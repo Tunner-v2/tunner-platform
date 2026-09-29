@@ -3,7 +3,7 @@ work_item_id: TUN-P0-019
 milestone_id: P0
 sprint_id: null
 title: GitHub repository governance and CI execution surface
-status: BLOCKED
+status: VALIDATION
 type: GOVERNANCE_BOOTSTRAP
 authority_refs:
   - docs/authority/amendments/AMD-0001/36_P0_Repository_Bootstrap_Governance_and_Context_Implementation_Spec.md
@@ -20,7 +20,7 @@ acceptance_criteria:
 prerequisites:
   - TUN-P0-001
 blockers:
-  - GITHUB-GOV-004: Repository-ruleset administration is unavailable in this environment.
+  - GITHUB-GOV-005: Independent authenticated ruleset readback is pending for ruleset 24217203.
 impact:
   architecture: false
   ui: false
@@ -42,7 +42,7 @@ required_tests:
 required_evidence:
   - GitHub remote URL
   - governance/bootstrap/github-main-ruleset.json
-  - GitHub branch/protection evidence
+  - governance/evidence/GITHUB-RULESET-24217203.json\n  - GitHub branch/protection evidence
 context_policy: TASK
 todos: []
 defects: []

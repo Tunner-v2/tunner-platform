@@ -4,7 +4,7 @@
 
 - ID: TUN-P0-019
 - Milestone/Sprint: P0 / no sprint
-- Status: BLOCKED (GitHub CODEOWNERS and ruleset authority)
+- Status: VALIDATION (GitHub ruleset independent readback)
 - Branch: main
 - Commit: `3fe58ef79909451405e434c8d06d651885a5dce6`
 
@@ -20,7 +20,7 @@
 
 ## Decisions/blockers
 
-- SSH authorization is not needed because HTTPS remote access is available.\n- CODEOWNERS is materialized with `@Tunner-v2/ai-dev`.\n- `GITHUB-GOV-004`: repository-ruleset administration requires GitHub-side action.
+- SSH authorization is not needed because HTTPS remote access is available.\n- CODEOWNERS is materialized with `@Tunner-v2/ai-dev`.\n- Ruleset 24217203 was reported configured; independent authenticated readback is pending.
 - `EXT-DRIVE-001` affects external freshness comparison only.
 
 ## Context state
@@ -31,4 +31,4 @@
 
 ## Exact next action
 
-- Configure the `main` ruleset in GitHub and record its evidence; then continue B2.
+- Validate GitHub ruleset 24217203 against the committed definition; then close TUN-P0-019 and continue B2.
