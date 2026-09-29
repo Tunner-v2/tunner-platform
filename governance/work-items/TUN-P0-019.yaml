@@ -20,7 +20,7 @@ acceptance_criteria:
 prerequisites:
   - TUN-P0-001
 blockers:
-  - GITHUB-BOOT-002: The current SSH identity is not authorized for git@github.com:Tunner-v2/tunner-platform.git.
+  - GITHUB-GOV-004: Repository-ruleset administration is unavailable in this environment.
 impact:
   architecture: false
   ui: false
@@ -37,10 +37,11 @@ activated_roles:
   - auditor
 required_tests:
   - HTTPS remote read test
-  - remote read test
   - bootstrap push
+  - branch ruleset and CODEOWNERS configuration
 required_evidence:
   - GitHub remote URL
+  - governance/bootstrap/github-main-ruleset.json
   - GitHub branch/protection evidence
 context_policy: TASK
 todos: []
