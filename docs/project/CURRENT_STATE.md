@@ -22,12 +22,12 @@
 
 | ID | State | Owner/roles | Blocker | Next action |
 |---|---|---|---|---|
-| TUN-P0-001 | DONE | governance-engineer, tester-qa-engineer, auditor, cyber-security-engineer, devops-engineer | none | Start TUN-P0-002 after GitHub destination is authorized |
-| TUN-P0-019 | BLOCKED | governance-engineer, devops-engineer, cyber-security-engineer, auditor | GitHub owner/organization, repository name, and authorization are not supplied | Obtain destination and create the remote |
+| TUN-P0-001 | DONE | governance-engineer, tester-qa-engineer, auditor, cyber-security-engineer, devops-engineer | none | Resume B2 |
+| TUN-P0-019 | BLOCKED | governance-engineer, devops-engineer, cyber-security-engineer, auditor | Current SSH identity is unauthorized for the registered private repository | Add an authorized SSH key or grant existing key write access |
 
 ## Build/test state
 
-- Last verified commit: `cc51bbaadd21fc39e97b4598a4b2fb9cc8fc15b8`.
+- Last verified commit: `3fe58ef79909451405e434c8d06d651885a5dce6`.
 - Build: not run; dependency restore/build is a user-run step.
 - Bundle integrity: PASS (125/125).
 - Pre-P0 package integrity: PASS (54/54).
@@ -36,8 +36,8 @@
 ## Open blockers
 
 - `EXT-DRIVE-001`: canonical Drive inventory was not readable through the connected session. This blocks only external-source comparison, not use of the immutable verified bootstrap bundle.
-- `GITHUB-BOOT-001`: a GitHub owner/organization and repository destination/authorization are needed to create the P0-generated remote.
+- `GITHUB-BOOT-002`: remote `git@github.com:Tunner-v2/tunner-platform.git` is registered, GitHub host identity was verified, but SSH authentication returned `Permission denied (publickey)`.
 
 ## Exact next authorized action
 
-- Create and register the GitHub remote once its destination and authorization are provided; then begin TUN-P0-002 under bootstrap governance.
+- Authorize an SSH key with write access to `Tunner-v2/tunner-platform`; then push `main` and register the canonical repository URL.

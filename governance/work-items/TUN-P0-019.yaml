@@ -1,0 +1,49 @@
+schema_version: 1
+work_item_id: TUN-P0-019
+milestone_id: P0
+sprint_id: null
+title: GitHub repository governance and CI execution surface
+status: BLOCKED
+type: GOVERNANCE_BOOTSTRAP
+authority_refs:
+  - docs/authority/amendments/AMD-0001/36_P0_Repository_Bootstrap_Governance_and_Context_Implementation_Spec.md
+  - governance/bootstrap/source/GITHUB_BOOTSTRAP_POLICY.md
+flow_refs: []
+contract_refs: []
+decision_refs:
+  - AMD-0001
+acceptance_criteria:
+  - Canonical GitHub remote is registered.
+  - Main is pushed through the approved bootstrap path.
+  - Actual repository URL is recorded without placeholders.
+  - Repository protection, CODEOWNERS and required checks are configured when workflows exist.
+prerequisites:
+  - TUN-P0-001
+blockers:
+  - GITHUB-BOOT-002: The current SSH identity is not authorized for git@github.com:Tunner-v2/tunner-platform.git.
+impact:
+  architecture: false
+  ui: false
+  sdk: false
+  financial: false
+  compliance: false
+  security: true
+  devops: true
+  support: false
+activated_roles:
+  - governance-engineer
+  - devops-engineer
+  - cyber-security-engineer
+  - auditor
+required_tests:
+  - SSH authentication test
+  - remote read test
+  - bootstrap push
+required_evidence:
+  - GitHub remote URL
+  - GitHub branch/protection evidence
+context_policy: TASK
+todos: []
+defects: []
+created_at: 2026-09-29T00:00:00-04:00
+updated_at: 2026-09-29T00:00:00-04:00
