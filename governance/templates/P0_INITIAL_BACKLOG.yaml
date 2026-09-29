@@ -1,0 +1,34 @@
+schema_version: 1
+milestone:
+  milestone_id: P0
+  title: Governance & Development System
+  goal: Create the repository and self-governing development control plane required before P1-P8.
+  status: APPROVED
+work_items:
+  - {id: TUN-P0-001, title: Repository bootstrap, prerequisites: []}
+  - {id: TUN-P0-002, title: Git and contribution policy, prerequisites: [TUN-P0-001]}
+  - {id: TUN-P0-003, title: Governance schemas, prerequisites: [TUN-P0-001]}
+  - {id: TUN-P0-004, title: tunner-governance MVP, prerequisites: [TUN-P0-003]}
+  - {id: TUN-P0-005, title: tunner-context MVP, prerequisites: [TUN-P0-003]}
+  - {id: TUN-P0-006, title: Docker development foundation, prerequisites: [TUN-P0-001]}
+  - {id: TUN-P0-007, title: Secrets foundation, prerequisites: [TUN-P0-006]}
+  - {id: TUN-P0-008, title: Database and migrations foundation, prerequisites: [TUN-P0-006]}
+  - {id: TUN-P0-009, title: Observability baseline, prerequisites: [TUN-P0-006]}
+  - {id: TUN-P0-010, title: Test harness, prerequisites: [TUN-P0-001]}
+  - {id: TUN-P0-011, title: Evidence generator, prerequisites: [TUN-P0-003, TUN-P0-010]}
+  - {id: TUN-P0-012, title: R&D source registry enforcement, prerequisites: [TUN-P0-003]}
+  - {id: TUN-P0-013, title: Security and supply-chain pipeline baseline, prerequisites: [TUN-P0-001]}
+  - {id: TUN-P0-014, title: Developer automation, prerequisites: [TUN-P0-006, TUN-P0-010]}
+  - {id: TUN-P0-015, title: Documentation validation, prerequisites: [TUN-P0-003]}
+  - {id: TUN-P0-019, title: GitHub repository governance and CI execution surface, prerequisites: [TUN-P0-001, TUN-P0-002]}
+  - {id: TUN-P0-026, title: Agent skill registry and entry contract, prerequisites: [TUN-P0-001]}
+  - {id: TUN-P0-027, title: Role activation and review-matrix engine, prerequisites: [TUN-P0-003, TUN-P0-026]}
+  - {id: TUN-P0-028, title: Governance-controlled orchestrator, prerequisites: [TUN-P0-004, TUN-P0-027]}
+  - {id: TUN-P0-029, title: Adaptive context index and retrieval engine, prerequisites: [TUN-P0-005, TUN-P0-026]}
+  - {id: TUN-P0-030, title: Persistent project memory and state, prerequisites: [TUN-P0-003, TUN-P0-005]}
+  - {id: TUN-P0-031, title: Governance and context cost-quality telemetry, prerequisites: [TUN-P0-004, TUN-P0-005]}
+  - {id: TUN-P0-032, title: Fresh-agent recovery test, prerequisites: [TUN-P0-026, TUN-P0-027, TUN-P0-029, TUN-P0-030]}
+  - {id: TUN-P0-033, title: Authority mirror/import verification, prerequisites: [TUN-P0-001]}
+  - {id: TUN-P0-034, title: Governance self-hosting cutover, prerequisites: [TUN-P0-004, TUN-P0-011, TUN-P0-026, TUN-P0-027, TUN-P0-033]}
+close_gate:
+  requires: [TUN-P0-001, TUN-P0-002, TUN-P0-003, TUN-P0-004, TUN-P0-005, TUN-P0-006, TUN-P0-007, TUN-P0-008, TUN-P0-009, TUN-P0-010, TUN-P0-011, TUN-P0-012, TUN-P0-013, TUN-P0-014, TUN-P0-015, TUN-P0-019, TUN-P0-026, TUN-P0-027, TUN-P0-028, TUN-P0-029, TUN-P0-030, TUN-P0-031, TUN-P0-032, TUN-P0-033, TUN-P0-034]

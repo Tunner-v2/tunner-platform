@@ -1,0 +1,35 @@
+schema_version: 1
+bootstrap_id: BOOT-P0-001
+title: Verified authority import and repository bootstrap
+status: IN_PROGRESS
+authority_refs:
+  - docs/authority/current-authority.json
+  - docs/authority/source-bundle/BUNDLE_MANIFEST.json
+  - docs/authority/source-bundle/PRE_P0_PACKAGE_MANIFEST.json
+  - docs/authority/amendments/AMD-0001/36_P0_Repository_Bootstrap_Governance_and_Context_Implementation_Spec.md
+acceptance_criteria:
+  - Bundle manifest verifies every listed file.
+  - Pre-P0 manifest verifies every listed file.
+  - Repository mirror retains approved baseline, active amendment, provenance and package manifests.
+  - B1 materializes the agent contract, twenty role skills, governance templates and project memory.
+  - Git bootstrap is traceable and marked with Bootstrap-Governance metadata.
+activated_roles:
+  - governance-engineer
+  - tester-qa-engineer
+  - auditor
+  - cyber-security-engineer
+  - devops-engineer
+changes:
+  - authority mirror created
+  - skills materialized
+  - templates and project memory materialized
+tests:
+  - bundle SHA-256 verification (125/125 PASS)
+  - Pre-P0 SHA-256 verification (54/54 PASS)
+evidence:
+  - governance/evidence/BOOT-P0-001-integrity.json
+  - docs/project/CURRENT_STATE.md
+  - docs/project/HANDOFF.md
+commit_sha: null
+created_at: 2026-09-29T00:00:00-04:00
+updated_at: 2026-09-29T00:00:00-04:00

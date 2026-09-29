@@ -1,0 +1,52 @@
+schema_version: 1
+work_item_id: TUN-P0-001
+milestone_id: P0
+sprint_id: null
+title: Repository bootstrap
+status: IN_PROGRESS
+type: GOVERNANCE_BOOTSTRAP
+authority_refs:
+  - docs/authority/amendments/AMD-0001/AMD-0001_Pre-P0_Governance_Agent_Skills_Context_and_Bootstrap_Completion.md
+  - docs/authority/amendments/AMD-0001/36_P0_Repository_Bootstrap_Governance_and_Context_Implementation_Spec.md
+  - governance/bootstrap/source/P0_DEFINITION_OF_READY.md
+  - governance/bootstrap/source/REPOSITORY_BLUEPRINT.md
+  - governance/bootstrap/source/BOOTSTRAP_RUNBOOK.md
+flow_refs: []
+contract_refs: []
+decision_refs:
+  - AMD-0001
+acceptance_criteria:
+  - Supplied bundle and Pre-P0 manifests verify by SHA-256.
+  - Exact authority bytes are materialized with provenance.
+  - Root AGENTS.md, 20 skills, governance templates, project-memory records and bootstrap work record exist.
+  - P0 readiness evidence is recorded.
+  - Local Git repository is initialized and first bootstrap commit is created.
+prerequisites: []
+blockers:
+  - EXT-DRIVE-001 (external comparison pending; not a local-bootstrap blocker)
+impact:
+  architecture: true
+  ui: false
+  sdk: false
+  financial: false
+  compliance: false
+  security: true
+  devops: true
+  support: false
+activated_roles:
+  - governance-engineer
+  - tester-qa-engineer
+  - auditor
+  - cyber-security-engineer
+  - devops-engineer
+required_tests:
+  - exact SHA-256 manifest verification
+  - authority mirror path/provenance inspection
+required_evidence:
+  - governance/evidence/BOOT-P0-001-integrity.json
+  - governance/bootstrap/BOOT-P0-001.yaml
+context_policy: TASK
+todos: []
+defects: []
+created_at: 2026-09-29T00:00:00-04:00
+updated_at: 2026-09-29T00:00:00-04:00

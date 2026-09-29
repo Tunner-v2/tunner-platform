@@ -1,0 +1,17 @@
+schema_version: 1
+policy_id: default-task
+mode: TASK
+repository_access: SCOPED
+token_budget: null
+always_include:
+  - authority-index
+  - current-work-item
+  - blocking-rules
+  - applicable-decisions
+dependency_depth: 2
+git_history_commits: 20
+include_relevant_tests: true
+include_role_skills: true
+maximum_escalation_mode: EXPANDED
+allow_insufficient_context: true
+

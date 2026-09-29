@@ -1,0 +1,32 @@
+schema_version: 1
+policy_id: default-role-activation
+rules:
+  - when: every_implementation
+    require: [full-stack-engineer, tester-qa-engineer]
+  - when: architecture_or_module_or_integration_change
+    require: [solution-architect]
+  - when: user_or_admin_ui_change
+    require: [ui-ux-engineer, frontend-engineer, end-user-ux-reviewer, content-writer]
+  - when: business_requirement_or_cross_domain_acceptance_change
+    require: [business-analyst]
+  - when: product_api_sdk_event_webhook_change
+    require: [sdk-engineer, tester-qa-engineer]
+  - when: financial_impact
+    require: [financial-specialist, tester-qa-engineer, auditor]
+  - when: compliance_or_privacy_or_regulated_impact
+    require: [compliance-specialist, auditor, tester-qa-engineer]
+  - when: authentication_authorization_secrets_crypto_sensitive_data_supply_chain
+    require: [cyber-security-engineer, tester-qa-engineer, auditor]
+  - when: ci_cd_container_environment_observability_deployment_iac
+    require: [devops-engineer]
+  - when: governance_context_orchestration_evidence_rule_change
+    require: [governance-engineer, auditor, tester-qa-engineer]
+  - when: material_external_library_provider_protocol_standard
+    require: [rd-engineer]
+  - when: admin_or_support_workflow
+    require: [admin-operator, support-engineer, ui-ux-engineer, tester-qa-engineer]
+  - when: milestone_or_release_closure
+    require: [project-manager, auditor]
+  - when: product_decision_or_explicit_product_acceptance
+    require: [founder-product-owner]
+
