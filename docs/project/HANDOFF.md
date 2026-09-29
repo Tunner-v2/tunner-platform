@@ -4,7 +4,7 @@
 
 - ID: TUN-P0-019
 - Milestone/Sprint: P0 / no sprint
-- Status: IN_PROGRESS (GitHub HTTPS bootstrap)
+- Status: BLOCKED (GitHub CODEOWNERS and ruleset authority)
 - Branch: main
 - Commit: `3fe58ef79909451405e434c8d06d651885a5dce6`
 
@@ -20,7 +20,7 @@
 
 ## Decisions/blockers
 
-- SSH authorization is not needed because HTTPS remote access is available.
+- SSH authorization is not needed because HTTPS remote access is available.\n- `GITHUB-GOV-003`: actual CODEOWNERS identities/team slugs and repository-ruleset administration authority are required.
 - `EXT-DRIVE-001` affects external freshness comparison only.
 
 ## Context state
@@ -31,4 +31,4 @@
 
 ## Exact next action
 
-- Push `main`, record the remote URL, then continue B2.
+- Receive approved CODEOWNERS identity/team mapping and ruleset administration authorization; then configure B2 protections.

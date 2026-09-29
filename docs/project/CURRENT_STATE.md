@@ -23,7 +23,7 @@
 | ID | State | Owner/roles | Blocker | Next action |
 |---|---|---|---|---|
 | TUN-P0-001 | DONE | governance-engineer, tester-qa-engineer, auditor, cyber-security-engineer, devops-engineer | none | Resume B2 |
-| TUN-P0-019 | IN_PROGRESS | governance-engineer, devops-engineer, cyber-security-engineer, auditor | none | Push main to the verified HTTPS remote and register repository evidence |
+| TUN-P0-019 | BLOCKED | governance-engineer, devops-engineer, cyber-security-engineer, auditor | GitHub CODEOWNERS identities and repository-ruleset administration authority are not supplied | Obtain owner/team mapping and configure protections |
 
 ## Build/test state
 
@@ -36,8 +36,8 @@
 ## Open blockers
 
 - `EXT-DRIVE-001`: canonical Drive inventory was not readable through the connected session. This blocks only external-source comparison, not use of the immutable verified bootstrap bundle.
-- None for remote access: HTTPS probe to `https://github.com/Tunner-v2/tunner-platform.git` succeeded.
+- `GITHUB-GOV-003`: HTTPS push succeeded, but GitHub CODEOWNERS identity/team mapping and ruleset administration authority are not supplied.
 
 ## Exact next authorized action
 
-- Push `main` to the verified HTTPS remote, then register the canonical repository URL and continue B2.
+- Obtain the GitHub usernames/team slugs for CODEOWNERS and ruleset administration authorization; then configure B2 protections.
