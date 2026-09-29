@@ -23,7 +23,7 @@
 | ID | State | Owner/roles | Blocker | Next action |
 |---|---|---|---|---|
 | TUN-P0-001 | DONE | governance-engineer, tester-qa-engineer, auditor, cyber-security-engineer, devops-engineer | none | Resume B2 |
-| TUN-P0-019 | BLOCKED | governance-engineer, devops-engineer, cyber-security-engineer, auditor | Current SSH identity is unauthorized for the registered private repository | Add an authorized SSH key or grant existing key write access |
+| TUN-P0-019 | IN_PROGRESS | governance-engineer, devops-engineer, cyber-security-engineer, auditor | none | Push main to the verified HTTPS remote and register repository evidence |
 
 ## Build/test state
 
@@ -36,8 +36,8 @@
 ## Open blockers
 
 - `EXT-DRIVE-001`: canonical Drive inventory was not readable through the connected session. This blocks only external-source comparison, not use of the immutable verified bootstrap bundle.
-- `GITHUB-BOOT-002`: remote `git@github.com:Tunner-v2/tunner-platform.git` is registered, GitHub host identity was verified, but SSH authentication returned `Permission denied (publickey)`.
+- None for remote access: HTTPS probe to `https://github.com/Tunner-v2/tunner-platform.git` succeeded.
 
 ## Exact next authorized action
 
-- Authorize an SSH key with write access to `Tunner-v2/tunner-platform`; then push `main` and register the canonical repository URL.
+- Push `main` to the verified HTTPS remote, then register the canonical repository URL and continue B2.
