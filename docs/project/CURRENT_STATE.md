@@ -23,7 +23,7 @@
 | ID | State | Owner/roles | Blocker | Next action |
 |---|---|---|---|---|
 | TUN-P0-001 | DONE | governance-engineer, tester-qa-engineer, auditor, cyber-security-engineer, devops-engineer | none | Resume B2 |
-| TUN-P0-019 | VALIDATION | governance-engineer, devops-engineer, cyber-security-engineer, auditor | Independent authenticated ruleset readback pending | Validate ruleset 24217203 against the committed definition |
+| TUN-P0-019 | VALIDATION | governance-engineer, devops-engineer, cyber-security-engineer, auditor | Independent authenticated ruleset readback pending | Validate repository ruleset 24217332 against the committed definition |
 
 ## Build/test state
 
@@ -36,8 +36,8 @@
 ## Open blockers
 
 - `EXT-DRIVE-001`: canonical Drive inventory was not readable through the connected session. This blocks only external-source comparison, not use of the immutable verified bootstrap bundle.
-- `GITHUB-GOV-004`: ruleset 24217203 was reported configured; independent authenticated readback remains pending.
+- `GITHUB-GOV-004`: repository ruleset 24217332 was reported configured; independent authenticated readback remains pending.
 
 ## Exact next authorized action
 
-- Validate GitHub ruleset 24217203 against `governance/bootstrap/github-main-ruleset.json`; then close TUN-P0-019 and continue B2.
+- Validate GitHub repository ruleset 24217332 against `governance/bootstrap/github-main-ruleset.json`; then close TUN-P0-019 and continue B2.
