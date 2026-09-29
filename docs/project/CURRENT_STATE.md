@@ -23,7 +23,7 @@
 | ID | State | Owner/roles | Blocker | Next action |
 |---|---|---|---|---|
 | TUN-P0-001 | DONE | governance-engineer, tester-qa-engineer, auditor, cyber-security-engineer, devops-engineer | none | Resume B2 |
-| TUN-P0-019 | VALIDATION | governance-engineer, devops-engineer, cyber-security-engineer, auditor | Independent authenticated ruleset readback pending | Validate repository ruleset 24217332 against the committed definition |
+| TUN-P0-019 | VALIDATION | governance-engineer, devops-engineer, cyber-security-engineer, auditor | Ruleset enforcement is partially verified; settings readback pending | Validate repository ruleset 24217332 against the committed definition |
 
 ## Build/test state
 
@@ -40,4 +40,4 @@
 
 ## Exact next authorized action
 
-- Validate GitHub repository ruleset 24217332 against `governance/bootstrap/github-main-ruleset.json`; then close TUN-P0-019 and continue B2.
+- Open a pull request from `bootstrap/repository-ruleset-evidence` to `main`; then validate its code-owner review requirement and settings against the committed definition.
