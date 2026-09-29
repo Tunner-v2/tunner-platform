@@ -1,0 +1,34 @@
+schema_version: 1
+gate_id: P0-B0-B1
+scope_type: BOOTSTRAP
+scope_id: BOOT-P0-001
+status: PASS
+checks:
+  - id: B0-BUNDLE-INTEGRITY
+    status: PASS
+    evidence: governance/evidence/BOOT-P0-001-integrity.json
+  - id: B0-AUTHORITY-MIRROR
+    status: PASS
+    evidence: governance/evidence/BOOT-P0-001-integrity.json
+  - id: B1-AGENT-CONTRACT
+    status: PASS
+    evidence: AGENTS.md
+  - id: B1-SKILL-MATERIALIZATION
+    status: PASS
+    evidence: .agent/skills
+  - id: B1-GOVERNANCE-MEMORY
+    status: PASS
+    evidence: governance/templates; docs/project
+required_roles:
+  - governance-engineer
+  - tester-qa-engineer
+  - auditor
+  - cyber-security-engineer
+  - devops-engineer
+required_evidence:
+  - governance/evidence/BOOT-P0-001-integrity.json
+  - governance/bootstrap/BOOT-P0-001.yaml
+blocking_findings:
+  - EXT-DRIVE-001 is non-blocking for B0/B1 and remains pending for external-source comparison.
+evaluated_at: 2026-09-29T00:00:00-04:00
+tool_version: bootstrap-manual-v1

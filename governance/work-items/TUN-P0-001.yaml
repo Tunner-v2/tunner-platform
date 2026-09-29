@@ -3,7 +3,7 @@ work_item_id: TUN-P0-001
 milestone_id: P0
 sprint_id: null
 title: Repository bootstrap
-status: IN_PROGRESS
+status: DONE
 type: GOVERNANCE_BOOTSTRAP
 authority_refs:
   - docs/authority/amendments/AMD-0001/AMD-0001_Pre-P0_Governance_Agent_Skills_Context_and_Bootstrap_Completion.md
@@ -22,8 +22,7 @@ acceptance_criteria:
   - P0 readiness evidence is recorded.
   - Local Git repository is initialized and first bootstrap commit is created.
 prerequisites: []
-blockers:
-  - EXT-DRIVE-001 (external comparison pending; not a local-bootstrap blocker)
+blockers: []
 impact:
   architecture: true
   ui: false
@@ -44,7 +43,7 @@ required_tests:
   - authority mirror path/provenance inspection
 required_evidence:
   - governance/evidence/BOOT-P0-001-integrity.json
-  - governance/bootstrap/BOOT-P0-001.yaml
+  - governance/gates/P0-B0-B1.yaml
 context_policy: TASK
 todos: []
 defects: []

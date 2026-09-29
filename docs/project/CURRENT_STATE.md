@@ -15,26 +15,29 @@
 ## Active sprint
 
 - ID: none
-- Goal: Bootstrap governance mode B0/B1.
+- Goal: B2 Git/GitHub bootstrap.
 - Dates: not scheduled.
 
 ## Active work items
 
 | ID | State | Owner/roles | Blocker | Next action |
 |---|---|---|---|---|
-| TUN-P0-001 | IN_PROGRESS | governance-engineer, tester-qa-engineer, auditor, cyber-security-engineer, devops-engineer | External Drive inventory unavailable; local mirror remains usable | Complete repository bootstrap evidence and initialize Git |
+| TUN-P0-001 | DONE | governance-engineer, tester-qa-engineer, auditor, cyber-security-engineer, devops-engineer | none | Start TUN-P0-002 after GitHub destination is authorized |
+| TUN-P0-019 | BLOCKED | governance-engineer, devops-engineer, cyber-security-engineer, auditor | GitHub owner/organization, repository name, and authorization are not supplied | Obtain destination and create the remote |
 
 ## Build/test state
 
-- Last verified commit: none; repository bootstrap is not yet committed.
+- Last verified commit: `cc51bbaadd21fc39e97b4598a4b2fb9cc8fc15b8`.
 - Build: not run; dependency restore/build is a user-run step.
 - Bundle integrity: PASS (125/125).
 - Pre-P0 package integrity: PASS (54/54).
+- Repository mirror integrity: PASS (125/125).
 
 ## Open blockers
 
 - `EXT-DRIVE-001`: canonical Drive inventory was not readable through the connected session. This blocks only external-source comparison, not use of the immutable verified bootstrap bundle.
+- `GITHUB-BOOT-001`: a GitHub owner/organization and repository destination/authorization are needed to create the P0-generated remote.
 
 ## Exact next authorized action
 
-- Finish B0/B1 evidence and initialize the local Git repository for TUN-P0-001; do not start P1–P8 work.
+- Create and register the GitHub remote once its destination and authorization are provided; then begin TUN-P0-002 under bootstrap governance.
