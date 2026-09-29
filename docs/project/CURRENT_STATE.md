@@ -23,7 +23,7 @@
 | ID | State | Owner/roles | Blocker | Next action |
 |---|---|---|---|---|
 | TUN-P0-001 | DONE | governance-engineer, tester-qa-engineer, auditor, cyber-security-engineer, devops-engineer | none | Resume B2 |
-| TUN-P0-019 | BLOCKED | governance-engineer, devops-engineer, cyber-security-engineer, auditor | GitHub CODEOWNERS identities and repository-ruleset administration authority are not supplied | Obtain owner/team mapping and configure protections |
+| TUN-P0-019 | BLOCKED | governance-engineer, devops-engineer, cyber-security-engineer, auditor | GitHub ruleset administration authority is not available in this environment | Configure main protections in GitHub |
 
 ## Build/test state
 
@@ -36,8 +36,8 @@
 ## Open blockers
 
 - `EXT-DRIVE-001`: canonical Drive inventory was not readable through the connected session. This blocks only external-source comparison, not use of the immutable verified bootstrap bundle.
-- `GITHUB-GOV-003`: HTTPS push succeeded, but GitHub CODEOWNERS identity/team mapping and ruleset administration authority are not supplied.
+- `GITHUB-GOV-004`: CODEOWNERS is materialized with `@Tunner-v2/ai-dev`; repository-ruleset administration still requires GitHub-side action.
 
 ## Exact next authorized action
 
-- Obtain the GitHub usernames/team slugs for CODEOWNERS and ruleset administration authorization; then configure B2 protections.
+- Configure the `main` ruleset in GitHub and capture its URL/evidence; then continue B2.
