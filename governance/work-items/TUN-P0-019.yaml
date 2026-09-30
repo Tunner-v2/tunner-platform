@@ -3,7 +3,7 @@ work_item_id: TUN-P0-019
 milestone_id: P0
 sprint_id: null
 title: GitHub repository governance and CI execution surface
-status: VALIDATION
+status: DONE
 type: GOVERNANCE_BOOTSTRAP
 authority_refs:
   - docs/authority/amendments/AMD-0001/36_P0_Repository_Bootstrap_Governance_and_Context_Implementation_Spec.md
@@ -19,8 +19,7 @@ acceptance_criteria:
   - Repository protection, CODEOWNERS and required checks are configured when workflows exist.
 prerequisites:
   - TUN-P0-001
-blockers:
-  - GITHUB-GOV-005: Ruleset 24217332 rejected a direct main push with GH013; complete settings readback and code-owner review validation remain pending.
+blockers: []
 impact:
   architecture: false
   ui: false
@@ -39,12 +38,15 @@ required_tests:
   - HTTPS remote read test
   - bootstrap push
   - branch ruleset and CODEOWNERS configuration
+  - pull request and code-owner approval
 required_evidence:
   - GitHub remote URL
   - governance/bootstrap/github-main-ruleset.json
-  - governance/evidence/GITHUB-RULESET-24217332.json\n  - GitHub branch/protection evidence
+  - governance/evidence/GITHUB-RULESET-24217332.json
+  - governance/evidence/GITHUB-PR-0001.json
+  - governance/evidence/GITHUB-AUTOMERGE-WORKFLOW.json
 context_policy: TASK
 todos: []
 defects: []
 created_at: 2026-09-29T00:00:00-04:00
-updated_at: 2026-09-29T00:00:00-04:00
+updated_at: 2026-09-30T01:29:05Z
