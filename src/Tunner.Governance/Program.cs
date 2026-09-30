@@ -22,6 +22,7 @@ public static class Program
         governance.Subcommands.Add(CreateGateCommand(repositoryOption));
         governance.Subcommands.Add(CreateTransitionCommand(repositoryOption));
         root.Subcommands.Add(governance);
+        root.Subcommands.Add(CreateContextCommand(repositoryOption));
 
         return root.Parse(args).Invoke();
     }
@@ -78,6 +79,34 @@ public static class Program
         return transition;
     }
 
+    private static Command CreateContextCommand(Option<DirectoryInfo?> repositoryOption)
+    {
+        var workItem = new Option<string>("--work-item") { Description = "Governed work item identifier to package." };
+        var output = new Option<DirectoryInfo?>("--output") { Description = "Generated pack directory. Defaults to docs/context/current." };
+        var build = new Command("build", "Generate a bounded, manifest-first context pack.");
+        build.Options.Add(workItem);
+        build.Options.Add(output);
+        build.SetAction(parseResult =>
+        {
+            var repository = Repository(parseResult, repositoryOption);
+            var destination = parseResult.GetValue(output) ?? new DirectoryInfo(Path.Combine(repository.FullName, "docs", "context", "current"));
+            return WriteResult(ContextApplication.Build(repository, parseResult.GetValue(workItem) ?? string.Empty, destination));
+        });
+
+        var verify = new Command("verify", "Verify the generated context pack source hashes.");
+        verify.Options.Add(output);
+        verify.SetAction(parseResult =>
+        {
+            var repository = Repository(parseResult, repositoryOption);
+            var destination = parseResult.GetValue(output) ?? new DirectoryInfo(Path.Combine(repository.FullName, "docs", "context", "current"));
+            return WriteResult(ContextApplication.Verify(repository, destination));
+        });
+
+        var context = new Command("context", "Generate and verify bounded repository context packs.");
+        context.Subcommands.Add(build);
+        context.Subcommands.Add(verify);
+        return context;
+    }
     private static DirectoryInfo Repository(ParseResult parseResult, Option<DirectoryInfo?> repositoryOption)
         => parseResult.GetValue(repositoryOption) ?? new DirectoryInfo(Directory.GetCurrentDirectory());
 

@@ -17,6 +17,15 @@ try
     var next = GovernanceApplication.Next(fixtureRoot);
     Expect(next.ExitCode == 0, "Next must be available for a valid fixture.", failures);
 
+    var contextOutput = new DirectoryInfo(Path.Combine(fixtureRoot.FullName, "docs", "context", "current"));
+    var contextBuild = ContextApplication.Build(fixtureRoot, "TUN-001", contextOutput);
+    Expect(contextBuild.ExitCode == 0, "Context build must generate a bounded fixture pack.", failures);
+    var contextCurrent = ContextApplication.Verify(fixtureRoot, contextOutput);
+    Expect(contextCurrent.ExitCode == 0, "A newly generated context pack must verify as current.", failures);
+    File.AppendAllText(Path.Combine(fixtureRoot.FullName, "governance", "work-items", "TUN-001.yaml"), "\n# Fixture source changed");
+    var contextStale = ContextApplication.Verify(fixtureRoot, contextOutput);
+    Expect(contextStale.ExitCode == 1, "Context verify must report a changed included source as stale.", failures);
+
     var gate = GovernanceApplication.CheckGate(fixtureRoot, "TUN-001");
     Expect(gate.ExitCode == 1, "Gate check must reject missing evidence and role-review evidence.", failures);
 

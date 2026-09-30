@@ -12,41 +12,34 @@
 - Status: ACTIVE
 - Goal: establish the self-governing development control plane before P1–P8.
 
-## Active sprint
-
-- ID: none
-- Goal: local P0 integration of Git policy and B1 governance schemas.
-- Dates: not scheduled.
-
 ## Active work items
 
-| ID | State | Owner/roles | Blocker | Next action |
-|---|---|---|---|---|
-| TUN-P0-001 | DONE | governance-engineer, tester-qa-engineer, auditor, cyber-security-engineer, devops-engineer | none | Bootstrap complete |
-| TUN-P0-019 | DONE | governance-engineer, devops-engineer, cyber-security-engineer, auditor | none | Ruleset, code-owner review, auto-merge, and automatic PR creation validated through PR #4 |
-| TUN-P0-002 | VALIDATION | governance-engineer, cyber-security-engineer, devops-engineer, tester-qa-engineer, auditor | none | Local policy/evidence validation passed; final DONE remains contingent on final protected P0 PR |
-| TUN-P0-003 | VALIDATION | governance-engineer, tester-qa-engineer, auditor | none | Schema validation passed; P0-004 is in progress locally |
-| TUN-P0-004 | IN_PROGRESS | governance-engineer, full-stack-engineer, tester-qa-engineer, auditor, rd-engineer, cyber-security-engineer | ENV-DOTNET-SDK-001 | Read-only MVP source/static evidence is recorded; executable validation awaits .NET 10 SDK |
+| ID | State | Blocker | Next action |
+|---|---|---|---|
+| TUN-P0-001 | DONE | none | Bootstrap complete |
+| TUN-P0-002 | CODE_REVIEW | none | Retain evidence for final aggregate P0 PR |
+| TUN-P0-003 | VALIDATION | none | Retain schema evidence for final aggregate P0 PR |
+| TUN-P0-004 | VALIDATION | none | Retain control-plane evidence for final aggregate P0 PR |
+| TUN-P0-005 | VALIDATION | none | Retain bounded context evidence; begin next eligible P0 work item |
+| TUN-P0-019 | VALIDATION | none | Retain GitHub governance evidence for final aggregate P0 PR |
 
 ## Build/test state
 
-- Last verified main commit: `b87f4c39d8bd4a11c53a713673aaf36a1ec4697c` (PR #4 automatic PR-creation workflow).
-- TUN-P0-002 static policy/content validation: PASS.
-- TUN-P0-003 structural schema validation: PASS for 16 entry schemas and 17 parsed JSON documents.
-- TUN-P0-003 negative unexpected-entry validation: PASS.`n- TUN-P0-004 package research: PASS; System.CommandLine 2.0.12, YamlDotNet 18.1.0, and JsonSchema.Net 9.4.0 are current stable baseline pins.`n- .NET SDK: unavailable locally; no restore, build, or executable test has been run.
-- Build: not run; dependency restore/build is a user-run step.
-- Bundle integrity: PASS (125/125).
-- Pre-P0 package integrity: PASS (54/54).
-- Repository mirror integrity: PASS (125/125).
+- .NET SDK: 10.0.401 installed and used for local P0 validation.
+- Tunner.Governance build: PASS (0 warnings, 0 errors).
+- Functional harness: PASS, including fresh and stale generated-context scenarios.
+- Governance live validation: PASS for 11 records with no diagnostics.
+- Context pack: PASS; docs/context/current/ is manifest-first and hash-verifiable.
+- NuGet vulnerability metadata: no vulnerable packages reported by current source metadata.
+- Bundle integrity: PASS (125/125). Pre-P0 package integrity: PASS (54/54). Repository mirror integrity: PASS (125/125).
 
 ## Delivery model and controls
 
-- DEC-0001 permits a temporary P0-only local integration branch: `change/TUN-P0-control-plane`.
-- Each P0 work item remains separately committed, validated, evidenced, and governed locally.
-- A locally validated P0 prerequisite may unblock a dependent local P0 work item; it cannot become DONE until the final P0 protected PR merges.
-- One final protected P0 pull request will require an independent `ai-dev` code-owner approval; GitHub may auto-merge only after protected requirements pass.
-- The temporary exception expires when that final P0 pull request is merged or closed. P1 onward uses the strict per-work-item procedure.
+- DEC-0001 permits the temporary P0-only local integration branch: change/TUN-P0-control-plane.
+- Each P0 work item is separately committed, validated, evidenced, and governed locally.
+- A locally validated P0 prerequisite may unblock dependent P0 work, but no P0 item becomes DONE until the final protected P0 PR merges.
+- One final protected P0 pull request requires an independent i-dev code-owner approval; GitHub may auto-merge only after protected requirements pass.
 
 ## Exact next authorized action
 
-- Install the .NET 10 SDK and run the documented restore/build/functional harness for TUN-P0-004; then record the resulting executable evidence before continuing its completion gate.
+- Start TUN-P0-006 (Docker development foundation) locally. Do not start Docker services until the environment prerequisite is confirmed and its governed work record defines the safe user-run runtime checks.

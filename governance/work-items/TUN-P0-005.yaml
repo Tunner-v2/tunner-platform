@@ -1,0 +1,56 @@
+schema_version: 1
+work_item_id: TUN-P0-005
+milestone_id: P0
+sprint_id: null
+title: tunner-context MVP
+status: VALIDATION
+type: GOVERNANCE_TOOLING
+authority_refs:
+  - docs/authority/amendments/AMD-0001/effective-overrides/04_Governance_and_Context_Tooling_Specification.md
+  - docs/authority/amendments/AMD-0001/effective-overrides/12_AI_Development_Protocol_Context_and_Project_Memory.md
+  - docs/authority/amendments/AMD-0001/effective-overrides/11_Development_Planes_Milestones_and_P0_Backlog.md
+  - docs/authority/amendments/AMD-0001/36_P0_Repository_Bootstrap_Governance_and_Context_Implementation_Spec.md
+flow_refs: []
+contract_refs: []
+decision_refs:
+  - AMD-0001
+  - DEC-0001
+acceptance_criteria:
+  - 'The unified 	unner context build --work-item <id> command generates a bounded, manifest-first context pack for a governed work item.'
+  - 'The generated pack identifies the current task, authority references, open blockers, relevant flows/contracts/decisions, required tests/evidence, activated role skills, and bounded relevant Git history.'
+  - 'The pack records included and excluded artifacts with reasons, source SHA-256 hashes, generation metadata, and explicit no-context findings instead of guessing.'
+  - '	unner context verify detects a missing or changed included source and reports STALE without treating generated output as authority.'
+  - 'The context builder writes only the documented generated context pack and does not mutate Product data or governance records.'
+prerequisites:
+  - TUN-P0-003
+blockers: []
+impact:
+  architecture: true
+  ui: false
+  sdk: false
+  financial: false
+  compliance: false
+  security: true
+  devops: false
+  support: false
+activated_roles:
+  - governance-engineer
+  - full-stack-engineer
+  - tester-qa-engineer
+  - auditor
+  - cyber-security-engineer
+required_tests:
+  - dotnet build Tunner.Governance.sln --no-restore
+  - dotnet run --project tests/Tunner.Governance.FunctionalTests --no-restore
+  - context build/verify positive fixture test
+  - context verify stale-source negative fixture test
+  - generated P0-005 context pack acceptance readback
+required_evidence:
+  - governance/context/CTX-TUN-P0-005-001.yaml
+  - governance/evidence/TUN-P0-005-VALIDATION.json
+  - governance/evidence/TUN-P0-005-ROLE-REVIEWS.json
+context_policy: TASK
+todos: []
+defects: []
+created_at: 2026-09-30T11:51:18-04:00
+updated_at: 2026-09-30T11:59:26-04:00

@@ -18,7 +18,7 @@ Repository-native, concise context for Tunner. It is derived from approved autho
 ## Architecture and boundaries
 
 - P0 owns only the governance/development control plane.
-- Governance tooling is isolated in `tools/`; production application projects must not depend on it.
+- Governance/context tooling is isolated in the standalone `Tunner.Governance.sln`; production application projects must not depend on it.
 - Product modules, user/admin UI, providers, financial behavior, contracts, and business workflows remain outside P0 unless required only as non-behavioral pipeline placeholders.
 
 ## Non-negotiable rules

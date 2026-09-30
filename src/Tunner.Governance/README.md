@@ -1,6 +1,6 @@
-# `tunner governance` MVP
+# `tunner` governance and context MVP
 
-P0-004 supplies a repository-native, read-only .NET 10 control-plane tool. It does not write governance records, invoke shells, read secrets, or access Product data.
+P0-004 and P0-005 supply a repository-native .NET 10 control-plane tool. Governance commands are read-only; context commands write only the documented generated context pack. The tool does not read secrets or access Product data.
 
 ## Commands
 
@@ -14,6 +14,15 @@ dotnet run --project src/Tunner.Governance -- governance transition check TUN-P0
 
 Pass `--repository <path>` before `governance` to point at another checkout. The tool reports JSON and returns a nonzero exit code for invalid records, blocked gates, or rejected transitions.
 
+
+## Context commands
+
+```powershell
+dotnet run --project src/Tunner.Governance -- context build --work-item TUN-P0-005
+dotnet run --project src/Tunner.Governance -- context verify
+```
+
+`context build` writes `docs/context/current/` from explicit work-item references, activated role skills, required evidence, durable project state, and bounded Git history. It records source hashes and exclusions. `context verify` returns `STALE` if an included source is missing or has changed; generated context is never authority.
 ## Validation boundary
 
 The MVP parses YAML with file/line/column diagnostics, builds the versioned JSON Schema catalog, and validates record identifiers, versioning, required fields, and undeclared top-level fields from that catalog. It deliberately does not mutate records. Rich nested type/format checks and Git-history immutability are follow-on governance work and must not be claimed as implemented until their tests exist.
