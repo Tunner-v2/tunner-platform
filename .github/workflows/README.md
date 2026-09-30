@@ -18,7 +18,7 @@ If auto-merge is not allowed by repository settings or policy, the workflow fail
 
 ## `create-pull-request.yml`
 
-This workflow creates a pull request to `main` whenever a non-`main` branch is pushed and does not already have an open pull request. It uses the branch's commit metadata for the pull request title and body. It has only `contents: read` and `pull-requests: write` permissions.
+This workflow creates a pull request to `main` whenever a non-`main` branch is pushed and does not already have an open pull request. It uses an explicit branch-based title and body, so it does not need to check out repository code. It has only `contents: read` and `pull-requests: write` permissions.
 
 It does not approve, merge, bypass the ruleset, access repository secrets, or execute repository code. The required `CODEOWNERS` review remains mandatory; the companion auto-merge workflow handles the merge only after that review and all other protected-branch requirements pass.
 

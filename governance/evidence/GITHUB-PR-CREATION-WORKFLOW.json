@@ -30,7 +30,7 @@
     "workflow_run": "https://github.com/Tunner-v2/tunner-platform/actions/runs/36662116690/job/109718931568",
     "completed_at": "2026-09-30T02:56:22Z",
     "conclusion": "failure",
-    "reason": "GitHub Actions pull-request creation permission was not enabled at the time of the first run.",
-    "remediation": "Repository owner enabled the required setting before the next push-triggered validation."
+    "reason": "The workflow used gh pr create --fill, which requires a local Git checkout; the job intentionally does not check out repository code.",
+    "remediation": "Replaced --fill with explicit branch-based title and body; no checkout is required."
   }
 }

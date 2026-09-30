@@ -24,4 +24,4 @@ jobs:
             echo "An open pull request already exists: $existing_pr"
             exit 0
           fi
-          gh pr create --repo "$GH_REPO" --base main --head "$HEAD_REF" --fill
+          gh pr create --repo "$GH_REPO" --base main --head "$HEAD_REF" --title "Automated PR: $HEAD_REF" --body "Automatically created for branch $HEAD_REF. Protected-branch review and checks remain required."

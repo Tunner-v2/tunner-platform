@@ -26,7 +26,7 @@
 - CODEOWNERS is materialized with `@Tunner-v2/ai-dev`.
 - Repository ruleset 24217332 was reported configured; independent authenticated readback is pending.
 - **Allow auto-merge** is enabled and was successfully validated by PR #2.
-- The repository owner must enable **Settings → Actions → General → Allow GitHub Actions to create and approve pull requests** once; this allows PR creation only, not approval by this workflow.
+- GitHub Actions PR-creation permission is enabled. The first run failed because `gh pr create --fill` requires a Git checkout; the workflow now uses an explicit title/body and still does not check out repository code.
 - Canonical Drive folders and controlling authority documents are now readable. The full source-to-mirror content diff remains TUN-P0-033 scope.
 
 ## Context state
