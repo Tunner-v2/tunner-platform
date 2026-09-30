@@ -13,7 +13,7 @@
 
 - The .NET Docker process boundary captures/replays Docker Compose progress output and uses only Docker exit code for failure detection across PowerShell versions. Its deterministic fake-Docker regression passed in both the current shell and powershell.exe.
 - The operator-run real Compose retry completed normally: PostgreSQL, RabbitMQ, Redis, OpenBao, Mailpit, and OTEL-LGTM reached Healthy. DEF-TUN-P0-006-003 is CLOSED.
-- The credential-free defaults use Tunner-only loopback ports, including PostgreSQL `25432`. The operator-run P0-008 rehearsal restored the pinned tool, built successfully, acquired the migration lock, applied `20260930173000_P0MigrationFoundation`, and completed. No connection value is retained here.
+- The credential-free defaults use Tunner-only loopback ports, including PostgreSQL `25432`. The operator-run P0-008 rehearsal restored the pinned tool, built successfully, acquired the migration lock, applied `20260930173000_P0MigrationFoundation`, and completed. A second operator-run rehearsal reported no migrations applied because the database was already up to date. No connection value is retained here.
 
 ## Boundaries
 

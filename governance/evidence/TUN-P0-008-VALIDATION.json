@@ -4,7 +4,7 @@
   "scope_type": "WORK_ITEM",
   "scope_id": "TUN-P0-008",
   "status": "PASS",
-  "checked_at": "2026-09-30T18:35:34.4932632-04:00",
+  "checked_at": "2026-09-30T18:49:38.3212090-04:00",
   "checks": [
     {
       "name": "compatible dependency and tooling restore",
@@ -71,6 +71,12 @@
       "command": "operator-run tools/dev/tunner-migrations.ps1 rehearse with the documented process-scoped local connection configuration",
       "result": "PASS",
       "details": "At 2026-09-30T18:35-04:00, the pinned dotnet-ef tool restored, the migrations project built successfully, the exclusive migration lock was acquired, and migration 20260930173000_P0MigrationFoundation applied successfully. The model-snapshot notice is expected for this intentionally model-free P0 foundation and did not prevent migration application. No connection value was retained in evidence."
+    },
+    {
+      "name": "operator-run repeat migration rehearsal",
+      "command": "operator-run tools/dev/tunner-migrations.ps1 rehearse with the documented process-scoped local connection configuration",
+      "result": "PASS",
+      "details": "At 2026-09-30T18:49-04:00, a second operator-run rehearsal restored and built successfully, acquired the migration lock, and reported that no migrations were applied because the database was already up to date. This confirms repeat-safe application of the P0 foundation migration without retaining any connection value in evidence."
     }
   ],
   "artifacts": [
