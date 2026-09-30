@@ -7,9 +7,9 @@ Repository-native, concise context for Tunner. It is derived from approved autho
 ## Product and authority
 
 - Name: Tunner Platform
-- Effective authority: Locked Documentation Baseline 1.6.0 + accepted ADR/PDR records + AMD-0001.
+- Effective authority: Locked Documentation Baseline 1.6.0 + accepted ADR/PDR records + AMD-0001 + AMD-0002.
 - Baseline status: ACTIVE / LOCKED.
-- Active amendment: AMD-0001 (approved, effective 2026-09-29).
+- Active amendments: AMD-0001 (approved, effective 2026-09-29) and AMD-0002 (approved, effective 2026-09-30).
 - P0: authorized. P1–P8: blocked pending the P0 enablement gate.
 - Local authority mirror: `docs/authority/`; local bundle verification passed on 2026-09-29.
 - External canonical locations: Development Documentation, Pre-P0 package, and decisions links are recorded in `docs/authority/current-authority.json`.
@@ -29,3 +29,4 @@ Repository-native, concise context for Tunner. It is derived from approved autho
 - Governance controls orchestration; no bootstrap exception survives B3.
 - Project state must be reconstructable without chat history.
 - Use the smallest sufficient authority/context and return `INSUFFICIENT_CONTEXT` when necessary.
+- PR approval gates protected-main integration/merge only; continue governance-eligible local/branch work while approval is pending unless a dependency explicitly requires `MERGED_TO_MAIN` or another genuine human gate.

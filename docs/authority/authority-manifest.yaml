@@ -2,7 +2,7 @@ schema_version: 1
 status: VERIFIED_LOCAL_MIRROR_PENDING_EXTERNAL_CHECK
 manifest_source: docs/authority/source-bundle/BUNDLE_MANIFEST.json
 verification_mode: exact_sha256
-effective_authority: "Locked Documentation Baseline 1.6.0 + accepted ADR/PDR records + AMD-0001"
+effective_authority: "Locked Documentation Baseline 1.6.0 + accepted ADR/PDR records + AMD-0001 + AMD-0002"
 baseline:
   version: 1.6.0
   path: docs/authority/baselines/1.6.0
@@ -11,4 +11,10 @@ amendment:
   id: AMD-0001
   path: docs/authority/amendments/AMD-0001
   source_url: https://drive.google.com/file/d/15MYKfh7zplOWoz80FvgPJOPi-Y6GfI7H/view
-external_source_verification: PENDING_EXTERNAL_CHECK
+amendments:
+  - id: AMD-0001
+    path: docs/authority/amendments/AMD-0001
+  - id: AMD-0002
+    path: docs/authority/amendments/AMD-0002
+    source_url: https://drive.google.com/file/d/1dmODTNgtRS7WbKZyuX__FVmuJKQplkxN/view
+external_source_verification: VERIFIED_DRIVE_READBACK_2026-09-30

@@ -3,7 +3,7 @@
 ## Baseline
 
 - Documentation: Baseline 1.6.0 (ACTIVE / LOCKED).
-- Active amendments: AMD-0001.
+- Active amendments: AMD-0001 and AMD-0002.
 - Authority verification: PASS for 125/125 bootstrap-bundle entries and 54/54 Pre-P0 entries; canonical Drive folders and controlling documents are readable. Full source-to-mirror diff remains TUN-P0-033 scope.
 
 ## Current milestone
@@ -32,7 +32,7 @@
 - Governance live validation: PASS for 13 records with no diagnostics.
 - Context pack: PASS; docs/context/current/ is manifest-first and hash-verifiable for TUN-P0-006.
 - P0-006 static Compose source/configuration validation: PASS; `tunner-dev doctor` confirmed Docker Desktop 4.87.0 / Engine 29.7.2 and Compose v5.4.0 without pulling images or starting containers.
-- P0-006 runtime dependency health: RETRY REQUIRED. The initial user-run test found the LGTM health probe used unavailable wget despite the stack completing startup; DEF-TUN-P0-006-001 records the corrected /tmp/ready probe and one user-run retest remains.
+- P0-006 runtime dependency health: PASS. User-run output confirmed PostgreSQL, RabbitMQ, Redis, OpenBao, Mailpit, and LGTM healthy after the corrected readiness probes and OpenBao configuration path fix.
 - NuGet vulnerability metadata: no vulnerable packages reported by current source metadata.
 - Bundle integrity: PASS (125/125). Pre-P0 package integrity: PASS (54/54). Repository mirror integrity: PASS (125/125).
 
