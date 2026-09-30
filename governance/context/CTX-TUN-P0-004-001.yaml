@@ -15,10 +15,15 @@ included_artifacts:
   - docs/authority/baselines/1.6.0/04_Governance_and_Context_Tooling_Specification.md
   - docs/authority/baselines/1.6.0/12_AI_Development_Protocol_Context_and_Project_Memory.md
   - docs/authority/amendments/AMD-0001/36_P0_Repository_Bootstrap_Governance_and_Context_Implementation_Spec.md
+  - docs/authority/amendments/AMD-0002/AMD-0002_Non-Blocking_PR_Approval_and_Continuous_Local_Execution.md
   - governance/policies/lifecycle-policy.yaml
-  - governance/policies/role-activation-policy.yaml
+  - governance/policies/pr-integration-policy.yaml
   - governance/work-items/TUN-P0-003.yaml
-  - governance/schemas/v1/
+  - governance/dependencies/DEP-TUN-P0-004-TUN-P0-003.yaml
+  - governance/schemas/v1/governance-record.schema.json
+  - src/Tunner.Governance/GovernanceApplication.cs
+  - tests/Tunner.Governance.FunctionalTests/Program.cs
+  - src/Tunner.Governance/README.md
 excluded_artifacts:
   - docs/authority/baselines/1.6.0/17_Account_Identity_and_Session_FRD.md
   - docs/authority/baselines/1.6.0/18_Billing_Account_and_Delegated_Authority_FRD.md
@@ -30,12 +35,13 @@ exclusion_reasons:
   docs/authority/baselines/1.6.0/26_Finance_Ledger_Accounting_Settlement_and_Payout_FRD.md: Product finance behavior is outside the governance-tool MVP.
   Figma and FigJam UX references: No user/admin UX changes are authorized for this repository-native tool.
 source_hashes:
-  "docs/authority/baselines/1.6.0/03_Governed_Development_Lifecycle_Scrum_Git.md": "d204886943712849c3453e22603b5a541f2a46b05cd15b17bc74382900abf0f7"
-  "docs/authority/baselines/1.6.0/04_Governance_and_Context_Tooling_Specification.md": "bb563aef0a8a8386c180b11355d46d1da189f0a37c15d3021fd90e2f45469ede"
-  "docs/authority/baselines/1.6.0/12_AI_Development_Protocol_Context_and_Project_Memory.md": "f29a4811fac77e247d57949ca412823323a010eec9c87a1f4a5a8a84275880ca"
-  "docs/authority/amendments/AMD-0001/36_P0_Repository_Bootstrap_Governance_and_Context_Implementation_Spec.md": "6d2cca41c5a9ba771962c7fc535998ce34f80abe491dce6a83a165a9c28ba645"
-  "governance/policies/lifecycle-policy.yaml": "e3f9131426f8aa2725c10cc80cec7592f3a0b4743364210f2f951e5c1d69ada9"
-  "governance/policies/role-activation-policy.yaml": "42150b80ebbec95a4c32ecbf2188d08b838d7a92b87fb5eb406bc9aaf7812a26"
-  "governance/work-items/TUN-P0-003.yaml": "d187b5f86964da196cd93f6f88483b2fbf57969b006c674863bdd18d5b27f01c"
-tool_version: manual-bootstrap-context-1.0.0
-created_at: 2026-09-30T16:30:00-04:00
+  docs/authority/amendments/AMD-0002/AMD-0002_Non-Blocking_PR_Approval_and_Continuous_Local_Execution.md: "133c067df9d6efd986f5f56b9a8c8cdc4328e4ceec5b2e27710c4454bb693093"
+  governance/policies/pr-integration-policy.yaml: "3efe932f4160b6613200456183b024996ad0096b3b0f96b5c4d5d101559def64"
+  governance/dependencies/DEP-TUN-P0-004-TUN-P0-003.yaml: "3d8268dcaf1d6aab72a0386964380c2e900762d2c4b1d9824e95614d7a4c3b10"
+  governance/work-items/TUN-P0-004.yaml: "cbad1c242b1b16b6018205edd8f7ba01a16f478b8194d42af0cf1824ae1cb9c2"
+  governance/schemas/v1/governance-record.schema.json: "3fbe3e77a281204739c83b384228f77de1644178180c7fc40929cfe6ed0ec63d"
+  src/Tunner.Governance/GovernanceApplication.cs: "f67d9b332bbbd5b8e1cdfbce3682b401cc9cdfa8c0b7b5942fefccce20ab6a09"
+  tests/Tunner.Governance.FunctionalTests/Program.cs: "a92d5641f8af7313488bcb89cf0770618f250e22498a34d1d693ffe549f6e454"
+  src/Tunner.Governance/README.md: "2717a2acfdab708cddba8faea16242e3ca2f8883371b2b37af38ecb55cf84778"
+tool_version: tunner-context-0.1.0
+created_at: 2026-09-30T18:10:18Z

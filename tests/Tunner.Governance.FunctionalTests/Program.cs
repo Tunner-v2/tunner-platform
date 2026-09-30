@@ -16,6 +16,11 @@ try
 
     var next = GovernanceApplication.Next(fixtureRoot);
     Expect(next.ExitCode == 0, "Next must be available for a valid fixture.", failures);
+    var nextPayload = (NextPayload)next.Payload;
+    Expect(nextPayload.Items.Single(item => item.WorkItemId == "TUN-LOCAL").Actionable, "LOCAL_VALIDATED dependency must permit local work.", failures);
+    Expect(!nextPayload.Items.Single(item => item.WorkItemId == "TUN-MERGED").Actionable, "MERGED_TO_MAIN dependency must block the dependent work.", failures);
+    Expect(!nextPayload.Items.Single(item => item.WorkItemId == "TUN-CHAIN").Actionable, "Configured local unmerged-chain limit must block further dependent chaining.", failures);
+    Expect(nextPayload.HumanIntegrationActions.SingleOrDefault(item => item.WorkItemId == "TUN-MERGED" && item.PrerequisiteWorkItemId == "TUN-001") is not null, "Merged-main dependency must surface a separate human integration action.", failures);
 
     var contextOutput = new DirectoryInfo(Path.Combine(fixtureRoot.FullName, "docs", "context", "current"));
     var contextBuild = ContextApplication.Build(fixtureRoot, "TUN-001", contextOutput);
@@ -26,10 +31,10 @@ try
     var contextStale = ContextApplication.Verify(fixtureRoot, contextOutput);
     Expect(contextStale.ExitCode == 1, "Context verify must report a changed included source as stale.", failures);
 
-    var gate = GovernanceApplication.CheckGate(fixtureRoot, "TUN-001");
+    var gate = GovernanceApplication.CheckGate(fixtureRoot, "TUN-TRANSITION");
     Expect(gate.ExitCode == 1, "Gate check must reject missing evidence and role-review evidence.", failures);
 
-    var transition = GovernanceApplication.CheckTransition(fixtureRoot, "TUN-001", "DONE");
+    var transition = GovernanceApplication.CheckTransition(fixtureRoot, "TUN-TRANSITION", "DONE");
     Expect(transition.ExitCode == 1, "Lifecycle check must reject DRAFT directly to DONE.", failures);
 
     File.WriteAllText(Path.Combine(fixtureRoot.FullName, "governance", "work-items", "malformed.yaml"), "schema_version: [");
@@ -82,6 +87,7 @@ static void CreateFixture(DirectoryInfo repositoryRoot, DirectoryInfo fixtureRoo
     CopyDirectory(schemaSource, schemaDestination);
     Directory.CreateDirectory(Path.Combine(fixtureRoot.FullName, "governance", "milestones"));
     Directory.CreateDirectory(Path.Combine(fixtureRoot.FullName, "governance", "work-items"));
+    Directory.CreateDirectory(Path.Combine(fixtureRoot.FullName, "governance", "dependencies"));
     Directory.CreateDirectory(Path.Combine(fixtureRoot.FullName, "governance", "policies"));
 
     File.WriteAllText(Path.Combine(fixtureRoot.FullName, "governance", "milestones", "MVP.yaml"), """
@@ -93,7 +99,7 @@ goal: Validate governance behavior
 scope: [governance]
 authority_refs: [authority]
 prerequisites: []
-work_items: [TUN-001]
+work_items: [TUN-001, TUN-TRANSITION, TUN-LOCAL, TUN-MERGED, TUN-CHAIN]
 required_gates: []
 required_roles: []
 evidence_refs: []
@@ -101,20 +107,91 @@ known_risks: []
 created_at: 2026-09-30T00:00:00-04:00
 updated_at: 2026-09-30T00:00:00-04:00
 """);
-    File.WriteAllText(Path.Combine(fixtureRoot.FullName, "governance", "work-items", "TUN-001.yaml"), """
+
+    WriteWorkItem(fixtureRoot, "TUN-001", "VALIDATION", "[]");
+    WriteWorkItem(fixtureRoot, "TUN-TRANSITION", "DRAFT", "[]");
+    WriteWorkItem(fixtureRoot, "TUN-LOCAL", "VALIDATION", "[TUN-001]");
+    WriteWorkItem(fixtureRoot, "TUN-CHAIN", "BACKLOG", "[TUN-LOCAL]");
+    WriteWorkItem(fixtureRoot, "TUN-MERGED", "BACKLOG", "[TUN-001]");
+
+    File.WriteAllText(Path.Combine(fixtureRoot.FullName, "governance", "dependencies", "DEP-LOCAL.yaml"), """
 schema_version: 1
-work_item_id: TUN-001
+dependency_id: DEP-LOCAL
+work_item_id: TUN-LOCAL
+prerequisite_work_item_id: TUN-001
+required_readiness: LOCAL_VALIDATED
+reason: Fixture local dependency
+status: ACTIVE
+evidence_refs: []
+created_at: 2026-09-30T00:00:00-04:00
+updated_at: 2026-09-30T00:00:00-04:00
+""");
+    File.WriteAllText(Path.Combine(fixtureRoot.FullName, "governance", "dependencies", "DEP-CHAIN.yaml"), """
+schema_version: 1
+dependency_id: DEP-CHAIN
+work_item_id: TUN-CHAIN
+prerequisite_work_item_id: TUN-LOCAL
+required_readiness: LOCAL_VALIDATED
+reason: Fixture chained local dependency
+status: ACTIVE
+evidence_refs: []
+created_at: 2026-09-30T00:00:00-04:00
+updated_at: 2026-09-30T00:00:00-04:00
+""");
+    File.WriteAllText(Path.Combine(fixtureRoot.FullName, "governance", "dependencies", "DEP-MERGED.yaml"), """
+schema_version: 1
+dependency_id: DEP-MERGED
+work_item_id: TUN-MERGED
+prerequisite_work_item_id: TUN-001
+required_readiness: MERGED_TO_MAIN
+reason: Fixture protected-main dependency
+status: ACTIVE
+evidence_refs: [governance/evidence/merged-main.json]
+created_at: 2026-09-30T00:00:00-04:00
+updated_at: 2026-09-30T00:00:00-04:00
+""");
+
+    File.WriteAllText(Path.Combine(fixtureRoot.FullName, "governance", "policies", "pr-integration-policy.yaml"), """
+schema_version: 1
+policy_id: fixture-pr-integration
+approval_pending_blocks_global_execution: false
+continue_independent_work: true
+continue_local_validation: true
+default_dependency_readiness: LOCAL_VALIDATED
+require_explicit_merged_main_for: []
+dependent_unmerged_chain_limit: 1
+concurrent_unmerged_work_limit: null
+request_human_action_only_when_required: true
+""");
+    File.WriteAllText(Path.Combine(fixtureRoot.FullName, "governance", "policies", "lifecycle-policy.yaml"), """
+schema_version: 1
+work_item:
+  normal: [DRAFT, BACKLOG, REFINEMENT, READY, IN_PROGRESS, CODE_REVIEW, VALIDATION, PRODUCT_ACCEPTANCE, DONE]
+  side: [BLOCKED, NEEDS_PRODUCT_DECISION]
+milestone:
+  normal: [PROPOSED, APPROVED, ACTIVE]
+  side: [BLOCKED]
+closure_requires_evidence: true
+history_deletion_for_cleanup: false
+""");
+}
+
+static void WriteWorkItem(DirectoryInfo fixtureRoot, string id, string status, string prerequisites)
+{
+    File.WriteAllText(Path.Combine(fixtureRoot.FullName, "governance", "work-items", $"{id}.yaml"), $"""
+schema_version: 1
+work_item_id: {id}
 milestone_id: MVP
 sprint_id: null
-title: Fixture work item
-status: DRAFT
+title: Fixture work item {id}
+status: {status}
 type: GOVERNANCE_TOOLING
 authority_refs: [authority]
 flow_refs: []
 contract_refs: []
 decision_refs: []
 acceptance_criteria: [deterministic]
-prerequisites: []
+prerequisites: {prerequisites}
 blockers: []
 impact:
   architecture: true
@@ -133,17 +210,6 @@ todos: []
 defects: []
 created_at: 2026-09-30T00:00:00-04:00
 updated_at: 2026-09-30T00:00:00-04:00
-""");
-    File.WriteAllText(Path.Combine(fixtureRoot.FullName, "governance", "policies", "lifecycle-policy.yaml"), """
-schema_version: 1
-work_item:
-  normal: [DRAFT, BACKLOG, REFINEMENT, READY, IN_PROGRESS, CODE_REVIEW, VALIDATION, PRODUCT_ACCEPTANCE, DONE]
-  side: [BLOCKED, NEEDS_PRODUCT_DECISION]
-milestone:
-  normal: [PROPOSED, APPROVED, ACTIVE]
-  side: [BLOCKED]
-closure_requires_evidence: true
-history_deletion_for_cleanup: false
 """);
 }
 

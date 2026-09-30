@@ -13,6 +13,11 @@ dotnet run --project src/Tunner.Governance -- governance transition check TUN-P0
 ```
 
 Pass `--repository <path>` before `governance` to point at another checkout. The tool reports JSON and returns a nonzero exit code for invalid records, blocked gates, or rejected transitions.
+## Approval-pending execution
+
+`governance next` returns `Items` for local/branch work and `HumanIntegrationActions` separately. A dependency explicitly declared `LOCAL_VALIDATED` may proceed after local validation; `MERGED_TO_MAIN` remains blocked until its prerequisite is `DONE` and the dependency’s merge-evidence references exist. This never approves, merges, or bypasses protected `main` controls.
+
+The PR-integration policy may set positive dependent-chain or concurrent-unmerged limits. The repository default leaves both values `null`, so no limit is inferred without an approved policy value.
 
 
 ## Context commands
@@ -37,4 +42,4 @@ dotnet build Tunner.Governance.sln --no-restore
 dotnet run --project tests/Tunner.Governance.FunctionalTests --no-restore
 ```
 
-The harness creates an isolated temporary repository fixture, covers valid validation/status/next behavior, required-evidence gate failure, invalid lifecycle transition rejection, and malformed-YAML rejection, then removes the fixture.
+The harness creates an isolated temporary repository fixture, covers valid validation/status/next behavior, required-evidence gate failure, invalid lifecycle transition rejection, AMD-0002 local/merged readiness behavior, configured chain-limit blocking, and malformed-YAML rejection, then removes the fixture.

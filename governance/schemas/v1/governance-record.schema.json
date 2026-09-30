@@ -35,8 +35,8 @@
     },
     "dependency": {
       "type": "object",
-      "properties": { "schema_version": { "$ref": "#/$defs/schemaVersion" }, "dependency_id": { "$ref": "#/$defs/id" }, "source_scope_type": { "$ref": "#/$defs/status" }, "source_scope_id": { "$ref": "#/$defs/id" }, "target_scope_type": { "$ref": "#/$defs/status" }, "target_scope_id": { "$ref": "#/$defs/id" }, "relationship": { "$ref": "#/$defs/status" }, "rationale": { "$ref": "#/$defs/nonEmptyString" }, "created_at": { "$ref": "#/$defs/timestamp" } },
-      "required": ["schema_version", "dependency_id", "source_scope_type", "source_scope_id", "target_scope_type", "target_scope_id", "relationship", "rationale", "created_at"], "additionalProperties": false
+      "properties": { "schema_version": { "$ref": "#/$defs/schemaVersion" }, "dependency_id": { "$ref": "#/$defs/id" }, "work_item_id": { "$ref": "#/$defs/id" }, "prerequisite_work_item_id": { "$ref": "#/$defs/id" }, "required_readiness": { "enum": ["LOCAL_VALIDATED", "MERGED_TO_MAIN"] }, "reason": { "$ref": "#/$defs/nonEmptyString" }, "status": { "$ref": "#/$defs/status" }, "evidence_refs": { "$ref": "#/$defs/stringArray" }, "created_at": { "$ref": "#/$defs/timestamp" }, "updated_at": { "$ref": "#/$defs/timestamp" } },
+      "required": ["schema_version", "dependency_id", "work_item_id", "prerequisite_work_item_id", "required_readiness", "reason", "status", "evidence_refs", "created_at", "updated_at"], "additionalProperties": false
     },
     "todo": {
       "type": "object",

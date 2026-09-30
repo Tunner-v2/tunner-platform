@@ -1,9 +1,9 @@
 {
   "GeneratorVersion": "tunner-context-0.1.0",
-  "GeneratedAt": "2026-09-30T17:49:28.1613081+00:00",
+  "GeneratedAt": "2026-09-30T18:14:01.1537323+00:00",
   "WorkItem": {
-    "Id": "TUN-P0-003",
-    "Title": "Governance schemas",
+    "Id": "TUN-P0-004",
+    "Title": "tunner-governance MVP",
     "Status": "VALIDATION",
     "ContextPolicy": "TASK"
   },
@@ -14,9 +14,24 @@
       "Sha256": "e7f9746520de0f438fba7946aba0478d030a2cb149b51042639b5e982ec294a2"
     },
     {
+      "Path": ".agent/skills/cyber-security-engineer/SKILL.md",
+      "Reason": "activated role skill",
+      "Sha256": "39589fc33ee2b55437333e552daa76b70c5c3f9f894716bb68447505b8f211bc"
+    },
+    {
+      "Path": ".agent/skills/full-stack-engineer/SKILL.md",
+      "Reason": "activated role skill",
+      "Sha256": "fb1cccbb0d8e5ff84e87e0333a76d9db3a30204e62e0027eadc835db56893aff"
+    },
+    {
       "Path": ".agent/skills/governance-engineer/SKILL.md",
       "Reason": "activated role skill",
       "Sha256": "020d63b77bc5f8516709cc743ae5505e906ce3232b6e0d4ae3fe1799cfc5450d"
+    },
+    {
+      "Path": ".agent/skills/rd-engineer/SKILL.md",
+      "Reason": "activated role skill",
+      "Sha256": "324a169862ebe365422338592c6d20cec1baae34024e092e18fb8eee6452aa5e"
     },
     {
       "Path": ".agent/skills/tester-qa-engineer/SKILL.md",
@@ -34,19 +49,34 @@
       "Sha256": "6d2cca41c5a9ba771962c7fc535998ce34f80abe491dce6a83a165a9c28ba645"
     },
     {
+      "Path": "docs/authority/amendments/AMD-0002/AMD-0002_Non-Blocking_PR_Approval_and_Continuous_Local_Execution.md",
+      "Reason": "explicit authority reference",
+      "Sha256": "133c067df9d6efd986f5f56b9a8c8cdc4328e4ceec5b2e27710c4454bb693093"
+    },
+    {
+      "Path": "docs/authority/baselines/1.6.0/03_Governed_Development_Lifecycle_Scrum_Git.md",
+      "Reason": "explicit authority reference",
+      "Sha256": "d204886943712849c3453e22603b5a541f2a46b05cd15b17bc74382900abf0f7"
+    },
+    {
       "Path": "docs/authority/baselines/1.6.0/04_Governance_and_Context_Tooling_Specification.md",
       "Reason": "explicit authority reference",
       "Sha256": "bb563aef0a8a8386c180b11355d46d1da189f0a37c15d3021fd90e2f45469ede"
     },
     {
+      "Path": "docs/authority/baselines/1.6.0/12_AI_Development_Protocol_Context_and_Project_Memory.md",
+      "Reason": "explicit authority reference",
+      "Sha256": "f29a4811fac77e247d57949ca412823323a010eec9c87a1f4a5a8a84275880ca"
+    },
+    {
       "Path": "docs/project/CURRENT_STATE.md",
       "Reason": "current project state",
-      "Sha256": "205bb7c20d7a60e73925ed444b0c873f5534a1387f629434e1a41920c997a2e8"
+      "Sha256": "a52610e221e58ba81d44f7fdcc67def00fd0763744f001882ba81c234697ad9e"
     },
     {
       "Path": "docs/project/HANDOFF.md",
       "Reason": "handoff state",
-      "Sha256": "2b247083dc67a7da6d61205918d7a64e343ceceecc9dd227e1e84fc078dca8b7"
+      "Sha256": "cece05e7a7e666d03c5dbe67d0dfd010b1d333b20e9a08e0cd47e5206fde7491"
     },
     {
       "Path": "docs/project/PROJECT_CONTEXT.md",
@@ -54,14 +84,34 @@
       "Sha256": "d49e7f38268e5c0cf79a49832b4c4ece580d3d54cdb5bfcceb1a1c21930aa256"
     },
     {
-      "Path": "governance/evidence/TUN-P0-003-ROLE-REVIEWS.json",
+      "Path": "governance/context/CTX-TUN-P0-004-001.yaml",
       "Reason": "required evidence",
-      "Sha256": "1986349ccbff744c45134ab29e38377b12fd32fa755cb95ce9068928a60125b7"
+      "Sha256": "aea186031156ddee31fc1e2081557e59de87f235a51141328c5a6df5fc571e76"
     },
     {
-      "Path": "governance/evidence/TUN-P0-003-SCHEMA-VALIDATION.json",
+      "Path": "governance/decisions/dec-0001-p0-local-integration.yaml",
+      "Reason": "explicit decision reference",
+      "Sha256": "14fa14ed9aff8d89846db1b8f567c08a037c4921a7f67b14f1b0182b8d03af58"
+    },
+    {
+      "Path": "governance/dependencies/DEP-TUN-P0-004-TUN-P0-003.yaml",
       "Reason": "required evidence",
-      "Sha256": "6de5fd1463f4b818a7920cba9bc179a7f00f8bb061213cc1b870ea8898e11fae"
+      "Sha256": "3d8268dcaf1d6aab72a0386964380c2e900762d2c4b1d9824e95614d7a4c3b10"
+    },
+    {
+      "Path": "governance/evidence/TUN-P0-004-RD-PACKAGES.json",
+      "Reason": "required evidence",
+      "Sha256": "80aa7f199a19b112d1230e230dfe30df6ca6ea56611465cd146bea9af3d4d5ca"
+    },
+    {
+      "Path": "governance/evidence/TUN-P0-004-ROLE-REVIEWS.json",
+      "Reason": "required evidence",
+      "Sha256": "d6ec4157c2d462560108b79893275406ba270855cb5d9ccf79ef36d188a233e5"
+    },
+    {
+      "Path": "governance/evidence/TUN-P0-004-VALIDATION.json",
+      "Reason": "required evidence",
+      "Sha256": "92f2a4d36f25d70bb0838edf71f5eddda0d622b6c71e0d3706e230e4a104ebf0"
     },
     {
       "Path": "governance/policies/lifecycle-policy.yaml",
@@ -69,19 +119,44 @@
       "Sha256": "e3f9131426f8aa2725c10cc80cec7592f3a0b4743364210f2f951e5c1d69ada9"
     },
     {
-      "Path": "governance/schemas/v1/README.md",
+      "Path": "governance/policies/pr-integration-policy.yaml",
       "Reason": "required evidence",
-      "Sha256": "a4179a985975053f909f1afb1615f565d6442e2484f29cb43147db3a4f0a5a06"
+      "Sha256": "3efe932f4160b6613200456183b024996ad0096b3b0f96b5c4d5d101559def64"
     },
     {
-      "Path": "governance/work-items/TUN-P0-001.yaml",
-      "Reason": "prerequisite state",
-      "Sha256": "1e299998b0f12e5ef9d58e73cc58ca3b7797159253f79ed59f8dbdf781fc14b1"
+      "Path": "governance/schemas/v1/governance-record.schema.json",
+      "Reason": "required evidence",
+      "Sha256": "d487ff5959281379b0a06f3126d9de32061b816a7abe4ead04e493aaa9bfd149"
     },
     {
       "Path": "governance/work-items/TUN-P0-003.yaml",
-      "Reason": "selected work item",
+      "Reason": "prerequisite state",
       "Sha256": "d187b5f86964da196cd93f6f88483b2fbf57969b006c674863bdd18d5b27f01c"
+    },
+    {
+      "Path": "governance/work-items/TUN-P0-004.yaml",
+      "Reason": "selected work item",
+      "Sha256": "38ac81df885f407e9982929c40715453f211e6e60f677f01afd05b589dac698c"
+    },
+    {
+      "Path": "src/Tunner.Governance/GovernanceApplication.cs",
+      "Reason": "required evidence",
+      "Sha256": "f67d9b332bbbd5b8e1cdfbce3682b401cc9cdfa8c0b7b5942fefccce20ab6a09"
+    },
+    {
+      "Path": "src/Tunner.Governance/README.md",
+      "Reason": "required evidence",
+      "Sha256": "2717a2acfdab708cddba8faea16242e3ca2f8883371b2b37af38ecb55cf84778"
+    },
+    {
+      "Path": "tests/Tunner.Governance.FunctionalTests/Program.cs",
+      "Reason": "required evidence",
+      "Sha256": "a92d5641f8af7313488bcb89cf0770618f250e22498a34d1d693ffe549f6e454"
+    },
+    {
+      "Path": "tools/validation/Validate-TunnerGovernanceSource.ps1",
+      "Reason": "required evidence",
+      "Sha256": "044a9c05ce911952c1b4112733fda27abc6128995807f13cda5a42e0b2c48854"
     }
   ],
   "Excluded": [
@@ -90,11 +165,24 @@
       "Reason": "optional source is unavailable: explicit decision reference"
     },
     {
+      "Path": "governance/decisions/AMD-0002.yaml",
+      "Reason": "optional source is unavailable: explicit decision reference"
+    },
+    {
+      "Path": "governance/decisions/DEC-0001.yaml",
+      "Reason": "optional source is unavailable: explicit decision reference"
+    },
+    {
       "Path": "governance/decisions/amd-0001-p0-local-integration.yaml",
+      "Reason": "optional source is unavailable: explicit decision reference"
+    },
+    {
+      "Path": "governance/decisions/amd-0002-p0-local-integration.yaml",
       "Reason": "optional source is unavailable: explicit decision reference"
     }
   ],
   "GitHistory": [
+    "831fb2c governance: refresh P0 schema validation evidence",
     "36591af governance: apply AMD-0002 contribution policy",
     "f746517 governance: synchronize AMD-0002 authority",
     "d5d3006 docs: record LGTM probe handoff",
@@ -102,8 +190,7 @@
     "02205af docs: record P0 Docker handoff",
     "78c8466 infra: add P0 local Docker foundation",
     "017e999 governance: add bounded context MVP",
-    "2c9a547 governance: add read-only control-plane MVP",
-    "948821f docs: hand off P0-004 governance MVP",
-    "e89f1f8 docs: refresh Drive authority context"
+    "9509d1a governance: validate P0 control-plane MVP",
+    "2c9a547 governance: add read-only control-plane MVP"
   ]
 }

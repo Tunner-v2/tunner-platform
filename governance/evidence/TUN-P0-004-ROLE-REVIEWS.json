@@ -4,75 +4,13 @@
   "scope_type": "WORK_ITEM",
   "scope_id": "TUN-P0-004",
   "status": "PASS",
-  "reviewed_at": "2026-09-30T11:46:14-04:00",
+  "reviewed_at": "2026-09-30T18:07:51Z",
   "reviews": [
-    {
-      "role": "governance-engineer",
-      "skill_version": "1.0.0",
-      "conclusion": "PASS",
-      "checks": [
-        "The command surface remains read-only and exposes validate, status, next, gate check, and transition check.",
-        "Lifecycle evaluation accepted only the sequential IN_PROGRESS to CODE_REVIEW and CODE_REVIEW to VALIDATION transitions.",
-        "The P0 local integration prerequisite behavior remains limited to the approved DEC-0001 condition."
-      ],
-      "findings": [
-        "Rich nested schema type/format validation and Git-history immutability are explicitly deferred."
-      ]
-    },
-    {
-      "role": "full-stack-engineer",
-      "skill_version": "1.0.0",
-      "conclusion": "PASS",
-      "checks": [
-        "The isolated .NET solution builds with zero warnings and zero errors.",
-        "No Product business behavior, API contract, or data mutation is introduced."
-      ],
-      "findings": []
-    },
-    {
-      "role": "tester-qa-engineer",
-      "skill_version": "1.0.0",
-      "conclusion": "PASS",
-      "checks": [
-        "The deterministic fixture harness passed valid validate/status/next behavior, missing-evidence gate rejection, invalid lifecycle-transition rejection, and malformed YAML rejection.",
-        "Live repository validation passed with nine records and no diagnostics."
-      ],
-      "findings": []
-    },
-    {
-      "role": "auditor",
-      "skill_version": "1.0.0",
-      "conclusion": "PASS",
-      "checks": [
-        "Authority, decision, work-item, context, research, test, and role-review references remain in repository records.",
-        "P0-004 evidence records executable outcomes without claiming P0 completion."
-      ],
-      "findings": [
-        "P0-004 remains VALIDATION; only the aggregate final protected P0 PR can satisfy the DEC-0001 completion gate."
-      ]
-    },
-    {
-      "role": "rd-engineer",
-      "skill_version": "1.0.0",
-      "conclusion": "PASS",
-      "checks": [
-        "Approved package pins restored and compiled under .NET SDK 10.0.401.",
-        "NuGet vulnerability metadata reported no vulnerable packages for the solution."
-      ],
-      "findings": []
-    },
-    {
-      "role": "cyber-security-engineer",
-      "skill_version": "1.0.0",
-      "conclusion": "PASS",
-      "checks": [
-        "Static validation rejects source-level mutation, process execution, and environment-secret access in the governance engine.",
-        "The tool uses repository files only and contains no Product-data operations or credentials.",
-        "No vulnerable packages were reported by the current NuGet source metadata."
-      ],
-      "findings": [
-        "Package vulnerability metadata is point-in-time and does not replace future release security review."
-      ]
-    }
+    { "role": "governance-engineer", "skill_version": "1.0.0", "conclusion": "PASS", "checks": ["Dependency records use explicit LOCAL_VALIDATED or MERGED_TO_MAIN readiness.", "The scheduler separates human protected-main integration actions from agent-executable work.", "Configured chain and concurrency limits are enforced only when a policy supplies a positive value."], "findings": [] },
+    { "role": "full-stack-engineer", "skill_version": "1.0.0", "conclusion": "PASS", "checks": ["The isolated .NET tooling solution builds with zero warnings and zero errors.", "No Product business behavior, API contract, or Product-data mutation is introduced."], "findings": [] },
+    { "role": "tester-qa-engineer", "skill_version": "1.0.0", "conclusion": "PASS", "checks": ["Deterministic fixture coverage passes for valid validation/status/next behavior, malformed YAML, gate failure, invalid lifecycle transition, LOCAL_VALIDATED continuation, MERGED_TO_MAIN blocking, and configured chain-limit blocking."], "findings": [] },
+    { "role": "auditor", "skill_version": "1.0.0", "conclusion": "PASS", "checks": ["AMD-0002 authority, dependency declaration, policy, implementation, tests, and evidence are linked from TUN-P0-004.", "The live policy preserves protected-main human authority and does not claim merge bypass."], "findings": [] },
+    { "role": "rd-engineer", "skill_version": "1.0.0", "conclusion": "PASS", "checks": ["Primary NuGet package listings were refreshed for the approved package pins.", "Current vulnerability metadata reports no vulnerable package for either tooling project."], "findings": [] },
+    { "role": "cyber-security-engineer", "skill_version": "1.0.0", "conclusion": "PASS", "checks": ["The governance engine remains repository-read-only with no Product-data or credential operations.", "Merged-main dependencies require declared merge evidence and surface a human action instead of silently unblocking."], "findings": [] }
   ]
 }

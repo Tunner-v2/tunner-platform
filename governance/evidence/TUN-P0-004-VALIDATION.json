@@ -4,62 +4,29 @@
   "scope_type": "WORK_ITEM",
   "scope_id": "TUN-P0-004",
   "status": "PASS",
-  "checked_at": "2026-09-30T11:46:14-04:00",
+  "checked_at": "2026-09-30T18:10:18Z",
+  "authority_refs": [
+    "docs/authority/baselines/1.6.0/03_Governed_Development_Lifecycle_Scrum_Git.md",
+    "docs/authority/baselines/1.6.0/04_Governance_and_Context_Tooling_Specification.md",
+    "docs/authority/amendments/AMD-0002/AMD-0002_Non-Blocking_PR_Approval_and_Continuous_Local_Execution.md"
+  ],
   "checks": [
-    {
-      "name": "static source contract",
-      "command": "powershell -ExecutionPolicy Bypass -File tools/validation/Validate-TunnerGovernanceSource.ps1",
-      "result": "PASS",
-      "details": "Validated the solution/project shape, approved package references, command surface, parser/schema markers, fixture scenarios, read-only source restrictions, and detected .NET SDK 10.0.401."
-    },
-    {
-      "name": "governance schema structural contract",
-      "command": "powershell -ExecutionPolicy Bypass -File tools/validation/Validate-GovernanceSchemas.ps1",
-      "result": "PASS",
-      "details": "Validated the shared schema library and all 16 required entry schemas."
-    },
-    {
-      "name": "C# restore, build, and functional execution",
-      "command": "dotnet restore Tunner.Governance.sln; dotnet build Tunner.Governance.sln --no-restore; dotnet run --project tests/Tunner.Governance.FunctionalTests --no-restore",
-      "result": "PASS",
-      "details": ".NET SDK 10.0.401 restored dependencies; build completed with 0 warnings and 0 errors; the deterministic positive and negative fixture harness passed."
-    },
-    {
-      "name": "live repository governance validation",
-      "command": "dotnet run --project src/Tunner.Governance --no-build -- governance validate",
-      "result": "PASS",
-      "details": "Validated 9 live P0 governance records with no diagnostics after additive milestone-schema alignment."
-    },
-    {
-      "name": "lifecycle transition checks",
-      "command": "dotnet run --project src/Tunner.Governance --no-build -- governance transition check TUN-P0-004 CODE_REVIEW; dotnet run --project src/Tunner.Governance --no-build -- governance transition check TUN-P0-004 VALIDATION",
-      "result": "PASS",
-      "details": "Both sequential normal-state transitions were accepted. Direct IN_PROGRESS to DONE remained rejected."
-    },
-    {
-      "name": "dependency vulnerability metadata",
-      "command": "dotnet list Tunner.Governance.sln package --vulnerable --include-transitive",
-      "result": "PASS",
-      "details": "No vulnerable packages were reported by the current NuGet source metadata."
-    },
-    {
-      "name": "whitespace check",
-      "command": "git diff --check",
-      "result": "PASS",
-      "details": "No whitespace errors reported."
-    }
+    { "name": "static source contract", "command": "powershell -ExecutionPolicy Bypass -File tools/validation/Validate-TunnerGovernanceSource.ps1", "result": "PASS", "details": "Validated read-only source restrictions, the AMD-0002 integration-policy parser, dependency readiness controls, scheduler human-action surface, configured reviewability-limit markers, and fixture scenarios under .NET SDK 10.0.401." },
+    { "name": "governance schema structural contract", "command": "powershell -ExecutionPolicy Bypass -File tools/validation/Validate-GovernanceSchemas.ps1", "result": "PASS", "details": "Validated the shared schema library and all 16 entry schemas, including the AMD-0002 dependency record shape." },
+    { "name": "C# build and functional execution", "command": "dotnet build Tunner.Governance.sln --no-restore; dotnet run --project tests/Tunner.Governance.FunctionalTests --no-build --no-restore", "result": "PASS", "details": "Build completed with 0 warnings and 0 errors. The deterministic fixture proves LOCAL_VALIDATED continuation, MERGED_TO_MAIN blocking with separate human integration action, and configured unmerged-chain limit enforcement." },
+    { "name": "live repository governance validation and readiness", "command": "dotnet run --project src/Tunner.Governance --no-build -- governance validate; dotnet run --project src/Tunner.Governance --no-build -- governance next; dotnet run --project src/Tunner.Governance --no-build -- governance gate check TUN-P0-004", "result": "PASS", "details": "Validated 16 records with no diagnostics. Eligible local P0 work remains listed, no current scope declares MERGED_TO_MAIN, and TUN-P0-004 gate check is READY." },
+    { "name": "dependency vulnerability metadata", "command": "dotnet list Tunner.Governance.sln package --vulnerable --include-transitive", "result": "PASS", "details": "No vulnerable packages were reported by the current NuGet source metadata." }
   ],
   "artifacts": [
-    "Tunner.Governance.sln",
-    "src/Tunner.Governance/Tunner.Governance.csproj",
-    "src/Tunner.Governance/Program.cs",
     "src/Tunner.Governance/GovernanceApplication.cs",
-    "src/Tunner.Governance/README.md",
     "tests/Tunner.Governance.FunctionalTests/Program.cs",
+    "governance/policies/pr-integration-policy.yaml",
+    "governance/dependencies/DEP-TUN-P0-004-TUN-P0-003.yaml",
+    "governance/schemas/v1/governance-record.schema.json",
     "tools/validation/Validate-TunnerGovernanceSource.ps1"
   ],
   "limitations": [
-    "The read-only MVP validates schema catalog shape, identifiers, schema version, required fields, and undeclared top-level fields. Rich nested type/format validation and Git-history immutability require later governed work and tests.",
-    "P0-004 is in VALIDATION. It cannot enter DONE until the aggregate P0 final protected pull request is complete under DEC-0001."
+    "The live PR-integration policy retains canonical null review-limit defaults; no project-specific limit is inferred. The engine enforces either limit when a governed policy configures a positive value.",
+    "P0-004 remains VALIDATION. It cannot enter DONE until the aggregate P0 final protected pull request completes under DEC-0001."
   ]
 }

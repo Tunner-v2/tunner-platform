@@ -6,31 +6,10 @@
   "status": "PASS",
   "retrieved_at": "2026-09-30",
   "sources": [
-    {
-      "package": "System.CommandLine",
-      "version": "2.0.12",
-      "source": "https://www.nuget.org/packages/System.CommandLine",
-      "selection": "Current stable 2.0.x package; supports RootCommand, nested commands, ParseResult, and SetAction."
-    },
-    {
-      "package": "YamlDotNet",
-      "version": "18.1.0",
-      "source": "https://www.nuget.org/packages/YamlDotNet",
-      "selection": "Current stable 18.x package; supports low-level YAML parsing and a document object model on .NET 10."
-    },
-    {
-      "package": "JsonSchema.Net",
-      "version": "9.4.0",
-      "source": "https://www.nuget.org/packages/JsonSchema.Net",
-      "selection": "Current stable 9.x package; used for JSON Schema Draft 2020-12 record-shape validation."
-    }
+    { "package": "System.CommandLine", "version": "2.0.12", "source": "https://www.nuget.org/packages/System.CommandLine/2.0.12", "selection": "Published stable 2.0.x pin; NuGet confirms the package supports command parsing and net8.0-or-higher compatibility." },
+    { "package": "YamlDotNet", "version": "18.1.0", "source": "https://www.nuget.org/packages/YamlDotNet/18.1.0", "selection": "Published stable 18.x pin used for repository-native YAML parsing." },
+    { "package": "JsonSchema.Net", "version": "9.4.0", "source": "https://www.nuget.org/packages/JsonSchema.Net/9.4.0", "selection": "Published 9.x pin compatible with net10.0 for the Draft 2020-12 schema catalog." }
   ],
-  "compatibility": {
-    "target_framework": "net10.0",
-    "language_version": "14.0",
-    "central_package_management": true
-  },
-  "limitations": [
-    "The local machine has no .NET SDK installed; package restore, compilation, and executable tests are not run in this environment."
-  ]
+  "compatibility": { "target_framework": "net10.0", "language_version": "14.0", "central_package_management": true, "local_sdk": "10.0.401" },
+  "limitations": [ "Package-page availability and vulnerability metadata are point-in-time evidence; they do not replace a release security review." ]
 }

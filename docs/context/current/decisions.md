@@ -1,3 +1,3 @@
 # Decisions
 
-No decision record was resolved from the work item references.
+- `governance/decisions/dec-0001-p0-local-integration.yaml` — explicit decision reference

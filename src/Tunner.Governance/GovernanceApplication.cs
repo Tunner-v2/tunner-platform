@@ -15,6 +15,7 @@ public static class GovernanceApplication
         new("milestones", "milestone", "milestone.schema.json", "milestone", "milestone_id"),
         new("sprints", "sprint", "sprint.schema.json", "sprint", "sprint_id"),
         new("work-items", "work-item", "work-item.schema.json", "workItem", "work_item_id"),
+        new("dependencies", "dependency", "dependency.schema.json", "dependency", "dependency_id"),
         new("todos", "todo", "todo.schema.json", "todo", "id"),
         new("defects", "defect", "defect.schema.json", "defect", "defect_id"),
         new("reopens", "reopen", "reopen.schema.json", "reopen", "reopen_id"),
@@ -29,6 +30,7 @@ public static class GovernanceApplication
         var diagnostics = new List<Diagnostic>();
         var schemas = SchemaCatalog.Load(repository, diagnostics);
         var records = LoadRecords(repository, diagnostics);
+        _ = IntegrationPolicy.Load(repository, diagnostics);
 
         foreach (var record in records)
         {
@@ -54,6 +56,11 @@ public static class GovernanceApplication
             if (!int.TryParse(record.Scalar("schema_version"), NumberStyles.Integer, CultureInfo.InvariantCulture, out var version) || version < 1)
             {
                 diagnostics.Add(Diagnostic.Error(record.Path, record.Root.Start, "GOV_SCHEMA_VERSION", "schema_version must be an integer of at least 1."));
+            }
+
+            if (StringComparer.Ordinal.Equals(record.Type.DefinitionName, "dependency") && !DependencyReadiness.Contains(record.Scalar("required_readiness") ?? string.Empty, StringComparer.Ordinal))
+            {
+                diagnostics.Add(Diagnostic.Error(record.Path, record.Root.Start, "GOV_DEPENDENCY_READINESS", "Dependency required_readiness must be LOCAL_VALIDATED or MERGED_TO_MAIN."));
             }
         }
 
@@ -82,8 +89,11 @@ public static class GovernanceApplication
         var diagnostics = new List<Diagnostic>();
         var records = LoadRecords(repository, diagnostics);
         var workItems = WorkItems(records);
+        var dependencies = DependencyRecords(records);
+        var integrationPolicy = IntegrationPolicy.Load(repository, diagnostics);
         var allowValidatedP0Prerequisites = HasApprovedP0LocalIntegration(records);
         var next = new List<NextItem>();
+        var integrationActions = new List<IntegrationAction>();
 
         foreach (var record in workItems.Values.OrderBy(item => item.Identifier, StringComparer.Ordinal))
         {
@@ -93,12 +103,18 @@ public static class GovernanceApplication
                 continue;
             }
 
-            var reasons = ReadinessReasons(record, workItems, allowValidatedP0Prerequisites);
+            var reasons = ReadinessReasons(repository, record, workItems, dependencies, integrationPolicy, allowValidatedP0Prerequisites);
+            integrationActions.AddRange(PendingIntegrationActions(repository, record, workItems, dependencies, integrationPolicy));
             var active = StringComparer.Ordinal.Equals(state, "IN_PROGRESS");
             next.Add(new NextItem(record.Identifier, state, active || reasons.Count == 0, active ? "currently in progress" : reasons.Count == 0 ? "all recorded prerequisites and blockers permit work" : string.Join("; ", reasons)));
         }
 
-        return new CommandResult(diagnostics.Count == 0 ? 0 : 1, "next", new NextPayload(next, diagnostics));
+        var actions = integrationActions
+            .DistinctBy(item => (item.WorkItemId, item.PrerequisiteWorkItemId, item.RequiredReadiness))
+            .OrderBy(item => item.WorkItemId, StringComparer.Ordinal)
+            .ThenBy(item => item.PrerequisiteWorkItemId, StringComparer.Ordinal)
+            .ToArray();
+        return new CommandResult(diagnostics.Count == 0 ? 0 : 1, "next", new NextPayload(next, actions, diagnostics));
     }
 
     public static CommandResult CheckGate(DirectoryInfo repository, string workItemId)
@@ -111,7 +127,7 @@ public static class GovernanceApplication
             return new CommandResult(2, "gate check", new GatePayload(workItemId, "NOT_FOUND", ["work item does not exist"], []));
         }
 
-        var failures = ReadinessReasons(workItem, workItems, HasApprovedP0LocalIntegration(records));
+        var failures = ReadinessReasons(repository, workItem, workItems, DependencyRecords(records), IntegrationPolicy.Load(repository, diagnostics), HasApprovedP0LocalIntegration(records));
         var satisfied = new List<string>();
         foreach (var evidencePath in workItem.StringList("required_evidence"))
         {
@@ -178,7 +194,7 @@ public static class GovernanceApplication
     private static Dictionary<string, GovernanceRecord> WorkItems(IReadOnlyList<GovernanceRecord> records)
         => records.Where(item => item.Type.DefinitionName == "work-item" && item.Identifier.Length > 0).ToDictionary(item => item.Identifier, StringComparer.Ordinal);
 
-    private static List<string> ReadinessReasons(GovernanceRecord workItem, Dictionary<string, GovernanceRecord> workItems, bool allowValidatedP0Prerequisites)
+    private static List<string> ReadinessReasons(DirectoryInfo repository, GovernanceRecord workItem, Dictionary<string, GovernanceRecord> workItems, IReadOnlyList<GovernanceRecord> dependencies, IntegrationPolicyDefinition integrationPolicy, bool allowValidatedP0Prerequisites)
     {
         var failures = new List<string>();
         foreach (var prerequisite in workItem.StringList("prerequisites"))
@@ -189,17 +205,105 @@ public static class GovernanceApplication
                 continue;
             }
 
-            var state = prerequisiteRecord.Scalar("status") ?? "UNKNOWN";
-            var p0LocalException = allowValidatedP0Prerequisites && StringComparer.Ordinal.Equals(workItem.Scalar("milestone_id"), "P0") && StringComparer.Ordinal.Equals(prerequisiteRecord.Scalar("milestone_id"), "P0") && StringComparer.Ordinal.Equals(state, "VALIDATION");
-            if (!StringComparer.Ordinal.Equals(state, "DONE") && !p0LocalException)
+            var declarations = dependencies.Where(item => StringComparer.Ordinal.Equals(item.Scalar("work_item_id"), workItem.Identifier) && StringComparer.Ordinal.Equals(item.Scalar("prerequisite_work_item_id"), prerequisite)).ToArray();
+            if (declarations.Length > 1)
             {
-                failures.Add($"prerequisite '{prerequisite}' is {state}");
+                failures.Add($"prerequisite '{prerequisite}' has multiple dependency declarations");
+                continue;
             }
+
+            var declaration = declarations.SingleOrDefault();
+            var readiness = declaration?.Scalar("required_readiness") ?? integrationPolicy.DefaultDependencyReadiness;
+            if (!DependencyReadiness.Contains(readiness, StringComparer.Ordinal))
+            {
+                failures.Add($"prerequisite '{prerequisite}' has unsupported readiness '{readiness}'");
+                continue;
+            }
+
+            if (!IsPrerequisiteReady(repository, workItem, prerequisiteRecord, declaration, readiness, allowValidatedP0Prerequisites))
+            {
+                failures.Add($"prerequisite '{prerequisite}' requires {readiness} but is {prerequisiteRecord.Scalar("status") ?? "UNKNOWN"}");
+            }
+        }
+
+        var chainDepth = LocalUnmergedChainDepth(workItem, workItems, dependencies, integrationPolicy, new HashSet<string>(StringComparer.Ordinal));
+        if (integrationPolicy.DependentUnmergedChainLimit is { } chainLimit && chainDepth > chainLimit)
+        {
+            failures.Add($"local unmerged dependency chain depth {chainDepth} exceeds configured limit {chainLimit}");
+        }
+
+        var concurrentCount = UnmergedLocalDependentCount(workItems, dependencies, integrationPolicy);
+        if (integrationPolicy.ConcurrentUnmergedWorkLimit is { } concurrentLimit && chainDepth > 0 && concurrentCount > concurrentLimit)
+        {
+            failures.Add($"local unmerged dependent count {concurrentCount} exceeds configured limit {concurrentLimit}");
         }
 
         failures.AddRange(workItem.StringList("blockers").Select(blocker => $"blocker: {blocker}"));
         return failures;
     }
+
+    private static int LocalUnmergedChainDepth(GovernanceRecord workItem, Dictionary<string, GovernanceRecord> workItems, IReadOnlyList<GovernanceRecord> dependencies, IntegrationPolicyDefinition integrationPolicy, ISet<string> visited)
+    {
+        if (!visited.Add(workItem.Identifier))
+        {
+            return 0;
+        }
+
+        var depth = 0;
+        foreach (var prerequisiteId in workItem.StringList("prerequisites"))
+        {
+            if (!workItems.TryGetValue(prerequisiteId, out var prerequisite))
+            {
+                continue;
+            }
+
+            var declaration = dependencies.FirstOrDefault(item => StringComparer.Ordinal.Equals(item.Scalar("work_item_id"), workItem.Identifier) && StringComparer.Ordinal.Equals(item.Scalar("prerequisite_work_item_id"), prerequisiteId));
+            var readiness = declaration?.Scalar("required_readiness") ?? integrationPolicy.DefaultDependencyReadiness;
+            if (StringComparer.Ordinal.Equals(readiness, "LOCAL_VALIDATED") && !StringComparer.Ordinal.Equals(prerequisite.Scalar("status"), "DONE"))
+            {
+                depth = Math.Max(depth, 1 + LocalUnmergedChainDepth(prerequisite, workItems, dependencies, integrationPolicy, visited));
+            }
+        }
+
+        visited.Remove(workItem.Identifier);
+        return depth;
+    }
+
+    private static int UnmergedLocalDependentCount(Dictionary<string, GovernanceRecord> workItems, IReadOnlyList<GovernanceRecord> dependencies, IntegrationPolicyDefinition integrationPolicy)
+        => workItems.Values.Count(workItem => workItem.StringList("prerequisites").Any(prerequisiteId => workItems.TryGetValue(prerequisiteId, out var prerequisite) && !StringComparer.Ordinal.Equals(prerequisite.Scalar("status"), "DONE") && StringComparer.Ordinal.Equals(dependencies.FirstOrDefault(item => StringComparer.Ordinal.Equals(item.Scalar("work_item_id"), workItem.Identifier) && StringComparer.Ordinal.Equals(item.Scalar("prerequisite_work_item_id"), prerequisiteId))?.Scalar("required_readiness") ?? integrationPolicy.DefaultDependencyReadiness, "LOCAL_VALIDATED")));
+
+    private static bool IsPrerequisiteReady(DirectoryInfo repository, GovernanceRecord workItem, GovernanceRecord prerequisite, GovernanceRecord? declaration, string readiness, bool allowValidatedP0Prerequisites)
+    {
+        var state = prerequisite.Scalar("status") ?? "UNKNOWN";
+        if (StringComparer.Ordinal.Equals(state, "DONE"))
+        {
+            return !StringComparer.Ordinal.Equals(readiness, "MERGED_TO_MAIN") || declaration is not null && declaration.StringList("evidence_refs").Count > 0 && declaration.StringList("evidence_refs").All(path => File.Exists(Path.Combine(repository.FullName, path.Replace('/', Path.DirectorySeparatorChar))));
+        }
+
+        var p0LocalException = allowValidatedP0Prerequisites && StringComparer.Ordinal.Equals(workItem.Scalar("milestone_id"), "P0") && StringComparer.Ordinal.Equals(prerequisite.Scalar("milestone_id"), "P0") && StringComparer.Ordinal.Equals(state, "VALIDATION");
+        return StringComparer.Ordinal.Equals(readiness, "LOCAL_VALIDATED") && StringComparer.Ordinal.Equals(state, "VALIDATION") && (declaration is not null || p0LocalException);
+    }
+
+    private static IEnumerable<IntegrationAction> PendingIntegrationActions(DirectoryInfo repository, GovernanceRecord workItem, Dictionary<string, GovernanceRecord> workItems, IReadOnlyList<GovernanceRecord> dependencies, IntegrationPolicyDefinition integrationPolicy)
+    {
+        foreach (var prerequisiteId in workItem.StringList("prerequisites"))
+        {
+            if (!workItems.TryGetValue(prerequisiteId, out var prerequisite))
+            {
+                continue;
+            }
+
+            var declaration = dependencies.FirstOrDefault(item => StringComparer.Ordinal.Equals(item.Scalar("work_item_id"), workItem.Identifier) && StringComparer.Ordinal.Equals(item.Scalar("prerequisite_work_item_id"), prerequisiteId));
+            var readiness = declaration?.Scalar("required_readiness") ?? integrationPolicy.DefaultDependencyReadiness;
+            if (StringComparer.Ordinal.Equals(readiness, "MERGED_TO_MAIN") && !IsPrerequisiteReady(repository, workItem, prerequisite, declaration, readiness, false))
+            {
+                yield return new IntegrationAction(workItem.Identifier, prerequisiteId, readiness, "HUMAN_PROTECTED_MAIN_INTEGRATION_REQUIRED", "The dependent scope explicitly requires merged-main evidence; local execution for unrelated eligible work continues.");
+            }
+        }
+    }
+
+    private static GovernanceRecord[] DependencyRecords(IReadOnlyList<GovernanceRecord> records)
+        => records.Where(item => item.Type.DefinitionName == "dependency").ToArray();
 
     private static bool HasApprovedP0LocalIntegration(IReadOnlyList<GovernanceRecord> records)
         => records.Any(record => record.Type.DefinitionName == "product-decision" && StringComparer.Ordinal.Equals(record.Identifier, "DEC-0001") && StringComparer.Ordinal.Equals(record.Scalar("status"), "APPROVED"));
@@ -304,6 +408,7 @@ public static class GovernanceApplication
         return sequence.Children.OfType<YamlScalarNode>().Select(item => item.Value).Where(item => !string.IsNullOrWhiteSpace(item)).Select(item => item!).ToArray();
     }
 
+    private static readonly string[] DependencyReadiness = ["LOCAL_VALIDATED", "MERGED_TO_MAIN"];
     private static readonly string[] TerminalStates = ["DONE", "CANCELED", "SUPERSEDED", "DUPLICATE", "NOT_APPLICABLE"];
 }
 
@@ -329,7 +434,8 @@ public sealed record MilestoneStatus(string Id, string Status);
 public sealed record WorkItemStatus(string Id, string Status, IReadOnlyList<string> Prerequisites, IReadOnlyList<string> Blockers, IReadOnlyList<string> RequiredEvidence);
 public sealed record StatusPayload(IReadOnlyList<MilestoneStatus> Milestones, IReadOnlyList<WorkItemStatus> WorkItems, object Validation);
 public sealed record NextItem(string WorkItemId, string Status, bool Actionable, string Reason);
-public sealed record NextPayload(IReadOnlyList<NextItem> Items, IReadOnlyList<Diagnostic> Diagnostics);
+public sealed record IntegrationAction(string WorkItemId, string PrerequisiteWorkItemId, string RequiredReadiness, string Action, string Reason);
+public sealed record NextPayload(IReadOnlyList<NextItem> Items, IReadOnlyList<IntegrationAction> HumanIntegrationActions, IReadOnlyList<Diagnostic> Diagnostics);
 public sealed record GatePayload(string WorkItemId, string Outcome, IReadOnlyList<string> Failures, IReadOnlyList<string> Satisfied);
 public sealed record TransitionPayload(string WorkItemId, string From, string Destination, string Outcome, string Reason);
 
@@ -394,6 +500,69 @@ internal static class SchemaCatalog
             diagnostics.Add(Diagnostic.Error(corePath, null, "GOV_SCHEMA_BUILD", exception.Message));
             return new Dictionary<string, SchemaDefinition>(StringComparer.Ordinal);
         }
+    }
+}
+
+internal sealed record IntegrationPolicyDefinition(string DefaultDependencyReadiness, int? DependentUnmergedChainLimit, int? ConcurrentUnmergedWorkLimit);
+
+internal static class IntegrationPolicy
+{
+    public static IntegrationPolicyDefinition Load(DirectoryInfo repository, ICollection<Diagnostic> diagnostics)
+    {
+        var path = Path.Combine(repository.FullName, "governance", "policies", "pr-integration-policy.yaml");
+        try
+        {
+            var stream = new YamlStream();
+            using var reader = File.OpenText(path);
+            stream.Load(reader);
+            if (stream.Documents.Count != 1 || stream.Documents[0].RootNode is not YamlMappingNode root)
+            {
+                diagnostics.Add(Diagnostic.Error(path, null, "GOV_PR_INTEGRATION_POLICY", "PR integration policy must contain one mapping document."));
+                return new IntegrationPolicyDefinition("LOCAL_VALIDATED", null, null);
+            }
+
+            var fields = GovernanceApplication.Fields(root);
+            var defaultReadiness = GovernanceApplication.Scalar(fields, "default_dependency_readiness") ?? string.Empty;
+            if (!new[] { "LOCAL_VALIDATED", "MERGED_TO_MAIN" }.Contains(defaultReadiness, StringComparer.Ordinal))
+            {
+                diagnostics.Add(Diagnostic.Error(path, root.Start, "GOV_PR_INTEGRATION_POLICY", "default_dependency_readiness must be LOCAL_VALIDATED or MERGED_TO_MAIN."));
+                defaultReadiness = "LOCAL_VALIDATED";
+            }
+
+            if (!StringComparer.Ordinal.Equals(GovernanceApplication.Scalar(fields, "approval_pending_blocks_global_execution"), "false") || !StringComparer.Ordinal.Equals(GovernanceApplication.Scalar(fields, "continue_independent_work"), "true") || !StringComparer.Ordinal.Equals(GovernanceApplication.Scalar(fields, "continue_local_validation"), "true"))
+            {
+                diagnostics.Add(Diagnostic.Error(path, root.Start, "GOV_PR_INTEGRATION_POLICY", "AMD-0002 requires non-blocking approval-pending execution controls."));
+            }
+
+            return new IntegrationPolicyDefinition(defaultReadiness, NullableLimit(fields, "dependent_unmerged_chain_limit", path, root.Start, diagnostics), NullableLimit(fields, "concurrent_unmerged_work_limit", path, root.Start, diagnostics));
+        }
+        catch (YamlException exception)
+        {
+            diagnostics.Add(Diagnostic.Error(path, exception.Start, "GOV_PR_INTEGRATION_POLICY", exception.Message));
+            return new IntegrationPolicyDefinition("LOCAL_VALIDATED", null, null);
+        }
+        catch (IOException exception)
+        {
+            diagnostics.Add(Diagnostic.Error(path, null, "GOV_PR_INTEGRATION_POLICY", exception.Message));
+            return new IntegrationPolicyDefinition("LOCAL_VALIDATED", null, null);
+        }
+    }
+
+    private static int? NullableLimit(IReadOnlyDictionary<string, YamlNode> fields, string field, string path, Mark mark, ICollection<Diagnostic> diagnostics)
+    {
+        var value = GovernanceApplication.Scalar(fields, field);
+        if (string.IsNullOrWhiteSpace(value) || StringComparer.Ordinal.Equals(value, "null"))
+        {
+            return null;
+        }
+
+        if (int.TryParse(value, NumberStyles.Integer, CultureInfo.InvariantCulture, out var limit) && limit > 0)
+        {
+            return limit;
+        }
+
+        diagnostics.Add(Diagnostic.Error(path, mark, "GOV_PR_INTEGRATION_POLICY", $"{field} must be a positive integer or null."));
+        return null;
     }
 }
 
