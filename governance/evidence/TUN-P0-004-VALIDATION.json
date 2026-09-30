@@ -1,0 +1,51 @@
+{
+  "schema_version": 1,
+  "evidence_id": "TUN-P0-004-VALIDATION",
+  "scope_type": "WORK_ITEM",
+  "scope_id": "TUN-P0-004",
+  "status": "PARTIAL",
+  "checked_at": "2026-09-30T17:00:00-04:00",
+  "checks": [
+    {
+      "name": "static source contract",
+      "command": "powershell -ExecutionPolicy Bypass -File tools/validation/Validate-TunnerGovernanceSource.ps1",
+      "result": "PASS",
+      "details": "Validated the .NET solution/project shape, approved package references, command surface, parser/schema behavior markers, functional-fixture scenarios, and absence of source-level mutation/process/environment access."
+    },
+    {
+      "name": "governance schema structural contract",
+      "command": "powershell -ExecutionPolicy Bypass -File tools/validation/Validate-GovernanceSchemas.ps1",
+      "result": "PASS",
+      "details": "Validated the shared schema library and all 16 required entry schemas."
+    },
+    {
+      "name": "schema JSON parsing",
+      "result": "PASS",
+      "details": "All 17 JSON schema documents parse with the local PowerShell JSON parser."
+    },
+    {
+      "name": "C# restore/build/functional execution",
+      "command": "dotnet restore Tunner.Governance.sln; dotnet build Tunner.Governance.sln --no-restore; dotnet run --project tests/Tunner.Governance.FunctionalTests --no-restore",
+      "result": "NOT_RUN",
+      "details": "No .NET SDK is installed on the local machine. No dependency installation, restore, build, or executable test was attempted."
+    },
+    {
+      "name": "whitespace check",
+      "command": "git diff --check",
+      "result": "PASS"
+    }
+  ],
+  "artifacts": [
+    "Tunner.Governance.sln",
+    "src/Tunner.Governance/Tunner.Governance.csproj",
+    "src/Tunner.Governance/Program.cs",
+    "src/Tunner.Governance/GovernanceApplication.cs",
+    "src/Tunner.Governance/README.md",
+    "tests/Tunner.Governance.FunctionalTests/Program.cs",
+    "tools/validation/Validate-TunnerGovernanceSource.ps1"
+  ],
+  "limitations": [
+    "Executable behavior, package compatibility, and the functional fixture harness remain unverified until a .NET 10 SDK is installed and the documented commands pass.",
+    "The read-only MVP validates schema catalog shape, identifiers, schema version, required fields, and undeclared top-level fields. Rich nested type/format validation and Git-history immutability require later governed work and tests."
+  ]
+}

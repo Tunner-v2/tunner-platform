@@ -26,7 +26,7 @@
 | TUN-P0-019 | DONE | governance-engineer, devops-engineer, cyber-security-engineer, auditor | none | Ruleset, code-owner review, auto-merge, and automatic PR creation validated through PR #4 |
 | TUN-P0-002 | VALIDATION | governance-engineer, cyber-security-engineer, devops-engineer, tester-qa-engineer, auditor | none | Local policy/evidence validation passed; final DONE remains contingent on final protected P0 PR |
 | TUN-P0-003 | VALIDATION | governance-engineer, tester-qa-engineer, auditor | none | Schema validation passed; P0-004 is in progress locally |
-| TUN-P0-004 | IN_PROGRESS | governance-engineer, full-stack-engineer, tester-qa-engineer, auditor, rd-engineer, cyber-security-engineer | .NET SDK absent for executable validation | Implement read-only governance MVP; record static and future SDK-run evidence |
+| TUN-P0-004 | IN_PROGRESS | governance-engineer, full-stack-engineer, tester-qa-engineer, auditor, rd-engineer, cyber-security-engineer | ENV-DOTNET-SDK-001 | Read-only MVP source/static evidence is recorded; executable validation awaits .NET 10 SDK |
 
 ## Build/test state
 
@@ -49,4 +49,4 @@
 
 ## Exact next authorized action
 
-- Implement the read-only TUN-P0-004 governance MVP on the local integration branch; executable validation remains pending a user-installed .NET 10 SDK.
+- Install the .NET 10 SDK and run the documented restore/build/functional harness for TUN-P0-004; then record the resulting executable evidence before continuing its completion gate.

@@ -1,0 +1,73 @@
+{
+  "schema_version": 1,
+  "evidence_id": "TUN-P0-004-ROLE-REVIEWS",
+  "scope_type": "WORK_ITEM",
+  "scope_id": "TUN-P0-004",
+  "status": "CONDITIONAL_PASS",
+  "reviewed_at": "2026-09-30T17:00:00-04:00",
+  "reviews": [
+    {
+      "role": "governance-engineer",
+      "skill_version": "1.0.0",
+      "conclusion": "CONDITIONAL_PASS",
+      "checks": [
+        "The command surface is read-only and exposes validate, status, next, gate check, and transition check.",
+        "Lifecycle evaluation reads the repository policy and returns INSUFFICIENT_CONTEXT for side-state graphs the authority does not define.",
+        "P0 local integration dependency behavior is limited to the approved DEC-0001 condition."
+      ],
+      "findings": [
+        "Executable validation is pending the .NET 10 SDK.",
+        "Nested schema type/format validation and Git-history immutability remain explicitly incomplete."
+      ]
+    },
+    {
+      "role": "full-stack-engineer",
+      "skill_version": "1.0.0",
+      "conclusion": "CONDITIONAL_PASS",
+      "checks": [
+        "The tool is isolated from the production application solution.",
+        "No Product business behavior, API contract, or data mutation is introduced."
+      ],
+      "findings": ["Compile and runtime checks are pending the .NET 10 SDK."]
+    },
+    {
+      "role": "tester-qa-engineer",
+      "skill_version": "1.0.0",
+      "conclusion": "CONDITIONAL_PASS",
+      "checks": [
+        "A deterministic fixture harness covers valid validation/status/next behavior, missing-evidence gate rejection, invalid lifecycle transition rejection, and malformed YAML rejection.",
+        "Static source contract and existing schema checks passed."
+      ],
+      "findings": ["The functional harness is not executed because no .NET SDK is present."]
+    },
+    {
+      "role": "auditor",
+      "skill_version": "1.0.0",
+      "conclusion": "CONDITIONAL_PASS",
+      "checks": [
+        "Authority, decision, work-item, context, research, test, and role-review references are retained in repository records.",
+        "The status does not claim a build or executable test passed."
+      ],
+      "findings": ["P0-004 cannot enter DONE until executable evidence is recorded and the final protected P0 PR completes."]
+    },
+    {
+      "role": "rd-engineer",
+      "skill_version": "1.0.0",
+      "conclusion": "PASS",
+      "checks": [
+        "NuGet primary sources were checked for current stable System.CommandLine 2.0.12, YamlDotNet 18.1.0, and JsonSchema.Net 9.4.0 pins."
+      ],
+      "findings": []
+    },
+    {
+      "role": "cyber-security-engineer",
+      "skill_version": "1.0.0",
+      "conclusion": "CONDITIONAL_PASS",
+      "checks": [
+        "Static validation rejects source-level file mutation, process execution, and environment-secret access in the governance engine.",
+        "The tool uses repository files only and does not include production credentials or Product-data operations."
+      ],
+      "findings": ["Dependency restore/SCA and executable behavior must be reviewed after SDK installation."]
+    }
+  ]
+}
