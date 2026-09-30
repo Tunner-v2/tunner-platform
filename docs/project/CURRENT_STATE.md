@@ -23,7 +23,7 @@
 | ID | State | Owner/roles | Blocker | Next action |
 |---|---|---|---|---|
 | TUN-P0-001 | DONE | governance-engineer, tester-qa-engineer, auditor, cyber-security-engineer, devops-engineer | none | Resume B2 |
-| TUN-P0-019 | DONE | governance-engineer, devops-engineer, cyber-security-engineer, auditor | Ruleset enforcement, code-owner review, and GitHub auto-merge: PASS via PRs #1 and #2. | Start TUN-P0-002 under protected-branch governance |
+| TUN-P0-019 | VALIDATION | governance-engineer, devops-engineer, cyber-security-engineer, auditor | Ruleset enforcement, code-owner review, and GitHub auto-merge: PASS. Automatic PR creation is implemented and pending a live run. | Enable the one-time GitHub Actions PR-creation setting and verify the workflow |
 
 ## Build/test state
 
@@ -36,7 +36,8 @@
 ## Open blockers
 
 - `GITHUB-GOV-004`: repository ruleset 24217332 was reported configured; independent authenticated readback remains pending.
+- `GITHUB-PR-AUTOMATION-001`: enable the one-time GitHub Actions setting that permits the `GITHUB_TOKEN` to create pull requests; then validate the PR-creation workflow.
 
 ## Exact next authorized action
 
-- Merge this validation-evidence branch through the required code-owner review; then start TUN-P0-002, Git and contribution policy.
+- Push this update; GitHub should create its pull request automatically. Validate it, then start TUN-P0-002, Git and contribution policy.

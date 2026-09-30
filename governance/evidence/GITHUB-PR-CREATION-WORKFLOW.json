@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "evidence_id": "GITHUB-PR-CREATION-WORKFLOW",
+  "scope_type": "WORK_ITEM",
+  "scope_id": "TUN-P0-019",
+  "status": "IMPLEMENTED_PENDING_LIVE_RUN",
+  "workflow_path": ".github/workflows/create-pull-request.yml",
+  "workflow_name": "Create Pull Request",
+  "event": "push",
+  "branch_scope": "all non-main branches",
+  "security_controls": [
+    "contents permission is read-only",
+    "pull-requests permission is limited to creation and lookup",
+    "does not approve pull requests",
+    "does not merge pull requests",
+    "does not bypass repository rules",
+    "does not access secrets",
+    "does not check out or execute repository code"
+  ],
+  "required_repository_configuration": [
+    "Settings > Actions > General > Workflow permissions: Read and write permissions",
+    "Settings > Actions > General > Allow GitHub Actions to create and approve pull requests"
+  ],
+  "validation_required": [
+    "a non-main branch push creates exactly one open pull request to main",
+    "a later push to that branch does not create a duplicate pull request",
+    "the code-owner approval and protected-branch requirements remain enforced"
+  ]
+}
