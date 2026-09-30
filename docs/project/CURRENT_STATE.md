@@ -24,7 +24,7 @@
 |---|---|---|---|---|
 | TUN-P0-001 | DONE | governance-engineer, tester-qa-engineer, auditor, cyber-security-engineer, devops-engineer | none | Bootstrap complete |
 | TUN-P0-019 | DONE | governance-engineer, devops-engineer, cyber-security-engineer, auditor | none | Ruleset, code-owner review, auto-merge, and automatic PR creation validated through PR #4 |
-| TUN-P0-002 | IN_PROGRESS | governance-engineer, cyber-security-engineer, devops-engineer, tester-qa-engineer, auditor | none | Push rebased contribution-policy branch; Actions creates the PR and enables auto-merge |
+| TUN-P0-002 | CODE_REVIEW | governance-engineer, cyber-security-engineer, devops-engineer, tester-qa-engineer, auditor | none | PR #5 is auto-created with auto-merge enabled; await independent code-owner review |
 
 ## Build/test state
 
@@ -41,4 +41,4 @@
 
 ## Exact next authorized action
 
-- Push the rebased TUN-P0-002 branch. GitHub Actions will create its pull request and enable native auto-merge; GitHub will merge only after the required code-owner approval.
+- Complete independent `ai-dev` code-owner review of PR #5; GitHub will merge it automatically after the protected requirements pass.

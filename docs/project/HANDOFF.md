@@ -4,7 +4,7 @@
 
 - ID: TUN-P0-002
 - Milestone/Sprint: P0 / no sprint
-- Status: IN_PROGRESS (implementation and static validation complete; protected-branch pull-request review remains)
+- Status: CODE_REVIEW (PR #5 is auto-created and native auto-merge is enabled)
 - Branch: `docs/TUN-P0-002-git-contribution-policy`
 - Prerequisite: TUN-P0-001 (DONE)
 
@@ -34,4 +34,4 @@
 
 ## Exact next action
 
-- Complete this rebase and push the branch. The repository workflow will create the pull request and enable auto-merge; the required `ai-dev` code-owner approval remains the merge gate.
+- Complete independent `ai-dev` code-owner review of PR #5; GitHub will merge it automatically after protected requirements pass.
