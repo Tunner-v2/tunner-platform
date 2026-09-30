@@ -1,0 +1,29 @@
+name: Create Pull Request
+
+on:
+  push:
+    branches-ignore:
+      - main
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  create-pull-request:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Create a pull request when one is not already open
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          HEAD_REF: ${{ github.ref_name }}
+        run: |
+          pr_url="$(gh pr list --repo "$GH_REPO" --base main --head "$HEAD_REF" --state open --json url --jq '.[0].url')"
+          if [ -z "$pr_url" ]; then
+            pr_url="$(gh pr create --repo "$GH_REPO" --base main --head "$HEAD_REF" --title "Automated PR: $HEAD_REF" --body "Automatically created for branch $HEAD_REF. Protected-branch review and checks remain required.")"
+            echo "Created pull request: $pr_url"
+          else
+            echo "An open pull request already exists: $pr_url"
+          fi
+          gh pr merge --auto --merge "$pr_url"
