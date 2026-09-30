@@ -17,7 +17,7 @@ foreach ($relativePath in $requiredFiles) {
 }
 
 $contextSource = Get-Content -Raw (Join-Path $repositoryRoot 'src\Tunner.Governance\ContextApplication.cs')
-foreach ($fragment in @('public static CommandResult Build', 'public static CommandResult Verify', 'GeneratorVersion', 'HashFile', 'GitHistory', 'IsWithin', 'ContextManifest', '"STALE"', 'ProcessStartInfo', 'ArgumentList.Add')) {
+foreach ($fragment in @('public static CommandResult Build', 'public static CommandResult Verify', 'GeneratorVersion', 'HashFile', 'GitHistory', 'IsWithin', 'ContextManifest', '"STALE"', 'ProcessStartInfo', 'ArgumentList.Add', 'current authority summary')) {
   if (-not $contextSource.Contains($fragment)) { throw "Context engine is missing required behavior marker: $fragment" }
 }
 foreach ($forbidden in @('Environment.GetEnvironmentVariable', 'UseShellExecute = true', 'cmd.exe', 'powershell.exe')) {

@@ -25,6 +25,8 @@ try
     var contextOutput = new DirectoryInfo(Path.Combine(fixtureRoot.FullName, "docs", "context", "current"));
     var contextBuild = ContextApplication.Build(fixtureRoot, "TUN-001", contextOutput);
     Expect(contextBuild.ExitCode == 0, "Context build must generate a bounded fixture pack.", failures);
+    var contextPayload = (ContextBuildPayload)contextBuild.Payload;
+    Expect(contextPayload.Included.Any(item => item.Path == "docs/authority/current-authority.json"), "Context build must include the current authority summary.", failures);
     var contextCurrent = ContextApplication.Verify(fixtureRoot, contextOutput);
     Expect(contextCurrent.ExitCode == 0, "A newly generated context pack must verify as current.", failures);
     File.AppendAllText(Path.Combine(fixtureRoot.FullName, "governance", "work-items", "TUN-001.yaml"), "\n# Fixture source changed");
@@ -89,6 +91,8 @@ static void CreateFixture(DirectoryInfo repositoryRoot, DirectoryInfo fixtureRoo
     Directory.CreateDirectory(Path.Combine(fixtureRoot.FullName, "governance", "work-items"));
     Directory.CreateDirectory(Path.Combine(fixtureRoot.FullName, "governance", "dependencies"));
     Directory.CreateDirectory(Path.Combine(fixtureRoot.FullName, "governance", "policies"));
+    Directory.CreateDirectory(Path.Combine(fixtureRoot.FullName, "docs", "authority"));
+    File.WriteAllText(Path.Combine(fixtureRoot.FullName, "docs", "authority", "current-authority.json"), "{}" + Environment.NewLine);
 
     File.WriteAllText(Path.Combine(fixtureRoot.FullName, "governance", "milestones", "MVP.yaml"), """
 schema_version: 1

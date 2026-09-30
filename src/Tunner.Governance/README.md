@@ -27,7 +27,7 @@ dotnet run --project src/Tunner.Governance -- context build --work-item TUN-P0-0
 dotnet run --project src/Tunner.Governance -- context verify
 ```
 
-`context build` writes `docs/context/current/` from explicit work-item references, activated role skills, required evidence, durable project state, and bounded Git history. It records source hashes and exclusions. `context verify` returns `STALE` if an included source is missing or has changed; generated context is never authority.
+`context build` writes `docs/context/current/` from the active-authority summary, explicit work-item references, activated role skills, required evidence, durable project state, and bounded Git history. It records source hashes and exclusions. `context verify` returns `STALE` if an included source is missing or has changed; generated context is never authority. Hash verification and build refusal for a corrupt authority mirror remain TUN-P0-033 scope.
 ## Validation boundary
 
 The MVP parses YAML with file/line/column diagnostics, builds the versioned JSON Schema catalog, and validates record identifiers, versioning, required fields, and undeclared top-level fields from that catalog. It deliberately does not mutate records. Rich nested type/format checks and Git-history immutability are follow-on governance work and must not be claimed as implemented until their tests exist.

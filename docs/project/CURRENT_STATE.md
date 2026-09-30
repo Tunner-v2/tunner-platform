@@ -17,20 +17,20 @@
 | ID | State | Blocker | Next action |
 |---|---|---|---|
 | TUN-P0-001 | DONE | none | Bootstrap complete |
-| TUN-P0-002 | VALIDATION | none | Validate AMD-0002 approval-pending execution policy; retain evidence for final aggregate P0 PR |
-| TUN-P0-003 | VALIDATION | none | Current schema and negative-entry validation PASS; retain evidence for final aggregate P0 PR |
-| TUN-P0-004 | VALIDATION | none | AMD-0002 dependency readiness and human integration actions validated; retain evidence for final aggregate P0 PR |
-| TUN-P0-005 | VALIDATION | none | Retain bounded context evidence for final aggregate P0 PR |
-| TUN-P0-006 | VALIDATION | User-run runtime acceptance | Rerun local dependency start/health after the LGTM probe correction; retain its evidence for the final aggregate P0 PR |
+| TUN-P0-002 | VALIDATION | none | Retain AMD-0002 contribution-policy evidence for final aggregate P0 PR |
+| TUN-P0-003 | VALIDATION | none | Retain schema-validation evidence for final aggregate P0 PR |
+| TUN-P0-004 | VALIDATION | none | Retain AMD-0002 dependency-readiness evidence for final aggregate P0 PR |
+| TUN-P0-005 | VALIDATION | none | Retain bounded context-pack evidence for final aggregate P0 PR |
+| TUN-P0-006 | VALIDATION | none | Runtime health is PASS; retain Compose evidence for final aggregate P0 PR |
 | TUN-P0-019 | VALIDATION | none | Retain GitHub governance evidence for final aggregate P0 PR |
 
 ## Build/test state
 
 - .NET SDK: 10.0.401 installed and used for local P0 validation.
 - Tunner.Governance build: PASS (0 warnings, 0 errors).
-- Functional harness: PASS, including fresh and stale generated-context scenarios.
-- Governance live validation: PASS for 13 records with no diagnostics.
-- Context pack: PASS; docs/context/current/ is manifest-first and hash-verifiable for TUN-P0-006.
+- Functional harness: PASS, including fresh and stale generated-context scenarios and active-authority-summary inclusion.
+- Governance live validation: PASS for 16 records with no diagnostics.
+- Context pack: PASS; `docs/context/current/` is manifest-first, hash-verifiable, and CURRENT for TUN-P0-005. It includes the active-authority summary and AMD-0002 source.
 - P0-006 static Compose source/configuration validation: PASS; `tunner-dev doctor` confirmed Docker Desktop 4.87.0 / Engine 29.7.2 and Compose v5.4.0 without pulling images or starting containers.
 - P0-006 runtime dependency health: PASS. User-run output confirmed PostgreSQL, RabbitMQ, Redis, OpenBao, Mailpit, and LGTM healthy after the corrected readiness probes and OpenBao configuration path fix.
 - NuGet vulnerability metadata: no vulnerable packages reported by current source metadata.
@@ -45,4 +45,4 @@
 
 ## Exact next authorized action
 
-- User-run P0-006 local dependency runtime acceptance: `./tools/dev/tunner-dev.ps1 start` followed by `./tools/dev/tunner-dev.ps1 health`. This pulls pinned images and starts containers; retain the health output as evidence. Then continue P0-007 only with the governed OpenBao bootstrap/policy scope.
+- TUN-P0-005 is locally validated. `governance next` reports only existing validation-stage records and no protected-main human action. Select the next governed P0 work item only after its repository work-item record is created from the canonical backlog; do not invent an unrecorded scope.

@@ -4,15 +4,15 @@
   "scope_type": "WORK_ITEM",
   "scope_id": "TUN-P0-005",
   "status": "PASS",
-  "reviewed_at": "2026-09-30T11:59:26-04:00",
+  "reviewed_at": "2026-09-30T14:43:07.1999255-04:00",
   "reviews": [
     {
       "role": "governance-engineer",
       "skill_version": "1.0.0",
       "conclusion": "PASS",
       "checks": [
-        "Context selection prioritizes explicit work-item links and records included/excluded provenance.",
-        "Verification returns CURRENT or STALE from source hashes and never treats generated text as authority."
+        "Context selection records explicit authority, work-state, decision, prerequisite, evidence, and role sources.",
+        "The generated pack exposes the effective-authority summary and explicit AMD-0002 source without claiming later authority-verification enforcement."
       ],
       "findings": []
     },
@@ -31,8 +31,8 @@
       "skill_version": "1.0.0",
       "conclusion": "PASS",
       "checks": [
-        "The temporary fixture covers build, fresh verification, and stale-source rejection.",
-        "The generated P0-005 pack was read back for task, authority, blockers, decisions, tests/evidence, exclusions, and Git history."
+        "The isolated fixture covers build, current verification, stale-source rejection, and active-authority-summary inclusion.",
+        "The generated P0-005 pack was read back for authority, task, blockers, decisions, tests/evidence, exclusions, and Git history."
       ],
       "findings": []
     },
@@ -41,8 +41,8 @@
       "skill_version": "1.0.0",
       "conclusion": "PASS",
       "checks": [
-        "Manifest records generation metadata, content hashes, reasons, and bounded Git history.",
-        "Project state and handoff are refreshed without claiming final P0 completion."
+        "Manifest records source hashes, generation metadata, selected/excluded reasons, and bounded Git history.",
+        "Current state and handoff distinguish local validation from the final protected-main integration gate."
       ],
       "findings": [
         "P0-005 remains VALIDATION; only the aggregate final protected P0 PR can satisfy the DEC-0001 completion gate."
@@ -58,7 +58,7 @@
         "The engine does not read environment secrets or Product data."
       ],
       "findings": [
-        "Dependency vulnerability metadata is point-in-time and does not replace later release security review."
+        "TUN-P0-033 owns authority hash verification and refusal behavior; P0-005 only records the current verified-authority summary."
       ]
     }
   ]

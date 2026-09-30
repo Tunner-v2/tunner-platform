@@ -10,16 +10,16 @@ authority_refs:
   - docs/authority/amendments/AMD-0001/effective-overrides/12_AI_Development_Protocol_Context_and_Project_Memory.md
   - docs/authority/amendments/AMD-0001/effective-overrides/11_Development_Planes_Milestones_and_P0_Backlog.md
   - docs/authority/amendments/AMD-0001/36_P0_Repository_Bootstrap_Governance_and_Context_Implementation_Spec.md
+  - docs/authority/amendments/AMD-0002/AMD-0002_Non-Blocking_PR_Approval_and_Continuous_Local_Execution.md
 flow_refs: []
 contract_refs: []
 decision_refs:
-  - AMD-0001
   - DEC-0001
 acceptance_criteria:
-  - 'The unified 	unner context build --work-item <id> command generates a bounded, manifest-first context pack for a governed work item.'
+  - 'The unified `tunner context build --work-item <id>` command generates a bounded, manifest-first context pack for a governed work item.'
   - 'The generated pack identifies the current task, authority references, open blockers, relevant flows/contracts/decisions, required tests/evidence, activated role skills, and bounded relevant Git history.'
   - 'The pack records included and excluded artifacts with reasons, source SHA-256 hashes, generation metadata, and explicit no-context findings instead of guessing.'
-  - '	unner context verify detects a missing or changed included source and reports STALE without treating generated output as authority.'
+  - '`tunner context verify` detects a missing or changed included source and reports STALE without treating generated output as authority.'
   - 'The context builder writes only the documented generated context pack and does not mutate Product data or governance records.'
 prerequisites:
   - TUN-P0-003
@@ -53,4 +53,4 @@ context_policy: TASK
 todos: []
 defects: []
 created_at: 2026-09-30T11:51:18-04:00
-updated_at: 2026-09-30T11:59:26-04:00
+updated_at: 2026-09-30T14:43:07.1999255-04:00
