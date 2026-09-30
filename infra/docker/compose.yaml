@@ -8,9 +8,9 @@ services:
       POSTGRES_USER: tunner
       POSTGRES_HOST_AUTH_METHOD: trust
     ports:
-      - "127.0.0.1:${POSTGRES_PORT:-5432}:5432"
+      - "127.0.0.1:${POSTGRES_PORT:-5433}:5432"
     volumes:
-      - postgres-data:/var/lib/postgresql/data
+      - postgres-data:/var/lib/postgresql
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
       interval: 5s
@@ -47,13 +47,13 @@ services:
   openbao:
     image: ${OPENBAO_IMAGE:-openbao/openbao:2.7.0}
     user: "0"
-    command: ["server"]
+    command: ["server", "-config=/openbao/config/openbao.hcl"]
     environment:
       BAO_ADDR: http://127.0.0.1:8200
     ports:
       - "127.0.0.1:${OPENBAO_PORT:-8200}:8200"
     volumes:
-      - ../openbao/config:/openbao/config:ro
+      - ../openbao/config:/openbao/config
       - openbao-data:/openbao/file
     healthcheck:
       test: ["CMD-SHELL", "bao status >/dev/null 2>&1; code=$$?; test $$code -eq 0 -o $$code -eq 2 -o $$code -eq 3"]

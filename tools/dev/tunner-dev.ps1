@@ -10,6 +10,7 @@ $ErrorActionPreference = "Stop"
 
 $repositoryRoot = (Resolve-Path (Join-Path $PSScriptRoot "../..")).Path
 $composeFile = Join-Path $repositoryRoot "infra/docker/compose.yaml"
+$composeProjectDirectory = Split-Path -Parent $composeFile
 $defaultEnvFile = Join-Path $repositoryRoot "infra/docker/.env.example"
 $localEnvFile = Join-Path $repositoryRoot "infra/docker/.env.local"
 $envFile = if (Test-Path -LiteralPath $localEnvFile) { $localEnvFile } else { $defaultEnvFile }
@@ -25,7 +26,7 @@ function Invoke-Compose {
 
     $composeArguments = @(
         "compose",
-        "--project-directory", $repositoryRoot,
+        "--project-directory", $composeProjectDirectory,
         "--env-file", $envFile,
         "--file", $composeFile
     ) + $Arguments

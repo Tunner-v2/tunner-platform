@@ -3,8 +3,8 @@
   "evidence_id": "TUN-P0-006-VALIDATION",
   "scope_type": "WORK_ITEM",
   "scope_id": "TUN-P0-006",
-  "status": "RUNTIME_RETRY_REQUIRED",
-  "checked_at": "2026-09-30T12:44:01.9924673-04:00",
+  "status": "PASS",
+  "checked_at": "2026-09-30T13:04:03-04:00",
   "checks": [
     {
       "name": "P0-006 source and Compose contract",
@@ -39,8 +39,8 @@
     {
       "name": "corrected runtime dependency health",
       "command": "user-run ./tools/dev/tunner-dev.ps1 start; ./tools/dev/tunner-dev.ps1 health",
-      "result": "NOT_RUN",
-      "details": "Compose now probes the selected LGTM image startup sentinel at /tmp/ready. Retest is required because the agent does not restart long-lived containers."
+      "result": "PASS",
+      "details": "User output at 2026-09-30T13:00-04:00 confirmed PostgreSQL, RabbitMQ, Redis, OpenBao, Mailpit, and Grafana OTEL-LGTM healthy. The OpenBao container mounted the repository infra/openbao/config directory after the wrapper resolved Compose-relative paths from infra/docker; LGTM used the /tmp/ready readiness sentinel."
     }
   ],
   "artifacts": [
@@ -52,8 +52,6 @@
     "docs/development/LOCAL_DOCKER.md"
   ],
   "limitations": [
-    "P0-006 remains in VALIDATION with one corrected user-run runtime retest pending.",
-    "DEF-TUN-P0-006-001 records the prior LGTM health-probe failure and correction.",
     "P0-007 owns OpenBao initialization, policies, application secret injection, and redaction.",
     "No P0 item can enter DONE before the single final protected aggregate P0 pull request under DEC-0001."
   ]

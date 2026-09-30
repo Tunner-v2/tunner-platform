@@ -60,6 +60,9 @@ foreach ($command in @('"doctor"', '"setup"', '"start"', '"stop"', '"health"', '
     if (-not $tool.Contains($command)) { throw "tunner-dev command missing: $command" }
 }
 if ($tool -notmatch '"compose",' -or $tool -notmatch '--wait') { throw "tunner-dev must invoke Docker Compose and wait for service health when starting." }
+if ($tool -notmatch '\$composeProjectDirectory\s*=\s*Split-Path -Parent \$composeFile' -or $tool -notmatch '"--project-directory", \$composeProjectDirectory') {
+    throw "tunner-dev must resolve Compose-relative bind paths from the Compose file directory."
+}
 
 $otelLgtm = [regex]::Match($compose, '(?ms)^  otel-lgtm:\r?\n(?<body>.*?)(?=^  [a-z-]+:|\z)').Groups['body'].Value
 if ([string]::IsNullOrWhiteSpace($otelLgtm)) { throw "Unable to isolate the LGTM Compose service for health validation." }
