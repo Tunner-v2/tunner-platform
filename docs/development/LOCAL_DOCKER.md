@@ -27,7 +27,7 @@ From the repository root in PowerShell:
 ./tools/dev/tunner-dev.ps1 stop
 ```
 
-`doctor` performs only Docker/Compose and static configuration checks. `start` pulls the pinned images and starts long-lived containers; run it only when you intend to use the local dependency environment. `stop` preserves named volumes.
+`doctor` performs only Docker/Compose and static configuration checks. `start` pulls the pinned images and starts long-lived containers; run it only when you intend to use the local dependency environment. `stop` preserves named volumes. Docker Compose may write normal status/progress lines to standard error even when it succeeds; the wrapper preserves that output and treats the native Docker exit code as the success/failure boundary.
 
 ## Local-only exposure
 

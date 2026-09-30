@@ -14,6 +14,7 @@ $requiredFiles = @(
     "infra/docker/.env.example",
     "infra/openbao/config/openbao.hcl",
     "tools/dev/tunner-dev.ps1",
+    "tools/validation/Test-TunnerDevNativeOutput.ps1",
     "docs/development/LOCAL_DOCKER.md"
 )
 
@@ -60,6 +61,9 @@ foreach ($command in @('"doctor"', '"setup"', '"start"', '"stop"', '"health"', '
     if (-not $tool.Contains($command)) { throw "tunner-dev command missing: $command" }
 }
 if ($tool -notmatch '"compose",' -or $tool -notmatch '--wait') { throw "tunner-dev must invoke Docker Compose and wait for service health when starting." }
+if ($tool -notmatch 'function Invoke-Docker' -or $tool -notmatch '\$PSNativeCommandUseErrorActionPreference\s*=\s*\$false' -or $tool -notmatch '\$exitCode\s*-ne\s*0') {
+    throw "tunner-dev must preserve Docker stderr progress while enforcing native exit codes."
+}
 if ($tool -notmatch '\$composeProjectDirectory\s*=\s*Split-Path -Parent \$composeFile' -or $tool -notmatch '"--project-directory", \$composeProjectDirectory') {
     throw "tunner-dev must resolve Compose-relative bind paths from the Compose file directory."
 }

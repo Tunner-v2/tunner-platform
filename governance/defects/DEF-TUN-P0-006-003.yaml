@@ -1,0 +1,17 @@
+schema_version: 1
+defect_id: DEF-TUN-P0-006-003
+work_item_id: TUN-P0-006
+classification: INFRASTRUCTURE
+severity: SEV-3
+status: VALIDATION
+environment: local PowerShell Docker Compose wrapper
+description: On PowerShell 7, tunner-dev.ps1 set ErrorActionPreference to Stop and invoked Docker Compose directly. Docker Compose emitted normal container-progress status lines to stderr with exit code zero, which PowerShell converted into a terminating NativeCommandError before the wrapper could inspect LASTEXITCODE.
+expected_behavior_ref: TUN-P0-006 acceptance criteria and docs/development/LOCAL_DOCKER.md wrapper contract.
+evidence:
+  - governance/evidence/TUN-P0-006-VALIDATION.json
+  - governance/evidence/TUN-P0-006-DEF-TUN-P0-006-003-REMEDIATION.json
+  - governance/evidence/TUN-P0-006-DEF-TUN-P0-006-003-ROLE-REVIEWS.json
+affected_versions:
+  - tools/dev/tunner-dev.ps1 before native stderr/exit-code handling remediation
+created_at: 2026-09-30T18:23:00-04:00
+updated_at: 2026-09-30T18:23:00-04:00

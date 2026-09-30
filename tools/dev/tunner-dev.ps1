@@ -21,6 +21,30 @@ function Assert-DockerAvailable {
     }
 }
 
+function Invoke-Docker {
+    param(
+        [string[]]$Arguments,
+        [string]$Operation
+    )
+
+    $exitCode = -1
+    $previousNativeErrorPreference = $PSNativeCommandUseErrorActionPreference
+    try {
+        # Docker Compose writes normal progress/status lines to stderr. Preserve that output,
+        # but use the native process exit code as the success boundary.
+        $PSNativeCommandUseErrorActionPreference = $false
+        & docker @Arguments
+        $exitCode = $LASTEXITCODE
+    }
+    finally {
+        $PSNativeCommandUseErrorActionPreference = $previousNativeErrorPreference
+    }
+
+    if ($exitCode -ne 0) {
+        throw "$Operation failed with exit code $exitCode."
+    }
+}
+
 function Invoke-Compose {
     param([string[]]$Arguments)
 
@@ -31,18 +55,13 @@ function Invoke-Compose {
         "--file", $composeFile
     ) + $Arguments
 
-    & docker @composeArguments
-    if ($LASTEXITCODE -ne 0) {
-        throw "docker compose failed with exit code $LASTEXITCODE."
-    }
+    Invoke-Docker -Arguments $composeArguments -Operation "docker compose"
 }
 
 function Invoke-Doctor {
     Assert-DockerAvailable
-    & docker version
-    if ($LASTEXITCODE -ne 0) { throw "docker version failed with exit code $LASTEXITCODE." }
-    & docker compose version
-    if ($LASTEXITCODE -ne 0) { throw "docker compose version failed with exit code $LASTEXITCODE." }
+    Invoke-Docker -Arguments @("version") -Operation "docker version"
+    Invoke-Docker -Arguments @("compose", "version") -Operation "docker compose version"
     Invoke-Compose -Arguments @("config", "--quiet")
     Write-Host "Docker and the Tunner local Compose configuration are ready."
 }
