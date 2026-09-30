@@ -5,7 +5,7 @@
 - ID: TUN-P0-007
 - Milestone/Sprint: P0 / no sprint
 - Status: VALIDATION (static, credential-free evidence complete)
-- Branch: change/TUN-P0-007-secrets-foundation
+- Branch: change/TUN-P0-007-secrets-foundation`r`n- Commit: 7f2f6e4 (`security: add P0 OpenBao secrets foundation`)
 - Prerequisite: TUN-P0-006 is locally validated; PR #6 merged to protected main at 87b62ff.
 - Integration: this work remains on its dedicated local branch under DEC-0002; do not introduce Product or production-secret scope.
 
@@ -25,4 +25,4 @@
 
 ## Next action
 
-- Run final governance lifecycle/gate checks and retain P0-007 validation evidence. Any local OpenBao initialization/unseal is an authorized operator-only procedure using the runbook; it is not a prerequisite for this static P0 evidence slice.
+- Preserve P0-007 validation evidence. The next canonical P0 candidate is TUN-P0-008 (database/migrations); create its governed work record and bounded context before implementation. Any local OpenBao initialization/unseal remains an authorized operator-only procedure using the runbook; it is not a prerequisite for this static P0 evidence slice.
