@@ -2,39 +2,36 @@
 
 ## Work item
 
-- ID: TUN-P0-019
+- ID: TUN-P0-002
 - Milestone/Sprint: P0 / no sprint
-- Status: VALIDATION (automatic PR creation implemented; live validation pending)
-- Branch: governance/automerge-live-validation
-- Implementation commit: `5c1cdb6` (`ci: enable guarded pull request auto-merge`)
+- Status: CODE_REVIEW (PR #5 is auto-created and native auto-merge is enabled)
+- Branch: `docs/TUN-P0-002-git-contribution-policy`
+- Prerequisite: TUN-P0-001 (DONE)
 
 ## Completed
 
-- B0/B1 completed with 125/125 repository-mirror hash verification.
-- Local remote `origin` is registered as `https://github.com/Tunner-v2/tunner-platform.git`.
-- `.github/workflows/automate-pr-automerge.yml` enables GitHub native auto-merge for non-draft, same-repository pull requests. It does not approve, bypass, or execute pull-request code. PR #2 validated the workflow end to end: Actions enabled auto-merge, a human approved, and GitHub merged it.
-- `.github/workflows/create-pull-request.yml` creates one open PR to `main` on a non-main branch push and enables native GitHub auto-merge. It does not approve, merge immediately, access secrets, bypass rules, or execute repository code.
+- Added repository-native Git and contribution policy, contribution guide, and pull-request template.
+- Preserved protected `main`, required pull requests, CODEOWNERS review, and native auto-merge only after protected requirements pass.
+- PR #4 proved automatic PR creation and guarded auto-merge; it merged after independent code-owner approval.
 
 ## Tests/evidence
 
-- GitHub SSH host-key verification: PASS.
-- GitHub SSH identity authentication: FAIL — `Permission denied (publickey)`.
+- Static policy/content validation: PASS.
+- Pull-request metadata fields: PASS.
+- Protected-main, CODEOWNERS, and auto-merge alignment review: PASS.
+- Evidence: `governance/evidence/TUN-P0-002-STATIC-VALIDATION.json`.
 
 ## Decisions/blockers
 
-- SSH authorization is not needed because HTTPS remote access is available.
-- CODEOWNERS is materialized with `@Tunner-v2/ai-dev`.
-- Repository ruleset 24217332 was reported configured; independent authenticated readback is pending.
-- **Allow auto-merge** is enabled and was successfully validated by PR #2.
-- GitHub Actions PR-creation permission is enabled. The first run failed because `gh pr create --fill` requires a Git checkout; the workflow now uses an explicit title/body and still does not check out repository code.
-- Canonical Drive folders and controlling authority documents are now readable. The full source-to-mirror content diff remains TUN-P0-033 scope.
+- P1–P8 Product behavior remains out of scope until P0 closes.
+- GitHub Actions creates pull requests and enables auto-merge, but does not approve or bypass required CODEOWNERS review.
 
 ## Context state
 
+- Authority: Baseline 1.6.0 document 03, AMD-0001, and `governance/bootstrap/source/GITHUB_BOOTSTRAP_POLICY.md`.
 - Context mode: TASK.
-- Authority mirror status: verified local mirror; canonical Drive access confirmed for the controlling documents. Full source-to-mirror content diff remains TUN-P0-033 scope.
-- Activated skills: governance-engineer, devops-engineer, cyber-security-engineer, auditor.
+- Activated roles: governance-engineer, cyber-security-engineer, devops-engineer, tester-qa-engineer, auditor.
 
 ## Exact next action
 
-- Push this update and validate that the same workflow enables auto-merge on PR #4. A code-owner approval should then merge it automatically; after that, start TUN-P0-002.
+- Complete independent `ai-dev` code-owner review of PR #5; GitHub will merge it automatically after protected requirements pass.

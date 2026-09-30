@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "evidence_id": "TUN-P0-002-STATIC-VALIDATION",
+  "scope_type": "WORK_ITEM",
+  "scope_id": "TUN-P0-002",
+  "status": "PASS",
+  "validation_type": "static_policy_content",
+  "files": [
+    "CONTRIBUTING.md",
+    ".github/pull_request_template.md",
+    "governance/policies/git-contribution-policy.yaml",
+    "governance/work-items/TUN-P0-002.yaml"
+  ],
+  "checks": {
+    "contribution_main_protection": true,
+    "contribution_branch_patterns": true,
+    "contribution_codeowner_gate": true,
+    "pr_work_item_field": true,
+    "pr_authority_field": true,
+    "pr_verification_field": true,
+    "policy_protected_main": true,
+    "policy_codeowner_gate": true,
+    "policy_auto_merge_guard": true,
+    "work_item_authority": true,
+    "work_item_prerequisite": true,
+    "codeowners_cover_policy": true
+  },
+  "limitations": [
+    "No dependency restore or product build applies to this documentation and governance policy slice.",
+    "Live protected-branch enforcement remains evidenced separately by TUN-P0-019."
+  ]
+}

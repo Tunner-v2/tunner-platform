@@ -1,0 +1,33 @@
+schema_version: 1
+policy_id: git-and-contribution-policy
+status: ACTIVE
+scope: repository
+main_branch:
+  name: main
+  direct_push: prohibited
+  force_push: prohibited
+  deletion: prohibited
+branching:
+  strategy: protected-trunk-based-development
+  branches: short_lived
+  allowed_prefixes: [feat, fix, change, hotfix, docs]
+  pattern: "<prefix>/TUN-<work-item-number>-<short-description>"
+commit:
+  cohesive: true
+  buildable_when_practical: true
+  recommended_format: "<type>(<scope>): <summary>"
+  traceability_trailers: [Work-Item, Milestone, Authority]
+pull_request:
+  required_for_main: true
+  required_metadata: [work_item, authority_impact, verification_evidence]
+  required_codeowner_review: true
+  auto_merge: permitted_after_protected_requirements
+  automation:
+    create_on_non_main_push: true
+    enable_auto_merge_on_non_main_push: true
+security:
+  prohibit_committed_secrets: true
+  require_sensitive_area_review: true
+evidence:
+  required_for_done: true
+  user_run_checks_must_be_recorded: true

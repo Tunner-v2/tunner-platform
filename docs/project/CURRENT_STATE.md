@@ -15,19 +15,21 @@
 ## Active sprint
 
 - ID: none
-- Goal: B2 Git/GitHub bootstrap.
+- Goal: Git and contribution policy.
 - Dates: not scheduled.
 
 ## Active work items
 
 | ID | State | Owner/roles | Blocker | Next action |
 |---|---|---|---|---|
-| TUN-P0-001 | DONE | governance-engineer, tester-qa-engineer, auditor, cyber-security-engineer, devops-engineer | none | Resume B2 |
-| TUN-P0-019 | VALIDATION | governance-engineer, devops-engineer, cyber-security-engineer, auditor | Ruleset enforcement, code-owner review, and GitHub auto-merge: PASS. Automatic PR creation: PASS via PR #4. Push-triggered auto-merge enablement is pending live validation. | Verify PR #4 has auto-merge enabled, then approve as code owner |
+| TUN-P0-001 | DONE | governance-engineer, tester-qa-engineer, auditor, cyber-security-engineer, devops-engineer | none | Bootstrap complete |
+| TUN-P0-019 | DONE | governance-engineer, devops-engineer, cyber-security-engineer, auditor | none | Ruleset, code-owner review, auto-merge, and automatic PR creation validated through PR #4 |
+| TUN-P0-002 | CODE_REVIEW | governance-engineer, cyber-security-engineer, devops-engineer, tester-qa-engineer, auditor | none | PR #5 is auto-created with auto-merge enabled; await independent code-owner review |
 
 ## Build/test state
 
-- Last verified commit: `99e9b61bf7d14caa1a81e628fffb48842572ce7d` (PR #2 auto-merge validation).
+- Last verified main commit: `b87f4c39d8bd4a11c53a713673aaf36a1ec4697c` (PR #4 automatic PR-creation workflow).
+- TUN-P0-002 static policy/content validation: PASS.
 - Build: not run; dependency restore/build is a user-run step.
 - Bundle integrity: PASS (125/125).
 - Pre-P0 package integrity: PASS (54/54).
@@ -35,8 +37,8 @@
 
 ## Open blockers
 
-- `GITHUB-GOV-004`: repository ruleset 24217332 was reported configured; independent authenticated readback remains pending.
+- No technical blocker. A protected-main code-owner approval remains required before a pull request can merge.
 
 ## Exact next authorized action
 
-- Push this update; GitHub should enable auto-merge on PR #4. Verify it, then approve as code owner; GitHub should merge automatically.
+- Complete independent `ai-dev` code-owner review of PR #5; GitHub will merge it automatically after the protected requirements pass.
