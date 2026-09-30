@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "evidence_id": "GITHUB-AUTOMERGE-WORKFLOW",
+  "scope_type": "WORK_ITEM",
+  "scope_id": "TUN-P0-019",
+  "status": "IMPLEMENTED_PENDING_GITHUB_CONFIGURATION_AND_RUN",
+  "workflow_path": ".github/workflows/automate-pr-automerge.yml",
+  "workflow_name": "Automate PR Auto-Merge",
+  "event": "pull_request",
+  "activity_types": ["opened", "synchronize", "reopened", "ready_for_review", "labeled"],
+  "security_controls": [
+    "does not approve pull requests",
+    "does not bypass repository rules",
+    "does not check out or execute pull-request code",
+    "runs only for non-draft branches in the same repository",
+    "uses the ephemeral GITHUB_TOKEN with declared least-required repository permissions"
+  ],
+  "required_repository_configuration": [
+    "Allow auto-merge is enabled in repository Settings > General > Pull Requests",
+    "GitHub Actions policy permits the workflow's contents: write and pull-requests: write permissions"
+  ],
+  "validation_required": [
+    "workflow run succeeds on a same-repository pull request",
+    "pull request remains blocked until the required code-owner approval and all ruleset requirements pass",
+    "GitHub merges only after those requirements pass"
+  ]
+}

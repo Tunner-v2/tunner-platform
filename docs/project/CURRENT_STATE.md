@@ -23,7 +23,7 @@
 | ID | State | Owner/roles | Blocker | Next action |
 |---|---|---|---|---|
 | TUN-P0-001 | DONE | governance-engineer, tester-qa-engineer, auditor, cyber-security-engineer, devops-engineer | none | Resume B2 |
-| TUN-P0-019 | VALIDATION | governance-engineer, devops-engineer, cyber-security-engineer, auditor | Ruleset enforcement and code-owner review: PASS via PR #1. | Validate repository ruleset 24217332 against the committed definition |
+| TUN-P0-019 | VALIDATION | governance-engineer, devops-engineer, cyber-security-engineer, auditor | Ruleset enforcement and code-owner review: PASS via PR #1. GitHub auto-merge workflow is implemented but needs repository configuration and a live run. | Enable GitHub auto-merge and validate the workflow on a protected same-repository PR |
 
 ## Build/test state
 
@@ -37,7 +37,8 @@
 
 - `EXT-DRIVE-001`: canonical Drive inventory was not readable through the connected session. This blocks only external-source comparison, not use of the immutable verified bootstrap bundle.
 - `GITHUB-GOV-004`: repository ruleset 24217332 was reported configured; independent authenticated readback remains pending.
+- `GITHUB-AUTOMERGE-001`: repository owner must enable **Allow auto-merge** and, if restricted by policy, permit the workflow's requested GitHub Actions token permissions. A successful live run remains pending.
 
 ## Exact next authorized action
 
-- Open a pull request from `bootstrap/repository-ruleset-evidence` to `main`; then validate its code-owner review requirement and settings against the committed definition.
+- Merge this branch through the required code-owner review; then enable **Allow auto-merge** in GitHub and validate the workflow on a same-repository protected pull request.
