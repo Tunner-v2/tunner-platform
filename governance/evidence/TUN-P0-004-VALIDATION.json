@@ -3,14 +3,14 @@
   "evidence_id": "TUN-P0-004-VALIDATION",
   "scope_type": "WORK_ITEM",
   "scope_id": "TUN-P0-004",
-  "status": "PARTIAL",
-  "checked_at": "2026-09-30T17:00:00-04:00",
+  "status": "PASS",
+  "checked_at": "2026-09-30T11:46:14-04:00",
   "checks": [
     {
       "name": "static source contract",
       "command": "powershell -ExecutionPolicy Bypass -File tools/validation/Validate-TunnerGovernanceSource.ps1",
       "result": "PASS",
-      "details": "Validated the .NET solution/project shape, approved package references, command surface, parser/schema behavior markers, functional-fixture scenarios, and absence of source-level mutation/process/environment access."
+      "details": "Validated the solution/project shape, approved package references, command surface, parser/schema markers, fixture scenarios, read-only source restrictions, and detected .NET SDK 10.0.401."
     },
     {
       "name": "governance schema structural contract",
@@ -19,20 +19,34 @@
       "details": "Validated the shared schema library and all 16 required entry schemas."
     },
     {
-      "name": "schema JSON parsing",
+      "name": "C# restore, build, and functional execution",
+      "command": "dotnet restore Tunner.Governance.sln; dotnet build Tunner.Governance.sln --no-restore; dotnet run --project tests/Tunner.Governance.FunctionalTests --no-restore",
       "result": "PASS",
-      "details": "All 17 JSON schema documents parse with the local PowerShell JSON parser."
+      "details": ".NET SDK 10.0.401 restored dependencies; build completed with 0 warnings and 0 errors; the deterministic positive and negative fixture harness passed."
     },
     {
-      "name": "C# restore/build/functional execution",
-      "command": "dotnet restore Tunner.Governance.sln; dotnet build Tunner.Governance.sln --no-restore; dotnet run --project tests/Tunner.Governance.FunctionalTests --no-restore",
-      "result": "NOT_RUN",
-      "details": "No .NET SDK is installed on the local machine. No dependency installation, restore, build, or executable test was attempted."
+      "name": "live repository governance validation",
+      "command": "dotnet run --project src/Tunner.Governance --no-build -- governance validate",
+      "result": "PASS",
+      "details": "Validated 9 live P0 governance records with no diagnostics after additive milestone-schema alignment."
+    },
+    {
+      "name": "lifecycle transition checks",
+      "command": "dotnet run --project src/Tunner.Governance --no-build -- governance transition check TUN-P0-004 CODE_REVIEW; dotnet run --project src/Tunner.Governance --no-build -- governance transition check TUN-P0-004 VALIDATION",
+      "result": "PASS",
+      "details": "Both sequential normal-state transitions were accepted. Direct IN_PROGRESS to DONE remained rejected."
+    },
+    {
+      "name": "dependency vulnerability metadata",
+      "command": "dotnet list Tunner.Governance.sln package --vulnerable --include-transitive",
+      "result": "PASS",
+      "details": "No vulnerable packages were reported by the current NuGet source metadata."
     },
     {
       "name": "whitespace check",
       "command": "git diff --check",
-      "result": "PASS"
+      "result": "PASS",
+      "details": "No whitespace errors reported."
     }
   ],
   "artifacts": [
@@ -45,7 +59,7 @@
     "tools/validation/Validate-TunnerGovernanceSource.ps1"
   ],
   "limitations": [
-    "Executable behavior, package compatibility, and the functional fixture harness remain unverified until a .NET 10 SDK is installed and the documented commands pass.",
-    "The read-only MVP validates schema catalog shape, identifiers, schema version, required fields, and undeclared top-level fields. Rich nested type/format validation and Git-history immutability require later governed work and tests."
+    "The read-only MVP validates schema catalog shape, identifiers, schema version, required fields, and undeclared top-level fields. Rich nested type/format validation and Git-history immutability require later governed work and tests.",
+    "P0-004 is in VALIDATION. It cannot enter DONE until the aggregate P0 final protected pull request is complete under DEC-0001."
   ]
 }

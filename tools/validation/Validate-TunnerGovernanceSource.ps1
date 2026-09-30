@@ -44,9 +44,12 @@ foreach ($scenario in @('GovernanceApplication.Validate', 'GovernanceApplication
   if (-not $functionalTest.Contains($scenario)) { throw "Functional fixture scenario is missing: $scenario" }
 }
 
+$sdk = Get-Command dotnet -ErrorAction SilentlyContinue
+$sdkStatus = if ($null -eq $sdk) { 'DOTNET_SDK_NOT_DETECTED' } else { 'DOTNET_SDK_AVAILABLE:' + (& dotnet --version) }
+
 [pscustomobject]@{
   result = 'PASS'
   scope = 'P0-004 static source contract'
-  executable_validation = 'PENDING_DOTNET_10_SDK'
+  executable_environment = $sdkStatus
   checked_artifacts = $requiredFiles
 } | ConvertTo-Json -Depth 5

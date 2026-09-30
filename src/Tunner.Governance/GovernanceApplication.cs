@@ -178,7 +178,7 @@ public static class GovernanceApplication
     private static Dictionary<string, GovernanceRecord> WorkItems(IReadOnlyList<GovernanceRecord> records)
         => records.Where(item => item.Type.DefinitionName == "work-item" && item.Identifier.Length > 0).ToDictionary(item => item.Identifier, StringComparer.Ordinal);
 
-    private static List<string> ReadinessReasons(GovernanceRecord workItem, IReadOnlyDictionary<string, GovernanceRecord> workItems, bool allowValidatedP0Prerequisites)
+    private static List<string> ReadinessReasons(GovernanceRecord workItem, Dictionary<string, GovernanceRecord> workItems, bool allowValidatedP0Prerequisites)
     {
         var failures = new List<string>();
         foreach (var prerequisite in workItem.StringList("prerequisites"))
@@ -204,7 +204,7 @@ public static class GovernanceApplication
     private static bool HasApprovedP0LocalIntegration(IReadOnlyList<GovernanceRecord> records)
         => records.Any(record => record.Type.DefinitionName == "product-decision" && StringComparer.Ordinal.Equals(record.Identifier, "DEC-0001") && StringComparer.Ordinal.Equals(record.Scalar("status"), "APPROVED"));
 
-    private static IReadOnlyList<GovernanceRecord> LoadRecords(DirectoryInfo repository, ICollection<Diagnostic> diagnostics)
+    private static List<GovernanceRecord> LoadRecords(DirectoryInfo repository, List<Diagnostic> diagnostics)
     {
         var records = new List<GovernanceRecord>();
         var governanceRoot = Path.Combine(repository.FullName, "governance");
@@ -244,7 +244,7 @@ public static class GovernanceApplication
         return records;
     }
 
-    private static YamlMappingNode? ParseMapping(string path, ICollection<Diagnostic> diagnostics)
+    private static YamlMappingNode? ParseMapping(string path, List<Diagnostic> diagnostics)
     {
         try
         {
@@ -308,10 +308,20 @@ public static class GovernanceApplication
 }
 
 public sealed record CommandResult(int ExitCode, string Command, object Payload);
-public sealed record Diagnostic(string File, int? Line, int? Column, string Severity, string Code, string Message)
+public sealed record Diagnostic(string File, long? Line, long? Column, string Severity, string Code, string Message)
 {
     public static Diagnostic Error(string file, Mark? mark, string code, string message)
-        => new(file, mark is null ? null : mark.Value.Line + 1, mark is null ? null : mark.Value.Column + 1, "ERROR", code, message);
+    {
+        long? line = null;
+        long? column = null;
+        if (mark is { } location)
+        {
+            line = location.Line + 1;
+            column = location.Column + 1;
+        }
+
+        return new(file, line, column, "ERROR", code, message);
+    }
 }
 
 public sealed record ValidationPayload(bool IsValid, int RecordCount, IReadOnlyList<Diagnostic> Diagnostics);
@@ -346,7 +356,8 @@ internal static class SchemaCatalog
 
         try
         {
-            _ = JsonSchema.FromText(File.ReadAllText(corePath));
+            var buildOptions = new BuildOptions { SchemaRegistry = new SchemaRegistry() };
+            _ = JsonSchema.FromText(File.ReadAllText(corePath), buildOptions);
             using var core = JsonDocument.Parse(File.ReadAllText(corePath));
             var definitions = core.RootElement.GetProperty("$defs");
             var result = new Dictionary<string, SchemaDefinition>(StringComparer.Ordinal);
@@ -359,7 +370,7 @@ internal static class SchemaCatalog
                     continue;
                 }
 
-                _ = JsonSchema.FromText(File.ReadAllText(path));
+                _ = JsonSchema.FromText(File.ReadAllText(path), buildOptions);
                 if (!definitions.TryGetProperty(type.SchemaDefinitionName, out var definition))
                 {
                     diagnostics.Add(Diagnostic.Error(path, null, "GOV_SCHEMA_DEFINITION", $"Definition '{type.SchemaDefinitionName}' is missing."));

@@ -49,7 +49,7 @@ public static class Program
 
     private static Command CreateGateCommand(Option<DirectoryInfo?> repositoryOption)
     {
-        var workItem = new Argument<string>("work-item", "Work item identifier, for example TUN-P0-004.");
+        var workItem = new Argument<string>("work-item") { Description = "Work item identifier, for example TUN-P0-004." };
         var check = new Command("check", "Check a work item’s read-only readiness gate.");
         check.Arguments.Add(workItem);
         check.SetAction(parseResult => WriteResult(GovernanceApplication.CheckGate(
@@ -63,8 +63,8 @@ public static class Program
 
     private static Command CreateTransitionCommand(Option<DirectoryInfo?> repositoryOption)
     {
-        var workItem = new Argument<string>("work-item", "Work item identifier.");
-        var destination = new Argument<string>("destination", "Requested lifecycle destination state.");
+        var workItem = new Argument<string>("work-item") { Description = "Work item identifier." };
+        var destination = new Argument<string>("destination") { Description = "Requested lifecycle destination state." };
         var check = new Command("check", "Check a lifecycle transition without mutating the record.");
         check.Arguments.Add(workItem);
         check.Arguments.Add(destination);

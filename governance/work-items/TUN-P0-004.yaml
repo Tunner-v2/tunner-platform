@@ -3,7 +3,7 @@ work_item_id: TUN-P0-004
 milestone_id: P0
 sprint_id: null
 title: tunner-governance MVP
-status: IN_PROGRESS
+status: VALIDATION
 type: GOVERNANCE_TOOLING
 authority_refs:
   - docs/authority/baselines/1.6.0/03_Governed_Development_Lifecycle_Scrum_Git.md
@@ -16,17 +16,16 @@ decision_refs:
   - AMD-0001
   - DEC-0001
 acceptance_criteria:
-  - A separate .NET 10/C# 14 repository-native tooling solution exposes the `tunner governance` command group.
-  - `validate` reports malformed governance YAML with file and location, verifies required record fields, and validates supported record shapes against the versioned schema contract.
-  - `status` deterministically reports milestones, work-item states, blockers, prerequisites, and evidence readiness without mutating repository records.
-  - `next` lists eligible work items and explains every ineligible item from prerequisite, blocker, or required-evidence facts.
-  - `gate check <work-item>` rejects DONE readiness when required evidence, activated-role review evidence, blockers, or prerequisites are incomplete.
-  - Invalid lifecycle transitions are rejected deterministically; the MVP is read-only and cannot mutate Product data or governance records.
-  - Tooling source, static checks, role reviews, and environment limitations are recorded as evidence.
+  - 'A separate .NET 10/C# 14 repository-native tooling solution exposes the `tunner governance` command group.'
+  - '`validate` reports malformed governance YAML with file and location, verifies required record fields, and validates supported record shapes against the versioned schema contract.'
+  - '`status` deterministically reports milestones, work-item states, blockers, prerequisites, and evidence readiness without mutating repository records.'
+  - '`next` lists eligible work items and explains every ineligible item from prerequisite, blocker, or required-evidence facts.'
+  - '`gate check <work-item>` rejects DONE readiness when required evidence, activated-role review evidence, blockers, or prerequisites are incomplete.'
+  - 'Invalid lifecycle transitions are rejected deterministically; the MVP is read-only and cannot mutate Product data or governance records.'
+  - 'Tooling source, static checks, role reviews, and environment limitations are recorded as evidence.'
 prerequisites:
   - TUN-P0-003
-blockers:
-  - ENV-DOTNET-SDK-001: The local machine has no .NET SDK; executable validation cannot run.
+blockers: []
 impact:
   architecture: true
   ui: false
@@ -45,9 +44,9 @@ activated_roles:
   - cyber-security-engineer
 required_tests:
   - dotnet build Tunner.Governance.sln --no-restore
-  - dotnet test Tunner.Governance.sln --no-restore
+  - dotnet run --project tests/Tunner.Governance.FunctionalTests --no-restore
   - positive and negative CLI fixture tests for validate, status, next, and gate check
-  - static source and fixture validation when the .NET SDK is unavailable
+  - static source and fixture validation
 required_evidence:
   - governance/context/CTX-TUN-P0-004-001.yaml
   - governance/evidence/TUN-P0-004-RD-PACKAGES.json
@@ -57,4 +56,4 @@ context_policy: TASK
 todos: []
 defects: []
 created_at: 2026-09-30T16:30:00-04:00
-updated_at: 2026-09-30T17:00:00-04:00
+updated_at: 2026-09-30T11:46:14-04:00
