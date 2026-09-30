@@ -24,7 +24,7 @@
 |---|---|---|---|---|
 | TUN-P0-001 | DONE | governance-engineer, tester-qa-engineer, auditor, cyber-security-engineer, devops-engineer | none | Bootstrap complete |
 | TUN-P0-019 | DONE | governance-engineer, devops-engineer, cyber-security-engineer, auditor | none | Ruleset, code-owner review, auto-merge, and automatic PR creation validated through PR #4 |
-| TUN-P0-002 | CODE_REVIEW | governance-engineer, cyber-security-engineer, devops-engineer, tester-qa-engineer, auditor | none | PR #5 is auto-created with auto-merge enabled; await independent code-owner review |
+| TUN-P0-002 | IN_PROGRESS | governance-engineer, cyber-security-engineer, devops-engineer, tester-qa-engineer, auditor | none | Continue on local P0 integration branch under DEC-0001; retain static evidence and final PR traceability |
 
 ## Build/test state
 
@@ -35,10 +35,13 @@
 - Pre-P0 package integrity: PASS (54/54).
 - Repository mirror integrity: PASS (125/125).
 
-## Open blockers
+## Delivery model and controls
 
-- No technical blocker. A protected-main code-owner approval remains required before a pull request can merge.
+- DEC-0001 permits a temporary P0-only local integration branch: `change/TUN-P0-control-plane`.
+- Each P0 work item remains separately committed, validated, evidenced, and governed locally.
+- One final protected P0 pull request will require an independent `ai-dev` code-owner approval; GitHub may auto-merge only after protected requirements pass.
+- The temporary exception expires when that final P0 pull request is merged or closed. P1 onward uses the strict per-work-item procedure.
 
 ## Exact next authorized action
 
-- Complete independent `ai-dev` code-owner review of PR #5; GitHub will merge it automatically after the protected requirements pass.
+- Continue the next eligible P0 work item on the local integration branch, with its required evidence and validation.

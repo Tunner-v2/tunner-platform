@@ -9,6 +9,8 @@
     "CONTRIBUTING.md",
     ".github/pull_request_template.md",
     "governance/policies/git-contribution-policy.yaml",
+    "governance/decisions/DEC-0001-p0-local-integration.yaml",
+    "governance/evidence/DEC-0001-P0-LOCAL-INTEGRATION.json",
     "governance/work-items/TUN-P0-002.yaml"
   ],
   "checks": {
@@ -21,12 +23,17 @@
     "policy_protected_main": true,
     "policy_codeowner_gate": true,
     "policy_auto_merge_guard": true,
+    "temporary_exception_named": true,
+    "temporary_exception_p0_limited": true,
+    "temporary_exception_expiry_defined": true,
+    "final_human_codeowner_review_retained": true,
     "work_item_authority": true,
     "work_item_prerequisite": true,
     "codeowners_cover_policy": true
   },
   "limitations": [
     "No dependency restore or product build applies to this documentation and governance policy slice.",
-    "Live protected-branch enforcement remains evidenced separately by TUN-P0-019."
+    "Live protected-branch enforcement remains evidenced separately by TUN-P0-019.",
+    "The final P0 pull request remains subject to live GitHub Ruleset and CODEOWNERS enforcement."
   ]
 }
