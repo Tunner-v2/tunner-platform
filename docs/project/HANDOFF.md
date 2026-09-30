@@ -4,9 +4,9 @@
 
 - ID: TUN-P0-007
 - Milestone/Sprint: P0 / no sprint
-- Status: BACKLOG (governance-eligible local preparation)
+- Status: READY (primary-source R&D recorded)
 - Branch: change/TUN-P0-007-secrets-foundation
-- Prerequisite: TUN-P0-006 is locally validated; `governance next` reports TUN-P0-007 actionable.
+- Prerequisite: TUN-P0-006 is locally validated; `governance next` reports TUN-P0-007 actionable. PR #6 merged to protected main at 87b62ff.
 - Integration: PR #6 remains approval-pending on `change/TUN-P0-control-plane`; this separate branch must not alter that PR.
 
 ## Completed
@@ -17,4 +17,4 @@
 
 ## Next action
 
-- Perform current primary-source OpenBao and secret-scan R&D, record the sources, then implement only the P0 secrets-foundation scope. Do not start local containers or introduce application/production secrets.
+- Implement only the P0 local OpenBao policy/bootstrap and repository secret-scan controls. Do not start local containers or introduce application/production secrets.
