@@ -3,8 +3,8 @@
   "evidence_id": "TUN-P0-008-VALIDATION",
   "scope_type": "WORK_ITEM",
   "scope_id": "TUN-P0-008",
-  "status": "PASS",
-  "checked_at": "2026-09-30T16:27:32.4541668-04:00",
+  "status": "PASS_WITH_OPERATOR_REHEARSAL_FOLLOW_UP",
+  "checked_at": "2026-09-30T18:00:07.6444706-04:00",
   "checks": [
     {
       "name": "compatible dependency and tooling restore",
@@ -22,13 +22,13 @@
       "name": "repository secret boundary",
       "command": "tools/security/Invoke-TunnerSecretScan.ps1",
       "result": "PASS",
-      "details": "The scan inspected 290 files and found no secret-pattern match. No database connection string, production credential, or migration execution output was committed."
+      "details": "The scan inspected 297 files and found no secret-pattern match. No database connection string, production credential, or migration execution output was committed."
     },
     {
       "name": "governance build and regression harness",
       "command": "dotnet build Tunner.Governance.sln --no-restore; dotnet run --project tests/Tunner.Governance.FunctionalTests --no-build; governance validate",
       "result": "PASS",
-      "details": "The full solution built with 0 warnings and 0 errors; the functional governance harness passed; governance validation reported 21 records with no diagnostics."
+      "details": "The full solution built with 0 warnings and 0 errors; the functional governance harness passed; governance validation reported 22 records with no diagnostics."
     },
     {
       "name": "lifecycle and whitespace",
@@ -41,6 +41,24 @@
       "command": "dotnet run --project src/Tunner.Governance --no-build -- authority verify",
       "result": "NON_BLOCKING_FINDING",
       "details": "The AGENTS.md startup command is not currently implemented by the repository CLI. DEF-TUN-P0-004-001 records the discrepancy for governed remediation; P0-008 authority hashes and migration gate evidence remain intact."
+    },
+    {
+      "name": "authority-preflight remediation verification",
+      "command": "dotnet run --project src/Tunner.Governance --no-build -- authority verify",
+      "result": "PASS",
+      "details": "DEF-TUN-P0-004-001 is closed. The command returned VERIFIED for all 72 imported authority artifacts with no findings. The earlier parity finding is retained as historical evidence."
+    },
+    {
+      "name": "local dependency diagnostic",
+      "command": "tools/dev/tunner-dev.ps1 doctor",
+      "result": "PASS",
+      "details": "Docker Desktop 4.87.0, Engine 29.7.2, and Compose v5.4.0 were available. The Tunner Compose configuration passed docker compose config --quiet. No image was pulled and no container was started."
+    },
+    {
+      "name": "live local PostgreSQL rehearsal reachability preflight",
+      "command": "tools/dev/tunner-dev.ps1 health",
+      "result": "OPERATOR_ACTION_REQUIRED",
+      "details": "The current PostgreSQL container is healthy but was created before the current Compose port mapping and has no published host port. The current Compose source correctly publishes 127.0.0.1:${POSTGRES_PORT:-5433}:5432 (POSTGRES_PORT=5432 in the credential-free example). The operator must rerun tunner-dev start to reconcile the container before running the host-side rehearsal."
     }
   ],
   "artifacts": [

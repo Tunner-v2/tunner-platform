@@ -31,14 +31,14 @@
 - .NET SDK: 10.0.401 installed and used for local P0 validation.
 - Tunner.Governance build: PASS (0 warnings, 0 errors).
 - Functional harness: PASS, including fresh and stale generated-context scenarios and active-authority-summary inclusion.
-- Governance live validation: PASS for 19 records with no diagnostics.
-- P0 foundation audit: PASS with three remediated governance/documentation findings; all seven registered P0 work-item gates are READY. Recoverable predecessor commits remain retained in Git history.
+- Governance live validation: PASS for 22 records with no diagnostics.
+- P0 foundation audit: PASS with three remediated governance/documentation findings. Recoverable predecessor commits remain retained in Git history.
 - Governance defect: DEF-TUN-P0-004-001 is CLOSED. The new read-only `tunner authority verify` command validated all 72 imported authority artifacts and blocks governance/context execution on any hash mismatch; P0-008 remains READY.
-- Context pack: PASS; `docs/context/current/` is manifest-first, hash-verifiable, and CURRENT for TUN-P0-007. It includes the active-authority summary and AMD-0002 source.
+- Context pack: PASS; `docs/context/current/` is manifest-first, hash-verifiable, and CURRENT for TUN-P0-008. It includes the active-authority summary and AMD-0002 source.
 - P0-006 static Compose source/configuration validation: PASS; `tunner-dev doctor` confirmed Docker Desktop 4.87.0 / Engine 29.7.2 and Compose v5.4.0 without pulling images or starting containers.
 - P0-006 runtime dependency health: PASS. User-run output confirmed PostgreSQL, RabbitMQ, Redis, OpenBao, Mailpit, and LGTM healthy after the corrected readiness probes and OpenBao configuration path fix.
 - P0-007 secrets foundation: PASS for static policy/bootstrap validation, a credential-free repository scan, generated negative fixture, clean build, functional harness, and context verification. No local bootstrap or secret value was executed or recorded.
-- P0-008 migration foundation: PASS for EF Core 10.0.12, Npgsql EF Core 10.0.3, and dotnet-ef 10.0.12 restore; credential-free source-only migration rehearsal fixture; secret scan; clean build; and governance functional harness. No database was contacted or migration executed.
+- P0-008 migration foundation: PASS for EF Core 10.0.12, Npgsql EF Core 10.0.3, and dotnet-ef 10.0.12 restore; credential-free source-only migration rehearsal fixture; secret scan (297 files); clean build; governance functional harness; authority verification (72 artifacts); and Docker/Compose doctor. No database was contacted or migration executed.
 - NuGet vulnerability metadata: no vulnerable packages reported by current source metadata.
 - Bundle integrity: PASS (125/125). Pre-P0 package integrity: PASS (54/54). Repository mirror integrity: PASS (125/125).
 
@@ -52,4 +52,4 @@
 ## Exact next authorized action
 
 - PR #6 merged to protected main. TUN-P0-007 is locally validated and committed as 7f2f6e4 on its separate branch; retain its evidence and do not introduce Product or production-secret scope.
-- TUN-P0-008 is in VALIDATION: its governance gate is READY and static acceptance evidence is recorded. Do not implement Product/domain schemas or execute migrations in this session.
+- TUN-P0-008 is in VALIDATION: its governance gate is READY and the refreshed source, security, governance, authority, and Docker diagnostic evidence is recorded. PostgreSQL is healthy but its current container predates the configured loopback host-port mapping, so the remaining operator-run rehearsal must first rerun `./tools/dev/tunner-dev.ps1 start` to reconcile the container. Then set `TUNNER_MIGRATION_CONNECTION_STRING` only in the current PowerShell process to `Host=127.0.0.1;Port=5432;Database=tunner;Username=tunner`, run `./tools/dev/tunner-migrations.ps1 rehearse`, clear the environment variable, and provide sanitized command output for evidence. Do not implement Product/domain schemas or treat this as production migration authority.
