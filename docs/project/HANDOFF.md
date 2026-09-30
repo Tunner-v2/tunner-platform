@@ -4,7 +4,7 @@
 
 - ID: TUN-P0-019
 - Milestone/Sprint: P0 / no sprint
-- Status: VALIDATION (GitHub ruleset independent readback)
+- Status: DONE (GitHub ruleset and code-owner review verified)
 - Branch: main
 - Commit: `3fe58ef79909451405e434c8d06d651885a5dce6`
 
@@ -31,4 +31,4 @@
 
 ## Exact next action
 
-- Validate GitHub repository ruleset 24217332 against the committed definition; then close TUN-P0-019 and continue B2.
+- Start TUN-P0-002, Git and contribution policy, under protected-branch governance.

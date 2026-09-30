@@ -23,7 +23,7 @@
 | ID | State | Owner/roles | Blocker | Next action |
 |---|---|---|---|---|
 | TUN-P0-001 | DONE | governance-engineer, tester-qa-engineer, auditor, cyber-security-engineer, devops-engineer | none | Resume B2 |
-| TUN-P0-019 | VALIDATION | governance-engineer, devops-engineer, cyber-security-engineer, auditor | Ruleset enforcement is partially verified; settings readback pending | Validate repository ruleset 24217332 against the committed definition |
+| TUN-P0-019 | VALIDATION | governance-engineer, devops-engineer, cyber-security-engineer, auditor | Ruleset enforcement and code-owner review: PASS via PR #1. | Validate repository ruleset 24217332 against the committed definition |
 
 ## Build/test state
 
