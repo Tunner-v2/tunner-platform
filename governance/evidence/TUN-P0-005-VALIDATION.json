@@ -28,7 +28,7 @@
       "name": "live P0-005 context pack",
       "command": "dotnet run --project src/Tunner.Governance --no-build -- context build --work-item TUN-P0-005; dotnet run --project src/Tunner.Governance --no-build -- context verify",
       "result": "PASS",
-      "details": "The generated pack identifies TUN-P0-005, the current-authority summary, explicit AMD-0001 and AMD-0002 authority, DEC-0001, no declared blockers, tests/evidence, roles, exclusions, hashes, and bounded Git history. Verification returned CURRENT."
+      "details": "The generated pack identifies TUN-P0-005, the current-authority summary, explicit AMD-0001 and AMD-0002 authority, DEC-0001 and DEC-0002, no declared blockers, tests/evidence, roles, exclusions, hashes, and bounded Git history. Verification returned CURRENT."
     },
     {
       "name": "governance readiness and dependency vulnerability metadata",
@@ -55,6 +55,6 @@
   "limitations": [
     "Generated context is a reproducible retrieval aid and never outranks repository authority.",
     "Authority hash verification and build refusal for a corrupt mirror remain TUN-P0-033 scope.",
-    "P0-005 remains in VALIDATION. It cannot enter DONE until the aggregate P0 final protected pull request is complete under DEC-0001."
+    "P0-005 remains in VALIDATION. It cannot enter DONE until its protected integration and the P0 enablement gate are complete under DEC-0002."
   ]
 }

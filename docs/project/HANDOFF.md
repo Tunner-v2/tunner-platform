@@ -4,11 +4,11 @@
 
 - ID: TUN-P0-005
 - Milestone/Sprint: P0 / no sprint
-- Status: VALIDATION (local P0 integration under DEC-0001)
+- Status: VALIDATION (incremental protected P0 integration authorized by DEC-0002)
 - Branch: change/TUN-P0-control-plane
 - Local commit: 7f0cc93 (`governance: refresh bounded context evidence`)
-- Integration: AMD-0002 permits continued governance-eligible local and branch work while protected-main approval is pending.
-- Prerequisite: TUN-P0-003 is locally validated under DEC-0001 P0 compatibility; P0-005 cannot enter DONE before the final protected P0 PR merges.
+- Integration: DEC-0002 permits this protected incremental P0 pull request; AMD-0002 permits continued governance-eligible local and branch work while approval is pending.
+- Prerequisite: TUN-P0-003 is locally validated under the superseded DEC-0001 compatibility record and current DEC-0002 integration policy; P0-005 cannot enter DONE until its protected integration and the P0 enablement gate are complete.
 
 ## Completed
 
@@ -34,7 +34,7 @@
 ## Decisions/blockers
 
 - Effective authority: Baseline 1.6.0 + accepted ADR/PDR records + AMD-0001 + AMD-0002.
-- DEC-0001 allows local P0 integration only. No P0 work item is DONE until the final protected P0 PR merges.
+- DEC-0002 supersedes DEC-0001 and permits protected incremental P0 pull requests. No P0 work item is DONE until its applicable protected integration and the P0 enablement gate are complete.
 - AMD-0002 does not bypass GitHub Rulesets, CODEOWNERS, human protected-main approval, Product decisions, or release authority.
 - TUN-P0-033 owns authority hash verification and build refusal for a corrupt mirror; P0-005 records the active verified-authority summary but does not claim that later enforcement.
 - P1–P8 Product behavior remains out of scope until P0 closes.
@@ -47,4 +47,4 @@
 
 ## Exact next action
 
-- Use `governance next`; it presently reports only existing validation records, so create/select the next repository work-item record from the canonical P0 backlog before implementing another scope. Do not push or merge before the final P0 aggregate PR is ready for protected-main review.
+- Push the current locally validated P0 aggregate and open a protected pull request under DEC-0002. After independent ai-dev approval and merge, use `governance next`; create/select the next repository work-item record from the canonical P0 backlog before implementing another scope.

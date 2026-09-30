@@ -52,11 +52,13 @@ known_risks:
   - EXT-DRIVE-001
 evidence_refs:
   - governance/evidence/DEC-0001-P0-LOCAL-INTEGRATION.json
+  - governance/decisions/DEC-0002.yaml
+  - governance/evidence/DEC-0002-GOVERNED-INCREMENTAL-P0-PR.json
   - governance/evidence/TUN-P0-003-VALIDATION.json
 delivery_exception:
-  decision_id: DEC-0001
+  decision_id: DEC-0002
   local_integration_branch: change/TUN-P0-control-plane
-  final_submission: one protected pull request after P0 completion
-  expires_when: P0 final protected pull request is merged or closed
+  submission: protected incremental pull requests for locally validated P0 slices
+  expires_when: P0 final protected pull request is merged or the temporary branch is closed
 created_at: 2026-09-29T00:00:00-04:00
-updated_at: 2026-09-30T16:00:00-04:00
+updated_at: 2026-09-30T15:17:35.4379043-04:00

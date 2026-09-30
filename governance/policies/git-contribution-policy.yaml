@@ -13,11 +13,11 @@ branching:
   allowed_prefixes: [feat, fix, change, hotfix, docs]
   pattern: "<prefix>/TUN-<work-item-number>-<short-description>"
   temporary_exceptions:
-    - decision_id: DEC-0001
+    - decision_id: DEC-0002
       branch: change/TUN-P0-control-plane
       scope: P0 governance and development-system work only
-      expires_when: P0 final protected pull request is merged or closed
-      rationale: Keep P0 locally integrated and evidence-bearing while deferring GitHub review to one final protected pull request.
+      expires_when: P0 final protected pull request is merged or the temporary branch is closed
+      rationale: Keep P0 locally integrated and evidence-bearing while allowing protected incremental pull requests for locally validated slices.
 commit:
   cohesive: true
   buildable_when_practical: true

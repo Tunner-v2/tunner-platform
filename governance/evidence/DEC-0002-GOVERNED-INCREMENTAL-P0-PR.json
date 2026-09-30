@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "decision_id": "DEC-0002",
+  "recorded_at": "2026-09-30T15:13:56.3465064-04:00",
+  "approval_source": "Product Owner instruction in the governed development session",
+  "approved_operating_model": {
+    "local_branch": "change/TUN-P0-control-plane",
+    "p0_work": "locally committed, validated, and evidenced per work item",
+    "github_submission": "protected incremental P0 pull requests for locally validated slices",
+    "approval": "independent ai-dev code-owner approval and configured protected checks before merge",
+    "post_merge": "continue governed local/branch P0 execution; P1-P8 remain blocked until the P0 enablement gate closes"
+  },
+  "controls_retained": [
+    "main direct pushes prohibited",
+    "existing ruleset and CODEOWNERS protections retained",
+    "human ai-dev code-owner approval required for every protected P0 pull request",
+    "native auto-merge only after protected requirements pass",
+    "P1-P8 remain gated on P0 enablement"
+  ]
+}

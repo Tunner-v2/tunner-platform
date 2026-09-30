@@ -17,12 +17,12 @@
 | ID | State | Blocker | Next action |
 |---|---|---|---|
 | TUN-P0-001 | DONE | none | Bootstrap complete |
-| TUN-P0-002 | VALIDATION | none | Retain AMD-0002 contribution-policy evidence for final aggregate P0 PR |
-| TUN-P0-003 | VALIDATION | none | Retain schema-validation evidence for final aggregate P0 PR |
-| TUN-P0-004 | VALIDATION | none | Retain AMD-0002 dependency-readiness evidence for final aggregate P0 PR |
-| TUN-P0-005 | VALIDATION | none | Retain bounded context-pack evidence for final aggregate P0 PR |
-| TUN-P0-006 | VALIDATION | none | Runtime health is PASS; retain Compose evidence for final aggregate P0 PR |
-| TUN-P0-019 | VALIDATION | none | Retain GitHub governance evidence for final aggregate P0 PR |
+| TUN-P0-002 | VALIDATION | none | Retain AMD-0002 contribution-policy evidence for protected incremental P0 PRs |
+| TUN-P0-003 | VALIDATION | none | Retain schema-validation evidence for protected incremental P0 PRs |
+| TUN-P0-004 | VALIDATION | none | Retain AMD-0002 dependency-readiness evidence for protected incremental P0 PRs |
+| TUN-P0-005 | VALIDATION | none | Retain bounded context-pack evidence for protected incremental P0 PRs |
+| TUN-P0-006 | VALIDATION | none | Runtime health is PASS; retain Compose evidence for protected incremental P0 PRs |
+| TUN-P0-019 | VALIDATION | none | Retain GitHub governance evidence for protected incremental P0 PRs |
 
 ## Build/test state
 
@@ -38,11 +38,11 @@
 
 ## Delivery model and controls
 
-- DEC-0001 permits the temporary P0-only local integration branch: change/TUN-P0-control-plane.
+- DEC-0002 supersedes DEC-0001 and permits protected incremental P0 pull requests from the temporary P0-only local integration branch: change/TUN-P0-control-plane.
 - Each P0 work item is separately committed, validated, evidenced, and governed locally.
-- A locally validated P0 prerequisite may unblock dependent P0 work, but no P0 item becomes DONE until the final protected P0 PR merges.
-- One final protected P0 pull request requires an independent ai-dev code-owner approval; GitHub may auto-merge only after protected requirements pass.
+- A locally validated P0 prerequisite may unblock dependent P0 work, but no P0 item becomes DONE until its protected integration and the P0 enablement gate are complete.
+- Each protected incremental P0 pull request requires an independent ai-dev code-owner approval; GitHub may auto-merge only after protected requirements pass. P0 remains incomplete until its separate enablement gate closes.
 
 ## Exact next authorized action
 
-- TUN-P0-005 is locally validated. `governance next` reports only existing validation-stage records and no protected-main human action. Select the next governed P0 work item only after its repository work-item record is created from the canonical backlog; do not invent an unrecorded scope.
+- Submit the current locally validated P0 aggregate as a protected pull request under DEC-0002. After its independent ai-dev approval and merge, create/select the next repository work-item record from the canonical backlog; do not invent an unrecorded scope.

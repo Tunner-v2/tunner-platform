@@ -1,0 +1,31 @@
+schema_version: 1
+decision_id: DEC-0002
+title: Governed incremental P0 protected pull requests
+status: APPROVED
+problem: DEC-0001 deferred all P0 integration to one final protected pull request. The Product Owner has authorized approval of the current locally validated P0 control-plane aggregate before remaining canonical P0 records are created and executed.
+options_considered:
+  - Retain one final protected P0 pull request only.
+  - Push the local control-plane branch directly to main.
+  - Permit protected, human-approved incremental P0 pull requests for locally validated P0 slices while retaining all protected-main and final-P0 gates.
+recommendation: Permit the current and subsequent locally validated P0 control-plane slices to be submitted through protected pull requests. Each pull request requires the existing independent ai-dev code-owner approval and all configured checks before merge. Continue local/branch work under AMD-0002 while approval is pending. P1-P8 remain blocked until the separate P0 enablement gate closes.
+business_impact: No Product/business behavior changes. This reduces approval batching without authorizing P1-P8 implementation or declaring P0 complete.
+technical_impact: The temporary change/TUN-P0-control-plane integration branch may be pushed for protected incremental P0 pull requests. Every included P0 work item remains locally committed, validated, evidenced, and traceable.
+security_compliance_impact: Direct pushes to main, force pushes, protected-history deletion, rulesets, CODEOWNERS enforcement, independent human approval, and native auto-merge requirements remain unchanged. Automation may create a pull request or enable auto-merge but cannot approve, bypass, or impersonate an ai-dev reviewer.
+affected_documents:
+  - governance/policies/git-contribution-policy.yaml
+  - governance/work-items/TUN-P0-002.yaml
+  - docs/project/DECISION_INDEX.md
+  - docs/project/CURRENT_STATE.md
+  - docs/project/HANDOFF.md
+affected_flows: []
+affected_work_items:
+  - TUN-P0-002
+  - TUN-P0-003
+  - TUN-P0-004
+  - TUN-P0-005
+  - TUN-P0-006
+  - TUN-P0-019
+requested_by: Product Owner
+approved_by: Product Owner
+approved_at: 2026-09-30T15:13:56.3465064-04:00
+supersedes: DEC-0001

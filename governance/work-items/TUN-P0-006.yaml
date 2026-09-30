@@ -17,6 +17,7 @@ flow_refs: []
 contract_refs: []
 decision_refs:
   - DEC-0001
+  - DEC-0002
 acceptance_criteria:
   - Docker Compose defines the local dependency topology: PostgreSQL 18, RabbitMQ 4.3 management, Redis 8.x, OpenBao, Mailpit, and Grafana OTEL-LGTM (which includes an OpenTelemetry Collector), with API and Worker health placeholders isolated behind an opt-in profile.
   - All image references are exact version tags selected from current primary-source evidence; no latest or edge tag is used.
@@ -61,4 +62,4 @@ defects:
   - DEF-TUN-P0-006-001
   - DEF-TUN-P0-006-002
 created_at: 2026-09-30T12:10:44-04:00
-updated_at: 2026-09-30T13:04:03-04:00
+updated_at: 2026-09-30T15:17:35.4379043-04:00
