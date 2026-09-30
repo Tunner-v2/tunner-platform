@@ -22,6 +22,7 @@
 | TUN-P0-004 | VALIDATION | none | Retain AMD-0002 dependency-readiness evidence for protected incremental P0 PRs |
 | TUN-P0-005 | VALIDATION | none | Retain bounded context-pack evidence for protected incremental P0 PRs |
 | TUN-P0-006 | VALIDATION | none | Runtime health is PASS; retain Compose evidence for protected incremental P0 PRs |
+| TUN-P0-007 | BACKLOG | none | Current OpenBao and secret-scan R&D; then implement the governed secrets foundation locally |
 | TUN-P0-019 | VALIDATION | none | Retain GitHub governance evidence for protected incremental P0 PRs |
 
 ## Build/test state
@@ -45,4 +46,4 @@
 
 ## Exact next authorized action
 
-- Submit the current locally validated P0 aggregate as a protected pull request under DEC-0002. After its independent ai-dev approval and merge, create/select the next repository work-item record from the canonical backlog; do not invent an unrecorded scope.
+- PR #6 is pending independent ai-dev approval under DEC-0002. In parallel, TUN-P0-007 is eligible for local R&D and implementation on its separate branch; do not push new commits to PR #6.
