@@ -4,7 +4,7 @@
 
 - Documentation: Baseline 1.6.0 (ACTIVE / LOCKED).
 - Active amendments: AMD-0001.
-- Authority verification: PASS for 125/125 bootstrap-bundle entries and 54/54 Pre-P0 entries; external Drive comparison pending.
+- Authority verification: PASS for 125/125 bootstrap-bundle entries and 54/54 Pre-P0 entries; canonical Drive folders and controlling documents are readable. Full source-to-mirror diff remains TUN-P0-033 scope.
 
 ## Current milestone
 
@@ -23,11 +23,11 @@
 | ID | State | Owner/roles | Blocker | Next action |
 |---|---|---|---|---|
 | TUN-P0-001 | DONE | governance-engineer, tester-qa-engineer, auditor, cyber-security-engineer, devops-engineer | none | Resume B2 |
-| TUN-P0-019 | VALIDATION | governance-engineer, devops-engineer, cyber-security-engineer, auditor | Ruleset enforcement and code-owner review: PASS via PR #1. GitHub auto-merge workflow is implemented but needs repository configuration and a live run. | Enable GitHub auto-merge and validate the workflow on a protected same-repository PR |
+| TUN-P0-019 | DONE | governance-engineer, devops-engineer, cyber-security-engineer, auditor | Ruleset enforcement, code-owner review, and GitHub auto-merge: PASS via PRs #1 and #2. | Start TUN-P0-002 under protected-branch governance |
 
 ## Build/test state
 
-- Last verified commit: `3fe58ef79909451405e434c8d06d651885a5dce6`.
+- Last verified commit: `99e9b61bf7d14caa1a81e628fffb48842572ce7d` (PR #2 auto-merge validation).
 - Build: not run; dependency restore/build is a user-run step.
 - Bundle integrity: PASS (125/125).
 - Pre-P0 package integrity: PASS (54/54).
@@ -35,10 +35,8 @@
 
 ## Open blockers
 
-- `EXT-DRIVE-001`: canonical Drive inventory was not readable through the connected session. This blocks only external-source comparison, not use of the immutable verified bootstrap bundle.
 - `GITHUB-GOV-004`: repository ruleset 24217332 was reported configured; independent authenticated readback remains pending.
-- `GITHUB-AUTOMERGE-001`: repository owner must enable **Allow auto-merge** and, if restricted by policy, permit the workflow's requested GitHub Actions token permissions. A successful live run remains pending.
 
 ## Exact next authorized action
 
-- Merge this branch through the required code-owner review; then enable **Allow auto-merge** in GitHub and validate the workflow on a same-repository protected pull request.
+- Merge this validation-evidence branch through the required code-owner review; then start TUN-P0-002, Git and contribution policy.
