@@ -1,5 +1,6 @@
 # Recent relevant Git changes
 
+- `36591af governance: apply AMD-0002 contribution policy`
 - `f746517 governance: synchronize AMD-0002 authority`
 - `d5d3006 docs: record LGTM probe handoff`
 - `9ef4ee4 fix: correct local LGTM health probe`
@@ -9,4 +10,3 @@
 - `2c9a547 governance: add read-only control-plane MVP`
 - `948821f docs: hand off P0-004 governance MVP`
 - `e89f1f8 docs: refresh Drive authority context`
-- `a471c6b docs: record P0 schema handoff`

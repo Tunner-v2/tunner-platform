@@ -18,7 +18,7 @@
 |---|---|---|---|
 | TUN-P0-001 | DONE | none | Bootstrap complete |
 | TUN-P0-002 | VALIDATION | none | Validate AMD-0002 approval-pending execution policy; retain evidence for final aggregate P0 PR |
-| TUN-P0-003 | VALIDATION | none | Retain schema evidence for final aggregate P0 PR |
+| TUN-P0-003 | VALIDATION | none | Current schema and negative-entry validation PASS; retain evidence for final aggregate P0 PR |
 | TUN-P0-004 | VALIDATION | none | Retain control-plane evidence for final aggregate P0 PR |
 | TUN-P0-005 | VALIDATION | none | Retain bounded context evidence for final aggregate P0 PR |
 | TUN-P0-006 | VALIDATION | User-run runtime acceptance | Rerun local dependency start/health after the LGTM probe correction; retain its evidence for the final aggregate P0 PR |
