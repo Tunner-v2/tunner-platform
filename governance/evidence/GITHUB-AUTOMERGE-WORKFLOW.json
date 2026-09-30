@@ -3,11 +3,17 @@
   "evidence_id": "GITHUB-AUTOMERGE-WORKFLOW",
   "scope_type": "WORK_ITEM",
   "scope_id": "TUN-P0-019",
-  "status": "IMPLEMENTED_PENDING_GITHUB_CONFIGURATION_AND_RUN",
+  "status": "LIVE_VALIDATED",
   "workflow_path": ".github/workflows/automate-pr-automerge.yml",
   "workflow_name": "Automate PR Auto-Merge",
   "event": "pull_request",
-  "activity_types": ["opened", "synchronize", "reopened", "ready_for_review", "labeled"],
+  "activity_types": [
+    "opened",
+    "synchronize",
+    "reopened",
+    "ready_for_review",
+    "labeled"
+  ],
   "security_controls": [
     "does not approve pull requests",
     "does not bypass repository rules",
@@ -23,5 +29,16 @@
     "workflow run succeeds on a same-repository pull request",
     "pull request remains blocked until the required code-owner approval and all ruleset requirements pass",
     "GitHub merges only after those requirements pass"
-  ]
+  ],
+  "live_validation": {
+    "status": "PASS",
+    "pull_request": "https://github.com/Tunner-v2/tunner-platform/pull/2",
+    "workflow_run": "https://github.com/Tunner-v2/tunner-platform/actions/runs/36657649250/job/109705333650",
+    "workflow_conclusion": "success",
+    "reviewer": "creativeideatorinc",
+    "review_state": "APPROVED",
+    "review_submitted_at": "2026-09-30T02:41:50Z",
+    "merged_at": "2026-09-29T22:42:22-04:00",
+    "merge_commit": "99e9b61bf7d14caa1a81e628fffb48842572ce7d"
+  }
 }

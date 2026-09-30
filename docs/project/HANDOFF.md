@@ -4,15 +4,15 @@
 
 - ID: TUN-P0-019
 - Milestone/Sprint: P0 / no sprint
-- Status: VALIDATION (GitHub ruleset and code-owner review verified; safe auto-merge automation pending live validation)
-- Branch: governance/b2-ruleset-validation
+- Status: DONE (GitHub ruleset, code-owner review, and safe auto-merge validated)
+- Branch: governance/automerge-live-validation
 - Implementation commit: `5c1cdb6` (`ci: enable guarded pull request auto-merge`)
 
 ## Completed
 
 - B0/B1 completed with 125/125 repository-mirror hash verification.
 - Local remote `origin` is registered as `https://github.com/Tunner-v2/tunner-platform.git`.
-- `.github/workflows/automate-pr-automerge.yml` enables GitHub native auto-merge for non-draft, same-repository pull requests. It does not approve, bypass, or execute pull-request code.
+- `.github/workflows/automate-pr-automerge.yml` enables GitHub native auto-merge for non-draft, same-repository pull requests. It does not approve, bypass, or execute pull-request code. PR #2 validated the workflow end to end: Actions enabled auto-merge, a human approved, and GitHub merged it.
 
 ## Tests/evidence
 
@@ -24,15 +24,15 @@
 - SSH authorization is not needed because HTTPS remote access is available.
 - CODEOWNERS is materialized with `@Tunner-v2/ai-dev`.
 - Repository ruleset 24217332 was reported configured; independent authenticated readback is pending.
-- The repository owner must enable **Allow auto-merge** before the workflow can enable automatic merging. If Actions policy restricts tokens, it must also allow `contents: write` and `pull-requests: write` for this workflow.
-- `EXT-DRIVE-001` affects external freshness comparison only.
+- **Allow auto-merge** is enabled and was successfully validated by PR #2.
+- Canonical Drive folders and controlling authority documents are now readable. The full source-to-mirror content diff remains TUN-P0-033 scope.
 
 ## Context state
 
 - Context mode: TASK.
-- Authority mirror status: verified local mirror pending external check.
+- Authority mirror status: verified local mirror; canonical Drive access confirmed for the controlling documents. Full source-to-mirror content diff remains TUN-P0-033 scope.
 - Activated skills: governance-engineer, devops-engineer, cyber-security-engineer, auditor.
 
 ## Exact next action
 
-- Merge and validate the auto-merge workflow on a protected same-repository pull request. Then resume TUN-P0-002, Git and contribution policy, under protected-branch governance.
+- Merge this evidence branch through protected-branch governance. Then start TUN-P0-002, Git and contribution policy.
