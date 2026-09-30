@@ -13,7 +13,7 @@ Repository-native, concise context for Tunner. It is derived from approved autho
 - P0: authorized. P1–P8: blocked pending the P0 enablement gate.
 - Local authority mirror: `docs/authority/`; local bundle verification passed on 2026-09-29.
 - External canonical locations: Development Documentation, Pre-P0 package, and decisions links are recorded in `docs/authority/current-authority.json`.
-- External-source verification: pending because the connected Drive session did not return an inventory.
+- External-source access: PASS — live Drive inventories are readable for Development Documentation, the Pre-P0 package, Decisions, and the FRD/Authority root; controlling authority and architecture-guideline files were fetched on 2026-09-30. A complete file-by-file Drive-to-mirror comparison remains TUN-P0-033 scope.
 
 ## Architecture and boundaries
 

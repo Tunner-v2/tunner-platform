@@ -33,7 +33,7 @@
 
 ## Context state
 
-- Authority: Baseline 1.6.0 documents 03 and 04, AMD-0001 document 36, `governance/bootstrap/source/GITHUB_BOOTSTRAP_POLICY.md`, and DEC-0001.
+- Authority: Baseline 1.6.0 documents 03 and 04, AMD-0001 document 36, `governance/bootstrap/source/GITHUB_BOOTSTRAP_POLICY.md`, and DEC-0001. Live Drive access/readback is confirmed; the complete Drive-to-mirror diff remains TUN-P0-033 scope.
 - Context mode: TASK.
 - Activated roles: governance-engineer, cyber-security-engineer, devops-engineer, tester-qa-engineer, auditor.
 
