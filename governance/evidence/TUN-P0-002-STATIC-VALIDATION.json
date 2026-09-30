@@ -9,6 +9,8 @@
     "CONTRIBUTING.md",
     ".github/pull_request_template.md",
     "governance/policies/git-contribution-policy.yaml",
+    "tools/validation/Validate-GitContributionPolicy.ps1",
+    "docs/authority/amendments/AMD-0002/AMD-0002_Non-Blocking_PR_Approval_and_Continuous_Local_Execution.md",
     "governance/decisions/DEC-0001-p0-local-integration.yaml",
     "governance/evidence/DEC-0001-P0-LOCAL-INTEGRATION.json",
     "governance/work-items/TUN-P0-002.yaml"
@@ -29,11 +31,16 @@
     "final_human_codeowner_review_retained": true,
     "work_item_authority": true,
     "work_item_prerequisite": true,
-    "codeowners_cover_policy": true
+    "codeowners_cover_policy": true,
+    "approval_pending_continues_local_execution": true,
+    "protected_main_integration_gate_retained": true,
+    "dependency_readiness_disclosed": true,
+    "amd_0002_authority": true
   },
   "limitations": [
     "No dependency restore or product build applies to this documentation and governance policy slice.",
     "Live protected-branch enforcement remains evidenced separately by TUN-P0-019.",
-    "The final P0 pull request remains subject to live GitHub Ruleset and CODEOWNERS enforcement."
+    "The final P0 pull request remains subject to live GitHub Ruleset and CODEOWNERS enforcement.",
+    "This static policy slice does not itself grant approval, merge, or Ruleset-bypass authority."
   ]
 }

@@ -3,6 +3,7 @@
 - Work item: `TUN-`
 - Milestone:
 - Authority / decision / contract references:
+- Dependency readiness required: `LOCAL_VALIDATED` / `MERGED_TO_MAIN` / not applicable:
 
 ## Summary
 

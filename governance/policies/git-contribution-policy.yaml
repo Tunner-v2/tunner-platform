@@ -28,6 +28,9 @@ pull_request:
   required_metadata: [work_item, authority_impact, verification_evidence]
   required_codeowner_review: true
   auto_merge: permitted_after_protected_requirements
+  approval_pending: continues_governance_eligible_local_and_branch_execution
+  integration_gate: protected_main_merge_requires_human_approval
+  dependency_readiness: [LOCAL_VALIDATED, MERGED_TO_MAIN]
   automation:
     create_on_non_main_push: true
     enable_auto_merge_on_non_main_push: true

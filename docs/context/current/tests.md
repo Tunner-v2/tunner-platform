@@ -1,13 +1,16 @@
 # Tests and evidence
 
-- `dotnet build Tunner.Governance.sln --no-restore` — required test
-- `dotnet run --project tests/Tunner.Governance.FunctionalTests --no-restore` — required test
-- `positive and negative CLI fixture tests for validate, status, next, and gate check` — required test
-- `static source and fixture validation` — required test
+- `static policy-content validation` — required test
+- `pull-request-template field validation` — required test
+- `protected-main policy alignment review` — required test
+- `approval-pending local-execution policy validation` — required test
 
 ## Required evidence
 
-- `governance/context/CTX-TUN-P0-004-001.yaml` — required evidence
-- `governance/evidence/TUN-P0-004-RD-PACKAGES.json` — required evidence
-- `governance/evidence/TUN-P0-004-VALIDATION.json` — required evidence
-- `governance/evidence/TUN-P0-004-ROLE-REVIEWS.json` — required evidence
+- `CONTRIBUTING.md` — required evidence
+- `.github/pull_request_template.md` — required evidence
+- `governance/policies/git-contribution-policy.yaml` — required evidence
+- `governance/evidence/TUN-P0-002-STATIC-VALIDATION.json` — required evidence
+- `tools/validation/Validate-GitContributionPolicy.ps1` — required evidence
+- `governance/decisions/DEC-0001-p0-local-integration.yaml` — required evidence
+- `governance/evidence/DEC-0001-P0-LOCAL-INTEGRATION.json` — required evidence

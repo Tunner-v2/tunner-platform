@@ -17,7 +17,7 @@
 | ID | State | Blocker | Next action |
 |---|---|---|---|
 | TUN-P0-001 | DONE | none | Bootstrap complete |
-| TUN-P0-002 | CODE_REVIEW | none | Retain evidence for final aggregate P0 PR |
+| TUN-P0-002 | VALIDATION | none | Validate AMD-0002 approval-pending execution policy; retain evidence for final aggregate P0 PR |
 | TUN-P0-003 | VALIDATION | none | Retain schema evidence for final aggregate P0 PR |
 | TUN-P0-004 | VALIDATION | none | Retain control-plane evidence for final aggregate P0 PR |
 | TUN-P0-005 | VALIDATION | none | Retain bounded context evidence for final aggregate P0 PR |

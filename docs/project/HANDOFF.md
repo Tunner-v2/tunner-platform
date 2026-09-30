@@ -2,44 +2,41 @@
 
 ## Work item
 
-- ID: TUN-P0-006
+- ID: TUN-P0-002
 - Milestone/Sprint: P0 / no sprint
 - Status: VALIDATION (local P0 integration under DEC-0001)
 - Branch: change/TUN-P0-control-plane
-- Commits: 78c8466 (foundation), 9ef4ee4 (LGTM health-probe correction)
-- Prerequisite: TUN-P0-001 (complete); P0-006 cannot enter DONE before runtime evidence and the final protected P0 PR.
+- Integration: AMD-0002 permits continued governance-eligible local and branch work while any protected-main pull request is approval-pending.
+- Prerequisite: TUN-P0-001 (complete); P0-002 cannot enter DONE before the final protected P0 PR merges.
 
 ## Completed
 
-- P0-006 added a secret-free local Docker Compose foundation for PostgreSQL 18, RabbitMQ 4.3 management, Redis 8, OpenBao, Mailpit, and Grafana OTEL-LGTM (including a local OpenTelemetry Collector).
-- All published host ports bind to loopback by default and can be overridden only for port conflicts through an ignored local environment file.
-- API and Worker health placeholders are opt-in and contain no Product implementation.
-- `tools/dev/tunner-dev.ps1` provides doctor, setup, start, stop, health, and logs; `docs/development/LOCAL_DOCKER.md` documents its bounded local-only use.
-- OpenBao uses normal server mode without a committed root token. P0-007 owns initialization, unseal handling, least-privilege policy, and secret injection.
+- The repository-native contribution guide and pull-request template retain protected-main and required CODEOWNERS review controls.
+- The contribution policy now distinguishes local validation from protected-main integration: approval-pending status continues governance-eligible local/branch work, while merge into `main` retains human approval.
+- Pull-request metadata now records whether a dependent scope requires `LOCAL_VALIDATED`, `MERGED_TO_MAIN`, or no dependency-readiness gate.
+- A focused static validator protects those policy statements from unreviewed regression.
 
 ## Tests/evidence
 
-- P0-006 static source and Compose contract: PASS.
-- `tunner-dev doctor`: PASS against Docker Desktop 4.87.0 / Engine 29.7.2 and Docker Compose v5.4.0; no image pull or service start was performed.
-- Governance validation: PASS for 13 records, no diagnostics.
-- P0-006 generated context pack: PASS / CURRENT.
-- `git diff --check`: PASS before this state update; rerun after any change.
-- R&D evidence: `governance/evidence/TUN-P0-006-RD-SERVICES.json`.
-- Role review evidence: `governance/evidence/TUN-P0-006-ROLE-REVIEWS.json`.
+- `tools/validation/Validate-GitContributionPolicy.ps1`: PASS.
+- `governance validate`: PASS for 15 records with no diagnostics.
+- TUN-P0-002 generated context pack: PASS / CURRENT with verified hashes.
+- Static policy evidence: `governance/evidence/TUN-P0-002-STATIC-VALIDATION.json`.
+- `git diff --check`: PASS before the local commit.
 
 ## Decisions/blockers
 
-- P1–P8 Product behavior remains out of scope until P0 closes.
+- Effective authority: Baseline 1.6.0 + accepted ADR/PDR records + AMD-0001 + AMD-0002.
 - DEC-0001 allows local P0 integration only. No P0 work item is DONE until the final protected P0 PR merges.
-- GitHub automation may create/auto-merge a PR after requirements pass; it cannot approve, bypass, or impersonate the required ai-dev code-owner review.
-- Initial user-run runtime evidence showed all core services except LGTM healthy. DEF-TUN-P0-006-001 records the failed wget health probe; the Compose correction now uses LGTM's /tmp/ready sentinel and requires one retest. The expected OpenBao state is responsive but uninitialized/sealed until P0-007.
+- AMD-0002 does not bypass protected-main approval, GitHub Rulesets, or CODEOWNERS. It only prevents approval-pending PR state from becoming a global development blocker.
+- P1–P8 Product behavior remains out of scope until P0 closes.
 
 ## Context state
 
-- Generated pack: docs/context/current/manifest.json.
-- P0-006 selection: governance/context/CTX-TUN-P0-006-001.yaml.
-- Pack scope: infrastructure authority/ADRs, prerequisite state, R&D evidence, required tests/evidence, active roles, project state, bounded Git history, and explicit Product/R2/OpenBao-bootstrap exclusions.
+- Generated pack: `docs/context/current/manifest.json`.
+- P0-002 selection: `governance/context/CTX-TUN-P0-002-001.yaml`.
+- Pack scope: contribution policy authority, prerequisite state, required evidence, active roles, project state, bounded Git history, and explicit Product/R2 exclusions.
 
 ## Exact next action
 
-- Run `./tools/dev/tunner-dev.ps1 start`, then `./tools/dev/tunner-dev.ps1 health` from the repository root in PowerShell and retain the output. Do not pass secrets or create `.env.local` credentials. Stop with `./tools/dev/tunner-dev.ps1 stop` when finished. After the runtime evidence is recorded, begin only the separately governed P0-007 OpenBao bootstrap/policy scope.
+- Commit the locally validated TUN-P0-002 governance-policy slice, then run `governance next` and select the next governance-eligible P0 work item. Do not push or merge before the final P0 aggregate PR is ready for protected-main review.
