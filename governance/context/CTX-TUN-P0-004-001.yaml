@@ -1,0 +1,41 @@
+schema_version: 1
+selection_id: CTX-TUN-P0-004-001
+scope_type: WORK_ITEM
+scope_id: TUN-P0-004
+context_mode: TASK
+included_artifacts:
+  - AGENTS.md
+  - .agent/skills/governance-engineer/SKILL.md
+  - .agent/skills/full-stack-engineer/SKILL.md
+  - .agent/skills/tester-qa-engineer/SKILL.md
+  - .agent/skills/auditor/SKILL.md
+  - .agent/skills/rd-engineer/SKILL.md
+  - .agent/skills/cyber-security-engineer/SKILL.md
+  - docs/authority/baselines/1.6.0/03_Governed_Development_Lifecycle_Scrum_Git.md
+  - docs/authority/baselines/1.6.0/04_Governance_and_Context_Tooling_Specification.md
+  - docs/authority/baselines/1.6.0/12_AI_Development_Protocol_Context_and_Project_Memory.md
+  - docs/authority/amendments/AMD-0001/36_P0_Repository_Bootstrap_Governance_and_Context_Implementation_Spec.md
+  - governance/policies/lifecycle-policy.yaml
+  - governance/policies/role-activation-policy.yaml
+  - governance/work-items/TUN-P0-003.yaml
+  - governance/schemas/v1/
+excluded_artifacts:
+  - docs/authority/baselines/1.6.0/17_Account_Identity_and_Session_FRD.md
+  - docs/authority/baselines/1.6.0/18_Billing_Account_and_Delegated_Authority_FRD.md
+  - docs/authority/baselines/1.6.0/26_Finance_Ledger_Accounting_Settlement_and_Payout_FRD.md
+  - Figma and FigJam UX references
+exclusion_reasons:
+  docs/authority/baselines/1.6.0/17_Account_Identity_and_Session_FRD.md: Product identity behavior is outside the governance-tool MVP.
+  docs/authority/baselines/1.6.0/18_Billing_Account_and_Delegated_Authority_FRD.md: Product billing behavior is outside the governance-tool MVP.
+  docs/authority/baselines/1.6.0/26_Finance_Ledger_Accounting_Settlement_and_Payout_FRD.md: Product finance behavior is outside the governance-tool MVP.
+  Figma and FigJam UX references: No user/admin UX changes are authorized for this repository-native tool.
+source_hashes:
+  "docs/authority/baselines/1.6.0/03_Governed_Development_Lifecycle_Scrum_Git.md": "d204886943712849c3453e22603b5a541f2a46b05cd15b17bc74382900abf0f7"
+  "docs/authority/baselines/1.6.0/04_Governance_and_Context_Tooling_Specification.md": "bb563aef0a8a8386c180b11355d46d1da189f0a37c15d3021fd90e2f45469ede"
+  "docs/authority/baselines/1.6.0/12_AI_Development_Protocol_Context_and_Project_Memory.md": "f29a4811fac77e247d57949ca412823323a010eec9c87a1f4a5a8a84275880ca"
+  "docs/authority/amendments/AMD-0001/36_P0_Repository_Bootstrap_Governance_and_Context_Implementation_Spec.md": "6d2cca41c5a9ba771962c7fc535998ce34f80abe491dce6a83a165a9c28ba645"
+  "governance/policies/lifecycle-policy.yaml": "e3f9131426f8aa2725c10cc80cec7592f3a0b4743364210f2f951e5c1d69ada9"
+  "governance/policies/role-activation-policy.yaml": "42150b80ebbec95a4c32ecbf2188d08b838d7a92b87fb5eb406bc9aaf7812a26"
+  "governance/work-items/TUN-P0-003.yaml": "d187b5f86964da196cd93f6f88483b2fbf57969b006c674863bdd18d5b27f01c"
+tool_version: manual-bootstrap-context-1.0.0
+created_at: 2026-09-30T16:30:00-04:00
