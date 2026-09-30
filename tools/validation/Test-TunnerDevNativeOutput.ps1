@@ -17,7 +17,15 @@ try {
     $env:Path = "$tempRoot;$previousPath"
     $global:LASTEXITCODE = 0
     & $runner start
-    if ($LASTEXITCODE -ne 0) { throw "Expected the fake Docker start path to succeed, but it exited $LASTEXITCODE." }
+    if ($LASTEXITCODE -ne 0) { throw "Expected the current-shell fake Docker start path to succeed, but it exited $LASTEXITCODE." }
+
+    $windowsPowerShell = Get-Command powershell.exe -ErrorAction SilentlyContinue
+    if ($null -ne $windowsPowerShell) {
+        $windowsOutput = & $windowsPowerShell.Source -NoProfile -ExecutionPolicy Bypass -File $runner start 2>&1
+        $windowsExitCode = $LASTEXITCODE
+        $windowsOutput | ForEach-Object { Write-Host $_ }
+        if ($windowsExitCode -ne 0) { throw "Expected the Windows PowerShell fake Docker start path to succeed, but it exited $windowsExitCode." }
+    }
 }
 finally {
     $env:Path = $previousPath

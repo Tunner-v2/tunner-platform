@@ -28,16 +28,21 @@ function Invoke-Docker {
     )
 
     $exitCode = -1
-    $previousNativeErrorPreference = $PSNativeCommandUseErrorActionPreference
+    # This preference exists only in newer PowerShell versions. When available, shadow it
+    # locally so Docker Compose progress on stderr is not converted into a terminating error.
+    $nativeErrorPreference = Get-Variable -Name PSNativeCommandUseErrorActionPreference -Scope Global -ErrorAction SilentlyContinue
+    $usesNativeErrorPreference = $null -ne $nativeErrorPreference
     try {
-        # Docker Compose writes normal progress/status lines to stderr. Preserve that output,
-        # but use the native process exit code as the success boundary.
-        $PSNativeCommandUseErrorActionPreference = $false
+        if ($usesNativeErrorPreference) {
+            Set-Variable -Name PSNativeCommandUseErrorActionPreference -Scope Local -Value $false
+        }
         & docker @Arguments
         $exitCode = $LASTEXITCODE
     }
     finally {
-        $PSNativeCommandUseErrorActionPreference = $previousNativeErrorPreference
+        if ($usesNativeErrorPreference) {
+            Remove-Variable -Name PSNativeCommandUseErrorActionPreference -Scope Local -ErrorAction SilentlyContinue
+        }
     }
 
     if ($exitCode -ne 0) {

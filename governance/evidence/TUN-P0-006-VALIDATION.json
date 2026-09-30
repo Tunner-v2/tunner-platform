@@ -46,7 +46,7 @@
       "name": "native stderr exit-code handling regression",
       "command": "tools/validation/Test-TunnerDevNativeOutput.ps1",
       "result": "PASS",
-      "details": "At 2026-09-30T18:25-04:00, a temporary fake docker.cmd emitted normal container-progress lines to stderr and exited zero. The wrapper completed doctor and start successfully without contacting Docker."
+      "details": "At 2026-09-30T18:25-04:00, a temporary fake docker.cmd emitted normal container-progress lines to stderr and exited zero. The wrapper completed doctor and start successfully without contacting Docker in both the current shell and powershell.exe."
     },
     {
       "name": "dedicated host-port configuration",

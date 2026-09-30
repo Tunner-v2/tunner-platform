@@ -9,7 +9,7 @@
       "name": "PowerShell native stderr regression fixture",
       "command": "tools/validation/Test-TunnerDevNativeOutput.ps1",
       "result": "PASS",
-      "details": "PASS at 2026-09-30T18:25-04:00. The fixture placed a temporary fake docker.cmd first on PATH. It wrote normal container-progress lines to stderr and exited zero; tunner-dev start completed without contacting Docker."
+      "details": "PASS at 2026-09-30T18:25-04:00. The fixture placed a temporary fake docker.cmd first on PATH. It wrote normal container-progress lines to stderr and exited zero; tunner-dev start completed without contacting Docker in both the current shell and powershell.exe."
     },
     {
       "name": "local Compose runtime retry",
