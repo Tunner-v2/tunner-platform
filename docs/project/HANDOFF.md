@@ -5,7 +5,7 @@
 - ID: TUN-P0-008
 - Milestone/Sprint: P0 / no sprint
 - Status: VALIDATION (governance gate READY; no live database execution)
-- Branch: change/TUN-P0-007-secrets-foundation
+- Branch: change/TUN-P0-007-secrets-foundation`r`n- Local validation commit: e0e87680091d9933ce4e977cb261d93c3ccf7b31
 - Prerequisite: TUN-P0-006 is locally validated; no Product/domain schema is authorized.
 - Integration: local P0 execution continues under DEC-0002. No push or protected-main change has been made for P0-008.
 
