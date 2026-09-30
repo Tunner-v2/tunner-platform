@@ -11,7 +11,7 @@ P0-008 establishes only migration-system mechanics. It contains no Product/domai
 
 ## Operator-run local rehearsal
 
-After P0-006 PostgreSQL is running, an operator may supply a local-only connection string in the current PowerShell process and run EF tooling from `src/Tunner.Database.Migrations`. Inspect generated migration source before applying it. Do not use `EnsureCreated` with migrations.
+After P0-006 PostgreSQL is running, an operator may supply a local-only connection string in the current PowerShell process and run EF tooling from `src/Tunner.Database.Migrations`. The dedicated default host endpoint is `Host=127.0.0.1;Port=25432;Database=tunner;Username=tunner`; it uses local-only PostgreSQL trust authentication and contains no secret. Inspect generated migration source before applying it. Do not use `EnsureCreated` with migrations.
 
 Use `./tools/dev/tunner-migrations.ps1 verify` for a source-only check. An authorized operator can run `./tools/dev/tunner-migrations.ps1 rehearse` only after setting a local-only connection string in the current process; the script restores the pinned `dotnet-ef` tool and applies the empty forward-only P0 rehearsal migration.
 

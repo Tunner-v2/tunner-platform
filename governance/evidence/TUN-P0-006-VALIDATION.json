@@ -41,14 +41,20 @@
       "command": "user-run ./tools/dev/tunner-dev.ps1 start; ./tools/dev/tunner-dev.ps1 health",
       "result": "PASS",
       "details": "User output at 2026-09-30T13:00-04:00 confirmed PostgreSQL, RabbitMQ, Redis, OpenBao, Mailpit, and Grafana OTEL-LGTM healthy. The OpenBao container mounted the repository infra/openbao/config directory after the wrapper resolved Compose-relative paths from infra/docker; LGTM used the /tmp/ready readiness sentinel."
-    }
-,
+    },
     {
       "name": "native stderr exit-code handling regression",
       "command": "tools/validation/Test-TunnerDevNativeOutput.ps1",
       "result": "PASS",
       "details": "At 2026-09-30T18:25-04:00, a temporary fake docker.cmd emitted normal container-progress lines to stderr and exited zero. The wrapper completed doctor and start successfully without contacting Docker."
-    }  ],
+    },
+    {
+      "name": "dedicated host-port configuration",
+      "command": "tools/validation/Validate-TunnerDevSource.ps1; tools/dev/tunner-dev.ps1 doctor",
+      "result": "PASS",
+      "details": "The credential-free example and Compose fallbacks now use Tunner-only loopback host ports 25432, 25672, 25673, 26379, 28200, 21025, 28025, 23000, 24317, and 24318. A read-only listener check found the selected ports free before configuration; static validation rejects return to common dependency ports; doctor rendered the configuration successfully."
+    }
+  ],
   "artifacts": [
     "infra/docker/compose.yaml",
     "infra/docker/.env.example",

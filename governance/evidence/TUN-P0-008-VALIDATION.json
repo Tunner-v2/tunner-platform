@@ -58,7 +58,13 @@
       "name": "live local PostgreSQL rehearsal reachability preflight",
       "command": "tools/dev/tunner-dev.ps1 health",
       "result": "OPERATOR_ACTION_REQUIRED",
-      "details": "The current PostgreSQL container is healthy but was created before the current Compose port mapping and has no published host port. The current Compose source correctly publishes 127.0.0.1:${POSTGRES_PORT:-5433}:5432 (POSTGRES_PORT=5432 in the credential-free example). The operator must rerun tunner-dev start to reconcile the container before running the host-side rehearsal."
+      "details": "The current PostgreSQL container is healthy but was created before the current Compose port mapping and has no published host port. The current Compose source correctly publishes 127.0.0.1:${POSTGRES_PORT:-25432}:5432 (POSTGRES_PORT=25432 in the credential-free example). The operator must rerun tunner-dev start to reconcile the container before running the host-side rehearsal."
+    },
+    {
+      "name": "dedicated PostgreSQL host-port migration handoff",
+      "command": "tools/validation/Validate-TunnerDevSource.ps1; tools/dev/tunner-dev.ps1 doctor; tools/validation/Validate-TunnerMigrationsSource.ps1",
+      "result": "PASS_WITH_OPERATOR_REHEARSAL_FOLLOW_UP",
+      "details": "The P0-008 operator handoff now uses loopback PostgreSQL port 25432, selected from the dedicated Tunner local range after a read-only listener check found it free. The Compose and migration-source validations passed without starting containers or applying a migration."
     }
   ],
   "artifacts": [
