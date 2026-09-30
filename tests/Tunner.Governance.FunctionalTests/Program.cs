@@ -1,3 +1,4 @@
+using System.Security.Cryptography;
 using Tunner.Governance;
 
 var failures = new List<string>();
@@ -7,6 +8,9 @@ var fixtureRoot = Directory.CreateTempSubdirectory("tunner-governance-fixture-")
 try
 {
     CreateFixture(repositoryRoot, fixtureRoot);
+
+    var authority = AuthorityApplication.Verify(fixtureRoot);
+    Expect(authority.ExitCode == 0, "A complete authority fixture must verify.", failures);
 
     var validation = GovernanceApplication.Validate(fixtureRoot);
     Expect(validation.ExitCode == 0, "A complete fixture must validate.", failures);
@@ -39,6 +43,18 @@ try
     var transition = GovernanceApplication.CheckTransition(fixtureRoot, "TUN-TRANSITION", "DONE");
     Expect(transition.ExitCode == 1, "Lifecycle check must reject DRAFT directly to DONE.", failures);
 
+    var authorityMirrorPath = Path.Combine(fixtureRoot.FullName, "docs", "authority", "mirror.txt");
+    File.AppendAllText(authorityMirrorPath, "tampered");
+    var authorityTampered = AuthorityApplication.Verify(fixtureRoot);
+    Expect(authorityTampered.ExitCode == 1, "Authority verify must reject changed authority bytes.", failures);
+    var validationBlocked = GovernanceApplication.Validate(fixtureRoot);
+    Expect(validationBlocked.ExitCode == 1, "Governance validation must block when authority verification fails.", failures);
+    var nextBlocked = GovernanceApplication.Next(fixtureRoot);
+    Expect(nextBlocked.ExitCode == 1 && ((NextPayload)nextBlocked.Payload).Items.All(item => !item.Actionable), "Governance next must block execution when authority verification fails.", failures);
+    var gateBlocked = GovernanceApplication.CheckGate(fixtureRoot, "TUN-001");
+    Expect(gateBlocked.ExitCode == 1, "Governance gates must block when authority verification fails.", failures);
+    var contextBlocked = ContextApplication.Build(fixtureRoot, "TUN-001", contextOutput);
+    Expect(contextBlocked.ExitCode == 1, "Context build must block when authority verification fails.", failures);
     File.WriteAllText(Path.Combine(fixtureRoot.FullName, "governance", "work-items", "malformed.yaml"), "schema_version: [");
     var malformed = GovernanceApplication.Validate(fixtureRoot);
     Expect(malformed.ExitCode == 1, "Validation must reject malformed YAML.", failures);
@@ -91,8 +107,20 @@ static void CreateFixture(DirectoryInfo repositoryRoot, DirectoryInfo fixtureRoo
     Directory.CreateDirectory(Path.Combine(fixtureRoot.FullName, "governance", "work-items"));
     Directory.CreateDirectory(Path.Combine(fixtureRoot.FullName, "governance", "dependencies"));
     Directory.CreateDirectory(Path.Combine(fixtureRoot.FullName, "governance", "policies"));
+    Directory.CreateDirectory(Path.Combine(fixtureRoot.FullName, "governance", "evidence"));
     Directory.CreateDirectory(Path.Combine(fixtureRoot.FullName, "docs", "authority"));
-    File.WriteAllText(Path.Combine(fixtureRoot.FullName, "docs", "authority", "current-authority.json"), "{}" + Environment.NewLine);
+    var currentAuthorityPath = Path.Combine(fixtureRoot.FullName, "docs", "authority", "current-authority.json");
+    var authorityMirrorPath = Path.Combine(fixtureRoot.FullName, "docs", "authority", "mirror.txt");
+    File.WriteAllText(currentAuthorityPath, "{\"effective_authority\":\"fixture\"}" + Environment.NewLine);
+    File.WriteAllText(authorityMirrorPath, "fixture authority bytes" + Environment.NewLine);
+    File.WriteAllText(Path.Combine(fixtureRoot.FullName, "governance", "evidence", "BOOT-P0-001-integrity.json"), $$"""
+{
+  "checks": [
+    { "local_path": "docs/authority/current-authority.json", "expected_sha256": "{{HashFile(currentAuthorityPath)}}" },
+    { "local_path": "docs/authority/mirror.txt", "expected_sha256": "{{HashFile(authorityMirrorPath)}}" }
+  ]
+}
+""");
 
     File.WriteAllText(Path.Combine(fixtureRoot.FullName, "governance", "milestones", "MVP.yaml"), """
 schema_version: 1
@@ -216,6 +244,9 @@ created_at: 2026-09-30T00:00:00-04:00
 updated_at: 2026-09-30T00:00:00-04:00
 """);
 }
+
+static string HashFile(string path)
+    => Convert.ToHexString(SHA256.HashData(File.ReadAllBytes(path))).ToLowerInvariant();
 
 static void CopyDirectory(DirectoryInfo source, DirectoryInfo destination)
 {

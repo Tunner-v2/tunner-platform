@@ -19,6 +19,12 @@ public static class ContextApplication
             return new CommandResult(2, "context build", new ContextBuildPayload("REJECTED", workItemId, output.FullName, [], [], ["output directory must be inside the repository"]));
         }
 
+        var authorityResult = AuthorityApplication.Verify(repository);
+        if (authorityResult.ExitCode != 0)
+        {
+            return new CommandResult(1, "context build", new ContextBuildPayload("AUTHORITY_INVALID", workItemId, output.FullName, [], [], ((AuthorityPayload)authorityResult.Payload).Findings));
+        }
+
         var workItemPath = Path.Combine(repository.FullName, "governance", "work-items", $"{workItemId}.yaml");
         var workItem = ContextWorkItem.Load(workItemPath);
         if (workItem is null)
@@ -91,6 +97,12 @@ public static class ContextApplication
         if (!IsWithin(repository, output))
         {
             return new CommandResult(2, "context verify", new ContextVerifyPayload("REJECTED", output.FullName, ["output directory must be inside the repository"]));
+        }
+
+        var authorityResult = AuthorityApplication.Verify(repository);
+        if (authorityResult.ExitCode != 0)
+        {
+            return new CommandResult(1, "context verify", new ContextVerifyPayload("AUTHORITY_INVALID", output.FullName, ((AuthorityPayload)authorityResult.Payload).Findings));
         }
 
         var manifestPath = Path.Combine(output.FullName, "manifest.json");

@@ -33,7 +33,7 @@
 - Functional harness: PASS, including fresh and stale generated-context scenarios and active-authority-summary inclusion.
 - Governance live validation: PASS for 19 records with no diagnostics.
 - P0 foundation audit: PASS with three remediated governance/documentation findings; all seven registered P0 work-item gates are READY. Recoverable predecessor commits remain retained in Git history.
-- Governance defect: DEF-TUN-P0-004-001 is OPEN. The documented `tunner authority verify` startup command is not implemented by the repository CLI; P0-008 validation remains unaffected because it records current authority hashes and a READY governance gate.
+- Governance defect: DEF-TUN-P0-004-001 is CLOSED. The new read-only `tunner authority verify` command validated all 72 imported authority artifacts and blocks governance/context execution on any hash mismatch; P0-008 remains READY.
 - Context pack: PASS; `docs/context/current/` is manifest-first, hash-verifiable, and CURRENT for TUN-P0-007. It includes the active-authority summary and AMD-0002 source.
 - P0-006 static Compose source/configuration validation: PASS; `tunner-dev doctor` confirmed Docker Desktop 4.87.0 / Engine 29.7.2 and Compose v5.4.0 without pulling images or starting containers.
 - P0-006 runtime dependency health: PASS. User-run output confirmed PostgreSQL, RabbitMQ, Redis, OpenBao, Mailpit, and LGTM healthy after the corrected readiness probes and OpenBao configuration path fix.

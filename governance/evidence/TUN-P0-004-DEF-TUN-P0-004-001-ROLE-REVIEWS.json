@@ -1,0 +1,52 @@
+{
+  "schema_version": 1,
+  "evidence_id": "TUN-P0-004-DEF-TUN-P0-004-001-ROLE-REVIEWS",
+  "scope_type": "DEFECT",
+  "scope_id": "DEF-TUN-P0-004-001",
+  "status": "PASS",
+  "reviewed_at": "2026-09-30T17:07:20.3911294-04:00",
+  "reviews": [
+    {
+      "role": "governance-engineer",
+      "skill_version": "1.0.0",
+      "conclusion": "PASS",
+      "checks": ["The documented authority-preflight command now exists and deterministically blocks governance validation, scheduling, gates, and context generation on mirror mismatch.", "The command is read-only and preserves lifecycle and protected-main controls."],
+      "findings": []
+    },
+    {
+      "role": "full-stack-engineer",
+      "skill_version": "1.0.0",
+      "conclusion": "PASS",
+      "checks": ["The CLI, application, context boundary, tests, and runbook are aligned without Product behavior or public contract changes."],
+      "findings": []
+    },
+    {
+      "role": "tester-qa-engineer",
+      "skill_version": "1.0.0",
+      "conclusion": "PASS",
+      "checks": ["The isolated fixture covers success and a deliberately modified authority artifact, asserting failure propagation to all required gates."],
+      "findings": []
+    },
+    {
+      "role": "auditor",
+      "skill_version": "1.0.0",
+      "conclusion": "PASS",
+      "checks": ["The original failure evidence is retained, the remediation evidence records exact passing commands, and the closed defect links both records."],
+      "findings": []
+    },
+    {
+      "role": "rd-engineer",
+      "skill_version": "1.0.0",
+      "conclusion": "PASS",
+      "checks": ["The remediation uses the existing approved bootstrap SHA-256 authority evidence and introduces no material external technology or provider decision."],
+      "findings": []
+    },
+    {
+      "role": "cyber-security-engineer",
+      "skill_version": "1.0.0",
+      "conclusion": "PASS",
+      "checks": ["The verifier uses local SHA-256 comparison only, accepts no credentials, does not access Drive, and blocks use of altered authority bytes."],
+      "findings": []
+    }
+  ]
+}

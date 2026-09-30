@@ -2,26 +2,25 @@
 
 ## Work item
 
-- ID: TUN-P0-008
+- ID: TUN-P0-004 / DEF-TUN-P0-004-001
 - Milestone/Sprint: P0 / no sprint
-- Status: VALIDATION (governance gate READY; no live database execution)
-- Branch: change/TUN-P0-007-secrets-foundation`r`n- Local validation commit: e0e87680091d9933ce4e977cb261d93c3ccf7b31
-- Prerequisite: TUN-P0-006 is locally validated; no Product/domain schema is authorized.
-- Integration: local P0 execution continues under DEC-0002. No push or protected-main change has been made for P0-008.
+- Status: VALIDATION (defect remediated locally)
+- Branch: change/TUN-P0-007-secrets-foundation
+- Scope: Restore the mandatory read-only `tunner authority verify` preflight; P0-008 remains separately VALIDATION/READY.
+- Integration: Local P0 execution continues under DEC-0002. No push or protected-main change was made.
 
 ## Completed
 
-- Completed and remediated the P0 foundation audit; all registered P0 work-item gates now return READY.
-- Created the canonical TUN-P0-008 work record and bounded TASK context selection.
-- Recorded current EF Core migration, EF Core 10, Npgsql 10, and migration-application primary-source evidence.
-- Added and built the P0-only database/migrations projects using EF Core 10.0.12, Npgsql 10.0.3, dotnet-ef 10.0.12, and System.Security.Cryptography.Xml 10.0.12. The source-only forward-only rehearsal fixture, secret scan, full build, functional harness, and governance validation passed.
+- Added `authority verify`, which verifies all authority-mirror entries recorded in bootstrap SHA-256 evidence.
+- Invalid authority hashes now block governance validation, `next`, work-item gate checks, and context build/verify.
+- Added positive and deliberate-tamper fixture coverage, static source validation, runbook documentation, remediation evidence, and activated-role reviews.
+- Verified the current local mirror: 72 authority artifacts matched with no findings.
 
 ## Boundaries
 
-- P0-008 may establish only migration-system mechanics: EF Core/Npgsql foundation, forward-only migration policy, design-time/execution separation, and a credential-free operator-run rehearsal path.
-- Do not create Product/domain tables, business semantics, application startup migration behavior, production deployment, or credential values.
-- Do not start containers or run a database migration in this session.
+- The verifier is read-only: it does not access Drive, import authority, mutate records, access credentials, or introduce Product behavior.
+- Drive import/diff and changed-authority acceptance remain separate governed authority workflows.
 
 ## Next action
 
-- Run governance next before selecting further work. All registered P0 items currently report VALIDATION; no additional P0 backlog record is presently registered. Resolve DEF-TUN-P0-004-001 through governed P0-004 scope before relying on the documented authority-preflight CLI command. Any local migration rehearsal remains operator-run and must not include Product schema or credential values.
+- Run governance next before selecting further work. All registered P0 items remain in VALIDATION and P0-008 remains gate READY; no additional P0 backlog record is presently registered.

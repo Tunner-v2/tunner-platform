@@ -22,6 +22,7 @@ public static class Program
         governance.Subcommands.Add(CreateGateCommand(repositoryOption));
         governance.Subcommands.Add(CreateTransitionCommand(repositoryOption));
         root.Subcommands.Add(governance);
+        root.Subcommands.Add(CreateAuthorityCommand(repositoryOption));
         root.Subcommands.Add(CreateContextCommand(repositoryOption));
 
         return root.Parse(args).Invoke();
@@ -79,6 +80,15 @@ public static class Program
         return transition;
     }
 
+    private static Command CreateAuthorityCommand(Option<DirectoryInfo?> repositoryOption)
+    {
+        var verify = new Command("verify", "Verify the imported authority mirror against bootstrap SHA-256 evidence.");
+        verify.SetAction(parseResult => WriteResult(AuthorityApplication.Verify(Repository(parseResult, repositoryOption))));
+
+        var authority = new Command("authority", "Read-only imported-authority verification commands.");
+        authority.Subcommands.Add(verify);
+        return authority;
+    }
     private static Command CreateContextCommand(Option<DirectoryInfo?> repositoryOption)
     {
         var workItem = new Option<string>("--work-item") { Description = "Governed work item identifier to package." };

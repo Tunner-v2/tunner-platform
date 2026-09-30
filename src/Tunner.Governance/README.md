@@ -5,6 +5,7 @@ P0-004 and P0-005 supply a repository-native .NET 10 control-plane tool. Governa
 ## Commands
 
 ```powershell
+dotnet run --project src/Tunner.Governance -- authority verify
 dotnet run --project src/Tunner.Governance -- governance validate
 dotnet run --project src/Tunner.Governance -- governance status
 dotnet run --project src/Tunner.Governance -- governance next
@@ -13,6 +14,14 @@ dotnet run --project src/Tunner.Governance -- governance transition check TUN-P0
 ```
 
 Pass `--repository <path>` before `governance` to point at another checkout. The tool reports JSON and returns a nonzero exit code for invalid records, blocked gates, or rejected transitions.
+
+## Authority verification
+
+```powershell
+dotnet run --project src/Tunner.Governance -- authority verify
+```
+
+`authority verify` reads the immutable bootstrap integrity evidence and checks every tracked `docs/authority/` artifact against its recorded SHA-256 value. It is read-only: no Drive access, import, or file mutation occurs. A mismatch blocks `governance validate`, `governance next`, `governance gate check`, and both context commands, preventing implementation or generated context from proceeding on an altered authority mirror.
 ## Approval-pending execution
 
 `governance next` returns `Items` for local/branch work and `HumanIntegrationActions` separately. A dependency explicitly declared `LOCAL_VALIDATED` may proceed after local validation; `MERGED_TO_MAIN` remains blocked until its prerequisite is `DONE` and the dependency’s merge-evidence references exist. This never approves, merges, or bypasses protected `main` controls.
