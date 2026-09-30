@@ -1,5 +1,6 @@
 # Recent relevant Git changes
 
+- `8805a1c docs: record P0-008 migration foundation handoff`
 - `bcb8e1d data: add P0 migration foundation`
 - `b8bb972 governance: start P0-008 database foundation`
 - `1ad07ae governance: remediate P0 foundation audit findings`
@@ -9,4 +10,3 @@
 - `107649e governance: start P0-007 secrets foundation`
 - `94da649 governance: permit incremental P0 integration`
 - `1cd123d docs: record P0-005 local handoff`
-- `7f0cc93 governance: refresh bounded context evidence`

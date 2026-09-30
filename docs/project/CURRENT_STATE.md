@@ -23,7 +23,7 @@
 | TUN-P0-005 | VALIDATION | none | Retain bounded context-pack evidence for protected incremental P0 PRs |
 | TUN-P0-006 | VALIDATION | none | Runtime health is PASS; retain Compose evidence for protected incremental P0 PRs |
 | TUN-P0-007 | VALIDATION | none | Retain credential-free OpenBao policy/bootstrap, local scan, and validation evidence |
-| TUN-P0-008 | IN_PROGRESS | none | Complete static migration validation, role reviews, and operator-run rehearsal guidance without Product schema |
+| TUN-P0-008 | VALIDATION | none | Retain validation evidence; any live local rehearsal remains operator-run |
 | TUN-P0-019 | VALIDATION | none | Retain GitHub governance evidence for protected incremental P0 PRs |
 
 ## Build/test state
@@ -37,6 +37,7 @@
 - P0-006 static Compose source/configuration validation: PASS; `tunner-dev doctor` confirmed Docker Desktop 4.87.0 / Engine 29.7.2 and Compose v5.4.0 without pulling images or starting containers.
 - P0-006 runtime dependency health: PASS. User-run output confirmed PostgreSQL, RabbitMQ, Redis, OpenBao, Mailpit, and LGTM healthy after the corrected readiness probes and OpenBao configuration path fix.
 - P0-007 secrets foundation: PASS for static policy/bootstrap validation, a credential-free repository scan, generated negative fixture, clean build, functional harness, and context verification. No local bootstrap or secret value was executed or recorded.
+- P0-008 migration foundation: PASS for EF Core 10.0.12, Npgsql EF Core 10.0.3, and dotnet-ef 10.0.12 restore; credential-free source-only migration rehearsal fixture; secret scan; clean build; and governance functional harness. No database was contacted or migration executed.
 - NuGet vulnerability metadata: no vulnerable packages reported by current source metadata.
 - Bundle integrity: PASS (125/125). Pre-P0 package integrity: PASS (54/54). Repository mirror integrity: PASS (125/125).
 
@@ -50,4 +51,4 @@
 ## Exact next authorized action
 
 - PR #6 merged to protected main. TUN-P0-007 is locally validated and committed as 7f2f6e4 on its separate branch; retain its evidence and do not introduce Product or production-secret scope.
-- TUN-P0-008 is IN_PROGRESS: EF Core/Npgsql projects build cleanly with patched dependency pinning; do not implement Product/domain schemas or execute migrations in this session.
+- TUN-P0-008 is in VALIDATION: its governance gate is READY and static acceptance evidence is recorded. Do not implement Product/domain schemas or execute migrations in this session.
