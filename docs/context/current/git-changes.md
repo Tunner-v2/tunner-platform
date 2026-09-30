@@ -1,5 +1,6 @@
 # Recent relevant Git changes
 
+- `3ec4dbd governance: ready P0-007 secrets foundation`
 - `107649e governance: start P0-007 secrets foundation`
 - `94da649 governance: permit incremental P0 integration`
 - `1cd123d docs: record P0-005 local handoff`
@@ -9,4 +10,3 @@
 - `36591af governance: apply AMD-0002 contribution policy`
 - `f746517 governance: synchronize AMD-0002 authority`
 - `1dcc983 fix: validate P0 local Docker foundation`
-- `d5d3006 docs: record LGTM probe handoff`

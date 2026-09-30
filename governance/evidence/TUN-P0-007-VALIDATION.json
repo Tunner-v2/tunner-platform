@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "evidence_id": "TUN-P0-007-VALIDATION",
+  "scope_type": "WORK_ITEM",
+  "scope_id": "TUN-P0-007",
+  "status": "PASS",
+  "checked_at": "2026-09-30T15:51:07.0174452-04:00",
+  "checks": [
+    {
+      "name": "PowerShell static syntax",
+      "command": "[scriptblock]::Create for OpenBao bootstrap, secret scan, and source validator",
+      "result": "PASS",
+      "details": "All three P0-007 PowerShell sources parsed successfully without executing Docker or accepting secret input."
+    },
+    {
+      "name": "repository secret scan and negative fixture",
+      "command": "tools/security/Invoke-TunnerSecretScan.ps1; tools/validation/Validate-TunnerSecretsSource.ps1",
+      "result": "PASS",
+      "details": "The scanner inspected 271 tracked/unignored files with no finding. The validator generated a temporary high-confidence token-pattern fixture and confirmed that the scanner rejected it; no fixture or credential remained in the repository."
+    },
+    {
+      "name": "OpenBao policy/bootstrap contract",
+      "command": "tools/validation/Validate-TunnerSecretsSource.ps1",
+      "result": "PASS",
+      "details": "Verified required local policy, bootstrap, documentation, and scanner artifacts; narrow mount/policy capabilities; read/list-only runtime policy; interactive SecureString token handling; transient-variable cleanup; and KV-v2 mount provisioning before policy application."
+    },
+    {
+      "name": "P0-006 regression",
+      "command": "tools/validation/Validate-TunnerDevSource.ps1",
+      "result": "PASS",
+      "details": "Existing local Docker source/configuration validation passed unchanged; no container was started."
+    },
+    {
+      "name": "governance build and functional harness",
+      "command": "dotnet build Tunner.Governance.sln --no-restore; dotnet run --project tests/Tunner.Governance.FunctionalTests --no-build",
+      "result": "PASS",
+      "details": "Build completed with 0 warnings and 0 errors; governance functional checks passed."
+    },
+    {
+      "name": "governance context and whitespace",
+      "command": "governance validate; context build --work-item TUN-P0-007; context verify; git diff --check",
+      "result": "PASS",
+      "details": "Governance validated 19 records with no diagnostics; the TUN-P0-007 context pack is CURRENT; no whitespace errors were reported."
+    }
+  ],
+  "artifacts": [
+    "infra/openbao/policies/tunner-local-bootstrap.hcl",
+    "infra/openbao/policies/tunner-local-runtime.hcl",
+    "tools/dev/openbao-bootstrap.ps1",
+    "tools/security/Invoke-TunnerSecretScan.ps1",
+    "tools/validation/Validate-TunnerSecretsSource.ps1",
+    "docs/development/LOCAL_OPENBAO.md"
+  ],
+  "limitations": [
+    "No OpenBao container was initialized, unsealed, or started during this validation.",
+    "No root token, unseal key, application token, or application secret value was supplied, stored, or printed.",
+    "Product-facing secret injection, production Vault deployment, and cloud-provider credential behavior remain outside P0-007 scope."
+  ]
+}

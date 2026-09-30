@@ -1,10 +1,10 @@
 {
   "GeneratorVersion": "tunner-context-0.1.0",
-  "GeneratedAt": "2026-09-30T19:41:27.6270565+00:00",
+  "GeneratedAt": "2026-09-30T19:52:09.8053738+00:00",
   "WorkItem": {
     "Id": "TUN-P0-007",
     "Title": "Secrets foundation",
-    "Status": "READY",
+    "Status": "VALIDATION",
     "ContextPolicy": "TASK"
   },
   "Included": [
@@ -76,17 +76,22 @@
     {
       "Path": "docs/project/CURRENT_STATE.md",
       "Reason": "current project state",
-      "Sha256": "094be02d4335940712621a42decabb70070a99581228231ff5c71f59c4c90328"
+      "Sha256": "1e38a517a5a54bd549da6297257c204b5ab6940cc944a6869f4076ae7fd50e24"
     },
     {
       "Path": "docs/project/HANDOFF.md",
       "Reason": "handoff state",
-      "Sha256": "0193e8d16c3f6c7069d226404e15ee5197c88f9ff637f91b35eaf35e3b223813"
+      "Sha256": "5cca84d2560bf4fde7c8ac08d76e21166e23610faa80746a2e34b169d432a87f"
     },
     {
       "Path": "docs/project/PROJECT_CONTEXT.md",
       "Reason": "durable project context",
-      "Sha256": "d49e7f38268e5c0cf79a49832b4c4ece580d3d54cdb5bfcceb1a1c21930aa256"
+      "Sha256": "12d7680421456819d82c13b168023040f60f95b6e2a35cc5db615c0eb205bf1a"
+    },
+    {
+      "Path": "governance/context/CTX-TUN-P0-007-001.yaml",
+      "Reason": "required evidence",
+      "Sha256": "f3366e7b465b62cbc6af1eaecdbd37a3a1c8bd89c04005b2cc37573f904d884b"
     },
     {
       "Path": "governance/decisions/DEC-0002.yaml",
@@ -97,6 +102,16 @@
       "Path": "governance/evidence/TUN-P0-007-RD-SOURCES.json",
       "Reason": "required evidence",
       "Sha256": "6c50812e6ea19b2488e3368d6df1bb857bccb8124143307c538cd3ccbc1186fd"
+    },
+    {
+      "Path": "governance/evidence/TUN-P0-007-ROLE-REVIEWS.json",
+      "Reason": "required evidence",
+      "Sha256": "08ba1f5e6cb295a0f870bef8b8f7058d1a1600aa0675de6d38573b843cd4ceec"
+    },
+    {
+      "Path": "governance/evidence/TUN-P0-007-VALIDATION.json",
+      "Reason": "required evidence",
+      "Sha256": "8b25ff45d563643cc34acdb1a1a6aaad7617e8871b582eecc552e84d5f7ec3d5"
     },
     {
       "Path": "governance/policies/lifecycle-policy.yaml",
@@ -111,28 +126,17 @@
     {
       "Path": "governance/work-items/TUN-P0-007.yaml",
       "Reason": "selected work item",
-      "Sha256": "caa25c2c1ec21729def10c9c95eae8ca46b0c72ebf34f30705d538dc1b846e67"
+      "Sha256": "a115330c8b12160e09233ffff49f96fa7aa430409a5ea58120571b20a69e9c03"
     }
   ],
   "Excluded": [
     {
-      "Path": "governance/context/CTX-TUN-P0-007-001.yaml",
-      "Reason": "optional source is unavailable: required evidence"
-    },
-    {
       "Path": "governance/decisions/dec-0002-p0-local-integration.yaml",
       "Reason": "optional source is unavailable: explicit decision reference"
-    },
-    {
-      "Path": "governance/evidence/TUN-P0-007-ROLE-REVIEWS.json",
-      "Reason": "optional source is unavailable: required evidence"
-    },
-    {
-      "Path": "governance/evidence/TUN-P0-007-VALIDATION.json",
-      "Reason": "optional source is unavailable: required evidence"
     }
   ],
   "GitHistory": [
+    "3ec4dbd governance: ready P0-007 secrets foundation",
     "107649e governance: start P0-007 secrets foundation",
     "94da649 governance: permit incremental P0 integration",
     "1cd123d docs: record P0-005 local handoff",
@@ -141,7 +145,6 @@
     "831fb2c governance: refresh P0 schema validation evidence",
     "36591af governance: apply AMD-0002 contribution policy",
     "f746517 governance: synchronize AMD-0002 authority",
-    "1dcc983 fix: validate P0 local Docker foundation",
-    "d5d3006 docs: record LGTM probe handoff"
+    "1dcc983 fix: validate P0 local Docker foundation"
   ]
 }
