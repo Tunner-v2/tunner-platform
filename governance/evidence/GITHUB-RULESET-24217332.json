@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "evidence_id": "GITHUB-RULESET-24217332",
+  "scope_type": "WORK_ITEM",
+  "scope_id": "TUN-P0-019",
+  "status": "ACTIVE_ENFORCEMENT_PARTIALLY_VERIFIED",
+  "repository": "https://github.com/Tunner-v2/tunner-platform",
+  "repository_visibility": "PUBLIC_REPORTED_BY_PRODUCT_OWNER",
+  "ruleset_url": "https://github.com/Tunner-v2/tunner-platform/settings/rules/24217332",
+  "ruleset_id": "24217332",
+  "scope": "REPOSITORY",
+  "expected_definition": "governance/bootstrap/github-main-ruleset.json",
+  "supersedes": "governance/evidence/GITHUB-RULESET-24217203.json",
+  "reported_by": "Product Owner via project conversation",
+  "reported_at": "2026-09-29T00:00:00-04:00",
+  "readback": {
+    "status": "PENDING",
+    "reason": "GitHub settings routes are not readable through this environment's unauthenticated web fetch."
+  },
+  "enforcement_observation": {\n    "status": "PASS",\n    "observed_at": "2026-09-29T00:00:00-04:00",\n    "command": "git push origin main",\n    "result": "GitHub GH013 rejected the update because changes to main must be made through a pull request."\n  },\n  "next_validation": "Compare active ruleset settings with governance/bootstrap/github-main-ruleset.json using an authenticated GitHub administration readback or a settings screenshot."
+}
