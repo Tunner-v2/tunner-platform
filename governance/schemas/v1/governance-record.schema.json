@@ -1,0 +1,102 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:tunner:governance:schema:v1:record-library",
+  "title": "Tunner Governance Record Library v1",
+  "description": "Shared definitions for repository-native governance records. URN identifiers are logical schema identifiers, not hosted endpoints.",
+  "$defs": {
+    "schemaVersion": { "type": "integer", "minimum": 1 },
+    "id": { "type": "string", "minLength": 1 },
+    "nonEmptyString": { "type": "string", "minLength": 1 },
+    "timestamp": { "anyOf": [{ "type": "string", "format": "date-time" }, { "type": "null" }] },
+    "stringArray": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+    "status": { "type": "string", "pattern": "^[A-Z][A-Z0-9_]*$" },
+    "booleanImpact": {
+      "type": "object",
+      "properties": {
+        "architecture": { "type": "boolean" }, "api": { "type": "boolean" }, "sdk": { "type": "boolean" }, "ui": { "type": "boolean" }, "content": { "type": "boolean" }, "financial": { "type": "boolean" }, "compliance": { "type": "boolean" }, "privacy": { "type": "boolean" }, "security": { "type": "boolean" }, "devops": { "type": "boolean" }, "admin_ops": { "type": "boolean" }, "support": { "type": "boolean" }, "data_schema": { "type": "boolean" }, "migration": { "type": "boolean" }, "provider": { "type": "boolean" }, "infrastructure": { "type": "boolean" }, "release": { "type": "boolean" }
+      },
+      "required": ["architecture", "ui", "sdk", "financial", "compliance", "security", "devops", "support"],
+      "additionalProperties": false
+    },
+    "milestone": {
+      "type": "object",
+      "properties": { "schema_version": { "$ref": "#/$defs/schemaVersion" }, "milestone_id": { "$ref": "#/$defs/id" }, "title": { "$ref": "#/$defs/nonEmptyString" }, "status": { "$ref": "#/$defs/status" }, "goal": { "$ref": "#/$defs/nonEmptyString" }, "scope": { "$ref": "#/$defs/stringArray" }, "authority_refs": { "$ref": "#/$defs/stringArray" }, "prerequisites": { "$ref": "#/$defs/stringArray" }, "work_items": { "$ref": "#/$defs/stringArray" }, "required_gates": { "$ref": "#/$defs/stringArray" }, "required_roles": { "$ref": "#/$defs/stringArray" }, "evidence_refs": { "$ref": "#/$defs/stringArray" }, "known_risks": { "$ref": "#/$defs/stringArray" }, "created_at": { "$ref": "#/$defs/timestamp" }, "updated_at": { "$ref": "#/$defs/timestamp" } },
+      "required": ["schema_version", "milestone_id", "title", "status", "goal", "scope", "authority_refs", "prerequisites", "work_items", "required_gates", "required_roles", "evidence_refs", "known_risks", "created_at", "updated_at"], "additionalProperties": false
+    },
+    "sprint": {
+      "type": "object",
+      "properties": { "schema_version": { "$ref": "#/$defs/schemaVersion" }, "sprint_id": { "$ref": "#/$defs/id" }, "milestone_id": { "$ref": "#/$defs/id" }, "goal": { "$ref": "#/$defs/nonEmptyString" }, "status": { "$ref": "#/$defs/status" }, "start_date": { "$ref": "#/$defs/timestamp" }, "end_date": { "$ref": "#/$defs/timestamp" }, "work_items": { "$ref": "#/$defs/stringArray" }, "scope_changes": { "$ref": "#/$defs/stringArray" }, "blockers": { "$ref": "#/$defs/stringArray" }, "evidence_refs": { "$ref": "#/$defs/stringArray" } },
+      "required": ["schema_version", "sprint_id", "milestone_id", "goal", "status", "start_date", "end_date", "work_items", "scope_changes", "blockers", "evidence_refs"], "additionalProperties": false
+    },
+    "workItem": {
+      "type": "object",
+      "properties": { "schema_version": { "$ref": "#/$defs/schemaVersion" }, "work_item_id": { "$ref": "#/$defs/id" }, "milestone_id": { "$ref": "#/$defs/id" }, "sprint_id": { "anyOf": [{ "$ref": "#/$defs/id" }, { "type": "null" }] }, "title": { "$ref": "#/$defs/nonEmptyString" }, "status": { "$ref": "#/$defs/status" }, "type": { "$ref": "#/$defs/status" }, "authority_refs": { "$ref": "#/$defs/stringArray" }, "flow_refs": { "$ref": "#/$defs/stringArray" }, "contract_refs": { "$ref": "#/$defs/stringArray" }, "decision_refs": { "$ref": "#/$defs/stringArray" }, "acceptance_criteria": { "$ref": "#/$defs/stringArray" }, "prerequisites": { "$ref": "#/$defs/stringArray" }, "blockers": { "$ref": "#/$defs/stringArray" }, "impact": { "$ref": "#/$defs/booleanImpact" }, "activated_roles": { "$ref": "#/$defs/stringArray" }, "required_tests": { "$ref": "#/$defs/stringArray" }, "required_evidence": { "$ref": "#/$defs/stringArray" }, "context_policy": { "$ref": "#/$defs/status" }, "todos": { "$ref": "#/$defs/stringArray" }, "defects": { "$ref": "#/$defs/stringArray" }, "created_at": { "$ref": "#/$defs/timestamp" }, "updated_at": { "$ref": "#/$defs/timestamp" } },
+      "required": ["schema_version", "work_item_id", "milestone_id", "sprint_id", "title", "status", "type", "authority_refs", "flow_refs", "contract_refs", "decision_refs", "acceptance_criteria", "prerequisites", "blockers", "impact", "activated_roles", "required_tests", "required_evidence", "context_policy", "todos", "defects", "created_at", "updated_at"], "additionalProperties": false
+    },
+    "dependency": {
+      "type": "object",
+      "properties": { "schema_version": { "$ref": "#/$defs/schemaVersion" }, "dependency_id": { "$ref": "#/$defs/id" }, "source_scope_type": { "$ref": "#/$defs/status" }, "source_scope_id": { "$ref": "#/$defs/id" }, "target_scope_type": { "$ref": "#/$defs/status" }, "target_scope_id": { "$ref": "#/$defs/id" }, "relationship": { "$ref": "#/$defs/status" }, "rationale": { "$ref": "#/$defs/nonEmptyString" }, "created_at": { "$ref": "#/$defs/timestamp" } },
+      "required": ["schema_version", "dependency_id", "source_scope_type", "source_scope_id", "target_scope_type", "target_scope_id", "relationship", "rationale", "created_at"], "additionalProperties": false
+    },
+    "todo": {
+      "type": "object",
+      "properties": { "schema_version": { "$ref": "#/$defs/schemaVersion" }, "id": { "$ref": "#/$defs/id" }, "work_item_id": { "$ref": "#/$defs/id" }, "title": { "$ref": "#/$defs/nonEmptyString" }, "status": { "$ref": "#/$defs/status" }, "priority": { "enum": ["P0", "P1", "P2", "P3"] }, "owner_role": { "$ref": "#/$defs/nonEmptyString" }, "prerequisites": { "$ref": "#/$defs/stringArray" }, "acceptance_condition": { "$ref": "#/$defs/nonEmptyString" }, "created_at": { "$ref": "#/$defs/timestamp" }, "updated_at": { "$ref": "#/$defs/timestamp" } },
+      "required": ["schema_version", "id", "work_item_id", "title", "status", "priority", "owner_role", "prerequisites", "acceptance_condition", "created_at", "updated_at"], "additionalProperties": false
+    },
+    "gate": {
+      "type": "object",
+      "properties": { "schema_version": { "$ref": "#/$defs/schemaVersion" }, "gate_id": { "$ref": "#/$defs/id" }, "scope_type": { "$ref": "#/$defs/status" }, "scope_id": { "$ref": "#/$defs/id" }, "status": { "$ref": "#/$defs/status" }, "checks": { "$ref": "#/$defs/stringArray" }, "required_roles": { "$ref": "#/$defs/stringArray" }, "required_evidence": { "$ref": "#/$defs/stringArray" }, "blocking_findings": { "$ref": "#/$defs/stringArray" }, "evaluated_at": { "$ref": "#/$defs/timestamp" }, "tool_version": { "anyOf": [{ "$ref": "#/$defs/nonEmptyString" }, { "type": "null" }] } },
+      "required": ["schema_version", "gate_id", "scope_type", "scope_id", "status", "checks", "required_roles", "required_evidence", "blocking_findings", "evaluated_at", "tool_version"], "additionalProperties": false
+    },
+    "defect": {
+      "type": "object",
+      "properties": { "schema_version": { "$ref": "#/$defs/schemaVersion" }, "defect_id": { "$ref": "#/$defs/id" }, "work_item_id": { "$ref": "#/$defs/id" }, "classification": { "$ref": "#/$defs/status" }, "severity": { "pattern": "^SEV-[0-9]+$" }, "status": { "$ref": "#/$defs/status" }, "environment": { "$ref": "#/$defs/nonEmptyString" }, "description": { "$ref": "#/$defs/nonEmptyString" }, "expected_behavior_ref": { "$ref": "#/$defs/nonEmptyString" }, "evidence": { "$ref": "#/$defs/stringArray" }, "affected_versions": { "$ref": "#/$defs/stringArray" }, "created_at": { "$ref": "#/$defs/timestamp" }, "updated_at": { "$ref": "#/$defs/timestamp" } },
+      "required": ["schema_version", "defect_id", "work_item_id", "classification", "severity", "status", "environment", "description", "expected_behavior_ref", "evidence", "affected_versions", "created_at", "updated_at"], "additionalProperties": false
+    },
+    "reopen": {
+      "type": "object",
+      "properties": { "schema_version": { "$ref": "#/$defs/schemaVersion" }, "reopen_id": { "$ref": "#/$defs/id" }, "work_item_id": { "$ref": "#/$defs/id" }, "previous_release": { "anyOf": [{ "$ref": "#/$defs/nonEmptyString" }, { "type": "null" }] }, "reason": { "$ref": "#/$defs/nonEmptyString" }, "detected_environment": { "$ref": "#/$defs/nonEmptyString" }, "classification": { "$ref": "#/$defs/status" }, "severity": { "pattern": "^SEV-[0-9]+$" }, "new_acceptance_criteria": { "$ref": "#/$defs/stringArray" }, "affected_versions": { "$ref": "#/$defs/stringArray" }, "evidence": { "$ref": "#/$defs/stringArray" }, "created_at": { "$ref": "#/$defs/timestamp" } },
+      "required": ["schema_version", "reopen_id", "work_item_id", "previous_release", "reason", "detected_environment", "classification", "severity", "new_acceptance_criteria", "affected_versions", "evidence", "created_at"], "additionalProperties": false
+    },
+    "productDecision": {
+      "type": "object",
+      "properties": { "schema_version": { "$ref": "#/$defs/schemaVersion" }, "decision_id": { "$ref": "#/$defs/id" }, "title": { "$ref": "#/$defs/nonEmptyString" }, "status": { "$ref": "#/$defs/status" }, "problem": { "$ref": "#/$defs/nonEmptyString" }, "options_considered": { "$ref": "#/$defs/stringArray" }, "recommendation": { "$ref": "#/$defs/nonEmptyString" }, "business_impact": { "$ref": "#/$defs/nonEmptyString" }, "technical_impact": { "$ref": "#/$defs/nonEmptyString" }, "security_compliance_impact": { "$ref": "#/$defs/nonEmptyString" }, "affected_documents": { "$ref": "#/$defs/stringArray" }, "affected_flows": { "$ref": "#/$defs/stringArray" }, "affected_work_items": { "$ref": "#/$defs/stringArray" }, "requested_by": { "$ref": "#/$defs/nonEmptyString" }, "approved_by": { "anyOf": [{ "$ref": "#/$defs/nonEmptyString" }, { "type": "null" }] }, "approved_at": { "$ref": "#/$defs/timestamp" }, "supersedes": { "anyOf": [{ "$ref": "#/$defs/id" }, { "type": "null" }] } },
+      "required": ["schema_version", "decision_id", "title", "status", "problem", "options_considered", "recommendation", "business_impact", "technical_impact", "security_compliance_impact", "affected_documents", "affected_flows", "affected_work_items", "requested_by", "approved_by", "approved_at", "supersedes"], "additionalProperties": false
+    },
+    "amendment": {
+      "type": "object",
+      "properties": { "schema_version": { "$ref": "#/$defs/schemaVersion" }, "amendment_id": { "$ref": "#/$defs/id" }, "target_document": { "$ref": "#/$defs/nonEmptyString" }, "from_version": { "$ref": "#/$defs/nonEmptyString" }, "to_version": { "$ref": "#/$defs/nonEmptyString" }, "reason": { "$ref": "#/$defs/nonEmptyString" }, "change_type": { "$ref": "#/$defs/status" }, "affected_flows": { "$ref": "#/$defs/stringArray" }, "affected_contracts": { "$ref": "#/$defs/stringArray" }, "affected_work_items": { "$ref": "#/$defs/stringArray" }, "migration_required": { "type": "boolean" }, "sdk_impact": { "$ref": "#/$defs/status" }, "release_impact": { "$ref": "#/$defs/status" }, "approval": { "$ref": "#/$defs/stringArray" }, "effective_at": { "$ref": "#/$defs/timestamp" } },
+      "required": ["schema_version", "amendment_id", "target_document", "from_version", "to_version", "reason", "change_type", "affected_flows", "affected_contracts", "affected_work_items", "migration_required", "sdk_impact", "release_impact", "approval", "effective_at"], "additionalProperties": false
+    },
+    "adrReference": {
+      "type": "object",
+      "properties": { "schema_version": { "$ref": "#/$defs/schemaVersion" }, "adr_reference_id": { "$ref": "#/$defs/id" }, "adr_id": { "$ref": "#/$defs/id" }, "title": { "$ref": "#/$defs/nonEmptyString" }, "status": { "$ref": "#/$defs/status" }, "decision_ref": { "$ref": "#/$defs/nonEmptyString" }, "path": { "$ref": "#/$defs/nonEmptyString" }, "affected_work_items": { "$ref": "#/$defs/stringArray" }, "created_at": { "$ref": "#/$defs/timestamp" } },
+      "required": ["schema_version", "adr_reference_id", "adr_id", "title", "status", "decision_ref", "path", "affected_work_items", "created_at"], "additionalProperties": false
+    },
+    "release": {
+      "type": "object",
+      "properties": { "schema_version": { "$ref": "#/$defs/schemaVersion" }, "release_id": { "$ref": "#/$defs/id" }, "version": { "$ref": "#/$defs/nonEmptyString" }, "status": { "$ref": "#/$defs/status" }, "commit_sha": { "$ref": "#/$defs/nonEmptyString" }, "container_digests": { "$ref": "#/$defs/stringArray" }, "migration_set": { "$ref": "#/$defs/stringArray" }, "api_contract_version": { "$ref": "#/$defs/nonEmptyString" }, "sdk_versions": { "type": "object", "additionalProperties": { "type": "string", "minLength": 1 } }, "sbom_refs": { "$ref": "#/$defs/stringArray" }, "attestations": { "$ref": "#/$defs/stringArray" }, "security_report": { "anyOf": [{ "$ref": "#/$defs/nonEmptyString" }, { "type": "null" }] }, "test_evidence": { "$ref": "#/$defs/stringArray" }, "documentation_baseline": { "$ref": "#/$defs/nonEmptyString" }, "amendments": { "$ref": "#/$defs/stringArray" }, "approval_evidence": { "$ref": "#/$defs/stringArray" } },
+      "required": ["schema_version", "release_id", "version", "status", "commit_sha", "container_digests", "migration_set", "api_contract_version", "sdk_versions", "sbom_refs", "attestations", "security_report", "test_evidence", "documentation_baseline", "amendments", "approval_evidence"], "additionalProperties": false
+    },
+    "evidenceManifest": {
+      "type": "object",
+      "properties": { "schema_version": { "$ref": "#/$defs/schemaVersion" }, "evidence_id": { "$ref": "#/$defs/id" }, "scope_type": { "$ref": "#/$defs/status" }, "scope_id": { "$ref": "#/$defs/id" }, "commit_sha": { "anyOf": [{ "$ref": "#/$defs/nonEmptyString" }, { "type": "null" }] }, "tool_versions": { "type": "object", "additionalProperties": { "type": "string" } }, "authority_hashes": { "type": "object", "additionalProperties": { "type": "string" } }, "skill_hashes": { "type": "object", "additionalProperties": { "type": "string" } }, "builds": { "$ref": "#/$defs/stringArray" }, "tests": { "$ref": "#/$defs/stringArray" }, "security_scans": { "$ref": "#/$defs/stringArray" }, "role_reviews": { "$ref": "#/$defs/stringArray" }, "artifacts": { "$ref": "#/$defs/stringArray" }, "context_manifest": { "anyOf": [{ "$ref": "#/$defs/nonEmptyString" }, { "type": "null" }] }, "created_at": { "$ref": "#/$defs/timestamp" } },
+      "required": ["schema_version", "evidence_id", "scope_type", "scope_id", "commit_sha", "tool_versions", "authority_hashes", "skill_hashes", "builds", "tests", "security_scans", "role_reviews", "artifacts", "context_manifest", "created_at"], "additionalProperties": false
+    },
+    "specialistReview": {
+      "type": "object",
+      "properties": { "schema_version": { "$ref": "#/$defs/schemaVersion" }, "review_id": { "$ref": "#/$defs/id" }, "work_item_id": { "$ref": "#/$defs/id" }, "role": { "$ref": "#/$defs/nonEmptyString" }, "skill_version": { "$ref": "#/$defs/nonEmptyString" }, "skill_hash": { "$ref": "#/$defs/nonEmptyString" }, "status": { "$ref": "#/$defs/status" }, "authority_refs": { "$ref": "#/$defs/stringArray" }, "findings": { "$ref": "#/$defs/stringArray" }, "blocking_findings": { "$ref": "#/$defs/stringArray" }, "evidence_refs": { "$ref": "#/$defs/stringArray" }, "reviewed_at": { "$ref": "#/$defs/timestamp" } },
+      "required": ["schema_version", "review_id", "work_item_id", "role", "skill_version", "skill_hash", "status", "authority_refs", "findings", "blocking_findings", "evidence_refs", "reviewed_at"], "additionalProperties": false
+    },
+    "contextSelection": {
+      "type": "object",
+      "properties": { "schema_version": { "$ref": "#/$defs/schemaVersion" }, "selection_id": { "$ref": "#/$defs/id" }, "scope_type": { "$ref": "#/$defs/status" }, "scope_id": { "$ref": "#/$defs/id" }, "context_mode": { "$ref": "#/$defs/status" }, "included_artifacts": { "$ref": "#/$defs/stringArray" }, "excluded_artifacts": { "$ref": "#/$defs/stringArray" }, "exclusion_reasons": { "type": "object", "additionalProperties": { "type": "string", "minLength": 1 } }, "source_hashes": { "type": "object", "additionalProperties": { "type": "string", "minLength": 1 } }, "tool_version": { "$ref": "#/$defs/nonEmptyString" }, "created_at": { "$ref": "#/$defs/timestamp" } },
+      "required": ["schema_version", "selection_id", "scope_type", "scope_id", "context_mode", "included_artifacts", "excluded_artifacts", "exclusion_reasons", "source_hashes", "tool_version", "created_at"], "additionalProperties": false
+    },
+    "handoff": {
+      "type": "object",
+      "properties": { "schema_version": { "$ref": "#/$defs/schemaVersion" }, "handoff_id": { "$ref": "#/$defs/id" }, "scope_type": { "$ref": "#/$defs/status" }, "scope_id": { "$ref": "#/$defs/id" }, "status": { "$ref": "#/$defs/status" }, "branch": { "$ref": "#/$defs/nonEmptyString" }, "commit_sha": { "anyOf": [{ "$ref": "#/$defs/nonEmptyString" }, { "type": "null" }] }, "changed_artifacts": { "$ref": "#/$defs/stringArray" }, "validation": { "$ref": "#/$defs/stringArray" }, "evidence_refs": { "$ref": "#/$defs/stringArray" }, "blockers": { "$ref": "#/$defs/stringArray" }, "next_action": { "$ref": "#/$defs/nonEmptyString" }, "created_at": { "$ref": "#/$defs/timestamp" } },
+      "required": ["schema_version", "handoff_id", "scope_type", "scope_id", "status", "branch", "commit_sha", "changed_artifacts", "validation", "evidence_refs", "blockers", "next_action", "created_at"], "additionalProperties": false
+    }
+  }
+}

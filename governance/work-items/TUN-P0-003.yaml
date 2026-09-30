@@ -1,0 +1,48 @@
+schema_version: 1
+work_item_id: TUN-P0-003
+milestone_id: P0
+sprint_id: null
+title: Governance schemas
+status: IN_PROGRESS
+type: GOVERNANCE_TOOLING
+authority_refs:
+  - docs/authority/baselines/1.6.0/04_Governance_and_Context_Tooling_Specification.md
+  - docs/authority/amendments/AMD-0001/36_P0_Repository_Bootstrap_Governance_and_Context_Implementation_Spec.md
+flow_refs: []
+contract_refs: []
+decision_refs:
+  - AMD-0001
+acceptance_criteria:
+  - Versioned JSON Schema entry documents exist for every P0-required governance record type.
+  - Each record shape requires schema_version and a non-empty record identifier.
+  - The B1 manual validator parses the schema documents and verifies the entry-schema/shared-definition contract without third-party installation.
+  - The validation boundary explicitly defers YAML instance parsing, precise locations, lifecycle enforcement, and Git-history immutability checks to TUN-P0-004.
+prerequisites:
+  - TUN-P0-001
+blockers: []
+impact:
+  architecture: true
+  ui: false
+  sdk: false
+  financial: false
+  compliance: false
+  security: false
+  devops: false
+  support: false
+activated_roles:
+  - governance-engineer
+  - tester-qa-engineer
+  - auditor
+required_tests:
+  - powershell -ExecutionPolicy Bypass -File tools/validation/Validate-GovernanceSchemas.ps1
+  - JSON parse check for all governance/schemas/v1/*.json documents
+  - negative validation check for unexpected entry schema
+required_evidence:
+  - governance/schemas/v1/README.md
+  - governance/evidence/TUN-P0-003-SCHEMA-VALIDATION.json
+  - governance/evidence/TUN-P0-003-ROLE-REVIEWS.json
+context_policy: TASK
+todos: []
+defects: []
+created_at: 2026-09-30T00:00:00-04:00
+updated_at: 2026-09-30T00:00:00-04:00
