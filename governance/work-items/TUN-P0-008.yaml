@@ -1,0 +1,61 @@
+schema_version: 1
+work_item_id: TUN-P0-008
+milestone_id: P0
+sprint_id: null
+title: Database and migrations foundation
+status: REFINEMENT
+type: DATA_FOUNDATION
+authority_refs:
+  - docs/authority/baselines/1.6.0/01_Engineering_Technology_Foundation.md
+  - docs/authority/baselines/1.6.0/05_Versioning_Compatibility_and_Release_Management.md
+  - docs/authority/baselines/1.6.0/06_Environment_Configuration_Secrets_and_Deployment.md
+  - docs/authority/baselines/1.6.0/09_Testing_Acceptance_Evidence_and_Quality_Gates.md
+  - docs/authority/baselines/1.6.0/13_RD_Source_Register.md
+  - docs/authority/baselines/1.6.0/15_Runtime_Communication_and_Infrastructure_Technology_Scope.md
+  - docs/authority/baselines/1.6.0/33_Production_Readiness_Compliance_and_Release_Gates.md
+  - docs/authority/amendments/AMD-0001/effective-overrides/11_Development_Planes_Milestones_and_P0_Backlog.md
+  - docs/authority/amendments/AMD-0002/AMD-0002_Non-Blocking_PR_Approval_and_Continuous_Local_Execution.md
+flow_refs: []
+contract_refs: []
+decision_refs:
+  - DEC-0002
+acceptance_criteria:
+  - EF Core 10 and Npgsql 10-compatible PostgreSQL migration tooling is defined without Product/domain schema behavior.
+  - Migration ownership, forward-only history, and production application-startup boundaries are documented and enforced by the P0 foundation.
+  - A credential-free local migration rehearsal path is documented; any long-running database operation remains operator-run.
+  - Product tables, business semantics, production deployment, and production credentials remain out of scope.
+prerequisites:
+  - TUN-P0-006
+blockers: []
+impact:
+  architecture: true
+  ui: false
+  sdk: false
+  financial: false
+  compliance: false
+  security: true
+  devops: true
+  support: false
+activated_roles:
+  - solution-architect
+  - governance-engineer
+  - cyber-security-engineer
+  - devops-engineer
+  - tester-qa-engineer
+  - auditor
+  - rd-engineer
+required_tests:
+  - current primary-source EF Core/Npgsql migration R&D evidence
+  - static migration source and credential-boundary validation
+  - forward-only migration rehearsal fixture
+  - governance gate and context freshness validation
+required_evidence:
+  - governance/context/CTX-TUN-P0-008-001.yaml
+  - governance/evidence/TUN-P0-008-RD-SOURCES.json
+  - governance/evidence/TUN-P0-008-VALIDATION.json
+  - governance/evidence/TUN-P0-008-ROLE-REVIEWS.json
+context_policy: TASK
+todos: []
+defects: []
+created_at: 2026-09-30T17:15:00-04:00
+updated_at: 2026-09-30T17:18:00-04:00

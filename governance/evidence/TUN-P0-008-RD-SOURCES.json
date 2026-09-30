@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "evidence_id": "TUN-P0-008-RD-SOURCES",
+  "scope_type": "WORK_ITEM",
+  "scope_id": "TUN-P0-008",
+  "status": "PASS",
+  "reviewed_at": "2026-09-30T16:09:46.6414269-04:00",
+  "sources": [
+    {
+      "title": "EF Core migrations overview",
+      "url": "https://learn.microsoft.com/en-us/ef/core/managing-schemas/migrations/",
+      "type": "primary vendor documentation",
+      "finding": "Migrations are source-controlled incremental schema changes with applied-history tracking; use a separate project/design-time factory when appropriate."
+    },
+    {
+      "title": "Applying EF Core migrations",
+      "url": "https://learn.microsoft.com/en-us/ef/core/managing-schemas/migrations/applying",
+      "type": "primary vendor documentation",
+      "finding": "Inspect and test migrations; use a separate deployment identity, migration bundle for automation, reviewed SQL for DBA-controlled execution, and do not embed production connection strings."
+    },
+    {
+      "title": "EF Core 10 release notes",
+      "url": "https://learn.microsoft.com/ef/core/what-is-new/ef-core-10.0/whatsnew",
+      "type": "primary vendor documentation",
+      "finding": "EF Core 10 is the .NET 10 LTS-aligned release."
+    },
+    {
+      "title": "Npgsql EF Core 10 release notes",
+      "url": "https://www.npgsql.org/efcore/release-notes/10.0.html",
+      "type": "primary provider documentation",
+      "finding": "Npgsql.EntityFrameworkCore.PostgreSQL 10.0 supports EF Core 10."
+    }
+  ],
+  "decision": "Use the locked EF Core 10 and Npgsql 10-compatible PostgreSQL foundation, forward-only immutable migrations, a separate migration execution boundary, and operator-run local rehearsal without committed credentials.",
+  "limitations": [
+    "No Product/domain model or migration is authorized in P0-008 refinement.",
+    "No database container, migration command, or production deployment was run during R&D."
+  ]
+}

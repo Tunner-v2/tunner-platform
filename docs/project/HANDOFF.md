@@ -2,32 +2,25 @@
 
 ## Work item
 
-- ID: TUN-P0-007
+- ID: TUN-P0-008
 - Milestone/Sprint: P0 / no sprint
-- Status: VALIDATION (static, credential-free evidence complete)
+- Status: REFINEMENT (current primary-source R&D recorded)
 - Branch: change/TUN-P0-007-secrets-foundation
-- Commit: 7f2f6e4 (`security: add P0 OpenBao secrets foundation`)
-- Prerequisite: TUN-P0-006 is locally validated; PR #6 merged to protected main at 87b62ff.
-- Integration: this work remains on its dedicated local branch under DEC-0002; do not introduce Product or production-secret scope.
+- Prerequisite: TUN-P0-006 is locally validated; no Product/domain schema is authorized.
+- Integration: local P0 execution continues under DEC-0002. No push or protected-main change has been made for P0-008.
 
 ## Completed
 
-- Added local OpenBao bootstrap and runtime policies with separate, path-specific least-privilege capabilities.
-- Added an interactive-only helper which provisions the local KV-v2 mount and applies policies without persisting or echoing token values.
-- Added a local OpenBao runbook, a repository secret scanner, a generated negative-fixture test, and static source validation.
-- Passed the P0-007 scan/validation, P0-006 regression validation, PowerShell parsing, .NET build (0 warnings/errors), governance functional harness, governance validation, context generation/verification, and whitespace check.
-- Recorded current primary-source R&D evidence, validation evidence, mandatory role reviews, and the bounded TUN-P0-007 context selection.
+- Completed and remediated the P0 foundation audit; all registered P0 work-item gates now return READY.
+- Created the canonical TUN-P0-008 work record and bounded TASK context selection.
+- Recorded current EF Core migration, EF Core 10, Npgsql 10, and migration-application primary-source evidence.
 
-## Boundaries and limitations
+## Boundaries
 
-- No container was started, initialized, or unsealed in this session.
-- No root token, unseal key, application token, or secret value was supplied, stored, or printed.
-- Product-facing secret injection, production Vault, cloud-provider credentials, and P1 implementation remain out of scope.
+- P0-008 may establish only migration-system mechanics: EF Core/Npgsql foundation, forward-only migration policy, design-time/execution separation, and a credential-free operator-run rehearsal path.
+- Do not create Product/domain tables, business semantics, application startup migration behavior, production deployment, or credential values.
+- Do not start containers or run a database migration in this session.
 
-## Audit status
-
-- P0 foundation audit passed after remediation of missing role-review evidence for TUN-P0-001, TUN-P0-002, and TUN-P0-019; an invalid P0-019 remote-URL evidence label; and literal newline markers in project documentation.
-- All registered P0 work-item gates are READY. Git integrity is sound; two dangling commits are safe, recoverable amend predecessors and were retained.
 ## Next action
 
-- Preserve P0-007 validation evidence. The next canonical P0 candidate is TUN-P0-008 (database/migrations); create its governed work record and bounded context before implementation. Any local OpenBao initialization/unseal remains an authorized operator-only procedure using the runbook; it is not a prerequisite for this static P0 evidence slice.
+- Refine the P0-only database/migration foundation and transition to READY only after the bounded context is current and the static acceptance plan is deterministic.
