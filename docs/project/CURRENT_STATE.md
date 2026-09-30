@@ -15,7 +15,7 @@
 ## Active sprint
 
 - ID: none
-- Goal: Git and contribution policy.
+- Goal: local P0 integration of Git policy and B1 governance schemas.
 - Dates: not scheduled.
 
 ## Active work items
@@ -24,12 +24,15 @@
 |---|---|---|---|---|
 | TUN-P0-001 | DONE | governance-engineer, tester-qa-engineer, auditor, cyber-security-engineer, devops-engineer | none | Bootstrap complete |
 | TUN-P0-019 | DONE | governance-engineer, devops-engineer, cyber-security-engineer, auditor | none | Ruleset, code-owner review, auto-merge, and automatic PR creation validated through PR #4 |
-| TUN-P0-002 | IN_PROGRESS | governance-engineer, cyber-security-engineer, devops-engineer, tester-qa-engineer, auditor | none | Continue on local P0 integration branch under DEC-0001; retain static evidence and final PR traceability |
+| TUN-P0-002 | VALIDATION | governance-engineer, cyber-security-engineer, devops-engineer, tester-qa-engineer, auditor | none | Local policy/evidence validation passed; final DONE remains contingent on final protected P0 PR |
+| TUN-P0-003 | VALIDATION | governance-engineer, tester-qa-engineer, auditor | none | Schema validation passed; prepare the next eligible local P0 work item |
 
 ## Build/test state
 
 - Last verified main commit: `b87f4c39d8bd4a11c53a713673aaf36a1ec4697c` (PR #4 automatic PR-creation workflow).
 - TUN-P0-002 static policy/content validation: PASS.
+- TUN-P0-003 structural schema validation: PASS for 16 entry schemas and 17 parsed JSON documents.
+- TUN-P0-003 negative unexpected-entry validation: PASS.
 - Build: not run; dependency restore/build is a user-run step.
 - Bundle integrity: PASS (125/125).
 - Pre-P0 package integrity: PASS (54/54).
@@ -39,9 +42,10 @@
 
 - DEC-0001 permits a temporary P0-only local integration branch: `change/TUN-P0-control-plane`.
 - Each P0 work item remains separately committed, validated, evidenced, and governed locally.
+- A locally validated P0 prerequisite may unblock a dependent local P0 work item; it cannot become DONE until the final P0 protected PR merges.
 - One final protected P0 pull request will require an independent `ai-dev` code-owner approval; GitHub may auto-merge only after protected requirements pass.
 - The temporary exception expires when that final P0 pull request is merged or closed. P1 onward uses the strict per-work-item procedure.
 
 ## Exact next authorized action
 
-- Continue the next eligible P0 work item on the local integration branch, with its required evidence and validation.
+- Prepare TUN-P0-004 on the local integration branch, with its required authority/context review before implementation.
