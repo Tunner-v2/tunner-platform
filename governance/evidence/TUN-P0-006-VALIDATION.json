@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "evidence_id": "TUN-P0-006-VALIDATION",
+  "scope_type": "WORK_ITEM",
+  "scope_id": "TUN-P0-006",
+  "status": "PARTIAL_RUNTIME_PENDING",
+  "checked_at": "2026-09-30T12:18:19.8655815-04:00",
+  "checks": [
+    {
+      "name": "P0-006 source and Compose contract",
+      "command": "powershell -ExecutionPolicy Bypass -File tools/validation/Validate-TunnerDevSource.ps1",
+      "result": "PASS",
+      "details": "Verified required topology, exact tags, mutable-tag rejection, no object-store/R2 configuration, no committed credential variables/root-token markers, loopback bindings, OpenBao configuration, tunner-dev command surface, and docker compose config rendering."
+    },
+    {
+      "name": "tunner-dev doctor",
+      "command": "powershell -ExecutionPolicy Bypass -File tools/dev/tunner-dev.ps1 doctor",
+      "result": "PASS",
+      "details": "Docker Desktop 4.87.0 / Engine 29.7.2 and Docker Compose v5.4.0 were available; the wrapper rendered the Compose configuration successfully without pulling images or starting containers."
+    },
+    {
+      "name": "governance and context",
+      "command": "dotnet run --project src/Tunner.Governance --no-build -- governance validate; dotnet run --project src/Tunner.Governance --no-build -- context build --work-item TUN-P0-006; dotnet run --project src/Tunner.Governance --no-build -- context verify",
+      "result": "PASS",
+      "details": "Governance validated 13 records with no diagnostics; the P0-006 bounded context pack generated and verified CURRENT."
+    },
+    {
+      "name": "runtime dependency health",
+      "command": "powershell -ExecutionPolicy Bypass -File tools/dev/tunner-dev.ps1 start; powershell -ExecutionPolicy Bypass -File tools/dev/tunner-dev.ps1 health",
+      "result": "NOT_RUN",
+      "details": "Not run by the agent because it pulls images and starts long-lived containers. It is an explicit user-run local acceptance step."
+    },
+    {
+      "name": "whitespace check",
+      "command": "git diff --check",
+      "result": "PASS",
+      "details": "No whitespace errors were reported after final P0-006 documentation and evidence updates."
+    }
+  ],
+  "artifacts": [
+    "infra/docker/compose.yaml",
+    "infra/docker/.env.example",
+    "infra/openbao/config/openbao.hcl",
+    "tools/dev/tunner-dev.ps1",
+    "tools/validation/Validate-TunnerDevSource.ps1",
+    "docs/development/LOCAL_DOCKER.md"
+  ],
+  "limitations": [
+    "P0-006 remains in VALIDATION with user-run runtime acceptance pending.",
+    "P0-007 owns OpenBao initialization, policies, application secret injection, and redaction.",
+    "No P0 item can enter DONE before the single final protected aggregate P0 pull request under DEC-0001."
+  ]
+}

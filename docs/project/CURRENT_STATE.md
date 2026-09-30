@@ -20,7 +20,8 @@
 | TUN-P0-002 | CODE_REVIEW | none | Retain evidence for final aggregate P0 PR |
 | TUN-P0-003 | VALIDATION | none | Retain schema evidence for final aggregate P0 PR |
 | TUN-P0-004 | VALIDATION | none | Retain control-plane evidence for final aggregate P0 PR |
-| TUN-P0-005 | VALIDATION | none | Retain bounded context evidence; begin next eligible P0 work item |
+| TUN-P0-005 | VALIDATION | none | Retain bounded context evidence for final aggregate P0 PR |
+| TUN-P0-006 | VALIDATION | User-run runtime acceptance | Run local dependency start/health once; retain its evidence for the final aggregate P0 PR |
 | TUN-P0-019 | VALIDATION | none | Retain GitHub governance evidence for final aggregate P0 PR |
 
 ## Build/test state
@@ -28,8 +29,10 @@
 - .NET SDK: 10.0.401 installed and used for local P0 validation.
 - Tunner.Governance build: PASS (0 warnings, 0 errors).
 - Functional harness: PASS, including fresh and stale generated-context scenarios.
-- Governance live validation: PASS for 11 records with no diagnostics.
-- Context pack: PASS; docs/context/current/ is manifest-first and hash-verifiable.
+- Governance live validation: PASS for 13 records with no diagnostics.
+- Context pack: PASS; docs/context/current/ is manifest-first and hash-verifiable for TUN-P0-006.
+- P0-006 static Compose source/configuration validation: PASS; `tunner-dev doctor` confirmed Docker Desktop 4.87.0 / Engine 29.7.2 and Compose v5.4.0 without pulling images or starting containers.
+- P0-006 runtime dependency health: NOT RUN. The user-run start/health step remains recorded evidence because long-lived container execution is not performed by this agent.
 - NuGet vulnerability metadata: no vulnerable packages reported by current source metadata.
 - Bundle integrity: PASS (125/125). Pre-P0 package integrity: PASS (54/54). Repository mirror integrity: PASS (125/125).
 
@@ -38,8 +41,8 @@
 - DEC-0001 permits the temporary P0-only local integration branch: change/TUN-P0-control-plane.
 - Each P0 work item is separately committed, validated, evidenced, and governed locally.
 - A locally validated P0 prerequisite may unblock dependent P0 work, but no P0 item becomes DONE until the final protected P0 PR merges.
-- One final protected P0 pull request requires an independent i-dev code-owner approval; GitHub may auto-merge only after protected requirements pass.
+- One final protected P0 pull request requires an independent ai-dev code-owner approval; GitHub may auto-merge only after protected requirements pass.
 
 ## Exact next authorized action
 
-- Start TUN-P0-006 (Docker development foundation) locally. Do not start Docker services until the environment prerequisite is confirmed and its governed work record defines the safe user-run runtime checks.
+- User-run P0-006 local dependency runtime acceptance: `./tools/dev/tunner-dev.ps1 start` followed by `./tools/dev/tunner-dev.ps1 health`. This pulls pinned images and starts containers; retain the health output as evidence. Then continue P0-007 only with the governed OpenBao bootstrap/policy scope.

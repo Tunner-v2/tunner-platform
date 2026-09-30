@@ -20,6 +20,7 @@ Repository-native, concise context for Tunner. It is derived from approved autho
 - P0 owns only the governance/development control plane.
 - Governance/context tooling is isolated in the standalone `Tunner.Governance.sln`; production application projects must not depend on it.
 - Product modules, user/admin UI, providers, financial behavior, contracts, and business workflows remain outside P0 unless required only as non-behavioral pipeline placeholders.
+- P0-006 local Docker dependencies are local/test-only. No committed credential or OpenBao root token is permitted; P0-007 owns initialization, policies, and application secret injection.
 
 ## Non-negotiable rules
 

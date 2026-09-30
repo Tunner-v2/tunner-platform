@@ -8,7 +8,8 @@ Start with [AGENTS.md](AGENTS.md). The verified, repository-local execution mirr
 
 - Effective authority: locked Baseline 1.6.0 + approved ADR/PDR records + AMD-0001.
 - Authority bundle SHA-256: `6e2ab9f5d5f3f3d490c0428d8f2a997a3f2c7b40815a4728cf8d622999b1c712`.
-- Canonical Drive validation: pending because this environment did not return a readable Drive inventory.
+- Canonical Drive readback: governing Development Documentation, Pre-P0, Decisions, and FRD/Authority folders are readable; the full source-to-mirror diff remains TUN-P0-033 scope.
 - Current scope: P0 control-plane work only.
+- Local Docker dependency foundation: [docs/development/LOCAL_DOCKER.md](docs/development/LOCAL_DOCKER.md). It is local/test-only; OpenBao bootstrap and application secret injection remain P0-007.
 
 Do not treat this README as a replacement for the approved authority.

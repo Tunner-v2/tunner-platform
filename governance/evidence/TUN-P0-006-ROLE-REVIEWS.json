@@ -1,0 +1,80 @@
+{
+  "schema_version": 1,
+  "evidence_id": "TUN-P0-006-ROLE-REVIEWS",
+  "scope_type": "WORK_ITEM",
+  "scope_id": "TUN-P0-006",
+  "status": "PASS_WITH_RUNTIME_FOLLOW_UP",
+  "reviewed_at": "2026-09-30T12:14:54.6886862-04:00",
+  "reviews": [
+    {
+      "role": "governance-engineer",
+      "skill_version": "1.0.0",
+      "conclusion": "PASS",
+      "checks": [
+        "The work item remains P0-only, records the explicit user-run runtime acceptance boundary, and preserves DEC-0001 final-PR governance.",
+        "The context selection identifies authority, roles, prerequisite state, exclusions, and required evidence without adding Product authority."
+      ],
+      "findings": []
+    },
+    {
+      "role": "devops-engineer",
+      "skill_version": "1.0.0",
+      "conclusion": "PASS_WITH_RUNTIME_FOLLOW_UP",
+      "checks": [
+        "Compose declares the required local topology with exact tags, health checks, named state volumes, loopback host bindings, and opt-in application placeholders.",
+        "The tunner-dev-compatible wrapper uses fixed argument arrays, validates Docker/Compose before work, preserves volumes on stop, and waits for health on user-run start."
+      ],
+      "findings": [
+        "No image pull, container start, or runtime health observation was performed by the agent; this is explicitly retained as user-run acceptance evidence."
+      ]
+    },
+    {
+      "role": "cyber-security-engineer",
+      "skill_version": "1.0.0",
+      "conclusion": "PASS_WITH_P0_BOUNDARY",
+      "checks": [
+        "Static source validation rejects mutable image tags, object-store/R2 configuration, committed credential variables, and OpenBao root-token markers.",
+        "All published ports are loopback-only by default; OpenBao uses normal server mode and reports its documented bootstrap states without storing a root token."
+      ],
+      "findings": [
+        "PostgreSQL trust authentication, RabbitMQ default local credentials, and unauthenticated Redis/Mailpit are intentionally limited to the isolated development foundation. P0-007 must replace application-facing dependency access with OpenBao-managed least-privilege credentials before Product services exist."
+      ]
+    },
+    {
+      "role": "tester-qa-engineer",
+      "skill_version": "1.0.0",
+      "conclusion": "PASS_WITH_RUNTIME_FOLLOW_UP",
+      "checks": [
+        "The static validator checks required services, exact image references, non-mutable-tag policy, loopback bindings, OpenBao configuration, wrapper commands, and Docker Compose rendering.",
+        "tunner-dev doctor successfully validated the installed Docker Desktop and Compose tooling without starting services."
+      ],
+      "findings": [
+        "Runtime service health remains a required user-run scenario because long-lived services were not started in this session."
+      ]
+    },
+    {
+      "role": "auditor",
+      "skill_version": "1.0.0",
+      "conclusion": "PASS_WITH_RUNTIME_FOLLOW_UP",
+      "checks": [
+        "Authority-to-work-to-artifact-to-static-test-to-evidence lineage is present, including point-in-time primary-source R&D evidence.",
+        "The work item does not claim P0 or runtime completion and records the remaining acceptance evidence as a blocker."
+      ],
+      "findings": [
+        "P0-006 cannot enter DONE until the runtime evidence and final protected aggregate P0 pull request exist."
+      ]
+    },
+    {
+      "role": "rd-engineer",
+      "skill_version": "1.0.0",
+      "conclusion": "PASS",
+      "checks": [
+        "Current primary-source release/tag evidence was captured for PostgreSQL, RabbitMQ, Redis, OpenBao, Mailpit, and Grafana OTEL-LGTM.",
+        "The selected local observability image is documented for development, demo, and testing only."
+      ],
+      "findings": [
+        "Tags are point-in-time references, not production digest pins; refresh and supply-chain review are required before a release."
+      ]
+    }
+  ]
+}
