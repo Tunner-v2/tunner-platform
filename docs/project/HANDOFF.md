@@ -24,4 +24,4 @@
 
 ## Next action
 
-- Run governance next before selecting further work. All registered P0 items currently report VALIDATION; no additional P0 backlog record is presently registered. Any local migration rehearsal remains operator-run and must not include Product schema or credential values.
+- Run governance next before selecting further work. All registered P0 items currently report VALIDATION; no additional P0 backlog record is presently registered. Resolve DEF-TUN-P0-004-001 through governed P0-004 scope before relying on the documented authority-preflight CLI command. Any local migration rehearsal remains operator-run and must not include Product schema or credential values.

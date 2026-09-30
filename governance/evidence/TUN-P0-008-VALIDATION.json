@@ -35,6 +35,12 @@
       "command": "governance transition check TUN-P0-008 CODE_REVIEW; git diff --check",
       "result": "PASS",
       "details": "The IN_PROGRESS to CODE_REVIEW transition was allowed by the normal lifecycle and no whitespace errors were reported before evidence finalization."
+    },
+    {
+      "name": "authority-preflight command parity",
+      "command": "dotnet run --project src/Tunner.Governance --no-build -- authority verify",
+      "result": "NON_BLOCKING_FINDING",
+      "details": "The AGENTS.md startup command is not currently implemented by the repository CLI. DEF-TUN-P0-004-001 records the discrepancy for governed remediation; P0-008 authority hashes and migration gate evidence remain intact."
     }
   ],
   "artifacts": [

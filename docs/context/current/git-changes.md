@@ -1,5 +1,6 @@
 # Recent relevant Git changes
 
+- `794b330 docs: record P0-008 validation handoff`
 - `e0e8768 data: validate P0 migration foundation`
 - `8805a1c docs: record P0-008 migration foundation handoff`
 - `bcb8e1d data: add P0 migration foundation`
@@ -9,4 +10,3 @@
 - `7f2f6e4 security: add P0 OpenBao secrets foundation`
 - `3ec4dbd governance: ready P0-007 secrets foundation`
 - `107649e governance: start P0-007 secrets foundation`
-- `94da649 governance: permit incremental P0 integration`
