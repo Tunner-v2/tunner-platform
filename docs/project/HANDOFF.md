@@ -6,7 +6,7 @@
 - Milestone/Sprint: P0 / no sprint
 - Status: VALIDATION (local P0 integration under DEC-0001)
 - Branch: change/TUN-P0-control-plane
-- Local commit: 9888759 (`governance: refresh bounded context evidence`)
+- Local commit: 7f0cc93 (`governance: refresh bounded context evidence`)
 - Integration: AMD-0002 permits continued governance-eligible local and branch work while protected-main approval is pending.
 - Prerequisite: TUN-P0-003 is locally validated under DEC-0001 P0 compatibility; P0-005 cannot enter DONE before the final protected P0 PR merges.
 
