@@ -1,0 +1,23 @@
+schema_version: 1
+work_item:
+  normal: [DRAFT, BACKLOG, REFINEMENT, READY, IN_PROGRESS, CODE_REVIEW, VALIDATION, PRODUCT_ACCEPTANCE, DONE]
+  side: [BLOCKED, NEEDS_PRODUCT_DECISION, UI_REQUIRED, CONTRACT_REQUIRED, SECURITY_REVIEW_REQUIRED, REOPENED, DEFERRED, CANCELED, SUPERSEDED, DUPLICATE, NOT_APPLICABLE]
+milestone:
+  normal: [PROPOSED, APPROVED, ACTIVE, VALIDATION, PRODUCT_ACCEPTANCE, RELEASED, CLOSED]
+  side: [BLOCKED, AMENDED, REOPENED, SUPERSEDED]
+closure_requires_evidence: true
+history_deletion_for_cleanup: false
+pr_integration:
+  approval_pending_blocks_global_execution: false
+  work_readiness: [IN_PROGRESS, CODE_REVIEW, VALIDATION, READY_FOR_MERGE]
+  pr_states: [DRAFT, OPEN, CHECKS_RUNNING, READY_FOR_REVIEW, APPROVAL_PENDING, APPROVED, MERGED]
+  dependency_readiness: [LOCAL_VALIDATED, MERGED_TO_MAIN]
+  continue_independent_work_while_approval_pending: true
+  continue_local_validation_while_approval_pending: true
+  dependent_unmerged_chain_limit: null
+  concurrent_unmerged_work_limit: null
+  human_gates:
+    - PROTECTED_MAIN_MERGE
+    - PRODUCT_DECISION_OR_ACCEPTANCE_WHEN_REQUIRED
+    - PRODUCTION_OR_RELEASE_AUTHORIZATION_WHEN_REQUIRED
+    - SECURITY_COMPLIANCE_LEGAL_APPROVAL_WHEN_REQUIRED

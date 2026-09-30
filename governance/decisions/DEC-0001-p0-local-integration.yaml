@@ -1,0 +1,24 @@
+schema_version: 1
+decision_id: DEC-0001
+title: P0 local integration and single final protected pull request
+status: APPROVED
+problem: P0 governance work consists of tightly coupled control-plane records and evidence. Per-work-item GitHub code-owner review creates disproportionate approval overhead before the control plane itself is complete.
+options_considered:
+  - Retain one protected pull request and required code-owner review for every P0 work item.
+  - Push P0 work directly to main without review.
+  - Integrate P0 locally with normal commits, evidence, validation, and work-item state, then submit one final protected pull request for the entire P0 milestone.
+recommendation: Use a local-only aggregate branch named change/TUN-P0-control-plane until all P0 acceptance evidence is complete, then create one protected pull request to main. The final pull request requires the existing independent ai-dev code-owner review and all applicable checks before native auto-merge may run.
+business_impact: No Product/business behavior changes. P1-P8 remain blocked until the P0 enablement gate closes.
+technical_impact: A temporary exception to the short-lived branch rule applies only to change/TUN-P0-control-plane. Individual P0 work items remain separately committed, validated, evidenced, and traceable.
+security_compliance_impact: Direct pushes to main, force-pushes, deletion of protected history, CODEOWNERS enforcement, and human approval requirements remain unchanged. Automation may create a PR and enable auto-merge but may not approve, bypass, or impersonate an ai-dev review.
+affected_documents:
+  - governance/policies/git-contribution-policy.yaml
+  - docs/project/CURRENT_STATE.md
+  - docs/project/HANDOFF.md
+affected_flows: []
+affected_work_items:
+  - TUN-P0-002
+requested_by: Product Owner
+approved_by: Product Owner
+approved_at: 2026-09-30
+supersedes: null

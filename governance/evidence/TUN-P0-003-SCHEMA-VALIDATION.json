@@ -1,0 +1,55 @@
+{
+  "schema_version": 1,
+  "evidence_id": "TUN-P0-003-SCHEMA-VALIDATION",
+  "scope_type": "WORK_ITEM",
+  "scope_id": "TUN-P0-003",
+  "status": "PASS",
+  "checked_at": "2026-09-30T17:49:10Z",
+  "authority_refs": [
+    "docs/authority/baselines/1.6.0/04_Governance_and_Context_Tooling_Specification.md#6",
+    "docs/authority/amendments/AMD-0001/36_P0_Repository_Bootstrap_Governance_and_Context_Implementation_Spec.md#6"
+  ],
+  "external_standard": {
+    "name": "JSON Schema Draft 2020-12",
+    "source": "https://json-schema.org/draft/2020-12/json-schema-core",
+    "selection": "Draft 2020-12 is explicitly declared by every v1 schema document; the source defines JSON Schema core mechanisms including dialect selection, schema identifiers, references, and reusable definitions."
+  },
+  "artifacts": [
+    "governance/schemas/v1/governance-record.schema.json",
+    "governance/schemas/v1/README.md",
+    "tools/validation/Validate-GovernanceSchemas.ps1"
+  ],
+  "entry_schema_count": 16,
+  "entry_schema_types": [
+    "milestone", "sprint", "work-item", "dependency", "todo", "gate", "defect", "reopen",
+    "product-decision", "amendment", "adr-reference", "release", "evidence-manifest",
+    "specialist-review", "context-selection", "handoff"
+  ],
+  "checks": [
+    {
+      "name": "structural schema contract",
+      "command": "powershell -ExecutionPolicy Bypass -File tools/validation/Validate-GovernanceSchemas.ps1",
+      "result": "PASS",
+      "details": "The shared library and all 16 expected entry schemas declared Draft 2020-12, referenced the correct shared definition, required schema_version and an identifier property, and rejected unspecified v1 fields."
+    },
+    {
+      "name": "JSON document parsing",
+      "result": "PASS",
+      "details": "All 17 JSON schema documents parsed successfully with the repository's installed Windows PowerShell."
+    },
+    {
+      "name": "negative unexpected-entry check",
+      "result": "PASS",
+      "details": "A temporary unexpected '*.schema.json' file produced exit code 1 and the expected rejection message; it was removed in the same command."
+    },
+    {
+      "name": "whitespace check",
+      "command": "git diff --check",
+      "result": "PASS"
+    }
+  ],
+  "limitations": [
+    "This B1 evidence validates schema-document structure, not YAML record instances.",
+    "YAML parsing, precise instance locations, reference resolution, lifecycle legality, and Git-history immutability checks are assigned to TUN-P0-004."
+  ]
+}

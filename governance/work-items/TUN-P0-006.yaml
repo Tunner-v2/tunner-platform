@@ -1,0 +1,65 @@
+schema_version: 1
+work_item_id: TUN-P0-006
+milestone_id: P0
+sprint_id: null
+title: Docker development foundation
+status: VALIDATION
+type: INFRASTRUCTURE
+authority_refs:
+  - docs/authority/amendments/AMD-0001/effective-overrides/11_Development_Planes_Milestones_and_P0_Backlog.md
+  - docs/authority/amendments/AMD-0001/effective-overrides/04_Governance_and_Context_Tooling_Specification.md
+  - docs/authority/baselines/1.6.0/01_Engineering_Technology_Foundation.md
+  - docs/authority/baselines/1.6.0/06_Environment_Configuration_Secrets_and_Deployment.md
+  - docs/authority/baselines/1.6.0/15_Runtime_Communication_and_Infrastructure_Technology_Scope.md
+  - docs/authority/baselines/1.6.0/decisions/ADR-0009_Local_Observability_OTEL_LGTM.md
+  - docs/authority/baselines/1.6.0/decisions/ADR-0013_Transactional_Email_Resend_Mailpit.md
+flow_refs: []
+contract_refs: []
+decision_refs:
+  - DEC-0001
+  - DEC-0002
+acceptance_criteria:
+  - Docker Compose defines the local dependency topology: PostgreSQL 18, RabbitMQ 4.3 management, Redis 8.x, OpenBao, Mailpit, and Grafana OTEL-LGTM (which includes an OpenTelemetry Collector), with API and Worker health placeholders isolated behind an opt-in profile.
+  - All image references are exact version tags selected from current primary-source evidence; no latest or edge tag is used.
+  - All published local ports bind to loopback by default and remain configurable without code changes.
+  - The repository contains no credential, secret, or permanent OpenBao root token. OpenBao starts in its documented sealed or uninitialized state; P0-007 owns initialization, policy, and application secret injection.
+  - The repository provides a documented tunner-dev-compatible PowerShell entry point for doctor, setup, start, stop, health, and logs. Its start command needs no manual dependency installation after Docker Desktop prerequisites are present.
+  - Static Compose configuration and source contracts pass without pulling images or starting long-lived containers. Runtime start and dependency-health acceptance are explicitly deferred to a user-run, local-environment validation.
+  - No object-store emulator, R2 credential, Product behavior, API implementation, Worker implementation, or production deployment claim is introduced.
+prerequisites:
+  - TUN-P0-001
+blockers:
+  - USER_RUN_RUNTIME_ACCEPTANCE: Static Compose and doctor validation passed; Docker image pull, long-lived container start, and dependency health acceptance remain an explicit user-run local validation under the long-running-process policy.
+impact:
+  architecture: true
+  ui: false
+  sdk: false
+  financial: false
+  compliance: false
+  security: true
+  devops: true
+  support: false
+activated_roles:
+  - governance-engineer
+  - devops-engineer
+  - cyber-security-engineer
+  - tester-qa-engineer
+  - auditor
+  - rd-engineer
+required_tests:
+  - powershell -ExecutionPolicy Bypass -File tools/validation/Validate-TunnerDevSource.ps1
+  - docker compose --env-file infra/docker/.env.example --file infra/docker/compose.yaml config --quiet
+  - powershell -ExecutionPolicy Bypass -File tools/dev/tunner-dev.ps1 doctor
+  - user-run tunner-dev start and tunner-dev health dependency acceptance after review of the generated instructions
+required_evidence:
+  - governance/context/CTX-TUN-P0-006-001.yaml
+  - governance/evidence/TUN-P0-006-RD-SERVICES.json
+  - governance/evidence/TUN-P0-006-VALIDATION.json
+  - governance/evidence/TUN-P0-006-ROLE-REVIEWS.json
+context_policy: TASK
+todos: []
+defects:
+  - DEF-TUN-P0-006-001
+  - DEF-TUN-P0-006-002
+created_at: 2026-09-30T12:10:44-04:00
+updated_at: 2026-09-30T15:17:35.4379043-04:00

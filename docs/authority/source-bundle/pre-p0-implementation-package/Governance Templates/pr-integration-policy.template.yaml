@@ -1,0 +1,12 @@
+schema_version: 1
+policy_id: default-pr-integration
+approval_pending_blocks_global_execution: false
+continue_independent_work: true
+continue_local_validation: true
+default_dependency_readiness: LOCAL_VALIDATED
+require_explicit_merged_main_for:
+  - release_or_production_integration
+  - protected_main_based_validation_when_specified
+dependent_unmerged_chain_limit: null
+concurrent_unmerged_work_limit: null
+request_human_action_only_when_required: true

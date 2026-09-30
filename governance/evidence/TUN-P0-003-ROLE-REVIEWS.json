@@ -1,0 +1,44 @@
+{
+  "schema_version": 1,
+  "evidence_id": "TUN-P0-003-ROLE-REVIEWS",
+  "scope_type": "WORK_ITEM",
+  "scope_id": "TUN-P0-003",
+  "status": "PASS",
+  "reviewed_at": "2026-09-30T00:00:00-04:00",
+  "reviews": [
+    {
+      "role": "governance-engineer",
+      "skill_version": "1.0.0",
+      "conclusion": "PASS",
+      "checks": [
+        "All sixteen AMD-0001 minimum record types have entry schemas.",
+        "Record state remains text-based and diffable; the schemas are repository files rather than an opaque store.",
+        "Every record definition requires schema_version and an identifier field.",
+        "Runtime lifecycle, reference, and history enforcement are explicitly reserved for TUN-P0-004."
+      ],
+      "findings": []
+    },
+    {
+      "role": "tester-qa-engineer",
+      "skill_version": "1.0.0",
+      "conclusion": "PASS",
+      "checks": [
+        "The structural validator parses the shared library and all sixteen entry schemas.",
+        "Independent JSON parsing covers all seventeen schema JSON documents.",
+        "A negative check proves an unexpected entry schema is rejected."
+      ],
+      "findings": []
+    },
+    {
+      "role": "auditor",
+      "skill_version": "1.0.0",
+      "conclusion": "PASS",
+      "checks": [
+        "Authority references and acceptance criteria are recorded on the work item.",
+        "Schema identifiers are logical URNs and do not claim a hosted source of authority.",
+        "Validation scope and future-tool boundary are recorded in version-controlled documentation and evidence."
+      ],
+      "findings": []
+    }
+  ]
+}

@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "evidence_id": "TUN-P0-005-ROLE-REVIEWS",
+  "scope_type": "WORK_ITEM",
+  "scope_id": "TUN-P0-005",
+  "status": "PASS",
+  "reviewed_at": "2026-09-30T14:43:07.1999255-04:00",
+  "reviews": [
+    {
+      "role": "governance-engineer",
+      "skill_version": "1.0.0",
+      "conclusion": "PASS",
+      "checks": [
+        "Context selection records explicit authority, work-state, decision, prerequisite, evidence, and role sources.",
+        "The generated pack exposes the effective-authority summary and explicit AMD-0002 source without claiming later authority-verification enforcement."
+      ],
+      "findings": []
+    },
+    {
+      "role": "full-stack-engineer",
+      "skill_version": "1.0.0",
+      "conclusion": "PASS",
+      "checks": [
+        "The context command extends the existing standalone .NET tool without a parallel runtime.",
+        "The solution builds with zero warnings and zero errors."
+      ],
+      "findings": []
+    },
+    {
+      "role": "tester-qa-engineer",
+      "skill_version": "1.0.0",
+      "conclusion": "PASS",
+      "checks": [
+        "The isolated fixture covers build, current verification, stale-source rejection, and active-authority-summary inclusion.",
+        "The generated P0-005 pack was read back for authority, task, blockers, decisions, tests/evidence, exclusions, and Git history."
+      ],
+      "findings": []
+    },
+    {
+      "role": "auditor",
+      "skill_version": "1.0.0",
+      "conclusion": "PASS",
+      "checks": [
+        "Manifest records source hashes, generation metadata, selected/excluded reasons, and bounded Git history.",
+        "Current state and handoff distinguish local validation from the final protected-main integration gate."
+      ],
+      "findings": [
+        "P0-005 remains VALIDATION; its protected integration and the P0 enablement gate are required under DEC-0002."
+      ]
+    },
+    {
+      "role": "cyber-security-engineer",
+      "skill_version": "1.0.0",
+      "conclusion": "PASS",
+      "checks": [
+        "Context output is restricted to a path beneath the repository root.",
+        "Git history uses ProcessStartInfo with fixed argument-list entries and UseShellExecute false.",
+        "The engine does not read environment secrets or Product data."
+      ],
+      "findings": [
+        "TUN-P0-033 owns authority hash verification and refusal behavior; P0-005 only records the current verified-authority summary."
+      ]
+    }
+  ]
+}

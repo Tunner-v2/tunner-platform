@@ -36,6 +36,8 @@ Commit messages support traceability but never replace work-item, authority, or 
 
 Every normal change reaches `main` through a pull request. The repository automations create an eligible PR and enable GitHub auto-merge after a branch push. A required `CODEOWNERS` review and all protected-branch requirements remain mandatory.
 
+While a pull request is awaiting approval, continue all governance-eligible local or branch work, validation, evidence, documentation/context, and independent work. Approval is required only to integrate or merge into protected `main`; block a dependent scope only when its declared readiness requirement is `MERGED_TO_MAIN` or another genuine human-authority gate.
+
 Before requesting review, complete the pull request template, link the governing work item, identify authority and decision impact, and attach applicable evidence. Do not mark an unverified check as passed.
 
 ## Quality and security

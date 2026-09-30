@@ -1,0 +1,60 @@
+{
+  "schema_version": 1,
+  "evidence_id": "TUN-P0-005-VALIDATION",
+  "scope_type": "WORK_ITEM",
+  "scope_id": "TUN-P0-005",
+  "status": "PASS",
+  "checked_at": "2026-09-30T14:43:07.1999255-04:00",
+  "checks": [
+    {
+      "name": "static context contract",
+      "command": "powershell -ExecutionPolicy Bypass -File tools/validation/Validate-TunnerContextSource.ps1",
+      "result": "PASS",
+      "details": "Verified bounded build/verify commands, repository-contained output, source hashes, stale reporting, fixed-argument Git history, and inclusion of the active authority summary."
+    },
+    {
+      "name": "governance and schema contracts",
+      "command": "powershell -ExecutionPolicy Bypass -File tools/validation/Validate-TunnerGovernanceSource.ps1; powershell -ExecutionPolicy Bypass -File tools/validation/Validate-GovernanceSchemas.ps1; dotnet run --project src/Tunner.Governance --no-build -- governance validate",
+      "result": "PASS",
+      "details": "The P0-004 source contract and all 16 governance entry schemas passed; live governance validation reported 16 records and no diagnostics."
+    },
+    {
+      "name": "build and functional execution",
+      "command": "dotnet build Tunner.Governance.sln --no-restore; dotnet run --project tests/Tunner.Governance.FunctionalTests --no-restore",
+      "result": "PASS",
+      "details": "Build completed with 0 warnings and 0 errors. The isolated fixture passed fresh-pack verification, stale-source detection, and active-authority-summary inclusion."
+    },
+    {
+      "name": "live P0-005 context pack",
+      "command": "dotnet run --project src/Tunner.Governance --no-build -- context build --work-item TUN-P0-005; dotnet run --project src/Tunner.Governance --no-build -- context verify",
+      "result": "PASS",
+      "details": "The generated pack identifies TUN-P0-005, the current-authority summary, explicit AMD-0001 and AMD-0002 authority, DEC-0001 and DEC-0002, no declared blockers, tests/evidence, roles, exclusions, hashes, and bounded Git history. Verification returned CURRENT."
+    },
+    {
+      "name": "governance readiness and dependency vulnerability metadata",
+      "command": "dotnet run --project src/Tunner.Governance --no-build -- governance gate check TUN-P0-005; dotnet run --project src/Tunner.Governance --no-build -- governance next; dotnet list Tunner.Governance.sln package --vulnerable --include-transitive",
+      "result": "PASS",
+      "details": "P0-005 gate is READY; the current graph reports no human protected-main integration action; NuGet reported no vulnerable packages."
+    },
+    {
+      "name": "whitespace check",
+      "command": "git diff --check",
+      "result": "PASS",
+      "details": "No whitespace errors reported."
+    }
+  ],
+  "artifacts": [
+    "src/Tunner.Governance/ContextApplication.cs",
+    "src/Tunner.Governance/Program.cs",
+    "src/Tunner.Governance/README.md",
+    "tests/Tunner.Governance.FunctionalTests/Program.cs",
+    "tools/validation/Validate-TunnerContextSource.ps1",
+    "docs/authority/current-authority.json",
+    "docs/context/current/manifest.json"
+  ],
+  "limitations": [
+    "Generated context is a reproducible retrieval aid and never outranks repository authority.",
+    "Authority hash verification and build refusal for a corrupt mirror remain TUN-P0-033 scope.",
+    "P0-005 remains in VALIDATION. It cannot enter DONE until its protected integration and the P0 enablement gate are complete under DEC-0002."
+  ]
+}

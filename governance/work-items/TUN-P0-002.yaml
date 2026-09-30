@@ -3,19 +3,24 @@ work_item_id: TUN-P0-002
 milestone_id: P0
 sprint_id: null
 title: Git and contribution policy
-status: CODE_REVIEW
+status: VALIDATION
 type: GOVERNANCE_POLICY
 authority_refs:
   - docs/authority/baselines/1.6.0/03_Governed_Development_Lifecycle_Scrum_Git.md
+  - docs/authority/amendments/AMD-0002/AMD-0002_Non-Blocking_PR_Approval_and_Continuous_Local_Execution.md
   - governance/bootstrap/source/GITHUB_BOOTSTRAP_POLICY.md
 flow_refs: []
 contract_refs: []
-decision_refs: []
+decision_refs:
+  - DEC-0001
+  - DEC-0002
 acceptance_criteria:
   - Protected trunk-based branch and commit conventions are documented.
   - Contributors have a repository-native contribution guide.
   - Pull requests collect work-item, authority-impact, verification, and review metadata.
   - Contribution policy preserves protected-branch and CODEOWNERS controls.
+  - Approval-pending pull requests do not block governance-eligible local or branch work; protected-main integration retains human approval.
+  - Pull requests disclose whether a dependent scope requires LOCAL_VALIDATED or MERGED_TO_MAIN readiness.
 prerequisites:
   - TUN-P0-001
 blockers: []
@@ -38,13 +43,19 @@ required_tests:
   - static policy-content validation
   - pull-request-template field validation
   - protected-main policy alignment review
+  - approval-pending local-execution policy validation
 required_evidence:
   - CONTRIBUTING.md
   - .github/pull_request_template.md
   - governance/policies/git-contribution-policy.yaml
   - governance/evidence/TUN-P0-002-STATIC-VALIDATION.json
+  - tools/validation/Validate-GitContributionPolicy.ps1
+  - governance/decisions/DEC-0001-p0-local-integration.yaml
+  - governance/evidence/DEC-0001-P0-LOCAL-INTEGRATION.json
+  - governance/decisions/DEC-0002.yaml
+  - governance/evidence/DEC-0002-GOVERNED-INCREMENTAL-P0-PR.json
 context_policy: TASK
 todos: []
 defects: []
 created_at: 2026-09-30T03:40:00Z
-updated_at: 2026-09-30T15:00:00Z
+updated_at: 2026-09-30T15:17:35.4379043-04:00

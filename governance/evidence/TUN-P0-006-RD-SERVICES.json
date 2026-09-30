@@ -1,0 +1,62 @@
+{
+  "schema_version": 1,
+  "evidence_id": "TUN-P0-006-RD-SERVICES",
+  "scope_type": "WORK_ITEM",
+  "scope_id": "TUN-P0-006",
+  "status": "PASS",
+  "retrieved_at": "2026-09-30T12:10:44-04:00",
+  "sources": [
+    {
+      "component": "PostgreSQL",
+      "image": "postgres:18.6",
+      "source": "https://hub.docker.com/_/postgres/tags?name=18",
+      "selection": "Authority requires PostgreSQL 18 and the Docker Official Image published exact 18.6 tags at retrieval."
+    },
+    {
+      "component": "RabbitMQ management",
+      "image": "rabbitmq:4.3.6-management",
+      "source": "https://hub.docker.com/_/rabbitmq/tags",
+      "selection": "Authority requires RabbitMQ 4.3 with the management UI; the Docker Official Image published exact 4.3.6-management tags at retrieval."
+    },
+    {
+      "component": "Redis",
+      "image": "redis:8.10.2",
+      "source": "https://hub.docker.com/_/redis",
+      "selection": "Authority requires Redis 8.x and the Docker Official Image published exact 8.10.2 tags at retrieval."
+    },
+    {
+      "component": "OpenBao",
+      "image": "openbao/openbao:2.7.0",
+      "source": "https://hub.docker.com/r/openbao/openbao/tags",
+      "selection": "OpenBao 2.7.0 was the current upstream release tag at retrieval. Its official server documentation states that a configured server starts sealed and must be initialized and unsealed before serving requests."
+    },
+    {
+      "component": "Mailpit",
+      "image": "axllent/mailpit:v1.31.3",
+      "source": "https://github.com/axllent/mailpit/releases/tag/v1.31.3",
+      "selection": "The official Mailpit project identified v1.31.3 as its current release at retrieval. Authority confines Mailpit to local/test email capture."
+    },
+    {
+      "component": "Grafana OTEL-LGTM",
+      "image": "grafana/otel-lgtm:0.34.0",
+      "source": "https://hub.docker.com/r/grafana/otel-lgtm/tags",
+      "selection": "The Grafana verified-publisher image published exact 0.34.0 tags at retrieval. Grafana documents this image as a development, demo, and testing stack containing an OpenTelemetry Collector, Grafana, Loki, Mimir, and Tempo."
+    },
+    {
+      "component": "API and Worker placeholders",
+      "image": "busybox:1.37.0",
+      "source": "https://hub.docker.com/_/busybox",
+      "selection": "The Docker Official Image published the exact 1.37.0 tag. It is isolated behind the opt-in app-placeholders profile and supplies no Tunner application behavior."
+    }
+  ],
+  "security_notes": [
+    "All Compose host port mappings bind to 127.0.0.1 by default; they are development-only and do not imply production exposure.",
+    "No image was pulled and no container was started while producing this evidence.",
+    "No secret, password, credential, R2 key, or permanent OpenBao root token is committed. P0-007 owns initialized OpenBao, least-privilege policy, and secret injection.",
+    "Mailpit remains a local/test sink only; it is not a production email provider or a public service."
+  ],
+  "limitations": [
+    "Tag existence is point-in-time R&D evidence, not an image digest pin or a release approval.",
+    "Runtime compatibility, container health, and image vulnerability scanning require a separate user-run local validation; this agent did not start long-lived services."
+  ]
+}

@@ -1,0 +1,73 @@
+schema_version: 1
+work_item_id: TUN-P0-004
+milestone_id: P0
+sprint_id: null
+title: tunner-governance MVP
+status: VALIDATION
+type: GOVERNANCE_TOOLING
+authority_refs:
+  - docs/authority/baselines/1.6.0/03_Governed_Development_Lifecycle_Scrum_Git.md
+  - docs/authority/baselines/1.6.0/04_Governance_and_Context_Tooling_Specification.md
+  - docs/authority/baselines/1.6.0/12_AI_Development_Protocol_Context_and_Project_Memory.md
+  - docs/authority/amendments/AMD-0001/36_P0_Repository_Bootstrap_Governance_and_Context_Implementation_Spec.md
+  - docs/authority/amendments/AMD-0002/AMD-0002_Non-Blocking_PR_Approval_and_Continuous_Local_Execution.md
+flow_refs: []
+contract_refs: []
+decision_refs:
+  - AMD-0001
+  - AMD-0002
+  - DEC-0001
+  - DEC-0002
+acceptance_criteria:
+  - 'A separate .NET 10/C# 14 repository-native tooling solution exposes the `tunner governance` command group.'
+  - '`validate` reports malformed governance YAML with file and location, verifies required record fields, and validates supported record shapes against the versioned schema contract.'
+  - '`status` deterministically reports milestones, work-item states, blockers, prerequisites, and evidence readiness without mutating repository records.'
+  - '`next` lists eligible work items and explains every ineligible item from prerequisite, blocker, or required-evidence facts.'
+  - '`gate check <work-item>` rejects DONE readiness when required evidence, activated-role review evidence, blockers, or prerequisites are incomplete.'
+  - 'Invalid lifecycle transitions are rejected deterministically; the MVP is read-only and cannot mutate Product data or governance records.'
+  - 'Tooling source, static checks, role reviews, and environment limitations are recorded as evidence.'
+  - '`next` separately reports genuine human protected-main integration actions while preserving agent-executable local/branch work.'
+  - 'Declared dependencies enforce LOCAL_VALIDATED or MERGED_TO_MAIN readiness; merged-main readiness requires explicit merge evidence.'
+  - 'Configured dependency-chain and concurrent-unmerged limits block only additional dependent local chains; null leaves no unapproved project cap.'
+prerequisites:
+  - TUN-P0-003
+blockers: []
+impact:
+  architecture: true
+  ui: false
+  sdk: false
+  financial: false
+  compliance: false
+  security: true
+  devops: false
+  support: false
+activated_roles:
+  - governance-engineer
+  - full-stack-engineer
+  - tester-qa-engineer
+  - auditor
+  - rd-engineer
+  - cyber-security-engineer
+required_tests:
+  - dotnet build Tunner.Governance.sln --no-restore
+  - dotnet run --project tests/Tunner.Governance.FunctionalTests --no-restore
+  - positive and negative CLI fixture tests for validate, status, next, and gate check
+  - static source and fixture validation
+  - AMD-0002 local-readiness, merged-main integration-action, and configured chain-limit fixture validation
+required_evidence:
+  - governance/context/CTX-TUN-P0-004-001.yaml
+  - governance/evidence/TUN-P0-004-RD-PACKAGES.json
+  - governance/evidence/TUN-P0-004-VALIDATION.json
+  - governance/evidence/TUN-P0-004-ROLE-REVIEWS.json
+  - governance/policies/pr-integration-policy.yaml
+  - governance/dependencies/DEP-TUN-P0-004-TUN-P0-003.yaml
+  - src/Tunner.Governance/GovernanceApplication.cs
+  - tests/Tunner.Governance.FunctionalTests/Program.cs
+  - governance/schemas/v1/governance-record.schema.json
+  - tools/validation/Validate-TunnerGovernanceSource.ps1
+  - src/Tunner.Governance/README.md
+context_policy: TASK
+todos: []
+defects: []
+created_at: 2026-09-30T16:30:00-04:00
+updated_at: 2026-09-30T15:17:35.4379043-04:00
