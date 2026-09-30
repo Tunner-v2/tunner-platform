@@ -6,7 +6,7 @@
 - Milestone/Sprint: P0 / no sprint
 - Status: VALIDATION (GitHub ruleset and code-owner review verified; safe auto-merge automation pending live validation)
 - Branch: governance/b2-ruleset-validation
-- Commit: pending
+- Implementation commit: `5c1cdb6` (`ci: enable guarded pull request auto-merge`)
 
 ## Completed
 
