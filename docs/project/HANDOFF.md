@@ -2,41 +2,39 @@
 
 ## Work item
 
-- ID: TUN-P0-003
+- ID: TUN-P0-004
 - Milestone/Sprint: P0 / no sprint
-- Status: VALIDATION (local P0 integration under DEC-0001)
+- Status: IN_PROGRESS (local P0 integration under DEC-0001)
 - Branch: `change/TUN-P0-control-plane`
-- Prerequisite: TUN-P0-001 (DONE)
+- Prerequisite: TUN-P0-003 (locally validated; final DONE awaits the final protected P0 PR)
 
 ## Completed
 
-- Added repository-native Git and contribution policy, contribution guide, and pull-request template; retained protected `main`, required pull requests, CODEOWNERS review, and guarded native auto-merge.
+- P0-002 contribution policy and P0-003 governance schemas are locally integrated with evidence and validation.
 - Recorded DEC-0001: P0 may be locally integrated until one final protected P0 pull request is ready.
-- Added JSON Schema Draft 2020-12 entry schemas for the sixteen record types required by AMD-0001, a shared v1 record library, and a dependency-free structural validator.
-- Recorded governance, QA, and audit role-review evidence plus source-backed JSON Schema dialect selection.
+- Created P0-004 work record, bounded context manifest, and package-research evidence for the read-only `tunner governance` MVP.
+- Current package pins were verified: System.CommandLine 2.0.12, YamlDotNet 18.1.0, and JsonSchema.Net 9.4.0.
 
 ## Tests/evidence
 
 - TUN-P0-002 static policy/content validation: PASS.
-- TUN-P0-003 `powershell -ExecutionPolicy Bypass -File tools/validation/Validate-GovernanceSchemas.ps1`: PASS (16 entry schemas).
-- TUN-P0-003 independent JSON parse: PASS (17 schema documents).
-- TUN-P0-003 negative unexpected entry-schema test: PASS.
-- `git diff --check`: PASS.
-- Evidence: `governance/evidence/TUN-P0-002-STATIC-VALIDATION.json`, `governance/evidence/DEC-0001-P0-LOCAL-INTEGRATION.json`, `governance/evidence/TUN-P0-003-SCHEMA-VALIDATION.json`, and `governance/evidence/TUN-P0-003-ROLE-REVIEWS.json`.
+- TUN-P0-003 schema contract, JSON parse, negative-entry, and whitespace validation: PASS.
+- TUN-P0-004 context/work-record/research static validation: PASS.
+- .NET SDK is absent locally. No package restore, build, or executable .NET test has run; this limitation must remain in P0-004 evidence until a user performs the documented SDK setup.
 
 ## Decisions/blockers
 
 - P1–P8 Product behavior remains out of scope until P0 closes.
 - DEC-0001 allows local integration of P0 only. A locally validated P0 prerequisite may unblock a dependent local P0 item, but no P0 item becomes DONE until the final P0 PR merges.
 - GitHub Actions creates pull requests and enables auto-merge, but does not approve or bypass required CODEOWNERS review. The final P0 PR retains that human gate.
-- P0-003 establishes schema shapes only. YAML instance parsing, precise validation locations, reference resolution, lifecycle/gate enforcement, and cross-commit immutable-ID checks remain TUN-P0-004 scope.
+- P0-004 is source-authorable, but executable validation is blocked until .NET 10 SDK installation is completed by the user.
 
 ## Context state
 
-- Authority: Baseline 1.6.0 documents 03 and 04, AMD-0001 document 36, `governance/bootstrap/source/GITHUB_BOOTSTRAP_POLICY.md`, and DEC-0001. Live Drive access/readback is confirmed; the complete Drive-to-mirror diff remains TUN-P0-033 scope.
-- Context mode: TASK.
-- Activated roles: governance-engineer, cyber-security-engineer, devops-engineer, tester-qa-engineer, auditor.
+- Authority: Baseline 1.6.0 documents 03, 04, and 12; AMD-0001 document 36; `governance/bootstrap/source/GITHUB_BOOTSTRAP_POLICY.md`; and DEC-0001.
+- Context: `governance/context/CTX-TUN-P0-004-001.yaml` (TASK; Product FRDs and UX references explicitly excluded as unrelated).
+- Activated roles: governance-engineer, full-stack-engineer, tester-qa-engineer, auditor, rd-engineer, cyber-security-engineer.
 
 ## Exact next action
 
-- Build the required context for TUN-P0-004 and validate its eligibility before implementation on `change/TUN-P0-control-plane`.
+- Implement `tunner governance` read-only commands (`validate`, `status`, `next`, and `gate check`) plus fixture tests and static source validation; do not run dependency installation or .NET restore/build in this environment.

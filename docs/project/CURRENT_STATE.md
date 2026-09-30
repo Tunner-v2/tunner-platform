@@ -25,14 +25,15 @@
 | TUN-P0-001 | DONE | governance-engineer, tester-qa-engineer, auditor, cyber-security-engineer, devops-engineer | none | Bootstrap complete |
 | TUN-P0-019 | DONE | governance-engineer, devops-engineer, cyber-security-engineer, auditor | none | Ruleset, code-owner review, auto-merge, and automatic PR creation validated through PR #4 |
 | TUN-P0-002 | VALIDATION | governance-engineer, cyber-security-engineer, devops-engineer, tester-qa-engineer, auditor | none | Local policy/evidence validation passed; final DONE remains contingent on final protected P0 PR |
-| TUN-P0-003 | VALIDATION | governance-engineer, tester-qa-engineer, auditor | none | Schema validation passed; prepare the next eligible local P0 work item |
+| TUN-P0-003 | VALIDATION | governance-engineer, tester-qa-engineer, auditor | none | Schema validation passed; P0-004 is in progress locally |
+| TUN-P0-004 | IN_PROGRESS | governance-engineer, full-stack-engineer, tester-qa-engineer, auditor, rd-engineer, cyber-security-engineer | .NET SDK absent for executable validation | Implement read-only governance MVP; record static and future SDK-run evidence |
 
 ## Build/test state
 
 - Last verified main commit: `b87f4c39d8bd4a11c53a713673aaf36a1ec4697c` (PR #4 automatic PR-creation workflow).
 - TUN-P0-002 static policy/content validation: PASS.
 - TUN-P0-003 structural schema validation: PASS for 16 entry schemas and 17 parsed JSON documents.
-- TUN-P0-003 negative unexpected-entry validation: PASS.
+- TUN-P0-003 negative unexpected-entry validation: PASS.`n- TUN-P0-004 package research: PASS; System.CommandLine 2.0.12, YamlDotNet 18.1.0, and JsonSchema.Net 9.4.0 are current stable baseline pins.`n- .NET SDK: unavailable locally; no restore, build, or executable test has been run.
 - Build: not run; dependency restore/build is a user-run step.
 - Bundle integrity: PASS (125/125).
 - Pre-P0 package integrity: PASS (54/54).
@@ -48,4 +49,4 @@
 
 ## Exact next authorized action
 
-- Prepare TUN-P0-004 on the local integration branch, with its required authority/context review before implementation.
+- Implement the read-only TUN-P0-004 governance MVP on the local integration branch; executable validation remains pending a user-installed .NET 10 SDK.
