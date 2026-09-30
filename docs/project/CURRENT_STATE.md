@@ -23,7 +23,7 @@
 | ID | State | Owner/roles | Blocker | Next action |
 |---|---|---|---|---|
 | TUN-P0-001 | DONE | governance-engineer, tester-qa-engineer, auditor, cyber-security-engineer, devops-engineer | none | Resume B2 |
-| TUN-P0-019 | VALIDATION | governance-engineer, devops-engineer, cyber-security-engineer, auditor | Ruleset enforcement, code-owner review, and GitHub auto-merge: PASS. Automatic PR creation is fixed after a checkout-independent title/body error and pending a live run. | Push the fix and verify automatic PR creation |
+| TUN-P0-019 | VALIDATION | governance-engineer, devops-engineer, cyber-security-engineer, auditor | Ruleset enforcement, code-owner review, and GitHub auto-merge: PASS. Automatic PR creation: PASS via PR #4. Push-triggered auto-merge enablement is pending live validation. | Verify PR #4 has auto-merge enabled, then approve as code owner |
 
 ## Build/test state
 
@@ -39,4 +39,4 @@
 
 ## Exact next authorized action
 
-- Push this update; GitHub should create its pull request automatically. Validate it, then start TUN-P0-002, Git and contribution policy.
+- Push this update; GitHub should enable auto-merge on PR #4. Verify it, then approve as code owner; GitHub should merge automatically.

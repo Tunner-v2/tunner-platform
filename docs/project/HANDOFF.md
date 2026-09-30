@@ -13,7 +13,7 @@
 - B0/B1 completed with 125/125 repository-mirror hash verification.
 - Local remote `origin` is registered as `https://github.com/Tunner-v2/tunner-platform.git`.
 - `.github/workflows/automate-pr-automerge.yml` enables GitHub native auto-merge for non-draft, same-repository pull requests. It does not approve, bypass, or execute pull-request code. PR #2 validated the workflow end to end: Actions enabled auto-merge, a human approved, and GitHub merged it.
-- `.github/workflows/create-pull-request.yml` creates one open PR to `main` on a non-main branch push. It does not approve, merge, access secrets, bypass rules, or execute repository code.
+- `.github/workflows/create-pull-request.yml` creates one open PR to `main` on a non-main branch push and enables native GitHub auto-merge. It does not approve, merge immediately, access secrets, bypass rules, or execute repository code.
 
 ## Tests/evidence
 
@@ -37,4 +37,4 @@
 
 ## Exact next action
 
-- Push this update and validate the automatic PR-creation workflow. Then start TUN-P0-002, Git and contribution policy.
+- Push this update and validate that the same workflow enables auto-merge on PR #4. A code-owner approval should then merge it automatically; after that, start TUN-P0-002.

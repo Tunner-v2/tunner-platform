@@ -6,7 +6,7 @@ on:
       - main
 
 permissions:
-  contents: read
+  contents: write
   pull-requests: write
 
 jobs:
@@ -19,9 +19,11 @@ jobs:
           GH_REPO: ${{ github.repository }}
           HEAD_REF: ${{ github.ref_name }}
         run: |
-          existing_pr="$(gh pr list --repo "$GH_REPO" --base main --head "$HEAD_REF" --state open --json url --jq '.[0].url')"
-          if [ -n "$existing_pr" ]; then
-            echo "An open pull request already exists: $existing_pr"
-            exit 0
+          pr_url="$(gh pr list --repo "$GH_REPO" --base main --head "$HEAD_REF" --state open --json url --jq '.[0].url')"
+          if [ -z "$pr_url" ]; then
+            pr_url="$(gh pr create --repo "$GH_REPO" --base main --head "$HEAD_REF" --title "Automated PR: $HEAD_REF" --body "Automatically created for branch $HEAD_REF. Protected-branch review and checks remain required.")"
+            echo "Created pull request: $pr_url"
+          else
+            echo "An open pull request already exists: $pr_url"
           fi
-          gh pr create --repo "$GH_REPO" --base main --head "$HEAD_REF" --title "Automated PR: $HEAD_REF" --body "Automatically created for branch $HEAD_REF. Protected-branch review and checks remain required."
+          gh pr merge --auto --merge "$pr_url"
