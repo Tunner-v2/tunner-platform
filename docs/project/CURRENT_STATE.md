@@ -23,7 +23,7 @@
 | TUN-P0-005 | VALIDATION | none | Retain bounded context-pack evidence for protected incremental P0 PRs |
 | TUN-P0-006 | VALIDATION | none | Runtime health is PASS; retain Compose evidence for protected incremental P0 PRs |
 | TUN-P0-007 | VALIDATION | none | Retain credential-free OpenBao policy/bootstrap, local scan, and validation evidence |
-| TUN-P0-008 | REFINEMENT | none | Define the P0-only EF Core/Npgsql migration foundation from current authority and R&D evidence |
+| TUN-P0-008 | IN_PROGRESS | none | Complete static migration validation, role reviews, and operator-run rehearsal guidance without Product schema |
 | TUN-P0-019 | VALIDATION | none | Retain GitHub governance evidence for protected incremental P0 PRs |
 
 ## Build/test state
@@ -50,4 +50,4 @@
 ## Exact next authorized action
 
 - PR #6 merged to protected main. TUN-P0-007 is locally validated and committed as 7f2f6e4 on its separate branch; retain its evidence and do not introduce Product or production-secret scope.
-- TUN-P0-008 is now in REFINEMENT with current EF Core/Npgsql primary-source R&D evidence; do not implement Product/domain schemas or execute migrations yet.
+- TUN-P0-008 is IN_PROGRESS: EF Core/Npgsql projects build cleanly with patched dependency pinning; do not implement Product/domain schemas or execute migrations in this session.
