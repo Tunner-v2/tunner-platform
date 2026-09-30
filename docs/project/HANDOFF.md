@@ -5,7 +5,8 @@
 - ID: TUN-P0-007
 - Milestone/Sprint: P0 / no sprint
 - Status: VALIDATION (static, credential-free evidence complete)
-- Branch: change/TUN-P0-007-secrets-foundation`r`n- Commit: 7f2f6e4 (`security: add P0 OpenBao secrets foundation`)
+- Branch: change/TUN-P0-007-secrets-foundation
+- Commit: 7f2f6e4 (`security: add P0 OpenBao secrets foundation`)
 - Prerequisite: TUN-P0-006 is locally validated; PR #6 merged to protected main at 87b62ff.
 - Integration: this work remains on its dedicated local branch under DEC-0002; do not introduce Product or production-secret scope.
 
@@ -23,6 +24,10 @@
 - No root token, unseal key, application token, or secret value was supplied, stored, or printed.
 - Product-facing secret injection, production Vault, cloud-provider credentials, and P1 implementation remain out of scope.
 
+## Audit status
+
+- P0 foundation audit passed after remediation of missing role-review evidence for TUN-P0-001, TUN-P0-002, and TUN-P0-019; an invalid P0-019 remote-URL evidence label; and literal newline markers in project documentation.
+- All registered P0 work-item gates are READY. Git integrity is sound; two dangling commits are safe, recoverable amend predecessors and were retained.
 ## Next action
 
 - Preserve P0-007 validation evidence. The next canonical P0 candidate is TUN-P0-008 (database/migrations); create its governed work record and bounded context before implementation. Any local OpenBao initialization/unseal remains an authorized operator-only procedure using the runbook; it is not a prerequisite for this static P0 evidence slice.

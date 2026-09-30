@@ -1,0 +1,46 @@
+{
+  "schema_version": 1,
+  "evidence_id": "TUN-P0-019-ROLE-REVIEWS",
+  "scope_type": "WORK_ITEM",
+  "scope_id": "TUN-P0-019",
+  "status": "PASS",
+  "reviewed_at": "2026-09-30T16:06:28.3170391-04:00",
+  "reviews": [
+    {
+      "role": "governance-engineer",
+      "skill_version": "1.0.0",
+      "conclusion": "PASS",
+      "checks": [
+        "The canonical remote, ruleset definition, pull-request evidence, and automation evidence are all repository-native and traceable."
+      ],
+      "findings": []
+    },
+    {
+      "role": "devops-engineer",
+      "skill_version": "1.0.0",
+      "conclusion": "PASS",
+      "checks": [
+        "The configured origin is the canonical HTTPS repository and the recorded workflows support pull-request creation and auto-merge only after protected requirements pass."
+      ],
+      "findings": []
+    },
+    {
+      "role": "cyber-security-engineer",
+      "skill_version": "1.0.0",
+      "conclusion": "PASS",
+      "checks": [
+        "Recorded GitHub enforcement rejects direct main updates; CODEOWNERS approval evidence is retained."
+      ],
+      "findings": []
+    },
+    {
+      "role": "auditor",
+      "skill_version": "1.0.0",
+      "conclusion": "PASS",
+      "checks": [
+        "The configured remote URL, ruleset readback, PR approval/merge record, and workflow records satisfy the stated P0-019 evidence lineage."
+      ],
+      "findings": []
+    }
+  ]
+}

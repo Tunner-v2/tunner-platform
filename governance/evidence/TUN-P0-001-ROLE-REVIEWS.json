@@ -1,0 +1,60 @@
+{
+  "schema_version": 1,
+  "evidence_id": "TUN-P0-001-ROLE-REVIEWS",
+  "scope_type": "WORK_ITEM",
+  "scope_id": "TUN-P0-001",
+  "status": "PASS",
+  "reviewed_at": "2026-09-30T16:06:28.3170391-04:00",
+  "reviews": [
+    {
+      "role": "governance-engineer",
+      "skill_version": "1.0.0",
+      "conclusion": "PASS",
+      "checks": [
+        "Bootstrap record, authority mirror integrity evidence, governance gate, entry contract, skills, and project-memory paths are present.",
+        "The bootstrap work remains a repository-native P0 control-plane record."
+      ],
+      "findings": []
+    },
+    {
+      "role": "tester-qa-engineer",
+      "skill_version": "1.0.0",
+      "conclusion": "PASS",
+      "checks": [
+        "Governance validation and functional checks pass.",
+        "The bootstrap integrity evidence records the bundle and Pre-P0 manifest verification boundary."
+      ],
+      "findings": []
+    },
+    {
+      "role": "auditor",
+      "skill_version": "1.0.0",
+      "conclusion": "PASS",
+      "checks": [
+        "Authority/provenance, required evidence, and bootstrap gate are traceable in version-controlled records."
+      ],
+      "findings": [
+        "A full Drive-to-mirror reconciliation remains separately tracked as TUN-P0-033; this review does not claim that future scope is complete."
+      ]
+    },
+    {
+      "role": "cyber-security-engineer",
+      "skill_version": "1.0.0",
+      "conclusion": "PASS",
+      "checks": [
+        "The repository secret scan passes with no finding.",
+        "The bootstrap evidence contains hashes and provenance rather than secret values."
+      ],
+      "findings": []
+    },
+    {
+      "role": "devops-engineer",
+      "skill_version": "1.0.0",
+      "conclusion": "PASS",
+      "checks": [
+        "The repository has a valid Git history and the bootstrap artifacts support a deterministic local control-plane build."
+      ],
+      "findings": []
+    }
+  ]
+}

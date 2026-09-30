@@ -31,9 +31,11 @@
 - Tunner.Governance build: PASS (0 warnings, 0 errors).
 - Functional harness: PASS, including fresh and stale generated-context scenarios and active-authority-summary inclusion.
 - Governance live validation: PASS for 19 records with no diagnostics.
+- P0 foundation audit: PASS with three remediated governance/documentation findings; all seven registered P0 work-item gates are READY. Recoverable predecessor commits remain retained in Git history.
 - Context pack: PASS; `docs/context/current/` is manifest-first, hash-verifiable, and CURRENT for TUN-P0-007. It includes the active-authority summary and AMD-0002 source.
 - P0-006 static Compose source/configuration validation: PASS; `tunner-dev doctor` confirmed Docker Desktop 4.87.0 / Engine 29.7.2 and Compose v5.4.0 without pulling images or starting containers.
-- P0-006 runtime dependency health: PASS. User-run output confirmed PostgreSQL, RabbitMQ, Redis, OpenBao, Mailpit, and LGTM healthy after the corrected readiness probes and OpenBao configuration path fix.`r`n- P0-007 secrets foundation: PASS for static policy/bootstrap validation, a credential-free repository scan, generated negative fixture, clean build, functional harness, and context verification. No local bootstrap or secret value was executed or recorded.
+- P0-006 runtime dependency health: PASS. User-run output confirmed PostgreSQL, RabbitMQ, Redis, OpenBao, Mailpit, and LGTM healthy after the corrected readiness probes and OpenBao configuration path fix.
+- P0-007 secrets foundation: PASS for static policy/bootstrap validation, a credential-free repository scan, generated negative fixture, clean build, functional harness, and context verification. No local bootstrap or secret value was executed or recorded.
 - NuGet vulnerability metadata: no vulnerable packages reported by current source metadata.
 - Bundle integrity: PASS (125/125). Pre-P0 package integrity: PASS (54/54). Repository mirror integrity: PASS (125/125).
 
@@ -46,4 +48,5 @@
 
 ## Exact next authorized action
 
-- PR #6 merged to protected main. TUN-P0-007 is locally validated and committed as 7f2f6e4 on its separate branch; retain its evidence and do not introduce Product or production-secret scope.`r`n- The next canonical P0 backlog candidate is TUN-P0-008 (database/migrations); its governed work record must be created before implementation.
+- PR #6 merged to protected main. TUN-P0-007 is locally validated and committed as 7f2f6e4 on its separate branch; retain its evidence and do not introduce Product or production-secret scope.
+- The next canonical P0 backlog candidate is TUN-P0-008 (database/migrations); its governed work record must be created before implementation.
