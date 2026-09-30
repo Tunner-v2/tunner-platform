@@ -3,8 +3,8 @@
   "evidence_id": "TUN-P0-006-VALIDATION",
   "scope_type": "WORK_ITEM",
   "scope_id": "TUN-P0-006",
-  "status": "PASS_WITH_USER_RUN_RETRY",
-  "checked_at": "2026-09-30T18:25:00-04:00",
+  "status": "PASS",
+  "checked_at": "2026-09-30T18:35:34.4932632-04:00",
   "checks": [
     {
       "name": "P0-006 source and Compose contract",
@@ -53,6 +53,12 @@
       "command": "tools/validation/Validate-TunnerDevSource.ps1; tools/dev/tunner-dev.ps1 doctor",
       "result": "PASS",
       "details": "The credential-free example and Compose fallbacks now use Tunner-only loopback host ports 25432, 25672, 25673, 26379, 28200, 21025, 28025, 23000, 24317, and 24318. A read-only listener check found the selected ports free before configuration; static validation rejects return to common dependency ports; doctor rendered the configuration successfully."
+    },
+    {
+      "name": "real local Compose retry",
+      "command": "operator-run tools/dev/tunner-dev.ps1 start",
+      "result": "PASS",
+      "details": "At 2026-09-30T18:35-04:00, the operator-run wrapper completed normally despite Docker Compose progress on stderr. PostgreSQL, RabbitMQ, Redis, OpenBao, Mailpit, and OTEL-LGTM each reached Healthy, and the wrapper reported that the local dependency foundation started."
     }
   ],
   "artifacts": [

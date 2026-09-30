@@ -3,13 +3,13 @@
   "evidence_id": "TUN-P0-006-DEF-TUN-P0-006-003-ROLE-REVIEWS",
   "scope_type": "DEFECT",
   "scope_id": "DEF-TUN-P0-006-003",
-  "status": "PASS_WITH_USER_RUN_RETRY",
+  "status": "PASS",
   "reviews": [
-    { "role": "governance-engineer", "conclusion": "PASS_WITH_USER_RUN_RETRY", "checks": ["The defect is scoped to the existing P0-006 wrapper and retains operator-run runtime acceptance."], "findings": [] },
-    { "role": "devops-engineer", "conclusion": "PASS_WITH_USER_RUN_RETRY", "checks": ["The remediation preserves Docker Compose arguments and health wait behavior while checking only native process exit codes."], "findings": [] },
-    { "role": "cyber-security-engineer", "conclusion": "PASS_WITH_USER_RUN_RETRY", "checks": ["The change does not add credentials, change loopback bindings, or suppress Docker output; normal stderr remains visible."], "findings": [] },
-    { "role": "tester-qa-engineer", "conclusion": "PASS_WITH_USER_RUN_RETRY", "checks": ["A deterministic fake-Docker fixture reproduces stderr progress with exit code zero without starting containers."], "findings": [] },
-    { "role": "auditor", "conclusion": "PASS_WITH_USER_RUN_RETRY", "checks": ["The user-provided error is retained in the defect description and the expected runtime retry is explicitly recorded."], "findings": [] },
+    { "role": "governance-engineer", "conclusion": "PASS", "checks": ["The defect is scoped to the existing P0-006 wrapper, and the required operator-run runtime acceptance passed."], "findings": [] },
+    { "role": "devops-engineer", "conclusion": "PASS", "checks": ["The remediation preserves Docker Compose arguments and health wait behavior while checking only native process exit codes; the real retry reached Healthy for all declared services."], "findings": [] },
+    { "role": "cyber-security-engineer", "conclusion": "PASS", "checks": ["The change does not add credentials, change loopback bindings, or suppress Docker output; normal stderr remained visible during the successful retry."], "findings": [] },
+    { "role": "tester-qa-engineer", "conclusion": "PASS", "checks": ["The deterministic fake-Docker fixture reproduces stderr progress with exit code zero, and the operator-run real Compose retry completed successfully."], "findings": [] },
+    { "role": "auditor", "conclusion": "PASS", "checks": ["The reported error, deterministic regression, and successful operator-run retry are traceable; the defect can close without production claims."], "findings": [] },
     { "role": "rd-engineer", "conclusion": "PASS", "checks": ["No external dependency, version, provider, or architecture decision changed."], "findings": [] }
   ]
 }

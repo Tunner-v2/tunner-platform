@@ -1,5 +1,6 @@
 # Recent relevant Git changes
 
+- `8515ba5 fix: capture Docker output across PowerShell versions`
 - `35858bf fix: support legacy PowerShell Docker wrapper`
 - `f08a052 config: reserve Tunner local port range`
 - `6546969 fix: preserve Docker Compose progress output`
@@ -9,4 +10,3 @@
 - `794b330 docs: record P0-008 validation handoff`
 - `e0e8768 data: validate P0 migration foundation`
 - `8805a1c docs: record P0-008 migration foundation handoff`
-- `b8bb972 governance: start P0-008 database foundation`

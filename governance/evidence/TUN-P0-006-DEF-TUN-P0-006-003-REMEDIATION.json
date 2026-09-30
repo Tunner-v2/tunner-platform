@@ -3,7 +3,7 @@
   "evidence_id": "TUN-P0-006-DEF-TUN-P0-006-003-REMEDIATION",
   "scope_type": "DEFECT",
   "scope_id": "DEF-TUN-P0-006-003",
-  "status": "PASS_WITH_USER_RUN_RETRY",
+  "status": "PASS",
   "checks": [
     {
       "name": "PowerShell native stderr regression fixture",
@@ -14,8 +14,8 @@
     {
       "name": "local Compose runtime retry",
       "command": "tools/dev/tunner-dev.ps1 start",
-      "result": "PENDING_USER_RUN",
-      "details": "The user-run retry will confirm that real Docker Compose progress output no longer aborts the PowerShell wrapper and that the current Compose configuration reconciles the existing local container."
+      "result": "PASS",
+      "details": "At 2026-09-30T18:35-04:00, the operator-run retry completed successfully. Normal Docker Compose progress remained visible, all declared dependencies reached Healthy, and the wrapper reported that the local dependency foundation started."
     }
   ]
 }

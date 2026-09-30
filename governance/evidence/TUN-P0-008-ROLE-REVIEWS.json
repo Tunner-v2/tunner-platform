@@ -3,8 +3,8 @@
   "evidence_id": "TUN-P0-008-ROLE-REVIEWS",
   "scope_type": "WORK_ITEM",
   "scope_id": "TUN-P0-008",
-  "status": "PASS_WITH_OPERATOR_REHEARSAL_FOLLOW_UP",
-  "reviewed_at": "2026-09-30T16:27:32.4541668-04:00",
+  "status": "PASS",
+  "reviewed_at": "2026-09-30T18:35:34.4932632-04:00",
   "reviews": [
     {
       "role": "solution-architect",
@@ -29,25 +29,25 @@
     {
       "role": "cyber-security-engineer",
       "skill_version": "1.0.0",
-      "conclusion": "PASS_WITH_OPERATOR_REHEARSAL_FOLLOW_UP",
+      "conclusion": "PASS",
       "checks": [
         "No connection string or production credential is embedded in source or evidence; the design-time factory requires only a process-scoped environment variable.",
         "Current compatible EF/Npgsql/tooling patches were selected from NuGet official indexes and the repository secret scan passed."
       ],
       "findings": [
-        "An operator must keep any local rehearsal connection string out of shell history, logs, and the repository. Production identity and deployment are not authorized by P0-008."
+        "The local rehearsal completed without retaining a connection value in repository evidence. Production identity and deployment remain outside P0-008 authority."
       ]
     },
     {
       "role": "devops-engineer",
       "skill_version": "1.0.0",
-      "conclusion": "PASS_WITH_OPERATOR_REHEARSAL_FOLLOW_UP",
+      "conclusion": "PASS",
       "checks": [
         "The tool manifest pins dotnet-ef and the wrapper separates source verification from the explicit operator-run database update command.",
         "The local runbook prohibits application-startup production migrations and directs future production work to a separately authorized identity and reviewed bundle or SQL artifact."
       ],
       "findings": [
-        "A live local database rehearsal is intentionally not run by Codex and is not evidence of production deployment readiness."
+        "The verified local rehearsal was operator-run and is not evidence of production deployment readiness."
       ]
     },
     {
@@ -63,13 +63,13 @@
     {
       "role": "auditor",
       "skill_version": "1.0.0",
-      "conclusion": "PASS_WITH_OPERATOR_REHEARSAL_FOLLOW_UP",
+      "conclusion": "PASS",
       "checks": [
         "Authority to task to implementation to tests to evidence traceability is present, including hashes for all referenced authority and activated-role instructions.",
         "The evidence distinguishes source validation from a live migration and makes no production-readiness or execution claim."
       ],
       "findings": [
-        "P0-008 remains in VALIDATION; it is not a completed P0 milestone and may not be represented as production-ready."
+        "P0-008 remains in VALIDATION pending protected integration and the separate P0 enablement gate; it is not production-ready."
       ]
     },
     {

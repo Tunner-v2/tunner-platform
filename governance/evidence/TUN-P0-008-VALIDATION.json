@@ -3,8 +3,8 @@
   "evidence_id": "TUN-P0-008-VALIDATION",
   "scope_type": "WORK_ITEM",
   "scope_id": "TUN-P0-008",
-  "status": "PASS_WITH_OPERATOR_REHEARSAL_FOLLOW_UP",
-  "checked_at": "2026-09-30T18:00:07.6444706-04:00",
+  "status": "PASS",
+  "checked_at": "2026-09-30T18:35:34.4932632-04:00",
   "checks": [
     {
       "name": "compatible dependency and tooling restore",
@@ -56,15 +56,21 @@
     },
     {
       "name": "live local PostgreSQL rehearsal reachability preflight",
-      "command": "tools/dev/tunner-dev.ps1 health",
-      "result": "OPERATOR_ACTION_REQUIRED",
-      "details": "The current PostgreSQL container is healthy but was created before the current Compose port mapping and has no published host port. The current Compose source correctly publishes 127.0.0.1:${POSTGRES_PORT:-25432}:5432 (POSTGRES_PORT=25432 in the credential-free example). The operator must rerun tunner-dev start to reconcile the container before running the host-side rehearsal."
+      "command": "operator-run tools/dev/tunner-dev.ps1 start",
+      "result": "PASS",
+      "details": "At 2026-09-30T18:35-04:00, the operator-run start reconciled the local dependency foundation. PostgreSQL and all other declared dependencies reached Healthy, and the wrapper completed normally while replaying Docker Compose progress output."
     },
     {
       "name": "dedicated PostgreSQL host-port migration handoff",
       "command": "tools/validation/Validate-TunnerDevSource.ps1; tools/dev/tunner-dev.ps1 doctor; tools/validation/Validate-TunnerMigrationsSource.ps1",
-      "result": "PASS_WITH_OPERATOR_REHEARSAL_FOLLOW_UP",
-      "details": "The P0-008 operator handoff now uses loopback PostgreSQL port 25432, selected from the dedicated Tunner local range after a read-only listener check found it free. The Compose and migration-source validations passed without starting containers or applying a migration."
+      "result": "PASS",
+      "details": "The P0-008 operator handoff uses loopback PostgreSQL port 25432, selected from the dedicated Tunner local range after a read-only listener check found it free. Compose and migration-source validation passed, and the operator subsequently completed the local rehearsal against the reconciled foundation."
+    },
+    {
+      "name": "operator-run local migration rehearsal",
+      "command": "operator-run tools/dev/tunner-migrations.ps1 rehearse with the documented process-scoped local connection configuration",
+      "result": "PASS",
+      "details": "At 2026-09-30T18:35-04:00, the pinned dotnet-ef tool restored, the migrations project built successfully, the exclusive migration lock was acquired, and migration 20260930173000_P0MigrationFoundation applied successfully. The model-snapshot notice is expected for this intentionally model-free P0 foundation and did not prevent migration application. No connection value was retained in evidence."
     }
   ],
   "artifacts": [
@@ -79,7 +85,6 @@
     "docs/development/LOCAL_MIGRATIONS.md"
   ],
   "limitations": [
-    "No container was started and no database migration was applied in this session.",
     "The local rehearsal command remains explicitly operator-run and requires a connection string supplied only in that operator process.",
     "Product/domain schema, business semantics, production migration deployment, application-startup migration behavior, and production credentials remain outside P0-008 scope."
   ]
