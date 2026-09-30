@@ -21,7 +21,7 @@
 | TUN-P0-003 | VALIDATION | none | Retain schema evidence for final aggregate P0 PR |
 | TUN-P0-004 | VALIDATION | none | Retain control-plane evidence for final aggregate P0 PR |
 | TUN-P0-005 | VALIDATION | none | Retain bounded context evidence for final aggregate P0 PR |
-| TUN-P0-006 | VALIDATION | User-run runtime acceptance | Run local dependency start/health once; retain its evidence for the final aggregate P0 PR |
+| TUN-P0-006 | VALIDATION | User-run runtime acceptance | Rerun local dependency start/health after the LGTM probe correction; retain its evidence for the final aggregate P0 PR |
 | TUN-P0-019 | VALIDATION | none | Retain GitHub governance evidence for final aggregate P0 PR |
 
 ## Build/test state
@@ -32,7 +32,7 @@
 - Governance live validation: PASS for 13 records with no diagnostics.
 - Context pack: PASS; docs/context/current/ is manifest-first and hash-verifiable for TUN-P0-006.
 - P0-006 static Compose source/configuration validation: PASS; `tunner-dev doctor` confirmed Docker Desktop 4.87.0 / Engine 29.7.2 and Compose v5.4.0 without pulling images or starting containers.
-- P0-006 runtime dependency health: NOT RUN. The user-run start/health step remains recorded evidence because long-lived container execution is not performed by this agent.
+- P0-006 runtime dependency health: RETRY REQUIRED. The initial user-run test found the LGTM health probe used unavailable wget despite the stack completing startup; DEF-TUN-P0-006-001 records the corrected /tmp/ready probe and one user-run retest remains.
 - NuGet vulnerability metadata: no vulnerable packages reported by current source metadata.
 - Bundle integrity: PASS (125/125). Pre-P0 package integrity: PASS (54/54). Repository mirror integrity: PASS (125/125).
 

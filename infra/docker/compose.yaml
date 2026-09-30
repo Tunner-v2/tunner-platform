@@ -83,7 +83,7 @@ services:
     volumes:
       - otel-lgtm-data:/data
     healthcheck:
-      test: ["CMD-SHELL", "wget -q -T 2 -O /dev/null http://127.0.0.1:3000/api/health"]
+      test: ["CMD-SHELL", "test -f /tmp/ready"]
       interval: 10s
       timeout: 5s
       retries: 20

@@ -1,0 +1,17 @@
+schema_version: 1
+defect_id: DEF-TUN-P0-006-001
+work_item_id: TUN-P0-006
+classification: INFRASTRUCTURE
+severity: SEV-3
+status: FIXED_PENDING_VALIDATION
+environment: local Docker Desktop development foundation
+description: The user-run first runtime health check reported Grafana OTEL-LGTM as unhealthy even though its own startup log reported all bundled components ready. Docker health history showed exit code 127 because the Compose probe invoked wget, which is absent from grafana/otel-lgtm:0.34.0.
+expected_behavior_ref: TUN-P0-006 acceptance criteria and docs/authority/baselines/1.6.0/06_Environment_Configuration_Secrets_and_Deployment.md local Docker dependency topology.
+evidence:
+  - governance/evidence/TUN-P0-006-VALIDATION.json
+  - governance/evidence/TUN-P0-006-ROLE-REVIEWS.json
+affected_versions:
+  - grafana/otel-lgtm:0.34.0
+  - infra/docker/compose.yaml before the /tmp/ready health-probe correction
+created_at: 2026-09-30T12:42:04.2031356-04:00
+updated_at: 2026-09-30T12:42:04.2031356-04:00

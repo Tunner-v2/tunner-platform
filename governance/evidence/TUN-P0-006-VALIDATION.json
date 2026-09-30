@@ -3,8 +3,8 @@
   "evidence_id": "TUN-P0-006-VALIDATION",
   "scope_type": "WORK_ITEM",
   "scope_id": "TUN-P0-006",
-  "status": "PARTIAL_RUNTIME_PENDING",
-  "checked_at": "2026-09-30T12:18:19.8655815-04:00",
+  "status": "RUNTIME_RETRY_REQUIRED",
+  "checked_at": "2026-09-30T12:44:01.9924673-04:00",
   "checks": [
     {
       "name": "P0-006 source and Compose contract",
@@ -25,16 +25,22 @@
       "details": "Governance validated 13 records with no diagnostics; the P0-006 bounded context pack generated and verified CURRENT."
     },
     {
-      "name": "runtime dependency health",
-      "command": "powershell -ExecutionPolicy Bypass -File tools/dev/tunner-dev.ps1 start; powershell -ExecutionPolicy Bypass -File tools/dev/tunner-dev.ps1 health",
-      "result": "NOT_RUN",
-      "details": "Not run by the agent because it pulls images and starts long-lived containers. It is an explicit user-run local acceptance step."
-    },
-    {
       "name": "whitespace check",
       "command": "git diff --check",
       "result": "PASS",
       "details": "No whitespace errors were reported after final P0-006 documentation and evidence updates."
+    },
+    {
+      "name": "initial runtime dependency health",
+      "command": "user-run ./tools/dev/tunner-dev.ps1 start; ./tools/dev/tunner-dev.ps1 health",
+      "result": "FAIL",
+      "details": "User output at 2026-09-30T12:32-12:36-04:00 showed PostgreSQL, RabbitMQ, Redis, Mailpit, and OpenBao healthy, but grafana/otel-lgtm:0.34.0 unhealthy. Read-only health history identified exit 127 because the configured wget probe was unavailable; the LGTM log itself reported all bundled components ready and created /tmp/ready."
+    },
+    {
+      "name": "corrected runtime dependency health",
+      "command": "user-run ./tools/dev/tunner-dev.ps1 start; ./tools/dev/tunner-dev.ps1 health",
+      "result": "NOT_RUN",
+      "details": "Compose now probes the selected LGTM image startup sentinel at /tmp/ready. Retest is required because the agent does not restart long-lived containers."
     }
   ],
   "artifacts": [
@@ -46,7 +52,8 @@
     "docs/development/LOCAL_DOCKER.md"
   ],
   "limitations": [
-    "P0-006 remains in VALIDATION with user-run runtime acceptance pending.",
+    "P0-006 remains in VALIDATION with one corrected user-run runtime retest pending.",
+    "DEF-TUN-P0-006-001 records the prior LGTM health-probe failure and correction.",
     "P0-007 owns OpenBao initialization, policies, application secret injection, and redaction.",
     "No P0 item can enter DONE before the single final protected aggregate P0 pull request under DEC-0001."
   ]

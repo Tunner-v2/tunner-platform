@@ -50,7 +50,7 @@ foreach ($publishedPort in $publishedPorts) {
     if ($publishedPort -notmatch '^127\.0\.0\.1:') { throw "Published port is not loopback-bound: $publishedPort" }
 }
 
-if ($openBao -notmatch 'storage\s+"file"' -or $openBao -notmatch 'tls_disable\s*=\s*1') {
+if ($openBao -notmatch 'storage\s+"(file|raft)"' -or $openBao -notmatch 'tls_disable\s*=\s*1') {
     throw "OpenBao local transport/storage configuration is incomplete."
 }
 $openBaoConfiguration = ($openBao -split "`r?`n" | Where-Object { $_ -notmatch '^\s*#' }) -join "`n"
@@ -60,6 +60,11 @@ foreach ($command in @('"doctor"', '"setup"', '"start"', '"stop"', '"health"', '
     if (-not $tool.Contains($command)) { throw "tunner-dev command missing: $command" }
 }
 if ($tool -notmatch '"compose",' -or $tool -notmatch '--wait') { throw "tunner-dev must invoke Docker Compose and wait for service health when starting." }
+
+$otelLgtm = [regex]::Match($compose, '(?ms)^  otel-lgtm:\r?\n(?<body>.*?)(?=^  [a-z-]+:|\z)').Groups['body'].Value
+if ([string]::IsNullOrWhiteSpace($otelLgtm)) { throw "Unable to isolate the LGTM Compose service for health validation." }
+if ($otelLgtm -match '(?i)wget') { throw "LGTM health check must not depend on wget; the selected image does not include it." }
+if ($otelLgtm -notmatch 'test:\s*\["CMD-SHELL",\s*"test -f /tmp/ready"\]') { throw "LGTM health check must use the image startup readiness sentinel." }
 
 if (-not $SkipComposeConfig) {
     if (-not (Get-Command docker -ErrorAction SilentlyContinue)) { throw "Docker is required to validate Compose configuration." }

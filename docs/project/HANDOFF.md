@@ -32,7 +32,7 @@
 - P1–P8 Product behavior remains out of scope until P0 closes.
 - DEC-0001 allows local P0 integration only. No P0 work item is DONE until the final protected P0 PR merges.
 - GitHub automation may create/auto-merge a PR after requirements pass; it cannot approve, bypass, or impersonate the required ai-dev code-owner review.
-- User-run runtime acceptance remains required because image pulls and long-lived services were not run by the agent. The expected OpenBao state is responsive but uninitialized/sealed until P0-007.
+- Initial user-run runtime evidence showed all core services except LGTM healthy. DEF-TUN-P0-006-001 records the failed wget health probe; the Compose correction now uses LGTM's /tmp/ready sentinel and requires one retest. The expected OpenBao state is responsive but uninitialized/sealed until P0-007.
 
 ## Context state
 
