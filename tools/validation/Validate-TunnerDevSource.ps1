@@ -72,7 +72,7 @@ foreach ($command in @('"doctor"', '"setup"', '"start"', '"stop"', '"health"', '
     if (-not $tool.Contains($command)) { throw "tunner-dev command missing: $command" }
 }
 if ($tool -notmatch '"compose",' -or $tool -notmatch '--wait') { throw "tunner-dev must invoke Docker Compose and wait for service health when starting." }
-if ($tool -notmatch 'function Invoke-Docker' -or $tool -notmatch 'Get-Variable -Name PSNativeCommandUseErrorActionPreference' -or $tool -notmatch 'Set-Variable -Name PSNativeCommandUseErrorActionPreference' -or $tool -notmatch '\$exitCode\s*-ne\s*0') {
+if ($tool -notmatch 'function Invoke-Docker' -or $tool -notmatch 'System.Diagnostics.ProcessStartInfo' -or $tool -notmatch 'RedirectStandardError' -or $tool -notmatch '\$process\.ExitCode' -or $tool -notmatch '\$exitCode\s*-ne\s*0') {
     throw "tunner-dev must preserve Docker stderr progress while enforcing native exit codes."
 }
 if ($tool -notmatch '\$composeProjectDirectory\s*=\s*Split-Path -Parent \$composeFile' -or $tool -notmatch '"--project-directory", \$composeProjectDirectory') {

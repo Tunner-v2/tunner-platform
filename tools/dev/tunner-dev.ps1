@@ -27,22 +27,34 @@ function Invoke-Docker {
         [string]$Operation
     )
 
-    $exitCode = -1
-    # This preference exists only in newer PowerShell versions. When available, shadow it
-    # locally so Docker Compose progress on stderr is not converted into a terminating error.
-    $nativeErrorPreference = Get-Variable -Name PSNativeCommandUseErrorActionPreference -Scope Global -ErrorAction SilentlyContinue
-    $usesNativeErrorPreference = $null -ne $nativeErrorPreference
+    # Docker Compose writes normal progress/status lines to stderr. Invoke it through the
+    # .NET process API, capture both streams, replay them, and use only its exit code.
+    $docker = Get-Command docker -CommandType Application -ErrorAction Stop | Select-Object -First 1
+    $startInfo = [System.Diagnostics.ProcessStartInfo]::new()
+    $startInfo.FileName = $docker.Source
+    $startInfo.UseShellExecute = $false
+    $startInfo.RedirectStandardOutput = $true
+    $startInfo.RedirectStandardError = $true
+    $startInfo.CreateNoWindow = $true
+    $startInfo.Arguments = (($Arguments | ForEach-Object {
+        if ($_ -match '[\s"]') { '"' + $_.Replace('"', '\"') + '"' } else { $_ }
+    }) -join ' ')
+
+    $process = [System.Diagnostics.Process]::new()
+    $process.StartInfo = $startInfo
     try {
-        if ($usesNativeErrorPreference) {
-            Set-Variable -Name PSNativeCommandUseErrorActionPreference -Scope Local -Value $false
-        }
-        & docker @Arguments
-        $exitCode = $LASTEXITCODE
+        if (-not $process.Start()) { throw "Unable to start $Operation." }
+        $standardOutput = $process.StandardOutput.ReadToEndAsync()
+        $standardError = $process.StandardError.ReadToEndAsync()
+        $process.WaitForExit()
+        $stdout = $standardOutput.GetAwaiter().GetResult()
+        $stderr = $standardError.GetAwaiter().GetResult()
+        if (-not [string]::IsNullOrWhiteSpace($stdout)) { Write-Host -NoNewline $stdout }
+        if (-not [string]::IsNullOrWhiteSpace($stderr)) { Write-Host -NoNewline $stderr }
+        $exitCode = $process.ExitCode
     }
     finally {
-        if ($usesNativeErrorPreference) {
-            Remove-Variable -Name PSNativeCommandUseErrorActionPreference -Scope Local -ErrorAction SilentlyContinue
-        }
+        $process.Dispose()
     }
 
     if ($exitCode -ne 0) {
