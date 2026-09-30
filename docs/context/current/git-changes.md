@@ -1,5 +1,6 @@
 # Recent relevant Git changes
 
+- `78c8466 infra: add P0 local Docker foundation`
 - `017e999 governance: add bounded context MVP`
 - `2c9a547 governance: add read-only control-plane MVP`
 - `948821f docs: hand off P0-004 governance MVP`
@@ -9,4 +10,3 @@
 - `45f98d2 governance: record P0-002 code review`
 - `b9147fd docs: add Git and contribution policy`
 - `bee5a8d ci: enable auto-merge when creating pull requests`
-- `179f344 fix: create pull request without checkout`

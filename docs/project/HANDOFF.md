@@ -6,6 +6,7 @@
 - Milestone/Sprint: P0 / no sprint
 - Status: VALIDATION (local P0 integration under DEC-0001)
 - Branch: change/TUN-P0-control-plane
+- Commit: 78c8466 (infra: add P0 local Docker foundation)
 - Prerequisite: TUN-P0-001 (complete); P0-006 cannot enter DONE before runtime evidence and the final protected P0 PR.
 
 ## Completed
