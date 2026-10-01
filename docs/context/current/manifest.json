@@ -1,9 +1,9 @@
 {
   "GeneratorVersion": "tunner-context-0.1.0",
-  "GeneratedAt": "2026-09-30T22:50:54.6589802+00:00",
+  "GeneratedAt": "2026-10-01T01:14:41.2739263+00:00",
   "WorkItem": {
-    "Id": "TUN-P0-008",
-    "Title": "Database and migrations foundation",
+    "Id": "TUN-P0-009",
+    "Title": "Observability baseline",
     "Status": "VALIDATION",
     "ContextPolicy": "TASK"
   },
@@ -22,6 +22,11 @@
       "Path": ".agent/skills/devops-engineer/SKILL.md",
       "Reason": "activated role skill",
       "Sha256": "a9eaab675e0fd3151da8323530d33c08e426968eecf992729aea3665bcf9d473"
+    },
+    {
+      "Path": ".agent/skills/full-stack-engineer/SKILL.md",
+      "Reason": "activated role skill",
+      "Sha256": "fb1cccbb0d8e5ff84e87e0333a76d9db3a30204e62e0027eadc835db56893aff"
     },
     {
       "Path": ".agent/skills/governance-engineer/SKILL.md",
@@ -64,11 +69,6 @@
       "Sha256": "b65976512db8ce580adcf33aca4131fb15f043625481c0c7ea3a043e4a262016"
     },
     {
-      "Path": "docs/authority/baselines/1.6.0/05_Versioning_Compatibility_and_Release_Management.md",
-      "Reason": "explicit authority reference",
-      "Sha256": "2cb16390505a8c37f8014ea8009686842910f4162754a7cab1f1bd6460e16773"
-    },
-    {
       "Path": "docs/authority/baselines/1.6.0/06_Environment_Configuration_Secrets_and_Deployment.md",
       "Reason": "explicit authority reference",
       "Sha256": "5c93869ce33002d70ffc78bb8449e5326125ca7b25e63ee7933333715fffea13"
@@ -89,34 +89,39 @@
       "Sha256": "eadcbad3ab6bc47aae683cf8f6038f6f1b51b5cc2d13c63af0696ae6f3bc5cd6"
     },
     {
-      "Path": "docs/authority/baselines/1.6.0/33_Production_Readiness_Compliance_and_Release_Gates.md",
+      "Path": "docs/authority/baselines/1.6.0/29_Privacy_Data_Lifecycle_and_Processing_Governance_FRD.md",
       "Reason": "explicit authority reference",
-      "Sha256": "654357288df7a97a5c3a05ecac7055794a663131a9ac31d9fdec5f10dc3ffa44"
+      "Sha256": "67dc3dc489e748978dea5bc5867323ce9cea1c71723853f2f418b919dbc3838e"
+    },
+    {
+      "Path": "docs/authority/baselines/1.6.0/decisions/ADR-0009_Local_Observability_OTEL_LGTM.md",
+      "Reason": "explicit authority reference",
+      "Sha256": "4b35b6c76f3a2aa3fdd67669dc9c50f3a2c97fdf7ac8f45c84b89b3071fad96c"
     },
     {
       "Path": "docs/authority/current-authority.json",
-      "Reason": "current authority summary",
+      "Reason": "explicit authority reference",
       "Sha256": "925648590845a8f6993860c8936f622f42abba09956ead6511a9b9b2cc302002"
     },
     {
       "Path": "docs/project/CURRENT_STATE.md",
       "Reason": "current project state",
-      "Sha256": "3165b459d06df3bc94ae1543a8f05a011b4292c45e8cb155be4a6e98a96e3e5d"
+      "Sha256": "c71f01a964f9a3eac6e0daf42d31e174670729d05c404fe717be3086cd8b7957"
     },
     {
       "Path": "docs/project/HANDOFF.md",
       "Reason": "handoff state",
-      "Sha256": "619c7ce25ac89851d8c46a23f0c17ccd8ba0ee2a51b32a8a60843a54edf2055f"
+      "Sha256": "da95165fc708b646a60333322a997f6b878edee5289ee6a88de5e293173bf9fc"
     },
     {
       "Path": "docs/project/PROJECT_CONTEXT.md",
       "Reason": "durable project context",
-      "Sha256": "12d7680421456819d82c13b168023040f60f95b6e2a35cc5db615c0eb205bf1a"
+      "Sha256": "fb8bde2b0aa1be7b1e4075c62ff350fed70ab1b6c8a4106733dad79d70703949"
     },
     {
-      "Path": "governance/context/CTX-TUN-P0-008-001.yaml",
+      "Path": "governance/context/CTX-TUN-P0-009-001.yaml",
       "Reason": "required evidence",
-      "Sha256": "16ff543b1420434e8155e8fbb1c592e1ac99adfc6e44b34cc0e7a33ce04095bf"
+      "Sha256": "7af723ee95dc4c7cde118bd6118e6dbf540b6047136ee48b0195ba953e105bae"
     },
     {
       "Path": "governance/decisions/DEC-0002.yaml",
@@ -124,19 +129,24 @@
       "Sha256": "34ffa686117689c3fc655910e70b9333a07ccc88ae16e47ff1520a4d2bb9e19b"
     },
     {
-      "Path": "governance/evidence/TUN-P0-008-RD-SOURCES.json",
+      "Path": "governance/dependencies/DEP-TUN-P0-009-TUN-P0-006.yaml",
       "Reason": "required evidence",
-      "Sha256": "4d8724c3517fb0f87bd317d47cc342154a9f363c630b7869175a9f18a67ed2a0"
+      "Sha256": "920f136f11ffa44a458177528775fa6b73a50dff87f6f4cff67c4b5ac360f377"
     },
     {
-      "Path": "governance/evidence/TUN-P0-008-ROLE-REVIEWS.json",
+      "Path": "governance/evidence/TUN-P0-009-RD-SOURCES.json",
       "Reason": "required evidence",
-      "Sha256": "7017ab1f749d66df69071a64bff046453732b84e4fd02cc6ddf8dee89907210d"
+      "Sha256": "73708070650a1efa8a34d9fbb8263da2585cdd20ebe28a3283c67427998bfd73"
     },
     {
-      "Path": "governance/evidence/TUN-P0-008-VALIDATION.json",
+      "Path": "governance/evidence/TUN-P0-009-ROLE-REVIEWS.json",
       "Reason": "required evidence",
-      "Sha256": "a0a3a791c5a87ffa2d1e0dce7a522e4a31de6aa6baac01ee44732ebcb37f3c1d"
+      "Sha256": "47062473a99f6df1e8922d4fa510f0f612380c70db68d12f804fc875009d1aac"
+    },
+    {
+      "Path": "governance/evidence/TUN-P0-009-VALIDATION.json",
+      "Reason": "required evidence",
+      "Sha256": "1c34574bbb9fe61c1457dd7ae212d25553431158f9d12647872954b2d306a128"
     },
     {
       "Path": "governance/policies/lifecycle-policy.yaml",
@@ -149,9 +159,9 @@
       "Sha256": "03127df8741ed1731a4dde1403143a42873ea6dabff1890c37e0c9da424aad9e"
     },
     {
-      "Path": "governance/work-items/TUN-P0-008.yaml",
+      "Path": "governance/work-items/TUN-P0-009.yaml",
       "Reason": "selected work item",
-      "Sha256": "bea27624313ff8184ff15da21f25f40efce698b191de61562e74eff78299feeb"
+      "Sha256": "da7f32b20fa5acca30bf69326a99026c9f537022b1d724ab9f4ad7dc3fc71f3a"
     }
   ],
   "Excluded": [
@@ -161,6 +171,7 @@
     }
   ],
   "GitHistory": [
+    "f3f7757 governance: record repeat migration rehearsal",
     "fe536dd governance: record local P0 runtime rehearsal",
     "8515ba5 fix: capture Docker output across PowerShell versions",
     "35858bf fix: support legacy PowerShell Docker wrapper",
@@ -169,7 +180,6 @@
     "00c1fc9 docs: record P0-008 rehearsal preflight",
     "3fb9690 governance: verify authority mirror integrity",
     "8385c82 governance: record authority preflight defect",
-    "794b330 docs: record P0-008 validation handoff",
-    "e0e8768 data: validate P0 migration foundation"
+    "794b330 docs: record P0-008 validation handoff"
   ]
 }

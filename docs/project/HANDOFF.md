@@ -2,26 +2,27 @@
 
 ## Work item
 
-- ID: TUN-P0-008 (with TUN-P0-006 / DEF-TUN-P0-006-003 runtime remediation)
+- ID: TUN-P0-009
 - Milestone/Sprint: P0 / no sprint
 - Status: VALIDATION (local acceptance evidence complete)
 - Branch: change/TUN-P0-007-secrets-foundation
-- Scope: Record the successful operator-run Compose retry and local forward-only migration rehearsal. The PowerShell Docker wrapper remediation and dedicated loopback host-port range are validated; container-internal topology, credentials, Product behavior, and production deployment are unchanged.
-- Integration: Local P0 execution continues under DEC-0002. No push or protected-main change was made in this validation refresh.
+- Scope: Reusable .NET OpenTelemetry/OTLP observability foundation with restrictive correlation/redaction and a local loopback-only Grafana OTEL-LGTM endpoint contract.
+- Integration: Local P0 execution continues under DEC-0002. No push or protected-main change was made.
 
 ## Completed
 
-- The .NET Docker process boundary captures/replays Docker Compose progress output and uses only Docker exit code for failure detection across PowerShell versions. Its deterministic fake-Docker regression passed in both the current shell and powershell.exe.
-- The operator-run real Compose retry completed normally: PostgreSQL, RabbitMQ, Redis, OpenBao, Mailpit, and OTEL-LGTM reached Healthy. DEF-TUN-P0-006-003 is CLOSED.
-- The credential-free defaults use Tunner-only loopback ports, including PostgreSQL `25432`. The operator-run P0-008 rehearsal restored the pinned tool, built successfully, acquired the migration lock, applied `20260930173000_P0MigrationFoundation`, and completed. A second operator-run rehearsal reported no migrations applied because the database was already up to date. No connection value is retained here.
+- Central package management pins OpenTelemetry, OpenTelemetry.Exporter.OpenTelemetryProtocol, and OpenTelemetry.Extensions.Hosting at 1.19.1.
+- Tunner.Observability supplies ActivitySource/Meter helpers, explicit opaque correlation scope, strict attribute allow-list, loopback-only OTLP HTTP configuration (127.0.0.1:24318 by default), and pre-export Activity/log redaction processors.
+- The static observability validator, clean full solution build, deterministic observability functional harness, repository secret scan, governance functional harness, authority verification, governance validation, context verification, and diff hygiene all passed.
+- The repository secret scanner was made compatible with Windows PowerShell by replacing an unavailable System.IO.Path.GetRelativePath call. The scan then inspected 316 files with no finding.
 
 ## Boundaries
 
-- The real Compose retry and live migration rehearsal were operator-run. Codex must not start containers or execute `tunner-migrations.ps1 rehearse` in future validation.
-- A local connection string must never be committed, placed in `.env.local`, pasted into evidence, or retained in shell history.
-- The live rehearsal is local validation only; it is not production migration or deployment approval.
+- No Docker container was started and no telemetry was sent during validation. Local Grafana OTEL-LGTM remains development/test-only.
+- No Product/business metric, usage/billing telemetry, production provider selection, production deployment configuration, credential, API, Worker, persistence, or UI behavior was introduced.
+- The P0 allow-list exports only opaque correlation identifiers plus redaction state. Any expansion requires later authority, data-classification, and privacy review.
 
 ## Exact next action
 
 1. Run governance next and select the next eligible P0 work item under AMD-0002; protected-main approval is not a general local-development stop.
-2. Keep TUN-P0-006 and TUN-P0-008 in `VALIDATION` until their protected integration and the separate P0 enablement gate; do not claim production readiness.
+2. Keep TUN-P0-006, TUN-P0-008, and TUN-P0-009 in VALIDATION until their protected integration and the separate P0 enablement gate; do not claim production readiness.

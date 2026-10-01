@@ -28,7 +28,12 @@ else {
 $findings = [System.Collections.Generic.List[object]]::new()
 foreach ($candidateFile in $candidateFiles) {
     if (-not (Test-Path -LiteralPath $candidateFile -PathType Leaf)) { continue }
-    $relativePath = [IO.Path]::GetRelativePath($RepositoryRoot, $candidateFile).Replace('\', '/')
+    if ($candidateFile.StartsWith($RepositoryRoot, [StringComparison]::OrdinalIgnoreCase)) {
+        $relativePath = $candidateFile.Substring($RepositoryRoot.Length).TrimStart('\', '/').Replace('\', '/')
+    }
+    else {
+        $relativePath = $candidateFile.Replace('\', '/')
+    }
     if ($relativePath -eq "tools/security/Invoke-TunnerSecretScan.ps1") { continue }
 
     $bytes = [IO.File]::ReadAllBytes($candidateFile)

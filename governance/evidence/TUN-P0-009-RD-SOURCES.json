@@ -1,0 +1,45 @@
+{
+  "schema_version": 1,
+  "evidence_id": "TUN-P0-009-RD-SOURCES",
+  "scope_type": "WORK_ITEM",
+  "scope_id": "TUN-P0-009",
+  "status": "PASS",
+  "reviewed_at": "2026-09-30T20:29:14.2829075-04:00",
+  "sources": [
+    {
+      "title": "OpenTelemetry .NET documentation",
+      "url": "https://opentelemetry.io/docs/languages/dotnet/",
+      "type": "primary project documentation",
+      "finding": "OpenTelemetry .NET supports stable traces, metrics, and logs for currently supported .NET versions."
+    },
+    {
+      "title": "OpenTelemetry .NET log correlation",
+      "url": "https://opentelemetry.io/docs/languages/dotnet/logs/correlation/",
+      "type": "primary project documentation",
+      "finding": "Logs produced within an active Activity are automatically correlated through TraceId, SpanId, and TraceFlags."
+    },
+    {
+      "title": ".NET observability with OpenTelemetry",
+      "url": "https://learn.microsoft.com/en-us/dotnet/core/diagnostics/observability-with-otel",
+      "type": "primary vendor documentation",
+      "finding": "The .NET platform supplies ILogger, Meter, and ActivitySource APIs; OpenTelemetry collects and exports them through vendor-neutral OTLP or backend adapters."
+    },
+    {
+      "title": "OpenTelemetry Protocol exporter for .NET",
+      "url": "https://www.nuget.org/packages/OpenTelemetry.Exporter.OpenTelemetryProtocol/",
+      "type": "primary package registry",
+      "finding": "The OTLP exporter accepts an endpoint capable of receiving OTLP. Stable OpenTelemetry 1.19.1 package releases were available at review time for .NET 8 and later."
+    },
+    {
+      "title": "Grafana Docker OpenTelemetry LGTM",
+      "url": "https://grafana.com/docs/opentelemetry/docker-lgtm/",
+      "type": "primary vendor documentation",
+      "finding": "The local Grafana OTEL-LGTM reference stack is suitable for development, demo, and testing; ADR-0009 preserves backend-neutral application instrumentation."
+    }
+  ],
+  "decision": "Use OpenTelemetry/OTLP conventions and a local Grafana OTEL-LGTM development/test endpoint. Keep application instrumentation backend-neutral, derive correlation from platform Activity context, and enforce a restrictive telemetry redaction boundary before export.",
+  "limitations": [
+    "No Product/business metric, usage or billing metering, production provider selection, production deployment, credential, or application host behavior is authorized.",
+    "Package versions and source freshness must be rechecked before any material provider, runtime, or production scope change."
+  ]
+}
