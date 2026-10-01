@@ -28,6 +28,7 @@ public static class Program
         root.Subcommands.Add(CreateContextCommand(repositoryOption));
         root.Subcommands.Add(CreateEvidenceCommand(repositoryOption));
         root.Subcommands.Add(CreateSourcesCommand(repositoryOption));
+        root.Subcommands.Add(CreateTelemetryCommand(repositoryOption));
 
         return root.Parse(args).Invoke();
     }
@@ -206,6 +207,26 @@ public static class Program
         var evidence = new Command("evidence", "Generate bounded, local evidence manifests.");
         evidence.Subcommands.Add(generate);
         return evidence;
+    }
+    private static Command CreateTelemetryCommand(Option<DirectoryInfo?> repositoryOption)
+    {
+        var workItem = new Option<string>("--work-item");
+        var output = new Option<FileInfo?>("--output");
+        var mode = new Option<string>("--context-mode");
+        var included = new Option<int>("--included");
+        var excluded = new Option<int>("--excluded");
+        var tokens = new Option<int?>("--approximate-input-tokens");
+        var cache = new Option<string>("--cache-outcome");
+        var stale = new Option<bool>("--stale-regenerated");
+        var expansion = new Option<string?>("--expansion-reason");
+        var roles = new Option<string[]>("--role");
+        var gate = new Option<string>("--gate-outcome");
+        var record = new Command("record", "Write a local, secret-safe context quality telemetry record.");
+        foreach(var option in new Option[]{workItem,output,mode,included,excluded,tokens,cache,stale,expansion,roles,gate}) record.Options.Add(option);
+        record.SetAction(p => WriteResult(ContextTelemetryApplication.Record(Repository(p, repositoryOption), p.GetValue(workItem) ?? string.Empty, p.GetValue(output), new ContextTelemetryInput(p.GetValue(mode) ?? "TASK",p.GetValue(included),p.GetValue(excluded),p.GetValue(tokens),p.GetValue(cache) ?? "NOT_AVAILABLE",p.GetValue(stale),p.GetValue(expansion),p.GetValue(roles) ?? [],p.GetValue(gate) ?? "UNKNOWN"))));
+        var telemetry = new Command("telemetry", "Record repository-local governance/context quality metadata.");
+        telemetry.Subcommands.Add(record);
+        return telemetry;
     }
     private static Command CreateSourcesCommand(Option<DirectoryInfo?> repositoryOption)
     {

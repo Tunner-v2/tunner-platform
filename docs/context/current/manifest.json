@@ -1,10 +1,10 @@
 {
   "GeneratorVersion": "tunner-context-0.1.0",
-  "GeneratedAt": "2026-10-01T20:39:33.7558615+00:00",
+  "GeneratedAt": "2026-10-01T20:56:42.66921+00:00",
   "WorkItem": {
-    "Id": "TUN-P0-030",
-    "Title": "Persistent project memory and state",
-    "Status": "VALIDATION",
+    "Id": "TUN-P0-031",
+    "Title": "Governance and context cost-quality telemetry",
+    "Status": "IN_PROGRESS",
     "ContextPolicy": "TASK"
   },
   "Included": [
@@ -45,15 +45,15 @@
       "Version": null
     },
     {
-      "Path": "docs/authority/amendments/AMD-0002/effective-overrides/36_P0_Repository_Bootstrap_Governance_and_Context_Implementation_Spec.md",
+      "Path": "docs/authority/amendments/AMD-0002/effective-overrides/04_Governance_and_Context_Tooling_Specification.md",
       "Reason": "explicit authority reference",
-      "Sha256": "c05b9ccd2ce95244b414a76ce241fcd240453e3a07bbf7e749c4262e0778ed90",
+      "Sha256": "4269c32b15b6622e22dfb63ef9d1104017407d8eb4b75c8ae4c4c528475d16f5",
       "Version": null
     },
     {
-      "Path": "docs/authority/baselines/1.6.0/12_AI_Development_Protocol_Context_and_Project_Memory.md",
+      "Path": "docs/authority/amendments/AMD-0002/effective-overrides/36_P0_Repository_Bootstrap_Governance_and_Context_Implementation_Spec.md",
       "Reason": "explicit authority reference",
-      "Sha256": "f29a4811fac77e247d57949ca412823323a010eec9c87a1f4a5a8a84275880ca",
+      "Sha256": "c05b9ccd2ce95244b414a76ce241fcd240453e3a07bbf7e749c4262e0778ed90",
       "Version": null
     },
     {
@@ -81,9 +81,9 @@
       "Version": null
     },
     {
-      "Path": "governance/context/CTX-TUN-P0-030-001.yaml",
+      "Path": "governance/context/CTX-TUN-P0-031-001.yaml",
       "Reason": "required evidence",
-      "Sha256": "33656e43eb9218ad92b368ffaa2f94edeee1119a22a02a485514eae5d43ce2a4",
+      "Sha256": "0a04b3ce51d0b40f9043fbed8bc08d8f5617df71c48542240180352181e24971",
       "Version": null
     },
     {
@@ -93,27 +93,15 @@
       "Version": null
     },
     {
-      "Path": "governance/dependencies/DEP-TUN-P0-030-TUN-P0-003.yaml",
+      "Path": "governance/dependencies/DEP-TUN-P0-031-TUN-P0-004.yaml",
       "Reason": "required evidence",
-      "Sha256": "4cee51bdee7f414bd1f8ba1d4fbc47ee84ed6e05daca815f72cd7f9331c59438",
+      "Sha256": "8272c90e2cd61b0d975a29917596d3dee439c86e186913643ef2048cb78ed82a",
       "Version": null
     },
     {
-      "Path": "governance/dependencies/DEP-TUN-P0-030-TUN-P0-005.yaml",
+      "Path": "governance/dependencies/DEP-TUN-P0-031-TUN-P0-005.yaml",
       "Reason": "required evidence",
-      "Sha256": "004e76285a01dd1f655cc4d054f98713f45c176b32215b3e9606af49546c8c94",
-      "Version": null
-    },
-    {
-      "Path": "governance/evidence/TUN-P0-030-ROLE-REVIEWS.json",
-      "Reason": "required evidence",
-      "Sha256": "6b1f5a3b1136a2da513ab0b0a5b75ff049db78a72d44c46f66450e5ccbfe417c",
-      "Version": null
-    },
-    {
-      "Path": "governance/evidence/TUN-P0-030-VALIDATION.json",
-      "Reason": "required evidence",
-      "Sha256": "646b8d76023304c577abf365042c6a7bb66009296a1f2ea76485a705ed9537be",
+      "Sha256": "1a6fc3cd674b165d12e5b681f0895ebe484cae3b67ed5679679a77fdd5771767",
       "Version": null
     },
     {
@@ -123,9 +111,9 @@
       "Version": null
     },
     {
-      "Path": "governance/work-items/TUN-P0-003.yaml",
+      "Path": "governance/work-items/TUN-P0-004.yaml",
       "Reason": "prerequisite state",
-      "Sha256": "d187b5f86964da196cd93f6f88483b2fbf57969b006c674863bdd18d5b27f01c",
+      "Sha256": "e87800ebd5ff6120055c9f5e8d0a152cc64c67b243797955a6d84daaf6a966b9",
       "Version": null
     },
     {
@@ -135,9 +123,9 @@
       "Version": null
     },
     {
-      "Path": "governance/work-items/TUN-P0-030.yaml",
+      "Path": "governance/work-items/TUN-P0-031.yaml",
       "Reason": "selected work item",
-      "Sha256": "5377b815c9b97f7bde539d822b8a0f613c3343d57cf4104455be775a78bcac79",
+      "Sha256": "2ae15352339a2c8b17cad1c872e4f45b59c913b78b2eb96e0bf75a99aa2e79d3",
       "Version": null
     }
   ],
@@ -145,9 +133,18 @@
     {
       "Path": "governance/decisions/dec-0002-p0-local-integration.yaml",
       "Reason": "optional source is unavailable: explicit decision reference"
+    },
+    {
+      "Path": "governance/evidence/TUN-P0-031-ROLE-REVIEWS.json",
+      "Reason": "optional source is unavailable: required evidence"
+    },
+    {
+      "Path": "governance/evidence/TUN-P0-031-VALIDATION.json",
+      "Reason": "optional source is unavailable: required evidence"
     }
   ],
   "GitHistory": [
+    "bedbe5a feat: complete P0 project memory state",
     "338a2cc feat: complete P0 adaptive context tooling",
     "94292a5 chore: record P0 orchestrator local validation",
     "8f12b91 fix: support governed orchestration review states",
@@ -156,7 +153,6 @@
     "6b09ebe feat: add P0 skill registry validation",
     "bb76144 feat: add P0 documentation validation",
     "db17647 feat: complete P0 developer automation",
-    "1bffc55 feat: add P0 security supply-chain baseline",
-    "e12e7b0 feat: add P0 source registry checker"
+    "1bffc55 feat: add P0 security supply-chain baseline"
   ]
 }

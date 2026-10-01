@@ -1,5 +1,6 @@
 # Recent relevant Git changes
 
+- `bedbe5a feat: complete P0 project memory state`
 - `338a2cc feat: complete P0 adaptive context tooling`
 - `94292a5 chore: record P0 orchestrator local validation`
 - `8f12b91 fix: support governed orchestration review states`
@@ -9,4 +10,3 @@
 - `bb76144 feat: add P0 documentation validation`
 - `db17647 feat: complete P0 developer automation`
 - `1bffc55 feat: add P0 security supply-chain baseline`
-- `e12e7b0 feat: add P0 source registry checker`
