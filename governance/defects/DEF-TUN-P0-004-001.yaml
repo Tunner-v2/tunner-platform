@@ -1,0 +1,19 @@
+schema_version: 1
+defect_id: DEF-TUN-P0-004-001
+work_item_id: TUN-P0-004
+classification: GOVERNANCE
+severity: SEV-3
+status: CLOSED
+environment: repository-native governance CLI preflight
+description: AGENTS.md lists `tunner authority verify` as a mandatory startup command, but the repository-native CLI currently exposes only `governance` and `context` command groups. The equivalent CLI invocation fails with unrecognized `authority` and `verify` arguments.
+expected_behavior_ref: AGENTS.md Mandatory startup and TUN-P0-004 acceptance criterion requiring deterministic governance control-plane tooling.
+evidence:
+  - governance/evidence/DEF-TUN-P0-004-001.json
+  - governance/evidence/TUN-P0-008-VALIDATION.json
+  - governance/evidence/DEF-TUN-P0-004-001-REMEDIATION.json
+  - governance/evidence/TUN-P0-004-DEF-TUN-P0-004-001-ROLE-REVIEWS.json
+affected_versions:
+  - src/Tunner.Governance current local control-plane CLI
+  - AGENTS.md current mandatory startup command list
+created_at: 2026-09-30T16:34:12-04:00
+updated_at: 2026-09-30T17:07:20-04:00

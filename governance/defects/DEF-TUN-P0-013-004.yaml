@@ -1,0 +1,16 @@
+schema_version: 1
+defect_id: DEF-TUN-P0-013-004
+work_item_id: TUN-P0-013
+classification: BUG
+severity: SEV-3
+status: CLOSED
+environment: Windows PowerShell 5.1 local security baseline
+description: The first property-safe parser composed optional package arrays with the plus operator, which can receive a scalar PSObject through pipeline unrolling and stopped evidence generation.
+expected_behavior_ref: TUN-P0-013 must inspect both top-level and transitive package groups when present and treat omitted groups as empty in supported PowerShell runtimes.
+evidence:
+  - tools/security/New-TunnerSupplyChainEvidence.ps1
+  - governance/evidence/DEF-TUN-P0-013-004-REMEDIATION.json
+affected_versions:
+  - tools/security/New-TunnerSupplyChainEvidence.ps1
+created_at: 2026-10-01T00:09:00-04:00
+updated_at: 2026-10-01T00:09:00-04:00

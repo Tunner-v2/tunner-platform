@@ -1,0 +1,48 @@
+{
+  "schema_version": 1,
+  "evidence_id": "TUN-P0-015-ROLE-REVIEWS",
+  "scope_type": "WORK_ITEM",
+  "scope_id": "TUN-P0-015",
+  "status": "PASS",
+  "reviewed_at": "2026-10-01T01:35:00-04:00",
+  "reviews": [
+    {
+      "role": "full-stack-engineer",
+      "skill_version": "1.0.0",
+      "conclusion": "PASS",
+      "checks": ["The implementation is a read-only repository validator and adds no Product, API, UI, or runtime behavior."],
+      "findings": []
+    },
+    {
+      "role": "governance-engineer",
+      "skill_version": "1.0.0",
+      "conclusion": "PASS",
+      "checks": ["The validator composes the established schema and source-registry controls, scopes duplicate checks by canonical record type, and preserves explicit local-only boundaries."],
+      "findings": []
+    },
+    {
+      "role": "tester-qa-engineer",
+      "skill_version": "1.0.0",
+      "conclusion": "PASS",
+      "checks": ["Temporary-fixture coverage passed for positive validation and three independent rejection paths; the full local gate passed."],
+      "findings": []
+    },
+    {
+      "role": "auditor",
+      "skill_version": "1.0.0",
+      "conclusion": "PASS",
+      "checks": ["Evidence distinguishes external-link syntax checks from live retrieval and local source-freshness evidence from a live refresh."],
+      "findings": ["P0-015 remains VALIDATION pending protected integration and P0 enablement."]
+    }
+  ],
+  "authority_hashes": {
+    "docs/authority/current-authority.json": "925648590845a8f6993860c8936f622f42abba09956ead6511a9b9b2cc302002",
+    "docs/authority/baselines/1.6.0/00_Authority_Change_Control_and_Documentation_Governance.md": "bfb9a1e1e52bd5231f848b639f85c69a8bc7f47cf57413889d7c19b34ca2e880"
+  },
+  "skill_hashes": {
+    "full-stack-engineer": "fb1cccbb0d8e5ff84e87e0333a76d9db3a30204e62e0027eadc835db56893aff",
+    "governance-engineer": "020d63b77bc5f8516709cc743ae5505e906ce3232b6e0d4ae3fe1799cfc5450d",
+    "tester-qa-engineer": "dcefecdc92fd9a92f70944f66ec5a9a4044e4ae70072875d6958c49cde94303c",
+    "auditor": "e7f9746520de0f438fba7946aba0478d030a2cb149b51042639b5e982ec294a2"
+  }
+}

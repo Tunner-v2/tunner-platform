@@ -1,0 +1,97 @@
+{
+  "schema_version": 1,
+  "evidence_id": "TUN-P0-008-VALIDATION",
+  "scope_type": "WORK_ITEM",
+  "scope_id": "TUN-P0-008",
+  "status": "PASS",
+  "checked_at": "2026-09-30T18:49:38.3212090-04:00",
+  "checks": [
+    {
+      "name": "compatible dependency and tooling restore",
+      "command": "dotnet restore Tunner.Governance.sln; dotnet tool restore",
+      "result": "PASS",
+      "details": "NuGet official indexes were checked for stable 10.0.x releases. The foundation pins EF Core and EF Core Design 10.0.12, Npgsql EF Core PostgreSQL 10.0.3, System.Security.Cryptography.Xml 10.0.12, and dotnet-ef 10.0.12. Restore completed successfully."
+    },
+    {
+      "name": "credential-free migration source rehearsal fixture",
+      "command": "tools/dev/tunner-migrations.ps1 verify; tools/validation/Validate-TunnerMigrationsSource.ps1",
+      "result": "PASS",
+      "details": "The separate migrations project built with 0 warnings and 0 errors; no database was contacted. Static validation proves the design-time factory accepts only the operator process environment variable, configures Npgsql and the migrations assembly, prohibits Product/domain entities and schema operations, requires an empty Up migration and a throwing forward-only Down migration, and verifies the operator-only EF command path."
+    },
+    {
+      "name": "repository secret boundary",
+      "command": "tools/security/Invoke-TunnerSecretScan.ps1",
+      "result": "PASS",
+      "details": "The scan inspected 297 files and found no secret-pattern match. No database connection string, production credential, or migration execution output was committed."
+    },
+    {
+      "name": "governance build and regression harness",
+      "command": "dotnet build Tunner.Governance.sln --no-restore; dotnet run --project tests/Tunner.Governance.FunctionalTests --no-build; governance validate",
+      "result": "PASS",
+      "details": "The full solution built with 0 warnings and 0 errors; the functional governance harness passed; governance validation reported 22 records with no diagnostics."
+    },
+    {
+      "name": "lifecycle and whitespace",
+      "command": "governance transition check TUN-P0-008 CODE_REVIEW; git diff --check",
+      "result": "PASS",
+      "details": "The IN_PROGRESS to CODE_REVIEW transition was allowed by the normal lifecycle and no whitespace errors were reported before evidence finalization."
+    },
+    {
+      "name": "authority-preflight command parity",
+      "command": "dotnet run --project src/Tunner.Governance --no-build -- authority verify",
+      "result": "NON_BLOCKING_FINDING",
+      "details": "The AGENTS.md startup command is not currently implemented by the repository CLI. DEF-TUN-P0-004-001 records the discrepancy for governed remediation; P0-008 authority hashes and migration gate evidence remain intact."
+    },
+    {
+      "name": "authority-preflight remediation verification",
+      "command": "dotnet run --project src/Tunner.Governance --no-build -- authority verify",
+      "result": "PASS",
+      "details": "DEF-TUN-P0-004-001 is closed. The command returned VERIFIED for all 72 imported authority artifacts with no findings. The earlier parity finding is retained as historical evidence."
+    },
+    {
+      "name": "local dependency diagnostic",
+      "command": "tools/dev/tunner-dev.ps1 doctor",
+      "result": "PASS",
+      "details": "Docker Desktop 4.87.0, Engine 29.7.2, and Compose v5.4.0 were available. The Tunner Compose configuration passed docker compose config --quiet. No image was pulled and no container was started."
+    },
+    {
+      "name": "live local PostgreSQL rehearsal reachability preflight",
+      "command": "operator-run tools/dev/tunner-dev.ps1 start",
+      "result": "PASS",
+      "details": "At 2026-09-30T18:35-04:00, the operator-run start reconciled the local dependency foundation. PostgreSQL and all other declared dependencies reached Healthy, and the wrapper completed normally while replaying Docker Compose progress output."
+    },
+    {
+      "name": "dedicated PostgreSQL host-port migration handoff",
+      "command": "tools/validation/Validate-TunnerDevSource.ps1; tools/dev/tunner-dev.ps1 doctor; tools/validation/Validate-TunnerMigrationsSource.ps1",
+      "result": "PASS",
+      "details": "The P0-008 operator handoff uses loopback PostgreSQL port 25432, selected from the dedicated Tunner local range after a read-only listener check found it free. Compose and migration-source validation passed, and the operator subsequently completed the local rehearsal against the reconciled foundation."
+    },
+    {
+      "name": "operator-run local migration rehearsal",
+      "command": "operator-run tools/dev/tunner-migrations.ps1 rehearse with the documented process-scoped local connection configuration",
+      "result": "PASS",
+      "details": "At 2026-09-30T18:35-04:00, the pinned dotnet-ef tool restored, the migrations project built successfully, the exclusive migration lock was acquired, and migration 20260930173000_P0MigrationFoundation applied successfully. The model-snapshot notice is expected for this intentionally model-free P0 foundation and did not prevent migration application. No connection value was retained in evidence."
+    },
+    {
+      "name": "operator-run repeat migration rehearsal",
+      "command": "operator-run tools/dev/tunner-migrations.ps1 rehearse with the documented process-scoped local connection configuration",
+      "result": "PASS",
+      "details": "At 2026-09-30T18:49-04:00, a second operator-run rehearsal restored and built successfully, acquired the migration lock, and reported that no migrations were applied because the database was already up to date. This confirms repeat-safe application of the P0 foundation migration without retaining any connection value in evidence."
+    }
+  ],
+  "artifacts": [
+    "Directory.Packages.props",
+    ".config/dotnet-tools.json",
+    "src/Tunner.Database/TunnerMigrationsDbContext.cs",
+    "src/Tunner.Database.Migrations/Tunner.Database.Migrations.csproj",
+    "src/Tunner.Database.Migrations/TunnerMigrationsDbContextFactory.cs",
+    "src/Tunner.Database.Migrations/Migrations/20260930173000_P0MigrationFoundation.cs",
+    "tools/dev/tunner-migrations.ps1",
+    "tools/validation/Validate-TunnerMigrationsSource.ps1",
+    "docs/development/LOCAL_MIGRATIONS.md"
+  ],
+  "limitations": [
+    "The local rehearsal command remains explicitly operator-run and requires a connection string supplied only in that operator process.",
+    "Product/domain schema, business semantics, production migration deployment, application-startup migration behavior, and production credentials remain outside P0-008 scope."
+  ]
+}

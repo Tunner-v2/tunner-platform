@@ -1,0 +1,56 @@
+schema_version: 1
+work_item_id: TUN-P0-007
+milestone_id: P0
+sprint_id: null
+title: Secrets foundation
+status: VALIDATION
+type: SECURITY_FOUNDATION
+authority_refs:
+  - docs/authority/baselines/1.6.0/04_Governance_and_Context_Tooling_Specification.md
+  - docs/authority/baselines/1.6.0/12_AI_Development_Protocol_Context_and_Project_Memory.md
+  - docs/authority/amendments/AMD-0001/36_P0_Repository_Bootstrap_Governance_and_Context_Implementation_Spec.md
+  - docs/authority/amendments/AMD-0002/AMD-0002_Non-Blocking_PR_Approval_and_Continuous_Local_Execution.md
+  - docs/authority/amendments/AMD-0001/effective-overrides/11_Development_Planes_Milestones_and_P0_Backlog.md
+flow_refs: []
+contract_refs: []
+decision_refs:
+  - DEC-0002
+acceptance_criteria:
+  - Vault abstraction is defined without application secrets in the repository.
+  - OpenBao local policies and a bootstrap workflow are documented and reproducibly validated without committing credentials.
+  - A secret-scan control is defined for the P0 repository scope.
+  - Product/business secret handling, production Vault deployment, and cloud-provider credential behavior remain out of scope.
+prerequisites:
+  - TUN-P0-006
+blockers: []
+impact:
+  architecture: true
+  ui: false
+  sdk: false
+  financial: false
+  compliance: false
+  security: true
+  devops: true
+  support: false
+activated_roles:
+  - governance-engineer
+  - cyber-security-engineer
+  - devops-engineer
+  - tester-qa-engineer
+  - auditor
+  - rd-engineer
+required_tests:
+  - current primary-source OpenBao and secret-scan R&D evidence
+  - static policy/bootstrap validation
+  - negative repository secret-scan fixture
+  - governance gate and context freshness validation
+required_evidence:
+  - governance/context/CTX-TUN-P0-007-001.yaml
+  - governance/evidence/TUN-P0-007-RD-SOURCES.json
+  - governance/evidence/TUN-P0-007-VALIDATION.json
+  - governance/evidence/TUN-P0-007-ROLE-REVIEWS.json
+context_policy: TASK
+todos: []
+defects: []
+created_at: 2026-09-30T15:22:15.9415422-04:00
+updated_at: 2026-09-30T16:32:00-04:00

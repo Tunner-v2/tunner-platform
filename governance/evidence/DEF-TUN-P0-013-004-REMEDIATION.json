@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "evidence_id": "DEF-TUN-P0-013-004-REMEDIATION",
+  "scope_type": "DEFECT",
+  "scope_id": "DEF-TUN-P0-013-004",
+  "status": "PASS",
+  "checked_at": "2026-10-01T00:09:00-04:00",
+  "checks": [
+    {
+      "name": "Optional package-group traversal",
+      "command": "powershell.exe -NoProfile -File tools/security/Invoke-TunnerSecurityBaseline.ps1 -AsOf 2026-09-30",
+      "result": "PASS",
+      "details": "The parser iterates top-level and transitive groups explicitly, so missing or singleton groups retain correct empty or collection semantics."
+    }
+  ],
+  "artifacts": [
+    "tools/security/New-TunnerSupplyChainEvidence.ps1"
+  ],
+  "limitations": [
+    "The remediation fixes collection handling only; it does not change vulnerability severity policy or generated SPDX content."
+  ]
+}

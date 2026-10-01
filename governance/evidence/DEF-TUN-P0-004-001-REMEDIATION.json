@@ -1,0 +1,47 @@
+{
+  "schema_version": 1,
+  "evidence_id": "DEF-TUN-P0-004-001-REMEDIATION",
+  "scope_type": "DEFECT",
+  "scope_id": "DEF-TUN-P0-004-001",
+  "status": "PASS",
+  "checked_at": "2026-09-30T17:07:20.3911294-04:00",
+  "checks": [
+    {
+      "name": "read-only authority mirror verification",
+      "command": "dotnet run --project src/Tunner.Governance --no-build -- authority verify",
+      "result": "PASS",
+      "details": "The new command verified 72 authority artifacts against bootstrap SHA-256 evidence with no findings."
+    },
+    {
+      "name": "positive and tamper regression fixture",
+      "command": "dotnet run --project tests/Tunner.Governance.FunctionalTests --no-build",
+      "result": "PASS",
+      "details": "The isolated fixture proves a valid authority mirror verifies and a one-byte authority change causes authority verification, governance validation, scheduling, gates, and context build to fail."
+    },
+    {
+      "name": "static and build validation",
+      "command": "tools/validation/Validate-TunnerGovernanceSource.ps1; dotnet build Tunner.Governance.sln --no-restore",
+      "result": "PASS",
+      "details": "The static contract verifies the read-only authority verifier, CLI command, context gating, and fixture scenarios. The full solution built with 0 warnings and 0 errors."
+    },
+    {
+      "name": "P0 regression gates",
+      "command": "governance validate; governance gate check TUN-P0-004; governance gate check TUN-P0-008; context verify",
+      "result": "PASS",
+      "details": "Live governance validation and both P0-004 and P0-008 gates remained READY; the generated context pack remained CURRENT."
+    }
+  ],
+  "artifacts": [
+    "src/Tunner.Governance/AuthorityApplication.cs",
+    "src/Tunner.Governance/Program.cs",
+    "src/Tunner.Governance/GovernanceApplication.cs",
+    "src/Tunner.Governance/ContextApplication.cs",
+    "tests/Tunner.Governance.FunctionalTests/Program.cs",
+    "tools/validation/Validate-TunnerGovernanceSource.ps1",
+    "src/Tunner.Governance/README.md"
+  ],
+  "limitations": [
+    "The verifier is intentionally read-only and validates the locally imported mirror against recorded bootstrap evidence; Drive import, diff, and changed-authority acceptance remain separately governed authority workflows.",
+    "No Product behavior, external service, credential, or production operation is introduced."
+  ]
+}

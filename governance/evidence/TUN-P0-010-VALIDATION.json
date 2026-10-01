@@ -1,0 +1,46 @@
+{
+  "schema_version": 1,
+  "evidence_id": "TUN-P0-010-VALIDATION",
+  "scope_type": "WORK_ITEM",
+  "scope_id": "TUN-P0-010",
+  "status": "PASS",
+  "checked_at": "2026-09-30T21:38:01.0728335-04:00",
+  "checks": [
+    {
+      "details": "Full solution build passed with 0 warnings and 0 errors.",
+      "command": "operator-run restore and build",
+      "result": "PASS",
+      "name": "restore and full build"
+    },
+    {
+      "details": "Four xUnit baseline tests passed without Docker or browser execution.",
+      "command": "tools/dev/tunner-test.ps1 unit",
+      "result": "PASS",
+      "name": "safe unit profile"
+    },
+    {
+      "details": "Static validation passed and secret scan inspected 332 files with no finding.",
+      "command": "Validate-TunnerTestHarnessSource.ps1; Invoke-TunnerSecretScan.ps1",
+      "result": "PASS",
+      "name": "source and security boundaries"
+    },
+    {
+      "details": "Harness passed; authority verified 72 artifacts; governance reported 29 records; context current.",
+      "command": "governance functional harness; authority verify; governance validate; context verify; git diff --check",
+      "result": "PASS",
+      "name": "governance and authority"
+    }
+  ],
+  "artifacts": [
+    "src/Tunner.Testing",
+    "tests/Tunner.TestHarness.Tests",
+    "tests/Contracts/README.md",
+    "tools/dev/tunner-test.ps1",
+    "tools/validation/Validate-TunnerTestHarnessSource.ps1",
+    "docs/development/LOCAL_TEST_HARNESS.md"
+  ],
+  "limitations": [
+    "No Testcontainers container was started and no Playwright browser was installed or launched.",
+    "No Product contract, API, UI journey, credential, production environment, or deployment behavior is present."
+  ]
+}

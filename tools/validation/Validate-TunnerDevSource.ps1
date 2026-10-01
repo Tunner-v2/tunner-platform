@@ -14,6 +14,7 @@ $requiredFiles = @(
     "infra/docker/.env.example",
     "infra/openbao/config/openbao.hcl",
     "tools/dev/tunner-dev.ps1",
+    "tools/validation/Test-TunnerDevNativeOutput.ps1",
     "docs/development/LOCAL_DOCKER.md"
 )
 
@@ -38,6 +39,17 @@ foreach ($image in @("postgres:18.6", "rabbitmq:4.3.6-management", "redis:8.10.2
     if (-not $envExample.Contains($image)) { throw "Pinned image is missing from .env.example: $image" }
 }
 
+$dedicatedHostPorts = @(
+    "POSTGRES_PORT=25432", "RABBITMQ_AMQP_PORT=25672", "RABBITMQ_MANAGEMENT_PORT=25673", "REDIS_PORT=26379", "OPENBAO_PORT=28200",
+    "MAILPIT_SMTP_PORT=21025", "MAILPIT_UI_PORT=28025", "GRAFANA_PORT=23000", "OTLP_GRPC_PORT=24317", "OTLP_HTTP_PORT=24318"
+)
+foreach ($portSetting in $dedicatedHostPorts) {
+    if (-not $envExample.Contains($portSetting)) { throw "Dedicated Tunner local port is missing: $portSetting" }
+}
+if ($envExample -match '(?m)^(POSTGRES_PORT|RABBITMQ_AMQP_PORT|RABBITMQ_MANAGEMENT_PORT|REDIS_PORT|OPENBAO_PORT|MAILPIT_SMTP_PORT|MAILPIT_UI_PORT|GRAFANA_PORT|OTLP_GRPC_PORT|OTLP_HTTP_PORT)=(5432|5672|15672|6379|8200|1025|8025|3000|4317|4318)$') {
+    throw "Tunner local defaults must not reuse common dependency ports."
+}
+
 if ($compose -match '(?im)^\s*image:\s*.*:(latest|edge)\s*$' -or $envExample -match '(?im)=.*:(latest|edge)\s*$') {
     throw "Mutable latest or edge image tag found."
 }
@@ -60,6 +72,9 @@ foreach ($command in @('"doctor"', '"setup"', '"start"', '"stop"', '"health"', '
     if (-not $tool.Contains($command)) { throw "tunner-dev command missing: $command" }
 }
 if ($tool -notmatch '"compose",' -or $tool -notmatch '--wait') { throw "tunner-dev must invoke Docker Compose and wait for service health when starting." }
+if ($tool -notmatch 'function Invoke-Docker' -or $tool -notmatch 'System.Diagnostics.ProcessStartInfo' -or $tool -notmatch 'RedirectStandardError' -or $tool -notmatch '\$process\.ExitCode' -or $tool -notmatch '\$exitCode\s*-ne\s*0') {
+    throw "tunner-dev must preserve Docker stderr progress while enforcing native exit codes."
+}
 if ($tool -notmatch '\$composeProjectDirectory\s*=\s*Split-Path -Parent \$composeFile' -or $tool -notmatch '"--project-directory", \$composeProjectDirectory') {
     throw "tunner-dev must resolve Compose-relative bind paths from the Compose file directory."
 }

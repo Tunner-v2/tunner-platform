@@ -1,3 +1,6 @@
+using System.Diagnostics;
+using System.Security.Cryptography;
+using System.Text.Json;
 using Tunner.Governance;
 
 var failures = new List<string>();
@@ -7,6 +10,10 @@ var fixtureRoot = Directory.CreateTempSubdirectory("tunner-governance-fixture-")
 try
 {
     CreateFixture(repositoryRoot, fixtureRoot);
+    InitializeGit(fixtureRoot);
+
+    var authority = AuthorityApplication.Verify(fixtureRoot);
+    Expect(authority.ExitCode == 0, "A complete authority fixture must verify.", failures);
 
     var validation = GovernanceApplication.Validate(fixtureRoot);
     Expect(validation.ExitCode == 0, "A complete fixture must validate.", failures);
@@ -22,6 +29,13 @@ try
     Expect(!nextPayload.Items.Single(item => item.WorkItemId == "TUN-CHAIN").Actionable, "Configured local unmerged-chain limit must block further dependent chaining.", failures);
     Expect(nextPayload.HumanIntegrationActions.SingleOrDefault(item => item.WorkItemId == "TUN-MERGED" && item.PrerequisiteWorkItemId == "TUN-001") is not null, "Merged-main dependency must surface a separate human integration action.", failures);
 
+    var sourcesCurrent = SourceRegistryApplication.Check(fixtureRoot, "TUN-001", "2026-09-30", 14);
+    Expect(sourcesCurrent.ExitCode == 0, "Current registered source evidence must pass.", failures);
+    var sourcesStale = SourceRegistryApplication.Check(fixtureRoot, "TUN-001", "2026-10-20", 14);
+    Expect(sourcesStale.ExitCode == 1, "Source evidence outside the explicit freshness window must fail.", failures);
+    File.AppendAllText(Path.Combine(fixtureRoot.FullName, "governance", "evidence", "source-evidence.json"), " ");
+    var sourcesTampered = SourceRegistryApplication.Check(fixtureRoot, "TUN-001", "2026-09-30", 14);
+    Expect(sourcesTampered.ExitCode == 1, "Changed source evidence must fail hash integrity.", failures);
     var contextOutput = new DirectoryInfo(Path.Combine(fixtureRoot.FullName, "docs", "context", "current"));
     var contextBuild = ContextApplication.Build(fixtureRoot, "TUN-001", contextOutput);
     Expect(contextBuild.ExitCode == 0, "Context build must generate a bounded fixture pack.", failures);
@@ -33,19 +47,71 @@ try
     var contextStale = ContextApplication.Verify(fixtureRoot, contextOutput);
     Expect(contextStale.ExitCode == 1, "Context verify must report a changed included source as stale.", failures);
 
+    RunGit(fixtureRoot, "add", ".");
+    RunGit(fixtureRoot, "commit", "--quiet", "-m", "fixture pre-evidence state");
+    var evidenceInput = Path.Combine(fixtureRoot.FullName, "governance", "evidence", "evidence-input.json");
+    File.WriteAllText(evidenceInput, "{\"result\":\"pass\"}" + Environment.NewLine);
+    RunGit(fixtureRoot, "add", "governance/evidence/evidence-input.json");
+    RunGit(fixtureRoot, "commit", "--quiet", "-m", "fixture evidence input");
+    var firstManifestPath = new FileInfo(Path.Combine(fixtureRoot.FullName, "artifacts", "evidence", "first.json"));
+    var evidence = EvidenceApplication.Generate(
+        fixtureRoot,
+        "TUN-001",
+        firstManifestPath,
+        ["governance\\work-items\\TUN-001.yaml"],
+        ["governance/evidence/evidence-input.json"],
+        ["governance/evidence/evidence-input.json"],
+        ["governance/evidence/evidence-input.json"]);
+    Expect(evidence.ExitCode == 0, "Evidence generation must accept bounded local references.", failures);
+    var generatedManifest = JsonSerializer.Deserialize<EvidenceManifest>(File.ReadAllText(firstManifestPath.FullName));
+    Expect(generatedManifest is not null && generatedManifest.ScopeId == "TUN-001" && generatedManifest.CommitSha.Length == 40, "Evidence manifest must record exact work-item and Git identity.", failures);
+    Expect(generatedManifest is not null && generatedManifest.WorkingTreeState == "CLEAN" && generatedManifest.Builds.Count == 1 && generatedManifest.Tests.Count == 1 && generatedManifest.SecurityScans.Count == 1 && generatedManifest.Artifacts.Count == 1, "Evidence manifest must record all required evidence categories without duplicate content.", failures);
+    var overwriteEvidence = EvidenceApplication.Generate(fixtureRoot, "TUN-001", firstManifestPath, [], ["governance/evidence/evidence-input.json"], ["governance/evidence/evidence-input.json"], ["governance/evidence/evidence-input.json"]);
+    Expect(overwriteEvidence.ExitCode == 2, "Evidence generation must reject an existing output path.", failures);
+    var secondManifestPath = new FileInfo(Path.Combine(fixtureRoot.FullName, "artifacts", "evidence", "second.json"));
+    var secondEvidence = EvidenceApplication.Generate(
+        fixtureRoot,
+        "TUN-001",
+        secondManifestPath,
+        [],
+        ["governance/evidence/evidence-input.json"],
+        ["governance/evidence/evidence-input.json"],
+        ["governance/evidence/evidence-input.json"]);
+    Expect(secondEvidence.ExitCode == 0 && File.ReadAllText(firstManifestPath.FullName) == File.ReadAllText(secondManifestPath.FullName), "Identical inputs must produce byte-identical manifests.", failures);
+    var escapedOutput = new FileInfo(Path.Combine(fixtureRoot.Parent!.FullName, "escaped-manifest.json"));
+    var escapedEvidence = EvidenceApplication.Generate(fixtureRoot, "TUN-001", escapedOutput, [], ["governance/evidence/evidence-input.json"], ["governance/evidence/evidence-input.json"], ["governance/evidence/evidence-input.json"]);
+    Expect(escapedEvidence.ExitCode == 2 && !escapedOutput.Exists, "Evidence generation must reject output paths outside the repository.", failures);
+    var secretLikeFileName = string.Concat("gh", "p_", "abcdefghijklmnopqrstuvwxyz1234.txt");
+    var secretNamedInput = Path.Combine(fixtureRoot.FullName, "governance", "evidence", secretLikeFileName);
+    File.WriteAllText(secretNamedInput, "fixture" + Environment.NewLine);
+    var secretOutput = new FileInfo(Path.Combine(fixtureRoot.FullName, "artifacts", "evidence", "secret.json"));
+    var secretEvidence = EvidenceApplication.Generate(fixtureRoot, "TUN-001", secretOutput, [$"governance/evidence/{secretLikeFileName}"], ["governance/evidence/evidence-input.json"], ["governance/evidence/evidence-input.json"], ["governance/evidence/evidence-input.json"]);
+    Expect(secretEvidence.ExitCode == 2 && !secretOutput.Exists, "Evidence generation must reject a manifest that would expose a secret-shaped value.", failures);
     var gate = GovernanceApplication.CheckGate(fixtureRoot, "TUN-TRANSITION");
     Expect(gate.ExitCode == 1, "Gate check must reject missing evidence and role-review evidence.", failures);
 
     var transition = GovernanceApplication.CheckTransition(fixtureRoot, "TUN-TRANSITION", "DONE");
     Expect(transition.ExitCode == 1, "Lifecycle check must reject DRAFT directly to DONE.", failures);
 
+    var authorityMirrorPath = Path.Combine(fixtureRoot.FullName, "docs", "authority", "mirror.txt");
+    File.AppendAllText(authorityMirrorPath, "tampered");
+    var authorityTampered = AuthorityApplication.Verify(fixtureRoot);
+    Expect(authorityTampered.ExitCode == 1, "Authority verify must reject changed authority bytes.", failures);
+    var validationBlocked = GovernanceApplication.Validate(fixtureRoot);
+    Expect(validationBlocked.ExitCode == 1, "Governance validation must block when authority verification fails.", failures);
+    var nextBlocked = GovernanceApplication.Next(fixtureRoot);
+    Expect(nextBlocked.ExitCode == 1 && ((NextPayload)nextBlocked.Payload).Items.All(item => !item.Actionable), "Governance next must block execution when authority verification fails.", failures);
+    var gateBlocked = GovernanceApplication.CheckGate(fixtureRoot, "TUN-001");
+    Expect(gateBlocked.ExitCode == 1, "Governance gates must block when authority verification fails.", failures);
+    var contextBlocked = ContextApplication.Build(fixtureRoot, "TUN-001", contextOutput);
+    Expect(contextBlocked.ExitCode == 1, "Context build must block when authority verification fails.", failures);
     File.WriteAllText(Path.Combine(fixtureRoot.FullName, "governance", "work-items", "malformed.yaml"), "schema_version: [");
     var malformed = GovernanceApplication.Validate(fixtureRoot);
     Expect(malformed.ExitCode == 1, "Validation must reject malformed YAML.", failures);
 }
 finally
 {
-    fixtureRoot.Delete(true);
+    DeleteFixture(fixtureRoot);
 }
 
 if (failures.Count > 0)
@@ -91,8 +157,21 @@ static void CreateFixture(DirectoryInfo repositoryRoot, DirectoryInfo fixtureRoo
     Directory.CreateDirectory(Path.Combine(fixtureRoot.FullName, "governance", "work-items"));
     Directory.CreateDirectory(Path.Combine(fixtureRoot.FullName, "governance", "dependencies"));
     Directory.CreateDirectory(Path.Combine(fixtureRoot.FullName, "governance", "policies"));
+    Directory.CreateDirectory(Path.Combine(fixtureRoot.FullName, "governance", "evidence"));
+    Directory.CreateDirectory(Path.Combine(fixtureRoot.FullName, "governance", "rd"));
     Directory.CreateDirectory(Path.Combine(fixtureRoot.FullName, "docs", "authority"));
-    File.WriteAllText(Path.Combine(fixtureRoot.FullName, "docs", "authority", "current-authority.json"), "{}" + Environment.NewLine);
+    var currentAuthorityPath = Path.Combine(fixtureRoot.FullName, "docs", "authority", "current-authority.json");
+    var authorityMirrorPath = Path.Combine(fixtureRoot.FullName, "docs", "authority", "mirror.txt");
+    File.WriteAllText(currentAuthorityPath, "{\"effective_authority\":\"fixture\"}" + Environment.NewLine);
+    File.WriteAllText(authorityMirrorPath, "fixture authority bytes" + Environment.NewLine);
+    File.WriteAllText(Path.Combine(fixtureRoot.FullName, "governance", "evidence", "BOOT-P0-001-integrity.json"), $$"""
+{
+  "checks": [
+    { "local_path": "docs/authority/current-authority.json", "expected_sha256": "{{HashFile(currentAuthorityPath)}}" },
+    { "local_path": "docs/authority/mirror.txt", "expected_sha256": "{{HashFile(authorityMirrorPath)}}" }
+  ]
+}
+""");
 
     File.WriteAllText(Path.Combine(fixtureRoot.FullName, "governance", "milestones", "MVP.yaml"), """
 schema_version: 1
@@ -155,6 +234,22 @@ created_at: 2026-09-30T00:00:00-04:00
 updated_at: 2026-09-30T00:00:00-04:00
 """);
 
+    var sourceEvidencePath = Path.Combine(fixtureRoot.FullName, "governance", "evidence", "source-evidence.json");
+    File.WriteAllText(sourceEvidencePath, """
+{
+  "schema_version": 1,
+  "scope_type": "WORK_ITEM",
+  "scope_id": "TUN-001",
+  "reviewed_at": "2026-09-30T00:00:00Z",
+  "sources": [{ "url": "https://example.test/source", "finding": "fixture primary source" }]
+}
+""");
+    File.WriteAllText(Path.Combine(fixtureRoot.FullName, "governance", "rd", "source-registry.json"), $$"""
+{
+  "schema_version": 1,
+  "entries": [{ "scope_type": "WORK_ITEM", "scope_id": "TUN-001", "evidence_path": "governance/evidence/source-evidence.json", "evidence_sha256": "{{HashFile(sourceEvidencePath)}}", "reviewed_on": "2026-09-30", "source_authority": "PRIMARY" }]
+}
+""");
     File.WriteAllText(Path.Combine(fixtureRoot.FullName, "governance", "policies", "pr-integration-policy.yaml"), """
 schema_version: 1
 policy_id: fixture-pr-integration
@@ -216,6 +311,59 @@ created_at: 2026-09-30T00:00:00-04:00
 updated_at: 2026-09-30T00:00:00-04:00
 """);
 }
+
+static void DeleteFixture(DirectoryInfo fixtureRoot)
+{
+    try
+    {
+        fixtureRoot.Delete(true);
+    }
+    catch (UnauthorizedAccessException)
+    {
+        foreach (var entry in fixtureRoot.EnumerateFileSystemInfos("*", SearchOption.AllDirectories))
+        {
+            entry.Attributes = FileAttributes.Normal;
+        }
+
+        fixtureRoot.Attributes = FileAttributes.Normal;
+        fixtureRoot.Delete(true);
+    }
+}
+static void InitializeGit(DirectoryInfo repository)
+{
+    File.WriteAllText(Path.Combine(repository.FullName, ".gitignore"), "artifacts/" + Environment.NewLine);
+    RunGit(repository, "init", "--quiet");
+    RunGit(repository, "config", "user.email", "fixture@tunner.local");
+    RunGit(repository, "config", "user.name", "Tunner fixture");
+    RunGit(repository, "add", ".");
+    RunGit(repository, "commit", "--quiet", "-m", "fixture baseline");
+}
+
+static void RunGit(DirectoryInfo repository, params string[] arguments)
+{
+    var startInfo = new ProcessStartInfo("git")
+    {
+        WorkingDirectory = repository.FullName,
+        RedirectStandardOutput = true,
+        RedirectStandardError = true,
+        UseShellExecute = false,
+        CreateNoWindow = true
+    };
+    foreach (var argument in arguments)
+    {
+        startInfo.ArgumentList.Add(argument);
+    }
+
+    using var process = Process.Start(startInfo) ?? throw new InvalidOperationException("Unable to start git for the fixture.");
+    var error = process.StandardError.ReadToEnd();
+    process.WaitForExit();
+    if (process.ExitCode != 0)
+    {
+        throw new InvalidOperationException($"Fixture git command failed: {error}");
+    }
+}
+static string HashFile(string path)
+    => Convert.ToHexString(SHA256.HashData(File.ReadAllBytes(path))).ToLowerInvariant();
 
 static void CopyDirectory(DirectoryInfo source, DirectoryInfo destination)
 {

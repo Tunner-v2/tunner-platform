@@ -2,49 +2,28 @@
 
 ## Work item
 
-- ID: TUN-P0-005
+- ID: TUN-P0-015
 - Milestone/Sprint: P0 / no sprint
-- Status: VALIDATION (incremental protected P0 integration authorized by DEC-0002)
-- Branch: change/TUN-P0-control-plane
-- Local commit: 7f0cc93 (`governance: refresh bounded context evidence`)
-- Integration: DEC-0002 permits this protected incremental P0 pull request; AMD-0002 permits continued governance-eligible local and branch work while approval is pending.
-- Prerequisite: TUN-P0-003 is locally validated under the superseded DEC-0001 compatibility record and current DEC-0002 integration policy; P0-005 cannot enter DONE until its protected integration and the P0 enablement gate are complete.
+- Status: VALIDATION (local implementation, validation evidence, and role review are recorded)
+- Branch: change/TUN-P0-007-secrets-foundation
+- Scope: repository-local documentation validation only.
+- Integration: local P0 execution continues under AMD-0002. No push or protected-main change has been made.
 
-## Completed
+## Completed implementation
 
-- The repository-native `tunner context build --work-item <id>` command produces a bounded, manifest-first context pack.
-- The pack includes the active-authority summary, selected authority references including AMD-0002, decisions, prerequisite state, project state, required evidence, activated roles, exclusions, hashes, and bounded Git history.
-- `tunner context verify` reports CURRENT for unchanged sources and STALE for a missing or modified source; generated context does not become authority.
-- Fixture coverage now asserts that a pack includes `docs/authority/current-authority.json`.
-- Corrected malformed tabbed CLI wording in the P0-005 acceptance record.
+- The validator checks repository-local Markdown links, canonical governance identifiers, duplicate identifiers per record type, authority/decision headers, schema validation, and recorded source freshness.
+- The validator composes the established schema and source-registry checks rather than implementing competing parsers or fetching external links.
+- Temporary-fixture regression coverage proves the positive path and the missing-link, duplicate-ID, and missing-header rejection paths.
+- An accidental literal PowerShell newline token in CURRENT_STATE.md was corrected.
 
-## Tests/evidence
+## Boundaries
 
-- Static P0-005 source validator: PASS.
-- P0-004 static source validator and 16 governance schema contracts: PASS.
-- .NET 10.0.401 build: PASS, 0 warnings, 0 errors.
-- Functional fixture harness: PASS, including fresh/context-stale and active-authority-summary scenarios.
-- Live governance validation: PASS for 16 records with no diagnostics.
-- Live P0-005 context build/verify: PASS / CURRENT.
-- `governance gate check TUN-P0-005`: READY.
-- `governance next`: no human protected-main integration actions.
-- NuGet vulnerability metadata: no vulnerable packages reported.
-- Evidence: `governance/evidence/TUN-P0-005-VALIDATION.json`, `governance/evidence/TUN-P0-005-ROLE-REVIEWS.json`, and `governance/context/CTX-TUN-P0-005-001.yaml`.
-
-## Decisions/blockers
-
-- Effective authority: Baseline 1.6.0 + accepted ADR/PDR records + AMD-0001 + AMD-0002.
-- DEC-0002 supersedes DEC-0001 and permits protected incremental P0 pull requests. No P0 work item is DONE until its applicable protected integration and the P0 enablement gate are complete.
-- AMD-0002 does not bypass GitHub Rulesets, CODEOWNERS, human protected-main approval, Product decisions, or release authority.
-- TUN-P0-033 owns authority hash verification and build refusal for a corrupt mirror; P0-005 records the active verified-authority summary but does not claim that later enforcement.
-- P1–P8 Product behavior remains out of scope until P0 closes.
-
-## Context state
-
-- Generated pack: `docs/context/current/manifest.json`.
-- P0-005 selection: `governance/context/CTX-TUN-P0-005-001.yaml`.
-- Pack scope: effective authority, explicit governance/context authority, AMD-0002 workflow authority, decision/prerequisite state, required evidence, active roles, project state, bounded Git history, and explicit exclusions.
+- External URLs are classified but never fetched by this validation scope.
+- Source freshness is limited to local P0-012 evidence with a caller-supplied date and age window.
+- No Product behavior, production deployment, credential, seed data, release claim, or protected-main integration is introduced.
+- Do not push without user direction. P0 remains subject to protected integration and the P0 enablement gate.
 
 ## Exact next action
 
-- Push the current locally validated P0 aggregate and open a protected pull request under DEC-0002. After independent ai-dev approval and merge, use `governance next`; create/select the next repository work-item record from the canonical P0 backlog before implementing another scope.
+1. Run the final P0-015 governance, authority, context, and diff-hygiene checks.
+2. Retain P0-015 evidence locally; use tunner governance next to select any further governance-eligible scope.

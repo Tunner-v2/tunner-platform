@@ -1,0 +1,54 @@
+{
+  "schema_version": 1,
+  "evidence_id": "P0-FOUNDATION-AUDIT-20260930",
+  "scope_type": "MILESTONE",
+  "scope_id": "P0",
+  "status": "PASS_WITH_REMEDIATED_FINDINGS",
+  "checked_at": "2026-09-30T16:08:11.4651454-04:00",
+  "checks": [
+    {
+      "name": "governance records and gates",
+      "result": "PASS",
+      "details": "Governance validation passed for 19 records and all seven registered P0 work-item gates returned READY after remediation."
+    },
+    {
+      "name": "validators and tests",
+      "result": "PASS",
+      "details": "All six source validators, repository secret scan, .NET build with 0 warnings/errors, and the governance functional harness passed."
+    },
+    {
+      "name": "context and documentation integrity",
+      "result": "PASS",
+      "details": "The TUN-P0-007 context pack verified CURRENT; Git whitespace check and literal-newline-marker scan passed."
+    },
+    {
+      "name": "Git object integrity",
+      "result": "PASS_WITH_NONBLOCKING_HISTORY_ARTIFACTS",
+      "details": "git fsck reported no corruption. Two dangling commits are recoverable predecessors created by documented amend operations and are retained without destructive cleanup."
+    }
+  ],
+  "findings": [
+    {
+      "id": "AUD-P0-001",
+      "severity": "MEDIUM",
+      "status": "REMEDIATED",
+      "details": "P0-001, P0-002, and P0-019 were missing role-review evidence required by their activated roles."
+    },
+    {
+      "id": "AUD-P0-002",
+      "severity": "MEDIUM",
+      "status": "REMEDIATED",
+      "details": "P0-019 listed a literal remote URL label where the governance gate requires a repository evidence path."
+    },
+    {
+      "id": "AUD-P0-003",
+      "severity": "LOW",
+      "status": "REMEDIATED",
+      "details": "Project handoff/current-state text contained literal newline escape markers rather than line breaks."
+    }
+  ],
+  "limitations": [
+    "No long-lived local services were started during this audit.",
+    "Dangling historical commits were inspected read-only and intentionally retained as recoverable Git history."
+  ]
+}

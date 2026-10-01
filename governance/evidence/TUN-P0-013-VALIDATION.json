@@ -1,0 +1,55 @@
+{
+  "schema_version": 1,
+  "evidence_id": "TUN-P0-013-VALIDATION",
+  "scope_type": "WORK_ITEM",
+  "scope_id": "TUN-P0-013",
+  "status": "PASS",
+  "checked_at": "2026-10-01T00:22:00-04:00",
+  "checks": [
+    {
+      "name": "static security and workflow policy",
+      "command": "powershell.exe -NoProfile -File tools/validation/Validate-TunnerSecuritySupplyChainSource.ps1 -RepositoryRoot (Get-Location).Path",
+      "result": "PASS",
+      "details": "Required local controls, immutable action pins, read-only CI permissions, rejection-test wiring, and image-scan configuration were verified."
+    },
+    {
+      "name": "normal local security and supply-chain baseline",
+      "command": "powershell.exe -NoProfile -File tools/security/Invoke-TunnerSecurityBaseline.ps1 -RepositoryRoot (Get-Location).Path -AsOf 2026-09-30",
+      "result": "PASS",
+      "details": "SAST source policy, secret scan, Compose policy, NuGet vulnerability query, SPDX 2.3 inventory, and checksum/provenance generation passed; 93 unique resolved packages were inventoried and no NuGet vulnerability was reported."
+    },
+    {
+      "name": "isolated negative security coverage",
+      "command": "powershell.exe -NoProfile -File tools/validation/Test-TunnerSecuritySupplyChain.ps1 -RepositoryRoot (Get-Location).Path",
+      "result": "PASS",
+      "details": "Unsafe source policy, mutable container tag, non-ISO evidence date, and escaping output directory were each rejected; named temporary fixtures were removed."
+    },
+    {
+      "name": "generated supply-chain evidence integrity",
+      "command": "ConvertFrom-Json artifacts/supply-chain/tunner.spdx.json; ConvertFrom-Json artifacts/supply-chain/tunner.provenance.json; Get-FileHash artifacts/supply-chain/tunner.spdx.json -Algorithm SHA256",
+      "result": "PASS",
+      "details": "The generated SPDX document declares SPDX-2.3 with 93 packages and its SHA-256 matches the provenance record."
+    },
+    {
+      "name": "foundation and governance integrity",
+      "command": "dotnet build Tunner.Governance.sln --no-restore; dotnet run --project tests/Tunner.Governance.FunctionalTests --no-build; tunner sources check --scope-id TUN-P0-013 --as-of 2026-09-30 --max-age-days 14; tunner authority verify; tunner governance validate; tunner context build/verify; git diff --check",
+      "result": "PASS",
+      "details": "Zero-warning build, governance functional harness, source freshness, authority verification (72 artifacts), governance validation (44 records), context freshness, and diff hygiene passed."
+    }
+  ],
+  "artifacts": [
+    "tools/security/Invoke-TunnerSastPolicyScan.ps1",
+    "tools/security/Invoke-TunnerContainerPolicyScan.ps1",
+    "tools/security/New-TunnerSupplyChainEvidence.ps1",
+    "tools/security/Invoke-TunnerSecurityBaseline.ps1",
+    "tools/validation/Test-TunnerSecuritySupplyChain.ps1",
+    "tools/validation/Validate-TunnerSecuritySupplyChainSource.ps1",
+    ".github/workflows/security-supply-chain.yml",
+    "docs/development/LOCAL_SECURITY_SUPPLY_CHAIN.md"
+  ],
+  "limitations": [
+    "The configured CI container-image scans require a GitHub Actions run after integration; no local image pull or scan was started by this validation.",
+    "Generated SBOM and provenance files are unsigned disposable local or CI evidence and are not release attestations, deployment records, or approval evidence.",
+    "The local SAST policy is intentionally narrow and does not replace later language-aware SAST, DAST, threat modeling, or penetration-testing scope."
+  ]
+}

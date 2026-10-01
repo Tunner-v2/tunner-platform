@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "evidence_id": "TUN-P0-007-RD-SOURCES",
+  "scope_type": "WORK_ITEM",
+  "scope_id": "TUN-P0-007",
+  "status": "PASS",
+  "reviewed_at": "2026-09-30T15:41:24.7903892-04:00",
+  "sources": [
+    {
+      "title": "OpenBao operator init",
+      "url": "https://openbao.org/docs/commands/operator/init/",
+      "type": "primary vendor documentation",
+      "finding": "Initialization is one-time per storage backend and generates unseal material and an initial root token; neither may be committed or logged."
+    },
+    {
+      "title": "OpenBao policies",
+      "url": "https://openbao.org/docs/concepts/policies/",
+      "type": "primary vendor documentation",
+      "finding": "Policies are path-based and deny by default; use separate least-privilege bootstrap and runtime policies."
+    },
+    {
+      "title": "GitHub secret scanning",
+      "url": "https://docs.github.com/en/code-security/concepts/secret-security/secret-scanning",
+      "type": "primary platform documentation",
+      "finding": "Secret scanning detects hardcoded credentials in repository history; local scanning remains necessary before any push."
+    },
+    {
+      "title": "GitHub push protection",
+      "url": "https://docs.github.com/en/enterprise-cloud@latest/code-security/concepts/secret-security/push-protection",
+      "type": "primary platform documentation",
+      "finding": "Push protection is preventive but must not be bypassed; P0 will not rely on it as the only scan control."
+    }
+  ],
+  "decision": "Use local OpenBao initialization with operator-supplied unseal/root material, path-specific policies, and a repository-local secret scan that never embeds credentials.",
+  "limitations": [
+    "No production Vault deployment, auto-unseal provider, or Product secret injection is authorized in P0.",
+    "No local container start was performed by this evidence collection."
+  ]
+}

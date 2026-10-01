@@ -1,48 +1,31 @@
 # CURRENT_STATE
 
-## Baseline
+## Baseline and milestone
 
-- Documentation: Baseline 1.6.0 (ACTIVE / LOCKED).
-- Active amendments: AMD-0001 and AMD-0002.
-- Authority verification: PASS for 125/125 bootstrap-bundle entries and 54/54 Pre-P0 entries; canonical Drive folders and controlling documents are readable. Full source-to-mirror diff remains TUN-P0-033 scope.
+- Effective authority: Baseline 1.6.0 + accepted ADR/PDR records + AMD-0001 + AMD-0002.
+- Authority mirror: tunner authority verify is currently passing for all 72 imported authority artifacts.
+- Milestone: P0 is ACTIVE. P1–P8 remain blocked by the separate P0 enablement gate.
+- Integration: local/branch development continues under AMD-0002; protected main integration still requires the approved human controls.
 
-## Current milestone
+## Locally validated P0 foundations
 
-- ID: P0
-- Status: ACTIVE
-- Goal: establish the self-governing development control plane before P1–P8.
+- TUN-P0-001 through TUN-P0-015 are locally validated where recorded; no item is represented as DONE before protected integration and P0 enablement.
+- TUN-P0-008’s local migration rehearsal is operator-confirmed against Tunner’s dedicated loopback PostgreSQL port 25432; the connection value was not retained in repository evidence.
+- TUN-P0-009 provides only a local, redacted OpenTelemetry baseline. It does not authorize Product telemetry or production observability.
+- TUN-P0-013 adds a local SAST-style policy, NuGet SCA query, repository secret scan, Compose-definition policy, SPDX 2.3 inventory, and checksum/provenance hook. Its GitHub Actions image scan is configured but awaits a remote run; no release attestation, deployment, or Product behavior is claimed.
+- TUN-P0-014 completes developer automation with guarded local reset and deterministic unit-test dispatch. No real Docker lifecycle or reset was run by validation.
+- TUN-P0-015 adds a read-only documentation gate for local links, canonical governance IDs, duplicate IDs by record type, authority headers, schema validation, and recorded source freshness. It does not fetch external URLs.
 
-## Active work items
+## Active work item
 
-| ID | State | Blocker | Next action |
+| ID | State | Scope | Next action |
 |---|---|---|---|
-| TUN-P0-001 | DONE | none | Bootstrap complete |
-| TUN-P0-002 | VALIDATION | none | Retain AMD-0002 contribution-policy evidence for protected incremental P0 PRs |
-| TUN-P0-003 | VALIDATION | none | Retain schema-validation evidence for protected incremental P0 PRs |
-| TUN-P0-004 | VALIDATION | none | Retain AMD-0002 dependency-readiness evidence for protected incremental P0 PRs |
-| TUN-P0-005 | VALIDATION | none | Retain bounded context-pack evidence for protected incremental P0 PRs |
-| TUN-P0-006 | VALIDATION | none | Runtime health is PASS; retain Compose evidence for protected incremental P0 PRs |
-| TUN-P0-019 | VALIDATION | none | Retain GitHub governance evidence for protected incremental P0 PRs |
-
-## Build/test state
-
-- .NET SDK: 10.0.401 installed and used for local P0 validation.
-- Tunner.Governance build: PASS (0 warnings, 0 errors).
-- Functional harness: PASS, including fresh and stale generated-context scenarios and active-authority-summary inclusion.
-- Governance live validation: PASS for 16 records with no diagnostics.
-- Context pack: PASS; `docs/context/current/` is manifest-first, hash-verifiable, and CURRENT for TUN-P0-005. It includes the active-authority summary and AMD-0002 source.
-- P0-006 static Compose source/configuration validation: PASS; `tunner-dev doctor` confirmed Docker Desktop 4.87.0 / Engine 29.7.2 and Compose v5.4.0 without pulling images or starting containers.
-- P0-006 runtime dependency health: PASS. User-run output confirmed PostgreSQL, RabbitMQ, Redis, OpenBao, Mailpit, and LGTM healthy after the corrected readiness probes and OpenBao configuration path fix.
-- NuGet vulnerability metadata: no vulnerable packages reported by current source metadata.
-- Bundle integrity: PASS (125/125). Pre-P0 package integrity: PASS (54/54). Repository mirror integrity: PASS (125/125).
-
-## Delivery model and controls
-
-- DEC-0002 supersedes DEC-0001 and permits protected incremental P0 pull requests from the temporary P0-only local integration branch: change/TUN-P0-control-plane.
-- Each P0 work item is separately committed, validated, evidenced, and governed locally.
-- A locally validated P0 prerequisite may unblock dependent P0 work, but no P0 item becomes DONE until its protected integration and the P0 enablement gate are complete.
-- Each protected incremental P0 pull request requires an independent ai-dev code-owner approval; GitHub may auto-merge only after protected requirements pass. P0 remains incomplete until its separate enablement gate closes.
+| TUN-P0-011 | VALIDATION | Deterministic local evidence manifests only | Retain local evidence; integration remains protected. |
+| TUN-P0-012 | VALIDATION | Local R&D/source registry | Retain local source-evidence and integration controls. |
+| TUN-P0-013 | VALIDATION | Security and supply-chain pipeline baseline | Retain local/CI evidence hooks; actual CI scan requires a remote workflow run after integration. |
+| TUN-P0-014 | VALIDATION | Developer automation | Retain local command evidence; real Docker lifecycle remains operator-run. |
+| TUN-P0-015 | VALIDATION | Documentation validation | Retain local validation evidence; no external links are fetched. |
 
 ## Exact next authorized action
 
-- Submit the current locally validated P0 aggregate as a protected pull request under DEC-0002. After its independent ai-dev approval and merge, create/select the next repository work-item record from the canonical backlog; do not invent an unrecorded scope.
+- Use tunner governance next to identify the next governance-eligible P0 item. Do not push or change protected main without explicit user direction.

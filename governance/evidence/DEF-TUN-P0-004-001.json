@@ -1,0 +1,12 @@
+{
+  "schema_version": 1,
+  "evidence_id": "DEF-TUN-P0-004-001",
+  "scope_type": "DEFECT",
+  "scope_id": "DEF-TUN-P0-004-001",
+  "status": "OPEN",
+  "observed_at": "2026-09-30T16:27:32-04:00",
+  "command": "dotnet run --project src/Tunner.Governance --no-build -- authority verify",
+  "result": "FAILED_AS_EXPECTED",
+  "details": "The CLI returned 'Required command was not provided' and reported unrecognized `authority` and `verify` arguments. Its help enumerated only `governance` and `context` command groups. This does not alter P0-008 migration validation; it is a recorded governance-tool/documentation parity defect.",
+  "remediation_boundary": "Resolve under TUN-P0-004 governance tooling scope by implementing the required authority preflight or by changing the governed startup contract through its applicable authority process."
+}

@@ -1,0 +1,79 @@
+{
+  "schema_version": 1,
+  "evidence_id": "TUN-P0-007-ROLE-REVIEWS",
+  "scope_type": "WORK_ITEM",
+  "scope_id": "TUN-P0-007",
+  "status": "PASS_WITH_OPERATOR_BOOTSTRAP_FOLLOW_UP",
+  "reviewed_at": "2026-09-30T15:51:07.0174452-04:00",
+  "reviews": [
+    {
+      "role": "governance-engineer",
+      "skill_version": "1.0.0",
+      "conclusion": "PASS",
+      "checks": [
+        "The lifecycle transition was checked before implementation, the work remains P0-only, and all required evidence paths now exist.",
+        "The bounded context selection names current authority, DEC-0002, the P0-006 prerequisite, roles, and explicit exclusions."
+      ],
+      "findings": []
+    },
+    {
+      "role": "cyber-security-engineer",
+      "skill_version": "1.0.0",
+      "conclusion": "PASS_WITH_OPERATOR_BOOTSTRAP_FOLLOW_UP",
+      "checks": [
+        "No credential value is committed. The helper prompts for a SecureString root token, uses it only for short-lived local Compose commands, and removes transient variables.",
+        "The runtime policy is read/list-only below the local KV-v2 namespace; the bootstrap policy has only the narrow mount and runtime-policy-management capability.",
+        "The local scanner passes the repository and rejects a generated negative fixture without exposing the match value."
+      ],
+      "findings": [
+        "A local operator must protect initialization output and root/unseal material outside the repository. This is documented and deliberately not automated by Codex."
+      ]
+    },
+    {
+      "role": "devops-engineer",
+      "skill_version": "1.0.0",
+      "conclusion": "PASS_WITH_OPERATOR_BOOTSTRAP_FOLLOW_UP",
+      "checks": [
+        "The bootstrap flow uses the existing loopback-only P0-006 Compose topology and does not add a persistent credential file, cloud deployment, or long-lived service automation.",
+        "The runbook distinguishes uninitialized, unsealed, policy-application, and scan steps and supplies an explicit static validation command."
+      ],
+      "findings": [
+        "Initialization and unseal are intentionally user-run local operations because they generate sensitive material; no runtime claim is made by this evidence."
+      ]
+    },
+    {
+      "role": "tester-qa-engineer",
+      "skill_version": "1.0.0",
+      "conclusion": "PASS",
+      "checks": [
+        "Static syntax, policy/bootstrap contract, repository scan, negative fixture, P0-006 regression, build, functional harness, governance, context, and whitespace checks passed.",
+        "The negative fixture is created only in a temporary directory and removed in a finally block."
+      ],
+      "findings": []
+    },
+    {
+      "role": "auditor",
+      "skill_version": "1.0.0",
+      "conclusion": "PASS_WITH_OPERATOR_BOOTSTRAP_FOLLOW_UP",
+      "checks": [
+        "Authority to work record to policy/tool/runbook to static tests to evidence lineage is present.",
+        "Primary-source R&D evidence is separately recorded, no secret material appears in evidence, and the P0 boundary is explicit."
+      ],
+      "findings": [
+        "P0-007 remains in VALIDATION and cannot be represented as production-ready or as a completed P0 milestone."
+      ]
+    },
+    {
+      "role": "rd-engineer",
+      "skill_version": "1.0.0",
+      "conclusion": "PASS",
+      "checks": [
+        "The implementation aligns with the current primary-source OpenBao initialization and policy documentation and GitHub secret-scanning/push-protection guidance recorded in TUN-P0-007-RD-SOURCES.",
+        "No technology, provider, or Product decision was invented."
+      ],
+      "findings": [
+        "Refresh source evidence before any material OpenBao version, deployment, or supply-chain scope change."
+      ]
+    }
+  ]
+}

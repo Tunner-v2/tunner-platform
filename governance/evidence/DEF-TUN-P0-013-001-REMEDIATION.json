@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "evidence_id": "DEF-TUN-P0-013-001-REMEDIATION",
+  "scope_type": "DEFECT",
+  "scope_id": "DEF-TUN-P0-013-001",
+  "status": "PASS",
+  "checked_at": "2026-09-30T23:52:00-04:00",
+  "checks": [
+    {
+      "name": "Windows PowerShell-compatible ISO date validation",
+      "command": "powershell.exe -NoProfile -File tools/security/Invoke-TunnerSecurityBaseline.ps1 -AsOf 2026-09-30",
+      "result": "PASS",
+      "details": "The generator uses DateTime.TryParseExact instead of DateOnly and remains strict about ISO yyyy-MM-dd input."
+    }
+  ],
+  "artifacts": [
+    "tools/security/New-TunnerSupplyChainEvidence.ps1"
+  ],
+  "limitations": [
+    "The remediation fixes PowerShell runtime compatibility only; it does not change the scope or policy of the security baseline."
+  ]
+}

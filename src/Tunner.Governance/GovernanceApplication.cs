@@ -28,6 +28,7 @@ public static class GovernanceApplication
     public static CommandResult Validate(DirectoryInfo repository)
     {
         var diagnostics = new List<Diagnostic>();
+        AddAuthorityDiagnostics(repository, diagnostics);
         var schemas = SchemaCatalog.Load(repository, diagnostics);
         var records = LoadRecords(repository, diagnostics);
         _ = IntegrationPolicy.Load(repository, diagnostics);
@@ -95,6 +96,22 @@ public static class GovernanceApplication
         var next = new List<NextItem>();
         var integrationActions = new List<IntegrationAction>();
 
+        var authority = AuthorityApplication.Verify(repository);
+        if (authority.ExitCode != 0)
+        {
+            var authorityPayload = (AuthorityPayload)authority.Payload;
+            foreach (var finding in authorityPayload.Findings)
+            {
+                diagnostics.Add(Diagnostic.Error("docs/authority", null, "GOV_AUTHORITY_INVALID", finding));
+            }
+
+            foreach (var record in workItems.Values.Where(item => !TerminalStates.Contains(item.Scalar("status") ?? "UNKNOWN", StringComparer.Ordinal)).OrderBy(item => item.Identifier, StringComparer.Ordinal))
+            {
+                next.Add(new NextItem(record.Identifier, record.Scalar("status") ?? "UNKNOWN", false, "authority verification failed"));
+            }
+
+            return new CommandResult(1, "next", new NextPayload(next, [], diagnostics));
+        }
         foreach (var record in workItems.Values.OrderBy(item => item.Identifier, StringComparer.Ordinal))
         {
             var state = record.Scalar("status") ?? "UNKNOWN";
@@ -128,6 +145,11 @@ public static class GovernanceApplication
         }
 
         var failures = ReadinessReasons(repository, workItem, workItems, DependencyRecords(records), IntegrationPolicy.Load(repository, diagnostics), HasApprovedP0LocalIntegration(records));
+        var authority = AuthorityApplication.Verify(repository);
+        if (authority.ExitCode != 0)
+        {
+            failures.AddRange(((AuthorityPayload)authority.Payload).Findings.Select(finding => $"authority verification failed: {finding}"));
+        }
         var satisfied = new List<string>();
         foreach (var evidencePath in workItem.StringList("required_evidence"))
         {
@@ -189,6 +211,19 @@ public static class GovernanceApplication
         return new CommandResult(allowed ? 0 : 1, "transition check", new TransitionPayload(workItemId, from, destination, allowed ? "ALLOWED" : "REJECTED", allowed ? "The destination is the next declared normal lifecycle state." : "Only the next declared normal lifecycle state is allowed by this MVP."));
     }
 
+    private static void AddAuthorityDiagnostics(DirectoryInfo repository, List<Diagnostic> diagnostics)
+    {
+        var authority = AuthorityApplication.Verify(repository);
+        if (authority.ExitCode == 0)
+        {
+            return;
+        }
+
+        foreach (var finding in ((AuthorityPayload)authority.Payload).Findings)
+        {
+            diagnostics.Add(Diagnostic.Error("docs/authority", null, "GOV_AUTHORITY_INVALID", finding));
+        }
+    }
     public static string Serialize(CommandResult result) => JsonSerializer.Serialize(result, JsonOptions);
 
     private static Dictionary<string, GovernanceRecord> WorkItems(IReadOnlyList<GovernanceRecord> records)

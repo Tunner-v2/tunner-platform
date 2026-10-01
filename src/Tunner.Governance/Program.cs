@@ -22,7 +22,10 @@ public static class Program
         governance.Subcommands.Add(CreateGateCommand(repositoryOption));
         governance.Subcommands.Add(CreateTransitionCommand(repositoryOption));
         root.Subcommands.Add(governance);
+        root.Subcommands.Add(CreateAuthorityCommand(repositoryOption));
         root.Subcommands.Add(CreateContextCommand(repositoryOption));
+        root.Subcommands.Add(CreateEvidenceCommand(repositoryOption));
+        root.Subcommands.Add(CreateSourcesCommand(repositoryOption));
 
         return root.Parse(args).Invoke();
     }
@@ -79,6 +82,15 @@ public static class Program
         return transition;
     }
 
+    private static Command CreateAuthorityCommand(Option<DirectoryInfo?> repositoryOption)
+    {
+        var verify = new Command("verify", "Verify the imported authority mirror against bootstrap SHA-256 evidence.");
+        verify.SetAction(parseResult => WriteResult(AuthorityApplication.Verify(Repository(parseResult, repositoryOption))));
+
+        var authority = new Command("authority", "Read-only imported-authority verification commands.");
+        authority.Subcommands.Add(verify);
+        return authority;
+    }
     private static Command CreateContextCommand(Option<DirectoryInfo?> repositoryOption)
     {
         var workItem = new Option<string>("--work-item") { Description = "Governed work item identifier to package." };
@@ -106,6 +118,54 @@ public static class Program
         context.Subcommands.Add(build);
         context.Subcommands.Add(verify);
         return context;
+    }
+    private static Command CreateEvidenceCommand(Option<DirectoryInfo?> repositoryOption)
+    {
+        var scopeId = new Option<string>("--scope-id") { Description = "Governed work-item identifier represented by the manifest." };
+        var output = new Option<FileInfo?>("--output") { Description = "New JSON manifest path beneath artifacts/evidence/." };
+        var artifact = new Option<string[]>("--artifact") { Description = "Additional repository-relative artifact to hash. Repeat for multiple artifacts." };
+        var build = new Option<string[]>("--build-reference") { Description = "Repository-relative build evidence to hash. Repeat for multiple references." };
+        var test = new Option<string[]>("--test-reference") { Description = "Repository-relative test evidence to hash. Repeat for multiple references." };
+        var securityScan = new Option<string[]>("--security-scan-reference") { Description = "Repository-relative security-scan evidence to hash. Repeat for multiple references." };
+
+        var generate = new Command("generate", "Create a deterministic local evidence manifest without release or production claims.");
+        generate.Options.Add(scopeId);
+        generate.Options.Add(output);
+        generate.Options.Add(artifact);
+        generate.Options.Add(build);
+        generate.Options.Add(test);
+        generate.Options.Add(securityScan);
+        generate.SetAction(parseResult => WriteResult(EvidenceApplication.Generate(
+            Repository(parseResult, repositoryOption),
+            parseResult.GetValue(scopeId) ?? string.Empty,
+            parseResult.GetValue(output),
+            parseResult.GetValue(artifact) ?? [],
+            parseResult.GetValue(build) ?? [],
+            parseResult.GetValue(test) ?? [],
+            parseResult.GetValue(securityScan) ?? [])));
+
+        var evidence = new Command("evidence", "Generate bounded, local evidence manifests.");
+        evidence.Subcommands.Add(generate);
+        return evidence;
+    }
+    private static Command CreateSourcesCommand(Option<DirectoryInfo?> repositoryOption)
+    {
+        var scopeId = new Option<string?>("--scope-id") { Description = "Optional registered work-item or decision identifier to check." };
+        var asOf = new Option<string>("--as-of") { Description = "Required ISO-8601 date used for deterministic freshness evaluation." };
+        var maxAgeDays = new Option<int?>("--max-age-days") { Description = "Required non-negative freshness window in days." };
+        var check = new Command("check", "Check registered material scopes against local primary-source evidence.");
+        check.Options.Add(scopeId);
+        check.Options.Add(asOf);
+        check.Options.Add(maxAgeDays);
+        check.SetAction(parseResult => WriteResult(SourceRegistryApplication.Check(
+            Repository(parseResult, repositoryOption),
+            parseResult.GetValue(scopeId),
+            parseResult.GetValue(asOf) ?? string.Empty,
+            parseResult.GetValue(maxAgeDays))));
+
+        var sources = new Command("sources", "Verify local R&D source-registry evidence without external browsing.");
+        sources.Subcommands.Add(check);
+        return sources;
     }
     private static DirectoryInfo Repository(ParseResult parseResult, Option<DirectoryInfo?> repositoryOption)
         => parseResult.GetValue(repositoryOption) ?? new DirectoryInfo(Directory.GetCurrentDirectory());

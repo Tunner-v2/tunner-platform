@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "evidence_id": "TUN-P0-006-DEF-TUN-P0-006-003-REMEDIATION",
+  "scope_type": "DEFECT",
+  "scope_id": "DEF-TUN-P0-006-003",
+  "status": "PASS",
+  "checks": [
+    {
+      "name": "PowerShell native stderr regression fixture",
+      "command": "tools/validation/Test-TunnerDevNativeOutput.ps1",
+      "result": "PASS",
+      "details": "PASS at 2026-09-30T18:25-04:00. The fixture placed a temporary fake docker.cmd first on PATH. It wrote normal container-progress lines to stderr and exited zero; tunner-dev start completed without contacting Docker in both the current shell and powershell.exe."
+    },
+    {
+      "name": "local Compose runtime retry",
+      "command": "tools/dev/tunner-dev.ps1 start",
+      "result": "PASS",
+      "details": "At 2026-09-30T18:35-04:00, the operator-run retry completed successfully. Normal Docker Compose progress remained visible, all declared dependencies reached Healthy, and the wrapper reported that the local dependency foundation started."
+    }
+  ]
+}

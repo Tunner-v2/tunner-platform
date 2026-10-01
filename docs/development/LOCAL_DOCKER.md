@@ -12,7 +12,7 @@ It is not a Product runtime, a production deployment, an object-store emulator, 
 - Docker Compose is available.
 - Ports in `infra/docker/.env.example` are free, or an ignored `infra/docker/.env.local` overrides only the conflicting port values.
 
-Do not put passwords, API keys, R2 credentials, OpenBao tokens, or other secrets in `.env.local`. P0-007 owns local OpenBao initialization, least-privilege policy, and application secret injection.
+Tunner defaults to a dedicated loopback-only host-port range so it does not take common ports used by other local solutions: PostgreSQL `25432`, RabbitMQ `25672`/`25673`, Redis `26379`, OpenBao `28200`, Mailpit `21025`/`28025`, Grafana `23000`, and OTLP `24317`/`24318`. Container-internal protocol ports remain unchanged. Do not put passwords, API keys, R2 credentials, OpenBao tokens, or other secrets in `.env.local`. P0-007 owns local OpenBao initialization, least-privilege policy, and application secret injection.
 
 ## Commands
 
@@ -27,7 +27,7 @@ From the repository root in PowerShell:
 ./tools/dev/tunner-dev.ps1 stop
 ```
 
-`doctor` performs only Docker/Compose and static configuration checks. `start` pulls the pinned images and starts long-lived containers; run it only when you intend to use the local dependency environment. `stop` preserves named volumes.
+`doctor` performs only Docker/Compose and static configuration checks. `start` pulls the pinned images and starts long-lived containers; run it only when you intend to use the local dependency environment. `stop` preserves named volumes. Docker Compose may write normal status/progress lines to standard error even when it succeeds; the wrapper preserves that output and treats the native Docker exit code as the success/failure boundary.
 
 ## Local-only exposure
 

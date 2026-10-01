@@ -1,0 +1,41 @@
+schema_version: 1
+selection_id: CTX-TUN-P0-010-001
+scope_type: WORK_ITEM
+scope_id: TUN-P0-010
+context_mode: TASK
+included_artifacts:
+  - AGENTS.md
+  - docs/authority/current-authority.json
+  - docs/authority/amendments/AMD-0001/effective-overrides/11_Development_Planes_Milestones_and_P0_Backlog.md
+  - docs/authority/amendments/AMD-0002/AMD-0002_Non-Blocking_PR_Approval_and_Continuous_Local_Execution.md
+  - docs/authority/baselines/1.6.0/01_Engineering_Technology_Foundation.md
+  - docs/authority/baselines/1.6.0/06_Environment_Configuration_Secrets_and_Deployment.md
+  - docs/authority/baselines/1.6.0/09_Testing_Acceptance_Evidence_and_Quality_Gates.md
+  - docs/authority/baselines/1.6.0/13_RD_Source_Register.md
+  - docs/authority/baselines/1.6.0/15_Runtime_Communication_and_Infrastructure_Technology_Scope.md
+  - governance/decisions/DEC-0002.yaml
+  - governance/work-items/TUN-P0-001.yaml
+  - governance/evidence/BOOT-P0-001-integrity.json
+  - governance/dependencies/DEP-TUN-P0-010-TUN-P0-001.yaml
+  - governance/evidence/TUN-P0-010-RD-SOURCES.json
+  - governance/policies/lifecycle-policy.yaml
+  - governance/policies/role-activation-policy.yaml
+  - .agent/skills/full-stack-engineer/SKILL.md
+  - .agent/skills/solution-architect/SKILL.md
+  - .agent/skills/governance-engineer/SKILL.md
+  - .agent/skills/cyber-security-engineer/SKILL.md
+  - .agent/skills/devops-engineer/SKILL.md
+  - .agent/skills/tester-qa-engineer/SKILL.md
+  - .agent/skills/auditor/SKILL.md
+  - .agent/skills/rd-engineer/SKILL.md
+excluded_artifacts:
+  - Product FRDs, API or event contracts, and business acceptance cases
+  - User and admin/support UX source sets and browser journeys
+  - Production environment, deployment, credential, and release evidence
+exclusion_reasons:
+  Product FRDs, API or event contracts, and business acceptance cases: P0-010 establishes testing infrastructure only and must not invent Product behavior or contracts.
+  User and admin/support UX source sets and browser journeys: The Playwright deliverable is an inert test skeleton; no UI-authorized journey exists in P0.
+  Production environment, deployment, credential, and release evidence: P0-010 must not start or target production resources or introduce credential material.
+source_hashes: {}
+tool_version: manual-bootstrap-context-1.0.0
+created_at: 2026-09-30T21:25:51.7042870-04:00

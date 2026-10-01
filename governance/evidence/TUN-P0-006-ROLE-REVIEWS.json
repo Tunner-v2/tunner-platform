@@ -3,8 +3,8 @@
   "evidence_id": "TUN-P0-006-ROLE-REVIEWS",
   "scope_type": "WORK_ITEM",
   "scope_id": "TUN-P0-006",
-  "status": "PASS_WITH_RUNTIME_FOLLOW_UP",
-  "reviewed_at": "2026-09-30T12:14:54.6886862-04:00",
+  "status": "PASS",
+  "reviewed_at": "2026-09-30T18:35:34.4932632-04:00",
   "reviews": [
     {
       "role": "governance-engineer",
@@ -19,13 +19,13 @@
     {
       "role": "devops-engineer",
       "skill_version": "1.0.0",
-      "conclusion": "PASS_WITH_RUNTIME_FOLLOW_UP",
+      "conclusion": "PASS",
       "checks": [
         "Compose declares the required local topology with exact tags, health checks, named state volumes, loopback host bindings, and opt-in application placeholders.",
         "The tunner-dev-compatible wrapper uses fixed argument arrays, validates Docker/Compose before work, preserves volumes on stop, and waits for health on user-run start."
       ],
       "findings": [
-        "No image pull, container start, or runtime health observation was performed by the agent; this is explicitly retained as user-run acceptance evidence."
+        "The real runtime retry was operator-run; it is recorded as local validation rather than production readiness evidence."
       ]
     },
     {
@@ -43,25 +43,25 @@
     {
       "role": "tester-qa-engineer",
       "skill_version": "1.0.0",
-      "conclusion": "PASS_WITH_RUNTIME_FOLLOW_UP",
+      "conclusion": "PASS",
       "checks": [
         "The static validator checks required services, exact image references, non-mutable-tag policy, loopback bindings, OpenBao configuration, wrapper commands, and Docker Compose rendering.",
         "tunner-dev doctor successfully validated the installed Docker Desktop and Compose tooling without starting services."
       ],
       "findings": [
-        "Runtime service health remains a required user-run scenario because long-lived services were not started in this session."
+        "The required operator-run runtime scenario passed; continued health monitoring is an operational concern outside P0-006 closure scope."
       ]
     },
     {
       "role": "auditor",
       "skill_version": "1.0.0",
-      "conclusion": "PASS_WITH_RUNTIME_FOLLOW_UP",
+      "conclusion": "PASS",
       "checks": [
         "Authority-to-work-to-artifact-to-static-test-to-evidence lineage is present, including point-in-time primary-source R&D evidence.",
         "The work item does not claim P0 or runtime completion and records the remaining acceptance evidence as a blocker."
       ],
       "findings": [
-        "P0-006 cannot enter DONE until the runtime evidence and final protected aggregate P0 pull request exist."
+        "P0-006 remains in VALIDATION pending protected integration and the separate P0 enablement gate."
       ]
     },
     {
