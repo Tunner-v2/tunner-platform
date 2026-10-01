@@ -3,18 +3,18 @@
 ## Work item
 
 - ID: TUN-P0-028
-- Status: CODE_REVIEW
+- Status: VALIDATION
 - Branch: change/TUN-P0-027-role-activation
-- Commit: ac5c875
+- Commits: ac5c875, 8f12b91
 - Scope: governance-controlled work dispatcher and unified `tunner work` commands.
 
 ## Verified local evidence
 
-- `work start` and `work run` return a governed plan only.
-- `work validate` and `work handoff` pass for TUN-P0-028.
-- Functional coverage proves eligible planning and refusal of a non-ready lifecycle state.
+- `work start`, `work run`, `work validate`, and `work handoff` all return deterministic machine-readable outcomes.
+- The regression suite covers eligible planning, non-ready lifecycle refusal, and clean CODE_REVIEW-state delegation.
 - The coordinator cannot mutate work state, invoke Product operations, merge, or release.
+- Build, functional tests, authority verification, governance validation, gate validation, context verification, and diff hygiene pass.
 
 ## Exact next action
 
-- Re-run the full local evidence set, transition TUN-P0-028 from CODE_REVIEW to VALIDATION, refresh context/project state, and use governance next to select the following eligible P0 item.
+- Run `tunner governance next`, create and validate the next eligible P0 control-plane record (expected TUN-P0-029), and continue locally under AMD-0002. Do not push or modify protected main without user direction.
