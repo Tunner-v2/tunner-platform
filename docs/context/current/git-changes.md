@@ -1,5 +1,6 @@
 # Recent relevant Git changes
 
+- `d32b807 feat: complete P0 context quality telemetry`
 - `bedbe5a feat: complete P0 project memory state`
 - `338a2cc feat: complete P0 adaptive context tooling`
 - `94292a5 chore: record P0 orchestrator local validation`
@@ -9,4 +10,3 @@
 - `6b09ebe feat: add P0 skill registry validation`
 - `bb76144 feat: add P0 documentation validation`
 - `db17647 feat: complete P0 developer automation`
-- `1bffc55 feat: add P0 security supply-chain baseline`
