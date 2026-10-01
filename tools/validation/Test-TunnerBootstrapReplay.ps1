@@ -1,0 +1,7 @@
+param([string]$RepositoryRoot=(Get-Location).Path)
+$ErrorActionPreference='Stop'
+$pass=& dotnet run --project (Join-Path $RepositoryRoot 'src/Tunner.Governance') --no-build -- --repo-root $RepositoryRoot bootstrap replay
+if($LASTEXITCODE -ne 0 -or (($pass|Out-String) -notmatch '"Outcome": "PASS"')){throw 'Bootstrap replay must pass for the checked-in record.'}
+$temp=Join-Path ([IO.Path]::GetTempPath()) ('tunner-bootstrap-'+[guid]::NewGuid().ToString('N'));New-Item -ItemType Directory -Path (Join-Path $temp 'governance/bootstrap') -Force|Out-Null;Set-Content -LiteralPath (Join-Path $temp '.tunner-root') -Value 'tunner-repository-root-v1';$bad=(Get-Content (Join-Path $RepositoryRoot 'governance/bootstrap/BOOT-P0-001.yaml') -Raw).Replace('bootstrap_scope: CONTROL_PLANE_ONLY','bootstrap_scope: PRODUCT_FEATURE');Set-Content -LiteralPath (Join-Path $temp 'governance/bootstrap/BOOT.yaml') -Value $bad
+try{$out=& dotnet run --project (Join-Path $RepositoryRoot 'src/Tunner.Governance') --no-build -- --repo-root $temp bootstrap replay;if($LASTEXITCODE -eq 0 -or (($out|Out-String) -notmatch '"Outcome": "BLOCKED"')){throw 'Product-scoped bootstrap fixture must be blocked.'}}finally{Remove-Item -LiteralPath $temp -Recurse -Force}
+Write-Host 'TUN-P0-034 bootstrap replay checks passed.'

@@ -2,7 +2,9 @@
 param([Parameter(Mandatory = $true, Position = 0)][ValidateSet("verify", "rehearse")][string]$Command)
 Set-StrictMode -Version Latest
 $ErrorActionPreference = "Stop"
-$repositoryRoot = (Resolve-Path (Join-Path $PSScriptRoot "../..")).Path
+$module = Join-Path $PSScriptRoot "../lib/Tunner.RepositoryRoot.psm1"
+Import-Module $module -Force
+$repositoryRoot = Resolve-TunnerRepositoryRoot -StartDirectory $PSScriptRoot
 $migrationsProject = Join-Path $repositoryRoot "src/Tunner.Database.Migrations/Tunner.Database.Migrations.csproj"
 
 switch ($Command) {

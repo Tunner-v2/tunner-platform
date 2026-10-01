@@ -1,0 +1,23 @@
+schema_version: 1
+work_item_id: TUN-P0-034
+milestone_id: P0
+sprint_id: null
+title: Governance self-hosting cutover
+status: DONE
+type: GOVERNANCE_TOOLING
+authority_refs: [docs/authority/current-authority.json, docs/authority/amendments/AMD-0001/effective-overrides/11_Development_Planes_Milestones_and_P0_Backlog.md]
+flow_refs: []
+contract_refs: []
+decision_refs: [DEC-0002]
+acceptance_criteria: [Replay bootstrap history without unexplained bypass, make each exception explicit and resolved or blocking, prevent Product feature work from bootstrap mode, and govern all subsequent P0 work through the self-hosted control plane.]
+prerequisites: [TUN-P0-004, TUN-P0-011, TUN-P0-026, TUN-P0-027, TUN-P0-033]
+blockers: []
+impact: {architecture: false, ui: false, sdk: false, financial: false, compliance: false, security: false, devops: false, support: false}
+activated_roles: [full-stack-engineer, governance-engineer, tester-qa-engineer, auditor]
+required_tests: [bootstrap replay, bootstrap exception validation, feature bootstrap refusal, build, governance validation]
+required_evidence: [governance/evidence/TUN-P0-034-VALIDATION.json, governance/evidence/TUN-P0-034-ROLE-REVIEWS.json]
+context_policy: TASK
+todos: []
+defects: []
+created_at: 2026-10-01T00:00:00-04:00
+updated_at: 2026-10-01T23:35:00-04:00

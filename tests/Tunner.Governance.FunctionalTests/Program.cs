@@ -12,6 +12,29 @@ try
     CreateFixture(repositoryRoot, fixtureRoot);
     InitializeGit(fixtureRoot);
 
+    var explicitRoot = RepositoryRootResolver.Resolve(fixtureRoot);
+    Expect(explicitRoot.FullName == fixtureRoot.FullName, "Explicit repository-root resolution must return the marked fixture root.", failures);
+    var nestedRoot = Directory.CreateDirectory(Path.Combine(fixtureRoot.FullName, "src", "nested"));
+    var originalCurrentDirectory = Directory.GetCurrentDirectory();
+    var originalEnvironmentRoot = Environment.GetEnvironmentVariable("TUNNER_REPO_ROOT");
+    try
+    {
+        Directory.SetCurrentDirectory(nestedRoot.FullName);
+        Expect(RepositoryRootResolver.Resolve().FullName == fixtureRoot.FullName, "Nested-directory resolution must return the marked fixture root.", failures);
+        Environment.SetEnvironmentVariable("TUNNER_REPO_ROOT", fixtureRoot.FullName);
+        Expect(RepositoryRootResolver.Resolve().FullName == fixtureRoot.FullName, "Environment repository-root resolution must return the marked fixture root.", failures);
+    }
+    finally
+    {
+        Environment.SetEnvironmentVariable("TUNNER_REPO_ROOT", originalEnvironmentRoot);
+        Directory.SetCurrentDirectory(originalCurrentDirectory);
+    }
+    Expect(RepositoryRootResolver.ToLogicalPath(fixtureRoot, fixtureRoot.FullName) == ".", "Repository root itself must serialize as a logical path.", failures);
+    Expect(RepositoryRootResolver.ToLogicalPath(fixtureRoot, Path.Combine(fixtureRoot.FullName, "governance", "work-items")) == "governance/work-items", "Nested paths must serialize with canonical separators.", failures);
+    var outsidePathRejected = false;
+    try { RepositoryRootResolver.ToLogicalPath(fixtureRoot, fixtureRoot.Parent!.FullName); } catch (InvalidOperationException) { outsidePathRejected = true; }
+    Expect(outsidePathRejected, "Logical path serialization must reject paths outside the repository root.", failures);
+
     var authority = AuthorityApplication.Verify(fixtureRoot);
     Expect(authority.ExitCode == 0, "A complete authority fixture must verify.", failures);
 
@@ -114,6 +137,12 @@ try
     var transition = GovernanceApplication.CheckTransition(fixtureRoot, "TUN-TRANSITION", "DONE");
     Expect(transition.ExitCode == 1, "Lifecycle check must reject DRAFT directly to DONE.", failures);
 
+    var milestoneClose = GovernanceApplication.CheckMilestoneClose(fixtureRoot, "MVP");
+    Expect(milestoneClose.ExitCode == 1 && ((MilestoneClosePayload)milestoneClose.Payload).Failures.Any(item => item.Contains("work item is not DONE", StringComparison.Ordinal)) && ((MilestoneClosePayload)milestoneClose.Payload).Failures.Any(item => item.Contains("milestone role-review evidence missing", StringComparison.Ordinal)), "Milestone close-check must refuse incomplete work and missing milestone reviews.", failures);
+
+    var milestoneTransition = GovernanceApplication.CheckMilestoneTransition(fixtureRoot, "MVP", "VALIDATION");
+    Expect(milestoneTransition.ExitCode == 0 && ((MilestoneTransitionPayload)milestoneTransition.Payload).Outcome == "ALLOWED", "Milestone lifecycle check must allow the next declared normal state.", failures);
+
     var rolePolicyPath = Path.Combine(fixtureRoot.FullName, "governance", "policies", "role-activation-policy.yaml");
     File.Copy(Path.Combine(repositoryRoot.FullName, "governance", "policies", "role-activation-policy.yaml"), rolePolicyPath, true);
     WriteRoleMatrixWorkItem(fixtureRoot, "[full-stack-engineer, tester-qa-engineer, governance-engineer]");
@@ -205,7 +234,7 @@ static void CreateFixture(DirectoryInfo repositoryRoot, DirectoryInfo fixtureRoo
     var schemaSource = new DirectoryInfo(Path.Combine(repositoryRoot.FullName, "governance", "schemas", "v1"));
     var schemaDestination = new DirectoryInfo(Path.Combine(fixtureRoot.FullName, "governance", "schemas", "v1"));
     CopyDirectory(schemaSource, schemaDestination);
-    Directory.CreateDirectory(Path.Combine(fixtureRoot.FullName, "governance", "milestones"));
+    File.WriteAllText(Path.Combine(fixtureRoot.FullName, ".tunner-root"), "tunner-repository-root-v1" + Environment.NewLine);    Directory.CreateDirectory(Path.Combine(fixtureRoot.FullName, "governance", "milestones"));
     Directory.CreateDirectory(Path.Combine(fixtureRoot.FullName, "governance", "work-items"));
     Directory.CreateDirectory(Path.Combine(fixtureRoot.FullName, "governance", "dependencies"));
     Directory.CreateDirectory(Path.Combine(fixtureRoot.FullName, "governance", "policies"));
@@ -238,7 +267,7 @@ authority_refs: [authority]
 prerequisites: []
 work_items: [TUN-001, TUN-TRANSITION, TUN-LOCAL, TUN-MERGED, TUN-CHAIN]
 required_gates: []
-required_roles: []
+required_roles: [auditor]
 evidence_refs: []
 known_risks: []
 created_at: 2026-09-30T00:00:00-04:00
@@ -322,7 +351,7 @@ work_item:
   normal: [DRAFT, BACKLOG, REFINEMENT, READY, IN_PROGRESS, CODE_REVIEW, VALIDATION, PRODUCT_ACCEPTANCE, DONE]
   side: [BLOCKED, NEEDS_PRODUCT_DECISION]
 milestone:
-  normal: [PROPOSED, APPROVED, ACTIVE]
+  normal: [PROPOSED, APPROVED, ACTIVE, VALIDATION, PRODUCT_ACCEPTANCE, RELEASED, CLOSED]
   side: [BLOCKED]
 closure_requires_evidence: true
 history_deletion_for_cleanup: false

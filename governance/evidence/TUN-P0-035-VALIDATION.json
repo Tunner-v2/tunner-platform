@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "evidence_id": "TUN-P0-035-VALIDATION",
+  "scope_type": "WORK_ITEM",
+  "scope_id": "TUN-P0-035",
+  "status": "PASS",
+  "checked_at": "2026-10-01T23:00:00-04:00",
+  "checks": [
+    "Shared C# and PowerShell repository-root resolvers implement explicit argument, TUNNER_REPO_ROOT, Git top-level, and marker-walk precedence.",
+    "Static machine-path audit and PowerShell explicit, environment, and nested resolver checks pass without modifying canonical authority mirrors.",
+    "Tunner.Governance.sln builds with zero warnings and zero errors; functional checks cover canonical logical-path and outside-root rejection.",
+    "Nested-directory authority verification passes and authority verify reports 76 checked artifacts.",
+    "The user-run random relocated-copy proof passed: restore/build and authority verify succeeded from a copy without .git; the location-independent validator was repaired to use the marker fallback and then passed against that relocated copy.",
+    "Governance validation and the TUN-P0-035 final gate pass."
+  ],
+  "limitations": [
+    "No production, protected-main integration, or deployment claim is implied. The relocated-copy proof is local acceptance evidence only."
+  ]
+}

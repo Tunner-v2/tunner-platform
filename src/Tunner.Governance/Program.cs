@@ -7,10 +7,11 @@ public static class Program
 {
     public static int Main(string[] args)
     {
-        var repositoryOption = new Option<DirectoryInfo?>("--repository")
+        var repositoryOption = new Option<DirectoryInfo?>("--repo-root")
         {
-            Description = "Repository root. Defaults to the current directory."
+            Description = "Validated Tunner repository root. Resolution otherwise uses TUNNER_REPO_ROOT, Git top-level, then .tunner-root discovery."
         };
+        repositoryOption.Aliases.Add("--repository");
 
         var root = new RootCommand("Tunner repository-native governance control-plane tool");
         root.Options.Add(repositoryOption);
@@ -21,9 +22,13 @@ public static class Program
         governance.Subcommands.Add(CreateNextCommand(repositoryOption));
         governance.Subcommands.Add(CreateGateCommand(repositoryOption));
         governance.Subcommands.Add(CreateTransitionCommand(repositoryOption));
+        governance.Subcommands.Add(CreateMilestoneCommand(repositoryOption));
         governance.Subcommands.Add(CreateRolesCommand(repositoryOption));
         root.Subcommands.Add(governance);
         root.Subcommands.Add(CreateWorkCommand(repositoryOption));
+        var bootstrapReplay = new Command("replay", "Replay bootstrap records and refuse unresolved exceptions.");
+        bootstrapReplay.SetAction(parseResult => WriteResult(BootstrapApplication.Replay(Repository(parseResult, repositoryOption))));
+        var bootstrap = new Command("bootstrap", "Read-only bootstrap replay controls."); bootstrap.Subcommands.Add(bootstrapReplay); root.Subcommands.Add(bootstrap);
         root.Subcommands.Add(CreateAuthorityCommand(repositoryOption));
         root.Subcommands.Add(CreateContextCommand(repositoryOption));
         root.Subcommands.Add(CreateEvidenceCommand(repositoryOption));
@@ -85,6 +90,33 @@ public static class Program
         return transition;
     }
 
+    private static Command CreateMilestoneCommand(Option<DirectoryInfo?> repositoryOption)
+    {
+        var milestone = new Argument<string>("milestone") { Description = "Milestone identifier, for example P0." };
+
+        var closeCheck = new Command("close-check", "Evaluate the read-only evidence and governance requirements for milestone closure.");
+        closeCheck.Arguments.Add(milestone);
+        closeCheck.SetAction(parseResult => WriteResult(GovernanceApplication.CheckMilestoneClose(
+            Repository(parseResult, repositoryOption),
+            parseResult.GetValue(milestone) ?? string.Empty)));
+
+        var destination = new Argument<string>("destination") { Description = "Requested milestone lifecycle destination state." };
+        var transitionCheck = new Command("check", "Check a milestone lifecycle transition without mutating the record.");
+        transitionCheck.Arguments.Add(milestone);
+        transitionCheck.Arguments.Add(destination);
+        transitionCheck.SetAction(parseResult => WriteResult(GovernanceApplication.CheckMilestoneTransition(
+            Repository(parseResult, repositoryOption),
+            parseResult.GetValue(milestone) ?? string.Empty,
+            parseResult.GetValue(destination) ?? string.Empty)));
+
+        var transition = new Command("transition", "Check milestone lifecycle transition legality without mutation.");
+        transition.Subcommands.Add(transitionCheck);
+
+        var command = new Command("milestone", "Read-only milestone closure and lifecycle controls.");
+        command.Subcommands.Add(closeCheck);
+        command.Subcommands.Add(transition);
+        return command;
+    }
     private static Command CreateRolesCommand(Option<DirectoryInfo?> repositoryOption)
     {
         var workItem = new Argument<string>("work-item") { Description = "Work item identifier." };
@@ -129,11 +161,23 @@ public static class Program
     }
     private static Command CreateAuthorityCommand(Option<DirectoryInfo?> repositoryOption)
     {
+        var status = new Command("status", "Report the locally imported authority lineage and hash-verification state.");
+        status.SetAction(parseResult => WriteResult(AuthorityApplication.Status(Repository(parseResult, repositoryOption))));
+
+        var import = new Command("import", "Verify the already materialized authority mirror without fetching or selecting remote authority.");
+        import.SetAction(parseResult => WriteResult(AuthorityApplication.Import(Repository(parseResult, repositoryOption))));
+
         var verify = new Command("verify", "Verify the imported authority mirror against bootstrap SHA-256 evidence.");
         verify.SetAction(parseResult => WriteResult(AuthorityApplication.Verify(Repository(parseResult, repositoryOption))));
 
+        var diff = new Command("diff", "Report offline mirror integrity; canonical-source candidates must be explicitly fetched and hash-recorded.");
+        diff.SetAction(parseResult => WriteResult(AuthorityApplication.Diff(Repository(parseResult, repositoryOption))));
+
         var authority = new Command("authority", "Read-only imported-authority verification commands.");
+        authority.Subcommands.Add(status);
+        authority.Subcommands.Add(import);
         authority.Subcommands.Add(verify);
+        authority.Subcommands.Add(diff);
         return authority;
     }
     private static Command CreateContextCommand(Option<DirectoryInfo?> repositoryOption)
@@ -248,7 +292,7 @@ public static class Program
         return sources;
     }
     private static DirectoryInfo Repository(ParseResult parseResult, Option<DirectoryInfo?> repositoryOption)
-        => parseResult.GetValue(repositoryOption) ?? new DirectoryInfo(Directory.GetCurrentDirectory());
+        => RepositoryRootResolver.Resolve(parseResult.GetValue(repositoryOption));
 
     private static int WriteResult(CommandResult result)
     {
