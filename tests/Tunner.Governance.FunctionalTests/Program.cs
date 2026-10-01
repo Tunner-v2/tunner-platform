@@ -12,6 +12,29 @@ try
     CreateFixture(repositoryRoot, fixtureRoot);
     InitializeGit(fixtureRoot);
 
+    var explicitRoot = RepositoryRootResolver.Resolve(fixtureRoot);
+    Expect(explicitRoot.FullName == fixtureRoot.FullName, "Explicit repository-root resolution must return the marked fixture root.", failures);
+    var nestedRoot = Directory.CreateDirectory(Path.Combine(fixtureRoot.FullName, "src", "nested"));
+    var originalCurrentDirectory = Directory.GetCurrentDirectory();
+    var originalEnvironmentRoot = Environment.GetEnvironmentVariable("TUNNER_REPO_ROOT");
+    try
+    {
+        Directory.SetCurrentDirectory(nestedRoot.FullName);
+        Expect(RepositoryRootResolver.Resolve().FullName == fixtureRoot.FullName, "Nested-directory resolution must return the marked fixture root.", failures);
+        Environment.SetEnvironmentVariable("TUNNER_REPO_ROOT", fixtureRoot.FullName);
+        Expect(RepositoryRootResolver.Resolve().FullName == fixtureRoot.FullName, "Environment repository-root resolution must return the marked fixture root.", failures);
+    }
+    finally
+    {
+        Environment.SetEnvironmentVariable("TUNNER_REPO_ROOT", originalEnvironmentRoot);
+        Directory.SetCurrentDirectory(originalCurrentDirectory);
+    }
+    Expect(RepositoryRootResolver.ToLogicalPath(fixtureRoot, fixtureRoot.FullName) == ".", "Repository root itself must serialize as a logical path.", failures);
+    Expect(RepositoryRootResolver.ToLogicalPath(fixtureRoot, Path.Combine(fixtureRoot.FullName, "governance", "work-items")) == "governance/work-items", "Nested paths must serialize with canonical separators.", failures);
+    var outsidePathRejected = false;
+    try { RepositoryRootResolver.ToLogicalPath(fixtureRoot, fixtureRoot.Parent!.FullName); } catch (InvalidOperationException) { outsidePathRejected = true; }
+    Expect(outsidePathRejected, "Logical path serialization must reject paths outside the repository root.", failures);
+
     var authority = AuthorityApplication.Verify(fixtureRoot);
     Expect(authority.ExitCode == 0, "A complete authority fixture must verify.", failures);
 
@@ -46,6 +69,27 @@ try
     File.AppendAllText(Path.Combine(fixtureRoot.FullName, "governance", "work-items", "TUN-001.yaml"), "\n# Fixture source changed");
     var contextStale = ContextApplication.Verify(fixtureRoot, contextOutput);
     Expect(contextStale.ExitCode == 1, "Context verify must report a changed included source as stale.", failures);
+    File.WriteAllText(Path.Combine(fixtureRoot.FullName, "authority"), "fixture authority reference" + Environment.NewLine);
+    File.Copy(Path.Combine(repositoryRoot.FullName, "AGENTS.md"), Path.Combine(fixtureRoot.FullName, "AGENTS.md"), true);
+    var fixtureSkillDirectory = Path.Combine(fixtureRoot.FullName, ".agent", "skills", "governance-engineer");
+    Directory.CreateDirectory(fixtureSkillDirectory);
+    File.Copy(Path.Combine(repositoryRoot.FullName, ".agent", "skills", "governance-engineer", "SKILL.md"), Path.Combine(fixtureSkillDirectory, "SKILL.md"), true);
+    var fixtureSourceDirectory = Path.Combine(fixtureRoot.FullName, "src", "Tunner.Governance");
+    Directory.CreateDirectory(fixtureSourceDirectory);
+    File.Copy(Path.Combine(repositoryRoot.FullName, "src", "Tunner.Governance", "AdaptiveContextApplication.cs"), Path.Combine(fixtureSourceDirectory, "AdaptiveContextApplication.cs"), true);
+    var adaptiveCoreOutput = new DirectoryInfo(Path.Combine(fixtureRoot.FullName, "docs", "context", "adaptive-core"));
+    var adaptiveCore = AdaptiveContextApplication.Build(fixtureRoot, "TUN-001", adaptiveCoreOutput, new AdaptiveContextRequest("CORE", null, "FULL"));
+    Expect(adaptiveCore.ExitCode == 0 && ((ContextBuildPayload)adaptiveCore.Payload).Included.All(item => item.Reason is "repository entry contract" or "current authority summary" or "selected work item" or "explicit authority reference" or "activated role skill"), "CORE context must retain only mandatory context for the fixture.", failures);
+    var adaptiveBudget = AdaptiveContextApplication.Build(fixtureRoot, "TUN-001", new DirectoryInfo(Path.Combine(fixtureRoot.FullName, "docs", "context", "adaptive-budget")), new AdaptiveContextRequest("TASK", 1, "REPOSITORY_READ"));
+    Expect(adaptiveBudget.ExitCode == 1 && ((ContextBuildPayload)adaptiveBudget.Payload).Outcome == "CONTEXT_BUDGET_INSUFFICIENT", "Context must fail closed when the token budget cannot contain mandatory authority.", failures);
+    var adaptiveEscalation = AdaptiveContextApplication.Escalate(fixtureRoot, "TUN-001", "TASK", "module dependency is missing");
+    Expect(adaptiveEscalation.ExitCode == 0 && ((AdaptiveEscalationPayload)adaptiveEscalation.Payload).NextMode == "EXPANDED", "Insufficient context must return controlled escalation instead of implicitly loading sources.", failures);
+    var adaptiveFullOutput = new DirectoryInfo(Path.Combine(fixtureRoot.FullName, "docs", "context", "adaptive-full"));
+    var adaptiveFull = AdaptiveContextApplication.Build(fixtureRoot, "TUN-001", adaptiveFullOutput, new AdaptiveContextRequest("FULL_AUDIT", null, "FULL"));
+    Expect(adaptiveFull.ExitCode == 0 && File.Exists(Path.Combine(fixtureRoot.FullName, "artifacts", "context-index", "index.json")), "FULL_AUDIT must create a disposable repository index rather than a prompt dump.", failures);
+    Expect(AdaptiveContextApplication.Verify(fixtureRoot, adaptiveFullOutput).ExitCode == 0, "Fresh FULL_AUDIT context must verify.", failures);
+    File.WriteAllText(Path.Combine(fixtureRoot.FullName, "unrelated-context-source.txt"), "changed" + Environment.NewLine);
+    Expect(AdaptiveContextApplication.Verify(fixtureRoot, adaptiveFullOutput).ExitCode == 1, "FULL_AUDIT index must become stale when an indexed repository source changes.", failures);
 
     RunGit(fixtureRoot, "add", ".");
     RunGit(fixtureRoot, "commit", "--quiet", "-m", "fixture pre-evidence state");
@@ -93,6 +137,43 @@ try
     var transition = GovernanceApplication.CheckTransition(fixtureRoot, "TUN-TRANSITION", "DONE");
     Expect(transition.ExitCode == 1, "Lifecycle check must reject DRAFT directly to DONE.", failures);
 
+    var milestoneClose = GovernanceApplication.CheckMilestoneClose(fixtureRoot, "MVP");
+    Expect(milestoneClose.ExitCode == 1 && ((MilestoneClosePayload)milestoneClose.Payload).Failures.Any(item => item.Contains("work item is not DONE", StringComparison.Ordinal)) && ((MilestoneClosePayload)milestoneClose.Payload).Failures.Any(item => item.Contains("milestone role-review evidence missing", StringComparison.Ordinal)), "Milestone close-check must refuse incomplete work and missing milestone reviews.", failures);
+
+    var milestoneTransition = GovernanceApplication.CheckMilestoneTransition(fixtureRoot, "MVP", "VALIDATION");
+    Expect(milestoneTransition.ExitCode == 0 && ((MilestoneTransitionPayload)milestoneTransition.Payload).Outcome == "ALLOWED", "Milestone lifecycle check must allow the next declared normal state.", failures);
+
+    var rolePolicyPath = Path.Combine(fixtureRoot.FullName, "governance", "policies", "role-activation-policy.yaml");
+    File.Copy(Path.Combine(repositoryRoot.FullName, "governance", "policies", "role-activation-policy.yaml"), rolePolicyPath, true);
+    WriteRoleMatrixWorkItem(fixtureRoot, "[full-stack-engineer, tester-qa-engineer, governance-engineer]");
+    File.WriteAllText(Path.Combine(fixtureRoot.FullName, "governance", "evidence", "TUN-P0-027-ROLE-REVIEWS.json"), "{\"schema_version\":1}" + Environment.NewLine);
+    File.WriteAllText(Path.Combine(fixtureRoot.FullName, "governance", "evidence", "role-matrix-ready.json"), "{\"result\":\"PASS\"}" + Environment.NewLine);
+    var roleMissing = GovernanceApplication.CheckGate(fixtureRoot, "TUN-P0-027");
+    Expect(roleMissing.ExitCode == 1 && ((GatePayload)roleMissing.Payload).Failures.Any(item => item.Contains("mandatory role is not activated: auditor", StringComparison.Ordinal)), "Gate must reject a calculated mandatory role omitted from activation.", failures);
+
+    WriteRoleMatrixWorkItem(fixtureRoot, "[full-stack-engineer, tester-qa-engineer, governance-engineer, auditor]");
+    foreach (var role in new[] { "full-stack-engineer", "tester-qa-engineer", "governance-engineer", "auditor" })
+    {
+        WriteStructuredReview(fixtureRoot, role, "PASS", "[]");
+    }
+
+    var roleReady = GovernanceApplication.CheckGate(fixtureRoot, "TUN-P0-027");
+    Expect(roleReady.ExitCode == 0, "Gate must accept complete passing structured reviews for every calculated role.", failures);
+    WriteStructuredReview(fixtureRoot, "auditor", "BLOCKED", "[audit evidence is incomplete]");
+    var roleBlocked = GovernanceApplication.CheckGate(fixtureRoot, "TUN-P0-027");
+    Expect(roleBlocked.ExitCode == 1 && ((GatePayload)roleBlocked.Payload).Failures.Any(item => item.Contains("mandatory role review did not pass: auditor", StringComparison.Ordinal)), "A blocking specialist review must block only its affected work-item gate.", failures);
+
+    WriteOrchestratorWorkItem(fixtureRoot);
+    var orchestratorStart = OrchestratorApplication.Start(fixtureRoot, "TUN-ORCH");
+    Expect(orchestratorStart.ExitCode == 0 && ((OrchestratorPayload)orchestratorStart.Payload).Outcome == "ELIGIBLE", "Orchestrator must accept an eligible in-progress work item without mutating it.", failures);
+    var orchestratorRun = OrchestratorApplication.Run(fixtureRoot, "TUN-ORCH");
+    Expect(orchestratorRun.ExitCode == 0 && ((OrchestratorPayload)orchestratorRun.Payload).Outcome == "PLAN_READY", "Orchestrator run must return a plan instead of executing Product operations.", failures);
+    var orchestratorPath = Path.Combine(fixtureRoot.FullName, "governance", "work-items", "TUN-ORCH.yaml");
+    File.WriteAllText(orchestratorPath, File.ReadAllText(orchestratorPath).Replace("status: IN_PROGRESS", "status: CODE_REVIEW"));
+    var orchestratorReviewState = OrchestratorApplication.Start(fixtureRoot, "TUN-ORCH");
+    Expect(orchestratorReviewState.ExitCode == 0, "Orchestrator must permit governed review-state validation work.", failures);
+    var orchestratorRefused = OrchestratorApplication.Start(fixtureRoot, "TUN-TRANSITION");
+    Expect(orchestratorRefused.ExitCode == 1 && ((OrchestratorPayload)orchestratorRefused.Payload).Outcome == "LIFECYCLE_REFUSED", "Orchestrator must refuse a non-ready lifecycle state.", failures);
     var authorityMirrorPath = Path.Combine(fixtureRoot.FullName, "docs", "authority", "mirror.txt");
     File.AppendAllText(authorityMirrorPath, "tampered");
     var authorityTampered = AuthorityApplication.Verify(fixtureRoot);
@@ -153,11 +234,13 @@ static void CreateFixture(DirectoryInfo repositoryRoot, DirectoryInfo fixtureRoo
     var schemaSource = new DirectoryInfo(Path.Combine(repositoryRoot.FullName, "governance", "schemas", "v1"));
     var schemaDestination = new DirectoryInfo(Path.Combine(fixtureRoot.FullName, "governance", "schemas", "v1"));
     CopyDirectory(schemaSource, schemaDestination);
-    Directory.CreateDirectory(Path.Combine(fixtureRoot.FullName, "governance", "milestones"));
+    File.WriteAllText(Path.Combine(fixtureRoot.FullName, ".tunner-root"), "tunner-repository-root-v1" + Environment.NewLine);    Directory.CreateDirectory(Path.Combine(fixtureRoot.FullName, "governance", "milestones"));
     Directory.CreateDirectory(Path.Combine(fixtureRoot.FullName, "governance", "work-items"));
     Directory.CreateDirectory(Path.Combine(fixtureRoot.FullName, "governance", "dependencies"));
     Directory.CreateDirectory(Path.Combine(fixtureRoot.FullName, "governance", "policies"));
+    File.Copy(Path.Combine(repositoryRoot.FullName, "governance", "policies", "role-activation-policy.yaml"), Path.Combine(fixtureRoot.FullName, "governance", "policies", "role-activation-policy.yaml"), true);
     Directory.CreateDirectory(Path.Combine(fixtureRoot.FullName, "governance", "evidence"));
+    Directory.CreateDirectory(Path.Combine(fixtureRoot.FullName, "governance", "reviews"));
     Directory.CreateDirectory(Path.Combine(fixtureRoot.FullName, "governance", "rd"));
     Directory.CreateDirectory(Path.Combine(fixtureRoot.FullName, "docs", "authority"));
     var currentAuthorityPath = Path.Combine(fixtureRoot.FullName, "docs", "authority", "current-authority.json");
@@ -184,7 +267,7 @@ authority_refs: [authority]
 prerequisites: []
 work_items: [TUN-001, TUN-TRANSITION, TUN-LOCAL, TUN-MERGED, TUN-CHAIN]
 required_gates: []
-required_roles: []
+required_roles: [auditor]
 evidence_refs: []
 known_risks: []
 created_at: 2026-09-30T00:00:00-04:00
@@ -268,7 +351,7 @@ work_item:
   normal: [DRAFT, BACKLOG, REFINEMENT, READY, IN_PROGRESS, CODE_REVIEW, VALIDATION, PRODUCT_ACCEPTANCE, DONE]
   side: [BLOCKED, NEEDS_PRODUCT_DECISION]
 milestone:
-  normal: [PROPOSED, APPROVED, ACTIVE]
+  normal: [PROPOSED, APPROVED, ACTIVE, VALIDATION, PRODUCT_ACCEPTANCE, RELEASED, CLOSED]
   side: [BLOCKED]
 closure_requires_evidence: true
 history_deletion_for_cleanup: false
@@ -312,6 +395,93 @@ updated_at: 2026-09-30T00:00:00-04:00
 """);
 }
 
+static void WriteOrchestratorWorkItem(DirectoryInfo fixtureRoot)
+{
+    File.WriteAllText(Path.Combine(fixtureRoot.FullName, "governance", "work-items", "TUN-ORCH.yaml"), """
+schema_version: 1
+work_item_id: TUN-ORCH
+milestone_id: P0
+sprint_id: null
+title: Orchestrator fixture
+status: IN_PROGRESS
+type: GOVERNANCE_TOOLING
+authority_refs: [authority]
+flow_refs: []
+contract_refs: []
+decision_refs: []
+acceptance_criteria: [deterministic]
+prerequisites: []
+blockers: []
+impact: {architecture: false, ui: false, sdk: false, financial: false, compliance: false, security: false, devops: false, support: false}
+activated_roles: [full-stack-engineer, governance-engineer, tester-qa-engineer, auditor]
+required_tests: []
+required_evidence: []
+context_policy: TASK
+todos: []
+defects: []
+created_at: 2026-09-30T06:00:00-04:00
+updated_at: 2026-09-30T06:00:00-04:00
+""");
+}
+static void WriteRoleMatrixWorkItem(DirectoryInfo fixtureRoot, string activatedRoles)
+{
+    File.WriteAllText(Path.Combine(fixtureRoot.FullName, "governance", "work-items", "TUN-P0-027.yaml"), $"""
+schema_version: 1
+work_item_id: TUN-P0-027
+milestone_id: P0
+sprint_id: null
+title: Role matrix fixture
+status: VALIDATION
+type: GOVERNANCE_TOOLING
+authority_refs: [authority]
+flow_refs: []
+contract_refs: []
+decision_refs: []
+acceptance_criteria: [deterministic]
+prerequisites: []
+blockers: []
+impact:
+  architecture: false
+  ui: false
+  sdk: false
+  financial: false
+  compliance: false
+  security: false
+  devops: false
+  support: false
+activated_roles: {activatedRoles}
+required_tests: []
+required_evidence: [governance/evidence/role-matrix-ready.json]
+context_policy: TASK
+todos: []
+defects: []
+created_at: 2026-10-01T05:00:00-04:00
+updated_at: 2026-10-01T05:00:00-04:00
+""");
+}
+
+static void WriteStructuredReview(DirectoryInfo fixtureRoot, string role, string result, string blockingFindings)
+{
+    File.WriteAllText(Path.Combine(fixtureRoot.FullName, "governance", "reviews", $"TUN-P0-027-{role}.yaml"), $"""
+schema_version: 1
+review_id: REV-TUN-P0-027-{role}
+work_item_id: TUN-P0-027
+role: {role}
+skill_id: {role}
+skill_version: 1.0.0
+skill_hash: fixture-hash
+result: {result}
+status: {result}
+authority_refs: [authority]
+context_artifacts: [governance/work-items/TUN-P0-027.yaml]
+findings: []
+required_actions: []
+blocking_findings: {blockingFindings}
+evidence_refs: [governance/evidence/role-matrix-ready.json]
+context_expansion_requested: false
+reviewed_at: 2026-10-01T05:00:00-04:00
+""");
+}
 static void DeleteFixture(DirectoryInfo fixtureRoot)
 {
     try

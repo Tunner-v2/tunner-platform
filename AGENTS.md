@@ -22,6 +22,7 @@ Canonical resources before repository creation:
 - Active amendments:
   - AMD-0001: https://drive.google.com/file/d/15MYKfh7zplOWoz80FvgPJOPi-Y6GfI7H/view
   - AMD-0002: https://drive.google.com/file/d/1dmODTNgtRS7WbKZyuX__FVmuJKQplkxN/view
+  - AMD-0003: https://drive.google.com/file/d/1N8GLvNiRkkm5hEgIIvJzJo_7DNpBJYJD/view
 
 ## Mandatory startup
 ```text
@@ -45,6 +46,7 @@ Then read the current work item, generated context manifest, only relevant autho
 - Refresh project state/context at handoff.
 - Use `INSUFFICIENT_CONTEXT` instead of guessing.
 - Repository access and prompt context are separate; load the smallest sufficient context.
+- Repository location is runtime context, never authority: persist in-repository paths relative to `<repo-root>` with `/` separators and resolve the root through the governed resolver.
 - A PR awaiting human approval is a protected-main integration gate, not a general development stop: run governance next and continue all eligible local/branch, validation, evidence, or independent work; block only scopes whose dependency explicitly requires `MERGED_TO_MAIN` or another genuine human-authority gate.
 
 ## Completion contract

@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "evidence_id": "P0-CLOSE-CHECK-20261002",
+  "scope_type": "MILESTONE",
+  "scope_id": "P0",
+  "status": "PASS",
+  "checked_at": "2026-10-02T00:15:00-04:00",
+  "checks": [
+    {
+      "command": "tools/dev/tunner-dev.ps1 doctor",
+      "result": "PASS",
+      "details": "Docker Desktop and the Tunner Compose configuration rendered successfully without restarting services."
+    },
+    {
+      "command": "tools/dev/tunner-dev.ps1 setup",
+      "result": "PASS",
+      "details": "Credential-free P0 setup preflight completed."
+    },
+    {
+      "command": "tools/dev/tunner-test.ps1 local",
+      "result": "PASS",
+      "details": "Four local test-harness checks passed."
+    },
+    {
+      "command": "tunner context build --work-item TUN-P0-034; tunner context verify",
+      "result": "PASS",
+      "details": "The bounded project context was regenerated and verified CURRENT."
+    },
+    {
+      "command": "tunner authority verify; tunner governance validate; tunner governance milestone close-check P0",
+      "result": "PASS",
+      "details": "Authority verification checked 76 artifacts, governance validation checked 112 records with no diagnostics, and the P0 close-check returned machine-readable PASS."
+    }
+  ],
+  "limitations": [
+    "This is local governance closure evidence. It does not replace protected-main integration approval, a production release, or later Product acceptance."
+  ]
+}

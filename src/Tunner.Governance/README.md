@@ -10,6 +10,7 @@ dotnet run --project src/Tunner.Governance -- governance validate
 dotnet run --project src/Tunner.Governance -- governance status
 dotnet run --project src/Tunner.Governance -- governance next
 dotnet run --project src/Tunner.Governance -- governance gate check TUN-P0-004
+dotnet run --project src/Tunner.Governance -- governance roles calculate TUN-P0-027
 dotnet run --project src/Tunner.Governance -- governance transition check TUN-P0-004 VALIDATION
 ```
 

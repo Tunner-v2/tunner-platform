@@ -8,7 +8,9 @@ param(
 Set-StrictMode -Version Latest
 $ErrorActionPreference = "Stop"
 
-$repositoryRoot = (Resolve-Path (Join-Path $PSScriptRoot "../..")).Path
+$module = Join-Path $PSScriptRoot "../lib/Tunner.RepositoryRoot.psm1"
+Import-Module $module -Force
+$repositoryRoot = Resolve-TunnerRepositoryRoot -StartDirectory $PSScriptRoot
 $composeFile = Join-Path $repositoryRoot "infra/docker/compose.yaml"
 $composeProjectDirectory = Split-Path -Parent $composeFile
 $defaultEnvFile = Join-Path $repositoryRoot "infra/docker/.env.example"

@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "evidence_id": "TUN-P0-027-VALIDATION",
+  "scope_type": "WORK_ITEM",
+  "scope_id": "TUN-P0-027",
+  "status": "PASS",
+  "checked_at": "2026-10-01T05:20:00-04:00",
+  "checks": [
+    {"name":"automatic role calculation","result":"PASS","details":"The governance-tooling classification deterministically required Full-stack, Governance, QA, and Auditor; declared roles matched the union."},
+    {"name":"mandatory-review enforcement","result":"PASS","details":"Functional coverage proves a missing calculated role fails, complete structured reviews pass, and a blocked specialist review fails only the affected gate."},
+    {"name":"legacy migration boundary","result":"PASS","details":"Records created before the P0-027 effective timestamp retain their existing evidence while post-boundary records use the new structured gate."},
+    {"name":"foundation integrity","result":"PASS","details":"Zero-warning build, static source validation, functional governance tests, authority verification, governance validation, and context freshness passed."}
+  ],
+  "limitations": ["This work does not execute an orchestrator, make Product decisions, retrieve external sources, or bypass protected-main approval.", "Automatic remediation of specialist findings is deferred to the governance-controlled orchestrator in TUN-P0-028."]
+}

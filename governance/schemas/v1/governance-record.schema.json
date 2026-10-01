@@ -85,8 +85,8 @@
     },
     "specialistReview": {
       "type": "object",
-      "properties": { "schema_version": { "$ref": "#/$defs/schemaVersion" }, "review_id": { "$ref": "#/$defs/id" }, "work_item_id": { "$ref": "#/$defs/id" }, "role": { "$ref": "#/$defs/nonEmptyString" }, "skill_version": { "$ref": "#/$defs/nonEmptyString" }, "skill_hash": { "$ref": "#/$defs/nonEmptyString" }, "status": { "$ref": "#/$defs/status" }, "authority_refs": { "$ref": "#/$defs/stringArray" }, "findings": { "$ref": "#/$defs/stringArray" }, "blocking_findings": { "$ref": "#/$defs/stringArray" }, "evidence_refs": { "$ref": "#/$defs/stringArray" }, "reviewed_at": { "$ref": "#/$defs/timestamp" } },
-      "required": ["schema_version", "review_id", "work_item_id", "role", "skill_version", "skill_hash", "status", "authority_refs", "findings", "blocking_findings", "evidence_refs", "reviewed_at"], "additionalProperties": false
+      "properties": { "schema_version": { "$ref": "#/$defs/schemaVersion" }, "review_id": { "$ref": "#/$defs/id" }, "work_item_id": { "$ref": "#/$defs/id" }, "role": { "$ref": "#/$defs/nonEmptyString" }, "skill_id": { "$ref": "#/$defs/nonEmptyString" }, "skill_version": { "$ref": "#/$defs/nonEmptyString" }, "skill_hash": { "$ref": "#/$defs/nonEmptyString" }, "result": { "enum": ["PASS", "FAIL", "BLOCKED", "NOT_APPLICABLE"] }, "status": { "$ref": "#/$defs/status" }, "authority_refs": { "$ref": "#/$defs/stringArray" }, "context_artifacts": { "$ref": "#/$defs/stringArray" }, "findings": { "$ref": "#/$defs/stringArray" }, "required_actions": { "$ref": "#/$defs/stringArray" }, "blocking_findings": { "$ref": "#/$defs/stringArray" }, "evidence_refs": { "$ref": "#/$defs/stringArray" }, "context_expansion_requested": { "type": "boolean" }, "reviewed_at": { "$ref": "#/$defs/timestamp" } },
+      "required": ["schema_version", "review_id", "work_item_id", "role", "skill_id", "skill_version", "skill_hash", "result", "status", "authority_refs", "context_artifacts", "findings", "required_actions", "blocking_findings", "evidence_refs", "context_expansion_requested", "reviewed_at"], "additionalProperties": false
     },
     "contextSelection": {
       "type": "object",

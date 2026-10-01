@@ -1,5 +1,7 @@
 schema_version: 1
 policy_id: default-role-activation
+enforcement:
+  required_from: 2026-10-01T04:30:00-04:00
 rules:
   - when: every_implementation
     require: [full-stack-engineer, tester-qa-engineer]

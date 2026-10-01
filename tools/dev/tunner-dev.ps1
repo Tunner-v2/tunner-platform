@@ -3,13 +3,16 @@ param(
     [Parameter(Mandatory = $true, Position = 0)]
     [ValidateSet("doctor", "setup", "start", "stop", "reset", "health", "test", "logs")]
     [string]$Command,
+    [string]$RepositoryRoot,
     [switch]$ConfirmReset
 )
 
 Set-StrictMode -Version Latest
 $ErrorActionPreference = "Stop"
 
-$repositoryRoot = (Resolve-Path (Join-Path $PSScriptRoot "../..")).Path
+$module = Join-Path $PSScriptRoot "../lib/Tunner.RepositoryRoot.psm1"
+Import-Module $module -Force
+$repositoryRoot = Resolve-TunnerRepositoryRoot -RepositoryRoot $RepositoryRoot -StartDirectory $PSScriptRoot
 $composeFile = Join-Path $repositoryRoot "infra/docker/compose.yaml"
 $composeProjectDirectory = Split-Path -Parent $composeFile
 $defaultEnvFile = Join-Path $repositoryRoot "infra/docker/.env.example"

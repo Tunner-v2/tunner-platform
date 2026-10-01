@@ -7,10 +7,10 @@ Repository-native, concise context for Tunner. It is derived from approved autho
 ## Product and authority
 
 - Name: Tunner Platform
-- Effective authority: Locked Documentation Baseline 1.6.0 + accepted ADR/PDR records + AMD-0001 + AMD-0002.
+- Effective authority: Locked Documentation Baseline 1.6.0 + accepted ADR/PDR records + AMD-0001 + AMD-0002 + AMD-0003.
 - Baseline status: ACTIVE / LOCKED.
-- Active amendments: AMD-0001 (approved, effective 2026-09-29) and AMD-0002 (approved, effective 2026-09-30).
-- P0: authorized. P1–P8: blocked pending the P0 enablement gate.
+- Active amendments: AMD-0001 (approved, effective 2026-09-29), AMD-0002 (approved, effective 2026-09-30), and AMD-0003 (approved, effective 2026-09-30).
+- P0: CLOSED after the machine-verifiable P0 enablement gate passed. P1–P8 may enter governance scheduling only when their authority-backed milestone/work-item records are materialized; no Product scope is implied by P0 closure.
 - Local authority mirror: `docs/authority/`; local bundle verification passed on 2026-09-29.
 - External canonical locations: Development Documentation, Pre-P0 package, and decisions links are recorded in `docs/authority/current-authority.json`.
 - External-source access: PASS — live Drive inventories are readable for Development Documentation, the Pre-P0 package, Decisions, and the FRD/Authority root; controlling authority and architecture-guideline files were fetched on 2026-09-30. A complete file-by-file Drive-to-mirror comparison remains TUN-P0-033 scope.
@@ -32,3 +32,4 @@ Repository-native, concise context for Tunner. It is derived from approved autho
 - Project state must be reconstructable without chat history.
 - Use the smallest sufficient authority/context and return `INSUFFICIENT_CONTEXT` when necessary.
 - PR approval gates protected-main integration/merge only; continue governance-eligible local/branch work while approval is pending unless a dependency explicitly requires `MERGED_TO_MAIN` or another genuine human gate.
+- Repository location is runtime context, not authority. Persist in-repository references relative to `<repo-root>` with `/` separators; resolve the root dynamically and never commit a host checkout path.
