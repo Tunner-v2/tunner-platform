@@ -1,5 +1,6 @@
 # Recent relevant Git changes
 
+- `8bf2b8d feat: add P0 observability baseline`
 - `f3f7757 governance: record repeat migration rehearsal`
 - `fe536dd governance: record local P0 runtime rehearsal`
 - `8515ba5 fix: capture Docker output across PowerShell versions`
@@ -9,4 +10,3 @@
 - `00c1fc9 docs: record P0-008 rehearsal preflight`
 - `3fb9690 governance: verify authority mirror integrity`
 - `8385c82 governance: record authority preflight defect`
-- `794b330 docs: record P0-008 validation handoff`

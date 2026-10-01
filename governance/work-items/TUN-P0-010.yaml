@@ -1,0 +1,66 @@
+schema_version: 1
+work_item_id: TUN-P0-010
+milestone_id: P0
+sprint_id: null
+title: Test harness
+status: VALIDATION
+type: TEST_FOUNDATION
+authority_refs:
+  - docs/authority/current-authority.json
+  - docs/authority/amendments/AMD-0001/effective-overrides/11_Development_Planes_Milestones_and_P0_Backlog.md
+  - docs/authority/amendments/AMD-0002/AMD-0002_Non-Blocking_PR_Approval_and_Continuous_Local_Execution.md
+  - docs/authority/baselines/1.6.0/01_Engineering_Technology_Foundation.md
+  - docs/authority/baselines/1.6.0/06_Environment_Configuration_Secrets_and_Deployment.md
+  - docs/authority/baselines/1.6.0/09_Testing_Acceptance_Evidence_and_Quality_Gates.md
+  - docs/authority/baselines/1.6.0/13_RD_Source_Register.md
+  - docs/authority/baselines/1.6.0/15_Runtime_Communication_and_Infrastructure_Technology_Scope.md
+flow_refs: []
+contract_refs: []
+decision_refs:
+  - DEC-0002
+acceptance_criteria:
+  - A repository-wide .NET unit-test standard is centrally versioned and runs through a deterministic command.
+  - A Testcontainers baseline is opt-in, uses throwaway containers with random host bindings, and never starts a container or uses committed credentials by default.
+  - A contract-test directory is present with explicit placeholders and no invented API, event, webhook, or Product contract.
+  - A Playwright .NET skeleton is present, defaults to no browser interaction, and documents the explicit operator browser-install and execution path for later UI-authorized work.
+  - An environment-test command selects unit, integration, browser, or full local profiles without mixing environments, starting Docker unexpectedly, or making production claims.
+  - No Product API, Worker, persistence, UI behavior, contract semantics, production test, credential, or deployment configuration is introduced.
+prerequisites:
+  - TUN-P0-001
+blockers: []
+impact:
+  architecture: true
+  ui: false
+  sdk: false
+  financial: false
+  compliance: false
+  security: true
+  devops: true
+  support: false
+activated_roles:
+  - full-stack-engineer
+  - solution-architect
+  - governance-engineer
+  - cyber-security-engineer
+  - devops-engineer
+  - tester-qa-engineer
+  - auditor
+  - rd-engineer
+required_tests:
+  - deterministic unit-test standard validation
+  - opt-in Testcontainers configuration validation without automatic container start
+  - contract-directory and Playwright-skeleton boundary validation
+  - environment-test command profile validation
+  - repository secret scan
+  - build, governance validation, authority verification, context freshness, and whitespace validation
+required_evidence:
+  - governance/context/CTX-TUN-P0-010-001.yaml
+  - governance/dependencies/DEP-TUN-P0-010-TUN-P0-001.yaml
+  - governance/evidence/TUN-P0-010-RD-SOURCES.json
+  - governance/evidence/TUN-P0-010-VALIDATION.json
+  - governance/evidence/TUN-P0-010-ROLE-REVIEWS.json
+context_policy: TASK
+todos: []
+defects: []
+created_at: 2026-09-30T21:25:51.7042870-04:00
+updated_at: 2026-09-30T21:25:51.7042870-04:00

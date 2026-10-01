@@ -53,4 +53,4 @@
 ## Exact next authorized action
 
 - PR #6 merged to protected main. TUN-P0-007 is locally validated and committed as 7f2f6e4 on its separate branch; retain its evidence and do not introduce Product or production-secret scope.
-- TUN-P0-006, TUN-P0-008, and TUN-P0-009 are locally validated in the repository `VALIDATION` state. Preserve their protected-main integration and P0 enablement gates; do not treat local migration or observability validation as production authority. Run governance next to select the next eligible P0 work item.
+- TUN-P0-010 is active with a verified authority/context pack and prerequisite readiness from TUN-P0-001. Implement only the approved test-harness infrastructure: unit-test standard, opt-in Testcontainers baseline, contract-test location, Playwright skeleton, and environment-test command. Do not start containers, install browsers, invent Product tests/contracts, or introduce production scope.
