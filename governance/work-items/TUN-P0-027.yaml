@@ -1,0 +1,34 @@
+schema_version: 1
+work_item_id: TUN-P0-027
+milestone_id: P0
+sprint_id: null
+title: Role activation and review-matrix engine
+status: CODE_REVIEW
+type: GOVERNANCE_TOOLING
+authority_refs:
+  - docs/authority/current-authority.json
+  - docs/authority/amendments/AMD-0001/effective-overrides/11_Development_Planes_Milestones_and_P0_Backlog.md
+  - docs/authority/amendments/AMD-0001/35_AI_Agent_Skill_Catalog_and_Review_Contracts.md
+  - docs/authority/amendments/AMD-0002/AMD-0002_Non-Blocking_PR_Approval_and_Continuous_Local_Execution.md
+  - docs/authority/amendments/AMD-0002/effective-overrides/04_Governance_and_Context_Tooling_Specification.md
+flow_refs: []
+contract_refs: []
+decision_refs: [DEC-0002]
+acceptance_criteria:
+  - Calculate the union of mandatory roles from a work item's declared impact classification and work type using the repository role-activation policy.
+  - Preserve legacy P0 evidence created before this control's effective timestamp while enforcing the role matrix on TUN-P0-027 and later records.
+  - Reject a gate when a calculated mandatory role is not activated, lacks one structured review, has a non-PASS result, lacks traceability, or carries a scoped blocking finding.
+  - Store schema-versioned specialist reviews with the complete structured handoff contract and retain a role-review evidence summary linked to the work item.
+  - Surface unresolved scoped role findings through governance next without blocking unrelated work or bypassing genuine human gates.
+  - Provide deterministic positive and negative functional coverage, source validation, context refresh, and documented local commands.
+prerequisites: [TUN-P0-003, TUN-P0-026]
+blockers: []
+impact: {architecture: false, ui: false, sdk: false, financial: false, compliance: false, security: false, devops: false, support: false}
+activated_roles: [full-stack-engineer, governance-engineer, tester-qa-engineer, auditor]
+required_tests: [role calculation CLI, mandatory-role omission gate failure, complete structured-review gate pass, scoped blocking-review gate failure, build, governance validation, authority verification, context freshness, diff hygiene]
+required_evidence: [governance/context/CTX-TUN-P0-027-001.yaml, governance/dependencies/DEP-TUN-P0-027-TUN-P0-003.yaml, governance/dependencies/DEP-TUN-P0-027-TUN-P0-026.yaml, governance/evidence/TUN-P0-027-VALIDATION.json, governance/evidence/TUN-P0-027-ROLE-REVIEWS.json, governance/reviews/REV-TUN-P0-027-full-stack-engineer.yaml, governance/reviews/REV-TUN-P0-027-governance-engineer.yaml, governance/reviews/REV-TUN-P0-027-tester-qa-engineer.yaml, governance/reviews/REV-TUN-P0-027-auditor.yaml]
+context_policy: TASK
+todos: []
+defects: []
+created_at: 2026-10-01T05:00:00-04:00
+updated_at: 2026-10-01T05:30:00-04:00

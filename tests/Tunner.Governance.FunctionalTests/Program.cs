@@ -93,6 +93,26 @@ try
     var transition = GovernanceApplication.CheckTransition(fixtureRoot, "TUN-TRANSITION", "DONE");
     Expect(transition.ExitCode == 1, "Lifecycle check must reject DRAFT directly to DONE.", failures);
 
+    var rolePolicyPath = Path.Combine(fixtureRoot.FullName, "governance", "policies", "role-activation-policy.yaml");
+    File.Copy(Path.Combine(repositoryRoot.FullName, "governance", "policies", "role-activation-policy.yaml"), rolePolicyPath, true);
+    WriteRoleMatrixWorkItem(fixtureRoot, "[full-stack-engineer, tester-qa-engineer, governance-engineer]");
+    File.WriteAllText(Path.Combine(fixtureRoot.FullName, "governance", "evidence", "TUN-P0-027-ROLE-REVIEWS.json"), "{\"schema_version\":1}" + Environment.NewLine);
+    File.WriteAllText(Path.Combine(fixtureRoot.FullName, "governance", "evidence", "role-matrix-ready.json"), "{\"result\":\"PASS\"}" + Environment.NewLine);
+    var roleMissing = GovernanceApplication.CheckGate(fixtureRoot, "TUN-P0-027");
+    Expect(roleMissing.ExitCode == 1 && ((GatePayload)roleMissing.Payload).Failures.Any(item => item.Contains("mandatory role is not activated: auditor", StringComparison.Ordinal)), "Gate must reject a calculated mandatory role omitted from activation.", failures);
+
+    WriteRoleMatrixWorkItem(fixtureRoot, "[full-stack-engineer, tester-qa-engineer, governance-engineer, auditor]");
+    foreach (var role in new[] { "full-stack-engineer", "tester-qa-engineer", "governance-engineer", "auditor" })
+    {
+        WriteStructuredReview(fixtureRoot, role, "PASS", "[]");
+    }
+
+    var roleReady = GovernanceApplication.CheckGate(fixtureRoot, "TUN-P0-027");
+    Expect(roleReady.ExitCode == 0, "Gate must accept complete passing structured reviews for every calculated role.", failures);
+    WriteStructuredReview(fixtureRoot, "auditor", "BLOCKED", "[audit evidence is incomplete]");
+    var roleBlocked = GovernanceApplication.CheckGate(fixtureRoot, "TUN-P0-027");
+    Expect(roleBlocked.ExitCode == 1 && ((GatePayload)roleBlocked.Payload).Failures.Any(item => item.Contains("mandatory role review did not pass: auditor", StringComparison.Ordinal)), "A blocking specialist review must block only its affected work-item gate.", failures);
+
     var authorityMirrorPath = Path.Combine(fixtureRoot.FullName, "docs", "authority", "mirror.txt");
     File.AppendAllText(authorityMirrorPath, "tampered");
     var authorityTampered = AuthorityApplication.Verify(fixtureRoot);
@@ -157,7 +177,9 @@ static void CreateFixture(DirectoryInfo repositoryRoot, DirectoryInfo fixtureRoo
     Directory.CreateDirectory(Path.Combine(fixtureRoot.FullName, "governance", "work-items"));
     Directory.CreateDirectory(Path.Combine(fixtureRoot.FullName, "governance", "dependencies"));
     Directory.CreateDirectory(Path.Combine(fixtureRoot.FullName, "governance", "policies"));
+    File.Copy(Path.Combine(repositoryRoot.FullName, "governance", "policies", "role-activation-policy.yaml"), Path.Combine(fixtureRoot.FullName, "governance", "policies", "role-activation-policy.yaml"), true);
     Directory.CreateDirectory(Path.Combine(fixtureRoot.FullName, "governance", "evidence"));
+    Directory.CreateDirectory(Path.Combine(fixtureRoot.FullName, "governance", "reviews"));
     Directory.CreateDirectory(Path.Combine(fixtureRoot.FullName, "governance", "rd"));
     Directory.CreateDirectory(Path.Combine(fixtureRoot.FullName, "docs", "authority"));
     var currentAuthorityPath = Path.Combine(fixtureRoot.FullName, "docs", "authority", "current-authority.json");
@@ -312,6 +334,65 @@ updated_at: 2026-09-30T00:00:00-04:00
 """);
 }
 
+static void WriteRoleMatrixWorkItem(DirectoryInfo fixtureRoot, string activatedRoles)
+{
+    File.WriteAllText(Path.Combine(fixtureRoot.FullName, "governance", "work-items", "TUN-P0-027.yaml"), $"""
+schema_version: 1
+work_item_id: TUN-P0-027
+milestone_id: P0
+sprint_id: null
+title: Role matrix fixture
+status: VALIDATION
+type: GOVERNANCE_TOOLING
+authority_refs: [authority]
+flow_refs: []
+contract_refs: []
+decision_refs: []
+acceptance_criteria: [deterministic]
+prerequisites: []
+blockers: []
+impact:
+  architecture: false
+  ui: false
+  sdk: false
+  financial: false
+  compliance: false
+  security: false
+  devops: false
+  support: false
+activated_roles: {activatedRoles}
+required_tests: []
+required_evidence: [governance/evidence/role-matrix-ready.json]
+context_policy: TASK
+todos: []
+defects: []
+created_at: 2026-10-01T05:00:00-04:00
+updated_at: 2026-10-01T05:00:00-04:00
+""");
+}
+
+static void WriteStructuredReview(DirectoryInfo fixtureRoot, string role, string result, string blockingFindings)
+{
+    File.WriteAllText(Path.Combine(fixtureRoot.FullName, "governance", "reviews", $"TUN-P0-027-{role}.yaml"), $"""
+schema_version: 1
+review_id: REV-TUN-P0-027-{role}
+work_item_id: TUN-P0-027
+role: {role}
+skill_id: {role}
+skill_version: 1.0.0
+skill_hash: fixture-hash
+result: {result}
+status: {result}
+authority_refs: [authority]
+context_artifacts: [governance/work-items/TUN-P0-027.yaml]
+findings: []
+required_actions: []
+blocking_findings: {blockingFindings}
+evidence_refs: [governance/evidence/role-matrix-ready.json]
+context_expansion_requested: false
+reviewed_at: 2026-10-01T05:00:00-04:00
+""");
+}
 static void DeleteFixture(DirectoryInfo fixtureRoot)
 {
     try

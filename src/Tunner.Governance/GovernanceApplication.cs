@@ -22,6 +22,7 @@ public static class GovernanceApplication
         new("decisions", "product-decision", "product-decision.schema.json", "productDecision", "decision_id"),
         new("gates", "gate", "gate.schema.json", "gate", "gate_id"),
         new("releases", "release", "release.schema.json", "release", "release_id"),
+        new("reviews", "specialist-review", "specialist-review.schema.json", "specialistReview", "review_id"),
         new("context", "context-selection", "context-selection.schema.json", "contextSelection", "selection_id")
     ];
 
@@ -123,7 +124,10 @@ public static class GovernanceApplication
             var reasons = ReadinessReasons(repository, record, workItems, dependencies, integrationPolicy, allowValidatedP0Prerequisites);
             integrationActions.AddRange(PendingIntegrationActions(repository, record, workItems, dependencies, integrationPolicy));
             var active = StringComparer.Ordinal.Equals(state, "IN_PROGRESS");
-            next.Add(new NextItem(record.Identifier, state, active || reasons.Count == 0, active ? "currently in progress" : reasons.Count == 0 ? "all recorded prerequisites and blockers permit work" : string.Join("; ", reasons)));
+            var reason = reasons.Count == 0
+                ? active ? "currently in progress" : "all recorded prerequisites and blockers permit work"
+                : active ? "currently in progress; " + string.Join("; ", reasons) : string.Join("; ", reasons);
+            next.Add(new NextItem(record.Identifier, state, active || reasons.Count == 0, reason));
         }
 
         var actions = integrationActions
@@ -174,13 +178,18 @@ public static class GovernanceApplication
             failures.Add($"role review evidence missing: {reviewEvidence}");
         }
 
+        var roleCheck = RoleActivationApplication.CheckReviews(repository, workItem, records);
+        failures.AddRange(roleCheck.Failures);
+        satisfied.AddRange(roleCheck.Satisfied);
+
         foreach (var diagnostic in diagnostics.Where(item => item.Severity == "ERROR"))
         {
             failures.Add($"record parse issue: {diagnostic.Code}");
         }
 
-        var outcome = failures.Count == 0 ? "READY" : "NOT_READY";
-        return new CommandResult(failures.Count == 0 ? 0 : 1, "gate check", new GatePayload(workItemId, outcome, failures, satisfied));
+        var normalizedFailures = failures.Distinct(StringComparer.Ordinal).ToArray();
+        var outcome = normalizedFailures.Length == 0 ? "READY" : "NOT_READY";
+        return new CommandResult(normalizedFailures.Length == 0 ? 0 : 1, "gate check", new GatePayload(workItemId, outcome, normalizedFailures, satisfied.Distinct(StringComparer.Ordinal).ToArray()));
     }
 
     public static CommandResult CheckTransition(DirectoryInfo repository, string workItemId, string destination)
@@ -226,7 +235,7 @@ public static class GovernanceApplication
     }
     public static string Serialize(CommandResult result) => JsonSerializer.Serialize(result, JsonOptions);
 
-    private static Dictionary<string, GovernanceRecord> WorkItems(IReadOnlyList<GovernanceRecord> records)
+    internal static Dictionary<string, GovernanceRecord> WorkItems(IReadOnlyList<GovernanceRecord> records)
         => records.Where(item => item.Type.DefinitionName == "work-item" && item.Identifier.Length > 0).ToDictionary(item => item.Identifier, StringComparer.Ordinal);
 
     private static List<string> ReadinessReasons(DirectoryInfo repository, GovernanceRecord workItem, Dictionary<string, GovernanceRecord> workItems, IReadOnlyList<GovernanceRecord> dependencies, IntegrationPolicyDefinition integrationPolicy, bool allowValidatedP0Prerequisites)
@@ -274,6 +283,8 @@ public static class GovernanceApplication
         }
 
         failures.AddRange(workItem.StringList("blockers").Select(blocker => $"blocker: {blocker}"));
+        var roleCheck = RoleActivationApplication.CheckReviews(repository, workItem, null);
+        failures.AddRange(roleCheck.Failures);
         return failures;
     }
 
@@ -343,7 +354,7 @@ public static class GovernanceApplication
     private static bool HasApprovedP0LocalIntegration(IReadOnlyList<GovernanceRecord> records)
         => records.Any(record => record.Type.DefinitionName == "product-decision" && StringComparer.Ordinal.Equals(record.Identifier, "DEC-0001") && StringComparer.Ordinal.Equals(record.Scalar("status"), "APPROVED"));
 
-    private static List<GovernanceRecord> LoadRecords(DirectoryInfo repository, List<Diagnostic> diagnostics)
+    internal static List<GovernanceRecord> LoadRecords(DirectoryInfo repository, List<Diagnostic> diagnostics)
     {
         var records = new List<GovernanceRecord>();
         var governanceRoot = Path.Combine(repository.FullName, "governance");

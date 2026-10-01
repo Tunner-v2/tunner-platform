@@ -21,6 +21,7 @@ public static class Program
         governance.Subcommands.Add(CreateNextCommand(repositoryOption));
         governance.Subcommands.Add(CreateGateCommand(repositoryOption));
         governance.Subcommands.Add(CreateTransitionCommand(repositoryOption));
+        governance.Subcommands.Add(CreateRolesCommand(repositoryOption));
         root.Subcommands.Add(governance);
         root.Subcommands.Add(CreateAuthorityCommand(repositoryOption));
         root.Subcommands.Add(CreateContextCommand(repositoryOption));
@@ -82,6 +83,19 @@ public static class Program
         return transition;
     }
 
+    private static Command CreateRolesCommand(Option<DirectoryInfo?> repositoryOption)
+    {
+        var workItem = new Argument<string>("work-item") { Description = "Work item identifier." };
+        var calculate = new Command("calculate", "Calculate mandatory roles from the declared impact classification.");
+        calculate.Arguments.Add(workItem);
+        calculate.SetAction(parseResult => WriteResult(RoleActivationApplication.Calculate(
+            Repository(parseResult, repositoryOption),
+            parseResult.GetValue(workItem) ?? string.Empty)));
+
+        var roles = new Command("roles", "Calculate and validate role-activation requirements.");
+        roles.Subcommands.Add(calculate);
+        return roles;
+    }
     private static Command CreateAuthorityCommand(Option<DirectoryInfo?> repositoryOption)
     {
         var verify = new Command("verify", "Verify the imported authority mirror against bootstrap SHA-256 evidence.");
