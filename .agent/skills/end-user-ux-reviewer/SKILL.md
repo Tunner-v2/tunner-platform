@@ -1,4 +1,5 @@
 ---
+skill_id: end-user-ux-reviewer
 name: end-user-ux-reviewer
 title: "End-user UX Reviewer"
 version: 1.0.0

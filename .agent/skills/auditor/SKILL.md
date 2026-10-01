@@ -1,4 +1,5 @@
 ---
+skill_id: auditor
 name: auditor
 title: "Auditor"
 version: 1.0.0

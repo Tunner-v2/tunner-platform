@@ -1,4 +1,5 @@
 ---
+skill_id: content-writer
 name: content-writer
 title: "Content Writer"
 version: 1.0.0

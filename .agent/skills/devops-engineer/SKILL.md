@@ -1,4 +1,5 @@
 ---
+skill_id: devops-engineer
 name: devops-engineer
 title: "DevOps Engineer"
 version: 1.0.0

@@ -1,4 +1,5 @@
 ---
+skill_id: full-stack-engineer
 name: full-stack-engineer
 title: "Full-stack Engineer"
 version: 1.0.0

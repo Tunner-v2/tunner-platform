@@ -1,5 +1,6 @@
 # Recent relevant Git changes
 
+- `bb76144 feat: add P0 documentation validation`
 - `db17647 feat: complete P0 developer automation`
 - `1bffc55 feat: add P0 security supply-chain baseline`
 - `e12e7b0 feat: add P0 source registry checker`
@@ -9,4 +10,3 @@
 - `f3f7757 governance: record repeat migration rehearsal`
 - `fe536dd governance: record local P0 runtime rehearsal`
 - `8515ba5 fix: capture Docker output across PowerShell versions`
-- `35858bf fix: support legacy PowerShell Docker wrapper`

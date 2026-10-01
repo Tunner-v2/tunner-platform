@@ -1,4 +1,5 @@
 ---
+skill_id: business-analyst
 name: business-analyst
 title: "Business Analyst"
 version: 1.0.0

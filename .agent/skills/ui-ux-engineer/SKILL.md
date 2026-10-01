@@ -1,4 +1,5 @@
 ---
+skill_id: ui-ux-engineer
 name: ui-ux-engineer
 title: "UI/UX Engineer"
 version: 1.0.0
