@@ -29,6 +29,13 @@ try
     Expect(!nextPayload.Items.Single(item => item.WorkItemId == "TUN-CHAIN").Actionable, "Configured local unmerged-chain limit must block further dependent chaining.", failures);
     Expect(nextPayload.HumanIntegrationActions.SingleOrDefault(item => item.WorkItemId == "TUN-MERGED" && item.PrerequisiteWorkItemId == "TUN-001") is not null, "Merged-main dependency must surface a separate human integration action.", failures);
 
+    var sourcesCurrent = SourceRegistryApplication.Check(fixtureRoot, "TUN-001", "2026-09-30", 14);
+    Expect(sourcesCurrent.ExitCode == 0, "Current registered source evidence must pass.", failures);
+    var sourcesStale = SourceRegistryApplication.Check(fixtureRoot, "TUN-001", "2026-10-20", 14);
+    Expect(sourcesStale.ExitCode == 1, "Source evidence outside the explicit freshness window must fail.", failures);
+    File.AppendAllText(Path.Combine(fixtureRoot.FullName, "governance", "evidence", "source-evidence.json"), " ");
+    var sourcesTampered = SourceRegistryApplication.Check(fixtureRoot, "TUN-001", "2026-09-30", 14);
+    Expect(sourcesTampered.ExitCode == 1, "Changed source evidence must fail hash integrity.", failures);
     var contextOutput = new DirectoryInfo(Path.Combine(fixtureRoot.FullName, "docs", "context", "current"));
     var contextBuild = ContextApplication.Build(fixtureRoot, "TUN-001", contextOutput);
     Expect(contextBuild.ExitCode == 0, "Context build must generate a bounded fixture pack.", failures);
@@ -151,6 +158,7 @@ static void CreateFixture(DirectoryInfo repositoryRoot, DirectoryInfo fixtureRoo
     Directory.CreateDirectory(Path.Combine(fixtureRoot.FullName, "governance", "dependencies"));
     Directory.CreateDirectory(Path.Combine(fixtureRoot.FullName, "governance", "policies"));
     Directory.CreateDirectory(Path.Combine(fixtureRoot.FullName, "governance", "evidence"));
+    Directory.CreateDirectory(Path.Combine(fixtureRoot.FullName, "governance", "rd"));
     Directory.CreateDirectory(Path.Combine(fixtureRoot.FullName, "docs", "authority"));
     var currentAuthorityPath = Path.Combine(fixtureRoot.FullName, "docs", "authority", "current-authority.json");
     var authorityMirrorPath = Path.Combine(fixtureRoot.FullName, "docs", "authority", "mirror.txt");
@@ -226,6 +234,22 @@ created_at: 2026-09-30T00:00:00-04:00
 updated_at: 2026-09-30T00:00:00-04:00
 """);
 
+    var sourceEvidencePath = Path.Combine(fixtureRoot.FullName, "governance", "evidence", "source-evidence.json");
+    File.WriteAllText(sourceEvidencePath, """
+{
+  "schema_version": 1,
+  "scope_type": "WORK_ITEM",
+  "scope_id": "TUN-001",
+  "reviewed_at": "2026-09-30T00:00:00Z",
+  "sources": [{ "url": "https://example.test/source", "finding": "fixture primary source" }]
+}
+""");
+    File.WriteAllText(Path.Combine(fixtureRoot.FullName, "governance", "rd", "source-registry.json"), $$"""
+{
+  "schema_version": 1,
+  "entries": [{ "scope_type": "WORK_ITEM", "scope_id": "TUN-001", "evidence_path": "governance/evidence/source-evidence.json", "evidence_sha256": "{{HashFile(sourceEvidencePath)}}", "reviewed_on": "2026-09-30", "source_authority": "PRIMARY" }]
+}
+""");
     File.WriteAllText(Path.Combine(fixtureRoot.FullName, "governance", "policies", "pr-integration-policy.yaml"), """
 schema_version: 1
 policy_id: fixture-pr-integration

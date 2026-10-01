@@ -45,6 +45,15 @@ dotnet run --project src/Tunner.Governance -- evidence generate --scope-id TUN-P
 ```
 
 `evidence generate` produces a write-once, repository-local JSON manifest for an existing work item. It verifies the authority mirror, records the checked-out Git commit and pre-generation working-tree state, hashes only selected repository-relative files, and requires build, test, and security-scan references. Output is restricted to a new direct `.json` child of `artifacts/evidence/`; source contents, credentials, releases, Product acceptance, protected-main approvals, deployment claims, and external publication are outside its boundary. See `docs/development/LOCAL_EVIDENCE_MANIFEST.md` for the local workflow.
+
+## Source registry
+
+`powershell
+dotnet run --project src/Tunner.Governance -- sources check --as-of 2026-09-30 --max-age-days 14
+`
+
+sources check deterministically validates local primary-source evidence hashes, scope linkage, review dates, and a caller-supplied freshness window. It does not browse externally or make release/Product claims. See docs/development/LOCAL_SOURCE_REGISTRY.md.
+
 ## Validation boundary
 
 The MVP parses YAML with file/line/column diagnostics, builds the versioned JSON Schema catalog, and validates record identifiers, versioning, required fields, and undeclared top-level fields from that catalog. It deliberately does not mutate records. Rich nested type/format checks and Git-history immutability are follow-on governance work and must not be claimed as implemented until their tests exist.

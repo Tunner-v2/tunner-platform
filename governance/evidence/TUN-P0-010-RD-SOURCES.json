@@ -1,21 +1,21 @@
 {
-  ""schema_version"": 1,
-  ""evidence_id"": ""TUN-P0-010-RD-SOURCES"",
-  ""scope_type"": ""WORK_ITEM"",
-  ""scope_id"": ""TUN-P0-010"",
-  ""status"": ""PASS"",
-  ""reviewed_at"": ""2026-09-30T21:25:51.7042870-04:00"",
-  ""sources"": [
-    { ""title"": ""Microsoft .NET unit testing with xUnit"", ""url"": ""https://learn.microsoft.com/en-us/dotnet/core/testing/unit-testing-csharp-with-xunit"", ""type"": ""primary vendor documentation"", ""finding"": ""A .NET xUnit test project is executed through dotnet test with Microsoft.NET.Test.Sdk and xUnit runner dependencies."" },
-    { ""title"": ""Testcontainers for .NET"", ""url"": ""https://dotnet.testcontainers.org/"", ""type"": ""primary project documentation"", ""finding"": ""Testcontainers provides throwaway Docker containers for .NET tests and supports random host-port binding."" },
-    { ""title"": ""Playwright .NET installation"", ""url"": ""https://playwright.dev/dotnet/docs/intro"", ""type"": ""primary project documentation"", ""finding"": ""Playwright .NET supports xUnit test-base integration and requires a separately installed browser runtime before browser execution."" },
-    { ""title"": ""Playwright .NET screenshots"", ""url"": ""https://playwright.dev/dotnet/docs/screenshots"", ""type"": ""primary project documentation"", ""finding"": ""Playwright can save full-page or element screenshots for later UI-authorized evidence."" },
-    { ""title"": ""NuGet package registries"", ""url"": ""https://www.nuget.org/packages/Testcontainers/"", ""type"": ""primary package registry"", ""finding"": ""At review time, Testcontainers 4.15.0, Microsoft.Playwright 1.63.0, Microsoft.NET.Test.Sdk 18.10.1, and xunit.v3 4.0.1 were current stable package releases for the selected test baseline."" }
+  "schema_version": 1,
+  "evidence_id": "TUN-P0-010-RD-SOURCES",
+  "scope_type": "WORK_ITEM",
+  "scope_id": "TUN-P0-010",
+  "status": "PASS",
+  "reviewed_at": "2026-09-30T21:25:51.7042870-04:00",
+  "sources": [
+    { "title": "Microsoft .NET unit testing with xUnit", "url": "https://learn.microsoft.com/en-us/dotnet/core/testing/unit-testing-csharp-with-xunit", "type": "primary vendor documentation", "finding": "A .NET xUnit test project is executed through dotnet test with Microsoft.NET.Test.Sdk and xUnit runner dependencies." },
+    { "title": "Testcontainers for .NET", "url": "https://dotnet.testcontainers.org/", "type": "primary project documentation", "finding": "Testcontainers provides throwaway Docker containers for .NET tests and supports random host-port binding." },
+    { "title": "Playwright .NET installation", "url": "https://playwright.dev/dotnet/docs/intro", "type": "primary project documentation", "finding": "Playwright .NET supports xUnit test-base integration and requires a separately installed browser runtime before browser execution." },
+    { "title": "Playwright .NET screenshots", "url": "https://playwright.dev/dotnet/docs/screenshots", "type": "primary project documentation", "finding": "Playwright can save full-page or element screenshots for later UI-authorized evidence." },
+    { "title": "NuGet package registries", "url": "https://www.nuget.org/packages/Testcontainers/", "type": "primary package registry", "finding": "At review time, Testcontainers 4.15.0, Microsoft.Playwright 1.63.0, Microsoft.NET.Test.Sdk 18.10.1, and xunit.v3 4.0.1 were current stable package releases for the selected test baseline." }
   ],
-  ""decision"": ""Use xUnit through dotnet test as the .NET unit standard, Testcontainers only under explicit local opt-in, and Playwright only as an inert skeleton until UI authority exists. Centralize selected package versions and keep browser installation/container execution operator-run."",
-  ""limitations"": [
-    ""No Product contract or UI journey exists for real contract or browser acceptance tests in P0."",
-    ""Container startup and browser installation are operator-run local actions and not part of default validation."",
-    ""Refresh package and vendor-source versions before material test-harness, CI, browser, or container scope changes.""
+  "decision": "Use xUnit through dotnet test as the .NET unit standard, Testcontainers only under explicit local opt-in, and Playwright only as an inert skeleton until UI authority exists. Centralize selected package versions and keep browser installation/container execution operator-run.",
+  "limitations": [
+    "No Product contract or UI journey exists for real contract or browser acceptance tests in P0.",
+    "Container startup and browser installation are operator-run local actions and not part of default validation.",
+    "Refresh package and vendor-source versions before material test-harness, CI, browser, or container scope changes."
   ]
 }

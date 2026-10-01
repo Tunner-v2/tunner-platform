@@ -1,0 +1,70 @@
+{
+  "schema_version": 1,
+  "evidence_id": "TUN-P0-012-ROLE-REVIEWS",
+  "scope_type": "WORK_ITEM",
+  "scope_id": "TUN-P0-012",
+  "status": "PASS",
+  "reviewed_at": "2026-09-30T23:16:23.4835462-04:00",
+  "reviews": [
+    {
+      "role": "full-stack-engineer",
+      "skill_version": "1.0.0",
+      "conclusion": "PASS",
+      "checks": [
+        "The implementation is isolated to the governance CLI with no Product/API/UI behavior."
+      ],
+      "findings": []
+    },
+    {
+      "role": "governance-engineer",
+      "skill_version": "1.0.0",
+      "conclusion": "PASS",
+      "checks": [
+        "Scope linkage, evidence hash, explicit freshness input, and rejection paths are deterministic."
+      ],
+      "findings": []
+    },
+    {
+      "role": "rd-engineer",
+      "skill_version": "1.0.0",
+      "conclusion": "PASS",
+      "checks": [
+        "The registry requires local PRIMARY HTTPS source metadata and records review dates; no stale evidence passed the explicit test window."
+      ],
+      "findings": [
+        "Live source refresh remains a governed R&D action, not an automated claim by this tool."
+      ]
+    },
+    {
+      "role": "tester-qa-engineer",
+      "skill_version": "1.0.0",
+      "conclusion": "PASS",
+      "checks": [
+        "Positive, stale, and hash mismatch fixture coverage passed with the governance regression suite."
+      ],
+      "findings": []
+    },
+    {
+      "role": "auditor",
+      "skill_version": "1.0.0",
+      "conclusion": "PASS",
+      "checks": [
+        "Existing P0 R&D evidence is traceable through registry hashes; malformed P0-010 evidence was detected and remediated."
+      ],
+      "findings": [
+        "P0-012 remains VALIDATION pending protected integration and P0 enablement."
+      ]
+    }
+  ],
+  "authority_hashes": {
+    "docs/authority/current-authority.json": "925648590845a8f6993860c8936f622f42abba09956ead6511a9b9b2cc302002",
+    "docs/authority/baselines/1.6.0/13_RD_Source_Register.md": "e7ae33989d5d21c593e7425e15d0d35f8ac81590ac357717c263c63188a34a13"
+  },
+  "skill_hashes": {
+    "full-stack-engineer": "fb1cccbb0d8e5ff84e87e0333a76d9db3a30204e62e0027eadc835db56893aff",
+    "governance-engineer": "020d63b77bc5f8516709cc743ae5505e906ce3232b6e0d4ae3fe1799cfc5450d",
+    "rd-engineer": "324a169862ebe365422338592c6d20cec1baae34024e092e18fb8eee6452aa5e",
+    "tester-qa-engineer": "dcefecdc92fd9a92f70944f66ec5a9a4044e4ae70072875d6958c49cde94303c",
+    "auditor": "e7f9746520de0f438fba7946aba0478d030a2cb149b51042639b5e982ec294a2"
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "evidence_id": "DEF-TUN-P0-012-001-REMEDIATION",
+  "scope_type": "DEFECT",
+  "scope_id": "DEF-TUN-P0-012-001",
+  "status": "PASS",
+  "checked_at": "2026-09-30T22:13:50.5341677-04:00",
+  "checks": [
+    {
+      "name": "P0-010 source evidence JSON parse",
+      "command": "Get-Content governance/evidence/TUN-P0-010-RD-SOURCES.json | ConvertFrom-Json",
+      "result": "PASS",
+      "details": "The serialization was normalized without changing the recorded source facts. The file now parses as one JSON object with its original scope and source list."
+    }
+  ],
+  "artifacts": [
+    "governance/evidence/TUN-P0-010-RD-SOURCES.json"
+  ],
+  "limitations": [
+    "This corrects evidence serialization only; it does not refresh external source content or alter P0-010 implementation scope."
+  ]
+}

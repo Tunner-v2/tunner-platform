@@ -1,0 +1,44 @@
+{
+  "schema_version": 1,
+  "evidence_id": "TUN-P0-012-VALIDATION",
+  "scope_type": "WORK_ITEM",
+  "scope_id": "TUN-P0-012",
+  "status": "PASS",
+  "checked_at": "2026-09-30T23:16:23.4835462-04:00",
+  "checks": [
+    {
+      "name": "registered source evidence",
+      "command": "tunner sources check --as-of 2026-09-30 --max-age-days 14",
+      "result": "PASS",
+      "details": "Six registered P0 source-evidence records passed exact hash, scope linkage, primary HTTPS metadata, matching review date, and explicit freshness-window checks."
+    },
+    {
+      "name": "deterministic negative coverage",
+      "command": "dotnet run --project tests/Tunner.Governance.FunctionalTests --no-build",
+      "result": "PASS",
+      "details": "The isolated fixture covers current, stale, and hash-mismatched source evidence."
+    },
+    {
+      "name": "serialization remediation",
+      "command": "ConvertFrom-Json governance/evidence/TUN-P0-010-RD-SOURCES.json",
+      "result": "PASS",
+      "details": "The malformed P0-010 source-evidence serialization was corrected without changing source facts and is recorded by DEF-TUN-P0-012-001."
+    },
+    {
+      "name": "foundation integrity",
+      "command": "dotnet build; static validation; secret scan; authority verify; governance validate",
+      "result": "PASS",
+      "details": "Build was zero-warning; static and functional checks passed; secret scan found no match; authority and governance validation passed."
+    }
+  ],
+  "artifacts": [
+    "src/Tunner.Governance/SourceRegistryApplication.cs",
+    "governance/rd/source-registry.json",
+    "tools/validation/Validate-TunnerSourceRegistry.ps1",
+    "docs/development/LOCAL_SOURCE_REGISTRY.md"
+  ],
+  "limitations": [
+    "This checker validates only local recorded evidence and caller-supplied freshness policy; it does not browse or certify live external source content.",
+    "It does not make Product, release, deployment, or protected-main approval decisions."
+  ]
+}

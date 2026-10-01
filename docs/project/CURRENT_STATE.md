@@ -19,6 +19,7 @@
 | ID | State | Scope | Next action |
 |---|---|---|---|
 | TUN-P0-011 | VALIDATION | Deterministic local evidence manifests only | Retain local evidence; integration remains protected. |
+| TUN-P0-012 | VALIDATION | Local R&D/source registry | Retain local source-evidence and integration controls. |
 
 ## Current P0-011 boundary
 
@@ -29,4 +30,4 @@
 
 ## Exact next authorized action
 
-- Run the final gate/context audit for P0-011, retain its local evidence, commit locally without pushing, then use `governance next` to identify the next eligible P0 item. Do not push or change protected `main` without explicit user direction.
+- Retain P0-012 local source-registry evidence, commit locally without pushing, then use `governance next` to identify the next eligible P0 item. Do not push or change protected `main` without explicit user direction.
