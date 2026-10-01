@@ -2,28 +2,28 @@
 
 ## Work item
 
-- ID: TUN-P0-012
+- ID: TUN-P0-013
 - Milestone/Sprint: P0 / no sprint
 - Status: VALIDATION (local implementation, validation evidence, and role review recorded)
 - Branch: `change/TUN-P0-007-secrets-foundation`
-- Scope: repository-native deterministic local R&D/source registry checks only.
+- Scope: repository-native security and supply-chain baseline only.
 - Integration: local P0 execution continues under AMD-0002. No push or protected-main change has been made.
 
 ## Completed implementation
 
-- `tunner sources check` produces a write-once JSON manifest for an existing governed work item.
-- Output is constrained to a new direct `.json` file in `artifacts/evidence/`; existing outputs, paths outside the repository, missing/reparse-point inputs, invalid authority, unavailable Git identity, and secret-shaped manifest values are rejected.
-- The manifest records a verified authority-summary hash, tool version, SHA-256 hashes for explicit repository-relative artifacts, build/test/security references, exact current Git commit, and pre-generation working-tree state.
-- The output expressly records that it is not release approval, Product acceptance, protected-main authorization, deployment proof, or production evidence.
-- The isolated functional harness covers successful generation, byte-identical output for identical inputs, path rejection, and secret-shaped-output rejection. `LOCAL_EVIDENCE_MANIFEST.md` documents the local command.
+- Local P0 controls run a narrow source-policy SAST scan, repository secret scan, Compose definition policy scan, NuGet vulnerability query, SPDX 2.3 dependency inventory, and SHA-256 provenance hook.
+- The evidence generator writes only disposable ignored `artifacts/supply-chain` files. It checks output boundaries, records the current Git commit and pre-generation tree state, and does not capture source contents or credentials.
+- A read-only GitHub Actions workflow uses immutable action commits, runs the same baseline and isolated rejection suite, uploads disposable evidence, and configures a high/critical public Compose-image scan.
+- Four compatibility/parser defects found during executable validation were remediated and recorded as closed `DEF-TUN-P0-013-001` through `DEF-TUN-P0-013-004`.
 
 ## Boundaries
 
-- Do not embed or scan source contents into the manifest; retain only controlled paths and hashes.
-- Do not treat a local manifest as a release, deployment, Product, approval, or external-publication record.
+- P0-013 does not build or publish a Product image, access a credential, deploy, make a release, or create an attestation.
+- The configured CI container image scans have not been executed locally; a remote GitHub Actions run after integration is the required execution evidence.
+- The local SAST policy is intentionally narrow; language-aware SAST, DAST, threat modeling, penetration testing, signed SBOM/provenance, and release attestation require later governed scope.
 - Do not push without user direction. P0 remains subject to protected integration and the P0 enablement gate.
 
 ## Exact next action
 
-1. Complete the P0-011 source, build, functional, secret, authority, governance, context, and diff-hygiene validation sequence.
-2. Record role review and validation evidence, move to `VALIDATION`, then ask `governance next` for the next eligible P0 item.
+1. Run `tunner governance next` and select the next eligible P0 work item under the ordered backlog.
+2. Retain P0-013 evidence locally; do not claim CI execution or release integrity until the relevant protected integration/release evidence exists.

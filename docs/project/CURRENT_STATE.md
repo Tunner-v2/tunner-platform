@@ -9,10 +9,10 @@
 
 ## Locally validated P0 foundations
 
-- TUN-P0-001 through TUN-P0-010 are locally validated where recorded; no item is represented as `DONE` before protected integration and P0 enablement.
-- TUN-P0-010 completed its independent audit: clean committed diff, zero-warning build, four unit tests passing, repository secret scan with no finding, and current governance/authority/context evidence.
+- TUN-P0-001 through TUN-P0-013 are locally validated where recorded; no item is represented as `DONE` before protected integration and P0 enablement.
 - TUN-P0-008’s local migration rehearsal is operator-confirmed against Tunner’s dedicated loopback PostgreSQL port `25432`; the connection value was not retained in repository evidence.
 - TUN-P0-009 provides only a local, redacted OpenTelemetry baseline. It does not authorize Product telemetry or production observability.
+- TUN-P0-013 adds a local SAST-style policy, NuGet SCA query, repository secret scan, Compose-definition policy, SPDX 2.3 inventory, and checksum/provenance hook. Its GitHub Actions image scan is configured but awaits a remote run; no release attestation, deployment, or Product behavior is claimed.
 
 ## Active work item
 
@@ -20,14 +20,8 @@
 |---|---|---|---|
 | TUN-P0-011 | VALIDATION | Deterministic local evidence manifests only | Retain local evidence; integration remains protected. |
 | TUN-P0-012 | VALIDATION | Local R&D/source registry | Retain local source-evidence and integration controls. |
-
-## Current P0-011 boundary
-
-- The new `evidence generate` command accepts only an existing governed work-item scope and repository-relative evidence paths.
-- It writes only a new direct `.json` child below ignored `artifacts/evidence/`, records SHA-256 hashes rather than source contents, verifies authority, and records exact current Git commit plus pre-generation tree state.
-- It requires build, test, and security-scan references; rejects path escapes, missing/reparse-point artifacts, existing outputs, unavailable Git identity, invalid authority, and secret-shaped output.
-- It does not read credentials, access Drive/GitHub/Docker/databases/Product data, publish externally, approve a release, authorize a merge, or establish Product acceptance.
+| TUN-P0-013 | VALIDATION | Security and supply-chain pipeline baseline | Retain local/CI evidence hooks; actual CI scan requires a remote workflow run after integration. |
 
 ## Exact next authorized action
 
-- Retain P0-012 local source-registry evidence, commit locally without pushing, then use `governance next` to identify the next eligible P0 item. Do not push or change protected `main` without explicit user direction.
+- Use `tunner governance next` to identify the next governance-eligible P0 item. Do not push or change protected `main` without explicit user direction.

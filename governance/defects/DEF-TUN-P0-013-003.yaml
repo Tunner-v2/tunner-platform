@@ -1,0 +1,16 @@
+schema_version: 1
+defect_id: DEF-TUN-P0-013-003
+work_item_id: TUN-P0-013
+classification: BUG
+severity: SEV-3
+status: CLOSED
+environment: .NET clean vulnerability report under Windows PowerShell strict mode
+description: A no-findings dotnet vulnerability report can omit the frameworks property per project; the first parser accessed that property directly under strict mode and stopped evidence generation.
+expected_behavior_ref: TUN-P0-013 must fail for reported vulnerabilities, but valid no-findings package reports must parse as empty vulnerability collections.
+evidence:
+  - tools/security/New-TunnerSupplyChainEvidence.ps1
+  - governance/evidence/DEF-TUN-P0-013-003-REMEDIATION.json
+affected_versions:
+  - tools/security/New-TunnerSupplyChainEvidence.ps1
+created_at: 2026-10-01T00:03:00-04:00
+updated_at: 2026-10-01T00:03:00-04:00

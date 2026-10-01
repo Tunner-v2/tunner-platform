@@ -1,0 +1,41 @@
+schema_version: 1
+work_item_id: TUN-P0-013
+milestone_id: P0
+sprint_id: null
+title: Security and supply-chain pipeline baseline
+status: VALIDATION
+type: SECURITY_PIPELINE
+authority_refs:
+  - docs/authority/current-authority.json
+  - docs/authority/amendments/AMD-0001/effective-overrides/11_Development_Planes_Milestones_and_P0_Backlog.md
+  - docs/authority/amendments/AMD-0001/effective-overrides/36_P0_Repository_Bootstrap_Governance_and_Context_Implementation_Spec.md
+  - docs/authority/amendments/AMD-0002/AMD-0002_Non-Blocking_PR_Approval_and_Continuous_Local_Execution.md
+  - docs/authority/baselines/1.6.0/01_Engineering_Technology_Foundation.md
+  - docs/authority/baselines/1.6.0/03_Governed_Development_Lifecycle_Scrum_Git.md
+  - docs/authority/baselines/1.6.0/04_Governance_and_Context_Tooling_Specification.md
+  - docs/authority/baselines/1.6.0/06_Environment_Configuration_Secrets_and_Deployment.md
+  - docs/authority/baselines/1.6.0/09_Testing_Acceptance_Evidence_and_Quality_Gates.md
+  - docs/authority/baselines/1.6.0/11_Development_Planes_Milestones_and_P0_Backlog.md
+  - docs/authority/baselines/1.6.0/13_RD_Source_Register.md
+  - docs/authority/baselines/1.6.0/33_Production_Readiness_Compliance_and_Release_Gates.md
+flow_refs: []
+contract_refs: []
+decision_refs: [DEC-0002]
+acceptance_criteria:
+  - Provide a deterministic local security baseline covering source-policy SAST, NuGet dependency vulnerability inspection, the existing repository secret scan, and Compose-definition policy checks.
+  - Generate a deterministic SPDX 2.3-compatible package inventory and a non-release checksum/provenance record from restored local dependency metadata.
+  - Add a read-only GitHub Actions workflow that runs the local baseline and immutable-pinned container image vulnerability scans for the declared local Compose images.
+  - Retain generated reports only as disposable local or CI artifacts; do not upload a release, publish an attestation, request deployment credentials, or claim production/release approval.
+  - Fail local checks for reported NuGet vulnerabilities, static source-policy findings, secret findings, unsafe Compose definitions, malformed generated evidence, or invalid output boundaries.
+  - Provide static and executable validation, role-review evidence, current R&D source evidence, governance validation, authority verification, and fresh context.
+prerequisites: [TUN-P0-012]
+blockers: []
+impact: {architecture: true, ui: false, sdk: false, financial: false, compliance: true, security: true, devops: true, support: false}
+activated_roles: [full-stack-engineer, governance-engineer, cyber-security-engineer, devops-engineer, rd-engineer, tester-qa-engineer, auditor]
+required_tests: [SAST source-policy positive and negative validation, NuGet vulnerability query, secret scan, Compose policy scan, SPDX/provenance schema validation, immutable CI action pin validation, build, functional tests, governance validation, authority verification, context freshness]
+required_evidence: [governance/context/CTX-TUN-P0-013-001.yaml, governance/dependencies/DEP-TUN-P0-013-TUN-P0-012.yaml, governance/evidence/TUN-P0-013-RD-SOURCES.json, governance/evidence/TUN-P0-013-VALIDATION.json, governance/evidence/TUN-P0-013-ROLE-REVIEWS.json]
+context_policy: TASK
+todos: []
+defects: [DEF-TUN-P0-013-001, DEF-TUN-P0-013-002, DEF-TUN-P0-013-003, DEF-TUN-P0-013-004]
+created_at: 2026-09-30T23:45:00-04:00
+updated_at: 2026-10-01T00:22:00-04:00

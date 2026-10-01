@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "evidence_id": "TUN-P0-013-RD-SOURCES",
+  "scope_type": "WORK_ITEM",
+  "scope_id": "TUN-P0-013",
+  "status": "PASS",
+  "reviewed_at": "2026-09-30T23:45:00-04:00",
+  "sources": [
+    { "title": "GitHub Actions: Using artifact attestations to establish provenance for builds", "url": "https://docs.github.com/en/actions/how-tos/secure-your-work/use-artifact-attestations/use-artifact-attestations", "type": "primary vendor documentation", "finding": "GitHub supports artifact attestations with SPDX SBOM linkage; P0-013 generates inventory and provenance hooks only and does not create a release attestation." },
+    { "title": "GitHub Actions setup-dotnet", "url": "https://github.com/actions/setup-dotnet", "type": "primary project documentation", "finding": "The official action can install the SDK described by global.json and requires only contents: read for the selected non-publishing workflow." },
+    { "title": "GitHub Actions checkout", "url": "https://github.com/actions/checkout", "type": "primary project documentation", "finding": "Checkout fetches the triggering repository revision; credentials can be disabled after checkout for a read-only security workflow." },
+    { "title": "Trivy Action", "url": "https://github.com/aquasecurity/trivy-action", "type": "primary project documentation", "finding": "The official Trivy action scans public container image references and can fail CI at selected vulnerability severities without credentials." },
+    { "title": "NIST Secure Software Development Framework 1.1", "url": "https://csrc.nist.gov/pubs/sp/800/218/final", "type": "primary standards publication", "finding": "The P0 baseline records machine-readable dependency and provenance evidence and applies repeatable security checks before later release scope." },
+    { "title": "SLSA v1.2", "url": "https://slsa.dev/spec/v1.2/", "type": "primary standards documentation", "finding": "Release provenance remains a later release-integrity operation; this work provides a local checksum/provenance hook rather than a release claim." }
+  ],
+  "decision": "Use dependency-free local PowerShell controls plus the installed .NET package reporting capability for SAST-style policy, SCA, secret, Compose policy, SPDX inventory, and checksum/provenance evidence. Use immutable-pinned GitHub Actions only for read-only CI and public Compose-image vulnerability scans. Do not introduce a product image build, secret, deployment credential, release publication, or release attestation in P0.",
+  "limitations": [
+    "The local SAST control is a narrow, explicit source-policy baseline; it is not a substitute for later language-aware code scanning or penetration testing.",
+    "The generated SPDX inventory and provenance JSON are local/CI evidence hooks, not signed attestations, release approvals, or production deployment evidence.",
+    "The image-vulnerability action executes only in GitHub Actions after protected integration; no container pull, image scan, or external publishing is started locally by this work.",
+    "Refresh all selected action, scanner, and standards references before changing pipeline or release scope."
+  ]
+}
