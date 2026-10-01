@@ -10,11 +10,11 @@
 ## Locally validated foundations
 
 - TUN-P0-001 through TUN-P0-015 are locally validated where recorded; no item is represented as DONE before protected integration and P0 enablement.
-- TUN-P0-026 is locally validated. PR #8 remains an integration-review concern only; it does not block eligible local P0 work.
-- TUN-P0-027 is locally validated: deterministic role activation, structured review enforcement, and scoped blocking passed their local gate.
-- TUN-P0-028 is locally validated: its coordinator-only `tunner work` CLI passes start, plan, validation, and handoff paths without Product execution, lifecycle mutation, merge, or release authority.
+- TUN-P0-026 is integrated into protected main through approved PR #8.
+- TUN-P0-027 and TUN-P0-028 are locally validated governance foundations.
+- TUN-P0-029 is locally validated: adaptive CORE/TASK/EXPANDED/FULL_AUDIT selection, disposable repository indexing, explicit insufficiency escalation, budget failure, access-versus-prompt separation, and source freshness all pass locally.
 
 ## Exact next authorized action
 
-- Run `tunner governance next` and select the next eligible P0 control-plane item. P0-029 is expected to build on the bounded-context behavior without turning generated context into authority.
+- Run `tunner governance next` and select the next eligible P0 control-plane item.
 - Do not push or change protected `main` without explicit user direction.

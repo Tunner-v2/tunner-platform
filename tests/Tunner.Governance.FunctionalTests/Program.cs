@@ -46,6 +46,27 @@ try
     File.AppendAllText(Path.Combine(fixtureRoot.FullName, "governance", "work-items", "TUN-001.yaml"), "\n# Fixture source changed");
     var contextStale = ContextApplication.Verify(fixtureRoot, contextOutput);
     Expect(contextStale.ExitCode == 1, "Context verify must report a changed included source as stale.", failures);
+    File.WriteAllText(Path.Combine(fixtureRoot.FullName, "authority"), "fixture authority reference" + Environment.NewLine);
+    File.Copy(Path.Combine(repositoryRoot.FullName, "AGENTS.md"), Path.Combine(fixtureRoot.FullName, "AGENTS.md"), true);
+    var fixtureSkillDirectory = Path.Combine(fixtureRoot.FullName, ".agent", "skills", "governance-engineer");
+    Directory.CreateDirectory(fixtureSkillDirectory);
+    File.Copy(Path.Combine(repositoryRoot.FullName, ".agent", "skills", "governance-engineer", "SKILL.md"), Path.Combine(fixtureSkillDirectory, "SKILL.md"), true);
+    var fixtureSourceDirectory = Path.Combine(fixtureRoot.FullName, "src", "Tunner.Governance");
+    Directory.CreateDirectory(fixtureSourceDirectory);
+    File.Copy(Path.Combine(repositoryRoot.FullName, "src", "Tunner.Governance", "AdaptiveContextApplication.cs"), Path.Combine(fixtureSourceDirectory, "AdaptiveContextApplication.cs"), true);
+    var adaptiveCoreOutput = new DirectoryInfo(Path.Combine(fixtureRoot.FullName, "docs", "context", "adaptive-core"));
+    var adaptiveCore = AdaptiveContextApplication.Build(fixtureRoot, "TUN-001", adaptiveCoreOutput, new AdaptiveContextRequest("CORE", null, "FULL"));
+    Expect(adaptiveCore.ExitCode == 0 && ((ContextBuildPayload)adaptiveCore.Payload).Included.All(item => item.Reason is "repository entry contract" or "current authority summary" or "selected work item" or "explicit authority reference" or "activated role skill"), "CORE context must retain only mandatory context for the fixture.", failures);
+    var adaptiveBudget = AdaptiveContextApplication.Build(fixtureRoot, "TUN-001", new DirectoryInfo(Path.Combine(fixtureRoot.FullName, "docs", "context", "adaptive-budget")), new AdaptiveContextRequest("TASK", 1, "REPOSITORY_READ"));
+    Expect(adaptiveBudget.ExitCode == 1 && ((ContextBuildPayload)adaptiveBudget.Payload).Outcome == "CONTEXT_BUDGET_INSUFFICIENT", "Context must fail closed when the token budget cannot contain mandatory authority.", failures);
+    var adaptiveEscalation = AdaptiveContextApplication.Escalate(fixtureRoot, "TUN-001", "TASK", "module dependency is missing");
+    Expect(adaptiveEscalation.ExitCode == 0 && ((AdaptiveEscalationPayload)adaptiveEscalation.Payload).NextMode == "EXPANDED", "Insufficient context must return controlled escalation instead of implicitly loading sources.", failures);
+    var adaptiveFullOutput = new DirectoryInfo(Path.Combine(fixtureRoot.FullName, "docs", "context", "adaptive-full"));
+    var adaptiveFull = AdaptiveContextApplication.Build(fixtureRoot, "TUN-001", adaptiveFullOutput, new AdaptiveContextRequest("FULL_AUDIT", null, "FULL"));
+    Expect(adaptiveFull.ExitCode == 0 && File.Exists(Path.Combine(fixtureRoot.FullName, "artifacts", "context-index", "index.json")), "FULL_AUDIT must create a disposable repository index rather than a prompt dump.", failures);
+    Expect(AdaptiveContextApplication.Verify(fixtureRoot, adaptiveFullOutput).ExitCode == 0, "Fresh FULL_AUDIT context must verify.", failures);
+    File.WriteAllText(Path.Combine(fixtureRoot.FullName, "unrelated-context-source.txt"), "changed" + Environment.NewLine);
+    Expect(AdaptiveContextApplication.Verify(fixtureRoot, adaptiveFullOutput).ExitCode == 1, "FULL_AUDIT index must become stale when an indexed repository source changes.", failures);
 
     RunGit(fixtureRoot, "add", ".");
     RunGit(fixtureRoot, "commit", "--quiet", "-m", "fixture pre-evidence state");

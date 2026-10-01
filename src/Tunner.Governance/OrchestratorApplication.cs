@@ -53,7 +53,7 @@ public static class OrchestratorApplication
             return start with { Command = "work context" };
         }
 
-        var build = ContextApplication.Build(repository, workItemId, output);
+        var build = AdaptiveContextApplication.Build(repository, workItemId, output);
         return build.ExitCode == 0
             ? new CommandResult(0, "work context", new OrchestratorPayload("CONTEXT_READY", workItemId, ((OrchestratorPayload)start.Payload).RequiredRoles, ["context was delegated to tunner-context"], []))
             : new CommandResult(build.ExitCode, "work context", build.Payload);

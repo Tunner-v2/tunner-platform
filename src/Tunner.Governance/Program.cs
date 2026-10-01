@@ -139,28 +139,43 @@ public static class Program
     {
         var workItem = new Option<string>("--work-item") { Description = "Governed work item identifier to package." };
         var output = new Option<DirectoryInfo?>("--output") { Description = "Generated pack directory. Defaults to docs/context/current." };
-        var build = new Command("build", "Generate a bounded, manifest-first context pack.");
-        build.Options.Add(workItem);
-        build.Options.Add(output);
+        var mode = new Option<string>("--mode") { Description = "CORE, TASK, EXPANDED, or FULL_AUDIT. Defaults to TASK." };
+        var tokenBudget = new Option<int?>("--token-budget") { Description = "Maximum approximate prompt-input token budget." };
+        var accessScope = new Option<string>("--access-scope") { Description = "Authorized repository access scope; independent from prompt selection." };
+        var build = new Command("build", "Generate a bounded, manifest-first adaptive context pack.");
+        build.Options.Add(workItem); build.Options.Add(output); build.Options.Add(mode); build.Options.Add(tokenBudget); build.Options.Add(accessScope);
         build.SetAction(parseResult =>
         {
             var repository = Repository(parseResult, repositoryOption);
             var destination = parseResult.GetValue(output) ?? new DirectoryInfo(Path.Combine(repository.FullName, "docs", "context", "current"));
-            return WriteResult(ContextApplication.Build(repository, parseResult.GetValue(workItem) ?? string.Empty, destination));
+            return WriteResult(AdaptiveContextApplication.Build(repository, parseResult.GetValue(workItem) ?? string.Empty, destination, new AdaptiveContextRequest(parseResult.GetValue(mode) ?? "TASK", parseResult.GetValue(tokenBudget), parseResult.GetValue(accessScope) ?? "REPOSITORY_READ")));
         });
-
-        var verify = new Command("verify", "Verify the generated context pack source hashes.");
+        var verify = new Command("verify", "Verify the generated context pack source hashes and adaptive index freshness.");
         verify.Options.Add(output);
         verify.SetAction(parseResult =>
         {
             var repository = Repository(parseResult, repositoryOption);
             var destination = parseResult.GetValue(output) ?? new DirectoryInfo(Path.Combine(repository.FullName, "docs", "context", "current"));
-            return WriteResult(ContextApplication.Verify(repository, destination));
+            return WriteResult(AdaptiveContextApplication.Verify(repository, destination));
         });
-
-        var context = new Command("context", "Generate and verify bounded repository context packs.");
-        context.Subcommands.Add(build);
-        context.Subcommands.Add(verify);
+        var indexOutput = new Option<FileInfo?>("--output") { Description = "Disposable index path; defaults to artifacts/context-index/index.json." };
+        var indexBuild = new Command("build", "Build a deterministic disposable authority/repository discovery index.");
+        indexBuild.Options.Add(indexOutput);
+        indexBuild.SetAction(parseResult =>
+        {
+            var repository = Repository(parseResult, repositoryOption);
+            return WriteResult(AdaptiveContextApplication.BuildIndex(repository, parseResult.GetValue(indexOutput) ?? new FileInfo(Path.Combine(repository.FullName, "artifacts", "context-index", "index.json"))));
+        });
+        var index = new Command("index", "Build disposable repository discovery indexes.");
+        index.Subcommands.Add(indexBuild);
+        var escalationWorkItem = new Argument<string>("work-item") { Description = "Governed work item identifier." };
+        var from = new Option<string>("--from") { Description = "Current context mode." };
+        var reason = new Option<string>("--reason") { Description = "Why the current bounded context is insufficient." };
+        var escalate = new Command("escalate", "Return the next governed context mode without implicitly loading sources.");
+        escalate.Arguments.Add(escalationWorkItem); escalate.Options.Add(from); escalate.Options.Add(reason);
+        escalate.SetAction(parseResult => WriteResult(AdaptiveContextApplication.Escalate(Repository(parseResult, repositoryOption), parseResult.GetValue(escalationWorkItem) ?? string.Empty, parseResult.GetValue(from) ?? "TASK", parseResult.GetValue(reason) ?? string.Empty)));
+        var context = new Command("context", "Generate, verify, index, and escalate bounded repository context.");
+        context.Subcommands.Add(build); context.Subcommands.Add(verify); context.Subcommands.Add(index); context.Subcommands.Add(escalate);
         return context;
     }
     private static Command CreateEvidenceCommand(Option<DirectoryInfo?> repositoryOption)
