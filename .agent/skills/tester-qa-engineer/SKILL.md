@@ -1,4 +1,5 @@
 ---
+skill_id: tester-qa-engineer
 name: tester-qa-engineer
 title: "Tester & QA Engineer"
 version: 1.0.0

@@ -1,4 +1,5 @@
 ---
+skill_id: sdk-engineer
 name: sdk-engineer
 title: "SDK Engineer"
 version: 1.0.0

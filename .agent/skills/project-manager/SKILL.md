@@ -1,4 +1,5 @@
 ---
+skill_id: project-manager
 name: project-manager
 title: "Project Manager"
 version: 1.0.0

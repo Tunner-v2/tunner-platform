@@ -29,3 +29,4 @@
 ## Exact next authorized action
 
 - Use tunner governance next to identify the next governance-eligible P0 item. Do not push or change protected main without explicit user direction.
+- TUN-P0-026 locally validates the mandatory agent skill registry and activated-skill version/hash context metadata.

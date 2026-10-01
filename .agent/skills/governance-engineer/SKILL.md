@@ -1,4 +1,5 @@
 ---
+skill_id: governance-engineer
 name: governance-engineer
 title: "Governance Engineer"
 version: 1.0.0

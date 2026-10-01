@@ -1,4 +1,5 @@
 ---
+skill_id: compliance-specialist
 name: compliance-specialist
 title: "Compliance Specialist"
 version: 1.0.0

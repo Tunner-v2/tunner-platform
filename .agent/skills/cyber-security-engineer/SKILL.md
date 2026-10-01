@@ -1,4 +1,5 @@
 ---
+skill_id: cyber-security-engineer
 name: cyber-security-engineer
 title: "Cyber Security Engineer"
 version: 1.0.0

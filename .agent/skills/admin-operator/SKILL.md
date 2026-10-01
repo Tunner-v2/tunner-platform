@@ -1,4 +1,5 @@
 ---
+skill_id: admin-operator
 name: admin-operator
 title: "Admin / Operator"
 version: 1.0.0

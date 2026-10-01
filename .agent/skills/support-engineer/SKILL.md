@@ -1,4 +1,5 @@
 ---
+skill_id: support-engineer
 name: support-engineer
 title: "Support Engineer"
 version: 1.0.0

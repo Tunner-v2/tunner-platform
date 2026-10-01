@@ -1,4 +1,5 @@
 ---
+skill_id: frontend-engineer
 name: frontend-engineer
 title: "Frontend Engineer"
 version: 1.0.0

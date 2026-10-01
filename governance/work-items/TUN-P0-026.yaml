@@ -1,0 +1,35 @@
+schema_version: 1
+work_item_id: TUN-P0-026
+milestone_id: P0
+sprint_id: null
+title: Agent skill registry and entry contract
+status: IN_PROGRESS
+type: GOVERNANCE_TOOLING
+authority_refs:
+  - docs/authority/current-authority.json
+  - docs/authority/amendments/AMD-0001/effective-overrides/11_Development_Planes_Milestones_and_P0_Backlog.md
+  - docs/authority/amendments/AMD-0001/effective-overrides/12_AI_Development_Protocol_Context_and_Project_Memory.md
+  - docs/authority/amendments/AMD-0001/35_AI_Agent_Skill_Catalog_and_Review_Contracts.md
+  - docs/authority/baselines/1.6.0/04_Governance_and_Context_Tooling_Specification.md
+  - docs/authority/baselines/1.6.0/09_Testing_Acceptance_Evidence_and_Quality_Gates.md
+flow_refs: []
+contract_refs: []
+decision_refs: [DEC-0002]
+acceptance_criteria:
+  - Provide a canonical registry for all twenty mandatory role skill manifests.
+  - Validate every registry entry, manifest path, identity, version, active status, and all common-contract sections without treating a human-readable summary as sufficient.
+  - Preserve the concise .agent/AGENTS.md entry contract and validate that it points to repository authority, governance startup commands, and skills without duplicating project memory.
+  - Include activated skill role, version, and SHA-256 in generated context output.
+  - Provide deterministic positive and negative tests and documented local validation commands.
+  - Do not add Product behavior, role-activation policy, workflow orchestration, external retrieval, or human-approval bypass.
+prerequisites: [TUN-P0-001]
+blockers: []
+impact: {architecture: false, ui: false, sdk: false, financial: false, compliance: false, security: false, devops: false, support: false}
+activated_roles: [full-stack-engineer, governance-engineer, tester-qa-engineer, auditor]
+required_tests: [registry and manifest positive validation, missing-role and malformed-manifest negative validation, generated context role-version-hash validation, build, governance validation, authority verification, context freshness, diff hygiene]
+required_evidence: [governance/context/CTX-TUN-P0-026-001.yaml, governance/dependencies/DEP-TUN-P0-026-TUN-P0-001.yaml, governance/evidence/TUN-P0-026-VALIDATION.json, governance/evidence/TUN-P0-026-ROLE-REVIEWS.json]
+context_policy: TASK
+todos: []
+defects: []
+created_at: 2026-10-01T00:40:00-04:00
+updated_at: 2026-10-01T00:40:00-04:00

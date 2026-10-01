@@ -1,4 +1,5 @@
 ---
+skill_id: solution-architect
 name: solution-architect
 title: "Solution Architect"
 version: 1.0.0

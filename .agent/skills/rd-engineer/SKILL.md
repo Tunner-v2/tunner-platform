@@ -1,4 +1,5 @@
 ---
+skill_id: rd-engineer
 name: rd-engineer
 title: "R&D Engineer"
 version: 1.0.0

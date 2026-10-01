@@ -1,4 +1,5 @@
 ---
+skill_id: financial-specialist
 name: financial-specialist
 title: "Financial Specialist"
 version: 1.0.0

@@ -1,4 +1,5 @@
 ---
+skill_id: founder-product-owner
 name: founder-product-owner
 title: "Founder / Product Owner Review"
 version: 1.0.0

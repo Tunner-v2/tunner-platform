@@ -194,8 +194,26 @@ public static class ContextApplication
             return false;
         }
 
-        included[normalized] = new ContextArtifact(normalized, reason, HashFile(fullPath));
+        included[normalized] = new ContextArtifact(normalized, reason, HashFile(fullPath), SkillVersion(fullPath, reason));
         return true;
+    }
+
+    private static string? SkillVersion(string path, string reason)
+    {
+        if (!StringComparer.Ordinal.Equals(reason, "activated role skill"))
+        {
+            return null;
+        }
+
+        try
+        {
+            var firstLines = File.ReadLines(path).Take(16).ToArray();
+            return firstLines.Select(line => line.Split(':', 2)).FirstOrDefault(parts => parts.Length == 2 && StringComparer.Ordinal.Equals(parts[0].Trim(), "version"))?[1].Trim().Trim('"', '\'');
+        }
+        catch (IOException)
+        {
+            return null;
+        }
     }
 
     private static string[] GitHistory(DirectoryInfo repository, IEnumerable<string> paths)
@@ -253,7 +271,7 @@ public static class ContextApplication
     }
 }
 
-public sealed record ContextArtifact(string Path, string Reason, string Sha256);
+public sealed record ContextArtifact(string Path, string Reason, string Sha256, string? Version = null);
 public sealed record ContextExclusion(string Path, string Reason);
 public sealed record ContextWorkItemDescriptor(string Id, string Title, string Status, string ContextPolicy);
 public sealed record ContextManifest(string GeneratorVersion, DateTimeOffset GeneratedAt, ContextWorkItemDescriptor WorkItem, IReadOnlyList<ContextArtifact> Included, IReadOnlyList<ContextExclusion> Excluded, IReadOnlyList<string> GitHistory);
