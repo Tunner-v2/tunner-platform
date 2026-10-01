@@ -1,7 +1,7 @@
 # Tunner Development Authority Amendment
 
-> **Status:** APPROVED / ACTIVE
-> **Effective date:** 2026-09-30
+> **Status:** APPROVED / ACTIVE  
+> **Effective date:** 2026-09-30  
 > **Target baseline:** Tunner Development Documentation Baseline 1.6.0
 
 # AMD-0003 — Location-Independent Repository & Path Resolution
