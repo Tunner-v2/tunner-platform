@@ -1,0 +1,38 @@
+schema_version: 1
+work_item_id: TUN-P0-015
+milestone_id: P0
+sprint_id: null
+title: Documentation validation
+status: VALIDATION
+type: GOVERNANCE_TOOLING
+authority_refs:
+  - docs/authority/current-authority.json
+  - docs/authority/amendments/AMD-0001/effective-overrides/11_Development_Planes_Milestones_and_P0_Backlog.md
+  - docs/authority/amendments/AMD-0002/AMD-0002_Non-Blocking_PR_Approval_and_Continuous_Local_Execution.md
+  - docs/authority/baselines/1.6.0/00_Authority_Change_Control_and_Documentation_Governance.md
+  - docs/authority/baselines/1.6.0/04_Governance_and_Context_Tooling_Specification.md
+  - docs/authority/baselines/1.6.0/09_Testing_Acceptance_Evidence_and_Quality_Gates.md
+  - docs/authority/baselines/1.6.0/11_Development_Planes_Milestones_and_P0_Backlog.md
+  - docs/authority/baselines/1.6.0/13_RD_Source_Register.md
+flow_refs: []
+contract_refs: []
+decision_refs: [DEC-0002]
+acceptance_criteria:
+  - Deterministically validate repository-local Markdown links without fetching external URLs.
+  - Validate canonical governance record identifiers and reject duplicate identifiers within the same record type.
+  - Run the existing governance schema catalog and record validation boundaries without duplicating their implementation.
+  - Require authority package or amendment and status headers on mirrored baseline and amendment Markdown records.
+  - Evaluate local recorded source review freshness using the P0-012 registry and explicit caller-supplied date/window.
+  - Provide isolated positive and negative regression coverage and documented local commands.
+  - Do not claim live web validation, Product behavior, release approval, deployment, or protected-main integration.
+prerequisites: [TUN-P0-003]
+blockers: []
+impact: {architecture: false, ui: false, sdk: false, financial: false, compliance: false, security: false, devops: false, support: false}
+activated_roles: [full-stack-engineer, governance-engineer, tester-qa-engineer, auditor]
+required_tests: [repository documentation validation, isolated missing-link duplicate-ID and header-negative checks, build, governance validation, authority verification, context freshness, diff hygiene]
+required_evidence: [governance/context/CTX-TUN-P0-015-001.yaml, governance/dependencies/DEP-TUN-P0-015-TUN-P0-003.yaml, governance/evidence/TUN-P0-015-VALIDATION.json, governance/evidence/TUN-P0-015-ROLE-REVIEWS.json]
+context_policy: TASK
+todos: []
+defects: []
+created_at: 2026-10-01T01:20:00-04:00
+updated_at: 2026-10-01T01:20:00-04:00
