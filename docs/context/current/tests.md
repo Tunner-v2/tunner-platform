@@ -1,10 +1,7 @@
 # Tests and evidence
 
-- `index build` — required test
-- `mode selection` — required test
-- `budget insufficiency` — required test
-- `stale invalidation` — required test
-- `controlled escalation` — required test
+- `project-memory validation` — required test
+- `handoff completeness` — required test
 - `build` — required test
 - `governance validation` — required test
 - `authority verification` — required test
@@ -12,6 +9,8 @@
 
 ## Required evidence
 
-- `governance/dependencies/DEP-TUN-P0-029-TUN-P0-028.yaml` — required evidence
-- `governance/evidence/TUN-P0-029-VALIDATION.json` — required evidence
-- `governance/evidence/TUN-P0-029-ROLE-REVIEWS.json` — required evidence
+- `governance/context/CTX-TUN-P0-030-001.yaml` — required evidence
+- `governance/dependencies/DEP-TUN-P0-030-TUN-P0-003.yaml` — required evidence
+- `governance/dependencies/DEP-TUN-P0-030-TUN-P0-005.yaml` — required evidence
+- `governance/evidence/TUN-P0-030-VALIDATION.json` — required evidence
+- `governance/evidence/TUN-P0-030-ROLE-REVIEWS.json` — required evidence

@@ -2,18 +2,17 @@
 
 ## Work item
 
-- ID: TUN-P0-029
+- ID: TUN-P0-030
 - Status: VALIDATION
 - Branch: change/TUN-P0-027-role-activation
-- Scope: adaptive governed context indexing and retrieval tooling.
+- Scope: persistent repository-native project memory and handoff validation.
 
 ## Verified local evidence
 
-- `tunner context build` supports CORE, TASK, EXPANDED, and FULL_AUDIT selections with a recorded access scope and budget.
-- `tunner context index build` emits a deterministic disposable discovery index; FULL_AUDIT remains an index/retrieval boundary, not a repository prompt dump.
-- Insufficient budget returns `CONTEXT_BUDGET_INSUFFICIENT`; `tunner context escalate` returns explicit `INSUFFICIENT_CONTEXT` with the next mode and no implicit source load.
-- Context verification detects selected-source changes and FULL_AUDIT index-source changes.
-- Build, functional tests, authority verification, governance validation, role calculation, work-item gate, context verification, and diff hygiene pass.
+- The project-memory validator confirms all five required project records are present, non-empty, and structurally usable.
+- Current state and handoff contain their required durable sections; governed state directories exist.
+- Zero-warning build, authority verification, governance validation, role calculation, context verification, and the P0-030 governance gate pass.
+- No Product behavior, authority override, remote action, or protected-main bypass was introduced.
 
 ## Exact next action
 

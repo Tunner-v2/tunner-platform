@@ -11,8 +11,8 @@
 
 - TUN-P0-001 through TUN-P0-015 are locally validated where recorded; no item is represented as DONE before protected integration and P0 enablement.
 - TUN-P0-026 is integrated into protected main through approved PR #8.
-- TUN-P0-027 and TUN-P0-028 are locally validated governance foundations.
-- TUN-P0-029 is locally validated: adaptive CORE/TASK/EXPANDED/FULL_AUDIT selection, disposable repository indexing, explicit insufficiency escalation, budget failure, access-versus-prompt separation, and source freshness all pass locally.
+- TUN-P0-027 through TUN-P0-030 are locally validated governance foundations.
+- TUN-P0-030 verifies that project context, current state, decisions, risks, and handoff are durable repository-native records with a deterministic validation command.
 
 ## Exact next authorized action
 
