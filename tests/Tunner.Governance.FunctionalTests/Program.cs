@@ -118,6 +118,10 @@ try
     Expect(orchestratorStart.ExitCode == 0 && ((OrchestratorPayload)orchestratorStart.Payload).Outcome == "ELIGIBLE", "Orchestrator must accept an eligible in-progress work item without mutating it.", failures);
     var orchestratorRun = OrchestratorApplication.Run(fixtureRoot, "TUN-ORCH");
     Expect(orchestratorRun.ExitCode == 0 && ((OrchestratorPayload)orchestratorRun.Payload).Outcome == "PLAN_READY", "Orchestrator run must return a plan instead of executing Product operations.", failures);
+    var orchestratorPath = Path.Combine(fixtureRoot.FullName, "governance", "work-items", "TUN-ORCH.yaml");
+    File.WriteAllText(orchestratorPath, File.ReadAllText(orchestratorPath).Replace("status: IN_PROGRESS", "status: CODE_REVIEW"));
+    var orchestratorReviewState = OrchestratorApplication.Start(fixtureRoot, "TUN-ORCH");
+    Expect(orchestratorReviewState.ExitCode == 0, "Orchestrator must permit governed review-state validation work.", failures);
     var orchestratorRefused = OrchestratorApplication.Start(fixtureRoot, "TUN-TRANSITION");
     Expect(orchestratorRefused.ExitCode == 1 && ((OrchestratorPayload)orchestratorRefused.Payload).Outcome == "LIFECYCLE_REFUSED", "Orchestrator must refuse a non-ready lifecycle state.", failures);
     var authorityMirrorPath = Path.Combine(fixtureRoot.FullName, "docs", "authority", "mirror.txt");
@@ -365,8 +369,8 @@ required_evidence: []
 context_policy: TASK
 todos: []
 defects: []
-created_at: 2026-10-01T06:00:00-04:00
-updated_at: 2026-10-01T06:00:00-04:00
+created_at: 2026-09-30T06:00:00-04:00
+updated_at: 2026-09-30T06:00:00-04:00
 """);
 }
 static void WriteRoleMatrixWorkItem(DirectoryInfo fixtureRoot, string activatedRoles)

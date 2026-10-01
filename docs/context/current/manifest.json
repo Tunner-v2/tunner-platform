@@ -1,10 +1,10 @@
 {
   "GeneratorVersion": "tunner-context-0.1.0",
-  "GeneratedAt": "2026-10-01T16:41:45.458007+00:00",
+  "GeneratedAt": "2026-10-01T16:54:38.608621+00:00",
   "WorkItem": {
     "Id": "TUN-P0-028",
     "Title": "Governance-controlled orchestrator",
-    "Status": "IN_PROGRESS",
+    "Status": "CODE_REVIEW",
     "ContextPolicy": "TASK"
   },
   "Included": [
@@ -71,13 +71,13 @@
     {
       "Path": "docs/project/CURRENT_STATE.md",
       "Reason": "current project state",
-      "Sha256": "6a547b3f31e007e4393dd6c9d122cc0a7a03e81c614a5c23a823f13f02bec09e",
+      "Sha256": "6b0c0876831f0d13432ca0b2eb8226a9f85453c60eb3d6e0de34b49e9887669f",
       "Version": null
     },
     {
       "Path": "docs/project/HANDOFF.md",
       "Reason": "handoff state",
-      "Sha256": "e7a25bb9134364c2a2586bd22a4fa26e13e8bc6a2d382874a2921492619cc254",
+      "Sha256": "404392f78eb05c157124e448fd928d70769cd90e37e9b9edd3f3886bca49caee",
       "Version": null
     },
     {
@@ -105,9 +105,45 @@
       "Version": null
     },
     {
+      "Path": "governance/evidence/TUN-P0-028-ROLE-REVIEWS.json",
+      "Reason": "required evidence",
+      "Sha256": "6231c4a2870fbe5b0e5883d7055a9a23bd3b7c96effa37ac202d7dcd38c23e18",
+      "Version": null
+    },
+    {
+      "Path": "governance/evidence/TUN-P0-028-VALIDATION.json",
+      "Reason": "required evidence",
+      "Sha256": "3c7e8785ae626532e0a0a17e4fb65bd78feac0feb083d094a54a47e24e02dbd9",
+      "Version": null
+    },
+    {
       "Path": "governance/policies/lifecycle-policy.yaml",
       "Reason": "lifecycle policy",
       "Sha256": "e3f9131426f8aa2725c10cc80cec7592f3a0b4743364210f2f951e5c1d69ada9",
+      "Version": null
+    },
+    {
+      "Path": "governance/reviews/REV-TUN-P0-028-auditor.yaml",
+      "Reason": "required evidence",
+      "Sha256": "995824de43803f2bb0e4aa7ec77b2126aaa2b9b4f88681288ef895396fedf721",
+      "Version": null
+    },
+    {
+      "Path": "governance/reviews/REV-TUN-P0-028-full-stack-engineer.yaml",
+      "Reason": "required evidence",
+      "Sha256": "a5ebec0ebd1c1f5f607c669143793bf7cc82677d1109c23e034ee8ad45a2d8f5",
+      "Version": null
+    },
+    {
+      "Path": "governance/reviews/REV-TUN-P0-028-governance-engineer.yaml",
+      "Reason": "required evidence",
+      "Sha256": "74c0683de2f5c68f0aeaf4ee78b273da4e6638af7bf2c309f0eb06591188cd51",
+      "Version": null
+    },
+    {
+      "Path": "governance/reviews/REV-TUN-P0-028-tester-qa-engineer.yaml",
+      "Reason": "required evidence",
+      "Sha256": "3613ec8b4d43524ac61439b1c47c781d8d6a543aeebd78f7f2d45baf125254d9",
       "Version": null
     },
     {
@@ -119,7 +155,7 @@
     {
       "Path": "governance/work-items/TUN-P0-028.yaml",
       "Reason": "selected work item",
-      "Sha256": "b11e86b397b3c95e6d793cbbf87c9d60f1c5816a6fc3055e31a8a9eb3560e5c4",
+      "Sha256": "b268157a9818d2d6024152535e314f04e01fccff0b226db94242e6c283e06ff0",
       "Version": null
     }
   ],
@@ -127,33 +163,10 @@
     {
       "Path": "governance/decisions/dec-0002-p0-local-integration.yaml",
       "Reason": "optional source is unavailable: explicit decision reference"
-    },
-    {
-      "Path": "governance/evidence/TUN-P0-028-ROLE-REVIEWS.json",
-      "Reason": "optional source is unavailable: required evidence"
-    },
-    {
-      "Path": "governance/evidence/TUN-P0-028-VALIDATION.json",
-      "Reason": "optional source is unavailable: required evidence"
-    },
-    {
-      "Path": "governance/reviews/REV-TUN-P0-028-auditor.yaml",
-      "Reason": "optional source is unavailable: required evidence"
-    },
-    {
-      "Path": "governance/reviews/REV-TUN-P0-028-full-stack-engineer.yaml",
-      "Reason": "optional source is unavailable: required evidence"
-    },
-    {
-      "Path": "governance/reviews/REV-TUN-P0-028-governance-engineer.yaml",
-      "Reason": "optional source is unavailable: required evidence"
-    },
-    {
-      "Path": "governance/reviews/REV-TUN-P0-028-tester-qa-engineer.yaml",
-      "Reason": "optional source is unavailable: required evidence"
     }
   ],
   "GitHistory": [
+    "ac5c875 feat: add governed work orchestrator",
     "42b2802 chore: record P0 role matrix local validation",
     "d1c9ca6 feat: enforce P0 role activation review matrix",
     "6b09ebe feat: add P0 skill registry validation",
@@ -162,7 +175,6 @@
     "1bffc55 feat: add P0 security supply-chain baseline",
     "e12e7b0 feat: add P0 source registry checker",
     "89d102a feat: add P0 evidence manifest generator",
-    "b8a1e35 feat: add P0 test harness",
-    "8bf2b8d feat: add P0 observability baseline"
+    "b8a1e35 feat: add P0 test harness"
   ]
 }

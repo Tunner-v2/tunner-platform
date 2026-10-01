@@ -2,19 +2,19 @@
 
 ## Work item
 
-- ID: TUN-P0-027
-- Status: VALIDATION
+- ID: TUN-P0-028
+- Status: CODE_REVIEW
 - Branch: change/TUN-P0-027-role-activation
-- Commit: d1c9ca6
-- Scope: deterministic impact-to-role calculation, structured specialist review records, scope-local blocking, and governance gate/next enforcement.
+- Commit: ac5c875
+- Scope: governance-controlled work dispatcher and unified `tunner work` commands.
 
 ## Verified local evidence
 
-- `governance gate check TUN-P0-027` is READY.
-- Zero-warning solution build, role-activation static validation, isolated functional tests, governance validation, authority verification, context verification, and diff hygiene pass.
-- The four calculated roles are Full-stack, Governance, QA, and Auditor. Formal review records are PASS with no blocking findings.
-- P0-026's lifecycle record is corrected to `VALIDATION`; its protected-main PR remains a distinct integration concern under AMD-0002.
+- `work start` and `work run` return a governed plan only.
+- `work validate` and `work handoff` pass for TUN-P0-028.
+- Functional coverage proves eligible planning and refusal of a non-ready lifecycle state.
+- The coordinator cannot mutate work state, invoke Product operations, merge, or release.
 
 ## Exact next action
 
-- Run `tunner governance next`, create the P0-028 record with its explicit P0-027 `LOCAL_VALIDATED` dependency if eligible, then continue the governance-controlled orchestrator slice locally. Do not push or modify protected `main` unless the user directs it.
+- Re-run the full local evidence set, transition TUN-P0-028 from CODE_REVIEW to VALIDATION, refresh context/project state, and use governance next to select the following eligible P0 item.

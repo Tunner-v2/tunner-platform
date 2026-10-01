@@ -23,15 +23,15 @@ public static class OrchestratorApplication
         }
 
         var state = workItem.Scalar("status") ?? "UNKNOWN";
-        if (!new[] { "READY", "IN_PROGRESS" }.Contains(state, StringComparer.Ordinal))
+        if (!new[] { "READY", "IN_PROGRESS", "CODE_REVIEW", "VALIDATION" }.Contains(state, StringComparer.Ordinal))
         {
             return Blocked(workItemId, "LIFECYCLE_REFUSED", [$"work item state '{state}' is not eligible for orchestrated execution"]);
         }
 
         var next = GovernanceApplication.Next(repository);
         var item = ((NextPayload)next.Payload).Items.SingleOrDefault(candidate => StringComparer.Ordinal.Equals(candidate.WorkItemId, workItemId));
-        var hardBlock = item is not null && (item.Reason.Contains("prerequisite", StringComparison.Ordinal) || item.Reason.Contains("blocker:", StringComparison.Ordinal) || item.Reason.Contains("authority verification failed", StringComparison.Ordinal) || item.Reason.Contains("unmerged", StringComparison.Ordinal));
-        if (next.ExitCode != 0 || item is null || !item.Actionable || hardBlock)
+        var hardBlock = item is not null && (item.Reason.Contains("prerequisite '", StringComparison.Ordinal) || item.Reason.Contains("blocker:", StringComparison.Ordinal) || item.Reason.Contains("authority verification failed", StringComparison.Ordinal) || item.Reason.Contains("unmerged", StringComparison.Ordinal));
+        if (next.ExitCode != 0 || item is null || (!item.Actionable && !StringComparer.Ordinal.Equals(item.Reason, "all recorded prerequisites and blockers permit work")) || hardBlock)
         {
             return Blocked(workItemId, "GOVERNANCE_REFUSED", item is null ? ["governance did not expose the requested work item as actionable"] : [item.Reason]);
         }
