@@ -11,11 +11,11 @@
 
 - TUN-P0-001 through TUN-P0-015 are locally validated where recorded; no item is represented as DONE before protected integration and P0 enablement.
 - TUN-P0-026 is locally validated. PR #8 remains an integration-review concern only; it does not block eligible local P0 work.
-- TUN-P0-027 implements deterministic role activation and structured review enforcement. It is in `CODE_REVIEW`; its local gate is READY, while protected-main integration has not been requested or performed.
+- TUN-P0-027 is locally validated: deterministic role activation, structured review enforcement, and scoped blocking all passed their local gate. It remains unmerged; protected-main integration has not been requested or performed.
 - TUN-P0-008’s local migration rehearsal is operator-confirmed against Tunner’s dedicated loopback PostgreSQL port 25432; its connection value was not retained in repository evidence.
 - TUN-P0-013 has local security/supply-chain evidence only; remote CI scanning and all production claims remain outside the verified scope.
 
 ## Exact next authorized action
 
-- Complete the P0-027 validation-state transition after its reviewable local slice is committed, refresh context, then run `tunner governance next` for the next eligible P0 item.
+- Run `tunner governance next` and select the next eligible P0 control-plane item. P0-028 is expected to consume the locally validated P0-027 role matrix when its dependency is declared `LOCAL_VALIDATED`.
 - Do not push or change protected `main` without explicit user direction.
