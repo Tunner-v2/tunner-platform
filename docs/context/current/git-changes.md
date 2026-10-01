@@ -1,5 +1,6 @@
 # Recent relevant Git changes
 
+- `42b2802 chore: record P0 role matrix local validation`
 - `d1c9ca6 feat: enforce P0 role activation review matrix`
 - `6b09ebe feat: add P0 skill registry validation`
 - `bb76144 feat: add P0 documentation validation`
@@ -9,4 +10,3 @@
 - `89d102a feat: add P0 evidence manifest generator`
 - `b8a1e35 feat: add P0 test harness`
 - `8bf2b8d feat: add P0 observability baseline`
-- `f3f7757 governance: record repeat migration rehearsal`

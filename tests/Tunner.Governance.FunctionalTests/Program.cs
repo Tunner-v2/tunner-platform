@@ -113,6 +113,13 @@ try
     var roleBlocked = GovernanceApplication.CheckGate(fixtureRoot, "TUN-P0-027");
     Expect(roleBlocked.ExitCode == 1 && ((GatePayload)roleBlocked.Payload).Failures.Any(item => item.Contains("mandatory role review did not pass: auditor", StringComparison.Ordinal)), "A blocking specialist review must block only its affected work-item gate.", failures);
 
+    WriteOrchestratorWorkItem(fixtureRoot);
+    var orchestratorStart = OrchestratorApplication.Start(fixtureRoot, "TUN-ORCH");
+    Expect(orchestratorStart.ExitCode == 0 && ((OrchestratorPayload)orchestratorStart.Payload).Outcome == "ELIGIBLE", "Orchestrator must accept an eligible in-progress work item without mutating it.", failures);
+    var orchestratorRun = OrchestratorApplication.Run(fixtureRoot, "TUN-ORCH");
+    Expect(orchestratorRun.ExitCode == 0 && ((OrchestratorPayload)orchestratorRun.Payload).Outcome == "PLAN_READY", "Orchestrator run must return a plan instead of executing Product operations.", failures);
+    var orchestratorRefused = OrchestratorApplication.Start(fixtureRoot, "TUN-TRANSITION");
+    Expect(orchestratorRefused.ExitCode == 1 && ((OrchestratorPayload)orchestratorRefused.Payload).Outcome == "LIFECYCLE_REFUSED", "Orchestrator must refuse a non-ready lifecycle state.", failures);
     var authorityMirrorPath = Path.Combine(fixtureRoot.FullName, "docs", "authority", "mirror.txt");
     File.AppendAllText(authorityMirrorPath, "tampered");
     var authorityTampered = AuthorityApplication.Verify(fixtureRoot);
@@ -334,6 +341,34 @@ updated_at: 2026-09-30T00:00:00-04:00
 """);
 }
 
+static void WriteOrchestratorWorkItem(DirectoryInfo fixtureRoot)
+{
+    File.WriteAllText(Path.Combine(fixtureRoot.FullName, "governance", "work-items", "TUN-ORCH.yaml"), """
+schema_version: 1
+work_item_id: TUN-ORCH
+milestone_id: P0
+sprint_id: null
+title: Orchestrator fixture
+status: IN_PROGRESS
+type: GOVERNANCE_TOOLING
+authority_refs: [authority]
+flow_refs: []
+contract_refs: []
+decision_refs: []
+acceptance_criteria: [deterministic]
+prerequisites: []
+blockers: []
+impact: {architecture: false, ui: false, sdk: false, financial: false, compliance: false, security: false, devops: false, support: false}
+activated_roles: [full-stack-engineer, governance-engineer, tester-qa-engineer, auditor]
+required_tests: []
+required_evidence: []
+context_policy: TASK
+todos: []
+defects: []
+created_at: 2026-10-01T06:00:00-04:00
+updated_at: 2026-10-01T06:00:00-04:00
+""");
+}
 static void WriteRoleMatrixWorkItem(DirectoryInfo fixtureRoot, string activatedRoles)
 {
     File.WriteAllText(Path.Combine(fixtureRoot.FullName, "governance", "work-items", "TUN-P0-027.yaml"), $"""

@@ -1,10 +1,10 @@
 {
   "GeneratorVersion": "tunner-context-0.1.0",
-  "GeneratedAt": "2026-10-01T16:40:19.0944989+00:00",
+  "GeneratedAt": "2026-10-01T16:41:45.458007+00:00",
   "WorkItem": {
-    "Id": "TUN-P0-027",
-    "Title": "Role activation and review-matrix engine",
-    "Status": "VALIDATION",
+    "Id": "TUN-P0-028",
+    "Title": "Governance-controlled orchestrator",
+    "Status": "IN_PROGRESS",
     "ContextPolicy": "TASK"
   },
   "Included": [
@@ -39,27 +39,27 @@
       "Version": null
     },
     {
-      "Path": "docs/authority/amendments/AMD-0001/35_AI_Agent_Skill_Catalog_and_Review_Contracts.md",
-      "Reason": "explicit authority reference",
-      "Sha256": "0d705374073c0555771ff1b98936d39867e1016640fb734f0f0d42c62a88962f",
-      "Version": null
-    },
-    {
       "Path": "docs/authority/amendments/AMD-0001/effective-overrides/11_Development_Planes_Milestones_and_P0_Backlog.md",
       "Reason": "explicit authority reference",
       "Sha256": "1f1a5858de8a01ce5af07f6a81ef6ea6b292aabe325634aa6fff0cde8a0e6550",
       "Version": null
     },
     {
-      "Path": "docs/authority/amendments/AMD-0002/AMD-0002_Non-Blocking_PR_Approval_and_Continuous_Local_Execution.md",
+      "Path": "docs/authority/amendments/AMD-0002/effective-overrides/03_Governed_Development_Lifecycle_Scrum_Git.md",
       "Reason": "explicit authority reference",
-      "Sha256": "8337f435b8d368553d373cca5ab304206e05a800c9946577983bd2e829e89e7e",
+      "Sha256": "d176e7fb8ad583d82605a379d95fbf64bb96fd0e26d070f25667b4ea8e4be771",
       "Version": null
     },
     {
       "Path": "docs/authority/amendments/AMD-0002/effective-overrides/04_Governance_and_Context_Tooling_Specification.md",
       "Reason": "explicit authority reference",
       "Sha256": "4269c32b15b6622e22dfb63ef9d1104017407d8eb4b75c8ae4c4c528475d16f5",
+      "Version": null
+    },
+    {
+      "Path": "docs/authority/amendments/AMD-0002/effective-overrides/36_P0_Repository_Bootstrap_Governance_and_Context_Implementation_Spec.md",
+      "Reason": "explicit authority reference",
+      "Sha256": "c05b9ccd2ce95244b414a76ce241fcd240453e3a07bbf7e749c4262e0778ed90",
       "Version": null
     },
     {
@@ -87,9 +87,9 @@
       "Version": null
     },
     {
-      "Path": "governance/context/CTX-TUN-P0-027-001.yaml",
+      "Path": "governance/context/CTX-TUN-P0-028-001.yaml",
       "Reason": "required evidence",
-      "Sha256": "741815a6e109c7b84a37d0eb47d0624094836b7c5eb694dddf33d20c35a4a6a7",
+      "Sha256": "21edbd04f930dfc8fc0e3f7323ef4b8c81442e64e8781e1e42b2bc606448e629",
       "Version": null
     },
     {
@@ -99,27 +99,9 @@
       "Version": null
     },
     {
-      "Path": "governance/dependencies/DEP-TUN-P0-027-TUN-P0-003.yaml",
+      "Path": "governance/dependencies/DEP-TUN-P0-028-TUN-P0-027.yaml",
       "Reason": "required evidence",
-      "Sha256": "e7cc1a89656ec27df973de8e3c9f224c5ffa204e2bb088008eb935c5120a57f7",
-      "Version": null
-    },
-    {
-      "Path": "governance/dependencies/DEP-TUN-P0-027-TUN-P0-026.yaml",
-      "Reason": "required evidence",
-      "Sha256": "e88d00730f89ddec1ff5191ae8545d911094140d666ae98179acba04ced26b55",
-      "Version": null
-    },
-    {
-      "Path": "governance/evidence/TUN-P0-027-ROLE-REVIEWS.json",
-      "Reason": "required evidence",
-      "Sha256": "b558711f17310bbd968e3de0543049e8c30ca7c7903836d89efb47d7ac56164d",
-      "Version": null
-    },
-    {
-      "Path": "governance/evidence/TUN-P0-027-VALIDATION.json",
-      "Reason": "required evidence",
-      "Sha256": "58145d8c3df4dfffce68995c955b18fbd0c4767a5cd2fe3b1168589535c061cd",
+      "Sha256": "ff72cdd039905e2a36c3c52824fdb43a5bb451118766265bf79280a80e8813ff",
       "Version": null
     },
     {
@@ -129,45 +111,15 @@
       "Version": null
     },
     {
-      "Path": "governance/reviews/REV-TUN-P0-027-auditor.yaml",
-      "Reason": "required evidence",
-      "Sha256": "fc6b40c0dad0161145a877a5046477344d86b18ba378a5169029386b315b43e1",
-      "Version": null
-    },
-    {
-      "Path": "governance/reviews/REV-TUN-P0-027-full-stack-engineer.yaml",
-      "Reason": "required evidence",
-      "Sha256": "0cc84d5b07ccfc5def846cb9c9ca347cd15fa9e08b37d490c62ebc809804173a",
-      "Version": null
-    },
-    {
-      "Path": "governance/reviews/REV-TUN-P0-027-governance-engineer.yaml",
-      "Reason": "required evidence",
-      "Sha256": "a60273ed6938081a7fa5a9abaf209ae59973332a23810260ddc74374f0b12136",
-      "Version": null
-    },
-    {
-      "Path": "governance/reviews/REV-TUN-P0-027-tester-qa-engineer.yaml",
-      "Reason": "required evidence",
-      "Sha256": "a02d058392a6830b119f70e2dfe961653f396d08ddd27a66c3e98e632dfd7461",
-      "Version": null
-    },
-    {
-      "Path": "governance/work-items/TUN-P0-003.yaml",
-      "Reason": "prerequisite state",
-      "Sha256": "d187b5f86964da196cd93f6f88483b2fbf57969b006c674863bdd18d5b27f01c",
-      "Version": null
-    },
-    {
-      "Path": "governance/work-items/TUN-P0-026.yaml",
-      "Reason": "prerequisite state",
-      "Sha256": "9b27678ec2e031bfc72f500e5555b30c04027efa59caefc49a2e1cfd44322175",
-      "Version": null
-    },
-    {
       "Path": "governance/work-items/TUN-P0-027.yaml",
-      "Reason": "selected work item",
+      "Reason": "prerequisite state",
       "Sha256": "b63875a28c7b723a34c8c1e9c336e14277c61584eb783b3d5c41c9ac3508d919",
+      "Version": null
+    },
+    {
+      "Path": "governance/work-items/TUN-P0-028.yaml",
+      "Reason": "selected work item",
+      "Sha256": "b11e86b397b3c95e6d793cbbf87c9d60f1c5816a6fc3055e31a8a9eb3560e5c4",
       "Version": null
     }
   ],
@@ -175,9 +127,34 @@
     {
       "Path": "governance/decisions/dec-0002-p0-local-integration.yaml",
       "Reason": "optional source is unavailable: explicit decision reference"
+    },
+    {
+      "Path": "governance/evidence/TUN-P0-028-ROLE-REVIEWS.json",
+      "Reason": "optional source is unavailable: required evidence"
+    },
+    {
+      "Path": "governance/evidence/TUN-P0-028-VALIDATION.json",
+      "Reason": "optional source is unavailable: required evidence"
+    },
+    {
+      "Path": "governance/reviews/REV-TUN-P0-028-auditor.yaml",
+      "Reason": "optional source is unavailable: required evidence"
+    },
+    {
+      "Path": "governance/reviews/REV-TUN-P0-028-full-stack-engineer.yaml",
+      "Reason": "optional source is unavailable: required evidence"
+    },
+    {
+      "Path": "governance/reviews/REV-TUN-P0-028-governance-engineer.yaml",
+      "Reason": "optional source is unavailable: required evidence"
+    },
+    {
+      "Path": "governance/reviews/REV-TUN-P0-028-tester-qa-engineer.yaml",
+      "Reason": "optional source is unavailable: required evidence"
     }
   ],
   "GitHistory": [
+    "42b2802 chore: record P0 role matrix local validation",
     "d1c9ca6 feat: enforce P0 role activation review matrix",
     "6b09ebe feat: add P0 skill registry validation",
     "bb76144 feat: add P0 documentation validation",
@@ -186,7 +163,6 @@
     "e12e7b0 feat: add P0 source registry checker",
     "89d102a feat: add P0 evidence manifest generator",
     "b8a1e35 feat: add P0 test harness",
-    "8bf2b8d feat: add P0 observability baseline",
-    "f3f7757 governance: record repeat migration rehearsal"
+    "8bf2b8d feat: add P0 observability baseline"
   ]
 }

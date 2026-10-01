@@ -23,6 +23,7 @@ public static class Program
         governance.Subcommands.Add(CreateTransitionCommand(repositoryOption));
         governance.Subcommands.Add(CreateRolesCommand(repositoryOption));
         root.Subcommands.Add(governance);
+        root.Subcommands.Add(CreateWorkCommand(repositoryOption));
         root.Subcommands.Add(CreateAuthorityCommand(repositoryOption));
         root.Subcommands.Add(CreateContextCommand(repositoryOption));
         root.Subcommands.Add(CreateEvidenceCommand(repositoryOption));
@@ -95,6 +96,35 @@ public static class Program
         var roles = new Command("roles", "Calculate and validate role-activation requirements.");
         roles.Subcommands.Add(calculate);
         return roles;
+    }
+    private static Command CreateWorkCommand(Option<DirectoryInfo?> repositoryOption)
+    {
+        var workItem = new Argument<string>("work-item") { Description = "Work item identifier." };
+        Command CommandFor(string name, string description, Func<DirectoryInfo, string, CommandResult> action)
+        {
+            var command = new Command(name, description);
+            command.Arguments.Add(workItem);
+            command.SetAction(parseResult => WriteResult(action(Repository(parseResult, repositoryOption), parseResult.GetValue(workItem) ?? string.Empty)));
+            return command;
+        }
+
+        var contextOutput = new Option<DirectoryInfo?>("--output") { Description = "Context output directory; defaults to docs/context/current." };
+        var context = new Command("context", "Delegate bounded context generation after governance eligibility succeeds.");
+        context.Arguments.Add(workItem);
+        context.Options.Add(contextOutput);
+        context.SetAction(parseResult =>
+        {
+            var repository = Repository(parseResult, repositoryOption);
+            return WriteResult(OrchestratorApplication.Context(repository, parseResult.GetValue(workItem) ?? string.Empty, parseResult.GetValue(contextOutput) ?? new DirectoryInfo(Path.Combine(repository.FullName, "docs", "context", "current"))));
+        });
+
+        var work = new Command("work", "Governance-controlled orchestration dispatcher; it does not mutate work state or execute Product operations.");
+        work.Subcommands.Add(CommandFor("start", "Confirm that governance permits orchestration.", OrchestratorApplication.Start));
+        work.Subcommands.Add(context);
+        work.Subcommands.Add(CommandFor("run", "Return the governed execution plan without performing Product operations.", OrchestratorApplication.Run));
+        work.Subcommands.Add(CommandFor("validate", "Delegate final readiness to governance gate check.", OrchestratorApplication.Validate));
+        work.Subcommands.Add(CommandFor("handoff", "Return deterministic handoff instructions only after a passing governance gate.", OrchestratorApplication.Handoff));
+        return work;
     }
     private static Command CreateAuthorityCommand(Option<DirectoryInfo?> repositoryOption)
     {
