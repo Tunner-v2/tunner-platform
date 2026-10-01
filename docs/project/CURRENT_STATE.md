@@ -9,10 +9,10 @@
 
 ## Locally validated P0 foundations
 
-- TUN-P0-001 through TUN-P0-013 are locally validated where recorded; no item is represented as `DONE` before protected integration and P0 enablement.
+- TUN-P0-001 through TUN-P0-014 are locally validated where recorded; no item is represented as `DONE` before protected integration and P0 enablement.
 - TUN-P0-008’s local migration rehearsal is operator-confirmed against Tunner’s dedicated loopback PostgreSQL port `25432`; the connection value was not retained in repository evidence.
 - TUN-P0-009 provides only a local, redacted OpenTelemetry baseline. It does not authorize Product telemetry or production observability.
-- TUN-P0-013 adds a local SAST-style policy, NuGet SCA query, repository secret scan, Compose-definition policy, SPDX 2.3 inventory, and checksum/provenance hook. Its GitHub Actions image scan is configured but awaits a remote run; no release attestation, deployment, or Product behavior is claimed.
+- TUN-P0-013 adds a local SAST-style policy, NuGet SCA query, repository secret scan, Compose-definition policy, SPDX 2.3 inventory, and checksum/provenance hook. Its GitHub Actions image scan is configured but awaits a remote run; no release attestation, deployment, or Product behavior is claimed.`r`n- TUN-P0-014 completes developer automation with guarded local reset and deterministic unit-test dispatch. No real Docker lifecycle or reset was run by validation.
 
 ## Active work item
 
@@ -20,7 +20,7 @@
 |---|---|---|---|
 | TUN-P0-011 | VALIDATION | Deterministic local evidence manifests only | Retain local evidence; integration remains protected. |
 | TUN-P0-012 | VALIDATION | Local R&D/source registry | Retain local source-evidence and integration controls. |
-| TUN-P0-013 | VALIDATION | Security and supply-chain pipeline baseline | Retain local/CI evidence hooks; actual CI scan requires a remote workflow run after integration. |
+| TUN-P0-013 | VALIDATION | Security and supply-chain pipeline baseline | Retain local/CI evidence hooks; actual CI scan requires a remote workflow run after integration. |`r`n| TUN-P0-014 | VALIDATION | Developer automation | Retain local command evidence; real Docker lifecycle remains operator-run. |
 
 ## Exact next authorized action
 

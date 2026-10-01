@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "evidence_id": "TUN-P0-014-ROLE-REVIEWS",
+  "scope_type": "WORK_ITEM",
+  "scope_id": "TUN-P0-014",
+  "status": "PASS",
+  "reviewed_at": "2026-10-01T00:52:00-04:00",
+  "reviews": [
+    { "role": "full-stack-engineer", "skill_version": "1.0.0", "conclusion": "PASS", "checks": ["The wrapper adds no Product behavior and routes test only to the existing unit harness."], "findings": [] },
+    { "role": "governance-engineer", "skill_version": "1.0.0", "conclusion": "PASS", "checks": ["Work, dependency, context, validation, and review records preserve LOCAL_VALIDATED prerequisites and remain VALIDATION."], "findings": [] },
+    { "role": "cyber-security-engineer", "skill_version": "1.0.0", "conclusion": "PASS", "checks": ["Reset requires explicit confirmation and uses the repository Compose scope; no credential, secret, or production command was added."], "findings": [] },
+    { "role": "devops-engineer", "skill_version": "1.0.0", "conclusion": "PASS", "checks": ["Docker invocations retain fixed arguments/project directory and reset is limited to Compose down with named-volume removal."], "findings": ["Real Docker lifecycle remains operator-run local acceptance."] },
+    { "role": "tester-qa-engineer", "skill_version": "1.0.0", "conclusion": "PASS", "checks": ["Isolated fake executable coverage verified both reset refusal and confirmed argument dispatch; real unit command passed four tests."], "findings": [] },
+    { "role": "auditor", "skill_version": "1.0.0", "conclusion": "PASS", "checks": ["Evidence distinguishes fake-command validation from real Docker operations and does not claim destructive/runtime acceptance."], "findings": ["P0-014 remains VALIDATION pending protected integration and P0 enablement."] }
+  ],
+  "authority_hashes": { "docs/authority/current-authority.json": "925648590845a8f6993860c8936f622f42abba09956ead6511a9b9b2cc302002" },
+  "skill_hashes": { "full-stack-engineer": "fb1cccbb0d8e5ff84e87e0333a76d9db3a30204e62e0027eadc835db56893aff", "governance-engineer": "020d63b77bc5f8516709cc743ae5505e906ce3232b6e0d4ae3fe1799cfc5450d", "cyber-security-engineer": "39589fc33ee2b55437333e552daa76b70c5c3f9f894716bb68447505b8f211bc", "devops-engineer": "a9eaab675e0fd3151da8323530d33c08e426968eecf992729aea3665bcf9d473", "tester-qa-engineer": "dcefecdc92fd9a92f70944f66ec5a9a4044e4ae70072875d6958c49cde94303c", "auditor": "e7f9746520de0f438fba7946aba0478d030a2cb149b51042639b5e982ec294a2" }
+}

@@ -1,8 +1,9 @@
 [CmdletBinding()]
 param(
     [Parameter(Mandatory = $true, Position = 0)]
-    [ValidateSet("doctor", "setup", "start", "stop", "health", "logs")]
-    [string]$Command
+    [ValidateSet("doctor", "setup", "start", "stop", "reset", "health", "test", "logs")]
+    [string]$Command,
+    [switch]$ConfirmReset
 )
 
 Set-StrictMode -Version Latest
@@ -14,6 +15,7 @@ $composeProjectDirectory = Split-Path -Parent $composeFile
 $defaultEnvFile = Join-Path $repositoryRoot "infra/docker/.env.example"
 $localEnvFile = Join-Path $repositoryRoot "infra/docker/.env.local"
 $envFile = if (Test-Path -LiteralPath $localEnvFile) { $localEnvFile } else { $defaultEnvFile }
+$testRunner = Join-Path $repositoryRoot "tools/dev/tunner-test.ps1"
 
 function Assert-DockerAvailable {
     if (-not (Get-Command docker -ErrorAction SilentlyContinue)) {
@@ -83,6 +85,13 @@ function Invoke-Doctor {
     Write-Host "Docker and the Tunner local Compose configuration are ready."
 }
 
+function Invoke-UnitTests {
+    if (-not (Test-Path -LiteralPath $testRunner -PathType Leaf)) { throw "Missing Tunner test runner: $testRunner" }
+    & $testRunner unit
+    if ($LASTEXITCODE -ne 0) { throw "Tunner unit-test command failed with exit code $LASTEXITCODE." }
+    Write-Host "Tunner unit-test command completed."
+}
+
 switch ($Command) {
     "doctor" { Invoke-Doctor }
     "setup" {
@@ -100,11 +109,18 @@ switch ($Command) {
         Invoke-Compose -Arguments @("stop")
         Write-Host "Local dependency foundation stopped. Named volumes were preserved."
     }
+    "reset" {
+        if (-not $ConfirmReset) { throw "Reset is destructive for Tunner local Compose volumes. Re-run with: ./tools/dev/tunner-dev.ps1 reset -ConfirmReset" }
+        Assert-DockerAvailable
+        Invoke-Compose -Arguments @("down", "--volumes", "--remove-orphans")
+        Write-Host "Tunner local Compose containers and named volumes were removed. Other Docker projects were not targeted."
+    }
     "health" {
         Assert-DockerAvailable
         Invoke-Compose -Arguments @("ps", "--format", "json")
         Write-Host "OpenBao is process-healthy when its status is uninitialized, sealed, or unsealed. P0-007 owns bootstrap and secret readiness."
     }
+    "test" { Invoke-UnitTests }
     "logs" {
         Assert-DockerAvailable
         Invoke-Compose -Arguments @("logs", "--tail", "200")

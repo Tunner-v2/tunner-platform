@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "evidence_id": "TUN-P0-014-VALIDATION",
+  "scope_type": "WORK_ITEM",
+  "scope_id": "TUN-P0-014",
+  "status": "PASS",
+  "checked_at": "2026-10-01T00:52:00-04:00",
+  "checks": [
+    { "name": "developer-automation source contract", "command": "powershell.exe -NoProfile -File tools/validation/Validate-TunnerDeveloperAutomationSource.ps1 -RepositoryRoot (Get-Location).Path", "result": "PASS", "details": "The complete command surface, reset confirmation guard, local Compose volume scope, unit-test dispatch, and isolated assertions were verified." },
+    { "name": "isolated Docker and test dispatch", "command": "powershell.exe -NoProfile -File tools/validation/Test-TunnerDevNativeOutput.ps1 -RepositoryRoot (Get-Location).Path", "result": "PASS", "details": "Temporary fake Docker and dotnet executables proved start stderr handling, reset refusal without confirmation, guarded Compose down volume arguments, and test dispatch without operating real Docker state." },
+    { "name": "deterministic test command", "command": "powershell.exe -NoProfile -File tools/dev/tunner-dev.ps1 test", "result": "PASS", "details": "The command delegated to the existing unit harness; 4 tests passed with no Docker, browser, or credential operation." },
+    { "name": "foundation integrity", "command": "dotnet build Tunner.Governance.sln --no-restore; secret scan; tunner authority verify; tunner governance validate; git diff --check", "result": "PASS", "details": "Zero-warning build, clean secret scan, authority verification (72 artifacts), governance validation (48 records), and diff hygiene passed." }
+  ],
+  "artifacts": ["tools/dev/tunner-dev.ps1", "tools/validation/Test-TunnerDevNativeOutput.ps1", "tools/validation/Validate-TunnerDeveloperAutomationSource.ps1", "docs/development/LOCAL_DEVELOPER_AUTOMATION.md"],
+  "limitations": ["Start, stop, health, logs, and reset are explicit operator-owned local Docker operations and were not run against real Docker state.", "Reset is destructive only for Tunner local Compose volumes and requires ConfirmReset; it is not a production or release operation.", "Test defaults to the P0 unit harness; container, browser, Product, and production testing remain separately governed."]
+}
