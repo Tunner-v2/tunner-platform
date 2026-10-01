@@ -24,6 +24,7 @@ public static class Program
         root.Subcommands.Add(governance);
         root.Subcommands.Add(CreateAuthorityCommand(repositoryOption));
         root.Subcommands.Add(CreateContextCommand(repositoryOption));
+        root.Subcommands.Add(CreateEvidenceCommand(repositoryOption));
 
         return root.Parse(args).Invoke();
     }
@@ -116,6 +117,35 @@ public static class Program
         context.Subcommands.Add(build);
         context.Subcommands.Add(verify);
         return context;
+    }
+    private static Command CreateEvidenceCommand(Option<DirectoryInfo?> repositoryOption)
+    {
+        var scopeId = new Option<string>("--scope-id") { Description = "Governed work-item identifier represented by the manifest." };
+        var output = new Option<FileInfo?>("--output") { Description = "New JSON manifest path beneath artifacts/evidence/." };
+        var artifact = new Option<string[]>("--artifact") { Description = "Additional repository-relative artifact to hash. Repeat for multiple artifacts." };
+        var build = new Option<string[]>("--build-reference") { Description = "Repository-relative build evidence to hash. Repeat for multiple references." };
+        var test = new Option<string[]>("--test-reference") { Description = "Repository-relative test evidence to hash. Repeat for multiple references." };
+        var securityScan = new Option<string[]>("--security-scan-reference") { Description = "Repository-relative security-scan evidence to hash. Repeat for multiple references." };
+
+        var generate = new Command("generate", "Create a deterministic local evidence manifest without release or production claims.");
+        generate.Options.Add(scopeId);
+        generate.Options.Add(output);
+        generate.Options.Add(artifact);
+        generate.Options.Add(build);
+        generate.Options.Add(test);
+        generate.Options.Add(securityScan);
+        generate.SetAction(parseResult => WriteResult(EvidenceApplication.Generate(
+            Repository(parseResult, repositoryOption),
+            parseResult.GetValue(scopeId) ?? string.Empty,
+            parseResult.GetValue(output),
+            parseResult.GetValue(artifact) ?? [],
+            parseResult.GetValue(build) ?? [],
+            parseResult.GetValue(test) ?? [],
+            parseResult.GetValue(securityScan) ?? [])));
+
+        var evidence = new Command("evidence", "Generate bounded, local evidence manifests.");
+        evidence.Subcommands.Add(generate);
+        return evidence;
     }
     private static DirectoryInfo Repository(ParseResult parseResult, Option<DirectoryInfo?> repositoryOption)
         => parseResult.GetValue(repositoryOption) ?? new DirectoryInfo(Directory.GetCurrentDirectory());

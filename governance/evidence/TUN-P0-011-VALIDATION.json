@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "evidence_id": "TUN-P0-011-VALIDATION",
+  "scope_type": "WORK_ITEM",
+  "scope_id": "TUN-P0-011",
+  "status": "PASS",
+  "checked_at": "2026-09-30T22:03:17.3478417-04:00",
+  "checks": [
+    {
+      "name": "deterministic repository-native implementation",
+      "command": "dotnet run --project src/Tunner.Governance --no-build -- evidence generate ...",
+      "result": "PASS",
+      "details": "A real local manifest was generated with exact commit identity, pre-generation DIRTY state, authority-summary hash, tool version, controlled SHA-256 artifact references, and atomic FileMode.CreateNew output creation. It contains explicit non-release limitations and no source contents."
+    },
+    {
+      "name": "zero-warning build",
+      "command": "dotnet build Tunner.Governance.sln --no-restore",
+      "result": "PASS",
+      "details": "The complete solution built with 0 warnings and 0 errors."
+    },
+    {
+      "name": "static evidence source validation",
+      "command": "tools/validation/Validate-TunnerEvidenceSource.ps1",
+      "result": "PASS",
+      "details": "The source validator confirmed command exposure, deterministic identity handling, path checks, write-once output, secret-shaped output rejection, no-release boundary, test coverage, and local runbook."
+    },
+    {
+      "name": "isolated functional regression",
+      "command": "dotnet run --project tests/Tunner.Governance.FunctionalTests --no-build",
+      "result": "PASS",
+      "details": "The isolated temporary-repository harness passed success, byte-identical generation, Windows-separator deduplication, outside-path refusal, existing-output refusal, secret-shaped-output refusal, existing governance behavior, authority tamper detection, and safe fixture cleanup."
+    },
+    {
+      "name": "repository secret boundary",
+      "command": "tools/security/Invoke-TunnerSecretScan.ps1",
+      "result": "PASS",
+      "details": "341 files were inspected with no rule match. The secret-shaped negative test value is constructed only in the disposable fixture and is not present as a committed literal."
+    },
+    {
+      "name": "authority and governance integrity",
+      "command": "tunner authority verify; tunner governance validate",
+      "result": "PASS",
+      "details": "Authority verification returned VERIFIED for all 72 imported artifacts, and governance validation accepted 33 records with no diagnostics before final evidence records were added."
+    },
+    {
+      "name": "context and diff hygiene",
+      "command": "tunner context build --work-item TUN-P0-011; tunner context verify; git diff --check",
+      "result": "PASS",
+      "details": "The bounded P0-011 context pack was generated and verified current before final evidence records; the final refresh re-verifies this after evidence creation. No whitespace error was reported."
+    }
+  ],
+  "artifacts": [
+    "src/Tunner.Governance/Program.cs",
+    "src/Tunner.Governance/EvidenceApplication.cs",
+    "tests/Tunner.Governance.FunctionalTests/Program.cs",
+    "tools/validation/Validate-TunnerEvidenceSource.ps1",
+    "docs/development/LOCAL_EVIDENCE_MANIFEST.md",
+    "src/Tunner.Governance/README.md"
+  ],
+  "limitations": [
+    "The generated local manifest is not committed evidence and does not approve a release, deployment, Product acceptance, or protected-main merge.",
+    "The tool intentionally records only selected repository paths and SHA-256 hashes; it cannot prove runtime behavior, external publication, or production state.",
+    "P0-011 remains subject to protected integration and the P0 enablement gate and therefore is not DONE."
+  ]
+}

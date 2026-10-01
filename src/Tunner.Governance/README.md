@@ -37,6 +37,14 @@ dotnet run --project src/Tunner.Governance -- context verify
 ```
 
 `context build` writes `docs/context/current/` from the active-authority summary, explicit work-item references, activated role skills, required evidence, durable project state, and bounded Git history. It records source hashes and exclusions. `context verify` returns `STALE` if an included source is missing or has changed; generated context is never authority. Hash verification and build refusal for a corrupt authority mirror remain TUN-P0-033 scope.
+
+## Evidence manifests
+
+```powershell
+dotnet run --project src/Tunner.Governance -- evidence generate --scope-id TUN-P0-011 --output artifacts/evidence/TUN-P0-011.local.manifest.json --artifact src/Tunner.Governance/EvidenceApplication.cs --build-reference governance/evidence/TUN-P0-010-VALIDATION.json --test-reference governance/evidence/TUN-P0-010-VALIDATION.json --security-scan-reference governance/evidence/TUN-P0-010-VALIDATION.json
+```
+
+`evidence generate` produces a write-once, repository-local JSON manifest for an existing work item. It verifies the authority mirror, records the checked-out Git commit and pre-generation working-tree state, hashes only selected repository-relative files, and requires build, test, and security-scan references. Output is restricted to a new direct `.json` child of `artifacts/evidence/`; source contents, credentials, releases, Product acceptance, protected-main approvals, deployment claims, and external publication are outside its boundary. See `docs/development/LOCAL_EVIDENCE_MANIFEST.md` for the local workflow.
 ## Validation boundary
 
 The MVP parses YAML with file/line/column diagnostics, builds the versioned JSON Schema catalog, and validates record identifiers, versioning, required fields, and undeclared top-level fields from that catalog. It deliberately does not mutate records. Rich nested type/format checks and Git-history immutability are follow-on governance work and must not be claimed as implemented until their tests exist.

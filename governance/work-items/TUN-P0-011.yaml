@@ -1,0 +1,35 @@
+schema_version: 1
+work_item_id: TUN-P0-011
+milestone_id: P0
+sprint_id: null
+title: Evidence generator
+status: VALIDATION
+type: GOVERNANCE_EVIDENCE
+authority_refs:
+  - docs/authority/current-authority.json
+  - docs/authority/amendments/AMD-0001/effective-overrides/11_Development_Planes_Milestones_and_P0_Backlog.md
+  - docs/authority/amendments/AMD-0002/AMD-0002_Non-Blocking_PR_Approval_and_Continuous_Local_Execution.md
+  - docs/authority/baselines/1.6.0/03_Governed_Development_Lifecycle_Scrum_Git.md
+  - docs/authority/baselines/1.6.0/04_Governance_and_Context_Tooling_Specification.md
+  - docs/authority/baselines/1.6.0/09_Testing_Acceptance_Evidence_and_Quality_Gates.md
+  - docs/authority/baselines/1.6.0/11_Development_Planes_Milestones_and_P0_Backlog.md
+flow_refs: []
+contract_refs: []
+decision_refs: [DEC-0002]
+acceptance_criteria:
+  - Deterministically generate an evidence manifest for an explicit local scope without release or production claims.
+  - Record exact Git identity, tool version, selected artifact hashes, test/build/scan references, and explicit limitations.
+  - Reject unsafe output paths, missing required artifacts, and secrets in generated output.
+  - Provide deterministic tests and a documented local command.
+  - Do not create release approval, Product behavior, or external publication.
+prerequisites: [TUN-P0-003, TUN-P0-010]
+blockers: []
+impact: {architecture: true, ui: false, sdk: false, financial: false, compliance: false, security: true, devops: false, support: false}
+activated_roles: [full-stack-engineer, governance-engineer, cyber-security-engineer, tester-qa-engineer, auditor]
+required_tests: [deterministic manifest generation, negative path validation, secret scan, build, governance validation, authority verification, context freshness]
+required_evidence: [governance/context/CTX-TUN-P0-011-001.yaml, governance/dependencies/DEP-TUN-P0-011-TUN-P0-003.yaml, governance/dependencies/DEP-TUN-P0-011-TUN-P0-010.yaml, governance/evidence/TUN-P0-011-VALIDATION.json, governance/evidence/TUN-P0-011-ROLE-REVIEWS.json]
+context_policy: TASK
+todos: []
+defects: []
+created_at: 2026-09-30T21:47:43.4152707-04:00
+updated_at: 2026-09-30T21:59:12.0262786-04:00

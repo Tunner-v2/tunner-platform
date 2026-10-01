@@ -22,6 +22,7 @@ Repository-native, concise context for Tunner. It is derived from approved autho
 - Product modules, user/admin UI, providers, financial behavior, contracts, and business workflows remain outside P0 unless required only as non-behavioral pipeline placeholders.
 - P0-006 local Docker dependencies are local/test-only. No committed credential or OpenBao root token is permitted; P0-007 provides the credential-free local initialization/policy/scan foundation; later governed work owns Product-facing secret injection.
 - P0-009 provides a technical OpenTelemetry/OTLP baseline only: opaque allow-listed correlation values, pre-export redaction, and a loopback-only local development/test collector contract. It does not authorize Product telemetry, billing/usage metering, production observability, or deployment behavior.
+- P0-011 provides a repository-native local evidence-manifest generator only. Its write-once manifests record controlled repository-path hashes, verified authority summary, current Git identity, and explicit limitations; they are not release, Product, deployment, protected-main, or external-publication authority.
 
 ## Non-negotiable rules
 
