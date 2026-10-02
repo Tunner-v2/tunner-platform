@@ -6,10 +6,16 @@ function Invoke-Tunner([string[]]$Arguments) {
   return ($output | Out-String | ConvertFrom-Json)
 }
 $authority=Invoke-Tunner @('--repository',$RepositoryRoot,'authority','verify')
+$status=Invoke-Tunner @('--repository',$RepositoryRoot,'governance','status')
 $next=Invoke-Tunner @('--repository',$RepositoryRoot,'governance','next')
 $roles=Invoke-Tunner @('--repository',$RepositoryRoot,'governance','roles','calculate','TUN-P0-032')
 $context=Invoke-Tunner @('--repository',$RepositoryRoot,'context','build','--work-item','TUN-P0-032','--mode','TASK','--output',(Join-Path $RepositoryRoot 'artifacts/recovery-context'))
 $escalation=Invoke-Tunner @('--repository',$RepositoryRoot,'context','escalate','TUN-P0-032','--from','TASK','--reason','cross-domain audit required')
-if($authority.Payload.Outcome -ne 'VERIFIED' -or -not $next.Payload.Items -or $roles.Payload.RequiredRoles.Count -lt 1 -or $context.Payload.Outcome -ne 'GENERATED' -or $escalation.Payload.Outcome -ne 'INSUFFICIENT_CONTEXT'){throw 'Fresh recovery assertions failed.'}
-$result=[ordered]@{schema_version=1;scope_id='TUN-P0-032';status='PASS';authority=$authority.Payload.Outcome;current_work='TUN-P0-032';roles=$roles.Payload.RequiredRoles;next_items=$next.Payload.Items.Count;context_mode='TASK';escalation_next_mode=$escalation.Payload.NextMode}
+$p0Closed=@($status.Payload.Milestones | Where-Object { $_.Id -eq 'P0' -and $_.Status -eq 'CLOSED' }).Count -eq 1
+$currentState=Get-Content -LiteralPath (Join-Path $RepositoryRoot 'docs/project/CURRENT_STATE.md') -Raw
+$hasRecordedRefinementAction=$currentState -match [regex]::Escape('materialize the next authority-backed milestone/work-item record')
+$hasEligibleWork=@($next.Payload.Items).Count -gt 0
+if($authority.Payload.Outcome -ne 'VERIFIED' -or $roles.Payload.RequiredRoles.Count -lt 1 -or $context.Payload.Outcome -ne 'GENERATED' -or $escalation.Payload.Outcome -ne 'INSUFFICIENT_CONTEXT' -or (-not $hasEligibleWork -and (-not $p0Closed -or -not $hasRecordedRefinementAction))){throw 'Fresh recovery assertions failed.'}
+$nextAction=if($hasEligibleWork){'ELIGIBLE_WORK_AVAILABLE'}else{'P1_REFINEMENT_REQUIRED'}
+$result=[ordered]@{schema_version=1;scope_id='TUN-P0-032';status='PASS';authority=$authority.Payload.Outcome;current_milestone='P0';current_work='TUN-P0-032';roles=$roles.Payload.RequiredRoles;next_items=@($next.Payload.Items).Count;next_action=$nextAction;context_mode='TASK';escalation_next_mode=$escalation.Payload.NextMode}
 $result|ConvertTo-Json -Depth 5

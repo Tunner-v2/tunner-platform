@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using System.Security.Cryptography;
+using System.Text;
 using System.Text.Json;
 using Tunner.Governance;
 
@@ -54,6 +55,9 @@ try
 
     var sourcesCurrent = SourceRegistryApplication.Check(fixtureRoot, "TUN-001", "2026-09-30", 14);
     Expect(sourcesCurrent.ExitCode == 0, "Current registered source evidence must pass.", failures);
+    File.WriteAllText(Path.Combine(fixtureRoot.FullName, "governance", "evidence", "source-evidence.json"), File.ReadAllText(Path.Combine(fixtureRoot.FullName, "governance", "evidence", "source-evidence.json")).Replace("\r\n", "\n", StringComparison.Ordinal), new UTF8Encoding(false));
+    var sourcesLineEndingNormalized = SourceRegistryApplication.Check(fixtureRoot, "TUN-001", "2026-09-30", 14);
+    Expect(sourcesLineEndingNormalized.ExitCode == 0, "Source evidence must retain its registered hash after newline normalization.", failures);
     var sourcesStale = SourceRegistryApplication.Check(fixtureRoot, "TUN-001", "2026-10-20", 14);
     Expect(sourcesStale.ExitCode == 1, "Source evidence outside the explicit freshness window must fail.", failures);
     File.AppendAllText(Path.Combine(fixtureRoot.FullName, "governance", "evidence", "source-evidence.json"), " ");
@@ -330,7 +334,7 @@ updated_at: 2026-09-30T00:00:00-04:00
     File.WriteAllText(Path.Combine(fixtureRoot.FullName, "governance", "rd", "source-registry.json"), $$"""
 {
   "schema_version": 1,
-  "entries": [{ "scope_type": "WORK_ITEM", "scope_id": "TUN-001", "evidence_path": "governance/evidence/source-evidence.json", "evidence_sha256": "{{HashFile(sourceEvidencePath)}}", "reviewed_on": "2026-09-30", "source_authority": "PRIMARY" }]
+  "entries": [{ "scope_type": "WORK_ITEM", "scope_id": "TUN-001", "evidence_path": "governance/evidence/source-evidence.json", "evidence_sha256": "{{HashSourceEvidence(sourceEvidencePath)}}", "reviewed_on": "2026-09-30", "source_authority": "PRIMARY" }]
 }
 """);
     File.WriteAllText(Path.Combine(fixtureRoot.FullName, "governance", "policies", "pr-integration-policy.yaml"), """
@@ -534,6 +538,14 @@ static void RunGit(DirectoryInfo repository, params string[] arguments)
 }
 static string HashFile(string path)
     => Convert.ToHexString(SHA256.HashData(File.ReadAllBytes(path))).ToLowerInvariant();
+
+static string HashSourceEvidence(string path)
+{
+    var text = File.ReadAllText(path)
+        .Replace("\r\n", "\n", StringComparison.Ordinal)
+        .Replace("\r", "\n", StringComparison.Ordinal);
+    return Convert.ToHexString(SHA256.HashData(new UTF8Encoding(false).GetBytes(text))).ToLowerInvariant();
+}
 
 static void CopyDirectory(DirectoryInfo source, DirectoryInfo destination)
 {

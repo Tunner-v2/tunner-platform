@@ -89,7 +89,10 @@ function Test-AuthorityHeaders {
             $hasAuthority = if ($isDecisionRecord) {
                 @($header | Where-Object { $_ -match '^#\s+(ADR|PDR)-[0-9]+' }).Count -gt 0
             } else {
-                @($header | Where-Object { $_ -match '^>\s+\*\*Tunner Development Authority (Package|Amendment)\*\*' }).Count -gt 0
+                @($header | Where-Object {
+                    $_ -match '^>\s+\*\*Tunner Development Authority (Package|Amendment)\*\*' -or
+                    $_ -match '^#\s+Tunner Development Authority Amendment\s*$'
+                }).Count -gt 0
             }
             $hasStatus = if ($isDecisionRecord) {
                 @($header | Where-Object { $_ -match '^\*\*Status:\*\*' }).Count -gt 0

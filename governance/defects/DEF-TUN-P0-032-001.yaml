@@ -1,0 +1,15 @@
+schema_version: 1
+defect_id: DEF-TUN-P0-032-001
+work_item_id: TUN-P0-032
+classification: GOVERNANCE
+severity: SEV-3
+status: CLOSED
+environment: fresh-agent recovery after valid P0 closure
+description: The recovery proof required an eligible governance-next item, which is incorrect when P0 is closed and the recorded next action is to materialize the first authority-backed P1 work item.
+expected_behavior_ref: TUN-P0-032 requires a fresh contributor to identify the current governed state and exact next action without relying on prior chat history.
+evidence:
+  - governance/evidence/P0-DEEP-AUDIT-20261001.json
+affected_versions:
+  - tools/validation/Test-TunnerFreshRecovery.ps1
+created_at: 2026-10-01T21:55:00-04:00
+updated_at: 2026-10-01T21:55:00-04:00
