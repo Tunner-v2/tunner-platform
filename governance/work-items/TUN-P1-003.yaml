@@ -1,0 +1,43 @@
+schema_version: 1
+work_item_id: TUN-P1-003
+milestone_id: P1
+sprint_id: null
+title: Transactional persistence and outbox primitive
+status: DRAFT
+type: PERSISTENCE_FOUNDATION
+authority_refs:
+  - docs/authority/current-authority.json
+  - docs/authority/amendments/AMD-0001/effective-overrides/11_Development_Planes_Milestones_and_P0_Backlog.md
+  - docs/authority/baselines/1.6.0/01_Engineering_Technology_Foundation.md
+  - docs/authority/baselines/1.6.0/02_Repository_Solution_and_Module_Architecture.md
+  - docs/authority/baselines/1.6.0/15_Runtime_Communication_and_Infrastructure_Technology_Scope.md
+  - docs/authority/baselines/1.6.0/decisions/ADR-0001_Durable_Messaging_RabbitMQ_Outbox_Inbox.md
+flow_refs: []
+contract_refs: []
+decision_refs: []
+acceptance_criteria:
+  - Refine and implement only the shared PostgreSQL transaction and atomic outbox mechanics required before post-commit transport.
+  - Preserve one logical owner for each table and prevent foreign-domain table mutation.
+  - Prove an owner write and outbox insertion commit atomically through deterministic tests and a governed migration rehearsal where a schema change is introduced.
+  - Do not implement RabbitMQ dispatch/consumer topology, inbox/durable-work behavior, Product/domain tables, business timers, provider behavior, or Product APIs.
+prerequisites: [TUN-P1-002]
+blockers: []
+impact: {architecture: true, ui: false, sdk: false, financial: false, compliance: false, security: false, devops: false, support: false, data_schema: true, migration: true}
+activated_roles: [full-stack-engineer, solution-architect, tester-qa-engineer]
+required_tests:
+  - authority verification
+  - governance validation
+  - role activation calculation and mandatory specialist reviews
+  - bounded expanded context verification
+  - deterministic atomic transaction/outbox tests
+  - migration rehearsal if persistence schema changes
+  - build and unit tests
+required_evidence:
+  - governance/context/CTX-TUN-P1-003-001.yaml
+  - governance/evidence/TUN-P1-003-VALIDATION.json
+  - governance/evidence/TUN-P1-003-ROLE-REVIEWS.json
+context_policy: EXPANDED
+todos: []
+defects: []
+created_at: 2026-10-01T23:59:00-04:00
+updated_at: 2026-10-01T23:59:00-04:00

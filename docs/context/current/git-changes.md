@@ -1,10 +1,10 @@
 # Recent relevant Git changes
 
+- `7bdf6ca fix(governance): remediate P0 closure audit`
 - `a2fdb94 chore: close P0 governance foundation`
 - `6aaa3b0 chore: refresh P0 telemetry handoff context`
 - `bedbe5a feat: complete P0 project memory state`
 - `338a2cc feat: complete P0 adaptive context tooling`
-- `617255e chore: start P0 adaptive context work`
 - `94292a5 chore: record P0 orchestrator local validation`
 - `8f12b91 fix: support governed orchestration review states`
 - `42b2802 chore: record P0 role matrix local validation`

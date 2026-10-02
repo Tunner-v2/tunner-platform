@@ -1,19 +1,13 @@
 {
   "GeneratorVersion": "tunner-context-0.1.0",
-  "GeneratedAt": "2026-10-02T01:58:12.4972544+00:00",
+  "GeneratedAt": "2026-10-02T02:27:25.8894158+00:00",
   "WorkItem": {
-    "Id": "TUN-P0-032",
-    "Title": "Fresh-agent recovery test",
-    "Status": "DONE",
-    "ContextPolicy": "TASK"
+    "Id": "TUN-P1-003",
+    "Title": "Transactional persistence and outbox primitive",
+    "Status": "DRAFT",
+    "ContextPolicy": "EXPANDED"
   },
   "Included": [
-    {
-      "Path": ".agent/skills/auditor/SKILL.md",
-      "Reason": "activated role skill",
-      "Sha256": "191c796fc5df0332ff2c3c464ca611d2c6d3ffc5ba7e2807986a71ad2e40d921",
-      "Version": "1.0.0"
-    },
     {
       "Path": ".agent/skills/full-stack-engineer/SKILL.md",
       "Reason": "activated role skill",
@@ -21,9 +15,9 @@
       "Version": "1.0.0"
     },
     {
-      "Path": ".agent/skills/governance-engineer/SKILL.md",
+      "Path": ".agent/skills/solution-architect/SKILL.md",
       "Reason": "activated role skill",
-      "Sha256": "3c948ff290690b012d3736b561021989681c2b6fcac3f115b96ca1083672536f",
+      "Sha256": "664ffba70d0f97e75951c3548b7f8391854781e4cf90cc50fc8829543783a35b",
       "Version": "1.0.0"
     },
     {
@@ -45,9 +39,27 @@
       "Version": null
     },
     {
-      "Path": "docs/authority/amendments/AMD-0002/effective-overrides/04_Governance_and_Context_Tooling_Specification.md",
+      "Path": "docs/authority/baselines/1.6.0/01_Engineering_Technology_Foundation.md",
       "Reason": "explicit authority reference",
-      "Sha256": "4269c32b15b6622e22dfb63ef9d1104017407d8eb4b75c8ae4c4c528475d16f5",
+      "Sha256": "b65976512db8ce580adcf33aca4131fb15f043625481c0c7ea3a043e4a262016",
+      "Version": null
+    },
+    {
+      "Path": "docs/authority/baselines/1.6.0/02_Repository_Solution_and_Module_Architecture.md",
+      "Reason": "explicit authority reference",
+      "Sha256": "3d7ede9a1b1f11024e902b0bd6731fc36a22ee0bf8525865bbb909131703318e",
+      "Version": null
+    },
+    {
+      "Path": "docs/authority/baselines/1.6.0/15_Runtime_Communication_and_Infrastructure_Technology_Scope.md",
+      "Reason": "explicit authority reference",
+      "Sha256": "eadcbad3ab6bc47aae683cf8f6038f6f1b51b5cc2d13c63af0696ae6f3bc5cd6",
+      "Version": null
+    },
+    {
+      "Path": "docs/authority/baselines/1.6.0/decisions/ADR-0001_Durable_Messaging_RabbitMQ_Outbox_Inbox.md",
+      "Reason": "explicit authority reference",
+      "Sha256": "aa18842ec7b413f9716b345399087adcf8743a295a182e40d9ff0dd26012acf1",
       "Version": null
     },
     {
@@ -59,37 +71,19 @@
     {
       "Path": "docs/project/CURRENT_STATE.md",
       "Reason": "current project state",
-      "Sha256": "c530a74e07def091f2975030f7663ac2ccb5d975a4c58556a6a510f5016c3955",
+      "Sha256": "2cab968f6883ad5bec87bfc68b778381ce2bfd5dd54f58b544548e6b0212d757",
       "Version": null
     },
     {
       "Path": "docs/project/HANDOFF.md",
       "Reason": "handoff state",
-      "Sha256": "d75a3802e76b60b4c5d5d8c16a2d8a2c9f6730d3798ebe026e78026a4405f204",
+      "Sha256": "301c94641d29f4924ea44f9c80b63f9dc71db772e4ecab920c427faffe5ef61b",
       "Version": null
     },
     {
       "Path": "docs/project/PROJECT_CONTEXT.md",
       "Reason": "durable project context",
-      "Sha256": "7dc970c66b54f85cba9550fa213fefeeffda1a7fbb2137218ad2606f3d67a608",
-      "Version": null
-    },
-    {
-      "Path": "governance/decisions/DEC-0002.yaml",
-      "Reason": "explicit decision reference",
-      "Sha256": "27d40af989c8ed712ed7797d70034bccf4e14a7a1320c2288cb1a3bbf017ae99",
-      "Version": null
-    },
-    {
-      "Path": "governance/evidence/TUN-P0-032-ROLE-REVIEWS.json",
-      "Reason": "required evidence",
-      "Sha256": "991ae224ef826aca018421a19f8f299611b45819eb325841e0d54c53b29bb0cb",
-      "Version": null
-    },
-    {
-      "Path": "governance/evidence/TUN-P0-032-VALIDATION.json",
-      "Reason": "required evidence",
-      "Sha256": "7d75679529688f8d3eed8fb7ce0f62c0e04a3412f2281113f302146fc767040e",
+      "Sha256": "04b072c5d80197b81da6c06200a089efdb70d7291bf938535489370c5d5495da",
       "Version": null
     },
     {
@@ -99,48 +93,44 @@
       "Version": null
     },
     {
-      "Path": "governance/work-items/TUN-P0-026.yaml",
+      "Path": "governance/work-items/TUN-P1-002.yaml",
       "Reason": "prerequisite state",
-      "Sha256": "cc57a37689010d527d947c28efad563266d3bd9b5668012cfa08de892e8dac5d",
+      "Sha256": "469f57d4d86e196812ac271474a48b6b126a6ed62c2a2c0316d4e04d30af9ade",
       "Version": null
     },
     {
-      "Path": "governance/work-items/TUN-P0-027.yaml",
-      "Reason": "prerequisite state",
-      "Sha256": "b9293040d4a971c5b1865280a0ca972b1fb271de051ae616da25e162fe70e6f2",
-      "Version": null
-    },
-    {
-      "Path": "governance/work-items/TUN-P0-029.yaml",
-      "Reason": "prerequisite state",
-      "Sha256": "ddeb5db9879b3569e71a8ac98e6b446139f659ac741ba73c59a466fb82db05cd",
-      "Version": null
-    },
-    {
-      "Path": "governance/work-items/TUN-P0-030.yaml",
-      "Reason": "prerequisite state",
-      "Sha256": "623633926dce25656da259cc33468c02fd8e3f06b4c4fe5ba9896905f0359947",
-      "Version": null
-    },
-    {
-      "Path": "governance/work-items/TUN-P0-032.yaml",
+      "Path": "governance/work-items/TUN-P1-003.yaml",
       "Reason": "selected work item",
-      "Sha256": "11c83ff61b4829b48ebb07a11b753a970a89ba0a513d25d91787ad83505fdcc2",
+      "Sha256": "22012f9c11af066dc775543d47ef5787f642e7b41bbec781d4e85472240f0e34",
+      "Version": null
+    },
+    {
+      "Path": "src/Tunner.Governance/AdaptiveContextApplication.cs",
+      "Reason": "governance module source",
+      "Sha256": "f3c5a8128a6749713314748ae3c6996e6084d2f9e47b0b0c53e1f83f33a0b49e",
       "Version": null
     }
   ],
   "Excluded": [
     {
-      "Path": "governance/decisions/dec-0002-p0-local-integration.yaml",
-      "Reason": "optional source is unavailable: explicit decision reference"
+      "Path": "governance/context/CTX-TUN-P1-003-001.yaml",
+      "Reason": "optional source is unavailable: required evidence"
+    },
+    {
+      "Path": "governance/evidence/TUN-P1-003-ROLE-REVIEWS.json",
+      "Reason": "optional source is unavailable: required evidence"
+    },
+    {
+      "Path": "governance/evidence/TUN-P1-003-VALIDATION.json",
+      "Reason": "optional source is unavailable: required evidence"
     }
   ],
   "GitHistory": [
+    "7bdf6ca fix(governance): remediate P0 closure audit",
     "a2fdb94 chore: close P0 governance foundation",
     "6aaa3b0 chore: refresh P0 telemetry handoff context",
     "bedbe5a feat: complete P0 project memory state",
     "338a2cc feat: complete P0 adaptive context tooling",
-    "617255e chore: start P0 adaptive context work",
     "94292a5 chore: record P0 orchestrator local validation",
     "8f12b91 fix: support governed orchestration review states",
     "42b2802 chore: record P0 role matrix local validation",

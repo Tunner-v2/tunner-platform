@@ -1,13 +1,15 @@
 # Tests and evidence
 
-- `fresh repository-only recovery` — required test
-- `bounded context` — required test
-- `controlled escalation` — required test
-- `build` — required test
-- `governance validation` — required test
 - `authority verification` — required test
+- `governance validation` — required test
+- `role activation calculation and mandatory specialist reviews` — required test
+- `bounded expanded context verification` — required test
+- `deterministic atomic transaction/outbox tests` — required test
+- `migration rehearsal if persistence schema changes` — required test
+- `build and unit tests` — required test
 
 ## Required evidence
 
-- `governance/evidence/TUN-P0-032-VALIDATION.json` — required evidence
-- `governance/evidence/TUN-P0-032-ROLE-REVIEWS.json` — required evidence
+- `governance/context/CTX-TUN-P1-003-001.yaml` — required evidence
+- `governance/evidence/TUN-P1-003-VALIDATION.json` — required evidence
+- `governance/evidence/TUN-P1-003-ROLE-REVIEWS.json` — required evidence

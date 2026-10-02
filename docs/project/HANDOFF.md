@@ -2,11 +2,13 @@
 
 ## Milestone
 
-- ID: P0 — Governance & Development System
-- Status: CLOSED
-- P0 integration branch: change/TUN-P0-027-role-activation (merged by PR #10 at 7bf72b9)
-- Base commit before the current local P0 closure changes: 6aaa3b0
-- Scope: repository bootstrap, authority mirror, governance/context/orchestration, evidence, security, CI, developer tooling, self-hosting cutover, and location-independent root/path resolution.
+- ID: P1 — Platform Foundation
+- Status: ACTIVE
+- Completed P1 work: TUN-P1-001 — authority-backed refinement; TUN-P1-002 — Platform host composition and module bootstrap. Both have passing validation and role-review gates.
+- Current P1 work: TUN-P1-003 — Transactional persistence and outbox primitive (`DRAFT`).
+- P0 historical integration: change/TUN-P0-027-role-activation merged by PR #10 at 7bf72b9.
+- P1-002 result: application-only `Tunner.Platform.slnx`, governance-only `Tunner.Governance.sln`, technical API `/health`, empty Worker composition root, explicit module registration, and deterministic architecture/boundary checks.
+- P1-003 scope: shared transaction/outbox mechanics only; it excludes Product/domain tables, RabbitMQ dispatch/consumers, inbox/durable work, provider behavior, and Product APIs.
 
 ## Verified local evidence
 
@@ -20,4 +22,4 @@
 ## Boundary and exact next action
 
 - P0 is integrated into protected `main` by approved PR #10; this remains a governance outcome, not a production release. Existing human approval requirements remain intact for future changes.
-- The next scope must be an authority-backed P1–P8 milestone/work item. Create or import it only from approved authority, then run authority/status/next/context startup checks and role activation before implementation. Do not infer Product requirements from P0 artifacts.
+- Start TUN-P1-003 refinement only after its expanded context and calculated specialist reviews are recorded. Preserve the PostgreSQL owner-table and atomic-outbox boundaries; do not infer Product/domain table or event semantics.

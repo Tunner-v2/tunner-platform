@@ -1,3 +1,3 @@
 # Decisions
 
-- `governance/decisions/DEC-0002.yaml` — explicit decision reference
+No decision record was resolved from the work item references.

@@ -6,6 +6,7 @@
 - Authority mirror: `tunner authority verify` passes for 76 hash-checked authority artifacts, including AMD-0003 and its recorded provenance.
 - Milestone: P0 is `CLOSED`. Its read-only `tunner governance milestone close-check P0` returned machine-readable `PASS` after every declared work-item final gate, P0 role review, evidence reference, closed TODO/defect, governance-schema, and authority-integrity check passed.
 - Integration: P0 was integrated into protected `main` by PR #10 at merge commit `7bf72b9`. This remains a governance milestone outcome, not a production-release claim.
+- P1 is `ACTIVE`. `TUN-P1-001` (authority-backed refinement) and `TUN-P1-002` (Platform host composition and module bootstrap) are `DONE` with passing gates. `TUN-P1-003` (transactional persistence and outbox primitive) is materialized as `DRAFT` for its own governed refinement. No Product/domain behavior has been claimed or implemented.
 
 ## Locally validated foundations
 
@@ -15,4 +16,4 @@
 
 ## Exact next authorized action
 
-- P1–P8 are no longer blocked by the P0 enablement gate. Before any Product implementation, materialize the next authority-backed milestone/work-item record, run the mandatory startup commands, calculate mandatory roles, and build bounded context. Do not invent Product scope or change protected `main` without explicit authorization.
+- Move `TUN-P1-003` through its checked refinement startup: calculate required roles, build expanded context, record specialist reviews, and define the transactional outbox boundary before implementation. Do not infer Product/domain tables, RabbitMQ dispatch/consumer topology, inbox/durable work, provider, or API behavior.
