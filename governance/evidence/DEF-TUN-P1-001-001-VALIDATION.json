@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "evidence_id": "DEF-TUN-P1-001-001-VALIDATION",
+  "scope_type": "DEFECT",
+  "scope_id": "DEF-TUN-P1-001-001",
+  "status": "BLOCKED",
+  "checked_at": "2026-10-03T07:24:38-04:00",
+  "candidate_sha": "0f168f6",
+  "verification_checkout": "isolated managed worktree",
+  "checks": [
+    "dotnet restore and dotnet build Tunner.Governance.sln completed with zero warnings and zero errors.",
+    "Tunner.Governance.FunctionalTests passed at the exact candidate checkout.",
+    "Authority verification failed for the exact candidate because its 76-artifact authority index predates current synchronized authority hashes."
+  ],
+  "conclusion": "The historical/recovery candidate cannot support TUN-P1-001 completion under current AMD-0002 evidence requirements. The work item remains REOPENED pending a new current-authority, P1-001-only recovery candidate and exact-SHA validation.",
+  "limitations": [
+    "No protected history was rewritten.",
+    "No TUN-P1-002 implementation or unrelated active worktree paths were staged or committed."
+  ]
+}
