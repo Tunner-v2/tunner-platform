@@ -1,0 +1,13 @@
+schema_version: 1
+defect_id: DEF-TUN-P1-021-003
+work_item_id: TUN-P1-021
+classification: GOVERNANCE_PORTABILITY_DEFECT
+severity: SEV-2
+status: OPEN
+environment: FRESH_MANAGED_GIT_WORKTREE
+description: Authority verification passes in the primary checkout but fails for the same commit in a fresh managed worktree. Git checkout normalization under core.autocrlf=true changes authority artifact bytes, while the authority index currently contains mixed LF and CRLF working-byte expectations.
+expected_behavior_ref: docs/authority/amendments/AMD-0003/AMD-0003_Location-Independent_Repository_and_Path_Resolution.md and docs/authority/amendments/AMD-0002/AMD-0002_Non-Blocking_PR_Approval_and_Continuous_Local_Execution.md sections 2B, 3 and 5
+evidence: [governance/evidence/DEF-TUN-P1-021-003-AUTHORITY-PORTABILITY.json]
+affected_versions: [2d57674, P1_LOCAL_BRANCH]
+created_at: 2026-10-03T07:27:49-04:00
+updated_at: 2026-10-03T07:27:49-04:00

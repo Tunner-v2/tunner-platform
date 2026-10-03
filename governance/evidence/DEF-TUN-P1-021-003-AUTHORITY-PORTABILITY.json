@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "evidence_id": "DEF-TUN-P1-021-003-AUTHORITY-PORTABILITY",
+  "scope_type": "DEFECT",
+  "scope_id": "DEF-TUN-P1-021-003",
+  "status": "OPEN",
+  "checked_at": "2026-10-03T07:27:49-04:00",
+  "candidate_sha": "2d57674",
+  "checks": [
+    "Primary checkout authority verification passed with 99 checked artifacts.",
+    "Fresh managed worktree at the exact same SHA restored and built Tunner.Governance.sln with zero warnings and zero errors; the governance functional suite passed.",
+    "The fresh worktree authority verifier failed across authority artifacts after Git checkout normalization.",
+    "Comparison confirmed core.autocrlf=true and authority Markdown files checked out LF in the primary checkout but CRLF in the fresh worktree; the authority index has mixed current line-ending expectations."
+  ],
+  "conclusion": "Authority byte verification is not deterministic across fresh worktrees. No work item may treat a primary-checkout-only authority pass as portable committed-state evidence until the authority-mirror checkout-byte contract and verifier policy are reconciled.",
+  "limitations": [
+    "No authority content, baseline, amendment, source hash, or protected history was modified.",
+    "No universal eol policy was guessed because the current authority index includes both LF and CRLF working-byte expectations."
+  ]
+}
