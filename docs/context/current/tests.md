@@ -10,3 +10,4 @@
 
 - `governance/evidence/TUN-P1-001-VALIDATION.json` — required evidence
 - `governance/evidence/TUN-P1-001-ROLE-REVIEWS.json` — required evidence
+- `docs/development/P1_PLATFORM_FOUNDATION_RECOVERY.md` — required evidence
