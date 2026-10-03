@@ -1,7 +1,7 @@
 # Recent relevant Git changes
 
+- `2e4433d chore(governance): correct P1-001 candidate linkage`
 - `0721680 chore(governance): close P1-001 portable recovery`
-- `f4a0fd1 docs(governance): finalize P1-001 portable recovery candidate`
 - `2d57674 docs(governance): create P1-001 authority recovery candidate`
 - `eb55921 fix(governance): reopen mixed P1-001 validation candidate`
 - `9141f85 fix(governance): enforce committed-state P1 readiness`

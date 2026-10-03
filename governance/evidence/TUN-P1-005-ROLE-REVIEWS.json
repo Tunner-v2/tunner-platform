@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "evidence_id": "TUN-P1-005-ROLE-REVIEWS",
+  "scope_type": "WORK_ITEM",
+  "scope_id": "TUN-P1-005",
+  "status": "PASS",
+  "reviewed_at": "2026-10-02T13:35:00-04:00",
+  "reviews": [
+    {
+      "role": "full-stack-engineer",
+      "conclusion": "PASS",
+      "checks": [
+        "The materialized records are atomic capability boundaries; no generic technical library or Product implementation was added."
+      ],
+      "findings": []
+    },
+    {
+      "role": "solution-architect",
+      "conclusion": "PASS",
+      "checks": [
+        "The dependency graph follows host, outbox, messaging, persistence, and explicit contract boundaries rather than numeric ordering."
+      ],
+      "findings": []
+    },
+    {
+      "role": "governance-engineer",
+      "conclusion": "PASS",
+      "checks": [
+        "Every materialized item has a record, required evidence paths, calculated roles, and explicit dependency or side-state gate."
+      ],
+      "findings": []
+    },
+    {
+      "role": "tester-qa-engineer",
+      "conclusion": "PASS",
+      "checks": [
+        "The focused source audit distinguishes no current duplicate from a claim of future shared behavior; deterministic governance and documentation checks cover this planning scope."
+      ],
+      "findings": []
+    },
+    {
+      "role": "auditor",
+      "conclusion": "PASS",
+      "checks": [
+        "AMD-0004 is mirrored with Drive provenance and P0 remains closed; the historical baseline checks remain intact."
+      ],
+      "findings": []
+    }
+  ],
+  "authority_hashes": {
+    "docs/authority/amendments/AMD-0004/AMD-0004_Shared_Technical_Primitives_Formatting_and_Canonicalization.md": "2a7884482e66c77d378483b8df1c47baa98d882c9cb75b13c0b606d1c9822f70",
+    "docs/development/P1_CAPABILITY_DECOMPOSITION_AND_PRIMITIVE_REUSE.md": "4458424f6ad7d0add7a3609c105a247148cc5ade720abdf8b9db1c135ffe711f",
+    "governance/work-items/TUN-P1-005.yaml": "e1f2461be36dc24e7407c29f4756207de1c457e9eb171dad0dd8a3dadbd21e7a",
+    "governance/milestones/P1.yaml": "05a7140e87c5e5b0f8ce4cfea35c38a74d81f2443809a8caad647034b55a7ea3",
+    "docs/authority/amendments/AMD-0001/effective-overrides/11_Development_Planes_Milestones_and_P0_Backlog.md": "1f1a5858de8a01ce5af07f6a81ef6ea6b292aabe325634aa6fff0cde8a0e6550",
+    "docs/authority/current-authority.json": "c90995b39d54c640b5168cfe4beb0a614f2d10c3bf1414bcc2bccc308fdb4a22"
+  },
+  "skill_hashes": {
+    "governance-engineer": "3c948ff290690b012d3736b561021989681c2b6fcac3f115b96ca1083672536f",
+    "solution-architect": "664ffba70d0f97e75951c3548b7f8391854781e4cf90cc50fc8829543783a35b",
+    "full-stack-engineer": "59adbe2133cf4ce88cbc9ca4eafce1d5a9d83b9562b6580c1571e6fc148d46b5",
+    "tester-qa-engineer": "a57ce99d7ad7a3b60f17e4826c81c507c9cc208d8928285c406222eefe0a18fd",
+    "auditor": "191c796fc5df0332ff2c3c464ca611d2c6d3ffc5ba7e2807986a71ad2e40d921"
+  }
+}

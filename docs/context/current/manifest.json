@@ -1,9 +1,9 @@
 {
   "GeneratorVersion": "tunner-context-0.1.0",
-  "GeneratedAt": "2026-10-03T11:37:35.3330647+00:00",
+  "GeneratedAt": "2026-10-03T12:08:51.7756226+00:00",
   "WorkItem": {
-    "Id": "TUN-P1-001",
-    "Title": "Platform Foundation authority-backed refinement",
+    "Id": "TUN-P1-005",
+    "Title": "P1 capability-oriented backlog and technical-primitives reuse audit",
     "Status": "DONE",
     "ContextPolicy": "EXPANDED"
   },
@@ -12,12 +12,6 @@
       "Path": ".agent/skills/auditor/SKILL.md",
       "Reason": "activated role skill",
       "Sha256": "191c796fc5df0332ff2c3c464ca611d2c6d3ffc5ba7e2807986a71ad2e40d921",
-      "Version": "1.0.0"
-    },
-    {
-      "Path": ".agent/skills/business-analyst/SKILL.md",
-      "Reason": "activated role skill",
-      "Sha256": "ca6e24da90c6dac80b7b75124f04a81a2d590e73cc1e99781546c4aad1bca04f",
       "Version": "1.0.0"
     },
     {
@@ -30,12 +24,6 @@
       "Path": ".agent/skills/governance-engineer/SKILL.md",
       "Reason": "activated role skill",
       "Sha256": "3c948ff290690b012d3736b561021989681c2b6fcac3f115b96ca1083672536f",
-      "Version": "1.0.0"
-    },
-    {
-      "Path": ".agent/skills/project-manager/SKILL.md",
-      "Reason": "activated role skill",
-      "Sha256": "ae262bf4c9a2e26c688106c7af420fbc4dc26a116048e04ae01a5e4e01ead927",
       "Version": "1.0.0"
     },
     {
@@ -70,7 +58,7 @@
     },
     {
       "Path": "docs/authority/amendments/AMD-0002/AMD-0002_Non-Blocking_PR_Approval_and_Continuous_Local_Execution.md",
-      "Reason": "explicit authority reference",
+      "Reason": "active authority amendment",
       "Sha256": "fcea764b28c87b24adeab8af8fdc4fdc95c63cddd3eb917b718b966838053e99",
       "Version": null
     },
@@ -82,7 +70,7 @@
     },
     {
       "Path": "docs/authority/amendments/AMD-0004/AMD-0004_Shared_Technical_Primitives_Formatting_and_Canonicalization.md",
-      "Reason": "active authority amendment",
+      "Reason": "explicit authority reference",
       "Sha256": "9577b29946c772fad06aa1a79d7866d16da3677e944a6bd46fafb13f296a2384",
       "Version": null
     },
@@ -105,27 +93,15 @@
       "Version": null
     },
     {
-      "Path": "docs/authority/baselines/1.6.0/04_Governance_and_Context_Tooling_Specification.md",
+      "Path": "docs/authority/baselines/1.6.0/09_Testing_Acceptance_Evidence_and_Quality_Gates.md",
       "Reason": "explicit authority reference",
-      "Sha256": "bb563aef0a8a8386c180b11355d46d1da189f0a37c15d3021fd90e2f45469ede",
-      "Version": null
-    },
-    {
-      "Path": "docs/authority/baselines/1.6.0/15_Runtime_Communication_and_Infrastructure_Technology_Scope.md",
-      "Reason": "explicit authority reference",
-      "Sha256": "eadcbad3ab6bc47aae683cf8f6038f6f1b51b5cc2d13c63af0696ae6f3bc5cd6",
+      "Sha256": "f7e5760a0d6e18610b1a2740e8f2f1a959d011a8020edfd8ba80c4f75058a7dc",
       "Version": null
     },
     {
       "Path": "docs/authority/current-authority.json",
       "Reason": "explicit authority reference",
       "Sha256": "369312c632cbccee94c50fe08be3327a333c3b4bc20e39614e18819a2985beab",
-      "Version": null
-    },
-    {
-      "Path": "docs/development/P1_PLATFORM_FOUNDATION_RECOVERY.md",
-      "Reason": "required evidence",
-      "Sha256": "0eeaf43eb74ebb5c9d4dfbe4632e40aa0753761c0a104f8f6577882142c59965",
       "Version": null
     },
     {
@@ -147,15 +123,21 @@
       "Version": null
     },
     {
-      "Path": "governance/evidence/TUN-P1-001-ROLE-REVIEWS.json",
+      "Path": "governance/context/CTX-TUN-P1-005-001.yaml",
       "Reason": "required evidence",
-      "Sha256": "0ad06bc92b215912e7d93a93eab6bb95faeaf84b850d3f683b506325759326f6",
+      "Sha256": "121689bc2f9e8ca5990653a2f5547f784f779936b2503b83d0bc730b0b436ef5",
       "Version": null
     },
     {
-      "Path": "governance/evidence/TUN-P1-001-VALIDATION.json",
+      "Path": "governance/evidence/TUN-P1-005-ROLE-REVIEWS.json",
       "Reason": "required evidence",
-      "Sha256": "b4b066ed19ae14a0aba9c713e018c7f923eaad112d072aef45ce451b36bacf51",
+      "Sha256": "8e107d9825e6dfe9598386297df2fca50dc255a404b1be56382fd2e7283dc4e8",
+      "Version": null
+    },
+    {
+      "Path": "governance/evidence/TUN-P1-005-VALIDATION.json",
+      "Reason": "required evidence",
+      "Sha256": "aa553b31578d03a52fe8075314524f263df9585ec16a901b6677f4c53dbd313d",
       "Version": null
     },
     {
@@ -166,8 +148,14 @@
     },
     {
       "Path": "governance/work-items/TUN-P1-001.yaml",
-      "Reason": "selected work item",
+      "Reason": "prerequisite state",
       "Sha256": "c21aab525bb5a01a1f5ff4023274e4c074ad880fc65db09d8f44be503885d230",
+      "Version": null
+    },
+    {
+      "Path": "governance/work-items/TUN-P1-005.yaml",
+      "Reason": "selected work item",
+      "Sha256": "d8266c4f76abf57759ac7eccb4825b1017a52560343203929d930a3e2a256e4c",
       "Version": null
     },
     {
@@ -179,8 +167,8 @@
   ],
   "Excluded": [],
   "GitHistory": [
+    "2e4433d chore(governance): correct P1-001 candidate linkage",
     "0721680 chore(governance): close P1-001 portable recovery",
-    "f4a0fd1 docs(governance): finalize P1-001 portable recovery candidate",
     "2d57674 docs(governance): create P1-001 authority recovery candidate",
     "eb55921 fix(governance): reopen mixed P1-001 validation candidate",
     "9141f85 fix(governance): enforce committed-state P1 readiness",

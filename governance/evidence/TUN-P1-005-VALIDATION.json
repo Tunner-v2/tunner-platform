@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "evidence_id": "TUN-P1-005-VALIDATION",
+  "scope_type": "WORK_ITEM",
+  "scope_id": "TUN-P1-005",
+  "status": "PASS",
+  "checked_at": "2026-10-02T14:00:00-04:00",
+  "checks": [
+    "Canonical AMD-0004 Drive Markdown mirror matches the 6189-byte source metadata and is SHA-256 recorded.",
+    "Authority verification passed with 79 checked artifacts and active AMD-0001 through AMD-0004.",
+    "Governance validation passed after materializing the capability-oriented P1 work items and dependency records.",
+    "Role calculation reported all five mandatory P1-005 roles as declared.",
+    "Focused source audit found no generic formatter/canonicalizer and no duplicate technical primitive to remediate; the telemetry identifier policy remains correctly Observability-owned.",
+    "The P1 decomposition records genuine contract, UX, security, research, and dependency gates without adding Product scope or numeric execution authority.",
+    "Final authority, governance gate, documentation, portability, and whitespace validation passed after the overlay metadata repair."
+  ],
+  "artifacts": [
+    "docs/development/P1_CAPABILITY_DECOMPOSITION_AND_PRIMITIVE_REUSE.md",
+    "governance/work-items/TUN-P1-005.yaml",
+    "governance/work-items/TUN-P1-006.yaml",
+    "governance/work-items/TUN-P1-019.yaml",
+    "governance/dependencies",
+    "docs/authority/amendments/AMD-0004"
+  ],
+  "limitations": [
+    "This is planning, traceability, and focused source-audit evidence only; it does not implement a shared formatter, canonicalizer, Product behavior, public contract, UI, or runtime capability.",
+    "P0 stays closed and its original baseline checks and close evidence are preserved.",
+    "Later P1 items remain governed by their individual dependencies, role reviews, evidence, and explicit contract or human gates."
+  ]
+}

@@ -1,0 +1,42 @@
+schema_version: 1
+selection_id: CTX-TUN-P1-005-001
+scope_type: WORK_ITEM
+scope_id: TUN-P1-005
+context_mode: EXPANDED
+included_artifacts:
+  - AGENTS.md
+  - docs/authority/current-authority.json
+  - docs/authority/amendments/AMD-0001/effective-overrides/11_Development_Planes_Milestones_and_P0_Backlog.md
+  - docs/authority/amendments/AMD-0004/AMD-0004_Shared_Technical_Primitives_Formatting_and_Canonicalization.md
+  - docs/authority/baselines/1.6.0/01_Engineering_Technology_Foundation.md
+  - docs/authority/baselines/1.6.0/02_Repository_Solution_and_Module_Architecture.md
+  - docs/authority/baselines/1.6.0/09_Testing_Acceptance_Evidence_and_Quality_Gates.md
+  - governance/milestones/P1.yaml
+  - governance/dependencies/DEP-TUN-P1-005-TUN-P1-001.yaml
+  - governance/work-items/TUN-P1-001.yaml
+  - governance/work-items/TUN-P1-005.yaml
+  - governance/evidence/TUN-P1-005-ROLE-REVIEWS.json
+  - governance/evidence/TUN-P1-005-VALIDATION.json
+  - docs/development/P1_CAPABILITY_DECOMPOSITION_AND_PRIMITIVE_REUSE.md
+  - docs/development/P1_PLATFORM_FOUNDATION_REFINEMENT.md
+  - docs/project/CURRENT_STATE.md
+  - docs/project/HANDOFF.md
+  - docs/project/PROJECT_CONTEXT.md
+  - .agent/skills/auditor/SKILL.md
+  - .agent/skills/full-stack-engineer/SKILL.md
+  - .agent/skills/governance-engineer/SKILL.md
+  - .agent/skills/solution-architect/SKILL.md
+  - .agent/skills/tester-qa-engineer/SKILL.md
+excluded_artifacts:
+  - Product/domain behaviors, user/admin workflows, commercial rules, policy values, and public contract semantics
+  - implementation of a generic Common, Utils, Helpers, formatting, canonicalization, parser, or shared-everything library
+  - RabbitMQ dispatch, consumers, inbox, durable work, retry, cache, Redis, object storage, SignalR, gRPC, authentication, authorization, environment, UI, BFF, provider, and deployment implementation
+  - P0 state, historical closure evidence, and locked baseline source documents
+exclusion_reasons:
+  Product/domain behaviors, user/admin workflows, commercial rules, policy values, and public contract semantics: P1-005 is authority synchronization, capability decomposition, and focused technical reuse audit only; their owners and contracts remain separate governed scopes.
+  implementation of a generic Common, Utils, Helpers, formatting, canonicalization, parser, or shared-everything library: AMD-0004 requires reuse search and cohesive ownership before an approved actual use case exists; the audit found none to remediate.
+  RabbitMQ dispatch, consumers, inbox, durable work, retry, cache, Redis, object storage, SignalR, gRPC, authentication, authorization, environment, UI, BFF, provider, and deployment implementation: these are separately bounded P1 capabilities with individual prerequisites, role reviews, evidence, or human-contract gates.
+  P0 state, historical closure evidence, and locked baseline source documents: AMD-0004 is an additive authority overlay and must not reopen or rewrite P0 history or the immutable baseline.
+source_hashes: {}
+tool_version: manual-p1-capability-context-1.0.0
+created_at: 2026-10-02T13:45:00-04:00

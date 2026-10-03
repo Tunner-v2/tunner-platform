@@ -1,0 +1,44 @@
+schema_version: 1
+work_item_id: TUN-P1-013
+milestone_id: P1
+sprint_id: null
+title: Effective-policy version resolver mechanics
+status: CONTRACT_REQUIRED
+type: POLICY_FOUNDATION
+authority_refs:
+  - docs/authority/current-authority.json
+  - docs/authority/amendments/AMD-0004/AMD-0004_Shared_Technical_Primitives_Formatting_and_Canonicalization.md
+  - docs/authority/amendments/AMD-0001/effective-overrides/11_Development_Planes_Milestones_and_P0_Backlog.md
+  - docs/authority/baselines/1.6.0/01_Engineering_Technology_Foundation.md
+  - docs/authority/baselines/1.6.0/02_Repository_Solution_and_Module_Architecture.md
+  - docs/authority/baselines/1.6.0/09_Testing_Acceptance_Evidence_and_Quality_Gates.md
+flow_refs: []
+contract_refs: []
+decision_refs: []
+acceptance_criteria:
+  - Implement shared effective-version resolution only after an owner policy contract supplies inputs/results; no policy value or Product behavior is invented.
+  - Reuse or extend a compatible existing capability when one exists; do not add a generic Common, Utils, Helpers, or shared-everything layer.
+  - Preserve domain/business semantics as owner concerns and keep technical canonicalization and presentation formatting non-authoritative.
+  - Do not infer Product behavior, user flows, commercial rules, policy values, or public contract semantics beyond cited authority.
+prerequisites: [TUN-P1-002, TUN-P1-005]
+blockers: [OWNER_POLICY_CONTRACT_REQUIRED]
+impact: {architecture: true, ui: false, sdk: false, financial: false, compliance: false, security: false, devops: false, support: false}
+activated_roles: [full-stack-engineer, solution-architect, tester-qa-engineer]
+required_tests: [authority verification, governance validation, role activation calculation and mandatory specialist reviews, bounded expanded context verification, scope-specific deterministic tests and evidence]
+required_evidence: [governance/context/CTX-TUN-P1-013-001.yaml, governance/evidence/TUN-P1-013-VALIDATION.json, governance/evidence/TUN-P1-013-ROLE-REVIEWS.json]
+context_policy: EXPANDED
+todos: []
+defects: []
+authority_resolution:
+  schema_version: 1
+  outcome: REQUIRED_MISSING_AUTHORITY
+  reviewed_authority_refs:
+    - docs/authority/current-authority.json
+    - docs/authority/amendments/AMD-0005/AMD-0005_Authority-First_Decision_Resolution_and_Duplicate-Decision_Prevention.md
+    - docs/authority/amendments/AMD-0005/effective-overrides/00_Authority_Change_Control_and_Documentation_Governance.md
+  unresolved_question: "Which owner-approved policy contract supplies the effective-policy version inputs, resolution semantics, and authoritative result?"
+  conclusion: "No approved owner policy contract was found in active authority or governed history; this is a real missing-authority blocker, not a conditional technology trigger."
+  conditional_trigger_absent: false
+  reviewed_at: 2026-10-03T09:25:00-04:00
+created_at: 2026-10-02T13:20:00-04:00
+updated_at: 2026-10-02T13:20:00-04:00
