@@ -10,21 +10,12 @@
   "passed": 125,
   "failed": 0,
   "status": "PASS",
-  "external_drive_verification": "PENDING_EXTERNAL_CHECK",
-  "external_drive_reason": "Connected Drive calls returned no readable source inventory during bootstrap.",
   "checks": [
     {
       "source_path": "BUNDLE_README.md",
       "local_path": "docs/authority/source-bundle/BUNDLE_README.md",
       "expected_sha256": "62891aa816ce4326e06e119548f70b02ca0c012da0de77f5c06a95d2e5d32c35",
       "actual_sha256": "62891aa816ce4326e06e119548f70b02ca0c012da0de77f5c06a95d2e5d32c35",
-      "pass": true
-    },
-    {
-      "source_path": "active-amendments/AMD-0001_Pre-P0_Governance_Agent_Skills_Context_and_Bootstrap_Completion.md",
-      "local_path": "docs/authority/amendments/AMD-0001/AMD-0001_Pre-P0_Governance_Agent_Skills_Context_and_Bootstrap_Completion.md",
-      "expected_sha256": "03ca1b0a42f4594683b0bddcc191a11ffb9175294e9d68077d812cde45163ae2",
-      "actual_sha256": "03ca1b0a42f4594683b0bddcc191a11ffb9175294e9d68077d812cde45163ae2",
       "pass": true
     },
     {
@@ -890,33 +881,245 @@
     }
   ],
   "amendment_checks": [
-  {
-    "source_path": "active-amendments/AMD-0003_Location-Independent_Repository_and_Path_Resolution.md",
-    "local_path": "docs/authority/amendments/AMD-0003/AMD-0003_Location-Independent_Repository_and_Path_Resolution.md",
-    "expected_sha256": "81dccf9a4bd147b2892ccc14cfd012486e9631d7afd9aafb60f172bed3c8f263",
-    "actual_sha256": "81dccf9a4bd147b2892ccc14cfd012486e9631d7afd9aafb60f172bed3c8f263",
-    "pass": true
-  },
-  {
-    "source_path": "active-amendments/AMD-0003_provenance.json",
-    "local_path": "docs/authority/amendments/AMD-0003/amendment-provenance.json",
-    "expected_sha256": "7e4c1423bfac8be303eeeffffc272c2af3b869a92d268cead78726035dfa91f9",
-    "actual_sha256": "7e4c1423bfac8be303eeeffffc272c2af3b869a92d268cead78726035dfa91f9",
-    "pass": true
-  },
-  {
-    "source_path": "active-amendments/AMD-0003_mirror-manifest.json",
-    "local_path": "docs/authority/amendments/AMD-0003/mirror-manifest.json",
-    "expected_sha256": "4c3a6b544e7eb79e0c1918a120ff0c2dfe8d26347b58563dd69b4f4b4bd5b0fe",
-    "actual_sha256": "4c3a6b544e7eb79e0c1918a120ff0c2dfe8d26347b58563dd69b4f4b4bd5b0fe",
-    "pass": true
-  },
-  {
-    "source_path": "current-authority.json",
-    "local_path": "docs/authority/current-authority.json",
-    "expected_sha256": "5c29b03bc9e076386d005849c2870cfb6411d18e1627d54a4d0eb9a48370ca3a",
-    "actual_sha256": "5c29b03bc9e076386d005849c2870cfb6411d18e1627d54a4d0eb9a48370ca3a",
-    "pass": true
-  }
-]
+    {
+      "source_path": "active-authority-sync-2026-10-03/current-authority.json",
+      "local_path": "docs/authority/current-authority.json",
+      "expected_sha256": "369312c632cbccee94c50fe08be3327a333c3b4bc20e39614e18819a2985beab",
+      "actual_sha256": "369312c632cbccee94c50fe08be3327a333c3b4bc20e39614e18819a2985beab",
+      "pass": true
+    },
+    {
+      "source_path": "active-authority-sync-2026-10-03/authority-manifest.yaml",
+      "local_path": "docs/authority/authority-manifest.yaml",
+      "expected_sha256": "be125d90f92b820f45d0338b133533ff09f3b6f4b832a1f9913321b4b156aa78",
+      "actual_sha256": "be125d90f92b820f45d0338b133533ff09f3b6f4b832a1f9913321b4b156aa78",
+      "pass": true
+    },
+    {
+      "source_path": "active-authority-sync-2026-10-03/architecture-guidelines/Tunner_Architecture_Flowchart_Interpretation_and_Development_Guidelines.md",
+      "local_path": "docs/authority/architecture-guidelines/Tunner_Architecture_Flowchart_Interpretation_and_Development_Guidelines.md",
+      "expected_sha256": "a93c95087a5638243b0082143818c0749c3fdf36cb48319ef8c702f30c4ce68b",
+      "actual_sha256": "a93c95087a5638243b0082143818c0749c3fdf36cb48319ef8c702f30c4ce68b",
+      "pass": true
+    },
+    {
+      "source_path": "active-authority-sync-2026-10-03/amendments/AMD-0001/AMD-0001_Pre-P0_Governance_Agent_Skills_Context_and_Bootstrap_Completion.md",
+      "local_path": "docs/authority/amendments/AMD-0001/AMD-0001_Pre-P0_Governance_Agent_Skills_Context_and_Bootstrap_Completion.md",
+      "expected_sha256": "6e99ecc0bd63bb5eef0cecba8ce20404a0b3777592b7feb96db5f604a473c7aa",
+      "actual_sha256": "6e99ecc0bd63bb5eef0cecba8ce20404a0b3777592b7feb96db5f604a473c7aa",
+      "pass": true
+    },
+    {
+      "source_path": "active-authority-sync-2026-10-03/amendments/AMD-0001/amendment-provenance.json",
+      "local_path": "docs/authority/amendments/AMD-0001/amendment-provenance.json",
+      "expected_sha256": "fa8911359813c12137f191f6c46aa6b4a3ad2330dca5c1983007ceb8af1a4e81",
+      "actual_sha256": "fa8911359813c12137f191f6c46aa6b4a3ad2330dca5c1983007ceb8af1a4e81",
+      "pass": true
+    },
+    {
+      "source_path": "active-authority-sync-2026-10-03/amendments/AMD-0001/mirror-manifest.json",
+      "local_path": "docs/authority/amendments/AMD-0001/mirror-manifest.json",
+      "expected_sha256": "fcc979c2264d33698b35b9ea4e48ab31e9650fcfdd443e36df302f06e26f1849",
+      "actual_sha256": "fcc979c2264d33698b35b9ea4e48ab31e9650fcfdd443e36df302f06e26f1849",
+      "pass": true
+    },
+    {
+      "source_path": "active-authority-sync-2026-10-03/amendments/AMD-0002/AMD-0002_Non-Blocking_PR_Approval_and_Continuous_Local_Execution.md",
+      "local_path": "docs/authority/amendments/AMD-0002/AMD-0002_Non-Blocking_PR_Approval_and_Continuous_Local_Execution.md",
+      "expected_sha256": "fcea764b28c87b24adeab8af8fdc4fdc95c63cddd3eb917b718b966838053e99",
+      "actual_sha256": "fcea764b28c87b24adeab8af8fdc4fdc95c63cddd3eb917b718b966838053e99",
+      "pass": true
+    },
+    {
+      "source_path": "active-authority-sync-2026-10-03/amendments/AMD-0002/amendment-provenance.json",
+      "local_path": "docs/authority/amendments/AMD-0002/amendment-provenance.json",
+      "expected_sha256": "8bc377b53ca4eead47d72b98f49825c5f79dc6fcaecd0f4c0f1f48c531ba96c0",
+      "actual_sha256": "8bc377b53ca4eead47d72b98f49825c5f79dc6fcaecd0f4c0f1f48c531ba96c0",
+      "pass": true
+    },
+    {
+      "source_path": "active-authority-sync-2026-10-03/amendments/AMD-0002/mirror-manifest.json",
+      "local_path": "docs/authority/amendments/AMD-0002/mirror-manifest.json",
+      "expected_sha256": "291df3d61a4b38e1d2aae68df57f41b2f82a5706830d51d1982803826d5d66aa",
+      "actual_sha256": "291df3d61a4b38e1d2aae68df57f41b2f82a5706830d51d1982803826d5d66aa",
+      "pass": true
+    },
+    {
+      "source_path": "active-authority-sync-2026-10-03/amendments/AMD-0003/AMD-0003_Location-Independent_Repository_and_Path_Resolution.md",
+      "local_path": "docs/authority/amendments/AMD-0003/AMD-0003_Location-Independent_Repository_and_Path_Resolution.md",
+      "expected_sha256": "6d53c8def8fd562a8939ea9e3615984bbfbf9e3f5313c5e3bdd781d36e1d096c",
+      "actual_sha256": "6d53c8def8fd562a8939ea9e3615984bbfbf9e3f5313c5e3bdd781d36e1d096c",
+      "pass": true
+    },
+    {
+      "source_path": "active-authority-sync-2026-10-03/amendments/AMD-0003/amendment-provenance.json",
+      "local_path": "docs/authority/amendments/AMD-0003/amendment-provenance.json",
+      "expected_sha256": "014a131369107bf2f7aed2145477aa7a0d05acce1b647595c0df2370206918a0",
+      "actual_sha256": "014a131369107bf2f7aed2145477aa7a0d05acce1b647595c0df2370206918a0",
+      "pass": true
+    },
+    {
+      "source_path": "active-authority-sync-2026-10-03/amendments/AMD-0003/mirror-manifest.json",
+      "local_path": "docs/authority/amendments/AMD-0003/mirror-manifest.json",
+      "expected_sha256": "945f1c1f12c5a228c66be96a13cbccad0fe5f0b65f8b74a888fd4ba415b43953",
+      "actual_sha256": "945f1c1f12c5a228c66be96a13cbccad0fe5f0b65f8b74a888fd4ba415b43953",
+      "pass": true
+    },
+    {
+      "source_path": "active-authority-sync-2026-10-03/amendments/AMD-0004/AMD-0004_Shared_Technical_Primitives_Formatting_and_Canonicalization.md",
+      "local_path": "docs/authority/amendments/AMD-0004/AMD-0004_Shared_Technical_Primitives_Formatting_and_Canonicalization.md",
+      "expected_sha256": "9577b29946c772fad06aa1a79d7866d16da3677e944a6bd46fafb13f296a2384",
+      "actual_sha256": "9577b29946c772fad06aa1a79d7866d16da3677e944a6bd46fafb13f296a2384",
+      "pass": true
+    },
+    {
+      "source_path": "active-authority-sync-2026-10-03/amendments/AMD-0004/amendment-provenance.json",
+      "local_path": "docs/authority/amendments/AMD-0004/amendment-provenance.json",
+      "expected_sha256": "87e2944f2a279e1f884127de875375f8163788060cdcc8661778eeb88c089c2e",
+      "actual_sha256": "87e2944f2a279e1f884127de875375f8163788060cdcc8661778eeb88c089c2e",
+      "pass": true
+    },
+    {
+      "source_path": "active-authority-sync-2026-10-03/amendments/AMD-0004/mirror-manifest.json",
+      "local_path": "docs/authority/amendments/AMD-0004/mirror-manifest.json",
+      "expected_sha256": "e61786b81284ccb28bf33de79c6f05a889cb0b741d9b3087e9363ebb4fd4fe76",
+      "actual_sha256": "e61786b81284ccb28bf33de79c6f05a889cb0b741d9b3087e9363ebb4fd4fe76",
+      "pass": true
+    },
+    {
+      "source_path": "active-authority-sync-2026-10-03/amendments/AMD-0005/AMD-0005_Authority-First_Decision_Resolution_and_Duplicate-Decision_Prevention.md",
+      "local_path": "docs/authority/amendments/AMD-0005/AMD-0005_Authority-First_Decision_Resolution_and_Duplicate-Decision_Prevention.md",
+      "expected_sha256": "51b259a3757c1f881846d3c17666723d0dc72628ad5d25bcd58360c6f41c0d64",
+      "actual_sha256": "51b259a3757c1f881846d3c17666723d0dc72628ad5d25bcd58360c6f41c0d64",
+      "pass": true
+    },
+    {
+      "source_path": "active-authority-sync-2026-10-03/amendments/AMD-0005/amendment-provenance.json",
+      "local_path": "docs/authority/amendments/AMD-0005/amendment-provenance.json",
+      "expected_sha256": "4d899827819f43b63af871950f2574a306ef7a535af2071745a2f5ee26ef484c",
+      "actual_sha256": "4d899827819f43b63af871950f2574a306ef7a535af2071745a2f5ee26ef484c",
+      "pass": true
+    },
+    {
+      "source_path": "active-authority-sync-2026-10-03/amendments/AMD-0005/mirror-manifest.json",
+      "local_path": "docs/authority/amendments/AMD-0005/mirror-manifest.json",
+      "expected_sha256": "309eaf52c2707982062864b43796aa96e16fc3b1d15d075be49006164d96346b",
+      "actual_sha256": "309eaf52c2707982062864b43796aa96e16fc3b1d15d075be49006164d96346b",
+      "pass": true
+    },
+    {
+      "source_path": "active-authority-sync-2026-10-03/amendments/AMD-0005/effective-overrides/00_Authority_Change_Control_and_Documentation_Governance.md",
+      "local_path": "docs/authority/amendments/AMD-0005/effective-overrides/00_Authority_Change_Control_and_Documentation_Governance.md",
+      "expected_sha256": "31bbdd41a6aae352a8dc15043ddb792312b2e5ad79c504a4cef9ed9f6e2f30ac",
+      "actual_sha256": "31bbdd41a6aae352a8dc15043ddb792312b2e5ad79c504a4cef9ed9f6e2f30ac",
+      "pass": true
+    },
+    {
+      "source_path": "active-authority-sync-2026-10-03/amendments/AMD-0005/effective-overrides/03_Governed_Development_Lifecycle_Scrum_Git.md",
+      "local_path": "docs/authority/amendments/AMD-0005/effective-overrides/03_Governed_Development_Lifecycle_Scrum_Git.md",
+      "expected_sha256": "b5ccedb5c82dc5c95cfd87305277b30a1256451427ffd1043de994235365b80e",
+      "actual_sha256": "b5ccedb5c82dc5c95cfd87305277b30a1256451427ffd1043de994235365b80e",
+      "pass": true
+    },
+    {
+      "source_path": "active-authority-sync-2026-10-03/amendments/AMD-0005/effective-overrides/04_Governance_and_Context_Tooling_Specification.md",
+      "local_path": "docs/authority/amendments/AMD-0005/effective-overrides/04_Governance_and_Context_Tooling_Specification.md",
+      "expected_sha256": "a2c49d4aa6595df005c2c698738c8ff8306ce48ff176cbf1441cbc21e8a97054",
+      "actual_sha256": "a2c49d4aa6595df005c2c698738c8ff8306ce48ff176cbf1441cbc21e8a97054",
+      "pass": true
+    },
+    {
+      "source_path": "active-authority-sync-2026-10-03/amendments/AMD-0005/effective-overrides/11_Development_Planes_Milestones_and_P0_Backlog.md",
+      "local_path": "docs/authority/amendments/AMD-0005/effective-overrides/11_Development_Planes_Milestones_and_P0_Backlog.md",
+      "expected_sha256": "69b68d406f60f22ef994747eb86c7f657e40e688024932afac3bc0dc3ece1be2",
+      "actual_sha256": "69b68d406f60f22ef994747eb86c7f657e40e688024932afac3bc0dc3ece1be2",
+      "pass": true
+    },
+    {
+      "source_path": "active-authority-sync-2026-10-03/amendments/AMD-0005/effective-overrides/12_AI_Development_Protocol_Context_and_Project_Memory.md",
+      "local_path": "docs/authority/amendments/AMD-0005/effective-overrides/12_AI_Development_Protocol_Context_and_Project_Memory.md",
+      "expected_sha256": "1db0576cdc2e96ab99934caa3bd5bfa2522389c08bf1bef3386512ffa3871770",
+      "actual_sha256": "1db0576cdc2e96ab99934caa3bd5bfa2522389c08bf1bef3386512ffa3871770",
+      "pass": true
+    },
+    {
+      "source_path": "active-authority-sync-2026-10-03/amendments/AMD-0005/effective-overrides/35_AI_Agent_Skill_Catalog_and_Review_Contracts.md",
+      "local_path": "docs/authority/amendments/AMD-0005/effective-overrides/35_AI_Agent_Skill_Catalog_and_Review_Contracts.md",
+      "expected_sha256": "c775fa8c1bf2b8ee432c7a0d91ec2eb6018ab2e831ab3fcce0fe83a783f45c2b",
+      "actual_sha256": "c775fa8c1bf2b8ee432c7a0d91ec2eb6018ab2e831ab3fcce0fe83a783f45c2b",
+      "pass": true
+    },
+    {
+      "source_path": "active-authority-sync-2026-10-03/amendments/AMD-0005/effective-overrides/36_P0_Repository_Bootstrap_Governance_and_Context_Implementation_Spec.md",
+      "local_path": "docs/authority/amendments/AMD-0005/effective-overrides/36_P0_Repository_Bootstrap_Governance_and_Context_Implementation_Spec.md",
+      "expected_sha256": "df53cdddf0ee2f7b8868ae89a99cf1939923ddc9afb02fcfd487030858378bc1",
+      "actual_sha256": "df53cdddf0ee2f7b8868ae89a99cf1939923ddc9afb02fcfd487030858378bc1",
+      "pass": true
+    },
+    {
+      "source_path": "active-authority-sync-2026-10-03/amendments/AMD-0005/effective-overrides/37_Current_Authority_Index.md",
+      "local_path": "docs/authority/amendments/AMD-0005/effective-overrides/37_Current_Authority_Index.md",
+      "expected_sha256": "da258b866cf459f37f3001dd9c268d41d4f0573a9cdd8ec7c487ecd878ee43ea",
+      "actual_sha256": "da258b866cf459f37f3001dd9c268d41d4f0573a9cdd8ec7c487ecd878ee43ea",
+      "pass": true
+    },
+    {
+      "source_path": "active-authority-sync-2026-10-03/amendments/AMD-0005/effective-overrides/README.md",
+      "local_path": "docs/authority/amendments/AMD-0005/effective-overrides/README.md",
+      "expected_sha256": "dbf7469b3001e45b04c99ac4235f9f946b2bb324efde1094cf40b16d179494fc",
+      "actual_sha256": "dbf7469b3001e45b04c99ac4235f9f946b2bb324efde1094cf40b16d179494fc",
+      "pass": true
+    },
+    {
+      "source_path": "active-authority-sync-2026-10-03/amendments/AMD-0005/effective-overrides/decisions/README.md",
+      "local_path": "docs/authority/amendments/AMD-0005/effective-overrides/decisions/README.md",
+      "expected_sha256": "34d8dfc9fbf78979b66ff1f8f2631815e1f408ac828ca50e1e246a038202f0d6",
+      "actual_sha256": "34d8dfc9fbf78979b66ff1f8f2631815e1f408ac828ca50e1e246a038202f0d6",
+      "pass": true
+    }
+  ],
+  "superseded_checks": [
+    {
+      "original_group": "checks",
+      "source_path": "active-amendments/AMD-0001_Pre-P0_Governance_Agent_Skills_Context_and_Bootstrap_Completion.md",
+      "local_path": "docs/authority/amendments/AMD-0001/AMD-0001_Pre-P0_Governance_Agent_Skills_Context_and_Bootstrap_Completion.md",
+      "expected_sha256": "03ca1b0a42f4594683b0bddcc191a11ffb9175294e9d68077d812cde45163ae2",
+      "actual_sha256": "03ca1b0a42f4594683b0bddcc191a11ffb9175294e9d68077d812cde45163ae2",
+      "pass": true,
+      "superseded_by": "AMD-0005 authority synchronization on 2026-10-03",
+      "reason": "The original bootstrap/previous-authority check is retained as historical evidence. Current authority is verified by a separate exact Drive overlay check."
+    },
+    {
+      "original_group": "amendment_checks",
+      "source_path": "active-amendments/AMD-0003_Location-Independent_Repository_and_Path_Resolution.md",
+      "local_path": "docs/authority/amendments/AMD-0003/AMD-0003_Location-Independent_Repository_and_Path_Resolution.md",
+      "expected_sha256": "81dccf9a4bd147b2892ccc14cfd012486e9631d7afd9aafb60f172bed3c8f263",
+      "actual_sha256": "81dccf9a4bd147b2892ccc14cfd012486e9631d7afd9aafb60f172bed3c8f263",
+      "pass": true,
+      "superseded_by": "AMD-0005 authority synchronization on 2026-10-03",
+      "reason": "The previous active-authority check is retained as historical evidence. Current authority is verified by a separate exact Drive overlay check."
+    },
+    {
+      "original_group": "amendment_checks",
+      "source_path": "current-authority.json",
+      "local_path": "docs/authority/current-authority.json",
+      "expected_sha256": "c90995b39d54c640b5168cfe4beb0a614f2d10c3bf1414bcc2bccc308fdb4a22",
+      "actual_sha256": "c90995b39d54c640b5168cfe4beb0a614f2d10c3bf1414bcc2bccc308fdb4a22",
+      "pass": true,
+      "superseded_by": "AMD-0005 authority synchronization on 2026-10-03",
+      "reason": "The previous active-authority check is retained as historical evidence. Current authority is verified by a separate exact Drive overlay check."
+    },
+    {
+      "original_group": "amendment_checks",
+      "source_path": "active-amendments/AMD-0004_Shared_Technical_Primitives_Formatting_and_Canonicalization.md",
+      "local_path": "docs/authority/amendments/AMD-0004/AMD-0004_Shared_Technical_Primitives_Formatting_and_Canonicalization.md",
+      "expected_sha256": "2a7884482e66c77d378483b8df1c47baa98d882c9cb75b13c0b606d1c9822f70",
+      "actual_sha256": "2a7884482e66c77d378483b8df1c47baa98d882c9cb75b13c0b606d1c9822f70",
+      "pass": true,
+      "superseded_by": "AMD-0005 authority synchronization on 2026-10-03",
+      "reason": "The previous active-authority check is retained as historical evidence. Current authority is verified by a separate exact Drive overlay check."
+    }
+  ],
+  "external_drive_verification": "VERIFIED_DRIVE_READBACK_2026-10-03",
+  "external_drive_reason": "Exact approved Drive files for AMD-0001 through AMD-0005, Current Authority Index, active decision/development indexes, affected effective overrides, and the Architecture Interpretation/Development Guidelines were fetched and hash-recorded. Superseded entries remain retained as historical evidence and are not presented as active checks."
 }
