@@ -1,0 +1,14 @@
+schema_version: 1
+reopen_id: REOPEN-TUN-P1-001-001
+work_item_id: TUN-P1-001
+previous_release: null
+reason: Retrospective AMD-0002 audit found that 6af6791 interleaves TUN-P1-001 refinement artifacts with TUN-P1-002 implementation, so it is not a cohesive P1-001 validation candidate.
+detected_environment: LOCAL_GOVERNANCE_CONTROL_PLANE
+classification: GOVERNANCE_DEFECT
+severity: SEV-2
+new_acceptance_criteria:
+  - Establish a P1-001-only recovery candidate and exact-SHA validation evidence without rewriting protected history or absorbing TUN-P1-002 implementation.
+  - Record repository-change ownership, validated and tested candidate SHA, and any remaining unrelated working-tree paths before returning the item to DONE.
+affected_versions: [6af6791, P1_LOCAL_BRANCH]
+evidence: [governance/evidence/TUN-P1-022-COMMIT-READINESS-AUDIT.json, governance/defects/DEF-TUN-P1-001-001.yaml]
+created_at: 2026-10-03T07:21:52-04:00
