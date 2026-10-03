@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "evidence_id": "TUN-P1-010-VALIDATION",
+  "scope_type": "WORK_ITEM",
+  "scope_id": "TUN-P1-010",
+  "status": "PASS",
+  "checked_at": "2026-10-03T01:20:00-04:00",
+  "checks": [
+    "Existing authority audit verified ADR-0002, ADR-0004, and Documents 01, 07, 08, 09, and 15; no duplicate Product Decision or unresolved material architecture choice was created.",
+    "Solution build completed with zero warnings and zero errors.",
+    "TUN-P1-010 static source validation passed: the Platform adapter requires authenticated policy access, explicit origin/rate-limit policy hooks, server-derived audience resolution, and no current non-BFF API exposure or Redis backplane.",
+    "Tunner.Platform.ArchitectureTests passed 14 of 14 checks, including protected endpoint metadata, absence of client subscription methods, payload-minimal hint shape, safe audience-key validation, and the deny-by-default scope resolver.",
+    "Primary-source registry evidence is current as of 2026-10-03; authority, governance schema, role activation, and regenerated context checks pass."
+  ],
+  "artifacts": [
+    "src/Tunner.Platform/Realtime/RealtimeAudience.cs",
+    "src/Tunner.Platform/Realtime/RealtimeResynchronizationHint.cs",
+    "src/Tunner.Platform/Realtime/TunnerRealtimeHub.cs",
+    "src/Tunner.Platform/Realtime/TunnerRealtimeServiceCollectionExtensions.cs",
+    "tests/Tunner.Platform.ArchitectureTests/RealtimeFoundationTests.cs",
+    "tools/validation/Validate-TunnerSignalRRealtimeSource.ps1",
+    "docs/development/P1_SIGNALR_REALTIME_REFINEMENT.md"
+  ],
+  "limitations": [
+    "No User/Admin BFF host is present or exposed by this slice. The current general API host does not register or map the realtime foundation.",
+    "No identity/session implementation, browser client, connection retry timing, stateful replay/retention, domain resource-policy semantics, domain event category, Product/account/resource subscription API, Product-facing SignalR, Redis deployment/backplane configuration, provider integration, deployment, or release behavior is introduced.",
+    "Every material command, query, permission decision, current-state read, and security-sensitive enforcement remains authoritative through the applicable BFF/API/read model. Realtime delivery is only a resynchronization hint."
+  ]
+}
