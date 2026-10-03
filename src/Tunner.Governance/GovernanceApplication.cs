@@ -228,6 +228,11 @@ public static class GovernanceApplication
             : allowed
                 ? "The destination is the next declared normal lifecycle state."
                 : "Only the next declared normal lifecycle state is allowed unless Product Acceptance is explicitly not required for a technical-only work item completing from VALIDATION.";
+        if (allowed && StringComparer.Ordinal.Equals(destination, "DONE") && RequiresCommittedState(workItem, destination) && !HasRequiredCommittedState(repository, workItem, destination))
+        {
+            return new CommandResult(1, "transition check", new TransitionPayload(workItemId, from, destination, "REJECTED", "P1 repository-changing completion requires valid committed-state readiness evidence."));
+        }
+
         return new CommandResult(allowed ? 0 : 1, "transition check", new TransitionPayload(workItemId, from, destination, allowed ? "ALLOWED" : "REJECTED", reason));
     }
 
@@ -570,6 +575,13 @@ public static class GovernanceApplication
                 continue;
             }
 
+            if (!HasRequiredCommittedState(repository, prerequisiteRecord))
+            {
+                failures.Add($"prerequisite '{prerequisite}' lacks valid committed-state readiness evidence");
+                continue;
+            }
+
+
             if (!IsPrerequisiteReady(repository, workItem, prerequisiteRecord, declaration, readiness, allowValidatedP0Prerequisites))
             {
                 failures.Add($"prerequisite '{prerequisite}' requires {readiness} but is {prerequisiteRecord.Scalar("status") ?? "UNKNOWN"}");
@@ -623,6 +635,21 @@ public static class GovernanceApplication
 
     private static int UnmergedLocalDependentCount(Dictionary<string, GovernanceRecord> workItems, IReadOnlyList<GovernanceRecord> dependencies, IntegrationPolicyDefinition integrationPolicy)
         => workItems.Values.Count(workItem => workItem.StringList("prerequisites").Any(prerequisiteId => workItems.TryGetValue(prerequisiteId, out var prerequisite) && !StringComparer.Ordinal.Equals(prerequisite.Scalar("status"), "DONE") && StringComparer.Ordinal.Equals(dependencies.FirstOrDefault(item => StringComparer.Ordinal.Equals(item.Scalar("work_item_id"), workItem.Identifier) && StringComparer.Ordinal.Equals(item.Scalar("prerequisite_work_item_id"), prerequisiteId))?.Scalar("required_readiness") ?? integrationPolicy.DefaultDependencyReadiness, "LOCAL_VALIDATED")));
+
+    private static bool RequiresCommittedState(GovernanceRecord record, string? state = null)
+        => StringComparer.Ordinal.Equals(record.Scalar("milestone_id"), "P1")
+            && new[] { "LOCAL_VALIDATED", "READY_FOR_MERGE", "DONE" }.Contains(state ?? record.Scalar("status"), StringComparer.Ordinal);
+
+    private static bool HasRequiredCommittedState(DirectoryInfo repository, GovernanceRecord record, string? state = null)
+    {
+        if (!RequiresCommittedState(record, state))
+        {
+            return true;
+        }
+
+        return CommitReadinessApplication.Read(record) is not null
+            && CommitReadinessApplication.Check(repository, record).Count == 0;
+    }
 
     private static bool IsPrerequisiteReady(DirectoryInfo repository, GovernanceRecord workItem, GovernanceRecord prerequisite, GovernanceRecord? declaration, string readiness, bool allowValidatedP0Prerequisites)
     {

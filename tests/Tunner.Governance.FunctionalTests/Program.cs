@@ -151,6 +151,33 @@ try
     var technicalOnlyCompletion = GovernanceApplication.CheckTransition(fixtureRoot, "TUN-TECHNICAL", "DONE");
     Expect(technicalOnlyCompletion.ExitCode == 0 && ((TransitionPayload)technicalOnlyCompletion.Payload).Reason.Contains("explicitly not required", StringComparison.Ordinal), "Lifecycle check must permit direct technical-only completion only when Product Acceptance is explicitly not required.", failures);
 
+    WriteWorkItem(fixtureRoot, "TUN-P1-COMMIT", "VALIDATION", "[]", false);
+    var p1CommitPath = Path.Combine(fixtureRoot.FullName, "governance", "work-items", "TUN-P1-COMMIT.yaml");
+    File.WriteAllText(p1CommitPath, File.ReadAllText(p1CommitPath).Replace("milestone_id: MVP", "milestone_id: P1", StringComparison.Ordinal));
+    RunGit(fixtureRoot, "add", "governance/work-items/TUN-P1-COMMIT.yaml");
+    RunGit(fixtureRoot, "commit", "--quiet", "-m", "fixture P1 candidate");
+    var p1CandidateSha = RunGitOutput(fixtureRoot, "rev-parse", "HEAD");
+    var p1CompletionWithoutState = GovernanceApplication.CheckTransition(fixtureRoot, "TUN-P1-COMMIT", "DONE");
+    Expect(p1CompletionWithoutState.ExitCode == 1 && ((TransitionPayload)p1CompletionWithoutState.Payload).Reason.Contains("committed-state readiness", StringComparison.Ordinal), "P1 completion must reject repository-changing work that lacks committed-state evidence.", failures);
+    File.AppendAllText(p1CommitPath, $"git_state:{Environment.NewLine}  repository_changed: true{Environment.NewLine}  validated_commit_sha: {p1CandidateSha}{Environment.NewLine}  tested_commit_sha: {p1CandidateSha}{Environment.NewLine}  work_item_commit_shas: [{p1CandidateSha}]{Environment.NewLine}  closure_commit_sha: null{Environment.NewLine}  remaining_uncommitted_paths: []{Environment.NewLine}  remaining_uncommitted_classification: NONE{Environment.NewLine}");
+    var p1CompletionWithState = GovernanceApplication.CheckTransition(fixtureRoot, "TUN-P1-COMMIT", "DONE");
+    Expect(p1CompletionWithState.ExitCode == 0, "P1 completion must accept a valid committed validation candidate while allowing a later metadata closure commit.", failures);
+
+    WriteWorkItem(fixtureRoot, "TUN-P1-UPSTREAM", "DONE", "[]");
+    WriteWorkItem(fixtureRoot, "TUN-P1-DOWNSTREAM", "READY", "[TUN-P1-UPSTREAM]");
+    var p1UpstreamPath = Path.Combine(fixtureRoot.FullName, "governance", "work-items", "TUN-P1-UPSTREAM.yaml");
+    var p1DownstreamPath = Path.Combine(fixtureRoot.FullName, "governance", "work-items", "TUN-P1-DOWNSTREAM.yaml");
+    File.WriteAllText(p1UpstreamPath, File.ReadAllText(p1UpstreamPath).Replace("milestone_id: MVP", "milestone_id: P1", StringComparison.Ordinal));
+    File.WriteAllText(p1DownstreamPath, File.ReadAllText(p1DownstreamPath).Replace("milestone_id: MVP", "milestone_id: P1", StringComparison.Ordinal));
+    RunGit(fixtureRoot, "add", "governance/work-items/TUN-P1-UPSTREAM.yaml", "governance/work-items/TUN-P1-DOWNSTREAM.yaml");
+    RunGit(fixtureRoot, "commit", "--quiet", "-m", "fixture P1 dependency candidates");
+    var p1DependencyCandidateSha = RunGitOutput(fixtureRoot, "rev-parse", "HEAD");
+    var p1DownstreamBeforeEvidence = (NextPayload)GovernanceApplication.Next(fixtureRoot).Payload;
+    Expect(!p1DownstreamBeforeEvidence.Items.Single(item => item.WorkItemId == "TUN-P1-DOWNSTREAM").Actionable, "A P1 downstream item must remain ineligible while its DONE prerequisite lacks committed-state evidence.", failures);
+    File.AppendAllText(p1UpstreamPath, $"git_state:{Environment.NewLine}  repository_changed: true{Environment.NewLine}  validated_commit_sha: {p1DependencyCandidateSha}{Environment.NewLine}  tested_commit_sha: {p1DependencyCandidateSha}{Environment.NewLine}  work_item_commit_shas: [{p1DependencyCandidateSha}]{Environment.NewLine}  closure_commit_sha: null{Environment.NewLine}  remaining_uncommitted_paths: []{Environment.NewLine}  remaining_uncommitted_classification: NONE{Environment.NewLine}");
+    var p1DownstreamAfterEvidence = (NextPayload)GovernanceApplication.Next(fixtureRoot).Payload;
+    Expect(p1DownstreamAfterEvidence.Items.Single(item => item.WorkItemId == "TUN-P1-DOWNSTREAM").Actionable, "A P1 downstream item may become eligible when its DONE prerequisite has valid committed-state evidence.", failures);
+
     var milestoneClose = GovernanceApplication.CheckMilestoneClose(fixtureRoot, "MVP");
     Expect(milestoneClose.ExitCode == 1 && ((MilestoneClosePayload)milestoneClose.Payload).Failures.Any(item => item.Contains("work item is not DONE", StringComparison.Ordinal)) && ((MilestoneClosePayload)milestoneClose.Payload).Failures.Any(item => item.Contains("milestone role-review evidence missing", StringComparison.Ordinal)), "Milestone close-check must refuse incomplete work and missing milestone reviews.", failures);
 
@@ -526,6 +553,33 @@ static void InitializeGit(DirectoryInfo repository)
     RunGit(repository, "config", "user.name", "Tunner fixture");
     RunGit(repository, "add", ".");
     RunGit(repository, "commit", "--quiet", "-m", "fixture baseline");
+}
+
+static string RunGitOutput(DirectoryInfo repository, params string[] arguments)
+{
+    var startInfo = new ProcessStartInfo("git")
+    {
+        WorkingDirectory = repository.FullName,
+        RedirectStandardOutput = true,
+        RedirectStandardError = true,
+        UseShellExecute = false,
+        CreateNoWindow = true
+    };
+    foreach (var argument in arguments)
+    {
+        startInfo.ArgumentList.Add(argument);
+    }
+
+    using var process = Process.Start(startInfo) ?? throw new InvalidOperationException("Unable to start git for the fixture.");
+    var output = process.StandardOutput.ReadToEnd();
+    var error = process.StandardError.ReadToEnd();
+    process.WaitForExit();
+    if (process.ExitCode != 0)
+    {
+        throw new InvalidOperationException($"Fixture git command failed: {error}");
+    }
+
+    return output.Trim();
 }
 
 static void RunGit(DirectoryInfo repository, params string[] arguments)
