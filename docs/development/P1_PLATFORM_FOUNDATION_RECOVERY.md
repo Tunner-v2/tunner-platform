@@ -20,3 +20,7 @@ This recovery adds no API, Worker, persistence, messaging, security, storage, UI
 ## Completion condition
 
 `TUN-P1-001` may return to `DONE` only after the recovery candidate is validated against current authority, its mandatory roles record passing reviews for the recovery scope, and the work item plus validation evidence identify the validated/tested candidate SHA and remaining unrelated worktree paths.
+
+## Portable validation baseline
+
+The current-authority portability prerequisite is satisfied by the committed authority integrity and checkout-byte corrections through 476e84b. The next P1-001-only candidate must be verified from a fresh worktree against that baseline; this document remains limited to refinement recovery and introduces no application behavior.
