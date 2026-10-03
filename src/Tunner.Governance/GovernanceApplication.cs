@@ -66,6 +66,8 @@ public static class GovernanceApplication
             }
         }
 
+        AddAuthorityResolutionDiagnostics(records, diagnostics);
+
         var isValid = diagnostics.All(item => item.Severity != "ERROR");
         return new CommandResult(isValid ? 0 : 1, "validate", new ValidationPayload(isValid, records.Count, diagnostics));
     }
@@ -149,6 +151,7 @@ public static class GovernanceApplication
         }
 
         var failures = ReadinessReasons(repository, workItem, workItems, DependencyRecords(records), IntegrationPolicy.Load(repository, diagnostics), HasApprovedP0LocalIntegration(records));
+        failures.AddRange(CommitReadinessApplication.Check(repository, workItem));
         var authority = AuthorityApplication.Verify(repository);
         if (authority.ExitCode != 0)
         {
@@ -216,8 +219,16 @@ public static class GovernanceApplication
 
         var fromIndex = Array.IndexOf(policy.NormalStates.ToArray(), from);
         var destinationIndex = Array.IndexOf(policy.NormalStates.ToArray(), destination);
-        var allowed = fromIndex >= 0 && destinationIndex == fromIndex + 1;
-        return new CommandResult(allowed ? 0 : 1, "transition check", new TransitionPayload(workItemId, from, destination, allowed ? "ALLOWED" : "REJECTED", allowed ? "The destination is the next declared normal lifecycle state." : "Only the next declared normal lifecycle state is allowed by this MVP."));
+        var nextDeclaredNormalState = fromIndex >= 0 && destinationIndex == fromIndex + 1;
+        var explicitlyTechnicalOnly = string.Equals(workItem.Scalar("product_acceptance_required"), "false", StringComparison.OrdinalIgnoreCase);
+        var directTechnicalCompletion = explicitlyTechnicalOnly && string.Equals(from, "VALIDATION", StringComparison.Ordinal) && string.Equals(destination, "DONE", StringComparison.Ordinal);
+        var allowed = nextDeclaredNormalState || directTechnicalCompletion;
+        var reason = directTechnicalCompletion
+            ? "Product Acceptance is explicitly not required; this technical-only work item may move directly from VALIDATION to DONE."
+            : allowed
+                ? "The destination is the next declared normal lifecycle state."
+                : "Only the next declared normal lifecycle state is allowed unless Product Acceptance is explicitly not required for a technical-only work item completing from VALIDATION.";
+        return new CommandResult(allowed ? 0 : 1, "transition check", new TransitionPayload(workItemId, from, destination, allowed ? "ALLOWED" : "REJECTED", reason));
     }
 
     public static CommandResult CheckMilestoneTransition(DirectoryInfo repository, string milestoneId, string destination)
@@ -461,6 +472,60 @@ public static class GovernanceApplication
             failures.Add($"milestone role-review evidence could not be read: {logicalPath}");
         }
     }
+    private static void AddAuthorityResolutionDiagnostics(IReadOnlyList<GovernanceRecord> records, List<Diagnostic> diagnostics)
+    {
+        foreach (var record in records.Where(RequiresAuthorityResolution))
+        {
+            if (!record.Fields.TryGetValue("authority_resolution", out var node) || node is not YamlMappingNode resolution)
+            {
+                diagnostics.Add(Diagnostic.Error(record.Path, record.Root.Start, "GOV_AUTHORITY_RESOLUTION_REQUIRED", "A missing-authority decision or blocker requires a schema-versioned Authority Resolution Pass."));
+                continue;
+            }
+
+            var fields = Fields(resolution);
+            var schemaVersion = Scalar(fields, "schema_version");
+            var outcome = Scalar(fields, "outcome");
+            var reviewedAuthority = StringList(fields, "reviewed_authority_refs");
+            var unresolvedQuestion = Scalar(fields, "unresolved_question");
+            var conclusion = Scalar(fields, "conclusion");
+            var triggerAbsent = string.Equals(Scalar(fields, "conditional_trigger_absent"), "true", StringComparison.OrdinalIgnoreCase);
+
+            if (!int.TryParse(schemaVersion, NumberStyles.Integer, CultureInfo.InvariantCulture, out var version) || version < 1 ||
+                string.IsNullOrWhiteSpace(outcome) || reviewedAuthority.Count == 0 || string.IsNullOrWhiteSpace(unresolvedQuestion) || string.IsNullOrWhiteSpace(conclusion))
+            {
+                diagnostics.Add(Diagnostic.Error(record.Path, resolution.Start, "GOV_AUTHORITY_RESOLUTION_INVALID", "Authority Resolution Pass must declare schema_version, outcome, reviewed_authority_refs, unresolved_question, and conclusion."));
+                continue;
+            }
+
+            if (!reviewedAuthority.Contains("docs/authority/current-authority.json", StringComparer.Ordinal))
+            {
+                diagnostics.Add(Diagnostic.Error(record.Path, resolution.Start, "GOV_AUTHORITY_RESOLUTION_INDEX", "Authority Resolution Pass must cite docs/authority/current-authority.json."));
+            }
+
+            if (triggerAbsent || string.Equals(outcome, "CONDITIONAL_TRIGGER_ABSENT", StringComparison.Ordinal))
+            {
+                diagnostics.Add(Diagnostic.Error(record.Path, resolution.Start, "GOV_AUTHORITY_RESOLUTION_CONDITIONAL", "A conditional trigger being absent is not a missing-authority decision or blocker."));
+            }
+        }
+    }
+
+    private static bool RequiresAuthorityResolution(GovernanceRecord record)
+    {
+        if (StringComparer.Ordinal.Equals(record.Type.DefinitionName, "product-decision"))
+        {
+            return true;
+        }
+
+        if (!StringComparer.Ordinal.Equals(record.Type.DefinitionName, "work-item"))
+        {
+            return false;
+        }
+
+        var state = record.Scalar("status");
+        return new[] { "NEEDS_PRODUCT_DECISION", "CONTRACT_REQUIRED", "TECH_DECISION_REQUIRED" }.Contains(state, StringComparer.Ordinal)
+            || record.StringList("blockers").Any(blocker => blocker.Contains("CONTRACT", StringComparison.Ordinal) || blocker.Contains("DECISION", StringComparison.Ordinal) || blocker.Contains("FIGMA_SCOPE", StringComparison.Ordinal));
+    }
+
     private static void AddAuthorityDiagnostics(DirectoryInfo repository, List<Diagnostic> diagnostics)
     {
         var authority = AuthorityApplication.Verify(repository);

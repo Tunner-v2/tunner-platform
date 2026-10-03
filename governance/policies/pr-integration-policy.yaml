@@ -4,6 +4,12 @@ approval_pending_blocks_global_execution: false
 continue_independent_work: true
 continue_local_validation: true
 default_dependency_readiness: LOCAL_VALIDATED
+commit_required_before_local_validated: true
+validation_candidate_sha_required: true
+tested_sha_must_match_validated_behavior_state: true
+work_item_owned_uncommitted_changes_block_readiness: true
+allow_metadata_only_closure_commit_after_validation: true
+preserve_classified_unrelated_dirty_paths: true
 require_explicit_merged_main_for:
   - release_or_production_integration
   - protected_main_based_validation_when_specified

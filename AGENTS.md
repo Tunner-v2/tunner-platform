@@ -23,6 +23,8 @@ Canonical resources before repository creation:
   - AMD-0001: https://drive.google.com/file/d/15MYKfh7zplOWoz80FvgPJOPi-Y6GfI7H/view
   - AMD-0002: https://drive.google.com/file/d/1dmODTNgtRS7WbKZyuX__FVmuJKQplkxN/view
   - AMD-0003: https://drive.google.com/file/d/1N8GLvNiRkkm5hEgIIvJzJo_7DNpBJYJD/view
+  - AMD-0004: https://drive.google.com/file/d/1ZBHXj1ndc5x341fRxEsva06Z2vpUPWzn/view
+  - AMD-0005: https://drive.google.com/file/d/1M_B4TYwf5gDKaZ-1w_gMR9Nse-Fs7B87/view
 
 ## Mandatory startup
 ```text
@@ -36,6 +38,7 @@ Then read the current work item, generated context manifest, only relevant autho
 
 ## Mandatory operating rules
 - Never invent business semantics, Product decisions, public contracts, legal/compliance values, money rules, provider finality, UX states, or security behavior.
+- Complete and record an Authority Resolution Pass before any missing-authority decision/blocker; use existing active authority when it resolves the question, and never classify an untriggered selective capability as missing authority.
 - Material ambiguity becomes a scoped blocker/decision request.
 - Governance controls orchestration; the orchestrator cannot bypass gates.
 - No free-floating TODOs.
@@ -43,14 +46,16 @@ Then read the current work item, generated context manifest, only relevant autho
 - Authority changes use ADR/PDR/amendment workflow.
 - Implement small vertical slices.
 - Preserve Git/evidence traceability.
+- For repository-changing work, commit all work-item-owned changes before `LOCAL_VALIDATED`, `READY_FOR_MERGE`, `DONE` or completed handoff; record the validated/tested SHA, preserve unrelated dirty paths without absorbing them, and revalidate if behavior-affecting files change after the validated SHA.
 - Refresh project state/context at handoff.
 - Use `INSUFFICIENT_CONTEXT` instead of guessing.
 - Repository access and prompt context are separate; load the smallest sufficient context.
 - Repository location is runtime context, never authority: persist in-repository paths relative to `<repo-root>` with `/` separators and resolve the root through the governed resolver.
 - A PR awaiting human approval is a protected-main integration gate, not a general development stop: run governance next and continue all eligible local/branch, validation, evidence, or independent work; block only scopes whose dependency explicitly requires `MERGED_TO_MAIN` or another genuine human-authority gate.
+- Flow-to-code mapping is many-to-many. Reuse compatible deterministic technical mechanics and keep domain semantics, canonicalization, and presentation formatting separate; do not create generic Common, Utils, Helpers, or equivalent dumping-ground libraries.
 
 ## Completion contract
-Before DONE: implementation/docs/contracts complete; required tests pass; mandatory role reviews pass; applicable security/compliance/financial/UX/SDK evidence exists; no blocker remains; TODOs/defects are recorded; traceability/evidence updated; context/project state refreshed; exact next action recorded.
+Before DONE: repository-changing work is anchored to a validated committed SHA with no work-item-owned uncommitted changes; implementation/docs/contracts complete; required tests pass; mandatory role reviews pass; applicable security/compliance/financial/UX/SDK evidence exists; no blocker remains; TODOs/defects are recorded; traceability/evidence updated; context/project state refreshed; exact next action recorded.
 
 ## Handoff
 Record branch/commit, work state, changes, tests, failures, blockers, decisions, TODOs, evidence, context freshness, activated skills, and exact next action. A new contributor must resume without chat history.

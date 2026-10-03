@@ -1,6 +1,8 @@
 # Recent relevant Git changes
 
+- `6af6791 feat(platform): establish governed P1 host foundation`
 - `7bdf6ca fix(governance): remediate P0 closure audit`
+- `8f14afd fix: preserve AMD-0003 authority bytes`
 - `a2fdb94 chore: close P0 governance foundation`
 - `6aaa3b0 chore: refresh P0 telemetry handoff context`
 - `bedbe5a feat: complete P0 project memory state`
@@ -8,5 +10,3 @@
 - `94292a5 chore: record P0 orchestrator local validation`
 - `8f12b91 fix: support governed orchestration review states`
 - `42b2802 chore: record P0 role matrix local validation`
-- `d1c9ca6 feat: enforce P0 role activation review matrix`
-- `6b09ebe feat: add P0 skill registry validation`

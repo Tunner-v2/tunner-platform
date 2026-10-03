@@ -7,3 +7,20 @@ milestone:
   side: [BLOCKED, AMENDED, REOPENED, SUPERSEDED]
 closure_requires_evidence: true
 history_deletion_for_cleanup: false
+pr_integration:
+  approval_pending_blocks_global_execution: false
+  work_readiness: [IN_PROGRESS, CODE_REVIEW, VALIDATION, READY_FOR_MERGE]
+  pr_states: [DRAFT, OPEN, CHECKS_RUNNING, READY_FOR_REVIEW, APPROVAL_PENDING, APPROVED, MERGED]
+  dependency_readiness: [LOCAL_VALIDATED, MERGED_TO_MAIN]
+  continue_independent_work_while_approval_pending: true
+  continue_local_validation_while_approval_pending: true
+  dependent_unmerged_chain_limit: null
+  concurrent_unmerged_work_limit: null
+  commit_readiness:
+    required_when_repository_changed: true
+    required_before: [LOCAL_VALIDATED, READY_FOR_MERGE, DONE, COMPLETED_HANDOFF]
+    validation_must_reference_commit: true
+    behavior_change_after_validation_invalidates_readiness: true
+    allow_metadata_only_closure_commit: true
+    preserve_unrelated_dirty_paths: true
+    no_repository_change_requires_commit: false

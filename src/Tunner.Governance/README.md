@@ -23,6 +23,10 @@ dotnet run --project src/Tunner.Governance -- authority verify
 ```
 
 `authority verify` reads the immutable bootstrap integrity evidence and checks every tracked `docs/authority/` artifact against its recorded SHA-256 value. It is read-only: no Drive access, import, or file mutation occurs. A mismatch blocks `governance validate`, `governance next`, `governance gate check`, and both context commands, preventing implementation or generated context from proceeding on an altered authority mirror.
+
+## Authority Resolution Pass
+
+A `NEEDS_PRODUCT_DECISION`, `CONTRACT_REQUIRED`, or `TECH_DECISION_REQUIRED` work item—and every repository-native Product Decision—must contain a schema-versioned `authority_resolution` record. Governance rejects the record when the pass omits the verified authority index, reviewed authority references, exact unresolved question, or conclusion. A conditional capability with no activation trigger cannot use this mechanism: it is not a missing-authority blocker. Historical decisions retain their retrospective review records rather than being deleted.
 ## Approval-pending execution
 
 `governance next` returns `Items` for local/branch work and `HumanIntegrationActions` separately. A dependency explicitly declared `LOCAL_VALIDATED` may proceed after local validation; `MERGED_TO_MAIN` remains blocked until its prerequisite is `DONE` and the dependency’s merge-evidence references exist. This never approves, merges, or bypasses protected `main` controls.
@@ -37,7 +41,7 @@ dotnet run --project src/Tunner.Governance -- context build --work-item TUN-P0-0
 dotnet run --project src/Tunner.Governance -- context verify
 ```
 
-`context build` writes `docs/context/current/` from the active-authority summary, explicit work-item references, activated role skills, required evidence, durable project state, and bounded Git history. It records source hashes and exclusions. `context verify` returns `STALE` if an included source is missing or has changed; generated context is never authority. Hash verification and build refusal for a corrupt authority mirror remain TUN-P0-033 scope.
+`context build` writes `docs/context/current/` from the active-authority summary, every active amendment declared by that verified index, explicit work-item references, activated role skills, required evidence, durable project state, and bounded Git history. It records source hashes and exclusions. `context verify` returns `STALE` if an included source is missing or has changed; generated context is never authority. Hash verification and build refusal for a corrupt authority mirror remain TUN-P0-033 scope.
 
 ## Evidence manifests
 
@@ -69,4 +73,4 @@ dotnet build Tunner.Governance.sln --no-restore
 dotnet run --project tests/Tunner.Governance.FunctionalTests --no-restore
 ```
 
-The harness creates an isolated temporary repository fixture, covers valid validation/status/next behavior, required-evidence gate failure, invalid lifecycle transition rejection, AMD-0002 local/merged readiness behavior, configured chain-limit blocking, and malformed-YAML rejection, then removes the fixture.
+The harness creates an isolated temporary repository fixture, covers valid validation/status/next behavior, required-evidence gate failure, invalid lifecycle transition rejection, AMD-0002 local/merged readiness behavior, configured chain-limit blocking, active-amendment context inclusion, Authority Resolution Pass rejection, and malformed-YAML rejection, then removes the fixture.

@@ -24,6 +24,7 @@ public static class Program
         governance.Subcommands.Add(CreateTransitionCommand(repositoryOption));
         governance.Subcommands.Add(CreateMilestoneCommand(repositoryOption));
         governance.Subcommands.Add(CreateRolesCommand(repositoryOption));
+        governance.Subcommands.Add(CreateCommitReadinessCommand(repositoryOption));
         root.Subcommands.Add(governance);
         root.Subcommands.Add(CreateWorkCommand(repositoryOption));
         var bootstrapReplay = new Command("replay", "Replay bootstrap records and refuse unresolved exceptions.");
@@ -129,6 +130,21 @@ public static class Program
         var roles = new Command("roles", "Calculate and validate role-activation requirements.");
         roles.Subcommands.Add(calculate);
         return roles;
+    }
+
+    private static Command CreateCommitReadinessCommand(Option<DirectoryInfo?> repositoryOption)
+    {
+        var milestone = new Option<string?>("--milestone") { Description = "Optional milestone scope for the committed-state readiness audit." };
+        var audit = new Command("audit", "Audit committed-state readiness without mutating governance records.");
+        audit.Options.Add(milestone);
+        audit.SetAction(parseResult =>
+        {
+            var findings = CommitReadinessApplication.Audit(Repository(parseResult, repositoryOption), parseResult.GetValue(milestone));
+            return WriteResult(new CommandResult(findings.Count == 0 ? 0 : 1, "commit-readiness audit", new { Outcome = findings.Count == 0 ? "PASS" : "REMEDIATION_REQUIRED", Findings = findings }));
+        });
+        var command = new Command("commit-readiness", "Read-only AMD-0002 committed-state readiness controls.");
+        command.Subcommands.Add(audit);
+        return command;
     }
     private static Command CreateWorkCommand(Option<DirectoryInfo?> repositoryOption)
     {

@@ -1,0 +1,41 @@
+schema_version: 1
+work_item_id: TUN-P1-021
+milestone_id: P1
+sprint_id: null
+title: Global-authority synchronization and implemented-state conformance audit
+status: REOPENED
+product_acceptance_required: false
+type: GOVERNANCE_TOOLING
+authority_refs:
+  - docs/authority/current-authority.json
+  - docs/authority/amendments/AMD-0001/AMD-0001_Pre-P0_Governance_Agent_Skills_Context_and_Bootstrap_Completion.md
+  - docs/authority/amendments/AMD-0002/AMD-0002_Non-Blocking_PR_Approval_and_Continuous_Local_Execution.md
+  - docs/authority/amendments/AMD-0003/AMD-0003_Location-Independent_Repository_and_Path_Resolution.md
+  - docs/authority/amendments/AMD-0004/AMD-0004_Shared_Technical_Primitives_Formatting_and_Canonicalization.md
+  - docs/authority/amendments/AMD-0005/AMD-0005_Authority-First_Decision_Resolution_and_Duplicate-Decision_Prevention.md
+  - docs/authority/amendments/AMD-0005/effective-overrides/00_Authority_Change_Control_and_Documentation_Governance.md
+  - docs/authority/amendments/AMD-0005/effective-overrides/03_Governed_Development_Lifecycle_Scrum_Git.md
+  - docs/authority/amendments/AMD-0005/effective-overrides/04_Governance_and_Context_Tooling_Specification.md
+  - docs/authority/amendments/AMD-0005/effective-overrides/11_Development_Planes_Milestones_and_P0_Backlog.md
+  - docs/authority/amendments/AMD-0005/effective-overrides/12_AI_Development_Protocol_Context_and_Project_Memory.md
+  - docs/authority/amendments/AMD-0005/effective-overrides/35_AI_Agent_Skill_Catalog_and_Review_Contracts.md
+  - docs/authority/architecture-guidelines/Tunner_Architecture_Flowchart_Interpretation_and_Development_Guidelines.md
+flow_refs: []
+contract_refs: []
+decision_refs: []
+acceptance_criteria:
+  - Synchronize and hash-verify the current active authority, including all GLOBAL amendments AMD-0001 through AMD-0005, without altering the locked baseline or treating drafts as active.
+  - Audit P0 governance/control-plane and completed P1 implementation for FRD/development-authority/ADR/PDR/amendment traceability, ownership, protocol, security, portability, reuse, decision/blocker, test/evidence, and R&D-freshness conformance.
+  - Classify every finding using the approved conformance-audit taxonomy, preserve historical evidence, and remediate only deviations already resolved by active authority.
+  - Record a complete implemented-state conformance report, refreshed project state, evidence, and bounded context; do not add Product behavior or unapproved technical scope.
+prerequisites: [TUN-P1-005]
+blockers: []
+impact: {architecture: true, ui: false, sdk: false, financial: false, compliance: false, security: false, devops: false, support: false}
+activated_roles: [full-stack-engineer, solution-architect, governance-engineer, tester-qa-engineer, auditor]
+required_tests: [authority verification, governance validation, complete applicable static-validation suite, governance functional regression tests, architecture tests, portability scan, decision/blocker authority-resolution audit, context verification]
+required_evidence: [governance/context/CTX-TUN-P1-021-001.yaml, governance/evidence/TUN-P1-021-AUTHORITY-SYNC.json, governance/evidence/TUN-P1-021-CONFORMANCE-AUDIT.json, governance/evidence/TUN-P1-021-ROLE-REVIEWS.json]
+context_policy: FULL_AUDIT
+todos: []
+defects: [DEF-TUN-P1-021-002]
+created_at: 2026-10-03T05:25:00-04:00
+updated_at: 2026-10-03T10:20:00-04:00

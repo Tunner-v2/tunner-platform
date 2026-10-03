@@ -9,9 +9,27 @@ authority_refs: []
 flow_refs: []
 contract_refs: []
 decision_refs: []
+authority_resolution_refs: []
+git_state:
+  repository_changed: null
+  validated_commit_sha: null
+  tested_commit_sha: null
+  work_item_commit_shas: []
+  closure_commit_sha: null
+  remaining_uncommitted_paths: []
+  remaining_uncommitted_classification: NONE  # NONE | PREEXISTING_UNRELATED | UNRELATED_ACTIVE_WORK | WORK_ITEM_OWNED
 acceptance_criteria: []
 prerequisites: []
+conditional_activation:
+  is_conditional: false
+  trigger_refs: []
+  trigger_status: null  # PRESENT | ABSENT | NOT_APPLICABLE
 blockers: []
+pr_integration:
+  pull_request: null
+  pr_state: null
+  local_readiness: null
+  merged_to_main: false
 impact:
   architecture: false
   ui: false

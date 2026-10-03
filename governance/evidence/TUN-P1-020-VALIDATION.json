@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "evidence_id": "TUN-P1-020-VALIDATION",
+  "scope_type": "WORK_ITEM",
+  "scope_id": "TUN-P1-020",
+  "status": "PASS",
+  "checked_at": "2026-10-02T22:50:00-04:00",
+  "checks": [
+    "Authority verification passed for 79 hash-checked artifacts.",
+    "Governance validation passed with 223 records and no diagnostics after the schema and work-item changes.",
+    "Tunner.Governance.sln built with zero warnings and zero errors.",
+    "Tunner.Governance.FunctionalTests passed, including direct technical-only completion, normal Product Acceptance progression, and rejection without the explicit exception.",
+    "Validate-TunnerGovernanceSource.ps1 and Validate-GovernanceSchemas.ps1 passed.",
+    "Expanded P1-020 context was generated and verified CURRENT.",
+    "Role calculation reported all five mandatory roles as declared, and each structured implementation review passed.",
+    "Transition preflight permits TUN-P1-009 VALIDATION to DONE only because its record explicitly declares product_acceptance_required: false."
+  ],
+  "artifacts": [
+    "governance/schemas/v1/governance-record.schema.json",
+    "governance/work-items/TUN-P1-020.yaml",
+    "governance/work-items/TUN-P1-006.yaml",
+    "governance/work-items/TUN-P1-007.yaml",
+    "governance/work-items/TUN-P1-008.yaml",
+    "governance/work-items/TUN-P1-009.yaml",
+    "src/Tunner.Governance/GovernanceApplication.cs",
+    "tests/Tunner.Governance.FunctionalTests/Program.cs"
+  ],
+  "limitations": [
+    "The optional record property does not infer technical-only status; only an explicit false value qualifies.",
+    "No Product Acceptance is represented or bypassed for work that lacks this explicit, evidence-backed declaration.",
+    "No Product, user, provider configuration, credential, deployment, release, or runtime behavior is introduced."
+  ]
+}

@@ -14,7 +14,7 @@ Schema URNs are logical identifiers only. They are not claims that a public sche
 
 This B1/P0-003 deliverable establishes record shapes and a dependency-free structural validation check. It does not parse YAML, calculate lifecycle legality, prove identifier immutability across Git history, resolve references, or emit precise instance locations. Those runtime behaviors belong to `TUN-P0-004` (`tunner-governance` MVP) and its acceptance tests.
 
-`additionalProperties: false` keeps each v1 record deliberate and reviewable. A breaking record-shape change requires a new schema version and governed amendment; schema rules alone cannot prove that an ID was unchanged between commits, so that history check is explicitly assigned to the future validator.
+`additionalProperties: false` keeps each v1 record deliberate and reviewable. `workItem.authority_resolution` and `productDecision.authority_resolution` use the shared schema-versioned Authority Resolution Pass shape; governance enforces it for missing-authority states and decision records. `workItem.product_acceptance_required` is an optional, backward-compatible boolean: only an explicit `false` supports the governed technical-only `VALIDATION` to `DONE` path; absence retains the normal lifecycle. A breaking record-shape change requires a new schema version and governed amendment; schema rules alone cannot prove that an ID was unchanged between commits, so that history check is explicitly assigned to the future validator.
 
 ## Manual validation
 

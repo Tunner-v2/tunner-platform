@@ -41,6 +41,9 @@ try
 
     var validation = GovernanceApplication.Validate(fixtureRoot);
     Expect(validation.ExitCode == 0, "A complete fixture must validate.", failures);
+    WriteWorkItem(fixtureRoot, "TUN-CONTRACT", "CONTRACT_REQUIRED", "[]");
+    Expect(GovernanceApplication.Validate(fixtureRoot).ExitCode == 1, "A missing-authority blocker must be rejected without a recorded Authority Resolution Pass.", failures);
+    File.Delete(Path.Combine(fixtureRoot.FullName, "governance", "work-items", "TUN-CONTRACT.yaml"));
 
     var status = GovernanceApplication.Status(fixtureRoot);
     Expect(status.ExitCode == 0, "Status must be available for a valid fixture.", failures);
@@ -68,6 +71,7 @@ try
     Expect(contextBuild.ExitCode == 0, "Context build must generate a bounded fixture pack.", failures);
     var contextPayload = (ContextBuildPayload)contextBuild.Payload;
     Expect(contextPayload.Included.Any(item => item.Path == "docs/authority/current-authority.json"), "Context build must include the current authority summary.", failures);
+    Expect(contextPayload.Included.Any(item => item.Path == "docs/authority/amendments/AMD-TEST/AMD-TEST_fixture.md" && item.Reason == "active authority amendment"), "Context build must include each active amendment declared by the verified authority index.", failures);
     var contextCurrent = ContextApplication.Verify(fixtureRoot, contextOutput);
     Expect(contextCurrent.ExitCode == 0, "A newly generated context pack must verify as current.", failures);
     File.AppendAllText(Path.Combine(fixtureRoot.FullName, "governance", "work-items", "TUN-001.yaml"), "\n# Fixture source changed");
@@ -140,6 +144,12 @@ try
 
     var transition = GovernanceApplication.CheckTransition(fixtureRoot, "TUN-TRANSITION", "DONE");
     Expect(transition.ExitCode == 1, "Lifecycle check must reject DRAFT directly to DONE.", failures);
+    var normalValidationTransition = GovernanceApplication.CheckTransition(fixtureRoot, "TUN-001", "PRODUCT_ACCEPTANCE");
+    Expect(normalValidationTransition.ExitCode == 0, "Lifecycle check must retain the declared Product Acceptance path when no technical-only exception is recorded.", failures);
+    var normalValidationCompletion = GovernanceApplication.CheckTransition(fixtureRoot, "TUN-001", "DONE");
+    Expect(normalValidationCompletion.ExitCode == 1, "Lifecycle check must not permit direct completion without the explicit technical-only exception.", failures);
+    var technicalOnlyCompletion = GovernanceApplication.CheckTransition(fixtureRoot, "TUN-TECHNICAL", "DONE");
+    Expect(technicalOnlyCompletion.ExitCode == 0 && ((TransitionPayload)technicalOnlyCompletion.Payload).Reason.Contains("explicitly not required", StringComparison.Ordinal), "Lifecycle check must permit direct technical-only completion only when Product Acceptance is explicitly not required.", failures);
 
     var milestoneClose = GovernanceApplication.CheckMilestoneClose(fixtureRoot, "MVP");
     Expect(milestoneClose.ExitCode == 1 && ((MilestoneClosePayload)milestoneClose.Payload).Failures.Any(item => item.Contains("work item is not DONE", StringComparison.Ordinal)) && ((MilestoneClosePayload)milestoneClose.Payload).Failures.Any(item => item.Contains("milestone role-review evidence missing", StringComparison.Ordinal)), "Milestone close-check must refuse incomplete work and missing milestone reviews.", failures);
@@ -247,9 +257,12 @@ static void CreateFixture(DirectoryInfo repositoryRoot, DirectoryInfo fixtureRoo
     Directory.CreateDirectory(Path.Combine(fixtureRoot.FullName, "governance", "reviews"));
     Directory.CreateDirectory(Path.Combine(fixtureRoot.FullName, "governance", "rd"));
     Directory.CreateDirectory(Path.Combine(fixtureRoot.FullName, "docs", "authority"));
+    var fixtureAmendmentDirectory = Path.Combine(fixtureRoot.FullName, "docs", "authority", "amendments", "AMD-TEST");
+    Directory.CreateDirectory(fixtureAmendmentDirectory);
+    File.WriteAllText(Path.Combine(fixtureAmendmentDirectory, "AMD-TEST_fixture.md"), "fixture active amendment" + Environment.NewLine);
     var currentAuthorityPath = Path.Combine(fixtureRoot.FullName, "docs", "authority", "current-authority.json");
     var authorityMirrorPath = Path.Combine(fixtureRoot.FullName, "docs", "authority", "mirror.txt");
-    File.WriteAllText(currentAuthorityPath, "{\"effective_authority\":\"fixture\"}" + Environment.NewLine);
+    File.WriteAllText(currentAuthorityPath, "{\"effective_authority\":\"fixture\",\"active_amendments\":[{\"id\":\"AMD-TEST\",\"path\":\"docs/authority/amendments/AMD-TEST\"}]}" + Environment.NewLine);
     File.WriteAllText(authorityMirrorPath, "fixture authority bytes" + Environment.NewLine);
     File.WriteAllText(Path.Combine(fixtureRoot.FullName, "governance", "evidence", "BOOT-P0-001-integrity.json"), $$"""
 {
@@ -269,7 +282,7 @@ goal: Validate governance behavior
 scope: [governance]
 authority_refs: [authority]
 prerequisites: []
-work_items: [TUN-001, TUN-TRANSITION, TUN-LOCAL, TUN-MERGED, TUN-CHAIN]
+work_items: [TUN-001, TUN-TRANSITION, TUN-TECHNICAL, TUN-LOCAL, TUN-MERGED, TUN-CHAIN]
 required_gates: []
 required_roles: [auditor]
 evidence_refs: []
@@ -280,6 +293,7 @@ updated_at: 2026-09-30T00:00:00-04:00
 
     WriteWorkItem(fixtureRoot, "TUN-001", "VALIDATION", "[]");
     WriteWorkItem(fixtureRoot, "TUN-TRANSITION", "DRAFT", "[]");
+    WriteWorkItem(fixtureRoot, "TUN-TECHNICAL", "VALIDATION", "[]", false);
     WriteWorkItem(fixtureRoot, "TUN-LOCAL", "VALIDATION", "[TUN-001]");
     WriteWorkItem(fixtureRoot, "TUN-CHAIN", "BACKLOG", "[TUN-LOCAL]");
     WriteWorkItem(fixtureRoot, "TUN-MERGED", "BACKLOG", "[TUN-001]");
@@ -362,8 +376,9 @@ history_deletion_for_cleanup: false
 """);
 }
 
-static void WriteWorkItem(DirectoryInfo fixtureRoot, string id, string status, string prerequisites)
+static void WriteWorkItem(DirectoryInfo fixtureRoot, string id, string status, string prerequisites, bool? productAcceptanceRequired = null)
 {
+    var productAcceptanceRequirement = productAcceptanceRequired.HasValue ? $"product_acceptance_required: {productAcceptanceRequired.Value.ToString().ToLowerInvariant()}{Environment.NewLine}" : string.Empty;
     File.WriteAllText(Path.Combine(fixtureRoot.FullName, "governance", "work-items", $"{id}.yaml"), $"""
 schema_version: 1
 work_item_id: {id}
@@ -371,7 +386,7 @@ milestone_id: MVP
 sprint_id: null
 title: Fixture work item {id}
 status: {status}
-type: GOVERNANCE_TOOLING
+{productAcceptanceRequirement}type: GOVERNANCE_TOOLING
 authority_refs: [authority]
 flow_refs: []
 contract_refs: []

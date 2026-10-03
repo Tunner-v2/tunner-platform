@@ -1,0 +1,32 @@
+schema_version: 1
+work_item_id: TUN-P1-020
+milestone_id: P1
+sprint_id: null
+title: Technical-only lifecycle completion remediation
+status: DONE
+type: GOVERNANCE_TOOLING
+product_acceptance_required: false
+authority_refs:
+  - docs/authority/current-authority.json
+  - docs/authority/amendments/AMD-0002/effective-overrides/03_Governed_Development_Lifecycle_Scrum_Git.md
+  - docs/authority/baselines/1.6.0/09_Testing_Acceptance_Evidence_and_Quality_Gates.md
+  - docs/authority/baselines/1.6.0/12_AI_Development_Protocol_Context_and_Project_Memory.md
+flow_refs: []
+contract_refs: []
+decision_refs: []
+acceptance_criteria:
+  - Permit VALIDATION to DONE only when the work item explicitly declares that Product Acceptance is not required.
+  - Preserve the declared next-state lifecycle path for every work item that does not explicitly opt out of Product Acceptance.
+  - Do not create synthetic Product acceptance, bypass evidence, reviews, dependencies, or human gates.
+  - Prove the direct technical-only path and the preserved Product-Acceptance path with deterministic functional tests.
+prerequisites: [TUN-P1-005]
+blockers: []
+impact: {architecture: true, ui: false, sdk: false, financial: false, compliance: false, security: false, devops: false, support: false}
+activated_roles: [full-stack-engineer, solution-architect, governance-engineer, tester-qa-engineer, auditor]
+required_tests: [authority verification, governance validation, lifecycle transition checks for technical-only and Product-Acceptance work items, governance functional tests, role activation calculation and mandatory specialist reviews, context verification]
+required_evidence: [governance/context/CTX-TUN-P1-020-001.yaml, governance/evidence/TUN-P1-020-VALIDATION.json, governance/evidence/TUN-P1-020-ROLE-REVIEWS.json]
+context_policy: EXPANDED
+todos: []
+defects: []
+created_at: 2026-10-02T18:15:00-04:00
+updated_at: 2026-10-02T23:00:00-04:00

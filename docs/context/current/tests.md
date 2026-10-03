@@ -2,14 +2,16 @@
 
 - `authority verification` — required test
 - `governance validation` — required test
-- `role activation calculation and mandatory specialist reviews` — required test
-- `bounded expanded context verification` — required test
-- `deterministic atomic transaction/outbox tests` — required test
-- `migration rehearsal if persistence schema changes` — required test
-- `build and unit tests` — required test
+- `complete applicable static-validation suite` — required test
+- `governance functional regression tests` — required test
+- `architecture tests` — required test
+- `portability scan` — required test
+- `decision/blocker authority-resolution audit` — required test
+- `context verification` — required test
 
 ## Required evidence
 
-- `governance/context/CTX-TUN-P1-003-001.yaml` — required evidence
-- `governance/evidence/TUN-P1-003-VALIDATION.json` — required evidence
-- `governance/evidence/TUN-P1-003-ROLE-REVIEWS.json` — required evidence
+- `governance/context/CTX-TUN-P1-021-001.yaml` — required evidence
+- `governance/evidence/TUN-P1-021-AUTHORITY-SYNC.json` — required evidence
+- `governance/evidence/TUN-P1-021-CONFORMANCE-AUDIT.json` — required evidence
+- `governance/evidence/TUN-P1-021-ROLE-REVIEWS.json` — required evidence
