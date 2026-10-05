@@ -10,7 +10,7 @@
 
 ## Locally validated foundations
 
-- TUN-P1-022 owns the current-authority synchronization, RV governance tooling/schema/context tests, binary ZIP override, and fresh-agent recovery.
+- TUN-P1-022 is DONE. RV GOVERNANCE READY: YES. Its validated/tested candidate SHA is 8574afb06bc60cccd6761bca1fbe3f6a9be53d26. It owns the current-authority synchronization, RV governance tooling/schema/context tests, binary ZIP override, and fresh-agent recovery.
 - Exact committed validation results, tested SHA, role reviews and ownership list are recorded in governance/evidence/TUN-P1-022-VALIDATION.json and governance/evidence/TUN-P1-022-ROLE-REVIEWS.json.
 - Earlier foundation claims remain available in Git history and their original evidence. This synchronization does not revalidate deployment/provider/Product acceptance.
 - The initial branch, HEAD, local commits and hashes of all pre-existing dirty paths are captured in governance/evidence/RV-SYNC-INITIAL-STATE.json.

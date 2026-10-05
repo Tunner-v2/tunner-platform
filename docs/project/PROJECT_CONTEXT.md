@@ -16,6 +16,6 @@ Generated context retrieves only the selected scope and bounded relevant/latest 
 
 ## Current work and recovery
 
-TUN-P1-022 records the synchronization work. Its validation and role-review evidence identifies the exact tested candidate SHA; metadata closure may have a later SHA. Governance tooling is isolated from the application solution. No Product/business semantics, provider operations, deployment or release acceptance are added.
+TUN-P1-022 is DONE and RV GOVERNANCE READY is YES. The validated/tested candidate is 8574afb06bc60cccd6761bca1fbe3f6a9be53d26. Its validation and role-review evidence identifies the exact tested candidate SHA; metadata closure may have a later SHA. Governance tooling is isolated from the application solution. No Product/business semantics, provider operations, deployment or release acceptance are added.
 
 Read docs/project/HANDOFF.md and governance/work-items/TUN-P1-022.yaml, then run the mandatory startup commands. Inspect governance next for eligible ordinary/Revision work. Actual P0 Revision creation remains outside this task and requires separate authorization.

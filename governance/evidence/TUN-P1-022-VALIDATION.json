@@ -1,31 +1,150 @@
 {
   "schema_version": 1,
   "scope_id": "TUN-P1-022",
-  "status": "VALIDATION_CANDIDATE_PREPARED",
-  "validated_commit_sha": null,
-  "tested_commit_sha": null,
+  "status": "PASS",
+  "validated_commit_sha": "8574afb06bc60cccd6761bca1fbe3f6a9be53d26",
+  "tested_commit_sha": "8574afb06bc60cccd6761bca1fbe3f6a9be53d26",
+  "closure_commit_sha": null,
   "checks": {
     "governance_build": "PASS: zero warnings/errors",
-    "application_build": "PASS: zero warnings/errors in preserved local tree",
+    "application_build": "PASS: zero warnings/errors",
     "governance_functional": "PASS",
     "rv_assertions": 56,
+    "schema_tests": "PASS: nested schema/enum/field rejection and 17 catalog entries",
+    "lifecycle_tests": "PASS: historical closure, reopen distinction, monotonic identity, closure evidence and immutability",
     "architecture_tests": "18/18 PASS",
-    "schema_entries": "17 PASS",
-    "authority_artifacts": "167 VERIFIED",
-    "governance_records": "276 valid before five new reviews",
+    "authority_verify": {
+      "Outcome": "VERIFIED",
+      "CheckedArtifacts": 167,
+      "Findings": []
+    },
+    "governance_validate": {
+      "IsValid": true,
+      "RecordCount": 281,
+      "Diagnostics": []
+    },
+    "context_verify": "CURRENT",
+    "fresh_recovery": "PASS",
+    "source_and_project_memory_tests": "PASS",
     "documentation": "PASS",
-    "source_freshness": "CURRENT",
-    "context_recovery": "PASS",
-    "static_source_and_path_guards": "PASS",
-    "committed_authority_checkout": "pending candidate commit"
+    "portability": "PASS"
   },
+  "committed_source_proof": {
+    "status": "PASS",
+    "candidate_sha": "8574afb06bc60cccd6761bca1fbe3f6a9be53d26",
+    "owned_paths": 115,
+    "all_owned_git_object_hashes_match": true,
+    "working_tree_boundary": "Unrelated pre-existing P1/reopen work remains excluded; governance source and templates match committed candidate."
+  },
+  "authority_checkout_portability": {
+    "status": "PASS",
+    "validated_commit_sha": "8574afb06bc60cccd6761bca1fbe3f6a9be53d26",
+    "byte_exact_checkout_checks": 167,
+    "zip_blob_hash": "88b8f7f7ac91ff58167bbb794e328fbcc089ed49",
+    "zip_working_tree_hash": "88b8f7f7ac91ff58167bbb794e328fbcc089ed49",
+    "zip_raw_hash": "88b8f7f7ac91ff58167bbb794e328fbcc089ed49",
+    "zip_sha256": "c020ddf78065eae94cfb307d68df513774f0df53337d897a30d2641a0b0c22c1",
+    "zip_attributes": "docs/authority/baselines/1.6.0/Tunner_Development_Documentation_Baseline_1.6.0_LOCKED.zip: binary: set\r\ndocs/authority/baselines/1.6.0/Tunner_Development_Documentation_Baseline_1.6.0_LOCKED.zip: diff: unset\r\ndocs/authority/baselines/1.6.0/Tunner_Development_Documentation_Baseline_1.6.0_LOCKED.zip: merge: unset\r\ndocs/authority/baselines/1.6.0/Tunner_Development_Documentation_Baseline_1.6.0_LOCKED.zip: text: unset\r\ndocs/authority/baselines/1.6.0/Tunner_Development_Documentation_Baseline_1.6.0_LOCKED.zip: eol: lf",
+    "boundary": "Reads committed blobs through declared checkout filters without cloning, moving, replacing the baseline, or changing verifier semantics."
+  },
+  "validation_boundary": "The 115 synchronization-owned files and governance dependency versions match the exact committed candidate. Tests ran in the existing repository with unrelated dirty work preserved. The application build/architecture checks additionally validate that preserved local implementation state.",
+  "owned_path_manifest": "governance/evidence/RV-SYNC-OWNED-PATHS.json",
+  "owned_file_count": 115,
   "preexisting_dirty_path_count": 162,
   "preserved_unrelated_path_count": 161,
+  "unrelated_bytes_preserved": true,
   "authorized_existing_overlap": [
     "AGENTS.md"
   ],
+  "unrelated_work_absorbed": false,
+  "historical_state": {
+    "P0": "CLOSED in committed history",
+    "working_P0": "Pre-existing REOPENED record retained byte-identically",
+    "active_revisions": []
+  },
+  "test_receipts": [
+    {
+      "path": "artifacts/rv-sync/application-build.log",
+      "sha256": "8da39f58f7b2bc66388906a40b344d970c816bd39bf4d1c6119c7fd7b22710d0"
+    },
+    {
+      "path": "artifacts/rv-sync/architecture.log",
+      "sha256": "3a5717b48cd73414ad6d87e44940d7d7befbd6c7632b312740c866eca0957393"
+    },
+    {
+      "path": "artifacts/rv-sync/authority-checkout.json",
+      "sha256": "062792c8ca9b2b86ed4f60cea322c50262543cb0866ac7c209dcf3cb65fae0f4"
+    },
+    {
+      "path": "artifacts/rv-sync/authority-verify.json",
+      "sha256": "364f1af9b11dfbc2444f96849413df224d487c4eb91b944f01556faaa76992b1"
+    },
+    {
+      "path": "artifacts/rv-sync/committed-source-proof.json",
+      "sha256": "04293ea8969b284b42e616bcdf71189d9071caf17789fa88ab8e34d027663889"
+    },
+    {
+      "path": "artifacts/rv-sync/context-build.log",
+      "sha256": "569766ceec5a9f09c5d217b22b2addfa5cabc0a04a803ecf3279d7dd5b0f81d3"
+    },
+    {
+      "path": "artifacts/rv-sync/context-source.log",
+      "sha256": "d3f0f659c6a235ff5e24ffa0fa50ab52171cd58505a830ee874995baa351da40"
+    },
+    {
+      "path": "artifacts/rv-sync/context-verify.json",
+      "sha256": "ab6a99501ed70ce45e3d3cd373b4637107a6b53f11d0e316143532a1b5a2ab0d"
+    },
+    {
+      "path": "artifacts/rv-sync/documentation.log",
+      "sha256": "4d22eae2f6aa51b6713cb5c8283e6866b12e6da0f567ceb4b2d118adc7eff856"
+    },
+    {
+      "path": "artifacts/rv-sync/fresh-recovery.json",
+      "sha256": "19385ad72cdddc18dff3278b0685c2f435dc8e46cb1a4e9745db20088bb52b5c"
+    },
+    {
+      "path": "artifacts/rv-sync/governance-build.log",
+      "sha256": "e1f65f0714ba2fd3f316e7d70e693c3df1c1c57f616ec37092316ba46b411450"
+    },
+    {
+      "path": "artifacts/rv-sync/governance-functional.log",
+      "sha256": "057de4d064f933b137ed0ca6c3fafe09d0a47fe0b15341391b640694fea3928d"
+    },
+    {
+      "path": "artifacts/rv-sync/governance-next.json",
+      "sha256": "45d59c9d661dd701732d35c566a2b5aa4e152ba4e97cab9cb4c74dfab4ba0fab"
+    },
+    {
+      "path": "artifacts/rv-sync/governance-source.log",
+      "sha256": "1313b6e49cf0600895f82ce23688cf340504bdf9e1a1e17126b7cee0ac353744"
+    },
+    {
+      "path": "artifacts/rv-sync/governance-status.json",
+      "sha256": "bb0e960f883682a6de0011e76450ced184097589af4ec2ca347e7d8af3624782"
+    },
+    {
+      "path": "artifacts/rv-sync/governance-validate.json",
+      "sha256": "0ed5d6fbe431586f8efabd31efd8951bf5624d7a777f50e4e0f5194ae7cbdbfe"
+    },
+    {
+      "path": "artifacts/rv-sync/path-portability.log",
+      "sha256": "a2e1ec9781ffe30eeadaf04339af06f0816e419d9e0870ded46d96708eb8db60"
+    },
+    {
+      "path": "artifacts/rv-sync/project-memory.log",
+      "sha256": "e90a48d534f22b5a8c146ad65bb7686213b8c7112c8f424b7b475e18205df09e"
+    },
+    {
+      "path": "artifacts/rv-sync/schemas.log",
+      "sha256": "4888cb16765d1844d4b5a02b5efa96bb7487901eb58ffb54ef40206bd65aea8c"
+    }
+  ],
+  "role_review_evidence": "governance/evidence/TUN-P1-022-ROLE-REVIEWS.json",
   "p0_revision_created": false,
   "new_amd_created": false,
-  "rv_governance_ready": false,
-  "created_at": "2026-10-05T19:06:48.3750618Z"
+  "rv_governance_ready": true,
+  "remaining_sync_issues": [],
+  "exact_next_action": "Run governed startup and governance next; obtain separate authorization before creating any actual P0 Revision. Preserve separately owned P0 reopen/P1 work.",
+  "validated_at": "2026-10-05T19:12:35.6223846Z"
 }
