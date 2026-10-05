@@ -18,7 +18,7 @@ public sealed class ProviderCorrelationBoundaryTests
     private static ProviderOperationContext Context(string scope = "owner-scope", ProviderBindingReference? binding = null,
         TechnicalCommandEnvelope<string>? command = null) => ProviderOperationContext.FromCommand(command ?? Command(), new IdempotencyScope(scope), binding ?? Binding());
 
-    private static ProviderIdempotencyBinding Identity(ProviderOperationContext? context = null, string fingerprint = "owner-fingerprint") => new(context ?? Context(), fingerprint);
+    private static ProviderIdempotencyBinding Identity(ProviderOperationContext? context = null, string fingerprint = "owner-fingerprint", string providerKey = "provider-stable-key") => new(context ?? Context(), fingerprint, providerKey);
 
     private static ProviderObjectReference Reference(ProviderBindingReference? binding = null) => new(binding ?? Binding(), "payment_intent", "pi_reference", "evt_reference", Instant);
 
@@ -85,7 +85,7 @@ public sealed class ProviderCorrelationBoundaryTests
         var other = Context(field == "scope" ? "other-scope" : "owner-scope",
             Binding(field == "instance" ? "other-instance" : "stripe-instance", field == "account" ? "other-account" : "account-ref",
                 field == "environment" ? "other-environment" : "test-environment"), Command(key: field == "key" ? "other-key" : "stable-key"));
-        Assert.Equal(ProviderIdempotencyComparison.DifferentIdentity, ProviderIdempotencyGuard.Compare(Identity(), Identity(other)));
+        Assert.Equal(ProviderIdempotencyComparison.DifferentIdentity, ProviderIdempotencyGuard.Compare(Identity(), Identity(other, providerKey: field is "scope" or "key" ? "other-provider-key" : "provider-stable-key")));
     }
 
     [Theory]
@@ -107,9 +107,40 @@ public sealed class ProviderCorrelationBoundaryTests
         var longKey = new string('k', 300);
         Assert.Equal(longKey, Context(command: Command(key: longKey)).IdempotencyKey);
         Assert.Equal(ProviderIdempotencyComparison.DifferentIdentity,
-            ProviderIdempotencyGuard.Compare(Identity(Context(command: Command(key: "KEY"))), Identity(Context(command: Command(key: "key")))));
+            ProviderIdempotencyGuard.Compare(Identity(Context(command: Command(key: "KEY"))), Identity(Context(command: Command(key: "key")), providerKey: "other-provider-key")));
         Assert.Equal(ProviderIdempotencyComparison.ConflictingRequest,
             ProviderIdempotencyGuard.Compare(Identity(fingerprint: "Fingerprint"), Identity(fingerprint: "fingerprint")));
+    }
+
+    [Theory]
+    [InlineData("scope")]
+    [InlineData("key")]
+    public void SameProviderKeyCannotBeReassignedToAnotherOwnerIdentity(string field)
+    {
+        var other = Context(field == "scope" ? "other-owner" : "owner-scope", command: Command(key: field == "key" ? "other-owner-key" : "stable-key"));
+        Assert.Equal(ProviderIdempotencyComparison.ConflictingRequest, ProviderIdempotencyGuard.Compare(Identity(), Identity(other)));
+    }
+
+    [Fact]
+    public void OwnerRetryCannotSilentlySwitchItsProviderKey()
+    {
+        Assert.Equal(ProviderIdempotencyComparison.ConflictingRequest,
+            ProviderIdempotencyGuard.Compare(Identity(), Identity(providerKey: "replacement-provider-key")));
+    }
+
+    [Fact]
+    public void ProviderKeyIsExplicitPreservedAndHasNoGenericVendorLimit()
+    {
+        var key = " " + new string('p', 300) + " ";
+        Assert.Equal(key, Identity(providerKey: key).ProviderIdempotencyKey);
+        Assert.ThrowsAny<ArgumentException>(() => Identity(providerKey: " "));
+    }
+
+    [Fact]
+    public void ProviderKeyComparisonIsOrdinal()
+    {
+        Assert.Equal(ProviderIdempotencyComparison.ConflictingRequest,
+            ProviderIdempotencyGuard.Compare(Identity(providerKey: "KEY"), Identity(providerKey: "key")));
     }
 
     [Fact]
@@ -184,7 +215,7 @@ public sealed class ProviderCorrelationBoundaryTests
         Assert.Throws<ArgumentNullException>(() => ProviderOperationContext.FromCommand<string>(null!, new IdempotencyScope("owner"), Binding()));
         Assert.Throws<ArgumentNullException>(() => ProviderOperationContext.FromCommand(Command(), null!, Binding()));
         Assert.Throws<ArgumentNullException>(() => ProviderOperationContext.FromCommand(Command(), new IdempotencyScope("owner"), null!));
-        Assert.Throws<ArgumentNullException>(() => new ProviderIdempotencyBinding(null!, "fingerprint"));
+        Assert.Throws<ArgumentNullException>(() => new ProviderIdempotencyBinding(null!, "fingerprint", "provider-key"));
         Assert.ThrowsAny<ArgumentException>(() => Identity(fingerprint: " "));
         Assert.Throws<ArgumentNullException>(() => ProviderIdempotencyGuard.Compare(null!, Identity()));
         Assert.Throws<ArgumentNullException>(() => ProviderIdempotencyGuard.Compare(Identity(), null!));

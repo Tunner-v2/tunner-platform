@@ -1,5 +1,7 @@
 # Recent relevant Git changes
 
+- `1be75c9 chore(governance): classify shared P1 coordination metadata`
+- `d724c8d feat(platform): add provider correlation and idempotency evidence boundary`
 - `8320368 chore(governance): resolve P1-015 authority and committed prerequisite readiness`
 - `9613dcf docs(governance): record P1-014 closure SHA and recovery context`
 - `36cca42 chore(governance): close validated P1-014 audit foundation`
@@ -8,5 +10,3 @@
 - `e475ea8 chore(governance): close validated P1-013 technical work item`
 - `6d7f23a test(platform): record committed P1-013 validation and role reviews`
 - `ef3517d feat(platform): add deterministic effective policy version selection`
-- `fbbcaa3 chore(governance): close P1-021 coordination and retain scoped P1 evidence findings`
-- `454d9d6 chore(governance): close P0-RV001 after exact committed parent validation`

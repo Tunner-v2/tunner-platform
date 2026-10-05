@@ -65,16 +65,19 @@ public sealed class ProviderOperationContext
 /// <summary>The owner fingerprints every effect-relevant input and durably reserves the identity atomically.</summary>
 public sealed class ProviderIdempotencyBinding
 {
-    public ProviderIdempotencyBinding(ProviderOperationContext operation, string requestFingerprint)
+    public ProviderIdempotencyBinding(ProviderOperationContext operation, string requestFingerprint, string providerIdempotencyKey)
     {
         ArgumentNullException.ThrowIfNull(operation);
         ArgumentException.ThrowIfNullOrWhiteSpace(requestFingerprint);
         Operation = operation;
+        ArgumentException.ThrowIfNullOrWhiteSpace(providerIdempotencyKey);
         RequestFingerprint = requestFingerprint;
+        ProviderIdempotencyKey = providerIdempotencyKey;
     }
 
     public ProviderOperationContext Operation { get; }
     public string RequestFingerprint { get; }
+    public string ProviderIdempotencyKey { get; }
 }
 
 public enum ProviderIdempotencyComparison
@@ -93,12 +96,16 @@ public static class ProviderIdempotencyGuard
         ArgumentNullException.ThrowIfNull(current);
         var first = previous.Operation;
         var second = current.Operation;
-        if (!StringComparer.Ordinal.Equals(first.OwnerScope.Value, second.OwnerScope.Value)
-            || !StringComparer.Ordinal.Equals(first.IdempotencyKey, second.IdempotencyKey)
-            || !StringComparer.Ordinal.Equals(first.Binding.ProviderInstanceId, second.Binding.ProviderInstanceId)
+        if (!StringComparer.Ordinal.Equals(first.Binding.ProviderInstanceId, second.Binding.ProviderInstanceId)
             || !StringComparer.Ordinal.Equals(first.Binding.ProviderAccountId, second.Binding.ProviderAccountId)
             || !StringComparer.Ordinal.Equals(first.Binding.EnvironmentReference, second.Binding.EnvironmentReference))
             return ProviderIdempotencyComparison.DifferentIdentity;
+
+        var sameOwnerIdentity = StringComparer.Ordinal.Equals(first.OwnerScope.Value, second.OwnerScope.Value)
+            && StringComparer.Ordinal.Equals(first.IdempotencyKey, second.IdempotencyKey);
+        var sameProviderKey = StringComparer.Ordinal.Equals(previous.ProviderIdempotencyKey, current.ProviderIdempotencyKey);
+        if (!sameOwnerIdentity && !sameProviderKey) return ProviderIdempotencyComparison.DifferentIdentity;
+        if (!sameOwnerIdentity || !sameProviderKey) return ProviderIdempotencyComparison.ConflictingRequest;
 
         return StringComparer.Ordinal.Equals(first.OperationId, second.OperationId)
             && StringComparer.Ordinal.Equals(first.CorrelationId, second.CorrelationId)
