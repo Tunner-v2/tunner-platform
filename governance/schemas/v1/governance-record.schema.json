@@ -79,7 +79,8 @@
         "validated_commit_sha": {
           "anyOf": [
             {
-              "$ref": "#/$defs/nonEmptyString"
+              "type": "string",
+              "pattern": "^[a-f0-9]{40}$"
             },
             {
               "type": "null"
@@ -89,7 +90,8 @@
         "tested_commit_sha": {
           "anyOf": [
             {
-              "$ref": "#/$defs/nonEmptyString"
+              "type": "string",
+              "pattern": "^[a-f0-9]{40}$"
             },
             {
               "type": "null"
@@ -102,7 +104,8 @@
         "closure_commit_sha": {
           "anyOf": [
             {
-              "$ref": "#/$defs/nonEmptyString"
+              "type": "string",
+              "pattern": "^[a-f0-9]{40}$"
             },
             {
               "type": "null"
@@ -130,7 +133,38 @@
         "remaining_uncommitted_paths",
         "remaining_uncommitted_classification"
       ],
-      "additionalProperties": false
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "then": {
+            "properties": {
+              "work_item_commit_shas": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "pattern": "^[a-f0-9]{40}$"
+                },
+                "minItems": 1
+              },
+              "tested_commit_sha": {
+                "type": "string",
+                "pattern": "^[a-f0-9]{40}$"
+              },
+              "validated_commit_sha": {
+                "type": "string",
+                "pattern": "^[a-f0-9]{40}$"
+              }
+            }
+          },
+          "if": {
+            "properties": {
+              "repository_changed": {
+                "const": true
+              }
+            }
+          }
+        }
+      ]
     },
     "status": {
       "type": "string",
@@ -1665,7 +1699,36 @@
         "created_at",
         "closed_at"
       ],
-      "additionalProperties": false
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "status": {
+                "const": "CLOSED"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "git_state": {
+                "properties": {
+                  "repository_changed": {
+                    "const": true
+                  }
+                }
+              },
+              "evidence_refs": {
+                "minItems": 1,
+                "type": "array"
+              }
+            },
+            "required": [
+              "git_state"
+            ]
+          }
+        }
+      ]
     }
   }
 }

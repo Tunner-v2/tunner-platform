@@ -63,6 +63,7 @@ internal static class CommitReadinessApplication
         if (StringComparer.Ordinal.Equals(state.RemainingUncommittedClassification, "NONE") && state.RemainingUncommittedPaths.Count > 0) failures.Add("classification NONE cannot list remaining uncommitted paths");
         if (state.ValidatedCommitSha is not null && !GitCommitExists(repository, state.ValidatedCommitSha)) failures.Add("validated_commit_sha does not resolve to a local Git commit");
         if (state.TestedCommitSha is not null && !GitCommitExists(repository, state.TestedCommitSha)) failures.Add("tested_commit_sha does not resolve to a local Git commit");
+        failures.AddRange(CommittedEvidenceApplication.Check(repository, record, state));
         return failures;
     }
 
@@ -87,9 +88,7 @@ internal static class CommitReadinessApplication
     {
         try
         {
-            using var process = Process.Start(new ProcessStartInfo("git", $"-C \"{repository.FullName}\" rev-parse --verify {sha}^{{commit}}") { RedirectStandardOutput = true, RedirectStandardError = true, UseShellExecute = false, CreateNoWindow = true });
-            process?.WaitForExit();
-            return process?.ExitCode == 0;
+            return CommittedEvidenceApplication.IsSha(sha) && CommittedEvidenceApplication.Git(repository, "rev-parse", "--verify", sha + "^{commit}") == sha;
         }
         catch (System.ComponentModel.Win32Exception)
         {

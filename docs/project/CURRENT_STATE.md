@@ -1,22 +1,31 @@
-# CURRENT_STATE
+# Governed project recovery state
 
-## Baseline and milestone
+Derived deterministically from repository-native governance. Regenerate with tunner context build.
 
-- Current authority is the canonical approved Development Documentation plus active AMD-0001 through AMD-0005 and accepted ADR/PDR records. Current RV updates and the complete Pre-P0 package 1.0.7 are mirrored under docs/authority/current. The package declares 58 files; its self manifest is additional.
-- Baseline 1.6.0 remains locked and unchanged. Current readback provenance and hashes are in governance/evidence/RV-SYNC-AUTHORITY.json.
-- P0 historical committed status is CLOSED. The pre-existing working P0 record is REOPENED, with earlier local reopen/work-item/evidence edits. Those files are preserved byte-for-byte and excluded from synchronization commits; their lifecycle reconciliation is separately owned.
-- P1 is ACTIVE. Existing local implementation/evidence is retained; neither remote contents nor old chat summaries determine its unpushed state.
-- Active Revision records: none. Latest Revision lineage: none. No P0 Revision or new AMD was created.
+- P0: historical CLOSED; active Revisions: P0-RV001
+- P1: historical ACTIVE; active Revisions:
 
-## Locally validated foundations
+Latest bounded Revision lineage:
+- P0-RV001: ACTIVE; original P0; parent none; CORRECTIVE: Post-closure remediation of governance/control-plane, evidence integrity, project-state consistency, fresh-agent recovery, authority integrity and portability deficiencies discovered after legitimate historical P0 closure.
+- P0-003-RV001: APPROVED; original TUN-P0-003; parent P0-RV001; CORRECTIVE: Remediate the post-closure gap recorded by REOPEN-TUN-P0-003-001; retain original DONE evidence.
+- P0-004-RV001: APPROVED; original TUN-P0-004; parent P0-RV001; CORRECTIVE: Remediate the post-closure gap recorded by REOPEN-TUN-P0-004-001; retain original DONE evidence.
+- P0-011-RV001: APPROVED; original TUN-P0-011; parent P0-RV001; CORRECTIVE: Remediate the post-closure gap recorded by REOPEN-TUN-P0-011-001; retain original DONE evidence.
+- P0-026-RV001: APPROVED; original TUN-P0-026; parent P0-RV001; CORRECTIVE: Remediate the post-closure gap recorded by REOPEN-TUN-P0-026-001; retain original DONE evidence.
+- P0-030-RV001: APPROVED; original TUN-P0-030; parent P0-RV001; CORRECTIVE: Remediate the post-closure gap recorded by REOPEN-TUN-P0-030-001; retain original DONE evidence.
+- P0-032-RV001: APPROVED; original TUN-P0-032; parent P0-RV001; CORRECTIVE: Remediate the post-closure gap recorded by REOPEN-TUN-P0-032-001; retain original DONE evidence.
+- P0-033-RV001: ACTIVE; original TUN-P0-033; parent P0-RV001; CORRECTIVE: Remediate the post-closure gap recorded by REOPEN-TUN-P0-033-001; retain original DONE evidence.
+- P0-035-RV001: ACTIVE; original TUN-P0-035; parent P0-RV001; CORRECTIVE: Remediate the post-closure gap recorded by REOPEN-TUN-P0-035-001; retain original DONE evidence.
 
-- TUN-P1-022 is DONE. RV GOVERNANCE READY: YES. Its validated/tested candidate SHA is 8574afb06bc60cccd6761bca1fbe3f6a9be53d26. It owns the current-authority synchronization, RV governance tooling/schema/context tests, binary ZIP override, and fresh-agent recovery.
-- Exact committed validation results, tested SHA, role reviews and ownership list are recorded in governance/evidence/TUN-P1-022-VALIDATION.json and governance/evidence/TUN-P1-022-ROLE-REVIEWS.json.
-- Earlier foundation claims remain available in Git history and their original evidence. This synchronization does not revalidate deployment/provider/Product acceptance.
-- The initial branch, HEAD, local commits and hashes of all pre-existing dirty paths are captured in governance/evidence/RV-SYNC-INITIAL-STATE.json.
+Selected scope: P0-035-RV001
+Validated SHA: not recorded
+Tested SHA: not recorded
+Closure SHA: not recorded
 
-Closure was recorded at 76f052b0983965df7285590e341dd14ec943519c. Later handoff-only metadata retains the validated/tested candidate; no behavior-affecting file changed.
+Prerequisites:
+Authority: docs/authority/current-authority.json
+Defects: DEF-TUN-P0-035-001
+Evidence: governance/evidence/P0-035-RV001-VALIDATION.json
 
-## Exact next authorized action
+Exact next governed action: P0-035-RV001: select eligible Revision children, implement, and validate the committed scope
 
-Run tunner authority verify, tunner governance status, tunner governance next, tunner context build and tunner context verify. Follow the eligible local record and its scoped dependency gates. Stop before creating any actual P0 Revision. The next P0 Revision needs separate authorization after RV readiness is reported; no pre-existing CHG bootstrap is required.
+P1 historical validation findings are retained in governance/evidence/P0-RV001-P1-EVIDENCE-AUDIT.json. No chat history is required.

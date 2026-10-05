@@ -168,13 +168,19 @@ public static class RevisionApplication
         if (revision.StringList("evidence_refs").Count == 0) failures.Add("closure requires new Revision evidence");
         foreach (var evidence in revision.StringList("evidence_refs"))
             if (!SafeFile(repository, evidence)) failures.Add($"required Revision evidence missing: {evidence}");
-        if (CommitReadinessApplication.Read(revision) is null) failures.Add("closure requires committed-state lineage");
+        if (CommitReadinessApplication.Read(revision)?.RepositoryChanged != true) failures.Add("repository-native Revision closure requires repository-changing committed-state lineage");
         failures.AddRange(CommitReadinessApplication.Check(repository, revision));
         var committedState = CommitReadinessApplication.Read(revision);
         if (committedState?.RepositoryChanged == true && committedState.ValidatedCommitSha is { } sha && Parse(Git(repository, "show", sha + ":" + RepositoryRootResolver.ToLogicalPath(repository, revision.Path))) is null)
             failures.Add("validated SHA must contain this Revision record");
         foreach (var workId in revision.StringList("work_items"))
         {
+            var childRevision = Revisions(records).SingleOrDefault(x => x.Identifier == workId && x.Scalar("parent_milestone_revision_id") == id);
+            if (childRevision is not null)
+            {
+                if (childRevision.Scalar("status") != "CLOSED") failures.Add($"child Revision is not CLOSED: {workId}");
+                continue;
+            }
             var work = records.SingleOrDefault(x => x.Type.DefinitionName == "work-item" && x.Identifier == workId);
             if (work is null || work.Scalar("revision_ref") != id || work.Scalar("status") != "DONE") failures.Add($"Revision child is not complete and linked: {workId}");
             else failures.AddRange(((GatePayload)GovernanceApplication.CheckGate(repository, workId).Payload).Failures.Select(x => $"{workId}: {x}"));
@@ -335,7 +341,7 @@ public static class RevisionApplication
                 failures.Add("parent milestone Revision must resolve to the original milestone lineage");
         }
         foreach (var childId in revision.StringList("work_items"))
-            if (!records.Any(x => x.Type.DefinitionName == "work-item" && x.Identifier == childId && x.Scalar("revision_ref") == revision.Identifier))
+            if (!records.Any(x => x.Identifier == childId && (x.Type.DefinitionName == "work-item" && x.Scalar("revision_ref") == revision.Identifier || x.Type.DefinitionName == "revision" && x.Scalar("parent_milestone_revision_id") == revision.Identifier)))
                 failures.Add($"Revision child does not link back to its owner: {childId}");
         foreach (var time in new[] { "created_at", "closed_at" })
             if (NullValue(revision.Scalar(time)) is { } value && !DateTimeOffset.TryParse(value, CultureInfo.InvariantCulture, DateTimeStyles.None, out _))
@@ -454,7 +460,7 @@ public static class RevisionApplication
         try { var stream = new YamlStream(); stream.Load(new StringReader(text)); return stream.Documents.Count == 1 ? stream.Documents[0].RootNode as YamlMappingNode : null; }
         catch (YamlException) { return null; }
     }
-    private static object? ToJson(YamlNode node) => node switch
+    internal static object? ToJson(YamlNode node) => node switch
     {
         YamlMappingNode mapping => mapping.Children.ToDictionary(x => ((YamlScalarNode)x.Key).Value ?? "", x => ToJson(x.Value), StringComparer.Ordinal),
         YamlSequenceNode sequence => sequence.Children.Select(ToJson).ToArray(),

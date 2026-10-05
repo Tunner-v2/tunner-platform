@@ -1,21 +1,31 @@
-# PROJECT_CONTEXT
+# Governed project recovery state
 
-## Purpose and authority
+Derived deterministically from repository-native governance. Regenerate with tunner context build.
 
-This concise project memory supports fresh-agent recovery without chat history. Governed records and approved authority remain authoritative. The original locked baseline and immutable historical evidence remain intact.
+- P0: historical CLOSED; active Revisions: P0-RV001
+- P1: historical ACTIVE; active Revisions:
 
-The current Development Document RV changes and Pre-P0 1.0.7 execution package are under docs/authority/current. Its 58 listed artifacts are hash-verified against the canonical package manifest. Accepted decisions and AMD-0001 through AMD-0005 remain active. See docs/authority/current-authority.json for provenance and precedence.
+Latest bounded Revision lineage:
+- P0-RV001: ACTIVE; original P0; parent none; CORRECTIVE: Post-closure remediation of governance/control-plane, evidence integrity, project-state consistency, fresh-agent recovery, authority integrity and portability deficiencies discovered after legitimate historical P0 closure.
+- P0-003-RV001: APPROVED; original TUN-P0-003; parent P0-RV001; CORRECTIVE: Remediate the post-closure gap recorded by REOPEN-TUN-P0-003-001; retain original DONE evidence.
+- P0-004-RV001: APPROVED; original TUN-P0-004; parent P0-RV001; CORRECTIVE: Remediate the post-closure gap recorded by REOPEN-TUN-P0-004-001; retain original DONE evidence.
+- P0-011-RV001: APPROVED; original TUN-P0-011; parent P0-RV001; CORRECTIVE: Remediate the post-closure gap recorded by REOPEN-TUN-P0-011-001; retain original DONE evidence.
+- P0-026-RV001: APPROVED; original TUN-P0-026; parent P0-RV001; CORRECTIVE: Remediate the post-closure gap recorded by REOPEN-TUN-P0-026-001; retain original DONE evidence.
+- P0-030-RV001: APPROVED; original TUN-P0-030; parent P0-RV001; CORRECTIVE: Remediate the post-closure gap recorded by REOPEN-TUN-P0-030-001; retain original DONE evidence.
+- P0-032-RV001: APPROVED; original TUN-P0-032; parent P0-RV001; CORRECTIVE: Remediate the post-closure gap recorded by REOPEN-TUN-P0-032-001; retain original DONE evidence.
+- P0-033-RV001: ACTIVE; original TUN-P0-033; parent P0-RV001; CORRECTIVE: Remediate the post-closure gap recorded by REOPEN-TUN-P0-033-001; retain original DONE evidence.
+- P0-035-RV001: ACTIVE; original TUN-P0-035; parent P0-RV001; CORRECTIVE: Remediate the post-closure gap recorded by REOPEN-TUN-P0-035-001; retain original DONE evidence.
 
-## Historical state and Revision lineage
+Selected scope: P0-035-RV001
+Validated SHA: not recorded
+Tested SHA: not recorded
+Closure SHA: not recorded
 
-P0's committed historical state is CLOSED and its original committed work items are DONE. Earlier local P0 REOPENED/IN_PROGRESS records, defects and evidence remain in the working tree. They are preserved as existing work; they are not a state change performed by this synchronization. P1 remains ACTIVE.
+Prerequisites:
+Authority: docs/authority/current-authority.json
+Defects: DEF-TUN-P0-035-001
+Evidence: governance/evidence/P0-035-RV001-VALIDATION.json
 
-There are no actual Revision records. RV capability uses governance/revisions and the existing schemas, CLI and context pipeline. Future post-closure work creates a separate Revision with its reason/type, original scope, immediate predecessor, optional parent milestone Revision, dependencies, authority, evidence and scoped impact. Historical closure remains separately visible.
+Exact next governed action: P0-035-RV001: select eligible Revision children, implement, and validate the committed scope
 
-Generated context retrieves only the selected scope and bounded relevant/latest lineage. CORE, TASK, EXPANDED and FULL_AUDIT retain their governed escalation order. The generated manifest includes source hashes, Revision-set freshness, historical scopes, SHA linkage and exclusions.
-
-## Current work and recovery
-
-TUN-P1-022 is DONE and RV GOVERNANCE READY is YES. The validated/tested candidate is 8574afb06bc60cccd6761bca1fbe3f6a9be53d26. Its validation and role-review evidence identifies the exact tested candidate SHA; metadata closure may have a later SHA. Governance tooling is isolated from the application solution. No Product/business semantics, provider operations, deployment or release acceptance are added.
-
-Read docs/project/HANDOFF.md and governance/work-items/TUN-P1-022.yaml, then run the mandatory startup commands. Inspect governance next for eligible ordinary/Revision work. Actual P0 Revision creation remains outside this task and requires separate authorization.
+P1 historical validation findings are retained in governance/evidence/P0-RV001-P1-EVIDENCE-AUDIT.json. No chat history is required.

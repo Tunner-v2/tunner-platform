@@ -61,6 +61,14 @@ public static class GovernanceApplication
                 diagnostics.Add(Diagnostic.Error(record.Path, record.Root.Start, "GOV_SCHEMA_VERSION", "schema_version must be an integer of at least 1."));
             }
 
+            if (record.Fields.TryGetValue("git_state", out var gitState))
+            {
+                using var library = JsonDocument.Parse(File.ReadAllText(Path.Combine(repository.FullName, "governance/schemas/v1/governance-record.schema.json")));
+                var executable = JsonSchema.FromText("{\"$defs\":" + library.RootElement.GetProperty("$defs").GetRawText() + ",\"$ref\":\"#/$defs/gitState\"}");
+                if (!executable.Evaluate(JsonSerializer.SerializeToElement(RevisionApplication.ToJson(gitState))).IsValid)
+                    diagnostics.Add(Diagnostic.Error(record.Path, gitState.Start, "GOV_GIT_STATE_SCHEMA", "git_state fails executable required field/type/SHA validation"));
+            }
+
             if (StringComparer.Ordinal.Equals(record.Type.DefinitionName, "dependency") && !DependencyReadiness.Contains(record.Scalar("required_readiness") ?? string.Empty, StringComparer.Ordinal))
             {
                 diagnostics.Add(Diagnostic.Error(record.Path, record.Root.Start, "GOV_DEPENDENCY_READINESS", "Dependency required_readiness must be LOCAL_VALIDATED or MERGED_TO_MAIN."));
@@ -135,7 +143,7 @@ public static class GovernanceApplication
             var reason = reasons.Count == 0
                 ? active ? "currently in progress" : "all recorded prerequisites and blockers permit work"
                 : active ? "currently in progress; " + string.Join("; ", reasons) : string.Join("; ", reasons);
-            next.Add(new NextItem(record.Identifier, state, validation.IsValid && revisionReasons.Count == 0 && (active || reasons.Count == 0), reason));
+            next.Add(new NextItem(record.Identifier, state, validation.IsValid && reasons.Count == 0, reason));
         }
 
         next.AddRange(RevisionApplication.Next(repository, records, validation.IsValid));
@@ -221,6 +229,13 @@ public static class GovernanceApplication
             return new CommandResult(1, "transition check", new TransitionPayload(workItemId, from, destination, "INSUFFICIENT_CONTEXT", string.Join("; ", diagnostics.Select(item => item.Message))));
         }
 
+        if (from == "REOPENED" && destination == "IN_PROGRESS")
+        {
+            var causation = records.Any(x => x.Type.DefinitionName == "reopen" && x.Scalar("work_item_id") == workItemId) ||
+                workItem.StringList("defects").Any(id => records.Any(x => x.Type.DefinitionName == "defect" && x.Identifier == id));
+            var valid = ((ValidationPayload)Validate(repository).Payload).IsValid;
+            return new CommandResult(causation && valid ? 0 : 1, "transition check", new TransitionPayload(workItemId, from, destination, causation && valid ? "ALLOWED" : "REJECTED", "Approved Document 03: reopened active acceptance/release work resumes active work with preserved completion causation."));
+        }
         if (policy.SideStates.Contains(from, StringComparer.Ordinal) || policy.SideStates.Contains(destination, StringComparer.Ordinal))
         {
             return new CommandResult(1, "transition check", new TransitionPayload(workItemId, from, destination, "INSUFFICIENT_CONTEXT", "The policy lists side states but does not define their transition graph."));

@@ -42,9 +42,43 @@ try
 
     var authority = AuthorityApplication.Verify(fixtureRoot);
     Expect(authority.ExitCode == 0, "A complete authority fixture must verify.", failures);
+    var registeredPath = Path.Combine(fixtureRoot.FullName, "docs", "authority", "mirror.txt");
+    var pristineBytes = File.ReadAllBytes(registeredPath);
+    var mutatedBytes = pristineBytes.ToArray(); mutatedBytes[0] ^= 1;
+    File.WriteAllBytes(registeredPath, mutatedBytes);
+    Expect(AuthorityApplication.Verify(fixtureRoot).ExitCode != 0, "A single-byte registered artifact mutation must fail.", failures);
+    File.WriteAllBytes(registeredPath, pristineBytes);
+    var activePath = Path.Combine(fixtureRoot.FullName, "docs", "authority", "amendments", "AMD-TEST", "AMD-TEST_fixture.md");
+    var activeBytes = File.ReadAllBytes(activePath);
+    var activeMutation = activeBytes.ToArray(); activeMutation[0] ^= 1;
+    File.WriteAllBytes(activePath, activeMutation);
+    Expect(AuthorityApplication.Verify(fixtureRoot).ExitCode != 0, "Active authority single-byte mutation must fail.", failures);
+    File.WriteAllBytes(activePath, activeBytes);
+    File.WriteAllText(Path.Combine(fixtureRoot.FullName, "unrelated.txt"), "unrelated changed work");
+    Expect(AuthorityApplication.Verify(fixtureRoot).ExitCode == 0, "Unrelated mutation must cause no false authority drift.", failures);
 
     var validation = GovernanceApplication.Validate(fixtureRoot);
     Expect(validation.ExitCode == 0, "A complete fixture must validate.", failures);
+    WriteWorkItem(fixtureRoot, "TUN-REOPEN", "REOPENED", "[]");
+    var reopenPath = Path.Combine(fixtureRoot.FullName, "governance", "reopens", "REOPEN-TUN-REOPEN-001.yaml");
+    Directory.CreateDirectory(Path.GetDirectoryName(reopenPath)!);
+    File.WriteAllText(reopenPath, """
+schema_version: 1
+reopen_id: REOPEN-TUN-REOPEN-001
+work_item_id: TUN-REOPEN
+previous_release: null
+reason: Current acceptance lifecycle correction
+detected_environment: FIXTURE
+classification: GOVERNANCE_DEFECT
+severity: SEV-2
+new_acceptance_criteria: [Preserve prior evidence]
+affected_versions: []
+evidence: []
+created_at: 2026-10-05T00:00:00Z
+""");
+    Expect(GovernanceApplication.CheckTransition(fixtureRoot, "TUN-REOPEN", "IN_PROGRESS").ExitCode == 0, "Approved active acceptance REOPENED work must resume with preserved causation.", failures);
+    File.Delete(Path.Combine(fixtureRoot.FullName, "governance", "work-items", "TUN-REOPEN.yaml"));
+    File.Delete(reopenPath);
     WriteWorkItem(fixtureRoot, "TUN-CONTRACT", "CONTRACT_REQUIRED", "[]");
     Expect(GovernanceApplication.Validate(fixtureRoot).ExitCode == 1, "A missing-authority blocker must be rejected without a recorded Authority Resolution Pass.", failures);
     File.Delete(Path.Combine(fixtureRoot.FullName, "governance", "work-items", "TUN-CONTRACT.yaml"));
@@ -78,6 +112,15 @@ try
     Expect(contextPayload.Included.Any(item => item.Path == "docs/authority/amendments/AMD-TEST/AMD-TEST_fixture.md" && item.Reason == "active authority amendment"), "Context build must include each active amendment declared by the verified authority index.", failures);
     var contextCurrent = ContextApplication.Verify(fixtureRoot, contextOutput);
     Expect(contextCurrent.ExitCode == 0, "A newly generated context pack must verify as current.", failures);
+    var unselectedGovernancePath = Path.Combine(fixtureRoot.FullName, "governance", "work-items", "TUN-TRANSITION.yaml");
+    File.AppendAllText(unselectedGovernancePath, "\n# unselected authoritative state changed");
+    Expect(ContextApplication.Verify(fixtureRoot, contextOutput).ExitCode != 0, "Unselected authoritative governance changes must invalidate derived project memory.", failures);
+    Expect(ContextApplication.Build(fixtureRoot, "TUN-001", contextOutput).ExitCode == 0 && ContextApplication.Verify(fixtureRoot, contextOutput).ExitCode == 0, "Context build must regenerate stale durable state deterministically.", failures);
+    var durableState = Path.Combine(fixtureRoot.FullName, "docs", "project", "CURRENT_STATE.md");
+    File.AppendAllText(durableState, "\nContradictory fabricated state");
+    Expect(ContextApplication.Verify(fixtureRoot, contextOutput).ExitCode != 0, "Contradictory derived memory must be detected.", failures);
+    ContextApplication.Build(fixtureRoot, "TUN-001", contextOutput);
+    Expect(!File.ReadAllText(durableState).Contains("Contradictory fabricated state", StringComparison.Ordinal), "Regeneration must replace stale derived conclusions using governance.", failures);
     File.AppendAllText(Path.Combine(fixtureRoot.FullName, "governance", "work-items", "TUN-001.yaml"), "\n# Fixture source changed");
     var contextStale = ContextApplication.Verify(fixtureRoot, contextOutput);
     Expect(contextStale.ExitCode == 1, "Context verify must report a changed included source as stale.", failures);
@@ -303,7 +346,8 @@ static void CreateFixture(DirectoryInfo repositoryRoot, DirectoryInfo fixtureRoo
 {
   "checks": [
     { "local_path": "docs/authority/current-authority.json", "expected_sha256": "{{HashFile(currentAuthorityPath)}}" },
-    { "local_path": "docs/authority/mirror.txt", "expected_sha256": "{{HashFile(authorityMirrorPath)}}" }
+    { "local_path": "docs/authority/mirror.txt", "expected_sha256": "{{HashFile(authorityMirrorPath)}}" },
+    { "local_path": "docs/authority/amendments/AMD-TEST/AMD-TEST_fixture.md", "expected_sha256": "{{HashFile(Path.Combine(fixtureAmendmentDirectory, "AMD-TEST_fixture.md"))}}" }
   ]
 }
 """);
@@ -592,6 +636,10 @@ static void RunRevisionChecks(DirectoryInfo repositoryRoot, ICollection<string> 
         Check(workCreated.ExitCode == 0 && ((RevisionOperationPayload)workCreated.Payload).RevisionId == "P0-004-RV001", "canonical work-item alias resolves original TUN identifier");
         var workRevision = Path.Combine(fixture.FullName, "governance", "revisions", "P0-004-RV001.yaml");
         Check(HashFile(workPath) == workHash, "historical work-item completion/evidence remains byte-identical");
+        string[] childRevisionRefs = ["P0-004-RV001"];
+        EditRevision(mileRevision, "work_items", childRevisionRefs);
+        Check(((RevisionOperationPayload)RevisionApplication.CloseCheck(fixture, "P0-RV001").Payload).Findings.Any(x => x.Contains("child Revision is not CLOSED", StringComparison.Ordinal)), "milestone Revision closure requires its linked child Revisions CLOSED");
+        EditRevision(mileRevision, "work_items", Array.Empty<string>());
         var child = RevisionApplication.CreateChild(fixture, "P0-004-RV001", "Scoped child");
         Check(child.ExitCode == 0 && ((RevisionOperationPayload)child.Payload).RevisionId == "P0-004-RV001-001", "canonical positive child ID is allocated under existing work-item storage");
         Check(RevisionApplication.CreateChild(fixture, "P0-004-RV001", "Second child").ExitCode == 0, "child allocation increments without duplicates");
@@ -661,7 +709,8 @@ static void RunRevisionChecks(DirectoryInfo repositoryRoot, ICollection<string> 
         Check(AdaptiveContextApplication.Build(fixture, "", context).ExitCode == 0, "canonical context build selects a current governed scope without --current");
         Check(RevisionApplication.CloseCheck(fixture, "P0-004-RV001").ExitCode != 0, "closure refuses incomplete children, validation, and committed evidence");
         var proofPath = Path.Combine(fixture.FullName, "governance", "evidence", "revision-proof.json");
-        File.WriteAllText(proofPath, "{\"result\":\"PASS\"}");
+        string[] ownedBehaviorPaths = ["docs/authority/current-authority.json"];
+        File.WriteAllText(proofPath, JsonSerializer.Serialize(new { scope_id = "P0-999-RV999", result = "PENDING", owned_behavior_paths = ownedBehaviorPaths }));
         EditRevision(importedPath, "status", "VALIDATION");
         EditRevision(importedPath, "product_acceptance_required", false);
         EditRevision(importedPath, "evidence_refs", proofRefs);
@@ -669,7 +718,20 @@ static void RunRevisionChecks(DirectoryInfo repositoryRoot, ICollection<string> 
         RunGit(fixture, "commit", "--quiet", "-m", "Revision validation candidate");
         var sha = RunGitOutput(fixture, "rev-parse", "HEAD");
         EditRevision(importedPath, "git_state", new { repository_changed = true, validated_commit_sha = sha, tested_commit_sha = sha, work_item_commit_shas = new[] { sha }, closure_commit_sha = (string?)null, remaining_uncommitted_paths = Array.Empty<string>(), remaining_uncommitted_classification = "PREEXISTING_UNRELATED" });
+        File.WriteAllText(proofPath, JsonSerializer.Serialize(new { scope_id = "P0-999-RV999", validation_kind = "COMMITTED", validated_commit_sha = sha, tested_commit_sha = sha, result = "PASS", owned_behavior_paths = ownedBehaviorPaths }));
         Check(RevisionApplication.CloseCheck(fixture, "P0-999-RV999").ExitCode == 0, "closure checks exact committed Revision identity and new evidence with unrelated dirty fixture work preserved");
+        var validProof = File.ReadAllText(proofPath);
+        File.WriteAllText(proofPath, validProof.Replace("\"tested_commit_sha\":\"" + sha, "\"tested_commit_sha\":\"0000000000000000000000000000000000000000", StringComparison.Ordinal));
+        Check(RevisionApplication.CloseCheck(fixture, "P0-999-RV999").ExitCode != 0, "evidence tested SHA mismatch is rejected");
+        File.WriteAllText(proofPath, validProof);
+        var behaviorPath = Path.Combine(fixture.FullName, "docs", "authority", "current-authority.json");
+        var behaviorBytes = File.ReadAllBytes(behaviorPath);
+        File.AppendAllText(behaviorPath, " ");
+        Check(RevisionApplication.CloseCheck(fixture, "P0-999-RV999").ExitCode != 0, "behavior changes after validation invalidate committed readiness");
+        File.WriteAllBytes(behaviorPath, behaviorBytes);
+        EditRevision(importedPath, "git_state", new { repository_changed = false, validated_commit_sha = (string?)null, tested_commit_sha = (string?)null, work_item_commit_shas = Array.Empty<string>(), closure_commit_sha = (string?)null, remaining_uncommitted_paths = Array.Empty<string>(), remaining_uncommitted_classification = "NONE" });
+        Check(RevisionApplication.CloseCheck(fixture, "P0-999-RV999").ExitCode != 0, "repository-native Revision cannot bypass committed lineage using false repository_changed");
+        EditRevision(importedPath, "git_state", new { repository_changed = true, validated_commit_sha = sha, tested_commit_sha = sha, work_item_commit_shas = new[] { sha }, closure_commit_sha = (string?)null, remaining_uncommitted_paths = Array.Empty<string>(), remaining_uncommitted_classification = "PREEXISTING_UNRELATED" });
         EditRevision(importedPath, "required_roles", requiredAuditor);
         Check(RevisionApplication.CloseCheck(fixture, "P0-999-RV999").ExitCode != 0, "declared specialist review is mandatory for closure");
         EditRevision(importedPath, "required_roles", Array.Empty<string>());
