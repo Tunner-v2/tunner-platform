@@ -5,7 +5,21 @@
     "src/Tunner.Governance/AuthorityApplication.cs"
   ],
   "validation_kind": "RETROSPECTIVE_COMMITTED",
-  "note": "New remediation evidence; original historical validation is not fabricated.",
+  "note": "New exact committed remediation validation. Prior historical execution is not asserted. Closure SHA is appended to this evidence only after the individual closure commit exists; the closed Revision record remains immutable.",
   "scope_id": "P0-033-RV001",
-  "result": "PENDING"
+  "result": "PASS",
+  "validated_commit_sha": "ee24bc4c198b8ffcf01d3d24b3d588a46a901305",
+  "tested_commit_sha": "ee24bc4c198b8ffcf01d3d24b3d588a46a901305",
+  "checked_at": "2026-10-05T19:44:25.7823507+00:00",
+  "closure_commit_sha": null,
+  "checks": [
+    "Governance build zero warnings/errors",
+    "Tunner.Platform.slnx build zero warnings/errors",
+    "Governance functional suite PASS including 60 RV checks, registered/active single-byte mutations, SHA mismatch, historical status, bounded non-blocking readiness and stale project-memory cases",
+    "17 executable schema entry points PASS",
+    "Platform architecture tests 18/18 PASS",
+    "Authority verification and byte-exact committed checkout 167 artifacts PASS",
+    "Fresh-agent recovery and project-state consistency PASS",
+    "Nested/location-independent path resolution PASS"
+  ]
 }

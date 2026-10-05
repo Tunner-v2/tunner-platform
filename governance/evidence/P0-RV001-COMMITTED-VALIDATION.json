@@ -1,0 +1,32 @@
+{
+  "zip_sha256": "c020ddf78065eae94cfb307d68df513774f0df53337d897a30d2641a0b0c22c1",
+  "zip_working_hash": "88b8f7f7ac91ff58167bbb794e328fbcc089ed49",
+  "result": "PASS",
+  "evidence_kind": "COMMITTED_CHECK_OUTPUTS",
+  "tests": {
+    "nested_root_and_location_independence": "PASS",
+    "fresh_recovery": "PASS",
+    "platform_architecture": "18/18",
+    "schema_entry_points": 17,
+    "authority_checkout_artifacts": 167,
+    "project_memory": "STALE detection and deterministic regeneration PASS",
+    "authority_mutations": "Pristine PASS; registered/active single-byte FAIL; unrelated mutation PASS",
+    "governance_functional": "PASS",
+    "rv_assertions": 60
+  },
+  "limitations": [
+    "NuGet online advisory retrieval unavailable; restored cached dependencies with NuGetAudit=false for validation only.",
+    "No deployment, Product acceptance, protected-main merge, new AMD, or unrequested P1 implementation is claimed."
+  ],
+  "scope_id": "P0-RV001",
+  "schema_version": 1,
+  "zip_blob_hash": "88b8f7f7ac91ff58167bbb794e328fbcc089ed49",
+  "validated_commit_sha": "ee24bc4c198b8ffcf01d3d24b3d588a46a901305",
+  "tested_commit_sha": "ee24bc4c198b8ffcf01d3d24b3d588a46a901305",
+  "build": {
+    "governance": "zero warnings/errors",
+    "boundary": "Task-owned governance behavior equals committed SHA. Preserved unrelated implementation remains dirty and is not represented as committed P1 validation.",
+    "platform_solution": "zero warnings/errors",
+    "command": "dotnet build Tunner.Platform.slnx --no-restore"
+  }
+}

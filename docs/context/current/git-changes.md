@@ -1,5 +1,6 @@
 # Recent relevant Git changes
 
+- `ee24bc4 fix(governance): implement P0-RV001 remediation validation candidate`
 - `af4f259 chore(context): anchor RV synchronization handoff to closure SHA`
 - `76f052b chore(governance): record committed RV validation and completion`
 - `8574afb feat(governance): synchronize approved RV lifecycle and current authority`
@@ -9,4 +10,3 @@
 - `8f14afd fix: preserve AMD-0003 authority bytes`
 - `a2fdb94 chore: close P0 governance foundation`
 - `6aaa3b0 chore: refresh P0 telemetry handoff context`
-- `bedbe5a feat: complete P0 project memory state`

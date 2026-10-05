@@ -6,3 +6,4 @@
 - `docs/authority/amendments/AMD-0004/AMD-0004_Shared_Technical_Primitives_Formatting_and_Canonicalization.md` — active authority amendment
 - `docs/authority/amendments/AMD-0005/AMD-0005_Authority-First_Decision_Resolution_and_Duplicate-Decision_Prevention.md` — active authority amendment
 - `docs/authority/current-authority.json` — explicit authority reference
+- `docs/authority/current/development/37_Current_Authority_Index.md` — explicit authority reference

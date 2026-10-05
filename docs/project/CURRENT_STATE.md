@@ -13,19 +13,19 @@ Latest bounded Revision lineage:
 - P0-026-RV001: APPROVED; original TUN-P0-026; parent P0-RV001; CORRECTIVE: Remediate the post-closure gap recorded by REOPEN-TUN-P0-026-001; retain original DONE evidence.
 - P0-030-RV001: APPROVED; original TUN-P0-030; parent P0-RV001; CORRECTIVE: Remediate the post-closure gap recorded by REOPEN-TUN-P0-030-001; retain original DONE evidence.
 - P0-032-RV001: APPROVED; original TUN-P0-032; parent P0-RV001; CORRECTIVE: Remediate the post-closure gap recorded by REOPEN-TUN-P0-032-001; retain original DONE evidence.
-- P0-033-RV001: ACTIVE; original TUN-P0-033; parent P0-RV001; CORRECTIVE: Remediate the post-closure gap recorded by REOPEN-TUN-P0-033-001; retain original DONE evidence.
+- P0-033-RV001: CLOSED; original TUN-P0-033; parent P0-RV001; CORRECTIVE: Remediate the post-closure gap recorded by REOPEN-TUN-P0-033-001; retain original DONE evidence.
 - P0-035-RV001: ACTIVE; original TUN-P0-035; parent P0-RV001; CORRECTIVE: Remediate the post-closure gap recorded by REOPEN-TUN-P0-035-001; retain original DONE evidence.
 
-Selected scope: P0-035-RV001
-Validated SHA: not recorded
-Tested SHA: not recorded
+Selected scope: P0-033-RV001
+Validated SHA: ee24bc4c198b8ffcf01d3d24b3d588a46a901305
+Tested SHA: ee24bc4c198b8ffcf01d3d24b3d588a46a901305
 Closure SHA: not recorded
 
 Prerequisites:
-Authority: docs/authority/current-authority.json
-Defects: DEF-TUN-P0-035-001
-Evidence: governance/evidence/P0-035-RV001-VALIDATION.json
+Authority: docs/authority/current-authority.json, docs/authority/current/development/37_Current_Authority_Index.md
+Defects: DEF-TUN-P0-033-001
+Evidence: governance/evidence/P0-033-RV001-VALIDATION.json, governance/evidence/P0-RV001-COMMITTED-VALIDATION.json
 
-Exact next governed action: P0-035-RV001: select eligible Revision children, implement, and validate the committed scope
+Exact next governed action: TUN-P1-021: currently in progress
 
 P1 historical validation findings are retained in governance/evidence/P0-RV001-P1-EVIDENCE-AUDIT.json. No chat history is required.
