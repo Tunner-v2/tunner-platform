@@ -3,7 +3,7 @@ work_item_id: TUN-P1-015
 milestone_id: P1
 sprint_id: null
 title: Provider-neutral adapter and correlation boundary
-status: CONTRACT_REQUIRED
+status: READY
 type: PROVIDER_FOUNDATION
 authority_refs:
   - docs/authority/current-authority.json
@@ -12,33 +12,35 @@ authority_refs:
   - docs/authority/baselines/1.6.0/01_Engineering_Technology_Foundation.md
   - docs/authority/baselines/1.6.0/02_Repository_Solution_and_Module_Architecture.md
   - docs/authority/baselines/1.6.0/09_Testing_Acceptance_Evidence_and_Quality_Gates.md
+  - docs/authority/baselines/1.6.0/23_Provider_Account_and_Routing_Operations_FRD.md
+  - docs/authority/baselines/1.6.0/32_Domain_API_Event_Data_and_Policy_Contract_Catalog.md
+  - docs/authority/baselines/1.6.0/decisions/ADR-0014_Payment_Provider_Stripe.md
+  - docs/authority/amendments/AMD-0005/AMD-0005_Authority-First_Decision_Resolution_and_Duplicate-Decision_Prevention.md
 flow_refs: []
-contract_refs: []
-decision_refs: []
+contract_refs: [docs/authority/baselines/1.6.0/23_Provider_Account_and_Routing_Operations_FRD.md, docs/authority/baselines/1.6.0/32_Domain_API_Event_Data_and_Policy_Contract_Catalog.md]
+decision_refs: [docs/authority/baselines/1.6.0/decisions/ADR-0014_Payment_Provider_Stripe.md]
 acceptance_criteria:
-  - Implement provider-neutral correlation/idempotency mechanics only after a provider contract is selected; no P7 payment behavior or provider finality claim.
+  - Implement stable owner-supplied provider correlation/idempotency bindings and typed ProviderObjectReference evidence under Documents 23 and 32 and accepted ADR-0014; reject conflicting identity reuse and cross-binding evidence without P7 behavior, external calls or finality claims.
   - Reuse or extend a compatible existing capability when one exists; do not add a generic Common, Utils, Helpers, or shared-everything layer.
   - Preserve domain/business semantics as owner concerns and keep technical canonicalization and presentation formatting non-authoritative.
   - Do not infer Product behavior, user flows, commercial rules, policy values, or public contract semantics beyond cited authority.
 prerequisites: [TUN-P1-004, TUN-P1-005]
-blockers: [PROVIDER_CONTRACT_BOUNDARY_REQUIRED]
+blockers: []
 impact: {architecture: true, api: true, ui: false, sdk: true, financial: false, compliance: false, security: false, devops: false, support: false, provider: true}
 activated_roles: [full-stack-engineer, solution-architect, sdk-engineer, rd-engineer, tester-qa-engineer]
 required_tests: [authority verification, governance validation, role activation calculation and mandatory specialist reviews, bounded expanded context verification, scope-specific deterministic tests and evidence]
-required_evidence: [governance/context/CTX-TUN-P1-015-001.yaml, governance/evidence/TUN-P1-015-VALIDATION.json, governance/evidence/TUN-P1-015-ROLE-REVIEWS.json]
+required_evidence: [governance/context/CTX-TUN-P1-015-001.yaml, governance/evidence/TUN-P1-015-VALIDATION.json, governance/evidence/TUN-P1-015-ROLE-REVIEWS.json, governance/evidence/TUN-P1-015-AUTHORITY-RESOLUTION.json, governance/evidence/TUN-P1-015-RD-SOURCES.json, docs/development/P1_PROVIDER_CORRELATION_BOUNDARY.md]
 context_policy: EXPANDED
 todos: []
 defects: []
 authority_resolution:
   schema_version: 1
-  outcome: REQUIRED_MISSING_AUTHORITY
-  reviewed_authority_refs:
-    - docs/authority/current-authority.json
-    - docs/authority/amendments/AMD-0005/AMD-0005_Authority-First_Decision_Resolution_and_Duplicate-Decision_Prevention.md
-    - docs/authority/amendments/AMD-0005/effective-overrides/00_Authority_Change_Control_and_Documentation_Governance.md
-  unresolved_question: "Which approved provider contract selects the provider-neutral correlation inputs, idempotency boundary, and finality semantics?"
-  conclusion: "No provider contract or provider selection is authorized; this is a real missing-authority blocker and does not permit payment or provider behavior."
+  outcome: RESOLVED_EXISTING_AUTHORITY
+  reviewed_authority_refs: [docs/authority/current-authority.json, docs/authority/baselines/1.6.0/23_Provider_Account_and_Routing_Operations_FRD.md, docs/authority/baselines/1.6.0/32_Domain_API_Event_Data_and_Policy_Contract_Catalog.md, docs/authority/baselines/1.6.0/decisions/ADR-0014_Payment_Provider_Stripe.md, docs/authority/amendments/AMD-0004/AMD-0004_Shared_Technical_Primitives_Formatting_and_Canonicalization.md, docs/authority/amendments/AMD-0005/AMD-0005_Authority-First_Decision_Resolution_and_Duplicate-Decision_Prevention.md]
+  unresolved_question: "None for the bounded provider correlation and evidence foundation."
+  conclusion: "Canonical Documents 23 and 32 and accepted ADR-0014 already resolve provider selection and the internal correlation/idempotency/evidence boundary. The earlier pass omitted these approved contracts. Detailed technical fields implement their invariants; finality and side effects remain owner concerns. Prior conclusion is preserved in Git and evidence."
   conditional_trigger_absent: false
-  reviewed_at: 2026-10-03T09:25:00-04:00
+  reviewed_at: 2026-10-05T21:51:58.8951353+00:00
 created_at: 2026-10-02T13:20:00-04:00
-updated_at: 2026-10-02T13:20:00-04:00
+updated_at: 2026-10-05T21:51:58.8951353+00:00
+product_acceptance_required: false

@@ -1,0 +1,31 @@
+{
+  "scope_type": "WORK_ITEM",
+  "status": "PASS",
+  "schema_version": 1,
+  "implementation_impact": "No SDK install/version selection, provider call, retries or finality added. Preserve owner-supplied identity and typed evidence only.",
+  "checked_at": "2026-10-05T21:51:58.8951353+00:00",
+  "scope_id": "TUN-P1-015",
+  "evidence_id": "TUN-P1-015-RD-SOURCES",
+  "sources": [
+    {
+      "url": "https://docs.stripe.com/api/idempotent_requests",
+      "classification": "PRIMARY_VENDOR",
+      "finding": "Stripe compares parameters for reused idempotency keys and persists initial execution results; retention and key constraints are provider-specific, not generic Tunner policy."
+    },
+    {
+      "url": "https://docs.stripe.com/error-low-level",
+      "classification": "PRIMARY_VENDOR",
+      "finding": "Network and server errors can leave an indeterminate external outcome. No transport exception is normalized to proof of no effect."
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/aspnet/core/fundamentals/openapi/aspnetcore-openapi?view=aspnetcore-10.0",
+      "classification": "PRIMARY_VENDOR",
+      "finding": "Existing .NET 10 OpenAPI 3.1 build-time generation remains supported."
+    },
+    {
+      "url": "https://spec.openapis.org/oas/v3.1.2.html",
+      "classification": "PUBLISHED_STANDARD",
+      "finding": "OpenAPI 3.1 remains the selected published baseline."
+    }
+  ]
+}

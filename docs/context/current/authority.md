@@ -9,5 +9,4 @@
 - `docs/authority/baselines/1.6.0/01_Engineering_Technology_Foundation.md` — explicit authority reference
 - `docs/authority/baselines/1.6.0/02_Repository_Solution_and_Module_Architecture.md` — explicit authority reference
 - `docs/authority/baselines/1.6.0/09_Testing_Acceptance_Evidence_and_Quality_Gates.md` — explicit authority reference
-- `docs/authority/baselines/1.6.0/29_Privacy_Data_Lifecycle_and_Processing_Governance_FRD.md` — explicit authority reference
 - `docs/authority/current-authority.json` — explicit authority reference
