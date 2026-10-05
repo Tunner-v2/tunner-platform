@@ -6,5 +6,5 @@
 - `docs/authority/amendments/AMD-0004/AMD-0004_Shared_Technical_Primitives_Formatting_and_Canonicalization.md` — active authority amendment
 - `docs/authority/amendments/AMD-0005/AMD-0005_Authority-First_Decision_Resolution_and_Duplicate-Decision_Prevention.md` — active authority amendment
 - `docs/authority/current-authority.json` — explicit authority reference
+- `docs/authority/current/development/03_Governed_Development_Lifecycle_Scrum_Git.md` — explicit authority reference
 - `docs/authority/current/development/04_Governance_and_Context_Tooling_Specification.md` — explicit authority reference
-- `docs/authority/current/development/36_P0_Repository_Bootstrap_Governance_and_Context_Implementation_Spec.md` — explicit authority reference
