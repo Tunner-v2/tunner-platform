@@ -3,9 +3,9 @@ defect_id: DEF-TUN-P1-021-002
 work_item_id: TUN-P1-021
 classification: GOVERNANCE_DEFECT
 severity: SEV-2
-status: OPEN
+status: SUPERSEDED
 environment: LOCAL_GOVERNANCE_CONTROL_PLANE
-description: Revised AMD-0002 requires committed-state readiness. Retrospective audit found every P1 item recorded DONE lacks git_state validation-candidate/tested commit linkage; P1-010 specifically remains uncommitted despite prior technical validation.
+description: Revised AMD-0002 requires committed-state readiness. Retrospective audit found P1-003, P1-004, P1-006 through P1-009, and P1-011 recorded DONE without git_state validation-candidate/tested commit linkage. P1-010 and P1-012 have recorded validation candidates and remain outside this finding.
 expected_behavior_ref: docs/authority/amendments/AMD-0002/AMD-0002_Non-Blocking_PR_Approval_and_Continuous_Local_Execution.md section 2B and sections 3/5
 evidence:
   - governance/evidence/TUN-P1-022-COMMIT-READINESS-AUDIT.json

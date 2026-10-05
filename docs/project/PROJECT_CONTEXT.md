@@ -16,16 +16,11 @@ Latest bounded Revision lineage:
 - P0-033-RV001: CLOSED; original TUN-P0-033; parent P0-RV001; CORRECTIVE: Remediate the post-closure gap recorded by REOPEN-TUN-P0-033-001; retain original DONE evidence.
 - P0-035-RV001: CLOSED; original TUN-P0-035; parent P0-RV001; CORRECTIVE: Remediate the post-closure gap recorded by REOPEN-TUN-P0-035-001; retain original DONE evidence.
 
-Selected scope: P0-RV001
-Validated SHA: f01c80d91a7806051314da5f253e5fe25114fe4e
-Tested SHA: f01c80d91a7806051314da5f253e5fe25114fe4e
+Selected scope: CURRENT_STATE
+Validated SHA: not recorded
+Tested SHA: not recorded
 Closure SHA: not recorded
 
-Prerequisites:
-Authority: docs/authority/current-authority.json
-Defects:
-Evidence: governance/evidence/P0-RV001-VALIDATION.json, governance/evidence/P0-RV001-COMMITTED-VALIDATION.json
-
-Exact next governed action: TUN-P1-021: currently in progress
+Exact next governed action: inspect scoped readiness findings from tunner governance next
 
 P1 historical validation findings are retained in governance/evidence/P0-RV001-P1-EVIDENCE-AUDIT.json. No chat history is required.

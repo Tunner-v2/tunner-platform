@@ -15,10 +15,4 @@
 
 ## Current Revision state
 
-- Revision: P0-RV001 (CLOSED)
-- Original scope: P0
-- Type/reason: CORRECTIVE: Post-closure remediation of governance/control-plane, evidence integrity, project-state consistency, fresh-agent recovery, authority integrity and portability deficiencies discovered after legitimate historical P0 closure.
-- Impact: NON_BLOCKING; blocked scope:
-- Prior Revision: none
-- Parent milestone Revision: none
-- Exact next action: preserve closure and run governance next
+No Revision is selected. No post-closure Revision is implicitly created.

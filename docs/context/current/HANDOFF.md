@@ -1,18 +1,12 @@
 # Generated HANDOFF
 
-- Scope: P0-RV001
-- State: CLOSED
+- Scope: CURRENT_STATE
+- State: READ_ONLY
 
-- Revision: P0-RV001 (CLOSED)
-- Original scope: P0
-- Type/reason: CORRECTIVE: Post-closure remediation of governance/control-plane, evidence integrity, project-state consistency, fresh-agent recovery, authority integrity and portability deficiencies discovered after legitimate historical P0 closure.
-- Impact: NON_BLOCKING; blocked scope:
-- Prior Revision: none
-- Parent milestone Revision: none
-- Exact next action: preserve closure and run governance next
+No Revision is selected. No post-closure Revision is implicitly created.
 
-- Validated SHA: f01c80d91a7806051314da5f253e5fe25114fe4e
-- Tested SHA: f01c80d91a7806051314da5f253e5fe25114fe4e
+- Validated SHA: not recorded
+- Tested SHA: not recorded
 - Closure SHA: not recorded
 
 - P0: historical CLOSED; working record CLOSED; active RVs:
@@ -27,6 +21,14 @@
 - TUN-P0-035: historical DONE; working record DONE; active RVs:
 Latest bounded Revision lineage:
 - P0-RV001: CLOSED; original P0; CORRECTIVE: Post-closure remediation of governance/control-plane, evidence integrity, project-state consistency, fresh-agent recovery, authority integrity and portability deficiencies discovered after legitimate historical P0 closure.; next action: preserve closure and run governance next
+- P0-003-RV001: CLOSED; original TUN-P0-003; CORRECTIVE: Remediate the post-closure gap recorded by REOPEN-TUN-P0-003-001; retain original DONE evidence.; next action: preserve closure and run governance next
+- P0-004-RV001: CLOSED; original TUN-P0-004; CORRECTIVE: Remediate the post-closure gap recorded by REOPEN-TUN-P0-004-001; retain original DONE evidence.; next action: preserve closure and run governance next
+- P0-011-RV001: CLOSED; original TUN-P0-011; CORRECTIVE: Remediate the post-closure gap recorded by REOPEN-TUN-P0-011-001; retain original DONE evidence.; next action: preserve closure and run governance next
+- P0-026-RV001: CLOSED; original TUN-P0-026; CORRECTIVE: Remediate the post-closure gap recorded by REOPEN-TUN-P0-026-001; retain original DONE evidence.; next action: preserve closure and run governance next
+- P0-030-RV001: CLOSED; original TUN-P0-030; CORRECTIVE: Remediate the post-closure gap recorded by REOPEN-TUN-P0-030-001; retain original DONE evidence.; next action: preserve closure and run governance next
+- P0-032-RV001: CLOSED; original TUN-P0-032; CORRECTIVE: Remediate the post-closure gap recorded by REOPEN-TUN-P0-032-001; retain original DONE evidence.; next action: preserve closure and run governance next
+- P0-033-RV001: CLOSED; original TUN-P0-033; CORRECTIVE: Remediate the post-closure gap recorded by REOPEN-TUN-P0-033-001; retain original DONE evidence.; next action: preserve closure and run governance next
+- P0-035-RV001: CLOSED; original TUN-P0-035; CORRECTIVE: Remediate the post-closure gap recorded by REOPEN-TUN-P0-035-001; retain original DONE evidence.; next action: preserve closure and run governance next
 
 
 The selected governed record and evidence retain validated/tested SHA and closure SHA. Run governance next before implementation. No chat history is required.

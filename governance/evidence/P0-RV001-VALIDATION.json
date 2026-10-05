@@ -22,8 +22,8 @@
   "result": "PASS",
   "validated_commit_sha": "f01c80d91a7806051314da5f253e5fe25114fe4e",
   "tested_commit_sha": "f01c80d91a7806051314da5f253e5fe25114fe4e",
-  "checked_at": "2026-10-05T19:54:38.3530948+00:00",
-  "closure_commit_sha": null,
+  "checked_at": "2026-10-05T15:54:38.3530948-04:00",
+  "closure_commit_sha": "454d9d6a00803df1e66a7399ce85e64e2552831a",
   "checks": [
     "Governance build zero warnings/errors",
     "Tunner.Platform.slnx build zero warnings/errors",
@@ -34,5 +34,8 @@
     "Fresh-agent recovery and project-state consistency PASS",
     "Nested/location-independent path resolution PASS"
   ],
-  "note": "New exact committed remediation validation. Prior historical execution is not asserted. Closure SHA is appended to this evidence only after the individual closure commit exists; the closed Revision record remains immutable."
+  "note": "New exact committed remediation validation. Prior historical execution is not asserted. Closure SHA is appended to this evidence only after the individual closure commit exists; the closed Revision record remains immutable.",
+  "validation_attempts": [
+    "Final governance build initially overlapped a running test DLL and failed with Windows MSB3021/MSB3027. Serial rerun passed with zero warnings/errors; no repository behavior was changed."
+  ]
 }
