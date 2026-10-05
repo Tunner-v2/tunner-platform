@@ -1,5 +1,6 @@
 # Recent relevant Git changes
 
+- `48d2a99 chore(governance): close P1-015 technical provider foundation`
 - `7dd1345 test(governance): record P1-015 committed validation and role reviews`
 - `debd619 fix(platform): bind provider keys to stable owner request identities`
 - `1be75c9 chore(governance): classify shared P1 coordination metadata`
@@ -9,4 +10,3 @@
 - `36cca42 chore(governance): close validated P1-014 audit foundation`
 - `ef4983a test(audit): record exact-SHA P1-014 validation and role reviews`
 - `b2a84cb docs(governance): record P1-013 closure lineage and final handoff`
-- `e475ea8 chore(governance): close validated P1-013 technical work item`
