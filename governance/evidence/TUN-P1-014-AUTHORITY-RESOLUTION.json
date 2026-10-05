@@ -1,0 +1,61 @@
+{
+  "schema_version": 1,
+  "evidence_id": "TUN-P1-014-AUTHORITY-RESOLUTION",
+  "scope_type": "WORK_ITEM",
+  "scope_id": "TUN-P1-014",
+  "status": "RESOLVED_EXISTING_AUTHORITY",
+  "checked_at": "2026-10-05T21:30:05.0270283+00:00",
+  "repository_head_at_review": "4fdd37de914bb1addd0c4a508889597551a8edb8",
+  "canonical_sources": [
+    {
+      "title": "28 - Support, Risk, Audit and Internal Operations FRD",
+      "url": "https://drive.google.com/file/d/18Hd0vDJbHzkLnCjrKWoEfeZQOFJzPQuC/view",
+      "sections": [
+        "9. Audit Event"
+      ],
+      "repository_path": "docs/authority/baselines/1.6.0/28_Support_Risk_Audit_and_Internal_Operations_FRD.md",
+      "repository_sha256": "2077b254ad3dadca03e7336339bf208ab7abc3d365f76c4173524c52854b1eb9",
+      "canonical_readback": "Verified approved append-only event fields and integrity requirement through Google Drive connector"
+    },
+    {
+      "title": "32 - Domain API, Event, Data and Policy Contract Catalog",
+      "url": "https://drive.google.com/file/d/1kvunBTzFrAPEnPsrhzd9cxh6aSHu_9-A/view",
+      "sections": [
+        "1. Purpose",
+        "2. Contract rules",
+        "4. Standard command envelope",
+        "19. Data ownership"
+      ],
+      "repository_path": "docs/authority/baselines/1.6.0/32_Domain_API_Event_Data_and_Policy_Contract_Catalog.md",
+      "repository_sha256": "b2e9446baa1a63f39e58246ab773cbeff0c15d00f6b240063b8a3eaa988b7339",
+      "canonical_readback": "Verified implementation-defined field schemas, operation/correlation identity and authenticated actor context through Google Drive connector"
+    }
+  ],
+  "reviewed_authority_refs": [
+    "docs/authority/baselines/1.6.0/28_Support_Risk_Audit_and_Internal_Operations_FRD.md",
+    "docs/authority/baselines/1.6.0/32_Domain_API_Event_Data_and_Policy_Contract_Catalog.md",
+    "docs/authority/baselines/1.6.0/29_Privacy_Data_Lifecycle_and_Processing_Governance_FRD.md",
+    "docs/authority/amendments/AMD-0004/AMD-0004_Shared_Technical_Primitives_Formatting_and_Canonicalization.md",
+    "docs/authority/amendments/AMD-0005/AMD-0005_Authority-First_Decision_Resolution_and_Duplicate-Decision_Prevention.md"
+  ],
+  "existing_authority_found": [
+    "Document 28 section 9 specifies append-only AuditEvent and its identity, actor, operation, version, approval, evidence and result fields.",
+    "Document 32 sections 1, 2 and 4 authorize executable field schemas and require stable operation/correlation IDs and trusted authenticated actor context.",
+    "Document 29 keeps data classification and retention policy with the owner; no global retention duration may be invented.",
+    "AMD-0004 requires cohesive technical reuse; AMD-0005 requires using sufficient existing authority."
+  ],
+  "conflicts_found": [],
+  "unresolved_question": null,
+  "blocked_scope": [],
+  "prior_pass": {
+    "source_commit": "4fdd37de914bb1addd0c4a508889597551a8edb8",
+    "source_path": "governance/work-items/TUN-P1-014.yaml",
+    "source_sha256": "ee9b60dd9d40b3bffe4464d46d4e1f93d8318bea955a6a1f2c4b46de2e2531b0",
+    "outcome": "REQUIRED_MISSING_AUTHORITY",
+    "reviewed_at": "2026-10-03T09:40:00-04:00",
+    "conclusion": "No sufficient audit contract boundary was found in active authority; generic audit behavior must not be invented.",
+    "disposition": "Superseded by canonical Drive readback of Document 28 section 9 and Document 32; retained here and in Git."
+  },
+  "result": "Replace the stale audit-contract blocker with explicit authority links. Prerequisite committed validation and preimplementation role reviews are still required; no implementation success is claimed.",
+  "new_authority_record_required": false
+}

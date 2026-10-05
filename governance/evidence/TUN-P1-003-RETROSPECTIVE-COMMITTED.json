@@ -3,8 +3,8 @@
   "evidence_id": "TUN-P1-003-RETROSPECTIVE-COMMITTED",
   "scope_type": "WORK_ITEM",
   "scope_id": "TUN-P1-003",
-  "status": "PENDING",
-  "result": "PENDING",
+  "status": "PASS",
+  "result": "PASS",
   "validation_kind": "RETROSPECTIVE_COMMITTED",
   "owned_behavior_paths": [
     "src/Tunner.Database/Outbox/OutboxMessage.cs",
@@ -19,5 +19,121 @@
   ],
   "historical_validation_claimed": false,
   "original_implementation_commit_sha": "4b3fb3c177056196cd2af29826374a902d665a6b",
-  "reason": "Current committed prerequisite validation for P1-014; preserves historical DONE status and original operator evidence. Shared migration context/snapshot are inspected through integration regression, not exclusively owned by P1-003."
+  "reason": "Current committed prerequisite validation for P1-014; preserves historical DONE status and original operator evidence. Shared migration context/snapshot are inspected through integration regression, not exclusively owned by P1-003.",
+  "validated_commit_sha": "4fdd37de914bb1addd0c4a508889597551a8edb8",
+  "tested_commit_sha": "4fdd37de914bb1addd0c4a508889597551a8edb8",
+  "checked_at": "2026-10-05T21:31:11.5623646+00:00",
+  "test_results": [
+    {
+      "artifact": "artifacts/tests/TUN-P1-003/P1-003-retrospective.trx",
+      "sha256": "159131841d424d610de22b475a733a402d6b2034da8e8821d4d6b85bde54b2a5",
+      "total": 2,
+      "passed": 2,
+      "failed": 0,
+      "tests": [
+        {
+          "name": "Tunner.Database.IntegrationTests.TransactionalOutboxIntegrationTests.PersistsOwnerWriteAndOutboxMessageWhenTheTransactionCommits",
+          "outcome": "Passed"
+        },
+        {
+          "name": "Tunner.Database.IntegrationTests.TransactionalOutboxIntegrationTests.RollsBackOwnerWriteWhenTheOutboxInsertFails",
+          "outcome": "Passed"
+        }
+      ]
+    },
+    {
+      "artifact": "artifacts/tests/TUN-P1-003/P1-003-unit-retry.trx",
+      "sha256": "84d8a806b88ef55ca345b7a8dbc2bee7c2511dd91698c388b2ca6218d0df3b37",
+      "total": 4,
+      "passed": 4,
+      "failed": 0,
+      "tests": [
+        {
+          "name": "Tunner.TestHarness.Tests.TestHarnessBaselineTests.ContainerExecutionIsDisabledWithoutExplicitOptIn",
+          "outcome": "Passed"
+        },
+        {
+          "name": "Tunner.TestHarness.Tests.TestHarnessBaselineTests.BrowserExecutionIsDisabledWithoutExplicitOptIn",
+          "outcome": "Passed"
+        },
+        {
+          "name": "Tunner.TestHarness.Tests.TestHarnessBaselineTests.TestcontainersBaselineUsesAThrowawayPostgresDescriptor",
+          "outcome": "Passed"
+        },
+        {
+          "name": "Tunner.TestHarness.Tests.TestHarnessBaselineTests.PlaywrightSkeletonExposesTheOfficialApiContractWithoutLaunchingABrowser",
+          "outcome": "Passed"
+        }
+      ]
+    }
+  ],
+  "checks": [
+    {
+      "command": "dotnet build Tunner.Platform.slnx --no-restore",
+      "exit_code": 0,
+      "result": "PASS",
+      "warnings": 0,
+      "errors": 0
+    },
+    {
+      "command": "dotnet test tests/Tunner.Database.IntegrationTests --no-build --no-restore --filter FullyQualifiedName~TransactionalOutboxIntegrationTests",
+      "profile": "TUNNER_RUN_CONTAINER_TESTS=1",
+      "exit_code": 0,
+      "result": "PASS",
+      "total": 2,
+      "passed": 2,
+      "skipped": 0,
+      "meaning": "Real PostgreSQL migration application, atomic owner/outbox commit and rollback"
+    },
+    {
+      "command": "dotnet test tests/Tunner.TestHarness.Tests --no-build --no-restore",
+      "exit_code": 0,
+      "result": "PASS",
+      "total": 4,
+      "passed": 4,
+      "skipped": 0
+    },
+    {
+      "command": "Validate-TunnerTransactionalOutboxSource.ps1",
+      "exit_code": 0,
+      "result": "PASS"
+    },
+    {
+      "command": "Validate-TunnerMigrationsSource.ps1",
+      "exit_code": 0,
+      "result": "PASS"
+    }
+  ],
+  "attempts": [
+    "The first concurrent build encountered locked test DLLs; serialized rebuild passed with zero warnings/errors.",
+    "The first unit harness lacked sandbox Docker pipe access (3/4 passed). Retried with authorized Docker access: 4/4 passed. Raw attempt results remain in ignored artifacts/tests/TUN-P1-003/P1-003-unit.trx."
+  ],
+  "role_reviews": [
+    {
+      "role": "full-stack-engineer",
+      "reviewer": "Codex",
+      "reviewed_commit_sha": "4fdd37de914bb1addd0c4a508889597551a8edb8",
+      "result": "PASS",
+      "finding": "Existing transaction coordinator stages owner state and outbox through a single owner-scoped transaction; rollback is executed with a non-cancelled token."
+    },
+    {
+      "role": "solution-architect",
+      "reviewer": "Codex",
+      "reviewed_commit_sha": "4fdd37de914bb1addd0c4a508889597551a8edb8",
+      "result": "PASS",
+      "finding": "Existing narrow ITransactionalOutboxContext preserves one logical write owner and introduces no transport or Product semantics."
+    },
+    {
+      "role": "tester-qa-engineer",
+      "reviewer": "Codex",
+      "reviewed_commit_sha": "4fdd37de914bb1addd0c4a508889597551a8edb8",
+      "result": "PASS",
+      "finding": "Two real PostgreSQL migration/atomicity tests and four unit harness tests passed on unchanged committed behavior. Historical operator validation is preserved, not attributed to a fabricated historical SHA."
+    }
+  ],
+  "limitations": [
+    "Current retrospective committed validation only; no earlier historical validation is asserted.",
+    "Local disposable database evidence does not constitute production, legal, Product or human acceptance.",
+    "Shared migration context and aggregate snapshot are regression-tested but are not exclusively P1-003-owned immutable behavior paths."
+  ]
 }

@@ -2,18 +2,19 @@
   "classification": "COMMITTED_EVIDENCE_GAP",
   "expected_behavior_ref": "docs/authority/amendments/AMD-0002/AMD-0002_Non-Blocking_PR_Approval_and_Continuous_Local_Execution.md",
   "work_item_id": "TUN-P1-003",
-  "updated_at": "2026-10-05T19:36:46.3633888+00:00",
+  "updated_at": "2026-10-05T21:31:11.5623646+00:00",
   "environment": "CURRENT_LOCAL_AUTHORITATIVE_IMPLEMENTATION_REVIEW",
-  "description": "Historical exact committed validation cannot be proven. Current preserved implementation source guards pass retrospectively; its owner must commit and validate its own scope. No historical test execution is fabricated, and unrelated eligible work remains eligible.",
-  "created_at": "2026-10-05T19:36:46.3581600+00:00",
+  "description": "Historical exact committed validation remains unproven and is not fabricated. Current authoritative implementation was retrospectively validated at 4fdd37de914bb1addd0c4a508889597551a8edb8: zero-warning build, two real PostgreSQL migration/atomicity tests and four unit harness tests passed. Original historical DONE evidence remains preserved.",
+  "created_at": "2026-10-05T15:36:46.35816-04:00",
   "defect_id": "DEF-TUN-P1-003-COMMIT-001",
   "affected_versions": [
     "P1_LOCAL_AUTHORITATIVE_IMPLEMENTATION"
   ],
   "evidence": [
-    "governance/evidence/P0-RV001-P1-EVIDENCE-AUDIT.json"
+    "governance/evidence/P0-RV001-P1-EVIDENCE-AUDIT.json",
+    "governance/evidence/TUN-P1-003-RETROSPECTIVE-COMMITTED.json"
   ],
   "schema_version": 1,
   "severity": "SEV-3",
-  "status": "OPEN"
+  "status": "CLOSED"
 }

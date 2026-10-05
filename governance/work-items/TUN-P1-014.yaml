@@ -3,7 +3,7 @@ work_item_id: TUN-P1-014
 milestone_id: P1
 sprint_id: null
 title: Audit append and correlation primitive
-status: BACKLOG
+status: READY
 type: AUDIT_FOUNDATION
 authority_refs:
   - docs/authority/current-authority.json
@@ -12,16 +12,20 @@ authority_refs:
   - docs/authority/baselines/1.6.0/01_Engineering_Technology_Foundation.md
   - docs/authority/baselines/1.6.0/02_Repository_Solution_and_Module_Architecture.md
   - docs/authority/baselines/1.6.0/09_Testing_Acceptance_Evidence_and_Quality_Gates.md
+  - docs/authority/baselines/1.6.0/28_Support_Risk_Audit_and_Internal_Operations_FRD.md
+  - docs/authority/baselines/1.6.0/32_Domain_API_Event_Data_and_Policy_Contract_Catalog.md
+  - docs/authority/baselines/1.6.0/29_Privacy_Data_Lifecycle_and_Processing_Governance_FRD.md
+  - docs/authority/amendments/AMD-0005/AMD-0005_Authority-First_Decision_Resolution_and_Duplicate-Decision_Prevention.md
 flow_refs: []
-contract_refs: []
+contract_refs: [docs/authority/baselines/1.6.0/28_Support_Risk_Audit_and_Internal_Operations_FRD.md, docs/authority/baselines/1.6.0/32_Domain_API_Event_Data_and_Policy_Contract_Catalog.md]
 decision_refs: []
 acceptance_criteria:
-  - Implement append/correlation mechanics only after an audit contract is sufficient; no Product audit workflow, retention, investigation, or business meaning.
+  - Implement immutable append-only audit events and operation/correlation references under Document 28 section 9 and Document 32, with integrity checks and atomic transaction evidence; preserve owner semantics and add no Product audit workflow, retention duration or investigation behavior.
   - Reuse or extend a compatible existing capability when one exists; do not add a generic Common, Utils, Helpers, or shared-everything layer.
   - Preserve domain/business semantics as owner concerns and keep technical canonicalization and presentation formatting non-authoritative.
   - Do not infer Product behavior, user flows, commercial rules, policy values, or public contract semantics beyond cited authority.
 prerequisites: [TUN-P1-003, TUN-P1-005]
-blockers: [AUDIT_CONTRACT_BOUNDARY_REQUIRED]
+blockers: []
 impact: {architecture: true, ui: false, sdk: false, financial: false, compliance: true, security: false, devops: false, support: false, data_schema: true, migration: true}
 activated_roles: [full-stack-engineer, solution-architect, compliance-specialist, tester-qa-engineer, auditor]
 required_tests: [authority verification, governance validation, role activation calculation and mandatory specialist reviews, bounded expanded context verification, scope-specific deterministic tests and evidence]
@@ -31,14 +35,21 @@ todos: []
 defects: []
 authority_resolution:
   schema_version: 1
-  outcome: REQUIRED_MISSING_AUTHORITY
+  outcome: RESOLVED_EXISTING_AUTHORITY
   reviewed_authority_refs:
     - docs/authority/current-authority.json
+    - docs/authority/baselines/1.6.0/28_Support_Risk_Audit_and_Internal_Operations_FRD.md
+    - docs/authority/baselines/1.6.0/32_Domain_API_Event_Data_and_Policy_Contract_Catalog.md
+    - docs/authority/baselines/1.6.0/29_Privacy_Data_Lifecycle_and_Processing_Governance_FRD.md
+    - docs/authority/amendments/AMD-0004/AMD-0004_Shared_Technical_Primitives_Formatting_and_Canonicalization.md
     - docs/authority/amendments/AMD-0005/AMD-0005_Authority-First_Decision_Resolution_and_Duplicate-Decision_Prevention.md
     - docs/authority/amendments/AMD-0005/effective-overrides/00_Authority_Change_Control_and_Documentation_Governance.md
-  unresolved_question: "Which approved audit contract defines append semantics, owner, retention, investigation, and correlation inputs?"
-  conclusion: "No sufficient audit contract boundary was found in active authority; generic audit behavior must not be invented."
+  unresolved_question: "None for the bounded append/correlation foundation; Product workflows and retention policy remain owner concerns."
+  conclusion: "Canonical Drive Document 28 section 9 and Document 32 already define the AuditEvent contract and operation/correlation inputs. The earlier pass omitted these sources and requested retention/investigation semantics outside this work item. Existing approved authority resolves the technical scope; no new AMD or Product decision is needed. Prior conclusion is preserved in Git and authority-resolution evidence."
   conditional_trigger_absent: false
-  reviewed_at: 2026-10-03T09:40:00-04:00
+  reviewed_at: 2026-10-05T21:30:05.0270283+00:00
 created_at: 2026-10-02T13:20:00-04:00
-updated_at: 2026-10-02T13:20:00-04:00
+updated_at: 2026-10-05T21:30:05.0270283+00:00
+product_acceptance_required: false
+
+
