@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "evidence_id": "TUN-P1-003-RETROSPECTIVE-COMMITTED",
+  "scope_type": "WORK_ITEM",
+  "scope_id": "TUN-P1-003",
+  "status": "PENDING",
+  "result": "PENDING",
+  "validation_kind": "RETROSPECTIVE_COMMITTED",
+  "owned_behavior_paths": [
+    "src/Tunner.Database/Outbox/OutboxMessage.cs",
+    "src/Tunner.Database/Outbox/OutboxModelConfiguration.cs",
+    "src/Tunner.Database/Outbox/ITransactionalOutboxContext.cs",
+    "src/Tunner.Database/Outbox/ITransactionalOutbox.cs",
+    "src/Tunner.Database/Outbox/EfTransactionalOutbox.cs",
+    "src/Tunner.Database.Migrations/Migrations/20261001230000_P1TransactionalOutbox.cs",
+    "tests/Tunner.Database.IntegrationTests/TransactionalOutboxIntegrationTests.cs",
+    "tools/validation/Validate-TunnerTransactionalOutboxSource.ps1",
+    "docs/development/LOCAL_TRANSACTIONAL_OUTBOX.md"
+  ],
+  "historical_validation_claimed": false,
+  "original_implementation_commit_sha": "4b3fb3c177056196cd2af29826374a902d665a6b",
+  "reason": "Current committed prerequisite validation for P1-014; preserves historical DONE status and original operator evidence. Shared migration context/snapshot are inspected through integration regression, not exclusively owned by P1-003."
+}
