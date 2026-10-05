@@ -24,3 +24,36 @@ pr_integration:
     allow_metadata_only_closure_commit: true
     preserve_unrelated_dirty_paths: true
     no_repository_change_requires_commit: false
+  human_gates:
+    - PROTECTED_MAIN_MERGE
+    - PRODUCT_DECISION_OR_ACCEPTANCE_WHEN_REQUIRED
+    - PRODUCTION_OR_RELEASE_AUTHORIZATION_WHEN_REQUIRED
+    - SECURITY_COMPLIANCE_LEGAL_APPROVAL_WHEN_REQUIRED
+
+authority_resolution:
+  required_before_missing_authority_blocker: true
+  required_before_decision_create: true
+  duplicate_active_authority_rejected: true
+  insufficient_context_requires_expansion: true
+  conditional_trigger_absent_is_not_missing_contract: true
+  protected_states:
+    - NEEDS_PRODUCT_DECISION
+    - CONTRACT_REQUIRED
+    - TECH_DECISION_REQUIRED
+
+revision:
+  enabled: true
+  historical_closure_immutable: true
+  post_closure_default: REVISION
+  reopen_reserved_for_active_acceptance_release_cycle: true
+  milestone_id_pattern: "<milestone_id>-RV<sequence>"
+  work_item_id_pattern: "<work_item_id>-RV<sequence>"
+  child_id_pattern: "<revision_id>-<sequence>"
+  sequence_has_artificial_limit: false
+  normal_states: [PROPOSED, APPROVED, ACTIVE, VALIDATION, PRODUCT_ACCEPTANCE, CLOSED]
+  side_states: [BLOCKED, CANCELED, SUPERSEDED]
+  types: [CORRECTIVE, HARDENING, IMPROVEMENT, SECURITY, PORTABILITY, COMPATIBILITY, PERFORMANCE, OPERABILITY, DOCUMENTATION, TECHNICAL_DEBT]
+  impact_classification: [NON_BLOCKING, SCOPED_BLOCKING, RELEASE_BLOCKING, SECURITY_BLOCKING]
+  revision_is_authority_change: false
+  authority_change_requires_adr_pdr_or_amendment: true
+

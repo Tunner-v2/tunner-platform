@@ -31,28 +31,29 @@ Canonical resources before repository creation:
 tunner authority verify
 tunner governance status
 tunner governance next
-tunner context build --current
+tunner context build
 tunner context verify
 ```
 Then read the current work item, generated context manifest, only relevant authority/decisions/flows/contracts, activated skills, relevant Git history, and current test/evidence state. Do not implement until governance reports the work eligible.
 
 ## Mandatory operating rules
 - Never invent business semantics, Product decisions, public contracts, legal/compliance values, money rules, provider finality, UX states, or security behavior.
-- Complete and record an Authority Resolution Pass before any missing-authority decision/blocker; use existing active authority when it resolves the question, and never classify an untriggered selective capability as missing authority.
 - Material ambiguity becomes a scoped blocker/decision request.
+- Before creating any decision/amendment request or `NEEDS_PRODUCT_DECISION` / `CONTRACT_REQUIRED` / `TECH_DECISION_REQUIRED` blocker, perform and record an AMD-0005 Authority Resolution Pass across applicable verified Development Documentation/FRDs, ADR/PDR/amendments, contracts, flows/architecture and governed decision history. Reuse existing authority; if context is insufficient, expand it rather than declaring a gap. An untriggered selective technology is not a missing contract.
 - Governance controls orchestration; the orchestrator cannot bypass gates.
 - No free-floating TODOs.
 - Material external decisions require current primary-source R&D.
 - Authority changes use ADR/PDR/amendment workflow.
+- Preserve historical closure: later work against a legitimately closed milestone/work item uses governed `RV` Revision lineage (`P0-RV001`, `P0-004-RV001`, etc.) rather than overwriting the original; an RV never substitutes for an authority change.
 - Implement small vertical slices.
 - Preserve Git/evidence traceability.
 - For repository-changing work, commit all work-item-owned changes before `LOCAL_VALIDATED`, `READY_FOR_MERGE`, `DONE` or completed handoff; record the validated/tested SHA, preserve unrelated dirty paths without absorbing them, and revalidate if behavior-affecting files change after the validated SHA.
 - Refresh project state/context at handoff.
 - Use `INSUFFICIENT_CONTEXT` instead of guessing.
 - Repository access and prompt context are separate; load the smallest sufficient context.
-- Repository location is runtime context, never authority: persist in-repository paths relative to `<repo-root>` with `/` separators and resolve the root through the governed resolver.
+- Treat flow-to-code mapping as many-to-many: reuse cohesive shared technical primitives/formatters/canonicalizers instead of reimplementing mechanics per flow/screen/module; preserve domain-owned business semantics and server authority for persisted canonical values.
+- Repository paths are location-independent: never hardcode a developer/CI/container absolute checkout path; persist in-repository references relative to `<repo-root>` and resolve the root dynamically through the governed path resolver.
 - A PR awaiting human approval is a protected-main integration gate, not a general development stop: run governance next and continue all eligible local/branch, validation, evidence, or independent work; block only scopes whose dependency explicitly requires `MERGED_TO_MAIN` or another genuine human-authority gate.
-- Flow-to-code mapping is many-to-many. Reuse compatible deterministic technical mechanics and keep domain semantics, canonicalization, and presentation formatting separate; do not create generic Common, Utils, Helpers, or equivalent dumping-ground libraries.
 
 ## Completion contract
 Before DONE: repository-changing work is anchored to a validated committed SHA with no work-item-owned uncommitted changes; implementation/docs/contracts complete; required tests pass; mandatory role reviews pass; applicable security/compliance/financial/UX/SDK evidence exists; no blocker remains; TODOs/defects are recorded; traceability/evidence updated; context/project state refreshed; exact next action recorded.

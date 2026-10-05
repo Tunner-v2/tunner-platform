@@ -15,6 +15,7 @@ public static class AdaptiveContextApplication
         var manifestPath = Path.Combine(output.FullName, "manifest.json");
         var manifest = JsonSerializer.Deserialize<ContextManifest>(File.ReadAllText(manifestPath));
         if (manifest is null) return Reject(workItemId, output, "base context manifest could not be read");
+        workItemId = manifest.WorkItem.Id;
         var included = manifest.Included.ToDictionary(x => x.Path, StringComparer.Ordinal);
         var excluded = manifest.Excluded.ToList();
         if (mode == "CORE") foreach (var item in included.Values.Where(x => !Mandatory(x)).Select(x => x.Path).ToArray()) { included.Remove(item); excluded.Add(new(item, "excluded by CORE context policy")); }
@@ -28,7 +29,7 @@ public static class AdaptiveContextApplication
         var used = mandatoryTokens;
         foreach (var optional in selected.Where(x => !Mandatory(x)).ToArray()) if (request.TokenBudget is not null && used + Tokens(optional) > request.TokenBudget) { selected.Remove(optional); excluded.Add(new(optional.Path, "context budget exhausted before optional artifact selection")); } else used += Tokens(optional);
         var selection = new AdaptiveContextSelection("tunner-adaptive-context-0.1.0", DateTimeOffset.UtcNow, workItemId, mode, request.AccessScope ?? "REPOSITORY_READ", request.TokenBudget, used, indexPath, indexHash, "NONE", selected, excluded);
-        File.WriteAllText(manifestPath, JsonSerializer.Serialize(new ContextManifest(manifest.GeneratorVersion, manifest.GeneratedAt, manifest.WorkItem, selected, excluded, manifest.GitHistory), Json) + Environment.NewLine, new UTF8Encoding(false));
+        File.WriteAllText(manifestPath, JsonSerializer.Serialize(manifest with { Included = selected, Excluded = excluded }, Json) + Environment.NewLine, new UTF8Encoding(false));
         Write(repo, Rel(repo, Path.Combine(output.FullName, "adaptive-selection.json")), selection);
         return new(0, "context build", new ContextBuildPayload("GENERATED", workItemId, output.FullName, selected, excluded, []));
     }
@@ -58,7 +59,7 @@ public static class AdaptiveContextApplication
     }
     static CommandResult Reject(string id, DirectoryInfo output, string finding) => new(2, "context build", new ContextBuildPayload("REJECTED", id, output.FullName, [], [], [finding]));
     static void Add(DirectoryInfo repo, Dictionary<string, ContextArtifact> into, List<ContextExclusion> excluded, string path, string reason, bool required = false) { var full = Path.Combine(repo.FullName, path.Replace('/', Path.DirectorySeparatorChar)); if (!File.Exists(full)) { excluded.Add(new(path, (required ? "required" : "optional") + " source is unavailable: " + reason)); return; } into[path] = new(path, reason, Hash(full), null); }
-    static bool Mandatory(ContextArtifact x) => x.Reason is "repository entry contract" or "current authority summary" or "selected work item" or "explicit authority reference" or "explicit flow reference" or "explicit contract reference" or "activated role skill" or "full audit repository index";
+    static bool Mandatory(ContextArtifact x) => x.Reason is "repository entry contract" or "current authority summary" or "selected work item" or "explicit authority reference" or "explicit flow reference" or "explicit contract reference" or "activated role skill" or "full audit repository index" or "current approved authority for selected scope" or "explicit decision reference" or "selected Revision" or "historical original scope" or "historical milestone state" or "relevant Revision lineage" or "Revision dependency or linked finding";
     static int Tokens(ContextArtifact x) => Math.Max(1, (Encoding.UTF8.GetByteCount(x.Path) + 4096) / 4);
     static string? Normalize(string? value) => value?.Trim().ToUpperInvariant() switch { "CORE" => "CORE", "TASK" => "TASK", "EXPANDED" => "EXPANDED", "FULL_AUDIT" => "FULL_AUDIT", _ => null };
     static AdaptiveIndexDocument Index(DirectoryInfo repo) => new("tunner-context-index-0.1.0", Directory.EnumerateFiles(repo.FullName, "*", SearchOption.AllDirectories).Where(p => !Skip(repo, p)).Select(p => { var q = Rel(repo, p); return new AdaptiveIndexEntry(q, q.Split('/')[0], new FileInfo(p).Length, Hash(p)); }).OrderBy(x => x.Path, StringComparer.Ordinal).ToArray());

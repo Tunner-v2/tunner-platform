@@ -3,14 +3,25 @@
 ## Work item
 - ID:
 - Milestone/Sprint:
+- Revision (if applicable):
+- Original scope revised (if applicable):
 - Status:
 - Branch:
-- Commit:
+- Validated commit:
+- Closure/handoff commit (if distinct):
+- Work-item commits:
+
+## Working tree ownership
+- repository changed:
+- remaining uncommitted paths:
+- classification (`NONE`, `PREEXISTING_UNRELATED`, `UNRELATED_ACTIVE_WORK`):
+- Work-item-owned uncommitted changes must be empty for completed handoff.
 
 ## Completed
 -
 
 ## Changed files/contracts/migrations
+- Use repository-relative paths only; do not persist the current checkout absolute path.
 -
 
 ## Tests/evidence

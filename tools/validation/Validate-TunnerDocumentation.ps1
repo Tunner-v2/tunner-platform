@@ -60,7 +60,7 @@ function Test-GovernanceIdentifiers {
     $recordTypes = @(
         @('milestones', 'milestone_id'), @('sprints', 'sprint_id'), @('work-items', 'work_item_id'), @('dependencies', 'dependency_id'),
         @('todos', 'id'), @('defects', 'defect_id'), @('reopens', 'reopen_id'), @('decisions', 'decision_id'),
-        @('gates', 'gate_id'), @('releases', 'release_id'), @('context', 'selection_id')
+        @('gates', 'gate_id'), @('releases', 'release_id'), @('context', 'selection_id'), @('revisions', 'revision_id')
     )
     foreach ($recordType in $recordTypes) {
         $directory = Join-Path (Join-Path $repositoryRoot 'governance') $recordType[0]

@@ -1,76 +1,56 @@
-# `tunner` governance and context MVP
+# Tunner governance and context tooling
 
-P0-004 and P0-005 supply a repository-native .NET 10 control-plane tool. Governance commands are read-only; context commands write only the documented generated context pack. The tool does not read secrets or access Product data.
+The standalone .NET 10 control plane uses repository-native governance records. Status, validation, gate, transition and close-check commands are read-only. Revision create and child-create allocate new governed records under the existing governance layout. Context commands write generated retrieval packs.
 
-## Commands
+## Startup
 
-```powershell
-dotnet run --project src/Tunner.Governance -- authority verify
-dotnet run --project src/Tunner.Governance -- governance validate
-dotnet run --project src/Tunner.Governance -- governance status
-dotnet run --project src/Tunner.Governance -- governance next
-dotnet run --project src/Tunner.Governance -- governance gate check TUN-P0-004
-dotnet run --project src/Tunner.Governance -- governance roles calculate TUN-P0-027
-dotnet run --project src/Tunner.Governance -- governance transition check TUN-P0-004 VALIDATION
-```
+Run from the governed repository root:
 
-Pass `--repository <path>` before `governance` to point at another checkout. The tool reports JSON and returns a nonzero exit code for invalid records, blocked gates, or rejected transitions.
+~~~powershell
+dotnet run --no-restore --project src/Tunner.Governance -- authority verify
+dotnet run --no-restore --project src/Tunner.Governance -- governance status
+dotnet run --no-restore --project src/Tunner.Governance -- governance next
+dotnet run --no-restore --project src/Tunner.Governance -- context build
+dotnet run --no-restore --project src/Tunner.Governance -- context verify
+~~~
 
-## Authority verification
+Use --repository before the command for explicit root resolution. Startup uses context build with no --current option. It selects eligible Revision work first, otherwise eligible ordinary work or a read-only current-state pack.
 
-```powershell
-dotnet run --project src/Tunner.Governance -- authority verify
-```
+## Revisions
 
-`authority verify` reads the immutable bootstrap integrity evidence and checks every tracked `docs/authority/` artifact against its recorded SHA-256 value. It is read-only: no Drive access, import, or file mutation occurs. A mismatch blocks `governance validate`, `governance next`, `governance gate check`, and both context commands, preventing implementation or generated context from proceeding on an altered authority mirror.
+RV is approved post-closure work lineage. Historical milestones stay CLOSED and original work items stay DONE. REOPENED remains available for corrections within the active acceptance/release cycle. Existing reopen history is preserved.
 
-## Authority Resolution Pass
+The following commands are available; creation against P0 is outside this synchronization task and requires separate authorization:
 
-A `NEEDS_PRODUCT_DECISION`, `CONTRACT_REQUIRED`, or `TECH_DECISION_REQUIRED` work item—and every repository-native Product Decision—must contain a schema-versioned `authority_resolution` record. Governance rejects the record when the pass omits the verified authority index, reviewed authority references, exact unresolved question, or conclusion. A conditional capability with no activation trigger cannot use this mechanism: it is not a missing-authority blocker. Historical decisions retain their retrospective review records rather than being deleted.
-## Approval-pending execution
+~~~text
+tunner governance revision create --scope <original-id> --type <approved-type> --title <title> --reason <reason> --impact NON_BLOCKING --authority-ref <verified-authority-path> --acceptance <criterion>
+tunner governance revision show <revision-id>
+tunner governance revision child-create <revision-id> --title <title>
+tunner governance revision transition check <revision-id> <destination>
+tunner governance revision close-check <revision-id>
+~~~
 
-`governance next` returns `Items` for local/branch work and `HumanIntegrationActions` separately. A dependency explicitly declared `LOCAL_VALIDATED` may proceed after local validation; `MERGED_TO_MAIN` remains blocked until its prerequisite is `DONE` and the dependency’s merge-evidence references exist. This never approves, merges, or bypasses protected `main` controls.
+Original TUN-prefixed work-item records resolve to the canonical identity stem. Allocation reserves current and Git-historical identifiers, uses an exclusive local mutex and arbitrary-precision sequence values, and formats at least three digits. Existing IDs are never recycled. Creation writes PROPOSED state; lifecycle checks do not approve or mutate progression.
 
-The PR-integration policy may set positive dependent-chain or concurrent-unmerged limits. The repository default leaves both values `null`, so no limit is inferred without an approved policy value.
+The approved lifecycle is PROPOSED → APPROVED → ACTIVE → VALIDATION → PRODUCT_ACCEPTANCE when required → CLOSED, with BLOCKED, CANCELED and SUPERSEDED side states. Side-state transitions require their governed record; no transition graph is invented. An explicit product_acceptance_required: false declaration retains the existing technical-only acceptance rule.
 
+Records declare authority, decisions, impact, affected scope, acceptance criteria, prerequisites, children, gates, roles, evidence and Git lineage. Accepted ADR/PDR mirror references resolve directly; no duplicate Product decision is needed. NON_BLOCKING work leaves unrelated eligible work available. Blocking classifications affect only the declared scope and its dependent work.
 
-## Context commands
+Closure requires committed-state evidence, linked completed children, declared passing gates/reviews and resolved defects. Committed identity fields and closed Revision history are immutable. Revision IDs, storage, schemas and examples are documented in governance/revisions/README.md and docs/development/RV_GOVERNANCE_SYNCHRONIZATION.md.
 
-```powershell
-dotnet run --project src/Tunner.Governance -- context build --work-item TUN-P0-005
-dotnet run --project src/Tunner.Governance -- context verify
-```
+## Authority and context
 
-`context build` writes `docs/context/current/` from the active-authority summary, every active amendment declared by that verified index, explicit work-item references, activated role skills, required evidence, durable project state, and bounded Git history. It records source hashes and exclusions. `context verify` returns `STALE` if an included source is missing or has changed; generated context is never authority. Hash verification and build refusal for a corrupt authority mirror remain TUN-P0-033 scope.
+Authority verification remains a byte-exact, read-only SHA-256 check using the existing integrity manifest. Current Drive readback provenance is recorded in docs/authority/current/mirror-manifest.json and governance/evidence/RV-SYNC-AUTHORITY.json. The previous integrity manifest and locked baseline are preserved.
 
-## Evidence manifests
+Context retrieval follows CORE → TASK → EXPANDED → FULL_AUDIT only when justified. Selected Revision context contains the original scope/evidence, current Revision, immediate previous and parent lineage, applicable current authority, linked findings, declared sources and bounded Git history. Generated CURRENT_STATE, PROJECT_CONTEXT and HANDOFF expose historical state separately, latest relevant lineage, SHA linkage and exact next action. Source and lineage hashes detect stale packs.
 
-```powershell
-dotnet run --project src/Tunner.Governance -- evidence generate --scope-id TUN-P0-011 --output artifacts/evidence/TUN-P0-011.local.manifest.json --artifact src/Tunner.Governance/EvidenceApplication.cs --build-reference governance/evidence/TUN-P0-010-VALIDATION.json --test-reference governance/evidence/TUN-P0-010-VALIDATION.json --security-scan-reference governance/evidence/TUN-P0-010-VALIDATION.json
-```
+## Validation and evidence
 
-`evidence generate` produces a write-once, repository-local JSON manifest for an existing work item. It verifies the authority mirror, records the checked-out Git commit and pre-generation working-tree state, hashes only selected repository-relative files, and requires build, test, and security-scan references. Output is restricted to a new direct `.json` child of `artifacts/evidence/`; source contents, credentials, releases, Product acceptance, protected-main approvals, deployment claims, and external publication are outside its boundary. See `docs/development/LOCAL_EVIDENCE_MANIFEST.md` for the local workflow.
+Governance validate checks the existing schema catalog and record conventions. Revision records additionally execute nested JSON Schema validation and lineage checks. Existing evidence generate accepts Revision scopes and records revision_ref for Revision-owned work.
 
-## Source registry
-
-`powershell
-dotnet run --project src/Tunner.Governance -- sources check --as-of 2026-09-30 --max-age-days 14
-`
-
-sources check deterministically validates local primary-source evidence hashes, scope linkage, review dates, and a caller-supplied freshness window. It does not browse externally or make release/Product claims. See docs/development/LOCAL_SOURCE_REGISTRY.md.
-
-## Validation boundary
-
-The MVP parses YAML with file/line/column diagnostics, builds the versioned JSON Schema catalog, and validates record identifiers, versioning, required fields, and undeclared top-level fields from that catalog. It deliberately does not mutate records. Rich nested type/format checks and Git-history immutability are follow-on governance work and must not be claimed as implemented until their tests exist.
-
-## Functional harness
-
-After the .NET 10 SDK is installed, run:
-
-```powershell
-dotnet restore Tunner.Governance.sln
+~~~powershell
 dotnet build Tunner.Governance.sln --no-restore
-dotnet run --project tests/Tunner.Governance.FunctionalTests --no-restore
-```
+dotnet run --no-build --project tests/Tunner.Governance.FunctionalTests
+~~~
 
-The harness creates an isolated temporary repository fixture, covers valid validation/status/next behavior, required-evidence gate failure, invalid lifecycle transition rejection, AMD-0002 local/merged readiness behavior, configured chain-limit blocking, active-amendment context inclusion, Authority Resolution Pass rejection, and malformed-YAML rejection, then removes the fixture.
+The harness exercises ordinary governance regression behavior and isolated RV identity/lifecycle/schema/context/portability fixtures. No fixture Revision is created in the actual repository.

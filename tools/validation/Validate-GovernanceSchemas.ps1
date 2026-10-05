@@ -7,7 +7,7 @@ $ErrorActionPreference = 'Stop'
 $repositoryRoot = (Resolve-Path (Join-Path $PSScriptRoot '..\..')).Path
 $schemaRoot = Join-Path $repositoryRoot 'governance\schemas\v1'
 $expected = [ordered]@{
-  'milestone.schema.json' = 'milestone'; 'sprint.schema.json' = 'sprint'; 'work-item.schema.json' = 'workItem'; 'dependency.schema.json' = 'dependency'; 'todo.schema.json' = 'todo'; 'gate.schema.json' = 'gate'; 'defect.schema.json' = 'defect'; 'reopen.schema.json' = 'reopen'; 'product-decision.schema.json' = 'productDecision'; 'amendment.schema.json' = 'amendment'; 'adr-reference.schema.json' = 'adrReference'; 'release.schema.json' = 'release'; 'evidence-manifest.schema.json' = 'evidenceManifest'; 'specialist-review.schema.json' = 'specialistReview'; 'context-selection.schema.json' = 'contextSelection'; 'handoff.schema.json' = 'handoff'
+  'milestone.schema.json' = 'milestone'; 'sprint.schema.json' = 'sprint'; 'work-item.schema.json' = 'workItem'; 'dependency.schema.json' = 'dependency'; 'todo.schema.json' = 'todo'; 'gate.schema.json' = 'gate'; 'defect.schema.json' = 'defect'; 'reopen.schema.json' = 'reopen'; 'revision.schema.json' = 'revision'; 'product-decision.schema.json' = 'productDecision'; 'amendment.schema.json' = 'amendment'; 'adr-reference.schema.json' = 'adrReference'; 'release.schema.json' = 'release'; 'evidence-manifest.schema.json' = 'evidenceManifest'; 'specialist-review.schema.json' = 'specialistReview'; 'context-selection.schema.json' = 'contextSelection'; 'handoff.schema.json' = 'handoff'
 }
 
 function Read-JsonDocument([string] $path) {

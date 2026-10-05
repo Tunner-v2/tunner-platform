@@ -2,6 +2,7 @@ using System.Diagnostics;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
+using System.Text.Json.Nodes;
 using Tunner.Governance;
 
 var failures = new List<string>();
@@ -10,6 +11,7 @@ var fixtureRoot = Directory.CreateTempSubdirectory("tunner-governance-fixture-")
 
 try
 {
+    RunRevisionChecks(repositoryRoot, failures);
     CreateFixture(repositoryRoot, fixtureRoot);
     InitializeGit(fixtureRoot);
 
@@ -21,7 +23,9 @@ try
     try
     {
         Directory.SetCurrentDirectory(nestedRoot.FullName);
-        Expect(RepositoryRootResolver.Resolve().FullName == fixtureRoot.FullName, "Nested-directory resolution must return the marked fixture root.", failures);
+        var nestedResolved = RepositoryRootResolver.Resolve().FullName;
+        var gitRoot = new DirectoryInfo(RunGitOutput(fixtureRoot, "rev-parse", "--show-toplevel")).FullName;
+        Expect(nestedResolved == gitRoot, "Nested-directory resolution must return the marked Git fixture root, including Windows short-path aliases.", failures);
         Environment.SetEnvironmentVariable("TUNNER_REPO_ROOT", fixtureRoot.FullName);
         Expect(RepositoryRootResolver.Resolve().FullName == fixtureRoot.FullName, "Environment repository-root resolution must return the marked fixture root.", failures);
     }
@@ -87,7 +91,7 @@ try
     File.Copy(Path.Combine(repositoryRoot.FullName, "src", "Tunner.Governance", "AdaptiveContextApplication.cs"), Path.Combine(fixtureSourceDirectory, "AdaptiveContextApplication.cs"), true);
     var adaptiveCoreOutput = new DirectoryInfo(Path.Combine(fixtureRoot.FullName, "docs", "context", "adaptive-core"));
     var adaptiveCore = AdaptiveContextApplication.Build(fixtureRoot, "TUN-001", adaptiveCoreOutput, new AdaptiveContextRequest("CORE", null, "FULL"));
-    Expect(adaptiveCore.ExitCode == 0 && ((ContextBuildPayload)adaptiveCore.Payload).Included.All(item => item.Reason is "repository entry contract" or "current authority summary" or "selected work item" or "explicit authority reference" or "activated role skill"), "CORE context must retain only mandatory context for the fixture.", failures);
+    Expect(adaptiveCore.ExitCode == 0 && ((ContextBuildPayload)adaptiveCore.Payload).Included.All(item => item.Reason is "repository entry contract" or "current authority summary" or "selected work item" or "explicit authority reference" or "activated role skill" or "historical milestone state"), "CORE context must retain only mandatory context for the fixture.", failures);
     var adaptiveBudget = AdaptiveContextApplication.Build(fixtureRoot, "TUN-001", new DirectoryInfo(Path.Combine(fixtureRoot.FullName, "docs", "context", "adaptive-budget")), new AdaptiveContextRequest("TASK", 1, "REPOSITORY_READ"));
     Expect(adaptiveBudget.ExitCode == 1 && ((ContextBuildPayload)adaptiveBudget.Payload).Outcome == "CONTEXT_BUDGET_INSUFFICIENT", "Context must fail closed when the token budget cannot contain mandatory authority.", failures);
     var adaptiveEscalation = AdaptiveContextApplication.Escalate(fixtureRoot, "TUN-001", "TASK", "module dependency is missing");
@@ -99,7 +103,8 @@ try
     File.WriteAllText(Path.Combine(fixtureRoot.FullName, "unrelated-context-source.txt"), "changed" + Environment.NewLine);
     Expect(AdaptiveContextApplication.Verify(fixtureRoot, adaptiveFullOutput).ExitCode == 1, "FULL_AUDIT index must become stale when an indexed repository source changes.", failures);
 
-    RunGit(fixtureRoot, "add", ".");
+    foreach (var path in Directory.EnumerateFiles(fixtureRoot.FullName, "*", SearchOption.AllDirectories).Select(x => Path.GetRelativePath(fixtureRoot.FullName, x).Replace('\\', '/')).Where(x => !x.StartsWith(".git/", StringComparison.Ordinal) && !x.StartsWith("artifacts/", StringComparison.Ordinal)))
+        RunGit(fixtureRoot, "add", "--", path);
     RunGit(fixtureRoot, "commit", "--quiet", "-m", "fixture pre-evidence state");
     var evidenceInput = Path.Combine(fixtureRoot.FullName, "governance", "evidence", "evidence-input.json");
     File.WriteAllText(evidenceInput, "{\"result\":\"pass\"}" + Environment.NewLine);
@@ -159,8 +164,9 @@ try
     var p1CandidateSha = RunGitOutput(fixtureRoot, "rev-parse", "HEAD");
     var p1CompletionWithoutState = GovernanceApplication.CheckTransition(fixtureRoot, "TUN-P1-COMMIT", "DONE");
     Expect(p1CompletionWithoutState.ExitCode == 1 && ((TransitionPayload)p1CompletionWithoutState.Payload).Reason.Contains("committed-state readiness", StringComparison.Ordinal), "P1 completion must reject repository-changing work that lacks committed-state evidence.", failures);
-    File.AppendAllText(p1CommitPath, $"git_state:{Environment.NewLine}  repository_changed: true{Environment.NewLine}  validated_commit_sha: {p1CandidateSha}{Environment.NewLine}  tested_commit_sha: {p1CandidateSha}{Environment.NewLine}  work_item_commit_shas: [{p1CandidateSha}]{Environment.NewLine}  closure_commit_sha: null{Environment.NewLine}  remaining_uncommitted_paths: []{Environment.NewLine}  remaining_uncommitted_classification: NONE{Environment.NewLine}");
+    File.AppendAllText(p1CommitPath, $"{Environment.NewLine}git_state:{Environment.NewLine}  repository_changed: true{Environment.NewLine}  validated_commit_sha: {p1CandidateSha}{Environment.NewLine}  tested_commit_sha: {p1CandidateSha}{Environment.NewLine}  work_item_commit_shas: [{p1CandidateSha}]{Environment.NewLine}  closure_commit_sha: null{Environment.NewLine}  remaining_uncommitted_paths: []{Environment.NewLine}  remaining_uncommitted_classification: NONE{Environment.NewLine}");
     var p1CompletionWithState = GovernanceApplication.CheckTransition(fixtureRoot, "TUN-P1-COMMIT", "DONE");
+    if (p1CompletionWithState.ExitCode != 0) Console.Error.WriteLine(GovernanceApplication.Serialize(p1CompletionWithState));
     Expect(p1CompletionWithState.ExitCode == 0, "P1 completion must accept a valid committed validation candidate while allowing a later metadata closure commit.", failures);
 
     WriteWorkItem(fixtureRoot, "TUN-P1-UPSTREAM", "DONE", "[]");
@@ -174,7 +180,7 @@ try
     var p1DependencyCandidateSha = RunGitOutput(fixtureRoot, "rev-parse", "HEAD");
     var p1DownstreamBeforeEvidence = (NextPayload)GovernanceApplication.Next(fixtureRoot).Payload;
     Expect(!p1DownstreamBeforeEvidence.Items.Single(item => item.WorkItemId == "TUN-P1-DOWNSTREAM").Actionable, "A P1 downstream item must remain ineligible while its DONE prerequisite lacks committed-state evidence.", failures);
-    File.AppendAllText(p1UpstreamPath, $"git_state:{Environment.NewLine}  repository_changed: true{Environment.NewLine}  validated_commit_sha: {p1DependencyCandidateSha}{Environment.NewLine}  tested_commit_sha: {p1DependencyCandidateSha}{Environment.NewLine}  work_item_commit_shas: [{p1DependencyCandidateSha}]{Environment.NewLine}  closure_commit_sha: null{Environment.NewLine}  remaining_uncommitted_paths: []{Environment.NewLine}  remaining_uncommitted_classification: NONE{Environment.NewLine}");
+    File.AppendAllText(p1UpstreamPath, $"{Environment.NewLine}git_state:{Environment.NewLine}  repository_changed: true{Environment.NewLine}  validated_commit_sha: {p1DependencyCandidateSha}{Environment.NewLine}  tested_commit_sha: {p1DependencyCandidateSha}{Environment.NewLine}  work_item_commit_shas: [{p1DependencyCandidateSha}]{Environment.NewLine}  closure_commit_sha: null{Environment.NewLine}  remaining_uncommitted_paths: []{Environment.NewLine}  remaining_uncommitted_classification: NONE{Environment.NewLine}");
     var p1DownstreamAfterEvidence = (NextPayload)GovernanceApplication.Next(fixtureRoot).Payload;
     Expect(p1DownstreamAfterEvidence.Items.Single(item => item.WorkItemId == "TUN-P1-DOWNSTREAM").Actionable, "A P1 downstream item may become eligible when its DONE prerequisite has valid committed-state evidence.", failures);
 
@@ -182,6 +188,7 @@ try
     Expect(milestoneClose.ExitCode == 1 && ((MilestoneClosePayload)milestoneClose.Payload).Failures.Any(item => item.Contains("work item is not DONE", StringComparison.Ordinal)) && ((MilestoneClosePayload)milestoneClose.Payload).Failures.Any(item => item.Contains("milestone role-review evidence missing", StringComparison.Ordinal)), "Milestone close-check must refuse incomplete work and missing milestone reviews.", failures);
 
     var milestoneTransition = GovernanceApplication.CheckMilestoneTransition(fixtureRoot, "MVP", "VALIDATION");
+    if (milestoneTransition.ExitCode != 0) Console.Error.WriteLine(GovernanceApplication.Serialize(milestoneTransition));
     Expect(milestoneTransition.ExitCode == 0 && ((MilestoneTransitionPayload)milestoneTransition.Payload).Outcome == "ALLOWED", "Milestone lifecycle check must allow the next declared normal state.", failures);
 
     var rolePolicyPath = Path.Combine(fixtureRoot.FullName, "governance", "policies", "role-activation-policy.yaml");
@@ -199,6 +206,7 @@ try
     }
 
     var roleReady = GovernanceApplication.CheckGate(fixtureRoot, "TUN-P0-027");
+    if (roleReady.ExitCode != 0) Console.Error.WriteLine(GovernanceApplication.Serialize(roleReady));
     Expect(roleReady.ExitCode == 0, "Gate must accept complete passing structured reviews for every calculated role.", failures);
     WriteStructuredReview(fixtureRoot, "auditor", "BLOCKED", "[audit evidence is incomplete]");
     var roleBlocked = GovernanceApplication.CheckGate(fixtureRoot, "TUN-P0-027");
@@ -528,8 +536,194 @@ context_expansion_requested: false
 reviewed_at: 2026-10-01T05:00:00-04:00
 """);
 }
+static void RunRevisionChecks(DirectoryInfo repositoryRoot, ICollection<string> failures)
+{
+    var fixture = Directory.CreateTempSubdirectory("tunner-governance-revision-fixture-");
+    var assertions = 0;
+    string[] declaredBlocked = ["TUN-RV-UNRELATED"];
+    string[] proofRefs = ["governance/evidence/revision-proof.json"];
+    string[] requiredAuditor = ["auditor"];
+    string[] dependencyScope = ["TUN-001"];
+    string[] priorDependency = ["P0-004-RV001"];
+    void Check(bool condition, string message) { assertions++; Expect(condition, "RV: " + message, failures); }
+    try
+    {
+        CreateFixture(repositoryRoot, fixture);
+        File.Copy(Path.Combine(repositoryRoot.FullName, "governance", "policies", "lifecycle-policy.yaml"), Path.Combine(fixture.FullName, "governance", "policies", "lifecycle-policy.yaml"), true);
+        var milestonePath = Path.Combine(fixture.FullName, "governance", "milestones", "P0.yaml");
+        var milestone = File.ReadAllText(Path.Combine(fixture.FullName, "governance", "milestones", "MVP.yaml"))
+            .Replace("milestone_id: MVP", "milestone_id: P0", StringComparison.Ordinal).Replace("status: ACTIVE", "status: CLOSED", StringComparison.Ordinal)
+            .Replace("authority_refs: [authority]", "authority_refs: [docs/authority/mirror.txt]", StringComparison.Ordinal);
+        File.WriteAllText(milestonePath, milestone);
+        foreach (var id in new[] { "TUN-P0-004", "TUN-P0-999" })
+        {
+            WriteWorkItem(fixture, id, "DONE", "[]");
+            var path = Path.Combine(fixture.FullName, "governance", "work-items", id + ".yaml");
+            File.WriteAllText(path, File.ReadAllText(path).Replace("milestone_id: MVP", "milestone_id: P0", StringComparison.Ordinal).Replace("authority_refs: [authority]", "authority_refs: [docs/authority/mirror.txt]", StringComparison.Ordinal));
+        }
+        WriteWorkItem(fixture, "TUN-RV-UNRELATED", "READY", "[]");
+        Directory.CreateDirectory(Path.Combine(fixture.FullName, "docs", "project"));
+        foreach (var name in new[] { "CURRENT_STATE", "PROJECT_CONTEXT", "HANDOFF" }) File.WriteAllText(Path.Combine(fixture.FullName, "docs", "project", name + ".md"), name);
+        File.WriteAllText(Path.Combine(fixture.FullName, "AGENTS.md"), "fixture recovery entry");
+        InitializeGit(fixture);
+        var decisionPath = Path.Combine(fixture.FullName, "docs", "authority", "ADR-9999_Approved_Test.md");
+        File.WriteAllText(decisionPath, "# ADR-9999\n\n**Status:** ACCEPTED\n");
+        var integrityPath = Path.Combine(fixture.FullName, "governance", "evidence", "BOOT-P0-001-integrity.json");
+        var integrity = JsonNode.Parse(File.ReadAllText(integrityPath))!;
+        integrity["checks"]!.AsArray().Add(JsonSerializer.SerializeToNode(new { local_path = "docs/authority/ADR-9999_Approved_Test.md", expected_sha256 = HashFile(decisionPath) }));
+        File.WriteAllText(integrityPath, integrity.ToJsonString());
+        var originalHash = HashFile(milestonePath);
+        var workPath = Path.Combine(fixture.FullName, "governance", "work-items", "TUN-P0-004.yaml");
+        var workHash = HashFile(workPath);
+        RevisionCreateRequest Request(string scope) => new(scope, "CORRECTIVE", "Approved corrective work", "Later correction after historical closure", "NON_BLOCKING", [], [], [], ["deterministic correction"]);
+        var created = RevisionApplication.Create(fixture, Request("P0") with { DecisionRefs = ["ADR-9999"] });
+        Check(created.ExitCode == 0 && ((RevisionOperationPayload)created.Payload).RevisionId == "P0-RV001", "closed milestone allocates RV001");
+        if (created.ExitCode != 0) { failures.Add(GovernanceApplication.Serialize(created)); return; }
+        var mileRevision = Path.Combine(fixture.FullName, "governance", "revisions", "P0-RV001.yaml");
+        Check(GovernanceApplication.Validate(fixture).ExitCode == 0, "existing accepted ADR resolves without a duplicate Product decision");
+        Check(HashFile(milestonePath) == originalHash, "milestone historical closure/evidence remains byte-identical");
+        Check(RevisionApplication.Create(fixture, Request("MVP")).ExitCode != 0, "active milestone correction retains REOPENED capability");
+        Check(RevisionApplication.Create(fixture, Request("P0") with { Type = "SPECULATIVE" }).ExitCode != 0, "unapproved revision types fail schema");
+        Check(RevisionApplication.Create(fixture, Request("P0") with { AuthorityRefs = ["docs/authority/missing.md"] }).ExitCode != 0, "missing/unverified authority cannot be invented");
+        Check(RevisionApplication.Create(fixture, Request("P0") with { Impact = "SCOPED_BLOCKING" }).ExitCode != 0, "blocking impact requires bounded declared scope");
+        Check(RevisionApplication.Create(fixture, Request("P0") with { BlockedScope = ["TUN-RV-UNRELATED"] }).ExitCode != 0, "NON_BLOCKING cannot declare blocked work");
+        Check(RevisionApplication.Create(fixture, Request("P0") with { DecisionRefs = ["DEC-UNAPPROVED"] }).ExitCode != 0, "unapproved authority decisions do not activate Revision work");
+        var workCreated = RevisionApplication.Create(fixture, Request("P0-004") with { ParentMilestoneRevisionId = "P0-RV001" });
+        Check(workCreated.ExitCode == 0 && ((RevisionOperationPayload)workCreated.Payload).RevisionId == "P0-004-RV001", "canonical work-item alias resolves original TUN identifier");
+        var workRevision = Path.Combine(fixture.FullName, "governance", "revisions", "P0-004-RV001.yaml");
+        Check(HashFile(workPath) == workHash, "historical work-item completion/evidence remains byte-identical");
+        var child = RevisionApplication.CreateChild(fixture, "P0-004-RV001", "Scoped child");
+        Check(child.ExitCode == 0 && ((RevisionOperationPayload)child.Payload).RevisionId == "P0-004-RV001-001", "canonical positive child ID is allocated under existing work-item storage");
+        Check(RevisionApplication.CreateChild(fixture, "P0-004-RV001", "Second child").ExitCode == 0, "child allocation increments without duplicates");
+        Check(RevisionApplication.CheckTransition(fixture, "P0-004-RV001", "ACTIVE").ExitCode != 0, "proposal cannot skip approval");
+        Check(RevisionApplication.CheckTransition(fixture, "P0-004-RV001", "APPROVED").ExitCode == 0, "next declared lifecycle transition is available");
+        EditRevision(mileRevision, "status", "ACTIVE");
+        var next = (NextPayload)GovernanceApplication.Next(fixture).Payload;
+        Check(next.Items.Any(x => x.WorkItemId == "P0-RV001" && x.Actionable), "governance next exposes eligible active Revision");
+        Check(next.Items.Single(x => x.WorkItemId == "TUN-RV-UNRELATED").Actionable, "NON_BLOCKING Revision preserves unrelated eligibility");
+        foreach (var impact in new[] { "SCOPED_BLOCKING", "RELEASE_BLOCKING", "SECURITY_BLOCKING" })
+        {
+            EditRevision(mileRevision, "impact_classification", impact);
+            EditRevision(mileRevision, "blocked_scope", declaredBlocked);
+            var blockedNext = (NextPayload)GovernanceApplication.Next(fixture).Payload;
+            Check(!blockedNext.Items.Single(x => x.WorkItemId == "TUN-RV-UNRELATED").Actionable, impact + " withholds only declared affected scope");
+            Check(blockedNext.Items.Single(x => x.WorkItemId == "TUN-LOCAL").Actionable, impact + " does not suppress unrelated work");
+        }
+        EditRevision(mileRevision, "blocked_scope", dependencyScope);
+        var dependentNext = (NextPayload)GovernanceApplication.Next(fixture).Payload;
+        Check(!dependentNext.Items.Single(x => x.WorkItemId == "TUN-LOCAL").Actionable && !dependentNext.Items.Single(x => x.WorkItemId == "TUN-CHAIN").Actionable, "declared dependency records propagate bounded Revision impact transitively");
+        Check(dependentNext.Items.Single(x => x.WorkItemId == "TUN-RV-UNRELATED").Actionable, "dependency impact preserves unrelated scope");
+        EditRevision(mileRevision, "impact_classification", "NON_BLOCKING"); EditRevision(mileRevision, "blocked_scope", Array.Empty<string>());
+        var second = RevisionApplication.Create(fixture, Request("TUN-P0-004"));
+        Check(second.ExitCode == 0 && ((RevisionOperationPayload)second.Payload).RevisionId == "P0-004-RV002", "second Revision increments and preserves prior record");
+        var secondPath = Path.Combine(fixture.FullName, "governance", "revisions", "P0-004-RV002.yaml");
+        Check(File.ReadAllText(secondPath).Contains("P0-004-RV001", StringComparison.Ordinal), "previous Revision lineage is linked");
+        Check(!((NextPayload)GovernanceApplication.Next(fixture).Payload).Items.Single(x => x.WorkItemId == "P0-004-RV002").Actionable, "proposal remains non-actionable before approval");
+        EditRevision(secondPath, "status", "APPROVED");
+        Check(((NextPayload)GovernanceApplication.Next(fixture).Payload).Items.Single(x => x.WorkItemId == "P0-004-RV002").Actionable, "previous lineage is not an undeclared prerequisite");
+        EditRevision(secondPath, "prerequisites", priorDependency);
+        Check(!((NextPayload)GovernanceApplication.Next(fixture).Payload).Items.Single(x => x.WorkItemId == "P0-004-RV002").Actionable, "explicit prior Revision prerequisite retains its scoped gate");
+        EditRevision(secondPath, "prerequisites", Array.Empty<string>());
+        var large = RevisionApplication.Create(fixture, Request("P0-999"));
+        Check(large.ExitCode == 0, "independent scope starts its own sequence");
+        var largePath = Path.Combine(fixture.FullName, "governance", "revisions", "P0-999-RV001.yaml");
+        EditRevision(largePath, "revision_id", "P0-999-RV999");
+        var importedPath = Path.Combine(fixture.FullName, "governance", "revisions", "P0-999-RV999.yaml");
+        File.Move(largePath, importedPath);
+        var beyond = RevisionApplication.Create(fixture, Request("P0-999"));
+        Check(beyond.ExitCode == 0 && ((RevisionOperationPayload)beyond.Payload).RevisionId == "P0-999-RV1000", "sequence has no RV999 ceiling");
+        var duplicate = Path.Combine(fixture.FullName, "governance", "revisions", "duplicate.yaml");
+        File.Copy(secondPath, duplicate);
+        Check(GovernanceApplication.Validate(fixture).ExitCode != 0, "duplicate Revision IDs are rejected without crashing");
+        File.Delete(duplicate);
+        var good = File.ReadAllText(secondPath);
+        EditRevision(secondPath, "revision_type", "UNKNOWN");
+        Check(GovernanceApplication.Validate(fixture).ExitCode != 0, "executable schema rejects bad enum");
+        File.WriteAllText(secondPath, good);
+        EditRevision(secondPath, "blocked_scope", "invalid scalar");
+        Check(GovernanceApplication.Validate(fixture).ExitCode != 0, "executable schema rejects wrong nested field shape");
+        File.WriteAllText(secondPath, good);
+        var context = new DirectoryInfo(Path.Combine(fixture.FullName, "artifacts", "revision-context"));
+        var pack = AdaptiveContextApplication.Build(fixture, "P0-004-RV002", context, new AdaptiveContextRequest("CORE", null, "REPOSITORY_READ"));
+        Check(pack.ExitCode == 0, "Revision context builds in CORE mode");
+        if (pack.ExitCode == 0)
+        {
+            var manifest = JsonSerializer.Deserialize<ContextManifest>(File.ReadAllText(Path.Combine(context.FullName, "manifest.json")))!;
+            Check(manifest.Revision?.OriginalScopeId == "TUN-P0-004", "fresh-agent manifest resolves original work-item identity");
+            Check(manifest.Included.Any(x => x.Path.EndsWith("P0-004-RV001.yaml", StringComparison.Ordinal)), "bounded context includes immediate previous lineage");
+            Check(manifest.Included.All(x => !x.Path.EndsWith("P0-999-RV999.yaml", StringComparison.Ordinal)), "unrelated Revision history is excluded");
+            Check(manifest.HistoricalScopes!.Any(x => x.Id == "P0" && x.HistoricalStatus == "CLOSED") && manifest.HistoricalScopes!.Any(x => x.Id == "TUN-P0-004" && x.HistoricalStatus == "DONE"), "generated memory separates historical closure from active RV state");
+            Check(File.ReadAllText(Path.Combine(context.FullName, "HANDOFF.md")).Contains("Exact next action", StringComparison.Ordinal), "fresh-agent recovery records exact Revision action");
+            Check(AdaptiveContextApplication.Verify(fixture, context).ExitCode == 0, "fresh Revision context verifies");
+            var extra = RevisionApplication.Create(fixture, Request("P0"));
+            Check(extra.ExitCode == 0 && AdaptiveContextApplication.Verify(fixture, context).ExitCode != 0, "new lineage invalidates context even when old selected sources are unchanged");
+        }
+        Check(AdaptiveContextApplication.Build(fixture, "", context).ExitCode == 0, "canonical context build selects a current governed scope without --current");
+        Check(RevisionApplication.CloseCheck(fixture, "P0-004-RV001").ExitCode != 0, "closure refuses incomplete children, validation, and committed evidence");
+        var proofPath = Path.Combine(fixture.FullName, "governance", "evidence", "revision-proof.json");
+        File.WriteAllText(proofPath, "{\"result\":\"PASS\"}");
+        EditRevision(importedPath, "status", "VALIDATION");
+        EditRevision(importedPath, "product_acceptance_required", false);
+        EditRevision(importedPath, "evidence_refs", proofRefs);
+        RunGit(fixture, "add", "--", "governance/revisions/P0-999-RV999.yaml", "governance/evidence/revision-proof.json");
+        RunGit(fixture, "commit", "--quiet", "-m", "Revision validation candidate");
+        var sha = RunGitOutput(fixture, "rev-parse", "HEAD");
+        EditRevision(importedPath, "git_state", new { repository_changed = true, validated_commit_sha = sha, tested_commit_sha = sha, work_item_commit_shas = new[] { sha }, closure_commit_sha = (string?)null, remaining_uncommitted_paths = Array.Empty<string>(), remaining_uncommitted_classification = "PREEXISTING_UNRELATED" });
+        Check(RevisionApplication.CloseCheck(fixture, "P0-999-RV999").ExitCode == 0, "closure checks exact committed Revision identity and new evidence with unrelated dirty fixture work preserved");
+        EditRevision(importedPath, "required_roles", requiredAuditor);
+        Check(RevisionApplication.CloseCheck(fixture, "P0-999-RV999").ExitCode != 0, "declared specialist review is mandatory for closure");
+        EditRevision(importedPath, "required_roles", Array.Empty<string>());
+        EditRevision(importedPath, "revision_type", "IMPROVEMENT");
+        Check(GovernanceApplication.Validate(fixture).ExitCode == 0, "open Revision may refine non-identity fields");
+        EditRevision(importedPath, "created_at", "2026-10-05T00:00:00Z");
+        Check(GovernanceApplication.Validate(fixture).ExitCode != 0, "committed Revision identity is immutable");
+        EditRevision(importedPath, "created_at", ReadYamlScalar(RunGitOutput(fixture, "show", sha + ":governance/revisions/P0-999-RV999.yaml"), "created_at"));
+        EditRevision(importedPath, "status", "CLOSED"); EditRevision(importedPath, "closed_at", "2026-10-05T15:00:00Z");
+        RunGit(fixture, "add", "--", "governance/revisions/P0-999-RV999.yaml"); RunGit(fixture, "commit", "--quiet", "-m", "Revision closure metadata");
+        Check(RevisionApplication.CheckTransition(fixture, "P0-999-RV999", "ACTIVE").ExitCode != 0, "closed Revision cannot be reopened");
+        var closed = File.ReadAllText(importedPath);
+        EditRevision(importedPath, "reason", "rewritten history");
+        Check(GovernanceApplication.Validate(fixture).ExitCode != 0, "closed Revision evidence/history cannot be silently edited");
+        File.WriteAllText(importedPath, closed);
+        File.Delete(importedPath);
+        Check(GovernanceApplication.Validate(fixture).ExitCode != 0, "committed Revision deletion is rejected");
+        File.WriteAllText(importedPath, closed);
+        var manifestFile = new FileInfo(Path.Combine(fixture.FullName, "artifacts", "evidence", "revision-manifest.json"));
+        var evidence = EvidenceApplication.Generate(fixture, "P0-RV001", manifestFile, [], ["governance/evidence/revision-proof.json"], ["governance/evidence/revision-proof.json"], ["governance/evidence/revision-proof.json"]);
+        Check(evidence.ExitCode == 0 && JsonSerializer.Deserialize<EvidenceManifest>(File.ReadAllText(manifestFile.FullName))?.RevisionRef == "P0-RV001", "generated evidence links the Revision scope");
+        Check(File.ReadAllText(Path.Combine(repositoryRoot.FullName, "governance", "policies", "lifecycle-policy.yaml")).Contains("REOPENED", StringComparison.Ordinal), "active-cycle REOPENED capability remains in approved policy");
+        var archive = "docs/authority/baselines/1.6.0/Tunner_Development_Documentation_Baseline_1.6.0_LOCKED.zip";
+        if (File.Exists(Path.Combine(repositoryRoot.FullName, archive)))
+        {
+            Check(RunGitOutput(repositoryRoot, "check-attr", "text", "--", archive).Contains("unset", StringComparison.Ordinal), "binary ZIP override prevents text normalization");
+            Check(RunGitOutput(repositoryRoot, "hash-object", archive) == RunGitOutput(repositoryRoot, "hash-object", "--no-filters", archive), "ZIP filtered and raw blob hashes agree");
+        }
+        Console.WriteLine($"PASS: {assertions} RV schema/lifecycle/context/recovery/portability checks");
+    }
+    finally { DeleteFixture(fixture); }
+}
+
+static void EditRevision(string path, string field, object value)
+{
+    var stream = new YamlDotNet.RepresentationModel.YamlStream(); stream.Load(new StringReader(File.ReadAllText(path)));
+    var mapping = (YamlDotNet.RepresentationModel.YamlMappingNode)stream.Documents[0].RootNode;
+    var replacement = new YamlDotNet.RepresentationModel.YamlStream(); replacement.Load(new StringReader(JsonSerializer.Serialize(value)));
+    mapping.Children[new YamlDotNet.RepresentationModel.YamlScalarNode(field)] = replacement.Documents[0].RootNode;
+    using var writer = new StringWriter(System.Globalization.CultureInfo.InvariantCulture); stream.Save(writer, false);
+    File.WriteAllText(path, writer.ToString());
+}
+
+static string ReadYamlScalar(string text, string field)
+{
+    var stream = new YamlDotNet.RepresentationModel.YamlStream(); stream.Load(new StringReader(text));
+    return ((YamlDotNet.RepresentationModel.YamlScalarNode)((YamlDotNet.RepresentationModel.YamlMappingNode)stream.Documents[0].RootNode).Children[new YamlDotNet.RepresentationModel.YamlScalarNode(field)]).Value ?? "";
+}
+
 static void DeleteFixture(DirectoryInfo fixtureRoot)
 {
+    var verifiedFixturePath = Path.GetFullPath(fixtureRoot.FullName);
+    var verifiedTempRoot = Path.GetFullPath(Path.GetTempPath()).TrimEnd(Path.DirectorySeparatorChar) + Path.DirectorySeparatorChar;
+    if (!verifiedFixturePath.StartsWith(verifiedTempRoot, StringComparison.OrdinalIgnoreCase) || !fixtureRoot.Name.StartsWith("tunner-governance-", StringComparison.Ordinal)) throw new InvalidOperationException("Fixture cleanup target is outside the generated test-fixture boundary.");
     try
     {
         fixtureRoot.Delete(true);
@@ -551,7 +745,8 @@ static void InitializeGit(DirectoryInfo repository)
     RunGit(repository, "init", "--quiet");
     RunGit(repository, "config", "user.email", "fixture@tunner.local");
     RunGit(repository, "config", "user.name", "Tunner fixture");
-    RunGit(repository, "add", ".");
+    foreach (var path in Directory.EnumerateFiles(repository.FullName, "*", SearchOption.AllDirectories).Select(x => Path.GetRelativePath(repository.FullName, x).Replace('\\', '/')).Where(x => !x.StartsWith(".git/", StringComparison.Ordinal) && !x.StartsWith("artifacts/", StringComparison.Ordinal)))
+        RunGit(repository, "add", "--", path);
     RunGit(repository, "commit", "--quiet", "-m", "fixture baseline");
 }
 

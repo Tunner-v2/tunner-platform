@@ -1,0 +1,59 @@
+schema_version: 1
+work_item:
+  normal: [DRAFT, BACKLOG, REFINEMENT, READY, IN_PROGRESS, CODE_REVIEW, VALIDATION, PRODUCT_ACCEPTANCE, DONE]
+  side: [BLOCKED, NEEDS_PRODUCT_DECISION, UI_REQUIRED, CONTRACT_REQUIRED, SECURITY_REVIEW_REQUIRED, REOPENED, DEFERRED, CANCELED, SUPERSEDED, DUPLICATE, NOT_APPLICABLE]
+milestone:
+  normal: [PROPOSED, APPROVED, ACTIVE, VALIDATION, PRODUCT_ACCEPTANCE, RELEASED, CLOSED]
+  side: [BLOCKED, AMENDED, REOPENED, SUPERSEDED]
+closure_requires_evidence: true
+history_deletion_for_cleanup: false
+pr_integration:
+  approval_pending_blocks_global_execution: false
+  work_readiness: [IN_PROGRESS, CODE_REVIEW, VALIDATION, READY_FOR_MERGE]
+  pr_states: [DRAFT, OPEN, CHECKS_RUNNING, READY_FOR_REVIEW, APPROVAL_PENDING, APPROVED, MERGED]
+  dependency_readiness: [LOCAL_VALIDATED, MERGED_TO_MAIN]
+  continue_independent_work_while_approval_pending: true
+  continue_local_validation_while_approval_pending: true
+  dependent_unmerged_chain_limit: null
+  concurrent_unmerged_work_limit: null
+  commit_readiness:
+    required_when_repository_changed: true
+    required_before: [LOCAL_VALIDATED, READY_FOR_MERGE, DONE, COMPLETED_HANDOFF]
+    validation_must_reference_commit: true
+    behavior_change_after_validation_invalidates_readiness: true
+    allow_metadata_only_closure_commit: true
+    preserve_unrelated_dirty_paths: true
+    no_repository_change_requires_commit: false
+  human_gates:
+    - PROTECTED_MAIN_MERGE
+    - PRODUCT_DECISION_OR_ACCEPTANCE_WHEN_REQUIRED
+    - PRODUCTION_OR_RELEASE_AUTHORIZATION_WHEN_REQUIRED
+    - SECURITY_COMPLIANCE_LEGAL_APPROVAL_WHEN_REQUIRED
+
+authority_resolution:
+  required_before_missing_authority_blocker: true
+  required_before_decision_create: true
+  duplicate_active_authority_rejected: true
+  insufficient_context_requires_expansion: true
+  conditional_trigger_absent_is_not_missing_contract: true
+  protected_states:
+    - NEEDS_PRODUCT_DECISION
+    - CONTRACT_REQUIRED
+    - TECH_DECISION_REQUIRED
+
+revision:
+  enabled: true
+  historical_closure_immutable: true
+  post_closure_default: REVISION
+  reopen_reserved_for_active_acceptance_release_cycle: true
+  milestone_id_pattern: "<milestone_id>-RV<sequence>"
+  work_item_id_pattern: "<work_item_id>-RV<sequence>"
+  child_id_pattern: "<revision_id>-<sequence>"
+  sequence_has_artificial_limit: false
+  normal_states: [PROPOSED, APPROVED, ACTIVE, VALIDATION, PRODUCT_ACCEPTANCE, CLOSED]
+  side_states: [BLOCKED, CANCELED, SUPERSEDED]
+  types: [CORRECTIVE, HARDENING, IMPROVEMENT, SECURITY, PORTABILITY, COMPATIBILITY, PERFORMANCE, OPERABILITY, DOCUMENTATION, TECHNICAL_DEBT]
+  impact_classification: [NON_BLOCKING, SCOPED_BLOCKING, RELEASE_BLOCKING, SECURITY_BLOCKING]
+  revision_is_authority_change: false
+  authority_change_requires_adr_pdr_or_amendment: true
+

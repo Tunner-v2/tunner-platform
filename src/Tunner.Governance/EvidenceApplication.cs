@@ -28,6 +28,8 @@ public static class EvidenceApplication
         }
 
         var workItemPath = $"governance/work-items/{scopeId}.yaml";
+        var revisionPath = $"governance/revisions/{scopeId}.yaml";
+        if (File.Exists(Path.Combine(repository.FullName, revisionPath))) workItemPath = revisionPath;
         if (findings.Count == 0 && !File.Exists(Path.Combine(repository.FullName, workItemPath.Replace('/', Path.DirectorySeparatorChar))))
         {
             findings.Add("scope-id must resolve to an existing governed work-item record");
@@ -76,7 +78,7 @@ public static class EvidenceApplication
         var manifest = new EvidenceManifest(
             1,
             GeneratorVersion,
-            "WORK_ITEM",
+            workItemPath == revisionPath ? "REVISION" : "WORK_ITEM",
             scopeId,
             gitIdentity.CommitSha,
             gitIdentity.WorkingTreeState,
@@ -91,6 +93,8 @@ public static class EvidenceApplication
                 "This manifest does not approve a release, authorize a protected-main merge, prove production deployment, or establish Product acceptance.",
                 "The recorded Git identity is the checked-out commit and working-tree state before the manifest file is written."
             ]);
+        var scopeRecord = GovernanceApplication.LoadRecords(repository, []).FirstOrDefault(x => x.Identifier == scopeId);
+        manifest = manifest with { RevisionRef = workItemPath == revisionPath ? scopeId : scopeRecord?.Scalar("revision_ref") is { } reference && reference != "null" ? reference : null };
         var json = JsonSerializer.Serialize(manifest, JsonOptions) + Environment.NewLine;
         if (SecretPattern.IsMatch(json))
         {
@@ -306,6 +310,7 @@ public sealed record EvidenceManifest(
     IReadOnlyList<EvidenceArtifact> Tests,
     IReadOnlyList<EvidenceArtifact> SecurityScans,
     IReadOnlyList<EvidenceArtifact> Artifacts,
-    IReadOnlyList<string> Limitations);
+    IReadOnlyList<string> Limitations,
+    string? RevisionRef = null);
 public sealed record EvidenceGeneratePayload(string Outcome, string ScopeId, string Output, IReadOnlyList<EvidenceArtifact> Artifacts, IReadOnlyList<string> Findings);
 internal sealed record GitIdentity(string CommitSha, string WorkingTreeState);

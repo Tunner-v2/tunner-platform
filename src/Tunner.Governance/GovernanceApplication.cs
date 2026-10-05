@@ -19,6 +19,7 @@ public static class GovernanceApplication
         new("todos", "todo", "todo.schema.json", "todo", "id"),
         new("defects", "defect", "defect.schema.json", "defect", "defect_id"),
         new("reopens", "reopen", "reopen.schema.json", "reopen", "reopen_id"),
+        new("revisions", "revision", "revision.schema.json", "revision", "revision_id"),
         new("decisions", "product-decision", "product-decision.schema.json", "productDecision", "decision_id"),
         new("gates", "gate", "gate.schema.json", "gate", "gate_id"),
         new("releases", "release", "release.schema.json", "release", "release_id"),
@@ -67,6 +68,7 @@ public static class GovernanceApplication
         }
 
         AddAuthorityResolutionDiagnostics(records, diagnostics);
+        RevisionApplication.AddDiagnostics(repository, records, diagnostics);
 
         var isValid = diagnostics.All(item => item.Severity != "ERROR");
         return new CommandResult(isValid ? 0 : 1, "validate", new ValidationPayload(isValid, records.Count, diagnostics));
@@ -85,7 +87,7 @@ public static class GovernanceApplication
             .Select(item => new WorkItemStatus(item.Identifier, item.Scalar("status") ?? "UNKNOWN", item.StringList("prerequisites"), item.StringList("blockers"), item.StringList("required_evidence")))
             .OrderBy(item => item.Id, StringComparer.Ordinal)
             .ToArray();
-        return new CommandResult(validation.ExitCode, "status", new StatusPayload(milestones, workItems, validation.Payload));
+        return new CommandResult(validation.ExitCode, "status", new StatusPayload(milestones, workItems, validation.Payload, RevisionApplication.Status(records), RevisionApplication.HistoricalScopes(repository, records)));
     }
 
     public static CommandResult Next(DirectoryInfo repository)
@@ -98,6 +100,8 @@ public static class GovernanceApplication
         var allowValidatedP0Prerequisites = HasApprovedP0LocalIntegration(records);
         var next = new List<NextItem>();
         var integrationActions = new List<IntegrationAction>();
+        var validation = (ValidationPayload)Validate(repository).Payload;
+        diagnostics.AddRange(validation.Diagnostics);
 
         var authority = AuthorityApplication.Verify(repository);
         if (authority.ExitCode != 0)
@@ -124,13 +128,17 @@ public static class GovernanceApplication
             }
 
             var reasons = ReadinessReasons(repository, record, workItems, dependencies, integrationPolicy, allowValidatedP0Prerequisites);
+            var revisionReasons = RevisionApplication.BlockingReasons(records, record);
+            reasons.AddRange(revisionReasons);
             integrationActions.AddRange(PendingIntegrationActions(repository, record, workItems, dependencies, integrationPolicy));
             var active = StringComparer.Ordinal.Equals(state, "IN_PROGRESS");
             var reason = reasons.Count == 0
                 ? active ? "currently in progress" : "all recorded prerequisites and blockers permit work"
                 : active ? "currently in progress; " + string.Join("; ", reasons) : string.Join("; ", reasons);
-            next.Add(new NextItem(record.Identifier, state, active || reasons.Count == 0, reason));
+            next.Add(new NextItem(record.Identifier, state, validation.IsValid && revisionReasons.Count == 0 && (active || reasons.Count == 0), reason));
         }
+
+        next.AddRange(RevisionApplication.Next(repository, records, validation.IsValid));
 
         var actions = integrationActions
             .DistinctBy(item => (item.WorkItemId, item.PrerequisiteWorkItemId, item.RequiredReadiness))
@@ -151,6 +159,7 @@ public static class GovernanceApplication
         }
 
         var failures = ReadinessReasons(repository, workItem, workItems, DependencyRecords(records), IntegrationPolicy.Load(repository, diagnostics), HasApprovedP0LocalIntegration(records));
+        failures.AddRange(RevisionApplication.BlockingReasons(records, workItem));
         failures.AddRange(CommitReadinessApplication.Check(repository, workItem));
         var authority = AuthorityApplication.Verify(repository);
         if (authority.ExitCode != 0)
@@ -314,7 +323,7 @@ public static class GovernanceApplication
         }
 
         var workItems = WorkItems(records);
-        var ownedWorkItems = workItems.Values.Where(item => StringComparer.Ordinal.Equals(item.Scalar("milestone_id"), milestoneId)).Select(item => item.Identifier).ToHashSet(StringComparer.Ordinal);
+        var ownedWorkItems = workItems.Values.Where(item => StringComparer.Ordinal.Equals(item.Scalar("milestone_id"), milestoneId) && item.Scalar("revision_ref") is null or "null" or "").Select(item => item.Identifier).ToHashSet(StringComparer.Ordinal);
         foreach (var undeclared in ownedWorkItems.Except(declaredWorkItemIds, StringComparer.Ordinal).OrderBy(item => item, StringComparer.Ordinal))
         {
             failures.Add($"milestone-owned work item is not declared by the milestone: {undeclared}");
@@ -391,7 +400,7 @@ public static class GovernanceApplication
             }
         }
 
-        var declaredGates = records.Where(item => item.Type.DefinitionName == "gate").ToDictionary(item => item.Identifier, StringComparer.Ordinal);
+        var declaredGates = records.Where(item => item.Type.DefinitionName == "gate").GroupBy(item => item.Identifier, StringComparer.Ordinal).ToDictionary(group => group.Key, group => group.First(), StringComparer.Ordinal);
         foreach (var requiredGate in milestone.StringList("required_gates"))
         {
             if (declaredGates.TryGetValue(requiredGate, out var gate))
@@ -547,7 +556,7 @@ public static class GovernanceApplication
     public static string Serialize(CommandResult result) => JsonSerializer.Serialize(result, JsonOptions);
 
     internal static Dictionary<string, GovernanceRecord> WorkItems(IReadOnlyList<GovernanceRecord> records)
-        => records.Where(item => item.Type.DefinitionName == "work-item" && item.Identifier.Length > 0).ToDictionary(item => item.Identifier, StringComparer.Ordinal);
+        => records.Where(item => item.Type.DefinitionName == "work-item" && item.Identifier.Length > 0).GroupBy(item => item.Identifier, StringComparer.Ordinal).ToDictionary(group => group.Key, group => group.First(), StringComparer.Ordinal);
 
     private static List<string> ReadinessReasons(DirectoryInfo repository, GovernanceRecord workItem, Dictionary<string, GovernanceRecord> workItems, IReadOnlyList<GovernanceRecord> dependencies, IntegrationPolicyDefinition integrationPolicy, bool allowValidatedP0Prerequisites)
     {
@@ -724,6 +733,8 @@ public static class GovernanceApplication
             }
         }
 
+        foreach (var duplicate in records.GroupBy(record => record.Identifier, StringComparer.Ordinal).Where(group => group.Count() > 1))
+            diagnostics.Add(Diagnostic.Error(duplicate.First().Path, null, "GOV_DUPLICATE_ID", $"Duplicate governed identifier '{duplicate.Key}'."));
         return records;
     }
 
@@ -813,7 +824,7 @@ public sealed record Diagnostic(string File, long? Line, long? Column, string Se
 public sealed record ValidationPayload(bool IsValid, int RecordCount, IReadOnlyList<Diagnostic> Diagnostics);
 public sealed record MilestoneStatus(string Id, string Status);
 public sealed record WorkItemStatus(string Id, string Status, IReadOnlyList<string> Prerequisites, IReadOnlyList<string> Blockers, IReadOnlyList<string> RequiredEvidence);
-public sealed record StatusPayload(IReadOnlyList<MilestoneStatus> Milestones, IReadOnlyList<WorkItemStatus> WorkItems, object Validation);
+public sealed record StatusPayload(IReadOnlyList<MilestoneStatus> Milestones, IReadOnlyList<WorkItemStatus> WorkItems, object Validation, IReadOnlyList<RevisionStatus> Revisions, IReadOnlyList<HistoricalScopeStatus> HistoricalScopes);
 public sealed record NextItem(string WorkItemId, string Status, bool Actionable, string Reason);
 public sealed record IntegrationAction(string WorkItemId, string PrerequisiteWorkItemId, string RequiredReadiness, string Action, string Reason);
 public sealed record NextPayload(IReadOnlyList<NextItem> Items, IReadOnlyList<IntegrationAction> HumanIntegrationActions, IReadOnlyList<Diagnostic> Diagnostics);

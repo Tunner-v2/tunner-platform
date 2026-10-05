@@ -1,0 +1,38 @@
+schema_version: 1
+work_item_id: TUN-P1-022
+milestone_id: P1
+revision_ref: null
+sprint_id: null
+title: Current authority synchronization and post-closure RV governance materialization
+status: IN_PROGRESS
+product_acceptance_required: false
+type: GOVERNANCE_TOOLING
+authority_refs:
+  - docs/authority/current-authority.json
+  - docs/authority/current/development/00_Authority_Change_Control_and_Documentation_Governance.md
+  - docs/authority/current/development/03_Governed_Development_Lifecycle_Scrum_Git.md
+  - docs/authority/current/development/04_Governance_and_Context_Tooling_Specification.md
+  - docs/authority/current/development/11_Development_Planes_Milestones_and_P0_Backlog.md
+  - docs/authority/current/development/12_AI_Development_Protocol_Context_and_Project_Memory.md
+  - docs/authority/current/development/36_P0_Repository_Bootstrap_Governance_and_Context_Implementation_Spec.md
+  - docs/authority/current/development/37_Current_Authority_Index.md
+flow_refs: []
+contract_refs: [governance/schemas/v1/revision.schema.json]
+decision_refs: []
+acceptance_criteria:
+  - Mirror current approved RV authority and every Pre-P0 1.0.7 manifest entry with byte-exact hashes; preserve locked Baseline 1.6.0 and prior authority evidence.
+  - Materialize monotonic immutable RV and child identities, executable schemas, scoped impact, lifecycle checks, closure evidence, and preserved REOPENED capability.
+  - Expose historical closure separately from active Revision state in governance and bounded fresh-agent context/project memory.
+  - Validate a cohesive committed synchronization candidate with zero-warning builds and relevant regression tests while preserving unrelated local work.
+  - Stop before any real P0 Revision, P0 reopen, or new AMD creation.
+prerequisites: []
+blockers: []
+impact: {architecture: true, ui: false, sdk: false, financial: false, compliance: false, security: false, devops: false, support: false}
+activated_roles: [full-stack-engineer, solution-architect, governance-engineer, tester-qa-engineer, auditor]
+required_tests: [dotnet build, governance functional regression tests, Revision schema and lifecycle tests, bounded context and fresh-agent tests, authority ZIP portability tests]
+required_evidence: [governance/evidence/RV-SYNC-INITIAL-STATE.json, governance/evidence/RV-SYNC-AUTHORITY.json, governance/evidence/TUN-P1-022-VALIDATION.json, governance/evidence/TUN-P1-022-ROLE-REVIEWS.json, docs/development/RV_GOVERNANCE_SYNCHRONIZATION.md]
+context_policy: TASK
+todos: []
+defects: []
+created_at: 2026-10-05T14:00:00-04:00
+updated_at: 2026-10-05T14:00:00-04:00

@@ -4,6 +4,12 @@ docs/authority/amendments/AMD-0003/AMD-0003_Location-Independent_Repository_and_
 
 # Authority mirror checkout bytes are hash-governed and must be deterministic across worktrees.
 docs/authority/** text eol=lf
+# ZIP authority artifacts retain byte-exact content; never normalize binary bytes.
+docs/authority/**/*.zip binary
+# Current Drive execution mirror retains the fetched UTF-8/LF bytes.
+docs/authority/current/** text eol=lf -whitespace
+# Retain the approved template's deliberate final blank line without altering source bytes.
+governance/templates/lifecycle-policy.template.yaml whitespace=-blank-at-eof
 docs/authority/amendments/AMD-0001/amendment-provenance.json text eol=crlf
 docs/authority/amendments/AMD-0001/mirror-manifest.json text eol=crlf
 docs/authority/amendments/AMD-0002/amendment-provenance.json text eol=crlf

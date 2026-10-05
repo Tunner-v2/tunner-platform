@@ -1,6 +1,7 @@
 schema_version: 1
 work_item_id: ""
 milestone_id: ""
+revision_ref: null  # Owning post-closure Revision when applicable
 sprint_id: null
 title: ""
 status: DRAFT
@@ -10,6 +11,20 @@ flow_refs: []
 contract_refs: []
 decision_refs: []
 authority_resolution_refs: []
+acceptance_criteria: []
+prerequisites: []
+conditional_activation:
+  is_conditional: false
+  trigger_refs: []
+  trigger_status: null  # PRESENT | ABSENT | NOT_APPLICABLE
+
+# Each prerequisite may declare: {work_item_id: "", required_readiness: LOCAL_VALIDATED | MERGED_TO_MAIN}
+blockers: []
+pr_integration:
+  pull_request: null
+  pr_state: null
+  local_readiness: null
+  merged_to_main: false
 git_state:
   repository_changed: null
   validated_commit_sha: null
@@ -18,18 +33,6 @@ git_state:
   closure_commit_sha: null
   remaining_uncommitted_paths: []
   remaining_uncommitted_classification: NONE  # NONE | PREEXISTING_UNRELATED | UNRELATED_ACTIVE_WORK | WORK_ITEM_OWNED
-acceptance_criteria: []
-prerequisites: []
-conditional_activation:
-  is_conditional: false
-  trigger_refs: []
-  trigger_status: null  # PRESENT | ABSENT | NOT_APPLICABLE
-blockers: []
-pr_integration:
-  pull_request: null
-  pr_state: null
-  local_readiness: null
-  merged_to_main: false
 impact:
   architecture: false
   ui: false

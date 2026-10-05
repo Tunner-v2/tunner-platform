@@ -25,6 +25,7 @@ public static class Program
         governance.Subcommands.Add(CreateMilestoneCommand(repositoryOption));
         governance.Subcommands.Add(CreateRolesCommand(repositoryOption));
         governance.Subcommands.Add(CreateCommitReadinessCommand(repositoryOption));
+        governance.Subcommands.Add(CreateRevisionCommand(repositoryOption));
         root.Subcommands.Add(governance);
         root.Subcommands.Add(CreateWorkCommand(repositoryOption));
         var bootstrapReplay = new Command("replay", "Replay bootstrap records and refuse unresolved exceptions.");
@@ -37,6 +38,50 @@ public static class Program
         root.Subcommands.Add(CreateTelemetryCommand(repositoryOption));
 
         return root.Parse(args).Invoke();
+    }
+
+    private static Command CreateRevisionCommand(Option<DirectoryInfo?> repositoryOption)
+    {
+        var scope = new Option<string>("--scope");
+        var type = new Option<string>("--type");
+        var title = new Option<string>("--title");
+        var reason = new Option<string>("--reason");
+        var impact = new Option<string>("--impact");
+        var blocked = new Option<string[]>("--blocked-scope");
+        var authority = new Option<string[]>("--authority-ref");
+        var decisions = new Option<string[]>("--decision-ref");
+        var criteria = new Option<string[]>("--acceptance");
+        var parent = new Option<string?>("--parent-milestone-revision");
+        var create = new Command("create", "Allocate post-closure Revision lineage without changing original closure.");
+        foreach (var option in new Option[] { scope, type, title, reason, impact, blocked, authority, decisions, criteria, parent }) create.Options.Add(option);
+        create.SetAction(p => WriteResult(RevisionApplication.Create(Repository(p, repositoryOption), new RevisionCreateRequest(
+            p.GetValue(scope) ?? "", p.GetValue(type) ?? "CORRECTIVE", p.GetValue(title) ?? "", p.GetValue(reason) ?? "",
+            p.GetValue(impact) ?? "NON_BLOCKING", p.GetValue(blocked) ?? [], p.GetValue(authority) ?? [],
+            p.GetValue(decisions) ?? [], p.GetValue(criteria) ?? [], p.GetValue(parent)))));
+        var revision = new Command("revision", "Repository-native post-closure work lineage.");
+        revision.Subcommands.Add(create);
+        foreach (var name in new[] { "show", "close-check" })
+        {
+            var id = new Argument<string>("revision-id");
+            var command = new Command(name, "Read-only Revision lineage and evidence check.");
+            command.Arguments.Add(id);
+            command.SetAction(p => WriteResult(name == "show" ? RevisionApplication.Show(Repository(p, repositoryOption), p.GetValue(id) ?? "") : RevisionApplication.CloseCheck(Repository(p, repositoryOption), p.GetValue(id) ?? "")));
+            revision.Subcommands.Add(command);
+        }
+        var childId = new Argument<string>("revision-id");
+        var childTitle = new Option<string>("--title");
+        var child = new Command("child-create", "Allocate a governed child work item under an open Revision.");
+        child.Arguments.Add(childId); child.Options.Add(childTitle);
+        child.SetAction(p => WriteResult(RevisionApplication.CreateChild(Repository(p, repositoryOption), p.GetValue(childId) ?? "", p.GetValue(childTitle) ?? "")));
+        revision.Subcommands.Add(child);
+        var transitionId = new Argument<string>("revision-id");
+        var destination = new Argument<string>("destination");
+        var transitionCheck = new Command("check", "Check Revision lifecycle without changing state.");
+        transitionCheck.Arguments.Add(transitionId); transitionCheck.Arguments.Add(destination);
+        transitionCheck.SetAction(p => WriteResult(RevisionApplication.CheckTransition(Repository(p, repositoryOption), p.GetValue(transitionId) ?? "", p.GetValue(destination) ?? "")));
+        var transition = new Command("transition", "Revision lifecycle eligibility.");
+        transition.Subcommands.Add(transitionCheck); revision.Subcommands.Add(transition);
+        return revision;
     }
 
     private static Command CreateValidateCommand(Option<DirectoryInfo?> repositoryOption)
