@@ -19,7 +19,7 @@ Latest bounded Revision lineage:
 Selected scope: TUN-P1-013
 Validated SHA: ef3517d63946843ff2ef674d16742931ec793214
 Tested SHA: ef3517d63946843ff2ef674d16742931ec793214
-Closure SHA: not recorded
+Closure SHA: e475ea88304db30cbb92b6540babfd9c528cc557
 
 Prerequisites: TUN-P1-002, TUN-P1-005
 Authority: docs/authority/current-authority.json, docs/authority/amendments/AMD-0004/AMD-0004_Shared_Technical_Primitives_Formatting_and_Canonicalization.md, docs/authority/amendments/AMD-0001/effective-overrides/11_Development_Planes_Milestones_and_P0_Backlog.md, docs/authority/baselines/1.6.0/01_Engineering_Technology_Foundation.md, docs/authority/baselines/1.6.0/02_Repository_Solution_and_Module_Architecture.md, docs/authority/baselines/1.6.0/09_Testing_Acceptance_Evidence_and_Quality_Gates.md, docs/authority/baselines/1.6.0/32_Domain_API_Event_Data_and_Policy_Contract_Catalog.md, docs/authority/baselines/1.6.0/26_Finance_Ledger_Accounting_Settlement_and_Payout_FRD.md, docs/authority/baselines/1.6.0/decisions/PDR-0010_Configurable_FX_Economic_Treatment_and_Guided_Configuration.md

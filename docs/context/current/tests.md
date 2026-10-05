@@ -13,3 +13,5 @@
 - `governance/evidence/TUN-P1-013-ROLE-REVIEWS.json` — required evidence
 - `governance/evidence/TUN-P1-013-AUTHORITY-RESOLUTION.json` — required evidence
 - `docs/development/P1_EFFECTIVE_POLICY_VERSION_RESOLUTION.md` — required evidence
+- `governance/evidence/TUN-P1-013-TEST-RESULTS.json` — required evidence
+- `governance/evidence/TUN-P1-013-CLOSURE.json` — required evidence
