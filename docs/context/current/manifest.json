@@ -1,29 +1,35 @@
 {
   "GeneratorVersion": "tunner-context-0.1.0",
-  "GeneratedAt": "2026-10-05T22:04:42.3447856+00:00",
+  "GeneratedAt": "2026-10-05T22:28:14.9242728+00:00",
   "WorkItem": {
-    "Id": "TUN-P1-015",
-    "Title": "Provider-neutral adapter and correlation boundary",
-    "Status": "DONE",
+    "Id": "TUN-P1-016",
+    "Title": "Platform environment configuration model",
+    "Status": "READY",
     "ContextPolicy": "EXPANDED"
   },
   "Included": [
     {
+      "Path": ".agent/skills/auditor/SKILL.md",
+      "Reason": "activated role skill",
+      "Sha256": "191c796fc5df0332ff2c3c464ca611d2c6d3ffc5ba7e2807986a71ad2e40d921",
+      "Version": "1.0.0"
+    },
+    {
+      "Path": ".agent/skills/cyber-security-engineer/SKILL.md",
+      "Reason": "activated role skill",
+      "Sha256": "2d32ff3d7fb503f29cf930e9852ed4a757bb48a08e3fa4e3f6d5a23139a47f97",
+      "Version": "1.0.0"
+    },
+    {
+      "Path": ".agent/skills/devops-engineer/SKILL.md",
+      "Reason": "activated role skill",
+      "Sha256": "0def19cfd8cf73f9fe47851ab171d3154e7e80b4675ded65964f10856789b50c",
+      "Version": "1.0.0"
+    },
+    {
       "Path": ".agent/skills/full-stack-engineer/SKILL.md",
       "Reason": "activated role skill",
       "Sha256": "59adbe2133cf4ce88cbc9ca4eafce1d5a9d83b9562b6580c1571e6fc148d46b5",
-      "Version": "1.0.0"
-    },
-    {
-      "Path": ".agent/skills/rd-engineer/SKILL.md",
-      "Reason": "activated role skill",
-      "Sha256": "2834c223dfd847a6d7cd28f52de4113efc574d621391d059e8dc1469bdf33187",
-      "Version": "1.0.0"
-    },
-    {
-      "Path": ".agent/skills/sdk-engineer/SKILL.md",
-      "Reason": "activated role skill",
-      "Sha256": "c64a66b2e19bccdbf69f13c9db62e9e2cbb0403f384591a93b5b787dc33b07ae",
       "Version": "1.0.0"
     },
     {
@@ -93,27 +99,21 @@
       "Version": null
     },
     {
+      "Path": "docs/authority/baselines/1.6.0/06_Environment_Configuration_Secrets_and_Deployment.md",
+      "Reason": "explicit contract reference",
+      "Sha256": "5c93869ce33002d70ffc78bb8449e5326125ca7b25e63ee7933333715fffea13",
+      "Version": null
+    },
+    {
+      "Path": "docs/authority/baselines/1.6.0/08_Security_Privacy_Compliance_and_Global_Market_Governance.md",
+      "Reason": "explicit authority reference",
+      "Sha256": "50d2ee11ec6021a4b3af22cf9dea25930fbb465d8409f6d25a21d51d5e7b983c",
+      "Version": null
+    },
+    {
       "Path": "docs/authority/baselines/1.6.0/09_Testing_Acceptance_Evidence_and_Quality_Gates.md",
       "Reason": "explicit authority reference",
       "Sha256": "f7e5760a0d6e18610b1a2740e8f2f1a959d011a8020edfd8ba80c4f75058a7dc",
-      "Version": null
-    },
-    {
-      "Path": "docs/authority/baselines/1.6.0/23_Provider_Account_and_Routing_Operations_FRD.md",
-      "Reason": "explicit contract reference",
-      "Sha256": "5b63132b423de7a21f7e7816d4fe771bfb2e5a733182a47da11c85757b44a087",
-      "Version": null
-    },
-    {
-      "Path": "docs/authority/baselines/1.6.0/32_Domain_API_Event_Data_and_Policy_Contract_Catalog.md",
-      "Reason": "explicit contract reference",
-      "Sha256": "b2e9446baa1a63f39e58246ab773cbeff0c15d00f6b240063b8a3eaa988b7339",
-      "Version": null
-    },
-    {
-      "Path": "docs/authority/baselines/1.6.0/decisions/ADR-0014_Payment_Provider_Stripe.md",
-      "Reason": "explicit authority reference",
-      "Sha256": "49daba710d7cdb12cf66d85dbc697a12ff19a2bd64d8e0d11b8cec3c5b005a79",
       "Version": null
     },
     {
@@ -129,69 +129,57 @@
       "Version": null
     },
     {
-      "Path": "docs/development/P1_PROVIDER_CORRELATION_BOUNDARY.md",
+      "Path": "docs/development/P1_ENGINEERING_ENVIRONMENT_CONFIGURATION.md",
       "Reason": "required evidence",
-      "Sha256": "64cecfdab4f876ab448aadaf15e07093c6ebb4c129e3bf476a3467640bce3bd2",
+      "Sha256": "cf80a9b7fcd688ea4323bd244c26f4749ebc2591ca3d62b3f7bde3e68f229056",
       "Version": null
     },
     {
       "Path": "docs/project/CURRENT_STATE.md",
       "Reason": "current project state",
-      "Sha256": "eb18f4558951f2c5a0257ae700c23a00ec03dc8a4902583740c366eb1b75e5df",
+      "Sha256": "f2393a449cd2817610de8ae8e739bd59a4792661f155c0108bd7a3581393a01c",
       "Version": null
     },
     {
       "Path": "docs/project/HANDOFF.md",
       "Reason": "handoff state",
-      "Sha256": "eb18f4558951f2c5a0257ae700c23a00ec03dc8a4902583740c366eb1b75e5df",
+      "Sha256": "f2393a449cd2817610de8ae8e739bd59a4792661f155c0108bd7a3581393a01c",
       "Version": null
     },
     {
       "Path": "docs/project/PROJECT_CONTEXT.md",
       "Reason": "durable project context",
-      "Sha256": "eb18f4558951f2c5a0257ae700c23a00ec03dc8a4902583740c366eb1b75e5df",
+      "Sha256": "f2393a449cd2817610de8ae8e739bd59a4792661f155c0108bd7a3581393a01c",
       "Version": null
     },
     {
-      "Path": "governance/context/CTX-TUN-P1-015-001.yaml",
+      "Path": "governance/context/CTX-TUN-P1-016-001.yaml",
       "Reason": "required evidence",
-      "Sha256": "6c071def0b7634d878469f0725403eae5711d99b48290d24ace2853c5bf9c454",
+      "Sha256": "52dbb1bfc38fba0f9de3b6705bbc970fe853fdc568c10c93910014b2dd22cf29",
       "Version": null
     },
     {
-      "Path": "governance/evidence/TUN-P1-015-AUTHORITY-RESOLUTION.json",
+      "Path": "governance/evidence/TUN-P1-016-AUTHORITY-RESOLUTION.json",
       "Reason": "required evidence",
-      "Sha256": "7e73420f33eae3aa9ad70c93ae00b6a0b4663408751a449f6893d23745b6a79b",
+      "Sha256": "ba7b67b4b35101009f64be60bfb01ef07783bfa8ce49bb25da18c07d3bf06e93",
       "Version": null
     },
     {
-      "Path": "governance/evidence/TUN-P1-015-CLOSURE.json",
+      "Path": "governance/evidence/TUN-P1-016-RD-SOURCES.json",
       "Reason": "required evidence",
-      "Sha256": "38e2b90d5348413a063609813ba62c8343e73e6799620e35d3ccb57f64564fdc",
+      "Sha256": "e62a5f9f72823b889269355302cf64154dd995215587fe6778c5faa94ca21fb0",
       "Version": null
     },
     {
-      "Path": "governance/evidence/TUN-P1-015-RD-SOURCES.json",
+      "Path": "governance/evidence/TUN-P1-016-ROLE-REVIEWS.json",
       "Reason": "required evidence",
-      "Sha256": "a1a64890d6a9f25d400f1af283aa469a9a39c0d69b638478d2d99ca1ad45525c",
+      "Sha256": "1b7219e679ca147c3555eaaa981e98b50599396bc26560afd2c769e7e847958f",
       "Version": null
     },
     {
-      "Path": "governance/evidence/TUN-P1-015-ROLE-REVIEWS.json",
+      "Path": "governance/evidence/TUN-P1-016-VALIDATION.json",
       "Reason": "required evidence",
-      "Sha256": "added48f8a85f661267b9770381743c73cb09b1d799116a5654237f6086f3371",
-      "Version": null
-    },
-    {
-      "Path": "governance/evidence/TUN-P1-015-TEST-RESULTS.json",
-      "Reason": "required evidence",
-      "Sha256": "f373fbdb73d7ae0e7a0943fc14e4d7a4f5146c7d8a8408ae339f8a7a15cfe688",
-      "Version": null
-    },
-    {
-      "Path": "governance/evidence/TUN-P1-015-VALIDATION.json",
-      "Reason": "required evidence",
-      "Sha256": "e02932147f17d623bff8c9d54540bd2b55ce889c6cd77649b437e773fc479d51",
+      "Sha256": "3a8e2f30aeb5f368fc4d5e6025f31438488cf7c1ee0926e843872c8ed4333170",
       "Version": null
     },
     {
@@ -213,9 +201,9 @@
       "Version": null
     },
     {
-      "Path": "governance/work-items/TUN-P1-004.yaml",
+      "Path": "governance/work-items/TUN-P1-002.yaml",
       "Reason": "prerequisite state",
-      "Sha256": "f5ff3d21227985aeda06092dcc2b35d5f0677e383c2f1999e72975844be043d3",
+      "Sha256": "0000561d401939111ef12ef61976c224e87e48851fe176d1389320bfdfeb1602",
       "Version": null
     },
     {
@@ -225,24 +213,24 @@
       "Version": null
     },
     {
-      "Path": "governance/work-items/TUN-P1-015.yaml",
+      "Path": "governance/work-items/TUN-P1-016.yaml",
       "Reason": "selected work item",
-      "Sha256": "177f65caf3a21c9d24a04466501e575f7fc20b87ef68555b10aa8b00634d492c",
+      "Sha256": "d9efc580980239e6dd77e447fd3b680775abd376ccfa55002e25bcdc05412c0c",
       "Version": null
     }
   ],
   "Excluded": [],
   "GitHistory": [
+    "332c150 chore(governance): record P1-015 closure lineage and repository recovery",
     "48d2a99 chore(governance): close P1-015 technical provider foundation",
     "7dd1345 test(governance): record P1-015 committed validation and role reviews",
-    "debd619 fix(platform): bind provider keys to stable owner request identities",
-    "1be75c9 chore(governance): classify shared P1 coordination metadata",
-    "d724c8d feat(platform): add provider correlation and idempotency evidence boundary",
     "8320368 chore(governance): resolve P1-015 authority and committed prerequisite readiness",
     "9613dcf docs(governance): record P1-014 closure SHA and recovery context",
     "36cca42 chore(governance): close validated P1-014 audit foundation",
     "ef4983a test(audit): record exact-SHA P1-014 validation and role reviews",
-    "b2a84cb docs(governance): record P1-013 closure lineage and final handoff"
+    "b2a84cb docs(governance): record P1-013 closure lineage and final handoff",
+    "e475ea8 chore(governance): close validated P1-013 technical work item",
+    "6d7f23a test(platform): record committed P1-013 validation and role reviews"
   ],
   "Revision": null,
   "HistoricalScopes": [
@@ -336,11 +324,7 @@
     }
   ],
   "RevisionSetSha256": "cd345b251a266eea38711788d4b72d80f527f6b5956b431a42f66d64e796b0c6",
-  "CommitState": {
-    "ValidatedSha": "debd619e73199503986780831d574d26ed3fd52d",
-    "TestedSha": "debd619e73199503986780831d574d26ed3fd52d",
-    "ClosureSha": "48d2a994735a34f669c2036e894e42d7abf9cc76"
-  },
+  "CommitState": null,
   "LatestRevisions": [
     {
       "Id": "P0-RV001",
@@ -460,5 +444,5 @@
       "NextAction": "preserve closure and run governance next"
     }
   ],
-  "GovernanceStateSha256": "0a248d4dbae62b7d591bbc46b29c296eed05491e0b592c4415e0672222f0f529"
+  "GovernanceStateSha256": "90b3c8cc396d1d949c6f981854466ecc4cbcc57daadfe8c67233b40fc7b80bd6"
 }
