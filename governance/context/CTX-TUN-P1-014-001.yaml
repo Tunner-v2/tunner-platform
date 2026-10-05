@@ -17,7 +17,17 @@
     "governance/evidence/TUN-P1-003-RETROSPECTIVE-COMMITTED.json",
     "governance/evidence/TUN-P1-014-AUTHORITY-RESOLUTION.json",
     "governance/evidence/TUN-P1-014-PREFLIGHT-REVIEWS.json",
-    "docs/development/P1_AUDIT_APPEND_AND_CORRELATION.md"
+    "docs/development/P1_AUDIT_APPEND_AND_CORRELATION.md",
+    "src/Tunner.Database/Audit/AuditEvent.cs",
+    "src/Tunner.Database/Audit/AuditEventRecord.cs",
+    "src/Tunner.Database/Audit/AuditModelConfiguration.cs",
+    "src/Tunner.Database/TunnerMigrationsDbContext.cs",
+    "src/Tunner.Database.Migrations/Migrations/20261005220000_P1AuditAppend.cs",
+    "src/Tunner.Database.Migrations/Migrations/TunnerMigrationsDbContextModelSnapshot.cs",
+    "tests/Tunner.Database.IntegrationTests/AuditEventTests.cs",
+    "tests/Tunner.Database.IntegrationTests/AuditAppendIntegrationTests.cs",
+    "governance/evidence/TUN-P1-014-VALIDATION.json",
+    "governance/evidence/TUN-P1-014-ROLE-REVIEWS.json"
   ],
   "excluded_artifacts": [
     "unrelated authority corpus",
@@ -36,13 +46,23 @@
     "docs/authority/baselines/1.6.0/29_Privacy_Data_Lifecycle_and_Processing_Governance_FRD.md": "67dc3dc489e748978dea5bc5867323ce9cea1c71723853f2f418b919dbc3838e",
     "docs/authority/amendments/AMD-0004/AMD-0004_Shared_Technical_Primitives_Formatting_and_Canonicalization.md": "9577b29946c772fad06aa1a79d7866d16da3677e944a6bd46fafb13f296a2384",
     "docs/authority/amendments/AMD-0005/AMD-0005_Authority-First_Decision_Resolution_and_Duplicate-Decision_Prevention.md": "51b259a3757c1f881846d3c17666723d0dc72628ad5d25bcd58360c6f41c0d64",
-    "governance/work-items/TUN-P1-014.yaml": "847889a946cfd886c409df11adaa97721ae7ce8252fcc4c25e9951940eb61b61",
+    "governance/work-items/TUN-P1-014.yaml": "ac272de28d1ee0ff62c1bb5c047f41af14cfed8f3195b87d840fcdd1c1d0a762",
     "governance/work-items/TUN-P1-003.yaml": "0aa8302ccb31134bc85c8774e010331d25d5657af1e93e27d3ed12119179ea76",
     "governance/evidence/TUN-P1-003-RETROSPECTIVE-COMMITTED.json": "df65a59bc4193d3ebe4a1bbc1c002b50021dbd7d865ae728a9d5076ccf10dde7",
     "governance/evidence/TUN-P1-014-AUTHORITY-RESOLUTION.json": "4ee5d10b8606ae44c5dba2f18a0a0a4d9748fbedc7587b7794edf3888a136dce",
     "governance/evidence/TUN-P1-014-PREFLIGHT-REVIEWS.json": "736913e36055fd3b3c739667261fe9b55634d3e6108a18000b7fb3f27203f130",
-    "docs/development/P1_AUDIT_APPEND_AND_CORRELATION.md": "8ce37f46b830c574dff881e2854ab7b51305a176edb0fd456ac782f8601f9aad"
+    "docs/development/P1_AUDIT_APPEND_AND_CORRELATION.md": "13f72be6edd3a387d58ca87a4c8ee2c6f01ec8a0c19c25cd2c5d812d4f58d2b6",
+    "src/Tunner.Database/Audit/AuditEvent.cs": "b812cf9217fddb833df4795ffafc2e967c24735a41abfcf81b14dfdaaad61458",
+    "src/Tunner.Database/Audit/AuditEventRecord.cs": "234aabe0039a8d1872ac8bb8deafc17c838e5c1aa09c375cce234668fda790db",
+    "src/Tunner.Database/Audit/AuditModelConfiguration.cs": "c83521d9981e4ce8787621c31539efa2c9f524e1f118fdb64e407fe3b225905b",
+    "src/Tunner.Database/TunnerMigrationsDbContext.cs": "c8a0efe7993e63799606d200c9e547f16614208aa3252dc1a2b420766c70b8f6",
+    "src/Tunner.Database.Migrations/Migrations/20261005220000_P1AuditAppend.cs": "b424691a2eeda64c17029af1c7015ebc9e613831bf4e31d120cb0a4f7c11f20a",
+    "src/Tunner.Database.Migrations/Migrations/TunnerMigrationsDbContextModelSnapshot.cs": "23954f6e5e6fb63e75fc6cbe2d02153330c4fd4c00d34c1a7645755fb80ffeaa",
+    "tests/Tunner.Database.IntegrationTests/AuditEventTests.cs": "7afb1127b09cf893ca2d06acd586a64251b69f31aef40c522eb82829f783b637",
+    "tests/Tunner.Database.IntegrationTests/AuditAppendIntegrationTests.cs": "10478ea96f243dc5e022331d9061ec26e4df175c4654d027bbc9f846177d1c52",
+    "governance/evidence/TUN-P1-014-VALIDATION.json": "cc2c5d65bad388b1496024353f418a95539de0aed576cc17ea91471be267bf3d",
+    "governance/evidence/TUN-P1-014-ROLE-REVIEWS.json": "91038e9307471268970bae5174e931ef864fbeecc9c400bd80b7565167f07fd5"
   },
   "tool_version": "p1-014-context-selection-1.0.0",
-  "created_at": "2026-10-05T21:32:06.4698792+00:00"
+  "created_at": "2026-10-05T17:32:06.4698792-04:00"
 }

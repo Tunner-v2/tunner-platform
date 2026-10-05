@@ -173,6 +173,27 @@ public sealed class TunnerMigrationsDbContextModelSnapshot : ModelSnapshot
                 .HasDatabaseName("IX_durable_work_items_claim");
             entity.ToTable("durable_work_items", "platform");
         });
+        modelBuilder.Entity("Tunner.Database.Audit.AuditEventRecord", entity =>
+        {
+            entity.Property<Guid>("EventId").ValueGeneratedNever().HasColumnType("uuid").HasColumnName("event_id");
+            entity.Property<DateTimeOffset>("OccurredAtUtc").HasColumnType("timestamp with time zone").HasColumnName("occurred_at_utc");
+            entity.Property<string>("OperationId").IsRequired().HasColumnType("text").HasColumnName("operation_id");
+            entity.Property<string>("CorrelationId").IsRequired().HasColumnType("text").HasColumnName("correlation_id");
+            entity.Property<string>("DataClassification").IsRequired().HasColumnType("text").HasColumnName("data_classification");
+            entity.Property<string>("RetentionClassReference").IsRequired().HasColumnType("text").HasColumnName("retention_class_ref");
+            entity.Property<string>("Envelope").IsRequired().HasColumnType("text").HasColumnName("envelope");
+            entity.Property<string>("IntegrityFormat").IsRequired().HasColumnType("text").HasColumnName("integrity_format");
+            entity.Property<string>("EnvelopeSha256").IsRequired().HasMaxLength(64).HasColumnType("character varying(64)").HasColumnName("envelope_sha256");
+            entity.HasKey("EventId");
+            entity.HasIndex("OperationId").HasDatabaseName("IX_audit_events_operation");
+            entity.HasIndex("CorrelationId").HasDatabaseName("IX_audit_events_correlation");
+            entity.ToTable("events", "audit", table =>
+            {
+                table.HasCheckConstraint("ck_audit_events_integrity_format", "integrity_format = 'sha256-envelope-v1'");
+                table.HasCheckConstraint("ck_audit_events_digest", "envelope_sha256 ~ '^[0-9a-f]{64}$'");
+            });
+        });
+
 #pragma warning restore 612, 618
     }
 }

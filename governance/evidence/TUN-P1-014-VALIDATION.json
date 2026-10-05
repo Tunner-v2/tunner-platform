@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "evidence_id": "TUN-P1-014-VALIDATION",
+  "scope_type": "WORK_ITEM",
+  "scope_id": "TUN-P1-014",
+  "status": "PENDING",
+  "result": "PENDING",
+  "validation_kind": "COMMITTED",
+  "owned_behavior_paths": [
+    "src/Tunner.Database/Audit/AuditEvent.cs",
+    "src/Tunner.Database/Audit/AuditEventRecord.cs",
+    "src/Tunner.Database/Audit/AuditModelConfiguration.cs",
+    "src/Tunner.Database/TunnerMigrationsDbContext.cs",
+    "src/Tunner.Database.Migrations/Migrations/20261005220000_P1AuditAppend.cs",
+    "src/Tunner.Database.Migrations/Migrations/TunnerMigrationsDbContextModelSnapshot.cs",
+    "tests/Tunner.Database.IntegrationTests/AuditEventTests.cs",
+    "tests/Tunner.Database.IntegrationTests/AuditAppendIntegrationTests.cs",
+    "docs/development/P1_AUDIT_APPEND_AND_CORRELATION.md"
+  ],
+  "checked_at": null,
+  "limitations": [
+    "Implementation candidate only. No passing execution or committed-state readiness is asserted before exact-SHA validation."
+  ]
+}
