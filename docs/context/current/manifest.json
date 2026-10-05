@@ -1,10 +1,10 @@
 {
   "GeneratorVersion": "tunner-context-0.1.0",
-  "GeneratedAt": "2026-10-05T19:52:06.775982+00:00",
+  "GeneratedAt": "2026-10-05T19:55:14.3414533+00:00",
   "WorkItem": {
     "Id": "P0-RV001",
     "Title": "Governance Integrity, Evidence \u0026 Portability Revision",
-    "Status": "VALIDATION",
+    "Status": "CLOSED",
     "ContextPolicy": "TASK"
   },
   "Included": [
@@ -83,19 +83,19 @@
     {
       "Path": "docs/project/CURRENT_STATE.md",
       "Reason": "current project state",
-      "Sha256": "259ef058b69366805f71409a88df11a176cc223780473e95c26e1fba109f1498",
+      "Sha256": "199ac716537948e1b2ff02426bf6997094bbc9eb3d02277182ad59a6d57f802b",
       "Version": null
     },
     {
       "Path": "docs/project/HANDOFF.md",
       "Reason": "handoff state",
-      "Sha256": "259ef058b69366805f71409a88df11a176cc223780473e95c26e1fba109f1498",
+      "Sha256": "199ac716537948e1b2ff02426bf6997094bbc9eb3d02277182ad59a6d57f802b",
       "Version": null
     },
     {
       "Path": "docs/project/PROJECT_CONTEXT.md",
       "Reason": "durable project context",
-      "Sha256": "259ef058b69366805f71409a88df11a176cc223780473e95c26e1fba109f1498",
+      "Sha256": "199ac716537948e1b2ff02426bf6997094bbc9eb3d02277182ad59a6d57f802b",
       "Version": null
     },
     {
@@ -135,6 +135,12 @@
       "Version": null
     },
     {
+      "Path": "governance/evidence/P0-RV001-COMMITTED-VALIDATION.json",
+      "Reason": "Revision evidence",
+      "Sha256": "61d173296f95c709613409c9ce48126ce16a466ba85ed371765f20c2636850cd",
+      "Version": null
+    },
+    {
       "Path": "governance/evidence/P0-RV001-OWNERSHIP-MAP.json",
       "Reason": "Revision dependency or linked finding",
       "Sha256": "f330fb1c7b9e59e26a3f5ee429e3c1dcbd805e0c701221cf45121f5fb2ed190e",
@@ -143,7 +149,7 @@
     {
       "Path": "governance/evidence/P0-RV001-VALIDATION.json",
       "Reason": "Revision evidence",
-      "Sha256": "005f77dcb09dd1048ffe936494ba1c6acd40bd807a43a0feab0a19649b70e098",
+      "Sha256": "5be374f7780fb8f822e38c94d0f270f6e1e4b8473c64eb0319250b1fdeaa9172",
       "Version": null
     },
     {
@@ -161,7 +167,7 @@
     {
       "Path": "governance/milestones/P0.yaml",
       "Reason": "historical milestone state",
-      "Sha256": "2cfdab59074cff1a296646f8fbfe97fedc9e15a254f212ef75edcb67b0efdd3d",
+      "Sha256": "58eb21e6d8de0d71b9f43146c2646209c30c67d2a1ed0dea06533b60061b7cec",
       "Version": null
     },
     {
@@ -227,12 +233,13 @@
     {
       "Path": "governance/revisions/P0-RV001.yaml",
       "Reason": "selected Revision",
-      "Sha256": "d5ede6a01f57f5630786b5dbadb8daa4717496a33707e7b9d660c0a3648f312a",
+      "Sha256": "9d512fd7edc6c711ca600aee4b729daf715d898065ddfcc9e751ceafe21007ed",
       "Version": null
     }
   ],
   "Excluded": [],
   "GitHistory": [
+    "f01c80d chore(governance): commit completed child lineage for P0 parent validation",
     "83b4947 chore(governance): close P0-032-RV001 at validated committed candidate",
     "111cc69 chore(governance): close P0-030-RV001 at validated committed candidate",
     "539c31e chore(governance): close P0-026-RV001 at validated committed candidate",
@@ -241,31 +248,30 @@
     "d76868d chore(governance): close P0-003-RV001 at validated committed candidate",
     "90fa2c2 chore(governance): close P0-035-RV001 at validated committed candidate",
     "27b2610 chore(governance): close P0-033-RV001 at validated committed candidate",
-    "ee24bc4 fix(governance): implement P0-RV001 remediation validation candidate",
-    "af4f259 chore(context): anchor RV synchronization handoff to closure SHA"
+    "ee24bc4 fix(governance): implement P0-RV001 remediation validation candidate"
   ],
   "Revision": {
     "Id": "P0-RV001",
     "OriginalScopeId": "P0",
     "Scope": "MILESTONE",
-    "Status": "VALIDATION",
+    "Status": "CLOSED",
     "Type": "CORRECTIVE",
     "Reason": "Post-closure remediation of governance/control-plane, evidence integrity, project-state consistency, fresh-agent recovery, authority integrity and portability deficiencies discovered after legitimate historical P0 closure.",
     "Impact": "NON_BLOCKING",
     "BlockedScope": [],
     "PreviousRevision": null,
     "ParentMilestoneRevision": null,
-    "NextAction": "collect passing gates, role reviews, committed evidence, and required acceptance"
+    "NextAction": "preserve closure and run governance next"
   },
   "HistoricalScopes": [
     {
       "Id": "P0",
       "HistoricalStatus": "CLOSED",
       "WorkingRecordStatus": "CLOSED",
-      "ActiveRevisionRefs": [
+      "ActiveRevisionRefs": [],
+      "ClosedRevisionRefs": [
         "P0-RV001"
-      ],
-      "ClosedRevisionRefs": []
+      ]
     },
     {
       "Id": "P1",
@@ -347,22 +353,26 @@
       ]
     }
   ],
-  "RevisionSetSha256": "4f59629cc72b609ef0daf5a34e8fa448468f00315ca68c4e84c2eda4fb48699d",
-  "CommitState": null,
+  "RevisionSetSha256": "cd345b251a266eea38711788d4b72d80f527f6b5956b431a42f66d64e796b0c6",
+  "CommitState": {
+    "ValidatedSha": "f01c80d91a7806051314da5f253e5fe25114fe4e",
+    "TestedSha": "f01c80d91a7806051314da5f253e5fe25114fe4e",
+    "ClosureSha": null
+  },
   "LatestRevisions": [
     {
       "Id": "P0-RV001",
       "OriginalScopeId": "P0",
       "Scope": "MILESTONE",
-      "Status": "VALIDATION",
+      "Status": "CLOSED",
       "Type": "CORRECTIVE",
       "Reason": "Post-closure remediation of governance/control-plane, evidence integrity, project-state consistency, fresh-agent recovery, authority integrity and portability deficiencies discovered after legitimate historical P0 closure.",
       "Impact": "NON_BLOCKING",
       "BlockedScope": [],
       "PreviousRevision": null,
       "ParentMilestoneRevision": null,
-      "NextAction": "collect passing gates, role reviews, committed evidence, and required acceptance"
+      "NextAction": "preserve closure and run governance next"
     }
   ],
-  "GovernanceStateSha256": "668ede67032106e1d2fd01932e6adbf5ab42f8c80661bfe90ac88982f970ed62"
+  "GovernanceStateSha256": "1879665aa6c34f99ff6832031a22a5789886d88457492613dfe73165849df7f4"
 }

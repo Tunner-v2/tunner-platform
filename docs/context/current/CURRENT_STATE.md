@@ -2,7 +2,7 @@
 
 ## Historical milestone state
 
-- P0: historical CLOSED; working record CLOSED; active RVs: P0-RV001
+- P0: historical CLOSED; working record CLOSED; active RVs:
 - P1: historical ACTIVE; working record ACTIVE; active RVs:
 - TUN-P0-003: historical DONE; working record DONE; active RVs:
 - TUN-P0-004: historical DONE; working record DONE; active RVs:
@@ -15,10 +15,10 @@
 
 ## Current Revision state
 
-- Revision: P0-RV001 (VALIDATION)
+- Revision: P0-RV001 (CLOSED)
 - Original scope: P0
 - Type/reason: CORRECTIVE: Post-closure remediation of governance/control-plane, evidence integrity, project-state consistency, fresh-agent recovery, authority integrity and portability deficiencies discovered after legitimate historical P0 closure.
 - Impact: NON_BLOCKING; blocked scope:
 - Prior Revision: none
 - Parent milestone Revision: none
-- Exact next action: collect passing gates, role reviews, committed evidence, and required acceptance
+- Exact next action: preserve closure and run governance next

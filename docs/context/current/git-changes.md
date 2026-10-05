@@ -1,5 +1,6 @@
 # Recent relevant Git changes
 
+- `f01c80d chore(governance): commit completed child lineage for P0 parent validation`
 - `83b4947 chore(governance): close P0-032-RV001 at validated committed candidate`
 - `111cc69 chore(governance): close P0-030-RV001 at validated committed candidate`
 - `539c31e chore(governance): close P0-026-RV001 at validated committed candidate`
@@ -9,4 +10,3 @@
 - `90fa2c2 chore(governance): close P0-035-RV001 at validated committed candidate`
 - `27b2610 chore(governance): close P0-033-RV001 at validated committed candidate`
 - `ee24bc4 fix(governance): implement P0-RV001 remediation validation candidate`
-- `af4f259 chore(context): anchor RV synchronization handoff to closure SHA`
