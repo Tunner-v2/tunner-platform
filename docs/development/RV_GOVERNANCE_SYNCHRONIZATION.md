@@ -51,6 +51,7 @@ Candidate/validated/tested/closure SHA values and final readiness are recorded i
 RV GOVERNANCE READY: YES.
 Validated SHA: 8574afb06bc60cccd6761bca1fbe3f6a9be53d26.
 Tested SHA: 8574afb06bc60cccd6761bca1fbe3f6a9be53d26.
+Closure SHA: 76f052b0983965df7285590e341dd14ec943519c. Later handoff metadata retains this closure lineage.
 
 P0-RV001 created: NO.
 Any actual P0 work-item Revision created: NO.
