@@ -3,8 +3,8 @@
   "evidence_id": "TUN-P1-014-VALIDATION",
   "scope_type": "WORK_ITEM",
   "scope_id": "TUN-P1-014",
-  "status": "PENDING",
-  "result": "PENDING",
+  "status": "PASS",
+  "result": "PASS",
   "validation_kind": "COMMITTED",
   "owned_behavior_paths": [
     "src/Tunner.Database/Audit/AuditEvent.cs",
@@ -17,8 +17,101 @@
     "tests/Tunner.Database.IntegrationTests/AuditAppendIntegrationTests.cs",
     "docs/development/P1_AUDIT_APPEND_AND_CORRELATION.md"
   ],
-  "checked_at": null,
+  "checked_at": "2026-10-05T17:41:33.5850144-04:00",
   "limitations": [
-    "Implementation candidate only. No passing execution or committed-state readiness is asserted before exact-SHA validation."
+    "Integrity is an exact-envelope SHA-256 checksum with checked projections; it is not a signature, independent anchor, or protection against a privileged administrator rewriting both envelope and digest.",
+    "The owner must supply already-authorized server-derived identity, action/result meaning, policy/approval evidence, data classification and applicable retention-class references. Their presence does not itself authorize an operation.",
+    "Staging is not durable success; the authorized owner must commit its configured transaction.",
+    "Owner-specific production retention/holds, audit search permissions, key/anchor policy and legal/production acceptance remain with their approved capabilities.",
+    "Required role reviews are Codex engineering reviews, not independent human or legal acceptance."
+  ],
+  "validated_commit_sha": "82db541fe675d7a6f22ea96fa4f5abd21e8ad9fb",
+  "tested_commit_sha": "82db541fe675d7a6f22ea96fa4f5abd21e8ad9fb",
+  "test_results_ref": "governance/evidence/TUN-P1-014-TEST-RESULTS.json",
+  "checks": [
+    {
+      "command": "dotnet build Tunner.Platform.slnx --no-restore",
+      "exit_code": 0,
+      "result": "PASS",
+      "warnings": 0,
+      "errors": 0
+    },
+    {
+      "command": "dotnet test tests/Tunner.Database.IntegrationTests --no-build --no-restore --filter FullyQualifiedName~AuditEventTests",
+      "exit_code": 0,
+      "result": "PASS",
+      "total": 14,
+      "passed": 14,
+      "skipped": 0
+    },
+    {
+      "command": "dotnet test tests/Tunner.Database.IntegrationTests --no-build --no-restore --filter 'FullyQualifiedName~AuditAppendIntegrationTests|FullyQualifiedName~TransactionalOutboxIntegrationTests'",
+      "profile": "TUNNER_RUN_CONTAINER_TESTS=1",
+      "exit_code": 0,
+      "result": "PASS",
+      "total": 13,
+      "passed": 13,
+      "skipped": 0
+    },
+    {
+      "command": "dotnet test tests/Tunner.Platform.ArchitectureTests --no-build --no-restore",
+      "exit_code": 0,
+      "result": "PASS",
+      "total": 36,
+      "passed": 36,
+      "skipped": 0
+    },
+    {
+      "command": "dotnet test tests/Tunner.Worker.Tests --no-build --no-restore",
+      "exit_code": 0,
+      "result": "PASS",
+      "total": 4,
+      "passed": 4,
+      "skipped": 0
+    },
+    {
+      "command": "dotnet test tests/Tunner.TestHarness.Tests --no-build --no-restore",
+      "exit_code": 0,
+      "result": "PASS",
+      "total": 4,
+      "passed": 4,
+      "skipped": 0
+    },
+    {
+      "command": "tunner authority verify",
+      "exit_code": 0,
+      "result": "PASS",
+      "registered_artifacts": 167
+    },
+    {
+      "command": "tunner governance validate",
+      "exit_code": 0,
+      "result": "PASS",
+      "records": 352
+    },
+    {
+      "command": "Validate-TunnerLocationIndependentPaths.ps1",
+      "exit_code": 0,
+      "result": "PASS"
+    },
+    {
+      "command": "Validate-TunnerMigrationsSource.ps1",
+      "exit_code": 0,
+      "result": "PASS"
+    },
+    {
+      "command": "Validate-TunnerTransactionalOutboxSource.ps1",
+      "exit_code": 0,
+      "result": "PASS"
+    }
+  ],
+  "acceptance_results": [
+    "Immutable event fields and defensive reference snapshots implement Document 28 section 9 without arbitrary object payloads.",
+    "Operation/correlation and applicable causation/evidence/approval/version references are preserved exactly.",
+    "Pristine records verify; single-byte envelope corruption and divergent indexed projection fail integrity checks.",
+    "Real PostgreSQL round-trip preserves exact envelope bytes and full original time; timestamp projection uses explicit microsecond precision.",
+    "Database guards reject UPDATE, DELETE and TRUNCATE; duplicate and concurrent same-ID writes cannot replace the original.",
+    "Existing transactional-outbox boundary commits owner/audit/outbox together and rolls back flushed audit/owner writes after failure or cancellation.",
+    "No Product workflow, audit UI/search, retention duration, legal policy, provider transport, public API or new authority record was introduced."
   ]
 }

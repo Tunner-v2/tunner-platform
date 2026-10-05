@@ -3,7 +3,7 @@ work_item_id: TUN-P1-014
 milestone_id: P1
 sprint_id: null
 title: Audit append and correlation primitive
-status: IN_PROGRESS
+status: VALIDATION
 type: AUDIT_FOUNDATION
 authority_refs:
   - docs/authority/current-authority.json
@@ -29,7 +29,7 @@ blockers: []
 impact: {architecture: true, ui: false, sdk: false, financial: false, compliance: true, security: false, devops: false, support: false, data_schema: true, migration: true}
 activated_roles: [full-stack-engineer, solution-architect, compliance-specialist, tester-qa-engineer, auditor]
 required_tests: [authority verification, governance validation, role activation calculation and mandatory specialist reviews, bounded expanded context verification, scope-specific deterministic tests and evidence]
-required_evidence: [governance/context/CTX-TUN-P1-014-001.yaml, governance/evidence/TUN-P1-014-VALIDATION.json, governance/evidence/TUN-P1-014-ROLE-REVIEWS.json, governance/evidence/TUN-P1-014-AUTHORITY-RESOLUTION.json, docs/development/P1_AUDIT_APPEND_AND_CORRELATION.md]
+required_evidence: [governance/context/CTX-TUN-P1-014-001.yaml, governance/evidence/TUN-P1-014-VALIDATION.json, governance/evidence/TUN-P1-014-ROLE-REVIEWS.json, governance/evidence/TUN-P1-014-AUTHORITY-RESOLUTION.json, docs/development/P1_AUDIT_APPEND_AND_CORRELATION.md, governance/evidence/TUN-P1-014-TEST-RESULTS.json]
 context_policy: EXPANDED
 todos: []
 defects: []
@@ -51,3 +51,12 @@ authority_resolution:
 created_at: 2026-10-02T13:20:00-04:00
 updated_at: 2026-10-05T21:30:05.0270283+00:00
 product_acceptance_required: false
+
+git_state:
+  repository_changed: true
+  validated_commit_sha: 82db541fe675d7a6f22ea96fa4f5abd21e8ad9fb
+  tested_commit_sha: 82db541fe675d7a6f22ea96fa4f5abd21e8ad9fb
+  work_item_commit_shas: [5343676f2bbfad2268c17066e8212807608c6184, aacd52c563e0fe3ab648a7d5c5faae46228637de, 82db541fe675d7a6f22ea96fa4f5abd21e8ad9fb]
+  closure_commit_sha: null
+  remaining_uncommitted_paths: []
+  remaining_uncommitted_classification: NONE
