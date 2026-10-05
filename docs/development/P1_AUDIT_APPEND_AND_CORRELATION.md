@@ -27,4 +27,3 @@ Tests cover metadata and reference snapshots, required/optional validation, UTC 
 Preimplementation reviews assess this contract and test plan only. Final Full-stack Engineer, Solution Architect, Compliance Specialist, Tester/QA and Auditor reviews must inspect the committed implementation and executed evidence. Codex records engineering reviews; these are not independent human, legal, Product or production acceptance.
 
 Commit all owned behavior and a PENDING validation envelope, validate that exact SHA, then record passing evidence and review findings. Only then check the final lifecycle gate. Technical-only completion records validated/tested SHA separately from metadata-only closure SHA. Original P0 closure and P1-003 historical operator evidence remain preserved.
-
