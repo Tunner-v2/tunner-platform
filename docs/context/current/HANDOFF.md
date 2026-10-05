@@ -1,7 +1,7 @@
 # Generated HANDOFF
 
-- Scope: CURRENT_STATE
-- State: READ_ONLY
+- Scope: TUN-P1-013
+- State: IN_PROGRESS
 
 No Revision is selected. No post-closure Revision is implicitly created.
 

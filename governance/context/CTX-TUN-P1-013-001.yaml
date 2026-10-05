@@ -13,8 +13,16 @@ included_artifacts:
   - docs/authority/baselines/1.6.0/decisions/PDR-0010_Configurable_FX_Economic_Treatment_and_Guided_Configuration.md
   - governance/work-items/TUN-P1-013.yaml
   - governance/evidence/TUN-P1-013-AUTHORITY-RESOLUTION.json
+  - governance/evidence/TUN-P1-013-PREFLIGHT-REVIEWS.json
+  - docs/development/P1_EFFECTIVE_POLICY_VERSION_RESOLUTION.md
+  - src/Tunner.Platform/Policies/EffectivePolicyVersionResolver.cs
+  - tests/Tunner.Platform.ArchitectureTests/EffectivePolicyVersionResolverTests.cs
+  - governance/reviews/REV-TUN-P1-013-full-stack-engineer.yaml
+  - governance/reviews/REV-TUN-P1-013-solution-architect.yaml
+  - governance/reviews/REV-TUN-P1-013-tester-qa-engineer.yaml
+  - governance/evidence/TUN-P1-013-VALIDATION.json
 excluded_artifacts: [unrelated authority corpus, financial implementation, public endpoints, Product policy values]
-exclusion_reasons: {financial implementation: PDR-0010 is a contract example; domain implementation is outside the shared technical work item.}
+exclusion_reasons: {financial implementation: PDR-0010 is an authority example; domain implementation is outside the shared technical work item.}
 source_hashes:
   'AGENTS.md': d1f126f87d831ec3218d3e16567649a4060949d92d18f2a1c02e6f872b9350b0
   'docs/authority/current-authority.json': 7f7f2df8fdb97bfe901d4409a86a9de8cf9a594cbe56f01c09267c34ce70694b
@@ -23,7 +31,15 @@ source_hashes:
   'docs/authority/baselines/1.6.0/32_Domain_API_Event_Data_and_Policy_Contract_Catalog.md': b2e9446baa1a63f39e58246ab773cbeff0c15d00f6b240063b8a3eaa988b7339
   'docs/authority/baselines/1.6.0/26_Finance_Ledger_Accounting_Settlement_and_Payout_FRD.md': a7966783e65068209d200a7d009207abd8252a1085b346c683030f82126726ef
   'docs/authority/baselines/1.6.0/decisions/PDR-0010_Configurable_FX_Economic_Treatment_and_Guided_Configuration.md': c84400288efbb4ed93a89d3292a49a0596d727227c18533d7f4abec6b0b483a9
-  'governance/work-items/TUN-P1-013.yaml': 066bdf0fae7cd2fe3e2a44754b3b07fd57cf93314789b9641662ad79c210fbf8
+  'governance/work-items/TUN-P1-013.yaml': da7c4b8dc61cb4098ca3928803b46c151d9ba5e01fab15abac804600fbdfb665
   'governance/evidence/TUN-P1-013-AUTHORITY-RESOLUTION.json': cce81e3473737d94053378d855c6785bbe354eaf447994c09ee9294404802687
-tool_version: p1-013-authority-resolution-1.0.0
+  'governance/evidence/TUN-P1-013-PREFLIGHT-REVIEWS.json': 728b3dddf3ab0f768b294fe8e1f34833e6a014f1799f939445ce8f4a8f6040f9
+  'docs/development/P1_EFFECTIVE_POLICY_VERSION_RESOLUTION.md': 9522de31bd7489762e96730240275aa1859da5c77fbc25c513d13954a4198b27
+  'src/Tunner.Platform/Policies/EffectivePolicyVersionResolver.cs': ad46a28d058e8d18c718d8529eaef006e72d570bd0e84f0c619b4ac8d947f6d0
+  'tests/Tunner.Platform.ArchitectureTests/EffectivePolicyVersionResolverTests.cs': d4197d854f0c9af30367b7998afb06225896f599414cfb616119d76742d19504
+  'governance/reviews/REV-TUN-P1-013-full-stack-engineer.yaml': 7feef20a5f79d381ad9899352a4624280853727d7de6ab0d08bea77c5961846f
+  'governance/reviews/REV-TUN-P1-013-solution-architect.yaml': 3b0c57a6712b36e4328d57475c0872e42ae9e56637a6dc8fe0560fc9fdde702b
+  'governance/reviews/REV-TUN-P1-013-tester-qa-engineer.yaml': e5387ab90586a0e5a292d0bbbb774d11fdbccc720e19c49776a8969371e088b4
+  'governance/evidence/TUN-P1-013-VALIDATION.json': ee88aee6a76fe471109eeac867c9ea315eda795f3c887e1998856b9710413fec
+tool_version: p1-013-context-selection-1.0.0
 created_at: 2026-10-05T20:15:14.9208198+00:00
