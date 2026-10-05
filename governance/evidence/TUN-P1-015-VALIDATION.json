@@ -13,9 +13,12 @@
   "owned_behavior_paths": [
     "src/Tunner.Platform/Providers/ProviderCorrelationBoundary.cs",
     "tests/Tunner.Platform.ArchitectureTests/ProviderCorrelationBoundaryTests.cs",
-    "docs/development/P1_PROVIDER_CORRELATION_BOUNDARY.md",
-    "docs/development/P1_CAPABILITY_DECOMPOSITION_AND_PRIMITIVE_REUSE.md"
+    "docs/development/P1_PROVIDER_CORRELATION_BOUNDARY.md"
   ],
   "validation_kind": "COMMITTED",
-  "evidence_id": "TUN-P1-015-VALIDATION"
+  "evidence_id": "TUN-P1-015-VALIDATION",
+  "owned_coordination_paths": [
+    "docs/development/P1_CAPABILITY_DECOMPOSITION_AND_PRIMITIVE_REUSE.md"
+  ],
+  "ownership_note": "The decomposition map is shared coordination metadata. This task updates only its P1-015 row; unrelated future row changes are not provider behavior changes."
 }
