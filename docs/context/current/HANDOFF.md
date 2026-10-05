@@ -1,7 +1,7 @@
 # Generated HANDOFF
 
 - Scope: TUN-P1-015
-- State: VALIDATION
+- State: DONE
 
 No Revision is selected. No post-closure Revision is implicitly created.
 

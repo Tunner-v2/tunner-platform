@@ -3,7 +3,7 @@ work_item_id: TUN-P1-015
 milestone_id: P1
 sprint_id: null
 title: Provider-neutral adapter and correlation boundary
-status: VALIDATION
+status: DONE
 type: PROVIDER_FOUNDATION
 authority_refs:
   - docs/authority/current-authority.json
@@ -29,7 +29,7 @@ blockers: []
 impact: {architecture: true, api: true, ui: false, sdk: true, financial: false, compliance: false, security: false, devops: false, support: false, provider: true}
 activated_roles: [full-stack-engineer, solution-architect, sdk-engineer, rd-engineer, tester-qa-engineer]
 required_tests: [authority verification, governance validation, role activation calculation and mandatory specialist reviews, bounded expanded context verification, scope-specific deterministic tests and evidence]
-required_evidence: [governance/context/CTX-TUN-P1-015-001.yaml, governance/evidence/TUN-P1-015-VALIDATION.json, governance/evidence/TUN-P1-015-ROLE-REVIEWS.json, governance/evidence/TUN-P1-015-AUTHORITY-RESOLUTION.json, governance/evidence/TUN-P1-015-RD-SOURCES.json, docs/development/P1_PROVIDER_CORRELATION_BOUNDARY.md, governance/evidence/TUN-P1-015-TEST-RESULTS.json]
+required_evidence: [governance/context/CTX-TUN-P1-015-001.yaml, governance/evidence/TUN-P1-015-VALIDATION.json, governance/evidence/TUN-P1-015-ROLE-REVIEWS.json, governance/evidence/TUN-P1-015-AUTHORITY-RESOLUTION.json, governance/evidence/TUN-P1-015-RD-SOURCES.json, docs/development/P1_PROVIDER_CORRELATION_BOUNDARY.md, governance/evidence/TUN-P1-015-TEST-RESULTS.json, governance/evidence/TUN-P1-015-CLOSURE.json]
 context_policy: EXPANDED
 todos: []
 defects: []
@@ -42,14 +42,14 @@ authority_resolution:
   conditional_trigger_absent: false
   reviewed_at: 2026-10-05T21:51:58.8951353+00:00
 created_at: 2026-10-02T13:20:00-04:00
-updated_at: 2026-10-05T22:01:19.3222460+00:00
+updated_at: 2026-10-05T22:02:39.4442088+00:00
 product_acceptance_required: false
 
 git_state:
   repository_changed: true
   validated_commit_sha: debd619e73199503986780831d574d26ed3fd52d
   tested_commit_sha: debd619e73199503986780831d574d26ed3fd52d
-  work_item_commit_shas: [832036836ee358620ee24d264ed4e141f7eabb4a, d724c8d3fc52e4e22f0c73a6f38f38e359aac088, 1be75c98a288f60f8276df171b8cd4beb46be137, debd619e73199503986780831d574d26ed3fd52d]
+  work_item_commit_shas: [832036836ee358620ee24d264ed4e141f7eabb4a, d724c8d3fc52e4e22f0c73a6f38f38e359aac088, 1be75c98a288f60f8276df171b8cd4beb46be137, debd619e73199503986780831d574d26ed3fd52d, 7dd1345addf8c3dafad88d6b0c8c7aff5d580176]
   closure_commit_sha: null
   remaining_uncommitted_paths: []
   remaining_uncommitted_classification: NONE

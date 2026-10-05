@@ -15,3 +15,4 @@
 - `governance/evidence/TUN-P1-015-RD-SOURCES.json` — required evidence
 - `docs/development/P1_PROVIDER_CORRELATION_BOUNDARY.md` — required evidence
 - `governance/evidence/TUN-P1-015-TEST-RESULTS.json` — required evidence
+- `governance/evidence/TUN-P1-015-CLOSURE.json` — required evidence
