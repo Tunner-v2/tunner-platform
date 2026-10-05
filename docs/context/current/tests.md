@@ -14,3 +14,4 @@
 - `governance/evidence/TUN-P1-014-AUTHORITY-RESOLUTION.json` — required evidence
 - `docs/development/P1_AUDIT_APPEND_AND_CORRELATION.md` — required evidence
 - `governance/evidence/TUN-P1-014-TEST-RESULTS.json` — required evidence
+- `governance/evidence/TUN-P1-014-CLOSURE.json` — required evidence
