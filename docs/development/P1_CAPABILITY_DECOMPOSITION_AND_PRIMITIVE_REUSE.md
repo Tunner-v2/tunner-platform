@@ -29,11 +29,10 @@ No `Common`, `Utils`, `Helpers`, or equivalent dumping-ground project/namespace 
 | TUN-P1-012 | Technical authorization/idempotency/expected-version primitives | Requires an authorization contract boundary. |
 | TUN-P1-013 | Effective-policy version resolver mechanics | Requires an owner policy contract. |
 | TUN-P1-014 | Audit append/correlation primitive | Document 28 section 9 and Document 32 define the approved audit/operation contract; append/integrity mechanics only, with owner-controlled semantics. |
-| TUN-P1-015 | Provider-neutral adapter/correlation boundary | Requires a provider contract boundary. |
+| TUN-P1-015 | Provider-neutral adapter/correlation boundary | Documents 23/32 and accepted ADR-0014 define stable correlation/idempotency and typed provider evidence; owner execution/finality stays outside this foundation. |
 | TUN-P1-016 | Platform environment configuration model | Requires an environment contract boundary. |
 | TUN-P1-017 | Problem/error technical standard | Requires a public error-contract boundary. |
 | TUN-P1-018 | User/Admin shared UI foundation | UI_REQUIRED until canonical UX/Figma scope is selected. |
 | TUN-P1-019 | User/Admin BFF technical foundation | SECURITY_REVIEW_REQUIRED until BFF security/session review. |
 
 The table is not an execution ranking. `tunner governance next` determines readiness from recorded dependencies, evidence, calculated roles, and genuine blockers.
-

@@ -1,10 +1,10 @@
 {
   "GeneratorVersion": "tunner-context-0.1.0",
-  "GeneratedAt": "2026-10-05T21:52:50.6681639+00:00",
+  "GeneratedAt": "2026-10-05T21:55:50.5141436+00:00",
   "WorkItem": {
     "Id": "TUN-P1-015",
     "Title": "Provider-neutral adapter and correlation boundary",
-    "Status": "READY",
+    "Status": "CODE_REVIEW",
     "ContextPolicy": "EXPANDED"
   },
   "Included": [
@@ -112,7 +112,7 @@
     },
     {
       "Path": "docs/authority/baselines/1.6.0/decisions/ADR-0014_Payment_Provider_Stripe.md",
-      "Reason": "explicit decision reference",
+      "Reason": "explicit authority reference",
       "Sha256": "49daba710d7cdb12cf66d85dbc697a12ff19a2bd64d8e0d11b8cec3c5b005a79",
       "Version": null
     },
@@ -155,7 +155,7 @@
     {
       "Path": "governance/context/CTX-TUN-P1-015-001.yaml",
       "Reason": "required evidence",
-      "Sha256": "0d6cc55260545048e0662eccd957203c35ce17ecb007d5d8c3ba2c303cca277a",
+      "Sha256": "4e79affb41ab97c5e2b308699c9f7f0861153e38eb11e18c3d5468eb6876a1d8",
       "Version": null
     },
     {
@@ -179,7 +179,7 @@
     {
       "Path": "governance/evidence/TUN-P1-015-VALIDATION.json",
       "Reason": "required evidence",
-      "Sha256": "43ffedc4d005f57fe5ffc4025f061557c327d9b3072aed10c2c0298aab5eb2fc",
+      "Sha256": "6e2fb992d68304517fb5559b626e4d555ac257acdafc47c707e6bf39912d0ccc",
       "Version": null
     },
     {
@@ -215,21 +215,13 @@
     {
       "Path": "governance/work-items/TUN-P1-015.yaml",
       "Reason": "selected work item",
-      "Sha256": "bb9607dba5c196468067edbc2c39d358b3daf87da2972f69279b0fbaccd6d984",
+      "Sha256": "5ef02d3314d7dd144b96c8f59bceca5ba9a7c04cd64a7c019443310570514012",
       "Version": null
     }
   ],
-  "Excluded": [
-    {
-      "Path": "governance/decisions/docs/authority/baselines/1.6.0/decisions/ADR-0014_Payment_Provider_Stripe.md.yaml",
-      "Reason": "optional source is unavailable: explicit decision reference"
-    },
-    {
-      "Path": "governance/decisions/docs/authority/baselines/1.6.0/decisions/adr-0014_payment_provider_stripe.md-p0-local-integration.yaml",
-      "Reason": "optional source is unavailable: explicit decision reference"
-    }
-  ],
+  "Excluded": [],
   "GitHistory": [
+    "8320368 chore(governance): resolve P1-015 authority and committed prerequisite readiness",
     "9613dcf docs(governance): record P1-014 closure SHA and recovery context",
     "36cca42 chore(governance): close validated P1-014 audit foundation",
     "ef4983a test(audit): record exact-SHA P1-014 validation and role reviews",
@@ -238,8 +230,7 @@
     "6d7f23a test(platform): record committed P1-013 validation and role reviews",
     "ef3517d feat(platform): add deterministic effective policy version selection",
     "fbbcaa3 chore(governance): close P1-021 coordination and retain scoped P1 evidence findings",
-    "454d9d6 chore(governance): close P0-RV001 after exact committed parent validation",
-    "f01c80d chore(governance): commit completed child lineage for P0 parent validation"
+    "454d9d6 chore(governance): close P0-RV001 after exact committed parent validation"
   ],
   "Revision": null,
   "HistoricalScopes": [
@@ -453,5 +444,5 @@
       "NextAction": "preserve closure and run governance next"
     }
   ],
-  "GovernanceStateSha256": "1255f861574bb7731dd24c26d3449f2f2091fe2923ad6ee66df0a584a1dfa62d"
+  "GovernanceStateSha256": "9fd10941a796ebdf4f0dba30a650a01fd42ccdcbf4d0871663c7c26ddc66f0f9"
 }

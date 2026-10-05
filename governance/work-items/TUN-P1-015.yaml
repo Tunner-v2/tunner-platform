@@ -3,7 +3,7 @@ work_item_id: TUN-P1-015
 milestone_id: P1
 sprint_id: null
 title: Provider-neutral adapter and correlation boundary
-status: READY
+status: CODE_REVIEW
 type: PROVIDER_FOUNDATION
 authority_refs:
   - docs/authority/current-authority.json
@@ -18,7 +18,7 @@ authority_refs:
   - docs/authority/amendments/AMD-0005/AMD-0005_Authority-First_Decision_Resolution_and_Duplicate-Decision_Prevention.md
 flow_refs: []
 contract_refs: [docs/authority/baselines/1.6.0/23_Provider_Account_and_Routing_Operations_FRD.md, docs/authority/baselines/1.6.0/32_Domain_API_Event_Data_and_Policy_Contract_Catalog.md]
-decision_refs: [docs/authority/baselines/1.6.0/decisions/ADR-0014_Payment_Provider_Stripe.md]
+decision_refs: []
 acceptance_criteria:
   - Implement stable owner-supplied provider correlation/idempotency bindings and typed ProviderObjectReference evidence under Documents 23 and 32 and accepted ADR-0014; reject conflicting identity reuse and cross-binding evidence without P7 behavior, external calls or finality claims.
   - Reuse or extend a compatible existing capability when one exists; do not add a generic Common, Utils, Helpers, or shared-everything layer.
@@ -42,5 +42,5 @@ authority_resolution:
   conditional_trigger_absent: false
   reviewed_at: 2026-10-05T21:51:58.8951353+00:00
 created_at: 2026-10-02T13:20:00-04:00
-updated_at: 2026-10-05T21:51:58.8951353+00:00
+updated_at: 2026-10-05T21:55:38.4545326+00:00
 product_acceptance_required: false
