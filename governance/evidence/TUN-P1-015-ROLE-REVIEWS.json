@@ -1,72 +1,79 @@
 {
-  "reviewed_commit": "2d64e05c9c9e3c084d8e20beaa43f789eaa20c31",
+  "reviewed_commit_sha": "debd619e73199503986780831d574d26ed3fd52d",
+  "status": "PASS",
+  "reviewed_at": "2026-10-05T22:01:19.3222460+00:00",
   "scope_id": "TUN-P1-015",
   "reviews": [
     {
+      "findings": [],
+      "phase": "COMMITTED_IMPLEMENTATION",
+      "checks": [
+        "Reviewed exact command/owner/provider identities, ordinal comparison, UTC instants, copied reference collections and fail-fast missing-input checks at the committed SHA.",
+        "Both key namespaces are explicit: an owner retry cannot change its provider key and another owner cannot inherit that key within the same provider binding.",
+        "No network execution or implicit business outcome is introduced; safe metadata minimization remains the owner responsibility."
+      ],
+      "conclusion": "PASS",
       "role": "full-stack-engineer",
-      "reviewer": "Codex",
-      "phase": "PREIMPLEMENTATION_CONTRACT_AND_TEST_PLAN",
-      "findings": [],
-      "checks": [
-        "Existing command envelope and IdempotencyScope are reused.",
-        "Pure comparison and copied typed evidence keep execution and authorization with owners."
-      ],
-      "result": "PASS"
+      "reviewed_commit_sha": "debd619e73199503986780831d574d26ed3fd52d",
+      "reviewer": "Codex"
     },
     {
+      "findings": [],
+      "phase": "COMMITTED_IMPLEMENTATION",
+      "checks": [
+        "Provider capability stays in the existing Platform assembly and reuses TechnicalCommandEnvelope and IdempotencyScope; no Common/Utils layer, generic adapter subsystem or reservation store is added.",
+        "Typed internal provider evidence conforms to Documents 23/32; immutable exact binding context preserves provenance without becoming domain truth.",
+        "The shared decomposition map is coordination metadata; only the provider source/tests/guide are owned behavior paths."
+      ],
+      "conclusion": "PASS",
       "role": "solution-architect",
-      "reviewer": "Codex",
-      "phase": "PREIMPLEMENTATION_CONTRACT_AND_TEST_PLAN",
-      "findings": [],
-      "checks": [
-        "A Providers capability stays in the existing Platform assembly.",
-        "No generic adapter interface, duplicated reservation store or new provider subsystem is introduced."
-      ],
-      "result": "PASS"
+      "reviewed_commit_sha": "debd619e73199503986780831d574d26ed3fd52d",
+      "reviewer": "Codex"
     },
     {
+      "findings": [],
+      "phase": "COMMITTED_IMPLEMENTATION",
+      "checks": [
+        "No provider SDK type, Product-facing API contract, SDK package or new external endpoint is introduced.",
+        "Idempotency/key conflict checks are pure and do not hide retries or reinterpret transport errors as payment failure; DifferentIdentity is not permission for another effect.",
+        "Provider-specific key limits and request fingerprint semantics remain in the selected owning adapter contract; no universal Stripe policy is imposed."
+      ],
+      "conclusion": "PASS",
       "role": "sdk-engineer",
-      "reviewer": "Codex",
-      "phase": "PREIMPLEMENTATION_CONTRACT_AND_TEST_PLAN",
-      "findings": [],
-      "checks": [
-        "Provider SDK objects remain internal; no public API/SDK compatibility change.",
-        "No unsafe automatic retries or domain error/finality mapping is planned."
-      ],
-      "result": "PASS"
+      "reviewed_commit_sha": "debd619e73199503986780831d574d26ed3fd52d",
+      "reviewer": "Codex"
     },
     {
+      "findings": [],
+      "phase": "COMMITTED_IMPLEMENTATION",
+      "checks": [
+        "Canonical Drive Documents 23/32 and accepted ADR-0014 were fetched and reviewed. Document 13 requires current implementation-time primary-source checks.",
+        "Stripe idempotency/error handling, .NET 10 OpenAPI and published OAS 3.1 documentation were checked on 2026-10-05 and recorded in the scope source registry.",
+        "No new external dependency/version/provider selection was made; provider-specific limits and external reconciliation are not encoded as generic Tunner rules."
+      ],
+      "conclusion": "PASS",
       "role": "rd-engineer",
-      "reviewer": "Codex",
-      "phase": "PREIMPLEMENTATION_CONTRACT_AND_TEST_PLAN",
-      "findings": [],
-      "checks": [
-        "Current canonical provider contracts and accepted Stripe decision verified.",
-        "Current primary sources checked; provider-specific limits do not become generic policy."
-      ],
-      "result": "PASS"
+      "reviewed_commit_sha": "debd619e73199503986780831d574d26ed3fd52d",
+      "reviewer": "Codex"
     },
     {
-      "role": "tester-qa-engineer",
-      "reviewer": "Codex",
-      "phase": "PREIMPLEMENTATION_CONTRACT_AND_TEST_PLAN",
       "findings": [],
+      "phase": "COMMITTED_IMPLEMENTATION",
       "checks": [
-        "Plan covers conflict detection, exact identifiers, immutable inputs, timestamps and evidence bindings.",
-        "Executed test evidence must match the committed candidate; no planning test pass is claimed."
+        "76 executed architecture cases pass, including 40 provider cases covering key collisions/switching, trace/fingerprint conflicts, scopes, copied collections, missing inputs, UTC and cross-binding evidence rejection.",
+        "Existing authorization/idempotency/version, OpenAPI, policies, realtime and storage regression cases pass; exact tested/validated SHA matches committed owned Git blobs.",
+        "Earlier candidate results and corrected precommit syntax failure are distinguished from final readiness; no test discovery or historical evidence substitutes for executed tests."
       ],
-      "result": "PASS"
+      "conclusion": "PASS",
+      "role": "tester-qa-engineer",
+      "reviewed_commit_sha": "debd619e73199503986780831d574d26ed3fd52d",
+      "reviewer": "Codex"
     }
   ],
-  "reviewed_at": "2026-10-05T21:51:58.8951353+00:00",
-  "limitations": [
-    "Contract/test-plan reviews only; no implementation readiness or executed test claim."
-  ],
-  "plan_path": "docs/development/P1_PROVIDER_CORRELATION_BOUNDARY.md",
-  "phase": "PREIMPLEMENTATION_CONTRACT_AND_TEST_PLAN",
   "scope_type": "WORK_ITEM",
+  "limitations": [
+    "Codex engineering role reviews; no independent human, Product or production acceptance is asserted."
+  ],
   "schema_version": 1,
-  "plan_sha256": "eb813aa3367911d6cdcd37715171704118fad6c3b62acb6d348c6c73f89c29bb",
-  "evidence_id": "TUN-P1-015-ROLE-REVIEWS",
-  "status": "PASS"
+  "evidence_id": "TUN-P1-015-ROLE-REVIEWS"
 }

@@ -1,13 +1,51 @@
 {
   "scope_type": "WORK_ITEM",
-  "tested_commit_sha": null,
-  "validated_commit_sha": null,
-  "status": "PENDING",
+  "tested_commit_sha": "debd619e73199503986780831d574d26ed3fd52d",
+  "validated_commit_sha": "debd619e73199503986780831d574d26ed3fd52d",
+  "status": "PASS",
   "limitations": [
-    "Candidate includes the explicit owner/provider key mapping discovered during final review; validation is pending at the new exact SHA."
+    "Owners must atomically persist/check both identity namespaces, include all effect-relevant inputs in the fingerprint, validate provider key constraints, authorize submission and reconcile unknown outcomes.",
+    "The comparison guard is stateless and does not implement durable duplicate prevention, provider execution, retries, failover or business finality.",
+    "Engineering role reviews are performed by Codex; no independent human, Product or production acceptance is claimed."
   ],
-  "checks": [],
-  "result": "PENDING",
+  "checks": [
+    {
+      "exit_code": 0,
+      "warnings": 0,
+      "errors": 0,
+      "result": "PASS",
+      "command": "dotnet build Tunner.Platform.slnx --no-restore"
+    },
+    {
+      "exit_code": 0,
+      "total": 76,
+      "command": "dotnet test tests/Tunner.Platform.ArchitectureTests --no-build --no-restore",
+      "result": "PASS",
+      "failed": 0,
+      "new_provider_boundary_cases": 40,
+      "passed": 76,
+      "skipped": 0
+    },
+    {
+      "exit_code": 0,
+      "registered_artifacts": 167,
+      "result": "PASS",
+      "command": "tunner authority verify"
+    },
+    {
+      "exit_code": 0,
+      "records": 358,
+      "result": "PASS",
+      "command": "tunner governance validate"
+    },
+    {
+      "exit_code": 0,
+      "selected_work_item": "TUN-P1-015",
+      "result": "CURRENT",
+      "command": "tunner context verify"
+    }
+  ],
+  "result": "PASS",
   "schema_version": 1,
   "scope_id": "TUN-P1-015",
   "owned_behavior_paths": [
@@ -20,5 +58,31 @@
   "owned_coordination_paths": [
     "docs/development/P1_CAPABILITY_DECOMPOSITION_AND_PRIMITIVE_REUSE.md"
   ],
-  "ownership_note": "The decomposition map is shared coordination metadata. This task updates only its P1-015 row; unrelated future row changes are not provider behavior changes."
+  "ownership_note": "The decomposition map is shared coordination metadata. This task updates only its P1-015 row; unrelated future row changes are not provider behavior changes.",
+  "checked_at": "2026-10-05T22:01:19.3222460+00:00",
+  "owned_git_blobs": {
+    "src/Tunner.Platform/Providers/ProviderCorrelationBoundary.cs": {
+      "match": true,
+      "working_tree_blob": "9f4a422b95153bf2244c6b2606dbdef022f02430",
+      "candidate_blob": "9f4a422b95153bf2244c6b2606dbdef022f02430"
+    },
+    "docs/development/P1_PROVIDER_CORRELATION_BOUNDARY.md": {
+      "match": true,
+      "working_tree_blob": "d75df8224229ef3bbba71eea59cd5e54c705612e",
+      "candidate_blob": "d75df8224229ef3bbba71eea59cd5e54c705612e"
+    },
+    "tests/Tunner.Platform.ArchitectureTests/ProviderCorrelationBoundaryTests.cs": {
+      "match": true,
+      "working_tree_blob": "69c4ec600b1bd817531a2048a62475bcbd1a8f24",
+      "candidate_blob": "69c4ec600b1bd817531a2048a62475bcbd1a8f24"
+    }
+  },
+  "test_results_ref": "governance/evidence/TUN-P1-015-TEST-RESULTS.json",
+  "acceptance_results": [
+    "Owner command identity and explicit provider idempotency key are stable, opaque and exact.",
+    "Pure guard detects request/trace conflicts, provider key reassignment and owner retry key switching. DifferentIdentity grants no execution/failover permission.",
+    "ProviderObjectReference evidence is immutable, UTC-observed and attached only to the exact selected binding; empty evidence implies no outcome.",
+    "Existing command envelope and owner scope are reused without a second idempotency store, new package, public API/SDK type or provider call.",
+    "Existing canonical provider contracts and accepted ADR-0014 resolve the stale blocker. Historical P1-004 evidence is preserved with separately proven retrospective committed validation."
+  ]
 }
