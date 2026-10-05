@@ -8,14 +8,14 @@ skill_hash: 664ffba70d0f97e75951c3548b7f8391854781e4cf90cc50fc8829543783a35b
 result: PASS
 status: PASS
 authority_refs: [docs/authority/current-authority.json, docs/authority/baselines/1.6.0/32_Domain_API_Event_Data_and_Policy_Contract_Catalog.md]
-context_artifacts: [governance/context/CTX-TUN-P1-013-001.yaml, docs/development/P1_EFFECTIVE_POLICY_VERSION_RESOLUTION.md]
+context_artifacts: [governance/context/CTX-TUN-P1-013-001.yaml, docs/development/P1_EFFECTIVE_POLICY_VERSION_RESOLUTION.md, src/Tunner.Platform/Policies/EffectivePolicyVersionResolver.cs, tests/Tunner.Platform.ArchitectureTests/EffectivePolicyVersionResolverTests.cs]
 findings:
-  - "Codex role-specific preimplementation contract/test-plan review only; implementation validation remains pending."
-  - "Repository search found no compatible resolver; a cohesive Platform/Policies capability reuses the existing assembly."
-  - "The owner retains status meaning, scope meaning, approval and precedence; metadata has no hidden tie breaker."
-  - "Effective interval inclusion is explicit owner input; no universal business convention or system clock is introduced."
+  - "Codex final implementation review at committed SHA ef3517d63946843ff2ef674d16742931ec793214"
+  - "The implementation is cohesive in the existing Platform assembly and introduces no new dependency or subsystem."
+  - "Owner business scope, approval, precedence, payloads and calculations remain outside the shared capability."
+  - "Interval conventions are explicit owner input; ambiguity never resolves through ID order or supersession metadata."
 required_actions: []
 blocking_findings: []
-evidence_refs: [governance/evidence/TUN-P1-013-PREFLIGHT-REVIEWS.json]
+evidence_refs: [governance/evidence/TUN-P1-013-VALIDATION.json, governance/evidence/TUN-P1-013-ROLE-REVIEWS.json, governance/evidence/TUN-P1-013-PREFLIGHT-REVIEWS.json]
 context_expansion_requested: false
-reviewed_at: 2026-10-05T20:23:38.1609077+00:00
+reviewed_at: 2026-10-05T20:28:58.7156998+00:00

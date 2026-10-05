@@ -1,10 +1,10 @@
 {
   "GeneratorVersion": "tunner-context-0.1.0",
-  "GeneratedAt": "2026-10-05T20:26:37.2577558+00:00",
+  "GeneratedAt": "2026-10-05T20:29:09.4940821+00:00",
   "WorkItem": {
     "Id": "TUN-P1-013",
     "Title": "Effective-policy version resolver mechanics",
-    "Status": "IN_PROGRESS",
+    "Status": "VALIDATION",
     "ContextPolicy": "EXPANDED"
   },
   "Included": [
@@ -125,25 +125,25 @@
     {
       "Path": "docs/project/CURRENT_STATE.md",
       "Reason": "current project state",
-      "Sha256": "e551d4c5630857bc1f4a5ed06f89b06330ae310e8d6823536ec4b5a17e05f24b",
+      "Sha256": "9524efabf0a8870eba0b9166130f79b41ffb6c88464bc2e09ac0d2f0f50b2e72",
       "Version": null
     },
     {
       "Path": "docs/project/HANDOFF.md",
       "Reason": "handoff state",
-      "Sha256": "e551d4c5630857bc1f4a5ed06f89b06330ae310e8d6823536ec4b5a17e05f24b",
+      "Sha256": "9524efabf0a8870eba0b9166130f79b41ffb6c88464bc2e09ac0d2f0f50b2e72",
       "Version": null
     },
     {
       "Path": "docs/project/PROJECT_CONTEXT.md",
       "Reason": "durable project context",
-      "Sha256": "e551d4c5630857bc1f4a5ed06f89b06330ae310e8d6823536ec4b5a17e05f24b",
+      "Sha256": "9524efabf0a8870eba0b9166130f79b41ffb6c88464bc2e09ac0d2f0f50b2e72",
       "Version": null
     },
     {
       "Path": "governance/context/CTX-TUN-P1-013-001.yaml",
       "Reason": "required evidence",
-      "Sha256": "caeab7224e4796ebb6211afed792bc3f77e16f8be50b3a94917f085f1e30380b",
+      "Sha256": "bb0708293e12af689188fda5ebcdb6e49a626be9a437638939707e5748aa0f69",
       "Version": null
     },
     {
@@ -153,9 +153,15 @@
       "Version": null
     },
     {
+      "Path": "governance/evidence/TUN-P1-013-ROLE-REVIEWS.json",
+      "Reason": "required evidence",
+      "Sha256": "26b9f9869814272707d3ea65a2d6ee3cb5244abad904200088b0a15f628a09d4",
+      "Version": null
+    },
+    {
       "Path": "governance/evidence/TUN-P1-013-VALIDATION.json",
       "Reason": "required evidence",
-      "Sha256": "ee88aee6a76fe471109eeac867c9ea315eda795f3c887e1998856b9710413fec",
+      "Sha256": "29c61b35dd0f049f0ec0e2cbfe140def522a105e714f256f55a4269f691c7156",
       "Version": null
     },
     {
@@ -191,7 +197,7 @@
     {
       "Path": "governance/work-items/TUN-P1-013.yaml",
       "Reason": "selected work item",
-      "Sha256": "da7c4b8dc61cb4098ca3928803b46c151d9ba5e01fab15abac804600fbdfb665",
+      "Sha256": "9a9e41c508b2fd4a7dee868d658f7d07e8212734c94b5a21bcad0cf232747e79",
       "Version": null
     }
   ],
@@ -203,13 +209,10 @@
     {
       "Path": "governance/decisions/pdr-0010-p0-local-integration.yaml",
       "Reason": "optional source is unavailable: explicit decision reference"
-    },
-    {
-      "Path": "governance/evidence/TUN-P1-013-ROLE-REVIEWS.json",
-      "Reason": "optional source is unavailable: required evidence"
     }
   ],
   "GitHistory": [
+    "ef3517d feat(platform): add deterministic effective policy version selection",
     "8ba39e0 fix(governance): resolve P1-013 against existing policy authority",
     "fbbcaa3 chore(governance): close P1-021 coordination and retain scoped P1 evidence findings",
     "454d9d6 chore(governance): close P0-RV001 after exact committed parent validation",
@@ -218,8 +221,7 @@
     "111cc69 chore(governance): close P0-030-RV001 at validated committed candidate",
     "539c31e chore(governance): close P0-026-RV001 at validated committed candidate",
     "dd0a3e6 chore(governance): close P0-011-RV001 at validated committed candidate",
-    "5b1e321 chore(governance): close P0-004-RV001 at validated committed candidate",
-    "d76868d chore(governance): close P0-003-RV001 at validated committed candidate"
+    "5b1e321 chore(governance): close P0-004-RV001 at validated committed candidate"
   ],
   "Revision": null,
   "HistoricalScopes": [
@@ -313,7 +315,11 @@
     }
   ],
   "RevisionSetSha256": "cd345b251a266eea38711788d4b72d80f527f6b5956b431a42f66d64e796b0c6",
-  "CommitState": null,
+  "CommitState": {
+    "ValidatedSha": "ef3517d63946843ff2ef674d16742931ec793214",
+    "TestedSha": "ef3517d63946843ff2ef674d16742931ec793214",
+    "ClosureSha": null
+  },
   "LatestRevisions": [
     {
       "Id": "P0-RV001",
@@ -433,5 +439,5 @@
       "NextAction": "preserve closure and run governance next"
     }
   ],
-  "GovernanceStateSha256": "31763c0e0a44313e9b8e21f9558936d5b717e352d3bb3b1fee36fd6bdf171761"
+  "GovernanceStateSha256": "fbc0fb93661476b88c3271bdc5fa7c8a334b2865621673861e7d35f7cfd45fca"
 }

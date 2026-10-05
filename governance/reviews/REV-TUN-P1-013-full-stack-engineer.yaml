@@ -8,14 +8,14 @@ skill_hash: 59adbe2133cf4ce88cbc9ca4eafce1d5a9d83b9562b6580c1571e6fc148d46b5
 result: PASS
 status: PASS
 authority_refs: [docs/authority/current-authority.json, docs/authority/baselines/1.6.0/32_Domain_API_Event_Data_and_Policy_Contract_Catalog.md]
-context_artifacts: [governance/context/CTX-TUN-P1-013-001.yaml, docs/development/P1_EFFECTIVE_POLICY_VERSION_RESOLUTION.md]
+context_artifacts: [governance/context/CTX-TUN-P1-013-001.yaml, docs/development/P1_EFFECTIVE_POLICY_VERSION_RESOLUTION.md, src/Tunner.Platform/Policies/EffectivePolicyVersionResolver.cs, tests/Tunner.Platform.ArchitectureTests/EffectivePolicyVersionResolverTests.cs]
 findings:
-  - "Codex role-specific preimplementation contract/test-plan review only; implementation validation remains pending."
-  - "Approved Document 32 supplies the technical contract; the owner supplies scope and eligibility."
-  - "No API, persistence, provider, financial or UI behavior changes are needed."
-  - "Required inputs are explicit; missing or ambiguous resolution has no selected policy."
+  - "Codex final implementation review at committed SHA ef3517d63946843ff2ef674d16742931ec793214"
+  - "Reviewed the committed selector and metadata API: explicit inputs, owner callbacks, no hidden clock or permissive fallback."
+  - "Argument checks and copied collections preserve traceability without adding HTTP, data, provider or UI behavior."
+  - "Zero-warning Platform solution build and 36 executed architecture tests pass at the recorded SHA."
 required_actions: []
 blocking_findings: []
-evidence_refs: [governance/evidence/TUN-P1-013-PREFLIGHT-REVIEWS.json]
+evidence_refs: [governance/evidence/TUN-P1-013-VALIDATION.json, governance/evidence/TUN-P1-013-ROLE-REVIEWS.json, governance/evidence/TUN-P1-013-PREFLIGHT-REVIEWS.json]
 context_expansion_requested: false
-reviewed_at: 2026-10-05T20:23:38.1609077+00:00
+reviewed_at: 2026-10-05T20:28:58.7156998+00:00

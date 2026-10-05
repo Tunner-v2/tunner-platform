@@ -8,14 +8,14 @@ skill_hash: a57ce99d7ad7a3b60f17e4826c81c507c9cc208d8928285c406222eefe0a18fd
 result: PASS
 status: PASS
 authority_refs: [docs/authority/current-authority.json, docs/authority/baselines/1.6.0/32_Domain_API_Event_Data_and_Policy_Contract_Catalog.md]
-context_artifacts: [governance/context/CTX-TUN-P1-013-001.yaml, docs/development/P1_EFFECTIVE_POLICY_VERSION_RESOLUTION.md]
+context_artifacts: [governance/context/CTX-TUN-P1-013-001.yaml, docs/development/P1_EFFECTIVE_POLICY_VERSION_RESOLUTION.md, src/Tunner.Platform/Policies/EffectivePolicyVersionResolver.cs, tests/Tunner.Platform.ArchitectureTests/EffectivePolicyVersionResolverTests.cs]
 findings:
-  - "Codex role-specific preimplementation contract/test-plan review only; implementation validation remains pending."
-  - "Planned tests cover event time, scope isolation, explicit interval boundaries, missing/ambiguous outcomes and duplicates."
-  - "Negative tests cover malformed metadata, absent/failed owner evaluators and defensive snapshots."
-  - "Final tests and role reviews will be recorded against a committed candidate; no execution success is claimed by this plan review."
+  - "Codex final implementation review at committed SHA ef3517d63946843ff2ef674d16742931ec793214"
+  - "Reviewed all 18 new deterministic cases and the 18 existing regression cases; 36 pass with zero failures or skips."
+  - "Coverage includes event-time history, scope isolation, equivalent UTC instants, all bounds, duplicates, missing/ambiguous results and owner failures."
+  - "Evidence references the exact committed candidate; no earlier historical execution is inferred or fabricated."
 required_actions: []
 blocking_findings: []
-evidence_refs: [governance/evidence/TUN-P1-013-PREFLIGHT-REVIEWS.json]
+evidence_refs: [governance/evidence/TUN-P1-013-VALIDATION.json, governance/evidence/TUN-P1-013-ROLE-REVIEWS.json, governance/evidence/TUN-P1-013-PREFLIGHT-REVIEWS.json]
 context_expansion_requested: false
-reviewed_at: 2026-10-05T20:23:38.1609077+00:00
+reviewed_at: 2026-10-05T20:28:58.7156998+00:00
