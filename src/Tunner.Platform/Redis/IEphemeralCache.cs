@@ -1,0 +1,1 @@
+namespace Tunner.Platform.Redis; public interface IEphemeralCache { Task<byte[]?> GetAsync(string entryKey, CancellationToken cancellationToken = default); Task SetAsync(string entryKey, ReadOnlyMemory<byte> value, TimeSpan timeToLive, CancellationToken cancellationToken = default); Task<bool> RemoveAsync(string entryKey, CancellationToken cancellationToken = default); }

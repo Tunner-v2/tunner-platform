@@ -1,0 +1,40 @@
+{
+  "schema_version": 1,
+  "evidence_id": "TUN-P1-006-RD-SOURCES",
+  "scope_type": "WORK_ITEM",
+  "scope_id": "TUN-P1-006",
+  "status": "PASS",
+  "reviewed_at": "2026-10-02T14:15:00-04:00",
+  "sources": [
+    {
+      "title": "RabbitMQ .NET/C# Client API Guide",
+      "url": "https://www.rabbitmq.com/client-libraries/dotnet-api-guide",
+      "type": "primary vendor documentation",
+      "finding": "RabbitMQ.Client 7 uses the RabbitMQ.Client API including IChannel. Connections are intended to be long-lived and channels are reused according to the client guide; the P1 scope can use the official client without adding a transport abstraction that would become generic infrastructure policy."
+    },
+    {
+      "title": "Consumer Acknowledgements and Publisher Confirms",
+      "url": "https://www.rabbitmq.com/docs/confirms",
+      "type": "primary vendor documentation",
+      "finding": "Publisher confirms establish broker acceptance of a published message; consumer delivery acknowledgements are independent and must be sent only after the consumer's own successful processing. The P1 dispatcher must not mark an outbox record published before confirm."
+    },
+    {
+      "title": "RabbitMQ Reliability Guide",
+      "url": "https://www.rabbitmq.com/docs/reliability",
+      "type": "primary vendor documentation",
+      "finding": "Acknowledgements and confirms produce at-least-once delivery characteristics, so consumer-side duplicate protection remains an inbox/idempotency concern rather than a claim that the P1 transport foundation is exactly-once."
+    },
+    {
+      "title": "RabbitMQ .NET client releases",
+      "url": "https://github.com/rabbitmq/rabbitmq-dotnet-client/releases",
+      "type": "official maintainer release record",
+      "finding": "The official client release record lists stable 7.x releases including v7.2.1. Any exact centrally managed package version remains subject to governed restore, license, and build validation before implementation."
+    }
+  ],
+  "decision": "Use the official RabbitMQ.Client 7.x package family for the authority-required post-commit dispatcher. Require publisher confirms before recording dispatch completion; retain the committed outbox as durable source of pending delivery. Keep consumer acknowledgement/inbox and all domain reactions separately governed.",
+  "limitations": [
+    "This evidence authorizes only technical RabbitMQ.Client compatibility and confirmed post-commit transport refinement. It does not authorize a Product event catalog, public event contract, Connected Product broker access, consumer business handler, inbox implementation, durable-work semantics, or arbitrary queue-per-customer topology.",
+    "The exact exchange, queue, dead-letter, retry, and quorum configuration remains limited to the bounded P1-006 technical topology and must not encode owner-domain semantics.",
+    "Refresh these sources before changing the client major version, broker protocol, durability semantics, or topology beyond the accepted ADR-0001 boundary."
+  ]
+}

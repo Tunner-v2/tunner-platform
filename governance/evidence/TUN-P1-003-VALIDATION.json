@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "evidence_id": "TUN-P1-003-VALIDATION",
+  "scope_type": "WORK_ITEM",
+  "scope_id": "TUN-P1-003",
+  "status": "PASS",
+  "checked_at": "2026-10-02T23:50:00-04:00",
+  "checks": [
+    "Operator-run dotnet restore of Tunner.Platform.slnx completed successfully.",
+    "Operator-run dotnet build of Tunner.Platform.slnx completed with zero warnings and zero errors.",
+    "Operator-run unit profile passed 4 of 4 Tunner.TestHarness checks.",
+    "Operator-run opt-in real PostgreSQL Testcontainers integration profile passed 2 of 2 transactional-outbox checks: atomic commit and rollback after a flushed owner write plus a forced duplicate outbox failure. The container uses a random host binding.",
+    "Operator-run non-production migration rehearsal built successfully and applied 20261001230000_P1TransactionalOutbox. No connection string, credential, fixed host port, or runtime path is persisted in this evidence.",
+    "Validate-TunnerTransactionalOutboxSource.ps1, Validate-TunnerMigrationsSource.ps1, Validate-TunnerTestHarnessSource.ps1, Validate-TunnerProjectMemorySource.ps1, Validate-TunnerDocumentation.ps1, and Validate-TunnerLocationIndependentPaths.ps1 passed.",
+    "Authority verification passed for 76 hash-checked artifacts; governance validation passed with no diagnostics; required specialist reviews passed; expanded context was regenerated and verified current; whitespace validation passed.",
+    "2026-10-02 remediation: Validate-TunnerTransactionalOutboxSource.ps1 passed against the shared migration context after the guard was narrowed to the single OutboxMessage mapping. Governance validation passed with 230 records and architecture regression tests passed 7 of 7."
+  ],
+  "artifacts": [
+    "src/Tunner.Database/Outbox/OutboxMessage.cs",
+    "src/Tunner.Database/Outbox/ITransactionalOutboxContext.cs",
+    "src/Tunner.Database/Outbox/ITransactionalOutbox.cs",
+    "src/Tunner.Database/Outbox/EfTransactionalOutbox.cs",
+    "src/Tunner.Database/Outbox/OutboxModelConfiguration.cs",
+    "src/Tunner.Database/TunnerMigrationsDbContext.cs",
+    "src/Tunner.Database.Migrations/Migrations/20261001230000_P1TransactionalOutbox.cs",
+    "src/Tunner.Database.Migrations/Migrations/TunnerMigrationsDbContextModelSnapshot.cs",
+    "tests/Tunner.Database.IntegrationTests/TransactionalOutboxIntegrationTests.cs",
+    "tools/validation/Validate-TunnerTransactionalOutboxSource.ps1",
+    "docs/development/LOCAL_TRANSACTIONAL_OUTBOX.md",
+    "governance/defects/DEF-TUN-P1-003-001.yaml",
+    "governance/evidence/DEF-TUN-P1-003-001-REMEDIATION.json"
+  ],
+  "limitations": [
+    "This establishes only a platform-owned outbox record and atomic owner-write boundary; it does not implement RabbitMQ dispatch, publisher confirms, consumers, inboxes, durable work, leases, timers, retry/redrive behavior, providers, Product APIs, UI, BFF, or identity behavior.",
+    "The passed migration rehearsal and container checks are local non-production evidence only. They do not establish production readiness, release approval, protected-main integration, or Product behavior acceptance.",
+    "The nullable published_at envelope field remains pending because post-commit dispatch is separately governed work."
+  ]
+}

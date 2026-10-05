@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "evidence_id": "TUN-P1-006-ROLE-REVIEWS",
+  "scope_type": "WORK_ITEM",
+  "scope_id": "TUN-P1-006",
+  "status": "PASS",
+  "reviewed_at": "2026-10-02T15:30:00-04:00",
+  "reviews": [
+    { "role": "devops-engineer", "conclusion": "PASS", "checks": ["The publisher takes runtime inputs only and introduces no configuration binding, credential, environment host, fixed port, or deployment policy."], "findings": [] },
+    { "role": "full-stack-engineer", "conclusion": "PASS", "checks": ["The post-commit coordinator marks only after confirmed publish completion and preserves the deliberate at-least-once boundary."], "findings": [] },
+    { "role": "rd-engineer", "conclusion": "PASS", "checks": ["Current primary RabbitMQ sources verify the selected client APIs, confirmation tracking, channel serialization requirement, and 7.x package family."], "findings": [] },
+    { "role": "solution-architect", "conclusion": "PASS", "checks": ["The implementation separates outbox persistence, dispatch coordination, and RabbitMQ transport while deferring consumer/inbox/retry/domain semantics."], "findings": [] },
+    { "role": "tester-qa-engineer", "conclusion": "PASS", "checks": ["The test plan covers the bounded transport failure and race cases without claiming deferred consumer guarantees."], "findings": [] }
+  ],
+  "authority_hashes": { "docs/authority/current-authority.json": "c90995b39d54c640b5168cfe4beb0a614f2d10c3bf1414bcc2bccc308fdb4a22", "docs/authority/baselines/1.6.0/decisions/ADR-0001_Durable_Messaging_RabbitMQ_Outbox_Inbox.md": "aa18842ec7b413f9716b345399087adcf8743a295a182e40d9ff0dd26012acf1", "governance/evidence/TUN-P1-006-RD-SOURCES.json": "edee92b49106e1d1f4ead06df162eb3653d3b6b5f061455a845d4d9f73a9b7fe" },
+  "skill_hashes": {
+    "devops-engineer": "0def19cfd8cf73f9fe47851ab171d3154e7e80b4675ded65964f10856789b50c",
+    "full-stack-engineer": "59adbe2133cf4ce88cbc9ca4eafce1d5a9d83b9562b6580c1571e6fc148d46b5",
+    "rd-engineer": "2834c223dfd847a6d7cd28f52de4113efc574d621391d059e8dc1469bdf33187",
+    "solution-architect": "664ffba70d0f97e75951c3548b7f8391854781e4cf90cc50fc8829543783a35b",
+    "tester-qa-engineer": "a57ce99d7ad7a3b60f17e4826c81c507c9cc208d8928285c406222eefe0a18fd"
+  }
+}

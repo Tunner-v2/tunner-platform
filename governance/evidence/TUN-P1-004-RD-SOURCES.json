@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "evidence_id": "TUN-P1-004-RD-SOURCES",
+  "scope_type": "WORK_ITEM",
+  "scope_id": "TUN-P1-004",
+  "status": "PASS",
+  "reviewed_at": "2026-10-02T11:14:17-04:00",
+  "sources": [
+    {
+      "title": "Generate OpenAPI documents — ASP.NET Core .NET 10",
+      "url": "https://learn.microsoft.com/en-us/aspnet/core/fundamentals/openapi/aspnetcore-openapi?view=aspnetcore-10.0",
+      "type": "primary vendor documentation",
+      "finding": "Microsoft.AspNetCore.OpenApi supports OpenAPI 3.1 document generation on .NET 10, including runtime and build-time generation; the P1 scope uses only the first-party executable-contract baseline."
+    },
+    {
+      "title": "What is new in ASP.NET Core in .NET 10 — OpenAPI 3.1 support",
+      "url": "https://learn.microsoft.com/en-us/aspnet/core/release-notes/aspnetcore-10.0?view=aspnetcore-10.0",
+      "type": "primary vendor documentation",
+      "finding": "ASP.NET Core .NET 10 generates OpenAPI 3.1 documents and documents the associated OpenAPI.NET 2.0 compatibility considerations; no OpenAPI 3.2 claim is made for this .NET 10 scope."
+    },
+    {
+      "title": "OpenAPI Specification v3.1.2",
+      "url": "https://spec.openapis.org/oas/v3.1",
+      "type": "primary standards documentation",
+      "finding": "OpenAPI 3.1 defines the HTTP API description contract and treats patch releases within the 3.1 feature set as compatible for supporting tooling."
+    }
+  ],
+  "decision": "Use the .NET 10 first-party OpenAPI pipeline as the executable OpenAPI 3.1 baseline required by ADR-0011. Publish only a technical contract artifact; defer Product operations, schemas, SDK generation, authentication, interactive UI, and public exposure to their owning governed work items.",
+  "limitations": [
+    "This evidence verifies current tool and standards compatibility only; it does not authorize a Product API, endpoint taxonomy, public documentation site, SDK release, or external publication.",
+    "OpenAPI 3.2 remains a forward target and may become normative only through the approved runtime/tooling upgrade trigger in ADR-0011.",
+    "Refresh these primary sources before changing the OpenAPI generator, published-contract behavior, or external API scope."
+  ]
+}

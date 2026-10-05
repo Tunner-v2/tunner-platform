@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "evidence_id": "TUN-P1-006-VALIDATION",
+  "scope_type": "WORK_ITEM",
+  "scope_id": "TUN-P1-006",
+  "status": "PASS",
+  "checked_at": "2026-10-02T14:35:54-04:00",
+  "checks": [
+    "Operator-run dotnet build of Tunner.Platform.slnx completed with zero warnings and zero errors.",
+    "Validate-TunnerRabbitMqDispatchSource.ps1 passed for the bounded post-commit RabbitMQ outbox dispatcher.",
+    "Operator-run Tunner.Worker.Tests passed 4 of 4 deterministic coordinator checks.",
+    "Authority verification, governance validation, current primary-source registry validation, bounded expanded context, and all five mandatory specialist reviews passed before the captured operator validation result.",
+    "The governed lifecycle preflight allowed CODE_REVIEW to VALIDATION, and diff hygiene reported no whitespace errors before evidence finalization."
+  ],
+  "artifacts": [
+    "src/Tunner.Database/Outbox/PendingOutboxMessage.cs",
+    "src/Tunner.Database/Outbox/IOutboxDispatchStore.cs",
+    "src/Tunner.Database/Outbox/EfOutboxDispatchStore.cs",
+    "src/Tunner.Worker/Messaging/IConfirmedOutboxPublisher.cs",
+    "src/Tunner.Worker/Messaging/OutboxDispatchCoordinator.cs",
+    "src/Tunner.Worker/Messaging/RabbitMqConfirmedOutboxPublisher.cs",
+    "tests/Tunner.Worker.Tests/OutboxDispatchCoordinatorTests.cs",
+    "tools/validation/Validate-TunnerRabbitMqDispatchSource.ps1",
+    "docs/development/LOCAL_RABBITMQ_OUTBOX_DISPATCH.md"
+  ],
+  "limitations": [
+    "This establishes only a technical post-commit, confirmed-publish outbox dispatch boundary with at-least-once delivery semantics.",
+    "No Product event catalog, queue, binding, consumer, inbox/idempotency, retry/redrive behavior, runtime registration, environment configuration, credential, fixed port, deployment, public API, or Connected Product behavior is introduced.",
+    "RabbitMQ remains non-authoritative; pending outbox rows are marked published only after publisher confirmation. Consumer and idempotency work remains separately governed by TUN-P1-007."
+  ]
+}

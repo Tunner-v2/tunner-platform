@@ -14,6 +14,10 @@ public static class TunnerApiHost
         builder.Services.AddTunnerObservability();
         builder.Services.AddTunnerModules();
         builder.Services.AddHealthChecks();
+        builder.Services.AddOpenApi(options =>
+        {
+            options.OpenApiVersion = Microsoft.OpenApi.OpenApiSpecVersion.OpenApi3_1;
+        });
 
         var application = builder.Build();
         application.MapHealthChecks("/health");

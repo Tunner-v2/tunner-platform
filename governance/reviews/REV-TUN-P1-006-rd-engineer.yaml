@@ -1,0 +1,31 @@
+schema_version: 1
+review_id: REV-TUN-P1-006-rd-engineer
+work_item_id: TUN-P1-006
+role: rd-engineer
+skill_id: rd-engineer
+skill_version: 1.0.0
+skill_hash: 2834c223dfd847a6d7cd28f52de4113efc574d621391d059e8dc1469bdf33187
+result: PASS
+status: PASS
+authority_refs:
+  - docs/authority/current-authority.json
+  - docs/authority/baselines/1.6.0/13_RD_Source_Register.md
+  - docs/authority/baselines/1.6.0/15_Runtime_Communication_and_Infrastructure_Technology_Scope.md
+  - docs/authority/baselines/1.6.0/decisions/ADR-0001_Durable_Messaging_RabbitMQ_Outbox_Inbox.md
+context_artifacts:
+  - governance/work-items/TUN-P1-006.yaml
+  - governance/context/CTX-TUN-P1-006-001.yaml
+  - governance/evidence/TUN-P1-006-RD-SOURCES.json
+  - governance/rd/source-registry.json
+  - Directory.Packages.props
+findings:
+  - Current primary RabbitMQ documentation supports the official RabbitMQ.Client 7.x IConnection and IChannel API, long-lived connections and channels, publisher confirmations, and publisher-side mutual exclusion for a shared channel.
+  - RabbitMQ.Client v7 confirmation tracking makes BasicPublishAsync fail for a broker nack or a mandatory-message return, which makes awaiting the call a suitable bounded confirmation boundary.
+  - RabbitMQ.Client 7.2.1 is centrally versioned; changing the major version or expanding delivery topology requires refreshed source evidence and governance review.
+required_actions: []
+blocking_findings: []
+evidence_refs:
+  - governance/evidence/TUN-P1-006-RD-SOURCES.json
+  - governance/rd/source-registry.json
+context_expansion_requested: false
+reviewed_at: 2026-10-02T15:30:00-04:00

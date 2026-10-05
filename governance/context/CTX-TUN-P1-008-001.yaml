@@ -1,0 +1,53 @@
+schema_version: 1
+selection_id: CTX-TUN-P1-008-001
+scope_type: WORK_ITEM
+scope_id: TUN-P1-008
+context_mode: EXPANDED
+included_artifacts:
+  - AGENTS.md
+  - docs/authority/current-authority.json
+  - docs/authority/amendments/AMD-0001/effective-overrides/11_Development_Planes_Milestones_and_P0_Backlog.md
+  - docs/authority/amendments/AMD-0004/AMD-0004_Shared_Technical_Primitives_Formatting_and_Canonicalization.md
+  - docs/authority/baselines/1.6.0/01_Engineering_Technology_Foundation.md
+  - docs/authority/baselines/1.6.0/02_Repository_Solution_and_Module_Architecture.md
+  - docs/authority/baselines/1.6.0/09_Testing_Acceptance_Evidence_and_Quality_Gates.md
+  - docs/authority/baselines/1.6.0/13_RD_Source_Register.md
+  - governance/milestones/P1.yaml
+  - governance/dependencies/DEP-TUN-P1-008-TUN-P1-002.yaml
+  - governance/dependencies/DEP-TUN-P1-008-TUN-P1-005.yaml
+  - governance/work-items/TUN-P1-002.yaml
+  - governance/work-items/TUN-P1-005.yaml
+  - governance/work-items/TUN-P1-008.yaml
+  - governance/evidence/TUN-P1-002-VALIDATION.json
+  - governance/evidence/TUN-P1-005-VALIDATION.json
+  - governance/evidence/TUN-P1-008-RD-SOURCES.json
+  - governance/evidence/TUN-P1-008-ROLE-REVIEWS.json
+  - governance/rd/source-registry.json
+  - docs/development/P1_CAPABILITY_DECOMPOSITION_AND_PRIMITIVE_REUSE.md
+  - docs/development/P1_PLATFORM_FOUNDATION_REFINEMENT.md
+  - docs/development/P1_REDIS_CACHE_COORDINATION_REFINEMENT.md
+  - docs/development/LOCAL_DEVELOPMENT.md
+  - docs/project/CURRENT_STATE.md
+  - docs/project/HANDOFF.md
+  - docs/project/PROJECT_CONTEXT.md
+  - src/Tunner.Platform
+  - src/Tunner.Database
+  - src/Tunner.Testing
+  - tests/Tunner.Database.IntegrationTests
+  - tools/dev
+  - .agent/skills/devops-engineer/SKILL.md
+  - .agent/skills/full-stack-engineer/SKILL.md
+  - .agent/skills/rd-engineer/SKILL.md
+  - .agent/skills/solution-architect/SKILL.md
+  - .agent/skills/tester-qa-engineer/SKILL.md
+excluded_artifacts:
+  - Product/user/admin behavior, public API/SDK, identity/session, financial, audit, provider, compliance, and commercial semantics
+  - Redis connection/configuration, credentials, key namespaces, cache payload/invalidation policy, lock duration, leader election, deployment, release, and production operations
+  - RabbitMQ consumer/topology, durable work/inbox semantics, owner-domain workflows, and Product retry policy
+exclusion_reasons:
+  Product/user/admin behavior, public API/SDK, identity/session, financial, audit, provider, compliance, and commercial semantics: P1-008 is a technical non-authoritative foundation without Product authority.
+  Redis connection/configuration, credentials, key namespaces, cache payload/invalidation policy, lock duration, leader election, deployment, release, and production operations: no application runtime or operational contract is authorized in this work item.
+  RabbitMQ consumer/topology, durable work/inbox semantics, owner-domain workflows, and Product retry policy: these have separate authority and ownership boundaries.
+source_hashes: {}
+tool_version: manual-p1-redis-refinement-context-1.0.0
+created_at: 2026-10-02T16:08:47-04:00

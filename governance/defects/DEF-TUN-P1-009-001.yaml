@@ -1,0 +1,24 @@
+schema_version: 1
+defect_id: DEF-TUN-P1-009-001
+work_item_id: TUN-P1-009
+classification: GOVERNANCE_LIFECYCLE
+severity: SEV-3
+status: CLOSED
+environment: repository-native governance CLI
+description: The same lifecycle control-plane defect recorded for TUN-P1-006 through TUN-P1-008 applies to this technical-only work item. Authority makes Product Acceptance conditional on applicable Product authority, but the current transition checker permits only the immediate normal state. TUN-P1-009 has no Product authority, Product impact, or Founder/Product Owner activation. Moving it from VALIDATION through PRODUCT_ACCEPTANCE would create a false acceptance claim.
+expected_behavior_ref: docs/authority/amendments/AMD-0002/effective-overrides/03_Governed_Development_Lifecycle_Scrum_Git.md lifecycle diagram; docs/authority/baselines/1.6.0/09_Testing_Acceptance_Evidence_and_Quality_Gates.md Product Acceptance complete where required; docs/authority/baselines/1.6.0/12_AI_Development_Protocol_Context_and_Project_Memory.md Founder/Product Owner authority boundary.
+evidence:
+  - governance/evidence/TUN-P1-020-VALIDATION.json
+  - governance/evidence/TUN-P1-009-RD-SOURCES.json
+  - governance/evidence/TUN-P1-009-VALIDATION.json
+  - governance/work-items/TUN-P1-009.yaml
+  - governance/policies/lifecycle-policy.yaml
+  - governance/defects/DEF-TUN-P1-006-001.yaml
+  - governance/defects/DEF-TUN-P1-007-001.yaml
+  - governance/defects/DEF-TUN-P1-008-001.yaml
+  - src/Tunner.Governance/GovernanceApplication.cs
+affected_versions:
+  - src/Tunner.Governance/GovernanceApplication.cs current local control-plane CLI
+  - governance/policies/lifecycle-policy.yaml current local lifecycle policy
+created_at: 2026-10-02T17:51:41-04:00
+updated_at: 2026-10-02T23:00:00-04:00
