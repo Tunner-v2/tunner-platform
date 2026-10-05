@@ -7,9 +7,9 @@
   "validated_commit_sha": "82db541fe675d7a6f22ea96fa4f5abd21e8ad9fb",
   "tested_commit_sha": "82db541fe675d7a6f22ea96fa4f5abd21e8ad9fb",
   "role_review_evidence_commit_sha": "ef4983a248f4ef7d004d44be94d14ab603faf808",
-  "closure_commit_sha": null,
+  "closure_commit_sha": "36cca426cff5c4e546eb257c3c66c8299589834e",
   "closure_kind": "METADATA_ONLY",
-  "closed_at": "2026-10-05T21:43:23.2178842+00:00",
+  "closed_at": "2026-10-05T17:43:23.2178842-04:00",
   "product_acceptance_required": false,
   "gate_result": "READY",
   "gate_failures": [],
@@ -23,7 +23,7 @@
     "governance/evidence/TUN-P1-014-ROLE-REVIEWS.json",
     "governance/evidence/TUN-P1-014-AUTHORITY-RESOLUTION.json"
   ],
-  "context": "Bounded EXPANDED work-item context regenerated and verified CURRENT before closure; refresh again after closure SHA is recorded.",
+  "context": "Bounded EXPANDED work-item context regenerated and verified CURRENT; validated/tested and metadata closure SHAs recorded separately.",
   "new_amd_created": false,
   "p0_historical_state": "CLOSED",
   "global_development_blocked": false,
@@ -32,5 +32,16 @@
   "limitations": [
     "Local technical completion only; no production promotion, human/legal acceptance, public API or Product audit/retention workflow is approved.",
     "Checksum and append-only DML guards do not prevent privileged administrator DDL or rewriting both envelope and digest."
-  ]
+  ],
+  "final_validation": {
+    "build": "PASS: zero warnings/errors at validated SHA",
+    "tests": "PASS: 71 executed, zero failures/skips at tested SHA",
+    "authority_verify": "PASS: 167 registered artifacts",
+    "governance_validate": "PASS: 352 records",
+    "final_gate": "READY: zero failures",
+    "context_verify": "CURRENT: closure lineage refresh",
+    "next_planned_work_item": "TUN-P1-015",
+    "next_currently_actionable": false,
+    "readiness_action": "Reconcile existing provider authority and P1-004 committed evidence; retain scoped gating."
+  }
 }
