@@ -15,10 +15,10 @@
 
 ## Current Revision state
 
-- Revision: P0-032-RV001 (CLOSED)
-- Original scope: TUN-P0-032
-- Type/reason: CORRECTIVE: Remediate the post-closure gap recorded by REOPEN-TUN-P0-032-001; retain original DONE evidence.
+- Revision: P0-RV001 (VALIDATION)
+- Original scope: P0
+- Type/reason: CORRECTIVE: Post-closure remediation of governance/control-plane, evidence integrity, project-state consistency, fresh-agent recovery, authority integrity and portability deficiencies discovered after legitimate historical P0 closure.
 - Impact: NON_BLOCKING; blocked scope:
 - Prior Revision: none
-- Parent milestone Revision: P0-RV001
-- Exact next action: preserve closure and run governance next
+- Parent milestone Revision: none
+- Exact next action: collect passing gates, role reviews, committed evidence, and required acceptance
