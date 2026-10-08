@@ -1,83 +1,92 @@
 {
-  "scope_id": "TUN-P1-016",
+  "evidence_id": "TUN-P1-016-ROLE-REVIEWS",
+  "reviewed_at": "2026-10-08T15:17:52.8469278-04:00",
+  "limitations": [
+    "Codex engineering role reviews; no independent human, Product or production acceptance is asserted."
+  ],
+  "status": "PASS",
+  "schema_version": 1,
   "reviews": [
     {
+      "conclusion": "PASS",
+      "findings": [],
+      "reviewed_commit_sha": "645003680d3479796e8906f456d9e18ddff1a805",
       "role": "full-stack-engineer",
       "checks": [
-        "Existing IConfiguration and explicit ITunnerModule mechanics are reused.",
-        "The immutable snapshot validates both top-level and nested shapes before singleton registration."
+        "Reviewed immutable read-only dictionaries, strict scalar/object shapes, constant error messages and one-time explicit module registration at the validated SHA.",
+        "Actual Generic Host composition, configuration provider overrides, duplicate registration and invalid-registration atomicity pass in executed tests.",
+        "Existing framework configuration and ITunnerModule are reused without provider/network startup, a new assembly or a generic utility layer."
       ],
-      "result": "PASS",
-      "phase": "PREIMPLEMENTATION_CONTRACT_AND_TEST_PLAN",
-      "reviewer": "Codex",
-      "findings": []
+      "phase": "COMMITTED_IMPLEMENTATION",
+      "reviewer": "Codex"
     },
     {
+      "conclusion": "PASS",
+      "findings": [],
+      "reviewed_commit_sha": "645003680d3479796e8906f456d9e18ddff1a805",
       "role": "solution-architect",
       "checks": [
-        "Configuration remains a cohesive Platform capability; no shared utility subsystem or automatic host/dependency activation.",
-        "Engineering identity and deploy-time configuration stay separate from Product environment/policy authority."
+        "Capability remains in Tunner.Platform and conforms to Documents 02/06; engineering environment classification does not become Product identity or an authorization grant.",
+        "Protocol/schema checks are code; deploy-time endpoints and opaque references are configuration. Business policy and runtime state have separate owners.",
+        "Only scoped source/tests/example/guide are behavior ownership; shared capability map is coordination metadata. No API/Worker composition expansion is required for an explicitly activated module foundation."
       ],
-      "result": "PASS",
-      "phase": "PREIMPLEMENTATION_CONTRACT_AND_TEST_PLAN",
-      "reviewer": "Codex",
-      "findings": []
+      "phase": "COMMITTED_IMPLEMENTATION",
+      "reviewer": "Codex"
     },
     {
+      "conclusion": "PASS",
+      "findings": [],
+      "reviewed_commit_sha": "645003680d3479796e8906f456d9e18ddff1a805",
       "role": "cyber-security-engineer",
       "checks": [
-        "Threat review rejects raw secret fields, credential-bearing endpoint URIs and value-disclosing diagnostics.",
-        "Opaque references confer no authorization; actual vault resolution and network destination policy remain with owners."
+        "Negative tests reject endpoint user-info, query/fragment carriers, invalid ports, control data, raw secret fields and ambiguous nested shapes without echoing submitted values.",
+        "Opaque vault references neither authorize nor resolve secrets. Destination allowlists, reference validation and workload permissions remain mandatory owning-adapter responsibilities.",
+        "Repository secret scan passes with unchanged rules; fixtures are synthetic and no credential material or configuration enumeration is logged. No production security acceptance is claimed."
       ],
-      "result": "PASS",
-      "phase": "PREIMPLEMENTATION_CONTRACT_AND_TEST_PLAN",
-      "reviewer": "Codex",
-      "findings": []
+      "phase": "COMMITTED_IMPLEMENTATION",
+      "reviewer": "Codex"
     },
     {
+      "conclusion": "PASS",
+      "findings": [],
+      "reviewed_commit_sha": "645003680d3479796e8906f456d9e18ddff1a805",
       "role": "devops-engineer",
       "checks": [
-        "Explicit profiles/provider precedence allow runtime overrides without source changes; no machine-specific paths or hidden defaults.",
-        "No production/cloud/release promotion or live secret injection is triggered; immutable snapshot reactivation is explicit."
+        "Document 06 local engineering classes/ports and credential-free example align; JSON, environment and command-line precedence tests override endpoints without source changes.",
+        "Runtime-loaded configuration snapshot is location independent; committed artifacts use relative paths, no machine-specific endpoint paths, bootstrap tokens or secrets.",
+        "No live vault, provider health, cloud IaC, deployment promotion or release readiness is asserted; this engineering foundation requires explicit activation."
       ],
-      "result": "PASS",
-      "phase": "PREIMPLEMENTATION_CONTRACT_AND_TEST_PLAN",
-      "reviewer": "Codex",
-      "findings": []
+      "phase": "COMMITTED_IMPLEMENTATION",
+      "reviewer": "Codex"
     },
     {
+      "conclusion": "PASS",
+      "findings": [],
+      "reviewed_commit_sha": "645003680d3479796e8906f456d9e18ddff1a805",
       "role": "tester-qa-engineer",
       "checks": [
-        "Plan covers missing/invalid profiles, nested shapes, negative credential tests, snapshots, provider precedence and Generic Host composition.",
-        "Exact committed candidate execution, source guard and secret scan are required; no planning test pass is claimed."
+        "140 executed architecture cases pass, including 64 new environment cases and all 76 existing host/OpenAPI/storage/realtime/policy/command/provider regressions.",
+        "Tests exercise missing/invalid classes, identity separation, strict shape and credential rejection, redacted diagnostics, immutability, module composition and actual configuration providers.",
+        "Exact validated/tested SHA matches all owned Git blobs. Precommit results and scanner fixture correction are distinguished from final committed validation."
       ],
-      "result": "PASS",
-      "phase": "PREIMPLEMENTATION_CONTRACT_AND_TEST_PLAN",
-      "reviewer": "Codex",
-      "findings": []
+      "phase": "COMMITTED_IMPLEMENTATION",
+      "reviewer": "Codex"
     },
     {
+      "conclusion": "PASS",
+      "findings": [],
+      "reviewed_commit_sha": "645003680d3479796e8906f456d9e18ddff1a805",
       "role": "auditor",
       "checks": [
-        "The omitted current environment contract resolves the earlier blocker; history and evidence are preserved.",
-        "Final implementation/test/evidence lineage must use matching validated/tested SHA and separately recorded closure metadata."
+        "Current canonical Document 06 was fetched; its approved contract resolves the prior omitted-authority conclusion. No AMD or new Product semantics were introduced.",
+        "Validated and tested SHA are the same real local commit; TRX outcomes, portable hash and owned Git blobs are recorded. Original P1-002 evidence and P0 closure remain unchanged.",
+        "Final role reviews replace preflight working reviews while immutable preflight evidence and Git history preserve their causation. Reviews are Codex engineering reviews, with closure metadata recorded separately."
       ],
-      "result": "PASS",
-      "phase": "PREIMPLEMENTATION_CONTRACT_AND_TEST_PLAN",
-      "reviewer": "Codex",
-      "findings": []
+      "phase": "COMMITTED_IMPLEMENTATION",
+      "reviewer": "Codex"
     }
   ],
-  "plan_sha256": "cf80a9b7fcd688ea4323bd244c26f4749ebc2591ca3d62b3f7bde3e68f229056",
-  "plan_path": "docs/development/P1_ENGINEERING_ENVIRONMENT_CONFIGURATION.md",
+  "reviewed_commit_sha": "645003680d3479796e8906f456d9e18ddff1a805",
   "scope_type": "WORK_ITEM",
-  "status": "PASS",
-  "reviewed_at": "2026-10-05T22:27:42.9748729+00:00",
-  "limitations": [
-    "Contract/test-plan reviews only, performed by Codex; no implementation/test/production or independent human acceptance is asserted."
-  ],
-  "reviewed_commit": "332c15051fae95e532644f8af4a965155e9a4e82",
-  "schema_version": 1,
-  "phase": "PREIMPLEMENTATION_CONTRACT_AND_TEST_PLAN",
-  "evidence_id": "TUN-P1-016-ROLE-REVIEWS"
+  "scope_id": "TUN-P1-016"
 }
