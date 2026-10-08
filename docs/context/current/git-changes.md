@@ -1,5 +1,6 @@
 # Recent relevant Git changes
 
+- `b2dbdcc chore(governance): close P1-016 engineering configuration foundation`
 - `812a8fd test(governance): record P1-016 committed validation and role reviews`
 - `6450036 test(platform): use clearly synthetic configuration rejection fixtures`
 - `607817c feat(platform): add explicit engineering environment configuration`
@@ -9,4 +10,3 @@
 - `7dd1345 test(governance): record P1-015 committed validation and role reviews`
 - `8320368 chore(governance): resolve P1-015 authority and committed prerequisite readiness`
 - `9613dcf docs(governance): record P1-014 closure SHA and recovery context`
-- `36cca42 chore(governance): close validated P1-014 audit foundation`
