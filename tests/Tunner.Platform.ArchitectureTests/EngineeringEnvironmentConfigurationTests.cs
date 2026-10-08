@@ -63,10 +63,10 @@ public sealed class EngineeringEnvironmentConfigurationTests
     }
 
     [Theory]
-    [InlineData("http://user:sentinel-value@localhost:7100")]
+    [InlineData("http://user:redacted@localhost:7100")]
     [InlineData("http://@localhost:7100")]
-    [InlineData("http://localhost:7100?token=sentinel-value")]
-    [InlineData("http://localhost:7100#sentinel-value")]
+    [InlineData("http://localhost:7100?token=redacted")]
+    [InlineData("http://localhost:7100#redacted")]
     [InlineData("http://localhost:0")]
     [InlineData("http://localhost:70000")]
     [InlineData("http://localhost:7100/bad%0Apath")]
@@ -75,13 +75,13 @@ public sealed class EngineeringEnvironmentConfigurationTests
     [InlineData("file://localhost/config")]
     [InlineData("ftp://localhost/config")]
     [InlineData("relative-endpoint")]
-    [InlineData("Host=localhost;Password=sentinel-value")]
+    [InlineData("Host=localhost;Password=redacted")]
     [InlineData("")]
     [InlineData(null)]
     public void SecretBearingOrMalformedEndpointsFailWithRedactedDiagnostics(string? value)
     {
         var error = Assert.Throws<InvalidOperationException>(() => EngineeringEnvironmentConfiguration.Load(Configuration(("Endpoints:api", value))));
-        Assert.DoesNotContain("sentinel-value", error.ToString(), StringComparison.Ordinal);
+        Assert.DoesNotContain("redacted", error.ToString(), StringComparison.Ordinal);
         if (!string.IsNullOrWhiteSpace(value)) Assert.DoesNotContain(value, error.Message, StringComparison.Ordinal);
     }
 

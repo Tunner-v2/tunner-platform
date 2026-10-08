@@ -1,5 +1,6 @@
 # Recent relevant Git changes
 
+- `607817c feat(platform): add explicit engineering environment configuration`
 - `2ac5d1f chore(governance): resolve P1-016 environment authority and eligibility`
 - `332c150 chore(governance): record P1-015 closure lineage and repository recovery`
 - `48d2a99 chore(governance): close P1-015 technical provider foundation`
@@ -9,4 +10,3 @@
 - `36cca42 chore(governance): close validated P1-014 audit foundation`
 - `ef4983a test(audit): record exact-SHA P1-014 validation and role reviews`
 - `b2a84cb docs(governance): record P1-013 closure lineage and final handoff`
-- `e475ea8 chore(governance): close validated P1-013 technical work item`
