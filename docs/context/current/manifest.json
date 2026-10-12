@@ -1,10 +1,10 @@
 {
   "GeneratorVersion": "tunner-context-0.1.0",
-  "GeneratedAt": "2026-10-12T20:32:33.810373+00:00",
+  "GeneratedAt": "2026-10-12T20:36:22.1426514+00:00",
   "WorkItem": {
     "Id": "TUN-P1-018",
     "Title": "User and Admin shared UI foundation",
-    "Status": "IN_PROGRESS",
+    "Status": "VALIDATION",
     "ContextPolicy": "EXPANDED"
   },
   "Included": [
@@ -149,31 +149,37 @@
     {
       "Path": "docs/project/CURRENT_STATE.md",
       "Reason": "current project state",
-      "Sha256": "a2a749475799819a05e9f3e23e01e11d0ab3dda0fc42f2af2b95b8866209e9b1",
+      "Sha256": "44a78e4aae9724fbb0a55867b9e5d799c739eac807e3a745ac2124dc541473b6",
       "Version": null
     },
     {
       "Path": "docs/project/HANDOFF.md",
       "Reason": "handoff state",
-      "Sha256": "a2a749475799819a05e9f3e23e01e11d0ab3dda0fc42f2af2b95b8866209e9b1",
+      "Sha256": "44a78e4aae9724fbb0a55867b9e5d799c739eac807e3a745ac2124dc541473b6",
       "Version": null
     },
     {
       "Path": "docs/project/PROJECT_CONTEXT.md",
       "Reason": "durable project context",
-      "Sha256": "a2a749475799819a05e9f3e23e01e11d0ab3dda0fc42f2af2b95b8866209e9b1",
+      "Sha256": "44a78e4aae9724fbb0a55867b9e5d799c739eac807e3a745ac2124dc541473b6",
       "Version": null
     },
     {
       "Path": "governance/context/CTX-TUN-P1-018-001.yaml",
       "Reason": "required evidence",
-      "Sha256": "729ffdcabe4ec790a1dfab84618597c00beab0984d17908766b124fcfb5a68ed",
+      "Sha256": "7aab9eff255f66cfd850e73263c6cf92f94a36d88ded07d75e37a094ef40f7a2",
       "Version": null
     },
     {
       "Path": "governance/evidence/TUN-P1-018-AUTHORITY-RESOLUTION.json",
       "Reason": "required evidence",
       "Sha256": "60f7176ce277284bdc0a5fa9c24c467655a642a87afa9ec5ad575b91cf057879",
+      "Version": null
+    },
+    {
+      "Path": "governance/evidence/TUN-P1-018-CLOSURE.json",
+      "Reason": "required evidence",
+      "Sha256": "2d81eb2996191defa25b5b5cde58e347db35c08d1f2e1f6c9e842dc557eecedd",
       "Version": null
     },
     {
@@ -191,13 +197,19 @@
     {
       "Path": "governance/evidence/TUN-P1-018-ROLE-REVIEWS.json",
       "Reason": "required evidence",
-      "Sha256": "f7cc48ddbf32e1a2a8cc7fe4a0d618079fffa50d46accbfd1e0adf23d39c196e",
+      "Sha256": "cae532182dcc9830ae16c42d57f6cfd58d12b04d76021960443e4670f063f648",
+      "Version": null
+    },
+    {
+      "Path": "governance/evidence/TUN-P1-018-TEST-RESULTS.json",
+      "Reason": "required evidence",
+      "Sha256": "ab6177719e4ce2a4c9ff7488796c817f357359cf9bda46564946a0afb0cf7ef9",
       "Version": null
     },
     {
       "Path": "governance/evidence/TUN-P1-018-VALIDATION.json",
       "Reason": "required evidence",
-      "Sha256": "d8868f5ea3c828d8e6e36287fb2a20e2b3fef0d64ccc42d78a1b573dfc74391b",
+      "Sha256": "6a6119ef8d20c128995c8e7bdc359df416501458ef5b5142b8feab73cd9d29a8",
       "Version": null
     },
     {
@@ -233,12 +245,13 @@
     {
       "Path": "governance/work-items/TUN-P1-018.yaml",
       "Reason": "selected work item",
-      "Sha256": "16dae6fa893943f04c97a9697ec8955c5fd7cc13aceae1ef1c2c09cc143f6239",
+      "Sha256": "994ce2d47c99a53fa98251e414d04b961a2043deb60f4355c004d97df62f8d1a",
       "Version": null
     }
   ],
   "Excluded": [],
   "GitHistory": [
+    "c928b32 feat(P1-018): add scoped light theme and shared accessible UI controls",
     "716f6ed docs(P1-018): resolve shared UI scope from approved light references",
     "03d705e chore(governance): record P1-017 closure lineage and repository recovery",
     "71d053c chore(governance): close P1-017 technical problem contract standard",
@@ -247,8 +260,7 @@
     "99c84a8 chore(governance): record P1-016 closure lineage and fresh-agent recovery",
     "b2dbdcc chore(governance): close P1-016 engineering configuration foundation",
     "812a8fd test(governance): record P1-016 committed validation and role reviews",
-    "2ac5d1f chore(governance): resolve P1-016 environment authority and eligibility",
-    "332c150 chore(governance): record P1-015 closure lineage and repository recovery"
+    "2ac5d1f chore(governance): resolve P1-016 environment authority and eligibility"
   ],
   "Revision": null,
   "HistoricalScopes": [
@@ -342,7 +354,11 @@
     }
   ],
   "RevisionSetSha256": "cd345b251a266eea38711788d4b72d80f527f6b5956b431a42f66d64e796b0c6",
-  "CommitState": null,
+  "CommitState": {
+    "ValidatedSha": "c928b32f5ccf291a2493bf37e19be3e70604f3e8",
+    "TestedSha": "c928b32f5ccf291a2493bf37e19be3e70604f3e8",
+    "ClosureSha": null
+  },
   "LatestRevisions": [
     {
       "Id": "P0-RV001",
@@ -462,5 +478,5 @@
       "NextAction": "preserve closure and run governance next"
     }
   ],
-  "GovernanceStateSha256": "c1e136ee85e49aeaee47de0be97aff8aac5f174a2e330cb5b9acdff8ffcfa9c1"
+  "GovernanceStateSha256": "d61e3f8d381f088c2ff69e315a51532206152055664484963730f3c28d995117"
 }

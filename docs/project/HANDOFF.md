@@ -17,8 +17,8 @@ Latest bounded Revision lineage:
 - P0-035-RV001: CLOSED; original TUN-P0-035; parent P0-RV001; CORRECTIVE: Remediate the post-closure gap recorded by REOPEN-TUN-P0-035-001; retain original DONE evidence.
 
 Selected scope: TUN-P1-018
-Validated SHA: not recorded
-Tested SHA: not recorded
+Validated SHA: c928b32f5ccf291a2493bf37e19be3e70604f3e8
+Tested SHA: c928b32f5ccf291a2493bf37e19be3e70604f3e8
 Closure SHA: not recorded
 
 Prerequisites: TUN-P1-002, TUN-P1-005
@@ -26,6 +26,6 @@ Authority: docs/authority/current-authority.json, docs/authority/amendments/AMD-
 Defects:
 Evidence:
 
-Exact next governed action: TUN-P1-018: currently in progress
+Exact next governed action: TUN-P1-018: all recorded prerequisites and blockers permit work
 
 P1 historical validation findings are retained in governance/evidence/P0-RV001-P1-EVIDENCE-AUDIT.json. No chat history is required.

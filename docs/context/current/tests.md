@@ -15,3 +15,5 @@
 - `governance/evidence/TUN-P1-018-DESIGN-SOURCES.json` — required evidence
 - `governance/evidence/TUN-P1-018-RD-SOURCES.json` — required evidence
 - `docs/development/P1_STRUCTURAL_UI_THEMING.md` — required evidence
+- `governance/evidence/TUN-P1-018-TEST-RESULTS.json` — required evidence
+- `governance/evidence/TUN-P1-018-CLOSURE.json` — required evidence

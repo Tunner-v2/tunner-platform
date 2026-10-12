@@ -1,18 +1,110 @@
 {
-  "status": "PENDING",
-  "checks": [],
+  "status": "PASS",
+  "checks": [
+    {
+      "result": "PASS",
+      "command": "pnpm install --frozen-lockfile --offline --ignore-scripts",
+      "exit_code": 0
+    },
+    {
+      "exit_code": 0,
+      "library": "PASS",
+      "command": "pnpm build",
+      "fixture": "PASS",
+      "generated_theme": "CURRENT",
+      "strict_types": true,
+      "result": "PASS"
+    },
+    {
+      "failed": 0,
+      "exit_code": 0,
+      "skipped": 0,
+      "command": "pnpm test",
+      "passed": 25,
+      "result": "PASS"
+    },
+    {
+      "exit_code": 0,
+      "failed": 0,
+      "passed": 13,
+      "flaky": 0,
+      "axe_violations": 0,
+      "skipped": 0,
+      "command": "pnpm test:browser",
+      "result": "PASS"
+    },
+    {
+      "result": "PASS",
+      "command": "dotnet build Tunner.Platform.slnx --no-restore",
+      "exit_code": 0,
+      "warnings": 0,
+      "errors": 0
+    },
+    {
+      "failed": 0,
+      "exit_code": 0,
+      "skipped": 0,
+      "command": "dotnet test tests/Tunner.Platform.ArchitectureTests/Tunner.Platform.ArchitectureTests.csproj --no-build --no-restore",
+      "passed": 182,
+      "result": "PASS"
+    },
+    {
+      "result": "PASS",
+      "identical_lockfile_verified": true,
+      "command": "pnpm audit --json",
+      "exit_code": 0,
+      "known_advisories": 0
+    },
+    {
+      "result": "PASS",
+      "command": "tools/security/Invoke-TunnerSecretScan.ps1",
+      "exit_code": 0,
+      "files": 1119,
+      "rule_matches": 0
+    },
+    {
+      "result": "PASS",
+      "command": "tools/validation/Validate-TunnerPlatformHostSource.ps1 -RepositoryRoot <repo-root>",
+      "exit_code": 0
+    },
+    {
+      "result": "PASS",
+      "command": "tools/validation/Validate-TunnerOpenApiContractSource.ps1 -RepositoryRoot <repo-root>",
+      "exit_code": 0
+    },
+    {
+      "result": "PASS",
+      "command": "tunner authority verify",
+      "exit_code": 0,
+      "registered_artifacts": 167
+    },
+    {
+      "result": "PASS",
+      "records": 378,
+      "command": "tunner governance validate",
+      "exit_code": 0
+    },
+    {
+      "result": "CURRENT",
+      "command": "tunner context verify",
+      "exit_code": 0
+    }
+  ],
   "ownership_phase": "COMPLETE_IMPLEMENTATION_CANDIDATE; source/config/lockfile/test/guide inventory is part of the validated commit.",
   "owned_coordination_paths": [
     ".gitignore",
     "docs/development/P1_CAPABILITY_DECOMPOSITION_AND_PRIMITIVE_REUSE.md"
   ],
-  "result": "PENDING",
+  "result": "PASS",
   "scope_type": "WORK_ITEM",
   "limitations": [
-    "Candidate committed-state validation has not executed yet.",
-    "Engineering technical foundation only; no new Product screen, BFF/auth or published backend content service."
+    "Structural shared light foundation only; User/Admin production apps, BFF/session/publication authority and business states remain owner work.",
+    "Content snapshot checking is presentation integrity, not browser authorization; owner resolvers must enforce approved publication/disclosure and audience selection.",
+    "Dark/system palettes are not activated. A future mode requires complete approved profiles, explicit styling, regeneration and tests.",
+    "Code Connect reads are unavailable under the current Figma seat/plan; no unavailable mapping is fabricated and no Figma file was changed.",
+    "Role reviews are Codex engineering reviews, not independent human, Product or production acceptance."
   ],
-  "tested_commit_sha": null,
+  "tested_commit_sha": "c928b32f5ccf291a2493bf37e19be3e70604f3e8",
   "validation_kind": "COMMITTED",
   "owned_behavior_paths": [
     "docs/development/P1_STRUCTURAL_UI_THEMING.md",
@@ -45,7 +137,159 @@
     "web/tsconfig.json"
   ],
   "schema_version": 1,
-  "validated_commit_sha": null,
+  "validated_commit_sha": "c928b32f5ccf291a2493bf37e19be3e70604f3e8",
   "scope_id": "TUN-P1-018",
-  "evidence_id": "TUN-P1-018-VALIDATION"
+  "evidence_id": "TUN-P1-018-VALIDATION",
+  "checked_at": "2026-10-12T16:36:08.5248531-04:00",
+  "owned_git_blobs": {
+    "docs/development/P1_STRUCTURAL_UI_THEMING.md": {
+      "working_tree_blob": "a9242c09cd053bd5f2081dfd8e45e018f49b0798",
+      "match": true,
+      "candidate_blob": "a9242c09cd053bd5f2081dfd8e45e018f49b0798"
+    },
+    "web/fixtures/ui/fixture.css": {
+      "working_tree_blob": "a2eda42ec81fcbb71a736546480420f38c58e798",
+      "match": true,
+      "candidate_blob": "a2eda42ec81fcbb71a736546480420f38c58e798"
+    },
+    "web/fixtures/ui/index.html": {
+      "working_tree_blob": "77193d5c2121a135c3251fe91e3f2f92490aee61",
+      "match": true,
+      "candidate_blob": "77193d5c2121a135c3251fe91e3f2f92490aee61"
+    },
+    "web/fixtures/ui/main.tsx": {
+      "working_tree_blob": "cfa6d6c22f3e63e77dbd49b6f6a3b48143c0378f",
+      "match": true,
+      "candidate_blob": "cfa6d6c22f3e63e77dbd49b6f6a3b48143c0378f"
+    },
+    "web/fixtures/ui/package.json": {
+      "working_tree_blob": "d7c3195d66e3e191667060f81aaf8683c5573ab2",
+      "match": true,
+      "candidate_blob": "d7c3195d66e3e191667060f81aaf8683c5573ab2"
+    },
+    "web/fixtures/ui/vite.config.ts": {
+      "working_tree_blob": "09456009ca8f37cbcb1e0297b7a9a38c6bbdf4cc",
+      "match": true,
+      "candidate_blob": "09456009ca8f37cbcb1e0297b7a9a38c6bbdf4cc"
+    },
+    "web/package.json": {
+      "working_tree_blob": "6e95dd0f236477926ce6e184c62008ade3b571a3",
+      "match": true,
+      "candidate_blob": "6e95dd0f236477926ce6e184c62008ade3b571a3"
+    },
+    "web/packages/ui/package.json": {
+      "working_tree_blob": "c9baefb8cc721b7aac72db5430c90799c501810e",
+      "match": true,
+      "candidate_blob": "c9baefb8cc721b7aac72db5430c90799c501810e"
+    },
+    "web/packages/ui/src/content.tsx": {
+      "working_tree_blob": "8c2343d356babf975729c4f2c23a7f7224a4080a",
+      "match": true,
+      "candidate_blob": "8c2343d356babf975729c4f2c23a7f7224a4080a"
+    },
+    "web/packages/ui/src/controls.tsx": {
+      "working_tree_blob": "b4702903485b385082e4291fc6ff75426ce67804",
+      "match": true,
+      "candidate_blob": "b4702903485b385082e4291fc6ff75426ce67804"
+    },
+    "web/packages/ui/src/index.ts": {
+      "working_tree_blob": "1ec71290d9ed360427c84116c6a85d05aabc1ed8",
+      "match": true,
+      "candidate_blob": "1ec71290d9ed360427c84116c6a85d05aabc1ed8"
+    },
+    "web/packages/ui/src/theme.generated.ts": {
+      "working_tree_blob": "91a639f208ce9ece4f940d27577b3f17467aba45",
+      "match": true,
+      "candidate_blob": "91a639f208ce9ece4f940d27577b3f17467aba45"
+    },
+    "web/packages/ui/src/theme.tsx": {
+      "working_tree_blob": "10b5e8d27dd4fc5be41bc2a47be31d919f4c2682",
+      "match": true,
+      "candidate_blob": "10b5e8d27dd4fc5be41bc2a47be31d919f4c2682"
+    },
+    "web/packages/ui/styles/components.css": {
+      "working_tree_blob": "d445f26b4205deea2bbd698c33ccf2b68a4e7614",
+      "match": true,
+      "candidate_blob": "d445f26b4205deea2bbd698c33ccf2b68a4e7614"
+    },
+    "web/packages/ui/styles/index.css": {
+      "working_tree_blob": "4aa6376d43f2d259573e3b9284789efbf550d7c2",
+      "match": true,
+      "candidate_blob": "4aa6376d43f2d259573e3b9284789efbf550d7c2"
+    },
+    "web/packages/ui/styles/tailwind.generated.css": {
+      "working_tree_blob": "fee04df0480ff042544ec4c22948dc8115ae76c2",
+      "match": true,
+      "candidate_blob": "fee04df0480ff042544ec4c22948dc8115ae76c2"
+    },
+    "web/packages/ui/styles/tokens.generated.css": {
+      "working_tree_blob": "2c32e7001c82829fa400fd70a10d09c80799b4ac",
+      "match": true,
+      "candidate_blob": "2c32e7001c82829fa400fd70a10d09c80799b4ac"
+    },
+    "web/packages/ui/theme.tokens.json": {
+      "working_tree_blob": "fe04c81980ad888d3b1ba4ae5a7da7ae444c9218",
+      "match": true,
+      "candidate_blob": "fe04c81980ad888d3b1ba4ae5a7da7ae444c9218"
+    },
+    "web/packages/ui/tools/build-theme.mjs": {
+      "working_tree_blob": "12a5cb57c7f4feb2b663482c776672eeed6ba58a",
+      "match": true,
+      "candidate_blob": "12a5cb57c7f4feb2b663482c776672eeed6ba58a"
+    },
+    "web/packages/ui/vite.config.ts": {
+      "working_tree_blob": "236f142d4a56a80d8032ad79fe12fbe921796eef",
+      "match": true,
+      "candidate_blob": "236f142d4a56a80d8032ad79fe12fbe921796eef"
+    },
+    "web/playwright.config.ts": {
+      "working_tree_blob": "9652b47c392b111d428c80c38d44190c9dceb060",
+      "match": true,
+      "candidate_blob": "9652b47c392b111d428c80c38d44190c9dceb060"
+    },
+    "web/pnpm-lock.yaml": {
+      "working_tree_blob": "7edca9c2a18e60cf3616099b5e0f5754baea15e2",
+      "match": true,
+      "candidate_blob": "7edca9c2a18e60cf3616099b5e0f5754baea15e2"
+    },
+    "web/pnpm-workspace.yaml": {
+      "working_tree_blob": "17a4e296116baa6fc9505862aabd402c16326f81",
+      "match": true,
+      "candidate_blob": "17a4e296116baa6fc9505862aabd402c16326f81"
+    },
+    "web/tests/browser/foundation.spec.ts": {
+      "working_tree_blob": "3af11fc1478dc339a20b5e341a1c13623a306e18",
+      "match": true,
+      "candidate_blob": "3af11fc1478dc339a20b5e341a1c13623a306e18"
+    },
+    "web/tests/contracts.test.tsx": {
+      "working_tree_blob": "c4460477c4c2a1ed530e83103a24f3971e786133",
+      "match": true,
+      "candidate_blob": "c4460477c4c2a1ed530e83103a24f3971e786133"
+    },
+    "web/tests/theme.test.mjs": {
+      "working_tree_blob": "ff4770544996bfa23b1631878726f7a8f5fe2109",
+      "match": true,
+      "candidate_blob": "ff4770544996bfa23b1631878726f7a8f5fe2109"
+    },
+    "web/tests/vite.config.ts": {
+      "working_tree_blob": "d02e4a36212ba12cba4579819f39694e89166cc1",
+      "match": true,
+      "candidate_blob": "d02e4a36212ba12cba4579819f39694e89166cc1"
+    },
+    "web/tsconfig.json": {
+      "working_tree_blob": "41342b8973ff94dcd6f253163e59e042a6c5ea5e",
+      "match": true,
+      "candidate_blob": "41342b8973ff94dcd6f253163e59e042a6c5ea5e"
+    }
+  },
+  "test_results_ref": "governance/evidence/TUN-P1-018-TEST-RESULTS.json",
+  "acceptance_results": [
+    "Existing Drive Documents 10/31, accepted ADR-0007 and canonical Figma controls resolve the selected foundation without a new AMD.",
+    "A single JSON source emits strict scoped primitive/semantic/component tokens, supported modes and the TailAdmin bridge; cycles/unknowns/duplicates/incomplete profiles/stale outputs fail.",
+    "Explicit light User/Admin ThemeProviders isolate nested presentation without global root mutation, persisted state or external asset/provider requests.",
+    "Shared native controls render owner-published versioned content and escape plain text; key/locale/state/provenance mismatch fails; owner actions/data/disabled/read-only state remain explicit.",
+    "Source geometry, fonts, visible keyboard focus, label/help/error associations, AA contrast and narrow reflow pass; soft decorative input borders are deliberately reconciled under existing AA authority.",
+    "All 38 new frontend checks and 182 prior architecture cases pass on the same actual committed implementation; no earlier P0/P1 behavior/evidence is rewritten."
+  ]
 }

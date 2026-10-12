@@ -1,12 +1,12 @@
 # Generated HANDOFF
 
 - Scope: TUN-P1-018
-- State: IN_PROGRESS
+- State: VALIDATION
 
 No Revision is selected. No post-closure Revision is implicitly created.
 
-- Validated SHA: not recorded
-- Tested SHA: not recorded
+- Validated SHA: c928b32f5ccf291a2493bf37e19be3e70604f3e8
+- Tested SHA: c928b32f5ccf291a2493bf37e19be3e70604f3e8
 - Closure SHA: not recorded
 
 - P0: historical CLOSED; working record CLOSED; active RVs:
