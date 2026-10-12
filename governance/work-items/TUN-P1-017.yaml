@@ -3,7 +3,7 @@ work_item_id: TUN-P1-017
 milestone_id: P1
 sprint_id: null
 title: Problem and error contract standard
-status: CONTRACT_REQUIRED
+status: READY
 type: CONTRACT_FOUNDATION
 authority_refs:
   - docs/authority/current-authority.json
@@ -12,33 +12,35 @@ authority_refs:
   - docs/authority/baselines/1.6.0/01_Engineering_Technology_Foundation.md
   - docs/authority/baselines/1.6.0/02_Repository_Solution_and_Module_Architecture.md
   - docs/authority/baselines/1.6.0/09_Testing_Acceptance_Evidence_and_Quality_Gates.md
+  - docs/authority/baselines/1.6.0/32_Domain_API_Event_Data_and_Policy_Contract_Catalog.md
+  - docs/authority/baselines/1.6.0/07_API_SDK_Event_and_Connected_Product_Foundation.md
+  - docs/authority/baselines/1.6.0/05_Versioning_Compatibility_and_Release_Management.md
+  - docs/authority/amendments/AMD-0005/AMD-0005_Authority-First_Decision_Resolution_and_Duplicate-Decision_Prevention.md
 flow_refs: []
-contract_refs: []
+contract_refs: [docs/authority/baselines/1.6.0/32_Domain_API_Event_Data_and_Policy_Contract_Catalog.md, docs/authority/baselines/1.6.0/07_API_SDK_Event_and_Connected_Product_Foundation.md]
 decision_refs: []
 acceptance_criteria:
-  - Establish RFC-aligned technical problem/error mechanics only after a public boundary is approved; no domain error taxonomy or Product error behavior.
+  - Implement RFC-compatible Problem Details under Document 32 section 6 using framework serialization, explicit safe owner metadata and forward-compatible consumption; no domain status mapping, new public endpoint, automatic exception detail or retry behavior.
   - Reuse or extend a compatible existing capability when one exists; do not add a generic Common, Utils, Helpers, or shared-everything layer.
   - Preserve domain/business semantics as owner concerns and keep technical canonicalization and presentation formatting non-authoritative.
   - Do not infer Product behavior, user flows, commercial rules, policy values, or public contract semantics beyond cited authority.
 prerequisites: [TUN-P1-004, TUN-P1-005]
-blockers: [PUBLIC_ERROR_CONTRACT_BOUNDARY_REQUIRED]
+blockers: []
 impact: {architecture: true, api: true, ui: false, sdk: true, financial: false, compliance: false, security: false, devops: false, support: false}
 activated_roles: [full-stack-engineer, solution-architect, sdk-engineer, tester-qa-engineer]
 required_tests: [authority verification, governance validation, role activation calculation and mandatory specialist reviews, bounded expanded context verification, scope-specific deterministic tests and evidence]
-required_evidence: [governance/context/CTX-TUN-P1-017-001.yaml, governance/evidence/TUN-P1-017-VALIDATION.json, governance/evidence/TUN-P1-017-ROLE-REVIEWS.json]
+required_evidence: [governance/context/CTX-TUN-P1-017-001.yaml, governance/evidence/TUN-P1-017-VALIDATION.json, governance/evidence/TUN-P1-017-ROLE-REVIEWS.json, governance/evidence/TUN-P1-017-AUTHORITY-RESOLUTION.json, governance/evidence/TUN-P1-017-RD-SOURCES.json, docs/development/P1_PROBLEM_DETAILS_STANDARD.md]
 context_policy: EXPANDED
 todos: []
 defects: []
 authority_resolution:
   schema_version: 1
-  outcome: REQUIRED_MISSING_AUTHORITY
-  reviewed_authority_refs:
-    - docs/authority/current-authority.json
-    - docs/authority/amendments/AMD-0005/AMD-0005_Authority-First_Decision_Resolution_and_Duplicate-Decision_Prevention.md
-    - docs/authority/amendments/AMD-0005/effective-overrides/00_Authority_Change_Control_and_Documentation_Governance.md
-  unresolved_question: "Which approved public boundary defines the required error problem contract and the scope that may expose it?"
-  conclusion: "The technical OpenAPI pipeline does not itself define a public error contract; no approved public boundary or domain error taxonomy was found."
+  outcome: RESOLVED_EXISTING_AUTHORITY
+  reviewed_authority_refs: [docs/authority/current-authority.json, docs/authority/baselines/1.6.0/32_Domain_API_Event_Data_and_Policy_Contract_Catalog.md, docs/authority/baselines/1.6.0/07_API_SDK_Event_and_Connected_Product_Foundation.md, docs/authority/baselines/1.6.0/05_Versioning_Compatibility_and_Release_Management.md, docs/authority/baselines/1.6.0/02_Repository_Solution_and_Module_Architecture.md, docs/authority/amendments/AMD-0004/AMD-0004_Shared_Technical_Primitives_Formatting_and_Canonicalization.md, docs/authority/amendments/AMD-0005/AMD-0005_Authority-First_Decision_Resolution_and_Duplicate-Decision_Prevention.md]
+  unresolved_question: None for the bounded technical problem representation.
+  conclusion: Document 32 section 6 and Documents 07/05 already define the approved error and API/SDK boundary; the prior pass omitted them. Detailed fields implement these invariants without new domain semantics. Prior conclusion is preserved in Git and evidence.
   conditional_trigger_absent: false
-  reviewed_at: 2026-10-03T09:25:00-04:00
+  reviewed_at: 2026-10-12T15:43:17.5092634-04:00
 created_at: 2026-10-02T13:20:00-04:00
-updated_at: 2026-10-02T13:20:00-04:00
+updated_at: 2026-10-12T15:43:17.5092634-04:00
+product_acceptance_required: false

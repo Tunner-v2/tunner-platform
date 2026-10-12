@@ -1,0 +1,43 @@
+{
+  "previous_conclusion": "authority_resolution:\n  schema_version: 1\n  outcome: REQUIRED_MISSING_AUTHORITY\n  reviewed_authority_refs:\n    - docs/authority/current-authority.json\n    - docs/authority/amendments/AMD-0005/AMD-0005_Authority-First_Decision_Resolution_and_Duplicate-Decision_Prevention.md\n    - docs/authority/amendments/AMD-0005/effective-overrides/00_Authority_Change_Control_and_Documentation_Governance.md\n  unresolved_question: \"Which approved public boundary defines the required error problem contract and the scope that may expose it?\"\n  conclusion: \"The technical OpenAPI pipeline does not itself define a public error contract; no approved public boundary or domain error taxonomy was found.\"\n  conditional_trigger_absent: false\n  reviewed_at: 2026-10-03T09:25:00-04:00\r\ncreated_at: 2026-10-02T13:20:00-04:00\nupdated_at: 2026-10-02T13:20:00-04:00",
+  "reviewed_authority_refs": [
+    "docs/authority/current-authority.json",
+    "docs/authority/baselines/1.6.0/32_Domain_API_Event_Data_and_Policy_Contract_Catalog.md",
+    "docs/authority/baselines/1.6.0/07_API_SDK_Event_and_Connected_Product_Foundation.md",
+    "docs/authority/baselines/1.6.0/05_Versioning_Compatibility_and_Release_Management.md",
+    "docs/authority/baselines/1.6.0/02_Repository_Solution_and_Module_Architecture.md",
+    "docs/authority/amendments/AMD-0004/AMD-0004_Shared_Technical_Primitives_Formatting_and_Canonicalization.md",
+    "docs/authority/amendments/AMD-0005/AMD-0005_Authority-First_Decision_Resolution_and_Duplicate-Decision_Prevention.md"
+  ],
+  "status": "PASS",
+  "canonical_sources": [
+    "https://drive.google.com/file/d/1kvunBTzFrAPEnPsrhzd9cxh6aSHu_9-A/view",
+    "https://drive.google.com/file/d/1fLcXiStHNAbK9ANWId9cbE_qQaf7OyMr/view",
+    "https://drive.google.com/file/d/1FkB9CU54lEAsGYVcbZ-BT0GPBMqNk5Rz/view"
+  ],
+  "readiness_reconciliation": "The native side-state transition check reports an unspecified side-state graph, not an authority conflict. Clear the resolved finding and return the working record to BACKLOG; use declared normal REFINEMENT/READY transitions with readiness checks before implementation.",
+  "outcome": "RESOLVED_EXISTING_AUTHORITY",
+  "reviewed_at": "2026-10-12T15:43:17.5092634-04:00",
+  "scope_type": "WORK_ITEM",
+  "conclusion": "Document 32 section 6 already specifies RFC-compatible Problem Details and canonical classes; section 1 authorizes maintaining detailed technical schemas in code. Documents 07/05 define API/SDK compatibility boundaries. The previous pass omitted these contracts; technical representation does not require new Product semantics.",
+  "new_authority_record_created": false,
+  "schema_version": 1,
+  "evidence_id": "TUN-P1-017-AUTHORITY-RESOLUTION",
+  "scope_id": "TUN-P1-017",
+  "prerequisite_checks": [
+    {
+      "work_item_id": "TUN-P1-004",
+      "validated_sha": "2d64e05c9c9e3c084d8e20beaa43f789eaa20c31",
+      "git_ancestry": "PASS",
+      "native_gate": "READY",
+      "historical_evidence_preserved": true
+    },
+    {
+      "work_item_id": "TUN-P1-005",
+      "validated_sha": "b40c9ef51bf73ab0b27f9bcdfbaa3a6cc77c9c0b",
+      "git_ancestry": "PASS",
+      "native_gate": "READY",
+      "historical_evidence_preserved": true
+    }
+  ]
+}

@@ -1,0 +1,61 @@
+{
+  "schema_version": 1,
+  "evidence_id": "TUN-P1-017-ROLE-REVIEWS",
+  "plan_path": "docs/development/P1_PROBLEM_DETAILS_STANDARD.md",
+  "reviews": [
+    {
+      "role": "full-stack-engineer",
+      "checks": [
+        "Reuse framework ProblemDetails with explicit owner inputs; finite optional metadata and private HTTP snapshot prevent ambient data copying and status divergence.",
+        "Plan covers real HTTP serialization and response isolation without adding endpoints or exception/domain mappings."
+      ],
+      "reviewer": "Codex",
+      "phase": "PREIMPLEMENTATION_CONTRACT_AND_TEST_PLAN",
+      "findings": [],
+      "result": "PASS"
+    },
+    {
+      "role": "solution-architect",
+      "checks": [
+        "Reuse existing TechnicalProblemCodes without editing historical command behavior; remain in the cohesive Operations capability and existing Platform assembly.",
+        "Document 32 fixes contract family/invariants; no Common layer, extra package, global middleware or domain taxonomy is created."
+      ],
+      "reviewer": "Codex",
+      "phase": "PREIMPLEMENTATION_CONTRACT_AND_TEST_PLAN",
+      "findings": [],
+      "result": "PASS"
+    },
+    {
+      "role": "sdk-engineer",
+      "checks": [
+        "Canonical code strings and unknown extensions are forward compatible; reader clones JSON values and follows wrong-type handling without hidden retry/finality semantics.",
+        "No generated public endpoint/SDK or compatibility version change; owner APIs must explicitly declare response metadata when activated."
+      ],
+      "reviewer": "Codex",
+      "phase": "PREIMPLEMENTATION_CONTRACT_AND_TEST_PLAN",
+      "findings": [],
+      "result": "PASS"
+    },
+    {
+      "role": "tester-qa-engineer",
+      "checks": [
+        "Plan covers explicit status, field shape, omission, exact trace/version/blocker projection, invalid input/redaction, no context leakage, snapshots and future/invalid JSON members.",
+        "Require exact committed build/tests, current prerequisite gates and authority/governance/context checks; planning review is not an executed test claim."
+      ],
+      "reviewer": "Codex",
+      "phase": "PREIMPLEMENTATION_CONTRACT_AND_TEST_PLAN",
+      "findings": [],
+      "result": "PASS"
+    }
+  ],
+  "status": "PASS",
+  "reviewed_commit": "99c84a87d5be975c43949aca0d35d47a2d4e6aa5",
+  "scope_type": "WORK_ITEM",
+  "phase": "PREIMPLEMENTATION_CONTRACT_AND_TEST_PLAN",
+  "scope_id": "TUN-P1-017",
+  "limitations": [
+    "Codex contract/test-plan engineering reviews only; no executed implementation test or independent human/Product acceptance."
+  ],
+  "reviewed_at": "2026-10-12T15:43:17.5092634-04:00",
+  "plan_sha256": "b52bef3e030a98e654e8e2cb2cde7633e9a5d3645328225dead030cf3daaacc8"
+}
