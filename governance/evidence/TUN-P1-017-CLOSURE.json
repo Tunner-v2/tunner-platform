@@ -17,7 +17,7 @@
   "closed_at": "2026-10-12T15:53:18.3686097-04:00",
   "global_development_blocked": false,
   "closure_kind": "METADATA_ONLY",
-  "closure_commit_sha": null,
+  "closure_commit_sha": "71d053cede80628c6d3115e27c4c16814b7aa00f",
   "schema_version": 1,
   "owned_behavior_uncommitted_paths": [],
   "status": "DONE",
@@ -30,11 +30,12 @@
     "final_gate": "READY: zero failures",
     "next_planned_work_item": "TUN-P1-018",
     "openapi_source_guard": "PASS",
-    "fresh_agent_recovery": "Pending final repository-only recovery after the actual closure SHA is recorded.",
+    "fresh_agent_recovery": "PASS: repository-only checks discover DONE scope, approved contract, prerequisites, tested/validated/closure lineage and exact next action from bounded repository artifacts.",
     "next_currently_actionable": false,
     "tests": "PASS: 182 executed, including 42 new Problem Details cases; zero failures/skips",
     "context_verify": "CURRENT",
-    "build": "PASS: zero warnings/errors at validated SHA"
+    "build": "PASS: zero warnings/errors at validated SHA",
+    "startup_command": "PASS: tunner context build executes without --current; canonical and scoped context verify CURRENT."
   },
   "limitations": [
     "Technical representation/consumption foundation; no public endpoint, middleware, SDK package, domain status policy or automatic retry is activated.",
@@ -52,5 +53,26 @@
     "docs/authority/baselines/1.6.0/07_API_SDK_Event_and_Connected_Product_Foundation.md",
     "docs/authority/baselines/1.6.0/05_Versioning_Compatibility_and_Release_Management.md"
   ],
-  "context": "Bounded EXPANDED scope context and deterministic project state refreshed; exact validated/tested and separate metadata closure lineage recorded."
+  "context": "Bounded EXPANDED scope context and deterministic project state refreshed; exact validated/tested and separate metadata closure lineage recorded.",
+  "repository_only_recovery": {
+    "checked_artifacts": [
+      "docs/context/current/manifest.json",
+      "docs/project/CURRENT_STATE.md",
+      "docs/project/HANDOFF.md",
+      "docs/project/PROJECT_CONTEXT.md",
+      "governance/evidence/TUN-P1-017-CLOSURE.json"
+    ],
+    "checked_at": "2026-10-12T15:56:14.6746428-04:00",
+    "closure_commit_sha": "71d053cede80628c6d3115e27c4c16814b7aa00f",
+    "validated_commit_sha": "4414c3691533a54cb7b93e0646fa3b9064c883de",
+    "result": "PASS",
+    "canonical_startup": "tunner context build: executed successfully",
+    "context_verify": "CURRENT",
+    "repository_only": true,
+    "selected_status": "DONE",
+    "context_mode": "EXPANDED",
+    "next_eligibility": "No current actionable work. Derived state points to governance next; included closure evidence identifies P1-018 canonical UX/Figma and plan-review preparation. No new authority gap is inferred from its recorded UI_REQUIRED state.",
+    "scope": "TUN-P1-017",
+    "next_action": "Prepare TUN-P1-018 User and Admin shared UI foundation: review existing approved Development Documentation and canonical Platform/Admin Figma references, select the bounded shared foundation scope, verify P1-002/P1-005 prerequisites and mandatory UX/frontend/content/test reviews, then run governance next. Implement only when eligible; no new Product screen, workflow or formatter semantics are inferred."
+  }
 }
