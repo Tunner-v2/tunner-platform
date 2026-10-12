@@ -1,7 +1,7 @@
 {
-  "tested_commit_sha": null,
-  "result": "PENDING",
-  "status": "PENDING",
+  "tested_commit_sha": "4414c3691533a54cb7b93e0646fa3b9064c883de",
+  "result": "PASS",
+  "status": "PASS",
   "owned_behavior_paths": [
     "src/Tunner.Platform/Operations/TechnicalProblemDetails.cs",
     "tests/Tunner.Platform.ArchitectureTests/TechnicalProblemDetailsTests.cs",
@@ -9,15 +9,99 @@
   ],
   "validation_kind": "COMMITTED",
   "limitations": [
-    "Not implemented/validated yet."
+    "Owners must select approved type/status/title, safe detail and disclosure of optional resource/version/blocker references. String validation does not prove content contains no sensitive material.",
+    "Retryability is an opaque owner classification, not permission to retry. Unknown external outcomes require owning-domain reconciliation.",
+    "Create returns a caller-owned mutable framework body; HttpResult owns an independent private snapshot. Consumers receive representation only; HTTP response status remains authoritative for generic HTTP handling.",
+    "No public endpoint or SDK is published. Endpoint owners must explicitly declare ProblemDetails response metadata in OpenAPI when activating the capability.",
+    "Reviews are Codex engineering reviews, not independent human, Product or production acceptance."
   ],
   "scope_type": "WORK_ITEM",
-  "checks": [],
-  "validated_commit_sha": null,
+  "checks": [
+    {
+      "warnings": 0,
+      "errors": 0,
+      "command": "dotnet build Tunner.Platform.slnx --no-restore",
+      "result": "PASS",
+      "exit_code": 0
+    },
+    {
+      "skipped": 0,
+      "new_problem_cases": 42,
+      "passed": 182,
+      "failed": 0,
+      "total": 182,
+      "result": "PASS",
+      "exit_code": 0,
+      "command": "dotnet test tests/Tunner.Platform.ArchitectureTests/Tunner.Platform.ArchitectureTests.csproj --no-build --no-restore"
+    },
+    {
+      "rule_matches": 0,
+      "files": 1075,
+      "command": "tools/security/Invoke-TunnerSecretScan.ps1",
+      "result": "PASS",
+      "exit_code": 0
+    },
+    {
+      "command": "tools/validation/Validate-TunnerPlatformHostSource.ps1 -RepositoryRoot <repo-root>",
+      "result": "PASS",
+      "exit_code": 0
+    },
+    {
+      "command": "tools/validation/Validate-TunnerOpenApiContractSource.ps1 -RepositoryRoot <repo-root>",
+      "result": "PASS",
+      "exit_code": 0
+    },
+    {
+      "registered_artifacts": 167,
+      "command": "tunner authority verify",
+      "result": "PASS",
+      "exit_code": 0
+    },
+    {
+      "records": 370,
+      "command": "tunner governance validate",
+      "result": "PASS",
+      "exit_code": 0
+    },
+    {
+      "selected_work_item": "TUN-P1-017",
+      "command": "tunner context verify",
+      "result": "CURRENT",
+      "exit_code": 0
+    }
+  ],
+  "validated_commit_sha": "4414c3691533a54cb7b93e0646fa3b9064c883de",
   "schema_version": 1,
   "evidence_id": "TUN-P1-017-VALIDATION",
   "scope_id": "TUN-P1-017",
   "owned_coordination_paths": [
     "docs/development/P1_CAPABILITY_DECOMPOSITION_AND_PRIMITIVE_REUSE.md"
+  ],
+  "checked_at": "2026-10-12T15:51:02.7812394-04:00",
+  "owned_git_blobs": {
+    "src/Tunner.Platform/Operations/TechnicalProblemDetails.cs": {
+      "working_tree_blob": "1cd7ef6f972234c74748f1532dde476291cfa9b9",
+      "match": true,
+      "candidate_blob": "1cd7ef6f972234c74748f1532dde476291cfa9b9"
+    },
+    "tests/Tunner.Platform.ArchitectureTests/TechnicalProblemDetailsTests.cs": {
+      "working_tree_blob": "73fd4468f2a710a2303b898faecd2ae2e81501dc",
+      "match": true,
+      "candidate_blob": "73fd4468f2a710a2303b898faecd2ae2e81501dc"
+    },
+    "docs/development/P1_PROBLEM_DETAILS_STANDARD.md": {
+      "working_tree_blob": "f6852323cf99ab2a170fffc962b9f1e9a660489a",
+      "match": true,
+      "candidate_blob": "f6852323cf99ab2a170fffc962b9f1e9a660489a"
+    }
+  },
+  "test_results_ref": "governance/evidence/TUN-P1-017-TEST-RESULTS.json",
+  "ownership_note": "The P1-017 decomposition row is shared coordination metadata. Only new Problem Details source/tests/guide are owned behavior; historical command primitives and OpenAPI composition were not edited. Later evidence/context/closure edits are metadata and are separately committed before completion.",
+  "acceptance_results": [
+    "Current canonical Document 32 section 6 resolves the omitted-contract finding; Documents 07/05 establish API/SDK compatibility without new authority.",
+    "Framework ProblemDetails and existing TechnicalProblemCodes are reused; the thirteen canonical classes are recognizable and future approved strings are preserved.",
+    "HTTP result uses a private snapshot with matching body/HTTP status and canonical application/problem+json; optional safe metadata is omitted rather than inferred.",
+    "RFC-compatible reading ignores wrong-typed standard members, preserves future extensions as document-independent clones and performs no URI lookup, detail-based classification or retry execution.",
+    "No new endpoint, exception middleware, SDK package, domain taxonomy or status/retry policy is implemented. Historical prerequisite evidence and command/host/OpenAPI behavior remain preserved."
   ]
 }

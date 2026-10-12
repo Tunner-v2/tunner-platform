@@ -17,8 +17,8 @@ Latest bounded Revision lineage:
 - P0-035-RV001: CLOSED; original TUN-P0-035; parent P0-RV001; CORRECTIVE: Remediate the post-closure gap recorded by REOPEN-TUN-P0-035-001; retain original DONE evidence.
 
 Selected scope: TUN-P1-017
-Validated SHA: not recorded
-Tested SHA: not recorded
+Validated SHA: 4414c3691533a54cb7b93e0646fa3b9064c883de
+Tested SHA: 4414c3691533a54cb7b93e0646fa3b9064c883de
 Closure SHA: not recorded
 
 Prerequisites: TUN-P1-004, TUN-P1-005

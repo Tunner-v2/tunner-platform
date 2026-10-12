@@ -1,61 +1,66 @@
 {
+  "reviewed_commit_sha": "4414c3691533a54cb7b93e0646fa3b9064c883de",
+  "scope_type": "WORK_ITEM",
+  "status": "PASS",
   "schema_version": 1,
+  "limitations": [
+    "Codex engineering role reviews; no independent human, Product or production acceptance."
+  ],
+  "reviewed_at": "2026-10-12T15:51:02.7812394-04:00",
+  "scope_id": "TUN-P1-017",
   "evidence_id": "TUN-P1-017-ROLE-REVIEWS",
-  "plan_path": "docs/development/P1_PROBLEM_DETAILS_STANDARD.md",
   "reviews": [
     {
+      "conclusion": "PASS",
       "role": "full-stack-engineer",
-      "checks": [
-        "Reuse framework ProblemDetails with explicit owner inputs; finite optional metadata and private HTTP snapshot prevent ambient data copying and status divergence.",
-        "Plan covers real HTTP serialization and response isolation without adding endpoints or exception/domain mappings."
-      ],
+      "phase": "COMMITTED_IMPLEMENTATION",
       "reviewer": "Codex",
-      "phase": "PREIMPLEMENTATION_CONTRACT_AND_TEST_PLAN",
       "findings": [],
-      "result": "PASS"
+      "checks": [
+        "Reviewed finite owner metadata, explicit status/type/title/correlation, exact string preservation, optional omission and per-result private snapshot at the validated SHA.",
+        "Real framework HTTP-result execution passes status/media-type/body tests; ambient query/trace/exception state and problem-service customization are not copied.",
+        "No exception/domain mapping, middleware or endpoint was introduced; framework serialization is reused without a parallel wire DTO or custom serializer."
+      ],
+      "reviewed_commit_sha": "4414c3691533a54cb7b93e0646fa3b9064c883de"
     },
     {
+      "conclusion": "PASS",
       "role": "solution-architect",
-      "checks": [
-        "Reuse existing TechnicalProblemCodes without editing historical command behavior; remain in the cohesive Operations capability and existing Platform assembly.",
-        "Document 32 fixes contract family/invariants; no Common layer, extra package, global middleware or domain taxonomy is created."
-      ],
+      "phase": "COMMITTED_IMPLEMENTATION",
       "reviewer": "Codex",
-      "phase": "PREIMPLEMENTATION_CONTRACT_AND_TEST_PLAN",
       "findings": [],
-      "result": "PASS"
+      "checks": [
+        "Problem mechanics stay in the existing Platform Operations capability and reuse TechnicalProblemCodes; historical command primitive source and host/OpenAPI composition remain unchanged.",
+        "Document 32 specifies contract family and invariants; detailed technical fields implement that approval without a new AMD, generic Common layer, dependency or Product taxonomy.",
+        "Shared capability map is coordination metadata; committed owned behavior source/tests/guide match the exact tested SHA."
+      ],
+      "reviewed_commit_sha": "4414c3691533a54cb7b93e0646fa3b9064c883de"
     },
     {
+      "conclusion": "PASS",
       "role": "sdk-engineer",
-      "checks": [
-        "Canonical code strings and unknown extensions are forward compatible; reader clones JSON values and follows wrong-type handling without hidden retry/finality semantics.",
-        "No generated public endpoint/SDK or compatibility version change; owner APIs must explicitly declare response metadata when activated."
-      ],
+      "phase": "COMMITTED_IMPLEMENTATION",
       "reviewer": "Codex",
-      "phase": "PREIMPLEMENTATION_CONTRACT_AND_TEST_PLAN",
       "findings": [],
-      "result": "PASS"
+      "checks": [
+        "Reader follows RFC wrong-type handling, exact machine fields and forward-compatible unknown extension/code strings; cloned nested JsonElement values remain usable after source disposal.",
+        "No URI dereference, human-detail parsing, inferred finality or automatic retry occurs. Unknown external-state classification remains with the owner.",
+        "No SDK package or negotiated API version changes; future owner endpoint activation must declare the response profile in normative OpenAPI. No framework model is claimed as a separately published Product SDK."
+      ],
+      "reviewed_commit_sha": "4414c3691533a54cb7b93e0646fa3b9064c883de"
     },
     {
+      "conclusion": "PASS",
       "role": "tester-qa-engineer",
-      "checks": [
-        "Plan covers explicit status, field shape, omission, exact trace/version/blocker projection, invalid input/redaction, no context leakage, snapshots and future/invalid JSON members.",
-        "Require exact committed build/tests, current prerequisite gates and authority/governance/context checks; planning review is not an executed test claim."
-      ],
+      "phase": "COMMITTED_IMPLEMENTATION",
       "reviewer": "Codex",
-      "phase": "PREIMPLEMENTATION_CONTRACT_AND_TEST_PLAN",
       "findings": [],
-      "result": "PASS"
+      "checks": [
+        "182 executed architecture cases pass: 42 new cases cover real HTTP output, optional fields, immutable result snapshots, invalid-input diagnostics, no ambient leakage and RFC-compatible future/malformed JSON consumption.",
+        "All 140 prior host/OpenAPI/storage/realtime/policy/command/provider/environment regressions pass. Build has zero warnings/errors; secret and host/OpenAPI guards pass.",
+        "Exact tested and validated SHA match committed owned Git blobs; precommit analyzer correction and side-state readiness reconciliation are documented without claiming historical or precommit readiness."
+      ],
+      "reviewed_commit_sha": "4414c3691533a54cb7b93e0646fa3b9064c883de"
     }
-  ],
-  "status": "PASS",
-  "reviewed_commit": "99c84a87d5be975c43949aca0d35d47a2d4e6aa5",
-  "scope_type": "WORK_ITEM",
-  "phase": "PREIMPLEMENTATION_CONTRACT_AND_TEST_PLAN",
-  "scope_id": "TUN-P1-017",
-  "limitations": [
-    "Codex contract/test-plan engineering reviews only; no executed implementation test or independent human/Product acceptance."
-  ],
-  "reviewed_at": "2026-10-12T15:43:17.5092634-04:00",
-  "plan_sha256": "b52bef3e030a98e654e8e2cb2cde7633e9a5d3645328225dead030cf3daaacc8"
+  ]
 }
