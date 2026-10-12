@@ -1,0 +1,56 @@
+{
+  "p0_historical_state": "CLOSED",
+  "evidence_refs": [
+    "governance/evidence/TUN-P1-017-VALIDATION.json",
+    "governance/evidence/TUN-P1-017-TEST-RESULTS.json",
+    "governance/evidence/TUN-P1-017-ROLE-REVIEWS.json",
+    "governance/evidence/TUN-P1-017-AUTHORITY-RESOLUTION.json",
+    "governance/evidence/TUN-P1-017-RD-SOURCES.json"
+  ],
+  "gate_failures": [],
+  "tested_commit_sha": "4414c3691533a54cb7b93e0646fa3b9064c883de",
+  "role_review_evidence_commit_sha": "1332640b513835c5b1aaa9777f2df9734fee07fb",
+  "initial_dirty_paths": [],
+  "validated_commit_sha": "4414c3691533a54cb7b93e0646fa3b9064c883de",
+  "gate_result": "READY",
+  "scope_id": "TUN-P1-017",
+  "closed_at": "2026-10-12T15:53:18.3686097-04:00",
+  "global_development_blocked": false,
+  "closure_kind": "METADATA_ONLY",
+  "closure_commit_sha": null,
+  "schema_version": 1,
+  "owned_behavior_uncommitted_paths": [],
+  "status": "DONE",
+  "final_validation": {
+    "secret_scan": "PASS: unchanged scanner rules; 1075 files, no rule match",
+    "governance_validate": "PASS: 370 records",
+    "readiness_action": "Review existing canonical UX/Figma scope and required plan reviews before implementation.",
+    "authority_verify": "PASS: 167 registered artifacts",
+    "host_composition": "PASS",
+    "final_gate": "READY: zero failures",
+    "next_planned_work_item": "TUN-P1-018",
+    "openapi_source_guard": "PASS",
+    "fresh_agent_recovery": "Pending final repository-only recovery after the actual closure SHA is recorded.",
+    "next_currently_actionable": false,
+    "tests": "PASS: 182 executed, including 42 new Problem Details cases; zero failures/skips",
+    "context_verify": "CURRENT",
+    "build": "PASS: zero warnings/errors at validated SHA"
+  },
+  "limitations": [
+    "Technical representation/consumption foundation; no public endpoint, middleware, SDK package, domain status policy or automatic retry is activated.",
+    "Safe titles/details/references and disclosure of optional resources/versions/blockers remain owner responsibilities. Opaque retryability grants no retry permission.",
+    "Codex engineering role reviews only; no independent human, Product or production acceptance is asserted."
+  ],
+  "scope_type": "WORK_ITEM",
+  "new_amd_created": false,
+  "exact_next_action": "Prepare TUN-P1-018 User and Admin shared UI foundation: review existing approved Development Documentation and canonical Platform/Admin Figma references, select the bounded shared foundation scope, verify P1-002/P1-005 prerequisites and mandatory UX/frontend/content/test reviews, then run governance next. Implement only when eligible; no new Product screen, workflow or formatter semantics are inferred.",
+  "evidence_id": "TUN-P1-017-CLOSURE",
+  "product_acceptance_required": false,
+  "preserved_work": "Initial tree was clean. Historical P0/P1 implementation/evidence preserved; changes are scoped Problem Details implementation, selected coordination row and P1-017 evidence/context.",
+  "authority_refs": [
+    "docs/authority/baselines/1.6.0/32_Domain_API_Event_Data_and_Policy_Contract_Catalog.md",
+    "docs/authority/baselines/1.6.0/07_API_SDK_Event_and_Connected_Product_Foundation.md",
+    "docs/authority/baselines/1.6.0/05_Versioning_Compatibility_and_Release_Management.md"
+  ],
+  "context": "Bounded EXPANDED scope context and deterministic project state refreshed; exact validated/tested and separate metadata closure lineage recorded."
+}
