@@ -7,7 +7,7 @@
   "closure_kind": "METADATA_ONLY",
   "validated_commit_sha": "c928b32f5ccf291a2493bf37e19be3e70604f3e8",
   "tested_commit_sha": "c928b32f5ccf291a2493bf37e19be3e70604f3e8",
-  "closure_commit_sha": null,
+  "closure_commit_sha": "4755f89958339ba605b929f2f00d77386bb0f8f9",
   "gate_result": "READY",
   "gate_failures": [],
   "initial_dirty_paths": [],
@@ -39,14 +39,36 @@
   "final_validation": {
     "secret_scan": "PASS: 1119 files; zero rule matches",
     "context_verify": "CURRENT",
-    "startup_command": "PENDING_POST_CLOSURE_CHECK",
+    "startup_command": "PASS: canonical tunner context build and scoped completed-scope context build both execute; verify CURRENT.",
     "final_gate": "READY: zero failures",
-    "fresh_agent_recovery": "PENDING_POST_CLOSURE_CHECK",
+    "fresh_agent_recovery": "PASS: completed scope, authority, prerequisites, selected source, tested/validated/closure SHAs and exact next governed preparation recoverable from bounded repository artifacts.",
     "tests": "PASS: 38 UI and 182 architecture cases; zero failures/skips/flakes",
     "role_reviews": "PASS: seven Codex engineering reviews",
     "build": "PASS: .NET zero warnings/errors; TypeScript/library/fixture builds pass",
     "authority_verify": "VERIFIED: 167",
     "governance_validate": "PASS: 378",
     "dependency_audit": "PASS: zero known advisories on identical committed lockfile"
+  },
+  "repository_only_recovery": {
+    "scope": "TUN-P1-018",
+    "validated_commit_sha": "c928b32f5ccf291a2493bf37e19be3e70604f3e8",
+    "checked_artifacts": [
+      "docs/context/current/manifest.json",
+      "docs/project/CURRENT_STATE.md",
+      "docs/project/HANDOFF.md",
+      "docs/project/PROJECT_CONTEXT.md",
+      "governance/context/CTX-TUN-P1-018-001.yaml",
+      "governance/evidence/TUN-P1-018-CLOSURE.json"
+    ],
+    "repository_only": true,
+    "context_mode": "EXPANDED",
+    "context_verify": "CURRENT",
+    "selected_status": "DONE",
+    "next_action": "Prepare TUN-P1-019 User BFF and Admin BFF foundation: complete the Authority Resolution Pass against existing approved BFF/session/security contracts and prerequisite evidence; record required specialist reviews, then run governance next. Implement only the eligible bounded contract; preserve completed P0/P1 work and infer no new auth/Product policy.",
+    "canonical_startup": "tunner context build: executed successfully without --current",
+    "next_eligibility": "P1-019 is planned; required existing BFF/session/security boundary review and five mandatory role reviews precede eligibility. No new authority gap or global pause is inferred.",
+    "checked_at": "2026-10-12T16:42:11.3830581-04:00",
+    "result": "PASS",
+    "closure_commit_sha": "4755f89958339ba605b929f2f00d77386bb0f8f9"
   }
 }
