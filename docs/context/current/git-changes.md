@@ -1,8 +1,8 @@
 # Recent relevant Git changes
 
+- `03d705e chore(governance): record P1-017 closure lineage and repository recovery`
 - `71d053c chore(governance): close P1-017 technical problem contract standard`
 - `1332640 test(governance): record P1-017 committed validation and reviews`
-- `4414c36 feat(platform): add approved technical Problem Details mechanics`
 - `3f4f7e8 chore(governance): resolve P1-017 approved problem contract and eligibility`
 - `99c84a8 chore(governance): record P1-016 closure lineage and fresh-agent recovery`
 - `b2dbdcc chore(governance): close P1-016 engineering configuration foundation`

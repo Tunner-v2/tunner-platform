@@ -8,6 +8,6 @@
 - `docs/authority/amendments/AMD-0005/AMD-0005_Authority-First_Decision_Resolution_and_Duplicate-Decision_Prevention.md` — explicit authority reference
 - `docs/authority/baselines/1.6.0/01_Engineering_Technology_Foundation.md` — explicit authority reference
 - `docs/authority/baselines/1.6.0/02_Repository_Solution_and_Module_Architecture.md` — explicit authority reference
-- `docs/authority/baselines/1.6.0/05_Versioning_Compatibility_and_Release_Management.md` — explicit authority reference
 - `docs/authority/baselines/1.6.0/09_Testing_Acceptance_Evidence_and_Quality_Gates.md` — explicit authority reference
+- `docs/authority/baselines/1.6.0/decisions/ADR-0007_Frontend_React_TypeScript_Vite_TailAdmin.md` — explicit authority reference
 - `docs/authority/current-authority.json` — explicit authority reference
