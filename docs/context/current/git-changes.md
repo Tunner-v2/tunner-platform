@@ -1,5 +1,6 @@
 # Recent relevant Git changes
 
+- `716f6ed docs(P1-018): resolve shared UI scope from approved light references`
 - `03d705e chore(governance): record P1-017 closure lineage and repository recovery`
 - `71d053c chore(governance): close P1-017 technical problem contract standard`
 - `1332640 test(governance): record P1-017 committed validation and reviews`
@@ -9,4 +10,3 @@
 - `812a8fd test(governance): record P1-016 committed validation and role reviews`
 - `2ac5d1f chore(governance): resolve P1-016 environment authority and eligibility`
 - `332c150 chore(governance): record P1-015 closure lineage and repository recovery`
-- `48d2a99 chore(governance): close P1-015 technical provider foundation`

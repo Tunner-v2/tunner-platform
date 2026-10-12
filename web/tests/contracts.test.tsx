@@ -1,0 +1,27 @@
+import { test } from 'node:test';
+import assert from 'node:assert/strict';
+import { renderToStaticMarkup } from 'react-dom/server';
+import type { ReactNode } from 'react';
+import { ThemeProvider, ContentProvider, PrimaryButton, TextField, TunnerBrand } from '../packages/ui/src/index';
+import type { PublishedContentResolver, ThemeMode, ThemeSurface } from '../packages/ui/src/index';
+
+const published: PublishedContentResolver = (key, context) => ({ key, text: key === 'brand' ? 'Tunner' : `<${key}>`, locale: context.locale, state: 'PUBLISHED', variantRef: 'fixture', versionRef: 'v1', publicationRef: 'fixture-only' });
+function wrap(children: ReactNode, resolve = published, surface: ThemeSurface = 'user') { return <ThemeProvider surface={surface}><ContentProvider locale="en" audience="verification" resolve={resolve}>{children}</ContentProvider></ThemeProvider>; }
+const render = (children: ReactNode, resolver?: PublishedContentResolver) => renderToStaticMarkup(wrap(children, resolver));
+test('SSR is browser-independent with plain brand and no icon', () => { const html = render(<TunnerBrand contentKey="brand"/>); assert.match(html, />Tunner</); assert.doesNotMatch(html, /svg|img|window|storage/i); assert.match(html, /data-tunner-theme="light"/); });
+test('native button defaults to button, with explicit owner submit supported', () => { assert.match(render(<PrimaryButton labelKey="action"/>), /type="button"/); assert.match(render(<PrimaryButton labelKey="action" type="submit"/>), /type="submit"/); });
+test('owner disabled and busy state preserved', () => { const html = render(<PrimaryButton labelKey="action" disabled aria-busy/>); assert.match(html, /disabled=""/); assert.match(html, /aria-busy="true"/); });
+test('content text is escaped and provenance is preserved', () => { const html = render(<PrimaryButton labelKey="script"/>); assert.match(html, /&lt;script&gt;/); assert.doesNotMatch(html, /<script>/); assert.match(html, /data-content-version="v1"/); assert.match(html, /data-content-publication="fixture-only"/); });
+test('missing required key fails without fallback', () => { assert.throws(() => render(<PrimaryButton labelKey="missing"/>, () => undefined), /Invalid published content/); });
+test('mismatched key or locale and unpublished snapshots fail', () => {
+  for (const override of [{key:'other'},{locale:'fr'},{state:'DRAFT'}]) assert.throws(() => render(<PrimaryButton labelKey="action"/>, (key, context) => ({...published(key, context)!, ...override}) as never), /Invalid published content/);
+});
+test('missing provenance and blank required copy fail', () => { for (const property of ['variantRef','versionRef','publicationRef','text']) assert.throws(() => render(<PrimaryButton labelKey="action"/>, (key, context) => ({...published(key, context)!, [property]: ''})), /Invalid published content/); });
+test('resolver receives bounded surface/locale/audience context', () => { renderToStaticMarkup(wrap(<PrimaryButton labelKey="action"/>, (key, context) => { assert.deepEqual(context, {surface:'admin',locale:'en',audience:'verification'}); assert.ok(Object.isFrozen(context)); return published(key, context); }, 'admin')); });
+test('required theme/content boundaries fail explicitly', () => { assert.throws(() => renderToStaticMarkup(<PrimaryButton labelKey="action"/>), /ThemeProvider/); assert.throws(() => renderToStaticMarkup(<ThemeProvider surface="user"><PrimaryButton labelKey="action"/></ThemeProvider>), /provider missing/); });
+test('invalid modes/surfaces fail rather than silently applying defaults', () => { assert.throws(() => renderToStaticMarkup(<ThemeProvider surface={'other' as ThemeSurface}>x</ThemeProvider>), /Unsupported/); assert.throws(() => renderToStaticMarkup(<ThemeProvider surface="user" mode={'dark' as ThemeMode}>x</ThemeProvider>), /Unsupported/); });
+test('empty locale/audience is rejected', () => { assert.throws(() => renderToStaticMarkup(<ContentProvider locale="" audience="verification" resolve={published}>x</ContentProvider>), /context required/); assert.throws(() => renderToStaticMarkup(<ContentProvider locale="en" audience="" resolve={published}>x</ContentProvider>), /context required/); });
+test('field label/help/error IDs and noncolor text preserve associations', () => { const html = render(<TextField id="sample" labelKey="label" helpKey="help" errorKey="error" value="owner data" readOnly/>); assert.match(html, /for="sample"/); assert.match(html, /aria-describedby="sample-help sample-error"/); assert.match(html, /aria-invalid="true"/); assert.match(html, /id="sample-error"/); assert.match(html, /&lt;error&gt;/); assert.match(html, /value="owner data"/); });
+test('absent optional slots stay absent', () => { const html = render(<TextField labelKey="label" value="" readOnly/>); assert.doesNotMatch(html, /aria-invalid|aria-describedby|field-error|field-help/); });
+test('generated label IDs are unique', () => { const html = render(<><TextField labelKey="a" value="" readOnly/><TextField labelKey="b" value="" readOnly/></>); const ids = [...html.matchAll(/<input[^>]*id="([^"]+)"/g)].map(m => m[1]); assert.equal(ids.length,2); assert.notEqual(ids[0],ids[1]); });
+test('nested surface providers preserve independent DOM boundaries', () => { const html = renderToStaticMarkup(wrap(<><PrimaryButton labelKey="outer"/>{wrap(<PrimaryButton labelKey="inner"/>, published, 'admin')}<PrimaryButton labelKey="outer-again"/></>)); assert.match(html, /data-tunner-surface="user"/); assert.match(html, /data-tunner-surface="admin"/); });

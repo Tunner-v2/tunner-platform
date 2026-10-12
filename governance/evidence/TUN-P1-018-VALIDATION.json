@@ -1,7 +1,7 @@
 {
   "status": "PENDING",
   "checks": [],
-  "ownership_phase": "Source inventory will be completed and committed with the implementation candidate before exact-SHA validation.",
+  "ownership_phase": "COMPLETE_IMPLEMENTATION_CANDIDATE; source/config/lockfile/test/guide inventory is part of the validated commit.",
   "owned_coordination_paths": [
     ".gitignore",
     "docs/development/P1_CAPABILITY_DECOMPOSITION_AND_PRIMITIVE_REUSE.md"
@@ -9,12 +9,40 @@
   "result": "PENDING",
   "scope_type": "WORK_ITEM",
   "limitations": [
-    "Not implemented/validated yet."
+    "Candidate committed-state validation has not executed yet.",
+    "Engineering technical foundation only; no new Product screen, BFF/auth or published backend content service."
   ],
   "tested_commit_sha": null,
   "validation_kind": "COMMITTED",
   "owned_behavior_paths": [
-    "docs/development/P1_STRUCTURAL_UI_THEMING.md"
+    "docs/development/P1_STRUCTURAL_UI_THEMING.md",
+    "web/fixtures/ui/fixture.css",
+    "web/fixtures/ui/index.html",
+    "web/fixtures/ui/main.tsx",
+    "web/fixtures/ui/package.json",
+    "web/fixtures/ui/vite.config.ts",
+    "web/package.json",
+    "web/packages/ui/package.json",
+    "web/packages/ui/src/content.tsx",
+    "web/packages/ui/src/controls.tsx",
+    "web/packages/ui/src/index.ts",
+    "web/packages/ui/src/theme.generated.ts",
+    "web/packages/ui/src/theme.tsx",
+    "web/packages/ui/styles/components.css",
+    "web/packages/ui/styles/index.css",
+    "web/packages/ui/styles/tailwind.generated.css",
+    "web/packages/ui/styles/tokens.generated.css",
+    "web/packages/ui/theme.tokens.json",
+    "web/packages/ui/tools/build-theme.mjs",
+    "web/packages/ui/vite.config.ts",
+    "web/playwright.config.ts",
+    "web/pnpm-lock.yaml",
+    "web/pnpm-workspace.yaml",
+    "web/tests/browser/foundation.spec.ts",
+    "web/tests/contracts.test.tsx",
+    "web/tests/theme.test.mjs",
+    "web/tests/vite.config.ts",
+    "web/tsconfig.json"
   ],
   "schema_version": 1,
   "validated_commit_sha": null,

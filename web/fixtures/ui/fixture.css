@@ -1,0 +1,17 @@
+@import 'tailwindcss';
+@import '@tunner/ui/styles.css';
+@import '@tunner/ui/tailwind.css';
+body { margin: 0; }
+.verification-page { max-width: 960px; margin: 0 auto; padding: 24px; }
+.verification-page h1 { font: 600 24px/1.4 system-ui, sans-serif; }
+.verification-page > p { font: 400 14px/1.5 system-ui, sans-serif; }
+.verification-panels { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 360px), 1fr)); gap: 24px; }
+.verification-panel { padding: var(--tn-primitive-space-24); border: var(--tn-primitive-border-width) solid var(--tn-semantic-decorative-border); border-radius: var(--tn-primitive-radius-10); background: var(--tn-semantic-page); }
+.verification-stack { display: flex; flex-direction: column; align-items: stretch; gap: var(--tn-primitive-space-24); }
+.verification-panel h2 { font-size: var(--tn-primitive-size-14); font-weight: var(--tn-primitive-weight-600); }
+.verification-panel form { display: flex; flex-direction: column; gap: var(--tn-primitive-space-24); }
+.reference-width { inline-size: 360px; max-inline-size: 100%; }
+.admin-reference-action { inline-size: 194px; max-inline-size: 100%; }
+.verification-utility { padding: var(--tn-primitive-space-8); }
+.verification-output { display: block; overflow-wrap: anywhere; }
+.reference-width > .tn-primary-button, .admin-reference-action > .tn-primary-button { inline-size: 100%; }

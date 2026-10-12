@@ -1,0 +1,31 @@
+{
+  "name": "tunner-web",
+  "private": true,
+  "type": "module",
+  "packageManager": "pnpm@11.19.0",
+  "engines": {
+    "node": ">=24.15.0 <25"
+  },
+  "scripts": {
+    "theme:build": "node packages/ui/tools/build-theme.mjs",
+    "theme:check": "node packages/ui/tools/build-theme.mjs --check",
+    "typecheck": "tsc --noEmit",
+    "build": "pnpm theme:check && pnpm typecheck && vite build --config packages/ui/vite.config.ts && vite build --config fixtures/ui/vite.config.ts",
+    "test": "node --test tests/theme.test.mjs && vite build --config tests/vite.config.ts && node --test tests/dist/contracts.test.js",
+    "test:browser": "playwright test",
+    "fixture": "vite --config fixtures/ui/vite.config.ts"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "4.13.0",
+    "@playwright/test": "1.62.1",
+    "@tailwindcss/vite": "4.3.3",
+    "@types/node": "24.13.3",
+    "@types/react": "19.2.18",
+    "@types/react-dom": "19.2.3",
+    "tailwindcss": "4.3.3",
+    "typescript": "5.9.3",
+    "vite": "8.2.2",
+    "react": "19.2.8",
+    "react-dom": "19.2.8"
+  }
+}
