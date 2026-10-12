@@ -3,12 +3,12 @@
   "evidence_id": "TUN-P1-018-CLOSURE",
   "scope_type": "WORK_ITEM",
   "scope_id": "TUN-P1-018",
-  "status": "VALIDATION",
+  "status": "DONE",
   "closure_kind": "METADATA_ONLY",
   "validated_commit_sha": "c928b32f5ccf291a2493bf37e19be3e70604f3e8",
   "tested_commit_sha": "c928b32f5ccf291a2493bf37e19be3e70604f3e8",
   "closure_commit_sha": null,
-  "gate_result": "PENDING",
+  "gate_result": "READY",
   "gate_failures": [],
   "initial_dirty_paths": [],
   "owned_behavior_uncommitted_paths": [],
@@ -31,5 +31,22 @@
     "Dark/system palettes are not activated. A future mode requires complete approved profiles, explicit styling, regeneration and tests.",
     "Code Connect reads are unavailable under the current Figma seat/plan; no unavailable mapping is fabricated and no Figma file was changed.",
     "Role reviews are Codex engineering reviews, not independent human, Product or production acceptance."
-  ]
+  ],
+  "closed_at": "2026-10-12T16:40:24.3362386-04:00",
+  "role_review_evidence_commit_sha": "fd0ee3b11b25706c139552ff3885652e98297534",
+  "context": "Bounded EXPANDED selection and deterministic project state refreshed; validated/tested SHA recorded separately from metadata closure.",
+  "preserved_work": "Initial tree clean. Historical P0/P1 implementation/evidence unchanged; changes are scoped P1-018 UI source/toolchain/tests/guide/reviews/context and build-output ignore rules. Generated dependency caches are ignored and not absorbed.",
+  "final_validation": {
+    "secret_scan": "PASS: 1119 files; zero rule matches",
+    "context_verify": "CURRENT",
+    "startup_command": "PENDING_POST_CLOSURE_CHECK",
+    "final_gate": "READY: zero failures",
+    "fresh_agent_recovery": "PENDING_POST_CLOSURE_CHECK",
+    "tests": "PASS: 38 UI and 182 architecture cases; zero failures/skips/flakes",
+    "role_reviews": "PASS: seven Codex engineering reviews",
+    "build": "PASS: .NET zero warnings/errors; TypeScript/library/fixture builds pass",
+    "authority_verify": "VERIFIED: 167",
+    "governance_validate": "PASS: 378",
+    "dependency_audit": "PASS: zero known advisories on identical committed lockfile"
+  }
 }
