@@ -26,6 +26,6 @@ Authority: docs/authority/current-authority.json, docs/authority/amendments/AMD-
 Defects:
 Evidence:
 
-Exact next governed action: TUN-P1-019: all recorded prerequisites and blockers permit work
+Exact next governed action: TUN-P1-019: currently in progress
 
 P1 historical validation findings are retained in governance/evidence/P0-RV001-P1-EVIDENCE-AUDIT.json. No chat history is required.

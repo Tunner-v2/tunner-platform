@@ -1,0 +1,85 @@
+{
+  "schema_version": 1,
+  "evidence_id": "TUN-P1-019-FLOW-READBACK",
+  "scope_type": "WORK_ITEM",
+  "scope_id": "TUN-P1-019",
+  "status": "PASS",
+  "source_url": "https://www.figma.com/board/bdJwXt1U7n3iyluSD21OYK/Tunner-Platform-Architecture",
+  "retrieved_on": "2026-10-14",
+  "file_key": "bdJwXt1U7n3iyluSD21OYK",
+  "sections": [
+    {
+      "section_id": "88:6714",
+      "flow_refs": [
+        "TUN-FLOW-ID-01"
+      ],
+      "selected_nodes": [
+        {
+          "node_id": "77:5235",
+          "text": "Accounts & Identity Authority\nAccount · profile · verified contacts · auth methods · MFA/passkeys · recovery · Account state"
+        },
+        {
+          "node_id": "77:5247",
+          "text": "Tunner Session Authority\nsession_id · device_id · assurance · expiry · revocation"
+        },
+        {
+          "node_id": "77:5274",
+          "text": "Internal Access\nseparate workforce identity · roles/scopes · privileged sessions"
+        },
+        {
+          "node_id": "77:5289",
+          "text": "Tunner Session is central SSO authority, not a shared Product session cookie"
+        }
+      ]
+    },
+    {
+      "section_id": "88:6726",
+      "flow_refs": [
+        "TUN-FLOW-ID-05"
+      ],
+      "selected_nodes": [
+        {
+          "node_id": "81:5800",
+          "text": "Create Tunner Session: session_id, Account, auth methods, assurance, auth time, expiry and client/origin context"
+        },
+        {
+          "node_id": "81:5830",
+          "text": "Validate session state, expiry, Account restrictions, assurance, revocation and required step-up"
+        },
+        {
+          "node_id": "81:5887",
+          "text": "Product-local sessions are outside the Tunner Session registry"
+        }
+      ]
+    },
+    {
+      "section_id": "88:6729",
+      "flow_refs": [
+        "TUN-FLOW-ID-06"
+      ],
+      "selected_nodes": [
+        {
+          "node_id": "82:5967",
+          "text": "Mark Tunner session revoked immediately and idempotently"
+        },
+        {
+          "node_id": "82:5976",
+          "text": "Future Tunner requests using revoked session are denied"
+        },
+        {
+          "node_id": "82:5997",
+          "text": "Product-local session may remain until Product policy/expiry; Tunner cannot directly mutate it"
+        },
+        {
+          "node_id": "82:6018",
+          "text": "CONTRACT RESOLVED — FRD 17 §9"
+        },
+        {
+          "node_id": "82:6030",
+          "text": "Product-local session behavior remains Product-owned and must never be assumed by Tunner UI"
+        }
+      ]
+    }
+  ],
+  "scope": "Bounded canonical readback only; owner session/identity/workforce semantics remain in FRD17/28. Not a new authority or full flow implementation."
+}

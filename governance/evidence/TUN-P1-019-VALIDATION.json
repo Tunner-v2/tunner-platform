@@ -6,10 +6,12 @@
   "schema_version": 1,
   "checks": [],
   "result": "PENDING",
-  "ownership_phase": "Complete source inventory will be committed in validation candidate.",
+  "ownership_phase": "COMPLETE_IMPLEMENTATION_CANDIDATE. Shared solution/test project aggregate references are scoped coordination changes and included in the exact candidate build/test; they are not exclusive permanent ownership of unrelated future project additions.",
   "tested_commit_sha": null,
   "limitations": [
-    "Implementation and committed-state validation have not executed."
+    "Committed-state validation is pending.",
+    "Real sign-in, Identity/workforce session state/policy, production key storage/proxy/deployment and Product projections remain owner work.",
+    "Synthetic test hosts alone supply an in-memory ticket store and activate a test identity event; they do not prove production session implementation."
   ],
   "scope_type": "WORK_ITEM",
   "owned_coordination_paths": [
@@ -19,6 +21,14 @@
   ],
   "validation_kind": "COMMITTED",
   "owned_behavior_paths": [
-    "docs/development/P1_BFF_TECHNICAL_FOUNDATION.md"
+    "docs/development/P1_BFF_TECHNICAL_FOUNDATION.md",
+    "src/Tunner.Admin.Bff/Program.cs",
+    "src/Tunner.Admin.Bff/Tunner.Admin.Bff.csproj",
+    "src/Tunner.Platform/Bff/BffBoundaryProfile.cs",
+    "src/Tunner.Platform/Bff/TunnerBffFoundation.cs",
+    "src/Tunner.Platform/Bff/UnavailableBffTicketStore.cs",
+    "src/Tunner.User.Bff/Program.cs",
+    "src/Tunner.User.Bff/Tunner.User.Bff.csproj",
+    "tests/Tunner.Platform.ArchitectureTests/BffFoundationTests.cs"
   ]
 }

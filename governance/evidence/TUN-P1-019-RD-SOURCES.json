@@ -11,7 +11,9 @@
     "https://learn.microsoft.com/en-us/aspnet/core/security/anti-request-forgery?view=aspnetcore-10.0",
     "https://learn.microsoft.com/en-us/aspnet/core/security/data-protection/configuration/overview?view=aspnetcore-10.0",
     "https://cheatsheetseries.owasp.org/cheatsheets/Cross-Site_Request_Forgery_Prevention_Cheat_Sheet.html",
-    "https://raw.githubusercontent.com/dotnet/aspnetcore/release/10.0/src/Security/Authentication/Cookies/src/CookieAuthenticationHandler.cs"
+    "https://raw.githubusercontent.com/dotnet/aspnetcore/release/10.0/src/Security/Authentication/Cookies/src/CookieAuthenticationHandler.cs",
+    "https://github.com/dotnet/runtime/issues/93319",
+    "https://github.com/dotnet/runtime/issues/103101"
   ],
   "status": "PASS",
   "scope_id": "TUN-P1-019",
@@ -21,6 +23,7 @@
     "Explicitly validate all unsafe methods, not only framework form-bound endpoints.",
     "Set stable distinct application discriminators; no checkout-specific cookie namespace.",
     "No implicit session lifetime/renewal; real sign-in remains disabled until owner work.",
-    "YARP, OAuth server, Identity implementation, proxy trust and production release are untriggered in this technical slice."
+    "YARP, OAuth server, Identity implementation, proxy trust and production release are untriggered in this technical slice.",
+    "Windows Schannel ephemeral-key limitation was reproduced before the candidate. The test fixture imports a generated PKCS12 buffer with default non-PersistKeySet lifecycle, scrubs it, pins the exact certificate and disposes the temporary user key. No production TLS control was changed."
   ]
 }
