@@ -15,7 +15,7 @@
     "governance/evidence/TUN-P1-019-ROLE-REVIEWS.json"
   ],
   "next_planned_scope": "P1 milestone readiness reconciliation",
-  "gate_result": "PENDING",
+  "gate_result": "READY",
   "owned_behavior_uncommitted_paths": [],
   "limitations": [
     "P1 transport/security foundation only. Default server store denies sessions; sign-in is disabled. Real identity/workforce state, policy/rotation, projections, proxy/deployment and production keys require later owner work.",
@@ -27,8 +27,27 @@
   "schema_version": 1,
   "gate_failures": [],
   "global_development_blocked": false,
-  "status": "VALIDATION",
+  "status": "DONE",
   "product_acceptance_required": false,
   "tested_commit_sha": "7aa8e46e6318479e8811b3c63d6baf84681de050",
-  "p0_historical_state": "CLOSED"
+  "p0_historical_state": "CLOSED",
+  "closed_at": "2026-10-14T15:01:28.6643768-04:00",
+  "role_review_evidence_commit_sha": "e2f399814699e2cc665d7a28d9db1869ade535da",
+  "final_validation": {
+    "authority_verify": "VERIFIED: 167",
+    "security_scope": "PASS: implemented technical boundary only",
+    "ui": "PASS: 38 prior checks and strict builds",
+    "architecture": "PASS: 231 including 49 new BFF cases",
+    "governance_validate": "PASS: 385 records",
+    "build": "PASS: zero warnings/errors",
+    "fresh_agent_recovery": "PENDING_POST_CLOSURE_CHECK",
+    "worker": "PASS: 4",
+    "dependency_audit": "FINDINGS: existing migration packages and runtime patch followup; no clean global/production assertion",
+    "context_verify": "CURRENT",
+    "observability": "PASS: executed functional/redaction checks",
+    "startup_command": "PENDING_POST_CLOSURE_CHECK",
+    "gate": "READY: zero failures",
+    "roles": "PASS: five Codex engineering reviews"
+  },
+  "preserved_work": "Initial tree clean. Historical P0/P1 implementation, authority archive, existing UI/API/Worker and their evidence were preserved. Shared solution/test project changes add BFF project references only; no package pin, runtime installation, migration or Identity implementation was changed."
 }
