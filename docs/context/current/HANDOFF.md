@@ -7,7 +7,7 @@ No Revision is selected. No post-closure Revision is implicitly created.
 
 - Validated SHA: 7aa8e46e6318479e8811b3c63d6baf84681de050
 - Tested SHA: 7aa8e46e6318479e8811b3c63d6baf84681de050
-- Closure SHA: not recorded
+- Closure SHA: 8e7b1b1e24b528c9e90056858494b2d00b954846
 
 - P0: historical CLOSED; working record CLOSED; active RVs:
 - P1: historical ACTIVE; working record ACTIVE; active RVs:

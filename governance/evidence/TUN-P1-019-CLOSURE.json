@@ -3,7 +3,7 @@
   "scope_type": "WORK_ITEM",
   "initial_dirty_paths": [],
   "new_amd_created": false,
-  "closure_commit_sha": null,
+  "closure_commit_sha": "8e7b1b1e24b528c9e90056858494b2d00b954846",
   "security_followup": "governance/defects/DEF-TUN-P1-001-SECURITY-20261014.yaml",
   "evidence_id": "TUN-P1-019-CLOSURE",
   "validated_commit_sha": "7aa8e46e6318479e8811b3c63d6baf84681de050",
@@ -40,14 +40,54 @@
     "architecture": "PASS: 231 including 49 new BFF cases",
     "governance_validate": "PASS: 385 records",
     "build": "PASS: zero warnings/errors",
-    "fresh_agent_recovery": "PENDING_POST_CLOSURE_CHECK",
+    "fresh_agent_recovery": "PASS: historical closure, completed scope, relevant authority/flows/source/tests, exact SHA lineage, security followup and next P1 readiness action recoverable without chat.",
     "worker": "PASS: 4",
     "dependency_audit": "FINDINGS: existing migration packages and runtime patch followup; no clean global/production assertion",
     "context_verify": "CURRENT",
     "observability": "PASS: executed functional/redaction checks",
-    "startup_command": "PENDING_POST_CLOSURE_CHECK",
+    "startup_command": "PASS: canonical bare startup and scoped completed-context generation execute; verification CURRENT.",
     "gate": "READY: zero failures",
     "roles": "PASS: five Codex engineering reviews"
   },
-  "preserved_work": "Initial tree clean. Historical P0/P1 implementation, authority archive, existing UI/API/Worker and their evidence were preserved. Shared solution/test project changes add BFF project references only; no package pin, runtime installation, migration or Identity implementation was changed."
+  "preserved_work": "Initial tree clean. Historical P0/P1 implementation, authority archive, existing UI/API/Worker and their evidence were preserved. Shared solution/test project changes add BFF project references only; no package pin, runtime installation, migration or Identity implementation was changed.",
+  "milestone_readiness": {
+    "interpretation": "Read-only findings require current-evidence reconciliation. Native messages label P1 defect IDs as P0 defects; this does not reopen historical P0 or prove implementation defects. P1 remains ACTIVE and no P2 implementation is authorized by this P1-019 closure.",
+    "observed_at": "2026-10-14T15:04:45.2589792-04:00",
+    "failures": [
+      "work-item final gate failed for TUN-P1-007: prerequisite 'TUN-P1-006' lacks valid committed-state readiness evidence",
+      "work-item final gate failed for TUN-P1-010: prerequisite 'TUN-P1-008' lacks valid committed-state readiness evidence",
+      "P0 defect remains open: DEF-TUN-P1-001-001 (OPEN)",
+      "P0 defect remains open: DEF-TUN-P1-001-SECURITY-20261014 (OPEN)",
+      "P0 defect remains open: DEF-TUN-P1-006-COMMIT-001 (OPEN)",
+      "P0 defect remains open: DEF-TUN-P1-007-COMMIT-001 (OPEN)",
+      "P0 defect remains open: DEF-TUN-P1-008-COMMIT-001 (OPEN)",
+      "P0 defect remains open: DEF-TUN-P1-009-COMMIT-001 (OPEN)",
+      "P0 defect remains open: DEF-TUN-P1-011-COMMIT-001 (OPEN)",
+      "milestone role-review evidence missing: governance/evidence/P1-MILESTONE-ROLE-REVIEWS.json"
+    ],
+    "milestone_id": "P1",
+    "outcome": "NOT_READY"
+  },
+  "repository_only_recovery": {
+    "checked_artifacts": [
+      "docs/context/current/manifest.json",
+      "docs/project/CURRENT_STATE.md",
+      "docs/project/HANDOFF.md",
+      "docs/project/PROJECT_CONTEXT.md",
+      "governance/context/CTX-TUN-P1-019-001.yaml",
+      "governance/evidence/TUN-P1-019-CLOSURE.json",
+      "governance/evidence/TUN-P1-019-SECURITY-ASSESSMENT.json"
+    ],
+    "result": "PASS",
+    "next_action": "Reconcile P1 milestone readiness from current evidence before P2: run governance milestone close-check P1, investigate legacy prerequisite/commit-evidence findings and open defects without reopening valid historical implementation, govern genuine post-closure repairs through RV lineage, address DEF-TUN-P1-001-SECURITY-20261014 runtime/migration dependency patch scope, and obtain required milestone role reviews. Do not treat all findings as proven implementation defects or start unapproved P2 behavior.",
+    "repository_only": true,
+    "closure_commit_sha": "8e7b1b1e24b528c9e90056858494b2d00b954846",
+    "context_verify": "CURRENT",
+    "checked_at": "2026-10-14T15:04:45.2589792-04:00",
+    "scope": "TUN-P1-019",
+    "context_mode": "EXPANDED",
+    "validated_commit_sha": "7aa8e46e6318479e8811b3c63d6baf84681de050",
+    "canonical_startup": "tunner context build: executed without --current",
+    "selected_status": "DONE"
+  }
 }

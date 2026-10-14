@@ -1,5 +1,6 @@
 # Recent relevant Git changes
 
+- `8e7b1b1 chore(P1-019): close validated BFF technical foundation`
 - `e2f3998 test(P1-019): record committed security validation and scoped findings`
 - `7aa8e46 feat(P1-019): add separate fail-closed browser BFF foundations`
 - `762ed22 docs(P1-019): resolve approved BFF scope and security plan`
@@ -9,4 +10,3 @@
 - `c928b32 feat(P1-018): add scoped light theme and shared accessible UI controls`
 - `716f6ed docs(P1-018): resolve shared UI scope from approved light references`
 - `03d705e chore(governance): record P1-017 closure lineage and repository recovery`
-- `71d053c chore(governance): close P1-017 technical problem contract standard`
