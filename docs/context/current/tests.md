@@ -15,3 +15,6 @@
 - `governance/evidence/TUN-P1-019-CANONICAL-SOURCES.json` — required evidence
 - `governance/evidence/TUN-P1-019-RD-SOURCES.json` — required evidence
 - `docs/development/P1_BFF_TECHNICAL_FOUNDATION.md` — required evidence
+- `governance/evidence/TUN-P1-019-TEST-RESULTS.json` — required evidence
+- `governance/evidence/TUN-P1-019-SECURITY-ASSESSMENT.json` — required evidence
+- `governance/evidence/TUN-P1-019-CLOSURE.json` — required evidence

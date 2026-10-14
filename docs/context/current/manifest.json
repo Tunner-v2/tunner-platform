@@ -1,10 +1,10 @@
 {
   "GeneratorVersion": "tunner-context-0.1.0",
-  "GeneratedAt": "2026-10-14T18:51:57.5433396+00:00",
+  "GeneratedAt": "2026-10-14T18:59:28.1715943+00:00",
   "WorkItem": {
     "Id": "TUN-P1-019",
     "Title": "User and Admin BFF technical foundation",
-    "Status": "IN_PROGRESS",
+    "Status": "VALIDATION",
     "ContextPolicy": "EXPANDED"
   },
   "Included": [
@@ -185,25 +185,25 @@
     {
       "Path": "docs/project/CURRENT_STATE.md",
       "Reason": "current project state",
-      "Sha256": "ba78d82781f0f465d43f11e6017b5474aa58571f4f922d09e52e612e24ca7d34",
+      "Sha256": "c14076a32111d58988e7778fa383a4733404428b57f80aefa5bce15bd325284e",
       "Version": null
     },
     {
       "Path": "docs/project/HANDOFF.md",
       "Reason": "handoff state",
-      "Sha256": "ba78d82781f0f465d43f11e6017b5474aa58571f4f922d09e52e612e24ca7d34",
+      "Sha256": "c14076a32111d58988e7778fa383a4733404428b57f80aefa5bce15bd325284e",
       "Version": null
     },
     {
       "Path": "docs/project/PROJECT_CONTEXT.md",
       "Reason": "durable project context",
-      "Sha256": "ba78d82781f0f465d43f11e6017b5474aa58571f4f922d09e52e612e24ca7d34",
+      "Sha256": "c14076a32111d58988e7778fa383a4733404428b57f80aefa5bce15bd325284e",
       "Version": null
     },
     {
       "Path": "governance/context/CTX-TUN-P1-019-001.yaml",
       "Reason": "required evidence",
-      "Sha256": "f9d926cd6172e3ace99a7be5377076ce7a8202bd0197478d3c157cfcaac03a24",
+      "Sha256": "3afc17b7b370eda4c5406dac1dfda759fe1446c12ad3b8517f1e23ecf085ccb1",
       "Version": null
     },
     {
@@ -216,6 +216,12 @@
       "Path": "governance/evidence/TUN-P1-019-CANONICAL-SOURCES.json",
       "Reason": "required evidence",
       "Sha256": "851803a59151ff9d649ed3d930607a90ea0973c07f6259e16bd7724af3e05bbe",
+      "Version": null
+    },
+    {
+      "Path": "governance/evidence/TUN-P1-019-CLOSURE.json",
+      "Reason": "required evidence",
+      "Sha256": "4a6056e181ec0a1bdad11515cc27e0f6ac879e2ad35566b0d968bf74f6fd84c7",
       "Version": null
     },
     {
@@ -233,13 +239,25 @@
     {
       "Path": "governance/evidence/TUN-P1-019-ROLE-REVIEWS.json",
       "Reason": "required evidence",
-      "Sha256": "979cac187997b9e6d5d1e919e2e856eed1479b6deb4f11c713fa056794b980a4",
+      "Sha256": "5cc7da44f2f76321bbfe4869cfa1a3e338b36e7f37e4fdef4333dc44b5b261c9",
+      "Version": null
+    },
+    {
+      "Path": "governance/evidence/TUN-P1-019-SECURITY-ASSESSMENT.json",
+      "Reason": "required evidence",
+      "Sha256": "d83157c84e839db618e2abe2ed8b416ed9f0b72a18a81897419cbf4e2218efdc",
+      "Version": null
+    },
+    {
+      "Path": "governance/evidence/TUN-P1-019-TEST-RESULTS.json",
+      "Reason": "required evidence",
+      "Sha256": "338dee1313714d88f4abc4d89b99634501265a971ac41a62699e3deaf77088db",
       "Version": null
     },
     {
       "Path": "governance/evidence/TUN-P1-019-VALIDATION.json",
       "Reason": "required evidence",
-      "Sha256": "65eade019c29f50cb97a4e08424758f180d960bf602b841de431e690221ffaed",
+      "Sha256": "a8b1772b1827d01484b3a904f201637b450f0210f2dd5456bbc2056e9eea1cd7",
       "Version": null
     },
     {
@@ -275,12 +293,13 @@
     {
       "Path": "governance/work-items/TUN-P1-019.yaml",
       "Reason": "selected work item",
-      "Sha256": "fb008df6469d77e043af0d745897b1a65a585a02cb0ba14f324f33ac7334bfe6",
+      "Sha256": "fc61c6ddb0de1f7f6023681aad65a9b5ebe412b7ded14d219c30b55aa29a3de6",
       "Version": null
     }
   ],
   "Excluded": [],
   "GitHistory": [
+    "7aa8e46 feat(P1-019): add separate fail-closed browser BFF foundations",
     "762ed22 docs(P1-019): resolve approved BFF scope and security plan",
     "08e1f90 docs(P1-018): anchor closure and repository-only recovery handoff",
     "4755f89 chore(P1-018): close validated shared UI foundation",
@@ -289,8 +308,7 @@
     "716f6ed docs(P1-018): resolve shared UI scope from approved light references",
     "03d705e chore(governance): record P1-017 closure lineage and repository recovery",
     "71d053c chore(governance): close P1-017 technical problem contract standard",
-    "1332640 test(governance): record P1-017 committed validation and reviews",
-    "3f4f7e8 chore(governance): resolve P1-017 approved problem contract and eligibility"
+    "1332640 test(governance): record P1-017 committed validation and reviews"
   ],
   "Revision": null,
   "HistoricalScopes": [
@@ -384,7 +402,11 @@
     }
   ],
   "RevisionSetSha256": "cd345b251a266eea38711788d4b72d80f527f6b5956b431a42f66d64e796b0c6",
-  "CommitState": null,
+  "CommitState": {
+    "ValidatedSha": "7aa8e46e6318479e8811b3c63d6baf84681de050",
+    "TestedSha": "7aa8e46e6318479e8811b3c63d6baf84681de050",
+    "ClosureSha": null
+  },
   "LatestRevisions": [
     {
       "Id": "P0-RV001",
@@ -504,5 +526,5 @@
       "NextAction": "preserve closure and run governance next"
     }
   ],
-  "GovernanceStateSha256": "d1a8c6e7d9eb9350ba9e5ae49aa81ffd1c624b9f51007cb0095e247acb63536f"
+  "GovernanceStateSha256": "959d68326b600ef7b1a1bd49340cf2d04a5280a8a35f800c0c140b154b8672b0"
 }

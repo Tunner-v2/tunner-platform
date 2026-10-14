@@ -1,5 +1,6 @@
 # Recent relevant Git changes
 
+- `7aa8e46 feat(P1-019): add separate fail-closed browser BFF foundations`
 - `762ed22 docs(P1-019): resolve approved BFF scope and security plan`
 - `08e1f90 docs(P1-018): anchor closure and repository-only recovery handoff`
 - `4755f89 chore(P1-018): close validated shared UI foundation`
@@ -9,4 +10,3 @@
 - `03d705e chore(governance): record P1-017 closure lineage and repository recovery`
 - `71d053c chore(governance): close P1-017 technical problem contract standard`
 - `1332640 test(governance): record P1-017 committed validation and reviews`
-- `3f4f7e8 chore(governance): resolve P1-017 approved problem contract and eligibility`

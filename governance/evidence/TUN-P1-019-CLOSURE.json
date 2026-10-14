@@ -1,0 +1,34 @@
+{
+  "scope_id": "TUN-P1-019",
+  "scope_type": "WORK_ITEM",
+  "initial_dirty_paths": [],
+  "new_amd_created": false,
+  "closure_commit_sha": null,
+  "security_followup": "governance/defects/DEF-TUN-P1-001-SECURITY-20261014.yaml",
+  "evidence_id": "TUN-P1-019-CLOSURE",
+  "validated_commit_sha": "7aa8e46e6318479e8811b3c63d6baf84681de050",
+  "closure_kind": "METADATA_ONLY",
+  "evidence_refs": [
+    "governance/evidence/TUN-P1-019-VALIDATION.json",
+    "governance/evidence/TUN-P1-019-TEST-RESULTS.json",
+    "governance/evidence/TUN-P1-019-SECURITY-ASSESSMENT.json",
+    "governance/evidence/TUN-P1-019-ROLE-REVIEWS.json"
+  ],
+  "next_planned_scope": "P1 milestone readiness reconciliation",
+  "gate_result": "PENDING",
+  "owned_behavior_uncommitted_paths": [],
+  "limitations": [
+    "P1 transport/security foundation only. Default server store denies sessions; sign-in is disabled. Real identity/workforce state, policy/rotation, projections, proxy/deployment and production keys require later owner work.",
+    "Real HTTPS component tests use a synthetic identity event and in-memory store only in test hosts. The store is not a production session implementation.",
+    "Repository-wide package audit has existing migration and runtime patch followups recorded in DEF-TUN-P1-001-SECURITY-20261014. No clean environment or production security acceptance is claimed.",
+    "Codex engineering reviews only; no independent human, Product or release acceptance."
+  ],
+  "exact_next_action": "Reconcile P1 milestone readiness from current evidence before P2: run governance milestone close-check P1, investigate legacy prerequisite/commit-evidence findings and open defects without reopening valid historical implementation, govern genuine post-closure repairs through RV lineage, address DEF-TUN-P1-001-SECURITY-20261014 runtime/migration dependency patch scope, and obtain required milestone role reviews. Do not treat all findings as proven implementation defects or start unapproved P2 behavior.",
+  "schema_version": 1,
+  "gate_failures": [],
+  "global_development_blocked": false,
+  "status": "VALIDATION",
+  "product_acceptance_required": false,
+  "tested_commit_sha": "7aa8e46e6318479e8811b3c63d6baf84681de050",
+  "p0_historical_state": "CLOSED"
+}
