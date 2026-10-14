@@ -3,7 +3,7 @@ work_item_id: TUN-P1-019
 milestone_id: P1
 sprint_id: null
 title: User and Admin BFF technical foundation
-status: SECURITY_REVIEW_REQUIRED
+status: READY
 type: BFF_FOUNDATION
 authority_refs:
   - docs/authority/current-authority.json
@@ -12,8 +12,21 @@ authority_refs:
   - docs/authority/baselines/1.6.0/01_Engineering_Technology_Foundation.md
   - docs/authority/baselines/1.6.0/02_Repository_Solution_and_Module_Architecture.md
   - docs/authority/baselines/1.6.0/09_Testing_Acceptance_Evidence_and_Quality_Gates.md
-flow_refs: []
-contract_refs: []
+  - docs/authority/baselines/1.6.0/07_API_SDK_Event_and_Connected_Product_Foundation.md
+  - docs/authority/baselines/1.6.0/08_Security_Privacy_Compliance_and_Global_Market_Governance.md
+  - docs/authority/baselines/1.6.0/17_Account_Identity_and_Session_FRD.md
+  - docs/authority/baselines/1.6.0/28_Support_Risk_Audit_and_Internal_Operations_FRD.md
+  - docs/authority/baselines/1.6.0/29_Privacy_Data_Lifecycle_and_Processing_Governance_FRD.md
+  - docs/authority/baselines/1.6.0/32_Domain_API_Event_Data_and_Policy_Contract_Catalog.md
+  - docs/authority/baselines/1.6.0/33_Production_Readiness_Compliance_and_Release_Gates.md
+  - docs/authority/baselines/1.6.0/34_Architecture_to_Development_Traceability_Matrix.md
+  - docs/authority/baselines/1.6.0/decisions/ADR-0004_Communication_Protocol_Boundaries.md
+  - docs/authority/baselines/1.6.0/decisions/ADR-0005_Browser_BFF_and_Token_Security.md
+  - docs/authority/baselines/1.6.0/decisions/ADR-0006_Identity_ASPNET_Identity_OpenIddict.md
+  - docs/authority/amendments/AMD-0003/AMD-0003_Location-Independent_Repository_and_Path_Resolution.md
+  - docs/authority/amendments/AMD-0005/AMD-0005_Authority-First_Decision_Resolution_and_Duplicate-Decision_Prevention.md
+flow_refs: [TUN-FLOW-ID-01, TUN-FLOW-ID-05, TUN-FLOW-ID-06]
+contract_refs: [docs/authority/baselines/1.6.0/17_Account_Identity_and_Session_FRD.md, docs/authority/baselines/1.6.0/28_Support_Risk_Audit_and_Internal_Operations_FRD.md, docs/authority/baselines/1.6.0/decisions/ADR-0005_Browser_BFF_and_Token_Security.md]
 decision_refs: []
 acceptance_criteria:
   - Establish separate technical BFF boundaries only after security/session review; no Account/Identity behavior, browser token storage, or Product workflow.
@@ -21,13 +34,22 @@ acceptance_criteria:
   - Preserve domain/business semantics as owner concerns and keep technical canonicalization and presentation formatting non-authoritative.
   - Do not infer Product behavior, user flows, commercial rules, policy values, or public contract semantics beyond cited authority.
 prerequisites: [TUN-P1-002, TUN-P1-005]
-blockers: [BFF_SECURITY_AND_SESSION_BOUNDARY_REVIEW_REQUIRED]
+blockers: []
 impact: {architecture: true, ui: false, sdk: false, financial: false, compliance: false, security: true, devops: false, support: false}
 activated_roles: [full-stack-engineer, solution-architect, cyber-security-engineer, tester-qa-engineer, auditor]
 required_tests: [authority verification, governance validation, role activation calculation and mandatory specialist reviews, bounded expanded context verification, scope-specific deterministic tests and evidence]
-required_evidence: [governance/context/CTX-TUN-P1-019-001.yaml, governance/evidence/TUN-P1-019-VALIDATION.json, governance/evidence/TUN-P1-019-ROLE-REVIEWS.json]
+required_evidence: [governance/context/CTX-TUN-P1-019-001.yaml, governance/evidence/TUN-P1-019-VALIDATION.json, governance/evidence/TUN-P1-019-ROLE-REVIEWS.json, governance/evidence/TUN-P1-019-AUTHORITY-RESOLUTION.json, governance/evidence/TUN-P1-019-CANONICAL-SOURCES.json, governance/evidence/TUN-P1-019-RD-SOURCES.json, docs/development/P1_BFF_TECHNICAL_FOUNDATION.md]
 context_policy: EXPANDED
 todos: []
 defects: []
 created_at: 2026-10-02T13:20:00-04:00
-updated_at: 2026-10-02T13:20:00-04:00
+updated_at: 2026-10-14T14:38:10.3162024-04:00
+product_acceptance_required: false
+authority_resolution:
+  schema_version: 1
+  outcome: RESOLVED_EXISTING_AUTHORITY
+  reviewed_authority_refs: [docs/authority/current-authority.json, docs/authority/baselines/1.6.0/01_Engineering_Technology_Foundation.md, docs/authority/baselines/1.6.0/02_Repository_Solution_and_Module_Architecture.md, docs/authority/baselines/1.6.0/07_API_SDK_Event_and_Connected_Product_Foundation.md, docs/authority/baselines/1.6.0/08_Security_Privacy_Compliance_and_Global_Market_Governance.md, docs/authority/baselines/1.6.0/09_Testing_Acceptance_Evidence_and_Quality_Gates.md, docs/authority/baselines/1.6.0/17_Account_Identity_and_Session_FRD.md, docs/authority/baselines/1.6.0/28_Support_Risk_Audit_and_Internal_Operations_FRD.md, docs/authority/baselines/1.6.0/29_Privacy_Data_Lifecycle_and_Processing_Governance_FRD.md, docs/authority/baselines/1.6.0/32_Domain_API_Event_Data_and_Policy_Contract_Catalog.md, docs/authority/baselines/1.6.0/33_Production_Readiness_Compliance_and_Release_Gates.md, docs/authority/baselines/1.6.0/34_Architecture_to_Development_Traceability_Matrix.md, docs/authority/baselines/1.6.0/decisions/ADR-0004_Communication_Protocol_Boundaries.md, docs/authority/baselines/1.6.0/decisions/ADR-0005_Browser_BFF_and_Token_Security.md, docs/authority/baselines/1.6.0/decisions/ADR-0006_Identity_ASPNET_Identity_OpenIddict.md, docs/authority/amendments/AMD-0003/AMD-0003_Location-Independent_Repository_and_Path_Resolution.md, docs/authority/amendments/AMD-0004/AMD-0004_Shared_Technical_Primitives_Formatting_and_Canonicalization.md, docs/authority/amendments/AMD-0005/AMD-0005_Authority-First_Decision_Resolution_and_Duplicate-Decision_Prevention.md]
+  unresolved_question: None for the planned technical BFF security foundation.
+  conclusion: Existing BFF/session/workforce authority and five scoped plan reviews resolve the recorded review condition; real sign-in and owner session policy remain inactive. Prior state/history is preserved in evidence and Git.
+  conditional_trigger_absent: false
+  reviewed_at: 2026-10-14T14:38:10.3162024-04:00

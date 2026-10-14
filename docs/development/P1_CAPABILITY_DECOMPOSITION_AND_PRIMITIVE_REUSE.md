@@ -33,6 +33,6 @@ No `Common`, `Utils`, `Helpers`, or equivalent dumping-ground project/namespace 
 | TUN-P1-016 | Platform environment configuration model | Document 06 defines engineering classes and deploy-time endpoint/secret-reference separation; explicit immutable module configuration only, without Product/deployment/secret-resolution behavior. |
 | TUN-P1-017 | Problem/error technical standard | Document 32 section 6 defines RFC-compatible Problem Details and canonical classes; explicit safe metadata, status consistency and forward compatibility only, with no domain mapping or hidden retries. |
 | TUN-P1-018 | User/Admin shared UI foundation | Selected existing User/Admin Figma controls and light theme; scoped primitive/semantic/component tokens, content-key binding and accessible controls only. |
-| TUN-P1-019 | User/Admin BFF technical foundation | SECURITY_REVIEW_REQUIRED until BFF security/session review. |
+| TUN-P1-019 | User/Admin BFF technical foundation | Existing ADR-0005 and Documents 17/28 resolve the boundary; reviewed shared secure-cookie/CSRF transport foundation with authentication denied by default; Identity/workforce owner activation stays separate. |
 
 The table is not an execution ranking. `tunner governance next` determines readiness from recorded dependencies, evidence, calculated roles, and genuine blockers.

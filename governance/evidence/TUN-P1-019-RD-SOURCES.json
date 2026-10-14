@@ -1,0 +1,26 @@
+{
+  "framework": "Existing pinned .NET 10 / ASP.NET Core shared framework",
+  "new_packages": [],
+  "scope_type": "WORK_ITEM",
+  "evidence_id": "TUN-P1-019-RD-SOURCES",
+  "schema_version": 1,
+  "sources": [
+    "https://learn.microsoft.com/en-us/aspnet/core/security/authentication/cookie?view=aspnetcore-10.0",
+    "https://learn.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.authentication.cookies.iticketstore?view=aspnetcore-10.0",
+    "https://learn.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.authentication.cookies.cookieauthenticationoptions.sessionstore?view=aspnetcore-10.0",
+    "https://learn.microsoft.com/en-us/aspnet/core/security/anti-request-forgery?view=aspnetcore-10.0",
+    "https://learn.microsoft.com/en-us/aspnet/core/security/data-protection/configuration/overview?view=aspnetcore-10.0",
+    "https://cheatsheetseries.owasp.org/cheatsheets/Cross-Site_Request_Forgery_Prevention_Cheat_Sheet.html",
+    "https://raw.githubusercontent.com/dotnet/aspnetcore/release/10.0/src/Security/Authentication/Cookies/src/CookieAuthenticationHandler.cs"
+  ],
+  "status": "PASS",
+  "scope_id": "TUN-P1-019",
+  "reviewed_at": "2026-10-14T14:38:10.3162024-04:00",
+  "findings": [
+    "Reuse ITicketStore and framework antiforgery instead of a custom session-token/crypto protocol.",
+    "Explicitly validate all unsafe methods, not only framework form-bound endpoints.",
+    "Set stable distinct application discriminators; no checkout-specific cookie namespace.",
+    "No implicit session lifetime/renewal; real sign-in remains disabled until owner work.",
+    "YARP, OAuth server, Identity implementation, proxy trust and production release are untriggered in this technical slice."
+  ]
+}
