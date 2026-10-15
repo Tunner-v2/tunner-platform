@@ -26,7 +26,11 @@ The result retains the exact test object key, content verification, object clean
 
 ## Validation and lifecycle
 
-Implementation validation is in progress. Focused tests and disposable OpenBao integration have passed; final evidence must bind the committed candidate before revision closure. Live Cloudflare R2 acceptance is NOT_EXECUTED by the agent because private operator authentication is required. TUN-P1-023 and its live R2 defect remain pending actual provider receipts.
+Validated/tested implementation SHA: `56ff151a8ae362318eb767a7071943732e26f15c`, branch `change/TUN-P1-001-platform-foundation-refinement`. Both builds pass with zero warnings/errors. All 353 .NET cases pass with zero skipped: 64 installer and 289 original platform regression cases. The production launcher passes four scenarios in each of PowerShell 7.6.5 and Windows PowerShell 5.1.19041.6456 using command doubles. Secrets source validation, secret scan and SAST pass.
+
+Ten owned Git objects match the validated candidate. TRX paths/hashes, repeat-run/disposable OpenBao evidence, retained failed attempts and all nine executing-agent scoped reviews are recorded in [revision validation](../../governance/evidence/P1-024-RV001-VALIDATION.json). No independent human or protected-main approval is implied. The [revision record](../../governance/revisions/P1-024-RV001.yaml) is the lifecycle authority.
+
+Live Cloudflare R2 acceptance is NOT_EXECUTED by the agent because private operator authentication is required. TUN-P1-023 and its live R2 defect remain pending actual provider receipts. Exact next action: run `./tools/dev/setup-r2.ps1`, enter private local bootstrap authentication, and preserve the non-secret JSON result. Only actual verified content/object/bootstrap cleanup can resolve provider acceptance.
 
 Primary sources:
 - [OpenBao token creation and lifetime controls](https://openbao.org/docs/commands/token/create/)
