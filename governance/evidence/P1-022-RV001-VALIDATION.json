@@ -14,7 +14,8 @@
     "Complete governance functional suite PASS, including all 60 existing RV checks and 15 new native CLI committed-proof checks.",
     "Candidate, HEAD and worktree owned Git objects agree.",
     "Secret scan and SAST inspect 1279 files with no match; existing secrets source validator PASS.",
-    "Original scope records/evidence retain immutable closure. Actual P1 committed-readiness audit follows co-owner closure; live R2 acceptance is separate and remains NOT_EXECUTED."
+    "Original closed scope records/evidence remain unchanged. Actual native P1 committed-readiness audit PASS with zero findings after explicit shared-test revision closure.",
+    "Final secret scan and SAST inspect 1296 files with no matches."
   ],
   "checked_at": "2026-10-15T22:05:43Z",
   "receipts": [
@@ -31,5 +32,13 @@
       "Match": true
     }
   ],
-  "native_p1_audit": "PENDING_COOWNER_CLOSURE"
+  "native_p1_audit": {
+    "command": "tunner governance commit-readiness audit --milestone P1",
+    "result": "PASS",
+    "findings": [],
+    "checked_at": "2026-10-15T22:09:54Z",
+    "receipt": "artifacts/P1-024-RV001/final-p1-committed-readiness.txt",
+    "receipt_sha256": "40127aef8da9c87afe0fb3200dac969a29ca6a881edff117f68f770cb2ef00a1"
+  },
+  "closure_commit_sha": "979643cf59161888a8710eaaec047043db9d32c8"
 }
