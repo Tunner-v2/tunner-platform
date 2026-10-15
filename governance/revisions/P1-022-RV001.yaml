@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "revision_id": "P1-022-RV001",
+  "revision_scope": "WORK_ITEM",
+  "original_scope_id": "TUN-P1-022",
+  "parent_revision_id": null,
+  "parent_milestone_revision_id": null,
+  "title": "Revalidate shared governance test module after revision-proof correction",
+  "revision_type": "COMPATIBILITY",
+  "status": "VALIDATION",
+  "reason": "Closed P1-022 also owns the shared governance functional test program; added closed-revision proof cases require explicit same-scope committed validation without changing its original completion.",
+  "authority_refs": [
+    "docs/authority/current/development/03_Governed_Development_Lifecycle_Scrum_Git.md",
+    "docs/authority/current/development/04_Governance_and_Context_Tooling_Specification.md"
+  ],
+  "decision_refs": [],
+  "defect_refs": [],
+  "change_refs": [],
+  "impact_classification": "SCOPED_BLOCKING",
+  "blocked_scope": [
+    "TUN-P1-023"
+  ],
+  "acceptance_criteria": [
+    "Validate only the co-owned governance functional test module at the correction candidate, preserve original P1-022 runtime behavior and closure, and restore native committed readiness without cross-scope waivers."
+  ],
+  "prerequisites": [],
+  "work_items": [],
+  "required_gates": [],
+  "required_roles": ["full-stack-engineer","solution-architect","governance-engineer","tester-qa-engineer","auditor"],
+  "evidence_refs": ["governance/evidence/P1-022-RV001-AUTHORITY-RESOLUTION.json", "governance/evidence/P1-022-RV001-VALIDATION.json", "governance/evidence/P1-022-RV001-ROLE-REVIEWS.json", "docs/development/REVISION_COMMITTED_PROOF_RV002.md"],
+  "created_at": "2026-10-15T21:54:33.1444775\u002B00:00",
+  "closed_at": null,
+  "product_acceptance_required": false
+}

@@ -47,6 +47,7 @@ internal static class CommittedEvidenceApplication
         if (state.ClosureCommitSha is { } closure && (!IsSha(closure) || Git(repository, "merge-base", closure, "HEAD") != closure))
             yield return "closure SHA must resolve in current ancestry";
         var matched = false;
+        RevisionCommittedProofResolver? revisionProof = null;
         foreach (var reference in record.StringList(record.Type.DefinitionName == "revision" ? "evidence_refs" : "required_evidence"))
         {
             var path = Path.GetFullPath(Path.Combine(repository.FullName, reference));
@@ -80,7 +81,10 @@ internal static class CommittedEvidenceApplication
                 {
                     var logical = item.ValueKind == JsonValueKind.String ? item.GetString() : null;
                     if (logical is null || logical.Contains("..", StringComparison.Ordinal) || logical.Contains('\\') || Path.IsPathRooted(logical)) { yield return "owned behavior paths must be repository-relative"; continue; }
-                    var expected = Git(repository, "rev-parse", sha + ":" + logical);
+                    revisionProof ??= new RevisionCommittedProofResolver(repository, record);
+                    var effectiveSha = revisionProof.Resolve(logical, out var proofFailure);
+                    if (proofFailure is not null) { yield return proofFailure; continue; }
+                    var expected = Git(repository, "rev-parse", (effectiveSha ?? sha) + ":" + logical);
                     var current = Git(repository, "rev-parse", "HEAD:" + logical);
                     var working = Git(repository, "hash-object", "--", logical);
                     if (expected.Length == 0 || expected != current || expected != working)

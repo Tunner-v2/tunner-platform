@@ -12,6 +12,7 @@ var fixtureRoot = Directory.CreateTempSubdirectory("tunner-governance-fixture-")
 try
 {
     RunRevisionChecks(repositoryRoot, failures);
+    RunRevisionCommittedProofChecks(repositoryRoot, failures);
     CreateFixture(repositoryRoot, fixtureRoot);
     InitializeGit(fixtureRoot);
 
@@ -807,6 +808,152 @@ static void RunRevisionChecks(DirectoryInfo repositoryRoot, ICollection<string> 
         Console.WriteLine($"PASS: {assertions} RV schema/lifecycle/context/recovery/portability checks");
     }
     finally { DeleteFixture(fixture); }
+}
+
+static void RunRevisionCommittedProofChecks(DirectoryInfo repositoryRoot, ICollection<string> failures)
+{
+    var fixture = Directory.CreateTempSubdirectory("tunner-governance-proof-fixture-");
+    var assertions = 0;
+    void Check(bool condition, string message) { assertions++; Expect(condition, "Revision committed proof: " + message, failures); }
+    try
+    {
+        CreateFixture(repositoryRoot, fixture);
+        File.Copy(Path.Combine(repositoryRoot.FullName, "governance/policies/lifecycle-policy.yaml"),
+            Path.Combine(fixture.FullName, "governance/policies/lifecycle-policy.yaml"), true);
+        const string originalId = "TUN-P1-024";
+        const string work = "governance/work-items/TUN-P1-024.yaml";
+        const string originalProof = "governance/evidence/original-proof.json";
+        string[] originalPaths = ["docs/proof-a.txt", "docs/proof-b.txt", "docs/proof-c.txt"];
+        WriteWorkItem(fixture, originalId, "DONE", "[]", false);
+        var workFile = Path.Combine(fixture.FullName, work);
+        File.WriteAllText(workFile, File.ReadAllText(workFile).Replace("authority_refs: [authority]",
+            "authority_refs: [docs/authority/mirror.txt]", StringComparison.Ordinal)
+            .Replace("required_evidence: [governance/evidence/missing.json]",
+                "required_evidence: [" + originalProof + "]", StringComparison.Ordinal));
+        foreach (var path in originalPaths) File.WriteAllText(Path.Combine(fixture.FullName, path), "original");
+        File.WriteAllText(Path.Combine(fixture.FullName, originalProof), JsonSerializer.Serialize(new
+        {
+            scope_id = originalId, validation_kind = "COMMITTED", owned_behavior_paths = originalPaths
+        }));
+        InitializeGit(fixture);
+        var originalSha = RunGitOutput(fixture, "rev-parse", "HEAD");
+        object State(string sha) => new
+        {
+            repository_changed = true, validated_commit_sha = sha, tested_commit_sha = sha,
+            work_item_commit_shas = new[] { sha }, closure_commit_sha = (string?)null,
+            remaining_uncommitted_paths = Array.Empty<string>(), remaining_uncommitted_classification = "PREEXISTING_UNRELATED"
+        };
+        void Proof(string path, string id, string sha, string[] owned) => File.WriteAllText(Path.Combine(fixture.FullName, path),
+            JsonSerializer.Serialize(new { scope_id = id, validation_kind = "COMMITTED", validated_commit_sha = sha,
+                tested_commit_sha = sha, result = "PASS", owned_behavior_paths = owned }));
+        EditRevision(workFile, "git_state", State(originalSha));
+        Proof(originalProof, originalId, originalSha, originalPaths);
+        RunGit(fixture, "add", "--", work, originalProof);
+        RunGit(fixture, "commit", "--quiet", "-m", "Original committed completion");
+        var originalWorkBytes = File.ReadAllBytes(workFile);
+        var originalProofBytes = File.ReadAllBytes(Path.Combine(fixture.FullName, originalProof));
+        Check(AuditCommittedFixture(fixture), "original completed scope passes before revision");
+
+        string Candidate(string[] owned, string value)
+        {
+            var created = RevisionApplication.Create(fixture, new(originalId, "CORRECTIVE", "Fixture revision",
+                "Later validated behavior", "NON_BLOCKING", [], [], [], ["exact committed proof"]));
+            if (created.ExitCode != 0) throw new InvalidOperationException(GovernanceApplication.Serialize(created));
+            var id = ((RevisionOperationPayload)created.Payload).RevisionId;
+            var revisionFile = Path.Combine(fixture.FullName, "governance/revisions/" + id + ".yaml");
+            var proof = "governance/evidence/" + id + "-proof.json";
+            EditRevision(revisionFile, "status", "VALIDATION");
+            EditRevision(revisionFile, "product_acceptance_required", false);
+            EditRevision(revisionFile, "evidence_refs", new[] { proof });
+            foreach (var path in owned) File.WriteAllText(Path.Combine(fixture.FullName, path), value);
+            File.WriteAllText(Path.Combine(fixture.FullName, proof), JsonSerializer.Serialize(new
+            {
+                scope_id = id, validation_kind = "COMMITTED", owned_behavior_paths = owned
+            }));
+            RunGit(fixture, ["add", "--", "governance/revisions/" + id + ".yaml", proof, .. owned]);
+            RunGit(fixture, "commit", "--quiet", "-m", "Revision validation candidate");
+            var sha = RunGitOutput(fixture, "rev-parse", "HEAD");
+            EditRevision(revisionFile, "git_state", State(sha));
+            Proof(proof, id, sha, owned);
+            return id;
+        }
+        void Close(string id, bool commit)
+        {
+            var path = Path.Combine(fixture.FullName, "governance/revisions/" + id + ".yaml");
+            EditRevision(path, "status", "CLOSED");
+            EditRevision(path, "closed_at", DateTimeOffset.UtcNow.ToString("O", System.Globalization.CultureInfo.InvariantCulture));
+            if (!commit) return;
+            RunGit(fixture, "add", "--", "governance/revisions/" + id + ".yaml", "governance/evidence/" + id + "-proof.json");
+            RunGit(fixture, "commit", "--quiet", "-m", "Committed revision closure");
+        }
+
+        string[] firstPaths = [originalPaths[0], originalPaths[1]];
+        var first = Candidate(firstPaths, "revision-one");
+        Check(!AuditCommittedFixture(fixture), "VALIDATION revision cannot waive original proof");
+        Close(first, false);
+        Check(!AuditCommittedFixture(fixture), "uncommitted CLOSED status cannot waive original proof");
+        Check(RevisionApplication.CloseCheck(fixture, first).ExitCode == 0, "fixture revision has complete native closure proof");
+        Close(first, true);
+        Check(AuditCommittedFixture(fixture), "committed closed revision supplies current owned-path proof");
+        var firstProofPath = Path.Combine(fixture.FullName, "governance/evidence/" + first + "-proof.json");
+        var firstProofBytes = File.ReadAllBytes(firstProofPath);
+        File.WriteAllText(firstProofPath, File.ReadAllText(firstProofPath).Replace("\"PASS\"", "\"FAIL\"", StringComparison.Ordinal));
+        Check(!AuditCommittedFixture(fixture), "uncommitted edited evidence cannot be substituted");
+        File.WriteAllBytes(firstProofPath, firstProofBytes);
+        var malformed = JsonNode.Parse(File.ReadAllText(firstProofPath))!;
+        malformed["result"] = true;
+        File.WriteAllText(firstProofPath, malformed.ToJsonString());
+        RunGit(fixture, "add", "--", "governance/evidence/" + first + "-proof.json");
+        RunGit(fixture, "commit", "--quiet", "-m", "Malformed current proof fixture");
+        Check(!AuditCommittedFixture(fixture), "committed malformed proof is a diagnostic failure rather than a crash");
+        File.WriteAllBytes(firstProofPath, firstProofBytes);
+        RunGit(fixture, "add", "--", "governance/evidence/" + first + "-proof.json");
+        RunGit(fixture, "commit", "--quiet", "-m", "Restore valid current proof fixture");
+        File.WriteAllText(Path.Combine(fixture.FullName, originalPaths[0]), "unvalidated");
+        Check(!AuditCommittedFixture(fixture), "later uncommitted behavior still fails");
+        File.WriteAllText(Path.Combine(fixture.FullName, originalPaths[0]), "revision-one");
+
+        string[] secondPaths = [originalPaths[0]];
+        var second = Candidate(secondPaths, "revision-two");
+        Close(second, true);
+        Check(AuditCommittedFixture(fixture), "later path owner and unchanged prior-owner paths compose");
+        Check(RevisionApplication.CloseCheck(fixture, first).ExitCode == 0, "prior revision proof resolves strictly later ownership without recursion to itself");
+        File.WriteAllText(Path.Combine(fixture.FullName, originalPaths[0]), "original");
+        Check(!AuditCommittedFixture(fixture), "unvalidated rollback cannot fall back to original or earlier revision proof");
+        File.WriteAllText(Path.Combine(fixture.FullName, originalPaths[0]), "revision-two");
+        File.WriteAllText(Path.Combine(fixture.FullName, originalPaths[2]), "unclaimed-drift");
+        Check(!AuditCommittedFixture(fixture), "an unclaimed original path still requires original proof");
+        File.WriteAllText(Path.Combine(fixture.FullName, originalPaths[2]), "original");
+        File.WriteAllText(Path.Combine(fixture.FullName, "unrelated.txt"), "preserve unrelated work");
+        Check(AuditCommittedFixture(fixture), "unrelated dirty work remains outside ownership");
+        Check(File.ReadAllBytes(workFile).SequenceEqual(originalWorkBytes) &&
+            File.ReadAllBytes(Path.Combine(fixture.FullName, originalProof)).SequenceEqual(originalProofBytes),
+            "original completion record and evidence remain byte-identical");
+        string[] missingClassification = [];
+        var invalid = Candidate(missingClassification, "unused");
+        Close(invalid, true);
+        Check(!AuditCommittedFixture(fixture), "a later committed CLOSED claim with empty ownership cannot fall back to older proof");
+        Console.WriteLine($"PASS: {assertions} closed-revision committed ownership checks");
+    }
+    finally { DeleteFixture(fixture); }
+}
+
+static bool AuditCommittedFixture(DirectoryInfo fixture)
+{
+    var start = new ProcessStartInfo("dotnet")
+    {
+        WorkingDirectory = fixture.FullName, RedirectStandardOutput = true, RedirectStandardError = true,
+        UseShellExecute = false, CreateNoWindow = true
+    };
+    foreach (var argument in new[] { typeof(GovernanceApplication).Assembly.Location, "--repo-root", fixture.FullName,
+        "governance", "commit-readiness", "audit", "--milestone", "MVP" }) start.ArgumentList.Add(argument);
+    using var process = Process.Start(start) ?? throw new InvalidOperationException("Unable to start fixture audit");
+    var output = process.StandardOutput.ReadToEnd();
+    var error = process.StandardError.ReadToEnd();
+    process.WaitForExit();
+    if (process.ExitCode is not (0 or 1)) throw new InvalidOperationException("Fixture audit failed: " + error);
+    using var result = JsonDocument.Parse(output);
+    return process.ExitCode == 0 && result.RootElement.GetProperty("Payload").GetProperty("Outcome").GetString() == "PASS";
 }
 
 static void EditRevision(string path, string field, object value)

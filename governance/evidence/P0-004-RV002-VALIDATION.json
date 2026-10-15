@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "scope_id": "P0-004-RV002",
+  "scope_type": "REVISION",
+  "validation_kind": "COMMITTED",
+  "result": "PENDING",
+  "validated_commit_sha": null,
+  "tested_commit_sha": null,
+  "owned_behavior_paths": [
+    "src/Tunner.Governance/CommittedEvidenceApplication.cs",
+    "src/Tunner.Governance/RevisionCommittedProofResolver.cs",
+    "tests/Tunner.Governance.FunctionalTests/Program.cs"
+  ],
+  "checks": [],
+  "validation_attempts": ["Initial build required converting Dictionary.ValueCollection to the existing IReadOnlyList revision-ordering input; corrected with ToArray.", "Initial native P1 audit rejected three legitimate installer-revision paths. The corrected resolver cleared those findings; the shared test-module edits then exposed P1-020 and P1-022 ownership, handled through explicit same-scope validation revisions.", "All existing 60 RV checks and 15 new CLI proof checks pass in the pre-commit smoke run; final validation binds the committed correction candidate."]
+}
