@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "scope_id": "TUN-P1-007",
+  "scope_type": "WORK_ITEM",
+  "validation_kind": "RETROSPECTIVE_COMMITTED",
+  "result": "PENDING",
+  "validated_commit_sha": null,
+  "tested_commit_sha": null,
+  "owned_behavior_paths": [
+    "docs/development/LOCAL_DURABLE_WORK_INBOX.md",
+    "src/Tunner.Database.Migrations/Migrations/20261002190000_P1DurableWorkInbox.cs",
+    "src/Tunner.Database/DurableWork/ConsumerInboxEntry.cs",
+    "src/Tunner.Database/DurableWork/DurableWorkItem.cs",
+    "src/Tunner.Database/DurableWork/DurableWorkModelConfiguration.cs",
+    "src/Tunner.Database/DurableWork/EfConsumerInboxStore.cs",
+    "src/Tunner.Database/DurableWork/EfDurableWorkStore.cs",
+    "src/Tunner.Database/DurableWork/IConsumerInboxStore.cs",
+    "src/Tunner.Database/DurableWork/IDurableWorkStore.cs",
+    "src/Tunner.Database/TunnerMigrationsDbContext.cs",
+    "tests/Tunner.Database.IntegrationTests/DurableWorkInboxIntegrationTests.cs",
+    "tools/validation/Validate-TunnerDurableWorkInboxSource.ps1"
+  ],
+  "checks": [],
+  "boundary": "Current preserved implementation revalidation owned by TUN-P1-023; original execution claims and historical evidence are unchanged. Governance lifecycle and evidence records are metadata; initial generated dirty files are excluded."
+}

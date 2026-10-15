@@ -34,6 +34,33 @@ public sealed class RedisEphemeralStoreIntegrationTests
         Assert.True(await store.TryAcquireAsync(tokenKey, secondOwner, TimeSpan.FromMinutes(1)));
     }
 
+    [Fact]
+    public async Task ExpiredCacheAndLeaseAreRemovedAndAnOldOwnerCannotReleaseTheNewLease()
+    {
+        SkipUnlessContainerTestsAreEnabled();
+        await using var container = TestcontainersBaseline.CreateRedisContainer();
+        await container.StartAsync();
+        using var connection = await ConnectionMultiplexer.ConnectAsync($"{container.Hostname}:{container.GetMappedPublicPort(6379)},abortConnect=false");
+        var store = new RedisEphemeralStore(connection.GetDatabase());
+        var cacheKey = $"expiry-cache-{Guid.NewGuid():N}";
+        var leaseKey = $"expiry-lease-{Guid.NewGuid():N}";
+        var oldOwner = Guid.NewGuid();
+        var newOwner = Guid.NewGuid();
+        await store.SetAsync(cacheKey, new byte[] { 42 }, TimeSpan.FromMilliseconds(250));
+        Assert.True(await store.TryAcquireAsync(leaseKey, oldOwner, TimeSpan.FromMilliseconds(250)));
+        var deadline = DateTimeOffset.UtcNow.AddSeconds(10);
+        while (await store.GetAsync(cacheKey) is not null && DateTimeOffset.UtcNow < deadline)
+            await Task.Delay(25);
+        Assert.Null(await store.GetAsync(cacheKey));
+        var acquired = false;
+        while (!(acquired = await store.TryAcquireAsync(leaseKey, newOwner, TimeSpan.FromSeconds(30))) && DateTimeOffset.UtcNow < deadline)
+            await Task.Delay(25);
+        Assert.True(acquired, "The expired lease must permit a new owner within the bounded deadline.");
+        Assert.False(await store.TryReleaseAsync(leaseKey, oldOwner));
+        Assert.False(await store.TryAcquireAsync(leaseKey, Guid.NewGuid(), TimeSpan.FromSeconds(30)));
+        Assert.True(await store.TryReleaseAsync(leaseKey, newOwner));
+    }
+
     private static void SkipUnlessContainerTestsAreEnabled()
     {
         if (!string.Equals(Environment.GetEnvironmentVariable("TUNNER_RUN_CONTAINER_TESTS"), "1", StringComparison.Ordinal)) throw SkipException.ForSkip("Set TUNNER_RUN_CONTAINER_TESTS=1 to run Redis container integration tests.");

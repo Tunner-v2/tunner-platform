@@ -5,6 +5,14 @@ namespace Tunner.Testing;
 
 public static class TestcontainersBaseline
 {
+    public static IContainer CreateRabbitMqContainer(string user, string password)
+        => new ContainerBuilder("rabbitmq:4.3.6-management")
+            .WithEnvironment("RABBITMQ_DEFAULT_USER", user)
+            .WithEnvironment("RABBITMQ_DEFAULT_PASS", password)
+            .WithPortBinding(5672, true)
+            .WithWaitStrategy(Wait.ForUnixContainer().UntilInternalTcpPortIsAvailable(5672))
+            .Build();
+
     public static IContainer CreateRedisContainer()
         => new ContainerBuilder("redis:8.10.2-alpine")
             .WithPortBinding(6379, true)

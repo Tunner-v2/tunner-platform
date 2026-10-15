@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "scope_id": "TUN-P1-006",
+  "scope_type": "WORK_ITEM",
+  "validation_kind": "RETROSPECTIVE_COMMITTED",
+  "result": "PENDING",
+  "validated_commit_sha": null,
+  "tested_commit_sha": null,
+  "owned_behavior_paths": [
+    "docs/development/LOCAL_RABBITMQ_OUTBOX_DISPATCH.md",
+    "src/Tunner.Database/Outbox/EfOutboxDispatchStore.cs",
+    "src/Tunner.Database/Outbox/IOutboxDispatchStore.cs",
+    "src/Tunner.Database/Outbox/PendingOutboxMessage.cs",
+    "src/Tunner.Testing/TestcontainersBaseline.cs",
+    "src/Tunner.Worker/Messaging/IConfirmedOutboxPublisher.cs",
+    "src/Tunner.Worker/Messaging/OutboxDispatchCoordinator.cs",
+    "src/Tunner.Worker/Messaging/RabbitMqConfirmedOutboxPublisher.cs",
+    "tests/Tunner.Worker.Tests/OutboxDispatchCoordinatorTests.cs",
+    "tests/Tunner.Worker.Tests/RabbitMqOutboxIntegrationTests.cs",
+    "tools/validation/Validate-TunnerRabbitMqDispatchSource.ps1"
+  ],
+  "checks": [],
+  "boundary": "Current preserved implementation revalidation owned by TUN-P1-023; original execution claims and historical evidence are unchanged. Governance lifecycle and evidence records are metadata; initial generated dirty files are excluded."
+}

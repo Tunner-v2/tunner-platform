@@ -386,6 +386,7 @@ internal sealed class BffTestHost : IAsyncDisposable
     private readonly BffSurface surface;
     private readonly Uri httpAddress;
     internal HttpClient Client { get; }
+    internal IServiceProvider Services => application.Services;
     internal string Origin => $"https://{surface.ToString().ToLowerInvariant()}-bff.example.test";
     internal TestBffTicketStore Store { get; }
     internal CookieAuthenticationOptions CookieOptions => application.Services.GetRequiredService<IOptionsMonitor<CookieAuthenticationOptions>>().Get(Scheme(surface));
@@ -393,7 +394,7 @@ internal sealed class BffTestHost : IAsyncDisposable
     private BffTestHost(WebApplication app, BffSurface value, HttpClient client, Uri http, TestBffTicketStore store) { application=app;surface=value;Client=client;httpAddress=http;Store=store; }
     internal static WebApplication Create(BffSurface surface, Action<WebApplicationBuilder> configure) => surface == BffSurface.User ? TunnerUserBffHost.CreateApplication([], configure) : TunnerAdminBffHost.CreateApplication([], configure);
 
-    internal static async Task<BffTestHost> Start(BffSurface surface, X509Certificate2 certificate, bool configureOrigin = true, bool testIdentity = true)
+    internal static async Task<BffTestHost> Start(BffSurface surface, X509Certificate2 certificate, bool configureOrigin = true, bool testIdentity = true, Action<WebApplicationBuilder>? configure = null, Action<WebApplication>? map = null)
     {
         var store = new TestBffTicketStore();
         var app = Create(surface, builder =>
@@ -408,7 +409,9 @@ internal sealed class BffTestHost : IAsyncDisposable
                 // Only this isolated test host activates a synthetic identity. No production sign-in endpoint/event is shipped.
                 builder.Services.PostConfigure<CookieAuthenticationOptions>(Scheme(surface), options => options.Events.OnSigningIn = _ => Task.CompletedTask);
             }
+            configure?.Invoke(builder);
         });
+        map?.Invoke(app);
         app.MapGet("/_fixture/csrf", (HttpContext context, IAntiforgery antiforgery) => Results.Json(new { requestToken = antiforgery.GetAndStoreTokens(context).RequestToken })).AllowAnonymous();
         app.MapPost("/_fixture/sign-in", async (HttpContext context) =>
         {

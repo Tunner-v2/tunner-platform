@@ -1,0 +1,13 @@
+schema_version: 1
+defect_id: DEF-TUN-P1-023-R2-001
+work_item_id: TUN-P1-023
+classification: ENVIRONMENT_PREREQUISITE
+severity: SEV-3
+status: OPEN
+environment: INSTALLER_NON_PRODUCTION_R2
+description: Live R2 put/read/delete validation requires the existing installer-configured non-production endpoint, dedicated integration-test bucket and bucket-scoped secret references through the secret-store abstraction/OpenBao. Those installed references are not supplied. The user requires all configuration during installation and forbids invented provider paths or environment names. SDK boundary tests do not prove live provider compatibility.
+expected_behavior_ref: docs/development/P1_READINESS_REMEDIATION.md
+evidence: [governance/evidence/TUN-P1-023-GAP-REGISTER.json, governance/evidence/TUN-P1-009-COMMITTED-RECONCILIATION.json]
+affected_versions: [P1_CURRENT_VALIDATION]
+created_at: 2026-10-15T16:00:00Z
+updated_at: 2026-10-15T16:00:00Z

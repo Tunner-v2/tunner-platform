@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "scope_id": "TUN-P1-009",
+  "scope_type": "WORK_ITEM",
+  "validation_kind": "RETROSPECTIVE_COMMITTED",
+  "result": "PENDING",
+  "validated_commit_sha": null,
+  "tested_commit_sha": null,
+  "owned_behavior_paths": [
+    "Directory.Packages.props",
+    "src/Tunner.Platform/ObjectStorage/IObjectStorage.cs",
+    "src/Tunner.Platform/ObjectStorage/ObjectStorageAddress.cs",
+    "src/Tunner.Platform/ObjectStorage/ObjectStorageReadResult.cs",
+    "src/Tunner.Platform/ObjectStorage/ObjectStorageWriteRequest.cs",
+    "src/Tunner.Platform/ObjectStorage/R2/AwsR2S3Client.cs",
+    "src/Tunner.Platform/ObjectStorage/R2/IR2S3Client.cs",
+    "src/Tunner.Platform/ObjectStorage/R2/R2ObjectStorage.cs",
+    "src/Tunner.Platform/Tunner.Platform.csproj",
+    "tests/Tunner.Platform.ArchitectureTests/AwsR2S3ClientTests.cs",
+    "tests/Tunner.Platform.ArchitectureTests/R2ObjectStorageTests.cs",
+    "tools/validation/Validate-TunnerR2ObjectStorageSource.ps1"
+  ],
+  "checks": [],
+  "boundary": "Current preserved implementation revalidation owned by TUN-P1-023; original execution claims and historical evidence are unchanged. Governance lifecycle and evidence records are metadata; initial generated dirty files are excluded.",
+  "live_r2_contract": {
+    "status": "PENDING_INSTALLER_CONFIGURATION",
+    "required": "Installer-provided existing dedicated non-production endpoint, bucket and bucket-scoped secret-store/OpenBao references; no invented names and no production access."
+  }
+}

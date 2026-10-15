@@ -4,7 +4,7 @@ using Xunit;
 
 namespace Tunner.Worker.Tests;
 
-public sealed class OutboxDispatchCoordinatorTests
+public sealed partial class OutboxDispatchCoordinatorTests
 {
     private static readonly DateTimeOffset PublishedAtUtc = new(2026, 10, 2, 19, 15, 0, TimeSpan.Zero);
 
