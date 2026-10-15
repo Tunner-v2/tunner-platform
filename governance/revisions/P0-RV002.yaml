@@ -1,0 +1,43 @@
+{
+  "schema_version": 1,
+  "revision_id": "P0-RV002",
+  "revision_scope": "MILESTONE",
+  "original_scope_id": "P0",
+  "parent_revision_id": "P0-RV001",
+  "parent_milestone_revision_id": null,
+  "title": "Committed readiness and recovery enforcement",
+  "revision_type": "CORRECTIVE",
+  "status": "ACTIVE",
+  "reason": "P1 reconciliation exposed fail-open committed-state gates, incomplete ownership validation, unbound milestone reviews and an empty recovery action; preserve historical P0 closure.",
+  "authority_refs": [
+    "docs/authority/current/development/03_Governed_Development_Lifecycle_Scrum_Git.md",
+    "docs/authority/current/development/04_Governance_and_Context_Tooling_Specification.md"
+  ],
+  "decision_refs": [],
+  "defect_refs": [
+    "DEF-P0-RV002-001"
+  ],
+  "change_refs": [],
+  "impact_classification": "NON_BLOCKING",
+  "blocked_scope": [],
+  "acceptance_criteria": [
+    "Require current committed evidence consistently, bind reviews to validated scope, expose exact recovery actions, and retain historical closure and immutable evidence."
+  ],
+  "prerequisites": [],
+  "work_items": [],
+  "required_gates": [],
+  "required_roles": [
+    "project-manager",
+    "solution-architect",
+    "governance-engineer",
+    "tester-qa-engineer",
+    "auditor"
+  ],
+  "evidence_refs": [
+    "governance/evidence/P0-RV002-VALIDATION.json",
+    "docs/development/P0_RV002_READINESS.md"
+  ],
+  "created_at": "2026-10-15T14:15:57.7774065+00:00",
+  "closed_at": null,
+  "product_acceptance_required": false
+}

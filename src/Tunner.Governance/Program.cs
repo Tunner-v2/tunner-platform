@@ -159,6 +159,10 @@ public static class Program
         transition.Subcommands.Add(transitionCheck);
 
         var command = new Command("milestone", "Read-only milestone closure and lifecycle controls.");
+        var snapshot = new Command("review-snapshot", "Return the exact committed scope binding for milestone role reviews.");
+        snapshot.Arguments.Add(milestone);
+        snapshot.SetAction(p => WriteResult(GovernanceApplication.MilestoneReviewSnapshot(Repository(p, repositoryOption), p.GetValue(milestone) ?? string.Empty)));
+        command.Subcommands.Add(snapshot);
         command.Subcommands.Add(closeCheck);
         command.Subcommands.Add(transition);
         return command;

@@ -1,4 +1,6 @@
 using System.Globalization;
+using System.Security.Cryptography;
+using System.Text;
 using System.Text.Json;
 using Json.Schema;
 using YamlDotNet.Core;
@@ -252,7 +254,7 @@ public static class GovernanceApplication
             : allowed
                 ? "The destination is the next declared normal lifecycle state."
                 : "Only the next declared normal lifecycle state is allowed unless Product Acceptance is explicitly not required for a technical-only work item completing from VALIDATION.";
-        if (allowed && StringComparer.Ordinal.Equals(destination, "DONE") && RequiresCommittedState(workItem, destination) && !HasRequiredCommittedState(repository, workItem, destination))
+        if (allowed && StringComparer.Ordinal.Equals(destination, "DONE") && RequiresCommittedState(repository, workItem, destination) && !HasRequiredCommittedState(repository, workItem, destination))
         {
             return new CommandResult(1, "transition check", new TransitionPayload(workItemId, from, destination, "REJECTED", "P1 repository-changing completion requires valid committed-state readiness evidence."));
         }
@@ -387,7 +389,7 @@ public static class GovernanceApplication
             var status = todo.Scalar("status") ?? "UNKNOWN";
             if (!ClosedTodoStatuses.Contains(status, StringComparer.Ordinal))
             {
-                failures.Add($"P0 TODO remains open: {todo.Identifier} ({status})");
+                failures.Add($"{milestoneId} TODO remains open: {todo.Identifier} ({status})");
             }
         }
 
@@ -396,7 +398,7 @@ public static class GovernanceApplication
             var status = defect.Scalar("status") ?? "UNKNOWN";
             if (!ClosedDefectStatuses.Contains(status, StringComparer.Ordinal))
             {
-                failures.Add($"P0 defect remains open: {defect.Identifier} ({status})");
+                failures.Add($"{milestoneId} defect remains open: {defect.Identifier} ({status})");
             }
         }
 
@@ -447,6 +449,33 @@ public static class GovernanceApplication
         var normalizedFailures = failures.Distinct(StringComparer.Ordinal).ToArray();
         return new CommandResult(normalizedFailures.Length == 0 ? 0 : 1, "milestone close-check", new MilestoneClosePayload(milestoneId, normalizedFailures.Length == 0 ? "PASS" : "NOT_READY", normalizedFailures, satisfied.Distinct(StringComparer.Ordinal).ToArray()));
     }
+    public static CommandResult MilestoneReviewSnapshot(DirectoryInfo repository, string milestoneId)
+    {
+        var records = LoadRecords(repository, []);
+        var milestone = records.SingleOrDefault(x => x.Type.DefinitionName == "milestone" && x.Identifier == milestoneId);
+        return milestone is null
+            ? new CommandResult(2, "milestone review-snapshot", new { Outcome = "NOT_FOUND" })
+            : new CommandResult(0, "milestone review-snapshot", new { Outcome = "GENERATED", MilestoneId = milestoneId,
+                ReviewedCommitSha = CommittedEvidenceApplication.Git(repository, "rev-parse", "HEAD"),
+                ReviewedScopeSha256 = MilestoneReviewFingerprint(repository, milestone) });
+    }
+
+    private static string MilestoneReviewFingerprint(DirectoryInfo repository, GovernanceRecord milestone)
+    {
+        var paths = milestone.StringList("work_items").Select(id => "governance/work-items/" + id + ".yaml")
+            .Concat(milestone.StringList("evidence_refs").Where(path => path != $"governance/evidence/{milestone.Identifier}-MILESTONE-ROLE-REVIEWS.json"))
+            .Distinct(StringComparer.Ordinal).OrderBy(path => path, StringComparer.Ordinal);
+        var rows = new List<string> { milestone.Identifier, string.Join(",", milestone.StringList("required_roles")),
+            string.Join(",", milestone.StringList("authority_refs")), string.Join(",", milestone.StringList("required_gates")) };
+        foreach (var logical in paths)
+        {
+            var path = Path.GetFullPath(Path.Combine(repository.FullName, logical));
+            rows.Add(logical + ":" + (path.StartsWith(repository.FullName + Path.DirectorySeparatorChar, StringComparison.OrdinalIgnoreCase) && File.Exists(path)
+                ? Convert.ToHexString(SHA256.HashData(File.ReadAllBytes(path))).ToLowerInvariant() : "MISSING"));
+        }
+        return Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(string.Join("\n", rows)))).ToLowerInvariant();
+    }
+
     private static void CheckMilestoneRoleReviews(DirectoryInfo repository, GovernanceRecord milestone, List<string> failures, List<string> satisfied)
     {
         var requiredRoles = milestone.StringList("required_roles");
@@ -473,6 +502,15 @@ public static class GovernanceApplication
                 !root.TryGetProperty("reviews", out var reviews) || reviews.ValueKind != JsonValueKind.Array)
             {
                 failures.Add($"milestone role-review evidence is malformed or not PASS: {logicalPath}");
+                return;
+            }
+
+            var expectedSnapshot = MilestoneReviewFingerprint(repository, milestone);
+            if (!root.TryGetProperty("reviewed_commit_sha", out var reviewedSha) || !CommittedEvidenceApplication.IsSha(reviewedSha.GetString()) ||
+                CommittedEvidenceApplication.Git(repository, "merge-base", reviewedSha.GetString()!, "HEAD") != reviewedSha.GetString() ||
+                !root.TryGetProperty("reviewed_scope_sha256", out var snapshot) || snapshot.GetString() != expectedSnapshot)
+            {
+                failures.Add($"milestone reviews lack current committed scope binding; run governance milestone review-snapshot {milestone.Identifier}");
                 return;
             }
 
@@ -660,13 +698,12 @@ public static class GovernanceApplication
     private static int UnmergedLocalDependentCount(Dictionary<string, GovernanceRecord> workItems, IReadOnlyList<GovernanceRecord> dependencies, IntegrationPolicyDefinition integrationPolicy)
         => workItems.Values.Count(workItem => workItem.StringList("prerequisites").Any(prerequisiteId => workItems.TryGetValue(prerequisiteId, out var prerequisite) && !StringComparer.Ordinal.Equals(prerequisite.Scalar("status"), "DONE") && StringComparer.Ordinal.Equals(dependencies.FirstOrDefault(item => StringComparer.Ordinal.Equals(item.Scalar("work_item_id"), workItem.Identifier) && StringComparer.Ordinal.Equals(item.Scalar("prerequisite_work_item_id"), prerequisiteId))?.Scalar("required_readiness") ?? integrationPolicy.DefaultDependencyReadiness, "LOCAL_VALIDATED")));
 
-    private static bool RequiresCommittedState(GovernanceRecord record, string? state = null)
-        => StringComparer.Ordinal.Equals(record.Scalar("milestone_id"), "P1")
-            && new[] { "LOCAL_VALIDATED", "READY_FOR_MERGE", "DONE" }.Contains(state ?? record.Scalar("status"), StringComparer.Ordinal);
+    private static bool RequiresCommittedState(DirectoryInfo repository, GovernanceRecord record, string? state = null)
+        => CommitReadinessApplication.IsRequired(repository, record, state);
 
     private static bool HasRequiredCommittedState(DirectoryInfo repository, GovernanceRecord record, string? state = null)
     {
-        if (!RequiresCommittedState(record, state))
+        if (!RequiresCommittedState(repository, record, state))
         {
             return true;
         }

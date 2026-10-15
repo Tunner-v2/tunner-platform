@@ -300,6 +300,18 @@ public static class ContextApplication
         Write(output, "HANDOFF.md", "# Generated HANDOFF\n\n- Scope: " + manifest.WorkItem.Id + "\n- State: " + manifest.WorkItem.Status + "\n\n" + detail + sha + "\n" + history + latest + "\n\nThe selected governed record and evidence retain validated/tested SHA and closure SHA. Run governance next before implementation. No chat history is required.\n");
     }
 
+    private static string RecoveryAction(IReadOnlyList<GovernanceRecord> records)
+    {
+        var milestones = records.Where(x => x.Type.DefinitionName == "milestone" && x.Scalar("status") != "CLOSED")
+            .OrderBy(x => x.Identifier, StringComparer.Ordinal).ToArray();
+        var defects = records.Where(x => x.Type.DefinitionName == "defect" && !new[] { "CLOSED", "RESOLVED", "CANCELED", "SUPERSEDED", "DUPLICATE", "NOT_APPLICABLE" }.Contains(x.Scalar("status"), StringComparer.Ordinal))
+            .Select(x => x.Identifier).OrderBy(x => x, StringComparer.Ordinal).ToArray();
+        return milestones.Length == 0 ? "No active milestone work; preserve historical closure and inspect governed backlog before starting a new scope."
+            : "Run tunner governance milestone close-check " + milestones[0].Identifier +
+              " and tunner governance commit-readiness audit --milestone " + milestones[0].Identifier +
+              "; reconcile scoped findings and required milestone reviews before lifecycle advancement. Open defects: " + string.Join(", ", defects);
+    }
+
     private static string GovernanceStateHash(DirectoryInfo repository)
     {
         var records = GovernanceApplication.LoadRecords(repository, []);
@@ -319,7 +331,7 @@ public static class ContextApplication
         var details = current is null ? "" : $"\nPrerequisites: {string.Join(", ", current.StringList("prerequisites"))}\nAuthority: {string.Join(", ", current.StringList("authority_refs"))}\nDefects: {string.Join(", ", current.StringList("defect_refs"))}\nEvidence: {string.Join(", ", current.StringList("evidence_refs"))}\n";
         var content = "# Governed project recovery state\n\nDerived deterministically from repository-native governance. Regenerate with tunner context build.\n\n" + history + "\n\nLatest bounded Revision lineage:\n" + rows +
             $"\n\nSelected scope: {selected}\nValidated SHA: {state?.ValidatedCommitSha ?? "not recorded"}\nTested SHA: {state?.TestedCommitSha ?? "not recorded"}\nClosure SHA: {state?.ClosureCommitSha ?? (current is null ? null : CommittedEvidenceApplication.ClosureSha(repository, current)) ?? "not recorded"}\n" + details +
-            $"\nExact next governed action: {(action is null ? "inspect scoped readiness findings from tunner governance next" : action.WorkItemId + ": " + action.Reason)}\n\nP1 historical validation findings are retained in governance/evidence/P0-RV001-P1-EVIDENCE-AUDIT.json. No chat history is required.\n";
+            $"\nExact next governed action: {(action is null ? RecoveryAction(records) : action.WorkItemId + ": " + action.Reason)}\n\nP1 historical validation findings are retained in governance/evidence/P0-RV001-P1-EVIDENCE-AUDIT.json. No chat history is required.\n";
         foreach (var name in new[] { "CURRENT_STATE.md", "HANDOFF.md", "PROJECT_CONTEXT.md" }) Write(output, name, content);
     }
 

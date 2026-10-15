@@ -201,26 +201,36 @@ created_at: 2026-10-05T00:00:00Z
 
     WriteWorkItem(fixtureRoot, "TUN-P1-COMMIT", "VALIDATION", "[]", false);
     var p1CommitPath = Path.Combine(fixtureRoot.FullName, "governance", "work-items", "TUN-P1-COMMIT.yaml");
-    File.WriteAllText(p1CommitPath, File.ReadAllText(p1CommitPath).Replace("milestone_id: MVP", "milestone_id: P1", StringComparison.Ordinal));
-    RunGit(fixtureRoot, "add", "governance/work-items/TUN-P1-COMMIT.yaml");
-    RunGit(fixtureRoot, "commit", "--quiet", "-m", "fixture P1 candidate");
-    var p1CandidateSha = RunGitOutput(fixtureRoot, "rev-parse", "HEAD");
+    File.WriteAllText(p1CommitPath, File.ReadAllText(p1CommitPath).Replace("milestone_id: MVP", "milestone_id: P1", StringComparison.Ordinal).Replace("git_state: {repository_changed: false, validated_commit_sha: null, tested_commit_sha: null, work_item_commit_shas: [], closure_commit_sha: null, remaining_uncommitted_paths: [], remaining_uncommitted_classification: NONE}", "", StringComparison.Ordinal));
+    var p1CandidateSha = PrepareCommittedFixture(fixtureRoot, "TUN-P1-COMMIT");
     var p1CompletionWithoutState = GovernanceApplication.CheckTransition(fixtureRoot, "TUN-P1-COMMIT", "DONE");
     Expect(p1CompletionWithoutState.ExitCode == 1 && ((TransitionPayload)p1CompletionWithoutState.Payload).Reason.Contains("committed-state readiness", StringComparison.Ordinal), "P1 completion must reject repository-changing work that lacks committed-state evidence.", failures);
     File.AppendAllText(p1CommitPath, $"{Environment.NewLine}git_state:{Environment.NewLine}  repository_changed: true{Environment.NewLine}  validated_commit_sha: {p1CandidateSha}{Environment.NewLine}  tested_commit_sha: {p1CandidateSha}{Environment.NewLine}  work_item_commit_shas: [{p1CandidateSha}]{Environment.NewLine}  closure_commit_sha: null{Environment.NewLine}  remaining_uncommitted_paths: []{Environment.NewLine}  remaining_uncommitted_classification: NONE{Environment.NewLine}");
     var p1CompletionWithState = GovernanceApplication.CheckTransition(fixtureRoot, "TUN-P1-COMMIT", "DONE");
     if (p1CompletionWithState.ExitCode != 0) Console.Error.WriteLine(GovernanceApplication.Serialize(p1CompletionWithState));
     Expect(p1CompletionWithState.ExitCode == 0, "P1 completion must accept a valid committed validation candidate while allowing a later metadata closure commit.", failures);
+    var p1ProofPath = Path.Combine(fixtureRoot.FullName, "governance", "evidence", "TUN-P1-COMMIT-proof.json");
+    var savedProof = File.ReadAllText(p1ProofPath);
+    File.Delete(p1ProofPath);
+    Expect(GovernanceApplication.CheckTransition(fixtureRoot, "TUN-P1-COMMIT", "DONE").ExitCode != 0, "A resolvable SHA alone must not replace scope-bound owned-file evidence.", failures);
+    File.WriteAllText(p1ProofPath, savedProof);
+    var ownedPath = Path.Combine(fixtureRoot.FullName, "docs", "TUN-P1-COMMIT-behavior.txt");
+    File.AppendAllText(ownedPath, "changed after validation");
+    Expect(GovernanceApplication.CheckTransition(fixtureRoot, "TUN-P1-COMMIT", "DONE").ExitCode != 0, "Ordinary work must reject owned behavior changed after its validated SHA.", failures);
+    File.WriteAllText(ownedPath, "fixture behavior");
+    var futureText = File.ReadAllText(p1CommitPath);
+    File.WriteAllText(p1CommitPath, futureText.Replace("milestone_id: P1", "milestone_id: P2", StringComparison.Ordinal));
+    Expect(GovernanceApplication.CheckTransition(fixtureRoot, "TUN-P1-COMMIT", "DONE").ExitCode == 0, "Valid committed evidence applies consistently to a later milestone.", failures);
+    File.WriteAllText(p1CommitPath, futureText);
 
     WriteWorkItem(fixtureRoot, "TUN-P1-UPSTREAM", "DONE", "[]");
     WriteWorkItem(fixtureRoot, "TUN-P1-DOWNSTREAM", "READY", "[TUN-P1-UPSTREAM]");
     var p1UpstreamPath = Path.Combine(fixtureRoot.FullName, "governance", "work-items", "TUN-P1-UPSTREAM.yaml");
     var p1DownstreamPath = Path.Combine(fixtureRoot.FullName, "governance", "work-items", "TUN-P1-DOWNSTREAM.yaml");
-    File.WriteAllText(p1UpstreamPath, File.ReadAllText(p1UpstreamPath).Replace("milestone_id: MVP", "milestone_id: P1", StringComparison.Ordinal));
+    File.WriteAllText(p1UpstreamPath, File.ReadAllText(p1UpstreamPath).Replace("milestone_id: MVP", "milestone_id: P1", StringComparison.Ordinal).Replace("git_state: {repository_changed: false, validated_commit_sha: null, tested_commit_sha: null, work_item_commit_shas: [], closure_commit_sha: null, remaining_uncommitted_paths: [], remaining_uncommitted_classification: NONE}", "", StringComparison.Ordinal));
     File.WriteAllText(p1DownstreamPath, File.ReadAllText(p1DownstreamPath).Replace("milestone_id: MVP", "milestone_id: P1", StringComparison.Ordinal));
-    RunGit(fixtureRoot, "add", "governance/work-items/TUN-P1-UPSTREAM.yaml", "governance/work-items/TUN-P1-DOWNSTREAM.yaml");
-    RunGit(fixtureRoot, "commit", "--quiet", "-m", "fixture P1 dependency candidates");
-    var p1DependencyCandidateSha = RunGitOutput(fixtureRoot, "rev-parse", "HEAD");
+    var p1DependencyCandidateSha = PrepareCommittedFixture(fixtureRoot, "TUN-P1-UPSTREAM");
+    Expect(((GatePayload)GovernanceApplication.CheckGate(fixtureRoot, "TUN-P1-UPSTREAM").Payload).Failures.Any(x => x.Contains("git_state is absent", StringComparison.Ordinal)), "Own-item gates must reject the same missing committed state as dependency gates.", failures);
     var p1DownstreamBeforeEvidence = (NextPayload)GovernanceApplication.Next(fixtureRoot).Payload;
     Expect(!p1DownstreamBeforeEvidence.Items.Single(item => item.WorkItemId == "TUN-P1-DOWNSTREAM").Actionable, "A P1 downstream item must remain ineligible while its DONE prerequisite lacks committed-state evidence.", failures);
     File.AppendAllText(p1UpstreamPath, $"{Environment.NewLine}git_state:{Environment.NewLine}  repository_changed: true{Environment.NewLine}  validated_commit_sha: {p1DependencyCandidateSha}{Environment.NewLine}  tested_commit_sha: {p1DependencyCandidateSha}{Environment.NewLine}  work_item_commit_shas: [{p1DependencyCandidateSha}]{Environment.NewLine}  closure_commit_sha: null{Environment.NewLine}  remaining_uncommitted_paths: []{Environment.NewLine}  remaining_uncommitted_classification: NONE{Environment.NewLine}");
@@ -228,6 +238,20 @@ created_at: 2026-10-05T00:00:00Z
     Expect(p1DownstreamAfterEvidence.Items.Single(item => item.WorkItemId == "TUN-P1-DOWNSTREAM").Actionable, "A P1 downstream item may become eligible when its DONE prerequisite has valid committed-state evidence.", failures);
 
     var milestoneClose = GovernanceApplication.CheckMilestoneClose(fixtureRoot, "MVP");
+    var snapshot = JsonSerializer.SerializeToNode(GovernanceApplication.MilestoneReviewSnapshot(fixtureRoot, "MVP").Payload)!;
+    var milestoneReviewPath = Path.Combine(fixtureRoot.FullName, "governance", "evidence", "MVP-MILESTONE-ROLE-REVIEWS.json");
+    File.WriteAllText(milestoneReviewPath, JsonSerializer.Serialize(new {
+        scope_type = "MILESTONE", scope_id = "MVP", status = "PASS",
+        reviewed_commit_sha = snapshot["ReviewedCommitSha"]!.GetValue<string>(),
+        reviewed_scope_sha256 = snapshot["ReviewedScopeSha256"]!.GetValue<string>(),
+        reviews = new[] { new { role = "auditor", conclusion = "PASS" } }
+    }));
+    Expect(!((MilestoneClosePayload)GovernanceApplication.CheckMilestoneClose(fixtureRoot, "MVP").Payload).Failures.Any(x => x.Contains("reviews lack current committed scope binding", StringComparison.Ordinal)), "Fresh milestone review binding is accepted independently of other unfinished work.", failures);
+    var bindingScope = Path.Combine(fixtureRoot.FullName, "governance", "work-items", "TUN-001.yaml");
+    var savedBindingScope = File.ReadAllText(bindingScope);
+    File.AppendAllText(bindingScope, "\n# changed review scope\n");
+    Expect(((MilestoneClosePayload)GovernanceApplication.CheckMilestoneClose(fixtureRoot, "MVP").Payload).Failures.Any(x => x.Contains("reviews lack current committed scope binding", StringComparison.Ordinal)), "Changed milestone scope must invalidate old PASS reviews.", failures);
+    File.WriteAllText(bindingScope, savedBindingScope);
     Expect(milestoneClose.ExitCode == 1 && ((MilestoneClosePayload)milestoneClose.Payload).Failures.Any(item => item.Contains("work item is not DONE", StringComparison.Ordinal)) && ((MilestoneClosePayload)milestoneClose.Payload).Failures.Any(item => item.Contains("milestone role-review evidence missing", StringComparison.Ordinal)), "Milestone close-check must refuse incomplete work and missing milestone reviews.", failures);
 
     var milestoneTransition = GovernanceApplication.CheckMilestoneTransition(fixtureRoot, "MVP", "VALIDATION");
@@ -455,8 +479,25 @@ history_deletion_for_cleanup: false
 """);
 }
 
+static string PrepareCommittedFixture(DirectoryInfo fixture, string id)
+{
+    var behavior = "docs/" + id + "-behavior.txt";
+    var proof = "governance/evidence/" + id + "-proof.json";
+    var work = "governance/work-items/" + id + ".yaml";
+    File.WriteAllText(Path.Combine(fixture.FullName, behavior), "fixture behavior");
+    File.WriteAllText(Path.Combine(fixture.FullName, work), File.ReadAllText(Path.Combine(fixture.FullName, work))
+        .Replace("required_evidence: [governance/evidence/missing.json]", "required_evidence: [" + proof + "]", StringComparison.Ordinal));
+    File.WriteAllText(Path.Combine(fixture.FullName, proof), JsonSerializer.Serialize(new { scope_id = id, validation_kind = "COMMITTED", owned_behavior_paths = new[] { behavior } }));
+    RunGit(fixture, "add", "--", work, behavior, proof);
+    RunGit(fixture, "commit", "--quiet", "-m", "committed fixture ownership");
+    var sha = RunGitOutput(fixture, "rev-parse", "HEAD");
+    File.WriteAllText(Path.Combine(fixture.FullName, proof), JsonSerializer.Serialize(new { scope_id = id, validation_kind = "COMMITTED", validated_commit_sha = sha, tested_commit_sha = sha, result = "PASS", owned_behavior_paths = new[] { behavior } }));
+    return sha;
+}
+
 static void WriteWorkItem(DirectoryInfo fixtureRoot, string id, string status, string prerequisites, bool? productAcceptanceRequired = null)
 {
+    const string noOpGitState = "git_state: {repository_changed: false, validated_commit_sha: null, tested_commit_sha: null, work_item_commit_shas: [], closure_commit_sha: null, remaining_uncommitted_paths: [], remaining_uncommitted_classification: NONE}";
     var productAcceptanceRequirement = productAcceptanceRequired.HasValue ? $"product_acceptance_required: {productAcceptanceRequired.Value.ToString().ToLowerInvariant()}{Environment.NewLine}" : string.Empty;
     File.WriteAllText(Path.Combine(fixtureRoot.FullName, "governance", "work-items", $"{id}.yaml"), $"""
 schema_version: 1
@@ -465,6 +506,7 @@ milestone_id: MVP
 sprint_id: null
 title: Fixture work item {id}
 status: {status}
+{noOpGitState}
 {productAcceptanceRequirement}type: GOVERNANCE_TOOLING
 authority_refs: [authority]
 flow_refs: []

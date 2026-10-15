@@ -39,7 +39,7 @@ internal static class CommitReadinessApplication
         var state = Read(record);
         if (state is null)
         {
-            return [];
+            return IsRequired(repository, record) ? ["git_state is absent; current committed-state readiness is not evidenced"] : [];
         }
 
         var failures = new List<string>();
@@ -75,10 +75,30 @@ internal static class CommitReadinessApplication
         foreach (var record in records.Where(item => item.Type.DefinitionName == "work-item" && (milestoneId is null || StringComparer.Ordinal.Equals(item.Scalar("milestone_id"), milestoneId)) && new[] { "LOCAL_VALIDATED", "READY_FOR_MERGE", "DONE" }.Contains(item.Scalar("status"), StringComparer.Ordinal)).OrderBy(item => item.Identifier, StringComparer.Ordinal))
         {
             var state = Read(record);
-            if (state is null) findings.Add($"{record.Identifier}: git_state is absent; historical compatibility is preserved but committed-state readiness is not evidenced");
+            if (state is null && IsRequired(repository, record)) findings.Add($"{record.Identifier}: git_state is absent; current committed-state readiness is not evidenced");
             else findings.AddRange(Check(repository, record).Select(item => $"{record.Identifier}: {item}"));
         }
         return findings;
+    }
+
+    internal static bool IsRequired(DirectoryInfo repository, GovernanceRecord record, string? state = null)
+    {
+        if (!new[] { "LOCAL_VALIDATED", "READY_FOR_MERGE", "DONE" }.Contains(state ?? record.Scalar("status"), StringComparer.Ordinal))
+            return false;
+        // Original closure is historical truth. New Revision work always supplies its own committed evidence.
+        var milestoneId = record.Scalar("milestone_id");
+        if (string.IsNullOrWhiteSpace(milestoneId) || milestoneId.Contains('/') || milestoneId.Contains('\\'))
+            return true;
+        var path = Path.Combine(repository.FullName, "governance", "milestones", milestoneId + ".yaml");
+        try
+        {
+            var yaml = new YamlStream();
+            yaml.Load(new StringReader(File.ReadAllText(path)));
+            return yaml.Documents.Count != 1 || yaml.Documents[0].RootNode is not YamlMappingNode milestone ||
+                GovernanceApplication.Scalar(GovernanceApplication.Fields(milestone), "status") != "CLOSED";
+        }
+        catch (IOException) { return true; }
+        catch (YamlDotNet.Core.YamlException) { return true; }
     }
 
     private static bool? ParseBoolean(string? value) => value?.ToLowerInvariant() switch { "true" => true, "false" => false, _ => null };

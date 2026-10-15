@@ -65,6 +65,7 @@ internal static class CommittedEvidenceApplication
                     yield return "evidence tested/validated SHA disagrees with governed committed-state lineage";
                 if (!root.TryGetProperty("result", out var result) || result.GetString() != "PASS") yield return "committed validation evidence must pass";
                 if (!root.TryGetProperty("owned_behavior_paths", out var paths) || paths.ValueKind != JsonValueKind.Array) { yield return "committed evidence must classify owned behavior paths"; continue; }
+                if (paths.GetArrayLength() == 0) yield return "repository-changing evidence must own at least one behavior path";
                 var committedEnvelope = Git(repository, "show", sha + ":" + reference);
                 JsonDocument? candidate;
                 try { candidate = JsonDocument.Parse(committedEnvelope); }
@@ -87,6 +88,6 @@ internal static class CommittedEvidenceApplication
                 }
             }
         }
-        if (record.Type.DefinitionName == "revision" && !matched) yield return "Revision closure requires a scope-bound committed validation evidence envelope";
+        if (!matched) yield return "repository-changing readiness requires a scope-bound committed validation evidence envelope";
     }
 }
