@@ -3,9 +3,9 @@
   "scope_id": "TUN-P1-009",
   "scope_type": "WORK_ITEM",
   "validation_kind": "RETROSPECTIVE_COMMITTED",
-  "result": "PENDING",
-  "validated_commit_sha": null,
-  "tested_commit_sha": null,
+  "result": "PASS",
+  "validated_commit_sha": "6fb030241ad0927f0a2576da23d348db1cfceab6",
+  "tested_commit_sha": "6fb030241ad0927f0a2576da23d348db1cfceab6",
   "owned_behavior_paths": [
     "Directory.Packages.props",
     "src/Tunner.Platform/ObjectStorage/IObjectStorage.cs",
@@ -20,10 +20,16 @@
     "tests/Tunner.Platform.ArchitectureTests/R2ObjectStorageTests.cs",
     "tools/validation/Validate-TunnerR2ObjectStorageSource.ps1"
   ],
-  "checks": [],
+  "checks": [
+    "Original P1-009 technical component scope only: five R2 component/SDK tests passed within 237 architecture cases, zero skipped. Tests cover opaque operations, SDK R2 upload flags, cancellation and response-stream disposal.",
+    "R2 source guard passed; all 12 owned blobs equal the tested candidate and HEAD/working objects."
+  ],
   "boundary": "Current preserved implementation revalidation owned by TUN-P1-023; original execution claims and historical evidence are unchanged. Governance lifecycle and evidence records are metadata; initial generated dirty files are excluded.",
   "live_r2_contract": {
     "status": "PENDING_INSTALLER_CONFIGURATION",
     "required": "Installer-provided existing dedicated non-production endpoint, bucket and bucket-scoped secret-store/OpenBao references; no invented names and no production access."
-  }
+  },
+  "checked_at": "2026-10-15T15:04:13Z",
+  "validation_boundary": "PASS covers only the original unconfigured SDK/component boundary. Live R2 provider put/read/delete has NOT run and is not claimed passing. The installer prerequisite stays OPEN under DEF-TUN-P1-023-R2-001 and blocks TUN-P1-023 and P1 milestone completion.",
+  "execution_receipt": "governance/evidence/TUN-P1-023-EXECUTION-RESULTS.json"
 }

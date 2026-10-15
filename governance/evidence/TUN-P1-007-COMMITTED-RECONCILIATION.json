@@ -3,9 +3,9 @@
   "scope_id": "TUN-P1-007",
   "scope_type": "WORK_ITEM",
   "validation_kind": "RETROSPECTIVE_COMMITTED",
-  "result": "PENDING",
-  "validated_commit_sha": null,
-  "tested_commit_sha": null,
+  "result": "PASS",
+  "validated_commit_sha": "6fb030241ad0927f0a2576da23d348db1cfceab6",
+  "tested_commit_sha": "6fb030241ad0927f0a2576da23d348db1cfceab6",
   "owned_behavior_paths": [
     "docs/development/LOCAL_DURABLE_WORK_INBOX.md",
     "src/Tunner.Database.Migrations/Migrations/20261002190000_P1DurableWorkInbox.cs",
@@ -20,6 +20,13 @@
     "tests/Tunner.Database.IntegrationTests/DurableWorkInboxIntegrationTests.cs",
     "tools/validation/Validate-TunnerDurableWorkInboxSource.ps1"
   ],
-  "checks": [],
-  "boundary": "Current preserved implementation revalidation owned by TUN-P1-023; original execution claims and historical evidence are unchanged. Governance lifecycle and evidence records are metadata; initial generated dirty files are excluded."
+  "checks": [
+    "PostgreSQL durable-work/inbox integration passed within the final 34/34 database tests, zero skipped; Validate-TunnerDurableWorkInboxSource.ps1 passed.",
+    "Platform candidate build: zero warnings/errors.",
+    "Read-only verification: all 12 owned candidate blobs equal HEAD and working-tree Git objects. No ownership mismatch."
+  ],
+  "boundary": "Current preserved implementation revalidation owned by TUN-P1-023; original execution claims and historical evidence are unchanged. Governance lifecycle and evidence records are metadata; initial generated dirty files are excluded.",
+  "checked_at": "2026-10-15T15:04:13Z",
+  "execution_receipt": "governance/evidence/TUN-P1-023-EXECUTION-RESULTS.json",
+  "scope_limit": "Current technical scope only. Original validation claims remain preserved; live R2 and P1 milestone acceptance remain unresolved."
 }

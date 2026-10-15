@@ -3,12 +3,19 @@
   "scope_id": "TUN-P1-005",
   "scope_type": "WORK_ITEM",
   "validation_kind": "RETROSPECTIVE_COMMITTED",
-  "result": "PENDING",
-  "validated_commit_sha": null,
-  "tested_commit_sha": null,
+  "result": "PASS",
+  "validated_commit_sha": "6fb030241ad0927f0a2576da23d348db1cfceab6",
+  "tested_commit_sha": "6fb030241ad0927f0a2576da23d348db1cfceab6",
   "owned_behavior_paths": [
     "docs/development/P1_CAPABILITY_DECOMPOSITION_AND_PRIMITIVE_REUSE.md"
   ],
-  "checks": [],
-  "boundary": "Current preserved implementation revalidation owned by TUN-P1-023; original execution claims and historical evidence are unchanged. Governance lifecycle and evidence records are metadata; initial generated dirty files are excluded."
+  "checks": [
+    "Capability decomposition and primitive-reuse documentation was reviewed against current authority and preserved implementation. Governance functional regression and applicable foundation source guards passed; no new Product semantics were introduced.",
+    "Platform candidate build: zero warnings/errors.",
+    "Read-only verification: all 1 owned candidate blobs equal HEAD and working-tree Git objects. No ownership mismatch."
+  ],
+  "boundary": "Current preserved implementation revalidation owned by TUN-P1-023; original execution claims and historical evidence are unchanged. Governance lifecycle and evidence records are metadata; initial generated dirty files are excluded.",
+  "checked_at": "2026-10-15T15:04:13Z",
+  "execution_receipt": "governance/evidence/TUN-P1-023-EXECUTION-RESULTS.json",
+  "scope_limit": "Current technical scope only. Original validation claims remain preserved; live R2 and P1 milestone acceptance remain unresolved."
 }

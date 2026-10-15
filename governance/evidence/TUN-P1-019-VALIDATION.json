@@ -1,98 +1,8 @@
 {
-  "status": "PASS",
-  "scope_id": "TUN-P1-019",
-  "evidence_id": "TUN-P1-019-VALIDATION",
-  "validated_commit_sha": "7aa8e46e6318479e8811b3c63d6baf84681de050",
   "schema_version": 1,
-  "checks": [
-    {
-      "command": "dotnet build Tunner.Platform.slnx --no-restore",
-      "exit_code": 0,
-      "errors": 0,
-      "warnings": 0,
-      "result": "PASS"
-    },
-    {
-      "failed": 0,
-      "skipped": 0,
-      "command": "dotnet test tests/Tunner.Platform.ArchitectureTests/Tunner.Platform.ArchitectureTests.csproj --no-build --no-restore",
-      "exit_code": 0,
-      "result": "PASS",
-      "passed": 231,
-      "bff_cases": 49
-    },
-    {
-      "command": "dotnet test tests/Tunner.Worker.Tests/Tunner.Worker.Tests.csproj --no-build --no-restore",
-      "exit_code": 0,
-      "passed": 4,
-      "failed": 0,
-      "result": "PASS"
-    },
-    {
-      "command": "dotnet run --no-build --no-restore --project tests/Tunner.Observability.FunctionalTests",
-      "exit_code": 0,
-      "result": "PASS"
-    },
-    {
-      "command": "pnpm build; pnpm test; pnpm test:browser (from web)",
-      "exit_code": 0,
-      "cases": 38,
-      "failed": 0,
-      "result": "PASS"
-    },
-    {
-      "command": "dotnet list Tunner.Platform.slnx package --include-transitive --vulnerable --format json --no-restore",
-      "exit_code": 0,
-      "affected_packages": 2,
-      "followup": "governance/defects/DEF-TUN-P1-001-SECURITY-20261014.yaml",
-      "result": "FINDINGS_OUTSIDE_IMPLEMENTED_BFF_PACKAGE_GRAPH"
-    },
-    {
-      "command": "tunner authority verify",
-      "exit_code": 0,
-      "registered_artifacts": 167,
-      "result": "PASS"
-    },
-    {
-      "command": "tunner governance validate",
-      "records": 384,
-      "exit_code": 0,
-      "result": "PASS"
-    },
-    {
-      "command": "tunner context verify",
-      "exit_code": 0,
-      "result": "CURRENT"
-    },
-    {
-      "command": "tools/validation/Validate-TunnerPlatformHostSource.ps1 and Validate-TunnerOpenApiContractSource.ps1 -RepositoryRoot <repo-root>",
-      "exit_code": 0,
-      "result": "PASS"
-    },
-    {
-      "command": "tools/security/Invoke-TunnerSecretScan.ps1",
-      "files": 1143,
-      "rule_matches": 0,
-      "exit_code": 0,
-      "result": "PASS"
-    }
-  ],
-  "result": "PASS",
-  "ownership_phase": "COMPLETE_IMPLEMENTATION_CANDIDATE. Shared solution/test project aggregate references are scoped coordination changes and included in the exact candidate build/test; they are not exclusive permanent ownership of unrelated future project additions.",
-  "tested_commit_sha": "7aa8e46e6318479e8811b3c63d6baf84681de050",
-  "limitations": [
-    "P1 transport/security foundation only. Default server store denies sessions; sign-in is disabled. Real identity/workforce state, policy/rotation, projections, proxy/deployment and production keys require later owner work.",
-    "Real HTTPS component tests use a synthetic identity event and in-memory store only in test hosts. The store is not a production session implementation.",
-    "Repository-wide package audit has existing migration and runtime patch followups recorded in DEF-TUN-P1-001-SECURITY-20261014. No clean environment or production security acceptance is claimed.",
-    "Codex engineering reviews only; no independent human, Product or release acceptance."
-  ],
+  "scope_id": "TUN-P1-019",
   "scope_type": "WORK_ITEM",
-  "owned_coordination_paths": [
-    "docs/development/P1_CAPABILITY_DECOMPOSITION_AND_PRIMITIVE_REUSE.md",
-    "Tunner.Platform.slnx",
-    "tests/Tunner.Platform.ArchitectureTests/Tunner.Platform.ArchitectureTests.csproj"
-  ],
-  "validation_kind": "COMMITTED",
+  "validation_kind": "RETROSPECTIVE_COMMITTED",
   "owned_behavior_paths": [
     "docs/development/P1_BFF_TECHNICAL_FOUNDATION.md",
     "src/Tunner.Admin.Bff/Program.cs",
@@ -104,78 +14,196 @@
     "src/Tunner.User.Bff/Tunner.User.Bff.csproj",
     "tests/Tunner.Platform.ArchitectureTests/BffFoundationTests.cs"
   ],
-  "owned_git_blobs": {
-    "docs/development/P1_BFF_TECHNICAL_FOUNDATION.md": {
-      "match": true,
-      "candidate_blob": "4e4a674d90867a2459333a12ea43eba9be273683",
-      "working_tree_blob": "4e4a674d90867a2459333a12ea43eba9be273683"
+  "historical_validation": {
+    "status": "PASS",
+    "scope_id": "TUN-P1-019",
+    "evidence_id": "TUN-P1-019-VALIDATION",
+    "validated_commit_sha": "7aa8e46e6318479e8811b3c63d6baf84681de050",
+    "schema_version": 1,
+    "checks": [
+      {
+        "command": "dotnet build Tunner.Platform.slnx --no-restore",
+        "exit_code": 0,
+        "errors": 0,
+        "warnings": 0,
+        "result": "PASS"
+      },
+      {
+        "failed": 0,
+        "skipped": 0,
+        "command": "dotnet test tests/Tunner.Platform.ArchitectureTests/Tunner.Platform.ArchitectureTests.csproj --no-build --no-restore",
+        "exit_code": 0,
+        "result": "PASS",
+        "passed": 231,
+        "bff_cases": 49
+      },
+      {
+        "command": "dotnet test tests/Tunner.Worker.Tests/Tunner.Worker.Tests.csproj --no-build --no-restore",
+        "exit_code": 0,
+        "passed": 4,
+        "failed": 0,
+        "result": "PASS"
+      },
+      {
+        "command": "dotnet run --no-build --no-restore --project tests/Tunner.Observability.FunctionalTests",
+        "exit_code": 0,
+        "result": "PASS"
+      },
+      {
+        "command": "pnpm build; pnpm test; pnpm test:browser (from web)",
+        "exit_code": 0,
+        "cases": 38,
+        "failed": 0,
+        "result": "PASS"
+      },
+      {
+        "command": "dotnet list Tunner.Platform.slnx package --include-transitive --vulnerable --format json --no-restore",
+        "exit_code": 0,
+        "affected_packages": 2,
+        "followup": "governance/defects/DEF-TUN-P1-001-SECURITY-20261014.yaml",
+        "result": "FINDINGS_OUTSIDE_IMPLEMENTED_BFF_PACKAGE_GRAPH"
+      },
+      {
+        "command": "tunner authority verify",
+        "exit_code": 0,
+        "registered_artifacts": 167,
+        "result": "PASS"
+      },
+      {
+        "command": "tunner governance validate",
+        "records": 384,
+        "exit_code": 0,
+        "result": "PASS"
+      },
+      {
+        "command": "tunner context verify",
+        "exit_code": 0,
+        "result": "CURRENT"
+      },
+      {
+        "command": "tools/validation/Validate-TunnerPlatformHostSource.ps1 and Validate-TunnerOpenApiContractSource.ps1 -RepositoryRoot <repo-root>",
+        "exit_code": 0,
+        "result": "PASS"
+      },
+      {
+        "command": "tools/security/Invoke-TunnerSecretScan.ps1",
+        "files": 1143,
+        "rule_matches": 0,
+        "exit_code": 0,
+        "result": "PASS"
+      }
+    ],
+    "result": "PASS",
+    "ownership_phase": "COMPLETE_IMPLEMENTATION_CANDIDATE. Shared solution/test project aggregate references are scoped coordination changes and included in the exact candidate build/test; they are not exclusive permanent ownership of unrelated future project additions.",
+    "tested_commit_sha": "7aa8e46e6318479e8811b3c63d6baf84681de050",
+    "limitations": [
+      "P1 transport/security foundation only. Default server store denies sessions; sign-in is disabled. Real identity/workforce state, policy/rotation, projections, proxy/deployment and production keys require later owner work.",
+      "Real HTTPS component tests use a synthetic identity event and in-memory store only in test hosts. The store is not a production session implementation.",
+      "Repository-wide package audit has existing migration and runtime patch followups recorded in DEF-TUN-P1-001-SECURITY-20261014. No clean environment or production security acceptance is claimed.",
+      "Codex engineering reviews only; no independent human, Product or release acceptance."
+    ],
+    "scope_type": "WORK_ITEM",
+    "owned_coordination_paths": [
+      "docs/development/P1_CAPABILITY_DECOMPOSITION_AND_PRIMITIVE_REUSE.md",
+      "Tunner.Platform.slnx",
+      "tests/Tunner.Platform.ArchitectureTests/Tunner.Platform.ArchitectureTests.csproj"
+    ],
+    "validation_kind": "COMMITTED",
+    "owned_behavior_paths": [
+      "docs/development/P1_BFF_TECHNICAL_FOUNDATION.md",
+      "src/Tunner.Admin.Bff/Program.cs",
+      "src/Tunner.Admin.Bff/Tunner.Admin.Bff.csproj",
+      "src/Tunner.Platform/Bff/BffBoundaryProfile.cs",
+      "src/Tunner.Platform/Bff/TunnerBffFoundation.cs",
+      "src/Tunner.Platform/Bff/UnavailableBffTicketStore.cs",
+      "src/Tunner.User.Bff/Program.cs",
+      "src/Tunner.User.Bff/Tunner.User.Bff.csproj",
+      "tests/Tunner.Platform.ArchitectureTests/BffFoundationTests.cs"
+    ],
+    "owned_git_blobs": {
+      "docs/development/P1_BFF_TECHNICAL_FOUNDATION.md": {
+        "match": true,
+        "candidate_blob": "4e4a674d90867a2459333a12ea43eba9be273683",
+        "working_tree_blob": "4e4a674d90867a2459333a12ea43eba9be273683"
+      },
+      "src/Tunner.Admin.Bff/Program.cs": {
+        "match": true,
+        "candidate_blob": "d639087ee55d11b436bb3db70c5b9cfb9f3eb20a",
+        "working_tree_blob": "d639087ee55d11b436bb3db70c5b9cfb9f3eb20a"
+      },
+      "src/Tunner.Admin.Bff/Tunner.Admin.Bff.csproj": {
+        "match": true,
+        "candidate_blob": "3678ee99b5bafa60e1205997814748f786e8d342",
+        "working_tree_blob": "3678ee99b5bafa60e1205997814748f786e8d342"
+      },
+      "src/Tunner.Platform/Bff/BffBoundaryProfile.cs": {
+        "match": true,
+        "candidate_blob": "2ab64e44736568c6ea9befef930930a05cb6bbf0",
+        "working_tree_blob": "2ab64e44736568c6ea9befef930930a05cb6bbf0"
+      },
+      "src/Tunner.Platform/Bff/TunnerBffFoundation.cs": {
+        "match": true,
+        "candidate_blob": "4f63cbf5d8d629bbb95d39230cd636ab7d14fda7",
+        "working_tree_blob": "4f63cbf5d8d629bbb95d39230cd636ab7d14fda7"
+      },
+      "src/Tunner.Platform/Bff/UnavailableBffTicketStore.cs": {
+        "match": true,
+        "candidate_blob": "95e6590dbd13229b595d4a872b07795a2749666d",
+        "working_tree_blob": "95e6590dbd13229b595d4a872b07795a2749666d"
+      },
+      "src/Tunner.User.Bff/Program.cs": {
+        "match": true,
+        "candidate_blob": "ebaf212cc986e24bd01f4805fcccfbe8da966b93",
+        "working_tree_blob": "ebaf212cc986e24bd01f4805fcccfbe8da966b93"
+      },
+      "src/Tunner.User.Bff/Tunner.User.Bff.csproj": {
+        "match": true,
+        "candidate_blob": "3678ee99b5bafa60e1205997814748f786e8d342",
+        "working_tree_blob": "3678ee99b5bafa60e1205997814748f786e8d342"
+      },
+      "tests/Tunner.Platform.ArchitectureTests/BffFoundationTests.cs": {
+        "match": true,
+        "candidate_blob": "726a3efe9db2e5ad4c59b97cb64715fb8f8a6a55",
+        "working_tree_blob": "726a3efe9db2e5ad4c59b97cb64715fb8f8a6a55"
+      },
+      "docs/development/P1_CAPABILITY_DECOMPOSITION_AND_PRIMITIVE_REUSE.md": {
+        "match": true,
+        "candidate_blob": "bc8ac7fea2f3ee0e0a6be9ea1be421b3fd5d5987",
+        "working_tree_blob": "bc8ac7fea2f3ee0e0a6be9ea1be421b3fd5d5987"
+      },
+      "Tunner.Platform.slnx": {
+        "match": true,
+        "candidate_blob": "e717f244ed55ff5005185959c010399a5523d6fa",
+        "working_tree_blob": "e717f244ed55ff5005185959c010399a5523d6fa"
+      },
+      "tests/Tunner.Platform.ArchitectureTests/Tunner.Platform.ArchitectureTests.csproj": {
+        "match": true,
+        "candidate_blob": "c1a547ab3dbe15af3d9da0f87830a4b8acd84882",
+        "working_tree_blob": "c1a547ab3dbe15af3d9da0f87830a4b8acd84882"
+      }
     },
-    "src/Tunner.Admin.Bff/Program.cs": {
-      "match": true,
-      "candidate_blob": "d639087ee55d11b436bb3db70c5b9cfb9f3eb20a",
-      "working_tree_blob": "d639087ee55d11b436bb3db70c5b9cfb9f3eb20a"
-    },
-    "src/Tunner.Admin.Bff/Tunner.Admin.Bff.csproj": {
-      "match": true,
-      "candidate_blob": "3678ee99b5bafa60e1205997814748f786e8d342",
-      "working_tree_blob": "3678ee99b5bafa60e1205997814748f786e8d342"
-    },
-    "src/Tunner.Platform/Bff/BffBoundaryProfile.cs": {
-      "match": true,
-      "candidate_blob": "2ab64e44736568c6ea9befef930930a05cb6bbf0",
-      "working_tree_blob": "2ab64e44736568c6ea9befef930930a05cb6bbf0"
-    },
-    "src/Tunner.Platform/Bff/TunnerBffFoundation.cs": {
-      "match": true,
-      "candidate_blob": "4f63cbf5d8d629bbb95d39230cd636ab7d14fda7",
-      "working_tree_blob": "4f63cbf5d8d629bbb95d39230cd636ab7d14fda7"
-    },
-    "src/Tunner.Platform/Bff/UnavailableBffTicketStore.cs": {
-      "match": true,
-      "candidate_blob": "95e6590dbd13229b595d4a872b07795a2749666d",
-      "working_tree_blob": "95e6590dbd13229b595d4a872b07795a2749666d"
-    },
-    "src/Tunner.User.Bff/Program.cs": {
-      "match": true,
-      "candidate_blob": "ebaf212cc986e24bd01f4805fcccfbe8da966b93",
-      "working_tree_blob": "ebaf212cc986e24bd01f4805fcccfbe8da966b93"
-    },
-    "src/Tunner.User.Bff/Tunner.User.Bff.csproj": {
-      "match": true,
-      "candidate_blob": "3678ee99b5bafa60e1205997814748f786e8d342",
-      "working_tree_blob": "3678ee99b5bafa60e1205997814748f786e8d342"
-    },
-    "tests/Tunner.Platform.ArchitectureTests/BffFoundationTests.cs": {
-      "match": true,
-      "candidate_blob": "726a3efe9db2e5ad4c59b97cb64715fb8f8a6a55",
-      "working_tree_blob": "726a3efe9db2e5ad4c59b97cb64715fb8f8a6a55"
-    },
-    "docs/development/P1_CAPABILITY_DECOMPOSITION_AND_PRIMITIVE_REUSE.md": {
-      "match": true,
-      "candidate_blob": "bc8ac7fea2f3ee0e0a6be9ea1be421b3fd5d5987",
-      "working_tree_blob": "bc8ac7fea2f3ee0e0a6be9ea1be421b3fd5d5987"
-    },
-    "Tunner.Platform.slnx": {
-      "match": true,
-      "candidate_blob": "e717f244ed55ff5005185959c010399a5523d6fa",
-      "working_tree_blob": "e717f244ed55ff5005185959c010399a5523d6fa"
-    },
-    "tests/Tunner.Platform.ArchitectureTests/Tunner.Platform.ArchitectureTests.csproj": {
-      "match": true,
-      "candidate_blob": "c1a547ab3dbe15af3d9da0f87830a4b8acd84882",
-      "working_tree_blob": "c1a547ab3dbe15af3d9da0f87830a4b8acd84882"
-    }
+    "checked_at": "2026-10-14T14:59:14.6369525-04:00",
+    "test_results_ref": "governance/evidence/TUN-P1-019-TEST-RESULTS.json",
+    "security_assessment_ref": "governance/evidence/TUN-P1-019-SECURITY-ASSESSMENT.json",
+    "acceptance_results": [
+      "Existing verified Drive/ADR/FigJam authority resolves the planned BFF/session security review without new AMD or business semantics.",
+      "Separate hosts share cohesive framework-based cookie/origin/antiforgery mechanics and existing Platform/Observability/Problem Details; production endpoint inventory remains HTTPS health only.",
+      "Tests prove default denial, protected server ticket transport, explicit expiry/no renewal, immediate retrieval/revocation, cookie namespaces, surface separation, safe 401/403/errors and all unsafe/anonymous CSRF guards.",
+      "The exact committed implementation passes all 231 architecture, four Worker and prior 38 UI checks plus Observability/source/security/context checks.",
+      "Current repository dependency/runtime advisories are truthfully separated from the implemented capability and preserved as an owned platform followup; no production security claim or silent waiver is created."
+    ],
+    "role_review_evidence_commit_sha": "e2f399814699e2cc665d7a28d9db1869ade535da",
+    "closure_commit_sha": "8e7b1b1e24b528c9e90056858494b2d00b954846"
   },
-  "checked_at": "2026-10-14T14:59:14.6369525-04:00",
-  "test_results_ref": "governance/evidence/TUN-P1-019-TEST-RESULTS.json",
-  "security_assessment_ref": "governance/evidence/TUN-P1-019-SECURITY-ASSESSMENT.json",
-  "acceptance_results": [
-    "Existing verified Drive/ADR/FigJam authority resolves the planned BFF/session security review without new AMD or business semantics.",
-    "Separate hosts share cohesive framework-based cookie/origin/antiforgery mechanics and existing Platform/Observability/Problem Details; production endpoint inventory remains HTTPS health only.",
-    "Tests prove default denial, protected server ticket transport, explicit expiry/no renewal, immediate retrieval/revocation, cookie namespaces, surface separation, safe 401/403/errors and all unsafe/anonymous CSRF guards.",
-    "The exact committed implementation passes all 231 architecture, four Worker and prior 38 UI checks plus Observability/source/security/context checks.",
-    "Current repository dependency/runtime advisories are truthfully separated from the implemented capability and preserved as an owned platform followup; no production security claim or silent waiver is created."
+  "result": "PASS",
+  "status": "PASS",
+  "validated_commit_sha": "6fb030241ad0927f0a2576da23d348db1cfceab6",
+  "tested_commit_sha": "6fb030241ad0927f0a2576da23d348db1cfceab6",
+  "checked_at": "2026-10-15T15:04:13Z",
+  "checks": [
+    "The isolated BFF test helper now accepts test-only realtime setup callbacks. All 237 architecture/BFF cases pass, including existing 49 BFF cases and actual SignalR transport tests; no shipped BFF behavior or production session activation changed. All nine owned blobs match the tested candidate."
   ],
-  "role_review_evidence_commit_sha": "e2f399814699e2cc665d7a28d9db1869ade535da",
-  "closure_commit_sha": "8e7b1b1e24b528c9e90056858494b2d00b954846"
+  "current_validation_owner": "TUN-P1-023",
+  "execution_receipt": "governance/evidence/TUN-P1-023-EXECUTION-RESULTS.json",
+  "boundary": "Current technical evidence only. Complete prior payload is retained in historical_validation. No new Product/release acceptance; live R2 and P1 milestone acceptance remain pending."
 }

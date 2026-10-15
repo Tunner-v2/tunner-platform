@@ -5,13 +5,13 @@ role: project-manager
 skill_id: project-manager
 skill_version: 1.0.0
 skill_hash: ae262bf4c9a2e26c688106c7af420fbc4dc26a116048e04ae01a5e4e01ead927
-status: PASS
-result: PASS
-required_actions: []
+status: BLOCKED
+result: BLOCKED
+required_actions: ["After installer supplies the existing non-production endpoint, dedicated bucket and secret-store/OpenBao references, run live R2 put/read/delete, retain cleanup evidence and repeat final acceptance review."]
 authority_refs: [docs/authority/current-authority.json]
 context_artifacts: [governance/work-items/TUN-P1-023.yaml, docs/development/P1_READINESS_REMEDIATION.md]
-findings: ["Preflight: sixteen finding groups are explicitly owned; milestone closure remains unavailable until every applicable gap and required review is resolved."]
-blocking_findings: []
-evidence_refs: [governance/evidence/TUN-P1-023-GAP-REGISTER.json]
+findings: ["Engineering remediation and per-scope evidence are recorded. Keep TUN-P1-023 in validation and P1 ACTIVE until installer-configured non-production R2 validation and derived milestone acceptance pass."]
+blocking_findings: ["DEF-TUN-P1-023-R2-001: live non-production R2 validation awaits installer configuration."]
+evidence_refs: [governance/evidence/TUN-P1-023-EXECUTION-RESULTS.json, governance/evidence/TUN-P1-023-GAP-REGISTER.json]
 context_expansion_requested: false
-reviewed_at: 2026-10-15T14:23:00Z
+reviewed_at: 2026-10-15T15:10:08Z

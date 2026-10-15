@@ -3,9 +3,9 @@
   "scope_type": "WORK_ITEM",
   "scope_id": "TUN-P1-023",
   "validation_kind": "COMMITTED",
-  "result": "PENDING",
-  "validated_commit_sha": null,
-  "tested_commit_sha": null,
+  "result": "PARTIAL",
+  "validated_commit_sha": "6fb030241ad0927f0a2576da23d348db1cfceab6",
+  "tested_commit_sha": "6fb030241ad0927f0a2576da23d348db1cfceab6",
   "owned_behavior_paths": [
     "Directory.Packages.props",
     "docs/authority/current/development/09_Testing_Acceptance_Evidence_and_Quality_Gates.md",
@@ -25,7 +25,29 @@
     "tools/validation/Validate-TunnerMigrationsSource.ps1",
     "tools/validation/Validate-TunnerOpenApiContractSource.ps1"
   ],
-  "checks": [],
+  "checks": [
+    {
+      "scope": "committed technical changes",
+      "result": "PASS",
+      "platform_tests_passed": 289,
+      "platform_tests_skipped": 0,
+      "ui_unit_tests_passed": 25,
+      "ui_browser_tests_passed": 13,
+      "build_warnings": 0,
+      "build_errors": 0
+    },
+    {
+      "scope": "existing P1 committed readiness",
+      "result": "PASS",
+      "work_items": 22,
+      "findings": []
+    },
+    {
+      "scope": "live R2 provider contract",
+      "result": "NOT_EXECUTED",
+      "blocker": "DEF-TUN-P1-023-R2-001"
+    }
+  ],
   "initial_dirty_paths": [
     "docs/context/current/HANDOFF.md",
     "docs/context/current/adaptive-selection.json",
@@ -40,5 +62,9 @@
     "docs/project/HANDOFF.md",
     "docs/project/PROJECT_CONTEXT.md"
   ],
-  "validation_boundary": "TUN-P1-023 technical candidate; live R2 contract awaits installer-provided non-production references and is excluded from any passing component claim."
+  "validation_boundary": "TUN-P1-023 technical candidate; live R2 contract awaits installer-provided non-production references and is excluded from any passing component claim.",
+  "checked_at": "2026-10-15T15:15:20Z",
+  "execution_results_ref": "governance/evidence/TUN-P1-023-EXECUTION-RESULTS.json",
+  "role_reviews_ref": "governance/evidence/TUN-P1-023-ROLE-REVIEWS.json",
+  "exact_next_action": "Installer supplies existing dedicated non-production R2 endpoint/bucket/secret references; run put/read/delete with cleanup evidence and repeat blocked final reviews, scope gate and P1 milestone close-check."
 }

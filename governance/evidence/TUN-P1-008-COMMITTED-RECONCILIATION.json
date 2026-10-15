@@ -3,9 +3,9 @@
   "scope_id": "TUN-P1-008",
   "scope_type": "WORK_ITEM",
   "validation_kind": "RETROSPECTIVE_COMMITTED",
-  "result": "PENDING",
-  "validated_commit_sha": null,
-  "tested_commit_sha": null,
+  "result": "PASS",
+  "validated_commit_sha": "6fb030241ad0927f0a2576da23d348db1cfceab6",
+  "tested_commit_sha": "6fb030241ad0927f0a2576da23d348db1cfceab6",
   "owned_behavior_paths": [
     "Directory.Packages.props",
     "src/Tunner.Platform/Redis/IEphemeralCache.cs",
@@ -15,6 +15,13 @@
     "tests/Tunner.Database.IntegrationTests/RedisEphemeralStoreIntegrationTests.cs",
     "tools/validation/Validate-TunnerRedisEphemeralSource.ps1"
   ],
-  "checks": [],
-  "boundary": "Current preserved implementation revalidation owned by TUN-P1-023; original execution claims and historical evidence are unchanged. Governance lifecycle and evidence records are metadata; initial generated dirty files are excluded."
+  "checks": [
+    "Both real Redis cases passed within 34/34 database tests, zero skipped: finite cache TTL, lease expiry/reacquisition and stale-owner release rejection; Redis source guard passed.",
+    "Platform candidate build: zero warnings/errors.",
+    "Read-only verification: all 7 owned candidate blobs equal HEAD and working-tree Git objects. No ownership mismatch."
+  ],
+  "boundary": "Current preserved implementation revalidation owned by TUN-P1-023; original execution claims and historical evidence are unchanged. Governance lifecycle and evidence records are metadata; initial generated dirty files are excluded.",
+  "checked_at": "2026-10-15T15:04:13Z",
+  "execution_receipt": "governance/evidence/TUN-P1-023-EXECUTION-RESULTS.json",
+  "scope_limit": "Current technical scope only. Original validation claims remain preserved; live R2 and P1 milestone acceptance remain unresolved."
 }

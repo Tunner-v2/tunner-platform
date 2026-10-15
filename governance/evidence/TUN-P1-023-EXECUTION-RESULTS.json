@@ -1,0 +1,149 @@
+{
+  "schema_version": 1,
+  "scope_id": "TUN-P1-023",
+  "status": "PARTIAL",
+  "technical_candidate_sha": "6fb030241ad0927f0a2576da23d348db1cfceab6",
+  "governance_candidate_sha": "c37a720e1618f5acc69ab417d6886009b59f6575",
+  "checked_at": "2026-10-15T15:15:20Z",
+  "execution": {
+    "platform_build": {
+      "result": "PASS",
+      "warnings": 0,
+      "errors": 0
+    },
+    "platform_tests": {
+      "result": "PASS",
+      "passed": 289,
+      "failed": 0,
+      "skipped": 0,
+      "projects": {
+        "architecture_bff_r2_signalr": 237,
+        "database": 34,
+        "worker": 6,
+        "harness": 12
+      },
+      "receipts": [
+        {
+          "sha256": "7d1403b6cb135d7cab7b821bd033a097053c81178f3110c6ab59ba47de067e66",
+          "total": "12",
+          "passed": "12",
+          "failed": "0",
+          "notExecuted": "0",
+          "path": "artifacts/P1-reconciliation-20261015/final/Chacha_Tech_FARHANWAZIR_2026-10-15_10_57_02_net10.0.trx"
+        },
+        {
+          "sha256": "6ccae88534d94a232aea3e783f540f3035932f6367f5873a0e41d2c6021432d8",
+          "total": "34",
+          "passed": "34",
+          "failed": "0",
+          "notExecuted": "0",
+          "path": "artifacts/P1-reconciliation-20261015/final/Chacha_Tech_FARHANWAZIR_2026-10-15_10_57_02_net10.0[1].trx"
+        },
+        {
+          "sha256": "2c5edbc9047c083915cf51d0947469fa96e7c6ca88ea3c7f2254c0b5536f0711",
+          "total": "237",
+          "passed": "237",
+          "failed": "0",
+          "notExecuted": "0",
+          "path": "artifacts/P1-reconciliation-20261015/final/Chacha_Tech_FARHANWAZIR_2026-10-15_10_57_04_net10.0.trx"
+        },
+        {
+          "sha256": "e5ab52f15f8973e760dcc3f4ebefc372616f080418daeeedc2f0f973cddb2a73",
+          "total": "6",
+          "passed": "6",
+          "failed": "0",
+          "notExecuted": "0",
+          "path": "artifacts/P1-reconciliation-20261015/final/Chacha_Tech_FARHANWAZIR_2026-10-15_10_57_32_net10.0.trx"
+        }
+      ]
+    },
+    "governance_functional": {
+      "result": "PASS",
+      "rv_assertions": 60
+    },
+    "observability_functional": {
+      "result": "PASS"
+    },
+    "ui": {
+      "unit_contract_cases": 25,
+      "browser_cases": 13,
+      "build": "PASS",
+      "typecheck": "PASS",
+      "advisories": 0
+    },
+    "source_guards": {
+      "result": "PASS",
+      "scopes": [
+        "RabbitMQ",
+        "durable work/inbox",
+        "Redis",
+        "R2",
+        "gRPC eligibility",
+        "SignalR",
+        "host composition",
+        "test harness",
+        "OpenAPI",
+        "outbox",
+        "migrations"
+      ]
+    },
+    "security": {
+      "nuget_vulnerable_packages": 0,
+      "nuget_source": "https://api.nuget.org/v3/index.json",
+      "secret_scan_files": 1187,
+      "secret_scan_matches": 0,
+      "sast_files": 1187,
+      "sast_matches": 0,
+      "selected_sdk": "10.0.402",
+      "selected_host_runtime": "10.0.13",
+      "serviced_aspnet_runtime": "10.0.13",
+      "host_restart_requested_by_installer": true,
+      "older_side_by_side_runtimes_retained": true
+    },
+    "authority": {
+      "verified_artifacts": 168,
+      "byte_exact_checkout_checks": 168,
+      "locked_baseline_modified": false
+    }
+  },
+  "live_r2": {
+    "result": "NOT_EXECUTED",
+    "reason": "Installer-provided existing non-production endpoint, dedicated bucket and bucket-scoped secret-store/OpenBao references are unavailable. User forbids invented endpoint/bucket/path/environment names and requires installer configuration.",
+    "defect_id": "DEF-TUN-P1-023-R2-001"
+  },
+  "failed_attempts": [
+    "An early governance fixture omitted required nested git_state fields; corrected before passing final governance execution.",
+    "The initial full-suite run with explicit container opt-in exposed a harness test that assumed the inherited variable was unset. The test now checks absent, blank, 0, true and explicit 1 values while restoring inherited state; final 12 cases passed.",
+    "The SDK fixture property Token caused generic-secret-assignment scanner false positives for cancellationToken assignments. Renamed observation only; scanner rules unchanged; final scan passed.",
+    "The security servicing update exposed old exact-version guards for EF/OpenAPI; guards now pin reviewed fixed 10.0.13.",
+    "Auto-review rejected a broad evidence/state PASS update because it could misrepresent unresolved R2 scope. No rejected changes were applied; subsequent evidence requires verified per-scope ownership and actual receipts."
+  ],
+  "review_method": "Engineering reviews by the executing agent; no independent human, Product, security-release or protected-main merge approval implied.",
+  "exact_next_action": "Installer supplies existing non-production R2 endpoint, dedicated integration bucket and bucket-scoped secret-store/OpenBao references. Then execute live put/read/delete with cleanup evidence, resolve DEF-TUN-P1-023-R2-001, repeat blocked role reviews and native P1 closure checks. Keep P1 ACTIVE and TUN-P1-023 in VALIDATION.",
+  "initial_dirty_paths": [
+    "docs/context/current/HANDOFF.md",
+    "docs/context/current/adaptive-selection.json",
+    "docs/context/current/authority.md",
+    "docs/context/current/contracts.md",
+    "docs/context/current/git-changes.md",
+    "docs/context/current/manifest.json",
+    "docs/context/current/relevant-flows.md",
+    "docs/context/current/summary.md",
+    "docs/context/current/tests.md",
+    "docs/project/CURRENT_STATE.md",
+    "docs/project/HANDOFF.md",
+    "docs/project/PROJECT_CONTEXT.md"
+  ],
+  "existing_p1_committed_readiness": {
+    "result": "PASS",
+    "work_items": 22,
+    "findings": [],
+    "command": "tunner governance commit-readiness audit --milestone P1"
+  },
+  "gap_register_summary": {
+    "total": 19,
+    "resolved": 17,
+    "partial_live_r2": 1,
+    "blocked_milestone_acceptance": 1
+  }
+}

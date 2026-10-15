@@ -1,10 +1,7 @@
 {
   "schema_version": 1,
-  "evidence_id": "TUN-P1-004-RETROSPECTIVE-COMMITTED",
-  "scope_type": "WORK_ITEM",
   "scope_id": "TUN-P1-004",
-  "status": "PASS",
-  "result": "PASS",
+  "scope_type": "WORK_ITEM",
   "validation_kind": "RETROSPECTIVE_COMMITTED",
   "owned_behavior_paths": [
     "src/Tunner.Api/Tunner.Api.csproj",
@@ -13,253 +10,280 @@
     "tools/validation/Validate-TunnerOpenApiContractSource.ps1",
     "docs/development/LOCAL_OPENAPI_CONTRACTS.md"
   ],
-  "historical_validation_claimed": false,
-  "original_implementation_commit_sha": "4b3fb3c177056196cd2af29826374a902d665a6b",
-  "reason": "Current committed prerequisite validation for P1-015; original DONE and operator evidence are preserved. Shared package configuration is regression-tested, not exclusively P1-004-owned.",
-  "validated_commit_sha": "2d64e05c9c9e3c084d8e20beaa43f789eaa20c31",
-  "tested_commit_sha": "2d64e05c9c9e3c084d8e20beaa43f789eaa20c31",
-  "checked_at": "2026-10-05T21:51:58.8951353+00:00",
-  "test_results": [
-    {
-      "passed": 36,
-      "tests": [
-        {
-          "name": "Tunner.Platform.ArchitectureTests.OpenApiContractFoundationTests.BuildPublishesAnOpenApi31ContractWithoutProductOperations",
-          "outcome": "Passed"
-        },
-        {
-          "name": "Tunner.Platform.ArchitectureTests.EffectivePolicyVersionResolverTests.IntervalBoundariesFollowExplicitOwnerInclusion(includesFrom: True, includesUntil: False)",
-          "outcome": "Passed"
-        },
-        {
-          "name": "Tunner.Platform.ArchitectureTests.EffectivePolicyVersionResolverTests.MissingRequiredMetadataAndSelfSupersessionAreRejected",
-          "outcome": "Passed"
-        },
-        {
-          "name": "Tunner.Platform.ArchitectureTests.R2ObjectStorageTests.ContractRejectsMissingTechnicalAddressValues",
-          "outcome": "Passed"
-        },
-        {
-          "name": "Tunner.Platform.ArchitectureTests.EffectivePolicyVersionResolverTests.AmbiguityCannotBeBrokenByInputOrderIdOrSupersession",
-          "outcome": "Passed"
-        },
-        {
-          "name": "Tunner.Platform.ArchitectureTests.R2ObjectStorageTests.DelegatesOpaqueObjectOperationsThroughTheInjectedR2Seam",
-          "outcome": "Passed"
-        },
-        {
-          "name": "Tunner.Platform.ArchitectureTests.RealtimeFoundationTests.RealtimeAudienceRejectsUnsafeKeys(groupName: \"product scope\")",
-          "outcome": "Passed"
-        },
-        {
-          "name": "Tunner.Platform.ArchitectureTests.HostCompositionTests.ApiHostContainsOnlyTheTechnicalHealthEndpointAtThisFoundationSlice",
-          "outcome": "Passed"
-        },
-        {
-          "name": "Tunner.Platform.ArchitectureTests.RealtimeFoundationTests.RealtimeAudienceAcceptsOnlyOpaqueTechnicalKeys(groupName: \"tunner:scope-001\")",
-          "outcome": "Passed"
-        },
-        {
-          "name": "Tunner.Platform.ArchitectureTests.TechnicalCommandPrimitivesTests.MissingEvaluatorFailsClosedWithCanonicalForbiddenScope",
-          "outcome": "Passed"
-        },
-        {
-          "name": "Tunner.Platform.ArchitectureTests.HostCompositionTests.ModuleRegistrationInvokesOnlyExplicitModules",
-          "outcome": "Passed"
-        },
-        {
-          "name": "Tunner.Platform.ArchitectureTests.RealtimeFoundationTests.RealtimeFoundationDeniesScopeUntilAnAuthoritativeResolverIsProvided",
-          "outcome": "Passed"
-        },
-        {
-          "name": "Tunner.Platform.ArchitectureTests.TechnicalCommandPrimitivesTests.IdempotencyReusesProtectedOperationOnlyWithinOwnerProvidedOpaqueScope",
-          "outcome": "Passed"
-        },
-        {
-          "name": "Tunner.Platform.ArchitectureTests.HostCompositionTests.ApiAndWorkerReferenceTheSharedPlatformAndObservabilityFoundations",
-          "outcome": "Passed"
-        },
-        {
-          "name": "Tunner.Platform.ArchitectureTests.RealtimeFoundationTests.RealtimeAudienceAcceptsOnlyOpaqueTechnicalKeys(groupName: \"tunner_scope_001\")",
-          "outcome": "Passed"
-        },
-        {
-          "name": "Tunner.Platform.ArchitectureTests.EffectivePolicyVersionResolverTests.OwnerMaySupplyOpenEndedOrInclusiveSingleInstantInterval",
-          "outcome": "Passed"
-        },
-        {
-          "name": "Tunner.Platform.ArchitectureTests.EffectivePolicyVersionResolverTests.HistoricalEventTimeSelectsExactVersionWithoutCurrentTimeOrLatestVersionBias",
-          "outcome": "Passed"
-        },
-        {
-          "name": "Tunner.Platform.ArchitectureTests.EffectivePolicyVersionResolverTests.IntervalsCompareAbsoluteInstantsAcrossTimezoneOffsets",
-          "outcome": "Passed"
-        },
-        {
-          "name": "Tunner.Platform.ArchitectureTests.EffectivePolicyVersionResolverTests.DuplicateIdentitiesAndNullCandidatesAreInvalidRegardlessOfScope",
-          "outcome": "Passed"
-        },
-        {
-          "name": "Tunner.Platform.ArchitectureTests.TechnicalCommandPrimitivesTests.AuthorizationDoesNotAcceptActorFromRequestAndFailsClosedWithoutServerActor",
-          "outcome": "Passed"
-        },
-        {
-          "name": "Tunner.Platform.ArchitectureTests.EffectivePolicyVersionResolverTests.InvertedAndEmptyIntervalsAreRejected",
-          "outcome": "Passed"
-        },
-        {
-          "name": "Tunner.Platform.ArchitectureTests.RealtimeFoundationTests.RealtimeFoundationHasNoClientSuppliedSubscriptionOrDomainPayload",
-          "outcome": "Passed"
-        },
-        {
-          "name": "Tunner.Platform.ArchitectureTests.EffectivePolicyVersionResolverTests.MissingOrFailingOwnerEvaluatorsCannotBecomeFallbackResolution",
-          "outcome": "Passed"
-        },
-        {
-          "name": "Tunner.Platform.ArchitectureTests.HostCompositionTests.PlatformFoundationDoesNotReferenceHostsOrDatabase",
-          "outcome": "Passed"
-        },
-        {
-          "name": "Tunner.Platform.ArchitectureTests.EffectivePolicyVersionResolverTests.IntervalBoundariesFollowExplicitOwnerInclusion(includesFrom: True, includesUntil: True)",
-          "outcome": "Passed"
-        },
-        {
-          "name": "Tunner.Platform.ArchitectureTests.EffectivePolicyVersionResolverTests.MissingResolutionNeverSuppliesAPolicyOrPermissiveDefault",
-          "outcome": "Passed"
-        },
-        {
-          "name": "Tunner.Platform.ArchitectureTests.EffectivePolicyVersionResolverTests.IntervalBoundariesFollowExplicitOwnerInclusion(includesFrom: False, includesUntil: False)",
-          "outcome": "Passed"
-        },
-        {
-          "name": "Tunner.Platform.ArchitectureTests.EffectivePolicyVersionResolverTests.RequestedOwnerScopeDoesNotSelectAnotherProductOrEnvironment",
-          "outcome": "Passed"
-        },
-        {
-          "name": "Tunner.Platform.ArchitectureTests.TechnicalCommandPrimitivesTests.ExpectedVersionIsDeterministicAndOwnerControlled",
-          "outcome": "Passed"
-        },
-        {
-          "name": "Tunner.Platform.ArchitectureTests.EffectivePolicyVersionResolverTests.IntervalBoundariesFollowExplicitOwnerInclusion(includesFrom: False, includesUntil: True)",
-          "outcome": "Passed"
-        },
-        {
-          "name": "Tunner.Platform.ArchitectureTests.EffectivePolicyVersionResolverTests.InputCollectionsCannotRewriteSelectedVersionEvidence",
-          "outcome": "Passed"
-        },
-        {
-          "name": "Tunner.Platform.ArchitectureTests.RealtimeFoundationTests.RealtimeFoundationMapsOnlyAnAuthenticatedBrowserProtectedEndpoint",
-          "outcome": "Passed"
-        },
-        {
-          "name": "Tunner.Platform.ArchitectureTests.EffectivePolicyVersionResolverTests.ExactVersionRetainsStatusScopeLineageAndApprovalEvidence",
-          "outcome": "Passed"
-        },
-        {
-          "name": "Tunner.Platform.ArchitectureTests.EffectivePolicyVersionResolverTests.OwnerEligibilityIsRequiredRatherThanAnAssumedStatusVocabulary",
-          "outcome": "Passed"
-        },
-        {
-          "name": "Tunner.Platform.ArchitectureTests.EffectivePolicyVersionResolverTests.OwnerControlsPrecedenceBySupplyingItsApprovedCandidateCohort",
-          "outcome": "Passed"
-        },
-        {
-          "name": "Tunner.Platform.ArchitectureTests.RealtimeFoundationTests.RealtimeAudienceRejectsUnsafeKeys(groupName: \"customer@example.com\")",
-          "outcome": "Passed"
-        }
-      ],
-      "failed": 0,
-      "skipped": 0,
-      "sha256": "e78b715726121aa715c1d4766cefc5a628f05c285756b0c7229bf3064791c035",
-      "total": 36,
-      "artifact": "artifacts/tests/TUN-P1-004/P1-004-retrospective.trx"
-    }
-  ],
-  "checks": [
-    {
-      "command": "dotnet build Tunner.Platform.slnx --no-restore",
-      "exit_code": 0,
-      "errors": 0,
-      "warnings": 0,
-      "result": "PASS"
-    },
-    {
-      "command": "Validate-TunnerOpenApiContractSource.ps1",
-      "exit_code": 0,
-      "result": "PASS"
-    },
-    {
-      "passed": 36,
-      "command": "dotnet test tests/Tunner.Platform.ArchitectureTests --no-build --no-restore",
-      "failed": 0,
-      "exit_code": 0,
-      "result": "PASS",
-      "total": 36,
-      "skipped": 0
-    },
-    {
-      "command": "Repeat official build-time OpenAPI generator against the committed API assembly",
-      "exit_code": 0,
-      "determinism": {
-        "first_sha256": "57ffb8ced3402cadcfa1feb1794fc9a388add35242c517f6e411960f388a7827",
-        "second_sha256": "57ffb8ced3402cadcfa1feb1794fc9a388add35242c517f6e411960f388a7827",
-        "identical": true
+  "historical_validation": {
+    "schema_version": 1,
+    "evidence_id": "TUN-P1-004-RETROSPECTIVE-COMMITTED",
+    "scope_type": "WORK_ITEM",
+    "scope_id": "TUN-P1-004",
+    "status": "PASS",
+    "result": "PASS",
+    "validation_kind": "RETROSPECTIVE_COMMITTED",
+    "owned_behavior_paths": [
+      "src/Tunner.Api/Tunner.Api.csproj",
+      "src/Tunner.Api/Program.cs",
+      "tests/Tunner.Platform.ArchitectureTests/OpenApiContractFoundationTests.cs",
+      "tools/validation/Validate-TunnerOpenApiContractSource.ps1",
+      "docs/development/LOCAL_OPENAPI_CONTRACTS.md"
+    ],
+    "historical_validation_claimed": false,
+    "original_implementation_commit_sha": "4b3fb3c177056196cd2af29826374a902d665a6b",
+    "reason": "Current committed prerequisite validation for P1-015; original DONE and operator evidence are preserved. Shared package configuration is regression-tested, not exclusively P1-004-owned.",
+    "validated_commit_sha": "2d64e05c9c9e3c084d8e20beaa43f789eaa20c31",
+    "tested_commit_sha": "2d64e05c9c9e3c084d8e20beaa43f789eaa20c31",
+    "checked_at": "2026-10-05T21:51:58.8951353+00:00",
+    "test_results": [
+      {
+        "passed": 36,
+        "tests": [
+          {
+            "name": "Tunner.Platform.ArchitectureTests.OpenApiContractFoundationTests.BuildPublishesAnOpenApi31ContractWithoutProductOperations",
+            "outcome": "Passed"
+          },
+          {
+            "name": "Tunner.Platform.ArchitectureTests.EffectivePolicyVersionResolverTests.IntervalBoundariesFollowExplicitOwnerInclusion(includesFrom: True, includesUntil: False)",
+            "outcome": "Passed"
+          },
+          {
+            "name": "Tunner.Platform.ArchitectureTests.EffectivePolicyVersionResolverTests.MissingRequiredMetadataAndSelfSupersessionAreRejected",
+            "outcome": "Passed"
+          },
+          {
+            "name": "Tunner.Platform.ArchitectureTests.R2ObjectStorageTests.ContractRejectsMissingTechnicalAddressValues",
+            "outcome": "Passed"
+          },
+          {
+            "name": "Tunner.Platform.ArchitectureTests.EffectivePolicyVersionResolverTests.AmbiguityCannotBeBrokenByInputOrderIdOrSupersession",
+            "outcome": "Passed"
+          },
+          {
+            "name": "Tunner.Platform.ArchitectureTests.R2ObjectStorageTests.DelegatesOpaqueObjectOperationsThroughTheInjectedR2Seam",
+            "outcome": "Passed"
+          },
+          {
+            "name": "Tunner.Platform.ArchitectureTests.RealtimeFoundationTests.RealtimeAudienceRejectsUnsafeKeys(groupName: \"product scope\")",
+            "outcome": "Passed"
+          },
+          {
+            "name": "Tunner.Platform.ArchitectureTests.HostCompositionTests.ApiHostContainsOnlyTheTechnicalHealthEndpointAtThisFoundationSlice",
+            "outcome": "Passed"
+          },
+          {
+            "name": "Tunner.Platform.ArchitectureTests.RealtimeFoundationTests.RealtimeAudienceAcceptsOnlyOpaqueTechnicalKeys(groupName: \"tunner:scope-001\")",
+            "outcome": "Passed"
+          },
+          {
+            "name": "Tunner.Platform.ArchitectureTests.TechnicalCommandPrimitivesTests.MissingEvaluatorFailsClosedWithCanonicalForbiddenScope",
+            "outcome": "Passed"
+          },
+          {
+            "name": "Tunner.Platform.ArchitectureTests.HostCompositionTests.ModuleRegistrationInvokesOnlyExplicitModules",
+            "outcome": "Passed"
+          },
+          {
+            "name": "Tunner.Platform.ArchitectureTests.RealtimeFoundationTests.RealtimeFoundationDeniesScopeUntilAnAuthoritativeResolverIsProvided",
+            "outcome": "Passed"
+          },
+          {
+            "name": "Tunner.Platform.ArchitectureTests.TechnicalCommandPrimitivesTests.IdempotencyReusesProtectedOperationOnlyWithinOwnerProvidedOpaqueScope",
+            "outcome": "Passed"
+          },
+          {
+            "name": "Tunner.Platform.ArchitectureTests.HostCompositionTests.ApiAndWorkerReferenceTheSharedPlatformAndObservabilityFoundations",
+            "outcome": "Passed"
+          },
+          {
+            "name": "Tunner.Platform.ArchitectureTests.RealtimeFoundationTests.RealtimeAudienceAcceptsOnlyOpaqueTechnicalKeys(groupName: \"tunner_scope_001\")",
+            "outcome": "Passed"
+          },
+          {
+            "name": "Tunner.Platform.ArchitectureTests.EffectivePolicyVersionResolverTests.OwnerMaySupplyOpenEndedOrInclusiveSingleInstantInterval",
+            "outcome": "Passed"
+          },
+          {
+            "name": "Tunner.Platform.ArchitectureTests.EffectivePolicyVersionResolverTests.HistoricalEventTimeSelectsExactVersionWithoutCurrentTimeOrLatestVersionBias",
+            "outcome": "Passed"
+          },
+          {
+            "name": "Tunner.Platform.ArchitectureTests.EffectivePolicyVersionResolverTests.IntervalsCompareAbsoluteInstantsAcrossTimezoneOffsets",
+            "outcome": "Passed"
+          },
+          {
+            "name": "Tunner.Platform.ArchitectureTests.EffectivePolicyVersionResolverTests.DuplicateIdentitiesAndNullCandidatesAreInvalidRegardlessOfScope",
+            "outcome": "Passed"
+          },
+          {
+            "name": "Tunner.Platform.ArchitectureTests.TechnicalCommandPrimitivesTests.AuthorizationDoesNotAcceptActorFromRequestAndFailsClosedWithoutServerActor",
+            "outcome": "Passed"
+          },
+          {
+            "name": "Tunner.Platform.ArchitectureTests.EffectivePolicyVersionResolverTests.InvertedAndEmptyIntervalsAreRejected",
+            "outcome": "Passed"
+          },
+          {
+            "name": "Tunner.Platform.ArchitectureTests.RealtimeFoundationTests.RealtimeFoundationHasNoClientSuppliedSubscriptionOrDomainPayload",
+            "outcome": "Passed"
+          },
+          {
+            "name": "Tunner.Platform.ArchitectureTests.EffectivePolicyVersionResolverTests.MissingOrFailingOwnerEvaluatorsCannotBecomeFallbackResolution",
+            "outcome": "Passed"
+          },
+          {
+            "name": "Tunner.Platform.ArchitectureTests.HostCompositionTests.PlatformFoundationDoesNotReferenceHostsOrDatabase",
+            "outcome": "Passed"
+          },
+          {
+            "name": "Tunner.Platform.ArchitectureTests.EffectivePolicyVersionResolverTests.IntervalBoundariesFollowExplicitOwnerInclusion(includesFrom: True, includesUntil: True)",
+            "outcome": "Passed"
+          },
+          {
+            "name": "Tunner.Platform.ArchitectureTests.EffectivePolicyVersionResolverTests.MissingResolutionNeverSuppliesAPolicyOrPermissiveDefault",
+            "outcome": "Passed"
+          },
+          {
+            "name": "Tunner.Platform.ArchitectureTests.EffectivePolicyVersionResolverTests.IntervalBoundariesFollowExplicitOwnerInclusion(includesFrom: False, includesUntil: False)",
+            "outcome": "Passed"
+          },
+          {
+            "name": "Tunner.Platform.ArchitectureTests.EffectivePolicyVersionResolverTests.RequestedOwnerScopeDoesNotSelectAnotherProductOrEnvironment",
+            "outcome": "Passed"
+          },
+          {
+            "name": "Tunner.Platform.ArchitectureTests.TechnicalCommandPrimitivesTests.ExpectedVersionIsDeterministicAndOwnerControlled",
+            "outcome": "Passed"
+          },
+          {
+            "name": "Tunner.Platform.ArchitectureTests.EffectivePolicyVersionResolverTests.IntervalBoundariesFollowExplicitOwnerInclusion(includesFrom: False, includesUntil: True)",
+            "outcome": "Passed"
+          },
+          {
+            "name": "Tunner.Platform.ArchitectureTests.EffectivePolicyVersionResolverTests.InputCollectionsCannotRewriteSelectedVersionEvidence",
+            "outcome": "Passed"
+          },
+          {
+            "name": "Tunner.Platform.ArchitectureTests.RealtimeFoundationTests.RealtimeFoundationMapsOnlyAnAuthenticatedBrowserProtectedEndpoint",
+            "outcome": "Passed"
+          },
+          {
+            "name": "Tunner.Platform.ArchitectureTests.EffectivePolicyVersionResolverTests.ExactVersionRetainsStatusScopeLineageAndApprovalEvidence",
+            "outcome": "Passed"
+          },
+          {
+            "name": "Tunner.Platform.ArchitectureTests.EffectivePolicyVersionResolverTests.OwnerEligibilityIsRequiredRatherThanAnAssumedStatusVocabulary",
+            "outcome": "Passed"
+          },
+          {
+            "name": "Tunner.Platform.ArchitectureTests.EffectivePolicyVersionResolverTests.OwnerControlsPrecedenceBySupplyingItsApprovedCandidateCohort",
+            "outcome": "Passed"
+          },
+          {
+            "name": "Tunner.Platform.ArchitectureTests.RealtimeFoundationTests.RealtimeAudienceRejectsUnsafeKeys(groupName: \"customer@example.com\")",
+            "outcome": "Passed"
+          }
+        ],
+        "failed": 0,
+        "skipped": 0,
+        "sha256": "e78b715726121aa715c1d4766cefc5a628f05c285756b0c7229bf3064791c035",
+        "total": 36,
+        "artifact": "artifacts/tests/TUN-P1-004/P1-004-retrospective.trx"
+      }
+    ],
+    "checks": [
+      {
+        "command": "dotnet build Tunner.Platform.slnx --no-restore",
+        "exit_code": 0,
+        "errors": 0,
+        "warnings": 0,
+        "result": "PASS"
       },
-      "result": "PASS"
-    }
+      {
+        "command": "Validate-TunnerOpenApiContractSource.ps1",
+        "exit_code": 0,
+        "result": "PASS"
+      },
+      {
+        "passed": 36,
+        "command": "dotnet test tests/Tunner.Platform.ArchitectureTests --no-build --no-restore",
+        "failed": 0,
+        "exit_code": 0,
+        "result": "PASS",
+        "total": 36,
+        "skipped": 0
+      },
+      {
+        "command": "Repeat official build-time OpenAPI generator against the committed API assembly",
+        "exit_code": 0,
+        "determinism": {
+          "first_sha256": "57ffb8ced3402cadcfa1feb1794fc9a388add35242c517f6e411960f388a7827",
+          "second_sha256": "57ffb8ced3402cadcfa1feb1794fc9a388add35242c517f6e411960f388a7827",
+          "identical": true
+        },
+        "result": "PASS"
+      }
+    ],
+    "current_primary_sources": [
+      {
+        "checked_at": "2026-10-05T21:51:58.8951353+00:00",
+        "url": "https://learn.microsoft.com/en-us/aspnet/core/fundamentals/openapi/aspnetcore-openapi?view=aspnetcore-10.0",
+        "finding": ".NET 10 first-party build-time OpenAPI 3.1 generation remains supported."
+      },
+      {
+        "checked_at": "2026-10-05T21:51:58.8951353+00:00",
+        "url": "https://spec.openapis.org/oas/v3.1.2.html",
+        "finding": "Published OpenAPI 3.1 specification; no version upgrade selected."
+      }
+    ],
+    "role_reviews": [
+      {
+        "role": "full-stack-engineer",
+        "reviewer": "Codex",
+        "finding": "Reviewed existing build-only first-party OpenAPI 3.1 configuration, no public provider/Product contracts or SDK types; source guard, full architecture suite and byte-identical repeated generation passed. Current primary documentation supports this baseline.",
+        "reviewed_commit_sha": "2d64e05c9c9e3c084d8e20beaa43f789eaa20c31",
+        "result": "PASS"
+      },
+      {
+        "role": "solution-architect",
+        "reviewer": "Codex",
+        "finding": "Reviewed existing build-only first-party OpenAPI 3.1 configuration, no public provider/Product contracts or SDK types; source guard, full architecture suite and byte-identical repeated generation passed. Current primary documentation supports this baseline.",
+        "reviewed_commit_sha": "2d64e05c9c9e3c084d8e20beaa43f789eaa20c31",
+        "result": "PASS"
+      },
+      {
+        "role": "sdk-engineer",
+        "reviewer": "Codex",
+        "finding": "Reviewed existing build-only first-party OpenAPI 3.1 configuration, no public provider/Product contracts or SDK types; source guard, full architecture suite and byte-identical repeated generation passed. Current primary documentation supports this baseline.",
+        "reviewed_commit_sha": "2d64e05c9c9e3c084d8e20beaa43f789eaa20c31",
+        "result": "PASS"
+      },
+      {
+        "role": "rd-engineer",
+        "reviewer": "Codex",
+        "finding": "Reviewed existing build-only first-party OpenAPI 3.1 configuration, no public provider/Product contracts or SDK types; source guard, full architecture suite and byte-identical repeated generation passed. Current primary documentation supports this baseline.",
+        "reviewed_commit_sha": "2d64e05c9c9e3c084d8e20beaa43f789eaa20c31",
+        "result": "PASS"
+      },
+      {
+        "role": "tester-qa-engineer",
+        "reviewer": "Codex",
+        "finding": "Reviewed existing build-only first-party OpenAPI 3.1 configuration, no public provider/Product contracts or SDK types; source guard, full architecture suite and byte-identical repeated generation passed. Current primary documentation supports this baseline.",
+        "reviewed_commit_sha": "2d64e05c9c9e3c084d8e20beaa43f789eaa20c31",
+        "result": "PASS"
+      }
+    ],
+    "limitations": [
+      "Current retrospective committed validation only; no historical test execution or historical SHA is invented.",
+      "Codex engineering reviews are not independent human or Product acceptance.",
+      "Original historical evidence and DONE status remain preserved."
+    ]
+  },
+  "result": "PASS",
+  "status": "PASS",
+  "validated_commit_sha": "6fb030241ad0927f0a2576da23d348db1cfceab6",
+  "tested_commit_sha": "6fb030241ad0927f0a2576da23d348db1cfceab6",
+  "checked_at": "2026-10-15T15:04:13Z",
+  "checks": [
+    "The exact-version OpenAPI guard now requires fixed 10.0.13 servicing pins and passes. The platform builds with zero warnings/errors; OpenAPI 3.1 contract tests pass within all 237 architecture tests. All five owned blobs match the tested candidate."
   ],
-  "current_primary_sources": [
-    {
-      "checked_at": "2026-10-05T21:51:58.8951353+00:00",
-      "url": "https://learn.microsoft.com/en-us/aspnet/core/fundamentals/openapi/aspnetcore-openapi?view=aspnetcore-10.0",
-      "finding": ".NET 10 first-party build-time OpenAPI 3.1 generation remains supported."
-    },
-    {
-      "checked_at": "2026-10-05T21:51:58.8951353+00:00",
-      "url": "https://spec.openapis.org/oas/v3.1.2.html",
-      "finding": "Published OpenAPI 3.1 specification; no version upgrade selected."
-    }
-  ],
-  "role_reviews": [
-    {
-      "role": "full-stack-engineer",
-      "reviewer": "Codex",
-      "finding": "Reviewed existing build-only first-party OpenAPI 3.1 configuration, no public provider/Product contracts or SDK types; source guard, full architecture suite and byte-identical repeated generation passed. Current primary documentation supports this baseline.",
-      "reviewed_commit_sha": "2d64e05c9c9e3c084d8e20beaa43f789eaa20c31",
-      "result": "PASS"
-    },
-    {
-      "role": "solution-architect",
-      "reviewer": "Codex",
-      "finding": "Reviewed existing build-only first-party OpenAPI 3.1 configuration, no public provider/Product contracts or SDK types; source guard, full architecture suite and byte-identical repeated generation passed. Current primary documentation supports this baseline.",
-      "reviewed_commit_sha": "2d64e05c9c9e3c084d8e20beaa43f789eaa20c31",
-      "result": "PASS"
-    },
-    {
-      "role": "sdk-engineer",
-      "reviewer": "Codex",
-      "finding": "Reviewed existing build-only first-party OpenAPI 3.1 configuration, no public provider/Product contracts or SDK types; source guard, full architecture suite and byte-identical repeated generation passed. Current primary documentation supports this baseline.",
-      "reviewed_commit_sha": "2d64e05c9c9e3c084d8e20beaa43f789eaa20c31",
-      "result": "PASS"
-    },
-    {
-      "role": "rd-engineer",
-      "reviewer": "Codex",
-      "finding": "Reviewed existing build-only first-party OpenAPI 3.1 configuration, no public provider/Product contracts or SDK types; source guard, full architecture suite and byte-identical repeated generation passed. Current primary documentation supports this baseline.",
-      "reviewed_commit_sha": "2d64e05c9c9e3c084d8e20beaa43f789eaa20c31",
-      "result": "PASS"
-    },
-    {
-      "role": "tester-qa-engineer",
-      "reviewer": "Codex",
-      "finding": "Reviewed existing build-only first-party OpenAPI 3.1 configuration, no public provider/Product contracts or SDK types; source guard, full architecture suite and byte-identical repeated generation passed. Current primary documentation supports this baseline.",
-      "reviewed_commit_sha": "2d64e05c9c9e3c084d8e20beaa43f789eaa20c31",
-      "result": "PASS"
-    }
-  ],
-  "limitations": [
-    "Current retrospective committed validation only; no historical test execution or historical SHA is invented.",
-    "Codex engineering reviews are not independent human or Product acceptance.",
-    "Original historical evidence and DONE status remain preserved."
-  ]
+  "current_validation_owner": "TUN-P1-023",
+  "execution_receipt": "governance/evidence/TUN-P1-023-EXECUTION-RESULTS.json",
+  "boundary": "Current technical evidence only. Complete prior payload is retained in historical_validation. No new Product/release acceptance; live R2 and P1 milestone acceptance remain pending."
 }
