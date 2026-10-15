@@ -14,8 +14,8 @@ function Require-Text([string]$Path, [string]$Expected) {
     if (-not ([IO.File]::ReadAllText($Path).Contains($Expected))) { throw "Expected text is missing from ${Path}: $Expected" }
 }
 
-Require-Text $packagePath '<PackageVersion Include="Microsoft.AspNetCore.OpenApi" Version="10.0.12" />'
-Require-Text $packagePath '<PackageVersion Include="Microsoft.Extensions.ApiDescription.Server" Version="10.0.12" />'
+Require-Text $packagePath '<PackageVersion Include="Microsoft.AspNetCore.OpenApi" Version="10.0.13" />'
+Require-Text $packagePath '<PackageVersion Include="Microsoft.Extensions.ApiDescription.Server" Version="10.0.13" />'
 Require-Text $apiProjectPath '<PackageReference Include="Microsoft.AspNetCore.OpenApi" />'
 Require-Text $apiProjectPath '<PackageReference Include="Microsoft.Extensions.ApiDescription.Server" PrivateAssets="all" />'
 Require-Text $apiProjectPath '<OpenApiDocumentsDirectory>$(BaseIntermediateOutputPath)openapi</OpenApiDocumentsDirectory>'
