@@ -7,7 +7,7 @@
   "parent_milestone_revision_id": null,
   "title": "Bounded project revision summary validation",
   "revision_type": "CORRECTIVE",
-  "status": "ACTIVE",
+  "status": "CLOSED",
   "reason": "Final P1 recovery verification exposed a validator that incorrectly requires all historical closed revisions in a bounded summary; preserve closed records and reject missing active or contradictory displayed states.",
   "authority_refs": [
     "docs/authority/current/development/12_AI_Development_Protocol_Context_and_Project_Memory.md",
@@ -37,6 +37,30 @@
     "governance/evidence/P0-RV003-VALIDATION.json"
   ],
   "created_at": "2026-10-15T15:25:39.3176660+00:00",
-  "closed_at": null,
-  "product_acceptance_required": false
+  "closed_at": "2026-10-15T15:30:27Z",
+  "product_acceptance_required": false,
+  "git_state": {
+    "repository_changed": true,
+    "validated_commit_sha": "1c0e7e1fa47bbf32fd5bafcd0f9da694487ec439",
+    "tested_commit_sha": "1c0e7e1fa47bbf32fd5bafcd0f9da694487ec439",
+    "work_item_commit_shas": [
+      "1c0e7e1fa47bbf32fd5bafcd0f9da694487ec439"
+    ],
+    "closure_commit_sha": null,
+    "remaining_uncommitted_paths": [
+      "docs/context/current/HANDOFF.md",
+      "docs/context/current/adaptive-selection.json",
+      "docs/context/current/authority.md",
+      "docs/context/current/contracts.md",
+      "docs/context/current/git-changes.md",
+      "docs/context/current/manifest.json",
+      "docs/context/current/relevant-flows.md",
+      "docs/context/current/summary.md",
+      "docs/context/current/tests.md",
+      "docs/project/CURRENT_STATE.md",
+      "docs/project/HANDOFF.md",
+      "docs/project/PROJECT_CONTEXT.md"
+    ],
+    "remaining_uncommitted_classification": "PREEXISTING_UNRELATED"
+  }
 }
