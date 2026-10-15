@@ -58,7 +58,7 @@
         "governance/evidence/TUN-P1-024-EXECUTION-RESULTS.json",
         "docs/development/R2_INSTALLER.md"
       ],
-      "disposition": "SDK/component and installer technical tests pass. TUN-P1-024 supplies installer setup, OpenBao resolution and a unique-object contract runner. Live R2 remains NOT_EXECUTED: the supplied bucket environment is explicitly unconfirmed and installed exact vault references are absent. DEF-TUN-P1-023-R2-001 remains OPEN."
+      "disposition": "SDK/component and installer technical tests pass. The operator now confirms bucket tunner is dedicated to non-production integration tests and reports setup-r2 complete. OpenBao is healthy and unsealed. The supplied profile locator tunner is not a verified full file path; exact credential references and live execution remain unverified. DEF-TUN-P1-023-R2-001 remains OPEN and live R2 remains NOT_EXECUTED."
     },
     {
       "id": "GAP-P1-023-EVIDENCE-011",
@@ -183,7 +183,7 @@
       "evidence": [
         "governance/evidence/TUN-P1-023-EXECUTION-RESULTS.json"
       ],
-      "disposition": "Existing 22 P1 items pass committed readiness; TUN-P1-023 and milestone acceptance remain pending live R2 and final reviews."
+      "disposition": "Current native P1 close-check passes all 23 completed work-item gates. TUN-P1-023 and milestone acceptance remain pending actual live R2 validation and the blocked reviews."
     },
     {
       "id": "GAP-P1-023-SERVICING-004",
@@ -230,7 +230,7 @@
       "disposition": "New committed revision passes seven positive/negative checks plus actual fresh recovery and project-state validation; historical closed records unchanged."
     }
   ],
-  "updated_at": "2026-10-15T17:32:17Z",
+  "updated_at": "2026-10-15T19:50:40Z",
   "summary": {
     "total": 20,
     "resolved": 18,
@@ -245,7 +245,9 @@
     "technical_tests_passed": 39,
     "combined_platform_tests_passed": 328,
     "live_result": "NOT_EXECUTED",
-    "bucket_environment": "UNCONFIRMED",
-    "remaining_prerequisite": "Confirm dedicated non-production bucket, complete installer setup with operator-supplied exact vault references and scoped private input, then run live contract validation."
+    "bucket_environment": "DEDICATED_NON_PRODUCTION_CONFIRMED_BY_OPERATOR",
+    "remaining_prerequisite": "Locate the saved non-secret installer profile, verify its operator-supplied references, then run the interactive live R2 test with a private scoped token and retain content and cleanup verification.",
+    "previous_bucket_environment": "UNCONFIRMED",
+    "installer_setup": "OPERATOR_REPORTED_COMPLETE_PROFILE_PATH_UNVERIFIED"
   }
 }

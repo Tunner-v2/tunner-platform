@@ -117,7 +117,7 @@
   },
   "live_r2": {
     "result": "NOT_EXECUTED",
-    "reason": "Installer-provided existing non-production endpoint, dedicated bucket and bucket-scoped secret-store/OpenBao references are unavailable. User forbids invented endpoint/bucket/path/environment names and requires installer configuration.",
+    "reason": "The operator confirms bucket tunner is dedicated to non-production integration tests and reports setup-r2 complete. The supplied profile locator tunner has not resolved to a saved profile; the full path and installed credential references remain unverified. Live testing still requires interactive private scoped-token entry and actual content/cleanup receipts.",
     "defect_id": "DEF-TUN-P1-023-R2-001"
   },
   "failed_attempts": [
@@ -129,7 +129,7 @@
     "Final project-memory source guard rejected omitted old CLOSED P0-RV001 in a deliberately bounded summary. New P0-RV003 preserves closure and corrects the validator; seven focused checks and final actual project-state/fresh-recovery validation pass."
   ],
   "review_method": "Engineering reviews by the executing agent; no independent human, Product, security-release or protected-main merge approval implied.",
-  "exact_next_action": "Installer supplies existing non-production R2 endpoint, dedicated integration bucket and bucket-scoped secret-store/OpenBao references. Then execute live put/read/delete with cleanup evidence, resolve DEF-TUN-P1-023-R2-001, repeat blocked role reviews and native P1 closure checks. Keep P1 ACTIVE and TUN-P1-023 in VALIDATION.",
+  "exact_next_action": "Locate the saved setup-r2 non-secret profile using its full file path. Read the installed exact credential references without reading or echoing secret values. Run test-r2 interactively against the operator-confirmed dedicated non-production bucket with a private short-lived scoped token. Preserve exact content and cleanup verification, resolve DEF-TUN-P1-023-R2-001 only on actual success, then repeat blocked reviews and native P1 closure checks.",
   "initial_dirty_paths": [
     "docs/context/current/HANDOFF.md",
     "docs/context/current/adaptive-selection.json",
@@ -157,6 +157,46 @@
     "blocked_milestone_acceptance": 1
   },
   "final_milestone_close_check": {
+    "outcome": "NOT_READY",
+    "existing_work_item_gates_passed": 23,
+    "failures": [
+      "work item is not DONE: TUN-P1-023 (VALIDATION)",
+      "P1 defect remains open: DEF-TUN-P1-023-R2-001 (OPEN)",
+      "milestone role-review evidence is malformed or not PASS: governance/evidence/P1-MILESTONE-ROLE-REVIEWS.json"
+    ],
+    "reason": "Native close-check still reports exactly the pending TUN-P1-023 state, its OPEN R2 prerequisite and BLOCKED milestone reviews. Bucket isolation is now operator-confirmed, but no live R2 acceptance receipt exists.",
+    "recorded_at": "2026-10-15T19:50:40Z",
+    "checked_commit_sha": "628ee60ef75c5b0aa85e81e359b78e259770d096"
+  },
+  "previous_live_r2_prerequisite": {
+    "result": "NOT_EXECUTED",
+    "reason": "Installer-provided existing non-production endpoint, dedicated bucket and bucket-scoped secret-store/OpenBao references are unavailable. User forbids invented endpoint/bucket/path/environment names and requires installer configuration.",
+    "defect_id": "DEF-TUN-P1-023-R2-001"
+  },
+  "setup_progress": {
+    "recorded_at": "2026-10-15T19:50:40Z",
+    "observed_commit_sha": "628ee60ef75c5b0aa85e81e359b78e259770d096",
+    "bucket": "tunner",
+    "bucket_environment": "DEDICATED_NON_PRODUCTION_CONFIRMED_BY_OPERATOR",
+    "confirmation_source": "Direct operator reply in this task",
+    "policy_application": "OPERATOR_REPORTED_SUCCESS",
+    "openbao_health": {
+      "Endpoint": "http://127.0.0.1:28200",
+      "HttpStatus": 200,
+      "Initialized": true,
+      "Sealed": false,
+      "Standby": false,
+      "CredentialsUsed": false
+    },
+    "health_observed_at": "2026-10-15T19:48:16.3038744+00:00",
+    "installer_setup": "OPERATOR_REPORTED_COMPLETE",
+    "supplied_profile_locator": "tunner",
+    "saved_profile_path_verified": false,
+    "exact_credential_references_verified": false,
+    "live_r2_requests_executed": false,
+    "private_credentials_received": false
+  },
+  "previous_final_milestone_close_check": {
     "outcome": "NOT_READY",
     "existing_work_item_gates_passed": 22,
     "failures": [

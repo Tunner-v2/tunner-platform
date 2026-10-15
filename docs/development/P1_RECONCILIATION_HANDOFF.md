@@ -1,6 +1,8 @@
 # P1 reconciliation handoff
 
-Current installer continuation: [P1 R2 installer handoff](P1_R2_INSTALLER_HANDOFF.md). The installer and local contract runner are implemented and validated under TUN-P1-024; live R2 remains blocked because the supplied bucket's environment is unconfirmed and installed credential references are absent. The baseline receipts and remediation history below are preserved.
+Current setup continuation (2026-10-15): the operator confirms bucket `tunner` is dedicated to non-production integration tests and reports `setup-r2` complete. OpenBao was independently observed as HTTP 200, initialized and unsealed at `http://127.0.0.1:28200`. The supplied profile locator `tunner` is not a verified full file path; no matching profile was located in the repository root or bounded searches of the operator's usual Documents/Desktop/Downloads folders. Obtain the full saved-profile path, verify its non-secret references, then run `test-r2` interactively with private scoped-token entry. No R2 request or live acceptance receipt exists yet. The earlier bucket-environment statements below describe the preserved historical reconciliation, superseded by this setup update.
+
+The installer and local contract runner remain implemented and validated under TUN-P1-024; [P1 R2 installer handoff](P1_R2_INSTALLER_HANDOFF.md) retains that technical history. Current native P1 close-check passes all 23 completed work-item gates and retains exactly three failures: TUN-P1-023 is VALIDATION, DEF-TUN-P1-023-R2-001 is OPEN, and milestone reviews are BLOCKED. P1 remains ACTIVE.
 
 Branch: `change/TUN-P1-001-platform-foundation-refinement`.
 Technical candidate: `6fb030241ad0927f0a2576da23d348db1cfceab6`.
