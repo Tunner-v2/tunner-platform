@@ -13,6 +13,8 @@ dotnet run --project src/Tunner.Installer -- test-r2 "<same-profile-path>"
 
 Replace the profile placeholder with an operator-selected file outside the checkout. The parent directory must already exist. Setup writes an atomic new file and refuses to overwrite an existing profile. To change configuration, rerun setup to a new operator-selected path. Protect the profile and its directory from unauthorized modification: it controls credential destinations even though it contains no secret values.
 
+Run `./tools/validation/Test-TunnerR2Installer.ps1` for the installer build, all installer tests with disposable OpenBao, existing secret scan and SAST. It resolves the checkout dynamically and keeps TRX receipts locally under `artifacts/r2-installer/`. Use `-NoRestore` when dependencies are already restored. The installer is built directly from its project; the existing platform solution retains its historical composition. No workflow or external artifact upload is added.
+
 Setup asks for:
 
 - Existing engineering environment class (`LOCAL_DEVELOPMENT` or `EPHEMERAL_TEST`) and environment reference, validated through the existing environment configuration model.
