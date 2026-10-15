@@ -16,7 +16,12 @@ Automatic review rejected editing closed P1-002 reconciliation records and rejec
 
 The user supplied an R2 endpoint/bucket pair, then explicitly answered that its environment is unconfirmed. No installed profile, exact logical vault reference, KV resource, field references or scoped credentials are supplied. No R2 request was made. No production resource, endpoint default, vault path or R2 environment-variable name was invented. Enter private values only in the interactive installer.
 
+Native committed-readiness audit over completed P1 work reports PASS with no findings. Governance validates 420 records without diagnostics; generated context verifies CURRENT and project-state recovery checks agree with authoritative governance. The current milestone review remains BLOCKED by live R2.
+
+An unrelated, newly observed untracked `.vscode/settings.json` appeared during execution. It is preserved without inspection or modification and excluded from task commits; the new work item classifies the remaining unrelated paths as UNRELATED_ACTIVE_WORK.
+
 Exact next action:
+
 1. Confirm an approved bucket dedicated to non-production integration tests.
 2. Run `dotnet run --project src/Tunner.Installer -- setup-r2 "<operator-selected-profile-path>"` with existing exact configuration/references and private scoped credentials. Use the confirmed bucket and base account endpoint separately.
 3. Run `dotnet run --project src/Tunner.Installer -- test-r2 "<same-profile-path>"`, preserve content/cleanup verification and tested SHA, and resolve the live prerequisite only on actual success.
