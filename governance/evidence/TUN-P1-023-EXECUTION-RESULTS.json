@@ -117,7 +117,7 @@
   },
   "live_r2": {
     "result": "NOT_EXECUTED",
-    "reason": "The operator confirms bucket tunner is dedicated to non-production integration tests and reports setup-r2 complete. The supplied profile locator tunner has not resolved to a saved profile; the full path and installed credential references remain unverified. Live testing still requires interactive private scoped-token entry and actual content/cleanup receipts.",
+    "reason": "The confirmed dedicated non-production bucket and operator-supplied references are retained in local configuration. Closed P1-024-RV001 automates scoped identity acquisition and credential creation/reuse. Actual provider validation requires the private operator run of tools/dev/setup-r2.ps1; no real authentication material has been received by the agent.",
     "defect_id": "DEF-TUN-P1-023-R2-001"
   },
   "failed_attempts": [
@@ -129,7 +129,7 @@
     "Final project-memory source guard rejected omitted old CLOSED P0-RV001 in a deliberately bounded summary. New P0-RV003 preserves closure and corrects the validator; seven focused checks and final actual project-state/fresh-recovery validation pass."
   ],
   "review_method": "Engineering reviews by the executing agent; no independent human, Product, security-release or protected-main merge approval implied.",
-  "exact_next_action": "Use the operator-selected local-config/r2/profile.json location. Copy an existing verified non-secret profile there without overwriting a file, or run setup-r2 interactively using existing approved exact references and private scoped credentials. Then run test-r2 on the same profile and retain content/cleanup verification before resolving the OPEN R2 prerequisite and repeating the blocked reviews.",
+  "exact_next_action": "Run ./tools/dev/setup-r2.ps1. The helper preserves local profile.json, privately requests one local bootstrap/root login, mints/passes a finite exact-path non-root token and asks for R2 keys only if the credential record is absent. Preserve the non-secret result with ContentVerified, CleanupVerified, BootstrapCleanupVerified and Passed, then complete live-provider acceptance and blocked P1 reviews only after actual success.",
   "initial_dirty_paths": [
     "docs/context/current/HANDOFF.md",
     "docs/context/current/adaptive-selection.json",
@@ -236,5 +236,25 @@
       "review_method": "Executing-agent DevOps and security scope check: references only in local profiles, private credential entry retained, no public R2 access required, existing closed records unchanged.",
       "live_r2_acceptance": "NOT_EXECUTED"
     }
+  },
+  "live_r2_history": [
+    {
+      "result": "NOT_EXECUTED",
+      "reason": "The operator confirms bucket tunner is dedicated to non-production integration tests and reports setup-r2 complete. The supplied profile locator tunner has not resolved to a saved profile; the full path and installed credential references remain unverified. Live testing still requires interactive private scoped-token entry and actual content/cleanup receipts.",
+      "defect_id": "DEF-TUN-P1-023-R2-001"
+    }
+  ],
+  "automatic_local_setup": {
+    "revision": "P1-024-RV001",
+    "status": "CLOSED",
+    "validated_commit_sha": "56ff151a8ae362318eb767a7071943732e26f15c",
+    "closure_commit_sha": "3daf63ecf70970dad952cd13978db1a69c218493",
+    "installer_cases_passed": 64,
+    "platform_cases_passed": 289,
+    "skipped": 0,
+    "role_review_scope": "Nine executing-agent scoped local implementation reviews; no independent human or live provider approval.",
+    "live_r2_result": "NOT_EXECUTED",
+    "evidence": "governance/evidence/P1-024-RV001-VALIDATION.json",
+    "runbook": "docs/development/R2_AUTOMATIC_LOCAL_SETUP.md"
   }
 }

@@ -5,9 +5,9 @@ classification: ENVIRONMENT_PREREQUISITE
 severity: SEV-3
 status: OPEN
 environment: INSTALLER_NON_PRODUCTION_R2
-description: The installer and OpenBao reference integration are implemented in TUN-P1-024. The operator now confirms that bucket tunner is dedicated to non-production integration tests and reports setup-r2 complete. OpenBao health was independently observed as HTTP 200, initialized and unsealed. The supplied profile locator is only tunner; a full saved-profile path has not been located or verified. Exact credential references must be read from that non-secret profile and scoped credentials remain private. Live R2 put/read/delete remains NOT_EXECUTED until the installed profile is located and the interactive contract test succeeds with cleanup verification. No endpoint, bucket, vault path, credential field or environment-variable name is invented.
+description: Automatic local R2 setup is implemented and validated under closed P1-024-RV001. The operator confirmed bucket tunner is dedicated to non-production tests and supplied exact configuration and vault field references, retained in the non-secret local profile example. Run tools/dev/setup-r2.ps1 to reuse configuration, privately authenticate the local bootstrap, automatically mint/use a scoped identity and create or reuse the credential record. Live R2 remains NOT_EXECUTED until the operator run reports content, object cleanup and bootstrap cleanup verified. No real token/key was received by the agent and no live provider acceptance is inferred from disposable tests.
 expected_behavior_ref: docs/development/P1_READINESS_REMEDIATION.md
 evidence: [governance/evidence/TUN-P1-023-GAP-REGISTER.json, governance/evidence/TUN-P1-009-COMMITTED-RECONCILIATION.json, governance/evidence/TUN-P1-024-EXECUTION-RESULTS.json, docs/development/R2_INSTALLER.md]
 affected_versions: [P1_CURRENT_VALIDATION]
 created_at: 2026-10-15T15:15:20Z
-updated_at: 2026-10-15T19:50:40Z
+updated_at: 2026-10-15T21:29:16.8314338+00:00

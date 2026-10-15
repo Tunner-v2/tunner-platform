@@ -1,6 +1,6 @@
 # Automatic local R2 setup
 
-Revision: P1-024-RV001. Original TUN-P1-024 remains DONE with its historical closure/evidence unchanged.
+Revision: P1-024-RV001 is CLOSED at `3daf63ecf70970dad952cd13978db1a69c218493` after native close-check PASS and an allowed CLOSED transition. Original TUN-P1-024 remains DONE with its historical closure/evidence unchanged.
 
 ## Operator command
 

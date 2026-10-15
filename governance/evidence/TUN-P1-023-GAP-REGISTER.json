@@ -58,7 +58,7 @@
         "governance/evidence/TUN-P1-024-EXECUTION-RESULTS.json",
         "docs/development/R2_INSTALLER.md"
       ],
-      "disposition": "SDK/component and installer technical tests pass. The operator now confirms bucket tunner is dedicated to non-production integration tests and reports setup-r2 complete. OpenBao is healthy and unsealed. The supplied profile locator tunner is not a verified full file path; exact credential references and live execution remain unverified. DEF-TUN-P1-023-R2-001 remains OPEN and live R2 remains NOT_EXECUTED."
+      "disposition": "Original SDK/component and installer validation is preserved. Closed P1-024-RV001 adds reusable local configuration and automatic exact-resource OpenBao identity/credential setup, validated by 64 installer cases and 289 platform regression cases. The operator confirmed dedicated non-production bucket tunner and supplied reference names. Live R2 is NOT_EXECUTED until tools/dev/setup-r2.ps1 runs privately with verified content/object/bootstrap cleanup; DEF-TUN-P1-023-R2-001 remains OPEN."
     },
     {
       "id": "GAP-P1-023-EVIDENCE-011",
@@ -230,7 +230,7 @@
       "disposition": "New committed revision passes seven positive/negative checks plus actual fresh recovery and project-state validation; historical closed records unchanged."
     }
   ],
-  "updated_at": "2026-10-15T19:50:40Z",
+  "updated_at": "2026-10-15T21:29:16.8314338+00:00",
   "summary": {
     "total": 20,
     "resolved": 18,
@@ -246,8 +246,13 @@
     "combined_platform_tests_passed": 328,
     "live_result": "NOT_EXECUTED",
     "bucket_environment": "DEDICATED_NON_PRODUCTION_CONFIRMED_BY_OPERATOR",
-    "remaining_prerequisite": "Locate the saved non-secret installer profile, verify its operator-supplied references, then run the interactive live R2 test with a private scoped token and retain content and cleanup verification.",
+    "remaining_prerequisite": "Run the automatic local helper with private operator bootstrap authentication and first-run bucket-scoped keys if needed; retain actual R2 content, object cleanup and bootstrap cleanup verification.",
     "previous_bucket_environment": "UNCONFIRMED",
-    "installer_setup": "OPERATOR_REPORTED_COMPLETE_PROFILE_PATH_UNVERIFIED"
+    "installer_setup": "OPERATOR_REPORTED_COMPLETE_PROFILE_PATH_UNVERIFIED",
+    "automatic_local_revision": "P1-024-RV001",
+    "automatic_local_validated_sha": "56ff151a8ae362318eb767a7071943732e26f15c",
+    "automatic_local_installer_tests_passed": 64,
+    "automatic_local_combined_tests_passed": 353,
+    "command": "./tools/dev/setup-r2.ps1"
   }
 }
