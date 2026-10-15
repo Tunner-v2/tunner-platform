@@ -16,7 +16,7 @@ Original closure and current work are separate governance facts.
 No Revision is selected. No post-closure Revision is implicitly created.
 
 Latest bounded Revision lineage:
-- P0-RV001: CLOSED; original P0; CORRECTIVE: Post-closure remediation of governance/control-plane, evidence integrity, project-state consistency, fresh-agent recovery, authority integrity and portability deficiencies discovered after legitimate historical P0 closure.; next action: preserve closure and run governance next
+- P0-RV002: CLOSED; original P0; CORRECTIVE: P1 reconciliation exposed fail-open committed-state gates, incomplete ownership validation, unbound milestone reviews and an empty recovery action; preserve historical P0 closure.; next action: preserve closure and run governance next
 - P0-003-RV001: CLOSED; original TUN-P0-003; CORRECTIVE: Remediate the post-closure gap recorded by REOPEN-TUN-P0-003-001; retain original DONE evidence.; next action: preserve closure and run governance next
 - P0-004-RV001: CLOSED; original TUN-P0-004; CORRECTIVE: Remediate the post-closure gap recorded by REOPEN-TUN-P0-004-001; retain original DONE evidence.; next action: preserve closure and run governance next
 - P0-011-RV001: CLOSED; original TUN-P0-011; CORRECTIVE: Remediate the post-closure gap recorded by REOPEN-TUN-P0-011-001; retain original DONE evidence.; next action: preserve closure and run governance next
