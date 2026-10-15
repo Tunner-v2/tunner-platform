@@ -1,5 +1,7 @@
 # P1 reconciliation handoff
 
+Current installer continuation: [P1 R2 installer handoff](P1_R2_INSTALLER_HANDOFF.md). The installer and local contract runner are implemented and validated under TUN-P1-024; live R2 remains blocked because the supplied bucket's environment is unconfirmed and installed credential references are absent. The baseline receipts and remediation history below are preserved.
+
 Branch: `change/TUN-P1-001-platform-foundation-refinement`.
 Technical candidate: `6fb030241ad0927f0a2576da23d348db1cfceab6`.
 Governance candidate: `c37a720e1618f5acc69ab417d6886009b59f6575`.
