@@ -1,3 +1,3 @@
 # Open blockers
 
-No blockers are declared for the selected work item.
+- `DEF-TUN-P1-023-R2-001` — declared blocker

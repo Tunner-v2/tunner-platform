@@ -145,10 +145,13 @@
     "docs/project/PROJECT_CONTEXT.md"
   ],
   "existing_p1_committed_readiness": {
+    "command": "tunner governance commit-readiness audit --milestone P1",
     "result": "PASS",
-    "work_items": 22,
     "findings": [],
-    "command": "tunner governance commit-readiness audit --milestone P1"
+    "checked_at": "2026-10-15T22:09:54Z",
+    "receipt": "artifacts/P1-024-RV001/final-p1-committed-readiness.txt",
+    "receipt_sha256": "40127aef8da9c87afe0fb3200dac969a29ca6a881edff117f68f770cb2ef00a1",
+    "scope": "All completed P1 work items including original installer and explicit same-scope closed revisions."
   },
   "gap_register_summary": {
     "total": 20,
@@ -256,5 +259,33 @@
     "live_r2_result": "NOT_EXECUTED",
     "evidence": "governance/evidence/P1-024-RV001-VALIDATION.json",
     "runbook": "docs/development/R2_AUTOMATIC_LOCAL_SETUP.md"
+  },
+  "committed_revision_proof": {
+    "correction_revision": "P0-004-RV002",
+    "validated_commit_sha": "6051f0aa258e11262b1edb6c1501837b05db623d",
+    "closure_commit_sha": "d9a8f6eb8352a63c818827d5af8115935ac94d2c",
+    "shared_test_revisions": [
+      "P1-020-RV001",
+      "P1-022-RV001"
+    ],
+    "shared_test_closure_commit_sha": "979643cf59161888a8710eaaec047043db9d32c8",
+    "result": "PASS",
+    "new_native_proof_checks": 15,
+    "existing_rv_checks": 60,
+    "evidence": "governance/evidence/P0-004-RV002-VALIDATION.json",
+    "native_p1_audit": {
+      "command": "tunner governance commit-readiness audit --milestone P1",
+      "result": "PASS",
+      "findings": [],
+      "checked_at": "2026-10-15T22:09:54Z",
+      "receipt": "artifacts/P1-024-RV001/final-p1-committed-readiness.txt",
+      "receipt_sha256": "40127aef8da9c87afe0fb3200dac969a29ca6a881edff117f68f770cb2ef00a1"
+    }
+  },
+  "previous_existing_p1_committed_readiness": {
+    "result": "PASS",
+    "work_items": 22,
+    "findings": [],
+    "command": "tunner governance commit-readiness audit --milestone P1"
   }
 }
