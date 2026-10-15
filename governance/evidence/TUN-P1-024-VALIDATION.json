@@ -3,9 +3,9 @@
   "scope_id": "TUN-P1-024",
   "scope_type": "WORK_ITEM",
   "validation_kind": "COMMITTED",
-  "result": "PENDING",
-  "validated_commit_sha": null,
-  "tested_commit_sha": null,
+  "result": "PASS",
+  "validated_commit_sha": "4825afc35878b36229f7f7e9f6902aab234cd68d",
+  "tested_commit_sha": "4825afc35878b36229f7f7e9f6902aab234cd68d",
   "owned_behavior_paths": [
     "src/Tunner.Platform/Secrets/ISecretStore.cs",
     "src/Tunner.Platform/Secrets/OpenBaoSecretStore.cs",
@@ -22,10 +22,13 @@
     "docs/development/R2_INSTALLER.md",
     "tools/validation/Test-TunnerR2Installer.ps1"
   ],
-  "checked_at": "2026-10-15T17:22:18Z",
+  "checked_at": "2026-10-15T17:32:17Z",
   "execution_receipt": "governance/evidence/TUN-P1-024-EXECUTION-RESULTS.json",
   "checks": [
-    "Local validation entry point and restored original solution await new committed validation."
+    "Installer local validation entry point PASS: zero-warning build, 39 tests including disposable OpenBao, unchanged secret scan and SAST.",
+    "Restored original platform solution tests PASS: 289 tests, zero skipped; combined current receipts cover 328 passing tests.",
+    "All 14 installer-owned behavior paths match candidate, HEAD and working Git objects.",
+    "Original platform solution equals its pre-task Git blob; closed P1-002 records unchanged."
   ],
   "scope_limit": "Technical installer and contract runner only; no live R2 PASS or milestone acceptance.",
   "previous_candidate_validation": {

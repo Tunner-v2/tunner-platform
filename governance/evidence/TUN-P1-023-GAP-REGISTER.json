@@ -54,9 +54,11 @@
       "status": "PARTIAL",
       "owner_work_item": "TUN-P1-023",
       "evidence": [
-        "governance/evidence/TUN-P1-023-EXECUTION-RESULTS.json"
+        "governance/evidence/TUN-P1-023-EXECUTION-RESULTS.json",
+        "governance/evidence/TUN-P1-024-EXECUTION-RESULTS.json",
+        "docs/development/R2_INSTALLER.md"
       ],
-      "disposition": "SDK/component tests and committed evidence pass. Live R2 put/read/delete remains NOT_EXECUTED until installer configuration; DEF-TUN-P1-023-R2-001 remains OPEN."
+      "disposition": "SDK/component and installer technical tests pass. TUN-P1-024 supplies installer setup, OpenBao resolution and a unique-object contract runner. Live R2 remains NOT_EXECUTED: the supplied bucket environment is explicitly unconfirmed and installed exact vault references are absent. DEF-TUN-P1-023-R2-001 remains OPEN."
     },
     {
       "id": "GAP-P1-023-EVIDENCE-011",
@@ -228,7 +230,7 @@
       "disposition": "New committed revision passes seven positive/negative checks plus actual fresh recovery and project-state validation; historical closed records unchanged."
     }
   ],
-  "updated_at": "2026-10-15T15:32:51Z",
+  "updated_at": "2026-10-15T17:32:17Z",
   "summary": {
     "total": 20,
     "resolved": 18,
@@ -236,5 +238,14 @@
     "blocked": 1,
     "remaining_external_prerequisite": "DEF-TUN-P1-023-R2-001",
     "existing_p1_commit_readiness": "PASS: all 22 existing work items, no findings"
+  },
+  "installer_update": {
+    "work_item": "TUN-P1-024",
+    "validated_commit_sha": "4825afc35878b36229f7f7e9f6902aab234cd68d",
+    "technical_tests_passed": 39,
+    "combined_platform_tests_passed": 328,
+    "live_result": "NOT_EXECUTED",
+    "bucket_environment": "UNCONFIRMED",
+    "remaining_prerequisite": "Confirm dedicated non-production bucket, complete installer setup with operator-supplied exact vault references and scoped private input, then run live contract validation."
   }
 }

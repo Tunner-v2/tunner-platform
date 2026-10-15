@@ -5,9 +5,9 @@ classification: ENVIRONMENT_PREREQUISITE
 severity: SEV-3
 status: OPEN
 environment: INSTALLER_NON_PRODUCTION_R2
-description: Live R2 put/read/delete validation requires the existing installer-configured non-production endpoint, dedicated integration-test bucket and bucket-scoped secret references through the secret-store abstraction/OpenBao. Those installed references are not supplied. The user requires all configuration during installation and forbids invented provider paths or environment names. SDK boundary tests do not prove live provider compatibility.
+description: The installer and OpenBao reference integration are implemented in TUN-P1-024. An endpoint and bucket pair were supplied, but the user explicitly confirms their environment is not yet known. Live R2 put/read/delete remains NOT_EXECUTED until a dedicated non-production bucket is confirmed and installation resolves operator-supplied bucket-scoped credential references. No installed profile or exact vault resource and field references are supplied; no names are invented. Production resources remain excluded.
 expected_behavior_ref: docs/development/P1_READINESS_REMEDIATION.md
-evidence: [governance/evidence/TUN-P1-023-GAP-REGISTER.json, governance/evidence/TUN-P1-009-COMMITTED-RECONCILIATION.json]
+evidence: [governance/evidence/TUN-P1-023-GAP-REGISTER.json, governance/evidence/TUN-P1-009-COMMITTED-RECONCILIATION.json, governance/evidence/TUN-P1-024-EXECUTION-RESULTS.json, docs/development/R2_INSTALLER.md]
 affected_versions: [P1_CURRENT_VALIDATION]
 created_at: 2026-10-15T15:15:20Z
-updated_at: 2026-10-15T15:15:20Z
+updated_at: 2026-10-15T17:30:29Z
