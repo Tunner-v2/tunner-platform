@@ -1,0 +1,66 @@
+{
+  "schema_version": 1,
+  "scope_type": "MILESTONE",
+  "scope_id": "P1",
+  "status": "BLOCKED",
+  "reviewed_commit_sha": "4b3203b9974b9da355a81e2b9becd43c93e590f0",
+  "reviewed_scope_sha256": "b30649914bb632589f95b9b11fbe66d2d9af5d72e972d9e085490ca2366e1332",
+  "reviewed_at": "2026-10-15T15:15:20Z",
+  "review_method": "Scoped engineering review by the executing agent; no independent human, Product or release approval implied.",
+  "reviews": [
+    {
+      "role": "project-manager",
+      "skill_hash": "ae262bf4c9a2e26c688106c7af420fbc4dc26a116048e04ae01a5e4e01ead927",
+      "conclusion": "BLOCKED",
+      "finding": "Current engineering changes and existing 22-item committed readiness pass, but TUN-P1-023 is PARTIAL/VALIDATION. Live R2 put/read/delete must use installer-provided non-production resources before P1 acceptance.",
+      "evidence_refs": [
+        "governance/evidence/TUN-P1-023-EXECUTION-RESULTS.json",
+        "governance/evidence/TUN-P1-023-ROLE-REVIEWS.json"
+      ]
+    },
+    {
+      "role": "solution-architect",
+      "skill_hash": "664ffba70d0f97e75951c3548b7f8391854781e4cf90cc50fc8829543783a35b",
+      "conclusion": "BLOCKED",
+      "finding": "Current engineering changes and existing 22-item committed readiness pass, but TUN-P1-023 is PARTIAL/VALIDATION. Live R2 put/read/delete must use installer-provided non-production resources before P1 acceptance.",
+      "evidence_refs": [
+        "governance/evidence/TUN-P1-023-EXECUTION-RESULTS.json",
+        "governance/evidence/TUN-P1-023-ROLE-REVIEWS.json"
+      ]
+    },
+    {
+      "role": "governance-engineer",
+      "skill_hash": "3c948ff290690b012d3736b561021989681c2b6fcac3f115b96ca1083672536f",
+      "conclusion": "BLOCKED",
+      "finding": "Current engineering changes and existing 22-item committed readiness pass, but TUN-P1-023 is PARTIAL/VALIDATION. Live R2 put/read/delete must use installer-provided non-production resources before P1 acceptance.",
+      "evidence_refs": [
+        "governance/evidence/TUN-P1-023-EXECUTION-RESULTS.json",
+        "governance/evidence/TUN-P1-023-ROLE-REVIEWS.json"
+      ]
+    },
+    {
+      "role": "tester-qa-engineer",
+      "skill_hash": "a57ce99d7ad7a3b60f17e4826c81c507c9cc208d8928285c406222eefe0a18fd",
+      "conclusion": "BLOCKED",
+      "finding": "Current engineering changes and existing 22-item committed readiness pass, but TUN-P1-023 is PARTIAL/VALIDATION. Live R2 put/read/delete must use installer-provided non-production resources before P1 acceptance.",
+      "evidence_refs": [
+        "governance/evidence/TUN-P1-023-EXECUTION-RESULTS.json",
+        "governance/evidence/TUN-P1-023-ROLE-REVIEWS.json"
+      ]
+    },
+    {
+      "role": "auditor",
+      "skill_hash": "191c796fc5df0332ff2c3c464ca611d2c6d3ffc5ba7e2807986a71ad2e40d921",
+      "conclusion": "BLOCKED",
+      "finding": "Current engineering changes and existing 22-item committed readiness pass, but TUN-P1-023 is PARTIAL/VALIDATION. Live R2 put/read/delete must use installer-provided non-production resources before P1 acceptance.",
+      "evidence_refs": [
+        "governance/evidence/TUN-P1-023-EXECUTION-RESULTS.json",
+        "governance/evidence/TUN-P1-023-ROLE-REVIEWS.json"
+      ]
+    }
+  ],
+  "blocking_findings": [
+    "DEF-TUN-P1-023-R2-001: installer configuration and live non-production provider contract validation remain required."
+  ],
+  "exact_next_action": "Complete installer-configured live R2 validation, resolve the explicit prerequisite, repeat blocked work-item reviews and completion gate, then regenerate committed milestone review snapshot and repeat native P1 close-check."
+}
