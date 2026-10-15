@@ -3,14 +3,51 @@
   "scope_id": "P0-004-RV002",
   "scope_type": "REVISION",
   "validation_kind": "COMMITTED",
-  "result": "PENDING",
-  "validated_commit_sha": null,
-  "tested_commit_sha": null,
+  "result": "PASS",
+  "validated_commit_sha": "6051f0aa258e11262b1edb6c1501837b05db623d",
+  "tested_commit_sha": "6051f0aa258e11262b1edb6c1501837b05db623d",
   "owned_behavior_paths": [
     "src/Tunner.Governance/CommittedEvidenceApplication.cs",
     "src/Tunner.Governance/RevisionCommittedProofResolver.cs",
     "tests/Tunner.Governance.FunctionalTests/Program.cs"
   ],
-  "checks": [],
-  "validation_attempts": ["Initial build required converting Dictionary.ValueCollection to the existing IReadOnlyList revision-ordering input; corrected with ToArray.", "Initial native P1 audit rejected three legitimate installer-revision paths. The corrected resolver cleared those findings; the shared test-module edits then exposed P1-020 and P1-022 ownership, handled through explicit same-scope validation revisions.", "All existing 60 RV checks and 15 new CLI proof checks pass in the pre-commit smoke run; final validation binds the committed correction candidate."]
+  "checks": [
+    "Committed build passes with zero warnings/errors.",
+    "Complete governance functional suite PASS, including all 60 existing RV checks and 15 new native CLI committed-proof checks.",
+    "Candidate, HEAD and worktree owned Git objects agree.",
+    "Secret scan and SAST inspect 1279 files with no match; existing secrets source validator PASS.",
+    "Original scope records/evidence retain immutable closure. Actual P1 committed-readiness audit follows co-owner closure; live R2 acceptance is separate and remains NOT_EXECUTED."
+  ],
+  "validation_attempts": [
+    "Initial build required converting Dictionary.ValueCollection to the existing IReadOnlyList revision-ordering input; corrected with ToArray.",
+    "Initial native P1 audit rejected three legitimate installer-revision paths. The corrected resolver cleared those findings; the shared test-module edits then exposed P1-020 and P1-022 ownership, handled through explicit same-scope validation revisions.",
+    "All existing 60 RV checks and 15 new CLI proof checks pass in the pre-commit smoke run; final validation binds the committed correction candidate.",
+    "A scan invocation initially used an absent Invoke-TunnerSast.ps1 filename; the registered Invoke-TunnerSastPolicyScan.ps1 was subsequently run and passed. No scanner failure was waived."
+  ],
+  "checked_at": "2026-10-15T22:05:43Z",
+  "receipts": [
+    {
+      "path": "artifacts/P1-024-RV001/governance-proof-committed.txt",
+      "sha256": "b39b055af61c564b29dd3a55f2d56f36532233f548446173baaccd7b73efdec5",
+      "result": "PASS"
+    }
+  ],
+  "owned_git_objects": [
+    {
+      "Path": "src/Tunner.Governance/CommittedEvidenceApplication.cs",
+      "Blob": "1cd53b9dfe4362be972595bacd628b52d0c4f991",
+      "Match": true
+    },
+    {
+      "Path": "src/Tunner.Governance/RevisionCommittedProofResolver.cs",
+      "Blob": "81127550704a019fddff5e2741db1a1b88cf6657",
+      "Match": true
+    },
+    {
+      "Path": "tests/Tunner.Governance.FunctionalTests/Program.cs",
+      "Blob": "1afadbec6b72072e3f0d8c6c05a4a1bd0edbe2d7",
+      "Match": true
+    }
+  ],
+  "native_p1_audit": "PENDING_COOWNER_CLOSURE"
 }
