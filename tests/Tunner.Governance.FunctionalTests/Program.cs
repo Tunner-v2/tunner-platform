@@ -238,6 +238,8 @@ created_at: 2026-10-05T00:00:00Z
     Expect(p1DownstreamAfterEvidence.Items.Single(item => item.WorkItemId == "TUN-P1-DOWNSTREAM").Actionable, "A P1 downstream item may become eligible when its DONE prerequisite has valid committed-state evidence.", failures);
 
     var milestoneClose = GovernanceApplication.CheckMilestoneClose(fixtureRoot, "MVP");
+    RunGit(fixtureRoot, "add", ".");
+    RunGit(fixtureRoot, "commit", "-m", "Anchor synthetic milestone review fixture");
     var snapshot = JsonSerializer.SerializeToNode(GovernanceApplication.MilestoneReviewSnapshot(fixtureRoot, "MVP").Payload)!;
     var milestoneReviewPath = Path.Combine(fixtureRoot.FullName, "governance", "evidence", "MVP-MILESTONE-ROLE-REVIEWS.json");
     File.WriteAllText(milestoneReviewPath, JsonSerializer.Serialize(new {

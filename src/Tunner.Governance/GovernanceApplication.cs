@@ -460,7 +460,7 @@ public static class GovernanceApplication
                 ReviewedScopeSha256 = MilestoneReviewFingerprint(repository, milestone) });
     }
 
-    private static string MilestoneReviewFingerprint(DirectoryInfo repository, GovernanceRecord milestone)
+    private static string MilestoneReviewFingerprint(DirectoryInfo repository, GovernanceRecord milestone, string? revision = null)
     {
         var paths = milestone.StringList("work_items").Select(id => "governance/work-items/" + id + ".yaml")
             .Concat(milestone.StringList("evidence_refs").Where(path => path != $"governance/evidence/{milestone.Identifier}-MILESTONE-ROLE-REVIEWS.json"))
@@ -471,7 +471,7 @@ public static class GovernanceApplication
         {
             var path = Path.GetFullPath(Path.Combine(repository.FullName, logical));
             rows.Add(logical + ":" + (path.StartsWith(repository.FullName + Path.DirectorySeparatorChar, StringComparison.OrdinalIgnoreCase) && File.Exists(path)
-                ? Convert.ToHexString(SHA256.HashData(File.ReadAllBytes(path))).ToLowerInvariant() : "MISSING"));
+                ? (revision is null ? CommittedEvidenceApplication.Git(repository, "hash-object", "--", logical) : CommittedEvidenceApplication.Git(repository, "rev-parse", revision + ":" + logical)) : "MISSING"));
         }
         return Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(string.Join("\n", rows)))).ToLowerInvariant();
     }
@@ -508,7 +508,7 @@ public static class GovernanceApplication
             var expectedSnapshot = MilestoneReviewFingerprint(repository, milestone);
             if (!root.TryGetProperty("reviewed_commit_sha", out var reviewedSha) || !CommittedEvidenceApplication.IsSha(reviewedSha.GetString()) ||
                 CommittedEvidenceApplication.Git(repository, "merge-base", reviewedSha.GetString()!, "HEAD") != reviewedSha.GetString() ||
-                !root.TryGetProperty("reviewed_scope_sha256", out var snapshot) || snapshot.GetString() != expectedSnapshot)
+                !root.TryGetProperty("reviewed_scope_sha256", out var snapshot) || (snapshot.GetString() != expectedSnapshot || snapshot.GetString() != MilestoneReviewFingerprint(repository, milestone, reviewedSha.GetString())))
             {
                 failures.Add($"milestone reviews lack current committed scope binding; run governance milestone review-snapshot {milestone.Identifier}");
                 return;
