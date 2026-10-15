@@ -3,9 +3,9 @@
   "scope_id": "P0-RV002",
   "scope_type": "REVISION",
   "validation_kind": "COMMITTED",
-  "result": "PENDING",
-  "validated_commit_sha": null,
-  "tested_commit_sha": null,
+  "result": "PASS",
+  "validated_commit_sha": "c37a720e1618f5acc69ab417d6886009b59f6575",
+  "tested_commit_sha": "c37a720e1618f5acc69ab417d6886009b59f6575",
   "owned_behavior_paths": [
     "src/Tunner.Governance/CommitReadinessApplication.cs",
     "src/Tunner.Governance/CommittedEvidenceApplication.cs",
@@ -15,7 +15,12 @@
     "tests/Tunner.Governance.FunctionalTests/Program.cs",
     "docs/development/P0_RV002_READINESS.md"
   ],
-  "checks": [],
+  "checks": [
+    "Governance build: zero warnings/errors.",
+    "Complete executable functional suite PASS, including 60 RV assertions and new missing-state, missing-envelope, modified-owned-file, all-active-milestone and stale/committed review-snapshot cases.",
+    "P0 and P0-RV001 CLOSED records remain unchanged.",
+    "Owned paths match the committed candidate; initial generated dirty paths excluded."
+  ],
   "initial_dirty_paths": [
     "docs/context/current/HANDOFF.md",
     "docs/context/current/adaptive-selection.json",
@@ -29,5 +34,10 @@
     "docs/project/CURRENT_STATE.md",
     "docs/project/HANDOFF.md",
     "docs/project/PROJECT_CONTEXT.md"
+  ],
+  "checked_at": "2026-10-15T14:55:56Z",
+  "validation_attempts": [
+    "Initial synthetic no-op fixture used an incomplete nested git_state mapping; corrected to complete explicit no-repository-change state before final passing validation.",
+    "Review binding was strengthened after inspection to compare Git-normalized working objects with reviewed committed objects; rerun passed."
   ]
 }
