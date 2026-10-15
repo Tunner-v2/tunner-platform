@@ -17,7 +17,8 @@
     "List failure, malformed JSON, mount-create failure and each policy-write failure stop subsequent mutations.",
     "Status is credential-free; private synthetic input is absent from output; transferred policy content is unchanged.",
     "Existing secrets source validator, secret scan and SAST pass; 1243 files inspected, no rule match.",
-    "Both owned source/test Git objects equal candidate, HEAD and working tree; original P0-007 work/evidence and infra/openbao files unchanged."
+    "Both owned source/test Git objects equal candidate, HEAD and working tree; original P0-007 work/evidence and infra/openbao files unchanged.",
+    "Native revision close-check PASS and CLOSED transition ALLOWED; revision closure committed. Explicit P1-023 context verifies CURRENT and project state agrees with authoritative governance."
   ],
   "runtime_test_policy": "Final Windows PowerShell 5.1 test process uses RemoteSigned; no machine/current-user policy is changed. Microsoft documents process lifetime and local-script behavior.",
   "primary_source": "https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_execution_policies?view=powershell-5.1",
@@ -48,5 +49,6 @@
     "Initial full-script test double used caller script scope and failed in both PowerShell versions; corrected isolated fixture state and cleanup. Production fix remained the indexed lookup.",
     "A committed Windows PowerShell test with default policy was blocked before script execution. Earlier smoke used a test-process override; final committed run uses process-only RemoteSigned and passes all nine cases."
   ],
-  "boundary": "No real root token received, no live mount/policy operation executed by these tests, and no R2 contact. Operator retry remains private; R2 provisioning/non-production prerequisite remains open."
+  "boundary": "No real root token received, no live mount/policy operation executed by these tests, and no R2 contact. Operator retry remains private; R2 provisioning/non-production prerequisite remains open.",
+  "closure_commit_sha": "8926b45a62274d8e018c06e1a1d44fbdfd7f2934"
 }
