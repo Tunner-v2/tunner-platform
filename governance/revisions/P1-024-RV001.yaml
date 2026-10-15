@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "revision_id": "P1-024-RV001",
+  "revision_scope": "WORK_ITEM",
+  "original_scope_id": "TUN-P1-024",
+  "parent_revision_id": null,
+  "parent_milestone_revision_id": null,
+  "title": "Automatic local R2 configuration and scoped OpenBao session",
+  "revision_type": "OPERABILITY",
+  "status": "VALIDATION",
+  "reason": "Operator requests one-command local setup and validation without repeatedly entering configuration or manually obtaining and copying scoped tokens.",
+  "authority_refs": [
+    "docs/authority/baselines/1.6.0/06_Environment_Configuration_Secrets_and_Deployment.md",
+    "docs/authority/current/development/03_Governed_Development_Lifecycle_Scrum_Git.md"
+  ],
+  "decision_refs": [],
+  "defect_refs": [],
+  "change_refs": [],
+  "impact_classification": "SCOPED_BLOCKING",
+  "blocked_scope": [
+    "TUN-P1-023"
+  ],
+  "acceptance_criteria": [
+    "Reuse operator-selected non-secret configuration; one private loopback bootstrap login creates and passes an exact-resource finite token in memory; create credentials only if absent; revoke token and remove temporary policy after success or failure; retain fresh non-production confirmation and truthful live acceptance."
+  ],
+  "prerequisites": [],
+  "work_items": [],
+  "required_gates": [],
+  "required_roles": ["project-manager","solution-architect","governance-engineer","tester-qa-engineer","auditor","full-stack-engineer","cyber-security-engineer","devops-engineer","rd-engineer"],
+  "evidence_refs": ["governance/evidence/P1-024-RV001-AUTHORITY-RESOLUTION.json", "governance/evidence/P1-024-RV001-VALIDATION.json", "governance/evidence/P1-024-RV001-ROLE-REVIEWS.json", "docs/development/R2_AUTOMATIC_LOCAL_SETUP.md"],
+  "created_at": "2026-10-15T20:50:12.1107361\u002B00:00",
+  "closed_at": null,
+  "product_acceptance_required": false
+}

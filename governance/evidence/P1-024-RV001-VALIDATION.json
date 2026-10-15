@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "scope_id": "P1-024-RV001",
+  "scope_type": "REVISION",
+  "validation_kind": "COMMITTED",
+  "result": "PENDING",
+  "validated_commit_sha": null,
+  "tested_commit_sha": null,
+  "owned_behavior_paths": [
+    "src/Tunner.Installer/LocalOpenBaoSession.cs",
+    "src/Tunner.Installer/LocalR2Setup.cs",
+    "src/Tunner.Installer/Program.cs",
+    "src/Tunner.Platform/Secrets/OpenBaoSecretStore.cs",
+    "tools/dev/setup-r2.ps1",
+    "local-config/r2/.gitignore",
+    "local-config/r2/profile.example.json",
+    "tests/Tunner.Installer.Tests/LocalBootstrapTests.cs",
+    "tests/Tunner.Installer.Tests/OpenBaoIntegrationTests.cs",
+    "local-config/r2/README.md"
+  ],
+  "checks": [],
+  "live_r2_result": "NOT_EXECUTED",
+  "validation_attempts": [
+    "Initial build failed CA1068 cancellation-token parameter order; corrected without suppressing analysis.",
+    "Next build failed CA1861 repeated fixture array; replaced with static readonly fixture data.",
+    "58 initial installer cases including real disposable OpenBao passed. Recovery review then added preservation of the object key and original probe failure if bootstrap cleanup fails; final committed run will include the added cases."
+  ]
+}

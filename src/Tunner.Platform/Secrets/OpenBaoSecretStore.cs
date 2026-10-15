@@ -1,3 +1,4 @@
+using System.Net;
 using System.Net.Http.Json;
 using System.Text.Json;
 using Tunner.Platform.Configuration;
@@ -45,10 +46,16 @@ public sealed class OpenBaoSecretStore : ISecretStore, IDisposable
     }
 
     public async Task<SecretValues> ReadAsync(EngineeringSecretReference reference, CancellationToken cancellationToken = default)
+        => await ReadIfPresentAsync(reference, cancellationToken).ConfigureAwait(false)
+            ?? throw new InvalidOperationException("SECRET_REQUEST_REJECTED");
+
+    /// <summary>Only a missing credential resource returns null; authentication and authorization failures still fail closed.</summary>
+    public async Task<SecretValues?> ReadIfPresentAsync(EngineeringSecretReference reference, CancellationToken cancellationToken = default)
     {
         ValidateReference(reference);
         await ValidateTokenAsync(cancellationToken).ConfigureAwait(false);
-        using var document = await SendAsync(HttpMethod.Get, "v1/" + reference.ResourceReference, null, cancellationToken).ConfigureAwait(false);
+        using var document = await SendOptionalAsync(HttpMethod.Get, "v1/" + reference.ResourceReference, null, allowNotFound: true, cancellationToken).ConfigureAwait(false);
+        if (document is null) return null;
         try
         {
             var data = document.RootElement.GetProperty("data").GetProperty("data");
@@ -104,12 +111,18 @@ public sealed class OpenBaoSecretStore : ISecretStore, IDisposable
     }
 
     private async Task<JsonDocument> SendAsync(HttpMethod method, string path, HttpContent? content, CancellationToken cancellationToken)
+        => await SendOptionalAsync(method, path, content, allowNotFound: false, cancellationToken).ConfigureAwait(false)
+            ?? throw new InvalidOperationException("SECRET_REQUEST_REJECTED");
+
+    private async Task<JsonDocument?> SendOptionalAsync(HttpMethod method, string path, HttpContent? content,
+        bool allowNotFound, CancellationToken cancellationToken)
     {
         try
         {
             using var request = new HttpRequestMessage(method, path) { Content = content };
             request.Headers.Add("X-Vault-Token", token);
             using var response = await client.SendAsync(request, cancellationToken).ConfigureAwait(false);
+            if (allowNotFound && response.StatusCode == HttpStatusCode.NotFound) return null;
             if (!response.IsSuccessStatusCode) throw new InvalidOperationException("SECRET_REQUEST_REJECTED");
             return JsonDocument.Parse(await response.Content.ReadAsByteArrayAsync(cancellationToken).ConfigureAwait(false));
         }

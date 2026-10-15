@@ -8,9 +8,9 @@ internal static class Program
 {
     public static async Task<int> Main(string[] args)
     {
-        if (args.Length != 2 || args[0] is not ("setup-r2" or "test-r2"))
+        if (args.Length != 2 || args[0] is not ("setup-r2" or "test-r2" or "local-r2"))
         {
-            Console.WriteLine("Usage: Tunner.Installer setup-r2|test-r2 <operator-selected-profile-path>");
+            Console.WriteLine("Usage: Tunner.Installer setup-r2|test-r2|local-r2 <operator-selected-profile-path>");
             return 2;
         }
         using var cancellation = new CancellationTokenSource();
@@ -19,6 +19,8 @@ internal static class Program
         try
         {
             if (Console.IsInputRedirected) throw new InvalidOperationException("INTERACTIVE_PRIVATE_INPUT_REQUIRED");
+            if (args[0] == "local-r2")
+                return await LocalAsync(args[1], cancellation.Token).ConfigureAwait(false);
             if (args[0] == "setup-r2")
                 return await SetupAsync(args[1], cancellation.Token).ConfigureAwait(false);
             var profile = await R2InstallationProfile.LoadAsync(args[1], cancellation.Token).ConfigureAwait(false);
@@ -59,7 +61,7 @@ internal static class Program
             DedicatedNonProductionTestBucket = Prompt("If confirmed dedicated to non-production tests, type DEDICATED NON-PRODUCTION") == "DEDICATED NON-PRODUCTION"
         };
         var reference = profile.Validate();
-        var mode = Prompt("Type EXISTING to resolve credentials or CREATE to create an absent vault record");
+        var mode = Prompt("Type EXISTING to resolve credentials or CREATE to create an absent vault record").ToUpperInvariant();
         if (mode is not ("EXISTING" or "CREATE")) throw new InvalidOperationException("SETUP_MODE_INVALID");
         using var secrets = new OpenBaoSecretStore(new Uri(profile.OpenBaoEndpoint), profile.SecretStoreReference, Secret("Short-lived scoped OpenBao token"));
         if (mode == "CREATE")
@@ -82,6 +84,33 @@ internal static class Program
         await profile.SaveNewAsync(path, cancellationToken).ConfigureAwait(false);
         Console.WriteLine("Profile saved; credentials resolved. Live R2 validation has not run.");
         return 0;
+    }
+
+    private static async Task<int> LocalAsync(string path, CancellationToken cancellationToken)
+    {
+        var profile = await R2InstallationProfile.LoadAsync(path, cancellationToken).ConfigureAwait(false);
+        if (profile.EnvironmentClass != "LOCAL_DEVELOPMENT" || !new Uri(profile.OpenBaoEndpoint).IsLoopback)
+            throw new InvalidOperationException("LOCAL_LOOPBACK_BOOTSTRAP_REQUIRED");
+        if (!profile.DedicatedNonProductionTestBucket)
+            throw new InvalidOperationException("DEDICATED_NON_PRODUCTION_BUCKET_REQUIRED");
+        Console.WriteLine($"Using bucket {profile.Bucket}; OpenBao {profile.OpenBaoEndpoint}; resource {profile.CredentialResourceReference}.");
+        Console.WriteLine("This creates and deletes one unique R2 test object.");
+        if (Prompt("Type DEDICATED NON-PRODUCTION") != "DEDICATED NON-PRODUCTION") return 2;
+        var session = await LocalOpenBaoSession.CreateAsync(profile,
+            Secret("Local OpenBao bootstrap/root token (private; used only to issue a restricted identity)"), cancellationToken).ConfigureAwait(false);
+        var result = await LocalR2Setup.RunAsync(profile, session, () =>
+                new Dictionary<string, string>(StringComparer.Ordinal)
+                {
+                    [profile.AccessKeyField] = Secret("Bucket-scoped R2 access key ID (first setup only)"),
+                    [profile.SecretKeyField] = Secret("Bucket-scoped R2 secret access key (first setup only)")
+                }, async (configuredProfile, secrets, operationToken) =>
+        {
+            Console.WriteLine("Credentials resolved; future runs reuse the existing record.");
+            using var configured = await ConfiguredR2Storage.CreateAsync(configuredProfile, secrets, operationToken).ConfigureAwait(false);
+            return await R2ContractProbe.RunAsync(configuredProfile, configured.Storage, configured.IsAbsentAsync, operationToken).ConfigureAwait(false);
+        }, cancellationToken).ConfigureAwait(false);
+        Console.WriteLine(JsonSerializer.Serialize(result));
+        return result.Passed ? 0 : 1;
     }
 
     private static string Prompt(string label)

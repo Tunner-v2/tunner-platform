@@ -1,36 +1,31 @@
 # Local R2 configuration
 
-Work item: TUN-P1-023. This directory holds non-secret installer profiles for local engineering. The actual object-storage contract test uses the operator-confirmed dedicated non-production R2 bucket.
+Current automation: P1-024-RV001. The installer reuses non-secret settings and stores R2 credential values only in OpenBao.
 
-The profile contains endpoint and bucket names, environment references, OpenBao endpoint, and exact vault resource/field references. Enter R2 key values and short-lived scoped OpenBao tokens only in the installer's private prompts. Keep the R2 credential values in OpenBao.
-
-Local profiles and installer temporary files are ignored by Git. Only this README and this directory's ignore rules are tracked. Protect local files and this directory from unauthorized modification; their references control credential destinations. Git ignore rules do not encrypt files or grant access control.
-
-## Save the profile here
-
-Run these commands from the repository root in an interactive PowerShell terminal:
+From any PowerShell working directory, invoke this script by its repository location. From the repository root:
 
 ```powershell
-dotnet run --project src/Tunner.Installer -- setup-r2 "./local-config/r2/profile.json"
-dotnet run --project src/Tunner.Installer -- test-r2 "./local-config/r2/profile.json"
+.\tools\dev\setup-r2.ps1
 ```
 
-The directory is ready for use. The installer creates `profile.json` only after configuration validates and credential resolution succeeds. Setup refuses to overwrite an existing profile. If that file already exists, use it with `test-r2`, or choose a new filename in this directory for another setup.
+The first run copies `profile.example.json` to the ignored `profile.json` if no profile exists. The example contains the non-secret values the operator supplied, including the confirmed dedicated non-production `tunner` bucket and selected vault field names. Review/edit the local profile when those settings change. Existing profiles are preserved.
 
-If an existing successfully saved profile is elsewhere, copy only that non-secret profile here after checking its fields. Do not copy a credential export, token file, or OpenBao initialization/unseal output.
+Each run displays its target, requires a fresh `DEDICATED NON-PRODUCTION` confirmation, and asks privately for the local OpenBao bootstrap/root token used previously for policy setup. The local bootstrap is restricted to `LOCAL_DEVELOPMENT` and a loopback OpenBao endpoint. It issues an exact-resource, non-root, nonrenewable token with a maximum 30-minute lifetime and passes it in memory to the secret-store adapter.
 
-## Known setup values
+If the R2 credential record is absent, the installer privately asks for the bucket-scoped R2 Access Key ID and Secret Access Key once and uses create-only KV-v2 CAS=0. Later runs automatically resolve that record. They do not repeat the configuration or R2 key prompts. A record with missing fields, denied access, a soft-deleted/versioned record, or a concurrent creator fails safely rather than being overwritten.
 
-| Prompt | Existing value |
-|---|---|
-| Engineering environment class | `LOCAL_DEVELOPMENT` |
-| R2 S3 endpoint base URL | `https://c38886fbac5e924b1e9f58c3185aae78.r2.cloudflarestorage.com` |
-| Bucket name | `tunner` |
-| OpenBao base URL | `http://127.0.0.1:28200` |
-| Dedicated non-production confirmation | `DEDICATED NON-PRODUCTION` |
+The same invocation runs the existing unique-object R2 put/read/delete test. It independently attempts to revoke the child token and remove its uniquely named temporary policy after success, failure or cancellation. Success requires verified object content, object cleanup and bootstrap cleanup. A bootstrap-cleanup failure returns a failing result while preserving the object key and original probe failure for recovery. Forced process termination can interrupt cleanup; the child token still has its hard expiry, and an operator must inspect any reported object or remaining temporary policy.
 
-Use the existing approved environment reference, logical secret-store reference, exact KV-v2 API resource reference and both credential field names. These values are not inferred from the bucket name. Use `EXISTING` for an already provisioned credential record. Use `CREATE` only for an approved absent record with a token permitted to create and read that exact resource. The bootstrap root token is rejected by this installer.
+Tokens are entered privately and remain in process memory; they are not written to profiles, arguments, environment variables or the clipboard. Normal managed-memory collection does not guarantee immediate zeroization. One private bootstrap login is still required per invocation; permanent root-token storage is not used.
 
-The R2 test uses authenticated S3 access. Public bucket access is unnecessary. It writes and deletes one unique test object and requires both content and cleanup verification to pass. The created directory alone does not establish live R2 acceptance.
+Local profiles and temporary files are ignored by Git. This README, the ignore rules and `profile.example.json` are tracked. Protect this directory against unauthorized modification; it controls credential destinations.
 
-See [installer behavior and failure recovery](../../docs/development/R2_INSTALLER.md) for credential boundaries and cleanup behavior. This directory is the explicitly selected repository-local profile location for this setup; the earlier general outside-checkout recommendation does not apply to this location.
+To use another existing profile:
+
+```powershell
+.\tools\dev\setup-r2.ps1 -ProfilePath "./local-config/r2/another-profile.json"
+```
+
+The original manual `setup-r2` and `test-r2` commands remain available; their setup mode accepts mixed case. See [manual installer behavior](../../docs/development/R2_INSTALLER.md) and [automatic setup evidence/recovery](../../docs/development/R2_AUTOMATIC_LOCAL_SETUP.md).
+
+This directory is the operator-selected repository-local location for non-secret configuration. Live R2 acceptance remains pending until an actual authorized run reports success; disposable tests establish implementation behavior only.
