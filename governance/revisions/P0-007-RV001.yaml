@@ -1,0 +1,49 @@
+{
+  "schema_version": 1,
+  "revision_id": "P0-007-RV001",
+  "revision_scope": "WORK_ITEM",
+  "original_scope_id": "TUN-P0-007",
+  "parent_revision_id": null,
+  "parent_milestone_revision_id": null,
+  "title": "OpenBao first-run mount discovery under strict mode",
+  "revision_type": "CORRECTIVE",
+  "status": "ACTIVE",
+  "reason": "User first-run apply-policies failed because absent tunner mount property access throws under StrictMode before the approved mount can be created.",
+  "authority_refs": [
+    "docs/authority/baselines/1.6.0/06_Environment_Configuration_Secrets_and_Deployment.md",
+    "docs/authority/current/development/03_Governed_Development_Lifecycle_Scrum_Git.md"
+  ],
+  "decision_refs": [],
+  "defect_refs": [
+    "DEF-P0-007-RV001-001"
+  ],
+  "change_refs": [],
+  "impact_classification": "SCOPED_BLOCKING",
+  "blocked_scope": [
+    "TUN-P1-023"
+  ],
+  "acceptance_criteria": [
+    "Absent mount is created, existing mount is preserved, failed provider commands stop safely, and token handling remains private; validate full bootstrap execution without real user credentials."
+  ],
+  "prerequisites": [],
+  "work_items": [],
+  "required_gates": [],
+  "required_roles": [
+    "project-manager",
+    "solution-architect",
+    "governance-engineer",
+    "devops-engineer",
+    "cyber-security-engineer",
+    "tester-qa-engineer",
+    "auditor"
+  ],
+  "evidence_refs": [
+    "governance/evidence/P0-007-RV001-AUTHORITY-RESOLUTION.json",
+    "governance/evidence/P0-007-RV001-VALIDATION.json",
+    "governance/evidence/P0-007-RV001-ROLE-REVIEWS.json",
+    "docs/development/OPENBAO_BOOTSTRAP_RV001.md"
+  ],
+  "created_at": "2026-10-15T18:23:33.3454015+00:00",
+  "closed_at": null,
+  "product_acceptance_required": false
+}

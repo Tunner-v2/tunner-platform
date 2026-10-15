@@ -55,7 +55,8 @@ switch ($Command) {
             $mountList = & docker compose --project-directory $composeProjectDirectory --env-file $envFile --file $composeFile exec -T --env "BAO_TOKEN=$rootToken" openbao bao secrets list -format=json
             if ($LASTEXITCODE -ne 0) { throw "OpenBao mount listing failed with exit code $LASTEXITCODE." }
             $mounts = $mountList | ConvertFrom-Json
-            if ($null -eq $mounts.'tunner/') {
+            # Indexed lookup returns null for an absent mount under StrictMode, including on Windows PowerShell 5.1.
+            if ($null -eq $mounts.PSObject.Properties['tunner/']) {
                 & docker compose --project-directory $composeProjectDirectory --env-file $envFile --file $composeFile exec -T --env "BAO_TOKEN=$rootToken" openbao bao secrets enable -path=tunner kv-v2
                 if ($LASTEXITCODE -ne 0) { throw "OpenBao KV-v2 mount creation failed with exit code $LASTEXITCODE." }
             }
