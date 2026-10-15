@@ -24,11 +24,11 @@ public sealed class AwsR2S3ClientTests
         Assert.Same(content, sdk.Put.InputStream);
         Assert.True(sdk.Put.DisablePayloadSigning);
         Assert.True(sdk.Put.DisableDefaultChecksumValidation);
-        Assert.Equal(cancellation.Token, sdk.Token);
+        Assert.Equal(cancellation.Token, sdk.ObservedCancellation);
         await client.DeleteAsync(address, cancellation.Token);
         Assert.Equal(address.Bucket, sdk.Delete!.BucketName);
         Assert.Equal(address.Key, sdk.Delete.Key);
-        Assert.Equal(cancellation.Token, sdk.Token);
+        Assert.Equal(cancellation.Token, sdk.ObservedCancellation);
     }
 
     [Fact]
@@ -40,7 +40,7 @@ public sealed class AwsR2S3ClientTests
         var result = await client.OpenReadAsync(new ObjectStorageAddress("fixture-bucket", "read-key"), cancellation.Token);
         Assert.Equal("fixture-bucket", sdk.Get!.BucketName);
         Assert.Equal("read-key", sdk.Get.Key);
-        Assert.Equal(cancellation.Token, sdk.Token);
+        Assert.Equal(cancellation.Token, sdk.ObservedCancellation);
         Assert.Same(sdk.ReadStream, result.Content);
         Assert.Equal(42, result.Content.ReadByte());
         result.Dispose();
@@ -70,25 +70,25 @@ public sealed class AwsR2S3ClientTests
         public PutObjectRequest? Put { get; private set; }
         public GetObjectRequest? Get { get; private set; }
         public DeleteObjectRequest? Delete { get; private set; }
-        public CancellationToken Token { get; private set; }
+        public CancellationToken ObservedCancellation { get; private set; }
         public TrackedStream ReadStream { get; } = new();
 
         public override Task<PutObjectResponse> PutObjectAsync(PutObjectRequest request, CancellationToken cancellationToken = default)
         {
             Put = request;
-            Token = cancellationToken;
+            ObservedCancellation = cancellationToken;
             return Task.FromResult(new PutObjectResponse());
         }
         public override Task<GetObjectResponse> GetObjectAsync(GetObjectRequest request, CancellationToken cancellationToken = default)
         {
             Get = request;
-            Token = cancellationToken;
+            ObservedCancellation = cancellationToken;
             return Task.FromResult(new GetObjectResponse { ResponseStream = ReadStream });
         }
         public override Task<DeleteObjectResponse> DeleteObjectAsync(DeleteObjectRequest request, CancellationToken cancellationToken = default)
         {
             Delete = request;
-            Token = cancellationToken;
+            ObservedCancellation = cancellationToken;
             return Task.FromResult(new DeleteObjectResponse());
         }
     }
