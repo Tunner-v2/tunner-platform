@@ -129,7 +129,7 @@
     "Final project-memory source guard rejected omitted old CLOSED P0-RV001 in a deliberately bounded summary. New P0-RV003 preserves closure and corrects the validator; seven focused checks and final actual project-state/fresh-recovery validation pass."
   ],
   "review_method": "Engineering reviews by the executing agent; no independent human, Product, security-release or protected-main merge approval implied.",
-  "exact_next_action": "Locate the saved setup-r2 non-secret profile using its full file path. Read the installed exact credential references without reading or echoing secret values. Run test-r2 interactively against the operator-confirmed dedicated non-production bucket with a private short-lived scoped token. Preserve exact content and cleanup verification, resolve DEF-TUN-P1-023-R2-001 only on actual success, then repeat blocked reviews and native P1 closure checks.",
+  "exact_next_action": "Use the operator-selected local-config/r2/profile.json location. Copy an existing verified non-secret profile there without overwriting a file, or run setup-r2 interactively using existing approved exact references and private scoped credentials. Then run test-r2 on the same profile and retain content/cleanup verification before resolving the OPEN R2 prerequisite and repeating the blocked reviews.",
   "initial_dirty_paths": [
     "docs/context/current/HANDOFF.md",
     "docs/context/current/adaptive-selection.json",
@@ -205,5 +205,20 @@
       "milestone role-review evidence is malformed or not PASS: governance/evidence/P1-MILESTONE-ROLE-REVIEWS.json"
     ],
     "reason": "Explicit pending live R2 installer configuration and its derived acceptance conditions; no missing implementation or evidence is silently waived."
+  },
+  "repository_local_configuration": {
+    "recorded_at": "2026-10-15T19:59:48.7018971+00:00",
+    "owning_work_item": "TUN-P1-023",
+    "authorization": "Direct operator request to create repository-local storage for non-secret configuration",
+    "directory": "local-config/r2",
+    "profile_path": "local-config/r2/profile.json",
+    "documentation": "local-config/r2/README.md",
+    "profiles_tracked": false,
+    "credentials_stored": false,
+    "profile_created": false,
+    "existing_profile_overwritten": false,
+    "new_bucket_required": false,
+    "live_r2_result": "NOT_EXECUTED",
+    "scope": "Directory, ignore rules and active P1 setup documentation only; installer and storage behavior unchanged."
   }
 }
