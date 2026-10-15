@@ -4,7 +4,7 @@
   "status": "PARTIAL",
   "technical_candidate_sha": "6fb030241ad0927f0a2576da23d348db1cfceab6",
   "governance_candidate_sha": "c37a720e1618f5acc69ab417d6886009b59f6575",
-  "checked_at": "2026-10-15T15:15:20Z",
+  "checked_at": "2026-10-15T15:32:51Z",
   "execution": {
     "platform_build": {
       "result": "PASS",
@@ -104,6 +104,15 @@
       "verified_artifacts": 168,
       "byte_exact_checkout_checks": 168,
       "locked_baseline_modified": false
+    },
+    "project_memory": {
+      "result": "PASS",
+      "focused_cases": 7,
+      "candidate_sha": "1c0e7e1fa47bbf32fd5bafcd0f9da694487ec439",
+      "closure_sha": "3d77b5cc3caf1723adcffeea0e7082cd40bc8d99",
+      "fresh_recovery": "PASS",
+      "actual_project_state": "PASS",
+      "context_verify": "CURRENT"
     }
   },
   "live_r2": {
@@ -116,7 +125,8 @@
     "The initial full-suite run with explicit container opt-in exposed a harness test that assumed the inherited variable was unset. The test now checks absent, blank, 0, true and explicit 1 values while restoring inherited state; final 12 cases passed.",
     "The SDK fixture property Token caused generic-secret-assignment scanner false positives for cancellationToken assignments. Renamed observation only; scanner rules unchanged; final scan passed.",
     "The security servicing update exposed old exact-version guards for EF/OpenAPI; guards now pin reviewed fixed 10.0.13.",
-    "Auto-review rejected a broad evidence/state PASS update because it could misrepresent unresolved R2 scope. No rejected changes were applied; subsequent evidence requires verified per-scope ownership and actual receipts."
+    "Auto-review rejected a broad evidence/state PASS update because it could misrepresent unresolved R2 scope. No rejected changes were applied; subsequent evidence requires verified per-scope ownership and actual receipts.",
+    "Final project-memory source guard rejected omitted old CLOSED P0-RV001 in a deliberately bounded summary. New P0-RV003 preserves closure and corrects the validator; seven focused checks and final actual project-state/fresh-recovery validation pass."
   ],
   "review_method": "Engineering reviews by the executing agent; no independent human, Product, security-release or protected-main merge approval implied.",
   "exact_next_action": "Installer supplies existing non-production R2 endpoint, dedicated integration bucket and bucket-scoped secret-store/OpenBao references. Then execute live put/read/delete with cleanup evidence, resolve DEF-TUN-P1-023-R2-001, repeat blocked role reviews and native P1 closure checks. Keep P1 ACTIVE and TUN-P1-023 in VALIDATION.",
@@ -141,9 +151,19 @@
     "command": "tunner governance commit-readiness audit --milestone P1"
   },
   "gap_register_summary": {
-    "total": 19,
-    "resolved": 17,
+    "total": 20,
+    "resolved": 18,
     "partial_live_r2": 1,
     "blocked_milestone_acceptance": 1
+  },
+  "final_milestone_close_check": {
+    "outcome": "NOT_READY",
+    "existing_work_item_gates_passed": 22,
+    "failures": [
+      "work item is not DONE: TUN-P1-023 (VALIDATION)",
+      "P1 defect remains open: DEF-TUN-P1-023-R2-001 (OPEN)",
+      "milestone role-review evidence is malformed or not PASS: governance/evidence/P1-MILESTONE-ROLE-REVIEWS.json"
+    ],
+    "reason": "Explicit pending live R2 installer configuration and its derived acceptance conditions; no missing implementation or evidence is silently waived."
   }
 }

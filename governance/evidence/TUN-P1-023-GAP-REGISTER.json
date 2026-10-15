@@ -215,12 +215,23 @@
         "governance/evidence/TUN-P1-023-EXECUTION-RESULTS.json"
       ],
       "disposition": "Current artifact/technical validation passes; complete previous envelope payload is preserved."
+    },
+    {
+      "id": "GAP-P1-023-BOUNDED-PROJECT-MEMORY",
+      "description": "Final project-memory source guard falsely required omitted old terminal revisions in a bounded summary.",
+      "status": "RESOLVED",
+      "owner_work_item": "TUN-P1-023",
+      "remediation_revision": "P0-RV003",
+      "evidence": [
+        "governance/evidence/P0-RV003-VALIDATION.json"
+      ],
+      "disposition": "New committed revision passes seven positive/negative checks plus actual fresh recovery and project-state validation; historical closed records unchanged."
     }
   ],
-  "updated_at": "2026-10-15T15:15:20Z",
+  "updated_at": "2026-10-15T15:32:51Z",
   "summary": {
-    "total": 19,
-    "resolved": 17,
+    "total": 20,
+    "resolved": 18,
     "partial": 1,
     "blocked": 1,
     "remaining_external_prerequisite": "DEF-TUN-P1-023-R2-001",

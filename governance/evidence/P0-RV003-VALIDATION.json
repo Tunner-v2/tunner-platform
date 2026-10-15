@@ -14,7 +14,8 @@
     "Test-TunnerProjectMemoryRevisionSummary.ps1: 7/7 PASS, including omitted terminal history, missing ACTIVE/BLOCKED revision and contradictory displayed status cases.",
     "Validate-TunnerProjectMemorySource.ps1 PASS against actual repository-native governance and current generated state.",
     "Normal native transition checks allowed APPROVED/ACTIVE; context verification was CURRENT before implementation.",
-    "Only the two declared PowerShell files implement this correction; .NET/Platform/UI behavior is unchanged. Existing passing test receipts remain preserved."
+    "Only the two declared PowerShell files implement this correction; .NET/Platform/UI behavior is unchanged. Existing passing test receipts remain preserved.",
+    "Final actual fresh-agent recovery PASS and project-memory source validation PASS after closure; original P0, P0-RV001 and P0-RV002 closed records unchanged."
   ],
   "discovered_by": "Final TUN-P1-023 handoff verification; Test-TunnerFreshRecovery passed, then project-memory source guard falsely rejected omitted old CLOSED P0-RV001 in a bounded summary.",
   "initial_dirty_paths": [
@@ -34,5 +35,6 @@
   "checked_at": "2026-10-15T15:29:10Z",
   "validation_attempts": [
     "Final P1 fresh-agent recovery passed; the old project-memory guard rejected omitted terminal P0-RV001. Corrected in this new revision without altering any prior closed record."
-  ]
+  ],
+  "closure_commit_sha": "3d77b5cc3caf1723adcffeea0e7082cd40bc8d99"
 }

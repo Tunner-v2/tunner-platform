@@ -3,11 +3,13 @@
 Branch: `change/TUN-P1-001-platform-foundation-refinement`.
 Technical candidate: `6fb030241ad0927f0a2576da23d348db1cfceab6`.
 Governance candidate: `c37a720e1618f5acc69ab417d6886009b59f6575`.
+P0-RV003 technical candidate: `1c0e7e1fa47bbf32fd5bafcd0f9da694487ec439`.
+P0-RV003 closure: `3d77b5cc3caf1723adcffeea0e7082cd40bc8d99`.
 P0-RV002 closure: `80e2500369a84a8cb24ea408f8b2f5937067cb24`.
 P1 evidence reconciliation commit: `aba3b320167af1e43548197c38d5da15fb029d3e`.
 The latest metadata-only handoff/review commit can be resolved with `git log -1 -- governance/evidence/P1-MILESTONE-ROLE-REVIEWS.json`.
 
-P0 and P0-RV001 retain their original CLOSED history. P0-RV002 is CLOSED. P1 remains ACTIVE. TUN-P1-023 is VALIDATION with an OPEN installer prerequisite and PARTIAL validation; it is not DONE. Existing 22 P1 work items pass the native committed-readiness audit with no findings.
+P0 and P0-RV001 retain their original CLOSED history. P0-RV002 and P0-RV003 are CLOSED. P1 remains ACTIVE. TUN-P1-023 is VALIDATION with an OPEN installer prerequisite and PARTIAL validation; it is not DONE. Existing 22 P1 work items pass the native committed-readiness audit with no findings.
 
 | Finding | Current disposition |
 |---|---|
@@ -30,11 +32,12 @@ P0 and P0-RV001 retain their original CLOSED history. P0-RV002 is CLOSED. P1 rem
 | Stale P1-001 administrative defect | Resolved against existing dedicated recovery; mixed historical commit not certified |
 | OpenAPI serving-version guard invalidated by servicing | Fixed guard and current envelope pass; prior payload retained |
 | BFF test helper invalidated old current evidence | Revalidated; complete prior payload retained |
+| Bounded project-memory validator falsely required all closed history | Resolved in P0-RV003; seven positive/negative checks and actual recovery/state validation pass |
 | P1 milestone acceptance and required final reviews | BLOCKED by live R2 prerequisite; no synthetic approval |
 
-The governed register groups these into 19 findings: 17 resolved, one partial R2 group and one blocked milestone group. Every initial finding and each later validation finding is recorded.
+The governed register groups these into 20 findings: 18 resolved, one partial R2 group and one blocked milestone group. Every initial finding and each later validation finding is recorded. Native P1 close-check passes all 22 existing work-item gates and reports exactly three pending conditions: TUN-P1-023 is VALIDATION, its R2 installer defect is OPEN, and milestone reviews are BLOCKED.
 
-Actual validation: platform build zero warnings/errors; 289 platform tests pass with zero skipped (237 architecture/BFF/R2/SignalR, 34 database, 6 Worker, 12 harness); complete governance functional suite passes including 60 RV assertions; observability passes; UI contract tests 25/25 and browser tests 13/13; UI build/typecheck and NuGet/pnpm audits pass; source guards, secret scan and SAST pass. TRX receipt names and SHA256 values are in [execution results](../../governance/evidence/TUN-P1-023-EXECUTION-RESULTS.json). Failed attempts remain in that report.
+Actual validation: platform build zero warnings/errors; 289 platform tests pass with zero skipped (237 architecture/BFF/R2/SignalR, 34 database, 6 Worker, 12 harness); complete governance functional suite passes including 60 RV assertions; seven bounded-summary checks and actual fresh recovery/project-state verification pass; observability passes; UI contract tests 25/25 and browser tests 13/13; UI build/typecheck and NuGet/pnpm audits pass; source guards, secret scan and SAST pass. TRX receipt names and SHA256 values are in [execution results](../../governance/evidence/TUN-P1-023-EXECUTION-RESULTS.json). Failed attempts remain in that report.
 
 R2 endpoint, dedicated non-production integration bucket, access-key-ID and secret-key references must be supplied during installation through the secret-store abstraction/OpenBao. The user supplied this configuration boundary but no concrete installed profile. No provider endpoint, bucket, OpenBao path or environment-variable name is invented. Production resources are excluded. Synthetic fixture values configure disposable local tests only. SDK tests do not certify live R2 compatibility.
 
