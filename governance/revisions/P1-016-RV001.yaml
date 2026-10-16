@@ -1,0 +1,68 @@
+{
+  "schema_version": 1,
+  "revision_id": "P1-016-RV001",
+  "revision_scope": "WORK_ITEM",
+  "original_scope_id": "TUN-P1-016",
+  "parent_revision_id": null,
+  "parent_milestone_revision_id": null,
+  "title": "Align engineering example with dedicated local Docker host ports",
+  "revision_type": "CORRECTIVE",
+  "status": "CLOSED",
+  "reason": "The local engineering example still uses conventional dependency ports while the established Tunner Docker stack publishes dedicated loopback host ports; port 5432 is occupied by another local project. User authorized fixing the mismatch.",
+  "authority_refs": [
+    "docs/authority/baselines/1.6.0/06_Environment_Configuration_Secrets_and_Deployment.md"
+  ],
+  "decision_refs": [],
+  "defect_refs": [],
+  "change_refs": [],
+  "impact_classification": "NON_BLOCKING",
+  "blocked_scope": [],
+  "acceptance_criteria": [
+    "Align the engineering example and its existing configuration assertions with the PostgreSQL, RabbitMQ, Redis and OpenBao Docker host mappings; preserve configurable overrides, credentials, internal container ports and historical closure."
+  ],
+  "prerequisites": [],
+  "work_items": [],
+  "required_gates": [],
+  "required_roles": [
+    "full-stack-engineer",
+    "solution-architect",
+    "cyber-security-engineer",
+    "devops-engineer",
+    "tester-qa-engineer",
+    "auditor",
+    "governance-engineer"
+  ],
+  "evidence_refs": [
+    "governance/evidence/P1-016-RV001-AUTHORITY-RESOLUTION.json",
+    "governance/evidence/P1-016-RV001-VALIDATION.json",
+    "governance/evidence/P1-016-RV001-ROLE-REVIEWS.json"
+  ],
+  "created_at": "2026-10-16T20:39:22.4159980+00:00",
+  "closed_at": "2026-10-16T20:47:42.725Z",
+  "product_acceptance_required": false,
+  "git_state": {
+    "repository_changed": true,
+    "validated_commit_sha": "b67e8f9aa0cf429c72424006c3e69a7fca7c52c1",
+    "tested_commit_sha": "b67e8f9aa0cf429c72424006c3e69a7fca7c52c1",
+    "work_item_commit_shas": [
+      "b67e8f9aa0cf429c72424006c3e69a7fca7c52c1"
+    ],
+    "closure_commit_sha": null,
+    "remaining_uncommitted_paths": [
+      "docs/context/current/HANDOFF.md",
+      "docs/context/current/adaptive-selection.json",
+      "docs/context/current/authority.md",
+      "docs/context/current/contracts.md",
+      "docs/context/current/git-changes.md",
+      "docs/context/current/manifest.json",
+      "docs/context/current/relevant-flows.md",
+      "docs/context/current/summary.md",
+      "docs/context/current/tests.md",
+      "docs/project/CURRENT_STATE.md",
+      "docs/project/HANDOFF.md",
+      "docs/project/PROJECT_CONTEXT.md",
+      ".vscode/settings.json"
+    ],
+    "remaining_uncommitted_classification": "PREEXISTING_UNRELATED"
+  }
+}

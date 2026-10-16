@@ -24,6 +24,8 @@ public static class TestcontainersBaseline
             .WithEnvironment("POSTGRES_USER", "tunner")
             .WithEnvironment("POSTGRES_HOST_AUTH_METHOD", "trust")
             .WithPortBinding(5432, true)
-            .WithWaitStrategy(Wait.ForUnixContainer().UntilInternalTcpPortIsAvailable(5432))
+            .WithWaitStrategy(Wait.ForUnixContainer()
+                .UntilInternalTcpPortIsAvailable(5432)
+                .UntilCommandIsCompleted("pg_isready", "-h", "127.0.0.1", "-p", "5432", "-U", "tunner", "-d", "tunner_outbox_test"))
             .Build();
 }

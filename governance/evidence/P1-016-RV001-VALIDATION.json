@@ -1,0 +1,384 @@
+{
+  "schema_version": 1,
+  "scope_id": "P1-016-RV001",
+  "validation_kind": "COMMITTED",
+  "result": "PASS",
+  "tested_commit_sha": "b67e8f9aa0cf429c72424006c3e69a7fca7c52c1",
+  "validated_commit_sha": "b67e8f9aa0cf429c72424006c3e69a7fca7c52c1",
+  "owned_behavior_paths": [
+    "infra/environments/engineering.example.json",
+    "tests/Tunner.Platform.ArchitectureTests/EngineeringEnvironmentConfigurationTests.cs",
+    "docs/development/P1_ENGINEERING_ENVIRONMENT_CONFIGURATION.md"
+  ],
+  "checked_at": "2026-10-16T20:45:40.241Z",
+  "committed_source_sha256": {
+    "infra/environments/engineering.example.json": "528d0617eee6267e264de73f4963964dd4f7c57c91615ab9d5eadf1e84e825a0",
+    "tests/Tunner.Platform.ArchitectureTests/EngineeringEnvironmentConfigurationTests.cs": "ec27c9095dcecd00e56abffa9d693f6c903fb0355891c1e0cf64057626f12589",
+    "docs/development/P1_ENGINEERING_ENVIRONMENT_CONFIGURATION.md": "c854c5103bcafc91b330a15c10a00af35f07d6ab308948c150d3a10e4ce9be8c"
+  },
+  "checks": {
+    "build": "PASS: zero warnings/errors",
+    "architecture_tests": {
+      "total": 237,
+      "passed": 237,
+      "failed": 0,
+      "not_executed": 0
+    },
+    "docker_source_validation": "PASS: existing source validator and rendered Compose configuration; no services started",
+    "endpoint_alignment": {
+      "postgres": {
+        "host": 25432,
+        "container": 5432
+      },
+      "rabbitmq": {
+        "host": 25672,
+        "container": 5672
+      },
+      "redis": {
+        "host": 26379,
+        "container": 6379
+      },
+      "openbao": {
+        "host": 28200,
+        "container": 8200
+      }
+    },
+    "secret_scan": "PASS: three owned behavior files, no matches",
+    "sast_policy": "PASS: 1558 tracked/unignored files, no rule matches",
+    "governance": "PASS: 644 records, no diagnostics",
+    "history": "Original TUN-P1-016 and P1 closure unchanged; 12 preexisting dirty tracked files preserved"
+  },
+  "test_suites": [
+    {
+      "suite": "Tunner.Platform.ArchitectureTests.dll",
+      "path": "artifacts/p1-016-rv001-20261016/validated-test-results/Chacha_Tech_FARHANWAZIR_2026-10-16_16_43_04_net10.0.trx",
+      "sha256": "6118779d330dc07c5c68cc8d31ab0365b04fd0815f84b4a0658adc184fa34a0e",
+      "total": 237,
+      "passed": 237,
+      "failed": 0,
+      "not_executed": 0,
+      "failures": []
+    }
+  ],
+  "receipts": [
+    {
+      "path": "artifacts/p1-016-rv001-20261016/build.log",
+      "sha256": "c0dfaab8bd6cfa5fc5379f47abac9e7f7186398756213f498a61c8e87ee4036b"
+    },
+    {
+      "path": "artifacts/p1-016-rv001-20261016/architecture-tests-host-access.log",
+      "sha256": "8994a7adf658dd64b6abd7f75724515db83dc13012feb9c53a690e269a244085"
+    },
+    {
+      "path": "artifacts/p1-016-rv001-20261016/architecture-tests.log",
+      "sha256": "bcc5dfff40d08c9c6b73db76c316849bdd8fd812466cf874f0f7e57fe377d1c7"
+    },
+    {
+      "path": "artifacts/p1-016-rv001-20261016/dev-source-validation.log",
+      "sha256": "7a42196abae8830278c8be69210d605e17bad76559401d5b72272b8b6288a18b"
+    },
+    {
+      "path": "artifacts/p1-016-rv001-20261016/compose-alignment.json",
+      "sha256": "4cece5a049ca7bd86437eded54ddffb05c6de5fc14ec625b46561dd27e6a3554"
+    },
+    {
+      "path": "artifacts/p1-016-rv001-20261016/secret-scan.log",
+      "sha256": "94a35d453b28c3d296c73c33b1f3a3429c929f8a90dd0e8c96094360cd521ecf"
+    },
+    {
+      "path": "artifacts/p1-016-rv001-20261016/sast-policy.log",
+      "sha256": "904ea8ebb11a00b339921fb5fcda71340e22b82ef8efb222ab966b5aacc70414"
+    },
+    {
+      "path": "artifacts/p1-016-rv001-20261016/candidate-governance.json",
+      "sha256": "43da88943adda4264cda4a7bbb38d2239bde32e221eac839a99b311eefc9e65e"
+    },
+    {
+      "path": "artifacts/p1-016-rv001-20261016/preservation-proof.json",
+      "sha256": "fc7cec5d9608aa19dc78daf0123a5180b29dcb5c5a44298e05a1a1902a6c8b4e"
+    }
+  ],
+  "failed_attempts": [
+    {
+      "finding": "Sandbox architecture run: 185 passed, 52 failed, zero skipped; HTTPS test certificate PFX loading raised CryptographicException.",
+      "resolution": "No source or security control changed. The same committed candidate reran with host access; all 237 tests passed. Original log and TRX are retained.",
+      "test_suites": [
+        {
+          "suite": "Tunner.Platform.ArchitectureTests.dll",
+          "path": "artifacts/p1-016-rv001-20261016/test-results/Chacha_Tech_FARHANWAZIR_2026-10-16_16_42_43_net10.0.trx",
+          "sha256": "95659d4a4181697bfdcc1944af2c4803d931053155c3a0a80fe1f85207735173",
+          "total": 237,
+          "passed": 185,
+          "failed": 52,
+          "not_executed": 0,
+          "failures": [
+            {
+              "test": "Tunner.Platform.ArchitectureTests.BffFoundationTests.NearlyExpiredTicketDoesNotAutomaticallyRenew",
+              "outcome": "Failed",
+              "message": "System.Security.Cryptography.CryptographicException : The system cannot find the file specified."
+            },
+            {
+              "test": "Tunner.Platform.ArchitectureTests.BffFoundationTests.EveryUnsafeVerbRequiresAValidBoundCsrfToken(verb: \"DELETE\")",
+              "outcome": "Failed",
+              "message": "System.Security.Cryptography.CryptographicException : The system cannot find the file specified."
+            },
+            {
+              "test": "Tunner.Platform.ArchitectureTests.BffFoundationTests.ForbidAndExceptionsReturnSafeProblemsWithoutDetailsOrRedirect",
+              "outcome": "Failed",
+              "message": "System.Security.Cryptography.CryptographicException : The system cannot find the file specified."
+            },
+            {
+              "test": "Tunner.Platform.ArchitectureTests.BffFoundationTests.InvalidConfiguredOriginFailsWithoutEchoingInput(origin: \"https://user-bff.example.test/path\")",
+              "outcome": "Failed",
+              "message": "System.Security.Cryptography.CryptographicException : The system cannot find the file specified."
+            },
+            {
+              "test": "Tunner.Platform.ArchitectureTests.BffFoundationTests.HttpAndSpoofedForwardedHttpsAreRejected(surface: User)",
+              "outcome": "Failed",
+              "message": "System.Security.Cryptography.CryptographicException : The system cannot find the file specified."
+            },
+            {
+              "test": "Tunner.Platform.ArchitectureTests.BffFoundationTests.EveryUnsafeVerbRequiresAValidBoundCsrfToken(verb: \"PATCH\")",
+              "outcome": "Failed",
+              "message": "System.Security.Cryptography.CryptographicException : The system cannot find the file specified."
+            },
+            {
+              "test": "Tunner.Platform.ArchitectureTests.RealtimeTransportTests.RealTransportRejectsAnonymousAndForeignOriginRequests",
+              "outcome": "Failed",
+              "message": "System.Security.Cryptography.CryptographicException : The system cannot find the file specified."
+            },
+            {
+              "test": "Tunner.Platform.ArchitectureTests.BffFoundationTests.InvalidServerTicketMetadataNeverAuthenticates(surface: Admin, kind: \"missing-expiry\")",
+              "outcome": "Failed",
+              "message": "System.Security.Cryptography.CryptographicException : The system cannot find the file specified."
+            },
+            {
+              "test": "Tunner.Platform.ArchitectureTests.BffFoundationTests.UnsafeRequestsRejectMissingOpaqueAndForeignOrigins(origin: \"https://outside.example.test\")",
+              "outcome": "Failed",
+              "message": "System.Security.Cryptography.CryptographicException : The system cannot find the file specified."
+            },
+            {
+              "test": "Tunner.Platform.ArchitectureTests.BffFoundationTests.InvalidServerTicketMetadataNeverAuthenticates(surface: Admin, kind: \"expired\")",
+              "outcome": "Failed",
+              "message": "System.Security.Cryptography.CryptographicException : The system cannot find the file specified."
+            },
+            {
+              "test": "Tunner.Platform.ArchitectureTests.BffFoundationTests.HttpsHealthWorksWithoutActivatingAnyIdentity(surface: User)",
+              "outcome": "Failed",
+              "message": "System.Security.Cryptography.CryptographicException : The system cannot find the file specified."
+            },
+            {
+              "test": "Tunner.Platform.ArchitectureTests.BffFoundationTests.StoreFailureNeverFallsBackToClientIdentityAndDoesNotLeakDetails",
+              "outcome": "Failed",
+              "message": "System.Security.Cryptography.CryptographicException : The system cannot find the file specified."
+            },
+            {
+              "test": "Tunner.Platform.ArchitectureTests.BffFoundationTests.InvalidClientCookieDoesNotLeakOrActivateBearerAuthentication(surface: Admin)",
+              "outcome": "Failed",
+              "message": "System.Security.Cryptography.CryptographicException : The system cannot find the file specified."
+            },
+            {
+              "test": "Tunner.Platform.ArchitectureTests.BffFoundationTests.ShippedHostsHaveOnlyHealthAndSeparateFrameworkBoundaries(surface: User)",
+              "outcome": "Failed",
+              "message": "System.Security.Cryptography.CryptographicException : The system cannot find the file specified."
+            },
+            {
+              "test": "Tunner.Platform.ArchitectureTests.BffFoundationTests.ShippedHostsHaveOnlyHealthAndSeparateFrameworkBoundaries(surface: Admin)",
+              "outcome": "Failed",
+              "message": "System.Security.Cryptography.CryptographicException : The system cannot find the file specified."
+            },
+            {
+              "test": "Tunner.Platform.ArchitectureTests.BffFoundationTests.UnsafeRequestsRejectMissingOpaqueAndForeignOrigins(origin: \"https://user-bff.example.test.outside.example.test\")",
+              "outcome": "Failed",
+              "message": "System.Security.Cryptography.CryptographicException : The system cannot find the file specified."
+            },
+            {
+              "test": "Tunner.Platform.ArchitectureTests.BffFoundationTests.DuplicateSurfaceRegistrationAndWeakenedCookieConfigurationFail",
+              "outcome": "Failed",
+              "message": "System.Security.Cryptography.CryptographicException : The system cannot find the file specified."
+            },
+            {
+              "test": "Tunner.Platform.ArchitectureTests.BffFoundationTests.InvalidServerTicketMetadataNeverAuthenticates(surface: User, kind: \"foreign-identity\")",
+              "outcome": "Failed",
+              "message": "System.Security.Cryptography.CryptographicException : The system cannot find the file specified."
+            },
+            {
+              "test": "Tunner.Platform.ArchitectureTests.BffFoundationTests.InvalidServerTicketMetadataNeverAuthenticates(surface: User, kind: \"missing-issued\")",
+              "outcome": "Failed",
+              "message": "System.Security.Cryptography.CryptographicException : The system cannot find the file specified."
+            },
+            {
+              "test": "Tunner.Platform.ArchitectureTests.BffFoundationTests.AnonymousEndpointsDoNotBypassCsrfAndForeignSurfaceTokensFail",
+              "outcome": "Failed",
+              "message": "System.Security.Cryptography.CryptographicException : The system cannot find the file specified."
+            },
+            {
+              "test": "Tunner.Platform.ArchitectureTests.RealtimeTransportTests.RealConnectionRatePolicyRejectsExcessConnections",
+              "outcome": "Failed",
+              "message": "System.Security.Cryptography.CryptographicException : The system cannot find the file specified."
+            },
+            {
+              "test": "Tunner.Platform.ArchitectureTests.BffFoundationTests.UnsafeRequestsRejectMissingOpaqueAndForeignOrigins(origin: \"null\")",
+              "outcome": "Failed",
+              "message": "System.Security.Cryptography.CryptographicException : The system cannot find the file specified."
+            },
+            {
+              "test": "Tunner.Platform.ArchitectureTests.BffFoundationTests.HttpsHealthWorksWithoutActivatingAnyIdentity(surface: Admin)",
+              "outcome": "Failed",
+              "message": "System.Security.Cryptography.CryptographicException : The system cannot find the file specified."
+            },
+            {
+              "test": "Tunner.Platform.ArchitectureTests.BffFoundationTests.DefaultProductionStoreAndSignInStayDenied",
+              "outcome": "Failed",
+              "message": "System.Security.Cryptography.CryptographicException : The system cannot find the file specified."
+            },
+            {
+              "test": "Tunner.Platform.ArchitectureTests.BffFoundationTests.EveryUnsafeVerbRequiresAValidBoundCsrfToken(verb: \"POST\")",
+              "outcome": "Failed",
+              "message": "System.Security.Cryptography.CryptographicException : The system cannot find the file specified."
+            },
+            {
+              "test": "Tunner.Platform.ArchitectureTests.BffFoundationTests.MissingOriginConfigurationLeavesOnlyHttpsHealthUsable",
+              "outcome": "Failed",
+              "message": "System.Security.Cryptography.CryptographicException : The system cannot find the file specified."
+            },
+            {
+              "test": "Tunner.Platform.ArchitectureTests.BffFoundationTests.FrameworkCookiesKeepPrincipalAndTokensOnlyOnServer(surface: User)",
+              "outcome": "Failed",
+              "message": "System.Security.Cryptography.CryptographicException : The system cannot find the file specified."
+            },
+            {
+              "test": "Tunner.Platform.ArchitectureTests.BffFoundationTests.InvalidClientCookieDoesNotLeakOrActivateBearerAuthentication(surface: User)",
+              "outcome": "Failed",
+              "message": "System.Security.Cryptography.CryptographicException : The system cannot find the file specified."
+            },
+            {
+              "test": "Tunner.Platform.ArchitectureTests.BffFoundationTests.InvalidServerTicketMetadataNeverAuthenticates(surface: User, kind: \"missing-expiry\")",
+              "outcome": "Failed",
+              "message": "System.Security.Cryptography.CryptographicException : The system cannot find the file specified."
+            },
+            {
+              "test": "Tunner.Platform.ArchitectureTests.BffFoundationTests.DuplicateSecurityHeadersAreRejected(header: \"X-Tunner-CSRF\")",
+              "outcome": "Failed",
+              "message": "System.Security.Cryptography.CryptographicException : The system cannot find the file specified."
+            },
+            {
+              "test": "Tunner.Platform.ArchitectureTests.BffFoundationTests.InvalidServerTicketMetadataNeverAuthenticates(surface: User, kind: \"future-issued\")",
+              "outcome": "Failed",
+              "message": "System.Security.Cryptography.CryptographicException : The system cannot find the file specified."
+            },
+            {
+              "test": "Tunner.Platform.ArchitectureTests.BffFoundationTests.UnsafeRequestsRejectMissingOpaqueAndForeignOrigins(origin: null)",
+              "outcome": "Failed",
+              "message": "System.Security.Cryptography.CryptographicException : The system cannot find the file specified."
+            },
+            {
+              "test": "Tunner.Platform.ArchitectureTests.BffFoundationTests.HttpAndSpoofedForwardedHttpsAreRejected(surface: Admin)",
+              "outcome": "Failed",
+              "message": "System.Security.Cryptography.CryptographicException : The system cannot find the file specified."
+            },
+            {
+              "test": "Tunner.Platform.ArchitectureTests.BffFoundationTests.InvalidServerTicketMetadataNeverAuthenticates(surface: Admin, kind: \"missing-issued\")",
+              "outcome": "Failed",
+              "message": "System.Security.Cryptography.CryptographicException : The system cannot find the file specified."
+            },
+            {
+              "test": "Tunner.Platform.ArchitectureTests.BffFoundationTests.InvalidServerTicketMetadataNeverAuthenticates(surface: Admin, kind: \"future-issued\")",
+              "outcome": "Failed",
+              "message": "System.Security.Cryptography.CryptographicException : The system cannot find the file specified."
+            },
+            {
+              "test": "Tunner.Platform.ArchitectureTests.BffFoundationTests.FrameworkCookiesKeepPrincipalAndTokensOnlyOnServer(surface: Admin)",
+              "outcome": "Failed",
+              "message": "System.Security.Cryptography.CryptographicException : The system cannot find the file specified."
+            },
+            {
+              "test": "Tunner.Platform.ArchitectureTests.BffFoundationTests.InvalidServerTicketMetadataNeverAuthenticates(surface: Admin, kind: \"foreign-identity\")",
+              "outcome": "Failed",
+              "message": "System.Security.Cryptography.CryptographicException : The system cannot find the file specified."
+            },
+            {
+              "test": "Tunner.Platform.ArchitectureTests.RealtimeTransportTests.ReconnectReauthorizesAndHintCarriesNoDomainStateBeforeAuthoritativeRead",
+              "outcome": "Failed",
+              "message": "System.Security.Cryptography.CryptographicException : The system cannot find the file specified."
+            },
+            {
+              "test": "Tunner.Platform.ArchitectureTests.BffFoundationTests.EveryUnsafeVerbRequiresAValidBoundCsrfToken(verb: \"PUT\")",
+              "outcome": "Failed",
+              "message": "System.Security.Cryptography.CryptographicException : The system cannot find the file specified."
+            },
+            {
+              "test": "Tunner.Platform.ArchitectureTests.BffFoundationTests.UserCookieCannotBeRenamedIntoAnAdminSession",
+              "outcome": "Failed",
+              "message": "System.Security.Cryptography.CryptographicException : The system cannot find the file specified."
+            },
+            {
+              "test": "Tunner.Platform.ArchitectureTests.BffFoundationTests.RevokedSessionIsDeniedOnTheVeryNextRequest(surface: Admin)",
+              "outcome": "Failed",
+              "message": "System.Security.Cryptography.CryptographicException : The system cannot find the file specified."
+            },
+            {
+              "test": "Tunner.Platform.ArchitectureTests.BffFoundationTests.InvalidConfiguredOriginFailsWithoutEchoingInput(origin: \"https://user:pass@user-bff.example.test\")",
+              "outcome": "Failed",
+              "message": "System.Security.Cryptography.CryptographicException : The system cannot find the file specified."
+            },
+            {
+              "test": "Tunner.Platform.ArchitectureTests.BffFoundationTests.InvalidConfiguredOriginFailsWithoutEchoingInput(origin: \"https://user-bff.example.test/#x\")",
+              "outcome": "Failed",
+              "message": "System.Security.Cryptography.CryptographicException : The system cannot find the file specified."
+            },
+            {
+              "test": "Tunner.Platform.ArchitectureTests.BffFoundationTests.WrongRequestHostIsRejectedEvenWithValidOriginAndCsrf",
+              "outcome": "Failed",
+              "message": "System.Security.Cryptography.CryptographicException : The system cannot find the file specified."
+            },
+            {
+              "test": "Tunner.Platform.ArchitectureTests.BffFoundationTests.FallbackAuthorizationReturnsSafe401WithoutLoginRedirect(surface: User)",
+              "outcome": "Failed",
+              "message": "System.Security.Cryptography.CryptographicException : The system cannot find the file specified."
+            },
+            {
+              "test": "Tunner.Platform.ArchitectureTests.BffFoundationTests.RevokedSessionIsDeniedOnTheVeryNextRequest(surface: User)",
+              "outcome": "Failed",
+              "message": "System.Security.Cryptography.CryptographicException : The system cannot find the file specified."
+            },
+            {
+              "test": "Tunner.Platform.ArchitectureTests.BffFoundationTests.InvalidServerTicketMetadataNeverAuthenticates(surface: User, kind: \"expired\")",
+              "outcome": "Failed",
+              "message": "System.Security.Cryptography.CryptographicException : The system cannot find the file specified."
+            },
+            {
+              "test": "Tunner.Platform.ArchitectureTests.BffFoundationTests.InvalidConfiguredOriginFailsWithoutEchoingInput(origin: \"http://user-bff.example.test\")",
+              "outcome": "Failed",
+              "message": "System.Security.Cryptography.CryptographicException : The system cannot find the file specified."
+            },
+            {
+              "test": "Tunner.Platform.ArchitectureTests.BffFoundationTests.DuplicateSecurityHeadersAreRejected(header: \"Origin\")",
+              "outcome": "Failed",
+              "message": "System.Security.Cryptography.CryptographicException : The system cannot find the file specified."
+            },
+            {
+              "test": "Tunner.Platform.ArchitectureTests.BffFoundationTests.FallbackAuthorizationReturnsSafe401WithoutLoginRedirect(surface: Admin)",
+              "outcome": "Failed",
+              "message": "System.Security.Cryptography.CryptographicException : The system cannot find the file specified."
+            },
+            {
+              "test": "Tunner.Platform.ArchitectureTests.BffFoundationTests.InvalidConfiguredOriginFailsWithoutEchoingInput(origin: \" https://user-bff.example.test\")",
+              "outcome": "Failed",
+              "message": "System.Security.Cryptography.CryptographicException : The system cannot find the file specified."
+            },
+            {
+              "test": "Tunner.Platform.ArchitectureTests.BffFoundationTests.InvalidConfiguredOriginFailsWithoutEchoingInput(origin: \"https://user-bff.example.test/?q=x\")",
+              "outcome": "Failed",
+              "message": "System.Security.Cryptography.CryptographicException : The system cannot find the file specified."
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "scope_boundary": "Local non-secret example, corresponding existing assertions and guidance only. No database/server/image/internal-port/credential/exposure change or service start; no production release or new Product acceptance.",
+  "release_blocker": "P1-RV001 / DEF-P1-CONTAINER-SCAN-001 remains open and unwaived.",
+  "handoff_ref": "docs/development/P1_016_PORT_ALIGNMENT_RV001.md",
+  "pull_request": "https://github.com/Tunner-v2/tunner-platform/pull/16"
+}
