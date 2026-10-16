@@ -18,6 +18,7 @@ public sealed class IdentityPersistenceDbContext(DbContextOptions<IdentityPersis
     {
         base.OnModelCreating(builder);
         IdentityModelConfiguration.Configure(builder);
+        RegistrationModelConfiguration.Configure(builder);
     }
 
     public async Task<AccountSnapshot?> ReadAccountAsync(string accountId, CancellationToken cancellationToken = default)

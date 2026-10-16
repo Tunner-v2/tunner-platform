@@ -627,6 +627,171 @@ namespace Tunner.Identity.Persistence.Migrations
                     b.ToTable("AspNetUsers", "identity");
                 });
 
+            modelBuilder.Entity("Tunner.Identity.Persistence.RegistrationAbuseBucketRow", b =>
+                {
+                    b.Property<string>("Partition")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Kind")
+                        .HasColumnType("text");
+
+                    b.Property<long>("Window")
+                        .HasColumnType("bigint");
+
+                    b.Property<int>("Count")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTimeOffset>("ExpiresAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Partition", "Kind", "Window");
+
+                    b.ToTable("registration_abuse_buckets", "identity");
+                });
+
+            modelBuilder.Entity("Tunner.Identity.Persistence.RegistrationMutationRow", b =>
+                {
+                    b.Property<Guid>("OperationId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Kind")
+                        .HasColumnType("text");
+
+                    b.Property<Guid>("IdempotencyKey")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("ResultJson")
+                        .IsRequired()
+                        .HasColumnType("jsonb");
+
+                    b.HasKey("OperationId", "Kind", "IdempotencyKey");
+
+                    b.ToTable("registration_mutations", "identity");
+                });
+
+            modelBuilder.Entity("Tunner.Identity.Persistence.RegistrationOperationRow", b =>
+                {
+                    b.Property<Guid>("OperationId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("AccountId")
+                        .HasColumnType("text");
+
+                    b.Property<DateTimeOffset>("AgeEvaluatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("AgeEvidenceReference")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("AgePolicyVersion")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("Attempts")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("BrowserDigest")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<Guid?>("ContactId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("CorrelationId")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid?>("DeliveryId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("ErrorCode")
+                        .HasColumnType("text");
+
+                    b.Property<DateTimeOffset>("ExpiresAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("IdempotencyKey")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("NormalizedEmail")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("PolicyVersion")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("PrivacyVersion")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("ProcessingReference")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("ProtectedAddress")
+                        .HasColumnType("text");
+
+                    b.Property<string>("ProtectedCode")
+                        .HasColumnType("text");
+
+                    b.Property<string>("ProtectedCredential")
+                        .HasColumnType("text");
+
+                    b.Property<string>("ProtectedDigest")
+                        .HasColumnType("text");
+
+                    b.Property<DateTimeOffset>("PurgeAfter")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTimeOffset>("ResendAfter")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("Resends")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("RetentionReference")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("TemplateVersion")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("TermsVersion")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<long>("Version")
+                        .IsConcurrencyToken()
+                        .HasColumnType("bigint");
+
+                    b.HasKey("OperationId");
+
+                    b.HasIndex("AccountId");
+
+                    b.HasIndex("PurgeAfter");
+
+                    b.HasIndex("BrowserDigest", "IdempotencyKey")
+                        .IsUnique();
+
+                    b.ToTable("registration_operations", "identity", t =>
+                        {
+                            t.HasCheckConstraint("ck_registration_status", "\"Status\" IN ('REQUIRES_ACTION','SUCCEEDED','FAILED')");
+
+                            t.HasCheckConstraint("ck_registration_version", "\"Version\" >= 1 AND \"Attempts\" >= 0 AND \"Resends\" >= 0");
+                        });
+                });
+
             modelBuilder.Entity("Tunner.Identity.Persistence.VerifiedContactRow", b =>
                 {
                     b.Property<Guid>("ContactId")
@@ -806,6 +971,23 @@ namespace Tunner.Identity.Persistence.Migrations
                         .HasForeignKey("Tunner.Identity.Persistence.IdentityUserAdapter", "AccountId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Tunner.Identity.Persistence.RegistrationMutationRow", b =>
+                {
+                    b.HasOne("Tunner.Identity.Persistence.RegistrationOperationRow", null)
+                        .WithMany()
+                        .HasForeignKey("OperationId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Tunner.Identity.Persistence.RegistrationOperationRow", b =>
+                {
+                    b.HasOne("Tunner.Identity.Persistence.AccountRow", null)
+                        .WithMany()
+                        .HasForeignKey("AccountId")
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("Tunner.Identity.Persistence.VerifiedContactRow", b =>

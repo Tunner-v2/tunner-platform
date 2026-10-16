@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "scope_id": "TUN-P2-004",
+  "reviewed_at": "2026-10-16T21:45:44.622Z",
+  "sources": [
+    {
+      "url": "https://pages.nist.gov/800-63-4/sp800-63b.html",
+      "use": "Single-factor passwords: minimum 15; permit at least 64; count Unicode code points, avoid composition rules, and check a blocklist. Email proof here confirms a contact and does not authenticate a session."
+    },
+    {
+      "url": "https://cheatsheetseries.owasp.org/cheatsheets/Authentication_Cheat_Sheet.html",
+      "use": "Generic registration errors/responses and work-factor timing precautions; existing-account handling cannot disclose arbitrary contact ownership."
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/aspnet/core/security/authentication/identity-configuration?view=aspnetcore-10.0",
+      "use": "Reuse framework IdentityV3 password hashing with explicitly owner-approved work factor. Test iteration count is isolated and not a production choice."
+    }
+  ],
+  "design": {
+    "file_key": "apNbwvAgdn1xIxYH1oiaSC",
+    "nodes": [
+      "70:270",
+      "70:539",
+      "70:630"
+    ],
+    "architecture_section": "bdJwXt1U7n3iyluSD21OYK/88:6717",
+    "fresh_reference_files": [
+      "artifacts/p2-004-20261016/figma-final-register.txt",
+      "artifacts/p2-004-20261016/figma-final-verify.txt",
+      "artifacts/p2-004-20261016/figma-final-ready.txt"
+    ]
+  },
+  "font_resolution": "Reuse existing @tunner/ui pinned @fontsource-variable/geist 5.3.0 and inter 5.3.0 local bundles. Initial temporary upstream font downloads were removed; no duplicate runtime font system or package version introduced.",
+  "authority_resolution_ref": "governance/evidence/TUN-P2-004-AUTHORITY-RESOLUTION.json"
+}

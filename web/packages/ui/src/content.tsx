@@ -32,3 +32,8 @@ export function ContentText({ contentKey }: { contentKey: string }) {
   const value = usePublishedContent(contentKey);
   return <span {...contentProvenance(value)}>{value.text}</span>;
 }
+
+/** Deterministic technical fallback only: required domain/legal content never falls back to an invented publication. */
+export function ContentUnavailable() {
+  return <main role="alert">The request could not be completed.</main>;
+}
