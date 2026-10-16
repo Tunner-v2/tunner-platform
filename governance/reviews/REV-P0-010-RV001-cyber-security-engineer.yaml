@@ -5,7 +5,7 @@
   "role": "cyber-security-engineer",
   "status": "PASS",
   "result": "PASS",
-  "reviewed_at": "2026-10-16T18:24:24.614Z",
+  "reviewed_at": "2026-10-16T18:30:35.884Z",
   "skill_id": "cyber-security-engineer",
   "skill_version": "1.0.0",
   "skill_hash": "2d32ff3d7fb503f29cf930e9852ed4a757bb48a08e3fa4e3f6d5a23139a47f97",
@@ -18,11 +18,12 @@
     "src/Tunner.Testing/TestcontainersBaseline.cs"
   ],
   "evidence_refs": [
-    "governance/evidence/P0-010-RV001-AUTHORITY-RESOLUTION.json"
+    "governance/evidence/P0-010-RV001-AUTHORITY-RESOLUTION.json",
+    "governance/evidence/P0-010-RV001-VALIDATION.json"
   ],
   "findings": [
-    "SCOPE READINESS ONLY: diagnose concrete PostgreSQL startup rejection, add shell-free pg_isready TCP readiness and an immediate SQL regression; no business logic, image pin or production environment change.",
-    "Technical correction authorized by continued milestone work; engineering review does not claim human Product/security/legal approval. Candidate tests and final reviews are required before Revision closure."
+    "Readiness executes pg_isready with argument tokens and explicit loopback TCP, without shell expansion, secret material or image/security policy changes. Disposable trust is inherited only within the opt-in test fixture.",
+    "Final engineering candidate review at 7acf2803d604c9f4b916c5e8b24985e9007aacb6. Actor: executing-agent role review; no independent human Product, legal or release approval is asserted."
   ],
   "blocking_findings": [],
   "required_actions": [],

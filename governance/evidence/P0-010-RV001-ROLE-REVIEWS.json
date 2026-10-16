@@ -1,0 +1,100 @@
+{
+  "schema_version": 1,
+  "evidence_id": "P0-010-RV001-ROLE-REVIEWS",
+  "scope_type": "REVISION",
+  "scope_id": "P0-010-RV001",
+  "status": "PASS",
+  "reviewed_commit_sha": "7acf2803d604c9f4b916c5e8b24985e9007aacb6",
+  "reviewed_at": "2026-10-16T18:30:35.886Z",
+  "reviews": [
+    {
+      "role": "full-stack-engineer",
+      "conclusion": "PASS",
+      "checks": [
+        "Only the shared disposable fixture wait and its immediate SQL probe changed; no database domain or application test expectations were weakened.",
+        "Final engineering candidate review at 7acf2803d604c9f4b916c5e8b24985e9007aacb6. Actor: executing-agent role review; no independent human Product, legal or release approval is asserted."
+      ],
+      "findings": [],
+      "review_ref": "governance/reviews/REV-P0-010-RV001-full-stack-engineer.yaml",
+      "skill_hash": "59adbe2133cf4ce88cbc9ca4eafce1d5a9d83b9562b6580c1571e6fc148d46b5"
+    },
+    {
+      "role": "solution-architect",
+      "conclusion": "PASS",
+      "checks": [
+        "Readiness is centralized in the reusable fixture rather than duplicated retry sleeps per test; existing opt-in, random bindings and cleanup remain in the same owner.",
+        "Final engineering candidate review at 7acf2803d604c9f4b916c5e8b24985e9007aacb6. Actor: executing-agent role review; no independent human Product, legal or release approval is asserted."
+      ],
+      "findings": [],
+      "review_ref": "governance/reviews/REV-P0-010-RV001-solution-architect.yaml",
+      "skill_hash": "664ffba70d0f97e75951c3548b7f8391854781e4cf90cc50fc8829543783a35b"
+    },
+    {
+      "role": "governance-engineer",
+      "conclusion": "PASS",
+      "checks": [
+        "Original TUN-P0-010 DONE and P0 CLOSED records are untouched. Native creation/approval/activation, byte-verified authority and separate committed correction lineage are preserved; the scoped P2 block remains until close-check passes.",
+        "Final engineering candidate review at 7acf2803d604c9f4b916c5e8b24985e9007aacb6. Actor: executing-agent role review; no independent human Product, legal or release approval is asserted."
+      ],
+      "findings": [],
+      "review_ref": "governance/reviews/REV-P0-010-RV001-governance-engineer.yaml",
+      "skill_hash": "3c948ff290690b012d3736b561021989681c2b6fcac3f115b96ca1083672536f"
+    },
+    {
+      "role": "cyber-security-engineer",
+      "conclusion": "PASS",
+      "checks": [
+        "Readiness executes pg_isready with argument tokens and explicit loopback TCP, without shell expansion, secret material or image/security policy changes. Disposable trust is inherited only within the opt-in test fixture.",
+        "Final engineering candidate review at 7acf2803d604c9f4b916c5e8b24985e9007aacb6. Actor: executing-agent role review; no independent human Product, legal or release approval is asserted."
+      ],
+      "findings": [],
+      "review_ref": "governance/reviews/REV-P0-010-RV001-cyber-security-engineer.yaml",
+      "skill_hash": "2d32ff3d7fb503f29cf930e9852ed4a757bb48a08e3fa4e3f6d5a23139a47f97"
+    },
+    {
+      "role": "devops-engineer",
+      "conclusion": "PASS",
+      "checks": [
+        "A TCP listener is followed by a PostgreSQL accepting-connections probe, avoiding temporary Unix-socket bootstrap readiness. Actual immediate TCP SQL and the full concurrent container regression pass.",
+        "Final engineering candidate review at 7acf2803d604c9f4b916c5e8b24985e9007aacb6. Actor: executing-agent role review; no independent human Product, legal or release approval is asserted."
+      ],
+      "findings": [],
+      "review_ref": "governance/reviews/REV-P0-010-RV001-devops-engineer.yaml",
+      "skill_hash": "0def19cfd8cf73f9fe47851ab171d3154e7e80b4675ded65964f10856789b50c"
+    },
+    {
+      "role": "tester-qa-engineer",
+      "conclusion": "PASS",
+      "checks": [
+        "The initial 57P03 failure is preserved. At the corrected candidate the new immediate SQL probe and all 13 harness, 34 database and 329 total platform tests pass with zero skips. No blind retry or expected-result change masks the failure.",
+        "Final engineering candidate review at 7acf2803d604c9f4b916c5e8b24985e9007aacb6. Actor: executing-agent role review; no independent human Product, legal or release approval is asserted."
+      ],
+      "findings": [],
+      "review_ref": "governance/reviews/REV-P0-010-RV001-tester-qa-engineer.yaml",
+      "skill_hash": "a57ce99d7ad7a3b60f17e4826c81c507c9cc208d8928285c406222eefe0a18fd"
+    },
+    {
+      "role": "auditor",
+      "conclusion": "PASS",
+      "checks": [
+        "Hash-bound original and corrected TRX evidence connects the concrete failure to the two-file correction at 7acf2803d604c9f4b916c5e8b24985e9007aacb6. No original closure evidence or unrelated working files were absorbed.",
+        "Final engineering candidate review at 7acf2803d604c9f4b916c5e8b24985e9007aacb6. Actor: executing-agent role review; no independent human Product, legal or release approval is asserted."
+      ],
+      "findings": [],
+      "review_ref": "governance/reviews/REV-P0-010-RV001-auditor.yaml",
+      "skill_hash": "191c796fc5df0332ff2c3c464ca611d2c6d3ffc5ba7e2807986a71ad2e40d921"
+    },
+    {
+      "role": "rd-engineer",
+      "conclusion": "PASS",
+      "checks": [
+        "Current primary Testcontainers and PostgreSQL documentation, plus installed Testcontainers 4.15.0 API metadata, establish chained application-readiness and zero-exit semantics. No dependency version, material provider selection or Product rule changed.",
+        "Final engineering candidate review at 7acf2803d604c9f4b916c5e8b24985e9007aacb6. Actor: executing-agent role review; no independent human Product, legal or release approval is asserted."
+      ],
+      "findings": [],
+      "review_ref": "governance/reviews/REV-P0-010-RV001-rd-engineer.yaml",
+      "skill_hash": "2834c223dfd847a6d7cd28f52de4113efc574d621391d059e8dc1469bdf33187"
+    }
+  ],
+  "review_boundary": "Executing-agent engineering reviews at the committed tested scope; not independent human assurance."
+}

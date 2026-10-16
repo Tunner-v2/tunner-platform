@@ -1,0 +1,115 @@
+{
+  "schema_version": 1,
+  "scope_id": "P0-010-RV001",
+  "validation_kind": "COMMITTED",
+  "result": "PASS",
+  "tested_commit_sha": "7acf2803d604c9f4b916c5e8b24985e9007aacb6",
+  "validated_commit_sha": "7acf2803d604c9f4b916c5e8b24985e9007aacb6",
+  "checked_at": "2026-10-16T18:30:35.734Z",
+  "owned_behavior_paths": [
+    "src/Tunner.Testing/TestcontainersBaseline.cs",
+    "tests/Tunner.TestHarness.Tests/TestHarnessBaselineTests.cs"
+  ],
+  "committed_source_sha256": {
+    "src/Tunner.Testing/TestcontainersBaseline.cs": "fada944eb5a4fe6d88f703282c7fcdcf7dc06721fb9fcd1e8cf7a5d53d262c71",
+    "tests/Tunner.TestHarness.Tests/TestHarnessBaselineTests.cs": "40a77702ac9644cdcd6a35b0a1b59fbec6426f4b419fab8e2cf40ef6fd925f4b"
+  },
+  "checks": {
+    "build": "PASS: zero warnings/errors",
+    "test_harness": {
+      "passed": 13,
+      "failed": 0,
+      "skipped": 0
+    },
+    "database_integration": {
+      "passed": 34,
+      "failed": 0,
+      "skipped": 0
+    },
+    "full_platform": {
+      "total": 329,
+      "passed": 329,
+      "failed": 0,
+      "not_executed": 0
+    },
+    "immediate_tcp_sql": "PASS: StartAsync is followed immediately by psql SELECT 1 over 127.0.0.1 TCP",
+    "test_harness_source": "PASS",
+    "secret_scan": "PASS"
+  },
+  "initial_failure_ref": "governance/evidence/P0-010-RV001-AUTHORITY-RESOLUTION.json",
+  "test_suites": [
+    {
+      "suite": "Tunner.Accounts.Tests.dll",
+      "path": "artifacts/p2-002-20261016/corrected-test-results/Chacha_Tech_FARHANWAZIR_2026-10-16_14_28_16_net10.0.trx",
+      "sha256": "1b6c753296242bb845be132356baff5b43710b0a3ad4b8daf998b2c953cab465",
+      "total": 39,
+      "passed": 39,
+      "failed": 0,
+      "not_executed": 0,
+      "failures": []
+    },
+    {
+      "suite": "Tunner.TestHarness.Tests.dll",
+      "path": "artifacts/p2-002-20261016/corrected-test-results/Chacha_Tech_FARHANWAZIR_2026-10-16_14_28_16_net10.0[1].trx",
+      "sha256": "cfaa0e3555819cf68cf13cf63c3a924a1af7de270fb3f1a87d3b361901a2b693",
+      "total": 13,
+      "passed": 13,
+      "failed": 0,
+      "not_executed": 0,
+      "failures": []
+    },
+    {
+      "suite": "Tunner.Database.IntegrationTests.dll",
+      "path": "artifacts/p2-002-20261016/corrected-test-results/Chacha_Tech_FARHANWAZIR_2026-10-16_14_28_16_net10.0[2].trx",
+      "sha256": "fd0a256a6b655b86d0681f229582871aff4d41bf8c811874873606ff273cd96e",
+      "total": 34,
+      "passed": 34,
+      "failed": 0,
+      "not_executed": 0,
+      "failures": []
+    },
+    {
+      "suite": "Tunner.Platform.ArchitectureTests.dll",
+      "path": "artifacts/p2-002-20261016/corrected-test-results/Chacha_Tech_FARHANWAZIR_2026-10-16_14_28_17_net10.0.trx",
+      "sha256": "5c2e77432cb712ce96b0b46cd99dfae515fd8064563a5f735cce79ddd48b043f",
+      "total": 237,
+      "passed": 237,
+      "failed": 0,
+      "not_executed": 0,
+      "failures": []
+    },
+    {
+      "suite": "Tunner.Worker.Tests.dll",
+      "path": "artifacts/p2-002-20261016/corrected-test-results/Chacha_Tech_FARHANWAZIR_2026-10-16_14_29_00_net10.0.trx",
+      "sha256": "8f3fa2f0a850fae3c19ba757d7f3e0a51431d0204e907bb50bc528bb4a552a93",
+      "total": 6,
+      "passed": 6,
+      "failed": 0,
+      "not_executed": 0,
+      "failures": []
+    }
+  ],
+  "receipts": [
+    {
+      "path": "artifacts/p2-002-20261016/corrected-build.log",
+      "sha256": "2b649a1ca26a1c36c5361eead1e681e351070174ba3fab0a6051855c01ec0cb6"
+    },
+    {
+      "path": "artifacts/p2-002-20261016/corrected-platform-tests.log",
+      "sha256": "aea12b66ba91bf55683d1d9cd1cdfab9001b8ba8334ee33d02b72ba107246945"
+    },
+    {
+      "path": "artifacts/p2-002-20261016/corrected-tests-summary.json",
+      "sha256": "cd7c5d03b37d61658f5c8560885f5036b7839fdf11a42f150685e3691f83f072"
+    },
+    {
+      "path": "artifacts/p2-002-20261016/test-harness-source.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "artifacts/p2-002-20261016/owned-secret-scan.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "scope_boundary": "Disposable opt-in local PostgreSQL test readiness only. Existing image, throwaway trust setup, random port binding and cleanup are preserved. No Product, production, image security or governance-tool behavior is altered."
+}

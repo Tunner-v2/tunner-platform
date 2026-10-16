@@ -5,7 +5,7 @@
   "role": "auditor",
   "status": "PASS",
   "result": "PASS",
-  "reviewed_at": "2026-10-16T18:24:24.617Z",
+  "reviewed_at": "2026-10-16T18:30:35.886Z",
   "skill_id": "auditor",
   "skill_version": "1.0.0",
   "skill_hash": "191c796fc5df0332ff2c3c464ca611d2c6d3ffc5ba7e2807986a71ad2e40d921",
@@ -18,11 +18,12 @@
     "src/Tunner.Testing/TestcontainersBaseline.cs"
   ],
   "evidence_refs": [
-    "governance/evidence/P0-010-RV001-AUTHORITY-RESOLUTION.json"
+    "governance/evidence/P0-010-RV001-AUTHORITY-RESOLUTION.json",
+    "governance/evidence/P0-010-RV001-VALIDATION.json"
   ],
   "findings": [
-    "SCOPE READINESS ONLY: diagnose concrete PostgreSQL startup rejection, add shell-free pg_isready TCP readiness and an immediate SQL regression; no business logic, image pin or production environment change.",
-    "Technical correction authorized by continued milestone work; engineering review does not claim human Product/security/legal approval. Candidate tests and final reviews are required before Revision closure."
+    "Hash-bound original and corrected TRX evidence connects the concrete failure to the two-file correction at 7acf2803d604c9f4b916c5e8b24985e9007aacb6. No original closure evidence or unrelated working files were absorbed.",
+    "Final engineering candidate review at 7acf2803d604c9f4b916c5e8b24985e9007aacb6. Actor: executing-agent role review; no independent human Product, legal or release approval is asserted."
   ],
   "blocking_findings": [],
   "required_actions": [],

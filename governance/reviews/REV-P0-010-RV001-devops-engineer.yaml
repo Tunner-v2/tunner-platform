@@ -5,7 +5,7 @@
   "role": "devops-engineer",
   "status": "PASS",
   "result": "PASS",
-  "reviewed_at": "2026-10-16T18:24:24.615Z",
+  "reviewed_at": "2026-10-16T18:30:35.885Z",
   "skill_id": "devops-engineer",
   "skill_version": "1.0.0",
   "skill_hash": "0def19cfd8cf73f9fe47851ab171d3154e7e80b4675ded65964f10856789b50c",
@@ -18,11 +18,12 @@
     "src/Tunner.Testing/TestcontainersBaseline.cs"
   ],
   "evidence_refs": [
-    "governance/evidence/P0-010-RV001-AUTHORITY-RESOLUTION.json"
+    "governance/evidence/P0-010-RV001-AUTHORITY-RESOLUTION.json",
+    "governance/evidence/P0-010-RV001-VALIDATION.json"
   ],
   "findings": [
-    "SCOPE READINESS ONLY: diagnose concrete PostgreSQL startup rejection, add shell-free pg_isready TCP readiness and an immediate SQL regression; no business logic, image pin or production environment change.",
-    "Technical correction authorized by continued milestone work; engineering review does not claim human Product/security/legal approval. Candidate tests and final reviews are required before Revision closure."
+    "A TCP listener is followed by a PostgreSQL accepting-connections probe, avoiding temporary Unix-socket bootstrap readiness. Actual immediate TCP SQL and the full concurrent container regression pass.",
+    "Final engineering candidate review at 7acf2803d604c9f4b916c5e8b24985e9007aacb6. Actor: executing-agent role review; no independent human Product, legal or release approval is asserted."
   ],
   "blocking_findings": [],
   "required_actions": [],
