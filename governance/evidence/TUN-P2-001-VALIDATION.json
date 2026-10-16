@@ -16,14 +16,16 @@
     "authority": "VERIFIED",
     "authority_artifacts": 179,
     "governance": "PASS",
-    "governed_records": 611,
+    "governed_records": 613,
     "frd_sections": 16,
     "acceptance_cases": 11,
     "work_items": 18,
     "dependency_graph": "acyclic; explicit LOCAL_VALIDATED; registered targets",
     "role_declarations": "18/18 native calculations PASS",
     "context_verify": "CURRENT",
-    "native_refinement_eligibility": "Final candidate gate NOT_READY: overbroad security blocked_scope and missing aggregate review envelope; rerun pending after metadata correction."
+    "native_refinement_eligibility": "READY: actual corrected native gate has no failures",
+    "release_barrier": "NOT_READY: P1-RV001-002 requires security remediation MERGED_TO_MAIN; no merge evidence declared",
+    "final_transition": "VALIDATION -> DONE ALLOWED"
   },
   "validation_boundary": "Documentation/governance refinement only. No Account/Identity runtime or new Product acceptance is claimed. Existing platform behavior is unchanged; the prior runtime suite is not represented as a new execution.",
   "failed_attempts": [
@@ -137,6 +139,23 @@
     {
       "path": "artifacts/p2-transition-20261016/TUN-P2-018-roles.json",
       "sha256": "fd24558a1dfe572b5e285940ef79c1cec0491516902457dca854088efba13abf"
+    },
+    {
+      "path": "artifacts/p2-transition-20261016/corrected-governance.json",
+      "sha256": "482af0b21bcc05cd5a4c05ddb22eb563663dbf22230291c566305a07a8e0a8b2"
+    },
+    {
+      "path": "artifacts/p2-transition-20261016/P2-001-corrected-gate.json",
+      "sha256": "ee3f436e33198d3a502318f4caf3f8ce6415d9d00cfa749919a2830b9f817e8e"
+    },
+    {
+      "path": "artifacts/p2-transition-20261016/P1-security-release-negative-gate.json",
+      "sha256": "42956b63158b9ba5f5248be5292731664c80ed22021fb92c73377222dd287bea"
+    },
+    {
+      "path": "artifacts/p2-transition-20261016/P2-001-done-check.json",
+      "sha256": "648da48d232a9d1bea76ae305488309bf5cdec469f1f6ce561c91193518afff5"
     }
-  ]
+  ],
+  "gate_checked_commit_sha": "70a52a6174bb4f378e6a903fffab31c043281624"
 }
