@@ -1,0 +1,20 @@
+schema_version: 1
+defect_id: DEF-TUN-P1-003-001
+work_item_id: TUN-P1-003
+classification: VALIDATION_SCOPE
+severity: SEV-3
+status: CLOSED
+environment: repository-native static source validation
+description: Validate-TunnerTransactionalOutboxSource.ps1 treated the shared TunnerMigrationsDbContext as if it could map only OutboxMessage. That assumption became false when later independently governed P1-007 persistence foundations added DurableWorkItem and ConsumerInboxEntry mappings, causing a false failure even though the P1-003 outbox table, narrow transaction context, migration, and prohibited-concern boundaries remain intact.
+expected_behavior_ref: governance/work-items/TUN-P1-003.yaml acceptance criteria; governance/work-items/TUN-P1-007.yaml approved shared persistence scope; docs/authority/amendments/AMD-0004/AMD-0004_Shared_Technical_Primitives_Formatting_and_Canonicalization.md capability-oriented reuse boundary.
+evidence:
+  - governance/evidence/TUN-P1-003-VALIDATION.json
+  - governance/evidence/DEF-TUN-P1-003-001-REMEDIATION.json
+  - tools/validation/Validate-TunnerTransactionalOutboxSource.ps1
+  - governance/work-items/TUN-P1-003.yaml
+  - governance/work-items/TUN-P1-007.yaml
+affected_versions:
+  - tools/validation/Validate-TunnerTransactionalOutboxSource.ps1 prior single-DbSet assertion
+  - src/Tunner.Database/TunnerMigrationsDbContext.cs current shared platform persistence context
+created_at: 2026-10-02T23:30:00-04:00
+updated_at: 2026-10-02T23:30:00-04:00

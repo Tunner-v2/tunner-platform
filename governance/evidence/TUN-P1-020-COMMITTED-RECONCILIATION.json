@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "scope_id": "TUN-P1-020",
+  "scope_type": "WORK_ITEM",
+  "validation_kind": "RETROSPECTIVE_COMMITTED",
+  "result": "PASS",
+  "validated_commit_sha": "6fb030241ad0927f0a2576da23d348db1cfceab6",
+  "tested_commit_sha": "6fb030241ad0927f0a2576da23d348db1cfceab6",
+  "owned_behavior_paths": [
+    "governance/schemas/v1/governance-record.schema.json",
+    "src/Tunner.Governance/GovernanceApplication.cs",
+    "tests/Tunner.Governance.FunctionalTests/Program.cs"
+  ],
+  "checks": [
+    "Complete governance functional regression passed, including direct technical-only completion, preserved Product Acceptance path, global committed readiness and 60 RV assertions. Current governance build has zero warnings/errors.",
+    "Platform candidate build: zero warnings/errors.",
+    "Read-only verification: all 3 owned candidate blobs equal HEAD and working-tree Git objects. No ownership mismatch."
+  ],
+  "boundary": "Current preserved implementation revalidation owned by TUN-P1-023; original execution claims and historical evidence are unchanged. Governance lifecycle and evidence records are metadata; initial generated dirty files are excluded.",
+  "checked_at": "2026-10-15T15:04:13Z",
+  "execution_receipt": "governance/evidence/TUN-P1-023-EXECUTION-RESULTS.json",
+  "scope_limit": "Current technical scope only. Original validation claims remain preserved; live R2 and P1 milestone acceptance remain unresolved."
+}

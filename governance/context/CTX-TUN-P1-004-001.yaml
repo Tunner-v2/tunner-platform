@@ -1,0 +1,47 @@
+schema_version: 1
+selection_id: CTX-TUN-P1-004-001
+scope_type: WORK_ITEM
+scope_id: TUN-P1-004
+context_mode: EXPANDED
+included_artifacts:
+  - AGENTS.md
+  - docs/authority/current-authority.json
+  - docs/authority/amendments/AMD-0001/effective-overrides/11_Development_Planes_Milestones_and_P0_Backlog.md
+  - docs/authority/baselines/1.6.0/07_API_SDK_Event_and_Connected_Product_Foundation.md
+  - docs/authority/baselines/1.6.0/09_Testing_Acceptance_Evidence_and_Quality_Gates.md
+  - docs/authority/baselines/1.6.0/13_RD_Source_Register.md
+  - docs/authority/baselines/1.6.0/32_Domain_API_Event_Data_and_Policy_Contract_Catalog.md
+  - docs/authority/baselines/1.6.0/decisions/ADR-0011_OpenAPI_31_on_NET10.md
+  - governance/milestones/P1.yaml
+  - governance/work-items/TUN-P1-002.yaml
+  - governance/work-items/TUN-P1-004.yaml
+  - governance/evidence/TUN-P1-004-RD-SOURCES.json
+  - governance/rd/source-registry.json
+  - docs/development/P1_PLATFORM_FOUNDATION_REFINEMENT.md
+  - docs/development/LOCAL_SOURCE_REGISTRY.md
+  - docs/project/CURRENT_STATE.md
+  - docs/project/HANDOFF.md
+  - docs/project/PROJECT_CONTEXT.md
+  - src/Tunner.Api
+  - src/Tunner.Platform.slnx
+  - Directory.Packages.props
+  - .agent/skills/full-stack-engineer/SKILL.md
+  - .agent/skills/solution-architect/SKILL.md
+  - .agent/skills/sdk-engineer/SKILL.md
+  - .agent/skills/rd-engineer/SKILL.md
+  - .agent/skills/tester-qa-engineer/SKILL.md
+excluded_artifacts:
+  - Product/domain endpoints, operation identifiers, schema families, and business workflows
+  - Account/Identity, OAuth/OpenID, authentication, authorization, session, and browser-token behavior
+  - client SDK generation, publication, versioning policy, and external API documentation site
+  - interactive API UI, webhook delivery, RabbitMQ transport, consumers, inbox, durable work, and providers
+  - production deployment, release, credentials, runtime secrets, and fixed host paths or ports
+exclusion_reasons:
+  Product/domain endpoints, operation identifiers, schema families, and business workflows: TUN-P1-004 establishes only technical OpenAPI generation and publication mechanics; domain contract content requires its owning authority.
+  Account/Identity, OAuth/OpenID, authentication, authorization, session, and browser-token behavior: these require separately governed P1/P2 security and identity scope.
+  client SDK generation, publication, versioning policy, and external API documentation site: SDK and public-exposure behavior require dedicated work items after the executable contract pipeline is proven.
+  interactive API UI, webhook delivery, RabbitMQ transport, consumers, inbox, durable work, and providers: these are independent P1/P3/P4 capability boundaries and are not prerequisite to a no-operation contract pipeline.
+  production deployment, release, credentials, runtime secrets, and fixed host paths or ports: this work is local and repository-portable only.
+source_hashes: {}
+tool_version: manual-p1-openapi-contract-context-1.0.0
+created_at: 2026-10-02T11:18:24-04:00

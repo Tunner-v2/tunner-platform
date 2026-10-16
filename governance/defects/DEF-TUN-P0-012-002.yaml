@@ -1,0 +1,16 @@
+schema_version: 1
+defect_id: DEF-TUN-P0-012-002
+work_item_id: TUN-P0-012
+classification: BUG
+severity: SEV-2
+status: CLOSED
+environment: Windows checkout with Git line-ending conversion
+description: The source-registry checker hashed working-tree bytes, causing valid JSON source evidence to fail integrity checks when Git converted canonical LF content to CRLF. One existing record also captured a platform-specific byte hash.
+expected_behavior_ref: TUN-P0-012 and AMD-0003 require deterministic repository-native evidence checks across supported checkout locations and platforms.
+evidence:
+  - governance/evidence/P0-DEEP-AUDIT-20261001.json
+affected_versions:
+  - src/Tunner.Governance/SourceRegistryApplication.cs
+  - governance/rd/source-registry.json
+created_at: 2026-10-01T21:55:00-04:00
+updated_at: 2026-10-01T21:55:00-04:00

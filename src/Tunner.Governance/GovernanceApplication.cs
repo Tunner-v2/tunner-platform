@@ -1,4 +1,6 @@
 using System.Globalization;
+using System.Security.Cryptography;
+using System.Text;
 using System.Text.Json;
 using Json.Schema;
 using YamlDotNet.Core;
@@ -19,6 +21,7 @@ public static class GovernanceApplication
         new("todos", "todo", "todo.schema.json", "todo", "id"),
         new("defects", "defect", "defect.schema.json", "defect", "defect_id"),
         new("reopens", "reopen", "reopen.schema.json", "reopen", "reopen_id"),
+        new("revisions", "revision", "revision.schema.json", "revision", "revision_id"),
         new("decisions", "product-decision", "product-decision.schema.json", "productDecision", "decision_id"),
         new("gates", "gate", "gate.schema.json", "gate", "gate_id"),
         new("releases", "release", "release.schema.json", "release", "release_id"),
@@ -60,11 +63,22 @@ public static class GovernanceApplication
                 diagnostics.Add(Diagnostic.Error(record.Path, record.Root.Start, "GOV_SCHEMA_VERSION", "schema_version must be an integer of at least 1."));
             }
 
+            if (record.Fields.TryGetValue("git_state", out var gitState))
+            {
+                using var library = JsonDocument.Parse(File.ReadAllText(Path.Combine(repository.FullName, "governance/schemas/v1/governance-record.schema.json")));
+                var executable = JsonSchema.FromText("{\"$defs\":" + library.RootElement.GetProperty("$defs").GetRawText() + ",\"$ref\":\"#/$defs/gitState\"}");
+                if (!executable.Evaluate(JsonSerializer.SerializeToElement(RevisionApplication.ToJson(gitState))).IsValid)
+                    diagnostics.Add(Diagnostic.Error(record.Path, gitState.Start, "GOV_GIT_STATE_SCHEMA", "git_state fails executable required field/type/SHA validation"));
+            }
+
             if (StringComparer.Ordinal.Equals(record.Type.DefinitionName, "dependency") && !DependencyReadiness.Contains(record.Scalar("required_readiness") ?? string.Empty, StringComparer.Ordinal))
             {
                 diagnostics.Add(Diagnostic.Error(record.Path, record.Root.Start, "GOV_DEPENDENCY_READINESS", "Dependency required_readiness must be LOCAL_VALIDATED or MERGED_TO_MAIN."));
             }
         }
+
+        AddAuthorityResolutionDiagnostics(records, diagnostics);
+        RevisionApplication.AddDiagnostics(repository, records, diagnostics);
 
         var isValid = diagnostics.All(item => item.Severity != "ERROR");
         return new CommandResult(isValid ? 0 : 1, "validate", new ValidationPayload(isValid, records.Count, diagnostics));
@@ -83,7 +97,7 @@ public static class GovernanceApplication
             .Select(item => new WorkItemStatus(item.Identifier, item.Scalar("status") ?? "UNKNOWN", item.StringList("prerequisites"), item.StringList("blockers"), item.StringList("required_evidence")))
             .OrderBy(item => item.Id, StringComparer.Ordinal)
             .ToArray();
-        return new CommandResult(validation.ExitCode, "status", new StatusPayload(milestones, workItems, validation.Payload));
+        return new CommandResult(validation.ExitCode, "status", new StatusPayload(milestones, workItems, validation.Payload, RevisionApplication.Status(records), RevisionApplication.HistoricalScopes(repository, records)));
     }
 
     public static CommandResult Next(DirectoryInfo repository)
@@ -96,6 +110,8 @@ public static class GovernanceApplication
         var allowValidatedP0Prerequisites = HasApprovedP0LocalIntegration(records);
         var next = new List<NextItem>();
         var integrationActions = new List<IntegrationAction>();
+        var validation = (ValidationPayload)Validate(repository).Payload;
+        diagnostics.AddRange(validation.Diagnostics);
 
         var authority = AuthorityApplication.Verify(repository);
         if (authority.ExitCode != 0)
@@ -122,13 +138,17 @@ public static class GovernanceApplication
             }
 
             var reasons = ReadinessReasons(repository, record, workItems, dependencies, integrationPolicy, allowValidatedP0Prerequisites);
+            var revisionReasons = RevisionApplication.BlockingReasons(records, record);
+            reasons.AddRange(revisionReasons);
             integrationActions.AddRange(PendingIntegrationActions(repository, record, workItems, dependencies, integrationPolicy));
             var active = StringComparer.Ordinal.Equals(state, "IN_PROGRESS");
             var reason = reasons.Count == 0
                 ? active ? "currently in progress" : "all recorded prerequisites and blockers permit work"
                 : active ? "currently in progress; " + string.Join("; ", reasons) : string.Join("; ", reasons);
-            next.Add(new NextItem(record.Identifier, state, active || reasons.Count == 0, reason));
+            next.Add(new NextItem(record.Identifier, state, validation.IsValid && reasons.Count == 0, reason));
         }
+
+        next.AddRange(RevisionApplication.Next(repository, records, validation.IsValid));
 
         var actions = integrationActions
             .DistinctBy(item => (item.WorkItemId, item.PrerequisiteWorkItemId, item.RequiredReadiness))
@@ -149,6 +169,8 @@ public static class GovernanceApplication
         }
 
         var failures = ReadinessReasons(repository, workItem, workItems, DependencyRecords(records), IntegrationPolicy.Load(repository, diagnostics), HasApprovedP0LocalIntegration(records));
+        failures.AddRange(RevisionApplication.BlockingReasons(records, workItem));
+        failures.AddRange(CommitReadinessApplication.Check(repository, workItem));
         var authority = AuthorityApplication.Verify(repository);
         if (authority.ExitCode != 0)
         {
@@ -209,6 +231,13 @@ public static class GovernanceApplication
             return new CommandResult(1, "transition check", new TransitionPayload(workItemId, from, destination, "INSUFFICIENT_CONTEXT", string.Join("; ", diagnostics.Select(item => item.Message))));
         }
 
+        if (from == "REOPENED" && destination == "IN_PROGRESS")
+        {
+            var causation = records.Any(x => x.Type.DefinitionName == "reopen" && x.Scalar("work_item_id") == workItemId) ||
+                workItem.StringList("defects").Any(id => records.Any(x => x.Type.DefinitionName == "defect" && x.Identifier == id));
+            var valid = ((ValidationPayload)Validate(repository).Payload).IsValid;
+            return new CommandResult(causation && valid ? 0 : 1, "transition check", new TransitionPayload(workItemId, from, destination, causation && valid ? "ALLOWED" : "REJECTED", "Approved Document 03: reopened active acceptance/release work resumes active work with preserved completion causation."));
+        }
         if (policy.SideStates.Contains(from, StringComparer.Ordinal) || policy.SideStates.Contains(destination, StringComparer.Ordinal))
         {
             return new CommandResult(1, "transition check", new TransitionPayload(workItemId, from, destination, "INSUFFICIENT_CONTEXT", "The policy lists side states but does not define their transition graph."));
@@ -216,8 +245,21 @@ public static class GovernanceApplication
 
         var fromIndex = Array.IndexOf(policy.NormalStates.ToArray(), from);
         var destinationIndex = Array.IndexOf(policy.NormalStates.ToArray(), destination);
-        var allowed = fromIndex >= 0 && destinationIndex == fromIndex + 1;
-        return new CommandResult(allowed ? 0 : 1, "transition check", new TransitionPayload(workItemId, from, destination, allowed ? "ALLOWED" : "REJECTED", allowed ? "The destination is the next declared normal lifecycle state." : "Only the next declared normal lifecycle state is allowed by this MVP."));
+        var nextDeclaredNormalState = fromIndex >= 0 && destinationIndex == fromIndex + 1;
+        var explicitlyTechnicalOnly = string.Equals(workItem.Scalar("product_acceptance_required"), "false", StringComparison.OrdinalIgnoreCase);
+        var directTechnicalCompletion = explicitlyTechnicalOnly && string.Equals(from, "VALIDATION", StringComparison.Ordinal) && string.Equals(destination, "DONE", StringComparison.Ordinal);
+        var allowed = nextDeclaredNormalState || directTechnicalCompletion;
+        var reason = directTechnicalCompletion
+            ? "Product Acceptance is explicitly not required; this technical-only work item may move directly from VALIDATION to DONE."
+            : allowed
+                ? "The destination is the next declared normal lifecycle state."
+                : "Only the next declared normal lifecycle state is allowed unless Product Acceptance is explicitly not required for a technical-only work item completing from VALIDATION.";
+        if (allowed && StringComparer.Ordinal.Equals(destination, "DONE") && RequiresCommittedState(repository, workItem, destination) && !HasRequiredCommittedState(repository, workItem, destination))
+        {
+            return new CommandResult(1, "transition check", new TransitionPayload(workItemId, from, destination, "REJECTED", "P1 repository-changing completion requires valid committed-state readiness evidence."));
+        }
+
+        return new CommandResult(allowed ? 0 : 1, "transition check", new TransitionPayload(workItemId, from, destination, allowed ? "ALLOWED" : "REJECTED", reason));
     }
 
     public static CommandResult CheckMilestoneTransition(DirectoryInfo repository, string milestoneId, string destination)
@@ -298,7 +340,7 @@ public static class GovernanceApplication
         }
 
         var workItems = WorkItems(records);
-        var ownedWorkItems = workItems.Values.Where(item => StringComparer.Ordinal.Equals(item.Scalar("milestone_id"), milestoneId)).Select(item => item.Identifier).ToHashSet(StringComparer.Ordinal);
+        var ownedWorkItems = workItems.Values.Where(item => StringComparer.Ordinal.Equals(item.Scalar("milestone_id"), milestoneId) && item.Scalar("revision_ref") is null or "null" or "").Select(item => item.Identifier).ToHashSet(StringComparer.Ordinal);
         foreach (var undeclared in ownedWorkItems.Except(declaredWorkItemIds, StringComparer.Ordinal).OrderBy(item => item, StringComparer.Ordinal))
         {
             failures.Add($"milestone-owned work item is not declared by the milestone: {undeclared}");
@@ -347,7 +389,7 @@ public static class GovernanceApplication
             var status = todo.Scalar("status") ?? "UNKNOWN";
             if (!ClosedTodoStatuses.Contains(status, StringComparer.Ordinal))
             {
-                failures.Add($"P0 TODO remains open: {todo.Identifier} ({status})");
+                failures.Add($"{milestoneId} TODO remains open: {todo.Identifier} ({status})");
             }
         }
 
@@ -356,7 +398,7 @@ public static class GovernanceApplication
             var status = defect.Scalar("status") ?? "UNKNOWN";
             if (!ClosedDefectStatuses.Contains(status, StringComparer.Ordinal))
             {
-                failures.Add($"P0 defect remains open: {defect.Identifier} ({status})");
+                failures.Add($"{milestoneId} defect remains open: {defect.Identifier} ({status})");
             }
         }
 
@@ -375,7 +417,7 @@ public static class GovernanceApplication
             }
         }
 
-        var declaredGates = records.Where(item => item.Type.DefinitionName == "gate").ToDictionary(item => item.Identifier, StringComparer.Ordinal);
+        var declaredGates = records.Where(item => item.Type.DefinitionName == "gate").GroupBy(item => item.Identifier, StringComparer.Ordinal).ToDictionary(group => group.Key, group => group.First(), StringComparer.Ordinal);
         foreach (var requiredGate in milestone.StringList("required_gates"))
         {
             if (declaredGates.TryGetValue(requiredGate, out var gate))
@@ -407,6 +449,33 @@ public static class GovernanceApplication
         var normalizedFailures = failures.Distinct(StringComparer.Ordinal).ToArray();
         return new CommandResult(normalizedFailures.Length == 0 ? 0 : 1, "milestone close-check", new MilestoneClosePayload(milestoneId, normalizedFailures.Length == 0 ? "PASS" : "NOT_READY", normalizedFailures, satisfied.Distinct(StringComparer.Ordinal).ToArray()));
     }
+    public static CommandResult MilestoneReviewSnapshot(DirectoryInfo repository, string milestoneId)
+    {
+        var records = LoadRecords(repository, []);
+        var milestone = records.SingleOrDefault(x => x.Type.DefinitionName == "milestone" && x.Identifier == milestoneId);
+        return milestone is null
+            ? new CommandResult(2, "milestone review-snapshot", new { Outcome = "NOT_FOUND" })
+            : new CommandResult(0, "milestone review-snapshot", new { Outcome = "GENERATED", MilestoneId = milestoneId,
+                ReviewedCommitSha = CommittedEvidenceApplication.Git(repository, "rev-parse", "HEAD"),
+                ReviewedScopeSha256 = MilestoneReviewFingerprint(repository, milestone) });
+    }
+
+    private static string MilestoneReviewFingerprint(DirectoryInfo repository, GovernanceRecord milestone, string? revision = null)
+    {
+        var paths = milestone.StringList("work_items").Select(id => "governance/work-items/" + id + ".yaml")
+            .Concat(milestone.StringList("evidence_refs").Where(path => path != $"governance/evidence/{milestone.Identifier}-MILESTONE-ROLE-REVIEWS.json"))
+            .Distinct(StringComparer.Ordinal).OrderBy(path => path, StringComparer.Ordinal);
+        var rows = new List<string> { milestone.Identifier, string.Join(",", milestone.StringList("required_roles")),
+            string.Join(",", milestone.StringList("authority_refs")), string.Join(",", milestone.StringList("required_gates")) };
+        foreach (var logical in paths)
+        {
+            var path = Path.GetFullPath(Path.Combine(repository.FullName, logical));
+            rows.Add(logical + ":" + (path.StartsWith(repository.FullName + Path.DirectorySeparatorChar, StringComparison.OrdinalIgnoreCase) && File.Exists(path)
+                ? (revision is null ? CommittedEvidenceApplication.Git(repository, "hash-object", "--", logical) : CommittedEvidenceApplication.Git(repository, "rev-parse", revision + ":" + logical)) : "MISSING"));
+        }
+        return Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(string.Join("\n", rows)))).ToLowerInvariant();
+    }
+
     private static void CheckMilestoneRoleReviews(DirectoryInfo repository, GovernanceRecord milestone, List<string> failures, List<string> satisfied)
     {
         var requiredRoles = milestone.StringList("required_roles");
@@ -436,6 +505,15 @@ public static class GovernanceApplication
                 return;
             }
 
+            var expectedSnapshot = MilestoneReviewFingerprint(repository, milestone);
+            if (!root.TryGetProperty("reviewed_commit_sha", out var reviewedSha) || !CommittedEvidenceApplication.IsSha(reviewedSha.GetString()) ||
+                CommittedEvidenceApplication.Git(repository, "merge-base", reviewedSha.GetString()!, "HEAD") != reviewedSha.GetString() ||
+                !root.TryGetProperty("reviewed_scope_sha256", out var snapshot) || (snapshot.GetString() != expectedSnapshot || snapshot.GetString() != MilestoneReviewFingerprint(repository, milestone, reviewedSha.GetString())))
+            {
+                failures.Add($"milestone reviews lack current committed scope binding; run governance milestone review-snapshot {milestone.Identifier}");
+                return;
+            }
+
             foreach (var role in requiredRoles)
             {
                 var passed = reviews.EnumerateArray().Any(review =>
@@ -461,6 +539,60 @@ public static class GovernanceApplication
             failures.Add($"milestone role-review evidence could not be read: {logicalPath}");
         }
     }
+    private static void AddAuthorityResolutionDiagnostics(IReadOnlyList<GovernanceRecord> records, List<Diagnostic> diagnostics)
+    {
+        foreach (var record in records.Where(RequiresAuthorityResolution))
+        {
+            if (!record.Fields.TryGetValue("authority_resolution", out var node) || node is not YamlMappingNode resolution)
+            {
+                diagnostics.Add(Diagnostic.Error(record.Path, record.Root.Start, "GOV_AUTHORITY_RESOLUTION_REQUIRED", "A missing-authority decision or blocker requires a schema-versioned Authority Resolution Pass."));
+                continue;
+            }
+
+            var fields = Fields(resolution);
+            var schemaVersion = Scalar(fields, "schema_version");
+            var outcome = Scalar(fields, "outcome");
+            var reviewedAuthority = StringList(fields, "reviewed_authority_refs");
+            var unresolvedQuestion = Scalar(fields, "unresolved_question");
+            var conclusion = Scalar(fields, "conclusion");
+            var triggerAbsent = string.Equals(Scalar(fields, "conditional_trigger_absent"), "true", StringComparison.OrdinalIgnoreCase);
+
+            if (!int.TryParse(schemaVersion, NumberStyles.Integer, CultureInfo.InvariantCulture, out var version) || version < 1 ||
+                string.IsNullOrWhiteSpace(outcome) || reviewedAuthority.Count == 0 || string.IsNullOrWhiteSpace(unresolvedQuestion) || string.IsNullOrWhiteSpace(conclusion))
+            {
+                diagnostics.Add(Diagnostic.Error(record.Path, resolution.Start, "GOV_AUTHORITY_RESOLUTION_INVALID", "Authority Resolution Pass must declare schema_version, outcome, reviewed_authority_refs, unresolved_question, and conclusion."));
+                continue;
+            }
+
+            if (!reviewedAuthority.Contains("docs/authority/current-authority.json", StringComparer.Ordinal))
+            {
+                diagnostics.Add(Diagnostic.Error(record.Path, resolution.Start, "GOV_AUTHORITY_RESOLUTION_INDEX", "Authority Resolution Pass must cite docs/authority/current-authority.json."));
+            }
+
+            if (triggerAbsent || string.Equals(outcome, "CONDITIONAL_TRIGGER_ABSENT", StringComparison.Ordinal))
+            {
+                diagnostics.Add(Diagnostic.Error(record.Path, resolution.Start, "GOV_AUTHORITY_RESOLUTION_CONDITIONAL", "A conditional trigger being absent is not a missing-authority decision or blocker."));
+            }
+        }
+    }
+
+    private static bool RequiresAuthorityResolution(GovernanceRecord record)
+    {
+        if (StringComparer.Ordinal.Equals(record.Type.DefinitionName, "product-decision"))
+        {
+            return true;
+        }
+
+        if (!StringComparer.Ordinal.Equals(record.Type.DefinitionName, "work-item"))
+        {
+            return false;
+        }
+
+        var state = record.Scalar("status");
+        return new[] { "NEEDS_PRODUCT_DECISION", "CONTRACT_REQUIRED", "TECH_DECISION_REQUIRED" }.Contains(state, StringComparer.Ordinal)
+            || record.StringList("blockers").Any(blocker => blocker.Contains("CONTRACT", StringComparison.Ordinal) || blocker.Contains("DECISION", StringComparison.Ordinal) || blocker.Contains("FIGMA_SCOPE", StringComparison.Ordinal));
+    }
+
     private static void AddAuthorityDiagnostics(DirectoryInfo repository, List<Diagnostic> diagnostics)
     {
         var authority = AuthorityApplication.Verify(repository);
@@ -477,7 +609,7 @@ public static class GovernanceApplication
     public static string Serialize(CommandResult result) => JsonSerializer.Serialize(result, JsonOptions);
 
     internal static Dictionary<string, GovernanceRecord> WorkItems(IReadOnlyList<GovernanceRecord> records)
-        => records.Where(item => item.Type.DefinitionName == "work-item" && item.Identifier.Length > 0).ToDictionary(item => item.Identifier, StringComparer.Ordinal);
+        => records.Where(item => item.Type.DefinitionName == "work-item" && item.Identifier.Length > 0).GroupBy(item => item.Identifier, StringComparer.Ordinal).ToDictionary(group => group.Key, group => group.First(), StringComparer.Ordinal);
 
     private static List<string> ReadinessReasons(DirectoryInfo repository, GovernanceRecord workItem, Dictionary<string, GovernanceRecord> workItems, IReadOnlyList<GovernanceRecord> dependencies, IntegrationPolicyDefinition integrationPolicy, bool allowValidatedP0Prerequisites)
     {
@@ -504,6 +636,13 @@ public static class GovernanceApplication
                 failures.Add($"prerequisite '{prerequisite}' has unsupported readiness '{readiness}'");
                 continue;
             }
+
+            if (!HasRequiredCommittedState(repository, prerequisiteRecord))
+            {
+                failures.Add($"prerequisite '{prerequisite}' lacks valid committed-state readiness evidence");
+                continue;
+            }
+
 
             if (!IsPrerequisiteReady(repository, workItem, prerequisiteRecord, declaration, readiness, allowValidatedP0Prerequisites))
             {
@@ -558,6 +697,20 @@ public static class GovernanceApplication
 
     private static int UnmergedLocalDependentCount(Dictionary<string, GovernanceRecord> workItems, IReadOnlyList<GovernanceRecord> dependencies, IntegrationPolicyDefinition integrationPolicy)
         => workItems.Values.Count(workItem => workItem.StringList("prerequisites").Any(prerequisiteId => workItems.TryGetValue(prerequisiteId, out var prerequisite) && !StringComparer.Ordinal.Equals(prerequisite.Scalar("status"), "DONE") && StringComparer.Ordinal.Equals(dependencies.FirstOrDefault(item => StringComparer.Ordinal.Equals(item.Scalar("work_item_id"), workItem.Identifier) && StringComparer.Ordinal.Equals(item.Scalar("prerequisite_work_item_id"), prerequisiteId))?.Scalar("required_readiness") ?? integrationPolicy.DefaultDependencyReadiness, "LOCAL_VALIDATED")));
+
+    private static bool RequiresCommittedState(DirectoryInfo repository, GovernanceRecord record, string? state = null)
+        => CommitReadinessApplication.IsRequired(repository, record, state);
+
+    private static bool HasRequiredCommittedState(DirectoryInfo repository, GovernanceRecord record, string? state = null)
+    {
+        if (!RequiresCommittedState(repository, record, state))
+        {
+            return true;
+        }
+
+        return CommitReadinessApplication.Read(record) is not null
+            && CommitReadinessApplication.Check(repository, record).Count == 0;
+    }
 
     private static bool IsPrerequisiteReady(DirectoryInfo repository, GovernanceRecord workItem, GovernanceRecord prerequisite, GovernanceRecord? declaration, string readiness, bool allowValidatedP0Prerequisites)
     {
@@ -632,6 +785,8 @@ public static class GovernanceApplication
             }
         }
 
+        foreach (var duplicate in records.GroupBy(record => record.Identifier, StringComparer.Ordinal).Where(group => group.Count() > 1))
+            diagnostics.Add(Diagnostic.Error(duplicate.First().Path, null, "GOV_DUPLICATE_ID", $"Duplicate governed identifier '{duplicate.Key}'."));
         return records;
     }
 
@@ -721,7 +876,7 @@ public sealed record Diagnostic(string File, long? Line, long? Column, string Se
 public sealed record ValidationPayload(bool IsValid, int RecordCount, IReadOnlyList<Diagnostic> Diagnostics);
 public sealed record MilestoneStatus(string Id, string Status);
 public sealed record WorkItemStatus(string Id, string Status, IReadOnlyList<string> Prerequisites, IReadOnlyList<string> Blockers, IReadOnlyList<string> RequiredEvidence);
-public sealed record StatusPayload(IReadOnlyList<MilestoneStatus> Milestones, IReadOnlyList<WorkItemStatus> WorkItems, object Validation);
+public sealed record StatusPayload(IReadOnlyList<MilestoneStatus> Milestones, IReadOnlyList<WorkItemStatus> WorkItems, object Validation, IReadOnlyList<RevisionStatus> Revisions, IReadOnlyList<HistoricalScopeStatus> HistoricalScopes);
 public sealed record NextItem(string WorkItemId, string Status, bool Actionable, string Reason);
 public sealed record IntegrationAction(string WorkItemId, string PrerequisiteWorkItemId, string RequiredReadiness, string Action, string Reason);
 public sealed record NextPayload(IReadOnlyList<NextItem> Items, IReadOnlyList<IntegrationAction> HumanIntegrationActions, IReadOnlyList<Diagnostic> Diagnostics);

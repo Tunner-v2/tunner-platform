@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "evidence_id": "TUN-P1-009-VALIDATION",
+  "scope_type": "WORK_ITEM",
+  "scope_id": "TUN-P1-009",
+  "status": "PASS",
+  "checked_at": "2026-10-02T17:51:41-04:00",
+  "checks": [
+    "Operator-run restore completed after adding centrally versioned AWSSDK.S3 3.7.510.8.",
+    "Operator-run solution build completed with zero warnings and zero errors.",
+    "Validate-TunnerR2ObjectStorageSource.ps1 passed and confirms the required S3 calls/caveat flags while rejecting embedded credentials and runtime endpoint configuration.",
+    "Operator-run Tunner.Platform.ArchitectureTests passed 7 of 7 checks, including the deterministic injected R2 provider seam.",
+    "Authority verification, governance validation, current primary-source evidence, expanded context, transition preflight, and final specialist review records are evaluated before state advancement."
+  ],
+  "artifacts": [
+    "Directory.Packages.props",
+    "src/Tunner.Platform/Tunner.Platform.csproj",
+    "src/Tunner.Platform/ObjectStorage/IObjectStorage.cs",
+    "src/Tunner.Platform/ObjectStorage/ObjectStorageAddress.cs",
+    "src/Tunner.Platform/ObjectStorage/ObjectStorageWriteRequest.cs",
+    "src/Tunner.Platform/ObjectStorage/ObjectStorageReadResult.cs",
+    "src/Tunner.Platform/ObjectStorage/R2/IR2S3Client.cs",
+    "src/Tunner.Platform/ObjectStorage/R2/R2ObjectStorage.cs",
+    "src/Tunner.Platform/ObjectStorage/R2/AwsR2S3Client.cs",
+    "tests/Tunner.Platform.ArchitectureTests/R2ObjectStorageTests.cs",
+    "tools/validation/Validate-TunnerR2ObjectStorageSource.ps1"
+  ],
+  "limitations": [
+    "This establishes only a provider-neutral object-storage contract and an injected R2/AWS technical adapter seam.",
+    "No account, bucket, credential, endpoint, region/jurisdiction, configuration, public/presigned access, content policy, malware scanning, retention/lifecycle/lock policy, authoritative PostgreSQL metadata, Product behavior, public API, SDK, deployment, or release behavior is introduced.",
+    "Provider ETag, metadata, lifecycle, retention, and location remain non-authoritative technical/provider outcomes; future owner-domain and PostgreSQL authority remain required."
+  ]
+}

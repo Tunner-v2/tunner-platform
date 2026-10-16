@@ -1,0 +1,1 @@
+namespace Tunner.Platform.Redis; public interface IEphemeralCoordination { Task<bool> TryAcquireAsync(string tokenKey, Guid ownerToken, TimeSpan timeToLive, CancellationToken cancellationToken = default); Task<bool> TryReleaseAsync(string tokenKey, Guid ownerToken, CancellationToken cancellationToken = default); }

@@ -1,18 +1,31 @@
-# CURRENT_STATE
+# Governed project recovery state
 
-## Baseline and milestone
+Derived deterministically from repository-native governance. Regenerate with tunner context build.
 
-- Effective authority: Baseline 1.6.0 + accepted ADR/PDR records + AMD-0001 + AMD-0002 + AMD-0003.
-- Authority mirror: `tunner authority verify` passes for 76 hash-checked authority artifacts, including AMD-0003 and its recorded provenance.
-- Milestone: P0 is `CLOSED`. Its read-only `tunner governance milestone close-check P0` returned machine-readable `PASS` after every declared work-item final gate, P0 role review, evidence reference, closed TODO/defect, governance-schema, and authority-integrity check passed.
-- Integration: P0 is locally closed under AMD-0002. Protected `main` integration remains subject to its existing human approval and repository rules; local closure is not a production-release claim.
+- P0: historical CLOSED; active Revisions:
+- P1: historical ACTIVE; active Revisions:
 
-## Completed P0 foundations
+Latest bounded Revision lineage:
+- P0-RV001: CLOSED; original P0; parent none; CORRECTIVE: Post-closure remediation of governance/control-plane, evidence integrity, project-state consistency, fresh-agent recovery, authority integrity and portability deficiencies discovered after legitimate historical P0 closure.
+- P0-003-RV001: CLOSED; original TUN-P0-003; parent P0-RV001; CORRECTIVE: Remediate the post-closure gap recorded by REOPEN-TUN-P0-003-001; retain original DONE evidence.
+- P0-004-RV001: CLOSED; original TUN-P0-004; parent P0-RV001; CORRECTIVE: Remediate the post-closure gap recorded by REOPEN-TUN-P0-004-001; retain original DONE evidence.
+- P0-011-RV001: CLOSED; original TUN-P0-011; parent P0-RV001; CORRECTIVE: Remediate the post-closure gap recorded by REOPEN-TUN-P0-011-001; retain original DONE evidence.
+- P0-026-RV001: CLOSED; original TUN-P0-026; parent P0-RV001; CORRECTIVE: Remediate the post-closure gap recorded by REOPEN-TUN-P0-026-001; retain original DONE evidence.
+- P0-030-RV001: CLOSED; original TUN-P0-030; parent P0-RV001; CORRECTIVE: Remediate the post-closure gap recorded by REOPEN-TUN-P0-030-001; retain original DONE evidence.
+- P0-032-RV001: CLOSED; original TUN-P0-032; parent P0-RV001; CORRECTIVE: Remediate the post-closure gap recorded by REOPEN-TUN-P0-032-001; retain original DONE evidence.
+- P0-033-RV001: CLOSED; original TUN-P0-033; parent P0-RV001; CORRECTIVE: Remediate the post-closure gap recorded by REOPEN-TUN-P0-033-001; retain original DONE evidence.
+- P0-035-RV001: CLOSED; original TUN-P0-035; parent P0-RV001; CORRECTIVE: Remediate the post-closure gap recorded by REOPEN-TUN-P0-035-001; retain original DONE evidence.
 
-- TUN-P0-001 through TUN-P0-015, TUN-P0-019, and TUN-P0-026 through TUN-P0-035 are all `DONE` with required evidence and final gates passing.
-- AMD-0003 is active. The shared C# and PowerShell repository-root resolvers support explicit root, `TUNNER_REPO_ROOT`, Git top-level, and marker-walk resolution. The user-run relocated-copy proof passed after the no-Git fallback validation repair.
-- The P0 close command now verifies all declared work items, their final gates, milestone evidence, declared milestone roles, and open P0 TODO/defect records without mutating any state.
+Selected scope: TUN-P1-019
+Validated SHA: 7aa8e46e6318479e8811b3c63d6baf84681de050
+Tested SHA: 7aa8e46e6318479e8811b3c63d6baf84681de050
+Closure SHA: 8e7b1b1e24b528c9e90056858494b2d00b954846
 
-## Exact next authorized action
+Prerequisites: TUN-P1-002, TUN-P1-005
+Authority: docs/authority/current-authority.json, docs/authority/amendments/AMD-0004/AMD-0004_Shared_Technical_Primitives_Formatting_and_Canonicalization.md, docs/authority/amendments/AMD-0001/effective-overrides/11_Development_Planes_Milestones_and_P0_Backlog.md, docs/authority/baselines/1.6.0/01_Engineering_Technology_Foundation.md, docs/authority/baselines/1.6.0/02_Repository_Solution_and_Module_Architecture.md, docs/authority/baselines/1.6.0/09_Testing_Acceptance_Evidence_and_Quality_Gates.md, docs/authority/baselines/1.6.0/07_API_SDK_Event_and_Connected_Product_Foundation.md, docs/authority/baselines/1.6.0/08_Security_Privacy_Compliance_and_Global_Market_Governance.md, docs/authority/baselines/1.6.0/17_Account_Identity_and_Session_FRD.md, docs/authority/baselines/1.6.0/28_Support_Risk_Audit_and_Internal_Operations_FRD.md, docs/authority/baselines/1.6.0/29_Privacy_Data_Lifecycle_and_Processing_Governance_FRD.md, docs/authority/baselines/1.6.0/32_Domain_API_Event_Data_and_Policy_Contract_Catalog.md, docs/authority/baselines/1.6.0/33_Production_Readiness_Compliance_and_Release_Gates.md, docs/authority/baselines/1.6.0/34_Architecture_to_Development_Traceability_Matrix.md, docs/authority/baselines/1.6.0/decisions/ADR-0004_Communication_Protocol_Boundaries.md, docs/authority/baselines/1.6.0/decisions/ADR-0005_Browser_BFF_and_Token_Security.md, docs/authority/baselines/1.6.0/decisions/ADR-0006_Identity_ASPNET_Identity_OpenIddict.md, docs/authority/amendments/AMD-0003/AMD-0003_Location-Independent_Repository_and_Path_Resolution.md, docs/authority/amendments/AMD-0005/AMD-0005_Authority-First_Decision_Resolution_and_Duplicate-Decision_Prevention.md
+Defects:
+Evidence:
 
-- P1–P8 are no longer blocked by the P0 enablement gate. Before any Product implementation, materialize the next authority-backed milestone/work-item record, run the mandatory startup commands, calculate mandatory roles, and build bounded context. Do not invent Product scope or change protected `main` without explicit authorization.
+Exact next governed action: inspect scoped readiness findings from tunner governance next
+
+P1 historical validation findings are retained in governance/evidence/P0-RV001-P1-EVIDENCE-AUDIT.json. No chat history is required.

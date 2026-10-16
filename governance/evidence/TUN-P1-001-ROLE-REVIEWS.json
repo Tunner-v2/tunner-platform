@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "evidence_id": "TUN-P1-001-ROLE-REVIEWS",
+  "scope_type": "WORK_ITEM",
+  "scope_id": "TUN-P1-001",
+  "status": "PASS",
+  "reviewed_at": "2026-10-01T22:55:00-04:00",
+  "reviews": [
+    { "role": "auditor", "conclusion": "PASS", "checks": ["The candidate backlog preserves authority hierarchy, later-plane separation, and explicit uncertainty gates."], "findings": [] },
+    { "role": "business-analyst", "conclusion": "PASS", "checks": ["The refinement does not create Product requirements; it records the boundaries that require later Product or UX authority."], "findings": [] },
+    { "role": "full-stack-engineer", "conclusion": "PASS", "checks": ["The first candidate is constrained to host composition and module boundaries and explicitly excludes application behavior."], "findings": [] },
+    { "role": "governance-engineer", "conclusion": "PASS", "checks": ["P1 and the first candidate use the declared lifecycle, calculated roles, expanded context, and evidence paths."], "findings": [] },
+    { "role": "project-manager", "conclusion": "PASS", "checks": ["Only one implementation candidate is materialized; remaining authority headings stay as a transparent candidate backlog pending their own refinement."], "findings": [] },
+    { "role": "solution-architect", "conclusion": "PASS", "checks": ["The decomposition preserves the cohesive modular architecture, ownership, authority boundaries, and protocol decisions without selecting an unapproved topology."], "findings": [] },
+    { "role": "tester-qa-engineer", "conclusion": "PASS", "checks": ["The refinement evidence records deterministic authority, governance, role, context, documentation, and whitespace checks; runtime claims are excluded."], "findings": [] }
+  ],
+  "authority_hashes": {
+    "docs/authority/current-authority.json": "5c29b03bc9e076386d005849c2870cfb6411d18e1627d54a4d0eb9a48370ca3a",
+    "docs/authority/amendments/AMD-0001/effective-overrides/11_Development_Planes_Milestones_and_P0_Backlog.md": "1f1a5858de8a01ce5af07f6a81ef6ea6b292aabe325634aa6fff0cde8a0e6550",
+    "docs/authority/baselines/1.6.0/01_Engineering_Technology_Foundation.md": "b65976512db8ce580adcf33aca4131fb15f043625481c0c7ea3a043e4a262016"
+  },
+  "skill_hashes": {
+    "auditor": "191c796fc5df0332ff2c3c464ca611d2c6d3ffc5ba7e2807986a71ad2e40d921",
+    "business-analyst": "ca6e24da90c6dac80b7b75124f04a81a2d590e73cc1e99781546c4aad1bca04f",
+    "full-stack-engineer": "59adbe2133cf4ce88cbc9ca4eafce1d5a9d83b9562b6580c1571e6fc148d46b5",
+    "governance-engineer": "3c948ff290690b012d3736b561021989681c2b6fcac3f115b96ca1083672536f",
+    "project-manager": "ae262bf4c9a2e26c688106c7af420fbc4dc26a116048e04ae01a5e4e01ead927",
+    "solution-architect": "664ffba70d0f97e75951c3548b7f8391854781e4cf90cc50fc8829543783a35b",
+    "tester-qa-engineer": "a57ce99d7ad7a3b60f17e4826c81c507c9cc208d8928285c406222eefe0a18fd"
+  }
+}

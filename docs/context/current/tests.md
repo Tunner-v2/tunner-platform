@@ -1,12 +1,20 @@
 # Tests and evidence
 
-- `bootstrap replay` — required test
-- `bootstrap exception validation` — required test
-- `feature bootstrap refusal` — required test
-- `build` — required test
+- `authority verification` — required test
 - `governance validation` — required test
+- `role activation calculation and mandatory specialist reviews` — required test
+- `bounded expanded context verification` — required test
+- `scope-specific deterministic tests and evidence` — required test
 
 ## Required evidence
 
-- `governance/evidence/TUN-P0-034-VALIDATION.json` — required evidence
-- `governance/evidence/TUN-P0-034-ROLE-REVIEWS.json` — required evidence
+- `governance/context/CTX-TUN-P1-019-001.yaml` — required evidence
+- `governance/evidence/TUN-P1-019-VALIDATION.json` — required evidence
+- `governance/evidence/TUN-P1-019-ROLE-REVIEWS.json` — required evidence
+- `governance/evidence/TUN-P1-019-AUTHORITY-RESOLUTION.json` — required evidence
+- `governance/evidence/TUN-P1-019-CANONICAL-SOURCES.json` — required evidence
+- `governance/evidence/TUN-P1-019-RD-SOURCES.json` — required evidence
+- `docs/development/P1_BFF_TECHNICAL_FOUNDATION.md` — required evidence
+- `governance/evidence/TUN-P1-019-TEST-RESULTS.json` — required evidence
+- `governance/evidence/TUN-P1-019-SECURITY-ASSESSMENT.json` — required evidence
+- `governance/evidence/TUN-P1-019-CLOSURE.json` — required evidence

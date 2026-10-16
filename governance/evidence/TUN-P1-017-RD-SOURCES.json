@@ -1,0 +1,26 @@
+{
+  "status": "PASS",
+  "implementation_impact": "Reuse installed .NET 10 ASP.NET framework and System.Text.Json; no new dependency, SDK package, endpoint, domain mapping or automatic retries.",
+  "scope_type": "WORK_ITEM",
+  "schema_version": 1,
+  "scope_id": "TUN-P1-017",
+  "evidence_id": "TUN-P1-017-RD-SOURCES",
+  "sources": [
+    {
+      "url": "https://www.rfc-editor.org/rfc/rfc9457.html",
+      "classification": "PRIMARY_STANDARD",
+      "finding": "HTTP/body status agreement; URI-reference identity; wrong-typed standard members ignored; extensions forward compatible; safe disclosure and no automatic dereference."
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/aspnet/core/fundamentals/error-handling-api?view=aspnetcore-10.0",
+      "classification": "PRIMARY_VENDOR",
+      "finding": "Existing ProblemDetails model and explicit error response integration; no global exception middleware or arbitrary exception details are introduced."
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.http.httpresults.jsonhttpresult-1?view=aspnetcore-10.0",
+      "classification": "PRIMARY_VENDOR",
+      "finding": "Existing JSON result executes response with explicit content type and status."
+    }
+  ],
+  "checked_at": "2026-10-12T15:43:17.5092634-04:00"
+}

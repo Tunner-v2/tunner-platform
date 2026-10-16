@@ -1,0 +1,13 @@
+schema_version: 1
+defect_id: DEF-TUN-P1-001-SECURITY-20261014
+work_item_id: TUN-P1-001
+classification: SECURITY_DEPENDENCY
+severity: SEV-2
+status: RESOLVED
+environment: LOCAL_DEPENDENCY_AND_RUNTIME_BASELINE
+description: Current NuGet audit reports four High and one Moderate advisories published 2026-10-13 for existing System.Security.Cryptography.Xml and Pkcs 10.0.12 in the migration project. Installed .NET and ASP.NET Core runtime is also 10.0.12. Vendor-fixed line is 10.0.13. P1-019 adds no affected NuGet package and exposes no XML/CMS or real identity endpoint; this record is an environment/dependency patch followup before release or identity activation, not a new authority blocker or a silent risk acceptance. Preserve historical closure and govern any post-closure implementation remediation through RV lineage as applicable. Current servicing pins resolve Xml/Pkcs to the fixed 10.0.13 line, fresh NuGet audit reports no vulnerable packages, selected SDK is 10.0.402 and host runtime is 10.0.13 with ASP.NET Core 10.0.13 installed. Older side-by-side runtimes are retained and the installer requested a restart. This resolves the current Tunner selected dependency/runtime baseline; no production release approval is implied.
+expected_behavior_ref: docs/authority/baselines/1.6.0/08_Security_Privacy_Compliance_and_Global_Market_Governance.md sections 2/3; docs/authority/baselines/1.6.0/33_Production_Readiness_Compliance_and_Release_Gates.md sections 4/5/6; vendor advisories in linked evidence.
+evidence: [governance/evidence/TUN-P1-019-SECURITY-ASSESSMENT.json, governance/evidence/TUN-P1-019-TEST-RESULTS.json, governance/evidence/TUN-P1-023-EXECUTION-RESULTS.json]
+affected_versions: [System.Security.Cryptography.Xml 10.0.12, System.Security.Cryptography.Pkcs 10.0.12, Microsoft.NETCore.App 10.0.12, Microsoft.AspNetCore.App 10.0.12]
+created_at: 2026-10-14T14:59:14.6369525-04:00
+updated_at: 2026-10-15T15:10:08Z

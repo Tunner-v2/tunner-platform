@@ -1,0 +1,13 @@
+schema_version: 1
+defect_id: DEF-P0-RV003-001
+work_item_id: TUN-P0-011
+classification: GOVERNANCE_DEFECT
+severity: SEV-3
+status: RESOLVED
+environment: BOUNDED_PROJECT_MEMORY_VALIDATION
+description: The project-memory source validator requires all historical revisions to be rendered even though the governed summary is bounded. Final P1 recovery passed but this guard rejected omitted old CLOSED P0-RV001 after P0-RV002 was added. Preserve all historical records; allow omitted terminal history, require every active revision and reject contradictory displayed statuses.
+expected_behavior_ref: docs/authority/current/development/12_AI_Development_Protocol_Context_and_Project_Memory.md
+evidence: [governance/evidence/P0-RV003-VALIDATION.json]
+affected_versions: [77402647d7926daec8fbb15244c8d577da0f95c9]
+created_at: 2026-10-15T15:25:39Z
+updated_at: 2026-10-15T15:29:10Z

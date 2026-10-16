@@ -1,0 +1,12 @@
+{
+  "schema_version": 1,
+  "scope_id": "P0-007-RV001",
+  "result": "RESOLVED_EXISTING_AUTHORITY",
+  "authority_refs": [
+    "docs/authority/baselines/1.6.0/06_Environment_Configuration_Secrets_and_Deployment.md",
+    "docs/authority/current/development/03_Governed_Development_Lifecycle_Scrum_Git.md"
+  ],
+  "conclusion": "Document 06 and original secrets foundation already authorize idempotent local KV-v2 mount and policy provisioning. The reported absent-property exception is an implementation defect, not missing Product authority. Correct only existence detection; preserve security policy, secret handling and historical closure. DevOps is the narrow implementation owner.",
+  "reproduction": "StrictMode Latest plus an empty JSON object throws PropertyNotFoundException for direct missing mount access; PSObject.Properties indexed lookup returns null.",
+  "reviewed_at": "2026-10-15T18:23:37Z"
+}

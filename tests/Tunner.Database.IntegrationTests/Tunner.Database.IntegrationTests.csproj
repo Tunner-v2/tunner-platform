@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" />
+    <PackageReference Include="xunit" />
+    <PackageReference Include="xunit.runner.visualstudio">
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="coverlet.collector">
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="../../src/Tunner.Database/Tunner.Database.csproj" />
+    <ProjectReference Include="../../src/Tunner.Database.Migrations/Tunner.Database.Migrations.csproj" />
+    <ProjectReference Include="../../src/Tunner.Platform/Tunner.Platform.csproj" />
+    <ProjectReference Include="../../src/Tunner.Testing/Tunner.Testing.csproj" />
+  </ItemGroup>
+</Project>

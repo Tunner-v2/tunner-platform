@@ -1,0 +1,553 @@
+{
+  "schema_version": 1,
+  "scope_id": "TUN-P1-024",
+  "result": "PASS",
+  "tested_commit_sha": "4825afc35878b36229f7f7e9f6902aab234cd68d",
+  "checked_at": "2026-10-15T17:32:17Z",
+  "build": {
+    "result": "PASS",
+    "warnings": 0,
+    "errors": 0
+  },
+  "platform_tests": {
+    "passed": 328,
+    "failed": 0,
+    "skipped": 0,
+    "projects": {
+      "installer": 39,
+      "architecture_bff_r2_signalr": 237,
+      "database": 34,
+      "worker": 6,
+      "harness": 12
+    },
+    "container_tests_enabled": true,
+    "receipts": [
+      {
+        "path": "artifacts/P1-r2-installer-20261015/restored-platform/Chacha_Tech_FARHANWAZIR_2026-10-15_13_29_17_net10.0.trx",
+        "sha256": "feae3480fb1c379bca8d93b91d8e27dea0b3377a90db49bffa6ded42284f5cde",
+        "total": "12",
+        "passed": "12",
+        "failed": "0",
+        "notExecuted": "0"
+      },
+      {
+        "path": "artifacts/P1-r2-installer-20261015/restored-platform/Chacha_Tech_FARHANWAZIR_2026-10-15_13_29_59_net10.0.trx",
+        "sha256": "19dd5ac6197bd687d7b0a03b3d2e8b5f4168eaba1afb682081ae2e28273fb053",
+        "total": "6",
+        "passed": "6",
+        "failed": "0",
+        "notExecuted": "0"
+      },
+      {
+        "path": "artifacts/P1-r2-installer-20261015/restored-platform/Chacha_Tech_FARHANWAZIR_2026-10-15_13_30_24_net10.0.trx",
+        "sha256": "acbbb906d39312d8ed4530b094bcc510f5824d1030aa4bf05a990b0258397080",
+        "total": "34",
+        "passed": "34",
+        "failed": "0",
+        "notExecuted": "0"
+      },
+      {
+        "path": "artifacts/P1-r2-installer-20261015/restored-platform/Chacha_Tech_FARHANWAZIR_2026-10-15_13_30_27_net10.0.trx",
+        "sha256": "c933b419f5f64e70fc233b68e79f870fa8d9a89ab9d6da1d4db2c6375b2e3620",
+        "total": "237",
+        "passed": "237",
+        "failed": "0",
+        "notExecuted": "0"
+      },
+      {
+        "path": "artifacts/r2-installer/Chacha_Tech_FARHANWAZIR_2026-10-15_13_29_45_net10.0.trx",
+        "sha256": "a0fd90377173c0b89713a210837695303e1b792adeda58f0a3594b57559bd461",
+        "total": "39",
+        "passed": "39",
+        "failed": "0",
+        "notExecuted": "0"
+      }
+    ]
+  },
+  "openbao": {
+    "image": "openbao/openbao:2.7.0",
+    "disposable": true,
+    "root_rejected": true,
+    "finite_scoped_token": true,
+    "cas_zero_no_overwrite": true,
+    "unrelated_path_denied": true
+  },
+  "cli_smoke": {
+    "usage_exit": 2,
+    "redirected_private_input_exit": 1,
+    "profile_created": false
+  },
+  "security": {
+    "secret_scan_files": 1227,
+    "secret_scan_matches": 0,
+    "sast_files": 1227,
+    "sast_matches": 0,
+    "vulnerable_installer_packages": 0,
+    "source": "https://api.nuget.org/v3/index.json"
+  },
+  "authority": {
+    "verified_artifacts": 168
+  },
+  "source_guards": [
+    "R2 object storage PASS",
+    "secrets source PASS",
+    "host composition PASS"
+  ],
+  "owned_git_objects": [
+    {
+      "path": "src/Tunner.Platform/Secrets/ISecretStore.cs",
+      "candidate": "35a0d9a41111c0cc976859aad9810104a09f6470",
+      "head": "35a0d9a41111c0cc976859aad9810104a09f6470",
+      "working": "35a0d9a41111c0cc976859aad9810104a09f6470",
+      "match": true
+    },
+    {
+      "path": "src/Tunner.Platform/Secrets/OpenBaoSecretStore.cs",
+      "candidate": "3d83663314ae94f9805149929e4db2c375d3d1b8",
+      "head": "3d83663314ae94f9805149929e4db2c375d3d1b8",
+      "working": "3d83663314ae94f9805149929e4db2c375d3d1b8",
+      "match": true
+    },
+    {
+      "path": "src/Tunner.Platform/Secrets/AssemblyInfo.cs",
+      "candidate": "28937310fa25b8dd259923427be7543f70cc06dd",
+      "head": "28937310fa25b8dd259923427be7543f70cc06dd",
+      "working": "28937310fa25b8dd259923427be7543f70cc06dd",
+      "match": true
+    },
+    {
+      "path": "src/Tunner.Installer/Tunner.Installer.csproj",
+      "candidate": "59909eaf1cfabe5bf9e073b0f6b25741298c2196",
+      "head": "59909eaf1cfabe5bf9e073b0f6b25741298c2196",
+      "working": "59909eaf1cfabe5bf9e073b0f6b25741298c2196",
+      "match": true
+    },
+    {
+      "path": "src/Tunner.Installer/R2InstallationProfile.cs",
+      "candidate": "07af5567a779083ca859f072fc38907b68af43c6",
+      "head": "07af5567a779083ca859f072fc38907b68af43c6",
+      "working": "07af5567a779083ca859f072fc38907b68af43c6",
+      "match": true
+    },
+    {
+      "path": "src/Tunner.Installer/ConfiguredR2Storage.cs",
+      "candidate": "40f22fedde86465981301b5004730c24482093c0",
+      "head": "40f22fedde86465981301b5004730c24482093c0",
+      "working": "40f22fedde86465981301b5004730c24482093c0",
+      "match": true
+    },
+    {
+      "path": "src/Tunner.Installer/R2ContractProbe.cs",
+      "candidate": "3c29362a46e4e19f87559c3cc0c5cbb318d884f8",
+      "head": "3c29362a46e4e19f87559c3cc0c5cbb318d884f8",
+      "working": "3c29362a46e4e19f87559c3cc0c5cbb318d884f8",
+      "match": true
+    },
+    {
+      "path": "src/Tunner.Installer/Program.cs",
+      "candidate": "1b92dc709d8993b1a4e1f1fc7cb6e2e07be6eb7a",
+      "head": "1b92dc709d8993b1a4e1f1fc7cb6e2e07be6eb7a",
+      "working": "1b92dc709d8993b1a4e1f1fc7cb6e2e07be6eb7a",
+      "match": true
+    },
+    {
+      "path": "tests/Tunner.Installer.Tests/Tunner.Installer.Tests.csproj",
+      "candidate": "fc3f813cc519459759b5b166feeb432a9148c25f",
+      "head": "fc3f813cc519459759b5b166feeb432a9148c25f",
+      "working": "fc3f813cc519459759b5b166feeb432a9148c25f",
+      "match": true
+    },
+    {
+      "path": "tests/Tunner.Installer.Tests/InstallerTests.cs",
+      "candidate": "edb3c567e229f3534a1add5adae8ac083b810474",
+      "head": "edb3c567e229f3534a1add5adae8ac083b810474",
+      "working": "edb3c567e229f3534a1add5adae8ac083b810474",
+      "match": true
+    },
+    {
+      "path": "tests/Tunner.Installer.Tests/OpenBaoIntegrationTests.cs",
+      "candidate": "4f82eeeacd4cf5ef9f75287ac0bc44cbb1906bea",
+      "head": "4f82eeeacd4cf5ef9f75287ac0bc44cbb1906bea",
+      "working": "4f82eeeacd4cf5ef9f75287ac0bc44cbb1906bea",
+      "match": true
+    },
+    {
+      "path": "tests/Tunner.Installer.Tests/ConfiguredStorageTests.cs",
+      "candidate": "690713b792d7a0d4d2cd31d781a71d2259f95c39",
+      "head": "690713b792d7a0d4d2cd31d781a71d2259f95c39",
+      "working": "690713b792d7a0d4d2cd31d781a71d2259f95c39",
+      "match": true
+    },
+    {
+      "path": "docs/development/R2_INSTALLER.md",
+      "candidate": "32ba93194a06c0e153eb4634399e32e13cfec17d",
+      "head": "32ba93194a06c0e153eb4634399e32e13cfec17d",
+      "working": "32ba93194a06c0e153eb4634399e32e13cfec17d",
+      "match": true
+    },
+    {
+      "path": "tools/validation/Test-TunnerR2Installer.ps1",
+      "candidate": "f953631057bc6a40b52f2e7497fe280831998222",
+      "head": "f953631057bc6a40b52f2e7497fe280831998222",
+      "working": "f953631057bc6a40b52f2e7497fe280831998222",
+      "match": true
+    }
+  ],
+  "live_r2": {
+    "result": "NOT_EXECUTED",
+    "bucket_environment": "UNCONFIRMED_BY_USER",
+    "installed_profile": "NOT_SUPPLIED",
+    "credential_references": "NOT_SUPPLIED",
+    "blocker": "DEF-TUN-P1-023-R2-001"
+  },
+  "prior_attempts": [
+    {
+      "result": "FAILED",
+      "finding": "Initial build: IConfigurationRoot/GetObjectMetadataResponse are not IDisposable; CA1869 options allocation.",
+      "resolution": "Use ConfigurationManager, metadata result without using, cached serializer options."
+    },
+    {
+      "result": "FAILED",
+      "finding": "Test compilation: obsolete ContainerBuilder constructor and CA1861 constant arrays.",
+      "resolution": "Use current image constructor and static readonly fixture arrays; no analyzer suppression."
+    },
+    {
+      "result": "FAILED",
+      "finding": "SDK configuration test compared trailing-slash-normalized endpoint as a string (38 passed, one failed).",
+      "resolution": "Compare equivalent URIs; final committed run all 39 installer tests PASS."
+    },
+    {
+      "result": "FAILED",
+      "finding": "Secret scanner flagged a synthetic fixture variable name as a generic assignment.",
+      "resolution": "Rename fixture variable; unchanged scanner passes with no exclusions."
+    },
+    {
+      "result": "FAILED",
+      "finding": "R2 source guard invoked without mandatory RepositoryRoot.",
+      "resolution": "Repeat with dynamically resolved repository root; PASS."
+    },
+    {
+      "result": "REMEDIATION_REQUIRED",
+      "finding": "Native P1 readiness audit detected shared solution changed after old P1-002 validation.",
+      "resolution": "Metadata revalidation of the closed item was rejected. Preserved both closed records and restored the exact original solution by removing only our own two additions; installer validation has a new local entry point."
+    },
+    {
+      "result": "AUTO_REVIEW_REJECTED",
+      "action": "Refresh closed TUN-P1-002 current reconciliation evidence and git_state.",
+      "reason": "Reviewer required RV lineage to preserve closed history.",
+      "resolution": "Not executed. Both closed records remain unchanged. Removed only the two solution additions made by our own installer commit; original solution Git object restored exactly."
+    },
+    {
+      "result": "AUTO_REVIEW_REJECTED",
+      "action": "Add a workflow with uploaded GitHub test receipts.",
+      "reason": "Reviewer required explicit authorization for the external payload/destination and questioned main-solution removal.",
+      "resolution": "Not executed. No workflow or upload exists. Read-only baseline/commit proof established sole ownership of the two additions, then narrowly approved patch restored them. Added only local installer validation script with local receipts."
+    },
+    {
+      "result": "FAILED",
+      "finding": "Local validation initially passed 39 tests but its secret scan matched retained synthetic failure wording in the evidence.",
+      "resolution": "Reworded only the evidence description, retained the finding, and reran the complete local validation command. All 39 tests, secret scan and SAST PASS with unchanged rules."
+    }
+  ],
+  "remaining_uncommitted_classification": "Initial 12 generated paths preserved; additional task-owned metadata is committed before handoff.",
+  "prior_committed_run": {
+    "schema_version": 1,
+    "scope_id": "TUN-P1-024",
+    "result": "PASS",
+    "tested_commit_sha": "4d0b30846d85a02d5e2f37df964dd3592afe8704",
+    "checked_at": "2026-10-15T17:22:18Z",
+    "build": {
+      "result": "PASS",
+      "warnings": 0,
+      "errors": 0
+    },
+    "platform_tests": {
+      "passed": 328,
+      "failed": 0,
+      "skipped": 0,
+      "projects": {
+        "installer": 39,
+        "architecture_bff_r2_signalr": 237,
+        "database": 34,
+        "worker": 6,
+        "harness": 12
+      },
+      "container_tests_enabled": true,
+      "receipts": [
+        {
+          "path": "artifacts/P1-r2-installer-20261015/final/Chacha_Tech_FARHANWAZIR_2026-10-15_13_18_17_net10.0.trx",
+          "sha256": "62c10b96a91db8a95ad49cdbb78d523739019fff20eb312a662d1415df636ac8",
+          "total": "12",
+          "passed": "12",
+          "failed": "0",
+          "notExecuted": "0"
+        },
+        {
+          "path": "artifacts/P1-r2-installer-20261015/final/Chacha_Tech_FARHANWAZIR_2026-10-15_13_18_25_net10.0.trx",
+          "sha256": "76490825c90fe5f7dd9b589956f8cfe75c0bcad55eb08a8d3f19f8fcb6a4f9e4",
+          "total": "39",
+          "passed": "39",
+          "failed": "0",
+          "notExecuted": "0"
+        },
+        {
+          "path": "artifacts/P1-r2-installer-20261015/final/Chacha_Tech_FARHANWAZIR_2026-10-15_13_18_38_net10.0.trx",
+          "sha256": "b0ff94b774fcf3b3d383a2d9d86802417fa861f8ea6b3335c27389167790810c",
+          "total": "237",
+          "passed": "237",
+          "failed": "0",
+          "notExecuted": "0"
+        },
+        {
+          "path": "artifacts/P1-r2-installer-20261015/final/Chacha_Tech_FARHANWAZIR_2026-10-15_13_18_47_net10.0.trx",
+          "sha256": "44c8636c97cf8f349286b1b70837ebf73d8f25a9c446f34f3e0ae08e45d945ee",
+          "total": "6",
+          "passed": "6",
+          "failed": "0",
+          "notExecuted": "0"
+        },
+        {
+          "path": "artifacts/P1-r2-installer-20261015/final/Chacha_Tech_FARHANWAZIR_2026-10-15_13_19_03_net10.0.trx",
+          "sha256": "c9e14cee5be56d0dc421be9e26509b029f582c6ac21de3043cfaafb0068c85e2",
+          "total": "34",
+          "passed": "34",
+          "failed": "0",
+          "notExecuted": "0"
+        }
+      ]
+    },
+    "openbao": {
+      "image": "openbao/openbao:2.7.0",
+      "disposable": true,
+      "root_rejected": true,
+      "finite_scoped_token": true,
+      "cas_zero_no_overwrite": true,
+      "unrelated_path_denied": true
+    },
+    "cli_smoke": {
+      "usage_exit": 2,
+      "redirected_private_input_exit": 1,
+      "profile_created": false
+    },
+    "security": {
+      "secret_scan_files": 1225,
+      "secret_scan_matches": 0,
+      "sast_files": 1225,
+      "sast_matches": 0,
+      "vulnerable_installer_packages": 0,
+      "source": "https://api.nuget.org/v3/index.json"
+    },
+    "authority": {
+      "verified_artifacts": 168
+    },
+    "source_guards": [
+      "R2 object storage PASS",
+      "secrets source PASS",
+      "host composition PASS"
+    ],
+    "owned_git_objects": [
+      {
+        "path": "src/Tunner.Platform/Secrets/ISecretStore.cs",
+        "candidate": "35a0d9a41111c0cc976859aad9810104a09f6470",
+        "head": "35a0d9a41111c0cc976859aad9810104a09f6470",
+        "working": "35a0d9a41111c0cc976859aad9810104a09f6470",
+        "match": true
+      },
+      {
+        "path": "src/Tunner.Platform/Secrets/OpenBaoSecretStore.cs",
+        "candidate": "3d83663314ae94f9805149929e4db2c375d3d1b8",
+        "head": "3d83663314ae94f9805149929e4db2c375d3d1b8",
+        "working": "3d83663314ae94f9805149929e4db2c375d3d1b8",
+        "match": true
+      },
+      {
+        "path": "src/Tunner.Platform/Secrets/AssemblyInfo.cs",
+        "candidate": "28937310fa25b8dd259923427be7543f70cc06dd",
+        "head": "28937310fa25b8dd259923427be7543f70cc06dd",
+        "working": "28937310fa25b8dd259923427be7543f70cc06dd",
+        "match": true
+      },
+      {
+        "path": "src/Tunner.Installer/Tunner.Installer.csproj",
+        "candidate": "59909eaf1cfabe5bf9e073b0f6b25741298c2196",
+        "head": "59909eaf1cfabe5bf9e073b0f6b25741298c2196",
+        "working": "59909eaf1cfabe5bf9e073b0f6b25741298c2196",
+        "match": true
+      },
+      {
+        "path": "src/Tunner.Installer/R2InstallationProfile.cs",
+        "candidate": "07af5567a779083ca859f072fc38907b68af43c6",
+        "head": "07af5567a779083ca859f072fc38907b68af43c6",
+        "working": "07af5567a779083ca859f072fc38907b68af43c6",
+        "match": true
+      },
+      {
+        "path": "src/Tunner.Installer/ConfiguredR2Storage.cs",
+        "candidate": "40f22fedde86465981301b5004730c24482093c0",
+        "head": "40f22fedde86465981301b5004730c24482093c0",
+        "working": "40f22fedde86465981301b5004730c24482093c0",
+        "match": true
+      },
+      {
+        "path": "src/Tunner.Installer/R2ContractProbe.cs",
+        "candidate": "3c29362a46e4e19f87559c3cc0c5cbb318d884f8",
+        "head": "3c29362a46e4e19f87559c3cc0c5cbb318d884f8",
+        "working": "3c29362a46e4e19f87559c3cc0c5cbb318d884f8",
+        "match": true
+      },
+      {
+        "path": "src/Tunner.Installer/Program.cs",
+        "candidate": "1b92dc709d8993b1a4e1f1fc7cb6e2e07be6eb7a",
+        "head": "1b92dc709d8993b1a4e1f1fc7cb6e2e07be6eb7a",
+        "working": "1b92dc709d8993b1a4e1f1fc7cb6e2e07be6eb7a",
+        "match": true
+      },
+      {
+        "path": "tests/Tunner.Installer.Tests/Tunner.Installer.Tests.csproj",
+        "candidate": "fc3f813cc519459759b5b166feeb432a9148c25f",
+        "head": "fc3f813cc519459759b5b166feeb432a9148c25f",
+        "working": "fc3f813cc519459759b5b166feeb432a9148c25f",
+        "match": true
+      },
+      {
+        "path": "tests/Tunner.Installer.Tests/InstallerTests.cs",
+        "candidate": "edb3c567e229f3534a1add5adae8ac083b810474",
+        "head": "edb3c567e229f3534a1add5adae8ac083b810474",
+        "working": "edb3c567e229f3534a1add5adae8ac083b810474",
+        "match": true
+      },
+      {
+        "path": "tests/Tunner.Installer.Tests/OpenBaoIntegrationTests.cs",
+        "candidate": "4f82eeeacd4cf5ef9f75287ac0bc44cbb1906bea",
+        "head": "4f82eeeacd4cf5ef9f75287ac0bc44cbb1906bea",
+        "working": "4f82eeeacd4cf5ef9f75287ac0bc44cbb1906bea",
+        "match": true
+      },
+      {
+        "path": "tests/Tunner.Installer.Tests/ConfiguredStorageTests.cs",
+        "candidate": "690713b792d7a0d4d2cd31d781a71d2259f95c39",
+        "head": "690713b792d7a0d4d2cd31d781a71d2259f95c39",
+        "working": "690713b792d7a0d4d2cd31d781a71d2259f95c39",
+        "match": true
+      },
+      {
+        "path": "Tunner.Platform.slnx",
+        "candidate": "e20f8a0f247dc73b6379c27e7d043fcaafeab678",
+        "head": "e20f8a0f247dc73b6379c27e7d043fcaafeab678",
+        "working": "e20f8a0f247dc73b6379c27e7d043fcaafeab678",
+        "match": true
+      },
+      {
+        "path": "docs/development/R2_INSTALLER.md",
+        "candidate": "1e524f2c819b6faa917e544f603c5b544fbe264e",
+        "head": "1e524f2c819b6faa917e544f603c5b544fbe264e",
+        "working": "1e524f2c819b6faa917e544f603c5b544fbe264e",
+        "match": true
+      },
+      {
+        "path": "Tunner.Governance.sln",
+        "candidate": "a6cf1ce9582995c60899f07baa858090ab9c77cc",
+        "head": "a6cf1ce9582995c60899f07baa858090ab9c77cc",
+        "working": "a6cf1ce9582995c60899f07baa858090ab9c77cc",
+        "match": true
+      },
+      {
+        "path": "docs/development/LOCAL_PLATFORM_HOST_COMPOSITION.md",
+        "candidate": "41d28a9b871aec2b3f467d94d30443494d11af82",
+        "head": "41d28a9b871aec2b3f467d94d30443494d11af82",
+        "working": "41d28a9b871aec2b3f467d94d30443494d11af82",
+        "match": true
+      },
+      {
+        "path": "src/Tunner.Api/Program.cs",
+        "candidate": "f29cb3b52e8083f2640527b6a0e59e3bf663ce06",
+        "head": "f29cb3b52e8083f2640527b6a0e59e3bf663ce06",
+        "working": "f29cb3b52e8083f2640527b6a0e59e3bf663ce06",
+        "match": true
+      },
+      {
+        "path": "src/Tunner.Platform/TunnerModuleRegistration.cs",
+        "candidate": "a5175bea9aa36ea91a98f7af6fdaa00c969fca65",
+        "head": "a5175bea9aa36ea91a98f7af6fdaa00c969fca65",
+        "working": "a5175bea9aa36ea91a98f7af6fdaa00c969fca65",
+        "match": true
+      },
+      {
+        "path": "src/Tunner.Worker/Program.cs",
+        "candidate": "753238edbe368f8bd99a351578669638f824c0ab",
+        "head": "753238edbe368f8bd99a351578669638f824c0ab",
+        "working": "753238edbe368f8bd99a351578669638f824c0ab",
+        "match": true
+      },
+      {
+        "path": "tests/Tunner.Platform.ArchitectureTests/HostCompositionTests.cs",
+        "candidate": "72efa67ceffa6b5109f4a104f3c7a8d1abaad157",
+        "head": "72efa67ceffa6b5109f4a104f3c7a8d1abaad157",
+        "working": "72efa67ceffa6b5109f4a104f3c7a8d1abaad157",
+        "match": true
+      },
+      {
+        "path": "tools/validation/Validate-TunnerPlatformHostSource.ps1",
+        "candidate": "c8976eb8625ef378d50b16d5cf41bbd44f84c70e",
+        "head": "c8976eb8625ef378d50b16d5cf41bbd44f84c70e",
+        "working": "c8976eb8625ef378d50b16d5cf41bbd44f84c70e",
+        "match": true
+      }
+    ],
+    "live_r2": {
+      "result": "NOT_EXECUTED",
+      "bucket_environment": "UNCONFIRMED_BY_USER",
+      "installed_profile": "NOT_SUPPLIED",
+      "credential_references": "NOT_SUPPLIED",
+      "blocker": "DEF-TUN-P1-023-R2-001"
+    },
+    "prior_attempts": [
+      {
+        "result": "FAILED",
+        "finding": "Initial build: IConfigurationRoot/GetObjectMetadataResponse are not IDisposable; CA1869 options allocation.",
+        "resolution": "Use ConfigurationManager, metadata result without using, cached serializer options."
+      },
+      {
+        "result": "FAILED",
+        "finding": "Test compilation: obsolete ContainerBuilder constructor and CA1861 constant arrays.",
+        "resolution": "Use current image constructor and static readonly fixture arrays; no analyzer suppression."
+      },
+      {
+        "result": "FAILED",
+        "finding": "SDK configuration test compared trailing-slash-normalized endpoint as a string (38 passed, one failed).",
+        "resolution": "Compare equivalent URIs; final committed run all 39 installer tests PASS."
+      },
+      {
+        "result": "FAILED",
+        "finding": "Secret scanner flagged a synthetic fixture variable name as a generic assignment.",
+        "resolution": "Rename fixture variable; unchanged scanner passes with no exclusions."
+      },
+      {
+        "result": "FAILED",
+        "finding": "R2 source guard invoked without mandatory RepositoryRoot.",
+        "resolution": "Repeat with dynamically resolved repository root; PASS."
+      },
+      {
+        "result": "REMEDIATION_REQUIRED",
+        "finding": "Native P1 readiness audit detected shared solution changed after old P1-002 validation.",
+        "resolution": "Revalidate current host composition against the tested installer SHA while preserving earlier payload; retain live prerequisite."
+      }
+    ],
+    "remaining_uncommitted_classification": "Initial 12 generated paths preserved; additional task-owned metadata is committed before handoff."
+  },
+  "local_validation_entry_point": {
+    "path": "tools/validation/Test-TunnerR2Installer.ps1",
+    "result": "PASS",
+    "build_warnings": 0,
+    "build_errors": 0,
+    "tests_passed": 39,
+    "receipts_local_only": true
+  },
+  "closed_scope_preservation": {
+    "platform_solution_original_blob": "e717f244ed55ff5005185959c010399a5523d6fa",
+    "platform_solution_current_blob": "e717f244ed55ff5005185959c010399a5523d6fa",
+    "p1_002_work_and_evidence_unchanged": true,
+    "workflow_created": false,
+    "external_artifact_upload": false
+  }
+}

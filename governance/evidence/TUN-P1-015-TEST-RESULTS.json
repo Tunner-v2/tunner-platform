@@ -1,0 +1,327 @@
+{
+  "checked_at": "2026-10-05T22:01:19.3222460+00:00",
+  "failed": 0,
+  "attempts": [
+    "Earlier candidates passed 35 new cases and 71 architecture cases. Final review added explicit owner/provider key mapping and invalidated those candidates for final readiness.",
+    "A syntax error in an added test caused a precommit build failure; corrected before the final candidate. Final exact-SHA build and all 76 tests pass."
+  ],
+  "skipped": 0,
+  "evidence_id": "TUN-P1-015-TEST-RESULTS",
+  "total": 76,
+  "scope_id": "TUN-P1-015",
+  "artifact": "artifacts/tests/TUN-P1-015/P1-015-provider-key-committed.trx",
+  "tested_commit_sha": "debd619e73199503986780831d574d26ed3fd52d",
+  "tests": [
+    {
+      "name": "Tunner.Platform.ArchitectureTests.HostCompositionTests.ApiHostContainsOnlyTheTechnicalHealthEndpointAtThisFoundationSlice",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Tunner.Platform.ArchitectureTests.ProviderCorrelationBoundaryTests.DistinctProviderOrOwnerIdentityIsSeparated(field: \"key\")",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Tunner.Platform.ArchitectureTests.EffectivePolicyVersionResolverTests.IntervalBoundariesFollowExplicitOwnerInclusion(includesFrom: False, includesUntil: False)",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Tunner.Platform.ArchitectureTests.ProviderCorrelationBoundaryTests.SameProviderKeyCannotBeReassignedToAnotherOwnerIdentity(field: \"scope\")",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Tunner.Platform.ArchitectureTests.ProviderCorrelationBoundaryTests.MalformedObjectEvidenceIsRejected(field: \"type\")",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Tunner.Platform.ArchitectureTests.ProviderCorrelationBoundaryTests.SameKeyWithChangedRequestOrTraceIsAConflict(field: \"fingerprint\")",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Tunner.Platform.ArchitectureTests.HostCompositionTests.ModuleRegistrationInvokesOnlyExplicitModules",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Tunner.Platform.ArchitectureTests.RealtimeFoundationTests.RealtimeAudienceRejectsUnsafeKeys(groupName: \"customer@example.com\")",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Tunner.Platform.ArchitectureTests.ProviderCorrelationBoundaryTests.MissingBindingInputsAreRejected(field: \"instance\")",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Tunner.Platform.ArchitectureTests.EffectivePolicyVersionResolverTests.OwnerControlsPrecedenceBySupplyingItsApprovedCandidateCohort",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Tunner.Platform.ArchitectureTests.ProviderCorrelationBoundaryTests.DistinctProviderOrOwnerIdentityIsSeparated(field: \"account\")",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Tunner.Platform.ArchitectureTests.EffectivePolicyVersionResolverTests.OwnerEligibilityIsRequiredRatherThanAnAssumedStatusVocabulary",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Tunner.Platform.ArchitectureTests.RealtimeFoundationTests.RealtimeAudienceAcceptsOnlyOpaqueTechnicalKeys(groupName: \"tunner_scope_001\")",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Tunner.Platform.ArchitectureTests.TechnicalCommandPrimitivesTests.IdempotencyReusesProtectedOperationOnlyWithinOwnerProvidedOpaqueScope",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Tunner.Platform.ArchitectureTests.TechnicalCommandPrimitivesTests.MissingEvaluatorFailsClosedWithCanonicalForbiddenScope",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Tunner.Platform.ArchitectureTests.ProviderCorrelationBoundaryTests.SameProviderKeyCannotBeReassignedToAnotherOwnerIdentity(field: \"key\")",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Tunner.Platform.ArchitectureTests.ProviderCorrelationBoundaryTests.DistinctProviderOrOwnerIdentityIsSeparated(field: \"scope\")",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Tunner.Platform.ArchitectureTests.ProviderCorrelationBoundaryTests.SameKeyWithChangedRequestOrTraceIsAConflict(field: \"correlation\")",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Tunner.Platform.ArchitectureTests.ProviderCorrelationBoundaryTests.ContextPreservesOwnerIdentityWithoutCanonicalizingOrGeneratingValues",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Tunner.Platform.ArchitectureTests.R2ObjectStorageTests.ContractRejectsMissingTechnicalAddressValues",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Tunner.Platform.ArchitectureTests.EffectivePolicyVersionResolverTests.InvertedAndEmptyIntervalsAreRejected",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Tunner.Platform.ArchitectureTests.HostCompositionTests.PlatformFoundationDoesNotReferenceHostsOrDatabase",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Tunner.Platform.ArchitectureTests.ProviderCorrelationBoundaryTests.InvalidCommandIdentityIsRejected(field: \"correlation\")",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Tunner.Platform.ArchitectureTests.ProviderCorrelationBoundaryTests.MissingBindingInputsAreRejected(field: \"environment\")",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Tunner.Platform.ArchitectureTests.EffectivePolicyVersionResolverTests.MissingResolutionNeverSuppliesAPolicyOrPermissiveDefault",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Tunner.Platform.ArchitectureTests.EffectivePolicyVersionResolverTests.DuplicateIdentitiesAndNullCandidatesAreInvalidRegardlessOfScope",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Tunner.Platform.ArchitectureTests.ProviderCorrelationBoundaryTests.EvidenceFromAnotherExactBindingIsRejected(field: \"contract\")",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Tunner.Platform.ArchitectureTests.EffectivePolicyVersionResolverTests.IntervalBoundariesFollowExplicitOwnerInclusion(includesFrom: False, includesUntil: True)",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Tunner.Platform.ArchitectureTests.ProviderCorrelationBoundaryTests.ObjectEvidencePreservesExactObjectAndEventReferencesAndOriginalTrace",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Tunner.Platform.ArchitectureTests.ProviderCorrelationBoundaryTests.DistinctProviderOrOwnerIdentityIsSeparated(field: \"instance\")",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Tunner.Platform.ArchitectureTests.OpenApiContractFoundationTests.BuildPublishesAnOpenApi31ContractWithoutProductOperations",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Tunner.Platform.ArchitectureTests.EffectivePolicyVersionResolverTests.IntervalsCompareAbsoluteInstantsAcrossTimezoneOffsets",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Tunner.Platform.ArchitectureTests.RealtimeFoundationTests.RealtimeFoundationHasNoClientSuppliedSubscriptionOrDomainPayload",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Tunner.Platform.ArchitectureTests.ProviderCorrelationBoundaryTests.EvidenceFromAnotherExactBindingIsRejected(field: \"account\")",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Tunner.Platform.ArchitectureTests.TechnicalCommandPrimitivesTests.AuthorizationDoesNotAcceptActorFromRequestAndFailsClosedWithoutServerActor",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Tunner.Platform.ArchitectureTests.ProviderCorrelationBoundaryTests.MalformedObjectEvidenceIsRejected(field: \"event\")",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Tunner.Platform.ArchitectureTests.EffectivePolicyVersionResolverTests.MissingRequiredMetadataAndSelfSupersessionAreRejected",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Tunner.Platform.ArchitectureTests.EffectivePolicyVersionResolverTests.ExactVersionRetainsStatusScopeLineageAndApprovalEvidence",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Tunner.Platform.ArchitectureTests.ProviderCorrelationBoundaryTests.ProviderKeyIsExplicitPreservedAndHasNoGenericVendorLimit",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Tunner.Platform.ArchitectureTests.ProviderCorrelationBoundaryTests.ProviderKeyComparisonIsOrdinal",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Tunner.Platform.ArchitectureTests.ProviderCorrelationBoundaryTests.MalformedObjectEvidenceIsRejected(field: \"metadata-reference\")",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Tunner.Platform.ArchitectureTests.ProviderCorrelationBoundaryTests.DistinctProviderOrOwnerIdentityIsSeparated(field: \"environment\")",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Tunner.Platform.ArchitectureTests.RealtimeFoundationTests.RealtimeAudienceAcceptsOnlyOpaqueTechnicalKeys(groupName: \"tunner:scope-001\")",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Tunner.Platform.ArchitectureTests.ProviderCorrelationBoundaryTests.InvalidCommandIdentityIsRejected(field: \"operation\")",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Tunner.Platform.ArchitectureTests.ProviderCorrelationBoundaryTests.InvalidCommandIdentityIsRejected(field: \"key\")",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Tunner.Platform.ArchitectureTests.ProviderCorrelationBoundaryTests.EquivalentOwnerRequestsRemainEquivalentAcrossObservationTimes",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Tunner.Platform.ArchitectureTests.EffectivePolicyVersionResolverTests.OwnerMaySupplyOpenEndedOrInclusiveSingleInstantInterval",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Tunner.Platform.ArchitectureTests.ProviderCorrelationBoundaryTests.NoObservedObjectCarriesNoInventedOutcomeAndEventIdIsOptional",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Tunner.Platform.ArchitectureTests.ProviderCorrelationBoundaryTests.OwnerRetryCannotSilentlySwitchItsProviderKey",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Tunner.Platform.ArchitectureTests.ProviderCorrelationBoundaryTests.MalformedObjectEvidenceIsRejected(field: \"time\")",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Tunner.Platform.ArchitectureTests.ProviderCorrelationBoundaryTests.MetadataAndEvidenceAreImmutableSnapshots",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Tunner.Platform.ArchitectureTests.EffectivePolicyVersionResolverTests.IntervalBoundariesFollowExplicitOwnerInclusion(includesFrom: True, includesUntil: False)",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Tunner.Platform.ArchitectureTests.ProviderCorrelationBoundaryTests.EvidenceFromAnotherExactBindingIsRejected(field: \"instance\")",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Tunner.Platform.ArchitectureTests.ProviderCorrelationBoundaryTests.MissingBindingInputsAreRejected(field: \"contract\")",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Tunner.Platform.ArchitectureTests.RealtimeFoundationTests.RealtimeAudienceRejectsUnsafeKeys(groupName: \"product scope\")",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Tunner.Platform.ArchitectureTests.ProviderCorrelationBoundaryTests.SameKeyWithChangedRequestOrTraceIsAConflict(field: \"operation\")",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Tunner.Platform.ArchitectureTests.EffectivePolicyVersionResolverTests.IntervalBoundariesFollowExplicitOwnerInclusion(includesFrom: True, includesUntil: True)",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Tunner.Platform.ArchitectureTests.ProviderCorrelationBoundaryTests.MalformedObjectEvidenceIsRejected(field: \"metadata-name\")",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Tunner.Platform.ArchitectureTests.ProviderCorrelationBoundaryTests.EvidenceFromAnotherExactBindingIsRejected(field: \"environment\")",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Tunner.Platform.ArchitectureTests.EffectivePolicyVersionResolverTests.HistoricalEventTimeSelectsExactVersionWithoutCurrentTimeOrLatestVersionBias",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Tunner.Platform.ArchitectureTests.EffectivePolicyVersionResolverTests.RequestedOwnerScopeDoesNotSelectAnotherProductOrEnvironment",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Tunner.Platform.ArchitectureTests.ProviderCorrelationBoundaryTests.MissingBindingInputsAreRejected(field: \"account\")",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Tunner.Platform.ArchitectureTests.ProviderCorrelationBoundaryTests.NullBoundaryInputsAndMissingFingerprintsAreRejected",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Tunner.Platform.ArchitectureTests.EffectivePolicyVersionResolverTests.InputCollectionsCannotRewriteSelectedVersionEvidence",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Tunner.Platform.ArchitectureTests.TechnicalCommandPrimitivesTests.ExpectedVersionIsDeterministicAndOwnerControlled",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Tunner.Platform.ArchitectureTests.HostCompositionTests.ApiAndWorkerReferenceTheSharedPlatformAndObservabilityFoundations",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Tunner.Platform.ArchitectureTests.ProviderCorrelationBoundaryTests.IdentityComparisonIsOrdinalAndDoesNotImposeStripeLimits",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Tunner.Platform.ArchitectureTests.EffectivePolicyVersionResolverTests.MissingOrFailingOwnerEvaluatorsCannotBecomeFallbackResolution",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Tunner.Platform.ArchitectureTests.RealtimeFoundationTests.RealtimeFoundationDeniesScopeUntilAnAuthoritativeResolverIsProvided",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Tunner.Platform.ArchitectureTests.R2ObjectStorageTests.DelegatesOpaqueObjectOperationsThroughTheInjectedR2Seam",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Tunner.Platform.ArchitectureTests.RealtimeFoundationTests.RealtimeFoundationMapsOnlyAnAuthenticatedBrowserProtectedEndpoint",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Tunner.Platform.ArchitectureTests.ProviderCorrelationBoundaryTests.InvalidCommandIdentityIsRejected(field: \"time\")",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Tunner.Platform.ArchitectureTests.ProviderCorrelationBoundaryTests.SameKeyWithChangedRequestOrTraceIsAConflict(field: \"contract\")",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Tunner.Platform.ArchitectureTests.ProviderCorrelationBoundaryTests.MalformedObjectEvidenceIsRejected(field: \"id\")",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Tunner.Platform.ArchitectureTests.EffectivePolicyVersionResolverTests.AmbiguityCannotBeBrokenByInputOrderIdOrSupersession",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Tunner.Platform.ArchitectureTests.ProviderCorrelationBoundaryTests.InvalidCommandIdentityIsRejected(field: \"scope\")",
+      "outcome": "Passed"
+    }
+  ],
+  "new_provider_boundary_cases": 40,
+  "sha256": "10e2ee4f296d5ad260af319397a21997ba4b8eabc0f994454cfde15f1ea87099",
+  "schema_version": 1,
+  "test_scope": "Internal provider correlation/idempotency/evidence boundary and existing architecture regressions; no provider network calls or production acceptance.",
+  "passed": 76,
+  "scope_type": "WORK_ITEM",
+  "status": "PASS"
+}

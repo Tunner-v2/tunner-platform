@@ -1,0 +1,69 @@
+{
+  "schema_version": 1,
+  "evidence_id": "TUN-P1-013-VALIDATION",
+  "scope_type": "WORK_ITEM",
+  "scope_id": "TUN-P1-013",
+  "status": "PASS",
+  "result": "PASS",
+  "validation_kind": "COMMITTED",
+  "validated_commit_sha": "ef3517d63946843ff2ef674d16742931ec793214",
+  "tested_commit_sha": "ef3517d63946843ff2ef674d16742931ec793214",
+  "owned_behavior_paths": [
+    "src/Tunner.Platform/Policies/EffectivePolicyVersionResolver.cs",
+    "tests/Tunner.Platform.ArchitectureTests/EffectivePolicyVersionResolverTests.cs",
+    "docs/development/P1_EFFECTIVE_POLICY_VERSION_RESOLUTION.md"
+  ],
+  "checks": [
+    {
+      "command": "dotnet build Tunner.Platform.slnx --no-restore",
+      "exit_code": 0,
+      "result": "PASS",
+      "warnings": 0,
+      "errors": 0
+    },
+    {
+      "command": "dotnet test tests/Tunner.Platform.ArchitectureTests --no-build --no-restore",
+      "exit_code": 0,
+      "result": "PASS",
+      "total": 36,
+      "passed": 36,
+      "failed": 0,
+      "skipped": 0,
+      "new_policy_resolution_cases": 18
+    },
+    {
+      "command": "tunner authority verify",
+      "exit_code": 0,
+      "result": "PASS",
+      "registered_artifacts": 167
+    },
+    {
+      "command": "tunner governance validate",
+      "exit_code": 0,
+      "result": "PASS",
+      "records": 346
+    },
+    {
+      "command": "tunner context verify",
+      "exit_code": 0,
+      "result": "CURRENT",
+      "selected_work_item": "TUN-P1-013"
+    }
+  ],
+  "limitations": [
+    "Owner modules must provide immutable scope values, scope matching, approval/eligibility evaluation and their approved precedence cohort.",
+    "This primitive identifies version metadata; policy payload ownership, financial calculations, persistence and authorization are outside this work item.",
+    "Role reviews are Codex engineering reviews, not independent human or Product acceptance."
+  ],
+  "checked_at": "2026-10-05T16:28:58.7156998-04:00",
+  "test_results_ref": "governance/evidence/TUN-P1-013-TEST-RESULTS.json",
+  "acceptance_results": [
+    "Exact historical version selection uses explicit business time and owner scope.",
+    "Missing and ambiguous resolution exposes no selected version; no fallback or latest-version tie breaker exists.",
+    "Duplicate IDs, malformed intervals and missing or failing owner callbacks are rejected.",
+    "Owner interval inclusion, status meaning, approval and precedence stay explicit; immutable metadata and copied evidence are retained.",
+    "No financial calculation, Product policy values, public API, persistence, provider or UI behavior was introduced."
+  ],
+  "closure_commit_sha": "e475ea88304db30cbb92b6540babfd9c528cc557",
+  "role_review_evidence_commit_sha": "6d7f23a5c86d802c8899c86f3d7eedb4ba00f1af"
+}

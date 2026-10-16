@@ -1,0 +1,22 @@
+schema_version: 1
+policy_id: repository-path-resolution
+root_marker: .tunner-root
+persisted_repository_path_mode: REPO_RELATIVE
+canonical_separator: "/"
+absolute_repository_paths_committed: FORBIDDEN
+root_resolution_order:
+  - CLI_REPO_ROOT
+  - TUNNER_REPO_ROOT
+  - GIT_TOP_LEVEL
+  - UPWARD_ROOT_MARKER
+current_working_directory_is_root_authority: false
+runtime_absolute_paths:
+  allowed_ephemeral: true
+  persist_in_repo_state: false
+external_filesystem_paths:
+  require_explicit_configuration: true
+  may_redefine_repo_root: false
+path_traversal_outside_repo:
+  default: DENY
+relocation_test_required: true
+nested_working_directory_test_required: true

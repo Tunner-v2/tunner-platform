@@ -1,0 +1,45 @@
+schema_version: 1
+selection_id: CTX-TUN-P1-020-001
+scope_type: WORK_ITEM
+scope_id: TUN-P1-020
+context_mode: EXPANDED
+included_artifacts:
+  - AGENTS.md
+  - docs/authority/current-authority.json
+  - docs/authority/amendments/AMD-0002/effective-overrides/03_Governed_Development_Lifecycle_Scrum_Git.md
+  - docs/authority/baselines/1.6.0/09_Testing_Acceptance_Evidence_and_Quality_Gates.md
+  - docs/authority/baselines/1.6.0/12_AI_Development_Protocol_Context_and_Project_Memory.md
+  - governance/policies/lifecycle-policy.yaml
+  - governance/work-items/TUN-P1-005.yaml
+  - governance/work-items/TUN-P1-020.yaml
+  - governance/work-items/TUN-P1-006.yaml
+  - governance/work-items/TUN-P1-007.yaml
+  - governance/work-items/TUN-P1-008.yaml
+  - governance/work-items/TUN-P1-009.yaml
+  - governance/defects/DEF-TUN-P1-006-001.yaml
+  - governance/defects/DEF-TUN-P1-007-001.yaml
+  - governance/defects/DEF-TUN-P1-008-001.yaml
+  - governance/defects/DEF-TUN-P1-009-001.yaml
+  - governance/schemas/v1/governance-record.schema.json
+  - src/Tunner.Governance/GovernanceApplication.cs
+  - tests/Tunner.Governance.FunctionalTests/Program.cs
+  - .agent/skills/full-stack-engineer/SKILL.md
+  - .agent/skills/solution-architect/SKILL.md
+  - .agent/skills/governance-engineer/SKILL.md
+  - .agent/skills/tester-qa-engineer/SKILL.md
+  - .agent/skills/auditor/SKILL.md
+excluded_artifacts:
+  - Product/user/admin behavior, public API or SDK, financial/commercial rules, identity, provider configuration, credentials, deployment, release, and runtime operations
+exclusion_reasons:
+  Product/user/admin behavior, public API or SDK, financial/commercial rules, identity, provider configuration, credentials, deployment, release, and runtime operations: This is a control-plane lifecycle correction with no Product or runtime scope.
+source_hashes:
+  AGENTS.md: e81c43fc36c63b1d6277f4116484d13bd03a4049f1f7fa093bc2ec363a4d528c
+  docs/authority/current-authority.json: c90995b39d54c640b5168cfe4beb0a614f2d10c3bf1414bcc2bccc308fdb4a22
+  docs/authority/amendments/AMD-0002/effective-overrides/03_Governed_Development_Lifecycle_Scrum_Git.md: d176e7fb8ad583d82605a379d95fbf64bb96fd0e26d070f25667b4ea8e4be771
+  docs/authority/baselines/1.6.0/09_Testing_Acceptance_Evidence_and_Quality_Gates.md: f7e5760a0d6e18610b1a2740e8f2f1a959d011a8020edfd8ba80c4f75058a7dc
+  docs/authority/baselines/1.6.0/12_AI_Development_Protocol_Context_and_Project_Memory.md: f29a4811fac77e247d57949ca412823323a010eec9c87a1f4a5a8a84275880ca
+  governance/policies/lifecycle-policy.yaml: e3f9131426f8aa2725c10cc80cec7592f3a0b4743364210f2f951e5c1d69ada9
+  governance/work-items/TUN-P1-005.yaml: d8266c4f76abf57759ac7eccb4825b1017a52560343203929d930a3e2a256e4c
+  src/Tunner.Governance/AdaptiveContextApplication.cs: f3c5a8128a6749713314748ae3c6996e6084d2f9e47b0b0c53e1f83f33a0b49e
+tool_version: tunner-context-0.1.0
+created_at: 2026-10-02T22:50:00-04:00

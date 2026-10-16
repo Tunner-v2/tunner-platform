@@ -1,0 +1,21 @@
+{
+  "evidence_id": "TUN-P1-016-RD-SOURCES",
+  "scope_type": "WORK_ITEM",
+  "sources": [
+    {
+      "finding": "Existing IConfiguration supports provider-independent sections, hierarchical keys and last-added-provider precedence; .NET 10 example verified. No .NET 11-only APIs are used.",
+      "classification": "PRIMARY_VENDOR",
+      "url": "https://learn.microsoft.com/en-us/dotnet/core/extensions/configuration"
+    },
+    {
+      "finding": "Validation of nested configuration must be explicit; snapshot parser checks every nested object rather than silently ignoring unknown fields.",
+      "classification": "PRIMARY_VENDOR",
+      "url": "https://learn.microsoft.com/en-us/dotnet/core/extensions/options"
+    }
+  ],
+  "implementation_impact": "Reuse existing framework Configuration and DI. No new dependency/version, cloud or secret provider is selected.",
+  "schema_version": 1,
+  "status": "PASS",
+  "scope_id": "TUN-P1-016",
+  "checked_at": "2026-10-05T22:27:42.9748729+00:00"
+}

@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "evidence_id": "TUN-P1-007-VALIDATION",
+  "scope_type": "WORK_ITEM",
+  "scope_id": "TUN-P1-007",
+  "status": "PASS",
+  "checked_at": "2026-10-02T15:42:26-04:00",
+  "checks": [
+    "Operator-run dotnet build of Tunner.Platform.slnx completed with zero warnings and zero errors.",
+    "Validate-TunnerDurableWorkInboxSource.ps1 passed for the bounded durable-work and consumer-inbox persistence foundation.",
+    "Operator-run Tunner.Database.IntegrationTests passed 7 of 7 checks with TUNNER_RUN_CONTAINER_TESTS=1.",
+    "Operator-run non-production migration rehearsal successfully applied 20261002190000_P1DurableWorkInbox against the local Tunner PostgreSQL database.",
+    "Authority verification, governance validation, current primary-source registry validation, expanded context, transition preflight, and final mandatory specialist reviews are evaluated and recorded before state advancement."
+  ],
+  "artifacts": [
+    "src/Tunner.Database/DurableWork/DurableWorkItem.cs",
+    "src/Tunner.Database/DurableWork/ConsumerInboxEntry.cs",
+    "src/Tunner.Database/DurableWork/IDurableWorkStore.cs",
+    "src/Tunner.Database/DurableWork/IConsumerInboxStore.cs",
+    "src/Tunner.Database/DurableWork/EfDurableWorkStore.cs",
+    "src/Tunner.Database/DurableWork/EfConsumerInboxStore.cs",
+    "src/Tunner.Database/DurableWork/DurableWorkModelConfiguration.cs",
+    "src/Tunner.Database/TunnerMigrationsDbContext.cs",
+    "src/Tunner.Database.Migrations/Migrations/20261002190000_P1DurableWorkInbox.cs",
+    "tests/Tunner.Database.IntegrationTests/DurableWorkInboxIntegrationTests.cs",
+    "tools/validation/Validate-TunnerDurableWorkInboxSource.ps1",
+    "docs/development/LOCAL_DURABLE_WORK_INBOX.md"
+  ],
+  "limitations": [
+    "This establishes generic durable-work leasing, caller-provided retry eligibility, and consumer-inbox idempotency mechanics only.",
+    "No business timer, workflow, work type, payload semantics, retry policy value, owner-domain handler, Product event/API, RabbitMQ consumer, queue or binding topology, runtime registration, credential, fixed port, deployment, release, or Connected Product behavior is introduced.",
+    "PostgreSQL remains the durable authority. The inbox prevents duplicate successful processing only when a future governed consumer correctly reserves, completes, or releases an entry; it does not claim end-to-end exactly-once business side effects."
+  ]
+}

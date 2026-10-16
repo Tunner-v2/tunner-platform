@@ -1,0 +1,20 @@
+schema_version: 1
+defect_id: DEF-TUN-P1-001-001
+work_item_id: TUN-P1-001
+classification: GOVERNANCE_DEFECT
+severity: SEV-2
+status: RESOLVED
+environment: LOCAL_GOVERNANCE_CONTROL_PLANE
+description: The only historical candidate for TUN-P1-001, 6af6791, mixes the refinement work item and evidence with TUN-P1-002 host-composition implementation. Revised AMD-0002 requires a cohesive work-item validation candidate or a governed reopen; the historical commit cannot be represented as a P1-001-only candidate. The original mixed 6af6791 is not certified. Its existing dedicated recovery f4a0fd15d3676a16f27724f2e2037691afc9e792 changes only the recovery document. Current refinement/recovery owned blobs match the new technical candidate; authority and executable governance checks passed.
+expected_behavior_ref: docs/authority/amendments/AMD-0002/AMD-0002_Non-Blocking_PR_Approval_and_Continuous_Local_Execution.md sections 2B, 3 and 5
+evidence:
+  - governance/evidence/TUN-P1-022-COMMIT-READINESS-AUDIT.json
+  - governance/work-items/TUN-P1-001.yaml
+  - governance/evidence/DEF-TUN-P1-001-001-VALIDATION.json
+  - governance/evidence/TUN-P1-001-COMMITTED-RECONCILIATION.json
+  - governance/evidence/TUN-P1-023-EXECUTION-RESULTS.json
+affected_versions:
+  - 6af6791
+  - P1_LOCAL_BRANCH
+created_at: 2026-10-03T07:21:52-04:00
+updated_at: 2026-10-15T15:10:08Z

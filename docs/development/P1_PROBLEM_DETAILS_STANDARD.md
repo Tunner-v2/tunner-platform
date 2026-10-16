@@ -1,0 +1,27 @@
+# P1 technical Problem Details standard
+
+TUN-P1-017 implements Document 32 sections 1, 2 and 6 with Document 07 API/SDK boundaries and Document 05 compatibility. Current canonical Drive Documents 32/07/05 were fetched on 2026-10-12. The earlier authority pass omitted the already approved error contract. No new AMD or domain error taxonomy is required.
+
+## Representation and ownership
+
+Reuse ASP.NET Core ProblemDetails, System.Text.Json and existing TechnicalProblemCodes. TechnicalProblemDetails creates a fresh framework body and a private HTTP result snapshot. The writer requires an explicit owner-selected 400-599 error status, type URI reference, safe title, error_code, correlation_id and opaque retryability classification. No code-to-status mapping, public type URL registry, automatic exception detail, retry execution or inferred business outcome is introduced. The canonical thirteen classes are recognizable as exact strings; future owner-approved classes remain opaque strings, not a closed enum.
+
+The owner supplies optional safe detail, occurrence instance, operation_id when applicable, resource_id when safe, current_version/expected_version when safe, and blocker_owner/blocker_ref when actionable. Optional metadata is omitted when absent. Versions are exact owner-supplied integers; the presentation layer does not reinterpret concurrency/finality or invent a missing version. References and codes are preserved exactly without trimming or case folding. Owner-selected correlation is never generated from arbitrary request headers. Only the approved finite metadata fields can be emitted; raw dictionaries, exceptions, stack traces, request URLs, tokens and provider objects cannot be passed as extension payloads.
+
+Field spelling is standard type/title/status/detail/instance plus snake-case Tunner extensions. The technical field name `retryability` carries the canonical retryability classification; its vocabulary and safe retry decision remain with the owning contract/policy. A label grants no automatic retry permission, especially for UNKNOWN_EXTERNAL_STATE.
+
+Create returns a caller-owned mutable framework body for explicit framework integration. HttpResult builds its own private snapshot and uses the existing framework JSON result with application/problem+json and the same explicit HTTP/body status. It does not invoke automatic problem-service customization, copy ambient context, install global middleware or add an endpoint. Endpoint owners must declare ProblemDetails response metadata in their OpenAPI contract when this capability is selected. Current health-only API composition and OpenAPI operations stay within their existing scope.
+
+Read accepts a JSON object, ignores standard members with wrong value types, retains valid HTTP status as advisory original-status data and defaults a missing/invalid-typed type to about:blank. Unknown extensions and future code/retryability strings are preserved as cloned JsonElement values, so the source document can be disposed. It never dereferences type/instance URIs or parses human detail to determine business behavior. The reader is protocol compatibility support in the Platform foundation; no SDK package, transport client or automatic domain mapping is published.
+
+Safe disclosure is an owner responsibility. A string parser cannot prove that approved title/detail/references contain no sensitive material. Optional resources, versions and blockers require the owning authorization/disclosure decision. This primitive provides no account-existence oracle or destination authorization.
+
+## Primary standards and framework basis
+
+[RFC 9457](https://www.rfc-editor.org/rfc/rfc9457.html) defines JSON Problem Details, HTTP/body status agreement, URI references, advisory human text and extensible consumption. It requires ignoring unrecognized extensions and standard members with incorrect value types. Its security guidance motivates explicit owner-approved disclosure and no exception/context copying. [ASP.NET Core error handling](https://learn.microsoft.com/en-us/aspnet/core/fundamentals/error-handling-api?view=aspnetcore-10.0) provides the framework model. [JsonHttpResult](https://learn.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.http.httpresults.jsonhttpresult-1?view=aspnetcore-10.0) provides existing JSON response execution. No new package/runtime/provider is selected.
+
+## Validation plan and completion
+
+Execute real HTTP-result tests without starting a server: verify content type, identical body/HTTP status, canonical field names, optional omission and exact trace/metadata. Verify framework serialization, redacted invalid-input diagnostics, no ambient exception/query/token leakage, independent response snapshots and explicit owner-selected status. Reader cases cover wrong-typed standard fields, unknown class/extension preservation, JSON document disposal, missing type and no automatic retry or URI lookup. Regress all existing architecture cases, including health-only OpenAPI.
+
+Before DONE commit owned source/tests/guide, validate the exact candidate SHA with zero-warning build and executed tests, run secret/authority/governance/context checks and record all four engineering role reviews. Closure metadata is a separate commit; tested/validated/closure SHAs remain distinct. Refresh bounded context and project state. Startup is tunner context build followed by tunner context verify. Next planned preparation is TUN-P1-018 with canonical UX/Figma authority and required reviews; no screen or workflow is inferred here.

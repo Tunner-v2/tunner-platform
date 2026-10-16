@@ -1,0 +1,89 @@
+{
+  "schema_version": 1,
+  "scope_id": "P0-032-RV002",
+  "validation_kind": "COMMITTED",
+  "result": "PASS",
+  "validated_commit_sha": "8dcb975fb4896daf585ed757859447e9279da9b2",
+  "tested_commit_sha": "8dcb975fb4896daf585ed757859447e9279da9b2",
+  "owned_behavior_paths": [
+    "src/Tunner.Governance/ContextApplication.cs"
+  ],
+  "note": "Committed corrective validation. Runtime and inventory execution SHAs and unchanged behavior reuse are explicit in execution results. Historical live R2 evidence is unchanged.",
+  "checked_at": "2026-10-16T16:51:04.523Z",
+  "execution_results_ref": "governance/evidence/P0-RV004-EXECUTION-RESULTS.json",
+  "checks": [
+    {
+      "name": "authority",
+      "result": "PASS",
+      "checked_artifacts": 179,
+      "committed_current_source_checks": 9,
+      "historical_source_and_zip_checks": "PASS"
+    },
+    {
+      "name": "build",
+      "result": "PASS",
+      "warnings": 0,
+      "errors": 0,
+      "source_commit_sha": "8dcb975fb4896daf585ed757859447e9279da9b2"
+    },
+    {
+      "name": "governance",
+      "result": "PASS",
+      "revision_checks": 60,
+      "committed_ownership_checks": 15,
+      "ordinary_functional_suite": "PASS",
+      "focused_authority_context_checks": 12,
+      "source_commit_sha": "8dcb975fb4896daf585ed757859447e9279da9b2"
+    },
+    {
+      "name": "platform_installer",
+      "result": "PASS",
+      "platform": 289,
+      "installer": 68,
+      "failed": 0,
+      "skipped": 0,
+      "container_integrations_executed": true,
+      "launch_commit_sha": "8dcb975fb4896daf585ed757859447e9279da9b2",
+      "installer_build_and_execution_commit_sha": "494015900983b7a6ac854a9151743397607fa1e8",
+      "unchanged_behavior_blob_proof": "artifacts/audit-remediation-20261016/unchanged-behavior-between-candidates.json"
+    },
+    {
+      "name": "web",
+      "result": "PASS",
+      "build": "PASS",
+      "unit_contract_tests": 25,
+      "browser_tests": 13,
+      "source_commit_sha": "8dcb975fb4896daf585ed757859447e9279da9b2"
+    },
+    {
+      "name": "supply_chain",
+      "result": "PASS",
+      "source_commit_sha": "494015900983b7a6ac854a9151743397607fa1e8",
+      "dotnet_scopes": 3,
+      "unique_resolved_packages": 105,
+      "vulnerable_packages": 0,
+      "frontend_reported_vulnerabilities": 0,
+      "workflow_yaml_parse": "PASS"
+    },
+    {
+      "name": "security",
+      "result": "PASS",
+      "sast_files": 1329,
+      "secret_scan_files": 1329,
+      "container_policy_images": 8,
+      "observability_functional": "PASS"
+    },
+    {
+      "name": "schema",
+      "result": "PASS",
+      "structural_entrypoints": 17
+    },
+    {
+      "name": "dirty_boundary",
+      "result": "PASS",
+      "preserved_tracked_paths": 12,
+      "excluded_untracked_directory": ".vscode/"
+    }
+  ],
+  "closure_commit_sha": "43928c95c939beb6916550bdb40a661e844babc6"
+}

@@ -113,6 +113,7 @@ public static class AuthorityApplication
             }
         }
 
+        checkedArtifacts += SupplementalAuthorityMirrors.Verify(repository, findings);
         var outcome = findings.Count == 0 ? "VERIFIED" : "INVALID";
         return new CommandResult(findings.Count == 0 ? 0 : 1, "authority verify", new AuthorityPayload(outcome, checkedArtifacts, findings));
     }

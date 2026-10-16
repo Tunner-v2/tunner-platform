@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "scope_id": "TUN-P1-002",
+  "scope_type": "WORK_ITEM",
+  "validation_kind": "RETROSPECTIVE_COMMITTED",
+  "result": "PASS",
+  "validated_commit_sha": "6fb030241ad0927f0a2576da23d348db1cfceab6",
+  "tested_commit_sha": "6fb030241ad0927f0a2576da23d348db1cfceab6",
+  "owned_behavior_paths": [
+    "Tunner.Governance.sln",
+    "Tunner.Platform.slnx",
+    "docs/development/LOCAL_PLATFORM_HOST_COMPOSITION.md",
+    "src/Tunner.Api/Program.cs",
+    "src/Tunner.Platform/TunnerModuleRegistration.cs",
+    "src/Tunner.Worker/Program.cs",
+    "tests/Tunner.Platform.ArchitectureTests/HostCompositionTests.cs",
+    "tools/validation/Validate-TunnerPlatformHostSource.ps1"
+  ],
+  "checks": [
+    "All 237 architecture tests passed, zero skipped, including host composition; platform host source guard passed and the solution built with zero warnings/errors.",
+    "Platform candidate build: zero warnings/errors.",
+    "Read-only verification: all 8 owned candidate blobs equal HEAD and working-tree Git objects. No ownership mismatch."
+  ],
+  "boundary": "Current preserved implementation revalidation owned by TUN-P1-023; original execution claims and historical evidence are unchanged. Governance lifecycle and evidence records are metadata; initial generated dirty files are excluded.",
+  "checked_at": "2026-10-15T15:04:13Z",
+  "execution_receipt": "governance/evidence/TUN-P1-023-EXECUTION-RESULTS.json",
+  "scope_limit": "Current technical scope only. Original validation claims remain preserved; live R2 and P1 milestone acceptance remain unresolved."
+}

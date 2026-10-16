@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "scope_id": "P1-024-RV001",
+  "status": "RESOLVED_EXISTING_AUTHORITY",
+  "resolution": "Local engineering bootstrap and usability automation under existing configuration/secrets authority; no Product/public/provider contract or production authentication change.",
+  "authority_refs": [
+    "docs/authority/baselines/1.6.0/06_Environment_Configuration_Secrets_and_Deployment.md",
+    "docs/authority/baselines/1.6.0/08_Security_Privacy_Compliance_and_Global_Market_Governance.md",
+    "docs/authority/baselines/1.6.0/15_Runtime_Communication_and_Infrastructure_Technology_Scope.md",
+    "docs/authority/current/development/03_Governed_Development_Lifecycle_Scrum_Git.md",
+    "docs/authority/amendments/AMD-0005/AMD-0005_Authority-First_Decision_Resolution_and_Duplicate-Decision_Prevention.md"
+  ],
+  "findings": [
+    "Document 06 separates non-secret operator configuration from vault values and permits a short-lived bootstrap mechanism; no permanent root credential in configuration.",
+    "Document 15 selects OpenBao locally and requires actual dedicated non-production R2 evidence for provider acceptance.",
+    "Original TUN-P1-024 remains DONE with its historical evidence. New local-only orchestration is isolated in this Revision.",
+    "Operator supplied the account endpoint, confirmed the tunner bucket dedicated to non-production tests, and entered the exact resource/field references; reusable configuration records those supplied values, not invented deployed defaults.",
+    "One private local administrative bootstrap input mints a non-root exact-path token for the secret-store adapter. Root never reads/writes R2 values; temporary policy/token cleanup is required."
+  ],
+  "primary_sources": [
+    {
+      "url": "https://openbao.org/docs/commands/token/create/",
+      "checked_on": "2026-10-15",
+      "use": "Explicit policy subset, bounded hard TTL, nonrenewable token and no default policy."
+    },
+    {
+      "url": "https://openbao.org/docs/concepts/policies/",
+      "checked_on": "2026-10-15",
+      "use": "Default-deny exact-path capabilities and named ACL lifecycle."
+    },
+    {
+      "url": "https://raw.githubusercontent.com/openbao/openbao/v2.7.0/api/auth_token.go",
+      "checked_on": "2026-10-15",
+      "use": "Verified token create, lookup-self and revoke-accessor API shape."
+    }
+  ],
+  "implementation_boundary": "Local loopback OpenBao only; saved references reused; no root/scoped credential in profile, args, environment, clipboard, logs or evidence; no production resources; live R2 remains separate from disposable fixture validation."
+}

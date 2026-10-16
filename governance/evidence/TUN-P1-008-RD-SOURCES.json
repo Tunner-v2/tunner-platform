@@ -1,0 +1,47 @@
+{
+  "schema_version": 1,
+  "evidence_id": "TUN-P1-008-RD-SOURCES",
+  "scope_type": "WORK_ITEM",
+  "scope_id": "TUN-P1-008",
+  "status": "PASS",
+  "reviewed_at": "2026-10-02T16:03:32-04:00",
+  "sources": [
+    {
+      "title": "Redis SET command",
+      "url": "https://redis.io/docs/latest/commands/set/",
+      "type": "primary Redis documentation",
+      "finding": "SET supports conditional NX/XX writes with EX or PX expiry. A successful conditional write can establish a short-lived technical coordination token, while a failed condition is an explicit non-acquisition outcome."
+    },
+    {
+      "title": "Redis EXPIRE command",
+      "url": "https://redis.io/docs/latest/commands/expire/",
+      "type": "primary Redis documentation",
+      "finding": "EXPIRE provides conditional TTL update options and reports whether the update occurred. Expiry is an ephemeral safeguard, not durable business authority."
+    },
+    {
+      "title": "StackExchange.Redis official repository and documentation",
+      "url": "https://github.com/StackExchange/StackExchange.Redis",
+      "type": "primary maintained client documentation",
+      "finding": "StackExchange.Redis is the maintained general-purpose .NET Redis client. Its documentation describes a multiplexed shared connection design and async API surface suitable for a narrow Platform adapter, without making Redis authoritative."
+    },
+    {
+      "title": "StackExchange.Redis release notes",
+      "url": "https://github.com/StackExchange/StackExchange.Redis/blob/main/docs/ReleaseNotes.md",
+      "type": "primary maintained client release notes",
+      "finding": "The current stable release is 3.3.1. The dependency must be centrally versioned and confined to the approved Redis capability; no deprecated or alternate client is required."
+    }
+,
+    {
+      "title": "Redis EVAL command",
+      "url": "https://redis.io/docs/latest/commands/eval/",
+      "type": "primary Redis documentation",
+      "finding": "EVAL accepts explicit key and argument lists for atomic server-side scripts. A one-key compare-and-delete script can release a coordination token only when its caller-owned token value still matches."
+    }
+  ],
+  "decision": "Refine a cohesive Platform-owned Redis technical capability only for explicitly caller-owned cache entries and short-lived coordination tokens. Every entry must have a caller-provided finite TTL; Redis cannot hold identity, financial, audit, durable workflow, retry, Product, or owner-domain truth. The approved technical client is centrally versioned StackExchange.Redis 3.3.1. No runtime configuration, connection string, credentials, key namespaces, cache content, lock duration, or Product behavior is selected in refinement.",
+  "limitations": [
+    "This evidence does not authorize an application Redis connection, StackExchange.Redis package adoption, configuration binding, credential, key naming convention, cache payload, invalidation policy, lock duration, distributed algorithm, consumer runtime, queue topology, or deployment behavior.",
+    "Redis conditional writes and expiration support only bounded technical coordination mechanics. They do not prove correctness for a business lease, leader election, financial action, identity/session state, audit record, durable work, or exactly-once side effect.",
+    "No Product, Connected Product, public API, SDK, provider, identity, financial, compliance, fixed host/port, deployment, or release behavior is authorized."
+  ]
+}

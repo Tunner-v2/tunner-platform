@@ -1,0 +1,41 @@
+{
+  "owned_behavior_paths": [
+    ".gitattributes",
+    "AGENTS.md",
+    "governance/schemas/v1/governance-record.schema.json",
+    "src/Tunner.Governance/AdaptiveContextApplication.cs",
+    "src/Tunner.Governance/AuthorityApplication.cs",
+    "src/Tunner.Governance/CommitReadinessApplication.cs",
+    "src/Tunner.Governance/CommittedEvidenceApplication.cs",
+    "src/Tunner.Governance/ContextApplication.cs",
+    "src/Tunner.Governance/GovernanceApplication.cs",
+    "src/Tunner.Governance/Program.cs",
+    "src/Tunner.Governance/RepositoryRootResolver.cs",
+    "src/Tunner.Governance/RevisionApplication.cs",
+    "tests/Tunner.Governance.FunctionalTests/Program.cs",
+    "tools/validation/Test-TunnerAuthorityCheckout.ps1",
+    "tools/validation/Test-TunnerFreshRecovery.ps1",
+    "tools/validation/Validate-TunnerProjectMemorySource.ps1"
+  ],
+  "validation_kind": "RETROSPECTIVE_COMMITTED",
+  "scope_id": "P0-RV001",
+  "result": "PASS",
+  "validated_commit_sha": "f01c80d91a7806051314da5f253e5fe25114fe4e",
+  "tested_commit_sha": "f01c80d91a7806051314da5f253e5fe25114fe4e",
+  "checked_at": "2026-10-05T15:54:38.3530948-04:00",
+  "closure_commit_sha": "454d9d6a00803df1e66a7399ce85e64e2552831a",
+  "checks": [
+    "Governance build zero warnings/errors",
+    "Tunner.Platform.slnx build zero warnings/errors",
+    "Governance functional suite PASS including 60 RV checks, registered/active single-byte mutations, SHA mismatch, historical status, bounded non-blocking readiness and stale project-memory cases",
+    "17 executable schema entry points PASS",
+    "Platform architecture tests 18/18 PASS",
+    "Authority verification and byte-exact committed checkout 167 artifacts PASS",
+    "Fresh-agent recovery and project-state consistency PASS",
+    "Nested/location-independent path resolution PASS"
+  ],
+  "note": "New exact committed remediation validation. Prior historical execution is not asserted. Closure SHA is appended to this evidence only after the individual closure commit exists; the closed Revision record remains immutable.",
+  "validation_attempts": [
+    "Final governance build initially overlapped a running test DLL and failed with Windows MSB3021/MSB3027. Serial rerun passed with zero warnings/errors; no repository behavior was changed."
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "evidence_id": "TUN-P1-004-VALIDATION",
+  "scope_type": "WORK_ITEM",
+  "scope_id": "TUN-P1-004",
+  "status": "PASS",
+  "checked_at": "2026-10-02T12:22:01-04:00",
+  "checks": [
+    "Operator-run dotnet restore of Tunner.Platform.slnx completed successfully.",
+    "Operator-run dotnet build of Tunner.Platform.slnx completed with zero warnings and zero errors.",
+    "The build-time OpenAPI generator produced src/Tunner.Api/obj/openapi/tunner-openapi.json using the OpenApi3_1 setting.",
+    "Validate-TunnerOpenApiContractSource.ps1 passed.",
+    "Operator-run Tunner.Platform.ArchitectureTests passed 5 of 5 checks, including the generated OpenAPI 3.1 contract and Product-operation exclusion checks.",
+    "Authority verification passed for 76 hash-checked artifacts; governance validation passed with no diagnostics; required specialist reviews passed; expanded context was regenerated and verified current; whitespace validation passed."
+  ],
+  "artifacts": [
+    "Directory.Packages.props",
+    "src/Tunner.Api/Tunner.Api.csproj",
+    "src/Tunner.Api/Program.cs",
+    "tests/Tunner.Platform.ArchitectureTests/OpenApiContractFoundationTests.cs",
+    "tools/validation/Validate-TunnerOpenApiContractSource.ps1",
+    "docs/development/LOCAL_OPENAPI_CONTRACTS.md"
+  ],
+  "limitations": [
+    "This establishes only build-time OpenAPI 3.1 document generation and local contract verification. It does not expose a runtime document endpoint or interactive API UI.",
+    "No Product/domain endpoint, operation identifier, schema family, authentication profile, OAuth/OpenID configuration, client SDK, API versioning policy, webhook delivery, deployment, or release behavior is introduced.",
+    "The generated document resides under the build output directory and is validation evidence, not a committed public API contract or release artifact."
+  ]
+}

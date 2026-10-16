@@ -1,0 +1,71 @@
+schema_version: 1
+selection_id: CTX-TUN-P1-006-001
+scope_type: WORK_ITEM
+scope_id: TUN-P1-006
+context_mode: EXPANDED
+included_artifacts:
+  - AGENTS.md
+  - docs/authority/current-authority.json
+  - docs/authority/amendments/AMD-0001/effective-overrides/11_Development_Planes_Milestones_and_P0_Backlog.md
+  - docs/authority/amendments/AMD-0004/AMD-0004_Shared_Technical_Primitives_Formatting_and_Canonicalization.md
+  - docs/authority/baselines/1.6.0/01_Engineering_Technology_Foundation.md
+  - docs/authority/baselines/1.6.0/02_Repository_Solution_and_Module_Architecture.md
+  - docs/authority/baselines/1.6.0/06_Environment_Configuration_Secrets_and_Deployment.md
+  - docs/authority/baselines/1.6.0/09_Testing_Acceptance_Evidence_and_Quality_Gates.md
+  - docs/authority/baselines/1.6.0/13_RD_Source_Register.md
+  - docs/authority/baselines/1.6.0/15_Runtime_Communication_and_Infrastructure_Technology_Scope.md
+  - docs/authority/baselines/1.6.0/decisions/ADR-0001_Durable_Messaging_RabbitMQ_Outbox_Inbox.md
+  - governance/milestones/P1.yaml
+  - governance/dependencies/DEP-TUN-P1-006-TUN-P1-003.yaml
+  - governance/dependencies/DEP-TUN-P1-006-TUN-P1-005.yaml
+  - governance/work-items/TUN-P1-003.yaml
+  - governance/work-items/TUN-P1-005.yaml
+  - governance/work-items/TUN-P1-006.yaml
+  - governance/evidence/TUN-P1-003-VALIDATION.json
+  - governance/evidence/TUN-P1-005-VALIDATION.json
+  - governance/evidence/TUN-P1-006-RD-SOURCES.json
+  - governance/evidence/TUN-P1-006-ROLE-REVIEWS.json
+  - governance/evidence/TUN-P1-006-VALIDATION.json
+  - governance/reviews/REV-TUN-P1-006-devops-engineer.yaml
+  - governance/reviews/REV-TUN-P1-006-full-stack-engineer.yaml
+  - governance/reviews/REV-TUN-P1-006-rd-engineer.yaml
+  - governance/reviews/REV-TUN-P1-006-solution-architect.yaml
+  - governance/reviews/REV-TUN-P1-006-tester-qa-engineer.yaml
+  - governance/rd/source-registry.json
+  - docs/development/P1_CAPABILITY_DECOMPOSITION_AND_PRIMITIVE_REUSE.md
+  - docs/development/LOCAL_TRANSACTIONAL_OUTBOX.md
+  - docs/development/LOCAL_RABBITMQ_OUTBOX_DISPATCH.md
+  - docs/development/LOCAL_DOCKER.md
+  - docs/project/CURRENT_STATE.md
+  - docs/project/HANDOFF.md
+  - src/Tunner.Database/Outbox
+  - src/Tunner.Database/TunnerMigrationsDbContext.cs
+  - src/Tunner.Database/Tunner.Database.csproj
+  - src/Tunner.Worker/Program.cs
+  - src/Tunner.Worker/Tunner.Worker.csproj
+  - src/Tunner.Worker/Messaging
+  - tests/Tunner.Worker.Tests
+  - tools/validation/Validate-TunnerRabbitMqDispatchSource.ps1
+  - infra/docker/compose.yaml
+  - infra/docker/.env.example
+  - Directory.Packages.props
+  - .agent/skills/devops-engineer/SKILL.md
+  - .agent/skills/full-stack-engineer/SKILL.md
+  - .agent/skills/rd-engineer/SKILL.md
+  - .agent/skills/solution-architect/SKILL.md
+  - .agent/skills/tester-qa-engineer/SKILL.md
+excluded_artifacts:
+  - Product/domain event catalog, owner-domain event creation, business handlers, public event contracts, and Connected Product broker access
+  - consumer inbox/idempotency, durable work, retry scheduling, redrive/replay semantics, or long-lived timer behavior
+  - queue-per-customer/work-item topology, domain-specific exchanges or bindings, and arbitrary workload semantics
+  - user/admin UI, BFF, public API/SDK, identity, OAuth/OIDC, authorization, provider, financial, and commercial behavior
+  - production deployment, broker credentials, secret values, environment-specific hosts, and fixed host ports
+exclusion_reasons:
+  Product/domain event catalog, owner-domain event creation, business handlers, public event contracts, and Connected Product broker access: P1-006 consumes only the existing generic committed outbox envelope and must not create Product or external integration authority.
+  consumer inbox/idempotency, durable work, retry scheduling, redrive/replay semantics, or long-lived timer behavior: ADR-0001 identifies them as separate durable mechanics; TUN-P1-007 owns the inbox/durable-work/retry capability.
+  queue-per-customer/work-item topology, domain-specific exchanges or bindings, and arbitrary workload semantics: topology must remain a bounded internal foundation and cannot encode unapproved owner-domain scaling or delivery behavior.
+  user/admin UI, BFF, public API/SDK, identity, OAuth/OIDC, authorization, provider, financial, and commercial behavior: none are required for post-commit internal transport and their authority remains separately governed.
+  production deployment, broker credentials, secret values, environment-specific hosts, and fixed host ports: P1-006 is local/repository-portable; secret delivery and production operations remain separate governed scopes.
+source_hashes: {}
+tool_version: manual-p1-rabbitmq-dispatch-context-1.0.0
+created_at: 2026-10-02T14:35:00-04:00

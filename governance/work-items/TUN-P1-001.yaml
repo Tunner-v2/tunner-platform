@@ -1,0 +1,45 @@
+schema_version: 1
+work_item_id: TUN-P1-001
+milestone_id: P1
+sprint_id: null
+title: Platform Foundation authority-backed refinement
+status: DONE
+type: GOVERNANCE_TOOLING
+authority_refs:
+  - docs/authority/current-authority.json
+  - docs/authority/amendments/AMD-0001/effective-overrides/11_Development_Planes_Milestones_and_P0_Backlog.md
+  - docs/authority/amendments/AMD-0002/AMD-0002_Non-Blocking_PR_Approval_and_Continuous_Local_Execution.md
+  - docs/authority/baselines/1.6.0/01_Engineering_Technology_Foundation.md
+  - docs/authority/baselines/1.6.0/02_Repository_Solution_and_Module_Architecture.md
+  - docs/authority/baselines/1.6.0/04_Governance_and_Context_Tooling_Specification.md
+  - docs/authority/baselines/1.6.0/15_Runtime_Communication_and_Infrastructure_Technology_Scope.md
+flow_refs: []
+contract_refs: []
+decision_refs: []
+acceptance_criteria:
+  - Decompose the approved P1 headline backlog into atomic governance work-item candidates without inventing Product/domain behavior.
+  - For each candidate, record authority references, scope/non-goals, required role activation, validation/evidence expectations, and only authority-supported dependencies.
+  - Identify ambiguity that needs an approved Product decision, ADR, PDR, current primary-source research, UX reference, or a later-plane dependency; record it as a governed blocker rather than guessing.
+  - Define the first implementation-eligible P1 slice only when its boundary, owner, acceptance checks, and required authority are sufficient.
+  - Do not implement API, Worker, persistence, messaging, security, storage, UI, Identity, payment, or provider behavior in this refinement slice.
+prerequisites: []
+blockers: []
+impact: {architecture: true, ui: false, sdk: false, financial: false, compliance: false, security: false, devops: false, support: false}
+activated_roles: [full-stack-engineer, solution-architect, governance-engineer, tester-qa-engineer, auditor, project-manager, business-analyst]
+required_tests:
+  - authority verification
+  - governance validation
+  - role activation calculation
+  - bounded expanded context verification
+  - P1 refinement traceability review
+required_evidence:
+  - governance/evidence/TUN-P1-001-VALIDATION.json
+  - governance/evidence/TUN-P1-001-ROLE-REVIEWS.json
+  - docs/development/P1_PLATFORM_FOUNDATION_RECOVERY.md
+  - governance/evidence/TUN-P1-001-COMMITTED-RECONCILIATION.json
+context_policy: EXPANDED
+todos: []
+defects: [DEF-TUN-P1-001-001]
+created_at: 2026-10-01T22:10:00-04:00
+updated_at: 2026-10-15T15:04:13Z
+git_state: {"repository_changed":true,"validated_commit_sha":"6fb030241ad0927f0a2576da23d348db1cfceab6","tested_commit_sha":"6fb030241ad0927f0a2576da23d348db1cfceab6","work_item_commit_shas":["f4a0fd15d3676a16f27724f2e2037691afc9e792","2d57674d64089e69d06ad8cd5eb278562f82ce37","6fb030241ad0927f0a2576da23d348db1cfceab6"],"closure_commit_sha":null,"remaining_uncommitted_paths":["docs/context/current/HANDOFF.md","docs/context/current/adaptive-selection.json","docs/context/current/authority.md","docs/context/current/contracts.md","docs/context/current/git-changes.md","docs/context/current/manifest.json","docs/context/current/relevant-flows.md","docs/context/current/summary.md","docs/context/current/tests.md","docs/project/CURRENT_STATE.md","docs/project/HANDOFF.md","docs/project/PROJECT_CONTEXT.md"],"remaining_uncommitted_classification":"PREEXISTING_UNRELATED"}

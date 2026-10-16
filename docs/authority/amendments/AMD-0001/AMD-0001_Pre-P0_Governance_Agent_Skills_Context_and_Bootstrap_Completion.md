@@ -2,6 +2,8 @@
 > **Status:** APPROVED / ACTIVE
 > **Effective date:** 2026-09-29
 > **Target baseline:** Tunner Development Documentation Baseline 1.6.0
+> **Applicability:** GLOBAL for governance, AI/human development protocol, context, orchestration, evidence, project-memory and development-control principles; P0-specific bootstrap deliverables remain phase-specific implementation obligations.
+> **Scope clarification:** 2026-10-03 — explicit Product Owner correction; discovery/pre-P0 origin does not limit global governing applicability.
 
 # AMD-0001 — Pre-P0 Governance, Agent Skills, Context Economy & Bootstrap Completion
 
@@ -16,6 +18,16 @@ The repository and GitHub Actions do not yet exist. They are outputs of P0 boots
 `TECHNICAL | GOVERNANCE | PROCESS | UX/QUALITY`
 
 No Tunner commercial/business-domain semantics are changed.
+
+## 2A. Global applicability clarification
+
+AMD-0001 was discovered and approved before P0 implementation, but its cross-cutting governance principles are **GLOBAL**. They govern all current and future Tunner development planes, milestones, work items and contributors wherever semantically applicable.
+
+Global rules include the multidisciplinary skill model, governance-controlled orchestration, adaptive/verified context, `INSUFFICIENT_CONTEXT`, repository project memory, authority verification, evidence/traceability and prevention of chat-only critical state.
+
+The following remain naturally phase-specific implementation obligations rather than global feature requirements: initial repository bootstrap, P0 self-hosting/cutover, P0 feature-development enablement and the numbered P0 bootstrap work items that establish the governance system. Once established, the resulting governance controls are inherited by all later planes.
+
+The phrase `Pre-P0` describes the amendment's discovery/activation context. It is not its applicability boundary.
 
 ## 3. Approved changes
 
@@ -55,6 +67,9 @@ No Tunner commercial/business-domain semantics are changed.
 - new `Pre-P0 Implementation Package/` (implementation templates and bootstrap/acceptance pack)
 
 ## 5. Development authorization
+
+**Historical authorization snapshot at AMD-0001 approval. This section does not limit the amendment's global applicability.**
+
 
 - Documentation/business closure: remains PASS.
 - P0 Governance & Development System: AUTHORIZED.

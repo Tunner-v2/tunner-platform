@@ -1,0 +1,35 @@
+{
+  "schemaVersion": 1,
+  "primitives": {
+    "white": "#ffffff", "black": "#000000", "indigo-600": "#4f46e5", "indigo-500": "#6366f1",
+    "slate-900": "#0f172a", "slate-600": "#475569", "slate-200": "#e2e8f0", "slate-50": "#f8fafc",
+    "admin-ink": "#141618", "admin-action": "#09090a", "admin-muted": "#616975", "admin-border": "#dbdfe5", "admin-page": "#f7f9fa", "error": "#c7241a",
+    "space-6": "6px", "space-8": "8px", "space-12": "12px", "space-14": "14px", "space-16": "16px", "space-24": "24px", "space-32": "32px", "space-40": "40px", "space-48": "48px",
+    "radius-8": "8px", "radius-10": "10px", "size-12": "12px", "size-13": "13px", "size-14": "14px", "size-24": "24px",
+    "line-17": "17px", "line-18": "18px", "line-20": "20px", "line-29": "29px",
+    "height-40": "40px", "height-42": "42px", "height-44": "44px", "weight-400": "400", "weight-600": "600", "weight-700": "700",
+    "geist": "\"Geist Variable\", sans-serif", "inter": "\"Inter Variable\", sans-serif",
+    "border-width": "1px", "focus-width": "2px", "focus-offset": "3px", "disabled-opacity": "0.5", "no-shadow": "none",
+    "user-button-shadow": "0px 4px 4px rgba(79, 70, 229, 0.25)", "user-focus-shadow": "0px 0px 2px rgba(99, 102, 241, 0.15)"
+  },
+  "profiles": {
+    "user": { "light": {
+      "font": "{primitive.geist}", "text": "{primitive.slate-900}", "muted": "{primitive.slate-600}", "surface": "{primitive.white}", "page": "{primitive.slate-50}",
+      "decorative-border": "{primitive.slate-200}", "interactive-border": "{primitive.slate-600}", "focus": "{primitive.indigo-500}", "error": "{primitive.error}",
+      "action-background": "{primitive.indigo-600}", "action-text": "{primitive.white}", "action-height": "{primitive.height-44}", "action-size": "{primitive.size-14}", "action-line": "{primitive.line-18}", "action-shadow": "{primitive.user-button-shadow}",
+      "field-height": "{primitive.height-44}", "field-radius": "{primitive.radius-8}", "field-focus-shadow": "{primitive.user-focus-shadow}"
+    }},
+    "admin": { "light": {
+      "font": "{primitive.inter}", "text": "{primitive.admin-ink}", "muted": "{primitive.admin-muted}", "surface": "{primitive.white}", "page": "{primitive.admin-page}",
+      "decorative-border": "{primitive.admin-border}", "interactive-border": "{primitive.admin-muted}", "focus": "{primitive.admin-ink}", "error": "{primitive.error}",
+      "action-background": "{primitive.admin-action}", "action-text": "{primitive.white}", "action-height": "{primitive.height-40}", "action-size": "{primitive.size-12}", "action-line": "{primitive.line-18}", "action-shadow": "{primitive.no-shadow}",
+      "field-height": "{primitive.height-42}", "field-radius": "{primitive.radius-10}", "field-focus-shadow": "{primitive.no-shadow}"
+    }}
+  },
+  "components": {
+    "button-background": "{semantic.action-background}", "button-color": "{semantic.action-text}", "button-height": "{semantic.action-height}", "button-size": "{semantic.action-size}", "button-line": "{semantic.action-line}", "button-shadow": "{semantic.action-shadow}", "button-radius": "{primitive.radius-8}", "button-weight": "{primitive.weight-600}", "button-padding": "{primitive.space-16}",
+    "field-height": "{semantic.field-height}", "field-radius": "{semantic.field-radius}", "field-background": "{semantic.surface}", "field-border": "{semantic.interactive-border}", "field-color": "{semantic.text}", "field-padding": "{primitive.space-14}", "field-size": "{primitive.size-14}", "field-line": "{primitive.line-20}", "field-weight": "{primitive.weight-400}", "field-focus-shadow": "{semantic.field-focus-shadow}",
+    "label-size": "{primitive.size-13}", "label-line": "{primitive.line-17}", "label-weight": "{primitive.weight-600}", "field-gap": "{primitive.space-6}", "description-size": "{primitive.size-13}", "description-line": "{primitive.line-20}",
+    "brand-font": "{primitive.inter}", "brand-color": "{primitive.black}", "brand-size": "{primitive.size-24}", "brand-line": "{primitive.line-29}", "brand-weight": "{primitive.weight-700}"
+  }
+}

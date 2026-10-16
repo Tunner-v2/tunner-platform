@@ -1,0 +1,59 @@
+schema_version: 1
+work_item_id: TUN-P1-013
+milestone_id: P1
+sprint_id: null
+title: Effective-policy version resolver mechanics
+status: DONE
+type: POLICY_FOUNDATION
+product_acceptance_required: false
+authority_refs:
+  - docs/authority/current-authority.json
+  - docs/authority/amendments/AMD-0004/AMD-0004_Shared_Technical_Primitives_Formatting_and_Canonicalization.md
+  - docs/authority/amendments/AMD-0001/effective-overrides/11_Development_Planes_Milestones_and_P0_Backlog.md
+  - docs/authority/baselines/1.6.0/01_Engineering_Technology_Foundation.md
+  - docs/authority/baselines/1.6.0/02_Repository_Solution_and_Module_Architecture.md
+  - docs/authority/baselines/1.6.0/09_Testing_Acceptance_Evidence_and_Quality_Gates.md
+  - docs/authority/baselines/1.6.0/32_Domain_API_Event_Data_and_Policy_Contract_Catalog.md
+  - docs/authority/baselines/1.6.0/26_Finance_Ledger_Accounting_Settlement_and_Payout_FRD.md
+  - docs/authority/baselines/1.6.0/decisions/PDR-0010_Configurable_FX_Economic_Treatment_and_Guided_Configuration.md
+flow_refs: []
+contract_refs: [docs/authority/baselines/1.6.0/32_Domain_API_Event_Data_and_Policy_Contract_Catalog.md]
+decision_refs: [PDR-0010]
+acceptance_criteria:
+  - Implement shared effective-version selection under Document 32 sections 17-18 using owner-supplied business effective time, explicit scope and version records; preserve exact selected version evidence and reject missing or ambiguous required resolution without inventing policy values or Product behavior.
+  - Reuse or extend a compatible existing capability when one exists; do not add a generic Common, Utils, Helpers, or shared-everything layer.
+  - Preserve domain/business semantics as owner concerns and keep technical canonicalization and presentation formatting non-authoritative.
+  - Do not infer Product behavior, user flows, commercial rules, policy values, or public contract semantics beyond cited authority.
+prerequisites: [TUN-P1-002, TUN-P1-005]
+blockers: []
+impact: {architecture: true, ui: false, sdk: false, financial: false, compliance: false, security: false, devops: false, support: false}
+activated_roles: [full-stack-engineer, solution-architect, tester-qa-engineer]
+required_tests: [authority verification, governance validation, role activation calculation and mandatory specialist reviews, bounded expanded context verification, scope-specific deterministic tests and evidence]
+required_evidence: [governance/context/CTX-TUN-P1-013-001.yaml, governance/evidence/TUN-P1-013-VALIDATION.json, governance/evidence/TUN-P1-013-ROLE-REVIEWS.json, governance/evidence/TUN-P1-013-AUTHORITY-RESOLUTION.json, docs/development/P1_EFFECTIVE_POLICY_VERSION_RESOLUTION.md, governance/evidence/TUN-P1-013-TEST-RESULTS.json, governance/evidence/TUN-P1-013-CLOSURE.json]
+context_policy: EXPANDED
+todos: []
+defects: []
+authority_resolution:
+  schema_version: 1
+  outcome: RESOLVED_EXISTING_AUTHORITY
+  reviewed_authority_refs:
+    - docs/authority/current-authority.json
+    - docs/authority/baselines/1.6.0/32_Domain_API_Event_Data_and_Policy_Contract_Catalog.md
+    - docs/authority/baselines/1.6.0/26_Finance_Ledger_Accounting_Settlement_and_Payout_FRD.md
+    - docs/authority/baselines/1.6.0/decisions/PDR-0010_Configurable_FX_Economic_Treatment_and_Guided_Configuration.md
+    - docs/authority/amendments/AMD-0004/AMD-0004_Shared_Technical_Primitives_Formatting_and_Canonicalization.md
+    - docs/authority/amendments/AMD-0005/AMD-0005_Authority-First_Decision_Resolution_and_Duplicate-Decision_Prevention.md
+  unresolved_question: "None for the shared technical version-selection scope; owner policy values and precedence remain with their approved domains."
+  conclusion: "Canonical Drive Document 32 sections 17-18 supplies policy version identity, status, effective interval, lineage, approval evidence and business-time plus explicit-scope resolution. Approved PDR-0010 and Document 26 supply a concrete owner policy contract and precedence. Detailed executable shapes are implementation work under Document 32 section 1. The prior OWNER_POLICY_CONTRACT_REQUIRED conclusion omitted these authorities and is superseded by this pass; its history is preserved in Git and TUN-P1-013-AUTHORITY-RESOLUTION.json. No new AMD, PDR or Product decision is required. Implementation and specialist review evidence remain pending."
+  conditional_trigger_absent: false
+  reviewed_at: 2026-10-05T20:15:14.9208198+00:00
+created_at: 2026-10-02T13:20:00-04:00
+updated_at: 2026-10-05T20:30:06.5384909+00:00
+git_state:
+  repository_changed: true
+  validated_commit_sha: ef3517d63946843ff2ef674d16742931ec793214
+  tested_commit_sha: ef3517d63946843ff2ef674d16742931ec793214
+  work_item_commit_shas: [8ba39e0ba45a7eb7aa49d307134fee5dadd0c9d4, ef3517d63946843ff2ef674d16742931ec793214, 6d7f23a5c86d802c8899c86f3d7eedb4ba00f1af, e475ea88304db30cbb92b6540babfd9c528cc557]
+  closure_commit_sha: e475ea88304db30cbb92b6540babfd9c528cc557
+  remaining_uncommitted_paths: []
+  remaining_uncommitted_classification: NONE

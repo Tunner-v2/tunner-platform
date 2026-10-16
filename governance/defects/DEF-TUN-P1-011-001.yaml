@@ -1,0 +1,19 @@
+schema_version: 1
+defect_id: DEF-TUN-P1-011-001
+work_item_id: TUN-P1-011
+classification: BACKLOG_DEFINITION
+severity: SEV-3
+status: CLOSED
+environment: repository-native governance backlog
+description: The original P1-011 record treated the absence of a conditional gRPC-Web/native-gRPC activation trigger as FEATURE_SPECIFIC_PROTOCOL_BOUNDARY_ADR_REQUIRED. ADR-0004 and Document 15 instead select REST/BFF, SignalR, REST/webhooks, and typed in-process calls as the default transports, and require a feature/process-specific ADR only after a concrete selective gRPC trigger exists.
+expected_behavior_ref: ADR-0004 Communication Protocol Boundaries; Document 15 sections 3.5, 3.6, 3.7, 8, 9, 17, and 18; AMD-0004 capability-oriented P1 backlog refinement.
+evidence:
+  - governance/work-items/TUN-P1-011.yaml
+  - governance/evidence/DEF-TUN-P1-011-001-REMEDIATION.json
+  - governance/evidence/TUN-P1-011-VALIDATION.json
+  - docs/development/P1_GRPC_PROTOCOL_ELIGIBILITY_AUDIT.md
+affected_versions:
+  - governance/work-items/TUN-P1-011.yaml prior CONTRACT_REQUIRED classification
+  - docs/development/P1_CAPABILITY_DECOMPOSITION_AND_PRIMITIVE_REUSE.md prior ambiguous P1-011 wording
+created_at: 2026-10-03T02:05:00-04:00
+updated_at: 2026-10-03T02:05:00-04:00

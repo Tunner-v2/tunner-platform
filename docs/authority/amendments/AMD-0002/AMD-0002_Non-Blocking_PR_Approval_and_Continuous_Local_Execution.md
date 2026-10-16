@@ -2,6 +2,8 @@
 > **Status:** APPROVED / ACTIVE  
 > **Effective date:** 2026-09-30  
 > **Target baseline:** Tunner Development Documentation Baseline 1.6.0 + AMD-0001
+> **Applicability:** GLOBAL across all development planes, milestones, work items, branches, PRs and governed integration/release workflows.
+> **Scope clarification:** 2026-10-03 — the P0 incident that exposed the bottleneck is discovery context only; the execution/integration rule is system-wide.
 
 # AMD-0002 — Non-Blocking PR Approval & Continuous Local Execution
 
@@ -16,6 +18,14 @@ This amendment removes the unnecessary synchronization point while preserving pr
 `TECHNICAL | GOVERNANCE | PROCESS | DEVELOPER_EXPERIENCE`
 
 No Tunner commercial/business-domain semantics are changed. No Product feature plane is authorized by this amendment.
+
+## 2A. Global applicability clarification
+
+AMD-0002 applies to **all current and future Tunner development**, not only P0. Wherever governed Git/PR integration exists, human approval of protected-main integration is distinct from agent/human execution eligibility.
+
+Later planes must continue eligible local/branch implementation, validation, evidence, documentation and independent work while a PR awaits approval, subject to declared dependency readiness and concurrency policy.
+
+The P0 approval bottleneck described in the reason section is the discovery context, not an applicability limitation.
 
 ## 3. Approved changes
 
@@ -60,6 +70,9 @@ The amended governance implementation is correct only when:
 - configurable concurrency/reviewability controls prevent unlimited dependent unmerged chains.
 
 ## 6. Development authorization
+
+**Historical authorization snapshot at AMD-0002 approval. This section does not limit global applicability after later planes become authorized.**
+
 
 - Documentation/business closure: remains PASS.
 - P0 Governance & Development System: remains AUTHORIZED.

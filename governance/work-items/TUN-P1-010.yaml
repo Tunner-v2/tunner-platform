@@ -1,0 +1,44 @@
+schema_version: 1
+work_item_id: TUN-P1-010
+milestone_id: P1
+sprint_id: null
+title: SignalR realtime hint and resynchronization baseline
+status: DONE
+product_acceptance_required: false
+type: REALTIME_FOUNDATION
+authority_refs:
+  - docs/authority/current-authority.json
+  - docs/authority/amendments/AMD-0004/AMD-0004_Shared_Technical_Primitives_Formatting_and_Canonicalization.md
+  - docs/authority/amendments/AMD-0001/effective-overrides/11_Development_Planes_Milestones_and_P0_Backlog.md
+  - docs/authority/baselines/1.6.0/01_Engineering_Technology_Foundation.md
+  - docs/authority/baselines/1.6.0/02_Repository_Solution_and_Module_Architecture.md
+  - docs/authority/baselines/1.6.0/07_API_SDK_Event_and_Connected_Product_Foundation.md
+  - docs/authority/baselines/1.6.0/08_Security_Privacy_Compliance_and_Global_Market_Governance.md
+  - docs/authority/baselines/1.6.0/09_Testing_Acceptance_Evidence_and_Quality_Gates.md
+  - docs/authority/baselines/1.6.0/15_Runtime_Communication_and_Infrastructure_Technology_Scope.md
+  - docs/authority/baselines/1.6.0/decisions/ADR-0002_Redis_Cache_and_SignalR_Backplane.md
+  - docs/authority/baselines/1.6.0/decisions/ADR-0004_Communication_Protocol_Boundaries.md
+flow_refs: []
+contract_refs: []
+decision_refs: []
+acceptance_criteria:
+  - Establish only Tunner User/Admin browser realtime technical foundations; no Connected Product SignalR contract or Product-facing SignalR behavior is introduced.
+  - REST/BFF/read models remain authoritative for commands, queries, permissions, and current state. Realtime carries only typed minimal resynchronization hints and never full authoritative domain objects.
+  - The reusable adapter requires authenticated policy access, has no client-supplied subscription method, and derives every audience membership server-side through the authenticated Tunner scope resolver.
+  - A reconnecting browser must re-establish authorized realtime scope and resynchronize affected authoritative state through BFF/API/read-model reads; missed, duplicate, stale, reordered, or unavailable realtime delivery cannot corrupt authoritative state.
+  - The adapter prevents sensitive identity, security, KYC, payment, financial, provider, or Product details from its foundation hint shape and telemetry.
+  - The adapter provides connection-level policy hooks for browser origin and rate/resource protection. Identity/session owners retain authoritative invalidation and reauthorization responsibility.
+  - Redis remains unconfigured at this slice and may be used only as a non-authoritative SignalR backplane when multiple Tunner web nodes require it.
+  - Do not define domain-specific realtime event categories, domain payloads, client reconnect timing, retention/replay behavior, Product behavior, or resource-policy semantics in this technical foundation.
+prerequisites: [TUN-P1-005, TUN-P1-008]
+blockers: []
+impact: {architecture: true, ui: false, sdk: false, financial: false, compliance: false, security: true, devops: false, support: false, provider: true}
+activated_roles: [full-stack-engineer, solution-architect, rd-engineer, cyber-security-engineer, auditor, tester-qa-engineer]
+required_tests: [authority verification, governance validation, role activation calculation and mandatory specialist reviews, bounded expanded context verification, scope-specific deterministic tests and evidence]
+required_evidence: [governance/context/CTX-TUN-P1-010-001.yaml, governance/evidence/TUN-P1-010-RD-SOURCES.json, governance/evidence/TUN-P1-010-VALIDATION.json, governance/evidence/TUN-P1-010-ROLE-REVIEWS.json, governance/evidence/TUN-P1-010-COMMITTED-RECONCILIATION.json]
+context_policy: EXPANDED
+todos: []
+defects: []
+created_at: 2026-10-02T13:20:00-04:00
+updated_at: 2026-10-15T15:04:13Z
+git_state: {"repository_changed":true,"validated_commit_sha":"6fb030241ad0927f0a2576da23d348db1cfceab6","tested_commit_sha":"6fb030241ad0927f0a2576da23d348db1cfceab6","work_item_commit_shas":["3b971b5ba443b3d90308b17268a4f61c55a04e6f","6fb030241ad0927f0a2576da23d348db1cfceab6"],"closure_commit_sha":null,"remaining_uncommitted_paths":["docs/context/current/HANDOFF.md","docs/context/current/adaptive-selection.json","docs/context/current/authority.md","docs/context/current/contracts.md","docs/context/current/git-changes.md","docs/context/current/manifest.json","docs/context/current/relevant-flows.md","docs/context/current/summary.md","docs/context/current/tests.md","docs/project/CURRENT_STATE.md","docs/project/HANDOFF.md","docs/project/PROJECT_CONTEXT.md"],"remaining_uncommitted_classification":"PREEXISTING_UNRELATED"}

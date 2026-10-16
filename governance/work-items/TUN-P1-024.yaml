@@ -1,0 +1,109 @@
+{
+  "schema_version": 1,
+  "work_item_id": "TUN-P1-024",
+  "milestone_id": "P1",
+  "sprint_id": null,
+  "title": "Installer R2 profile and OpenBao secret resolution",
+  "status": "DONE",
+  "type": "ENVIRONMENT_FOUNDATION",
+  "product_acceptance_required": false,
+  "authority_refs": [
+    "docs/authority/current-authority.json",
+    "docs/authority/baselines/1.6.0/06_Environment_Configuration_Secrets_and_Deployment.md",
+    "docs/authority/baselines/1.6.0/08_Security_Privacy_Compliance_and_Global_Market_Governance.md",
+    "docs/authority/baselines/1.6.0/15_Runtime_Communication_and_Infrastructure_Technology_Scope.md",
+    "docs/authority/current/development/03_Governed_Development_Lifecycle_Scrum_Git.md",
+    "docs/authority/amendments/AMD-0005/AMD-0005_Authority-First_Decision_Resolution_and_Duplicate-Decision_Prevention.md"
+  ],
+  "flow_refs": [],
+  "contract_refs": [
+    "docs/authority/baselines/1.6.0/06_Environment_Configuration_Secrets_and_Deployment.md"
+  ],
+  "decision_refs": [],
+  "acceptance_criteria": [
+    "Collect non-secret engineering R2 configuration and exact operator-provided secret references during installer setup; store no credentials or bootstrap token in the profile.",
+    "Resolve credentials through a provider-neutral secret-store abstraction and OpenBao KV v2 using a scoped finite-lifetime token; reject root tokens and credential disclosure.",
+    "Reuse the existing R2 adapter; provide a dedicated non-production contract runner with bounded unique-object cleanup. Do not mark live R2 acceptance passed without actual authorized execution.",
+    "Validate installation, secret transport, failure handling and cleanup with meaningful deterministic and disposable OpenBao integration tests; commit owned changes and record tested SHA.",
+    "Preserve closed work and historical evidence; P1-023 and milestone acceptance remain blocked until live R2 evidence exists."
+  ],
+  "prerequisites": [
+    "TUN-P1-009",
+    "TUN-P1-016"
+  ],
+  "blockers": [],
+  "impact": {
+    "architecture": true,
+    "ui": false,
+    "sdk": false,
+    "financial": false,
+    "compliance": false,
+    "security": true,
+    "devops": true,
+    "support": false,
+    "provider": true,
+    "infrastructure": true
+  },
+  "activated_roles": [
+    "project-manager",
+    "solution-architect",
+    "governance-engineer",
+    "tester-qa-engineer",
+    "auditor",
+    "full-stack-engineer",
+    "cyber-security-engineer",
+    "devops-engineer",
+    "rd-engineer"
+  ],
+  "required_tests": [
+    "authority verification",
+    "governance eligibility",
+    "installer and secret-store tests",
+    "disposable OpenBao integration",
+    "platform regression",
+    "secret and static analysis",
+    "context verification"
+  ],
+  "required_evidence": [
+    "governance/evidence/TUN-P1-024-AUTHORITY-RESOLUTION.json",
+    "governance/evidence/TUN-P1-024-VALIDATION.json",
+    "governance/evidence/TUN-P1-024-ROLE-REVIEWS.json",
+    "docs/development/R2_INSTALLER.md",
+    "governance/evidence/TUN-P1-024-EXECUTION-RESULTS.json",
+    "docs/development/P1_R2_INSTALLER_HANDOFF.md"
+  ],
+  "context_policy": "EXPANDED",
+  "todos": [],
+  "defects": [],
+  "created_at": "2026-10-15T17:04:41Z",
+  "updated_at": "2026-10-15T17:39:58Z",
+  "git_state": {
+    "repository_changed": true,
+    "validated_commit_sha": "4825afc35878b36229f7f7e9f6902aab234cd68d",
+    "tested_commit_sha": "4825afc35878b36229f7f7e9f6902aab234cd68d",
+    "work_item_commit_shas": [
+      "4d0b30846d85a02d5e2f37df964dd3592afe8704",
+      "4825afc35878b36229f7f7e9f6902aab234cd68d",
+      "2f6d934fc9364bfafab5e178f5c490866f8cc6b7",
+      "df9578a85cb9b5933ecd71a9cd3af5f305f10344",
+      "d6db76de9308846853561912952ff09852bec326"
+    ],
+    "closure_commit_sha": "d6db76de9308846853561912952ff09852bec326",
+    "remaining_uncommitted_paths": [
+      "docs/context/current/HANDOFF.md",
+      "docs/context/current/adaptive-selection.json",
+      "docs/context/current/authority.md",
+      "docs/context/current/contracts.md",
+      "docs/context/current/git-changes.md",
+      "docs/context/current/manifest.json",
+      "docs/context/current/relevant-flows.md",
+      "docs/context/current/summary.md",
+      "docs/context/current/tests.md",
+      "docs/project/CURRENT_STATE.md",
+      "docs/project/HANDOFF.md",
+      "docs/project/PROJECT_CONTEXT.md",
+      ".vscode/settings.json"
+    ],
+    "remaining_uncommitted_classification": "UNRELATED_ACTIVE_WORK"
+  }
+}

@@ -1,0 +1,74 @@
+{
+  "schema_version": 1,
+  "revision_id": "P0-004-RV002",
+  "revision_scope": "WORK_ITEM",
+  "original_scope_id": "TUN-P0-004",
+  "parent_revision_id": "P0-004-RV001",
+  "parent_milestone_revision_id": null,
+  "title": "Resolve committed proof through closed work-item revisions",
+  "revision_type": "CORRECTIVE",
+  "status": "CLOSED",
+  "reason": "P1 audit incorrectly reports three original installer paths stale after a tested closed P1-024-RV001; current proof must follow validated closed revision ownership while preserving historical closure.",
+  "authority_refs": [
+    "docs/authority/current/development/03_Governed_Development_Lifecycle_Scrum_Git.md",
+    "docs/authority/current/development/04_Governance_and_Context_Tooling_Specification.md"
+  ],
+  "decision_refs": [],
+  "defect_refs": [
+    "DEF-P0-004-RV002-001"
+  ],
+  "change_refs": [],
+  "impact_classification": "SCOPED_BLOCKING",
+  "blocked_scope": [
+    "TUN-P1-023"
+  ],
+  "acceptance_criteria": [
+    "Resolve latest committed closed same-scope revision proof per owned path; retain original validation for unchanged or unclaimed paths; reject active, uncommitted, stale, malformed or insufficient revision proof and later unvalidated changes; preserve all historical closure records; validate native P1 audit and meaningful negative regression cases."
+  ],
+  "prerequisites": [],
+  "work_items": [],
+  "required_gates": [],
+  "required_roles": [
+    "project-manager",
+    "solution-architect",
+    "governance-engineer",
+    "tester-qa-engineer",
+    "auditor",
+    "cyber-security-engineer",
+    "devops-engineer"
+  ],
+  "evidence_refs": [
+    "governance/evidence/P0-004-RV002-AUTHORITY-RESOLUTION.json",
+    "governance/evidence/P0-004-RV002-VALIDATION.json",
+    "governance/evidence/P0-004-RV002-ROLE-REVIEWS.json",
+    "docs/development/REVISION_COMMITTED_PROOF_RV002.md"
+  ],
+  "created_at": "2026-10-15T21:34:32.7888553+00:00",
+  "closed_at": "2026-10-15T22:10:51Z",
+  "product_acceptance_required": false,
+  "git_state": {
+    "repository_changed": true,
+    "validated_commit_sha": "6051f0aa258e11262b1edb6c1501837b05db623d",
+    "tested_commit_sha": "6051f0aa258e11262b1edb6c1501837b05db623d",
+    "work_item_commit_shas": [
+      "6051f0aa258e11262b1edb6c1501837b05db623d"
+    ],
+    "closure_commit_sha": null,
+    "remaining_uncommitted_paths": [
+      "docs/context/current/HANDOFF.md",
+      "docs/context/current/adaptive-selection.json",
+      "docs/context/current/authority.md",
+      "docs/context/current/contracts.md",
+      "docs/context/current/git-changes.md",
+      "docs/context/current/manifest.json",
+      "docs/context/current/relevant-flows.md",
+      "docs/context/current/summary.md",
+      "docs/context/current/tests.md",
+      "docs/project/CURRENT_STATE.md",
+      "docs/project/HANDOFF.md",
+      "docs/project/PROJECT_CONTEXT.md",
+      ".vscode/settings.json"
+    ],
+    "remaining_uncommitted_classification": "PREEXISTING_UNRELATED"
+  }
+}

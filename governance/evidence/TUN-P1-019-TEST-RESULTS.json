@@ -1,0 +1,261 @@
+{
+  "dependency_audit": {
+    "projects": 14,
+    "affected_project": "src/Tunner.Database.Migrations/Tunner.Database.Migrations.csproj",
+    "result": "FINDINGS",
+    "bff_package_findings": 0,
+    "security_assessment": "governance/evidence/TUN-P1-019-SECURITY-ASSESSMENT.json",
+    "affected_packages": 2
+  },
+  "raw_log_hashes": {
+    "artifacts/P1-019-committed-build.log": "29aebf735feaeac2c0c07dfc789488011034f52ffa5bb0845db0213349006566",
+    "artifacts/P1-019-committed-architecture.log": "953a60684facc7592fe86e77585d77c56fae9bd4f098062e08f6c84b31670cb7",
+    "artifacts/P1-019-committed-worker.log": "1429f044dd0af20600a7a75b96885e7b8751a975e7a7bb5eaf36a3b4c8775d06",
+    "artifacts/P1-019-committed-observability.log": "dee4d9e18b4ea0368ae94c471860cdbdb7d8e9184550058377f23ed843a720dc",
+    "artifacts/P1-019-committed-ui-build.log": "4b3a1499b920f54b694f5cbbeb0d8cfc4eebfa9cc2ba7519518dc39be62f3cc2",
+    "artifacts/P1-019-committed-ui-contracts.log": "2d469e5ad5e3d47c60ddf0fe03558c757a0356369236df92a16ec41c151889e0",
+    "artifacts/P1-019-committed-ui-browser.log": "f564519cbb19ff250383333ab355953e83c4a7467ff16c6df94a64383fb3ba61",
+    "artifacts/P1-019-nuget-audit.json": "530860b6f28f2d015becc8a21a7e7e3550de8d11bb187d8dcd40930043e13079"
+  },
+  "preliminary_failure_history": [
+    "Before this candidate, 34 HTTPS cases failed because Windows Schannel could not use the generated ephemeral certificate key. The documented nonpersistent default key-load lifecycle fixed the test fixture; production TLS was never disabled.",
+    "Context build rejected symbolic flow IDs as missing paths. A bounded repository-native FigJam readback now provides resolvable flow references; final scoped context build/verify passed."
+  ],
+  "architecture": {
+    "skipped": 0,
+    "passed": 231,
+    "prior": 182,
+    "failed": 0,
+    "bff": 49
+  },
+  "dotnet_build": {
+    "errors": 0,
+    "warnings": 0,
+    "result": "PASS"
+  },
+  "limitations": [
+    "No production store, real Identity/workforce sign-in or Product flow was tested or claimed.",
+    "Package audit exit zero is not treated as a clean audit. Findings are retained and assigned separately to the platform dependency baseline."
+  ],
+  "scope_id": "TUN-P1-019",
+  "worker": {
+    "skipped": 0,
+    "passed": 4,
+    "failed": 0
+  },
+  "schema_version": 1,
+  "validated_commit_sha": "7aa8e46e6318479e8811b3c63d6baf84681de050",
+  "tested_commit_sha": "7aa8e46e6318479e8811b3c63d6baf84681de050",
+  "executed_at": "2026-10-14T14:59:14.6369525-04:00",
+  "scope_type": "WORK_ITEM",
+  "status": "PASS",
+  "bff_cases": [
+    {
+      "name": "Tunner.Platform.ArchitectureTests.BffFoundationTests.InvalidServerTicketMetadataNeverAuthenticates(surface: User, kind: \"foreign-identity\")",
+      "result": "Passed"
+    },
+    {
+      "name": "Tunner.Platform.ArchitectureTests.BffFoundationTests.WrongRequestHostIsRejectedEvenWithValidOriginAndCsrf",
+      "result": "Passed"
+    },
+    {
+      "name": "Tunner.Platform.ArchitectureTests.BffFoundationTests.InvalidClientCookieDoesNotLeakOrActivateBearerAuthentication(surface: Admin)",
+      "result": "Passed"
+    },
+    {
+      "name": "Tunner.Platform.ArchitectureTests.BffFoundationTests.DefaultProductionStoreAndSignInStayDenied",
+      "result": "Passed"
+    },
+    {
+      "name": "Tunner.Platform.ArchitectureTests.BffFoundationTests.MissingOriginConfigurationLeavesOnlyHttpsHealthUsable",
+      "result": "Passed"
+    },
+    {
+      "name": "Tunner.Platform.ArchitectureTests.BffFoundationTests.InvalidClientCookieDoesNotLeakOrActivateBearerAuthentication(surface: User)",
+      "result": "Passed"
+    },
+    {
+      "name": "Tunner.Platform.ArchitectureTests.BffFoundationTests.UnsafeRequestsRejectMissingOpaqueAndForeignOrigins(origin: \"https://outside.example.test\")",
+      "result": "Passed"
+    },
+    {
+      "name": "Tunner.Platform.ArchitectureTests.BffFoundationTests.InvalidConfiguredOriginFailsWithoutEchoingInput(origin: \" https://user-bff.example.test\")",
+      "result": "Passed"
+    },
+    {
+      "name": "Tunner.Platform.ArchitectureTests.BffFoundationTests.EveryUnsafeVerbRequiresAValidBoundCsrfToken(verb: \"DELETE\")",
+      "result": "Passed"
+    },
+    {
+      "name": "Tunner.Platform.ArchitectureTests.BffFoundationTests.InvalidServerTicketMetadataNeverAuthenticates(surface: Admin, kind: \"missing-issued\")",
+      "result": "Passed"
+    },
+    {
+      "name": "Tunner.Platform.ArchitectureTests.BffFoundationTests.InvalidConfiguredOriginFailsWithoutEchoingInput(origin: \"https://user:pass@user-bff.example.test\")",
+      "result": "Passed"
+    },
+    {
+      "name": "Tunner.Platform.ArchitectureTests.BffFoundationTests.UserCookieCannotBeRenamedIntoAnAdminSession",
+      "result": "Passed"
+    },
+    {
+      "name": "Tunner.Platform.ArchitectureTests.BffFoundationTests.InvalidConfiguredOriginFailsWithoutEchoingInput(origin: \"http://user-bff.example.test\")",
+      "result": "Passed"
+    },
+    {
+      "name": "Tunner.Platform.ArchitectureTests.BffFoundationTests.StoreFailureNeverFallsBackToClientIdentityAndDoesNotLeakDetails",
+      "result": "Passed"
+    },
+    {
+      "name": "Tunner.Platform.ArchitectureTests.BffFoundationTests.FrameworkCookiesKeepPrincipalAndTokensOnlyOnServer(surface: User)",
+      "result": "Passed"
+    },
+    {
+      "name": "Tunner.Platform.ArchitectureTests.BffFoundationTests.DuplicateSecurityHeadersAreRejected(header: \"Origin\")",
+      "result": "Passed"
+    },
+    {
+      "name": "Tunner.Platform.ArchitectureTests.BffFoundationTests.InvalidServerTicketMetadataNeverAuthenticates(surface: Admin, kind: \"expired\")",
+      "result": "Passed"
+    },
+    {
+      "name": "Tunner.Platform.ArchitectureTests.BffFoundationTests.InvalidConfiguredOriginFailsWithoutEchoingInput(origin: \"https://user-bff.example.test/?q=x\")",
+      "result": "Passed"
+    },
+    {
+      "name": "Tunner.Platform.ArchitectureTests.BffFoundationTests.HttpAndSpoofedForwardedHttpsAreRejected(surface: Admin)",
+      "result": "Passed"
+    },
+    {
+      "name": "Tunner.Platform.ArchitectureTests.BffFoundationTests.InvalidServerTicketMetadataNeverAuthenticates(surface: User, kind: \"future-issued\")",
+      "result": "Passed"
+    },
+    {
+      "name": "Tunner.Platform.ArchitectureTests.BffFoundationTests.ShippedHostsHaveOnlyHealthAndSeparateFrameworkBoundaries(surface: Admin)",
+      "result": "Passed"
+    },
+    {
+      "name": "Tunner.Platform.ArchitectureTests.BffFoundationTests.InvalidServerTicketMetadataNeverAuthenticates(surface: Admin, kind: \"foreign-identity\")",
+      "result": "Passed"
+    },
+    {
+      "name": "Tunner.Platform.ArchitectureTests.BffFoundationTests.EveryUnsafeVerbRequiresAValidBoundCsrfToken(verb: \"PATCH\")",
+      "result": "Passed"
+    },
+    {
+      "name": "Tunner.Platform.ArchitectureTests.BffFoundationTests.InvalidServerTicketMetadataNeverAuthenticates(surface: Admin, kind: \"future-issued\")",
+      "result": "Passed"
+    },
+    {
+      "name": "Tunner.Platform.ArchitectureTests.BffFoundationTests.RevokedSessionIsDeniedOnTheVeryNextRequest(surface: User)",
+      "result": "Passed"
+    },
+    {
+      "name": "Tunner.Platform.ArchitectureTests.BffFoundationTests.FallbackAuthorizationReturnsSafe401WithoutLoginRedirect(surface: Admin)",
+      "result": "Passed"
+    },
+    {
+      "name": "Tunner.Platform.ArchitectureTests.BffFoundationTests.InvalidServerTicketMetadataNeverAuthenticates(surface: Admin, kind: \"missing-expiry\")",
+      "result": "Passed"
+    },
+    {
+      "name": "Tunner.Platform.ArchitectureTests.BffFoundationTests.ForbidAndExceptionsReturnSafeProblemsWithoutDetailsOrRedirect",
+      "result": "Passed"
+    },
+    {
+      "name": "Tunner.Platform.ArchitectureTests.BffFoundationTests.UnsafeRequestsRejectMissingOpaqueAndForeignOrigins(origin: \"null\")",
+      "result": "Passed"
+    },
+    {
+      "name": "Tunner.Platform.ArchitectureTests.BffFoundationTests.ShippedHostsHaveOnlyHealthAndSeparateFrameworkBoundaries(surface: User)",
+      "result": "Passed"
+    },
+    {
+      "name": "Tunner.Platform.ArchitectureTests.BffFoundationTests.NearlyExpiredTicketDoesNotAutomaticallyRenew",
+      "result": "Passed"
+    },
+    {
+      "name": "Tunner.Platform.ArchitectureTests.BffFoundationTests.HttpsHealthWorksWithoutActivatingAnyIdentity(surface: Admin)",
+      "result": "Passed"
+    },
+    {
+      "name": "Tunner.Platform.ArchitectureTests.BffFoundationTests.RevokedSessionIsDeniedOnTheVeryNextRequest(surface: Admin)",
+      "result": "Passed"
+    },
+    {
+      "name": "Tunner.Platform.ArchitectureTests.BffFoundationTests.FallbackAuthorizationReturnsSafe401WithoutLoginRedirect(surface: User)",
+      "result": "Passed"
+    },
+    {
+      "name": "Tunner.Platform.ArchitectureTests.BffFoundationTests.UnsafeRequestsRejectMissingOpaqueAndForeignOrigins(origin: \"https://user-bff.example.test.outside.example.test\")",
+      "result": "Passed"
+    },
+    {
+      "name": "Tunner.Platform.ArchitectureTests.BffFoundationTests.AnonymousEndpointsDoNotBypassCsrfAndForeignSurfaceTokensFail",
+      "result": "Passed"
+    },
+    {
+      "name": "Tunner.Platform.ArchitectureTests.BffFoundationTests.InvalidServerTicketMetadataNeverAuthenticates(surface: User, kind: \"missing-expiry\")",
+      "result": "Passed"
+    },
+    {
+      "name": "Tunner.Platform.ArchitectureTests.BffFoundationTests.UnsafeRequestsRejectMissingOpaqueAndForeignOrigins(origin: null)",
+      "result": "Passed"
+    },
+    {
+      "name": "Tunner.Platform.ArchitectureTests.BffFoundationTests.EveryUnsafeVerbRequiresAValidBoundCsrfToken(verb: \"PUT\")",
+      "result": "Passed"
+    },
+    {
+      "name": "Tunner.Platform.ArchitectureTests.BffFoundationTests.FrameworkCookiesKeepPrincipalAndTokensOnlyOnServer(surface: Admin)",
+      "result": "Passed"
+    },
+    {
+      "name": "Tunner.Platform.ArchitectureTests.BffFoundationTests.EveryUnsafeVerbRequiresAValidBoundCsrfToken(verb: \"POST\")",
+      "result": "Passed"
+    },
+    {
+      "name": "Tunner.Platform.ArchitectureTests.BffFoundationTests.InvalidServerTicketMetadataNeverAuthenticates(surface: User, kind: \"expired\")",
+      "result": "Passed"
+    },
+    {
+      "name": "Tunner.Platform.ArchitectureTests.BffFoundationTests.InvalidServerTicketMetadataNeverAuthenticates(surface: User, kind: \"missing-issued\")",
+      "result": "Passed"
+    },
+    {
+      "name": "Tunner.Platform.ArchitectureTests.BffFoundationTests.InvalidConfiguredOriginFailsWithoutEchoingInput(origin: \"https://user-bff.example.test/path\")",
+      "result": "Passed"
+    },
+    {
+      "name": "Tunner.Platform.ArchitectureTests.BffFoundationTests.DuplicateSecurityHeadersAreRejected(header: \"X-Tunner-CSRF\")",
+      "result": "Passed"
+    },
+    {
+      "name": "Tunner.Platform.ArchitectureTests.BffFoundationTests.HttpsHealthWorksWithoutActivatingAnyIdentity(surface: User)",
+      "result": "Passed"
+    },
+    {
+      "name": "Tunner.Platform.ArchitectureTests.BffFoundationTests.InvalidConfiguredOriginFailsWithoutEchoingInput(origin: \"https://user-bff.example.test/#x\")",
+      "result": "Passed"
+    },
+    {
+      "name": "Tunner.Platform.ArchitectureTests.BffFoundationTests.DuplicateSurfaceRegistrationAndWeakenedCookieConfigurationFail",
+      "result": "Passed"
+    },
+    {
+      "name": "Tunner.Platform.ArchitectureTests.BffFoundationTests.HttpAndSpoofedForwardedHttpsAreRejected(surface: User)",
+      "result": "Passed"
+    }
+  ],
+  "observability": "PASS: executed functional/redaction checks",
+  "evidence_id": "TUN-P1-019-TEST-RESULTS",
+  "ui": {
+    "build": "PASS",
+    "browser_cases": 13,
+    "token_and_ssr_cases": 25,
+    "skipped": 0,
+    "flaky": 0,
+    "failed": 0,
+    "strict_types": "PASS"
+  }
+}

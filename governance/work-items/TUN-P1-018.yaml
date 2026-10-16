@@ -1,0 +1,55 @@
+schema_version: 1
+work_item_id: TUN-P1-018
+milestone_id: P1
+sprint_id: null
+title: User and Admin shared UI foundation
+status: DONE
+type: UI_FOUNDATION
+authority_refs:
+  - docs/authority/current-authority.json
+  - docs/authority/amendments/AMD-0004/AMD-0004_Shared_Technical_Primitives_Formatting_and_Canonicalization.md
+  - docs/authority/amendments/AMD-0001/effective-overrides/11_Development_Planes_Milestones_and_P0_Backlog.md
+  - docs/authority/baselines/1.6.0/01_Engineering_Technology_Foundation.md
+  - docs/authority/baselines/1.6.0/02_Repository_Solution_and_Module_Architecture.md
+  - docs/authority/baselines/1.6.0/09_Testing_Acceptance_Evidence_and_Quality_Gates.md
+  - docs/authority/baselines/1.6.0/10_UI_UX_Components_Widgets_and_Plugins_Development_Rules.md
+  - docs/authority/baselines/1.6.0/31_UI_UX_Screen_and_Control_Center_Requirements_Matrix.md
+  - docs/authority/baselines/1.6.0/decisions/ADR-0007_Frontend_React_TypeScript_Vite_TailAdmin.md
+  - docs/authority/amendments/AMD-0005/AMD-0005_Authority-First_Decision_Resolution_and_Duplicate-Decision_Prevention.md
+flow_refs: []
+contract_refs: [docs/authority/baselines/1.6.0/10_UI_UX_Components_Widgets_and_Plugins_Development_Rules.md, docs/authority/baselines/1.6.0/31_UI_UX_Screen_and_Control_Center_Requirements_Matrix.md, governance/evidence/TUN-P1-018-DESIGN-SOURCES.json]
+decision_refs: []
+acceptance_criteria:
+  - Implement the selected Figma-backed structural light-theme and shared native controls in web/packages/ui with isolated User/Admin profiles, primitive/semantic/component aliases, versioned content slots and tested accessibility; no new Product screen, workflow, BFF/auth or business-state layer is inferred.
+  - Reuse or extend a compatible existing capability when one exists; do not add a generic Common, Utils, Helpers, or shared-everything layer.
+  - Preserve domain/business semantics as owner concerns and keep technical canonicalization and presentation formatting non-authoritative.
+  - Do not infer Product behavior, user flows, commercial rules, policy values, or public contract semantics beyond cited authority.
+prerequisites: [TUN-P1-002, TUN-P1-005]
+blockers: []
+impact: {architecture: true, ui: true, content: true, sdk: false, financial: false, compliance: false, security: false, devops: false, support: false}
+activated_roles: [full-stack-engineer, solution-architect, ui-ux-engineer, frontend-engineer, end-user-ux-reviewer, content-writer, tester-qa-engineer]
+required_tests: [authority verification, governance validation, role activation calculation and mandatory specialist reviews, bounded expanded context verification, scope-specific deterministic tests and evidence]
+required_evidence: [governance/context/CTX-TUN-P1-018-001.yaml, governance/evidence/TUN-P1-018-VALIDATION.json, governance/evidence/TUN-P1-018-ROLE-REVIEWS.json, governance/evidence/TUN-P1-018-AUTHORITY-RESOLUTION.json, governance/evidence/TUN-P1-018-DESIGN-SOURCES.json, governance/evidence/TUN-P1-018-RD-SOURCES.json, docs/development/P1_STRUCTURAL_UI_THEMING.md, governance/evidence/TUN-P1-018-TEST-RESULTS.json, governance/evidence/TUN-P1-018-CLOSURE.json]
+context_policy: EXPANDED
+todos: []
+defects: []
+authority_resolution:
+  schema_version: 1
+  outcome: RESOLVED_EXISTING_AUTHORITY
+  reviewed_authority_refs: [docs/authority/current-authority.json, docs/authority/baselines/1.6.0/10_UI_UX_Components_Widgets_and_Plugins_Development_Rules.md, docs/authority/baselines/1.6.0/31_UI_UX_Screen_and_Control_Center_Requirements_Matrix.md, docs/authority/baselines/1.6.0/02_Repository_Solution_and_Module_Architecture.md, docs/authority/baselines/1.6.0/decisions/ADR-0007_Frontend_React_TypeScript_Vite_TailAdmin.md, docs/authority/amendments/AMD-0004/AMD-0004_Shared_Technical_Primitives_Formatting_and_Canonicalization.md, docs/authority/amendments/AMD-0005/AMD-0005_Authority-First_Decision_Resolution_and_Duplicate-Decision_Prevention.md]
+  unresolved_question: None for the selected structural light theme and shared controls.
+  conclusion: Existing Documents 10/31, accepted ADR-0007 and inspected canonical User/Admin control references resolve the previously unselected scope. User selected light mode with future mode structure; AA border reconciliation follows existing authority. Prior conclusion remains in Git/evidence.
+  conditional_trigger_absent: false
+  reviewed_at: 2026-10-12T16:18:59.9571690-04:00
+created_at: 2026-10-02T13:20:00-04:00
+updated_at: 2026-10-12T16:40:24.3362386-04:00
+product_acceptance_required: false
+
+git_state:
+  repository_changed: true
+  validated_commit_sha: c928b32f5ccf291a2493bf37e19be3e70604f3e8
+  tested_commit_sha: c928b32f5ccf291a2493bf37e19be3e70604f3e8
+  work_item_commit_shas: [716f6ed3d06feb39c94c01463f1d4e27d3067849, c928b32f5ccf291a2493bf37e19be3e70604f3e8, fd0ee3b11b25706c139552ff3885652e98297534, 4755f89958339ba605b929f2f00d77386bb0f8f9]
+  closure_commit_sha: 4755f89958339ba605b929f2f00d77386bb0f8f9
+  remaining_uncommitted_paths: []
+  remaining_uncommitted_classification: NONE

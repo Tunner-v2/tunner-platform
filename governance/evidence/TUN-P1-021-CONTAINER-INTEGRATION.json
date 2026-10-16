@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "evidence_id": "TUN-P1-021-CONTAINER-INTEGRATION",
+  "scope_type": "WORK_ITEM",
+  "scope_id": "TUN-P1-021",
+  "status": "PASS",
+  "checked_at": "2026-10-03T12:15:00-04:00",
+  "purpose": "Remediate the previously recorded non-blocking live-container test-evidence gap in the P0/P1 implemented-state conformance audit.",
+  "command": "$env:TUNNER_RUN_CONTAINER_TESTS = '1'; dotnet test .\\tests\\Tunner.Database.IntegrationTests\\Tunner.Database.IntegrationTests.csproj --no-restore",
+  "result": {"failed": 0, "passed": 8, "skipped": 0, "total": 8, "duration": "1m10s"},
+  "coverage": ["PostgreSQL transactional persistence", "Redis-backed integration paths"],
+  "boundary": "This evidence validates disposable Testcontainers resources only. It adds no Product behavior, authority, deployment state, or production-readiness claim."
+}

@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "scope_id": "TUN-P1-006",
+  "scope_type": "WORK_ITEM",
+  "validation_kind": "RETROSPECTIVE_COMMITTED",
+  "result": "PASS",
+  "validated_commit_sha": "6fb030241ad0927f0a2576da23d348db1cfceab6",
+  "tested_commit_sha": "6fb030241ad0927f0a2576da23d348db1cfceab6",
+  "owned_behavior_paths": [
+    "docs/development/LOCAL_RABBITMQ_OUTBOX_DISPATCH.md",
+    "src/Tunner.Database/Outbox/EfOutboxDispatchStore.cs",
+    "src/Tunner.Database/Outbox/IOutboxDispatchStore.cs",
+    "src/Tunner.Database/Outbox/PendingOutboxMessage.cs",
+    "src/Tunner.Testing/TestcontainersBaseline.cs",
+    "src/Tunner.Worker/Messaging/IConfirmedOutboxPublisher.cs",
+    "src/Tunner.Worker/Messaging/OutboxDispatchCoordinator.cs",
+    "src/Tunner.Worker/Messaging/RabbitMqConfirmedOutboxPublisher.cs",
+    "tests/Tunner.Worker.Tests/OutboxDispatchCoordinatorTests.cs",
+    "tests/Tunner.Worker.Tests/RabbitMqOutboxIntegrationTests.cs",
+    "tools/validation/Validate-TunnerRabbitMqDispatchSource.ps1"
+  ],
+  "checks": [
+    "Tunner.Worker.Tests: 6/6 PASS, zero skipped, including actual RabbitMQ routed confirmation and persistent envelope, mandatory return, queue-overflow nack and broker outage; failed delivery never marks the outbox published.",
+    "Validate-TunnerRabbitMqDispatchSource.ps1 PASS; platform build zero warnings/errors.",
+    "All 11 owned paths verified with candidate blob == HEAD blob == git hash-object working file; no ownership mismatch."
+  ],
+  "boundary": "Current preserved implementation revalidation owned by TUN-P1-023; original execution claims and historical evidence are unchanged. Governance lifecycle and evidence records are metadata; initial generated dirty files are excluded.",
+  "checked_at": "2026-10-15T15:04:13Z",
+  "execution_receipt": "governance/evidence/TUN-P1-023-EXECUTION-RESULTS.json",
+  "test_receipt_sha256": "e5ab52f15f8973e760dcc3f4ebefc372616f080418daeeedc2f0f973cddb2a73"
+}

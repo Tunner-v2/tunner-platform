@@ -1,0 +1,248 @@
+{
+  "schema_version": 1,
+  "scope_type": "WORK_ITEM",
+  "scope_id": "TUN-P1-023",
+  "validation_kind": "COMMITTED",
+  "result": "PASS",
+  "validated_commit_sha": "6fb030241ad0927f0a2576da23d348db1cfceab6",
+  "tested_commit_sha": "6fb030241ad0927f0a2576da23d348db1cfceab6",
+  "owned_behavior_paths": [
+    "Directory.Packages.props",
+    "docs/authority/current/development/09_Testing_Acceptance_Evidence_and_Quality_Gates.md",
+    "docs/authority/current/mirror-manifest.json",
+    "docs/development/P1_READINESS_REMEDIATION.md",
+    "global.json",
+    "governance/evidence/BOOT-P0-001-integrity.json",
+    "src/Tunner.Testing/TestcontainersBaseline.cs",
+    "tests/Tunner.Database.IntegrationTests/RedisEphemeralStoreIntegrationTests.cs",
+    "tests/Tunner.Platform.ArchitectureTests/AwsR2S3ClientTests.cs",
+    "tests/Tunner.Platform.ArchitectureTests/BffFoundationTests.cs",
+    "tests/Tunner.Platform.ArchitectureTests/RealtimeTransportTests.cs",
+    "tests/Tunner.TestHarness.Tests/TestHarnessBaselineTests.cs",
+    "tests/Tunner.Worker.Tests/OutboxDispatchCoordinatorTests.cs",
+    "tests/Tunner.Worker.Tests/RabbitMqOutboxIntegrationTests.cs",
+    "tests/Tunner.Worker.Tests/Tunner.Worker.Tests.csproj",
+    "tools/validation/Validate-TunnerMigrationsSource.ps1",
+    "tools/validation/Validate-TunnerOpenApiContractSource.ps1"
+  ],
+  "checks": [
+    {
+      "scope": "committed technical changes",
+      "result": "PASS",
+      "platform_tests_passed": 289,
+      "platform_tests_skipped": 0,
+      "ui_unit_tests_passed": 25,
+      "ui_browser_tests_passed": 13,
+      "build_warnings": 0,
+      "build_errors": 0
+    },
+    {
+      "scope": "existing P1 committed readiness",
+      "result": "PASS",
+      "work_items": 22,
+      "findings": []
+    },
+    {
+      "scope": "live R2 provider contract",
+      "result": "PASS",
+      "execution_source": "OPERATOR_SUPPLIED_TERMINAL_OUTPUT",
+      "receipt": "governance/evidence/TUN-P1-023-LIVE-R2-20261016.json",
+      "content_verified": true,
+      "object_cleanup_verified": true,
+      "bootstrap_cleanup_verified": true
+    },
+    {
+      "scope": "current committed ownership and security audit",
+      "result": "PASS",
+      "owned_paths_matched": 17,
+      "nuget_vulnerabilities": 0,
+      "pnpm_vulnerabilities": 0,
+      "secret_scan_files": 1296,
+      "sast_files": 1296
+    }
+  ],
+  "initial_dirty_paths": [
+    "docs/context/current/HANDOFF.md",
+    "docs/context/current/adaptive-selection.json",
+    "docs/context/current/authority.md",
+    "docs/context/current/contracts.md",
+    "docs/context/current/git-changes.md",
+    "docs/context/current/manifest.json",
+    "docs/context/current/relevant-flows.md",
+    "docs/context/current/summary.md",
+    "docs/context/current/tests.md",
+    "docs/project/CURRENT_STATE.md",
+    "docs/project/HANDOFF.md",
+    "docs/project/PROJECT_CONTEXT.md"
+  ],
+  "validation_boundary": "Committed reconciliation behavior is byte-identical to the tested candidate. Completed installer/governance revisions retain separate committed proof. Actual R2 result is operator-supplied. Engineering scope only; no independent human, Product, protected-main or production/release approval.",
+  "checked_at": "2026-10-16T15:22:13Z",
+  "execution_results_ref": "governance/evidence/TUN-P1-023-EXECUTION-RESULTS.json",
+  "role_reviews_ref": "governance/evidence/TUN-P1-023-ROLE-REVIEWS.json",
+  "exact_next_action": "Complete the current P1 engineering gate receipt, then retain VALIDATION until applicable milestone acceptance/release is authorized.",
+  "previous_validation": {
+    "schema_version": 1,
+    "scope_type": "WORK_ITEM",
+    "scope_id": "TUN-P1-023",
+    "validation_kind": "COMMITTED",
+    "result": "PARTIAL",
+    "validated_commit_sha": "6fb030241ad0927f0a2576da23d348db1cfceab6",
+    "tested_commit_sha": "6fb030241ad0927f0a2576da23d348db1cfceab6",
+    "owned_behavior_paths": [
+      "Directory.Packages.props",
+      "docs/authority/current/development/09_Testing_Acceptance_Evidence_and_Quality_Gates.md",
+      "docs/authority/current/mirror-manifest.json",
+      "docs/development/P1_READINESS_REMEDIATION.md",
+      "global.json",
+      "governance/evidence/BOOT-P0-001-integrity.json",
+      "src/Tunner.Testing/TestcontainersBaseline.cs",
+      "tests/Tunner.Database.IntegrationTests/RedisEphemeralStoreIntegrationTests.cs",
+      "tests/Tunner.Platform.ArchitectureTests/AwsR2S3ClientTests.cs",
+      "tests/Tunner.Platform.ArchitectureTests/BffFoundationTests.cs",
+      "tests/Tunner.Platform.ArchitectureTests/RealtimeTransportTests.cs",
+      "tests/Tunner.TestHarness.Tests/TestHarnessBaselineTests.cs",
+      "tests/Tunner.Worker.Tests/OutboxDispatchCoordinatorTests.cs",
+      "tests/Tunner.Worker.Tests/RabbitMqOutboxIntegrationTests.cs",
+      "tests/Tunner.Worker.Tests/Tunner.Worker.Tests.csproj",
+      "tools/validation/Validate-TunnerMigrationsSource.ps1",
+      "tools/validation/Validate-TunnerOpenApiContractSource.ps1"
+    ],
+    "checks": [
+      {
+        "scope": "committed technical changes",
+        "result": "PASS",
+        "platform_tests_passed": 289,
+        "platform_tests_skipped": 0,
+        "ui_unit_tests_passed": 25,
+        "ui_browser_tests_passed": 13,
+        "build_warnings": 0,
+        "build_errors": 0
+      },
+      {
+        "scope": "existing P1 committed readiness",
+        "result": "PASS",
+        "work_items": 22,
+        "findings": []
+      },
+      {
+        "scope": "live R2 provider contract",
+        "result": "NOT_EXECUTED",
+        "blocker": "DEF-TUN-P1-023-R2-001"
+      }
+    ],
+    "initial_dirty_paths": [
+      "docs/context/current/HANDOFF.md",
+      "docs/context/current/adaptive-selection.json",
+      "docs/context/current/authority.md",
+      "docs/context/current/contracts.md",
+      "docs/context/current/git-changes.md",
+      "docs/context/current/manifest.json",
+      "docs/context/current/relevant-flows.md",
+      "docs/context/current/summary.md",
+      "docs/context/current/tests.md",
+      "docs/project/CURRENT_STATE.md",
+      "docs/project/HANDOFF.md",
+      "docs/project/PROJECT_CONTEXT.md"
+    ],
+    "validation_boundary": "TUN-P1-023 technical candidate; live R2 contract awaits installer-provided non-production references and is excluded from any passing component claim.",
+    "checked_at": "2026-10-15T15:15:20Z",
+    "execution_results_ref": "governance/evidence/TUN-P1-023-EXECUTION-RESULTS.json",
+    "role_reviews_ref": "governance/evidence/TUN-P1-023-ROLE-REVIEWS.json",
+    "exact_next_action": "Installer supplies existing dedicated non-production R2 endpoint/bucket/secret references; run put/read/delete with cleanup evidence and repeat blocked final reviews, scope gate and P1 milestone close-check."
+  },
+  "live_r2_receipt_ref": "governance/evidence/TUN-P1-023-LIVE-R2-20261016.json",
+  "owned_git_objects": [
+    {
+      "Path": "Directory.Packages.props",
+      "Blob": "38a52702bf882fcc34cfaaf9bf25775b37de5754",
+      "Match": true
+    },
+    {
+      "Path": "docs/authority/current/development/09_Testing_Acceptance_Evidence_and_Quality_Gates.md",
+      "Blob": "9207b1e3767899d4ed87ea7d321afe19551dde67",
+      "Match": true
+    },
+    {
+      "Path": "docs/authority/current/mirror-manifest.json",
+      "Blob": "f42e1d4ca20a5af794a9529a2c1308abeb06c5bb",
+      "Match": true
+    },
+    {
+      "Path": "docs/development/P1_READINESS_REMEDIATION.md",
+      "Blob": "86bbae7471fbb3b58e4e08aeda8985f2d6259ebf",
+      "Match": true
+    },
+    {
+      "Path": "global.json",
+      "Blob": "6916a33774630d06b6925a2350f0dcd11f276f9b",
+      "Match": true
+    },
+    {
+      "Path": "governance/evidence/BOOT-P0-001-integrity.json",
+      "Blob": "d2a5accbd49ae9273793e097992199694d591568",
+      "Match": true
+    },
+    {
+      "Path": "src/Tunner.Testing/TestcontainersBaseline.cs",
+      "Blob": "46234379064ca1da5ac8c731962893d800c68921",
+      "Match": true
+    },
+    {
+      "Path": "tests/Tunner.Database.IntegrationTests/RedisEphemeralStoreIntegrationTests.cs",
+      "Blob": "424865e07e27889a4227f1ee5a60c769c7fe7809",
+      "Match": true
+    },
+    {
+      "Path": "tests/Tunner.Platform.ArchitectureTests/AwsR2S3ClientTests.cs",
+      "Blob": "7f1902cace6af56078a1a8791f0560d551cda9d6",
+      "Match": true
+    },
+    {
+      "Path": "tests/Tunner.Platform.ArchitectureTests/BffFoundationTests.cs",
+      "Blob": "13176eaf72fd679580d98073d2ad0af63a0b99a7",
+      "Match": true
+    },
+    {
+      "Path": "tests/Tunner.Platform.ArchitectureTests/RealtimeTransportTests.cs",
+      "Blob": "567dfb161fc69d5f8314aed1a53499ed259d176d",
+      "Match": true
+    },
+    {
+      "Path": "tests/Tunner.TestHarness.Tests/TestHarnessBaselineTests.cs",
+      "Blob": "b78299604d22b26e4d79ec16f5df1a895300767b",
+      "Match": true
+    },
+    {
+      "Path": "tests/Tunner.Worker.Tests/OutboxDispatchCoordinatorTests.cs",
+      "Blob": "635e7085cb843ce4ca6611923ec2e751b354704f",
+      "Match": true
+    },
+    {
+      "Path": "tests/Tunner.Worker.Tests/RabbitMqOutboxIntegrationTests.cs",
+      "Blob": "c1ee084307163d2f220e595aef11493b4adda776",
+      "Match": true
+    },
+    {
+      "Path": "tests/Tunner.Worker.Tests/Tunner.Worker.Tests.csproj",
+      "Blob": "4d3a22ae8a8cd9a5b3d02f022896aa843c91ebb6",
+      "Match": true
+    },
+    {
+      "Path": "tools/validation/Validate-TunnerMigrationsSource.ps1",
+      "Blob": "39f50267695b52df5b6e534dcf32fb4f09bb4d68",
+      "Match": true
+    },
+    {
+      "Path": "tools/validation/Validate-TunnerOpenApiContractSource.ps1",
+      "Blob": "e3d15f95ba84d81910305f771b5ac97f776b849e",
+      "Match": true
+    }
+  ],
+  "closure_commit_sha": "8b4388a4bd118c6c4f312cb690f00671ecab614b",
+  "final_work_item_gate": {
+    "result": "READY",
+    "failures": [],
+    "done_transition": "ALLOWED",
+    "product_acceptance_required": false
+  }
+}

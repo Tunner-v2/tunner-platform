@@ -1,0 +1,44 @@
+schema_version: 1
+selection_id: CTX-TUN-P1-001-001
+scope_type: WORK_ITEM
+scope_id: TUN-P1-001
+context_mode: EXPANDED
+included_artifacts:
+  - AGENTS.md
+  - docs/authority/current-authority.json
+  - docs/authority/amendments/AMD-0001/effective-overrides/11_Development_Planes_Milestones_and_P0_Backlog.md
+  - docs/authority/baselines/1.6.0/01_Engineering_Technology_Foundation.md
+  - docs/authority/baselines/1.6.0/02_Repository_Solution_and_Module_Architecture.md
+  - docs/authority/baselines/1.6.0/03_Governed_Development_Lifecycle_Scrum_Git.md
+  - docs/authority/baselines/1.6.0/04_Governance_and_Context_Tooling_Specification.md
+  - docs/authority/baselines/1.6.0/15_Runtime_Communication_and_Infrastructure_Technology_Scope.md
+  - docs/authority/baselines/1.6.0/32_Domain_API_Event_Data_and_Policy_Contract_Catalog.md
+  - docs/authority/baselines/1.6.0/decisions/ADR-0001_Durable_Messaging_RabbitMQ_Outbox_Inbox.md
+  - docs/authority/baselines/1.6.0/decisions/ADR-0002_Redis_Cache_and_SignalR_Backplane.md
+  - docs/authority/baselines/1.6.0/decisions/ADR-0004_Communication_Protocol_Boundaries.md
+  - docs/authority/baselines/1.6.0/decisions/ADR-0012_Object_Storage_Cloudflare_R2.md
+  - governance/milestones/P1.yaml
+  - governance/work-items/TUN-P1-001.yaml
+  - governance/evidence/P0-DEEP-AUDIT-20261001.json
+  - docs/project/CURRENT_STATE.md
+  - docs/development/P1_PLATFORM_FOUNDATION_REFINEMENT.md
+  - .agent/skills/full-stack-engineer/SKILL.md
+  - .agent/skills/solution-architect/SKILL.md
+  - .agent/skills/governance-engineer/SKILL.md
+  - .agent/skills/tester-qa-engineer/SKILL.md
+  - .agent/skills/auditor/SKILL.md
+  - .agent/skills/project-manager/SKILL.md
+  - .agent/skills/business-analyst/SKILL.md
+excluded_artifacts:
+  - Product/domain flow implementation details not required to refine technical primitives
+  - production credentials and runtime secrets
+  - external source retrieval or provider account actions
+  - unselected UX/Figma screens
+exclusion_reasons:
+  Product/domain flow implementation details not required to refine technical primitives: P1 refinement maps foundation boundaries and must not infer Product semantics.
+  production credentials and runtime secrets: no P1 refinement decision needs credentials and sensitive values remain separately controlled.
+  external source retrieval or provider account actions: this refinement uses the verified local authority mirror; live source refresh belongs only to a specifically scoped R&D requirement.
+  unselected UX/Figma screens: UI foundation cannot be designed from unspecified screens or components.
+source_hashes: {}
+tool_version: manual-p1-refinement-context-1.0.0
+created_at: 2026-10-01T22:45:00-04:00

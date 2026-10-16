@@ -1,0 +1,193 @@
+{
+  "schema_version": 1,
+  "checked_head": "bd369caf0dab1320a7816a8d183bb56b22760d95",
+  "next_action": "Affected P1 owners must commit and validate their own preserved implementation before claiming committed readiness. These scope-specific evidence gaps do not globally block independent work.",
+  "scope_id": "P0-011-RV001",
+  "validation_kind": "RETROSPECTIVE_CURRENT_STATE_REVIEW",
+  "historical_validation_not_fabricated": true,
+  "findings": [
+    {
+      "implementation_artifacts_absent_from_HEAD": [],
+      "historical_validation": "COMMITTED_LINEAGE_VERIFIED",
+      "current_review": "COMMITTED_LINEAGE_VERIFIED",
+      "scope_id": "TUN-P1-001",
+      "scope": "Evidence reconciliation only; preserved P1 implementation is not absorbed into P0 remediation.",
+      "validated_commit_sha": "f4a0fd15d3676a16f27724f2e2037691afc9e792",
+      "tested_commit_sha": "f4a0fd15d3676a16f27724f2e2037691afc9e792",
+      "historical_status": "DONE"
+    },
+    {
+      "implementation_artifacts_absent_from_HEAD": [],
+      "historical_validation": "COMMITTED_LINEAGE_VERIFIED",
+      "current_review": "COMMITTED_LINEAGE_VERIFIED",
+      "scope_id": "TUN-P1-002",
+      "scope": "Evidence reconciliation only; preserved P1 implementation is not absorbed into P0 remediation.",
+      "validated_commit_sha": "1d1057914d392f19710e14329c2c29a011c014e7",
+      "tested_commit_sha": "1d1057914d392f19710e14329c2c29a011c014e7",
+      "historical_status": "DONE"
+    },
+    {
+      "implementation_artifacts_absent_from_HEAD": [
+        "src/Tunner.Database/Outbox/OutboxMessage.cs",
+        "src/Tunner.Database/Outbox/ITransactionalOutboxContext.cs",
+        "src/Tunner.Database/Outbox/ITransactionalOutbox.cs",
+        "src/Tunner.Database/Outbox/EfTransactionalOutbox.cs",
+        "src/Tunner.Database/Outbox/OutboxModelConfiguration.cs",
+        "src/Tunner.Database.Migrations/Migrations/20261001230000_P1TransactionalOutbox.cs",
+        "src/Tunner.Database.Migrations/Migrations/TunnerMigrationsDbContextModelSnapshot.cs",
+        "tests/Tunner.Database.IntegrationTests/TransactionalOutboxIntegrationTests.cs"
+      ],
+      "historical_validation": "NOT_PROVEN; ORIGINAL CLAIMS PRESERVED",
+      "current_review": "RETROSPECTIVE_CURRENT_SOURCE_GUARD_PASS; IMPLEMENTATION_NOT_COMMITTED",
+      "scope_id": "TUN-P1-003",
+      "scope": "Evidence reconciliation only; preserved P1 implementation is not absorbed into P0 remediation.",
+      "validated_commit_sha": null,
+      "tested_commit_sha": null,
+      "historical_status": "DONE"
+    },
+    {
+      "implementation_artifacts_absent_from_HEAD": [
+        "tests/Tunner.Platform.ArchitectureTests/OpenApiContractFoundationTests.cs"
+      ],
+      "historical_validation": "NOT_PROVEN; ORIGINAL CLAIMS PRESERVED",
+      "current_review": "RETROSPECTIVE_CURRENT_SOURCE_GUARD_PASS; IMPLEMENTATION_NOT_COMMITTED",
+      "scope_id": "TUN-P1-004",
+      "scope": "Evidence reconciliation only; preserved P1 implementation is not absorbed into P0 remediation.",
+      "validated_commit_sha": null,
+      "tested_commit_sha": null,
+      "historical_status": "DONE"
+    },
+    {
+      "implementation_artifacts_absent_from_HEAD": [],
+      "historical_validation": "COMMITTED_LINEAGE_VERIFIED",
+      "current_review": "COMMITTED_LINEAGE_VERIFIED",
+      "scope_id": "TUN-P1-005",
+      "scope": "Evidence reconciliation only; preserved P1 implementation is not absorbed into P0 remediation.",
+      "validated_commit_sha": "b40c9ef51bf73ab0b27f9bcdfbaa3a6cc77c9c0b",
+      "tested_commit_sha": "b40c9ef51bf73ab0b27f9bcdfbaa3a6cc77c9c0b",
+      "historical_status": "DONE"
+    },
+    {
+      "implementation_artifacts_absent_from_HEAD": [
+        "src/Tunner.Database/Outbox/PendingOutboxMessage.cs",
+        "src/Tunner.Database/Outbox/IOutboxDispatchStore.cs",
+        "src/Tunner.Database/Outbox/EfOutboxDispatchStore.cs",
+        "src/Tunner.Worker/Messaging/IConfirmedOutboxPublisher.cs",
+        "src/Tunner.Worker/Messaging/OutboxDispatchCoordinator.cs",
+        "src/Tunner.Worker/Messaging/RabbitMqConfirmedOutboxPublisher.cs",
+        "tests/Tunner.Worker.Tests/OutboxDispatchCoordinatorTests.cs"
+      ],
+      "historical_validation": "NOT_PROVEN; ORIGINAL CLAIMS PRESERVED",
+      "current_review": "RETROSPECTIVE_CURRENT_SOURCE_GUARD_PASS; IMPLEMENTATION_NOT_COMMITTED",
+      "scope_id": "TUN-P1-006",
+      "scope": "Evidence reconciliation only; preserved P1 implementation is not absorbed into P0 remediation.",
+      "validated_commit_sha": null,
+      "tested_commit_sha": null,
+      "historical_status": "DONE"
+    },
+    {
+      "implementation_artifacts_absent_from_HEAD": [
+        "src/Tunner.Database/DurableWork/DurableWorkItem.cs",
+        "src/Tunner.Database/DurableWork/ConsumerInboxEntry.cs",
+        "src/Tunner.Database/DurableWork/IDurableWorkStore.cs",
+        "src/Tunner.Database/DurableWork/IConsumerInboxStore.cs",
+        "src/Tunner.Database/DurableWork/EfDurableWorkStore.cs",
+        "src/Tunner.Database/DurableWork/EfConsumerInboxStore.cs",
+        "src/Tunner.Database/DurableWork/DurableWorkModelConfiguration.cs",
+        "src/Tunner.Database.Migrations/Migrations/20261002190000_P1DurableWorkInbox.cs",
+        "tests/Tunner.Database.IntegrationTests/DurableWorkInboxIntegrationTests.cs"
+      ],
+      "historical_validation": "NOT_PROVEN; ORIGINAL CLAIMS PRESERVED",
+      "current_review": "RETROSPECTIVE_CURRENT_SOURCE_GUARD_PASS; IMPLEMENTATION_NOT_COMMITTED",
+      "scope_id": "TUN-P1-007",
+      "scope": "Evidence reconciliation only; preserved P1 implementation is not absorbed into P0 remediation.",
+      "validated_commit_sha": null,
+      "tested_commit_sha": null,
+      "historical_status": "DONE"
+    },
+    {
+      "implementation_artifacts_absent_from_HEAD": [
+        "src/Tunner.Platform/Redis/IEphemeralCache.cs",
+        "src/Tunner.Platform/Redis/IEphemeralCoordination.cs",
+        "src/Tunner.Platform/Redis/RedisEphemeralStore.cs",
+        "tests/Tunner.Database.IntegrationTests/RedisEphemeralStoreIntegrationTests.cs"
+      ],
+      "historical_validation": "NOT_PROVEN; ORIGINAL CLAIMS PRESERVED",
+      "current_review": "RETROSPECTIVE_CURRENT_SOURCE_GUARD_PASS; IMPLEMENTATION_NOT_COMMITTED",
+      "scope_id": "TUN-P1-008",
+      "scope": "Evidence reconciliation only; preserved P1 implementation is not absorbed into P0 remediation.",
+      "validated_commit_sha": null,
+      "tested_commit_sha": null,
+      "historical_status": "DONE"
+    },
+    {
+      "implementation_artifacts_absent_from_HEAD": [
+        "src/Tunner.Platform/ObjectStorage/IObjectStorage.cs",
+        "src/Tunner.Platform/ObjectStorage/ObjectStorageAddress.cs",
+        "src/Tunner.Platform/ObjectStorage/ObjectStorageWriteRequest.cs",
+        "src/Tunner.Platform/ObjectStorage/ObjectStorageReadResult.cs",
+        "src/Tunner.Platform/ObjectStorage/R2/IR2S3Client.cs",
+        "src/Tunner.Platform/ObjectStorage/R2/R2ObjectStorage.cs",
+        "src/Tunner.Platform/ObjectStorage/R2/AwsR2S3Client.cs",
+        "tests/Tunner.Platform.ArchitectureTests/R2ObjectStorageTests.cs"
+      ],
+      "historical_validation": "NOT_PROVEN; ORIGINAL CLAIMS PRESERVED",
+      "current_review": "RETROSPECTIVE_CURRENT_SOURCE_GUARD_PASS; IMPLEMENTATION_NOT_COMMITTED",
+      "scope_id": "TUN-P1-009",
+      "scope": "Evidence reconciliation only; preserved P1 implementation is not absorbed into P0 remediation.",
+      "validated_commit_sha": null,
+      "tested_commit_sha": null,
+      "historical_status": "DONE"
+    },
+    {
+      "implementation_artifacts_absent_from_HEAD": [],
+      "historical_validation": "COMMITTED_LINEAGE_VERIFIED",
+      "current_review": "COMMITTED_LINEAGE_VERIFIED",
+      "scope_id": "TUN-P1-010",
+      "scope": "Evidence reconciliation only; preserved P1 implementation is not absorbed into P0 remediation.",
+      "validated_commit_sha": "3b971b5ba443b3d90308b17268a4f61c55a04e6f",
+      "tested_commit_sha": "3b971b5ba443b3d90308b17268a4f61c55a04e6f",
+      "historical_status": "DONE"
+    },
+    {
+      "implementation_artifacts_absent_from_HEAD": [],
+      "historical_validation": "NOT_PROVEN; ORIGINAL CLAIMS PRESERVED",
+      "current_review": "RETROSPECTIVE_CURRENT_SOURCE_GUARD_PASS; IMPLEMENTATION_NOT_COMMITTED",
+      "scope_id": "TUN-P1-011",
+      "scope": "Evidence reconciliation only; preserved P1 implementation is not absorbed into P0 remediation.",
+      "validated_commit_sha": null,
+      "tested_commit_sha": null,
+      "historical_status": "DONE"
+    },
+    {
+      "implementation_artifacts_absent_from_HEAD": [],
+      "historical_validation": "COMMITTED_LINEAGE_VERIFIED",
+      "current_review": "COMMITTED_LINEAGE_VERIFIED",
+      "scope_id": "TUN-P1-012",
+      "scope": "Evidence reconciliation only; preserved P1 implementation is not absorbed into P0 remediation.",
+      "validated_commit_sha": "5ea9c8b1730ac12dcdc2788c97df482774bac3a1",
+      "tested_commit_sha": "5ea9c8b1730ac12dcdc2788c97df482774bac3a1",
+      "historical_status": "DONE"
+    },
+    {
+      "implementation_artifacts_absent_from_HEAD": [],
+      "historical_validation": "COMMITTED_LINEAGE_VERIFIED",
+      "current_review": "COMMITTED_LINEAGE_VERIFIED",
+      "scope_id": "TUN-P1-020",
+      "scope": "Evidence reconciliation only; preserved P1 implementation is not absorbed into P0 remediation.",
+      "validated_commit_sha": "9141f851271ca11dcca64a28053e97fcce89b9ec",
+      "tested_commit_sha": "9141f851271ca11dcca64a28053e97fcce89b9ec",
+      "historical_status": "DONE"
+    },
+    {
+      "implementation_artifacts_absent_from_HEAD": [],
+      "historical_validation": "COMMITTED_LINEAGE_VERIFIED",
+      "current_review": "COMMITTED_LINEAGE_VERIFIED",
+      "scope_id": "TUN-P1-022",
+      "scope": "Evidence reconciliation only; preserved P1 implementation is not absorbed into P0 remediation.",
+      "validated_commit_sha": "8574afb06bc60cccd6761bca1fbe3f6a9be53d26",
+      "tested_commit_sha": "8574afb06bc60cccd6761bca1fbe3f6a9be53d26",
+      "historical_status": "DONE"
+    }
+  ]
+}

@@ -1,0 +1,42 @@
+schema_version: 1
+selection_id: CTX-TUN-P1-011-001
+scope_type: WORK_ITEM
+scope_id: TUN-P1-011
+context_mode: EXPANDED
+included_artifacts:
+  - AGENTS.md
+  - docs/authority/current-authority.json
+  - docs/authority/amendments/AMD-0001/effective-overrides/11_Development_Planes_Milestones_and_P0_Backlog.md
+  - docs/authority/amendments/AMD-0004/AMD-0004_Shared_Technical_Primitives_Formatting_and_Canonicalization.md
+  - docs/authority/baselines/1.6.0/01_Engineering_Technology_Foundation.md
+  - docs/authority/baselines/1.6.0/02_Repository_Solution_and_Module_Architecture.md
+  - docs/authority/baselines/1.6.0/07_API_SDK_Event_and_Connected_Product_Foundation.md
+  - docs/authority/baselines/1.6.0/09_Testing_Acceptance_Evidence_and_Quality_Gates.md
+  - docs/authority/baselines/1.6.0/15_Runtime_Communication_and_Infrastructure_Technology_Scope.md
+  - docs/authority/baselines/1.6.0/decisions/ADR-0004_Communication_Protocol_Boundaries.md
+  - governance/work-items/TUN-P1-005.yaml
+  - governance/work-items/TUN-P1-011.yaml
+  - governance/defects/DEF-TUN-P1-011-001.yaml
+  - docs/development/P1_PLATFORM_FOUNDATION_REFINEMENT.md
+  - docs/development/P1_CAPABILITY_DECOMPOSITION_AND_PRIMITIVE_REUSE.md
+  - docs/development/P1_GRPC_PROTOCOL_ELIGIBILITY_AUDIT.md
+  - docs/project/CURRENT_STATE.md
+  - docs/project/HANDOFF.md
+  - docs/project/PROJECT_CONTEXT.md
+  - src
+  - tests
+  - Directory.Packages.props
+  - .agent/skills/auditor/SKILL.md
+  - .agent/skills/full-stack-engineer/SKILL.md
+  - .agent/skills/governance-engineer/SKILL.md
+  - .agent/skills/solution-architect/SKILL.md
+  - .agent/skills/tester-qa-engineer/SKILL.md
+excluded_artifacts:
+  - Product behavior, Connected Product contract changes, BFF/client implementation, actual gRPC adoption, generated clients, and service extraction
+  - identity, session, security-policy, financial, provider, commercial, compliance, audit, deployment, and release behavior
+exclusion_reasons:
+  Product behavior, Connected Product contract changes, BFF/client implementation, actual gRPC adoption, generated clients, and service extraction: P1-011 evaluates protocol activation eligibility only. These scopes require a future approved feature/process trigger and applicable authority.
+  identity, session, security-policy, financial, provider, commercial, compliance, audit, deployment, and release behavior: No current trigger authorizes these separate owner-domain concerns.
+source_hashes: {}
+tool_version: manual-p1-grpc-protocol-eligibility-context-1.0.0
+created_at: 2026-10-03T02:05:00-04:00

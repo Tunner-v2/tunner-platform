@@ -1,0 +1,431 @@
+{
+  "schema_version": 1,
+  "evidence_id": "TUN-P1-014-TEST-RESULTS",
+  "scope_type": "WORK_ITEM",
+  "scope_id": "TUN-P1-014",
+  "status": "PASS",
+  "tested_commit_sha": "82db541fe675d7a6f22ea96fa4f5abd21e8ad9fb",
+  "total": 71,
+  "passed": 71,
+  "failed": 0,
+  "skipped": 0,
+  "new_audit_unit_cases": 14,
+  "new_audit_postgres_cases": 11,
+  "existing_postgres_regressions": 2,
+  "checked_at": "2026-10-05T21:41:33.5850144+00:00",
+  "suites": [
+    {
+      "profile": "audit_unit",
+      "artifact": "artifacts/tests/TUN-P1-014/P1-014-unit-final.trx",
+      "artifact_sha256": "0daa14ff4e042df2ab3b01ec368323a78573b41fa80b85f29be677c8cc09d023",
+      "total": 14,
+      "passed": 14,
+      "failed": 0,
+      "skipped": 0,
+      "results": [
+        {
+          "name": "Tunner.Database.IntegrationTests.AuditEventTests.InvalidActorTargetsAndOptionalReferencesAreRejected",
+          "outcome": "Passed",
+          "duration": "00:00:00.0035039"
+        },
+        {
+          "name": "Tunner.Database.IntegrationTests.AuditEventTests.RequiredMetadataCannotBeEmpty(missing: \"operation\")",
+          "outcome": "Passed",
+          "duration": "00:00:00.0000167"
+        },
+        {
+          "name": "Tunner.Database.IntegrationTests.AuditEventTests.RequiredMetadataCannotBeEmpty(missing: \"action\")",
+          "outcome": "Passed",
+          "duration": "00:00:00.0000154"
+        },
+        {
+          "name": "Tunner.Database.IntegrationTests.AuditEventTests.RequiredMetadataCannotBeEmpty(missing: \"retention\")",
+          "outcome": "Passed",
+          "duration": "00:00:00.0000225"
+        },
+        {
+          "name": "Tunner.Database.IntegrationTests.AuditEventTests.RequiredMetadataCannotBeEmpty(missing: \"id\")",
+          "outcome": "Passed",
+          "duration": "00:00:00.0000308"
+        },
+        {
+          "name": "Tunner.Database.IntegrationTests.AuditEventTests.OptionalOwnerReferencesRemainOptionalWithoutInventedDefaults",
+          "outcome": "Passed",
+          "duration": "00:00:00.0176473"
+        },
+        {
+          "name": "Tunner.Database.IntegrationTests.AuditEventTests.CallerCollectionsCannotRewriteAnEventOrItsIdentity",
+          "outcome": "Passed",
+          "duration": "00:00:00.0916636"
+        },
+        {
+          "name": "Tunner.Database.IntegrationTests.AuditEventTests.ExactBytesAndIntegrityVersionAreRequired",
+          "outcome": "Passed",
+          "duration": "00:00:00.0012256"
+        },
+        {
+          "name": "Tunner.Database.IntegrationTests.AuditEventTests.RequiredMetadataCannotBeEmpty(missing: \"correlation\")",
+          "outcome": "Passed",
+          "duration": "00:00:00.0002963"
+        },
+        {
+          "name": "Tunner.Database.IntegrationTests.AuditEventTests.EquivalentInstantsHaveTheSameEnvelopeAndExactTimeIsPreserved",
+          "outcome": "Passed",
+          "duration": "00:00:00.0071988"
+        },
+        {
+          "name": "Tunner.Database.IntegrationTests.AuditEventTests.StagingAddsOnlyANewAuditRecordWithoutClaimingDurableSuccess",
+          "outcome": "Passed",
+          "duration": "00:00:01.3017360"
+        },
+        {
+          "name": "Tunner.Database.IntegrationTests.AuditEventTests.RequiredMetadataCannotBeEmpty(missing: \"result\")",
+          "outcome": "Passed",
+          "duration": "00:00:00.0000148"
+        },
+        {
+          "name": "Tunner.Database.IntegrationTests.AuditEventTests.RequiredMetadataCannotBeEmpty(missing: \"classification\")",
+          "outcome": "Passed",
+          "duration": "00:00:00.0114261"
+        },
+        {
+          "name": "Tunner.Database.IntegrationTests.AuditEventTests.EnvelopeCarriesApprovedIdentityVersionAndEvidenceReferences",
+          "outcome": "Passed",
+          "duration": "00:00:00.0198312"
+        }
+      ]
+    },
+    {
+      "profile": "audit_postgres_and_outbox_regression",
+      "artifact": "artifacts/tests/TUN-P1-014/P1-014-postgres-final.trx",
+      "artifact_sha256": "db1d4a52050acb2f5b5f0b0c90b309e8b26ddd537add561ceb3367f7295d2a31",
+      "total": 13,
+      "passed": 13,
+      "failed": 0,
+      "skipped": 0,
+      "results": [
+        {
+          "name": "Tunner.Database.IntegrationTests.AuditAppendIntegrationTests.OrdinarySqlCannotMutateAuditHistory(sql: \"TRUNCATE audit.events\")",
+          "outcome": "Passed",
+          "duration": "00:00:00.0228155"
+        },
+        {
+          "name": "Tunner.Database.IntegrationTests.AuditAppendIntegrationTests.PrivilegedTestCorruptionIsDetectedInEnvelopeOrProjection(projection: False)",
+          "outcome": "Passed",
+          "duration": "00:00:00.0356502"
+        },
+        {
+          "name": "Tunner.Database.IntegrationTests.AuditAppendIntegrationTests.OrdinarySqlCannotMutateAuditHistory(sql: \"UPDATE audit.events SET operation_id = 'changed' W\"···)",
+          "outcome": "Passed",
+          "duration": "00:00:00.0136717"
+        },
+        {
+          "name": "Tunner.Database.IntegrationTests.AuditAppendIntegrationTests.LaterOutboxFailureRollsBackAlreadyFlushedOwnerAndAuditWrites",
+          "outcome": "Passed",
+          "duration": "00:00:00.0918427"
+        },
+        {
+          "name": "Tunner.Database.IntegrationTests.AuditAppendIntegrationTests.MigrationAndRoundTripPreserveCorrelationEnvelopeAndIntegrity",
+          "outcome": "Passed",
+          "duration": "00:00:00.0556309"
+        },
+        {
+          "name": "Tunner.Database.IntegrationTests.AuditAppendIntegrationTests.ARepeatedStableIdIsRejectedAndItsOriginalRecordSurvives",
+          "outcome": "Passed",
+          "duration": "00:00:00.0314943"
+        },
+        {
+          "name": "Tunner.Database.IntegrationTests.AuditAppendIntegrationTests.CancellationAfterFlushCannotLeaveAnAuditOfAnUncommittedOwnerWrite",
+          "outcome": "Passed",
+          "duration": "00:00:00.1701950"
+        },
+        {
+          "name": "Tunner.Database.IntegrationTests.TransactionalOutboxIntegrationTests.PersistsOwnerWriteAndOutboxMessageWhenTheTransactionCommits",
+          "outcome": "Passed",
+          "duration": "00:00:05.4165496"
+        },
+        {
+          "name": "Tunner.Database.IntegrationTests.AuditAppendIntegrationTests.PrivilegedTestCorruptionIsDetectedInEnvelopeOrProjection(projection: True)",
+          "outcome": "Passed",
+          "duration": "00:00:00.0409249"
+        },
+        {
+          "name": "Tunner.Database.IntegrationTests.AuditAppendIntegrationTests.OrdinarySqlCannotMutateAuditHistory(sql: \"DELETE FROM audit.events WHERE event_id = {0}\")",
+          "outcome": "Passed",
+          "duration": "00:00:00.8915853"
+        },
+        {
+          "name": "Tunner.Database.IntegrationTests.TransactionalOutboxIntegrationTests.RollsBackOwnerWriteWhenTheOutboxInsertFails",
+          "outcome": "Passed",
+          "duration": "00:00:12.6665672"
+        },
+        {
+          "name": "Tunner.Database.IntegrationTests.AuditAppendIntegrationTests.ConcurrentSameIdAppendsHaveOneWinner",
+          "outcome": "Passed",
+          "duration": "00:00:00.0331643"
+        },
+        {
+          "name": "Tunner.Database.IntegrationTests.AuditAppendIntegrationTests.OwnerAuditAndOutboxCommitThroughTheExistingTransactionBoundary",
+          "outcome": "Passed",
+          "duration": "00:00:00.0420076"
+        }
+      ]
+    },
+    {
+      "profile": "platform_architecture",
+      "artifact": "artifacts/tests/TUN-P1-014/P1-014-architecture-final.trx",
+      "artifact_sha256": "a4497f1bc10c8072eb5b01a07587ca78f8f94431095d9f170ace09d897a53cbd",
+      "total": 36,
+      "passed": 36,
+      "failed": 0,
+      "skipped": 0,
+      "results": [
+        {
+          "name": "Tunner.Platform.ArchitectureTests.EffectivePolicyVersionResolverTests.InputCollectionsCannotRewriteSelectedVersionEvidence",
+          "outcome": "Passed",
+          "duration": "00:00:00.0228675"
+        },
+        {
+          "name": "Tunner.Platform.ArchitectureTests.RealtimeFoundationTests.RealtimeAudienceRejectsUnsafeKeys(groupName: \"product scope\")",
+          "outcome": "Passed",
+          "duration": "00:00:00.0004315"
+        },
+        {
+          "name": "Tunner.Platform.ArchitectureTests.EffectivePolicyVersionResolverTests.IntervalBoundariesFollowExplicitOwnerInclusion(includesFrom: False, includesUntil: False)",
+          "outcome": "Passed",
+          "duration": "00:00:00.0000108"
+        },
+        {
+          "name": "Tunner.Platform.ArchitectureTests.EffectivePolicyVersionResolverTests.HistoricalEventTimeSelectsExactVersionWithoutCurrentTimeOrLatestVersionBias",
+          "outcome": "Passed",
+          "duration": "00:00:00.0014549"
+        },
+        {
+          "name": "Tunner.Platform.ArchitectureTests.RealtimeFoundationTests.RealtimeFoundationDeniesScopeUntilAnAuthoritativeResolverIsProvided",
+          "outcome": "Passed",
+          "duration": "00:00:00.0027395"
+        },
+        {
+          "name": "Tunner.Platform.ArchitectureTests.RealtimeFoundationTests.RealtimeFoundationHasNoClientSuppliedSubscriptionOrDomainPayload",
+          "outcome": "Passed",
+          "duration": "00:00:00.1578387"
+        },
+        {
+          "name": "Tunner.Platform.ArchitectureTests.EffectivePolicyVersionResolverTests.DuplicateIdentitiesAndNullCandidatesAreInvalidRegardlessOfScope",
+          "outcome": "Passed",
+          "duration": "00:00:00.0008576"
+        },
+        {
+          "name": "Tunner.Platform.ArchitectureTests.HostCompositionTests.ApiHostContainsOnlyTheTechnicalHealthEndpointAtThisFoundationSlice",
+          "outcome": "Passed",
+          "duration": "00:00:00.5269250"
+        },
+        {
+          "name": "Tunner.Platform.ArchitectureTests.EffectivePolicyVersionResolverTests.InvertedAndEmptyIntervalsAreRejected",
+          "outcome": "Passed",
+          "duration": "00:00:00.0010149"
+        },
+        {
+          "name": "Tunner.Platform.ArchitectureTests.RealtimeFoundationTests.RealtimeAudienceAcceptsOnlyOpaqueTechnicalKeys(groupName: \"tunner:scope-001\")",
+          "outcome": "Passed",
+          "duration": "00:00:00.0003003"
+        },
+        {
+          "name": "Tunner.Platform.ArchitectureTests.EffectivePolicyVersionResolverTests.AmbiguityCannotBeBrokenByInputOrderIdOrSupersession",
+          "outcome": "Passed",
+          "duration": "00:00:00.0077829"
+        },
+        {
+          "name": "Tunner.Platform.ArchitectureTests.HostCompositionTests.PlatformFoundationDoesNotReferenceHostsOrDatabase",
+          "outcome": "Passed",
+          "duration": "00:00:00.0047272"
+        },
+        {
+          "name": "Tunner.Platform.ArchitectureTests.EffectivePolicyVersionResolverTests.IntervalBoundariesFollowExplicitOwnerInclusion(includesFrom: True, includesUntil: True)",
+          "outcome": "Passed",
+          "duration": "00:00:00.0006024"
+        },
+        {
+          "name": "Tunner.Platform.ArchitectureTests.OpenApiContractFoundationTests.BuildPublishesAnOpenApi31ContractWithoutProductOperations",
+          "outcome": "Passed",
+          "duration": "00:00:00.1850938"
+        },
+        {
+          "name": "Tunner.Platform.ArchitectureTests.EffectivePolicyVersionResolverTests.IntervalBoundariesFollowExplicitOwnerInclusion(includesFrom: False, includesUntil: True)",
+          "outcome": "Passed",
+          "duration": "00:00:00.0000236"
+        },
+        {
+          "name": "Tunner.Platform.ArchitectureTests.R2ObjectStorageTests.ContractRejectsMissingTechnicalAddressValues",
+          "outcome": "Passed",
+          "duration": "00:00:00.0114286"
+        },
+        {
+          "name": "Tunner.Platform.ArchitectureTests.EffectivePolicyVersionResolverTests.OwnerControlsPrecedenceBySupplyingItsApprovedCandidateCohort",
+          "outcome": "Passed",
+          "duration": "00:00:00.0010271"
+        },
+        {
+          "name": "Tunner.Platform.ArchitectureTests.EffectivePolicyVersionResolverTests.OwnerMaySupplyOpenEndedOrInclusiveSingleInstantInterval",
+          "outcome": "Passed",
+          "duration": "00:00:00.0006659"
+        },
+        {
+          "name": "Tunner.Platform.ArchitectureTests.TechnicalCommandPrimitivesTests.AuthorizationDoesNotAcceptActorFromRequestAndFailsClosedWithoutServerActor",
+          "outcome": "Passed",
+          "duration": "00:00:00.0062204"
+        },
+        {
+          "name": "Tunner.Platform.ArchitectureTests.EffectivePolicyVersionResolverTests.ExactVersionRetainsStatusScopeLineageAndApprovalEvidence",
+          "outcome": "Passed",
+          "duration": "00:00:00.0017050"
+        },
+        {
+          "name": "Tunner.Platform.ArchitectureTests.RealtimeFoundationTests.RealtimeAudienceRejectsUnsafeKeys(groupName: \"customer@example.com\")",
+          "outcome": "Passed",
+          "duration": "00:00:00.0171270"
+        },
+        {
+          "name": "Tunner.Platform.ArchitectureTests.EffectivePolicyVersionResolverTests.MissingOrFailingOwnerEvaluatorsCannotBecomeFallbackResolution",
+          "outcome": "Passed",
+          "duration": "00:00:00.0026539"
+        },
+        {
+          "name": "Tunner.Platform.ArchitectureTests.EffectivePolicyVersionResolverTests.IntervalsCompareAbsoluteInstantsAcrossTimezoneOffsets",
+          "outcome": "Passed",
+          "duration": "00:00:00.0005063"
+        },
+        {
+          "name": "Tunner.Platform.ArchitectureTests.EffectivePolicyVersionResolverTests.MissingResolutionNeverSuppliesAPolicyOrPermissiveDefault",
+          "outcome": "Passed",
+          "duration": "00:00:00.0014530"
+        },
+        {
+          "name": "Tunner.Platform.ArchitectureTests.TechnicalCommandPrimitivesTests.IdempotencyReusesProtectedOperationOnlyWithinOwnerProvidedOpaqueScope",
+          "outcome": "Passed",
+          "duration": "00:00:00.0215776"
+        },
+        {
+          "name": "Tunner.Platform.ArchitectureTests.RealtimeFoundationTests.RealtimeAudienceAcceptsOnlyOpaqueTechnicalKeys(groupName: \"tunner_scope_001\")",
+          "outcome": "Passed",
+          "duration": "00:00:00.0003014"
+        },
+        {
+          "name": "Tunner.Platform.ArchitectureTests.EffectivePolicyVersionResolverTests.IntervalBoundariesFollowExplicitOwnerInclusion(includesFrom: True, includesUntil: False)",
+          "outcome": "Passed",
+          "duration": "00:00:00.0168777"
+        },
+        {
+          "name": "Tunner.Platform.ArchitectureTests.R2ObjectStorageTests.DelegatesOpaqueObjectOperationsThroughTheInjectedR2Seam",
+          "outcome": "Passed",
+          "duration": "00:00:00.0201806"
+        },
+        {
+          "name": "Tunner.Platform.ArchitectureTests.TechnicalCommandPrimitivesTests.MissingEvaluatorFailsClosedWithCanonicalForbiddenScope",
+          "outcome": "Passed",
+          "duration": "00:00:00.0015077"
+        },
+        {
+          "name": "Tunner.Platform.ArchitectureTests.TechnicalCommandPrimitivesTests.ExpectedVersionIsDeterministicAndOwnerControlled",
+          "outcome": "Passed",
+          "duration": "00:00:00.0141664"
+        },
+        {
+          "name": "Tunner.Platform.ArchitectureTests.EffectivePolicyVersionResolverTests.RequestedOwnerScopeDoesNotSelectAnotherProductOrEnvironment",
+          "outcome": "Passed",
+          "duration": "00:00:00.0324232"
+        },
+        {
+          "name": "Tunner.Platform.ArchitectureTests.RealtimeFoundationTests.RealtimeFoundationMapsOnlyAnAuthenticatedBrowserProtectedEndpoint",
+          "outcome": "Passed",
+          "duration": "00:00:00.3025398"
+        },
+        {
+          "name": "Tunner.Platform.ArchitectureTests.EffectivePolicyVersionResolverTests.MissingRequiredMetadataAndSelfSupersessionAreRejected",
+          "outcome": "Passed",
+          "duration": "00:00:00.0058452"
+        },
+        {
+          "name": "Tunner.Platform.ArchitectureTests.EffectivePolicyVersionResolverTests.OwnerEligibilityIsRequiredRatherThanAnAssumedStatusVocabulary",
+          "outcome": "Passed",
+          "duration": "00:00:00.0008257"
+        },
+        {
+          "name": "Tunner.Platform.ArchitectureTests.HostCompositionTests.ApiAndWorkerReferenceTheSharedPlatformAndObservabilityFoundations",
+          "outcome": "Passed",
+          "duration": "00:00:00.0638464"
+        },
+        {
+          "name": "Tunner.Platform.ArchitectureTests.HostCompositionTests.ModuleRegistrationInvokesOnlyExplicitModules",
+          "outcome": "Passed",
+          "duration": "00:00:00.0010150"
+        }
+      ]
+    },
+    {
+      "profile": "worker_regression",
+      "artifact": "artifacts/tests/TUN-P1-014/P1-014-worker-final.trx",
+      "artifact_sha256": "042918d560bc87eb8cb6f9517404025b03741bb4a1427f6790bc5bc34185b353",
+      "total": 4,
+      "passed": 4,
+      "failed": 0,
+      "skipped": 0,
+      "results": [
+        {
+          "name": "Tunner.Worker.Tests.OutboxDispatchCoordinatorTests.RejectsANonPositiveBatchWithoutReadingTheStore",
+          "outcome": "Passed",
+          "duration": "00:00:00.0079690"
+        },
+        {
+          "name": "Tunner.Worker.Tests.OutboxDispatchCoordinatorTests.DispatchesPendingMessagesInStoreOrderAndMarksThemAfterConfirmation",
+          "outcome": "Passed",
+          "duration": "00:00:00.0083454"
+        },
+        {
+          "name": "Tunner.Worker.Tests.OutboxDispatchCoordinatorTests.LeavesTheFailedAndRemainingMessagesPendingWhenConfirmationFails",
+          "outcome": "Passed",
+          "duration": "00:00:00.0023597"
+        },
+        {
+          "name": "Tunner.Worker.Tests.OutboxDispatchCoordinatorTests.DoesNotCountAConditionalMarkThatAnotherDispatcherAlreadyCompleted",
+          "outcome": "Passed",
+          "duration": "00:00:00.0586165"
+        }
+      ]
+    },
+    {
+      "profile": "unit_harness",
+      "artifact": "artifacts/tests/TUN-P1-014/P1-014-harness-final.trx",
+      "artifact_sha256": "06c05c1a8d53a2f50308a93b67bb251652f1d7ce96233e15f5b39fe9d427792a",
+      "total": 4,
+      "passed": 4,
+      "failed": 0,
+      "skipped": 0,
+      "results": [
+        {
+          "name": "Tunner.TestHarness.Tests.TestHarnessBaselineTests.BrowserExecutionIsDisabledWithoutExplicitOptIn",
+          "outcome": "Passed",
+          "duration": "00:00:00.0019651"
+        },
+        {
+          "name": "Tunner.TestHarness.Tests.TestHarnessBaselineTests.PlaywrightSkeletonExposesTheOfficialApiContractWithoutLaunchingABrowser",
+          "outcome": "Passed",
+          "duration": "00:00:00.0149352"
+        },
+        {
+          "name": "Tunner.TestHarness.Tests.TestHarnessBaselineTests.ContainerExecutionIsDisabledWithoutExplicitOptIn",
+          "outcome": "Passed",
+          "duration": "00:00:00.0003940"
+        },
+        {
+          "name": "Tunner.TestHarness.Tests.TestHarnessBaselineTests.TestcontainersBaselineUsesAThrowawayPostgresDescriptor",
+          "outcome": "Passed",
+          "duration": "00:00:00.9534826"
+        }
+      ]
+    }
+  ],
+  "limitations": [
+    "Real PostgreSQL tests use disposable local containers. Raw TRX is ignored; this portable summary preserves executed test names, outcomes and artifact hashes."
+  ]
+}

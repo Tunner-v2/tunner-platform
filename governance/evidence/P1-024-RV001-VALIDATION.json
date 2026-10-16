@@ -1,0 +1,173 @@
+{
+  "schema_version": 1,
+  "scope_id": "P1-024-RV001",
+  "scope_type": "REVISION",
+  "validation_kind": "COMMITTED",
+  "result": "PASS",
+  "validated_commit_sha": "56ff151a8ae362318eb767a7071943732e26f15c",
+  "tested_commit_sha": "56ff151a8ae362318eb767a7071943732e26f15c",
+  "owned_behavior_paths": [
+    "src/Tunner.Installer/LocalOpenBaoSession.cs",
+    "src/Tunner.Installer/LocalR2Setup.cs",
+    "src/Tunner.Installer/Program.cs",
+    "src/Tunner.Platform/Secrets/OpenBaoSecretStore.cs",
+    "tools/dev/setup-r2.ps1",
+    "local-config/r2/.gitignore",
+    "local-config/r2/profile.example.json",
+    "tests/Tunner.Installer.Tests/LocalBootstrapTests.cs",
+    "tests/Tunner.Installer.Tests/OpenBaoIntegrationTests.cs",
+    "local-config/r2/README.md"
+  ],
+  "checks": [
+    "Both platform and installer builds pass with zero warnings/errors.",
+    "All 353 .NET tests pass, zero failed/skipped: 64 installer including disposable OpenBao; 237 architecture/BFF/R2/SignalR, 34 database, 6 worker and 12 harness.",
+    "Real OpenBao 2.7.0 proves exact-path child issuance, first-run CAS=0 creation, repeat-run credential reuse, sibling-path denial, child revocation and temporary-policy removal.",
+    "Negative tests reject remote bootstrap endpoints, non-local environments, invalid/unbounded/overprivileged identities and authorization failures; cleanup remains independent of cancellation.",
+    "Combined workflow preserves the object recovery key and original failure when bootstrap cleanup fails, and never reports Passed unless all required verification succeeds.",
+    "Four production-launcher scenarios pass in PowerShell 7.6.5 and Windows PowerShell 5.1.19041.6456: initial copy, preservation, spaced/custom path and child failure. Dotnet is stubbed for these launcher cases.",
+    "Secrets source validation, secret scan and SAST pass on the committed implementation; source scans inspect 1255 files without a match.",
+    "Ten owned Git objects match candidate, HEAD and worktree. Original TUN-P1-024 work-item and closure evidence records remain unchanged."
+  ],
+  "live_r2_result": "NOT_EXECUTED",
+  "validation_attempts": [
+    "Initial build failed CA1068 cancellation-token parameter order; corrected without suppressing analysis.",
+    "Next build failed CA1861 repeated fixture array; replaced with static readonly fixture data.",
+    "58 initial installer cases including real disposable OpenBao passed. Recovery review then added preservation of the object key and original probe failure if bootstrap cleanup fails; final committed run will include the added cases.",
+    "Initial launcher scenario fixture compared mixed path separators and assumed native -- survives PowerShell function binding; corrected only the harness normalization/last-argument checks. All four scenarios then passed in both runtimes."
+  ],
+  "checked_at": "2026-10-15T21:24:37.9496402+00:00",
+  "receipts": [
+    {
+      "Path": "artifacts/P1-024-RV001/platform/Chacha_Tech_FARHANWAZIR_2026-10-15_17_22_38_net10.0.trx",
+      "Sha256": "8c738ac77f418b98bac76f2b81a96fe211526675ca89fd27d525a62b9bcc0a30",
+      "Total": 12,
+      "Passed": 12,
+      "Failed": 0,
+      "NotExecuted": 0
+    },
+    {
+      "Path": "artifacts/P1-024-RV001/platform/Chacha_Tech_FARHANWAZIR_2026-10-15_17_22_39_net10.0.trx",
+      "Sha256": "3b9e9a11c4a9d92ae95009e6c38c826e5af0e556bea3ccd772e1d2907073e175",
+      "Total": 34,
+      "Passed": 34,
+      "Failed": 0,
+      "NotExecuted": 0
+    },
+    {
+      "Path": "artifacts/P1-024-RV001/platform/Chacha_Tech_FARHANWAZIR_2026-10-15_17_22_40_net10.0.trx",
+      "Sha256": "78a714c75ad5fed364d2325b31c8a4ba6211ee5b7c270be296d4125d84a19faa",
+      "Total": 237,
+      "Passed": 237,
+      "Failed": 0,
+      "NotExecuted": 0
+    },
+    {
+      "Path": "artifacts/P1-024-RV001/platform/Chacha_Tech_FARHANWAZIR_2026-10-15_17_23_11_net10.0.trx",
+      "Sha256": "a624bca3e738012b93dfe99aa6f92fd94e9c455d1520ece823c58c0743dbdf1b",
+      "Total": 6,
+      "Passed": 6,
+      "Failed": 0,
+      "NotExecuted": 0
+    },
+    {
+      "Path": "artifacts/P1-024-RV001/installer/Chacha_Tech_FARHANWAZIR_2026-10-15_17_23_26_net10.0.trx",
+      "Sha256": "c63274714b1e51a31d2510bd9b0bf07a553411169592bc983313f3eedd70fc5a",
+      "Total": 64,
+      "Passed": 64,
+      "Failed": 0,
+      "NotExecuted": 0
+    }
+  ],
+  "owned_git_objects": [
+    {
+      "Path": "src/Tunner.Installer/LocalOpenBaoSession.cs",
+      "Blob": "852a39f490a8ed267b18d1859670a5127d054080",
+      "Match": true
+    },
+    {
+      "Path": "src/Tunner.Installer/LocalR2Setup.cs",
+      "Blob": "79c964df0e170863528f7d04b1aca8df632bab75",
+      "Match": true
+    },
+    {
+      "Path": "src/Tunner.Installer/Program.cs",
+      "Blob": "8fe63862480b427a05c7c2e547afb7e4b7e9c3ee",
+      "Match": true
+    },
+    {
+      "Path": "src/Tunner.Platform/Secrets/OpenBaoSecretStore.cs",
+      "Blob": "2f47de812b46ab51ef913e85ce912cd3fd87c165",
+      "Match": true
+    },
+    {
+      "Path": "tools/dev/setup-r2.ps1",
+      "Blob": "c58bf7b7dc2c0299d0194012ac42d294abc5894f",
+      "Match": true
+    },
+    {
+      "Path": "local-config/r2/.gitignore",
+      "Blob": "b96aa4ed6934810ad29fe3ef8df4fe313d993291",
+      "Match": true
+    },
+    {
+      "Path": "local-config/r2/profile.example.json",
+      "Blob": "49b85cce52912e5ff6902b8d897b45cc1679df6b",
+      "Match": true
+    },
+    {
+      "Path": "tests/Tunner.Installer.Tests/LocalBootstrapTests.cs",
+      "Blob": "1b95e01ac2d6ce97f2d5b0b6775c6e435d9413ba",
+      "Match": true
+    },
+    {
+      "Path": "tests/Tunner.Installer.Tests/OpenBaoIntegrationTests.cs",
+      "Blob": "b04f9b27927316275f882948ee7104f1d7e35823",
+      "Match": true
+    },
+    {
+      "Path": "local-config/r2/README.md",
+      "Blob": "d85fecfce887ca99554f61ced5333ca7f096ee25",
+      "Match": true
+    }
+  ],
+  "platform_tests_passed": 289,
+  "installer_tests_passed": 64,
+  "combined_tests_passed": 353,
+  "failed": 0,
+  "skipped": 0,
+  "build_warnings": 0,
+  "build_errors": 0,
+  "launcher_validation": {
+    "powershell7_passed": 4,
+    "windows_powershell51_passed": 4,
+    "production_script": "tools/dev/setup-r2.ps1",
+    "reproduction_script": "$tunnerActualRoot = $PWD.Path\n$tunnerLauncher = Join-Path $tunnerActualRoot 'tools/dev/setup-r2.ps1'\n$tunnerFixtureBase = [IO.Path]::GetFullPath((Join-Path $tunnerActualRoot 'artifacts/P1-024-RV001'))\n$tunnerFixtureRoot = Join-Path $tunnerFixtureBase ('launcher-fixture-' + [Guid]::NewGuid().ToString('N'))\n$global:tunnerLauncherFixture = [pscustomobject]@{ Root=$tunnerFixtureRoot; Code=0; Arguments=@(); Calls=0 }\nfunction Import-Module { }\nfunction Resolve-TunnerRepositoryRoot { $global:tunnerLauncherFixture.Root }\nfunction dotnet {\n $global:tunnerLauncherFixture.Arguments = @($args)\n $global:tunnerLauncherFixture.Calls++\n $global:LASTEXITCODE = $global:tunnerLauncherFixture.Code\n}\ntry {\n [void][IO.Directory]::CreateDirectory((Join-Path $tunnerFixtureRoot 'local-config/r2'))\n $tunnerFixtureTemplate = Join-Path $tunnerFixtureRoot 'local-config/r2/profile.example.json'\n [IO.File]::Copy((Join-Path $tunnerActualRoot 'local-config/r2/profile.example.json'),$tunnerFixtureTemplate,$false)\n $tunnerExpected = [IO.File]::ReadAllText($tunnerFixtureTemplate)\n & $tunnerLauncher\n $tunnerDefaultProfile = [IO.Path]::GetFullPath((Join-Path $tunnerFixtureRoot 'local-config/r2/profile.json'))\n if ([IO.File]::ReadAllText($tunnerDefaultProfile) -ne $tunnerExpected -or $global:tunnerLauncherFixture.Arguments -notcontains 'local-r2' -or $global:tunnerLauncherFixture.Arguments[-1] -ne $tunnerDefaultProfile) { throw 'First-run copy or invocation failed.' }\n [IO.File]::WriteAllText($tunnerDefaultProfile,'preserve-existing-profile-bytes')\n & $tunnerLauncher\n if ([IO.File]::ReadAllText($tunnerDefaultProfile) -ne 'preserve-existing-profile-bytes') { throw 'Existing profile was overwritten.' }\n $tunnerAlternate = [IO.Path]::GetFullPath((Join-Path $tunnerFixtureRoot 'local-config/r2/path with spaces/profile.json'))\n & $tunnerLauncher -ProfilePath $tunnerAlternate\n if ([IO.File]::ReadAllText($tunnerAlternate) -ne $tunnerExpected -or $global:tunnerLauncherFixture.Arguments[-1] -ne $tunnerAlternate) { throw 'Alternate profile path handling failed.' }\n $global:tunnerLauncherFixture.Code = 7\n $tunnerFailedAsExpected = $false\n try { & $tunnerLauncher } catch { $tunnerFailedAsExpected = $_.Exception.Message.StartsWith('Local R2 setup/validation failed.') }\n if (-not $tunnerFailedAsExpected -or $global:tunnerLauncherFixture.Calls -ne 4) { throw 'Child failure did not propagate.' }\n Write-Output ('Launcher production-script scenarios: PASS 4/4; PowerShell ' + $PSVersionTable.PSVersion.ToString() + '; dotnet stubbed, no credentials or provider calls.')\n}\nfinally {\n Set-Location -LiteralPath $tunnerActualRoot\n $tunnerFixtureResolved = [IO.Path]::GetFullPath($tunnerFixtureRoot)\n if (-not $tunnerFixtureResolved.StartsWith($tunnerFixtureBase + [IO.Path]::DirectorySeparatorChar,[StringComparison]::OrdinalIgnoreCase)) { throw 'Fixture cleanup outside intended artifact directory.' }\n if (Test-Path -LiteralPath $tunnerFixtureResolved) { Remove-Item -LiteralPath $tunnerFixtureResolved -Recurse -Force }\n Remove-Variable tunnerLauncherFixture -Scope Global -ErrorAction SilentlyContinue\n}",
+    "provider_requests": "NONE; dotnet is replaced by a command double",
+    "receipts": [
+      {
+        "Path": "artifacts/P1-024-RV001/launcher-pwsh7.txt",
+        "Sha256": "e9c9ea2c4b62281a0d41aaaf1f82e8efdc278be7e801261884e0787b9461adb9"
+      },
+      {
+        "Path": "artifacts/P1-024-RV001/launcher-windows51.txt",
+        "Sha256": "e96845a0772f179d854dffcc6adff4f67baf354b971e65e878ecfc1298724ed9"
+      }
+    ]
+  },
+  "boundary": "No real operator root/scoped token or R2 key was received by the agent; no live OpenBao policy/token change or R2 request was made. One operator-private bootstrap login is required by the new local flow. TUN-P1-023 and its live-provider prerequisite remain open.",
+  "final_security_checks": {
+    "secret_scan_files": 1264,
+    "secret_scan_matches": 0,
+    "sast_files": 1264,
+    "sast_matches": 0,
+    "governance_records": 439,
+    "governance_diagnostics": [],
+    "original_installer_closure_unchanged": true
+  },
+  "closure_commit_sha": "3daf63ecf70970dad952cd13978db1a69c218493",
+  "native_closure": {
+    "close_check": "PASS",
+    "closed_transition": "ALLOWED",
+    "closure_commit_sha": "3daf63ecf70970dad952cd13978db1a69c218493"
+  }
+}

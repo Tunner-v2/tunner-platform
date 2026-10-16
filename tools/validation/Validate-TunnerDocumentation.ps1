@@ -60,7 +60,7 @@ function Test-GovernanceIdentifiers {
     $recordTypes = @(
         @('milestones', 'milestone_id'), @('sprints', 'sprint_id'), @('work-items', 'work_item_id'), @('dependencies', 'dependency_id'),
         @('todos', 'id'), @('defects', 'defect_id'), @('reopens', 'reopen_id'), @('decisions', 'decision_id'),
-        @('gates', 'gate_id'), @('releases', 'release_id'), @('context', 'selection_id')
+        @('gates', 'gate_id'), @('releases', 'release_id'), @('context', 'selection_id'), @('revisions', 'revision_id')
     )
     foreach ($recordType in $recordTypes) {
         $directory = Join-Path (Join-Path $repositoryRoot 'governance') $recordType[0]
@@ -89,7 +89,10 @@ function Test-AuthorityHeaders {
             $hasAuthority = if ($isDecisionRecord) {
                 @($header | Where-Object { $_ -match '^#\s+(ADR|PDR)-[0-9]+' }).Count -gt 0
             } else {
-                @($header | Where-Object { $_ -match '^>\s+\*\*Tunner Development Authority (Package|Amendment)\*\*' }).Count -gt 0
+                @($header | Where-Object {
+                    $_ -match '^>\s+\*\*Tunner Development Authority (Package|Amendment)\*\*' -or
+                    $_ -match '^#\s+Tunner Development Authority Amendment\s*$'
+                }).Count -gt 0
             }
             $hasStatus = if ($isDecisionRecord) {
                 @($header | Where-Object { $_ -match '^\*\*Status:\*\*' }).Count -gt 0

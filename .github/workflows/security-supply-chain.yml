@@ -24,11 +24,26 @@ jobs:
         with:
           global-json-file: global.json
       - name: Restore
-        run: dotnet restore Tunner.Governance.sln
+        run: |
+          dotnet restore Tunner.Governance.sln
+          dotnet restore Tunner.Platform.slnx
+          dotnet restore tests/Tunner.Installer.Tests
+          dotnet restore tests/Tunner.AuditRemediation.FunctionalTests
       - name: Build
-        run: dotnet build Tunner.Governance.sln --no-restore
+        run: |
+          dotnet build Tunner.Governance.sln --no-restore
+          dotnet build Tunner.Platform.slnx --no-restore
+          dotnet build tests/Tunner.Installer.Tests --no-restore
       - name: Governance functional checks
         run: dotnet run --project tests/Tunner.Governance.FunctionalTests --no-restore
+      - name: Platform and installer tests
+        env:
+          TUNNER_RUN_CONTAINER_TESTS: "1"
+        run: |
+          dotnet test Tunner.Platform.slnx --no-build --no-restore --logger trx --results-directory artifacts/ci-tests/platform
+          dotnet test tests/Tunner.Installer.Tests --no-build --no-restore --logger trx --results-directory artifacts/ci-tests/installer
+          dotnet run --project tests/Tunner.Observability.FunctionalTests --no-build --no-restore
+          dotnet run --project tests/Tunner.AuditRemediation.FunctionalTests --no-restore
       - name: Static security baseline validation
         shell: pwsh
         run: ./tools/validation/Validate-TunnerSecuritySupplyChainSource.ps1 -RepositoryRoot $PWD
@@ -39,7 +54,9 @@ jobs:
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: supply-chain-evidence-${{ github.sha }}
-          path: artifacts/supply-chain/
+          path: |
+            artifacts/supply-chain/
+            artifacts/ci-tests/
           if-no-files-found: error
           retention-days: 14
 
@@ -68,3 +85,39 @@ jobs:
           ignore-unfixed: true
           exit-code: '1'
           format: table
+  web-validation:
+    name: Web build tests and dependency audit
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout triggering revision
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - name: Set up supported Node.js
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1
+        with:
+          node-version: '24'
+          package-manager-cache: false
+      - name: Use the repository-pinned pnpm
+        run: corepack enable
+      - name: Install locked frontend dependencies
+        working-directory: web
+        run: pnpm install --frozen-lockfile
+      - name: Build and test shared UI
+        working-directory: web
+        run: |
+          pnpm build
+          pnpm test
+          pnpm exec playwright install --with-deps msedge
+          pnpm test:browser
+      - name: Frontend dependency audit
+        working-directory: web
+        run: pnpm audit --json > test-results/dependency-audit.json
+      - name: Retain browser and dependency evidence
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        with:
+          name: web-validation-${{ github.sha }}
+          path: web/test-results/
+          if-no-files-found: error
+          retention-days: 14

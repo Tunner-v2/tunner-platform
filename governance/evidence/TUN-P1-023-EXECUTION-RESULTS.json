@@ -1,0 +1,343 @@
+{
+  "schema_version": 1,
+  "scope_id": "TUN-P1-023",
+  "status": "PASS",
+  "technical_candidate_sha": "6fb030241ad0927f0a2576da23d348db1cfceab6",
+  "governance_candidate_sha": "c37a720e1618f5acc69ab417d6886009b59f6575",
+  "checked_at": "2026-10-16T15:22:13Z",
+  "execution": {
+    "platform_build": {
+      "result": "PASS",
+      "warnings": 0,
+      "errors": 0
+    },
+    "platform_tests": {
+      "result": "PASS",
+      "passed": 289,
+      "failed": 0,
+      "skipped": 0,
+      "projects": {
+        "architecture_bff_r2_signalr": 237,
+        "database": 34,
+        "worker": 6,
+        "harness": 12
+      },
+      "receipts": [
+        {
+          "sha256": "7d1403b6cb135d7cab7b821bd033a097053c81178f3110c6ab59ba47de067e66",
+          "total": "12",
+          "passed": "12",
+          "failed": "0",
+          "notExecuted": "0",
+          "path": "artifacts/P1-reconciliation-20261015/final/Chacha_Tech_FARHANWAZIR_2026-10-15_10_57_02_net10.0.trx"
+        },
+        {
+          "sha256": "6ccae88534d94a232aea3e783f540f3035932f6367f5873a0e41d2c6021432d8",
+          "total": "34",
+          "passed": "34",
+          "failed": "0",
+          "notExecuted": "0",
+          "path": "artifacts/P1-reconciliation-20261015/final/Chacha_Tech_FARHANWAZIR_2026-10-15_10_57_02_net10.0[1].trx"
+        },
+        {
+          "sha256": "2c5edbc9047c083915cf51d0947469fa96e7c6ca88ea3c7f2254c0b5536f0711",
+          "total": "237",
+          "passed": "237",
+          "failed": "0",
+          "notExecuted": "0",
+          "path": "artifacts/P1-reconciliation-20261015/final/Chacha_Tech_FARHANWAZIR_2026-10-15_10_57_04_net10.0.trx"
+        },
+        {
+          "sha256": "e5ab52f15f8973e760dcc3f4ebefc372616f080418daeeedc2f0f973cddb2a73",
+          "total": "6",
+          "passed": "6",
+          "failed": "0",
+          "notExecuted": "0",
+          "path": "artifacts/P1-reconciliation-20261015/final/Chacha_Tech_FARHANWAZIR_2026-10-15_10_57_32_net10.0.trx"
+        }
+      ]
+    },
+    "governance_functional": {
+      "result": "PASS",
+      "rv_assertions": 60,
+      "latest_committed_proof": {
+        "result": "PASS",
+        "validated_sha": "6051f0aa258e11262b1edb6c1501837b05db623d",
+        "rv_assertions": 60,
+        "new_native_committed_proof_cases": 15,
+        "evidence": "governance/evidence/P0-004-RV002-VALIDATION.json"
+      }
+    },
+    "observability_functional": {
+      "result": "PASS"
+    },
+    "ui": {
+      "unit_contract_cases": 25,
+      "browser_cases": 13,
+      "build": "PASS",
+      "typecheck": "PASS",
+      "advisories": 0
+    },
+    "source_guards": {
+      "result": "PASS",
+      "scopes": [
+        "RabbitMQ",
+        "durable work/inbox",
+        "Redis",
+        "R2",
+        "gRPC eligibility",
+        "SignalR",
+        "host composition",
+        "test harness",
+        "OpenAPI",
+        "outbox",
+        "migrations"
+      ]
+    },
+    "security": {
+      "nuget_vulnerable_packages": 0,
+      "nuget_source": "https://api.nuget.org/v3/index.json",
+      "secret_scan_files": 1187,
+      "secret_scan_matches": 0,
+      "sast_files": 1187,
+      "sast_matches": 0,
+      "selected_sdk": "10.0.402",
+      "selected_host_runtime": "10.0.13",
+      "serviced_aspnet_runtime": "10.0.13",
+      "host_restart_requested_by_installer": true,
+      "older_side_by_side_runtimes_retained": true,
+      "latest_refresh": {
+        "checked_at": "2026-10-16T15:22:13Z",
+        "nuget_vulnerabilities": 0,
+        "pnpm_vulnerabilities": 0,
+        "secret_scan_files": 1296,
+        "secret_scan_matches": 0,
+        "sast_files": 1296,
+        "sast_matches": 0,
+        "selected_sdk": "10.0.402",
+        "selected_runtime": "10.0.13",
+        "source_behavior_unchanged": true
+      }
+    },
+    "authority": {
+      "verified_artifacts": 168,
+      "byte_exact_checkout_checks": 168,
+      "locked_baseline_modified": false
+    },
+    "project_memory": {
+      "result": "PASS",
+      "focused_cases": 7,
+      "candidate_sha": "1c0e7e1fa47bbf32fd5bafcd0f9da694487ec439",
+      "closure_sha": "3d77b5cc3caf1723adcffeea0e7082cd40bc8d99",
+      "fresh_recovery": "PASS",
+      "actual_project_state": "PASS",
+      "context_verify": "CURRENT"
+    }
+  },
+  "live_r2": {
+    "result": "PASS",
+    "execution_source": "OPERATOR_SUPPLIED_TERMINAL_OUTPUT",
+    "receipt": "governance/evidence/TUN-P1-023-LIVE-R2-20261016.json",
+    "ObjectKey": "tunner-contract-tests/daae208000d7486fa462fdafed7b168f",
+    "ContentVerified": true,
+    "CleanupVerified": true,
+    "ProbeFailureCode": null,
+    "BootstrapCleanupVerified": true,
+    "FailureCode": null,
+    "Passed": true
+  },
+  "failed_attempts": [
+    "An early governance fixture omitted required nested git_state fields; corrected before passing final governance execution.",
+    "The initial full-suite run with explicit container opt-in exposed a harness test that assumed the inherited variable was unset. The test now checks absent, blank, 0, true and explicit 1 values while restoring inherited state; final 12 cases passed.",
+    "The SDK fixture property Token caused generic-secret-assignment scanner false positives for cancellationToken assignments. Renamed observation only; scanner rules unchanged; final scan passed.",
+    "The security servicing update exposed old exact-version guards for EF/OpenAPI; guards now pin reviewed fixed 10.0.13.",
+    "Auto-review rejected a broad evidence/state PASS update because it could misrepresent unresolved R2 scope. No rejected changes were applied; subsequent evidence requires verified per-scope ownership and actual receipts.",
+    "Final project-memory source guard rejected omitted old CLOSED P0-RV001 in a deliberately bounded summary. New P0-RV003 preserves closure and corrects the validator; seven focused checks and final actual project-state/fresh-recovery validation pass.",
+    {
+      "at": "2026-10-16T15:22:13Z",
+      "scope": "fresh dependency advisory refresh",
+      "result": "NETWORK_SANDBOX_RETRY",
+      "detail": "Initial NuGet socket access was blocked and pnpm fetch failed. Both read-only public-registry audits then passed after authorized network execution; no failed audit was waived."
+    }
+  ],
+  "review_method": "Engineering reviews by the executing agent; no independent human, Product, security-release or protected-main merge approval implied.",
+  "exact_next_action": "Complete the current P1 engineering gate receipt, then retain VALIDATION until applicable milestone acceptance/release is authorized.",
+  "initial_dirty_paths": [
+    "docs/context/current/HANDOFF.md",
+    "docs/context/current/adaptive-selection.json",
+    "docs/context/current/authority.md",
+    "docs/context/current/contracts.md",
+    "docs/context/current/git-changes.md",
+    "docs/context/current/manifest.json",
+    "docs/context/current/relevant-flows.md",
+    "docs/context/current/summary.md",
+    "docs/context/current/tests.md",
+    "docs/project/CURRENT_STATE.md",
+    "docs/project/HANDOFF.md",
+    "docs/project/PROJECT_CONTEXT.md"
+  ],
+  "existing_p1_committed_readiness": {
+    "command": "tunner governance commit-readiness audit --milestone P1",
+    "result": "PASS",
+    "findings": [],
+    "checked_at": "2026-10-15T22:09:54Z",
+    "receipt": "artifacts/P1-024-RV001/final-p1-committed-readiness.txt",
+    "receipt_sha256": "40127aef8da9c87afe0fb3200dac969a29ca6a881edff117f68f770cb2ef00a1",
+    "scope": "All completed P1 work items including original installer and explicit same-scope closed revisions."
+  },
+  "gap_register_summary": {
+    "total": 20,
+    "resolved": 20,
+    "partial": 0,
+    "blocked": 0
+  },
+  "final_milestone_close_check": {
+    "result": "SEE_CURRENT_NATIVE_GATE_RECEIPT",
+    "receipt": "governance/evidence/P1-ENGINEERING-VALIDATION-20261016.json"
+  },
+  "previous_live_r2_prerequisite": {
+    "result": "NOT_EXECUTED",
+    "reason": "Installer-provided existing non-production endpoint, dedicated bucket and bucket-scoped secret-store/OpenBao references are unavailable. User forbids invented endpoint/bucket/path/environment names and requires installer configuration.",
+    "defect_id": "DEF-TUN-P1-023-R2-001"
+  },
+  "setup_progress": {
+    "recorded_at": "2026-10-15T19:50:40Z",
+    "observed_commit_sha": "628ee60ef75c5b0aa85e81e359b78e259770d096",
+    "bucket": "tunner",
+    "bucket_environment": "DEDICATED_NON_PRODUCTION_CONFIRMED_BY_OPERATOR",
+    "confirmation_source": "Direct operator reply in this task",
+    "policy_application": "OPERATOR_REPORTED_SUCCESS",
+    "openbao_health": {
+      "Endpoint": "http://127.0.0.1:28200",
+      "HttpStatus": 200,
+      "Initialized": true,
+      "Sealed": false,
+      "Standby": false,
+      "CredentialsUsed": false
+    },
+    "health_observed_at": "2026-10-15T19:48:16.3038744+00:00",
+    "installer_setup": "OPERATOR_REPORTED_COMPLETE",
+    "supplied_profile_locator": "tunner",
+    "saved_profile_path_verified": false,
+    "exact_credential_references_verified": false,
+    "live_r2_requests_executed": false,
+    "private_credentials_received": false
+  },
+  "previous_final_milestone_close_check": {
+    "outcome": "NOT_READY",
+    "existing_work_item_gates_passed": 22,
+    "failures": [
+      "work item is not DONE: TUN-P1-023 (VALIDATION)",
+      "P1 defect remains open: DEF-TUN-P1-023-R2-001 (OPEN)",
+      "milestone role-review evidence is malformed or not PASS: governance/evidence/P1-MILESTONE-ROLE-REVIEWS.json"
+    ],
+    "reason": "Explicit pending live R2 installer configuration and its derived acceptance conditions; no missing implementation or evidence is silently waived."
+  },
+  "repository_local_configuration": {
+    "recorded_at": "2026-10-15T19:59:48.7018971+00:00",
+    "owning_work_item": "TUN-P1-023",
+    "authorization": "Direct operator request to create repository-local storage for non-secret configuration",
+    "directory": "local-config/r2",
+    "profile_path": "local-config/r2/profile.json",
+    "documentation": "local-config/r2/README.md",
+    "profiles_tracked": false,
+    "credentials_stored": false,
+    "profile_created": false,
+    "existing_profile_overwritten": false,
+    "new_bucket_required": false,
+    "live_r2_result": "NOT_EXECUTED",
+    "scope": "Directory, ignore rules and active P1 setup documentation only; installer and storage behavior unchanged.",
+    "verification": {
+      "validated_commit_sha": "883fb0e952edeea8002c265a3f4d09b49d572fbf",
+      "checked_at": "2026-10-15T20:02:07.9654039+00:00",
+      "owned_paths_match_commit": true,
+      "git_ignore_cases_passed": 6,
+      "secret_scan_files": 4,
+      "secret_scan_matches": 0,
+      "governance_valid": true,
+      "governance_records": 429,
+      "directory_exists": true,
+      "profile_created": false,
+      "product_tests_rerun": false,
+      "test_scope": "Directory existence, local-profile ignore rules, committed ownership, secret scan and governance schema; no source or runtime configuration behavior changed.",
+      "review_method": "Executing-agent DevOps and security scope check: references only in local profiles, private credential entry retained, no public R2 access required, existing closed records unchanged.",
+      "live_r2_acceptance": "NOT_EXECUTED"
+    }
+  },
+  "live_r2_history": [
+    {
+      "result": "NOT_EXECUTED",
+      "reason": "The operator confirms bucket tunner is dedicated to non-production integration tests and reports setup-r2 complete. The supplied profile locator tunner has not resolved to a saved profile; the full path and installed credential references remain unverified. Live testing still requires interactive private scoped-token entry and actual content/cleanup receipts.",
+      "defect_id": "DEF-TUN-P1-023-R2-001"
+    },
+    {
+      "result": "NOT_EXECUTED",
+      "reason": "The confirmed dedicated non-production bucket and operator-supplied references are retained in local configuration. Closed P1-024-RV001 automates scoped identity acquisition and credential creation/reuse. Actual provider validation requires the private operator run of tools/dev/setup-r2.ps1; no real authentication material has been received by the agent.",
+      "defect_id": "DEF-TUN-P1-023-R2-001"
+    }
+  ],
+  "automatic_local_setup": {
+    "revision": "P1-024-RV001",
+    "status": "CLOSED",
+    "validated_commit_sha": "56ff151a8ae362318eb767a7071943732e26f15c",
+    "closure_commit_sha": "3daf63ecf70970dad952cd13978db1a69c218493",
+    "installer_cases_passed": 64,
+    "platform_cases_passed": 289,
+    "skipped": 0,
+    "role_review_scope": "Nine executing-agent scoped local implementation reviews; no independent human or live provider approval.",
+    "live_r2_result": "PASS",
+    "evidence": "governance/evidence/P1-024-RV001-VALIDATION.json",
+    "runbook": "docs/development/R2_AUTOMATIC_LOCAL_SETUP.md",
+    "live_r2_receipt": "governance/evidence/TUN-P1-023-LIVE-R2-20261016.json"
+  },
+  "committed_revision_proof": {
+    "correction_revision": "P0-004-RV002",
+    "validated_commit_sha": "6051f0aa258e11262b1edb6c1501837b05db623d",
+    "closure_commit_sha": "d9a8f6eb8352a63c818827d5af8115935ac94d2c",
+    "shared_test_revisions": [
+      "P1-020-RV001",
+      "P1-022-RV001"
+    ],
+    "shared_test_closure_commit_sha": "979643cf59161888a8710eaaec047043db9d32c8",
+    "result": "PASS",
+    "new_native_proof_checks": 15,
+    "existing_rv_checks": 60,
+    "evidence": "governance/evidence/P0-004-RV002-VALIDATION.json",
+    "native_p1_audit": {
+      "command": "tunner governance commit-readiness audit --milestone P1",
+      "result": "PASS",
+      "findings": [],
+      "checked_at": "2026-10-15T22:09:54Z",
+      "receipt": "artifacts/P1-024-RV001/final-p1-committed-readiness.txt",
+      "receipt_sha256": "40127aef8da9c87afe0fb3200dac969a29ca6a881edff117f68f770cb2ef00a1"
+    }
+  },
+  "previous_existing_p1_committed_readiness": {
+    "result": "PASS",
+    "work_items": 22,
+    "findings": [],
+    "command": "tunner governance commit-readiness audit --milestone P1"
+  },
+  "work_item_completion": {
+    "status": "DONE",
+    "closure_commit_sha": "8b4388a4bd118c6c4f312cb690f00671ecab614b",
+    "gate": "READY",
+    "transition": "ALLOWED",
+    "validated_sha": "6fb030241ad0927f0a2576da23d348db1cfceab6"
+  },
+  "final_engineering_gate_receipt": "governance/evidence/P1-ENGINEERING-VALIDATION-20261016.json",
+  "final_milestone_close_check_history": [
+    {
+      "outcome": "NOT_READY",
+      "existing_work_item_gates_passed": 23,
+      "failures": [
+        "work item is not DONE: TUN-P1-023 (VALIDATION)",
+        "P1 defect remains open: DEF-TUN-P1-023-R2-001 (OPEN)",
+        "milestone role-review evidence is malformed or not PASS: governance/evidence/P1-MILESTONE-ROLE-REVIEWS.json"
+      ],
+      "reason": "Native close-check still reports exactly the pending TUN-P1-023 state, its OPEN R2 prerequisite and BLOCKED milestone reviews. Bucket isolation is now operator-confirmed, but no live R2 acceptance receipt exists.",
+      "recorded_at": "2026-10-15T19:50:40Z",
+      "checked_commit_sha": "628ee60ef75c5b0aa85e81e359b78e259770d096"
+    }
+  ]
+}

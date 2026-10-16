@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "evidence_id": "TUN-P1-010-RD-SOURCES",
+  "scope_type": "WORK_ITEM",
+  "scope_id": "TUN-P1-010",
+  "status": "PASS",
+  "reviewed_at": "2026-10-03T00:45:00-04:00",
+  "sources": [
+    {"title":"ASP.NET Core SignalR configuration","url":"https://learn.microsoft.com/aspnet/core/signalr/configuration","type":"primary Microsoft documentation","finding":"Stateful reconnect is opt-in on both server and client and can buffer/replay messages. P1 deliberately does not configure stateful reconnect, replay, retention, or client retry behavior; authoritative recovery remains a BFF/API/read-model read."},
+    {"title":"ASP.NET Core SignalR JavaScript client","url":"https://learn.microsoft.com/aspnet/core/signalr/javascript-client","type":"primary Microsoft documentation","finding":"Automatic reconnect is opt-in, does not retry an initial start failure, and may establish a new server connection. The reusable foundation therefore has no client recovery contract and requires later clients to re-establish authorized scope and resynchronize authoritatively."},
+    {"title":"SignalR authentication and authorization","url":"https://learn.microsoft.com/aspnet/core/signalr/authn-and-authz","type":"primary Microsoft documentation","finding":"Hub authentication and authorization must be explicitly configured. P1 maps only through an authenticated technical policy and delegates server-side audience/resource resolution to the authenticated BFF/domain scope; no client-selected subscription is accepted."},
+    {"title":"Security considerations in ASP.NET Core SignalR","url":"https://learn.microsoft.com/aspnet/core/signalr/security","type":"primary Microsoft documentation","finding":"Browser SignalR needs origin, token, logging, and transport controls. The foundation requires named browser-origin and rate-limit policies at mapping time, uses the BFF authenticated browser boundary, and permits no sensitive payload fields."},
+    {"title":"ASP.NET Core SignalR Redis backplane","url":"https://learn.microsoft.com/aspnet/core/signalr/redis-backplane","type":"primary Microsoft documentation","finding":"Redis is a scale-out delivery backplane, not business state. P1 does not configure it; it can be added only when a multi-node Tunner web host needs scale-out."}
+  ],
+  "decision":"Existing ADR-0004 and ADR-0002 already select SignalR for Tunner-owned browser realtime and Redis only for optional non-authoritative scale-out. P1 implements a reusable technical foundation only: authenticated policy-gated connection mapping, server-derived audience resolution, payload-minimal resynchronization hints, and explicit browser-boundary/rate-limit hooks. No Product-facing SignalR, domain event category, resource subscription API, client retry/replay policy, or business authority is introduced.",
+  "limitations":["This evidence does not authorize identity/session implementation, User/Admin BFF host exposure, domain resource-policy semantics, client UX, reconnect timing, replay retention, Product behavior, provider usage, deployment, or release behavior.","Realtime is never an authority for mutation, entitlement, consistency, finality, audit, financial, provider, or owner-domain decisions."]
+}

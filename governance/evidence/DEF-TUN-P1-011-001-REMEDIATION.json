@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "evidence_id": "DEF-TUN-P1-011-001-REMEDIATION",
+  "scope_type": "DEFECT",
+  "scope_id": "DEF-TUN-P1-011-001",
+  "status": "PASS",
+  "checked_at": "2026-10-03T02:15:00-04:00",
+  "finding": "P1-011 incorrectly classified the absence of a conditional gRPC activation trigger as a missing feature-specific ADR contract.",
+  "remediation": "The work item now evaluates present triggers, records NOT_PRESENT when neither a material browser capability nor a justified process boundary exists, preserves the future ADR trigger, and prohibits speculative packages/protos/endpoints/generated clients/scaffolding.",
+  "authority": [
+    "docs/authority/baselines/1.6.0/decisions/ADR-0004_Communication_Protocol_Boundaries.md",
+    "docs/authority/baselines/1.6.0/15_Runtime_Communication_and_Infrastructure_Technology_Scope.md",
+    "docs/authority/amendments/AMD-0004/AMD-0004_Shared_Technical_Primitives_Formatting_and_Canonicalization.md"
+  ],
+  "artifacts": [
+    "governance/work-items/TUN-P1-011.yaml",
+    "governance/defects/DEF-TUN-P1-011-001.yaml",
+    "docs/development/P1_GRPC_PROTOCOL_ELIGIBILITY_AUDIT.md",
+    "tools/validation/Validate-TunnerGrpcEligibilitySource.ps1"
+  ]
+}

@@ -1,0 +1,74 @@
+{
+  "schema_version": 1,
+  "revision_id": "P1-024-RV001",
+  "revision_scope": "WORK_ITEM",
+  "original_scope_id": "TUN-P1-024",
+  "parent_revision_id": null,
+  "parent_milestone_revision_id": null,
+  "title": "Automatic local R2 configuration and scoped OpenBao session",
+  "revision_type": "OPERABILITY",
+  "status": "CLOSED",
+  "reason": "Operator requests one-command local setup and validation without repeatedly entering configuration or manually obtaining and copying scoped tokens.",
+  "authority_refs": [
+    "docs/authority/baselines/1.6.0/06_Environment_Configuration_Secrets_and_Deployment.md",
+    "docs/authority/current/development/03_Governed_Development_Lifecycle_Scrum_Git.md"
+  ],
+  "decision_refs": [],
+  "defect_refs": [],
+  "change_refs": [],
+  "impact_classification": "SCOPED_BLOCKING",
+  "blocked_scope": [
+    "TUN-P1-023"
+  ],
+  "acceptance_criteria": [
+    "Reuse operator-selected non-secret configuration; one private loopback bootstrap login creates and passes an exact-resource finite token in memory; create credentials only if absent; revoke token and remove temporary policy after success or failure; retain fresh non-production confirmation and truthful live acceptance."
+  ],
+  "prerequisites": [],
+  "work_items": [],
+  "required_gates": [],
+  "required_roles": [
+    "project-manager",
+    "solution-architect",
+    "governance-engineer",
+    "tester-qa-engineer",
+    "auditor",
+    "full-stack-engineer",
+    "cyber-security-engineer",
+    "devops-engineer",
+    "rd-engineer"
+  ],
+  "evidence_refs": [
+    "governance/evidence/P1-024-RV001-AUTHORITY-RESOLUTION.json",
+    "governance/evidence/P1-024-RV001-VALIDATION.json",
+    "governance/evidence/P1-024-RV001-ROLE-REVIEWS.json",
+    "docs/development/R2_AUTOMATIC_LOCAL_SETUP.md"
+  ],
+  "created_at": "2026-10-15T20:50:12.1107361+00:00",
+  "closed_at": "2026-10-15T21:28:41Z",
+  "product_acceptance_required": false,
+  "git_state": {
+    "repository_changed": true,
+    "validated_commit_sha": "56ff151a8ae362318eb767a7071943732e26f15c",
+    "tested_commit_sha": "56ff151a8ae362318eb767a7071943732e26f15c",
+    "work_item_commit_shas": [
+      "56ff151a8ae362318eb767a7071943732e26f15c"
+    ],
+    "closure_commit_sha": null,
+    "remaining_uncommitted_paths": [
+      "docs/context/current/HANDOFF.md",
+      "docs/context/current/adaptive-selection.json",
+      "docs/context/current/authority.md",
+      "docs/context/current/contracts.md",
+      "docs/context/current/git-changes.md",
+      "docs/context/current/manifest.json",
+      "docs/context/current/relevant-flows.md",
+      "docs/context/current/summary.md",
+      "docs/context/current/tests.md",
+      "docs/project/CURRENT_STATE.md",
+      "docs/project/HANDOFF.md",
+      "docs/project/PROJECT_CONTEXT.md",
+      ".vscode/settings.json"
+    ],
+    "remaining_uncommitted_classification": "PREEXISTING_UNRELATED"
+  }
+}

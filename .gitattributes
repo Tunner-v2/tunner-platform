@@ -1,3 +1,36 @@
 # Canonical authority mirrors retain source bytes, including Markdown hard-break spaces.
 docs/authority/amendments/AMD-0002/** -whitespace
 docs/authority/amendments/AMD-0003/AMD-0003_Location-Independent_Repository_and_Path_Resolution.md whitespace=-trailing-space
+
+# Authority mirror checkout bytes are hash-governed and must be deterministic across worktrees.
+docs/authority/** text eol=lf
+# ZIP authority artifacts retain byte-exact content; never normalize binary bytes.
+docs/authority/**/*.zip binary
+# Current Drive execution mirror retains the fetched UTF-8/LF bytes.
+docs/authority/current/** text eol=lf -whitespace
+# Retain the approved template's deliberate final blank line without altering source bytes.
+governance/templates/lifecycle-policy.template.yaml whitespace=-blank-at-eof
+docs/authority/amendments/AMD-0001/amendment-provenance.json text eol=crlf
+docs/authority/amendments/AMD-0001/mirror-manifest.json text eol=crlf
+docs/authority/amendments/AMD-0002/amendment-provenance.json text eol=crlf
+docs/authority/amendments/AMD-0002/effective-overrides/03_Governed_Development_Lifecycle_Scrum_Git.md text eol=crlf
+docs/authority/amendments/AMD-0002/effective-overrides/04_Governance_and_Context_Tooling_Specification.md text eol=crlf
+docs/authority/amendments/AMD-0002/effective-overrides/12_AI_Development_Protocol_Context_and_Project_Memory.md text eol=crlf
+docs/authority/amendments/AMD-0002/effective-overrides/36_P0_Repository_Bootstrap_Governance_and_Context_Implementation_Spec.md text eol=crlf
+docs/authority/amendments/AMD-0002/effective-overrides/37_Current_Authority_Index.md text eol=crlf
+docs/authority/amendments/AMD-0002/effective-overrides/README.md text eol=crlf
+docs/authority/amendments/AMD-0002/mirror-manifest.json text eol=crlf
+docs/authority/amendments/AMD-0003/amendment-provenance.json text eol=crlf
+docs/authority/amendments/AMD-0003/mirror-manifest.json text eol=crlf
+docs/authority/amendments/AMD-0004/amendment-provenance.json text eol=crlf
+docs/authority/amendments/AMD-0004/mirror-manifest.json text eol=crlf
+docs/authority/amendments/AMD-0005/amendment-provenance.json text eol=crlf
+docs/authority/amendments/AMD-0005/mirror-manifest.json text eol=crlf
+docs/authority/current-authority.json text eol=crlf
+docs/authority/source-bundle/pre-p0-implementation-package/AGENTS.md text eol=crlf
+"docs/authority/source-bundle/pre-p0-implementation-package/Governance Templates/dependency.template.yaml" text eol=crlf
+"docs/authority/source-bundle/pre-p0-implementation-package/Governance Templates/lifecycle-policy.template.yaml" text eol=crlf
+"docs/authority/source-bundle/pre-p0-implementation-package/Governance Templates/pr-integration-policy.template.yaml" text eol=crlf
+"docs/authority/source-bundle/pre-p0-implementation-package/Governance Templates/work-item.template.yaml" text eol=crlf
+docs/authority/source-bundle/pre-p0-implementation-package/PRE_P0_PACKAGE_INDEX.md text eol=crlf
+docs/authority/source-bundle/pre-p0-implementation-package/PRE_P0_PACKAGE_MANIFEST.json text eol=crlf

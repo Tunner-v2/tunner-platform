@@ -1,0 +1,158 @@
+{
+  "schema_version": 1,
+  "evidence_id": "TUN-P1-018-TEST-RESULTS",
+  "scope_type": "WORK_ITEM",
+  "scope_id": "TUN-P1-018",
+  "status": "PASS",
+  "validated_commit_sha": "c928b32f5ccf291a2493bf37e19be3e70604f3e8",
+  "tested_commit_sha": "c928b32f5ccf291a2493bf37e19be3e70604f3e8",
+  "executed_at": "2026-10-12T16:36:08.5248531-04:00",
+  "web": {
+    "flaky": 0,
+    "failed": 0,
+    "ssr_contract_cases": 15,
+    "browser": "Microsoft Edge via Playwright",
+    "skipped": 0,
+    "passed": 38,
+    "library_build": "PASS",
+    "strict_types": "PASS",
+    "fixture_build": "PASS",
+    "theme_graph_cases": 10,
+    "browser_cases": 13,
+    "browser_tests": [
+      {
+        "result": "passed",
+        "name": "user: source metrics, structural roles and font load",
+        "retries": 0
+      },
+      {
+        "result": "passed",
+        "name": "user: keyboard focus, controlled typing and no implicit submit",
+        "retries": 0
+      },
+      {
+        "result": "passed",
+        "name": "user: error descriptions and source-aligned focus",
+        "retries": 0
+      },
+      {
+        "result": "passed",
+        "name": "user: publication refresh updates copy and provenance",
+        "retries": 0
+      },
+      {
+        "result": "passed",
+        "name": "admin: source metrics, structural roles and font load",
+        "retries": 0
+      },
+      {
+        "result": "passed",
+        "name": "admin: keyboard focus, controlled typing and no implicit submit",
+        "retries": 0
+      },
+      {
+        "result": "passed",
+        "name": "admin: error descriptions and source-aligned focus",
+        "retries": 0
+      },
+      {
+        "result": "passed",
+        "name": "admin: publication refresh updates copy and provenance",
+        "retries": 0
+      },
+      {
+        "result": "passed",
+        "name": "axe WCAG 2.2 AA reports no violations",
+        "retries": 0
+      },
+      {
+        "result": "passed",
+        "name": "narrow width reflows long content without clipping",
+        "retries": 0
+      },
+      {
+        "result": "passed",
+        "name": "isolated surface roles and TailAdmin bridge survive side-by-side use",
+        "retries": 0
+      },
+      {
+        "result": "passed",
+        "name": "fonts and rendering use only local assets and no persisted state",
+        "retries": 0
+      },
+      {
+        "result": "passed",
+        "name": "nested Admin mode does not leak into either surrounding User control",
+        "retries": 0
+      }
+    ]
+  },
+  "architecture": {
+    "total": 182,
+    "passed": 182,
+    "failed": 0,
+    "skipped": 0
+  },
+  "dotnet_build": {
+    "result": "PASS",
+    "warnings": 0,
+    "errors": 0
+  },
+  "dependency_audit": {
+    "source": "Public package advisory registry",
+    "note": "Audit was performed on the identical pinned lockfile before the candidate commit; its Git blob is verified against the tested SHA.",
+    "audited_lockfile_blob": "7edca9c2a18e60cf3616099b5e0f5754baea15e2",
+    "dependency_count": 95,
+    "known_advisories": {
+      "info": 0,
+      "low": 0,
+      "moderate": 0,
+      "high": 0,
+      "critical": 0
+    },
+    "result": "PASS"
+  },
+  "visual_review": {
+    "reference_nodes": [
+      "apNbwvAgdn1xIxYH1oiaSC:2:54",
+      "apNbwvAgdn1xIxYH1oiaSC:2:37",
+      "3F9tAviUejTYpYvRJt8gM1:49:3"
+    ],
+    "reviewer": "Codex",
+    "checks": [
+      "Plain Tunner without icon",
+      "Geist/indigo User and Inter/black Admin",
+      "Source control dimensions/radii/fonts/weights",
+      "Intentional AA interactive-border reconciliation",
+      "Wrapped long labels with no page horizontal overflow",
+      "Same-page and nested theme isolation"
+    ],
+    "screenshots": {
+      "narrow": {
+        "sha256": "c88a6891d466abb115f3aad13d2c942e8b88b7da284a5284325cc3ac612327e9",
+        "path": "web/test-results/narrow-light.png"
+      },
+      "desktop": {
+        "sha256": "f85c3c04300a116d7d0df6f1189202aef1a2a6574bd25798df13182c879b9a9f",
+        "path": "web/test-results/desktop-light.png"
+      }
+    },
+    "viewports": [
+      "1024x1000",
+      "320x1100"
+    ],
+    "result": "PASS"
+  },
+  "raw_log_hashes": {
+    "artifacts/P1-018-committed-web-build.log": "6d54bf7677dd3de6c2ade412b4718b3862fb9a8be588f2ce6eae96b211818f5c",
+    "artifacts/P1-018-committed-contract-tests.log": "6059fbc3eb2c7c6de99c904c2c1a2e697fb6845af93c5fe6433b4c8e20e9ad6d",
+    "artifacts/P1-018-committed-browser-tests.log": "6e5cd4c4724acc5c2c733229be5731ab9a560ada3b3b7ae7a0c2562831aa3511",
+    "artifacts/P1-018-committed-dotnet-build.log": "9fdcdba72359318dfc8af4350494ba1d45192eda65ad2e2c5591940324cc19e6",
+    "artifacts/P1-018-committed-dotnet-tests.log": "ffcce2fff648165a5ee0ad3e841c325c7629f41d421d0182f14fba1fc7c5eacf",
+    "artifacts/P1-018-dependency-audit.json": "fed46340ebd897d7eacb96918dd6f07f1f8440767d606a4f966b74f88579bb7b"
+  },
+  "limitations": [
+    "Raw build/browser artifacts are generated and ignored; this record preserves portable test names/counts/hash provenance.",
+    "Automated accessibility and scoped engineering review do not claim independent human or complete Product journey acceptance."
+  ]
+}

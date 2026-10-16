@@ -1,0 +1,107 @@
+{
+  "schema_version": 1,
+  "scope_id": "P1",
+  "scope_type": "MILESTONE",
+  "result": "PASS",
+  "checked_at": "2026-10-16T15:36:38Z",
+  "milestone_state": "VALIDATION",
+  "declared_work_items": 24,
+  "done_work_items": 24,
+  "engineering_findings": {
+    "total": 20,
+    "resolved": 20,
+    "partial": 0,
+    "blocked": 0
+  },
+  "evaluated_commit_sha": "734e10a2a4952698f2a6c7c5d5130567b19982e3",
+  "reviewed_commit_sha": "199e8cea44315ee8680249845fc9c52e9e865651",
+  "reviewed_scope_sha256": "80c4589ec11bddafad4d8b260d03eece9e3870733e01c1421117871146485e31",
+  "native_checks": {
+    "committed_readiness": {
+      "command": "tunner governance commit-readiness audit --milestone P1",
+      "outcome": "PASS",
+      "findings": []
+    },
+    "milestone_close_check": {
+      "command": "tunner governance milestone close-check P1",
+      "outcome": "PASS",
+      "failures": [],
+      "work_item_gates_passed": 24,
+      "required_milestone_roles_passed": 5
+    },
+    "next": {
+      "command": "tunner governance next",
+      "eligible_items": [],
+      "human_integration_actions": [],
+      "diagnostics": []
+    },
+    "context": {
+      "outcome": "CURRENT",
+      "project_memory_validation": "PASS"
+    }
+  },
+  "receipts": [
+    {
+      "path": "artifacts/P1-024-RV001/p1-all24-readiness-20261016.txt",
+      "sha256": "40127aef8da9c87afe0fb3200dac969a29ca6a881edff117f68f770cb2ef00a1"
+    },
+    {
+      "path": "artifacts/P1-024-RV001/p1-engineering-close-check-20261016.txt",
+      "sha256": "90985819ff2765812eeafb83a4f668b1e62d9e022a0dd3306e72f718f9131049"
+    },
+    {
+      "path": "governance/evidence/TUN-P1-023-LIVE-R2-20261016.json",
+      "sha256": "1097e9f4b776aa2298ed57b3fae4c3f62ce462043cc068abeb5ad74c4e135629"
+    }
+  ],
+  "work_item_completion": {
+    "id": "TUN-P1-023",
+    "status": "DONE",
+    "validated_sha": "6fb030241ad0927f0a2576da23d348db1cfceab6",
+    "closure_sha": "8b4388a4bd118c6c4f312cb690f00671ecab614b",
+    "unchanged_owned_paths": 17
+  },
+  "live_r2": {
+    "result": "PASS",
+    "receipt": "governance/evidence/TUN-P1-023-LIVE-R2-20261016.json",
+    "execution_source": "OPERATOR_SUPPLIED_TERMINAL_OUTPUT",
+    "object_key": "tunner-contract-tests/daae208000d7486fa462fdafed7b168f",
+    "content_verified": true,
+    "object_cleanup_verified": true,
+    "bootstrap_cleanup_verified": true,
+    "defect": "DEF-TUN-P1-023-R2-001",
+    "defect_status": "RESOLVED"
+  },
+  "fresh_security_audit": {
+    "nuget_vulnerabilities": 0,
+    "pnpm_vulnerabilities": 0,
+    "secret_scan_result": "PASS",
+    "sast_result": "PASS",
+    "secret_scan_files": 1298,
+    "secret_scan_matches": 0,
+    "sast_files": 1298,
+    "sast_matches": 0
+  },
+  "role_review_boundary": "Executing-agent scoped engineering review plus attributed operator provider result; no independent human, Product, protected-main integration or production/release authorization claimed.",
+  "authority_refs": [
+    "docs/authority/current/development/03_Governed_Development_Lifecycle_Scrum_Git.md",
+    "governance/policies/lifecycle-policy.yaml"
+  ],
+  "remaining_lifecycle": "P1 remains VALIDATION. The declared milestone lifecycle continues through PRODUCT_ACCEPTANCE, RELEASED and CLOSED. Applicable acceptance/release authorization must be recorded before advancing beyond validated engineering work.",
+  "exact_next_action": "Obtain applicable P1 milestone acceptance/release authorization and follow native-allowed transitions; do not infer Product or production approval from this engineering PASS.",
+  "unrelated_dirty_paths_preserved": [
+    "docs/context/current/HANDOFF.md",
+    "docs/context/current/adaptive-selection.json",
+    "docs/context/current/authority.md",
+    "docs/context/current/contracts.md",
+    "docs/context/current/git-changes.md",
+    "docs/context/current/manifest.json",
+    "docs/context/current/relevant-flows.md",
+    "docs/context/current/summary.md",
+    "docs/context/current/tests.md",
+    "docs/project/CURRENT_STATE.md",
+    "docs/project/HANDOFF.md",
+    "docs/project/PROJECT_CONTEXT.md",
+    ".vscode/settings.json"
+  ]
+}

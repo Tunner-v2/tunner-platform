@@ -1,0 +1,294 @@
+{
+  "schema_version": 1,
+  "scope_id": "TUN-P1-023",
+  "scope_type": "WORK_ITEM",
+  "initial_head": "fef0e8e433749457e4561b17da09d8fb91c701fd",
+  "initial_dirty_paths": [
+    "docs/context/current/HANDOFF.md",
+    "docs/context/current/adaptive-selection.json",
+    "docs/context/current/authority.md",
+    "docs/context/current/contracts.md",
+    "docs/context/current/git-changes.md",
+    "docs/context/current/manifest.json",
+    "docs/context/current/relevant-flows.md",
+    "docs/context/current/summary.md",
+    "docs/context/current/tests.md",
+    "docs/project/CURRENT_STATE.md",
+    "docs/project/HANDOFF.md",
+    "docs/project/PROJECT_CONTEXT.md"
+  ],
+  "findings": [
+    {
+      "id": "GAP-P1-023-EVIDENCE-006",
+      "description": "P1-006 committed dispatch validation and real broker behavior",
+      "status": "RESOLVED",
+      "owner_work_item": "TUN-P1-023",
+      "evidence": [
+        "governance/evidence/TUN-P1-023-EXECUTION-RESULTS.json"
+      ],
+      "disposition": "Verified current implementation/evidence passes the recorded scoped checks."
+    },
+    {
+      "id": "GAP-P1-023-EVIDENCE-007",
+      "description": "P1-007 committed durable-work/inbox validation",
+      "status": "RESOLVED",
+      "owner_work_item": "TUN-P1-023",
+      "evidence": [
+        "governance/evidence/TUN-P1-023-EXECUTION-RESULTS.json"
+      ],
+      "disposition": "Verified current implementation/evidence passes the recorded scoped checks."
+    },
+    {
+      "id": "GAP-P1-023-EVIDENCE-008",
+      "description": "P1-008 committed Redis validation and real TTL expiry",
+      "status": "RESOLVED",
+      "owner_work_item": "TUN-P1-023",
+      "evidence": [
+        "governance/evidence/TUN-P1-023-EXECUTION-RESULTS.json"
+      ],
+      "disposition": "Verified current implementation/evidence passes the recorded scoped checks."
+    },
+    {
+      "id": "GAP-P1-023-EVIDENCE-009",
+      "description": "P1-009 committed SDK/component evidence and live R2 contract",
+      "status": "RESOLVED",
+      "owner_work_item": "TUN-P1-023",
+      "evidence": [
+        "governance/evidence/TUN-P1-023-EXECUTION-RESULTS.json",
+        "governance/evidence/TUN-P1-024-EXECUTION-RESULTS.json",
+        "docs/development/R2_INSTALLER.md",
+        "governance/evidence/TUN-P1-023-LIVE-R2-20261016.json"
+      ],
+      "disposition": "Operator-supplied actual setup-r2 output reports Passed=true, content verified, unique test object deletion verified and temporary OpenBao cleanup verified. Credentials are saved for reuse. Original SDK/installer/revision evidence is retained; private tokens/keys were neither received nor accessed.",
+      "previous_disposition": "Original SDK/component and installer validation is preserved. Closed P1-024-RV001 adds reusable local configuration and automatic exact-resource OpenBao identity/credential setup, validated by 64 installer cases and 289 platform regression cases. The operator confirmed dedicated non-production bucket tunner and supplied reference names. Live R2 is NOT_EXECUTED until tools/dev/setup-r2.ps1 runs privately with verified content/object/bootstrap cleanup; DEF-TUN-P1-023-R2-001 remains OPEN."
+    },
+    {
+      "id": "GAP-P1-023-EVIDENCE-011",
+      "description": "P1-011 committed protocol eligibility evidence",
+      "status": "RESOLVED",
+      "owner_work_item": "TUN-P1-023",
+      "evidence": [
+        "governance/evidence/TUN-P1-023-EXECUTION-RESULTS.json"
+      ],
+      "disposition": "Verified current implementation/evidence passes the recorded scoped checks."
+    },
+    {
+      "id": "GAP-P1-023-LEGACY-ENVELOPES",
+      "description": "Owned-file validation for P1-001/002/005/010/012/020/022",
+      "status": "RESOLVED",
+      "owner_work_item": "TUN-P1-023",
+      "evidence": [
+        "governance/evidence/TUN-P1-023-EXECUTION-RESULTS.json"
+      ],
+      "disposition": "Verified current implementation/evidence passes the recorded scoped checks."
+    },
+    {
+      "id": "GAP-P1-023-SECURITY",
+      "description": "Vendor security package and installed runtime patch plus clean audit",
+      "status": "RESOLVED",
+      "owner_work_item": "TUN-P1-023",
+      "evidence": [
+        "governance/evidence/TUN-P1-023-EXECUTION-RESULTS.json"
+      ],
+      "disposition": "Verified current implementation/evidence passes the recorded scoped checks."
+    },
+    {
+      "id": "GAP-P1-023-GATE-CONSISTENCY",
+      "description": "Missing committed-state evidence must fail current readiness consistently",
+      "status": "RESOLVED",
+      "owner_work_item": "TUN-P1-023",
+      "evidence": [
+        "governance/evidence/TUN-P1-023-EXECUTION-RESULTS.json",
+        "governance/evidence/P0-RV002-VALIDATION.json"
+      ],
+      "disposition": "Verified current implementation/evidence passes the recorded scoped checks."
+    },
+    {
+      "id": "GAP-P1-023-GLOBAL-READINESS",
+      "description": "Committed readiness applies across active milestones",
+      "status": "RESOLVED",
+      "owner_work_item": "TUN-P1-023",
+      "evidence": [
+        "governance/evidence/TUN-P1-023-EXECUTION-RESULTS.json",
+        "governance/evidence/P0-RV002-VALIDATION.json"
+      ],
+      "disposition": "Verified current implementation/evidence passes the recorded scoped checks."
+    },
+    {
+      "id": "GAP-P1-023-REVIEW-FRESHNESS",
+      "description": "Milestone reviews bind to validated content and cannot be stale",
+      "status": "RESOLVED",
+      "owner_work_item": "TUN-P1-023",
+      "evidence": [
+        "governance/evidence/TUN-P1-023-EXECUTION-RESULTS.json",
+        "governance/evidence/P0-RV002-VALIDATION.json"
+      ],
+      "disposition": "Verified current implementation/evidence passes the recorded scoped checks."
+    },
+    {
+      "id": "GAP-P1-023-RECOVERY",
+      "description": "Current-state recovery exposes actionable findings rather than an empty next loop",
+      "status": "RESOLVED",
+      "owner_work_item": "TUN-P1-023",
+      "evidence": [
+        "governance/evidence/TUN-P1-023-EXECUTION-RESULTS.json",
+        "governance/evidence/P0-RV002-VALIDATION.json"
+      ],
+      "disposition": "Verified current implementation/evidence passes the recorded scoped checks."
+    },
+    {
+      "id": "GAP-P1-023-DIAGNOSTICS",
+      "description": "P1 defects must not be labeled P0",
+      "status": "RESOLVED",
+      "owner_work_item": "TUN-P1-023",
+      "evidence": [
+        "governance/evidence/TUN-P1-023-EXECUTION-RESULTS.json",
+        "governance/evidence/P0-RV002-VALIDATION.json"
+      ],
+      "disposition": "Verified current implementation/evidence passes the recorded scoped checks."
+    },
+    {
+      "id": "GAP-P1-023-AUTHORITY-09",
+      "description": "Synchronize approved Document 09 extension without changing locked baseline",
+      "status": "RESOLVED",
+      "owner_work_item": "TUN-P1-023",
+      "evidence": [
+        "governance/evidence/TUN-P1-023-EXECUTION-RESULTS.json"
+      ],
+      "disposition": "Verified current implementation/evidence passes the recorded scoped checks."
+    },
+    {
+      "id": "GAP-P1-023-SIGNALR",
+      "description": "Real authenticated SignalR transport/origin/rate/reconnect validation",
+      "status": "RESOLVED",
+      "owner_work_item": "TUN-P1-023",
+      "evidence": [
+        "governance/evidence/TUN-P1-023-EXECUTION-RESULTS.json"
+      ],
+      "disposition": "Verified current implementation/evidence passes the recorded scoped checks."
+    },
+    {
+      "id": "GAP-P1-023-STALE-DEFECT",
+      "description": "Resolve P1-001 administrative defect against existing recovery evidence",
+      "status": "RESOLVED",
+      "owner_work_item": "TUN-P1-023",
+      "evidence": [
+        "governance/evidence/TUN-P1-023-EXECUTION-RESULTS.json"
+      ],
+      "disposition": "Verified current implementation/evidence passes the recorded scoped checks."
+    },
+    {
+      "id": "GAP-P1-023-MILESTONE",
+      "description": "Required role reviews and native P1 milestone closure gates",
+      "status": "RESOLVED",
+      "owner_work_item": "TUN-P1-023",
+      "evidence": [
+        "governance/evidence/TUN-P1-023-EXECUTION-RESULTS.json"
+      ],
+      "disposition": "Live prerequisite resolved; all nine work-item engineering reviews pass; native TUN-P1-023 gate READY and DONE transition ALLOWED. The item is committed DONE, all 24 P1 items are DONE and P1 is VALIDATION. Current milestone review/native gate evidence is retained in governance/evidence/P1-ENGINEERING-VALIDATION-20261016.json. Acceptance/release authorization remains a separate governed step.",
+      "previous_disposition": "Current native P1 close-check passes all 23 completed work-item gates. TUN-P1-023 and milestone acceptance remain pending actual live R2 validation and the blocked reviews."
+    },
+    {
+      "id": "GAP-P1-023-SERVICING-004",
+      "description": "Security servicing invalidated the old OpenAPI source-guard envelope.",
+      "status": "RESOLVED",
+      "owner_work_item": "TUN-P1-023",
+      "evidence": [
+        "governance/evidence/TUN-P1-004-RETROSPECTIVE-COMMITTED.json",
+        "governance/evidence/TUN-P1-023-EXECUTION-RESULTS.json"
+      ],
+      "disposition": "Current artifact/technical validation passes; complete previous envelope payload is preserved."
+    },
+    {
+      "id": "GAP-P1-023-BFF-019",
+      "description": "Realtime test-host callbacks required current BFF test-helper ownership revalidation.",
+      "status": "RESOLVED",
+      "owner_work_item": "TUN-P1-023",
+      "evidence": [
+        "governance/evidence/TUN-P1-019-VALIDATION.json",
+        "governance/evidence/TUN-P1-023-EXECUTION-RESULTS.json"
+      ],
+      "disposition": "Current artifact/technical validation passes; complete previous envelope payload is preserved."
+    },
+    {
+      "id": "GAP-P1-023-OWNERSHIP-021",
+      "description": "Legacy audit-coordination evidence had an empty ownership list.",
+      "status": "RESOLVED",
+      "owner_work_item": "TUN-P1-023",
+      "evidence": [
+        "governance/evidence/TUN-P1-021-RV-COORDINATION.json",
+        "governance/evidence/TUN-P1-023-EXECUTION-RESULTS.json"
+      ],
+      "disposition": "Current artifact/technical validation passes; complete previous envelope payload is preserved."
+    },
+    {
+      "id": "GAP-P1-023-BOUNDED-PROJECT-MEMORY",
+      "description": "Final project-memory source guard falsely required omitted old terminal revisions in a bounded summary.",
+      "status": "RESOLVED",
+      "owner_work_item": "TUN-P1-023",
+      "remediation_revision": "P0-RV003",
+      "evidence": [
+        "governance/evidence/P0-RV003-VALIDATION.json"
+      ],
+      "disposition": "New committed revision passes seven positive/negative checks plus actual fresh recovery and project-state validation; historical closed records unchanged."
+    }
+  ],
+  "updated_at": "2026-10-16T15:22:13Z",
+  "summary": {
+    "total": 20,
+    "resolved": 20,
+    "partial": 0,
+    "blocked": 0,
+    "remaining_external_prerequisite": null,
+    "existing_p1_commit_readiness": "Prior committed audit passed; current all-24-item verification is retained in governance/evidence/P1-ENGINEERING-VALIDATION-20261016.json",
+    "completion_boundary": "Engineering findings resolved; final native gates and milestone lifecycle are recorded separately."
+  },
+  "installer_update": {
+    "work_item": "TUN-P1-024",
+    "validated_commit_sha": "4825afc35878b36229f7f7e9f6902aab234cd68d",
+    "technical_tests_passed": 39,
+    "combined_platform_tests_passed": 328,
+    "live_result": "PASS",
+    "bucket_environment": "DEDICATED_NON_PRODUCTION_CONFIRMED_BY_OPERATOR",
+    "remaining_prerequisite": null,
+    "previous_bucket_environment": "UNCONFIRMED",
+    "installer_setup": "OPERATOR_EXECUTED_AUTOMATIC_SETUP_AND_LIVE_CONTRACT_PASS",
+    "automatic_local_revision": "P1-024-RV001",
+    "automatic_local_validated_sha": "56ff151a8ae362318eb767a7071943732e26f15c",
+    "automatic_local_installer_tests_passed": 64,
+    "automatic_local_combined_tests_passed": 353,
+    "command": "./tools/dev/setup-r2.ps1",
+    "live_receipt": "governance/evidence/TUN-P1-023-LIVE-R2-20261016.json"
+  },
+  "committed_revision_proof": {
+    "correction_revision": "P0-004-RV002",
+    "validated_commit_sha": "6051f0aa258e11262b1edb6c1501837b05db623d",
+    "closure_commit_sha": "d9a8f6eb8352a63c818827d5af8115935ac94d2c",
+    "shared_test_revisions": [
+      "P1-020-RV001",
+      "P1-022-RV001"
+    ],
+    "shared_test_closure_commit_sha": "979643cf59161888a8710eaaec047043db9d32c8",
+    "result": "PASS",
+    "new_native_proof_checks": 15,
+    "existing_rv_checks": 60,
+    "evidence": "governance/evidence/P0-004-RV002-VALIDATION.json",
+    "native_p1_audit": {
+      "command": "tunner governance commit-readiness audit --milestone P1",
+      "result": "PASS",
+      "findings": [],
+      "checked_at": "2026-10-15T22:09:54Z",
+      "receipt": "artifacts/P1-024-RV001/final-p1-committed-readiness.txt",
+      "receipt_sha256": "40127aef8da9c87afe0fb3200dac969a29ca6a881edff117f68f770cb2ef00a1"
+    }
+  },
+  "previous_summary": {
+    "total": 20,
+    "resolved": 18,
+    "partial": 1,
+    "blocked": 1,
+    "remaining_external_prerequisite": "DEF-TUN-P1-023-R2-001",
+    "existing_p1_commit_readiness": "PASS: actual current P1 audit, zero findings, committed same-scope revisions verified"
+  },
+  "final_engineering_gate_receipt": "governance/evidence/P1-ENGINEERING-VALIDATION-20261016.json"
+}

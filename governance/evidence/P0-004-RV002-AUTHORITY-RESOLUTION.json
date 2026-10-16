@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "scope_id": "P0-004-RV002",
+  "result": "RESOLVED_EXISTING_AUTHORITY",
+  "authority_refs": [
+    "docs/authority/current/development/03_Governed_Development_Lifecycle_Scrum_Git.md",
+    "docs/authority/current/development/04_Governance_and_Context_Tooling_Specification.md",
+    "docs/authority/amendments/AMD-0005/AMD-0005_Authority-First_Decision_Resolution_and_Duplicate-Decision_Prevention.md"
+  ],
+  "findings": [
+    "Document 03 section 19.4 defines effective state as historical closure plus ordered Revision lineage; section 19.5 retains committed validation for every Revision.",
+    "Document 04 TOOL-REV-002 and revision-aware requirements preserve original/prior lineage and deterministic revision ordering. Current committed ownership must use the latest applicable proved path owner, not overwrite original closed records.",
+    "Native P1 audit currently rejects three P1-024 paths solely because validated closed P1-024-RV001 changed them. Its own native close-check passed and all 353 tests bind to the later SHA.",
+    "Resolution is technical gate correction under existing authority: a latest closed owner must be committed, pass its complete native closure checks, and own the path in its validation candidate. Missing, malformed, active, uncommitted or stale proof cannot substitute."
+  ],
+  "observed_failure": {
+    "command": "tunner governance commit-readiness audit --milestone P1",
+    "outcome": "REMEDIATION_REQUIRED",
+    "paths": [
+      "src/Tunner.Platform/Secrets/OpenBaoSecretStore.cs",
+      "src/Tunner.Installer/Program.cs",
+      "tests/Tunner.Installer.Tests/OpenBaoIntegrationTests.cs"
+    ]
+  },
+  "implementation_owner": "Governance Engineer; narrow control-plane implementation is sufficient, no Product or provider behavior change."
+}

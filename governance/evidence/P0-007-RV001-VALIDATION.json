@@ -1,0 +1,54 @@
+{
+  "schema_version": 1,
+  "scope_id": "P0-007-RV001",
+  "scope_type": "REVISION",
+  "validation_kind": "COMMITTED",
+  "result": "PASS",
+  "validated_commit_sha": "4f74987590668437637faffd212a3b169b38dcc6",
+  "tested_commit_sha": "4f74987590668437637faffd212a3b169b38dcc6",
+  "owned_behavior_paths": [
+    "tools/dev/openbao-bootstrap.ps1",
+    "tools/validation/Test-TunnerOpenBaoBootstrap.ps1"
+  ],
+  "checked_at": "2026-10-15T18:32:14Z",
+  "checks": [
+    "Nine complete production-helper scenarios pass in PowerShell 7.6.5 and Windows PowerShell 5.1.19041.6456, 18 total scenario executions.",
+    "Absent empty/unrelated mount lists create the approved mount once; existing mount skips creation.",
+    "List failure, malformed JSON, mount-create failure and each policy-write failure stop subsequent mutations.",
+    "Status is credential-free; private synthetic input is absent from output; transferred policy content is unchanged.",
+    "Existing secrets source validator, secret scan and SAST pass; 1243 files inspected, no rule match.",
+    "Both owned source/test Git objects equal candidate, HEAD and working tree; original P0-007 work/evidence and infra/openbao files unchanged.",
+    "Native revision close-check PASS and CLOSED transition ALLOWED; revision closure committed. Explicit P1-023 context verifies CURRENT and project state agrees with authoritative governance."
+  ],
+  "runtime_test_policy": "Final Windows PowerShell 5.1 test process uses RemoteSigned; no machine/current-user policy is changed. Microsoft documents process lifetime and local-script behavior.",
+  "primary_source": "https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_execution_policies?view=powershell-5.1",
+  "receipts": [
+    {
+      "path": "artifacts/P0-007-RV001/powershell7.txt",
+      "sha256": "2ec56a35a58a64c4ee9b20f7e42278ffc6cc568417897f0270a011e362aa2589"
+    },
+    {
+      "path": "artifacts/P0-007-RV001/windows-powershell51.txt",
+      "sha256": "044c997e1f00835627409c2f6c033024701b094b2662e45a444256d1bc3adb33"
+    }
+  ],
+  "owned_git_objects": [
+    {
+      "path": "tools/dev/openbao-bootstrap.ps1",
+      "blob": "ee46cab9f2f162dde16a42905fc6620fef312691",
+      "match": true
+    },
+    {
+      "path": "tools/validation/Test-TunnerOpenBaoBootstrap.ps1",
+      "blob": "b071318a29841ff3363fc2b7a36295fe871cf2e9",
+      "match": true
+    }
+  ],
+  "validation_attempts": [
+    "Original absent-member access reproduced PropertyNotFoundException under StrictMode; indexed lookup returns null.",
+    "Initial full-script test double used caller script scope and failed in both PowerShell versions; corrected isolated fixture state and cleanup. Production fix remained the indexed lookup.",
+    "A committed Windows PowerShell test with default policy was blocked before script execution. Earlier smoke used a test-process override; final committed run uses process-only RemoteSigned and passes all nine cases."
+  ],
+  "boundary": "No real root token received, no live mount/policy operation executed by these tests, and no R2 contact. Operator retry remains private; R2 provisioning/non-production prerequisite remains open.",
+  "closure_commit_sha": "8926b45a62274d8e018c06e1a1d44fbdfd7f2934"
+}

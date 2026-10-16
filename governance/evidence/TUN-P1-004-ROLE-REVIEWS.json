@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "evidence_id": "TUN-P1-004-ROLE-REVIEWS",
+  "scope_type": "WORK_ITEM",
+  "scope_id": "TUN-P1-004",
+  "status": "PASS",
+  "reviewed_at": "2026-10-02T12:22:01-04:00",
+  "reviews": [
+    { "role": "full-stack-engineer", "conclusion": "PASS", "checks": ["The implemented API-host changes remain limited to build-time contract generation and verification; the operator build passed with zero warnings and errors."], "findings": [] },
+    { "role": "solution-architect", "conclusion": "PASS", "checks": ["The API-to-Platform boundary remains unchanged; no domain, database, transport, provider, or Product ownership change was introduced."], "findings": [] },
+    { "role": "sdk-engineer", "conclusion": "PASS", "checks": ["The generated document contains no Product operations and no SDK/client, compatibility, or external-publication behavior was added."], "findings": [] },
+    { "role": "rd-engineer", "conclusion": "PASS", "checks": ["Current Microsoft and OpenAPI Initiative primary-source evidence continues to support the .NET 10 OpenAPI 3.1 baseline."], "findings": [] },
+    { "role": "tester-qa-engineer", "conclusion": "PASS", "checks": ["Static validation passed and all five architecture checks passed, including OpenAPI 3.1 output generation and Product-operation exclusion."], "findings": [] }
+  ],
+  "authority_hashes": {
+    "docs/authority/current-authority.json": "5c29b03bc9e076386d005849c2870cfb6411d18e1627d54a4d0eb9a48370ca3a",
+    "docs/authority/amendments/AMD-0001/effective-overrides/11_Development_Planes_Milestones_and_P0_Backlog.md": "1f1a5858de8a01ce5af07f6a81ef6ea6b292aabe325634aa6fff0cde8a0e6550",
+    "docs/authority/baselines/1.6.0/07_API_SDK_Event_and_Connected_Product_Foundation.md": "c750445e916fc6734e2df7039df93bcac51f8fbf6b4a2ee2f9df60e7ca864d95",
+    "docs/authority/baselines/1.6.0/09_Testing_Acceptance_Evidence_and_Quality_Gates.md": "f7e5760a0d6e18610b1a2740e8f2f1a959d011a8020edfd8ba80c4f75058a7dc",
+    "docs/authority/baselines/1.6.0/13_RD_Source_Register.md": "e7ae33989d5d21c593e7425e15d0d35f8ac81590ac357717c263c63188a34a13",
+    "docs/authority/baselines/1.6.0/32_Domain_API_Event_Data_and_Policy_Contract_Catalog.md": "b2e9446baa1a63f39e58246ab773cbeff0c15d00f6b240063b8a3eaa988b7339",
+    "docs/authority/baselines/1.6.0/decisions/ADR-0011_OpenAPI_31_on_NET10.md": "81b6794cfe2a99d0b87c3fa06f6028204304a9fd1d58fe743be6d98655daba6c"
+  },
+  "skill_hashes": {
+    "full-stack-engineer": "59adbe2133cf4ce88cbc9ca4eafce1d5a9d83b9562b6580c1571e6fc148d46b5",
+    "solution-architect": "664ffba70d0f97e75951c3548b7f8391854781e4cf90cc50fc8829543783a35b",
+    "sdk-engineer": "c64a66b2e19bccdbf69f13c9db62e9e2cbb0403f384591a93b5b787dc33b07ae",
+    "rd-engineer": "2834c223dfd847a6d7cd28f52de4113efc574d621391d059e8dc1469bdf33187",
+    "tester-qa-engineer": "a57ce99d7ad7a3b60f17e4826c81c507c9cc208d8928285c406222eefe0a18fd"
+  }
+}

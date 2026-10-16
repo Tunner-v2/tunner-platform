@@ -1,0 +1,46 @@
+schema_version: 1
+work_item_id: TUN-P1-023
+milestone_id: P1
+sprint_id: null
+title: P1 readiness reconciliation and validation remediation
+status: DONE
+type: GOVERNANCE_TOOLING
+product_acceptance_required: false
+authority_refs:
+  - docs/authority/current/development/03_Governed_Development_Lifecycle_Scrum_Git.md
+  - docs/authority/current/development/04_Governance_and_Context_Tooling_Specification.md
+  - docs/authority/baselines/1.6.0/09_Testing_Acceptance_Evidence_and_Quality_Gates.md
+  - docs/authority/baselines/1.6.0/15_Runtime_Communication_and_Infrastructure_Technology_Scope.md
+  - docs/authority/amendments/AMD-0004/AMD-0004_Shared_Technical_Primitives_Formatting_and_Canonicalization.md
+  - docs/authority/amendments/AMD-0005/AMD-0005_Authority-First_Decision_Resolution_and_Duplicate-Decision_Prevention.md
+flow_refs: []
+contract_refs: []
+decision_refs: []
+acceptance_criteria:
+  - Resolve every scoped finding in governance/evidence/TUN-P1-023-GAP-REGISTER.json with actual committed validation; retain failed attempts and external prerequisites truthfully.
+  - Preserve original historical evidence and closed P0/RV records. P0-RV002 owns control-plane corrections; incomplete current P1 acceptance is reconciled without a blanket P1 Revision.
+  - Correct missing committed-state and ownership evidence; resolve the stale P1-001 defect using its existing recovery; keep genuine failures open.
+  - Patch affected crypto dependencies and validate the installed runtime against current vendor sources before closing the security defect.
+  - Exercise RabbitMQ confirmed delivery/failure, Redis TTL expiry, the AWS R2 seam and real SignalR protection/reconnection. Live R2 uses dedicated non-production infrastructure and external secret references.
+  - Refresh effective Document 09 under existing AMD-0004 authority while preserving locked baseline bytes.
+  - Record mandatory engineering and milestone reviews against the validated candidate; advance P1 only through allowed lifecycle states and human gates.
+prerequisites: []
+blockers: []
+impact: {architecture: true, ui: false, sdk: false, financial: false, compliance: false, security: true, devops: true, support: false, provider: true, infrastructure: true}
+activated_roles: [full-stack-engineer, solution-architect, governance-engineer, tester-qa-engineer, auditor, project-manager, cyber-security-engineer, devops-engineer, rd-engineer]
+required_tests: [authority verification, governance regression, current security audit, real dependency integration, BFF and architecture regression, UI regression, current source validation, context verification]
+required_evidence:
+  - governance/evidence/TUN-P1-023-GAP-REGISTER.json
+  - governance/evidence/TUN-P1-023-VALIDATION.json
+  - governance/evidence/TUN-P1-023-ROLE-REVIEWS.json
+  - docs/development/P1_READINESS_REMEDIATION.md
+  - governance/evidence/TUN-P1-023-EXECUTION-RESULTS.json
+  - docs/development/P1_R2_INSTALLER_HANDOFF.md
+  - governance/evidence/TUN-P1-023-LIVE-R2-20261016.json
+context_policy: EXPANDED
+todos: []
+defects: [DEF-TUN-P1-023-R2-001]
+created_at: 2026-10-15T10:00:00-04:00
+updated_at: 2026-10-16T15:28:30Z
+
+git_state: {"repository_changed":true,"validated_commit_sha":"6fb030241ad0927f0a2576da23d348db1cfceab6","tested_commit_sha":"6fb030241ad0927f0a2576da23d348db1cfceab6","work_item_commit_shas":["2616d6ebe3a5baf926185ceddcc1950a4b4dd424","e3c3dabcc40d3cd5cdf8ad2994771bbefb6ac4c3","6fb030241ad0927f0a2576da23d348db1cfceab6"],"closure_commit_sha":null,"remaining_uncommitted_paths":["docs/context/current/HANDOFF.md","docs/context/current/adaptive-selection.json","docs/context/current/authority.md","docs/context/current/contracts.md","docs/context/current/git-changes.md","docs/context/current/manifest.json","docs/context/current/relevant-flows.md","docs/context/current/summary.md","docs/context/current/tests.md","docs/project/CURRENT_STATE.md","docs/project/HANDOFF.md","docs/project/PROJECT_CONTEXT.md",".vscode/settings.json"],"remaining_uncommitted_classification":"PREEXISTING_UNRELATED"}

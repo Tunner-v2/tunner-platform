@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "evidence_id": "TUN-P1-009-RD-SOURCES",
+  "scope_type": "WORK_ITEM",
+  "scope_id": "TUN-P1-009",
+  "status": "PASS",
+  "reviewed_at": "2026-10-02T17:05:35-04:00",
+  "sources": [
+    {
+      "title": "Cloudflare R2 AWS SDK for .NET example",
+      "url": "https://developers.cloudflare.com/r2/examples/aws/aws-sdk-net/",
+      "type": "primary Cloudflare provider documentation",
+      "finding": "Cloudflare documents the AWS SDK for .NET v3 client against the R2 S3 endpoint and explicitly requires disabling payload signing and default checksum validation for its current non-support of AWSSDK.S3 streaming SigV4. Provider behavior must remain in the R2 adapter, not in domain contracts."
+    },
+    {
+      "title": "Cloudflare R2 S3 API compatibility",
+      "url": "https://developers.cloudflare.com/r2/api/s3/api/",
+      "type": "primary Cloudflare provider documentation",
+      "finding": "R2 exposes an S3-compatible endpoint with region auto, but its compatibility matrix is incomplete and evolves. The adapter must use only verified object operations and must not treat S3 compatibility as full AWS S3 parity."
+    },
+    {
+      "title": "Cloudflare R2 data location",
+      "url": "https://developers.cloudflare.com/r2/reference/data-location/",
+      "type": "primary Cloudflare provider documentation",
+      "finding": "Location Hints are best-effort performance inputs rather than residency guarantees; jurisdictional restrictions use different endpoints and cannot be changed after bucket creation. Bucket location and jurisdiction therefore remain later infrastructure/compliance decisions."
+    },
+    {
+      "title": "AWS SDK for .NET S3 client documentation",
+      "url": "https://docs.aws.amazon.com/sdk-for-net/v4/developer-guide/s3-apis-intro.html",
+      "type": "primary SDK documentation",
+      "finding": "AWS documents AWSSDK.S3 as the supported .NET package family for S3 APIs. AWS describes v4 as current, while Cloudflare's R2-specific .NET documentation currently shows v3. For this R2-only adapter, the centrally versioned Cloudflare-documented v3 line is pinned to 3.7.510.8; a v4 upgrade requires fresh Cloudflare R2 compatibility evidence."
+    }
+  ],
+  "decision": "Implement a cohesive Platform-owned provider-neutral IObjectStorage boundary with a deterministic R2 adapter seam. The R2-only adapter uses centrally versioned AWSSDK.S3 3.7.510.8 behind an injected IAmazonS3 client and applies the current Cloudflare-documented streaming-SigV4/checksum request flags. Actual provider client construction, endpoint, account/bucket identifiers, credentials, region/jurisdiction, retention, lifecycle, presigned access, encryption, and operational configuration remain deferred to later governed scope."
+  ,
+  "limitations": [
+    "This evidence does not authorize a Cloudflare account, R2 bucket, API token, credential, configuration binding, endpoint, region, jurisdiction, lifecycle, bucket lock, public bucket, custom domain, presigned URL, upload policy, malware scan, content type/size policy, retention rule, deployment, or release behavior.",
+    "The Platform contract must not expose AWS or Cloudflare SDK types as public, persisted, Product, or owner-domain authority. PostgreSQL remains the authority for object metadata, ownership, checksum, retention, lifecycle, and usability when those concepts are later approved.",
+    "No Product/user/admin flow, public API, SDK, Connected Product, identity, financial, audit, compliance, or commercial semantics are authorized."
+  ]
+}

@@ -1,0 +1,68 @@
+{
+  "schema_version": 1,
+  "scope_id": "TUN-P1-024",
+  "scope_type": "WORK_ITEM",
+  "validation_kind": "COMMITTED",
+  "result": "PASS",
+  "validated_commit_sha": "4825afc35878b36229f7f7e9f6902aab234cd68d",
+  "tested_commit_sha": "4825afc35878b36229f7f7e9f6902aab234cd68d",
+  "owned_behavior_paths": [
+    "src/Tunner.Platform/Secrets/ISecretStore.cs",
+    "src/Tunner.Platform/Secrets/OpenBaoSecretStore.cs",
+    "src/Tunner.Platform/Secrets/AssemblyInfo.cs",
+    "src/Tunner.Installer/Tunner.Installer.csproj",
+    "src/Tunner.Installer/R2InstallationProfile.cs",
+    "src/Tunner.Installer/ConfiguredR2Storage.cs",
+    "src/Tunner.Installer/R2ContractProbe.cs",
+    "src/Tunner.Installer/Program.cs",
+    "tests/Tunner.Installer.Tests/Tunner.Installer.Tests.csproj",
+    "tests/Tunner.Installer.Tests/InstallerTests.cs",
+    "tests/Tunner.Installer.Tests/OpenBaoIntegrationTests.cs",
+    "tests/Tunner.Installer.Tests/ConfiguredStorageTests.cs",
+    "docs/development/R2_INSTALLER.md",
+    "tools/validation/Test-TunnerR2Installer.ps1"
+  ],
+  "checked_at": "2026-10-15T17:32:17Z",
+  "execution_receipt": "governance/evidence/TUN-P1-024-EXECUTION-RESULTS.json",
+  "checks": [
+    "Installer local validation entry point PASS: zero-warning build, 39 tests including disposable OpenBao, unchanged secret scan and SAST.",
+    "Restored original platform solution tests PASS: 289 tests, zero skipped; combined current receipts cover 328 passing tests.",
+    "All 14 installer-owned behavior paths match candidate, HEAD and working Git objects.",
+    "Original platform solution equals its pre-task Git blob; closed P1-002 records unchanged."
+  ],
+  "scope_limit": "Technical installer and contract runner only; no live R2 PASS or milestone acceptance.",
+  "previous_candidate_validation": {
+    "schema_version": 1,
+    "scope_id": "TUN-P1-024",
+    "scope_type": "WORK_ITEM",
+    "validation_kind": "COMMITTED",
+    "result": "PASS",
+    "validated_commit_sha": "4d0b30846d85a02d5e2f37df964dd3592afe8704",
+    "tested_commit_sha": "4d0b30846d85a02d5e2f37df964dd3592afe8704",
+    "owned_behavior_paths": [
+      "src/Tunner.Platform/Secrets/ISecretStore.cs",
+      "src/Tunner.Platform/Secrets/OpenBaoSecretStore.cs",
+      "src/Tunner.Platform/Secrets/AssemblyInfo.cs",
+      "src/Tunner.Installer/Tunner.Installer.csproj",
+      "src/Tunner.Installer/R2InstallationProfile.cs",
+      "src/Tunner.Installer/ConfiguredR2Storage.cs",
+      "src/Tunner.Installer/R2ContractProbe.cs",
+      "src/Tunner.Installer/Program.cs",
+      "tests/Tunner.Installer.Tests/Tunner.Installer.Tests.csproj",
+      "tests/Tunner.Installer.Tests/InstallerTests.cs",
+      "tests/Tunner.Installer.Tests/OpenBaoIntegrationTests.cs",
+      "tests/Tunner.Installer.Tests/ConfiguredStorageTests.cs",
+      "Tunner.Platform.slnx",
+      "docs/development/R2_INSTALLER.md"
+    ],
+    "checked_at": "2026-10-15T17:22:18Z",
+    "execution_receipt": "governance/evidence/TUN-P1-024-EXECUTION-RESULTS.json",
+    "checks": [
+      "Solution builds with zero warnings/errors.",
+      "328 platform tests pass, zero skipped; 39 installer tests include real disposable OpenBao.",
+      "Secret scan/SAST and installer transitive vulnerability audit pass.",
+      "All 14 owned behavior paths exactly match tested candidate, HEAD and working-tree Git objects."
+    ],
+    "scope_limit": "Technical installer and contract runner only; no live R2 PASS or milestone acceptance."
+  }
+}

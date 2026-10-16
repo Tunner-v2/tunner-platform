@@ -1,0 +1,40 @@
+{
+  "schema_version": 1,
+  "evidence_id": "TUN-P1-002-VALIDATION",
+  "scope_type": "WORK_ITEM",
+  "scope_id": "TUN-P1-002",
+  "status": "PASS",
+  "checked_at": "2026-10-01T23:55:00-04:00",
+  "checks": [
+    "Tunner.Governance.sln restored and built with zero warnings/errors while containing governance tooling only.",
+    "Tunner.Platform.slnx restored and built with zero warnings/errors while containing application and application-test projects only.",
+    "Tunner.Platform.ArchitectureTests passed 4 of 4 checks for the technical health endpoint, explicit module registration, host references, and platform dependency direction.",
+    "Existing Tunner.Governance functional checks, Tunner.Observability functional checks, and Tunner.TestHarness unit checks passed without launching a host or container.",
+    "Validate-TunnerPlatformHostSource.ps1 passed: the application solution excludes governance tooling, the governance solution excludes application projects, both hosts reference only the Platform/Observability foundations, and the source uses the explicit module-registration convention.",
+    "Authority verification passed for 76 artifacts; governance validation passed for 131 records; expanded context for TUN-P1-002 is current; repository documentation validation and whitespace validation passed."
+  ],
+  "artifacts": [
+    "Tunner.Platform.slnx",
+    "Tunner.Governance.sln",
+    "src/Tunner.Platform/TunnerModuleRegistration.cs",
+    "src/Tunner.Api/Program.cs",
+    "src/Tunner.Worker/Program.cs",
+    "tests/Tunner.Platform.ArchitectureTests/HostCompositionTests.cs",
+    "tools/validation/Validate-TunnerPlatformHostSource.ps1",
+    "docs/development/LOCAL_PLATFORM_HOST_COMPOSITION.md"
+  ],
+  "limitations": [
+    "The API host exposes only a technical health endpoint. It is not a Product API, OAuth/Identity surface, BFF, or deployed service claim.",
+    "The Worker host has no outbox, durable work, timers, RabbitMQ, provider, or Product processing behavior in this slice.",
+    "No API/Worker/Docker process was started; production readiness, dependency health, release, and protected-main integration remain out of scope."
+  ],
+  "commit_sha": "1d1057914d392f19710e14329c2c29a011c014e7",
+  "git_state": {
+    "repository_changed": true,
+    "validated_commit_sha": "1d1057914d392f19710e14329c2c29a011c014e7",
+    "tested_commit_sha": "1d1057914d392f19710e14329c2c29a011c014e7",
+    "work_item_commit_shas": ["1d1057914d392f19710e14329c2c29a011c014e7"],
+    "closure_commit_sha": null,
+    "remaining_uncommitted_classification": "UNRELATED_ACTIVE_WORK"
+  }
+}

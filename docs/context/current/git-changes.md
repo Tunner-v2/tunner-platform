@@ -1,12 +1,12 @@
 # Recent relevant Git changes
 
-- `6aaa3b0 chore: refresh P0 telemetry handoff context`
-- `bedbe5a feat: complete P0 project memory state`
-- `338a2cc feat: complete P0 adaptive context tooling`
-- `94292a5 chore: record P0 orchestrator local validation`
-- `8f12b91 fix: support governed orchestration review states`
-- `42b2802 chore: record P0 role matrix local validation`
-- `d1c9ca6 feat: enforce P0 role activation review matrix`
-- `6b09ebe feat: add P0 skill registry validation`
-- `bb76144 feat: add P0 documentation validation`
-- `db17647 feat: complete P0 developer automation`
+- `8e7b1b1 chore(P1-019): close validated BFF technical foundation`
+- `e2f3998 test(P1-019): record committed security validation and scoped findings`
+- `7aa8e46 feat(P1-019): add separate fail-closed browser BFF foundations`
+- `762ed22 docs(P1-019): resolve approved BFF scope and security plan`
+- `08e1f90 docs(P1-018): anchor closure and repository-only recovery handoff`
+- `4755f89 chore(P1-018): close validated shared UI foundation`
+- `fd0ee3b test(P1-018): record committed UI validation and seven role reviews`
+- `c928b32 feat(P1-018): add scoped light theme and shared accessible UI controls`
+- `716f6ed docs(P1-018): resolve shared UI scope from approved light references`
+- `03d705e chore(governance): record P1-017 closure lineage and repository recovery`

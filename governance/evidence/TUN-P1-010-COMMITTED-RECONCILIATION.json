@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "scope_id": "TUN-P1-010",
+  "scope_type": "WORK_ITEM",
+  "validation_kind": "RETROSPECTIVE_COMMITTED",
+  "result": "PASS",
+  "validated_commit_sha": "6fb030241ad0927f0a2576da23d348db1cfceab6",
+  "tested_commit_sha": "6fb030241ad0927f0a2576da23d348db1cfceab6",
+  "owned_behavior_paths": [
+    "docs/development/P1_SIGNALR_REALTIME_REFINEMENT.md",
+    "src/Tunner.Platform/Realtime/RealtimeAudience.cs",
+    "src/Tunner.Platform/Realtime/RealtimeResynchronizationHint.cs",
+    "src/Tunner.Platform/Realtime/TunnerRealtimeHub.cs",
+    "src/Tunner.Platform/Realtime/TunnerRealtimeServiceCollectionExtensions.cs",
+    "tests/Tunner.Platform.ArchitectureTests/BffFoundationTests.cs",
+    "tests/Tunner.Platform.ArchitectureTests/RealtimeFoundationTests.cs",
+    "tests/Tunner.Platform.ArchitectureTests/RealtimeTransportTests.cs",
+    "tools/validation/Validate-TunnerSignalRRealtimeSource.ps1"
+  ],
+  "checks": [
+    "All 237 architecture/BFF tests passed, zero skipped, including actual SignalR authentication/origin rejection, WebSocket hint delivery, reconnect/revocation, authoritative read and connection rate rejection; SignalR source guard passed.",
+    "Platform candidate build: zero warnings/errors.",
+    "Read-only verification: all 9 owned candidate blobs equal HEAD and working-tree Git objects. No ownership mismatch."
+  ],
+  "boundary": "Current preserved implementation revalidation owned by TUN-P1-023; original execution claims and historical evidence are unchanged. Governance lifecycle and evidence records are metadata; initial generated dirty files are excluded.",
+  "checked_at": "2026-10-15T15:04:13Z",
+  "execution_receipt": "governance/evidence/TUN-P1-023-EXECUTION-RESULTS.json",
+  "scope_limit": "Current technical scope only. Original validation claims remain preserved; live R2 and P1 milestone acceptance remain unresolved."
+}

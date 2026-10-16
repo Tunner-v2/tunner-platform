@@ -1,0 +1,52 @@
+schema_version: 1
+work_item_id: ""
+milestone_id: ""
+revision_ref: null  # Owning post-closure Revision when applicable
+sprint_id: null
+title: ""
+status: DRAFT
+type: FEATURE
+authority_refs: []
+flow_refs: []
+contract_refs: []
+decision_refs: []
+authority_resolution_refs: []
+acceptance_criteria: []
+prerequisites: []
+conditional_activation:
+  is_conditional: false
+  trigger_refs: []
+  trigger_status: null  # PRESENT | ABSENT | NOT_APPLICABLE
+
+# Each prerequisite may declare: {work_item_id: "", required_readiness: LOCAL_VALIDATED | MERGED_TO_MAIN}
+blockers: []
+pr_integration:
+  pull_request: null
+  pr_state: null
+  local_readiness: null
+  merged_to_main: false
+git_state:
+  repository_changed: null
+  validated_commit_sha: null
+  tested_commit_sha: null
+  work_item_commit_shas: []
+  closure_commit_sha: null
+  remaining_uncommitted_paths: []
+  remaining_uncommitted_classification: NONE  # NONE | PREEXISTING_UNRELATED | UNRELATED_ACTIVE_WORK | WORK_ITEM_OWNED
+impact:
+  architecture: false
+  ui: false
+  sdk: false
+  financial: false
+  compliance: false
+  security: false
+  devops: false
+  support: false
+activated_roles: []
+required_tests: []
+required_evidence: []
+context_policy: TASK
+todos: []
+defects: []
+created_at: null
+updated_at: null

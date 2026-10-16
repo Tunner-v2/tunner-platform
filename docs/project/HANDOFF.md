@@ -1,23 +1,31 @@
-# HANDOFF
+# Governed project recovery state
 
-## Milestone
+Derived deterministically from repository-native governance. Regenerate with tunner context build.
 
-- ID: P0 — Governance & Development System
-- Status: CLOSED
-- Branch: change/TUN-P0-027-role-activation
-- Base commit before the current local P0 closure changes: 6aaa3b0
-- Scope: repository bootstrap, authority mirror, governance/context/orchestration, evidence, security, CI, developer tooling, self-hosting cutover, and location-independent root/path resolution.
+- P0: historical CLOSED; active Revisions:
+- P1: historical ACTIVE; active Revisions:
 
-## Verified closure evidence
+Latest bounded Revision lineage:
+- P0-RV001: CLOSED; original P0; parent none; CORRECTIVE: Post-closure remediation of governance/control-plane, evidence integrity, project-state consistency, fresh-agent recovery, authority integrity and portability deficiencies discovered after legitimate historical P0 closure.
+- P0-003-RV001: CLOSED; original TUN-P0-003; parent P0-RV001; CORRECTIVE: Remediate the post-closure gap recorded by REOPEN-TUN-P0-003-001; retain original DONE evidence.
+- P0-004-RV001: CLOSED; original TUN-P0-004; parent P0-RV001; CORRECTIVE: Remediate the post-closure gap recorded by REOPEN-TUN-P0-004-001; retain original DONE evidence.
+- P0-011-RV001: CLOSED; original TUN-P0-011; parent P0-RV001; CORRECTIVE: Remediate the post-closure gap recorded by REOPEN-TUN-P0-011-001; retain original DONE evidence.
+- P0-026-RV001: CLOSED; original TUN-P0-026; parent P0-RV001; CORRECTIVE: Remediate the post-closure gap recorded by REOPEN-TUN-P0-026-001; retain original DONE evidence.
+- P0-030-RV001: CLOSED; original TUN-P0-030; parent P0-RV001; CORRECTIVE: Remediate the post-closure gap recorded by REOPEN-TUN-P0-030-001; retain original DONE evidence.
+- P0-032-RV001: CLOSED; original TUN-P0-032; parent P0-RV001; CORRECTIVE: Remediate the post-closure gap recorded by REOPEN-TUN-P0-032-001; retain original DONE evidence.
+- P0-033-RV001: CLOSED; original TUN-P0-033; parent P0-RV001; CORRECTIVE: Remediate the post-closure gap recorded by REOPEN-TUN-P0-033-001; retain original DONE evidence.
+- P0-035-RV001: CLOSED; original TUN-P0-035; parent P0-RV001; CORRECTIVE: Remediate the post-closure gap recorded by REOPEN-TUN-P0-035-001; retain original DONE evidence.
 
-- `tunner authority verify`: VERIFIED for 76 hash-checked artifacts.
-- `tunner governance validate`: valid with no diagnostics.
-- All 26 declared P0 work items are `DONE`; the close-check re-evaluates every individual final gate as `READY`.
-- The P0 governance-engineer, tester/QA-engineer, and auditor reviews pass in `governance/evidence/P0-MILESTONE-ROLE-REVIEWS.json`.
-- `dotnet build Tunner.Governance.sln --no-restore` and the governance functional suite pass with zero build warnings/errors.
-- `tunner governance milestone close-check P0` returns machine-readable `PASS`; state progression was checked at every policy transition through `CLOSED`.
+Selected scope: TUN-P1-019
+Validated SHA: 7aa8e46e6318479e8811b3c63d6baf84681de050
+Tested SHA: 7aa8e46e6318479e8811b3c63d6baf84681de050
+Closure SHA: 8e7b1b1e24b528c9e90056858494b2d00b954846
 
-## Boundary and exact next action
+Prerequisites: TUN-P1-002, TUN-P1-005
+Authority: docs/authority/current-authority.json, docs/authority/amendments/AMD-0004/AMD-0004_Shared_Technical_Primitives_Formatting_and_Canonicalization.md, docs/authority/amendments/AMD-0001/effective-overrides/11_Development_Planes_Milestones_and_P0_Backlog.md, docs/authority/baselines/1.6.0/01_Engineering_Technology_Foundation.md, docs/authority/baselines/1.6.0/02_Repository_Solution_and_Module_Architecture.md, docs/authority/baselines/1.6.0/09_Testing_Acceptance_Evidence_and_Quality_Gates.md, docs/authority/baselines/1.6.0/07_API_SDK_Event_and_Connected_Product_Foundation.md, docs/authority/baselines/1.6.0/08_Security_Privacy_Compliance_and_Global_Market_Governance.md, docs/authority/baselines/1.6.0/17_Account_Identity_and_Session_FRD.md, docs/authority/baselines/1.6.0/28_Support_Risk_Audit_and_Internal_Operations_FRD.md, docs/authority/baselines/1.6.0/29_Privacy_Data_Lifecycle_and_Processing_Governance_FRD.md, docs/authority/baselines/1.6.0/32_Domain_API_Event_Data_and_Policy_Contract_Catalog.md, docs/authority/baselines/1.6.0/33_Production_Readiness_Compliance_and_Release_Gates.md, docs/authority/baselines/1.6.0/34_Architecture_to_Development_Traceability_Matrix.md, docs/authority/baselines/1.6.0/decisions/ADR-0004_Communication_Protocol_Boundaries.md, docs/authority/baselines/1.6.0/decisions/ADR-0005_Browser_BFF_and_Token_Security.md, docs/authority/baselines/1.6.0/decisions/ADR-0006_Identity_ASPNET_Identity_OpenIddict.md, docs/authority/amendments/AMD-0003/AMD-0003_Location-Independent_Repository_and_Path_Resolution.md, docs/authority/amendments/AMD-0005/AMD-0005_Authority-First_Decision_Resolution_and_Duplicate-Decision_Prevention.md
+Defects:
+Evidence:
 
-- P0 closure is a local governance outcome, not a protected-main merge or production release. Existing human approval requirements remain intact.
-- The next scope must be an authority-backed P1–P8 milestone/work item. Create or import it only from approved authority, then run authority/status/next/context startup checks and role activation before implementation. Do not infer Product requirements from P0 artifacts.
+Exact next governed action: inspect scoped readiness findings from tunner governance next
+
+P1 historical validation findings are retained in governance/evidence/P0-RV001-P1-EVIDENCE-AUDIT.json. No chat history is required.

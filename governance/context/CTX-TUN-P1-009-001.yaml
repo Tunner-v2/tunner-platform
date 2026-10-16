@@ -1,0 +1,51 @@
+schema_version: 1
+selection_id: CTX-TUN-P1-009-001
+scope_type: WORK_ITEM
+scope_id: TUN-P1-009
+context_mode: EXPANDED
+included_artifacts:
+  - AGENTS.md
+  - docs/authority/current-authority.json
+  - docs/authority/amendments/AMD-0001/effective-overrides/11_Development_Planes_Milestones_and_P0_Backlog.md
+  - docs/authority/amendments/AMD-0004/AMD-0004_Shared_Technical_Primitives_Formatting_and_Canonicalization.md
+  - docs/authority/baselines/1.6.0/01_Engineering_Technology_Foundation.md
+  - docs/authority/baselines/1.6.0/02_Repository_Solution_and_Module_Architecture.md
+  - docs/authority/baselines/1.6.0/09_Testing_Acceptance_Evidence_and_Quality_Gates.md
+  - docs/authority/baselines/1.6.0/13_RD_Source_Register.md
+  - governance/milestones/P1.yaml
+  - governance/dependencies/DEP-TUN-P1-009-TUN-P1-002.yaml
+  - governance/dependencies/DEP-TUN-P1-009-TUN-P1-005.yaml
+  - governance/work-items/TUN-P1-002.yaml
+  - governance/work-items/TUN-P1-005.yaml
+  - governance/work-items/TUN-P1-009.yaml
+  - governance/evidence/TUN-P1-002-VALIDATION.json
+  - governance/evidence/TUN-P1-005-VALIDATION.json
+  - governance/evidence/TUN-P1-009-RD-SOURCES.json
+  - governance/rd/source-registry.json
+  - docs/development/P1_CAPABILITY_DECOMPOSITION_AND_PRIMITIVE_REUSE.md
+  - docs/development/P1_PLATFORM_FOUNDATION_REFINEMENT.md
+  - docs/development/P1_R2_OBJECT_STORAGE_REFINEMENT.md
+  - docs/development/LOCAL_DEVELOPMENT.md
+  - docs/project/CURRENT_STATE.md
+  - docs/project/HANDOFF.md
+  - docs/project/PROJECT_CONTEXT.md
+  - src/Tunner.Platform
+  - src/Tunner.Testing
+  - tests/Tunner.Database.IntegrationTests
+  - tools/dev
+  - .agent/skills/devops-engineer/SKILL.md
+  - .agent/skills/full-stack-engineer/SKILL.md
+  - .agent/skills/rd-engineer/SKILL.md
+  - .agent/skills/solution-architect/SKILL.md
+  - .agent/skills/tester-qa-engineer/SKILL.md
+excluded_artifacts:
+  - Product/user/admin behavior, public API/SDK, identity/session, financial, audit, provider, compliance, and commercial semantics
+  - Cloudflare account/bucket/provider configuration, credentials, endpoints, regional/jurisdiction selection, lifecycle/lock/encryption policy, public access, presigned access, deployment, release, and production operations
+  - Object ownership/purpose, content type/size/malware policy, retention/legal hold, authoritative PostgreSQL metadata, and external provider finality
+exclusion_reasons:
+  Product/user/admin behavior, public API/SDK, identity/session, financial, audit, provider, compliance, and commercial semantics: P1-009 is a technical storage foundation without Product authority.
+  Cloudflare account/bucket/provider configuration, credentials, endpoints, regional/jurisdiction selection, lifecycle/lock/encryption policy, public access, presigned access, deployment, release, and production operations: provider environment and compliance choices require later governed authority.
+  Object ownership/purpose, content type/size/malware policy, retention/legal hold, authoritative PostgreSQL metadata, and external provider finality: owner-domain policy and the system of record are out of scope for this adapter boundary.
+source_hashes: {}
+tool_version: manual-p1-r2-refinement-context-1.0.0
+created_at: 2026-10-02T17:05:35-04:00

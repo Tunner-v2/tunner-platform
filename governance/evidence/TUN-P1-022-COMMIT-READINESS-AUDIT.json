@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "evidence_id": "TUN-P1-022-COMMIT-READINESS-AUDIT",
+  "scope_type": "MILESTONE",
+  "scope_id": "P1",
+  "status": "REMEDIATION_REQUIRED",
+  "checked_at": "2026-10-03T12:45:00-04:00",
+  "authority_ref": "AMD-0002 sections 2B, 3 and 5",
+  "command": "tunner governance commit-readiness audit --milestone P1",
+  "result": {
+    "completed_items_audited": ["TUN-P1-001", "TUN-P1-002", "TUN-P1-003", "TUN-P1-004", "TUN-P1-005", "TUN-P1-006", "TUN-P1-007", "TUN-P1-008", "TUN-P1-009", "TUN-P1-010", "TUN-P1-011", "TUN-P1-020", "TUN-P1-021"],
+    "items_with_validated_commit_state": [],
+    "items_requiring_remediation": ["TUN-P1-001", "TUN-P1-002", "TUN-P1-003", "TUN-P1-004", "TUN-P1-005", "TUN-P1-006", "TUN-P1-007", "TUN-P1-008", "TUN-P1-009", "TUN-P1-010", "TUN-P1-011", "TUN-P1-020", "TUN-P1-021"]
+  },
+  "ownership_finding": "The active dirty worktree contains interleaved historical P1 implementation, governance, documentation, evidence and generated-context paths. No blanket staging or commit is permitted. Each remediation commit must be scoped after deterministic ownership classification.",
+  "p1_010": "P1-010 remains technically authority-aligned but cannot retain DONE under revised AMD-0002 until its owned change set is committed, validation rerun against that SHA, and evidence/git_state linkage recorded.",
+  "next_action": "Classify path ownership and create cohesive validation-candidate commits without absorbing unrelated paths; begin with the governing P1-021 remediation and then remediate historical P1 records in dependency order."
+}

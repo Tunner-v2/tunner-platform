@@ -10,6 +10,10 @@
 - Status:
 - Goal:
 
+## Active revisions
+| Revision | Original scope | State | Impact/blocking scope | Next action |
+|---|---|---|---|---|
+
 ## Active sprint
 - ID:
 - Goal:
@@ -18,6 +22,10 @@
 ## Active work items
 | ID | State | Owner/roles | Blocker | Next action |
 |---|---|---|---|---|
+
+## Repository state
+- Root resolution: PASS/FAIL
+- Path portability validation: PASS/FAIL
 
 ## Build/test state
 - Last verified commit:

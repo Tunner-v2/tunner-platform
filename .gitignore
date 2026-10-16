@@ -9,3 +9,12 @@ obj/
 !.env.example
 artifacts/
 coverage/
+# Local identity-allocation mutex is generated state, never a governed record.
+governance/revisions/.allocation.lock
+# P1-018 web dependency, build and test output.
+node_modules/
+web/**/dist/
+web/**/.vite/
+web/test-results/
+web/playwright-report/
+.pnpm-store/

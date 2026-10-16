@@ -1,0 +1,25 @@
+{
+  "scope_type": "WORK_ITEM",
+  "outcome": "RESOLVED_EXISTING_AUTHORITY",
+  "reviewed_at": "2026-10-05T21:51:58.8951353+00:00",
+  "status": "PASS",
+  "conclusion": "Documents 23 and 32 define typed provider evidence and stable correlation/idempotency; ADR-0014 already selects Stripe. Detailed internal technical fields implement approved contract invariants; P7 finality/side effects are not triggered. Earlier missing-authority conclusion omitted these contracts.",
+  "new_authority_record_created": false,
+  "previous_conclusion": "authority_resolution:\n  schema_version: 1\n  outcome: REQUIRED_MISSING_AUTHORITY\n  reviewed_authority_refs:\n    - docs/authority/current-authority.json\n    - docs/authority/amendments/AMD-0005/AMD-0005_Authority-First_Decision_Resolution_and_Duplicate-Decision_Prevention.md\n    - docs/authority/amendments/AMD-0005/effective-overrides/00_Authority_Change_Control_and_Documentation_Governance.md\n  unresolved_question: \"Which approved provider contract selects the provider-neutral correlation inputs, idempotency boundary, and finality semantics?\"\n  conclusion: \"No provider contract or provider selection is authorized; this is a real missing-authority blocker and does not permit payment or provider behavior.\"\n  conditional_trigger_absent: false\n  reviewed_at: 2026-10-03T09:25:00-04:00\r\n",
+  "schema_version": 1,
+  "scope_id": "TUN-P1-015",
+  "canonical_sources": [
+    "https://drive.google.com/file/d/1X6IJ4Ym7APshKu2cNGJg7VKcQYBs7AgL/view",
+    "https://drive.google.com/file/d/1kvunBTzFrAPEnPsrhzd9cxh6aSHu_9-A/view",
+    "https://drive.google.com/file/d/10O131crc2a8wyXRokA6KAfqCwEpkYIxA/view"
+  ],
+  "reviewed_authority_refs": [
+    "docs/authority/current-authority.json",
+    "docs/authority/baselines/1.6.0/23_Provider_Account_and_Routing_Operations_FRD.md",
+    "docs/authority/baselines/1.6.0/32_Domain_API_Event_Data_and_Policy_Contract_Catalog.md",
+    "docs/authority/baselines/1.6.0/decisions/ADR-0014_Payment_Provider_Stripe.md",
+    "docs/authority/amendments/AMD-0004/AMD-0004_Shared_Technical_Primitives_Formatting_and_Canonicalization.md",
+    "docs/authority/amendments/AMD-0005/AMD-0005_Authority-First_Decision_Resolution_and_Duplicate-Decision_Prevention.md"
+  ],
+  "evidence_id": "TUN-P1-015-AUTHORITY-RESOLUTION"
+}

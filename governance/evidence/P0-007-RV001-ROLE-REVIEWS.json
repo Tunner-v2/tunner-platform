@@ -1,0 +1,71 @@
+{
+  "schema_version": 1,
+  "scope_id": "P0-007-RV001",
+  "scope_type": "REVISION",
+  "status": "PASS",
+  "reviewed_commit_sha": "4f74987590668437637faffd212a3b169b38dcc6",
+  "reviewed_at": "2026-10-15T18:32:14Z",
+  "review_method": "Executing-agent scoped final role reviews; no independent human or release acceptance implied.",
+  "reviews": [
+    {
+      "role": "project-manager",
+      "result": "PASS",
+      "skill_hash": "ae262bf4c9a2e26c688106c7af420fbc4dc26a116048e04ae01a5e4e01ead927",
+      "findings": [
+        "Corrective scope resolves the reported first-run bootstrap bug under existing authority. Original P0-007 closure remains intact; P1 live R2 prerequisite remains open."
+      ]
+    },
+    {
+      "role": "solution-architect",
+      "result": "PASS",
+      "skill_hash": "664ffba70d0f97e75951c3548b7f8391854781e4cf90cc50fc8829543783a35b",
+      "findings": [
+        "Only mount-property existence detection changes. Existing mount name, configuration, policy contents, credential mechanism and operation ordering are preserved."
+      ]
+    },
+    {
+      "role": "governance-engineer",
+      "result": "PASS",
+      "skill_hash": "3c948ff290690b012d3736b561021989681c2b6fcac3f115b96ca1083672536f",
+      "findings": [
+        "Native authority verification checks 168 artifacts; revision allocation, approval and activation are allowed. Candidate includes exact ownership classification; both owned Git objects match tested SHA and working tree."
+      ]
+    },
+    {
+      "role": "devops-engineer",
+      "result": "PASS",
+      "skill_hash": "0def19cfd8cf73f9fe47851ab171d3154e7e80b4675ded65964f10856789b50c",
+      "findings": [
+        "Full bootstrap runs with command doubles pass all nine cases in PowerShell 7 and Windows PowerShell 5.1: first run creates the mount, repeat run preserves it, and provider failures halt later operations."
+      ]
+    },
+    {
+      "role": "cyber-security-engineer",
+      "result": "PASS",
+      "skill_hash": "2d32ff3d7fb503f29cf930e9852ed4a757bb48a08e3fa4e3f6d5a23139a47f97",
+      "findings": [
+        "Secret scan/SAST pass 1243 files with unchanged rules. Synthetic private input is redacted from captured output. Original policies and transport settings are unchanged; actual root token remains with the operator."
+      ]
+    },
+    {
+      "role": "tester-qa-engineer",
+      "result": "PASS",
+      "skill_hash": "a57ce99d7ad7a3b60f17e4826c81c507c9cc208d8928285c406222eefe0a18fd",
+      "findings": [
+        "18 scenario executions pass across both runtimes. Coverage includes empty/unrelated/existing mounts, listing failure, malformed JSON, create failure, both policy failures and credential-free status. Prior harness and host-policy failures are retained."
+      ]
+    },
+    {
+      "role": "auditor",
+      "result": "PASS",
+      "skill_hash": "191c796fc5df0332ff2c3c464ca611d2c6d3ffc5ba7e2807986a71ad2e40d921",
+      "findings": [
+        "Exact tested SHA, local receipt hashes, two owned Git blobs and original closed-record preservation are verified. These are executing-agent scoped reviews; no independent human approval or actual operator policy-application success is claimed."
+      ]
+    }
+  ],
+  "blocking_findings": [],
+  "evidence_refs": [
+    "governance/evidence/P0-007-RV001-VALIDATION.json"
+  ]
+}

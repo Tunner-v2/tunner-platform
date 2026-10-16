@@ -3,6 +3,8 @@
 > **Status:** APPROVED / ACTIVE  
 > **Effective date:** 2026-09-30  
 > **Target baseline:** Tunner Development Documentation Baseline 1.6.0
+> **Applicability:** GLOBAL across repository source, tooling, governance, evidence, documentation, scripts, Docker/CI/CD, tests and all current/future development planes.
+> **Scope clarification:** 2026-10-03 — P0 establishes the shared resolver and initial relocation evidence; portability remains a permanent system-wide invariant.
 
 # AMD-0003 — Location-Independent Repository & Path Resolution
 
@@ -20,13 +22,19 @@ Audit of the live core Development Documentation and selected Pre-P0 path-bearin
 
 No Tunner business/commercial/domain semantics change.
 
+## 2A. Global applicability clarification
+
+AMD-0003 is a permanent **GLOBAL repository invariant**. It applies to every current and future plane and every repository-resident artifact where filesystem paths can occur.
+
+P0 is responsible for establishing `.tunner-root`, the shared resolver and initial relocation proof. That implementation responsibility does not make the portability rule P0-only. All later application code, tooling, SDK/build scripts, test/evidence generators, CI/CD, Docker assets and generated project state must continue using the governed location-independent path model.
+
 ## 3. Approved rules
 
 1. The Tunner repository/solution checkout location is runtime context, never project authority.
 2. No committed source, script, build config, solution/project reference, Docker/CI config, governance record, evidence artifact, generated project state or documentation instruction may require a developer/runner-specific absolute repository path.
 3. Repository-internal persisted paths use `<repo-root>`-relative logical form and canonical `/` separators.
 4. Add committed `.tunner-root` as a repository-root marker.
-5. All P0 tools use one shared root/path resolver:
+5. All Tunner repository tooling uses one shared root/path resolver established during P0:
    - explicit validated `--repo-root`;
    - validated `TUNNER_REPO_ROOT`;
    - Git top-level;
@@ -38,7 +46,7 @@ No Tunner business/commercial/domain semantics change.
 9. Docker/Compose, scripts and CI derive checkout/workspace paths dynamically.
 10. Google Drive URLs/IDs, GitHub URLs, Figma URLs, provider URIs and network endpoints are external identifiers, not local filesystem paths; they remain valid authority/resource references.
 11. Validation must detect unapproved machine-specific absolute repository paths.
-12. P0 must prove portability by relocating/copying/cloning the checkout to a different parent location/drive and rerunning the governed toolchain without committed path edits.
+12. P0 must establish initial portability evidence by relocating/copying/cloning the checkout to a different parent location/drive and rerunning the governed toolchain without committed path edits; later tooling and planes must preserve that invariant.
 13. Conceptual repository diagrams use `<repo-root>/`, not `/`, to avoid implying a Linux filesystem-root dependency.
 14. Add `TUN-P0-035 — Location-independent repository/path resolution` and require it for P0 closure.
 
@@ -60,10 +68,13 @@ No Tunner business/commercial/domain semantics change.
 
 ## 5. Development authorization
 
+**Historical authorization snapshot at AMD-0003 approval. The P0 work item is the initial implementation vehicle; the portability rule itself is global and permanent.**
+
+
 - Documentation/business closure remains PASS.
 - P0 remains AUTHORIZED.
 - P1–P8 remain blocked by the existing P0 enablement gate.
-- This amendment adds a P0 portability requirement; it does not reopen Product/business design.
+- This amendment adds the initial P0 portability implementation/evidence requirement and a permanent global portability invariant; it does not reopen Product/business design.
 - Product Owner decision introduced: NONE beyond the explicit approval of this amendment.
 
 ## 6. Approval

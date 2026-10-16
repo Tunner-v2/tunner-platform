@@ -9,6 +9,7 @@ Stable concise project context derived from approved authority. Not a replacemen
 - Business/domain boundaries:
 - Current documentation baseline:
 - Active amendments:
+- Active/latest revisions:
 
 ## Architecture summary
 - Runtime/topology:
@@ -35,3 +36,10 @@ Stable concise project context derived from approved authority. Not a replacemen
 - FRD/decision authority outranks Figma/code.
 - Governance controls orchestration.
 - Project state must be reconstructable without chat history.
+
+
+## Repository path policy
+- Repository root marker: `.tunner-root`
+- Persisted repository paths: relative to repository root
+- Checkout absolute path: runtime-only, never project authority
+- Root resolution: governed dynamic resolver

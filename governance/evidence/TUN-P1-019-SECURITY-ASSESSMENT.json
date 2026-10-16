@@ -1,0 +1,72 @@
+{
+  "schema_version": 1,
+  "evidence_id": "TUN-P1-019-SECURITY-ASSESSMENT",
+  "scope_type": "WORK_ITEM",
+  "scope_id": "TUN-P1-019",
+  "status": "PASS",
+  "reviewed_at": "2026-10-14T14:59:14.6369525-04:00",
+  "reviewed_commit": "7aa8e46e6318479e8811b3c63d6baf84681de050",
+  "scope": "Implemented P1 BFF technical boundary only; not environment or production release acceptance.",
+  "new_package_references": [],
+  "bff_nuget_advisory_findings": 0,
+  "repository_dependency_audit_result": "FINDINGS",
+  "repository_dependency_findings": [
+    {
+      "project": "src/Tunner.Database.Migrations/Tunner.Database.Migrations.csproj",
+      "package": "System.Security.Cryptography.Xml",
+      "resolved_version": "10.0.12",
+      "advisories": [
+        {
+          "severity": "High",
+          "advisoryurl": "https://github.com/advisories/GHSA-r955-8q5j-3h83"
+        },
+        {
+          "severity": "High",
+          "advisoryurl": "https://github.com/advisories/GHSA-7hqp-7c5m-4vq6"
+        },
+        {
+          "severity": "High",
+          "advisoryurl": "https://github.com/advisories/GHSA-c399-9853-6jmj"
+        }
+      ]
+    },
+    {
+      "project": "src/Tunner.Database.Migrations/Tunner.Database.Migrations.csproj",
+      "package": "System.Security.Cryptography.Pkcs",
+      "resolved_version": "10.0.12",
+      "advisories": [
+        {
+          "severity": "High",
+          "advisoryurl": "https://github.com/advisories/GHSA-846f-f764-76mx"
+        },
+        {
+          "severity": "Moderate",
+          "advisoryurl": "https://github.com/advisories/GHSA-2fmv-rv2c-59x7"
+        }
+      ]
+    }
+  ],
+  "installed_framework": "Microsoft.NETCore.App / Microsoft.AspNetCore.App 10.0.12",
+  "required_environment_followup": "Upgrade affected installed runtime/SDK and migration package dependencies to the vendor-fixed 10.0.13 line or later approved stable patch, then rebuild/revalidate before production or identity activation.",
+  "followup_defect": "governance/defects/DEF-TUN-P1-001-SECURITY-20261014.yaml",
+  "exposure_analysis": [
+    "No shipped BFF endpoint accepts XML, SignedXml, CMS/PKCS#7 or external certificates. The only shipped route is HTTPS health. Real sign-in is disabled and the default authoritative ticket store denies every identity.",
+    "Framework cryptographic operations remain framework-owned; BFF client input is protected cookie/antiforgery material, not caller-supplied XML/CMS. Data Protection key-ring and certificate custody are operator-controlled future deployment concerns.",
+    "Synthetic TLS tests import only their self-generated certificate. The current package audit identifies explicit vulnerable packages only in the unchanged migration project; it does not establish a clean installed shared runtime.",
+    "The new boundary has no unresolved demonstrated critical/high-risk attack path in its implemented transport scope. Vendor advisories remain OPEN environment/dependency findings; no risk acceptance, production clearance or immunity of shared framework is claimed."
+  ],
+  "threat_checks": [
+    "HTTPS required; forwarded-header spoof does not upgrade HTTP",
+    "Explicit target host and Origin; no CORS or trusted proxy enabled",
+    "Secure/HttpOnly/host-only distinct cookie namespaces and Data Protection discriminators",
+    "Native server ticket storage; no browser principal/access/refresh token body",
+    "Deny-by-default store and disabled real sign-in; explicit expiry/no renewal",
+    "Immediate per-request server retrieval/revocation",
+    "Explicit all-unsafe-verb and anonymous-endpoint antiforgery; duplicate/cross-surface header/token rejection",
+    "Existing safe Problem Details, server correlation, no-store/nosniff and redacted-only default logging"
+  ],
+  "limitations": [
+    "Owner restrictions/assurance/idle/rotation and authoritative store are later governed Identity/workforce work.",
+    "Technical component tests and Codex reviews do not constitute independent human security, release or production approval."
+  ]
+}

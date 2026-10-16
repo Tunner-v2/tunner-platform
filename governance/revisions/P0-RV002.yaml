@@ -1,0 +1,68 @@
+{
+  "schema_version": 1,
+  "revision_id": "P0-RV002",
+  "revision_scope": "MILESTONE",
+  "original_scope_id": "P0",
+  "parent_revision_id": "P0-RV001",
+  "parent_milestone_revision_id": null,
+  "title": "Committed readiness and recovery enforcement",
+  "revision_type": "CORRECTIVE",
+  "status": "CLOSED",
+  "reason": "P1 reconciliation exposed fail-open committed-state gates, incomplete ownership validation, unbound milestone reviews and an empty recovery action; preserve historical P0 closure.",
+  "authority_refs": [
+    "docs/authority/current/development/03_Governed_Development_Lifecycle_Scrum_Git.md",
+    "docs/authority/current/development/04_Governance_and_Context_Tooling_Specification.md"
+  ],
+  "decision_refs": [],
+  "defect_refs": [
+    "DEF-P0-RV002-001"
+  ],
+  "change_refs": [],
+  "impact_classification": "NON_BLOCKING",
+  "blocked_scope": [],
+  "acceptance_criteria": [
+    "Require current committed evidence consistently, bind reviews to validated scope, expose exact recovery actions, and retain historical closure and immutable evidence."
+  ],
+  "prerequisites": [],
+  "work_items": [],
+  "required_gates": [],
+  "required_roles": [
+    "project-manager",
+    "solution-architect",
+    "governance-engineer",
+    "tester-qa-engineer",
+    "auditor"
+  ],
+  "evidence_refs": [
+    "governance/evidence/P0-RV002-VALIDATION.json",
+    "docs/development/P0_RV002_READINESS.md"
+  ],
+  "created_at": "2026-10-15T14:15:57.7774065+00:00",
+  "closed_at": "2026-10-15T14:55:56Z",
+  "product_acceptance_required": false,
+  "git_state": {
+    "repository_changed": true,
+    "validated_commit_sha": "c37a720e1618f5acc69ab417d6886009b59f6575",
+    "tested_commit_sha": "c37a720e1618f5acc69ab417d6886009b59f6575",
+    "work_item_commit_shas": [
+      "e158df936c50b691f9a0418005539d212e9ac9fc",
+      "c37a720e1618f5acc69ab417d6886009b59f6575"
+    ],
+    "closure_commit_sha": null,
+    "remaining_uncommitted_paths": [
+      "docs/context/current/HANDOFF.md",
+      "docs/context/current/adaptive-selection.json",
+      "docs/context/current/authority.md",
+      "docs/context/current/contracts.md",
+      "docs/context/current/git-changes.md",
+      "docs/context/current/manifest.json",
+      "docs/context/current/relevant-flows.md",
+      "docs/context/current/summary.md",
+      "docs/context/current/tests.md",
+      "docs/project/CURRENT_STATE.md",
+      "docs/project/HANDOFF.md",
+      "docs/project/PROJECT_CONTEXT.md"
+    ],
+    "remaining_uncommitted_classification": "PREEXISTING_UNRELATED"
+  }
+}

@@ -36,8 +36,15 @@ function Get-PropertyValues($Object, [string]$PropertyName) {
     return @($property.Value)
 }
 
-$inventory = Invoke-DotnetJson @('list', 'Tunner.Governance.sln', 'package', '--include-transitive', '--format', 'json', '--no-restore')
-$vulnerabilityReport = Invoke-DotnetJson @('list', 'Tunner.Governance.sln', 'package', '--vulnerable', '--include-transitive', '--format', 'json', '--no-restore')
+$dependencyScopes = @('Tunner.Governance.sln', 'Tunner.Platform.slnx', 'tests/Tunner.Installer.Tests/Tunner.Installer.Tests.csproj')
+$inventory = [PSCustomObject]@{ projects = @() }
+$vulnerabilityReport = [PSCustomObject]@{ projects = @() }
+foreach ($scope in $dependencyScopes) {
+    $scopeInventory = Invoke-DotnetJson @('list', $scope, 'package', '--include-transitive', '--format', 'json', '--no-restore')
+    $scopeVulnerabilities = Invoke-DotnetJson @('list', $scope, 'package', '--vulnerable', '--include-transitive', '--format', 'json', '--no-restore')
+    $inventory.projects += @(Get-PropertyValues $scopeInventory 'projects')
+    $vulnerabilityReport.projects += @(Get-PropertyValues $scopeVulnerabilities 'projects')
+}
 $vulnerablePackages = [System.Collections.Generic.List[string]]::new()
 foreach ($project in @(Get-PropertyValues $vulnerabilityReport 'projects')) {
     foreach ($framework in @(Get-PropertyValues $project 'frameworks')) {
@@ -99,7 +106,7 @@ $sbom = [ordered]@{
 $sbomPath = Join-Path $outputPath 'tunner.spdx.json'
 [IO.File]::WriteAllText($sbomPath, (($sbom | ConvertTo-Json -Depth 20) + [Environment]::NewLine), [Text.UTF8Encoding]::new($false))
 
-$checksumInputs = @('Directory.Packages.props', 'global.json', 'infra/docker/compose.yaml', 'Tunner.Governance.sln', 'docs/authority/current-authority.json') | ForEach-Object {
+$checksumInputs = @('Directory.Packages.props', 'global.json', 'infra/docker/compose.yaml', 'Tunner.Governance.sln', 'Tunner.Platform.slnx', 'tests/Tunner.Installer.Tests/Tunner.Installer.Tests.csproj', 'web/package.json', 'web/pnpm-lock.yaml', 'docs/authority/current-authority.json') | ForEach-Object {
     $path = Join-Path $RepositoryRoot $_
     if (-not (Test-Path -LiteralPath $path -PathType Leaf)) { throw "Required checksum input is missing: $_" }
     [ordered]@{ path = $_; sha256 = Get-Sha256 $path }
@@ -109,6 +116,7 @@ $provenance = [ordered]@{
     evidence_type = 'local-supply-chain-provenance-hook'
     generated_on = $AsOf
     git_commit = $gitCommit
+    dependency_scopes = $dependencyScopes
     working_tree_clean_before_generation = $treeClean
     sbom = [ordered]@{ path = 'tunner.spdx.json'; sha256 = Get-Sha256 $sbomPath; format = 'SPDX-2.3' }
     checksum_inputs = @($checksumInputs | Sort-Object path)

@@ -22,6 +22,10 @@ try {
     $nativeExit = Get-Variable -Name LASTEXITCODE -ValueOnly -ErrorAction SilentlyContinue
     if ($null -ne $nativeExit -and $nativeExit -ne 0) { throw 'Positive documentation fixture failed.' }
 
+    [IO.File]::WriteAllText((Join-Path $fixture 'docs/authority/amendments/AMD-TEST.md'), ("# Tunner Development Authority Amendment" + $lineBreak + $lineBreak + "> **Status:** APPROVED / ACTIVE" + $lineBreak))
+    & $validator -RepositoryRoot $fixture -AsOf '2026-10-01' -SkipSchemaValidation -SkipSourceFreshness | Out-Null
+    $amendmentExit = Get-Variable -Name LASTEXITCODE -ValueOnly -ErrorAction SilentlyContinue
+    if ($null -ne $amendmentExit -and $amendmentExit -ne 0) { throw 'Approved amendment heading fixture failed.' }
     function Assert-Failure([string]$Name, [string]$ExpectedToken, [scriptblock]$Action) {
         try { & $Action; throw "$Name unexpectedly passed." }
         catch {

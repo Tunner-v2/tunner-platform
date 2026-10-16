@@ -1,0 +1,47 @@
+{
+  "schema_version": 1,
+  "evidence_id": "TUN-P1-013-CLOSURE",
+  "scope_type": "WORK_ITEM",
+  "scope_id": "TUN-P1-013",
+  "status": "DONE",
+  "result": "PASS",
+  "recorded_at": "2026-10-05T20:31:20.3132932+00:00",
+  "validated_commit_sha": "ef3517d63946843ff2ef674d16742931ec793214",
+  "tested_commit_sha": "ef3517d63946843ff2ef674d16742931ec793214",
+  "role_review_evidence_commit_sha": "6d7f23a5c86d802c8899c86f3d7eedb4ba00f1af",
+  "closure_commit_sha": "e475ea88304db30cbb92b6540babfd9c528cc557",
+  "completion_gate": {
+    "command": "tunner governance gate check TUN-P1-013",
+    "evaluated_head": "6d7f23a5c86d802c8899c86f3d7eedb4ba00f1af",
+    "outcome": "READY",
+    "failures": []
+  },
+  "closure_transition": {
+    "from": "VALIDATION",
+    "destination": "DONE",
+    "outcome": "ALLOWED",
+    "product_acceptance_required": false,
+    "note": "Technical-only shared capability under existing approved authority; no Product acceptance is asserted."
+  },
+  "evidence_refs": [
+    "governance/evidence/TUN-P1-013-AUTHORITY-RESOLUTION.json",
+    "governance/evidence/TUN-P1-013-PREFLIGHT-REVIEWS.json",
+    "governance/evidence/TUN-P1-013-VALIDATION.json",
+    "governance/evidence/TUN-P1-013-TEST-RESULTS.json",
+    "governance/evidence/TUN-P1-013-ROLE-REVIEWS.json"
+  ],
+  "behavior_changed_after_validation": false,
+  "initial_head": "8ba39e0ba45a7eb7aa49d307134fee5dadd0c9d4",
+  "initial_dirty_paths": [],
+  "remaining_uncommitted_classification": "NONE",
+  "historical_p0_status": "CLOSED",
+  "historical_p0_revision_status": "CLOSED",
+  "new_authority_created": false,
+  "next_planned_work_item": "TUN-P1-014",
+  "exact_next_action": "Review existing approved audit/contract authority for P1-014 and reconcile its recorded readiness before implementing the Audit append and correlation primitive. Do not create a duplicate authority request.",
+  "limitations": [
+    "Owner scope/eligibility/precedence and policy payload decisions remain outside the shared resolver.",
+    "Existing P1 historical committed-state findings for other work items were not modified by this task.",
+    "No P1-014 implementation or Product/financial/public API behavior is included."
+  ]
+}

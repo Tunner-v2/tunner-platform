@@ -1,0 +1,110 @@
+{
+  "schema_version": 1,
+  "evidence_id": "TUN-P1-013-AUTHORITY-RESOLUTION",
+  "scope_type": "WORK_ITEM",
+  "scope_id": "TUN-P1-013",
+  "status": "RESOLVED_EXISTING_AUTHORITY",
+  "checked_at": "2026-10-05T20:15:14.9208198+00:00",
+  "repository_head_at_review": "4b3fb3c177056196cd2af29826374a902d665a6b",
+  "question": "Which approved owner policy contract supplies effective-policy version inputs, resolution semantics and authoritative results?",
+  "search_terms": [
+    "effective-policy",
+    "policy version",
+    "policy registries",
+    "business effective time",
+    "explicit scope",
+    "FxEconomicTreatmentPolicy",
+    "policy resolution and versioning"
+  ],
+  "canonical_sources": [
+    {
+      "title": "32 - Domain API, Event, Data and Policy Contract Catalog",
+      "url": "https://drive.google.com/file/d/1kvunBTzFrAPEnPsrhzd9cxh6aSHu_9-A/view?usp=drivesdk",
+      "modified_at": "2026-10-02T17:02:12.998Z",
+      "sections": [
+        "1. Purpose",
+        "17. Policy registries",
+        "18. Policy resolution rule",
+        "19. Data ownership"
+      ],
+      "repository_path": "docs/authority/baselines/1.6.0/32_Domain_API_Event_Data_and_Policy_Contract_Catalog.md",
+      "repository_sha256": "b2e9446baa1a63f39e58246ab773cbeff0c15d00f6b240063b8a3eaa988b7339"
+    },
+    {
+      "title": "26 - Finance, Ledger, Accounting, Settlement and Payout FRD",
+      "url": "https://drive.google.com/file/d/1nYBL7l8ELdif4KZo1aiGvK3yidt2jIs2/view?usp=drivesdk",
+      "modified_at": "2026-09-29T17:29:08.351Z",
+      "sections": [
+        "7. Treasury and FX evidence",
+        "8. Ledger scope and posting rules"
+      ],
+      "repository_path": "docs/authority/baselines/1.6.0/26_Finance_Ledger_Accounting_Settlement_and_Payout_FRD.md",
+      "repository_sha256": "a7966783e65068209d200a7d009207abd8252a1085b346c683030f82126726ef"
+    },
+    {
+      "title": "PDR-0010 - Configurable FX Economic Treatment and Guided Configuration",
+      "url": "https://drive.google.com/file/d/1iiImx2TO3elcNCNsyPFabLybk4WSyAg9/view?usp=drivesdk",
+      "modified_at": "2026-09-25T21:25:49.431Z",
+      "sections": [
+        "Policy resolution and versioning",
+        "Acceptance"
+      ],
+      "repository_path": "docs/authority/baselines/1.6.0/decisions/PDR-0010_Configurable_FX_Economic_Treatment_and_Guided_Configuration.md",
+      "repository_sha256": "c84400288efbb4ed93a89d3292a49a0596d727227c18533d7f4abec6b0b483a9"
+    },
+    {
+      "title": "AMD-0004 - Shared Technical Primitives, Formatting and Canonicalization",
+      "url": "https://drive.google.com/file/d/1ZBHXj1ndc5x341fRxEsva06Z2vpUPWzn/view?usp=drivesdk",
+      "modified_at": "2026-10-03T08:54:56.184Z",
+      "sections": [
+        "3. Approved rules"
+      ],
+      "repository_path": "docs/authority/amendments/AMD-0004/AMD-0004_Shared_Technical_Primitives_Formatting_and_Canonicalization.md",
+      "repository_sha256": "9577b29946c772fad06aa1a79d7866d16da3677e944a6bd46fafb13f296a2384"
+    },
+    {
+      "title": "AMD-0005 - Authority-First Decision Resolution and Duplicate-Decision Prevention",
+      "url": "https://drive.google.com/file/d/1M_B4TYwf5gDKaZ-1w_gMR9Nse-Fs7B87/view?usp=drivesdk",
+      "modified_at": "2026-10-03T08:55:00.056Z",
+      "sections": [
+        "4. Mandatory Authority Resolution Pass",
+        "5. Existing authority takes precedence"
+      ],
+      "repository_path": "docs/authority/amendments/AMD-0005/AMD-0005_Authority-First_Decision_Resolution_and_Duplicate-Decision_Prevention.md",
+      "repository_sha256": "51b259a3757c1f881846d3c17666723d0dc72628ad5d25bcd58360c6f41c0d64"
+    }
+  ],
+  "existing_authority_found": [
+    "Document 32 section 1 authorizes detailed executable field schemas during implementation while fixing contract families and invariants in approved documentation.",
+    "Document 32 section 17 defines immutable version identity, status, effective interval, supersession lineage and approval evidence.",
+    "Document 32 section 18 resolves by business effective time and explicit scope; missing or ambiguous required resolution blocks the affected operation without a hidden default.",
+    "Document 26 and PDR-0010 provide an approved owner policy with explicit scope, effective time, precedence and immutable historical evidence.",
+    "AMD-0004 permits cohesive reusable deterministic mechanics while owner domains retain business semantics.",
+    "AMD-0005 requires linking existing sufficient authority rather than creating duplicate authority requests or missing-contract blockers."
+  ],
+  "conflicts_found": [],
+  "unresolved_question": null,
+  "blocked_scope": [],
+  "result": "Remove OWNER_POLICY_CONTRACT_REQUIRED and return P1-013 to REFINEMENT with explicit contract and decision links. Do not claim implemented, reviewed, validated or DONE.",
+  "prior_pass": {
+    "source_commit": "4b3fb3c177056196cd2af29826374a902d665a6b",
+    "source_path": "governance/work-items/TUN-P1-013.yaml",
+    "source_sha256": "507f5692624f71cfd4d2c9bd9267cf34574232d68bd31aab12d6528cff439cc4",
+    "reviewed_at": "2026-10-03T09:25:00-04:00",
+    "outcome": "REQUIRED_MISSING_AUTHORITY",
+    "conclusion": "No approved owner policy contract was found in active authority or governed history; this is a real missing-authority blocker, not a conditional technology trigger.",
+    "disposition": "Superseded by current canonical Drive readback; preserved in Git and this evidence record.",
+    "reason": "The earlier pass omitted Document 32 policy registries/resolution and approved owner policy PDR-0010."
+  },
+  "implementation_boundary": [
+    "Shared deterministic version selection only.",
+    "Owner domains supply business policy content, scope meaning, approval rules and precedence.",
+    "No Finance calculations, financial defaults, public endpoints or Product semantics are implemented by this authority correction."
+  ],
+  "evidence_limitations": [
+    "This evidence records authority resolution and governance correction only; it is not implementation validation or completed specialist review.",
+    "Repository artifact hashes identify existing mirrors; canonical connector text readback does not replace byte-exact registered authority verification."
+  ],
+  "exact_next_action": "Prepare the bounded P1-013 technical contract and role review under the linked existing authority, then re-evaluate governance eligibility before implementation.",
+  "new_authority_created": false
+}
