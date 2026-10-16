@@ -23,7 +23,7 @@
     "dependency_graph": "acyclic; explicit LOCAL_VALIDATED; registered targets",
     "role_declarations": "18/18 native calculations PASS",
     "context_verify": "CURRENT",
-    "native_refinement_eligibility": "Actionable"
+    "native_refinement_eligibility": "Final candidate gate NOT_READY: overbroad security blocked_scope and missing aggregate review envelope; rerun pending after metadata correction."
   },
   "validation_boundary": "Documentation/governance refinement only. No Account/Identity runtime or new Product acceptance is claimed. Existing platform behavior is unchanged; the prior runtime suite is not represented as a new execution.",
   "failed_attempts": [
@@ -34,6 +34,10 @@
     {
       "finding": "Disposable coverage helper used Windows default text encoding.",
       "resolution": "Read verified authority files explicitly as UTF-8; all section/acceptance/dependency checks pass."
+    },
+    {
+      "finding": "Native final gate exposed overbroad P1 security scope propagation and missing aggregate review evidence.",
+      "resolution": "Register explicit release-readiness child with MERGED_TO_MAIN security prerequisite, target that release scope, and aggregate the nine completed engineering reviews. Record actual rerun separately."
     }
   ],
   "open_release_follow_up": "P1-RV001 / DEF-P1-CONTAINER-SCAN-001; actual remote container failures and absent required-status rule remain unwaived.",

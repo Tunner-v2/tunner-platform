@@ -293,5 +293,12 @@
   ],
   "research_boundary": "Candidates require actual image scans and compatibility checks before adoption. PostgreSQL findings include the bundled gosu Go binary. No fixed image, exploit reachability, waiver/VEX approval or changed branch protection is claimed.",
   "blocked_scope": "P1 formal release/production integration; independent P2 authority refinement and pure-domain local work may continue.",
-  "original_closure_preserved": true
+  "original_closure_preserved": true,
+  "release_gate": {
+    "work_item_id": "P1-RV001-002",
+    "prerequisite": "P1-RV001-001",
+    "required_readiness": "MERGED_TO_MAIN",
+    "reason": "Native recursive prerequisite scope made blocked_scope P1 prohibit unrelated local P2 documentation. Target the explicit release-readiness work and require completed, merged security remediation. Findings and severity thresholds remain unwaived.",
+    "status": "NOT_READY"
+  }
 }
