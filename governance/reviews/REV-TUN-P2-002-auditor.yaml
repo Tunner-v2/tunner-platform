@@ -5,7 +5,7 @@
   "role": "auditor",
   "status": "PASS",
   "result": "PASS",
-  "reviewed_at": "2026-10-16T19:37:01.384Z",
+  "reviewed_at": "2026-10-16T20:19:00.112Z",
   "skill_id": "auditor",
   "skill_version": "1.0.0",
   "skill_hash": "191c796fc5df0332ff2c3c464ca611d2c6d3ffc5ba7e2807986a71ad2e40d921",
@@ -31,9 +31,8 @@
     "governance/evidence/TUN-P2-002-VALIDATION.json"
   ],
   "findings": [
-    "Actual 329/329 regression receipts at 7acf2803d604c9f4b916c5e8b24985e9007aacb6 replace scope-only review. The original 57P03 failure remains traceable through P0-010-RV001. Unrelated dirty paths are excluded; Product acceptance and image release barriers remain separate and unclaimed.",
-    "Final engineering candidate review at d856dde651440216369f0698f92f5d7878505d64. Actor: executing-agent role review; no independent human Product, legal or release approval is asserted.",
-    "Ownership envelope is committed in the final tested candidate. Final exact-SHA scope has 329 passed/zero failed/zero skipped across completed suites; Docker interruption and sequential project recovery are explicitly retained in validation evidence."
+    "The active VALIDATION record is revalidated rather than closed history rewritten. The original d856dde validation and review remain in prior evidence, the same ownership array is present in candidate 99c0cf268b368ba64b4984dce6172a00a2546718, and all 345 tests pass at that SHA.",
+    "Revalidation at 99c0cf268b368ba64b4984dce6172a00a2546718 for the P2-003 additive shared solution change. Executing-agent engineering role review; Product, legal, protected-main and release approvals remain separate."
   ],
   "blocking_findings": [],
   "required_actions": [],
