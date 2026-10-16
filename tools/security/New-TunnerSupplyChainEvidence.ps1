@@ -37,8 +37,8 @@ function Get-PropertyValues($Object, [string]$PropertyName) {
 }
 
 $dependencyScopes = @('Tunner.Governance.sln', 'Tunner.Platform.slnx', 'tests/Tunner.Installer.Tests/Tunner.Installer.Tests.csproj')
-$inventory = @{ projects = @() }
-$vulnerabilityReport = @{ projects = @() }
+$inventory = [PSCustomObject]@{ projects = @() }
+$vulnerabilityReport = [PSCustomObject]@{ projects = @() }
 foreach ($scope in $dependencyScopes) {
     $scopeInventory = Invoke-DotnetJson @('list', $scope, 'package', '--include-transitive', '--format', 'json', '--no-restore')
     $scopeVulnerabilities = Invoke-DotnetJson @('list', $scope, 'package', '--vulnerable', '--include-transitive', '--format', 'json', '--no-restore')
