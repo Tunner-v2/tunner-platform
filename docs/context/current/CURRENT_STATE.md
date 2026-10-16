@@ -3,7 +3,7 @@
 ## Historical milestone state
 
 - P0: historical CLOSED; working record CLOSED; active RVs:
-- P1: historical ACTIVE; working record ACTIVE; active RVs:
+- P1: historical VALIDATION; working record VALIDATION; active RVs:
 - TUN-P0-003: historical DONE; working record DONE; active RVs:
 - TUN-P0-004: historical DONE; working record DONE; active RVs:
 - TUN-P0-007: historical DONE; working record DONE; active RVs:
