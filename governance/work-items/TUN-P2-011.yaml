@@ -1,0 +1,84 @@
+{
+  "schema_version": 1,
+  "work_item_id": "TUN-P2-011",
+  "milestone_id": "P2",
+  "sprint_id": null,
+  "title": "Proof-hierarchy Account recovery workflow",
+  "status": "BACKLOG",
+  "type": "FEATURE",
+  "authority_refs": [
+    "docs/authority/current-authority.json",
+    "docs/authority/current/development/11_Development_Planes_Milestones_and_P0_Backlog.md",
+    "docs/authority/baselines/1.6.0/17_Account_Identity_and_Session_FRD.md",
+    "docs/authority/current/development/32_Domain_API_Event_Data_and_Policy_Contract_Catalog.md",
+    "docs/authority/current/development/34_Architecture_to_Development_Traceability_Matrix.md",
+    "docs/authority/baselines/1.6.0/decisions/ADR-0006_Identity_ASPNET_Identity_OpenIddict.md",
+    "docs/authority/baselines/1.6.0/decisions/PDR-0007_DOB_Based_18_Plus_Eligibility.md",
+    "docs/authority/current/development/AMD-0002_Non-Blocking_PR_Approval_and_Continuous_Local_Execution.md",
+    "docs/authority/current/development/02_Repository_Solution_and_Module_Architecture.md",
+    "docs/authority/current/development/09_Testing_Acceptance_Evidence_and_Quality_Gates.md",
+    "docs/authority/baselines/1.6.0/29_Privacy_Data_Lifecycle_and_Processing_Governance_FRD.md"
+  ],
+  "flow_refs": [
+    "docs/authority/current/development/34_Architecture_to_Development_Traceability_Matrix.md"
+  ],
+  "contract_refs": [
+    "docs/authority/current/development/32_Domain_API_Event_Data_and_Policy_Contract_Catalog.md"
+  ],
+  "decision_refs": [
+    "ADR-0006",
+    "PDR-0007"
+  ],
+  "acceptance_criteria": [
+    "Enforce approved strong-authenticator, recovery-code, safe-contact/risk and governed review precedence; Support cannot bypass it.",
+    "Make session revocation/authenticator invalidation/MFA reenrollment and restrictions explicit in RecoveryResult under active policy.",
+    "Keep recovery idempotent, enumeration-resistant and free of security questions or existing credential disclosure."
+  ],
+  "prerequisites": [
+    "TUN-P2-003",
+    "TUN-P2-005",
+    "TUN-P2-006",
+    "TUN-P2-007",
+    "TUN-P2-008",
+    "TUN-P2-009",
+    "TUN-P2-010"
+  ],
+  "blockers": [],
+  "impact": {
+    "architecture": true,
+    "ui": true,
+    "sdk": false,
+    "financial": false,
+    "compliance": true,
+    "security": true,
+    "devops": false,
+    "support": false,
+    "api": true
+  },
+  "activated_roles": [
+    "full-stack-engineer",
+    "tester-qa-engineer",
+    "solution-architect",
+    "cyber-security-engineer",
+    "auditor",
+    "compliance-specialist",
+    "sdk-engineer",
+    "ui-ux-engineer",
+    "frontend-engineer",
+    "end-user-ux-reviewer",
+    "content-writer"
+  ],
+  "required_tests": [
+    "proof hierarchy and Support bypass rejection",
+    "duplicate/concurrent recovery and explicit side effects",
+    "safe recovery UI and restricted evidence"
+  ],
+  "required_evidence": [
+    "governance/evidence/TUN-P2-011-VALIDATION.json"
+  ],
+  "context_policy": "TASK",
+  "todos": [],
+  "defects": [],
+  "created_at": "2026-10-16T17:48:49.296Z",
+  "updated_at": "2026-10-16T17:48:49.296Z"
+}

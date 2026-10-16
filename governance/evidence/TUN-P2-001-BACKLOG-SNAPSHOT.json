@@ -1,0 +1,1556 @@
+{
+  "schema_version": 1,
+  "scope_id": "TUN-P2-001",
+  "created_at": "2026-10-16T17:48:49.296Z",
+  "authority_refs": [
+    "docs/authority/current-authority.json",
+    "docs/authority/current/development/11_Development_Planes_Milestones_and_P0_Backlog.md",
+    "docs/authority/baselines/1.6.0/17_Account_Identity_and_Session_FRD.md",
+    "docs/authority/current/development/32_Domain_API_Event_Data_and_Policy_Contract_Catalog.md",
+    "docs/authority/current/development/34_Architecture_to_Development_Traceability_Matrix.md",
+    "docs/authority/baselines/1.6.0/decisions/ADR-0006_Identity_ASPNET_Identity_OpenIddict.md",
+    "docs/authority/baselines/1.6.0/decisions/PDR-0007_DOB_Based_18_Plus_Eligibility.md",
+    "docs/authority/current/development/AMD-0002_Non-Blocking_PR_Approval_and_Continuous_Local_Execution.md"
+  ],
+  "documentation_gate": "Existing verified FRD 17 plus accepted ADR-0006/PDR-0007 and current contract catalog satisfy preparation authority. Detailed executable contracts and UX/provider/policy evidence are refined in the owning slice before code.",
+  "section_coverage": {
+    "1": [
+      1,
+      17,
+      18
+    ],
+    "2": [
+      3,
+      5,
+      7,
+      8,
+      9,
+      10,
+      11,
+      13,
+      14,
+      15
+    ],
+    "3": [
+      3,
+      4,
+      15
+    ],
+    "4": [
+      4,
+      12
+    ],
+    "5": [
+      10
+    ],
+    "6": [
+      3,
+      5,
+      7,
+      8,
+      9,
+      10
+    ],
+    "7": [
+      6
+    ],
+    "8": [
+      5,
+      13
+    ],
+    "9": [
+      13,
+      14
+    ],
+    "10": [
+      9,
+      11
+    ],
+    "11": [
+      2,
+      4
+    ],
+    "12": [
+      15
+    ],
+    "13": [
+      4,
+      5,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15
+    ],
+    "14": [
+      16
+    ],
+    "15": [
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      15,
+      17
+    ],
+    "16": [
+      17,
+      18
+    ]
+  },
+  "acceptance_coverage": [
+    {
+      "case": "registration enumeration resistance",
+      "tasks": [
+        4,
+        11
+      ]
+    },
+    {
+      "case": "verified-email collision never auto-links",
+      "tasks": [
+        10
+      ]
+    },
+    {
+      "case": "candidate email cannot replace before proof",
+      "tasks": [
+        12
+      ]
+    },
+    {
+      "case": "passkey/TOTP enrollment remains inactive until proof",
+      "tasks": [
+        7,
+        8
+      ]
+    },
+    {
+      "case": "Support cannot bypass recovery proof",
+      "tasks": [
+        11
+      ]
+    },
+    {
+      "case": "Tunner revocation and Product propagation are separately evidenced",
+      "tasks": [
+        13,
+        14
+      ]
+    },
+    {
+      "case": "closure enforces owner-domain blockers",
+      "tasks": [
+        15
+      ]
+    },
+    {
+      "case": "closed Account cannot authenticate",
+      "tasks": [
+        5,
+        15
+      ]
+    },
+    {
+      "case": "registration/recovery/verification replay is idempotent",
+      "tasks": [
+        4,
+        11,
+        12
+      ]
+    },
+    {
+      "case": "concurrent email/security mutations detect version conflicts",
+      "tasks": [
+        6,
+        8,
+        9,
+        12,
+        15
+      ]
+    },
+    {
+      "case": "Account activation creates no Product membership/entitlement",
+      "tasks": [
+        4,
+        14,
+        17
+      ]
+    }
+  ],
+  "first_implementation_scope": "TUN-P2-002",
+  "work_items": [
+    {
+      "schema_version": 1,
+      "work_item_id": "TUN-P2-002",
+      "milestone_id": "P2",
+      "sprint_id": null,
+      "title": "Calendar-safe adult eligibility and derived evidence",
+      "status": "BACKLOG",
+      "type": "FEATURE",
+      "authority_refs": [
+        "docs/authority/current-authority.json",
+        "docs/authority/current/development/11_Development_Planes_Milestones_and_P0_Backlog.md",
+        "docs/authority/baselines/1.6.0/17_Account_Identity_and_Session_FRD.md",
+        "docs/authority/current/development/32_Domain_API_Event_Data_and_Policy_Contract_Catalog.md",
+        "docs/authority/current/development/34_Architecture_to_Development_Traceability_Matrix.md",
+        "docs/authority/baselines/1.6.0/decisions/ADR-0006_Identity_ASPNET_Identity_OpenIddict.md",
+        "docs/authority/baselines/1.6.0/decisions/PDR-0007_DOB_Based_18_Plus_Eligibility.md",
+        "docs/authority/current/development/AMD-0002_Non-Blocking_PR_Approval_and_Continuous_Local_Execution.md",
+        "docs/authority/current/development/02_Repository_Solution_and_Module_Architecture.md",
+        "docs/authority/current/development/09_Testing_Acceptance_Evidence_and_Quality_Gates.md",
+        "docs/authority/baselines/1.6.0/29_Privacy_Data_Lifecycle_and_Processing_Governance_FRD.md"
+      ],
+      "flow_refs": [
+        "docs/authority/current/development/34_Architecture_to_Development_Traceability_Matrix.md"
+      ],
+      "contract_refs": [
+        "docs/authority/current/development/32_Domain_API_Event_Data_and_Policy_Contract_Catalog.md"
+      ],
+      "decision_refs": [
+        "ADR-0006",
+        "PDR-0007"
+      ],
+      "acceptance_criteria": [
+        "Evaluate the approved DOB + 18 calendar years <= trusted server evaluation date expression, including exact birthday and leap/calendar boundaries.",
+        "Return the AGE_INELIGIBLE outcome for an under-18 applicant; produce policy/version, evaluation date and evidence/correlation references without retaining raw DOB in the result.",
+        "Expose an Accounts-owned internal capability with no Account/session/Product Relationship creation or public endpoint in this slice."
+      ],
+      "prerequisites": [
+        "TUN-P2-001"
+      ],
+      "blockers": [],
+      "impact": {
+        "architecture": true,
+        "ui": false,
+        "sdk": false,
+        "financial": false,
+        "compliance": true,
+        "security": true,
+        "devops": false,
+        "support": false
+      },
+      "activated_roles": [
+        "full-stack-engineer",
+        "tester-qa-engineer",
+        "solution-architect",
+        "cyber-security-engineer",
+        "auditor",
+        "compliance-specialist"
+      ],
+      "required_tests": [
+        "birthday/leap/year boundaries and invalid dates",
+        "restricted DOB minimization and explicit policy/evidence provenance",
+        "domain dependency direction and platform regression"
+      ],
+      "required_evidence": [
+        "governance/evidence/TUN-P2-002-VALIDATION.json"
+      ],
+      "context_policy": "TASK",
+      "todos": [],
+      "defects": [],
+      "created_at": "2026-10-16T17:48:49.296Z",
+      "updated_at": "2026-10-16T17:48:49.296Z"
+    },
+    {
+      "schema_version": 1,
+      "work_item_id": "TUN-P2-003",
+      "milestone_id": "P2",
+      "sprint_id": null,
+      "title": "Account and Identity persistence/framework foundation",
+      "status": "BACKLOG",
+      "type": "FEATURE",
+      "authority_refs": [
+        "docs/authority/current-authority.json",
+        "docs/authority/current/development/11_Development_Planes_Milestones_and_P0_Backlog.md",
+        "docs/authority/baselines/1.6.0/17_Account_Identity_and_Session_FRD.md",
+        "docs/authority/current/development/32_Domain_API_Event_Data_and_Policy_Contract_Catalog.md",
+        "docs/authority/current/development/34_Architecture_to_Development_Traceability_Matrix.md",
+        "docs/authority/baselines/1.6.0/decisions/ADR-0006_Identity_ASPNET_Identity_OpenIddict.md",
+        "docs/authority/baselines/1.6.0/decisions/PDR-0007_DOB_Based_18_Plus_Eligibility.md",
+        "docs/authority/current/development/AMD-0002_Non-Blocking_PR_Approval_and_Continuous_Local_Execution.md",
+        "docs/authority/current/development/02_Repository_Solution_and_Module_Architecture.md",
+        "docs/authority/current/development/09_Testing_Acceptance_Evidence_and_Quality_Gates.md",
+        "docs/authority/baselines/1.6.0/29_Privacy_Data_Lifecycle_and_Processing_Governance_FRD.md"
+      ],
+      "flow_refs": [
+        "docs/authority/current/development/34_Architecture_to_Development_Traceability_Matrix.md"
+      ],
+      "contract_refs": [
+        "docs/authority/current/development/32_Domain_API_Event_Data_and_Policy_Contract_Catalog.md"
+      ],
+      "decision_refs": [
+        "ADR-0006",
+        "PDR-0007"
+      ],
+      "acceptance_criteria": [
+        "Refine and implement Accounts/Identity-owned canonical resources and state versions with ASP.NET Core Identity + OpenIddict at currently researched supported versions.",
+        "Preserve stable Tunner-owned identifiers and domain boundaries; framework/provider types are not cross-domain authority.",
+        "Rehearse forward/rollback-safe database changes and uniqueness/concurrency behavior; configure explicit operator/policy values without inventing security defaults."
+      ],
+      "prerequisites": [
+        "TUN-P2-001",
+        "TUN-P2-002",
+        "TUN-P1-002",
+        "TUN-P1-003",
+        "TUN-P1-013"
+      ],
+      "blockers": [],
+      "impact": {
+        "architecture": true,
+        "ui": false,
+        "sdk": false,
+        "financial": false,
+        "compliance": true,
+        "security": true,
+        "devops": false,
+        "support": false,
+        "data_schema": true,
+        "migration": true,
+        "provider": true
+      },
+      "activated_roles": [
+        "full-stack-engineer",
+        "tester-qa-engineer",
+        "solution-architect",
+        "cyber-security-engineer",
+        "auditor",
+        "compliance-specialist",
+        "rd-engineer"
+      ],
+      "required_tests": [
+        "real PostgreSQL migration rehearsal and uniqueness/concurrency",
+        "module dependency/ownership checks",
+        "primary-source package compatibility and dependency scan"
+      ],
+      "required_evidence": [
+        "governance/evidence/TUN-P2-003-VALIDATION.json"
+      ],
+      "context_policy": "TASK",
+      "todos": [],
+      "defects": [],
+      "created_at": "2026-10-16T17:48:49.296Z",
+      "updated_at": "2026-10-16T17:48:49.296Z"
+    },
+    {
+      "schema_version": 1,
+      "work_item_id": "TUN-P2-004",
+      "milestone_id": "P2",
+      "sprint_id": null,
+      "title": "Registration and verified-contact activation vertical slice",
+      "status": "BACKLOG",
+      "type": "FEATURE",
+      "authority_refs": [
+        "docs/authority/current-authority.json",
+        "docs/authority/current/development/11_Development_Planes_Milestones_and_P0_Backlog.md",
+        "docs/authority/baselines/1.6.0/17_Account_Identity_and_Session_FRD.md",
+        "docs/authority/current/development/32_Domain_API_Event_Data_and_Policy_Contract_Catalog.md",
+        "docs/authority/current/development/34_Architecture_to_Development_Traceability_Matrix.md",
+        "docs/authority/baselines/1.6.0/decisions/ADR-0006_Identity_ASPNET_Identity_OpenIddict.md",
+        "docs/authority/baselines/1.6.0/decisions/PDR-0007_DOB_Based_18_Plus_Eligibility.md",
+        "docs/authority/current/development/AMD-0002_Non-Blocking_PR_Approval_and_Continuous_Local_Execution.md",
+        "docs/authority/current/development/02_Repository_Solution_and_Module_Architecture.md",
+        "docs/authority/current/development/09_Testing_Acceptance_Evidence_and_Quality_Gates.md",
+        "docs/authority/baselines/1.6.0/29_Privacy_Data_Lifecycle_and_Processing_Governance_FRD.md"
+      ],
+      "flow_refs": [
+        "docs/authority/current/development/34_Architecture_to_Development_Traceability_Matrix.md"
+      ],
+      "contract_refs": [
+        "docs/authority/current/development/32_Domain_API_Event_Data_and_Policy_Contract_Catalog.md"
+      ],
+      "decision_refs": [
+        "ADR-0006",
+        "PDR-0007"
+      ],
+      "acceptance_criteria": [
+        "Implement registration through server-side eligibility and verification-pending activation without arbitrary Account enumeration.",
+        "Require valid proof and atomic uniqueness recheck for activation; duplicate operations are idempotent and post-commit effects remain explicit.",
+        "Implement only approved registration/verification UX and governed content; no age-attestation checkbox or Product membership/entitlement creation."
+      ],
+      "prerequisites": [
+        "TUN-P2-002",
+        "TUN-P2-003",
+        "TUN-P1-017",
+        "TUN-P1-018",
+        "TUN-P1-019"
+      ],
+      "blockers": [],
+      "impact": {
+        "architecture": true,
+        "ui": true,
+        "sdk": false,
+        "financial": false,
+        "compliance": true,
+        "security": true,
+        "devops": false,
+        "support": false,
+        "api": true
+      },
+      "activated_roles": [
+        "full-stack-engineer",
+        "tester-qa-engineer",
+        "solution-architect",
+        "cyber-security-engineer",
+        "auditor",
+        "compliance-specialist",
+        "sdk-engineer",
+        "ui-ux-engineer",
+        "frontend-engineer",
+        "end-user-ux-reviewer",
+        "content-writer"
+      ],
+      "required_tests": [
+        "underage/no-activation negative paths",
+        "duplicate/concurrent registration and verification replay",
+        "BFF/browser accessibility and no enumeration or raw-DOB leakage"
+      ],
+      "required_evidence": [
+        "governance/evidence/TUN-P2-004-VALIDATION.json"
+      ],
+      "context_policy": "TASK",
+      "todos": [],
+      "defects": [],
+      "created_at": "2026-10-16T17:48:49.296Z",
+      "updated_at": "2026-10-16T17:48:49.296Z"
+    },
+    {
+      "schema_version": 1,
+      "work_item_id": "TUN-P2-005",
+      "milestone_id": "P2",
+      "sprint_id": null,
+      "title": "Authentication and server-managed BFF sessions",
+      "status": "BACKLOG",
+      "type": "FEATURE",
+      "authority_refs": [
+        "docs/authority/current-authority.json",
+        "docs/authority/current/development/11_Development_Planes_Milestones_and_P0_Backlog.md",
+        "docs/authority/baselines/1.6.0/17_Account_Identity_and_Session_FRD.md",
+        "docs/authority/current/development/32_Domain_API_Event_Data_and_Policy_Contract_Catalog.md",
+        "docs/authority/current/development/34_Architecture_to_Development_Traceability_Matrix.md",
+        "docs/authority/baselines/1.6.0/decisions/ADR-0006_Identity_ASPNET_Identity_OpenIddict.md",
+        "docs/authority/baselines/1.6.0/decisions/PDR-0007_DOB_Based_18_Plus_Eligibility.md",
+        "docs/authority/current/development/AMD-0002_Non-Blocking_PR_Approval_and_Continuous_Local_Execution.md",
+        "docs/authority/current/development/02_Repository_Solution_and_Module_Architecture.md",
+        "docs/authority/current/development/09_Testing_Acceptance_Evidence_and_Quality_Gates.md",
+        "docs/authority/baselines/1.6.0/29_Privacy_Data_Lifecycle_and_Processing_Governance_FRD.md"
+      ],
+      "flow_refs": [
+        "docs/authority/current/development/34_Architecture_to_Development_Traceability_Matrix.md"
+      ],
+      "contract_refs": [
+        "docs/authority/current/development/32_Domain_API_Event_Data_and_Policy_Contract_Catalog.md"
+      ],
+      "decision_refs": [
+        "ADR-0006",
+        "PDR-0007"
+      ],
+      "acceptance_criteria": [
+        "Implement password authentication and sign-out through server-managed Tunner/BFF sessions and versioned policy values.",
+        "Rotate identifiers at authentication/material privilege changes, enforce active Account restrictions and expiry, and keep OAuth tokens out of browser JavaScript.",
+        "Reuse User/Admin BFF separation and shared error/authorization mechanics."
+      ],
+      "prerequisites": [
+        "TUN-P2-003",
+        "TUN-P2-004",
+        "TUN-P1-012",
+        "TUN-P1-019"
+      ],
+      "blockers": [],
+      "impact": {
+        "architecture": true,
+        "ui": true,
+        "sdk": false,
+        "financial": false,
+        "compliance": true,
+        "security": true,
+        "devops": false,
+        "support": false,
+        "api": true
+      },
+      "activated_roles": [
+        "full-stack-engineer",
+        "tester-qa-engineer",
+        "solution-architect",
+        "cyber-security-engineer",
+        "auditor",
+        "compliance-specialist",
+        "sdk-engineer",
+        "ui-ux-engineer",
+        "frontend-engineer",
+        "end-user-ux-reviewer",
+        "content-writer"
+      ],
+      "required_tests": [
+        "cookie/session boundary and restricted/closed Account rejection",
+        "rotation/expiry/revocation/idempotent sign-out",
+        "browser token absence and approved login UX"
+      ],
+      "required_evidence": [
+        "governance/evidence/TUN-P2-005-VALIDATION.json"
+      ],
+      "context_policy": "TASK",
+      "todos": [],
+      "defects": [],
+      "created_at": "2026-10-16T17:48:49.296Z",
+      "updated_at": "2026-10-16T17:48:49.296Z"
+    },
+    {
+      "schema_version": 1,
+      "work_item_id": "TUN-P2-006",
+      "milestone_id": "P2",
+      "sprint_id": null,
+      "title": "Versioned assurance and operation-bound step-up",
+      "status": "BACKLOG",
+      "type": "FEATURE",
+      "authority_refs": [
+        "docs/authority/current-authority.json",
+        "docs/authority/current/development/11_Development_Planes_Milestones_and_P0_Backlog.md",
+        "docs/authority/baselines/1.6.0/17_Account_Identity_and_Session_FRD.md",
+        "docs/authority/current/development/32_Domain_API_Event_Data_and_Policy_Contract_Catalog.md",
+        "docs/authority/current/development/34_Architecture_to_Development_Traceability_Matrix.md",
+        "docs/authority/baselines/1.6.0/decisions/ADR-0006_Identity_ASPNET_Identity_OpenIddict.md",
+        "docs/authority/baselines/1.6.0/decisions/PDR-0007_DOB_Based_18_Plus_Eligibility.md",
+        "docs/authority/current/development/AMD-0002_Non-Blocking_PR_Approval_and_Continuous_Local_Execution.md",
+        "docs/authority/current/development/02_Repository_Solution_and_Module_Architecture.md",
+        "docs/authority/current/development/09_Testing_Acceptance_Evidence_and_Quality_Gates.md"
+      ],
+      "flow_refs": [
+        "docs/authority/current/development/34_Architecture_to_Development_Traceability_Matrix.md"
+      ],
+      "contract_refs": [
+        "docs/authority/current/development/32_Domain_API_Event_Data_and_Policy_Contract_Catalog.md"
+      ],
+      "decision_refs": [
+        "ADR-0006",
+        "PDR-0007"
+      ],
+      "acceptance_criteria": [
+        "Resolve approved assurance requirements at sensitive-operation execution from versioned policy.",
+        "Bind fresh step-up proof to the operation/context and policy lifetime; prevent reuse as a general session upgrade.",
+        "Do not invent assurance mappings, timeouts or risk thresholds; obtain actual configured policy evidence before enabling affected runtime paths."
+      ],
+      "prerequisites": [
+        "TUN-P2-003",
+        "TUN-P2-005",
+        "TUN-P1-012",
+        "TUN-P1-013"
+      ],
+      "blockers": [],
+      "impact": {
+        "architecture": true,
+        "ui": true,
+        "sdk": false,
+        "financial": false,
+        "compliance": false,
+        "security": true,
+        "devops": false,
+        "support": false,
+        "api": true
+      },
+      "activated_roles": [
+        "full-stack-engineer",
+        "tester-qa-engineer",
+        "solution-architect",
+        "cyber-security-engineer",
+        "auditor",
+        "sdk-engineer",
+        "ui-ux-engineer",
+        "frontend-engineer",
+        "end-user-ux-reviewer",
+        "content-writer"
+      ],
+      "required_tests": [
+        "wrong operation/context, expiry and replay rejection",
+        "policy-version selection and expected-version conflicts",
+        "sensitive action UX and safe error outcomes"
+      ],
+      "required_evidence": [
+        "governance/evidence/TUN-P2-006-VALIDATION.json"
+      ],
+      "context_policy": "TASK",
+      "todos": [],
+      "defects": [],
+      "created_at": "2026-10-16T17:48:49.296Z",
+      "updated_at": "2026-10-16T17:48:49.296Z"
+    },
+    {
+      "schema_version": 1,
+      "work_item_id": "TUN-P2-007",
+      "milestone_id": "P2",
+      "sprint_id": null,
+      "title": "Passkey registration authentication and revocation",
+      "status": "BACKLOG",
+      "type": "FEATURE",
+      "authority_refs": [
+        "docs/authority/current-authority.json",
+        "docs/authority/current/development/11_Development_Planes_Milestones_and_P0_Backlog.md",
+        "docs/authority/baselines/1.6.0/17_Account_Identity_and_Session_FRD.md",
+        "docs/authority/current/development/32_Domain_API_Event_Data_and_Policy_Contract_Catalog.md",
+        "docs/authority/current/development/34_Architecture_to_Development_Traceability_Matrix.md",
+        "docs/authority/baselines/1.6.0/decisions/ADR-0006_Identity_ASPNET_Identity_OpenIddict.md",
+        "docs/authority/baselines/1.6.0/decisions/PDR-0007_DOB_Based_18_Plus_Eligibility.md",
+        "docs/authority/current/development/AMD-0002_Non-Blocking_PR_Approval_and_Continuous_Local_Execution.md",
+        "docs/authority/current/development/02_Repository_Solution_and_Module_Architecture.md",
+        "docs/authority/current/development/09_Testing_Acceptance_Evidence_and_Quality_Gates.md",
+        "docs/authority/baselines/1.6.0/29_Privacy_Data_Lifecycle_and_Processing_Governance_FRD.md"
+      ],
+      "flow_refs": [
+        "docs/authority/current/development/34_Architecture_to_Development_Traceability_Matrix.md"
+      ],
+      "contract_refs": [
+        "docs/authority/current/development/32_Domain_API_Event_Data_and_Policy_Contract_Catalog.md"
+      ],
+      "decision_refs": [
+        "ADR-0006",
+        "PDR-0007"
+      ],
+      "acceptance_criteria": [
+        "Implement WebAuthn/passkey ceremonies under approved relying-party/origin and security policy configuration.",
+        "Keep credentials inactive until successful ceremony, retain public metadata only, and require authorized step-up for mutations.",
+        "Never receive/log passkey private material; use current primary-source standards/framework evidence."
+      ],
+      "prerequisites": [
+        "TUN-P2-003",
+        "TUN-P2-005",
+        "TUN-P2-006"
+      ],
+      "blockers": [],
+      "impact": {
+        "architecture": true,
+        "ui": true,
+        "sdk": false,
+        "financial": false,
+        "compliance": true,
+        "security": true,
+        "devops": false,
+        "support": false,
+        "api": true,
+        "provider": true
+      },
+      "activated_roles": [
+        "full-stack-engineer",
+        "tester-qa-engineer",
+        "solution-architect",
+        "cyber-security-engineer",
+        "auditor",
+        "compliance-specialist",
+        "sdk-engineer",
+        "ui-ux-engineer",
+        "frontend-engineer",
+        "end-user-ux-reviewer",
+        "content-writer",
+        "rd-engineer"
+      ],
+      "required_tests": [
+        "ceremony origin/challenge/replay failures",
+        "inactive enrollment and credential revocation",
+        "cross-browser accessible approved ceremony UI"
+      ],
+      "required_evidence": [
+        "governance/evidence/TUN-P2-007-VALIDATION.json"
+      ],
+      "context_policy": "TASK",
+      "todos": [],
+      "defects": [],
+      "created_at": "2026-10-16T17:48:49.296Z",
+      "updated_at": "2026-10-16T17:48:49.296Z"
+    },
+    {
+      "schema_version": 1,
+      "work_item_id": "TUN-P2-008",
+      "milestone_id": "P2",
+      "sprint_id": null,
+      "title": "TOTP enrollment verification and disable lifecycle",
+      "status": "BACKLOG",
+      "type": "FEATURE",
+      "authority_refs": [
+        "docs/authority/current-authority.json",
+        "docs/authority/current/development/11_Development_Planes_Milestones_and_P0_Backlog.md",
+        "docs/authority/baselines/1.6.0/17_Account_Identity_and_Session_FRD.md",
+        "docs/authority/current/development/32_Domain_API_Event_Data_and_Policy_Contract_Catalog.md",
+        "docs/authority/current/development/34_Architecture_to_Development_Traceability_Matrix.md",
+        "docs/authority/baselines/1.6.0/decisions/ADR-0006_Identity_ASPNET_Identity_OpenIddict.md",
+        "docs/authority/baselines/1.6.0/decisions/PDR-0007_DOB_Based_18_Plus_Eligibility.md",
+        "docs/authority/current/development/AMD-0002_Non-Blocking_PR_Approval_and_Continuous_Local_Execution.md",
+        "docs/authority/current/development/02_Repository_Solution_and_Module_Architecture.md",
+        "docs/authority/current/development/09_Testing_Acceptance_Evidence_and_Quality_Gates.md"
+      ],
+      "flow_refs": [
+        "docs/authority/current/development/34_Architecture_to_Development_Traceability_Matrix.md"
+      ],
+      "contract_refs": [
+        "docs/authority/current/development/32_Domain_API_Event_Data_and_Policy_Contract_Catalog.md"
+      ],
+      "decision_refs": [
+        "ADR-0006",
+        "PDR-0007"
+      ],
+      "acceptance_criteria": [
+        "Keep TOTP enrollment inactive until the first valid verification code.",
+        "Protect seed material and require approved step-up/policy for enable/disable/reset; do not expose seeds to Admin/Support.",
+        "Preserve operation identity and audit evidence without storing secrets in logs/events."
+      ],
+      "prerequisites": [
+        "TUN-P2-003",
+        "TUN-P2-005",
+        "TUN-P2-006"
+      ],
+      "blockers": [],
+      "impact": {
+        "architecture": true,
+        "ui": true,
+        "sdk": false,
+        "financial": false,
+        "compliance": false,
+        "security": true,
+        "devops": false,
+        "support": false,
+        "api": true
+      },
+      "activated_roles": [
+        "full-stack-engineer",
+        "tester-qa-engineer",
+        "solution-architect",
+        "cyber-security-engineer",
+        "auditor",
+        "sdk-engineer",
+        "ui-ux-engineer",
+        "frontend-engineer",
+        "end-user-ux-reviewer",
+        "content-writer"
+      ],
+      "required_tests": [
+        "first-code activation, wrong-code and replay/rate controls",
+        "step-up and unauthorized mutation rejection",
+        "safe UI, logs and audit evidence"
+      ],
+      "required_evidence": [
+        "governance/evidence/TUN-P2-008-VALIDATION.json"
+      ],
+      "context_policy": "TASK",
+      "todos": [],
+      "defects": [],
+      "created_at": "2026-10-16T17:48:49.296Z",
+      "updated_at": "2026-10-16T17:48:49.296Z"
+    },
+    {
+      "schema_version": 1,
+      "work_item_id": "TUN-P2-009",
+      "milestone_id": "P2",
+      "sprint_id": null,
+      "title": "Recovery-code issuance replacement and consumption",
+      "status": "BACKLOG",
+      "type": "FEATURE",
+      "authority_refs": [
+        "docs/authority/current-authority.json",
+        "docs/authority/current/development/11_Development_Planes_Milestones_and_P0_Backlog.md",
+        "docs/authority/baselines/1.6.0/17_Account_Identity_and_Session_FRD.md",
+        "docs/authority/current/development/32_Domain_API_Event_Data_and_Policy_Contract_Catalog.md",
+        "docs/authority/current/development/34_Architecture_to_Development_Traceability_Matrix.md",
+        "docs/authority/baselines/1.6.0/decisions/ADR-0006_Identity_ASPNET_Identity_OpenIddict.md",
+        "docs/authority/baselines/1.6.0/decisions/PDR-0007_DOB_Based_18_Plus_Eligibility.md",
+        "docs/authority/current/development/AMD-0002_Non-Blocking_PR_Approval_and_Continuous_Local_Execution.md",
+        "docs/authority/current/development/02_Repository_Solution_and_Module_Architecture.md",
+        "docs/authority/current/development/09_Testing_Acceptance_Evidence_and_Quality_Gates.md"
+      ],
+      "flow_refs": [
+        "docs/authority/current/development/34_Architecture_to_Development_Traceability_Matrix.md"
+      ],
+      "contract_refs": [
+        "docs/authority/current/development/32_Domain_API_Event_Data_and_Policy_Contract_Catalog.md"
+      ],
+      "decision_refs": [
+        "ADR-0006",
+        "PDR-0007"
+      ],
+      "acceptance_criteria": [
+        "Generate/display/download each recovery-code set once and store verifier-safe representations only.",
+        "Atomically consume individual codes and invalidate replaced sets according to approved policy.",
+        "Require fresh authorized step-up and preserve safe operation/audit lineage."
+      ],
+      "prerequisites": [
+        "TUN-P2-003",
+        "TUN-P2-005",
+        "TUN-P2-006"
+      ],
+      "blockers": [],
+      "impact": {
+        "architecture": true,
+        "ui": true,
+        "sdk": false,
+        "financial": false,
+        "compliance": false,
+        "security": true,
+        "devops": false,
+        "support": false,
+        "api": true
+      },
+      "activated_roles": [
+        "full-stack-engineer",
+        "tester-qa-engineer",
+        "solution-architect",
+        "cyber-security-engineer",
+        "auditor",
+        "sdk-engineer",
+        "ui-ux-engineer",
+        "frontend-engineer",
+        "end-user-ux-reviewer",
+        "content-writer"
+      ],
+      "required_tests": [
+        "single-use concurrency and replaced-set rejection",
+        "one-time display/download and verifier-safe persistence",
+        "authorization and sensitive-output redaction"
+      ],
+      "required_evidence": [
+        "governance/evidence/TUN-P2-009-VALIDATION.json"
+      ],
+      "context_policy": "TASK",
+      "todos": [],
+      "defects": [],
+      "created_at": "2026-10-16T17:48:49.296Z",
+      "updated_at": "2026-10-16T17:48:49.296Z"
+    },
+    {
+      "schema_version": 1,
+      "work_item_id": "TUN-P2-010",
+      "milestone_id": "P2",
+      "sprint_id": null,
+      "title": "Google and Microsoft federation and explicit linking",
+      "status": "BACKLOG",
+      "type": "FEATURE",
+      "authority_refs": [
+        "docs/authority/current-authority.json",
+        "docs/authority/current/development/11_Development_Planes_Milestones_and_P0_Backlog.md",
+        "docs/authority/baselines/1.6.0/17_Account_Identity_and_Session_FRD.md",
+        "docs/authority/current/development/32_Domain_API_Event_Data_and_Policy_Contract_Catalog.md",
+        "docs/authority/current/development/34_Architecture_to_Development_Traceability_Matrix.md",
+        "docs/authority/baselines/1.6.0/decisions/ADR-0006_Identity_ASPNET_Identity_OpenIddict.md",
+        "docs/authority/baselines/1.6.0/decisions/PDR-0007_DOB_Based_18_Plus_Eligibility.md",
+        "docs/authority/current/development/AMD-0002_Non-Blocking_PR_Approval_and_Continuous_Local_Execution.md",
+        "docs/authority/current/development/02_Repository_Solution_and_Module_Architecture.md",
+        "docs/authority/current/development/09_Testing_Acceptance_Evidence_and_Quality_Gates.md",
+        "docs/authority/baselines/1.6.0/29_Privacy_Data_Lifecycle_and_Processing_Governance_FRD.md"
+      ],
+      "flow_refs": [
+        "docs/authority/current/development/34_Architecture_to_Development_Traceability_Matrix.md"
+      ],
+      "contract_refs": [
+        "docs/authority/current/development/32_Domain_API_Event_Data_and_Policy_Contract_Catalog.md"
+      ],
+      "decision_refs": [
+        "ADR-0006",
+        "PDR-0007"
+      ],
+      "acceptance_criteria": [
+        "Normalize provider plus immutable subject into Tunner-owned links; never link solely because emails match.",
+        "Require existing-Account authentication/recovery for verified-email collision and explicit confirmed link flows.",
+        "Prevent unlinking the last policy-required authentication/recovery path; provider email changes do not rewrite identity keys."
+      ],
+      "prerequisites": [
+        "TUN-P2-003",
+        "TUN-P2-004",
+        "TUN-P2-005",
+        "TUN-P2-006"
+      ],
+      "blockers": [],
+      "impact": {
+        "architecture": true,
+        "ui": true,
+        "sdk": false,
+        "financial": false,
+        "compliance": true,
+        "security": true,
+        "devops": false,
+        "support": false,
+        "api": true,
+        "provider": true
+      },
+      "activated_roles": [
+        "full-stack-engineer",
+        "tester-qa-engineer",
+        "solution-architect",
+        "cyber-security-engineer",
+        "auditor",
+        "compliance-specialist",
+        "sdk-engineer",
+        "ui-ux-engineer",
+        "frontend-engineer",
+        "end-user-ux-reviewer",
+        "content-writer",
+        "rd-engineer"
+      ],
+      "required_tests": [
+        "verified-email collision/no-auto-link",
+        "subject immutability, callback state/replay and explicit linking",
+        "provider failure and last-authenticator unlink rejection"
+      ],
+      "required_evidence": [
+        "governance/evidence/TUN-P2-010-VALIDATION.json"
+      ],
+      "context_policy": "TASK",
+      "todos": [],
+      "defects": [],
+      "created_at": "2026-10-16T17:48:49.296Z",
+      "updated_at": "2026-10-16T17:48:49.296Z"
+    },
+    {
+      "schema_version": 1,
+      "work_item_id": "TUN-P2-011",
+      "milestone_id": "P2",
+      "sprint_id": null,
+      "title": "Proof-hierarchy Account recovery workflow",
+      "status": "BACKLOG",
+      "type": "FEATURE",
+      "authority_refs": [
+        "docs/authority/current-authority.json",
+        "docs/authority/current/development/11_Development_Planes_Milestones_and_P0_Backlog.md",
+        "docs/authority/baselines/1.6.0/17_Account_Identity_and_Session_FRD.md",
+        "docs/authority/current/development/32_Domain_API_Event_Data_and_Policy_Contract_Catalog.md",
+        "docs/authority/current/development/34_Architecture_to_Development_Traceability_Matrix.md",
+        "docs/authority/baselines/1.6.0/decisions/ADR-0006_Identity_ASPNET_Identity_OpenIddict.md",
+        "docs/authority/baselines/1.6.0/decisions/PDR-0007_DOB_Based_18_Plus_Eligibility.md",
+        "docs/authority/current/development/AMD-0002_Non-Blocking_PR_Approval_and_Continuous_Local_Execution.md",
+        "docs/authority/current/development/02_Repository_Solution_and_Module_Architecture.md",
+        "docs/authority/current/development/09_Testing_Acceptance_Evidence_and_Quality_Gates.md",
+        "docs/authority/baselines/1.6.0/29_Privacy_Data_Lifecycle_and_Processing_Governance_FRD.md"
+      ],
+      "flow_refs": [
+        "docs/authority/current/development/34_Architecture_to_Development_Traceability_Matrix.md"
+      ],
+      "contract_refs": [
+        "docs/authority/current/development/32_Domain_API_Event_Data_and_Policy_Contract_Catalog.md"
+      ],
+      "decision_refs": [
+        "ADR-0006",
+        "PDR-0007"
+      ],
+      "acceptance_criteria": [
+        "Enforce approved strong-authenticator, recovery-code, safe-contact/risk and governed review precedence; Support cannot bypass it.",
+        "Make session revocation/authenticator invalidation/MFA reenrollment and restrictions explicit in RecoveryResult under active policy.",
+        "Keep recovery idempotent, enumeration-resistant and free of security questions or existing credential disclosure."
+      ],
+      "prerequisites": [
+        "TUN-P2-003",
+        "TUN-P2-005",
+        "TUN-P2-006",
+        "TUN-P2-007",
+        "TUN-P2-008",
+        "TUN-P2-009",
+        "TUN-P2-010"
+      ],
+      "blockers": [],
+      "impact": {
+        "architecture": true,
+        "ui": true,
+        "sdk": false,
+        "financial": false,
+        "compliance": true,
+        "security": true,
+        "devops": false,
+        "support": false,
+        "api": true
+      },
+      "activated_roles": [
+        "full-stack-engineer",
+        "tester-qa-engineer",
+        "solution-architect",
+        "cyber-security-engineer",
+        "auditor",
+        "compliance-specialist",
+        "sdk-engineer",
+        "ui-ux-engineer",
+        "frontend-engineer",
+        "end-user-ux-reviewer",
+        "content-writer"
+      ],
+      "required_tests": [
+        "proof hierarchy and Support bypass rejection",
+        "duplicate/concurrent recovery and explicit side effects",
+        "safe recovery UI and restricted evidence"
+      ],
+      "required_evidence": [
+        "governance/evidence/TUN-P2-011-VALIDATION.json"
+      ],
+      "context_policy": "TASK",
+      "todos": [],
+      "defects": [],
+      "created_at": "2026-10-16T17:48:49.296Z",
+      "updated_at": "2026-10-16T17:48:49.296Z"
+    },
+    {
+      "schema_version": 1,
+      "work_item_id": "TUN-P2-012",
+      "milestone_id": "P2",
+      "sprint_id": null,
+      "title": "Verified-contact change with candidate proof and uniqueness",
+      "status": "BACKLOG",
+      "type": "FEATURE",
+      "authority_refs": [
+        "docs/authority/current-authority.json",
+        "docs/authority/current/development/11_Development_Planes_Milestones_and_P0_Backlog.md",
+        "docs/authority/baselines/1.6.0/17_Account_Identity_and_Session_FRD.md",
+        "docs/authority/current/development/32_Domain_API_Event_Data_and_Policy_Contract_Catalog.md",
+        "docs/authority/current/development/34_Architecture_to_Development_Traceability_Matrix.md",
+        "docs/authority/baselines/1.6.0/decisions/ADR-0006_Identity_ASPNET_Identity_OpenIddict.md",
+        "docs/authority/baselines/1.6.0/decisions/PDR-0007_DOB_Based_18_Plus_Eligibility.md",
+        "docs/authority/current/development/AMD-0002_Non-Blocking_PR_Approval_and_Continuous_Local_Execution.md",
+        "docs/authority/current/development/02_Repository_Solution_and_Module_Architecture.md",
+        "docs/authority/current/development/09_Testing_Acceptance_Evidence_and_Quality_Gates.md",
+        "docs/authority/baselines/1.6.0/29_Privacy_Data_Lifecycle_and_Processing_Governance_FRD.md"
+      ],
+      "flow_refs": [
+        "docs/authority/current/development/34_Architecture_to_Development_Traceability_Matrix.md"
+      ],
+      "contract_refs": [
+        "docs/authority/current/development/32_Domain_API_Event_Data_and_Policy_Contract_Catalog.md"
+      ],
+      "decision_refs": [
+        "ADR-0006",
+        "PDR-0007"
+      ],
+      "acceptance_criteria": [
+        "Keep the existing verified contact effective while an unverified candidate awaits proof.",
+        "Require fresh authorized step-up, proof completion and atomic normalized uniqueness/version checks before replacement.",
+        "Ordinary profile editing and Product-provided email cannot establish verified Tunner contact evidence."
+      ],
+      "prerequisites": [
+        "TUN-P2-003",
+        "TUN-P2-005",
+        "TUN-P2-006",
+        "TUN-P2-011"
+      ],
+      "blockers": [],
+      "impact": {
+        "architecture": true,
+        "ui": true,
+        "sdk": false,
+        "financial": false,
+        "compliance": true,
+        "security": true,
+        "devops": false,
+        "support": false,
+        "api": true
+      },
+      "activated_roles": [
+        "full-stack-engineer",
+        "tester-qa-engineer",
+        "solution-architect",
+        "cyber-security-engineer",
+        "auditor",
+        "compliance-specialist",
+        "sdk-engineer",
+        "ui-ux-engineer",
+        "frontend-engineer",
+        "end-user-ux-reviewer",
+        "content-writer"
+      ],
+      "required_tests": [
+        "candidate isolation and proof/replay rejection",
+        "concurrent uniqueness/version conflict",
+        "approved contact-change UX and notification/audit lineage"
+      ],
+      "required_evidence": [
+        "governance/evidence/TUN-P2-012-VALIDATION.json"
+      ],
+      "context_policy": "TASK",
+      "todos": [],
+      "defects": [],
+      "created_at": "2026-10-16T17:48:49.296Z",
+      "updated_at": "2026-10-16T17:48:49.296Z"
+    },
+    {
+      "schema_version": 1,
+      "work_item_id": "TUN-P2-013",
+      "milestone_id": "P2",
+      "sprint_id": null,
+      "title": "Session device listing trust and revocation",
+      "status": "BACKLOG",
+      "type": "FEATURE",
+      "authority_refs": [
+        "docs/authority/current-authority.json",
+        "docs/authority/current/development/11_Development_Planes_Milestones_and_P0_Backlog.md",
+        "docs/authority/baselines/1.6.0/17_Account_Identity_and_Session_FRD.md",
+        "docs/authority/current/development/32_Domain_API_Event_Data_and_Policy_Contract_Catalog.md",
+        "docs/authority/current/development/34_Architecture_to_Development_Traceability_Matrix.md",
+        "docs/authority/baselines/1.6.0/decisions/ADR-0006_Identity_ASPNET_Identity_OpenIddict.md",
+        "docs/authority/baselines/1.6.0/decisions/PDR-0007_DOB_Based_18_Plus_Eligibility.md",
+        "docs/authority/current/development/AMD-0002_Non-Blocking_PR_Approval_and_Continuous_Local_Execution.md",
+        "docs/authority/current/development/02_Repository_Solution_and_Module_Architecture.md",
+        "docs/authority/current/development/09_Testing_Acceptance_Evidence_and_Quality_Gates.md",
+        "docs/authority/baselines/1.6.0/29_Privacy_Data_Lifecycle_and_Processing_Governance_FRD.md"
+      ],
+      "flow_refs": [
+        "docs/authority/current/development/34_Architecture_to_Development_Traceability_Matrix.md"
+      ],
+      "contract_refs": [
+        "docs/authority/current/development/32_Domain_API_Event_Data_and_Policy_Contract_Catalog.md"
+      ],
+      "decision_refs": [
+        "ADR-0006",
+        "PDR-0007"
+      ],
+      "acceptance_criteria": [
+        "Expose permission-safe Tunner session/device evidence; device trust never substitutes for authentication.",
+        "Apply immediate idempotent Tunner revocation and separately evidence Product propagation/acknowledgement where contracted.",
+        "Do not claim global Product sign-out without every relevant Product contract and acknowledgement."
+      ],
+      "prerequisites": [
+        "TUN-P2-003",
+        "TUN-P2-005",
+        "TUN-P2-006"
+      ],
+      "blockers": [],
+      "impact": {
+        "architecture": true,
+        "ui": true,
+        "sdk": false,
+        "financial": false,
+        "compliance": true,
+        "security": true,
+        "devops": false,
+        "support": false,
+        "api": true
+      },
+      "activated_roles": [
+        "full-stack-engineer",
+        "tester-qa-engineer",
+        "solution-architect",
+        "cyber-security-engineer",
+        "auditor",
+        "compliance-specialist",
+        "sdk-engineer",
+        "ui-ux-engineer",
+        "frontend-engineer",
+        "end-user-ux-reviewer",
+        "content-writer"
+      ],
+      "required_tests": [
+        "immediate revocation and duplicate execution",
+        "ownership/authorization and device-trust bypass rejection",
+        "safe session/device UX and truthful Product propagation states"
+      ],
+      "required_evidence": [
+        "governance/evidence/TUN-P2-013-VALIDATION.json"
+      ],
+      "context_policy": "TASK",
+      "todos": [],
+      "defects": [],
+      "created_at": "2026-10-16T17:48:49.296Z",
+      "updated_at": "2026-10-16T17:48:49.296Z"
+    },
+    {
+      "schema_version": 1,
+      "work_item_id": "TUN-P2-014",
+      "milestone_id": "P2",
+      "sprint_id": null,
+      "title": "OpenIddict Product authorization and revocation contracts",
+      "status": "BACKLOG",
+      "type": "FEATURE",
+      "authority_refs": [
+        "docs/authority/current-authority.json",
+        "docs/authority/current/development/11_Development_Planes_Milestones_and_P0_Backlog.md",
+        "docs/authority/baselines/1.6.0/17_Account_Identity_and_Session_FRD.md",
+        "docs/authority/current/development/32_Domain_API_Event_Data_and_Policy_Contract_Catalog.md",
+        "docs/authority/current/development/34_Architecture_to_Development_Traceability_Matrix.md",
+        "docs/authority/baselines/1.6.0/decisions/ADR-0006_Identity_ASPNET_Identity_OpenIddict.md",
+        "docs/authority/baselines/1.6.0/decisions/PDR-0007_DOB_Based_18_Plus_Eligibility.md",
+        "docs/authority/current/development/AMD-0002_Non-Blocking_PR_Approval_and_Continuous_Local_Execution.md",
+        "docs/authority/current/development/02_Repository_Solution_and_Module_Architecture.md",
+        "docs/authority/current/development/09_Testing_Acceptance_Evidence_and_Quality_Gates.md",
+        "docs/authority/baselines/1.6.0/19_Connected_Product_and_SDK_Lifecycle_FRD.md"
+      ],
+      "flow_refs": [
+        "docs/authority/current/development/34_Architecture_to_Development_Traceability_Matrix.md"
+      ],
+      "contract_refs": [
+        "docs/authority/current/development/32_Domain_API_Event_Data_and_Policy_Contract_Catalog.md"
+      ],
+      "decision_refs": [
+        "ADR-0006",
+        "PDR-0007"
+      ],
+      "acceptance_criteria": [
+        "Validate registered Product/environment/client/redirect/PKCE, Tunner session and Product Relationship before client/audience/scope-bound OAuth/OIDC issuance.",
+        "Keep Tunner Account, Product membership and Product-local sessions distinct; revoke grants/refresh artifacts according to active policy.",
+        "Refine detailed contracts against approved Product integration authority and current OpenIddict/standards documentation before runtime integration."
+      ],
+      "prerequisites": [
+        "TUN-P2-003",
+        "TUN-P2-005",
+        "TUN-P2-006",
+        "TUN-P2-013"
+      ],
+      "blockers": [],
+      "impact": {
+        "architecture": true,
+        "ui": false,
+        "sdk": false,
+        "financial": false,
+        "compliance": false,
+        "security": true,
+        "devops": false,
+        "support": false,
+        "api": true,
+        "provider": true
+      },
+      "activated_roles": [
+        "full-stack-engineer",
+        "tester-qa-engineer",
+        "solution-architect",
+        "cyber-security-engineer",
+        "auditor",
+        "sdk-engineer",
+        "rd-engineer"
+      ],
+      "required_tests": [
+        "redirect/client/environment/PKCE/audience/scope rejection",
+        "revocation/introspection and compromised-session paths",
+        "contract conformance and provider/protocol failure cases"
+      ],
+      "required_evidence": [
+        "governance/evidence/TUN-P2-014-VALIDATION.json"
+      ],
+      "context_policy": "TASK",
+      "todos": [],
+      "defects": [],
+      "created_at": "2026-10-16T17:48:49.296Z",
+      "updated_at": "2026-10-16T17:48:49.296Z"
+    },
+    {
+      "schema_version": 1,
+      "work_item_id": "TUN-P2-015",
+      "milestone_id": "P2",
+      "sprint_id": null,
+      "title": "Account restrictions and closure with owner-domain blockers",
+      "status": "BACKLOG",
+      "type": "FEATURE",
+      "authority_refs": [
+        "docs/authority/current-authority.json",
+        "docs/authority/current/development/11_Development_Planes_Milestones_and_P0_Backlog.md",
+        "docs/authority/baselines/1.6.0/17_Account_Identity_and_Session_FRD.md",
+        "docs/authority/current/development/32_Domain_API_Event_Data_and_Policy_Contract_Catalog.md",
+        "docs/authority/current/development/34_Architecture_to_Development_Traceability_Matrix.md",
+        "docs/authority/baselines/1.6.0/decisions/ADR-0006_Identity_ASPNET_Identity_OpenIddict.md",
+        "docs/authority/baselines/1.6.0/decisions/PDR-0007_DOB_Based_18_Plus_Eligibility.md",
+        "docs/authority/current/development/AMD-0002_Non-Blocking_PR_Approval_and_Continuous_Local_Execution.md",
+        "docs/authority/current/development/02_Repository_Solution_and_Module_Architecture.md",
+        "docs/authority/current/development/09_Testing_Acceptance_Evidence_and_Quality_Gates.md",
+        "docs/authority/baselines/1.6.0/18_Billing_Account_and_Delegated_Authority_FRD.md",
+        "docs/authority/baselines/1.6.0/29_Privacy_Data_Lifecycle_and_Processing_Governance_FRD.md"
+      ],
+      "flow_refs": [
+        "docs/authority/current/development/34_Architecture_to_Development_Traceability_Matrix.md"
+      ],
+      "contract_refs": [
+        "docs/authority/current/development/32_Domain_API_Event_Data_and_Policy_Contract_Catalog.md"
+      ],
+      "decision_refs": [
+        "ADR-0006",
+        "PDR-0007"
+      ],
+      "acceptance_criteria": [
+        "Preserve versioned restrictions and canonical ACTIVE/RESTRICTED/CLOSING/CLOSED transitions under approved policy and proof.",
+        "Evaluate defined Billing/Finance/Product/Security/Privacy blockers through owner contracts without implementing their domains or treating unknown availability as clearance.",
+        "Preserve immutable evidence and disable new authentication for CLOSED Accounts; exceptional erroneous closure correction requires governed Security/Recovery before purge."
+      ],
+      "prerequisites": [
+        "TUN-P2-003",
+        "TUN-P2-005",
+        "TUN-P2-006",
+        "TUN-P2-011",
+        "TUN-P2-012",
+        "TUN-P2-013",
+        "TUN-P2-014"
+      ],
+      "blockers": [],
+      "impact": {
+        "architecture": true,
+        "ui": true,
+        "sdk": false,
+        "financial": false,
+        "compliance": true,
+        "security": true,
+        "devops": false,
+        "support": false,
+        "api": true
+      },
+      "activated_roles": [
+        "full-stack-engineer",
+        "tester-qa-engineer",
+        "solution-architect",
+        "cyber-security-engineer",
+        "auditor",
+        "compliance-specialist",
+        "sdk-engineer",
+        "ui-ux-engineer",
+        "frontend-engineer",
+        "end-user-ux-reviewer",
+        "content-writer"
+      ],
+      "required_tests": [
+        "owner blockers and unavailable/unknown dependency paths",
+        "closed authentication denial and version/concurrency",
+        "closure-review UX with exact safe owner-resolution paths and retained evidence"
+      ],
+      "required_evidence": [
+        "governance/evidence/TUN-P2-015-VALIDATION.json"
+      ],
+      "context_policy": "TASK",
+      "todos": [],
+      "defects": [],
+      "created_at": "2026-10-16T17:48:49.296Z",
+      "updated_at": "2026-10-16T17:48:49.296Z"
+    },
+    {
+      "schema_version": 1,
+      "work_item_id": "TUN-P2-016",
+      "milestone_id": "P2",
+      "sprint_id": null,
+      "title": "Identity post-commit notification and audit integration",
+      "status": "BACKLOG",
+      "type": "FEATURE",
+      "authority_refs": [
+        "docs/authority/current-authority.json",
+        "docs/authority/current/development/11_Development_Planes_Milestones_and_P0_Backlog.md",
+        "docs/authority/baselines/1.6.0/17_Account_Identity_and_Session_FRD.md",
+        "docs/authority/current/development/32_Domain_API_Event_Data_and_Policy_Contract_Catalog.md",
+        "docs/authority/current/development/34_Architecture_to_Development_Traceability_Matrix.md",
+        "docs/authority/baselines/1.6.0/decisions/ADR-0006_Identity_ASPNET_Identity_OpenIddict.md",
+        "docs/authority/baselines/1.6.0/decisions/PDR-0007_DOB_Based_18_Plus_Eligibility.md",
+        "docs/authority/current/development/AMD-0002_Non-Blocking_PR_Approval_and_Continuous_Local_Execution.md",
+        "docs/authority/current/development/02_Repository_Solution_and_Module_Architecture.md",
+        "docs/authority/current/development/09_Testing_Acceptance_Evidence_and_Quality_Gates.md",
+        "docs/authority/baselines/1.6.0/27_Notifications_Communications_and_Preferences_FRD.md"
+      ],
+      "flow_refs": [
+        "docs/authority/current/development/34_Architecture_to_Development_Traceability_Matrix.md"
+      ],
+      "contract_refs": [
+        "docs/authority/current/development/32_Domain_API_Event_Data_and_Policy_Contract_Catalog.md"
+      ],
+      "decision_refs": [
+        "ADR-0006",
+        "PDR-0007"
+      ],
+      "acceptance_criteria": [
+        "Emit approved versioned Identity events only after authoritative commit and reuse P1 outbox/inbox/audit/correlation primitives.",
+        "Pass safe stable references to notification delivery contracts with governed content/version provenance; do not duplicate the Notification domain.",
+        "Preserve idempotency, retry/failure evidence and sensitive payload minimization."
+      ],
+      "prerequisites": [
+        "TUN-P2-003",
+        "TUN-P2-004",
+        "TUN-P2-005",
+        "TUN-P1-003",
+        "TUN-P1-006",
+        "TUN-P1-007",
+        "TUN-P1-014"
+      ],
+      "blockers": [],
+      "impact": {
+        "architecture": true,
+        "ui": false,
+        "sdk": false,
+        "financial": false,
+        "compliance": false,
+        "security": true,
+        "devops": false,
+        "support": false,
+        "api": true
+      },
+      "activated_roles": [
+        "full-stack-engineer",
+        "tester-qa-engineer",
+        "solution-architect",
+        "cyber-security-engineer",
+        "auditor",
+        "sdk-engineer"
+      ],
+      "required_tests": [
+        "atomic commit/outbox and duplicate consumer handling",
+        "sensitive payload/redaction and correlation integrity",
+        "notification-intent contract and failure/recovery integration"
+      ],
+      "required_evidence": [
+        "governance/evidence/TUN-P2-016-VALIDATION.json"
+      ],
+      "context_policy": "TASK",
+      "todos": [],
+      "defects": [],
+      "created_at": "2026-10-16T17:48:49.296Z",
+      "updated_at": "2026-10-16T17:48:49.296Z"
+    },
+    {
+      "schema_version": 1,
+      "work_item_id": "TUN-P2-017",
+      "milestone_id": "P2",
+      "sprint_id": null,
+      "title": "P2 end-to-end security privacy and UX conformance",
+      "status": "BACKLOG",
+      "type": "FEATURE",
+      "authority_refs": [
+        "docs/authority/current-authority.json",
+        "docs/authority/current/development/11_Development_Planes_Milestones_and_P0_Backlog.md",
+        "docs/authority/baselines/1.6.0/17_Account_Identity_and_Session_FRD.md",
+        "docs/authority/current/development/32_Domain_API_Event_Data_and_Policy_Contract_Catalog.md",
+        "docs/authority/current/development/34_Architecture_to_Development_Traceability_Matrix.md",
+        "docs/authority/baselines/1.6.0/decisions/ADR-0006_Identity_ASPNET_Identity_OpenIddict.md",
+        "docs/authority/baselines/1.6.0/decisions/PDR-0007_DOB_Based_18_Plus_Eligibility.md",
+        "docs/authority/current/development/AMD-0002_Non-Blocking_PR_Approval_and_Continuous_Local_Execution.md",
+        "docs/authority/current/development/02_Repository_Solution_and_Module_Architecture.md",
+        "docs/authority/current/development/09_Testing_Acceptance_Evidence_and_Quality_Gates.md",
+        "docs/authority/baselines/1.6.0/29_Privacy_Data_Lifecycle_and_Processing_Governance_FRD.md"
+      ],
+      "flow_refs": [
+        "docs/authority/current/development/34_Architecture_to_Development_Traceability_Matrix.md"
+      ],
+      "contract_refs": [
+        "docs/authority/current/development/32_Domain_API_Event_Data_and_Policy_Contract_Catalog.md"
+      ],
+      "decision_refs": [
+        "ADR-0006",
+        "PDR-0007"
+      ],
+      "acceptance_criteria": [
+        "Execute every FRD 17 acceptance case across API/BFF/UI and actual disposable infrastructure with negative, concurrent, replay, recovery and authorization coverage.",
+        "Verify approved UX/accessibility, governed content, no Product membership/entitlement mutation and no credential/raw-DOB leakage.",
+        "Record actual committed SHAs, dependency/security results, migration evidence and unresolved scoped findings without substituting discovery for execution."
+      ],
+      "prerequisites": [
+        "TUN-P2-002",
+        "TUN-P2-003",
+        "TUN-P2-004",
+        "TUN-P2-005",
+        "TUN-P2-006",
+        "TUN-P2-007",
+        "TUN-P2-008",
+        "TUN-P2-009",
+        "TUN-P2-010",
+        "TUN-P2-011",
+        "TUN-P2-012",
+        "TUN-P2-013",
+        "TUN-P2-014",
+        "TUN-P2-015",
+        "TUN-P2-016"
+      ],
+      "blockers": [],
+      "impact": {
+        "architecture": true,
+        "ui": true,
+        "sdk": false,
+        "financial": false,
+        "compliance": true,
+        "security": true,
+        "devops": false,
+        "support": false
+      },
+      "activated_roles": [
+        "full-stack-engineer",
+        "tester-qa-engineer",
+        "solution-architect",
+        "cyber-security-engineer",
+        "auditor",
+        "compliance-specialist",
+        "ui-ux-engineer",
+        "frontend-engineer",
+        "end-user-ux-reviewer",
+        "content-writer"
+      ],
+      "required_tests": [
+        "full Account/Identity E2E suite",
+        "security/abuse/accessibility and privacy negative matrix",
+        "fresh context/recovery and required role review evidence"
+      ],
+      "required_evidence": [
+        "governance/evidence/TUN-P2-017-VALIDATION.json"
+      ],
+      "context_policy": "TASK",
+      "todos": [],
+      "defects": [],
+      "created_at": "2026-10-16T17:48:49.296Z",
+      "updated_at": "2026-10-16T17:48:49.296Z"
+    },
+    {
+      "schema_version": 1,
+      "work_item_id": "TUN-P2-018",
+      "milestone_id": "P2",
+      "sprint_id": null,
+      "title": "P2 acceptance and integration handoff",
+      "status": "BACKLOG",
+      "type": "DOCUMENTATION",
+      "authority_refs": [
+        "docs/authority/current-authority.json",
+        "docs/authority/current/development/11_Development_Planes_Milestones_and_P0_Backlog.md",
+        "docs/authority/baselines/1.6.0/17_Account_Identity_and_Session_FRD.md",
+        "docs/authority/current/development/32_Domain_API_Event_Data_and_Policy_Contract_Catalog.md",
+        "docs/authority/current/development/34_Architecture_to_Development_Traceability_Matrix.md",
+        "docs/authority/baselines/1.6.0/decisions/ADR-0006_Identity_ASPNET_Identity_OpenIddict.md",
+        "docs/authority/baselines/1.6.0/decisions/PDR-0007_DOB_Based_18_Plus_Eligibility.md",
+        "docs/authority/current/development/AMD-0002_Non-Blocking_PR_Approval_and_Continuous_Local_Execution.md",
+        "docs/authority/current/development/02_Repository_Solution_and_Module_Architecture.md",
+        "docs/authority/current/development/09_Testing_Acceptance_Evidence_and_Quality_Gates.md"
+      ],
+      "flow_refs": [
+        "docs/authority/current/development/34_Architecture_to_Development_Traceability_Matrix.md"
+      ],
+      "contract_refs": [
+        "docs/authority/current/development/32_Domain_API_Event_Data_and_Policy_Contract_Catalog.md"
+      ],
+      "decision_refs": [
+        "ADR-0006",
+        "PDR-0007"
+      ],
+      "acceptance_criteria": [
+        "Assemble committed P2 evidence, required reviews, known issues and exact implementation/closure lineage.",
+        "Obtain actual authorized human Product acceptance before claiming it, and retain protected-main merge/release controls separately.",
+        "Run native milestone readiness and lifecycle checks; preserve unrelated work and refresh the final bounded context/handoff."
+      ],
+      "prerequisites": [
+        "TUN-P2-017"
+      ],
+      "blockers": [],
+      "impact": {
+        "architecture": false,
+        "ui": false,
+        "sdk": false,
+        "financial": false,
+        "compliance": false,
+        "security": false,
+        "devops": false,
+        "support": false,
+        "release": true
+      },
+      "activated_roles": [
+        "project-manager",
+        "auditor",
+        "governance-engineer"
+      ],
+      "required_tests": [
+        "native committed-readiness and milestone close-check",
+        "evidence hash/lineage and actual acceptance review",
+        "fresh-agent recovery and next-action verification"
+      ],
+      "required_evidence": [
+        "governance/evidence/TUN-P2-018-VALIDATION.json"
+      ],
+      "context_policy": "TASK",
+      "todos": [],
+      "defects": [],
+      "created_at": "2026-10-16T17:48:49.296Z",
+      "updated_at": "2026-10-16T17:48:49.296Z"
+    }
+  ],
+  "release_boundary": "Local validated prerequisites permit P2 work. P1 is historically CLOSED and new remote image/gate findings belong to release-blocking P1-RV001; do not suppress them or infer deployment approval."
+}

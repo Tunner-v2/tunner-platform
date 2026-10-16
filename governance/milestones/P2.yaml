@@ -1,0 +1,78 @@
+{
+  "schema_version": 1,
+  "milestone_id": "P2",
+  "title": "Account & Identity",
+  "status": "ACTIVE",
+  "goal": "Implement the approved Tunner Account/Identity capability through refined vertical slices, preserving Product membership and domain ownership boundaries.",
+  "scope": [
+    "Registration and verified contacts",
+    "Authentication, passkeys, TOTP, recovery codes and external identities",
+    "Tunner sessions/devices, step-up and recovery",
+    "Product authorization protocol boundary and Account closure",
+    "Account Center UX, security/audit/notification evidence and milestone acceptance"
+  ],
+  "non_goals": [
+    "Product membership/roles/entitlements or Product-local session authority",
+    "Billing/Finance/provider domain implementation",
+    "New Product policy values, legal conclusions or production deployment authority"
+  ],
+  "authority_refs": [
+    "docs/authority/current-authority.json",
+    "docs/authority/current/development/11_Development_Planes_Milestones_and_P0_Backlog.md",
+    "docs/authority/baselines/1.6.0/17_Account_Identity_and_Session_FRD.md",
+    "docs/authority/current/development/32_Domain_API_Event_Data_and_Policy_Contract_Catalog.md",
+    "docs/authority/current/development/34_Architecture_to_Development_Traceability_Matrix.md",
+    "docs/authority/baselines/1.6.0/decisions/ADR-0006_Identity_ASPNET_Identity_OpenIddict.md",
+    "docs/authority/baselines/1.6.0/decisions/PDR-0007_DOB_Based_18_Plus_Eligibility.md",
+    "docs/authority/current/development/AMD-0002_Non-Blocking_PR_Approval_and_Continuous_Local_Execution.md"
+  ],
+  "prerequisites": [
+    "P0",
+    "P1"
+  ],
+  "work_items": [
+    "TUN-P2-001",
+    "TUN-P2-002",
+    "TUN-P2-003",
+    "TUN-P2-004",
+    "TUN-P2-005",
+    "TUN-P2-006",
+    "TUN-P2-007",
+    "TUN-P2-008",
+    "TUN-P2-009",
+    "TUN-P2-010",
+    "TUN-P2-011",
+    "TUN-P2-012",
+    "TUN-P2-013",
+    "TUN-P2-014",
+    "TUN-P2-015",
+    "TUN-P2-016",
+    "TUN-P2-017",
+    "TUN-P2-018"
+  ],
+  "required_gates": [],
+  "required_roles": [
+    "full-stack-engineer",
+    "solution-architect",
+    "governance-engineer",
+    "tester-qa-engineer",
+    "auditor",
+    "project-manager",
+    "business-analyst",
+    "cyber-security-engineer",
+    "compliance-specialist"
+  ],
+  "evidence_refs": [
+    "governance/evidence/TUN-P2-001-AUTHORITY-RESOLUTION.json",
+    "governance/evidence/TUN-P2-001-VALIDATION.json",
+    "governance/evidence/TUN-P2-001-BACKLOG-SNAPSHOT.json",
+    "docs/development/P2_ACCOUNT_IDENTITY_REFINEMENT.md"
+  ],
+  "known_risks": [
+    "P1 protected-main/closure integration and formal deployment remain separate facts; use exact accepted closure and PR receipts.",
+    "P1-RV001 tracks later remote image vulnerabilities and effective status-check enforcement as a release block; no waiver or image remediation is claimed.",
+    "Runtime policy/provider/UX details require targeted owning-slice refinement before implementation."
+  ],
+  "created_at": "2026-10-16T17:32:48.676Z",
+  "updated_at": "2026-10-16T17:48:49.296Z"
+}

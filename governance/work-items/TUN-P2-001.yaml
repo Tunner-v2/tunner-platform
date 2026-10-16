@@ -1,0 +1,80 @@
+{
+  "schema_version": 1,
+  "work_item_id": "TUN-P2-001",
+  "milestone_id": "P2",
+  "sprint_id": null,
+  "title": "Account & Identity authority-backed refinement",
+  "status": "IN_PROGRESS",
+  "type": "BUSINESS_REQUIREMENT",
+  "authority_refs": [
+    "docs/authority/current-authority.json",
+    "docs/authority/current/development/11_Development_Planes_Milestones_and_P0_Backlog.md",
+    "docs/authority/baselines/1.6.0/17_Account_Identity_and_Session_FRD.md",
+    "docs/authority/current/development/32_Domain_API_Event_Data_and_Policy_Contract_Catalog.md",
+    "docs/authority/current/development/34_Architecture_to_Development_Traceability_Matrix.md",
+    "docs/authority/baselines/1.6.0/decisions/ADR-0006_Identity_ASPNET_Identity_OpenIddict.md",
+    "docs/authority/baselines/1.6.0/decisions/PDR-0007_DOB_Based_18_Plus_Eligibility.md",
+    "docs/authority/current/development/AMD-0002_Non-Blocking_PR_Approval_and_Continuous_Local_Execution.md"
+  ],
+  "flow_refs": [
+    "docs/authority/current/development/34_Architecture_to_Development_Traceability_Matrix.md"
+  ],
+  "contract_refs": [
+    "docs/authority/current/development/32_Domain_API_Event_Data_and_Policy_Contract_Catalog.md"
+  ],
+  "decision_refs": [
+    "ADR-0006",
+    "PDR-0007"
+  ],
+  "acceptance_criteria": [
+    "Map every FRD 17 state/resource/operation/event/UI/acceptance family to bounded governed P2 work items with explicit owner, non-goals, source references and LOCAL_VALIDATED prerequisites.",
+    "Resolve existing authority before declaring missing Product contracts; preserve existing FRD/ADR/PDR semantics and cross-domain ownership.",
+    "Identify and scope the first implementation slice, its tests/evidence, activated roles and any genuine policy/UX/provider prerequisites.",
+    "Retain P1 PR/integration and acceptance boundaries while permitting authorized local P2 work under AMD-0002.",
+    "Do not implement Account/Identity runtime behavior, provider adapters, persistence or user interfaces in this refinement work."
+  ],
+  "prerequisites": [
+    "TUN-P1-001"
+  ],
+  "blockers": [],
+  "impact": {
+    "architecture": true,
+    "ui": false,
+    "sdk": false,
+    "financial": false,
+    "compliance": true,
+    "security": true,
+    "devops": false,
+    "support": false
+  },
+  "activated_roles": [
+    "full-stack-engineer",
+    "solution-architect",
+    "governance-engineer",
+    "tester-qa-engineer",
+    "auditor",
+    "project-manager",
+    "business-analyst",
+    "cyber-security-engineer",
+    "compliance-specialist"
+  ],
+  "required_tests": [
+    "authority verify",
+    "governance validate and role calculation",
+    "native next eligibility and work transitions",
+    "bounded TASK context build/verify",
+    "FRD-to-backlog coverage and dependency graph review"
+  ],
+  "required_evidence": [
+    "governance/evidence/TUN-P2-001-AUTHORITY-RESOLUTION.json",
+    "governance/evidence/TUN-P2-001-VALIDATION.json",
+    "governance/evidence/TUN-P2-001-BACKLOG-SNAPSHOT.json",
+    "docs/development/P2_ACCOUNT_IDENTITY_REFINEMENT.md"
+  ],
+  "context_policy": "TASK",
+  "todos": [],
+  "defects": [],
+  "created_at": "2026-10-16T17:32:48.676Z",
+  "updated_at": "2026-10-16T17:48:49.296Z",
+  "product_acceptance_required": false
+}

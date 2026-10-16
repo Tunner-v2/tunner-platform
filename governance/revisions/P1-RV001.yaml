@@ -1,0 +1,52 @@
+{
+  "schema_version": 1,
+  "revision_id": "P1-RV001",
+  "revision_scope": "MILESTONE",
+  "original_scope_id": "P1",
+  "parent_revision_id": null,
+  "parent_milestone_revision_id": null,
+  "title": "Resolve remote container CVEs and integration check enforcement",
+  "revision_type": "SECURITY",
+  "status": "PROPOSED",
+  "reason": "After local P1 closure and protected PR integration, GitHub scans identified high/critical Go dependency findings in four development images and effective main rules expose no required status-check rule. Preserve original closure and track release-blocking remediation separately.",
+  "authority_refs": [
+    "docs/authority/baselines/1.6.0/08_Security_Privacy_Compliance_and_Global_Market_Governance.md",
+    "docs/authority/current/development/09_Testing_Acceptance_Evidence_and_Quality_Gates.md",
+    "docs/authority/baselines/1.6.0/decisions/ADR-0008_GitHub_and_GitHub_Actions.md"
+  ],
+  "decision_refs": [],
+  "defect_refs": [
+    "DEF-P1-CONTAINER-SCAN-001"
+  ],
+  "change_refs": [],
+  "impact_classification": "RELEASE_BLOCKING",
+  "blocked_scope": [
+    "P1"
+  ],
+  "acceptance_criteria": [
+    "Reproduce and resolve the four container scan failures without suppressing findings or reducing severity thresholds; follow applicable approved security exception/VEX rules if a reported component is demonstrably not affected. Verify effective integration status-check enforcement and record actual source/build/scan evidence before release."
+  ],
+  "prerequisites": [],
+  "work_items": [
+    "P1-RV001-001"
+  ],
+  "required_gates": [],
+  "required_roles": [
+    "project-manager",
+    "solution-architect",
+    "governance-engineer",
+    "tester-qa-engineer",
+    "auditor",
+    "full-stack-engineer",
+    "cyber-security-engineer",
+    "devops-engineer",
+    "rd-engineer"
+  ],
+  "evidence_refs": [
+    "governance/evidence/P1-RV001-SECURITY-FINDINGS.json",
+    "governance/evidence/P1-RV001-AUTHORITY-RESOLUTION.json"
+  ],
+  "created_at": "2026-10-16T17:46:06.8366094+00:00",
+  "closed_at": null,
+  "product_acceptance_required": false
+}
