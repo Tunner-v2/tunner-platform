@@ -1,0 +1,40 @@
+{
+  "schema_version": 1,
+  "revision_id": "P0-033-RV002",
+  "revision_scope": "WORK_ITEM",
+  "original_scope_id": "TUN-P0-033",
+  "parent_revision_id": "P0-033-RV001",
+  "parent_milestone_revision_id": "P0-RV004",
+  "title": "Verify additive current authority overlays",
+  "revision_type": "CORRECTIVE",
+  "status": "ACTIVE",
+  "reason": "Deep-audit synchronization adds current authority verification owned by the closed mirror-import scope; preserve earlier closure.",
+  "authority_refs": [
+    "docs/authority/current/development/04_Governance_and_Context_Tooling_Specification.md"
+  ],
+  "decision_refs": [],
+  "defect_refs": [],
+  "change_refs": [],
+  "impact_classification": "NON_BLOCKING",
+  "blocked_scope": [],
+  "acceptance_criteria": [
+    "Retain all original byte-exact checks and reject mutated or missing supplemental manifests and authority bytes."
+  ],
+  "prerequisites": [],
+  "work_items": [],
+  "required_gates": [],
+  "required_roles": [
+    "project-manager",
+    "solution-architect",
+    "governance-engineer",
+    "tester-qa-engineer",
+    "auditor"
+  ],
+  "evidence_refs": [
+    "governance/evidence/P0-RV004-AUTHORITY-RESOLUTION.json",
+    "governance/evidence/P0-033-RV002-VALIDATION.json"
+  ],
+  "created_at": "2026-10-16T16:31:03.8741676+00:00",
+  "closed_at": null,
+  "product_acceptance_required": false
+}

@@ -30,8 +30,11 @@ internal static class Program
             if (Prompt("Type DEDICATED NON-PRODUCTION") != "DEDICATED NON-PRODUCTION") return 2;
             using var secrets = new OpenBaoSecretStore(new Uri(profile.OpenBaoEndpoint), profile.SecretStoreReference, Secret("Short-lived scoped OpenBao token"));
             using var configured = await ConfiguredR2Storage.CreateAsync(profile, secrets, cancellation.Token).ConfigureAwait(false);
+            var started = DateTimeOffset.UtcNow;
             var result = await R2ContractProbe.RunAsync(profile, configured.Storage, configured.IsAbsentAsync, cancellation.Token).ConfigureAwait(false);
-            Console.WriteLine(JsonSerializer.Serialize(result));
+            var receipt = R2ExecutionReceipt.Create(profile, started, DateTimeOffset.UtcNow, result.ObjectKey, result.ContentVerified, result.CleanupVerified, null, result.FailureCode);
+            await receipt.SaveAsync(args[1], CancellationToken.None).ConfigureAwait(false);
+            Console.WriteLine(JsonSerializer.Serialize(receipt));
             return result.Passed ? 0 : 1;
         }
         catch (OperationCanceledException) { Console.Error.WriteLine("INSTALLATION_CANCELLED"); return 1; }
@@ -98,6 +101,7 @@ internal static class Program
         if (Prompt("Type DEDICATED NON-PRODUCTION") != "DEDICATED NON-PRODUCTION") return 2;
         var session = await LocalOpenBaoSession.CreateAsync(profile,
             Secret("Local OpenBao bootstrap/root token (private; used only to issue a restricted identity)"), cancellationToken).ConfigureAwait(false);
+        var started = DateTimeOffset.UtcNow;
         var result = await LocalR2Setup.RunAsync(profile, session, () =>
                 new Dictionary<string, string>(StringComparer.Ordinal)
                 {
@@ -109,7 +113,9 @@ internal static class Program
             using var configured = await ConfiguredR2Storage.CreateAsync(configuredProfile, secrets, operationToken).ConfigureAwait(false);
             return await R2ContractProbe.RunAsync(configuredProfile, configured.Storage, configured.IsAbsentAsync, operationToken).ConfigureAwait(false);
         }, cancellationToken).ConfigureAwait(false);
-        Console.WriteLine(JsonSerializer.Serialize(result));
+        var receipt = R2ExecutionReceipt.Create(profile, started, DateTimeOffset.UtcNow, result.ObjectKey, result.ContentVerified, result.CleanupVerified, result.BootstrapCleanupVerified, result.FailureCode);
+        await receipt.SaveAsync(path, CancellationToken.None).ConfigureAwait(false);
+        Console.WriteLine(JsonSerializer.Serialize(receipt));
         return result.Passed ? 0 : 1;
     }
 

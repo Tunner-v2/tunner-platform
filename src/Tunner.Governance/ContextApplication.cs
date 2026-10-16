@@ -46,7 +46,10 @@ public static class ContextApplication
             return new CommandResult(2, "context build", new ContextBuildPayload("NOT_FOUND", workItemId, output.FullName, [], [], ["work item record does not exist or is not a YAML mapping"]));
         }
 
-        WriteDurableState(repository, records, workItemId);
+        var defaultOutput = Path.Combine(repository.FullName, "docs", "context", "current");
+        var projectOutput = new DirectoryInfo(string.Equals(Path.GetFullPath(output.FullName), defaultOutput, StringComparison.OrdinalIgnoreCase)
+            ? Path.Combine(repository.FullName, "docs", "project") : Path.Combine(output.FullName, "project"));
+        WriteDurableState(repository, records, workItemId, projectOutput);
         var included = new Dictionary<string, ContextArtifact>(StringComparer.Ordinal);
         var excluded = new List<ContextExclusion>();
         AddRequired(repository, included, excluded, "AGENTS.md", "repository entry contract");
@@ -57,9 +60,9 @@ public static class ContextApplication
         var owningRevision = records.FirstOrDefault(x => x.Type.DefinitionName == "revision" && x.Identifier == GovernanceApplication.Scalar(workItem.Fields, "revision_ref"));
         if (owningRevision is not null) AddRevisionContext(repository, owningRevision, records, included, excluded);
         foreach (var milestone in records.Where(x => x.Type.DefinitionName == "milestone")) AddRequired(repository, included, excluded, Relative(repository, milestone.Path), "historical milestone state");
-        AddOptional(repository, included, excluded, "docs/project/PROJECT_CONTEXT.md", "durable project context");
-        AddOptional(repository, included, excluded, "docs/project/CURRENT_STATE.md", "current project state");
-        AddOptional(repository, included, excluded, "docs/project/HANDOFF.md", "handoff state");
+        AddOptional(repository, included, excluded, Relative(repository, Path.Combine(projectOutput.FullName, "PROJECT_CONTEXT.md")), "durable project context");
+        AddOptional(repository, included, excluded, Relative(repository, Path.Combine(projectOutput.FullName, "CURRENT_STATE.md")), "current project state");
+        AddOptional(repository, included, excluded, Relative(repository, Path.Combine(projectOutput.FullName, "HANDOFF.md")), "handoff state");
         AddOptional(repository, included, excluded, "governance/policies/lifecycle-policy.yaml", "lifecycle policy");
 
         foreach (var authority in workItem.StringList("authority_refs"))
@@ -95,6 +98,12 @@ public static class ContextApplication
         foreach (var evidence in workItem.StringList("required_evidence"))
         {
             AddOptional(repository, included, excluded, evidence, "required evidence");
+        }
+
+        foreach (var defectId in workItem.StringList("defects"))
+        {
+            var defect = records.FirstOrDefault(record => record.Type.DefinitionName == "defect" && record.Identifier == defectId);
+            AddRequired(repository, included, excluded, defect is null ? $"governance/defects/{defectId}.yaml" : Relative(repository, defect.Path), "selected work-item defect");
         }
 
         foreach (var role in workItem.StringList("activated_roles"))
@@ -204,7 +213,8 @@ public static class ContextApplication
                     continue;
                 }
 
-                AddRequired(repository, included, excluded, Relative(repository, document), "active authority amendment");
+                var current = "docs/authority/current/development/" + Path.GetFileName(document);
+                AddRequired(repository, included, excluded, SupplementalAuthorityMirrors.Paths(repository).Contains(current, StringComparer.Ordinal) ? current : Relative(repository, document), "active authority amendment");
             }
         }
         catch (JsonException)
@@ -242,9 +252,11 @@ public static class ContextApplication
 
     private static void AddCurrentAuthorityOverrides(DirectoryInfo repository, IReadOnlyList<string> references, Dictionary<string, ContextArtifact> included, List<ContextExclusion> excluded)
     {
+        foreach (var path in SupplementalAuthorityMirrors.Paths(repository).Where(path => path.EndsWith("/decisions/README.md", StringComparison.Ordinal)))
+            AddRequired(repository, included, excluded, path, "current decision authority index");
         foreach (var reference in references.Where(x => x.StartsWith("docs/authority/", StringComparison.Ordinal)))
         {
-            var current = "docs/authority/current/development/" + Path.GetFileName(reference);
+            var current = "docs/authority/current/development/" + (reference.Contains("/decisions/", StringComparison.Ordinal) ? "decisions/" : "") + Path.GetFileName(reference);
             if (current != reference && File.Exists(Path.Combine(repository.FullName, current)))
                 AddRequired(repository, included, excluded, current, "current approved authority for selected scope");
         }
@@ -309,7 +321,7 @@ public static class ContextApplication
         return milestones.Length == 0 ? "No active milestone work; preserve historical closure and inspect governed backlog before starting a new scope."
             : "Run tunner governance milestone close-check " + milestones[0].Identifier +
               " and tunner governance commit-readiness audit --milestone " + milestones[0].Identifier +
-              "; reconcile scoped findings and required milestone reviews before lifecycle advancement. Open defects: " + string.Join(", ", defects);
+              "; after PASS, record applicable acceptance/release authorization and check the next native milestone transition before advancing. Open defects: " + string.Join(", ", defects);
     }
 
     private static string GovernanceStateHash(DirectoryInfo repository)
@@ -318,9 +330,9 @@ public static class ContextApplication
         return Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(string.Join("\n", records.OrderBy(x => x.Path, StringComparer.Ordinal).Select(x => Relative(repository, x.Path) + ":" + HashFile(x.Path)))))).ToLowerInvariant();
     }
 
-    private static void WriteDurableState(DirectoryInfo repository, IReadOnlyList<GovernanceRecord> records, string selected)
+    private static void WriteDurableState(DirectoryInfo repository, IReadOnlyList<GovernanceRecord> records, string selected, DirectoryInfo destination)
     {
-        var output = Directory.CreateDirectory(Path.Combine(repository.FullName, "docs", "project"));
+        var output = Directory.CreateDirectory(destination.FullName);
         var history = string.Join("\n", RevisionApplication.HistoricalScopes(repository, records).Where(x => records.Any(r => r.Type.DefinitionName == "milestone" && r.Identifier == x.Id)).Select(x => $"- {x.Id}: historical {x.HistoricalStatus}; active Revisions: {string.Join(", ", x.ActiveRevisionRefs)}"));
         var lineage = RevisionApplication.Status(records).GroupBy(x => x.OriginalScopeId, StringComparer.Ordinal).Select(x => x.Last()).ToArray();
         var current = records.SingleOrDefault(x => x.Identifier == selected);
@@ -328,7 +340,7 @@ public static class ContextApplication
         var rows = string.Join("\n", lineage.Select(x => $"- {x.Id}: {x.Status}; original {x.OriginalScopeId}; parent {x.ParentMilestoneRevision ?? "none"}; {x.Type}: {x.Reason}"));
         var next = (NextPayload)GovernanceApplication.Next(repository).Payload;
         var action = next.Items.FirstOrDefault(x => x.Actionable && x.WorkItemId == selected) ?? next.Items.FirstOrDefault(x => x.Actionable);
-        var details = current is null ? "" : $"\nPrerequisites: {string.Join(", ", current.StringList("prerequisites"))}\nAuthority: {string.Join(", ", current.StringList("authority_refs"))}\nDefects: {string.Join(", ", current.StringList("defect_refs"))}\nEvidence: {string.Join(", ", current.StringList("evidence_refs"))}\n";
+        var details = current is null ? "" : $"\nPrerequisites: {string.Join(", ", current.StringList("prerequisites"))}\nAuthority: {string.Join(", ", current.StringList("authority_refs"))}\nDefects: {string.Join(", ", current.StringList(current.Type.DefinitionName == "revision" ? "defect_refs" : "defects"))}\nEvidence: {string.Join(", ", current.StringList(current.Type.DefinitionName == "work-item" ? "required_evidence" : "evidence_refs"))}\n";
         var content = "# Governed project recovery state\n\nDerived deterministically from repository-native governance. Regenerate with tunner context build.\n\n" + history + "\n\nLatest bounded Revision lineage:\n" + rows +
             $"\n\nSelected scope: {selected}\nValidated SHA: {state?.ValidatedCommitSha ?? "not recorded"}\nTested SHA: {state?.TestedCommitSha ?? "not recorded"}\nClosure SHA: {state?.ClosureCommitSha ?? (current is null ? null : CommittedEvidenceApplication.ClosureSha(repository, current)) ?? "not recorded"}\n" + details +
             $"\nExact next governed action: {(action is null ? RecoveryAction(records) : action.WorkItemId + ": " + action.Reason)}\n\nP1 historical validation findings are retained in governance/evidence/P0-RV001-P1-EVIDENCE-AUDIT.json. No chat history is required.\n";
