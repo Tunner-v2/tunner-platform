@@ -5,7 +5,7 @@
   "role": "cyber-security-engineer",
   "status": "PASS",
   "result": "PASS",
-  "reviewed_at": "2026-10-16T20:19:00.112Z",
+  "reviewed_at": "2026-10-16T21:58:02.545Z",
   "skill_id": "cyber-security-engineer",
   "skill_version": "1.0.0",
   "skill_hash": "2d32ff3d7fb503f29cf930e9852ed4a757bb48a08e3fa4e3f6d5a23139a47f97",
@@ -33,10 +33,54 @@
     "governance/evidence/TUN-P2-003-DATA-INVENTORY.json"
   ],
   "findings": [
-    "Registration activates EF user and OpenIddict Core stores only; tests confirm no UserManager, SignInManager or authentication server/scheme is registered. Explicit connection and matching schema-v3 design/runtime options are required. Secret/SAST scans pass; the module dependency audit reports no known NuGet vulnerabilities. Permanent SQL integrity errors use 23514. Existing P1 container findings remain open and unwaived.",
-    "Final engineering review of exact tested candidate 99c0cf268b368ba64b4984dce6172a00a2546718. All 345 platform tests pass; Product acceptance and release approval remain separate."
+    "Active persistence scope revalidated at f64f9976a150e3c4a08378c9b87c980b91359a81 after additive P2-004 context/model/project/test wiring. The same 21-path ownership array was already committed in this candidate. All original 16 persistence tests and all 364 .NET tests pass; original evidence is preserved. Foundation store/immutability/uniqueness/outbox/schema ownership and no-DOB invariants remain intact.",
+    "Separate opt-in registration is owned by TUN-P2-004; persistence configuration still does not activate UserManager/sign-in/server sessions. No production processing, Product acceptance, protected-main merge or release approval is asserted. "
   ],
   "blocking_findings": [],
   "required_actions": [],
-  "context_expansion_requested": false
+  "context_expansion_requested": false,
+  "prior_reviews": [
+    {
+      "schema_version": 1,
+      "review_id": "REV-TUN-P2-003-cyber-security-engineer",
+      "work_item_id": "TUN-P2-003",
+      "role": "cyber-security-engineer",
+      "status": "PASS",
+      "result": "PASS",
+      "reviewed_at": "2026-10-16T20:19:00.112Z",
+      "skill_id": "cyber-security-engineer",
+      "skill_version": "1.0.0",
+      "skill_hash": "2d32ff3d7fb503f29cf930e9852ed4a757bb48a08e3fa4e3f6d5a23139a47f97",
+      "authority_refs": [
+        "docs/authority/current-authority.json",
+        "docs/authority/current/development/11_Development_Planes_Milestones_and_P0_Backlog.md",
+        "docs/authority/baselines/1.6.0/17_Account_Identity_and_Session_FRD.md",
+        "docs/authority/current/development/32_Domain_API_Event_Data_and_Policy_Contract_Catalog.md",
+        "docs/authority/current/development/34_Architecture_to_Development_Traceability_Matrix.md",
+        "docs/authority/baselines/1.6.0/decisions/ADR-0006_Identity_ASPNET_Identity_OpenIddict.md",
+        "docs/authority/baselines/1.6.0/decisions/PDR-0007_DOB_Based_18_Plus_Eligibility.md",
+        "docs/authority/current/development/AMD-0002_Non-Blocking_PR_Approval_and_Continuous_Local_Execution.md",
+        "docs/authority/current/development/02_Repository_Solution_and_Module_Architecture.md",
+        "docs/authority/current/development/09_Testing_Acceptance_Evidence_and_Quality_Gates.md",
+        "docs/authority/baselines/1.6.0/29_Privacy_Data_Lifecycle_and_Processing_Governance_FRD.md"
+      ],
+      "context_artifacts": [
+        "governance/work-items/TUN-P2-003.yaml",
+        "docs/development/P2_003_IDENTITY_PERSISTENCE.md"
+      ],
+      "evidence_refs": [
+        "governance/evidence/TUN-P2-003-AUTHORITY-RESOLUTION.json",
+        "governance/evidence/TUN-P2-003-RD-SOURCES.json",
+        "governance/evidence/TUN-P2-003-VALIDATION.json",
+        "governance/evidence/TUN-P2-003-DATA-INVENTORY.json"
+      ],
+      "findings": [
+        "Registration activates EF user and OpenIddict Core stores only; tests confirm no UserManager, SignInManager or authentication server/scheme is registered. Explicit connection and matching schema-v3 design/runtime options are required. Secret/SAST scans pass; the module dependency audit reports no known NuGet vulnerabilities. Permanent SQL integrity errors use 23514. Existing P1 container findings remain open and unwaived.",
+        "Final engineering review of exact tested candidate 99c0cf268b368ba64b4984dce6172a00a2546718. All 345 platform tests pass; Product acceptance and release approval remain separate."
+      ],
+      "blocking_findings": [],
+      "required_actions": [],
+      "context_expansion_requested": false
+    }
+  ]
 }

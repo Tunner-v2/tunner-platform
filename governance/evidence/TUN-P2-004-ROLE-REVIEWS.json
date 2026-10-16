@@ -1,0 +1,155 @@
+{
+  "schema_version": 1,
+  "evidence_id": "TUN-P2-004-ROLE-REVIEWS",
+  "scope_type": "WORK_ITEM",
+  "scope_id": "TUN-P2-004",
+  "status": "PASS",
+  "reviewed_commit_sha": "f64f9976a150e3c4a08378c9b87c980b91359a81",
+  "reviewed_at": "2026-10-16T21:58:02.545Z",
+  "reviews": [
+    {
+      "role": "full-stack-engineer",
+      "conclusion": "PASS",
+      "checks": [
+        "Registration, private recovery, proof, resend and purge use existing Identity/policy/outbox primitives. Per-operation proposed credentials prevent pending-registration pre-hijacking; exactly one verified proof activates the canonical Account. The consent-first form and later eligibility step preserve server 18+ authority.",
+        "Exact tested candidate f64f9976a150e3c4a08378c9b87c980b91359a81. Executing-agent engineering perspective; Product/content/legal acceptance, protected-main merge and production release approvals remain separate."
+      ],
+      "findings": [],
+      "review_ref": "governance/reviews/REV-TUN-P2-004-full-stack-engineer.yaml",
+      "skill_hash": "59adbe2133cf4ce88cbc9ca4eafce1d5a9d83b9562b6580c1571e6fc148d46b5"
+    },
+    {
+      "role": "tester-qa-engineer",
+      "conclusion": "PASS",
+      "checks": [
+        "All 364 .NET, 25 web unit and 20 Edge browser tests pass without skips. Real PostgreSQL races/replay/expiry/abuse/retention and real HTTPS/origin/CSRF/cookie/body boundaries complement fixture-publication browser coverage. Failed attempts are retained and excluded.",
+        "Exact tested candidate f64f9976a150e3c4a08378c9b87c980b91359a81. Executing-agent engineering perspective; Product/content/legal acceptance, protected-main merge and production release approvals remain separate."
+      ],
+      "findings": [],
+      "review_ref": "governance/reviews/REV-TUN-P2-004-tester-qa-engineer.yaml",
+      "skill_hash": "a57ce99d7ad7a3b60f17e4826c81c507c9cc208d8928285c406222eefe0a18fd"
+    },
+    {
+      "role": "solution-architect",
+      "conclusion": "PASS",
+      "checks": [
+        "Identity owns canonical Account/contact/credential state and registration tables. Accounts stays framework-free; one existing outbox participates in the transaction. Existing normalized-email and effective-policy primitives are reused. Login/session and production notification/audit/maintenance remain with explicit TUN-P2-005/016 owners.",
+        "Exact tested candidate f64f9976a150e3c4a08378c9b87c980b91359a81. Executing-agent engineering perspective; Product/content/legal acceptance, protected-main merge and production release approvals remain separate."
+      ],
+      "findings": [],
+      "review_ref": "governance/reviews/REV-TUN-P2-004-solution-architect.yaml",
+      "skill_hash": "664ffba70d0f97e75951c3548b7f8391854781e4cf90cc50fc8829543783a35b"
+    },
+    {
+      "role": "cyber-security-engineer",
+      "conclusion": "PASS",
+      "checks": [
+        "Private protected browser context, actual-peer HMAC abuse partition, HTTPS/origin/CSRF and bounded JSON remain mandatory. Framework IdentityV3 work factor is an approved server policy input. Codes/credentials are separately protected, proof is constant-time compared, stale/concurrent versions cannot overwrite the winning credential, and existing/new account responses share hashing/opaque state. No mathematically constant network timing or production provider security is claimed. P1 image findings remain open.",
+        "Exact tested candidate f64f9976a150e3c4a08378c9b87c980b91359a81. Executing-agent engineering perspective; Product/content/legal acceptance, protected-main merge and production release approvals remain separate."
+      ],
+      "findings": [],
+      "review_ref": "governance/reviews/REV-TUN-P2-004-cyber-security-engineer.yaml",
+      "skill_hash": "2d32ff3d7fb503f29cf930e9852ed4a757bb48a08e3fa4e3f6d5a23139a47f97"
+    },
+    {
+      "role": "auditor",
+      "conclusion": "PASS",
+      "checks": [
+        "All 49 frozen behavior paths match committed/tested candidate f64f9976a150e3c4a08378c9b87c980b91359a81. Source hashes, six TRX results, web results, corrected failures and publish receipts are recorded. Prior active P2-003 evidence/reviews are retained during shared-file revalidation; unrelated dirty files remain byte-identical. These are executing-agent engineering reviews, not independent human or Product approval.",
+        "Exact tested candidate f64f9976a150e3c4a08378c9b87c980b91359a81. Executing-agent engineering perspective; Product/content/legal acceptance, protected-main merge and production release approvals remain separate."
+      ],
+      "findings": [],
+      "review_ref": "governance/reviews/REV-TUN-P2-004-auditor.yaml",
+      "skill_hash": "191c796fc5df0332ff2c3c464ca611d2c6d3ffc5ba7e2807986a71ad2e40d921"
+    },
+    {
+      "role": "compliance-specialist",
+      "conclusion": "PASS",
+      "checks": [
+        "Raw DOB exists only in request/browser memory for approved server 18+ evaluation, never a persistence column/outbox/log/storage entry. The initial screen has notices only and a separate DOB step occurs before registration POST; notice acknowledgement is not age evidence. Explicit approved processing/retention/publication references are required; fixture legal/security values grant no production authority.",
+        "Exact tested candidate f64f9976a150e3c4a08378c9b87c980b91359a81. Executing-agent engineering perspective; Product/content/legal acceptance, protected-main merge and production release approvals remain separate."
+      ],
+      "findings": [],
+      "review_ref": "governance/reviews/REV-TUN-P2-004-compliance-specialist.yaml",
+      "skill_hash": "38f8de27e31b3ae5cec070320d9b408d6f75682b024322f5e37585c76921303e"
+    },
+    {
+      "role": "sdk-engineer",
+      "conclusion": "PASS",
+      "checks": [
+        "Typed server-owned BFF contracts document operation identity, expected versions, safe Problem Details and private status recovery. No public Product API, generated SDK, access grant or browser token is introduced. Detailed field contracts remain in code and the implementation contract document under Doc32.",
+        "Exact tested candidate f64f9976a150e3c4a08378c9b87c980b91359a81. Executing-agent engineering perspective; Product/content/legal acceptance, protected-main merge and production release approvals remain separate."
+      ],
+      "findings": [],
+      "review_ref": "governance/reviews/REV-TUN-P2-004-sdk-engineer.yaml",
+      "skill_hash": "c64a66b2e19bccdbf69f13c9db62e9e2cbb0403f384591a93b5b787dc33b07ae"
+    },
+    {
+      "role": "ui-ux-engineer",
+      "conclusion": "PASS",
+      "checks": [
+        "Four grounded Figma frames align with FRD17/31 and the explicit user choice: first email/password/notices, then DOB eligibility, proof and readiness. Existing Tunner text-only brand, Geist/Inter, intrinsic SVG geometry and shared finite control presentations are used. Native date entry and policy-derived expiry are documented adaptations.",
+        "Exact tested candidate f64f9976a150e3c4a08378c9b87c980b91359a81. Executing-agent engineering perspective; Product/content/legal acceptance, protected-main merge and production release approvals remain separate."
+      ],
+      "findings": [],
+      "review_ref": "governance/reviews/REV-TUN-P2-004-ui-ux-engineer.yaml",
+      "skill_hash": "1fc89f73cb56107fe5669d6699bb50b4ebe6481c0efea7e59eff30b350ce5800"
+    },
+    {
+      "role": "frontend-engineer",
+      "conclusion": "PASS",
+      "checks": [
+        "The User app reuses ThemeProvider/ContentProvider/TextField/PrimaryButton and existing pinned local fonts. Source metrics, all local images, responsive 320px layouts, focus, server-time-based display, duplicate-submit guards, no browser storage and uncertainty recovery pass. Standard User/Admin control regression metrics remain unchanged.",
+        "Exact tested candidate f64f9976a150e3c4a08378c9b87c980b91359a81. Executing-agent engineering perspective; Product/content/legal acceptance, protected-main merge and production release approvals remain separate."
+      ],
+      "findings": [],
+      "review_ref": "governance/reviews/REV-TUN-P2-004-frontend-engineer.yaml",
+      "skill_hash": "688773fc2118294031c0245fcd54ba3d560a4b4a1ee8dec98f9b7e99408cd27a"
+    },
+    {
+      "role": "end-user-ux-reviewer",
+      "conclusion": "PASS",
+      "checks": [
+        "DOB is absent on the first screen. Required notices precede the separate eligibility screen with a clear return action; no network registration occurs before that screen is submitted. Underage/error, latest-proof/resend, expired proof and uncertain-result states are actionable and accessible. Readiness grants no Product action or unavailable sign-in button.",
+        "Exact tested candidate f64f9976a150e3c4a08378c9b87c980b91359a81. Executing-agent engineering perspective; Product/content/legal acceptance, protected-main merge and production release approvals remain separate."
+      ],
+      "findings": [],
+      "review_ref": "governance/reviews/REV-TUN-P2-004-end-user-ux-reviewer.yaml",
+      "skill_hash": "e9059d04505ec461405de6abe23d31526205f498ea815207dd042a87f82ec4d1"
+    },
+    {
+      "role": "content-writer",
+      "conclusion": "PASS",
+      "checks": [
+        "Semantic copy remains DRAFT in content.proposal.json; tests explicitly synthesize fixture publications. The BFF requires complete matching-locale PUBLISHED provenance and effective notice/link references. Missing content denies processing rather than inventing legal/domain fallback. Only the existing generic technical error text is deterministic.",
+        "Exact tested candidate f64f9976a150e3c4a08378c9b87c980b91359a81. Executing-agent engineering perspective; Product/content/legal acceptance, protected-main merge and production release approvals remain separate."
+      ],
+      "findings": [],
+      "review_ref": "governance/reviews/REV-TUN-P2-004-content-writer.yaml",
+      "skill_hash": "9683a7f4aa8e50e2922fb7bbc74238d2d7bdb8ce2a81f922030c45ce9258e130"
+    },
+    {
+      "role": "rd-engineer",
+      "conclusion": "PASS",
+      "checks": [
+        "Current primary NIST SP800-63B-4, OWASP Authentication guidance and Microsoft Identity documentation informed Unicode password length/blocklisting, generic responses and explicit IdentityV3 work parameters. No package versions or draft/secondary sources replace authority; upstream font experiments were removed in favor of the existing pinned local font packages.",
+        "Exact tested candidate f64f9976a150e3c4a08378c9b87c980b91359a81. Executing-agent engineering perspective; Product/content/legal acceptance, protected-main merge and production release approvals remain separate."
+      ],
+      "findings": [],
+      "review_ref": "governance/reviews/REV-TUN-P2-004-rd-engineer.yaml",
+      "skill_hash": "2834c223dfd847a6d7cd28f52de4113efc574d621391d059e8dc1469bdf33187"
+    },
+    {
+      "role": "devops-engineer",
+      "conclusion": "PASS",
+      "checks": [
+        "Fresh Release publish succeeds and contains all 25 web distribution files byte-identically plus 26 verified native gzip/Brotli variants. Runtime activation requires explicit approved providers/origin/Data Protection; no live database, production deployment, secrets delivery, main protection, image selection or service port was mutated. Existing unwaived P1 release blockers remain.",
+        "Exact tested candidate f64f9976a150e3c4a08378c9b87c980b91359a81. Executing-agent engineering perspective; Product/content/legal acceptance, protected-main merge and production release approvals remain separate."
+      ],
+      "findings": [],
+      "review_ref": "governance/reviews/REV-TUN-P2-004-devops-engineer.yaml",
+      "skill_hash": "0def19cfd8cf73f9fe47851ab171d3154e7e80b4675ded65964f10856789b50c"
+    }
+  ],
+  "review_boundary": "Executing-agent engineering perspectives only. Initial eleven scope reviews are preserved. Final impact classification additionally records schema/migration and R&D/packaging review; no human, Product or legal approval is implied."
+}
