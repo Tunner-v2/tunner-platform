@@ -161,7 +161,7 @@
     }
   ],
   "review_method": "Engineering reviews by the executing agent; no independent human, Product, security-release or protected-main merge approval implied.",
-  "exact_next_action": "Complete native work-item and milestone engineering checks from committed evidence; preserve applicable milestone acceptance/release lifecycle and human gates.",
+  "exact_next_action": "Complete the current P1 engineering gate receipt, then retain VALIDATION until applicable milestone acceptance/release is authorized.",
   "initial_dirty_paths": [
     "docs/context/current/HANDOFF.md",
     "docs/context/current/adaptive-selection.json",
@@ -187,21 +187,13 @@
   },
   "gap_register_summary": {
     "total": 20,
-    "resolved": 18,
-    "partial_live_r2": 1,
-    "blocked_milestone_acceptance": 1
+    "resolved": 20,
+    "partial": 0,
+    "blocked": 0
   },
   "final_milestone_close_check": {
-    "outcome": "NOT_READY",
-    "existing_work_item_gates_passed": 23,
-    "failures": [
-      "work item is not DONE: TUN-P1-023 (VALIDATION)",
-      "P1 defect remains open: DEF-TUN-P1-023-R2-001 (OPEN)",
-      "milestone role-review evidence is malformed or not PASS: governance/evidence/P1-MILESTONE-ROLE-REVIEWS.json"
-    ],
-    "reason": "Native close-check still reports exactly the pending TUN-P1-023 state, its OPEN R2 prerequisite and BLOCKED milestone reviews. Bucket isolation is now operator-confirmed, but no live R2 acceptance receipt exists.",
-    "recorded_at": "2026-10-15T19:50:40Z",
-    "checked_commit_sha": "628ee60ef75c5b0aa85e81e359b78e259770d096"
+    "result": "SEE_CURRENT_NATIVE_GATE_RECEIPT",
+    "receipt": "governance/evidence/P1-ENGINEERING-VALIDATION-20261016.json"
   },
   "previous_live_r2_prerequisite": {
     "result": "NOT_EXECUTED",
@@ -325,5 +317,27 @@
     "work_items": 22,
     "findings": [],
     "command": "tunner governance commit-readiness audit --milestone P1"
-  }
+  },
+  "work_item_completion": {
+    "status": "DONE",
+    "closure_commit_sha": "8b4388a4bd118c6c4f312cb690f00671ecab614b",
+    "gate": "READY",
+    "transition": "ALLOWED",
+    "validated_sha": "6fb030241ad0927f0a2576da23d348db1cfceab6"
+  },
+  "final_engineering_gate_receipt": "governance/evidence/P1-ENGINEERING-VALIDATION-20261016.json",
+  "final_milestone_close_check_history": [
+    {
+      "outcome": "NOT_READY",
+      "existing_work_item_gates_passed": 23,
+      "failures": [
+        "work item is not DONE: TUN-P1-023 (VALIDATION)",
+        "P1 defect remains open: DEF-TUN-P1-023-R2-001 (OPEN)",
+        "milestone role-review evidence is malformed or not PASS: governance/evidence/P1-MILESTONE-ROLE-REVIEWS.json"
+      ],
+      "reason": "Native close-check still reports exactly the pending TUN-P1-023 state, its OPEN R2 prerequisite and BLOCKED milestone reviews. Bucket isolation is now operator-confirmed, but no live R2 acceptance receipt exists.",
+      "recorded_at": "2026-10-15T19:50:40Z",
+      "checked_commit_sha": "628ee60ef75c5b0aa85e81e359b78e259770d096"
+    }
+  ]
 }
