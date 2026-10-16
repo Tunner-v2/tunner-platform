@@ -9,6 +9,8 @@ namespace Tunner.Identity.Persistence.Migrations
     /// <inheritdoc />
     public partial class P2IdentityFoundation : Migration
     {
+        private static readonly string[] ExternalIdentityKeyColumns = ["provider", "subject"];
+        private static readonly string[] ProtocolLookupColumns = ["ApplicationId", "Status", "Subject", "Type"];
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -404,7 +406,7 @@ namespace Tunner.Identity.Persistence.Migrations
                 name: "IX_external_identity_links_provider_subject",
                 schema: "identity",
                 table: "external_identity_links",
-                columns: new[] { "provider", "subject" },
+                columns: ExternalIdentityKeyColumns,
                 unique: true);
 
             migrationBuilder.CreateIndex(
@@ -418,7 +420,7 @@ namespace Tunner.Identity.Persistence.Migrations
                 name: "IX_OpenIddictAuthorizations_ApplicationId_Status_Subject_Type",
                 schema: "identity",
                 table: "OpenIddictAuthorizations",
-                columns: new[] { "ApplicationId", "Status", "Subject", "Type" });
+                columns: ProtocolLookupColumns);
 
             migrationBuilder.CreateIndex(
                 name: "IX_OpenIddictScopes_Name",
@@ -431,7 +433,7 @@ namespace Tunner.Identity.Persistence.Migrations
                 name: "IX_OpenIddictTokens_ApplicationId_Status_Subject_Type",
                 schema: "identity",
                 table: "OpenIddictTokens",
-                columns: new[] { "ApplicationId", "Status", "Subject", "Type" });
+                columns: ProtocolLookupColumns);
 
             migrationBuilder.CreateIndex(
                 name: "IX_OpenIddictTokens_AuthorizationId",

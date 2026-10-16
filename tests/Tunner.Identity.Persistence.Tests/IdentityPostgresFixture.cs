@@ -43,6 +43,8 @@ public sealed class IdentityPostgresFixture : IAsyncLifetime
         var database = new IdentityTestDatabase(adminConnection.ConnectionString);
         await using var identity = database.Context();
         await identity.Database.MigrateAsync();
+        if (!(await identity.Database.GetAppliedMigrationsAsync()).Any() || identity.Database.HasPendingModelChanges())
+            throw new InvalidOperationException("Identity test database must have the complete current migration before a test can run.");
         return database;
     }
 

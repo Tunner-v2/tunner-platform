@@ -57,7 +57,8 @@ public sealed class IdentityFoundationTests(IdentityPostgresFixture fixture) : I
         check.VerifiedContacts.Add(candidate);
         await check.SaveChangesAsync();
         candidate.State = ContactVerificationState.Verified; candidate.Version++;
-        await Assert.ThrowsAsync<DbUpdateException>(() => check.SaveChangesAsync());
+        var collision = await Assert.ThrowsAsync<DbUpdateException>(() => check.SaveChangesAsync());
+        Assert.Equal("23505", Assert.IsType<PostgresException>(collision.InnerException).SqlState);
     }
 
     [Fact]
@@ -121,7 +122,8 @@ public sealed class IdentityFoundationTests(IdentityPostgresFixture fixture) : I
         var account=Row();account.State=AccountState.Active;
         if(partial){account.AgeEligibilityStatus="ELIGIBLE";account.AgeEvaluatedAtUtc=RecordedAt;}
         context.Accounts.Add(account);
-        await Assert.ThrowsAsync<DbUpdateException>(()=>context.SaveChangesAsync());
+        var rejected = await Assert.ThrowsAsync<DbUpdateException>(()=>context.SaveChangesAsync());
+        Assert.Equal("23514", Assert.IsType<PostgresException>(rejected.InnerException).SqlState);
     }
 
     [Fact]
