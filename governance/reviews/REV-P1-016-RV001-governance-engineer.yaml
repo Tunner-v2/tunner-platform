@@ -5,7 +5,7 @@
   "role": "governance-engineer",
   "status": "PASS",
   "result": "PASS",
-  "reviewed_at": "2026-10-16T20:40:16.143Z",
+  "reviewed_at": "2026-10-16T20:45:40.241Z",
   "skill_id": "governance-engineer",
   "skill_version": "1.0.0",
   "skill_hash": "3c948ff290690b012d3736b561021989681c2b6fcac3f115b96ca1083672536f",
@@ -18,10 +18,12 @@
     "infra/environments/engineering.example.json"
   ],
   "evidence_refs": [
-    "governance/evidence/P1-016-RV001-AUTHORITY-RESOLUTION.json"
+    "governance/evidence/P1-016-RV001-AUTHORITY-RESOLUTION.json",
+    "governance/evidence/P1-016-RV001-VALIDATION.json"
   ],
   "findings": [
-    "SCOPE READINESS ONLY: Record user authorization for the technical corrective scope, required role evidence and legal revision transitions. No schema/gate/authority semantics or historical closure is changed."
+    "Authority verifies 179 artifacts and governance validates 644 records. Corrective scope was directly authorized by the user; normal lifecycle checks were allowed. No rule, authority or historical closure was modified.",
+    "Executing-agent final engineering review at b67e8f9aa0cf429c72424006c3e69a7fca7c52c1; no independent human, Product or release acceptance is claimed."
   ],
   "blocking_findings": [],
   "required_actions": [],

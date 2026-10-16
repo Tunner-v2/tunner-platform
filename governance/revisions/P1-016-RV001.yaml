@@ -7,7 +7,7 @@
   "parent_milestone_revision_id": null,
   "title": "Align engineering example with dedicated local Docker host ports",
   "revision_type": "CORRECTIVE",
-  "status": "ACTIVE",
+  "status": "VALIDATION",
   "reason": "The local engineering example still uses conventional dependency ports while the established Tunner Docker stack publishes dedicated loopback host ports; port 5432 is occupied by another local project. User authorized fixing the mismatch.",
   "authority_refs": [
     "docs/authority/baselines/1.6.0/06_Environment_Configuration_Secrets_and_Deployment.md"
@@ -39,5 +39,30 @@
   ],
   "created_at": "2026-10-16T20:39:22.4159980+00:00",
   "closed_at": null,
-  "product_acceptance_required": false
+  "product_acceptance_required": false,
+  "git_state": {
+    "repository_changed": true,
+    "validated_commit_sha": "b67e8f9aa0cf429c72424006c3e69a7fca7c52c1",
+    "tested_commit_sha": "b67e8f9aa0cf429c72424006c3e69a7fca7c52c1",
+    "work_item_commit_shas": [
+      "b67e8f9aa0cf429c72424006c3e69a7fca7c52c1"
+    ],
+    "closure_commit_sha": null,
+    "remaining_uncommitted_paths": [
+      "docs/context/current/HANDOFF.md",
+      "docs/context/current/adaptive-selection.json",
+      "docs/context/current/authority.md",
+      "docs/context/current/contracts.md",
+      "docs/context/current/git-changes.md",
+      "docs/context/current/manifest.json",
+      "docs/context/current/relevant-flows.md",
+      "docs/context/current/summary.md",
+      "docs/context/current/tests.md",
+      "docs/project/CURRENT_STATE.md",
+      "docs/project/HANDOFF.md",
+      "docs/project/PROJECT_CONTEXT.md",
+      ".vscode/settings.json"
+    ],
+    "remaining_uncommitted_classification": "PREEXISTING_UNRELATED"
+  }
 }
