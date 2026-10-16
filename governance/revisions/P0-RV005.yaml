@@ -7,7 +7,7 @@
   "parent_milestone_revision_id": null,
   "title": "Make audit recovery fixture independent of live backlog",
   "revision_type": "CORRECTIVE",
-  "status": "ACTIVE",
+  "status": "VALIDATION",
   "reason": "P2 registration CI and local reproduction exposed a stale hard-coded no-eligible-work fixture; preserve closed P0-RV004 history and repair only test isolation.",
   "authority_refs": [
     "docs/authority/current/development/03_Governed_Development_Lifecycle_Scrum_Git.md",
@@ -40,5 +40,30 @@
   ],
   "created_at": "2026-10-16T22:10:25.2715071+00:00",
   "closed_at": null,
-  "product_acceptance_required": false
+  "product_acceptance_required": false,
+  "git_state": {
+    "repository_changed": true,
+    "validated_commit_sha": "45f20f9224fc90d2c350197eda6682598dcd2114",
+    "tested_commit_sha": "45f20f9224fc90d2c350197eda6682598dcd2114",
+    "work_item_commit_shas": [
+      "45f20f9224fc90d2c350197eda6682598dcd2114"
+    ],
+    "closure_commit_sha": null,
+    "remaining_uncommitted_paths": [
+      "docs/context/current/HANDOFF.md",
+      "docs/context/current/adaptive-selection.json",
+      "docs/context/current/authority.md",
+      "docs/context/current/contracts.md",
+      "docs/context/current/git-changes.md",
+      "docs/context/current/manifest.json",
+      "docs/context/current/relevant-flows.md",
+      "docs/context/current/summary.md",
+      "docs/context/current/tests.md",
+      "docs/project/CURRENT_STATE.md",
+      "docs/project/HANDOFF.md",
+      "docs/project/PROJECT_CONTEXT.md",
+      ".vscode/settings.json"
+    ],
+    "remaining_uncommitted_classification": "PREEXISTING_UNRELATED"
+  }
 }
