@@ -1,0 +1,99 @@
+{
+  "schema_version": 1,
+  "scope_id": "TUN-P2-002",
+  "status": "VALIDATION",
+  "engineering_gate": "READY",
+  "recorded_at": "2026-10-16T19:40:18.537Z",
+  "branch": "change/TUN-P2-002-adult-eligibility",
+  "validated_commit_sha": "d856dde651440216369f0698f92f5d7878505d64",
+  "tested_commit_sha": "d856dde651440216369f0698f92f5d7878505d64",
+  "locally_ready_metadata_commit_sha": "3a34c733a104d1d847a103560bddcf9d5b918d20",
+  "implementation_commit_sha": "d742737cb1c76da2ef783fdb68133ae054963177",
+  "corrective_implementation_commit_sha": "7acf2803d604c9f4b916c5e8b24985e9007aacb6",
+  "corrective_revision": {
+    "id": "P0-010-RV001",
+    "status": "CLOSED",
+    "closure_commit_sha": "3a34c733a104d1d847a103560bddcf9d5b918d20",
+    "defect": "DEF-P0-010-POSTGRES-READY-001",
+    "defect_status": "RESOLVED"
+  },
+  "pull_request": "https://github.com/Tunner-v2/tunner-platform/pull/14",
+  "pr_state_at_handoff": "OPEN; human protected-main approval is separate",
+  "validation_ref": "governance/evidence/TUN-P2-002-VALIDATION.json",
+  "role_reviews_ref": "governance/evidence/TUN-P2-002-ROLE-REVIEWS.json",
+  "authority_resolution_ref": "governance/evidence/TUN-P2-002-AUTHORITY-RESOLUTION.json",
+  "tests": {
+    "execution_mode": "Same-SHA suite aggregation after Docker daemon interruption; completed Accounts/architecture results plus sequential recovery of interrupted harness/database/worker projects. Original failed/aborted attempt is retained.",
+    "total": 329,
+    "passed": 329,
+    "failed": 0,
+    "not_executed": 0,
+    "accounts": 39,
+    "architecture": 237,
+    "harness": 13,
+    "database": 34,
+    "worker": 6
+  },
+  "project_state": {
+    "P1": "CLOSED",
+    "P2": "ACTIVE",
+    "TUN_P2_001": "DONE",
+    "TUN_P2_002": "VALIDATION; locally validated, Product acceptance remains required",
+    "TUN_P2_003": "BACKLOG; implementation blocked only by required scope reviews, not by the validated P2-002 prerequisite"
+  },
+  "context": {
+    "scope_id": "TUN-P2-003",
+    "mode": "TASK",
+    "output": "artifacts/p2-002-20261016/next-context",
+    "last_verified": "CURRENT",
+    "refresh_at_publication": true
+  },
+  "next_action": "Read the TUN-P2-003 TASK manifest and existing Accounts module; complete its seven declared specialist scope reviews, native roles/next/transition checks, then implement the bounded Identity/framework and persistence slice. Reuse the existing eligibility capability and P1 policy primitives. Keep P2-002 Product acceptance separate.",
+  "release_blocker": {
+    "revision": "P1-RV001",
+    "status": "OPEN_RELEASE_BLOCKING",
+    "findings": "Unwaived image CVEs and missing effective required-status-check enforcement",
+    "release_work_item": "P1-RV001-002",
+    "requires": "P1-RV001-001 MERGED_TO_MAIN"
+  },
+  "activated_roles": {
+    "eligibility": [
+      "full-stack-engineer",
+      "tester-qa-engineer",
+      "solution-architect",
+      "cyber-security-engineer",
+      "auditor",
+      "compliance-specialist"
+    ],
+    "fixture_correction": [
+      "full-stack-engineer",
+      "solution-architect",
+      "governance-engineer",
+      "cyber-security-engineer",
+      "devops-engineer",
+      "tester-qa-engineer",
+      "auditor",
+      "rd-engineer"
+    ]
+  },
+  "preserved_unrelated_paths": [
+    "docs/context/current/HANDOFF.md",
+    "docs/context/current/adaptive-selection.json",
+    "docs/context/current/authority.md",
+    "docs/context/current/contracts.md",
+    "docs/context/current/git-changes.md",
+    "docs/context/current/manifest.json",
+    "docs/context/current/relevant-flows.md",
+    "docs/context/current/summary.md",
+    "docs/context/current/tests.md",
+    "docs/project/CURRENT_STATE.md",
+    "docs/project/HANDOFF.md",
+    "docs/project/PROJECT_CONTEXT.md",
+    ".vscode/settings.json"
+  ],
+  "temporary_helpers": {
+    "directory": "artifacts/p2-002-20261016",
+    "classification": "Ignored disposable patch/test-summary helpers, raw TRX/logs and generated context packs; committed summaries preserve exact SHAs, hashes, commands, results and failures."
+  },
+  "approval_boundary": "Engineering validation and agent role reviews do not assert independent human assurance, Product acceptance or production approval."
+}

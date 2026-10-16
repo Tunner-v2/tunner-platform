@@ -1,0 +1,46 @@
+{
+  "schema_version": 1,
+  "scope_id": "TUN-P2-002",
+  "outcome": "RESOLVED_EXISTING_AUTHORITY",
+  "reviewed_at": "2026-10-16T18:13:28.285Z",
+  "reviewed_authority_refs": [
+    "docs/authority/current-authority.json",
+    "docs/authority/current/development/11_Development_Planes_Milestones_and_P0_Backlog.md",
+    "docs/authority/baselines/1.6.0/17_Account_Identity_and_Session_FRD.md",
+    "docs/authority/current/development/32_Domain_API_Event_Data_and_Policy_Contract_Catalog.md",
+    "docs/authority/current/development/34_Architecture_to_Development_Traceability_Matrix.md",
+    "docs/authority/baselines/1.6.0/decisions/ADR-0006_Identity_ASPNET_Identity_OpenIddict.md",
+    "docs/authority/baselines/1.6.0/decisions/PDR-0007_DOB_Based_18_Plus_Eligibility.md",
+    "docs/authority/current/development/AMD-0002_Non-Blocking_PR_Approval_and_Continuous_Local_Execution.md",
+    "docs/authority/current/development/02_Repository_Solution_and_Module_Architecture.md",
+    "docs/authority/current/development/09_Testing_Acceptance_Evidence_and_Quality_Gates.md",
+    "docs/authority/baselines/1.6.0/29_Privacy_Data_Lifecycle_and_Processing_Governance_FRD.md"
+  ],
+  "conclusions": [
+    "PDR-0007 and FRD17 section11 fix DOB + 18 calendar years <= trusted server evaluation date and AGE_INELIGIBLE. Reuse this authority rather than invent a new age threshold or proof requirement.",
+    "FRD29 classifies DOB as restricted and permits durable derived evidence without raw DOB. This pure evaluator has no storage or logging; downstream transaction/retention integration remains in its owning slice.",
+    "Catalog32 permits typed internal application contracts and implementation field detail; Doc02 permits a small domain module/project with testable infrastructure-free boundaries. No public API/event, database schema, provider or UX contract is triggered.",
+    "DateOnly.AddYears applies the approved calendar-year expression, including Gregorian leap/century adjustment. Addition beyond year9999 cannot become eligible at any representable evaluation date and returns ineligible without overflow.",
+    "UTC instant/date are captured from injected server TimeProvider once; no caller evaluation-date parameter or local-machine date is introduced. Active policy resolution remains a caller-owned application obligation using existing governed P1 primitives."
+  ],
+  "primary_technical_sources": [
+    {
+      "url": "https://learn.microsoft.com/en-us/dotnet/api/system.dateonly.addyears?view=net-10.0",
+      "purpose": "Approved .NET calendar-year operation",
+      "checked_at": "2026-10-16T18:13:28.285Z"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/dotnet/api/system.datetime.addyears?view=net-10.0",
+      "purpose": "Documented leap-year adjustment for calendar-year addition",
+      "checked_at": "2026-10-16T18:13:28.285Z"
+    }
+  ],
+  "business_authority": "Existing PDR-0007 and FRD17 only; Microsoft API documentation establishes runtime mechanics, not Product or legal authority.",
+  "reviewed_governed_history": [
+    "governance/work-items/TUN-P2-001.yaml",
+    "governance/dependencies/DEP-TUN-P2-002-TUN-P2-001.yaml",
+    "governance/evidence/P2-REFINEMENT-HANDOFF-20261016.json",
+    "governance/evidence/P1-RV001-SECURITY-FINDINGS.json"
+  ],
+  "scope_boundary": "Internal deterministic calculation and derived evidence only; no registration, activation, persistence, authentication, OAuth, UX or provider behavior."
+}

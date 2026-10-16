@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "defect_id": "DEF-P0-010-POSTGRES-READY-001",
+  "work_item_id": "TUN-P0-010",
+  "classification": "BUG",
+  "severity": "SEV-3",
+  "status": "RESOLVED",
+  "environment": "Opt-in disposable local PostgreSQL integration tests",
+  "description": "TCP-only fixture readiness allowed a migration to connect while PostgreSQL was starting (57P03), failing one actual platform regression at d742737. Correct under P0-010-RV001; original DONE and evidence remain unchanged. Fixed at 7acf2803d604c9f4b916c5e8b24985e9007aacb6 by waiting for PostgreSQL TCP readiness; immediate SQL and all 329 platform tests pass, zero skips. Original failure retained.",
+  "expected_behavior_ref": "docs/authority/current/development/09_Testing_Acceptance_Evidence_and_Quality_Gates.md",
+  "evidence": [
+    "governance/evidence/P0-010-RV001-AUTHORITY-RESOLUTION.json",
+    "governance/evidence/P0-010-RV001-VALIDATION.json"
+  ],
+  "affected_versions": [
+    "d742737cb1c76da2ef783fdb68133ae054963177"
+  ],
+  "created_at": "2026-10-16T18:24:24.608Z",
+  "updated_at": "2026-10-16T18:30:35.959Z"
+}

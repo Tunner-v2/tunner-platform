@@ -1,0 +1,76 @@
+{
+  "schema_version": 1,
+  "revision_id": "P0-010-RV001",
+  "revision_scope": "WORK_ITEM",
+  "original_scope_id": "TUN-P0-010",
+  "parent_revision_id": null,
+  "parent_milestone_revision_id": null,
+  "title": "Wait for usable PostgreSQL in the disposable test fixture",
+  "revision_type": "CORRECTIVE",
+  "status": "CLOSED",
+  "reason": "P2-002 committed regression at d742737 found PostgreSQL 57P03 during migration after TCP-only container readiness. Correct the closed test-harness scope through Revision lineage and preserve original closure.",
+  "authority_refs": [
+    "docs/authority/current/development/09_Testing_Acceptance_Evidence_and_Quality_Gates.md",
+    "docs/authority/baselines/1.6.0/02_Repository_Solution_and_Module_Architecture.md"
+  ],
+  "decision_refs": [],
+  "defect_refs": [
+    "DEF-P0-010-POSTGRES-READY-001"
+  ],
+  "change_refs": [],
+  "impact_classification": "SCOPED_BLOCKING",
+  "blocked_scope": [
+    "TUN-P2-002"
+  ],
+  "acceptance_criteria": [
+    "Wait for the final TCP PostgreSQL service to accept connections before releasing the opt-in disposable fixture; preserve image, credentials, random binding and production boundaries, retain the original failure, and prove corrected database and platform regression at a committed SHA."
+  ],
+  "prerequisites": [],
+  "work_items": [],
+  "required_gates": [],
+  "required_roles": [
+    "full-stack-engineer",
+    "solution-architect",
+    "governance-engineer",
+    "cyber-security-engineer",
+    "devops-engineer",
+    "tester-qa-engineer",
+    "auditor",
+    "rd-engineer"
+  ],
+  "evidence_refs": [
+    "governance/evidence/P0-010-RV001-AUTHORITY-RESOLUTION.json",
+    "governance/evidence/P0-010-RV001-VALIDATION.json",
+    "governance/evidence/P0-010-RV001-ROLE-REVIEWS.json"
+  ],
+  "created_at": "2026-10-16T18:23:20.3325735+00:00",
+  "closed_at": "2026-10-16T19:38:07.402Z",
+  "product_acceptance_required": false,
+  "git_state": {
+    "repository_changed": true,
+    "validated_commit_sha": "d856dde651440216369f0698f92f5d7878505d64",
+    "tested_commit_sha": "d856dde651440216369f0698f92f5d7878505d64",
+    "work_item_commit_shas": [
+      "fe0f055baf73d7924e50beabb8b2b89873e4e33b",
+      "7acf2803d604c9f4b916c5e8b24985e9007aacb6",
+      "d856dde651440216369f0698f92f5d7878505d64"
+    ],
+    "closure_commit_sha": null,
+    "remaining_uncommitted_paths": [
+      "docs/context/current/HANDOFF.md",
+      "docs/context/current/adaptive-selection.json",
+      "docs/context/current/authority.md",
+      "docs/context/current/contracts.md",
+      "docs/context/current/git-changes.md",
+      "docs/context/current/manifest.json",
+      "docs/context/current/relevant-flows.md",
+      "docs/context/current/summary.md",
+      "docs/context/current/tests.md",
+      "docs/project/CURRENT_STATE.md",
+      "docs/project/HANDOFF.md",
+      "docs/project/PROJECT_CONTEXT.md",
+      ".vscode/settings.json"
+    ],
+    "remaining_uncommitted_classification": "PREEXISTING_UNRELATED"
+  }
+}
