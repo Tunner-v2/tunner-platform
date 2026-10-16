@@ -1,0 +1,61 @@
+{
+  "schema_version": 1,
+  "scope_id": "P1",
+  "status": "CLOSED",
+  "recorded_at": "2026-10-16T17:40:51.946Z",
+  "closure_commit_sha": "4a1c1372cd8bd9290819513e8a76dda3542ae722",
+  "validated_behavior_commit_shas": [
+    "8dcb975fb4896daf585ed757859447e9279da9b2",
+    "494015900983b7a6ac854a9151743397607fa1e8"
+  ],
+  "acceptance_candidate_commit_sha": "5ba277e3e2182c62388ea4855e3d79386b1464ab",
+  "acceptance_evidence_ref": "governance/evidence/P1-ACCEPTANCE-AND-HANDOFF-20261016.json",
+  "current_role_review_ref": "governance/evidence/P1-MILESTONE-ROLE-REVIEWS.json",
+  "execution_evidence_ref": "governance/evidence/P0-RV004-EXECUTION-RESULTS.json",
+  "github_pr": "https://github.com/Tunner-v2/tunner-platform/pull/11",
+  "scope": "Accepted local Platform Foundation engineering milestone; formal protected-main integration and production deployment remain separate and pending.",
+  "state_transitions": [
+    "VALIDATION -> PRODUCT_ACCEPTANCE",
+    "PRODUCT_ACCEPTANCE -> RELEASED (accepted local engineering handoff)",
+    "RELEASED -> CLOSED"
+  ],
+  "native_gate_receipts": [
+    {
+      "path": "artifacts/p2-transition-20261016/P1-final-close-check.json",
+      "sha256": "251b79dfc5c4e3b6ef76cf2bfa2525d9d6c25649a885c11cf5c98f824971047d",
+      "outcome": "PASS"
+    },
+    {
+      "path": "artifacts/p2-transition-20261016/P1-release-transition.json",
+      "sha256": "4d047c1624897441a3b937407076417f07465297a119dfb9e3849835d1220d6f",
+      "outcome": "ALLOWED"
+    },
+    {
+      "path": "artifacts/p2-transition-20261016/P1-closed-transition.json",
+      "sha256": "63943b84d6d932b3871f4fbf7d195707f0994ce158e7079049bfe64ea8808fb2",
+      "outcome": "ALLOWED"
+    },
+    {
+      "path": "artifacts/p2-transition-20261016/P1-completion-review-snapshot.json",
+      "sha256": "0914d14d419430dcf098c2458b9ba9503cd99766c42733bbb231a3b768d5d850",
+      "outcome": "GENERATED"
+    }
+  ],
+  "next_authorized_work": "TUN-P2-001 Account & Identity authority-backed refinement on change/TUN-P2-001-account-identity-refinement; consume validated P1 prerequisites under AMD-0002.",
+  "unrelated_paths_preserved": [
+    "docs/context/current/HANDOFF.md",
+    "docs/context/current/adaptive-selection.json",
+    "docs/context/current/authority.md",
+    "docs/context/current/contracts.md",
+    "docs/context/current/git-changes.md",
+    "docs/context/current/manifest.json",
+    "docs/context/current/relevant-flows.md",
+    "docs/context/current/summary.md",
+    "docs/context/current/tests.md",
+    "docs/project/CURRENT_STATE.md",
+    "docs/project/HANDOFF.md",
+    "docs/project/PROJECT_CONTEXT.md",
+    ".vscode/settings.json"
+  ],
+  "historical_record_policy": "No original DONE records or prior CLOSED revisions were overwritten. Later P1 changes use governed RV lineage."
+}
