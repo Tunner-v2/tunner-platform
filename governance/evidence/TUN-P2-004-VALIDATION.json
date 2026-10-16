@@ -159,7 +159,8 @@
       "mismatches": [],
       "native_compressed_variants": 26,
       "compressed_contents_match_source": true
-    }
+    },
+    "roles": "PASS: thirteen final executing-agent engineering role reviews, including explicit R&D and artifact packaging impact"
   },
   "test_suites": [
     {
@@ -334,6 +335,11 @@
     {
       "finding": "Sandbox web dependency refresh stalled while rebuilding node_modules.",
       "resolution": "Stopped only that process; completed the pinned frozen offline install with authorized host access. No package version, supply-chain check or test gate weakened."
+    },
+    {
+      "finding": "The first final-review metadata archive used prior_reviews inside formal specialist-review YAML, which its strict schema does not declare.",
+      "resolution": "Moved complete prior formal snapshots into the aggregate role evidence JSON; kept the formal YAML within its existing schema. No governance schema or gate was weakened; behavioral source/tested SHA remains unchanged.",
+      "receipt": "artifacts/p2-004-20261016/final-governance-before-commit.json"
     }
   ],
   "execution_mode": "Committed f64f997 candidate: sequential zero-warning .NET build then six container-enabled project runs, plus pinned web build/unit/Edge suites. Earlier uncommitted or earlier-candidate runs are excluded.",
