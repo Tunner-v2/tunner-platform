@@ -51,14 +51,16 @@
     {
       "id": "GAP-P1-023-EVIDENCE-009",
       "description": "P1-009 committed SDK/component evidence and live R2 contract",
-      "status": "PARTIAL",
+      "status": "RESOLVED",
       "owner_work_item": "TUN-P1-023",
       "evidence": [
         "governance/evidence/TUN-P1-023-EXECUTION-RESULTS.json",
         "governance/evidence/TUN-P1-024-EXECUTION-RESULTS.json",
-        "docs/development/R2_INSTALLER.md"
+        "docs/development/R2_INSTALLER.md",
+        "governance/evidence/TUN-P1-023-LIVE-R2-20261016.json"
       ],
-      "disposition": "Original SDK/component and installer validation is preserved. Closed P1-024-RV001 adds reusable local configuration and automatic exact-resource OpenBao identity/credential setup, validated by 64 installer cases and 289 platform regression cases. The operator confirmed dedicated non-production bucket tunner and supplied reference names. Live R2 is NOT_EXECUTED until tools/dev/setup-r2.ps1 runs privately with verified content/object/bootstrap cleanup; DEF-TUN-P1-023-R2-001 remains OPEN."
+      "disposition": "Operator-supplied actual setup-r2 output reports Passed=true, content verified, unique test object deletion verified and temporary OpenBao cleanup verified. Credentials are saved for reuse. Original SDK/installer/revision evidence is retained; private tokens/keys were neither received nor accessed.",
+      "previous_disposition": "Original SDK/component and installer validation is preserved. Closed P1-024-RV001 adds reusable local configuration and automatic exact-resource OpenBao identity/credential setup, validated by 64 installer cases and 289 platform regression cases. The operator confirmed dedicated non-production bucket tunner and supplied reference names. Live R2 is NOT_EXECUTED until tools/dev/setup-r2.ps1 runs privately with verified content/object/bootstrap cleanup; DEF-TUN-P1-023-R2-001 remains OPEN."
     },
     {
       "id": "GAP-P1-023-EVIDENCE-011",
@@ -178,12 +180,13 @@
     {
       "id": "GAP-P1-023-MILESTONE",
       "description": "Required role reviews and native P1 milestone closure gates",
-      "status": "BLOCKED",
+      "status": "RESOLVED",
       "owner_work_item": "TUN-P1-023",
       "evidence": [
         "governance/evidence/TUN-P1-023-EXECUTION-RESULTS.json"
       ],
-      "disposition": "Current native P1 close-check passes all 23 completed work-item gates. TUN-P1-023 and milestone acceptance remain pending actual live R2 validation and the blocked reviews."
+      "disposition": "The actual live prerequisite is resolved and all nine engineering work-item reviews pass. Final native work-item and committed milestone checks are ordered lifecycle actions; applicable milestone acceptance/release remains separate. No Product or release approval is inferred.",
+      "previous_disposition": "Current native P1 close-check passes all 23 completed work-item gates. TUN-P1-023 and milestone acceptance remain pending actual live R2 validation and the blocked reviews."
     },
     {
       "id": "GAP-P1-023-SERVICING-004",
@@ -230,30 +233,32 @@
       "disposition": "New committed revision passes seven positive/negative checks plus actual fresh recovery and project-state validation; historical closed records unchanged."
     }
   ],
-  "updated_at": "2026-10-15T22:10:51Z",
+  "updated_at": "2026-10-16T15:22:13Z",
   "summary": {
     "total": 20,
-    "resolved": 18,
-    "partial": 1,
-    "blocked": 1,
-    "remaining_external_prerequisite": "DEF-TUN-P1-023-R2-001",
-    "existing_p1_commit_readiness": "PASS: actual current P1 audit, zero findings, committed same-scope revisions verified"
+    "resolved": 20,
+    "partial": 0,
+    "blocked": 0,
+    "remaining_external_prerequisite": null,
+    "existing_p1_commit_readiness": "Prior committed audit PASS; final all-item audit follows work-item completion.",
+    "completion_boundary": "Engineering findings resolved; final native gates and milestone lifecycle are recorded separately."
   },
   "installer_update": {
     "work_item": "TUN-P1-024",
     "validated_commit_sha": "4825afc35878b36229f7f7e9f6902aab234cd68d",
     "technical_tests_passed": 39,
     "combined_platform_tests_passed": 328,
-    "live_result": "NOT_EXECUTED",
+    "live_result": "PASS",
     "bucket_environment": "DEDICATED_NON_PRODUCTION_CONFIRMED_BY_OPERATOR",
-    "remaining_prerequisite": "Run the automatic local helper with private operator bootstrap authentication and first-run bucket-scoped keys if needed; retain actual R2 content, object cleanup and bootstrap cleanup verification.",
+    "remaining_prerequisite": null,
     "previous_bucket_environment": "UNCONFIRMED",
-    "installer_setup": "OPERATOR_REPORTED_COMPLETE_PROFILE_PATH_UNVERIFIED",
+    "installer_setup": "OPERATOR_EXECUTED_AUTOMATIC_SETUP_AND_LIVE_CONTRACT_PASS",
     "automatic_local_revision": "P1-024-RV001",
     "automatic_local_validated_sha": "56ff151a8ae362318eb767a7071943732e26f15c",
     "automatic_local_installer_tests_passed": 64,
     "automatic_local_combined_tests_passed": 353,
-    "command": "./tools/dev/setup-r2.ps1"
+    "command": "./tools/dev/setup-r2.ps1",
+    "live_receipt": "governance/evidence/TUN-P1-023-LIVE-R2-20261016.json"
   },
   "committed_revision_proof": {
     "correction_revision": "P0-004-RV002",
@@ -276,5 +281,13 @@
       "receipt": "artifacts/P1-024-RV001/final-p1-committed-readiness.txt",
       "receipt_sha256": "40127aef8da9c87afe0fb3200dac969a29ca6a881edff117f68f770cb2ef00a1"
     }
+  },
+  "previous_summary": {
+    "total": 20,
+    "resolved": 18,
+    "partial": 1,
+    "blocked": 1,
+    "remaining_external_prerequisite": "DEF-TUN-P1-023-R2-001",
+    "existing_p1_commit_readiness": "PASS: actual current P1 audit, zero findings, committed same-scope revisions verified"
   }
 }

@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "scope_id": "TUN-P1-023",
+  "scope_type": "WORK_ITEM",
+  "result": "PASS",
+  "recorded_at": "2026-10-16T15:22:13Z",
+  "execution_source": "OPERATOR_SUPPLIED_TERMINAL_OUTPUT",
+  "command": "./tools/dev/setup-r2.ps1",
+  "engineering_environment": "LOCAL_DEVELOPMENT",
+  "bucket": "tunner",
+  "bucket_environment": "DEDICATED_NON_PRODUCTION_CONFIRMED_BY_OPERATOR",
+  "non_secret_target": {
+    "endpoint": "https://c38886fbac5e924b1e9f58c3185aae78.r2.cloudflarestorage.com",
+    "openbao_base_url": "http://127.0.0.1:28200",
+    "kv_v2_resource": "tunner/data/local/r2/tunner"
+  },
+  "operator_reported_credential_setup": "Credentials resolved; future runs reuse the existing record.",
+  "reported_result": {
+    "ObjectKey": "tunner-contract-tests/daae208000d7486fa462fdafed7b168f",
+    "ContentVerified": true,
+    "CleanupVerified": true,
+    "ProbeFailureCode": null,
+    "BootstrapCleanupVerified": true,
+    "FailureCode": null,
+    "Passed": true
+  },
+  "reviewed_checkout_sha": "52a7ac56b4d08bd97b79dc7eeff4a1e6755eb85c",
+  "installer_validated_sha": "56ff151a8ae362318eb767a7071943732e26f15c",
+  "source_binding": "The operator reported this command from the existing checkout. Output has no embedded Git SHA or run timestamp. Review verifies unchanged committed behavior and records the current checkout separately. No agent-run or independently captured provider receipt is claimed.",
+  "secrets_received": false,
+  "authority_boundary": "Dedicated non-production object contract and temporary bootstrap cleanup only; no Product acceptance, protected-main integration or production/release authorization."
+}

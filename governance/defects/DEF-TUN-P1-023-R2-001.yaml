@@ -3,11 +3,11 @@ defect_id: DEF-TUN-P1-023-R2-001
 work_item_id: TUN-P1-023
 classification: ENVIRONMENT_PREREQUISITE
 severity: SEV-3
-status: OPEN
+status: RESOLVED
 environment: INSTALLER_NON_PRODUCTION_R2
-description: Automatic local R2 setup is implemented and validated under closed P1-024-RV001. The operator confirmed bucket tunner is dedicated to non-production tests and supplied exact configuration and vault field references, retained in the non-secret local profile example. Run tools/dev/setup-r2.ps1 to reuse configuration, privately authenticate the local bootstrap, automatically mint/use a scoped identity and create or reuse the credential record. Live R2 remains NOT_EXECUTED until the operator run reports content, object cleanup and bootstrap cleanup verified. No real token/key was received by the agent and no live provider acceptance is inferred from disposable tests.
+description: Operator executed tools/dev/setup-r2.ps1 against the confirmed dedicated non-production tunner bucket. The supplied actual result reports content, test-object cleanup and temporary OpenBao cleanup verified with Passed true and no failure code. Non-secret receipt retained; no private token/key received or accessed.
 expected_behavior_ref: docs/development/P1_READINESS_REMEDIATION.md
-evidence: [governance/evidence/TUN-P1-023-GAP-REGISTER.json, governance/evidence/TUN-P1-009-COMMITTED-RECONCILIATION.json, governance/evidence/TUN-P1-024-EXECUTION-RESULTS.json, docs/development/R2_INSTALLER.md]
+evidence: [governance/evidence/TUN-P1-023-LIVE-R2-20261016.json, governance/evidence/TUN-P1-023-EXECUTION-RESULTS.json, governance/evidence/TUN-P1-023-GAP-REGISTER.json]
 affected_versions: [P1_CURRENT_VALIDATION]
 created_at: 2026-10-15T15:15:20Z
-updated_at: 2026-10-15T21:29:16.8314338+00:00
+updated_at: 2026-10-16T15:22:13Z

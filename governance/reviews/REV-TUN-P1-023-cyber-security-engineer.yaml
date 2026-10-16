@@ -10,8 +10,8 @@ result: PASS
 required_actions: []
 authority_refs: [docs/authority/current-authority.json]
 context_artifacts: [governance/work-items/TUN-P1-023.yaml, docs/development/P1_READINESS_REMEDIATION.md]
-findings: ["Fresh transitive NuGet audit is clean; selected SDK/runtime is serviced to 10.0.402/10.0.13. Secret scan and SAST pass without weakened rules. Older side-by-side runtimes and installer restart request are disclosed; no production release approval is implied."]
+findings: ["Fresh public NuGet and pnpm advisory checks report zero vulnerabilities. Secret scan/SAST pass on 1296 files. SDK 10.0.402/runtime 10.0.13 remain selected; older side-by-side runtimes are disclosed. Operator output verifies bootstrap cleanup without exposing credentials.","Re-review of unchanged tested candidate 6fb030241ad0927f0a2576da23d348db1cfceab6 and operator-supplied live receipt; no independent human, Product or release approval implied."]
 blocking_findings: []
-evidence_refs: [governance/evidence/TUN-P1-023-EXECUTION-RESULTS.json, governance/evidence/TUN-P1-023-GAP-REGISTER.json]
+evidence_refs: [governance/evidence/TUN-P1-023-LIVE-R2-20261016.json, governance/evidence/TUN-P1-023-EXECUTION-RESULTS.json, governance/evidence/TUN-P1-023-GAP-REGISTER.json]
 context_expansion_requested: false
-reviewed_at: 2026-10-15T15:10:08Z
+reviewed_at: 2026-10-16T15:22:13Z
