@@ -5,7 +5,7 @@
   "role": "tester-qa-engineer",
   "status": "PASS",
   "result": "PASS",
-  "reviewed_at": "2026-10-16T19:37:01.380Z",
+  "reviewed_at": "2026-10-16T20:19:00.112Z",
   "skill_id": "tester-qa-engineer",
   "skill_version": "1.0.0",
   "skill_hash": "a57ce99d7ad7a3b60f17e4826c81c507c9cc208d8928285c406222eefe0a18fd",
@@ -31,9 +31,8 @@
     "governance/evidence/TUN-P2-002-VALIDATION.json"
   ],
   "findings": [
-    "All 39 new tests pass, covering leap/century/birthday/date-limit boundaries, UTC rollover and one-read consistency, missing provenance, invalid typed input, deterministic evidence and restricted DOB exclusion. All 329 platform tests pass after the governed fixture correction.",
-    "Final engineering candidate review at d856dde651440216369f0698f92f5d7878505d64. Actor: executing-agent role review; no independent human Product, legal or release approval is asserted.",
-    "Ownership envelope is committed in the final tested candidate. Final exact-SHA scope has 329 passed/zero failed/zero skipped across completed suites; Docker interruption and sequential project recovery are explicitly retained in validation evidence."
+    "All 39 eligibility tests reran and pass at this SHA, including leap/birthday/calendar/UTC, invalid input, provenance and DOB minimization. The full six-suite aggregate is 345 passed, zero failed/skipped.",
+    "Revalidation at 99c0cf268b368ba64b4984dce6172a00a2546718 for the P2-003 additive shared solution change. Executing-agent engineering role review; Product, legal, protected-main and release approvals remain separate."
   ],
   "blocking_findings": [],
   "required_actions": [],
