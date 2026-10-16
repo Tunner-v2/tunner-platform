@@ -1,0 +1,73 @@
+{
+  "schema_version": 1,
+  "scope_id": "P0-010-RV001",
+  "outcome": "RESOLVED_EXISTING_AUTHORITY",
+  "reviewed_at": "2026-10-16T18:24:24.607Z",
+  "reviewed_authority_refs": [
+    "docs/authority/current/development/09_Testing_Acceptance_Evidence_and_Quality_Gates.md",
+    "docs/authority/baselines/1.6.0/02_Repository_Solution_and_Module_Architecture.md"
+  ],
+  "reviewed_history": [
+    "governance/work-items/TUN-P0-010.yaml",
+    "governance/evidence/TUN-P0-010-VALIDATION.json",
+    "src/Tunner.Testing/TestcontainersBaseline.cs",
+    "tests/Tunner.Database.IntegrationTests/DurableWorkInboxIntegrationTests.cs"
+  ],
+  "failure": {
+    "candidate_commit_sha": "d742737cb1c76da2ef783fdb68133ae054963177",
+    "test": "DurableWorkInboxIntegrationTests.ReclaimsAnExpiredLeaseAndRejectsAStaleCompletion",
+    "error": "Npgsql 57P03: the database system is starting up",
+    "initial_totals": {
+      "total": 328,
+      "passed": 327,
+      "failed": 1,
+      "skipped": 0
+    },
+    "new_accounts_tests": {
+      "passed": 39,
+      "failed": 0
+    },
+    "receipts": [
+      {
+        "path": "artifacts/p2-002-20261016/test-results/Chacha_Tech_FARHANWAZIR_2026-10-16_14_19_43_net10.0.trx",
+        "sha256": "3ec25d714590d282a08ae7ee6898ec7287535cc105d392ced17c097c2d946f4f"
+      },
+      {
+        "path": "artifacts/p2-002-20261016/test-results/Chacha_Tech_FARHANWAZIR_2026-10-16_14_19_43_net10.0[1].trx",
+        "sha256": "cf7887cdb7e7f2675ab19584a3f1ab86025aa50b6d16415424ef7908e0821ea5"
+      },
+      {
+        "path": "artifacts/p2-002-20261016/test-results/Chacha_Tech_FARHANWAZIR_2026-10-16_14_19_44_net10.0.trx",
+        "sha256": "a1c63ef9544b29eb52b2fc59939587643d8a7b4bafd704f639957a3aea6ec77e"
+      },
+      {
+        "path": "artifacts/p2-002-20261016/test-results/Chacha_Tech_FARHANWAZIR_2026-10-16_14_19_45_net10.0.trx",
+        "sha256": "a43a26c4231abe9d19657764b0d4428783e5e165784e11956b67d324f11f8b78"
+      },
+      {
+        "path": "artifacts/p2-002-20261016/test-results/Chacha_Tech_FARHANWAZIR_2026-10-16_14_20_42_net10.0.trx",
+        "sha256": "ee8c8f169142e124d75fac3e1f0adeaef4adbee1b999ff9933a5fee1002dd826"
+      }
+    ]
+  },
+  "conclusions": [
+    "The original test-harness TUN-P0-010 is DONE under CLOSED P0. Fix via a new scoped Revision and retain all original closure and evidence.",
+    "TCP port availability does not guarantee PostgreSQL is accepting queries. Extend the fixture wait with pg_isready against 127.0.0.1 TCP so the temporary Unix-socket bootstrap service cannot satisfy it.",
+    "Keep existing image, opt-in guard, disposable cleanup, random port and trust-only throwaway-test database contract unchanged. This is test readiness, not new runtime/provider/security policy.",
+    "Add an opt-in readiness regression that issues immediate TCP SQL after fixture StartAsync. Rerun all platform tests at the committed correction candidate and retain the first failing receipts.",
+    "The native creator requires the canonical byte-verified Doc02 baseline path; the current alias was rejected and no authority verification rule was bypassed."
+  ],
+  "primary_sources": [
+    {
+      "url": "https://dotnet.testcontainers.org/api/wait_strategies/",
+      "checked_at": "2026-10-16T18:24:24.608Z",
+      "fact": "A listening TCP port is insufficient for service readiness; wait strategies can be chained."
+    },
+    {
+      "url": "https://www.postgresql.org/docs/current/app-pg-isready.html",
+      "checked_at": "2026-10-16T18:24:24.608Z",
+      "fact": "pg_isready returns zero only when accepting connections normally; use explicit TCP host."
+    }
+  ],
+  "local_api_evidence": "Testcontainers 4.15.0 installed XML confirms UntilCommandIsCompleted(string[]) waits for exit 0 and does not invoke a shell."
+}
