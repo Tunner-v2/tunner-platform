@@ -5,7 +5,8 @@
   "nodes": {
     "registration": "70:270",
     "verification": "70:539",
-    "ready": "70:630"
+    "ready": "70:630",
+    "eligibility": "187:2"
   },
   "changes": "Existing editable layers aligned with FRD before implementation; no new brand/logo. DOB, no unsupported federation/Product grant, one proof field, policy-backed expiry, text-only Tunner. Shared accessible interactive border replaces insufficient-contrast reference border.",
   "components": "@tunner/ui finite spacious/verification/outline presentations; existing standard User/Admin controls unchanged. Geist/Inter loaded from existing pinned local font dependencies.",
@@ -92,6 +93,7 @@
       "usage": "footer separator; 4x4"
     }
   ],
-  "visual_checks": "Desktop 1440x1024 plus 320px register/verify/ready and underage state; final exact-candidate browser run and screenshot receipts required in validation record.",
-  "publication": "No Product/content/legal acceptance asserted."
+  "visual_checks": "Desktop 1440x1024 plus 320px register/eligibility/verify/ready and underage state; final exact-candidate screenshot receipts in validation record.",
+  "publication": "No Product/content/legal acceptance asserted.",
+  "user_direction": "DOB removed from first screen, moved to a separate user-confirmed eligibility step after notices. No registration POST before DOB, server 18+ gate unchanged."
 }

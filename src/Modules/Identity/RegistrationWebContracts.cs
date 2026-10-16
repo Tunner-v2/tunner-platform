@@ -13,6 +13,10 @@ public sealed class RegistrationPresentation
     private static readonly string[] RequiredKeys = [
         "brand.tunner",
         "registration.heading",
+        "registration.continue",
+        "registration.back",
+        "registration.eligibility.heading",
+        "registration.eligibility.description",
         "registration.description",
         "registration.context.heading",
         "registration.context.description",

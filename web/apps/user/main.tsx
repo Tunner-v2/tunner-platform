@@ -29,7 +29,7 @@ function App() {
   return <ThemeProvider surface="user" mode="light"><ContentProvider locale={options.locale} audience="registration" resolve={key=>options.content[key]}><Registration boot={options} /></ContentProvider></ThemeProvider>;
 }
 function Registration({boot}:{boot:Bootstrap}) {
-  const [stage,setStage]=useState<'register'|'verify'|'ready'>('register');
+  const [stage,setStage]=useState<'register'|'eligibility'|'verify'|'ready'>('register');
   const [email,setEmail]=useState('');const [password,setPassword]=useState('');const [birth,setBirth]=useState('');
   const [notices,setNotices]=useState(false);const [code,setCode]=useState('');const [operation,setOperation]=useState<Operation>();
   const [error,setError]=useState<string>();const [uncertain,setUncertain]=useState(false);const [busy,setBusy]=useState(false);
@@ -46,14 +46,18 @@ function Registration({boot}:{boot:Bootstrap}) {
     try {
       const response=await fetch(path,{method:'POST',credentials:'same-origin',redirect:'error',cache:'no-store',headers:{'Content-Type':'application/json','X-Tunner-CSRF':boot.csrfToken},body:JSON.stringify(body)});
       if(response.ok)accept(await response.json() as Operation);
-      else {const problem=await response.json() as Problem;setError(errorKeys[problem.error_code??'']??'registration.error.unavailable');
+      else {const problem=await response.json() as Problem;setError(errorKeys[problem.error_code??'']??'registration.error.unavailable');if(path==='/registration/register')setStage('register');
         if(problem.current_version!==undefined)setOperation(current=>current?{...current,version:problem.current_version!}:current);}
     } catch {setUncertain(true);setError('registration.error.uncertain');}
     finally {setPassword('');setBirth('');inFlight.current=false;setBusy(false);}
   }
-  function register(event:FormEvent<HTMLFormElement>) {
+  function start(event:FormEvent<HTMLFormElement>) {
     event.preventDefault();const length=Array.from(password).length;
     if(length<boot.passwordMinimumLength||length>boot.passwordMaximumLength){setError('registration.error.password');return;}
+    setStage('eligibility');setError(undefined);
+  }
+  function register(event:FormEvent<HTMLFormElement>) {
+    event.preventDefault();
     void send('/registration/register',{idempotencyKey:registerKey.current,email,password,dateOfBirth:birth,termsVersion:boot.termsVersion,privacyVersion:boot.privacyVersion,acknowledgedNotices:notices});
   }
   function verify(event:FormEvent<HTMLFormElement>) {event.preventDefault();if(operation)void send('/registration/verify',{operationId:operation.operationId,idempotencyKey:crypto.randomUUID(),expectedVersion:operation.version,code});}
@@ -63,7 +67,7 @@ function Registration({boot}:{boot:Bootstrap}) {
       if(response.ok)accept(await response.json() as Operation);else {const problem=await response.json() as Problem;if(problem.error_code==='AGE_INELIGIBLE'){setUncertain(false);setStage('register');setError('registration.error.age');}else setError('registration.error.uncertain');}}
     catch {setError('registration.error.uncertain');}finally {inFlight.current=false;setBusy(false);}
   }
-  const scene=stage==='register'?'register':stage==='verify'?'verify':'ready';
+  const scene=stage==='register'||stage==='eligibility'?'register':stage==='verify'?'verify':'ready';
   const expiry=operation?.expiresAt?new Date(operation.expiresAt):undefined;
   const resendDisabled=busy||!operation||Boolean(operation.resendAfter&&now<Date.parse(operation.resendAfter));
   return <div className="registration-page">
@@ -76,14 +80,21 @@ function Registration({boot}:{boot:Bootstrap}) {
           <h1 ref={heading} tabIndex={-1}><ContentText contentKey="registration.heading" /></h1>
           <p className="subtitle"><ContentText contentKey="registration.description" /></p>
           <aside className="account-context"><strong><ContentText contentKey="registration.context.heading" /></strong><p><ContentText contentKey="registration.context.description" /></p></aside>
-          <p className="age-guidance"><ContentText contentKey="registration.age.help" /></p>
-          <form onSubmit={register}>
-            <TextField presentation="spacious" labelKey="registration.birth.label" name="date_of_birth" type="date" value={birth} required autoComplete="bday" disabled={busy||uncertain} onChange={e=>{setBirth(e.target.value);changed();}} />
+          <form onSubmit={start}>
             <TextField presentation="spacious" labelKey="registration.email.label" name="email" type="email" value={email} required autoComplete="email" maxLength={256} disabled={busy||uncertain} onChange={e=>{setEmail(e.target.value);changed();}} />
             <TextField presentation="spacious" labelKey="registration.password.label" helpKey="registration.password.help" name="password" type="password" value={password} required autoComplete="new-password" maxLength={boot.passwordMaximumLength*2} disabled={busy||uncertain} onChange={e=>{setPassword(e.target.value);changed();}} />
             <label className="notice-ack"><input type="checkbox" checked={notices} required disabled={busy||uncertain} onChange={e=>{setNotices(e.target.checked);changed();}} /><span><ContentText contentKey="registration.notices.ack" /> <a href={boot.termsUri}><ContentText contentKey="registration.terms" /></a> <ContentText contentKey="registration.notices.and" /> <a href={boot.privacyUri}><ContentText contentKey="registration.privacy" /></a></span></label>
+            <PrimaryButton presentation="spacious" type="submit" labelKey="registration.continue" disabled={busy||uncertain} aria-busy={busy} />
+          </form>
+        </>:stage==='eligibility'?<>
+          <h1 ref={heading} tabIndex={-1}><ContentText contentKey="registration.eligibility.heading" /></h1>
+          <p className="subtitle"><ContentText contentKey="registration.eligibility.description" /></p>
+          <p className="age-guidance"><ContentText contentKey="registration.age.help" /></p>
+          <form onSubmit={register}>
+            <TextField presentation="spacious" labelKey="registration.birth.label" name="date_of_birth" type="date" value={birth} required autoComplete="bday" disabled={busy||uncertain} onChange={e=>{setBirth(e.target.value);changed();}} />
             <PrimaryButton presentation="spacious" type="submit" labelKey="registration.submit" disabled={busy||uncertain} aria-busy={busy} />
           </form>
+          <button type="button" className="text-action" disabled={busy||uncertain} onClick={()=>{setStage('register');setBirth('');setError(undefined);}}><ContentText contentKey="registration.back" /></button>
         </>:stage==='verify'?<>
           <span className="step"><ContentText contentKey="verification.step" /></span>
           <h1 ref={heading} tabIndex={-1}><ContentText contentKey="verification.heading" /></h1>
