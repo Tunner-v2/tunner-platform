@@ -3,9 +3,9 @@
   "scope_id": "P0-010-RV001",
   "validation_kind": "COMMITTED",
   "result": "PASS",
-  "tested_commit_sha": "7acf2803d604c9f4b916c5e8b24985e9007aacb6",
-  "validated_commit_sha": "7acf2803d604c9f4b916c5e8b24985e9007aacb6",
-  "checked_at": "2026-10-16T18:30:35.734Z",
+  "tested_commit_sha": "d856dde651440216369f0698f92f5d7878505d64",
+  "validated_commit_sha": "d856dde651440216369f0698f92f5d7878505d64",
+  "checked_at": "2026-10-16T19:37:01.410Z",
   "owned_behavior_paths": [
     "src/Tunner.Testing/TestcontainersBaseline.cs",
     "tests/Tunner.TestHarness.Tests/TestHarnessBaselineTests.cs"
@@ -40,8 +40,8 @@
   "test_suites": [
     {
       "suite": "Tunner.Accounts.Tests.dll",
-      "path": "artifacts/p2-002-20261016/corrected-test-results/Chacha_Tech_FARHANWAZIR_2026-10-16_14_28_16_net10.0.trx",
-      "sha256": "1b6c753296242bb845be132356baff5b43710b0a3ad4b8daf998b2c953cab465",
+      "path": "artifacts/p2-002-20261016/anchored-test-results/Chacha_Tech_FARHANWAZIR_2026-10-16_14_32_42_net10.0.trx",
+      "sha256": "118b896ddae48a7f467d7dd5f0b2ba9f3abfee95f6e3f17538b10b710be9c2cf",
       "total": 39,
       "passed": 39,
       "failed": 0,
@@ -49,9 +49,19 @@
       "failures": []
     },
     {
+      "suite": "Tunner.Platform.ArchitectureTests.dll",
+      "path": "artifacts/p2-002-20261016/anchored-test-results/Chacha_Tech_FARHANWAZIR_2026-10-16_14_32_48_net10.0.trx",
+      "sha256": "5b79dc9f3732f462db5c9f32fcfe2217426caa0b43d4b3369b9fbbbb47c37af6",
+      "total": 237,
+      "passed": 237,
+      "failed": 0,
+      "not_executed": 0,
+      "failures": []
+    },
+    {
       "suite": "Tunner.TestHarness.Tests.dll",
-      "path": "artifacts/p2-002-20261016/corrected-test-results/Chacha_Tech_FARHANWAZIR_2026-10-16_14_28_16_net10.0[1].trx",
-      "sha256": "cfaa0e3555819cf68cf13cf63c3a924a1af7de270fb3f1a87d3b361901a2b693",
+      "path": "artifacts/p2-002-20261016/anchored-recovery-results/Chacha_Tech_FARHANWAZIR_2026-10-16_15_33_59_net10.0.trx",
+      "sha256": "d7af35b4f6bcd6240b916e36b9b05353989b5381a723b4fb82d82248dcf0a76c",
       "total": 13,
       "passed": 13,
       "failed": 0,
@@ -60,8 +70,8 @@
     },
     {
       "suite": "Tunner.Database.IntegrationTests.dll",
-      "path": "artifacts/p2-002-20261016/corrected-test-results/Chacha_Tech_FARHANWAZIR_2026-10-16_14_28_16_net10.0[2].trx",
-      "sha256": "fd0a256a6b655b86d0681f229582871aff4d41bf8c811874873606ff273cd96e",
+      "path": "artifacts/p2-002-20261016/anchored-recovery-results/Chacha_Tech_FARHANWAZIR_2026-10-16_15_34_13_net10.0.trx",
+      "sha256": "dc175913a2f3a06fe624703226114a9721f388de7326880534b35b07d7d578f7",
       "total": 34,
       "passed": 34,
       "failed": 0,
@@ -69,19 +79,9 @@
       "failures": []
     },
     {
-      "suite": "Tunner.Platform.ArchitectureTests.dll",
-      "path": "artifacts/p2-002-20261016/corrected-test-results/Chacha_Tech_FARHANWAZIR_2026-10-16_14_28_17_net10.0.trx",
-      "sha256": "5c2e77432cb712ce96b0b46cd99dfae515fd8064563a5f735cce79ddd48b043f",
-      "total": 237,
-      "passed": 237,
-      "failed": 0,
-      "not_executed": 0,
-      "failures": []
-    },
-    {
       "suite": "Tunner.Worker.Tests.dll",
-      "path": "artifacts/p2-002-20261016/corrected-test-results/Chacha_Tech_FARHANWAZIR_2026-10-16_14_29_00_net10.0.trx",
-      "sha256": "8f3fa2f0a850fae3c19ba757d7f3e0a51431d0204e907bb50bc528bb4a552a93",
+      "path": "artifacts/p2-002-20261016/anchored-recovery-results/Chacha_Tech_FARHANWAZIR_2026-10-16_15_36_16_net10.0.trx",
+      "sha256": "8d836f592a91e6574008599a4b3b4bf035f8fd804b9318586b815d3fe1b62b65",
       "total": 6,
       "passed": 6,
       "failed": 0,
@@ -109,7 +109,44 @@
     {
       "path": "artifacts/p2-002-20261016/owned-secret-scan.log",
       "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "artifacts/p2-002-20261016/final-execution-summary.json",
+      "sha256": "f3a8f7141c889e0e527dc1f8e0dee53434130ab0637ec276ed5a2fd825a8c015"
+    },
+    {
+      "path": "artifacts/p2-002-20261016/anchored-platform-tests.log",
+      "sha256": "da7c12c2b6a6d9126deb698a9cc6e44171ea2e2d709601cfb216256565725949"
+    },
+    {
+      "path": "artifacts/p2-002-20261016/Tunner.TestHarness.Tests-recovery.log",
+      "sha256": "93fd4cd7e75ea2446503c62640016d23f239c00d761eaa8123d437e66652b2b8"
+    },
+    {
+      "path": "artifacts/p2-002-20261016/Tunner.Database.IntegrationTests-recovery.log",
+      "sha256": "6c9147c7d53930650d579bffd68330d48fa8dec16a973a33bd782d3189cccb11"
+    },
+    {
+      "path": "artifacts/p2-002-20261016/Tunner.Worker.Tests-recovery.log",
+      "sha256": "5b9b7a7b39d629fbffa76f89f3c82e8eed8d0d14163eef01b2df07a0abdc3e7a"
+    },
+    {
+      "path": "artifacts/p2-002-20261016/ownership-anchor-proof.json",
+      "sha256": "15eb3a3c395d2b94da621b2c31508b9af7cd11fac96a492722fc69904eaa1d03"
     }
   ],
-  "scope_boundary": "Disposable opt-in local PostgreSQL test readiness only. Existing image, throwaway trust setup, random port binding and cleanup are preserved. No Product, production, image security or governance-tool behavior is altered."
+  "scope_boundary": "Disposable opt-in local PostgreSQL test readiness only. Existing image, throwaway trust setup, random port binding and cleanup are preserved. No Product, production, image security or governance-tool behavior is altered.",
+  "implementation_candidate_commit_sha": "7acf2803d604c9f4b916c5e8b24985e9007aacb6",
+  "ownership_manifest_candidate_commit_sha": "d856dde651440216369f0698f92f5d7878505d64",
+  "final_execution_mode": "Same-SHA suite aggregation after Docker daemon interruption; completed Accounts/architecture results plus sequential recovery of interrupted harness/database/worker projects. Original failed/aborted attempt is retained.",
+  "failed_gate_attempts": [
+    {
+      "finding": "Ownership envelope absent at the original implementation SHA.",
+      "resolution": "Commit ownership declarations before final exact-SHA execution."
+    },
+    {
+      "finding": "Docker daemon API 500 interrupted the first anchored container run.",
+      "resolution": "Preserve original logs and rerun interrupted suites with bounded hang handling; all scoped suites pass."
+    }
+  ]
 }
