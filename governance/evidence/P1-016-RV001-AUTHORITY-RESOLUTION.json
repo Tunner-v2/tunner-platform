@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "scope_id": "P1-016-RV001",
+  "outcome": "RESOLVED_EXISTING_AUTHORITY",
+  "reviewed_at": "2026-10-16T20:40:16.138Z",
+  "reviewed_authority_refs": [
+    "docs/authority/baselines/1.6.0/06_Environment_Configuration_Secrets_and_Deployment.md"
+  ],
+  "reviewed_history": [
+    "governance/work-items/TUN-P1-016.yaml",
+    "governance/evidence/TUN-P1-016-VALIDATION.json",
+    "docs/development/LOCAL_DOCKER.md",
+    "infra/docker/compose.yaml",
+    "infra/docker/.env.example",
+    "infra/environments/engineering.example.json",
+    "tests/Tunner.Platform.ArchitectureTests/EngineeringEnvironmentConfigurationTests.cs"
+  ],
+  "conclusions": [
+    "Document 06 section 7 permits conflict-driven configurable local port overrides; this host has another project on PostgreSQL 5432. Established Tunner Docker ports are already dedicated and loopback-only.",
+    "The engineering JSON is a non-secret local environment example and still points at conventional container-side ports. Align all four dependency endpoints with the already established host mappings, not the global authority defaults.",
+    "Preserve original TUN-P1-016 DONE/P1 CLOSED records and their immutable evidence. This revision changes only the example, corresponding existing assertions and implementation guidance.",
+    "No new Product/security policy, authority amendment, technology selection, package dependency, credential, service lifecycle or production operation is required."
+  ],
+  "user_authorization": "Direct user instruction: fix the port issue and proceed accordingly",
+  "implementation_scope": [
+    "infra/environments/engineering.example.json",
+    "tests/Tunner.Platform.ArchitectureTests/EngineeringEnvironmentConfigurationTests.cs",
+    "docs/development/P1_ENGINEERING_ENVIRONMENT_CONFIGURATION.md"
+  ]
+}

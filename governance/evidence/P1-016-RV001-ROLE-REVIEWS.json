@@ -1,0 +1,67 @@
+{
+  "schema_version": 1,
+  "evidence_id": "P1-016-RV001-ROLE-REVIEWS",
+  "scope_id": "P1-016-RV001",
+  "status": "PASS",
+  "review_stage": "SCOPE_READINESS_ONLY",
+  "reviewed_at": "2026-10-16T20:40:16.143Z",
+  "reviews": [
+    {
+      "role": "full-stack-engineer",
+      "result": "PASS",
+      "checks": [
+        "SCOPE READINESS ONLY: Correct only the existing example endpoint values and their existing configuration assertion; no parser/API/domain behavior changes."
+      ],
+      "skill_hash": "59adbe2133cf4ce88cbc9ca4eafce1d5a9d83b9562b6580c1571e6fc148d46b5"
+    },
+    {
+      "role": "solution-architect",
+      "result": "PASS",
+      "checks": [
+        "SCOPE READINESS ONLY: Reuse the existing EngineeringEnvironmentConfiguration snapshot and override mechanism; no new layer or dependency."
+      ],
+      "skill_hash": "664ffba70d0f97e75951c3548b7f8391854781e4cf90cc50fc8829543783a35b"
+    },
+    {
+      "role": "cyber-security-engineer",
+      "result": "PASS",
+      "checks": [
+        "SCOPE READINESS ONLY: Keep loopback-only host access and existing secret references. No credential, trust, authentication or exposure change; P1 container findings remain unwaived."
+      ],
+      "skill_hash": "2d32ff3d7fb503f29cf930e9852ed4a757bb48a08e3fa4e3f6d5a23139a47f97"
+    },
+    {
+      "role": "devops-engineer",
+      "result": "PASS",
+      "checks": [
+        "SCOPE READINESS ONLY: Align the four example dependency endpoints to the established Compose host ports: PostgreSQL 25432, RabbitMQ 25672, Redis 26379 and OpenBao 28200. Internal container ports and configurable overrides remain unchanged. No service restart or deployment is part of this correction."
+      ],
+      "skill_hash": "0def19cfd8cf73f9fe47851ab171d3154e7e80b4675ded65964f10856789b50c"
+    },
+    {
+      "role": "tester-qa-engineer",
+      "result": "PASS",
+      "checks": [
+        "SCOPE READINESS ONLY: Update the existing example-backed expected PostgreSQL port and check the other three host ports in the same test. Run the existing architecture suite and source/Compose validation; no new test project or test-count inflation."
+      ],
+      "skill_hash": "a57ce99d7ad7a3b60f17e4826c81c507c9cc208d8928285c406222eefe0a18fd"
+    },
+    {
+      "role": "auditor",
+      "result": "PASS",
+      "checks": [
+        "SCOPE READINESS ONLY: Use append-only P1-016-RV001 lineage, freeze the three owned paths before exact-SHA execution, preserve closed P0/P1 and unrelated dirty paths, and separate local correction readiness from release approval."
+      ],
+      "skill_hash": "191c796fc5df0332ff2c3c464ca611d2c6d3ffc5ba7e2807986a71ad2e40d921"
+    },
+    {
+      "role": "governance-engineer",
+      "result": "PASS",
+      "checks": [
+        "SCOPE READINESS ONLY: Record user authorization for the technical corrective scope, required role evidence and legal revision transitions. No schema/gate/authority semantics or historical closure is changed."
+      ],
+      "skill_hash": "3c948ff290690b012d3736b561021989681c2b6fcac3f115b96ca1083672536f"
+    }
+  ],
+  "review_boundary": "Executing-agent engineering role checks for technical scope. Final actual candidate reviews required after validation; no independent human assurance or production acceptance."
+}
