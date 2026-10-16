@@ -1,0 +1,63 @@
+{
+  "schema_version": 1,
+  "scope_id": "TUN-P2-003",
+  "checked_at": "2026-10-16T19:58:04.917Z",
+  "selection": {
+    "identity_entity_framework": "10.0.13",
+    "openiddict_entity_framework": "7.7.2",
+    "entity_framework": "10.0.13",
+    "npgsql_provider": "10.0.3",
+    "identity_store_schema": "Version3; same runtime/design-time options"
+  },
+  "sources": [
+    {
+      "url": "https://api.github.com/repos/openiddict/openiddict-core/releases/latest",
+      "release": "7.7.2",
+      "published_at": "2026-10-10T15:06:35Z",
+      "kind": "official stable release metadata"
+    },
+    {
+      "url": "https://api.nuget.org/v3-flatcontainer/openiddict.entityframeworkcore/7.7.2/openiddict.entityframeworkcore.nuspec",
+      "kind": "official package target/dependency/license metadata"
+    },
+    {
+      "url": "https://api.nuget.org/v3-flatcontainer/microsoft.aspnetcore.identity.entityframeworkcore/10.0.13/microsoft.aspnetcore.identity.entityframeworkcore.nuspec",
+      "kind": "official package target/dependency/license metadata"
+    },
+    {
+      "url": "https://documentation.openiddict.com/integrations/entity-framework-core",
+      "kind": "official store integration guide"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/aspnet/core/security/authentication/customize-identity-model?view=aspnetcore-10.0",
+      "kind": "official schema/design-time integration"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/dotnet/aspnetcore/v10.0.13/src/Identity/EntityFrameworkCore/src/IdentityUserContext.cs",
+      "kind": "exact upstream version model implementation"
+    }
+  ],
+  "receipts": [
+    {
+      "path": "artifacts/p2-003-20261016/openiddict-release.json",
+      "sha256": "0a7a9d75e2a791bc480938b5c3b5b1ae6a5224d0efce617cb7f4a9cf74e38abb"
+    },
+    {
+      "path": "artifacts/p2-003-20261016/openiddict.entityframeworkcore.nuspec",
+      "sha256": "9fb49ae6587882380d04c9e4996c05fbc1bbc2edd4dec6063efb59b835382fd3"
+    },
+    {
+      "path": "artifacts/p2-003-20261016/microsoft.aspnetcore.identity.entityframeworkcore.nuspec",
+      "sha256": "a420473d2f7b5b17c5908b68825c96a02b4fe6682d24be3412d963ce14e25cda"
+    },
+    {
+      "path": "artifacts/p2-003-20261016/IdentityUserContext-upstream.cs",
+      "sha256": "e6d3582d3363edd9954529bbfc2c83ae3f49238f643a51ec1ee9962a1fabc99a"
+    },
+    {
+      "path": "artifacts/p2-003-20261016/UserOnlyStore-upstream.cs",
+      "sha256": "859e02d8fa44a27a7d88ed697f7b3991205fc9db9e773813c4169929581ba698"
+    }
+  ],
+  "conclusion": "Use stable supported target packages within the approved ADR-0006 stack. Preview 8.x is not selected. Installed/restore/audit results determine actual final compatibility; no OAuth/security values are inferred from defaults."
+}
