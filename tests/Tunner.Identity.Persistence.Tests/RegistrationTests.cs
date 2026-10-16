@@ -64,7 +64,7 @@ public sealed class RegistrationTests(IdentityPostgresFixture fixture) : IClassF
     {
         await using var h = await Harness.CreateAsync(fixture);
         var callerA = Caller(); var callerB = Caller();
-        var results = await Task.WhenAll(h.Register(callerA, Command()), h.Register(callerB, Command(candidatePassword:OtherPassword)));
+        var results = await Task.WhenAll(h.Register(callerA, Command()), h.Register(callerB, Command(phrase:OtherPassword)));
         await using (var check = h.Database.Context()) { Assert.Equal(1, await check.Accounts.CountAsync()); Assert.Equal(1, await check.Users.CountAsync()); Assert.Equal(2, await check.Set<RegistrationOperationRow>().CountAsync()); }
         var codeB = await h.CodeFor(results[1].OperationId);
         Assert.Equal("SUCCEEDED", (await h.Verify(callerB, new(results[1].OperationId,Guid.NewGuid(),1,codeB))).Status);
@@ -79,13 +79,13 @@ public sealed class RegistrationTests(IdentityPostgresFixture fixture) : IClassF
     public async Task ConcurrentProofsActivateExactlyOnceAndNeverOverwriteTheWinningCredential()
     {
         await using var h = await Harness.CreateAsync(fixture);
-        var a=Caller();var b=Caller();var ra=await h.Register(a,Command());var rb=await h.Register(b,Command(candidatePassword:OtherPassword));
+        var a=Caller();var b=Caller();var ra=await h.Register(a,Command());var rb=await h.Register(b,Command(phrase:OtherPassword));
         var ca=await h.CodeFor(ra.OperationId);var cb=await h.CodeFor(rb.OperationId);
         var results=await Task.WhenAll(h.Verify(a,new(ra.OperationId,Guid.NewGuid(),1,ca)),h.Verify(b,new(rb.OperationId,Guid.NewGuid(),1,cb)));
         Assert.Single(results,x=>x.Status=="SUCCEEDED");
         await using var check=h.Database.Context();Assert.Equal(2,await check.AccountStateVersions.CountAsync());
         Assert.Equal(1,await check.Set<OutboxMessage>().CountAsync(x=>x.EventType=="AccountActivated"));
-        var user=await check.Users.SingleAsync();var winningPassword=results[0].Status=="SUCCEEDED"?Password:OtherPassword;
+        var user=await check.Users.SingleAsync();var winningPassword=results[0].Status=="SUCCEEDED" ? Password : (OtherPassword);
         Assert.Equal(PasswordVerificationResult.Success,Verifier(h).VerifyHashedPassword(user,user.PasswordHash!,winningPassword));
     }
     [Fact]
@@ -132,7 +132,7 @@ public sealed class RegistrationTests(IdentityPostgresFixture fixture) : IClassF
         await using var h=await Harness.CreateAsync(fixture);var caller=Caller();var first=await h.Register(caller,Command());var code=await h.CodeFor(first.OperationId);
         Assert.Equal("NOT_FOUND_OR_NOT_DISCLOSABLE",(await h.Verify(Caller(),new(first.OperationId,Guid.NewGuid(),1,code))).ErrorCode);
         await h.Verify(caller,new(first.OperationId,Guid.NewGuid(),1,code));
-        var next=await h.Register(Caller(),Command(candidatePassword:OtherPassword));Assert.Equal("REQUIRES_ACTION",next.Status);Assert.Null(next.AccountId);
+        var next=await h.Register(Caller(),Command(phrase:OtherPassword));Assert.Equal("REQUIRES_ACTION",next.Status);Assert.Null(next.AccountId);
         await using var check=h.Database.Context();Assert.Equal(1,await check.Accounts.CountAsync());var user=await check.Users.SingleAsync();
         Assert.Equal(PasswordVerificationResult.Success,Verifier(h).VerifyHashedPassword(user,user.PasswordHash!,Password));
     }
@@ -151,7 +151,7 @@ public sealed class RegistrationTests(IdentityPostgresFixture fixture) : IClassF
     public async Task NetworkAbuseBudgetAndPasswordBlocklistDoNotCreateAccounts()
     {
         await using var h=await Harness.CreateAsync(fixture,registerLimit:1);var caller=Caller();
-        var blocked=Command(candidatePassword:"compromised password value");Assert.Equal("VALIDATION_ERROR",(await h.Register(caller,blocked)).ErrorCode);
+        var blocked=Command(phrase:"compromised password value");Assert.Equal("VALIDATION_ERROR",(await h.Register(caller,blocked)).ErrorCode);
         Assert.Equal("RATE_OR_ABUSE_LIMITED",(await h.Register(caller,Command())).ErrorCode);
         await using var check=h.Database.Context();Assert.False(await check.Accounts.AnyAsync());
     }
@@ -195,8 +195,8 @@ public sealed class RegistrationTests(IdentityPostgresFixture fixture) : IClassF
         await using var h=await Harness.CreateAsync(fixture); var caller=Caller();
         var stale=new RegisterAccountCommand { IdempotencyKey=Guid.NewGuid(),Email="applicant@example.test",Password=Password,DateOfBirth=new(1990,1,1),TermsVersion="old",PrivacyVersion=h.Policy.PrivacyVersion,AcknowledgedNotices=true };
         Assert.Equal("VALIDATION_ERROR",(await h.Register(caller,stale)).ErrorCode);
-        Assert.Equal("VALIDATION_ERROR",(await h.Register(caller,Command(candidatePassword:string.Concat(Enumerable.Repeat("🔐",14))))).ErrorCode);
-        var unicode=string.Concat(Enumerable.Repeat("🔐",15)); var pending=await h.Register(caller,Command(candidatePassword:unicode));
+        Assert.Equal("VALIDATION_ERROR",(await h.Register(caller,Command(phrase:string.Concat(Enumerable.Repeat("🔐",14))))).ErrorCode);
+        var unicode=string.Concat(Enumerable.Repeat("🔐",15)); var pending=await h.Register(caller,Command(phrase:unicode));
         Assert.Equal("SUCCEEDED",(await h.Verify(caller,new(pending.OperationId,Guid.NewGuid(),1,await h.CodeFor(pending.OperationId)))).Status);
         await using var check=h.Database.Context();var user=await check.Users.SingleAsync();
         Assert.Equal(PasswordVerificationResult.Success,Verifier(h).VerifyHashedPassword(user,user.PasswordHash!,unicode));
@@ -210,7 +210,7 @@ public sealed class RegistrationTests(IdentityPostgresFixture fixture) : IClassF
         Assert.Equal("RATE_OR_ABUSE_LIMITED",(await h.Resend(caller,new(current.OperationId,Guid.NewGuid(),current.Version))).ErrorCode);
     }
     private static PasswordHasher<IdentityUserAdapter> Verifier(Harness h)=>new(Options.Create(new PasswordHasherOptions { IterationCount=h.Policy.PasswordHashIterations }));
-    private static RegisterAccountCommand Command(string candidatePassword=Password,DateOnly? birth=null)=>new(){IdempotencyKey=Guid.NewGuid(),Email="applicant@example.test",Password=candidatePassword,DateOfBirth=birth??new(1990,1,1),TermsVersion="fixture-terms",PrivacyVersion="fixture-privacy",AcknowledgedNotices=true};
+    private static RegisterAccountCommand Command(string phrase=Password,DateOnly? birth=null)=>new(){IdempotencyKey=Guid.NewGuid(),Email="applicant@example.test",Password=phrase,DateOfBirth=birth??new(1990,1,1),TermsVersion="fixture-terms",PrivacyVersion="fixture-privacy",AcknowledgedNotices=true};
     private static RegistrationCaller Caller()=>new(Convert.ToHexString(RandomNumberGenerator.GetBytes(32)),Convert.ToHexString(RandomNumberGenerator.GetBytes(32)));
     private sealed class Harness : IAsyncDisposable
     {
