@@ -1,0 +1,60 @@
+{
+  "schema_version": 1,
+  "work_item_id": "P1-RV001-002",
+  "milestone_id": "P1",
+  "revision_ref": "P1-RV001",
+  "sprint_id": null,
+  "title": "Release readiness gate after container and integration remediation",
+  "status": "DRAFT",
+  "type": "GOVERNANCE_TOOLING",
+  "authority_refs": [
+    "docs/authority/baselines/1.6.0/08_Security_Privacy_Compliance_and_Global_Market_Governance.md",
+    "docs/authority/current/development/09_Testing_Acceptance_Evidence_and_Quality_Gates.md",
+    "docs/authority/baselines/1.6.0/decisions/ADR-0008_GitHub_and_GitHub_Actions.md"
+  ],
+  "flow_refs": [],
+  "contract_refs": [],
+  "decision_refs": [],
+  "acceptance_criteria": [
+    "Do not authorize release until P1-RV001-001 security remediation is completed and integrated to protected main with verifiable merge and clean container scan evidence.",
+    "Retain all high/critical thresholds and source/build provenance. Resolve effective required status-check enforcement; no waiver or production approval is implied."
+  ],
+  "prerequisites": [
+    "P1-RV001-001"
+  ],
+  "blockers": [],
+  "impact": {
+    "architecture": false,
+    "ui": false,
+    "sdk": false,
+    "financial": false,
+    "compliance": false,
+    "security": true,
+    "devops": true,
+    "support": false
+  },
+  "activated_roles": [
+    "project-manager",
+    "solution-architect",
+    "governance-engineer",
+    "tester-qa-engineer",
+    "auditor",
+    "full-stack-engineer",
+    "cyber-security-engineer",
+    "devops-engineer",
+    "rd-engineer"
+  ],
+  "required_tests": [
+    "native release-readiness dependency remains blocked before remediation merge",
+    "verify all four container scans and effective integration checks"
+  ],
+  "required_evidence": [
+    "governance/evidence/P1-RV001-SECURITY-FINDINGS.json"
+  ],
+  "context_policy": "TASK",
+  "todos": [],
+  "defects": [],
+  "created_at": "2026-10-16T18:00:17.0011164+00:00",
+  "updated_at": "2026-10-16T18:02:51.144Z",
+  "product_acceptance_required": false
+}

@@ -1,0 +1,71 @@
+{
+  "schema_version": 1,
+  "scope_id": "TUN-P2-001",
+  "status": "DONE",
+  "recorded_at": "2026-10-16T18:08:09.928Z",
+  "branch": "change/TUN-P2-001-account-identity-refinement",
+  "refinement_deliverable_commit_sha": "280ac2460d14f8d761d3c258c3dff564317cc249",
+  "refinement_closure_commit_sha": "cf72bca3d64c85acb1b4ba8ea451e86e651b5128",
+  "p1_status": "CLOSED",
+  "p1_closure_commit_sha": "4a1c1372cd8bd9290819513e8a76dda3542ae722",
+  "p1_product_owner_acceptance_ref": "governance/evidence/P1-ACCEPTANCE-AND-HANDOFF-20261016.json",
+  "p1_merged_prs": [
+    "https://github.com/Tunner-v2/tunner-platform/pull/11",
+    "https://github.com/Tunner-v2/tunner-platform/pull/12"
+  ],
+  "p2_pull_request": "https://github.com/Tunner-v2/tunner-platform/pull/13",
+  "validation_ref": "governance/evidence/TUN-P2-001-VALIDATION.json",
+  "role_review_ref": "governance/evidence/TUN-P2-001-ROLE-REVIEWS.json",
+  "p2_status": "ACTIVE",
+  "work_items": {
+    "total": 18,
+    "done": 1,
+    "backlog": 17
+  },
+  "next_action": "Prepare TUN-P2-002 scope reviews from its fresh TASK manifest; run governance next and legal lifecycle checks. Implement only after eligibility. This handoff claims no Account/Identity runtime implementation.",
+  "open_release_blocker": {
+    "revision": "P1-RV001",
+    "defect": "DEF-P1-CONTAINER-SCAN-001",
+    "release_work_item": "P1-RV001-002",
+    "remediation_work_item": "P1-RV001-001",
+    "required_readiness": "MERGED_TO_MAIN",
+    "status": "NOT_READY",
+    "findings_ref": "governance/evidence/P1-RV001-SECURITY-FINDINGS.json"
+  },
+  "context": {
+    "work_item": "TUN-P2-002",
+    "mode": "TASK",
+    "output": "artifacts/p2-transition-20261016/next-context",
+    "verified": "CURRENT",
+    "refresh_command": "dotnet run --no-build --no-restore --project src/Tunner.Governance -- context build --work-item TUN-P2-002 --mode TASK --output artifacts/p2-transition-20261016/next-context"
+  },
+  "preserved_unrelated_paths": [
+    "docs/context/current/HANDOFF.md",
+    "docs/context/current/adaptive-selection.json",
+    "docs/context/current/authority.md",
+    "docs/context/current/contracts.md",
+    "docs/context/current/git-changes.md",
+    "docs/context/current/manifest.json",
+    "docs/context/current/relevant-flows.md",
+    "docs/context/current/summary.md",
+    "docs/context/current/tests.md",
+    "docs/project/CURRENT_STATE.md",
+    "docs/project/HANDOFF.md",
+    "docs/project/PROJECT_CONTEXT.md",
+    ".vscode/settings.json"
+  ],
+  "helpers": {
+    "directory": "artifacts/p2-transition-20261016",
+    "classification": "Disposable ignored local helpers and raw receipts; governed findings, review and validation summaries are committed.",
+    "not_repository_deliverables": [
+      "github-helpers.ps1",
+      "validate_p2_plan.py",
+      "raw CI logs and generated context packs"
+    ]
+  },
+  "boundaries": [
+    "Production release is not approved. Actual container findings remain unresolved and unwaived.",
+    "Engineering role reviews were executed by the agent; no independent human security or future Product approval is claimed.",
+    "Protected-main PR approval is separate; eligible local work can continue under AMD-0002."
+  ]
+}

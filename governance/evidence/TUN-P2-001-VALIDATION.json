@@ -1,0 +1,161 @@
+{
+  "schema_version": 1,
+  "scope_id": "TUN-P2-001",
+  "validation_kind": "COMMITTED",
+  "result": "PASS",
+  "validated_commit_sha": "280ac2460d14f8d761d3c258c3dff564317cc249",
+  "tested_commit_sha": "280ac2460d14f8d761d3c258c3dff564317cc249",
+  "owned_behavior_paths": [
+    "docs/development/P2_ACCOUNT_IDENTITY_REFINEMENT.md",
+    "governance/evidence/TUN-P2-001-BACKLOG-SNAPSHOT.json",
+    "governance/evidence/TUN-P2-001-AUTHORITY-RESOLUTION.json"
+  ],
+  "note": "Immutable refinement deliverables; live governed status/review/validation metadata evolves separately.",
+  "checked_at": "2026-10-16T17:58:00.589Z",
+  "checks": {
+    "authority": "VERIFIED",
+    "authority_artifacts": 179,
+    "governance": "PASS",
+    "governed_records": 613,
+    "frd_sections": 16,
+    "acceptance_cases": 11,
+    "work_items": 18,
+    "dependency_graph": "acyclic; explicit LOCAL_VALIDATED; registered targets",
+    "role_declarations": "18/18 native calculations PASS",
+    "context_verify": "CURRENT",
+    "native_refinement_eligibility": "READY: actual corrected native gate has no failures",
+    "release_barrier": "NOT_READY: P1-RV001-002 requires security remediation MERGED_TO_MAIN; no merge evidence declared",
+    "final_transition": "VALIDATION -> DONE ALLOWED"
+  },
+  "validation_boundary": "Documentation/governance refinement only. No Account/Identity runtime or new Product acceptance is claimed. Existing platform behavior is unchanged; the prior runtime suite is not represented as a new execution.",
+  "failed_attempts": [
+    {
+      "finding": "Template authority_resolution_refs field is not accepted by the enforced work-item schema.",
+      "resolution": "Retain authority resolution through supported required_evidence and review traceability fields; native validation passes."
+    },
+    {
+      "finding": "Disposable coverage helper used Windows default text encoding.",
+      "resolution": "Read verified authority files explicitly as UTF-8; all section/acceptance/dependency checks pass."
+    },
+    {
+      "finding": "Native final gate exposed overbroad P1 security scope propagation and missing aggregate review evidence.",
+      "resolution": "Register explicit release-readiness child with MERGED_TO_MAIN security prerequisite, target that release scope, and aggregate the nine completed engineering reviews. Record actual rerun separately."
+    }
+  ],
+  "open_release_follow_up": "P1-RV001 / DEF-P1-CONTAINER-SCAN-001; actual remote container failures and absent required-status rule remain unwaived.",
+  "receipts": [
+    {
+      "path": "artifacts/p2-transition-20261016/candidate-authority.json",
+      "sha256": "d39b480f68ce32a6055f88869997190edd69efe4b498b129cf3408116205a0e9"
+    },
+    {
+      "path": "artifacts/p2-transition-20261016/candidate-governance.json",
+      "sha256": "cda488023b7ae3103e672385ff15484dcded5f861f5c326e10998c30ddf52508"
+    },
+    {
+      "path": "artifacts/p2-transition-20261016/candidate-coverage.log",
+      "sha256": "fa394c6e21a2b8d7d4c1e9d1d96dc5a92c3503d148cd398071dbe615780dfad4"
+    },
+    {
+      "path": "artifacts/p2-transition-20261016/candidate-next.json",
+      "sha256": "d62c50ab6e44ca286400a5566a9abb2dc2e4536388f83ab0cb0f3bdc514ada92"
+    },
+    {
+      "path": "artifacts/p2-transition-20261016/candidate-context-verify.json",
+      "sha256": "ace53f291826f8830a992050213eb0f1f0f27efa56b7275c1045e4e935b0a5c9"
+    },
+    {
+      "path": "artifacts/p2-transition-20261016/plan-coverage-validation.json",
+      "sha256": "48b71359423a981c169844bb7e3d63cc9da1077cb11845d04e7d210cc4cd94eb"
+    },
+    {
+      "path": "artifacts/p2-transition-20261016/TUN-P2-001-roles.json",
+      "sha256": "11acb7e9307286aa4f2a3f05e7bb3ea2482022fcaeb19b108ee73b4e70dc93e6"
+    },
+    {
+      "path": "artifacts/p2-transition-20261016/TUN-P2-002-roles.json",
+      "sha256": "7f9b9072592ea3d0a0c7e4da9233917cb30aca941a08619c07d56946ff3bf6c0"
+    },
+    {
+      "path": "artifacts/p2-transition-20261016/TUN-P2-003-roles.json",
+      "sha256": "6c2325088710c6221dae0a9a5a2e56725576822833c406157c00081918404005"
+    },
+    {
+      "path": "artifacts/p2-transition-20261016/TUN-P2-004-roles.json",
+      "sha256": "e45be95c9032ef660ae0c68a45b9bd93f5f688aebfdb1b7fcbc5a6356b3694f4"
+    },
+    {
+      "path": "artifacts/p2-transition-20261016/TUN-P2-005-roles.json",
+      "sha256": "fe8e7798e0fface98e9f7e61173acb1a29f104490872915d094b79b9a452ec39"
+    },
+    {
+      "path": "artifacts/p2-transition-20261016/TUN-P2-006-roles.json",
+      "sha256": "1b83a00da4830201bddd62ced651fe05b86c56883c06930ee65e16d8ced9fa77"
+    },
+    {
+      "path": "artifacts/p2-transition-20261016/TUN-P2-007-roles.json",
+      "sha256": "469bce23aae3fe1c258196208a27e8c9e5508d73e9330305f7115163349b66c6"
+    },
+    {
+      "path": "artifacts/p2-transition-20261016/TUN-P2-008-roles.json",
+      "sha256": "d75b2090c43dcffae730a99c2698e3fefd983585d492ea28e151a63929ee9d93"
+    },
+    {
+      "path": "artifacts/p2-transition-20261016/TUN-P2-009-roles.json",
+      "sha256": "a6d31bb0f6f1bf303ad750bd4e58425755e6dfa223096078ce67228278b4e08c"
+    },
+    {
+      "path": "artifacts/p2-transition-20261016/TUN-P2-010-roles.json",
+      "sha256": "4302820caa32a9783e0fb8b188ca979fe8e1216b31ff30d4b4819ab6676a9091"
+    },
+    {
+      "path": "artifacts/p2-transition-20261016/TUN-P2-011-roles.json",
+      "sha256": "341e6307cbf279977c5b829c31f6b0eca5f700ea8e988fa632f06108e8dc171d"
+    },
+    {
+      "path": "artifacts/p2-transition-20261016/TUN-P2-012-roles.json",
+      "sha256": "6c5683b50bfa8a042780871318207673d43f079d70c960acb1d23f144f0b616d"
+    },
+    {
+      "path": "artifacts/p2-transition-20261016/TUN-P2-013-roles.json",
+      "sha256": "ec05d0b68221e0300a07c48acc543b9215761d2e174d5376522c7ead3bf10596"
+    },
+    {
+      "path": "artifacts/p2-transition-20261016/TUN-P2-014-roles.json",
+      "sha256": "fdad50f7c48edf26ae10950c88b274ff035ebdc2175e6bee66e8508b5ff6cd4f"
+    },
+    {
+      "path": "artifacts/p2-transition-20261016/TUN-P2-015-roles.json",
+      "sha256": "cbb4625ce21b68f20495950fd05dec239e152f4ea4b5eddd1ee9b256418ddcc5"
+    },
+    {
+      "path": "artifacts/p2-transition-20261016/TUN-P2-016-roles.json",
+      "sha256": "fa0a6fdbcedb32d7b11c65a51842a5967f1c8240f729d79fe4e02e18e1f3050d"
+    },
+    {
+      "path": "artifacts/p2-transition-20261016/TUN-P2-017-roles.json",
+      "sha256": "ff47e48dfea6555b5e29ffde67c9b60f023a0a9b2853eb2a237e9b004e13cd43"
+    },
+    {
+      "path": "artifacts/p2-transition-20261016/TUN-P2-018-roles.json",
+      "sha256": "fd24558a1dfe572b5e285940ef79c1cec0491516902457dca854088efba13abf"
+    },
+    {
+      "path": "artifacts/p2-transition-20261016/corrected-governance.json",
+      "sha256": "482af0b21bcc05cd5a4c05ddb22eb563663dbf22230291c566305a07a8e0a8b2"
+    },
+    {
+      "path": "artifacts/p2-transition-20261016/P2-001-corrected-gate.json",
+      "sha256": "ee3f436e33198d3a502318f4caf3f8ce6415d9d00cfa749919a2830b9f817e8e"
+    },
+    {
+      "path": "artifacts/p2-transition-20261016/P1-security-release-negative-gate.json",
+      "sha256": "42956b63158b9ba5f5248be5292731664c80ed22021fb92c73377222dd287bea"
+    },
+    {
+      "path": "artifacts/p2-transition-20261016/P2-001-done-check.json",
+      "sha256": "648da48d232a9d1bea76ae305488309bf5cdec469f1f6ce561c91193518afff5"
+    }
+  ],
+  "gate_checked_commit_sha": "70a52a6174bb4f378e6a903fffab31c043281624"
+}

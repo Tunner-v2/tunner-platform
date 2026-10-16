@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "scope_id": "TUN-P2-001",
+  "outcome": "RESOLVED_EXISTING_AUTHORITY",
+  "reviewed_at": "2026-10-16T17:48:49.296Z",
+  "reviewed_authority_refs": [
+    "docs/authority/current-authority.json",
+    "docs/authority/current/development/11_Development_Planes_Milestones_and_P0_Backlog.md",
+    "docs/authority/baselines/1.6.0/17_Account_Identity_and_Session_FRD.md",
+    "docs/authority/current/development/32_Domain_API_Event_Data_and_Policy_Contract_Catalog.md",
+    "docs/authority/current/development/34_Architecture_to_Development_Traceability_Matrix.md",
+    "docs/authority/baselines/1.6.0/decisions/ADR-0006_Identity_ASPNET_Identity_OpenIddict.md",
+    "docs/authority/baselines/1.6.0/decisions/PDR-0007_DOB_Based_18_Plus_Eligibility.md",
+    "docs/authority/current/development/AMD-0002_Non-Blocking_PR_Approval_and_Continuous_Local_Execution.md"
+  ],
+  "reviewed_governed_history": [
+    "governance/milestones/P0.yaml",
+    "governance/milestones/P1.yaml",
+    "governance/evidence/P0-RV004-EXECUTION-RESULTS.json",
+    "governance/evidence/P1-MILESTONE-ROLE-REVIEWS.json",
+    "governance/policies/pr-integration-policy.yaml",
+    "governance/evidence/P1-ACCEPTANCE-AND-HANDOFF-20261016.json",
+    "governance/evidence/P1-CLOSURE-20261016.json"
+  ],
+  "conclusions": [
+    "FRD 17 already defines the P2 state/resources, contact, authentication, sessions, recovery, eligibility, operations, events, UI and acceptance families; do not create a duplicate FRD or Product decision.",
+    "ADR-0006 selects ASP.NET Core Identity + OpenIddict and first Google/Microsoft adapters. PDR-0007 fixes server-side DOB + 18 calendar years eligibility, no attestation checkbox and restricted-DOB minimization.",
+    "Document 32 fixes contract families and permits detailed executable field schemas during implementation; Document 34 maps Identity FigJam sections 36-45 and exact FRD contract closure.",
+    "P0 enablement is closed and P1 foundation work items are committed DONE. AMD-0002 permits P2 local preparation and locally validated prerequisite consumption while P1 protected PR #11 awaits review. No global merged-main prerequisite is invented.",
+    "P1 Product Owner acceptance is now explicitly confirmed and the engineering milestone is CLOSED; PR #11 merged, and PR #12 carries acceptance/closure metadata. No production deployment or release tag is inferred.",
+    "Runtime security/policy values, privileged operations, provider readiness and user-visible UX must follow their existing approved authority and applicable role reviews before implementation. Untriggered later-plane integrations do not justify duplicate contract blockers."
+  ],
+  "authorization": "Human requested continuation, a P1 GitHub PR and forward progress; PR #11 now exists.",
+  "pr_url": "https://github.com/Tunner-v2/tunner-platform/pull/12",
+  "scope_boundary": "Authority-backed P2 refinement only. No Account, credential, authentication, OAuth, session, recovery, UI or provider runtime implementation in TUN-P2-001."
+}

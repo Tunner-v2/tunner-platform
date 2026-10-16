@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "defect_id": "DEF-P1-CONTAINER-SCAN-001",
+  "work_item_id": "P1-RV001-001",
+  "classification": "BUG",
+  "severity": "SEV-2",
+  "status": "OPEN",
+  "environment": "GitHub Actions development-image supply-chain scan",
+  "description": "Four declared development images fail actual HIGH/CRITICAL vulnerability scans, including critical/high findings in the PostgreSQL gosu Go binary. Effective main rules require human/codeowner approval but contain no required status-check rule, so these failures did not block integration. This is a release-blocking follow-up under P1-RV001; no production exploit or deployment is asserted.",
+  "expected_behavior_ref": "docs/authority/baselines/1.6.0/08_Security_Privacy_Compliance_and_Global_Market_Governance.md",
+  "evidence": [
+    "governance/evidence/P1-RV001-SECURITY-FINDINGS.json"
+  ],
+  "affected_versions": [
+    "postgres:18.6",
+    "openbao/openbao:2.7.0",
+    "axllent/mailpit:v1.31.3",
+    "grafana/otel-lgtm:0.34.0"
+  ],
+  "created_at": "2026-10-16T17:49:51.000Z",
+  "updated_at": "2026-10-16T17:49:51.000Z"
+}

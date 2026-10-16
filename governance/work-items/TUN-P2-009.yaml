@@ -1,0 +1,78 @@
+{
+  "schema_version": 1,
+  "work_item_id": "TUN-P2-009",
+  "milestone_id": "P2",
+  "sprint_id": null,
+  "title": "Recovery-code issuance replacement and consumption",
+  "status": "BACKLOG",
+  "type": "FEATURE",
+  "authority_refs": [
+    "docs/authority/current-authority.json",
+    "docs/authority/current/development/11_Development_Planes_Milestones_and_P0_Backlog.md",
+    "docs/authority/baselines/1.6.0/17_Account_Identity_and_Session_FRD.md",
+    "docs/authority/current/development/32_Domain_API_Event_Data_and_Policy_Contract_Catalog.md",
+    "docs/authority/current/development/34_Architecture_to_Development_Traceability_Matrix.md",
+    "docs/authority/baselines/1.6.0/decisions/ADR-0006_Identity_ASPNET_Identity_OpenIddict.md",
+    "docs/authority/baselines/1.6.0/decisions/PDR-0007_DOB_Based_18_Plus_Eligibility.md",
+    "docs/authority/current/development/AMD-0002_Non-Blocking_PR_Approval_and_Continuous_Local_Execution.md",
+    "docs/authority/current/development/02_Repository_Solution_and_Module_Architecture.md",
+    "docs/authority/current/development/09_Testing_Acceptance_Evidence_and_Quality_Gates.md"
+  ],
+  "flow_refs": [
+    "docs/authority/current/development/34_Architecture_to_Development_Traceability_Matrix.md"
+  ],
+  "contract_refs": [
+    "docs/authority/current/development/32_Domain_API_Event_Data_and_Policy_Contract_Catalog.md"
+  ],
+  "decision_refs": [
+    "ADR-0006",
+    "PDR-0007"
+  ],
+  "acceptance_criteria": [
+    "Generate/display/download each recovery-code set once and store verifier-safe representations only.",
+    "Atomically consume individual codes and invalidate replaced sets according to approved policy.",
+    "Require fresh authorized step-up and preserve safe operation/audit lineage."
+  ],
+  "prerequisites": [
+    "TUN-P2-003",
+    "TUN-P2-005",
+    "TUN-P2-006"
+  ],
+  "blockers": [],
+  "impact": {
+    "architecture": true,
+    "ui": true,
+    "sdk": false,
+    "financial": false,
+    "compliance": false,
+    "security": true,
+    "devops": false,
+    "support": false,
+    "api": true
+  },
+  "activated_roles": [
+    "full-stack-engineer",
+    "tester-qa-engineer",
+    "solution-architect",
+    "cyber-security-engineer",
+    "auditor",
+    "sdk-engineer",
+    "ui-ux-engineer",
+    "frontend-engineer",
+    "end-user-ux-reviewer",
+    "content-writer"
+  ],
+  "required_tests": [
+    "single-use concurrency and replaced-set rejection",
+    "one-time display/download and verifier-safe persistence",
+    "authorization and sensitive-output redaction"
+  ],
+  "required_evidence": [
+    "governance/evidence/TUN-P2-009-VALIDATION.json"
+  ],
+  "context_policy": "TASK",
+  "todos": [],
+  "defects": [],
+  "created_at": "2026-10-16T17:48:49.296Z",
+  "updated_at": "2026-10-16T17:48:49.296Z"
+}
