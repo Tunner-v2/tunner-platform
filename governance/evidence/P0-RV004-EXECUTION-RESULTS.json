@@ -1,0 +1,231 @@
+{
+  "schema_version": 1,
+  "scope_id": "P0-RV004",
+  "status": "PASS",
+  "recorded_at": "2026-10-16T16:51:04.523Z",
+  "implementation_commit_sha": "8dcb975fb4896daf585ed757859447e9279da9b2",
+  "inventory_fix_commit_sha": "494015900983b7a6ac854a9151743397607fa1e8",
+  "execution_boundary": "Local engineering validation; no remote GitHub run, fresh live R2 execution, Product acceptance, protected-main integration or production release is claimed.",
+  "checks": [
+    {
+      "name": "authority",
+      "result": "PASS",
+      "checked_artifacts": 179,
+      "committed_current_source_checks": 9,
+      "historical_source_and_zip_checks": "PASS"
+    },
+    {
+      "name": "build",
+      "result": "PASS",
+      "warnings": 0,
+      "errors": 0,
+      "source_commit_sha": "8dcb975fb4896daf585ed757859447e9279da9b2"
+    },
+    {
+      "name": "governance",
+      "result": "PASS",
+      "revision_checks": 60,
+      "committed_ownership_checks": 15,
+      "ordinary_functional_suite": "PASS",
+      "focused_authority_context_checks": 12,
+      "source_commit_sha": "8dcb975fb4896daf585ed757859447e9279da9b2"
+    },
+    {
+      "name": "platform_installer",
+      "result": "PASS",
+      "platform": 289,
+      "installer": 68,
+      "failed": 0,
+      "skipped": 0,
+      "container_integrations_executed": true,
+      "launch_commit_sha": "8dcb975fb4896daf585ed757859447e9279da9b2",
+      "installer_build_and_execution_commit_sha": "494015900983b7a6ac854a9151743397607fa1e8",
+      "unchanged_behavior_blob_proof": "artifacts/audit-remediation-20261016/unchanged-behavior-between-candidates.json"
+    },
+    {
+      "name": "web",
+      "result": "PASS",
+      "build": "PASS",
+      "unit_contract_tests": 25,
+      "browser_tests": 13,
+      "source_commit_sha": "8dcb975fb4896daf585ed757859447e9279da9b2"
+    },
+    {
+      "name": "supply_chain",
+      "result": "PASS",
+      "source_commit_sha": "494015900983b7a6ac854a9151743397607fa1e8",
+      "dotnet_scopes": 3,
+      "unique_resolved_packages": 105,
+      "vulnerable_packages": 0,
+      "frontend_reported_vulnerabilities": 0,
+      "workflow_yaml_parse": "PASS"
+    },
+    {
+      "name": "security",
+      "result": "PASS",
+      "sast_files": 1329,
+      "secret_scan_files": 1329,
+      "container_policy_images": 8,
+      "observability_functional": "PASS"
+    },
+    {
+      "name": "schema",
+      "result": "PASS",
+      "structural_entrypoints": 17
+    },
+    {
+      "name": "dirty_boundary",
+      "result": "PASS",
+      "preserved_tracked_paths": 12,
+      "excluded_untracked_directory": ".vscode/"
+    }
+  ],
+  "failed_attempts": [
+    {
+      "name": "initial multi-scope inventory",
+      "result": "FAIL",
+      "source_commit_sha": "8dcb975fb4896daf585ed757859447e9279da9b2",
+      "error": "Package inventory contained no resolved packages.",
+      "cause": "PowerShell hashtables did not expose project keys to the existing PSObject-based property reader.",
+      "resolution": "Use PSCustomObject aggregates; actual committed inventory rerun PASS at 494015900983b7a6ac854a9151743397607fa1e8"
+    },
+    {
+      "name": "new regression fixture and process",
+      "result": "FAIL_BEFORE_CANDIDATE",
+      "cause": "Initial fixture included active remediation work while asserting the no-eligible-work branch; a later compiler check required explicit success return.",
+      "resolution": "Isolate that branch by removing the six new fixture-only revision records; preserve all production checks, catch assertion failures with exit 1, disable Windows apphost. Committed run PASS."
+    }
+  ],
+  "assurance_limitation": {
+    "id": "AUD-04",
+    "status": "HISTORICAL_LIMITATION_RETAINED_FUTURE_CAPTURE_IMPLEMENTED",
+    "details": "Prior operator-provided live R2 output has no embedded Git SHA or execution timestamp. It is not retroactively upgraded. Future private operator runs write source, tool hash, UTC interval and cleanup receipts; installer component tests do not imply a new live run."
+  },
+  "receipts": [
+    {
+      "path": "artifacts/audit-remediation-20261016/governance-build.log",
+      "sha256": "612537a544d7c251f90b2cf460359dd741ceea0e2bc705620e95b79fea6ec91f",
+      "bytes": 413
+    },
+    {
+      "path": "artifacts/audit-remediation-20261016/focused-regression.log",
+      "sha256": "53be3812086db3c5c700b84dce993fed4e23f55bb49b9e5d010768777901d737",
+      "bytes": 53
+    },
+    {
+      "path": "artifacts/audit-remediation-20261016/governance-functional.log",
+      "sha256": "b39b055af61c564b29dd3a55f2d56f36532233f548446173baaccd7b73efdec5",
+      "bytes": 162
+    },
+    {
+      "path": "artifacts/audit-remediation-20261016/platform-tests.log",
+      "sha256": "ec45c869a43a4b4d97fffd78661defb45a9b4f4a32566da39d450285f8e02a4f",
+      "bytes": 5431
+    },
+    {
+      "path": "artifacts/audit-remediation-20261016/installer-tests.log",
+      "sha256": "3221f17cbc14af792f2975d84a3ab3a7ea397189936f2957e9b736260524d0b7",
+      "bytes": 984
+    },
+    {
+      "path": "artifacts/audit-remediation-20261016/observability-functional.log",
+      "sha256": "dee4d9e18b4ea0368ae94c471860cdbdb7d8e9184550058377f23ed843a720dc",
+      "bytes": 46
+    },
+    {
+      "path": "artifacts/audit-remediation-20261016/web-build.log",
+      "sha256": "58620af90b63b2db628d542f4cd8c4b5bb86597124da2a907585b888f5ab2bd0",
+      "bytes": 1915
+    },
+    {
+      "path": "artifacts/audit-remediation-20261016/web-tests.log",
+      "sha256": "333ea68b34e9a35c87757ea4d5f7d263c6ff5f93e8e27d288ad5672161bcec72",
+      "bytes": 2310
+    },
+    {
+      "path": "artifacts/audit-remediation-20261016/web-browser.log",
+      "sha256": "419d9e3b9f30a01886dd47ce9a909dd65a5331620a24319171c95fc8c7ff3fa7",
+      "bytes": 1922
+    },
+    {
+      "path": "artifacts/audit-remediation-20261016/web-dependency-audit.json",
+      "sha256": "f36dd952a9b4198a9ac9f4bf497007e7ff9de07c3091615ff8a847a84d12b547",
+      "bytes": 293
+    },
+    {
+      "path": "artifacts/audit-remediation-20261016/supply-chain.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "artifacts/audit-remediation-20261016/supply-chain-final.log",
+      "sha256": "ce3d300c5fc9db0c1d633e3ac16865687ab82f53da7e370ba6ad557029825c18",
+      "bytes": 1672
+    },
+    {
+      "path": "artifacts/audit-remediation-20261016/supply-chain-final/tunner.spdx.json",
+      "sha256": "5d6ee8236b8a91b958ca644868eb18b943d7e3e2fe849daab8fdde0af0c407e9",
+      "bytes": 38431
+    },
+    {
+      "path": "artifacts/audit-remediation-20261016/supply-chain-final/tunner.provenance.json",
+      "sha256": "5db50a00a26667e71624727811ceb4b266bc3716d75364b9e75bf80234703158",
+      "bytes": 2129
+    },
+    {
+      "path": "artifacts/audit-remediation-20261016/schemas.log",
+      "sha256": "4888cb16765d1844d4b5a02b5efa96bb7487901eb58ffb54ef40206bd65aea8c",
+      "bytes": 871
+    },
+    {
+      "path": "artifacts/audit-remediation-20261016/committed-authority.log",
+      "sha256": "b6456d29687594dce74164706f77d4147298aa8c8340cf06d9d9599f272a0fa3",
+      "bytes": 1122
+    },
+    {
+      "path": "artifacts/audit-remediation-20261016/committed-supplemental-checks.json",
+      "sha256": "181d1c7f46c05794a43a8289d3aab4d16ab31685ee60c900e9c4d485e145f129",
+      "bytes": 2823
+    },
+    {
+      "path": "artifacts/audit-remediation-20261016/authority-verify.json",
+      "sha256": "d39b480f68ce32a6055f88869997190edd69efe4b498b129cf3408116205a0e9",
+      "bytes": 157
+    },
+    {
+      "path": "artifacts/audit-remediation-20261016/security-source.log",
+      "sha256": "2c70913f23bf546cf3e97d22d8c6ca8218ed524460258e4371b307834b13773d",
+      "bytes": 64
+    },
+    {
+      "path": "artifacts/audit-remediation-20261016/sast.log",
+      "sha256": "32777ae2f125c7c419412dda10c91f6b021be5151b465274e21c5134ed5961ee",
+      "bytes": 99
+    },
+    {
+      "path": "artifacts/audit-remediation-20261016/secrets.log",
+      "sha256": "b0976ed033472396a88338820727f12314a4e72b5468efee2223d039dcd4a25c",
+      "bytes": 73
+    },
+    {
+      "path": "artifacts/audit-remediation-20261016/container-policy.log",
+      "sha256": "160765e73479699b55c95d44e7bfb02a4b60fc02c3a23bce09695ab2628a13cd",
+      "bytes": 150
+    },
+    {
+      "path": "artifacts/audit-remediation-20261016/unchanged-behavior-between-candidates.json",
+      "sha256": "00af34caf3724f0db5b75f95088044955841852a329646c34caabe5c5f86a2ab",
+      "bytes": 3490
+    },
+    {
+      "path": "artifacts/audit-remediation-20261016/test-counts.json",
+      "sha256": "e9e884d0e72ea1ca7df51cc8caac8e1239cd0b092112494dbf2f6e71f9bd00e3",
+      "bytes": 193
+    },
+    {
+      "path": "artifacts/audit-remediation-20261016/preserved-user-paths.json",
+      "sha256": "60ba06be33b87957f9fa054d8a5f42e17321bc41df3482e4fa68d21bb0316fdc",
+      "bytes": 1941
+    }
+  ]
+}
