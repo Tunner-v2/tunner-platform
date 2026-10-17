@@ -2,7 +2,7 @@
   "schema_version": 1,
   "scope_id": "TUN-P2-004",
   "amendment": "AMD-0008",
-  "status": "PENDING_COMMITTED_REVALIDATION",
+  "status": "VALIDATED_REGISTRATION_SCOPE",
   "production_ui_acceptance": "BLOCKED",
   "checked_at": "2026-10-17T21:24:47.801Z",
   "authority_resolution": {
@@ -134,7 +134,7 @@
       "foreground": "#475569",
       "on_white": 7.58,
       "on_page": 7.24,
-      "status": "APPROVED_AND_IMPLEMENTED_PENDING_FINAL_VALIDATION"
+      "status": "APPROVED_IMPLEMENTED_AND_VALIDATED"
     },
     "automated_check_limit": "axe did not flag these reference contrast cases; manual findings govern the open visual gate."
   },
@@ -142,13 +142,13 @@
     {
       "id": "DEF-TUN-P2-004-UI-001",
       "classification": "UI_FIDELITY_DEFECT",
-      "status": "REMEDIATED_PENDING_COMMITTED_VALIDATION",
+      "status": "CLOSED",
       "details": "Faithful placeholder, typography, geometry, support/footer composition and approved glyph restoration."
     },
     {
       "id": "DEF-TUN-P2-004-UI-002",
       "classification": "UI_REQUIRED",
-      "status": "APPROVED_AND_SYNCHRONIZED_PENDING_FINAL_VALIDATION",
+      "status": "CLOSED",
       "details": "Direct scoped Product Owner approval recorded; approved Figma contrast/personal information/consent adaptations synchronized."
     }
   ],
@@ -184,5 +184,9 @@
     "docs/project/PROJECT_CONTEXT.md",
     ".vscode/settings.json"
   ],
-  "review_provenance": "Executing Codex agent; no independent human/Product approval inferred."
+  "review_provenance": "Executing Codex agent; no independent human/Product approval inferred.",
+  "tested_commit_sha": "ba81f0e3ccd92b2e1b9730c72cb37f0de489278c",
+  "registration_visual_acceptance": "PASS_REGISTRATION_SCOPE",
+  "final_visual_validation": "governance/evidence/AMD0008-UI-VISUAL-VALIDATION.json",
+  "remaining_governance_todo": "TODO-AMD0008-GOV001"
 }
