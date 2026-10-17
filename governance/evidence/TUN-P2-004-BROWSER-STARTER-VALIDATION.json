@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "scope_id": "TUN-P2-004",
+  "validation_kind": "PENDING_COMMITTED_REVALIDATION",
+  "result": "PENDING",
+  "tested_commit_sha": null,
+  "validated_commit_sha": null,
+  "owned_behavior_paths": [
+    "start-browser.cmd",
+    "stop-browser.cmd",
+    "tools/dev/tunner-browser.ps1",
+    "tools/browser-testing/Tunner.BrowserTesting.csproj",
+    "tools/browser-testing/Program.cs",
+    "tools/validation/Test-TunnerBrowserStarter.ps1",
+    "web/playwright.browser-testing.config.ts",
+    "web/tests/browser-testing/manual-flow.spec.ts",
+    "docs/development/LOCAL_BROWSER_TESTING.md",
+    "governance/evidence/TUN-P2-004-BROWSER-STARTER-SCOPE.json"
+  ],
+  "checks": {},
+  "prior_production_regressions": {
+    "source_commit_sha": "ba81f0e3ccd92b2e1b9730c72cb37f0de489278c",
+    "receipt": "governance/evidence/history/TUN-P2-004-before-browser-starter-VALIDATION.json",
+    "method": "Production/UI source files remain byte-identical; new tool gets independent committed-source testing. No old test run is reattributed."
+  }
+}

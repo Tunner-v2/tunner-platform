@@ -1,0 +1,46 @@
+{
+  "schema_version": 1,
+  "work_item_id": "TUN-P2-004",
+  "recorded_at": "2026-10-17T22:12:14.977Z",
+  "eligibility": {
+    "native_outcome": "Actionable:true",
+    "source": "artifacts/amd0008-ui-fidelity-20261017/browser-start-next.json",
+    "context": "CURRENT"
+  },
+  "user_request": "Prepare everything and start required services for personal browser testing",
+  "explicit_selection": "Isolated local browser testing (Recommended)",
+  "authority_resolution": {
+    "outcome": "RESOLVED_EXISTING_AUTHORITY",
+    "sources": [
+      "docs/authority/current/development/06_Environment_Configuration_Secrets_and_Deployment.md",
+      "docs/authority/current/development/09_Testing_Acceptance_Evidence_and_Quality_Gates.md",
+      "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md",
+      "docs/development/P2_004_REGISTRATION_SCOPE.md",
+      "tests/Tunner.Identity.Persistence.Tests/RegistrationBffTests.cs",
+      "tests/Tunner.Identity.Persistence.Tests/FixtureAccountAgePolicies.cs"
+    ],
+    "conclusion": "Active registration slice owns a separate isolated synthetic manual-test composition. Reuse real application/BFF/security; no production policy, content publication, new visual state or closed bootstrap implementation is changed."
+  },
+  "boundary": [
+    "No new runtime dependency package or changed production entry point",
+    "Separate local-test project and named database/volume",
+    "Fixture providers never injected into Production BFF",
+    "Unrelated dirty files and Docker projects are preserved"
+  ],
+  "research": [
+    {
+      "source": "https://mailpit.axllent.org/docs/api-v1/view.html",
+      "purpose": "Primary Mailpit API reference for local acceptance testing"
+    },
+    {
+      "source": "dotnet dev-certs https --help",
+      "purpose": "Installed SDK certificate check/trust semantics"
+    }
+  ],
+  "required_checks": [
+    "Fresh start and migration readiness; actual HTTPS registration to SMTP/Mailpit proof and Personal Information completion",
+    "Idempotent start, status, guarded stop/restart and retained database data",
+    "PowerShell5.1 compatibility and occupied-port/PID/TLS/Production rejection guards",
+    "Committed exact source SHA, source-bound validation, current context, parent role review refresh"
+  ]
+}

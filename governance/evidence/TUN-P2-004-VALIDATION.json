@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "scope_id": "TUN-P2-004",
-  "validation_kind": "COMMITTED",
-  "result": "PASS",
+  "validation_kind": "PENDING_COMMITTED_REVALIDATION",
+  "result": "PENDING",
   "tested_commit_sha": "ba81f0e3ccd92b2e1b9730c72cb37f0de489278c",
   "validated_commit_sha": "ba81f0e3ccd92b2e1b9730c72cb37f0de489278c",
   "owned_behavior_paths": [
@@ -64,7 +64,17 @@
     "web/tests/registration/registration.spec.ts",
     "web/tsconfig.json",
     "web/apps/user/public/assets/ready-approved-check.svg",
-    "web/tests/contracts.test.tsx"
+    "web/tests/contracts.test.tsx",
+    "start-browser.cmd",
+    "stop-browser.cmd",
+    "tools/dev/tunner-browser.ps1",
+    "tools/browser-testing/Tunner.BrowserTesting.csproj",
+    "tools/browser-testing/Program.cs",
+    "tools/validation/Test-TunnerBrowserStarter.ps1",
+    "web/playwright.browser-testing.config.ts",
+    "web/tests/browser-testing/manual-flow.spec.ts",
+    "docs/development/LOCAL_BROWSER_TESTING.md",
+    "governance/evidence/TUN-P2-004-BROWSER-STARTER-SCOPE.json"
   ],
   "checked_at": "2026-10-17T21:40:23.710Z",
   "committed_source_sha256": {
@@ -830,6 +840,11 @@
     {
       "ref": "governance/evidence/history/TUN-P2-004-before-AMD0008-VALIDATION.json",
       "tested_commit_sha": "c6fa8e7690095f8eb2401587c407501fced29a4d",
+      "result": "PASS"
+    },
+    {
+      "ref": "governance/evidence/history/TUN-P2-004-before-browser-starter-VALIDATION.json",
+      "tested_commit_sha": "ba81f0e3ccd92b2e1b9730c72cb37f0de489278c",
       "result": "PASS"
     }
   ],

@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup><OutputType>Exe</OutputType><UseAppHost>false</UseAppHost></PropertyGroup>
+  <ItemGroup><FrameworkReference Include="Microsoft.AspNetCore.App" /></ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="../../src/Tunner.User.Bff/Tunner.User.Bff.csproj" />
+    <ProjectReference Include="../../src/Tunner.Database.Migrations/Tunner.Database.Migrations.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="../../web/apps/user/content.proposal.json" Link="browser-test-content.json" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="../../web/apps/user/dist/**/*" Link="wwwroot/registration/%(RecursiveDir)%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+</Project>
