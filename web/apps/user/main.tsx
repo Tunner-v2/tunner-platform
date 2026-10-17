@@ -93,10 +93,10 @@ function Registration({boot}:{boot:Bootstrap}) {
           <p className="subtitle"><ContentText contentKey="registration.description" /></p>
           <aside className="account-context"><strong><ContentText contentKey="registration.context.heading" /></strong><p><ContentText contentKey="registration.context.description" /></p></aside>
           <form onSubmit={start}>
-            <TextField presentation="spacious" labelKey="registration.email.label" name="email" type="email" value={email} required autoComplete="email" maxLength={256} disabled={busy||uncertain} onChange={e=>{setEmail(e.target.value);changed();}} />
-            <TextField presentation="spacious" labelKey="registration.password.label" helpKey="registration.password.help" name="password" type="password" value={password} required autoComplete="new-password" maxLength={boot.passwordMaximumLength*2} disabled={busy||uncertain} onChange={e=>{setPassword(e.target.value);changed();}} />
-            <TextField presentation="spacious" labelKey="registration.confirmation.label" name="password_confirmation" type="password" value={confirmation} required autoComplete="new-password" maxLength={boot.passwordMaximumLength*2} disabled={busy||uncertain} onChange={e=>{setConfirmation(e.target.value);changed();}} />
-            <label className="notice-ack"><input type="checkbox" checked={notices} required disabled={busy||uncertain} onChange={e=>{setNotices(e.target.checked);changed();}} /><span><ContentText contentKey="registration.notices.ack" /> <a href={boot.termsUri}><ContentText contentKey="registration.terms" /></a> <ContentText contentKey="registration.notices.and" /> <a href={boot.privacyUri}><ContentText contentKey="registration.privacy" /></a></span></label>
+            <TextField presentation="spacious" labelKey="registration.email.label" placeholderKey="registration.email.placeholder" name="email" type="email" value={email} required autoComplete="email" maxLength={256} disabled={busy||uncertain} onChange={e=>{setEmail(e.target.value);changed();}} />
+            <TextField presentation="spacious" labelKey="registration.password.label" placeholderKey="registration.password.placeholder" helpKey="registration.password.help" name="password" type="password" value={password} required autoComplete="new-password" maxLength={boot.passwordMaximumLength*2} disabled={busy||uncertain} onChange={e=>{setPassword(e.target.value);changed();}} />
+            <TextField presentation="spacious" labelKey="registration.confirmation.label" placeholderKey="registration.confirmation.placeholder" name="password_confirmation" type="password" value={confirmation} required autoComplete="new-password" maxLength={boot.passwordMaximumLength*2} disabled={busy||uncertain} onChange={e=>{setConfirmation(e.target.value);changed();}} />
+            <label className="notice-ack"><input type="checkbox" checked={notices} required disabled={busy||uncertain} onChange={e=>{setNotices(e.target.checked);changed();}} /><span className="notice-copy"><span className="notice-intro"><ContentText contentKey="registration.notices.ack" /></span><a className="notice-terms" href={boot.termsUri}><ContentText contentKey="registration.terms" /></a><span className="notice-and"><ContentText contentKey="registration.notices.and" /></span><a href={boot.privacyUri}><ContentText contentKey="registration.privacy" /></a></span></label>
             <PrimaryButton presentation="spacious" type="submit" labelKey="registration.continue" disabled={busy||uncertain} aria-busy={busy} />
           </form>
         </>:stage==='personal'?<>
@@ -118,27 +118,27 @@ function Registration({boot}:{boot:Bootstrap}) {
           <h1 ref={heading} tabIndex={-1}><ContentText contentKey="verification.heading" /></h1>
           <p className="subtitle"><ContentText contentKey="verification.description" /></p>
           <form onSubmit={verify} className="verification-form">
-            <TextField presentation="verification" labelKey="verification.code.label" name="verification_code" value={code} required autoComplete="one-time-code" inputMode="numeric" maxLength={boot.proofDigits} disabled={busy||uncertain} onChange={e=>setCode(e.target.value)} />
-            <p className="expiry"><ContentText contentKey="verification.expiry" /> {expiry&&<time dateTime={operation!.expiresAt!}>{new Intl.DateTimeFormat(boot.locale,{hour:'numeric',minute:'2-digit',timeZoneName:'short'}).format(expiry)}</time>}</p>
+            <TextField presentation="verification" labelKey="verification.code.label" placeholderKey="verification.code.label" name="verification_code" value={code} required autoComplete="one-time-code" inputMode="numeric" maxLength={boot.proofDigits} disabled={busy||uncertain} onChange={e=>setCode(e.target.value)} />
+            <p className="expiry"><ContentText contentKey="verification.expiry" /></p>
             <PrimaryButton presentation="spacious" type="submit" labelKey="verification.submit" disabled={busy||uncertain||Boolean(expiry&&now>=expiry.valueOf())} aria-busy={busy} />
             <PrimaryButton presentation="spacious" appearance="outline" labelKey="verification.resend" disabled={resendDisabled||uncertain} onClick={()=>{if(operation)void send('/registration/resend',{operationId:operation.operationId,idempotencyKey:crypto.randomUUID(),expectedVersion:operation.version});}} />
           </form>
           <aside className="verification-note"><strong><ContentText contentKey="verification.note.heading" /></strong><p><ContentText contentKey="verification.note.description" /></p></aside>
-          <button type="button" className="text-action" disabled={busy||uncertain} onClick={()=>{setStage('register');setOperation(undefined);setCode('');setError(undefined);registerKey.current=crypto.randomUUID();}}><ContentText contentKey="verification.back" /></button>
+          <p className="verification-back"><span className="wrong-email"><ContentText contentKey="verification.wrongEmail" /></span> <button type="button" className="text-action" disabled={busy||uncertain} onClick={()=>{setStage('register');setOperation(undefined);setCode('');setError(undefined);registerKey.current=crypto.randomUUID();}}><ContentText contentKey="verification.back" /></button></p>
         </>:<>
-          <div className="verified-mark"><img src="/registration/assets/ready-imgEllipse1.svg" alt="" /><span aria-hidden="true">✓</span></div>
+          <div className="verified-mark"><img src="/registration/assets/ready-imgEllipse1.svg" alt="" /><img className="approved-check" src="/registration/assets/ready-approved-check.svg" alt="" /></div>
           <h1 ref={heading} tabIndex={-1}><ContentText contentKey="registration.ready.heading" /></h1>
           <p className="subtitle"><ContentText contentKey="registration.ready.description" /></p>
           <aside className="verification-note"><strong><ContentText contentKey="registration.context.heading" /></strong><p><ContentText contentKey="registration.ready.boundary" /></p></aside>
           <p className="ready-help"><ContentText contentKey="registration.ready.next" /></p>
-          {boot.supportUri&&<a href={boot.supportUri}><ContentText contentKey="registration.support" /></a>}
+          {boot.supportUri&&<p className="ready-support"><span><ContentText contentKey="registration.ready.needHelp" /></span> <a href={boot.supportUri}><ContentText contentKey="registration.ready.contact" /></a></p>}
         </>}
         {busy&&<p role="status"><ContentText contentKey="registration.working" /></p>}
         {error&&<p className="registration-error" role="alert"><ContentText contentKey={error} />{error==='registration.error.password'&&<> {boot.passwordMinimumLength}–{boot.passwordMaximumLength}</>}</p>}
         {uncertain&&<><PrimaryButton presentation="spacious" appearance="outline" labelKey="registration.checkProgress" disabled={busy} onClick={()=>void recover()} /><button type="button" className="text-action" disabled={busy} onClick={()=>window.location.reload()}><ContentText contentKey="registration.startAgain" /></button></>}
       </section>
     </main>
-    <footer className="registration-footer"><a href={boot.privacyUri}><ContentText contentKey="registration.privacy" /></a><img src={'/registration/assets/'+scene+'-imgEllipse.svg'} alt="" /><a href={boot.termsUri}><ContentText contentKey="registration.terms" /></a>{boot.supportUri&&<><img src={'/registration/assets/'+scene+'-imgEllipse.svg'} alt="" /><a href={boot.supportUri}><ContentText contentKey="registration.support" /></a></>}</footer>
+    <footer className="registration-footer"><a href={boot.privacyUri}><ContentText contentKey="registration.privacy" /></a><img src={'/registration/assets/'+scene+'-imgEllipse.svg'} alt="" /><a href={boot.termsUri}><ContentText contentKey="registration.footer.terms" /></a>{boot.supportUri&&<><img src={'/registration/assets/'+scene+'-imgEllipse.svg'} alt="" /><a href={boot.supportUri}><ContentText contentKey="registration.footer.contact" /></a></>}</footer>
   </div>;
 }
 createRoot(document.getElementById('root')!).render(<App />);

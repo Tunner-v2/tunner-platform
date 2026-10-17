@@ -1,0 +1,106 @@
+{
+  "schema_version": 1,
+  "work_item_id": "TUN-P2-004-UI001",
+  "milestone_id": "P2",
+  "sprint_id": null,
+  "title": "Registration visual adaptations and Product Owner approval",
+  "status": "UI_REQUIRED",
+  "type": "UI_FIDELITY_DEFECT",
+  "product_acceptance_required": true,
+  "authority_refs": [
+    "docs/authority/current-authority.json",
+    "docs/authority/current/development/11_Development_Planes_Milestones_and_P0_Backlog.md",
+    "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md",
+    "docs/authority/current/development/32_Domain_API_Event_Data_and_Policy_Contract_Catalog.md",
+    "docs/authority/current/development/34_Architecture_to_Development_Traceability_Matrix.md",
+    "docs/authority/baselines/1.6.0/decisions/ADR-0006_Identity_ASPNET_Identity_OpenIddict.md",
+    "docs/authority/current/development/AMD-0002_Non-Blocking_PR_Approval_and_Continuous_Local_Execution.md",
+    "docs/authority/current/development/02_Repository_Solution_and_Module_Architecture.md",
+    "docs/authority/current/development/09_Testing_Acceptance_Evidence_and_Quality_Gates.md",
+    "docs/authority/current/development/29_Privacy_Data_Lifecycle_and_Processing_Governance_FRD.md",
+    "docs/authority/current/decisions/PDR-0011_Universal_Account_Eligibility_Age-Aware_Consent_and_Delegated_Commercial_Authority.md",
+    "docs/authority/current/decisions/AMD-0007_Universal_Registration_Age-Aware_Consent_and_Delegated_Commercial_Authority.md",
+    "docs/authority/current/decisions/AMD-0008_Approved_Figma_Visual_Fidelity_and_Product_Owner_UX_Consent.md",
+    "docs/authority/current/development/10_UI_UX_Components_Widgets_and_Plugins_Development_Rules.md",
+    "docs/authority/current/development/31_UI_UX_Screen_and_Control_Center_Requirements_Matrix.md",
+    "docs/authority/current/development/35_AI_Agent_Skill_Catalog_and_Review_Contracts.md"
+  ],
+  "flow_refs": [
+    "docs/authority/current/development/34_Architecture_to_Development_Traceability_Matrix.md"
+  ],
+  "contract_refs": [
+    "docs/authority/current/development/32_Domain_API_Event_Data_and_Policy_Contract_Catalog.md"
+  ],
+  "decision_refs": [
+    "PDR-0011",
+    "AMD-0007",
+    "AMD-0008"
+  ],
+  "acceptance_criteria": [
+    "Explicit Product Owner visual consent identifies reviewed screens, rationale, snapshot, scope, approver, date and evidence.",
+    "Approved adaptations synchronized to Figma before production UI is unblocked; full visual/accessibility/state evidence and applicable role reviews pass.",
+    "UI_VISUAL_APPROVAL remains BLOCKED for every unapproved material mismatch or missing design; historical completion is preserved."
+  ],
+  "prerequisites": [],
+  "blockers": [
+    "Final committed-candidate visual evidence/reviews and separately governed bootstrap/CI propagation verification remain pending."
+  ],
+  "impact": {
+    "ui": true,
+    "compliance": true,
+    "security": false,
+    "architecture": false
+  },
+  "activated_roles": [
+    "ui-ux-engineer",
+    "frontend-engineer",
+    "end-user-ux-reviewer",
+    "tester-qa-engineer",
+    "governance-engineer"
+  ],
+  "required_tests": [
+    "Matched viewport visual comparisons, local asset integrity, responsive/keyboard/focus/accessibility and functional regressions"
+  ],
+  "required_evidence": [
+    "governance/evidence/AMD0008-UI-AUDIT.json",
+    "docs/development/AMD0008_UI_REVIEW.md",
+    "governance/gates/UI_VISUAL_APPROVAL.yaml",
+    "governance/evidence/AMD0008-PRODUCT-OWNER-VISUAL-CONSENT.json",
+    "governance/evidence/AMD0008-FIGMA-SYNC.json"
+  ],
+  "context_policy": "TASK",
+  "todos": [],
+  "defects": [
+    "DEF-TUN-P2-004-UI-002"
+  ],
+  "authority_resolution": {
+    "schema_version": 1,
+    "outcome": "RESOLVED_EXISTING_AUTHORITY",
+    "reviewed_authority_refs": [
+      "docs/authority/current-authority.json",
+      "docs/authority/current/development/11_Development_Planes_Milestones_and_P0_Backlog.md",
+      "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md",
+      "docs/authority/current/development/32_Domain_API_Event_Data_and_Policy_Contract_Catalog.md",
+      "docs/authority/current/development/34_Architecture_to_Development_Traceability_Matrix.md",
+      "docs/authority/baselines/1.6.0/decisions/ADR-0006_Identity_ASPNET_Identity_OpenIddict.md",
+      "docs/authority/current/development/AMD-0002_Non-Blocking_PR_Approval_and_Continuous_Local_Execution.md",
+      "docs/authority/current/development/02_Repository_Solution_and_Module_Architecture.md",
+      "docs/authority/current/development/09_Testing_Acceptance_Evidence_and_Quality_Gates.md",
+      "docs/authority/current/development/29_Privacy_Data_Lifecycle_and_Processing_Governance_FRD.md",
+      "docs/authority/current/decisions/PDR-0011_Universal_Account_Eligibility_Age-Aware_Consent_and_Delegated_Commercial_Authority.md",
+      "docs/authority/current/decisions/AMD-0007_Universal_Registration_Age-Aware_Consent_and_Delegated_Commercial_Authority.md",
+      "docs/authority/current/decisions/AMD-0008_Approved_Figma_Visual_Fidelity_and_Product_Owner_UX_Consent.md",
+      "docs/authority/current/development/10_UI_UX_Components_Widgets_and_Plugins_Development_Rules.md",
+      "docs/authority/current/development/31_UI_UX_Screen_and_Control_Center_Requirements_Matrix.md",
+      "docs/authority/current/development/35_AI_Agent_Skill_Catalog_and_Review_Contracts.md",
+      "https://www.figma.com/design/apNbwvAgdn1xIxYH1oiaSC/Tunner-Platform-UX-Master?node-id=70-270",
+      "https://www.figma.com/design/apNbwvAgdn1xIxYH1oiaSC/Tunner-Platform-UX-Master?node-id=35-107"
+    ],
+    "unresolved_question": "Scoped visual consent is recorded; final validation and bootstrap propagation remain required.",
+    "conclusion": "Direct Product Owner approval resolves the four proposed visual scopes. Existing authority still requires committed-source evidence, visual review and appropriate historical revision lineage for closed bootstrap tooling.",
+    "conditional_trigger_absent": false,
+    "reviewed_at": "2026-10-17T21:22:33.272Z"
+  },
+  "created_at": "2026-10-17T21:22:33.272Z",
+  "updated_at": "2026-10-17T21:22:33.272Z"
+}

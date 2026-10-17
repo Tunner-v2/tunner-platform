@@ -25,3 +25,10 @@ test('field label/help/error IDs and noncolor text preserve associations', () =>
 test('absent optional slots stay absent', () => { const html = render(<TextField labelKey="label" value="" readOnly/>); assert.doesNotMatch(html, /aria-invalid|aria-describedby|field-error|field-help/); });
 test('generated label IDs are unique', () => { const html = render(<><TextField labelKey="a" value="" readOnly/><TextField labelKey="b" value="" readOnly/></>); const ids = [...html.matchAll(/<input[^>]*id="([^"]+)"/g)].map(m => m[1]); assert.equal(ids.length,2); assert.notEqual(ids[0],ids[1]); });
 test('nested surface providers preserve independent DOM boundaries', () => { const html = renderToStaticMarkup(wrap(<><PrimaryButton labelKey="outer"/>{wrap(<PrimaryButton labelKey="inner"/>, published, 'admin')}<PrimaryButton labelKey="outer-again"/></>)); assert.match(html, /data-tunner-surface="user"/); assert.match(html, /data-tunner-surface="admin"/); });
+
+test('placeholder requires its own published copy and provenance while retaining the visible label', () => {
+  const html=render(<TextField id="published-placeholder" labelKey="label" placeholderKey="placeholder" value="" readOnly/>);
+  assert.match(html,/for="published-placeholder"/); assert.match(html,/placeholder="&lt;placeholder&gt;"/);
+  assert.match(html,/<input[^>]*data-content-key="placeholder"/);
+  assert.throws(()=>render(<TextField labelKey="label" placeholderKey="placeholder" value="" readOnly/>,(key,context)=>key==='placeholder'?undefined:published(key,context)),/Invalid published content/);
+});

@@ -1,16 +1,22 @@
-> **Tunner Development Authority Package**  
+﻿> **Tunner Development Authority Package**  
 > **Status:** ACTIVE — LOCKED DEVELOPMENT BASELINE 1.6.0  
 > **Baseline revision date:** 2026-09-29  
 
+
 # 00 — Authority, Change Control and Documentation Governance
+
 
 ## 1. Objective
 
+
 Prevent business drift, AI hallucination, stale documentation, hidden changes and contradictory implementation.
+
 
 ## 2. Source classification
 
+
 Every requirement used during development must be classified:
+
 
 - `PRODUCT_DECISION` — explicit Product Owner decision.
 - `DEV_AUTHORITY` — approved development specification.
@@ -22,11 +28,27 @@ Every requirement used during development must be classified:
 - `ADR` — technical architecture decision.
 - `IMPLEMENTATION` — code-level choice that does not change business semantics.
 
+
 The source classification must appear in work-item traceability.
+
+
+## 2A. Domain-sensitive Figma authority and visual consent — AMD-0008
+
+
+Global active UX amendment: https://drive.google.com/file/d/1DErZZpc3rIwzfpADnDzD9a361draTuhW/view
+
+
+`UX_REFERENCE_USER` and `UX_REFERENCE_ADMIN` mean **approved visual/interaction implementation specifications** for their designed screens and shared components, not permission to use alternative aesthetics. Approved FRDs/PDRs/ADRs still govern business, identity, security, accessibility and domain behavior. If a current FRD requires a changed element, the agent must propose an Figma-consistent adaptation, document the visual/business difference and obtain explicit Product Owner approval of a material visual change before production UI acceptance. The agent may recommend but cannot approve on the owner's behalf.
+
+
+AI/developers must faithfully reproduce approved Figma backgrounds (including gradient/glow/asset layers), composition and controls; a TailAdmin default does not supersede the Tunner theme. New/unmatched screens and novel visual patterns follow `UI_REQUIRED` plus Product Owner design consent; existing screen mismatch follows `UI_FIDELITY_DEFECT`. `UI_VISUAL_APPROVAL` requires screenshot-based matched-view comparison, traceability to approved Figma nodes/tokens/components, functional/accessibility review, and approval evidence for exceptions. A generic AI review, absence of comments or engineering discretion is not approval.
+
 
 ## 3. Conflict rule
 
+
 If sources conflict:
+
 
 1. stop only the affected work item;
 2. preserve all evidence;
@@ -37,13 +59,18 @@ If sources conflict:
 7. update all downstream authorities;
 8. resume from the approved baseline.
 
+
 An AI agent must not “pick the most likely interpretation.”
+
 
 ## 4. Assumption and hallucination policy
 
+
 An assumption is any behavior not supported by an approved source.
 
+
 ### Prohibited examples
+
 
 - inventing a subscription grace period;
 - assuming Tunner owns Product entitlements;
@@ -53,13 +80,18 @@ An assumption is any behavior not supported by an approved source.
 - creating a new Product membership model in Tunner;
 - treating an SDK package version as sufficient API compatibility evidence.
 
+
 ### Allowed engineering inference
+
 
 Low-risk implementation details may be chosen when they do not change observable business behavior, security/compliance requirements or compatibility.
 
+
 Example: naming a private helper method is not a Product Decision.
 
+
 ## 5. Product Decision object
+
 
 ```yaml
 decision_id: DEC-0001
@@ -80,9 +112,12 @@ approved_at: null
 supersedes: null
 ```
 
+
 ## 6. Amendment object
 
+
 Approved specifications are never silently rewritten.
+
 
 ```yaml
 amendment_id: AMD-0001
@@ -99,29 +134,41 @@ release_impact: NONE
 approval: []
 ```
 
+
 The Git diff is evidence, but the amendment explains *why*.
+
 
 ## 7. Documentation lifecycle
 
+
 `DRAFT → BASELINE_CANDIDATE → ACTIVE → AMENDED → SUPERSEDED → ARCHIVED`
+
 
 Only ACTIVE + applicable approved amendments are implementation authority.
 
+
 ## 8. Documentation update rule
 
+
 A code/contract change that affects documented behavior cannot merge until one of these is true:
+
 
 - documentation updated in the same PR;
 - a separate documentation work item is explicitly linked and the governance policy allows deferred documentation;
 - change is internal-only and documented as `NO_DOC_IMPACT`.
 
+
 For public API, SDK, security, compliance, data schema, business lifecycle and operational behavior, deferred documentation is not allowed.
+
 
 ### Documentation maintenance correction vs authority amendment
 
+
 Not every documentation defect requires an `AMD-*`. A controlled documentation maintenance correction may be applied to the active working documentation when the change **closes an omission, contradiction, stale instruction or missing development-governance mechanic without changing approved Product/business/domain/contract/security/compliance semantics**.
 
+
 Such a correction must:
+
 
 - be explicitly authorized by the Product Owner/governance authority;
 - preserve the immutable locked baseline archive and prior document history;
@@ -130,9 +177,12 @@ Such a correction must:
 - record the reason and affected documents in Git/Drive history/evidence;
 - never be used to bypass ADR/PDR/amendment approval for a real semantic authority change.
 
+
 Use an `AMD-*`, ADR or PDR when the approved requirement/decision itself changes. Use documentation maintenance correction when the approved intent remains the same and the documentation was incomplete, stale, internally contradictory or missing implementation-governance mechanics needed to express that intent.
 
+
 Examples:
+
 
 - adding the missing post-closure `RV` lifecycle while preserving existing authority/change boundaries → documentation maintenance correction;
 - correcting a stale CLI invocation to match the already-authorized tool contract → documentation maintenance correction;
@@ -140,9 +190,13 @@ Examples:
 - changing Product financial, security, identity, provider or lifecycle semantics → authority change requiring the applicable governed decision/amendment.
 
 
+
+
 ## 9. R&D gate
 
+
 Before implementing a material external standard/library/provider/protocol:
+
 
 - search current authoritative primary sources;
 - record source URL, publication/version date and retrieval date;
@@ -151,20 +205,27 @@ Before implementing a material external standard/library/provider/protocol:
 - record decision in ADR or source register;
 - re-check immediately before implementation if information is freshness-sensitive.
 
+
 Community blogs may support understanding but cannot override normative sources.
+
 
 ## 10. Real example — ambiguous cancellation
 
+
 **Situation:** Product sends `cancel` but the architecture does not define whether access remains through period end.
 
+
 Correct action:
+
 
 - Tunner may define the billing cancellation effective time only from approved subscription contract.
 - Product entitlement effect remains Product-owned.
 - If the billing effective-time rule itself is missing, create `DEC-*`.
 - Do not implement “cancel at period end” simply because a payment provider commonly supports it.
 
+
 ## 11. Acceptance tests
+
 
 | ID | Given | When | Then |
 |---|---|---|---|
@@ -174,19 +235,27 @@ Correct action:
 | GOV-DOC-004 | current external standard required | implementation starts | source register contains authoritative research dated before implementation |
 | GOV-DOC-005 | approved intent is unchanged but documentation has an omission/stale governance mechanic | correction is authorized | documentation may be corrected without `AMD-*`; history/provenance are preserved and semantic authority does not change |
 
+
 ## 12. Current baseline closure gate
+
 
 Package 1.6.0 is the **ACTIVE — LOCKED DEVELOPMENT BASELINE**. The full-project documentation/FigJam/UI/contract/traceability closure gate in document 16 passed on 2026-09-29. P0 Governance & Development System implementation is authorized. Feature/platform planes P1–P8 remain gated by the P0 feature-development enablement gate in document 11; no plane may bypass governance readiness.
 
+
 Future packages must not use the word “ready” when material technology or Product Decisions remain unclassified.
+
 
 ## 13. Active pre-development amendments
 
+
 ### AMD-0001 — Pre-P0 Governance, Agent Skills, Context Economy & Bootstrap Completion
+
 
 Status: **APPROVED / ACTIVE — 2026-09-29**
 
+
 Baseline 1.6.0 remains the immutable locked documentation archive. AMD-0001 supplements it before repository/P0 implementation with:
+
 
 - the complete 20-role agent skill catalog;
 - governance-controlled orchestration;
@@ -197,22 +266,32 @@ Baseline 1.6.0 remains the immutable locked documentation archive. AMD-0001 supp
 - the strict P0-to-feature-development gate;
 - relocation of non-governance feature/platform implementation out of P0.
 
+
 Effective implementation authority before the next consolidated baseline is:
 
+
 `Locked Baseline 1.6.0 + approved PDR/ADR records + AMD-0001`
+
 
 The absence of a GitHub repository or GitHub Actions URL before P0 bootstrap is an expected bootstrap state, not an unresolved Product or architecture decision.
 
 
+
+
 ## 14. Authority-first decision-resolution gate — AMD-0005
+
 
 Before creating any Product Decision, ADR/technical-decision request, amendment request, `NEEDS_PRODUCT_DECISION`, `CONTRACT_REQUIRED`, `TECH_DECISION_REQUIRED` or equivalent missing-authority blocker, the contributor must complete a recorded **Authority Resolution Pass**.
 
+
 The pass must verify the current authority mirror/index and review all applicable active Development Documentation/FRDs, accepted ADR/PDR/amendment records, canonical contracts, applicable `TUN-FLOW-*`/FigJam architecture, governed work/decision history and—only where material—current primary-source R&D.
+
 
 A decision/blocker is valid only when the recorded pass identifies the exact unresolved question and proves that existing applicable Tunner authority does not already resolve it.
 
+
 Rules:
+
 
 1. Existing applicable authority is reused; do not create a duplicate decision merely to restate it.
 2. Implementation that conflicts with existing authority is a conformance/defect issue unless an intentional authority change is proposed.
@@ -221,7 +300,9 @@ Rules:
 5. Corrected/superseded governance history is preserved; authoritative history is not deleted for cleanup.
 6. A selective/trigger-based capability with no current activation trigger is not a missing-contract decision. Do not invent scope to justify the technology.
 
+
 Minimum decision authority evidence:
+
 
 ```yaml
 authority_resolution:
@@ -236,9 +317,12 @@ authority_resolution:
   evidence: []
 ```
 
+
 `verified: false`, an empty applicable authority review, or a gap already answered by active authority prevents the proposed decision/blocker from advancing.
 
+
 Acceptance:
+
 
 | ID | Given | When | Then |
 |---|---|---|---|
@@ -248,24 +332,34 @@ Acceptance:
 | GOV-AUTH-004 | external guidance differs from Tunner authority | implementation is proposed | current Tunner authority remains controlling until governed ADR/PDR/amendment changes it |
 | GOV-AUTH-005 | prior decision is later found unnecessary/conflicting | correction occurs | historical record is superseded/corrected rather than silently deleted |
 
+
 AMD-0005 canonical authority: https://drive.google.com/file/d/1M_B4TYwf5gDKaZ-1w_gMR9Nse-Fs7B87/view
+
+
 
 
 ## 15. Post-closure revision lineage
 
+
 Closed milestones and completed work items are immutable historical accomplishments. A later correction, hardening change, compatibility update, maintenance change or implementation improvement does not overwrite that closure and does not require the original record to be repeatedly reopened.
+
 
 Tunner uses append-only **Revision (`RV`) lineage** for post-closure implementation work.
 
+
 Canonical identifiers:
+
 
 - milestone revision: `<milestone_id>-RV<sequence>`, for example `P0-RV001`;
 - work-item revision: `<work_item_id>-RV<sequence>`, for example `P0-004-RV001`;
 - optional revision child/work slice: `<revision_id>-<sequence>`, for example `P0-004-RV001-001`.
 
+
 The numeric sequence is presentation/order metadata only and has no artificial maximum. Zero-padding is recommended for readability, but `RV1000` remains valid when reached.
 
+
 Revision rules:
+
 
 1. The original `CLOSED` milestone or `DONE` work item remains historically unchanged.
 2. A revision links the original scope, its reason/cause, applicable authority, defects/changes, acceptance criteria, implementation/evidence and predecessor revision where one exists.
@@ -276,11 +370,15 @@ Revision rules:
 7. Current effective project state is derived from the historical original plus applicable active/closed Revision lineage. History is never rewritten for convenience.
 8. A Revision may be non-blocking, scoped-blocking, release-blocking or security-blocking according to governed impact. An active Revision does not automatically invalidate unrelated capabilities of the original milestone.
 
+
 Representative revision types:
+
 
 `CORRECTIVE | HARDENING | IMPROVEMENT | SECURITY | PORTABILITY | COMPATIBILITY | PERFORMANCE | OPERABILITY | DOCUMENTATION | TECHNICAL_DEBT`
 
+
 Acceptance:
+
 
 | ID | Given | When | Then |
 |---|---|---|---|

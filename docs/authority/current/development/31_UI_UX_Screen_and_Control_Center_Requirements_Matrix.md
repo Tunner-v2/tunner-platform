@@ -5,7 +5,15 @@
 
 
 
+
+
+
+
 # 31 — UI/UX Screen & Control-Center Requirements Matrix
+
+
+
+
 
 
 
@@ -15,12 +23,24 @@
 
 
 
+
+
+
+
 This document closes the development requirement that **developers must not invent screens, omit required operational states, or implement generic CRUD in place of governed workflows**.
 
 
 
 
+
+
+
+
 Authority order remains:
+
+
+
+
 
 
 
@@ -32,7 +52,15 @@ Authority order remains:
 
 
 
+
+
+
+
 Figma references:
+
+
+
+
 
 
 
@@ -43,9 +71,35 @@ Figma references:
 
 
 
+
+
+
+
 Existing Figma screens are visual/workflow references. If they conflict with a domain FRD, the FRD wins and the UI must be updated before implementation of the affected flow.
 
 
+
+
+
+
+
+
+## 1A. Figma visual-fidelity authority and Product Owner approval — AMD-0008
+
+
+**Active UX governance:** https://drive.google.com/file/d/1DErZZpc3rIwzfpADnDzD9a361draTuhW/view
+
+
+Every approved Figma User/Admin screen is the **visual specification**, not optional inspiration. Existing UI must reproduce all approved visible components, including full-page backgrounds/glows/gradients/illustrations, layout, field styles/sizes, typography, visual hierarchy, borders/radii, shadows, colors, icons, navigation/footer, controls and their states. TailAdmin React defaults must not displace Tunner Figma styling. Screen implementation must map: Screen ID → active FRD/flow → Figma file/node/version → tokens/components/assets → runtime screenshot/evidence.
+
+
+For missing/changed forms, fields, states or screens, the AI may propose a brand-consistent design but requires explicit Product Owner approval before the new visual variation or materially changed layout is approved for production. Existing fields must reuse matching Figma components and tokens. Business/security behavior remains controlled by applicable FRDs; if Figma is inconsistent with a current requirement, record the precise difference, propose minimal visually compatible revision, secure Product Owner design approval, update Figma and then resume affected UI implementation. A background omission or arbitrary field restyling is `UI_FIDELITY_DEFECT`, not acceptable engineering discretion.
+
+
+Existing login `2:4`, registration `70:270`, verify-email `70:539` and account-ready `70:630` frames are approved design references with branded `bg-glow-indigo` and `bg-glow-violet` visual elements; do not omit them. Where Figma login provider labels differ from approved identity providers (Google/Microsoft first), or PDR-0011 registration behavior differs from older Figma content, preserve the visual language and submit the exact adaptation for consent.
+
+
+**Additional acceptance:** `UX-FID-001..008` under AMD-0008 are mandatory visual-evidence and Product Owner consent gates. Compare implementation screenshots at matching Figma viewport and documented responsive breakpoints; inspect backgrounds, fields, states, alignment/clipping, keyboard/accessibility. Material mismatch or unapproved deviation blocks `UI_VISUAL_APPROVAL` and production UI release. Existing implementations must be audited; missing approved styling is a defect even if functional tests pass. The `UI_REQUIRED` gate still applies to unapproved missing screens.
 
 
 ## 2. Universal screen rules
@@ -53,7 +107,15 @@ Existing Figma screens are visual/workflow references. If they conflict with a d
 
 
 
+
+
+
+
 Every actionable screen must define/display as applicable:
+
+
+
+
 
 
 
@@ -75,12 +137,24 @@ Every actionable screen must define/display as applicable:
 
 
 
+
+
+
+
 Buttons/links must not be enabled for actions the backend will always reject. A pending/approved request must not be presented as executed success.
 
 
 
 
+
+
+
+
 ## 3. User Account Center required screens
+
+
+
+
 
 
 
@@ -109,7 +183,15 @@ Buttons/links must not be enabled for actions the backend will always reject. A 
 
 
 
+
+
+
+
 ## 4. Billing Account / user billing screens
+
+
+
+
 
 
 
@@ -132,12 +214,24 @@ Buttons/links must not be enabled for actions the backend will always reject. A 
 
 
 
+
+
+
+
 ## 5. Founder/Owner/Admin landing dashboard
 
 
 
 
+
+
+
+
 `A-OVR-01 Platform Dashboard` is mandatory and must aggregate **read models only**:
+
+
+
+
 
 
 
@@ -158,12 +252,24 @@ Buttons/links must not be enabled for actions the backend will always reject. A 
 
 
 
+
+
+
+
 Dashboard actions route to governed owning screens; it is not a cross-domain mutation console.
 
 
 
 
+
+
+
+
 ## 6. Admin Control Centers
+
+
+
+
 
 
 
@@ -193,12 +299,24 @@ Dashboard actions route to governed owning screens; it is not a cross-domain mut
 
 
 
+
+
+
+
 ## 7. Finance operational case screens
 
 
 
 
+
+
+
+
 Finance must use stable case/operation threads for nontrivial actions, including:
+
+
+
+
 
 
 
@@ -217,7 +335,15 @@ Finance must use stable case/operation threads for nontrivial actions, including
 
 
 
+
+
+
+
 Every case screen must show current state, owner, due/escalation, evidence timeline, permitted next actions and completion evidence. It cannot be closed merely by a free-text “resolved” toggle when a reconciled finality requirement exists.
+
+
+
+
 
 
 
@@ -227,7 +353,15 @@ Every case screen must show current state, owner, due/escalation, evidence timel
 
 
 
+
+
+
+
 Product operators (where customer-facing portal exists) require:
+
+
+
+
 
 
 
@@ -246,7 +380,15 @@ Product operators (where customer-facing portal exists) require:
 
 
 
+
+
+
+
 Self-service cannot grant itself capabilities, production activation or exceptions beyond backend policy.
+
+
+
+
 
 
 
@@ -256,7 +398,15 @@ Self-service cannot grant itself capabilities, production activation or exceptio
 
 
 
+
+
+
+
 Financial configuration must use a guided workflow rather than a raw policy-form/JSON editor as the primary operator experience. The workflow must:
+
+
+
+
 
 
 
@@ -274,7 +424,15 @@ Financial configuration must use a guided workflow rather than a raw policy-form
 
 
 
+
+
+
+
 The UI should provide recommended defaults and contextual explanations so ordinary configuration requires minimal manual interpretation. Advanced/custom fields remain progressive-disclosure controls rather than cluttering the standard path.
+
+
+
+
 
 
 
@@ -284,7 +442,15 @@ The UI should provide recommended defaults and contextual explanations so ordina
 
 
 
+
+
+
+
 All applicable screens support:
+
+
+
+
 
 
 
@@ -303,12 +469,24 @@ All applicable screens support:
 
 
 
+
+
+
+
 ## 10. Content requirements
 
 
 
 
+
+
+
+
 User-facing copy must describe business outcome, not internal implementation. Examples:
+
+
+
+
 
 
 
@@ -322,7 +500,15 @@ User-facing copy must describe business outcome, not internal implementation. Ex
 
 
 
+
+
+
+
 ### Global managed-content requirement
+
+
+
+
 
 
 
@@ -332,7 +518,15 @@ The content rule applies globally to every applicable User, Admin/Support and Co
 
 
 
+
+
+
+
 Ordinary users must receive user-oriented language rather than technical implementation terminology. Admin/Support surfaces may expose technical terms only when necessary for the authorized operational task, and must still provide a comprehensible business/operator explanation. Raw domain constants may remain in diagnostic evidence where permission requires them, but they are not the primary presentation.
+
+
+
+
 
 
 
@@ -342,12 +536,24 @@ Every screen/component specification must identify its semantic content keys/slo
 
 
 
+
+
+
+
 `A-CNT-01 Content Management` is a required governed Admin capability providing contextual search/edit, draft, preview, locale/audience/context variants, validation, version comparison, approval where required, publish, history and rollback. AI/model assistance, when enabled, creates proposals/drafts only and cannot publish directly.
 
 
 
 
+
+
+
+
 ## 11. Accessibility and responsive behavior
+
+
+
+
 
 
 
@@ -366,12 +572,24 @@ Every screen/component specification must identify its semantic content keys/slo
 
 
 
+
+
+
+
 ## 12. UI_REQUIRED gate
 
 
 
 
+
+
+
+
 If implementation encounters an operation required by an FRD but no approved screen/component exists:
+
+
+
+
 
 
 
@@ -384,12 +602,24 @@ If implementation encounters an operation required by an FRD but no approved scr
 
 
 
+
+
+
+
 Developer may create nonvisual backend contract/tests but may not invent production UX.
 
 
 
 
+
+
+
+
 ## 13. Prototype/linking acceptance
+
+
+
+
 
 
 
@@ -406,10 +636,18 @@ Developer may create nonvisual backend contract/tests but may not invent product
 
 
 
+
+
+
+
 ## Age-aware registration and payer UX — PDR-0011 / AMD-0007
 
 
+
+
 Registration UI must keep acquisition simple: initial registration does not ask DOB or present an 18+ gate. After verified contact, Personal Information collects DOB and the server evaluates age. Under-18 users continue the ordinary Account/Product experience except where active age/consent/privacy/safety policy requires a scoped restriction.
+
+
 
 
 For paid actions, a user without independent commercial eligibility sees payer-resolution UX rather than Account rejection. The UI may offer supported paths such as authorized parent/guardian, organization/school access or an already eligible Billing Account. The sponsored user must never be presented as owner of the payer's payment method/Billing Account. Consent and payment authorization are separate user journeys/evidence.

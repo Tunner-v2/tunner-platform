@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "gate_id": "UI_VISUAL_APPROVAL",
+  "scope_type": "MILESTONE",
+  "scope_id": "P2",
+  "status": "BLOCKED",
+  "checks": [
+    "Approved Figma node/snapshot and FRD mapping for each implemented screen",
+    "All approved composition/assets/styles/states reproduced at matching viewports",
+    "Explicit scoped Product Owner consent for material adaptations; approved Figma synchronized",
+    "Responsive/accessibility/keyboard and required role evidence pass; no open fidelity defect"
+  ],
+  "required_roles": [
+    "ui-ux-engineer",
+    "frontend-engineer",
+    "end-user-ux-reviewer",
+    "tester-qa-engineer"
+  ],
+  "required_evidence": [
+    "governance/evidence/AMD0008-UI-AUDIT.json",
+    "docs/development/AMD0008_UI_REVIEW.md"
+  ],
+  "blocking_findings": [
+    "TUN-P2-004-UI001: explicit visual consent and final Figma synchronization pending",
+    "Final committed-candidate visual and required review evidence pending",
+    "Gate covers current P2 production UI acceptance; it does not approve future P2 screens"
+  ],
+  "evaluated_at": "2026-10-17T21:22:33.272Z",
+  "tool_version": "AMD0008-existing-milestone-gate-v1"
+}

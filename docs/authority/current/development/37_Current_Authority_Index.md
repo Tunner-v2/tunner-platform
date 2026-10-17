@@ -9,7 +9,23 @@
 
 
 
+
+
+
+
+
+
+
+
 # 37 — Current Authority Index
+
+
+
+
+
+
+
+
 
 
 
@@ -27,6 +43,14 @@
 
 
 
+
+
+
+
+
+
+
+
 Current implementation authority:
 
 
@@ -36,7 +60,23 @@ Current implementation authority:
 
 
 
-`Locked Documentation Baseline 1.6.0 + accepted ADR/PDR records + AMD-0001 + AMD-0002 + AMD-0003 + AMD-0004 + AMD-0005 + AMD-0007`
+
+
+
+
+
+
+
+
+`Locked Documentation Baseline 1.6.0 + accepted ADR/PDR records + AMD-0001 + AMD-0002 + AMD-0003 + AMD-0004 + AMD-0005 + AMD-0007 + AMD-0008`
+
+
+
+
+
+
+
+
 
 
 
@@ -46,6 +86,14 @@ Current implementation authority:
 
 
 Immutable baseline archive:
+
+
+
+
+
+
+
+
 
 
 
@@ -65,7 +113,23 @@ Immutable baseline archive:
 
 
 
+
+
+
+
+
+
+
+
 Active amendments:
+
+
+
+
+
+
+
+
 
 
 
@@ -106,6 +170,14 @@ Active amendments:
 
 
 
+
+
+
+
+
+
+
+
 - `AMD-0007_Universal_Registration_Age-Aware_Consent_and_Delegated_Commercial_Authority.md`
   - Drive: https://drive.google.com/file/d/1-b8la8H33y7ZJXPLdUU0SMDId00EZ4Yf/view
   - Status: `APPROVED / ACTIVE`
@@ -113,7 +185,28 @@ Active amendments:
   - Effective date: `2026-10-17`
 
 
+
+
+## 1A. Active UI design fidelity amendment — AMD-0008 (2026-10-17)
+
+
+- Authority: [AMD-0008 — Approved Figma Visual Fidelity & Product Owner UX Consent](https://drive.google.com/file/d/1DErZZpc3rIwzfpADnDzD9a361draTuhW/view).
+- Status: `APPROVED / ACTIVE`; applicability: GLOBAL to designed User/Admin/Connected Product UI and AI-assisted design implementation.
+- Figma's approved screen/components are binding for **visual presentation**, including background, glow/gradients, complete page composition, form/field/button styling, tokens, interaction states and supported responsive interpretation. Approved FRDs/PDRs control business/security behavior.
+- AI/developers cannot omit approved visual elements, replace them with TailAdmin defaults, or approve their own new/different UI. Unmatched elements, new designs or material changes require explicit Product Owner visual approval; missing designed elements constitute `UI_FIDELITY_DEFECT`.
+- Required controls: screen-to-FRD-to-Figma node traceability, screenshot-based fidelity/functional/accessibility review, evidence/approval record, production `UI_VISUAL_APPROVAL` gate. Documents 00/10/12/31/33/35/36 and README reflect this instruction, subject to implementation/mirror rollout.
+- Baseline 1.6.0 remains immutable. P0 remains authorized; P1–P8 authorization is unchanged and stays subject to the existing P0 enablement gate. AMD-0008 is a UX/design governance amendment, not completion evidence for an implementation milestone.
+
+
 ## 2. Authorization state
+
+
+
+
+
+
+
+
 
 
 
@@ -135,6 +228,14 @@ Active amendments:
 
 
 
+
+
+
+
+
+
+
+
 P1–P8 are automatically eligible for governance scheduling only after document 36's machine-verifiable P0 gate passes.
 
 
@@ -144,7 +245,23 @@ P1–P8 are automatically eligible for governance scheduling only after document
 
 
 
+
+
+
+
+
+
+
+
 ## 3. New amendment authorities
+
+
+
+
+
+
+
+
 
 
 
@@ -163,7 +280,23 @@ P1–P8 are automatically eligible for governance scheduling only after document
 
 
 
+
+
+
+
+
+
+
+
 These are mandatory under AMD-0001.
+
+
+
+
+
+
+
+
 
 
 
@@ -181,7 +314,23 @@ These are mandatory under AMD-0001.
 
 
 
+
+
+
+
+
+
+
+
 Canonical folder:
+
+
+
+
+
+
+
+
 
 
 
@@ -199,7 +348,23 @@ https://drive.google.com/drive/folders/15pVwFcj6TfbRQWAcR_54V7-DrrMJ7k28
 
 
 
+
+
+
+
+
+
+
+
 Status: `COMPLETE_READY_FOR_P0_MATERIALIZATION`.
+
+
+
+
+
+
+
+
 
 
 
@@ -228,6 +393,14 @@ Contents include:
 
 
 
+
+
+
+
+
+
+
+
 These artifacts are pre-P0 implementation inputs. Their existence does not mean the repository or governance executables already exist. `TUN-P0-001` materializes them into the repository and brings them under normal governance.
 
 
@@ -237,7 +410,23 @@ These artifacts are pre-P0 implementation inputs. Their existence does not mean 
 
 
 
+
+
+
+
+
+
+
+
 ## 4. Bootstrap-generated resources
+
+
+
+
+
+
+
+
 
 
 
@@ -261,6 +450,14 @@ These artifacts are pre-P0 implementation inputs. Their existence does not mean 
 
 
 
+
+
+
+
+
+
+
+
 These states are expected before P0 and do not reopen Product/business documentation closure.
 
 
@@ -270,7 +467,23 @@ These states are expected before P0 and do not reopen Product/business documenta
 
 
 
+
+
+
+
+
+
+
+
 ## 5. Authority order
+
+
+
+
+
+
+
+
 
 
 
@@ -292,7 +505,23 @@ These states are expected before P0 and do not reopen Product/business documenta
 
 
 
+
+
+
+
+
+
+
+
 No generated context, skill, repository summary, provider object or AI memory can override this order.
+
+
+
+
+
+
+
+
 
 
 
@@ -310,7 +539,23 @@ No generated context, skill, repository summary, provider object or AI memory ca
 
 
 
+
+
+
+
+
+
+
+
 Before repository creation, development handoff uses the locked Drive authority + all active approved amendments.
+
+
+
+
+
+
+
+
 
 
 
@@ -328,7 +573,23 @@ After repository creation, the repository imports this authority lineage and bec
 
 
 
+
+
+
+
+
+
+
+
 ## 7. Archived draft manifests
+
+
+
+
+
+
+
+
 
 
 
@@ -346,7 +607,23 @@ Any manifest explicitly named/marked `draft`, `archived`, or `development_author
 
 
 
+
+
+
+
+
+
+
+
 ## 8. Repository authority mirror
+
+
+
+
+
+
+
+
 
 
 
@@ -364,7 +641,23 @@ P0 must import this effective authority into a hash-verified repository mirror. 
 
 
 
+
+
+
+
+
+
+
+
 A mismatch between the repository mirror and approved source provenance is a governance blocker, not an AI merge decision.
+
+
+
+
+
+
+
+
 
 
 
@@ -382,7 +675,23 @@ A mismatch between the repository mirror and approved source provenance is a gov
 
 
 
+
+
+
+
+
+
+
+
 P0 begins under the limited bootstrap-governance protocol in document 36 because the governance executable does not exist at the first commit. Bootstrap mode permits only control-plane work and ends at the mandatory self-hosting cutover. The implemented governance tool must replay and validate bootstrap history before any P1–P8 work can become eligible.
+
+
+
+
+
+
+
+
 
 
 
@@ -400,7 +709,23 @@ P0 begins under the limited bootstrap-governance protocol in document 36 because
 
 
 
+
+
+
+
+
+
+
+
 AMD-0002 makes required human PR approval an integration/merge gate, not a global development execution gate. Governance continues all eligible local/branch, validation, evidence and independent work while a PR is awaiting approval. A dependent scope pauses only when its declared dependency readiness is `MERGED_TO_MAIN` or another human-authority gate is genuinely required.
+
+
+
+
+
+
+
+
 
 
 
@@ -426,7 +751,31 @@ AMD-0002 makes required human PR approval an integration/merge gate, not a globa
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ## 11. Location-independent repository rule
+
+
+
+
+
+
+
+
 
 
 
@@ -452,7 +801,31 @@ AMD-0003 prohibits hardcoded machine-specific absolute repository/solution/works
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ## 12. Shared technical primitives and flow-to-code rule
+
+
+
+
+
+
+
+
 
 
 
@@ -470,7 +843,23 @@ AMD-0004 makes flow-to-code mapping explicitly many-to-many. Repeated determinis
 
 
 
+
+
+
+
+
+
+
+
 Presentation formatters render authoritative typed values and never perform business calculations. Persisted/security-relevant/external canonical values are authoritatively validated/canonicalized server-side. Cross-runtime implementations conform to the same semantic contract/test vectors where applicable.
+
+
+
+
+
+
+
+
 
 
 
@@ -496,7 +885,31 @@ P1 executable decomposition must be capability-oriented with flow references for
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ## 13. Authority-first decision-resolution rule
+
+
+
+
+
+
+
+
 
 
 
@@ -514,7 +927,23 @@ AMD-0005 requires a machine-recorded Authority Resolution Pass before creating P
 
 
 
+
+
+
+
+
+
+
+
 Existing applicable authority must be reused. A decision/blocker is valid only when verified applicable authority has been reviewed and the exact unresolved gap remains.
+
+
+
+
+
+
+
+
 
 
 
@@ -532,7 +961,23 @@ Conditional/selective technologies do not create artificial gaps when their acti
 
 
 
+
+
+
+
+
+
+
+
 ## 14. Global applicability of active amendments
+
+
+
+
+
+
+
+
 
 
 
@@ -550,11 +995,27 @@ The cross-cutting governing principles in AMD-0001 through AMD-0005 are **GLOBAL
 
 
 
+
+
+
+
+
+
+
+
 - AMD-0001: global governance/AI/context/orchestration/evidence principles; initial bootstrap deliverables remain P0-specific establishment work.
 - AMD-0002: global PR integration vs local execution semantics.
 - AMD-0003: global repository/path portability invariant; P0 establishes the initial resolver/evidence.
 - AMD-0004: global reuse, many-to-many flow-to-code mapping, formatting and canonicalization rules.
 - AMD-0005: global authority-first decision resolution and duplicate-decision prevention.
+
+
+
+
+
+
+
+
 
 
 
@@ -580,7 +1041,31 @@ A plane, work item or incident named in an amendment may describe where the gap 
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ## 15. Post-closure Revision (`RV`) lifecycle
+
+
+
+
+
+
+
+
 
 
 
@@ -598,7 +1083,23 @@ The active Development Documentation now defines append-only post-closure Revisi
 
 
 
+
+
+
+
+
+
+
+
 Canonical forms include `P0-RV001` for milestone-level revision and `P0-004-RV001` for work-item revision. Revision sequences are monotonic and are not artificially limited.
+
+
+
+
+
+
+
+
 
 
 
@@ -616,7 +1117,23 @@ A Revision is development-work lineage, not authority lineage. It does not repla
 
 
 
+
+
+
+
+
+
+
+
 Historical `CLOSED`/`DONE` evidence is preserved. `REOPENED` remains available for the active acceptance/release lifecycle; post-closure work defaults to Revision lineage.
+
+
+
+
+
+
+
+
 
 
 
@@ -634,7 +1151,19 @@ This closes a development-lifecycle documentation gap and does not change Tunner
 
 
 
+
+
+
+
+
+
+
+
 ## Authority addition — 2026-10-17
+
+
+
+
 
 
 

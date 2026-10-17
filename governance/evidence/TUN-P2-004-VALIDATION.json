@@ -1,10 +1,10 @@
 {
   "schema_version": 1,
   "scope_id": "TUN-P2-004",
-  "validation_kind": "COMMITTED",
-  "result": "PASS",
-  "tested_commit_sha": "c6fa8e7690095f8eb2401587c407501fced29a4d",
-  "validated_commit_sha": "c6fa8e7690095f8eb2401587c407501fced29a4d",
+  "validation_kind": "PENDING_COMMITTED_REVALIDATION",
+  "result": "PENDING",
+  "tested_commit_sha": null,
+  "validated_commit_sha": null,
   "owned_behavior_paths": [
     "docs/contracts/registration-onboarding.openapi.json",
     "docs/development/P2_004_REGISTRATION.md",
@@ -62,286 +62,16 @@
     "web/pnpm-lock.yaml",
     "web/pnpm-workspace.yaml",
     "web/tests/registration/registration.spec.ts",
-    "web/tsconfig.json"
+    "web/tsconfig.json",
+    "web/apps/user/public/assets/ready-approved-check.svg",
+    "web/tests/contracts.test.tsx"
   ],
-  "checked_at": "2026-10-17T20:15:56.211Z",
-  "committed_source_sha256": {
-    "docs/contracts/registration-onboarding.openapi.json": "00fd130ed71d5a87f9bb86a936316ab1aeda52cacb0de461db0ccd49947265a6",
-    "docs/development/P2_004_REGISTRATION.md": "59819f1d739cccd11676171eac91f38b3b14d9d771ba7860ee43d1e7c06db7db",
-    "docs/development/P2_004_REGISTRATION_SCOPE.md": "399be6ec31836788ccba2f532f1880562f2fe824ec83f471a108f8cd686a4304",
-    "docs/development/PDR0011_AMD0007_IMPLEMENTATION.md": "a1e66fa29e85beba2798df5e527339a48d83012353fc94d15ba88f46c7d1f2d4",
-    "governance/evidence/TUN-P2-004-AUTHORITY-RESOLUTION.json": "cdea421ad4ac14dc956f6099d8f67d3a3a068e1ac7caa4732cec41fa4a45e959",
-    "governance/evidence/TUN-P2-004-DATA-INVENTORY.json": "7b529c7e6fde03ed432d26a9e62b79d930db78eacc2c9a6cde200e6c2a8f828b",
-    "governance/evidence/TUN-P2-004-RD-SOURCES.json": "c1fe8b18a4d6165e3e51b0660fa62f1941f5a1c05d592659000164bcdfcfca4c",
-    "governance/evidence/TUN-P2-004-UI-ALIGNMENT.json": "21dceef6c9fd5f743e24b5475c877a6e2d3501cbb9bf4fb37eea0f00a7b2639d",
-    "src/Modules/Identity/AccountPersonalInformationApplication.cs": "35883b5eeed9c731e897e5dc8d16efb8edc20f58a6a0ff1da46df603a485c481",
-    "src/Modules/Identity/AccountPersonalInformationContracts.cs": "e5a13faa8ca390153b4716a7e6ac9ce7ba782348198cdd92600f6bd9cbf40a9d",
-    "src/Modules/Identity/IdentityPersistenceDbContext.cs": "3ec99e760107209e463d83f317a5f4887543f4daea93f84f315e2e9044c1b09f",
-    "src/Modules/Identity/Migrations/20261016211325_P2Registration.Designer.cs": "9a3dcaca63065bb41b57697615116bcb0ad093419bcf4f8192cfa89aa45568ac",
-    "src/Modules/Identity/Migrations/20261016211325_P2Registration.cs": "912f90666cf4068723feaae9107a53b1b4fe10cc983cf8eab346c14fe03c0482",
-    "src/Modules/Identity/Migrations/20261017195227_Pdr0011RegistrationOnboarding.Designer.cs": "00e4f23ad49d4bb2d248658c3b23a5acea064e1126578faaa5f3920ec5b0e086",
-    "src/Modules/Identity/Migrations/20261017195227_Pdr0011RegistrationOnboarding.cs": "1b4cba00ddf0a7bf8c5140f6ef6c97e9c54e83463a4ab06558d1fe8ef54cc268",
-    "src/Modules/Identity/Migrations/IdentityPersistenceDbContextModelSnapshot.cs": "ff707980412c4624cf65fb54281cfef49d7d180cb81263ebd4033b134394d305",
-    "src/Modules/Identity/RegistrationApplication.cs": "435af60e0ec1a2d818f66c5ea8c2cb57fef29e4e34489cc30a9016d0b7608d7e",
-    "src/Modules/Identity/RegistrationContracts.cs": "fd3d6a7720e255cb5aefdcd7463d024d1b22300954cc8a18b31c8849293fa915",
-    "src/Modules/Identity/RegistrationEndpoints.cs": "f944ecdd83517fbb8c77356d6e8024173cef1747614437b416a772addd325c10",
-    "src/Modules/Identity/RegistrationPersonalInformation.cs": "ee407c04e963259520ad3ef4a0b5930f406f964e33b4ae75bf95fe77479ce664",
-    "src/Modules/Identity/RegistrationRows.cs": "dec75f3b7c0c5598853b736be89a5ccaff02ab3215b9b0a8414c45857377eec6",
-    "src/Modules/Identity/RegistrationWebContracts.cs": "6139e3bf00eb3f1e21ac287d49256bc49f78a3bcbfda8759ce9da353177a808c",
-    "src/Modules/Identity/Tunner.Identity.Persistence.csproj": "dfe3ca202ac04d779d5ab75f9db2bc07bd7b62e16b5d637e9a88597c27f93d60",
-    "src/Tunner.User.Bff/Program.cs": "e9a71d8946d6dc0035df79c1a1771e0f4bced08a0d7345db4e8a5b141aeca114",
-    "src/Tunner.User.Bff/Tunner.User.Bff.csproj": "e76424d9b4c6ef771086dd4cfa46d366c484faea2c51df08e7bc2538a53b967d",
-    "tests/Tunner.Identity.Persistence.Tests/FixtureAccountAgePolicies.cs": "e0e46bf4078c174c1155a5e2a8e509072a6b2fc43f69d41115818a3315ac2809",
-    "tests/Tunner.Identity.Persistence.Tests/RegistrationBffTests.cs": "9d7d45242670db727a469e039d7ec617ea76357a7be1892b00aa7c9baecae92b",
-    "tests/Tunner.Identity.Persistence.Tests/RegistrationTests.cs": "f4b45b6e74d63218d4605beee92c86433508862ebae8f9aa7b94ac8db19f1864",
-    "tests/Tunner.Identity.Persistence.Tests/Tunner.Identity.Persistence.Tests.csproj": "3ca1038045e80c0797c8d3449242247b53d7794754ce9e76e2ede3aa388d41a5",
-    "web/apps/user/content.proposal.json": "035900c88304a9f237777a0dffb95117f220f50cdcb4e898823a4493403c500f",
-    "web/apps/user/index.html": "534854158f1574f2411d1bdd406b465aa2e150ec11696dfb58ff53590ecb3c82",
-    "web/apps/user/main.tsx": "851160e88657d691fbb312e877500d682de73edfa91515d182ffcac03fb8df44",
-    "web/apps/user/package.json": "4de0d4d8cd6baf00ece6dcc988a7a3453f74acb758fd13c1f1908625ac6b4db4",
-    "web/apps/user/public/assets/ready-imgBgGlowIndigo.svg": "54934000b01f421419fc9a104dcf5068f48b525394d0587534600695fcc37859",
-    "web/apps/user/public/assets/ready-imgBgGlowViolet.svg": "517d39c4c5d721617a76ccd97aff0f56124cc817d032004c1d20f38d0aae0691",
-    "web/apps/user/public/assets/ready-imgEllipse.svg": "eb37331f873999d6fb122fa3594881a0a935da1b41d20101227761c4194a4a2d",
-    "web/apps/user/public/assets/ready-imgEllipse1.svg": "716e0ee704ab22493cf82ceccfb7c671d1273e61790636451df1f1eb75458bd4",
-    "web/apps/user/public/assets/register-imgBgGlowIndigo.svg": "3f46d383407fee017a39de72f9a287348d25736b2747e28874da0c7028efbb78",
-    "web/apps/user/public/assets/register-imgBgGlowViolet.svg": "6057cd9d95e1b7ee08ba24451f9b5a93e997cb96305ad1401b65718999d0f434",
-    "web/apps/user/public/assets/register-imgEllipse.svg": "eb37331f873999d6fb122fa3594881a0a935da1b41d20101227761c4194a4a2d",
-    "web/apps/user/public/assets/verify-imgBgGlowIndigo.svg": "1cad56a901f56e0bd762afb54fbcf56e388bb865cc48ffa6347704588b6d51c1",
-    "web/apps/user/public/assets/verify-imgBgGlowViolet.svg": "517d39c4c5d721617a76ccd97aff0f56124cc817d032004c1d20f38d0aae0691",
-    "web/apps/user/public/assets/verify-imgEllipse.svg": "eb37331f873999d6fb122fa3594881a0a935da1b41d20101227761c4194a4a2d",
-    "web/apps/user/registration.css": "c27db823eb934f45fbfdc6038d87c8e6e9ad4666796df03e6b23c8a0cca5c29e",
-    "web/apps/user/vite.config.ts": "2d285f80318f5a674f914294c985a697caa9cb6af501b873bf225e485f5260d0",
-    "web/package.json": "fa6b443df75b86dfb670f17087558e1c1f1147035843332c1971e263d497f231",
-    "web/packages/ui/src/content.tsx": "c3dba91b6f319d1acdad86fffecc1778e5f72494557394dc5f584b5f08207e11",
-    "web/packages/ui/src/controls.tsx": "8aa3142e094bc10b0ccb070a1426531eb99d9a471e9924d9962940b564003848",
-    "web/packages/ui/src/index.ts": "29a0d4e389fb7eab224d664f58c66a5558190b23ce8c27d25c76596a4123aa3d",
-    "web/packages/ui/styles/components.css": "6915a962f68941e08d7d428a91dbe3fe778cbb709d51ac8c1356ad3f59e5ee77",
-    "web/packages/ui/styles/tokens.generated.css": "502a42a64d996658909df4ac134509eedb82e5d23c51720e9dd40edd64ca38ed",
-    "web/packages/ui/theme.tokens.json": "427e9312d71781f837bae64a7b029b41b8ab19dcbe1e11389094a5f62c642257",
-    "web/playwright.registration.config.ts": "5b26c3c2c031f4479587a04537107f2c941b4695d11d5c2183897b93a0b67171",
-    "web/pnpm-lock.yaml": "c1103795b4092f19a7612bf3ec668da5f0a56e311e96254e695fa4c2f0a99b0f",
-    "web/pnpm-workspace.yaml": "f33994953af37b8791f5deb396eb0bfc8655e003d01d5d8467fba249964fc706",
-    "web/tests/registration/registration.spec.ts": "2245f70b0118e96ea852a1e745a80636eb3e3cc5bbcff69e7a2a9c61864536a8",
-    "web/tsconfig.json": "48c9b647a26b01f32e527fec0ab53907ba6821500ef4840691f3a5bfae7cd18b"
-  },
-  "checks": {
-    "build": "PASS: platform and pinned web build; zero .NET warnings/errors; theme CURRENT",
-    "all_platform_tests": {
-      "total": 395,
-      "passed": 395,
-      "failed": 0,
-      "not_executed": 0
-    },
-    "identity_postgres_and_https": {
-      "total": 48,
-      "passed": 48,
-      "failed": 0,
-      "not_executed": 0
-    },
-    "web_unit": {
-      "total": 25,
-      "passed": 25,
-      "failed": 0,
-      "skipped": 0
-    },
-    "browser": {
-      "total": 21,
-      "passed": 21,
-      "failed": 0,
-      "skipped": 0,
-      "registration_cases": 8,
-      "shared_ui_regression_cases": 13
-    },
-    "architecture": {
-      "total": 237,
-      "passed": 237,
-      "failed": 0
-    },
-    "privacy": "PASS: encrypted purpose/retention-bound Account DOB/name payload; no raw profile in replay/history/response/outbox/browser storage. Purge and current re-evaluation tests pass.",
-    "historical_migration": "PASS: actual populated PDR-0007 failed operation forward-upgrades with Stage LEGACY and unchanged failure/provenance; no activation. Populated downgrade is refused.",
-    "consent_commercial": "PASS: jurisdiction-scoped policy, trusted current consent, school policy permission, current age at18; consent never grants independent payer authority. Future Billing action enforcement is outside undeveloped planes.",
-    "sast_policy": "PASS: 1651 files inspected; no rule match",
-    "owned_secret_scan": "PASS: 57 owned behavior files; no rule match",
-    "nuget_audit": "PASS: no vulnerable direct/transitive Identity packages reported",
-    "pnpm_audit": "PASS: 95 dependencies; zero vulnerabilities",
-    "publish": {
-      "candidate": "c6fa8e7690095f8eb2401587c407501fced29a4d",
-      "source_files": 25,
-      "published_files": 51,
-      "compressed_variants": 26,
-      "mismatches": []
-    },
-    "authority": "VERIFIED: 192 artifacts, no findings",
-    "governance": "PASS: 667 records, zero diagnostics at tested candidate"
-  },
-  "test_suites": [
-    {
-      "suite": "identity-final",
-      "path": "artifacts/pdr0011-amd0007-20261017/final-results/identity/identity-final.trx",
-      "sha256": "28d38f7f3ecb99788244c9b9ab5fb5c7b95eb7c3673dab23876cef091f708a0f",
-      "total": 48,
-      "passed": 48,
-      "failed": 0,
-      "not_executed": 0
-    },
-    {
-      "suite": "Tunner.Accounts.Tests",
-      "path": "artifacts/pdr0011-amd0007-20261017/final-results/Tunner.Accounts.Tests/Tunner.Accounts.Tests.trx",
-      "sha256": "735fa0138015bc9f468e522f8f440b6aacaeba53f58a63aea7491a979d6530e7",
-      "total": 57,
-      "passed": 57,
-      "failed": 0,
-      "not_executed": 0
-    },
-    {
-      "suite": "Tunner.Database.IntegrationTests",
-      "path": "artifacts/pdr0011-amd0007-20261017/final-results/Tunner.Database.IntegrationTests/Tunner.Database.IntegrationTests.trx",
-      "sha256": "938b74792c57efd860f60bac8c3b3f9739e0b7f345e759a717de3017bd349c42",
-      "total": 34,
-      "passed": 34,
-      "failed": 0,
-      "not_executed": 0
-    },
-    {
-      "suite": "Tunner.Platform.ArchitectureTests",
-      "path": "artifacts/pdr0011-amd0007-20261017/final-results/Tunner.Platform.ArchitectureTests/Tunner.Platform.ArchitectureTests.trx",
-      "sha256": "7eca4fa980c7c520c760a7516acd6b6cd3341190bce92af876a8e0856be3c367",
-      "total": 237,
-      "passed": 237,
-      "failed": 0,
-      "not_executed": 0
-    },
-    {
-      "suite": "Tunner.TestHarness.Tests",
-      "path": "artifacts/pdr0011-amd0007-20261017/final-results/Tunner.TestHarness.Tests/Tunner.TestHarness.Tests.trx",
-      "sha256": "b09588ac241d5b977779b3c7c1e3c6f1e31c4a2e84ce73899a8e8b086fd494dc",
-      "total": 13,
-      "passed": 13,
-      "failed": 0,
-      "not_executed": 0
-    },
-    {
-      "suite": "Tunner.Worker.Tests",
-      "path": "artifacts/pdr0011-amd0007-20261017/final-results/Tunner.Worker.Tests/Tunner.Worker.Tests.trx",
-      "sha256": "ab2b860b87e10d582fc7cb32b9f9ac162a9a79de633edc661f3dd336adfccc94",
-      "total": 6,
-      "passed": 6,
-      "failed": 0,
-      "not_executed": 0
-    }
-  ],
-  "receipts": [
-    {
-      "path": "artifacts/pdr0011-amd0007-20261017/final-build.log",
-      "sha256": "6232495972ac8b570ae46672b6cb7f4f9dae2cd7f3dd0f81167cdd143e629cc3"
-    },
-    {
-      "path": "artifacts/pdr0011-amd0007-20261017/final-web-build.log",
-      "sha256": "626432265383515f2d1eb179eee9f7b97eccb48afd1031d8bc6f64fc286754c4"
-    },
-    {
-      "path": "artifacts/pdr0011-amd0007-20261017/final-web-unit.log",
-      "sha256": "1cc7a21d64a4b417641ff740a1b68fcf1fc02615ec298e9f82897a93b4f889e6"
-    },
-    {
-      "path": "artifacts/pdr0011-amd0007-20261017/final-browser.log",
-      "sha256": "5fe845f781db6c1d6433af57ea8df60138590831c55a79ff8eb29fab4a14cdba"
-    },
-    {
-      "path": "artifacts/pdr0011-amd0007-20261017/final-secret-scan.log",
-      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
-    },
-    {
-      "path": "artifacts/pdr0011-amd0007-20261017/final-sast-policy.log",
-      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
-    },
-    {
-      "path": "artifacts/pdr0011-amd0007-20261017/final-nuget-audit.json",
-      "sha256": "aa67bb1da01d83d39503db14eff008c05b32d3dbd7240130f470735f96f407d7"
-    },
-    {
-      "path": "artifacts/pdr0011-amd0007-20261017/final-pnpm-audit.json",
-      "sha256": "f36dd952a9b4198a9ac9f4bf497007e7ff9de07c3091615ff8a847a84d12b547"
-    },
-    {
-      "path": "artifacts/pdr0011-amd0007-20261017/final-publish.log",
-      "sha256": "3ee01fc9514f5f169988b7c1846ddfc479abd9532f427bc576a1e0cc783c19e1"
-    },
-    {
-      "path": "artifacts/pdr0011-amd0007-20261017/final-packaging.json",
-      "sha256": "a5459066d9b92625f4041e53967bb6896936ef9396c881d1733f0978286576a0"
-    },
-    {
-      "path": "artifacts/pdr0011-amd0007-20261017/final-authority.json",
-      "sha256": "7f927935ff95c0502d6170a427edacce5d7c18cc9cd058fbfa6f23e92bb447c6"
-    },
-    {
-      "path": "artifacts/pdr0011-amd0007-20261017/candidate-governance.json",
-      "sha256": "699d2fc0bce1d2c0ec2face65807ca3c3f8b095d65d9dbbd128d07f85cf7af54"
-    },
-    {
-      "path": "artifacts/pdr0011-amd0007-20261017/final-p2-003-gate.json",
-      "sha256": "10a740969cc55171ebedcb59107bdbece96d81bb35f72c71ec20ad7f336d6054"
-    },
-    {
-      "path": "artifacts/pdr0011-amd0007-20261017/final-p2-004-gate.json",
-      "sha256": "79d511b23e6e34b816c58d19a44f03ebffff49d93e36a5308d9a9038f89bec27"
-    },
-    {
-      "path": "artifacts/pdr0011-amd0007-20261017/final-governance.json",
-      "sha256": "699d2fc0bce1d2c0ec2face65807ca3c3f8b095d65d9dbbd128d07f85cf7af54"
-    },
-    {
-      "path": "artifacts/pdr0011-amd0007-20261017/final-context-verify.json",
-      "sha256": "a277f00adb4fac1306c3385104513eb26aad884e7533243473e097c9b20c947c"
-    },
-    {
-      "path": "artifacts/pdr0011-amd0007-20261017/final-authority-checkout.json",
-      "sha256": "39d6aff9ce67af772886a11c46fd3127b77ed63864490bbe1e373dbafc1427d3"
-    }
-  ],
-  "screenshots": [
-    {
-      "path": "artifacts/pdr0011-amd0007-20261017/screenshots/consent-desktop.png",
-      "sha256": "44db72068268eaa76a5948ea37b5894e7c9ef310cc64bcace2bf21c23297207e"
-    },
-    {
-      "path": "artifacts/pdr0011-amd0007-20261017/screenshots/consent-narrow.png",
-      "sha256": "79b1c2d5dbb3d6288b9430a49875bbdb00e444c234841ca91c12d8f05acc70d9"
-    },
-    {
-      "path": "artifacts/pdr0011-amd0007-20261017/screenshots/personal-desktop.png",
-      "sha256": "7f52246442bbeb444e2e2b4cf9ca7aafeaeb81b19fb4c6f4512bae7965c04b0e"
-    },
-    {
-      "path": "artifacts/pdr0011-amd0007-20261017/screenshots/personal-narrow.png",
-      "sha256": "0aab7fdff2ac00baa0cb3557174c5b2fcdf489c15cc407b10756e04e2c1f30bc"
-    },
-    {
-      "path": "artifacts/pdr0011-amd0007-20261017/screenshots/ready-desktop.png",
-      "sha256": "6cefc294c6cbd75a0d6e91d7ab182b5b7b517b27f7a40396bec7fb76e44e5fb0"
-    },
-    {
-      "path": "artifacts/pdr0011-amd0007-20261017/screenshots/ready-narrow.png",
-      "sha256": "9493c49098f6b49cd46884aef5a3e1722baf1ef93406f6a38c3fad2ab1b0f7ab"
-    },
-    {
-      "path": "artifacts/pdr0011-amd0007-20261017/screenshots/register-desktop.png",
-      "sha256": "6f0b830c891433b7c5fee850b8a52ceea1470dabd2be66947477051da5e381bb"
-    },
-    {
-      "path": "artifacts/pdr0011-amd0007-20261017/screenshots/register-narrow.png",
-      "sha256": "342f959e66574f4150a5d96d390772c513834ac0c0a945d859b9e8e03b095a5a"
-    },
-    {
-      "path": "artifacts/pdr0011-amd0007-20261017/screenshots/verify-desktop.png",
-      "sha256": "3a5c1bcc3ba75b4aee2c94df134d468b4ca49c05ade084f1f7ce7ade33ec8da6"
-    },
-    {
-      "path": "artifacts/pdr0011-amd0007-20261017/screenshots/verify-narrow.png",
-      "sha256": "7966213ba04b2992bfbebc8b1125a000eef01042e8e2327f103450b6f1d117d1"
-    }
-  ],
+  "checked_at": "2026-10-17T21:24:47.801Z",
+  "committed_source_sha256": {},
+  "checks": {},
+  "test_suites": [],
+  "receipts": [],
+  "screenshots": [],
   "failed_attempts": [
     {
       "finding": "Normal patch editor cannot update reparse-point authority path.",
@@ -362,7 +92,10 @@
     }
   ],
   "execution_mode": "Committed c6fa8e7: platform/web build, six actual container-enabled .NET project runs and pinned Edge browser suites. Prior development runs are not final evidence.",
-  "validation_limits": "Layered disposable PostgreSQL and real HTTPS BFF integration plus browser fixtures. No production provider delivery, legal/consent publication, live personal data, production key custody, complete future Billing/session/Product plane or independent human approval is claimed.",
+  "validation_limits": [
+    "Engineering regression results cannot grant Product Owner visual approval, content/legal publication or release approval.",
+    "UI_VISUAL_APPROVAL is BLOCKED; approval child TUN-P2-004-UI001 is UI_REQUIRED."
+  ],
   "lifecycle_boundary": "Engineering VALIDATION within active P2-004. No historical closure overwritten; no RV required. Product acceptance/protected-main/release remain separate.",
   "follow_on_owners": {
     "sessions": "TUN-P2-005",
@@ -781,6 +514,11 @@
         "evidence_ref": "governance/evidence/P0-RV005-VALIDATION.json",
         "boundary": "Reproduced stale audit fixture only; all 49 registration-owned behavior paths still match original tested SHA. Original registration validation is unchanged."
       }
+    },
+    {
+      "ref": "governance/evidence/history/TUN-P2-004-before-AMD0008-VALIDATION.json",
+      "tested_commit_sha": "c6fa8e7690095f8eb2401587c407501fced29a4d",
+      "result": "PASS"
     }
   ],
   "native_readiness": {

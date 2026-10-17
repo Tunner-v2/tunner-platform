@@ -3,19 +3,31 @@
 > **Closure revision date:** 2026-09-29  
 
 
+
+
 # 33 — Production Readiness, Compliance & Release Gates
+
+
 
 
 ## 1. Purpose
 
 
+
+
 This document defines objective gates for promoting Tunner from development to Sandbox, Staging and Production. “Feature complete” or “tests pass” alone is not release authority.
+
+
 
 
 ## 2. Gate model
 
 
+
+
 Every release has a `ReleaseReadinessRecord` with gate status:
+
+
 
 
 ```text
@@ -27,13 +39,21 @@ NOT_APPLICABLE_WITH_EVIDENCE
 ```
 
 
+
+
 Exceptions are time-bound, owned and approved; they cannot waive constitutional Product Decisions or critical financial/security invariants.
+
+
 
 
 ## 3. Documentation/traceability gate
 
 
+
+
 PASS requires:
+
+
 
 
 - implemented work maps to active FRD/workflow/ADR/PDR;
@@ -45,7 +65,11 @@ PASS requires:
 - no implemented behavior contradicts FigJam authority boundary without approved architecture change.
 
 
+
+
 ## 4. Code quality gate
+
+
 
 
 - build clean with warnings policy;
@@ -57,7 +81,11 @@ PASS requires:
 - package licenses and known vulnerabilities reviewed.
 
 
+
+
 ## 5. Dependency/supply-chain gate
+
+
 
 
 - dependencies pinned/locked and centrally governed;
@@ -70,7 +98,11 @@ PASS requires:
 - deployment credentials use short-lived/OIDC mechanisms where target platform supports them.
 
 
+
+
 ## 6. Security gate
+
+
 
 
 - threat model updated for materially changed capability;
@@ -85,7 +117,11 @@ PASS requires:
 - security logging/audit is sufficient and privacy-safe.
 
 
+
+
 ## 7. Identity/privacy gate
+
+
 
 
 - NIST SP 800-63 Revision 4-informed identity policy reviewed for implemented assurance/recovery behavior;
@@ -98,7 +134,11 @@ PASS requires:
 - required notices/consent/communication policy versions are active.
 
 
+
+
 ## 8. Payment/PCI, Product compliance and provider-account gate
+
+
 
 
 - PDR-0006 provider-neutral merchant/payment orchestration is implemented; Connected Product contracts contain no provider dependency;
@@ -115,10 +155,16 @@ PASS requires:
 - Tunner provider merchant/account capability gates tested independently from Product economics.
 
 
+
+
 ## 9. Market/tax/commercial gate
 
 
+
+
 For each enabled market/Product/payment-service profile:
+
+
 
 
 - `MarketEligibilityPolicy` ACTIVE;
@@ -133,10 +179,16 @@ For each enabled market/Product/payment-service profile:
 - sanctions/restricted-business/provider policy passes.
 
 
+
+
 Missing market compliance policy means **market blocked**, not release-wide fabricated defaults.
 
 
+
+
 ## 10. Finance/accounting gate
+
+
 
 
 - Chart of Accounts and posting rules active for every released financial event;
@@ -153,10 +205,16 @@ Missing market compliance policy means **market blocked**, not release-wide fabr
 - period close rehearsal passes before first financial production close.
 
 
+
+
 ## 11. Provider gate
 
 
+
+
 Stripe/Resend/R2 and any enabled provider require:
+
+
 
 
 - production account created and approved;
@@ -170,7 +228,11 @@ Stripe/Resend/R2 and any enabled provider require:
 - any production claim/configuration of provider continuity has at least two independently ACTIVE/charge-capable eligible routes and tested pre-submission routing; no continuity claim relies on an account still in verification/review/hold.
 
 
+
+
 ## 12. Data/storage gate
+
+
 
 
 - PostgreSQL migration rehearsal on production-like copy/test dataset;
@@ -181,10 +243,16 @@ Stripe/Resend/R2 and any enabled provider require:
 - Redis/RabbitMQ loss/restart tests prove business truth is recoverable/not solely stored there.
 
 
+
+
 ## 13. Reliability/DR gate
 
 
+
+
 Before Production, each critical service has approved:
+
+
 
 
 - SLO/SLI/ReliabilityBudgetPolicy;
@@ -195,10 +263,16 @@ Before Production, each critical service has approved:
 - incident/rollback/fix-forward runbook.
 
 
+
+
 Load/stress/capacity test establishes adequate headroom for planned release. No fixed universal target is invented; the approved release profile stores the measured/required values.
 
 
+
+
 ## 14. Observability gate
+
+
 
 
 - trace correlation across BFF/API/worker/DB/provider operations;
@@ -210,7 +284,11 @@ Load/stress/capacity test establishes adequate headroom for planned release. No 
 - alerts tested through a synthetic signal before Production.
 
 
+
+
 ## 15. Accessibility/UI gate
+
+
 
 
 - approved Figma screen coverage exists for released user/operator workflow;
@@ -222,10 +300,25 @@ Load/stress/capacity test establishes adequate headroom for planned release. No 
 - screenshots/evidence attached to milestone acceptance.
 
 
+
+
+## 15A. Approved Figma visual-fidelity release gate — AMD-0008
+
+
+Active global UX authority: https://drive.google.com/file/d/1DErZZpc3rIwzfpADnDzD9a361draTuhW/view. For any release containing User/Admin/Connected Product-facing UI, `UI_VISUAL_APPROVAL` is a required release-readiness result independent of functionality, accessibility and build success.
+
+
+Required proof includes an approved Figma node/version/screen ID, applicable FRD/flow/component/token mapping, runtime screenshots compared at matching reference dimensions and approved responsive breakpoints, inspection of full backgrounds/glow/gradients/assets plus typography/field/button/card/navigation/footer style, labels, state variants, alignment/overlap/clipping, keyboard/accessibility tests, and recorded visual exception approvals by the Product Owner. Missing visuals, TailAdmin default-style substitutions, unapproved changed layouts or novel components, unapproved FRD-versus-Figma adaptations and missing evidence make this gate FAIL. Never treat an omitted full-screen background as a tolerable snapshot difference. All discovered mismatches are `UI_FIDELITY_DEFECT`; missing/unapproved screens follow `UI_REQUIRED`. A passing automated test alone cannot override Product Owner approval.
+
+
 ## 16. Performance and concurrency gate
 
 
+
+
 Critical scenarios include:
+
+
 
 
 - registration/login/session validation;
@@ -239,13 +332,21 @@ Critical scenarios include:
 - privacy export/archive where relevant.
 
 
+
+
 Concurrency tests specifically target duplicate creation, version conflict, idempotency and balance/allocation invariants.
+
+
 
 
 ## 17. Environment promotion
 
 
+
+
 Immutable artifact promotion:
+
+
 
 
 ```text
@@ -253,16 +354,26 @@ DEV -> SANDBOX -> STAGING -> PRODUCTION
 ```
 
 
+
+
 Artifact is built once per release candidate and promoted with environment configuration/secret bindings. Environment-specific rebuild is prohibited except when a new artifact/version is intentionally produced and revalidated.
+
+
 
 
 Database migration is separately gated and must record exact migration set/hash.
 
 
+
+
 ## 18. Release approval
 
 
+
+
 Release approval records:
+
+
 
 
 - release version/tag/artifact digest;
@@ -277,13 +388,21 @@ Release approval records:
 - post-deploy verification result.
 
 
+
+
 Git tag/release artifact becomes immutable closure evidence.
+
+
 
 
 ## 19. Post-deployment verification
 
 
+
+
 Verify:
+
+
 
 
 - health/SLO/freshness;
@@ -297,16 +416,26 @@ Verify:
 - read models/projections current.
 
 
+
+
 Financial live-charge smoke tests require explicit safe test/production policy and are never improvised.
+
+
 
 
 ## 20. Rollback/fix-forward
 
 
+
+
 Rollback is used only when safe for code/data/provider contract. If irreversible migration or external side effect occurred, use fix-forward/reconciliation/compensating operation. Deployment rollback must never rollback a successful real-world Payment/Email/Bank side effect in database history.
 
 
+
+
 ## 21. Production blocker examples
+
+
 
 
 - unresolved Product Decision affecting released workflow;
@@ -324,7 +453,13 @@ Rollback is used only when safe for code/data/provider contract. If irreversible
 
 
 
+
+
+
+
 ## Governed presentation-content release gate
+
+
 
 
 Production promotion requires evidence that all applicable user/operator presentation surfaces use the governed content architecture rather than unmanaged screen-local mutable copy; ordinary UI does not expose raw internal implementation terminology as primary content; deterministic fallback is tested; sensitive/legal/security/payment/tax/privacy/consent content has required version/approval evidence; published-version cache invalidation is tested; historical content references remain reconstructable where required; and any model-assisted content path is proposal-only with no direct production publication authority.

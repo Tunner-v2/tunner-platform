@@ -17,7 +17,7 @@ async function fillPersonal(page:Page){await page.getByLabel('Full name',{exact:
 async function axe(page:Page){const report=await new AxeBuilder({page}).withTags(['wcag2a','wcag2aa','wcag21aa','wcag22aa']).analyze();expect(report.violations).toEqual([]);}
 async function snapshot(page:Page,name:string){await axe(page);expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);await page.screenshot({path:'test-results/registration/'+name+'.png',fullPage:true});}
 
-test('approved registration geometry, local assets/fonts and no DOB or stored sensitive state',async({page})=>{
+test('registration reference geometry, local assets/fonts and no DOB or stored sensitive state',async({page})=>{
  const external:string[]=[];page.on('request',r=>{if(!r.url().startsWith('http://127.0.0.1:5189')&&!r.url().startsWith('data:'))external.push(r.url());});await boot(page);
  expect(await page.locator('.registration-card').evaluate(e=>({width:e.getBoundingClientRect().width,height:e.getBoundingClientRect().height}))).toEqual({width:580,height:662});
  expect(await page.getByLabel('Email address').evaluate(e=>e.getBoundingClientRect().height)).toBe(52);
@@ -26,6 +26,13 @@ test('approved registration geometry, local assets/fonts and no DOB or stored se
  expect(await page.evaluate(()=>document.fonts.check('600 14px "Geist Variable"'))).toBe(true);
  expect(await page.locator('img').evaluateAll(images=>images.every(element=>{const e=element as HTMLImageElement;return e.complete&&e.naturalWidth>0&&e.getBoundingClientRect().width===e.naturalWidth;}))).toBe(true);
  expect(external).toEqual([]);await expect(page.locator('input[type=date]')).toHaveCount(0);await expect(page.getByText(/18 or older|eligibility/i)).toHaveCount(0);
+ await expect(page.getByLabel('Email address')).toHaveAttribute('placeholder','you@example.com');
+ await expect(page.getByLabel('Password',{exact:true})).toHaveAttribute('placeholder','Create a strong password');
+ await expect(page.getByLabel('Confirm password')).toHaveAttribute('placeholder','Enter your password again');
+ expect(await page.getByRole('checkbox').evaluate(e=>getComputedStyle(e).borderRadius)).toBe('5px');
+ expect(await page.getByRole('heading').evaluate(e=>getComputedStyle(e).letterSpacing)).toBe('normal');
+ await expect(page.getByRole('link',{name:'Terms of Service',exact:true})).toBeVisible();
+ await expect(page.getByRole('link',{name:'Contact Support',exact:true})).toBeVisible();
  await snapshot(page,'register-desktop');expect(await page.evaluate(()=>({local:localStorage.length,session:sessionStorage.length}))).toEqual({local:0,session:0});
 });
 test('confirmation and notice acceptance precede direct registration without age fields',async({page})=>{
@@ -36,7 +43,11 @@ test('confirmation and notice acceptance precede direct registration without age
  await page.getByLabel('Confirm password').fill('a unique fixture passphrase');await page.getByRole('button',{name:'Continue',exact:true}).click();await expect(page.getByRole('heading',{name:'Check your email'})).toBeVisible();expect(posts).toBe(1);await expect(page.locator('input[type=date]')).toHaveCount(0);
 });
 test('proof errors/version/resend lead to normal Personal Information and under18 completion without Product/session action',async({page})=>{
- await beginVerification(page);await snapshot(page,'verify-desktop');
+ await beginVerification(page);
+ await expect(page.getByLabel('Verification code')).toHaveAttribute('placeholder','Verification code');
+ await expect(page.getByText('STEP 2',{exact:true})).toBeVisible();
+ await expect(page.getByRole('button',{name:'Go back',exact:true})).toBeVisible();
+ await snapshot(page,'verify-desktop');
  let receivedVersion=0;await page.route('**/registration/verify',async route=>{receivedVersion=(route.request().postDataJSON() as {expectedVersion:number}).expectedVersion;await route.fulfill({status:400,json:{error_code:'NOT_FOUND_OR_NOT_DISCLOSABLE',current_version:2}});});
  await page.getByLabel('Verification code').fill('000000');await page.getByRole('button',{name:'Verify email',exact:true}).click();await expect(page.getByRole('alert')).toBeVisible();expect(receivedVersion).toBe(1);
  await page.route('**/registration/resend',async route=>{expect((route.request().postDataJSON() as {expectedVersion:number}).expectedVersion).toBe(2);await route.fulfill({status:202,json:pending(3)});});await page.getByRole('button',{name:'Resend code'}).click();await expect(page.getByLabel('Verification code')).toHaveValue('');
