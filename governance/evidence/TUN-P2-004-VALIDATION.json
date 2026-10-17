@@ -179,7 +179,7 @@
       "mismatches": []
     },
     "authority": "VERIFIED:195 artifacts;168 byte-exact committed authority checkout checks",
-    "governance": "PASS:671 records, zero diagnostics before final metadata"
+    "governance": "PASS:672 records, zero diagnostics; native parent engineering gate READY"
   },
   "test_suites": [
     {
@@ -833,5 +833,12 @@
       "result": "PASS"
     }
   ],
-  "native_readiness": "PENDING_POST_COMMIT_CHECK"
+  "native_readiness": {
+    "outcome": "READY",
+    "receipt": "artifacts/amd0008-ui-fidelity-20261017/final-p2-004-gate.json",
+    "source_commit_sha": "ba81f0e3ccd92b2e1b9730c72cb37f0de489278c",
+    "metadata_commit_sha": "55f750f77e8b5cdeff2f8db9a141639c0df95c19",
+    "production_milestone_visual_gate": "BLOCKED",
+    "context": "CURRENT"
+  }
 }
