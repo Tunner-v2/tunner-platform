@@ -128,7 +128,8 @@ function Stop-BrowserHost {
         $details = Get-CimInstance Win32_Process -Filter ('ProcessId=' + $State.ProcessId)
         if ($process.StartTime.ToUniversalTime().Ticks -ne $State.ProcessStartedTicks -or
             $null -eq $details -or $details.CommandLine.IndexOf($hostAssembly,[StringComparison]::OrdinalIgnoreCase) -lt 0) {
-            throw 'Refusing to stop a process that does not match this starter and its recorded start time.'
+            Write-Warning 'The saved PID now belongs to another process. It was left running; this stale host reference is ignored.'
+            return
         }
         Stop-Process -Id $State.ProcessId -ErrorAction Stop
         $process.WaitForExit(10000) | Out-Null

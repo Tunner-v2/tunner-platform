@@ -11,9 +11,9 @@ $testPort=Select-LocalPort 30100
 $testListener=[Net.Sockets.TcpListener]::new([Net.IPAddress]::Loopback,$testPort)
 try { $testListener.Start(); Assert-BrowserCheck ((Select-LocalPort $testPort) -ne $testPort) 'occupied ports are skipped without changing their owner' } finally { $testListener.Stop() }
 $wrongProcess=[pscustomobject]@{ProcessId=[Diagnostics.Process]::GetCurrentProcess().Id;ProcessStartedTicks=0}
-$refused=$false
-try { Stop-BrowserHost $wrongProcess } catch { $refused=$_.Exception.Message -like 'Refusing to stop*' }
-Assert-BrowserCheck $refused 'PID reuse or an unrelated process cannot be stopped'
+$stateBytesBefore=[IO.File]::ReadAllBytes((Join-Path $testRoot 'artifacts/browser-testing/runtime.json'))
+Stop-BrowserHost $wrongProcess
+Assert-BrowserCheck ((Get-Process -Id $wrongProcess.ProcessId -ErrorAction Stop).Id -eq $wrongProcess.ProcessId -and [Convert]::ToBase64String($stateBytesBefore) -eq [Convert]::ToBase64String([IO.File]::ReadAllBytes((Join-Path $testRoot 'artifacts/browser-testing/runtime.json')))) 'PID reuse leaves the unrelated process and saved state unchanged'
 $wrongPin=$testState | ConvertTo-Json | ConvertFrom-Json
 $wrongPin.CertificateSha256=('0'*64)
 Assert-BrowserCheck (-not (Get-BrowserStatus $wrongPin)) 'wrong TLS certificate pins are rejected'
