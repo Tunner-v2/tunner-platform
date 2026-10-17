@@ -1,10 +1,10 @@
 {
   "schema_version": 1,
   "scope_id": "TUN-P2-004",
-  "validation_kind": "PENDING_COMMITTED_REVALIDATION",
-  "result": "PENDING",
-  "tested_commit_sha": "ba81f0e3ccd92b2e1b9730c72cb37f0de489278c",
-  "validated_commit_sha": "ba81f0e3ccd92b2e1b9730c72cb37f0de489278c",
+  "validation_kind": "COMMITTED",
+  "result": "PASS",
+  "tested_commit_sha": "ccb82f64a12cfed08c4f30a0ca763e8205b704ce",
+  "validated_commit_sha": "ccb82f64a12cfed08c4f30a0ca763e8205b704ce",
   "owned_behavior_paths": [
     "docs/contracts/registration-onboarding.openapi.json",
     "docs/development/P2_004_REGISTRATION.md",
@@ -76,7 +76,7 @@
     "docs/development/LOCAL_BROWSER_TESTING.md",
     "governance/evidence/TUN-P2-004-BROWSER-STARTER-SCOPE.json"
   ],
-  "checked_at": "2026-10-17T21:40:23.710Z",
+  "checked_at": "2026-10-17T22:25:07.647Z",
   "committed_source_sha256": {
     "docs/contracts/registration-onboarding.openapi.json": "00fd130ed71d5a87f9bb86a936316ab1aeda52cacb0de461db0ccd49947265a6",
     "docs/development/P2_004_REGISTRATION.md": "59819f1d739cccd11676171eac91f38b3b14d9d771ba7860ee43d1e7c06db7db",
@@ -136,7 +136,17 @@
     "web/tests/registration/registration.spec.ts": "837244f1e7bd64b5570c9140155ab80f4a9cbbc2ac5af87aefd54a76790ea931",
     "web/tsconfig.json": "48c9b647a26b01f32e527fec0ab53907ba6821500ef4840691f3a5bfae7cd18b",
     "web/apps/user/public/assets/ready-approved-check.svg": "99551d3b4a7414c69cbee238e26768b2bc708fbe64e0f9dbf2da811600fb0d48",
-    "web/tests/contracts.test.tsx": "c00163a4a86e79637ff4fa3cc15cc2008fcdb3feb52128ea82f009563fd8c6c5"
+    "web/tests/contracts.test.tsx": "c00163a4a86e79637ff4fa3cc15cc2008fcdb3feb52128ea82f009563fd8c6c5",
+    "start-browser.cmd": "fb4a107b9718e5242752fea8d7ebe70b306a1459c3dbe33d067740b34b10923d",
+    "stop-browser.cmd": "e0257179b4d6aadf48326f9f571b9be79398ff31bb538dcd1670a8e269918307",
+    "tools/dev/tunner-browser.ps1": "fae0dc847d88394fd61418f18838c8b3c4c7bdd43e4f988ea48166e3ca4f10ad",
+    "tools/browser-testing/Tunner.BrowserTesting.csproj": "c081bb2cf3acf647a2c64ba44731e8fd075d6d31da3ca642eee2ebbc36ace60d",
+    "tools/browser-testing/Program.cs": "6dbe89a8ad5762ccead3d07924b07083ac09c8b402ac6b2645b27eebe96b9cbe",
+    "tools/validation/Test-TunnerBrowserStarter.ps1": "a227b918a26b76075b887d42ec98a7835a251a94420cadee9755871969eadb41",
+    "web/playwright.browser-testing.config.ts": "46c2f5b9f4145ca7b0d34f7efc86eb69c84342ed3104b1236121c7abc8ea3723",
+    "web/tests/browser-testing/manual-flow.spec.ts": "82777c29303ec11060cf3bafec203396d56ad4a70c30d1dbf8f5e2f7e368a588",
+    "docs/development/LOCAL_BROWSER_TESTING.md": "0b027019f565662e837b7f970811b92014583ca36e71b30e701fc65768e26bf5",
+    "governance/evidence/TUN-P2-004-BROWSER-STARTER-SCOPE.json": "7610e3fb6dd82ca9406cbef81db1bd83fc46c7a812713bae95a3ea99bb39418f"
   },
   "checks": {
     "build": "PASS: zero-warning platform and pinned web build; theme CURRENT",
@@ -144,19 +154,25 @@
       "total": 395,
       "passed": 395,
       "failed": 0,
-      "not_executed": 0
+      "not_executed": 0,
+      "tested_commit_sha": "ba81f0e3ccd92b2e1b9730c72cb37f0de489278c",
+      "provenance": "Retained original executed run;59 previous behavior paths unchanged. Dedicated current architecture and starter checks recorded separately."
     },
     "identity_postgres_and_https": {
       "total": 48,
       "passed": 48,
       "failed": 0,
-      "not_executed": 0
+      "not_executed": 0,
+      "tested_commit_sha": "ba81f0e3ccd92b2e1b9730c72cb37f0de489278c",
+      "provenance": "Retained executed run against identical production/UI source; no rerun implied."
     },
     "web_unit": {
       "total": 26,
       "passed": 26,
       "failed": 0,
-      "skipped": 0
+      "skipped": 0,
+      "tested_commit_sha": "ba81f0e3ccd92b2e1b9730c72cb37f0de489278c",
+      "provenance": "Retained executed run against identical production/UI source; no rerun implied."
     },
     "browser": {
       "total": 21,
@@ -164,7 +180,9 @@
       "failed": 0,
       "skipped": 0,
       "registration_cases": 8,
-      "shared_ui_regression_cases": 13
+      "shared_ui_regression_cases": 13,
+      "tested_commit_sha": "ba81f0e3ccd92b2e1b9730c72cb37f0de489278c",
+      "provenance": "Retained executed run against identical production/UI source; no rerun implied."
     },
     "additional_audit_runs": {
       "final_shared_states": 1,
@@ -175,7 +193,8 @@
     "architecture": {
       "total": 237,
       "passed": 237,
-      "failed": 0
+      "failed": 0,
+      "tested_commit_sha": "ccb82f64a12cfed08c4f30a0ca763e8205b704ce"
     },
     "owned_secret_scan": "PASS:67 candidate files; no rule match",
     "sast_policy": "PASS:1693 files; no rule match",
@@ -189,7 +208,15 @@
       "mismatches": []
     },
     "authority": "VERIFIED:195 artifacts;168 byte-exact committed authority checkout checks",
-    "governance": "PASS:672 records, zero diagnostics; native parent engineering gate READY"
+    "governance": "PASS:672 records, zero diagnostics; native parent engineering gate READY",
+    "browser_starter": {
+      "browser_cases": 2,
+      "safety_checks": 7,
+      "lifecycle": "PASS",
+      "receipt": "governance/evidence/TUN-P2-004-BROWSER-STARTER-VALIDATION.json",
+      "tested_commit_sha": "ccb82f64a12cfed08c4f30a0ca763e8205b704ce",
+      "normal_browser_certificate_trust": "PENDING_USER_APPROVAL"
+    }
   },
   "test_suites": [
     {
@@ -199,7 +226,8 @@
       "failed": 0,
       "not_executed": 0,
       "sha256": "845975b8f29700f17c983cf272ac06de88dfed36ac7ab7f88fa760ff9ee2481c",
-      "receipt": "artifacts/amd0008-ui-fidelity-20261017/final-results/identity.trx"
+      "receipt": "artifacts/amd0008-ui-fidelity-20261017/final-results/identity.trx",
+      "tested_commit_sha": "ba81f0e3ccd92b2e1b9730c72cb37f0de489278c"
     },
     {
       "suite": "Tunner.Accounts.Tests.trx",
@@ -208,7 +236,8 @@
       "failed": 0,
       "not_executed": 0,
       "sha256": "83f6d7242d80e0dcfa725ccc1f4c0ce0f29dc6ce48ad0b411885beb2ea15464a",
-      "receipt": "artifacts/amd0008-ui-fidelity-20261017/final-results/Tunner.Accounts.Tests.trx"
+      "receipt": "artifacts/amd0008-ui-fidelity-20261017/final-results/Tunner.Accounts.Tests.trx",
+      "tested_commit_sha": "ba81f0e3ccd92b2e1b9730c72cb37f0de489278c"
     },
     {
       "suite": "Tunner.Database.IntegrationTests.trx",
@@ -217,7 +246,8 @@
       "failed": 0,
       "not_executed": 0,
       "sha256": "aabebee983e63f867c6d539253402351080930c3fe2842c02682753957ea0f9d",
-      "receipt": "artifacts/amd0008-ui-fidelity-20261017/final-results/Tunner.Database.IntegrationTests.trx"
+      "receipt": "artifacts/amd0008-ui-fidelity-20261017/final-results/Tunner.Database.IntegrationTests.trx",
+      "tested_commit_sha": "ba81f0e3ccd92b2e1b9730c72cb37f0de489278c"
     },
     {
       "suite": "Tunner.Platform.ArchitectureTests.trx",
@@ -226,7 +256,8 @@
       "failed": 0,
       "not_executed": 0,
       "sha256": "bf6194aefb1b2e02933ec995006bea411dae382078bcd68bb9c4296ff6c2bda5",
-      "receipt": "artifacts/amd0008-ui-fidelity-20261017/final-results/Tunner.Platform.ArchitectureTests.trx"
+      "receipt": "artifacts/amd0008-ui-fidelity-20261017/final-results/Tunner.Platform.ArchitectureTests.trx",
+      "tested_commit_sha": "ba81f0e3ccd92b2e1b9730c72cb37f0de489278c"
     },
     {
       "suite": "Tunner.TestHarness.Tests.trx",
@@ -235,7 +266,8 @@
       "failed": 0,
       "not_executed": 0,
       "sha256": "3d20a094e2f26ee2cb1a5e7e02c309f2f5838da4d48405206396e6109ec9d35d",
-      "receipt": "artifacts/amd0008-ui-fidelity-20261017/final-results/Tunner.TestHarness.Tests.trx"
+      "receipt": "artifacts/amd0008-ui-fidelity-20261017/final-results/Tunner.TestHarness.Tests.trx",
+      "tested_commit_sha": "ba81f0e3ccd92b2e1b9730c72cb37f0de489278c"
     },
     {
       "suite": "Tunner.Worker.Tests.trx",
@@ -244,7 +276,8 @@
       "failed": 0,
       "not_executed": 0,
       "sha256": "94995be8b4dbb4d94de4abff8885b67d09372583894260a83d5dc16341ed7b36",
-      "receipt": "artifacts/amd0008-ui-fidelity-20261017/final-results/Tunner.Worker.Tests.trx"
+      "receipt": "artifacts/amd0008-ui-fidelity-20261017/final-results/Tunner.Worker.Tests.trx",
+      "tested_commit_sha": "ba81f0e3ccd92b2e1b9730c72cb37f0de489278c"
     }
   ],
   "receipts": [
@@ -295,6 +328,38 @@
     {
       "path": "artifacts/amd0008-ui-fidelity-20261017/final-packaging.json",
       "sha256": "44795e0a14c98d3f07c9f6546a33c346fc4a1246f5f112275ef3845b18920997"
+    },
+    {
+      "path": "artifacts/browser-starter-20261017/final-browser.log",
+      "sha256": "4b9f4f04ee0b16d8de622c0a70358c46db8c132f91ebfce32a049009b2be9e8d"
+    },
+    {
+      "path": "artifacts/browser-starter-20261017/final-guards.log",
+      "sha256": "b6899c5f0eb7a745d18df2816c79ea23d1f86c8e4a90d3d3aee52b4833e83099"
+    },
+    {
+      "path": "artifacts/browser-starter-20261017/final-idempotent-start.log",
+      "sha256": "9447fc62b27c940cf74130a6a0e6b61dbefa7c24a1b8cdc6d2478d7786fc35b2"
+    },
+    {
+      "path": "artifacts/browser-starter-20261017/final-restart.log",
+      "sha256": "7fd61108fad805a0890d3d24ab7113b2f59ceaf1222923cb0a052662b63205af"
+    },
+    {
+      "path": "artifacts/browser-starter-20261017/final-architecture-host.log",
+      "sha256": "02277d59b0fdd56b3a51f299f4b4f938de0de931b8e791f31c4a140f88d99b13"
+    },
+    {
+      "path": "artifacts/browser-starter-20261017/final-secrets.log",
+      "sha256": "c562c127b94bca2b810f554906375a67777c4b614300dad00d6463c12443bd73"
+    },
+    {
+      "path": "artifacts/browser-starter-20261017/final-sast.log",
+      "sha256": "9f31443f4cf71157036e15aedc4f2612d1ccc4a5c532c2bf11f22b5c6319495f"
+    },
+    {
+      "path": "artifacts/browser-starter-20261017/retained-data.json",
+      "sha256": "b117911b433cd170acf28f78aa91296111cb025dbb3569799d670644d335e5ef"
     }
   ],
   "screenshots": [
@@ -416,7 +481,8 @@
   "validation_limits": [
     "Current registration visual scope passes with recorded Product Owner approved exceptions.",
     "P2 milestone production visual gate stays BLOCKED for remaining scopes and bootstrap/CI propagation.",
-    "No Product content/legal, protected-main or production release approval; existing P1-RV001 remains unwaived."
+    "No Product content/legal, protected-main or production release approval; existing P1-RV001 remains unwaived.",
+    "Local starter uses explicit synthetic fixture providers; Windows localhost certificate trust awaits direct user authorization after auto-review rejection."
   ],
   "lifecycle_boundary": "Engineering VALIDATION within active P2-004. No historical closure overwritten; no RV required. Product acceptance/protected-main/release remain separate.",
   "follow_on_owners": {
@@ -848,12 +914,5 @@
       "result": "PASS"
     }
   ],
-  "native_readiness": {
-    "outcome": "READY",
-    "receipt": "artifacts/amd0008-ui-fidelity-20261017/final-p2-004-gate.json",
-    "source_commit_sha": "ba81f0e3ccd92b2e1b9730c72cb37f0de489278c",
-    "metadata_commit_sha": "55f750f77e8b5cdeff2f8db9a141639c0df95c19",
-    "production_milestone_visual_gate": "BLOCKED",
-    "context": "CURRENT"
-  }
+  "native_readiness": "PENDING_POST_COMMIT_CHECK"
 }

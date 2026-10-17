@@ -1,0 +1,192 @@
+{
+  "schema_version": 1,
+  "scope_id": "TUN-P2-004",
+  "status": "PASS",
+  "reviewed_commit_sha": "ba81f0e3ccd92b2e1b9730c72cb37f0de489278c",
+  "reviewed_at": "2026-10-17T21:41:25.337Z",
+  "review_provenance": "Executing-agent engineering role perspectives. Product Owner visual consent is separately recorded; no independent human review or release approval inferred.",
+  "visual_scope_result": "PASS_REGISTRATION_SCOPE",
+  "production_milestone_visual_gate": "BLOCKED_REMAINING_SCOPE_AND_BOOTSTRAP_PROPAGATION",
+  "reviews": [
+    {
+      "role": "full-stack-engineer",
+      "conclusion": "PASS",
+      "checks": [
+        "Shared TextField resolves optional placeholder through published-content boundary with independent provenance; existing callers remain compatible.",
+        "Business registration/profile/consent workflows unchanged;395 .NET and26 web regressions pass.",
+        "Reviewed committed source ba81f0e3ccd92b2e1b9730c72cb37f0de489278c.",
+        "Executing-agent engineering perspective; direct Product visual consent is a separate receipt."
+      ],
+      "review_ref": "governance/reviews/REV-TUN-P2-004-full-stack-engineer.yaml",
+      "skill_hash": "59adbe2133cf4ce88cbc9ca4eafce1d5a9d83b9562b6580c1571e6fc148d46b5"
+    },
+    {
+      "role": "tester-qa-engineer",
+      "conclusion": "PASS",
+      "checks": [
+        "Executed395 .NET,26 web,21 browser cases with zero failures/skips; final sources anchored to ba81f0e3ccd92b2e1b9730c72cb37f0de489278c.",
+        "Matched five updated Figma screens at1440x1024 and approved responsive/state reuse; final manual contrast complements axe.",
+        "Reviewed committed source ba81f0e3ccd92b2e1b9730c72cb37f0de489278c.",
+        "Executing-agent engineering perspective; direct Product visual consent is a separate receipt."
+      ],
+      "review_ref": "governance/reviews/REV-TUN-P2-004-tester-qa-engineer.yaml",
+      "skill_hash": "a57ce99d7ad7a3b60f17e4826c81c507c9cc208d8928285c406222eefe0a18fd"
+    },
+    {
+      "role": "solution-architect",
+      "conclusion": "PASS",
+      "checks": [
+        "Reused shared controls/theme/publication and existing Account/Identity boundaries. No backend business semantics or provider authority changed.",
+        "Approved editable Figma adaptations preserve existing compositions and original supplied SVG assets.",
+        "Reviewed committed source ba81f0e3ccd92b2e1b9730c72cb37f0de489278c.",
+        "Executing-agent engineering perspective; direct Product visual consent is a separate receipt."
+      ],
+      "review_ref": "governance/reviews/REV-TUN-P2-004-solution-architect.yaml",
+      "skill_hash": "664ffba70d0f97e75951c3548b7f8391854781e4cf90cc50fc8829543783a35b"
+    },
+    {
+      "role": "cyber-security-engineer",
+      "conclusion": "PASS",
+      "checks": [
+        "Published placeholder copy fails closed with no fallback; input text is escaped and carries correct provenance.",
+        "48 Identity/PostgreSQL/real HTTPS cases pass; secret/SAST and live dependency audits pass. No remote asset or browser credential storage introduced.",
+        "Reviewed committed source ba81f0e3ccd92b2e1b9730c72cb37f0de489278c.",
+        "Executing-agent engineering perspective; direct Product visual consent is a separate receipt."
+      ],
+      "review_ref": "governance/reviews/REV-TUN-P2-004-cyber-security-engineer.yaml",
+      "skill_hash": "2d32ff3d7fb503f29cf930e9852ed4a757bb48a08e3fa4e3f6d5a23139a47f97"
+    },
+    {
+      "role": "auditor",
+      "conclusion": "PASS",
+      "checks": [
+        "All59 owned behavior paths match tested committed source;13 unrelated dirty files are preserved.",
+        "Scoped direct Product Owner approval and Figma synchronization are recorded; old alignment, authority pins and validation/reviews retained. Current scope pass does not grant release/global propagation.",
+        "Reviewed committed source ba81f0e3ccd92b2e1b9730c72cb37f0de489278c.",
+        "Executing-agent engineering perspective; direct Product visual consent is a separate receipt."
+      ],
+      "review_ref": "governance/reviews/REV-TUN-P2-004-auditor.yaml",
+      "skill_hash": "191c796fc5df0332ff2c3c464ca611d2c6d3ffc5ba7e2807986a71ad2e40d921"
+    },
+    {
+      "role": "compliance-specialist",
+      "conclusion": "PASS",
+      "checks": [
+        "Protected DOB/profile/consent and age-aware business behavior unchanged and regressions pass.",
+        "Visual consent is scoped; DRAFT content and legal/publication/release boundaries remain explicit.",
+        "Reviewed committed source ba81f0e3ccd92b2e1b9730c72cb37f0de489278c.",
+        "Executing-agent engineering perspective; direct Product visual consent is a separate receipt."
+      ],
+      "review_ref": "governance/reviews/REV-TUN-P2-004-compliance-specialist.yaml",
+      "skill_hash": "38f8de27e31b3ae5cec070320d9b408d6f75682b024322f5e37585c76921303e"
+    },
+    {
+      "role": "sdk-engineer",
+      "conclusion": "PASS",
+      "checks": [
+        "Private BFF presentation requires approved placeholder/footer/support keys; no public Product API/SDK release is invented.",
+        "Existing strict registration/Personal Information contracts and server policy authority remain unchanged.",
+        "Reviewed committed source ba81f0e3ccd92b2e1b9730c72cb37f0de489278c.",
+        "Executing-agent engineering perspective; direct Product visual consent is a separate receipt."
+      ],
+      "review_ref": "governance/reviews/REV-TUN-P2-004-sdk-engineer.yaml",
+      "skill_hash": "c64a66b2e19bccdbf69f13c9db62e9e2cbb0403f384591a93b5b787dc33b07ae"
+    },
+    {
+      "role": "ui-ux-engineer",
+      "conclusion": "PASS",
+      "checks": [
+        "Five matched-viewport updated references inspected against actual rendered screens; original glow/background assets retained and check glyph exported from approved70:696.",
+        "Direct scoped PO approval covers layout/contrast/responsive/shared-state adaptations; final visual receipt passes registration scope. P2 gate remains blocked for remaining scope/tooling.",
+        "Reviewed committed source ba81f0e3ccd92b2e1b9730c72cb37f0de489278c.",
+        "Executing-agent engineering perspective; direct Product visual consent is a separate receipt."
+      ],
+      "review_ref": "governance/reviews/REV-TUN-P2-004-ui-ux-engineer.yaml",
+      "skill_hash": "1fc89f73cb56107fe5669d6699bb50b4ebe6481c0efea7e59eff30b350ce5800"
+    },
+    {
+      "role": "frontend-engineer",
+      "conclusion": "PASS",
+      "checks": [
+        "Shared components and theme tokens reused; local Geist/Inter and original SVGs load without external requests.",
+        "Build/type/theme and26 web/21 browser checks pass. Approved placeholder/checkbox/footer contrast is7.58:1 on white or7.24:1 on page.",
+        "Reviewed committed source ba81f0e3ccd92b2e1b9730c72cb37f0de489278c.",
+        "Executing-agent engineering perspective; direct Product visual consent is a separate receipt."
+      ],
+      "review_ref": "governance/reviews/REV-TUN-P2-004-frontend-engineer.yaml",
+      "skill_hash": "688773fc2118294031c0245fcd54ba3d560a4b4a1ee8dec98f9b7e99408cd27a"
+    },
+    {
+      "role": "end-user-ux-reviewer",
+      "conclusion": "PASS",
+      "checks": [
+        "Required normal Personal Information and trusted consent states preserve clear progression and no implementation terminology.",
+        "Keyboard/focus/error/recovery/narrow evidence and explicit approved native-control patterns are recorded; no unsupported Product grant or age-only Account rejection introduced.",
+        "Reviewed committed source ba81f0e3ccd92b2e1b9730c72cb37f0de489278c.",
+        "Executing-agent engineering perspective; direct Product visual consent is a separate receipt."
+      ],
+      "review_ref": "governance/reviews/REV-TUN-P2-004-end-user-ux-reviewer.yaml",
+      "skill_hash": "e9059d04505ec461405de6abe23d31526205f498ea815207dd042a87f82ec4d1"
+    },
+    {
+      "role": "content-writer",
+      "conclusion": "PASS",
+      "checks": [
+        "Restored Figma placeholder/badge/support/footer text via published-content keys; missing placeholder publication fails closed.",
+        "Proposal remains DRAFT outside synthetic browser fixtures; Product visual consent is not content/legal publication.",
+        "Reviewed committed source ba81f0e3ccd92b2e1b9730c72cb37f0de489278c.",
+        "Executing-agent engineering perspective; direct Product visual consent is a separate receipt."
+      ],
+      "review_ref": "governance/reviews/REV-TUN-P2-004-content-writer.yaml",
+      "skill_hash": "9683a7f4aa8e50e2922fb7bbc74238d2d7bdb8ce2a81f922030c45ce9258e130"
+    },
+    {
+      "role": "rd-engineer",
+      "conclusion": "PASS",
+      "checks": [
+        "Fresh Figma reference/asset reads and verified Drive authority support fidelity; no new external technology or business decision introduced.",
+        "Current pinned dependency vulnerability queries report no findings.",
+        "Reviewed committed source ba81f0e3ccd92b2e1b9730c72cb37f0de489278c.",
+        "Executing-agent engineering perspective; direct Product visual consent is a separate receipt."
+      ],
+      "review_ref": "governance/reviews/REV-TUN-P2-004-rd-engineer.yaml",
+      "skill_hash": "2834c223dfd847a6d7cd28f52de4113efc574d621391d059e8dc1469bdf33187"
+    },
+    {
+      "role": "devops-engineer",
+      "conclusion": "PASS",
+      "checks": [
+        "Zero-warning platform/web builds; fresh BFF package includes26 source files plus28 valid compressed variants, with no mismatch.",
+        "Local validation does not waive CI image/security/protected-main requirements or authorize deployment.",
+        "Reviewed committed source ba81f0e3ccd92b2e1b9730c72cb37f0de489278c.",
+        "Executing-agent engineering perspective; direct Product visual consent is a separate receipt."
+      ],
+      "review_ref": "governance/reviews/REV-TUN-P2-004-devops-engineer.yaml",
+      "skill_hash": "0def19cfd8cf73f9fe47851ab171d3154e7e80b4675ded65964f10856789b50c"
+    },
+    {
+      "role": "business-analyst",
+      "conclusion": "PASS",
+      "checks": [
+        "AMD-0005 pass reuses FRD/PDR business authority; AMD-0008 controls visual conflicts, resolved through actual PO scope approval.",
+        "Registration, proof, profile/DOB and conditional consent sequence remains approved; no new business semantics.",
+        "Reviewed committed source ba81f0e3ccd92b2e1b9730c72cb37f0de489278c.",
+        "Executing-agent engineering perspective; direct Product visual consent is a separate receipt."
+      ],
+      "review_ref": "governance/reviews/REV-TUN-P2-004-business-analyst.yaml",
+      "skill_hash": "ca6e24da90c6dac80b7b75124f04a81a2d590e73cc1e99781546c4aad1bca04f"
+    },
+    {
+      "role": "financial-specialist",
+      "conclusion": "PASS",
+      "checks": [
+        "Independent commercial eligibility and consent/BillingAuthority separation remain unchanged and executed regressions pass.",
+        "No Billing/Finance plane, money rule or provider-finality implementation introduced.",
+        "Reviewed committed source ba81f0e3ccd92b2e1b9730c72cb37f0de489278c.",
+        "Executing-agent engineering perspective; direct Product visual consent is a separate receipt."
+      ],
+      "review_ref": "governance/reviews/REV-TUN-P2-004-financial-specialist.yaml",
+      "skill_hash": "3c2a56c0f484c3645f61b7b2b8b437b04a9a93661ec574ea863d1c720da82723"
+    }
+  ]
+}

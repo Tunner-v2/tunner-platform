@@ -1,10 +1,11 @@
 {
   "schema_version": 1,
   "scope_id": "TUN-P2-004",
-  "validation_kind": "PENDING_COMMITTED_REVALIDATION",
-  "result": "PENDING",
-  "tested_commit_sha": null,
-  "validated_commit_sha": null,
+  "validation_kind": "COMMITTED",
+  "result": "PASS_LOCAL_TEST_MODE",
+  "tested_commit_sha": "ccb82f64a12cfed08c4f30a0ca763e8205b704ce",
+  "validated_commit_sha": "ccb82f64a12cfed08c4f30a0ca763e8205b704ce",
+  "checked_at": "2026-10-17T22:25:07.641Z",
   "owned_behavior_paths": [
     "start-browser.cmd",
     "stop-browser.cmd",
@@ -17,10 +18,110 @@
     "docs/development/LOCAL_BROWSER_TESTING.md",
     "governance/evidence/TUN-P2-004-BROWSER-STARTER-SCOPE.json"
   ],
-  "checks": {},
+  "committed_source_sha256": {
+    "start-browser.cmd": "fb4a107b9718e5242752fea8d7ebe70b306a1459c3dbe33d067740b34b10923d",
+    "stop-browser.cmd": "e0257179b4d6aadf48326f9f571b9be79398ff31bb538dcd1670a8e269918307",
+    "tools/dev/tunner-browser.ps1": "fae0dc847d88394fd61418f18838c8b3c4c7bdd43e4f988ea48166e3ca4f10ad",
+    "tools/browser-testing/Tunner.BrowserTesting.csproj": "c081bb2cf3acf647a2c64ba44731e8fd075d6d31da3ca642eee2ebbc36ace60d",
+    "tools/browser-testing/Program.cs": "6dbe89a8ad5762ccead3d07924b07083ac09c8b402ac6b2645b27eebe96b9cbe",
+    "tools/validation/Test-TunnerBrowserStarter.ps1": "a227b918a26b76075b887d42ec98a7835a251a94420cadee9755871969eadb41",
+    "web/playwright.browser-testing.config.ts": "46c2f5b9f4145ca7b0d34f7efc86eb69c84342ed3104b1236121c7abc8ea3723",
+    "web/tests/browser-testing/manual-flow.spec.ts": "82777c29303ec11060cf3bafec203396d56ad4a70c30d1dbf8f5e2f7e368a588",
+    "docs/development/LOCAL_BROWSER_TESTING.md": "0b027019f565662e837b7f970811b92014583ca36e71b30e701fc65768e26bf5",
+    "governance/evidence/TUN-P2-004-BROWSER-STARTER-SCOPE.json": "7610e3fb6dd82ca9406cbef81db1bd83fc46c7a812713bae95a3ea99bb39418f"
+  },
+  "checks": {
+    "browser": {
+      "executed": 2,
+      "passed": 2,
+      "failed": 0,
+      "skipped": 0,
+      "flow": "Actual HTTPS BFF -> PostgreSQL -> SMTP/Mailpit proof -> Personal Information -> Account Ready; foreign Origin and missing CSRF rejected."
+    },
+    "powershell_51_safety": {
+      "executed": 7,
+      "passed": 7,
+      "failed": 0,
+      "checks": [
+        "Real host readiness",
+        "Occupied port skipped",
+        "Unrelated/stale PID untouched",
+        "Wrong certificate pin rejected",
+        "Production mode refused",
+        "Isolated services/database/volume",
+        "Negative checks leave host healthy"
+      ]
+    },
+    "lifecycle": "PASS: isolated stop/restart/build/migrations and second start idempotence; own data retained",
+    "data_retention": {
+      "database": "tunner_browser_testing",
+      "accountCount": 3,
+      "volumePreserved": true
+    },
+    "architecture": {
+      "executed": 237,
+      "passed": 237,
+      "failed": 0,
+      "skipped": 0,
+      "mode": "Host certificate-store access"
+    },
+    "build": "Zero-warning host build and pinned pnpm build pass during committed-source restart.",
+    "secret_scan": "PASS:14 candidate files; no rule match",
+    "sast": "PASS:1727 files; no rule match"
+  },
+  "receipts": [
+    {
+      "path": "artifacts/browser-starter-20261017/final-browser.log",
+      "sha256": "4b9f4f04ee0b16d8de622c0a70358c46db8c132f91ebfce32a049009b2be9e8d"
+    },
+    {
+      "path": "artifacts/browser-starter-20261017/final-guards.log",
+      "sha256": "b6899c5f0eb7a745d18df2816c79ea23d1f86c8e4a90d3d3aee52b4833e83099"
+    },
+    {
+      "path": "artifacts/browser-starter-20261017/final-idempotent-start.log",
+      "sha256": "9447fc62b27c940cf74130a6a0e6b61dbefa7c24a1b8cdc6d2478d7786fc35b2"
+    },
+    {
+      "path": "artifacts/browser-starter-20261017/final-restart.log",
+      "sha256": "7fd61108fad805a0890d3d24ab7113b2f59ceaf1222923cb0a052662b63205af"
+    },
+    {
+      "path": "artifacts/browser-starter-20261017/final-architecture-host.log",
+      "sha256": "02277d59b0fdd56b3a51f299f4b4f938de0de931b8e791f31c4a140f88d99b13"
+    },
+    {
+      "path": "artifacts/browser-starter-20261017/final-secrets.log",
+      "sha256": "c562c127b94bca2b810f554906375a67777c4b614300dad00d6463c12443bd73"
+    },
+    {
+      "path": "artifacts/browser-starter-20261017/final-sast.log",
+      "sha256": "9f31443f4cf71157036e15aedc4f2612d1ccc4a5c532c2bf11f22b5c6319495f"
+    },
+    {
+      "path": "artifacts/browser-starter-20261017/retained-data.json",
+      "sha256": "b117911b433cd170acf28f78aa91296111cb025dbb3569799d670644d335e5ef"
+    }
+  ],
   "prior_production_regressions": {
     "source_commit_sha": "ba81f0e3ccd92b2e1b9730c72cb37f0de489278c",
     "receipt": "governance/evidence/history/TUN-P2-004-before-browser-starter-VALIDATION.json",
-    "method": "Production/UI source files remain byte-identical; new tool gets independent committed-source testing. No old test run is reattributed."
-  }
+    "owned_paths": 59,
+    "byte_identical_at_new_source": true,
+    "method": "395 .NET/26 web/21 fixture browser results retain their original tested SHA;237 architecture cases and dedicated real browser/lifecycle checks execute for this starter."
+  },
+  "operator_https_trust": {
+    "status": "PENDING_EXPLICIT_USER_APPROVAL",
+    "action": "Trust the existing localhost ASP.NET development certificate in Windows",
+    "auto_review": "Rejected because persistent certificate trust is a security-setting change not explicitly authorized; no workaround or indirect trust operation was attempted.",
+    "current_mode": "Application is running. Pinned local readiness and browser automation work; normal browser trust requires explicit authorization."
+  },
+  "development_failures": [
+    "Initial restricted NuGet audit restore could not reach nuget.org; host-authorized pinned restore passed.",
+    "Web-SDK duplicate static assets resolved using the existing console-host pattern.",
+    "Mailpit array expansion corrected and generated Compose config validated before building.",
+    "Platform/outbox migrations added before Identity, reusing the established integration fixture order. Development browser failures are retained separately; final tests assert the actual HTTP202 result before progression.",
+    "Restricted architecture run failed52 certificate-fixture cases; host-authorized run passed237 without code or expectation changes."
+  ],
+  "lifecycle_boundary": "P2 remains active VALIDATION; production policies/content/legal/visual/release approvals and existing TODO-AMD0008-GOV001 are unchanged."
 }

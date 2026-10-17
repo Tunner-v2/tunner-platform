@@ -5,7 +5,7 @@
   "role": "financial-specialist",
   "status": "PASS",
   "result": "PASS",
-  "reviewed_at": "2026-10-17T21:41:25.337Z",
+  "reviewed_at": "2026-10-17T22:25:13.240Z",
   "skill_id": "financial-specialist",
   "skill_version": "1.0.0",
   "skill_hash": "3c2a56c0f484c3645f61b7b2b8b437b04a9a93661ec574ea863d1c720da82723",
@@ -31,19 +31,22 @@
     "docs/development/P2_004_REGISTRATION.md",
     "docs/contracts/registration-onboarding.openapi.json",
     "docs/development/PDR0011_AMD0007_IMPLEMENTATION.md",
-    "docs/development/AMD0008_UI_REVIEW.md"
+    "docs/development/AMD0008_UI_REVIEW.md",
+    "docs/development/LOCAL_BROWSER_TESTING.md"
   ],
   "evidence_refs": [
     "governance/evidence/TUN-P2-004-VALIDATION.json",
     "governance/evidence/PDR0011-AMD0007-IMPACT-AUDIT.json",
     "governance/evidence/AMD0008-UI-VISUAL-VALIDATION.json",
-    "governance/evidence/AMD0008-PRODUCT-OWNER-VISUAL-CONSENT.json"
+    "governance/evidence/AMD0008-PRODUCT-OWNER-VISUAL-CONSENT.json",
+    "governance/evidence/TUN-P2-004-BROWSER-STARTER-VALIDATION.json"
   ],
   "findings": [
-    "Independent commercial eligibility and consent/BillingAuthority separation remain unchanged and executed regressions pass.",
-    "No Billing/Finance plane, money rule or provider-finality implementation introduced.",
-    "Reviewed committed source ba81f0e3ccd92b2e1b9730c72cb37f0de489278c.",
-    "Executing-agent engineering perspective; direct Product visual consent is a separate receipt."
+    "Prior registration/UI behavior and approved visual scope are unchanged;59 prior paths match their original tested source.",
+    "Reviewed separate local browser-test composition at ccb82f64a12cfed08c4f30a0ca763e8205b704ce:2 real browser cases,7 safety checks,237 host architecture cases and lifecycle/build checks pass.",
+    "Synthetic providers are Development-only; no production policy/content publication, new Figma layout, or production security bypass.",
+    "Local certificate trust was auto-review rejected and remains pending explicit user approval; no alternative trust operation was attempted.",
+    "Executing-agent engineering role perspective; no independent human or release approval inferred."
   ],
   "blocking_findings": [],
   "required_actions": [],
