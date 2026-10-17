@@ -1,64 +1,17 @@
 {
   "schema_version": 1,
-  "evidence_id": "TUN-P2-002-ROLE-REVIEWS",
-  "scope_type": "WORK_ITEM",
   "scope_id": "TUN-P2-002",
   "status": "PASS",
-  "reviewed_commit_sha": "99c0cf268b368ba64b4984dce6172a00a2546718",
-  "reviewed_at": "2026-10-16T20:19:00.112Z",
+  "reviewed_commit_sha": "16b6e40615cde8804570ca7269784435c692305e",
+  "reviewed_at": "2026-10-17T19:47:34.589Z",
   "reviews": [
-    {
-      "role": "full-stack-engineer",
-      "conclusion": "PASS",
-      "checks": [
-        "The eligibility implementation, tests and module/project declarations are unchanged. The shared solution adds the separate persistence module; all 39 eligibility tests and 345 platform tests pass at the new candidate.",
-        "Revalidation at 99c0cf268b368ba64b4984dce6172a00a2546718 for the P2-003 additive shared solution change. Executing-agent engineering role review; Product, legal, protected-main and release approvals remain separate."
-      ],
-      "findings": [],
-      "review_ref": "governance/reviews/REV-TUN-P2-002-full-stack-engineer.yaml",
-      "skill_hash": "59adbe2133cf4ce88cbc9ca4eafce1d5a9d83b9562b6580c1571e6fc148d46b5"
-    },
-    {
-      "role": "tester-qa-engineer",
-      "conclusion": "PASS",
-      "checks": [
-        "All 39 eligibility tests reran and pass at this SHA, including leap/birthday/calendar/UTC, invalid input, provenance and DOB minimization. The full six-suite aggregate is 345 passed, zero failed/skipped.",
-        "Revalidation at 99c0cf268b368ba64b4984dce6172a00a2546718 for the P2-003 additive shared solution change. Executing-agent engineering role review; Product, legal, protected-main and release approvals remain separate."
-      ],
-      "findings": [],
-      "review_ref": "governance/reviews/REV-TUN-P2-002-tester-qa-engineer.yaml",
-      "skill_hash": "a57ce99d7ad7a3b60f17e4826c81c507c9cc208d8928285c406222eefe0a18fd"
-    },
-    {
-      "role": "solution-architect",
-      "conclusion": "PASS",
-      "checks": [
-        "Accounts remains framework-free; the new AccountSnapshot is a domain DTO and the Identity framework depends inward on Accounts. The additive solution extension is compiled and 237 architecture tests pass.",
-        "Revalidation at 99c0cf268b368ba64b4984dce6172a00a2546718 for the P2-003 additive shared solution change. Executing-agent engineering role review; Product, legal, protected-main and release approvals remain separate."
-      ],
-      "findings": [],
-      "review_ref": "governance/reviews/REV-TUN-P2-002-solution-architect.yaml",
-      "skill_hash": "664ffba70d0f97e75951c3548b7f8391854781e4cf90cc50fc8829543783a35b"
-    },
-    {
-      "role": "cyber-security-engineer",
-      "conclusion": "PASS",
-      "checks": [
-        "Eligibility source/project/test blobs are unchanged from the prior reviewed candidate, retaining the prior scan evidence. No browser clock, new eligibility endpoint or raw DOB storage was introduced. The new Identity graph is separately scanned; P1 container findings remain open.",
-        "Revalidation at 99c0cf268b368ba64b4984dce6172a00a2546718 for the P2-003 additive shared solution change. Executing-agent engineering role review; Product, legal, protected-main and release approvals remain separate."
-      ],
-      "findings": [],
-      "review_ref": "governance/reviews/REV-TUN-P2-002-cyber-security-engineer.yaml",
-      "skill_hash": "2d32ff3d7fb503f29cf930e9852ed4a757bb48a08e3fa4e3f6d5a23139a47f97"
-    },
     {
       "role": "auditor",
       "conclusion": "PASS",
       "checks": [
-        "The active VALIDATION record is revalidated rather than closed history rewritten. The original d856dde validation and review remain in prior evidence, the same ownership array is present in candidate 99c0cf268b368ba64b4984dce6172a00a2546718, and all 345 tests pass at that SHA.",
-        "Revalidation at 99c0cf268b368ba64b4984dce6172a00a2546718 for the P2-003 additive shared solution change. Executing-agent engineering role review; Product, legal, protected-main and release approvals remain separate."
+        "PDR-0011 current classification separates normal Account lifecycle, policy-scoped consent and independent commercial eligibility. Historical PDR-0007 adapter remains readable; shared calendar arithmetic is reused.",
+        "57 actual unit tests pass without skips at committed candidate 16b6e40615cde8804570ca7269784435c692305e. Executing-agent engineering role perspective; no Product/release/legal acceptance is implied."
       ],
-      "findings": [],
       "review_ref": "governance/reviews/REV-TUN-P2-002-auditor.yaml",
       "skill_hash": "191c796fc5df0332ff2c3c464ca611d2c6d3ffc5ba7e2807986a71ad2e40d921"
     },
@@ -66,15 +19,53 @@
       "role": "compliance-specialist",
       "conclusion": "PASS",
       "checks": [
-        "The unchanged eligibility result still omits DOB and retains only approved derived evidence. Persistence introduced by the separate slice has a reviewed inactive data inventory; no new retention/legal/Product acceptance is inferred.",
-        "Revalidation at 99c0cf268b368ba64b4984dce6172a00a2546718 for the P2-003 additive shared solution change. Executing-agent engineering role review; Product, legal, protected-main and release approvals remain separate."
+        "PDR-0011 current classification separates normal Account lifecycle, policy-scoped consent and independent commercial eligibility. Historical PDR-0007 adapter remains readable; shared calendar arithmetic is reused.",
+        "57 actual unit tests pass without skips at committed candidate 16b6e40615cde8804570ca7269784435c692305e. Executing-agent engineering role perspective; no Product/release/legal acceptance is implied."
       ],
-      "findings": [],
       "review_ref": "governance/reviews/REV-TUN-P2-002-compliance-specialist.yaml",
       "skill_hash": "38f8de27e31b3ae5cec070320d9b408d6f75682b024322f5e37585c76921303e"
+    },
+    {
+      "role": "cyber-security-engineer",
+      "conclusion": "PASS",
+      "checks": [
+        "PDR-0011 current classification separates normal Account lifecycle, policy-scoped consent and independent commercial eligibility. Historical PDR-0007 adapter remains readable; shared calendar arithmetic is reused.",
+        "57 actual unit tests pass without skips at committed candidate 16b6e40615cde8804570ca7269784435c692305e. Executing-agent engineering role perspective; no Product/release/legal acceptance is implied."
+      ],
+      "review_ref": "governance/reviews/REV-TUN-P2-002-cyber-security-engineer.yaml",
+      "skill_hash": "2d32ff3d7fb503f29cf930e9852ed4a757bb48a08e3fa4e3f6d5a23139a47f97"
+    },
+    {
+      "role": "full-stack-engineer",
+      "conclusion": "PASS",
+      "checks": [
+        "PDR-0011 current classification separates normal Account lifecycle, policy-scoped consent and independent commercial eligibility. Historical PDR-0007 adapter remains readable; shared calendar arithmetic is reused.",
+        "57 actual unit tests pass without skips at committed candidate 16b6e40615cde8804570ca7269784435c692305e. Executing-agent engineering role perspective; no Product/release/legal acceptance is implied."
+      ],
+      "review_ref": "governance/reviews/REV-TUN-P2-002-full-stack-engineer.yaml",
+      "skill_hash": "59adbe2133cf4ce88cbc9ca4eafce1d5a9d83b9562b6580c1571e6fc148d46b5"
+    },
+    {
+      "role": "solution-architect",
+      "conclusion": "PASS",
+      "checks": [
+        "PDR-0011 current classification separates normal Account lifecycle, policy-scoped consent and independent commercial eligibility. Historical PDR-0007 adapter remains readable; shared calendar arithmetic is reused.",
+        "57 actual unit tests pass without skips at committed candidate 16b6e40615cde8804570ca7269784435c692305e. Executing-agent engineering role perspective; no Product/release/legal acceptance is implied."
+      ],
+      "review_ref": "governance/reviews/REV-TUN-P2-002-solution-architect.yaml",
+      "skill_hash": "664ffba70d0f97e75951c3548b7f8391854781e4cf90cc50fc8829543783a35b"
+    },
+    {
+      "role": "tester-qa-engineer",
+      "conclusion": "PASS",
+      "checks": [
+        "PDR-0011 current classification separates normal Account lifecycle, policy-scoped consent and independent commercial eligibility. Historical PDR-0007 adapter remains readable; shared calendar arithmetic is reused.",
+        "57 actual unit tests pass without skips at committed candidate 16b6e40615cde8804570ca7269784435c692305e. Executing-agent engineering role perspective; no Product/release/legal acceptance is implied."
+      ],
+      "review_ref": "governance/reviews/REV-TUN-P2-002-tester-qa-engineer.yaml",
+      "skill_hash": "a57ce99d7ad7a3b60f17e4826c81c507c9cc208d8928285c406222eefe0a18fd"
     }
   ],
-  "review_boundary": "Executing-agent engineering reviews at the committed tested scope; not independent human assurance.",
   "prior_reviews": [
     {
       "schema_version": 1,
@@ -82,16 +73,15 @@
       "scope_type": "WORK_ITEM",
       "scope_id": "TUN-P2-002",
       "status": "PASS",
-      "reviewed_commit_sha": "d856dde651440216369f0698f92f5d7878505d64",
-      "reviewed_at": "2026-10-16T19:37:01.404Z",
+      "reviewed_commit_sha": "99c0cf268b368ba64b4984dce6172a00a2546718",
+      "reviewed_at": "2026-10-16T20:19:00.112Z",
       "reviews": [
         {
           "role": "full-stack-engineer",
           "conclusion": "PASS",
           "checks": [
-            "The Accounts-owned evaluator implements only the approved internal eligibility predicate and immutable derived evidence. Server/application ownership of active policy and post-commit DOB disposal is explicit; no endpoint or activation path is added.",
-            "Final engineering candidate review at d856dde651440216369f0698f92f5d7878505d64. Actor: executing-agent role review; no independent human Product, legal or release approval is asserted.",
-            "Exact-SHA final suite aggregation after recorded Docker interruption: 329 passed, zero failed/skipped."
+            "The eligibility implementation, tests and module/project declarations are unchanged. The shared solution adds the separate persistence module; all 39 eligibility tests and 345 platform tests pass at the new candidate.",
+            "Revalidation at 99c0cf268b368ba64b4984dce6172a00a2546718 for the P2-003 additive shared solution change. Executing-agent engineering role review; Product, legal, protected-main and release approvals remain separate."
           ],
           "findings": [],
           "review_ref": "governance/reviews/REV-TUN-P2-002-full-stack-engineer.yaml",
@@ -101,9 +91,8 @@
           "role": "tester-qa-engineer",
           "conclusion": "PASS",
           "checks": [
-            "All 39 new tests pass, covering leap/century/birthday/date-limit boundaries, UTC rollover and one-read consistency, missing provenance, invalid typed input, deterministic evidence and restricted DOB exclusion. All 329 platform tests pass after the governed fixture correction.",
-            "Final engineering candidate review at d856dde651440216369f0698f92f5d7878505d64. Actor: executing-agent role review; no independent human Product, legal or release approval is asserted.",
-            "Exact-SHA final suite aggregation after recorded Docker interruption: 329 passed, zero failed/skipped."
+            "All 39 eligibility tests reran and pass at this SHA, including leap/birthday/calendar/UTC, invalid input, provenance and DOB minimization. The full six-suite aggregate is 345 passed, zero failed/skipped.",
+            "Revalidation at 99c0cf268b368ba64b4984dce6172a00a2546718 for the P2-003 additive shared solution change. Executing-agent engineering role review; Product, legal, protected-main and release approvals remain separate."
           ],
           "findings": [],
           "review_ref": "governance/reviews/REV-TUN-P2-002-tester-qa-engineer.yaml",
@@ -113,9 +102,8 @@
           "role": "solution-architect",
           "conclusion": "PASS",
           "checks": [
-            "New small Accounts project has no package or infrastructure dependency. Tests enforce module direction and existing host regression still passes; solution inclusion gives existing CI coverage without moving business semantics into shared Platform.",
-            "Final engineering candidate review at d856dde651440216369f0698f92f5d7878505d64. Actor: executing-agent role review; no independent human Product, legal or release approval is asserted.",
-            "Exact-SHA final suite aggregation after recorded Docker interruption: 329 passed, zero failed/skipped."
+            "Accounts remains framework-free; the new AccountSnapshot is a domain DTO and the Identity framework depends inward on Accounts. The additive solution extension is compiled and 237 architecture tests pass.",
+            "Revalidation at 99c0cf268b368ba64b4984dce6172a00a2546718 for the P2-003 additive shared solution change. Executing-agent engineering role review; Product, legal, protected-main and release approvals remain separate."
           ],
           "findings": [],
           "review_ref": "governance/reviews/REV-TUN-P2-002-solution-architect.yaml",
@@ -125,9 +113,8 @@
           "role": "cyber-security-engineer",
           "conclusion": "PASS",
           "checks": [
-            "No caller clock/date or browser endpoint is exposed. Evidence omits raw DOB, missing references cannot produce an outcome, and diagnostic checks do not echo DOB. Eight-file secret scan passes and the new test dependency graph reports no known vulnerable NuGet packages. Existing image findings remain open.",
-            "Final engineering candidate review at d856dde651440216369f0698f92f5d7878505d64. Actor: executing-agent role review; no independent human Product, legal or release approval is asserted.",
-            "Exact-SHA final suite aggregation after recorded Docker interruption: 329 passed, zero failed/skipped."
+            "Eligibility source/project/test blobs are unchanged from the prior reviewed candidate, retaining the prior scan evidence. No browser clock, new eligibility endpoint or raw DOB storage was introduced. The new Identity graph is separately scanned; P1 container findings remain open.",
+            "Revalidation at 99c0cf268b368ba64b4984dce6172a00a2546718 for the P2-003 additive shared solution change. Executing-agent engineering role review; Product, legal, protected-main and release approvals remain separate."
           ],
           "findings": [],
           "review_ref": "governance/reviews/REV-TUN-P2-002-cyber-security-engineer.yaml",
@@ -137,9 +124,8 @@
           "role": "auditor",
           "conclusion": "PASS",
           "checks": [
-            "Actual 329/329 regression receipts at 7acf2803d604c9f4b916c5e8b24985e9007aacb6 replace scope-only review. The original 57P03 failure remains traceable through P0-010-RV001. Unrelated dirty paths are excluded; Product acceptance and image release barriers remain separate and unclaimed.",
-            "Final engineering candidate review at d856dde651440216369f0698f92f5d7878505d64. Actor: executing-agent role review; no independent human Product, legal or release approval is asserted.",
-            "Exact-SHA final suite aggregation after recorded Docker interruption: 329 passed, zero failed/skipped."
+            "The active VALIDATION record is revalidated rather than closed history rewritten. The original d856dde validation and review remain in prior evidence, the same ownership array is present in candidate 99c0cf268b368ba64b4984dce6172a00a2546718, and all 345 tests pass at that SHA.",
+            "Revalidation at 99c0cf268b368ba64b4984dce6172a00a2546718 for the P2-003 additive shared solution change. Executing-agent engineering role review; Product, legal, protected-main and release approvals remain separate."
           ],
           "findings": [],
           "review_ref": "governance/reviews/REV-TUN-P2-002-auditor.yaml",
@@ -149,16 +135,102 @@
           "role": "compliance-specialist",
           "conclusion": "PASS",
           "checks": [
-            "FRD29/PDR-0007 minimization is preserved in the returned and serialized evidence. No DOB storage, retention deadline, jurisdiction or stronger proof rule is introduced. Future registration must apply approved processing/retention rules and dispose of input after commit.",
-            "Final engineering candidate review at d856dde651440216369f0698f92f5d7878505d64. Actor: executing-agent role review; no independent human Product, legal or release approval is asserted.",
-            "Exact-SHA final suite aggregation after recorded Docker interruption: 329 passed, zero failed/skipped."
+            "The unchanged eligibility result still omits DOB and retains only approved derived evidence. Persistence introduced by the separate slice has a reviewed inactive data inventory; no new retention/legal/Product acceptance is inferred.",
+            "Revalidation at 99c0cf268b368ba64b4984dce6172a00a2546718 for the P2-003 additive shared solution change. Executing-agent engineering role review; Product, legal, protected-main and release approvals remain separate."
           ],
           "findings": [],
           "review_ref": "governance/reviews/REV-TUN-P2-002-compliance-specialist.yaml",
           "skill_hash": "38f8de27e31b3ae5cec070320d9b408d6f75682b024322f5e37585c76921303e"
         }
       ],
-      "review_boundary": "Executing-agent engineering reviews at the committed tested scope; not independent human assurance."
+      "review_boundary": "Executing-agent engineering reviews at the committed tested scope; not independent human assurance.",
+      "prior_reviews": [
+        {
+          "schema_version": 1,
+          "evidence_id": "TUN-P2-002-ROLE-REVIEWS",
+          "scope_type": "WORK_ITEM",
+          "scope_id": "TUN-P2-002",
+          "status": "PASS",
+          "reviewed_commit_sha": "d856dde651440216369f0698f92f5d7878505d64",
+          "reviewed_at": "2026-10-16T19:37:01.404Z",
+          "reviews": [
+            {
+              "role": "full-stack-engineer",
+              "conclusion": "PASS",
+              "checks": [
+                "The Accounts-owned evaluator implements only the approved internal eligibility predicate and immutable derived evidence. Server/application ownership of active policy and post-commit DOB disposal is explicit; no endpoint or activation path is added.",
+                "Final engineering candidate review at d856dde651440216369f0698f92f5d7878505d64. Actor: executing-agent role review; no independent human Product, legal or release approval is asserted.",
+                "Exact-SHA final suite aggregation after recorded Docker interruption: 329 passed, zero failed/skipped."
+              ],
+              "findings": [],
+              "review_ref": "governance/reviews/REV-TUN-P2-002-full-stack-engineer.yaml",
+              "skill_hash": "59adbe2133cf4ce88cbc9ca4eafce1d5a9d83b9562b6580c1571e6fc148d46b5"
+            },
+            {
+              "role": "tester-qa-engineer",
+              "conclusion": "PASS",
+              "checks": [
+                "All 39 new tests pass, covering leap/century/birthday/date-limit boundaries, UTC rollover and one-read consistency, missing provenance, invalid typed input, deterministic evidence and restricted DOB exclusion. All 329 platform tests pass after the governed fixture correction.",
+                "Final engineering candidate review at d856dde651440216369f0698f92f5d7878505d64. Actor: executing-agent role review; no independent human Product, legal or release approval is asserted.",
+                "Exact-SHA final suite aggregation after recorded Docker interruption: 329 passed, zero failed/skipped."
+              ],
+              "findings": [],
+              "review_ref": "governance/reviews/REV-TUN-P2-002-tester-qa-engineer.yaml",
+              "skill_hash": "a57ce99d7ad7a3b60f17e4826c81c507c9cc208d8928285c406222eefe0a18fd"
+            },
+            {
+              "role": "solution-architect",
+              "conclusion": "PASS",
+              "checks": [
+                "New small Accounts project has no package or infrastructure dependency. Tests enforce module direction and existing host regression still passes; solution inclusion gives existing CI coverage without moving business semantics into shared Platform.",
+                "Final engineering candidate review at d856dde651440216369f0698f92f5d7878505d64. Actor: executing-agent role review; no independent human Product, legal or release approval is asserted.",
+                "Exact-SHA final suite aggregation after recorded Docker interruption: 329 passed, zero failed/skipped."
+              ],
+              "findings": [],
+              "review_ref": "governance/reviews/REV-TUN-P2-002-solution-architect.yaml",
+              "skill_hash": "664ffba70d0f97e75951c3548b7f8391854781e4cf90cc50fc8829543783a35b"
+            },
+            {
+              "role": "cyber-security-engineer",
+              "conclusion": "PASS",
+              "checks": [
+                "No caller clock/date or browser endpoint is exposed. Evidence omits raw DOB, missing references cannot produce an outcome, and diagnostic checks do not echo DOB. Eight-file secret scan passes and the new test dependency graph reports no known vulnerable NuGet packages. Existing image findings remain open.",
+                "Final engineering candidate review at d856dde651440216369f0698f92f5d7878505d64. Actor: executing-agent role review; no independent human Product, legal or release approval is asserted.",
+                "Exact-SHA final suite aggregation after recorded Docker interruption: 329 passed, zero failed/skipped."
+              ],
+              "findings": [],
+              "review_ref": "governance/reviews/REV-TUN-P2-002-cyber-security-engineer.yaml",
+              "skill_hash": "2d32ff3d7fb503f29cf930e9852ed4a757bb48a08e3fa4e3f6d5a23139a47f97"
+            },
+            {
+              "role": "auditor",
+              "conclusion": "PASS",
+              "checks": [
+                "Actual 329/329 regression receipts at 7acf2803d604c9f4b916c5e8b24985e9007aacb6 replace scope-only review. The original 57P03 failure remains traceable through P0-010-RV001. Unrelated dirty paths are excluded; Product acceptance and image release barriers remain separate and unclaimed.",
+                "Final engineering candidate review at d856dde651440216369f0698f92f5d7878505d64. Actor: executing-agent role review; no independent human Product, legal or release approval is asserted.",
+                "Exact-SHA final suite aggregation after recorded Docker interruption: 329 passed, zero failed/skipped."
+              ],
+              "findings": [],
+              "review_ref": "governance/reviews/REV-TUN-P2-002-auditor.yaml",
+              "skill_hash": "191c796fc5df0332ff2c3c464ca611d2c6d3ffc5ba7e2807986a71ad2e40d921"
+            },
+            {
+              "role": "compliance-specialist",
+              "conclusion": "PASS",
+              "checks": [
+                "FRD29/PDR-0007 minimization is preserved in the returned and serialized evidence. No DOB storage, retention deadline, jurisdiction or stronger proof rule is introduced. Future registration must apply approved processing/retention rules and dispose of input after commit.",
+                "Final engineering candidate review at d856dde651440216369f0698f92f5d7878505d64. Actor: executing-agent role review; no independent human Product, legal or release approval is asserted.",
+                "Exact-SHA final suite aggregation after recorded Docker interruption: 329 passed, zero failed/skipped."
+              ],
+              "findings": [],
+              "review_ref": "governance/reviews/REV-TUN-P2-002-compliance-specialist.yaml",
+              "skill_hash": "38f8de27e31b3ae5cec070320d9b408d6f75682b024322f5e37585c76921303e"
+            }
+          ],
+          "review_boundary": "Executing-agent engineering reviews at the committed tested scope; not independent human assurance."
+        }
+      ]
     }
-  ]
+  ],
+  "reviewer_provenance": "Executing-agent engineering role perspectives; no independent human approval is represented."
 }

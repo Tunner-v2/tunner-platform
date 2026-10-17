@@ -1,31 +1,67 @@
 {
   "schema_version": 1,
-  "evidence_id": "TUN-P2-003-ROLE-REVIEWS",
-  "scope_type": "WORK_ITEM",
   "scope_id": "TUN-P2-003",
   "status": "PASS",
-  "reviewed_commit_sha": "f64f9976a150e3c4a08378c9b87c980b91359a81",
-  "reviewed_at": "2026-10-16T21:58:02.545Z",
+  "reviewed_commit_sha": "ec1a55e142cea0a1e46f63b0bdc38f63fb43b0e8",
+  "reviewed_at": "2026-10-17T19:47:34.605Z",
   "reviews": [
+    {
+      "role": "auditor",
+      "conclusion": "PASS",
+      "checks": [
+        "PDR-0011 removes the adult-only ACTIVE constraint, retains complete historical age evidence and rejects partial provenance. Separate Account-owned protected Personal Information storage and immutable safe evaluation history are added by a forward migration.",
+        "15 actual PostgreSQL migration/concurrency/uniqueness/framework/outbox tests pass without skips at ec1a55e142cea0a1e46f63b0bdc38f63fb43b0e8. Executing-agent engineering perspective; no Product/release/legal acceptance."
+      ],
+      "review_ref": "governance/reviews/REV-TUN-P2-003-auditor.yaml",
+      "skill_hash": "191c796fc5df0332ff2c3c464ca611d2c6d3ffc5ba7e2807986a71ad2e40d921"
+    },
+    {
+      "role": "compliance-specialist",
+      "conclusion": "PASS",
+      "checks": [
+        "PDR-0011 removes the adult-only ACTIVE constraint, retains complete historical age evidence and rejects partial provenance. Separate Account-owned protected Personal Information storage and immutable safe evaluation history are added by a forward migration.",
+        "15 actual PostgreSQL migration/concurrency/uniqueness/framework/outbox tests pass without skips at ec1a55e142cea0a1e46f63b0bdc38f63fb43b0e8. Executing-agent engineering perspective; no Product/release/legal acceptance."
+      ],
+      "review_ref": "governance/reviews/REV-TUN-P2-003-compliance-specialist.yaml",
+      "skill_hash": "38f8de27e31b3ae5cec070320d9b408d6f75682b024322f5e37585c76921303e"
+    },
+    {
+      "role": "cyber-security-engineer",
+      "conclusion": "PASS",
+      "checks": [
+        "PDR-0011 removes the adult-only ACTIVE constraint, retains complete historical age evidence and rejects partial provenance. Separate Account-owned protected Personal Information storage and immutable safe evaluation history are added by a forward migration.",
+        "15 actual PostgreSQL migration/concurrency/uniqueness/framework/outbox tests pass without skips at ec1a55e142cea0a1e46f63b0bdc38f63fb43b0e8. Executing-agent engineering perspective; no Product/release/legal acceptance."
+      ],
+      "review_ref": "governance/reviews/REV-TUN-P2-003-cyber-security-engineer.yaml",
+      "skill_hash": "2d32ff3d7fb503f29cf930e9852ed4a757bb48a08e3fa4e3f6d5a23139a47f97"
+    },
     {
       "role": "full-stack-engineer",
       "conclusion": "PASS",
       "checks": [
-        "Active persistence scope revalidated at f64f9976a150e3c4a08378c9b87c980b91359a81 after additive P2-004 context/model/project/test wiring. The same 21-path ownership array was already committed in this candidate. All original 16 persistence tests and all 364 .NET tests pass; original evidence is preserved. Foundation store/immutability/uniqueness/outbox/schema ownership and no-DOB invariants remain intact.",
-        "Separate opt-in registration is owned by TUN-P2-004; persistence configuration still does not activate UserManager/sign-in/server sessions. No production processing, Product acceptance, protected-main merge or release approval is asserted. "
+        "PDR-0011 removes the adult-only ACTIVE constraint, retains complete historical age evidence and rejects partial provenance. Separate Account-owned protected Personal Information storage and immutable safe evaluation history are added by a forward migration.",
+        "15 actual PostgreSQL migration/concurrency/uniqueness/framework/outbox tests pass without skips at ec1a55e142cea0a1e46f63b0bdc38f63fb43b0e8. Executing-agent engineering perspective; no Product/release/legal acceptance."
       ],
-      "findings": [],
       "review_ref": "governance/reviews/REV-TUN-P2-003-full-stack-engineer.yaml",
       "skill_hash": "59adbe2133cf4ce88cbc9ca4eafce1d5a9d83b9562b6580c1571e6fc148d46b5"
+    },
+    {
+      "role": "rd-engineer",
+      "conclusion": "PASS",
+      "checks": [
+        "PDR-0011 removes the adult-only ACTIVE constraint, retains complete historical age evidence and rejects partial provenance. Separate Account-owned protected Personal Information storage and immutable safe evaluation history are added by a forward migration.",
+        "15 actual PostgreSQL migration/concurrency/uniqueness/framework/outbox tests pass without skips at ec1a55e142cea0a1e46f63b0bdc38f63fb43b0e8. Executing-agent engineering perspective; no Product/release/legal acceptance."
+      ],
+      "review_ref": "governance/reviews/REV-TUN-P2-003-rd-engineer.yaml",
+      "skill_hash": "2834c223dfd847a6d7cd28f52de4113efc574d621391d059e8dc1469bdf33187"
     },
     {
       "role": "solution-architect",
       "conclusion": "PASS",
       "checks": [
-        "Active persistence scope revalidated at f64f9976a150e3c4a08378c9b87c980b91359a81 after additive P2-004 context/model/project/test wiring. The same 21-path ownership array was already committed in this candidate. All original 16 persistence tests and all 364 .NET tests pass; original evidence is preserved. Foundation store/immutability/uniqueness/outbox/schema ownership and no-DOB invariants remain intact.",
-        "Separate opt-in registration is owned by TUN-P2-004; persistence configuration still does not activate UserManager/sign-in/server sessions. No production processing, Product acceptance, protected-main merge or release approval is asserted. "
+        "PDR-0011 removes the adult-only ACTIVE constraint, retains complete historical age evidence and rejects partial provenance. Separate Account-owned protected Personal Information storage and immutable safe evaluation history are added by a forward migration.",
+        "15 actual PostgreSQL migration/concurrency/uniqueness/framework/outbox tests pass without skips at ec1a55e142cea0a1e46f63b0bdc38f63fb43b0e8. Executing-agent engineering perspective; no Product/release/legal acceptance."
       ],
-      "findings": [],
       "review_ref": "governance/reviews/REV-TUN-P2-003-solution-architect.yaml",
       "skill_hash": "664ffba70d0f97e75951c3548b7f8391854781e4cf90cc50fc8829543783a35b"
     },
@@ -33,59 +69,13 @@
       "role": "tester-qa-engineer",
       "conclusion": "PASS",
       "checks": [
-        "Active persistence scope revalidated at f64f9976a150e3c4a08378c9b87c980b91359a81 after additive P2-004 context/model/project/test wiring. The same 21-path ownership array was already committed in this candidate. All original 16 persistence tests and all 364 .NET tests pass; original evidence is preserved. Foundation store/immutability/uniqueness/outbox/schema ownership and no-DOB invariants remain intact.",
-        "Separate opt-in registration is owned by TUN-P2-004; persistence configuration still does not activate UserManager/sign-in/server sessions. No production processing, Product acceptance, protected-main merge or release approval is asserted. "
+        "PDR-0011 removes the adult-only ACTIVE constraint, retains complete historical age evidence and rejects partial provenance. Separate Account-owned protected Personal Information storage and immutable safe evaluation history are added by a forward migration.",
+        "15 actual PostgreSQL migration/concurrency/uniqueness/framework/outbox tests pass without skips at ec1a55e142cea0a1e46f63b0bdc38f63fb43b0e8. Executing-agent engineering perspective; no Product/release/legal acceptance."
       ],
-      "findings": [],
       "review_ref": "governance/reviews/REV-TUN-P2-003-tester-qa-engineer.yaml",
       "skill_hash": "a57ce99d7ad7a3b60f17e4826c81c507c9cc208d8928285c406222eefe0a18fd"
-    },
-    {
-      "role": "cyber-security-engineer",
-      "conclusion": "PASS",
-      "checks": [
-        "Active persistence scope revalidated at f64f9976a150e3c4a08378c9b87c980b91359a81 after additive P2-004 context/model/project/test wiring. The same 21-path ownership array was already committed in this candidate. All original 16 persistence tests and all 364 .NET tests pass; original evidence is preserved. Foundation store/immutability/uniqueness/outbox/schema ownership and no-DOB invariants remain intact.",
-        "Separate opt-in registration is owned by TUN-P2-004; persistence configuration still does not activate UserManager/sign-in/server sessions. No production processing, Product acceptance, protected-main merge or release approval is asserted. "
-      ],
-      "findings": [],
-      "review_ref": "governance/reviews/REV-TUN-P2-003-cyber-security-engineer.yaml",
-      "skill_hash": "2d32ff3d7fb503f29cf930e9852ed4a757bb48a08e3fa4e3f6d5a23139a47f97"
-    },
-    {
-      "role": "compliance-specialist",
-      "conclusion": "PASS",
-      "checks": [
-        "Active persistence scope revalidated at f64f9976a150e3c4a08378c9b87c980b91359a81 after additive P2-004 context/model/project/test wiring. The same 21-path ownership array was already committed in this candidate. All original 16 persistence tests and all 364 .NET tests pass; original evidence is preserved. Foundation store/immutability/uniqueness/outbox/schema ownership and no-DOB invariants remain intact.",
-        "Separate opt-in registration is owned by TUN-P2-004; persistence configuration still does not activate UserManager/sign-in/server sessions. No production processing, Product acceptance, protected-main merge or release approval is asserted. Pending registration data has an explicit P2-004 inventory and approved-runtime activation preconditions."
-      ],
-      "findings": [],
-      "review_ref": "governance/reviews/REV-TUN-P2-003-compliance-specialist.yaml",
-      "skill_hash": "38f8de27e31b3ae5cec070320d9b408d6f75682b024322f5e37585c76921303e"
-    },
-    {
-      "role": "auditor",
-      "conclusion": "PASS",
-      "checks": [
-        "Active persistence scope revalidated at f64f9976a150e3c4a08378c9b87c980b91359a81 after additive P2-004 context/model/project/test wiring. The same 21-path ownership array was already committed in this candidate. All original 16 persistence tests and all 364 .NET tests pass; original evidence is preserved. Foundation store/immutability/uniqueness/outbox/schema ownership and no-DOB invariants remain intact.",
-        "Separate opt-in registration is owned by TUN-P2-004; persistence configuration still does not activate UserManager/sign-in/server sessions. No production processing, Product acceptance, protected-main merge or release approval is asserted. "
-      ],
-      "findings": [],
-      "review_ref": "governance/reviews/REV-TUN-P2-003-auditor.yaml",
-      "skill_hash": "191c796fc5df0332ff2c3c464ca611d2c6d3ffc5ba7e2807986a71ad2e40d921"
-    },
-    {
-      "role": "rd-engineer",
-      "conclusion": "PASS",
-      "checks": [
-        "Active persistence scope revalidated at f64f9976a150e3c4a08378c9b87c980b91359a81 after additive P2-004 context/model/project/test wiring. The same 21-path ownership array was already committed in this candidate. All original 16 persistence tests and all 364 .NET tests pass; original evidence is preserved. Foundation store/immutability/uniqueness/outbox/schema ownership and no-DOB invariants remain intact.",
-        "Separate opt-in registration is owned by TUN-P2-004; persistence configuration still does not activate UserManager/sign-in/server sessions. No production processing, Product acceptance, protected-main merge or release approval is asserted. "
-      ],
-      "findings": [],
-      "review_ref": "governance/reviews/REV-TUN-P2-003-rd-engineer.yaml",
-      "skill_hash": "2834c223dfd847a6d7cd28f52de4113efc574d621391d059e8dc1469bdf33187"
     }
   ],
-  "review_boundary": "Executing-agent engineering role reviews at the committed tested scope; no independent human Product, legal or release assurance is claimed.",
   "prior_reviews": [
     {
       "schema_version": 1,
@@ -93,15 +83,15 @@
       "scope_type": "WORK_ITEM",
       "scope_id": "TUN-P2-003",
       "status": "PASS",
-      "reviewed_commit_sha": "99c0cf268b368ba64b4984dce6172a00a2546718",
-      "reviewed_at": "2026-10-16T20:19:00.112Z",
+      "reviewed_commit_sha": "f64f9976a150e3c4a08378c9b87c980b91359a81",
+      "reviewed_at": "2026-10-16T21:58:02.545Z",
       "reviews": [
         {
           "role": "full-stack-engineer",
           "conclusion": "PASS",
           "checks": [
-            "Canonical Account, contact and immutable provider-subject persistence is implemented behind the Identity-owned EF context. Typed Account projections keep framework IDs private to the adapter; existing outbox transaction mapping is reused. No registration or authentication host path is activated.",
-            "Final engineering review of exact tested candidate 99c0cf268b368ba64b4984dce6172a00a2546718. All 345 platform tests pass; Product acceptance and release approval remain separate."
+            "Active persistence scope revalidated at f64f9976a150e3c4a08378c9b87c980b91359a81 after additive P2-004 context/model/project/test wiring. The same 21-path ownership array was already committed in this candidate. All original 16 persistence tests and all 364 .NET tests pass; original evidence is preserved. Foundation store/immutability/uniqueness/outbox/schema ownership and no-DOB invariants remain intact.",
+            "Separate opt-in registration is owned by TUN-P2-004; persistence configuration still does not activate UserManager/sign-in/server sessions. No production processing, Product acceptance, protected-main merge or release approval is asserted. "
           ],
           "findings": [],
           "review_ref": "governance/reviews/REV-TUN-P2-003-full-stack-engineer.yaml",
@@ -111,8 +101,8 @@
           "role": "solution-architect",
           "conclusion": "PASS",
           "checks": [
-            "Accounts remains framework-free. Identity owns its EF schema, Identity/OpenIddict store adapters and migrations; platform.outbox_messages is excluded from these migrations. The additive shared solution change is revalidated for the still-active TUN-P2-002 scope. All platform architecture tests pass.",
-            "Final engineering review of exact tested candidate 99c0cf268b368ba64b4984dce6172a00a2546718. All 345 platform tests pass; Product acceptance and release approval remain separate."
+            "Active persistence scope revalidated at f64f9976a150e3c4a08378c9b87c980b91359a81 after additive P2-004 context/model/project/test wiring. The same 21-path ownership array was already committed in this candidate. All original 16 persistence tests and all 364 .NET tests pass; original evidence is preserved. Foundation store/immutability/uniqueness/outbox/schema ownership and no-DOB invariants remain intact.",
+            "Separate opt-in registration is owned by TUN-P2-004; persistence configuration still does not activate UserManager/sign-in/server sessions. No production processing, Product acceptance, protected-main merge or release approval is asserted. "
           ],
           "findings": [],
           "review_ref": "governance/reviews/REV-TUN-P2-003-solution-architect.yaml",
@@ -122,8 +112,8 @@
           "role": "tester-qa-engineer",
           "conclusion": "PASS",
           "checks": [
-            "All 16 new real-PostgreSQL tests pass: migrated/model-consistent fixtures, forward/empty rollback/reapply, populated rollback refusal, verified email uniqueness races, immutable external keys, optimistic concurrency and state history, direct SQL tamper guards, explicit age provenance, framework stores and Account/outbox transaction atomicity. All 329 existing platform tests pass at the same SHA. Invalid/stale-binary and failed built attempts are retained and excluded from final passing evidence.",
-            "Final engineering review of exact tested candidate 99c0cf268b368ba64b4984dce6172a00a2546718. All 345 platform tests pass; Product acceptance and release approval remain separate."
+            "Active persistence scope revalidated at f64f9976a150e3c4a08378c9b87c980b91359a81 after additive P2-004 context/model/project/test wiring. The same 21-path ownership array was already committed in this candidate. All original 16 persistence tests and all 364 .NET tests pass; original evidence is preserved. Foundation store/immutability/uniqueness/outbox/schema ownership and no-DOB invariants remain intact.",
+            "Separate opt-in registration is owned by TUN-P2-004; persistence configuration still does not activate UserManager/sign-in/server sessions. No production processing, Product acceptance, protected-main merge or release approval is asserted. "
           ],
           "findings": [],
           "review_ref": "governance/reviews/REV-TUN-P2-003-tester-qa-engineer.yaml",
@@ -133,8 +123,8 @@
           "role": "cyber-security-engineer",
           "conclusion": "PASS",
           "checks": [
-            "Registration activates EF user and OpenIddict Core stores only; tests confirm no UserManager, SignInManager or authentication server/scheme is registered. Explicit connection and matching schema-v3 design/runtime options are required. Secret/SAST scans pass; the module dependency audit reports no known NuGet vulnerabilities. Permanent SQL integrity errors use 23514. Existing P1 container findings remain open and unwaived.",
-            "Final engineering review of exact tested candidate 99c0cf268b368ba64b4984dce6172a00a2546718. All 345 platform tests pass; Product acceptance and release approval remain separate."
+            "Active persistence scope revalidated at f64f9976a150e3c4a08378c9b87c980b91359a81 after additive P2-004 context/model/project/test wiring. The same 21-path ownership array was already committed in this candidate. All original 16 persistence tests and all 364 .NET tests pass; original evidence is preserved. Foundation store/immutability/uniqueness/outbox/schema ownership and no-DOB invariants remain intact.",
+            "Separate opt-in registration is owned by TUN-P2-004; persistence configuration still does not activate UserManager/sign-in/server sessions. No production processing, Product acceptance, protected-main merge or release approval is asserted. "
           ],
           "findings": [],
           "review_ref": "governance/reviews/REV-TUN-P2-003-cyber-security-engineer.yaml",
@@ -144,8 +134,8 @@
           "role": "compliance-specialist",
           "conclusion": "PASS",
           "checks": [
-            "Database/model checks confirm no DOB column; only derived eligibility policy, evaluation time and evidence references persist. The reviewed inactive storage inventory records contact/external subject metadata and requires processing/retention review before production activation. No retention duration, jurisdiction or legal acceptance is invented.",
-            "Final engineering review of exact tested candidate 99c0cf268b368ba64b4984dce6172a00a2546718. All 345 platform tests pass; Product acceptance and release approval remain separate."
+            "Active persistence scope revalidated at f64f9976a150e3c4a08378c9b87c980b91359a81 after additive P2-004 context/model/project/test wiring. The same 21-path ownership array was already committed in this candidate. All original 16 persistence tests and all 364 .NET tests pass; original evidence is preserved. Foundation store/immutability/uniqueness/outbox/schema ownership and no-DOB invariants remain intact.",
+            "Separate opt-in registration is owned by TUN-P2-004; persistence configuration still does not activate UserManager/sign-in/server sessions. No production processing, Product acceptance, protected-main merge or release approval is asserted. Pending registration data has an explicit P2-004 inventory and approved-runtime activation preconditions."
           ],
           "findings": [],
           "review_ref": "governance/reviews/REV-TUN-P2-003-compliance-specialist.yaml",
@@ -155,8 +145,8 @@
           "role": "auditor",
           "conclusion": "PASS",
           "checks": [
-            "Owned behavior is frozen in exact tested commit 99c0cf268b368ba64b4984dce6172a00a2546718; all 345 executed tests pass with zero failed/skipped across six suite executions. Source hashes, failed attempts, seven role skills and unrelated dirty paths are recorded. This is executing-agent engineering review; Product acceptance, protected-main integration and release authorization remain separate.",
-            "Final engineering review of exact tested candidate 99c0cf268b368ba64b4984dce6172a00a2546718. All 345 platform tests pass; Product acceptance and release approval remain separate."
+            "Active persistence scope revalidated at f64f9976a150e3c4a08378c9b87c980b91359a81 after additive P2-004 context/model/project/test wiring. The same 21-path ownership array was already committed in this candidate. All original 16 persistence tests and all 364 .NET tests pass; original evidence is preserved. Foundation store/immutability/uniqueness/outbox/schema ownership and no-DOB invariants remain intact.",
+            "Separate opt-in registration is owned by TUN-P2-004; persistence configuration still does not activate UserManager/sign-in/server sessions. No production processing, Product acceptance, protected-main merge or release approval is asserted. "
           ],
           "findings": [],
           "review_ref": "governance/reviews/REV-TUN-P2-003-auditor.yaml",
@@ -166,325 +156,417 @@
           "role": "rd-engineer",
           "conclusion": "PASS",
           "checks": [
-            "Fresh official release/NuGet metadata pins Identity EF 10.0.13 and OpenIddict EF 7.7.2 with the existing EF 10.0.13/Npgsql 10.0.3 graph. Actual restore, transitive audit, zero-warning build, model consistency and framework CRUD tests confirm compatibility. The existing EF tool 10.0.12 version warning is retained; no unrelated tooling change or analyzer suppression is introduced.",
-            "Final engineering review of exact tested candidate 99c0cf268b368ba64b4984dce6172a00a2546718. All 345 platform tests pass; Product acceptance and release approval remain separate."
+            "Active persistence scope revalidated at f64f9976a150e3c4a08378c9b87c980b91359a81 after additive P2-004 context/model/project/test wiring. The same 21-path ownership array was already committed in this candidate. All original 16 persistence tests and all 364 .NET tests pass; original evidence is preserved. Foundation store/immutability/uniqueness/outbox/schema ownership and no-DOB invariants remain intact.",
+            "Separate opt-in registration is owned by TUN-P2-004; persistence configuration still does not activate UserManager/sign-in/server sessions. No production processing, Product acceptance, protected-main merge or release approval is asserted. "
           ],
           "findings": [],
           "review_ref": "governance/reviews/REV-TUN-P2-003-rd-engineer.yaml",
           "skill_hash": "2834c223dfd847a6d7cd28f52de4113efc574d621391d059e8dc1469bdf33187"
         }
       ],
-      "review_boundary": "Executing-agent engineering role reviews at the committed tested scope; no independent human Product, legal or release assurance is claimed."
+      "review_boundary": "Executing-agent engineering role reviews at the committed tested scope; no independent human Product, legal or release assurance is claimed.",
+      "prior_reviews": [
+        {
+          "schema_version": 1,
+          "evidence_id": "TUN-P2-003-ROLE-REVIEWS",
+          "scope_type": "WORK_ITEM",
+          "scope_id": "TUN-P2-003",
+          "status": "PASS",
+          "reviewed_commit_sha": "99c0cf268b368ba64b4984dce6172a00a2546718",
+          "reviewed_at": "2026-10-16T20:19:00.112Z",
+          "reviews": [
+            {
+              "role": "full-stack-engineer",
+              "conclusion": "PASS",
+              "checks": [
+                "Canonical Account, contact and immutable provider-subject persistence is implemented behind the Identity-owned EF context. Typed Account projections keep framework IDs private to the adapter; existing outbox transaction mapping is reused. No registration or authentication host path is activated.",
+                "Final engineering review of exact tested candidate 99c0cf268b368ba64b4984dce6172a00a2546718. All 345 platform tests pass; Product acceptance and release approval remain separate."
+              ],
+              "findings": [],
+              "review_ref": "governance/reviews/REV-TUN-P2-003-full-stack-engineer.yaml",
+              "skill_hash": "59adbe2133cf4ce88cbc9ca4eafce1d5a9d83b9562b6580c1571e6fc148d46b5"
+            },
+            {
+              "role": "solution-architect",
+              "conclusion": "PASS",
+              "checks": [
+                "Accounts remains framework-free. Identity owns its EF schema, Identity/OpenIddict store adapters and migrations; platform.outbox_messages is excluded from these migrations. The additive shared solution change is revalidated for the still-active TUN-P2-002 scope. All platform architecture tests pass.",
+                "Final engineering review of exact tested candidate 99c0cf268b368ba64b4984dce6172a00a2546718. All 345 platform tests pass; Product acceptance and release approval remain separate."
+              ],
+              "findings": [],
+              "review_ref": "governance/reviews/REV-TUN-P2-003-solution-architect.yaml",
+              "skill_hash": "664ffba70d0f97e75951c3548b7f8391854781e4cf90cc50fc8829543783a35b"
+            },
+            {
+              "role": "tester-qa-engineer",
+              "conclusion": "PASS",
+              "checks": [
+                "All 16 new real-PostgreSQL tests pass: migrated/model-consistent fixtures, forward/empty rollback/reapply, populated rollback refusal, verified email uniqueness races, immutable external keys, optimistic concurrency and state history, direct SQL tamper guards, explicit age provenance, framework stores and Account/outbox transaction atomicity. All 329 existing platform tests pass at the same SHA. Invalid/stale-binary and failed built attempts are retained and excluded from final passing evidence.",
+                "Final engineering review of exact tested candidate 99c0cf268b368ba64b4984dce6172a00a2546718. All 345 platform tests pass; Product acceptance and release approval remain separate."
+              ],
+              "findings": [],
+              "review_ref": "governance/reviews/REV-TUN-P2-003-tester-qa-engineer.yaml",
+              "skill_hash": "a57ce99d7ad7a3b60f17e4826c81c507c9cc208d8928285c406222eefe0a18fd"
+            },
+            {
+              "role": "cyber-security-engineer",
+              "conclusion": "PASS",
+              "checks": [
+                "Registration activates EF user and OpenIddict Core stores only; tests confirm no UserManager, SignInManager or authentication server/scheme is registered. Explicit connection and matching schema-v3 design/runtime options are required. Secret/SAST scans pass; the module dependency audit reports no known NuGet vulnerabilities. Permanent SQL integrity errors use 23514. Existing P1 container findings remain open and unwaived.",
+                "Final engineering review of exact tested candidate 99c0cf268b368ba64b4984dce6172a00a2546718. All 345 platform tests pass; Product acceptance and release approval remain separate."
+              ],
+              "findings": [],
+              "review_ref": "governance/reviews/REV-TUN-P2-003-cyber-security-engineer.yaml",
+              "skill_hash": "2d32ff3d7fb503f29cf930e9852ed4a757bb48a08e3fa4e3f6d5a23139a47f97"
+            },
+            {
+              "role": "compliance-specialist",
+              "conclusion": "PASS",
+              "checks": [
+                "Database/model checks confirm no DOB column; only derived eligibility policy, evaluation time and evidence references persist. The reviewed inactive storage inventory records contact/external subject metadata and requires processing/retention review before production activation. No retention duration, jurisdiction or legal acceptance is invented.",
+                "Final engineering review of exact tested candidate 99c0cf268b368ba64b4984dce6172a00a2546718. All 345 platform tests pass; Product acceptance and release approval remain separate."
+              ],
+              "findings": [],
+              "review_ref": "governance/reviews/REV-TUN-P2-003-compliance-specialist.yaml",
+              "skill_hash": "38f8de27e31b3ae5cec070320d9b408d6f75682b024322f5e37585c76921303e"
+            },
+            {
+              "role": "auditor",
+              "conclusion": "PASS",
+              "checks": [
+                "Owned behavior is frozen in exact tested commit 99c0cf268b368ba64b4984dce6172a00a2546718; all 345 executed tests pass with zero failed/skipped across six suite executions. Source hashes, failed attempts, seven role skills and unrelated dirty paths are recorded. This is executing-agent engineering review; Product acceptance, protected-main integration and release authorization remain separate.",
+                "Final engineering review of exact tested candidate 99c0cf268b368ba64b4984dce6172a00a2546718. All 345 platform tests pass; Product acceptance and release approval remain separate."
+              ],
+              "findings": [],
+              "review_ref": "governance/reviews/REV-TUN-P2-003-auditor.yaml",
+              "skill_hash": "191c796fc5df0332ff2c3c464ca611d2c6d3ffc5ba7e2807986a71ad2e40d921"
+            },
+            {
+              "role": "rd-engineer",
+              "conclusion": "PASS",
+              "checks": [
+                "Fresh official release/NuGet metadata pins Identity EF 10.0.13 and OpenIddict EF 7.7.2 with the existing EF 10.0.13/Npgsql 10.0.3 graph. Actual restore, transitive audit, zero-warning build, model consistency and framework CRUD tests confirm compatibility. The existing EF tool 10.0.12 version warning is retained; no unrelated tooling change or analyzer suppression is introduced.",
+                "Final engineering review of exact tested candidate 99c0cf268b368ba64b4984dce6172a00a2546718. All 345 platform tests pass; Product acceptance and release approval remain separate."
+              ],
+              "findings": [],
+              "review_ref": "governance/reviews/REV-TUN-P2-003-rd-engineer.yaml",
+              "skill_hash": "2834c223dfd847a6d7cd28f52de4113efc574d621391d059e8dc1469bdf33187"
+            }
+          ],
+          "review_boundary": "Executing-agent engineering role reviews at the committed tested scope; no independent human Product, legal or release assurance is claimed."
+        }
+      ],
+      "prior_formal_reviews": {
+        "auditor": [
+          {
+            "schema_version": 1,
+            "review_id": "REV-TUN-P2-003-auditor",
+            "work_item_id": "TUN-P2-003",
+            "role": "auditor",
+            "status": "PASS",
+            "result": "PASS",
+            "reviewed_at": "2026-10-16T20:19:00.112Z",
+            "skill_id": "auditor",
+            "skill_version": "1.0.0",
+            "skill_hash": "191c796fc5df0332ff2c3c464ca611d2c6d3ffc5ba7e2807986a71ad2e40d921",
+            "authority_refs": [
+              "docs/authority/current-authority.json",
+              "docs/authority/current/development/11_Development_Planes_Milestones_and_P0_Backlog.md",
+              "docs/authority/baselines/1.6.0/17_Account_Identity_and_Session_FRD.md",
+              "docs/authority/current/development/32_Domain_API_Event_Data_and_Policy_Contract_Catalog.md",
+              "docs/authority/current/development/34_Architecture_to_Development_Traceability_Matrix.md",
+              "docs/authority/baselines/1.6.0/decisions/ADR-0006_Identity_ASPNET_Identity_OpenIddict.md",
+              "docs/authority/baselines/1.6.0/decisions/PDR-0007_DOB_Based_18_Plus_Eligibility.md",
+              "docs/authority/current/development/AMD-0002_Non-Blocking_PR_Approval_and_Continuous_Local_Execution.md",
+              "docs/authority/current/development/02_Repository_Solution_and_Module_Architecture.md",
+              "docs/authority/current/development/09_Testing_Acceptance_Evidence_and_Quality_Gates.md",
+              "docs/authority/baselines/1.6.0/29_Privacy_Data_Lifecycle_and_Processing_Governance_FRD.md"
+            ],
+            "context_artifacts": [
+              "governance/work-items/TUN-P2-003.yaml",
+              "docs/development/P2_003_IDENTITY_PERSISTENCE.md"
+            ],
+            "evidence_refs": [
+              "governance/evidence/TUN-P2-003-AUTHORITY-RESOLUTION.json",
+              "governance/evidence/TUN-P2-003-RD-SOURCES.json",
+              "governance/evidence/TUN-P2-003-VALIDATION.json",
+              "governance/evidence/TUN-P2-003-DATA-INVENTORY.json"
+            ],
+            "findings": [
+              "Owned behavior is frozen in exact tested commit 99c0cf268b368ba64b4984dce6172a00a2546718; all 345 executed tests pass with zero failed/skipped across six suite executions. Source hashes, failed attempts, seven role skills and unrelated dirty paths are recorded. This is executing-agent engineering review; Product acceptance, protected-main integration and release authorization remain separate.",
+              "Final engineering review of exact tested candidate 99c0cf268b368ba64b4984dce6172a00a2546718. All 345 platform tests pass; Product acceptance and release approval remain separate."
+            ],
+            "blocking_findings": [],
+            "required_actions": [],
+            "context_expansion_requested": false
+          }
+        ],
+        "compliance-specialist": [
+          {
+            "schema_version": 1,
+            "review_id": "REV-TUN-P2-003-compliance-specialist",
+            "work_item_id": "TUN-P2-003",
+            "role": "compliance-specialist",
+            "status": "PASS",
+            "result": "PASS",
+            "reviewed_at": "2026-10-16T20:19:00.112Z",
+            "skill_id": "compliance-specialist",
+            "skill_version": "1.0.0",
+            "skill_hash": "38f8de27e31b3ae5cec070320d9b408d6f75682b024322f5e37585c76921303e",
+            "authority_refs": [
+              "docs/authority/current-authority.json",
+              "docs/authority/current/development/11_Development_Planes_Milestones_and_P0_Backlog.md",
+              "docs/authority/baselines/1.6.0/17_Account_Identity_and_Session_FRD.md",
+              "docs/authority/current/development/32_Domain_API_Event_Data_and_Policy_Contract_Catalog.md",
+              "docs/authority/current/development/34_Architecture_to_Development_Traceability_Matrix.md",
+              "docs/authority/baselines/1.6.0/decisions/ADR-0006_Identity_ASPNET_Identity_OpenIddict.md",
+              "docs/authority/baselines/1.6.0/decisions/PDR-0007_DOB_Based_18_Plus_Eligibility.md",
+              "docs/authority/current/development/AMD-0002_Non-Blocking_PR_Approval_and_Continuous_Local_Execution.md",
+              "docs/authority/current/development/02_Repository_Solution_and_Module_Architecture.md",
+              "docs/authority/current/development/09_Testing_Acceptance_Evidence_and_Quality_Gates.md",
+              "docs/authority/baselines/1.6.0/29_Privacy_Data_Lifecycle_and_Processing_Governance_FRD.md"
+            ],
+            "context_artifacts": [
+              "governance/work-items/TUN-P2-003.yaml",
+              "docs/development/P2_003_IDENTITY_PERSISTENCE.md"
+            ],
+            "evidence_refs": [
+              "governance/evidence/TUN-P2-003-AUTHORITY-RESOLUTION.json",
+              "governance/evidence/TUN-P2-003-RD-SOURCES.json",
+              "governance/evidence/TUN-P2-003-VALIDATION.json",
+              "governance/evidence/TUN-P2-003-DATA-INVENTORY.json"
+            ],
+            "findings": [
+              "Database/model checks confirm no DOB column; only derived eligibility policy, evaluation time and evidence references persist. The reviewed inactive storage inventory records contact/external subject metadata and requires processing/retention review before production activation. No retention duration, jurisdiction or legal acceptance is invented.",
+              "Final engineering review of exact tested candidate 99c0cf268b368ba64b4984dce6172a00a2546718. All 345 platform tests pass; Product acceptance and release approval remain separate."
+            ],
+            "blocking_findings": [],
+            "required_actions": [],
+            "context_expansion_requested": false
+          }
+        ],
+        "cyber-security-engineer": [
+          {
+            "schema_version": 1,
+            "review_id": "REV-TUN-P2-003-cyber-security-engineer",
+            "work_item_id": "TUN-P2-003",
+            "role": "cyber-security-engineer",
+            "status": "PASS",
+            "result": "PASS",
+            "reviewed_at": "2026-10-16T20:19:00.112Z",
+            "skill_id": "cyber-security-engineer",
+            "skill_version": "1.0.0",
+            "skill_hash": "2d32ff3d7fb503f29cf930e9852ed4a757bb48a08e3fa4e3f6d5a23139a47f97",
+            "authority_refs": [
+              "docs/authority/current-authority.json",
+              "docs/authority/current/development/11_Development_Planes_Milestones_and_P0_Backlog.md",
+              "docs/authority/baselines/1.6.0/17_Account_Identity_and_Session_FRD.md",
+              "docs/authority/current/development/32_Domain_API_Event_Data_and_Policy_Contract_Catalog.md",
+              "docs/authority/current/development/34_Architecture_to_Development_Traceability_Matrix.md",
+              "docs/authority/baselines/1.6.0/decisions/ADR-0006_Identity_ASPNET_Identity_OpenIddict.md",
+              "docs/authority/baselines/1.6.0/decisions/PDR-0007_DOB_Based_18_Plus_Eligibility.md",
+              "docs/authority/current/development/AMD-0002_Non-Blocking_PR_Approval_and_Continuous_Local_Execution.md",
+              "docs/authority/current/development/02_Repository_Solution_and_Module_Architecture.md",
+              "docs/authority/current/development/09_Testing_Acceptance_Evidence_and_Quality_Gates.md",
+              "docs/authority/baselines/1.6.0/29_Privacy_Data_Lifecycle_and_Processing_Governance_FRD.md"
+            ],
+            "context_artifacts": [
+              "governance/work-items/TUN-P2-003.yaml",
+              "docs/development/P2_003_IDENTITY_PERSISTENCE.md"
+            ],
+            "evidence_refs": [
+              "governance/evidence/TUN-P2-003-AUTHORITY-RESOLUTION.json",
+              "governance/evidence/TUN-P2-003-RD-SOURCES.json",
+              "governance/evidence/TUN-P2-003-VALIDATION.json",
+              "governance/evidence/TUN-P2-003-DATA-INVENTORY.json"
+            ],
+            "findings": [
+              "Registration activates EF user and OpenIddict Core stores only; tests confirm no UserManager, SignInManager or authentication server/scheme is registered. Explicit connection and matching schema-v3 design/runtime options are required. Secret/SAST scans pass; the module dependency audit reports no known NuGet vulnerabilities. Permanent SQL integrity errors use 23514. Existing P1 container findings remain open and unwaived.",
+              "Final engineering review of exact tested candidate 99c0cf268b368ba64b4984dce6172a00a2546718. All 345 platform tests pass; Product acceptance and release approval remain separate."
+            ],
+            "blocking_findings": [],
+            "required_actions": [],
+            "context_expansion_requested": false
+          }
+        ],
+        "full-stack-engineer": [
+          {
+            "schema_version": 1,
+            "review_id": "REV-TUN-P2-003-full-stack-engineer",
+            "work_item_id": "TUN-P2-003",
+            "role": "full-stack-engineer",
+            "status": "PASS",
+            "result": "PASS",
+            "reviewed_at": "2026-10-16T20:19:00.112Z",
+            "skill_id": "full-stack-engineer",
+            "skill_version": "1.0.0",
+            "skill_hash": "59adbe2133cf4ce88cbc9ca4eafce1d5a9d83b9562b6580c1571e6fc148d46b5",
+            "authority_refs": [
+              "docs/authority/current-authority.json",
+              "docs/authority/current/development/11_Development_Planes_Milestones_and_P0_Backlog.md",
+              "docs/authority/baselines/1.6.0/17_Account_Identity_and_Session_FRD.md",
+              "docs/authority/current/development/32_Domain_API_Event_Data_and_Policy_Contract_Catalog.md",
+              "docs/authority/current/development/34_Architecture_to_Development_Traceability_Matrix.md",
+              "docs/authority/baselines/1.6.0/decisions/ADR-0006_Identity_ASPNET_Identity_OpenIddict.md",
+              "docs/authority/baselines/1.6.0/decisions/PDR-0007_DOB_Based_18_Plus_Eligibility.md",
+              "docs/authority/current/development/AMD-0002_Non-Blocking_PR_Approval_and_Continuous_Local_Execution.md",
+              "docs/authority/current/development/02_Repository_Solution_and_Module_Architecture.md",
+              "docs/authority/current/development/09_Testing_Acceptance_Evidence_and_Quality_Gates.md",
+              "docs/authority/baselines/1.6.0/29_Privacy_Data_Lifecycle_and_Processing_Governance_FRD.md"
+            ],
+            "context_artifacts": [
+              "governance/work-items/TUN-P2-003.yaml",
+              "docs/development/P2_003_IDENTITY_PERSISTENCE.md"
+            ],
+            "evidence_refs": [
+              "governance/evidence/TUN-P2-003-AUTHORITY-RESOLUTION.json",
+              "governance/evidence/TUN-P2-003-RD-SOURCES.json",
+              "governance/evidence/TUN-P2-003-VALIDATION.json",
+              "governance/evidence/TUN-P2-003-DATA-INVENTORY.json"
+            ],
+            "findings": [
+              "Canonical Account, contact and immutable provider-subject persistence is implemented behind the Identity-owned EF context. Typed Account projections keep framework IDs private to the adapter; existing outbox transaction mapping is reused. No registration or authentication host path is activated.",
+              "Final engineering review of exact tested candidate 99c0cf268b368ba64b4984dce6172a00a2546718. All 345 platform tests pass; Product acceptance and release approval remain separate."
+            ],
+            "blocking_findings": [],
+            "required_actions": [],
+            "context_expansion_requested": false
+          }
+        ],
+        "rd-engineer": [
+          {
+            "schema_version": 1,
+            "review_id": "REV-TUN-P2-003-rd-engineer",
+            "work_item_id": "TUN-P2-003",
+            "role": "rd-engineer",
+            "status": "PASS",
+            "result": "PASS",
+            "reviewed_at": "2026-10-16T20:19:00.112Z",
+            "skill_id": "rd-engineer",
+            "skill_version": "1.0.0",
+            "skill_hash": "2834c223dfd847a6d7cd28f52de4113efc574d621391d059e8dc1469bdf33187",
+            "authority_refs": [
+              "docs/authority/current-authority.json",
+              "docs/authority/current/development/11_Development_Planes_Milestones_and_P0_Backlog.md",
+              "docs/authority/baselines/1.6.0/17_Account_Identity_and_Session_FRD.md",
+              "docs/authority/current/development/32_Domain_API_Event_Data_and_Policy_Contract_Catalog.md",
+              "docs/authority/current/development/34_Architecture_to_Development_Traceability_Matrix.md",
+              "docs/authority/baselines/1.6.0/decisions/ADR-0006_Identity_ASPNET_Identity_OpenIddict.md",
+              "docs/authority/baselines/1.6.0/decisions/PDR-0007_DOB_Based_18_Plus_Eligibility.md",
+              "docs/authority/current/development/AMD-0002_Non-Blocking_PR_Approval_and_Continuous_Local_Execution.md",
+              "docs/authority/current/development/02_Repository_Solution_and_Module_Architecture.md",
+              "docs/authority/current/development/09_Testing_Acceptance_Evidence_and_Quality_Gates.md",
+              "docs/authority/baselines/1.6.0/29_Privacy_Data_Lifecycle_and_Processing_Governance_FRD.md"
+            ],
+            "context_artifacts": [
+              "governance/work-items/TUN-P2-003.yaml",
+              "docs/development/P2_003_IDENTITY_PERSISTENCE.md"
+            ],
+            "evidence_refs": [
+              "governance/evidence/TUN-P2-003-AUTHORITY-RESOLUTION.json",
+              "governance/evidence/TUN-P2-003-RD-SOURCES.json",
+              "governance/evidence/TUN-P2-003-VALIDATION.json",
+              "governance/evidence/TUN-P2-003-DATA-INVENTORY.json"
+            ],
+            "findings": [
+              "Fresh official release/NuGet metadata pins Identity EF 10.0.13 and OpenIddict EF 7.7.2 with the existing EF 10.0.13/Npgsql 10.0.3 graph. Actual restore, transitive audit, zero-warning build, model consistency and framework CRUD tests confirm compatibility. The existing EF tool 10.0.12 version warning is retained; no unrelated tooling change or analyzer suppression is introduced.",
+              "Final engineering review of exact tested candidate 99c0cf268b368ba64b4984dce6172a00a2546718. All 345 platform tests pass; Product acceptance and release approval remain separate."
+            ],
+            "blocking_findings": [],
+            "required_actions": [],
+            "context_expansion_requested": false
+          }
+        ],
+        "solution-architect": [
+          {
+            "schema_version": 1,
+            "review_id": "REV-TUN-P2-003-solution-architect",
+            "work_item_id": "TUN-P2-003",
+            "role": "solution-architect",
+            "status": "PASS",
+            "result": "PASS",
+            "reviewed_at": "2026-10-16T20:19:00.112Z",
+            "skill_id": "solution-architect",
+            "skill_version": "1.0.0",
+            "skill_hash": "664ffba70d0f97e75951c3548b7f8391854781e4cf90cc50fc8829543783a35b",
+            "authority_refs": [
+              "docs/authority/current-authority.json",
+              "docs/authority/current/development/11_Development_Planes_Milestones_and_P0_Backlog.md",
+              "docs/authority/baselines/1.6.0/17_Account_Identity_and_Session_FRD.md",
+              "docs/authority/current/development/32_Domain_API_Event_Data_and_Policy_Contract_Catalog.md",
+              "docs/authority/current/development/34_Architecture_to_Development_Traceability_Matrix.md",
+              "docs/authority/baselines/1.6.0/decisions/ADR-0006_Identity_ASPNET_Identity_OpenIddict.md",
+              "docs/authority/baselines/1.6.0/decisions/PDR-0007_DOB_Based_18_Plus_Eligibility.md",
+              "docs/authority/current/development/AMD-0002_Non-Blocking_PR_Approval_and_Continuous_Local_Execution.md",
+              "docs/authority/current/development/02_Repository_Solution_and_Module_Architecture.md",
+              "docs/authority/current/development/09_Testing_Acceptance_Evidence_and_Quality_Gates.md",
+              "docs/authority/baselines/1.6.0/29_Privacy_Data_Lifecycle_and_Processing_Governance_FRD.md"
+            ],
+            "context_artifacts": [
+              "governance/work-items/TUN-P2-003.yaml",
+              "docs/development/P2_003_IDENTITY_PERSISTENCE.md"
+            ],
+            "evidence_refs": [
+              "governance/evidence/TUN-P2-003-AUTHORITY-RESOLUTION.json",
+              "governance/evidence/TUN-P2-003-RD-SOURCES.json",
+              "governance/evidence/TUN-P2-003-VALIDATION.json",
+              "governance/evidence/TUN-P2-003-DATA-INVENTORY.json"
+            ],
+            "findings": [
+              "Accounts remains framework-free. Identity owns its EF schema, Identity/OpenIddict store adapters and migrations; platform.outbox_messages is excluded from these migrations. The additive shared solution change is revalidated for the still-active TUN-P2-002 scope. All platform architecture tests pass.",
+              "Final engineering review of exact tested candidate 99c0cf268b368ba64b4984dce6172a00a2546718. All 345 platform tests pass; Product acceptance and release approval remain separate."
+            ],
+            "blocking_findings": [],
+            "required_actions": [],
+            "context_expansion_requested": false
+          }
+        ],
+        "tester-qa-engineer": [
+          {
+            "schema_version": 1,
+            "review_id": "REV-TUN-P2-003-tester-qa-engineer",
+            "work_item_id": "TUN-P2-003",
+            "role": "tester-qa-engineer",
+            "status": "PASS",
+            "result": "PASS",
+            "reviewed_at": "2026-10-16T20:19:00.112Z",
+            "skill_id": "tester-qa-engineer",
+            "skill_version": "1.0.0",
+            "skill_hash": "a57ce99d7ad7a3b60f17e4826c81c507c9cc208d8928285c406222eefe0a18fd",
+            "authority_refs": [
+              "docs/authority/current-authority.json",
+              "docs/authority/current/development/11_Development_Planes_Milestones_and_P0_Backlog.md",
+              "docs/authority/baselines/1.6.0/17_Account_Identity_and_Session_FRD.md",
+              "docs/authority/current/development/32_Domain_API_Event_Data_and_Policy_Contract_Catalog.md",
+              "docs/authority/current/development/34_Architecture_to_Development_Traceability_Matrix.md",
+              "docs/authority/baselines/1.6.0/decisions/ADR-0006_Identity_ASPNET_Identity_OpenIddict.md",
+              "docs/authority/baselines/1.6.0/decisions/PDR-0007_DOB_Based_18_Plus_Eligibility.md",
+              "docs/authority/current/development/AMD-0002_Non-Blocking_PR_Approval_and_Continuous_Local_Execution.md",
+              "docs/authority/current/development/02_Repository_Solution_and_Module_Architecture.md",
+              "docs/authority/current/development/09_Testing_Acceptance_Evidence_and_Quality_Gates.md",
+              "docs/authority/baselines/1.6.0/29_Privacy_Data_Lifecycle_and_Processing_Governance_FRD.md"
+            ],
+            "context_artifacts": [
+              "governance/work-items/TUN-P2-003.yaml",
+              "docs/development/P2_003_IDENTITY_PERSISTENCE.md"
+            ],
+            "evidence_refs": [
+              "governance/evidence/TUN-P2-003-AUTHORITY-RESOLUTION.json",
+              "governance/evidence/TUN-P2-003-RD-SOURCES.json",
+              "governance/evidence/TUN-P2-003-VALIDATION.json",
+              "governance/evidence/TUN-P2-003-DATA-INVENTORY.json"
+            ],
+            "findings": [
+              "All 16 new real-PostgreSQL tests pass: migrated/model-consistent fixtures, forward/empty rollback/reapply, populated rollback refusal, verified email uniqueness races, immutable external keys, optimistic concurrency and state history, direct SQL tamper guards, explicit age provenance, framework stores and Account/outbox transaction atomicity. All 329 existing platform tests pass at the same SHA. Invalid/stale-binary and failed built attempts are retained and excluded from final passing evidence.",
+              "Final engineering review of exact tested candidate 99c0cf268b368ba64b4984dce6172a00a2546718. All 345 platform tests pass; Product acceptance and release approval remain separate."
+            ],
+            "blocking_findings": [],
+            "required_actions": [],
+            "context_expansion_requested": false
+          }
+        ]
+      }
     }
   ],
-  "prior_formal_reviews": {
-    "auditor": [
-      {
-        "schema_version": 1,
-        "review_id": "REV-TUN-P2-003-auditor",
-        "work_item_id": "TUN-P2-003",
-        "role": "auditor",
-        "status": "PASS",
-        "result": "PASS",
-        "reviewed_at": "2026-10-16T20:19:00.112Z",
-        "skill_id": "auditor",
-        "skill_version": "1.0.0",
-        "skill_hash": "191c796fc5df0332ff2c3c464ca611d2c6d3ffc5ba7e2807986a71ad2e40d921",
-        "authority_refs": [
-          "docs/authority/current-authority.json",
-          "docs/authority/current/development/11_Development_Planes_Milestones_and_P0_Backlog.md",
-          "docs/authority/baselines/1.6.0/17_Account_Identity_and_Session_FRD.md",
-          "docs/authority/current/development/32_Domain_API_Event_Data_and_Policy_Contract_Catalog.md",
-          "docs/authority/current/development/34_Architecture_to_Development_Traceability_Matrix.md",
-          "docs/authority/baselines/1.6.0/decisions/ADR-0006_Identity_ASPNET_Identity_OpenIddict.md",
-          "docs/authority/baselines/1.6.0/decisions/PDR-0007_DOB_Based_18_Plus_Eligibility.md",
-          "docs/authority/current/development/AMD-0002_Non-Blocking_PR_Approval_and_Continuous_Local_Execution.md",
-          "docs/authority/current/development/02_Repository_Solution_and_Module_Architecture.md",
-          "docs/authority/current/development/09_Testing_Acceptance_Evidence_and_Quality_Gates.md",
-          "docs/authority/baselines/1.6.0/29_Privacy_Data_Lifecycle_and_Processing_Governance_FRD.md"
-        ],
-        "context_artifacts": [
-          "governance/work-items/TUN-P2-003.yaml",
-          "docs/development/P2_003_IDENTITY_PERSISTENCE.md"
-        ],
-        "evidence_refs": [
-          "governance/evidence/TUN-P2-003-AUTHORITY-RESOLUTION.json",
-          "governance/evidence/TUN-P2-003-RD-SOURCES.json",
-          "governance/evidence/TUN-P2-003-VALIDATION.json",
-          "governance/evidence/TUN-P2-003-DATA-INVENTORY.json"
-        ],
-        "findings": [
-          "Owned behavior is frozen in exact tested commit 99c0cf268b368ba64b4984dce6172a00a2546718; all 345 executed tests pass with zero failed/skipped across six suite executions. Source hashes, failed attempts, seven role skills and unrelated dirty paths are recorded. This is executing-agent engineering review; Product acceptance, protected-main integration and release authorization remain separate.",
-          "Final engineering review of exact tested candidate 99c0cf268b368ba64b4984dce6172a00a2546718. All 345 platform tests pass; Product acceptance and release approval remain separate."
-        ],
-        "blocking_findings": [],
-        "required_actions": [],
-        "context_expansion_requested": false
-      }
-    ],
-    "compliance-specialist": [
-      {
-        "schema_version": 1,
-        "review_id": "REV-TUN-P2-003-compliance-specialist",
-        "work_item_id": "TUN-P2-003",
-        "role": "compliance-specialist",
-        "status": "PASS",
-        "result": "PASS",
-        "reviewed_at": "2026-10-16T20:19:00.112Z",
-        "skill_id": "compliance-specialist",
-        "skill_version": "1.0.0",
-        "skill_hash": "38f8de27e31b3ae5cec070320d9b408d6f75682b024322f5e37585c76921303e",
-        "authority_refs": [
-          "docs/authority/current-authority.json",
-          "docs/authority/current/development/11_Development_Planes_Milestones_and_P0_Backlog.md",
-          "docs/authority/baselines/1.6.0/17_Account_Identity_and_Session_FRD.md",
-          "docs/authority/current/development/32_Domain_API_Event_Data_and_Policy_Contract_Catalog.md",
-          "docs/authority/current/development/34_Architecture_to_Development_Traceability_Matrix.md",
-          "docs/authority/baselines/1.6.0/decisions/ADR-0006_Identity_ASPNET_Identity_OpenIddict.md",
-          "docs/authority/baselines/1.6.0/decisions/PDR-0007_DOB_Based_18_Plus_Eligibility.md",
-          "docs/authority/current/development/AMD-0002_Non-Blocking_PR_Approval_and_Continuous_Local_Execution.md",
-          "docs/authority/current/development/02_Repository_Solution_and_Module_Architecture.md",
-          "docs/authority/current/development/09_Testing_Acceptance_Evidence_and_Quality_Gates.md",
-          "docs/authority/baselines/1.6.0/29_Privacy_Data_Lifecycle_and_Processing_Governance_FRD.md"
-        ],
-        "context_artifacts": [
-          "governance/work-items/TUN-P2-003.yaml",
-          "docs/development/P2_003_IDENTITY_PERSISTENCE.md"
-        ],
-        "evidence_refs": [
-          "governance/evidence/TUN-P2-003-AUTHORITY-RESOLUTION.json",
-          "governance/evidence/TUN-P2-003-RD-SOURCES.json",
-          "governance/evidence/TUN-P2-003-VALIDATION.json",
-          "governance/evidence/TUN-P2-003-DATA-INVENTORY.json"
-        ],
-        "findings": [
-          "Database/model checks confirm no DOB column; only derived eligibility policy, evaluation time and evidence references persist. The reviewed inactive storage inventory records contact/external subject metadata and requires processing/retention review before production activation. No retention duration, jurisdiction or legal acceptance is invented.",
-          "Final engineering review of exact tested candidate 99c0cf268b368ba64b4984dce6172a00a2546718. All 345 platform tests pass; Product acceptance and release approval remain separate."
-        ],
-        "blocking_findings": [],
-        "required_actions": [],
-        "context_expansion_requested": false
-      }
-    ],
-    "cyber-security-engineer": [
-      {
-        "schema_version": 1,
-        "review_id": "REV-TUN-P2-003-cyber-security-engineer",
-        "work_item_id": "TUN-P2-003",
-        "role": "cyber-security-engineer",
-        "status": "PASS",
-        "result": "PASS",
-        "reviewed_at": "2026-10-16T20:19:00.112Z",
-        "skill_id": "cyber-security-engineer",
-        "skill_version": "1.0.0",
-        "skill_hash": "2d32ff3d7fb503f29cf930e9852ed4a757bb48a08e3fa4e3f6d5a23139a47f97",
-        "authority_refs": [
-          "docs/authority/current-authority.json",
-          "docs/authority/current/development/11_Development_Planes_Milestones_and_P0_Backlog.md",
-          "docs/authority/baselines/1.6.0/17_Account_Identity_and_Session_FRD.md",
-          "docs/authority/current/development/32_Domain_API_Event_Data_and_Policy_Contract_Catalog.md",
-          "docs/authority/current/development/34_Architecture_to_Development_Traceability_Matrix.md",
-          "docs/authority/baselines/1.6.0/decisions/ADR-0006_Identity_ASPNET_Identity_OpenIddict.md",
-          "docs/authority/baselines/1.6.0/decisions/PDR-0007_DOB_Based_18_Plus_Eligibility.md",
-          "docs/authority/current/development/AMD-0002_Non-Blocking_PR_Approval_and_Continuous_Local_Execution.md",
-          "docs/authority/current/development/02_Repository_Solution_and_Module_Architecture.md",
-          "docs/authority/current/development/09_Testing_Acceptance_Evidence_and_Quality_Gates.md",
-          "docs/authority/baselines/1.6.0/29_Privacy_Data_Lifecycle_and_Processing_Governance_FRD.md"
-        ],
-        "context_artifacts": [
-          "governance/work-items/TUN-P2-003.yaml",
-          "docs/development/P2_003_IDENTITY_PERSISTENCE.md"
-        ],
-        "evidence_refs": [
-          "governance/evidence/TUN-P2-003-AUTHORITY-RESOLUTION.json",
-          "governance/evidence/TUN-P2-003-RD-SOURCES.json",
-          "governance/evidence/TUN-P2-003-VALIDATION.json",
-          "governance/evidence/TUN-P2-003-DATA-INVENTORY.json"
-        ],
-        "findings": [
-          "Registration activates EF user and OpenIddict Core stores only; tests confirm no UserManager, SignInManager or authentication server/scheme is registered. Explicit connection and matching schema-v3 design/runtime options are required. Secret/SAST scans pass; the module dependency audit reports no known NuGet vulnerabilities. Permanent SQL integrity errors use 23514. Existing P1 container findings remain open and unwaived.",
-          "Final engineering review of exact tested candidate 99c0cf268b368ba64b4984dce6172a00a2546718. All 345 platform tests pass; Product acceptance and release approval remain separate."
-        ],
-        "blocking_findings": [],
-        "required_actions": [],
-        "context_expansion_requested": false
-      }
-    ],
-    "full-stack-engineer": [
-      {
-        "schema_version": 1,
-        "review_id": "REV-TUN-P2-003-full-stack-engineer",
-        "work_item_id": "TUN-P2-003",
-        "role": "full-stack-engineer",
-        "status": "PASS",
-        "result": "PASS",
-        "reviewed_at": "2026-10-16T20:19:00.112Z",
-        "skill_id": "full-stack-engineer",
-        "skill_version": "1.0.0",
-        "skill_hash": "59adbe2133cf4ce88cbc9ca4eafce1d5a9d83b9562b6580c1571e6fc148d46b5",
-        "authority_refs": [
-          "docs/authority/current-authority.json",
-          "docs/authority/current/development/11_Development_Planes_Milestones_and_P0_Backlog.md",
-          "docs/authority/baselines/1.6.0/17_Account_Identity_and_Session_FRD.md",
-          "docs/authority/current/development/32_Domain_API_Event_Data_and_Policy_Contract_Catalog.md",
-          "docs/authority/current/development/34_Architecture_to_Development_Traceability_Matrix.md",
-          "docs/authority/baselines/1.6.0/decisions/ADR-0006_Identity_ASPNET_Identity_OpenIddict.md",
-          "docs/authority/baselines/1.6.0/decisions/PDR-0007_DOB_Based_18_Plus_Eligibility.md",
-          "docs/authority/current/development/AMD-0002_Non-Blocking_PR_Approval_and_Continuous_Local_Execution.md",
-          "docs/authority/current/development/02_Repository_Solution_and_Module_Architecture.md",
-          "docs/authority/current/development/09_Testing_Acceptance_Evidence_and_Quality_Gates.md",
-          "docs/authority/baselines/1.6.0/29_Privacy_Data_Lifecycle_and_Processing_Governance_FRD.md"
-        ],
-        "context_artifacts": [
-          "governance/work-items/TUN-P2-003.yaml",
-          "docs/development/P2_003_IDENTITY_PERSISTENCE.md"
-        ],
-        "evidence_refs": [
-          "governance/evidence/TUN-P2-003-AUTHORITY-RESOLUTION.json",
-          "governance/evidence/TUN-P2-003-RD-SOURCES.json",
-          "governance/evidence/TUN-P2-003-VALIDATION.json",
-          "governance/evidence/TUN-P2-003-DATA-INVENTORY.json"
-        ],
-        "findings": [
-          "Canonical Account, contact and immutable provider-subject persistence is implemented behind the Identity-owned EF context. Typed Account projections keep framework IDs private to the adapter; existing outbox transaction mapping is reused. No registration or authentication host path is activated.",
-          "Final engineering review of exact tested candidate 99c0cf268b368ba64b4984dce6172a00a2546718. All 345 platform tests pass; Product acceptance and release approval remain separate."
-        ],
-        "blocking_findings": [],
-        "required_actions": [],
-        "context_expansion_requested": false
-      }
-    ],
-    "rd-engineer": [
-      {
-        "schema_version": 1,
-        "review_id": "REV-TUN-P2-003-rd-engineer",
-        "work_item_id": "TUN-P2-003",
-        "role": "rd-engineer",
-        "status": "PASS",
-        "result": "PASS",
-        "reviewed_at": "2026-10-16T20:19:00.112Z",
-        "skill_id": "rd-engineer",
-        "skill_version": "1.0.0",
-        "skill_hash": "2834c223dfd847a6d7cd28f52de4113efc574d621391d059e8dc1469bdf33187",
-        "authority_refs": [
-          "docs/authority/current-authority.json",
-          "docs/authority/current/development/11_Development_Planes_Milestones_and_P0_Backlog.md",
-          "docs/authority/baselines/1.6.0/17_Account_Identity_and_Session_FRD.md",
-          "docs/authority/current/development/32_Domain_API_Event_Data_and_Policy_Contract_Catalog.md",
-          "docs/authority/current/development/34_Architecture_to_Development_Traceability_Matrix.md",
-          "docs/authority/baselines/1.6.0/decisions/ADR-0006_Identity_ASPNET_Identity_OpenIddict.md",
-          "docs/authority/baselines/1.6.0/decisions/PDR-0007_DOB_Based_18_Plus_Eligibility.md",
-          "docs/authority/current/development/AMD-0002_Non-Blocking_PR_Approval_and_Continuous_Local_Execution.md",
-          "docs/authority/current/development/02_Repository_Solution_and_Module_Architecture.md",
-          "docs/authority/current/development/09_Testing_Acceptance_Evidence_and_Quality_Gates.md",
-          "docs/authority/baselines/1.6.0/29_Privacy_Data_Lifecycle_and_Processing_Governance_FRD.md"
-        ],
-        "context_artifacts": [
-          "governance/work-items/TUN-P2-003.yaml",
-          "docs/development/P2_003_IDENTITY_PERSISTENCE.md"
-        ],
-        "evidence_refs": [
-          "governance/evidence/TUN-P2-003-AUTHORITY-RESOLUTION.json",
-          "governance/evidence/TUN-P2-003-RD-SOURCES.json",
-          "governance/evidence/TUN-P2-003-VALIDATION.json",
-          "governance/evidence/TUN-P2-003-DATA-INVENTORY.json"
-        ],
-        "findings": [
-          "Fresh official release/NuGet metadata pins Identity EF 10.0.13 and OpenIddict EF 7.7.2 with the existing EF 10.0.13/Npgsql 10.0.3 graph. Actual restore, transitive audit, zero-warning build, model consistency and framework CRUD tests confirm compatibility. The existing EF tool 10.0.12 version warning is retained; no unrelated tooling change or analyzer suppression is introduced.",
-          "Final engineering review of exact tested candidate 99c0cf268b368ba64b4984dce6172a00a2546718. All 345 platform tests pass; Product acceptance and release approval remain separate."
-        ],
-        "blocking_findings": [],
-        "required_actions": [],
-        "context_expansion_requested": false
-      }
-    ],
-    "solution-architect": [
-      {
-        "schema_version": 1,
-        "review_id": "REV-TUN-P2-003-solution-architect",
-        "work_item_id": "TUN-P2-003",
-        "role": "solution-architect",
-        "status": "PASS",
-        "result": "PASS",
-        "reviewed_at": "2026-10-16T20:19:00.112Z",
-        "skill_id": "solution-architect",
-        "skill_version": "1.0.0",
-        "skill_hash": "664ffba70d0f97e75951c3548b7f8391854781e4cf90cc50fc8829543783a35b",
-        "authority_refs": [
-          "docs/authority/current-authority.json",
-          "docs/authority/current/development/11_Development_Planes_Milestones_and_P0_Backlog.md",
-          "docs/authority/baselines/1.6.0/17_Account_Identity_and_Session_FRD.md",
-          "docs/authority/current/development/32_Domain_API_Event_Data_and_Policy_Contract_Catalog.md",
-          "docs/authority/current/development/34_Architecture_to_Development_Traceability_Matrix.md",
-          "docs/authority/baselines/1.6.0/decisions/ADR-0006_Identity_ASPNET_Identity_OpenIddict.md",
-          "docs/authority/baselines/1.6.0/decisions/PDR-0007_DOB_Based_18_Plus_Eligibility.md",
-          "docs/authority/current/development/AMD-0002_Non-Blocking_PR_Approval_and_Continuous_Local_Execution.md",
-          "docs/authority/current/development/02_Repository_Solution_and_Module_Architecture.md",
-          "docs/authority/current/development/09_Testing_Acceptance_Evidence_and_Quality_Gates.md",
-          "docs/authority/baselines/1.6.0/29_Privacy_Data_Lifecycle_and_Processing_Governance_FRD.md"
-        ],
-        "context_artifacts": [
-          "governance/work-items/TUN-P2-003.yaml",
-          "docs/development/P2_003_IDENTITY_PERSISTENCE.md"
-        ],
-        "evidence_refs": [
-          "governance/evidence/TUN-P2-003-AUTHORITY-RESOLUTION.json",
-          "governance/evidence/TUN-P2-003-RD-SOURCES.json",
-          "governance/evidence/TUN-P2-003-VALIDATION.json",
-          "governance/evidence/TUN-P2-003-DATA-INVENTORY.json"
-        ],
-        "findings": [
-          "Accounts remains framework-free. Identity owns its EF schema, Identity/OpenIddict store adapters and migrations; platform.outbox_messages is excluded from these migrations. The additive shared solution change is revalidated for the still-active TUN-P2-002 scope. All platform architecture tests pass.",
-          "Final engineering review of exact tested candidate 99c0cf268b368ba64b4984dce6172a00a2546718. All 345 platform tests pass; Product acceptance and release approval remain separate."
-        ],
-        "blocking_findings": [],
-        "required_actions": [],
-        "context_expansion_requested": false
-      }
-    ],
-    "tester-qa-engineer": [
-      {
-        "schema_version": 1,
-        "review_id": "REV-TUN-P2-003-tester-qa-engineer",
-        "work_item_id": "TUN-P2-003",
-        "role": "tester-qa-engineer",
-        "status": "PASS",
-        "result": "PASS",
-        "reviewed_at": "2026-10-16T20:19:00.112Z",
-        "skill_id": "tester-qa-engineer",
-        "skill_version": "1.0.0",
-        "skill_hash": "a57ce99d7ad7a3b60f17e4826c81c507c9cc208d8928285c406222eefe0a18fd",
-        "authority_refs": [
-          "docs/authority/current-authority.json",
-          "docs/authority/current/development/11_Development_Planes_Milestones_and_P0_Backlog.md",
-          "docs/authority/baselines/1.6.0/17_Account_Identity_and_Session_FRD.md",
-          "docs/authority/current/development/32_Domain_API_Event_Data_and_Policy_Contract_Catalog.md",
-          "docs/authority/current/development/34_Architecture_to_Development_Traceability_Matrix.md",
-          "docs/authority/baselines/1.6.0/decisions/ADR-0006_Identity_ASPNET_Identity_OpenIddict.md",
-          "docs/authority/baselines/1.6.0/decisions/PDR-0007_DOB_Based_18_Plus_Eligibility.md",
-          "docs/authority/current/development/AMD-0002_Non-Blocking_PR_Approval_and_Continuous_Local_Execution.md",
-          "docs/authority/current/development/02_Repository_Solution_and_Module_Architecture.md",
-          "docs/authority/current/development/09_Testing_Acceptance_Evidence_and_Quality_Gates.md",
-          "docs/authority/baselines/1.6.0/29_Privacy_Data_Lifecycle_and_Processing_Governance_FRD.md"
-        ],
-        "context_artifacts": [
-          "governance/work-items/TUN-P2-003.yaml",
-          "docs/development/P2_003_IDENTITY_PERSISTENCE.md"
-        ],
-        "evidence_refs": [
-          "governance/evidence/TUN-P2-003-AUTHORITY-RESOLUTION.json",
-          "governance/evidence/TUN-P2-003-RD-SOURCES.json",
-          "governance/evidence/TUN-P2-003-VALIDATION.json",
-          "governance/evidence/TUN-P2-003-DATA-INVENTORY.json"
-        ],
-        "findings": [
-          "All 16 new real-PostgreSQL tests pass: migrated/model-consistent fixtures, forward/empty rollback/reapply, populated rollback refusal, verified email uniqueness races, immutable external keys, optimistic concurrency and state history, direct SQL tamper guards, explicit age provenance, framework stores and Account/outbox transaction atomicity. All 329 existing platform tests pass at the same SHA. Invalid/stale-binary and failed built attempts are retained and excluded from final passing evidence.",
-          "Final engineering review of exact tested candidate 99c0cf268b368ba64b4984dce6172a00a2546718. All 345 platform tests pass; Product acceptance and release approval remain separate."
-        ],
-        "blocking_findings": [],
-        "required_actions": [],
-        "context_expansion_requested": false
-      }
-    ]
-  }
+  "reviewer_provenance": "Executing-agent engineering role perspectives; no independent human approval is represented."
 }

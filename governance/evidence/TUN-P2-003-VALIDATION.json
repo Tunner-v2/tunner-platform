@@ -1,10 +1,10 @@
 {
   "schema_version": 1,
   "scope_id": "TUN-P2-003",
-  "validation_kind": "CANDIDATE",
-  "result": "PENDING_EXACT_COMMIT_TESTS",
-  "validated_commit_sha": null,
-  "tested_commit_sha": null,
+  "validation_kind": "COMMITTED",
+  "result": "PASS",
+  "validated_commit_sha": "ec1a55e142cea0a1e46f63b0bdc38f63fb43b0e8",
+  "tested_commit_sha": "ec1a55e142cea0a1e46f63b0bdc38f63fb43b0e8",
   "owned_behavior_paths": [
     "Directory.Packages.props",
     "Tunner.Platform.slnx",
@@ -526,5 +526,333 @@
   "authority_refs": [
     "PDR-0011",
     "AMD-0007"
+  ],
+  "checked_at": "2026-10-17T19:47:31.197Z",
+  "tests": {
+    "passed": 15,
+    "failed": 0,
+    "skipped": 0,
+    "environment": "Host-authorized disposable PostgreSQL18.6 via existing Testcontainers fixture",
+    "receipt": "artifacts/pdr0011-amd0007-20261017/validated/foundation-exact.trx",
+    "failed_development_attempts": [
+      "sandbox Docker named-pipe access denied",
+      "generated migration analyzer correction",
+      "prior downgrade assertion superseded by stricter all-migrations-preserved assertion"
+    ]
+  },
+  "committed_source_sha256": {
+    "Directory.Packages.props": "98ff6c1281cabbe8c99f8de5ec8ad39eb2929e3890878c75b03d646ef77f98fe",
+    "Tunner.Platform.slnx": "f037f86bb2b1ecfd72fb1787523412703c593ed424c86a92956afcfc27605449",
+    "docs/development/P2_003_IDENTITY_PERSISTENCE.md": "63badc59b042a1cd41cb9a409c97496405044a280b1bc7e953018ae1ea1e4120",
+    "governance/evidence/TUN-P2-003-AUTHORITY-RESOLUTION.json": "c9ba231080d6f0059baec18f18afbe741e8da3b527face35767a243a3838bd95",
+    "governance/evidence/TUN-P2-003-DATA-INVENTORY.json": "00da8b50303e3c4af0ab0994a4df89c18da53f5812ac2b8b86c5422d15350d23",
+    "governance/evidence/TUN-P2-003-RD-SOURCES.json": "1c532867c222c81525d058dac23780a0b7210c01b0672e2168852652992dc2e3",
+    "src/Modules/Accounts/AccountSnapshot.cs": "de3b989ebd9b8a89255632740b58a219e16d92e479728d6df4d95ad8c95407a8",
+    "src/Modules/Identity/AssemblyInfo.cs": "57c1f2c2bdcc3c56c68cb04d1417c18b179537447168824c21e111d4fd8ef84b",
+    "src/Modules/Identity/IdentityMigrationSql.cs": "77925d199380122c533464e514186d7555608788c33da971fe7ccda8f152c28a",
+    "src/Modules/Identity/IdentityModelConfiguration.cs": "4b6b967a611026a6df8edbc97b2d2859b11ca34feb46a48d44c516f746d94281",
+    "src/Modules/Identity/IdentityPersistenceDbContext.cs": "3ec99e760107209e463d83f317a5f4887543f4daea93f84f315e2e9044c1b09f",
+    "src/Modules/Identity/IdentityPersistenceDbContextFactory.cs": "804dcd8bbf1958079fdbf836dad6dd7e7238efad5501cad3fec93c13bb6b6200",
+    "src/Modules/Identity/IdentityPersistenceRegistration.cs": "a8600595de0c2b20afd64f4def4781f8c584add35fd4d7f6d12ee858ffd475e1",
+    "src/Modules/Identity/IdentityRows.cs": "71d0d04ff51f57065aaffd52d2746f5417e80e9b51e656a34e7008f0028b8d9e",
+    "src/Modules/Identity/Migrations/20261016200608_P2IdentityFoundation.Designer.cs": "ffd00b430cc5178b3ee495e27793be87893c48bd02e0b596d20541001134a389",
+    "src/Modules/Identity/Migrations/20261016200608_P2IdentityFoundation.cs": "c7356d1e6f55507613d98deac66877b8c78f175d0b39213c2de262b500cd75e5",
+    "src/Modules/Identity/Migrations/IdentityPersistenceDbContextModelSnapshot.cs": "5f3f8ba6826f752a96133067a5903e3bcaa5fa87fc0f1759ecd7dceb57edd31b",
+    "src/Modules/Identity/Tunner.Identity.Persistence.csproj": "dfe3ca202ac04d779d5ab75f9db2bc07bd7b62e16b5d637e9a88597c27f93d60",
+    "tests/Tunner.Identity.Persistence.Tests/IdentityFoundationTests.cs": "bdc20efa56d0732010875bfb3418359669f10b91aa8fa55e3b71ababbb8bfee0",
+    "tests/Tunner.Identity.Persistence.Tests/IdentityPostgresFixture.cs": "06daf56f57b144db77c5d6b3b9666e24d7e2297d39265408a982535efaa78c6a",
+    "tests/Tunner.Identity.Persistence.Tests/Tunner.Identity.Persistence.Tests.csproj": "bc43afb4e828c0b2cb65d6768fc9503d606a55c6db74c9d8ca20136533d5dc8d",
+    "src/Modules/Identity/AccountPersonalInformationRows.cs": "ba334dc9e6e13da44380ef42fcabcb31cdb66787c71c563b1408b5bf76e0122e",
+    "src/Modules/Identity/Migrations/20261017194133_Pdr0011AccountAgePolicy.cs": "fe6f526c114ce2fdc3eb074fdeae689c0526fc90ff91e092c51721bec1ca1ed2",
+    "src/Modules/Identity/Migrations/20261017194133_Pdr0011AccountAgePolicy.Designer.cs": "7001101600ee5664ad56d0b71260e42a44e8f19dd511b2824c5aa020a2670801"
+  },
+  "prior_formal_reviews": [
+    {
+      "schema_version": 1,
+      "review_id": "REV-TUN-P2-003-auditor",
+      "work_item_id": "TUN-P2-003",
+      "role": "auditor",
+      "status": "PASS",
+      "result": "PASS",
+      "reviewed_at": "2026-10-17T19:47:34.566Z",
+      "skill_id": "auditor",
+      "skill_version": "1.0.0",
+      "skill_hash": "191c796fc5df0332ff2c3c464ca611d2c6d3ffc5ba7e2807986a71ad2e40d921",
+      "authority_refs": [
+        "docs/authority/current-authority.json",
+        "docs/authority/current/development/11_Development_Planes_Milestones_and_P0_Backlog.md",
+        "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md",
+        "docs/authority/current/development/32_Domain_API_Event_Data_and_Policy_Contract_Catalog.md",
+        "docs/authority/current/development/34_Architecture_to_Development_Traceability_Matrix.md",
+        "docs/authority/baselines/1.6.0/decisions/ADR-0006_Identity_ASPNET_Identity_OpenIddict.md",
+        "docs/authority/current/development/AMD-0002_Non-Blocking_PR_Approval_and_Continuous_Local_Execution.md",
+        "docs/authority/current/development/02_Repository_Solution_and_Module_Architecture.md",
+        "docs/authority/current/development/09_Testing_Acceptance_Evidence_and_Quality_Gates.md",
+        "docs/authority/current/development/29_Privacy_Data_Lifecycle_and_Processing_Governance_FRD.md",
+        "docs/authority/current/decisions/PDR-0011_Universal_Account_Eligibility_Age-Aware_Consent_and_Delegated_Commercial_Authority.md",
+        "docs/authority/current/decisions/AMD-0007_Universal_Registration_Age-Aware_Consent_and_Delegated_Commercial_Authority.md"
+      ],
+      "context_artifacts": [
+        "src/Modules/Identity/AccountPersonalInformationRows.cs",
+        "docs/development/P2_003_IDENTITY_PERSISTENCE.md"
+      ],
+      "evidence_refs": [
+        "governance/evidence/TUN-P2-003-VALIDATION.json",
+        "governance/evidence/PDR0011-AMD0007-IMPACT-AUDIT.json"
+      ],
+      "findings": [
+        "PDR-0011 removes the adult-only ACTIVE constraint, retains complete historical age evidence and rejects partial provenance. Separate Account-owned protected Personal Information storage and immutable safe evaluation history are added by a forward migration.",
+        "15 actual PostgreSQL migration/concurrency/uniqueness/framework/outbox tests pass without skips at ec1a55e142cea0a1e46f63b0bdc38f63fb43b0e8. Executing-agent engineering perspective; no Product/release/legal acceptance."
+      ],
+      "blocking_findings": [],
+      "required_actions": [],
+      "context_expansion_requested": false
+    },
+    {
+      "schema_version": 1,
+      "review_id": "REV-TUN-P2-003-compliance-specialist",
+      "work_item_id": "TUN-P2-003",
+      "role": "compliance-specialist",
+      "status": "PASS",
+      "result": "PASS",
+      "reviewed_at": "2026-10-17T19:47:34.568Z",
+      "skill_id": "compliance-specialist",
+      "skill_version": "1.0.0",
+      "skill_hash": "38f8de27e31b3ae5cec070320d9b408d6f75682b024322f5e37585c76921303e",
+      "authority_refs": [
+        "docs/authority/current-authority.json",
+        "docs/authority/current/development/11_Development_Planes_Milestones_and_P0_Backlog.md",
+        "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md",
+        "docs/authority/current/development/32_Domain_API_Event_Data_and_Policy_Contract_Catalog.md",
+        "docs/authority/current/development/34_Architecture_to_Development_Traceability_Matrix.md",
+        "docs/authority/baselines/1.6.0/decisions/ADR-0006_Identity_ASPNET_Identity_OpenIddict.md",
+        "docs/authority/current/development/AMD-0002_Non-Blocking_PR_Approval_and_Continuous_Local_Execution.md",
+        "docs/authority/current/development/02_Repository_Solution_and_Module_Architecture.md",
+        "docs/authority/current/development/09_Testing_Acceptance_Evidence_and_Quality_Gates.md",
+        "docs/authority/current/development/29_Privacy_Data_Lifecycle_and_Processing_Governance_FRD.md",
+        "docs/authority/current/decisions/PDR-0011_Universal_Account_Eligibility_Age-Aware_Consent_and_Delegated_Commercial_Authority.md",
+        "docs/authority/current/decisions/AMD-0007_Universal_Registration_Age-Aware_Consent_and_Delegated_Commercial_Authority.md"
+      ],
+      "context_artifacts": [
+        "src/Modules/Identity/AccountPersonalInformationRows.cs",
+        "docs/development/P2_003_IDENTITY_PERSISTENCE.md"
+      ],
+      "evidence_refs": [
+        "governance/evidence/TUN-P2-003-VALIDATION.json",
+        "governance/evidence/PDR0011-AMD0007-IMPACT-AUDIT.json"
+      ],
+      "findings": [
+        "PDR-0011 removes the adult-only ACTIVE constraint, retains complete historical age evidence and rejects partial provenance. Separate Account-owned protected Personal Information storage and immutable safe evaluation history are added by a forward migration.",
+        "15 actual PostgreSQL migration/concurrency/uniqueness/framework/outbox tests pass without skips at ec1a55e142cea0a1e46f63b0bdc38f63fb43b0e8. Executing-agent engineering perspective; no Product/release/legal acceptance."
+      ],
+      "blocking_findings": [],
+      "required_actions": [],
+      "context_expansion_requested": false
+    },
+    {
+      "schema_version": 1,
+      "review_id": "REV-TUN-P2-003-cyber-security-engineer",
+      "work_item_id": "TUN-P2-003",
+      "role": "cyber-security-engineer",
+      "status": "PASS",
+      "result": "PASS",
+      "reviewed_at": "2026-10-17T19:47:34.570Z",
+      "skill_id": "cyber-security-engineer",
+      "skill_version": "1.0.0",
+      "skill_hash": "2d32ff3d7fb503f29cf930e9852ed4a757bb48a08e3fa4e3f6d5a23139a47f97",
+      "authority_refs": [
+        "docs/authority/current-authority.json",
+        "docs/authority/current/development/11_Development_Planes_Milestones_and_P0_Backlog.md",
+        "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md",
+        "docs/authority/current/development/32_Domain_API_Event_Data_and_Policy_Contract_Catalog.md",
+        "docs/authority/current/development/34_Architecture_to_Development_Traceability_Matrix.md",
+        "docs/authority/baselines/1.6.0/decisions/ADR-0006_Identity_ASPNET_Identity_OpenIddict.md",
+        "docs/authority/current/development/AMD-0002_Non-Blocking_PR_Approval_and_Continuous_Local_Execution.md",
+        "docs/authority/current/development/02_Repository_Solution_and_Module_Architecture.md",
+        "docs/authority/current/development/09_Testing_Acceptance_Evidence_and_Quality_Gates.md",
+        "docs/authority/current/development/29_Privacy_Data_Lifecycle_and_Processing_Governance_FRD.md",
+        "docs/authority/current/decisions/PDR-0011_Universal_Account_Eligibility_Age-Aware_Consent_and_Delegated_Commercial_Authority.md",
+        "docs/authority/current/decisions/AMD-0007_Universal_Registration_Age-Aware_Consent_and_Delegated_Commercial_Authority.md"
+      ],
+      "context_artifacts": [
+        "src/Modules/Identity/AccountPersonalInformationRows.cs",
+        "docs/development/P2_003_IDENTITY_PERSISTENCE.md"
+      ],
+      "evidence_refs": [
+        "governance/evidence/TUN-P2-003-VALIDATION.json",
+        "governance/evidence/PDR0011-AMD0007-IMPACT-AUDIT.json"
+      ],
+      "findings": [
+        "PDR-0011 removes the adult-only ACTIVE constraint, retains complete historical age evidence and rejects partial provenance. Separate Account-owned protected Personal Information storage and immutable safe evaluation history are added by a forward migration.",
+        "15 actual PostgreSQL migration/concurrency/uniqueness/framework/outbox tests pass without skips at ec1a55e142cea0a1e46f63b0bdc38f63fb43b0e8. Executing-agent engineering perspective; no Product/release/legal acceptance."
+      ],
+      "blocking_findings": [],
+      "required_actions": [],
+      "context_expansion_requested": false
+    },
+    {
+      "schema_version": 1,
+      "review_id": "REV-TUN-P2-003-full-stack-engineer",
+      "work_item_id": "TUN-P2-003",
+      "role": "full-stack-engineer",
+      "status": "PASS",
+      "result": "PASS",
+      "reviewed_at": "2026-10-17T19:47:34.571Z",
+      "skill_id": "full-stack-engineer",
+      "skill_version": "1.0.0",
+      "skill_hash": "59adbe2133cf4ce88cbc9ca4eafce1d5a9d83b9562b6580c1571e6fc148d46b5",
+      "authority_refs": [
+        "docs/authority/current-authority.json",
+        "docs/authority/current/development/11_Development_Planes_Milestones_and_P0_Backlog.md",
+        "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md",
+        "docs/authority/current/development/32_Domain_API_Event_Data_and_Policy_Contract_Catalog.md",
+        "docs/authority/current/development/34_Architecture_to_Development_Traceability_Matrix.md",
+        "docs/authority/baselines/1.6.0/decisions/ADR-0006_Identity_ASPNET_Identity_OpenIddict.md",
+        "docs/authority/current/development/AMD-0002_Non-Blocking_PR_Approval_and_Continuous_Local_Execution.md",
+        "docs/authority/current/development/02_Repository_Solution_and_Module_Architecture.md",
+        "docs/authority/current/development/09_Testing_Acceptance_Evidence_and_Quality_Gates.md",
+        "docs/authority/current/development/29_Privacy_Data_Lifecycle_and_Processing_Governance_FRD.md",
+        "docs/authority/current/decisions/PDR-0011_Universal_Account_Eligibility_Age-Aware_Consent_and_Delegated_Commercial_Authority.md",
+        "docs/authority/current/decisions/AMD-0007_Universal_Registration_Age-Aware_Consent_and_Delegated_Commercial_Authority.md"
+      ],
+      "context_artifacts": [
+        "src/Modules/Identity/AccountPersonalInformationRows.cs",
+        "docs/development/P2_003_IDENTITY_PERSISTENCE.md"
+      ],
+      "evidence_refs": [
+        "governance/evidence/TUN-P2-003-VALIDATION.json",
+        "governance/evidence/PDR0011-AMD0007-IMPACT-AUDIT.json"
+      ],
+      "findings": [
+        "PDR-0011 removes the adult-only ACTIVE constraint, retains complete historical age evidence and rejects partial provenance. Separate Account-owned protected Personal Information storage and immutable safe evaluation history are added by a forward migration.",
+        "15 actual PostgreSQL migration/concurrency/uniqueness/framework/outbox tests pass without skips at ec1a55e142cea0a1e46f63b0bdc38f63fb43b0e8. Executing-agent engineering perspective; no Product/release/legal acceptance."
+      ],
+      "blocking_findings": [],
+      "required_actions": [],
+      "context_expansion_requested": false
+    },
+    {
+      "schema_version": 1,
+      "review_id": "REV-TUN-P2-003-rd-engineer",
+      "work_item_id": "TUN-P2-003",
+      "role": "rd-engineer",
+      "status": "PASS",
+      "result": "PASS",
+      "reviewed_at": "2026-10-17T19:47:34.573Z",
+      "skill_id": "rd-engineer",
+      "skill_version": "1.0.0",
+      "skill_hash": "2834c223dfd847a6d7cd28f52de4113efc574d621391d059e8dc1469bdf33187",
+      "authority_refs": [
+        "docs/authority/current-authority.json",
+        "docs/authority/current/development/11_Development_Planes_Milestones_and_P0_Backlog.md",
+        "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md",
+        "docs/authority/current/development/32_Domain_API_Event_Data_and_Policy_Contract_Catalog.md",
+        "docs/authority/current/development/34_Architecture_to_Development_Traceability_Matrix.md",
+        "docs/authority/baselines/1.6.0/decisions/ADR-0006_Identity_ASPNET_Identity_OpenIddict.md",
+        "docs/authority/current/development/AMD-0002_Non-Blocking_PR_Approval_and_Continuous_Local_Execution.md",
+        "docs/authority/current/development/02_Repository_Solution_and_Module_Architecture.md",
+        "docs/authority/current/development/09_Testing_Acceptance_Evidence_and_Quality_Gates.md",
+        "docs/authority/current/development/29_Privacy_Data_Lifecycle_and_Processing_Governance_FRD.md",
+        "docs/authority/current/decisions/PDR-0011_Universal_Account_Eligibility_Age-Aware_Consent_and_Delegated_Commercial_Authority.md",
+        "docs/authority/current/decisions/AMD-0007_Universal_Registration_Age-Aware_Consent_and_Delegated_Commercial_Authority.md"
+      ],
+      "context_artifacts": [
+        "src/Modules/Identity/AccountPersonalInformationRows.cs",
+        "docs/development/P2_003_IDENTITY_PERSISTENCE.md"
+      ],
+      "evidence_refs": [
+        "governance/evidence/TUN-P2-003-VALIDATION.json",
+        "governance/evidence/PDR0011-AMD0007-IMPACT-AUDIT.json"
+      ],
+      "findings": [
+        "PDR-0011 removes the adult-only ACTIVE constraint, retains complete historical age evidence and rejects partial provenance. Separate Account-owned protected Personal Information storage and immutable safe evaluation history are added by a forward migration.",
+        "15 actual PostgreSQL migration/concurrency/uniqueness/framework/outbox tests pass without skips at ec1a55e142cea0a1e46f63b0bdc38f63fb43b0e8. Executing-agent engineering perspective; no Product/release/legal acceptance."
+      ],
+      "blocking_findings": [],
+      "required_actions": [],
+      "context_expansion_requested": false
+    },
+    {
+      "schema_version": 1,
+      "review_id": "REV-TUN-P2-003-solution-architect",
+      "work_item_id": "TUN-P2-003",
+      "role": "solution-architect",
+      "status": "PASS",
+      "result": "PASS",
+      "reviewed_at": "2026-10-17T19:47:34.575Z",
+      "skill_id": "solution-architect",
+      "skill_version": "1.0.0",
+      "skill_hash": "664ffba70d0f97e75951c3548b7f8391854781e4cf90cc50fc8829543783a35b",
+      "authority_refs": [
+        "docs/authority/current-authority.json",
+        "docs/authority/current/development/11_Development_Planes_Milestones_and_P0_Backlog.md",
+        "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md",
+        "docs/authority/current/development/32_Domain_API_Event_Data_and_Policy_Contract_Catalog.md",
+        "docs/authority/current/development/34_Architecture_to_Development_Traceability_Matrix.md",
+        "docs/authority/baselines/1.6.0/decisions/ADR-0006_Identity_ASPNET_Identity_OpenIddict.md",
+        "docs/authority/current/development/AMD-0002_Non-Blocking_PR_Approval_and_Continuous_Local_Execution.md",
+        "docs/authority/current/development/02_Repository_Solution_and_Module_Architecture.md",
+        "docs/authority/current/development/09_Testing_Acceptance_Evidence_and_Quality_Gates.md",
+        "docs/authority/current/development/29_Privacy_Data_Lifecycle_and_Processing_Governance_FRD.md",
+        "docs/authority/current/decisions/PDR-0011_Universal_Account_Eligibility_Age-Aware_Consent_and_Delegated_Commercial_Authority.md",
+        "docs/authority/current/decisions/AMD-0007_Universal_Registration_Age-Aware_Consent_and_Delegated_Commercial_Authority.md"
+      ],
+      "context_artifacts": [
+        "src/Modules/Identity/AccountPersonalInformationRows.cs",
+        "docs/development/P2_003_IDENTITY_PERSISTENCE.md"
+      ],
+      "evidence_refs": [
+        "governance/evidence/TUN-P2-003-VALIDATION.json",
+        "governance/evidence/PDR0011-AMD0007-IMPACT-AUDIT.json"
+      ],
+      "findings": [
+        "PDR-0011 removes the adult-only ACTIVE constraint, retains complete historical age evidence and rejects partial provenance. Separate Account-owned protected Personal Information storage and immutable safe evaluation history are added by a forward migration.",
+        "15 actual PostgreSQL migration/concurrency/uniqueness/framework/outbox tests pass without skips at ec1a55e142cea0a1e46f63b0bdc38f63fb43b0e8. Executing-agent engineering perspective; no Product/release/legal acceptance."
+      ],
+      "blocking_findings": [],
+      "required_actions": [],
+      "context_expansion_requested": false
+    },
+    {
+      "schema_version": 1,
+      "review_id": "REV-TUN-P2-003-tester-qa-engineer",
+      "work_item_id": "TUN-P2-003",
+      "role": "tester-qa-engineer",
+      "status": "PASS",
+      "result": "PASS",
+      "reviewed_at": "2026-10-17T19:47:34.576Z",
+      "skill_id": "tester-qa-engineer",
+      "skill_version": "1.0.0",
+      "skill_hash": "a57ce99d7ad7a3b60f17e4826c81c507c9cc208d8928285c406222eefe0a18fd",
+      "authority_refs": [
+        "docs/authority/current-authority.json",
+        "docs/authority/current/development/11_Development_Planes_Milestones_and_P0_Backlog.md",
+        "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md",
+        "docs/authority/current/development/32_Domain_API_Event_Data_and_Policy_Contract_Catalog.md",
+        "docs/authority/current/development/34_Architecture_to_Development_Traceability_Matrix.md",
+        "docs/authority/baselines/1.6.0/decisions/ADR-0006_Identity_ASPNET_Identity_OpenIddict.md",
+        "docs/authority/current/development/AMD-0002_Non-Blocking_PR_Approval_and_Continuous_Local_Execution.md",
+        "docs/authority/current/development/02_Repository_Solution_and_Module_Architecture.md",
+        "docs/authority/current/development/09_Testing_Acceptance_Evidence_and_Quality_Gates.md",
+        "docs/authority/current/development/29_Privacy_Data_Lifecycle_and_Processing_Governance_FRD.md",
+        "docs/authority/current/decisions/PDR-0011_Universal_Account_Eligibility_Age-Aware_Consent_and_Delegated_Commercial_Authority.md",
+        "docs/authority/current/decisions/AMD-0007_Universal_Registration_Age-Aware_Consent_and_Delegated_Commercial_Authority.md"
+      ],
+      "context_artifacts": [
+        "src/Modules/Identity/AccountPersonalInformationRows.cs",
+        "docs/development/P2_003_IDENTITY_PERSISTENCE.md"
+      ],
+      "evidence_refs": [
+        "governance/evidence/TUN-P2-003-VALIDATION.json",
+        "governance/evidence/PDR0011-AMD0007-IMPACT-AUDIT.json"
+      ],
+      "findings": [
+        "PDR-0011 removes the adult-only ACTIVE constraint, retains complete historical age evidence and rejects partial provenance. Separate Account-owned protected Personal Information storage and immutable safe evaluation history are added by a forward migration.",
+        "15 actual PostgreSQL migration/concurrency/uniqueness/framework/outbox tests pass without skips at ec1a55e142cea0a1e46f63b0bdc38f63fb43b0e8. Executing-agent engineering perspective; no Product/release/legal acceptance."
+      ],
+      "blocking_findings": [],
+      "required_actions": [],
+      "context_expansion_requested": false
+    }
   ]
 }
