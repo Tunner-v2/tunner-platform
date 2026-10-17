@@ -24,7 +24,7 @@ P2 UI_VISUAL_APPROVAL remains BLOCKED: propagate active amendment controls into 
 
 Next exact action: perform the scoped AMD-0005 resolution/impact pass for TODO-AMD0008-GOV001, materialize an eligible P0 Revision using the existing committed revision capability and current authority, and complete its role/startup gates before changing closed bootstrap-owned tooling. In parallel, run governance next and refine P2-005 startup roles and login2:4 Google/Microsoft vs GitHub mismatch; implement only when native eligibility passes and obtain a concrete visual adaptation approval where needed. Do not treat pending PR approval as a blanket development stop.
 
-Existing P1-RV001 release/image/security/protected-main requirements remain unwaived. Content/legal publication, actual policy/delivery providers and production release approvals remain separate. The user's previously shared application-error screenshot has not yet been diagnosed in this UI slice; review its test-process provenance after the ongoing task is complete.
+Existing P1-RV001 release/image/security/protected-main requirements remain unwaived. Content/legal publication, actual policy/delivery providers and production release approvals remain separate. The previously shared application-error screenshot matches the audit helper fixture assertion failure already recorded on2026-10-16. Current source retains isolated fixture state, controlled assertion exits and UseAppHost=false; a fresh run at71aa1a3 passes13 authority/context checks. See governance/evidence/AMD0008-PRIOR-APPLICATION-ERROR-REVIEW.json for attribution and evidence limits.
 
 ## Preserved boundary and resume context
 
