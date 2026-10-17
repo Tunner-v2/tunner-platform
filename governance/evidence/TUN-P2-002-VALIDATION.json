@@ -1,209 +1,29 @@
 {
   "schema_version": 1,
   "scope_id": "TUN-P2-002",
-  "validation_kind": "COMMITTED",
-  "result": "PASS",
-  "tested_commit_sha": "99c0cf268b368ba64b4984dce6172a00a2546718",
-  "validated_commit_sha": "99c0cf268b368ba64b4984dce6172a00a2546718",
-  "checked_at": "2026-10-16T20:19:00.112Z",
+  "validation_kind": "CANDIDATE",
+  "result": "PENDING_EXACT_COMMIT_TESTS",
+  "validated_commit_sha": null,
+  "tested_commit_sha": null,
   "owned_behavior_paths": [
     "src/Modules/Accounts/Tunner.Accounts.csproj",
     "src/Modules/Accounts/AgeEligibilityEvaluator.cs",
     "tests/Tunner.Accounts.Tests/Tunner.Accounts.Tests.csproj",
     "tests/Tunner.Accounts.Tests/AgeEligibilityEvaluatorTests.cs",
     "Tunner.Platform.slnx",
-    "docs/development/P2_002_ADULT_ELIGIBILITY.md"
+    "docs/development/P2_002_ADULT_ELIGIBILITY.md",
+    "src/Modules/Accounts/AccountAgeCapabilities.cs",
+    "tests/Tunner.Accounts.Tests/AccountAgeCapabilityTests.cs"
   ],
-  "committed_source_sha256": {
-    "src/Modules/Accounts/Tunner.Accounts.csproj": "8d654c44b7bebb6b31a9f2f606927f45b5072193adc4eef8cce3f3cf3b278df3",
-    "src/Modules/Accounts/AgeEligibilityEvaluator.cs": "5b5609a8e51d415f78da2ac64e692ec20af30406997c189610ff51800e6e2fcf",
-    "tests/Tunner.Accounts.Tests/Tunner.Accounts.Tests.csproj": "85432c01e89cea35c03b3da7627d4dfe54e670dae51c359be0cbe22b7c35cc56",
-    "tests/Tunner.Accounts.Tests/AgeEligibilityEvaluatorTests.cs": "c229c14bdfd1e08d42f77ed99f2aa42d38a5a10b5009e21a10bce116d6217b52",
-    "Tunner.Platform.slnx": "f037f86bb2b1ecfd72fb1787523412703c593ed424c86a92956afcfc27605449",
-    "docs/development/P2_002_ADULT_ELIGIBILITY.md": "2e90136d9bbedcef1cedd2747b8f463af37729618bfdb3807a15c4c47c859438"
-  },
-  "checks": {
-    "build": "PASS: same candidate, zero warnings/errors",
-    "accounts_tests": {
-      "total": 39,
-      "passed": 39,
-      "failed": 0,
-      "skipped": 0
-    },
-    "platform_regression": {
-      "total": 345,
-      "passed": 345,
-      "failed": 0,
-      "not_executed": 0
-    },
-    "governance": "PASS: candidate 636 records, no diagnostics",
-    "roles": "PASS: six required and declared roles; no missing roles",
-    "secret_scan": "Prior passing eligibility scan retained for unchanged evaluator/test/project/doc blobs; new P2-003 owned paths scanned separately",
-    "nuget_audit": "Prior eligibility dependency audit retained for unchanged Accounts/test package declarations; new Identity dependency graph separately audited",
-    "policy_and_privacy": "Calendar-safe approved rule, single server UTC clock read, stable AGE_INELIGIBLE, required provenance; no raw DOB in output/serialization/diagnostics",
-    "architecture": "Framework-free Accounts contracts and evaluator remain independent; additive solution inclusion and new AccountSnapshot compile under the 237 passing architecture tests"
-  },
-  "test_suites": [
-    {
-      "suite": "Tunner.Identity.Persistence.Tests.dll",
-      "path": "artifacts/p2-003-20261016/final-identity-results/Chacha_Tech_FARHANWAZIR_2026-10-16_16_12_48_net10.0.trx",
-      "sha256": "6f787c6bf1f513b4437f705c610de7b580c4baab262366a5df9c9ea3f8f30e09",
-      "total": 16,
-      "passed": 16,
-      "failed": 0,
-      "not_executed": 0,
-      "failures": []
-    },
-    {
-      "suite": "Tunner.Accounts.Tests.dll",
-      "path": "artifacts/p2-003-20261016/regression-results/Chacha_Tech_FARHANWAZIR_2026-10-16_16_13_50_net10.0.trx",
-      "sha256": "0d8d88992fcbcfd93f3de17b09f2170740fe21aac002ba9ac43c23ae757a616b",
-      "total": 39,
-      "passed": 39,
-      "failed": 0,
-      "not_executed": 0,
-      "failures": []
-    },
-    {
-      "suite": "Tunner.Platform.ArchitectureTests.dll",
-      "path": "artifacts/p2-003-20261016/regression-results/Chacha_Tech_FARHANWAZIR_2026-10-16_16_13_56_net10.0.trx",
-      "sha256": "c124cd4b18d5d4242d04351b617e4f82d44778b3b5a66d363775542d15c3ce8f",
-      "total": 237,
-      "passed": 237,
-      "failed": 0,
-      "not_executed": 0,
-      "failures": []
-    },
-    {
-      "suite": "Tunner.TestHarness.Tests.dll",
-      "path": "artifacts/p2-003-20261016/regression-results/Chacha_Tech_FARHANWAZIR_2026-10-16_16_14_16_net10.0.trx",
-      "sha256": "acb0457fd7b60c65a17460e083d08bba032de454e03cdf9b48155fa5e190a102",
-      "total": 13,
-      "passed": 13,
-      "failed": 0,
-      "not_executed": 0,
-      "failures": []
-    },
-    {
-      "suite": "Tunner.Database.IntegrationTests.dll",
-      "path": "artifacts/p2-003-20261016/regression-results/Chacha_Tech_FARHANWAZIR_2026-10-16_16_14_31_net10.0.trx",
-      "sha256": "da3e839d51575e76fc33f12082381ae0b3c558e4144a333f27aa89af18b6c716",
-      "total": 34,
-      "passed": 34,
-      "failed": 0,
-      "not_executed": 0,
-      "failures": []
-    },
-    {
-      "suite": "Tunner.Worker.Tests.dll",
-      "path": "artifacts/p2-003-20261016/regression-results/Chacha_Tech_FARHANWAZIR_2026-10-16_16_15_27_net10.0.trx",
-      "sha256": "268223ce4d15dd10f6999b7ba43715ece4d6d0b471251c64a832728c5dc370f8",
-      "total": 6,
-      "passed": 6,
-      "failed": 0,
-      "not_executed": 0,
-      "failures": []
-    }
-  ],
-  "receipts": [
-    {
-      "path": "artifacts/p2-003-20261016/build.log",
-      "sha256": "868a89fda036e12370c91d9b16ebb504b6e66ed3555e4760dacc5161c9729ef3"
-    },
-    {
-      "path": "artifacts/p2-003-20261016/final-identity-tests.log",
-      "sha256": "96b143daaf47b6fddad42a92d845fe8a43ed7e0721b2c4c6e944b95386298a2e"
-    },
-    {
-      "path": "artifacts/p2-003-20261016/Tunner.Accounts.Tests.log",
-      "sha256": "8ccfaef5a08543dcaf1f04e601e3cfa104102c0d67ef543455dab8ebd017a65a"
-    },
-    {
-      "path": "artifacts/p2-003-20261016/Tunner.Platform.ArchitectureTests.log",
-      "sha256": "d7c2209d30b644494f1112d2191ae296ca09e2a070172928c78d1907e59dc489"
-    },
-    {
-      "path": "artifacts/p2-003-20261016/Tunner.TestHarness.Tests.log",
-      "sha256": "9eb530a60799914b406fdcc2e9efebb2ab3839e29a6424d3d519c5e11094273b"
-    },
-    {
-      "path": "artifacts/p2-003-20261016/Tunner.Database.IntegrationTests.log",
-      "sha256": "237fa759447677b85c795ab3b4f062fa524f1b4d49683a5364e673115dd0b4f1"
-    },
-    {
-      "path": "artifacts/p2-003-20261016/Tunner.Worker.Tests.log",
-      "sha256": "4b9c7051bd3a76a0ff5c1b1692965a9d8356fe3ec0ed51a7b0eea55cf1bcfdb6"
-    },
-    {
-      "path": "artifacts/p2-003-20261016/candidate-governance.json",
-      "sha256": "632b28d840552f55aad9994e27e931d465ae4535b94fbb0a3f1fc387321e562e"
-    },
-    {
-      "path": "artifacts/p2-003-20261016/roles.json",
-      "sha256": "6c2325088710c6221dae0a9a5a2e56725576822833c406157c00081918404005"
-    },
-    {
-      "path": "artifacts/p2-003-20261016/sast-policy.log",
-      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
-    },
-    {
-      "path": "artifacts/p2-003-20261016/secret-scan.log",
-      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
-    },
-    {
-      "path": "artifacts/p2-003-20261016/identity-nuget-audit.json",
-      "sha256": "aa67bb1da01d83d39503db14eff008c05b32d3dbd7240130f470735f96f407d7"
-    },
-    {
-      "path": "artifacts/p2-003-20261016/identity-package-inventory.json",
-      "sha256": "2c3ac74085068fa03062a5a1e6cd7d111c60659f5e3ae093a111e7ec5d885859"
-    },
-    {
-      "path": "artifacts/p2-003-20261016/migration-generation.log",
-      "sha256": "d89dd9dda13eaac3b218da6eb3aee946e9c4f37d64bfd7a9b15cf9e7482ba8c4"
-    }
-  ],
-  "dependency_validation": {
-    "corrective_revision": "P0-010-RV001",
-    "candidate_commit_sha": "7acf2803d604c9f4b916c5e8b24985e9007aacb6",
-    "reason": "Required platform run exposed a TCP-readiness defect; corrected through historical test-harness Revision and reran the whole affected suite."
-  },
-  "failed_attempts": [
-    {
-      "finding": "Sandbox could not fetch NuGet vulnerability metadata (NU1900).",
-      "resolution": "Restore completed with authorized network access and audit checks left enabled."
-    },
-    {
-      "finding": "CA1822 rejected a computed constant PolicyFamily property.",
-      "resolution": "Keep immutable per-instance policy-family evidence without analyzer suppression."
-    },
-    {
-      "finding": "Initial platform run had 327 passed, one PostgreSQL 57P03 startup failure.",
-      "resolution": "Preserve original receipts; P0-010-RV001 corrects readiness, final committed run has 329 passed and no failures/skips."
-    },
-    {
-      "finding": "Initial committed gate rejected the ownership envelope because it was absent from the original test candidate.",
-      "resolution": "Freeze identical ownership declarations in candidate d856dde651440216369f0698f92f5d7878505d64 and execute required suites at that exact SHA; source blobs are unchanged from 7acf2803d604c9f4b916c5e8b24985e9007aacb6."
-    },
-    {
-      "finding": "The anchored full run was interrupted by Docker API InternalServerError while container tests were running.",
-      "resolution": "Retain its log; Docker subsequently responded. Completed Accounts/architecture results are retained, and only the interrupted three container projects were rerun sequentially with two-minute per-test hang termination. All five final suites pass at the same SHA."
-    }
-  ],
-  "lifecycle_boundary": "Engineering revalidation of the unchanged eligibility capability and additive shared solution reference. TUN-P2-002 remains VALIDATION pending required Product acceptance; no Account activation, session, public registration or release is claimed.",
-  "release_blocker": "P1-RV001 / DEF-P1-CONTAINER-SCAN-001 remains open and unwaived.",
-  "implementation_candidate_commit_sha": "7acf2803d604c9f4b916c5e8b24985e9007aacb6",
-  "ownership_manifest_candidate_commit_sha": "d856dde651440216369f0698f92f5d7878505d64",
-  "final_execution_mode": "All six platform suite executions at 99c0cf268b368ba64b4984dce6172a00a2546718 pass (345/345), including all 39 eligibility tests. Historical interrupted attempts and original receipts remain in prior_validations.",
   "prior_validations": [
     {
       "schema_version": 1,
       "scope_id": "TUN-P2-002",
       "validation_kind": "COMMITTED",
       "result": "PASS",
-      "tested_commit_sha": "d856dde651440216369f0698f92f5d7878505d64",
-      "validated_commit_sha": "d856dde651440216369f0698f92f5d7878505d64",
-      "checked_at": "2026-10-16T19:37:00.656Z",
+      "tested_commit_sha": "99c0cf268b368ba64b4984dce6172a00a2546718",
+      "validated_commit_sha": "99c0cf268b368ba64b4984dce6172a00a2546718",
+      "checked_at": "2026-10-16T20:19:00.112Z",
       "owned_behavior_paths": [
         "src/Modules/Accounts/Tunner.Accounts.csproj",
         "src/Modules/Accounts/AgeEligibilityEvaluator.cs",
@@ -217,11 +37,11 @@
         "src/Modules/Accounts/AgeEligibilityEvaluator.cs": "5b5609a8e51d415f78da2ac64e692ec20af30406997c189610ff51800e6e2fcf",
         "tests/Tunner.Accounts.Tests/Tunner.Accounts.Tests.csproj": "85432c01e89cea35c03b3da7627d4dfe54e670dae51c359be0cbe22b7c35cc56",
         "tests/Tunner.Accounts.Tests/AgeEligibilityEvaluatorTests.cs": "c229c14bdfd1e08d42f77ed99f2aa42d38a5a10b5009e21a10bce116d6217b52",
-        "Tunner.Platform.slnx": "42d4d8f12f7a0fe0efd22567990824917cbb8c1699063ebb3ab206c609a905e7",
+        "Tunner.Platform.slnx": "f037f86bb2b1ecfd72fb1787523412703c593ed424c86a92956afcfc27605449",
         "docs/development/P2_002_ADULT_ELIGIBILITY.md": "2e90136d9bbedcef1cedd2747b8f463af37729618bfdb3807a15c4c47c859438"
       },
       "checks": {
-        "build": "PASS: zero warnings/errors",
+        "build": "PASS: same candidate, zero warnings/errors",
         "accounts_tests": {
           "total": 39,
           "passed": 39,
@@ -229,23 +49,33 @@
           "skipped": 0
         },
         "platform_regression": {
-          "total": 329,
-          "passed": 329,
+          "total": 345,
+          "passed": 345,
           "failed": 0,
           "not_executed": 0
         },
-        "governance": "PASS: 629 records, no diagnostics",
+        "governance": "PASS: candidate 636 records, no diagnostics",
         "roles": "PASS: six required and declared roles; no missing roles",
-        "secret_scan": "PASS: eight implementation/harness files, no matches",
-        "nuget_audit": "PASS: no vulnerable packages reported for Accounts tests including transitive dependencies",
+        "secret_scan": "Prior passing eligibility scan retained for unchanged evaluator/test/project/doc blobs; new P2-003 owned paths scanned separately",
+        "nuget_audit": "Prior eligibility dependency audit retained for unchanged Accounts/test package declarations; new Identity dependency graph separately audited",
         "policy_and_privacy": "Calendar-safe approved rule, single server UTC clock read, stable AGE_INELIGIBLE, required provenance; no raw DOB in output/serialization/diagnostics",
-        "architecture": "Independent Accounts module without host, provider, database or infrastructure dependencies; no public endpoint or host wiring"
+        "architecture": "Framework-free Accounts contracts and evaluator remain independent; additive solution inclusion and new AccountSnapshot compile under the 237 passing architecture tests"
       },
       "test_suites": [
         {
+          "suite": "Tunner.Identity.Persistence.Tests.dll",
+          "path": "artifacts/p2-003-20261016/final-identity-results/Chacha_Tech_FARHANWAZIR_2026-10-16_16_12_48_net10.0.trx",
+          "sha256": "6f787c6bf1f513b4437f705c610de7b580c4baab262366a5df9c9ea3f8f30e09",
+          "total": 16,
+          "passed": 16,
+          "failed": 0,
+          "not_executed": 0,
+          "failures": []
+        },
+        {
           "suite": "Tunner.Accounts.Tests.dll",
-          "path": "artifacts/p2-002-20261016/anchored-test-results/Chacha_Tech_FARHANWAZIR_2026-10-16_14_32_42_net10.0.trx",
-          "sha256": "118b896ddae48a7f467d7dd5f0b2ba9f3abfee95f6e3f17538b10b710be9c2cf",
+          "path": "artifacts/p2-003-20261016/regression-results/Chacha_Tech_FARHANWAZIR_2026-10-16_16_13_50_net10.0.trx",
+          "sha256": "0d8d88992fcbcfd93f3de17b09f2170740fe21aac002ba9ac43c23ae757a616b",
           "total": 39,
           "passed": 39,
           "failed": 0,
@@ -254,8 +84,8 @@
         },
         {
           "suite": "Tunner.Platform.ArchitectureTests.dll",
-          "path": "artifacts/p2-002-20261016/anchored-test-results/Chacha_Tech_FARHANWAZIR_2026-10-16_14_32_48_net10.0.trx",
-          "sha256": "5b79dc9f3732f462db5c9f32fcfe2217426caa0b43d4b3369b9fbbbb47c37af6",
+          "path": "artifacts/p2-003-20261016/regression-results/Chacha_Tech_FARHANWAZIR_2026-10-16_16_13_56_net10.0.trx",
+          "sha256": "c124cd4b18d5d4242d04351b617e4f82d44778b3b5a66d363775542d15c3ce8f",
           "total": 237,
           "passed": 237,
           "failed": 0,
@@ -264,8 +94,8 @@
         },
         {
           "suite": "Tunner.TestHarness.Tests.dll",
-          "path": "artifacts/p2-002-20261016/anchored-recovery-results/Chacha_Tech_FARHANWAZIR_2026-10-16_15_33_59_net10.0.trx",
-          "sha256": "d7af35b4f6bcd6240b916e36b9b05353989b5381a723b4fb82d82248dcf0a76c",
+          "path": "artifacts/p2-003-20261016/regression-results/Chacha_Tech_FARHANWAZIR_2026-10-16_16_14_16_net10.0.trx",
+          "sha256": "acb0457fd7b60c65a17460e083d08bba032de454e03cdf9b48155fa5e190a102",
           "total": 13,
           "passed": 13,
           "failed": 0,
@@ -274,8 +104,8 @@
         },
         {
           "suite": "Tunner.Database.IntegrationTests.dll",
-          "path": "artifacts/p2-002-20261016/anchored-recovery-results/Chacha_Tech_FARHANWAZIR_2026-10-16_15_34_13_net10.0.trx",
-          "sha256": "dc175913a2f3a06fe624703226114a9721f388de7326880534b35b07d7d578f7",
+          "path": "artifacts/p2-003-20261016/regression-results/Chacha_Tech_FARHANWAZIR_2026-10-16_16_14_31_net10.0.trx",
+          "sha256": "da3e839d51575e76fc33f12082381ae0b3c558e4144a333f27aa89af18b6c716",
           "total": 34,
           "passed": 34,
           "failed": 0,
@@ -284,8 +114,8 @@
         },
         {
           "suite": "Tunner.Worker.Tests.dll",
-          "path": "artifacts/p2-002-20261016/anchored-recovery-results/Chacha_Tech_FARHANWAZIR_2026-10-16_15_36_16_net10.0.trx",
-          "sha256": "8d836f592a91e6574008599a4b3b4bf035f8fd804b9318586b815d3fe1b62b65",
+          "path": "artifacts/p2-003-20261016/regression-results/Chacha_Tech_FARHANWAZIR_2026-10-16_16_15_27_net10.0.trx",
+          "sha256": "268223ce4d15dd10f6999b7ba43715ece4d6d0b471251c64a832728c5dc370f8",
           "total": 6,
           "passed": 6,
           "failed": 0,
@@ -295,56 +125,60 @@
       ],
       "receipts": [
         {
-          "path": "artifacts/p2-002-20261016/corrected-build.log",
-          "sha256": "2b649a1ca26a1c36c5361eead1e681e351070174ba3fab0a6051855c01ec0cb6"
+          "path": "artifacts/p2-003-20261016/build.log",
+          "sha256": "868a89fda036e12370c91d9b16ebb504b6e66ed3555e4760dacc5161c9729ef3"
         },
         {
-          "path": "artifacts/p2-002-20261016/corrected-platform-tests.log",
-          "sha256": "aea12b66ba91bf55683d1d9cd1cdfab9001b8ba8334ee33d02b72ba107246945"
+          "path": "artifacts/p2-003-20261016/final-identity-tests.log",
+          "sha256": "96b143daaf47b6fddad42a92d845fe8a43ed7e0721b2c4c6e944b95386298a2e"
         },
         {
-          "path": "artifacts/p2-002-20261016/corrected-tests-summary.json",
-          "sha256": "cd7c5d03b37d61658f5c8560885f5036b7839fdf11a42f150685e3691f83f072"
+          "path": "artifacts/p2-003-20261016/Tunner.Accounts.Tests.log",
+          "sha256": "8ccfaef5a08543dcaf1f04e601e3cfa104102c0d67ef543455dab8ebd017a65a"
         },
         {
-          "path": "artifacts/p2-002-20261016/roles-calculation.json",
-          "sha256": "7f9b9072592ea3d0a0c7e4da9233917cb30aca941a08619c07d56946ff3bf6c0"
+          "path": "artifacts/p2-003-20261016/Tunner.Platform.ArchitectureTests.log",
+          "sha256": "d7c2209d30b644494f1112d2191ae296ca09e2a070172928c78d1907e59dc489"
         },
         {
-          "path": "artifacts/p2-002-20261016/corrected-candidate-governance.json",
-          "sha256": "030ed28e4b78eeb5b5f9fd59d4ef352f476dfbe3be2cbe248507d520c5063d27"
+          "path": "artifacts/p2-003-20261016/Tunner.TestHarness.Tests.log",
+          "sha256": "9eb530a60799914b406fdcc2e9efebb2ab3839e29a6424d3d519c5e11094273b"
         },
         {
-          "path": "artifacts/p2-002-20261016/owned-secret-scan.log",
+          "path": "artifacts/p2-003-20261016/Tunner.Database.IntegrationTests.log",
+          "sha256": "237fa759447677b85c795ab3b4f062fa524f1b4d49683a5364e673115dd0b4f1"
+        },
+        {
+          "path": "artifacts/p2-003-20261016/Tunner.Worker.Tests.log",
+          "sha256": "4b9c7051bd3a76a0ff5c1b1692965a9d8356fe3ec0ed51a7b0eea55cf1bcfdb6"
+        },
+        {
+          "path": "artifacts/p2-003-20261016/candidate-governance.json",
+          "sha256": "632b28d840552f55aad9994e27e931d465ae4535b94fbb0a3f1fc387321e562e"
+        },
+        {
+          "path": "artifacts/p2-003-20261016/roles.json",
+          "sha256": "6c2325088710c6221dae0a9a5a2e56725576822833c406157c00081918404005"
+        },
+        {
+          "path": "artifacts/p2-003-20261016/sast-policy.log",
           "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
         },
         {
-          "path": "artifacts/p2-002-20261016/nuget-vulnerability-report.json",
-          "sha256": "f0ad9200b6f19727a9f484206aa4ce7f486a901cb8c8985dc9d7686462a209a6"
+          "path": "artifacts/p2-003-20261016/secret-scan.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
         },
         {
-          "path": "artifacts/p2-002-20261016/final-execution-summary.json",
-          "sha256": "f3a8f7141c889e0e527dc1f8e0dee53434130ab0637ec276ed5a2fd825a8c015"
+          "path": "artifacts/p2-003-20261016/identity-nuget-audit.json",
+          "sha256": "aa67bb1da01d83d39503db14eff008c05b32d3dbd7240130f470735f96f407d7"
         },
         {
-          "path": "artifacts/p2-002-20261016/anchored-platform-tests.log",
-          "sha256": "da7c12c2b6a6d9126deb698a9cc6e44171ea2e2d709601cfb216256565725949"
+          "path": "artifacts/p2-003-20261016/identity-package-inventory.json",
+          "sha256": "2c3ac74085068fa03062a5a1e6cd7d111c60659f5e3ae093a111e7ec5d885859"
         },
         {
-          "path": "artifacts/p2-002-20261016/Tunner.TestHarness.Tests-recovery.log",
-          "sha256": "93fd4cd7e75ea2446503c62640016d23f239c00d761eaa8123d437e66652b2b8"
-        },
-        {
-          "path": "artifacts/p2-002-20261016/Tunner.Database.IntegrationTests-recovery.log",
-          "sha256": "6c9147c7d53930650d579bffd68330d48fa8dec16a973a33bd782d3189cccb11"
-        },
-        {
-          "path": "artifacts/p2-002-20261016/Tunner.Worker.Tests-recovery.log",
-          "sha256": "5b9b7a7b39d629fbffa76f89f3c82e8eed8d0d14163eef01b2df07a0abdc3e7a"
-        },
-        {
-          "path": "artifacts/p2-002-20261016/ownership-anchor-proof.json",
-          "sha256": "15eb3a3c395d2b94da621b2c31508b9af7cd11fac96a492722fc69904eaa1d03"
+          "path": "artifacts/p2-003-20261016/migration-generation.log",
+          "sha256": "d89dd9dda13eaac3b218da6eb3aee946e9c4f37d64bfd7a9b15cf9e7482ba8c4"
         }
       ],
       "dependency_validation": {
@@ -374,12 +208,203 @@
           "resolution": "Retain its log; Docker subsequently responded. Completed Accounts/architecture results are retained, and only the interrupted three container projects were rerun sequentially with two-minute per-test hang termination. All five final suites pass at the same SHA."
         }
       ],
-      "lifecycle_boundary": "Engineering validation only; TUN-P2-002 remains VALIDATION pending required Product acceptance. No Account activation, persistence, session, Product Relationship, public API or release is claimed.",
+      "lifecycle_boundary": "Engineering revalidation of the unchanged eligibility capability and additive shared solution reference. TUN-P2-002 remains VALIDATION pending required Product acceptance; no Account activation, session, public registration or release is claimed.",
       "release_blocker": "P1-RV001 / DEF-P1-CONTAINER-SCAN-001 remains open and unwaived.",
       "implementation_candidate_commit_sha": "7acf2803d604c9f4b916c5e8b24985e9007aacb6",
       "ownership_manifest_candidate_commit_sha": "d856dde651440216369f0698f92f5d7878505d64",
-      "final_execution_mode": "Same-SHA suite aggregation after Docker daemon interruption; completed Accounts/architecture results plus sequential recovery of interrupted harness/database/worker projects. Original failed/aborted attempt is retained."
+      "final_execution_mode": "All six platform suite executions at 99c0cf268b368ba64b4984dce6172a00a2546718 pass (345/345), including all 39 eligibility tests. Historical interrupted attempts and original receipts remain in prior_validations.",
+      "prior_validations": [
+        {
+          "schema_version": 1,
+          "scope_id": "TUN-P2-002",
+          "validation_kind": "COMMITTED",
+          "result": "PASS",
+          "tested_commit_sha": "d856dde651440216369f0698f92f5d7878505d64",
+          "validated_commit_sha": "d856dde651440216369f0698f92f5d7878505d64",
+          "checked_at": "2026-10-16T19:37:00.656Z",
+          "owned_behavior_paths": [
+            "src/Modules/Accounts/Tunner.Accounts.csproj",
+            "src/Modules/Accounts/AgeEligibilityEvaluator.cs",
+            "tests/Tunner.Accounts.Tests/Tunner.Accounts.Tests.csproj",
+            "tests/Tunner.Accounts.Tests/AgeEligibilityEvaluatorTests.cs",
+            "Tunner.Platform.slnx",
+            "docs/development/P2_002_ADULT_ELIGIBILITY.md"
+          ],
+          "committed_source_sha256": {
+            "src/Modules/Accounts/Tunner.Accounts.csproj": "8d654c44b7bebb6b31a9f2f606927f45b5072193adc4eef8cce3f3cf3b278df3",
+            "src/Modules/Accounts/AgeEligibilityEvaluator.cs": "5b5609a8e51d415f78da2ac64e692ec20af30406997c189610ff51800e6e2fcf",
+            "tests/Tunner.Accounts.Tests/Tunner.Accounts.Tests.csproj": "85432c01e89cea35c03b3da7627d4dfe54e670dae51c359be0cbe22b7c35cc56",
+            "tests/Tunner.Accounts.Tests/AgeEligibilityEvaluatorTests.cs": "c229c14bdfd1e08d42f77ed99f2aa42d38a5a10b5009e21a10bce116d6217b52",
+            "Tunner.Platform.slnx": "42d4d8f12f7a0fe0efd22567990824917cbb8c1699063ebb3ab206c609a905e7",
+            "docs/development/P2_002_ADULT_ELIGIBILITY.md": "2e90136d9bbedcef1cedd2747b8f463af37729618bfdb3807a15c4c47c859438"
+          },
+          "checks": {
+            "build": "PASS: zero warnings/errors",
+            "accounts_tests": {
+              "total": 39,
+              "passed": 39,
+              "failed": 0,
+              "skipped": 0
+            },
+            "platform_regression": {
+              "total": 329,
+              "passed": 329,
+              "failed": 0,
+              "not_executed": 0
+            },
+            "governance": "PASS: 629 records, no diagnostics",
+            "roles": "PASS: six required and declared roles; no missing roles",
+            "secret_scan": "PASS: eight implementation/harness files, no matches",
+            "nuget_audit": "PASS: no vulnerable packages reported for Accounts tests including transitive dependencies",
+            "policy_and_privacy": "Calendar-safe approved rule, single server UTC clock read, stable AGE_INELIGIBLE, required provenance; no raw DOB in output/serialization/diagnostics",
+            "architecture": "Independent Accounts module without host, provider, database or infrastructure dependencies; no public endpoint or host wiring"
+          },
+          "test_suites": [
+            {
+              "suite": "Tunner.Accounts.Tests.dll",
+              "path": "artifacts/p2-002-20261016/anchored-test-results/Chacha_Tech_FARHANWAZIR_2026-10-16_14_32_42_net10.0.trx",
+              "sha256": "118b896ddae48a7f467d7dd5f0b2ba9f3abfee95f6e3f17538b10b710be9c2cf",
+              "total": 39,
+              "passed": 39,
+              "failed": 0,
+              "not_executed": 0,
+              "failures": []
+            },
+            {
+              "suite": "Tunner.Platform.ArchitectureTests.dll",
+              "path": "artifacts/p2-002-20261016/anchored-test-results/Chacha_Tech_FARHANWAZIR_2026-10-16_14_32_48_net10.0.trx",
+              "sha256": "5b79dc9f3732f462db5c9f32fcfe2217426caa0b43d4b3369b9fbbbb47c37af6",
+              "total": 237,
+              "passed": 237,
+              "failed": 0,
+              "not_executed": 0,
+              "failures": []
+            },
+            {
+              "suite": "Tunner.TestHarness.Tests.dll",
+              "path": "artifacts/p2-002-20261016/anchored-recovery-results/Chacha_Tech_FARHANWAZIR_2026-10-16_15_33_59_net10.0.trx",
+              "sha256": "d7af35b4f6bcd6240b916e36b9b05353989b5381a723b4fb82d82248dcf0a76c",
+              "total": 13,
+              "passed": 13,
+              "failed": 0,
+              "not_executed": 0,
+              "failures": []
+            },
+            {
+              "suite": "Tunner.Database.IntegrationTests.dll",
+              "path": "artifacts/p2-002-20261016/anchored-recovery-results/Chacha_Tech_FARHANWAZIR_2026-10-16_15_34_13_net10.0.trx",
+              "sha256": "dc175913a2f3a06fe624703226114a9721f388de7326880534b35b07d7d578f7",
+              "total": 34,
+              "passed": 34,
+              "failed": 0,
+              "not_executed": 0,
+              "failures": []
+            },
+            {
+              "suite": "Tunner.Worker.Tests.dll",
+              "path": "artifacts/p2-002-20261016/anchored-recovery-results/Chacha_Tech_FARHANWAZIR_2026-10-16_15_36_16_net10.0.trx",
+              "sha256": "8d836f592a91e6574008599a4b3b4bf035f8fd804b9318586b815d3fe1b62b65",
+              "total": 6,
+              "passed": 6,
+              "failed": 0,
+              "not_executed": 0,
+              "failures": []
+            }
+          ],
+          "receipts": [
+            {
+              "path": "artifacts/p2-002-20261016/corrected-build.log",
+              "sha256": "2b649a1ca26a1c36c5361eead1e681e351070174ba3fab0a6051855c01ec0cb6"
+            },
+            {
+              "path": "artifacts/p2-002-20261016/corrected-platform-tests.log",
+              "sha256": "aea12b66ba91bf55683d1d9cd1cdfab9001b8ba8334ee33d02b72ba107246945"
+            },
+            {
+              "path": "artifacts/p2-002-20261016/corrected-tests-summary.json",
+              "sha256": "cd7c5d03b37d61658f5c8560885f5036b7839fdf11a42f150685e3691f83f072"
+            },
+            {
+              "path": "artifacts/p2-002-20261016/roles-calculation.json",
+              "sha256": "7f9b9072592ea3d0a0c7e4da9233917cb30aca941a08619c07d56946ff3bf6c0"
+            },
+            {
+              "path": "artifacts/p2-002-20261016/corrected-candidate-governance.json",
+              "sha256": "030ed28e4b78eeb5b5f9fd59d4ef352f476dfbe3be2cbe248507d520c5063d27"
+            },
+            {
+              "path": "artifacts/p2-002-20261016/owned-secret-scan.log",
+              "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+            },
+            {
+              "path": "artifacts/p2-002-20261016/nuget-vulnerability-report.json",
+              "sha256": "f0ad9200b6f19727a9f484206aa4ce7f486a901cb8c8985dc9d7686462a209a6"
+            },
+            {
+              "path": "artifacts/p2-002-20261016/final-execution-summary.json",
+              "sha256": "f3a8f7141c889e0e527dc1f8e0dee53434130ab0637ec276ed5a2fd825a8c015"
+            },
+            {
+              "path": "artifacts/p2-002-20261016/anchored-platform-tests.log",
+              "sha256": "da7c12c2b6a6d9126deb698a9cc6e44171ea2e2d709601cfb216256565725949"
+            },
+            {
+              "path": "artifacts/p2-002-20261016/Tunner.TestHarness.Tests-recovery.log",
+              "sha256": "93fd4cd7e75ea2446503c62640016d23f239c00d761eaa8123d437e66652b2b8"
+            },
+            {
+              "path": "artifacts/p2-002-20261016/Tunner.Database.IntegrationTests-recovery.log",
+              "sha256": "6c9147c7d53930650d579bffd68330d48fa8dec16a973a33bd782d3189cccb11"
+            },
+            {
+              "path": "artifacts/p2-002-20261016/Tunner.Worker.Tests-recovery.log",
+              "sha256": "5b9b7a7b39d629fbffa76f89f3c82e8eed8d0d14163eef01b2df07a0abdc3e7a"
+            },
+            {
+              "path": "artifacts/p2-002-20261016/ownership-anchor-proof.json",
+              "sha256": "15eb3a3c395d2b94da621b2c31508b9af7cd11fac96a492722fc69904eaa1d03"
+            }
+          ],
+          "dependency_validation": {
+            "corrective_revision": "P0-010-RV001",
+            "candidate_commit_sha": "7acf2803d604c9f4b916c5e8b24985e9007aacb6",
+            "reason": "Required platform run exposed a TCP-readiness defect; corrected through historical test-harness Revision and reran the whole affected suite."
+          },
+          "failed_attempts": [
+            {
+              "finding": "Sandbox could not fetch NuGet vulnerability metadata (NU1900).",
+              "resolution": "Restore completed with authorized network access and audit checks left enabled."
+            },
+            {
+              "finding": "CA1822 rejected a computed constant PolicyFamily property.",
+              "resolution": "Keep immutable per-instance policy-family evidence without analyzer suppression."
+            },
+            {
+              "finding": "Initial platform run had 327 passed, one PostgreSQL 57P03 startup failure.",
+              "resolution": "Preserve original receipts; P0-010-RV001 corrects readiness, final committed run has 329 passed and no failures/skips."
+            },
+            {
+              "finding": "Initial committed gate rejected the ownership envelope because it was absent from the original test candidate.",
+              "resolution": "Freeze identical ownership declarations in candidate d856dde651440216369f0698f92f5d7878505d64 and execute required suites at that exact SHA; source blobs are unchanged from 7acf2803d604c9f4b916c5e8b24985e9007aacb6."
+            },
+            {
+              "finding": "The anchored full run was interrupted by Docker API InternalServerError while container tests were running.",
+              "resolution": "Retain its log; Docker subsequently responded. Completed Accounts/architecture results are retained, and only the interrupted three container projects were rerun sequentially with two-minute per-test hang termination. All five final suites pass at the same SHA."
+            }
+          ],
+          "lifecycle_boundary": "Engineering validation only; TUN-P2-002 remains VALIDATION pending required Product acceptance. No Account activation, persistence, session, Product Relationship, public API or release is claimed.",
+          "release_blocker": "P1-RV001 / DEF-P1-CONTAINER-SCAN-001 remains open and unwaived.",
+          "implementation_candidate_commit_sha": "7acf2803d604c9f4b916c5e8b24985e9007aacb6",
+          "ownership_manifest_candidate_commit_sha": "d856dde651440216369f0698f92f5d7878505d64",
+          "final_execution_mode": "Same-SHA suite aggregation after Docker daemon interruption; completed Accounts/architecture results plus sequential recovery of interrupted harness/database/worker projects. Original failed/aborted attempt is retained."
+        }
+      ],
+      "revalidation_reason": "TUN-P2-003 additively extends shared Tunner.Platform.slnx while TUN-P2-002 is still active in VALIDATION. Revalidate the unchanged ownership envelope at the new exact candidate; original validation remains in prior_validations. No closed work is rewritten."
     }
   ],
-  "revalidation_reason": "TUN-P2-003 additively extends shared Tunner.Platform.slnx while TUN-P2-002 is still active in VALIDATION. Revalidate the unchanged ownership envelope at the new exact candidate; original validation remains in prior_validations. No closed work is rewritten."
+  "authority_refs": [
+    "PDR-0011",
+    "AMD-0007"
+  ],
+  "note": "Original PDR-0007 evidence and passing receipt preserved; new current capability behavior requires committed-candidate tests."
 }

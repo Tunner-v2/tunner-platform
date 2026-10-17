@@ -36,11 +36,15 @@ public sealed record AgeEligibilityEvidence
 }
 
 /// <summary>
-/// Implements FRD 17 section 11 and PDR-0007. The owning server application supplies
+/// Historical PDR-0007 evidence adapter and shared calendar primitive. Current PDR-0011
+/// capability evaluation never treats its historical failure code as Account ineligibility. The server supplies
 /// the clock, resolved active policy version and opaque operation evidence references.
 /// </summary>
 public sealed class AgeEligibilityEvaluator
 {
+    internal static bool HasReachedAge(DateOnly birth, DateOnly date, int years) =>
+        birth <= date && birth.Year <= DateOnly.MaxValue.Year - years && birth.AddYears(years) <= date;
+
     private const int RequiredAgeYears = 18;
     private readonly TimeProvider timeProvider;
 
@@ -65,8 +69,7 @@ public sealed class AgeEligibilityEvaluator
 
         // An eighteenth birthday beyond DateOnly's range is later than every
         // representable evaluation date; do not overflow or approximate with days.
-        var eligible = dateOfBirth.Year <= DateOnly.MaxValue.Year - RequiredAgeYears &&
-            dateOfBirth.AddYears(RequiredAgeYears) <= evaluationDate;
+        var eligible = HasReachedAge(dateOfBirth, evaluationDate, RequiredAgeYears);
 
         return new AgeEligibilityEvidence(
             eligible ? AgeEligibilityStatus.Eligible : AgeEligibilityStatus.Ineligible,

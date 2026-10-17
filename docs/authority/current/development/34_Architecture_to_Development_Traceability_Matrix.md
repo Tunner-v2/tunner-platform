@@ -1,14 +1,29 @@
-> **Tunner Development Authority Package**  
+﻿> **Tunner Development Authority Package**  
 > **Status:** ACTIVE — LOCKED DEVELOPMENT BASELINE 1.6.0  
 > **Closure revision date:** 2026-09-29  
 
+
+
+
 # 34 — Architecture-to-Development Traceability Matrix
+
+
+
 
 ## 1. Purpose
 
+
+
+
 Every FigJam architecture section must resolve to authoritative development documentation. A range mapping below applies to **each section number in that range individually**; special A-sections are separately listed. Implementation work must cite both the relevant FRD and exact FigJam flow/section when behavior is flow-specific.
 
+
+
+
 ## 2. Section coverage
+
+
+
 
 | FigJam section(s) | Development authority | Closure purpose |
 |---|---|---|
@@ -44,9 +59,18 @@ Every FigJam architecture section must resolve to authoritative development docu
 | 142–144 | 29, 30 | data lifecycle/retention/hold |
 | 145–150 | 29, 28, 33 | privacy requests/governance/incidents |
 
+
+
+
 ## 3. Explicit FigJam contract-marker closure
 
+
+
+
 The following markers were discovered by programmatic FigJam audit and must have a direct closing contract:
+
+
+
 
 | Section | Marker | Closing document |
 |---:|---|---|
@@ -77,7 +101,13 @@ The following markers were discovered by programmatic FigJam audit and must have
 | 72 | RESOLVED — FRD CONTRACT AUTHORITY | 20/21 discount/promotion contract |
 | 141 | RESOLVED — POLICY/FRD/RELEASE-GATE AUTHORITY | 22 remittance policy + 26 accounting/reconciliation + 33 market/release gate |
 
+
+
+
 ## 4. Cross-cutting authority coverage
+
+
+
 
 | Concern | Authority |
 |---|---|
@@ -97,27 +127,55 @@ The following markers were discovered by programmatic FigJam audit and must have
 | Product compliance/KYC + provider-account separation | PDR-0006, 07, 22, 23, 28, 32 |
 | Product payable balance + payout identity/destination/finality/exception reconciliation | PDR-0006, 26, 32 |
 | Tunner-owned notification SDK/provider boundary | 27, 32 |
+| age-aware Account/consent/commercial eligibility | PDR-0011, AMD-0007, 08, 17, 18, 21, 29, 31, 33 |
+
+
+
 
 ## 5. Product Decision closure
 
+
+
+
 No Product Owner business decision remains OPEN in the current documentation closure.
+
+
+
 
 Resolved constitutional decisions include:
 
+
+
+
 - PDR-0005 — Canada/Ontario home jurisdiction and configurable currency model;
 - PDR-0006 — Product finance/provider-account separation and payment orchestration;
-- PDR-0007 — DOB-based 18+ eligibility;
+- PDR-0011 — universal Account eligibility, age-aware consent and delegated commercial authority; supersedes PDR-0007 prospectively;
 - PDR-0008 — Connected Product service relationship/platform scope;
 - PDR-0009 — managed/extensible tax-engine foundation;
 - PDR-0010 — configurable FX economic treatment and guided configuration.
 
+
+
+
 PDR-0010 maps FX economics across 20, 26, 31, 32 and 33: cause-based defaults are policy-driven, Product-specific overrides are versioned through ProductCommercialAgreement, actual conversions retain immutable FxConversion evidence, and operator configuration is guided/validated/previewable rather than hardcoded.
+
+
+
 
 If a new ambiguity is discovered during FigJam alignment, it must be added to document 16 as a new Product Decision/amendment gate; implementation may not invent a resolution.
 
+
+
+
 ## 6. Closure audit conditions
 
+
+
+
 Final promotion to ACTIVE requires all of:
+
+
+
 
 - every section mapping above has an implementation-capable contract;
 - all explicit FigJam BACKEND/LEGAL/UI markers resolved;
@@ -129,12 +187,24 @@ Final promotion to ACTIVE requires all of:
 - UI screen matrix covers every user/operator action in the FRDs;
 - production gates make variable legal/deployment values explicit policy/release inputs rather than developer guesses.
 
+
+
+
 ## 8. AMD-0001 cross-cutting closure
 
+
+
+
 AMD-0001 does not change FigJam business/domain semantics. It adds implementation authority for the development control plane:
+
+
+
 
 - document 35 — detailed 20-role skill/review contracts;
 - document 36 — P0 repository/bootstrap/governance/context/orchestration implementation;
 - document 37 — current effective authority/authorization index.
+
+
+
 
 These are cross-cutting development-governance authorities and therefore do not require new FigJam domain sections.

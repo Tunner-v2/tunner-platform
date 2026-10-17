@@ -1,4 +1,4 @@
-> **Tunner Development Authority Package**
+﻿> **Tunner Development Authority Package**
 >
 > **Status:** ACTIVE — LOCKED DEVELOPMENT BASELINE 1.6.0  
 > **Baseline revision date:** 2026-09-29  
@@ -7,15 +7,33 @@
 > **Tertiary reference:** Figma Admin/Support UX and Tunner Platform UX  
 > **Business safeguard:** No development document may silently override an explicit Product Owner business decision or Tunner domain-ownership boundary. A conflict creates a governed Product Decision / Amendment gate.
 
+
+
+
 # Tunner Development Documentation — Master Index
+
+
+
 
 ## 1. Purpose
 
+
+
+
 This repository package is the parent development authority for building Tunner with human engineers and AI development agents. It translates the Tunner business model and FigJam architecture into an implementable, governed, testable and transferable engineering system.
+
+
+
 
 The documentation is intentionally separated into focused authorities rather than a single oversized specification. Every development task must be traceable to the applicable documents, architecture flow IDs, Product Owner decisions, acceptance criteria, Git history and test evidence.
 
+
+
+
 ## 2. Locked baseline decisions
+
+
+
 
 | Area | Decision |
 |---|---|
@@ -58,24 +76,48 @@ The documentation is intentionally separated into focused authorities rather tha
 | Financial-services regulatory posture | Market/provider activation must pass the applicable regulatory/provider/compliance gate. Tunner Finance is limited to the payment, payable, settlement, payout, reconciliation and accounting-control capabilities defined by the active service contracts; any additional regulated financial capability requires explicit approval before activation. |
 | Payout finality | Approved Settlement is immutable; Payout snapshots ProductPayoutDestinationVersion; provider route is resolved separately; replacement external payout uses new payout/idempotency identity; PayoutReceipt is per payout attempt/finality; PayoutProcessingCase is exception/reconciliation-only. |
 | FX economic treatment | PDR-0010 locks a configurable, versioned `FxEconomicTreatmentPolicy` with cause-based defaults: customer/issuer FX is external to Tunner, Tunner treasury/provider-settlement FX is Tunner-borne by default, Product-requested payout FX is Product-borne by default, and accounting/statutory translation is reporting-only. ProductCommercialAgreement may explicitly override Product-affecting allocation through guided configuration and approved policy versions. |
-| Account eligibility | Tunner Accounts are **18+ only**; registration collects DOB and performs authoritative server-side age calculation; under-18 registration is denied (PDR-0007) |
+| Account eligibility | Registration is open without an 18+ Account gate. After contact verification, DOB is collected in Personal Information and evaluated server-side. Under-18 users continue ordinary use subject to age/consent policy but cannot independently exercise paid commercial/payment authority; sponsored paid access reuses Billing Account/Billing Authority (PDR-0011, AMD-0007). |
 | UI source | Figma is reference, not business/backend authority |
 | Internet research | Mandatory before implementation of a material standard, library, compliance control, provider, protocol or architectural decision |
 | AI behavior | No unapproved assumptions. Ambiguity becomes a scoped governance block and Product Decision request. |
 
+
+
+
 ### Global commerce interpretation
+
+
+
 
 Toronto, Ontario, Canada is Tunner's current corporate/home jurisdiction for the active model. Tunner may offer eligible Products to customers globally when provider, card network/issuer, sanctions, Product and applicable destination-market requirements permit the transaction.
 
+
+
+
 Product presentment currency is explicit Product catalog/configuration, not inferred from the customer's card currency. An eligible card can be used when the selected provider route supports the configured presentment currency; issuer/cardholder FX is external unless Tunner/provider actually performs a recorded conversion.
+
+
+
 
 Tunner currently has an active CAD-denominated Canadian bank account for provider settlement. Provider settlement currency is configuration-driven. A future USD account becomes active only after it is created, verified and bound. ProductPayable remains in the Product commercial transaction/presentment currency and is independent of provider settlement currency; provider settlement FX is separate Tunner treasury/clearing evidence. Product payout currency is independently configured and any actual conversion is recorded as immutable `FxConversion` evidence. Country/market eligibility remains versioned policy.
 
+
+
+
 Global selling can create destination-country privacy, consumer, marketing and indirect-tax obligations. Market expansion is therefore controlled through a jurisdiction/market policy registry and tax-obligation monitoring rather than by hardcoding Canada-only compliance. Tunner delegates tax calculation to an approved managed tax service through `ITaxEngine`; it does not maintain its own tax-rate or jurisdiction rules. The active payment provider's tax service may be preferred when it is capability-compatible, but tax-engine binding remains separately configurable and extensible.
+
+
+
 
 ### Selected external-provider boundary
 
+
+
+
 Stripe, Resend and Cloudflare R2 are selected implementation providers, but none becomes Tunner business authority. Tunner owns canonical payment, notification and object-metadata state. Provider SDK objects, webhooks and dashboards are normalized through adapters and may not be persisted as the domain model.
+
+
+
 
 - Stripe: initial payment provider; stable official `Stripe.net` release only.
 - Resend: primary production transactional-email provider; official `Resend` .NET SDK.
@@ -83,9 +125,18 @@ Stripe, Resend and Cloudflare R2 are selected implementation providers, but none
 - Cloudflare R2: primary object store through its S3-compatible API and official AWS SDK for .NET.
 - Mailpit: local/test email capture only.
 
+
+
+
 ## 3. Authority order
 
+
+
+
 For development execution:
+
+
+
 
 1. **Approved development documentation**
 2. **Approved amendments and Product Decisions**
@@ -94,11 +145,23 @@ For development execution:
 5. **Figma User/Account UX reference**
 6. **Implementation details and code**
 
+
+
+
 An explicit Product Owner decision is constitutional business authority. If a development document conflicts with such a decision, development does not “choose” one: the affected item is blocked and the documentation is amended.
+
+
+
 
 Google Drive UI/UX documents are explicitly outside development scope.
 
+
+
+
 ## 4. Document map
+
+
+
 
 | File | Authority |
 |---|---|
@@ -143,43 +206,106 @@ Google Drive UI/UX documents are explicitly outside development scope.
 | `Pre-P0 Implementation Package/` | Ready-to-materialize AGENTS.md, 20 skills, governance/project-memory templates, bootstrap runbook and P0 acceptance pack |
 | `decisions/` | Accepted ADRs, Product Decision Records and approved amendments; immutable decision lineage |
 
+
+
+
 The separately maintained **Tunner Architecture Flowchart Interpretation and Development Guidelines** remains mandatory reading and is intentionally external to this package because it governs FigJam interpretation across documentation revisions. Current Drive authority: https://drive.google.com/file/d/1I6PXE-kMIwe3WRrjUwPPckyQFzGU8BTB/view
+
+
+
 
 **PD-CLOSE-05 — FX economic responsibility is RESOLVED by PDR-0010.** FX treatment is configuration-driven through versioned `FxEconomicTreatmentPolicy` with an approved cause-based default and guided configuration. Provider-settlement/treasury FX, Product payout FX, customer/issuer FX and statutory/accounting translation remain distinct contexts; every Product-affecting override is explicit, previewable, effective-dated and tied to `ProductCommercialAgreement`. No open Product Owner commercial decision remains in the current documentation closure. Baseline 1.6.0 closure passed on 2026-09-29; P0 is authorized and P1–P8 remain gated by the P0 feature-development enablement gate.
 
+
+
+
 ### Pre-P0 implementation package
+
+
+
 
 The complete pre-P0 materialization pack is maintained at:
 
+
+
+
 https://drive.google.com/drive/folders/15pVwFcj6TfbRQWAcR_54V7-DrrMJ7k28
+
+
+
 
 It contains the concise `AGENTS.md` template, all 20 role `SKILL.md` contracts, governance-record templates, project-memory templates, repository blueprint, bootstrap/self-hosting runbook, context-cost policy, GitHub bootstrap policy, P0 Definition of Ready/Done and fresh-agent recovery test. During `TUN-P0-001`, these are materialized into the repository and then governed by the repository control plane.
 
 
 
+
+
+
+
+
+
+
+
+
 ### Authority-first decision resolution
+
+
+
 
 Under **AMD-0005**, no contributor may create a Product/technical decision, amendment request based on alleged missing authority, or missing-authority blocker until a recorded Authority Resolution Pass proves that verified applicable Development Documentation/FRDs, active ADR/PDR/amendments, contracts, flows/architecture and governed decision history do not already resolve the question.
 
+
+
+
 Existing authority is reused rather than duplicated. `INSUFFICIENT_CONTEXT` causes context expansion before gap classification. A selective/trigger-based technology with no active trigger is not a missing contract and must not manufacture an ADR or Product Owner decision.
+
+
+
 
 AMD-0005: https://drive.google.com/file/d/1M_B4TYwf5gDKaZ-1w_gMR9Nse-Fs7B87/view
 
+
+
+
 ### PR approval and continuous development
+
+
+
 
 Under **AMD-0002**, required PR approval gates integration into protected `main`; it does not normally stop local/branch development. Governance must continue all eligible work while approval is pending and block only scopes whose dependency explicitly requires `MERGED_TO_MAIN` or another genuine human-authority gate.
 
+
+
+
 AMD-0002 also requires committed-state local readiness: repository-changing work must have an identified validated commit SHA before `LOCAL_VALIDATED`, `READY_FOR_MERGE`, `DONE` or completed handoff. PR approval/merge remains separate. Final test/review/evidence must correspond to the validated committed state; unrelated/pre-existing dirty paths are preserved and explicitly classified rather than silently committed.
+
+
+
 
 ## 5. Development start rule
 
+
+
+
 **DOCUMENTATION BASELINE 1.6.0 IS ACTIVE AND LOCKED. P0 IS AUTHORIZED.** The full-project closure gate in document 16 has passed for this baseline.
+
+
+
 
 The first authorized implementation activity is **P0 — Governance & Development System**. P1–P8 feature/platform development must not begin until the P0 feature-development enablement gate in document 11 passes with machine-readable evidence. This prevents product implementation from depending on chat memory, unenforced workflow rules or ad-hoc orchestration.
 
+
+
+
 ## 6. Development sequence after documentation activation
 
+
+
+
 Documentation activation authorizes **P0 — Governance & Development System first**.
+
+
+
 
 1. P0 governance/control-plane bootstrap: governance schemas, context engine, agent skills, governed orchestration, project memory/state, test/evidence and developer automation.
 2. Pass the P0 feature-development enablement gate in document 11.
@@ -192,52 +318,135 @@ Documentation activation authorizes **P0 — Governance & Development System fir
 9. Full Finance & Accounting.
 10. Production-readiness hardening.
 
+
+
+
 P1–P8 must not bypass P0 merely because documentation is active.
+
+
+
 
 ## 7. Definition of “done”
 
+
+
+
 “Code compiles” is never sufficient.
+
+
+
 
 A governed work item is done only when its required implementation, documentation, automated tests, security/contract checks, evidence, Git/PR trace and applicable Product Acceptance are complete.
 
+
+
+
 ## 8. Core engineering maxim
+
+
+
 
 > **Simplify topology, not business truth. Reuse infrastructure, not business authority.**
 
 
+
+
+
+
+
+
 ## 9. Repository location portability
+
+
+
 
 The Tunner checkout/solution location is not authority and must never be hardcoded.
 
+
+
+
 All repository-internal committed references use paths relative to `<repo-root>`. P0 establishes `.tunner-root` and the shared resolver defined by AMD-0003. Development must remain valid if the repository is moved or cloned to another drive, parent directory, CI workspace or container host path.
+
+
+
 
 Canonical Google Drive/GitHub/Figma URLs/IDs remain external resource identifiers; this rule concerns local/CI/container filesystem paths.
 
+
+
+
 ## 10. Shared capability and flow-to-code rule
+
+
+
 
 Tunner implements shared technical mechanics once and reuses them across applicable flows/modules/surfaces. `TUN-FLOW-*` identifiers define behavior and traceability; they do not mandate one service/class/project/table/component stack per flow.
 
+
+
+
 The governing separation is:
+
+
+
 
 `domain/business semantics != technical canonicalization != presentation formatting`
 
+
+
+
 Shared primitives/formatters must remain technical and cohesive. Domain modules continue to own business calculations, eligibility, uniqueness/mutability policy, authorization and state. Presentation formatters render authoritative typed values only.
+
+
+
 
 Examples include Money/currency display, dates/times, percentages, identifiers, slugs/text normalization and other deterministic representation concerns. Cross-runtime implementations use semantic conformance tests rather than duplicated ad-hoc behavior.
 
 
+
+
+
+
+
+
 ## 11. Post-closure Revision (`RV`) lifecycle
+
+
+
 
 Tunner preserves legitimate milestone/work-item closure as immutable historical evidence. Later corrective, hardening, compatibility, maintenance or implementation-improvement work is represented through append-only Revision (`RV`) lineage rather than overwriting or repeatedly reopening the original record.
 
+
+
+
 Examples:
+
+
+
 
 - `P0-RV001` — first milestone-level Revision associated with P0;
 - `P0-004-RV001` — first Revision associated with original work item P0-004;
 - `P0-004-RV001-001` — optional child slice under that Revision.
 
+
+
+
 Revision sequence numbering is monotonic and has no artificial count limit.
+
+
+
 
 `REOPENED` remains appropriate for an item still inside the active acceptance/release lifecycle. Historically closed work defaults to a Revision.
 
+
+
+
 An RV is implementation/work-governance lineage, not an authority amendment. It cannot change Product/business/architecture/security authority without the applicable ADR/PDR/amendment.
+
+
+
+
+### Age-aware Account and commercial eligibility — PDR-0011 / AMD-0007
+
+
+PDR-0011 supersedes PDR-0007 prospectively. Registration no longer uses DOB as the initial acquisition gate. Verified contact precedes Personal Information/DOB. Age below 18 does not by itself deny the Account or ordinary Product use; age-sensitive consent is policy-driven and independent paid commercial authority is denied. Paid access may be sponsored through an eligible guardian/adult, organization, school/education organization or other supported Billing Account using the existing delegated Billing Authority model.
