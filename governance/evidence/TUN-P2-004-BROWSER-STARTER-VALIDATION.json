@@ -101,6 +101,18 @@
     {
       "path": "artifacts/browser-starter-20261017/retained-data.json",
       "sha256": "b117911b433cd170acf28f78aa91296111cb025dbb3569799d670644d335e5ef"
+    },
+    {
+      "path": "artifacts/browser-starter-20261017/approved-certificate-start.log",
+      "sha256": "f9810f4c979a5629962ce7a064ab0bbf38d4e975a12b5e66fc743227605a23b7"
+    },
+    {
+      "path": "artifacts/browser-starter-20261017/approved-certificate-check.log",
+      "sha256": "8dce0e66860eb3833fe8874607e92dabd3387a3c2cacf8fd29aff267718990e0"
+    },
+    {
+      "path": "artifacts/browser-starter-20261017/approved-certificate-receipt.json",
+      "sha256": "7653e8a0058e30ad49212327f25a823918e150c94bc9f1152fcbd8c46c999852"
     }
   ],
   "prior_production_regressions": {
@@ -111,10 +123,19 @@
     "method": "395 .NET/26 web/21 fixture browser results retain their original tested SHA;237 architecture cases and dedicated real browser/lifecycle checks execute for this starter."
   },
   "operator_https_trust": {
-    "status": "PENDING_EXPLICIT_USER_APPROVAL",
+    "status": "COMPLETE_USER_AUTHORIZED",
     "action": "Trust the existing localhost ASP.NET development certificate in Windows",
-    "auto_review": "Rejected because persistent certificate trust is a security-setting change not explicitly authorized; no workaround or indirect trust operation was attempted.",
-    "current_mode": "Application is running. Pinned local readiness and browser automation work; normal browser trust requires explicit authorization."
+    "user_authorization": "Yes—trust the existing localhost certificate",
+    "question_item_id": "[\"request_user_input_async\",\"call_286dfcdd679144c29a871add483a1422\",0]",
+    "checked_at": "2026-10-17T22:51:36.7737140Z",
+    "certificate_thumbprint": "5A69399638FDB746D14B645BE603348BD4FF182E",
+    "certificate_subject": "CN=localhost",
+    "certificate_trusted_current_user": true,
+    "application_status": 200,
+    "mailpit_status": 200,
+    "tls_validation": "Default Windows HTTPS certificate validation; no skip or custom validation callback",
+    "auto_review": "Initially rejected because persistent certificate trust lacked explicit authorization. The user then explicitly approved it; the original normal startup action succeeded. No workaround or indirect trust operation was attempted.",
+    "current_mode": "Normal browser HTTPS and original exact-pinned readiness both pass. Isolated local test mode remains explicit."
   },
   "development_failures": [
     "Initial restricted NuGet audit restore could not reach nuget.org; host-authorized pinned restore passed.",
@@ -125,5 +146,5 @@
     "First post-commit readiness rejected the custom PASS_LOCAL_TEST_MODE result token. Metadata now uses the existing PASS schema with explicit local-only validation_scope; no gate or executable behavior changed."
   ],
   "lifecycle_boundary": "P2 remains active VALIDATION; production policies/content/legal/visual/release approvals and existing TODO-AMD0008-GOV001 are unchanged.",
-  "validation_scope": "Isolated Development-only browser-test host and starter; Windows certificate trust remains a separately authorized operator security-setting action, not production or release acceptance."
+  "validation_scope": "Isolated Development-only browser-test host and starter; separately user-authorized Windows localhost certificate trust is complete. No production or release acceptance."
 }

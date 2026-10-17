@@ -215,7 +215,8 @@
       "lifecycle": "PASS",
       "receipt": "governance/evidence/TUN-P2-004-BROWSER-STARTER-VALIDATION.json",
       "tested_commit_sha": "ccb82f64a12cfed08c4f30a0ca763e8205b704ce",
-      "normal_browser_certificate_trust": "PENDING_USER_APPROVAL"
+      "normal_browser_certificate_trust": "COMPLETE_USER_AUTHORIZED",
+      "normal_https_validation": "PASS: default Windows certificate validation; app and Mailpit HTTP200"
     }
   },
   "test_suites": [
@@ -360,6 +361,18 @@
     {
       "path": "artifacts/browser-starter-20261017/retained-data.json",
       "sha256": "b117911b433cd170acf28f78aa91296111cb025dbb3569799d670644d335e5ef"
+    },
+    {
+      "path": "artifacts/browser-starter-20261017/approved-certificate-start.log",
+      "sha256": "f9810f4c979a5629962ce7a064ab0bbf38d4e975a12b5e66fc743227605a23b7"
+    },
+    {
+      "path": "artifacts/browser-starter-20261017/approved-certificate-check.log",
+      "sha256": "8dce0e66860eb3833fe8874607e92dabd3387a3c2cacf8fd29aff267718990e0"
+    },
+    {
+      "path": "artifacts/browser-starter-20261017/approved-certificate-receipt.json",
+      "sha256": "7653e8a0058e30ad49212327f25a823918e150c94bc9f1152fcbd8c46c999852"
     }
   ],
   "screenshots": [
@@ -482,7 +495,7 @@
     "Current registration visual scope passes with recorded Product Owner approved exceptions.",
     "P2 milestone production visual gate stays BLOCKED for remaining scopes and bootstrap/CI propagation.",
     "No Product content/legal, protected-main or production release approval; existing P1-RV001 remains unwaived.",
-    "Local starter uses explicit synthetic fixture providers; Windows localhost certificate trust awaits direct user authorization after auto-review rejection."
+    "Local starter uses explicit synthetic fixture providers. Windows trust for the existing localhost certificate was separately authorized by the user and verified; no production acceptance is implied."
   ],
   "lifecycle_boundary": "Engineering VALIDATION within active P2-004. No historical closure overwritten; no RV required. Product acceptance/protected-main/release remain separate.",
   "follow_on_owners": {
