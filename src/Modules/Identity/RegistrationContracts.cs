@@ -1,11 +1,12 @@
 using System.Text.Json.Serialization;
 using Tunner.Platform.Policies;
+using Tunner.Accounts;
 
 namespace Tunner.Identity.Persistence;
 
 /// <summary>Trusted server-resolved policy; none of these values are browser authority or defaults.</summary>
 public sealed record RegistrationPolicy(
-    string Version, string AgePolicyVersion, string ProcessingReference, string RetentionReference,
+    string Version, string AccountEligibilityAuthority, string ProcessingReference, string RetentionReference,
     string TermsVersion, string PrivacyVersion, string VerificationTemplateVersion, string ExistingAccountTemplateVersion, string ActivationProfile,
     int PasswordMinimumLength, int PasswordMaximumLength, int PasswordHashIterations,
     int ProofDigits, TimeSpan ProofLifetime, int ProofAttempts, TimeSpan ResendCooldown, int ResendLimit,
@@ -14,9 +15,9 @@ public sealed record RegistrationPolicy(
 {
     public void Validate()
     {
-        string[] refs = [Version, AgePolicyVersion, ProcessingReference, RetentionReference, TermsVersion, PrivacyVersion,
+        string[] refs = [Version, AccountEligibilityAuthority, ProcessingReference, RetentionReference, TermsVersion, PrivacyVersion,
             VerificationTemplateVersion, ExistingAccountTemplateVersion];
-        if (refs.Any(string.IsNullOrWhiteSpace) || ActivationProfile != "PASSWORD_AND_VERIFIED_EMAIL" || PasswordMinimumLength < 15 || PasswordMaximumLength < 64 ||
+        if (refs.Any(string.IsNullOrWhiteSpace) || AccountEligibilityAuthority != "PDR-0011" || ActivationProfile != "PASSWORD_AND_VERIFIED_EMAIL" || PasswordMinimumLength < 15 || PasswordMaximumLength < 64 ||
             PasswordMaximumLength < PasswordMinimumLength || PasswordHashIterations <= 0 || ProofDigits is < 6 or > 9 ||
             ProofLifetime <= TimeSpan.Zero || ProofAttempts <= 0 || ResendCooldown < TimeSpan.Zero || ResendLimit < 0 ||
             AbuseWindow <= TimeSpan.Zero || RegisterLimit <= 0 || VerifyLimit <= 0 || ResendRequestLimit <= 0 || LookupLimit <= 0 ||
@@ -63,26 +64,29 @@ public sealed record RegistrationCaller(string BrowserDigest, string NetworkDige
     }
 }
 
-/// <summary>Not a record: generated diagnostics must not print DOB, password or email.</summary>
+/// <summary>Not a record: generated diagnostics must not print credentials or email.</summary>
+[JsonUnmappedMemberHandling(JsonUnmappedMemberHandling.Disallow)]
 public sealed class RegisterAccountCommand
 {
     public required Guid IdempotencyKey { get; init; }
     public required string Email { get; init; }
     public required string Password { get; init; }
-    public required DateOnly DateOfBirth { get; init; }
+    public required string PasswordConfirmation { get; init; }
     public required string TermsVersion { get; init; }
     public required string PrivacyVersion { get; init; }
     public required bool AcknowledgedNotices { get; init; }
     public override string ToString() => nameof(RegisterAccountCommand);
 }
 
+[JsonUnmappedMemberHandling(JsonUnmappedMemberHandling.Disallow)]
 public sealed record VerifyRegistrationCommand(Guid OperationId, Guid IdempotencyKey, long ExpectedVersion, string Code)
 {
     public override string ToString() => nameof(VerifyRegistrationCommand);
 }
+[JsonUnmappedMemberHandling(JsonUnmappedMemberHandling.Disallow)]
 public sealed record ResendRegistrationCommand(Guid OperationId, Guid IdempotencyKey, long ExpectedVersion);
 public sealed record RegistrationResult(Guid OperationId, string CorrelationId, string Status, long Version,
-    string? ErrorCode, DateTimeOffset? ExpiresAt, DateTimeOffset? ResendAfter, string? AccountId = null);
+    string? ErrorCode, DateTimeOffset? ExpiresAt, DateTimeOffset? ResendAfter, string? AccountId = null, string? NextAction = null, AccountCapabilityEvaluation? AgeCapabilities = null, PersonalInformationView? PersonalInformation = null);
 
 /// <summary>Post-commit notification adapter contract. Stable DeliveryId is its idempotency identity.</summary>
 public interface IRegistrationNotificationDispatcher
@@ -103,5 +107,7 @@ public interface IRegistrationApplication
     Task<RegistrationResult> FindAsync(RegistrationCaller caller, Guid idempotencyKey, CancellationToken cancellationToken = default);
     Task<RegistrationResult> RegisterAsync(RegistrationCaller caller, RegisterAccountCommand command, CancellationToken cancellationToken = default);
     Task<RegistrationResult> VerifyAsync(RegistrationCaller caller, VerifyRegistrationCommand command, CancellationToken cancellationToken = default);
+    Task<RegistrationResult> CompletePersonalInformationAsync(RegistrationCaller caller, CompletePersonalInformationCommand command, CancellationToken cancellationToken = default);
+    Task<RegistrationResult> ContinueAsync(RegistrationCaller caller, ResendRegistrationCommand command, CancellationToken cancellationToken = default);
     Task<RegistrationResult> ResendAsync(RegistrationCaller caller, ResendRegistrationCommand command, CancellationToken cancellationToken = default);
 }

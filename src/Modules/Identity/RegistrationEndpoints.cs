@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Tunner.Platform.Operations;
+using Tunner.Accounts;
 
 namespace Tunner.Identity.Persistence;
 
@@ -25,10 +26,12 @@ public static class RegistrationEndpoints
         ArgumentNullException.ThrowIfNull(services);
         Type[] required = [typeof(IRegistrationPolicySource), typeof(IRegistrationPasswordBlocklist),
             typeof(IRegistrationNotificationDispatcher), typeof(IRegistrationPresentationSource),
-            typeof(RegistrationNetworkPartitionKey), typeof(IdentityPersistenceDbContext)];
+            typeof(RegistrationNetworkPartitionKey), typeof(IdentityPersistenceDbContext), typeof(IAccountAgePolicySource), typeof(IAccountConsentEvidenceSource)];
         if (required.Any(type => !services.Any(x => x.ServiceType == type)))
             throw new InvalidOperationException("Registration requires explicit policy, blocklist, notification, content, key and persistence providers.");
         services.TryAddSingleton(TimeProvider.System);
+        services.AddScoped<AccountPersonalInformationApplication>();
+        services.AddScoped<IAccountCommercialEligibilityReader>(sp => sp.GetRequiredService<AccountPersonalInformationApplication>());
         services.AddScoped<IRegistrationApplication, RegistrationApplication>();
         return services;
     }
@@ -67,11 +70,16 @@ public static class RegistrationEndpoints
             var caller = new RegistrationCaller(Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(browser!.Id))), network.Partition(context.Connection.RemoteIpAddress));
             try { return ToHttp(await application.FindAsync(caller, key, context.RequestAborted).ConfigureAwait(false)); }
             catch (InvalidOperationException) { return Problem(503, "DEPENDENCY_UNAVAILABLE"); }
+            catch (CryptographicException) { return Problem(503, "DEPENDENCY_UNAVAILABLE"); }
         }).AllowAnonymous();
         endpoints.MapPost("/registration/register", (HttpContext context, IRegistrationApplication application) =>
             InvokeAsync<RegisterAccountCommand>(context, (caller, command, ct) => application.RegisterAsync(caller, command, ct))).AllowAnonymous();
         endpoints.MapPost("/registration/verify", (HttpContext context, IRegistrationApplication application) =>
             InvokeAsync<VerifyRegistrationCommand>(context, (caller, command, ct) => application.VerifyAsync(caller, command, ct))).AllowAnonymous();
+        endpoints.MapPost("/registration/personal-information", (HttpContext context, IRegistrationApplication application) =>
+            InvokeAsync<CompletePersonalInformationCommand>(context, (caller, command, ct) => application.CompletePersonalInformationAsync(caller, command, ct))).AllowAnonymous();
+        endpoints.MapPost("/registration/continue", (HttpContext context, IRegistrationApplication application) =>
+            InvokeAsync<ResendRegistrationCommand>(context, (caller, command, ct) => application.ContinueAsync(caller, command, ct))).AllowAnonymous();
         endpoints.MapPost("/registration/resend", (HttpContext context, IRegistrationApplication application) =>
             InvokeAsync<ResendRegistrationCommand>(context, (caller, command, ct) => application.ResendAsync(caller, command, ct))).AllowAnonymous();
         MapPackagedWebAssets(endpoints);
@@ -97,13 +105,21 @@ public static class RegistrationEndpoints
         if (size is null || size.IsReadOnly) return Problem(503, "DEPENDENCY_UNAVAILABLE");
         size.MaxRequestBodySize = maximumBytes;
         T? command;
-        try { command = await context.Request.ReadFromJsonAsync<T>(WebJson, context.RequestAborted).ConfigureAwait(false); }
+        try
+        {
+            using var body = new MemoryStream();
+            await context.Request.Body.CopyToAsync(body, context.RequestAborted).ConfigureAwait(false);
+            if (body.Length > maximumBytes) return Problem(413, "VALIDATION_ERROR");
+            command = JsonSerializer.Deserialize<T>(body.ToArray(), WebJson);
+        }
         catch (JsonException) { return Problem(400, "VALIDATION_ERROR"); }
         catch (BadHttpRequestException exception) { return Problem(exception.StatusCode == StatusCodes.Status413PayloadTooLarge ? 413 : 400, "VALIDATION_ERROR"); }
         if (command is null) return Problem(400, "VALIDATION_ERROR");
         RegistrationResult result;
         try { result = await action(caller, command, context.RequestAborted).ConfigureAwait(false); }
         catch (InvalidOperationException) { return Problem(503, "DEPENDENCY_UNAVAILABLE"); }
+        catch (CryptographicException) { return Problem(503, "DEPENDENCY_UNAVAILABLE"); }
+        catch (ArgumentException) { return Problem(400, "VALIDATION_ERROR"); }
         return ToHttp(result);
     }
     private static IResult ToHttp(RegistrationResult result)

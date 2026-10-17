@@ -10,4 +10,10 @@ Consent is a trusted, subject/policy/time-bound evidence relationship. Guardian/
 
 Current commercial eligibility is recomputed from protected profile material and effective policy at action time. Unknown/expired/missing evidence cannot independently authorize a payer; the existing PAYER_CONTEXT_REQUIRED contract and BillingAuthority own the resolution. No minor payment resources are introduced.
 
-Status: preparation in progress. Final committed-source tests, reviews and receipts must replace this preparation status before readiness.
+Implementation: the active P2-002 evaluator and P2-003 persistence corrections are committed and validated. P2-004 now implements verification-bound normal Personal Information and policy-driven completion. The current result is exclusively the committed TUN-P2-004-VALIDATION.json receipt; a PENDING candidate is never readiness.
+
+Contracts: docs/contracts/registration-onboarding.openapi.json records the strict private BFF schema. No public SDK or Product API is activated. Forward migrations preserve historical PDR-0007 rows and refuse populated downgrade. The new protected profile payload is the only DOB store; immutable history, replay receipts and outbox hold safe references/evaluations.
+
+Figma: existing initial70:270, normal profile35:107 and onboarding derivative198:2 align before code. Historical DOB-only187:2 is hidden/labeled superseded. Published copy remains an explicit production dependency.
+
+Handoff: use the work-item validation/role receipts and the task-specific PDR0011_AMD0007_HANDOFF.md. Generated context lives under the ignored task artifacts to preserve the pre-existing dirty context/project files. No Product/release acceptance or closure is asserted.

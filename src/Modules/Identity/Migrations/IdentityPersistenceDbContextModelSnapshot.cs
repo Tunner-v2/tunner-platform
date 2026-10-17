@@ -749,15 +749,13 @@ namespace Tunner.Identity.Persistence.Migrations
                     b.Property<string>("AccountId")
                         .HasColumnType("text");
 
-                    b.Property<DateTimeOffset>("AgeEvaluatedAt")
+                    b.Property<DateTimeOffset?>("AgeEvaluatedAt")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("AgeEvidenceReference")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("AgePolicyVersion")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<int>("Attempts")
@@ -830,6 +828,10 @@ namespace Tunner.Identity.Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<string>("Stage")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("text");
@@ -857,6 +859,8 @@ namespace Tunner.Identity.Persistence.Migrations
 
                     b.ToTable("registration_operations", "identity", t =>
                         {
+                            t.HasCheckConstraint("ck_registration_stage", "\"Stage\" IN ('LEGACY','VERIFY_CONTACT','PERSONAL_INFORMATION','CONSENT_REQUIRED','COMPLETE')");
+
                             t.HasCheckConstraint("ck_registration_status", "\"Status\" IN ('REQUIRES_ACTION','SUCCEEDED','FAILED')");
 
                             t.HasCheckConstraint("ck_registration_version", "\"Version\" >= 1 AND \"Attempts\" >= 0 AND \"Resends\" >= 0");

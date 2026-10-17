@@ -14,10 +14,10 @@ using Tunner.Database.Outbox;
 namespace Tunner.Identity.Persistence;
 
 /// <summary>Identity-owned registration. The caller/context and effective policy are trusted server inputs.</summary>
-public sealed class RegistrationApplication(
+public sealed partial class RegistrationApplication(
     IdentityPersistenceDbContext database, IRegistrationPolicySource policies,
     IRegistrationPasswordBlocklist blocklist, IDataProtectionProvider protection,
-    IRegistrationNotificationDispatcher notifications, TimeProvider timeProvider) : IRegistrationApplication
+    IRegistrationNotificationDispatcher notifications, TimeProvider timeProvider, AccountPersonalInformationApplication personalInformation) : IRegistrationApplication
 {
     private readonly IDataProtector credentialProtection = protection.CreateProtector("Tunner.Identity.Registration.Credential.v1");
     private readonly IDataProtector challengeProtection = protection.CreateProtector("Tunner.Identity.Registration.Challenge.v1");
@@ -32,7 +32,8 @@ public sealed class RegistrationApplication(
         if (!await AllowAsync(caller, "STATUS", policy.LookupLimit, policy, now, cancellationToken).ConfigureAwait(false))
             return await CompleteAsync(transaction, Failure(Guid.Empty, "RATE_OR_ABUSE_LIMITED"), null, cancellationToken).ConfigureAwait(false);
         var row = await database.Set<RegistrationOperationRow>().AsNoTracking().SingleOrDefaultAsync(x => x.BrowserDigest == caller.BrowserDigest && x.IdempotencyKey == idempotencyKey, cancellationToken).ConfigureAwait(false);
-        return await CompleteAsync(transaction, row is null ? Failure(Guid.Empty, "NOT_FOUND_OR_NOT_DISCLOSABLE") : Result(row), null, cancellationToken).ConfigureAwait(false);
+        var result = row is null || row.Stage != "LEGACY" && now >= row.PurgeAfter ? Failure(Guid.Empty, "NOT_FOUND_OR_NOT_DISCLOSABLE") : await DescribeAsync(row, now, cancellationToken).ConfigureAwait(false);
+        return await CompleteAsync(transaction, result, null, cancellationToken).ConfigureAwait(false);
     }
 
     public async Task<RegistrationResult> RegisterAsync(RegistrationCaller caller, RegisterAccountCommand command, CancellationToken cancellationToken = default)
@@ -44,8 +45,12 @@ public sealed class RegistrationApplication(
             return await CompleteAsync(transaction, Failure(Guid.Empty, "RATE_OR_ABUSE_LIMITED"), null, cancellationToken).ConfigureAwait(false);
         await LockAsync("registration:" + caller.BrowserDigest + command.IdempotencyKey, cancellationToken).ConfigureAwait(false);
         var prior = await database.Set<RegistrationOperationRow>().SingleOrDefaultAsync(x => x.BrowserDigest == caller.BrowserDigest && x.IdempotencyKey == command.IdempotencyKey, cancellationToken).ConfigureAwait(false);
-        if (prior is not null) return await CompleteAsync(transaction, Result(prior), prior, cancellationToken).ConfigureAwait(false);
-        if (command.IdempotencyKey == Guid.Empty || !ValidEmail(command.Email) || command.Password is null ||
+        if (prior is not null)
+        {
+            if(prior.Stage!="LEGACY"&&now>=prior.PurgeAfter)return await CompleteAsync(transaction,Failure(prior.OperationId,"NOT_FOUND_OR_NOT_DISCLOSABLE"),null,cancellationToken).ConfigureAwait(false);
+            return await CompleteAsync(transaction,await DescribeAsync(prior,now,cancellationToken).ConfigureAwait(false),prior,cancellationToken).ConfigureAwait(false);
+        }
+        if (command.IdempotencyKey == Guid.Empty || !ValidEmail(command.Email) || command.Password is null || !string.Equals(command.Password, command.PasswordConfirmation, StringComparison.Ordinal) ||
             command.Password.EnumerateRunes().Count() < policy.PasswordMinimumLength || command.Password.EnumerateRunes().Count() > policy.PasswordMaximumLength ||
             !command.AcknowledgedNotices || command.TermsVersion != policy.TermsVersion || command.PrivacyVersion != policy.PrivacyVersion ||
             await blocklist.IsBlockedAsync(command.Password, cancellationToken).ConfigureAwait(false))
@@ -55,20 +60,12 @@ public sealed class RegistrationApplication(
             OperationId = Guid.NewGuid(), BrowserDigest = caller.BrowserDigest, IdempotencyKey = command.IdempotencyKey,
             CorrelationId = Guid.NewGuid().ToString("N"), NormalizedEmail = Normalizer.NormalizeEmail(command.Email.Trim())!,
             ProtectedAddress = addressProtection.Protect(command.Email.Trim()), PolicyVersion = policy.Version,
-            AgePolicyVersion = policy.AgePolicyVersion, TermsVersion = policy.TermsVersion, PrivacyVersion = policy.PrivacyVersion,
+            Stage = "VERIFY_CONTACT", TermsVersion = policy.TermsVersion, PrivacyVersion = policy.PrivacyVersion,
             ProcessingReference = policy.ProcessingReference, RetentionReference = policy.RetentionReference,
             CreatedAt = now, ExpiresAt = now + policy.ProofLifetime, ResendAfter = now + policy.ResendCooldown,
-            PurgeAfter = now + policy.PendingMaterialRetention, Version = 1,
-            AgeEvidenceReference = "registration-age:" + Guid.NewGuid().ToString("N")
+            PurgeAfter = now + policy.PendingMaterialRetention, Version = 1
         };
-        var age = new AgeEligibilityEvaluator(new SnapshotClock(now)).Evaluate(command.DateOfBirth, policy.AgePolicyVersion, operation.AgeEvidenceReference, operation.CorrelationId);
-        operation.AgeEvaluatedAt = age.AgeEvaluatedAt;
         database.Add(operation);
-        if (age.Status != AgeEligibilityStatus.Eligible)
-        {
-            operation.Status = "FAILED"; operation.ErrorCode = "AGE_INELIGIBLE"; operation.ProtectedAddress = null; operation.NormalizedEmail = string.Empty;
-            return await CompleteAsync(transaction, Result(operation), null, cancellationToken).ConfigureAwait(false);
-        }
         // The same expensive framework hashing path runs before existing/new Account lookup.
         var hasher = Hasher(policy);
         var proposedHash = hasher.HashPassword(new IdentityUserAdapter(), command.Password);
@@ -90,8 +87,7 @@ public sealed class RegistrationApplication(
         {
             account = new AccountRow { AccountId = "ACC-" + Guid.NewGuid().ToString("N"), State = AccountState.VerificationPending, Version = 1,
                 RecordedAtUtc = now, OperationId = OperationReference(operation.OperationId), CorrelationId = operation.CorrelationId,
-                EvidenceReference = "registration:" + operation.OperationId, AgeEligibilityStatus = "ELIGIBLE", AgeEvaluatedAtUtc = now,
-                AgePolicyVersion = policy.AgePolicyVersion, AgeEvidenceReference = operation.AgeEvidenceReference };
+                EvidenceReference = "registration:" + operation.OperationId };
             contact = new VerifiedContactRow { ContactId = Guid.NewGuid(), AccountId = account.AccountId,
                 NormalizedEmail = operation.NormalizedEmail, State = ContactVerificationState.Unverified, Version = 1,
                 EvidenceReference = "registration-contact:" + operation.OperationId };
@@ -130,11 +126,19 @@ public sealed class RegistrationApplication(
         var operation = await OwnedAsync(caller, command.OperationId, cancellationToken).ConfigureAwait(false);
         if (operation is null) return await CompleteAsync(transaction, Failure(command.OperationId, "NOT_FOUND_OR_NOT_DISCLOSABLE"), null, cancellationToken).ConfigureAwait(false);
         var replay = await ReplayAsync(operation.OperationId, "VERIFY", command.IdempotencyKey, cancellationToken).ConfigureAwait(false);
-        if (replay is not null) return await CompleteAsync(transaction, replay, null, cancellationToken).ConfigureAwait(false);
+        if (replay is not null)
+        {
+            if (replay.ErrorCode is null && replay.NextAction == "PERSONAL_INFORMATION")
+            {
+                if(now >= operation.PurgeAfter)return await CompleteAsync(transaction,Failure(operation.OperationId,"NOT_FOUND_OR_NOT_DISCLOSABLE"),null,cancellationToken).ConfigureAwait(false);
+                replay=replay with {PersonalInformation=await personalInformation.ViewAsync(operation.AccountId!,now,cancellationToken).ConfigureAwait(false)};
+            }
+            return await CompleteAsync(transaction, replay, null, cancellationToken).ConfigureAwait(false);
+        }
         RegistrationResult result;
         var digest = Digest(operation, command.Code ?? string.Empty);
         var validProof = operation.ProtectedDigest is not null && CryptographicOperations.FixedTimeEquals(digest, challengeProtection.Unprotect(Convert.FromBase64String(operation.ProtectedDigest)));
-        if (command.IdempotencyKey == Guid.Empty || operation.Status != "REQUIRES_ACTION" || operation.AccountId is null ||
+        if (command.IdempotencyKey == Guid.Empty || operation.Status != "REQUIRES_ACTION" || operation.Stage != "VERIFY_CONTACT" || operation.AccountId is null ||
             operation.PolicyVersion != policy.Version || now >= operation.ExpiresAt || operation.Attempts >= policy.ProofAttempts)
             result = Failure(operation.OperationId, "NOT_FOUND_OR_NOT_DISCLOSABLE", operation);
         else if (command.ExpectedVersion != operation.Version)
@@ -158,17 +162,14 @@ public sealed class RegistrationApplication(
                 var user = await database.Users.SingleAsync(x => x.AccountId == account.AccountId, cancellationToken).ConfigureAwait(false);
                 user.PasswordHash = credentialProtection.Unprotect(operation.ProtectedCredential); user.EmailConfirmed = true;
                 user.SecurityStamp = Guid.NewGuid().ToString("N"); user.ConcurrencyStamp = Guid.NewGuid().ToString("N");
-                account.State = AccountState.Active; account.Version++; account.RecordedAtUtc = now;
-                account.OperationId = OperationReference(operation.OperationId); account.CorrelationId = operation.CorrelationId;
-                account.EvidenceReference = "contact-proof:" + operation.OperationId;
-                account.AgeEligibilityStatus = "ELIGIBLE"; account.AgeEvaluatedAtUtc = operation.AgeEvaluatedAt;
-                account.AgePolicyVersion = operation.AgePolicyVersion; account.AgeEvidenceReference = operation.AgeEvidenceReference;
-                contact.State = ContactVerificationState.Verified; contact.Version++; contact.EvidenceReference = account.EvidenceReference;
-                operation.Status = "SUCCEEDED"; operation.Version++; ClearMaterial(operation);
-                AddEvent(operation, "AccountActivated", account.AccountId, account.Version, now);
+                contact.State = ContactVerificationState.Verified; contact.Version++; contact.EvidenceReference = "contact-proof:" + operation.OperationId;
+                operation.Stage = "PERSONAL_INFORMATION"; operation.Version++; ClearMaterial(operation);
+                AddEvent(operation, "VerifiedContactChanged", contact.ContactId.ToString("N"), contact.Version, now);
                 result = Result(operation);
             }
         }
+        await database.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
+        if (result.ErrorCode is null) result = await DescribeAsync(operation, now, cancellationToken).ConfigureAwait(false);
         Remember(operation.OperationId, "VERIFY", command.IdempotencyKey, result);
         return await CompleteAsync(transaction, result, null, cancellationToken).ConfigureAwait(false);
     }
@@ -186,7 +187,7 @@ public sealed class RegistrationApplication(
         var replay = await ReplayAsync(operation.OperationId, "RESEND", command.IdempotencyKey, cancellationToken).ConfigureAwait(false);
         if (replay is not null) return await CompleteAsync(transaction, replay, null, cancellationToken).ConfigureAwait(false);
         RegistrationResult result; RegistrationOperationRow? delivery = null;
-        if (command.IdempotencyKey == Guid.Empty || operation.Status != "REQUIRES_ACTION" || now >= operation.PurgeAfter || operation.PolicyVersion != policy.Version)
+        if (command.IdempotencyKey == Guid.Empty || operation.Status != "REQUIRES_ACTION" || operation.Stage != "VERIFY_CONTACT" || now >= operation.PurgeAfter || operation.PolicyVersion != policy.Version)
             result = Failure(operation.OperationId, "NOT_FOUND_OR_NOT_DISCLOSABLE", operation);
         else if (command.ExpectedVersion != operation.Version) result = Failure(operation.OperationId, "VERSION_CONFLICT", operation);
         else if (now < operation.ResendAfter || operation.Resends >= policy.ResendLimit) result = Failure(operation.OperationId, "RATE_OR_ABUSE_LIMITED", operation);
@@ -264,7 +265,7 @@ public sealed class RegistrationApplication(
         return row is null ? null : JsonSerializer.Deserialize<RegistrationResult>(row.ResultJson);
     }
     private void Remember(Guid id, string kind, Guid key, RegistrationResult result) => database.Add(new RegistrationMutationRow
-        { OperationId = id, Kind = kind, IdempotencyKey = key, ResultJson = JsonSerializer.Serialize(result) });
+        { OperationId = id, Kind = kind, IdempotencyKey = key, ResultJson = JsonSerializer.Serialize(result with { PersonalInformation = null }) });
     private void SetChallenge(RegistrationOperationRow row, RegistrationPolicy policy, DateTimeOffset now)
     {
         var bound = (int)Math.Pow(10, policy.ProofDigits);
@@ -287,8 +288,9 @@ public sealed class RegistrationApplication(
     }
     private static string OperationReference(Guid id) => "OP-" + id.ToString("N");
     private static RegistrationResult Result(RegistrationOperationRow row) => new(row.OperationId, row.CorrelationId, row.Status,
-        row.Version, row.ErrorCode, row.Status == "REQUIRES_ACTION" ? row.ExpiresAt : null,
-        row.Status == "REQUIRES_ACTION" ? row.ResendAfter : null, row.Status == "SUCCEEDED" ? row.AccountId : null);
+        row.Version, row.ErrorCode, row.Status == "REQUIRES_ACTION" ? row.Stage == "VERIFY_CONTACT" || row.Stage == "LEGACY" ? row.ExpiresAt : row.PurgeAfter : null,
+        row.Status == "REQUIRES_ACTION" && row.Stage == "VERIFY_CONTACT" ? row.ResendAfter : null, row.Stage is "PERSONAL_INFORMATION" or "CONSENT_REQUIRED" or "COMPLETE" || row.Status == "SUCCEEDED" ? row.AccountId : null,
+        row.Stage == "LEGACY" ? row.Status == "SUCCEEDED" ? "COMPLETE" : "VERIFY_CONTACT" : row.Stage);
     private static RegistrationResult Failure(Guid id, string code, RegistrationOperationRow? row = null) =>
         new(id, row?.CorrelationId ?? Guid.NewGuid().ToString("N"), "FAILED", row?.Version ?? 0, code, null, null);
     private void AddEvent(RegistrationOperationRow row, string type, string subject, long version, DateTimeOffset now) =>
@@ -308,7 +310,6 @@ public sealed class RegistrationApplication(
     }
     private static void ClearMaterial(RegistrationOperationRow row)
     { row.ProtectedAddress = null; row.ProtectedCredential = null; row.ProtectedCode = null; row.ProtectedDigest = null; row.NormalizedEmail = string.Empty; }
-    private sealed class SnapshotClock(DateTimeOffset now) : TimeProvider { public override DateTimeOffset GetUtcNow() => now; }
 }
 public sealed class RegistrationNotificationUnavailableException : Exception
 {

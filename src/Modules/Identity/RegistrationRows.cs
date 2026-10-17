@@ -16,13 +16,14 @@ internal sealed class RegistrationOperationRow
     public string? ProtectedCode { get; set; }
     public string? ProtectedDigest { get; set; }
     public string PolicyVersion { get; set; } = string.Empty;
-    public string AgePolicyVersion { get; set; } = string.Empty;
+    public string? AgePolicyVersion { get; set; }
     public string TermsVersion { get; set; } = string.Empty;
     public string PrivacyVersion { get; set; } = string.Empty;
     public string ProcessingReference { get; set; } = string.Empty;
     public string RetentionReference { get; set; } = string.Empty;
-    public DateTimeOffset AgeEvaluatedAt { get; set; }
-    public string AgeEvidenceReference { get; set; } = string.Empty;
+    public DateTimeOffset? AgeEvaluatedAt { get; set; }
+    public string? AgeEvidenceReference { get; set; }
+    public string Stage { get; set; } = "LEGACY";
     public DateTimeOffset CreatedAt { get; set; }
     public DateTimeOffset ExpiresAt { get; set; }
     public DateTimeOffset ResendAfter { get; set; }
@@ -59,6 +60,7 @@ internal static class RegistrationModelConfiguration
             b.ToTable("registration_operations", "identity", t =>
             {
                 t.HasCheckConstraint("ck_registration_version", "\"Version\" >= 1 AND \"Attempts\" >= 0 AND \"Resends\" >= 0");
+                t.HasCheckConstraint("ck_registration_stage", "\"Stage\" IN ('LEGACY','VERIFY_CONTACT','PERSONAL_INFORMATION','CONSENT_REQUIRED','COMPLETE')");
                 t.HasCheckConstraint("ck_registration_status", "\"Status\" IN ('REQUIRES_ACTION','SUCCEEDED','FAILED')");
             });
             b.HasKey(x => x.OperationId);

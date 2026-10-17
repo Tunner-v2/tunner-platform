@@ -1,0 +1,536 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Tunner private User BFF registration/onboarding contract",
+    "version": "pdr0011-onboarding-v1",
+    "description": "Implementation schema under Doc32. No public SDK/product API activation or legal/content publication. Historical PDR-0007 receipts remain historical."
+  },
+  "paths": {
+    "/registration/register": {
+      "post": {
+        "operationId": "register",
+        "description": "HTTPS and configured same-origin request, framework antiforgery, expiring protected browser context and server abuse/policy checks. No login session. Unknown client claims are rejected.",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "X-Tunner-CSRF",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RegisterAccount"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Completed or replayed operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OperationResult"
+                }
+              }
+            }
+          },
+          "202": {
+            "description": "Next action required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OperationResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Safe validation/proof/context problem; no raw request values"
+          },
+          "409": {
+            "description": "VERSION_CONFLICT"
+          },
+          "413": {
+            "description": "Bounded body exceeded"
+          },
+          "429": {
+            "description": "RATE_OR_ABUSE_LIMITED"
+          },
+          "503": {
+            "description": "Explicit policy/provider dependency unavailable"
+          }
+        }
+      }
+    },
+    "/registration/verify": {
+      "post": {
+        "operationId": "verify",
+        "description": "HTTPS and configured same-origin request, framework antiforgery, expiring protected browser context and server abuse/policy checks. No login session. Unknown client claims are rejected.",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "X-Tunner-CSRF",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/VerifyContact"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Completed or replayed operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OperationResult"
+                }
+              }
+            }
+          },
+          "202": {
+            "description": "Next action required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OperationResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Safe validation/proof/context problem; no raw request values"
+          },
+          "409": {
+            "description": "VERSION_CONFLICT"
+          },
+          "413": {
+            "description": "Bounded body exceeded"
+          },
+          "429": {
+            "description": "RATE_OR_ABUSE_LIMITED"
+          },
+          "503": {
+            "description": "Explicit policy/provider dependency unavailable"
+          }
+        }
+      }
+    },
+    "/registration/personal-information": {
+      "post": {
+        "operationId": "personal_information",
+        "description": "HTTPS and configured same-origin request, framework antiforgery, expiring protected browser context and server abuse/policy checks. No login session. Unknown client claims are rejected.",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "X-Tunner-CSRF",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CompletePersonalInformation"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Completed or replayed operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OperationResult"
+                }
+              }
+            }
+          },
+          "202": {
+            "description": "Next action required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OperationResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Safe validation/proof/context problem; no raw request values"
+          },
+          "409": {
+            "description": "VERSION_CONFLICT"
+          },
+          "413": {
+            "description": "Bounded body exceeded"
+          },
+          "429": {
+            "description": "RATE_OR_ABUSE_LIMITED"
+          },
+          "503": {
+            "description": "Explicit policy/provider dependency unavailable"
+          }
+        }
+      }
+    },
+    "/registration/continue": {
+      "post": {
+        "operationId": "continue",
+        "description": "HTTPS and configured same-origin request, framework antiforgery, expiring protected browser context and server abuse/policy checks. No login session. Unknown client claims are rejected.",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "X-Tunner-CSRF",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/VersionedOperation"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Completed or replayed operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OperationResult"
+                }
+              }
+            }
+          },
+          "202": {
+            "description": "Next action required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OperationResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Safe validation/proof/context problem; no raw request values"
+          },
+          "409": {
+            "description": "VERSION_CONFLICT"
+          },
+          "413": {
+            "description": "Bounded body exceeded"
+          },
+          "429": {
+            "description": "RATE_OR_ABUSE_LIMITED"
+          },
+          "503": {
+            "description": "Explicit policy/provider dependency unavailable"
+          }
+        }
+      }
+    },
+    "/registration/resend": {
+      "post": {
+        "operationId": "resend",
+        "description": "HTTPS and configured same-origin request, framework antiforgery, expiring protected browser context and server abuse/policy checks. No login session. Unknown client claims are rejected.",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "X-Tunner-CSRF",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/VersionedOperation"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Completed or replayed operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OperationResult"
+                }
+              }
+            }
+          },
+          "202": {
+            "description": "Next action required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OperationResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Safe validation/proof/context problem; no raw request values"
+          },
+          "409": {
+            "description": "VERSION_CONFLICT"
+          },
+          "413": {
+            "description": "Bounded body exceeded"
+          },
+          "429": {
+            "description": "RATE_OR_ABUSE_LIMITED"
+          },
+          "503": {
+            "description": "Explicit policy/provider dependency unavailable"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "RegisterAccount": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "idempotencyKey",
+          "email",
+          "password",
+          "passwordConfirmation",
+          "termsVersion",
+          "privacyVersion",
+          "acknowledgedNotices"
+        ],
+        "properties": {
+          "idempotencyKey": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "email": {
+            "type": "string",
+            "format": "email"
+          },
+          "password": {
+            "type": "string",
+            "writeOnly": true
+          },
+          "passwordConfirmation": {
+            "type": "string",
+            "writeOnly": true
+          },
+          "termsVersion": {
+            "type": "string"
+          },
+          "privacyVersion": {
+            "type": "string"
+          },
+          "acknowledgedNotices": {
+            "type": "boolean",
+            "const": true
+          }
+        }
+      },
+      "CompletePersonalInformation": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "operationId",
+          "idempotencyKey",
+          "expectedVersion",
+          "dateOfBirth"
+        ],
+        "properties": {
+          "operationId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "idempotencyKey": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "expectedVersion": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "dateOfBirth": {
+            "type": "string",
+            "format": "date",
+            "writeOnly": true,
+            "description": "RESTRICTED_PERSONAL. Required only after verified contact in normal Personal Information; never an Account age admission gate."
+          },
+          "fullName": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "writeOnly": true
+          },
+          "displayName": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "writeOnly": true
+          }
+        }
+      },
+      "VersionedOperation": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "operationId",
+          "idempotencyKey",
+          "expectedVersion"
+        ],
+        "properties": {
+          "operationId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "idempotencyKey": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "expectedVersion": {
+            "type": "integer",
+            "format": "int64"
+          }
+        }
+      },
+      "VerifyContact": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "operationId",
+          "idempotencyKey",
+          "expectedVersion",
+          "code"
+        ],
+        "properties": {
+          "operationId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "idempotencyKey": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "expectedVersion": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "code": {
+            "type": "string",
+            "writeOnly": true
+          }
+        }
+      },
+      "OperationResult": {
+        "type": "object",
+        "required": [
+          "operationId",
+          "correlationId",
+          "status",
+          "version",
+          "nextAction"
+        ],
+        "properties": {
+          "operationId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "correlationId": {
+            "type": "string"
+          },
+          "status": {
+            "enum": [
+              "REQUIRES_ACTION",
+              "SUCCEEDED"
+            ]
+          },
+          "version": {
+            "type": "integer"
+          },
+          "nextAction": {
+            "enum": [
+              "VERIFY_CONTACT",
+              "PERSONAL_INFORMATION",
+              "CONSENT_REQUIRED",
+              "COMPLETE"
+            ]
+          },
+          "expiresAt": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          },
+          "resendAfter": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          },
+          "accountId": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Disclosed only to verified, bound onboarding context."
+          },
+          "ageCapabilities": {
+            "type": [
+              "object",
+              "null"
+            ],
+            "description": "Safe current age/consent policy evaluation; independentCommercialEligible is an age capability, never a BillingAuthority grant. No DOB."
+          },
+          "personalInformation": {
+            "type": [
+              "object",
+              "null"
+            ],
+            "description": "Verified email and server field limits; raw DOB and saved names are never projected by this onboarding interface."
+          }
+        }
+      }
+    }
+  }
+}

@@ -47,17 +47,16 @@ public sealed class RegistrationTests(IdentityPostgresFixture fixture) : IClassF
         Assert.DoesNotContain(code, publicEvidence); Assert.DoesNotContain(Password, publicEvidence); Assert.DoesNotContain("1990-01-01", publicEvidence);
         Assert.Equal(nameof(RegisterAccountCommand), Command().ToString());
     }
-    [Fact]
-    public async Task UnderageProducesDerivedFailureWithoutAccountContactCredentialOrNotification()
+    [Theory]
+    [InlineData(false,"a very long unique test passphrase")]
+    [InlineData(true,"mismatch")]
+    [InlineData(true,"")]
+    public async Task MissingNoticesAndMismatchedConfirmationCannotRegister(bool notices,string confirmation)
     {
-        await using var h = await Harness.CreateAsync(fixture);
-        var result = await h.Register(Caller(), Command(birth: new DateOnly(2015,1,1)));
-        Assert.Equal("AGE_INELIGIBLE", result.ErrorCode); Assert.Empty(h.Notices.Messages);
-        await using var check = h.Database.Context();
-        Assert.False(await check.Accounts.AnyAsync()); Assert.False(await check.Users.AnyAsync()); Assert.False(await check.VerifiedContacts.AnyAsync());
-        Assert.False(await check.Set<OutboxMessage>().AnyAsync());
-        Assert.Empty((await check.Set<RegistrationOperationRow>().SingleAsync()).NormalizedEmail);
-        Assert.DoesNotContain(check.Model.GetEntityTypes().SelectMany(x=>x.GetProperties()), p=>p.Name.Contains("Birth",StringComparison.OrdinalIgnoreCase));
+        await using var h=await Harness.CreateAsync(fixture);var result=await h.Register(Caller(),Command(confirmation:confirmation,notices:notices));
+        Assert.Equal("VALIDATION_ERROR",result.ErrorCode);Assert.Empty(h.Notices.Messages);await using var check=h.Database.Context();
+        Assert.False(await check.Accounts.AnyAsync());Assert.False(await check.Users.AnyAsync());Assert.False(await check.VerifiedContacts.AnyAsync());Assert.False(await check.Set<OutboxMessage>().AnyAsync());
+        Assert.DoesNotContain(typeof(RegisterAccountCommand).GetProperties(),p=>p.Name.Contains("Birth",StringComparison.OrdinalIgnoreCase));
     }
     [Fact]
     public async Task ConcurrentRegistrationUsesOneCanonicalAccountAndBindsEachProposedCredentialToItsOwnProof()
@@ -95,7 +94,7 @@ public sealed class RegistrationTests(IdentityPostgresFixture fixture) : IClassF
         var first=await h.Register(caller,command);var duplicate=await h.Register(caller,command);
         Assert.Equal(first,duplicate);Assert.Single(h.Notices.Messages);
         var verify=new VerifyRegistrationCommand(first.OperationId,Guid.NewGuid(),1,await h.CodeFor(first.OperationId));
-        var result=await h.Verify(caller,verify);Assert.Equal(result,await h.Verify(caller,verify));
+        var result=await h.Verify(caller,verify);Assert.Equal(JsonSerializer.Serialize(result),JsonSerializer.Serialize(await h.Verify(caller,verify)));
         await using var check=h.Database.Context();Assert.Equal(1,await check.Accounts.CountAsync());Assert.Equal(2,await check.AccountStateVersions.CountAsync());
     }
     [Fact]
@@ -193,7 +192,7 @@ public sealed class RegistrationTests(IdentityPostgresFixture fixture) : IClassF
     public async Task PasswordPolicyCountsUnicodeCodePointsAndNoticeVersionsMustBeCurrent()
     {
         await using var h=await Harness.CreateAsync(fixture); var caller=Caller();
-        var stale=new RegisterAccountCommand { IdempotencyKey=Guid.NewGuid(),Email="applicant@example.test",Password=Password,DateOfBirth=new(1990,1,1),TermsVersion="old",PrivacyVersion=h.Policy.PrivacyVersion,AcknowledgedNotices=true };
+        var stale=new RegisterAccountCommand { IdempotencyKey=Guid.NewGuid(),Email="applicant@example.test",Password=Password,PasswordConfirmation=Password,TermsVersion="old",PrivacyVersion=h.Policy.PrivacyVersion,AcknowledgedNotices=true };
         Assert.Equal("VALIDATION_ERROR",(await h.Register(caller,stale)).ErrorCode);
         Assert.Equal("VALIDATION_ERROR",(await h.Register(caller,Command(phrase:string.Concat(Enumerable.Repeat("🔐",14))))).ErrorCode);
         var unicode=string.Concat(Enumerable.Repeat("🔐",15)); var pending=await h.Register(caller,Command(phrase:unicode));
@@ -209,8 +208,134 @@ public sealed class RegistrationTests(IdentityPostgresFixture fixture) : IClassF
         h.Clock.Advance(h.Policy.ResendCooldown);
         Assert.Equal("RATE_OR_ABUSE_LIMITED",(await h.Resend(caller,new(current.OperationId,Guid.NewGuid(),current.Version))).ErrorCode);
     }
+
+    [Fact]
+    public async Task ProofOpensNormalPersonalInformationAndUnder18DoesNotDenyAccount()
+    {
+        await using var h=await Harness.CreateAsync(fixture);var caller=Caller();var pending=await h.Register(caller,Command());
+        var command=new CompletePersonalInformationCommand{OperationId=pending.OperationId,IdempotencyKey=Guid.NewGuid(),ExpectedVersion=1,DateOfBirth=new(2015,4,6),FullName="Test Person",DisplayName="Test"};
+        Assert.Equal("NOT_FOUND_OR_NOT_DISCLOSABLE",(await h.Personal(caller,command)).ErrorCode);
+        var verified=await h.VerifyContact(caller,new(pending.OperationId,Guid.NewGuid(),1,await h.CodeFor(pending.OperationId)));
+        Assert.Equal("PERSONAL_INFORMATION",verified.NextAction);Assert.Equal("applicant@example.test",verified.PersonalInformation!.VerifiedEmail);
+        await using(var db=h.Database.Context()){Assert.Equal(AccountState.VerificationPending,(await db.Accounts.SingleAsync()).State);Assert.True((await db.Users.SingleAsync()).EmailConfirmed);}
+        var completed=await h.Personal(caller,new(){OperationId=pending.OperationId,IdempotencyKey=Guid.NewGuid(),ExpectedVersion=verified.Version,DateOfBirth=new(2015,4,6),FullName="Test Person",DisplayName="Test"});
+        Assert.Equal("SUCCEEDED",completed.Status);Assert.Equal("COMPLETE",completed.NextAction);
+        Assert.Equal("UNDER_18",completed.AgeCapabilities!.AgeClassification);Assert.True(completed.AgeCapabilities.AgeAllowsAccountLifecycle);
+        Assert.False(completed.AgeCapabilities.IndependentCommercialEligible);Assert.Equal("PAYER_CONTEXT_REQUIRED",completed.AgeCapabilities.PayerResolutionCode);
+        await using var check=h.Database.Context();Assert.Equal(AccountState.Active,(await check.Accounts.SingleAsync()).State);
+    }
+    [Fact]
+    public async Task PersonalInformationIsBoundVersionedAndRejectsFutureBirthWithoutSideEffects()
+    {
+        await using var h=await Harness.CreateAsync(fixture);var caller=Caller();var pending=await h.Register(caller,Command());
+        var verified=await h.VerifyContact(caller,new(pending.OperationId,Guid.NewGuid(),1,await h.CodeFor(pending.OperationId)));
+        CompletePersonalInformationCommand Input(long version,DateOnly birth)=>new(){OperationId=pending.OperationId,IdempotencyKey=Guid.NewGuid(),ExpectedVersion=version,DateOfBirth=birth};
+        Assert.Equal("NOT_FOUND_OR_NOT_DISCLOSABLE",(await h.Personal(Caller(),Input(verified.Version,new(2010,1,1)))).ErrorCode);
+        Assert.Equal("VERSION_CONFLICT",(await h.Personal(caller,Input(999,new(2010,1,1)))).ErrorCode);
+        Assert.Equal("VALIDATION_ERROR",(await h.Personal(caller,Input(verified.Version,new(2030,1,1)))).ErrorCode);
+        await using var db=h.Database.Context();Assert.False(await db.Set<AccountPersonalInformationRow>().AnyAsync());
+        Assert.False(await db.Set<OutboxMessage>().AnyAsync(x=>x.EventType=="AccountActivated"));
+    }
+    [Theory]
+    [InlineData("GUARDIAN",false,true)]
+    [InlineData("SCHOOL",false,false)]
+    [InlineData("SCHOOL",true,true)]
+    public async Task CurrentTrustedConsentControlsOnlyItsPolicyAndNeverGrantsPayerAuthority(string source,bool schoolAllowed,bool accepted)
+    {
+        await using var h=await Harness.CreateAsync(fixture);
+        h.AgePolicies.Policy=h.AgePolicies.Policy with {Age=h.AgePolicies.Policy.Age with {ConsentBelowAgeYears=14,SchoolAuthorizationAllowed=schoolAllowed}};
+        var caller=Caller();var pending=await h.Register(caller,Command());
+        var verified=await h.VerifyContact(caller,new(pending.OperationId,Guid.NewGuid(),1,await h.CodeFor(pending.OperationId)));
+        var consent=await h.Personal(caller,new(){OperationId=pending.OperationId,IdempotencyKey=Guid.NewGuid(),ExpectedVersion=verified.Version,DateOfBirth=new(2015,1,1)});
+        Assert.Equal("CONSENT_REQUIRED",consent.NextAction);Assert.False(consent.AgeCapabilities!.ConsentSatisfied);
+        h.AgePolicies.Evidence.Add(new(consent.AccountId!,"consent:test","fixture-consent-v2",source,"actor:test","verification:test",h.Clock.GetUtcNow(),null,false,null));
+        var continued=await h.Continue(caller,new(pending.OperationId,Guid.NewGuid(),consent.Version));
+        Assert.Equal(accepted?"SUCCEEDED":"REQUIRES_ACTION",continued.Status);
+        Assert.False(continued.AgeCapabilities!.IndependentCommercialEligible);
+        await using var db=h.Database.Context();Assert.Equal(accepted?AccountState.Active:AccountState.VerificationPending,(await db.Accounts.SingleAsync()).State);
+    }
+    [Fact]
+    public async Task Turning18ReevaluatesCurrentCapabilityWithoutReplacingAccountOrChangingHistoricalEvidence()
+    {
+        await using var h=await Harness.CreateAsync(fixture);var caller=Caller();var pending=await h.Register(caller,Command());
+        var verified=await h.VerifyContact(caller,new(pending.OperationId,Guid.NewGuid(),1,await h.CodeFor(pending.OperationId)));
+        var result=await h.Personal(caller,new(){OperationId=pending.OperationId,IdempotencyKey=Guid.NewGuid(),ExpectedVersion=verified.Version,DateOfBirth=new(2008,10,17)});
+        Assert.False(result.AgeCapabilities!.IndependentCommercialEligible);h.Clock.Advance(TimeSpan.FromDays(1));
+        await using var db=h.Database.Context();var current=await h.Profile(db).ReadCurrentAsync(result.AccountId!);
+        Assert.True(current!.IndependentCommercialEligible);Assert.Equal(result.AccountId,current.AccountId);Assert.Equal(1,await db.Accounts.CountAsync());
+        var history=await db.Set<AccountPersonalInformationVersionRow>().SingleAsync();
+        Assert.Contains("UNDER_18",history.EvaluationJson);
+    }
+    [Fact]
+    public async Task ProtectedProfileExpiresWithoutRawDobInEventsDiagnosticsOrHistory()
+    {
+        await using var h=await Harness.CreateAsync(fixture);h.AgePolicies.Policy=h.AgePolicies.Policy with{ProtectedDataRetention=TimeSpan.FromMinutes(10)};
+        var caller=Caller();var pending=await h.Register(caller,Command());
+        var verified=await h.VerifyContact(caller,new(pending.OperationId,Guid.NewGuid(),1,await h.CodeFor(pending.OperationId)));
+        var command=new CompletePersonalInformationCommand{OperationId=pending.OperationId,IdempotencyKey=Guid.NewGuid(),ExpectedVersion=verified.Version,DateOfBirth=new(2015,4,6),FullName="Protected Name"};
+        var result=await h.Personal(caller,command);await using var db=h.Database.Context();
+        var row=await db.Set<AccountPersonalInformationRow>().SingleAsync();
+        Assert.DoesNotContain("2015-04-06",row.ProtectedData!);Assert.DoesNotContain("Protected Name",row.ProtectedData!);
+        var safe=JsonSerializer.Serialize(result)+command.ToString()+string.Join("",await db.Set<OutboxMessage>().Select(x=>x.Payload).ToArrayAsync())+string.Join("",await db.Set<AccountPersonalInformationVersionRow>().Select(x=>x.EvaluationJson).ToArrayAsync());
+        Assert.DoesNotContain("2015-04-06",safe);Assert.DoesNotContain("Protected Name",safe);
+        var replayEvidence=string.Join("",await db.Set<RegistrationMutationRow>().Select(x=>x.ResultJson).ToArrayAsync());
+        Assert.DoesNotContain("applicant@example.test",replayEvidence);Assert.DoesNotContain("2015-04-06",replayEvidence);Assert.DoesNotContain("Protected Name",replayEvidence);
+        h.Clock.Advance(TimeSpan.FromMinutes(10));Assert.Null(await h.Profile(db).ReadCurrentAsync(result.AccountId!));
+        Assert.Equal(1,await h.Profile(db).PurgeExpiredMaterialAsync(10));Assert.Null(row.ProtectedData);
+        Assert.Equal(2,await db.Set<AccountPersonalInformationVersionRow>().CountAsync());Assert.Equal(AccountState.Active,(await db.Accounts.SingleAsync()).State);
+    }
+    [Fact]
+    public async Task ProfileReplayAndConcurrentSubmissionsKeepOneCanonicalProfileAndActivation()
+    {
+        await using var h=await Harness.CreateAsync(fixture);var caller=Caller();var pending=await h.Register(caller,Command());
+        var verified=await h.VerifyContact(caller,new(pending.OperationId,Guid.NewGuid(),1,await h.CodeFor(pending.OperationId)));
+        var command=new CompletePersonalInformationCommand{OperationId=pending.OperationId,IdempotencyKey=Guid.NewGuid(),ExpectedVersion=verified.Version,DateOfBirth=new(2010,1,1)};
+        var results=await Task.WhenAll(h.Personal(caller,command),h.Personal(caller,command));
+        Assert.Equal(JsonSerializer.Serialize(results[0]),JsonSerializer.Serialize(results[1]));
+        Assert.Equal(JsonSerializer.Serialize(results[0]),JsonSerializer.Serialize(await h.Personal(caller,command)));
+        await using var db=h.Database.Context();Assert.Equal(1,await db.Set<AccountPersonalInformationRow>().CountAsync());Assert.Equal(1,await db.Set<AccountPersonalInformationVersionRow>().CountAsync());
+        Assert.Equal(1,await db.Set<OutboxMessage>().CountAsync(x=>x.EventType=="AccountActivated"));
+    }
+    [Fact]
+    public async Task MissingJurisdictionPolicyCannotPersistProfileOrActivate()
+    {
+        await using var h=await Harness.CreateAsync(fixture);var caller=Caller();var pending=await h.Register(caller,Command());
+        var verified=await h.VerifyContact(caller,new(pending.OperationId,Guid.NewGuid(),1,await h.CodeFor(pending.OperationId)));h.AgePolicies.Missing=true;
+        await Assert.ThrowsAsync<InvalidOperationException>(()=>h.Personal(caller,new(){OperationId=pending.OperationId,IdempotencyKey=Guid.NewGuid(),ExpectedVersion=verified.Version,DateOfBirth=new(2010,1,1)}));
+        await using var db=h.Database.Context();Assert.False(await db.Set<AccountPersonalInformationRow>().AnyAsync());Assert.Equal(AccountState.VerificationPending,(await db.Accounts.SingleAsync()).State);
+    }
+
+    [Fact]
+    public async Task ForwardUpgradePreservesHistoricalPdr0007RejectionWithoutRelabelingOrActivation()
+    {
+        await using var h=await Harness.CreateAsync(fixture);var caller=Caller();var key=Guid.NewGuid();var operation=Guid.NewGuid();var now=h.Clock.GetUtcNow();
+        await using(var context=h.Database.Context())
+        {
+            await context.GetService<IMigrator>().MigrateAsync("20261016211325_P2Registration");
+            await using(var connection=new NpgsqlConnection(h.Database.ConnectionString))
+            {
+                await connection.OpenAsync();await using var seed=connection.CreateCommand();
+                seed.CommandText="""
+                INSERT INTO identity.registration_operations
+                ("OperationId","BrowserDigest","IdempotencyKey","CorrelationId","NormalizedEmail","PolicyVersion","AgePolicyVersion",
+                 "TermsVersion","PrivacyVersion","ProcessingReference","RetentionReference","AgeEvaluatedAt","AgeEvidenceReference",
+                 "CreatedAt","ExpiresAt","ResendAfter","PurgeAfter","Version","Attempts","Resends","Status","ErrorCode","TemplateVersion")
+                VALUES (@operation,@browser,@key,'historical-correlation','','historical-registration','PDR-0007',
+                 'historical-terms','historical-privacy','historical-processing','historical-retention',@now,'historical-age-evidence',
+                 @now,@now,@now,@now,1,0,0,'FAILED','AGE_INELIGIBLE','historical-template')
+                """;
+                seed.Parameters.AddWithValue("operation",operation);seed.Parameters.AddWithValue("browser",caller.BrowserDigest);
+                seed.Parameters.AddWithValue("key",key);seed.Parameters.AddWithValue("now",now);await seed.ExecuteNonQueryAsync();
+            }
+            await context.Database.MigrateAsync();var row=await context.Set<RegistrationOperationRow>().SingleAsync();
+            Assert.Equal("LEGACY",row.Stage);Assert.Equal("PDR-0007",row.AgePolicyVersion);Assert.Equal("historical-age-evidence",row.AgeEvidenceReference);
+            Assert.Equal("FAILED",row.Status);Assert.Equal("AGE_INELIGIBLE",row.ErrorCode);Assert.Equal(now,row.AgeEvaluatedAt);Assert.Equal(1,row.Version);
+        }
+        await using var check=h.Database.Context();var result=await h.Application(check).FindAsync(caller,key);
+        Assert.Equal("AGE_INELIGIBLE",result.ErrorCode);Assert.False(await check.Accounts.AnyAsync());Assert.False(await check.Set<AccountPersonalInformationRow>().AnyAsync());
+    }
     private static PasswordHasher<IdentityUserAdapter> Verifier(Harness h)=>new(Options.Create(new PasswordHasherOptions { IterationCount=h.Policy.PasswordHashIterations }));
-    private static RegisterAccountCommand Command(string phrase=Password,DateOnly? birth=null)=>new(){IdempotencyKey=Guid.NewGuid(),Email="applicant@example.test",Password=phrase,DateOfBirth=birth??new(1990,1,1),TermsVersion="fixture-terms",PrivacyVersion="fixture-privacy",AcknowledgedNotices=true};
+    private static RegisterAccountCommand Command(string phrase=Password,string? confirmation=null,bool notices=true)=>new(){IdempotencyKey=Guid.NewGuid(),Email="applicant@example.test",Password=phrase,PasswordConfirmation=confirmation??phrase,TermsVersion="fixture-terms",PrivacyVersion="fixture-privacy",AcknowledgedNotices=notices};
     private static RegistrationCaller Caller()=>new(Convert.ToHexString(RandomNumberGenerator.GetBytes(32)),Convert.ToHexString(RandomNumberGenerator.GetBytes(32)));
     private sealed class Harness : IAsyncDisposable
     {
@@ -218,12 +343,17 @@ public sealed class RegistrationTests(IdentityPostgresFixture fixture) : IClassF
         public TestClock Clock {get;}=new();
         public NoticeSink Notices {get;}=new();
         private readonly EphemeralDataProtectionProvider protection=new();
+        public FixtureAccountAgePolicies AgePolicies {get;}=new();
+        public AccountPersonalInformationApplication Profile(IdentityPersistenceDbContext context)=>new(context,AgePolicies,AgePolicies,protection,Clock);
         public required RegistrationPolicy Policy {get;init;}
         public RegistrationPolicyVersion Version=>new(new(Policy.Version,"ACTIVE","REGISTRATION",new EffectivePolicyInterval(Clock.GetUtcNow().AddYears(-1),true,null,false),null,["fixture-only-approval"]),Policy);
-        public static async Task<Harness> CreateAsync(IdentityPostgresFixture fixture,int registerLimit=1000)=>new(){Database=await fixture.CreateDatabaseAsync(),Policy=new("fixture-registration","fixture-age","fixture-processing","fixture-retention","fixture-terms","fixture-privacy","fixture-verification-template","fixture-existing-template","PASSWORD_AND_VERIFIED_EMAIL",15,128,10000,6,TimeSpan.FromMinutes(5),2,TimeSpan.FromSeconds(30),2,TimeSpan.FromMinutes(1),registerLimit,1000,1000,1000,TimeSpan.FromMinutes(30),TimeSpan.FromHours(1))};
-        public RegistrationApplication Application(IdentityPersistenceDbContext context,IRegistrationPolicySource? source=null)=>new(context,source??new RegistrationPolicyCatalog([Version]),new Blocklist(),protection,Notices,Clock);
+        public static async Task<Harness> CreateAsync(IdentityPostgresFixture fixture,int registerLimit=1000)=>new(){Database=await fixture.CreateDatabaseAsync(),Policy=new("fixture-registration-v2","PDR-0011","fixture-processing","fixture-retention","fixture-terms","fixture-privacy","fixture-verification-template","fixture-existing-template","PASSWORD_AND_VERIFIED_EMAIL",15,128,10000,6,TimeSpan.FromMinutes(5),2,TimeSpan.FromSeconds(30),2,TimeSpan.FromMinutes(1),registerLimit,1000,1000,1000,TimeSpan.FromMinutes(30),TimeSpan.FromHours(1))};
+        public RegistrationApplication Application(IdentityPersistenceDbContext context,IRegistrationPolicySource? source=null)=>new(context,source??new RegistrationPolicyCatalog([Version]),new Blocklist(),protection,Notices,Clock,Profile(context));
         public async Task<RegistrationResult> Register(RegistrationCaller caller,RegisterAccountCommand command){await using var db=Database.Context();return await Application(db).RegisterAsync(caller,command);}
-        public async Task<RegistrationResult> Verify(RegistrationCaller caller,VerifyRegistrationCommand command){await using var db=Database.Context();return await Application(db).VerifyAsync(caller,command);}
+        public async Task<RegistrationResult> VerifyContact(RegistrationCaller caller,VerifyRegistrationCommand command){await using var db=Database.Context();return await Application(db).VerifyAsync(caller,command);}
+        public async Task<RegistrationResult> Personal(RegistrationCaller caller,CompletePersonalInformationCommand command){await using var db=Database.Context();return await Application(db).CompletePersonalInformationAsync(caller,command);}
+        public async Task<RegistrationResult> Continue(RegistrationCaller caller,ResendRegistrationCommand command){await using var db=Database.Context();return await Application(db).ContinueAsync(caller,command);}
+        public async Task<RegistrationResult> Verify(RegistrationCaller caller,VerifyRegistrationCommand command){var result=await VerifyContact(caller,command);return result.ErrorCode is null&&result.NextAction=="PERSONAL_INFORMATION"?await Personal(caller,new(){OperationId=result.OperationId,IdempotencyKey=command.IdempotencyKey,ExpectedVersion=result.Version,DateOfBirth=new(1990,1,1)}):result;}
         public async Task<RegistrationResult> Resend(RegistrationCaller caller,ResendRegistrationCommand command){await using var db=Database.Context();return await Application(db).ResendAsync(caller,command);}
         public async Task<string> CodeFor(Guid id){await using var db=Database.Context();var row=await db.Set<RegistrationOperationRow>().SingleAsync(x=>x.OperationId==id);return protection.CreateProtector("Tunner.Identity.Registration.Challenge.v1").Unprotect(row.ProtectedCode!);}
         public ValueTask DisposeAsync()=>Database.DisposeAsync();

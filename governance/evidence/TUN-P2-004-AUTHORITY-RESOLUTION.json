@@ -2,88 +2,124 @@
   "schema_version": 1,
   "scope_id": "TUN-P2-004",
   "outcome": "RESOLVED_EXISTING_AUTHORITY",
-  "reviewed_at": "2026-10-16T21:01:05.991Z",
+  "reviewed_at": "2026-10-17T20:07:38.066Z",
   "reviewed_authority_refs": [
     "docs/authority/current-authority.json",
     "docs/authority/current/development/11_Development_Planes_Milestones_and_P0_Backlog.md",
-    "docs/authority/baselines/1.6.0/17_Account_Identity_and_Session_FRD.md",
+    "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md",
     "docs/authority/current/development/32_Domain_API_Event_Data_and_Policy_Contract_Catalog.md",
     "docs/authority/current/development/34_Architecture_to_Development_Traceability_Matrix.md",
     "docs/authority/baselines/1.6.0/decisions/ADR-0006_Identity_ASPNET_Identity_OpenIddict.md",
-    "docs/authority/baselines/1.6.0/decisions/PDR-0007_DOB_Based_18_Plus_Eligibility.md",
     "docs/authority/current/development/AMD-0002_Non-Blocking_PR_Approval_and_Continuous_Local_Execution.md",
     "docs/authority/current/development/02_Repository_Solution_and_Module_Architecture.md",
     "docs/authority/current/development/09_Testing_Acceptance_Evidence_and_Quality_Gates.md",
-    "docs/authority/baselines/1.6.0/29_Privacy_Data_Lifecycle_and_Processing_Governance_FRD.md"
+    "docs/authority/current/development/29_Privacy_Data_Lifecycle_and_Processing_Governance_FRD.md",
+    "docs/authority/current/decisions/PDR-0011_Universal_Account_Eligibility_Age-Aware_Consent_and_Delegated_Commercial_Authority.md",
+    "docs/authority/current/decisions/AMD-0007_Universal_Registration_Age-Aware_Consent_and_Delegated_Commercial_Authority.md"
   ],
-  "additional_authority_refs": [
-    "docs/authority/baselines/1.6.0/08_Security_Privacy_Compliance_and_Global_Market_Governance.md",
-    "docs/authority/baselines/1.6.0/27_Notifications_Communications_and_Preferences_FRD.md",
-    "docs/authority/baselines/1.6.0/31_UI_UX_Screen_and_Control_Center_Requirements_Matrix.md"
+  "authority_resolution": [
+    "Current PDR-0011 / AMD-0007 supersedes the global PDR-0007 admission restriction prospectively. No new decision/amendment request.",
+    "FRD17/29/31 plus FigJam37: registration without DOB, verify contact, normal Personal Information/DOB, server evaluation, policy-required consent and activation.",
+    "FRD18/21 and FigJam47/49/60: independent commercial restrictions under18; existing delegated/sponsored BillingAccount/BillingAuthority handles paid use. No new minor resources or future-plane implementation.",
+    "Current privacy/contracts/traceability reuse approved providers, protected purpose-bound retention, shared calendar/effective-policy resolver and owner boundaries."
   ],
-  "live_source_receipts": [
-    {
-      "path": "artifacts/p2-004-20261016/drive-frd17.md",
-      "sha256": "f833efd00f7a9972a92eaab1f5dad2e4b290432e134b2ab984de26ece0d93e85"
-    },
-    {
-      "path": "artifacts/p2-004-20261016/drive-contracts.md",
-      "sha256": "d3e3ce6a67a9389648e18a09ddf214f1c9f0d15b44c302f63fcd67734c184498"
-    },
-    {
-      "path": "artifacts/p2-004-20261016/drive-privacy.md",
-      "sha256": "67dc3dc489e748978dea5bc5867323ce9cea1c71723853f2f418b919dbc3838e"
-    },
-    {
-      "path": "artifacts/p2-004-20261016/drive-ux.md",
-      "sha256": "4b7bb30e1401d8da0f12b6554be698e54c37517acbd0f4b1842a47b355c0743e"
-    }
-  ],
-  "figjam": {
-    "file_key": "bdJwXt1U7n3iyluSD21OYK",
-    "section_id": "88:6717",
-    "flow": "TUN-FLOW-ID-02",
-    "findings": [
-      "Do not create a duplicate Account for an existing normalized contact.",
-      "Existing Account lookup must resist arbitrary contact enumeration.",
-      "Proof must be valid/unexpired; retry and rate limits resolve from policy.",
-      "Direct registration does not activate Product relationships or grant Product roles/entitlements."
+  "lifecycle": {
+    "original_status": "VALIDATION",
+    "historical_closure": false,
+    "revision_required": false,
+    "changed_active_owners": [
+      "TUN-P2-002",
+      "TUN-P2-003",
+      "TUN-P2-004"
     ]
   },
-  "figma": {
-    "file_key": "apNbwvAgdn1xIxYH1oiaSC",
-    "nodes": [
-      "70:270",
-      "70:539",
-      "70:630"
-    ],
-    "alignment_required": [
-      "Replace unnecessary full-name input with required DOB for minimal registration.",
-      "Remove unsupported GitHub from the registration slice; federation belongs to TUN-P2-010.",
-      "Remove automatic Product-access promises.",
-      "Replace fixed password-composition/length and verification expiry copy with policy-backed presentation.",
-      "Verification sent/delivered wording follows actual post-commit evidence."
-    ],
-    "design_system_discovery": "No repository Code Connect files and no instances, variables, text/effect styles in the three reference frames. Preserve the existing editable nodes/fonts; reuse @tunner/ui controls/tokens in code."
-  },
-  "implementation_resolution": [
-    "FRD 17/PDR-0007 fix the 18+ semantics; reuse the evaluator and discard raw DOB after committing derived evidence.",
-    "Doc32 expressly permits detailed schemas/OpenAPI during implementation. Use BFF REST/JSON, stable operation identity, server-derived anonymous context, expected versions and safe Problem Details. No Product API or SDK is activated.",
-    "Identity owns transactional registration/verification/resend state and canonical Account/contact mutation. Use current EF/Identity stores and shared outbox; do not create a second outbox or canonicalizer.",
-    "Required numeric security, hashing, challenge expiry/retry/abuse and privacy/notice values are explicit versioned server policy inputs. Missing or ambiguous policy blocks processing. No screenshot number becomes a security default.",
-    "Correct affected Figma flow before flow implementation under Doc31 section1; generated sensitive copy remains a governed proposal until the owning publication/approval workflow supplies effective versions.",
-    "No new legal basis, retention period, external identity linking, login session or Product entitlement is invented. Production activation requires the approved processing/retention/security/content configuration; test policy values are explicit fixtures only."
-  ],
-  "user_sequencing_resolution": {
-    "request": "No DOB on initial terms/privacy screen",
-    "confirmation": "User explicitly selected move DOB to a later eligibility step",
-    "authority_pass": [
-      "FRD17 section11: registration collects DOB and server calculates 18+; no active Account/session/Product relationship for underage.",
-      "PDR-0007: DOB-based registration, no separate age checkbox; no first-screen positioning requirement.",
-      "FRD31: align affected Figma before flow implementation."
-    ],
+  "historical_resolution": {
+    "schema_version": 1,
+    "scope_id": "TUN-P2-004",
     "outcome": "RESOLVED_EXISTING_AUTHORITY",
-    "implementation": "Initial email/password/notices UI, then separate DOB step before POST/canonical processing; consent is not substituted for eligibility.",
-    "figma_eligibility_node": "187:2"
+    "reviewed_at": "2026-10-16T21:01:05.991Z",
+    "reviewed_authority_refs": [
+      "docs/authority/current-authority.json",
+      "docs/authority/current/development/11_Development_Planes_Milestones_and_P0_Backlog.md",
+      "docs/authority/baselines/1.6.0/17_Account_Identity_and_Session_FRD.md",
+      "docs/authority/current/development/32_Domain_API_Event_Data_and_Policy_Contract_Catalog.md",
+      "docs/authority/current/development/34_Architecture_to_Development_Traceability_Matrix.md",
+      "docs/authority/baselines/1.6.0/decisions/ADR-0006_Identity_ASPNET_Identity_OpenIddict.md",
+      "docs/authority/baselines/1.6.0/decisions/PDR-0007_DOB_Based_18_Plus_Eligibility.md",
+      "docs/authority/current/development/AMD-0002_Non-Blocking_PR_Approval_and_Continuous_Local_Execution.md",
+      "docs/authority/current/development/02_Repository_Solution_and_Module_Architecture.md",
+      "docs/authority/current/development/09_Testing_Acceptance_Evidence_and_Quality_Gates.md",
+      "docs/authority/baselines/1.6.0/29_Privacy_Data_Lifecycle_and_Processing_Governance_FRD.md"
+    ],
+    "additional_authority_refs": [
+      "docs/authority/baselines/1.6.0/08_Security_Privacy_Compliance_and_Global_Market_Governance.md",
+      "docs/authority/baselines/1.6.0/27_Notifications_Communications_and_Preferences_FRD.md",
+      "docs/authority/baselines/1.6.0/31_UI_UX_Screen_and_Control_Center_Requirements_Matrix.md"
+    ],
+    "live_source_receipts": [
+      {
+        "path": "artifacts/p2-004-20261016/drive-frd17.md",
+        "sha256": "f833efd00f7a9972a92eaab1f5dad2e4b290432e134b2ab984de26ece0d93e85"
+      },
+      {
+        "path": "artifacts/p2-004-20261016/drive-contracts.md",
+        "sha256": "d3e3ce6a67a9389648e18a09ddf214f1c9f0d15b44c302f63fcd67734c184498"
+      },
+      {
+        "path": "artifacts/p2-004-20261016/drive-privacy.md",
+        "sha256": "67dc3dc489e748978dea5bc5867323ce9cea1c71723853f2f418b919dbc3838e"
+      },
+      {
+        "path": "artifacts/p2-004-20261016/drive-ux.md",
+        "sha256": "4b7bb30e1401d8da0f12b6554be698e54c37517acbd0f4b1842a47b355c0743e"
+      }
+    ],
+    "figjam": {
+      "file_key": "bdJwXt1U7n3iyluSD21OYK",
+      "section_id": "88:6717",
+      "flow": "TUN-FLOW-ID-02",
+      "findings": [
+        "Do not create a duplicate Account for an existing normalized contact.",
+        "Existing Account lookup must resist arbitrary contact enumeration.",
+        "Proof must be valid/unexpired; retry and rate limits resolve from policy.",
+        "Direct registration does not activate Product relationships or grant Product roles/entitlements."
+      ]
+    },
+    "figma": {
+      "file_key": "apNbwvAgdn1xIxYH1oiaSC",
+      "nodes": [
+        "70:270",
+        "70:539",
+        "70:630"
+      ],
+      "alignment_required": [
+        "Replace unnecessary full-name input with required DOB for minimal registration.",
+        "Remove unsupported GitHub from the registration slice; federation belongs to TUN-P2-010.",
+        "Remove automatic Product-access promises.",
+        "Replace fixed password-composition/length and verification expiry copy with policy-backed presentation.",
+        "Verification sent/delivered wording follows actual post-commit evidence."
+      ],
+      "design_system_discovery": "No repository Code Connect files and no instances, variables, text/effect styles in the three reference frames. Preserve the existing editable nodes/fonts; reuse @tunner/ui controls/tokens in code."
+    },
+    "implementation_resolution": [
+      "FRD 17/PDR-0007 fix the 18+ semantics; reuse the evaluator and discard raw DOB after committing derived evidence.",
+      "Doc32 expressly permits detailed schemas/OpenAPI during implementation. Use BFF REST/JSON, stable operation identity, server-derived anonymous context, expected versions and safe Problem Details. No Product API or SDK is activated.",
+      "Identity owns transactional registration/verification/resend state and canonical Account/contact mutation. Use current EF/Identity stores and shared outbox; do not create a second outbox or canonicalizer.",
+      "Required numeric security, hashing, challenge expiry/retry/abuse and privacy/notice values are explicit versioned server policy inputs. Missing or ambiguous policy blocks processing. No screenshot number becomes a security default.",
+      "Correct affected Figma flow before flow implementation under Doc31 section1; generated sensitive copy remains a governed proposal until the owning publication/approval workflow supplies effective versions.",
+      "No new legal basis, retention period, external identity linking, login session or Product entitlement is invented. Production activation requires the approved processing/retention/security/content configuration; test policy values are explicit fixtures only."
+    ],
+    "user_sequencing_resolution": {
+      "request": "No DOB on initial terms/privacy screen",
+      "confirmation": "User explicitly selected move DOB to a later eligibility step",
+      "authority_pass": [
+        "FRD17 section11: registration collects DOB and server calculates 18+; no active Account/session/Product relationship for underage.",
+        "PDR-0007: DOB-based registration, no separate age checkbox; no first-screen positioning requirement.",
+        "FRD31: align affected Figma before flow implementation."
+      ],
+      "outcome": "RESOLVED_EXISTING_AUTHORITY",
+      "implementation": "Initial email/password/notices UI, then separate DOB step before POST/canonical processing; consent is not substituted for eligibility.",
+      "figma_eligibility_node": "187:2"
+    }
   }
 }
