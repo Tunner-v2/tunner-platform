@@ -2,5 +2,9 @@
   <ItemGroup>
     <ProjectReference Include="../Tunner.Observability/Tunner.Observability.csproj" />
     <ProjectReference Include="../Tunner.Platform/Tunner.Platform.csproj" />
+    <ProjectReference Include="../Modules/Identity/Tunner.Identity.Persistence.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="../../web/apps/user/dist/**/*" Link="wwwroot/registration/%(RecursiveDir)%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
   </ItemGroup>
 </Project>

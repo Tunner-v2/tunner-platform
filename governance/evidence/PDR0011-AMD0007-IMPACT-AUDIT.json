@@ -1,0 +1,116 @@
+{
+  "schema_version": 1,
+  "scope_id": "TUN-P2-004",
+  "reviewed_at": "2026-10-17T19:35:24.904Z",
+  "outcome": "EXISTING_APPROVED_AUTHORITY_RESOLVED",
+  "authority_refs": [
+    "docs/authority/current-authority.json",
+    "docs/authority/current/development/37_Current_Authority_Index.md",
+    "docs/authority/current/development/13_RD_Source_Register.md",
+    "docs/authority/current/development/34_Architecture_to_Development_Traceability_Matrix.md",
+    "docs/authority/current/development/32_Domain_API_Event_Data_and_Policy_Contract_Catalog.md",
+    "docs/authority/current/development/31_UI_UX_Screen_and_Control_Center_Requirements_Matrix.md",
+    "docs/authority/current/development/29_Privacy_Data_Lifecycle_and_Processing_Governance_FRD.md",
+    "docs/authority/current/development/21_Billing_Subscription_Checkout_Renewal_and_Dunning_FRD.md",
+    "docs/authority/current/development/18_Billing_Account_and_Delegated_Authority_FRD.md",
+    "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md",
+    "docs/authority/current/development/16_Full_Project_Documentation_Closure_and_Gap_Register.md",
+    "docs/authority/current/development/08_Security_Privacy_Compliance_and_Global_Market_Governance.md",
+    "docs/authority/current/development/README.md",
+    "docs/authority/current/development/33_Production_Readiness_Compliance_and_Release_Gates.md",
+    "docs/authority/current/decisions/README.md",
+    "docs/authority/current/decisions/PDR-0011_Universal_Account_Eligibility_Age-Aware_Consent_and_Delegated_Commercial_Authority.md",
+    "docs/authority/current/decisions/AMD-0007_Universal_Registration_Age-Aware_Consent_and_Delegated_Commercial_Authority.md"
+  ],
+  "original_status": "VALIDATION",
+  "original_tested_commit_sha": "f64f9976a150e3c4a08378c9b87c980b91359a81",
+  "revision_required": false,
+  "affected_active_owners": [
+    "TUN-P2-002",
+    "TUN-P2-003",
+    "TUN-P2-004"
+  ],
+  "findings": [
+    {
+      "owner": "TUN-P2-004",
+      "paths": [
+        "RegistrationContracts.cs",
+        "RegistrationApplication.cs",
+        "RegistrationRows.cs",
+        "RegistrationEndpoints.cs",
+        "web/apps/user"
+      ],
+      "change": "Remove registration DOB and old AGE_INELIGIBLE branch; retain proof, credential and uniqueness controls; add verified-contact-bound normal Personal Information."
+    },
+    {
+      "owner": "TUN-P2-002",
+      "paths": [
+        "src/Modules/Accounts/AgeEligibilityEvaluator.cs"
+      ],
+      "change": "Reuse calendar calculation; add current age/consent/commercial classification with historical evidence compatibility."
+    },
+    {
+      "owner": "TUN-P2-003",
+      "paths": [
+        "IdentityModelConfiguration.cs",
+        "IdentityPersistenceDbContextModelSnapshot.cs"
+      ],
+      "change": "Forward migration removes active-account adult-only constraint; profile and derived evidence storage remain Account-owned."
+    }
+  ],
+  "downstream": {
+    "runtime_modules": "Only Accounts and Identity currently exist; Billing and Subscription have no implementation module.",
+    "action": "P2 publishes capability/policy boundary only; P2-005 auth/session and P2-014 Product authorization consume ordinary Account state without an age-only deny; future Billing/Subscription revalidate current commercial eligibility and BillingAuthority.",
+    "no_premature_plane_implementation": true
+  },
+  "figjam_sections": [
+    "88:6717",
+    "104:8327",
+    "104:8333",
+    "122:10321"
+  ],
+  "figma_alignment_required": [
+    "Remove DOB eligibility step187:2 from current registration journey",
+    "Registration70:270: email/password/confirmation and notices",
+    "Personal Information35:2: retain existing fields, add DOB"
+  ],
+  "classification": {
+    "authority_sync": [
+      "docs/authority/current/development/37_Current_Authority_Index.md",
+      "docs/authority/current/development/13_RD_Source_Register.md",
+      "docs/authority/current/development/34_Architecture_to_Development_Traceability_Matrix.md",
+      "docs/authority/current/development/32_Domain_API_Event_Data_and_Policy_Contract_Catalog.md",
+      "docs/authority/current/development/31_UI_UX_Screen_and_Control_Center_Requirements_Matrix.md",
+      "docs/authority/current/development/29_Privacy_Data_Lifecycle_and_Processing_Governance_FRD.md",
+      "docs/authority/current/development/21_Billing_Subscription_Checkout_Renewal_and_Dunning_FRD.md",
+      "docs/authority/current/development/18_Billing_Account_and_Delegated_Authority_FRD.md",
+      "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md",
+      "docs/authority/current/development/16_Full_Project_Documentation_Closure_and_Gap_Register.md",
+      "docs/authority/current/development/08_Security_Privacy_Compliance_and_Global_Market_Governance.md",
+      "docs/authority/current/development/README.md",
+      "docs/authority/current/development/33_Production_Readiness_Compliance_and_Release_Gates.md",
+      "docs/authority/current/decisions/README.md",
+      "docs/authority/current/decisions/PDR-0011_Universal_Account_Eligibility_Age-Aware_Consent_and_Delegated_Commercial_Authority.md",
+      "docs/authority/current/decisions/AMD-0007_Universal_Registration_Age-Aware_Consent_and_Delegated_Commercial_Authority.md"
+    ],
+    "implementation": "existing P2 active lifecycle",
+    "tests_evidence": "P2-002/003/004 tests and new revision receipts",
+    "generated_contracts": "No published SDK/OpenAPI currently exposes registration; internal BFF request evolves in this active unmerged slice.",
+    "unrelated": [
+      "docs/context/current/HANDOFF.md",
+      "docs/context/current/adaptive-selection.json",
+      "docs/context/current/authority.md",
+      "docs/context/current/contracts.md",
+      "docs/context/current/git-changes.md",
+      "docs/context/current/manifest.json",
+      "docs/context/current/relevant-flows.md",
+      "docs/context/current/summary.md",
+      "docs/context/current/tests.md",
+      "docs/project/CURRENT_STATE.md",
+      "docs/project/HANDOFF.md",
+      "docs/project/PROJECT_CONTEXT.md",
+      ".vscode/settings.json"
+    ]
+  },
+  "history": "Locked PDR-0007, old migrations, old validated source SHAs and evidence preserved; no new PDR/AMD/RV is invented."
+}

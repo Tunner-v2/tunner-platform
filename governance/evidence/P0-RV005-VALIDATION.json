@@ -1,0 +1,77 @@
+{
+  "schema_version": 1,
+  "scope_id": "P0-RV005",
+  "validation_kind": "COMMITTED",
+  "result": "PASS",
+  "validated_commit_sha": "45f20f9224fc90d2c350197eda6682598dcd2114",
+  "tested_commit_sha": "45f20f9224fc90d2c350197eda6682598dcd2114",
+  "owned_behavior_paths": [
+    "tests/Tunner.AuditRemediation.FunctionalTests/Program.cs",
+    "docs/development/P0_RV005_AUDIT_FIXTURE.md",
+    "governance/evidence/P0-RV005-AUTHORITY-RESOLUTION.json"
+  ],
+  "checked_at": "2026-10-16T22:16:48.114Z",
+  "committed_source_sha256": {
+    "tests/Tunner.AuditRemediation.FunctionalTests/Program.cs": "18e8b8067995bb91d0b92b615e4740f34ed70a13973ce7830619152d35ddaf60",
+    "docs/development/P0_RV005_AUDIT_FIXTURE.md": "fe6cf5dc500c3bae9a68693cb64e8399fa79ca76aa156477517d2b9e137077fe",
+    "governance/evidence/P0-RV005-AUTHORITY-RESOLUTION.json": "2488c3d757d081ba79557ed96e70e673ecbf24ef6971b8f2d129eceb553df018"
+  },
+  "checks": {
+    "build": "PASS: zero warnings/errors",
+    "audit_harness": "PASS: 13 actual authority/context checks, including explicit no-eligible-work precondition and all original assertions",
+    "governance_functional": "PASS: full ordinary functional suite, 60 RV and 15 closed-revision committed ownership checks",
+    "governance": "PASS: 665 records, no diagnostics",
+    "secret_scan": "PASS: three owned files, no matches",
+    "sast_policy": "PASS: 1620 files, no matches",
+    "history": {
+      "governance/milestones/P0.yaml": true,
+      "governance/revisions/P0-RV004.yaml": true,
+      "governance/evidence/P0-RV004-VALIDATION.json": true
+    },
+    "registration": "All 49 P2-004 behavior paths still match f64f9976a150e3c4a08378c9b87c980b91359a81; original 364 .NET /25 web-unit /20 browser validation unchanged",
+    "dirty_work": "Twelve tracked preexisting dirty files and .vscode/settings.json preserved; no absorption"
+  },
+  "receipts": [
+    {
+      "path": "artifacts/p0-rv005-20261016/validated-build.log",
+      "sha256": "8e40e80f96d77bcce8248d251632860445e53d8b6a5d9779fa31516c701070cc"
+    },
+    {
+      "path": "artifacts/p0-rv005-20261016/validated-audit-test.log",
+      "sha256": "a28ca25266f1356f43245afce223940cb5ce6fb74658c75d82aada9025cbe142"
+    },
+    {
+      "path": "artifacts/p0-rv005-20261016/validated-governance-tests.log",
+      "sha256": "b39b055af61c564b29dd3a55f2d56f36532233f548446173baaccd7b73efdec5"
+    },
+    {
+      "path": "artifacts/p0-rv005-20261016/validated-governance.json",
+      "sha256": "471ad78c48c612d91c825a7b2bc1ff6ed2c84fee49a31fe73f88272be1ca4c13"
+    },
+    {
+      "path": "artifacts/p0-rv005-20261016/sast-policy.log",
+      "sha256": "c5b3807faccf62a4fdf869de5872e389ebb69b48c367e6c67f9d55bf44830c9a"
+    },
+    {
+      "path": "artifacts/p0-rv005-20261016/secret-scan.log",
+      "sha256": "94a35d453b28c3d296c73c33b1f3a3429c929f8a90dd0e8c96094360cd521ecf"
+    },
+    {
+      "path": "artifacts/p0-rv005-20261016/context-verify.json",
+      "sha256": "34750f3d2292d441a921aa19a87e6c8e2e3310508fb542efbbe476255f2fe1f9"
+    }
+  ],
+  "failed_attempts": [
+    {
+      "finding": "CI and current local execution failed the stale no-eligible-work assumption.",
+      "receipts": [
+        "artifacts/p2-004-20261016/github-security-baseline.log",
+        "artifacts/p2-004-20261016/current-audit-harness-reproduction.log"
+      ],
+      "resolution": "Explicitly isolate only nonterminal work/revisions in the disposable fixture and assert native-next has zero actionable work; retain all existing authority/recovery assertions."
+    }
+  ],
+  "boundary": "Test fixture only; no production context rule, Product behavior, original closure, registration source, release gate or security waiver changed.",
+  "role_reviews_ref": "governance/evidence/P0-RV005-ROLE-REVIEWS.json",
+  "pull_request": "https://github.com/Tunner-v2/tunner-platform/pull/17"
+}

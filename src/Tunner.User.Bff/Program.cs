@@ -1,6 +1,7 @@
 using Tunner.Observability;
 using Tunner.Platform;
 using Tunner.Platform.Bff;
+using Tunner.Identity.Persistence;
 
 namespace Tunner.User.Bff;
 
@@ -16,9 +17,12 @@ public static class TunnerUserBffHost
         builder.Services.AddTunnerObservability();
         builder.Services.AddTunnerModules();
         builder.Services.AddTunnerBffFoundation(BffSurface.User, builder.Configuration["Bff:BrowserOrigin"]);
+        var registration = builder.Services.Any(x => x.ServiceType == typeof(IRegistrationPolicySource));
+        if (registration) builder.Services.AddTunnerRegistrationApplication();
         var application = builder.Build();
         application.UseTunnerBffFoundation();
         application.MapTunnerBffHealth();
+        if (registration) application.MapTunnerRegistration();
         return application;
     }
 }

@@ -1,0 +1,40 @@
+{
+  "schema_version": 1,
+  "scope_id": "TUN-P2-003",
+  "status": "LOCAL_INACTIVE_STORAGE_REVIEWED",
+  "authority_ref": "docs/authority/baselines/1.6.0/29_Privacy_Data_Lifecycle_and_Processing_Governance_FRD.md",
+  "reviewed_at": "2026-10-16T20:06:51.176Z",
+  "resources": [
+    {
+      "resource": "TunnerAccount and state versions",
+      "fields": "Stable Account ID, state/version, operation/correlation/evidence references and evaluated age/policy references",
+      "purpose": "Authoritative identity/version provenance; derived eligibility only",
+      "excluded": "No raw DOB, government identity document or Product entitlement",
+      "production_activation": "Approved processing/retention classification and release gates required"
+    },
+    {
+      "resource": "VerifiedContact",
+      "fields": "Account/contact ID, server-normalized email, contact state/version, anonymization instant and evidence reference",
+      "purpose": "Verified contact uniqueness and candidate proof storage; no public verification flow here",
+      "production_activation": "Approved field inventory, purpose, access and retention contract required; no duration is inferred"
+    },
+    {
+      "resource": "ExternalIdentityLink",
+      "fields": "Account/link ID, provider/immutable subject, version and evidence reference",
+      "purpose": "Explicit provider-subject linkage; email is not the identity key",
+      "production_activation": "Provider/processor and operation-policy review before adapter activation"
+    },
+    {
+      "resource": "Framework credential/protocol stores",
+      "fields": "ASP.NET Identity v3 and OpenIddict Core entity fields under Identity schema",
+      "purpose": "Approved framework storage only; no authenticator enrollment, credential generation, token issuance or session activation",
+      "production_activation": "Owning flow must apply approved security/secrets/processing contracts; framework rows are not cross-domain Account authority"
+    }
+  ],
+  "controls": [
+    "Local tests use synthetic values in disposable databases only.",
+    "No endpoint, log/telemetry emission or production migration is introduced.",
+    "Shared audit/outbox ownership and records are not deleted by Identity rollback.",
+    "No legal basis, retention deadline, risk acceptance or production readiness is asserted."
+  ]
+}
