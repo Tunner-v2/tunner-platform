@@ -1,10 +1,10 @@
 {
   "schema_version": 1,
   "scope_id": "TUN-P2-002",
-  "validation_kind": "CANDIDATE",
-  "result": "PENDING_EXACT_COMMIT_TESTS",
-  "validated_commit_sha": null,
-  "tested_commit_sha": null,
+  "validation_kind": "COMMITTED",
+  "result": "PASS",
+  "validated_commit_sha": "16b6e40615cde8804570ca7269784435c692305e",
+  "tested_commit_sha": "16b6e40615cde8804570ca7269784435c692305e",
   "owned_behavior_paths": [
     "src/Modules/Accounts/Tunner.Accounts.csproj",
     "src/Modules/Accounts/AgeEligibilityEvaluator.cs",
@@ -406,5 +406,270 @@
     "PDR-0011",
     "AMD-0007"
   ],
-  "note": "Original PDR-0007 evidence and passing receipt preserved; new current capability behavior requires committed-candidate tests."
+  "note": "Original PDR-0007 evidence and passing receipt preserved; new current capability behavior requires committed-candidate tests.",
+  "checked_at": "2026-10-17T19:40:00.222Z",
+  "tests": {
+    "passed": 57,
+    "failed": 0,
+    "skipped": 0,
+    "receipt": "artifacts/pdr0011-amd0007-20261017/validated/accounts-exact.trx"
+  },
+  "committed_source_sha256": {
+    "src/Modules/Accounts/Tunner.Accounts.csproj": "8d654c44b7bebb6b31a9f2f606927f45b5072193adc4eef8cce3f3cf3b278df3",
+    "src/Modules/Accounts/AgeEligibilityEvaluator.cs": "2e7fb346307cc5de3bc56f17ccd539df3bf4a4c23b5a9bfe563feefad26ac62e",
+    "tests/Tunner.Accounts.Tests/Tunner.Accounts.Tests.csproj": "85432c01e89cea35c03b3da7627d4dfe54e670dae51c359be0cbe22b7c35cc56",
+    "tests/Tunner.Accounts.Tests/AgeEligibilityEvaluatorTests.cs": "c229c14bdfd1e08d42f77ed99f2aa42d38a5a10b5009e21a10bce116d6217b52",
+    "Tunner.Platform.slnx": "f037f86bb2b1ecfd72fb1787523412703c593ed424c86a92956afcfc27605449",
+    "docs/development/P2_002_ADULT_ELIGIBILITY.md": "88171b189aae572b0fc60be628df5383720714a61c16c7994f02442adc9938e8",
+    "src/Modules/Accounts/AccountAgeCapabilities.cs": "41a160e9160a34a7c79785c5f4ac3905ce05a438e017929dd245fa4732d44f45",
+    "tests/Tunner.Accounts.Tests/AccountAgeCapabilityTests.cs": "c8d9ac4ed9e8c2ef1fb6b939ec093cc09a7977a982884e317d38b1576e4fecb4"
+  },
+  "prior_formal_reviews": [
+    {
+      "schema_version": 1,
+      "review_id": "REV-TUN-P2-002-auditor",
+      "work_item_id": "TUN-P2-002",
+      "role": "auditor",
+      "status": "PASS",
+      "result": "PASS",
+      "reviewed_at": "2026-10-17T19:40:00.887Z",
+      "skill_id": "auditor",
+      "skill_version": "1.0.0",
+      "skill_hash": "191c796fc5df0332ff2c3c464ca611d2c6d3ffc5ba7e2807986a71ad2e40d921",
+      "authority_refs": [
+        "docs/authority/current-authority.json",
+        "docs/authority/current/development/11_Development_Planes_Milestones_and_P0_Backlog.md",
+        "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md",
+        "docs/authority/current/development/32_Domain_API_Event_Data_and_Policy_Contract_Catalog.md",
+        "docs/authority/current/development/34_Architecture_to_Development_Traceability_Matrix.md",
+        "docs/authority/baselines/1.6.0/decisions/ADR-0006_Identity_ASPNET_Identity_OpenIddict.md",
+        "docs/authority/current/development/AMD-0002_Non-Blocking_PR_Approval_and_Continuous_Local_Execution.md",
+        "docs/authority/current/development/02_Repository_Solution_and_Module_Architecture.md",
+        "docs/authority/current/development/09_Testing_Acceptance_Evidence_and_Quality_Gates.md",
+        "docs/authority/current/development/29_Privacy_Data_Lifecycle_and_Processing_Governance_FRD.md",
+        "docs/authority/current/decisions/PDR-0011_Universal_Account_Eligibility_Age-Aware_Consent_and_Delegated_Commercial_Authority.md",
+        "docs/authority/current/decisions/AMD-0007_Universal_Registration_Age-Aware_Consent_and_Delegated_Commercial_Authority.md"
+      ],
+      "context_artifacts": [
+        "src/Modules/Accounts/AccountAgeCapabilities.cs",
+        "docs/development/P2_002_ADULT_ELIGIBILITY.md"
+      ],
+      "evidence_refs": [
+        "governance/evidence/TUN-P2-002-VALIDATION.json",
+        "governance/evidence/PDR0011-AMD0007-IMPACT-AUDIT.json"
+      ],
+      "findings": [
+        "PDR-0011 current classification separates normal Account lifecycle, policy-scoped consent and independent commercial eligibility. Historical PDR-0007 adapter remains readable; shared calendar arithmetic is reused.",
+        "57 actual unit tests pass without skips at committed candidate 16b6e40615cde8804570ca7269784435c692305e. Executing-agent engineering role perspective; no Product/release/legal acceptance is implied."
+      ],
+      "blocking_findings": [],
+      "required_actions": [],
+      "context_expansion_requested": false
+    },
+    {
+      "schema_version": 1,
+      "review_id": "REV-TUN-P2-002-compliance-specialist",
+      "work_item_id": "TUN-P2-002",
+      "role": "compliance-specialist",
+      "status": "PASS",
+      "result": "PASS",
+      "reviewed_at": "2026-10-17T19:40:00.888Z",
+      "skill_id": "compliance-specialist",
+      "skill_version": "1.0.0",
+      "skill_hash": "38f8de27e31b3ae5cec070320d9b408d6f75682b024322f5e37585c76921303e",
+      "authority_refs": [
+        "docs/authority/current-authority.json",
+        "docs/authority/current/development/11_Development_Planes_Milestones_and_P0_Backlog.md",
+        "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md",
+        "docs/authority/current/development/32_Domain_API_Event_Data_and_Policy_Contract_Catalog.md",
+        "docs/authority/current/development/34_Architecture_to_Development_Traceability_Matrix.md",
+        "docs/authority/baselines/1.6.0/decisions/ADR-0006_Identity_ASPNET_Identity_OpenIddict.md",
+        "docs/authority/current/development/AMD-0002_Non-Blocking_PR_Approval_and_Continuous_Local_Execution.md",
+        "docs/authority/current/development/02_Repository_Solution_and_Module_Architecture.md",
+        "docs/authority/current/development/09_Testing_Acceptance_Evidence_and_Quality_Gates.md",
+        "docs/authority/current/development/29_Privacy_Data_Lifecycle_and_Processing_Governance_FRD.md",
+        "docs/authority/current/decisions/PDR-0011_Universal_Account_Eligibility_Age-Aware_Consent_and_Delegated_Commercial_Authority.md",
+        "docs/authority/current/decisions/AMD-0007_Universal_Registration_Age-Aware_Consent_and_Delegated_Commercial_Authority.md"
+      ],
+      "context_artifacts": [
+        "src/Modules/Accounts/AccountAgeCapabilities.cs",
+        "docs/development/P2_002_ADULT_ELIGIBILITY.md"
+      ],
+      "evidence_refs": [
+        "governance/evidence/TUN-P2-002-VALIDATION.json",
+        "governance/evidence/PDR0011-AMD0007-IMPACT-AUDIT.json"
+      ],
+      "findings": [
+        "PDR-0011 current classification separates normal Account lifecycle, policy-scoped consent and independent commercial eligibility. Historical PDR-0007 adapter remains readable; shared calendar arithmetic is reused.",
+        "57 actual unit tests pass without skips at committed candidate 16b6e40615cde8804570ca7269784435c692305e. Executing-agent engineering role perspective; no Product/release/legal acceptance is implied."
+      ],
+      "blocking_findings": [],
+      "required_actions": [],
+      "context_expansion_requested": false
+    },
+    {
+      "schema_version": 1,
+      "review_id": "REV-TUN-P2-002-cyber-security-engineer",
+      "work_item_id": "TUN-P2-002",
+      "role": "cyber-security-engineer",
+      "status": "PASS",
+      "result": "PASS",
+      "reviewed_at": "2026-10-17T19:40:00.889Z",
+      "skill_id": "cyber-security-engineer",
+      "skill_version": "1.0.0",
+      "skill_hash": "2d32ff3d7fb503f29cf930e9852ed4a757bb48a08e3fa4e3f6d5a23139a47f97",
+      "authority_refs": [
+        "docs/authority/current-authority.json",
+        "docs/authority/current/development/11_Development_Planes_Milestones_and_P0_Backlog.md",
+        "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md",
+        "docs/authority/current/development/32_Domain_API_Event_Data_and_Policy_Contract_Catalog.md",
+        "docs/authority/current/development/34_Architecture_to_Development_Traceability_Matrix.md",
+        "docs/authority/baselines/1.6.0/decisions/ADR-0006_Identity_ASPNET_Identity_OpenIddict.md",
+        "docs/authority/current/development/AMD-0002_Non-Blocking_PR_Approval_and_Continuous_Local_Execution.md",
+        "docs/authority/current/development/02_Repository_Solution_and_Module_Architecture.md",
+        "docs/authority/current/development/09_Testing_Acceptance_Evidence_and_Quality_Gates.md",
+        "docs/authority/current/development/29_Privacy_Data_Lifecycle_and_Processing_Governance_FRD.md",
+        "docs/authority/current/decisions/PDR-0011_Universal_Account_Eligibility_Age-Aware_Consent_and_Delegated_Commercial_Authority.md",
+        "docs/authority/current/decisions/AMD-0007_Universal_Registration_Age-Aware_Consent_and_Delegated_Commercial_Authority.md"
+      ],
+      "context_artifacts": [
+        "src/Modules/Accounts/AccountAgeCapabilities.cs",
+        "docs/development/P2_002_ADULT_ELIGIBILITY.md"
+      ],
+      "evidence_refs": [
+        "governance/evidence/TUN-P2-002-VALIDATION.json",
+        "governance/evidence/PDR0011-AMD0007-IMPACT-AUDIT.json"
+      ],
+      "findings": [
+        "PDR-0011 current classification separates normal Account lifecycle, policy-scoped consent and independent commercial eligibility. Historical PDR-0007 adapter remains readable; shared calendar arithmetic is reused.",
+        "57 actual unit tests pass without skips at committed candidate 16b6e40615cde8804570ca7269784435c692305e. Executing-agent engineering role perspective; no Product/release/legal acceptance is implied."
+      ],
+      "blocking_findings": [],
+      "required_actions": [],
+      "context_expansion_requested": false
+    },
+    {
+      "schema_version": 1,
+      "review_id": "REV-TUN-P2-002-full-stack-engineer",
+      "work_item_id": "TUN-P2-002",
+      "role": "full-stack-engineer",
+      "status": "PASS",
+      "result": "PASS",
+      "reviewed_at": "2026-10-17T19:40:00.891Z",
+      "skill_id": "full-stack-engineer",
+      "skill_version": "1.0.0",
+      "skill_hash": "59adbe2133cf4ce88cbc9ca4eafce1d5a9d83b9562b6580c1571e6fc148d46b5",
+      "authority_refs": [
+        "docs/authority/current-authority.json",
+        "docs/authority/current/development/11_Development_Planes_Milestones_and_P0_Backlog.md",
+        "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md",
+        "docs/authority/current/development/32_Domain_API_Event_Data_and_Policy_Contract_Catalog.md",
+        "docs/authority/current/development/34_Architecture_to_Development_Traceability_Matrix.md",
+        "docs/authority/baselines/1.6.0/decisions/ADR-0006_Identity_ASPNET_Identity_OpenIddict.md",
+        "docs/authority/current/development/AMD-0002_Non-Blocking_PR_Approval_and_Continuous_Local_Execution.md",
+        "docs/authority/current/development/02_Repository_Solution_and_Module_Architecture.md",
+        "docs/authority/current/development/09_Testing_Acceptance_Evidence_and_Quality_Gates.md",
+        "docs/authority/current/development/29_Privacy_Data_Lifecycle_and_Processing_Governance_FRD.md",
+        "docs/authority/current/decisions/PDR-0011_Universal_Account_Eligibility_Age-Aware_Consent_and_Delegated_Commercial_Authority.md",
+        "docs/authority/current/decisions/AMD-0007_Universal_Registration_Age-Aware_Consent_and_Delegated_Commercial_Authority.md"
+      ],
+      "context_artifacts": [
+        "src/Modules/Accounts/AccountAgeCapabilities.cs",
+        "docs/development/P2_002_ADULT_ELIGIBILITY.md"
+      ],
+      "evidence_refs": [
+        "governance/evidence/TUN-P2-002-VALIDATION.json",
+        "governance/evidence/PDR0011-AMD0007-IMPACT-AUDIT.json"
+      ],
+      "findings": [
+        "PDR-0011 current classification separates normal Account lifecycle, policy-scoped consent and independent commercial eligibility. Historical PDR-0007 adapter remains readable; shared calendar arithmetic is reused.",
+        "57 actual unit tests pass without skips at committed candidate 16b6e40615cde8804570ca7269784435c692305e. Executing-agent engineering role perspective; no Product/release/legal acceptance is implied."
+      ],
+      "blocking_findings": [],
+      "required_actions": [],
+      "context_expansion_requested": false
+    },
+    {
+      "schema_version": 1,
+      "review_id": "REV-TUN-P2-002-solution-architect",
+      "work_item_id": "TUN-P2-002",
+      "role": "solution-architect",
+      "status": "PASS",
+      "result": "PASS",
+      "reviewed_at": "2026-10-17T19:40:00.893Z",
+      "skill_id": "solution-architect",
+      "skill_version": "1.0.0",
+      "skill_hash": "664ffba70d0f97e75951c3548b7f8391854781e4cf90cc50fc8829543783a35b",
+      "authority_refs": [
+        "docs/authority/current-authority.json",
+        "docs/authority/current/development/11_Development_Planes_Milestones_and_P0_Backlog.md",
+        "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md",
+        "docs/authority/current/development/32_Domain_API_Event_Data_and_Policy_Contract_Catalog.md",
+        "docs/authority/current/development/34_Architecture_to_Development_Traceability_Matrix.md",
+        "docs/authority/baselines/1.6.0/decisions/ADR-0006_Identity_ASPNET_Identity_OpenIddict.md",
+        "docs/authority/current/development/AMD-0002_Non-Blocking_PR_Approval_and_Continuous_Local_Execution.md",
+        "docs/authority/current/development/02_Repository_Solution_and_Module_Architecture.md",
+        "docs/authority/current/development/09_Testing_Acceptance_Evidence_and_Quality_Gates.md",
+        "docs/authority/current/development/29_Privacy_Data_Lifecycle_and_Processing_Governance_FRD.md",
+        "docs/authority/current/decisions/PDR-0011_Universal_Account_Eligibility_Age-Aware_Consent_and_Delegated_Commercial_Authority.md",
+        "docs/authority/current/decisions/AMD-0007_Universal_Registration_Age-Aware_Consent_and_Delegated_Commercial_Authority.md"
+      ],
+      "context_artifacts": [
+        "src/Modules/Accounts/AccountAgeCapabilities.cs",
+        "docs/development/P2_002_ADULT_ELIGIBILITY.md"
+      ],
+      "evidence_refs": [
+        "governance/evidence/TUN-P2-002-VALIDATION.json",
+        "governance/evidence/PDR0011-AMD0007-IMPACT-AUDIT.json"
+      ],
+      "findings": [
+        "PDR-0011 current classification separates normal Account lifecycle, policy-scoped consent and independent commercial eligibility. Historical PDR-0007 adapter remains readable; shared calendar arithmetic is reused.",
+        "57 actual unit tests pass without skips at committed candidate 16b6e40615cde8804570ca7269784435c692305e. Executing-agent engineering role perspective; no Product/release/legal acceptance is implied."
+      ],
+      "blocking_findings": [],
+      "required_actions": [],
+      "context_expansion_requested": false
+    },
+    {
+      "schema_version": 1,
+      "review_id": "REV-TUN-P2-002-tester-qa-engineer",
+      "work_item_id": "TUN-P2-002",
+      "role": "tester-qa-engineer",
+      "status": "PASS",
+      "result": "PASS",
+      "reviewed_at": "2026-10-17T19:40:00.894Z",
+      "skill_id": "tester-qa-engineer",
+      "skill_version": "1.0.0",
+      "skill_hash": "a57ce99d7ad7a3b60f17e4826c81c507c9cc208d8928285c406222eefe0a18fd",
+      "authority_refs": [
+        "docs/authority/current-authority.json",
+        "docs/authority/current/development/11_Development_Planes_Milestones_and_P0_Backlog.md",
+        "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md",
+        "docs/authority/current/development/32_Domain_API_Event_Data_and_Policy_Contract_Catalog.md",
+        "docs/authority/current/development/34_Architecture_to_Development_Traceability_Matrix.md",
+        "docs/authority/baselines/1.6.0/decisions/ADR-0006_Identity_ASPNET_Identity_OpenIddict.md",
+        "docs/authority/current/development/AMD-0002_Non-Blocking_PR_Approval_and_Continuous_Local_Execution.md",
+        "docs/authority/current/development/02_Repository_Solution_and_Module_Architecture.md",
+        "docs/authority/current/development/09_Testing_Acceptance_Evidence_and_Quality_Gates.md",
+        "docs/authority/current/development/29_Privacy_Data_Lifecycle_and_Processing_Governance_FRD.md",
+        "docs/authority/current/decisions/PDR-0011_Universal_Account_Eligibility_Age-Aware_Consent_and_Delegated_Commercial_Authority.md",
+        "docs/authority/current/decisions/AMD-0007_Universal_Registration_Age-Aware_Consent_and_Delegated_Commercial_Authority.md"
+      ],
+      "context_artifacts": [
+        "src/Modules/Accounts/AccountAgeCapabilities.cs",
+        "docs/development/P2_002_ADULT_ELIGIBILITY.md"
+      ],
+      "evidence_refs": [
+        "governance/evidence/TUN-P2-002-VALIDATION.json",
+        "governance/evidence/PDR0011-AMD0007-IMPACT-AUDIT.json"
+      ],
+      "findings": [
+        "PDR-0011 current classification separates normal Account lifecycle, policy-scoped consent and independent commercial eligibility. Historical PDR-0007 adapter remains readable; shared calendar arithmetic is reused.",
+        "57 actual unit tests pass without skips at committed candidate 16b6e40615cde8804570ca7269784435c692305e. Executing-agent engineering role perspective; no Product/release/legal acceptance is implied."
+      ],
+      "blocking_findings": [],
+      "required_actions": [],
+      "context_expansion_requested": false
+    }
+  ]
 }
