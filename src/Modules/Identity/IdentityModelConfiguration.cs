@@ -18,7 +18,6 @@ internal static class IdentityModelConfiguration
                 t.HasCheckConstraint("ck_account_version", "version >= 1");
                 t.HasCheckConstraint("ck_account_provenance", "length(operation_id) > 0 AND length(correlation_id) > 0 AND length(evidence_reference) > 0");
                 t.HasCheckConstraint("ck_account_age", "(age_eligibility_status IS NULL AND age_evaluated_at_utc IS NULL AND age_policy_version IS NULL AND age_evidence_reference IS NULL) OR (age_eligibility_status IN ('ELIGIBLE','INELIGIBLE') AND age_evaluated_at_utc IS NOT NULL AND age_policy_version IS NOT NULL AND age_evidence_reference IS NOT NULL AND length(age_policy_version) > 0 AND length(age_evidence_reference) > 0)");
-                t.HasCheckConstraint("ck_active_age", "state <> 'ACTIVE' OR (age_eligibility_status IS NOT NULL AND age_eligibility_status = 'ELIGIBLE')");
             });
             b.HasKey(x => x.AccountId);
             b.Property(x => x.AccountId).HasColumnName("account_id");

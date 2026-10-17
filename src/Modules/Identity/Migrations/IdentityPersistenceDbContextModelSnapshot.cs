@@ -401,6 +401,79 @@ namespace Tunner.Identity.Persistence.Migrations
                         });
                 });
 
+            modelBuilder.Entity("Tunner.Identity.Persistence.AccountPersonalInformationRow", b =>
+                {
+                    b.Property<string>("AccountId")
+                        .HasColumnType("text");
+
+                    b.Property<string>("EvaluationJson")
+                        .IsRequired()
+                        .HasColumnType("jsonb");
+
+                    b.Property<string>("ProcessingReference")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("ProtectedData")
+                        .HasColumnType("text");
+
+                    b.Property<DateTimeOffset>("PurgeAfter")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTimeOffset>("RecordedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("RetentionReference")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<long>("Version")
+                        .IsConcurrencyToken()
+                        .HasColumnType("bigint");
+
+                    b.HasKey("AccountId");
+
+                    b.HasIndex("PurgeAfter");
+
+                    b.ToTable("personal_information", "accounts", t =>
+                        {
+                            t.HasCheckConstraint("ck_personal_processing", "length(\"ProcessingReference\") > 0 AND length(\"RetentionReference\") > 0");
+
+                            t.HasCheckConstraint("ck_personal_retention", "\"PurgeAfter\" > \"RecordedAt\"");
+
+                            t.HasCheckConstraint("ck_personal_version", "\"Version\" >= 1");
+                        });
+                });
+
+            modelBuilder.Entity("Tunner.Identity.Persistence.AccountPersonalInformationVersionRow", b =>
+                {
+                    b.Property<string>("AccountId")
+                        .HasColumnType("text");
+
+                    b.Property<long>("Version")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("EvaluationJson")
+                        .IsRequired()
+                        .HasColumnType("jsonb");
+
+                    b.Property<Guid>("IdempotencyKey")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("OnboardingOperationId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTimeOffset>("RecordedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("AccountId", "Version");
+
+                    b.HasIndex("OnboardingOperationId", "IdempotencyKey")
+                        .IsUnique();
+
+                    b.ToTable("personal_information_versions", "accounts");
+                });
+
             modelBuilder.Entity("Tunner.Identity.Persistence.AccountRow", b =>
                 {
                     b.Property<string>("AccountId")
@@ -465,8 +538,6 @@ namespace Tunner.Identity.Persistence.Migrations
                             t.HasCheckConstraint("ck_account_state", "state IN ('VERIFICATION_PENDING','ACTIVE','RESTRICTED','CLOSING','CLOSED')");
 
                             t.HasCheckConstraint("ck_account_version", "version >= 1");
-
-                            t.HasCheckConstraint("ck_active_age", "state <> 'ACTIVE' OR (age_eligibility_status IS NOT NULL AND age_eligibility_status = 'ELIGIBLE')");
                         });
                 });
 
@@ -944,6 +1015,24 @@ namespace Tunner.Identity.Persistence.Migrations
                     b.Navigation("Application");
 
                     b.Navigation("Authorization");
+                });
+
+            modelBuilder.Entity("Tunner.Identity.Persistence.AccountPersonalInformationRow", b =>
+                {
+                    b.HasOne("Tunner.Identity.Persistence.AccountRow", null)
+                        .WithOne()
+                        .HasForeignKey("Tunner.Identity.Persistence.AccountPersonalInformationRow", "AccountId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Tunner.Identity.Persistence.AccountPersonalInformationVersionRow", b =>
+                {
+                    b.HasOne("Tunner.Identity.Persistence.AccountRow", null)
+                        .WithMany()
+                        .HasForeignKey("AccountId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Tunner.Identity.Persistence.AccountStateRow", b =>

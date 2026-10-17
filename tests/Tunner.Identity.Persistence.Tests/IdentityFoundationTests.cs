@@ -113,17 +113,18 @@ public sealed class IdentityFoundationTests(IdentityPostgresFixture fixture) : I
         Assert.Equal(1,await context.AccountStateVersions.CountAsync());
     }
 
-    [Theory]
-    [InlineData(false)]
-    [InlineData(true)]
-    public async Task ActiveAccountCannotOmitEligibleAgeAndItsProvenance(bool partial)
+    [Fact]
+    public async Task ActiveAccountMayHaveNoAgeOrHistoricalUnderageEvidenceButPartialLegacyEvidenceStillFails()
     {
-        await using var db=await fixture.CreateDatabaseAsync();await using var context=db.Context();
-        var account=Row();account.State=AccountState.Active;
-        if(partial){account.AgeEligibilityStatus="ELIGIBLE";account.AgeEvaluatedAtUtc=RecordedAt;}
-        context.Accounts.Add(account);
-        var rejected = await Assert.ThrowsAsync<DbUpdateException>(()=>context.SaveChangesAsync());
-        Assert.Equal("23514", Assert.IsType<PostgresException>(rejected.InnerException).SqlState);
+        await using var db=await fixture.CreateDatabaseAsync();
+        await using(var context=db.Context())
+        {
+            var unknown=Row();unknown.State=AccountState.Active;context.Accounts.Add(unknown);
+            var historical=Row();historical.State=AccountState.Active;historical.AgeEligibilityStatus="INELIGIBLE";historical.AgeEvaluatedAtUtc=RecordedAt;historical.AgePolicyVersion="historical-PDR-0007";historical.AgeEvidenceReference="historical-evidence";context.Accounts.Add(historical);
+            await context.SaveChangesAsync();Assert.Equal(2,await context.Accounts.CountAsync(x=>x.State==AccountState.Active));
+        }
+        await using var invalid=db.Context();var partial=Row();partial.State=AccountState.Active;partial.AgeEligibilityStatus="ELIGIBLE";partial.AgeEvaluatedAtUtc=RecordedAt;invalid.Accounts.Add(partial);
+        var rejected=await Assert.ThrowsAsync<DbUpdateException>(()=>invalid.SaveChangesAsync());Assert.Equal("23514",Assert.IsType<PostgresException>(rejected.InnerException).SqlState);
     }
 
     [Fact]
@@ -135,9 +136,10 @@ public sealed class IdentityFoundationTests(IdentityPostgresFixture fixture) : I
         await context.Database.MigrateAsync();
         Assert.False(context.Database.HasPendingModelChanges());
         context.Accounts.Add(Row());await context.SaveChangesAsync();
+        var appliedBefore=await context.Database.GetAppliedMigrationsAsync();
         await Assert.ThrowsAsync<PostgresException>(()=>context.GetService<IMigrator>().MigrateAsync(Migration.InitialDatabase));
         Assert.Equal(1,await context.Accounts.CountAsync());
-        Assert.Single(await context.Database.GetAppliedMigrationsAsync());
+        Assert.Equal(appliedBefore,await context.Database.GetAppliedMigrationsAsync());
         Assert.False(await context.Set<OutboxMessage>().AnyAsync());
     }
 

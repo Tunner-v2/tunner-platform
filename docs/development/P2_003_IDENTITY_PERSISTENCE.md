@@ -13,3 +13,7 @@ Coverage: canonical Account/contact/link resources and storage are implemented h
 Validation must include real PostgreSQL migrations, uniqueness races, concurrency, immutable identifiers/history, immediate store CRUD and owner/outbox atomicity; framework/domain dependency checks; current NuGet vulnerability audit; and exact committed ownership for this work plus the overlapping active P2-002 solution reference. Freeze ownership evidence in the candidate before testing. Record failed attempts and all test executions truthfully.
 
 New personal-data inventory is reviewed as local, inactive storage. Production activation requires the approved processing/retention and release gates; no legal conclusion or retention duration is chosen. P1-RV001 remains an unwaived release blocker. Product acceptance is separate from local engineering validation.
+
+
+## PDR-0011 / AMD-0007 persistence correction
+A forward migration removes only the adult-only ACTIVE constraint. Complete historical eligibility evidence remains readable; incomplete legacy provenance remains invalid. Normal Personal Information is Account-owned, separate from registration, with protected restricted values, explicit processing/retention references, optimistic versions and safe immutable evaluation history. No historical migration or Account-state record is rewritten.
