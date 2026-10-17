@@ -2,7 +2,7 @@
   "schema_version": 1,
   "scope_id": "TUN-P2-004",
   "validation_kind": "COMMITTED",
-  "result": "PASS_LOCAL_TEST_MODE",
+  "result": "PASS",
   "tested_commit_sha": "ccb82f64a12cfed08c4f30a0ca763e8205b704ce",
   "validated_commit_sha": "ccb82f64a12cfed08c4f30a0ca763e8205b704ce",
   "checked_at": "2026-10-17T22:25:07.641Z",
@@ -121,7 +121,9 @@
     "Web-SDK duplicate static assets resolved using the existing console-host pattern.",
     "Mailpit array expansion corrected and generated Compose config validated before building.",
     "Platform/outbox migrations added before Identity, reusing the established integration fixture order. Development browser failures are retained separately; final tests assert the actual HTTP202 result before progression.",
-    "Restricted architecture run failed52 certificate-fixture cases; host-authorized run passed237 without code or expectation changes."
+    "Restricted architecture run failed52 certificate-fixture cases; host-authorized run passed237 without code or expectation changes.",
+    "First post-commit readiness rejected the custom PASS_LOCAL_TEST_MODE result token. Metadata now uses the existing PASS schema with explicit local-only validation_scope; no gate or executable behavior changed."
   ],
-  "lifecycle_boundary": "P2 remains active VALIDATION; production policies/content/legal/visual/release approvals and existing TODO-AMD0008-GOV001 are unchanged."
+  "lifecycle_boundary": "P2 remains active VALIDATION; production policies/content/legal/visual/release approvals and existing TODO-AMD0008-GOV001 are unchanged.",
+  "validation_scope": "Isolated Development-only browser-test host and starter; Windows certificate trust remains a separately authorized operator security-setting action, not production or release acceptance."
 }
