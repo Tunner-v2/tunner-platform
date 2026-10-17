@@ -1,20 +1,20 @@
 {
   "schema_version": 1,
-  "evidence_id": "TUN-P2-004-ROLE-REVIEWS",
-  "scope_type": "WORK_ITEM",
   "scope_id": "TUN-P2-004",
   "status": "PASS",
-  "reviewed_commit_sha": "f64f9976a150e3c4a08378c9b87c980b91359a81",
-  "reviewed_at": "2026-10-16T21:58:02.545Z",
+  "reviewed_commit_sha": "c6fa8e7690095f8eb2401587c407501fced29a4d",
+  "reviewed_at": "2026-10-17T20:15:56.211Z",
+  "review_provenance": "Executing-agent engineering role perspectives; no independent human or Product/release approval.",
   "reviews": [
     {
       "role": "full-stack-engineer",
       "conclusion": "PASS",
       "checks": [
-        "Registration, private recovery, proof, resend and purge use existing Identity/policy/outbox primitives. Per-operation proposed credentials prevent pending-registration pre-hijacking; exactly one verified proof activates the canonical Account. The consent-first form and later eligibility step preserve server 18+ authority.",
-        "Exact tested candidate f64f9976a150e3c4a08378c9b87c980b91359a81. Executing-agent engineering perspective; Product/content/legal acceptance, protected-main merge and production release approvals remain separate."
+        "Register has no DOB; verified proof precedes normal profile; transactional stage/version/account/outbox changes preserve uniqueness and replay.",
+        "48 actual Identity/PostgreSQL/HTTPS cases pass at the reviewed SHA, including historical migration and under18 activation.",
+        "Reviewed committed implementation c6fa8e7690095f8eb2401587c407501fced29a4d.",
+        "Executing-agent engineering perspective, not independent human/Product/legal/release approval."
       ],
-      "findings": [],
       "review_ref": "governance/reviews/REV-TUN-P2-004-full-stack-engineer.yaml",
       "skill_hash": "59adbe2133cf4ce88cbc9ca4eafce1d5a9d83b9562b6580c1571e6fc148d46b5"
     },
@@ -22,10 +22,11 @@
       "role": "tester-qa-engineer",
       "conclusion": "PASS",
       "checks": [
-        "All 364 .NET, 25 web unit and 20 Edge browser tests pass without skips. Real PostgreSQL races/replay/expiry/abuse/retention and real HTTPS/origin/CSRF/cookie/body boundaries complement fixture-publication browser coverage. Failed attempts are retained and excluded.",
-        "Exact tested candidate f64f9976a150e3c4a08378c9b87c980b91359a81. Executing-agent engineering perspective; Product/content/legal acceptance, protected-main merge and production release approvals remain separate."
+        "395 .NET,25 web and21 browser tests pass with zero failures/skips at the committed candidate. Development failures are retained separately.",
+        "Replay/concurrency, proof/abuse, consent/school, calendar, current18 re-evaluation, protected expiry/purge, OpenAPI, actual HTTPS and responsive WCAG checks are executed.",
+        "Reviewed committed implementation c6fa8e7690095f8eb2401587c407501fced29a4d.",
+        "Executing-agent engineering perspective, not independent human/Product/legal/release approval."
       ],
-      "findings": [],
       "review_ref": "governance/reviews/REV-TUN-P2-004-tester-qa-engineer.yaml",
       "skill_hash": "a57ce99d7ad7a3b60f17e4826c81c507c9cc208d8928285c406222eefe0a18fd"
     },
@@ -33,10 +34,11 @@
       "role": "solution-architect",
       "conclusion": "PASS",
       "checks": [
-        "Identity owns canonical Account/contact/credential state and registration tables. Accounts stays framework-free; one existing outbox participates in the transaction. Existing normalized-email and effective-policy primitives are reused. Login/session and production notification/audit/maintenance remain with explicit TUN-P2-005/016 owners.",
-        "Exact tested candidate f64f9976a150e3c4a08378c9b87c980b91359a81. Executing-agent engineering perspective; Product/content/legal acceptance, protected-main merge and production release approvals remain separate."
+        "Reuse shared Accounts calendar/effective policy, Account-owned profile, existing Identity/EF/outbox and User BFF boundaries. No new minor identity/payment domain.",
+        "Missing Billing/Subscription planes remain contractual. Session/Product relationship implementation remains with P2-005/P2-014; no age-only Account/session/Product denial introduced.",
+        "Reviewed committed implementation c6fa8e7690095f8eb2401587c407501fced29a4d.",
+        "Executing-agent engineering perspective, not independent human/Product/legal/release approval."
       ],
-      "findings": [],
       "review_ref": "governance/reviews/REV-TUN-P2-004-solution-architect.yaml",
       "skill_hash": "664ffba70d0f97e75951c3548b7f8391854781e4cf90cc50fc8829543783a35b"
     },
@@ -44,10 +46,11 @@
       "role": "cyber-security-engineer",
       "conclusion": "PASS",
       "checks": [
-        "Private protected browser context, actual-peer HMAC abuse partition, HTTPS/origin/CSRF and bounded JSON remain mandatory. Framework IdentityV3 work factor is an approved server policy input. Codes/credentials are separately protected, proof is constant-time compared, stale/concurrent versions cannot overwrite the winning credential, and existing/new account responses share hashing/opaque state. No mathematically constant network timing or production provider security is claimed. P1 image findings remain open.",
-        "Exact tested candidate f64f9976a150e3c4a08378c9b87c980b91359a81. Executing-agent engineering perspective; Product/content/legal acceptance, protected-main merge and production release approvals remain separate."
+        "Strict body schemas reject obsolete DOB registration and forged consent/commercial claims. HTTPS/origin/CSRF/protected expiring context, abuse/version/proof and uniqueness guards remain.",
+        "DOB/names protected by isolated purpose; no raw profile in receipts/events/responses/browser storage; safe errors. Secret/SAST and current dependency audits pass.",
+        "Reviewed committed implementation c6fa8e7690095f8eb2401587c407501fced29a4d.",
+        "Executing-agent engineering perspective, not independent human/Product/legal/release approval."
       ],
-      "findings": [],
       "review_ref": "governance/reviews/REV-TUN-P2-004-cyber-security-engineer.yaml",
       "skill_hash": "2d32ff3d7fb503f29cf930e9852ed4a757bb48a08e3fa4e3f6d5a23139a47f97"
     },
@@ -55,10 +58,11 @@
       "role": "auditor",
       "conclusion": "PASS",
       "checks": [
-        "All 49 frozen behavior paths match committed/tested candidate f64f9976a150e3c4a08378c9b87c980b91359a81. Source hashes, six TRX results, web results, corrected failures and publish receipts are recorded. Prior active P2-003 evidence/reviews are retained during shared-file revalidation; unrelated dirty files remain byte-identical. These are executing-agent engineering reviews, not independent human or Product approval.",
-        "Exact tested candidate f64f9976a150e3c4a08378c9b87c980b91359a81. Executing-agent engineering perspective; Product/content/legal acceptance, protected-main merge and production release approvals remain separate."
+        "Original P2-004 VALIDATION and PDR-0007 receipts preserved. No RV, closure rewrite, new Product decision or inferred acceptance. All57 behavior paths match the tested committed SHA.",
+        "P2-003 shared snapshot/test-project overlap is revalidated at this SHA. Unrelated dirty files remain byte-identical and unstaged.",
+        "Reviewed committed implementation c6fa8e7690095f8eb2401587c407501fced29a4d.",
+        "Executing-agent engineering perspective, not independent human/Product/legal/release approval."
       ],
-      "findings": [],
       "review_ref": "governance/reviews/REV-TUN-P2-004-auditor.yaml",
       "skill_hash": "191c796fc5df0332ff2c3c464ca611d2c6d3ffc5ba7e2807986a71ad2e40d921"
     },
@@ -66,10 +70,11 @@
       "role": "compliance-specialist",
       "conclusion": "PASS",
       "checks": [
-        "Raw DOB exists only in request/browser memory for approved server 18+ evaluation, never a persistence column/outbox/log/storage entry. The initial screen has notices only and a separate DOB step occurs before registration POST; notice acknowledgement is not age evidence. Explicit approved processing/retention/publication references are required; fixture legal/security values grant no production authority.",
-        "Exact tested candidate f64f9976a150e3c4a08378c9b87c980b91359a81. Executing-agent engineering perspective; Product/content/legal acceptance, protected-main merge and production release approvals remain separate."
+        "DOB is restricted personal data in normal Personal Information with explicit purpose/retention and protected custody; safe evidence retained after payload purge.",
+        "Consent is trusted Account/policy/time/actor-bound; no global consent threshold, invented legal default, or production consent/content approval. Under18 is not Account admission denial.",
+        "Reviewed committed implementation c6fa8e7690095f8eb2401587c407501fced29a4d.",
+        "Executing-agent engineering perspective, not independent human/Product/legal/release approval."
       ],
-      "findings": [],
       "review_ref": "governance/reviews/REV-TUN-P2-004-compliance-specialist.yaml",
       "skill_hash": "38f8de27e31b3ae5cec070320d9b408d6f75682b024322f5e37585c76921303e"
     },
@@ -77,10 +82,11 @@
       "role": "sdk-engineer",
       "conclusion": "PASS",
       "checks": [
-        "Typed server-owned BFF contracts document operation identity, expected versions, safe Problem Details and private status recovery. No public Product API, generated SDK, access grant or browser token is introduced. Detailed field contracts remain in code and the implementation contract document under Doc32.",
-        "Exact tested candidate f64f9976a150e3c4a08378c9b87c980b91359a81. Executing-agent engineering perspective; Product/content/legal acceptance, protected-main merge and production release approvals remain separate."
+        "Strict private BFF OpenAPI separates initial registration and write-only DOB profile input; safe nextAction/operation metadata drives UI.",
+        "No public Product SDK/API currently exposes registration; no SDK release/version or external compatibility promise is invented. Existing technical Problem Details are reused.",
+        "Reviewed committed implementation c6fa8e7690095f8eb2401587c407501fced29a4d.",
+        "Executing-agent engineering perspective, not independent human/Product/legal/release approval."
       ],
-      "findings": [],
       "review_ref": "governance/reviews/REV-TUN-P2-004-sdk-engineer.yaml",
       "skill_hash": "c64a66b2e19bccdbf69f13c9db62e9e2cbb0403f384591a93b5b787dc33b07ae"
     },
@@ -88,10 +94,11 @@
       "role": "ui-ux-engineer",
       "conclusion": "PASS",
       "checks": [
-        "Four grounded Figma frames align with FRD17/31 and the explicit user choice: first email/password/notices, then DOB eligibility, proof and readiness. Existing Tunner text-only brand, Geist/Inter, intrinsic SVG geometry and shared finite control presentations are used. Native date entry and policy-derived expiry are documented adaptations.",
-        "Exact tested candidate f64f9976a150e3c4a08378c9b87c980b91359a81. Executing-agent engineering perspective; Product/content/legal acceptance, protected-main merge and production release approvals remain separate."
+        "Editable Figma initial70:270 adds confirmation; obsolete DOB-only187:2 hidden/labeled historical; normal profile35:107 and onboarding198:2 contain DOB.",
+        "Desktop/320px normal states pass WCAG AA checks. Reuse shared controls, text-only Tunner, local fonts and intrinsic supplied SVGs.",
+        "Reviewed committed implementation c6fa8e7690095f8eb2401587c407501fced29a4d.",
+        "Executing-agent engineering perspective, not independent human/Product/legal/release approval."
       ],
-      "findings": [],
       "review_ref": "governance/reviews/REV-TUN-P2-004-ui-ux-engineer.yaml",
       "skill_hash": "1fc89f73cb56107fe5669d6699bb50b4ebe6481c0efea7e59eff30b350ce5800"
     },
@@ -99,10 +106,11 @@
       "role": "frontend-engineer",
       "conclusion": "PASS",
       "checks": [
-        "The User app reuses ThemeProvider/ContentProvider/TextField/PrimaryButton and existing pinned local fonts. Source metrics, all local images, responsive 320px layouts, focus, server-time-based display, duplicate-submit guards, no browser storage and uncertainty recovery pass. Standard User/Admin control regression metrics remain unchanged.",
-        "Exact tested candidate f64f9976a150e3c4a08378c9b87c980b91359a81. Executing-agent engineering perspective; Product/content/legal acceptance, protected-main merge and production release approvals remain separate."
+        "Direct initial registration has email/password/confirmation/notices; verified response opens normal Personal Information. No local age calculation or separate DOB screen.",
+        "Uncertain submission clears passwords/confirmation/DOB and recovers with original private key, without automatic repost. Eight registration browser regressions pass.",
+        "Reviewed committed implementation c6fa8e7690095f8eb2401587c407501fced29a4d.",
+        "Executing-agent engineering perspective, not independent human/Product/legal/release approval."
       ],
-      "findings": [],
       "review_ref": "governance/reviews/REV-TUN-P2-004-frontend-engineer.yaml",
       "skill_hash": "688773fc2118294031c0245fcd54ba3d560a4b4a1ee8dec98f9b7e99408cd27a"
     },
@@ -110,10 +118,11 @@
       "role": "end-user-ux-reviewer",
       "conclusion": "PASS",
       "checks": [
-        "DOB is absent on the first screen. Required notices precede the separate eligibility screen with a clear return action; no network registration occurs before that screen is submitted. Underage/error, latest-proof/resend, expired proof and uncertain-result states are actionable and accessible. Readiness grants no Product action or unavailable sign-in button.",
-        "Exact tested candidate f64f9976a150e3c4a08378c9b87c980b91359a81. Executing-agent engineering perspective; Product/content/legal acceptance, protected-main merge and production release approvals remain separate."
+        "Users see normal Personal Information after email proof and no blanket under18 rejection. Only policy-required consent state appears; browser cannot self-assert it.",
+        "Completion grants no invented Product or sign-in action. Narrow layouts, labels, keyboard/focus and safe errors are checked.",
+        "Reviewed committed implementation c6fa8e7690095f8eb2401587c407501fced29a4d.",
+        "Executing-agent engineering perspective, not independent human/Product/legal/release approval."
       ],
-      "findings": [],
       "review_ref": "governance/reviews/REV-TUN-P2-004-end-user-ux-reviewer.yaml",
       "skill_hash": "e9059d04505ec461405de6abe23d31526205f498ea815207dd042a87f82ec4d1"
     },
@@ -121,10 +130,11 @@
       "role": "content-writer",
       "conclusion": "PASS",
       "checks": [
-        "Semantic copy remains DRAFT in content.proposal.json; tests explicitly synthesize fixture publications. The BFF requires complete matching-locale PUBLISHED provenance and effective notice/link references. Missing content denies processing rather than inventing legal/domain fallback. Only the existing generic technical error text is deterministic.",
-        "Exact tested candidate f64f9976a150e3c4a08378c9b87c980b91359a81. Executing-agent engineering perspective; Product/content/legal acceptance, protected-main merge and production release approvals remain separate."
+        "Semantic labels match the affected Figma/control flow; obsolete18+ admission/eligibility copy is removed from active proposal.",
+        "Copy remains DRAFT. Runtime still requires effective published provenance and approved legal links; no legal/publication approval is asserted.",
+        "Reviewed committed implementation c6fa8e7690095f8eb2401587c407501fced29a4d.",
+        "Executing-agent engineering perspective, not independent human/Product/legal/release approval."
       ],
-      "findings": [],
       "review_ref": "governance/reviews/REV-TUN-P2-004-content-writer.yaml",
       "skill_hash": "9683a7f4aa8e50e2922fb7bbc74238d2d7bdb8ce2a81f922030c45ce9258e130"
     },
@@ -132,10 +142,11 @@
       "role": "rd-engineer",
       "conclusion": "PASS",
       "checks": [
-        "Current primary NIST SP800-63B-4, OWASP Authentication guidance and Microsoft Identity documentation informed Unicode password length/blocklisting, generic responses and explicit IdentityV3 work parameters. No package versions or draft/secondary sources replace authority; upstream font experiments were removed in favor of the existing pinned local font packages.",
-        "Exact tested candidate f64f9976a150e3c4a08378c9b87c980b91359a81. Executing-agent engineering perspective; Product/content/legal acceptance, protected-main merge and production release approvals remain separate."
+        "No new external technology/provider decision: reuse existing framework Data Protection/Identity/EF, approved policy/calendar and shared UI.",
+        "Existing primary-source security guidance is retained as engineering guidance; canonical PDR-0011/AMD-0007 controls Product semantics, not screenshots or legal guesses.",
+        "Reviewed committed implementation c6fa8e7690095f8eb2401587c407501fced29a4d.",
+        "Executing-agent engineering perspective, not independent human/Product/legal/release approval."
       ],
-      "findings": [],
       "review_ref": "governance/reviews/REV-TUN-P2-004-rd-engineer.yaml",
       "skill_hash": "2834c223dfd847a6d7cd28f52de4113efc574d621391d059e8dc1469bdf33187"
     },
@@ -143,466 +154,1309 @@
       "role": "devops-engineer",
       "conclusion": "PASS",
       "checks": [
-        "Fresh Release publish succeeds and contains all 25 web distribution files byte-identically plus 26 verified native gzip/Brotli variants. Runtime activation requires explicit approved providers/origin/Data Protection; no live database, production deployment, secrets delivery, main protection, image selection or service port was mutated. Existing unwaived P1 release blockers remain.",
-        "Exact tested candidate f64f9976a150e3c4a08378c9b87c980b91359a81. Executing-agent engineering perspective; Product/content/legal acceptance, protected-main merge and production release approvals remain separate."
+        "Platform/web build and fresh Release BFF publish pass. All25 original web files and26 compressed variants match; no stale previous publish assets retained.",
+        "No live migration/provider/deployment or protection bypass. Existing P1-RV001 security/release findings remain unwaived.",
+        "Reviewed committed implementation c6fa8e7690095f8eb2401587c407501fced29a4d.",
+        "Executing-agent engineering perspective, not independent human/Product/legal/release approval."
       ],
-      "findings": [],
       "review_ref": "governance/reviews/REV-TUN-P2-004-devops-engineer.yaml",
       "skill_hash": "0def19cfd8cf73f9fe47851ab171d3154e7e80b4675ded65964f10856789b50c"
+    },
+    {
+      "role": "business-analyst",
+      "conclusion": "PASS",
+      "checks": [
+        "Approved PDR-0011/AMD-0007 requirements map to registration, verified Personal Information, current policy consent and independent commercial capability.",
+        "Active lifecycle owners002/003/004 corrected; future planes are bounded contracts and original historical PDR-0007 outcomes remain intact.",
+        "Reviewed committed implementation c6fa8e7690095f8eb2401587c407501fced29a4d.",
+        "Executing-agent engineering perspective, not independent human/Product/legal/release approval."
+      ],
+      "review_ref": "governance/reviews/REV-TUN-P2-004-business-analyst.yaml",
+      "skill_hash": "ca6e24da90c6dac80b7b75124f04a81a2d590e73cc1e99781546c4aad1bca04f"
+    },
+    {
+      "role": "financial-specialist",
+      "conclusion": "PASS",
+      "checks": [
+        "Under18 never independently qualifies for payer/payment-method/paid-contract capability; current age evaluation returns PAYER_CONTEXT_REQUIRED.",
+        "Guardian/adult/organization/school sponsorship reuses future existing BillingAccount/BillingAuthority contracts. Consent evidence is not payment authority; no financial plane or money rule is invented.",
+        "Reviewed committed implementation c6fa8e7690095f8eb2401587c407501fced29a4d.",
+        "Executing-agent engineering perspective, not independent human/Product/legal/release approval."
+      ],
+      "review_ref": "governance/reviews/REV-TUN-P2-004-financial-specialist.yaml",
+      "skill_hash": "3c2a56c0f484c3645f61b7b2b8b437b04a9a93661ec574ea863d1c720da82723"
     }
   ],
-  "review_boundary": "Executing-agent engineering perspectives only. Initial eleven scope reviews are preserved. Final impact classification additionally records schema/migration and R&D/packaging review; no human, Product or legal approval is implied.",
-  "prior_formal_reviews": {
-    "auditor": [
-      {
-        "schema_version": 1,
-        "review_id": "REV-TUN-P2-004-auditor",
-        "work_item_id": "TUN-P2-004",
-        "role": "auditor",
-        "status": "PASS",
-        "result": "PASS",
-        "reviewed_at": "2026-10-16T21:01:05.998Z",
-        "skill_id": "auditor",
-        "skill_version": "1.0.0",
-        "skill_hash": "191c796fc5df0332ff2c3c464ca611d2c6d3ffc5ba7e2807986a71ad2e40d921",
-        "authority_refs": [
-          "docs/authority/current-authority.json",
-          "docs/authority/current/development/11_Development_Planes_Milestones_and_P0_Backlog.md",
-          "docs/authority/baselines/1.6.0/17_Account_Identity_and_Session_FRD.md",
-          "docs/authority/current/development/32_Domain_API_Event_Data_and_Policy_Contract_Catalog.md",
-          "docs/authority/current/development/34_Architecture_to_Development_Traceability_Matrix.md",
-          "docs/authority/baselines/1.6.0/decisions/ADR-0006_Identity_ASPNET_Identity_OpenIddict.md",
-          "docs/authority/baselines/1.6.0/decisions/PDR-0007_DOB_Based_18_Plus_Eligibility.md",
-          "docs/authority/current/development/AMD-0002_Non-Blocking_PR_Approval_and_Continuous_Local_Execution.md",
-          "docs/authority/current/development/02_Repository_Solution_and_Module_Architecture.md",
-          "docs/authority/current/development/09_Testing_Acceptance_Evidence_and_Quality_Gates.md",
-          "docs/authority/baselines/1.6.0/29_Privacy_Data_Lifecycle_and_Processing_Governance_FRD.md"
+  "prior_review_snapshots": [
+    {
+      "schema_version": 1,
+      "evidence_id": "TUN-P2-004-ROLE-REVIEWS",
+      "scope_type": "WORK_ITEM",
+      "scope_id": "TUN-P2-004",
+      "status": "PASS",
+      "reviewed_commit_sha": "f64f9976a150e3c4a08378c9b87c980b91359a81",
+      "reviewed_at": "2026-10-16T21:58:02.545Z",
+      "reviews": [
+        {
+          "role": "full-stack-engineer",
+          "conclusion": "PASS",
+          "checks": [
+            "Registration, private recovery, proof, resend and purge use existing Identity/policy/outbox primitives. Per-operation proposed credentials prevent pending-registration pre-hijacking; exactly one verified proof activates the canonical Account. The consent-first form and later eligibility step preserve server 18+ authority.",
+            "Exact tested candidate f64f9976a150e3c4a08378c9b87c980b91359a81. Executing-agent engineering perspective; Product/content/legal acceptance, protected-main merge and production release approvals remain separate."
+          ],
+          "findings": [],
+          "review_ref": "governance/reviews/REV-TUN-P2-004-full-stack-engineer.yaml",
+          "skill_hash": "59adbe2133cf4ce88cbc9ca4eafce1d5a9d83b9562b6580c1571e6fc148d46b5"
+        },
+        {
+          "role": "tester-qa-engineer",
+          "conclusion": "PASS",
+          "checks": [
+            "All 364 .NET, 25 web unit and 20 Edge browser tests pass without skips. Real PostgreSQL races/replay/expiry/abuse/retention and real HTTPS/origin/CSRF/cookie/body boundaries complement fixture-publication browser coverage. Failed attempts are retained and excluded.",
+            "Exact tested candidate f64f9976a150e3c4a08378c9b87c980b91359a81. Executing-agent engineering perspective; Product/content/legal acceptance, protected-main merge and production release approvals remain separate."
+          ],
+          "findings": [],
+          "review_ref": "governance/reviews/REV-TUN-P2-004-tester-qa-engineer.yaml",
+          "skill_hash": "a57ce99d7ad7a3b60f17e4826c81c507c9cc208d8928285c406222eefe0a18fd"
+        },
+        {
+          "role": "solution-architect",
+          "conclusion": "PASS",
+          "checks": [
+            "Identity owns canonical Account/contact/credential state and registration tables. Accounts stays framework-free; one existing outbox participates in the transaction. Existing normalized-email and effective-policy primitives are reused. Login/session and production notification/audit/maintenance remain with explicit TUN-P2-005/016 owners.",
+            "Exact tested candidate f64f9976a150e3c4a08378c9b87c980b91359a81. Executing-agent engineering perspective; Product/content/legal acceptance, protected-main merge and production release approvals remain separate."
+          ],
+          "findings": [],
+          "review_ref": "governance/reviews/REV-TUN-P2-004-solution-architect.yaml",
+          "skill_hash": "664ffba70d0f97e75951c3548b7f8391854781e4cf90cc50fc8829543783a35b"
+        },
+        {
+          "role": "cyber-security-engineer",
+          "conclusion": "PASS",
+          "checks": [
+            "Private protected browser context, actual-peer HMAC abuse partition, HTTPS/origin/CSRF and bounded JSON remain mandatory. Framework IdentityV3 work factor is an approved server policy input. Codes/credentials are separately protected, proof is constant-time compared, stale/concurrent versions cannot overwrite the winning credential, and existing/new account responses share hashing/opaque state. No mathematically constant network timing or production provider security is claimed. P1 image findings remain open.",
+            "Exact tested candidate f64f9976a150e3c4a08378c9b87c980b91359a81. Executing-agent engineering perspective; Product/content/legal acceptance, protected-main merge and production release approvals remain separate."
+          ],
+          "findings": [],
+          "review_ref": "governance/reviews/REV-TUN-P2-004-cyber-security-engineer.yaml",
+          "skill_hash": "2d32ff3d7fb503f29cf930e9852ed4a757bb48a08e3fa4e3f6d5a23139a47f97"
+        },
+        {
+          "role": "auditor",
+          "conclusion": "PASS",
+          "checks": [
+            "All 49 frozen behavior paths match committed/tested candidate f64f9976a150e3c4a08378c9b87c980b91359a81. Source hashes, six TRX results, web results, corrected failures and publish receipts are recorded. Prior active P2-003 evidence/reviews are retained during shared-file revalidation; unrelated dirty files remain byte-identical. These are executing-agent engineering reviews, not independent human or Product approval.",
+            "Exact tested candidate f64f9976a150e3c4a08378c9b87c980b91359a81. Executing-agent engineering perspective; Product/content/legal acceptance, protected-main merge and production release approvals remain separate."
+          ],
+          "findings": [],
+          "review_ref": "governance/reviews/REV-TUN-P2-004-auditor.yaml",
+          "skill_hash": "191c796fc5df0332ff2c3c464ca611d2c6d3ffc5ba7e2807986a71ad2e40d921"
+        },
+        {
+          "role": "compliance-specialist",
+          "conclusion": "PASS",
+          "checks": [
+            "Raw DOB exists only in request/browser memory for approved server 18+ evaluation, never a persistence column/outbox/log/storage entry. The initial screen has notices only and a separate DOB step occurs before registration POST; notice acknowledgement is not age evidence. Explicit approved processing/retention/publication references are required; fixture legal/security values grant no production authority.",
+            "Exact tested candidate f64f9976a150e3c4a08378c9b87c980b91359a81. Executing-agent engineering perspective; Product/content/legal acceptance, protected-main merge and production release approvals remain separate."
+          ],
+          "findings": [],
+          "review_ref": "governance/reviews/REV-TUN-P2-004-compliance-specialist.yaml",
+          "skill_hash": "38f8de27e31b3ae5cec070320d9b408d6f75682b024322f5e37585c76921303e"
+        },
+        {
+          "role": "sdk-engineer",
+          "conclusion": "PASS",
+          "checks": [
+            "Typed server-owned BFF contracts document operation identity, expected versions, safe Problem Details and private status recovery. No public Product API, generated SDK, access grant or browser token is introduced. Detailed field contracts remain in code and the implementation contract document under Doc32.",
+            "Exact tested candidate f64f9976a150e3c4a08378c9b87c980b91359a81. Executing-agent engineering perspective; Product/content/legal acceptance, protected-main merge and production release approvals remain separate."
+          ],
+          "findings": [],
+          "review_ref": "governance/reviews/REV-TUN-P2-004-sdk-engineer.yaml",
+          "skill_hash": "c64a66b2e19bccdbf69f13c9db62e9e2cbb0403f384591a93b5b787dc33b07ae"
+        },
+        {
+          "role": "ui-ux-engineer",
+          "conclusion": "PASS",
+          "checks": [
+            "Four grounded Figma frames align with FRD17/31 and the explicit user choice: first email/password/notices, then DOB eligibility, proof and readiness. Existing Tunner text-only brand, Geist/Inter, intrinsic SVG geometry and shared finite control presentations are used. Native date entry and policy-derived expiry are documented adaptations.",
+            "Exact tested candidate f64f9976a150e3c4a08378c9b87c980b91359a81. Executing-agent engineering perspective; Product/content/legal acceptance, protected-main merge and production release approvals remain separate."
+          ],
+          "findings": [],
+          "review_ref": "governance/reviews/REV-TUN-P2-004-ui-ux-engineer.yaml",
+          "skill_hash": "1fc89f73cb56107fe5669d6699bb50b4ebe6481c0efea7e59eff30b350ce5800"
+        },
+        {
+          "role": "frontend-engineer",
+          "conclusion": "PASS",
+          "checks": [
+            "The User app reuses ThemeProvider/ContentProvider/TextField/PrimaryButton and existing pinned local fonts. Source metrics, all local images, responsive 320px layouts, focus, server-time-based display, duplicate-submit guards, no browser storage and uncertainty recovery pass. Standard User/Admin control regression metrics remain unchanged.",
+            "Exact tested candidate f64f9976a150e3c4a08378c9b87c980b91359a81. Executing-agent engineering perspective; Product/content/legal acceptance, protected-main merge and production release approvals remain separate."
+          ],
+          "findings": [],
+          "review_ref": "governance/reviews/REV-TUN-P2-004-frontend-engineer.yaml",
+          "skill_hash": "688773fc2118294031c0245fcd54ba3d560a4b4a1ee8dec98f9b7e99408cd27a"
+        },
+        {
+          "role": "end-user-ux-reviewer",
+          "conclusion": "PASS",
+          "checks": [
+            "DOB is absent on the first screen. Required notices precede the separate eligibility screen with a clear return action; no network registration occurs before that screen is submitted. Underage/error, latest-proof/resend, expired proof and uncertain-result states are actionable and accessible. Readiness grants no Product action or unavailable sign-in button.",
+            "Exact tested candidate f64f9976a150e3c4a08378c9b87c980b91359a81. Executing-agent engineering perspective; Product/content/legal acceptance, protected-main merge and production release approvals remain separate."
+          ],
+          "findings": [],
+          "review_ref": "governance/reviews/REV-TUN-P2-004-end-user-ux-reviewer.yaml",
+          "skill_hash": "e9059d04505ec461405de6abe23d31526205f498ea815207dd042a87f82ec4d1"
+        },
+        {
+          "role": "content-writer",
+          "conclusion": "PASS",
+          "checks": [
+            "Semantic copy remains DRAFT in content.proposal.json; tests explicitly synthesize fixture publications. The BFF requires complete matching-locale PUBLISHED provenance and effective notice/link references. Missing content denies processing rather than inventing legal/domain fallback. Only the existing generic technical error text is deterministic.",
+            "Exact tested candidate f64f9976a150e3c4a08378c9b87c980b91359a81. Executing-agent engineering perspective; Product/content/legal acceptance, protected-main merge and production release approvals remain separate."
+          ],
+          "findings": [],
+          "review_ref": "governance/reviews/REV-TUN-P2-004-content-writer.yaml",
+          "skill_hash": "9683a7f4aa8e50e2922fb7bbc74238d2d7bdb8ce2a81f922030c45ce9258e130"
+        },
+        {
+          "role": "rd-engineer",
+          "conclusion": "PASS",
+          "checks": [
+            "Current primary NIST SP800-63B-4, OWASP Authentication guidance and Microsoft Identity documentation informed Unicode password length/blocklisting, generic responses and explicit IdentityV3 work parameters. No package versions or draft/secondary sources replace authority; upstream font experiments were removed in favor of the existing pinned local font packages.",
+            "Exact tested candidate f64f9976a150e3c4a08378c9b87c980b91359a81. Executing-agent engineering perspective; Product/content/legal acceptance, protected-main merge and production release approvals remain separate."
+          ],
+          "findings": [],
+          "review_ref": "governance/reviews/REV-TUN-P2-004-rd-engineer.yaml",
+          "skill_hash": "2834c223dfd847a6d7cd28f52de4113efc574d621391d059e8dc1469bdf33187"
+        },
+        {
+          "role": "devops-engineer",
+          "conclusion": "PASS",
+          "checks": [
+            "Fresh Release publish succeeds and contains all 25 web distribution files byte-identically plus 26 verified native gzip/Brotli variants. Runtime activation requires explicit approved providers/origin/Data Protection; no live database, production deployment, secrets delivery, main protection, image selection or service port was mutated. Existing unwaived P1 release blockers remain.",
+            "Exact tested candidate f64f9976a150e3c4a08378c9b87c980b91359a81. Executing-agent engineering perspective; Product/content/legal acceptance, protected-main merge and production release approvals remain separate."
+          ],
+          "findings": [],
+          "review_ref": "governance/reviews/REV-TUN-P2-004-devops-engineer.yaml",
+          "skill_hash": "0def19cfd8cf73f9fe47851ab171d3154e7e80b4675ded65964f10856789b50c"
+        }
+      ],
+      "review_boundary": "Executing-agent engineering perspectives only. Initial eleven scope reviews are preserved. Final impact classification additionally records schema/migration and R&D/packaging review; no human, Product or legal approval is implied.",
+      "prior_formal_reviews": {
+        "auditor": [
+          {
+            "schema_version": 1,
+            "review_id": "REV-TUN-P2-004-auditor",
+            "work_item_id": "TUN-P2-004",
+            "role": "auditor",
+            "status": "PASS",
+            "result": "PASS",
+            "reviewed_at": "2026-10-16T21:01:05.998Z",
+            "skill_id": "auditor",
+            "skill_version": "1.0.0",
+            "skill_hash": "191c796fc5df0332ff2c3c464ca611d2c6d3ffc5ba7e2807986a71ad2e40d921",
+            "authority_refs": [
+              "docs/authority/current-authority.json",
+              "docs/authority/current/development/11_Development_Planes_Milestones_and_P0_Backlog.md",
+              "docs/authority/baselines/1.6.0/17_Account_Identity_and_Session_FRD.md",
+              "docs/authority/current/development/32_Domain_API_Event_Data_and_Policy_Contract_Catalog.md",
+              "docs/authority/current/development/34_Architecture_to_Development_Traceability_Matrix.md",
+              "docs/authority/baselines/1.6.0/decisions/ADR-0006_Identity_ASPNET_Identity_OpenIddict.md",
+              "docs/authority/baselines/1.6.0/decisions/PDR-0007_DOB_Based_18_Plus_Eligibility.md",
+              "docs/authority/current/development/AMD-0002_Non-Blocking_PR_Approval_and_Continuous_Local_Execution.md",
+              "docs/authority/current/development/02_Repository_Solution_and_Module_Architecture.md",
+              "docs/authority/current/development/09_Testing_Acceptance_Evidence_and_Quality_Gates.md",
+              "docs/authority/baselines/1.6.0/29_Privacy_Data_Lifecycle_and_Processing_Governance_FRD.md"
+            ],
+            "context_artifacts": [
+              "governance/work-items/TUN-P2-004.yaml",
+              "docs/development/P2_004_REGISTRATION_SCOPE.md"
+            ],
+            "evidence_refs": [
+              "governance/evidence/TUN-P2-004-AUTHORITY-RESOLUTION.json"
+            ],
+            "findings": [
+              "SCOPE READINESS ONLY: Preserve original closure and preexisting dirty files. Freeze ownership before tests; revalidate active P2-003 scope when shared persistence/test blobs change. No scope-only review is final validation.",
+              "The plan requires the identified Figma alignment before affected flow code, and final actual implementation/test reviews before local readiness. No Product/legal/release approval or independent human assurance is claimed."
+            ],
+            "blocking_findings": [],
+            "required_actions": [],
+            "context_expansion_requested": false
+          }
         ],
-        "context_artifacts": [
-          "governance/work-items/TUN-P2-004.yaml",
-          "docs/development/P2_004_REGISTRATION_SCOPE.md"
+        "compliance-specialist": [
+          {
+            "schema_version": 1,
+            "review_id": "REV-TUN-P2-004-compliance-specialist",
+            "work_item_id": "TUN-P2-004",
+            "role": "compliance-specialist",
+            "status": "PASS",
+            "result": "PASS",
+            "reviewed_at": "2026-10-16T21:01:05.999Z",
+            "skill_id": "compliance-specialist",
+            "skill_version": "1.0.0",
+            "skill_hash": "38f8de27e31b3ae5cec070320d9b408d6f75682b024322f5e37585c76921303e",
+            "authority_refs": [
+              "docs/authority/current-authority.json",
+              "docs/authority/current/development/11_Development_Planes_Milestones_and_P0_Backlog.md",
+              "docs/authority/baselines/1.6.0/17_Account_Identity_and_Session_FRD.md",
+              "docs/authority/current/development/32_Domain_API_Event_Data_and_Policy_Contract_Catalog.md",
+              "docs/authority/current/development/34_Architecture_to_Development_Traceability_Matrix.md",
+              "docs/authority/baselines/1.6.0/decisions/ADR-0006_Identity_ASPNET_Identity_OpenIddict.md",
+              "docs/authority/baselines/1.6.0/decisions/PDR-0007_DOB_Based_18_Plus_Eligibility.md",
+              "docs/authority/current/development/AMD-0002_Non-Blocking_PR_Approval_and_Continuous_Local_Execution.md",
+              "docs/authority/current/development/02_Repository_Solution_and_Module_Architecture.md",
+              "docs/authority/current/development/09_Testing_Acceptance_Evidence_and_Quality_Gates.md",
+              "docs/authority/baselines/1.6.0/29_Privacy_Data_Lifecycle_and_Processing_Governance_FRD.md"
+            ],
+            "context_artifacts": [
+              "governance/work-items/TUN-P2-004.yaml",
+              "docs/development/P2_004_REGISTRATION_SCOPE.md"
+            ],
+            "evidence_refs": [
+              "governance/evidence/TUN-P2-004-AUTHORITY-RESOLUTION.json"
+            ],
+            "findings": [
+              "SCOPE READINESS ONLY: No raw DOB persistence, no unnecessary name field, no invented legal basis/retention. Approved processing/notice policy gates production activation.",
+              "The plan requires the identified Figma alignment before affected flow code, and final actual implementation/test reviews before local readiness. No Product/legal/release approval or independent human assurance is claimed."
+            ],
+            "blocking_findings": [],
+            "required_actions": [],
+            "context_expansion_requested": false
+          }
         ],
-        "evidence_refs": [
-          "governance/evidence/TUN-P2-004-AUTHORITY-RESOLUTION.json"
+        "content-writer": [
+          {
+            "schema_version": 1,
+            "review_id": "REV-TUN-P2-004-content-writer",
+            "work_item_id": "TUN-P2-004",
+            "role": "content-writer",
+            "status": "PASS",
+            "result": "PASS",
+            "reviewed_at": "2026-10-16T21:01:06.003Z",
+            "skill_id": "content-writer",
+            "skill_version": "1.0.0",
+            "skill_hash": "9683a7f4aa8e50e2922fb7bbc74238d2d7bdb8ce2a81f922030c45ce9258e130",
+            "authority_refs": [
+              "docs/authority/current-authority.json",
+              "docs/authority/current/development/11_Development_Planes_Milestones_and_P0_Backlog.md",
+              "docs/authority/baselines/1.6.0/17_Account_Identity_and_Session_FRD.md",
+              "docs/authority/current/development/32_Domain_API_Event_Data_and_Policy_Contract_Catalog.md",
+              "docs/authority/current/development/34_Architecture_to_Development_Traceability_Matrix.md",
+              "docs/authority/baselines/1.6.0/decisions/ADR-0006_Identity_ASPNET_Identity_OpenIddict.md",
+              "docs/authority/baselines/1.6.0/decisions/PDR-0007_DOB_Based_18_Plus_Eligibility.md",
+              "docs/authority/current/development/AMD-0002_Non-Blocking_PR_Approval_and_Continuous_Local_Execution.md",
+              "docs/authority/current/development/02_Repository_Solution_and_Module_Architecture.md",
+              "docs/authority/current/development/09_Testing_Acceptance_Evidence_and_Quality_Gates.md",
+              "docs/authority/baselines/1.6.0/29_Privacy_Data_Lifecycle_and_Processing_Governance_FRD.md"
+            ],
+            "context_artifacts": [
+              "governance/work-items/TUN-P2-004.yaml",
+              "docs/development/P2_004_REGISTRATION_SCOPE.md"
+            ],
+            "evidence_refs": [
+              "governance/evidence/TUN-P2-004-AUTHORITY-RESOLUTION.json"
+            ],
+            "findings": [
+              "SCOPE READINESS ONLY: Use semantic content keys and published/proposed version provenance; no screenshot password/expiry number becomes authority and no generic consent substitutes for processing governance.",
+              "The plan requires the identified Figma alignment before affected flow code, and final actual implementation/test reviews before local readiness. No Product/legal/release approval or independent human assurance is claimed."
+            ],
+            "blocking_findings": [],
+            "required_actions": [],
+            "context_expansion_requested": false
+          }
         ],
-        "findings": [
-          "SCOPE READINESS ONLY: Preserve original closure and preexisting dirty files. Freeze ownership before tests; revalidate active P2-003 scope when shared persistence/test blobs change. No scope-only review is final validation.",
-          "The plan requires the identified Figma alignment before affected flow code, and final actual implementation/test reviews before local readiness. No Product/legal/release approval or independent human assurance is claimed."
+        "cyber-security-engineer": [
+          {
+            "schema_version": 1,
+            "review_id": "REV-TUN-P2-004-cyber-security-engineer",
+            "work_item_id": "TUN-P2-004",
+            "role": "cyber-security-engineer",
+            "status": "PASS",
+            "result": "PASS",
+            "reviewed_at": "2026-10-16T21:01:05.997Z",
+            "skill_id": "cyber-security-engineer",
+            "skill_version": "1.0.0",
+            "skill_hash": "2d32ff3d7fb503f29cf930e9852ed4a757bb48a08e3fa4e3f6d5a23139a47f97",
+            "authority_refs": [
+              "docs/authority/current-authority.json",
+              "docs/authority/current/development/11_Development_Planes_Milestones_and_P0_Backlog.md",
+              "docs/authority/baselines/1.6.0/17_Account_Identity_and_Session_FRD.md",
+              "docs/authority/current/development/32_Domain_API_Event_Data_and_Policy_Contract_Catalog.md",
+              "docs/authority/current/development/34_Architecture_to_Development_Traceability_Matrix.md",
+              "docs/authority/baselines/1.6.0/decisions/ADR-0006_Identity_ASPNET_Identity_OpenIddict.md",
+              "docs/authority/baselines/1.6.0/decisions/PDR-0007_DOB_Based_18_Plus_Eligibility.md",
+              "docs/authority/current/development/AMD-0002_Non-Blocking_PR_Approval_and_Continuous_Local_Execution.md",
+              "docs/authority/current/development/02_Repository_Solution_and_Module_Architecture.md",
+              "docs/authority/current/development/09_Testing_Acceptance_Evidence_and_Quality_Gates.md",
+              "docs/authority/baselines/1.6.0/29_Privacy_Data_Lifecycle_and_Processing_Governance_FRD.md"
+            ],
+            "context_artifacts": [
+              "governance/work-items/TUN-P2-004.yaml",
+              "docs/development/P2_004_REGISTRATION_SCOPE.md"
+            ],
+            "evidence_refs": [
+              "governance/evidence/TUN-P2-004-AUTHORITY-RESOLUTION.json"
+            ],
+            "findings": [
+              "SCOPE READINESS ONLY: No arbitrary existence leak, pre-hijacked pending credential activation, raw proof exposure, implicit policy defaults or CSRF exception. Current primary NIST/OWASP/Identity research guides the implementation.",
+              "The plan requires the identified Figma alignment before affected flow code, and final actual implementation/test reviews before local readiness. No Product/legal/release approval or independent human assurance is claimed."
+            ],
+            "blocking_findings": [],
+            "required_actions": [],
+            "context_expansion_requested": false
+          }
         ],
-        "blocking_findings": [],
-        "required_actions": [],
-        "context_expansion_requested": false
+        "end-user-ux-reviewer": [
+          {
+            "schema_version": 1,
+            "review_id": "REV-TUN-P2-004-end-user-ux-reviewer",
+            "work_item_id": "TUN-P2-004",
+            "role": "end-user-ux-reviewer",
+            "status": "PASS",
+            "result": "PASS",
+            "reviewed_at": "2026-10-16T21:01:06.003Z",
+            "skill_id": "end-user-ux-reviewer",
+            "skill_version": "1.0.0",
+            "skill_hash": "e9059d04505ec461405de6abe23d31526205f498ea815207dd042a87f82ec4d1",
+            "authority_refs": [
+              "docs/authority/current-authority.json",
+              "docs/authority/current/development/11_Development_Planes_Milestones_and_P0_Backlog.md",
+              "docs/authority/baselines/1.6.0/17_Account_Identity_and_Session_FRD.md",
+              "docs/authority/current/development/32_Domain_API_Event_Data_and_Policy_Contract_Catalog.md",
+              "docs/authority/current/development/34_Architecture_to_Development_Traceability_Matrix.md",
+              "docs/authority/baselines/1.6.0/decisions/ADR-0006_Identity_ASPNET_Identity_OpenIddict.md",
+              "docs/authority/baselines/1.6.0/decisions/PDR-0007_DOB_Based_18_Plus_Eligibility.md",
+              "docs/authority/current/development/AMD-0002_Non-Blocking_PR_Approval_and_Continuous_Local_Execution.md",
+              "docs/authority/current/development/02_Repository_Solution_and_Module_Architecture.md",
+              "docs/authority/current/development/09_Testing_Acceptance_Evidence_and_Quality_Gates.md",
+              "docs/authority/baselines/1.6.0/29_Privacy_Data_Lifecycle_and_Processing_Governance_FRD.md"
+            ],
+            "context_artifacts": [
+              "governance/work-items/TUN-P2-004.yaml",
+              "docs/development/P2_004_REGISTRATION_SCOPE.md"
+            ],
+            "evidence_refs": [
+              "governance/evidence/TUN-P2-004-AUTHORITY-RESOLUTION.json"
+            ],
+            "findings": [
+              "SCOPE READINESS ONLY: Make age requirement, pending verification, retry and terminal outcome clear without claiming Product access or delivery that did not occur.",
+              "The plan requires the identified Figma alignment before affected flow code, and final actual implementation/test reviews before local readiness. No Product/legal/release approval or independent human assurance is claimed."
+            ],
+            "blocking_findings": [],
+            "required_actions": [],
+            "context_expansion_requested": false
+          }
+        ],
+        "frontend-engineer": [
+          {
+            "schema_version": 1,
+            "review_id": "REV-TUN-P2-004-frontend-engineer",
+            "work_item_id": "TUN-P2-004",
+            "role": "frontend-engineer",
+            "status": "PASS",
+            "result": "PASS",
+            "reviewed_at": "2026-10-16T21:01:06.002Z",
+            "skill_id": "frontend-engineer",
+            "skill_version": "1.0.0",
+            "skill_hash": "688773fc2118294031c0245fcd54ba3d560a4b4a1ee8dec98f9b7e99408cd27a",
+            "authority_refs": [
+              "docs/authority/current-authority.json",
+              "docs/authority/current/development/11_Development_Planes_Milestones_and_P0_Backlog.md",
+              "docs/authority/baselines/1.6.0/17_Account_Identity_and_Session_FRD.md",
+              "docs/authority/current/development/32_Domain_API_Event_Data_and_Policy_Contract_Catalog.md",
+              "docs/authority/current/development/34_Architecture_to_Development_Traceability_Matrix.md",
+              "docs/authority/baselines/1.6.0/decisions/ADR-0006_Identity_ASPNET_Identity_OpenIddict.md",
+              "docs/authority/baselines/1.6.0/decisions/PDR-0007_DOB_Based_18_Plus_Eligibility.md",
+              "docs/authority/current/development/AMD-0002_Non-Blocking_PR_Approval_and_Continuous_Local_Execution.md",
+              "docs/authority/current/development/02_Repository_Solution_and_Module_Architecture.md",
+              "docs/authority/current/development/09_Testing_Acceptance_Evidence_and_Quality_Gates.md",
+              "docs/authority/baselines/1.6.0/29_Privacy_Data_Lifecycle_and_Processing_Governance_FRD.md"
+            ],
+            "context_artifacts": [
+              "governance/work-items/TUN-P2-004.yaml",
+              "docs/development/P2_004_REGISTRATION_SCOPE.md"
+            ],
+            "evidence_refs": [
+              "governance/evidence/TUN-P2-004-AUTHORITY-RESOLUTION.json"
+            ],
+            "findings": [
+              "SCOPE READINESS ONLY: Reuse shared theme, controls and governed content. BFF-only requests; no OAuth tokens, password/DOB/proof persistence or direct provider calls.",
+              "The plan requires the identified Figma alignment before affected flow code, and final actual implementation/test reviews before local readiness. No Product/legal/release approval or independent human assurance is claimed."
+            ],
+            "blocking_findings": [],
+            "required_actions": [],
+            "context_expansion_requested": false
+          }
+        ],
+        "full-stack-engineer": [
+          {
+            "schema_version": 1,
+            "review_id": "REV-TUN-P2-004-full-stack-engineer",
+            "work_item_id": "TUN-P2-004",
+            "role": "full-stack-engineer",
+            "status": "PASS",
+            "result": "PASS",
+            "reviewed_at": "2026-10-16T21:01:05.992Z",
+            "skill_id": "full-stack-engineer",
+            "skill_version": "1.0.0",
+            "skill_hash": "59adbe2133cf4ce88cbc9ca4eafce1d5a9d83b9562b6580c1571e6fc148d46b5",
+            "authority_refs": [
+              "docs/authority/current-authority.json",
+              "docs/authority/current/development/11_Development_Planes_Milestones_and_P0_Backlog.md",
+              "docs/authority/baselines/1.6.0/17_Account_Identity_and_Session_FRD.md",
+              "docs/authority/current/development/32_Domain_API_Event_Data_and_Policy_Contract_Catalog.md",
+              "docs/authority/current/development/34_Architecture_to_Development_Traceability_Matrix.md",
+              "docs/authority/baselines/1.6.0/decisions/ADR-0006_Identity_ASPNET_Identity_OpenIddict.md",
+              "docs/authority/baselines/1.6.0/decisions/PDR-0007_DOB_Based_18_Plus_Eligibility.md",
+              "docs/authority/current/development/AMD-0002_Non-Blocking_PR_Approval_and_Continuous_Local_Execution.md",
+              "docs/authority/current/development/02_Repository_Solution_and_Module_Architecture.md",
+              "docs/authority/current/development/09_Testing_Acceptance_Evidence_and_Quality_Gates.md",
+              "docs/authority/baselines/1.6.0/29_Privacy_Data_Lifecycle_and_Processing_Governance_FRD.md"
+            ],
+            "context_artifacts": [
+              "governance/work-items/TUN-P2-004.yaml",
+              "docs/development/P2_004_REGISTRATION_SCOPE.md"
+            ],
+            "evidence_refs": [
+              "governance/evidence/TUN-P2-004-AUTHORITY-RESOLUTION.json"
+            ],
+            "findings": [
+              "SCOPE READINESS ONLY: Reuse Accounts eligibility, Identity EF stores and outbox; implement registration/verification/resend as the bounded User BFF vertical slice.",
+              "The plan requires the identified Figma alignment before affected flow code, and final actual implementation/test reviews before local readiness. No Product/legal/release approval or independent human assurance is claimed."
+            ],
+            "blocking_findings": [],
+            "required_actions": [],
+            "context_expansion_requested": false
+          }
+        ],
+        "sdk-engineer": [
+          {
+            "schema_version": 1,
+            "review_id": "REV-TUN-P2-004-sdk-engineer",
+            "work_item_id": "TUN-P2-004",
+            "role": "sdk-engineer",
+            "status": "PASS",
+            "result": "PASS",
+            "reviewed_at": "2026-10-16T21:01:06.000Z",
+            "skill_id": "sdk-engineer",
+            "skill_version": "1.0.0",
+            "skill_hash": "c64a66b2e19bccdbf69f13c9db62e9e2cbb0403f384591a93b5b787dc33b07ae",
+            "authority_refs": [
+              "docs/authority/current-authority.json",
+              "docs/authority/current/development/11_Development_Planes_Milestones_and_P0_Backlog.md",
+              "docs/authority/baselines/1.6.0/17_Account_Identity_and_Session_FRD.md",
+              "docs/authority/current/development/32_Domain_API_Event_Data_and_Policy_Contract_Catalog.md",
+              "docs/authority/current/development/34_Architecture_to_Development_Traceability_Matrix.md",
+              "docs/authority/baselines/1.6.0/decisions/ADR-0006_Identity_ASPNET_Identity_OpenIddict.md",
+              "docs/authority/baselines/1.6.0/decisions/PDR-0007_DOB_Based_18_Plus_Eligibility.md",
+              "docs/authority/current/development/AMD-0002_Non-Blocking_PR_Approval_and_Continuous_Local_Execution.md",
+              "docs/authority/current/development/02_Repository_Solution_and_Module_Architecture.md",
+              "docs/authority/current/development/09_Testing_Acceptance_Evidence_and_Quality_Gates.md",
+              "docs/authority/baselines/1.6.0/29_Privacy_Data_Lifecycle_and_Processing_Governance_FRD.md"
+            ],
+            "context_artifacts": [
+              "governance/work-items/TUN-P2-004.yaml",
+              "docs/development/P2_004_REGISTRATION_SCOPE.md"
+            ],
+            "evidence_refs": [
+              "governance/evidence/TUN-P2-004-AUTHORITY-RESOLUTION.json"
+            ],
+            "findings": [
+              "SCOPE READINESS ONLY: BFF REST/JSON only; detailed fields follow Doc32 envelopes. No Product SDK contract or provider-native public identifier is introduced.",
+              "The plan requires the identified Figma alignment before affected flow code, and final actual implementation/test reviews before local readiness. No Product/legal/release approval or independent human assurance is claimed."
+            ],
+            "blocking_findings": [],
+            "required_actions": [],
+            "context_expansion_requested": false
+          }
+        ],
+        "solution-architect": [
+          {
+            "schema_version": 1,
+            "review_id": "REV-TUN-P2-004-solution-architect",
+            "work_item_id": "TUN-P2-004",
+            "role": "solution-architect",
+            "status": "PASS",
+            "result": "PASS",
+            "reviewed_at": "2026-10-16T21:01:05.996Z",
+            "skill_id": "solution-architect",
+            "skill_version": "1.0.0",
+            "skill_hash": "664ffba70d0f97e75951c3548b7f8391854781e4cf90cc50fc8829543783a35b",
+            "authority_refs": [
+              "docs/authority/current-authority.json",
+              "docs/authority/current/development/11_Development_Planes_Milestones_and_P0_Backlog.md",
+              "docs/authority/baselines/1.6.0/17_Account_Identity_and_Session_FRD.md",
+              "docs/authority/current/development/32_Domain_API_Event_Data_and_Policy_Contract_Catalog.md",
+              "docs/authority/current/development/34_Architecture_to_Development_Traceability_Matrix.md",
+              "docs/authority/baselines/1.6.0/decisions/ADR-0006_Identity_ASPNET_Identity_OpenIddict.md",
+              "docs/authority/baselines/1.6.0/decisions/PDR-0007_DOB_Based_18_Plus_Eligibility.md",
+              "docs/authority/current/development/AMD-0002_Non-Blocking_PR_Approval_and_Continuous_Local_Execution.md",
+              "docs/authority/current/development/02_Repository_Solution_and_Module_Architecture.md",
+              "docs/authority/current/development/09_Testing_Acceptance_Evidence_and_Quality_Gates.md",
+              "docs/authority/baselines/1.6.0/29_Privacy_Data_Lifecycle_and_Processing_Governance_FRD.md"
+            ],
+            "context_artifacts": [
+              "governance/work-items/TUN-P2-004.yaml",
+              "docs/development/P2_004_REGISTRATION_SCOPE.md"
+            ],
+            "evidence_refs": [
+              "governance/evidence/TUN-P2-004-AUTHORITY-RESOLUTION.json"
+            ],
+            "findings": [
+              "SCOPE READINESS ONLY: Identity owns canonical state and policy-controlled mutations; provider/notification/public DTO boundaries remain explicit. No login/session/Product scope expansion.",
+              "The plan requires the identified Figma alignment before affected flow code, and final actual implementation/test reviews before local readiness. No Product/legal/release approval or independent human assurance is claimed."
+            ],
+            "blocking_findings": [],
+            "required_actions": [],
+            "context_expansion_requested": false
+          }
+        ],
+        "tester-qa-engineer": [
+          {
+            "schema_version": 1,
+            "review_id": "REV-TUN-P2-004-tester-qa-engineer",
+            "work_item_id": "TUN-P2-004",
+            "role": "tester-qa-engineer",
+            "status": "PASS",
+            "result": "PASS",
+            "reviewed_at": "2026-10-16T21:01:05.996Z",
+            "skill_id": "tester-qa-engineer",
+            "skill_version": "1.0.0",
+            "skill_hash": "a57ce99d7ad7a3b60f17e4826c81c507c9cc208d8928285c406222eefe0a18fd",
+            "authority_refs": [
+              "docs/authority/current-authority.json",
+              "docs/authority/current/development/11_Development_Planes_Milestones_and_P0_Backlog.md",
+              "docs/authority/baselines/1.6.0/17_Account_Identity_and_Session_FRD.md",
+              "docs/authority/current/development/32_Domain_API_Event_Data_and_Policy_Contract_Catalog.md",
+              "docs/authority/current/development/34_Architecture_to_Development_Traceability_Matrix.md",
+              "docs/authority/baselines/1.6.0/decisions/ADR-0006_Identity_ASPNET_Identity_OpenIddict.md",
+              "docs/authority/baselines/1.6.0/decisions/PDR-0007_DOB_Based_18_Plus_Eligibility.md",
+              "docs/authority/current/development/AMD-0002_Non-Blocking_PR_Approval_and_Continuous_Local_Execution.md",
+              "docs/authority/current/development/02_Repository_Solution_and_Module_Architecture.md",
+              "docs/authority/current/development/09_Testing_Acceptance_Evidence_and_Quality_Gates.md",
+              "docs/authority/baselines/1.6.0/29_Privacy_Data_Lifecycle_and_Processing_Governance_FRD.md"
+            ],
+            "context_artifacts": [
+              "governance/work-items/TUN-P2-004.yaml",
+              "docs/development/P2_004_REGISTRATION_SCOPE.md"
+            ],
+            "evidence_refs": [
+              "governance/evidence/TUN-P2-004-AUTHORITY-RESOLUTION.json"
+            ],
+            "findings": [
+              "SCOPE READINESS ONLY: Require actual PostgreSQL concurrency/replay/negative-path tests plus BFF/browser origin/CSRF/accessibility validation before readiness.",
+              "The plan requires the identified Figma alignment before affected flow code, and final actual implementation/test reviews before local readiness. No Product/legal/release approval or independent human assurance is claimed."
+            ],
+            "blocking_findings": [],
+            "required_actions": [],
+            "context_expansion_requested": false
+          }
+        ],
+        "ui-ux-engineer": [
+          {
+            "schema_version": 1,
+            "review_id": "REV-TUN-P2-004-ui-ux-engineer",
+            "work_item_id": "TUN-P2-004",
+            "role": "ui-ux-engineer",
+            "status": "PASS",
+            "result": "PASS",
+            "reviewed_at": "2026-10-16T21:01:06.001Z",
+            "skill_id": "ui-ux-engineer",
+            "skill_version": "1.0.0",
+            "skill_hash": "1fc89f73cb56107fe5669d6699bb50b4ebe6481c0efea7e59eff30b350ce5800",
+            "authority_refs": [
+              "docs/authority/current-authority.json",
+              "docs/authority/current/development/11_Development_Planes_Milestones_and_P0_Backlog.md",
+              "docs/authority/baselines/1.6.0/17_Account_Identity_and_Session_FRD.md",
+              "docs/authority/current/development/32_Domain_API_Event_Data_and_Policy_Contract_Catalog.md",
+              "docs/authority/current/development/34_Architecture_to_Development_Traceability_Matrix.md",
+              "docs/authority/baselines/1.6.0/decisions/ADR-0006_Identity_ASPNET_Identity_OpenIddict.md",
+              "docs/authority/baselines/1.6.0/decisions/PDR-0007_DOB_Based_18_Plus_Eligibility.md",
+              "docs/authority/current/development/AMD-0002_Non-Blocking_PR_Approval_and_Continuous_Local_Execution.md",
+              "docs/authority/current/development/02_Repository_Solution_and_Module_Architecture.md",
+              "docs/authority/current/development/09_Testing_Acceptance_Evidence_and_Quality_Gates.md",
+              "docs/authority/baselines/1.6.0/29_Privacy_Data_Lifecycle_and_Processing_Governance_FRD.md"
+            ],
+            "context_artifacts": [
+              "governance/work-items/TUN-P2-004.yaml",
+              "docs/development/P2_004_REGISTRATION_SCOPE.md"
+            ],
+            "evidence_refs": [
+              "governance/evidence/TUN-P2-004-AUTHORITY-RESOLUTION.json"
+            ],
+            "findings": [
+              "SCOPE READINESS ONLY: Correct the three existing Figma frames against FRD31/17 before affected flow implementation; preserve editable reference style and review error/underage/pending/verified states.",
+              "The plan requires the identified Figma alignment before affected flow code, and final actual implementation/test reviews before local readiness. No Product/legal/release approval or independent human assurance is claimed."
+            ],
+            "blocking_findings": [],
+            "required_actions": [],
+            "context_expansion_requested": false
+          }
+        ]
       }
-    ],
-    "compliance-specialist": [
-      {
-        "schema_version": 1,
-        "review_id": "REV-TUN-P2-004-compliance-specialist",
-        "work_item_id": "TUN-P2-004",
-        "role": "compliance-specialist",
-        "status": "PASS",
-        "result": "PASS",
-        "reviewed_at": "2026-10-16T21:01:05.999Z",
-        "skill_id": "compliance-specialist",
-        "skill_version": "1.0.0",
-        "skill_hash": "38f8de27e31b3ae5cec070320d9b408d6f75682b024322f5e37585c76921303e",
-        "authority_refs": [
-          "docs/authority/current-authority.json",
-          "docs/authority/current/development/11_Development_Planes_Milestones_and_P0_Backlog.md",
-          "docs/authority/baselines/1.6.0/17_Account_Identity_and_Session_FRD.md",
-          "docs/authority/current/development/32_Domain_API_Event_Data_and_Policy_Contract_Catalog.md",
-          "docs/authority/current/development/34_Architecture_to_Development_Traceability_Matrix.md",
-          "docs/authority/baselines/1.6.0/decisions/ADR-0006_Identity_ASPNET_Identity_OpenIddict.md",
-          "docs/authority/baselines/1.6.0/decisions/PDR-0007_DOB_Based_18_Plus_Eligibility.md",
-          "docs/authority/current/development/AMD-0002_Non-Blocking_PR_Approval_and_Continuous_Local_Execution.md",
-          "docs/authority/current/development/02_Repository_Solution_and_Module_Architecture.md",
-          "docs/authority/current/development/09_Testing_Acceptance_Evidence_and_Quality_Gates.md",
-          "docs/authority/baselines/1.6.0/29_Privacy_Data_Lifecycle_and_Processing_Governance_FRD.md"
-        ],
-        "context_artifacts": [
-          "governance/work-items/TUN-P2-004.yaml",
-          "docs/development/P2_004_REGISTRATION_SCOPE.md"
-        ],
-        "evidence_refs": [
-          "governance/evidence/TUN-P2-004-AUTHORITY-RESOLUTION.json"
-        ],
-        "findings": [
-          "SCOPE READINESS ONLY: No raw DOB persistence, no unnecessary name field, no invented legal basis/retention. Approved processing/notice policy gates production activation.",
-          "The plan requires the identified Figma alignment before affected flow code, and final actual implementation/test reviews before local readiness. No Product/legal/release approval or independent human assurance is claimed."
-        ],
-        "blocking_findings": [],
-        "required_actions": [],
-        "context_expansion_requested": false
-      }
-    ],
-    "content-writer": [
-      {
-        "schema_version": 1,
-        "review_id": "REV-TUN-P2-004-content-writer",
-        "work_item_id": "TUN-P2-004",
-        "role": "content-writer",
-        "status": "PASS",
-        "result": "PASS",
-        "reviewed_at": "2026-10-16T21:01:06.003Z",
-        "skill_id": "content-writer",
-        "skill_version": "1.0.0",
-        "skill_hash": "9683a7f4aa8e50e2922fb7bbc74238d2d7bdb8ce2a81f922030c45ce9258e130",
-        "authority_refs": [
-          "docs/authority/current-authority.json",
-          "docs/authority/current/development/11_Development_Planes_Milestones_and_P0_Backlog.md",
-          "docs/authority/baselines/1.6.0/17_Account_Identity_and_Session_FRD.md",
-          "docs/authority/current/development/32_Domain_API_Event_Data_and_Policy_Contract_Catalog.md",
-          "docs/authority/current/development/34_Architecture_to_Development_Traceability_Matrix.md",
-          "docs/authority/baselines/1.6.0/decisions/ADR-0006_Identity_ASPNET_Identity_OpenIddict.md",
-          "docs/authority/baselines/1.6.0/decisions/PDR-0007_DOB_Based_18_Plus_Eligibility.md",
-          "docs/authority/current/development/AMD-0002_Non-Blocking_PR_Approval_and_Continuous_Local_Execution.md",
-          "docs/authority/current/development/02_Repository_Solution_and_Module_Architecture.md",
-          "docs/authority/current/development/09_Testing_Acceptance_Evidence_and_Quality_Gates.md",
-          "docs/authority/baselines/1.6.0/29_Privacy_Data_Lifecycle_and_Processing_Governance_FRD.md"
-        ],
-        "context_artifacts": [
-          "governance/work-items/TUN-P2-004.yaml",
-          "docs/development/P2_004_REGISTRATION_SCOPE.md"
-        ],
-        "evidence_refs": [
-          "governance/evidence/TUN-P2-004-AUTHORITY-RESOLUTION.json"
-        ],
-        "findings": [
-          "SCOPE READINESS ONLY: Use semantic content keys and published/proposed version provenance; no screenshot password/expiry number becomes authority and no generic consent substitutes for processing governance.",
-          "The plan requires the identified Figma alignment before affected flow code, and final actual implementation/test reviews before local readiness. No Product/legal/release approval or independent human assurance is claimed."
-        ],
-        "blocking_findings": [],
-        "required_actions": [],
-        "context_expansion_requested": false
-      }
-    ],
-    "cyber-security-engineer": [
-      {
-        "schema_version": 1,
-        "review_id": "REV-TUN-P2-004-cyber-security-engineer",
-        "work_item_id": "TUN-P2-004",
-        "role": "cyber-security-engineer",
-        "status": "PASS",
-        "result": "PASS",
-        "reviewed_at": "2026-10-16T21:01:05.997Z",
-        "skill_id": "cyber-security-engineer",
-        "skill_version": "1.0.0",
-        "skill_hash": "2d32ff3d7fb503f29cf930e9852ed4a757bb48a08e3fa4e3f6d5a23139a47f97",
-        "authority_refs": [
-          "docs/authority/current-authority.json",
-          "docs/authority/current/development/11_Development_Planes_Milestones_and_P0_Backlog.md",
-          "docs/authority/baselines/1.6.0/17_Account_Identity_and_Session_FRD.md",
-          "docs/authority/current/development/32_Domain_API_Event_Data_and_Policy_Contract_Catalog.md",
-          "docs/authority/current/development/34_Architecture_to_Development_Traceability_Matrix.md",
-          "docs/authority/baselines/1.6.0/decisions/ADR-0006_Identity_ASPNET_Identity_OpenIddict.md",
-          "docs/authority/baselines/1.6.0/decisions/PDR-0007_DOB_Based_18_Plus_Eligibility.md",
-          "docs/authority/current/development/AMD-0002_Non-Blocking_PR_Approval_and_Continuous_Local_Execution.md",
-          "docs/authority/current/development/02_Repository_Solution_and_Module_Architecture.md",
-          "docs/authority/current/development/09_Testing_Acceptance_Evidence_and_Quality_Gates.md",
-          "docs/authority/baselines/1.6.0/29_Privacy_Data_Lifecycle_and_Processing_Governance_FRD.md"
-        ],
-        "context_artifacts": [
-          "governance/work-items/TUN-P2-004.yaml",
-          "docs/development/P2_004_REGISTRATION_SCOPE.md"
-        ],
-        "evidence_refs": [
-          "governance/evidence/TUN-P2-004-AUTHORITY-RESOLUTION.json"
-        ],
-        "findings": [
-          "SCOPE READINESS ONLY: No arbitrary existence leak, pre-hijacked pending credential activation, raw proof exposure, implicit policy defaults or CSRF exception. Current primary NIST/OWASP/Identity research guides the implementation.",
-          "The plan requires the identified Figma alignment before affected flow code, and final actual implementation/test reviews before local readiness. No Product/legal/release approval or independent human assurance is claimed."
-        ],
-        "blocking_findings": [],
-        "required_actions": [],
-        "context_expansion_requested": false
-      }
-    ],
-    "end-user-ux-reviewer": [
-      {
-        "schema_version": 1,
-        "review_id": "REV-TUN-P2-004-end-user-ux-reviewer",
-        "work_item_id": "TUN-P2-004",
-        "role": "end-user-ux-reviewer",
-        "status": "PASS",
-        "result": "PASS",
-        "reviewed_at": "2026-10-16T21:01:06.003Z",
-        "skill_id": "end-user-ux-reviewer",
-        "skill_version": "1.0.0",
-        "skill_hash": "e9059d04505ec461405de6abe23d31526205f498ea815207dd042a87f82ec4d1",
-        "authority_refs": [
-          "docs/authority/current-authority.json",
-          "docs/authority/current/development/11_Development_Planes_Milestones_and_P0_Backlog.md",
-          "docs/authority/baselines/1.6.0/17_Account_Identity_and_Session_FRD.md",
-          "docs/authority/current/development/32_Domain_API_Event_Data_and_Policy_Contract_Catalog.md",
-          "docs/authority/current/development/34_Architecture_to_Development_Traceability_Matrix.md",
-          "docs/authority/baselines/1.6.0/decisions/ADR-0006_Identity_ASPNET_Identity_OpenIddict.md",
-          "docs/authority/baselines/1.6.0/decisions/PDR-0007_DOB_Based_18_Plus_Eligibility.md",
-          "docs/authority/current/development/AMD-0002_Non-Blocking_PR_Approval_and_Continuous_Local_Execution.md",
-          "docs/authority/current/development/02_Repository_Solution_and_Module_Architecture.md",
-          "docs/authority/current/development/09_Testing_Acceptance_Evidence_and_Quality_Gates.md",
-          "docs/authority/baselines/1.6.0/29_Privacy_Data_Lifecycle_and_Processing_Governance_FRD.md"
-        ],
-        "context_artifacts": [
-          "governance/work-items/TUN-P2-004.yaml",
-          "docs/development/P2_004_REGISTRATION_SCOPE.md"
-        ],
-        "evidence_refs": [
-          "governance/evidence/TUN-P2-004-AUTHORITY-RESOLUTION.json"
-        ],
-        "findings": [
-          "SCOPE READINESS ONLY: Make age requirement, pending verification, retry and terminal outcome clear without claiming Product access or delivery that did not occur.",
-          "The plan requires the identified Figma alignment before affected flow code, and final actual implementation/test reviews before local readiness. No Product/legal/release approval or independent human assurance is claimed."
-        ],
-        "blocking_findings": [],
-        "required_actions": [],
-        "context_expansion_requested": false
-      }
-    ],
-    "frontend-engineer": [
-      {
-        "schema_version": 1,
-        "review_id": "REV-TUN-P2-004-frontend-engineer",
-        "work_item_id": "TUN-P2-004",
-        "role": "frontend-engineer",
-        "status": "PASS",
-        "result": "PASS",
-        "reviewed_at": "2026-10-16T21:01:06.002Z",
-        "skill_id": "frontend-engineer",
-        "skill_version": "1.0.0",
-        "skill_hash": "688773fc2118294031c0245fcd54ba3d560a4b4a1ee8dec98f9b7e99408cd27a",
-        "authority_refs": [
-          "docs/authority/current-authority.json",
-          "docs/authority/current/development/11_Development_Planes_Milestones_and_P0_Backlog.md",
-          "docs/authority/baselines/1.6.0/17_Account_Identity_and_Session_FRD.md",
-          "docs/authority/current/development/32_Domain_API_Event_Data_and_Policy_Contract_Catalog.md",
-          "docs/authority/current/development/34_Architecture_to_Development_Traceability_Matrix.md",
-          "docs/authority/baselines/1.6.0/decisions/ADR-0006_Identity_ASPNET_Identity_OpenIddict.md",
-          "docs/authority/baselines/1.6.0/decisions/PDR-0007_DOB_Based_18_Plus_Eligibility.md",
-          "docs/authority/current/development/AMD-0002_Non-Blocking_PR_Approval_and_Continuous_Local_Execution.md",
-          "docs/authority/current/development/02_Repository_Solution_and_Module_Architecture.md",
-          "docs/authority/current/development/09_Testing_Acceptance_Evidence_and_Quality_Gates.md",
-          "docs/authority/baselines/1.6.0/29_Privacy_Data_Lifecycle_and_Processing_Governance_FRD.md"
-        ],
-        "context_artifacts": [
-          "governance/work-items/TUN-P2-004.yaml",
-          "docs/development/P2_004_REGISTRATION_SCOPE.md"
-        ],
-        "evidence_refs": [
-          "governance/evidence/TUN-P2-004-AUTHORITY-RESOLUTION.json"
-        ],
-        "findings": [
-          "SCOPE READINESS ONLY: Reuse shared theme, controls and governed content. BFF-only requests; no OAuth tokens, password/DOB/proof persistence or direct provider calls.",
-          "The plan requires the identified Figma alignment before affected flow code, and final actual implementation/test reviews before local readiness. No Product/legal/release approval or independent human assurance is claimed."
-        ],
-        "blocking_findings": [],
-        "required_actions": [],
-        "context_expansion_requested": false
-      }
-    ],
-    "full-stack-engineer": [
-      {
-        "schema_version": 1,
-        "review_id": "REV-TUN-P2-004-full-stack-engineer",
-        "work_item_id": "TUN-P2-004",
-        "role": "full-stack-engineer",
-        "status": "PASS",
-        "result": "PASS",
-        "reviewed_at": "2026-10-16T21:01:05.992Z",
-        "skill_id": "full-stack-engineer",
-        "skill_version": "1.0.0",
-        "skill_hash": "59adbe2133cf4ce88cbc9ca4eafce1d5a9d83b9562b6580c1571e6fc148d46b5",
-        "authority_refs": [
-          "docs/authority/current-authority.json",
-          "docs/authority/current/development/11_Development_Planes_Milestones_and_P0_Backlog.md",
-          "docs/authority/baselines/1.6.0/17_Account_Identity_and_Session_FRD.md",
-          "docs/authority/current/development/32_Domain_API_Event_Data_and_Policy_Contract_Catalog.md",
-          "docs/authority/current/development/34_Architecture_to_Development_Traceability_Matrix.md",
-          "docs/authority/baselines/1.6.0/decisions/ADR-0006_Identity_ASPNET_Identity_OpenIddict.md",
-          "docs/authority/baselines/1.6.0/decisions/PDR-0007_DOB_Based_18_Plus_Eligibility.md",
-          "docs/authority/current/development/AMD-0002_Non-Blocking_PR_Approval_and_Continuous_Local_Execution.md",
-          "docs/authority/current/development/02_Repository_Solution_and_Module_Architecture.md",
-          "docs/authority/current/development/09_Testing_Acceptance_Evidence_and_Quality_Gates.md",
-          "docs/authority/baselines/1.6.0/29_Privacy_Data_Lifecycle_and_Processing_Governance_FRD.md"
-        ],
-        "context_artifacts": [
-          "governance/work-items/TUN-P2-004.yaml",
-          "docs/development/P2_004_REGISTRATION_SCOPE.md"
-        ],
-        "evidence_refs": [
-          "governance/evidence/TUN-P2-004-AUTHORITY-RESOLUTION.json"
-        ],
-        "findings": [
-          "SCOPE READINESS ONLY: Reuse Accounts eligibility, Identity EF stores and outbox; implement registration/verification/resend as the bounded User BFF vertical slice.",
-          "The plan requires the identified Figma alignment before affected flow code, and final actual implementation/test reviews before local readiness. No Product/legal/release approval or independent human assurance is claimed."
-        ],
-        "blocking_findings": [],
-        "required_actions": [],
-        "context_expansion_requested": false
-      }
-    ],
-    "sdk-engineer": [
-      {
-        "schema_version": 1,
-        "review_id": "REV-TUN-P2-004-sdk-engineer",
-        "work_item_id": "TUN-P2-004",
-        "role": "sdk-engineer",
-        "status": "PASS",
-        "result": "PASS",
-        "reviewed_at": "2026-10-16T21:01:06.000Z",
-        "skill_id": "sdk-engineer",
-        "skill_version": "1.0.0",
-        "skill_hash": "c64a66b2e19bccdbf69f13c9db62e9e2cbb0403f384591a93b5b787dc33b07ae",
-        "authority_refs": [
-          "docs/authority/current-authority.json",
-          "docs/authority/current/development/11_Development_Planes_Milestones_and_P0_Backlog.md",
-          "docs/authority/baselines/1.6.0/17_Account_Identity_and_Session_FRD.md",
-          "docs/authority/current/development/32_Domain_API_Event_Data_and_Policy_Contract_Catalog.md",
-          "docs/authority/current/development/34_Architecture_to_Development_Traceability_Matrix.md",
-          "docs/authority/baselines/1.6.0/decisions/ADR-0006_Identity_ASPNET_Identity_OpenIddict.md",
-          "docs/authority/baselines/1.6.0/decisions/PDR-0007_DOB_Based_18_Plus_Eligibility.md",
-          "docs/authority/current/development/AMD-0002_Non-Blocking_PR_Approval_and_Continuous_Local_Execution.md",
-          "docs/authority/current/development/02_Repository_Solution_and_Module_Architecture.md",
-          "docs/authority/current/development/09_Testing_Acceptance_Evidence_and_Quality_Gates.md",
-          "docs/authority/baselines/1.6.0/29_Privacy_Data_Lifecycle_and_Processing_Governance_FRD.md"
-        ],
-        "context_artifacts": [
-          "governance/work-items/TUN-P2-004.yaml",
-          "docs/development/P2_004_REGISTRATION_SCOPE.md"
-        ],
-        "evidence_refs": [
-          "governance/evidence/TUN-P2-004-AUTHORITY-RESOLUTION.json"
-        ],
-        "findings": [
-          "SCOPE READINESS ONLY: BFF REST/JSON only; detailed fields follow Doc32 envelopes. No Product SDK contract or provider-native public identifier is introduced.",
-          "The plan requires the identified Figma alignment before affected flow code, and final actual implementation/test reviews before local readiness. No Product/legal/release approval or independent human assurance is claimed."
-        ],
-        "blocking_findings": [],
-        "required_actions": [],
-        "context_expansion_requested": false
-      }
-    ],
-    "solution-architect": [
-      {
-        "schema_version": 1,
-        "review_id": "REV-TUN-P2-004-solution-architect",
-        "work_item_id": "TUN-P2-004",
-        "role": "solution-architect",
-        "status": "PASS",
-        "result": "PASS",
-        "reviewed_at": "2026-10-16T21:01:05.996Z",
-        "skill_id": "solution-architect",
-        "skill_version": "1.0.0",
-        "skill_hash": "664ffba70d0f97e75951c3548b7f8391854781e4cf90cc50fc8829543783a35b",
-        "authority_refs": [
-          "docs/authority/current-authority.json",
-          "docs/authority/current/development/11_Development_Planes_Milestones_and_P0_Backlog.md",
-          "docs/authority/baselines/1.6.0/17_Account_Identity_and_Session_FRD.md",
-          "docs/authority/current/development/32_Domain_API_Event_Data_and_Policy_Contract_Catalog.md",
-          "docs/authority/current/development/34_Architecture_to_Development_Traceability_Matrix.md",
-          "docs/authority/baselines/1.6.0/decisions/ADR-0006_Identity_ASPNET_Identity_OpenIddict.md",
-          "docs/authority/baselines/1.6.0/decisions/PDR-0007_DOB_Based_18_Plus_Eligibility.md",
-          "docs/authority/current/development/AMD-0002_Non-Blocking_PR_Approval_and_Continuous_Local_Execution.md",
-          "docs/authority/current/development/02_Repository_Solution_and_Module_Architecture.md",
-          "docs/authority/current/development/09_Testing_Acceptance_Evidence_and_Quality_Gates.md",
-          "docs/authority/baselines/1.6.0/29_Privacy_Data_Lifecycle_and_Processing_Governance_FRD.md"
-        ],
-        "context_artifacts": [
-          "governance/work-items/TUN-P2-004.yaml",
-          "docs/development/P2_004_REGISTRATION_SCOPE.md"
-        ],
-        "evidence_refs": [
-          "governance/evidence/TUN-P2-004-AUTHORITY-RESOLUTION.json"
-        ],
-        "findings": [
-          "SCOPE READINESS ONLY: Identity owns canonical state and policy-controlled mutations; provider/notification/public DTO boundaries remain explicit. No login/session/Product scope expansion.",
-          "The plan requires the identified Figma alignment before affected flow code, and final actual implementation/test reviews before local readiness. No Product/legal/release approval or independent human assurance is claimed."
-        ],
-        "blocking_findings": [],
-        "required_actions": [],
-        "context_expansion_requested": false
-      }
-    ],
-    "tester-qa-engineer": [
-      {
-        "schema_version": 1,
-        "review_id": "REV-TUN-P2-004-tester-qa-engineer",
-        "work_item_id": "TUN-P2-004",
-        "role": "tester-qa-engineer",
-        "status": "PASS",
-        "result": "PASS",
-        "reviewed_at": "2026-10-16T21:01:05.996Z",
-        "skill_id": "tester-qa-engineer",
-        "skill_version": "1.0.0",
-        "skill_hash": "a57ce99d7ad7a3b60f17e4826c81c507c9cc208d8928285c406222eefe0a18fd",
-        "authority_refs": [
-          "docs/authority/current-authority.json",
-          "docs/authority/current/development/11_Development_Planes_Milestones_and_P0_Backlog.md",
-          "docs/authority/baselines/1.6.0/17_Account_Identity_and_Session_FRD.md",
-          "docs/authority/current/development/32_Domain_API_Event_Data_and_Policy_Contract_Catalog.md",
-          "docs/authority/current/development/34_Architecture_to_Development_Traceability_Matrix.md",
-          "docs/authority/baselines/1.6.0/decisions/ADR-0006_Identity_ASPNET_Identity_OpenIddict.md",
-          "docs/authority/baselines/1.6.0/decisions/PDR-0007_DOB_Based_18_Plus_Eligibility.md",
-          "docs/authority/current/development/AMD-0002_Non-Blocking_PR_Approval_and_Continuous_Local_Execution.md",
-          "docs/authority/current/development/02_Repository_Solution_and_Module_Architecture.md",
-          "docs/authority/current/development/09_Testing_Acceptance_Evidence_and_Quality_Gates.md",
-          "docs/authority/baselines/1.6.0/29_Privacy_Data_Lifecycle_and_Processing_Governance_FRD.md"
-        ],
-        "context_artifacts": [
-          "governance/work-items/TUN-P2-004.yaml",
-          "docs/development/P2_004_REGISTRATION_SCOPE.md"
-        ],
-        "evidence_refs": [
-          "governance/evidence/TUN-P2-004-AUTHORITY-RESOLUTION.json"
-        ],
-        "findings": [
-          "SCOPE READINESS ONLY: Require actual PostgreSQL concurrency/replay/negative-path tests plus BFF/browser origin/CSRF/accessibility validation before readiness.",
-          "The plan requires the identified Figma alignment before affected flow code, and final actual implementation/test reviews before local readiness. No Product/legal/release approval or independent human assurance is claimed."
-        ],
-        "blocking_findings": [],
-        "required_actions": [],
-        "context_expansion_requested": false
-      }
-    ],
-    "ui-ux-engineer": [
-      {
-        "schema_version": 1,
-        "review_id": "REV-TUN-P2-004-ui-ux-engineer",
-        "work_item_id": "TUN-P2-004",
-        "role": "ui-ux-engineer",
-        "status": "PASS",
-        "result": "PASS",
-        "reviewed_at": "2026-10-16T21:01:06.001Z",
-        "skill_id": "ui-ux-engineer",
-        "skill_version": "1.0.0",
-        "skill_hash": "1fc89f73cb56107fe5669d6699bb50b4ebe6481c0efea7e59eff30b350ce5800",
-        "authority_refs": [
-          "docs/authority/current-authority.json",
-          "docs/authority/current/development/11_Development_Planes_Milestones_and_P0_Backlog.md",
-          "docs/authority/baselines/1.6.0/17_Account_Identity_and_Session_FRD.md",
-          "docs/authority/current/development/32_Domain_API_Event_Data_and_Policy_Contract_Catalog.md",
-          "docs/authority/current/development/34_Architecture_to_Development_Traceability_Matrix.md",
-          "docs/authority/baselines/1.6.0/decisions/ADR-0006_Identity_ASPNET_Identity_OpenIddict.md",
-          "docs/authority/baselines/1.6.0/decisions/PDR-0007_DOB_Based_18_Plus_Eligibility.md",
-          "docs/authority/current/development/AMD-0002_Non-Blocking_PR_Approval_and_Continuous_Local_Execution.md",
-          "docs/authority/current/development/02_Repository_Solution_and_Module_Architecture.md",
-          "docs/authority/current/development/09_Testing_Acceptance_Evidence_and_Quality_Gates.md",
-          "docs/authority/baselines/1.6.0/29_Privacy_Data_Lifecycle_and_Processing_Governance_FRD.md"
-        ],
-        "context_artifacts": [
-          "governance/work-items/TUN-P2-004.yaml",
-          "docs/development/P2_004_REGISTRATION_SCOPE.md"
-        ],
-        "evidence_refs": [
-          "governance/evidence/TUN-P2-004-AUTHORITY-RESOLUTION.json"
-        ],
-        "findings": [
-          "SCOPE READINESS ONLY: Correct the three existing Figma frames against FRD31/17 before affected flow implementation; preserve editable reference style and review error/underage/pending/verified states.",
-          "The plan requires the identified Figma alignment before affected flow code, and final actual implementation/test reviews before local readiness. No Product/legal/release approval or independent human assurance is claimed."
-        ],
-        "blocking_findings": [],
-        "required_actions": [],
-        "context_expansion_requested": false
-      }
-    ]
-  }
+    }
+  ],
+  "prior_formal_reviews": [
+    {
+      "schema_version": 1,
+      "review_id": "REV-TUN-P2-004-full-stack-engineer",
+      "work_item_id": "TUN-P2-004",
+      "role": "full-stack-engineer",
+      "status": "PASS",
+      "result": "PASS",
+      "reviewed_at": "2026-10-17T20:15:56.211Z",
+      "skill_id": "full-stack-engineer",
+      "skill_version": "1.0.0",
+      "skill_hash": "59adbe2133cf4ce88cbc9ca4eafce1d5a9d83b9562b6580c1571e6fc148d46b5",
+      "authority_refs": [
+        "docs/authority/current-authority.json",
+        "docs/authority/current/development/11_Development_Planes_Milestones_and_P0_Backlog.md",
+        "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md",
+        "docs/authority/current/development/32_Domain_API_Event_Data_and_Policy_Contract_Catalog.md",
+        "docs/authority/current/development/34_Architecture_to_Development_Traceability_Matrix.md",
+        "docs/authority/baselines/1.6.0/decisions/ADR-0006_Identity_ASPNET_Identity_OpenIddict.md",
+        "docs/authority/current/development/AMD-0002_Non-Blocking_PR_Approval_and_Continuous_Local_Execution.md",
+        "docs/authority/current/development/02_Repository_Solution_and_Module_Architecture.md",
+        "docs/authority/current/development/09_Testing_Acceptance_Evidence_and_Quality_Gates.md",
+        "docs/authority/current/development/29_Privacy_Data_Lifecycle_and_Processing_Governance_FRD.md",
+        "docs/authority/current/decisions/PDR-0011_Universal_Account_Eligibility_Age-Aware_Consent_and_Delegated_Commercial_Authority.md",
+        "docs/authority/current/decisions/AMD-0007_Universal_Registration_Age-Aware_Consent_and_Delegated_Commercial_Authority.md"
+      ],
+      "context_artifacts": [
+        "docs/development/P2_004_REGISTRATION.md",
+        "docs/contracts/registration-onboarding.openapi.json",
+        "docs/development/PDR0011_AMD0007_IMPLEMENTATION.md"
+      ],
+      "evidence_refs": [
+        "governance/evidence/TUN-P2-004-VALIDATION.json",
+        "governance/evidence/PDR0011-AMD0007-IMPACT-AUDIT.json"
+      ],
+      "findings": [
+        "Register has no DOB; verified proof precedes normal profile; transactional stage/version/account/outbox changes preserve uniqueness and replay.",
+        "48 actual Identity/PostgreSQL/HTTPS cases pass at the reviewed SHA, including historical migration and under18 activation.",
+        "Reviewed committed implementation c6fa8e7690095f8eb2401587c407501fced29a4d.",
+        "Executing-agent engineering perspective, not independent human/Product/legal/release approval."
+      ],
+      "blocking_findings": [],
+      "required_actions": [],
+      "context_expansion_requested": false
+    },
+    {
+      "schema_version": 1,
+      "review_id": "REV-TUN-P2-004-tester-qa-engineer",
+      "work_item_id": "TUN-P2-004",
+      "role": "tester-qa-engineer",
+      "status": "PASS",
+      "result": "PASS",
+      "reviewed_at": "2026-10-17T20:15:56.211Z",
+      "skill_id": "tester-qa-engineer",
+      "skill_version": "1.0.0",
+      "skill_hash": "a57ce99d7ad7a3b60f17e4826c81c507c9cc208d8928285c406222eefe0a18fd",
+      "authority_refs": [
+        "docs/authority/current-authority.json",
+        "docs/authority/current/development/11_Development_Planes_Milestones_and_P0_Backlog.md",
+        "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md",
+        "docs/authority/current/development/32_Domain_API_Event_Data_and_Policy_Contract_Catalog.md",
+        "docs/authority/current/development/34_Architecture_to_Development_Traceability_Matrix.md",
+        "docs/authority/baselines/1.6.0/decisions/ADR-0006_Identity_ASPNET_Identity_OpenIddict.md",
+        "docs/authority/current/development/AMD-0002_Non-Blocking_PR_Approval_and_Continuous_Local_Execution.md",
+        "docs/authority/current/development/02_Repository_Solution_and_Module_Architecture.md",
+        "docs/authority/current/development/09_Testing_Acceptance_Evidence_and_Quality_Gates.md",
+        "docs/authority/current/development/29_Privacy_Data_Lifecycle_and_Processing_Governance_FRD.md",
+        "docs/authority/current/decisions/PDR-0011_Universal_Account_Eligibility_Age-Aware_Consent_and_Delegated_Commercial_Authority.md",
+        "docs/authority/current/decisions/AMD-0007_Universal_Registration_Age-Aware_Consent_and_Delegated_Commercial_Authority.md"
+      ],
+      "context_artifacts": [
+        "docs/development/P2_004_REGISTRATION.md",
+        "docs/contracts/registration-onboarding.openapi.json",
+        "docs/development/PDR0011_AMD0007_IMPLEMENTATION.md"
+      ],
+      "evidence_refs": [
+        "governance/evidence/TUN-P2-004-VALIDATION.json",
+        "governance/evidence/PDR0011-AMD0007-IMPACT-AUDIT.json"
+      ],
+      "findings": [
+        "395 .NET,25 web and21 browser tests pass with zero failures/skips at the committed candidate. Development failures are retained separately.",
+        "Replay/concurrency, proof/abuse, consent/school, calendar, current18 re-evaluation, protected expiry/purge, OpenAPI, actual HTTPS and responsive WCAG checks are executed.",
+        "Reviewed committed implementation c6fa8e7690095f8eb2401587c407501fced29a4d.",
+        "Executing-agent engineering perspective, not independent human/Product/legal/release approval."
+      ],
+      "blocking_findings": [],
+      "required_actions": [],
+      "context_expansion_requested": false
+    },
+    {
+      "schema_version": 1,
+      "review_id": "REV-TUN-P2-004-solution-architect",
+      "work_item_id": "TUN-P2-004",
+      "role": "solution-architect",
+      "status": "PASS",
+      "result": "PASS",
+      "reviewed_at": "2026-10-17T20:15:56.211Z",
+      "skill_id": "solution-architect",
+      "skill_version": "1.0.0",
+      "skill_hash": "664ffba70d0f97e75951c3548b7f8391854781e4cf90cc50fc8829543783a35b",
+      "authority_refs": [
+        "docs/authority/current-authority.json",
+        "docs/authority/current/development/11_Development_Planes_Milestones_and_P0_Backlog.md",
+        "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md",
+        "docs/authority/current/development/32_Domain_API_Event_Data_and_Policy_Contract_Catalog.md",
+        "docs/authority/current/development/34_Architecture_to_Development_Traceability_Matrix.md",
+        "docs/authority/baselines/1.6.0/decisions/ADR-0006_Identity_ASPNET_Identity_OpenIddict.md",
+        "docs/authority/current/development/AMD-0002_Non-Blocking_PR_Approval_and_Continuous_Local_Execution.md",
+        "docs/authority/current/development/02_Repository_Solution_and_Module_Architecture.md",
+        "docs/authority/current/development/09_Testing_Acceptance_Evidence_and_Quality_Gates.md",
+        "docs/authority/current/development/29_Privacy_Data_Lifecycle_and_Processing_Governance_FRD.md",
+        "docs/authority/current/decisions/PDR-0011_Universal_Account_Eligibility_Age-Aware_Consent_and_Delegated_Commercial_Authority.md",
+        "docs/authority/current/decisions/AMD-0007_Universal_Registration_Age-Aware_Consent_and_Delegated_Commercial_Authority.md"
+      ],
+      "context_artifacts": [
+        "docs/development/P2_004_REGISTRATION.md",
+        "docs/contracts/registration-onboarding.openapi.json",
+        "docs/development/PDR0011_AMD0007_IMPLEMENTATION.md"
+      ],
+      "evidence_refs": [
+        "governance/evidence/TUN-P2-004-VALIDATION.json",
+        "governance/evidence/PDR0011-AMD0007-IMPACT-AUDIT.json"
+      ],
+      "findings": [
+        "Reuse shared Accounts calendar/effective policy, Account-owned profile, existing Identity/EF/outbox and User BFF boundaries. No new minor identity/payment domain.",
+        "Missing Billing/Subscription planes remain contractual. Session/Product relationship implementation remains with P2-005/P2-014; no age-only Account/session/Product denial introduced.",
+        "Reviewed committed implementation c6fa8e7690095f8eb2401587c407501fced29a4d.",
+        "Executing-agent engineering perspective, not independent human/Product/legal/release approval."
+      ],
+      "blocking_findings": [],
+      "required_actions": [],
+      "context_expansion_requested": false
+    },
+    {
+      "schema_version": 1,
+      "review_id": "REV-TUN-P2-004-cyber-security-engineer",
+      "work_item_id": "TUN-P2-004",
+      "role": "cyber-security-engineer",
+      "status": "PASS",
+      "result": "PASS",
+      "reviewed_at": "2026-10-17T20:15:56.211Z",
+      "skill_id": "cyber-security-engineer",
+      "skill_version": "1.0.0",
+      "skill_hash": "2d32ff3d7fb503f29cf930e9852ed4a757bb48a08e3fa4e3f6d5a23139a47f97",
+      "authority_refs": [
+        "docs/authority/current-authority.json",
+        "docs/authority/current/development/11_Development_Planes_Milestones_and_P0_Backlog.md",
+        "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md",
+        "docs/authority/current/development/32_Domain_API_Event_Data_and_Policy_Contract_Catalog.md",
+        "docs/authority/current/development/34_Architecture_to_Development_Traceability_Matrix.md",
+        "docs/authority/baselines/1.6.0/decisions/ADR-0006_Identity_ASPNET_Identity_OpenIddict.md",
+        "docs/authority/current/development/AMD-0002_Non-Blocking_PR_Approval_and_Continuous_Local_Execution.md",
+        "docs/authority/current/development/02_Repository_Solution_and_Module_Architecture.md",
+        "docs/authority/current/development/09_Testing_Acceptance_Evidence_and_Quality_Gates.md",
+        "docs/authority/current/development/29_Privacy_Data_Lifecycle_and_Processing_Governance_FRD.md",
+        "docs/authority/current/decisions/PDR-0011_Universal_Account_Eligibility_Age-Aware_Consent_and_Delegated_Commercial_Authority.md",
+        "docs/authority/current/decisions/AMD-0007_Universal_Registration_Age-Aware_Consent_and_Delegated_Commercial_Authority.md"
+      ],
+      "context_artifacts": [
+        "docs/development/P2_004_REGISTRATION.md",
+        "docs/contracts/registration-onboarding.openapi.json",
+        "docs/development/PDR0011_AMD0007_IMPLEMENTATION.md"
+      ],
+      "evidence_refs": [
+        "governance/evidence/TUN-P2-004-VALIDATION.json",
+        "governance/evidence/PDR0011-AMD0007-IMPACT-AUDIT.json"
+      ],
+      "findings": [
+        "Strict body schemas reject obsolete DOB registration and forged consent/commercial claims. HTTPS/origin/CSRF/protected expiring context, abuse/version/proof and uniqueness guards remain.",
+        "DOB/names protected by isolated purpose; no raw profile in receipts/events/responses/browser storage; safe errors. Secret/SAST and current dependency audits pass.",
+        "Reviewed committed implementation c6fa8e7690095f8eb2401587c407501fced29a4d.",
+        "Executing-agent engineering perspective, not independent human/Product/legal/release approval."
+      ],
+      "blocking_findings": [],
+      "required_actions": [],
+      "context_expansion_requested": false
+    },
+    {
+      "schema_version": 1,
+      "review_id": "REV-TUN-P2-004-auditor",
+      "work_item_id": "TUN-P2-004",
+      "role": "auditor",
+      "status": "PASS",
+      "result": "PASS",
+      "reviewed_at": "2026-10-17T20:15:56.211Z",
+      "skill_id": "auditor",
+      "skill_version": "1.0.0",
+      "skill_hash": "191c796fc5df0332ff2c3c464ca611d2c6d3ffc5ba7e2807986a71ad2e40d921",
+      "authority_refs": [
+        "docs/authority/current-authority.json",
+        "docs/authority/current/development/11_Development_Planes_Milestones_and_P0_Backlog.md",
+        "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md",
+        "docs/authority/current/development/32_Domain_API_Event_Data_and_Policy_Contract_Catalog.md",
+        "docs/authority/current/development/34_Architecture_to_Development_Traceability_Matrix.md",
+        "docs/authority/baselines/1.6.0/decisions/ADR-0006_Identity_ASPNET_Identity_OpenIddict.md",
+        "docs/authority/current/development/AMD-0002_Non-Blocking_PR_Approval_and_Continuous_Local_Execution.md",
+        "docs/authority/current/development/02_Repository_Solution_and_Module_Architecture.md",
+        "docs/authority/current/development/09_Testing_Acceptance_Evidence_and_Quality_Gates.md",
+        "docs/authority/current/development/29_Privacy_Data_Lifecycle_and_Processing_Governance_FRD.md",
+        "docs/authority/current/decisions/PDR-0011_Universal_Account_Eligibility_Age-Aware_Consent_and_Delegated_Commercial_Authority.md",
+        "docs/authority/current/decisions/AMD-0007_Universal_Registration_Age-Aware_Consent_and_Delegated_Commercial_Authority.md"
+      ],
+      "context_artifacts": [
+        "docs/development/P2_004_REGISTRATION.md",
+        "docs/contracts/registration-onboarding.openapi.json",
+        "docs/development/PDR0011_AMD0007_IMPLEMENTATION.md"
+      ],
+      "evidence_refs": [
+        "governance/evidence/TUN-P2-004-VALIDATION.json",
+        "governance/evidence/PDR0011-AMD0007-IMPACT-AUDIT.json"
+      ],
+      "findings": [
+        "Original P2-004 VALIDATION and PDR-0007 receipts preserved. No RV, closure rewrite, new Product decision or inferred acceptance. All57 behavior paths match the tested committed SHA.",
+        "P2-003 shared snapshot/test-project overlap is revalidated at this SHA. Unrelated dirty files remain byte-identical and unstaged.",
+        "Reviewed committed implementation c6fa8e7690095f8eb2401587c407501fced29a4d.",
+        "Executing-agent engineering perspective, not independent human/Product/legal/release approval."
+      ],
+      "blocking_findings": [],
+      "required_actions": [],
+      "context_expansion_requested": false
+    },
+    {
+      "schema_version": 1,
+      "review_id": "REV-TUN-P2-004-compliance-specialist",
+      "work_item_id": "TUN-P2-004",
+      "role": "compliance-specialist",
+      "status": "PASS",
+      "result": "PASS",
+      "reviewed_at": "2026-10-17T20:15:56.211Z",
+      "skill_id": "compliance-specialist",
+      "skill_version": "1.0.0",
+      "skill_hash": "38f8de27e31b3ae5cec070320d9b408d6f75682b024322f5e37585c76921303e",
+      "authority_refs": [
+        "docs/authority/current-authority.json",
+        "docs/authority/current/development/11_Development_Planes_Milestones_and_P0_Backlog.md",
+        "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md",
+        "docs/authority/current/development/32_Domain_API_Event_Data_and_Policy_Contract_Catalog.md",
+        "docs/authority/current/development/34_Architecture_to_Development_Traceability_Matrix.md",
+        "docs/authority/baselines/1.6.0/decisions/ADR-0006_Identity_ASPNET_Identity_OpenIddict.md",
+        "docs/authority/current/development/AMD-0002_Non-Blocking_PR_Approval_and_Continuous_Local_Execution.md",
+        "docs/authority/current/development/02_Repository_Solution_and_Module_Architecture.md",
+        "docs/authority/current/development/09_Testing_Acceptance_Evidence_and_Quality_Gates.md",
+        "docs/authority/current/development/29_Privacy_Data_Lifecycle_and_Processing_Governance_FRD.md",
+        "docs/authority/current/decisions/PDR-0011_Universal_Account_Eligibility_Age-Aware_Consent_and_Delegated_Commercial_Authority.md",
+        "docs/authority/current/decisions/AMD-0007_Universal_Registration_Age-Aware_Consent_and_Delegated_Commercial_Authority.md"
+      ],
+      "context_artifacts": [
+        "docs/development/P2_004_REGISTRATION.md",
+        "docs/contracts/registration-onboarding.openapi.json",
+        "docs/development/PDR0011_AMD0007_IMPLEMENTATION.md"
+      ],
+      "evidence_refs": [
+        "governance/evidence/TUN-P2-004-VALIDATION.json",
+        "governance/evidence/PDR0011-AMD0007-IMPACT-AUDIT.json"
+      ],
+      "findings": [
+        "DOB is restricted personal data in normal Personal Information with explicit purpose/retention and protected custody; safe evidence retained after payload purge.",
+        "Consent is trusted Account/policy/time/actor-bound; no global consent threshold, invented legal default, or production consent/content approval. Under18 is not Account admission denial.",
+        "Reviewed committed implementation c6fa8e7690095f8eb2401587c407501fced29a4d.",
+        "Executing-agent engineering perspective, not independent human/Product/legal/release approval."
+      ],
+      "blocking_findings": [],
+      "required_actions": [],
+      "context_expansion_requested": false
+    },
+    {
+      "schema_version": 1,
+      "review_id": "REV-TUN-P2-004-sdk-engineer",
+      "work_item_id": "TUN-P2-004",
+      "role": "sdk-engineer",
+      "status": "PASS",
+      "result": "PASS",
+      "reviewed_at": "2026-10-17T20:15:56.211Z",
+      "skill_id": "sdk-engineer",
+      "skill_version": "1.0.0",
+      "skill_hash": "c64a66b2e19bccdbf69f13c9db62e9e2cbb0403f384591a93b5b787dc33b07ae",
+      "authority_refs": [
+        "docs/authority/current-authority.json",
+        "docs/authority/current/development/11_Development_Planes_Milestones_and_P0_Backlog.md",
+        "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md",
+        "docs/authority/current/development/32_Domain_API_Event_Data_and_Policy_Contract_Catalog.md",
+        "docs/authority/current/development/34_Architecture_to_Development_Traceability_Matrix.md",
+        "docs/authority/baselines/1.6.0/decisions/ADR-0006_Identity_ASPNET_Identity_OpenIddict.md",
+        "docs/authority/current/development/AMD-0002_Non-Blocking_PR_Approval_and_Continuous_Local_Execution.md",
+        "docs/authority/current/development/02_Repository_Solution_and_Module_Architecture.md",
+        "docs/authority/current/development/09_Testing_Acceptance_Evidence_and_Quality_Gates.md",
+        "docs/authority/current/development/29_Privacy_Data_Lifecycle_and_Processing_Governance_FRD.md",
+        "docs/authority/current/decisions/PDR-0011_Universal_Account_Eligibility_Age-Aware_Consent_and_Delegated_Commercial_Authority.md",
+        "docs/authority/current/decisions/AMD-0007_Universal_Registration_Age-Aware_Consent_and_Delegated_Commercial_Authority.md"
+      ],
+      "context_artifacts": [
+        "docs/development/P2_004_REGISTRATION.md",
+        "docs/contracts/registration-onboarding.openapi.json",
+        "docs/development/PDR0011_AMD0007_IMPLEMENTATION.md"
+      ],
+      "evidence_refs": [
+        "governance/evidence/TUN-P2-004-VALIDATION.json",
+        "governance/evidence/PDR0011-AMD0007-IMPACT-AUDIT.json"
+      ],
+      "findings": [
+        "Strict private BFF OpenAPI separates initial registration and write-only DOB profile input; safe nextAction/operation metadata drives UI.",
+        "No public Product SDK/API currently exposes registration; no SDK release/version or external compatibility promise is invented. Existing technical Problem Details are reused.",
+        "Reviewed committed implementation c6fa8e7690095f8eb2401587c407501fced29a4d.",
+        "Executing-agent engineering perspective, not independent human/Product/legal/release approval."
+      ],
+      "blocking_findings": [],
+      "required_actions": [],
+      "context_expansion_requested": false
+    },
+    {
+      "schema_version": 1,
+      "review_id": "REV-TUN-P2-004-ui-ux-engineer",
+      "work_item_id": "TUN-P2-004",
+      "role": "ui-ux-engineer",
+      "status": "PASS",
+      "result": "PASS",
+      "reviewed_at": "2026-10-17T20:15:56.211Z",
+      "skill_id": "ui-ux-engineer",
+      "skill_version": "1.0.0",
+      "skill_hash": "1fc89f73cb56107fe5669d6699bb50b4ebe6481c0efea7e59eff30b350ce5800",
+      "authority_refs": [
+        "docs/authority/current-authority.json",
+        "docs/authority/current/development/11_Development_Planes_Milestones_and_P0_Backlog.md",
+        "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md",
+        "docs/authority/current/development/32_Domain_API_Event_Data_and_Policy_Contract_Catalog.md",
+        "docs/authority/current/development/34_Architecture_to_Development_Traceability_Matrix.md",
+        "docs/authority/baselines/1.6.0/decisions/ADR-0006_Identity_ASPNET_Identity_OpenIddict.md",
+        "docs/authority/current/development/AMD-0002_Non-Blocking_PR_Approval_and_Continuous_Local_Execution.md",
+        "docs/authority/current/development/02_Repository_Solution_and_Module_Architecture.md",
+        "docs/authority/current/development/09_Testing_Acceptance_Evidence_and_Quality_Gates.md",
+        "docs/authority/current/development/29_Privacy_Data_Lifecycle_and_Processing_Governance_FRD.md",
+        "docs/authority/current/decisions/PDR-0011_Universal_Account_Eligibility_Age-Aware_Consent_and_Delegated_Commercial_Authority.md",
+        "docs/authority/current/decisions/AMD-0007_Universal_Registration_Age-Aware_Consent_and_Delegated_Commercial_Authority.md"
+      ],
+      "context_artifacts": [
+        "docs/development/P2_004_REGISTRATION.md",
+        "docs/contracts/registration-onboarding.openapi.json",
+        "docs/development/PDR0011_AMD0007_IMPLEMENTATION.md"
+      ],
+      "evidence_refs": [
+        "governance/evidence/TUN-P2-004-VALIDATION.json",
+        "governance/evidence/PDR0011-AMD0007-IMPACT-AUDIT.json"
+      ],
+      "findings": [
+        "Editable Figma initial70:270 adds confirmation; obsolete DOB-only187:2 hidden/labeled historical; normal profile35:107 and onboarding198:2 contain DOB.",
+        "Desktop/320px normal states pass WCAG AA checks. Reuse shared controls, text-only Tunner, local fonts and intrinsic supplied SVGs.",
+        "Reviewed committed implementation c6fa8e7690095f8eb2401587c407501fced29a4d.",
+        "Executing-agent engineering perspective, not independent human/Product/legal/release approval."
+      ],
+      "blocking_findings": [],
+      "required_actions": [],
+      "context_expansion_requested": false
+    },
+    {
+      "schema_version": 1,
+      "review_id": "REV-TUN-P2-004-frontend-engineer",
+      "work_item_id": "TUN-P2-004",
+      "role": "frontend-engineer",
+      "status": "PASS",
+      "result": "PASS",
+      "reviewed_at": "2026-10-17T20:15:56.211Z",
+      "skill_id": "frontend-engineer",
+      "skill_version": "1.0.0",
+      "skill_hash": "688773fc2118294031c0245fcd54ba3d560a4b4a1ee8dec98f9b7e99408cd27a",
+      "authority_refs": [
+        "docs/authority/current-authority.json",
+        "docs/authority/current/development/11_Development_Planes_Milestones_and_P0_Backlog.md",
+        "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md",
+        "docs/authority/current/development/32_Domain_API_Event_Data_and_Policy_Contract_Catalog.md",
+        "docs/authority/current/development/34_Architecture_to_Development_Traceability_Matrix.md",
+        "docs/authority/baselines/1.6.0/decisions/ADR-0006_Identity_ASPNET_Identity_OpenIddict.md",
+        "docs/authority/current/development/AMD-0002_Non-Blocking_PR_Approval_and_Continuous_Local_Execution.md",
+        "docs/authority/current/development/02_Repository_Solution_and_Module_Architecture.md",
+        "docs/authority/current/development/09_Testing_Acceptance_Evidence_and_Quality_Gates.md",
+        "docs/authority/current/development/29_Privacy_Data_Lifecycle_and_Processing_Governance_FRD.md",
+        "docs/authority/current/decisions/PDR-0011_Universal_Account_Eligibility_Age-Aware_Consent_and_Delegated_Commercial_Authority.md",
+        "docs/authority/current/decisions/AMD-0007_Universal_Registration_Age-Aware_Consent_and_Delegated_Commercial_Authority.md"
+      ],
+      "context_artifacts": [
+        "docs/development/P2_004_REGISTRATION.md",
+        "docs/contracts/registration-onboarding.openapi.json",
+        "docs/development/PDR0011_AMD0007_IMPLEMENTATION.md"
+      ],
+      "evidence_refs": [
+        "governance/evidence/TUN-P2-004-VALIDATION.json",
+        "governance/evidence/PDR0011-AMD0007-IMPACT-AUDIT.json"
+      ],
+      "findings": [
+        "Direct initial registration has email/password/confirmation/notices; verified response opens normal Personal Information. No local age calculation or separate DOB screen.",
+        "Uncertain submission clears passwords/confirmation/DOB and recovers with original private key, without automatic repost. Eight registration browser regressions pass.",
+        "Reviewed committed implementation c6fa8e7690095f8eb2401587c407501fced29a4d.",
+        "Executing-agent engineering perspective, not independent human/Product/legal/release approval."
+      ],
+      "blocking_findings": [],
+      "required_actions": [],
+      "context_expansion_requested": false
+    },
+    {
+      "schema_version": 1,
+      "review_id": "REV-TUN-P2-004-end-user-ux-reviewer",
+      "work_item_id": "TUN-P2-004",
+      "role": "end-user-ux-reviewer",
+      "status": "PASS",
+      "result": "PASS",
+      "reviewed_at": "2026-10-17T20:15:56.211Z",
+      "skill_id": "end-user-ux-reviewer",
+      "skill_version": "1.0.0",
+      "skill_hash": "e9059d04505ec461405de6abe23d31526205f498ea815207dd042a87f82ec4d1",
+      "authority_refs": [
+        "docs/authority/current-authority.json",
+        "docs/authority/current/development/11_Development_Planes_Milestones_and_P0_Backlog.md",
+        "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md",
+        "docs/authority/current/development/32_Domain_API_Event_Data_and_Policy_Contract_Catalog.md",
+        "docs/authority/current/development/34_Architecture_to_Development_Traceability_Matrix.md",
+        "docs/authority/baselines/1.6.0/decisions/ADR-0006_Identity_ASPNET_Identity_OpenIddict.md",
+        "docs/authority/current/development/AMD-0002_Non-Blocking_PR_Approval_and_Continuous_Local_Execution.md",
+        "docs/authority/current/development/02_Repository_Solution_and_Module_Architecture.md",
+        "docs/authority/current/development/09_Testing_Acceptance_Evidence_and_Quality_Gates.md",
+        "docs/authority/current/development/29_Privacy_Data_Lifecycle_and_Processing_Governance_FRD.md",
+        "docs/authority/current/decisions/PDR-0011_Universal_Account_Eligibility_Age-Aware_Consent_and_Delegated_Commercial_Authority.md",
+        "docs/authority/current/decisions/AMD-0007_Universal_Registration_Age-Aware_Consent_and_Delegated_Commercial_Authority.md"
+      ],
+      "context_artifacts": [
+        "docs/development/P2_004_REGISTRATION.md",
+        "docs/contracts/registration-onboarding.openapi.json",
+        "docs/development/PDR0011_AMD0007_IMPLEMENTATION.md"
+      ],
+      "evidence_refs": [
+        "governance/evidence/TUN-P2-004-VALIDATION.json",
+        "governance/evidence/PDR0011-AMD0007-IMPACT-AUDIT.json"
+      ],
+      "findings": [
+        "Users see normal Personal Information after email proof and no blanket under18 rejection. Only policy-required consent state appears; browser cannot self-assert it.",
+        "Completion grants no invented Product or sign-in action. Narrow layouts, labels, keyboard/focus and safe errors are checked.",
+        "Reviewed committed implementation c6fa8e7690095f8eb2401587c407501fced29a4d.",
+        "Executing-agent engineering perspective, not independent human/Product/legal/release approval."
+      ],
+      "blocking_findings": [],
+      "required_actions": [],
+      "context_expansion_requested": false
+    },
+    {
+      "schema_version": 1,
+      "review_id": "REV-TUN-P2-004-content-writer",
+      "work_item_id": "TUN-P2-004",
+      "role": "content-writer",
+      "status": "PASS",
+      "result": "PASS",
+      "reviewed_at": "2026-10-17T20:15:56.211Z",
+      "skill_id": "content-writer",
+      "skill_version": "1.0.0",
+      "skill_hash": "9683a7f4aa8e50e2922fb7bbc74238d2d7bdb8ce2a81f922030c45ce9258e130",
+      "authority_refs": [
+        "docs/authority/current-authority.json",
+        "docs/authority/current/development/11_Development_Planes_Milestones_and_P0_Backlog.md",
+        "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md",
+        "docs/authority/current/development/32_Domain_API_Event_Data_and_Policy_Contract_Catalog.md",
+        "docs/authority/current/development/34_Architecture_to_Development_Traceability_Matrix.md",
+        "docs/authority/baselines/1.6.0/decisions/ADR-0006_Identity_ASPNET_Identity_OpenIddict.md",
+        "docs/authority/current/development/AMD-0002_Non-Blocking_PR_Approval_and_Continuous_Local_Execution.md",
+        "docs/authority/current/development/02_Repository_Solution_and_Module_Architecture.md",
+        "docs/authority/current/development/09_Testing_Acceptance_Evidence_and_Quality_Gates.md",
+        "docs/authority/current/development/29_Privacy_Data_Lifecycle_and_Processing_Governance_FRD.md",
+        "docs/authority/current/decisions/PDR-0011_Universal_Account_Eligibility_Age-Aware_Consent_and_Delegated_Commercial_Authority.md",
+        "docs/authority/current/decisions/AMD-0007_Universal_Registration_Age-Aware_Consent_and_Delegated_Commercial_Authority.md"
+      ],
+      "context_artifacts": [
+        "docs/development/P2_004_REGISTRATION.md",
+        "docs/contracts/registration-onboarding.openapi.json",
+        "docs/development/PDR0011_AMD0007_IMPLEMENTATION.md"
+      ],
+      "evidence_refs": [
+        "governance/evidence/TUN-P2-004-VALIDATION.json",
+        "governance/evidence/PDR0011-AMD0007-IMPACT-AUDIT.json"
+      ],
+      "findings": [
+        "Semantic labels match the affected Figma/control flow; obsolete18+ admission/eligibility copy is removed from active proposal.",
+        "Copy remains DRAFT. Runtime still requires effective published provenance and approved legal links; no legal/publication approval is asserted.",
+        "Reviewed committed implementation c6fa8e7690095f8eb2401587c407501fced29a4d.",
+        "Executing-agent engineering perspective, not independent human/Product/legal/release approval."
+      ],
+      "blocking_findings": [],
+      "required_actions": [],
+      "context_expansion_requested": false
+    },
+    {
+      "schema_version": 1,
+      "review_id": "REV-TUN-P2-004-rd-engineer",
+      "work_item_id": "TUN-P2-004",
+      "role": "rd-engineer",
+      "status": "PASS",
+      "result": "PASS",
+      "reviewed_at": "2026-10-17T20:15:56.211Z",
+      "skill_id": "rd-engineer",
+      "skill_version": "1.0.0",
+      "skill_hash": "2834c223dfd847a6d7cd28f52de4113efc574d621391d059e8dc1469bdf33187",
+      "authority_refs": [
+        "docs/authority/current-authority.json",
+        "docs/authority/current/development/11_Development_Planes_Milestones_and_P0_Backlog.md",
+        "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md",
+        "docs/authority/current/development/32_Domain_API_Event_Data_and_Policy_Contract_Catalog.md",
+        "docs/authority/current/development/34_Architecture_to_Development_Traceability_Matrix.md",
+        "docs/authority/baselines/1.6.0/decisions/ADR-0006_Identity_ASPNET_Identity_OpenIddict.md",
+        "docs/authority/current/development/AMD-0002_Non-Blocking_PR_Approval_and_Continuous_Local_Execution.md",
+        "docs/authority/current/development/02_Repository_Solution_and_Module_Architecture.md",
+        "docs/authority/current/development/09_Testing_Acceptance_Evidence_and_Quality_Gates.md",
+        "docs/authority/current/development/29_Privacy_Data_Lifecycle_and_Processing_Governance_FRD.md",
+        "docs/authority/current/decisions/PDR-0011_Universal_Account_Eligibility_Age-Aware_Consent_and_Delegated_Commercial_Authority.md",
+        "docs/authority/current/decisions/AMD-0007_Universal_Registration_Age-Aware_Consent_and_Delegated_Commercial_Authority.md"
+      ],
+      "context_artifacts": [
+        "docs/development/P2_004_REGISTRATION.md",
+        "docs/contracts/registration-onboarding.openapi.json",
+        "docs/development/PDR0011_AMD0007_IMPLEMENTATION.md"
+      ],
+      "evidence_refs": [
+        "governance/evidence/TUN-P2-004-VALIDATION.json",
+        "governance/evidence/PDR0011-AMD0007-IMPACT-AUDIT.json"
+      ],
+      "findings": [
+        "No new external technology/provider decision: reuse existing framework Data Protection/Identity/EF, approved policy/calendar and shared UI.",
+        "Existing primary-source security guidance is retained as engineering guidance; canonical PDR-0011/AMD-0007 controls Product semantics, not screenshots or legal guesses.",
+        "Reviewed committed implementation c6fa8e7690095f8eb2401587c407501fced29a4d.",
+        "Executing-agent engineering perspective, not independent human/Product/legal/release approval."
+      ],
+      "blocking_findings": [],
+      "required_actions": [],
+      "context_expansion_requested": false
+    },
+    {
+      "schema_version": 1,
+      "review_id": "REV-TUN-P2-004-devops-engineer",
+      "work_item_id": "TUN-P2-004",
+      "role": "devops-engineer",
+      "status": "PASS",
+      "result": "PASS",
+      "reviewed_at": "2026-10-17T20:15:56.211Z",
+      "skill_id": "devops-engineer",
+      "skill_version": "1.0.0",
+      "skill_hash": "0def19cfd8cf73f9fe47851ab171d3154e7e80b4675ded65964f10856789b50c",
+      "authority_refs": [
+        "docs/authority/current-authority.json",
+        "docs/authority/current/development/11_Development_Planes_Milestones_and_P0_Backlog.md",
+        "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md",
+        "docs/authority/current/development/32_Domain_API_Event_Data_and_Policy_Contract_Catalog.md",
+        "docs/authority/current/development/34_Architecture_to_Development_Traceability_Matrix.md",
+        "docs/authority/baselines/1.6.0/decisions/ADR-0006_Identity_ASPNET_Identity_OpenIddict.md",
+        "docs/authority/current/development/AMD-0002_Non-Blocking_PR_Approval_and_Continuous_Local_Execution.md",
+        "docs/authority/current/development/02_Repository_Solution_and_Module_Architecture.md",
+        "docs/authority/current/development/09_Testing_Acceptance_Evidence_and_Quality_Gates.md",
+        "docs/authority/current/development/29_Privacy_Data_Lifecycle_and_Processing_Governance_FRD.md",
+        "docs/authority/current/decisions/PDR-0011_Universal_Account_Eligibility_Age-Aware_Consent_and_Delegated_Commercial_Authority.md",
+        "docs/authority/current/decisions/AMD-0007_Universal_Registration_Age-Aware_Consent_and_Delegated_Commercial_Authority.md"
+      ],
+      "context_artifacts": [
+        "docs/development/P2_004_REGISTRATION.md",
+        "docs/contracts/registration-onboarding.openapi.json",
+        "docs/development/PDR0011_AMD0007_IMPLEMENTATION.md"
+      ],
+      "evidence_refs": [
+        "governance/evidence/TUN-P2-004-VALIDATION.json",
+        "governance/evidence/PDR0011-AMD0007-IMPACT-AUDIT.json"
+      ],
+      "findings": [
+        "Platform/web build and fresh Release BFF publish pass. All25 original web files and26 compressed variants match; no stale previous publish assets retained.",
+        "No live migration/provider/deployment or protection bypass. Existing P1-RV001 security/release findings remain unwaived.",
+        "Reviewed committed implementation c6fa8e7690095f8eb2401587c407501fced29a4d.",
+        "Executing-agent engineering perspective, not independent human/Product/legal/release approval."
+      ],
+      "blocking_findings": [],
+      "required_actions": [],
+      "context_expansion_requested": false
+    },
+    {
+      "schema_version": 1,
+      "review_id": "REV-TUN-P2-004-business-analyst",
+      "work_item_id": "TUN-P2-004",
+      "role": "business-analyst",
+      "status": "PASS",
+      "result": "PASS",
+      "reviewed_at": "2026-10-17T20:15:56.211Z",
+      "skill_id": "business-analyst",
+      "skill_version": "1.0.0",
+      "skill_hash": "ca6e24da90c6dac80b7b75124f04a81a2d590e73cc1e99781546c4aad1bca04f",
+      "authority_refs": [
+        "docs/authority/current-authority.json",
+        "docs/authority/current/development/11_Development_Planes_Milestones_and_P0_Backlog.md",
+        "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md",
+        "docs/authority/current/development/32_Domain_API_Event_Data_and_Policy_Contract_Catalog.md",
+        "docs/authority/current/development/34_Architecture_to_Development_Traceability_Matrix.md",
+        "docs/authority/baselines/1.6.0/decisions/ADR-0006_Identity_ASPNET_Identity_OpenIddict.md",
+        "docs/authority/current/development/AMD-0002_Non-Blocking_PR_Approval_and_Continuous_Local_Execution.md",
+        "docs/authority/current/development/02_Repository_Solution_and_Module_Architecture.md",
+        "docs/authority/current/development/09_Testing_Acceptance_Evidence_and_Quality_Gates.md",
+        "docs/authority/current/development/29_Privacy_Data_Lifecycle_and_Processing_Governance_FRD.md",
+        "docs/authority/current/decisions/PDR-0011_Universal_Account_Eligibility_Age-Aware_Consent_and_Delegated_Commercial_Authority.md",
+        "docs/authority/current/decisions/AMD-0007_Universal_Registration_Age-Aware_Consent_and_Delegated_Commercial_Authority.md"
+      ],
+      "context_artifacts": [
+        "docs/development/P2_004_REGISTRATION.md",
+        "docs/contracts/registration-onboarding.openapi.json",
+        "docs/development/PDR0011_AMD0007_IMPLEMENTATION.md"
+      ],
+      "evidence_refs": [
+        "governance/evidence/TUN-P2-004-VALIDATION.json",
+        "governance/evidence/PDR0011-AMD0007-IMPACT-AUDIT.json"
+      ],
+      "findings": [
+        "Approved PDR-0011/AMD-0007 requirements map to registration, verified Personal Information, current policy consent and independent commercial capability.",
+        "Active lifecycle owners002/003/004 corrected; future planes are bounded contracts and original historical PDR-0007 outcomes remain intact.",
+        "Reviewed committed implementation c6fa8e7690095f8eb2401587c407501fced29a4d.",
+        "Executing-agent engineering perspective, not independent human/Product/legal/release approval."
+      ],
+      "blocking_findings": [],
+      "required_actions": [],
+      "context_expansion_requested": false
+    },
+    {
+      "schema_version": 1,
+      "review_id": "REV-TUN-P2-004-financial-specialist",
+      "work_item_id": "TUN-P2-004",
+      "role": "financial-specialist",
+      "status": "PASS",
+      "result": "PASS",
+      "reviewed_at": "2026-10-17T20:15:56.211Z",
+      "skill_id": "financial-specialist",
+      "skill_version": "1.0.0",
+      "skill_hash": "3c2a56c0f484c3645f61b7b2b8b437b04a9a93661ec574ea863d1c720da82723",
+      "authority_refs": [
+        "docs/authority/current-authority.json",
+        "docs/authority/current/development/11_Development_Planes_Milestones_and_P0_Backlog.md",
+        "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md",
+        "docs/authority/current/development/32_Domain_API_Event_Data_and_Policy_Contract_Catalog.md",
+        "docs/authority/current/development/34_Architecture_to_Development_Traceability_Matrix.md",
+        "docs/authority/baselines/1.6.0/decisions/ADR-0006_Identity_ASPNET_Identity_OpenIddict.md",
+        "docs/authority/current/development/AMD-0002_Non-Blocking_PR_Approval_and_Continuous_Local_Execution.md",
+        "docs/authority/current/development/02_Repository_Solution_and_Module_Architecture.md",
+        "docs/authority/current/development/09_Testing_Acceptance_Evidence_and_Quality_Gates.md",
+        "docs/authority/current/development/29_Privacy_Data_Lifecycle_and_Processing_Governance_FRD.md",
+        "docs/authority/current/decisions/PDR-0011_Universal_Account_Eligibility_Age-Aware_Consent_and_Delegated_Commercial_Authority.md",
+        "docs/authority/current/decisions/AMD-0007_Universal_Registration_Age-Aware_Consent_and_Delegated_Commercial_Authority.md"
+      ],
+      "context_artifacts": [
+        "docs/development/P2_004_REGISTRATION.md",
+        "docs/contracts/registration-onboarding.openapi.json",
+        "docs/development/PDR0011_AMD0007_IMPLEMENTATION.md"
+      ],
+      "evidence_refs": [
+        "governance/evidence/TUN-P2-004-VALIDATION.json",
+        "governance/evidence/PDR0011-AMD0007-IMPACT-AUDIT.json"
+      ],
+      "findings": [
+        "Under18 never independently qualifies for payer/payment-method/paid-contract capability; current age evaluation returns PAYER_CONTEXT_REQUIRED.",
+        "Guardian/adult/organization/school sponsorship reuses future existing BillingAccount/BillingAuthority contracts. Consent evidence is not payment authority; no financial plane or money rule is invented.",
+        "Reviewed committed implementation c6fa8e7690095f8eb2401587c407501fced29a4d.",
+        "Executing-agent engineering perspective, not independent human/Product/legal/release approval."
+      ],
+      "blocking_findings": [],
+      "required_actions": [],
+      "context_expansion_requested": false
+    }
+  ]
 }

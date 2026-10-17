@@ -5,39 +5,38 @@
   "role": "cyber-security-engineer",
   "status": "PASS",
   "result": "PASS",
-  "reviewed_at": "2026-10-16T21:58:02.545Z",
+  "reviewed_at": "2026-10-17T20:15:56.211Z",
   "skill_id": "cyber-security-engineer",
   "skill_version": "1.0.0",
   "skill_hash": "2d32ff3d7fb503f29cf930e9852ed4a757bb48a08e3fa4e3f6d5a23139a47f97",
   "authority_refs": [
     "docs/authority/current-authority.json",
     "docs/authority/current/development/11_Development_Planes_Milestones_and_P0_Backlog.md",
-    "docs/authority/baselines/1.6.0/17_Account_Identity_and_Session_FRD.md",
+    "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md",
     "docs/authority/current/development/32_Domain_API_Event_Data_and_Policy_Contract_Catalog.md",
     "docs/authority/current/development/34_Architecture_to_Development_Traceability_Matrix.md",
     "docs/authority/baselines/1.6.0/decisions/ADR-0006_Identity_ASPNET_Identity_OpenIddict.md",
-    "docs/authority/baselines/1.6.0/decisions/PDR-0007_DOB_Based_18_Plus_Eligibility.md",
     "docs/authority/current/development/AMD-0002_Non-Blocking_PR_Approval_and_Continuous_Local_Execution.md",
     "docs/authority/current/development/02_Repository_Solution_and_Module_Architecture.md",
     "docs/authority/current/development/09_Testing_Acceptance_Evidence_and_Quality_Gates.md",
-    "docs/authority/baselines/1.6.0/29_Privacy_Data_Lifecycle_and_Processing_Governance_FRD.md"
+    "docs/authority/current/development/29_Privacy_Data_Lifecycle_and_Processing_Governance_FRD.md",
+    "docs/authority/current/decisions/PDR-0011_Universal_Account_Eligibility_Age-Aware_Consent_and_Delegated_Commercial_Authority.md",
+    "docs/authority/current/decisions/AMD-0007_Universal_Registration_Age-Aware_Consent_and_Delegated_Commercial_Authority.md"
   ],
   "context_artifacts": [
-    "governance/work-items/TUN-P2-004.yaml",
-    "docs/development/P2_004_REGISTRATION_SCOPE.md",
-    "docs/development/P2_004_REGISTRATION.md"
+    "docs/development/P2_004_REGISTRATION.md",
+    "docs/contracts/registration-onboarding.openapi.json",
+    "docs/development/PDR0011_AMD0007_IMPLEMENTATION.md"
   ],
   "evidence_refs": [
     "governance/evidence/TUN-P2-004-VALIDATION.json",
-    "governance/evidence/TUN-P2-004-AUTHORITY-RESOLUTION.json",
-    "governance/evidence/TUN-P2-004-RD-SOURCES.json",
-    "governance/evidence/TUN-P2-004-DATA-INVENTORY.json",
-    "governance/evidence/TUN-P2-004-UI-ALIGNMENT.json",
-    "governance/evidence/TUN-P2-004-ROLE-REVIEWS.json"
+    "governance/evidence/PDR0011-AMD0007-IMPACT-AUDIT.json"
   ],
   "findings": [
-    "Private protected browser context, actual-peer HMAC abuse partition, HTTPS/origin/CSRF and bounded JSON remain mandatory. Framework IdentityV3 work factor is an approved server policy input. Codes/credentials are separately protected, proof is constant-time compared, stale/concurrent versions cannot overwrite the winning credential, and existing/new account responses share hashing/opaque state. No mathematically constant network timing or production provider security is claimed. P1 image findings remain open.",
-    "Exact tested candidate f64f9976a150e3c4a08378c9b87c980b91359a81. Executing-agent engineering perspective; Product/content/legal acceptance, protected-main merge and production release approvals remain separate."
+    "Strict body schemas reject obsolete DOB registration and forged consent/commercial claims. HTTPS/origin/CSRF/protected expiring context, abuse/version/proof and uniqueness guards remain.",
+    "DOB/names protected by isolated purpose; no raw profile in receipts/events/responses/browser storage; safe errors. Secret/SAST and current dependency audits pass.",
+    "Reviewed committed implementation c6fa8e7690095f8eb2401587c407501fced29a4d.",
+    "Executing-agent engineering perspective, not independent human/Product/legal/release approval."
   ],
   "blocking_findings": [],
   "required_actions": [],

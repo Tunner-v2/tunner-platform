@@ -5,7 +5,7 @@
   "role": "financial-specialist",
   "status": "PASS",
   "result": "PASS",
-  "reviewed_at": "2026-10-17T19:35:43.529Z",
+  "reviewed_at": "2026-10-17T20:15:56.211Z",
   "skill_id": "financial-specialist",
   "skill_version": "1.0.0",
   "skill_hash": "3c2a56c0f484c3645f61b7b2b8b437b04a9a93661ec574ea863d1c720da82723",
@@ -24,15 +24,19 @@
     "docs/authority/current/decisions/AMD-0007_Universal_Registration_Age-Aware_Consent_and_Delegated_Commercial_Authority.md"
   ],
   "context_artifacts": [
-    "governance/work-items/TUN-P2-004.yaml",
+    "docs/development/P2_004_REGISTRATION.md",
+    "docs/contracts/registration-onboarding.openapi.json",
     "docs/development/PDR0011_AMD0007_IMPLEMENTATION.md"
   ],
   "evidence_refs": [
+    "governance/evidence/TUN-P2-004-VALIDATION.json",
     "governance/evidence/PDR0011-AMD0007-IMPACT-AUDIT.json"
   ],
   "findings": [
-    "Pre-implementation scope/authority review only: PDR-0011/AMD-0007 resolve the changed requirements; Accounts supplies commercial eligibility without implementing Billing/Payment/Subscription or granting payer authority from consent. No new monetary rule or legal threshold is introduced.",
-    "Executing-agent role perspective; final source/test review will supersede this preparation review before validation readiness."
+    "Under18 never independently qualifies for payer/payment-method/paid-contract capability; current age evaluation returns PAYER_CONTEXT_REQUIRED.",
+    "Guardian/adult/organization/school sponsorship reuses future existing BillingAccount/BillingAuthority contracts. Consent evidence is not payment authority; no financial plane or money rule is invented.",
+    "Reviewed committed implementation c6fa8e7690095f8eb2401587c407501fced29a4d.",
+    "Executing-agent engineering perspective, not independent human/Product/legal/release approval."
   ],
   "blocking_findings": [],
   "required_actions": [],
