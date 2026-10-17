@@ -278,6 +278,26 @@
     {
       "path": "artifacts/pdr0011-amd0007-20261017/candidate-governance.json",
       "sha256": "699d2fc0bce1d2c0ec2face65807ca3c3f8b095d65d9dbbd128d07f85cf7af54"
+    },
+    {
+      "path": "artifacts/pdr0011-amd0007-20261017/final-p2-003-gate.json",
+      "sha256": "10a740969cc55171ebedcb59107bdbece96d81bb35f72c71ec20ad7f336d6054"
+    },
+    {
+      "path": "artifacts/pdr0011-amd0007-20261017/final-p2-004-gate.json",
+      "sha256": "79d511b23e6e34b816c58d19a44f03ebffff49d93e36a5308d9a9038f89bec27"
+    },
+    {
+      "path": "artifacts/pdr0011-amd0007-20261017/final-governance.json",
+      "sha256": "699d2fc0bce1d2c0ec2face65807ca3c3f8b095d65d9dbbd128d07f85cf7af54"
+    },
+    {
+      "path": "artifacts/pdr0011-amd0007-20261017/final-context-verify.json",
+      "sha256": "a277f00adb4fac1306c3385104513eb26aad884e7533243473e097c9b20c947c"
+    },
+    {
+      "path": "artifacts/pdr0011-amd0007-20261017/final-authority-checkout.json",
+      "sha256": "39d6aff9ce67af772886a11c46fd3127b77ed63864490bbe1e373dbafc1427d3"
     }
   ],
   "screenshots": [
@@ -762,5 +782,17 @@
         "boundary": "Reproduced stale audit fixture only; all 49 registration-owned behavior paths still match original tested SHA. Original registration validation is unchanged."
       }
     }
-  ]
+  ],
+  "native_readiness": {
+    "outcome": "READY",
+    "checkpoint_commit_sha": "395fbd442edf912adf7397acc3893fb483f68525",
+    "p2_003": "READY",
+    "p2_004": "READY",
+    "governance_records": 667,
+    "diagnostics": 0,
+    "context": "CURRENT",
+    "authority_artifacts": 192,
+    "committed_authority_checks": 168,
+    "report_boundary": "Later report/receipt metadata changes no behavior. Refresh ignored native context after the final metadata commit."
+  }
 }
