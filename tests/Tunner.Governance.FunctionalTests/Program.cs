@@ -1099,6 +1099,11 @@ static void RunGlobalUiEvidenceChecks(DirectoryInfo repositoryRoot, ICollection<
     try
     {
         CreateFixture(repositoryRoot, fixture);
+        string[] fixtureAuthorityRefs = ["docs/authority/mirror.txt"];
+        string[] fixtureAcceptance = ["Synthetic current UI proof"];
+        string[] fixtureRoles = ["governance-engineer"];
+        string[] fixtureImageRefs = ["governance/evidence/fixture-render.png"];
+        string[] fixtureVersions = ["fixture"];
         var app = Directory.CreateDirectory(Path.Combine(fixture.FullName, "web/apps/fixture"));
         var source = Path.Combine(app.FullName, "main.tsx");
         File.WriteAllText(source, "export const fixture = 1;\n");
@@ -1109,7 +1114,7 @@ static void RunGlobalUiEvidenceChecks(DirectoryInfo repositoryRoot, ICollection<
         object Item(string id, string kind, string path, string status = "IMPLEMENTED") => new
         {
             id, kind, status, app = "fixture", module = "fixture", pathname = path, runtime_pathname = path, guard = "server-authorized workflow",
-            owner_scopes = new[] { "WORK-UI" }, authority_refs = new[] { "docs/authority/mirror.txt" },
+            owner_scopes = new[] { "WORK-UI" }, authority_refs = fixtureAuthorityRefs,
             figma_refs = new[] { "synthetic gate fixture reference" }, source_paths = new[] { "web/apps/fixture" }
         };
         var inventory = JsonSerializer.SerializeToNode(new
@@ -1118,6 +1123,28 @@ static void RunGlobalUiEvidenceChecks(DirectoryInfo repositoryRoot, ICollection<
             items = new[] { Item("SCREEN-A", "SCREEN", "/alpha"), Item("SCREEN-B", "SCREEN", "/beta"), Item("FORM-B", "FORM", "/beta"), Item("FUTURE", "SCREEN", "", "PLANNED") }
         })!;
         File.WriteAllText(inventoryPath, inventory.ToJsonString());
+        var resolutionWorkPath = Path.Combine(fixture.FullName, "governance/work-items/WORK-UI.yaml");
+        const string resolutionProofRef = "governance/evidence/WORK-UI-UI-COMPLIANCE.json";
+        const string resolutionValidationRef = "governance/evidence/WORK-UI-VALIDATION.json";
+        var resolutionOwned = new[] { "web/apps/fixture/main.tsx", UiComplianceApplication.InventoryPath };
+        var resolutionWork = JsonSerializer.SerializeToNode(new
+        {
+            schema_version = 1, work_item_id = "WORK-UI", milestone_id = "MVP", sprint_id = (string?)null,
+            title = "Synthetic resolved UI lifecycle fixture", status = "UI_REQUIRED", type = "GOVERNANCE_TOOLING",
+            authority_refs = fixtureAuthorityRefs, flow_refs = Array.Empty<string>(), contract_refs = Array.Empty<string>(), decision_refs = Array.Empty<string>(),
+            acceptance_criteria = fixtureAcceptance, prerequisites = Array.Empty<string>(), blockers = Array.Empty<string>(),
+            impact = new { architecture = false, ui = true, sdk = false, financial = false, compliance = false, security = false, devops = false, support = false },
+            activated_roles = fixtureRoles, required_tests = Array.Empty<string>(),
+            required_evidence = new[] { resolutionValidationRef, resolutionProofRef, "governance/evidence/WORK-UI-ROLE-REVIEWS.json" },
+            ui_evidence_ref = resolutionProofRef, context_policy = "TASK", todos = Array.Empty<string>(), defects = Array.Empty<string>(),
+            authority_resolution = new { schema_version = 1, outcome = "RESOLVED_EXISTING_AUTHORITY", reviewed_authority_refs = fixtureAuthorityRefs,
+                unresolved_question = "None in this synthetic fixture", conclusion = "Synthetic existing approved visual authority", conditional_trigger_absent = false, reviewed_at = "2026-09-30T00:00:00-04:00" },
+            created_at = "2026-09-30T00:00:00-04:00", updated_at = "2026-09-30T00:00:00-04:00"
+        })!;
+        File.WriteAllText(resolutionWorkPath, resolutionWork.ToJsonString());
+        var resolutionValidation = JsonSerializer.SerializeToNode(new { scope_id = "WORK-UI", validation_kind = "COMMITTED", result = "PENDING", owned_behavior_paths = resolutionOwned })!;
+        File.WriteAllText(Path.Combine(fixture.FullName, resolutionValidationRef), resolutionValidation.ToJsonString());
+        File.WriteAllText(Path.Combine(fixture.FullName, "governance/evidence/WORK-UI-ROLE-REVIEWS.json"), "{}"); // Explicit legacy synthetic fixture; current mandatory-role behavior is covered separately.
         InitializeGit(fixture);
         var sha = RunGitOutput(fixture, "rev-parse", "HEAD");
         object Reference() => new { path = "governance/evidence/fixture-render.png", sha256 = HashFile(imagePath) };
@@ -1170,6 +1197,55 @@ static void RunGlobalUiEvidenceChecks(DirectoryInfo repositoryRoot, ICollection<
         changed = proof.DeepClone(); changed["scope_id"] = "ANOTHER-SCOPE"; WriteProof(changed);
         Check(Has("requested scope"), "one work scope cannot silently substitute for another"); Reset();
         Check(Run().Outcome == "PASS", "negative checks restore the original valid fixture without weakening a gate");
+        var resolutionChecks = 0;
+        void ResolutionCheck(bool value, string message) { resolutionChecks++; Expect(value, "Resolved UI_REQUIRED lifecycle: " + message, failures); }
+        resolutionWork["git_state"] = JsonSerializer.SerializeToNode(new { repository_changed = true, validated_commit_sha = sha, tested_commit_sha = sha,
+            work_item_commit_shas = new[] { sha }, closure_commit_sha = (string?)null, remaining_uncommitted_paths = Array.Empty<string>(), remaining_uncommitted_classification = "NONE" });
+        resolutionValidation["result"] = "PASS"; resolutionValidation["tested_commit_sha"] = sha; resolutionValidation["validated_commit_sha"] = sha;
+        var scopedProof = proof.DeepClone(); scopedProof["scope_id"] = "WORK-UI";
+        File.WriteAllText(Path.Combine(fixture.FullName, resolutionValidationRef), resolutionValidation.ToJsonString());
+        File.WriteAllText(Path.Combine(fixture.FullName, resolutionProofRef), scopedProof.ToJsonString());
+        void WriteResolutionWork(JsonNode value) => File.WriteAllText(resolutionWorkPath, value.ToJsonString());
+        WriteResolutionWork(resolutionWork);
+        RunGit(fixture, "add", "--", "governance/work-items/WORK-UI.yaml", resolutionValidationRef, resolutionProofRef);
+        RunGit(fixture, "commit", "--quiet", "-m", "Synthetic committed UI resolution");
+        TransitionPayload Transition(string destination = "REFINEMENT") => (TransitionPayload)GovernanceApplication.CheckTransition(fixture, "WORK-UI", destination).Payload;
+        ResolutionCheck(((GatePayload)GovernanceApplication.CheckGate(fixture, "WORK-UI").Payload).Outcome == "READY", "fixture has real passing committed work and scope-bound UI gates");
+        ResolutionCheck(Transition().Outcome == "ALLOWED", "resolved validated UI work may return to refinement");
+        ResolutionCheck(Transition("DONE").Outcome != "ALLOWED", "no direct completion or normal-state skipping");
+        var changedWork = resolutionWork.DeepClone(); changedWork["status"] = "BLOCKED"; WriteResolutionWork(changedWork);
+        ResolutionCheck(Transition().Outcome != "ALLOWED", "other side states retain their existing refusal"); WriteResolutionWork(resolutionWork);
+        changedWork = resolutionWork.DeepClone(); changedWork["blockers"] = new JsonArray("unresolved fixture blocker"); WriteResolutionWork(changedWork);
+        ResolutionCheck(Transition().Outcome == "REJECTED", "ordinary work blockers still reject unblocking"); WriteResolutionWork(resolutionWork);
+        changedWork = resolutionWork.DeepClone(); changedWork.AsObject().Remove("authority_resolution"); WriteResolutionWork(changedWork);
+        ResolutionCheck(Transition().Outcome == "REJECTED", "recorded authority resolution is required"); WriteResolutionWork(resolutionWork);
+        changedWork = resolutionWork.DeepClone(); changedWork.AsObject().Remove("ui_evidence_ref"); WriteResolutionWork(changedWork);
+        ResolutionCheck(Transition().Outcome == "REJECTED", "a legacy or unrelated PASS cannot replace scope-bound UI proof"); WriteResolutionWork(resolutionWork);
+        changedWork = resolutionWork.DeepClone(); changedWork["git_state"]!["repository_changed"] = false; WriteResolutionWork(changedWork);
+        ResolutionCheck(Transition().Outcome == "REJECTED", "repository-changing committed validation is mandatory"); WriteResolutionWork(resolutionWork);
+        File.AppendAllText(source, "export const stale = true;\n");
+        ResolutionCheck(Transition().Outcome == "REJECTED", "stale owned source blocks the side-state exit"); File.WriteAllText(source, "export const fixture = 1;\n");
+        var dirtyProof = scopedProof.DeepClone(); dirtyProof["result"] = "FAIL"; File.WriteAllText(Path.Combine(fixture.FullName, resolutionProofRef), dirtyProof.ToJsonString());
+        ResolutionCheck(Transition().Outcome == "REJECTED", "failed or uncommitted UI proof is refused"); File.WriteAllText(Path.Combine(fixture.FullName, resolutionProofRef), scopedProof.ToJsonString());
+        Directory.CreateDirectory(Path.Combine(fixture.FullName, "governance/todos"));
+        var todoPath = Path.Combine(fixture.FullName, "governance/todos/TODO-UI-FIXTURE.yaml");
+        var todo = JsonSerializer.SerializeToNode(new { schema_version = 1, id = "TODO-UI-FIXTURE", work_item_id = "WORK-UI", title = "Synthetic tracked UI blocker", status = "OPEN", priority = "P2", owner_role = "governance-engineer", prerequisites = Array.Empty<string>(), acceptance_condition = "Synthetic resolved state", created_at = "2026-09-30T00:00:00-04:00", updated_at = "2026-09-30T00:00:00-04:00" })!;
+        File.WriteAllText(todoPath, todo.ToJsonString());
+        changedWork = resolutionWork.DeepClone(); changedWork["todos"] = new JsonArray("TODO-UI-FIXTURE"); WriteResolutionWork(changedWork);
+        ResolutionCheck(Transition().Outcome == "REJECTED", "an open linked TODO cannot be ignored");
+        todo["status"] = "DONE"; File.WriteAllText(todoPath, todo.ToJsonString());
+        ResolutionCheck(Transition().Outcome == "ALLOWED", "a resolved linked TODO permits the otherwise valid exit");
+        changedWork["todos"] = new JsonArray("TODO-DOES-NOT-EXIST"); WriteResolutionWork(changedWork);
+        ResolutionCheck(Transition().Outcome == "REJECTED", "missing linked records fail closed");
+        Directory.CreateDirectory(Path.Combine(fixture.FullName, "governance/defects"));
+        var defectPath = Path.Combine(fixture.FullName, "governance/defects/DEF-UI-FIXTURE.yaml");
+        var defect = JsonSerializer.SerializeToNode(new { schema_version = 1, defect_id = "DEF-UI-FIXTURE", work_item_id = "WORK-UI", classification = "UI_REQUIRED", severity = "SEV-3", status = "OPEN", environment = "synthetic fixture", description = "Synthetic unresolved design defect", expected_behavior_ref = "docs/authority/mirror.txt", evidence = fixtureImageRefs, affected_versions = fixtureVersions, created_at = "2026-09-30T00:00:00-04:00", updated_at = "2026-09-30T00:00:00-04:00" })!;
+        File.WriteAllText(defectPath, defect.ToJsonString());
+        changedWork = resolutionWork.DeepClone(); changedWork["defects"] = new JsonArray("DEF-UI-FIXTURE"); WriteResolutionWork(changedWork);
+        ResolutionCheck(Transition().Outcome == "REJECTED", "open design defects still block acceptance");
+        defect["status"] = "CLOSED"; File.WriteAllText(defectPath, defect.ToJsonString());
+        ResolutionCheck(Transition().Outcome == "ALLOWED", "closed tracked defects restore the original guarded positive path");
+        Console.WriteLine($"Resolved UI_REQUIRED lifecycle checks: {resolutionChecks}");
     }
     finally { DeleteFixture(fixture); }
     Console.WriteLine($"Global UI evidence gate checks: {checks}");
