@@ -1,6 +1,6 @@
 # Global UI compliance handoff — 2026-10-18
 
-Status: current implemented UI locally validated and explicitly accepted; scoped work CLOSED/DONE. Draft [PR18](https://github.com/Tunner-v2/tunner-platform/pull/18) awaits CI/review and separate protected-main integration. No whole-P2 or release completion.
+Status: current implemented UI locally validated and explicitly accepted; scoped work CLOSED/DONE. Draft [PR18](https://github.com/Tunner-v2/tunner-platform/pull/18) has passing web/security-baseline jobs at bce02c7; four container scan failures block merge/release readiness, with separate human/parent integration still pending. No whole-P2 or release completion.
 
 ## Branch and source
 
@@ -20,7 +20,7 @@ The [audit report](GLOBAL_UI_COMPLIANCE_REPORT.md) contains the ten-part authori
 
 ## Failures and boundaries
 
-Initial/development failed attempts are retained in validation envelopes and excluded from acceptance. The reported Windows dialogs lack the original managed stack: the proven fix guards remaining managed setup/body/cleanup paths, preserves failure exit1 and diagnostics, and does not suppress Windows error reporting. Existing P1-RV001 security/release findings remain unwaived. Legal/content/provider publication is not implied by local synthetic browser fixtures.
+Initial/development failed attempts are retained in validation envelopes and excluded from acceptance. The reported Windows dialogs lack the original managed stack: the proven fix guards remaining managed setup/body/cleanup paths, preserves failure exit1 and diagnostics, and does not suppress Windows error reporting. Existing P1-RV001 security/release findings remain unwaived. Its appended current CI observation records matching PostgreSQL/OpenBao/Mailpit CVE sets and two additional LGTM scanner IDs; no vulnerability was suppressed. The auto-PR job fails its attempt to enable auto-merge on a draft; draft/no-auto-merge is retained. Legal/content/provider publication is not implied by local synthetic browser fixtures.
 
 Product consent is scoped in AMD0008-PRODUCT-OWNER-VISUAL-CONSENT.json, AMD0009-ADMIN-BORDER-PRODUCT-OWNER-CONSENT.json and AMD0009-CURRENT-UI-PRODUCT-ACCEPTANCE.json. No current-scope visual decision remains. Broader parent registration acceptance, future visual changes, protected-main merge and production/release require their own applicable authority.
 
@@ -32,7 +32,7 @@ Activated roles: UI/UX Engineer,Frontend Engineer,Tester/QA,End-user UX Reviewer
 
 ## Exact next authorized action
 
-Final governance next marks TUN-P2-002/003/004 VALIDATION actionable. Start with the fresh TUN-P2-004 pack and prepare its remaining registration validation/acceptance review without treating the scoped UI approval as acceptance of the broader parent. TUN-P2-005 authentication is BACKLOG/non-actionable; complete refinement/current authority/Figma/context and mandatory role preparation, then rerun its native gate before implementation. A PR awaiting approval does not stop eligible preparation.
+First preserve the release block: existing P1-RV001 owns the four image scan failures and status-check enforcement. Prepare its authority/role/refinement gates before implementing security remediation. Final governance next marks TUN-P2-002/003/004 VALIDATION actionable. Start with the fresh TUN-P2-004 pack and prepare its remaining registration validation/acceptance review without treating the scoped UI approval as acceptance of the broader parent. TUN-P2-005 authentication is BACKLOG/non-actionable; complete refinement/current authority/Figma/context and mandatory role preparation, then rerun its native gate before implementation. A PR awaiting approval does not stop eligible preparation.
 
 To verify this handoff:
 
