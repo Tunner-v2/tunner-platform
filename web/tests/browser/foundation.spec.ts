@@ -56,3 +56,18 @@ test('nested Admin mode does not leak into either surrounding User control', asy
   expect(await buttons.evaluateAll(elements=>elements.map(e=>getComputedStyle(e).backgroundColor))).toEqual(['rgb(79, 70, 229)','rgb(9, 9, 10)','rgb(79, 70, 229)']);
   const outerScope=page.getByTestId('nested-themes');await expect(outerScope.getByRole('button',{name:'Nested Admin example'})).toBeVisible();
 });
+for(const surface of ['user','admin'] as const){
+ test(surface+': shared validation handles submit, blur, correction, focus and duplicate submission',async({page})=>{
+  await page.goto('/');const panel=page.getByTestId(surface+'-panel');const field=panel.locator('#'+surface+'-field');const form=panel.locator('form');
+  await expect(form).toHaveAttribute('novalidate','');await field.fill('');await field.blur();await expect(field).toHaveAttribute('aria-invalid','true');
+  await form.evaluate((element:HTMLFormElement)=>element.requestSubmit());await expect(field).toBeFocused();await expect(form.getByRole('alert')).toBeVisible();
+  expect(await field.evaluate(e=>getComputedStyle(e).borderColor)).toBe('rgb(185, 28, 28)');
+  expect(await field.evaluate(e=>{const css=getComputedStyle(e);return {approvedWidth:css.getPropertyValue('--tn-primitive-invalid-border-width').trim(),renderedWidth:parseFloat(css.borderTopWidth),pixelRatio:devicePixelRatio};})).toEqual({approvedWidth:'1.5px',renderedWidth:Math.floor(1.5*await page.evaluate(()=>devicePixelRatio))/await page.evaluate(()=>devicePixelRatio),pixelRatio:await page.evaluate(()=>devicePixelRatio)});
+  const errorId=await field.getAttribute('aria-describedby');expect(errorId).toBeTruthy();
+  await field.fill('x'.repeat(201));await expect(field).toHaveAttribute('aria-invalid','true');await field.fill('corrected owner value');await expect(field).not.toHaveAttribute('aria-invalid','true');await expect(form.getByRole('alert')).toHaveCount(0);
+  await form.evaluate((element:HTMLFormElement)=>{element.requestSubmit();element.requestSubmit();});await expect(field).toBeDisabled();await expect(page.getByTestId(surface+'-count')).toHaveText('10');await expect(field).toBeEnabled();
+  const report=await new AxeBuilder({page}).withTags(['wcag2a','wcag2aa','wcag21aa','wcag22aa']).analyze();expect(report.violations).toEqual([]);
+  await field.fill('');await form.evaluate((element:HTMLFormElement)=>element.requestSubmit());await expect(field).toBeFocused();await page.screenshot({path:'test-results/shared-'+surface+'-validation-desktop.png',fullPage:true});
+  await page.setViewportSize({width:320,height:1100});expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);await page.screenshot({path:'test-results/shared-'+surface+'-validation-mobile.png',fullPage:true});
+ });
+}

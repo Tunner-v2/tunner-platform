@@ -1,8 +1,12 @@
+import { registrationSchema, verificationSchema, personalInformationSchema, validBirthDate } from '../apps/user/validation';
+import { registrationRoutes } from '../apps/user/routes';
+import inventory from '../../docs/contracts/ui-inventory.json' with { type: 'json' };
+import onboarding from '../../docs/contracts/registration-onboarding.openapi.json' with { type: 'json' };
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { renderToStaticMarkup } from 'react-dom/server';
 import type { ReactNode } from 'react';
-import { ThemeProvider, ContentProvider, PrimaryButton, TextField, TunnerBrand } from '../packages/ui/src/index';
+import { ThemeProvider, ContentProvider, PrimaryButton, TextField, TunnerBrand, z, validateTunnerForm, FormErrorSummary } from '../packages/ui/src/index';
 import type { PublishedContentResolver, ThemeMode, ThemeSurface } from '../packages/ui/src/index';
 
 const published: PublishedContentResolver = (key, context) => ({ key, text: key === 'brand' ? 'Tunner' : `<${key}>`, locale: context.locale, state: 'PUBLISHED', variantRef: 'fixture', versionRef: 'v1', publicationRef: 'fixture-only' });
@@ -31,4 +35,36 @@ test('placeholder requires its own published copy and provenance while retaining
   assert.match(html,/for="published-placeholder"/); assert.match(html,/placeholder="&lt;placeholder&gt;"/);
   assert.match(html,/<input[^>]*data-content-key="placeholder"/);
   assert.throws(()=>render(<TextField labelKey="label" placeholderKey="placeholder" value="" readOnly/>,(key,context)=>key==='placeholder'?undefined:published(key,context)),/Invalid published content/);
+});
+
+// Shared mechanics carry only the owning schema's message keys and cross-field policy.
+
+test('typed schemas enforce required, format, range and cross-field rules using domain keys', () => {
+ const schema = z.object({ email:z.string().email('example.email'), amount:z.number().min(1,'example.range'), confirmation:z.string() }).refine(value=>value.confirmation==='confirmed',{path:['confirmation'],message:'example.confirmation'});
+ const result = validateTunnerForm(schema,{email:'bad',amount:0,confirmation:''});
+ assert.equal(result.valid,false);assert.deepEqual(result.errors,{email:'example.email',amount:'example.range',confirmation:'example.confirmation'});
+ const corrected=validateTunnerForm(schema,{email:'example@example.test',amount:1,confirmation:'confirmed'});assert.equal(corrected.valid,true);assert.deepEqual(corrected.errors,{});
+});
+test('schema form-level errors and published summary remain separate from field rules',()=>{
+ const schema=z.object({value:z.string()}).refine(()=>false,{message:'example.form'});const result=validateTunnerForm(schema,{value:'safe'});assert.equal(result.valid,false);if(!result.valid)assert.equal(result.formErrorKey,'example.form');
+ const html=render(<FormErrorSummary contentKey="example.form"/>);assert.match(html,/role="alert"/);assert.match(html,/data-content-key="example.form"/);assert.doesNotMatch(html,/<example.form>/);
+});
+
+test('domain schemas use current policy and do not inherit historical Figma password or age restrictions',()=>{
+ const policy={passwordMinimumLength:15,passwordMaximumLength:128,proofDigits:6};const password='a'.repeat(15);const schema=registrationSchema(policy);
+ assert.equal(validateTunnerForm(schema,{email:'person@example.test',password,password_confirmation:password,notices:true}).valid,true);
+ const invalid=validateTunnerForm(schema,{email:'bad',password:'short',password_confirmation:'other',notices:false});assert.equal(invalid.valid,false);assert.deepEqual(Object.keys(invalid.errors).sort(),['email','notices','password','password_confirmation']);
+ const unicode='😀'.repeat(15);assert.equal(validateTunnerForm(schema,{email:'person@localhost',password:unicode,password_confirmation:unicode,notices:true}).valid,true);
+ assert.equal(validateTunnerForm(verificationSchema(6),{verification_code:'12345'}).valid,false);assert.equal(validateTunnerForm(verificationSchema(6),{verification_code:'１２３４５６'}).valid,false);assert.equal(validateTunnerForm(verificationSchema(6),{verification_code:'123456'}).valid,true);
+ const profile=personalInformationSchema(4,4,'2026-10-17');assert.equal(validateTunnerForm(profile,{full_name:'😀😀😀😀',display_name:'',date_of_birth:'2015-01-01'}).valid,true);assert.equal(validateTunnerForm(profile,{full_name:'😀😀😀😀😀',display_name:'',date_of_birth:'2015-01-01'}).valid,false);
+});
+test('DOB schema is calendar-safe and rejects future dates without client age eligibility policy',()=>{
+ for(const date of ['2025-02-29','2024-02-30','0000-01-01','2026-10-18','not-a-date'])assert.equal(validBirthDate(date,'2026-10-17'),false,date);
+ for(const date of ['2024-02-29','0099-01-01','2026-10-17','2015-01-01'])assert.equal(validBirthDate(date,'2026-10-17'),true,date);
+});
+test('every implemented screen route agrees with the central inventory and known BFF fallback contract',()=>{
+ const rows=inventory.items.filter(row=>row.kind==='SCREEN'&&row.status==='IMPLEMENTED');assert.equal(rows.length,Object.keys(registrationRoutes).length);
+ for(const route of Object.values(registrationRoutes)){const row=rows.find(r=>r.id===route.id);assert.ok(row);assert.equal(row.pathname,route.pathname);assert.equal(row.runtime_pathname,route.pathname);assert.ok(row.guard);assert.ok(row.figma_refs.length);}
+ assert.deepEqual(Object.values(registrationRoutes).map(r=>r.pathname),onboarding['x-tunner-screen-paths']);
+ assert.equal(inventory.items.filter(row=>row.kind==='FORM'&&row.status==='IMPLEMENTED').length,3);
 });

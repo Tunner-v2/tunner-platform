@@ -68,7 +68,8 @@
       ],
       "observed_defects": [
         "UI_ROUTING_DEFECT"
-      ]
+      ],
+      "routing_state": "IMPLEMENTED_PENDING_VALIDATION"
     },
     {
       "id": "U-AUTH-03",
@@ -78,7 +79,7 @@
       "module": "Identity.Registration",
       "title": "verify",
       "pathname": "/registration/verify-email",
-      "runtime_pathname": "/registration",
+      "runtime_pathname": "/registration/verify-email",
       "parameter_schema": {},
       "guard": "Server-bound registration state required; deep entry must not imply completion",
       "owner_scopes": [
@@ -105,7 +106,8 @@
       ],
       "observed_defects": [
         "UI_ROUTING_DEFECT"
-      ]
+      ],
+      "routing_state": "IMPLEMENTED_PENDING_VALIDATION"
     },
     {
       "id": "U-AUTH-03A",
@@ -115,7 +117,7 @@
       "module": "Identity.Registration",
       "title": "personal",
       "pathname": "/registration/personal-information",
-      "runtime_pathname": "/registration",
+      "runtime_pathname": "/registration/personal-information",
       "parameter_schema": {},
       "guard": "Server-bound registration state required; deep entry must not imply completion",
       "owner_scopes": [
@@ -142,7 +144,8 @@
       ],
       "observed_defects": [
         "UI_ROUTING_DEFECT"
-      ]
+      ],
+      "routing_state": "IMPLEMENTED_PENDING_VALIDATION"
     },
     {
       "id": "U-AUTH-CONSENT",
@@ -152,7 +155,7 @@
       "module": "Identity.Registration",
       "title": "consent",
       "pathname": "/registration/consent",
-      "runtime_pathname": "/registration",
+      "runtime_pathname": "/registration/consent",
       "parameter_schema": {},
       "guard": "Server-bound registration state required; deep entry must not imply completion",
       "owner_scopes": [
@@ -177,7 +180,8 @@
       "form_ids": [],
       "observed_defects": [
         "UI_ROUTING_DEFECT"
-      ]
+      ],
+      "routing_state": "IMPLEMENTED_PENDING_VALIDATION"
     },
     {
       "id": "U-AUTH-RESULT",
@@ -187,7 +191,7 @@
       "module": "Identity.Registration",
       "title": "ready",
       "pathname": "/registration/complete",
-      "runtime_pathname": "/registration",
+      "runtime_pathname": "/registration/complete",
       "parameter_schema": {},
       "guard": "Server-bound registration state required; deep entry must not imply completion",
       "owner_scopes": [
@@ -212,7 +216,8 @@
       "form_ids": [],
       "observed_defects": [
         "UI_ROUTING_DEFECT"
-      ]
+      ],
+      "routing_state": "IMPLEMENTED_PENDING_VALIDATION"
     },
     {
       "id": "FORM-REGISTRATION",
@@ -387,10 +392,10 @@
         "docs/authority/current/development/10_UI_UX_Components_Widgets_and_Plugins_Development_Rules.md"
       ],
       "figma_refs": [
-        {
-          "file_key": "3F9tAviUejTYpYvRJt8gM1",
-          "node_id": "49:128"
-        }
+        "https://www.figma.com/design/3F9tAviUejTYpYvRJt8gM1?node-id=49-131",
+        "https://www.figma.com/design/3F9tAviUejTYpYvRJt8gM1?node-id=49-132",
+        "https://www.figma.com/design/3F9tAviUejTYpYvRJt8gM1?node-id=49-133",
+        "https://www.figma.com/design/apNbwvAgdn1xIxYH1oiaSC?node-id=70-1257"
       ],
       "source_paths": [
         "web/packages/ui",
@@ -1553,5 +1558,6 @@
       "node_id": "187:2",
       "reason": "Hidden historical DOB-only screen, superseded prospectively by PDR-0011/AMD-0007; never implement as active UI."
     }
-  ]
+  ],
+  "updated_at": "2026-10-18T03:09:15.186Z"
 }

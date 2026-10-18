@@ -4,7 +4,7 @@
   "milestone_id": "P2",
   "sprint_id": null,
   "title": "Global routing and reusable form validation adoption for existing registration screens",
-  "status": "BACKLOG",
+  "status": "IN_PROGRESS",
   "type": "UI_ROUTING_DEFECT",
   "authority_refs": [
     "docs/authority/current-authority.json",
@@ -46,12 +46,13 @@
     "Keep future unimplemented modules in governed refinement and preserve current business/policy/authorization boundaries."
   ],
   "prerequisites": [
-    "TUN-P2-004"
+    "TUN-P2-002",
+    "TUN-P2-003",
+    "TUN-P1-017",
+    "TUN-P1-018",
+    "TUN-P1-019"
   ],
-  "blockers": [
-    "P0-RV006: current P0 enablement must pass before feature implementation",
-    "P1-018-RV001: shared capability Revision must be governed and validated before final adoption acceptance"
-  ],
+  "blockers": [],
   "impact": {
     "architecture": true,
     "ui": true,
@@ -92,7 +93,8 @@
     "governance/evidence/TUN-P2-004-UI002-VALIDATION.json",
     "governance/evidence/TUN-P2-004-UI002-ROLE-REVIEWS.json",
     "governance/evidence/TUN-P2-004-UI002-UI-COMPLIANCE.json",
-    "docs/development/GLOBAL_UI_COMPLIANCE_REPORT.md"
+    "docs/development/GLOBAL_UI_COMPLIANCE_REPORT.md",
+    "governance/evidence/TUN-P2-004-UI002-STARTUP-REVIEWS.json"
   ],
   "ui_evidence_ref": "governance/evidence/TUN-P2-004-UI002-UI-COMPLIANCE.json",
   "context_policy": "TASK",
@@ -100,9 +102,10 @@
   "defects": [
     "DEF-AMD0009-ROUTING-001",
     "DEF-AMD0009-VALIDATION-001",
-    "DEF-AMD0009-FIDELITY-001"
+    "DEF-AMD0009-FIDELITY-001",
+    "DEF-AMD0009-ADMIN-CONTRAST-001"
   ],
   "product_acceptance_required": false,
   "created_at": "2026-10-18T02:35:57.326Z",
-  "updated_at": "2026-10-18T02:35:57.326Z"
+  "updated_at": "2026-10-18T03:00:20.069Z"
 }
