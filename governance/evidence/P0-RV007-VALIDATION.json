@@ -2,9 +2,9 @@
   "schema_version": 1,
   "scope_id": "P0-RV007",
   "validation_kind": "COMMITTED",
-  "result": "PENDING",
-  "tested_commit_sha": null,
-  "validated_commit_sha": null,
+  "result": "PASS",
+  "tested_commit_sha": "de08aaec13cf77fdb5b28bed69c280aab89fe67a",
+  "validated_commit_sha": "de08aaec13cf77fdb5b28bed69c280aab89fe67a",
   "owned_behavior_paths": [
     ".agent/skills/end-user-ux-reviewer/SKILL.md",
     ".agent/skills/frontend-engineer/SKILL.md",
@@ -46,5 +46,59 @@
     "src/Tunner.Governance/UiComplianceApplication.cs",
     "tests/Tunner.Governance.FunctionalTests/Program.cs"
   ],
-  "boundary": "Candidate classification only; final committed governance regressions, reviews and current P0 revalidation are required."
+  "boundary": "Technical governance correction only. Direct scoped UI Product acceptance is separate; no whole-P2,merge,production or release approval.",
+  "checked_at": "2026-10-18T21:28:44.195Z",
+  "checks": {
+    "build": "PASS:0 warnings/0 errors",
+    "functional": "PASS:full suite;15 resolved UI_REQUIRED,16 UI evidence,9 milestone-review,60 Revision,15 committed-ownership,1 controlled child failure-reporting check plus ordinary coverage",
+    "authority": "PASS:196 artifacts; Baseline1.6.0 unchanged",
+    "source_security": "PASS:unchanged secret and SAST policies",
+    "frontend": "Unchanged owned UI runtime; prior accepted bea01cf proof retained",
+    "preservation": "13 unrelated files byte-identical; original closed history unchanged"
+  },
+  "receipts": [
+    {
+      "path": "artifacts/global-ui-20261017/rv007-committed-build.log",
+      "sha256": "c0a4f968c16e8732cf64ec6a6c2be562653ab028f153e2849cc7d3f34b611748"
+    },
+    {
+      "path": "artifacts/global-ui-20261017/rv007-committed-functional.log",
+      "sha256": "7437cbdb144a7c553eeef5f8f34b4eb38251f2932d431e0e4d1b3a35b778ef8b"
+    },
+    {
+      "path": "artifacts/global-ui-20261017/rv007-current-authority.json",
+      "sha256": "0c5af37d75a7543723a3030046c3c75ed00dd999e3f443cb128bdb1b54ca67c5"
+    },
+    {
+      "path": "artifacts/global-ui-20261017/rv007-current-review-snapshot.json",
+      "sha256": "0d9ea38246109ba4f9ff272de4ccd426e3cfca12c4cec9be338c0176fd5e5947"
+    },
+    {
+      "path": "artifacts/global-ui-20261017/rv007-secret-scan.log",
+      "sha256": "6518eda6a719ce2da321a7d5ed6aa3d4151b29e5fd2155abbd8ed18bf96bbdd2"
+    },
+    {
+      "path": "artifacts/global-ui-20261017/rv007-sast.log",
+      "sha256": "54ddf2ed07e773a100bb423f2e088f47f6979f1c79765b35e21a32cfb61866a0"
+    }
+  ],
+  "failed_attempts": [
+    {
+      "receipt": "artifacts/global-ui-20261017/rv007-development-build.log",
+      "cause": "Analyzer rejected repeated constant array arguments in synthetic fixtures; reused values without suppressing the policy."
+    },
+    {
+      "receipt": "artifacts/global-ui-20261017/rv007-development-build-fixed.log",
+      "cause": "Captured fixture values were initialized after the first helper invocation; moved initialization before use."
+    },
+    {
+      "receipt": "artifacts/global-ui-20261017/rv007-build-stale-worker-lock.log",
+      "cause": "An older completed test worker held the output DLL. Waited for its exit; accepted final build is zero-warning/error."
+    },
+    {
+      "receipt": "artifacts/global-ui-20261017/rv007-development-functional.log",
+      "cause": "Earlier no-build invocation used the previous test binary after a failed build; explicitly excluded. Only the committed run with15 new resolution checks is accepted."
+    }
+  ],
+  "role_reviews_ref": "governance/evidence/P0-RV007-ROLE-REVIEWS.json"
 }
