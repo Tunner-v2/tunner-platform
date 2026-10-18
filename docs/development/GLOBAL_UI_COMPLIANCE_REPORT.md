@@ -30,6 +30,7 @@ Current forms are FORM-REGISTRATION, FORM-VERIFY-EMAIL and FORM-PERSONAL-INFORMA
 | DEF-AMD0009-ADMIN-CONTRAST-001 | Admin idle border differed from49:132 | CLOSED: explicit scoped PO consent; only49:132 stroke synchronized to #616975 |
 | TODO-AMD0008-GOV001 | Prospective instruction/role/schema/CI propagation incomplete | DONE through validated closed P0-RV006 |
 | P0-RV007 | READY UI001 could not leave UI_REQUIRED because the native side-state graph was undefined | CLOSED: bounded correction, full native regressions and current P0 enablement PASS |
+| DEF-FUNCTIONAL-HARNESS-001 / P0-RV008 | Reported test-process dialogs; setup/cleanup and some unexpected errors could escape reporting | CLOSED: guarded boundaries; six controlled failure cases and both actual suites PASS. Original historical stack remains unavailable |
 
 The 53 unimplemented entries are prepared in [deferred work scopes](GLOBAL_UI_DEFERRED_WORK_ITEMS.json) and [planning handoff](GLOBAL_UI_DEFERRED_SCOPE.md). Missing design references are UI_REQUIRED before implementation, subject to fresh owner authority/Figma resolution. They are not accepted defects in implemented applications and receive no feature authorization from this audit.
 
@@ -48,7 +49,7 @@ The shared pathname primitive preserves browser history without sensitive histor
 - Governance: central inventory, per-item source/evidence checker, current review lineage, CI/activated-role propagation and guarded UI_REQUIRED resolution.
 - Local starter: PowerShell7 compilation suppresses only the obsolete-API compatibility diagnostic; Windows PowerShell5.1 support and exact TLS pinning remain unchanged.
 
-The complete Git diff and source/evidence manifests provide the file-level trace. Thirteen preexisting context/project/editor files were preserved byte-for-byte and excluded from staging. Previous validation/review receipts remain in history or Git.
+The [task-owned changed-file manifest](GLOBAL_UI_CHANGED_FILES.json), complete Git diff and source/evidence envelopes provide the file-level trace. Thirteen preexisting context/project/editor files were preserved byte-for-byte and excluded from staging. Previous validation/review receipts remain in history or Git.
 
 ## 6. Executed tests
 
@@ -66,6 +67,9 @@ The complete Git diff and source/evidence manifests provide the file-level trace
 | Global and four owning-scope UI evidence gates | PASS; all10 current inventory items covered |
 | Portable evidence | PASS44 unique Git-blob hash comparisons; six well-formed TRX receipts |
 | Governance correction | PASS full suite at de08aae:15 guarded UI resolution,16 UI evidence,9 milestone review,60 Revision,15 committed ownership and1 controlled failure-reporting check, plus ordinary coverage |
+| Reported test-process error follow-up | PASS at 623d3db: six child-process startup/body/cleanup failures return exactly exit1 with diagnostics; both normal suites PASS; zero-warning/error builds |
+| Final native enablement | PASS: current P0 enablement and global UI gate after closed P0-RV008 |
+| GitHub integration | Draft PR18; CI/human review and parent PR17 integration remain pending/separate |
 | Source security | PASS unchanged secret/SAST scans; frontend advisory audit had zero findings at validation time |
 
 Accepted source and receipts are in [test-index.json](../../governance/evidence/ui/AMD0009/test-index.json), [global per-item proof](../../governance/evidence/GLOBAL-UI-COMPLIANCE.json), P0-RV006/P0-RV007 validation records and the scoped envelopes. Failed/development/stale-binary attempts are explicitly excluded and retained in their validation histories.
@@ -74,7 +78,7 @@ URL-001..006, VAL-001..008 and UX-FID-001..008 are recorded per applicable item.
 
 ## 7. Visual and accessibility evidence
 
-Approved reference images and current renders were compared at1440x1024. Tablet768x1024/mobile320x1024 screenshots cover all five screens and each form error state; the real host additionally verifies1366x768 laptop behavior. Shared variants have independent desktop/mobile screenshots, keyboard/focus and axe WCAG2.2 AA engineering checks. Decorative SVGs, backgrounds/glows, layout, typography, controls and approved states remain present. The snapshot collection is [governance/evidence/ui/AMD0009](../../governance/evidence/ui/AMD0009).
+Approved reference images and current renders were compared at1440x1024. Tablet768x1024/mobile320x1024 screenshots cover all five screens and each form error state; the real host additionally verifies1366x768 laptop behavior. Shared variants have independent desktop/mobile screenshots, keyboard/focus and axe WCAG2.2 AA engineering checks. Decorative SVGs, backgrounds/glows, layout, typography, controls and approved states remain present. The snapshot collection is [governance/evidence/ui/AMD0009](../../governance/evidence/ui/AMD0009). A local side-by-side gallery is available at `artifacts/global-ui-20261017/final-validated-review.html`.
 
 Pixel metrics are diagnostic only; no arbitrary diff threshold replaces approved Figma or PO consent. Differences from export rasterization and approved native date affordances are recorded. Automated accessibility success is not presented as complete legal/accessibility certification.
 
@@ -86,8 +90,8 @@ Current scoped acceptance does not grant whole-P2 completion, future screens, ne
 
 ## 9. Remaining governed actions
 
-UI001 and UI002 reached DONE through every allowed native transition and passing final readiness gate; P0-RV007 is CLOSED and current P0 enablement passes. See [native closure receipts](../../governance/evidence/AMD0009-CURRENT-UI-CLOSURE.json). P1-018-RV001 is CLOSED with native closure PASS. Parent TUN-P2-004 retains its broader VALIDATION/acceptance boundary. Then run governance next and prepare the next eligible P2 slice; planned features are not implemented merely because this UI gate passes. The UI process is closed. The separately queued functional-test application-error report is now under bounded follow-up review.
+UI001 and UI002 reached DONE through every allowed native transition and passing final readiness gate; P0-RV007 is CLOSED and current P0 enablement passes. See [native closure receipts](../../governance/evidence/AMD0009-CURRENT-UI-CLOSURE.json). P1-018-RV001 is CLOSED with native closure PASS. Parent TUN-P2-004 retains its broader VALIDATION/acceptance boundary. Final native next marks TUN-P2-002, TUN-P2-003 and TUN-P2-004 in VALIDATION actionable. The exact next authorized action for this handoff is to use the fresh TUN-P2-004 pack to prepare its remaining registration validation/acceptance review; current UI consent does not accept the broader parent. TUN-P2-005 authentication remains BACKLOG/non-actionable with mandatory role preparation missing. Refine it and rerun its authority/context/role gates before implementation. Planned features are not implemented merely because this UI gate passes. The UI process and queued functional-test follow-up are closed. [Error review](../../governance/evidence/FUNCTIONAL-HARNESS-ERROR-REVIEW-20261018.json) distinguishes proven managed-error path fixes from the unavailable original stack. Both actual functional suites, six controlled failure cases, seven activated technical reviews and native P0-RV008 closure pass. No OS error-reporting suppression was used.
 
 ## 10. Git and handoff
 
-Branch: `codex/global-ui-compliance`. UI tested source: `bea01cfcd813bf8000a7e1c64b8c74492c4b4e31`. Governance correction tested source: `de08aaec13cf77fdb5b28bed69c280aab89fe67a`. Acceptance evidence/reviews are committed separately from source; closure commits are metadata only. Parent PR17 remains a separate protected-main review dependency. The final handoff records native outcomes, current context pack and the new GitHub review URL when published.
+Branch: `codex/global-ui-compliance`. UI tested source: `bea01cfcd813bf8000a7e1c64b8c74492c4b4e31`. Governance correction tested source: `de08aaec13cf77fdb5b28bed69c280aab89fe67a`. Acceptance evidence/reviews are committed separately from source; closure commits are metadata only. Parent PR17 remains a separate protected-main review dependency. Managed test-harness source is additionally validated at `623d3db08ee73182904a12dd08351260a715449c`. [PR18](https://github.com/Tunner-v2/tunner-platform/pull/18) is draft and targets main under the existing auto-PR workflow, with PR17 explicitly recorded as its unmerged parent dependency. Automatic merge is disabled; no merge or deployment was performed. See [handoff](GLOBAL_UI_HANDOFF_20261018.md) and [final native receipts](../../governance/evidence/AMD0009-FINAL-GATES-20261018.json).
