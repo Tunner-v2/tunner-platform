@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "status": "FIX_VALIDATED",
+  "reported_executables": [
+    "Tunner.Governance.FunctionalTests.exe",
+    "Tunner.AuditRemediation.FunctionalTests.exe"
+  ],
+  "reported_code": "0xe0434352",
+  "original_stack": "Unavailable; generic screenshots and bounded retained-event inspection do not prove the original managed exception.",
+  "earlier_governance_fixes": "Closed P0-RV006 already fixed ambiguous proof handling/read-only fixture deletion and main-body diagnostics.",
+  "additional_fix": "P0-RV008 guards initialization and cleanup in both harnesses and unexpected managed AuditRemediation body failures. No failures are swallowed or converted to success; no WER/OS settings changed.",
+  "source_commit": "623d3db08ee73182904a12dd08351260a715449c",
+  "proof_ref": "governance/evidence/P0-RV008-VALIDATION.json",
+  "reproduce_validation": "pwsh -NoProfile -File tools/validation/Test-TunnerFunctionalHarnessFailures.ps1",
+  "expected": "Six controlled child failures each exit1 with matching diagnostics and no unhandled/falsePASS output; validation runner exits0 after all assertions.",
+  "normal_runs": [
+    "dotnet run --no-restore --project tests/Tunner.Governance.FunctionalTests",
+    "dotnet run --no-restore --project tests/Tunner.AuditRemediation.FunctionalTests"
+  ],
+  "boundary": "Managed paths covered by these actual tests. Do not claim diagnosis of an unavailable historical stack or guarantee against unrelated native/fatal/runtime failures."
+}

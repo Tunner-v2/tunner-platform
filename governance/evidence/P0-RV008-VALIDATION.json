@@ -1,10 +1,10 @@
 {
   "schema_version": 1,
   "scope_id": "P0-RV008",
-  "validation_kind": "CANDIDATE",
-  "result": "PENDING",
-  "tested_commit_sha": null,
-  "validated_commit_sha": null,
+  "validation_kind": "COMMITTED",
+  "result": "PASS",
+  "tested_commit_sha": "623d3db08ee73182904a12dd08351260a715449c",
+  "validated_commit_sha": "623d3db08ee73182904a12dd08351260a715449c",
   "owned_behavior_paths": [
     ".agent/skills/end-user-ux-reviewer/SKILL.md",
     ".agent/skills/frontend-engineer/SKILL.md",
@@ -49,14 +49,78 @@
     "tests/Tunner.Governance.FunctionalTests/Program.cs",
     "tools/validation/Test-TunnerFunctionalHarnessFailures.ps1"
   ],
-  "checked_at": "2026-10-18T21:44:02.135Z",
+  "checked_at": "2026-10-18T21:49:04.022Z",
   "boundary": "Test-process managed diagnostics only; UI source remains accepted at bea01cf. No production or OS error reporting policy changes.",
-  "receipts": [],
+  "receipts": [
+    {
+      "path": "governance/evidence/ui/AMD0009/rv008-committed-governance-build.log",
+      "sha256": "94adc028655a886e25e86346d0f730a687b45a365823f083a6e823a745a16fc4",
+      "raw_artifact": "artifacts/global-ui-20261017/rv008-committed-governance-build.log",
+      "raw_sha256": "1d1c34f459ea114b2ac1c8818a1279585bf1537833e69d9ca8499a94b9d8001d"
+    },
+    {
+      "path": "governance/evidence/ui/AMD0009/rv008-committed-audit-build.log",
+      "sha256": "e3d676f33d3087263c090b601a776a154a840f730970a6518c41e8e959f5dc10",
+      "raw_artifact": "artifacts/global-ui-20261017/rv008-committed-audit-build.log",
+      "raw_sha256": "199d63adb66de6a046bca73f679a92b087a06f2bbd45befa11ab9730438411b5"
+    },
+    {
+      "path": "governance/evidence/ui/AMD0009/rv008-committed-failure-checks.log",
+      "sha256": "8de00e1b99cdc786e68ecdd68dd549d4253984353776fa4c849fa56cc39ba25a",
+      "raw_artifact": "artifacts/global-ui-20261017/rv008-committed-failure-checks.log",
+      "raw_sha256": "cb7a2391106a9f0b20c5685766d021866866aaf4db8ea1bf83d3e8a8febb1dea"
+    },
+    {
+      "path": "governance/evidence/ui/AMD0009/rv008-committed-audit-functional.log",
+      "sha256": "f43ed28553043a8abcd9b0109aee7072405f7ac5d61606db7db19856ccf27d74",
+      "raw_artifact": "artifacts/global-ui-20261017/rv008-committed-audit-functional.log",
+      "raw_sha256": "a28ca25266f1356f43245afce223940cb5ce6fb74658c75d82aada9025cbe142"
+    },
+    {
+      "path": "governance/evidence/ui/AMD0009/rv008-committed-governance-functional.log",
+      "sha256": "dd5db41654cb4e5f25b3cfe54e8f28bb38dd9110c035a7114ce9081929530cf5",
+      "raw_artifact": "artifacts/global-ui-20261017/rv008-committed-governance-functional.log",
+      "raw_sha256": "7437cbdb144a7c553eeef5f8f34b4eb38251f2932d431e0e4d1b3a35b778ef8b"
+    },
+    {
+      "path": "governance/evidence/ui/AMD0009/rv008-current-authority.json",
+      "sha256": "828cfacea8745aff25828b927e48da2056bff8350f045a0e599ae936c984e95d",
+      "raw_artifact": "artifacts/global-ui-20261017/rv008-current-authority.json",
+      "raw_sha256": "0c5af37d75a7543723a3030046c3c75ed00dd999e3f443cb128bdb1b54ca67c5"
+    },
+    {
+      "path": "governance/evidence/ui/AMD0009/rv008-current-review-snapshot.json",
+      "sha256": "7d8b927fab1e645f01ce59476e5e29f6a4b1c1806c199680534041bf006645ab",
+      "raw_artifact": "artifacts/global-ui-20261017/rv008-current-review-snapshot.json",
+      "raw_sha256": "d51df4760f82b7bcae18749821f1d8526f43f18f1e52d7b80a87f7c6c9679764"
+    },
+    {
+      "path": "governance/evidence/ui/AMD0009/rv008-secret-scan.log",
+      "sha256": "e6cf5e8ea392fdb3ee0d6eddfc343e0ff017a41bfedb6cb45cc65f1c6353633e",
+      "raw_artifact": "artifacts/global-ui-20261017/rv008-secret-scan.log",
+      "raw_sha256": "911abe796d44fdb32cccb864aae87606a6baaa8846f0f5edbba7c903d21cb7fe"
+    },
+    {
+      "path": "governance/evidence/ui/AMD0009/rv008-sast.log",
+      "sha256": "5bac63aa9cfca8f94d2bedc5c79319ad4d3e81a7a95cadcc01ed80cab5ea8b4f",
+      "raw_artifact": "artifacts/global-ui-20261017/rv008-sast.log",
+      "raw_sha256": "df2bff64c317af014603be20b0deb08649045828fe53d6b7c6580fb69c947350"
+    }
+  ],
   "failed_attempts": [
     {
       "receipt": "artifacts/global-ui-20261017/rv008-candidate-governance-build.log",
       "cause": "Analyzer rejected direct synthetic throw inside finally. Moved simulated cleanup operation into guarded cleanup helper; no analyzer suppression."
     }
   ],
-  "role_reviews_ref": "governance/evidence/P0-RV008-ROLE-REVIEWS.json"
+  "role_reviews_ref": "governance/evidence/P0-RV008-ROLE-REVIEWS.json",
+  "checks": {
+    "build": "PASS:both projects0 warnings/errors at committed source",
+    "faults": "PASS:6 process startup/body/cleanup cases require exact exit1,diagnostics,noUnhandled/noFalsePASS",
+    "audit": "PASS:13 actual authority/context checks",
+    "governance": "PASS:full ordinary suite plus15UI resolution,16UI evidence,9milestone review,60Revision,15ownership and1in-process child reporting check",
+    "authority": "PASS:196 verified; Baseline1.6.0 unchanged",
+    "security": "PASS:42 owned secret scan and existing SAST policy",
+    "preservation": "PASS:13 unrelated files byte-identical"
+  }
 }
