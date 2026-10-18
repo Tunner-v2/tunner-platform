@@ -2,9 +2,9 @@
   "schema_version": 1,
   "scope_id": "TUN-P2-004-UI001",
   "validation_kind": "COMMITTED",
-  "result": "PENDING",
-  "tested_commit_sha": null,
-  "validated_commit_sha": null,
+  "result": "PASS",
+  "tested_commit_sha": "bea01cfcd813bf8000a7e1c64b8c74492c4b4e31",
+  "validated_commit_sha": "bea01cfcd813bf8000a7e1c64b8c74492c4b4e31",
   "owned_behavior_paths": [
     "docs/contracts/.gitattributes",
     "docs/contracts/registration-onboarding.openapi.json",
@@ -86,5 +86,22 @@
     "web/tests/vite.config.ts",
     "web/tsconfig.json"
   ],
-  "boundary": "Refresh current visual proof for the already approved four scopes; no broader Product acceptance inferred."
+  "boundary": "Only the directly accepted current UI scope. Whole P2,production publication/provider policy,protected-main merge and release are excluded; native closure checks remain mandatory.",
+  "checked_at": "2026-10-18T21:05:37.563Z",
+  "checks": {
+    "runtime": "PASS:398 backend,31 unit,40 browser; zero skipped/failed accepted runs",
+    "operator_probe": "PASS:10 real HTTPS laptop/history/refresh/security checks",
+    "starter": "PASS:7 unique safety checks in both supported PowerShell runtimes",
+    "visual": "Source matching,explicit scoped consents and committed per-item evidence; formal gate separately evaluated",
+    "ownership": "Reviewed behavior is committed and unchanged; unrelated paths preserved"
+  },
+  "receipts": [
+    {
+      "path": "governance/evidence/ui/AMD0009/test-index.json",
+      "sha256": "0c337406f8e90935a4efe6cd50f592150f60e095982e564ad98086ea897ec435"
+    }
+  ],
+  "role_reviews_ref": "governance/evidence/TUN-P2-004-UI001-ROLE-REVIEWS.json",
+  "ui_evidence_ref": "governance/evidence/TUN-P2-004-UI001-UI-COMPLIANCE.json",
+  "product_acceptance_ref": "governance/evidence/AMD0009-CURRENT-UI-PRODUCT-ACCEPTANCE.json"
 }

@@ -4,17 +4,19 @@
   "work_item_id": "TUN-P2-004-UI002",
   "classification": "UI_ROUTING_DEFECT",
   "severity": "SEV-3",
-  "status": "OPEN",
+  "status": "CLOSED",
   "environment": "Current User frontend/shared control source and approved Figma readback",
-  "description": "Five existing registration views: web/apps/user/main.tsx uses a local stage state; every full-screen view remains under /registration. RegistrationEndpoints only maps /registration SPA shell; no guarded deep-link fallback or refresh resume.",
+  "description": "Five existing registration views: web/apps/user/main.tsx uses a local stage state; every full-screen view remains under /registration. RegistrationEndpoints only maps /registration SPA shell; no guarded deep-link fallback or refresh resume. Resolved at validated source bea01cfcd813bf8000a7e1c64b8c74492c4b4e31; all five committed per-item UI checks pass. Direct scoped Product Owner acceptance is recorded in AMD0009-CURRENT-UI-PRODUCT-ACCEPTANCE.json.",
   "expected_behavior_ref": "docs/authority/current/decisions/AMD-0009_URL_Addressable_Routing_and_Governed_Form_Validation.md",
   "evidence": [
     "governance/evidence/AMD0009-INITIAL-AUDIT.json",
-    "docs/contracts/ui-inventory.json"
+    "docs/contracts/ui-inventory.json",
+    "governance/evidence/GLOBAL-UI-COMPLIANCE.json",
+    "governance/evidence/AMD0009-CURRENT-UI-PRODUCT-ACCEPTANCE.json"
   ],
   "affected_versions": [
     "27e21bf3a1e02fa013d4899d79d59023845d3936"
   ],
   "created_at": "2026-10-18T02:35:57.326Z",
-  "updated_at": "2026-10-18T02:35:57.326Z"
+  "updated_at": "2026-10-18T21:07:55.700Z"
 }

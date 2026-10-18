@@ -2,9 +2,9 @@
   "schema_version": 1,
   "scope_id": "TUN-P2-004",
   "validation_kind": "COMMITTED",
-  "result": "PENDING",
-  "tested_commit_sha": null,
-  "validated_commit_sha": null,
+  "result": "PASS",
+  "tested_commit_sha": "bea01cfcd813bf8000a7e1c64b8c74492c4b4e31",
+  "validated_commit_sha": "bea01cfcd813bf8000a7e1c64b8c74492c4b4e31",
   "owned_behavior_paths": [
     "docs/contracts/.gitattributes",
     "docs/contracts/registration-onboarding.openapi.json",
@@ -85,8 +85,8 @@
     "web/tests/registration/support.ts",
     "web/tsconfig.json"
   ],
-  "checked_at": "2026-10-18T03:34:08.254Z",
-  "boundary": "Candidate source ownership only. Final committed build, tests, per-item visual proof and role review must replace this PENDING receipt before acceptance.",
+  "checked_at": "2026-10-18T21:05:37.638Z",
+  "boundary": "Only the directly accepted current UI scope. Whole P2,production publication/provider policy,protected-main merge and release are excluded; native closure checks remain mandatory.",
   "prior_validations": [
     {
       "ref": "governance/evidence/history/TUN-P2-004-before-AMD0009-VALIDATION.json",
@@ -96,5 +96,21 @@
   ],
   "owned_coordination_paths": [
     "governance/evidence/ui/AMD0009/.gitattributes"
-  ]
+  ],
+  "checks": {
+    "runtime": "PASS:398 backend,31 unit,40 browser; zero skipped/failed accepted runs",
+    "operator_probe": "PASS:10 real HTTPS laptop/history/refresh/security checks",
+    "starter": "PASS:7 unique safety checks in both supported PowerShell runtimes",
+    "visual": "Source matching,explicit scoped consents and committed per-item evidence; formal gate separately evaluated",
+    "ownership": "Reviewed behavior is committed and unchanged; unrelated paths preserved"
+  },
+  "receipts": [
+    {
+      "path": "governance/evidence/ui/AMD0009/test-index.json",
+      "sha256": "0c337406f8e90935a4efe6cd50f592150f60e095982e564ad98086ea897ec435"
+    }
+  ],
+  "role_reviews_ref": "governance/evidence/TUN-P2-004-ROLE-REVIEWS.json",
+  "ui_evidence_ref": "governance/evidence/TUN-P2-004-UI-COMPLIANCE.json",
+  "product_acceptance_ref": "governance/evidence/AMD0009-CURRENT-UI-PRODUCT-ACCEPTANCE.json"
 }
