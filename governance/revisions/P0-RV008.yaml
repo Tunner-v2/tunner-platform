@@ -1,0 +1,45 @@
+{
+  "schema_version": 1,
+  "revision_id": "P0-RV008",
+  "revision_scope": "MILESTONE",
+  "original_scope_id": "P0",
+  "parent_revision_id": "P0-RV007",
+  "parent_milestone_revision_id": null,
+  "title": "Report functional harness startup and cleanup failures safely",
+  "revision_type": "CORRECTIVE",
+  "status": "ACTIVE",
+  "reason": "User reported Windows CLR application-error dialogs for Governance and AuditRemediation functional executables. Existing main-body catches leave initialization and cleanup exceptions able to escape; correct test-process diagnostics without suppressing failures or changing product behavior.",
+  "authority_refs": [
+    "docs/authority/current/development/09_Testing_Acceptance_Evidence_and_Quality_Gates.md",
+    "docs/authority/current/development/36_P0_Repository_Bootstrap_Governance_and_Context_Implementation_Spec.md"
+  ],
+  "decision_refs": [],
+  "defect_refs": [
+    "DEF-FUNCTIONAL-HARNESS-001"
+  ],
+  "change_refs": [],
+  "impact_classification": "NON_BLOCKING",
+  "blocked_scope": [],
+  "acceptance_criteria": [
+    "Both functional harnesses return nonzero and useful diagnostics for managed startup,body and cleanup errors; normal suites pass; no Windows error-reporting or production policy changes."
+  ],
+  "prerequisites": [],
+  "work_items": [],
+  "required_gates": [],
+  "required_roles": [
+    "governance-engineer",
+    "solution-architect",
+    "full-stack-engineer",
+    "tester-qa-engineer",
+    "auditor",
+    "devops-engineer",
+    "cyber-security-engineer"
+  ],
+  "evidence_refs": [
+    "governance/evidence/P0-RV008-AUTHORITY-RESOLUTION.json",
+    "governance/evidence/P0-RV008-STARTUP-REVIEWS.json"
+  ],
+  "created_at": "2026-10-18T21:40:11.1621243+00:00",
+  "closed_at": null,
+  "product_acceptance_required": false
+}
