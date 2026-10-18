@@ -11,6 +11,9 @@ var fixtureRoot = Directory.CreateTempSubdirectory("tunner-governance-fixture-")
 
 try
 {
+    if (args.Contains("--self-test-failure-reporting", StringComparer.Ordinal))
+        throw new InvalidOperationException("Controlled harness failure reporting check");
+    RunHarnessFailureReportingCheck(failures);
     RunGlobalUiEvidenceChecks(repositoryRoot, failures);
     RunMilestoneRevisionReviewChecks(repositoryRoot, failures);
     RunRevisionChecks(repositoryRoot, failures);
@@ -311,9 +314,17 @@ created_at: 2026-10-05T00:00:00Z
     var malformed = GovernanceApplication.Validate(fixtureRoot);
     Expect(malformed.ExitCode == 1, "Validation must reject malformed YAML.", failures);
 }
+catch (Exception error) when (error is not OutOfMemoryException)
+{
+    failures.Add("FAIL: unexpected governance harness error: " + error);
+}
 finally
 {
-    DeleteFixture(fixtureRoot);
+    try { DeleteFixture(fixtureRoot); }
+    catch (Exception error) when (error is IOException or UnauthorizedAccessException)
+    {
+        failures.Add("FAIL: governance fixture cleanup: " + error);
+    }
 }
 
 if (failures.Count > 0)
@@ -1225,4 +1236,19 @@ static void RunMilestoneRevisionReviewChecks(DirectoryInfo repositoryRoot, IColl
     }
     finally { DeleteFixture(fixture); }
     Console.WriteLine($"Milestone Revision review checks: {checks}");
+}
+
+static void RunHarnessFailureReportingCheck(ICollection<string> failures)
+{
+    var start = new ProcessStartInfo("dotnet") { RedirectStandardOutput = true, RedirectStandardError = true, UseShellExecute = false, CreateNoWindow = true };
+    start.ArgumentList.Add(typeof(Program).Assembly.Location);
+    start.ArgumentList.Add("--self-test-failure-reporting");
+    using var process = Process.Start(start) ?? throw new InvalidOperationException("Cannot start harness reporting check");
+    var stdout = process.StandardOutput.ReadToEnd();
+    var stderr = process.StandardError.ReadToEnd();
+    process.WaitForExit();
+    Expect(process.ExitCode == 1 && stderr.Contains("Controlled harness failure reporting check", StringComparison.Ordinal) &&
+        !stderr.Contains("Unhandled exception.", StringComparison.Ordinal) && !stdout.Contains("PASS:", StringComparison.Ordinal),
+        "Unexpected harness errors must return exit 1 with diagnostics rather than an unhandled Windows application error.", failures);
+    Console.WriteLine("Harness failure reporting checks: 1");
 }

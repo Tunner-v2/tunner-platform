@@ -15,9 +15,11 @@ internal static class MilestoneReviewRevalidation
         foreach (var candidate in RevisionApplication.Status(revisions.ToArray()).Where(r => r.Status == "CLOSED").Reverse())
         {
             var revision = revisions.Single(r => r.Identifier == candidate.Id);
-            var proof = revision.StringList("evidence_refs").SingleOrDefault(p =>
-                p.EndsWith("-MILESTONE-ROLE-REVIEWS.json", StringComparison.Ordinal));
-            if (proof is null) continue;
+            var proofs = revision.StringList("evidence_refs").Where(p =>
+                p.EndsWith("-MILESTONE-ROLE-REVIEWS.json", StringComparison.Ordinal)).ToArray();
+            if (proofs.Length == 0) continue;
+            if (proofs.Length != 1) return historicalPath;
+            var proof = proofs[0];
             // A newer claimed review cannot silently fall back to an older claim when its proof is invalid.
             if (candidate.Status != "CLOSED" || !IsCommitted(repository, RepositoryRootResolver.ToLogicalPath(repository, revision.Path)) ||
                 milestone.StringList("required_roles").Any(r => !revision.StringList("required_roles").Contains(r, StringComparer.Ordinal)) ||
