@@ -200,6 +200,7 @@ public static class GovernanceApplication
             failures.Add($"role review evidence missing: {reviewEvidence}");
         }
 
+        UiComplianceApplication.AddGateFailures(repository, workItem, failures, satisfied);
         var roleCheck = RoleActivationApplication.CheckReviews(repository, workItem, records);
         failures.AddRange(roleCheck.Failures);
         satisfied.AddRange(roleCheck.Satisfied);
@@ -484,7 +485,7 @@ public static class GovernanceApplication
             return;
         }
 
-        var logicalPath = $"governance/evidence/{milestone.Identifier}-MILESTONE-ROLE-REVIEWS.json";
+        var logicalPath = MilestoneReviewRevalidation.Resolve(repository, milestone, $"governance/evidence/{milestone.Identifier}-MILESTONE-ROLE-REVIEWS.json");
         var path = Path.Combine(repository.FullName, logicalPath.Replace('/', Path.DirectorySeparatorChar));
         if (!File.Exists(path))
         {

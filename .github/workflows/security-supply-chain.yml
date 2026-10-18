@@ -17,7 +17,7 @@ jobs:
       - name: Checkout triggering revision
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
-          fetch-depth: 1
+          fetch-depth: 0
           persist-credentials: false
       - name: Set up .NET from global.json
         uses: actions/setup-dotnet@a98b56852c35b8e3190ac28c8c2271da59106c68 # v6.0.0
@@ -44,6 +44,8 @@ jobs:
           dotnet test tests/Tunner.Installer.Tests --no-build --no-restore --logger trx --results-directory artifacts/ci-tests/installer
           dotnet run --project tests/Tunner.Observability.FunctionalTests --no-build --no-restore
           dotnet run --project tests/Tunner.AuditRemediation.FunctionalTests --no-restore
+      - name: Global UI route form and fidelity evidence gate
+        run: dotnet run --project src/Tunner.Governance --no-build --no-restore -- governance ui check
       - name: Static security baseline validation
         shell: pwsh
         run: ./tools/validation/Validate-TunnerSecuritySupplyChainSource.ps1 -RepositoryRoot $PWD

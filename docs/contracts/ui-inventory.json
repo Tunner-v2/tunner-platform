@@ -1,0 +1,1557 @@
+{
+  "schema_version": 1,
+  "authority_refs": [
+    "AMD-0008",
+    "AMD-0009"
+  ],
+  "scope": "All current and future Tunner-owned frontend applications. PLANNED entries are not implemented or accepted.",
+  "apps": [
+    {
+      "id": "user",
+      "status": "IMPLEMENTED",
+      "source_root": "web/apps/user"
+    },
+    {
+      "id": "ui-fixture",
+      "status": "TEST_FIXTURE",
+      "source_root": "web/fixtures/ui"
+    },
+    {
+      "id": "admin",
+      "status": "PLANNED",
+      "source_root": null
+    },
+    {
+      "id": "billing-finance",
+      "status": "PLANNED",
+      "source_root": null
+    },
+    {
+      "id": "product-self-service",
+      "status": "PLANNED",
+      "source_root": null
+    }
+  ],
+  "items": [
+    {
+      "id": "U-AUTH-02",
+      "kind": "SCREEN",
+      "status": "IMPLEMENTED",
+      "app": "user",
+      "module": "Identity.Registration",
+      "title": "register",
+      "pathname": "/registration",
+      "runtime_pathname": "/registration",
+      "parameter_schema": {},
+      "guard": "Public; new request remains server-validated",
+      "owner_scopes": [
+        "TUN-P2-004",
+        "TUN-P2-004-UI002"
+      ],
+      "authority_refs": [
+        "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md",
+        "docs/authority/current/development/31_UI_UX_Screen_and_Control_Center_Requirements_Matrix.md"
+      ],
+      "figma_refs": [
+        {
+          "file_key": "apNbwvAgdn1xIxYH1oiaSC",
+          "node_id": "70:270"
+        }
+      ],
+      "source_paths": [
+        "web/apps/user",
+        "src/Modules/Identity/RegistrationEndpoints.cs",
+        "src/Modules/Identity/RegistrationApplication.cs"
+      ],
+      "form_ids": [
+        "FORM-REGISTRATION"
+      ],
+      "observed_defects": [
+        "UI_ROUTING_DEFECT"
+      ]
+    },
+    {
+      "id": "U-AUTH-03",
+      "kind": "SCREEN",
+      "status": "IMPLEMENTED",
+      "app": "user",
+      "module": "Identity.Registration",
+      "title": "verify",
+      "pathname": "/registration/verify-email",
+      "runtime_pathname": "/registration",
+      "parameter_schema": {},
+      "guard": "Server-bound registration state required; deep entry must not imply completion",
+      "owner_scopes": [
+        "TUN-P2-004",
+        "TUN-P2-004-UI002"
+      ],
+      "authority_refs": [
+        "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md",
+        "docs/authority/current/development/31_UI_UX_Screen_and_Control_Center_Requirements_Matrix.md"
+      ],
+      "figma_refs": [
+        {
+          "file_key": "apNbwvAgdn1xIxYH1oiaSC",
+          "node_id": "70:539"
+        }
+      ],
+      "source_paths": [
+        "web/apps/user",
+        "src/Modules/Identity/RegistrationEndpoints.cs",
+        "src/Modules/Identity/RegistrationApplication.cs"
+      ],
+      "form_ids": [
+        "FORM-VERIFY-EMAIL"
+      ],
+      "observed_defects": [
+        "UI_ROUTING_DEFECT"
+      ]
+    },
+    {
+      "id": "U-AUTH-03A",
+      "kind": "SCREEN",
+      "status": "IMPLEMENTED",
+      "app": "user",
+      "module": "Identity.Registration",
+      "title": "personal",
+      "pathname": "/registration/personal-information",
+      "runtime_pathname": "/registration",
+      "parameter_schema": {},
+      "guard": "Server-bound registration state required; deep entry must not imply completion",
+      "owner_scopes": [
+        "TUN-P2-004",
+        "TUN-P2-004-UI002"
+      ],
+      "authority_refs": [
+        "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md",
+        "docs/authority/current/development/31_UI_UX_Screen_and_Control_Center_Requirements_Matrix.md"
+      ],
+      "figma_refs": [
+        {
+          "file_key": "apNbwvAgdn1xIxYH1oiaSC",
+          "node_id": "198:2"
+        }
+      ],
+      "source_paths": [
+        "web/apps/user",
+        "src/Modules/Identity/RegistrationEndpoints.cs",
+        "src/Modules/Identity/RegistrationApplication.cs"
+      ],
+      "form_ids": [
+        "FORM-PERSONAL-INFORMATION"
+      ],
+      "observed_defects": [
+        "UI_ROUTING_DEFECT"
+      ]
+    },
+    {
+      "id": "U-AUTH-CONSENT",
+      "kind": "SCREEN",
+      "status": "IMPLEMENTED",
+      "app": "user",
+      "module": "Identity.Registration",
+      "title": "consent",
+      "pathname": "/registration/consent",
+      "runtime_pathname": "/registration",
+      "parameter_schema": {},
+      "guard": "Server-bound registration state required; deep entry must not imply completion",
+      "owner_scopes": [
+        "TUN-P2-004",
+        "TUN-P2-004-UI002"
+      ],
+      "authority_refs": [
+        "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md",
+        "docs/authority/current/development/31_UI_UX_Screen_and_Control_Center_Requirements_Matrix.md"
+      ],
+      "figma_refs": [
+        {
+          "file_key": "apNbwvAgdn1xIxYH1oiaSC",
+          "node_id": "207:2"
+        }
+      ],
+      "source_paths": [
+        "web/apps/user",
+        "src/Modules/Identity/RegistrationEndpoints.cs",
+        "src/Modules/Identity/RegistrationApplication.cs"
+      ],
+      "form_ids": [],
+      "observed_defects": [
+        "UI_ROUTING_DEFECT"
+      ]
+    },
+    {
+      "id": "U-AUTH-RESULT",
+      "kind": "SCREEN",
+      "status": "IMPLEMENTED",
+      "app": "user",
+      "module": "Identity.Registration",
+      "title": "ready",
+      "pathname": "/registration/complete",
+      "runtime_pathname": "/registration",
+      "parameter_schema": {},
+      "guard": "Server-bound registration state required; deep entry must not imply completion",
+      "owner_scopes": [
+        "TUN-P2-004",
+        "TUN-P2-004-UI002"
+      ],
+      "authority_refs": [
+        "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md",
+        "docs/authority/current/development/31_UI_UX_Screen_and_Control_Center_Requirements_Matrix.md"
+      ],
+      "figma_refs": [
+        {
+          "file_key": "apNbwvAgdn1xIxYH1oiaSC",
+          "node_id": "70:630"
+        }
+      ],
+      "source_paths": [
+        "web/apps/user",
+        "src/Modules/Identity/RegistrationEndpoints.cs",
+        "src/Modules/Identity/RegistrationApplication.cs"
+      ],
+      "form_ids": [],
+      "observed_defects": [
+        "UI_ROUTING_DEFECT"
+      ]
+    },
+    {
+      "id": "FORM-REGISTRATION",
+      "kind": "FORM",
+      "status": "IMPLEMENTED",
+      "app": "user",
+      "module": "Identity.Registration",
+      "screen_id": "U-AUTH-02",
+      "owner_scopes": [
+        "TUN-P2-004",
+        "TUN-P2-004-UI002"
+      ],
+      "authority_refs": [
+        "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md",
+        "docs/authority/current/development/31_UI_UX_Screen_and_Control_Center_Requirements_Matrix.md"
+      ],
+      "figma_refs": [
+        {
+          "file_key": "apNbwvAgdn1xIxYH1oiaSC",
+          "node_id": "70:270"
+        },
+        {
+          "file_key": "apNbwvAgdn1xIxYH1oiaSC",
+          "node_id": "70:1257",
+          "role": "Approved error presentation exemplar; current domain fields/copy remain authoritative"
+        }
+      ],
+      "source_paths": [
+        "web/apps/user",
+        "src/Modules/Identity/RegistrationEndpoints.cs",
+        "src/Modules/Identity/RegistrationApplication.cs",
+        "src/Modules/Identity/RegistrationPersonalInformation.cs"
+      ],
+      "fields": [
+        "email",
+        "password",
+        "password_confirmation",
+        "acknowledged_notices"
+      ],
+      "backend_validation": "Authoritative existing registration application/policy validation; browser hints are supplementary",
+      "observed_defects": [
+        "UI_VALIDATION_DEFECT",
+        "UI_FIDELITY_DEFECT"
+      ]
+    },
+    {
+      "id": "FORM-VERIFY-EMAIL",
+      "kind": "FORM",
+      "status": "IMPLEMENTED",
+      "app": "user",
+      "module": "Identity.Registration",
+      "screen_id": "U-AUTH-03",
+      "owner_scopes": [
+        "TUN-P2-004",
+        "TUN-P2-004-UI002"
+      ],
+      "authority_refs": [
+        "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md",
+        "docs/authority/current/development/31_UI_UX_Screen_and_Control_Center_Requirements_Matrix.md"
+      ],
+      "figma_refs": [
+        {
+          "file_key": "apNbwvAgdn1xIxYH1oiaSC",
+          "node_id": "70:539"
+        },
+        {
+          "file_key": "apNbwvAgdn1xIxYH1oiaSC",
+          "node_id": "70:1257",
+          "role": "Approved error presentation exemplar; current domain fields/copy remain authoritative"
+        }
+      ],
+      "source_paths": [
+        "web/apps/user",
+        "src/Modules/Identity/RegistrationEndpoints.cs",
+        "src/Modules/Identity/RegistrationApplication.cs",
+        "src/Modules/Identity/RegistrationPersonalInformation.cs"
+      ],
+      "fields": [
+        "verification_code"
+      ],
+      "backend_validation": "Authoritative existing registration application/policy validation; browser hints are supplementary",
+      "observed_defects": [
+        "UI_VALIDATION_DEFECT",
+        "UI_FIDELITY_DEFECT"
+      ]
+    },
+    {
+      "id": "FORM-PERSONAL-INFORMATION",
+      "kind": "FORM",
+      "status": "IMPLEMENTED",
+      "app": "user",
+      "module": "Identity.Registration",
+      "screen_id": "U-AUTH-03A",
+      "owner_scopes": [
+        "TUN-P2-004",
+        "TUN-P2-004-UI002"
+      ],
+      "authority_refs": [
+        "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md",
+        "docs/authority/current/development/31_UI_UX_Screen_and_Control_Center_Requirements_Matrix.md"
+      ],
+      "figma_refs": [
+        {
+          "file_key": "apNbwvAgdn1xIxYH1oiaSC",
+          "node_id": "198:2"
+        },
+        {
+          "file_key": "apNbwvAgdn1xIxYH1oiaSC",
+          "node_id": "70:1257",
+          "role": "Approved error presentation exemplar; current domain fields/copy remain authoritative"
+        }
+      ],
+      "source_paths": [
+        "web/apps/user",
+        "src/Modules/Identity/RegistrationEndpoints.cs",
+        "src/Modules/Identity/RegistrationApplication.cs",
+        "src/Modules/Identity/RegistrationPersonalInformation.cs"
+      ],
+      "fields": [
+        "full_name",
+        "display_name",
+        "date_of_birth",
+        "verified_email"
+      ],
+      "backend_validation": "Authoritative existing registration application/policy validation; browser hints are supplementary",
+      "observed_defects": [
+        "UI_VALIDATION_DEFECT",
+        "UI_FIDELITY_DEFECT"
+      ]
+    },
+    {
+      "id": "SHARED-FORM-USER",
+      "kind": "COMPONENT",
+      "status": "TEST_FIXTURE",
+      "app": "ui-fixture",
+      "module": "SharedUI",
+      "owner_scopes": [
+        "TUN-P1-018",
+        "P1-018-RV001"
+      ],
+      "authority_refs": [
+        "docs/authority/current/development/31_UI_UX_Screen_and_Control_Center_Requirements_Matrix.md",
+        "docs/authority/current/development/10_UI_UX_Components_Widgets_and_Plugins_Development_Rules.md"
+      ],
+      "figma_refs": [
+        {
+          "file_key": "apNbwvAgdn1xIxYH1oiaSC",
+          "node_id": "70:1257"
+        }
+      ],
+      "source_paths": [
+        "web/packages/ui",
+        "web/fixtures/ui"
+      ],
+      "acceptance_boundary": "Development-only shared-control fixture. No production sign-in/provider/domain action exists.",
+      "observed_defects": [
+        "UI_VALIDATION_DEFECT"
+      ]
+    },
+    {
+      "id": "SHARED-FORM-ADMIN",
+      "kind": "COMPONENT",
+      "status": "TEST_FIXTURE",
+      "app": "ui-fixture",
+      "module": "SharedUI",
+      "owner_scopes": [
+        "TUN-P1-018",
+        "P1-018-RV001"
+      ],
+      "authority_refs": [
+        "docs/authority/current/development/31_UI_UX_Screen_and_Control_Center_Requirements_Matrix.md",
+        "docs/authority/current/development/10_UI_UX_Components_Widgets_and_Plugins_Development_Rules.md"
+      ],
+      "figma_refs": [
+        {
+          "file_key": "3F9tAviUejTYpYvRJt8gM1",
+          "node_id": "49:128"
+        }
+      ],
+      "source_paths": [
+        "web/packages/ui",
+        "web/fixtures/ui"
+      ],
+      "acceptance_boundary": "Development-only shared-control fixture. No production sign-in/provider/domain action exists.",
+      "observed_defects": [
+        "UI_VALIDATION_DEFECT"
+      ]
+    },
+    {
+      "id": "U-AUTH-01",
+      "kind": "SCREEN",
+      "status": "PLANNED",
+      "app": "user",
+      "module": "U-AUTH",
+      "title": "Sign in",
+      "requirements": "Email/password, passkey where supported, Google, Microsoft; safe errors; Product-origin OAuth context preserved",
+      "pathname": null,
+      "runtime_pathname": null,
+      "guard": "Resolve from owning FRD and current authorization before implementation",
+      "owner_scopes": [],
+      "authority_refs": [
+        "docs/authority/current/development/31_UI_UX_Screen_and_Control_Center_Requirements_Matrix.md"
+      ],
+      "figma_refs": [
+        {
+          "file_key": "apNbwvAgdn1xIxYH1oiaSC",
+          "node_id": "2:4"
+        }
+      ],
+      "source_paths": [],
+      "planning_status": "OWNER_AND_ROUTE_REFINEMENT_REQUIRED",
+      "design_status": "EXISTING_DESIGN",
+      "acceptance_boundary": "Unimplemented: no PASS inherited from registration and no feature implementation authorized by this inventory."
+    },
+    {
+      "id": "U-AUTH-04",
+      "kind": "SCREEN",
+      "status": "PLANNED",
+      "app": "user",
+      "module": "U-AUTH",
+      "title": "MFA / Authenticator Setup",
+      "requirements": "TOTP QR/secret one-time presentation; verify first code before activation",
+      "pathname": null,
+      "runtime_pathname": null,
+      "guard": "Resolve from owning FRD and current authorization before implementation",
+      "owner_scopes": [],
+      "authority_refs": [
+        "docs/authority/current/development/31_UI_UX_Screen_and_Control_Center_Requirements_Matrix.md"
+      ],
+      "figma_refs": [],
+      "source_paths": [],
+      "planning_status": "OWNER_AND_ROUTE_REFINEMENT_REQUIRED",
+      "design_status": "UI_REQUIRED_BEFORE_IMPLEMENTATION",
+      "acceptance_boundary": "Unimplemented: no PASS inherited from registration and no feature implementation authorized by this inventory."
+    },
+    {
+      "id": "U-AUTH-05",
+      "kind": "SCREEN",
+      "status": "PLANNED",
+      "app": "user",
+      "module": "U-AUTH",
+      "title": "Passkey Setup",
+      "requirements": "WebAuthn ceremony; no private-key visibility",
+      "pathname": null,
+      "runtime_pathname": null,
+      "guard": "Resolve from owning FRD and current authorization before implementation",
+      "owner_scopes": [],
+      "authority_refs": [
+        "docs/authority/current/development/31_UI_UX_Screen_and_Control_Center_Requirements_Matrix.md"
+      ],
+      "figma_refs": [],
+      "source_paths": [],
+      "planning_status": "OWNER_AND_ROUTE_REFINEMENT_REQUIRED",
+      "design_status": "UI_REQUIRED_BEFORE_IMPLEMENTATION",
+      "acceptance_boundary": "Unimplemented: no PASS inherited from registration and no feature implementation authorized by this inventory."
+    },
+    {
+      "id": "U-AUTH-06",
+      "kind": "SCREEN",
+      "status": "PLANNED",
+      "app": "user",
+      "module": "U-AUTH",
+      "title": "Recovery Codes",
+      "requirements": "one-time reveal/download and replacement warning",
+      "pathname": null,
+      "runtime_pathname": null,
+      "guard": "Resolve from owning FRD and current authorization before implementation",
+      "owner_scopes": [],
+      "authority_refs": [
+        "docs/authority/current/development/31_UI_UX_Screen_and_Control_Center_Requirements_Matrix.md"
+      ],
+      "figma_refs": [],
+      "source_paths": [],
+      "planning_status": "OWNER_AND_ROUTE_REFINEMENT_REQUIRED",
+      "design_status": "UI_REQUIRED_BEFORE_IMPLEMENTATION",
+      "acceptance_boundary": "Unimplemented: no PASS inherited from registration and no feature implementation authorized by this inventory."
+    },
+    {
+      "id": "U-AUTH-07",
+      "kind": "SCREEN",
+      "status": "PLANNED",
+      "app": "user",
+      "module": "U-AUTH",
+      "title": "Account Recovery",
+      "requirements": "safe account-existence behavior, recovery case/next proof, denial/escalation status",
+      "pathname": null,
+      "runtime_pathname": null,
+      "guard": "Resolve from owning FRD and current authorization before implementation",
+      "owner_scopes": [],
+      "authority_refs": [
+        "docs/authority/current/development/31_UI_UX_Screen_and_Control_Center_Requirements_Matrix.md"
+      ],
+      "figma_refs": [],
+      "source_paths": [],
+      "planning_status": "OWNER_AND_ROUTE_REFINEMENT_REQUIRED",
+      "design_status": "UI_REQUIRED_BEFORE_IMPLEMENTATION",
+      "acceptance_boundary": "Unimplemented: no PASS inherited from registration and no feature implementation authorized by this inventory."
+    },
+    {
+      "id": "U-AUTH-08",
+      "kind": "SCREEN",
+      "status": "PLANNED",
+      "app": "user",
+      "module": "U-AUTH",
+      "title": "Product Authorization",
+      "requirements": "requested Product/scopes/assurance and registered callback; authorize/deny",
+      "pathname": null,
+      "runtime_pathname": null,
+      "guard": "Resolve from owning FRD and current authorization before implementation",
+      "owner_scopes": [],
+      "authority_refs": [
+        "docs/authority/current/development/31_UI_UX_Screen_and_Control_Center_Requirements_Matrix.md"
+      ],
+      "figma_refs": [],
+      "source_paths": [],
+      "planning_status": "OWNER_AND_ROUTE_REFINEMENT_REQUIRED",
+      "design_status": "UI_REQUIRED_BEFORE_IMPLEMENTATION",
+      "acceptance_boundary": "Unimplemented: no PASS inherited from registration and no feature implementation authorized by this inventory."
+    },
+    {
+      "id": "U-ACCT-01",
+      "kind": "SCREEN",
+      "status": "PLANNED",
+      "app": "user",
+      "module": "U-ACCT",
+      "title": "Account Overview",
+      "requirements": "Account state, security posture, verified contact, recent safe activity, relevant billing summaries",
+      "pathname": null,
+      "runtime_pathname": null,
+      "guard": "Resolve from owning FRD and current authorization before implementation",
+      "owner_scopes": [],
+      "authority_refs": [
+        "docs/authority/current/development/31_UI_UX_Screen_and_Control_Center_Requirements_Matrix.md"
+      ],
+      "figma_refs": [],
+      "source_paths": [],
+      "planning_status": "OWNER_AND_ROUTE_REFINEMENT_REQUIRED",
+      "design_status": "UI_REQUIRED_BEFORE_IMPLEMENTATION",
+      "acceptance_boundary": "Unimplemented: no PASS inherited from registration and no feature implementation authorized by this inventory."
+    },
+    {
+      "id": "U-ACCT-02",
+      "kind": "SCREEN",
+      "status": "PLANNED",
+      "app": "user",
+      "module": "U-ACCT",
+      "title": "Profile & Verified Contact",
+      "requirements": "profile edit vs verified-contact change kept separate; candidate verification state",
+      "pathname": null,
+      "runtime_pathname": null,
+      "guard": "Resolve from owning FRD and current authorization before implementation",
+      "owner_scopes": [],
+      "authority_refs": [
+        "docs/authority/current/development/31_UI_UX_Screen_and_Control_Center_Requirements_Matrix.md"
+      ],
+      "figma_refs": [],
+      "source_paths": [],
+      "planning_status": "OWNER_AND_ROUTE_REFINEMENT_REQUIRED",
+      "design_status": "UI_REQUIRED_BEFORE_IMPLEMENTATION",
+      "acceptance_boundary": "Unimplemented: no PASS inherited from registration and no feature implementation authorized by this inventory."
+    },
+    {
+      "id": "U-ACCT-03",
+      "kind": "SCREEN",
+      "status": "PLANNED",
+      "app": "user",
+      "module": "U-ACCT",
+      "title": "Sign-in Methods",
+      "requirements": "password/passkeys/Google/Microsoft/TOTP links with safe add/remove eligibility",
+      "pathname": null,
+      "runtime_pathname": null,
+      "guard": "Resolve from owning FRD and current authorization before implementation",
+      "owner_scopes": [],
+      "authority_refs": [
+        "docs/authority/current/development/31_UI_UX_Screen_and_Control_Center_Requirements_Matrix.md"
+      ],
+      "figma_refs": [],
+      "source_paths": [],
+      "planning_status": "OWNER_AND_ROUTE_REFINEMENT_REQUIRED",
+      "design_status": "UI_REQUIRED_BEFORE_IMPLEMENTATION",
+      "acceptance_boundary": "Unimplemented: no PASS inherited from registration and no feature implementation authorized by this inventory."
+    },
+    {
+      "id": "U-ACCT-04",
+      "kind": "SCREEN",
+      "status": "PLANNED",
+      "app": "user",
+      "module": "U-ACCT",
+      "title": "Sessions & Devices",
+      "requirements": "current/other sessions, device trust, revoke actions; Product-session boundary copy",
+      "pathname": null,
+      "runtime_pathname": null,
+      "guard": "Resolve from owning FRD and current authorization before implementation",
+      "owner_scopes": [],
+      "authority_refs": [
+        "docs/authority/current/development/31_UI_UX_Screen_and_Control_Center_Requirements_Matrix.md"
+      ],
+      "figma_refs": [],
+      "source_paths": [],
+      "planning_status": "OWNER_AND_ROUTE_REFINEMENT_REQUIRED",
+      "design_status": "UI_REQUIRED_BEFORE_IMPLEMENTATION",
+      "acceptance_boundary": "Unimplemented: no PASS inherited from registration and no feature implementation authorized by this inventory."
+    },
+    {
+      "id": "U-ACCT-05",
+      "kind": "SCREEN",
+      "status": "PLANNED",
+      "app": "user",
+      "module": "U-ACCT",
+      "title": "Security Activity",
+      "requirements": "permission-safe Account/Security events and correlation refs",
+      "pathname": null,
+      "runtime_pathname": null,
+      "guard": "Resolve from owning FRD and current authorization before implementation",
+      "owner_scopes": [],
+      "authority_refs": [
+        "docs/authority/current/development/31_UI_UX_Screen_and_Control_Center_Requirements_Matrix.md"
+      ],
+      "figma_refs": [],
+      "source_paths": [],
+      "planning_status": "OWNER_AND_ROUTE_REFINEMENT_REQUIRED",
+      "design_status": "UI_REQUIRED_BEFORE_IMPLEMENTATION",
+      "acceptance_boundary": "Unimplemented: no PASS inherited from registration and no feature implementation authorized by this inventory."
+    },
+    {
+      "id": "U-ACCT-06",
+      "kind": "SCREEN",
+      "status": "PLANNED",
+      "app": "user",
+      "module": "U-ACCT",
+      "title": "Linked Products",
+      "requirements": "Tunner Product Relationships, authorization scopes/status; not Product membership/entitlement",
+      "pathname": null,
+      "runtime_pathname": null,
+      "guard": "Resolve from owning FRD and current authorization before implementation",
+      "owner_scopes": [],
+      "authority_refs": [
+        "docs/authority/current/development/31_UI_UX_Screen_and_Control_Center_Requirements_Matrix.md"
+      ],
+      "figma_refs": [],
+      "source_paths": [],
+      "planning_status": "OWNER_AND_ROUTE_REFINEMENT_REQUIRED",
+      "design_status": "UI_REQUIRED_BEFORE_IMPLEMENTATION",
+      "acceptance_boundary": "Unimplemented: no PASS inherited from registration and no feature implementation authorized by this inventory."
+    },
+    {
+      "id": "U-ACCT-07",
+      "kind": "SCREEN",
+      "status": "PLANNED",
+      "app": "user",
+      "module": "U-ACCT",
+      "title": "Notification Preferences",
+      "requirements": "optional/marketing preferences and in-app history; mandatory-class explanation",
+      "pathname": null,
+      "runtime_pathname": null,
+      "guard": "Resolve from owning FRD and current authorization before implementation",
+      "owner_scopes": [],
+      "authority_refs": [
+        "docs/authority/current/development/31_UI_UX_Screen_and_Control_Center_Requirements_Matrix.md"
+      ],
+      "figma_refs": [],
+      "source_paths": [],
+      "planning_status": "OWNER_AND_ROUTE_REFINEMENT_REQUIRED",
+      "design_status": "UI_REQUIRED_BEFORE_IMPLEMENTATION",
+      "acceptance_boundary": "Unimplemented: no PASS inherited from registration and no feature implementation authorized by this inventory."
+    },
+    {
+      "id": "U-ACCT-08",
+      "kind": "SCREEN",
+      "status": "PLANNED",
+      "app": "user",
+      "module": "U-ACCT",
+      "title": "Privacy Requests",
+      "requirements": "request type eligibility, identity verification, owner-task progress, export/result",
+      "pathname": null,
+      "runtime_pathname": null,
+      "guard": "Resolve from owning FRD and current authorization before implementation",
+      "owner_scopes": [],
+      "authority_refs": [
+        "docs/authority/current/development/31_UI_UX_Screen_and_Control_Center_Requirements_Matrix.md"
+      ],
+      "figma_refs": [],
+      "source_paths": [],
+      "planning_status": "OWNER_AND_ROUTE_REFINEMENT_REQUIRED",
+      "design_status": "UI_REQUIRED_BEFORE_IMPLEMENTATION",
+      "acceptance_boundary": "Unimplemented: no PASS inherited from registration and no feature implementation authorized by this inventory."
+    },
+    {
+      "id": "U-ACCT-09",
+      "kind": "SCREEN",
+      "status": "PLANNED",
+      "app": "user",
+      "module": "U-ACCT",
+      "title": "Account Closure",
+      "requirements": "exact blockers by owner domain, consequences, step-up, closure status",
+      "pathname": null,
+      "runtime_pathname": null,
+      "guard": "Resolve from owning FRD and current authorization before implementation",
+      "owner_scopes": [],
+      "authority_refs": [
+        "docs/authority/current/development/31_UI_UX_Screen_and_Control_Center_Requirements_Matrix.md"
+      ],
+      "figma_refs": [],
+      "source_paths": [],
+      "planning_status": "OWNER_AND_ROUTE_REFINEMENT_REQUIRED",
+      "design_status": "UI_REQUIRED_BEFORE_IMPLEMENTATION",
+      "acceptance_boundary": "Unimplemented: no PASS inherited from registration and no feature implementation authorized by this inventory."
+    },
+    {
+      "id": "U-BILL-01",
+      "kind": "SCREEN",
+      "status": "PLANNED",
+      "app": "user",
+      "module": "U-BILL",
+      "title": "Billing Accounts",
+      "requirements": "visible Billing Accounts, membership role, authority mode/capabilities and payer/commercial summaries sourced only from authoritative Billing/Finance resources",
+      "pathname": null,
+      "runtime_pathname": null,
+      "guard": "Resolve from owning FRD and current authorization before implementation",
+      "owner_scopes": [],
+      "authority_refs": [
+        "docs/authority/current/development/31_UI_UX_Screen_and_Control_Center_Requirements_Matrix.md"
+      ],
+      "figma_refs": [],
+      "source_paths": [],
+      "planning_status": "OWNER_AND_ROUTE_REFINEMENT_REQUIRED",
+      "design_status": "UI_REQUIRED_BEFORE_IMPLEMENTATION",
+      "acceptance_boundary": "Unimplemented: no PASS inherited from registration and no feature implementation authorized by this inventory."
+    },
+    {
+      "id": "U-BILL-02",
+      "kind": "SCREEN",
+      "status": "PLANNED",
+      "app": "user",
+      "module": "U-BILL",
+      "title": "Billing Account Detail",
+      "requirements": "Billing Profile, members, authority, Product relationships, subscriptions/invoices/payment refs",
+      "pathname": null,
+      "runtime_pathname": null,
+      "guard": "Resolve from owning FRD and current authorization before implementation",
+      "owner_scopes": [],
+      "authority_refs": [
+        "docs/authority/current/development/31_UI_UX_Screen_and_Control_Center_Requirements_Matrix.md"
+      ],
+      "figma_refs": [],
+      "source_paths": [],
+      "planning_status": "OWNER_AND_ROUTE_REFINEMENT_REQUIRED",
+      "design_status": "UI_REQUIRED_BEFORE_IMPLEMENTATION",
+      "acceptance_boundary": "Unimplemented: no PASS inherited from registration and no feature implementation authorized by this inventory."
+    },
+    {
+      "id": "U-BILL-03",
+      "kind": "SCREEN",
+      "status": "PLANNED",
+      "app": "user",
+      "module": "U-BILL",
+      "title": "Billing Profile",
+      "requirements": "versioned payer details; verified-contact/tax dependencies; impact/effective date",
+      "pathname": null,
+      "runtime_pathname": null,
+      "guard": "Resolve from owning FRD and current authorization before implementation",
+      "owner_scopes": [],
+      "authority_refs": [
+        "docs/authority/current/development/31_UI_UX_Screen_and_Control_Center_Requirements_Matrix.md"
+      ],
+      "figma_refs": [],
+      "source_paths": [],
+      "planning_status": "OWNER_AND_ROUTE_REFINEMENT_REQUIRED",
+      "design_status": "UI_REQUIRED_BEFORE_IMPLEMENTATION",
+      "acceptance_boundary": "Unimplemented: no PASS inherited from registration and no feature implementation authorized by this inventory."
+    },
+    {
+      "id": "U-BILL-04",
+      "kind": "SCREEN",
+      "status": "PLANNED",
+      "app": "user",
+      "module": "U-BILL",
+      "title": "Members",
+      "requirements": "membership invite/change/remove status; authority explicitly separate",
+      "pathname": null,
+      "runtime_pathname": null,
+      "guard": "Resolve from owning FRD and current authorization before implementation",
+      "owner_scopes": [],
+      "authority_refs": [
+        "docs/authority/current/development/31_UI_UX_Screen_and_Control_Center_Requirements_Matrix.md"
+      ],
+      "figma_refs": [],
+      "source_paths": [],
+      "planning_status": "OWNER_AND_ROUTE_REFINEMENT_REQUIRED",
+      "design_status": "UI_REQUIRED_BEFORE_IMPLEMENTATION",
+      "acceptance_boundary": "Unimplemented: no PASS inherited from registration and no feature implementation authorized by this inventory."
+    },
+    {
+      "id": "U-BILL-05",
+      "kind": "SCREEN",
+      "status": "PLANNED",
+      "app": "user",
+      "module": "U-BILL",
+      "title": "Billing Authority",
+      "requirements": "effective capabilities/source and managed-by-Product explanation; eligible exception path only",
+      "pathname": null,
+      "runtime_pathname": null,
+      "guard": "Resolve from owning FRD and current authorization before implementation",
+      "owner_scopes": [],
+      "authority_refs": [
+        "docs/authority/current/development/31_UI_UX_Screen_and_Control_Center_Requirements_Matrix.md"
+      ],
+      "figma_refs": [],
+      "source_paths": [],
+      "planning_status": "OWNER_AND_ROUTE_REFINEMENT_REQUIRED",
+      "design_status": "UI_REQUIRED_BEFORE_IMPLEMENTATION",
+      "acceptance_boundary": "Unimplemented: no PASS inherited from registration and no feature implementation authorized by this inventory."
+    },
+    {
+      "id": "U-BILL-06",
+      "kind": "SCREEN",
+      "status": "PLANNED",
+      "app": "user",
+      "module": "U-BILL",
+      "title": "Payment Methods",
+      "requirements": "provider-tokenized method summary, setup/challenge states, default/disable dependency checks",
+      "pathname": null,
+      "runtime_pathname": null,
+      "guard": "Resolve from owning FRD and current authorization before implementation",
+      "owner_scopes": [],
+      "authority_refs": [
+        "docs/authority/current/development/31_UI_UX_Screen_and_Control_Center_Requirements_Matrix.md"
+      ],
+      "figma_refs": [],
+      "source_paths": [],
+      "planning_status": "OWNER_AND_ROUTE_REFINEMENT_REQUIRED",
+      "design_status": "UI_REQUIRED_BEFORE_IMPLEMENTATION",
+      "acceptance_boundary": "Unimplemented: no PASS inherited from registration and no feature implementation authorized by this inventory."
+    },
+    {
+      "id": "U-BILL-07",
+      "kind": "SCREEN",
+      "status": "PLANNED",
+      "app": "user",
+      "module": "U-BILL",
+      "title": "Subscriptions",
+      "requirements": "Tunner Billing Subscription lifecycle with Product-owned entitlement disclaimer/contract-driven wording",
+      "pathname": null,
+      "runtime_pathname": null,
+      "guard": "Resolve from owning FRD and current authorization before implementation",
+      "owner_scopes": [],
+      "authority_refs": [
+        "docs/authority/current/development/31_UI_UX_Screen_and_Control_Center_Requirements_Matrix.md"
+      ],
+      "figma_refs": [],
+      "source_paths": [],
+      "planning_status": "OWNER_AND_ROUTE_REFINEMENT_REQUIRED",
+      "design_status": "UI_REQUIRED_BEFORE_IMPLEMENTATION",
+      "acceptance_boundary": "Unimplemented: no PASS inherited from registration and no feature implementation authorized by this inventory."
+    },
+    {
+      "id": "U-BILL-08",
+      "kind": "SCREEN",
+      "status": "PLANNED",
+      "app": "user",
+      "module": "U-BILL",
+      "title": "Subscription Change",
+      "requirements": "plan/item/quantity/effective-date preview, proration/scheduled-change evidence, authority gate",
+      "pathname": null,
+      "runtime_pathname": null,
+      "guard": "Resolve from owning FRD and current authorization before implementation",
+      "owner_scopes": [],
+      "authority_refs": [
+        "docs/authority/current/development/31_UI_UX_Screen_and_Control_Center_Requirements_Matrix.md"
+      ],
+      "figma_refs": [],
+      "source_paths": [],
+      "planning_status": "OWNER_AND_ROUTE_REFINEMENT_REQUIRED",
+      "design_status": "UI_REQUIRED_BEFORE_IMPLEMENTATION",
+      "acceptance_boundary": "Unimplemented: no PASS inherited from registration and no feature implementation authorized by this inventory."
+    },
+    {
+      "id": "U-BILL-09",
+      "kind": "SCREEN",
+      "status": "PLANNED",
+      "app": "user",
+      "module": "U-BILL",
+      "title": "Dunning/Payment Resolution",
+      "requirements": "amount/Invoice/attempt status, payment-method update, safe retry state; no duplicate retry on unknown outcome",
+      "pathname": null,
+      "runtime_pathname": null,
+      "guard": "Resolve from owning FRD and current authorization before implementation",
+      "owner_scopes": [],
+      "authority_refs": [
+        "docs/authority/current/development/31_UI_UX_Screen_and_Control_Center_Requirements_Matrix.md"
+      ],
+      "figma_refs": [],
+      "source_paths": [],
+      "planning_status": "OWNER_AND_ROUTE_REFINEMENT_REQUIRED",
+      "design_status": "UI_REQUIRED_BEFORE_IMPLEMENTATION",
+      "acceptance_boundary": "Unimplemented: no PASS inherited from registration and no feature implementation authorized by this inventory."
+    },
+    {
+      "id": "U-BILL-10",
+      "kind": "SCREEN",
+      "status": "PLANNED",
+      "app": "user",
+      "module": "U-BILL",
+      "title": "Invoices & Credits",
+      "requirements": "immutable documents, allocations/credit notes, delivery status separate",
+      "pathname": null,
+      "runtime_pathname": null,
+      "guard": "Resolve from owning FRD and current authorization before implementation",
+      "owner_scopes": [],
+      "authority_refs": [
+        "docs/authority/current/development/31_UI_UX_Screen_and_Control_Center_Requirements_Matrix.md"
+      ],
+      "figma_refs": [],
+      "source_paths": [],
+      "planning_status": "OWNER_AND_ROUTE_REFINEMENT_REQUIRED",
+      "design_status": "UI_REQUIRED_BEFORE_IMPLEMENTATION",
+      "acceptance_boundary": "Unimplemented: no PASS inherited from registration and no feature implementation authorized by this inventory."
+    },
+    {
+      "id": "U-BILL-11",
+      "kind": "SCREEN",
+      "status": "PLANNED",
+      "app": "user",
+      "module": "U-BILL",
+      "title": "Billing Account Closure",
+      "requirements": "exact blockers and prospective closure effects",
+      "pathname": null,
+      "runtime_pathname": null,
+      "guard": "Resolve from owning FRD and current authorization before implementation",
+      "owner_scopes": [],
+      "authority_refs": [
+        "docs/authority/current/development/31_UI_UX_Screen_and_Control_Center_Requirements_Matrix.md"
+      ],
+      "figma_refs": [],
+      "source_paths": [],
+      "planning_status": "OWNER_AND_ROUTE_REFINEMENT_REQUIRED",
+      "design_status": "UI_REQUIRED_BEFORE_IMPLEMENTATION",
+      "acceptance_boundary": "Unimplemented: no PASS inherited from registration and no feature implementation authorized by this inventory."
+    },
+    {
+      "id": "U-CHK-01",
+      "kind": "SCREEN",
+      "status": "PLANNED",
+      "app": "user",
+      "module": "U-CHK",
+      "title": "Tunner Checkout",
+      "requirements": "Tunner-owned Product/order summary, explicit price/currency, tax, Billing Account/customer details, provider-neutral checkout state, confirmation/processing/result; selected route may use provider-secure embedded collection or an approved provider-hosted handoff and must return/converge on the same CheckoutOperation",
+      "pathname": null,
+      "runtime_pathname": null,
+      "guard": "Resolve from owning FRD and current authorization before implementation",
+      "owner_scopes": [],
+      "authority_refs": [
+        "docs/authority/current/development/31_UI_UX_Screen_and_Control_Center_Requirements_Matrix.md"
+      ],
+      "figma_refs": [],
+      "source_paths": [],
+      "planning_status": "OWNER_AND_ROUTE_REFINEMENT_REQUIRED",
+      "design_status": "UI_REQUIRED_BEFORE_IMPLEMENTATION",
+      "acceptance_boundary": "Unimplemented: no PASS inherited from registration and no feature implementation authorized by this inventory."
+    },
+    {
+      "id": "A-ID-01",
+      "kind": "SCREEN",
+      "status": "PLANNED",
+      "app": "admin",
+      "module": "A-ID",
+      "title": "Accounts & Identity",
+      "requirements": "Account search/detail; sessions/devices; recovery/security evidence; restricted guided protection actions; no credential reveal",
+      "pathname": null,
+      "runtime_pathname": null,
+      "guard": "Resolve from owning FRD and current authorization before implementation",
+      "owner_scopes": [],
+      "authority_refs": [
+        "docs/authority/current/development/31_UI_UX_Screen_and_Control_Center_Requirements_Matrix.md"
+      ],
+      "figma_refs": [],
+      "source_paths": [],
+      "planning_status": "OWNER_AND_ROUTE_REFINEMENT_REQUIRED",
+      "design_status": "UI_REQUIRED_BEFORE_IMPLEMENTATION",
+      "acceptance_boundary": "Unimplemented: no PASS inherited from registration and no feature implementation authorized by this inventory."
+    },
+    {
+      "id": "A-PRD-01",
+      "kind": "SCREEN",
+      "status": "PLANNED",
+      "app": "admin",
+      "module": "A-PRD",
+      "title": "Connected Products",
+      "requirements": "Product/environment registry; client/OAuth; capabilities; event subscriptions; SDK/API compatibility; self-service/readiness",
+      "pathname": null,
+      "runtime_pathname": null,
+      "guard": "Resolve from owning FRD and current authorization before implementation",
+      "owner_scopes": [],
+      "authority_refs": [
+        "docs/authority/current/development/31_UI_UX_Screen_and_Control_Center_Requirements_Matrix.md"
+      ],
+      "figma_refs": [],
+      "source_paths": [],
+      "planning_status": "OWNER_AND_ROUTE_REFINEMENT_REQUIRED",
+      "design_status": "UI_REQUIRED_BEFORE_IMPLEMENTATION",
+      "acceptance_boundary": "Unimplemented: no PASS inherited from registration and no feature implementation authorized by this inventory."
+    },
+    {
+      "id": "A-BIL-01",
+      "kind": "SCREEN",
+      "status": "PLANNED",
+      "app": "admin",
+      "module": "A-BIL",
+      "title": "Billing Accounts",
+      "requirements": "Billing Account/detail; membership; authority; profile; Product relationship; closure/migration governed workflows",
+      "pathname": null,
+      "runtime_pathname": null,
+      "guard": "Resolve from owning FRD and current authorization before implementation",
+      "owner_scopes": [],
+      "authority_refs": [
+        "docs/authority/current/development/31_UI_UX_Screen_and_Control_Center_Requirements_Matrix.md"
+      ],
+      "figma_refs": [],
+      "source_paths": [],
+      "planning_status": "OWNER_AND_ROUTE_REFINEMENT_REQUIRED",
+      "design_status": "UI_REQUIRED_BEFORE_IMPLEMENTATION",
+      "acceptance_boundary": "Unimplemented: no PASS inherited from registration and no feature implementation authorized by this inventory."
+    },
+    {
+      "id": "A-SUB-01",
+      "kind": "SCREEN",
+      "status": "PLANNED",
+      "app": "admin",
+      "module": "A-SUB",
+      "title": "Billing Subscriptions",
+      "requirements": "lifecycle, scheduled changes, renewal/dunning operations, commercial/financial refs; Product authority boundary",
+      "pathname": null,
+      "runtime_pathname": null,
+      "guard": "Resolve from owning FRD and current authorization before implementation",
+      "owner_scopes": [],
+      "authority_refs": [
+        "docs/authority/current/development/31_UI_UX_Screen_and_Control_Center_Requirements_Matrix.md"
+      ],
+      "figma_refs": [],
+      "source_paths": [],
+      "planning_status": "OWNER_AND_ROUTE_REFINEMENT_REQUIRED",
+      "design_status": "UI_REQUIRED_BEFORE_IMPLEMENTATION",
+      "acceptance_boundary": "Unimplemented: no PASS inherited from registration and no feature implementation authorized by this inventory."
+    },
+    {
+      "id": "A-PAY-01",
+      "kind": "SCREEN",
+      "status": "PLANNED",
+      "app": "admin",
+      "module": "A-PAY",
+      "title": "Payments",
+      "requirements": "transactions/attempts, finality, reconciliation, refund/void/dispute actions",
+      "pathname": null,
+      "runtime_pathname": null,
+      "guard": "Resolve from owning FRD and current authorization before implementation",
+      "owner_scopes": [],
+      "authority_refs": [
+        "docs/authority/current/development/31_UI_UX_Screen_and_Control_Center_Requirements_Matrix.md"
+      ],
+      "figma_refs": [],
+      "source_paths": [],
+      "planning_status": "OWNER_AND_ROUTE_REFINEMENT_REQUIRED",
+      "design_status": "UI_REQUIRED_BEFORE_IMPLEMENTATION",
+      "acceptance_boundary": "Unimplemented: no PASS inherited from registration and no feature implementation authorized by this inventory."
+    },
+    {
+      "id": "A-INV-01",
+      "kind": "SCREEN",
+      "status": "PLANNED",
+      "app": "admin",
+      "module": "A-INV",
+      "title": "Invoices & Credits",
+      "requirements": "draft/issue/read-only issued document, allocations, credit/void/write-off, delivery evidence",
+      "pathname": null,
+      "runtime_pathname": null,
+      "guard": "Resolve from owning FRD and current authorization before implementation",
+      "owner_scopes": [],
+      "authority_refs": [
+        "docs/authority/current/development/31_UI_UX_Screen_and_Control_Center_Requirements_Matrix.md"
+      ],
+      "figma_refs": [],
+      "source_paths": [],
+      "planning_status": "OWNER_AND_ROUTE_REFINEMENT_REQUIRED",
+      "design_status": "UI_REQUIRED_BEFORE_IMPLEMENTATION",
+      "acceptance_boundary": "Unimplemented: no PASS inherited from registration and no feature implementation authorized by this inventory."
+    },
+    {
+      "id": "A-FIN-01",
+      "kind": "SCREEN",
+      "status": "PLANNED",
+      "app": "admin",
+      "module": "A-FIN",
+      "title": "Financial Control",
+      "requirements": "journals, trial balance, posting exceptions, reconciliation, period control, TunnerTreasuryAccounts, FxConversions, evidence lineage",
+      "pathname": null,
+      "runtime_pathname": null,
+      "guard": "Resolve from owning FRD and current authorization before implementation",
+      "owner_scopes": [],
+      "authority_refs": [
+        "docs/authority/current/development/31_UI_UX_Screen_and_Control_Center_Requirements_Matrix.md"
+      ],
+      "figma_refs": [],
+      "source_paths": [],
+      "planning_status": "OWNER_AND_ROUTE_REFINEMENT_REQUIRED",
+      "design_status": "UI_REQUIRED_BEFORE_IMPLEMENTATION",
+      "acceptance_boundary": "Unimplemented: no PASS inherited from registration and no feature implementation authorized by this inventory."
+    },
+    {
+      "id": "A-FEE-01",
+      "kind": "SCREEN",
+      "status": "PLANNED",
+      "app": "admin",
+      "module": "A-FEE",
+      "title": "Tunner Fees & Economics",
+      "requirements": "fee policies/calculations, provider-cost attribution, Product economics/payable evidence, payout-currency preference and guided FX economic-treatment configuration with templates, previews, effective versions, approvals and audit evidence",
+      "pathname": null,
+      "runtime_pathname": null,
+      "guard": "Resolve from owning FRD and current authorization before implementation",
+      "owner_scopes": [],
+      "authority_refs": [
+        "docs/authority/current/development/31_UI_UX_Screen_and_Control_Center_Requirements_Matrix.md"
+      ],
+      "figma_refs": [],
+      "source_paths": [],
+      "planning_status": "OWNER_AND_ROUTE_REFINEMENT_REQUIRED",
+      "design_status": "UI_REQUIRED_BEFORE_IMPLEMENTATION",
+      "acceptance_boundary": "Unimplemented: no PASS inherited from registration and no feature implementation authorized by this inventory."
+    },
+    {
+      "id": "A-TAX-01",
+      "kind": "SCREEN",
+      "status": "PLANNED",
+      "app": "admin",
+      "module": "A-TAX",
+      "title": "Tax",
+      "requirements": "market/tax readiness, Tax Determinations/exceptions, registration evidence, remittance obligations/cases",
+      "pathname": null,
+      "runtime_pathname": null,
+      "guard": "Resolve from owning FRD and current authorization before implementation",
+      "owner_scopes": [],
+      "authority_refs": [
+        "docs/authority/current/development/31_UI_UX_Screen_and_Control_Center_Requirements_Matrix.md"
+      ],
+      "figma_refs": [],
+      "source_paths": [],
+      "planning_status": "OWNER_AND_ROUTE_REFINEMENT_REQUIRED",
+      "design_status": "UI_REQUIRED_BEFORE_IMPLEMENTATION",
+      "acceptance_boundary": "Unimplemented: no PASS inherited from registration and no feature implementation authorized by this inventory."
+    },
+    {
+      "id": "A-MER-01",
+      "kind": "SCREEN",
+      "status": "PLANNED",
+      "app": "admin",
+      "module": "A-MER",
+      "title": "Product Compliance & Provider Readiness",
+      "requirements": "ProductKycCase lifecycle/evidence, Product payment/payout eligibility, Tunner ProviderAccountBinding readiness, provider-route evidence and effective versions; Product economics remain Product-scoped",
+      "pathname": null,
+      "runtime_pathname": null,
+      "guard": "Resolve from owning FRD and current authorization before implementation",
+      "owner_scopes": [],
+      "authority_refs": [
+        "docs/authority/current/development/31_UI_UX_Screen_and_Control_Center_Requirements_Matrix.md"
+      ],
+      "figma_refs": [],
+      "source_paths": [],
+      "planning_status": "OWNER_AND_ROUTE_REFINEMENT_REQUIRED",
+      "design_status": "UI_REQUIRED_BEFORE_IMPLEMENTATION",
+      "acceptance_boundary": "Unimplemented: no PASS inherited from registration and no feature implementation authorized by this inventory."
+    },
+    {
+      "id": "A-PRV-01",
+      "kind": "SCREEN",
+      "status": "PLANNED",
+      "app": "admin",
+      "module": "A-PRV",
+      "title": "Providers",
+      "requirements": "provider instances/accounts/capabilities, onboarding/remediation, credentials rotation, routes, incidents",
+      "pathname": null,
+      "runtime_pathname": null,
+      "guard": "Resolve from owning FRD and current authorization before implementation",
+      "owner_scopes": [],
+      "authority_refs": [
+        "docs/authority/current/development/31_UI_UX_Screen_and_Control_Center_Requirements_Matrix.md"
+      ],
+      "figma_refs": [],
+      "source_paths": [],
+      "planning_status": "OWNER_AND_ROUTE_REFINEMENT_REQUIRED",
+      "design_status": "UI_REQUIRED_BEFORE_IMPLEMENTATION",
+      "acceptance_boundary": "Unimplemented: no PASS inherited from registration and no feature implementation authorized by this inventory."
+    },
+    {
+      "id": "A-NTF-01",
+      "kind": "SCREEN",
+      "status": "PLANNED",
+      "app": "admin",
+      "module": "A-NTF",
+      "title": "Notifications",
+      "requirements": "templates/classes/routes, delivery attempts, suppressions, incidents, provider health",
+      "pathname": null,
+      "runtime_pathname": null,
+      "guard": "Resolve from owning FRD and current authorization before implementation",
+      "owner_scopes": [],
+      "authority_refs": [
+        "docs/authority/current/development/31_UI_UX_Screen_and_Control_Center_Requirements_Matrix.md"
+      ],
+      "figma_refs": [],
+      "source_paths": [],
+      "planning_status": "OWNER_AND_ROUTE_REFINEMENT_REQUIRED",
+      "design_status": "UI_REQUIRED_BEFORE_IMPLEMENTATION",
+      "acceptance_boundary": "Unimplemented: no PASS inherited from registration and no feature implementation authorized by this inventory."
+    },
+    {
+      "id": "A-SUP-01",
+      "kind": "SCREEN",
+      "status": "PLANNED",
+      "app": "admin",
+      "module": "A-SUP",
+      "title": "Support",
+      "requirements": "queues, case workspace, evidence, communication, escalation/action request, SLA",
+      "pathname": null,
+      "runtime_pathname": null,
+      "guard": "Resolve from owning FRD and current authorization before implementation",
+      "owner_scopes": [],
+      "authority_refs": [
+        "docs/authority/current/development/31_UI_UX_Screen_and_Control_Center_Requirements_Matrix.md"
+      ],
+      "figma_refs": [],
+      "source_paths": [],
+      "planning_status": "OWNER_AND_ROUTE_REFINEMENT_REQUIRED",
+      "design_status": "UI_REQUIRED_BEFORE_IMPLEMENTATION",
+      "acceptance_boundary": "Unimplemented: no PASS inherited from registration and no feature implementation authorized by this inventory."
+    },
+    {
+      "id": "A-RSK-01",
+      "kind": "SCREEN",
+      "status": "PLANNED",
+      "app": "admin",
+      "module": "A-RSK",
+      "title": "Compliance & Risk",
+      "requirements": "risk cases, IDV review, merchant review, exceptions, evidence packages",
+      "pathname": null,
+      "runtime_pathname": null,
+      "guard": "Resolve from owning FRD and current authorization before implementation",
+      "owner_scopes": [],
+      "authority_refs": [
+        "docs/authority/current/development/31_UI_UX_Screen_and_Control_Center_Requirements_Matrix.md"
+      ],
+      "figma_refs": [],
+      "source_paths": [],
+      "planning_status": "OWNER_AND_ROUTE_REFINEMENT_REQUIRED",
+      "design_status": "UI_REQUIRED_BEFORE_IMPLEMENTATION",
+      "acceptance_boundary": "Unimplemented: no PASS inherited from registration and no feature implementation authorized by this inventory."
+    },
+    {
+      "id": "A-SEC-01",
+      "kind": "SCREEN",
+      "status": "PLANNED",
+      "app": "admin",
+      "module": "A-SEC",
+      "title": "Security Operations",
+      "requirements": "signals/investigations/account protection/session trace; owner-domain execution results",
+      "pathname": null,
+      "runtime_pathname": null,
+      "guard": "Resolve from owning FRD and current authorization before implementation",
+      "owner_scopes": [],
+      "authority_refs": [
+        "docs/authority/current/development/31_UI_UX_Screen_and_Control_Center_Requirements_Matrix.md"
+      ],
+      "figma_refs": [],
+      "source_paths": [],
+      "planning_status": "OWNER_AND_ROUTE_REFINEMENT_REQUIRED",
+      "design_status": "UI_REQUIRED_BEFORE_IMPLEMENTATION",
+      "acceptance_boundary": "Unimplemented: no PASS inherited from registration and no feature implementation authorized by this inventory."
+    },
+    {
+      "id": "A-AUD-01",
+      "kind": "SCREEN",
+      "status": "PLANNED",
+      "app": "admin",
+      "module": "A-AUD",
+      "title": "Audit & Governance",
+      "requirements": "audit explorer, policies, approvals, evidence packages, Governor conformance",
+      "pathname": null,
+      "runtime_pathname": null,
+      "guard": "Resolve from owning FRD and current authorization before implementation",
+      "owner_scopes": [],
+      "authority_refs": [
+        "docs/authority/current/development/31_UI_UX_Screen_and_Control_Center_Requirements_Matrix.md"
+      ],
+      "figma_refs": [],
+      "source_paths": [],
+      "planning_status": "OWNER_AND_ROUTE_REFINEMENT_REQUIRED",
+      "design_status": "UI_REQUIRED_BEFORE_IMPLEMENTATION",
+      "acceptance_boundary": "Unimplemented: no PASS inherited from registration and no feature implementation authorized by this inventory."
+    },
+    {
+      "id": "A-PLT-01",
+      "kind": "SCREEN",
+      "status": "PLANNED",
+      "app": "admin",
+      "module": "A-PLT",
+      "title": "Platform Operations",
+      "requirements": "health, incidents, maintenance/change, queues/workers/timers/DLQ, DR, reliability budgets",
+      "pathname": null,
+      "runtime_pathname": null,
+      "guard": "Resolve from owning FRD and current authorization before implementation",
+      "owner_scopes": [],
+      "authority_refs": [
+        "docs/authority/current/development/31_UI_UX_Screen_and_Control_Center_Requirements_Matrix.md"
+      ],
+      "figma_refs": [],
+      "source_paths": [],
+      "planning_status": "OWNER_AND_ROUTE_REFINEMENT_REQUIRED",
+      "design_status": "UI_REQUIRED_BEFORE_IMPLEMENTATION",
+      "acceptance_boundary": "Unimplemented: no PASS inherited from registration and no feature implementation authorized by this inventory."
+    },
+    {
+      "id": "A-IAM-01",
+      "kind": "SCREEN",
+      "status": "PLANNED",
+      "app": "admin",
+      "module": "A-IAM",
+      "title": "Internal Access",
+      "requirements": "workforce identities, assignments, access requests, JIT privilege, certification, SoD, offboarding",
+      "pathname": null,
+      "runtime_pathname": null,
+      "guard": "Resolve from owning FRD and current authorization before implementation",
+      "owner_scopes": [],
+      "authority_refs": [
+        "docs/authority/current/development/31_UI_UX_Screen_and_Control_Center_Requirements_Matrix.md"
+      ],
+      "figma_refs": [],
+      "source_paths": [],
+      "planning_status": "OWNER_AND_ROUTE_REFINEMENT_REQUIRED",
+      "design_status": "UI_REQUIRED_BEFORE_IMPLEMENTATION",
+      "acceptance_boundary": "Unimplemented: no PASS inherited from registration and no feature implementation authorized by this inventory."
+    },
+    {
+      "id": "A-PRVY-01",
+      "kind": "SCREEN",
+      "status": "PLANNED",
+      "app": "admin",
+      "module": "A-PRVY",
+      "title": "Privacy & Data Governance",
+      "requirements": "requests, inventory, processing activities, retention/holds, processors, incidents",
+      "pathname": null,
+      "runtime_pathname": null,
+      "guard": "Resolve from owning FRD and current authorization before implementation",
+      "owner_scopes": [],
+      "authority_refs": [
+        "docs/authority/current/development/31_UI_UX_Screen_and_Control_Center_Requirements_Matrix.md"
+      ],
+      "figma_refs": [],
+      "source_paths": [],
+      "planning_status": "OWNER_AND_ROUTE_REFINEMENT_REQUIRED",
+      "design_status": "UI_REQUIRED_BEFORE_IMPLEMENTATION",
+      "acceptance_boundary": "Unimplemented: no PASS inherited from registration and no feature implementation authorized by this inventory."
+    },
+    {
+      "id": "A-EXEC-OVERVIEW",
+      "kind": "SCREEN",
+      "status": "PLANNED",
+      "app": "admin",
+      "module": "Founder.ControlCenter",
+      "title": "Executive Overview",
+      "pathname": null,
+      "runtime_pathname": null,
+      "guard": "Privileged Admin session and owner-domain permissions; refinement before implementation",
+      "owner_scopes": [],
+      "authority_refs": [
+        "docs/authority/current/development/31_UI_UX_Screen_and_Control_Center_Requirements_Matrix.md"
+      ],
+      "figma_refs": [
+        {
+          "file_key": "3F9tAviUejTYpYvRJt8gM1",
+          "node_id": "12:2"
+        }
+      ],
+      "source_paths": [],
+      "planning_status": "OWNER_AND_ROUTE_REFINEMENT_REQUIRED",
+      "design_status": "EXISTING_DESIGN"
+    },
+    {
+      "id": "U-PUBLIC-PRIVACY",
+      "title": "Public privacy policy",
+      "kind": "SCREEN",
+      "status": "PLANNED",
+      "app": "user",
+      "module": "PublicContent",
+      "pathname": null,
+      "runtime_pathname": null,
+      "guard": "Owning FRD/session/flow refinement before implementation",
+      "owner_scopes": [],
+      "authority_refs": [
+        "docs/authority/current/development/31_UI_UX_Screen_and_Control_Center_Requirements_Matrix.md"
+      ],
+      "figma_refs": [
+        {
+          "file_key": "apNbwvAgdn1xIxYH1oiaSC",
+          "node_id": "70:712"
+        }
+      ],
+      "source_paths": [],
+      "planning_status": "OWNER_AND_ROUTE_REFINEMENT_REQUIRED",
+      "design_status": "EXISTING_DESIGN",
+      "acceptance_boundary": "Designed but not implemented; no current PASS claimed."
+    },
+    {
+      "id": "U-PUBLIC-TERMS",
+      "title": "Public terms of service",
+      "kind": "SCREEN",
+      "status": "PLANNED",
+      "app": "user",
+      "module": "PublicContent",
+      "pathname": null,
+      "runtime_pathname": null,
+      "guard": "Owning FRD/session/flow refinement before implementation",
+      "owner_scopes": [],
+      "authority_refs": [
+        "docs/authority/current/development/31_UI_UX_Screen_and_Control_Center_Requirements_Matrix.md"
+      ],
+      "figma_refs": [
+        {
+          "file_key": "apNbwvAgdn1xIxYH1oiaSC",
+          "node_id": "70:816"
+        }
+      ],
+      "source_paths": [],
+      "planning_status": "OWNER_AND_ROUTE_REFINEMENT_REQUIRED",
+      "design_status": "EXISTING_DESIGN",
+      "acceptance_boundary": "Designed but not implemented; no current PASS claimed."
+    },
+    {
+      "id": "U-PUBLIC-CONTACT",
+      "title": "Contact support",
+      "kind": "SCREEN",
+      "status": "PLANNED",
+      "app": "user",
+      "module": "PublicContent",
+      "pathname": null,
+      "runtime_pathname": null,
+      "guard": "Owning FRD/session/flow refinement before implementation",
+      "owner_scopes": [],
+      "authority_refs": [
+        "docs/authority/current/development/31_UI_UX_Screen_and_Control_Center_Requirements_Matrix.md"
+      ],
+      "figma_refs": [
+        {
+          "file_key": "apNbwvAgdn1xIxYH1oiaSC",
+          "node_id": "70:920"
+        }
+      ],
+      "source_paths": [],
+      "planning_status": "OWNER_AND_ROUTE_REFINEMENT_REQUIRED",
+      "design_status": "EXISTING_DESIGN",
+      "acceptance_boundary": "Designed but not implemented; no current PASS claimed."
+    },
+    {
+      "id": "U-PUBLIC-SUPPORT-RESULT",
+      "title": "Support submitted overlay",
+      "kind": "COMPONENT",
+      "status": "PLANNED",
+      "app": "user",
+      "module": "PublicContent",
+      "pathname": null,
+      "runtime_pathname": null,
+      "guard": "Owning FRD/session/flow refinement before implementation",
+      "owner_scopes": [],
+      "authority_refs": [
+        "docs/authority/current/development/31_UI_UX_Screen_and_Control_Center_Requirements_Matrix.md"
+      ],
+      "figma_refs": [
+        {
+          "file_key": "apNbwvAgdn1xIxYH1oiaSC",
+          "node_id": "70:1234"
+        }
+      ],
+      "source_paths": [],
+      "planning_status": "OWNER_AND_ROUTE_REFINEMENT_REQUIRED",
+      "design_status": "EXISTING_DESIGN",
+      "acceptance_boundary": "Existing same-screen design variant; no independent pathname is inferred."
+    },
+    {
+      "id": "U-AUTH-KNOWN-ACCOUNTS",
+      "title": "Known accounts sign-in variant",
+      "kind": "COMPONENT",
+      "status": "PLANNED",
+      "app": "user",
+      "module": "Identity.Authentication",
+      "pathname": null,
+      "runtime_pathname": null,
+      "guard": "Owning FRD/session/flow refinement before implementation",
+      "owner_scopes": [],
+      "authority_refs": [
+        "docs/authority/current/development/31_UI_UX_Screen_and_Control_Center_Requirements_Matrix.md"
+      ],
+      "figma_refs": [
+        {
+          "file_key": "apNbwvAgdn1xIxYH1oiaSC",
+          "node_id": "99:324"
+        }
+      ],
+      "source_paths": [],
+      "planning_status": "OWNER_AND_ROUTE_REFINEMENT_REQUIRED",
+      "design_status": "EXISTING_DESIGN",
+      "acceptance_boundary": "Existing same-screen design variant; no independent pathname is inferred."
+    },
+    {
+      "id": "U-AUTH-PRODUCT-ORIGIN",
+      "title": "Product-origin sign-in variant",
+      "kind": "COMPONENT",
+      "status": "PLANNED",
+      "app": "user",
+      "module": "Identity.Authentication",
+      "pathname": null,
+      "runtime_pathname": null,
+      "guard": "Owning FRD/session/flow refinement before implementation",
+      "owner_scopes": [],
+      "authority_refs": [
+        "docs/authority/current/development/31_UI_UX_Screen_and_Control_Center_Requirements_Matrix.md"
+      ],
+      "figma_refs": [
+        {
+          "file_key": "apNbwvAgdn1xIxYH1oiaSC",
+          "node_id": "99:411"
+        }
+      ],
+      "source_paths": [],
+      "planning_status": "OWNER_AND_ROUTE_REFINEMENT_REQUIRED",
+      "design_status": "EXISTING_DESIGN",
+      "acceptance_boundary": "Existing same-screen design variant; no independent pathname is inferred."
+    }
+  ],
+  "excluded_historical_designs": [
+    {
+      "file_key": "apNbwvAgdn1xIxYH1oiaSC",
+      "node_id": "187:2",
+      "reason": "Hidden historical DOB-only screen, superseded prospectively by PDR-0011/AMD-0007; never implement as active UI."
+    }
+  ]
+}

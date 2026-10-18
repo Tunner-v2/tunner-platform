@@ -11,6 +11,8 @@ var fixtureRoot = Directory.CreateTempSubdirectory("tunner-governance-fixture-")
 
 try
 {
+    RunGlobalUiEvidenceChecks(repositoryRoot, failures);
+    RunMilestoneRevisionReviewChecks(repositoryRoot, failures);
     RunRevisionChecks(repositoryRoot, failures);
     RunRevisionCommittedProofChecks(repositoryRoot, failures);
     CreateFixture(repositoryRoot, fixtureRoot);
@@ -1076,4 +1078,151 @@ static void CopyDirectory(DirectoryInfo source, DirectoryInfo destination)
     {
         CopyDirectory(directory, new DirectoryInfo(Path.Combine(destination.FullName, directory.Name)));
     }
+}
+
+static void RunGlobalUiEvidenceChecks(DirectoryInfo repositoryRoot, ICollection<string> failures)
+{
+    var fixture = Directory.CreateTempSubdirectory("tunner-governance-ui-evidence-fixture-");
+    var checks = 0;
+    void Check(bool value, string message) { checks++; Expect(value, "Global UI evidence: " + message, failures); }
+    try
+    {
+        CreateFixture(repositoryRoot, fixture);
+        var app = Directory.CreateDirectory(Path.Combine(fixture.FullName, "web/apps/fixture"));
+        var source = Path.Combine(app.FullName, "main.tsx");
+        File.WriteAllText(source, "export const fixture = 1;\n");
+        Directory.CreateDirectory(Path.Combine(fixture.FullName, "docs/contracts"));
+        var inventoryPath = Path.Combine(fixture.FullName, UiComplianceApplication.InventoryPath);
+        var imagePath = Path.Combine(fixture.FullName, "governance/evidence/fixture-render.png");
+        File.Copy(Path.Combine(repositoryRoot.FullName, "governance/evidence/ui/AMD0008/approved-reference-register.png"), imagePath);
+        object Item(string id, string kind, string path, string status = "IMPLEMENTED") => new
+        {
+            id, kind, status, app = "fixture", module = "fixture", pathname = path, runtime_pathname = path, guard = "server-authorized workflow",
+            owner_scopes = new[] { "WORK-UI" }, authority_refs = new[] { "docs/authority/mirror.txt" },
+            figma_refs = new[] { "synthetic gate fixture reference" }, source_paths = new[] { "web/apps/fixture" }
+        };
+        var inventory = JsonSerializer.SerializeToNode(new
+        {
+            schema_version = 1, apps = new[] { new { id = "fixture", status = "IMPLEMENTED", source_root = "web/apps/fixture" } },
+            items = new[] { Item("SCREEN-A", "SCREEN", "/alpha"), Item("SCREEN-B", "SCREEN", "/beta"), Item("FORM-B", "FORM", "/beta"), Item("FUTURE", "SCREEN", "", "PLANNED") }
+        })!;
+        File.WriteAllText(inventoryPath, inventory.ToJsonString());
+        InitializeGit(fixture);
+        var sha = RunGitOutput(fixture, "rev-parse", "HEAD");
+        object Reference() => new { path = "governance/evidence/fixture-render.png", sha256 = HashFile(imagePath) };
+        object Row(string id, bool form) => new
+        {
+            id, checks = (form ? UiComplianceApplication.ValidationChecks : UiComplianceApplication.UrlChecks).Concat(UiComplianceApplication.FidelityChecks)
+                .Select(id => new { id, result = "PASS", evidence_refs = new[] { Reference() } }),
+            screenshots = new[] { Reference(), Reference() }, deviations = Array.Empty<object>()
+        };
+        var proof = JsonSerializer.SerializeToNode(new
+        {
+            scope_id = "GLOBAL_UI", result = "PASS", tested_commit_sha = sha, inventory_sha256 = HashFile(inventoryPath),
+            owned_behavior_paths = new[] { "web/apps/fixture/main.tsx", UiComplianceApplication.InventoryPath },
+            items = new[] { Row("SCREEN-A", false), Row("SCREEN-B", false), Row("FORM-B", true) }
+        })!;
+        var proofPath = Path.Combine(fixture.FullName, "governance/evidence/GLOBAL-UI-COMPLIANCE.json");
+        File.WriteAllText(proofPath, proof.ToJsonString());
+        RunGit(fixture, "add", "--", "governance/evidence/GLOBAL-UI-COMPLIANCE.json");
+        RunGit(fixture, "commit", "--quiet", "-m", "Synthetic UI evidence envelope");
+        UiCompliancePayload Run() => (UiCompliancePayload)UiComplianceApplication.Check(fixture).Payload;
+        void WriteProof(JsonNode value) => File.WriteAllText(proofPath, value.ToJsonString());
+        void Reset() { WriteProof(proof); File.WriteAllText(inventoryPath, inventory.ToJsonString()); File.WriteAllText(source, "export const fixture = 1;\n"); }
+        bool Has(string text) => Run().Failures.Any(x => x.Contains(text, StringComparison.Ordinal));
+        Check(Run().Outcome == "PASS" && Run().CoveredItems.Count == 3, "each live route/form passes independently; unimplemented future screen is not claimed");
+        var changed = proof.DeepClone(); changed["items"]!.AsArray().RemoveAt(2); WriteProof(changed);
+        Check(Has("missing for applicable item: FORM-B"), "one route passing cannot approve another form"); Reset();
+        changed = proof.DeepClone(); var validation = changed["items"]![2]!["checks"]!.AsArray(); validation.Remove(validation.Single(x => x!["id"]!.GetValue<string>() == "VAL-003")); WriteProof(changed);
+        Check(Has("missing or duplicate VAL-003"), "backend validation evidence is mandatory per form"); Reset();
+        changed = proof.DeepClone(); changed["items"]![1]!["checks"]![2]!["result"] = "FAIL"; WriteProof(changed);
+        Check(Has("URL-003 is not PASS"), "failed history/refresh acceptance blocks the affected route"); Reset();
+        changed = proof.DeepClone(); var exclusion = changed["items"]![0]!["checks"]![3]!; exclusion["result"] = "NOT_APPLICABLE"; exclusion["reason"] = ""; exclusion["authority_refs"] = new JsonArray(); WriteProof(changed);
+        Check(Has("unsupported exclusion"), "unjustified not-applicable labels cannot waive tests"); Reset();
+        changed = proof.DeepClone(); changed["items"]![0]!["screenshots"]![0]!["sha256"] = new string('0', 64); WriteProof(changed);
+        Check(Has("hash mismatch"), "stale visual evidence is rejected"); Reset();
+        changed = proof.DeepClone(); changed["items"]![0]!["deviations"]!.AsArray().Add(JsonSerializer.SerializeToNode(new { status = "AI_APPROVED", approval_evidence = Reference() })); WriteProof(changed);
+        Check(Has("not Product Owner approved"), "AI cannot approve a material visual deviation"); Reset();
+        var invChanged = inventory.DeepClone(); invChanged["items"]![0]!["figma_refs"] = new JsonArray(); File.WriteAllText(inventoryPath, invChanged.ToJsonString());
+        Check(Has("UI_REQUIRED"), "missing approved visual authority blocks acceptance"); Reset();
+        invChanged = inventory.DeepClone(); invChanged["items"]![1]!["runtime_pathname"] = "/alpha"; File.WriteAllText(inventoryPath, invChanged.ToJsonString());
+        Check(Has("UI_ROUTING_DEFECT"), "component swaps under a stale URL fail"); Reset();
+        File.AppendAllText(source, "export const changed = true;\n"); Check(Has("behavior changed after"), "owned source changes invalidate prior tested SHA"); Reset();
+        var newSource = Path.Combine(app.FullName, "unregistered.tsx"); File.WriteAllText(newSource, "export const another = 1;");
+        Check(Has("omits an applicable registered file"), "new untracked UI source cannot escape the evidence source set"); File.Delete(newSource);
+        var otherApp = Directory.CreateDirectory(Path.Combine(fixture.FullName, "web/apps/missing")); File.WriteAllText(Path.Combine(otherApp.FullName, "main.tsx"), "export const app = true;");
+        Check(Has("application is absent"), "each new app must enter the global inventory"); File.Delete(Path.Combine(otherApp.FullName, "main.tsx")); Directory.Delete(otherApp.FullName);
+        changed = proof.DeepClone(); changed["tested_commit_sha"] = new string('0', 40); WriteProof(changed);
+        Check(Has("tested committed ancestor"), "invented commit identity is refused"); Reset();
+        changed = proof.DeepClone(); changed["items"]![0]!["screenshots"]![0]!["path"] = "../outside.png"; WriteProof(changed);
+        Check(Has("malformed"), "evidence paths cannot escape the checkout"); Reset();
+        changed = proof.DeepClone(); changed["scope_id"] = "ANOTHER-SCOPE"; WriteProof(changed);
+        Check(Has("requested scope"), "one work scope cannot silently substitute for another"); Reset();
+        Check(Run().Outcome == "PASS", "negative checks restore the original valid fixture without weakening a gate");
+    }
+    finally { DeleteFixture(fixture); }
+    Console.WriteLine($"Global UI evidence gate checks: {checks}");
+}
+
+static void RunMilestoneRevisionReviewChecks(DirectoryInfo repositoryRoot, ICollection<string> failures)
+{
+    var fixture = Directory.CreateTempSubdirectory("tunner-governance-milestone-review-fixture-");
+    var checks = 0;
+    string[] auditorRoles = ["auditor"];
+    string[] mirrorAuthority = ["docs/authority/mirror.txt"];
+    void Check(bool value, string message) { checks++; Expect(value, "Milestone Revision review: " + message, failures); }
+    try
+    {
+        CreateFixture(repositoryRoot, fixture);
+        File.Copy(Path.Combine(repositoryRoot.FullName, "governance/policies/lifecycle-policy.yaml"), Path.Combine(fixture.FullName, "governance/policies/lifecycle-policy.yaml"), true);
+        var milestonePath = Path.Combine(fixture.FullName, "governance/milestones/MVP.yaml");
+        File.WriteAllText(milestonePath, File.ReadAllText(milestonePath).Replace("status: ACTIVE", "status: CLOSED", StringComparison.Ordinal));
+        var historical = Path.Combine(fixture.FullName, "governance/evidence/MVP-MILESTONE-ROLE-REVIEWS.json");
+        File.WriteAllText(historical, JsonSerializer.Serialize(new { scope_type = "MILESTONE", scope_id = "MVP", status = "PASS", reviews = new[] { new { role = "auditor", conclusion = "PASS" } } }));
+        var originalBytes = File.ReadAllBytes(historical);
+        InitializeGit(fixture);
+        bool Bound() => !((MilestoneClosePayload)GovernanceApplication.CheckMilestoneClose(fixture, "MVP").Payload).Failures.Any(x => x.Contains("reviews lack current committed scope binding", StringComparison.Ordinal));
+        Check(!Bound(), "historical unbound PASS alone does not satisfy current readiness");
+        var created = RevisionApplication.Create(fixture, new("MVP", "HARDENING", "Current milestone review", "Preserve historical review and add current proof", "NON_BLOCKING", [], ["docs/authority/mirror.txt"], [], ["current committed review"]));
+        var id = ((RevisionOperationPayload)created.Payload).RevisionId;
+        if (created.ExitCode != 0) throw new InvalidOperationException(GovernanceApplication.Serialize(created));
+        var recordPath = "governance/revisions/" + id + ".yaml";
+        var record = Path.Combine(fixture.FullName, recordPath);
+        var proofPath = "governance/evidence/" + id + "-proof.json";
+        var reviewPath = "governance/evidence/" + id + "-MILESTONE-ROLE-REVIEWS.json";
+        const string sourcePath = "docs/current-review-scope.txt";
+        File.WriteAllText(Path.Combine(fixture.FullName, sourcePath), "current scope");
+        EditRevision(record, "status", "VALIDATION"); EditRevision(record, "product_acceptance_required", false);
+        EditRevision(record, "required_roles", auditorRoles); EditRevision(record, "evidence_refs", new[] { proofPath, reviewPath });
+        File.WriteAllText(Path.Combine(fixture.FullName, proofPath), JsonSerializer.Serialize(new { scope_id = id, validation_kind = "COMMITTED", owned_behavior_paths = new[] { sourcePath } }));
+        File.WriteAllText(Path.Combine(fixture.FullName, reviewPath), "{}");
+        var specialist = "governance/reviews/REV-" + id + "-auditor.yaml";
+        File.WriteAllText(Path.Combine(fixture.FullName, specialist), JsonSerializer.Serialize(new { schema_version = 1, review_id = "REV-" + id + "-auditor", work_item_id = id, role = "auditor", status = "PASS", result = "PASS", reviewed_at = "2026-10-17T00:00:00Z", skill_id = "auditor", skill_version = "1.0.0", skill_hash = new string('a', 64), authority_refs = mirrorAuthority, context_artifacts = new[] { recordPath }, evidence_refs = new[] { proofPath }, findings = Array.Empty<string>(), blocking_findings = Array.Empty<string>(), required_actions = Array.Empty<string>(), context_expansion_requested = false }));
+        RunGit(fixture, "add", "--", recordPath, proofPath, reviewPath, sourcePath, specialist); RunGit(fixture, "commit", "--quiet", "-m", "Revision review source candidate");
+        var sha = RunGitOutput(fixture, "rev-parse", "HEAD");
+        var snapshot = JsonSerializer.SerializeToNode(GovernanceApplication.MilestoneReviewSnapshot(fixture, "MVP").Payload)!;
+        File.WriteAllText(Path.Combine(fixture.FullName, reviewPath), JsonSerializer.Serialize(new { scope_type = "MILESTONE", scope_id = "MVP", status = "PASS", revision_ref = id, reviewed_commit_sha = sha, reviewed_scope_sha256 = snapshot["ReviewedScopeSha256"]!.GetValue<string>(), reviews = new[] { new { role = "auditor", conclusion = "PASS" } } }));
+        File.WriteAllText(Path.Combine(fixture.FullName, proofPath), JsonSerializer.Serialize(new { scope_id = id, validation_kind = "COMMITTED", result = "PASS", tested_commit_sha = sha, validated_commit_sha = sha, owned_behavior_paths = new[] { sourcePath } }));
+        EditRevision(record, "git_state", new { repository_changed = true, validated_commit_sha = sha, tested_commit_sha = sha, work_item_commit_shas = new[] { sha }, closure_commit_sha = (string?)null, remaining_uncommitted_paths = Array.Empty<string>(), remaining_uncommitted_classification = "NONE" });
+        Check(!Bound(), "an open Revision cannot replace historical review binding");
+        EditRevision(record, "status", "CLOSED"); EditRevision(record, "closed_at", "2026-10-17T01:00:00Z");
+        Check(!Bound(), "uncommitted closure/evidence cannot waive the current binding");
+        RunGit(fixture, "add", "--", recordPath, proofPath, reviewPath); RunGit(fixture, "commit", "--quiet", "-m", "Committed technical Revision review");
+        var closed = RevisionApplication.CloseCheck(fixture, id);
+        if (closed.ExitCode != 0) Console.Error.WriteLine(GovernanceApplication.Serialize(closed));
+        Check(closed.ExitCode == 0 && Bound(), "fully validated committed closed Revision supplies current milestone proof");
+        EditRevision(record, "evidence_refs", new[] { proofPath, reviewPath, "governance/evidence/duplicate-MILESTONE-ROLE-REVIEWS.json" });
+        RunGit(fixture, "add", "--", recordPath); RunGit(fixture, "commit", "--quiet", "-m", "Reject ambiguous milestone reviews");
+        Check(!Bound(), "multiple claimed milestone reviews fail closed without an exception");
+        EditRevision(record, "evidence_refs", new[] { proofPath, reviewPath });
+        RunGit(fixture, "add", "--", recordPath); RunGit(fixture, "commit", "--quiet", "-m", "Restore singular milestone review");
+        var reviewFile = Path.Combine(fixture.FullName, reviewPath); var saved = File.ReadAllBytes(reviewFile);
+        File.AppendAllText(reviewFile, " "); Check(!Bound(), "dirty replacement review is refused"); File.WriteAllBytes(reviewFile, saved);
+        var binding = Path.Combine(fixture.FullName, "governance/work-items/TUN-001.yaml"); var savedBinding = File.ReadAllText(binding);
+        File.AppendAllText(binding, "\n# scope changed\n"); Check(!Bound(), "a scope change invalidates the replacement review too"); File.WriteAllText(binding, savedBinding);
+        File.AppendAllText(historical, " "); Check(!Bound(), "historical review tampering is never concealed by a new receipt"); File.WriteAllBytes(historical, originalBytes);
+        Check(Bound() && File.ReadAllBytes(historical).SequenceEqual(originalBytes), "historical receipt stays byte-identical after all negative checks");
+    }
+    finally { DeleteFixture(fixture); }
+    Console.WriteLine($"Milestone Revision review checks: {checks}");
 }

@@ -1,6 +1,6 @@
 # Tunner Agent Entry Contract
 
-**Status:** PRE-P0 AUTHORITATIVE TEMPLATE
+**Status:** GOVERNED REPOSITORY ENTRY CONTRACT
 **Applies from:** repository bootstrap
 **Authority:** Baseline 1.6.0 + active approved amendments/ADR/PDR records
 
@@ -25,6 +25,12 @@ Canonical resources before repository creation:
   - AMD-0003: https://drive.google.com/file/d/1N8GLvNiRkkm5hEgIIvJzJo_7DNpBJYJD/view
   - AMD-0004: https://drive.google.com/file/d/1ZBHXj1ndc5x341fRxEsva06Z2vpUPWzn/view
   - AMD-0005: https://drive.google.com/file/d/1M_B4TYwf5gDKaZ-1w_gMR9Nse-Fs7B87/view
+
+## Global UI contract (AMD-0008 / AMD-0009)
+
+Approved Figma controls visual presentation; FRDs/PDRs control domain behavior. This applies to every existing and future Tunner-owned User, Admin, Billing, Finance, Support, Product self-service and operator UI. Resolve docs/contracts/ui-inventory.json, owning FRD and actual Figma components before frontend work. Independent full screens use canonical pathnames with guarded deep links, reload and browser history; same-screen interactions may use safe local/query/fragment state. Never put secrets or personal information in URLs.
+
+Reuse one typed form/validation capability and approved Figma field/error variants; independent backend validation remains authoritative. Native constraint bubbles and handwritten per-screen error styles cannot substitute. Require URL-001..006, VAL-001..008, and UX-FID-001..008 evidence for each applicable route/form/component, with committed source binding and rendered/reference screenshots. Missing designs/material deviations require explicit Product Owner consent, not AI approval. Record UI_ROUTING_DEFECT, UI_VALIDATION_DEFECT, UI_FIDELITY_DEFECT and UI_REQUIRED; block affected acceptance until resolved. A passing registration form cannot approve another scope. Use the native tunner governance ui check gate. Preserve historical closure through RV lineage and the P0 enablement boundary.
 
 ## Mandatory startup
 ```text

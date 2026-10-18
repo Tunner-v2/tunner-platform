@@ -1,0 +1,108 @@
+{
+  "schema_version": 1,
+  "work_item_id": "TUN-P2-004-UI002",
+  "milestone_id": "P2",
+  "sprint_id": null,
+  "title": "Global routing and reusable form validation adoption for existing registration screens",
+  "status": "BACKLOG",
+  "type": "UI_ROUTING_DEFECT",
+  "authority_refs": [
+    "docs/authority/current-authority.json",
+    "docs/authority/current/development/11_Development_Planes_Milestones_and_P0_Backlog.md",
+    "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md",
+    "docs/authority/current/development/32_Domain_API_Event_Data_and_Policy_Contract_Catalog.md",
+    "docs/authority/current/development/34_Architecture_to_Development_Traceability_Matrix.md",
+    "docs/authority/baselines/1.6.0/decisions/ADR-0006_Identity_ASPNET_Identity_OpenIddict.md",
+    "docs/authority/current/development/AMD-0002_Non-Blocking_PR_Approval_and_Continuous_Local_Execution.md",
+    "docs/authority/current/development/02_Repository_Solution_and_Module_Architecture.md",
+    "docs/authority/current/development/09_Testing_Acceptance_Evidence_and_Quality_Gates.md",
+    "docs/authority/current/development/29_Privacy_Data_Lifecycle_and_Processing_Governance_FRD.md",
+    "docs/authority/current/decisions/PDR-0011_Universal_Account_Eligibility_Age-Aware_Consent_and_Delegated_Commercial_Authority.md",
+    "docs/authority/current/decisions/AMD-0007_Universal_Registration_Age-Aware_Consent_and_Delegated_Commercial_Authority.md",
+    "docs/authority/current/decisions/AMD-0008_Approved_Figma_Visual_Fidelity_and_Product_Owner_UX_Consent.md",
+    "docs/authority/current/development/10_UI_UX_Components_Widgets_and_Plugins_Development_Rules.md",
+    "docs/authority/current/development/31_UI_UX_Screen_and_Control_Center_Requirements_Matrix.md",
+    "docs/authority/current/development/35_AI_Agent_Skill_Catalog_and_Review_Contracts.md",
+    "docs/authority/current/development/06_Environment_Configuration_Secrets_and_Deployment.md",
+    "docs/authority/current/decisions/AMD-0009_URL_Addressable_Routing_and_Governed_Form_Validation.md"
+  ],
+  "flow_refs": [
+    "docs/authority/current/development/34_Architecture_to_Development_Traceability_Matrix.md"
+  ],
+  "contract_refs": [
+    "docs/authority/current/development/32_Domain_API_Event_Data_and_Policy_Contract_Catalog.md",
+    "docs/contracts/ui-inventory.json"
+  ],
+  "decision_refs": [
+    "PDR-0011",
+    "AMD-0007",
+    "AMD-0008",
+    "AMD-0009"
+  ],
+  "acceptance_criteria": [
+    "Each existing full-screen registration view has a canonical pathname; direct links, refresh, browser history and safe workflow guards use authoritative server-bound state without sensitive URLs.",
+    "All three live forms reuse shared typed schema validation and approved field/summary styling, preserving independent server validation, correct domain content, safe correction/focus and duplicate-submit protection.",
+    "Apply every applicable URL-001..006, VAL-001..008 and UX-FID-001..008 per affected route/form with actual browser/backend/component evidence and matched Figma screenshots.",
+    "Keep future unimplemented modules in governed refinement and preserve current business/policy/authorization boundaries."
+  ],
+  "prerequisites": [
+    "TUN-P2-004"
+  ],
+  "blockers": [
+    "P0-RV006: current P0 enablement must pass before feature implementation",
+    "P1-018-RV001: shared capability Revision must be governed and validated before final adoption acceptance"
+  ],
+  "impact": {
+    "architecture": true,
+    "ui": true,
+    "api": true,
+    "security": true,
+    "compliance": true,
+    "sdk": false,
+    "financial": false,
+    "devops": false,
+    "support": false
+  },
+  "activated_roles": [
+    "full-stack-engineer",
+    "tester-qa-engineer",
+    "solution-architect",
+    "cyber-security-engineer",
+    "auditor",
+    "compliance-specialist",
+    "sdk-engineer",
+    "ui-ux-engineer",
+    "frontend-engineer",
+    "end-user-ux-reviewer",
+    "content-writer",
+    "rd-engineer",
+    "devops-engineer",
+    "business-analyst",
+    "financial-specialist"
+  ],
+  "required_tests": [
+    "URL-001..006 per current route",
+    "VAL-001..008 per current form",
+    "UX-FID-001..008 per affected screen/component",
+    "Authoritative backend bypass and browser security regression"
+  ],
+  "required_evidence": [
+    "governance/evidence/AMD0009-INITIAL-AUDIT.json",
+    "docs/contracts/ui-inventory.json",
+    "governance/evidence/TUN-P2-004-UI002-VALIDATION.json",
+    "governance/evidence/TUN-P2-004-UI002-ROLE-REVIEWS.json",
+    "governance/evidence/TUN-P2-004-UI002-UI-COMPLIANCE.json",
+    "docs/development/GLOBAL_UI_COMPLIANCE_REPORT.md"
+  ],
+  "ui_evidence_ref": "governance/evidence/TUN-P2-004-UI002-UI-COMPLIANCE.json",
+  "context_policy": "TASK",
+  "todos": [],
+  "defects": [
+    "DEF-AMD0009-ROUTING-001",
+    "DEF-AMD0009-VALIDATION-001",
+    "DEF-AMD0009-FIDELITY-001"
+  ],
+  "product_acceptance_required": false,
+  "created_at": "2026-10-18T02:35:57.326Z",
+  "updated_at": "2026-10-18T02:35:57.326Z"
+}
