@@ -21,7 +21,11 @@ $projectName = 'tunner-browser-' + $rootHash
 # Per-request certificate pinning for readiness works in Windows PowerShell 5.1 and PowerShell 7.
 # It never changes global certificate validation or accepts an arbitrary certificate.
 if (-not ('TunnerBrowserLocalHttps' -as [type])) {
-    Add-Type -WarningAction SilentlyContinue -TypeDefinition @'
+    # Keep the .NET Framework-compatible certificate-pinned bridge on Windows PowerShell 5.1.
+    # Modern PowerShell compilers diagnose this API as obsolete; suppress only that compatibility diagnostic.
+    $browserCompileOptions = @{}
+    if ($PSVersionTable.PSVersion.Major -ge 7) { $browserCompileOptions.CompilerOptions = @('/nowarn:SYSLIB0014') }
+    Add-Type @browserCompileOptions -WarningAction SilentlyContinue -TypeDefinition @'
 using System;
 using System.IO;
 using System.Net;
