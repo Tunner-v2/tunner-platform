@@ -2,7 +2,7 @@
   "schema_version": 1,
   "scope_id": "P0-RV006",
   "validation_kind": "COMMITTED",
-  "result": "PENDING",
+  "result": "PASS",
   "owned_behavior_paths": [
     ".agent/skills/end-user-ux-reviewer/SKILL.md",
     ".agent/skills/frontend-engineer/SKILL.md",
@@ -43,6 +43,56 @@
     "src/Tunner.Governance/UiComplianceApplication.cs"
   ],
   "checks": {
-    "uncommitted_smoke": "PASS: full Governance functional suite, 16 UI evidence checks, 8 milestone review checks, 60 Revision and 15 closed-ownership checks; final committed run required."
-  }
+    "build": "PASS: zero warnings and errors",
+    "governance_functional": "PASS: full suite, 16 global UI gate, 9 milestone review, 60 Revision, 15 committed ownership and 1 controlled child-process failure-reporting check",
+    "authority": "PASS: 196 artifacts; Baseline 1.6.0 unchanged",
+    "governance": "PASS: 677 records and no diagnostics before final review records",
+    "source_security": "PASS: 48 task-owned files secret scanned; 1749 source files SAST scanned",
+    "preservation": "13 preexisting dirty files byte-identical; original P0 milestone, work-item and review closure records unchanged",
+    "global_ui_acceptance": "NOT CLAIMED: P2 runtime defects remain open; new global CI gate deliberately blocks release until current per-item UI proof passes"
+  },
+  "validated_commit_sha": "42908d44672b25abfa54a21b5fd1e7252deeb43e",
+  "tested_commit_sha": "42908d44672b25abfa54a21b5fd1e7252deeb43e",
+  "checked_at": "2026-10-18T02:48:17.632Z",
+  "receipts": [
+    {
+      "path": "artifacts/global-ui-20261017/p0-committed-build.log",
+      "sha256": "3761a6873bac01f031db30e3884df08a0a5aa5801de9ff5e493f8f6f88cb5e97"
+    },
+    {
+      "path": "artifacts/global-ui-20261017/p0-committed-governance-tests.log",
+      "sha256": "68e14d03447ffc5f343f07791ffbe9db59cd2f4ef435d47f7706302e14ec2bf3"
+    },
+    {
+      "path": "artifacts/global-ui-20261017/p0-committed-authority.json",
+      "sha256": "0c5af37d75a7543723a3030046c3c75ed00dd999e3f443cb128bdb1b54ca67c5"
+    },
+    {
+      "path": "artifacts/global-ui-20261017/p0-committed-validation.json",
+      "sha256": "bbaa83a0d1cc33402361c9f26108ca873dce6b89dae954e305359a1481bbe81f"
+    },
+    {
+      "path": "artifacts/global-ui-20261017/p0-committed-secret-scan.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "artifacts/global-ui-20261017/p0-committed-sast.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "artifacts/global-ui-20261017/p0-review-snapshot.json",
+      "sha256": "afe66f28f2ad3d6b9feb3f5b00be0fa823ce6073fef202032cf0c1a4a816fccd"
+    }
+  ],
+  "failed_attempts": [
+    {
+      "receipt": "artifacts/global-ui-20261017/p0-controls-smoke-corrected.log",
+      "cause": "New fixture used direct recursive deletion on Windows Git objects; replaced with existing validated DeleteFixture helper."
+    },
+    {
+      "source_commit": "5f78fb1130ce2b7b22be70c514624deb876f9da2",
+      "cause": "Negative duplicate-proof regression exposed SingleOrDefault throwing; now explicit count check refuses ambiguity, and harness catches unexpected managed errors and exits 1."
+    }
+  ],
+  "boundary": "Technical control-plane validation; no production frontend acceptance, Product decision, release or merge authorization inferred."
 }

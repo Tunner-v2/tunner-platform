@@ -7,7 +7,7 @@
   "parent_milestone_revision_id": null,
   "title": "Global UI fidelity routing and validation governance",
   "revision_type": "HARDENING",
-  "status": "ACTIVE",
+  "status": "VALIDATION",
   "reason": "Implement AMD-0008/AMD-0009 controls and source synchronization under current authority index; preserve original closure and independently revalidate P0 enablement.",
   "authority_refs": [
     "docs/authority/current/development/37_Current_Authority_Index.md",
@@ -46,9 +46,37 @@
   "evidence_refs": [
     "governance/evidence/P0-RV006-AUTHORITY-RESOLUTION.json",
     "governance/evidence/P0-RV006-STARTUP-REVIEWS.json",
-    "governance/evidence/P0-RV006-VALIDATION.json"
+    "governance/evidence/P0-RV006-VALIDATION.json",
+    "governance/evidence/P0-RV006-ROLE-REVIEWS.json",
+    "governance/evidence/P0-RV006-MILESTONE-ROLE-REVIEWS.json"
   ],
   "created_at": "2026-10-18T02:12:38.3412884+00:00",
   "closed_at": null,
-  "product_acceptance_required": false
+  "product_acceptance_required": false,
+  "git_state": {
+    "repository_changed": true,
+    "validated_commit_sha": "42908d44672b25abfa54a21b5fd1e7252deeb43e",
+    "tested_commit_sha": "42908d44672b25abfa54a21b5fd1e7252deeb43e",
+    "work_item_commit_shas": [
+      "5f78fb1130ce2b7b22be70c514624deb876f9da2",
+      "42908d44672b25abfa54a21b5fd1e7252deeb43e"
+    ],
+    "closure_commit_sha": null,
+    "remaining_uncommitted_paths": [
+      "docs/context/current/HANDOFF.md",
+      "docs/context/current/adaptive-selection.json",
+      "docs/context/current/authority.md",
+      "docs/context/current/contracts.md",
+      "docs/context/current/git-changes.md",
+      "docs/context/current/manifest.json",
+      "docs/context/current/relevant-flows.md",
+      "docs/context/current/summary.md",
+      "docs/context/current/tests.md",
+      "docs/project/CURRENT_STATE.md",
+      "docs/project/HANDOFF.md",
+      "docs/project/PROJECT_CONTEXT.md",
+      ".vscode/settings.json"
+    ],
+    "remaining_uncommitted_classification": "PREEXISTING_UNRELATED"
+  }
 }
