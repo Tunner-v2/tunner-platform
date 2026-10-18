@@ -13,3 +13,7 @@ The module is a small independent project at src/Modules/Accounts with no extern
 Technical references checked 2026-10-16: [DateOnly.AddYears](https://learn.microsoft.com/en-us/dotnet/api/system.dateonly.addyears?view=net-10.0) and [Gregorian year adjustment](https://learn.microsoft.com/en-us/dotnet/api/system.datetime.addyears?view=net-10.0). These establish runtime mechanics; the business authority remains PDR-0007 and FRD 17.
 
 P1-RV001 remains open and release-blocking for the separate image/CVE and integration-check findings. This pure local capability does not change those images or waive release controls. P2 Product acceptance and production release remain separate lifecycle gates.
+
+
+## PDR-0011 / AMD-0007 prospective correction
+Current AccountAgeCapabilityEvaluator reuses the historical calendar primitive and returns jurisdiction-scoped consent and independent commercial classification. UNDER_18 does not deny Account lifecycle. Consent never grants BillingAuthority. Re-evaluate at action time; preserve the historical PDR-0007 evidence adapter only for history.

@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "reviewed_at": "2026-10-17T21:48:04.474Z",
+  "executable": "Tunner.AuditRemediation.FunctionalTests.exe",
+  "dialog_code": "0xe0434352",
+  "assessment": "Matches the local audit helper fixture assertion failure recorded on2026-10-16; no Tunner product UI crash is inferred.",
+  "historical_receipt": "artifacts/audit-remediation-20261016/application-error-review.json",
+  "historical_source_commit": "8dcb975fb4896daf585ed757859447e9279da9b2",
+  "original_cause": "Retained actionable corrective revisions invalidated the fixture no-eligible-work expectation.",
+  "current_source_checks": [
+    "Disposable fixture explicitly isolates live work/revision eligibility without changing real records.",
+    "InvalidOperationException assertion failures are caught and return exit1; success returns0.",
+    "UseAppHost=false is retained."
+  ],
+  "current_run": {
+    "source_head": "71aa1a3ce46f2514e350fcc45d52866b2bcaec3f",
+    "command": "dotnet run --no-build --no-restore --project tests/Tunner.AuditRemediation.FunctionalTests",
+    "result": "PASS:13 audit-remediation authority/context checks",
+    "exit_code": 0,
+    "receipt": "artifacts/amd0008-ui-fidelity-20261017/application-error-helper-verification.log",
+    "sha256": "a28ca25266f1356f43245afce223940cb5ce6fb74658c75d82aada9025cbe142"
+  },
+  "diagnostic_boundary": "No matching Application Error event was returned by the targeted local query. Attribution relies on the matching executable and retained execution receipt; no crash dump analysis was performed.",
+  "primary_reference": {
+    "url": "https://learn.microsoft.com/en-us/shows/inside/e0434352",
+    "meaning": "0xE0434352 identifies a CLR/.NET exception; the code alone does not identify the specific managed cause."
+  }
+}

@@ -1,11 +1,26 @@
 {
   "schema_version": 1,
   "revision_ref": "P0-RV004",
-  "authority_change": false,
+  "authority_change": true,
   "supplemental_mirrors": [
     {
       "manifest_path": "docs/authority/current/supplemental-manifest.json",
-      "sha256": "ae413c05c2dc92e662d4375956835ce8b7450145abf6ae6b3ac611107ef68ee0"
+      "sha256": "c74b18cc4ff69bea5e961c48d111f3f3924af71d27391268b5029bcdc620f9f1"
+    },
+    {
+      "manifest_path": "docs/authority/current/age-policy-manifest.json",
+      "sha256": "26780349de69f84751c1710b3231cb7d033f8105b2e90ba1914f282785fc99da"
+    },
+    {
+      "manifest_path": "docs/authority/current/visual-fidelity-manifest.json",
+      "sha256": "d810f080cdb3f6ff09ba52345dff6d277bc77254680b06f5133d5e72e9225875",
+      "authority_refs": [
+        "AMD-0008"
+      ]
     }
+  ],
+  "active_change_refs": [
+    "PDR-0011",
+    "AMD-0007"
   ]
 }

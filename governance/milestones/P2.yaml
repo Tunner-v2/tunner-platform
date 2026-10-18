@@ -19,12 +19,14 @@
   "authority_refs": [
     "docs/authority/current-authority.json",
     "docs/authority/current/development/11_Development_Planes_Milestones_and_P0_Backlog.md",
-    "docs/authority/baselines/1.6.0/17_Account_Identity_and_Session_FRD.md",
+    "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md",
     "docs/authority/current/development/32_Domain_API_Event_Data_and_Policy_Contract_Catalog.md",
     "docs/authority/current/development/34_Architecture_to_Development_Traceability_Matrix.md",
     "docs/authority/baselines/1.6.0/decisions/ADR-0006_Identity_ASPNET_Identity_OpenIddict.md",
-    "docs/authority/baselines/1.6.0/decisions/PDR-0007_DOB_Based_18_Plus_Eligibility.md",
-    "docs/authority/current/development/AMD-0002_Non-Blocking_PR_Approval_and_Continuous_Local_Execution.md"
+    "docs/authority/current/development/AMD-0002_Non-Blocking_PR_Approval_and_Continuous_Local_Execution.md",
+    "docs/authority/current/decisions/AMD-0008_Approved_Figma_Visual_Fidelity_and_Product_Owner_UX_Consent.md",
+    "docs/authority/current/decisions/PDR-0011_Universal_Account_Eligibility_Age-Aware_Consent_and_Delegated_Commercial_Authority.md",
+    "docs/authority/current/decisions/AMD-0007_Universal_Registration_Age-Aware_Consent_and_Delegated_Commercial_Authority.md"
   ],
   "prerequisites": [
     "P0",
@@ -48,9 +50,12 @@
     "TUN-P2-015",
     "TUN-P2-016",
     "TUN-P2-017",
-    "TUN-P2-018"
+    "TUN-P2-018",
+    "TUN-P2-004-UI001"
   ],
-  "required_gates": [],
+  "required_gates": [
+    "UI_VISUAL_APPROVAL"
+  ],
   "required_roles": [
     "full-stack-engineer",
     "solution-architect",
@@ -66,7 +71,8 @@
     "governance/evidence/TUN-P2-001-AUTHORITY-RESOLUTION.json",
     "governance/evidence/TUN-P2-001-VALIDATION.json",
     "governance/evidence/TUN-P2-001-BACKLOG-SNAPSHOT.json",
-    "docs/development/P2_ACCOUNT_IDENTITY_REFINEMENT.md"
+    "docs/development/P2_ACCOUNT_IDENTITY_REFINEMENT.md",
+    "governance/evidence/AMD0008-UI-AUDIT.json"
   ],
   "known_risks": [
     "P1 protected-main/closure integration and formal deployment remain separate facts; use exact accepted closure and PR receipts.",
@@ -74,5 +80,5 @@
     "Runtime policy/provider/UX details require targeted owning-slice refinement before implementation."
   ],
   "created_at": "2026-10-16T17:32:48.676Z",
-  "updated_at": "2026-10-16T17:48:49.296Z"
+  "updated_at": "2026-10-17T21:22:33.272Z"
 }

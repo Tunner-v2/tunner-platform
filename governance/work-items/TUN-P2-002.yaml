@@ -3,21 +3,22 @@
   "work_item_id": "TUN-P2-002",
   "milestone_id": "P2",
   "sprint_id": null,
-  "title": "Calendar-safe adult eligibility and derived evidence",
+  "title": "Calendar-safe age classification and consent/commercial capability policy",
   "status": "VALIDATION",
   "type": "FEATURE",
   "authority_refs": [
     "docs/authority/current-authority.json",
     "docs/authority/current/development/11_Development_Planes_Milestones_and_P0_Backlog.md",
-    "docs/authority/baselines/1.6.0/17_Account_Identity_and_Session_FRD.md",
+    "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md",
     "docs/authority/current/development/32_Domain_API_Event_Data_and_Policy_Contract_Catalog.md",
     "docs/authority/current/development/34_Architecture_to_Development_Traceability_Matrix.md",
     "docs/authority/baselines/1.6.0/decisions/ADR-0006_Identity_ASPNET_Identity_OpenIddict.md",
-    "docs/authority/baselines/1.6.0/decisions/PDR-0007_DOB_Based_18_Plus_Eligibility.md",
     "docs/authority/current/development/AMD-0002_Non-Blocking_PR_Approval_and_Continuous_Local_Execution.md",
     "docs/authority/current/development/02_Repository_Solution_and_Module_Architecture.md",
     "docs/authority/current/development/09_Testing_Acceptance_Evidence_and_Quality_Gates.md",
-    "docs/authority/baselines/1.6.0/29_Privacy_Data_Lifecycle_and_Processing_Governance_FRD.md"
+    "docs/authority/current/development/29_Privacy_Data_Lifecycle_and_Processing_Governance_FRD.md",
+    "docs/authority/current/decisions/PDR-0011_Universal_Account_Eligibility_Age-Aware_Consent_and_Delegated_Commercial_Authority.md",
+    "docs/authority/current/decisions/AMD-0007_Universal_Registration_Age-Aware_Consent_and_Delegated_Commercial_Authority.md"
   ],
   "flow_refs": [
     "docs/authority/current/development/34_Architecture_to_Development_Traceability_Matrix.md"
@@ -27,12 +28,12 @@
   ],
   "decision_refs": [
     "ADR-0006",
-    "PDR-0007"
+    "PDR-0011"
   ],
   "acceptance_criteria": [
-    "Evaluate the approved DOB + 18 calendar years <= trusted server evaluation date expression, including exact birthday and leap/calendar boundaries.",
-    "Return the AGE_INELIGIBLE outcome for an under-18 applicant; produce policy/version, evaluation date and evidence/correlation references without retaining raw DOB in the result.",
-    "Expose an Accounts-owned internal capability with no Account/session/Product Relationship creation or public endpoint in this slice."
+    "Retain historical DOB-based evidence reader and shared calendar arithmetic without applying old global ineligibility to current Account lifecycle.",
+    "Resolve PDR-0011 age classification, jurisdiction-scoped consent and independent commercial eligibility with server clock, effective policy and safe evidence references.",
+    "Re-evaluate age/capability without replacing Account identity; no DOB in returned/diagnostic derived evidence."
   ],
   "prerequisites": [
     "TUN-P2-001"
@@ -71,15 +72,17 @@
   "todos": [],
   "defects": [],
   "created_at": "2026-10-16T17:48:49.296Z",
-  "updated_at": "2026-10-16T19:38:07.403Z",
+  "updated_at": "2026-10-16T20:19:00.112Z",
   "git_state": {
     "repository_changed": true,
-    "validated_commit_sha": "d856dde651440216369f0698f92f5d7878505d64",
-    "tested_commit_sha": "d856dde651440216369f0698f92f5d7878505d64",
+    "validated_commit_sha": "16b6e40615cde8804570ca7269784435c692305e",
+    "tested_commit_sha": "16b6e40615cde8804570ca7269784435c692305e",
     "work_item_commit_shas": [
       "d742737cb1c76da2ef783fdb68133ae054963177",
       "7acf2803d604c9f4b916c5e8b24985e9007aacb6",
-      "d856dde651440216369f0698f92f5d7878505d64"
+      "d856dde651440216369f0698f92f5d7878505d64",
+      "99c0cf268b368ba64b4984dce6172a00a2546718",
+      "16b6e40615cde8804570ca7269784435c692305e"
     ],
     "closure_commit_sha": null,
     "remaining_uncommitted_paths": [

@@ -4,20 +4,26 @@
   "milestone_id": "P2",
   "sprint_id": null,
   "title": "Registration and verified-contact activation vertical slice",
-  "status": "BACKLOG",
+  "status": "VALIDATION",
   "type": "FEATURE",
   "authority_refs": [
     "docs/authority/current-authority.json",
     "docs/authority/current/development/11_Development_Planes_Milestones_and_P0_Backlog.md",
-    "docs/authority/baselines/1.6.0/17_Account_Identity_and_Session_FRD.md",
+    "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md",
     "docs/authority/current/development/32_Domain_API_Event_Data_and_Policy_Contract_Catalog.md",
     "docs/authority/current/development/34_Architecture_to_Development_Traceability_Matrix.md",
     "docs/authority/baselines/1.6.0/decisions/ADR-0006_Identity_ASPNET_Identity_OpenIddict.md",
-    "docs/authority/baselines/1.6.0/decisions/PDR-0007_DOB_Based_18_Plus_Eligibility.md",
     "docs/authority/current/development/AMD-0002_Non-Blocking_PR_Approval_and_Continuous_Local_Execution.md",
     "docs/authority/current/development/02_Repository_Solution_and_Module_Architecture.md",
     "docs/authority/current/development/09_Testing_Acceptance_Evidence_and_Quality_Gates.md",
-    "docs/authority/baselines/1.6.0/29_Privacy_Data_Lifecycle_and_Processing_Governance_FRD.md"
+    "docs/authority/current/development/29_Privacy_Data_Lifecycle_and_Processing_Governance_FRD.md",
+    "docs/authority/current/decisions/PDR-0011_Universal_Account_Eligibility_Age-Aware_Consent_and_Delegated_Commercial_Authority.md",
+    "docs/authority/current/decisions/AMD-0007_Universal_Registration_Age-Aware_Consent_and_Delegated_Commercial_Authority.md",
+    "docs/authority/current/decisions/AMD-0008_Approved_Figma_Visual_Fidelity_and_Product_Owner_UX_Consent.md",
+    "docs/authority/current/development/10_UI_UX_Components_Widgets_and_Plugins_Development_Rules.md",
+    "docs/authority/current/development/31_UI_UX_Screen_and_Control_Center_Requirements_Matrix.md",
+    "docs/authority/current/development/35_AI_Agent_Skill_Catalog_and_Review_Contracts.md",
+    "docs/authority/current/development/06_Environment_Configuration_Secrets_and_Deployment.md"
   ],
   "flow_refs": [
     "docs/authority/current/development/34_Architecture_to_Development_Traceability_Matrix.md"
@@ -27,12 +33,14 @@
   ],
   "decision_refs": [
     "ADR-0006",
-    "PDR-0007"
+    "PDR-0011",
+    "AMD-0008"
   ],
   "acceptance_criteria": [
-    "Implement registration through server-side eligibility and verification-pending activation without arbitrary Account enumeration.",
-    "Require valid proof and atomic uniqueness recheck for activation; duplicate operations are idempotent and post-commit effects remain explicit.",
-    "Implement only approved registration/verification UX and governed content; no age-attestation checkbox or Product membership/entitlement creation."
+    "Register with email/password/confirmation and current terms/privacy acknowledgement, without DOB or age rejection; verify contact before normal Personal Information.",
+    "Personal Information collects DOB using shared calendar-safe server evaluation; age below18 does not itself deny Account activation, normal authentication/session or ordinary Product relationship.",
+    "Resolve current jurisdiction-scoped age/consent policy and trusted consent evidence; independent payer/payment-method/paid-term capabilities remain restricted under18, while existing BillingAuthority/sponsorship contracts own paid access.",
+    "Preserve PDR-0007 evidence and existing idempotency, proof, uniqueness, privacy, framework credential and outbox behavior; no new minor identity/payment resources."
   ],
   "prerequisites": [
     "TUN-P2-002",
@@ -46,12 +54,15 @@
     "architecture": true,
     "ui": true,
     "sdk": false,
-    "financial": false,
+    "financial": true,
     "compliance": true,
     "security": true,
-    "devops": false,
+    "devops": true,
     "support": false,
-    "api": true
+    "api": true,
+    "data_schema": true,
+    "migration": true,
+    "provider": true
   },
   "activated_roles": [
     "full-stack-engineer",
@@ -64,19 +75,80 @@
     "ui-ux-engineer",
     "frontend-engineer",
     "end-user-ux-reviewer",
-    "content-writer"
+    "content-writer",
+    "rd-engineer",
+    "devops-engineer",
+    "business-analyst",
+    "financial-specialist"
   ],
   "required_tests": [
-    "underage/no-activation negative paths",
-    "duplicate/concurrent registration and verification replay",
-    "BFF/browser accessibility and no enumeration or raw-DOB leakage"
+    "registration and verification without DOB; no age-based Account activation rejection",
+    "Personal Information proof binding, policy/consent/evidence, encrypted retention and re-evaluation at18",
+    "current commercial eligibility and consent/BillingAuthority separation; future-plane contract conformance",
+    "calendar, privacy, replay/concurrency, real PostgreSQL/HTTPS BFF and accessible browser regressions",
+    "isolated manual browser starter: real HTTPS/SMTP/database flow, safe lifecycle, TLS/Production/PID/port guards"
   ],
   "required_evidence": [
-    "governance/evidence/TUN-P2-004-VALIDATION.json"
+    "governance/evidence/TUN-P2-004-VALIDATION.json",
+    "governance/evidence/TUN-P2-004-AUTHORITY-RESOLUTION.json",
+    "docs/development/P2_004_REGISTRATION_SCOPE.md",
+    "docs/development/P2_004_REGISTRATION.md",
+    "governance/evidence/TUN-P2-004-RD-SOURCES.json",
+    "governance/evidence/TUN-P2-004-DATA-INVENTORY.json",
+    "governance/evidence/TUN-P2-004-UI-ALIGNMENT.json",
+    "governance/evidence/TUN-P2-004-ROLE-REVIEWS.json",
+    "governance/evidence/PDR0011-AMD0007-IMPACT-AUDIT.json",
+    "docs/development/PDR0011_AMD0007_IMPLEMENTATION.md",
+    "governance/evidence/AMD0008-UI-AUDIT.json",
+    "docs/development/AMD0008_UI_REVIEW.md",
+    "governance/evidence/AMD0008-UI-VISUAL-VALIDATION.json",
+    "docs/development/AMD0008_HANDOFF.md",
+    "governance/gates/UI_VISUAL_APPROVAL.yaml",
+    "governance/work-items/TUN-P2-004-UI001.yaml",
+    "governance/todos/TODO-AMD0008-GOV001.yaml",
+    "governance/evidence/TUN-P2-004-BROWSER-STARTER-VALIDATION.json",
+    "docs/development/LOCAL_BROWSER_TESTING.md",
+    "governance/evidence/TUN-P2-004-BROWSER-STARTER-SCOPE.json",
+    "docs/development/BROWSER_STARTER_HANDOFF.md"
   ],
   "context_policy": "TASK",
   "todos": [],
-  "defects": [],
+  "defects": [
+    "DEF-TUN-P2-004-UI-001"
+  ],
   "created_at": "2026-10-16T17:48:49.296Z",
-  "updated_at": "2026-10-16T17:48:49.296Z"
+  "updated_at": "2026-10-17T22:25:13.225Z",
+  "git_state": {
+    "repository_changed": true,
+    "validated_commit_sha": "ccb82f64a12cfed08c4f30a0ca763e8205b704ce",
+    "tested_commit_sha": "ccb82f64a12cfed08c4f30a0ca763e8205b704ce",
+    "work_item_commit_shas": [
+      "e14ec1ec6c94d3edcefd3612770f784ef2bab2bd",
+      "e1bb1a1b843d3cb7d3dbd744e8a1c828445a65b9",
+      "23d8cd50037e96ae0e3091c13995cff48fa7ec68",
+      "97220ac1e8a497408b5e6ff044dbcc090d4690e1",
+      "f64f9976a150e3c4a08378c9b87c980b91359a81",
+      "c6fa8e7690095f8eb2401587c407501fced29a4d",
+      "ba81f0e3ccd92b2e1b9730c72cb37f0de489278c",
+      "c8adffbbadc60d930504bc23a9217bc0768d9c6a",
+      "ccb82f64a12cfed08c4f30a0ca763e8205b704ce"
+    ],
+    "closure_commit_sha": null,
+    "remaining_uncommitted_paths": [
+      "docs/context/current/HANDOFF.md",
+      "docs/context/current/adaptive-selection.json",
+      "docs/context/current/authority.md",
+      "docs/context/current/contracts.md",
+      "docs/context/current/git-changes.md",
+      "docs/context/current/manifest.json",
+      "docs/context/current/relevant-flows.md",
+      "docs/context/current/summary.md",
+      "docs/context/current/tests.md",
+      "docs/project/CURRENT_STATE.md",
+      "docs/project/HANDOFF.md",
+      "docs/project/PROJECT_CONTEXT.md",
+      ".vscode/settings.json"
+    ],
+    "remaining_uncommitted_classification": "PREEXISTING_UNRELATED"
+  }
 }

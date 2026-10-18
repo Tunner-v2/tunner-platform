@@ -1,4 +1,6 @@
+using System.Text;
 using System.Text.Json;
+using YamlDotNet.RepresentationModel;
 using Tunner.Governance;
 
 var repository = RepositoryRootResolver.Resolve();
@@ -24,9 +26,11 @@ try
     File.AppendAllText(manifestPath, " ");
     Check(AuthorityApplication.Verify(fixture).ExitCode != 0, "supplemental manifest drift is rejected");
     File.WriteAllBytes(manifestPath, bytes);
-    // Model the no-eligible-work recovery branch independently of this checkout's active corrections.
-    foreach (var revision in new[] { "P0-RV004", "P0-030-RV002", "P0-032-RV002", "P0-033-RV002", "P1-022-RV002", "P1-024-RV002" })
-        File.Delete(Path.Combine(fixture.FullName, "governance", "revisions", revision + ".yaml"));
+    // Model this branch explicitly; the live backlog must not decide fixture eligibility.
+    IsolateNoEligibleWork(fixture);
+    var next = GovernanceApplication.Next(fixture);
+    Check(next.ExitCode == 0 && ((NextPayload)next.Payload).Items.All(item => !item.Actionable),
+        "fixture explicitly has no eligible work");
     var originalProject = Path.Combine(fixture.FullName, "docs", "project", "HANDOFF.md");
     Directory.CreateDirectory(Path.GetDirectoryName(originalProject)!);
     File.WriteAllText(originalProject, "pre-existing unrelated recovery note");
@@ -51,7 +55,7 @@ try
     var defectPath = Path.Combine(fixture.FullName, "governance/defects/DEF-TUN-P1-023-R2-001.yaml");
     File.AppendAllText(defectPath, Environment.NewLine + "# mutation" + Environment.NewLine);
     Check(ContextApplication.Verify(fixture, output).ExitCode != 0, "linked defect mutation makes context stale");
-    Console.WriteLine("PASS: 12 audit-remediation authority/context checks");
+    Console.WriteLine("PASS: 13 audit-remediation authority/context checks");
 }
 catch (InvalidOperationException exception)
 {
@@ -77,4 +81,26 @@ static void Copy(string source, string destination)
         File.Copy(file, Path.Combine(destination, Path.GetFileName(file)));
     foreach (var directory in Directory.EnumerateDirectories(source))
         Copy(directory, Path.Combine(destination, Path.GetFileName(directory)));
+}
+
+static void IsolateNoEligibleWork(DirectoryInfo fixture)
+{
+    string[] terminal = ["DONE", "CLOSED", "CANCELED", "SUPERSEDED", "DUPLICATE", "NOT_APPLICABLE"];
+    foreach (var directory in new[] { "work-items", "revisions" })
+    {
+        foreach (var path in Directory.EnumerateFiles(Path.Combine(fixture.FullName, "governance", directory), "*.yaml"))
+        {
+            var yaml = new YamlStream();
+            using (var reader = File.OpenText(path)) yaml.Load(reader);
+            var record = (YamlMappingNode)yaml.Documents.Single().RootNode;
+            var field = new YamlScalarNode("status");
+            if (record.Children[field] is not YamlScalarNode status)
+                throw new InvalidOperationException("Fixture record has no scalar status.");
+            if (terminal.Contains(status.Value, StringComparer.Ordinal)) continue;
+            // Only the disposable copy changes. Keep terminal historical records byte-identical.
+            record.Children[field] = new YamlScalarNode("CANCELED");
+            using var writer = new StreamWriter(path, false, new UTF8Encoding(false));
+            yaml.Save(writer, false);
+        }
+    }
 }

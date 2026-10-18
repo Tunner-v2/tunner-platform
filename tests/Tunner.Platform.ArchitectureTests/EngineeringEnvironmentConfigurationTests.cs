@@ -220,7 +220,10 @@ public sealed class EngineeringEnvironmentConfigurationTests
         var profile = EngineeringEnvironmentConfiguration.Load(configuration);
         Assert.Equal(EngineeringEnvironmentClass.LocalDevelopment, profile.Class);
         Assert.Equal(7201, profile.Endpoints["api"].Port);
-        Assert.Equal(5432, profile.Endpoints["postgres"].Port);
+        Assert.Equal(25432, profile.Endpoints["postgres"].Port);
+        Assert.Equal(25672, profile.Endpoints["rabbitmq"].Port);
+        Assert.Equal(26379, profile.Endpoints["redis"].Port);
+        Assert.Equal(28200, profile.Endpoints["openbao"].Port);
         Assert.Equal("tunner/local/postgres", profile.SecretReferences["postgresCredential"].ResourceReference);
     }
 

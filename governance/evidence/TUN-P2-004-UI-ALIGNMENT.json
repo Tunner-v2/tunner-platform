@@ -1,0 +1,269 @@
+{
+  "schema_version": 1,
+  "scope_id": "TUN-P2-004",
+  "authority": "docs/authority/current/decisions/AMD-0008_Approved_Figma_Visual_Fidelity_and_Product_Owner_UX_Consent.md",
+  "figma_file": "apNbwvAgdn1xIxYH1oiaSC",
+  "visual_gate": "UI_VISUAL_APPROVAL",
+  "production_ui_acceptance": "PENDING_FINAL_COMMITTED_VALIDATION",
+  "approved_base_nodes": {
+    "registration": "70:270",
+    "verification": "70:539",
+    "ready": "70:630",
+    "normal_personal_information": "35:107",
+    "consent": "207:2",
+    "personal_information_onboarding": "198:2"
+  },
+  "candidate_nodes_requiring_visual_consent": {
+    "registration_confirmation": "197:5",
+    "personal_information_onboarding": "198:2"
+  },
+  "reference_viewport": {
+    "width": 1440,
+    "height": 1024
+  },
+  "reference_snapshot": "governance/evidence/ui/AMD0008/review-snapshot.json",
+  "asset_verification": {
+    "original_assets": 10,
+    "sha256_match": 10,
+    "additional_approved_glyph": {
+      "node": "70:696",
+      "path": "web/apps/user/public/assets/ready-approved-check.svg",
+      "sha256": "5cf00b5b003b98f240bf74151841185904247362b74039bf350ce8574bbb36db"
+    }
+  },
+  "restorations": [
+    "Exact placeholders, normal heading tracking, card padding, field/button/note/badge and support/footer geometry; native proof expiry remains server-enforced.",
+    "Original Figma background/glow SVGs retained byte-identical; success glyph restored from approved outlined export.",
+    "Shared published-copy hook reused for placeholder text; content remains DRAFT outside explicit test fixtures."
+  ],
+  "pending_visual_consent": [],
+  "reviewer_identity": "Executing Codex agent, engineering inspection only; no Product Owner visual consent inferred.",
+  "limitations": [
+    "Automated axe success does not prove manual contrast compliance.",
+    "Matching viewport inspection and asset identity are recorded; no Product-approved pixel-difference threshold exists.",
+    "Existing Figma candidate edits are not retroactively treated as approved."
+  ],
+  "prior_alignment": {
+    "schema_version": 1,
+    "scope_id": "TUN-P2-004",
+    "figma_file": "apNbwvAgdn1xIxYH1oiaSC",
+    "nodes": {
+      "registration": "70:270",
+      "verification": "70:539",
+      "ready": "70:630",
+      "eligibility": "187:2"
+    },
+    "changes": "Existing editable layers aligned with FRD before implementation; no new brand/logo. DOB, no unsupported federation/Product grant, one proof field, policy-backed expiry, text-only Tunner. Shared accessible interactive border replaces insufficient-contrast reference border.",
+    "components": "@tunner/ui finite spacious/verification/outline presentations; existing standard User/Admin controls unchanged. Geist/Inter loaded from existing pinned local font dependencies.",
+    "reference_variations": "Browser-native date affordance and current server expiry time improve entry/expiry guidance. All semantic copy remains a DRAFT proposal pending owner publication, including notice wording. Tests use explicit synthetic publications only.",
+    "assets": [
+      {
+        "path": "web/apps/user/public/assets/ready-imgBgGlowIndigo.svg",
+        "sha256": "54934000b01f421419fc9a104dcf5068f48b525394d0587534600695fcc37859",
+        "bytes": 683,
+        "width": "840",
+        "height": "740",
+        "usage": "decorative glow; intrinsic image dimensions"
+      },
+      {
+        "path": "web/apps/user/public/assets/ready-imgBgGlowViolet.svg",
+        "sha256": "517d39c4c5d721617a76ccd97aff0f56124cc817d032004c1d20f38d0aae0691",
+        "bytes": 683,
+        "width": "700",
+        "height": "600",
+        "usage": "decorative glow; intrinsic image dimensions"
+      },
+      {
+        "path": "web/apps/user/public/assets/ready-imgEllipse.svg",
+        "sha256": "eb37331f873999d6fb122fa3594881a0a935da1b41d20101227761c4194a4a2d",
+        "bytes": 227,
+        "width": "4",
+        "height": "4",
+        "usage": "footer separator; 4x4"
+      },
+      {
+        "path": "web/apps/user/public/assets/ready-imgEllipse1.svg",
+        "sha256": "716e0ee704ab22493cf82ceccfb7c671d1273e61790636451df1f1eb75458bd4",
+        "bytes": 234,
+        "width": "72",
+        "height": "72",
+        "usage": "success circle; 72x72"
+      },
+      {
+        "path": "web/apps/user/public/assets/register-imgBgGlowIndigo.svg",
+        "sha256": "3f46d383407fee017a39de72f9a287348d25736b2747e28874da0c7028efbb78",
+        "bytes": 686,
+        "width": "840",
+        "height": "740",
+        "usage": "decorative glow; intrinsic image dimensions"
+      },
+      {
+        "path": "web/apps/user/public/assets/register-imgBgGlowViolet.svg",
+        "sha256": "6057cd9d95e1b7ee08ba24451f9b5a93e997cb96305ad1401b65718999d0f434",
+        "bytes": 686,
+        "width": "700",
+        "height": "600",
+        "usage": "decorative glow; intrinsic image dimensions"
+      },
+      {
+        "path": "web/apps/user/public/assets/register-imgEllipse.svg",
+        "sha256": "eb37331f873999d6fb122fa3594881a0a935da1b41d20101227761c4194a4a2d",
+        "bytes": 227,
+        "width": "4",
+        "height": "4",
+        "usage": "footer separator; 4x4"
+      },
+      {
+        "path": "web/apps/user/public/assets/verify-imgBgGlowIndigo.svg",
+        "sha256": "1cad56a901f56e0bd762afb54fbcf56e388bb865cc48ffa6347704588b6d51c1",
+        "bytes": 683,
+        "width": "840",
+        "height": "740",
+        "usage": "decorative glow; intrinsic image dimensions"
+      },
+      {
+        "path": "web/apps/user/public/assets/verify-imgBgGlowViolet.svg",
+        "sha256": "517d39c4c5d721617a76ccd97aff0f56124cc817d032004c1d20f38d0aae0691",
+        "bytes": 683,
+        "width": "700",
+        "height": "600",
+        "usage": "decorative glow; intrinsic image dimensions"
+      },
+      {
+        "path": "web/apps/user/public/assets/verify-imgEllipse.svg",
+        "sha256": "eb37331f873999d6fb122fa3594881a0a935da1b41d20101227761c4194a4a2d",
+        "bytes": 227,
+        "width": "4",
+        "height": "4",
+        "usage": "footer separator; 4x4"
+      }
+    ],
+    "visual_checks": "Desktop1440x1024 and320px registration/verify/personal/consent/complete; WCAG AA automated checks plus visual inspection. See final committed-candidate receipts.",
+    "publication": "No Product/content/legal acceptance asserted.",
+    "user_direction": "Current approved PDR-0011 / AMD-0007 replaces earlier sequencing direction. No DOB-only onboarding stage.",
+    "authority": "PDR-0011 / AMD-0007, current FRD17/29/31 and FigJam37/47/49/60",
+    "figma_nodes": [
+      "70:270",
+      "70:334",
+      "197:5",
+      "35:107",
+      "197:9",
+      "198:2",
+      "198:59",
+      "70:539",
+      "70:630"
+    ],
+    "alignment": "Edited existing source before UI implementation: initial email/password/confirmation/notices, hidden historical DOB-only187:2, required DOB inside normal Personal Information with existing full/display names and verified email. Under18 has no blanket rejection screen. Policy-required consent state carries no browser-authority checkbox.",
+    "prior_alignment": {
+      "schema_version": 1,
+      "scope_id": "TUN-P2-004",
+      "figma_file": "apNbwvAgdn1xIxYH1oiaSC",
+      "nodes": {
+        "registration": "70:270",
+        "verification": "70:539",
+        "ready": "70:630",
+        "eligibility": "187:2"
+      },
+      "changes": "Existing editable layers aligned with FRD before implementation; no new brand/logo. DOB, no unsupported federation/Product grant, one proof field, policy-backed expiry, text-only Tunner. Shared accessible interactive border replaces insufficient-contrast reference border.",
+      "components": "@tunner/ui finite spacious/verification/outline presentations; existing standard User/Admin controls unchanged. Geist/Inter loaded from existing pinned local font dependencies.",
+      "reference_variations": "Browser-native date affordance and current server expiry time improve entry/expiry guidance. All semantic copy remains a DRAFT proposal pending owner publication, including notice wording. Tests use explicit synthetic publications only.",
+      "assets": [
+        {
+          "path": "web/apps/user/public/assets/ready-imgBgGlowIndigo.svg",
+          "sha256": "54934000b01f421419fc9a104dcf5068f48b525394d0587534600695fcc37859",
+          "bytes": 683,
+          "width": "840",
+          "height": "740",
+          "usage": "decorative glow; intrinsic image dimensions"
+        },
+        {
+          "path": "web/apps/user/public/assets/ready-imgBgGlowViolet.svg",
+          "sha256": "517d39c4c5d721617a76ccd97aff0f56124cc817d032004c1d20f38d0aae0691",
+          "bytes": 683,
+          "width": "700",
+          "height": "600",
+          "usage": "decorative glow; intrinsic image dimensions"
+        },
+        {
+          "path": "web/apps/user/public/assets/ready-imgEllipse.svg",
+          "sha256": "eb37331f873999d6fb122fa3594881a0a935da1b41d20101227761c4194a4a2d",
+          "bytes": 227,
+          "width": "4",
+          "height": "4",
+          "usage": "footer separator; 4x4"
+        },
+        {
+          "path": "web/apps/user/public/assets/ready-imgEllipse1.svg",
+          "sha256": "716e0ee704ab22493cf82ceccfb7c671d1273e61790636451df1f1eb75458bd4",
+          "bytes": 234,
+          "width": "72",
+          "height": "72",
+          "usage": "success circle; 72x72"
+        },
+        {
+          "path": "web/apps/user/public/assets/register-imgBgGlowIndigo.svg",
+          "sha256": "3f46d383407fee017a39de72f9a287348d25736b2747e28874da0c7028efbb78",
+          "bytes": 686,
+          "width": "840",
+          "height": "740",
+          "usage": "decorative glow; intrinsic image dimensions"
+        },
+        {
+          "path": "web/apps/user/public/assets/register-imgBgGlowViolet.svg",
+          "sha256": "6057cd9d95e1b7ee08ba24451f9b5a93e997cb96305ad1401b65718999d0f434",
+          "bytes": 686,
+          "width": "700",
+          "height": "600",
+          "usage": "decorative glow; intrinsic image dimensions"
+        },
+        {
+          "path": "web/apps/user/public/assets/register-imgEllipse.svg",
+          "sha256": "eb37331f873999d6fb122fa3594881a0a935da1b41d20101227761c4194a4a2d",
+          "bytes": 227,
+          "width": "4",
+          "height": "4",
+          "usage": "footer separator; 4x4"
+        },
+        {
+          "path": "web/apps/user/public/assets/verify-imgBgGlowIndigo.svg",
+          "sha256": "1cad56a901f56e0bd762afb54fbcf56e388bb865cc48ffa6347704588b6d51c1",
+          "bytes": 683,
+          "width": "840",
+          "height": "740",
+          "usage": "decorative glow; intrinsic image dimensions"
+        },
+        {
+          "path": "web/apps/user/public/assets/verify-imgBgGlowViolet.svg",
+          "sha256": "517d39c4c5d721617a76ccd97aff0f56124cc817d032004c1d20f38d0aae0691",
+          "bytes": 683,
+          "width": "700",
+          "height": "600",
+          "usage": "decorative glow; intrinsic image dimensions"
+        },
+        {
+          "path": "web/apps/user/public/assets/verify-imgEllipse.svg",
+          "sha256": "eb37331f873999d6fb122fa3594881a0a935da1b41d20101227761c4194a4a2d",
+          "bytes": 227,
+          "width": "4",
+          "height": "4",
+          "usage": "footer separator; 4x4"
+        }
+      ],
+      "visual_checks": "Desktop 1440x1024 plus 320px register/eligibility/verify/ready and underage state; final exact-candidate screenshot receipts in validation record.",
+      "publication": "No Product/content/legal acceptance asserted.",
+      "user_direction": "DOB removed from first screen, moved to a separate user-confirmed eligibility step after notices. No registration POST before DOB, server 18+ gate unchanged."
+    }
+  },
+  "product_owner_visual_consent": "governance/evidence/AMD0008-PRODUCT-OWNER-VISUAL-CONSENT.json",
+  "figma_sync": "governance/evidence/AMD0008-FIGMA-SYNC.json",
+  "approved_adaptations": [
+    "Registration confirmation composition; normal Personal Information/DOB onboarding composition and consent-pending screen",
+    "Accessible contrast proposal and current footer exception",
+    "Shared interaction/state and 320px responsive adaptations without separately approved state/frame references"
+  ],
+  "approved_exceptions": [
+    "Shared focus/checked/error/expired/recovery patterns and320px responsive layouts from reviewed images",
+    "Browser-native date format/calendar affordance varies by platform; functional value remains server-canonical",
+    "No approved arbitrary pixel-diff tolerance; matched-view manual review required"
+  ]
+}
