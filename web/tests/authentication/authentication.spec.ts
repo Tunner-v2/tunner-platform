@@ -30,15 +30,16 @@ for(const width of [1440,1024,768,390,320]){
   await expect(page.getByText('Signing out ends your Tunner session. Connected products manage their own sessions.')).toBeVisible();await accessibility(page,'signed-in-'+width);
  });
 }
-test('Login empty blur correction first invalid focus and server error preserve only safe values',async({page})=>{
+for(const width of [1440,768,320]){test('Login empty blur correction first invalid focus and server error preserve only safe values at '+width,async({page})=>{
+ await page.setViewportSize({width,height:1024});
  await setup(page);let posts=0;await page.route('**/authentication/sign-in',route=>{posts++;return route.fulfill({status:401,json:{error_code:'AUTHENTICATION_FAILED'}});});await page.goto('/login');
  await page.getByLabel('Email address').fill('bad');await page.getByLabel('Password',{exact:true}).focus();await expect(page.getByLabel('Email address')).toHaveAttribute('aria-invalid','true');
  await page.getByRole('button',{name:'Sign in',exact:true}).click();await expect(page.getByLabel('Email address')).toBeFocused();expect(posts).toBe(0);await expect(page.getByRole('alert')).toHaveText(proposal.content['authentication.error.highlighted']);
  await fill(page);await expect(page.getByRole('alert')).toHaveCount(0);await page.getByRole('button',{name:'Sign in',exact:true}).click();await expect(page.getByRole('alert')).toHaveText(proposal.content['authentication.error.credentials']);
  expect(posts).toBe(1);await expect(page.getByLabel('Email address')).toHaveValue('person@example.test');await expect(page.getByLabel('Password',{exact:true})).toHaveValue('');
  const field=page.getByLabel('Password',{exact:true});await field.focus();await page.getByLabel('Email address').focus();const description=await field.getAttribute('aria-describedby');expect(description).toBeTruthy();await expect(page.locator('[id="'+description+'"]')).toHaveText(proposal.content['authentication.error.password']);
- await accessibility(page,'login-server-error');
-});
+ await accessibility(page,'login-server-error-'+width);
+});}
 test('Canonical URL direct entry refresh browser history and sign-out guard',async({page})=>{
  const state=await setup(page);let posts=0;await page.route('**/authentication/sign-in',async route=>{posts++;expect(route.request().headers()['x-tunner-csrf']).toBe('fixture-anonymous-csrf');state.authenticated=true;await route.fulfill({json:{authenticated:true}});});
  await page.route('**/authentication/sign-out',async route=>{expect(route.request().headers()['x-tunner-csrf']).toBe('fixture-authenticated-csrf');state.authenticated=false;await route.fulfill({json:{authenticated:false}});});
