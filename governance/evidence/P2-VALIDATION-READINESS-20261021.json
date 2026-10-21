@@ -1,0 +1,109 @@
+{
+  "schema_version": 1,
+  "scope_id": "P2",
+  "result": "PASS_SCOPED_ENGINEERING_GATES",
+  "checked_at": "2026-10-21T17:05:40.942Z",
+  "work_state": "P2-002/003/004 retain VALIDATION; READY gate does not grant Product acceptance, DONE, merge or release.",
+  "delta_commit_sha": "2b4cf343c3219f0b4e6b081fa394c2d3c57b31a0",
+  "gates": [
+    {
+      "ExitCode": 0,
+      "Command": "gate check",
+      "Payload": {
+        "WorkItemId": "TUN-P2-002",
+        "Outcome": "READY",
+        "Failures": [],
+        "Satisfied": [
+          "evidence exists: governance/evidence/TUN-P2-002-VALIDATION.json",
+          "evidence exists: governance/evidence/TUN-P2-002-AUTHORITY-RESOLUTION.json",
+          "evidence exists: governance/evidence/TUN-P2-002-ROLE-REVIEWS.json",
+          "evidence exists: docs/development/P2_002_ADULT_ELIGIBILITY.md",
+          "role review evidence exists",
+          "mandatory role review passed: auditor",
+          "mandatory role review passed: compliance-specialist",
+          "mandatory role review passed: cyber-security-engineer",
+          "mandatory role review passed: full-stack-engineer",
+          "mandatory role review passed: solution-architect",
+          "mandatory role review passed: tester-qa-engineer"
+        ]
+      }
+    },
+    {
+      "ExitCode": 0,
+      "Command": "gate check",
+      "Payload": {
+        "WorkItemId": "TUN-P2-003",
+        "Outcome": "READY",
+        "Failures": [],
+        "Satisfied": [
+          "evidence exists: governance/evidence/TUN-P2-003-VALIDATION.json",
+          "evidence exists: governance/evidence/TUN-P2-003-AUTHORITY-RESOLUTION.json",
+          "evidence exists: governance/evidence/TUN-P2-003-RD-SOURCES.json",
+          "evidence exists: governance/evidence/TUN-P2-003-ROLE-REVIEWS.json",
+          "evidence exists: docs/development/P2_003_IDENTITY_PERSISTENCE.md",
+          "evidence exists: governance/evidence/TUN-P2-003-DATA-INVENTORY.json",
+          "role review evidence exists",
+          "mandatory role review passed: auditor",
+          "mandatory role review passed: compliance-specialist",
+          "mandatory role review passed: cyber-security-engineer",
+          "mandatory role review passed: full-stack-engineer",
+          "mandatory role review passed: rd-engineer",
+          "mandatory role review passed: solution-architect",
+          "mandatory role review passed: tester-qa-engineer"
+        ]
+      }
+    },
+    {
+      "ExitCode": 0,
+      "Command": "gate check",
+      "Payload": {
+        "WorkItemId": "TUN-P2-004",
+        "Outcome": "READY",
+        "Failures": [],
+        "Satisfied": [
+          "evidence exists: governance/evidence/TUN-P2-004-VALIDATION.json",
+          "evidence exists: governance/evidence/TUN-P2-004-AUTHORITY-RESOLUTION.json",
+          "evidence exists: docs/development/P2_004_REGISTRATION_SCOPE.md",
+          "evidence exists: docs/development/P2_004_REGISTRATION.md",
+          "evidence exists: governance/evidence/TUN-P2-004-RD-SOURCES.json",
+          "evidence exists: governance/evidence/TUN-P2-004-DATA-INVENTORY.json",
+          "evidence exists: governance/evidence/TUN-P2-004-UI-ALIGNMENT.json",
+          "evidence exists: governance/evidence/TUN-P2-004-ROLE-REVIEWS.json",
+          "evidence exists: governance/evidence/PDR0011-AMD0007-IMPACT-AUDIT.json",
+          "evidence exists: docs/development/PDR0011_AMD0007_IMPLEMENTATION.md",
+          "evidence exists: governance/evidence/AMD0008-UI-AUDIT.json",
+          "evidence exists: docs/development/AMD0008_UI_REVIEW.md",
+          "evidence exists: governance/evidence/AMD0008-UI-VISUAL-VALIDATION.json",
+          "evidence exists: docs/development/AMD0008_HANDOFF.md",
+          "evidence exists: governance/gates/UI_VISUAL_APPROVAL.yaml",
+          "evidence exists: governance/work-items/TUN-P2-004-UI001.yaml",
+          "evidence exists: governance/todos/TODO-AMD0008-GOV001.yaml",
+          "evidence exists: governance/evidence/TUN-P2-004-SECURITY-REVALIDATION-20261021.json",
+          "evidence exists: docs/development/LOCAL_BROWSER_TESTING.md",
+          "evidence exists: governance/evidence/TUN-P2-004-BROWSER-STARTER-SCOPE.json",
+          "evidence exists: docs/development/BROWSER_STARTER_HANDOFF.md",
+          "evidence exists: governance/evidence/TUN-P2-004-UI-COMPLIANCE.json",
+          "evidence exists: docs/development/GLOBAL_UI_COMPLIANCE_REPORT.md",
+          "evidence exists: docs/development/GLOBAL_UI_HANDOFF_20261018.md",
+          "evidence exists: governance/evidence/AMD0009-FINAL-GATES-20261018.json",
+          "role review evidence exists",
+          "AMD-0008/0009 per-route/form UI compliance passed",
+          "mandatory role review passed: auditor",
+          "mandatory role review passed: compliance-specialist",
+          "mandatory role review passed: content-writer",
+          "mandatory role review passed: cyber-security-engineer",
+          "mandatory role review passed: devops-engineer",
+          "mandatory role review passed: end-user-ux-reviewer",
+          "mandatory role review passed: financial-specialist",
+          "mandatory role review passed: frontend-engineer",
+          "mandatory role review passed: full-stack-engineer",
+          "mandatory role review passed: rd-engineer",
+          "mandatory role review passed: sdk-engineer",
+          "mandatory role review passed: solution-architect",
+          "mandatory role review passed: tester-qa-engineer",
+          "mandatory role review passed: ui-ux-engineer"
+        ]
+      }
+    }
+  ]
+}
