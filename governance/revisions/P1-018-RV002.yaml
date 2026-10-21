@@ -1,0 +1,55 @@
+{
+  "schema_version": 1,
+  "revision_id": "P1-018-RV002",
+  "revision_scope": "WORK_ITEM",
+  "original_scope_id": "TUN-P1-018",
+  "parent_revision_id": "P1-018-RV001",
+  "parent_milestone_revision_id": "P1-RV001",
+  "title": "Revalidate shared frontend foundation after the Vite security patch",
+  "revision_type": "SECURITY",
+  "status": "APPROVED",
+  "reason": "P0-RV009 security remediation patched Vite8.2.2 to8.2.4; shared UI ownership from closed P1-018-RV001 requires a new append-only work-item Revision and current UI source evidence. Revalidate current committed unchanged layouts, forms and routes without reopening original closure or claiming new Product acceptance.",
+  "authority_refs": [
+    "docs/authority/current/development/37_Current_Authority_Index.md",
+    "docs/authority/baselines/1.6.0/08_Security_Privacy_Compliance_and_Global_Market_Governance.md",
+    "docs/authority/baselines/1.6.0/decisions/ADR-0007_Frontend_React_TypeScript_Vite_TailAdmin.md",
+    "docs/authority/current/development/09_Testing_Acceptance_Evidence_and_Quality_Gates.md",
+    "docs/authority/baselines/1.6.0/10_UI_UX_Components_Widgets_and_Plugins_Development_Rules.md",
+    "docs/authority/baselines/1.6.0/31_UI_UX_Screen_and_Control_Center_Requirements_Matrix.md"
+  ],
+  "decision_refs": [],
+  "defect_refs": [],
+  "change_refs": [],
+  "impact_classification": "SCOPED_BLOCKING",
+  "blocked_scope": [
+    "P1-RV001-001"
+  ],
+  "acceptance_criteria": [
+    "Minimal Vite security patch has no outstanding dependency advisories; current build, unit, per-route/form browser and rendered-reference checks pass; current UI proof is bound to a committed source and prior Product-approved visual exceptions remain unchanged."
+  ],
+  "prerequisites": [],
+  "work_items": [],
+  "required_gates": [],
+  "required_roles": [
+    "project-manager",
+    "solution-architect",
+    "governance-engineer",
+    "tester-qa-engineer",
+    "auditor",
+    "full-stack-engineer",
+    "cyber-security-engineer",
+    "devops-engineer",
+    "rd-engineer",
+    "frontend-engineer",
+    "ui-ux-engineer",
+    "end-user-ux-reviewer"
+  ],
+  "evidence_refs": [
+    "governance/evidence/P1-018-RV002-AUTHORITY-RESOLUTION.json",
+    "governance/evidence/P1-018-RV002-STARTUP-REVIEWS.json",
+    "governance/evidence/P1-018-RV002-VALIDATION.json"
+  ],
+  "created_at": "2026-10-21T16:39:40.2819060+00:00",
+  "closed_at": null,
+  "product_acceptance_required": false
+}
