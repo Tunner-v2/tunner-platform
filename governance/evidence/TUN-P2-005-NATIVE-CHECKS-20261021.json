@@ -4,7 +4,7 @@
   "recorded_at": "2026-10-21T18:57:58.324Z",
   "behavior_validated_tested_sha": "100cccd26f34211810e6c2bcf2a72242f5872c22",
   "committed_evidence_sha": "3069d03a2c0a599d7490a3c1dba4e4ac3c4c81a8",
-  "schema_checked_at_sha": "4c39352bd9c97a9c43acf9023bd8502dba78eda8",
+  "schema_checked_at_sha": "38b9a6e07a40a5be74064e492da74483008bed8d",
   "result": "ENGINEERING_PASS_UI_ACCEPTANCE_BLOCKED",
   "authority": {
     "outcome": "VERIFIED",
@@ -16,7 +16,7 @@
     "Command": "validate",
     "Payload": {
       "IsValid": true,
-      "RecordCount": 797,
+      "RecordCount": 806,
       "Diagnostics": []
     }
   },
@@ -318,16 +318,21 @@
     "draft": true,
     "base": "codex/global-ui-compliance",
     "dependency": "https://github.com/Tunner-v2/tunner-platform/pull/18",
-    "final_push": "APPROVED_FOR_PUBLICATION_AFTER_TECHNICAL_CHECKS",
+    "final_push": "PUBLISHED_DRAFT_VERIFIED",
     "proposal_ref": "artifacts/p2-005-auth-20261021/pr-publication-review.md",
     "automation_revision": "P0-019-RV001",
-    "live_evidence_ref": "governance/evidence/P0-019-RV001-LIVE-PR.json"
+    "live_evidence_ref": "governance/evidence/P0-019-RV001-LIVE-PR.json",
+    "verified_head_sha": "38b9a6e07a40a5be74064e492da74483008bed8d",
+    "one_open_head_pr": true,
+    "auto_merge": false
   },
   "additional_ci_validation": {
     "tested_sha": "45c8fba6c60a905194d9937aa5d1181627ed6b76",
     "checks_passed": 27,
     "exact_one_line_delta": "PASS",
     "native_close_check": "PASS",
-    "original_scope_preserved": "TUN-P0-019"
+    "original_scope_preserved": "TUN-P0-019",
+    "live_result": "PASS",
+    "workflow_run_url": "https://github.com/Tunner-v2/tunner-platform/actions/runs/39658297369"
   }
 }
