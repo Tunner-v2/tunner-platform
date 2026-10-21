@@ -1,10 +1,10 @@
 {
   "schema_version": 1,
   "scope_id": "P0-RV009",
-  "validation_kind": "CANDIDATE",
-  "result": "PENDING",
-  "tested_commit_sha": null,
-  "validated_commit_sha": null,
+  "validation_kind": "COMMITTED",
+  "result": "PASS",
+  "tested_commit_sha": "8afa4769f9b8553b619c0455abbb6890aff2974b",
+  "validated_commit_sha": "8afa4769f9b8553b619c0455abbb6890aff2974b",
   "owned_behavior_paths": [
     ".agent/skills/end-user-ux-reviewer/SKILL.md",
     ".agent/skills/frontend-engineer/SKILL.md",
@@ -69,5 +69,63 @@
     "web/pnpm-lock.yaml"
   ],
   "boundary": "CI enforcement and private rebuild foundations only. All unresolved vendor-image and signed-plugin findings remain open under P1-RV001. No default adoption, registry publication, merge, deployment or release acceptance.",
-  "inherited_source_proof": "governance/evidence/P0-RV008-VALIDATION.json"
+  "inherited_source_proof": "governance/evidence/P0-RV008-VALIDATION.json",
+  "checked_at": "2026-10-21T16:51:47.715Z",
+  "checks": {
+    "governance": "PASS full functional suite",
+    "audit": "PASS13",
+    "ci_enforcement": "PASS27",
+    "image_compatibility": "PASS8 PostgreSQL+8 OpenBao+5 Mailpit",
+    "image_scans": "PASS three private images;0 fixable HIGH/CRITICAL",
+    "source_security": "PASS SAST,secret,container-policy,security-source,dev-source",
+    "frontend": "PASS at8afa; repeated31 unit/38 browser atfd58093; no classified behavior changed",
+    "release": "BLOCKED P1-RV001 vendor/LGTM and merged-main dependency"
+  },
+  "receipts": [
+    {
+      "path": "governance/evidence/security/20261021/image-results.json",
+      "sha256": "8e15be2c7982ac9d3cb207054134e5d376609d26a9bcefffe89fa35a4f66e430"
+    },
+    {
+      "path": "governance/evidence/security/20261021/governance-functional-8afa476.log",
+      "sha256": "dd5db41654cb4e5f25b3cfe54e8f28bb38dd9110c035a7114ce9081929530cf5"
+    },
+    {
+      "path": "governance/evidence/security/20261021/audit-functional-8afa476.log",
+      "sha256": "f43ed28553043a8abcd9b0109aee7072405f7ac5d61606db7db19856ccf27d74"
+    },
+    {
+      "path": "governance/evidence/security/20261021/postgres-checks-8afa476.log",
+      "sha256": "a8727a5ef38dcffe7b5baa5fdb709976502958a4f6e7a95758ae7f3056bb4d9e"
+    },
+    {
+      "path": "governance/evidence/security/20261021/openbao-checks-8afa476.log",
+      "sha256": "f41669b5cb33a3649a25bbf79b841043318d997ee698471fe79ec8dc7c2862e4"
+    },
+    {
+      "path": "governance/evidence/security/20261021/mailpit-checks-8afa476.log",
+      "sha256": "27f2a76d151b22dbd3366ec924a9c6d8ef5f60d6f9dbc7cf1920a059c9b94e68"
+    },
+    {
+      "path": "governance/evidence/security/20261021/sast-final.log",
+      "sha256": "abe76a30dd5900ccf26ebb0d70f307a7b072cd7f52af95a516b311eee8d81887"
+    },
+    {
+      "path": "governance/evidence/security/20261021/secret-final.log",
+      "sha256": "af1982f1651f8e92978f7b074237dcaed92b489cf2db8c12a2d572b8a712e241"
+    },
+    {
+      "path": "governance/evidence/security/20261021/container-policy-final.log",
+      "sha256": "8a7949fc691f4da0d5752e9abf5633ccca64d90d1bc1c1d0edc571c16a389464"
+    },
+    {
+      "path": "governance/evidence/security/20261021/security-source-final.log",
+      "sha256": "42f8593ea1c6c052cd9f9972e49d0f47cd303fb31d7e2b763611b0077bd747bf"
+    },
+    {
+      "path": "governance/evidence/security/20261021/dev-source-final.log",
+      "sha256": "1ced0551eb5bf7f0de8e15c576774982e62221f9b1793c8b2c4d8f7e5e8314fd"
+    }
+  ],
+  "role_reviews_ref": "governance/evidence/P0-RV009-ROLE-REVIEWS.json"
 }

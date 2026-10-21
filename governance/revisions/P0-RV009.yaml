@@ -7,7 +7,7 @@
   "parent_milestone_revision_id": null,
   "title": "Enforce supply-chain checks and validated dependency image references",
   "revision_type": "SECURITY",
-  "status": "ACTIVE",
+  "status": "VALIDATION",
   "reason": "P1-RV001 remediation affects CI and dependency defaults owned by closed P0. Preserve original closure through independent Revision lineage; introduce stable fail-closed status contexts and validate supported image patch references, retaining all unresolved findings and human integration gates.",
   "authority_refs": [
     "docs/authority/baselines/1.6.0/01_Engineering_Technology_Foundation.md",
@@ -52,9 +52,37 @@
     "governance/evidence/P0-RV009-STARTUP-REVIEWS.json",
     "governance/evidence/P0-RV009-VALIDATION.json",
     "governance/evidence/P0-RV009-REQUIRED-CHECKS-20261021.json",
-    "governance/evidence/P1-RV001-001-RD-SECURITY-FOLLOWUP-20261021.json"
+    "governance/evidence/P1-RV001-001-RD-SECURITY-FOLLOWUP-20261021.json",
+    "governance/evidence/P0-RV009-ROLE-REVIEWS.json",
+    "governance/evidence/P0-RV009-MILESTONE-ROLE-REVIEWS.json"
   ],
   "created_at": "2026-10-20T20:08:28.0650289+00:00",
   "closed_at": null,
-  "product_acceptance_required": false
+  "product_acceptance_required": false,
+  "git_state": {
+    "repository_changed": true,
+    "validated_commit_sha": "8afa4769f9b8553b619c0455abbb6890aff2974b",
+    "tested_commit_sha": "8afa4769f9b8553b619c0455abbb6890aff2974b",
+    "work_item_commit_shas": [
+      "31bc49e7ff7308bfa900c253f32a135bc701ec3a",
+      "8afa4769f9b8553b619c0455abbb6890aff2974b"
+    ],
+    "closure_commit_sha": null,
+    "remaining_uncommitted_paths": [
+      "docs/context/current/HANDOFF.md",
+      "docs/context/current/adaptive-selection.json",
+      "docs/context/current/authority.md",
+      "docs/context/current/contracts.md",
+      "docs/context/current/git-changes.md",
+      "docs/context/current/manifest.json",
+      "docs/context/current/relevant-flows.md",
+      "docs/context/current/summary.md",
+      "docs/context/current/tests.md",
+      "docs/project/CURRENT_STATE.md",
+      "docs/project/HANDOFF.md",
+      "docs/project/PROJECT_CONTEXT.md",
+      ".vscode/settings.json"
+    ],
+    "remaining_uncommitted_classification": "PREEXISTING_UNRELATED"
+  }
 }

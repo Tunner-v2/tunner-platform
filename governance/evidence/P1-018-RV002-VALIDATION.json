@@ -2,9 +2,9 @@
   "schema_version": 1,
   "scope_id": "P1-018-RV002",
   "validation_kind": "RETROSPECTIVE_COMMITTED",
-  "result": "PENDING",
-  "tested_commit_sha": null,
-  "validated_commit_sha": null,
+  "result": "PASS",
+  "tested_commit_sha": "fd58093d839aec7d55e7578b24a35a804e984eaf",
+  "validated_commit_sha": "fd58093d839aec7d55e7578b24a35a804e984eaf",
   "owned_behavior_paths": [
     "docs/contracts/.gitattributes",
     "docs/contracts/ui-inventory.json",
@@ -44,5 +44,27 @@
   "owned_coordination_paths": [
     "governance/evidence/ui/AMD0009/.gitattributes"
   ],
-  "boundary": "Candidate envelope for actual revalidation; no PASS claimed until new source-bound tests and UI gate."
+  "boundary": "Candidate envelope for actual revalidation; no PASS claimed until new source-bound tests and UI gate.",
+  "checked_at": "2026-10-21T16:51:47.715Z",
+  "checks": {
+    "build": "PASS",
+    "unit": "PASS31 (10 theme+21 contracts)",
+    "browser": "PASS38 (16 foundation+22 registration);16 additional shared capture rerun",
+    "dependency_audit": "PASS zero advisories",
+    "visual": "PASS29 comparisons with no material change",
+    "backend": "No backend source change; prior independent validation evidence retained",
+    "acceptance": "Technical revalidation; no new Product decision or acceptance"
+  },
+  "receipts": [
+    {
+      "path": "governance/evidence/ui/security-20261021/test-index.json",
+      "sha256": "bcfbeda5635111b2b6229ea340019c573c81636642999de8afcd195978c3dc46"
+    },
+    {
+      "path": "governance/evidence/ui/security-20261021/visual-comparison.json",
+      "sha256": "7a6787110594cbb58cdefc1a1a197310cc6bc1f995146a7a9746c6bc8513f594"
+    }
+  ],
+  "role_reviews_ref": "governance/evidence/P1-018-RV002-ROLE-REVIEWS.json",
+  "ui_evidence_ref": "governance/evidence/GLOBAL-UI-COMPLIANCE.json"
 }
