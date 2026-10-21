@@ -4,7 +4,7 @@
   "milestone_id": "P2",
   "sprint_id": null,
   "title": "Authentication and server-managed BFF sessions",
-  "status": "BACKLOG",
+  "status": "IN_PROGRESS",
   "type": "FEATURE",
   "authority_refs": [
     "docs/authority/current-authority.json",
@@ -22,18 +22,21 @@
     "docs/authority/current/decisions/AMD-0008_Approved_Figma_Visual_Fidelity_and_Product_Owner_UX_Consent.md",
     "docs/authority/current/development/10_UI_UX_Components_Widgets_and_Plugins_Development_Rules.md",
     "docs/authority/current/development/31_UI_UX_Screen_and_Control_Center_Requirements_Matrix.md",
-    "docs/authority/current/development/35_AI_Agent_Skill_Catalog_and_Review_Contracts.md"
+    "docs/authority/current/development/35_AI_Agent_Skill_Catalog_and_Review_Contracts.md",
+    "docs/authority/current/decisions/AMD-0009_URL_Addressable_Routing_and_Governed_Form_Validation.md"
   ],
   "flow_refs": [
     "docs/authority/current/development/34_Architecture_to_Development_Traceability_Matrix.md"
   ],
   "contract_refs": [
-    "docs/authority/current/development/32_Domain_API_Event_Data_and_Policy_Contract_Catalog.md"
+    "docs/authority/current/development/32_Domain_API_Event_Data_and_Policy_Contract_Catalog.md",
+    "docs/contracts/authentication-session-contract.md"
   ],
   "decision_refs": [
     "ADR-0006",
     "PDR-0011",
-    "AMD-0008"
+    "AMD-0008",
+    "AMD-0009"
   ],
   "acceptance_criteria": [
     "Implement password authentication and sign-out through server-managed Tunner/BFF sessions and versioned policy values.",
@@ -69,10 +72,11 @@
     "ui-ux-engineer",
     "frontend-engineer",
     "end-user-ux-reviewer",
-    "content-writer"
+    "content-writer",
+    "rd-engineer"
   ],
   "required_tests": [
-    "cookie/session boundary and restricted/closed Account rejection",
+    "cookie/session boundary; policy-scoped restricted/closing Account access and closed Account rejection; no age-only denial",
     "rotation/expiry/revocation/idempotent sign-out",
     "browser token absence and approved login UX"
   ],
@@ -83,5 +87,5 @@
   "todos": [],
   "defects": [],
   "created_at": "2026-10-16T17:48:49.296Z",
-  "updated_at": "2026-10-17T21:42:07.653Z"
+  "updated_at": "2026-10-21T17:39:03.207Z"
 }
