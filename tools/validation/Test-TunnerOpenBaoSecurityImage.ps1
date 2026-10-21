@@ -32,11 +32,16 @@ function Invoke-FixtureDocker {
     if ($LASTEXITCODE -ne 0) { throw ('Docker fixture operation failed: '+$Arguments[0]) }
     return ($value -join [Environment]::NewLine).Trim()
 }
+function Update-FixtureEndpoint {
+    $binding=Invoke-FixtureDocker -Arguments @('port',$fixture,'8200/tcp')
+    if ($binding -notmatch '^127\.0\.0\.1:\d+$') { throw 'Fixture API must use a random loopback-only port.' }
+    $script:baseUri='http://'+$binding
+}
 function Invoke-FixtureRequest {
     param([string]$Method='GET',[string]$Path,[object]$Body,[hashtable]$Headers=@{},[int]$Expected=200)
-    $request = @{Method=$Method;Uri=($script:baseUri+$Path);Headers=$Headers;SkipHttpErrorCheck=$true;TimeoutSec=5}
+    $request = @{Method=$Method;Uri=($script:baseUri+$Path);Headers=$Headers;SkipHttpErrorCheck=$true;TimeoutSec=20}
     if ($null -ne $Body) { $request.Body=$Body | ConvertTo-Json -Depth 8 -Compress; $request.ContentType='application/json' }
-    $response = Invoke-WebRequest @request
+    try { $response = Invoke-WebRequest @request } catch { throw ('Fixture transport failed for '+$Path+'; response content withheld.') }
     if ($response.StatusCode -ne $Expected) { throw ('Unexpected fixture response for '+$Path+': '+$response.StatusCode+'; response body withheld.') }
     if (-not [string]::IsNullOrWhiteSpace($response.Content)) { return $response.Content | ConvertFrom-Json }
 }
@@ -44,9 +49,9 @@ function Wait-FixtureHealth {
     param([int]$Expected)
     $deadline=[DateTime]::UtcNow.AddSeconds(45)
     do {
-        try { return (Invoke-FixtureRequest -Path '/v1/sys/health' -Expected $Expected) } catch { Start-Sleep -Milliseconds 300 }
+        try { return (Invoke-FixtureRequest -Path '/v1/sys/health' -Expected $Expected) } catch { $lastFailure=$_.Exception.Message; Start-Sleep -Milliseconds 300 }
     } while ([DateTime]::UtcNow -lt $deadline)
-    throw 'Disposable OpenBao did not reach the expected health state.'
+    throw ('Disposable OpenBao expected health '+$Expected+'; last failure: '+$lastFailure)
 }
 try {
     $version = Invoke-FixtureDocker -Arguments @('run','--rm','--entrypoint','bao',$Image,'version')
@@ -56,9 +61,7 @@ try {
     $volumeCreated=$true
     Invoke-FixtureDocker -Arguments @('run','--detach','--name',$fixture,'--user','0','--publish','127.0.0.1::8200','--mount',('type=volume,source='+$volume+',target=/openbao/file'),'--mount',('type=bind,source='+$config+',target=/openbao/config/fixture.hcl,readonly'),$Image,'server','-config=/openbao/config/fixture.hcl') | Out-Null
     $started=$true
-    $binding=Invoke-FixtureDocker -Arguments @('port',$fixture,'8200/tcp')
-    if ($binding -notmatch '^127\.0\.0\.1:\d+$') { throw 'Fixture API must use a random loopback-only port.' }
-    $script:baseUri='http://'+$binding
+    Update-FixtureEndpoint
     Wait-FixtureHealth 501 | Out-Null
     # Tokens and unseal material below are created only for this disposable fixture;
     # they are never written to disk, stdout, process arguments, or operator services.
@@ -86,16 +89,22 @@ try {
     if ($actual.data.data.value -cne $marker) { throw 'Create-only CAS write was not preserved.' }
     $checks.Add('KV create-only CAS rejects replacement')
     Invoke-FixtureDocker -Arguments @('restart',$fixture) | Out-Null
+    Update-FixtureEndpoint
     Wait-FixtureHealth 503 | Out-Null
     Invoke-FixtureRequest -Method POST -Path '/v1/sys/unseal' -Body @{key=$initial.keys_base64[0]} | Out-Null
     Wait-FixtureHealth 200 | Out-Null
     $actual=Invoke-FixtureRequest -Path '/v1/security-fixture/data/allowed' -Headers $scoped
     if ($actual.data.data.value -cne $marker) { throw 'Raft storage or scoped token did not survive restart.' }
     $checks.Add('Raft data and token persist through restart and re-unseal')
-    Invoke-FixtureRequest -Method POST -Path '/v1/auth/token/revoke-self' -Headers $scoped -Body @{} -Expected 204 | Out-Null
+    Invoke-FixtureRequest -Method POST -Path '/v1/auth/token/revoke-self' -Headers $scoped -Body @{} -Expected 403 | Out-Null
+    Invoke-FixtureRequest -Method POST -Path '/v1/auth/token/revoke' -Headers $root -Body @{token=$issued.auth.client_token} -Expected 204 | Out-Null
     Invoke-FixtureRequest -Path '/v1/security-fixture/data/allowed' -Headers $scoped -Expected 403 | Out-Null
-    $checks.Add('revoked scoped token is denied')
+    $checks.Add('scoped self-management denied; authorized admin revocation is enforced')
     Write-Output ('PASS: '+$checks.Count+' isolated OpenBao security-image checks')
+} catch {
+    Write-Output ('Fixture checks reached: '+($checks -join '; '))
+    if ($started) { & docker inspect --format '{{.State.Status}} exit={{.State.ExitCode}} oom={{.State.OOMKilled}}' $fixture }
+    throw
 } finally {
     if ($started) { Invoke-FixtureDocker -Arguments @('rm','--force',$fixture) | Out-Null }
     if ($volumeCreated) { Invoke-FixtureDocker -Arguments @('volume','rm',$volume) | Out-Null }

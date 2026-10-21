@@ -19,7 +19,7 @@ function Invoke-FixtureDocker {
 function Wait-Postgres {
     $deadline = [DateTime]::UtcNow.AddSeconds(60)
     do {
-        & docker exec $fixture pg_isready -q -U tunner -d fixture 2>$null | Out-Null
+        & docker exec $fixture sh -c 'test "$(cat /proc/1/comm)" = postgres && pg_isready -q -U tunner -d fixture' 2>$null | Out-Null
         if ($LASTEXITCODE -eq 0) { return }
         Start-Sleep -Milliseconds 300
     } while ([DateTime]::UtcNow -lt $deadline)

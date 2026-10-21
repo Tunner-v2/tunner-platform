@@ -83,6 +83,8 @@ jobs:
             component: postgres
           - image: tunner-security/openbao:2.7.1-r1
             component: openbao
+          - image: tunner-security/mailpit:1.31.6-r1
+            component: mailpit
     steps:
       - name: Checkout candidate build source
         if: matrix.component != ''

@@ -1,6 +1,6 @@
 #requires -Version 7.0
 [CmdletBinding()]
-param([ValidateSet('postgres','openbao','all')][string]$Component = 'all', [string]$RepositoryRoot)
+param([ValidateSet('postgres','openbao','mailpit','all')][string]$Component = 'all', [string]$RepositoryRoot)
 Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
 Import-Module (Join-Path $PSScriptRoot '../lib/Tunner.RepositoryRoot.psm1') -Force

@@ -48,6 +48,7 @@
     "infra/docker/compose.yaml",
     "infra/security-images/.dockerignore",
     "infra/security-images/catalog.json",
+    "infra/security-images/mailpit.Dockerfile",
     "infra/security-images/openbao.Dockerfile",
     "infra/security-images/postgres.Dockerfile",
     "src/Tunner.Governance/GovernanceApplication.cs",
@@ -63,7 +64,9 @@
     "tools/validation/Test-TunnerMailpitImage.ps1",
     "tools/validation/Test-TunnerOpenBaoSecurityImage.ps1",
     "tools/validation/Test-TunnerPostgresSecurityImage.ps1",
-    "tools/validation/Validate-TunnerDevSource.ps1"
+    "tools/validation/Validate-TunnerDevSource.ps1",
+    "web/package.json",
+    "web/pnpm-lock.yaml"
   ],
   "boundary": "CI enforcement and private rebuild foundations only. All unresolved vendor-image and signed-plugin findings remain open under P1-RV001. No default adoption, registry publication, merge, deployment or release acceptance.",
   "inherited_source_proof": "governance/evidence/P0-RV008-VALIDATION.json"
