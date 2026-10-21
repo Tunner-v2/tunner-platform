@@ -22,10 +22,6 @@ internal static class AuthenticationMigrationSql
           FOR EACH ROW EXECUTE FUNCTION identity.guard_tunner_session();
         """;
     internal const string GuardDowngrade = """
-        DO $$ BEGIN
-          IF EXISTS(SELECT 1 FROM identity.tunner_sessions) OR EXISTS(SELECT 1 FROM identity.authentication_abuse)
-          THEN RAISE EXCEPTION 'Authentication state exists; use a governed forward migration' USING ERRCODE='23514'; END IF;
-        END; $$;
         DROP TRIGGER tunner_session_guard ON identity.tunner_sessions;
         DROP FUNCTION identity.guard_tunner_session();
         """;

@@ -14,7 +14,7 @@ public sealed class AuthenticationPolicyTests
         Assert.Throws<InvalidOperationException>(() => new AuthenticationPolicyCatalog([]).RequireEffective(now));
         Assert.Throws<InvalidOperationException>(() => new AuthenticationPolicyCatalog([Version("draft", "DRAFT")]).RequireEffective(now));
         Assert.Throws<InvalidOperationException>(() => new AuthenticationPolicyCatalog([Version("one", "ACTIVE"), Version("two", "ACTIVE")]).RequireEffective(now));
-        Assert.Equal("two", new AuthenticationPolicyCatalog([Version("one", "ACTIVE"), Version("two", "ACTIVE", "one")]).RequireEffective(now).Version);
+        Assert.Equal("two", new AuthenticationPolicyCatalog([Version("one", "SUPERSEDED"), Version("two", "ACTIVE", "one")]).RequireEffective(now).Version);
         Assert.Throws<InvalidOperationException>(() => new AuthenticationPolicyCatalog([Version("one", "ACTIVE")]).RequireEffective(now.AddDays(2)));
     }
 }

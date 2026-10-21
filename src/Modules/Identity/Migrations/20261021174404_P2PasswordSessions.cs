@@ -102,6 +102,7 @@ namespace Tunner.Identity.Persistence.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.Sql(IdentityMigrationSql.GuardDowngrade);
             migrationBuilder.Sql(AuthenticationMigrationSql.GuardDowngrade);
             migrationBuilder.DropTable(
                 name: "authentication_abuse",
