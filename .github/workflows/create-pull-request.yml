@@ -19,7 +19,7 @@ jobs:
           GH_REPO: ${{ github.repository }}
           HEAD_REF: ${{ github.ref_name }}
         run: |
-          pr_url="$(gh pr list --repo "$GH_REPO" --base main --head "$HEAD_REF" --state open --json url --jq '.[0].url')"
+          pr_url="$(gh pr list --repo "$GH_REPO" --head "$HEAD_REF" --state open --json url --jq '.[0].url')"
           if [ -z "$pr_url" ]; then
             pr_url="$(gh pr create --repo "$GH_REPO" --base main --head "$HEAD_REF" --title "Automated PR: $HEAD_REF" --body "Automatically created for branch $HEAD_REF. Protected-branch review and checks remain required.")"
             echo "Created pull request: $pr_url"

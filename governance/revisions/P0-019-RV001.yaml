@@ -1,0 +1,45 @@
+{
+  "schema_version": 1,
+  "revision_id": "P0-019-RV001",
+  "revision_scope": "WORK_ITEM",
+  "original_scope_id": "TUN-P0-019",
+  "parent_revision_id": null,
+  "parent_milestone_revision_id": null,
+  "title": "Preserve existing draft PR scope during push automation",
+  "revision_type": "CORRECTIVE",
+  "status": "ACTIVE",
+  "reason": "Explicit human approval authorizes removing only the PR lookup base filter so draft authentication PR19 on its parent branch is reused. Preserve historical P0 closure, draft guard, main protections and merge authority.",
+  "authority_refs": [
+    "docs/authority/baselines/1.6.0/decisions/ADR-0008_GitHub_and_GitHub_Actions.md",
+    "docs/authority/current/development/09_Testing_Acceptance_Evidence_and_Quality_Gates.md"
+  ],
+  "decision_refs": [],
+  "defect_refs": [],
+  "change_refs": [],
+  "impact_classification": "NON_BLOCKING",
+  "blocked_scope": [],
+  "acceptance_criteria": [
+    "Remove only the main-base filter from existing PR lookup; existing draft guard and new-PR/merge policy remain unchanged; prove native eligibility, CI regression and committed source validation before closure."
+  ],
+  "prerequisites": [],
+  "work_items": [],
+  "required_gates": [],
+  "required_roles": [
+    "project-manager",
+    "governance-engineer",
+    "devops-engineer",
+    "cyber-security-engineer",
+    "auditor",
+    "tester-qa-engineer",
+    "full-stack-engineer",
+    "solution-architect"
+  ],
+  "evidence_refs": [
+    "governance/evidence/P0-019-RV001-AUTHORITY-AND-CONSENT.json",
+    "governance/evidence/P0-019-RV001-STARTUP-REVIEWS.json",
+    "governance/evidence/P0-019-RV001-VALIDATION.json"
+  ],
+  "created_at": "2026-10-21T18:59:52.2638498+00:00",
+  "closed_at": null,
+  "product_acceptance_required": false
+}
