@@ -2,9 +2,30 @@
   "schema_version": 1,
   "scope_id": "P0-019-RV001",
   "validation_kind": "COMMITTED",
-  "result": "PENDING",
+  "result": "PASS",
+  "tested_commit_sha": "45c8fba6c60a905194d9937aa5d1181627ed6b76",
+  "validated_commit_sha": "45c8fba6c60a905194d9937aa5d1181627ed6b76",
   "owned_behavior_paths": [
     ".github/workflows/create-pull-request.yml"
   ],
-  "boundary": "One-line PR lookup only. Preserve current draft/main rules and external authority read-only instruction. Final source-bound CI validation is required."
+  "tests": {
+    "ci_enforcement": {
+      "passed": 27,
+      "failed": 0
+    },
+    "exact_one_line_delta": {
+      "result": "PASS",
+      "baseline_sha": "b6300d344762b67fc32e0c1c9fa6d148515c25f5",
+      "statement": "Only --base main was removed from gh pr list. All remaining workflow bytes are equivalent, including main creation, draft guard and merge policy."
+    }
+  },
+  "receipts": [
+    {
+      "path": "governance/evidence/ui/authentication-20261021/pr-automation-ci.log",
+      "sha256": "9c6ff10aaf65498543a95494bf9a98a82153efdc2748c63b237881d9f9e9e7fa"
+    }
+  ],
+  "primary_source": "https://cli.github.com/manual/gh_pr_list",
+  "boundary": "Local technical CI correction only; no protected-main merge, production deploy or Product/UI acceptance. Figma and Drive unchanged.",
+  "live_workflow_validation": "Pending final branch push; verify exactly one open head PR, base codex/global-ui-compliance, DRAFT and no auto-merge."
 }
