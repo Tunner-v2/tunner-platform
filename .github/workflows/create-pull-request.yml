@@ -26,4 +26,8 @@ jobs:
           else
             echo "An open pull request already exists: $pr_url"
           fi
-          gh pr merge --auto --merge "$pr_url"
+          if [ "$(gh pr view --repo "$GH_REPO" "$pr_url" --json isDraft --jq .isDraft)" = "true" ]; then
+            echo "Draft PR retained for review; automatic merge remains disabled."
+          else
+            gh pr merge --auto --merge "$pr_url"
+          fi
