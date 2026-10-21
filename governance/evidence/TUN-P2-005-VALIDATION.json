@@ -3,7 +3,7 @@
   "scope_id": "TUN-P2-005",
   "validation_kind": "COMMITTED",
   "result": "PASS",
-  "validation_boundary": "ENGINEERING_ONLY_PRODUCTION_UI_BLOCKED",
+  "validation_boundary": "ENGINEERING_VALIDATED_CURRENT_UI_PRODUCT_OWNER_APPROVED_FIGMA_TODO",
   "tested_commit_sha": "100cccd26f34211810e6c2bcf2a72242f5872c22",
   "validated_commit_sha": "100cccd26f34211810e6c2bcf2a72242f5872c22",
   "owned_behavior_paths": [
@@ -70,14 +70,16 @@
     "earlier_cohort_ref": "Git commit 95e0aea retains the original e1a979a/0a21bc4 receipts; earlier raw run logs remain in artifacts/p2-005-auth-20261021.",
     "metadata_only_after_source": true
   },
-  "ui_visual_approval": "BLOCKED",
+  "ui_visual_approval": "PENDING_EXACT_SOURCE_REVALIDATION",
   "ui_evidence_ref": "governance/evidence/TUN-P2-005-UI-COMPLIANCE.json",
-  "open_defects": [
-    "DEF-TUN-P2-005-UI-001"
-  ],
+  "open_defects": [],
   "open_todos": [
     "TODO-TUN-P2-005-FIGMA001"
   ],
   "completion_claim": false,
-  "external_authority_ref": "governance/evidence/TUN-P2-005-EXTERNAL-AUTHORITY-BOUNDARY.json"
+  "external_authority_ref": "governance/evidence/TUN-P2-005-EXTERNAL-AUTHORITY-BOUNDARY.json",
+  "visual_acceptance_ref": "governance/evidence/TUN-P2-005-VISUAL-ACCEPTANCE-DEFERRAL-20261021.json",
+  "deferred_defects": [
+    "DEF-TUN-P2-005-UI-001"
+  ]
 }

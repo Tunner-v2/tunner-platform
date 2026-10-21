@@ -448,8 +448,8 @@
         "src/Modules/Identity/IdentityWebAssets.cs"
       ],
       "planning_status": "PASSWORD_SLICE_IMPLEMENTED_FUTURE_AUTH_FEATURES_DEFERRED",
-      "design_status": "SCOPED_CONSENT_OWNER_FIGMA_UPDATE_PENDING",
-      "acceptance_boundary": "Implemented P2-005 password slice only. Passkeys, federation, Product-origin OAuth and recovery remain separate work items. UI_VISUAL_APPROVAL awaits required owner Figma updates; no inherited registration acceptance.",
+      "design_status": "PRODUCT_OWNER_APPROVED_SNAPSHOT_FIGMA_BACKFILL_DEFERRED",
+      "acceptance_boundary": "Current implemented P2-005 visuals explicitly approved by the Product Owner. Figma backfill is a nonblocking owner TODO under the scoped exception; no Figma update or new frame ID is claimed. Future features/screens retain their own authority and approval.",
       "parameter_schema": {},
       "form_ids": [
         "FORM-LOGIN"
@@ -458,8 +458,8 @@
         "UI_FIDELITY_DEFECT"
       ],
       "routing_state": "IMPLEMENTED",
-      "visual_state": "PRODUCT_SCOPED_CONSENT_FIGMA_UPDATE_PENDING",
-      "consent_ref": "governance/evidence/TUN-P2-005-VISUAL-CONSENT-20261021.json"
+      "visual_state": "PRODUCT_OWNER_APPROVED_CURRENT_IMPLEMENTATION",
+      "consent_ref": "governance/evidence/TUN-P2-005-VISUAL-ACCEPTANCE-DEFERRAL-20261021.json"
     },
     {
       "id": "U-AUTH-04",
@@ -1619,8 +1619,10 @@
         "UI_REQUIRED"
       ],
       "routing_state": "IMPLEMENTED",
-      "visual_state": "PRODUCT_SCOPED_CONSENT_FIGMA_UPDATE_PENDING",
-      "consent_ref": "governance/evidence/TUN-P2-005-VISUAL-CONSENT-20261021.json"
+      "visual_state": "PRODUCT_OWNER_APPROVED_CURRENT_IMPLEMENTATION",
+      "consent_ref": "governance/evidence/TUN-P2-005-VISUAL-ACCEPTANCE-DEFERRAL-20261021.json",
+      "design_status": "PRODUCT_OWNER_APPROVED_SNAPSHOT_FIGMA_BACKFILL_DEFERRED",
+      "acceptance_boundary": "Current implemented P2-005 visuals explicitly approved by the Product Owner. Figma backfill is a nonblocking owner TODO under the scoped exception; no Figma update or new frame ID is claimed. Future features/screens retain their own authority and approval."
     },
     {
       "id": "FORM-LOGIN",
@@ -1661,14 +1663,17 @@
       ],
       "observed_defects": [],
       "validation_state": "IMPLEMENTED_SOURCE_VALIDATION_PENDING",
-      "consent_ref": "governance/evidence/TUN-P2-005-VISUAL-CONSENT-20261021.json",
+      "consent_ref": "governance/evidence/TUN-P2-005-VISUAL-ACCEPTANCE-DEFERRAL-20261021.json",
       "screen_id": "U-AUTH-01",
       "fields": [
         "email",
         "password",
         "remember"
       ],
-      "backend_validation": "Independent strict JSON, policy length, current verified contact, framework credential verification, Account restriction, origin/CSRF/context and abuse/idempotency checks"
+      "backend_validation": "Independent strict JSON, policy length, current verified contact, framework credential verification, Account restriction, origin/CSRF/context and abuse/idempotency checks",
+      "design_status": "PRODUCT_OWNER_APPROVED_SNAPSHOT_FIGMA_BACKFILL_DEFERRED",
+      "visual_state": "PRODUCT_OWNER_APPROVED_CURRENT_IMPLEMENTATION",
+      "acceptance_boundary": "Current implemented P2-005 visuals explicitly approved by the Product Owner. Figma backfill is a nonblocking owner TODO under the scoped exception; no Figma update or new frame ID is claimed. Future features/screens retain their own authority and approval."
     }
   ],
   "excluded_historical_designs": [
@@ -1678,5 +1683,5 @@
       "reason": "Hidden historical DOB-only screen, superseded prospectively by PDR-0011/AMD-0007; never implement as active UI."
     }
   ],
-  "updated_at": "2026-10-18T03:09:15.186Z"
+  "updated_at": "2026-10-21T19:14:37.021Z"
 }

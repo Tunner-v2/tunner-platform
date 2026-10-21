@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "result": "BLOCKED",
+  "result": "PENDING_EXACT_SOURCE_REVALIDATION",
   "tested_commit_sha": "100cccd26f34211810e6c2bcf2a72242f5872c22",
-  "inventory_sha256": "0e4f19bd4b7cd34cf78af188442dfc82d99a2bb3ae6c316aa9c728733ab784c0",
+  "inventory_sha256": "710de0c1c7809dd9dce054ca96b74d9b3c80118b44432fe50511732d6da7010f",
   "owned_behavior_paths": [
     "docs/contracts/.gitattributes",
     "docs/contracts/ui-inventory.json",
@@ -4309,8 +4309,8 @@
         },
         {
           "id": "UX-FID-001",
-          "result": "BLOCKED",
-          "reason": "Implementation matches the explicitly approved packet, but the current Figma Login variants/new signed-in frame must be updated by the owner under AMD-0008 section4 before production UI acceptance.",
+          "result": "PASS",
+          "reason": "Exact current rendered snapshots explicitly accepted by the Product Owner; Figma source-composition references are preserved and backfill is deferred by the scoped latest human instruction.",
           "evidence_refs": [
             {
               "path": "governance/evidence/TUN-P2-005-VISUAL-CONSENT-20261021.json",
@@ -4319,6 +4319,10 @@
             {
               "path": "governance/evidence/ui/authentication-20261021/test-index.json",
               "sha256": "56b94a749f62922b109a0522c357af4af66aad5b67733bf63c7ffb27f4c76f98"
+            },
+            {
+              "path": "governance/evidence/TUN-P2-005-VISUAL-ACCEPTANCE-DEFERRAL-20261021.json",
+              "sha256": "2a2ed7402e090eeab3a73ef0726c0209b62db34de1f720234e7a23c0ae5cf37f"
             }
           ]
         },
@@ -4366,8 +4370,8 @@
         },
         {
           "id": "UX-FID-005",
-          "result": "BLOCKED",
-          "reason": "Implementation matches the explicitly approved packet, but the current Figma Login variants/new signed-in frame must be updated by the owner under AMD-0008 section4 before production UI acceptance.",
+          "result": "PASS",
+          "reason": "Exact current rendered snapshots explicitly accepted by the Product Owner; Figma source-composition references are preserved and backfill is deferred by the scoped latest human instruction.",
           "evidence_refs": [
             {
               "path": "governance/evidence/TUN-P2-005-VISUAL-CONSENT-20261021.json",
@@ -4376,6 +4380,10 @@
             {
               "path": "governance/evidence/ui/authentication-20261021/test-index.json",
               "sha256": "56b94a749f62922b109a0522c357af4af66aad5b67733bf63c7ffb27f4c76f98"
+            },
+            {
+              "path": "governance/evidence/TUN-P2-005-VISUAL-ACCEPTANCE-DEFERRAL-20261021.json",
+              "sha256": "2a2ed7402e090eeab3a73ef0726c0209b62db34de1f720234e7a23c0ae5cf37f"
             }
           ]
         },
@@ -4409,8 +4417,8 @@
         },
         {
           "id": "UX-FID-008",
-          "result": "BLOCKED",
-          "reason": "Implementation matches the explicitly approved packet, but the current Figma Login variants/new signed-in frame must be updated by the owner under AMD-0008 section4 before production UI acceptance.",
+          "result": "PASS",
+          "reason": "Exact current rendered snapshots explicitly accepted by the Product Owner; Figma source-composition references are preserved and backfill is deferred by the scoped latest human instruction.",
           "evidence_refs": [
             {
               "path": "governance/evidence/TUN-P2-005-VISUAL-CONSENT-20261021.json",
@@ -4419,6 +4427,10 @@
             {
               "path": "governance/evidence/ui/authentication-20261021/test-index.json",
               "sha256": "56b94a749f62922b109a0522c357af4af66aad5b67733bf63c7ffb27f4c76f98"
+            },
+            {
+              "path": "governance/evidence/TUN-P2-005-VISUAL-ACCEPTANCE-DEFERRAL-20261021.json",
+              "sha256": "2a2ed7402e090eeab3a73ef0726c0209b62db34de1f720234e7a23c0ae5cf37f"
             }
           ]
         }
@@ -4461,9 +4473,17 @@
             "sha256": "58eff6b8b41bd790a55afc048a139874a60ee12e72013e3a0e316ce2ed815145"
           },
           "scope": "Exact two-scope packet approval; pending manual owner Figma synchronization is not waived."
+        },
+        {
+          "status": "PRODUCT_OWNER_APPROVED",
+          "approval_evidence": {
+            "path": "governance/evidence/TUN-P2-005-VISUAL-ACCEPTANCE-DEFERRAL-20261021.json",
+            "sha256": "2a2ed7402e090eeab3a73ef0726c0209b62db34de1f720234e7a23c0ae5cf37f"
+          },
+          "scope": "Accept current rendered implementation and keep owner Figma backfill nonblocking. This is not a claim that Figma was synchronized."
         }
       ],
-      "production_ui_result": "BLOCKED"
+      "production_ui_result": "PRODUCT_OWNER_APPROVED_CURRENT_SCOPE"
     },
     {
       "id": "U-AUTH-SIGNED-IN",
@@ -4566,8 +4586,8 @@
         },
         {
           "id": "UX-FID-001",
-          "result": "BLOCKED",
-          "reason": "Implementation matches the explicitly approved packet, but the current Figma Login variants/new signed-in frame must be updated by the owner under AMD-0008 section4 before production UI acceptance.",
+          "result": "PASS",
+          "reason": "Exact current rendered snapshots explicitly accepted by the Product Owner; Figma source-composition references are preserved and backfill is deferred by the scoped latest human instruction.",
           "evidence_refs": [
             {
               "path": "governance/evidence/TUN-P2-005-VISUAL-CONSENT-20261021.json",
@@ -4576,6 +4596,10 @@
             {
               "path": "governance/evidence/ui/authentication-20261021/test-index.json",
               "sha256": "56b94a749f62922b109a0522c357af4af66aad5b67733bf63c7ffb27f4c76f98"
+            },
+            {
+              "path": "governance/evidence/TUN-P2-005-VISUAL-ACCEPTANCE-DEFERRAL-20261021.json",
+              "sha256": "2a2ed7402e090eeab3a73ef0726c0209b62db34de1f720234e7a23c0ae5cf37f"
             }
           ]
         },
@@ -4623,8 +4647,8 @@
         },
         {
           "id": "UX-FID-005",
-          "result": "BLOCKED",
-          "reason": "Implementation matches the explicitly approved packet, but the current Figma Login variants/new signed-in frame must be updated by the owner under AMD-0008 section4 before production UI acceptance.",
+          "result": "PASS",
+          "reason": "Exact current rendered snapshots explicitly accepted by the Product Owner; Figma source-composition references are preserved and backfill is deferred by the scoped latest human instruction.",
           "evidence_refs": [
             {
               "path": "governance/evidence/TUN-P2-005-VISUAL-CONSENT-20261021.json",
@@ -4633,6 +4657,10 @@
             {
               "path": "governance/evidence/ui/authentication-20261021/test-index.json",
               "sha256": "56b94a749f62922b109a0522c357af4af66aad5b67733bf63c7ffb27f4c76f98"
+            },
+            {
+              "path": "governance/evidence/TUN-P2-005-VISUAL-ACCEPTANCE-DEFERRAL-20261021.json",
+              "sha256": "2a2ed7402e090eeab3a73ef0726c0209b62db34de1f720234e7a23c0ae5cf37f"
             }
           ]
         },
@@ -4666,8 +4694,8 @@
         },
         {
           "id": "UX-FID-008",
-          "result": "BLOCKED",
-          "reason": "Implementation matches the explicitly approved packet, but the current Figma Login variants/new signed-in frame must be updated by the owner under AMD-0008 section4 before production UI acceptance.",
+          "result": "PASS",
+          "reason": "Exact current rendered snapshots explicitly accepted by the Product Owner; Figma source-composition references are preserved and backfill is deferred by the scoped latest human instruction.",
           "evidence_refs": [
             {
               "path": "governance/evidence/TUN-P2-005-VISUAL-CONSENT-20261021.json",
@@ -4676,6 +4704,10 @@
             {
               "path": "governance/evidence/ui/authentication-20261021/test-index.json",
               "sha256": "56b94a749f62922b109a0522c357af4af66aad5b67733bf63c7ffb27f4c76f98"
+            },
+            {
+              "path": "governance/evidence/TUN-P2-005-VISUAL-ACCEPTANCE-DEFERRAL-20261021.json",
+              "sha256": "2a2ed7402e090eeab3a73ef0726c0209b62db34de1f720234e7a23c0ae5cf37f"
             }
           ]
         }
@@ -4714,9 +4746,17 @@
             "sha256": "58eff6b8b41bd790a55afc048a139874a60ee12e72013e3a0e316ce2ed815145"
           },
           "scope": "Exact two-scope packet approval; pending manual owner Figma synchronization is not waived."
+        },
+        {
+          "status": "PRODUCT_OWNER_APPROVED",
+          "approval_evidence": {
+            "path": "governance/evidence/TUN-P2-005-VISUAL-ACCEPTANCE-DEFERRAL-20261021.json",
+            "sha256": "2a2ed7402e090eeab3a73ef0726c0209b62db34de1f720234e7a23c0ae5cf37f"
+          },
+          "scope": "Accept current rendered implementation and keep owner Figma backfill nonblocking. This is not a claim that Figma was synchronized."
         }
       ],
-      "production_ui_result": "BLOCKED"
+      "production_ui_result": "PRODUCT_OWNER_APPROVED_CURRENT_SCOPE"
     },
     {
       "id": "FORM-LOGIN",
@@ -4877,8 +4917,8 @@
         },
         {
           "id": "UX-FID-001",
-          "result": "BLOCKED",
-          "reason": "Implementation matches the explicitly approved packet, but the current Figma Login variants/new signed-in frame must be updated by the owner under AMD-0008 section4 before production UI acceptance.",
+          "result": "PASS",
+          "reason": "Exact current rendered snapshots explicitly accepted by the Product Owner; Figma source-composition references are preserved and backfill is deferred by the scoped latest human instruction.",
           "evidence_refs": [
             {
               "path": "governance/evidence/TUN-P2-005-VISUAL-CONSENT-20261021.json",
@@ -4887,6 +4927,10 @@
             {
               "path": "governance/evidence/ui/authentication-20261021/test-index.json",
               "sha256": "56b94a749f62922b109a0522c357af4af66aad5b67733bf63c7ffb27f4c76f98"
+            },
+            {
+              "path": "governance/evidence/TUN-P2-005-VISUAL-ACCEPTANCE-DEFERRAL-20261021.json",
+              "sha256": "2a2ed7402e090eeab3a73ef0726c0209b62db34de1f720234e7a23c0ae5cf37f"
             }
           ]
         },
@@ -4934,8 +4978,8 @@
         },
         {
           "id": "UX-FID-005",
-          "result": "BLOCKED",
-          "reason": "Implementation matches the explicitly approved packet, but the current Figma Login variants/new signed-in frame must be updated by the owner under AMD-0008 section4 before production UI acceptance.",
+          "result": "PASS",
+          "reason": "Exact current rendered snapshots explicitly accepted by the Product Owner; Figma source-composition references are preserved and backfill is deferred by the scoped latest human instruction.",
           "evidence_refs": [
             {
               "path": "governance/evidence/TUN-P2-005-VISUAL-CONSENT-20261021.json",
@@ -4944,6 +4988,10 @@
             {
               "path": "governance/evidence/ui/authentication-20261021/test-index.json",
               "sha256": "56b94a749f62922b109a0522c357af4af66aad5b67733bf63c7ffb27f4c76f98"
+            },
+            {
+              "path": "governance/evidence/TUN-P2-005-VISUAL-ACCEPTANCE-DEFERRAL-20261021.json",
+              "sha256": "2a2ed7402e090eeab3a73ef0726c0209b62db34de1f720234e7a23c0ae5cf37f"
             }
           ]
         },
@@ -4977,8 +5025,8 @@
         },
         {
           "id": "UX-FID-008",
-          "result": "BLOCKED",
-          "reason": "Implementation matches the explicitly approved packet, but the current Figma Login variants/new signed-in frame must be updated by the owner under AMD-0008 section4 before production UI acceptance.",
+          "result": "PASS",
+          "reason": "Exact current rendered snapshots explicitly accepted by the Product Owner; Figma source-composition references are preserved and backfill is deferred by the scoped latest human instruction.",
           "evidence_refs": [
             {
               "path": "governance/evidence/TUN-P2-005-VISUAL-CONSENT-20261021.json",
@@ -4987,6 +5035,10 @@
             {
               "path": "governance/evidence/ui/authentication-20261021/test-index.json",
               "sha256": "56b94a749f62922b109a0522c357af4af66aad5b67733bf63c7ffb27f4c76f98"
+            },
+            {
+              "path": "governance/evidence/TUN-P2-005-VISUAL-ACCEPTANCE-DEFERRAL-20261021.json",
+              "sha256": "2a2ed7402e090eeab3a73ef0726c0209b62db34de1f720234e7a23c0ae5cf37f"
             }
           ]
         }
@@ -5025,14 +5077,23 @@
             "sha256": "58eff6b8b41bd790a55afc048a139874a60ee12e72013e3a0e316ce2ed815145"
           },
           "scope": "Exact two-scope packet approval; pending manual owner Figma synchronization is not waived."
+        },
+        {
+          "status": "PRODUCT_OWNER_APPROVED",
+          "approval_evidence": {
+            "path": "governance/evidence/TUN-P2-005-VISUAL-ACCEPTANCE-DEFERRAL-20261021.json",
+            "sha256": "2a2ed7402e090eeab3a73ef0726c0209b62db34de1f720234e7a23c0ae5cf37f"
+          },
+          "scope": "Accept current rendered implementation and keep owner Figma backfill nonblocking. This is not a claim that Figma was synchronized."
         }
       ],
-      "production_ui_result": "BLOCKED"
+      "production_ui_result": "PRODUCT_OWNER_APPROVED_CURRENT_SCOPE"
     }
   ],
   "pending_owner_update_ref": "docs/development/P2_005_EXTERNAL_UPDATES.md",
   "prior_evidence_ref": "governance/evidence/history/GLOBAL-UI-before-P2-005.json",
   "revalidation_ref": "P1-018-RV003",
-  "boundary": "Existing10 items have current engineering regression evidence. New2 screens/1 form have explicit scoped consent and passing functional/accessibility tests, but required owner Figma synchronization keeps their production UI gate blocked.",
-  "scope_id": "GLOBAL_UI"
+  "boundary": "Current13 live items only. Current Login/signed-in/form are explicitly Product Owner approved; Figma backfill is a nonblocking TODO. No future UI, whole-P2, protected-main or release approval is implied.",
+  "scope_id": "GLOBAL_UI",
+  "acceptance_override_ref": "governance/evidence/TUN-P2-005-VISUAL-ACCEPTANCE-DEFERRAL-20261021.json"
 }

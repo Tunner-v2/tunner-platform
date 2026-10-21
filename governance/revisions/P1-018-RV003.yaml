@@ -8,7 +8,7 @@
   "title": "Extend global route and form inventory for approved password authentication",
   "revision_type": "IMPROVEMENT",
   "status": "ACTIVE",
-  "reason": "P2-005 adds two approved scoped screens and one form. Preserve closed foundation evidence through append-only lineage while extending central inventory and revalidating shared routes/forms. Current authority and Product consent are resolved in TUN-P2-005-AUTHORITY-RESOLUTION.json; Figma and Drive remain read-only by explicit user instruction.",
+  "reason": "P2-005 adds two approved scoped screens and one form. Preserve closed foundation evidence through append-only lineage while extending central inventory and revalidating shared routes/forms. Current authority and Product consent are resolved in TUN-P2-005-AUTHORITY-RESOLUTION.json; Figma and Drive remain read-only by explicit user instruction. Latest explicit Product Owner approval accepts the implemented screens and defers Figma backfill to a nonblocking owner TODO; preserve original P1 closure and all future/release gates.",
   "authority_refs": [
     "docs/authority/current/development/37_Current_Authority_Index.md",
     "docs/authority/current/development/09_Testing_Acceptance_Evidence_and_Quality_Gates.md",
@@ -17,12 +17,10 @@
   "decision_refs": [],
   "defect_refs": [],
   "change_refs": [],
-  "impact_classification": "SCOPED_BLOCKING",
-  "blocked_scope": [
-    "TUN-P2-005"
-  ],
+  "impact_classification": "NON_BLOCKING",
+  "blocked_scope": [],
   "acceptance_criteria": [
-    "Central inventory covers Login, guarded signed-in confirmation and the shared Login form; current source-bound URL/VAL/UX and regression evidence is recorded; historical closure is preserved; production UI remains blocked until required Product Owner Figma updates are verified."
+    "Central inventory covers the two approved P2-005 screens and Login form; current committed URL/VAL/UX regression evidence passes against the Product-approved snapshots. Preserve historical closure. Keep owner Figma backfill OPEN and nonblocking under the explicit scoped exception."
   ],
   "prerequisites": [],
   "work_items": [],
@@ -46,7 +44,8 @@
   ],
   "evidence_refs": [
     "governance/evidence/P1-018-RV003-STARTUP-REVIEWS.json",
-    "governance/evidence/TUN-P2-005-VISUAL-CONSENT-20261021.json"
+    "governance/evidence/TUN-P2-005-VISUAL-CONSENT-20261021.json",
+    "governance/evidence/TUN-P2-005-VISUAL-ACCEPTANCE-DEFERRAL-20261021.json"
   ],
   "created_at": "2026-10-21T17:58:59.8173284+00:00",
   "closed_at": null
