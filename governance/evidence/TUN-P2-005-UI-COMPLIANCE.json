@@ -1,0 +1,901 @@
+{
+  "schema_version": 1,
+  "result": "BLOCKED",
+  "tested_commit_sha": "e1a979ada9ca4828c2f404489fadf055031cb910",
+  "inventory_sha256": "0e4f19bd4b7cd34cf78af188442dfc82d99a2bb3ae6c316aa9c728733ab784c0",
+  "owned_behavior_paths": [
+    "docs/contracts/.gitattributes",
+    "docs/contracts/ui-inventory.json",
+    "src/Modules/Identity/AuthenticationApplication.cs",
+    "src/Modules/Identity/AuthenticationContracts.cs",
+    "src/Modules/Identity/AuthenticationEndpoints.cs",
+    "src/Modules/Identity/AuthenticationMigrationSql.cs",
+    "src/Modules/Identity/AuthenticationPresentation.cs",
+    "src/Modules/Identity/AuthenticationRows.cs",
+    "src/Modules/Identity/IdentityEmail.cs",
+    "src/Modules/Identity/IdentityWebAssets.cs",
+    "src/Modules/Identity/RegistrationApplication.cs",
+    "src/Modules/Identity/RegistrationEndpoints.cs",
+    "src/Modules/Identity/RegistrationPersonalInformation.cs",
+    "web/apps/user/authentication.content.proposal.json",
+    "web/apps/user/authentication.css",
+    "web/apps/user/authentication.html",
+    "web/apps/user/authentication.routes.ts",
+    "web/apps/user/authentication.tsx",
+    "web/apps/user/authentication.validation.ts",
+    "web/apps/user/content.proposal.json",
+    "web/apps/user/index.html",
+    "web/apps/user/main.tsx",
+    "web/apps/user/package.json",
+    "web/apps/user/public/assets/login-bg-indigo.svg",
+    "web/apps/user/public/assets/login-bg-violet.svg",
+    "web/apps/user/public/assets/login-eye-off.svg",
+    "web/apps/user/public/assets/login-google.svg",
+    "web/apps/user/public/assets/ready-approved-check.svg",
+    "web/apps/user/public/assets/ready-imgBgGlowIndigo.svg",
+    "web/apps/user/public/assets/ready-imgBgGlowViolet.svg",
+    "web/apps/user/public/assets/ready-imgEllipse.svg",
+    "web/apps/user/public/assets/ready-imgEllipse1.svg",
+    "web/apps/user/public/assets/register-imgBgGlowIndigo.svg",
+    "web/apps/user/public/assets/register-imgBgGlowViolet.svg",
+    "web/apps/user/public/assets/register-imgEllipse.svg",
+    "web/apps/user/public/assets/verify-imgBgGlowIndigo.svg",
+    "web/apps/user/public/assets/verify-imgBgGlowViolet.svg",
+    "web/apps/user/public/assets/verify-imgEllipse.svg",
+    "web/apps/user/registration.css",
+    "web/apps/user/routes.ts",
+    "web/apps/user/validation.ts",
+    "web/apps/user/vite.config.ts",
+    "web/fixtures/ui/fixture.css",
+    "web/fixtures/ui/index.html",
+    "web/fixtures/ui/main.tsx",
+    "web/fixtures/ui/package.json",
+    "web/fixtures/ui/vite.config.ts",
+    "web/package.json",
+    "web/packages/ui/package.json",
+    "web/packages/ui/src/content.tsx",
+    "web/packages/ui/src/controls.tsx",
+    "web/packages/ui/src/forms.tsx",
+    "web/packages/ui/src/index.ts",
+    "web/packages/ui/src/navigation.ts",
+    "web/packages/ui/src/theme.generated.ts",
+    "web/packages/ui/src/theme.tsx",
+    "web/packages/ui/styles/components.css",
+    "web/packages/ui/styles/index.css",
+    "web/packages/ui/styles/tailwind.generated.css",
+    "web/packages/ui/styles/tokens.generated.css",
+    "web/packages/ui/theme.tokens.json",
+    "web/packages/ui/tools/build-theme.mjs",
+    "web/packages/ui/vite.config.ts",
+    "web/pnpm-lock.yaml",
+    "web/tsconfig.json"
+  ],
+  "items": [
+    {
+      "id": "U-AUTH-01",
+      "figma_refs": [
+        {
+          "file_key": "apNbwvAgdn1xIxYH1oiaSC",
+          "node_id": "2:4"
+        }
+      ],
+      "checks": [
+        {
+          "id": "URL-001",
+          "result": "PASS",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/ui/authentication-20261021/test-index.json",
+              "sha256": "0b574a585a4ece8ae6703326854d8d2174974070d2685e5da885ac9bf06c62e5"
+            },
+            {
+              "path": "governance/evidence/ui/authentication-20261021/browser.log",
+              "sha256": "1b5bfc16b732981e32fc5e25159d4120ebbc6d17fadf48b0eb00f2bfda0e0e55"
+            },
+            {
+              "path": "governance/evidence/ui/authentication-20261021/real-browser-results.json",
+              "sha256": "f4dab3ae65fe32891dd64baf97e0ecbf5399edc2bfb39edf26ec55c32d941270"
+            }
+          ]
+        },
+        {
+          "id": "URL-002",
+          "result": "PASS",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/ui/authentication-20261021/test-index.json",
+              "sha256": "0b574a585a4ece8ae6703326854d8d2174974070d2685e5da885ac9bf06c62e5"
+            },
+            {
+              "path": "governance/evidence/ui/authentication-20261021/browser.log",
+              "sha256": "1b5bfc16b732981e32fc5e25159d4120ebbc6d17fadf48b0eb00f2bfda0e0e55"
+            },
+            {
+              "path": "governance/evidence/ui/authentication-20261021/real-browser-results.json",
+              "sha256": "f4dab3ae65fe32891dd64baf97e0ecbf5399edc2bfb39edf26ec55c32d941270"
+            }
+          ]
+        },
+        {
+          "id": "URL-003",
+          "result": "PASS",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/ui/authentication-20261021/test-index.json",
+              "sha256": "0b574a585a4ece8ae6703326854d8d2174974070d2685e5da885ac9bf06c62e5"
+            },
+            {
+              "path": "governance/evidence/ui/authentication-20261021/browser.log",
+              "sha256": "1b5bfc16b732981e32fc5e25159d4120ebbc6d17fadf48b0eb00f2bfda0e0e55"
+            },
+            {
+              "path": "governance/evidence/ui/authentication-20261021/real-browser-results.json",
+              "sha256": "f4dab3ae65fe32891dd64baf97e0ecbf5399edc2bfb39edf26ec55c32d941270"
+            }
+          ]
+        },
+        {
+          "id": "URL-004",
+          "result": "NOT_APPLICABLE",
+          "reason": "No modal/tab/anchor route is introduced; checkbox and password reveal use same-screen local state.",
+          "authority_refs": [
+            "docs/authority/current/decisions/AMD-0008_Approved_Figma_Visual_Fidelity_and_Product_Owner_UX_Consent.md",
+            "docs/authority/current/decisions/AMD-0009_URL_Addressable_Routing_and_Governed_Form_Validation.md"
+          ]
+        },
+        {
+          "id": "URL-005",
+          "result": "PASS",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/ui/authentication-20261021/test-index.json",
+              "sha256": "0b574a585a4ece8ae6703326854d8d2174974070d2685e5da885ac9bf06c62e5"
+            },
+            {
+              "path": "governance/evidence/ui/authentication-20261021/browser.log",
+              "sha256": "1b5bfc16b732981e32fc5e25159d4120ebbc6d17fadf48b0eb00f2bfda0e0e55"
+            },
+            {
+              "path": "governance/evidence/ui/authentication-20261021/real-browser-results.json",
+              "sha256": "f4dab3ae65fe32891dd64baf97e0ecbf5399edc2bfb39edf26ec55c32d941270"
+            }
+          ]
+        },
+        {
+          "id": "URL-006",
+          "result": "NOT_APPLICABLE",
+          "reason": "This authorized slice is direct password sign-in. Federation/Product-origin OAuth and callbacks retain separate P2-010/P2-014 owners and no existing callback is changed.",
+          "authority_refs": [
+            "docs/authority/current/decisions/AMD-0008_Approved_Figma_Visual_Fidelity_and_Product_Owner_UX_Consent.md",
+            "docs/authority/current/decisions/AMD-0009_URL_Addressable_Routing_and_Governed_Form_Validation.md"
+          ]
+        },
+        {
+          "id": "UX-FID-001",
+          "result": "BLOCKED",
+          "reason": "Implementation matches the explicitly approved packet, but the current Figma Login variants/new signed-in frame must be updated by the owner under AMD-0008 section4 before production UI acceptance.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/TUN-P2-005-VISUAL-CONSENT-20261021.json",
+              "sha256": "58eff6b8b41bd790a55afc048a139874a60ee12e72013e3a0e316ce2ed815145"
+            },
+            {
+              "path": "governance/evidence/ui/authentication-20261021/test-index.json",
+              "sha256": "0b574a585a4ece8ae6703326854d8d2174974070d2685e5da885ac9bf06c62e5"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-002",
+          "result": "PASS",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/TUN-P2-005-VISUAL-CONSENT-20261021.json",
+              "sha256": "58eff6b8b41bd790a55afc048a139874a60ee12e72013e3a0e316ce2ed815145"
+            },
+            {
+              "path": "governance/evidence/ui/authentication-20261021/test-index.json",
+              "sha256": "0b574a585a4ece8ae6703326854d8d2174974070d2685e5da885ac9bf06c62e5"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-003",
+          "result": "PASS",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/TUN-P2-005-VISUAL-CONSENT-20261021.json",
+              "sha256": "58eff6b8b41bd790a55afc048a139874a60ee12e72013e3a0e316ce2ed815145"
+            },
+            {
+              "path": "governance/evidence/ui/authentication-20261021/test-index.json",
+              "sha256": "0b574a585a4ece8ae6703326854d8d2174974070d2685e5da885ac9bf06c62e5"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-004",
+          "result": "PASS",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/TUN-P2-005-VISUAL-CONSENT-20261021.json",
+              "sha256": "58eff6b8b41bd790a55afc048a139874a60ee12e72013e3a0e316ce2ed815145"
+            },
+            {
+              "path": "governance/evidence/ui/authentication-20261021/test-index.json",
+              "sha256": "0b574a585a4ece8ae6703326854d8d2174974070d2685e5da885ac9bf06c62e5"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-005",
+          "result": "BLOCKED",
+          "reason": "Implementation matches the explicitly approved packet, but the current Figma Login variants/new signed-in frame must be updated by the owner under AMD-0008 section4 before production UI acceptance.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/TUN-P2-005-VISUAL-CONSENT-20261021.json",
+              "sha256": "58eff6b8b41bd790a55afc048a139874a60ee12e72013e3a0e316ce2ed815145"
+            },
+            {
+              "path": "governance/evidence/ui/authentication-20261021/test-index.json",
+              "sha256": "0b574a585a4ece8ae6703326854d8d2174974070d2685e5da885ac9bf06c62e5"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-006",
+          "result": "PASS",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/TUN-P2-005-VISUAL-CONSENT-20261021.json",
+              "sha256": "58eff6b8b41bd790a55afc048a139874a60ee12e72013e3a0e316ce2ed815145"
+            },
+            {
+              "path": "governance/evidence/ui/authentication-20261021/test-index.json",
+              "sha256": "0b574a585a4ece8ae6703326854d8d2174974070d2685e5da885ac9bf06c62e5"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-007",
+          "result": "PASS",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/TUN-P2-005-VISUAL-CONSENT-20261021.json",
+              "sha256": "58eff6b8b41bd790a55afc048a139874a60ee12e72013e3a0e316ce2ed815145"
+            },
+            {
+              "path": "governance/evidence/ui/authentication-20261021/test-index.json",
+              "sha256": "0b574a585a4ece8ae6703326854d8d2174974070d2685e5da885ac9bf06c62e5"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-008",
+          "result": "BLOCKED",
+          "reason": "Implementation matches the explicitly approved packet, but the current Figma Login variants/new signed-in frame must be updated by the owner under AMD-0008 section4 before production UI acceptance.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/TUN-P2-005-VISUAL-CONSENT-20261021.json",
+              "sha256": "58eff6b8b41bd790a55afc048a139874a60ee12e72013e3a0e316ce2ed815145"
+            },
+            {
+              "path": "governance/evidence/ui/authentication-20261021/test-index.json",
+              "sha256": "0b574a585a4ece8ae6703326854d8d2174974070d2685e5da885ac9bf06c62e5"
+            }
+          ]
+        }
+      ],
+      "screenshots": [
+        {
+          "path": "governance/evidence/ui/authentication-20261021/actual/authentication/login-1024.png",
+          "sha256": "b1ac243fdc0063aa387200bd3647ef511e0f2d117277a69167d215b826a0f10c"
+        },
+        {
+          "path": "governance/evidence/ui/authentication-20261021/actual/authentication/login-1440.png",
+          "sha256": "3d3877b7b8e8283e5f71bdd33c2790e5e19c9a946507cc223e8ec0a0e23f7711"
+        },
+        {
+          "path": "governance/evidence/ui/authentication-20261021/actual/authentication/login-320.png",
+          "sha256": "f3041699fb8ec7fb804fc56c87db7f357eb340d284e1b2ee63e2e5539b9389db"
+        },
+        {
+          "path": "governance/evidence/ui/authentication-20261021/actual/authentication/login-390.png",
+          "sha256": "2784c48acc47212959caa2ce783fb272a85b708f4e7d4e4519c86f6998b78b53"
+        },
+        {
+          "path": "governance/evidence/ui/authentication-20261021/actual/authentication/login-768.png",
+          "sha256": "7d8588ac8d9847467b1595035b439ab4bc6e77393494784574ad420dc4792307"
+        },
+        {
+          "path": "governance/evidence/ui/authentication-20261021/reference/login-proposal-1440.png",
+          "sha256": "ff5fe2e31abd267ac820cc8c829d74888f40dca354558ab98b5b9ec809a576eb"
+        },
+        {
+          "path": "governance/evidence/ui/authentication-20261021/reference/login-figma-1440.png",
+          "sha256": "b847c61833c053614ca4b33fa15d4231f4851ce0504b44c37668dc1fb5657d73"
+        }
+      ],
+      "deviations": [
+        {
+          "status": "PRODUCT_OWNER_APPROVED",
+          "approval_evidence": {
+            "path": "governance/evidence/TUN-P2-005-VISUAL-CONSENT-20261021.json",
+            "sha256": "58eff6b8b41bd790a55afc048a139874a60ee12e72013e3a0e316ce2ed815145"
+          },
+          "scope": "Exact two-scope packet approval; pending manual owner Figma synchronization is not waived."
+        }
+      ],
+      "production_ui_result": "BLOCKED"
+    },
+    {
+      "id": "U-AUTH-SIGNED-IN",
+      "figma_refs": [
+        {
+          "file_key": "apNbwvAgdn1xIxYH1oiaSC",
+          "node_id": "70:630"
+        }
+      ],
+      "checks": [
+        {
+          "id": "URL-001",
+          "result": "PASS",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/ui/authentication-20261021/test-index.json",
+              "sha256": "0b574a585a4ece8ae6703326854d8d2174974070d2685e5da885ac9bf06c62e5"
+            },
+            {
+              "path": "governance/evidence/ui/authentication-20261021/browser.log",
+              "sha256": "1b5bfc16b732981e32fc5e25159d4120ebbc6d17fadf48b0eb00f2bfda0e0e55"
+            },
+            {
+              "path": "governance/evidence/ui/authentication-20261021/real-browser-results.json",
+              "sha256": "f4dab3ae65fe32891dd64baf97e0ecbf5399edc2bfb39edf26ec55c32d941270"
+            }
+          ]
+        },
+        {
+          "id": "URL-002",
+          "result": "PASS",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/ui/authentication-20261021/test-index.json",
+              "sha256": "0b574a585a4ece8ae6703326854d8d2174974070d2685e5da885ac9bf06c62e5"
+            },
+            {
+              "path": "governance/evidence/ui/authentication-20261021/browser.log",
+              "sha256": "1b5bfc16b732981e32fc5e25159d4120ebbc6d17fadf48b0eb00f2bfda0e0e55"
+            },
+            {
+              "path": "governance/evidence/ui/authentication-20261021/real-browser-results.json",
+              "sha256": "f4dab3ae65fe32891dd64baf97e0ecbf5399edc2bfb39edf26ec55c32d941270"
+            }
+          ]
+        },
+        {
+          "id": "URL-003",
+          "result": "PASS",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/ui/authentication-20261021/test-index.json",
+              "sha256": "0b574a585a4ece8ae6703326854d8d2174974070d2685e5da885ac9bf06c62e5"
+            },
+            {
+              "path": "governance/evidence/ui/authentication-20261021/browser.log",
+              "sha256": "1b5bfc16b732981e32fc5e25159d4120ebbc6d17fadf48b0eb00f2bfda0e0e55"
+            },
+            {
+              "path": "governance/evidence/ui/authentication-20261021/real-browser-results.json",
+              "sha256": "f4dab3ae65fe32891dd64baf97e0ecbf5399edc2bfb39edf26ec55c32d941270"
+            }
+          ]
+        },
+        {
+          "id": "URL-004",
+          "result": "NOT_APPLICABLE",
+          "reason": "No modal/tab/anchor route is introduced; checkbox and password reveal use same-screen local state.",
+          "authority_refs": [
+            "docs/authority/current/decisions/AMD-0008_Approved_Figma_Visual_Fidelity_and_Product_Owner_UX_Consent.md",
+            "docs/authority/current/decisions/AMD-0009_URL_Addressable_Routing_and_Governed_Form_Validation.md"
+          ]
+        },
+        {
+          "id": "URL-005",
+          "result": "PASS",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/ui/authentication-20261021/test-index.json",
+              "sha256": "0b574a585a4ece8ae6703326854d8d2174974070d2685e5da885ac9bf06c62e5"
+            },
+            {
+              "path": "governance/evidence/ui/authentication-20261021/browser.log",
+              "sha256": "1b5bfc16b732981e32fc5e25159d4120ebbc6d17fadf48b0eb00f2bfda0e0e55"
+            },
+            {
+              "path": "governance/evidence/ui/authentication-20261021/real-browser-results.json",
+              "sha256": "f4dab3ae65fe32891dd64baf97e0ecbf5399edc2bfb39edf26ec55c32d941270"
+            }
+          ]
+        },
+        {
+          "id": "URL-006",
+          "result": "NOT_APPLICABLE",
+          "reason": "This authorized slice is direct password sign-in. Federation/Product-origin OAuth and callbacks retain separate P2-010/P2-014 owners and no existing callback is changed.",
+          "authority_refs": [
+            "docs/authority/current/decisions/AMD-0008_Approved_Figma_Visual_Fidelity_and_Product_Owner_UX_Consent.md",
+            "docs/authority/current/decisions/AMD-0009_URL_Addressable_Routing_and_Governed_Form_Validation.md"
+          ]
+        },
+        {
+          "id": "UX-FID-001",
+          "result": "BLOCKED",
+          "reason": "Implementation matches the explicitly approved packet, but the current Figma Login variants/new signed-in frame must be updated by the owner under AMD-0008 section4 before production UI acceptance.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/TUN-P2-005-VISUAL-CONSENT-20261021.json",
+              "sha256": "58eff6b8b41bd790a55afc048a139874a60ee12e72013e3a0e316ce2ed815145"
+            },
+            {
+              "path": "governance/evidence/ui/authentication-20261021/test-index.json",
+              "sha256": "0b574a585a4ece8ae6703326854d8d2174974070d2685e5da885ac9bf06c62e5"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-002",
+          "result": "PASS",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/TUN-P2-005-VISUAL-CONSENT-20261021.json",
+              "sha256": "58eff6b8b41bd790a55afc048a139874a60ee12e72013e3a0e316ce2ed815145"
+            },
+            {
+              "path": "governance/evidence/ui/authentication-20261021/test-index.json",
+              "sha256": "0b574a585a4ece8ae6703326854d8d2174974070d2685e5da885ac9bf06c62e5"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-003",
+          "result": "PASS",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/TUN-P2-005-VISUAL-CONSENT-20261021.json",
+              "sha256": "58eff6b8b41bd790a55afc048a139874a60ee12e72013e3a0e316ce2ed815145"
+            },
+            {
+              "path": "governance/evidence/ui/authentication-20261021/test-index.json",
+              "sha256": "0b574a585a4ece8ae6703326854d8d2174974070d2685e5da885ac9bf06c62e5"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-004",
+          "result": "PASS",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/TUN-P2-005-VISUAL-CONSENT-20261021.json",
+              "sha256": "58eff6b8b41bd790a55afc048a139874a60ee12e72013e3a0e316ce2ed815145"
+            },
+            {
+              "path": "governance/evidence/ui/authentication-20261021/test-index.json",
+              "sha256": "0b574a585a4ece8ae6703326854d8d2174974070d2685e5da885ac9bf06c62e5"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-005",
+          "result": "BLOCKED",
+          "reason": "Implementation matches the explicitly approved packet, but the current Figma Login variants/new signed-in frame must be updated by the owner under AMD-0008 section4 before production UI acceptance.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/TUN-P2-005-VISUAL-CONSENT-20261021.json",
+              "sha256": "58eff6b8b41bd790a55afc048a139874a60ee12e72013e3a0e316ce2ed815145"
+            },
+            {
+              "path": "governance/evidence/ui/authentication-20261021/test-index.json",
+              "sha256": "0b574a585a4ece8ae6703326854d8d2174974070d2685e5da885ac9bf06c62e5"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-006",
+          "result": "PASS",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/TUN-P2-005-VISUAL-CONSENT-20261021.json",
+              "sha256": "58eff6b8b41bd790a55afc048a139874a60ee12e72013e3a0e316ce2ed815145"
+            },
+            {
+              "path": "governance/evidence/ui/authentication-20261021/test-index.json",
+              "sha256": "0b574a585a4ece8ae6703326854d8d2174974070d2685e5da885ac9bf06c62e5"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-007",
+          "result": "PASS",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/TUN-P2-005-VISUAL-CONSENT-20261021.json",
+              "sha256": "58eff6b8b41bd790a55afc048a139874a60ee12e72013e3a0e316ce2ed815145"
+            },
+            {
+              "path": "governance/evidence/ui/authentication-20261021/test-index.json",
+              "sha256": "0b574a585a4ece8ae6703326854d8d2174974070d2685e5da885ac9bf06c62e5"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-008",
+          "result": "BLOCKED",
+          "reason": "Implementation matches the explicitly approved packet, but the current Figma Login variants/new signed-in frame must be updated by the owner under AMD-0008 section4 before production UI acceptance.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/TUN-P2-005-VISUAL-CONSENT-20261021.json",
+              "sha256": "58eff6b8b41bd790a55afc048a139874a60ee12e72013e3a0e316ce2ed815145"
+            },
+            {
+              "path": "governance/evidence/ui/authentication-20261021/test-index.json",
+              "sha256": "0b574a585a4ece8ae6703326854d8d2174974070d2685e5da885ac9bf06c62e5"
+            }
+          ]
+        }
+      ],
+      "screenshots": [
+        {
+          "path": "governance/evidence/ui/authentication-20261021/actual/authentication/signed-in-1024.png",
+          "sha256": "9807dffdc39540e8882ab8e9dcf23204c1d946ccfcb7977092e8dd4c242df59f"
+        },
+        {
+          "path": "governance/evidence/ui/authentication-20261021/actual/authentication/signed-in-1440.png",
+          "sha256": "3f43a91de7fdf7b4f2b4826502b462c54a66125f1225cce184843c02b5cc671c"
+        },
+        {
+          "path": "governance/evidence/ui/authentication-20261021/actual/authentication/signed-in-320.png",
+          "sha256": "c3a6aa228e158adb0c03e562ea4bfce3ac735b65c811aeaa3e86e46d14374a9d"
+        },
+        {
+          "path": "governance/evidence/ui/authentication-20261021/actual/authentication/signed-in-390.png",
+          "sha256": "ce21251222d3e988327c0898619fa2b3134fd1f6ae6b7687c73ad70b160fee81"
+        },
+        {
+          "path": "governance/evidence/ui/authentication-20261021/actual/authentication/signed-in-768.png",
+          "sha256": "374135ce1d5ed1dd9a79483536a3da129ab22f4aa725c4201c88fb07d263ceb6"
+        },
+        {
+          "path": "governance/evidence/ui/authentication-20261021/reference/signed-in-proposal-1440.png",
+          "sha256": "3f43a91de7fdf7b4f2b4826502b462c54a66125f1225cce184843c02b5cc671c"
+        }
+      ],
+      "deviations": [
+        {
+          "status": "PRODUCT_OWNER_APPROVED",
+          "approval_evidence": {
+            "path": "governance/evidence/TUN-P2-005-VISUAL-CONSENT-20261021.json",
+            "sha256": "58eff6b8b41bd790a55afc048a139874a60ee12e72013e3a0e316ce2ed815145"
+          },
+          "scope": "Exact two-scope packet approval; pending manual owner Figma synchronization is not waived."
+        }
+      ],
+      "production_ui_result": "BLOCKED"
+    },
+    {
+      "id": "FORM-LOGIN",
+      "figma_refs": [
+        {
+          "file_key": "apNbwvAgdn1xIxYH1oiaSC",
+          "node_id": "2:4"
+        },
+        {
+          "file_key": "apNbwvAgdn1xIxYH1oiaSC",
+          "node_id": "70:1257"
+        }
+      ],
+      "checks": [
+        {
+          "id": "VAL-001",
+          "result": "PASS",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/ui/authentication-20261021/test-index.json",
+              "sha256": "0b574a585a4ece8ae6703326854d8d2174974070d2685e5da885ac9bf06c62e5"
+            },
+            {
+              "path": "governance/evidence/ui/authentication-20261021/identity.trx",
+              "sha256": "b1780d30ac7b217e027f4652894e065b91fa0b128f989b7f3a69fc7d2b2a09b7"
+            },
+            {
+              "path": "governance/evidence/ui/authentication-20261021/real-browser-results.json",
+              "sha256": "f4dab3ae65fe32891dd64baf97e0ecbf5399edc2bfb39edf26ec55c32d941270"
+            }
+          ]
+        },
+        {
+          "id": "VAL-002",
+          "result": "PASS",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/ui/authentication-20261021/test-index.json",
+              "sha256": "0b574a585a4ece8ae6703326854d8d2174974070d2685e5da885ac9bf06c62e5"
+            },
+            {
+              "path": "governance/evidence/ui/authentication-20261021/identity.trx",
+              "sha256": "b1780d30ac7b217e027f4652894e065b91fa0b128f989b7f3a69fc7d2b2a09b7"
+            },
+            {
+              "path": "governance/evidence/ui/authentication-20261021/real-browser-results.json",
+              "sha256": "f4dab3ae65fe32891dd64baf97e0ecbf5399edc2bfb39edf26ec55c32d941270"
+            }
+          ]
+        },
+        {
+          "id": "VAL-003",
+          "result": "PASS",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/ui/authentication-20261021/test-index.json",
+              "sha256": "0b574a585a4ece8ae6703326854d8d2174974070d2685e5da885ac9bf06c62e5"
+            },
+            {
+              "path": "governance/evidence/ui/authentication-20261021/identity.trx",
+              "sha256": "b1780d30ac7b217e027f4652894e065b91fa0b128f989b7f3a69fc7d2b2a09b7"
+            },
+            {
+              "path": "governance/evidence/ui/authentication-20261021/real-browser-results.json",
+              "sha256": "f4dab3ae65fe32891dd64baf97e0ecbf5399edc2bfb39edf26ec55c32d941270"
+            }
+          ]
+        },
+        {
+          "id": "VAL-004",
+          "result": "PASS",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/ui/authentication-20261021/test-index.json",
+              "sha256": "0b574a585a4ece8ae6703326854d8d2174974070d2685e5da885ac9bf06c62e5"
+            },
+            {
+              "path": "governance/evidence/ui/authentication-20261021/identity.trx",
+              "sha256": "b1780d30ac7b217e027f4652894e065b91fa0b128f989b7f3a69fc7d2b2a09b7"
+            },
+            {
+              "path": "governance/evidence/ui/authentication-20261021/real-browser-results.json",
+              "sha256": "f4dab3ae65fe32891dd64baf97e0ecbf5399edc2bfb39edf26ec55c32d941270"
+            }
+          ]
+        },
+        {
+          "id": "VAL-005",
+          "result": "PASS",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/ui/authentication-20261021/test-index.json",
+              "sha256": "0b574a585a4ece8ae6703326854d8d2174974070d2685e5da885ac9bf06c62e5"
+            },
+            {
+              "path": "governance/evidence/ui/authentication-20261021/identity.trx",
+              "sha256": "b1780d30ac7b217e027f4652894e065b91fa0b128f989b7f3a69fc7d2b2a09b7"
+            },
+            {
+              "path": "governance/evidence/ui/authentication-20261021/real-browser-results.json",
+              "sha256": "f4dab3ae65fe32891dd64baf97e0ecbf5399edc2bfb39edf26ec55c32d941270"
+            }
+          ]
+        },
+        {
+          "id": "VAL-006",
+          "result": "PASS",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/ui/authentication-20261021/test-index.json",
+              "sha256": "0b574a585a4ece8ae6703326854d8d2174974070d2685e5da885ac9bf06c62e5"
+            },
+            {
+              "path": "governance/evidence/ui/authentication-20261021/identity.trx",
+              "sha256": "b1780d30ac7b217e027f4652894e065b91fa0b128f989b7f3a69fc7d2b2a09b7"
+            },
+            {
+              "path": "governance/evidence/ui/authentication-20261021/real-browser-results.json",
+              "sha256": "f4dab3ae65fe32891dd64baf97e0ecbf5399edc2bfb39edf26ec55c32d941270"
+            }
+          ]
+        },
+        {
+          "id": "VAL-007",
+          "result": "PASS",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/ui/authentication-20261021/test-index.json",
+              "sha256": "0b574a585a4ece8ae6703326854d8d2174974070d2685e5da885ac9bf06c62e5"
+            },
+            {
+              "path": "governance/evidence/ui/authentication-20261021/identity.trx",
+              "sha256": "b1780d30ac7b217e027f4652894e065b91fa0b128f989b7f3a69fc7d2b2a09b7"
+            },
+            {
+              "path": "governance/evidence/ui/authentication-20261021/real-browser-results.json",
+              "sha256": "f4dab3ae65fe32891dd64baf97e0ecbf5399edc2bfb39edf26ec55c32d941270"
+            }
+          ]
+        },
+        {
+          "id": "VAL-008",
+          "result": "PASS",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/ui/authentication-20261021/test-index.json",
+              "sha256": "0b574a585a4ece8ae6703326854d8d2174974070d2685e5da885ac9bf06c62e5"
+            },
+            {
+              "path": "governance/evidence/ui/authentication-20261021/identity.trx",
+              "sha256": "b1780d30ac7b217e027f4652894e065b91fa0b128f989b7f3a69fc7d2b2a09b7"
+            },
+            {
+              "path": "governance/evidence/ui/authentication-20261021/real-browser-results.json",
+              "sha256": "f4dab3ae65fe32891dd64baf97e0ecbf5399edc2bfb39edf26ec55c32d941270"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-001",
+          "result": "BLOCKED",
+          "reason": "Implementation matches the explicitly approved packet, but the current Figma Login variants/new signed-in frame must be updated by the owner under AMD-0008 section4 before production UI acceptance.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/TUN-P2-005-VISUAL-CONSENT-20261021.json",
+              "sha256": "58eff6b8b41bd790a55afc048a139874a60ee12e72013e3a0e316ce2ed815145"
+            },
+            {
+              "path": "governance/evidence/ui/authentication-20261021/test-index.json",
+              "sha256": "0b574a585a4ece8ae6703326854d8d2174974070d2685e5da885ac9bf06c62e5"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-002",
+          "result": "PASS",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/TUN-P2-005-VISUAL-CONSENT-20261021.json",
+              "sha256": "58eff6b8b41bd790a55afc048a139874a60ee12e72013e3a0e316ce2ed815145"
+            },
+            {
+              "path": "governance/evidence/ui/authentication-20261021/test-index.json",
+              "sha256": "0b574a585a4ece8ae6703326854d8d2174974070d2685e5da885ac9bf06c62e5"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-003",
+          "result": "PASS",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/TUN-P2-005-VISUAL-CONSENT-20261021.json",
+              "sha256": "58eff6b8b41bd790a55afc048a139874a60ee12e72013e3a0e316ce2ed815145"
+            },
+            {
+              "path": "governance/evidence/ui/authentication-20261021/test-index.json",
+              "sha256": "0b574a585a4ece8ae6703326854d8d2174974070d2685e5da885ac9bf06c62e5"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-004",
+          "result": "PASS",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/TUN-P2-005-VISUAL-CONSENT-20261021.json",
+              "sha256": "58eff6b8b41bd790a55afc048a139874a60ee12e72013e3a0e316ce2ed815145"
+            },
+            {
+              "path": "governance/evidence/ui/authentication-20261021/test-index.json",
+              "sha256": "0b574a585a4ece8ae6703326854d8d2174974070d2685e5da885ac9bf06c62e5"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-005",
+          "result": "BLOCKED",
+          "reason": "Implementation matches the explicitly approved packet, but the current Figma Login variants/new signed-in frame must be updated by the owner under AMD-0008 section4 before production UI acceptance.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/TUN-P2-005-VISUAL-CONSENT-20261021.json",
+              "sha256": "58eff6b8b41bd790a55afc048a139874a60ee12e72013e3a0e316ce2ed815145"
+            },
+            {
+              "path": "governance/evidence/ui/authentication-20261021/test-index.json",
+              "sha256": "0b574a585a4ece8ae6703326854d8d2174974070d2685e5da885ac9bf06c62e5"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-006",
+          "result": "PASS",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/TUN-P2-005-VISUAL-CONSENT-20261021.json",
+              "sha256": "58eff6b8b41bd790a55afc048a139874a60ee12e72013e3a0e316ce2ed815145"
+            },
+            {
+              "path": "governance/evidence/ui/authentication-20261021/test-index.json",
+              "sha256": "0b574a585a4ece8ae6703326854d8d2174974070d2685e5da885ac9bf06c62e5"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-007",
+          "result": "PASS",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/TUN-P2-005-VISUAL-CONSENT-20261021.json",
+              "sha256": "58eff6b8b41bd790a55afc048a139874a60ee12e72013e3a0e316ce2ed815145"
+            },
+            {
+              "path": "governance/evidence/ui/authentication-20261021/test-index.json",
+              "sha256": "0b574a585a4ece8ae6703326854d8d2174974070d2685e5da885ac9bf06c62e5"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-008",
+          "result": "BLOCKED",
+          "reason": "Implementation matches the explicitly approved packet, but the current Figma Login variants/new signed-in frame must be updated by the owner under AMD-0008 section4 before production UI acceptance.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/TUN-P2-005-VISUAL-CONSENT-20261021.json",
+              "sha256": "58eff6b8b41bd790a55afc048a139874a60ee12e72013e3a0e316ce2ed815145"
+            },
+            {
+              "path": "governance/evidence/ui/authentication-20261021/test-index.json",
+              "sha256": "0b574a585a4ece8ae6703326854d8d2174974070d2685e5da885ac9bf06c62e5"
+            }
+          ]
+        }
+      ],
+      "screenshots": [
+        {
+          "path": "governance/evidence/ui/authentication-20261021/actual/authentication/login-server-error-1440.png",
+          "sha256": "e5c784f92dd0ab829d2ef2f044a20ed1e3726fe8283d0e93bf47842f19ac1dc4"
+        },
+        {
+          "path": "governance/evidence/ui/authentication-20261021/actual/authentication/login-server-error-320.png",
+          "sha256": "917befdcfe02f76c142b707b28ab9fe3a8ae37e57731c63b04f4f0cc9e86b165"
+        },
+        {
+          "path": "governance/evidence/ui/authentication-20261021/actual/authentication/login-server-error-768.png",
+          "sha256": "e109f3914af8ca8f42231f49568ee8788636ed707218820f49c890bdc9e025bf"
+        },
+        {
+          "path": "governance/evidence/ui/authentication-20261021/reference/login-proposal-1440.png",
+          "sha256": "ff5fe2e31abd267ac820cc8c829d74888f40dca354558ab98b5b9ec809a576eb"
+        },
+        {
+          "path": "governance/evidence/ui/authentication-20261021/reference/login-figma-1440.png",
+          "sha256": "b847c61833c053614ca4b33fa15d4231f4851ce0504b44c37668dc1fb5657d73"
+        },
+        {
+          "path": "governance/evidence/ui/AMD0009/figma-registration-validation-errors.png",
+          "sha256": "0b1e8d0a4516747f85501f828cb62dd7adbb938ce9f1244e34e5a1eb5db0d5fa"
+        }
+      ],
+      "deviations": [
+        {
+          "status": "PRODUCT_OWNER_APPROVED",
+          "approval_evidence": {
+            "path": "governance/evidence/TUN-P2-005-VISUAL-CONSENT-20261021.json",
+            "sha256": "58eff6b8b41bd790a55afc048a139874a60ee12e72013e3a0e316ce2ed815145"
+          },
+          "scope": "Exact two-scope packet approval; pending manual owner Figma synchronization is not waived."
+        }
+      ],
+      "production_ui_result": "BLOCKED"
+    }
+  ],
+  "pending_owner_update_ref": "docs/development/P2_005_EXTERNAL_UPDATES.md",
+  "prior_evidence_ref": "governance/evidence/history/GLOBAL-UI-before-P2-005.json",
+  "revalidation_ref": "P1-018-RV003",
+  "boundary": "Existing10 items have current engineering regression evidence. New2 screens/1 form have explicit scoped consent and passing functional/accessibility tests, but required owner Figma synchronization keeps their production UI gate blocked.",
+  "scope_id": "TUN-P2-005"
+}

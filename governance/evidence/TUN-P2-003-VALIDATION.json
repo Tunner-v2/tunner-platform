@@ -3,8 +3,8 @@
   "scope_id": "TUN-P2-003",
   "validation_kind": "COMMITTED",
   "result": "PASS",
-  "validated_commit_sha": "c6fa8e7690095f8eb2401587c407501fced29a4d",
-  "tested_commit_sha": "c6fa8e7690095f8eb2401587c407501fced29a4d",
+  "validated_commit_sha": "73fb504750942c8bf9cc380dfbfe7f3d58cef11e",
+  "tested_commit_sha": "e1a979ada9ca4828c2f404489fadf055031cb910",
   "owned_behavior_paths": [
     "Directory.Packages.props",
     "Tunner.Platform.slnx",
@@ -889,13 +889,18 @@
           "context_expansion_requested": false
         }
       ]
+    },
+    {
+      "ref": "governance/evidence/history/TUN-P2-003-before-P2-005-validation.json",
+      "validated_commit_sha": "c6fa8e7690095f8eb2401587c407501fced29a4d",
+      "result": "PASS"
     }
   ],
   "authority_refs": [
     "PDR-0011",
     "AMD-0007"
   ],
-  "checked_at": "2026-10-17T20:15:56.211Z",
+  "checked_at": "2026-10-21T18:42:02.373Z",
   "tests": {
     "passed": 15,
     "failed": 0,
@@ -1258,5 +1263,14 @@
       "sha256": "699d2fc0bce1d2c0ec2face65807ca3c3f8b095d65d9dbbd128d07f85cf7af54"
     }
   ],
-  "note": "Same active P2-003 lifecycle; no historical closure rewritten. Current snapshot/test-project overlap is committed and revalidated."
+  "note": "Same active P2-003 lifecycle; no historical closure rewritten. Current snapshot/test-project overlap is committed and revalidated.",
+  "p2_005_overlap_revalidation": {
+    "result": "PASS_ENGINEERING_REGRESSION",
+    "test_index_ref": "governance/evidence/ui/authentication-20261021/test-index.json",
+    "backend_passed": 77,
+    "unit_passed": 31,
+    "dev_browser_passed": 54,
+    "real_browser_passed": 3,
+    "boundary": "Preserves all previous owned paths and original scope. No new authentication UI or production acceptance inherited; native revision/gate closure remains required."
+  }
 }
