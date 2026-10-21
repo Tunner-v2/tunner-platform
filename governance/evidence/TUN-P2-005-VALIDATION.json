@@ -4,8 +4,8 @@
   "validation_kind": "COMMITTED",
   "result": "PASS",
   "validation_boundary": "ENGINEERING_ONLY_PRODUCTION_UI_BLOCKED",
-  "tested_commit_sha": "0a21bc4f2bf1f94f43ef19d61e9b5fb5e46fa061",
-  "validated_commit_sha": "95e0aeae8f1c6bc3372510c59f62a3eb7e484cbc",
+  "tested_commit_sha": "100cccd26f34211810e6c2bcf2a72242f5872c22",
+  "validated_commit_sha": "100cccd26f34211810e6c2bcf2a72242f5872c22",
   "owned_behavior_paths": [
     "docs/contracts/authentication-session-contract.md",
     "docs/contracts/ui-inventory.json",
@@ -56,17 +56,18 @@
     "web/tests/browser-testing/authentication-flow.spec.ts",
     "web/tests/contracts.test.tsx"
   ],
-  "checked_at": "2026-10-21T18:42:02.360Z",
+  "checked_at": "2026-10-21T18:52:06.133Z",
   "test_index_ref": "governance/evidence/ui/authentication-20261021/test-index.json",
   "component_test_commits": {
-    "backend_unit_dev_browser": "e1a979ada9ca4828c2f404489fadf055031cb910",
-    "real_browser": "0a21bc4f2bf1f94f43ef19d61e9b5fb5e46fa061",
-    "static_contract_and_operational_review": "73fb504750942c8bf9cc380dfbfe7f3d58cef11e"
+    "backend_unit_dev_browser": "100cccd26f34211810e6c2bcf2a72242f5872c22",
+    "real_browser": "100cccd26f34211810e6c2bcf2a72242f5872c22",
+    "starter_safety": "100cccd26f34211810e6c2bcf2a72242f5872c22"
   },
   "source_binding": {
-    "method": "Incremental exact-source verification",
-    "runtime_and_existing_test_inputs": "Git diff confirms src/tests, runtime tools, web apps/packages and unit/shared/registration sources match e1a979a. The only later executable change is the real smoke-test status assertion, rerun at0a21bc4. Local HTTP contract prose was corrected to match the already implemented options response; operational review metadata was added at73fb504.",
-    "no_single_head_claim_for_all_commands": true,
+    "method": "Full exact-commit rerun",
+    "executed_at_sha": "100cccd26f34211810e6c2bcf2a72242f5872c22",
+    "runtime_source_equivalence": "The already running isolated host uses the same committed runtime inputs as this SHA. All 77 backend tests, 31 unit tests, 54 dev-browser tests, 3 real-browser tests and 7 starter checks were rerun while HEAD was 100cccd and no task source was dirty.",
+    "earlier_cohort_ref": "Git commit 95e0aea retains the original e1a979a/0a21bc4 receipts; earlier raw run logs remain in artifacts/p2-005-auth-20261021.",
     "metadata_only_after_source": true
   },
   "ui_visual_approval": "BLOCKED",
