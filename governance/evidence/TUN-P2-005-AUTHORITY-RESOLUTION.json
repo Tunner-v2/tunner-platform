@@ -1,0 +1,106 @@
+{
+  "schema_version": 1,
+  "scope_id": "TUN-P2-005",
+  "reviewed_at": "2026-10-21T17:22:54.925Z",
+  "outcome": "EXISTING_FUNCTIONAL_AUTHORITY_AND_SCOPED_UI_CONSENT_BOUNDARY",
+  "verified_authority_artifacts": 196,
+  "current_index_drive_modified_at": "2026-10-17T23:24:42.127Z",
+  "reviewed_authority_refs": [
+    "docs/authority/current-authority.json",
+    "docs/authority/current/development/11_Development_Planes_Milestones_and_P0_Backlog.md",
+    "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md",
+    "docs/authority/current/development/32_Domain_API_Event_Data_and_Policy_Contract_Catalog.md",
+    "docs/authority/current/development/34_Architecture_to_Development_Traceability_Matrix.md",
+    "docs/authority/baselines/1.6.0/decisions/ADR-0006_Identity_ASPNET_Identity_OpenIddict.md",
+    "docs/authority/current/development/AMD-0002_Non-Blocking_PR_Approval_and_Continuous_Local_Execution.md",
+    "docs/authority/current/development/02_Repository_Solution_and_Module_Architecture.md",
+    "docs/authority/current/development/09_Testing_Acceptance_Evidence_and_Quality_Gates.md",
+    "docs/authority/current/development/29_Privacy_Data_Lifecycle_and_Processing_Governance_FRD.md",
+    "docs/authority/current/decisions/PDR-0011_Universal_Account_Eligibility_Age-Aware_Consent_and_Delegated_Commercial_Authority.md",
+    "docs/authority/current/decisions/AMD-0007_Universal_Registration_Age-Aware_Consent_and_Delegated_Commercial_Authority.md",
+    "docs/authority/current/decisions/AMD-0008_Approved_Figma_Visual_Fidelity_and_Product_Owner_UX_Consent.md",
+    "docs/authority/current/development/10_UI_UX_Components_Widgets_and_Plugins_Development_Rules.md",
+    "docs/authority/current/development/31_UI_UX_Screen_and_Control_Center_Requirements_Matrix.md",
+    "docs/authority/current/development/35_AI_Agent_Skill_Catalog_and_Review_Contracts.md",
+    "docs/authority/current/decisions/AMD-0009_URL_Addressable_Routing_and_Governed_Form_Validation.md",
+    "docs/authority/current/development/08_Security_Privacy_Compliance_and_Global_Market_Governance.md",
+    "docs/authority/current/development/13_RD_Source_Register.md"
+  ],
+  "reviewed_flows": {
+    "file_key": "bdJwXt1U7n3iyluSD21OYK",
+    "sections": [
+      {
+        "node_id": "52:3992",
+        "name": "02 — Direct Tunner User Registration, Authentication &amp; Account Center Workflow"
+      },
+      {
+        "node_id": "52:3993",
+        "name": "02A — Connected Product–Initiated Registration / Sign-In &amp; Return Workflow"
+      },
+      {
+        "node_id": "88:6714",
+        "name": "36 — Identity, Authentication, Sessions &amp; Security — Functional Architecture"
+      },
+      {
+        "node_id": "88:6717",
+        "name": "37 — Identity — Registration, Verified Contact &amp; Account Activation"
+      },
+      {
+        "node_id": "88:6720",
+        "name": "38 — Identity — Authentication Assurance, Passkeys, MFA &amp; Step-Up"
+      },
+      {
+        "node_id": "88:6723",
+        "name": "39 — Identity — Product-Origin OAuth/OIDC, SSO &amp; Product Relationship"
+      },
+      {
+        "node_id": "88:6726",
+        "name": "40 — Identity — Session &amp; Device Lifecycle"
+      },
+      {
+        "node_id": "88:6729",
+        "name": "41 — Identity — Session Revocation, Authorization Grants &amp; Product Session Propagation"
+      },
+      {
+        "node_id": "88:6732",
+        "name": "42 — Identity — Recovery &amp; Access Restoration"
+      },
+      {
+        "node_id": "88:6735",
+        "name": "43 — Identity — Verified Contact Change &amp; Identity Verification"
+      },
+      {
+        "node_id": "88:6738",
+        "name": "44 — Identity — Account State, Restrictions &amp; Closure"
+      },
+      {
+        "node_id": "88:6741",
+        "name": "45 — Security — Investigation, Containment &amp; Account Protection"
+      }
+    ],
+    "bounded_read_ref": "artifacts/p2-005-auth-20261021/figjam-identity-sections.json"
+  },
+  "reviewed_governed_history": [
+    "docs/development/P2_ACCOUNT_IDENTITY_REFINEMENT.md",
+    "governance/evidence/TUN-P2-001-AUTHORITY-RESOLUTION.json",
+    "governance/evidence/PDR0011-AMD0007-IMPACT-AUDIT.json",
+    "governance/evidence/AMD0008-PRODUCT-OWNER-VISUAL-CONSENT.json",
+    "governance/evidence/AMD0009-CURRENT-UI-PRODUCT-ACCEPTANCE.json"
+  ],
+  "design": {
+    "file_key": "apNbwvAgdn1xIxYH1oiaSC",
+    "login_node": "2:4",
+    "ready_reference_node": "70:630",
+    "reference_ref": "artifacts/p2-005-auth-20261021/login-figma-1440.png"
+  },
+  "resolutions": [
+    "Password authentication, sign-out, server-managed BFF cookies, rotation, policy expiry and immediate idempotent revocation already have authority in FRD17/ADR0006/FigJam38/40/41. Do not create a duplicate business decision.",
+    "PDR0011/AMD0007 supersede old PDR0007 age-only denial. A minor age classification by itself must not deny authentication or a normal Tunner session.",
+    "Production policy values, assurance mappings, processing and retention references are supplied by effective trusted versioned sources, not invented constants. Missing runtime providers fail unavailable; isolated fixtures are explicitly synthetic.",
+    "FigmaLogin2:4 GitHub button conflict is explicitly recognized by AMD0008/Doc31; Product Owner now instructs Google/Microsoft only and GitHub in future updates.",
+    "Other visual deviations remain limited to a prepared two-scope proposal; no generic proceed or earlier five-screen acceptance is treated as approval for a new signed-in screen.",
+    "OpenIddict Product grants, federation, step-up, devices, recovery, Account restriction mutations and cross-Product session termination retain their separate work-item owners."
+  ],
+  "proposal_ref": "artifacts/p2-005-auth-20261021/visual-review.html",
+  "implementation_boundary": "Prepare and activate an explicit backend-only child for persistence/application/BFF HTTP tests if UI consent remains pending. Parent acceptance and affected production UI stay gated. No source implementation before the corresponding native eligibility check."
+}
