@@ -3,8 +3,8 @@
   "scope_id": "TUN-P2-004",
   "validation_kind": "COMMITTED",
   "result": "PASS",
-  "tested_commit_sha": "bea01cfcd813bf8000a7e1c64b8c74492c4b4e31",
-  "validated_commit_sha": "bea01cfcd813bf8000a7e1c64b8c74492c4b4e31",
+  "tested_commit_sha": "fd58093d839aec7d55e7578b24a35a804e984eaf",
+  "validated_commit_sha": "fd58093d839aec7d55e7578b24a35a804e984eaf",
   "owned_behavior_paths": [
     "docs/contracts/.gitattributes",
     "docs/contracts/registration-onboarding.openapi.json",
@@ -85,32 +85,47 @@
     "web/tests/registration/support.ts",
     "web/tsconfig.json"
   ],
-  "checked_at": "2026-10-18T21:05:37.638Z",
+  "checked_at": "2026-10-21T17:03:53.622Z",
   "boundary": "Only the directly accepted current UI scope. Whole P2,production publication/provider policy,protected-main merge and release are excluded; native closure checks remain mandatory.",
   "prior_validations": [
     {
       "ref": "governance/evidence/history/TUN-P2-004-before-AMD0009-VALIDATION.json",
       "tested_commit_sha": "ccb82f64a12cfed08c4f30a0ca763e8205b704ce",
       "result": "PASS"
+    },
+    {
+      "ref": "governance/evidence/history/TUN-P2-004-before-Vite824-VALIDATION.json",
+      "tested_commit_sha": "bea01cfcd813bf8000a7e1c64b8c74492c4b4e31",
+      "result": "PASS",
+      "scope": "Prior accepted runtime/backend/starter results; unchanged behavior retained."
     }
   ],
   "owned_coordination_paths": [
     "governance/evidence/ui/AMD0009/.gitattributes"
   ],
   "checks": {
-    "runtime": "PASS:398 backend,31 unit,40 browser; zero skipped/failed accepted runs",
-    "operator_probe": "PASS:10 real HTTPS laptop/history/refresh/security checks",
-    "starter": "PASS:7 unique safety checks in both supported PowerShell runtimes",
-    "visual": "Source matching,explicit scoped consents and committed per-item evidence; formal gate separately evaluated",
-    "ownership": "Reviewed behavior is committed and unchanged; unrelated paths preserved"
+    "delta": "PASS: only the Vite package/lock patch changes among78 owned paths;76 source paths unchanged.",
+    "frontend": "PASS atfd58093: build,31 unit,38 browser,zero-advisory audit;29 comparisons show no material visual change.",
+    "prior_runtime": "Retained prior bea01cf backend/starter/operator validation; not claimed as newly rerun.",
+    "ownership": "All78 paths retained;10 starter paths remain covered by the current main envelope.",
+    "lifecycle": "VALIDATION retained; native gate must pass after committing evidence; Product and release authority unchanged."
   },
   "receipts": [
     {
       "path": "governance/evidence/ui/AMD0009/test-index.json",
       "sha256": "0c337406f8e90935a4efe6cd50f592150f60e095982e564ad98086ea897ec435"
+    },
+    {
+      "path": "governance/evidence/ui/security-20261021/test-index.json",
+      "sha256": "bcfbeda5635111b2b6229ea340019c573c81636642999de8afcd195978c3dc46"
+    },
+    {
+      "path": "governance/evidence/ui/security-20261021/visual-comparison.json",
+      "sha256": "7a6787110594cbb58cdefc1a1a197310cc6bc1f995146a7a9746c6bc8513f594"
     }
   ],
   "role_reviews_ref": "governance/evidence/TUN-P2-004-ROLE-REVIEWS.json",
   "ui_evidence_ref": "governance/evidence/TUN-P2-004-UI-COMPLIANCE.json",
-  "product_acceptance_ref": "governance/evidence/AMD0009-CURRENT-UI-PRODUCT-ACCEPTANCE.json"
+  "product_acceptance_ref": "governance/evidence/AMD0009-CURRENT-UI-PRODUCT-ACCEPTANCE.json",
+  "delta_validation_ref": "governance/evidence/TUN-P2-004-SECURITY-REVALIDATION-20261021.json"
 }
