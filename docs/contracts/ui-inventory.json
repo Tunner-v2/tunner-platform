@@ -1659,12 +1659,16 @@
         "src/Modules/Identity/AuthenticationEndpoints.cs",
         "src/Modules/Identity/IdentityWebAssets.cs"
       ],
-      "screen_ids": [
-        "U-AUTH-01"
-      ],
       "observed_defects": [],
       "validation_state": "IMPLEMENTED_SOURCE_VALIDATION_PENDING",
-      "consent_ref": "governance/evidence/TUN-P2-005-VISUAL-CONSENT-20261021.json"
+      "consent_ref": "governance/evidence/TUN-P2-005-VISUAL-CONSENT-20261021.json",
+      "screen_id": "U-AUTH-01",
+      "fields": [
+        "email",
+        "password",
+        "remember"
+      ],
+      "backend_validation": "Independent strict JSON, policy length, current verified contact, framework credential verification, Account restriction, origin/CSRF/context and abuse/idempotency checks"
     }
   ],
   "excluded_historical_designs": [
