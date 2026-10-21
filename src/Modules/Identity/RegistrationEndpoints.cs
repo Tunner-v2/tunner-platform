@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Routing;
-using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Tunner.Platform.Operations;
@@ -31,6 +30,7 @@ public static class RegistrationEndpoints
         if (required.Any(type => !services.Any(x => x.ServiceType == type)))
             throw new InvalidOperationException("Registration requires explicit policy, blocklist, notification, content, key and persistence providers.");
         services.TryAddSingleton(TimeProvider.System);
+        services.TryAddSingleton<IdentityWebAssets>();
         services.AddScoped<AccountPersonalInformationApplication>();
         services.AddScoped<IAccountCommercialEligibilityReader>(sp => sp.GetRequiredService<AccountPersonalInformationApplication>());
         services.AddScoped<IRegistrationApplication, RegistrationApplication>();
@@ -187,21 +187,9 @@ public static class RegistrationEndpoints
     }
     private static void MapPackagedWebAssets(IEndpointRouteBuilder endpoints)
     {
-        var root = Path.Combine(AppContext.BaseDirectory, "wwwroot", "registration");
-        if (!Directory.Exists(root)) return;
-        var types = new FileExtensionContentTypeProvider();
-        foreach (var path in Directory.EnumerateFiles(root, "*", SearchOption.AllDirectories))
-        {
-            var name = Path.GetRelativePath(root, path).Replace('\\', '/');
-            if (!types.TryGetContentType(path, out var contentType)) continue;
-            var routes = name == "index.html" ? ScreenPaths : ["/registration/" + name];
-            foreach (var route in routes) endpoints.MapGet(route, (HttpContext context) =>
-            {
-                context.Response.Headers.ContentSecurityPolicy = "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self'; font-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'none'; frame-ancestors 'none'; form-action 'self'";
-                context.Response.Headers["Referrer-Policy"] = "no-referrer";
-                return Results.File(path, contentType);
-            }).AllowAnonymous();
-        }
+        var assets = endpoints.ServiceProvider.GetRequiredService<IdentityWebAssets>();
+        assets.MapAssets(endpoints);
+        assets.MapScreens(endpoints, "index.html", ScreenPaths, static _ => true);
     }
     private sealed record BrowserContext(string Id, DateTimeOffset ExpiresAt, Guid RegistrationKey = default);
 }

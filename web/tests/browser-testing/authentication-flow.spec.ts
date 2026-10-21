@@ -1,0 +1,16 @@
+import { test, expect } from '@playwright/test';
+import { readFileSync } from 'node:fs';
+import { randomUUID } from 'node:crypto';
+const state=JSON.parse(readFileSync('../artifacts/browser-testing/runtime.json','utf8').replace(/^\uFEFF/,''));
+
+test('verified local account can sign in refresh and sign out through the real BFF',async({page,request})=>{
+ const email='auth-'+randomUUID()+'@example.test';const password='Local unique authentication passphrase 2026!';
+ await page.goto('/registration');await page.getByLabel('Email address').fill(email);await page.getByLabel('Password',{exact:true}).fill(password);await page.getByLabel('Confirm password').fill(password);await page.getByRole('checkbox').check();await page.getByRole('button',{name:'Continue',exact:true}).click();await expect(page.getByRole('heading',{name:'Check your email'})).toBeVisible();
+ let messageId='';await expect.poll(async()=>{const inbox=await(await request.get('http://127.0.0.1:'+state.MailpitPort+'/api/v1/messages')).json();const message=inbox.messages.find((m:{ID:string,To:{Address:string}[]})=>m.To.some(a=>a.Address===email));messageId=message?.ID??'';return Boolean(messageId);},{timeout:20000}).toBe(true);
+ const mail=await(await request.get('http://127.0.0.1:'+state.MailpitPort+'/api/v1/message/'+messageId)).json();const code=mail.Text.match(/code is: (\d{6})/);expect(code).not.toBeNull();await page.getByLabel('Verification code').fill(code[1]);await page.getByRole('button',{name:'Verify email',exact:true}).click();await expect(page.getByRole('heading',{name:'Personal Information'})).toBeVisible();
+ await page.getByLabel('Full name',{exact:true}).fill('Synthetic Authentication Test');await page.getByLabel('Date of birth (required)').fill('2015-01-01');await page.getByRole('button',{name:'Continue',exact:true}).click();await expect(page.getByRole('heading',{name:'Your email is verified'})).toBeVisible();
+ await page.goto('/login');await expect(page.getByRole('heading',{name:'Welcome back'})).toBeVisible();await page.getByLabel('Email address').fill(email);await page.getByLabel('Password',{exact:true}).fill(password);const auth=page.waitForResponse(r=>r.url().endsWith('/authentication/sign-in')&&r.request().method()==='POST');await page.getByRole('button',{name:'Sign in',exact:true}).click();const signed=await auth;expect(signed.status(),await signed.text()).toBe(200);
+ await expect(page).toHaveURL(/\/signed-in$/);await expect(page.getByRole('heading',{name:'You’re signed in'})).toBeVisible();await page.reload();await expect(page.getByRole('heading',{name:'You’re signed in'})).toBeVisible();await page.screenshot({path:'../artifacts/browser-testing/signed-in-browser-test.png',fullPage:true});
+ const cookie=(await page.context().cookies()).find(c=>c.name==='__Host-Tunner.User.Session');expect(cookie?.httpOnly).toBe(true);expect(cookie?.secure).toBe(true);expect(await page.evaluate(()=>({local:localStorage.length,session:sessionStorage.length,hasBearer:document.cookie.includes('__Host-Tunner.User.Session')}))).toEqual({local:0,session:0,hasBearer:false});
+ await page.getByRole('button',{name:'Sign out',exact:true}).click();await expect(page).toHaveURL(/\/login$/);await page.goto('/signed-in');await expect(page).toHaveURL(/\/login$/);
+});
