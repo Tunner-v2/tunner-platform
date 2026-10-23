@@ -1,0 +1,96 @@
+{
+  "schema_version": 1,
+  "scope_id": "TUN-P2-005",
+  "status": "ENGINEERING_PASS_UI_ACCEPTANCE_BLOCKED",
+  "reviewed_commit_sha": "100cccd26f34211810e6c2bcf2a72242f5872c22",
+  "provenance": "Executing agent applying activated specialist contracts; not independent human review, Product acceptance or release approval.",
+  "reviews": [
+    {
+      "role": "full-stack-engineer",
+      "skill_hash": "59adbe2133cf4ce88cbc9ca4eafce1d5a9d83b9562b6580c1571e6fc148d46b5",
+      "result": "PASS_ENGINEERING",
+      "review_ref": "governance/reviews/REV-TUN-P2-005-full-stack-engineer.yaml"
+    },
+    {
+      "role": "tester-qa-engineer",
+      "skill_hash": "52aee18f251a614e339adba9f7c886a5da1ef4ab0482ae6b77044184128415c6",
+      "result": "PASS_ENGINEERING",
+      "review_ref": "governance/reviews/REV-TUN-P2-005-tester-qa-engineer.yaml"
+    },
+    {
+      "role": "solution-architect",
+      "skill_hash": "664ffba70d0f97e75951c3548b7f8391854781e4cf90cc50fc8829543783a35b",
+      "result": "PASS_ENGINEERING",
+      "review_ref": "governance/reviews/REV-TUN-P2-005-solution-architect.yaml"
+    },
+    {
+      "role": "cyber-security-engineer",
+      "skill_hash": "2d32ff3d7fb503f29cf930e9852ed4a757bb48a08e3fa4e3f6d5a23139a47f97",
+      "result": "PASS_ENGINEERING",
+      "review_ref": "governance/reviews/REV-TUN-P2-005-cyber-security-engineer.yaml"
+    },
+    {
+      "role": "auditor",
+      "skill_hash": "191c796fc5df0332ff2c3c464ca611d2c6d3ffc5ba7e2807986a71ad2e40d921",
+      "result": "PASS_ENGINEERING",
+      "review_ref": "governance/reviews/REV-TUN-P2-005-auditor.yaml"
+    },
+    {
+      "role": "compliance-specialist",
+      "skill_hash": "38f8de27e31b3ae5cec070320d9b408d6f75682b024322f5e37585c76921303e",
+      "result": "PASS_ENGINEERING",
+      "review_ref": "governance/reviews/REV-TUN-P2-005-compliance-specialist.yaml"
+    },
+    {
+      "role": "sdk-engineer",
+      "skill_hash": "c64a66b2e19bccdbf69f13c9db62e9e2cbb0403f384591a93b5b787dc33b07ae",
+      "result": "PASS_ENGINEERING",
+      "review_ref": "governance/reviews/REV-TUN-P2-005-sdk-engineer.yaml"
+    },
+    {
+      "role": "ui-ux-engineer",
+      "skill_hash": "498ff7e4b46012b1e90773cd29ebac903d7ac83767d739cc327d9b69a3b4c5c2",
+      "result": "ENGINEERING_PASS_PRODUCTION_UI_BLOCKED",
+      "review_ref": "governance/reviews/REV-TUN-P2-005-ui-ux-engineer.yaml"
+    },
+    {
+      "role": "frontend-engineer",
+      "skill_hash": "3472e745aa478457939b1aeeba319f72989bb9e97791e458f0b9979ec1b538d7",
+      "result": "PASS_ENGINEERING",
+      "review_ref": "governance/reviews/REV-TUN-P2-005-frontend-engineer.yaml"
+    },
+    {
+      "role": "end-user-ux-reviewer",
+      "skill_hash": "cfaa2eeffd945eef70a6ff1023b1af42fc0413add7b357b2fcd914473e976665",
+      "result": "ENGINEERING_PASS_PRODUCTION_UI_BLOCKED",
+      "review_ref": "governance/reviews/REV-TUN-P2-005-end-user-ux-reviewer.yaml"
+    },
+    {
+      "role": "content-writer",
+      "skill_hash": "9683a7f4aa8e50e2922fb7bbc74238d2d7bdb8ce2a81f922030c45ce9258e130",
+      "result": "PASS_ENGINEERING",
+      "review_ref": "governance/reviews/REV-TUN-P2-005-content-writer.yaml"
+    },
+    {
+      "role": "rd-engineer",
+      "skill_hash": "2834c223dfd847a6d7cd28f52de4113efc574d621391d059e8dc1469bdf33187",
+      "result": "PASS_ENGINEERING",
+      "review_ref": "governance/reviews/REV-TUN-P2-005-rd-engineer.yaml"
+    },
+    {
+      "role": "devops-engineer",
+      "skill_hash": "0def19cfd8cf73f9fe47851ab171d3154e7e80b4675ded65964f10856789b50c",
+      "result": "PASS_ENGINEERING",
+      "review_ref": "governance/reviews/REV-TUN-P2-005-devops-engineer.yaml"
+    }
+  ],
+  "checks": [
+    "Real77 backend,31 unit,54 dev-browser,3 real-browser and7 starter safety checks pass with zero final failures/skips.",
+    "No initial DOB gate or age-only normal-session rejection; independent scoped Account authority remains mandatory.",
+    "Shared form/error/route, cookie/CSRF/origin, policy, persistence and outbox capabilities are reused.",
+    "User prohibits Figma/Drive edits; exact manual changes are provided and no external mutation occurred.",
+    "Migration downgrade guard, route/form inventory regression, eager response-body test wait and suite evidence deletion were found and corrected.",
+    "All13 unrelated dirty files remain byte-identical and excluded."
+  ],
+  "required_owner_action": "Apply exact manual Figma changes, return the new signed-in node reference, then read-only reverify and complete scoped native UI/revision gates."
+}

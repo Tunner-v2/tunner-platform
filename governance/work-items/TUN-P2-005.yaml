@@ -4,7 +4,7 @@
   "milestone_id": "P2",
   "sprint_id": null,
   "title": "Authentication and server-managed BFF sessions",
-  "status": "BACKLOG",
+  "status": "CODE_REVIEW",
   "type": "FEATURE",
   "authority_refs": [
     "docs/authority/current-authority.json",
@@ -22,18 +22,21 @@
     "docs/authority/current/decisions/AMD-0008_Approved_Figma_Visual_Fidelity_and_Product_Owner_UX_Consent.md",
     "docs/authority/current/development/10_UI_UX_Components_Widgets_and_Plugins_Development_Rules.md",
     "docs/authority/current/development/31_UI_UX_Screen_and_Control_Center_Requirements_Matrix.md",
-    "docs/authority/current/development/35_AI_Agent_Skill_Catalog_and_Review_Contracts.md"
+    "docs/authority/current/development/35_AI_Agent_Skill_Catalog_and_Review_Contracts.md",
+    "docs/authority/current/decisions/AMD-0009_URL_Addressable_Routing_and_Governed_Form_Validation.md"
   ],
   "flow_refs": [
     "docs/authority/current/development/34_Architecture_to_Development_Traceability_Matrix.md"
   ],
   "contract_refs": [
-    "docs/authority/current/development/32_Domain_API_Event_Data_and_Policy_Contract_Catalog.md"
+    "docs/authority/current/development/32_Domain_API_Event_Data_and_Policy_Contract_Catalog.md",
+    "docs/contracts/authentication-session-contract.md"
   ],
   "decision_refs": [
     "ADR-0006",
     "PDR-0011",
-    "AMD-0008"
+    "AMD-0008",
+    "AMD-0009"
   ],
   "acceptance_criteria": [
     "Implement password authentication and sign-out through server-managed Tunner/BFF sessions and versioned policy values.",
@@ -54,7 +57,7 @@
     "financial": false,
     "compliance": true,
     "security": true,
-    "devops": false,
+    "devops": true,
     "support": false,
     "api": true
   },
@@ -69,10 +72,12 @@
     "ui-ux-engineer",
     "frontend-engineer",
     "end-user-ux-reviewer",
-    "content-writer"
+    "content-writer",
+    "rd-engineer",
+    "devops-engineer"
   ],
   "required_tests": [
-    "cookie/session boundary and restricted/closed Account rejection",
+    "cookie/session boundary; policy-scoped restricted/closing Account access and closed Account rejection; no age-only denial",
     "rotation/expiry/revocation/idempotent sign-out",
     "browser token absence and approved login UX"
   ],
@@ -80,8 +85,50 @@
     "governance/evidence/TUN-P2-005-VALIDATION.json"
   ],
   "context_policy": "TASK",
-  "todos": [],
-  "defects": [],
+  "todos": [
+    "TODO-TUN-P2-005-FIGMA001"
+  ],
+  "defects": [
+    "DEF-TUN-P2-005-UI-001"
+  ],
   "created_at": "2026-10-16T17:48:49.296Z",
-  "updated_at": "2026-10-17T21:42:07.653Z"
+  "updated_at": "2026-10-21T18:52:06.134Z",
+  "ui_evidence_ref": "governance/evidence/TUN-P2-005-UI-COMPLIANCE.json",
+  "git_state": {
+    "repository_changed": true,
+    "validated_commit_sha": "100cccd26f34211810e6c2bcf2a72242f5872c22",
+    "tested_commit_sha": "100cccd26f34211810e6c2bcf2a72242f5872c22",
+    "work_item_commit_shas": [
+      "5289d15d492f1f91f7c4e223638521eb40e9052d",
+      "71412fed9d47b5f58990eb7386f565049e910e9d",
+      "17693a93e4263fd718833d7510bc75a79db2d5df",
+      "6de2b72348fa4956535862b41220fb131326a389",
+      "673247ed049c7b41703dd4ab9c2d8043df970127",
+      "21b628970443f77e7fe203f76e57165f5b59aa34",
+      "a8f7f3740c718c49a517fbac504f7f3e062763be",
+      "e1a979ada9ca4828c2f404489fadf055031cb910",
+      "0a21bc4f2bf1f94f43ef19d61e9b5fb5e46fa061",
+      "32a7f7559adc2bfc5d661784510d6b2bdb860a4c",
+      "73fb504750942c8bf9cc380dfbfe7f3d58cef11e",
+      "95e0aeae8f1c6bc3372510c59f62a3eb7e484cbc",
+      "100cccd26f34211810e6c2bcf2a72242f5872c22"
+    ],
+    "closure_commit_sha": null,
+    "remaining_uncommitted_paths": [
+      "docs/context/current/HANDOFF.md",
+      "docs/context/current/adaptive-selection.json",
+      "docs/context/current/authority.md",
+      "docs/context/current/contracts.md",
+      "docs/context/current/git-changes.md",
+      "docs/context/current/manifest.json",
+      "docs/context/current/relevant-flows.md",
+      "docs/context/current/summary.md",
+      "docs/context/current/tests.md",
+      "docs/project/CURRENT_STATE.md",
+      "docs/project/HANDOFF.md",
+      "docs/project/PROJECT_CONTEXT.md",
+      ".vscode/settings.json"
+    ],
+    "remaining_uncommitted_classification": "PREEXISTING_UNRELATED"
+  }
 }

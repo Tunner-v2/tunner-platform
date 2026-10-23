@@ -43,7 +43,11 @@ try
     var metadata = new PolicyVersionCandidate<string>(policy.Version, "ACTIVE", "REGISTRATION",
         new EffectivePolicyInterval(DateTimeOffset.UtcNow.AddDays(-1), true, null, false), null, ["SYNTHETIC-LOCAL-TEST-ONLY"]);
     var age = new BrowserTestAgePolicies();
-    var app = TunnerUserBffHost.CreateApplication([], builder =>
+    var authenticationPolicy = new AuthenticationPolicy("browser-test-auth-v1", "test-only-processing", "test-only-retention", "test-only-password-assurance", 128, 10000,
+        TimeSpan.FromMinutes(30), TimeSpan.FromMinutes(5), TimeSpan.FromHours(8), TimeSpan.FromMinutes(20), TimeSpan.FromMinutes(10), TimeSpan.FromMinutes(1), 1000, 100);
+    var authenticationMetadata = new PolicyVersionCandidate<string>(authenticationPolicy.Version, "ACTIVE", "AUTHENTICATION",
+        new EffectivePolicyInterval(DateTimeOffset.UtcNow.AddDays(-1), true, null, false), null, ["SYNTHETIC-LOCAL-TEST-ONLY"]);
+    var app = TunnerAuthenticatedUserBffHost.CreateApplication([], builder =>
     {
         builder.Configuration.AddInMemoryCollection(new Dictionary<string, string?> { ["Bff:BrowserOrigin"] = origin });
         builder.WebHost.ConfigureKestrel(server => server.Listen(IPAddress.Loopback, config.ApplicationPort, endpoint => endpoint.UseHttps(certificate)));
@@ -51,6 +55,10 @@ try
             .PersistKeysToFileSystem(new DirectoryInfo(Path.Combine(directory, "keys")));
         if (OperatingSystem.IsWindows()) protection.ProtectKeysWithDpapi();
         builder.Services.AddTunnerIdentityPersistence(connectionString);
+        builder.Services.AddSingleton<IAuthenticationPolicySource>(new AuthenticationPolicyCatalog([new(authenticationMetadata, authenticationPolicy)]));
+        builder.Services.AddSingleton<IAccountAuthenticationAccessSource, BrowserTestAuthenticationAccess>();
+        builder.Services.AddSingleton<IAuthenticationPresentationSource>(new BrowserTestAuthenticationPresentation(origin));
+        builder.Services.AddSingleton(new AuthenticationPartitionKey(RandomNumberGenerator.GetBytes(32)));
         builder.Services.AddSingleton<IRegistrationPolicySource>(new RegistrationPolicyCatalog([new(metadata, policy)]));
         builder.Services.AddSingleton<IAccountAgePolicySource>(age);
         builder.Services.AddSingleton<IAccountConsentEvidenceSource>(age);
@@ -150,4 +158,22 @@ internal sealed class BrowserTestMailpit(int smtpPort) : IRegistrationNotificati
         finally { gate.Release(); }
     }
     public void Dispose() => gate.Dispose();
+}
+
+// Synthetic Account access and content providers are confined to this explicitly Development-only executable.
+internal sealed class BrowserTestAuthenticationAccess : IAccountAuthenticationAccessSource
+{
+    public ValueTask<AccountAuthenticationAccessDecision> RequireAsync(AccountAuthenticationAccessRequest request, CancellationToken cancellationToken) =>
+        ValueTask.FromResult(new AccountAuthenticationAccessDecision(request.AccountId, request.StateVersion, request.Operation, request.State == AccountState.Active,
+            "test-only-access", "SYNTHETIC-LOCAL-TEST-ONLY", new EffectivePolicyInterval(request.EffectiveAt.AddMinutes(-1), true, request.EffectiveAt.AddMinutes(1), false)));
+}
+internal sealed class BrowserTestAuthenticationPresentation(string origin) : IAuthenticationPresentationSource
+{
+    public AuthenticationPresentation RequirePublished(AuthenticationPolicy policy)
+    {
+        using var proposal = JsonDocument.Parse(File.ReadAllText(Path.Combine(AppContext.BaseDirectory, "browser-test-authentication-content.json")));
+        var values = proposal.RootElement.GetProperty("content").EnumerateObject().Select(p => new RegistrationPublishedText(p.Name,
+            "synthetic-test-variant", "synthetic-test-version", "LOCAL-TEST-NOT-A-PUBLICATION", "en", "PUBLISHED", p.Value.GetString()!));
+        return new("en", values, new(origin + "/browser-testing/terms"), new(origin + "/browser-testing/privacy"), new(origin + "/browser-testing/support"));
+    }
 }

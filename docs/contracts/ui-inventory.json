@@ -417,16 +417,20 @@
     {
       "id": "U-AUTH-01",
       "kind": "SCREEN",
-      "status": "PLANNED",
+      "status": "IMPLEMENTED",
       "app": "user",
-      "module": "U-AUTH",
-      "title": "Sign in",
+      "module": "Identity.Authentication",
+      "title": "Login",
       "requirements": "Email/password, passkey where supported, Google, Microsoft; safe errors; Product-origin OAuth context preserved",
-      "pathname": null,
-      "runtime_pathname": null,
-      "guard": "Resolve from owning FRD and current authorization before implementation",
-      "owner_scopes": [],
+      "pathname": "/login",
+      "runtime_pathname": "/login",
+      "guard": "Anonymous credential transaction; protected browser context, policy, origin and CSRF required for sign-in",
+      "owner_scopes": [
+        "TUN-P2-005",
+        "P1-018-RV003"
+      ],
       "authority_refs": [
+        "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md",
         "docs/authority/current/development/31_UI_UX_Screen_and_Control_Center_Requirements_Matrix.md"
       ],
       "figma_refs": [
@@ -435,10 +439,27 @@
           "node_id": "2:4"
         }
       ],
-      "source_paths": [],
-      "planning_status": "OWNER_AND_ROUTE_REFINEMENT_REQUIRED",
-      "design_status": "EXISTING_DESIGN",
-      "acceptance_boundary": "Unimplemented: no PASS inherited from registration and no feature implementation authorized by this inventory."
+      "source_paths": [
+        "web/apps/user/authentication.tsx",
+        "web/apps/user/authentication.css",
+        "web/apps/user/authentication.routes.ts",
+        "web/apps/user/authentication.validation.ts",
+        "src/Modules/Identity/AuthenticationEndpoints.cs",
+        "src/Modules/Identity/IdentityWebAssets.cs"
+      ],
+      "planning_status": "PASSWORD_SLICE_IMPLEMENTED_FUTURE_AUTH_FEATURES_DEFERRED",
+      "design_status": "SCOPED_CONSENT_OWNER_FIGMA_UPDATE_PENDING",
+      "acceptance_boundary": "Implemented P2-005 password slice only. Passkeys, federation, Product-origin OAuth and recovery remain separate work items. UI_VISUAL_APPROVAL awaits required owner Figma updates; no inherited registration acceptance.",
+      "parameter_schema": {},
+      "form_ids": [
+        "FORM-LOGIN"
+      ],
+      "observed_defects": [
+        "UI_FIDELITY_DEFECT"
+      ],
+      "routing_state": "IMPLEMENTED",
+      "visual_state": "PRODUCT_SCOPED_CONSENT_FIGMA_UPDATE_PENDING",
+      "consent_ref": "governance/evidence/TUN-P2-005-VISUAL-CONSENT-20261021.json"
     },
     {
       "id": "U-AUTH-04",
@@ -1558,6 +1579,96 @@
       "planning_status": "OWNER_AND_ROUTE_REFINEMENT_REQUIRED",
       "design_status": "EXISTING_DESIGN",
       "acceptance_boundary": "Existing same-screen design variant; no independent pathname is inferred."
+    },
+    {
+      "id": "U-AUTH-SIGNED-IN",
+      "kind": "SCREEN",
+      "status": "IMPLEMENTED",
+      "app": "user",
+      "module": "Identity.Authentication",
+      "title": "Signed-in confirmation",
+      "pathname": "/signed-in",
+      "runtime_pathname": "/signed-in",
+      "parameter_schema": {},
+      "guard": "Authoritative current User session; anonymous/expired/revoked direct entry redirects to /login; client rechecks on every history revision",
+      "owner_scopes": [
+        "TUN-P2-005",
+        "P1-018-RV003"
+      ],
+      "authority_refs": [
+        "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md",
+        "docs/authority/current/development/31_UI_UX_Screen_and_Control_Center_Requirements_Matrix.md"
+      ],
+      "figma_refs": [
+        {
+          "file_key": "apNbwvAgdn1xIxYH1oiaSC",
+          "node_id": "70:630"
+        }
+      ],
+      "figma_reference_status": "APPROVED_COMPOSITION_REUSE_NEW_FRAME_PENDING_OWNER_UPDATE",
+      "source_paths": [
+        "web/apps/user/authentication.tsx",
+        "web/apps/user/authentication.css",
+        "web/apps/user/authentication.routes.ts",
+        "web/apps/user/authentication.validation.ts",
+        "src/Modules/Identity/AuthenticationEndpoints.cs",
+        "src/Modules/Identity/IdentityWebAssets.cs"
+      ],
+      "form_ids": [],
+      "observed_defects": [
+        "UI_REQUIRED"
+      ],
+      "routing_state": "IMPLEMENTED",
+      "visual_state": "PRODUCT_SCOPED_CONSENT_FIGMA_UPDATE_PENDING",
+      "consent_ref": "governance/evidence/TUN-P2-005-VISUAL-CONSENT-20261021.json"
+    },
+    {
+      "id": "FORM-LOGIN",
+      "kind": "FORM",
+      "status": "IMPLEMENTED",
+      "app": "user",
+      "module": "Identity.Authentication",
+      "title": "Password sign-in",
+      "pathname": "/login",
+      "runtime_pathname": "/login",
+      "parameter_schema": {},
+      "guard": "Anonymous credential transaction requires protected browser operation, CSRF and same-origin checks; independent server credential/policy/Account validation",
+      "owner_scopes": [
+        "TUN-P2-005",
+        "P1-018-RV003"
+      ],
+      "authority_refs": [
+        "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md",
+        "docs/authority/current/development/31_UI_UX_Screen_and_Control_Center_Requirements_Matrix.md"
+      ],
+      "figma_refs": [
+        {
+          "file_key": "apNbwvAgdn1xIxYH1oiaSC",
+          "node_id": "2:4"
+        },
+        {
+          "file_key": "apNbwvAgdn1xIxYH1oiaSC",
+          "node_id": "70:1257"
+        }
+      ],
+      "source_paths": [
+        "web/apps/user/authentication.tsx",
+        "web/apps/user/authentication.css",
+        "web/apps/user/authentication.routes.ts",
+        "web/apps/user/authentication.validation.ts",
+        "src/Modules/Identity/AuthenticationEndpoints.cs",
+        "src/Modules/Identity/IdentityWebAssets.cs"
+      ],
+      "observed_defects": [],
+      "validation_state": "IMPLEMENTED_SOURCE_VALIDATION_PENDING",
+      "consent_ref": "governance/evidence/TUN-P2-005-VISUAL-CONSENT-20261021.json",
+      "screen_id": "U-AUTH-01",
+      "fields": [
+        "email",
+        "password",
+        "remember"
+      ],
+      "backend_validation": "Independent strict JSON, policy length, current verified contact, framework credential verification, Account restriction, origin/CSRF/context and abuse/idempotency checks"
     }
   ],
   "excluded_historical_designs": [

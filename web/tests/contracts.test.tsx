@@ -1,3 +1,4 @@
+import { authenticationRoutes } from '../apps/user/authentication.routes';
 import { registrationSchema, verificationSchema, personalInformationSchema, validBirthDate } from '../apps/user/validation';
 import { registrationRoutes } from '../apps/user/routes';
 import inventory from '../../docs/contracts/ui-inventory.json' with { type: 'json' };
@@ -63,8 +64,8 @@ test('DOB schema is calendar-safe and rejects future dates without client age el
  for(const date of ['2024-02-29','0099-01-01','2026-10-17','2015-01-01'])assert.equal(validBirthDate(date,'2026-10-17'),true,date);
 });
 test('every implemented screen route agrees with the central inventory and known BFF fallback contract',()=>{
- const rows=inventory.items.filter(row=>row.kind==='SCREEN'&&row.status==='IMPLEMENTED');assert.equal(rows.length,Object.keys(registrationRoutes).length);
- for(const route of Object.values(registrationRoutes)){const row=rows.find(r=>r.id===route.id);assert.ok(row);assert.equal(row.pathname,route.pathname);assert.equal(row.runtime_pathname,route.pathname);assert.ok(row.guard);assert.ok(row.figma_refs.length);}
+ const rows=inventory.items.filter(row=>row.kind==='SCREEN'&&row.status==='IMPLEMENTED'&&row.app==='user');const routes=[...Object.values(registrationRoutes),...Object.values(authenticationRoutes)];assert.equal(rows.length,routes.length);
+ for(const route of routes){const row=rows.find(r=>r.id===route.id);assert.ok(row);assert.equal(row.pathname,route.pathname);assert.equal(row.runtime_pathname,route.pathname);assert.ok(row.guard);assert.ok(row.figma_refs.length);}
  assert.deepEqual(Object.values(registrationRoutes).map(r=>r.pathname),onboarding['x-tunner-screen-paths']);
- assert.equal(inventory.items.filter(row=>row.kind==='FORM'&&row.status==='IMPLEMENTED').length,3);
+ const forms=inventory.items.filter(row=>row.kind==='FORM'&&row.status==='IMPLEMENTED');const formScreens=new Set(routes.map(route=>route.id));assert.ok(forms.every(form=>form.screen_id!==undefined&&formScreens.has(form.screen_id as typeof routes[number]['id'])));assert.ok(forms.some(form=>form.id==='FORM-LOGIN'));assert.equal(new Set(forms.map(form=>form.id)).size,forms.length);
 });

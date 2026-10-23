@@ -113,9 +113,10 @@ function Get-BrowserStatus {
 function Show-BrowserAddresses {
     param($State)
     Write-Host ('Application: https://localhost:' + $State.ApplicationPort + '/registration')
+    Write-Host ('Sign-in test: https://localhost:' + $State.ApplicationPort + '/login')
     Write-Host ('Verification inbox: http://127.0.0.1:' + $State.MailpitPort)
     Write-Host ('PostgreSQL: 127.0.0.1:' + $State.PostgresPort + ' -> container 5432; database tunner_browser_testing')
-    Write-Host 'ISOLATED LOCAL TEST DATA ONLY. Registration, verification and Personal Information are available. Sign-in and later P2 features are still under development.'
+    Write-Host 'ISOLATED LOCAL TEST DATA ONLY. Registration, verification, Personal Information and password sign-in/sign-out are available for isolated engineering testing. Production visual acceptance and later P2 features remain pending.'
 }
 function Open-BrowserAddresses {
     param($State)
@@ -247,7 +248,7 @@ try {
     }
     $options = [TunnerBrowserLocalHttps]::Get(('https://localhost:' + $state.ApplicationPort + '/registration/options'),$state.CertificateSha256) | ConvertFrom-Json
     if ($options.policyVersion -ne 'browser-test-registration-v2') { throw 'The registration providers did not pass the test-mode readiness check.' }
-    Write-Host 'Ready: database migrations, HTTPS, real registration API, packaged UI and local verification delivery.'
+    Write-Host 'Ready: database migrations, HTTPS, registration/authentication APIs, packaged UI and local verification delivery.'
     Show-BrowserAddresses $state
     Open-BrowserAddresses $state
 } catch {
