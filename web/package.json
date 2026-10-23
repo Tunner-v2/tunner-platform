@@ -12,7 +12,7 @@
     "typecheck": "tsc --noEmit",
     "build": "pnpm theme:check && pnpm typecheck && vite build --config packages/ui/vite.config.ts && vite build --config fixtures/ui/vite.config.ts && vite build --config apps/user/vite.config.ts",
     "test": "node --test tests/theme.test.mjs && vite build --config tests/vite.config.ts && node --test tests/dist/contracts.test.js",
-    "test:browser": "playwright test && playwright test --config playwright.registration.config.ts",
+    "test:browser": "playwright test && playwright test --config playwright.registration.config.ts && playwright test --config playwright.authentication.config.ts",
     "fixture": "vite --config fixtures/ui/vite.config.ts"
   },
   "devDependencies": {
@@ -24,7 +24,7 @@
     "@types/react-dom": "19.2.3",
     "tailwindcss": "4.3.3",
     "typescript": "5.9.3",
-    "vite": "8.2.2",
+    "vite": "8.2.4",
     "react": "19.2.8",
     "react-dom": "19.2.8"
   }

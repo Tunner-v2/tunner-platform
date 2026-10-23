@@ -1,0 +1,48 @@
+{
+  "schema_version": 1,
+  "evidence_id": "P1-RV001-001-RD-SECURITY-REBUILDS-20261021",
+  "scope_type": "WORK_ITEM",
+  "scope_id": "P1-RV001-001",
+  "status": "PASS_RESEARCH_NOT_RELEASE",
+  "reviewed_at": "2026-10-21",
+  "sources": [
+    {
+      "component": "Go toolchain",
+      "url": "https://go.dev/doc/devel/release",
+      "finding": "Go1.27.3 released2026-10-19 adds crypto/x509 security fixes. Official download metadata and pinned golang1.27.3-bookworm image manifest were verified. Rebuilds retain actual Go binary module metadata."
+    },
+    {
+      "component": "PostgreSQL and gosu",
+      "url": "https://github.com/tianon/gosu/tree/6456aaa0f3c854d199d0f037f068eb97515b7513",
+      "finding": "Preserve PostgreSQL18.6 baseline digest5a5a84b19854a9ffaa54082c166ff4ec27473a361e496e5ea167f298f2da9722 and gosu1.19 source commit. Rebuild gosu withGo1.27.3 and install the exact signed Debian pcre2/OpenSSL fixes identified by actual scans."
+    },
+    {
+      "component": "OpenBao",
+      "url": "https://openbao.org/community/contributing/packaging/",
+      "finding": "Use released2.7.1 source distribution with embedded UI, checksum6da0c07e61d8dfd2ab72ad47cb96691fb7abfecd460a55272545346575c37711. Regenerate vendor tree for x/net0.60.0; stamp numeric semantic version2.7.1, source commit and commit timestamp. Default runtime API/Raft behavior preserved."
+    },
+    {
+      "component": "Mailpit",
+      "url": "https://github.com/axllent/mailpit/releases/tag/v1.31.6",
+      "finding": "Version1.31.6 and multi-platform index digest23fe39e81bde596a918000b3135c0f85dc8bb4c9ea6be274b051143f3e300387 verified; actual vulnerability scan and isolated SMTP/API checks pass."
+    },
+    {
+      "component": "Complete LGTM stack",
+      "url": "https://github.com/grafana/docker-otel-lgtm/blob/v0.37.0/docker/Dockerfile",
+      "finding": "Latest tested vendor0.37.0 includes Grafana13.2.3, Prometheus3.15.0, Tempo3.1.0, Loki3.7.8, Pyroscope2.4.0, Collector0.162.0 and OBI0.14.0. Scan still fails; preserve every component. Signed catalog plugins are separate release artifacts."
+    },
+    {
+      "component": "Grafana plugin signature verification",
+      "url": "https://raw.githubusercontent.com/grafana/grafana/v13.2.3/pkg/plugins/manager/signature/manifest.go",
+      "finding": "Signature validation verifies executable hashes in vendor manifests. Latest signed PostgreSQL plugin13.0.4 still has5 fixable HIGH findings. No changed trust root or unsigned-plugin setting is authorized."
+    }
+  ],
+  "evidence_refs": [
+    "governance/evidence/P1-RV001-LGTM-SIGNED-PLUGIN-BOUNDARY-20261021.json",
+    "governance/evidence/P1-RV001-MAINTAINED-REBUILDS-APPROVAL-20261020.json"
+  ],
+  "limitations": [
+    "Research and private candidate validation do not approve registry publication, default adoption, protected-main merge, deployment or release.",
+    "A candidate containing an extracted file truncated by the disk-full incident was rejected despite its clean vulnerability scan. Compatibility remains an independent gate."
+  ]
+}

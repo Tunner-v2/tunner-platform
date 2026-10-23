@@ -200,6 +200,7 @@ public static class GovernanceApplication
             failures.Add($"role review evidence missing: {reviewEvidence}");
         }
 
+        UiComplianceApplication.AddGateFailures(repository, workItem, failures, satisfied);
         var roleCheck = RoleActivationApplication.CheckReviews(repository, workItem, records);
         failures.AddRange(roleCheck.Failures);
         satisfied.AddRange(roleCheck.Satisfied);
@@ -237,6 +238,14 @@ public static class GovernanceApplication
                 workItem.StringList("defects").Any(id => records.Any(x => x.Type.DefinitionName == "defect" && x.Identifier == id));
             var valid = ((ValidationPayload)Validate(repository).Payload).IsValid;
             return new CommandResult(causation && valid ? 0 : 1, "transition check", new TransitionPayload(workItemId, from, destination, causation && valid ? "ALLOWED" : "REJECTED", "Approved Document 03: reopened active acceptance/release work resumes active work with preserved completion causation."));
+        }
+        if (from == "UI_REQUIRED" && destination == "REFINEMENT")
+        {
+            var failures = ResolvedUiRequiredFailures(repository, workItem, records);
+            return new CommandResult(failures.Count == 0 ? 0 : 1, "transition check", new TransitionPayload(workItemId, from, destination,
+                failures.Count == 0 ? "ALLOWED" : "REJECTED", failures.Count == 0
+                    ? "Approved Document 10: resolved, committed and validated UI work returns to refinement; ordinary sequential lifecycle and Product acceptance remain required."
+                    : string.Join("; ", failures)));
         }
         if (policy.SideStates.Contains(from, StringComparer.Ordinal) || policy.SideStates.Contains(destination, StringComparer.Ordinal))
         {
@@ -484,7 +493,7 @@ public static class GovernanceApplication
             return;
         }
 
-        var logicalPath = $"governance/evidence/{milestone.Identifier}-MILESTONE-ROLE-REVIEWS.json";
+        var logicalPath = MilestoneReviewRevalidation.Resolve(repository, milestone, $"governance/evidence/{milestone.Identifier}-MILESTONE-ROLE-REVIEWS.json");
         var path = Path.Combine(repository.FullName, logicalPath.Replace('/', Path.DirectorySeparatorChar));
         if (!File.Exists(path))
         {
@@ -610,6 +619,34 @@ public static class GovernanceApplication
 
     internal static Dictionary<string, GovernanceRecord> WorkItems(IReadOnlyList<GovernanceRecord> records)
         => records.Where(item => item.Type.DefinitionName == "work-item" && item.Identifier.Length > 0).GroupBy(item => item.Identifier, StringComparer.Ordinal).ToDictionary(group => group.Key, group => group.First(), StringComparer.Ordinal);
+
+    private static IReadOnlyList<string> ResolvedUiRequiredFailures(DirectoryInfo repository, GovernanceRecord workItem, IReadOnlyList<GovernanceRecord> records)
+    {
+        var failures = new List<string>();
+        if (CommitReadinessApplication.Read(workItem)?.RepositoryChanged != true)
+            failures.Add("resolved UI_REQUIRED work requires committed repository-changing validation");
+        if (!workItem.Fields.TryGetValue("authority_resolution", out var node) || node is not YamlMappingNode resolution ||
+            Scalar(Fields(resolution), "outcome") != "RESOLVED_EXISTING_AUTHORITY")
+            failures.Add("resolved UI_REQUIRED work requires a recorded existing-authority resolution");
+        var uiReference = workItem.Scalar("ui_evidence_ref");
+        if (string.IsNullOrWhiteSpace(uiReference)) failures.Add("resolved UI_REQUIRED work requires scope-bound UI evidence");
+        foreach (var field in new[] { "todos", "defects" })
+        {
+            var type = field == "todos" ? "todo" : "defect";
+            var closed = field == "todos" ? new[] { "DONE", "CANCELED", "NOT_APPLICABLE", "SUPERSEDED" }
+                : new[] { "CLOSED", "RESOLVED", "NOT_APPLICABLE", "SUPERSEDED" };
+            foreach (var reference in workItem.StringList(field))
+            {
+                var matches = records.Where(record => record.Type.DefinitionName == type && record.Identifier == reference).ToArray();
+                if (matches.Length != 1 || !closed.Contains(matches[0].Scalar("status"), StringComparer.Ordinal))
+                    failures.Add("resolved UI_REQUIRED work has a missing, ambiguous or unresolved tracked " + type + ": " + reference);
+            }
+        }
+        if (failures.Count > 0) return failures;
+        failures.AddRange(((GatePayload)CheckGate(repository, workItem.Identifier).Payload).Failures);
+        failures.AddRange(((UiCompliancePayload)UiComplianceApplication.Check(repository, workItem.Identifier, uiReference!).Payload).Failures);
+        return failures.Distinct(StringComparer.Ordinal).ToArray();
+    }
 
     private static List<string> ReadinessReasons(DirectoryInfo repository, GovernanceRecord workItem, Dictionary<string, GovernanceRecord> workItems, IReadOnlyList<GovernanceRecord> dependencies, IntegrationPolicyDefinition integrationPolicy, bool allowValidatedP0Prerequisites)
     {

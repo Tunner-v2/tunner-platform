@@ -1,21 +1,6 @@
 import { test, expect } from '@playwright/test';
-import type { Page } from '@playwright/test';
-import AxeBuilder from '@axe-core/playwright';
-import proposal from '../../apps/user/content.proposal.json' with { type: 'json' };
-
-// Explicit synthetic publication/policy for browser tests only. Shipped copy remains DRAFT.
-const content=Object.fromEntries(Object.entries(proposal.content).map(([key,text])=>[key,{key,text,variantRef:'fixture-variant',versionRef:'fixture-version',publicationRef:'fixture-only-publication',locale:'en',state:'PUBLISHED'}]));
-const operationId='70fe1ab6-6d1f-4edc-a0ee-bc46f817d28a';
-function pending(version=1,nextAction='VERIFY_CONTACT'){return {operationId,correlationId:'fixture-correlation',status:'REQUIRES_ACTION',version,nextAction,expiresAt:new Date(Date.now()+300000).toISOString(),resendAfter:new Date(Date.now()-1000).toISOString()};}
-function personal(){return {...pending(2,'PERSONAL_INFORMATION'),personalInformation:{fullName:null,displayName:null,verifiedEmail:'fixture@example.test',fullNameMaximumLength:100,displayNameMaximumLength:80}};}
-function complete(){return {...pending(4,'COMPLETE'),status:'SUCCEEDED',expiresAt:null,resendAfter:null,accountId:'ACC-fixture'};}
-async function boot(page:Page){await page.route('**/registration/options',route=>route.fulfill({json:{csrfToken:'fixture-token',serverTime:new Date().toISOString(),policyVersion:'fixture-policy',termsVersion:'fixture-terms',privacyVersion:'fixture-privacy',passwordMinimumLength:15,passwordMaximumLength:128,proofDigits:6,locale:'en',content,termsUri:'https://fixture.example.test/terms',privacyUri:'https://fixture.example.test/privacy',supportUri:'https://fixture.example.test/support'}}));await page.goto('/registration/');await expect(page.getByRole('heading',{name:proposal.content['registration.heading']})).toBeVisible();await page.evaluate(()=>document.fonts.ready);}
-async function fill(page:Page){await page.getByLabel('Email address').fill('fixture@example.test');await page.getByLabel('Password',{exact:true}).fill('a unique fixture passphrase');await page.getByLabel('Confirm password',{exact:true}).fill('a unique fixture passphrase');await page.getByRole('checkbox').check();}
-async function beginVerification(page:Page){await page.route('**/registration/register',async route=>{const body=route.request().postDataJSON() as Record<string,unknown>;expect(Object.keys(body).sort()).toEqual(['acknowledgedNotices','email','idempotencyKey','password','passwordConfirmation','privacyVersion','termsVersion'].sort());await route.fulfill({status:202,json:pending()});});await boot(page);await fill(page);await page.getByRole('button',{name:'Continue',exact:true}).click();await expect(page.getByRole('heading',{name:'Check your email'})).toBeVisible();await expect(page.getByLabel('Date of birth (required)')).toHaveCount(0);}
-async function openPersonal(page:Page){await page.route('**/registration/verify',route=>route.fulfill({status:202,json:personal()}));await page.getByLabel('Verification code').fill('123456');await page.getByRole('button',{name:'Verify email',exact:true}).click();await expect(page.getByRole('heading',{name:'Personal Information'})).toBeVisible();}
-async function fillPersonal(page:Page){await page.getByLabel('Full name',{exact:true}).fill('Fixture Person');await page.getByLabel('Display name',{exact:true}).fill('Fixture');await page.getByLabel('Date of birth (required)').fill('2015-01-01');}
-async function axe(page:Page){const report=await new AxeBuilder({page}).withTags(['wcag2a','wcag2aa','wcag21aa','wcag22aa']).analyze();expect(report.violations).toEqual([]);}
-async function snapshot(page:Page,name:string){await axe(page);expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);await page.screenshot({path:'test-results/registration/'+name+'.png',fullPage:true});}
+import proposal from '../../apps/user/content.proposal.json' with { type:'json' };
+import { pending, personal, complete, boot, fill, beginVerification, openPersonal, fillPersonal, snapshot } from './support';
 
 test('registration reference geometry, local assets/fonts and no DOB or stored sensitive state',async({page})=>{
  const external:string[]=[];page.on('request',r=>{if(!r.url().startsWith('http://127.0.0.1:5189')&&!r.url().startsWith('data:'))external.push(r.url());});await boot(page);
@@ -39,7 +24,7 @@ test('confirmation and notice acceptance precede direct registration without age
  let posts=0;await page.route('**/registration/register',route=>{posts++;return route.fulfill({status:202,json:pending()});});await boot(page);
  await page.getByLabel('Email address').fill('fixture@example.test');await page.getByLabel('Password',{exact:true}).fill('a unique fixture passphrase');await page.getByLabel('Confirm password').fill('different');
  await page.getByRole('button',{name:'Continue',exact:true}).click();expect(posts).toBe(0);
- await page.getByRole('checkbox').check();await page.getByRole('button',{name:'Continue',exact:true}).click();await expect(page.getByRole('alert')).toHaveText(proposal.content['registration.error.confirmation']);expect(posts).toBe(0);
+ await page.getByRole('checkbox').check();await page.getByRole('button',{name:'Continue',exact:true}).click();await expect(page.getByRole('alert')).toHaveText(proposal.content['registration.error.highlighted']);await expect(page.locator('[data-content-key="registration.error.confirmation"]')).toHaveText(proposal.content['registration.error.confirmation']);expect(posts).toBe(0);
  await page.getByLabel('Confirm password').fill('a unique fixture passphrase');await page.getByRole('button',{name:'Continue',exact:true}).click();await expect(page.getByRole('heading',{name:'Check your email'})).toBeVisible();expect(posts).toBe(1);await expect(page.locator('input[type=date]')).toHaveCount(0);
 });
 test('proof errors/version/resend lead to normal Personal Information and under18 completion without Product/session action',async({page})=>{

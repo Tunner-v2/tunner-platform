@@ -1,0 +1,72 @@
+{
+  "schema_version": 1,
+  "scope_id": "TUN-P2-005",
+  "authority": "AMD-0008 section 4",
+  "recorded_at": "2026-10-21T17:33:07.302Z",
+  "question_item_id": "[\"request_user_input_async\",\"call_0f69ccd78b67404289aff554bf027e8c\",0]",
+  "human_response": "Approve these two visual scopes",
+  "outcome": "APPROVED_SCOPED_VISUAL_ADAPTATIONS",
+  "scopes": [
+    {
+      "screen": "U-AUTH-01",
+      "figma_node": "2:4",
+      "changes": [
+        "Hide System Status without an authoritative feed",
+        "Google and Microsoft provider slots unavailable until P2-010; GitHub deferred by prior explicit direction",
+        "Forgot password unavailable until P2-011",
+        "Shared accessible slate field, footer and separator treatment",
+        "Shared validation, focus, pending and responsive patterns",
+        "Subtitle: Enter your credentials to access your account"
+      ]
+    },
+    {
+      "screen": "U-AUTH-SIGNED-IN",
+      "canonical_path": "/signed-in",
+      "reference_figma_node": "70:630",
+      "changes": [
+        "Reuse approved Account Ready composition",
+        "Heading: You’re signed in",
+        "Subtitle: You are signed in to Tunner.",
+        "Safety note: For your security, sign out when you finish on a shared device.",
+        "Sign out button",
+        "Caption: Signing out ends your Tunner session. Connected products manage their own sessions."
+      ]
+    }
+  ],
+  "reviewed_packet": [
+    {
+      "path": "artifacts/p2-005-auth-20261021/visual-review.html",
+      "sha256": "2962dab2e4fc4a7519e1ce772e32fa5216f754b247910de4fbffb82f5dd4210d"
+    },
+    {
+      "path": "artifacts/p2-005-auth-20261021/login-proposal.html",
+      "sha256": "a1c6ac7507f8ebc7c99d4bb9890c5057eaed66a60335bfe12df9ece1b16b2ce7"
+    },
+    {
+      "path": "artifacts/p2-005-auth-20261021/signed-in-proposal.html",
+      "sha256": "b1e091ff66fb6024560de352e5383ab51f9cb2718ee0cad35c2e9202cc35dba8"
+    },
+    {
+      "path": "artifacts/p2-005-auth-20261021/login-proposal-1440.png",
+      "sha256": "ff5fe2e31abd267ac820cc8c829d74888f40dca354558ab98b5b9ec809a576eb"
+    },
+    {
+      "path": "artifacts/p2-005-auth-20261021/login-proposal-320.png",
+      "sha256": "68baea86dc068d505ef9f1c9906b5b10fe3748cfa5dcee33aee13e8caa2179cc"
+    },
+    {
+      "path": "artifacts/p2-005-auth-20261021/signed-in-proposal-1440.png",
+      "sha256": "3f43a91de7fdf7b4f2b4826502b462c54a66125f1225cce184843c02b5cc671c"
+    },
+    {
+      "path": "artifacts/p2-005-auth-20261021/signed-in-proposal-320.png",
+      "sha256": "c3a6aa228e158adb0c03e562ea4bfce3ac735b65c811aeaa3e86e46d14374a9d"
+    }
+  ],
+  "limits": [
+    "No whole-P2 acceptance",
+    "No production runtime policy approval",
+    "No protected-main merge, deployment or release approval"
+  ],
+  "synchronization_status": "APPROVED_AWAITING_FIGMA_SYNC_AND_IMPLEMENTATION_VALIDATION"
+}

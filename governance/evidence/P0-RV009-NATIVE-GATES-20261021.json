@@ -1,0 +1,79 @@
+{
+  "schema_version": 1,
+  "scope_id": "P0-RV009",
+  "result": "PASS",
+  "checked_at": "2026-10-21T16:55:30.736Z",
+  "evidence_commit_sha": "2f9c8e0562d4a301d8fcc60463de8c58c286295f",
+  "gates": [
+    {
+      "receipt": "ui-global-final.json",
+      "ExitCode": 0,
+      "Command": "ui check",
+      "Payload": {
+        "Outcome": "PASS",
+        "ScopeId": "GLOBAL_UI",
+        "CoveredItems": [
+          "U-AUTH-02",
+          "U-AUTH-03",
+          "U-AUTH-03A",
+          "U-AUTH-CONSENT",
+          "U-AUTH-RESULT",
+          "FORM-REGISTRATION",
+          "FORM-VERIFY-EMAIL",
+          "FORM-PERSONAL-INFORMATION",
+          "SHARED-FORM-USER",
+          "SHARED-FORM-ADMIN"
+        ],
+        "Failures": []
+      }
+    },
+    {
+      "receipt": "ui-rv002-close-check.json",
+      "ExitCode": 0,
+      "Command": "revision close-check",
+      "Payload": {
+        "RevisionId": "P1-018-RV002",
+        "Outcome": "PASS",
+        "Findings": [],
+        "Satisfied": []
+      }
+    },
+    {
+      "receipt": "p0-rv009-close-check.json",
+      "ExitCode": 0,
+      "Command": "revision close-check",
+      "Payload": {
+        "RevisionId": "P0-RV009",
+        "Outcome": "PASS",
+        "Findings": [],
+        "Satisfied": []
+      }
+    },
+    {
+      "receipt": "ui-rv002-close-transition.json",
+      "ExitCode": 0,
+      "Command": "revision transition check",
+      "Payload": {
+        "RevisionId": "P1-018-RV002",
+        "Outcome": "ALLOWED",
+        "Findings": [],
+        "Satisfied": []
+      }
+    },
+    {
+      "receipt": "p0-rv009-close-transition.json",
+      "ExitCode": 0,
+      "Command": "revision transition check",
+      "Payload": {
+        "RevisionId": "P0-RV009",
+        "Outcome": "ALLOWED",
+        "Findings": [],
+        "Satisfied": []
+      }
+    }
+  ],
+  "limitations": [
+    "Initial raw-hash UI rejection caused by retained CRLF checkout was corrected by restoring only26 owned receipts from committed LF blobs. Initial failing receipt was not accepted.",
+    "Native gates provide technical closure for these two revisions; unresolved P1 container release blocker remains open."
+  ]
+}
