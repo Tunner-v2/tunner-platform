@@ -19,6 +19,8 @@ The first complete private LGTM build at7660ed5 failed on a verified dependency 
 
 Wait for that single full build; do not launch another competing complete build. On success inspect artifacts/security-images/lgtm-build.json and recipe binding, then run tools/security/Scan-TunnerLgtmImage.ps1 and tools/validation/Test-TunnerLgtmImage.ps1 against tunner-security/lgtm:0.38.1-r1. The scanner requires all23 executables, OS/Node coverage, the exact Java runtime SBOM and the source/hash/test/review/expiry guard before applying the two approved plugin VEX statements. Keep raw reports and unrelated findings blocking.
 
+Current effective main rules are verified read-only: strict Security baseline, Container security gate and Web build tests and dependency audit checks (GitHub integration15368), one approval and Code Owner review are required. See governance/evidence/P1-RV001-001-INTEGRATION-ENFORCEMENT-20261028.json. Historical missing-check observations are retained; no settings were changed.
+
 The full rebuilt image, final compatibility, SBOM/licenses/provenance, all final role reviews, runtime/catalog/matrix adoption and clean CI remain unaccepted. LGTM runtime default is still grafana/otel-lgtm:0.34.0 and the aggregate GitHub container gate correctly fails. Do not create FINAL-VALIDATION or mark DONE until actual required gates pass. P1-RV001-002 explicitly requires MERGED_TO_MAIN; unrelated eligible P2 branch work is not stopped by that integration gate.
 
 ## Consent, boundaries and recovery
