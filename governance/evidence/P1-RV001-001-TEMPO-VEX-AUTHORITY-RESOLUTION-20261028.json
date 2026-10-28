@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "scope_id": "P1-RV001-001",
+  "method": "AMD-0005 authority resolution",
+  "reviewed_authority_refs": [
+    "docs/authority/baselines/1.6.0/08_Security_Privacy_Compliance_and_Global_Market_Governance.md",
+    "docs/authority/baselines/1.6.0/33_Production_Readiness_Compliance_and_Release_Gates.md",
+    "docs/development/LOCAL_SECURITY_SUPPLY_CHAIN.md",
+    "governance/evidence/P1-RV001-AUTHORITY-RESOLUTION.json",
+    "governance/evidence/P1-RV001-MAINTAINED-REBUILDS-APPROVAL-20261020.json",
+    "docs/development/ADR-LGTM-DEV-SIGNING-20261028.md",
+    "governance/work-items/P1-RV001-001.yaml"
+  ],
+  "resolution": "Existing maintenance authorizes repairs but explicitly excludes CVE suppression. The dev signing extension does not extend that scanner boundary. Current work acceptance allows only applicable approved VEX; no existing approved statement covers these exact Tempo findings. Source/linked-package analysis demonstrates the affected server code is absent from the rebuilt plugin, but consuming VEX requires new explicit scope consent. The reviewed packet was prepared without applying VEX. Direct scoped consent now authorizes implementation of guards/rejection tests and required reviews before consumption; no duplicate business amendment or external authority write is required.",
+  "source_evidence": [
+    "artifacts/security-followup-20261028/all-plugins-rebuilt-scan.json",
+    "artifacts/security-followup-20261028/tempo-plugin-linked-packages.txt",
+    "artifacts/security-followup-20261028/tempo-fixed-source-module.json",
+    "artifacts/security-followup-20261028/tempo-redaction-tests.json"
+  ],
+  "not_a_risk_waiver": true
+}
