@@ -8,12 +8,13 @@
   "title": "Adopt validated development security image repairs without scan waivers",
   "revision_type": "SECURITY",
   "status": "ACTIVE",
-  "reason": "The user requests fixes for actual GitHub scan failures. Preserve closed P0 and P0-RV009 while repairing maintained OpenBao and aligning CI/development image references only after full-image scans and compatibility checks. LGTM signed-plugin failures remain enforced; no merge, publication, deployment, removal or trust override is authorized.",
+  "reason": "The user requests fixes for actual GitHub scan failures. Preserve closed P0 and P0-RV009 while repairing maintained OpenBao and aligning CI/development image references only after full-image scans and compatibility checks. LGTM signed-plugin failures remain enforced; no merge, publication, deployment, removal or trust override is authorized. The subsequent explicit dev/test signing approval permits only the additional Tunner verifier described in ADR-LGTM-DEV-SIGNING-20261028; production trust remains excluded.",
   "authority_refs": [
     "docs/authority/baselines/1.6.0/08_Security_Privacy_Compliance_and_Global_Market_Governance.md",
     "docs/authority/current/development/09_Testing_Acceptance_Evidence_and_Quality_Gates.md",
     "docs/authority/baselines/1.6.0/decisions/ADR-0008_GitHub_and_GitHub_Actions.md",
-    "docs/authority/baselines/1.6.0/decisions/ADR-0009_Local_Observability_OTEL_LGTM.md"
+    "docs/authority/baselines/1.6.0/decisions/ADR-0009_Local_Observability_OTEL_LGTM.md",
+    "docs/development/ADR-LGTM-DEV-SIGNING-20261028.md"
   ],
   "decision_refs": [],
   "defect_refs": [],
@@ -40,7 +41,8 @@
   "evidence_refs": [
     "governance/evidence/P1-RV001-001-AUTHORITY-RESOLUTION-20261028.json",
     "governance/evidence/P1-RV001-001-RD-SOURCES-20261028.json",
-    "governance/evidence/P1-RV001-001-STARTUP-REVIEWS-20261028.json"
+    "governance/evidence/P1-RV001-001-STARTUP-REVIEWS-20261028.json",
+    "governance/evidence/P1-RV001-001-LGTM-SIGNING-APPROVAL-20261028.json"
   ],
   "created_at": "2026-10-28T18:21:36.0437361+00:00",
   "closed_at": null,

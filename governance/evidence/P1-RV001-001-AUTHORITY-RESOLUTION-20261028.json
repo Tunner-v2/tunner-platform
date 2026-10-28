@@ -39,5 +39,10 @@
     }
   },
   "resolution": "Existing maintenance approval plus the explicit CI-fix request authorizes compatible security repairs and validation in private local/CI development scope. Repair OpenBao, retain complete image scans and verify runtime/CI references before changing defaults. No release, registry publication, protected-main integration, vulnerability waiver or plugin trust change is authorized. Preserve P0 closure via P0-RV010. Fresh signed-plugin findings keep LGTM and release blocked; no duplicate business requirement is invented.",
-  "scope_boundary": "Implementation may proceed on independent repairs; final acceptance must not be claimed while LGTM, signing or required scans fail."
+  "scope_boundary": "Implementation may proceed on independent repairs; final acceptance must not be claimed while LGTM, signing or required scans fail.",
+  "subsequent_approval": {
+    "evidence_ref": "governance/evidence/P1-RV001-001-LGTM-SIGNING-APPROVAL-20261028.json",
+    "adr_ref": "docs/development/ADR-LGTM-DEV-SIGNING-20261028.md",
+    "outcome": "Explicit bounded dev/test trust extension authorized; original release/publication/main/deployment/waiver exclusions unchanged."
+  }
 }

@@ -29,7 +29,8 @@ function Assert-DockerAvailable {
 function Invoke-Docker {
     param(
         [string[]]$Arguments,
-        [string]$Operation
+        [string]$Operation,
+        [switch]$Capture
     )
 
     # Docker Compose writes normal progress/status lines to stderr. Invoke it through the
@@ -54,7 +55,7 @@ function Invoke-Docker {
         $process.WaitForExit()
         $stdout = $standardOutput.GetAwaiter().GetResult()
         $stderr = $standardError.GetAwaiter().GetResult()
-        if (-not [string]::IsNullOrWhiteSpace($stdout)) { Write-Host -NoNewline $stdout }
+        if (-not $Capture -and -not [string]::IsNullOrWhiteSpace($stdout)) { Write-Host -NoNewline $stdout }
         if (-not [string]::IsNullOrWhiteSpace($stderr)) { Write-Host -NoNewline $stderr }
         $exitCode = $process.ExitCode
     }
@@ -65,10 +66,11 @@ function Invoke-Docker {
     if ($exitCode -ne 0) {
         throw "$Operation failed with exit code $exitCode."
     }
+    if ($Capture) { return $stdout }
 }
 
 function Invoke-Compose {
-    param([string[]]$Arguments)
+    param([string[]]$Arguments, [switch]$Capture)
 
     $composeArguments = @(
         "compose",
@@ -77,7 +79,7 @@ function Invoke-Compose {
         "--file", $composeFile
     ) + $Arguments
 
-    Invoke-Docker -Arguments $composeArguments -Operation "docker compose"
+    Invoke-Docker -Arguments $composeArguments -Operation "docker compose" -Capture:$Capture
 }
 
 function Invoke-Doctor {
@@ -103,7 +105,9 @@ switch ($Command) {
     }
     "start" {
         Invoke-Doctor
-        Write-Host "Starting the Tunner local dependency foundation. This pulls images and starts containers."
+        $runtimeImages = @((Invoke-Compose -Arguments @("config", "--images") -Capture) -split "\r?\n" | Where-Object { -not [string]::IsNullOrWhiteSpace($_) })
+        & (Join-Path $repositoryRoot "tools/security/Ensure-TunnerDevelopmentImages.ps1") -Images $runtimeImages -RepositoryRoot $repositoryRoot
+        Write-Host "Starting the Tunner local dependency foundation. Reviewed maintained images are built locally when required."
         Invoke-Compose -Arguments @("up", "--detach", "--wait", "--wait-timeout", "120")
         Write-Host "Local dependency foundation started. Run: ./tools/dev/tunner-dev.ps1 health"
     }

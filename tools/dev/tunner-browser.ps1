@@ -218,6 +218,7 @@ try {
     $postgres.ports = @('127.0.0.1:' + $state.PostgresPort + ':5432')
     $postgres.volumes = @(@{type='volume';source='browser-postgres-data';target='/var/lib/postgresql'})
     $mailpit = $baseCompose.services.mailpit
+    & (Join-Path $repositoryRoot 'tools/security/Ensure-TunnerDevelopmentImages.ps1') -Images @($postgres.image,$mailpit.image) -RepositoryRoot $repositoryRoot
     $mailpit.ports = @(("127.0.0.1:{0}:1025" -f $state.SmtpPort),("127.0.0.1:{0}:8025" -f $state.MailpitPort))
     @{services=@{postgres=$postgres;mailpit=$mailpit};volumes=@{'browser-postgres-data'=@{}}} | ConvertTo-Json -Depth 30 | Set-Content -LiteralPath $composePath -Encoding UTF8
     Write-BrowserState $state
