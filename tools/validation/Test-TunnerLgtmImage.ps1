@@ -15,6 +15,7 @@ $output=Join-Path $RepositoryRoot ('artifacts/security-images/'+$prefix)
 $checks=[Collections.Generic.List[string]]::new()
 $containers=[Collections.Generic.List[string]]::new()
 $volumes=[Collections.Generic.List[string]]::new()
+# Dedicated fixture bridge; every published port is loopback-only and all inputs are synthetic.
 $network=$prefix+'-net'
 $networkCreated=$false
 $credential=[Convert]::ToBase64String([Text.Encoding]::UTF8.GetBytes('tunner-fixture:public-test-fixture'))
@@ -38,7 +39,7 @@ function Start-Lgtm([string]$phase,[string]$reference,[string]$volume) {
     $id=(& docker @args).Trim()
     if($LASTEXITCODE -ne 0){throw ('Cannot start '+$phase+' fixture')};$containers.Add($name)
     $ports=@{}
-    foreach($port in @(3000,3100,3200,4040,4317,4318,9090)){$mapping=(& docker port $name ($port.ToString()+'/tcp')).Trim();if($LASTEXITCODE -ne 0 -or $mapping -notmatch '^127\.0\.0\.1:([0-9]+)$'){throw 'Fixture port is not loopback-only'};$ports[$port]=[int]$Matches[1]}
+    foreach($port in @(3000,3100,3200,4040,4317,4318,9090)){$mapping=(@(& docker port $name ($port.ToString()+'/tcp')) -join '').Trim();if($LASTEXITCODE -ne 0 -or $mapping -notmatch '^127\.0\.0\.1:([0-9]+)$'){throw 'Fixture port is not loopback-only'};$ports[$port]=[int]$Matches[1]}
     $instance=[pscustomobject]@{name=$name;ports=$ports;id=$id;image=$reference}
     Wait-For { & docker exec $name test -f /tmp/ready 2>$null; $LASTEXITCODE -eq 0 } ($phase+' vendor readiness sentinel') 240
     return $instance
@@ -47,8 +48,8 @@ function Stop-Lgtm($instance) { & docker stop --time 15 $instance.name | Out-Nul
 function Get-Grafana($instance,[string]$path) { Invoke-RestMethod -Uri ('http://127.0.0.1:'+$instance.ports[3000]+$path) -Headers $headers -TimeoutSec 10 }
 function Assert-Dashboard($instance,[string]$uid,[string]$phase) { $saved=Get-Grafana $instance ('/api/dashboards/uid/'+$uid);Expect ($saved.dashboard.title -eq 'Tunner synthetic storage fixture') ($phase+' saved dashboard preserved') }
 try {
-    & docker network create --internal --label ('io.tunner.fixture='+$prefix) $network | Out-Null
-    if($LASTEXITCODE -ne 0){throw 'Internal fixture network creation failed'};$networkCreated=$true
+    & docker network create --driver bridge --label ('io.tunner.fixture='+$prefix) $network | Out-Null
+    if($LASTEXITCODE -ne 0){throw 'Dedicated fixture network creation failed'};$networkCreated=$true
     $data=$prefix+'-data';$backup=$prefix+'-backup';$restore=$prefix+'-restore'
     foreach($v in @($data,$backup,$restore)){New-Volume $v}
     $baseline=Start-Lgtm 'baseline' $BaselineImage $data
