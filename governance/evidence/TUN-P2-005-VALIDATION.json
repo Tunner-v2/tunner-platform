@@ -4,8 +4,8 @@
   "validation_kind": "COMMITTED",
   "result": "PASS",
   "validation_boundary": "ENGINEERING_PASS_CURRENT_VISUALS_ACCEPTED_NONBLOCKING_FIGMA_TODO",
-  "tested_commit_sha": "f63e81b062049f2ce65a623d29c1fc311400fcd7",
-  "validated_commit_sha": "f63e81b062049f2ce65a623d29c1fc311400fcd7",
+  "tested_commit_sha": "f132e0fbf5322650d2cdcb3f7cacb78e659cfded",
+  "validated_commit_sha": "f132e0fbf5322650d2cdcb3f7cacb78e659cfded",
   "owned_behavior_paths": [
     "docs/contracts/authentication-session-contract.md",
     "docs/contracts/ui-inventory.json",
@@ -60,14 +60,15 @@
   "test_index_ref": "governance/evidence/ui/authentication-20261028/test-index.json",
   "component_test_commits": {
     "backend_unit_dev_browser": "f63e81b062049f2ce65a623d29c1fc311400fcd7",
-    "real_browser": "f63e81b062049f2ce65a623d29c1fc311400fcd7",
-    "starter_safety": "f63e81b062049f2ce65a623d29c1fc311400fcd7"
+    "real_browser": "f132e0fbf5322650d2cdcb3f7cacb78e659cfded",
+    "starter_safety": "f132e0fbf5322650d2cdcb3f7cacb78e659cfded"
   },
   "source_binding": {
-    "method": "Exact committed-source rerun",
-    "executed_at_sha": "f63e81b062049f2ce65a623d29c1fc311400fcd7",
-    "runtime": "ASP.NET10.0.13; Docker29.7.2 Desktop Linux endpoint npipe://./pipe/dockerDesktopLinuxEngine for the .NET test client; no saved Docker context or OS trust change.",
-    "scope": "All behavior-affecting ownership, domain/HTTPS/DB and current UI regression tests were executed at this committed source; later changes are evidence/lifecycle metadata."
+    "method": "Committed-source equivalence plus affected real-browser/starter rerun",
+    "executed_at_sha": "f132e0fbf5322650d2cdcb3f7cacb78e659cfded",
+    "prior_full_regression_sha": "f63e81b062049f2ce65a623d29c1fc311400fcd7",
+    "scope": "Only tools/dev/tunner-browser.ps1 changed within these ownership sets. Backend, shared UI and browser spec source remain byte-identical to the prior 77/31/54 PASS cohort. Three real browser and seven starter checks rerun on maintained runtime images at this committed source.",
+    "delta_evidence_ref": "governance/evidence/P1-RV001-001-RUNTIME-REVALIDATION-20261028.json"
   },
   "ui_visual_approval": "PASS_SCOPED_PRODUCT_OWNER_EXCEPTION",
   "ui_evidence_ref": "governance/evidence/TUN-P2-005-UI-COMPLIANCE.json",
@@ -80,5 +81,13 @@
   "visual_acceptance_ref": "governance/evidence/TUN-P2-005-VISUAL-ACCEPTANCE-DEFERRAL-20261021.json",
   "deferred_defects": [
     "DEF-TUN-P2-005-UI-001"
-  ]
+  ],
+  "previous_validations": [
+    {
+      "validated_commit_sha": "f63e81b062049f2ce65a623d29c1fc311400fcd7",
+      "result": "PASS",
+      "boundary": "Prior complete regression remains valid for byte-identical source; maintained-image starter delta revalidated separately."
+    }
+  ],
+  "runtime_delta_ref": "governance/evidence/P1-RV001-001-RUNTIME-REVALIDATION-20261028.json"
 }
