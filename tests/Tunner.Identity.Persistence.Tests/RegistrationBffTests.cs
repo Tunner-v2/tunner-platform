@@ -37,7 +37,7 @@ public sealed class RegistrationBffTests(IdentityPostgresFixture fixture) : ICla
         using(var missingBrowser=await host.Post(Command(),csrfOnly,token))Assert.Equal(HttpStatusCode.Forbidden,missingBrowser.StatusCode);
         await using(var check=db.Context())Assert.False(await check.Accounts.AnyAsync());
         var command=Command();using var pending=await host.Post(command,cookie,token);Assert.Equal(HttpStatusCode.Accepted,pending.StatusCode);
-        Assert.False(pending.Headers.Contains("Set-Cookie"));var safe=await pending.Content.ReadAsStringAsync();
+        Assert.DoesNotContain(pending.Headers.TryGetValues("Set-Cookie",out var updatedCookies)?updatedCookies:[],x=>x.StartsWith("__Host-Tunner.User.Session=",StringComparison.Ordinal));var safe=await pending.Content.ReadAsStringAsync();
         Assert.DoesNotContain(command.Password,safe);Assert.DoesNotContain(command.Email,safe);Assert.DoesNotContain("1990-01-01",safe);
         using var recovery=await host.Get("/registration/status/"+command.IdempotencyKey,cookie);Assert.Equal(HttpStatusCode.Accepted,recovery.StatusCode);
         using var other=await host.Get("/registration/status/"+command.IdempotencyKey);Assert.Equal(HttpStatusCode.Forbidden,other.StatusCode);
@@ -102,13 +102,88 @@ public sealed class RegistrationBffTests(IdentityPostgresFixture fixture) : ICla
         Assert.True(personal.GetProperty("properties").GetProperty("dateOfBirth").GetProperty("writeOnly").GetBoolean());
         Assert.False(schemas.GetProperty("OperationResult").GetProperty("properties").TryGetProperty("dateOfBirth",out _));
     }
-    private static RegisterAccountCommand Command()=>new(){IdempotencyKey=Guid.NewGuid(),Email="applicant@example.test",Password="a unique long fixture passphrase",PasswordConfirmation="a unique long fixture passphrase",TermsVersion="fixture-terms",PrivacyVersion="fixture-privacy",AcknowledgedNotices=true};
+    [Fact]
+    public async Task ProtectedProgressRecoversOnlyItsOwnServerStageAndRestartPreservesAccountEvidence()
+    {
+        await using var db=await fixture.CreateDatabaseAsync();await using var host=await Host.Start(db);
+        using var options=await host.Get("/registration/options");var boot=await options.Content.ReadFromJsonAsync<JsonElement>();
+        var token=boot.GetProperty("csrfToken").GetString()!;var cookie=Cookies(options);var key=boot.GetProperty("registrationKey").GetGuid();
+        using(var empty=await host.Get("/registration/progress",cookie))Assert.Equal(HttpStatusCode.BadRequest,empty.StatusCode);
+        var command=Command(key);using var registered=await host.Post(command,cookie,token);Assert.Equal(HttpStatusCode.Accepted,registered.StatusCode);
+        using(var progress=await host.Get("/registration/progress",cookie))
+        {
+            Assert.Equal(HttpStatusCode.Accepted,progress.StatusCode);var current=await progress.Content.ReadFromJsonAsync<RegistrationResult>();Assert.NotNull(current);Assert.Equal("VERIFY_CONTACT",current.NextAction);
+            Assert.DoesNotContain(command.Password,await progress.Content.ReadAsStringAsync());Assert.DoesNotContain(command.Email,await progress.Content.ReadAsStringAsync());Assert.True(progress.Headers.CacheControl?.NoStore);
+        }
+        using(var otherOptions=await host.Get("/registration/options"))
+        using(var other=await host.Get("/registration/progress",Cookies(otherOptions)))Assert.Equal(HttpStatusCode.BadRequest,other.StatusCode);
+        using(var missing=await host.Get("/registration/progress"))Assert.Equal(HttpStatusCode.Forbidden,missing.StatusCode);
+        var broken=ReplaceBrowserCookie(cookie,"invalid-protected-context");using(var tampered=await host.Get("/registration/progress",broken))Assert.Equal(HttpStatusCode.Forbidden,tampered.StatusCode);
+        var protector=host.Services.GetRequiredService<IDataProtectionProvider>().CreateProtector("Tunner.User.Registration.Browser.v1");
+        var protectedValue=cookie.Split(';').Select(x=>x.Trim()).Single(x=>x.StartsWith(RegistrationEndpoints.BrowserCookieName+"=",StringComparison.Ordinal))[(RegistrationEndpoints.BrowserCookieName.Length+1)..];
+        using var old=JsonDocument.Parse(protector.Unprotect(protectedValue));
+        var expired=ReplaceBrowserCookie(cookie,protector.Protect(JsonSerializer.Serialize(new{Id=old.RootElement.GetProperty("Id").GetString(),ExpiresAt=DateTimeOffset.UtcNow.AddSeconds(-1),RegistrationKey=key})));
+        using(var rejected=await host.Get("/registration/progress",expired))Assert.Equal(HttpStatusCode.Forbidden,rejected.StatusCode);
+        using(var noCsrf=await host.Post(new{},cookie,null,path:"/registration/restart"))Assert.Equal(HttpStatusCode.BadRequest,noCsrf.StatusCode);
+        using(var origin=await host.Post(new{},cookie,token,"https://outside.example.test",path:"/registration/restart"))Assert.Equal(HttpStatusCode.Forbidden,origin.StatusCode);
+        using(var extra=await host.Post(new{operationId=Guid.NewGuid()},cookie,token,path:"/registration/restart"))Assert.Equal(HttpStatusCode.BadRequest,extra.StatusCode);
+        using(var huge=await host.Post(new{padding=new string('x',300)},cookie,token,path:"/registration/restart"))Assert.Equal(HttpStatusCode.RequestEntityTooLarge,huge.StatusCode);
+        using var reset=await host.Post(new{},cookie,token,path:"/registration/restart");Assert.Equal(HttpStatusCode.OK,reset.StatusCode);
+        var fresh=await reset.Content.ReadFromJsonAsync<JsonElement>();Assert.NotEqual(key,fresh.GetProperty("registrationKey").GetGuid());
+        var nextCookie=ReplaceBrowserCookie(cookie,Cookies(reset).Split('=',2)[1]);
+        using(var progress=await host.Get("/registration/progress",nextCookie))Assert.Equal(HttpStatusCode.BadRequest,progress.StatusCode);
+        using(var legacy=await host.Get("/registration/status/"+key,nextCookie))Assert.Equal(HttpStatusCode.Accepted,legacy.StatusCode);
+        await using var check=db.Context();Assert.Equal(Tunner.Accounts.AccountState.VerificationPending,(await check.Accounts.SingleAsync()).State);Assert.Single(host.Notices.Messages);
+        Assert.DoesNotContain(reset.Headers.GetValues("Set-Cookie"),x=>x.StartsWith("__Host-Tunner.User.Session=",StringComparison.Ordinal));
+    }
+    [Fact]
+    public async Task KnownScreenFallbackPreservesApiAndAssetFailures()
+    {
+        var root=Path.Combine(AppContext.BaseDirectory,"wwwroot","registration");Directory.CreateDirectory(root);var index=Path.Combine(root,"index.html");
+        var created=!File.Exists(index);if(created)await File.WriteAllTextAsync(index,"<!doctype html><title>Isolated SPA dispatch fixture</title>");
+        try
+        {
+            await using var db=await fixture.CreateDatabaseAsync();await using var host=await Host.Start(db);
+            string[] paths=["/registration","/registration/verify-email","/registration/personal-information","/registration/consent","/registration/complete"];
+            foreach(var path in paths){using var response=await host.Get(path);Assert.Equal(HttpStatusCode.OK,response.StatusCode);Assert.Equal("text/html",response.Content.Headers.ContentType?.MediaType);Assert.Contains("frame-ancestors 'none'",response.Headers.GetValues("Content-Security-Policy").Single(),StringComparison.Ordinal);}
+            using(var unknown=await host.Get("/registration/not-a-screen"))Assert.Equal(HttpStatusCode.Unauthorized,unknown.StatusCode);
+            using(var asset=await host.Get("/registration/assets/missing.js"))Assert.Equal(HttpStatusCode.Unauthorized,asset.StatusCode);
+            using(var api=await host.Get("/registration/progress")){Assert.Equal(HttpStatusCode.Forbidden,api.StatusCode);Assert.NotEqual("text/html",api.Content.Headers.ContentType?.MediaType);}
+            using(var postOnly=await host.Get("/registration/verify"))Assert.Equal(HttpStatusCode.Unauthorized,postOnly.StatusCode);
+        }
+        finally{if(created)File.Delete(index);}
+    }
+    [Fact]
+    public async Task BackendIndependentlyRejectsAllThreeFormsWhenClientValidationIsBypassed()
+    {
+        await using var db=await fixture.CreateDatabaseAsync();await using var host=await Host.Start(db);
+        using var options=await host.Get("/registration/options");var boot=await options.Content.ReadFromJsonAsync<JsonElement>();var token=boot.GetProperty("csrfToken").GetString()!;var cookie=Cookies(options);
+        string[] cases=["email","password","confirmation","notices"];
+        foreach(var field in cases)
+        {
+            var valid=Command();var bad=new RegisterAccountCommand{IdempotencyKey=valid.IdempotencyKey,Email=field=="email"?"bad":valid.Email,Password=field=="password"?"short":valid.Password,PasswordConfirmation=field=="confirmation"?"different":field=="password"?"short":valid.PasswordConfirmation,TermsVersion=valid.TermsVersion,PrivacyVersion=valid.PrivacyVersion,AcknowledgedNotices=field!="notices"};
+            using var response=await host.Post(bad,cookie,token);Assert.Equal(HttpStatusCode.BadRequest,response.StatusCode);
+        }
+        await using(var empty=db.Context())Assert.False(await empty.Accounts.AnyAsync());
+        var attempt=Command();using var registered=await host.Post(attempt,cookie,token);var operation=await registered.Content.ReadFromJsonAsync<RegistrationResult>();Assert.NotNull(operation);
+        using(var code=await host.Post(new VerifyRegistrationCommand(operation.OperationId,Guid.NewGuid(),operation.Version,"bad"),cookie,token,path:"/registration/verify"))Assert.Equal(HttpStatusCode.BadRequest,code.StatusCode);
+        using var status=await host.Get("/registration/status/"+attempt.IdempotencyKey,cookie);var latest=await status.Content.ReadFromJsonAsync<RegistrationResult>();Assert.NotNull(latest);
+        using var proof=await host.Post(new VerifyRegistrationCommand(operation.OperationId,Guid.NewGuid(),latest.Version,host.Notices.Messages.Single().Code!),cookie,token,path:"/registration/verify");Assert.Equal(HttpStatusCode.Accepted,proof.StatusCode);
+        var verified=await proof.Content.ReadFromJsonAsync<RegistrationResult>();Assert.NotNull(verified);
+        using(var future=await host.Post(new CompletePersonalInformationCommand{OperationId=verified.OperationId,IdempotencyKey=Guid.NewGuid(),ExpectedVersion=verified.Version,DateOfBirth=DateOnly.FromDateTime(DateTime.UtcNow).AddDays(1)},cookie,token,path:"/registration/personal-information"))Assert.Equal(HttpStatusCode.BadRequest,future.StatusCode);
+        using(var longName=await host.Post(new CompletePersonalInformationCommand{OperationId=verified.OperationId,IdempotencyKey=Guid.NewGuid(),ExpectedVersion=verified.Version,DateOfBirth=new(2015,1,1),FullName=new string('x',101)},cookie,token,path:"/registration/personal-information"))Assert.Equal(HttpStatusCode.BadRequest,longName.StatusCode);
+        await using var check=db.Context();Assert.Equal(Tunner.Accounts.AccountState.VerificationPending,(await check.Accounts.SingleAsync()).State);
+    }
+    private static string Cookies(HttpResponseMessage response)=>string.Join("; ",response.Headers.GetValues("Set-Cookie").Select(x=>x.Split(';')[0]));
+    private static string ReplaceBrowserCookie(string cookie,string value)=>string.Join("; ",cookie.Split(';').Select(x=>x.Trim()).Where(x=>!x.StartsWith(RegistrationEndpoints.BrowserCookieName+"=",StringComparison.Ordinal)).Append(RegistrationEndpoints.BrowserCookieName+"="+value));
+    private static RegisterAccountCommand Command(Guid? key=null)=>new(){IdempotencyKey=key??Guid.NewGuid(),Email="applicant@example.test",Password="a unique long fixture passphrase",PasswordConfirmation="a unique long fixture passphrase",TermsVersion="fixture-terms",PrivacyVersion="fixture-privacy",AcknowledgedNotices=true};
     private sealed class Host : IAsyncDisposable
     {
         private const string Origin="https://registration.example.test";
         private readonly WebApplication app;private readonly X509Certificate2 certificate;private readonly Uri http;
         private readonly HttpClient client;
         public NoticeSink Notices {get;}
+        public IServiceProvider Services=>app.Services;
         private Host(WebApplication app,X509Certificate2 certificate,HttpClient client,Uri http,NoticeSink notices){this.app=app;this.certificate=certificate;this.client=client;this.http=http;Notices=notices;}
         public static async Task<Host> Start(IdentityTestDatabase database)
         {

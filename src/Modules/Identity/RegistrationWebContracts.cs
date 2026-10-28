@@ -69,7 +69,13 @@ public sealed class RegistrationPresentation
         "registration.error.unavailable",
         "registration.error.invalid",
         "registration.error.uncertain",
-        "registration.error.password"
+        "registration.error.password",
+        "registration.error.email",
+        "registration.error.notices",
+        "registration.error.highlighted",
+        "verification.error.code",
+        "personal.error.name",
+        "personal.error.birth"
     ];
     public RegistrationPresentation(string locale, IEnumerable<RegistrationPublishedText> content, Uri termsUri, Uri privacyUri, Uri? supportUri)
     {

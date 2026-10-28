@@ -1,0 +1,363 @@
+{
+  "schema_version": 1,
+  "scope_id": "TUN-P2-005",
+  "result": "PASS_CURRENT_IMPLEMENTATION_SCOPED_PRODUCT_ACCEPTANCE",
+  "tested_commit_sha": "f63e81b062049f2ce65a623d29c1fc311400fcd7",
+  "recorded_at": "2026-10-28T18:04:57.657Z",
+  "backend": {
+    "passed": 77,
+    "failed": 0,
+    "skipped": 0
+  },
+  "unit": {
+    "passed": 31,
+    "failed": 0
+  },
+  "dev_browser": {
+    "shared": 16,
+    "registration": 22,
+    "authentication": 16,
+    "failed": 0,
+    "skipped": 0,
+    "flaky": 0
+  },
+  "real_browser": {
+    "passed": 3,
+    "failed": 0
+  },
+  "starter_safety": {
+    "passed": 7,
+    "failed": 0
+  },
+  "source_binding": {
+    "method": "Exact committed-source rerun",
+    "executed_at_sha": "f63e81b062049f2ce65a623d29c1fc311400fcd7",
+    "runtime": "ASP.NET10.0.13; Docker29.7.2 Desktop Linux endpoint npipe://./pipe/dockerDesktopLinuxEngine for the .NET test client; no saved Docker context or OS trust change.",
+    "scope": "All behavior-affecting ownership, domain/HTTPS/DB and current UI regression tests were executed at this committed source; later changes are evidence/lifecycle metadata."
+  },
+  "receipts": [
+    {
+      "raw_ref": "artifacts/p2-005-acceptance-20261028/tests/identity-f63e81b-final.trx",
+      "raw_sha256": "d1ac21d0dfe68ab127cc5f2b7ac48a178c76ace530b1278a991366a1e8a8eeb8",
+      "portable_ref": "governance/evidence/ui/authentication-20261028/identity.trx",
+      "portable_sha256": "ba079fd6e7286fadb7bcc04c564e210adc38a1e3210006ed99745ff4e1842aa1"
+    },
+    {
+      "raw_ref": "artifacts/p2-005-acceptance-20261028/frontend-unit-f63e81b.log",
+      "raw_sha256": "819779fcc21b16ef0bee0d902dedbe4a63d6be954d40bd689c77636ef4f1eefc",
+      "portable_ref": "governance/evidence/ui/authentication-20261028/unit.log",
+      "portable_sha256": "8afc737b55c4e5b6fc41e4d475f2f80b0e5890817e005c5267495645dc3f1167"
+    },
+    {
+      "raw_ref": "artifacts/p2-005-acceptance-20261028/frontend-browser-f63e81b.log",
+      "raw_sha256": "5f29592aeeb0aa3cd6c1405afdcb4d31e1d2822ea5070eb844ab389f5cd7573e",
+      "portable_ref": "governance/evidence/ui/authentication-20261028/browser.log",
+      "portable_sha256": "20eb7d89faeac28a2de8c929de4ccda517183e7f691563168c11241dbe1310af"
+    },
+    {
+      "raw_ref": "artifacts/p2-005-acceptance-20261028/real-browser-f63e81b.log",
+      "raw_sha256": "8cb26bbd12d848f7abb136bc682dd9edd8dd2d6ee9b0a09d5934cbb00f05cd25",
+      "portable_ref": "governance/evidence/ui/authentication-20261028/real-browser.log",
+      "portable_sha256": "471961d9fd6942afd5cd3343ee86fdaf0040090051fc87a3a3553e585ba42d16"
+    },
+    {
+      "raw_ref": "artifacts/p2-005-acceptance-20261028/starter-f63e81b.log",
+      "raw_sha256": "193c264823f22719c9c0c8bf305e51f50e433601273ec9b4609f248f36705ff6",
+      "portable_ref": "governance/evidence/ui/authentication-20261028/starter.log",
+      "portable_sha256": "52f81031ca47fc7d5cf3a04ff1c70aeaed427d32f3e332200a5d366d798438dc"
+    },
+    {
+      "raw_ref": "artifacts/p2-005-acceptance-20261028/starter-safety-f63e81b.log",
+      "raw_sha256": "65abb4eb2401fba29f6de95fafe24c10df4f326484fd5f4327f33d81fb88c0cf",
+      "portable_ref": "governance/evidence/ui/authentication-20261028/starter-safety.log",
+      "portable_sha256": "3dc83fd63954e1c9a24f9c3b380aecd887e13061950b6285ef9111bd67f7a87c"
+    },
+    {
+      "raw_ref": "web/test-results/results.json",
+      "raw_sha256": "60ca9df13eadb37145fdb26894fe51d02c3ff0edd6dc952770aa25fc68aafbfd",
+      "portable_ref": "governance/evidence/ui/authentication-20261028/shared-results.json",
+      "portable_sha256": "c7e36a5a1b39a2ffedd48ee1ab54ac066127bf05047d7e0399601e9b98a8f52e"
+    },
+    {
+      "raw_ref": "web/test-results/registration/results.json",
+      "raw_sha256": "58d2ae7d43d5e2111f4112e2bc3353e98491c4b8cc70d22b8469561e095224d5",
+      "portable_ref": "governance/evidence/ui/authentication-20261028/registration-results.json",
+      "portable_sha256": "4dd0747b73771292bff7eb0b757afa43740efb8c643610e3eb3ae6f6f262156e"
+    },
+    {
+      "raw_ref": "web/test-results/authentication/results.json",
+      "raw_sha256": "aed0b47a732255dd19bda41afcbe7ac557f8eadf1330e6d8139a46362cc2654c",
+      "portable_ref": "governance/evidence/ui/authentication-20261028/authentication-results.json",
+      "portable_sha256": "292a1cd3b6dbc46093f5b5a0383aaf048fced7542dd61d284b6f84fc5850fd5d"
+    },
+    {
+      "raw_ref": "artifacts/browser-testing/browser-results.json",
+      "raw_sha256": "861f677508d8c53aea774e2eb683026e501aad97d349baa07929742d29386dcf",
+      "portable_ref": "governance/evidence/ui/authentication-20261028/real-browser-results.json",
+      "portable_sha256": "4922ce6a7bd29ddc721a55520174b8721769fc58b7d17879989cafda7e20a7fe"
+    }
+  ],
+  "screenshots": [
+    {
+      "path": "governance/evidence/ui/authentication-20261028/actual/admin-input-idle-reference-788.png",
+      "sha256": "0d0dc84b92dac4ce7ea94896fc97410019465864ae58eb79ce5ae8fd9b004bf2"
+    },
+    {
+      "path": "governance/evidence/ui/authentication-20261028/actual/authentication/login-1024.png",
+      "sha256": "b1ac243fdc0063aa387200bd3647ef511e0f2d117277a69167d215b826a0f10c"
+    },
+    {
+      "path": "governance/evidence/ui/authentication-20261028/actual/authentication/login-1440.png",
+      "sha256": "b97005afb4f70e0ff947d0b48542bf578c9c31ca53090e1e3895f79553b93e32"
+    },
+    {
+      "path": "governance/evidence/ui/authentication-20261028/actual/authentication/login-320.png",
+      "sha256": "f3041699fb8ec7fb804fc56c87db7f357eb340d284e1b2ee63e2e5539b9389db"
+    },
+    {
+      "path": "governance/evidence/ui/authentication-20261028/actual/authentication/login-390.png",
+      "sha256": "2784c48acc47212959caa2ce783fb272a85b708f4e7d4e4519c86f6998b78b53"
+    },
+    {
+      "path": "governance/evidence/ui/authentication-20261028/actual/authentication/login-768.png",
+      "sha256": "bc381235bab2c34a6c26c4a09674e53b8b38247301637f60f9e6765b48a221f5"
+    },
+    {
+      "path": "governance/evidence/ui/authentication-20261028/actual/authentication/login-server-error-1440.png",
+      "sha256": "e5c784f92dd0ab829d2ef2f044a20ed1e3726fe8283d0e93bf47842f19ac1dc4"
+    },
+    {
+      "path": "governance/evidence/ui/authentication-20261028/actual/authentication/login-server-error-320.png",
+      "sha256": "c0363322e04f025662f03baca37d97b4cdcee2631ecb932342bc874e8e96a7b9"
+    },
+    {
+      "path": "governance/evidence/ui/authentication-20261028/actual/authentication/login-server-error-768.png",
+      "sha256": "e109f3914af8ca8f42231f49568ee8788636ed707218820f49c890bdc9e025bf"
+    },
+    {
+      "path": "governance/evidence/ui/authentication-20261028/actual/authentication/signed-in-1024.png",
+      "sha256": "9807dffdc39540e8882ab8e9dcf23204c1d946ccfcb7977092e8dd4c242df59f"
+    },
+    {
+      "path": "governance/evidence/ui/authentication-20261028/actual/authentication/signed-in-1440.png",
+      "sha256": "3f43a91de7fdf7b4f2b4826502b462c54a66125f1225cce184843c02b5cc671c"
+    },
+    {
+      "path": "governance/evidence/ui/authentication-20261028/actual/authentication/signed-in-320.png",
+      "sha256": "c3a6aa228e158adb0c03e562ea4bfce3ac735b65c811aeaa3e86e46d14374a9d"
+    },
+    {
+      "path": "governance/evidence/ui/authentication-20261028/actual/authentication/signed-in-390.png",
+      "sha256": "ddaa63e96f16de165e7b79d638d7654fe5489c4e38f690676cd50367725b6621"
+    },
+    {
+      "path": "governance/evidence/ui/authentication-20261028/actual/authentication/signed-in-768.png",
+      "sha256": "374135ce1d5ed1dd9a79483536a3da129ab22f4aa725c4201c88fb07d263ceb6"
+    },
+    {
+      "path": "governance/evidence/ui/authentication-20261028/actual/desktop-light.png",
+      "sha256": "0bc878d8febd1122bf888b5ed819c17c4764562079a331c87f5040e4fb4e15c1"
+    },
+    {
+      "path": "governance/evidence/ui/authentication-20261028/actual/narrow-light.png",
+      "sha256": "fc3538e681f1290e8e3cd979448a1c47cbad0bddd9c30f97c826939f4004484e"
+    },
+    {
+      "path": "governance/evidence/ui/authentication-20261028/actual/registration/consent-desktop.png",
+      "sha256": "cd2208c6feb04bf5a29a79d43f8bd311555a23b2dbe2e654c0dc8a25704a5256"
+    },
+    {
+      "path": "governance/evidence/ui/authentication-20261028/actual/registration/consent-narrow.png",
+      "sha256": "a96bb400f9bb2ee8f5282717844afe7890ab8bdeb3d16e382cf984704f0a7067"
+    },
+    {
+      "path": "governance/evidence/ui/authentication-20261028/actual/registration/global-consent-1440.png",
+      "sha256": "96475af21f1dfb706b36583f5d2c6b6a11b65885f37c895580be86d1be36c8c5"
+    },
+    {
+      "path": "governance/evidence/ui/authentication-20261028/actual/registration/global-consent-320.png",
+      "sha256": "5e425c91d0d31fdf4c87902e03d0c68c08858b8ff1c2c110aec57e4462159e00"
+    },
+    {
+      "path": "governance/evidence/ui/authentication-20261028/actual/registration/global-consent-768.png",
+      "sha256": "069b237a02f9e664e7d99e268f4ffd51f288429d52febc7f2a37508445efddd3"
+    },
+    {
+      "path": "governance/evidence/ui/authentication-20261028/actual/registration/global-personal-1440.png",
+      "sha256": "cc738ae30fd7d7b06c5c328229db8e5fde8a53b981298f523586519a34125e29"
+    },
+    {
+      "path": "governance/evidence/ui/authentication-20261028/actual/registration/global-personal-320.png",
+      "sha256": "14813390b24df9db014392189d7b89adc472dead6b720936aaff59fc2552a5d8"
+    },
+    {
+      "path": "governance/evidence/ui/authentication-20261028/actual/registration/global-personal-768.png",
+      "sha256": "09a645110814d074fe288b38fa6bf2ad8a9502ba86690d18589e6a07dd1235bd"
+    },
+    {
+      "path": "governance/evidence/ui/authentication-20261028/actual/registration/global-personal-errors-1440.png",
+      "sha256": "dd1156f5dfeac742c984719a3a0918a7c8037384eb999ce31eadb5a715d250a4"
+    },
+    {
+      "path": "governance/evidence/ui/authentication-20261028/actual/registration/global-personal-errors-320.png",
+      "sha256": "a96f9dd336557f5b5c3876e33489fc3852096c911a3ef139f5d28bdbe4586a5f"
+    },
+    {
+      "path": "governance/evidence/ui/authentication-20261028/actual/registration/global-personal-errors-768.png",
+      "sha256": "020e363d74b2514d39f91a49b7c4042f75d369554b795a91cfd903e4e1f21612"
+    },
+    {
+      "path": "governance/evidence/ui/authentication-20261028/actual/registration/global-ready-1440.png",
+      "sha256": "be13ff145a99a6107556dea1cabcb35a5b517264451159cfff565be3a5a65280"
+    },
+    {
+      "path": "governance/evidence/ui/authentication-20261028/actual/registration/global-ready-320.png",
+      "sha256": "025b74f24090f0d4be2ae06e3770356ef839183d8b755a889d02534aa9091c59"
+    },
+    {
+      "path": "governance/evidence/ui/authentication-20261028/actual/registration/global-ready-768.png",
+      "sha256": "6e93ab1ef41033f26c8304064fda98c697a72eae588cd48ff2d7c814d1f583e4"
+    },
+    {
+      "path": "governance/evidence/ui/authentication-20261028/actual/registration/global-register-1440.png",
+      "sha256": "7c51f87606d2f22f5e94914d488a381a640c3130bc6424c22758cc40da3af9bc"
+    },
+    {
+      "path": "governance/evidence/ui/authentication-20261028/actual/registration/global-register-320.png",
+      "sha256": "e56976f391855bf2f72a7f2879e94b15117164020c23f6010d457953cb16441d"
+    },
+    {
+      "path": "governance/evidence/ui/authentication-20261028/actual/registration/global-register-768.png",
+      "sha256": "bdc70f0a7a0d3b553fbf23c4988613713d019392601573632570c38e5e9e8303"
+    },
+    {
+      "path": "governance/evidence/ui/authentication-20261028/actual/registration/global-registration-errors-1440.png",
+      "sha256": "7ff5697dd008707ead3ae71b79ac284641ea589b15aaf0e5c0472bfee576d240"
+    },
+    {
+      "path": "governance/evidence/ui/authentication-20261028/actual/registration/global-registration-errors-320.png",
+      "sha256": "7b4380a31f92c5ff2c70bf43f7f3bfcb71826b7ab537d459d0a4ba43438f465d"
+    },
+    {
+      "path": "governance/evidence/ui/authentication-20261028/actual/registration/global-registration-errors-768.png",
+      "sha256": "ccdc49527cf20984a64396aa7bc0787536094822e5bf670f37f861d3fdc7bdec"
+    },
+    {
+      "path": "governance/evidence/ui/authentication-20261028/actual/registration/global-verification-errors-1440.png",
+      "sha256": "2a45bf8e51f8fdfd8599da002d94a7c297aa2a3758962f5a00acb17321961cd1"
+    },
+    {
+      "path": "governance/evidence/ui/authentication-20261028/actual/registration/global-verification-errors-320.png",
+      "sha256": "db03f429221209dae6f6364147414f3cb38e76f77ddcff751acc55efa0568cb3"
+    },
+    {
+      "path": "governance/evidence/ui/authentication-20261028/actual/registration/global-verification-errors-768.png",
+      "sha256": "e83aee23c504fba9a5e75d0fb59bc8f20f270975da6d271a02ea94949f90b720"
+    },
+    {
+      "path": "governance/evidence/ui/authentication-20261028/actual/registration/global-verify-1440.png",
+      "sha256": "f2e0893e64eec1c110966bfd87828aeaed3a119a937034920a377bb6382a4e6c"
+    },
+    {
+      "path": "governance/evidence/ui/authentication-20261028/actual/registration/global-verify-320.png",
+      "sha256": "d4d9f2fefada4f01260fb5ff78d35711ab2912a5140dd61b4343092ce25280e1"
+    },
+    {
+      "path": "governance/evidence/ui/authentication-20261028/actual/registration/global-verify-768.png",
+      "sha256": "abb7d72d8244d7988d29f2133c124a4cf879082a828ea850e18bc013b009ab0c"
+    },
+    {
+      "path": "governance/evidence/ui/authentication-20261028/actual/registration/personal-desktop.png",
+      "sha256": "cc738ae30fd7d7b06c5c328229db8e5fde8a53b981298f523586519a34125e29"
+    },
+    {
+      "path": "governance/evidence/ui/authentication-20261028/actual/registration/personal-narrow.png",
+      "sha256": "e157403aae53723443c5e440d9226f05688bd3ba1df94e194f59d2016ad44eef"
+    },
+    {
+      "path": "governance/evidence/ui/authentication-20261028/actual/registration/ready-desktop.png",
+      "sha256": "be13ff145a99a6107556dea1cabcb35a5b517264451159cfff565be3a5a65280"
+    },
+    {
+      "path": "governance/evidence/ui/authentication-20261028/actual/registration/ready-narrow.png",
+      "sha256": "97d65295a6c368f804d67d04c68181466ee9bfc28b3af32f9c826e8c06c8c2af"
+    },
+    {
+      "path": "governance/evidence/ui/authentication-20261028/actual/registration/register-desktop.png",
+      "sha256": "7c51f87606d2f22f5e94914d488a381a640c3130bc6424c22758cc40da3af9bc"
+    },
+    {
+      "path": "governance/evidence/ui/authentication-20261028/actual/registration/register-narrow.png",
+      "sha256": "2496c5047313c38b74293b86751449a454a084a052db988c0f8b5217480ef794"
+    },
+    {
+      "path": "governance/evidence/ui/authentication-20261028/actual/registration/verify-desktop.png",
+      "sha256": "f2e0893e64eec1c110966bfd87828aeaed3a119a937034920a377bb6382a4e6c"
+    },
+    {
+      "path": "governance/evidence/ui/authentication-20261028/actual/registration/verify-narrow.png",
+      "sha256": "b75df0739cc5bbae986fcb8352f46fe424e4ff93d7ab19df23065849cc3beac9"
+    },
+    {
+      "path": "governance/evidence/ui/authentication-20261028/actual/shared-admin-validation-desktop.png",
+      "sha256": "c1b395b65204e5746cbf3be192e133c82674e51d786bfb81b1ef4dba60518218"
+    },
+    {
+      "path": "governance/evidence/ui/authentication-20261028/actual/shared-admin-validation-mobile.png",
+      "sha256": "f587bd84fad51c79a3e4cd63e81188e39659153a47a3f5c356c66ed90354e6f7"
+    },
+    {
+      "path": "governance/evidence/ui/authentication-20261028/actual/shared-user-validation-desktop.png",
+      "sha256": "bd025d313bae5afc971ba4ee2028fe9b4f9e89f24df32da90bdd0e267692eab3"
+    },
+    {
+      "path": "governance/evidence/ui/authentication-20261028/actual/shared-user-validation-mobile.png",
+      "sha256": "8de57fe0dc7a164eadf226e23a2c3af5365b37cdd839950e3e935d7d0aad4aa2"
+    },
+    {
+      "path": "governance/evidence/ui/authentication-20261028/reference/login-figma-1440.png",
+      "sha256": "b847c61833c053614ca4b33fa15d4231f4851ce0504b44c37668dc1fb5657d73"
+    },
+    {
+      "path": "governance/evidence/ui/authentication-20261028/reference/login-proposal-1440.png",
+      "sha256": "ff5fe2e31abd267ac820cc8c829d74888f40dca354558ab98b5b9ec809a576eb"
+    },
+    {
+      "path": "governance/evidence/ui/authentication-20261028/reference/login-proposal-320.png",
+      "sha256": "68baea86dc068d505ef9f1c9906b5b10fe3748cfa5dcee33aee13e8caa2179cc"
+    },
+    {
+      "path": "governance/evidence/ui/authentication-20261028/reference/signed-in-proposal-1440.png",
+      "sha256": "3f43a91de7fdf7b4f2b4826502b462c54a66125f1225cce184843c02b5cc671c"
+    },
+    {
+      "path": "governance/evidence/ui/authentication-20261028/reference/signed-in-proposal-320.png",
+      "sha256": "c3a6aa228e158adb0c03e562ea4bfce3ac735b65c811aeaa3e86e46d14374a9d"
+    },
+    {
+      "path": "governance/evidence/ui/authentication-20261028/actual/real-signed-in.png",
+      "sha256": "f4413c3d91e22abab5830d88cd465fe554d0905550905221470632831284880b"
+    },
+    {
+      "path": "governance/evidence/ui/authentication-20261028/actual/real-registration-ready.png",
+      "sha256": "be13ff145a99a6107556dea1cabcb35a5b517264451159cfff565be3a5a65280"
+    }
+  ],
+  "approval_ref": "governance/evidence/TUN-P2-005-VISUAL-ACCEPTANCE-DEFERRAL-20261021.json",
+  "figma_backfill": {
+    "status": "OPEN",
+    "blocking": false,
+    "todo": "TODO-TUN-P2-005-FIGMA001"
+  },
+  "failed_prior_attempts": [
+    {
+      "source": "9bad52c",
+      "reason": "Full workspace disk blocked compiler/screenshot writes; the ignored regenerable Trivy DB cache was removed after path/ownership checks. Source and scan reports were preserved."
+    },
+    {
+      "source": "f63e81b",
+      "reason": "Initial Docker fixture probe used the unavailable default pipe; the Docker CLI endpoint spelling also required normalization for the .NET npipe transport. The final correctly configured suite passed all77; earlier failed receipts remain in artifacts."
+    }
+  ],
+  "release_or_merge_approval": false
+}

@@ -1,0 +1,98 @@
+{
+  "schema_version": 1,
+  "scope_id": "P0-RV009",
+  "result": "PASS_THREE_PRIVATE_CANDIDATES",
+  "source_commit": "8afa4769f9b8553b619c0455abbb6890aff2974b",
+  "checked_at": "2026-10-21T16:48:17.555Z",
+  "policy": "Trivy0.70.0 full-image scans with ignore-unfixed, HIGH/CRITICAL and exit-code1; no CVE exclusions. Nonempty target coverage required.",
+  "images": [
+    {
+      "component": "postgres",
+      "image": "tunner-security/postgres:18.6-r1",
+      "image_id": "sha256:297d7db03adf82fff8a53e817e7cad0f6f154e01822af47331ed94b286beda06",
+      "source_commit": "8afa4769f9b8553b619c0455abbb6890aff2974b",
+      "recipe_sha256": "305e82e0cd63cda019bcf9863f78d31c21dd1fcd56808d3beaa14ea7ca670357",
+      "recipe_has_uncommitted_changes": false,
+      "fixable_high_critical": 0,
+      "target_count": 2,
+      "scan_ref": {
+        "path": "governance/evidence/security/20261021/postgres-scan.json",
+        "sha256": "e4288c29e77b827d940309669fc2f4860b8cae3ee79e72f0409fbc816639a21a"
+      },
+      "compatibility_checks": 8
+    },
+    {
+      "component": "openbao",
+      "image": "tunner-security/openbao:2.7.1-r1",
+      "image_id": "sha256:84d609ce13df5e673522ffe504268867ef816cc50f9ac48a8d2efbc30c0ec96e",
+      "source_commit": "8afa4769f9b8553b619c0455abbb6890aff2974b",
+      "recipe_sha256": "9ca4fc93806dded79572530b8cfb355f0a66b7b07b0e07deead2bca1e8e809a5",
+      "recipe_has_uncommitted_changes": false,
+      "fixable_high_critical": 0,
+      "target_count": 2,
+      "scan_ref": {
+        "path": "governance/evidence/security/20261021/openbao-scan.json",
+        "sha256": "def305e58f6802f9d409c6ffca48cdd66333663460079d35e2a34e7c5f7897b3"
+      },
+      "compatibility_checks": 8
+    },
+    {
+      "component": "mailpit",
+      "image": "tunner-security/mailpit:1.31.6-r1",
+      "image_id": "sha256:1fbd3039a6676dd3ce58e45b23ec95d0ad51d8351dfd46c9c745973742868604",
+      "source_commit": "8afa4769f9b8553b619c0455abbb6890aff2974b",
+      "recipe_sha256": "24b5298969facb87a090c4c19fd16f93d9fd18107d9009a48de0e02b060aa760",
+      "recipe_has_uncommitted_changes": false,
+      "fixable_high_critical": 0,
+      "target_count": 2,
+      "scan_ref": {
+        "path": "governance/evidence/security/20261021/mailpit-scan.json",
+        "sha256": "470d75fef7111535634cabc2c71a20437e23697c79779543257f6a331bab2f1f"
+      },
+      "compatibility_checks": 5
+    }
+  ],
+  "receipts": [
+    {
+      "path": "governance/evidence/security/20261021/governance-functional-8afa476.log",
+      "sha256": "dd5db41654cb4e5f25b3cfe54e8f28bb38dd9110c035a7114ce9081929530cf5"
+    },
+    {
+      "path": "governance/evidence/security/20261021/audit-functional-8afa476.log",
+      "sha256": "f43ed28553043a8abcd9b0109aee7072405f7ac5d61606db7db19856ccf27d74"
+    },
+    {
+      "path": "governance/evidence/security/20261021/postgres-checks-8afa476.log",
+      "sha256": "a8727a5ef38dcffe7b5baa5fdb709976502958a4f6e7a95758ae7f3056bb4d9e"
+    },
+    {
+      "path": "governance/evidence/security/20261021/openbao-checks-8afa476.log",
+      "sha256": "f41669b5cb33a3649a25bbf79b841043318d997ee698471fe79ec8dc7c2862e4"
+    },
+    {
+      "path": "governance/evidence/security/20261021/mailpit-checks-8afa476.log",
+      "sha256": "27f2a76d151b22dbd3366ec924a9c6d8ef5f60d6f9dbc7cf1920a059c9b94e68"
+    },
+    {
+      "path": "governance/evidence/security/20261021/sast-final.log",
+      "sha256": "abe76a30dd5900ccf26ebb0d70f307a7b072cd7f52af95a516b311eee8d81887"
+    },
+    {
+      "path": "governance/evidence/security/20261021/secret-final.log",
+      "sha256": "af1982f1651f8e92978f7b074237dcaed92b489cf2db8c12a2d572b8a712e241"
+    },
+    {
+      "path": "governance/evidence/security/20261021/container-policy-final.log",
+      "sha256": "8a7949fc691f4da0d5752e9abf5633ccca64d90d1bc1c1d0edc571c16a389464"
+    },
+    {
+      "path": "governance/evidence/security/20261021/security-source-final.log",
+      "sha256": "42f8593ea1c6c052cd9f9972e49d0f47cd303fb31d7e2b763611b0077bd747bf"
+    },
+    {
+      "path": "governance/evidence/security/20261021/dev-source-final.log",
+      "sha256": "1ced0551eb5bf7f0de8e15c576774982e62221f9b1793c8b2c4d8f7e5e8314fd"
+    }
+  ],
+  "boundary": "Private local validation only; development Compose remains on vendor defaults. No publication, deployment or production acceptance. Vendor LGTM remains security-blocked. Scan results are time-specific."
+}

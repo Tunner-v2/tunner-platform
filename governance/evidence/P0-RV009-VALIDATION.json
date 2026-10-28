@@ -1,0 +1,131 @@
+{
+  "schema_version": 1,
+  "scope_id": "P0-RV009",
+  "validation_kind": "COMMITTED",
+  "result": "PASS",
+  "tested_commit_sha": "8afa4769f9b8553b619c0455abbb6890aff2974b",
+  "validated_commit_sha": "8afa4769f9b8553b619c0455abbb6890aff2974b",
+  "owned_behavior_paths": [
+    ".agent/skills/end-user-ux-reviewer/SKILL.md",
+    ".agent/skills/frontend-engineer/SKILL.md",
+    ".agent/skills/tester-qa-engineer/SKILL.md",
+    ".agent/skills/ui-ux-engineer/SKILL.md",
+    ".github/workflows/create-pull-request.yml",
+    ".github/workflows/security-supply-chain.yml",
+    "AGENTS.md",
+    "docs/authority/current-authority.json",
+    "docs/authority/current/age-policy-manifest.json",
+    "docs/authority/current/decisions/AMD-0009_URL_Addressable_Routing_and_Governed_Form_Validation.md",
+    "docs/authority/current/development/09_Testing_Acceptance_Evidence_and_Quality_Gates.md",
+    "docs/authority/current/development/10_UI_UX_Components_Widgets_and_Plugins_Development_Rules.md",
+    "docs/authority/current/development/12_AI_Development_Protocol_Context_and_Project_Memory.md",
+    "docs/authority/current/development/31_UI_UX_Screen_and_Control_Center_Requirements_Matrix.md",
+    "docs/authority/current/development/33_Production_Readiness_Compliance_and_Release_Gates.md",
+    "docs/authority/current/development/35_AI_Agent_Skill_Catalog_and_Review_Contracts.md",
+    "docs/authority/current/development/36_P0_Repository_Bootstrap_Governance_and_Context_Implementation_Spec.md",
+    "docs/authority/current/development/37_Current_Authority_Index.md",
+    "docs/authority/current/development/README.md",
+    "docs/authority/current/history/before-AMD0009-age-policy-manifest.json",
+    "docs/authority/current/history/before-AMD0009-mirror-manifest.json",
+    "docs/authority/current/history/before-AMD0009-supplemental-manifest.json",
+    "docs/authority/current/history/before-AMD0009-visual-fidelity-manifest.json",
+    "docs/authority/current/mirror-manifest.json",
+    "docs/authority/current/supplemental-manifest.json",
+    "docs/authority/current/supplemental-registration.json",
+    "docs/authority/current/visual-fidelity-manifest.json",
+    "docs/contracts/UI_REQUIRED_RESOLUTION.md",
+    "governance/config/required-main-checks.json",
+    "governance/evidence/BOOT-P0-001-integrity.json",
+    "governance/evidence/P0-RV006-AUTHORITY-RESOLUTION.json",
+    "governance/evidence/P0-RV007-AUTHORITY-RESOLUTION.json",
+    "governance/evidence/P0-RV008-AUTHORITY-RESOLUTION.json",
+    "governance/evidence/history/BOOT-P0-001-before-AMD0009-integrity.json",
+    "governance/rd/source-registry.json",
+    "governance/schemas/v1/governance-record.schema.json",
+    "governance/schemas/v1/ui-inventory.schema.json",
+    "governance/templates/work-item.template.yaml",
+    "infra/docker/.env.example",
+    "infra/docker/compose.yaml",
+    "infra/security-images/.dockerignore",
+    "infra/security-images/catalog.json",
+    "infra/security-images/mailpit.Dockerfile",
+    "infra/security-images/openbao.Dockerfile",
+    "infra/security-images/postgres.Dockerfile",
+    "src/Tunner.Governance/GovernanceApplication.cs",
+    "src/Tunner.Governance/MilestoneReviewRevalidation.cs",
+    "src/Tunner.Governance/Program.cs",
+    "src/Tunner.Governance/UiComplianceApplication.cs",
+    "tests/Tunner.AuditRemediation.FunctionalTests/Program.cs",
+    "tests/Tunner.Governance.FunctionalTests/Program.cs",
+    "tools/security/Assert-TunnerCiResult.ps1",
+    "tools/security/Build-TunnerSecurityImages.ps1",
+    "tools/validation/Test-TunnerCiEnforcement.ps1",
+    "tools/validation/Test-TunnerFunctionalHarnessFailures.ps1",
+    "tools/validation/Test-TunnerMailpitImage.ps1",
+    "tools/validation/Test-TunnerOpenBaoSecurityImage.ps1",
+    "tools/validation/Test-TunnerPostgresSecurityImage.ps1",
+    "tools/validation/Validate-TunnerDevSource.ps1",
+    "web/package.json",
+    "web/pnpm-lock.yaml"
+  ],
+  "boundary": "CI enforcement and private rebuild foundations only. All unresolved vendor-image and signed-plugin findings remain open under P1-RV001. No default adoption, registry publication, merge, deployment or release acceptance.",
+  "inherited_source_proof": "governance/evidence/P0-RV008-VALIDATION.json",
+  "checked_at": "2026-10-21T16:51:47.715Z",
+  "checks": {
+    "governance": "PASS full functional suite",
+    "audit": "PASS13",
+    "ci_enforcement": "PASS27",
+    "image_compatibility": "PASS8 PostgreSQL+8 OpenBao+5 Mailpit",
+    "image_scans": "PASS three private images;0 fixable HIGH/CRITICAL",
+    "source_security": "PASS SAST,secret,container-policy,security-source,dev-source",
+    "frontend": "PASS at8afa; repeated31 unit/38 browser atfd58093; no classified behavior changed",
+    "release": "BLOCKED P1-RV001 vendor/LGTM and merged-main dependency"
+  },
+  "receipts": [
+    {
+      "path": "governance/evidence/security/20261021/image-results.json",
+      "sha256": "8e15be2c7982ac9d3cb207054134e5d376609d26a9bcefffe89fa35a4f66e430"
+    },
+    {
+      "path": "governance/evidence/security/20261021/governance-functional-8afa476.log",
+      "sha256": "dd5db41654cb4e5f25b3cfe54e8f28bb38dd9110c035a7114ce9081929530cf5"
+    },
+    {
+      "path": "governance/evidence/security/20261021/audit-functional-8afa476.log",
+      "sha256": "f43ed28553043a8abcd9b0109aee7072405f7ac5d61606db7db19856ccf27d74"
+    },
+    {
+      "path": "governance/evidence/security/20261021/postgres-checks-8afa476.log",
+      "sha256": "a8727a5ef38dcffe7b5baa5fdb709976502958a4f6e7a95758ae7f3056bb4d9e"
+    },
+    {
+      "path": "governance/evidence/security/20261021/openbao-checks-8afa476.log",
+      "sha256": "f41669b5cb33a3649a25bbf79b841043318d997ee698471fe79ec8dc7c2862e4"
+    },
+    {
+      "path": "governance/evidence/security/20261021/mailpit-checks-8afa476.log",
+      "sha256": "27f2a76d151b22dbd3366ec924a9c6d8ef5f60d6f9dbc7cf1920a059c9b94e68"
+    },
+    {
+      "path": "governance/evidence/security/20261021/sast-final.log",
+      "sha256": "abe76a30dd5900ccf26ebb0d70f307a7b072cd7f52af95a516b311eee8d81887"
+    },
+    {
+      "path": "governance/evidence/security/20261021/secret-final.log",
+      "sha256": "af1982f1651f8e92978f7b074237dcaed92b489cf2db8c12a2d572b8a712e241"
+    },
+    {
+      "path": "governance/evidence/security/20261021/container-policy-final.log",
+      "sha256": "8a7949fc691f4da0d5752e9abf5633ccca64d90d1bc1c1d0edc571c16a389464"
+    },
+    {
+      "path": "governance/evidence/security/20261021/security-source-final.log",
+      "sha256": "42f8593ea1c6c052cd9f9972e49d0f47cd303fb31d7e2b763611b0077bd747bf"
+    },
+    {
+      "path": "governance/evidence/security/20261021/dev-source-final.log",
+      "sha256": "1ced0551eb5bf7f0de8e15c576774982e62221f9b1793c8b2c4d8f7e5e8314fd"
+    }
+  ],
+  "role_reviews_ref": "governance/evidence/P0-RV009-ROLE-REVIEWS.json"
+}

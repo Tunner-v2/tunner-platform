@@ -1,0 +1,370 @@
+{
+  "schema_version": 1,
+  "scope_id": "TUN-P2-005",
+  "result": "PASS_ENGINEERING_UI_ACCEPTANCE_BLOCKED",
+  "validated_source_sha": "100cccd26f34211810e6c2bcf2a72242f5872c22",
+  "backend": {
+    "executed_at_sha": "100cccd26f34211810e6c2bcf2a72242f5872c22",
+    "total": 77,
+    "passed": 77,
+    "failed": 0,
+    "skipped": 0
+  },
+  "unit": {
+    "executed_at_sha": "100cccd26f34211810e6c2bcf2a72242f5872c22",
+    "total": 31,
+    "passed": 31,
+    "failed": 0
+  },
+  "dev_browser": {
+    "executed_at_sha": "100cccd26f34211810e6c2bcf2a72242f5872c22",
+    "shared": 16,
+    "registration": 22,
+    "authentication": 16,
+    "failed": 0,
+    "skipped": 0,
+    "flaky": 0
+  },
+  "real_browser": {
+    "executed_at_sha": "100cccd26f34211810e6c2bcf2a72242f5872c22",
+    "total": 3,
+    "passed": 3,
+    "failed": 0,
+    "scope": "Real HTTPS/PostgreSQL/SMTP registration, under18 normal sign-in, refresh, sign-out and origin/CSRF"
+  },
+  "starter_safety": {
+    "passed": 7,
+    "failed": 0,
+    "initial_precondition_failure": "Safety script requires a running host; initial invocation before startup failed that prerequisite. The real-host rerun passed all7.",
+    "executed_at_sha": "100cccd26f34211810e6c2bcf2a72242f5872c22"
+  },
+  "source_binding": {
+    "method": "Full exact-commit rerun",
+    "executed_at_sha": "100cccd26f34211810e6c2bcf2a72242f5872c22",
+    "runtime_source_equivalence": "The already running isolated host uses the same committed runtime inputs as this SHA. All 77 backend tests, 31 unit tests, 54 dev-browser tests, 3 real-browser tests and 7 starter checks were rerun while HEAD was 100cccd and no task source was dirty.",
+    "earlier_cohort_ref": "Git commit 95e0aea retains the original e1a979a/0a21bc4 receipts; earlier raw run logs remain in artifacts/p2-005-auth-20261021.",
+    "metadata_only_after_source": true
+  },
+  "materialization": "Committed portable text copies normalize LF, final newline and checkout-root strings. Original raw receipts are identified by separate hashes. web/test-results and browser-results are disposable mutable outputs; committed copies preserve this executed cohort.",
+  "receipts": [
+    {
+      "raw_ref": "artifacts/p2-005-auth-20261021/tests/identity-100cccd-enabled.trx",
+      "raw_sha256": "8e3138a56bdb809050799912c2c87ab4abff610745b7a4605476e54ac4355aa7",
+      "portable_ref": "governance/evidence/ui/authentication-20261021/identity.trx",
+      "portable_sha256": "32079eba522d4fce1367318076d7f918aa6bc56d4c41ff7037d6c4db4117e8e5"
+    },
+    {
+      "raw_ref": "artifacts/p2-005-auth-20261021/frontend-unit-100cccd.log",
+      "raw_sha256": "54cb8737f0e84c519e651002e63eaf71276d2d5c9146dfc1ddd0e0a15c5d4576",
+      "portable_ref": "governance/evidence/ui/authentication-20261021/unit.log",
+      "portable_sha256": "c3ceb040ae85e3eb2dbf2b3c678512fa994e463186c3fc1ff9db7b66c732a941"
+    },
+    {
+      "raw_ref": "artifacts/p2-005-auth-20261021/frontend-browser-100cccd.log",
+      "raw_sha256": "a73e9a867b5767fa0f14c65ac09d590e1cbdb1230878c5c483f41a1782db0e5b",
+      "portable_ref": "governance/evidence/ui/authentication-20261021/browser.log",
+      "portable_sha256": "d210714181f008b6b659bfe8494a441a0a72207424955c4d8fa7e9db92735c84"
+    },
+    {
+      "raw_ref": "artifacts/p2-005-auth-20261021/real-browser-100cccd.log",
+      "raw_sha256": "0c1d216037ee9410b04f96de4d9ee0205d51c857214a0e41f0bd5368a769ac78",
+      "portable_ref": "governance/evidence/ui/authentication-20261021/real-browser.log",
+      "portable_sha256": "720ad5d335d5e328a79a07f4491969b21888eb3cbdf4171a777d42f289b37f67"
+    },
+    {
+      "raw_ref": "artifacts/p2-005-auth-20261021/starter-a8f7f37.log",
+      "raw_sha256": "6c7c86a5b93a1fc3885e31c077e66e876e5f1f5e1ca07f03953170dec92dc8b3",
+      "portable_ref": "governance/evidence/ui/authentication-20261021/starter.log",
+      "portable_sha256": "9bfef3eff31a41a9beff1d23cab6ac0672ada492b6255ddd60d5b2b6ee4a24f5"
+    },
+    {
+      "raw_ref": "artifacts/p2-005-auth-20261021/starter-safety-100cccd.log",
+      "raw_sha256": "65abb4eb2401fba29f6de95fafe24c10df4f326484fd5f4327f33d81fb88c0cf",
+      "portable_ref": "governance/evidence/ui/authentication-20261021/starter-safety.log",
+      "portable_sha256": "3dc83fd63954e1c9a24f9c3b380aecd887e13061950b6285ef9111bd67f7a87c"
+    },
+    {
+      "raw_ref": "web/test-results/results.json",
+      "raw_sha256": "50f712b7f97ecfa6605709ae8327016f4c3f534d9f4a105f197f08ecc4ec7c9e",
+      "portable_ref": "governance/evidence/ui/authentication-20261021/shared-results.json",
+      "portable_sha256": "ca9c5b472b4ec359bcbefe754158c985f17548758f850cd61d0b456389672ab0"
+    },
+    {
+      "raw_ref": "web/test-results/registration/results.json",
+      "raw_sha256": "dba4bead9504e3d376c5dfa1e0b16909b4b8c0d23c40015f47d18237fed03ecb",
+      "portable_ref": "governance/evidence/ui/authentication-20261021/registration-results.json",
+      "portable_sha256": "4757fd36fe7383448919a582032aab0488d7810305d403ff4251b31379a1d5b7"
+    },
+    {
+      "raw_ref": "web/test-results/authentication/results.json",
+      "raw_sha256": "905c21296d5800406be777b11900d201b3e8fbaa9582bcb70e1246351fdc9e20",
+      "portable_ref": "governance/evidence/ui/authentication-20261021/authentication-results.json",
+      "portable_sha256": "6456026e7d268b22dd89bd9add69e29c3c586890b02ef9b09413286143f08693"
+    },
+    {
+      "raw_ref": "artifacts/browser-testing/browser-results.json",
+      "raw_sha256": "1c7b1cccecc7274110459d40616e7d0517208c05175bcd5663e92c056f64f442",
+      "portable_ref": "governance/evidence/ui/authentication-20261021/real-browser-results.json",
+      "portable_sha256": "f388c89d826e6cd82a229a8a981b3c69c32c37d6764b03242a199d135f7e0db6"
+    }
+  ],
+  "screenshots": [
+    {
+      "path": "governance/evidence/ui/authentication-20261021/actual/admin-input-idle-reference-788.png",
+      "sha256": "0d0dc84b92dac4ce7ea94896fc97410019465864ae58eb79ce5ae8fd9b004bf2"
+    },
+    {
+      "path": "governance/evidence/ui/authentication-20261021/actual/authentication/login-1024.png",
+      "sha256": "7ad6ec41bfa2465aa688e50920afc39e5ca315ed81af48f0335112c746dca9a9"
+    },
+    {
+      "path": "governance/evidence/ui/authentication-20261021/actual/authentication/login-1440.png",
+      "sha256": "3d3877b7b8e8283e5f71bdd33c2790e5e19c9a946507cc223e8ec0a0e23f7711"
+    },
+    {
+      "path": "governance/evidence/ui/authentication-20261021/actual/authentication/login-320.png",
+      "sha256": "f3041699fb8ec7fb804fc56c87db7f357eb340d284e1b2ee63e2e5539b9389db"
+    },
+    {
+      "path": "governance/evidence/ui/authentication-20261021/actual/authentication/login-390.png",
+      "sha256": "2784c48acc47212959caa2ce783fb272a85b708f4e7d4e4519c86f6998b78b53"
+    },
+    {
+      "path": "governance/evidence/ui/authentication-20261021/actual/authentication/login-768.png",
+      "sha256": "bc381235bab2c34a6c26c4a09674e53b8b38247301637f60f9e6765b48a221f5"
+    },
+    {
+      "path": "governance/evidence/ui/authentication-20261021/actual/authentication/login-server-error-1440.png",
+      "sha256": "7ada766093e3493aa87f64ef133bfbfe0559a64628ecbba02edfb3eb61e6ae16"
+    },
+    {
+      "path": "governance/evidence/ui/authentication-20261021/actual/authentication/login-server-error-320.png",
+      "sha256": "917befdcfe02f76c142b707b28ab9fe3a8ae37e57731c63b04f4f0cc9e86b165"
+    },
+    {
+      "path": "governance/evidence/ui/authentication-20261021/actual/authentication/login-server-error-768.png",
+      "sha256": "e109f3914af8ca8f42231f49568ee8788636ed707218820f49c890bdc9e025bf"
+    },
+    {
+      "path": "governance/evidence/ui/authentication-20261021/actual/authentication/signed-in-1024.png",
+      "sha256": "9807dffdc39540e8882ab8e9dcf23204c1d946ccfcb7977092e8dd4c242df59f"
+    },
+    {
+      "path": "governance/evidence/ui/authentication-20261021/actual/authentication/signed-in-1440.png",
+      "sha256": "3f43a91de7fdf7b4f2b4826502b462c54a66125f1225cce184843c02b5cc671c"
+    },
+    {
+      "path": "governance/evidence/ui/authentication-20261021/actual/authentication/signed-in-320.png",
+      "sha256": "98fdd654e7b20664093c2f596cab497a92a1771f70449abed4daea619d53a5bc"
+    },
+    {
+      "path": "governance/evidence/ui/authentication-20261021/actual/authentication/signed-in-390.png",
+      "sha256": "ce21251222d3e988327c0898619fa2b3134fd1f6ae6b7687c73ad70b160fee81"
+    },
+    {
+      "path": "governance/evidence/ui/authentication-20261021/actual/authentication/signed-in-768.png",
+      "sha256": "374135ce1d5ed1dd9a79483536a3da129ab22f4aa725c4201c88fb07d263ceb6"
+    },
+    {
+      "path": "governance/evidence/ui/authentication-20261021/actual/desktop-light.png",
+      "sha256": "0bc878d8febd1122bf888b5ed819c17c4764562079a331c87f5040e4fb4e15c1"
+    },
+    {
+      "path": "governance/evidence/ui/authentication-20261021/actual/narrow-light.png",
+      "sha256": "fc3538e681f1290e8e3cd979448a1c47cbad0bddd9c30f97c826939f4004484e"
+    },
+    {
+      "path": "governance/evidence/ui/authentication-20261021/actual/registration/consent-desktop.png",
+      "sha256": "cd2208c6feb04bf5a29a79d43f8bd311555a23b2dbe2e654c0dc8a25704a5256"
+    },
+    {
+      "path": "governance/evidence/ui/authentication-20261021/actual/registration/consent-narrow.png",
+      "sha256": "a96bb400f9bb2ee8f5282717844afe7890ab8bdeb3d16e382cf984704f0a7067"
+    },
+    {
+      "path": "governance/evidence/ui/authentication-20261021/actual/registration/global-consent-1440.png",
+      "sha256": "96475af21f1dfb706b36583f5d2c6b6a11b65885f37c895580be86d1be36c8c5"
+    },
+    {
+      "path": "governance/evidence/ui/authentication-20261021/actual/registration/global-consent-320.png",
+      "sha256": "5e425c91d0d31fdf4c87902e03d0c68c08858b8ff1c2c110aec57e4462159e00"
+    },
+    {
+      "path": "governance/evidence/ui/authentication-20261021/actual/registration/global-consent-768.png",
+      "sha256": "069b237a02f9e664e7d99e268f4ffd51f288429d52febc7f2a37508445efddd3"
+    },
+    {
+      "path": "governance/evidence/ui/authentication-20261021/actual/registration/global-personal-1440.png",
+      "sha256": "cc738ae30fd7d7b06c5c328229db8e5fde8a53b981298f523586519a34125e29"
+    },
+    {
+      "path": "governance/evidence/ui/authentication-20261021/actual/registration/global-personal-320.png",
+      "sha256": "14813390b24df9db014392189d7b89adc472dead6b720936aaff59fc2552a5d8"
+    },
+    {
+      "path": "governance/evidence/ui/authentication-20261021/actual/registration/global-personal-768.png",
+      "sha256": "09a645110814d074fe288b38fa6bf2ad8a9502ba86690d18589e6a07dd1235bd"
+    },
+    {
+      "path": "governance/evidence/ui/authentication-20261021/actual/registration/global-personal-errors-1440.png",
+      "sha256": "dd1156f5dfeac742c984719a3a0918a7c8037384eb999ce31eadb5a715d250a4"
+    },
+    {
+      "path": "governance/evidence/ui/authentication-20261021/actual/registration/global-personal-errors-320.png",
+      "sha256": "a96f9dd336557f5b5c3876e33489fc3852096c911a3ef139f5d28bdbe4586a5f"
+    },
+    {
+      "path": "governance/evidence/ui/authentication-20261021/actual/registration/global-personal-errors-768.png",
+      "sha256": "020e363d74b2514d39f91a49b7c4042f75d369554b795a91cfd903e4e1f21612"
+    },
+    {
+      "path": "governance/evidence/ui/authentication-20261021/actual/registration/global-ready-1440.png",
+      "sha256": "be13ff145a99a6107556dea1cabcb35a5b517264451159cfff565be3a5a65280"
+    },
+    {
+      "path": "governance/evidence/ui/authentication-20261021/actual/registration/global-ready-320.png",
+      "sha256": "025b74f24090f0d4be2ae06e3770356ef839183d8b755a889d02534aa9091c59"
+    },
+    {
+      "path": "governance/evidence/ui/authentication-20261021/actual/registration/global-ready-768.png",
+      "sha256": "f61718caa634374344a80ad32fee141b6ff56c0ed08d12abd5e52e25f5799c9e"
+    },
+    {
+      "path": "governance/evidence/ui/authentication-20261021/actual/registration/global-register-1440.png",
+      "sha256": "7c51f87606d2f22f5e94914d488a381a640c3130bc6424c22758cc40da3af9bc"
+    },
+    {
+      "path": "governance/evidence/ui/authentication-20261021/actual/registration/global-register-320.png",
+      "sha256": "e56976f391855bf2f72a7f2879e94b15117164020c23f6010d457953cb16441d"
+    },
+    {
+      "path": "governance/evidence/ui/authentication-20261021/actual/registration/global-register-768.png",
+      "sha256": "bdc70f0a7a0d3b553fbf23c4988613713d019392601573632570c38e5e9e8303"
+    },
+    {
+      "path": "governance/evidence/ui/authentication-20261021/actual/registration/global-registration-errors-1440.png",
+      "sha256": "7ff5697dd008707ead3ae71b79ac284641ea589b15aaf0e5c0472bfee576d240"
+    },
+    {
+      "path": "governance/evidence/ui/authentication-20261021/actual/registration/global-registration-errors-320.png",
+      "sha256": "7b4380a31f92c5ff2c70bf43f7f3bfcb71826b7ab537d459d0a4ba43438f465d"
+    },
+    {
+      "path": "governance/evidence/ui/authentication-20261021/actual/registration/global-registration-errors-768.png",
+      "sha256": "ccdc49527cf20984a64396aa7bc0787536094822e5bf670f37f861d3fdc7bdec"
+    },
+    {
+      "path": "governance/evidence/ui/authentication-20261021/actual/registration/global-verification-errors-1440.png",
+      "sha256": "2a45bf8e51f8fdfd8599da002d94a7c297aa2a3758962f5a00acb17321961cd1"
+    },
+    {
+      "path": "governance/evidence/ui/authentication-20261021/actual/registration/global-verification-errors-320.png",
+      "sha256": "db03f429221209dae6f6364147414f3cb38e76f77ddcff751acc55efa0568cb3"
+    },
+    {
+      "path": "governance/evidence/ui/authentication-20261021/actual/registration/global-verification-errors-768.png",
+      "sha256": "e83aee23c504fba9a5e75d0fb59bc8f20f270975da6d271a02ea94949f90b720"
+    },
+    {
+      "path": "governance/evidence/ui/authentication-20261021/actual/registration/global-verify-1440.png",
+      "sha256": "f2e0893e64eec1c110966bfd87828aeaed3a119a937034920a377bb6382a4e6c"
+    },
+    {
+      "path": "governance/evidence/ui/authentication-20261021/actual/registration/global-verify-320.png",
+      "sha256": "d4d9f2fefada4f01260fb5ff78d35711ab2912a5140dd61b4343092ce25280e1"
+    },
+    {
+      "path": "governance/evidence/ui/authentication-20261021/actual/registration/global-verify-768.png",
+      "sha256": "abb7d72d8244d7988d29f2133c124a4cf879082a828ea850e18bc013b009ab0c"
+    },
+    {
+      "path": "governance/evidence/ui/authentication-20261021/actual/registration/personal-desktop.png",
+      "sha256": "cc738ae30fd7d7b06c5c328229db8e5fde8a53b981298f523586519a34125e29"
+    },
+    {
+      "path": "governance/evidence/ui/authentication-20261021/actual/registration/personal-narrow.png",
+      "sha256": "e157403aae53723443c5e440d9226f05688bd3ba1df94e194f59d2016ad44eef"
+    },
+    {
+      "path": "governance/evidence/ui/authentication-20261021/actual/registration/ready-desktop.png",
+      "sha256": "be13ff145a99a6107556dea1cabcb35a5b517264451159cfff565be3a5a65280"
+    },
+    {
+      "path": "governance/evidence/ui/authentication-20261021/actual/registration/ready-narrow.png",
+      "sha256": "97d65295a6c368f804d67d04c68181466ee9bfc28b3af32f9c826e8c06c8c2af"
+    },
+    {
+      "path": "governance/evidence/ui/authentication-20261021/actual/registration/register-desktop.png",
+      "sha256": "7c51f87606d2f22f5e94914d488a381a640c3130bc6424c22758cc40da3af9bc"
+    },
+    {
+      "path": "governance/evidence/ui/authentication-20261021/actual/registration/register-narrow.png",
+      "sha256": "2496c5047313c38b74293b86751449a454a084a052db988c0f8b5217480ef794"
+    },
+    {
+      "path": "governance/evidence/ui/authentication-20261021/actual/registration/verify-desktop.png",
+      "sha256": "f2e0893e64eec1c110966bfd87828aeaed3a119a937034920a377bb6382a4e6c"
+    },
+    {
+      "path": "governance/evidence/ui/authentication-20261021/actual/registration/verify-narrow.png",
+      "sha256": "b75df0739cc5bbae986fcb8352f46fe424e4ff93d7ab19df23065849cc3beac9"
+    },
+    {
+      "path": "governance/evidence/ui/authentication-20261021/actual/shared-admin-validation-desktop.png",
+      "sha256": "c1b395b65204e5746cbf3be192e133c82674e51d786bfb81b1ef4dba60518218"
+    },
+    {
+      "path": "governance/evidence/ui/authentication-20261021/actual/shared-admin-validation-mobile.png",
+      "sha256": "f587bd84fad51c79a3e4cd63e81188e39659153a47a3f5c356c66ed90354e6f7"
+    },
+    {
+      "path": "governance/evidence/ui/authentication-20261021/actual/shared-user-validation-desktop.png",
+      "sha256": "bd025d313bae5afc971ba4ee2028fe9b4f9e89f24df32da90bdd0e267692eab3"
+    },
+    {
+      "path": "governance/evidence/ui/authentication-20261021/actual/shared-user-validation-mobile.png",
+      "sha256": "8de57fe0dc7a164eadf226e23a2c3af5365b37cdd839950e3e935d7d0aad4aa2"
+    },
+    {
+      "path": "governance/evidence/ui/authentication-20261021/reference/login-figma-1440.png",
+      "sha256": "b847c61833c053614ca4b33fa15d4231f4851ce0504b44c37668dc1fb5657d73"
+    },
+    {
+      "path": "governance/evidence/ui/authentication-20261021/reference/login-proposal-1440.png",
+      "sha256": "ff5fe2e31abd267ac820cc8c829d74888f40dca354558ab98b5b9ec809a576eb"
+    },
+    {
+      "path": "governance/evidence/ui/authentication-20261021/reference/login-proposal-320.png",
+      "sha256": "68baea86dc068d505ef9f1c9906b5b10fe3748cfa5dcee33aee13e8caa2179cc"
+    },
+    {
+      "path": "governance/evidence/ui/authentication-20261021/reference/signed-in-proposal-1440.png",
+      "sha256": "3f43a91de7fdf7b4f2b4826502b462c54a66125f1225cce184843c02b5cc671c"
+    },
+    {
+      "path": "governance/evidence/ui/authentication-20261021/reference/signed-in-proposal-320.png",
+      "sha256": "c3a6aa228e158adb0c03e562ea4bfce3ac735b65c811aeaa3e86e46d14374a9d"
+    },
+    {
+      "path": "governance/evidence/ui/authentication-20261021/actual/real-signed-in.png",
+      "sha256": "651b6d6f7e34092aa1d0d2ef390533e9a8f296b915521bae164ca56e7075b424"
+    },
+    {
+      "path": "governance/evidence/ui/authentication-20261021/actual/real-registration-ready.png",
+      "sha256": "be13ff145a99a6107556dea1cabcb35a5b517264451159cfff565be3a5a65280"
+    }
+  ],
+  "external_authority": {
+    "figma": "READ_ONLY_NO_CHANGES",
+    "drive": "READ_ONLY_NO_CHANGES",
+    "required_owner_update": "docs/development/P2_005_EXTERNAL_UPDATES.md"
+  },
+  "production_ui_result": "BLOCKED",
+  "prior_failed_invocations": [
+    {
+      "raw_ref": "artifacts/p2-005-auth-20261021/backend-100cccd.log",
+      "result": "FAIL",
+      "reason": "Executing agent omitted TUNNER_RUN_CONTAINER_TESTS=1; 73 tests refused their container prerequisite, 4 policy tests passed. Corrected enabled rerun passed all77 without source changes."
+    }
+  ]
+}

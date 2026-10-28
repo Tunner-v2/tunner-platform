@@ -35,7 +35,7 @@ foreach ($service in @("postgres:", "rabbitmq:", "redis:", "openbao:", "mailpit:
     if (-not $compose.Contains($service)) { throw "Compose service missing: $service" }
 }
 
-foreach ($image in @("postgres:18.6", "rabbitmq:4.3.6-management", "redis:8.10.2", "openbao/openbao:2.7.0", "axllent/mailpit:v1.31.3", "grafana/otel-lgtm:0.34.0")) {
+foreach ($image in @("postgres:18.6", "rabbitmq:4.3.6-management", "redis:8.10.2", "openbao/openbao:2.7.0", "axllent/mailpit:v1.31.6", "grafana/otel-lgtm:0.34.0")) {
     if (-not $envExample.Contains($image)) { throw "Pinned image is missing from .env.example: $image" }
 }
 

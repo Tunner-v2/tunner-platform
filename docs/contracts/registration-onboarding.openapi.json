@@ -2,8 +2,8 @@
   "openapi": "3.1.0",
   "info": {
     "title": "Tunner private User BFF registration/onboarding contract",
-    "version": "pdr0011-onboarding-v1",
-    "description": "Implementation schema under Doc32. No public SDK/product API activation or legal/content publication. Historical PDR-0007 receipts remain historical."
+    "version": "amd0009-onboarding-v2",
+    "description": "Implementation schema under Doc32. No public SDK/product API activation or legal/content publication. Historical PDR-0007 receipts remain historical. AMD9 adds private server-bound progress recovery and known screen paths; existing registration POST, status and business contracts remain compatible."
   },
   "paths": {
     "/registration/register": {
@@ -320,6 +320,107 @@
           }
         }
       }
+    },
+    "/registration/progress": {
+      "get": {
+        "operationId": "registrationProgress",
+        "description": "HTTPS, same-origin read of expiring protected HttpOnly browser pointer, caller/network-bound application FindAsync and current server policy. Contains no code, DOB or credential, and grants no login session. Unknown/expired context fails safely.",
+        "responses": {
+          "200": {
+            "description": "Current completed stage; not an authentication session",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OperationResult"
+                }
+              }
+            }
+          },
+          "202": {
+            "description": "Current authorized onboarding stage",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OperationResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Not found or not disclosable"
+          },
+          "403": {
+            "description": "Missing/expired/invalid protected browser context"
+          },
+          "429": {
+            "description": "Rate limited"
+          },
+          "503": {
+            "description": "Required dependency unavailable"
+          }
+        }
+      }
+    },
+    "/registration/restart": {
+      "post": {
+        "operationId": "restartRegistrationPresentation",
+        "description": "Reset only the protected presentation/idempotency pointer for a new registration attempt. Existing operation/account/evidence is preserved. HTTPS, configured origin, CSRF, valid protected browser context and bounded empty object are mandatory.",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "X-Tunner-CSRF",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "additionalProperties": false,
+                "maxProperties": 0
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "New non-authorizing browser-bound attempt key",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "registrationKey"
+                  ],
+                  "properties": {
+                    "registrationKey": {
+                      "type": "string",
+                      "format": "uuid"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Malformed object or missing CSRF"
+          },
+          "403": {
+            "description": "Origin or browser context rejected"
+          },
+          "413": {
+            "description": "256-byte budget exceeded"
+          },
+          "415": {
+            "description": "JSON required"
+          }
+        }
+      }
     }
   },
   "components": {
@@ -532,5 +633,13 @@
         }
       }
     }
-  }
+  },
+  "x-tunner-screen-paths": [
+    "/registration",
+    "/registration/verify-email",
+    "/registration/personal-information",
+    "/registration/consent",
+    "/registration/complete"
+  ],
+  "x-tunner-bootstrap-attempt-key": "GET /registration/options returns registrationKey for the protected attempt pointer; initial real clients retain it in memory. It is not an authentication or verification proof. Existing arbitrary idempotency keys remain accepted and update only that protected pointer on successful registration."
 }

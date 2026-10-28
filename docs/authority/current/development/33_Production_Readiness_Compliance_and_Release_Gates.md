@@ -5,7 +5,31 @@
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
 # 33 — Production Readiness, Compliance & Release Gates
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -15,7 +39,31 @@
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
 This document defines objective gates for promoting Tunner from development to Sandbox, Staging and Production. “Feature complete” or “tests pass” alone is not release authority.
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -25,7 +73,31 @@ This document defines objective gates for promoting Tunner from development to S
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
 Every release has a `ReleaseReadinessRecord` with gate status:
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -41,7 +113,31 @@ NOT_APPLICABLE_WITH_EVIDENCE
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
 Exceptions are time-bound, owned and approved; they cannot waive constitutional Product Decisions or critical financial/security invariants.
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -51,7 +147,31 @@ Exceptions are time-bound, owned and approved; they cannot waive constitutional 
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
 PASS requires:
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -67,7 +187,31 @@ PASS requires:
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
 ## 4. Code quality gate
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -83,7 +227,31 @@ PASS requires:
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
 ## 5. Dependency/supply-chain gate
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -100,7 +268,31 @@ PASS requires:
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
 ## 6. Security gate
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -119,7 +311,31 @@ PASS requires:
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
 ## 7. Identity/privacy gate
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -136,7 +352,31 @@ PASS requires:
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
 ## 8. Payment/PCI, Product compliance and provider-account gate
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -157,12 +397,48 @@ PASS requires:
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
 ## 9. Market/tax/commercial gate
 
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
 For each enabled market/Product/payment-service profile:
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -181,12 +457,48 @@ For each enabled market/Product/payment-service profile:
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
 Missing market compliance policy means **market blocked**, not release-wide fabricated defaults.
 
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
 ## 10. Finance/accounting gate
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -207,12 +519,48 @@ Missing market compliance policy means **market blocked**, not release-wide fabr
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
 ## 11. Provider gate
 
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
 Stripe/Resend/R2 and any enabled provider require:
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -230,7 +578,31 @@ Stripe/Resend/R2 and any enabled provider require:
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
 ## 12. Data/storage gate
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -245,12 +617,48 @@ Stripe/Resend/R2 and any enabled provider require:
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
 ## 13. Reliability/DR gate
 
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
 Before Production, each critical service has approved:
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -265,12 +673,48 @@ Before Production, each critical service has approved:
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
 Load/stress/capacity test establishes adequate headroom for planned release. No fixed universal target is invented; the approved release profile stores the measured/required values.
 
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
 ## 14. Observability gate
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -286,7 +730,31 @@ Load/stress/capacity test establishes adequate headroom for planned release. No 
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
 ## 15. Accessibility/UI gate
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -302,13 +770,59 @@ Load/stress/capacity test establishes adequate headroom for planned release. No 
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
 ## 15A. Approved Figma visual-fidelity release gate — AMD-0008
+
+
+
+
+
+
 
 
 Active global UX authority: https://drive.google.com/file/d/1DErZZpc3rIwzfpADnDzD9a361draTuhW/view. For any release containing User/Admin/Connected Product-facing UI, `UI_VISUAL_APPROVAL` is a required release-readiness result independent of functionality, accessibility and build success.
 
 
+
+
+
+
+
+
 Required proof includes an approved Figma node/version/screen ID, applicable FRD/flow/component/token mapping, runtime screenshots compared at matching reference dimensions and approved responsive breakpoints, inspection of full backgrounds/glow/gradients/assets plus typography/field/button/card/navigation/footer style, labels, state variants, alignment/overlap/clipping, keyboard/accessibility tests, and recorded visual exception approvals by the Product Owner. Missing visuals, TailAdmin default-style substitutions, unapproved changed layouts or novel components, unapproved FRD-versus-Figma adaptations and missing evidence make this gate FAIL. Never treat an omitted full-screen background as a tolerable snapshot difference. All discovered mismatches are `UI_FIDELITY_DEFECT`; missing/unapproved screens follow `UI_REQUIRED`. A passing automated test alone cannot override Product Owner approval.
+
+
+
+
+
+
+
+
+## 15B. URL routing and form-validation release gate — AMD-0009
+
+
+
+
+Authority: https://drive.google.com/file/d/1VeaNofocTrsbXwdePg8VSVuembRQxr7A/view. Every independently navigable screen must map to an actual pathname and pass navigation, direct-entry, refresh, Back/Forward, SPA server fallback, authorized route guards and safe Product OAuth context tests. No unchanged pathname for a different full screen, no hash-only main screen router, no PII/token exposure in URLs. Every applicable form must pass reusable app-level typed/schema validation and independent backend validation; sole reliance on HTML5 required/tooltips is a failure. Error states must match approved Figma field/error/summary design (`registration-validation-errors`, node `70:1257`) with correct accessibility and responsive screenshots; security/business validation is determined by current FRD policy, not historical design text. `URL-001..006`, `VAL-001..008` evidence required. Unresolved `UI_ROUTING_DEFECT`, `UI_VALIDATION_DEFECT` or `UI_FIDELITY_DEFECT` blocks corresponding release and `UI_VISUAL_APPROVAL` gate.
+
+
+
+
+## 15C. Global per-screen and per-form AMD-0009 gate
+
+
+**GLOBAL scope:** every released Tunner-owned independent screen and form, present/future, across User, Admin, Billing, Finance, Product self-service and operations. The registration error design `70:1257` is a visual reference for the **shared approved Figma-derived error presentation**, not a limit on applicability or a universal registration text template. For each affected form, verify reusable approved field/summary error styles and interactions, typed application validation, authoritative relevant-domain backend checks, first-invalid focus, server-error mapping, a11y and responsive states. For each independently navigable full-screen view verify distinct canonical pathname, safe direct-link/refresh/back-forward/auth/route guard, correct routing inventory and links. Validation and route tests `URL-001..006`, `VAL-001..008` MUST pass for each applicable screen/form, with shared component variant tests plus per-route/form evidence. Passing registration alone does not authorize release of another module. Material visual exceptions require Product Owner consent under AMD-0008. Failures: `UI_ROUTING_DEFECT`, `UI_VALIDATION_DEFECT`, `UI_FIDELITY_DEFECT`, and block affected acceptance/release.
 
 
 ## 16. Performance and concurrency gate
@@ -316,7 +830,31 @@ Required proof includes an approved Figma node/version/screen ID, applicable FRD
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
 Critical scenarios include:
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -334,7 +872,31 @@ Critical scenarios include:
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
 Concurrency tests specifically target duplicate creation, version conflict, idempotency and balance/allocation invariants.
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -344,7 +906,31 @@ Concurrency tests specifically target duplicate creation, version conflict, idem
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
 Immutable artifact promotion:
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -356,7 +942,31 @@ DEV -> SANDBOX -> STAGING -> PRODUCTION
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
 Artifact is built once per release candidate and promoted with environment configuration/secret bindings. Environment-specific rebuild is prohibited except when a new artifact/version is intentionally produced and revalidated.
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -366,12 +976,48 @@ Database migration is separately gated and must record exact migration set/hash.
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
 ## 18. Release approval
 
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
 Release approval records:
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -390,7 +1036,31 @@ Release approval records:
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
 Git tag/release artifact becomes immutable closure evidence.
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -400,7 +1070,31 @@ Git tag/release artifact becomes immutable closure evidence.
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
 Verify:
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -418,7 +1112,31 @@ Verify:
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
 Financial live-charge smoke tests require explicit safe test/production policy and are never improvised.
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -428,12 +1146,48 @@ Financial live-charge smoke tests require explicit safe test/production policy a
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
 Rollback is used only when safe for code/data/provider contract. If irreversible migration or external side effect occurred, use fix-forward/reconciliation/compensating operation. Deployment rollback must never rollback a successful real-world Payment/Email/Bank side effect in database history.
 
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
 ## 21. Production blocker examples
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -457,7 +1211,43 @@ Rollback is used only when safe for code/data/provider contract. If irreversible
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ## Governed presentation-content release gate
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
