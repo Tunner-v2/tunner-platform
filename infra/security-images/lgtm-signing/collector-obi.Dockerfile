@@ -30,7 +30,8 @@ RUN --mount=type=cache,id=tunner-lgtm-go1273-mod,target=/go/pkg/mod,sharing=shar
     cd _build; \
     go get github.com/go-jose/go-jose/v4@v4.1.6; go mod tidy; go mod verify; \
     go build -p=2 -trimpath -tags grpcnotrace -ldflags='-s -w' -o /out/bin/otelcol-contrib .; \
-    cp go.mod go.sum components.go /out/provenance/collector/; \    go version -m /out/bin/otelcol-contrib > /out/provenance/collector/buildinfo.txt; \
+    cp go.mod go.sum components.go /out/provenance/collector/; \
+    go version -m /out/bin/otelcol-contrib > /out/provenance/collector/buildinfo.txt; \
     go list -m -json all > /out/provenance/collector/modules.json; \
     /out/bin/otelcol-contrib --version > /out/provenance/collector/version.txt; \
     /out/bin/otelcol-contrib components > /out/provenance/collector/components.txt

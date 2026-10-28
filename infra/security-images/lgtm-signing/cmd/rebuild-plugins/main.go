@@ -8,11 +8,13 @@ import (
 	"errors"
 	"flag"
 	"fmt"
+	"io"
 	"io/fs"
 	"os"
 	"os/exec"
 	"path/filepath"
 	"strings"
+	"time"
 )
 
 type sourceModule struct {
@@ -85,11 +87,53 @@ func run() error {
 	return os.WriteFile(filepath.Join(*output, "candidate-boundary.json"), append(proof, '\n'), 0444)
 }
 func command(dir, name string, args ...string) error {
+	if name == "go" && len(args) > 0 && args[0] == "get" {
+		return retryModuleDownload(func() ([]byte, error) {
+			cmd := exec.Command(name, args...)
+			cmd.Dir = dir
+			return cmd.CombinedOutput()
+		}, os.Stderr, time.Sleep)
+	}
 	cmd := exec.Command(name, args...)
 	cmd.Dir = dir
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 	return cmd.Run()
+}
+
+// Retry only transient transport failures from dependency retrieval. Tests,
+// compilation, source checksums and policy validation never use this path.
+func retryModuleDownload(run func() ([]byte, error), log io.Writer, pause func(time.Duration)) error {
+	for attempt := 1; attempt <= 3; attempt++ {
+		output, err := run()
+		if _, writeErr := log.Write(output); writeErr != nil {
+			return writeErr
+		}
+		if err == nil {
+			return nil
+		}
+		if attempt == 3 || !transientDownloadFailure(string(output)) {
+			return err
+		}
+		fmt.Fprintf(log, "TRANSIENT MODULE DOWNLOAD: retry %d/3; source/checksum requirements unchanged\n", attempt+1)
+		pause(time.Duration(attempt*2) * time.Second)
+	}
+	return errors.New("unreachable dependency retry state")
+}
+
+func transientDownloadFailure(output string) bool {
+	s := strings.ToLower(output)
+	for _, blocked := range []string{"checksum mismatch", "security error", "verification failed", "unknown revision", "invalid version", "does not contain package"} {
+		if strings.Contains(s, blocked) {
+			return false
+		}
+	}
+	for _, transient := range []string{"tls handshake timeout", "i/o timeout", "connection reset by peer", "temporary failure in name resolution"} {
+		if strings.Contains(s, transient) {
+			return true
+		}
+	}
+	return false
 }
 func capture(dir string, args ...string) ([]byte, error) {
 	cmd := exec.Command("go", args...)
