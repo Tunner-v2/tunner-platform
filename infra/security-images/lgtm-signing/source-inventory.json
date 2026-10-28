@@ -1,0 +1,129 @@
+{
+  "schema_version": 1,
+  "scope": "DEV_TEST_ONLY_NOT_YET_ADOPTED",
+  "upstream_image": "grafana/otel-lgtm@sha256:0df9bc14142000b161344bd24caf6ddd319b7319055aedaf9b0692b125730af7",
+  "grafana": {
+    "version": "13.2.4",
+    "commit": "af4a33e3786594ad72f72d97e6744010330c2977",
+    "archive_sha256": "fdd57503b5f591e951ea3dff80ab53a41487c3373dc89370da2e36e7bf752f52"
+  },
+  "plugins": [
+    {
+      "directory": "elasticsearch",
+      "id": "elasticsearch",
+      "version": "12.9.2",
+      "path": "github.com/grafana/grafana-elasticsearch-datasource/pkg",
+      "module": "github.com/grafana/grafana-elasticsearch-datasource",
+      "source_version": "v0.0.0-20261006170718-a4b9ec92456c",
+      "vcs": "a4b9ec92456c705a5b3ff81c538c19293a5ee88e"
+    },
+    {
+      "directory": "grafana-postgresql-datasource",
+      "id": "grafana-postgresql-datasource",
+      "version": "13.0.4",
+      "path": "github.com/grafana/grafana-postgresql-datasource/pkg",
+      "module": "github.com/grafana/grafana-postgresql-datasource",
+      "source_version": "v0.0.0-20260925110940-4d167c25053d",
+      "vcs": "4d167c25053dc0444178451abf8a3f171e9e4471"
+    },
+    {
+      "directory": "grafana-pyroscope-datasource",
+      "id": "grafana-pyroscope-datasource",
+      "version": "13.0.7",
+      "path": "github.com/grafana/grafana-pyroscope-datasource/pkg",
+      "module": "github.com/grafana/grafana-pyroscope-datasource",
+      "source_version": "v0.0.0-20261008181727-fcc51a6c9f04",
+      "vcs": "fcc51a6c9f04f446e7d6ff0a7b3a288e3ca8c52e"
+    },
+    {
+      "directory": "influxdb",
+      "id": "influxdb",
+      "version": "13.1.7",
+      "path": "github.com/grafana/grafana-influxdb-datasource/pkg",
+      "module": "github.com/grafana/grafana-influxdb-datasource",
+      "source_version": "v0.0.0-20261007193059-030eec102c9c",
+      "vcs": "030eec102c9cfab314b73c87a2599ba8bb80bc40"
+    },
+    {
+      "directory": "jaeger",
+      "id": "jaeger",
+      "version": "13.0.5",
+      "path": "github.com/grafana/grafana-jaeger-datasource/pkg",
+      "module": "github.com/grafana/grafana-jaeger-datasource",
+      "source_version": "v0.0.0-20261008182416-f2e2b7c6e0c2",
+      "vcs": "f2e2b7c6e0c2504cac5d30141e4a2f7b4990fe63"
+    },
+    {
+      "directory": "loki",
+      "id": "loki",
+      "version": "13.2.2",
+      "path": "github.com/grafana/grafana-loki-datasource/pkg",
+      "module": "github.com/grafana/grafana-loki-datasource",
+      "source_version": "v0.0.0-20261008182227-6d076df3d695",
+      "vcs": "6d076df3d695f5fda342fbbad1f52547b55a96e2"
+    },
+    {
+      "directory": "mssql",
+      "id": "mssql",
+      "version": "13.0.7",
+      "path": "github.com/grafana/grafana-mssql-datasource/pkg",
+      "module": "github.com/grafana/grafana-mssql-datasource",
+      "source_version": "v0.0.0-20261008182622-e0ad61ae0451",
+      "vcs": "e0ad61ae045182f7869ba35afd1c48069b6add43"
+    },
+    {
+      "directory": "mysql",
+      "id": "mysql",
+      "version": "13.1.4",
+      "path": "github.com/grafana/grafana-mysql-datasource/pkg",
+      "module": "github.com/grafana/grafana-mysql-datasource",
+      "source_version": "v0.0.0-20261008182016-453ec30a1245",
+      "vcs": "453ec30a1245e539974d869a62f1c09bb5b9dfa9"
+    },
+    {
+      "directory": "opentsdb",
+      "id": "opentsdb",
+      "version": "13.0.4",
+      "path": "github.com/grafana/grafana-opentsdb-datasource/pkg",
+      "module": "github.com/grafana/grafana-opentsdb-datasource",
+      "source_version": "v0.0.0-20260928131858-2e3dc74ef71f",
+      "vcs": "2e3dc74ef71fe4b57b24170bd2c35612bc69ac25"
+    },
+    {
+      "directory": "prometheus",
+      "id": "prometheus",
+      "version": "13.2.3",
+      "path": "github.com/grafana/grafana-prometheus-datasource/pkg",
+      "module": "github.com/grafana/grafana-prometheus-datasource",
+      "source_version": "v0.0.0-20260929115645-6d21418acde6",
+      "vcs": "6d21418acde6ce31c9f7a6418a88758842a881bb"
+    },
+    {
+      "directory": "stackdriver",
+      "id": "stackdriver",
+      "version": "12.6.2",
+      "path": "github.com/grafana/grafana-cloudmonitoring-datasource/pkg",
+      "module": "github.com/grafana/grafana-cloudmonitoring-datasource",
+      "source_version": "v0.0.0-20260826152047-cb0dadba1d04",
+      "vcs": "cb0dadba1d04a4697a344d134d92dc520411bb7c"
+    },
+    {
+      "directory": "tempo",
+      "id": "tempo",
+      "version": "13.2.4",
+      "path": "github.com/grafana/grafana-tempo-datasource/pkg",
+      "module": "github.com/grafana/grafana-tempo-datasource",
+      "source_version": "v0.0.0-20261006162855-cdacb742bae9",
+      "vcs": "cdacb742bae90fbf62c48c5cca0eacdc08fd2acd"
+    },
+    {
+      "directory": "zipkin",
+      "id": "zipkin",
+      "version": "12.4.9",
+      "path": "github.com/grafana/grafana-zipkin-datasource/pkg",
+      "module": "github.com/grafana/grafana-zipkin-datasource",
+      "source_version": "v0.0.0-20260928200943-4f1d9629b22e",
+      "vcs": "4f1d9629b22e2bae0c887e20d82360786b4f34b6"
+    }
+  ]
+}
