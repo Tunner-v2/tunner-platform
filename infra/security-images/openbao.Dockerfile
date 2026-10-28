@@ -5,10 +5,10 @@ WORKDIR /src
 RUN apt-get update && apt-get install -y --no-install-recommends xz-utils=5.4.1-1+deb12u2 && rm -rf /var/lib/apt/lists/*
 RUN tar -xJf /tmp/source.tar.xz --strip-components=1 && test -f internal/http/web_ui/index.html
 ENV CGO_ENABLED=0 GOTOOLCHAIN=local
-RUN go get golang.org/x/net@v0.60.0 && go mod vendor && go mod verify
+RUN go get golang.org/x/net@v0.60.0 github.com/go-jose/go-jose/v4@v4.1.6 && go mod vendor && go mod verify
 ARG TARGETARCH
 RUN --mount=type=cache,id=tunner-security-go1273,target=/root/.cache/go-build,sharing=locked GOOS=linux GOARCH=$TARGETARCH go build -p=2 -trimpath -tags=ui \
-    -ldflags='-X github.com/openbao/openbao/v2/internal/version.fullVersion=2.7.1 -X github.com/openbao/openbao/v2/internal/version.GitCommit=a5db72cef75c24b920ade02065b18dd8eb666bac -X github.com/openbao/openbao/v2/internal/version.CommitDate=2026-10-01T13:32:54Z -X github.com/openbao/openbao/v2/internal/version.VersionMetadata=tunner.security1' \
+    -ldflags='-X github.com/openbao/openbao/v2/internal/version.fullVersion=2.7.1 -X github.com/openbao/openbao/v2/internal/version.GitCommit=a5db72cef75c24b920ade02065b18dd8eb666bac -X github.com/openbao/openbao/v2/internal/version.CommitDate=2026-10-01T13:32:54Z -X github.com/openbao/openbao/v2/internal/version.VersionMetadata=tunner.security2' \
     -o /out/bao . && go version -m /out/bao
 
 FROM openbao/openbao:2.7.1@sha256:6d2b93856e3fcf7b18ad855a0b51eaba474dc8b79cf554379ea32034797d2acf
@@ -18,4 +18,4 @@ LABEL org.opencontainers.image.title="Tunner security rebuild of OpenBao 2.7.1" 
       io.tunner.upstream.image="openbao/openbao:2.7.1@sha256:6d2b93856e3fcf7b18ad855a0b51eaba474dc8b79cf554379ea32034797d2acf" \
       io.tunner.source.commit="a5db72cef75c24b920ade02065b18dd8eb666bac" \
       io.tunner.security.toolchain="go1.27.3" \
-      io.tunner.security.patch="golang.org/x/net@v0.60.0"
+      io.tunner.security.patch="golang.org/x/net@v0.60.0;github.com/go-jose/go-jose/v4@v4.1.6"

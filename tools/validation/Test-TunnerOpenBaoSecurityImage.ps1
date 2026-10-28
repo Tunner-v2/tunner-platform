@@ -1,6 +1,6 @@
 #requires -Version 7.0
 [CmdletBinding()]
-param([string]$Image = 'tunner-security/openbao:2.7.1-r1', [string]$RepositoryRoot)
+param([string]$Image = 'tunner-security/openbao:2.7.1-r2', [string]$RepositoryRoot)
 Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
 Import-Module (Join-Path $PSScriptRoot '../lib/Tunner.RepositoryRoot.psm1') -Force
