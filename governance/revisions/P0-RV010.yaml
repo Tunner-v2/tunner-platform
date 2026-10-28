@@ -1,0 +1,48 @@
+{
+  "schema_version": 1,
+  "revision_id": "P0-RV010",
+  "revision_scope": "MILESTONE",
+  "original_scope_id": "P0",
+  "parent_revision_id": "P0-RV009",
+  "parent_milestone_revision_id": null,
+  "title": "Adopt validated development security image repairs without scan waivers",
+  "revision_type": "SECURITY",
+  "status": "ACTIVE",
+  "reason": "The user requests fixes for actual GitHub scan failures. Preserve closed P0 and P0-RV009 while repairing maintained OpenBao and aligning CI/development image references only after full-image scans and compatibility checks. LGTM signed-plugin failures remain enforced; no merge, publication, deployment, removal or trust override is authorized.",
+  "authority_refs": [
+    "docs/authority/baselines/1.6.0/08_Security_Privacy_Compliance_and_Global_Market_Governance.md",
+    "docs/authority/current/development/09_Testing_Acceptance_Evidence_and_Quality_Gates.md",
+    "docs/authority/baselines/1.6.0/decisions/ADR-0008_GitHub_and_GitHub_Actions.md",
+    "docs/authority/baselines/1.6.0/decisions/ADR-0009_Local_Observability_OTEL_LGTM.md"
+  ],
+  "decision_refs": [],
+  "defect_refs": [],
+  "change_refs": [],
+  "impact_classification": "NON_BLOCKING",
+  "blocked_scope": [],
+  "acceptance_criteria": [
+    "Repair only approved security/development image and CI scope; preserve full component scans, HIGH/CRITICAL thresholds, signed plugin integrity, current ports/storage/APIs and protected integration gates; no unresolved finding is waived."
+  ],
+  "prerequisites": [],
+  "work_items": [],
+  "required_gates": [],
+  "required_roles": [
+    "project-manager",
+    "solution-architect",
+    "governance-engineer",
+    "tester-qa-engineer",
+    "auditor",
+    "full-stack-engineer",
+    "cyber-security-engineer",
+    "devops-engineer",
+    "rd-engineer"
+  ],
+  "evidence_refs": [
+    "governance/evidence/P1-RV001-001-AUTHORITY-RESOLUTION-20261028.json",
+    "governance/evidence/P1-RV001-001-RD-SOURCES-20261028.json",
+    "governance/evidence/P1-RV001-001-STARTUP-REVIEWS-20261028.json"
+  ],
+  "created_at": "2026-10-28T18:21:36.0437361+00:00",
+  "closed_at": null,
+  "product_acceptance_required": false
+}

@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "scope_type": "WORK_ITEM",
+  "scope_id": "P1-RV001-001",
+  "reviewed_at": "2026-10-28",
+  "sources": [
+    {
+      "url": "https://github.com/go-jose/go-jose/security/advisories/GHSA-mgcc-cww5-fp2q",
+      "finding": "Official HIGH CVE2026-116587 affects go-jose/v4 through4.1.5;4.1.6 is patched. Rebuild the existing approved OpenBao2.7.1 source with this bounded patch and preserve its UI/Raft/API behavior."
+    },
+    {
+      "url": "https://github.com/grafana/docker-otel-lgtm/releases/tag/v0.38.1",
+      "finding": "Latest official candidate released26October. Actual full-image scan28October still finds87 fixable HIGH entries across25 discovered targets; do not call a latest tag secure."
+    },
+    {
+      "url": "https://grafana.com/api/plugins/grafana-postgresql-datasource",
+      "finding": "Official API readback28October still reports13.0.4. Signed artifact bytes cannot be patched under the old vendor signature."
+    },
+    {
+      "url": "https://grafana.com/developers/plugin-tools/publish-a-plugin/sign-a-plugin",
+      "finding": "Vendor signing authenticates plugin contents; private signing requires verified ownership. No unsigned-plugin or changed trust root is authorized."
+    },
+    {
+      "url": "https://go.dev/doc/devel/release",
+      "finding": "Go1.27.3 is the current reviewed patch fixing the crypto/x509 issue in the failing vendor binaries. Maintain existing pinned toolchain; no new version guess."
+    }
+  ],
+  "raw_evidence_root": "artifacts/security-followup-20261028",
+  "authority_resolution_ref": "governance/evidence/P1-RV001-001-AUTHORITY-RESOLUTION-20261028.json"
+}
