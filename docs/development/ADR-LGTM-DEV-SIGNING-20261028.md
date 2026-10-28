@@ -17,7 +17,7 @@ Use a separate explicit Tunner signature filename, preserve the original vendor 
 
 ## Key custody and build boundary
 
-Prototype/CI uses a fresh synthetic signing key generated only inside a disposable build process. Its private material exists in a non-exported secret/tmpfs mount, is never logged, never enters a Docker layer, Git, output receipt or final image. Only the public key/fingerprint and signed manifests are exported. Such images establish synthetic dev/test trust only. Operator-managed trust requires a separate reviewed explicit key configuration and custody evidence; no production key is requested or invented here. No global unsigned-plugin setting, development-mode trust bypass or trusted arbitrary key download is permitted.
+Prototype/CI uses a fresh synthetic signing key generated only inside a disposable build process. The prototype keeps private material only in process memory, never writing a private-key file. Any later externally supplied signing key must use a non-exported secret/tmpfs mount. Private material is never logged and never enters a Docker layer, Git, output receipt or final image. Only the public key/fingerprint and signed manifests are exported. Such images establish synthetic dev/test trust only. Operator-managed trust requires a separate reviewed explicit key configuration and custody evidence; no production key is requested or invented here. No global unsigned-plugin setting, development-mode trust bypass or trusted arbitrary key download is permitted.
 
 ## Rebuild and adoption contract
 
@@ -27,7 +27,7 @@ Pin official release source artifacts, toolchain and dependency repairs; preserv
 
 - https://grafana.com/developers/plugin-tools/publish-a-plugin/sign-a-plugin
 - https://github.com/grafana/docker-otel-lgtm/releases/tag/v0.38.1
-- https://raw.githubusercontent.com/grafana/grafana/v13.2.3/pkg/plugins/manager/signature/manifest.go
-- https://raw.githubusercontent.com/grafana/grafana/v13.2.3/pkg/plugins/manager/signature/signature.go
+- https://raw.githubusercontent.com/grafana/grafana/v13.2.4/pkg/plugins/manager/signature/manifest.go
+- https://raw.githubusercontent.com/grafana/grafana/v13.2.4/pkg/plugins/manager/signature/signature.go
 
 No production deployment, publication, protected-main integration or release is authorized.

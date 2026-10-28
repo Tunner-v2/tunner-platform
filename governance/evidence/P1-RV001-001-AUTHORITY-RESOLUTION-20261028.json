@@ -44,5 +44,24 @@
     "evidence_ref": "governance/evidence/P1-RV001-001-LGTM-SIGNING-APPROVAL-20261028.json",
     "adr_ref": "docs/development/ADR-LGTM-DEV-SIGNING-20261028.md",
     "outcome": "Explicit bounded dev/test trust extension authorized; original release/publication/main/deployment/waiver exclusions unchanged."
+  },
+  "followup_ci_findings": {
+    "observed_at": "2026-10-28T19:19:20.559Z",
+    "run": "https://github.com/Tunner-v2/tunner-platform/actions/runs/40751668912",
+    "mailpit_ui": {
+      "package": "dompurify",
+      "installed": "3.4.16",
+      "fixed": "3.4.17",
+      "advisories": [
+        "GHSA-cg2g-xh64-v4q7",
+        "GHSA-mrv2-3pqr-j5jr"
+      ],
+      "repair": "Pin only the sanitizer and exact vendor lockfile entries. Force each actual image build to run its mandatory UI audit; keep the HIGH/CRITICAL failure."
+    },
+    "backend_packaging": {
+      "failure": "CanonicalScreensGuardDirectEntryAndDoNotExposeAnAlternateHtmlRoute: /login Unauthorized on clean Linux CI",
+      "resolution": "Existing Tunner.User.Bff.csproj packages web/apps/user/dist. Build frozen-lock frontend assets before .NET compilation in the existing security job; preserve application routes and authorization checks."
+    },
+    "authority_resolution": "Existing maintained dependency, CI reproducibility, packaged User-UI and testing contracts resolve both failures without a business decision or UI redesign. P0-RV010 preserves historical P0 closure; the active P1 security revision owns these repairs."
   }
 }

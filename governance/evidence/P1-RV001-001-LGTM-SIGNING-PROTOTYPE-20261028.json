@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "scope_id": "P1-RV001-001",
+  "result": "PASS_PROTOTYPE_NOT_RUNTIME_ACCEPTANCE",
+  "approval_ref": "governance/evidence/P1-RV001-001-LGTM-SIGNING-APPROVAL-20261028.json",
+  "source_commit": "eadb1161ac06c9b0fffba3a07e22498da93256bc",
+  "native_integration_source_commit": "8ce8bd2db678b03d5e5335ec44f92bd81b72921a",
+  "signer_suites": {
+    "passed_test_results": 35,
+    "failed": 0,
+    "receipt": "artifacts/security-followup-20261028/lgtm-signing-eadb116-tests.json",
+    "sha256": "7277fc4696b7995af94421664ed0df18845fa4bc09a3befcb289938504e5bb6c"
+  },
+  "native_grafana": {
+    "version": "13.2.4",
+    "passed_test_results": 62,
+    "failed": 0,
+    "skipped_tests": 0,
+    "packages_without_test_files": 2,
+    "receipt": "artifacts/security-followup-20261028/native-signature-tests.json",
+    "sha256": "1187f437c309d89a65b61ab5b6bbc7deb663a47e3840e9bd1e459c35d377c94e",
+    "image_id": "sha256:d0422958a8300d78c1909f971561d19d5a56c62c8a7634a896be4d834b48ed46",
+    "vendor_path": "Existing vendor signature package regressions pass; no Tunner manifest delegates to the original path. Present invalid Tunner manifest fails before a source default can bypass it."
+  },
+  "secret_custody": "Synthetic Ed25519 key generated and cleared in process memory; only public trust policy, fingerprints and signed manifests are exported. No runtime/publication/production trust is enabled.",
+  "remaining": [
+    "Rebuild all affected LGTM executables and exact plugin sources with security dependency repairs",
+    "Pin final generated public policy and complete licenses/SBOM/provenance",
+    "Run complete stack/plugin compatibility and actual final-image/source UI scans",
+    "Record architect/security/governance acceptance against final tested source before LGTM runtime adoption"
+  ],
+  "completion_claim": false
+}
