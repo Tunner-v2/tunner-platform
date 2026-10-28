@@ -136,6 +136,36 @@ jobs:
           if-no-files-found: error
           retention-days: 14
 
+
+  # Additional candidate proof only. Declared runtime defaults and their existing
+  # aggregate gate remain unchanged until the rebuilt image is actually accepted.
+  lgtm-candidate-validation:
+    name: Maintained LGTM candidate validation
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    steps:
+      - name: Checkout committed candidate source
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - name: Build complete private dev/test candidate
+        shell: pwsh
+        run: ./tools/security/Build-TunnerLgtmSecurityImage.ps1
+      - name: Require complete image and embedded dependency scans
+        shell: pwsh
+        run: ./tools/security/Scan-TunnerLgtmImage.ps1 -Image tunner-security/lgtm:0.38.1-r1 -Environment test
+      - name: Verify native signatures telemetry persistence and rollback
+        shell: pwsh
+        run: ./tools/validation/Test-TunnerLgtmImage.ps1 -Image tunner-security/lgtm:0.38.1-r1
+      - name: Retain candidate proof without publishing an image
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        with:
+          name: lgtm-candidate-proof-${{ github.sha }}
+          path: artifacts/security-images/
+          if-no-files-found: error
+          retention-days: 14
+
   container-security-gate:
     name: Container security gate
     if: ${{ always() }}
