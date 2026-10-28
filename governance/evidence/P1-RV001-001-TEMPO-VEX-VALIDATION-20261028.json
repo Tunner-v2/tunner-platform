@@ -1,0 +1,52 @@
+{
+  "schema_version": 1,
+  "scope_id": "P1-RV001-001",
+  "result": "PASS_SCOPED_DEV_TEST_VEX_ONLY",
+  "tested_commit": "091a51b87bc6eeef188d18db9bf2aa009565f75c",
+  "consumer_execution_commit": "a3e5ae1",
+  "plugin_build_commit": "bb3d4124cb409520a11f6e5070511b4cc2416131",
+  "created_at": "2026-10-28T20:52:40.686Z",
+  "approval_ref": "governance/evidence/P1-RV001-001-TEMPO-VEX-APPROVAL-20261028.json",
+  "review_ref": "governance/evidence/security-20261028/tempo-vex/review.json",
+  "validator_source_sha256": "d7004ffb467190fcb8d25d3dc977cf19bf2581ac87354cea743ac82d22aeaa22",
+  "tests": {
+    "pass": 59,
+    "fail": 0,
+    "skip": 0
+  },
+  "unfiltered": {
+    "ref": "governance/evidence/security-20261028/tempo-vex/unfiltered-scan.json",
+    "targets": 13,
+    "fixable_high_critical": 2,
+    "exit_code": 1
+  },
+  "corrected": {
+    "ref": "governance/evidence/security-20261028/tempo-vex/corrected-scan.json",
+    "targets": 13,
+    "fixable_high_critical": 0,
+    "exact_suppressed_cves": [
+      "CVE-2026-21728",
+      "CVE-2026-28377"
+    ],
+    "exit_code": 0
+  },
+  "guard_ref": "governance/evidence/security-20261028/tempo-vex/guard.json",
+  "exact_binary_sha256": "963c415f3eb286c4d9a1001cab275d9563d4bd4b548ad5b6dd84953e17be61b9",
+  "image_id": "sha256:3094e5fa4cab45a946dbe02d166d4b2983cb01efb2f2688ba9c033df59852880",
+  "valid_until_utc": "2026-11-27T00:00:00Z",
+  "boundaries": [
+    "Only rebuilt Tempo data-source plugin",
+    "Full LGTM service rebuild and compatibility acceptance still pending",
+    "No core Tempo VEX",
+    "No production/publication/merge approval"
+  ],
+  "evidence_sha256": {
+    "governance/evidence/security-20261028/tempo-vex/unfiltered-scan.json": "a703dfb31c2bbb3f7846bc2894fd7467c5e69675d62d183f71f526ebde0d69fe",
+    "governance/evidence/security-20261028/tempo-vex/corrected-scan.json": "5a9fede772060d7d17ac73b2ad1da1a1855b04e409dd6d0e8571f1fc2c6fe9b4",
+    "governance/evidence/security-20261028/tempo-vex/guard.json": "b1cba80ecb690ab179b0bce987fadbcdcb1b139dc489ad464bd5f1d31f7fffae",
+    "governance/evidence/security-20261028/tempo-vex/source-module.json": "cf137bbff98ac79161c36ef334001ca62d161813c2c12f2b3704fb54c59969c1",
+    "governance/evidence/security-20261028/tempo-vex/linked-packages.txt": "971d7aa71931a23b1876edd0cd27fcad552f6fbbca146f2177ee8133bac22a44",
+    "governance/evidence/security-20261028/tempo-vex/redaction-tests.json": "fc771d0e8b3deb72e2e04d73ff8875e645cb09738c54b6a1fa1cb07e954e6661",
+    "governance/evidence/security-20261028/tempo-vex/scan.log": "1f1996ba7ba0f7abfe2523f70a11ce3c33828079b77b01cada3ca3439d87c44d"
+  }
+}
