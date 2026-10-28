@@ -71,6 +71,14 @@
     {
       "url": "https://raw.githubusercontent.com/grafana/docker-otel-lgtm/v0.38.1/README.md",
       "finding": "Vendor supports dev/test use, shared/data persistence and optional OBI. Enabling kernel instrumentation requires privileged host/PID access; those optional host-instrumentation tests are not enabled or claimed by the unprivileged compatibility fixture."
+    },
+    {
+      "url": "https://go.dev/ref/mod#module-cache",
+      "finding": "The official reference permits simultaneous Go commands sharing the module cache. Source files remain read-only by default; default checksum authentication and go mod verify are retained. Task-only caches may use shared BuildKit mounts instead of holding two exclusive locks across complete component builds."
+    },
+    {
+      "url": "https://pkg.go.dev/cmd/go#hdr-Build_and_test_caching",
+      "finding": "Pinned Go1.27.3 go help cache confirms concurrent invocation safety. Package build parallelism2 and GOMAXPROCS2 constrain each component. Cache-mode recovery changes orchestration only; source sums, test suites, VEX guards and full-image acceptance gates remain mandatory."
     }
   ],
   "raw_evidence_root": "artifacts/security-followup-20261028",
