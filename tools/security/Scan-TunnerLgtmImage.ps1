@@ -60,7 +60,7 @@ foreach ($dependency in $inventory.obi_embedded_java.runtime_dependencies) {
 $correctedExit = $rawExit
 $vexUsed = $false
 if ($matching.Count -gt 0) {
-    $guardArgs = @('run','--rm','--network','none','--cap-drop','ALL','--read-only','--tmpfs','/tmp:rw,nosuid,size=1073741824','-e','GOCACHE=/tmp/go-cache','-e','GOMAXPROCS=2','--mount',('type=bind,src='+$source+',dst=/src,readonly'),'--mount',('type=bind,src='+$approved+',dst=/approved,readonly'),'--mount',('type=bind,src='+$output+',dst=/audit,readonly'),'-w','/src',$go,'go','run','./cmd/vex-check','--approved-dir','/approved','--binary','/audit/tempo-plugin','--raw-scan','/audit/unfiltered.json','--image-id',$imageId)
+    $guardArgs = @('run','--rm','--network','none','--cap-drop','ALL','--read-only','--tmpfs','/tmp:rw,exec,nosuid,size=1073741824','-e','GOCACHE=/tmp/go-cache','-e','GOMAXPROCS=2','--mount',('type=bind,src='+$source+',dst=/src,readonly'),'--mount',('type=bind,src='+$approved+',dst=/approved,readonly'),'--mount',('type=bind,src='+$output+',dst=/audit,readonly'),'-w','/src',$go,'go','run','./cmd/vex-check','--approved-dir','/approved','--binary','/audit/tempo-plugin','--raw-scan','/audit/unfiltered.json','--image-id',$imageId)
     & docker @guardArgs | Set-Content (Join-Path $output 'guard.json') -Encoding utf8NoBOM
     if ($LASTEXITCODE -ne 0) { throw 'Approval/source/hash/context/tests/review/expiry guard rejected VEX; raw failure remains blocking.' }
     & docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v tunner-trivy-ci-cache:/root/.cache/trivy --mount ('type=bind,src='+$output+',dst=/audit') --mount ('type=bind,src='+$approved+',dst=/approved,readonly') $scanner @scanArgs --show-suppressed --vex /approved/tempo-vex.json --output /audit/corrected.json $imageId

@@ -97,7 +97,7 @@ try {
     $prom='http://127.0.0.1:'+$candidate.ports[9090]+'/api/v1/query?query=tunner_security_fixture'
     Wait-For { $r=Invoke-RestMethod -Uri $prom -TimeoutSec 5;@($r.data.result).Count -gt 0 -and [double]$r.data.result[0].value[1] -eq 1 } 'Prometheus returns the exact ingested gauge'
     $profileSource=Join-Path $PSScriptRoot 'fixtures/lgtm-profile'
-    & docker run --rm --network none --cap-drop ALL --read-only --tmpfs /tmp:rw,nosuid,size=1073741824 -e GOCACHE=/tmp/go-cache -e GOMAXPROCS=2 --mount ('type=bind,src='+$profileSource+',dst=/src,readonly') --mount ('type=bind,src='+$output+',dst=/out') golang:1.27.3-bookworm@sha256:5c3e9b43cfd3bb95c7937462e29d87ada57b481a96fa23ad0eb61778d7a00110 go run /src/main.go /out/synthetic.pprof
+    & docker run --rm --network none --cap-drop ALL --read-only --tmpfs /tmp:rw,exec,nosuid,size=1073741824 -e GOCACHE=/tmp/go-cache -e GOMAXPROCS=2 --mount ('type=bind,src='+$profileSource+',dst=/src,readonly') --mount ('type=bind,src='+$output+',dst=/out') golang:1.27.3-bookworm@sha256:5c3e9b43cfd3bb95c7937462e29d87ada57b481a96fa23ad0eb61778d7a00110 go run /src/main.go /out/synthetic.pprof
     if($LASTEXITCODE -ne 0){throw 'Synthetic isolated profile generation failed'}
     $profile=Invoke-WebRequest -Method Post -Uri ($pbase+'/ingest?name=tunner-security-fixture.goroutine') -Form @{profile=Get-Item (Join-Path $output 'synthetic.pprof')} -TimeoutSec 15
     Expect ($profile.StatusCode -eq 200) 'Pyroscope accepts synthetic pprof profile'
