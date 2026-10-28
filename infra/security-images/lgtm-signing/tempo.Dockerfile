@@ -5,8 +5,8 @@ ADD --checksum=sha256:a42f9ffacb3f8fdca315f15fd9fda855607c43cfb9c20e4ec86c084585
 WORKDIR /src/tempo
 RUN tar -xzf /tmp/tempo.tar.gz --strip-components=1 && mkdir -p /out/provenance/tempo /out/bin
 # Use the checksum-verified updated module graph rather than stale upstream vendor/modules.txt.
-RUN --mount=type=cache,id=tunner-lgtm-go1273-mod,target=/go/pkg/mod,sharing=locked \
-    --mount=type=cache,id=tunner-lgtm-go1273-build,target=/root/.cache/go-build,sharing=locked \
+RUN --mount=type=cache,id=tunner-lgtm-go1273-mod,target=/go/pkg/mod,sharing=shared \
+    --mount=type=cache,id=tunner-lgtm-go1273-build,target=/root/.cache/go-build,sharing=shared \
     set -eu; \
     go get github.com/go-jose/go-jose/v4@v4.1.6; go mod tidy; go mod verify; \
     go test -mod=readonly -p=2 -count=1 -json ./tempodb/backend/s3 -run '^TestSSEConfigEncryptionKeyRedacted$' > /out/provenance/tempo/redaction-tests.json || { cat /out/provenance/tempo/redaction-tests.json; exit 1; }; \

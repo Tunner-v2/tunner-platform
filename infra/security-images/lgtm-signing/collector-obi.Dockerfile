@@ -6,8 +6,8 @@ ADD --checksum=sha256:769e2467372c3333f646a1894be7c8cc80dfea3c49b0eaa9809fc7740a
 WORKDIR /src/obi
 RUN tar -xzf /tmp/obi.tar.gz --strip-components=1 && echo "21d35cb644013fc164fce5d9ba537e394181f27e08236033a434f5c5e9da9cdf  pkg/internal/java/embedded/obi-java-agent.jar" | sha256sum -c - && test -s pkg/ebpf/common/bpf_x86_bpfel.o
 FROM obi-source AS obi-builder
-RUN --mount=type=cache,id=tunner-lgtm-go1273-mod,target=/go/pkg/mod,sharing=locked \
-    --mount=type=cache,id=tunner-lgtm-go1273-build,target=/root/.cache/go-build,sharing=locked \
+RUN --mount=type=cache,id=tunner-lgtm-go1273-mod,target=/go/pkg/mod,sharing=shared \
+    --mount=type=cache,id=tunner-lgtm-go1273-build,target=/root/.cache/go-build,sharing=shared \
     set -eu; mkdir -p /out/bin /out/provenance/obi; \
     go mod verify; \
     go test -p=2 -count=1 -json ./cmd/obi/... ./pkg/buildinfo > /out/provenance/obi/upstream-tests.json; \
@@ -21,8 +21,8 @@ FROM obi-source AS collector-builder
 ADD --checksum=sha256:589a91e904cf78ea88c543c0ef2170529b89b74904386bfa87876ff07d60748e https://codeload.github.com/open-telemetry/opentelemetry-collector-releases/tar.gz/6c65793ec707f673304e52dfcb642684fda1a048 /tmp/collector.tar.gz
 WORKDIR /src/collector
 RUN tar -xzf /tmp/collector.tar.gz --strip-components=1 && mkdir -p internal/obi-src /out/bin /out/provenance/collector && cp -a /src/obi/. internal/obi-src/
-RUN --mount=type=cache,id=tunner-lgtm-go1273-mod,target=/go/pkg/mod,sharing=locked \
-    --mount=type=cache,id=tunner-lgtm-go1273-build,target=/root/.cache/go-build,sharing=locked \
+RUN --mount=type=cache,id=tunner-lgtm-go1273-mod,target=/go/pkg/mod,sharing=shared \
+    --mount=type=cache,id=tunner-lgtm-go1273-build,target=/root/.cache/go-build,sharing=shared \
     set -eu; go install go.opentelemetry.io/collector/cmd/builder@v0.163.0; \
     cd distributions/otelcol-contrib; \
     timeout 45m /go/bin/builder --verbose --skip-compilation --config manifest.yaml; \

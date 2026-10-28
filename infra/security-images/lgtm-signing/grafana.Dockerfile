@@ -1,15 +1,15 @@
 # Unsigned intermediate plugin candidates only; no LGTM runtime trust/adoption.
 FROM grafana/otel-lgtm:0.38.1@sha256:0df9bc14142000b161344bd24caf6ddd319b7319055aedaf9b0692b125730af7 AS vendor
 FROM golang:1.27.3-bookworm@sha256:5c3e9b43cfd3bb95c7937462e29d87ada57b481a96fa23ad0eb61778d7a00110 AS builder
-ENV CGO_ENABLED=0 GOTOOLCHAIN=local
+ENV CGO_ENABLED=0 GOTOOLCHAIN=local GOMAXPROCS=2
 WORKDIR /tools
 COPY go.mod verify.go ./
 COPY cmd/rebuild-plugins ./cmd/rebuild-plugins
 COPY source-inventory.json /reviewed/source-inventory.json
 COPY --from=vendor /otel-lgtm/grafana/data/plugins-bundled /vendor-plugins
 ARG PLUGIN_ID=
-RUN --mount=type=cache,id=tunner-lgtm-go1273-mod,target=/go/pkg/mod,sharing=locked \
-    --mount=type=cache,id=tunner-lgtm-go1273-build,target=/root/.cache/go-build,sharing=locked \
+RUN --mount=type=cache,id=tunner-lgtm-go1273-mod,target=/go/pkg/mod,sharing=shared \
+    --mount=type=cache,id=tunner-lgtm-go1273-build,target=/root/.cache/go-build,sharing=shared \
     go run ./cmd/rebuild-plugins -inventory /reviewed/source-inventory.json -vendor-root /vendor-plugins -output /out -plugin "$PLUGIN_ID"
 FROM scratch AS unsigned-plugins
 COPY --from=builder /out/ /
@@ -33,8 +33,8 @@ RUN sed -i 's/^package signing$/package tunnerdev/' pkg/plugins/manager/signatur
 COPY grafana-adapter.go.txt pkg/plugins/manager/signature/tunner_dev.go
 COPY grafana-adapter-test.go.txt pkg/plugins/manager/signature/tunner_dev_test.go
 RUN cd /tools && go run ./cmd/sign-dev -plugins /out/plugins -inventory /reviewed/source-inventory.json -policy-output /src/grafana/pkg/plugins/manager/signature/tunner_dev_policy.go -audit-output /out/provenance/grafana/signing-public.json
-RUN --mount=type=cache,id=tunner-lgtm-go1273-mod,target=/go/pkg/mod,sharing=locked \
-    --mount=type=cache,id=tunner-lgtm-go1273-build,target=/root/.cache/go-build,sharing=locked \
+RUN --mount=type=cache,id=tunner-lgtm-go1273-mod,target=/go/pkg/mod,sharing=shared \
+    --mount=type=cache,id=tunner-lgtm-go1273-build,target=/root/.cache/go-build,sharing=shared \
     set -eu; go get github.com/go-jose/go-jose/v4@v4.1.6 github.com/getkin/kin-openapi@v0.149.0; \
     go test -p=2 -count=1 -json ./pkg/plugins/manager/signature/... > /out/provenance/grafana/native-signature-tests.json; \
     go build -p=2 -trimpath -ldflags='-s -w -X main.version=13.2.4 -X main.commit=af4a33e3786594ad72f72d97e6744010330c2977 -X main.buildBranch=v13.2.4-tunner-dev -X main.buildstamp=1793145600' -o /out/bin/grafana ./pkg/cmd/grafana; \

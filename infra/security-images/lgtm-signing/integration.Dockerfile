@@ -13,6 +13,6 @@ COPY grafana-adapter-test.go.txt /src/grafana/pkg/plugins/manager/signature/tunn
 # No key is trusted in this test-only package. Native adapter tests use an
 # isolated in-memory policy; adoption must generate and pin a real dev-build policy.
 RUN printf '%s\n' 'package signature' 'import tunnerdev "github.com/grafana/grafana/pkg/plugins/manager/signature/tunnerdev"' 'var tunnerDevPolicy = tunnerdev.Policy{}' > pkg/plugins/manager/signature/tunner_dev_policy.go
-RUN --mount=type=cache,id=tunner-lgtm-go1273-mod,target=/go/pkg/mod,sharing=locked \
-    --mount=type=cache,id=tunner-lgtm-go1273-build,target=/root/.cache/go-build,sharing=locked \
+RUN --mount=type=cache,id=tunner-lgtm-go1273-mod,target=/go/pkg/mod,sharing=shared \
+    --mount=type=cache,id=tunner-lgtm-go1273-build,target=/root/.cache/go-build,sharing=shared \
     go test -p=2 -count=1 -json ./pkg/plugins/manager/signature/... > /tmp/native-signature-tests.json
