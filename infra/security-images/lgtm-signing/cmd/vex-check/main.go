@@ -97,8 +97,10 @@ func run() error {
 	if err != nil {
 		return err
 	}
-	if count == 0 { return errors.New("no matching raw finding; use the unfiltered scan") }
- return json.NewEncoder(os.Stdout).Encode(map[string]any{"result": "PASS_SCOPED_DEV_TEST_ONLY", "applicable_reviewed_findings": count, "image_id": *imageID, "validator_source_sha256": codeHash, "vex_sha256": hash(vex), "production_authorized": false})
+	if count == 0 {
+		return errors.New("no matching raw finding; use the unfiltered scan")
+	}
+	return json.NewEncoder(os.Stdout).Encode(map[string]any{"result": "PASS_SCOPED_DEV_TEST_ONLY", "applicable_reviewed_findings": count, "image_id": *imageID, "validator_source_sha256": codeHash, "vex_sha256": hash(vex), "production_authorized": false})
 }
 func validatorSourceHash() (string, error) {
 	_, file, _, ok := runtime.Caller(0)
