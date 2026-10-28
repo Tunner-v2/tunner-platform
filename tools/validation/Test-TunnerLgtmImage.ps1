@@ -27,7 +27,7 @@ function Wait-For([scriptblock]$test,[string]$name,[int]$seconds=120) {
 }
 function New-Volume([string]$name) { & docker volume create --label ('io.tunner.fixture='+$prefix) $name | Out-Null; if($LASTEXITCODE -ne 0){throw 'Fixture volume creation failed'};$volumes.Add($name) }
 function Copy-Volume([string]$from,[string]$to) {
-    & docker run --rm --network none --mount ('type=volume,src='+$from+',dst=/source,readonly') --mount ('type=volume,src='+$to+',dst=/target') busybox:1.37.0 cp -a /source/. /target/
+    & docker run --rm --network none --mount ('type=volume,src='+$from+',dst=/source,readonly') --mount ('type=volume,src='+$to+',dst=/target') busybox:1.37.0@sha256:bdf57e528e45e4433820e045b29b4597825a1c9e38353532d90a01445013f82e cp -a /source/. /target/
     if($LASTEXITCODE -ne 0){throw 'Owned stopped-volume backup/restore failed'}
 }
 function Start-Lgtm([string]$phase,[string]$reference,[string]$volume) {
