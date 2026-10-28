@@ -21,10 +21,10 @@ $networkCreated=$false
 $credential=[Convert]::ToBase64String([Text.Encoding]::UTF8.GetBytes('tunner-fixture:public-test-fixture'))
 $headers=@{Authorization='Basic '+$credential}
 function Expect([bool]$condition,[string]$name) { if(-not $condition){throw $name};$checks.Add($name);Write-Host ('PASS: '+$name) }
-function Wait-For([scriptblock]$test,[string]$name,[int]$seconds=120) {
+function Wait-For([scriptblock]$test,[string]$checkName,[int]$seconds=120) {
     $deadline=[DateTimeOffset]::UtcNow.AddSeconds($seconds)
-    do { try { if(& $test){$checks.Add($name);Write-Host ('PASS: '+$name);return} } catch {} ; Start-Sleep -Seconds 1 } while([DateTimeOffset]::UtcNow -lt $deadline)
-    throw ('Timeout: '+$name)
+    do { try { if(& $test){$checks.Add($checkName);Write-Host ('PASS: '+$checkName);return} } catch {} ; Start-Sleep -Seconds 1 } while([DateTimeOffset]::UtcNow -lt $deadline)
+    throw ('Timeout: '+$checkName)
 }
 function New-Volume([string]$name) { & docker volume create --label ('io.tunner.fixture='+$prefix) $name | Out-Null; if($LASTEXITCODE -ne 0){throw 'Fixture volume creation failed'};$volumes.Add($name) }
 function Copy-Volume([string]$from,[string]$to) {
