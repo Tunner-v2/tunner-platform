@@ -20,16 +20,20 @@
     },
     {
       "component": "mailpit",
-      "image": "tunner-security/mailpit:1.31.6-r1",
+      "image": "tunner-security/mailpit:1.31.6-r2",
       "dockerfile": "infra/security-images/mailpit.Dockerfile",
       "minimum_free_gib": 8,
-      "compatibility_test": "tools/validation/Test-TunnerMailpitImage.ps1"
+      "compatibility_test": "tools/validation/Test-TunnerMailpitImage.ps1",
+      "recipe_inputs": [
+        "infra/security-images/mailpit-ui.patch"
+      ]
     }
   ],
   "lgtm": {
-    "status": "BLOCKED_SIGNED_PLUGIN_REBUILD_INTEGRITY",
+    "status": "DEV_TEST_SIGNING_IMPLEMENTATION_APPROVED_NOT_ADOPTED",
     "existing_image": "grafana/otel-lgtm:0.34.0",
-    "candidate_vendor_image": "grafana/otel-lgtm:0.37.0",
-    "boundary": "Keep the complete stack and vendor signature checks. No unsigned-plugin override or altered trust root is authorized."
+    "candidate_vendor_image": "grafana/otel-lgtm:0.38.1",
+    "approval_ref": "governance/evidence/P1-RV001-001-LGTM-SIGNING-APPROVAL-20261028.json",
+    "boundary": "Keep the complete stack and vendor verification. The separately approved additional Tunner signing path is dev/test only and must pass source-pinned signature/tamper/full-stack/full-image gates before runtime adoption. No unsigned bypass, publication, main merge or production release."
   }
 }

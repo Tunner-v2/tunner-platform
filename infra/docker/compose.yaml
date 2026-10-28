@@ -63,7 +63,7 @@ services:
       start_period: 10s
 
   mailpit:
-    image: ${MAILPIT_IMAGE:-tunner-security/mailpit:1.31.6-r1}
+    image: ${MAILPIT_IMAGE:-tunner-security/mailpit:1.31.6-r2}
     ports:
       - "127.0.0.1:${MAILPIT_SMTP_PORT:-21025}:1025"
       - "127.0.0.1:${MAILPIT_UI_PORT:-28025}:8025"

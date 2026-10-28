@@ -7,6 +7,10 @@ $RepositoryRoot=Resolve-TunnerRepositoryRoot -RepositoryRoot $RepositoryRoot -St
 $defaults=[IO.File]::ReadAllText((Join-Path $RepositoryRoot 'infra/docker/.env.example'))
 $workflow=[IO.File]::ReadAllText((Join-Path $RepositoryRoot '.github/workflows/security-supply-chain.yml'))
 $catalog=Get-Content -LiteralPath (Join-Path $RepositoryRoot 'infra/security-images/catalog.json') -Raw | ConvertFrom-Json
+$compose=[IO.File]::ReadAllText((Join-Path $RepositoryRoot 'infra/docker/compose.yaml'))
+$bindings=@{}
+foreach($m in [regex]::Matches($defaults,'(?m)^([A-Z_]+_IMAGE)=(\S+)')){$bindings[$m.Groups[1].Value]=$m.Groups[2].Value}
+foreach($m in [regex]::Matches($compose,'image:\s*\$\{([A-Z_]+_IMAGE):-([^}]+)\}')){if($bindings[$m.Groups[1].Value] -cne $m.Groups[2].Value){throw ('Compose fallback differs from the scanned default: '+$m.Groups[1].Value)}}
 $declared=@([regex]::Matches($defaults,'(?m)^[A-Z_]+_IMAGE=(\S+)') | ForEach-Object {$_.Groups[1].Value})
 $scanned=@([regex]::Matches($workflow,'(?m)^\s*- image: (\S+)') | ForEach-Object {$_.Groups[1].Value})
 if ($declared.Count -lt 7 -or $scanned.Count -ne ($scanned | Select-Object -Unique).Count) {throw 'Missing runtime coverage or duplicate matrix image.'}
