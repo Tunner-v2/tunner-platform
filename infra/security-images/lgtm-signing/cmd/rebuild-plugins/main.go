@@ -15,7 +15,16 @@ import (
 	"strings"
 )
 
+type sourceModule struct {
+ Module string `json:"module"`
+ SourceVersion string `json:"source_version"`
+ SourceSum string `json:"source_sum"`
+ GoModSum string `json:"go_mod_sum"`
+ Destination string `json:"destination"`
+ VCS string `json:"vcs"`
+}
 type plugin struct {
+ AdditionalModules []sourceModule `json:"additional_modules"`
 	Directory     string `json:"directory"`
 	ID            string `json:"id"`
 	Version       string `json:"version"`
@@ -89,34 +98,20 @@ func capture(dir string, args ...string) ([]byte, error) {
 	return cmd.Output()
 }
 func rebuild(p plugin, vendorRoot, output string) error {
-	data, err := capture("", "mod", "download", "-json", p.Module+"@"+p.SourceVersion)
-	if err != nil {
-		return err
-	}
-	var module struct{ Dir, Sum, GoModSum string }
-	if err = json.Unmarshal(data, &module); err != nil {
-		return err
-	}
-	if module.Sum != p.SourceSum || module.GoModSum != p.GoModSum || !strings.HasPrefix(module.Dir, "/go/pkg/mod/") {
-		return errors.New("downloaded source checksum/location differs from approved inventory")
-	}
-	work := filepath.Join("/work/plugins", p.Directory)
-	assets := filepath.Join(output, "plugins", p.Directory)
-	proof := filepath.Join(output, "provenance", p.Directory)
-	for _, dir := range []string{work, assets, proof} {
-		if err := os.MkdirAll(dir, 0755); err != nil {
-			return err
-		}
-	}
-	if err = command("", "cp", "-a", module.Dir+"/.", work); err != nil {
-		return err
-	}
-	if err = command("", "chmod", "-R", "u+w", work); err != nil {
-		return err
-	}
-	if err = command("", "cp", "-a", filepath.Join(vendorRoot, p.Directory)+"/.", assets); err != nil {
-		return err
-	}
+ work:=filepath.Join("/work/plugins",p.Directory);assets:=filepath.Join(output,"plugins",p.Directory);proof:=filepath.Join(output,"provenance",p.Directory)
+ for _,dir:=range []string{work,assets,proof}{if err:=os.MkdirAll(dir,0755);err!=nil{return err}}
+ data,err:=materialize(sourceModule{Module:p.Module,SourceVersion:p.SourceVersion,SourceSum:p.SourceSum,GoModSum:p.GoModSum,VCS:p.VCS},work);if err!=nil{return err}
+ for _,extra:=range p.AdditionalModules{
+  if !fs.ValidPath(extra.Destination)||extra.Destination=="."||!strings.HasPrefix(extra.Module,p.Module+"/")||extra.VCS!=p.VCS{return errors.New("nested source must match the exact reviewed repository commit")}
+  nestedWork:=filepath.Join(work,extra.Destination)
+  nestedData,err:=materialize(extra,nestedWork);if err!=nil{return err}
+  if err=command(nestedWork,"go","get","golang.org/x/net@v0.60.0");err!=nil{return err}
+  if err=command(nestedWork,"go","mod","verify");err!=nil{return err}
+  nestedProof:=filepath.Join(proof,"additional-modules",extra.Destination);if err=os.MkdirAll(nestedProof,0755);err!=nil{return err}
+  if err=os.WriteFile(filepath.Join(nestedProof,"upstream-source.json"),nestedData,0444);err!=nil{return err}
+  for _,name:=range []string{"go.mod","go.sum"}{body,err:=os.ReadFile(filepath.Join(nestedWork,name));if err!=nil{return err};if err=os.WriteFile(filepath.Join(nestedProof,name),body,0444);err!=nil{return err}}
+ }
+ if err=command("","cp","-a",filepath.Join(vendorRoot,p.Directory)+"/.",assets);err!=nil{return err}
 	patches := []string{"golang.org/x/net@v0.60.0"}
 	if p.ID == "stackdriver" {
 		patches = append(patches, "google.golang.org/grpc@v1.83.2")
@@ -130,23 +125,8 @@ func rebuild(p plugin, vendorRoot, output string) error {
 	if err = command(work, "go", "mod", "verify"); err != nil {
 		return err
 	}
-	tests, err := os.Create(filepath.Join(proof, "upstream-tests.json"))
-	if err != nil {
-		return err
-	}
-	test := exec.Command("go", "test", "-p=2", "-count=1", "-json", "./pkg/...")
-	test.Dir = work
-	test.Stdout = tests
-	test.Stderr = os.Stderr
-	testErr := test.Run()
-	closeErr := tests.Close()
-	if testErr != nil {
-		reportTestFailure(filepath.Join(proof, "upstream-tests.json"))
-		return testErr
-	}
-	if closeErr != nil {
-		return closeErr
-	}
+	if err=runUpstreamTests(work,filepath.Join(proof,"upstream-tests.json"),"./pkg/...");err!=nil{return err}
+ for _,extra:=range p.AdditionalModules{if err=runUpstreamTests(filepath.Join(work,extra.Destination),filepath.Join(proof,"upstream-tests-"+strings.ReplaceAll(extra.Destination,"/","_")+".json"),"./...");err!=nil{return err}}
 	info, _ := json.Marshal(map[string]any{"time": int64(1792454400000), "pluginID": p.ID, "version": p.Version})
 	flags := fmt.Sprintf("-X 'github.com/grafana/grafana-plugin-sdk-go/build/buildinfo.buildInfoJSON=%s' -X main.pluginID=%s -X main.version=%s", info, p.ID, p.Version)
 	relative := "." + strings.TrimPrefix(p.Path, p.Module)
@@ -189,4 +169,19 @@ func reportTestFailure(name string) {
   if e.Action=="fail"{failed=append(failed,key)}
  }
  for _,key:=range failed{fmt.Fprintln(os.Stderr,"UPSTREAM TEST FAILURE:",key);for _,line:=range outputs[key]{fmt.Fprint(os.Stderr,line)}}
+}
+
+func materialize(spec sourceModule,work string)([]byte,error){
+ data,err:=capture("","mod","download","-json",spec.Module+"@"+spec.SourceVersion);if err!=nil{return nil,err}
+ var m struct{Dir,Sum,GoModSum string;Origin struct{Hash string}}
+ if err=json.Unmarshal(data,&m);err!=nil{return nil,err}
+ if m.Sum!=spec.SourceSum||m.GoModSum!=spec.GoModSum||!strings.HasPrefix(m.Dir,"/go/pkg/mod/")||(m.Origin.Hash!=""&&m.Origin.Hash!=spec.VCS){return nil,errors.New("source checksum/commit/location differs from reviewed inventory")}
+ if err=os.MkdirAll(work,0755);err!=nil{return nil,err}
+ if err=command("","cp","-a",m.Dir+"/.",work);err!=nil{return nil,err}
+ if err=command("","chmod","-R","u+w",work);err!=nil{return nil,err};return data,nil
+}
+func runUpstreamTests(work,receipt,selection string)error{
+ file,err:=os.Create(receipt);if err!=nil{return err}
+ test:=exec.Command("go","test","-p=2","-count=1","-json",selection);test.Dir=work;test.Stdout=file;test.Stderr=os.Stderr
+ testErr:=test.Run();closeErr:=file.Close();if testErr!=nil{reportTestFailure(receipt);return testErr};return closeErr
 }
