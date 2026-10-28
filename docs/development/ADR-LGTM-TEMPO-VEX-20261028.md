@@ -1,6 +1,6 @@
 # ADR-LGTM-TEMPO-VEX-20261028 — exact dev/test applicability correction
 
-Status: Product Owner scope authorized; guard/review validation required before consumption.
+Status: Exact dev/test plugin scope approved and guard/review validation passed; full LGTM acceptance remains pending.
 Work item P1-RV001-001; P0-RV010 preserves historical closure.
 
 The direct reply “Approve these scoped dev/test VEX corrections” extends only the scanner boundary in the earlier maintenance approval for CVE-2026-21728 and CVE-2026-28377 on the exact reviewed Tempo data-source executable. It does not extend the separately approved signing scope into production or authorize filtering another component. See governance/evidence/P1-RV001-001-TEMPO-VEX-APPROVAL-20261028.json and the AMD-0005 resolution receipt.

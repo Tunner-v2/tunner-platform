@@ -63,6 +63,14 @@
     {
       "url": "https://trivy.dev/docs/dev/supply-chain/vex/file/",
       "finding": "Trivy matches product/dependency PURLs; it does not supply the required executable/source/expiry enforcement. External typed guard checks exact consent/source/binary/image/tests/reviews before consumption, retains raw findings, rejects unknown contexts and expires November27."
+    },
+    {
+      "url": "https://github.com/open-telemetry/opentelemetry-ebpf-instrumentation/releases/download/v0.15.2/obi-java-agent-v0.15.2.cyclonedx.json",
+      "finding": "The separate official runtime SBOM hash769e2467372c3333f646a1894be7c8cc80dfea3c49b0eaa9809fc7740a950d5d positively identifies both shaded ByteBuddy1.18.14-jdk5 dependencies. Direct JAR inspection has no package metadata because upstream relocates classes and excludes META-INF; treat that scan as inconclusive and enforce the exact runtime SBOM scan."
+    },
+    {
+      "url": "https://raw.githubusercontent.com/grafana/docker-otel-lgtm/v0.38.1/README.md",
+      "finding": "Vendor supports dev/test use, shared/data persistence and optional OBI. Enabling kernel instrumentation requires privileged host/PID access; those optional host-instrumentation tests are not enabled or claimed by the unprivileged compatibility fixture."
     }
   ],
   "raw_evidence_root": "artifacts/security-followup-20261028",
