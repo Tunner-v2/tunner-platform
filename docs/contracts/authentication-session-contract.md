@@ -1,6 +1,6 @@
 # P2-005 private User BFF authentication and session contract
 
-Derived from FRD17 §§6/8/13/15/16, ADR-0006 and catalog32; not a new Product or public OAuth contract. This is an implementation specification pending executable validation and scoped UI acceptance.
+Derived from FRD17 §§6/8/13/15/16, ADR-0006 and catalog32; not a new Product or public OAuth contract. This is the private implementation specification. Executable validation is source-bound by the P2-005 receipt; the current implemented visual scope is accepted under the explicit Product Owner Figma-backfill deferral.
 
 GET /authentication/options is anonymous, same-origin, HTTPS and no-store. It returns the maximum accepted password length, private operation idempotency key, framework antiforgery request token and trusted published presentation. The policy version stays in protected server-owned context rather than request JSON. It sets a purpose-protected HttpOnly/Secure/Strict host-only browser-context cookie with nonce, policy, expiry, previous authenticated session reference and digest of the previous opaque User cookie. These are server-originated and never accepted as browser policy/actor authority. Reissuing options must not extend an existing operation context silently.
 
@@ -16,4 +16,4 @@ Authentication policy source uses EffectivePolicyVersionResolver with explicit a
 
 /login and /signed-in are canonical UI routes. Login is accessible anonymously and signed-in direct entry verifies the current User session server-side. Unknown paths/API methods keep existing fallback protections. No credentials, personal data, proof or tokens enter paths/query/history/storage. Client validation uses the shared typed schema/error/focus/pending system; backend validation remains independent. URLs/forms and responsive visual comparisons require their own source-bound URL/VAL/UX evidence.
 
-Product Owner approved the exact packet in TUN-P2-005-VISUAL-CONSENT-20261021.json. Figma synchronization is currently blocked by a read-only connector; no UI acceptance is asserted.
+Product Owner approved the exact packet in TUN-P2-005-VISUAL-CONSENT-20261021.json and subsequently accepted the current implemented Login/signed-in screens in TUN-P2-005-VISUAL-ACCEPTANCE-DEFERRAL-20261021.json. Owner Figma backfill remains OPEN in TODO-TUN-P2-005-FIGMA001 and is nonblocking for these approved screens. AI makes no Figma or Drive edits; future screens, security behavior, merge and release authority are not waived.

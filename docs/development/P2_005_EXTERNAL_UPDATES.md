@@ -1,3 +1,5 @@
+> Current status (2026-10-28): The Product Owner explicitly approved the implemented Login and signed-in screens and deferred this Figma backfill as nonblocking. TODO-TUN-P2-005-FIGMA001 remains OPEN. The detailed manual changes below are retained for later owner synchronization; AI has no Figma/Drive write authority. See governance/evidence/TUN-P2-005-VISUAL-ACCEPTANCE-DEFERRAL-20261021.json.
+
 # P2-005 exact external design updates for the Product Owner
 
 AI is not allowed to edit Figma or Google Drive. Both remain unchanged. The Product Owner approved these two implementation scopes in the linked consent receipt; this document provides the manual Figma changes required by AMD-0008 section4 before affected production UI acceptance. No new business amendment is requested: FRD17 already authorizes the password/session slice, and Google/Microsoft direction is explicit.
