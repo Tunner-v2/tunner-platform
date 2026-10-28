@@ -9,10 +9,12 @@ COPY --from=pyroscope /bin/pyroscope /otel-lgtm/pyroscope/pyroscope
 COPY --from=obi /bin/obi /otel-lgtm/obi/obi
 COPY --from=collector /bin/otelcol-contrib /otel-lgtm/otelcol-contrib/otelcol-contrib
 COPY --from=grafana /provenance/grafana/signing-public.json /usr/share/tunner/lgtm-signing-public.json
+COPY --from=obi /provenance/obi/java-agent.sbom.json /usr/share/tunner/obi-java-agent.sbom.json
 LABEL io.tunner.scope="dev-test-only" io.tunner.production.authorized="false" io.tunner.upstream.lgtm="0.38.1"
 FROM scratch AS provenance
-COPY --from=grafana /provenance/ /grafana/
-COPY --from=tempo /provenance/ /tempo/
-COPY --from=pyroscope /provenance/ /pyroscope/
-COPY --from=obi /provenance/ /obi/
-COPY --from=collector /provenance/ /collector/
+COPY --from=grafana /provenance/grafana/ /grafana/
+COPY --from=grafana /provenance/plugins/ /plugins/
+COPY --from=tempo /provenance/tempo/ /tempo/
+COPY --from=pyroscope /provenance/pyroscope/ /pyroscope/
+COPY --from=obi /provenance/obi/ /obi/
+COPY --from=collector /provenance/collector/ /collector/

@@ -174,5 +174,21 @@
       "go_mod_sum": "h1:6SpR/MNH5AesD/tQ3+R4cFPIuUFSAG85WqeHF+XikAw=",
       "binary": "gpx_grafana-zipkin-datasource_linux_amd64"
     }
-  ]
+  ],
+  "obi_embedded_java": {
+    "source_version": "v0.15.2",
+    "jar_sha256": "21d35cb644013fc164fce5d9ba537e394181f27e08236033a434f5c5e9da9cdf",
+    "sbom_url": "https://github.com/open-telemetry/opentelemetry-ebpf-instrumentation/releases/download/v0.15.2/obi-java-agent-v0.15.2.cyclonedx.json",
+    "sbom_sha256": "769e2467372c3333f646a1894be7c8cc80dfea3c49b0eaa9809fc7740a950d5d",
+    "runtime_dependencies": [
+      {
+        "name": "net.bytebuddy:byte-buddy-agent",
+        "version": "1.18.14-jdk5"
+      },
+      {
+        "name": "net.bytebuddy:byte-buddy",
+        "version": "1.18.14-jdk5"
+      }
+    ]
+  }
 }

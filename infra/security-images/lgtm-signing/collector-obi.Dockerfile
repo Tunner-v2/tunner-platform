@@ -2,8 +2,9 @@
 FROM golang:1.27.3-bookworm@sha256:5c3e9b43cfd3bb95c7937462e29d87ada57b481a96fa23ad0eb61778d7a00110 AS obi-source
 ENV CGO_ENABLED=0 GOTOOLCHAIN=local GOMAXPROCS=2
 ADD --checksum=sha256:d3cbec602e3ab7b357d2f4a57b29e502365f9098808418e8b4d96dec8fa9281f https://github.com/open-telemetry/opentelemetry-ebpf-instrumentation/releases/download/v0.15.2/obi-v0.15.2-source-generated.tar.gz /tmp/obi.tar.gz
+ADD --checksum=sha256:769e2467372c3333f646a1894be7c8cc80dfea3c49b0eaa9809fc7740a950d5d https://github.com/open-telemetry/opentelemetry-ebpf-instrumentation/releases/download/v0.15.2/obi-java-agent-v0.15.2.cyclonedx.json /reviewed/obi-java-agent.sbom.json
 WORKDIR /src/obi
-RUN tar -xzf /tmp/obi.tar.gz --strip-components=1 && test -s pkg/internal/java/embedded/obi-java-agent.jar && test -s pkg/ebpf/common/bpf_x86_bpfel.o
+RUN tar -xzf /tmp/obi.tar.gz --strip-components=1 && echo "21d35cb644013fc164fce5d9ba537e394181f27e08236033a434f5c5e9da9cdf  pkg/internal/java/embedded/obi-java-agent.jar" | sha256sum -c - && test -s pkg/ebpf/common/bpf_x86_bpfel.o
 FROM obi-source AS obi-builder
 RUN --mount=type=cache,id=tunner-lgtm-go1273-mod,target=/go/pkg/mod,sharing=locked \
     --mount=type=cache,id=tunner-lgtm-go1273-build,target=/root/.cache/go-build,sharing=locked \
@@ -13,6 +14,7 @@ RUN --mount=type=cache,id=tunner-lgtm-go1273-mod,target=/go/pkg/mod,sharing=lock
     go build -p=2 -trimpath -ldflags='-s -w -X go.opentelemetry.io/obi/pkg/buildinfo.Version=v0.15.2 -X go.opentelemetry.io/obi/pkg/buildinfo.Revision=b28e4e7' -o /out/bin/obi ./cmd/obi/main.go; \
     go version -m /out/bin/obi > /out/provenance/obi/buildinfo.txt; \
     cp go.mod go.sum LICENSE NOTICE /out/provenance/obi/; \
+    cp /reviewed/obi-java-agent.sbom.json /out/provenance/obi/java-agent.sbom.json; \
     find pkg -type f '(' -name '*_bpfel.o' -o -name '*_bpfeb.o' -o -name '*.jar' ')' -exec sha256sum '{}' ';' > /out/provenance/obi/embedded-assets.sha256; \
     go list -m -json all > /out/provenance/obi/modules.json
 FROM obi-source AS collector-builder
