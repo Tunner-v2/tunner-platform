@@ -25,7 +25,7 @@ RUN --mount=type=cache,id=tunner-lgtm-go1273-mod,target=/go/pkg/mod,sharing=lock
     --mount=type=cache,id=tunner-lgtm-go1273-build,target=/root/.cache/go-build,sharing=locked \
     set -eu; go install go.opentelemetry.io/collector/cmd/builder@v0.163.0; \
     cd distributions/otelcol-contrib; \
-    /go/bin/builder --skip-compilation --config manifest.yaml; \
+    timeout 45m /go/bin/builder --verbose --skip-compilation --config manifest.yaml; \
     cp manifest.yaml /out/provenance/collector/manifest.yaml; \
     cd _build; \
     go get github.com/go-jose/go-jose/v4@v4.1.6; go mod tidy; go mod verify; \
