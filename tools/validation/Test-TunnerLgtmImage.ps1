@@ -64,7 +64,7 @@ try {
     $health=Get-Grafana $candidate '/api/health'
     Expect ($health.database -eq 'ok' -and $health.version -eq '13.2.4') 'Grafana13.2.4 API and SQLite healthy'
     $inventory=Get-Content (Join-Path $RepositoryRoot 'infra/security-images/lgtm-signing/source-inventory.json') -Raw|ConvertFrom-Json
-    foreach($plugin in $inventory.plugins){$settings=Get-Grafana $candidate ('/api/plugins/'+$plugin.id+'/settings');Expect ($settings.signature -eq 'valid') ('native runtime signature valid: '+$plugin.id)}
+    foreach($plugin in $inventory.plugins){Wait-For { (Get-Grafana $candidate ('/api/plugins/'+$plugin.id+'/settings')).signature -eq 'valid' } ('native runtime signature valid: '+$plugin.id) 60}
     $gbase='http://127.0.0.1:'+$candidate.ports[3000]
     $html=Invoke-WebRequest -Uri $gbase -Headers $headers -TimeoutSec 15
     Expect ($html.StatusCode -eq 200 -and $html.Content -match '<html') 'Grafana retained production UI served'
