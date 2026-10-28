@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "scope_id": "TUN-P2-005",
-  "status": "ENGINEERING_PASS_UI_ACCEPTANCE_BLOCKED",
-  "reviewed_commit_sha": "100cccd26f34211810e6c2bcf2a72242f5872c22",
+  "status": "ENGINEERING_PASS_CURRENT_UI_PRODUCT_OWNER_APPROVED",
+  "reviewed_commit_sha": "f63e81b062049f2ce65a623d29c1fc311400fcd7",
   "provenance": "Executing agent applying activated specialist contracts; not independent human review, Product acceptance or release approval.",
   "reviews": [
     {
@@ -50,7 +50,7 @@
     {
       "role": "ui-ux-engineer",
       "skill_hash": "498ff7e4b46012b1e90773cd29ebac903d7ac83767d739cc327d9b69a3b4c5c2",
-      "result": "ENGINEERING_PASS_PRODUCTION_UI_BLOCKED",
+      "result": "PASS_CURRENT_SCOPE_APPROVED_EXCEPTION",
       "review_ref": "governance/reviews/REV-TUN-P2-005-ui-ux-engineer.yaml"
     },
     {
@@ -62,7 +62,7 @@
     {
       "role": "end-user-ux-reviewer",
       "skill_hash": "cfaa2eeffd945eef70a6ff1023b1af42fc0413add7b357b2fcd914473e976665",
-      "result": "ENGINEERING_PASS_PRODUCTION_UI_BLOCKED",
+      "result": "PASS_CURRENT_SCOPE_APPROVED_EXCEPTION",
       "review_ref": "governance/reviews/REV-TUN-P2-005-end-user-ux-reviewer.yaml"
     },
     {
@@ -92,5 +92,6 @@
     "Migration downgrade guard, route/form inventory regression, eager response-body test wait and suite evidence deletion were found and corrected.",
     "All13 unrelated dirty files remain byte-identical and excluded."
   ],
-  "required_owner_action": "Apply exact manual Figma changes, return the new signed-in node reference, then read-only reverify and complete scoped native UI/revision gates."
+  "required_owner_action": "Nonblocking Figma backfill remains OPEN; current implemented screens are explicitly approved. No future UI, whole-P2, protected-main or release approval is inferred.",
+  "visual_acceptance_ref": "governance/evidence/TUN-P2-005-VISUAL-ACCEPTANCE-DEFERRAL-20261021.json"
 }

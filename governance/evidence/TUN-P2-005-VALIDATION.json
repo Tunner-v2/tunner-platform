@@ -3,9 +3,9 @@
   "scope_id": "TUN-P2-005",
   "validation_kind": "COMMITTED",
   "result": "PASS",
-  "validation_boundary": "ENGINEERING_VALIDATED_CURRENT_UI_PRODUCT_OWNER_APPROVED_FIGMA_TODO",
-  "tested_commit_sha": "100cccd26f34211810e6c2bcf2a72242f5872c22",
-  "validated_commit_sha": "100cccd26f34211810e6c2bcf2a72242f5872c22",
+  "validation_boundary": "ENGINEERING_PASS_CURRENT_VISUALS_ACCEPTED_NONBLOCKING_FIGMA_TODO",
+  "tested_commit_sha": "f63e81b062049f2ce65a623d29c1fc311400fcd7",
+  "validated_commit_sha": "f63e81b062049f2ce65a623d29c1fc311400fcd7",
   "owned_behavior_paths": [
     "docs/contracts/authentication-session-contract.md",
     "docs/contracts/ui-inventory.json",
@@ -56,21 +56,20 @@
     "web/tests/browser-testing/authentication-flow.spec.ts",
     "web/tests/contracts.test.tsx"
   ],
-  "checked_at": "2026-10-21T18:52:06.133Z",
-  "test_index_ref": "governance/evidence/ui/authentication-20261021/test-index.json",
+  "checked_at": "2026-10-28T18:05:00.206Z",
+  "test_index_ref": "governance/evidence/ui/authentication-20261028/test-index.json",
   "component_test_commits": {
-    "backend_unit_dev_browser": "100cccd26f34211810e6c2bcf2a72242f5872c22",
-    "real_browser": "100cccd26f34211810e6c2bcf2a72242f5872c22",
-    "starter_safety": "100cccd26f34211810e6c2bcf2a72242f5872c22"
+    "backend_unit_dev_browser": "f63e81b062049f2ce65a623d29c1fc311400fcd7",
+    "real_browser": "f63e81b062049f2ce65a623d29c1fc311400fcd7",
+    "starter_safety": "f63e81b062049f2ce65a623d29c1fc311400fcd7"
   },
   "source_binding": {
-    "method": "Full exact-commit rerun",
-    "executed_at_sha": "100cccd26f34211810e6c2bcf2a72242f5872c22",
-    "runtime_source_equivalence": "The already running isolated host uses the same committed runtime inputs as this SHA. All 77 backend tests, 31 unit tests, 54 dev-browser tests, 3 real-browser tests and 7 starter checks were rerun while HEAD was 100cccd and no task source was dirty.",
-    "earlier_cohort_ref": "Git commit 95e0aea retains the original e1a979a/0a21bc4 receipts; earlier raw run logs remain in artifacts/p2-005-auth-20261021.",
-    "metadata_only_after_source": true
+    "method": "Exact committed-source rerun",
+    "executed_at_sha": "f63e81b062049f2ce65a623d29c1fc311400fcd7",
+    "runtime": "ASP.NET10.0.13; Docker29.7.2 Desktop Linux endpoint npipe://./pipe/dockerDesktopLinuxEngine for the .NET test client; no saved Docker context or OS trust change.",
+    "scope": "All behavior-affecting ownership, domain/HTTPS/DB and current UI regression tests were executed at this committed source; later changes are evidence/lifecycle metadata."
   },
-  "ui_visual_approval": "PENDING_EXACT_SOURCE_REVALIDATION",
+  "ui_visual_approval": "PASS_SCOPED_PRODUCT_OWNER_EXCEPTION",
   "ui_evidence_ref": "governance/evidence/TUN-P2-005-UI-COMPLIANCE.json",
   "open_defects": [],
   "open_todos": [
