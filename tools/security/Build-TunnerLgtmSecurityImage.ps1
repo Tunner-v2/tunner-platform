@@ -32,8 +32,14 @@ try {
     $env:RECIPE_SHA256 = $fingerprint
     Push-Location $RepositoryRoot
     try {
-        & docker buildx bake -f infra/security-images/lgtm-signing/docker-bake.hcl --progress plain --metadata-file (Join-Path $output 'lgtm-buildkit.json')
-        if ($LASTEXITCODE -ne 0) { throw 'Complete dev/test LGTM rebuild failed; no runtime default is changed.' }
+        & docker buildx bake -f infra/security-images/lgtm-signing/docker-bake.hcl --progress plain --metadata-file (Join-Path $output 'lgtm-buildkit.json') 2>&1 |
+            ForEach-Object { $_.ToString() } | Tee-Object -FilePath (Join-Path $output 'lgtm-build.log')
+        $buildExit = $LASTEXITCODE
+        if ($buildExit -ne 0) {
+            [ordered]@{schema_version=1;scope_id='P1-RV001-001';component='lgtm';source_commit=$commit;recipe_sha256=$fingerprint;status='BUILD_FAILED';exit_code=$buildExit;log='lgtm-build.log';runtime_defaults_changed=$false;production_authorized=$false} |
+                ConvertTo-Json -Depth 5 | Set-Content (Join-Path $output 'lgtm-build-failure.json') -Encoding utf8NoBOM
+            throw 'Complete dev/test LGTM rebuild failed; no runtime default is changed. See artifacts/security-images/lgtm-build.log and lgtm-build-failure.json.'
+        }
     } finally { Pop-Location }
     $id = (& docker image inspect $image --format '{{.Id}}').Trim()
     if ($LASTEXITCODE -ne 0) { throw 'Cannot identify the immutable built image.' }
