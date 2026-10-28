@@ -141,6 +141,7 @@ func rebuild(p plugin, vendorRoot, output string) error {
 	testErr := test.Run()
 	closeErr := tests.Close()
 	if testErr != nil {
+		reportTestFailure(filepath.Join(proof, "upstream-tests.json"))
 		return testErr
 	}
 	if closeErr != nil {
@@ -176,4 +177,16 @@ func rebuild(p plugin, vendorRoot, output string) error {
 		return err
 	}
 	return os.WriteFile(filepath.Join(proof, "upstream-source.json"), append(data, '\n'), 0444)
+}
+
+// Retain full JSON on disk and emit only failing-test diagnostics to build logs.
+func reportTestFailure(name string) {
+ f,err:=os.Open(name);if err!=nil{return};defer f.Close()
+ type event struct{Action,Package,Test,Output string}
+ decoder:=json.NewDecoder(f);outputs:=map[string][]string{};failed:=[]string{}
+ for {var e event;if decoder.Decode(&e)!=nil{break};key:=e.Package+"/"+e.Test
+  if e.Output!="" {outputs[key]=append(outputs[key],e.Output);if len(outputs[key])>32{outputs[key]=outputs[key][len(outputs[key])-32:]}}
+  if e.Action=="fail"{failed=append(failed,key)}
+ }
+ for _,key:=range failed{fmt.Fprintln(os.Stderr,"UPSTREAM TEST FAILURE:",key);for _,line:=range outputs[key]{fmt.Fprint(os.Stderr,line)}}
 }
