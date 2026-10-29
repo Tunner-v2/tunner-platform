@@ -3,6 +3,7 @@ package main
 import (
 	"bytes"
 	"errors"
+	"strings"
 	"testing"
 	"time"
 )
@@ -57,5 +58,31 @@ func TestDownloadTransportClassifier(t *testing.T) {
 		if transientDownloadFailure(message) {
 			t.Fatalf("must remain blocking: %s", message)
 		}
+	}
+}
+
+func TestFailureReportRetainsBuildAndSetupDiagnostics(t *testing.T) {
+	input := "{\"Action\":\"build-output\",\"ImportPath\":\"example/pkg\",\"Output\":\"missing go.sum entry for test dependency\\n\"}\n" +
+		"{\"Action\":\"build-fail\",\"ImportPath\":\"example/pkg\"}\n" +
+		"{\"Action\":\"output\",\"Output\":\"TLS handshake timeout\\n\"}\n" +
+		"{\"Action\":\"output\",\"Package\":\"example/pkg\",\"Output\":\"FAIL setup failed\\n\"}\n" +
+		"{\"Action\":\"fail\",\"Package\":\"example/pkg\"}\n"
+	var output bytes.Buffer
+	reportTestFailureTo(strings.NewReader(input), &output)
+	for _, want := range []string{"missing go.sum entry", "UPSTREAM BUILD FAILURE: example/pkg", "TLS handshake timeout", "FAIL setup failed"} {
+		if !strings.Contains(output.String(), want) {
+			t.Fatalf("lost diagnostic %q: %s", want, output.String())
+		}
+	}
+}
+func TestFailureReportOmitsSuccessfulCaseNoise(t *testing.T) {
+	input := "{\"Action\":\"output\",\"Package\":\"example\",\"Test\":\"Passed\",\"Output\":\"successful case noise\\n\"}\n" +
+		"{\"Action\":\"pass\",\"Package\":\"example\",\"Test\":\"Passed\"}\n" +
+		"{\"Action\":\"output\",\"Package\":\"example\",\"Test\":\"Failed\",\"Output\":\"expected rejected, got allowed\\n\"}\n" +
+		"{\"Action\":\"fail\",\"Package\":\"example\",\"Test\":\"Failed\"}\n"
+	var output bytes.Buffer
+	reportTestFailureTo(strings.NewReader(input), &output)
+	if strings.Contains(output.String(), "successful case noise") || !strings.Contains(output.String(), "expected rejected, got allowed") {
+		t.Fatal(output.String())
 	}
 }

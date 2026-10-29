@@ -249,14 +249,30 @@ func reportTestFailure(name string) {
 		return
 	}
 	defer f.Close()
-	type event struct{ Action, Package, Test, Output string }
-	decoder := json.NewDecoder(f)
+	reportTestFailureTo(f, os.Stderr)
+}
+
+func reportTestFailureTo(input io.Reader, output io.Writer) {
+	type event struct{ Action, Package, ImportPath, Test, Output string }
+	decoder := json.NewDecoder(input)
 	outputs := map[string][]string{}
 	failed := []string{}
 	for {
 		var e event
 		if decoder.Decode(&e) != nil {
 			break
+		}
+		// Go 1.27 emits compiler/setup diagnostics as build-output events,
+		// often with ImportPath rather than Package and no Test field.
+		if e.Action == "build-output" || e.Action == "build-fail" {
+			fmt.Fprint(output, e.Output)
+			if e.Action == "build-fail" {
+				fmt.Fprintln(output, "UPSTREAM BUILD FAILURE:", e.ImportPath)
+			}
+			continue
+		}
+		if e.Package == "" && e.Output != "" {
+			fmt.Fprint(output, e.Output)
 		}
 		key := e.Package + "/" + e.Test
 		if e.Output != "" {
@@ -270,9 +286,9 @@ func reportTestFailure(name string) {
 		}
 	}
 	for _, key := range failed {
-		fmt.Fprintln(os.Stderr, "UPSTREAM TEST FAILURE:", key)
+		fmt.Fprintln(output, "UPSTREAM TEST FAILURE:", key)
 		for _, line := range outputs[key] {
-			fmt.Fprint(os.Stderr, line)
+			fmt.Fprint(output, line)
 		}
 	}
 }
