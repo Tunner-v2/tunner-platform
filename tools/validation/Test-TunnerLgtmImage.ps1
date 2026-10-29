@@ -7,7 +7,7 @@ Import-Module (Join-Path $PSScriptRoot '../lib/Tunner.RepositoryRoot.psm1') -For
 $RepositoryRoot=Resolve-TunnerRepositoryRoot -RepositoryRoot $RepositoryRoot -StartDirectory $PSScriptRoot
 $sourceCommit=(& git -C $RepositoryRoot rev-parse HEAD).Trim()
 if($LASTEXITCODE -ne 0){throw 'Cannot bind committed fixture source'}
-$ownedDirty=@(& git -C $RepositoryRoot status --porcelain -- tools/validation/Test-TunnerLgtmImage.ps1 tools/validation/fixtures/lgtm-profile)
+$ownedDirty=@(& git -C $RepositoryRoot status --porcelain -- tools/validation/Test-TunnerLgtmImage.ps1 tools/validation/fixtures/lgtm-profile tools/validation/fixtures/lgtm-grpc src/Tunner.Observability Directory.Build.props Directory.Packages.props global.json)
 if($LASTEXITCODE -ne 0 -or $ownedDirty.Count){throw 'Commit the fixture before execution'}
 $prefix='tunner-lgtm-'+[Guid]::NewGuid().ToString('N')
 $output=Join-Path $RepositoryRoot ('artifacts/security-images/'+$prefix)
@@ -76,7 +76,7 @@ try {
         Wait-For { (Invoke-WebRequest -Uri $u -TimeoutSec 5).StatusCode -eq 200 } ($entry.name+' ready')
     }
     $tcp=[Net.Sockets.TcpClient]::new()
-    try{$tcp.ConnectAsync('127.0.0.1',$candidate.ports[4317]).Wait(5000)|Out-Null;Expect $tcp.Connected 'OTLP gRPC TCP listener (protocol exchange not claimed)'}finally{$tcp.Dispose()}
+    try{$tcp.ConnectAsync('127.0.0.1',$candidate.ports[4317]).Wait(5000)|Out-Null;Expect $tcp.Connected 'OTLP gRPC loopback TCP connection'}finally{$tcp.Dispose()}
     $marker='fixture-'+[Guid]::NewGuid().ToString('N')
     $resource=@{attributes=@(@{key='service.name';value=@{stringValue='tunner-security-fixture'}})}
     $nano=([DateTimeOffset]::UtcNow.ToUnixTimeMilliseconds()*1000000L).ToString()
@@ -96,6 +96,33 @@ try {
     Wait-For { (Invoke-WebRequest -Uri $loki -TimeoutSec 5).Content -match $marker } 'Loki returns the exact ingested log'
     $prom='http://127.0.0.1:'+$candidate.ports[9090]+'/api/v1/query?query=tunner_security_fixture'
     Wait-For { $r=Invoke-RestMethod -Uri $prom -TimeoutSec 5;@($r.data.result).Count -gt 0 -and [double]$r.data.result[0].value[1] -eq 1 } 'Prometheus returns the exact ingested gauge'
+    $grpcProject=Join-Path $PSScriptRoot 'fixtures/lgtm-grpc/Lgtm.GrpcFixture.csproj'
+    $grpcStart=[Diagnostics.ProcessStartInfo]::new('dotnet')
+    $grpcStart.WorkingDirectory=$RepositoryRoot
+    $grpcStart.UseShellExecute=$false;$grpcStart.CreateNoWindow=$true
+    $grpcStart.RedirectStandardOutput=$true;$grpcStart.RedirectStandardError=$true
+    foreach($key in @($grpcStart.Environment.Keys)){if($key.StartsWith('OTEL_',[StringComparison]::OrdinalIgnoreCase)){$grpcStart.Environment.Remove($key)|Out-Null}}
+    $grpcStart.Environment['DOTNET_CLI_TELEMETRY_OPTOUT']='1'
+    foreach($argument in @('run','--project',$grpcProject,'--configuration','Release','--no-launch-profile','--',('http://127.0.0.1:'+$candidate.ports[4317]),[Guid]::NewGuid().ToString('N'))){$grpcStart.ArgumentList.Add($argument)}
+    $grpcClient=[Diagnostics.Process]::new();$grpcClient.StartInfo=$grpcStart
+    try{
+        if(-not $grpcClient.Start()){throw 'Cannot start the isolated synthetic gRPC client'}
+        $grpcStdout=$grpcClient.StandardOutput.ReadToEndAsync();$grpcStderr=$grpcClient.StandardError.ReadToEndAsync()
+        if(-not $grpcClient.WaitForExit(120000)){$grpcClient.Kill($true);$grpcClient.WaitForExit();throw 'Synthetic gRPC client timed out'}
+        $grpcOutput=$grpcStdout.GetAwaiter().GetResult();$grpcError=$grpcStderr.GetAwaiter().GetResult()
+        [IO.File]::WriteAllText((Join-Path $output 'grpc-client.log'),$grpcOutput+$grpcError,[Text.UTF8Encoding]::new($false))
+        if($grpcClient.ExitCode -ne 0){throw 'Synthetic gRPC export failed; see grpc-client.log'}
+    }finally{$grpcClient.Dispose()}
+    $grpcProof=($grpcOutput -split '\r?\n'|Where-Object{$_ -match '^\{'}|Select-Object -Last 1)|ConvertFrom-Json
+    Expect ($grpcProof.protocol -ceq 'OTLP_GRPC' -and $grpcProof.trace_id -match '^[a-f0-9]{32}$') 'real OTLP/gRPC trace log and metric exporter completed'
+    $grpcTempo='http://127.0.0.1:'+$candidate.ports[3200]+'/api/traces/'+$grpcProof.trace_id
+    Wait-For { (Invoke-WebRequest -Uri $grpcTempo -Headers @{Accept='application/json'} -TimeoutSec 5).Content -match $grpcProof.marker } 'Tempo returns the exact gRPC trace'
+    $grpcQuery=[Uri]::EscapeDataString('{service_name="tunner-grpc-security-fixture"}')
+    $grpcLoki='http://127.0.0.1:'+$candidate.ports[3100]+'/loki/api/v1/query_range?query='+$grpcQuery+'&limit=20'
+    Wait-For { (Invoke-WebRequest -Uri $grpcLoki -TimeoutSec 5).Content -match $grpcProof.marker } 'Loki returns the exact gRPC log'
+    $grpcMetricQuery=[Uri]::EscapeDataString('tunner_grpc_security_fixture{fixture_id="'+$grpcProof.fixture_id+'"}')
+    $grpcProm='http://127.0.0.1:'+$candidate.ports[9090]+'/api/v1/query?query='+$grpcMetricQuery
+    Wait-For { $r=Invoke-RestMethod -Uri $grpcProm -TimeoutSec 5;@($r.data.result).Count -gt 0 -and [double]$r.data.result[0].value[1] -eq 1 } 'Prometheus returns the exact gRPC gauge'
     $profileSource=Join-Path $PSScriptRoot 'fixtures/lgtm-profile'
     & docker run --rm --network none --cap-drop ALL --read-only --tmpfs /tmp:rw,exec,nosuid,size=1073741824 -e GOCACHE=/tmp/go-cache -e GOMAXPROCS=2 --mount ('type=bind,src='+$profileSource+',dst=/src,readonly') --mount ('type=bind,src='+$output+',dst=/out') golang:1.27.3-bookworm@sha256:5c3e9b43cfd3bb95c7937462e29d87ada57b481a96fa23ad0eb61778d7a00110 go run /src/main.go /out/synthetic.pprof
     if($LASTEXITCODE -ne 0){throw 'Synthetic isolated profile generation failed'}
@@ -110,7 +137,7 @@ try {
     $rollback=Start-Lgtm 'rollback' $BaselineImage $restore
     Assert-Dashboard $rollback $uid 'baseline backup restore rollback'
     Stop-Lgtm $rollback
-    [ordered]@{schema_version=1;scope_id='P1-RV001-001';source_commit=$sourceCommit;image=$Image;image_id=(& docker image inspect $Image --format '{{.Id}}').Trim();baseline=$BaselineImage;result='PASS_DEV_TEST_COMPATIBILITY';passed=$checks.Count;checks=$checks;fixture_scope=$prefix;operator_data_used=$false;operator_credentials_used=$false;kernel_bpf_instrumentation='NOT_EXECUTED_OPTIONAL_NOT_ENABLED';grpc='TCP_LISTENER_ONLY';production_authorized=$false}|ConvertTo-Json -Depth 7|Set-Content (Join-Path $output 'compatibility.json') -Encoding utf8NoBOM
+    [ordered]@{schema_version=1;scope_id='P1-RV001-001';source_commit=$sourceCommit;image=$Image;image_id=(& docker image inspect $Image --format '{{.Id}}').Trim();baseline=$BaselineImage;result='PASS_DEV_TEST_COMPATIBILITY';passed=$checks.Count;checks=$checks;fixture_scope=$prefix;operator_data_used=$false;operator_credentials_used=$false;kernel_bpf_instrumentation='NOT_EXECUTED_OPTIONAL_NOT_ENABLED';grpc='TRACES_LOGS_METRICS_INGEST_AND_QUERY';production_authorized=$false}|ConvertTo-Json -Depth 7|Set-Content (Join-Path $output 'compatibility.json') -Encoding utf8NoBOM
     Write-Output ('PASS: '+$checks.Count+' complete LGTM dev/test compatibility checks. Evidence: '+$output)
 } catch {
     [ordered]@{schema_version=1;scope_id='P1-RV001-001';source_commit=$sourceCommit;image=$Image;result='FAIL_COMPATIBILITY';passed=$checks.Count;checks=$checks;reason=$_.Exception.Message;fixture_scope=$prefix;operator_data_used=$false;operator_credentials_used=$false}|ConvertTo-Json -Depth 7|Set-Content (Join-Path $output 'compatibility.json') -Encoding utf8NoBOM
