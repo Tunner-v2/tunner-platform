@@ -1,0 +1,48 @@
+{
+  "schema_version": 1,
+  "scope_id": "P1-RV001-001",
+  "result": "PASS_SCOPED_DEV_TEST_VEX",
+  "roles": [
+    "solution-architect",
+    "cyber-security-engineer",
+    "governance-engineer"
+  ],
+  "review_provenance": "Executing agent applied the activated specialist contracts; this is not an independent human review or release acceptance.",
+  "reviewed_at": "2026-10-28T20:49:28.562Z",
+  "tested_commit": "091a51b87bc6eeef188d18db9bf2aa009565f75c",
+  "validator_source_sha256": "d7004ffb467190fcb8d25d3dc977cf19bf2581ac87354cea743ac82d22aeaa22",
+  "evidence_sha256": {
+    "approval": "376913686644f75f145f989a8d3fd9ee13fa8c3c2f4ec0b80148bdc595a28c33",
+    "binding": "3777b8bc2922dc8be80262581a6e8c92e0bdfb3898cf3fbafbad66b0bc6ea94c",
+    "source": "750f96094351d84db3c276fc8511bc500a06d49d2bb9a3ffd0b7e43002ee17a5",
+    "vex": "a9c77b2b3166d299b08d5e43e0e761f3ea1cbe9bfd542db9df37f7bf45ff17f0",
+    "tests": "bac4fa730606fcfd6385975c0b77380aad96b3ed10e8ba16e8a98698f1c3a12c"
+  },
+  "tests": {
+    "pass": 59,
+    "fail": 0,
+    "skip": 0
+  },
+  "assessments": [
+    {
+      "role": "solution-architect",
+      "finding": "Reusable standard-library guard is isolated from domain behavior; exact plugin/source/package/image context is checked before invoking the existing scanner. No service, datasource or original vendor signature path is removed."
+    },
+    {
+      "role": "cyber-security-engineer",
+      "finding": "Exact direct consent, source commit/sum, binary hash, four protobuf-only dependencies, both CVE IDs, unchanged VEX/review/source hashes and expiry are fail-closed. Rejection tests cover source/hash/CVE/context/image/expiry/tamper. Raw reports remain retained. Unrelated findings retain HIGH/CRITICAL exit failure."
+    },
+    {
+      "role": "governance-engineer",
+      "finding": "AMD-0005 resolution and exact direct consent recorded. Immutable historical closure preserved by RV lineage. Dev/test only, expires 2026-11-27; complete LGTM acceptance remains pending. Native context CURRENT with 196 authority artifacts VERIFIED."
+    }
+  ],
+  "exclusions": [
+    "Core Tempo service VEX",
+    "Other CVEs/plugins/binaries",
+    "Protected-main merge",
+    "Production release/deployment",
+    "Registry publication"
+  ],
+  "next_action": "Execute the source-bound guard against the immutable candidate and retain both unfiltered and corrected scans."
+}

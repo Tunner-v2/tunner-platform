@@ -17,12 +17,23 @@ jobs:
       - name: Checkout triggering revision
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
-          fetch-depth: 1
+          fetch-depth: 0
           persist-credentials: false
       - name: Set up .NET from global.json
         uses: actions/setup-dotnet@a98b56852c35b8e3190ac28c8c2271da59106c68 # v6.0.0
         with:
           global-json-file: global.json
+      - name: Set up supported Node.js for packaged User assets
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1
+        with:
+          node-version: '24'
+          package-manager-cache: false
+      - name: Build locked User assets before .NET packaging
+        working-directory: web
+        run: |
+          corepack enable
+          pnpm install --frozen-lockfile
+          pnpm build
       - name: Restore
         run: |
           dotnet restore Tunner.Governance.sln
@@ -44,6 +55,14 @@ jobs:
           dotnet test tests/Tunner.Installer.Tests --no-build --no-restore --logger trx --results-directory artifacts/ci-tests/installer
           dotnet run --project tests/Tunner.Observability.FunctionalTests --no-build --no-restore
           dotnet run --project tests/Tunner.AuditRemediation.FunctionalTests --no-restore
+      - name: Global UI route form and fidelity evidence gate
+        run: dotnet run --project src/Tunner.Governance --no-build --no-restore -- governance ui check
+      - name: Required-check enforcement regression
+        shell: pwsh
+        run: ./tools/validation/Test-TunnerCiEnforcement.ps1
+      - name: Runtime image inventory coverage
+        shell: pwsh
+        run: ./tools/validation/Validate-TunnerSecurityImageDefaults.ps1
       - name: Static security baseline validation
         shell: pwsh
         run: ./tools/validation/Validate-TunnerSecuritySupplyChainSource.ps1 -RepositoryRoot $PWD
@@ -66,16 +85,39 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        image:
-          - postgres:18.6
-          - rabbitmq:4.3.6-management
-          - redis:8.10.2
-          - openbao/openbao:2.7.0
-          - axllent/mailpit:v1.31.3
-          - grafana/otel-lgtm:0.34.0
-          - busybox:1.37.0
+        include:
+          - image: rabbitmq:4.3.6-management
+          - image: redis:8.10.2
+          - image: grafana/otel-lgtm:0.34.0
+          - image: busybox:1.37.0
+          - image: tunner-security/postgres:18.6-r1
+            component: postgres
+          - image: tunner-security/openbao:2.7.1-r2
+            component: openbao
+          - image: tunner-security/mailpit:1.31.6-r2
+            component: mailpit
     steps:
-      - name: Scan declared public image
+      - name: Checkout candidate build source
+        if: matrix.component != ''
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - name: Build private maintained candidate
+        if: matrix.component != ''
+        shell: pwsh
+        env:
+          BUILD_COMPONENT: ${{ matrix.component }}
+        run: ./tools/security/Build-TunnerSecurityImages.ps1 -Component $env:BUILD_COMPONENT
+      - name: Candidate compatibility checks
+        if: matrix.component != ''
+        shell: pwsh
+        env:
+          BUILD_COMPONENT: ${{ matrix.component }}
+        run: |
+          $catalog = Get-Content infra/security-images/catalog.json -Raw | ConvertFrom-Json
+          $entry = $catalog.images | Where-Object component -eq $env:BUILD_COMPONENT
+          & ('./' + $entry.compatibility_test) -Image $entry.image
+      - name: Scan declared runtime image
         uses: aquasecurity/trivy-action@ed142fd0673e97e23eac54620cfb913e5ce36c25 # v0.36.0
         with:
           image-ref: ${{ matrix.image }}
@@ -85,6 +127,60 @@ jobs:
           ignore-unfixed: true
           exit-code: '1'
           format: table
+      - name: Retain private build provenance
+        if: always() && matrix.component != ''
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        with:
+          name: private-image-${{ matrix.component }}-${{ github.sha }}
+          path: artifacts/security-images/
+          if-no-files-found: error
+          retention-days: 14
+
+
+  # Additional candidate proof only. Declared runtime defaults and their existing
+  # aggregate gate remain unchanged until the rebuilt image is actually accepted.
+  lgtm-candidate-validation:
+    name: Maintained LGTM candidate validation
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    steps:
+      - name: Checkout committed candidate source
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - name: Build complete private dev/test candidate
+        shell: pwsh
+        run: ./tools/security/Build-TunnerLgtmSecurityImage.ps1
+      - name: Require complete image and embedded dependency scans
+        shell: pwsh
+        run: ./tools/security/Scan-TunnerLgtmImage.ps1 -Image tunner-security/lgtm:0.38.1-r1 -Environment test
+      - name: Verify native signatures telemetry persistence and rollback
+        shell: pwsh
+        run: ./tools/validation/Test-TunnerLgtmImage.ps1 -Image tunner-security/lgtm:0.38.1-r1
+      - name: Retain candidate proof without publishing an image
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        with:
+          name: lgtm-candidate-proof-${{ github.sha }}
+          path: artifacts/security-images/
+          if-no-files-found: error
+          retention-days: 14
+
+  container-security-gate:
+    name: Container security gate
+    if: ${{ always() }}
+    needs: [container-image-scan]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout enforcement helper
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - name: Require all declared image scans to succeed
+        shell: pwsh
+        env:
+          IMAGE_SCAN_RESULT: ${{ needs.container-image-scan.result }}
+        run: ./tools/security/Assert-TunnerCiResult.ps1 -Result $env:IMAGE_SCAN_RESULT
   web-validation:
     name: Web build tests and dependency audit
     runs-on: ubuntu-latest

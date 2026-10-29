@@ -14,7 +14,55 @@
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 # Tunner Development Documentation — Master Index
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -32,7 +80,55 @@
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 This repository package is the parent development authority for building Tunner with human engineers and AI development agents. It translates the Tunner business model and FigJam architecture into an implementable, governed, testable and transferable engineering system.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -50,7 +146,55 @@ The documentation is intentionally separated into focused authorities rather tha
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ## 2. Locked baseline decisions
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -112,7 +256,55 @@ The documentation is intentionally separated into focused authorities rather tha
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ### Global commerce interpretation
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -130,7 +322,55 @@ Toronto, Ontario, Canada is Tunner's current corporate/home jurisdiction for the
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 Product presentment currency is explicit Product catalog/configuration, not inferred from the customer's card currency. An eligible card can be used when the selected provider route supports the configured presentment currency; issuer/cardholder FX is external unless Tunner/provider actually performs a recorded conversion.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -148,7 +388,55 @@ Tunner currently has an active CAD-denominated Canadian bank account for provide
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 Global selling can create destination-country privacy, consumer, marketing and indirect-tax obligations. Market expansion is therefore controlled through a jurisdiction/market policy registry and tax-obligation monitoring rather than by hardcoding Canada-only compliance. Tunner delegates tax calculation to an approved managed tax service through `ITaxEngine`; it does not maintain its own tax-rate or jurisdiction rules. The active payment provider's tax service may be preferred when it is capability-compatible, but tax-engine binding remains separately configurable and extensible.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -166,7 +454,55 @@ Global selling can create destination-country privacy, consumer, marketing and i
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 Stripe, Resend and Cloudflare R2 are selected implementation providers, but none becomes Tunner business authority. Tunner owns canonical payment, notification and object-metadata state. Provider SDK objects, webhooks and dashboards are normalized through adapters and may not be persisted as the domain model.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -188,6 +524,30 @@ Stripe, Resend and Cloudflare R2 are selected implementation providers, but none
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ## 3. Authority order
 
 
@@ -197,7 +557,55 @@ Stripe, Resend and Cloudflare R2 are selected implementation providers, but none
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 For development execution:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -220,7 +628,55 @@ For development execution:
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 An explicit Product Owner decision is constitutional business authority. If a development document conflicts with such a decision, development does not “choose” one: the affected item is blocked and the documentation is amended.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -238,7 +694,55 @@ Google Drive UI/UX documents are explicitly outside development scope.
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ## 4. Document map
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -297,7 +801,55 @@ Google Drive UI/UX documents are explicitly outside development scope.
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 The separately maintained **Tunner Architecture Flowchart Interpretation and Development Guidelines** remains mandatory reading and is intentionally external to this package because it governs FigJam interpretation across documentation revisions. Current Drive authority: https://drive.google.com/file/d/1I6PXE-kMIwe3WRrjUwPPckyQFzGU8BTB/view
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -315,7 +867,55 @@ The separately maintained **Tunner Architecture Flowchart Interpretation and Dev
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ### Pre-P0 implementation package
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -333,7 +933,55 @@ The complete pre-P0 materialization pack is maintained at:
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 https://drive.google.com/drive/folders/15pVwFcj6TfbRQWAcR_54V7-DrrMJ7k28
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -367,7 +1015,103 @@ It contains the concise `AGENTS.md` template, all 20 role `SKILL.md` contracts, 
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ### Authority-first decision resolution
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -385,7 +1129,55 @@ Under **AMD-0005**, no contributor may create a Product/technical decision, amen
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 Existing authority is reused rather than duplicated. `INSUFFICIENT_CONTEXT` causes context expansion before gap classification. A selective/trigger-based technology with no active trigger is not a missing contract and must not manufacture an ADR or Product Owner decision.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -403,7 +1195,55 @@ AMD-0005: https://drive.google.com/file/d/1M_B4TYwf5gDKaZ-1w_gMR9Nse-Fs7B87/view
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ### PR approval and continuous development
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -421,7 +1261,55 @@ Under **AMD-0002**, required PR approval gates integration into protected `main`
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 AMD-0002 also requires committed-state local readiness: repository-changing work must have an identified validated commit SHA before `LOCAL_VALIDATED`, `READY_FOR_MERGE`, `DONE` or completed handoff. PR approval/merge remains separate. Final test/review/evidence must correspond to the validated committed state; unrelated/pre-existing dirty paths are preserved and explicitly classified rather than silently committed.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -433,16 +1321,80 @@ AMD-0002 also requires committed-state local readiness: repository-changing work
 ### Approved Figma design-fidelity authority — AMD-0008
 
 
+
+
+
+
+
+
 **Active post-baseline amendment:** [AMD-0008 — Approved Figma Visual Fidelity & Product Owner UX Consent](https://drive.google.com/file/d/1DErZZpc3rIwzfpADnDzD9a361draTuhW/view) (2026-10-17).
+
+
+
+
+
+
 
 
 Existing approved Figma User/Admin screens are binding for **visual implementation**: faithfully reproduce backgrounds/glow/gradients, layout/composition, fields, card surfaces, typography, icons, spacing, colors, controls and their states. TailAdmin React is the code foundation and does not override approved Tunner design tokens and styling. Business/security behavior remains under the FRD/PDR/ADR authority hierarchy. The existing User Login, Registration, Verify Email and Account Ready Figma designs must be followed, subject to approved contract-driven functional changes.
 
 
+
+
+
+
+
+
 AI may research and propose an on-theme screen/form/field improvement or missing screen design, but **cannot self-approve** any material difference from an approved Figma screen, nor publish a new visual pattern without Product Owner approval. Missing visual assets/backgrounds or styling are `UI_FIDELITY_DEFECT`. Unmatched/new designs use `UI_REQUIRED` and Product Owner design consent. A `UI_VISUAL_APPROVAL` release gate requires matched Figma/runtime screenshot comparisons, design-system component/token traceability, responsive/accessibility checks and evidence for deviations. P0/P1 authorization boundaries remain unchanged.
 
 
+
+
+
+
+
+
+### Mandatory path routing and Figma validation — AMD-0009
+
+
+
+
+**Active 2026-10-17 amendment:** [AMD-0009 — URL-Addressable Screen Routing & Governed Form Validation](https://drive.google.com/file/d/1VeaNofocTrsbXwdePg8VSVuembRQxr7A/view). Each complete navigable screen/registration stage must own a meaningful pathname and handle direct links, refresh, Back/Forward and permissions safely. Fragment anchors/query parameters may represent suitable same-screen sections/dialogs but not full-screen navigation; no secrets/PII in URL. HTML5 constraint validation is not sufficient: reusable typed application schema validation plus independent server validation is mandatory. Reuse the existing Figma `registration-validation-errors` frame `70:1257` field/form error presentation and background visuals, but resolve validation rules and visible fields from active domain authority. Gate `URL-001..006` and `VAL-001..008` with screenshot, accessible UX and security regression evidence. Defects `UI_ROUTING_DEFECT`/`UI_VALIDATION_DEFECT`/`UI_FIDELITY_DEFECT` block relevant acceptance. AMD-0008 Product Owner visual consent remains mandatory; existing P0/P1–P8 boundaries unchanged.
+
+
+
+
+### Global application of AMD-0009: all screens and forms
+
+
+AMD-0009 is **a platform-wide frontend standard** across all existing/future Tunner-owned User, Admin/Support, Billing/Checkout, Finance, Connected Product self-service and operator interfaces. Registration is merely its initial illustrated case. Every separately navigable full-screen view must have its own canonical pathname, mapped to a screen/module/FRD/Figma route registry with safe navigation, refresh and Back/Forward; in-screen popups/anchors may use appropriately managed query/fragment/local state. Every form must share the approved Figma-derived reusable validation styles/components (field/summary/errors/states), client typed validation and authoritative domain-specific backend checks. Figma registration-validation-errors `70:1257` provides an example of the visual pattern; do not copy its registration-specific fields or error messages into other domains. **Apply `URL-001..006` and `VAL-001..008` to each relevant form/route**, not merely to registration. Product Owner design consent remains mandatory for unapproved new visual patterns under AMD-0008. Source: https://drive.google.com/file/d/1VeaNofocTrsbXwdePg8VSVuembRQxr7A/view.
+
+
 ## 5. Development start rule
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -460,7 +1412,55 @@ AI may research and propose an on-theme screen/form/field improvement or missing
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 The first authorized implementation activity is **P0 — Governance & Development System**. P1–P8 feature/platform development must not begin until the P0 feature-development enablement gate in document 11 passes with machine-readable evidence. This prevents product implementation from depending on chat memory, unenforced workflow rules or ad-hoc orchestration.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -478,7 +1478,55 @@ The first authorized implementation activity is **P0 — Governance & Developmen
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 Documentation activation authorizes **P0 — Governance & Development System first**.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -505,7 +1553,55 @@ Documentation activation authorizes **P0 — Governance & Development System fir
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 P1–P8 must not bypass P0 merely because documentation is active.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -523,7 +1619,55 @@ P1–P8 must not bypass P0 merely because documentation is active.
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 “Code compiles” is never sufficient.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -541,7 +1685,55 @@ A governed work item is done only when its required implementation, documentatio
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ## 8. Core engineering maxim
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -567,7 +1759,79 @@ A governed work item is done only when its required implementation, documentatio
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ## 9. Repository location portability
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -585,7 +1849,55 @@ The Tunner checkout/solution location is not authority and must never be hardcod
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 All repository-internal committed references use paths relative to `<repo-root>`. P0 establishes `.tunner-root` and the shared resolver defined by AMD-0003. Development must remain valid if the repository is moved or cloned to another drive, parent directory, CI workspace or container host path.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -603,7 +1915,55 @@ Canonical Google Drive/GitHub/Figma URLs/IDs remain external resource identifier
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ## 10. Shared capability and flow-to-code rule
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -621,7 +1981,55 @@ Tunner implements shared technical mechanics once and reuses them across applica
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 The governing separation is:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -639,7 +2047,55 @@ The governing separation is:
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 Shared primitives/formatters must remain technical and cohesive. Domain modules continue to own business calculations, eligibility, uniqueness/mutability policy, authorization and state. Presentation formatters render authoritative typed values only.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -665,7 +2121,79 @@ Examples include Money/currency display, dates/times, percentages, identifiers, 
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ## 11. Post-closure Revision (`RV`) lifecycle
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -683,7 +2211,55 @@ Tunner preserves legitimate milestone/work-item closure as immutable historical 
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 Examples:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -703,7 +2279,55 @@ Examples:
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 Revision sequence numbering is monotonic and has no artificial count limit.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -721,6 +2345,30 @@ Revision sequence numbering is monotonic and has no artificial count limit.
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 An RV is implementation/work-governance lineage, not an authority amendment. It cannot change Product/business/architecture/security authority without the applicable ADR/PDR/amendment.
 
 
@@ -730,7 +2378,43 @@ An RV is implementation/work-governance lineage, not an authority amendment. It 
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ### Age-aware Account and commercial eligibility — PDR-0011 / AMD-0007
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

@@ -1,0 +1,140 @@
+{
+  "schema_version": 1,
+  "scope_id": "P0-RV009",
+  "outcome": "RESOLVED_EXISTING_AUTHORITY",
+  "reviewed_at": "2026-10-20T20:11:34.170Z",
+  "reviewed_authority_refs": [
+    "docs/authority/baselines/1.6.0/01_Engineering_Technology_Foundation.md",
+    "docs/authority/current/development/09_Testing_Acceptance_Evidence_and_Quality_Gates.md",
+    "docs/authority/baselines/1.6.0/decisions/ADR-0008_GitHub_and_GitHub_Actions.md",
+    "docs/authority/current/development/03_Governed_Development_Lifecycle_Scrum_Git.md",
+    "docs/authority/current/development/13_RD_Source_Register.md",
+    "governance/evidence/P1-RV001-AUTHORITY-RESOLUTION.json"
+  ],
+  "conclusion": "Existing Doc01 governed image patching and ADR0008 required status/security checks authorize the control-plane correction. Preserve original closed P0 via RV009 and keep P1-RV001 release-blocking criteria intact; no waiver or new Product semantics.",
+  "observed_main_rules": "No required_status_checks rule; original codeowner/approval/stale-dismissal protections remain mandatory.",
+  "bounded_changes": [
+    "Stable fail-closed container scan aggregate and review-safe PR automation.",
+    "Actual supported vendor patch pins and compatibility validation; Mailpit1.31.6 has a clean candidate scan.",
+    "Exact desired-main-check payload and fresh effective readback; preserve other rules and bypass actors."
+  ],
+  "remaining_security_scope": "Vendor candidates forPostgreSQL/OpenBao/LGTM still fail unchanged policy. A scan-backed maintained-build scope choice is pending; no custom supplier image is adopted by this record.",
+  "native_rejection_resolved": "First Revision allocation used an unregistered current Doc01 copy; retained rejection and retried the verified immutable baseline reference. No byte-verification semantics changed.",
+  "primary_sources": [
+    "https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-rulesets/available-rules-for-rulesets",
+    "https://github.com/axllent/mailpit/releases/tag/v1.31.6",
+    "https://raw.githubusercontent.com/docker-library/docs/master/postgres/README.md"
+  ],
+  "candidate_receipts": [
+    {
+      "name": "openbao-current",
+      "image": "openbao/openbao:2.7.0",
+      "digests": [
+        "openbao/openbao@sha256:71156a1c6623a5fa3f5e61b0c6a8ead0faf0df29a778339188443551995d1315"
+      ],
+      "total": 4,
+      "critical": 0,
+      "unique_cves": [
+        "CVE-2026-78667",
+        "CVE-2026-78669",
+        "CVE-2026-97031"
+      ],
+      "receipt": "artifacts/security-remediation-20261020/openbao-current-scan.json",
+      "sha256": "4ebb37362bc64d91419e1748558226f26e7b58b480f4caff2f992fecf641f204"
+    },
+    {
+      "name": "openbao-candidate",
+      "image": "openbao/openbao:2.7.1",
+      "digests": [
+        "openbao/openbao@sha256:6d2b93856e3fcf7b18ad855a0b51eaba474dc8b79cf554379ea32034797d2acf"
+      ],
+      "total": 4,
+      "critical": 0,
+      "unique_cves": [
+        "CVE-2026-78667",
+        "CVE-2026-78669",
+        "CVE-2026-97031"
+      ],
+      "receipt": "artifacts/security-remediation-20261020/openbao-candidate-scan.json",
+      "sha256": "9cb0ec8dd3abbadba5d1b8cca177a026117c0b756b8343940469e4574112f3f1"
+    },
+    {
+      "name": "mailpit-candidate",
+      "image": "axllent/mailpit:v1.31.6",
+      "digests": [
+        "axllent/mailpit@sha256:23fe39e81bde596a918000b3135c0f85dc8bb4c9ea6be274b051143f3e300387"
+      ],
+      "total": 0,
+      "critical": 0,
+      "unique_cves": [],
+      "receipt": "artifacts/security-remediation-20261020/mailpit-candidate-scan.json",
+      "sha256": "a2313297b105e91ec96d5d46821b4c0b376dbaf2b9b9e00a7dbe3eb1e8969579"
+    },
+    {
+      "name": "lgtm-candidate",
+      "image": "grafana/otel-lgtm:0.37.0",
+      "digests": [
+        "grafana/otel-lgtm@sha256:57b5ab1ca6619beb180174e2fccce04762470750669d043f544b4726d0582d07"
+      ],
+      "total": 110,
+      "critical": 0,
+      "unique_cves": [
+        "CVE-2026-100349",
+        "CVE-2026-100351",
+        "CVE-2026-100352",
+        "CVE-2026-100353",
+        "CVE-2026-100354",
+        "CVE-2026-103111",
+        "CVE-2026-21728",
+        "CVE-2026-28377",
+        "CVE-2026-78667",
+        "CVE-2026-78669",
+        "CVE-2026-84304",
+        "CVE-2026-84445",
+        "CVE-2026-86145",
+        "CVE-2026-89161",
+        "CVE-2026-97031"
+      ],
+      "receipt": "artifacts/security-remediation-20261020/lgtm-candidate-scan.json",
+      "sha256": "7645ba054a9946515cfebdb88b1f765a730fd181e631c2bfdf080d8dc7b1ee02"
+    },
+    {
+      "name": "postgres-alpine-candidate",
+      "image": "postgres:18.6-alpine",
+      "digests": [
+        "postgres@sha256:77f585114c32fbca283dc835b0596f4e52b51b4c6662d7810b2f4084f60a1873"
+      ],
+      "total": 25,
+      "critical": 1,
+      "unique_cves": [
+        "CVE-2025-61726",
+        "CVE-2025-61729",
+        "CVE-2025-68121",
+        "CVE-2026-25679",
+        "CVE-2026-27145",
+        "CVE-2026-32280",
+        "CVE-2026-32281",
+        "CVE-2026-32283",
+        "CVE-2026-33811",
+        "CVE-2026-33814",
+        "CVE-2026-33818",
+        "CVE-2026-39820",
+        "CVE-2026-39821",
+        "CVE-2026-39822",
+        "CVE-2026-39836",
+        "CVE-2026-42499",
+        "CVE-2026-42504",
+        "CVE-2026-56853",
+        "CVE-2026-56858",
+        "CVE-2026-56859",
+        "CVE-2026-56860",
+        "CVE-2026-56862",
+        "CVE-2026-78667",
+        "CVE-2026-78669",
+        "CVE-2026-97031"
+      ],
+      "receipt": "artifacts/security-remediation-20261020/postgres-alpine-candidate-scan.json",
+      "sha256": "1748071476094e71ff953a83f32463fbabdd56e77fee7032b29da988c4554575"
+    }
+  ]
+}

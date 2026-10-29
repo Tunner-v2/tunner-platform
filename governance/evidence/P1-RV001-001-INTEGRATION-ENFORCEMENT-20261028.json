@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "scope_id": "P1-RV001-001",
+  "result": "PASS_CURRENT_EFFECTIVE_ENFORCEMENT",
+  "observed_at": "2026-10-28T23:18:48.5117484+00:00",
+  "source_commit": "8b83bcc9ec3bca75aa5bfe22c851d2ae1c8a5a19",
+  "remote_main_commit": "bcf8f8da10131a10060e04587259779048bbe8d0",
+  "repository": "Tunner-v2/tunner-platform",
+  "branch": "main",
+  "source_endpoint": "GET /repos/Tunner-v2/tunner-platform/rules/branches/main",
+  "ruleset_id": 24217332,
+  "required_contexts": [
+    "Security baseline",
+    "Container security gate",
+    "Web build tests and dependency audit"
+  ],
+  "integration_id": 15368,
+  "strict_required_status_checks": true,
+  "required_approving_reviews": 1,
+  "code_owner_review_required": true,
+  "settings_changed": false,
+  "evidence_path": "governance/evidence/security-20261028/effective-main-rules.json",
+  "evidence_sha256": "2053c185f59b5b5752238c754bb48734af58b640e9d8c6baf38f73b016d8864f",
+  "boundary": "Read-only verification of current effective rules, not scan completion, human approval, protected-main merge or release acceptance. Historical missing-check observations remain unchanged."
+}

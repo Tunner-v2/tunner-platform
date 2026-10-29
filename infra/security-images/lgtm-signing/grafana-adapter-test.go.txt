@@ -1,0 +1,45 @@
+package signature
+
+import (
+ "context"
+ "crypto/ed25519"
+ "crypto/rand"
+ "crypto/sha256"
+ "encoding/base64"
+ "encoding/hex"
+ "encoding/json"
+ "io/fs"
+ "os"
+ "path/filepath"
+ "testing"
+
+ "github.com/grafana/grafana/pkg/plugins"
+ tunnerdev "github.com/grafana/grafana/pkg/plugins/manager/signature/tunnerdev"
+)
+type tunnerTestFS struct{fs.FS;root string}
+func(f tunnerTestFS)Type()plugins.FSType{return plugins.FSTypeLocal}
+func(f tunnerTestFS)Base()string{return f.root}
+func(f tunnerTestFS)Rel(p string)(string,error){return filepath.Rel(f.root,p)}
+func(f tunnerTestFS)Files()([]string,error){var names []string;err:=fs.WalkDir(f.FS,".",func(n string,d fs.DirEntry,e error)error{if e==nil&&!d.IsDir(){names=append(names,n)};return e});return names,err}
+type tunnerDefaultSource struct{}
+func(tunnerDefaultSource)PluginClass(context.Context)plugins.Class{return plugins.Class("external")}
+func(tunnerDefaultSource)DefaultSignature(context.Context,string)(plugins.Signature,bool){return plugins.Signature{Status:plugins.SignatureStatusValid},true}
+func(tunnerDefaultSource)Discover(context.Context)([]*plugins.FoundBundle,error){return nil,nil}
+
+func TestTunnerNativeAdapterSignatureAndTamper(t *testing.T){
+ root:=t.TempDir();pub,key,err:=ed25519.GenerateKey(rand.Reader);if err!=nil{t.Fatal(err)}
+ sum:=sha256.Sum256(pub);fingerprint:=hex.EncodeToString(sum[:]);id,version:="grafana-postgresql-datasource","13.0.4"
+ files:=map[string]string{"plugin.json":`{"id":"grafana-postgresql-datasource","info":{"version":"13.0.4"}}`,"MANIFEST.txt":"synthetic vendor provenance","binary":"synthetic rebuilt executable"}
+ manifest:=tunnerdev.Manifest{Schema:1,Scope:tunnerdev.Scope,KeyID:"native-test-v1",Fingerprint:fingerprint,Plugin:id,Version:version,Files:map[string]string{}}
+ for n,body:=range files{if err:=os.WriteFile(filepath.Join(root,n),[]byte(body),0600);err!=nil{t.Fatal(err)};sum:=sha256.Sum256([]byte(body));manifest.Files[n]=hex.EncodeToString(sum[:])}
+ payload,_:=json.Marshal(manifest);raw,_:=json.Marshal(tunnerdev.Envelope{Payload:base64.StdEncoding.EncodeToString(payload),Signature:base64.StdEncoding.EncodeToString(ed25519.Sign(key,payload))});if err:=os.WriteFile(filepath.Join(root,tunnerdev.ManifestName),raw,0600);err!=nil{t.Fatal(err)}
+ var plugin plugins.FoundPlugin;if err:=json.Unmarshal([]byte(files["plugin.json"]),&plugin.JSONData);err!=nil{t.Fatal(err)};plugin.FS=tunnerTestFS{FS:os.DirFS(root),root:root}
+ policy:=tunnerdev.Policy{Keys:map[string]tunnerdev.Key{"native-test-v1":{Public:pub,Fingerprint:fingerprint}},Plugins:map[string]string{id:version}}
+ signature,handled:=calculateTunnerDevelopmentSignature(plugin,policy);if !handled||signature.Status!=plugins.SignatureStatusValid||signature.SigningOrg!="Tunner development/test rebuild"{t.Fatalf("unexpected native result: %+v %v",signature,handled)}
+ if err:=os.WriteFile(filepath.Join(root,"binary"),[]byte("tampered"),0600);err!=nil{t.Fatal(err)}
+ signature,handled=calculateTunnerDevelopmentSignature(plugin,policy);if !handled||signature.Status!=plugins.SignatureStatusInvalid{t.Fatal("native adapter must reject altered content")}
+ // A present invalid extension cannot be bypassed by a source default.
+ signature,err=DefaultCalculator(nil).Calculate(context.Background(),tunnerDefaultSource{},plugin);if err!=nil||signature.Status!=plugins.SignatureStatusInvalid{t.Fatal("invalid extension bypassed via source default")}
+ if err:=os.Remove(filepath.Join(root,tunnerdev.ManifestName));err!=nil{t.Fatal(err)}
+ signature,err=DefaultCalculator(nil).Calculate(context.Background(),tunnerDefaultSource{},plugin);if err!=nil||signature.Status!=plugins.SignatureStatusValid{t.Fatal("original source default path must remain unchanged when extension is absent")}
+}

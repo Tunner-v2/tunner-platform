@@ -1,0 +1,93 @@
+{
+  "schema_version": 1,
+  "scope_id": "TUN-P2-005",
+  "validation_kind": "COMMITTED",
+  "result": "PASS",
+  "validation_boundary": "ENGINEERING_PASS_CURRENT_VISUALS_ACCEPTED_NONBLOCKING_FIGMA_TODO",
+  "tested_commit_sha": "f132e0fbf5322650d2cdcb3f7cacb78e659cfded",
+  "validated_commit_sha": "f132e0fbf5322650d2cdcb3f7cacb78e659cfded",
+  "owned_behavior_paths": [
+    "docs/contracts/authentication-session-contract.md",
+    "docs/contracts/ui-inventory.json",
+    "governance/evidence/TUN-P2-005-AUTHORITY-RESOLUTION.json",
+    "governance/evidence/TUN-P2-005-DATA-INVENTORY.json",
+    "governance/evidence/TUN-P2-005-EXTERNAL-AUTHORITY-BOUNDARY.json",
+    "governance/evidence/TUN-P2-005-PROVIDER-DIRECTION-20261021.json",
+    "governance/evidence/TUN-P2-005-RD-SOURCES.json",
+    "governance/evidence/TUN-P2-005-VISUAL-CONSENT-20261021.json",
+    "src/Modules/Identity/AuthenticationApplication.cs",
+    "src/Modules/Identity/AuthenticationContracts.cs",
+    "src/Modules/Identity/AuthenticationEndpoints.cs",
+    "src/Modules/Identity/AuthenticationMigrationSql.cs",
+    "src/Modules/Identity/AuthenticationPresentation.cs",
+    "src/Modules/Identity/AuthenticationRows.cs",
+    "src/Modules/Identity/IdentityEmail.cs",
+    "src/Modules/Identity/IdentityPersistenceDbContext.cs",
+    "src/Modules/Identity/IdentityWebAssets.cs",
+    "src/Modules/Identity/Migrations/20261021174404_P2PasswordSessions.Designer.cs",
+    "src/Modules/Identity/Migrations/20261021174404_P2PasswordSessions.cs",
+    "src/Modules/Identity/Migrations/IdentityPersistenceDbContextModelSnapshot.cs",
+    "src/Modules/Identity/RegistrationApplication.cs",
+    "src/Modules/Identity/RegistrationEndpoints.cs",
+    "src/Tunner.User.Bff/TunnerAuthenticatedUserBffHost.cs",
+    "tests/Tunner.Identity.Persistence.Tests/AuthenticationPolicyTests.cs",
+    "tests/Tunner.Identity.Persistence.Tests/AuthenticationTestHost.cs",
+    "tests/Tunner.Identity.Persistence.Tests/AuthenticationTests.cs",
+    "tests/Tunner.Identity.Persistence.Tests/Tunner.Identity.Persistence.Tests.csproj",
+    "tools/browser-testing/Program.cs",
+    "tools/browser-testing/Tunner.BrowserTesting.csproj",
+    "tools/dev/tunner-browser.ps1",
+    "web/apps/user/authentication.content.proposal.json",
+    "web/apps/user/authentication.css",
+    "web/apps/user/authentication.html",
+    "web/apps/user/authentication.routes.ts",
+    "web/apps/user/authentication.tsx",
+    "web/apps/user/authentication.validation.ts",
+    "web/apps/user/public/assets/login-bg-indigo.svg",
+    "web/apps/user/public/assets/login-bg-violet.svg",
+    "web/apps/user/public/assets/login-eye-off.svg",
+    "web/apps/user/public/assets/login-google.svg",
+    "web/apps/user/vite.config.ts",
+    "web/package.json",
+    "web/playwright.authentication.config.ts",
+    "web/playwright.config.ts",
+    "web/playwright.registration.config.ts",
+    "web/tests/authentication/authentication.spec.ts",
+    "web/tests/browser-testing/authentication-flow.spec.ts",
+    "web/tests/contracts.test.tsx"
+  ],
+  "checked_at": "2026-10-28T18:05:00.206Z",
+  "test_index_ref": "governance/evidence/ui/authentication-20261028/test-index.json",
+  "component_test_commits": {
+    "backend_unit_dev_browser": "f63e81b062049f2ce65a623d29c1fc311400fcd7",
+    "real_browser": "f132e0fbf5322650d2cdcb3f7cacb78e659cfded",
+    "starter_safety": "f132e0fbf5322650d2cdcb3f7cacb78e659cfded"
+  },
+  "source_binding": {
+    "method": "Committed-source equivalence plus affected real-browser/starter rerun",
+    "executed_at_sha": "f132e0fbf5322650d2cdcb3f7cacb78e659cfded",
+    "prior_full_regression_sha": "f63e81b062049f2ce65a623d29c1fc311400fcd7",
+    "scope": "Only tools/dev/tunner-browser.ps1 changed within these ownership sets. Backend, shared UI and browser spec source remain byte-identical to the prior 77/31/54 PASS cohort. Three real browser and seven starter checks rerun on maintained runtime images at this committed source.",
+    "delta_evidence_ref": "governance/evidence/P1-RV001-001-RUNTIME-REVALIDATION-20261028.json"
+  },
+  "ui_visual_approval": "PASS_SCOPED_PRODUCT_OWNER_EXCEPTION",
+  "ui_evidence_ref": "governance/evidence/TUN-P2-005-UI-COMPLIANCE.json",
+  "open_defects": [],
+  "open_todos": [
+    "TODO-TUN-P2-005-FIGMA001"
+  ],
+  "completion_claim": false,
+  "external_authority_ref": "governance/evidence/TUN-P2-005-EXTERNAL-AUTHORITY-BOUNDARY.json",
+  "visual_acceptance_ref": "governance/evidence/TUN-P2-005-VISUAL-ACCEPTANCE-DEFERRAL-20261021.json",
+  "deferred_defects": [
+    "DEF-TUN-P2-005-UI-001"
+  ],
+  "previous_validations": [
+    {
+      "validated_commit_sha": "f63e81b062049f2ce65a623d29c1fc311400fcd7",
+      "result": "PASS",
+      "boundary": "Prior complete regression remains valid for byte-identical source; maintained-image starter delta revalidated separately."
+    }
+  ],
+  "runtime_delta_ref": "governance/evidence/P1-RV001-001-RUNTIME-REVALIDATION-20261028.json"
+}

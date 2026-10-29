@@ -1,0 +1,14 @@
+diff --git a/pkg/plugins/manager/signature/manifest.go b/pkg/plugins/manager/signature/manifest.go
+--- a/pkg/plugins/manager/signature/manifest.go
++++ b/pkg/plugins/manager/signature/manifest.go
+@@ -140,7 +140,10 @@
+ 	return manifest, nil
+ }
+ 
+ func (s *Signature) Calculate(ctx context.Context, src plugins.PluginSource, plugin plugins.FoundPlugin) (plugins.Signature, error) {
++	if result, handled := calculateTunnerDevelopmentSignature(plugin, tunnerDevPolicy); handled {
++		return result, nil
++	}
+ 	if defaultSignature, exists := src.DefaultSignature(ctx, plugin.JSONData.ID); exists {
+ 		return defaultSignature, nil
+ 	}

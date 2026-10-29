@@ -488,6 +488,16 @@
               "type": "null"
             }
           ]
+        },
+        "ui_evidence_ref": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/nonEmptyString"
+            },
+            {
+              "type": "null"
+            }
+          ]
         }
       },
       "required": [
@@ -1671,6 +1681,16 @@
         },
         "product_acceptance_required": {
           "type": "boolean"
+        },
+        "ui_evidence_ref": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/nonEmptyString"
+            },
+            {
+              "type": "null"
+            }
+          ]
         }
       },
       "required": [

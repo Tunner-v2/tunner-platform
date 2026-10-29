@@ -21,7 +21,11 @@ $projectName = 'tunner-browser-' + $rootHash
 # Per-request certificate pinning for readiness works in Windows PowerShell 5.1 and PowerShell 7.
 # It never changes global certificate validation or accepts an arbitrary certificate.
 if (-not ('TunnerBrowserLocalHttps' -as [type])) {
-    Add-Type -WarningAction SilentlyContinue -TypeDefinition @'
+    # Keep the .NET Framework-compatible certificate-pinned bridge on Windows PowerShell 5.1.
+    # Modern PowerShell compilers diagnose this API as obsolete; suppress only that compatibility diagnostic.
+    $browserCompileOptions = @{}
+    if ($PSVersionTable.PSVersion.Major -ge 7) { $browserCompileOptions.CompilerOptions = @('/nowarn:SYSLIB0014') }
+    Add-Type @browserCompileOptions -WarningAction SilentlyContinue -TypeDefinition @'
 using System;
 using System.IO;
 using System.Net;
@@ -109,9 +113,10 @@ function Get-BrowserStatus {
 function Show-BrowserAddresses {
     param($State)
     Write-Host ('Application: https://localhost:' + $State.ApplicationPort + '/registration')
+    Write-Host ('Sign-in test: https://localhost:' + $State.ApplicationPort + '/login')
     Write-Host ('Verification inbox: http://127.0.0.1:' + $State.MailpitPort)
     Write-Host ('PostgreSQL: 127.0.0.1:' + $State.PostgresPort + ' -> container 5432; database tunner_browser_testing')
-    Write-Host 'ISOLATED LOCAL TEST DATA ONLY. Registration, verification and Personal Information are available. Sign-in and later P2 features are still under development.'
+    Write-Host 'ISOLATED LOCAL TEST DATA ONLY. Registration, verification, Personal Information and password sign-in/sign-out are available for isolated engineering testing. Production visual acceptance and later P2 features remain pending.'
 }
 function Open-BrowserAddresses {
     param($State)
@@ -213,6 +218,7 @@ try {
     $postgres.ports = @('127.0.0.1:' + $state.PostgresPort + ':5432')
     $postgres.volumes = @(@{type='volume';source='browser-postgres-data';target='/var/lib/postgresql'})
     $mailpit = $baseCompose.services.mailpit
+    & (Join-Path $repositoryRoot 'tools/security/Ensure-TunnerDevelopmentImages.ps1') -Images @($postgres.image,$mailpit.image) -RepositoryRoot $repositoryRoot
     $mailpit.ports = @(("127.0.0.1:{0}:1025" -f $state.SmtpPort),("127.0.0.1:{0}:8025" -f $state.MailpitPort))
     @{services=@{postgres=$postgres;mailpit=$mailpit};volumes=@{'browser-postgres-data'=@{}}} | ConvertTo-Json -Depth 30 | Set-Content -LiteralPath $composePath -Encoding UTF8
     Write-BrowserState $state
@@ -243,7 +249,7 @@ try {
     }
     $options = [TunnerBrowserLocalHttps]::Get(('https://localhost:' + $state.ApplicationPort + '/registration/options'),$state.CertificateSha256) | ConvertFrom-Json
     if ($options.policyVersion -ne 'browser-test-registration-v2') { throw 'The registration providers did not pass the test-mode readiness check.' }
-    Write-Host 'Ready: database migrations, HTTPS, real registration API, packaged UI and local verification delivery.'
+    Write-Host 'Ready: database migrations, HTTPS, registration/authentication APIs, packaged UI and local verification delivery.'
     Show-BrowserAddresses $state
     Open-BrowserAddresses $state
 } catch {

@@ -1,0 +1,86 @@
+{
+  "schema_version": 1,
+  "scope_type": "WORK_ITEM",
+  "scope_id": "P1-RV001-001",
+  "reviewed_at": "2026-10-28",
+  "sources": [
+    {
+      "url": "https://github.com/go-jose/go-jose/security/advisories/GHSA-mgcc-cww5-fp2q",
+      "finding": "Official HIGH CVE2026-116587 affects go-jose/v4 through4.1.5;4.1.6 is patched. Rebuild the existing approved OpenBao2.7.1 source with this bounded patch and preserve its UI/Raft/API behavior."
+    },
+    {
+      "url": "https://github.com/grafana/docker-otel-lgtm/releases/tag/v0.38.1",
+      "finding": "Latest official candidate released26October. Actual full-image scan28October still finds87 fixable HIGH entries across25 discovered targets; do not call a latest tag secure."
+    },
+    {
+      "url": "https://grafana.com/api/plugins/grafana-postgresql-datasource",
+      "finding": "Official API readback28October still reports13.0.4. Signed artifact bytes cannot be patched under the old vendor signature."
+    },
+    {
+      "url": "https://grafana.com/developers/plugin-tools/publish-a-plugin/sign-a-plugin",
+      "finding": "Vendor signing authenticates plugin contents and cannot be forged or reused after binary patching. Subsequent direct consent authorizes only the separate dev/test Tunner root in the local ADR; vendor trust remains intact and unsigned overrides remain prohibited."
+    },
+    {
+      "url": "https://go.dev/doc/devel/release",
+      "finding": "Go1.27.3 is the current reviewed patch fixing the crypto/x509 issue in the failing vendor binaries. Maintain existing pinned toolchain; no new version guess."
+    },
+    {
+      "url": "https://github.com/cure53/DOMPurify/releases/tag/3.4.17",
+      "finding": "Official patch release3.4.17 is available. Fresh CI reproduces HIGH/CRITICAL findings in vendor Mailpit DOMPurify3.4.16; pin only the patched sanitizer and exact integrity-bearing lock entries."
+    },
+    {
+      "url": "https://github.com/cure53/DOMPurify/security/advisories/GHSA-cg2g-xh64-v4q7",
+      "finding": "Vendor advisory identifies the fixed3.4.17 sanitizer patch; preserve the UI and sanitizer API while updating the dependency."
+    },
+    {
+      "url": "https://github.com/cure53/DOMPurify/security/advisories/GHSA-mrv2-3pqr-j5jr",
+      "finding": "Vendor advisory documents a sanitizer weakness fixed by3.4.17. Keep the unchanged fixable HIGH/CRITICAL gate and verify the exact rebuilt production lockfile."
+    },
+    {
+      "url": "https://raw.githubusercontent.com/grafana/grafana/v13.2.4/pkg/plugins/manager/signature/manifest.go",
+      "finding": "Source-pinned native integration with the separate dev/test adapter passes62 test results and no failed/skipped tests; two helper packages contain no tests. Existing vendor verification remains unchanged when no Tunner manifest exists."
+    },
+    {
+      "url": "https://github.com/open-telemetry/opentelemetry-ebpf-instrumentation/releases/tag/v0.15.2",
+      "finding": "Official generated source archive includes both BPF architectures and the Java agent. Release asset metadata and SHA256SUMS agree on d3cbec602e3ab7b357d2f4a57b29e502365f9098808418e8b4d96dec8fa9281f. Rebuild the Go executable with the approved patched toolchain while preserving embedded assets."
+    },
+    {
+      "url": "https://raw.githubusercontent.com/open-telemetry/opentelemetry-collector-releases/6c65793ec707f673304e52dfcb642684fda1a048/distributions/otelcol-contrib/manifest.yaml",
+      "finding": "The complete0.163.2 distribution manifest and all factories are retained, including OBI0.15.2 and its official generated-source replacement. Official Makefile pins builder0.163.0. No receiver/exporter/extension is dropped to obtain a clean scan."
+    },
+    {
+      "url": "https://raw.githubusercontent.com/grafana/pyroscope/36d558a4799e86ce9814a5348e6ecc300e4ed192/cmd/pyroscope/frontend.Dockerfile",
+      "finding": "Official production build uses immutable Yarn installation and Vite assets. Rebuild and audit complete production UI and embed with embedassets; never substitute dev-mode stubs."
+    },
+    {
+      "url": "https://grafana.com/security/security-advisories/cve-2026-21728/",
+      "finding": "Vendor fixes predate verified Tempo3.1.1 source. The plugin only links protobuf packages, with no affected query/config server code. Exact scoped consent recorded before VEX consumption."
+    },
+    {
+      "url": "https://grafana.com/security/security-advisories/cve-2026-28377/",
+      "finding": "Vendor fixed2.10.3 source precedes verified3.1.1 release commit. Exact plugin source/hash guards and the redaction regression support the separately consented applicability correction."
+    },
+    {
+      "url": "https://trivy.dev/docs/dev/supply-chain/vex/file/",
+      "finding": "Trivy matches product/dependency PURLs; it does not supply the required executable/source/expiry enforcement. External typed guard checks exact consent/source/binary/image/tests/reviews before consumption, retains raw findings, rejects unknown contexts and expires November27."
+    },
+    {
+      "url": "https://github.com/open-telemetry/opentelemetry-ebpf-instrumentation/releases/download/v0.15.2/obi-java-agent-v0.15.2.cyclonedx.json",
+      "finding": "The separate official runtime SBOM hash769e2467372c3333f646a1894be7c8cc80dfea3c49b0eaa9809fc7740a950d5d positively identifies both shaded ByteBuddy1.18.14-jdk5 dependencies. Direct JAR inspection has no package metadata because upstream relocates classes and excludes META-INF; treat that scan as inconclusive and enforce the exact runtime SBOM scan."
+    },
+    {
+      "url": "https://raw.githubusercontent.com/grafana/docker-otel-lgtm/v0.38.1/README.md",
+      "finding": "Vendor supports dev/test use, shared/data persistence and optional OBI. Enabling kernel instrumentation requires privileged host/PID access; those optional host-instrumentation tests are not enabled or claimed by the unprivileged compatibility fixture."
+    },
+    {
+      "url": "https://go.dev/ref/mod#module-cache",
+      "finding": "The official reference permits simultaneous Go commands sharing the module cache. Source files remain read-only by default; default checksum authentication and go mod verify are retained. Task-only caches may use shared BuildKit mounts instead of holding two exclusive locks across complete component builds."
+    },
+    {
+      "url": "https://pkg.go.dev/cmd/go#hdr-Build_and_test_caching",
+      "finding": "Pinned Go1.27.3 go help cache confirms concurrent invocation safety. Package build parallelism2 and GOMAXPROCS2 constrain each component. Cache-mode recovery changes orchestration only; source sums, test suites, VEX guards and full-image acceptance gates remain mandatory."
+    }
+  ],
+  "raw_evidence_root": "artifacts/security-followup-20261028",
+  "authority_resolution_ref": "governance/evidence/P1-RV001-001-AUTHORITY-RESOLUTION-20261028.json"
+}

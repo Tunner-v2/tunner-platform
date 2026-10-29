@@ -82,3 +82,11 @@ body { margin:0; }
 
 /* Exported outline of approved Figma text node 70:696, at its measured render bounds. */
 .verified-mark img.approved-check { inset:auto; left:25.8208px; top:23.672px; inline-size:21px; block-size:22px; }
+
+/* Approved 70:1257 error primitives, retaining each screen's approved variant. */
+.registration-card.verify .tn-input[aria-invalid='true'] { border-color:var(--tn-semantic-error); }
+.notice-field { margin-block:6px 12px; }
+.notice-field .notice-ack { margin:0; }
+.notice-field>.tn-field-error { display:block; margin-block-start:var(--tn-component-error-gap); margin-inline-start:32px; }
+.notice-ack input:not(:checked)[aria-invalid='true'] { appearance:none; border:var(--tn-primitive-invalid-border-width) solid var(--tn-semantic-error); border-radius:var(--tn-primitive-radius-5); background:var(--tn-primitive-error-surface); }
+.registration-card .tn-form-error-summary { margin:20px 0 0; }

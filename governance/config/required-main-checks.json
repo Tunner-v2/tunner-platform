@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "branch": "main",
+  "strict_required_status_checks_policy": true,
+  "required_status_checks": [
+    {
+      "context": "Security baseline",
+      "integration_id": 15368
+    },
+    {
+      "context": "Container security gate",
+      "integration_id": 15368
+    },
+    {
+      "context": "Web build tests and dependency audit",
+      "integration_id": 15368
+    }
+  ],
+  "authority_ref": "docs/authority/baselines/1.6.0/decisions/ADR-0008_GitHub_and_GitHub_Actions.md",
+  "configuration_kind": "DESIRED_STATE;effective API readback required",
+  "preserve": "Existing codeowner approval,stale-review dismissal,no-force-push,no-delete and bypass actors unchanged."
+}
