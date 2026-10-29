@@ -154,6 +154,10 @@ jobs:
       - name: Require complete image and embedded dependency scans
         shell: pwsh
         run: ./tools/security/Scan-TunnerLgtmImage.ps1 -Image tunner-security/lgtm:0.38.1-r1 -Environment test
+      - name: Set up approved .NET SDK for real gRPC compatibility
+        uses: actions/setup-dotnet@a98b56852c35b8e3190ac28c8c2271da59106c68
+        with:
+          global-json-file: global.json
       - name: Verify native signatures telemetry persistence and rollback
         shell: pwsh
         run: ./tools/validation/Test-TunnerLgtmImage.ps1 -Image tunner-security/lgtm:0.38.1-r1
