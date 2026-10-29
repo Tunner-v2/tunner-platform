@@ -79,6 +79,22 @@
     {
       "url": "https://pkg.go.dev/cmd/go#hdr-Build_and_test_caching",
       "finding": "Pinned Go1.27.3 go help cache confirms concurrent invocation safety. Package build parallelism2 and GOMAXPROCS2 constrain each component. Cache-mode recovery changes orchestration only; source sums, test suites, VEX guards and full-image acceptance gates remain mandatory."
+    },
+    {
+      "url": "https://go.dev/ref/mod#authenticating",
+      "finding": "Resumable host download of public AWS module1.55.8 is authenticated by pinned Go with explicit sum.golang.org before native-cache use. Retain exact module h1, GoModSum, archive SHA256 and temporary-helper provenance; no checksum bypass or source replacement."
+    },
+    {
+      "url": "https://raw.githubusercontent.com/SermoDigital/jose/803625baeddc/crypto/none.go",
+      "finding": "Exact legacy source unconditionally registers crypto.Hash(0). Pinned Go1.27.3 rejects that unsupported global registration, reproducing the Collector startup panic. The scoped proposed patch removes only the obsolete init; all signing/verification implementations remain unchanged."
+    },
+    {
+      "url": "https://proxy.golang.org/bitbucket.org/atlassian/go-asap/v2/@v/v2.26.3.zip",
+      "finding": "Primary module source shows nine supported RSA/RSA-PSS/ECDSA algorithms and explicit exclusion of none/HMAC. Preserve that validator map; test correct signatures, wrong keys, tampering, expiry, issuer/audience and rejection before key lookup."
+    },
+    {
+      "url": "https://go.dev/ref/mod#vendoring",
+      "finding": "Use supported vendoring after source authentication/verification, hash-check and patch the exact legacy file, retain original module versions and licenses, and preserve vendor/modules.txt plus patch/proof. Native Go build help forbids overlays below GOMODCACHE; do not mutate the authenticated cache or obscure original versions through local replacements."
     }
   ],
   "raw_evidence_root": "artifacts/security-followup-20261028",
