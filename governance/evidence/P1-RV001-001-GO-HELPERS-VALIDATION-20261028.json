@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "scope_id": "P1-RV001-001",
+  "status": "PASS_HELPER_REGRESSIONS_ONLY",
+  "tested_commit": "6d9a2f6a6ce7e42adfc1db4c5b367b13bff79cfb",
+  "go_vet": "PASS",
+  "passed_test_cases": 69,
+  "failed_test_cases": 0,
+  "skipped_test_cases": 0,
+  "package_without_tests": [
+    "tunner.dev/lgtm-signing/cmd/vex-check"
+  ],
+  "network": "none",
+  "capabilities": "dropped_all",
+  "root_filesystem": "read_only",
+  "go_image": "golang:1.27.3-bookworm@sha256:5c3e9b43cfd3bb95c7937462e29d87ada57b481a96fa23ad0eb61778d7a00110",
+  "evidence_path": "governance/evidence/security-20261028/build-reliability/helper-tests-69.jsonl",
+  "evidence_sha256": "30990b3003a3c06bb042b4b0057ab6e3ef519c069a32247372ff19ea311ba4fb",
+  "raw_artifact": "artifacts/security-followup-20261028/go-helpers-69-current-tests.jsonl",
+  "raw_artifact_sha256": "30990b3003a3c06bb042b4b0057ab6e3ef519c069a32247372ff19ea311ba4fb",
+  "normalization": "UTF-8 JSONL line endings normalized to LF only; test events are unchanged.",
+  "added_coverage": [
+    "Go build-output and build-fail setup diagnostics with ImportPath",
+    "Retain failing-case diagnostics while excluding successful-case noise"
+  ],
+  "boundary": "Does not accept the full LGTM image, upstream source builds, final image scan, compatibility, CI, merge or release."
+}
