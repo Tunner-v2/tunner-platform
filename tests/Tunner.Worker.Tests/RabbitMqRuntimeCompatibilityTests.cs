@@ -35,6 +35,7 @@ public sealed partial class OutboxDispatchCoordinatorTests
         await broker.StopAsync();
         await broker.StartAsync();
         await RequireManagementAsync(broker, password);
+        endpoint = new Uri($"amqp://fixture:{password}@{broker.Hostname}:{broker.GetMappedPublicPort(5672)}");
         await using var restarted = await new ConnectionFactory { Uri = endpoint }.CreateConnectionAsync();
         await using var readChannel = await restarted.CreateChannelAsync();
         var received = await readChannel.BasicGetAsync(queueName, autoAck: true);
