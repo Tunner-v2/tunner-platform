@@ -36,6 +36,7 @@ RUN git apply --check /tmp/ui-security.patch && git apply /tmp/ui-security.patch
 COPY --from=ui-builder /src/prometheus/web/ui/static /src/prometheus/web/ui/static
 COPY --from=ui-builder /out /out
 COPY --from=ui-audit /out /out
+COPY prometheus-assets_test.go.txt web/ui/tunner_assets_test.go
 RUN bash scripts/compress_assets.sh
 RUN --mount=type=cache,id=tunner-lgtm-go1273-mod,target=/go/pkg/mod,sharing=shared \
     --mount=type=cache,id=tunner-lgtm-go1273-build,target=/root/.cache/go-build,sharing=shared \

@@ -75,6 +75,16 @@ try {
         $u='http://127.0.0.1:'+$candidate.ports[$entry.port]+$entry.path
         Wait-For { (Invoke-WebRequest -Uri $u -TimeoutSec 5).StatusCode -eq 200 } ($entry.name+' ready')
     }
+    $promBase='http://127.0.0.1:'+$candidate.ports[9090]
+    $promHtml=Invoke-WebRequest -Uri ($promBase+'/query') -TimeoutSec 15
+    Expect ($promHtml.StatusCode -eq 200 -and $promHtml.Content -match 'id="root"') 'Prometheus retained production UI served'
+    foreach($asset in @(@{pattern='<script[^>]+src="([^" ]+\.js)"';name='JavaScript'},@{pattern='<link[^>]+href="([^" ]+\.css)"';name='stylesheet'})){
+        $assetMatch=[regex]::Match($promHtml.Content,$asset.pattern)
+        if(-not $assetMatch.Success -or $assetMatch.Groups[1].Value -notmatch '^(?:\./|/)?assets/[A-Za-z0-9_.-]+\.(?:js|css)$'){throw 'Unexpected Prometheus production asset reference'}
+        $assetPath=$assetMatch.Groups[1].Value.TrimStart([char[]]'./')
+        $assetResponse=Invoke-WebRequest -Uri ($promBase+'/'+$assetPath) -TimeoutSec 15
+        Expect ($assetResponse.StatusCode -eq 200 -and $assetResponse.RawContentLength -gt 1024) ('Prometheus production '+$asset.name+' served')
+    }
     $tcp=[Net.Sockets.TcpClient]::new()
     try{$tcp.ConnectAsync('127.0.0.1',$candidate.ports[4317]).Wait(5000)|Out-Null;Expect $tcp.Connected 'OTLP gRPC loopback TCP connection'}finally{$tcp.Dispose()}
     $marker='fixture-'+[Guid]::NewGuid().ToString('N')

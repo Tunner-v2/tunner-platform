@@ -1,0 +1,75 @@
+$ bash build_ui.sh --all
+build lezer-promql
+$ bash ./build.sh
++ pnpm exec lezer-generator src/promql.grammar -o src/parser
+Unused rule 'TsOfMaxFirstTime' (src/promql.grammar 486:2)
+Wrote src/parser.js and src/parser.terms.js
++ cat src/parser.terms.js
++ bash ./generate-types.sh
++ mkdir -p ./dist
++ indexFile=./dist/index.d.ts
++ [[ -f ./dist/index.d.ts ]]
++ cat
+++ sed -E 's/ = [0-9]+/: number/' src/parser.terms.js
++ pnpm exec rollup -c
+[36m
+[1m./src/parser.js[22m → [1m./dist/index.cjs, ./dist/index.es.js[22m...[39m
+[32mcreated [1m./dist/index.cjs, ./dist/index.es.js[22m in [1m183ms[22m[39m
+build codemirror-promql
+$ pnpm run build:lib
+$ bash ./build.sh
++ tsc --module esnext --target es2018 --outDir dist/esm
++ tsc6 --module commonjs --moduleResolution node --target es5 --outDir dist/cjs --downlevelIteration --ignoreDeprecations 6.0
+build react-app
+$ react-app-rewired build
+(node:191) [DEP0176] DeprecationWarning: fs.F_OK is deprecated, use fs.constants.F_OK instead
+(Use `node --trace-deprecation ...` to show where the warning was created)
+Creating an optimized production build...
+Compiled with warnings.
+
+[eslint] 
+src/pages/graph/SeriesName.tsx
+  Line 1:21:  'useContext' is defined but never used  @typescript-eslint/no-unused-vars
+
+src/pages/status/Status.tsx
+  Line 130:37:  Expected '!==' and instead saw '!='                                                                                                                                                                                                          eqeqeq
+  Line 133:6:   React Hook useEffect has a missing dependency: 'setAnimateLogo'. Either include it or remove the dependency array. If 'setAnimateLogo' changes too often, find the parent component that defines it and wrap that definition in useCallback  react-hooks/exhaustive-deps
+
+Search for the keywords to learn more about each warning.
+To ignore, add // eslint-disable-next-line to the line before.
+
+File sizes after gzip:
+
+  495.32 kB  build/static/js/main.339f942b.js
+  53.76 kB   build/static/css/main.3a01f811.css
+
+The project was built assuming it is hosted at ./.
+You can control this with the homepage field in your package.json.
+
+The build folder is ready to be deployed.
+
+Find out more about deployment here:
+
+  https://cra.link/deployment
+
+build mantine-ui
+$ tsc && vite build
+(!) Your Vite config uses features that are unsupported by `configLoader: 'native'`, which is planned to become the default in a future major version of Vite:
+  - `__dirname` (vite.config.ts:21:17). Use `import.meta.dirname` instead
+Set `VITE_CONFIG_NATIVE_IGNORE_WARNING=true` to suppress this warning.
+vite v8.2.4 building client environment for production...
+transforming...
+✓ 7481 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                       1.83 kB │ gzip:   0.82 kB
+dist/assets/codicon-B_nZgZYP.ttf     61.02 kB
+dist/assets/index-BV7pz6k1.css      286.21 kB │ gzip:  41.66 kB
+dist/assets/index-MKGKlG4_.js     1,931.37 kB │ gzip: 565.65 kB
+
+[plugin builtin:vite-reporter] 
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rolldownOptions.output.codeSplitting to improve chunking: https://rolldown.rs/reference/OutputOptions.codeSplitting
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+✓ built in 7.26s
