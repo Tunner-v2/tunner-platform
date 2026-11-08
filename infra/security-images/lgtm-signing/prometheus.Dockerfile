@@ -23,6 +23,9 @@ COPY --from=ui-builder /audit-input /audit-input
 ARG UI_AUDIT_EPOCH=required
 RUN --mount=type=cache,id=tunner-security-trivy-db,target=/root/.cache/trivy,sharing=locked \
     test "$UI_AUDIT_EPOCH" != required && mkdir -p /out/provenance/prometheus/ui && trivy fs --scanners vuln --severity HIGH,CRITICAL --ignore-unfixed --exit-code 1 --format json --list-all-pkgs --output /out/provenance/prometheus/ui/production-audit.json /audit-input
+FROM scratch AS ui-proof
+COPY --from=ui-builder /out/ /
+COPY --from=ui-audit /out/ /
 FROM golang:1.27.3-bookworm@sha256:5c3e9b43cfd3bb95c7937462e29d87ada57b481a96fa23ad0eb61778d7a00110 AS builder
 ENV CGO_ENABLED=0 GOTOOLCHAIN=local GOMAXPROCS=2
 ADD --checksum=sha256:4636cc523bda30bdf92bf7b05b4491bb3d3038d89ebb3223c7b9a71f23e9e9c9 https://codeload.github.com/prometheus/prometheus/tar.gz/bae3eced0a5369e050e83ea73bc381d7c4b1a719 /tmp/prometheus.tar.gz
