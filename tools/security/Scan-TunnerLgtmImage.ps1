@@ -11,6 +11,10 @@ Import-Module (Join-Path $PSScriptRoot '../lib/Tunner.RepositoryRoot.psm1') -For
 $RepositoryRoot = Resolve-TunnerRepositoryRoot -RepositoryRoot $RepositoryRoot -StartDirectory $PSScriptRoot
 $scanner = 'aquasec/trivy:0.70.0@sha256:be1190afcb28352bfddc4ddeb71470835d16462af68d310f9f4bca710961a41e'
 $go = 'golang:1.27.3-bookworm@sha256:5c3e9b43cfd3bb95c7937462e29d87ada57b481a96fa23ad0eb61778d7a00110'
+$sourceCommit = (& git -C $RepositoryRoot rev-parse HEAD).Trim()
+if ($LASTEXITCODE -ne 0) { throw 'Cannot bind scanner source commit.' }
+$ownedDirty = @(& git -C $RepositoryRoot status --porcelain -- tools/security/Scan-TunnerLgtmImage.ps1 infra/security-images/lgtm-signing)
+if ($LASTEXITCODE -ne 0 -or $ownedDirty.Count) { throw 'Commit scanner and governed source inputs before image acceptance scanning.' }
 $runId = [Guid]::NewGuid().ToString('N')
 $output = Join-Path $RepositoryRoot ('artifacts/security-images/lgtm-scan-'+$runId)
 [IO.Directory]::CreateDirectory($output) | Out-Null
@@ -57,6 +61,18 @@ $javaPackages = @($javaScan.Results | Where-Object Type -eq 'jar' | ForEach-Obje
 foreach ($dependency in $inventory.obi_embedded_java.runtime_dependencies) {
     if (@($javaPackages | Where-Object { $_.Name -ceq $dependency.name -and $_.Version -ceq $dependency.version }).Count -ne 1) { throw 'Embedded Java package scan coverage is incomplete.' }
 }
+# Export complete dependency inventories before any applicability correction.
+foreach ($binding in @(@{input='unfiltered.json';output='runtime.sbom.spdx.json'},@{input='embedded-java-scan.json';output='embedded-java.sbom.spdx.json'})) {
+    & docker run --rm --network none --cap-drop ALL --read-only --mount ('type=bind,src='+$output+',dst=/audit') $scanner convert --format spdx-json --output ('/audit/'+$binding.output) ('/audit/'+$binding.input)
+    if ($LASTEXITCODE -ne 0) { throw 'Complete SPDX dependency export failed.' }
+    $sbom = Get-Content (Join-Path $output $binding.output) -Raw | ConvertFrom-Json
+    if ($sbom.spdxVersion -notmatch '^SPDX-' -or @($sbom.packages).Count -eq 0) { throw 'SPDX export contains no packages.' }
+}
+# License inventory is retained for review; it grants no new distribution/legal approval.
+& docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v tunner-trivy-ci-cache:/root/.cache/trivy --mount ('type=bind,src='+$output+',dst=/audit') $scanner image --scanners license --license-full --format json --list-all-pkgs --output /audit/licenses.json $imageId
+if ($LASTEXITCODE -ne 0) { throw 'Complete license inventory failed to execute.' }
+$licenses = Get-Content (Join-Path $output 'licenses.json') -Raw | ConvertFrom-Json
+if ($licenses.Metadata.ImageID -cne $imageId) { throw 'License inventory is not bound to the exact candidate image.' }
 $correctedExit = $rawExit
 $vexUsed = $false
 if ($matching.Count -gt 0) {
@@ -68,7 +84,7 @@ if ($matching.Count -gt 0) {
     if ($correctedExit -notin @(0,1)) { throw 'Corrected scanner execution failed.' }
     $vexUsed = $true
 }
-$receipt = [ordered]@{schema_version=1;scope_id='P1-RV001-001';environment=$Environment;source_commit=(& git -C $RepositoryRoot rev-parse HEAD).Trim();image=$Image;image_id=$imageId;binary_targets=$targets.Count;embedded_java_dependencies=@($inventory.obi_embedded_java.runtime_dependencies).Count;embedded_java_scan='embedded-java-scan.json';raw_exit_code=$rawExit;vex_used=$vexUsed;corrected_exit_code=$correctedExit;raw_report='unfiltered.json';corrected_report=$(if($vexUsed){'corrected.json'}else{$null});production_authorized=$false;status=$(if($correctedExit -eq 0){'PASS_SCAN_ONLY'}else{'FAIL_SCAN'})}
+$receipt = [ordered]@{schema_version=1;scope_id='P1-RV001-001';environment=$Environment;source_commit=$sourceCommit;source_inputs_committed=$true;runtime_sbom='runtime.sbom.spdx.json';embedded_java_sbom='embedded-java.sbom.spdx.json';license_inventory='licenses.json';image=$Image;image_id=$imageId;binary_targets=$targets.Count;embedded_java_dependencies=@($inventory.obi_embedded_java.runtime_dependencies).Count;embedded_java_scan='embedded-java-scan.json';raw_exit_code=$rawExit;vex_used=$vexUsed;corrected_exit_code=$correctedExit;raw_report='unfiltered.json';corrected_report=$(if($vexUsed){'corrected.json'}else{$null});production_authorized=$false;status=$(if($correctedExit -eq 0){'PASS_SCAN_ONLY'}else{'FAIL_SCAN'})}
 $receipt | ConvertTo-Json -Depth 5 | Set-Content (Join-Path $output 'receipt.json') -Encoding utf8NoBOM
 if ($correctedExit -ne 0) { throw ('Applicable HIGH/CRITICAL findings remain blocking. Evidence: '+$output) }
 Write-Output ('PASS: full LGTM image scan; compatibility/release acceptance remains separate. Evidence: '+$output)
