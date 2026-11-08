@@ -215,6 +215,13 @@ func rebuild(p plugin, vendorRoot, output string) error {
 	info, _ := json.Marshal(map[string]any{"time": int64(1792454400000), "pluginID": p.ID, "version": p.Version})
 	flags := fmt.Sprintf("-X 'github.com/grafana/grafana-plugin-sdk-go/build/buildinfo.buildInfoJSON=%s' -X main.pluginID=%s -X main.version=%s", info, p.ID, p.Version)
 	relative := "." + strings.TrimPrefix(p.Path, p.Module)
+	linked, err := capture(work, "list", "-deps", relative)
+	if err != nil {
+		return err
+	}
+	if err = os.WriteFile(filepath.Join(proof, "linked-packages.txt"), linked, 0444); err != nil {
+		return err
+	}
 	if err = command(work, "go", "build", "-p=2", "-trimpath", "-buildvcs=false", "-ldflags", flags, "-o", filepath.Join(assets, p.Binary), relative); err != nil {
 		return err
 	}

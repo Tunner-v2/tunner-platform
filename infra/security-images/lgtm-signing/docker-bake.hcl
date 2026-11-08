@@ -29,11 +29,24 @@ target "collector" {
   dockerfile = "collector-obi.Dockerfile"
   target = "collector-candidate"
 }
+target "loki" {
+  inherits = ["common"]
+  dockerfile = "loki.Dockerfile"
+}
+target "prometheus" {
+  inherits = ["common"]
+  dockerfile = "prometheus.Dockerfile"
+  args = { UI_AUDIT_EPOCH = UI_AUDIT_EPOCH }
+}
+target "os" {
+  inherits = ["common"]
+  dockerfile = "os-repair.Dockerfile"
+}
 target "lgtm" {
   inherits = ["common"]
   dockerfile = "runtime.Dockerfile"
   target = "runtime"
-  contexts = { grafana = "target:grafana", tempo = "target:tempo", pyroscope = "target:pyroscope", obi = "target:obi", collector = "target:collector" }
+  contexts = { grafana = "target:grafana", tempo = "target:tempo", pyroscope = "target:pyroscope", obi = "target:obi", collector = "target:collector", loki = "target:loki", prometheus = "target:prometheus", os = "target:os" }
   tags = ["tunner-security/lgtm:0.38.1-r1"]
   labels = { "io.tunner.recipe.sha256" = RECIPE_SHA256 }
   output = ["type=docker"]
@@ -42,6 +55,6 @@ target "provenance" {
   inherits = ["common"]
   dockerfile = "runtime.Dockerfile"
   target = "provenance"
-  contexts = { grafana = "target:grafana", tempo = "target:tempo", pyroscope = "target:pyroscope", obi = "target:obi", collector = "target:collector" }
+  contexts = { grafana = "target:grafana", tempo = "target:tempo", pyroscope = "target:pyroscope", obi = "target:obi", collector = "target:collector", loki = "target:loki", prometheus = "target:prometheus", os = "target:os" }
   output = ["type=local,dest=artifacts/security-images/lgtm-provenance"]
 }

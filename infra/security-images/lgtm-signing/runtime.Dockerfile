@@ -1,5 +1,10 @@
 # Preserve the complete vendor stack/configuration/assets and replace only reviewed binaries/plugins.
 FROM grafana/otel-lgtm:0.38.1@sha256:0df9bc14142000b161344bd24caf6ddd319b7319055aedaf9b0692b125730af7 AS runtime
+# Apply the authentic signed OS package and its updated package database before binary overlays.
+COPY --from=os /rootfs/ /
+COPY --from=loki /bin/loki /otel-lgtm/loki/loki
+COPY --from=prometheus /bin/prometheus /otel-lgtm/prometheus/prometheus
+COPY --from=prometheus /bin/promtool /otel-lgtm/prometheus/promtool
 COPY --from=grafana /bin/grafana /otel-lgtm/grafana/bin/grafana
 COPY --from=grafana /plugins/ /otel-lgtm/grafana/data/plugins-bundled/
 COPY --from=tempo /bin/tempo /otel-lgtm/tempo/tempo
@@ -18,3 +23,6 @@ COPY --from=tempo /provenance/tempo/ /tempo/
 COPY --from=pyroscope /provenance/pyroscope/ /pyroscope/
 COPY --from=obi /provenance/obi/ /obi/
 COPY --from=collector /provenance/collector/ /collector/
+COPY --from=loki /provenance/loki/ /loki/
+COPY --from=prometheus /provenance/prometheus/ /prometheus/
+COPY --from=os /provenance/os/ /os/

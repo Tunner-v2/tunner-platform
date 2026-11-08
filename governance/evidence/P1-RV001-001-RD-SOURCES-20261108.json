@@ -65,6 +65,46 @@
     {
       "url": "https://github.com/grafana/docker-otel-lgtm/releases/tag/v0.40.0",
       "finding": "Current stable6November candidate was evaluated by exact digest72e05804790e6e0d8c0b70a6d5ff1f721ef7b203463374631e99aa3429bd0cf6. Actual fresh scan retains72 HIGH/CRITICAL entries; it is not clean and is not adopted. Continue maintaining the previously approved complete0.38.1 scope without silently importing different/new plugin trust scopes."
+    },
+    {
+      "url": "https://access.redhat.com/security/cve/CVE-2026-111497",
+      "finding": "Fix libbrotli with the authentic signed RHEL9 package1.0.9-10.el9_8.1. Use the vendor own UBI9.8 installer image217dd5692d369799d34d09ffb6f5f3404efebc7900834490fdf9ae92fd6721d4, signed repositories, scripts and rpm verification; overlay actual package payload and complete resulting RPM database on the unchanged micro runtime. No metadata-only or ignored finding."
+    },
+    {
+      "url": "https://raw.githubusercontent.com/grafana/docker-otel-lgtm/v0.38.1/docker/Dockerfile",
+      "finding": "Exact vendor source confirms UBI9 builder/installroot and UBI9 micro runtime. Keep every complete component and asset; no runtime installer or application removal."
+    },
+    {
+      "url": "https://github.com/grafana/loki/releases/tag/v3.7.9",
+      "finding": "Preserve release3.7.9 source d3b4a2f76bfc5625abee7ceb00b8896fa3c31549 and checksum f64c14e3aaeab3c14c013974c6a016e5f61fd1758354ca8dcd320dcce8c656aa; rebuild complete Loki with net0.62.0 and upstream UI/build tests."
+    },
+    {
+      "url": "https://github.com/prometheus/prometheus/releases/tag/v3.15.1",
+      "finding": "Preserve release3.15.1 source bae3eced0a5369e050e83ea73bc381d7c4b1a719 and checksum4636cc523bda30bdf92bf7b05b4491bb3d3038d89ebb3223c7b9a71f23e9e9c9. Rebuild both complete Mantine/legacy UIs and both builtinassets Go executables; use native frozen pnpm locks and tests, not a stub or unchanged vulnerable prebuilt UI."
+    },
+    {
+      "url": "https://github.com/7rulnik/source-map-js/releases/tag/v1.2.2",
+      "finding": "Exact bounded Prometheus UI override: source-map-js1.2.1 to1.2.2. Native pnpm11.19 workspace overrides preserve upstream supply-chain policies; package-set diff confirms only the eight reviewed versions change. Full UI build/test and fresh production-graph scan remain mandatory."
+    },
+    {
+      "url": "https://github.com/nodejs/undici/releases/tag/v8.12.2",
+      "finding": "Exact bounded Prometheus UI override: undici8.10.2 to8.12.2. Native pnpm11.19 workspace overrides preserve upstream supply-chain policies; package-set diff confirms only the eight reviewed versions change. Full UI build/test and fresh production-graph scan remain mandatory."
+    },
+    {
+      "url": "https://github.com/vitejs/vite/releases/tag/v8.2.4",
+      "finding": "Exact bounded Prometheus UI override: vite8.2.2 to8.2.4. Native pnpm11.19 workspace overrides preserve upstream supply-chain policies; package-set diff confirms only the eight reviewed versions change. Full UI build/test and fresh production-graph scan remain mandatory."
+    },
+    {
+      "url": "https://github.com/immutable-js/immutable-js/releases/tag/v5.1.8",
+      "finding": "Exact bounded Prometheus UI override: immutable5.1.5 to5.1.8. Native pnpm11.19 workspace overrides preserve upstream supply-chain policies; package-set diff confirms only the eight reviewed versions change. Full UI build/test and fresh production-graph scan remain mandatory."
+    },
+    {
+      "url": "https://github.com/ai/nanoid/releases/tag/3.3.18",
+      "finding": "Exact bounded Prometheus UI override: nanoid3.3.12 to3.3.18. Native pnpm11.19 workspace overrides preserve upstream supply-chain policies; package-set diff confirms only the eight reviewed versions change. Full UI build/test and fresh production-graph scan remain mandatory."
+    },
+    {
+      "url": "https://github.com/postcss/postcss/releases/tag/8.5.18",
+      "finding": "Exact bounded Prometheus UI override: postcss8.5.15 to8.5.18. Native pnpm11.19 workspace overrides preserve upstream supply-chain policies; package-set diff confirms only the eight reviewed versions change. Full UI build/test and fresh production-graph scan remain mandatory."
     }
   ],
   "boundary": "Investigation and bounded patch authority only. Historical October scans remain historical. New image/compatibility/CI and final reviewed committed-source acceptance remain required; Drive/Figma read-only."
