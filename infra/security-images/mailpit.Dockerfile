@@ -1,46 +1,16 @@
-# Reuse the released UI and apply the bounded DOMPurify security repair.
-FROM node:24.22.1-bookworm@sha256:5630d96570d4ca4a8523fda3d169d0114554d0f48293e1ae3db6be7c79b42a17 AS ui
-WORKDIR /src
-RUN git init . && git remote add origin https://github.com/axllent/mailpit.git && \
-    git fetch --depth=1 origin a028b01f4a24b4b36bdad95b8e09e070ebf2bad4 && \
-    git checkout --detach FETCH_HEAD && \
-    test "$(git rev-parse HEAD)" = a028b01f4a24b4b36bdad95b8e09e070ebf2bad4
-COPY mailpit-ui.patch /tmp/mailpit-ui.patch
-RUN git apply --check /tmp/mailpit-ui.patch && git apply /tmp/mailpit-ui.patch
-RUN npm ci
-RUN npm run package
-
-# Audit the exact production UI lockfile with the already approved Trivy policy.
+# Preserve the complete current vendor runtime; independently audit its exact released production UI graph.
 FROM aquasec/trivy:0.70.0@sha256:be1190afcb28352bfddc4ddeb71470835d16462af68d310f9f4bca710961a41e AS ui-audit
-COPY --from=ui /src/package.json /src/package-lock.json /scan/
-# Every actual build must execute the audit against the current database.
+ADD --checksum=sha256:d4b813d34faeed3fdfc9c4614aaefc6c4fc42ed467eabdabeb508d273950ee06 https://raw.githubusercontent.com/axllent/mailpit/3bc38efc5c4687659b9099eb2c8d8f6e76113f11/package.json /scan/package.json
+ADD --checksum=sha256:b4325c24efede5de5401f88b16c1bd73cf794e979191d4c02012b71836e924f1 https://raw.githubusercontent.com/axllent/mailpit/3bc38efc5c4687659b9099eb2c8d8f6e76113f11/package-lock.json /scan/package-lock.json
 ARG UI_AUDIT_EPOCH
 RUN --mount=type=cache,id=tunner-security-trivy-db,target=/root/.cache/trivy,sharing=locked \
     test -n "$UI_AUDIT_EPOCH" && trivy fs --scanners vuln --severity HIGH,CRITICAL --ignore-unfixed --exit-code 1 \
     --list-all-pkgs --format json --output /ui-audit.json /scan || { cat /ui-audit.json; exit 1; }
 
-FROM ui AS verified-ui
-COPY --from=ui-audit /ui-audit.json /src/tunner-ui-audit.json
-RUN node -e 'const r=require("./tunner-ui-audit.json"); if(!r.Results?.some(x=>x.Type==="npm" && x.Packages?.length>0)) throw Error("Missing production NPM coverage"); console.log("PASS: production NPM lockfile coverage and vulnerability gate");'
-
-FROM golang:1.27.3-bookworm@sha256:5c3e9b43cfd3bb95c7937462e29d87ada57b481a96fa23ad0eb61778d7a00110 AS builder
-WORKDIR /src
-COPY --from=verified-ui /src/ /src/
-ENV CGO_ENABLED=0 GOTOOLCHAIN=local
-RUN go mod download && go mod verify && \
-    go install github.com/google/go-licenses/v2@v2.0.1 && \
-    go-licenses report ./... --template .github/third-party-licenses.tpl --ignore github.com/axllent/mailpit > internal/licenses/third-party.txt
-ARG TARGETARCH
-RUN --mount=type=cache,id=tunner-security-go1273,target=/root/.cache/go-build,sharing=locked \
-    GOOS=linux GOARCH=$TARGETARCH go build -p=2 -trimpath \
-    -ldflags='-X github.com/axllent/mailpit/config.Version=1.31.6' -o /out/mailpit . && \
-    go version -m /out/mailpit
-
-FROM axllent/mailpit:v1.31.6@sha256:23fe39e81bde596a918000b3135c0f85dc8bb4c9ea6be274b051143f3e300387
-COPY --from=builder --chmod=755 /out/mailpit /mailpit
-COPY --from=verified-ui /src/tunner-ui-audit.json /usr/share/tunner-security/mailpit-ui-dependency-audit.json
-LABEL org.opencontainers.image.title="Tunner security rebuild of Mailpit 1.31.6" \
+FROM axllent/mailpit:v1.33.1@sha256:aef2aacc11f075ec0fb6874275ee4a421e688e11a96ebb296134d1735c7761ce
+COPY --from=ui-audit /ui-audit.json /usr/share/tunner-security/mailpit-ui-dependency-audit.json
+LABEL org.opencontainers.image.title="Tunner audited vendor Mailpit 1.33.1" \
       org.opencontainers.image.vendor="Tunner" \
-      io.tunner.source.commit="a028b01f4a24b4b36bdad95b8e09e070ebf2bad4" \
-      io.tunner.security.toolchain="go1.27.3" \
-      io.tunner.security.ui.patch="dompurify@3.4.17;follow-redirects@1.16.2"
+      io.tunner.source.commit="3bc38efc5c4687659b9099eb2c8d8f6e76113f11" \
+      io.tunner.upstream.image="axllent/mailpit:v1.33.1@sha256:aef2aacc11f075ec0fb6874275ee4a421e688e11a96ebb296134d1735c7761ce" \
+      io.tunner.security.mode="vendor-binary-and-ui-unchanged-with-independent-production-lockfile-audit"

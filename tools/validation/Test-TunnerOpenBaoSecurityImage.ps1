@@ -1,6 +1,6 @@
 #requires -Version 7.0
 [CmdletBinding()]
-param([string]$Image = 'tunner-security/openbao:2.7.1-r2', [string]$RepositoryRoot)
+param([string]$Image = 'tunner-security/openbao:2.7.1-r2', [string]$RepositoryRoot, [ValidateSet('2.7.1','2.7.2')][string]$ExpectedVersion = '2.7.1')
 Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
 Import-Module (Join-Path $PSScriptRoot '../lib/Tunner.RepositoryRoot.psm1') -Force
@@ -55,8 +55,8 @@ function Wait-FixtureHealth {
 }
 try {
     $version = Invoke-FixtureDocker -Arguments @('run','--rm','--entrypoint','bao',$Image,'version')
-    if ($version -notmatch 'OpenBao v2\.7\.1') { throw 'Unexpected OpenBao version.' }
-    $checks.Add('OpenBao 2.7.1 release metadata preserved')
+    if ($version -notmatch ('OpenBao v'+[regex]::Escape($ExpectedVersion)+'(?:\s|$)')) { throw 'Unexpected OpenBao version.' }
+    $checks.Add('OpenBao '+$ExpectedVersion+' release metadata preserved')
     Invoke-FixtureDocker -Arguments @('volume','create','--label','io.tunner.fixture=security-validation',$volume) | Out-Null
     $volumeCreated=$true
     Invoke-FixtureDocker -Arguments @('run','--detach','--name',$fixture,'--user','0','--publish','127.0.0.1::8200','--mount',('type=volume,source='+$volume+',target=/openbao/file'),'--mount',('type=bind,source='+$config+',target=/openbao/config/fixture.hcl,readonly'),$Image,'server','-config=/openbao/config/fixture.hcl') | Out-Null

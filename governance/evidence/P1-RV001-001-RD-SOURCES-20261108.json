@@ -45,6 +45,26 @@
     {
       "url": "https://raw.githubusercontent.com/docker-library/docs/master/rabbitmq/content.md",
       "finding": "Use the complete management image, preserve hostname/node and data-volume semantics and default management plugin; no plugin removal or feature suppression is a security repair."
+    },
+    {
+      "url": "https://pkg.go.dev/vuln/GO-2026-6860",
+      "finding": "Official Go advisory identifies CVE-2026-78661 in x/net/html before0.62.0. Actual fresh scans now flag all13 older rebuilt plugins, OpenBao and Mailpit; update the dependency instead of adding a waiver."
+    },
+    {
+      "url": "https://secdb.alpinelinux.org/v3.24/main.json",
+      "finding": "Official current Alpine metadata fixes musl in1.2.6-r3 and zlib in1.3.2-r1/later1.4-r0. Current vendor OpenBao2.7.2 usesAlpine3.24.3 and has no OS findings, so preserve that new base rather than maintaining another OS overlay."
+    },
+    {
+      "url": "https://github.com/axllent/mailpit/releases/tag/v1.33.1",
+      "finding": "Released7November with updated Go and node dependencies. Exact official imageaef2aacc11f075ec0fb6874275ee4a421e688e11a96ebb296134d1735c7761ce passes full-image scan. Exact source3bc38efc5c4687659b9099eb2c8d8f6e76113f11 supplies independently checksum-pinned UI manifests. Preserve vendor binary/UI unchanged in an audited private wrapper, retaining the existing automated production-lockfile gate. Retain historical1.31.6 patches without using them on the new source."
+    },
+    {
+      "url": "https://github.com/openbao/openbao/releases/tag/v2.7.2",
+      "finding": "Current2.7 patch includes upstream authentication/path security repairs. Exact official source-dist SHA256f50ac5b150e780728b0f8c5c1533e6542576ff3834f9a89d6c9921e6759f0109; source9e0a0d3c3504a0a00b45e61355afac5e35c78379. Vendor image5046911075e137e154ce49ab051502f4ec7cf367d484ae4a4dce665d9b90561f still has go-jose4.1.4 and x/net0.61 findings; rebuild released source including complete embedded UI with4.1.6/0.62.0 and pinnedGo1.27.3, then run authoritative compatibility/scan gates."
+    },
+    {
+      "url": "https://github.com/grafana/docker-otel-lgtm/releases/tag/v0.40.0",
+      "finding": "Current stable6November candidate was evaluated by exact digest72e05804790e6e0d8c0b70a6d5ff1f721ef7b203463374631e99aa3429bd0cf6. Actual fresh scan retains72 HIGH/CRITICAL entries; it is not clean and is not adopted. Continue maintaining the previously approved complete0.38.1 scope without silently importing different/new plugin trust scopes."
     }
   ],
   "boundary": "Investigation and bounded patch authority only. Historical October scans remain historical. New image/compatibility/CI and final reviewed committed-source acceptance remain required; Drive/Figma read-only."
