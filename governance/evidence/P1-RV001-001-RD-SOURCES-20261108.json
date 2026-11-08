@@ -1,0 +1,51 @@
+{
+  "schema_version": 1,
+  "scope_type": "WORK_ITEM",
+  "scope_id": "P1-RV001-001",
+  "reviewed_at": "2026-11-08",
+  "previous_evidence": "governance/evidence/P1-RV001-001-RD-SOURCES-20261028.json",
+  "authority_resolution": {
+    "refs": [
+      "docs/authority/baselines/1.6.0/08_Security_Privacy_Compliance_and_Global_Market_Governance.md",
+      "docs/authority/baselines/1.6.0/decisions/ADR-0001_Durable_Messaging_RabbitMQ_Outbox_Inbox.md",
+      "docs/authority/baselines/1.6.0/decisions/ADR-0002_Redis_Cache_and_SignalR_Backplane.md",
+      "governance/evidence/P1-RV001-MAINTAINED-REBUILDS-APPROVAL-20261020.json"
+    ],
+    "outcome": "Existing authority permits compatible maintenance within RabbitMQ4.3 and Redis8.x, and bounded private PostgreSQL/Mailpit security rebuilds. No business behavior, provider, trust, severity threshold or production authority changes. Evaluate complete official Alpine variants without creating a new Redis/RabbitMQ maintained fork; preserve enabled features, clients, management UI, configured persistence and loopback ports; verify integration and restart/management compatibility before adoption."
+  },
+  "sources": [
+    {
+      "url": "https://security-tracker.debian.org/tracker/CVE-2026-109518",
+      "finding": "APT3.0.4 and associated libapt-pkg7.0 fix the newly observed Debian13 finding. Disable retries only for the bootstrap update/install using the old APT client; the vendor advisory requires nonzero retries for the hard-link attack. No ignore or severity change."
+    },
+    {
+      "url": "https://security-tracker.debian.org/tracker/CVE-2026-85091",
+      "finding": "The Debian13 security zlib1g version is1:1.3.dfsg+really1.3.1-1+deb13u1. Install the authenticated distribution security patch; retain the scanner-reported CVE-2026-76844 alongside it without a new waiver."
+    },
+    {
+      "url": "https://ubuntu.com/security/CVE-2026-109518",
+      "finding": "Ubuntu24.04 APT2.8.4ubuntu0.1 is fixed. Both current RabbitMQ4.3.6 and evaluated4.3.7 Ubuntu variants still contain2.8.3; newer application version alone does not clear the scan."
+    },
+    {
+      "url": "https://github.com/follow-redirects/follow-redirects/security/advisories/GHSA-mrwp-f3q8-3g9p",
+      "finding": "CVE-2026-116689 affects1.16.0..1.16.1;1.16.2 is patched. Retain the existing DOMPurify3.4.17 patch and change only the follow-redirects version, tarball URL and npm-generated integrity. Preserve unrelated lockfile metadata."
+    },
+    {
+      "url": "https://github.com/redis/redis/releases/tag/8.10.3",
+      "finding": "Official stable8.10.3 stays within accepted Redis8.x authority; no8.12 release candidate is selected. Evaluate complete official Alpine variant, exact manifest71885d8cc6e42f2bc0aa2eb853bfc4be200b5108a46ac50e117ae1df0531fb80. Fresh remote scan passes; actual client/cache/TTL/lease compatibility is still required."
+    },
+    {
+      "url": "https://github.com/rabbitmq/rabbitmq-server/releases/tag/v4.3.7",
+      "finding": "Official4.3.7 is a maintenance release within the accepted4.3 series. Evaluate management-alpine variant, exact manifesteb338b3fc8f5c251028c0022ac0de3fe1db2d599d1c6a08b45898f756f248881. Fresh scan passes; real publisher confirms/returns/nacks and management/restart compatibility remain required."
+    },
+    {
+      "url": "https://raw.githubusercontent.com/docker-library/docs/master/redis/content.md",
+      "finding": "Official image preserves redis-server/redis-cli and normal privilege dropping. Keep existing ephemeral runtime command and loopback-only bindings; no SKIP_DROP_PRIVS or authoritative Redis persistence is introduced."
+    },
+    {
+      "url": "https://raw.githubusercontent.com/docker-library/docs/master/rabbitmq/content.md",
+      "finding": "Use the complete management image, preserve hostname/node and data-volume semantics and default management plugin; no plugin removal or feature suppression is a security repair."
+    }
+  ],
+  "boundary": "Investigation and bounded patch authority only. Historical October scans remain historical. New image/compatibility/CI and final reviewed committed-source acceptance remain required; Drive/Figma read-only."
+}

@@ -12,7 +12,8 @@ RUN GOOS=linux GOARCH=$TARGETARCH go build -trimpath -ldflags='-d -w' -o /out/go
     go version -m /out/gosu
 
 FROM postgres:18.6@sha256:5a5a84b19854a9ffaa54082c166ff4ec27473a361e496e5ea167f298f2da9722
-RUN apt-get update && apt-get install -y --no-install-recommends --only-upgrade \
+RUN apt-get -o Acquire::Retries=0 update && apt-get -o Acquire::Retries=0 install -y --no-install-recommends --only-upgrade \
+    apt=3.0.4 libapt-pkg7.0=3.0.4 zlib1g=1:1.3.dfsg+really1.3.1-1+deb13u1 \
     libpcre2-8-0=10.46-1~deb13u3 libssl3t64=3.5.7-1~deb13u3 \
     openssl=3.5.7-1~deb13u3 openssl-provider-legacy=3.5.7-1~deb13u3 && \
     rm -rf /var/lib/apt/lists/*

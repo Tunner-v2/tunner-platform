@@ -17,7 +17,7 @@ COPY --from=ui /src/package.json /src/package-lock.json /scan/
 ARG UI_AUDIT_EPOCH
 RUN --mount=type=cache,id=tunner-security-trivy-db,target=/root/.cache/trivy,sharing=locked \
     test -n "$UI_AUDIT_EPOCH" && trivy fs --scanners vuln --severity HIGH,CRITICAL --ignore-unfixed --exit-code 1 \
-    --list-all-pkgs --format json --output /ui-audit.json /scan
+    --list-all-pkgs --format json --output /ui-audit.json /scan || { cat /ui-audit.json; exit 1; }
 
 FROM ui AS verified-ui
 COPY --from=ui-audit /ui-audit.json /src/tunner-ui-audit.json
@@ -43,4 +43,4 @@ LABEL org.opencontainers.image.title="Tunner security rebuild of Mailpit 1.31.6"
       org.opencontainers.image.vendor="Tunner" \
       io.tunner.source.commit="a028b01f4a24b4b36bdad95b8e09e070ebf2bad4" \
       io.tunner.security.toolchain="go1.27.3" \
-      io.tunner.security.ui.patch="dompurify@3.4.17"
+      io.tunner.security.ui.patch="dompurify@3.4.17;follow-redirects@1.16.2"
