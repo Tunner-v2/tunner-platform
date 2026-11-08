@@ -15,7 +15,7 @@ COPY --from=ui-builder /out /out
 WORKDIR /src/pyroscope
 RUN --mount=type=cache,id=tunner-lgtm-go1273-mod,target=/go/pkg/mod,sharing=shared \
     --mount=type=cache,id=tunner-lgtm-go1273-build,target=/root/.cache/go-build,sharing=shared \
-    set -eu; mkdir -p /out/bin; go get github.com/go-jose/go-jose/v4@v4.1.6; go mod verify; \
+    set -eu; mkdir -p /out/bin; go get golang.org/x/net@v0.62.0 github.com/go-jose/go-jose/v4@v4.1.6; go mod verify; \
     go test -p=2 -tags embedassets -count=1 -json ./ui/... ./pkg/util/build/... > /out/provenance/pyroscope/upstream-tests.json; \
     go build -p=2 -trimpath -tags netgo,embedassets -ldflags='-s -w -X github.com/grafana/pyroscope/v2/pkg/util/build.Version=2.4.1 -X github.com/grafana/pyroscope/v2/pkg/util/build.Revision=36d558a4799e86ce9814a5348e6ecc300e4ed192 -X github.com/grafana/pyroscope/v2/pkg/util/build.Branch=v2.4.1-tunner-dev' -o /out/bin/pyroscope ./cmd/pyroscope; \
     go version -m /out/bin/pyroscope > /out/provenance/pyroscope/buildinfo.txt; \

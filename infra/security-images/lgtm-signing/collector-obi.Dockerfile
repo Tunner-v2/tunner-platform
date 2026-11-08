@@ -9,9 +9,9 @@ FROM obi-source AS obi-builder
 RUN --mount=type=cache,id=tunner-lgtm-go1273-mod,target=/go/pkg/mod,sharing=shared \
     --mount=type=cache,id=tunner-lgtm-go1273-build,target=/root/.cache/go-build,sharing=shared \
     set -eu; mkdir -p /out/bin /out/provenance/obi; \
-    go mod verify; \
-    go test -p=2 -count=1 -json ./cmd/obi/... ./pkg/buildinfo > /out/provenance/obi/upstream-tests.json; \
-    go build -p=2 -trimpath -ldflags='-s -w -X go.opentelemetry.io/obi/pkg/buildinfo.Version=v0.15.2 -X go.opentelemetry.io/obi/pkg/buildinfo.Revision=b28e4e7' -o /out/bin/obi ./cmd/obi/main.go; \
+    go get golang.org/x/net@v0.62.0; go mod verify; \
+    go test -mod=readonly -p=2 -count=1 -json ./cmd/obi/... ./pkg/buildinfo > /out/provenance/obi/upstream-tests.json; \
+    go build -mod=readonly -p=2 -trimpath -ldflags='-s -w -X go.opentelemetry.io/obi/pkg/buildinfo.Version=v0.15.2 -X go.opentelemetry.io/obi/pkg/buildinfo.Revision=b28e4e7' -o /out/bin/obi ./cmd/obi/main.go; \
     go version -m /out/bin/obi > /out/provenance/obi/buildinfo.txt; \
     cp go.mod go.sum LICENSE NOTICE /out/provenance/obi/; \
     cp /reviewed/obi-java-agent.sbom.json /out/provenance/obi/java-agent.sbom.json; \
@@ -30,7 +30,7 @@ RUN --mount=type=cache,id=tunner-lgtm-go1273-mod,target=/go/pkg/mod,sharing=shar
     timeout 45m /go/bin/builder --verbose --skip-compilation --config manifest.yaml; \
     cp manifest.yaml /out/provenance/collector/manifest.yaml; \
     cd _build; \
-    go get github.com/go-jose/go-jose/v4@v4.1.6; \
+    go get golang.org/x/net@v0.62.0 github.com/go-jose/go-jose/v4@v4.1.6; \
     mkdir -p tunner-compat; cp /reviewed/collector-sermo-compat_test.go tunner-compat/compat_test.go; \
     go mod tidy; go mod verify; \
     test "$(go list -m -f '{{.Version}}' github.com/SermoDigital/jose)" = v0.9.2-0.20180104203859-803625baeddc; \

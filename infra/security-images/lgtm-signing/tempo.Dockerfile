@@ -8,7 +8,7 @@ RUN tar -xzf /tmp/tempo.tar.gz --strip-components=1 && mkdir -p /out/provenance/
 RUN --mount=type=cache,id=tunner-lgtm-go1273-mod,target=/go/pkg/mod,sharing=shared \
     --mount=type=cache,id=tunner-lgtm-go1273-build,target=/root/.cache/go-build,sharing=shared \
     set -eu; \
-    go get github.com/go-jose/go-jose/v4@v4.1.6; go mod tidy; go mod verify; \
+    go get golang.org/x/net@v0.62.0 github.com/go-jose/go-jose/v4@v4.1.6; go mod tidy; go mod verify; \
     go test -mod=readonly -p=2 -count=1 -json ./tempodb/backend/s3 -run '^TestSSEConfigEncryptionKeyRedacted$' > /out/provenance/tempo/redaction-tests.json || { cat /out/provenance/tempo/redaction-tests.json; exit 1; }; \
     go test -mod=readonly -p=2 -count=1 -json ./modules/frontend -run 'Limit|Search' > /out/provenance/tempo/query-limit-tests.json || { cat /out/provenance/tempo/query-limit-tests.json; exit 1; }; \
     for name in tempo tempo-cli tempo-query; do \

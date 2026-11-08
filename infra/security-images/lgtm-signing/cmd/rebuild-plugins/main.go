@@ -17,6 +17,8 @@ import (
 	"time"
 )
 
+const networkSecurityPatch = "golang.org/x/net@v0.62.0"
+
 type sourceModule struct {
 	Module        string `json:"module"`
 	SourceVersion string `json:"source_version"`
@@ -163,7 +165,7 @@ func rebuild(p plugin, vendorRoot, output string) error {
 		if err != nil {
 			return err
 		}
-		if err = command(nestedWork, "go", "get", "golang.org/x/net@v0.60.0"); err != nil {
+		if err = command(nestedWork, "go", "get", networkSecurityPatch); err != nil {
 			return err
 		}
 		if err = command(nestedWork, "go", "mod", "verify"); err != nil {
@@ -189,7 +191,7 @@ func rebuild(p plugin, vendorRoot, output string) error {
 	if err = command("", "cp", "-a", filepath.Join(vendorRoot, p.Directory)+"/.", assets); err != nil {
 		return err
 	}
-	patches := []string{"golang.org/x/net@v0.60.0"}
+	patches := []string{networkSecurityPatch}
 	if p.ID == "stackdriver" {
 		patches = append(patches, "google.golang.org/grpc@v1.83.2")
 	}

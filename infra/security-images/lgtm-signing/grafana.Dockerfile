@@ -35,7 +35,7 @@ COPY grafana-adapter-test.go.txt pkg/plugins/manager/signature/tunner_dev_test.g
 RUN cd /tools && go run ./cmd/sign-dev -plugins /out/plugins -inventory /reviewed/source-inventory.json -policy-output /src/grafana/pkg/plugins/manager/signature/tunner_dev_policy.go -audit-output /out/provenance/grafana/signing-public.json
 RUN --mount=type=cache,id=tunner-lgtm-go1273-mod,target=/go/pkg/mod,sharing=shared \
     --mount=type=cache,id=tunner-lgtm-go1273-build,target=/root/.cache/go-build,sharing=shared \
-    set -eu; go get github.com/go-jose/go-jose/v4@v4.1.6 github.com/getkin/kin-openapi@v0.149.0; \
+    set -eu; go get golang.org/x/net@v0.62.0 github.com/go-jose/go-jose/v4@v4.1.6 github.com/getkin/kin-openapi@v0.149.0; \
     go test -p=2 -count=1 -json ./pkg/plugins/manager/signature/... > /out/provenance/grafana/native-signature-tests.json; \
     go build -p=2 -trimpath -ldflags='-s -w -X main.version=13.2.4 -X main.commit=af4a33e3786594ad72f72d97e6744010330c2977 -X main.buildBranch=v13.2.4-tunner-dev -X main.buildstamp=1793145600' -o /out/bin/grafana ./pkg/cmd/grafana; \
     go version -m /out/bin/grafana > /out/provenance/grafana/buildinfo.txt; \
