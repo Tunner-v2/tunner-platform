@@ -55,7 +55,7 @@ function Wait-FixtureHealth {
 }
 try {
     $version = Invoke-FixtureDocker -Arguments @('run','--rm','--entrypoint','bao',$Image,'version')
-    if ($version -notmatch ('OpenBao v'+[regex]::Escape($ExpectedVersion)+'(?:\s|$)')) { throw 'Unexpected OpenBao version.' }
+    if ($version -notmatch ('OpenBao v'+[regex]::Escape($ExpectedVersion)+'(?:[+\s]|$)')) { throw 'Unexpected OpenBao version.' }
     $checks.Add('OpenBao '+$ExpectedVersion+' release metadata preserved')
     Invoke-FixtureDocker -Arguments @('volume','create','--label','io.tunner.fixture=security-validation',$volume) | Out-Null
     $volumeCreated=$true
