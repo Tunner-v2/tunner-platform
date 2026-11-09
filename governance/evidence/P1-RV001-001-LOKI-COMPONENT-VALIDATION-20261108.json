@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "scope_id": "P1-RV001-001",
+  "status": "PASS_LOKI_COMPONENT_NOT_COMPLETE_STACK",
+  "tested_commit": "7ccc3db07854038f0780e7e24c0f4d4752ae5933",
+  "image": "tunner-security/lgtm-loki-network-candidate:20261108",
+  "image_id": "sha256:7e750e4e89ff10f71c1fece3fb2679c65298e919af9858a97f692d1a74b83edd",
+  "version": "3.7.9",
+  "upstream_source": "d3b4a2f76bfc5625abee7ceb00b8896fa3c31549",
+  "source_archive_sha256": "f64c14e3aaeab3c14c013974c6a016e5f61fd1758354ca8dcd320dcce8c656aa",
+  "go": "1.27.3",
+  "network_dependency": "golang.org/x/net@v0.62.0",
+  "upstream_tests": {
+    "passed": 78,
+    "failed": 0,
+    "skipped": 0
+  },
+  "actual_cli": "PASS_EXACT_RELEASE_SOURCE_VERSION",
+  "scan": {
+    "go_packages": 368,
+    "fixable_high_critical": 0,
+    "filtering": false
+  },
+  "source_license_inventory": [
+    "LICENSE"
+  ],
+  "earlier_failure": "The first resumed build passed tests/build/CLI but failed collecting nonexistent root NOTICE. Exact source archive contains LICENSE only. Corrected build preserves the actual license; failed log retained.",
+  "scope_boundary": "No feature removal. Complete Loki API/UI handlers remain. Combined runtime behavior, full-image scan and44-stack checks remain pending in Linux CI.",
+  "evidence_sha256": {
+    "governance/evidence/security-20261108/loki-component/scan.json": "90094db0ac189ecae4f4cf800f985593d0e3130838f56d096f1ab837cc9bbe35",
+    "governance/evidence/security-20261108/loki-component/upstream-tests.jsonl": "5f9b23609e6917f109d7ad585a397a35f84ec37b6efc50a7210bc359dfa27cfd",
+    "governance/evidence/security-20261108/loki-component/actual-version.txt": "fdbb87c1551e5e3eb9803faa8874dfe0990fbcf3b423e64ab8d0ce23881946c5",
+    "governance/evidence/security-20261108/loki-component/buildinfo.txt": "8cc7738e343c6048e394079ad61d61a4081bbfbbc580b5e9a058fbc7e52dce30",
+    "governance/evidence/security-20261108/loki-component/go.mod": "8941b81787970cbd4c3344ecdae625a240487a495ccac2e421658e3fdf828944",
+    "governance/evidence/security-20261108/loki-component/go.sum": "abad3fdbeec10d717e9c72c93d6feee205a44939eaf694c208444c6238438b1f",
+    "governance/evidence/security-20261108/loki-component/LICENSE": "0d96a4ff68ad6d4b6f1f30f713b18d5184912ba8dd389f86aa7710db079abcb0",
+    "governance/evidence/security-20261108/loki-component/buildkit.json": "3ba3685907c6127b99bd544e2a3e9e92812493ead25cc2ef6adc1b5e74ba93b8",
+    "governance/evidence/security-20261108/loki-component/failed-license-build.log": "730810a768243a9d6654c39915656963a1df1aff7fb0f29682eb448f297c7688"
+  },
+  "production_authorized": false
+}
