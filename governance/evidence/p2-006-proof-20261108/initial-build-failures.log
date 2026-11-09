@@ -1,0 +1,70 @@
+proof-test-build.log
+  Tunner.Database -> <repo-root>\src\Tunner.Database\bin\Debug\net10.0\Tunner.Database.dll
+  Tunner.Accounts -> <repo-root>\src\Modules\Accounts\bin\Debug\net10.0\Tunner.Accounts.dll
+  Tunner.Platform -> <repo-root>\src\Tunner.Platform\bin\Debug\net10.0\Tunner.Platform.dll
+  Tunner.Observability -> <repo-root>\src\Tunner.Observability\bin\Debug\net10.0\Tunner.Observability.dll
+  Tunner.Testing -> <repo-root>\src\Tunner.Testing\bin\Debug\net10.0\Tunner.Testing.dll
+  Tunner.Database.Migrations -> <repo-root>\src\Tunner.Database.Migrations\bin\Debug\net10.0\Tunner.Database.Migrations.dll
+<repo-root>\src\Modules\Identity\Migrations\20261109033631_P2OperationStepUpProofs.cs(18,26): error CA1861: Prefer 'static readonly' fields over constant array arguments if the called method is called repeatedly and is not mutating the passed array (https://learn.microsoft.com/dotnet/fundamentals/code-analysis/quality-rules/ca1861) [<repo-root>\src\Modules\Identity\Tunner.Identity.Persistence.csproj]
+<repo-root>\src\Modules\Identity\Migrations\20261109033631_P2OperationStepUpProofs.cs(65,43): error CA1861: Prefer 'static readonly' fields over constant array arguments if the called method is called repeatedly and is not mutating the passed array (https://learn.microsoft.com/dotnet/fundamentals/code-analysis/quality-rules/ca1861) [<repo-root>\src\Modules\Identity\Tunner.Identity.Persistence.csproj]
+<repo-root>\src\Modules\Identity\Migrations\20261109033631_P2OperationStepUpProofs.cs(80,26): error CA1861: Prefer 'static readonly' fields over constant array arguments if the called method is called repeatedly and is not mutating the passed array (https://learn.microsoft.com/dotnet/fundamentals/code-analysis/quality-rules/ca1861) [<repo-root>\src\Modules\Identity\Tunner.Identity.Persistence.csproj]
+<repo-root>\src\Modules\Identity\Migrations\20261109033631_P2OperationStepUpProofs.cs(86,26): error CA1861: Prefer 'static readonly' fields over constant array arguments if the called method is called repeatedly and is not mutating the passed array (https://learn.microsoft.com/dotnet/fundamentals/code-analysis/quality-rules/ca1861) [<repo-root>\src\Modules\Identity\Tunner.Identity.Persistence.csproj]
+
+Build FAILED.
+
+<repo-root>\src\Modules\Identity\Migrations\20261109033631_P2OperationStepUpProofs.cs(18,26): error CA1861: Prefer 'static readonly' fields over constant array arguments if the called method is called repeatedly and is not mutating the passed array (https://learn.microsoft.com/dotnet/fundamentals/code-analysis/quality-rules/ca1861) [<repo-root>\src\Modules\Identity\Tunner.Identity.Persistence.csproj]
+<repo-root>\src\Modules\Identity\Migrations\20261109033631_P2OperationStepUpProofs.cs(65,43): error CA1861: Prefer 'static readonly' fields over constant array arguments if the called method is called repeatedly and is not mutating the passed array (https://learn.microsoft.com/dotnet/fundamentals/code-analysis/quality-rules/ca1861) [<repo-root>\src\Modules\Identity\Tunner.Identity.Persistence.csproj]
+<repo-root>\src\Modules\Identity\Migrations\20261109033631_P2OperationStepUpProofs.cs(80,26): error CA1861: Prefer 'static readonly' fields over constant array arguments if the called method is called repeatedly and is not mutating the passed array (https://learn.microsoft.com/dotnet/fundamentals/code-analysis/quality-rules/ca1861) [<repo-root>\src\Modules\Identity\Tunner.Identity.Persistence.csproj]
+<repo-root>\src\Modules\Identity\Migrations\20261109033631_P2OperationStepUpProofs.cs(86,26): error CA1861: Prefer 'static readonly' fields over constant array arguments if the called method is called repeatedly and is not mutating the passed array (https://learn.microsoft.com/dotnet/fundamentals/code-analysis/quality-rules/ca1861) [<repo-root>\src\Modules\Identity\Tunner.Identity.Persistence.csproj]
+    0 Warning(s)
+    4 Error(s)
+
+Time Elapsed 00:00:05.57
+
+proof-test-build-2.log
+  Tunner.Accounts -> <repo-root>\src\Modules\Accounts\bin\Debug\net10.0\Tunner.Accounts.dll
+  Tunner.Platform -> <repo-root>\src\Tunner.Platform\bin\Debug\net10.0\Tunner.Platform.dll
+  Tunner.Observability -> <repo-root>\src\Tunner.Observability\bin\Debug\net10.0\Tunner.Observability.dll
+  Tunner.Testing -> <repo-root>\src\Tunner.Testing\bin\Debug\net10.0\Tunner.Testing.dll
+  Tunner.Database -> <repo-root>\src\Tunner.Database\bin\Debug\net10.0\Tunner.Database.dll
+  Tunner.Database.Migrations -> <repo-root>\src\Tunner.Database.Migrations\bin\Debug\net10.0\Tunner.Database.Migrations.dll
+  Tunner.Identity.Persistence -> <repo-root>\src\Modules\Identity\bin\Debug\net10.0\Tunner.Identity.Persistence.dll
+  Tunner.User.Bff -> <repo-root>\src\Tunner.User.Bff\bin\Debug\net10.0\Tunner.User.Bff.dll
+<repo-root>\tests\Tunner.Identity.Persistence.Tests\StepUpTests.cs(124,9): error xUnit2031: Do not use a Where clause to filter before calling Assert.Single. Use the overload of Assert.Single that accepts a filtering function. (https://xunit.net/xunit.analyzers/rules/xUnit2031) [<repo-root>\tests\Tunner.Identity.Persistence.Tests\Tunner.Identity.Persistence.Tests.csproj]
+<repo-root>\tests\Tunner.Identity.Persistence.Tests\StepUpTests.cs(124,55): error xUnit2031: Do not use a Where clause to filter before calling Assert.Single. Use the overload of Assert.Single that accepts a filtering function. (https://xunit.net/xunit.analyzers/rules/xUnit2031) [<repo-root>\tests\Tunner.Identity.Persistence.Tests\Tunner.Identity.Persistence.Tests.csproj]
+<repo-root>\tests\Tunner.Identity.Persistence.Tests\StepUpTests.cs(235,135): error CA2201: Exception type System.Exception is not sufficiently specific (https://learn.microsoft.com/dotnet/fundamentals/code-analysis/quality-rules/ca2201) [<repo-root>\tests\Tunner.Identity.Persistence.Tests\Tunner.Identity.Persistence.Tests.csproj]
+<repo-root>\tests\Tunner.Identity.Persistence.Tests\StepUpTests.cs(248,90): error EF1003: Method 'ExecuteSqlRawAsync' inserts concatenated strings directly into the SQL, without any protection against SQL injection. Consider using 'ExecuteSqlAsync' instead, which protects against SQL injection, or make sure that the value is sanitized and suppress the warning. [<repo-root>\tests\Tunner.Identity.Persistence.Tests\Tunner.Identity.Persistence.Tests.csproj]
+<repo-root>\tests\Tunner.Identity.Persistence.Tests\StepUpTests.cs(255,91): error EF1003: Method 'ExecuteSqlRawAsync' inserts concatenated strings directly into the SQL, without any protection against SQL injection. Consider using 'ExecuteSqlAsync' instead, which protects against SQL injection, or make sure that the value is sanitized and suppress the warning. [<repo-root>\tests\Tunner.Identity.Persistence.Tests\Tunner.Identity.Persistence.Tests.csproj]
+<repo-root>\tests\Tunner.Identity.Persistence.Tests\StepUpTests.cs(25,43): error CA1859: Change return type of method 'Source' from 'Tunner.Identity.Persistence.IAssurancePolicySource' to 'Tunner.Identity.Persistence.AssurancePolicyCatalog' for improved performance (https://learn.microsoft.com/dotnet/fundamentals/code-analysis/quality-rules/ca1859) [<repo-root>\tests\Tunner.Identity.Persistence.Tests\Tunner.Identity.Persistence.Tests.csproj]
+
+Build FAILED.
+
+<repo-root>\tests\Tunner.Identity.Persistence.Tests\StepUpTests.cs(124,9): error xUnit2031: Do not use a Where clause to filter before calling Assert.Single. Use the overload of Assert.Single that accepts a filtering function. (https://xunit.net/xunit.analyzers/rules/xUnit2031) [<repo-root>\tests\Tunner.Identity.Persistence.Tests\Tunner.Identity.Persistence.Tests.csproj]
+<repo-root>\tests\Tunner.Identity.Persistence.Tests\StepUpTests.cs(124,55): error xUnit2031: Do not use a Where clause to filter before calling Assert.Single. Use the overload of Assert.Single that accepts a filtering function. (https://xunit.net/xunit.analyzers/rules/xUnit2031) [<repo-root>\tests\Tunner.Identity.Persistence.Tests\Tunner.Identity.Persistence.Tests.csproj]
+<repo-root>\tests\Tunner.Identity.Persistence.Tests\StepUpTests.cs(235,135): error CA2201: Exception type System.Exception is not sufficiently specific (https://learn.microsoft.com/dotnet/fundamentals/code-analysis/quality-rules/ca2201) [<repo-root>\tests\Tunner.Identity.Persistence.Tests\Tunner.Identity.Persistence.Tests.csproj]
+<repo-root>\tests\Tunner.Identity.Persistence.Tests\StepUpTests.cs(248,90): error EF1003: Method 'ExecuteSqlRawAsync' inserts concatenated strings directly into the SQL, without any protection against SQL injection. Consider using 'ExecuteSqlAsync' instead, which protects against SQL injection, or make sure that the value is sanitized and suppress the warning. [<repo-root>\tests\Tunner.Identity.Persistence.Tests\Tunner.Identity.Persistence.Tests.csproj]
+<repo-root>\tests\Tunner.Identity.Persistence.Tests\StepUpTests.cs(255,91): error EF1003: Method 'ExecuteSqlRawAsync' inserts concatenated strings directly into the SQL, without any protection against SQL injection. Consider using 'ExecuteSqlAsync' instead, which protects against SQL injection, or make sure that the value is sanitized and suppress the warning. [<repo-root>\tests\Tunner.Identity.Persistence.Tests\Tunner.Identity.Persistence.Tests.csproj]
+<repo-root>\tests\Tunner.Identity.Persistence.Tests\StepUpTests.cs(25,43): error CA1859: Change return type of method 'Source' from 'Tunner.Identity.Persistence.IAssurancePolicySource' to 'Tunner.Identity.Persistence.AssurancePolicyCatalog' for improved performance (https://learn.microsoft.com/dotnet/fundamentals/code-analysis/quality-rules/ca1859) [<repo-root>\tests\Tunner.Identity.Persistence.Tests\Tunner.Identity.Persistence.Tests.csproj]
+    0 Warning(s)
+    6 Error(s)
+
+Time Elapsed 00:00:09.45
+
+proof-test-build-4.log
+  Tunner.Database -> <repo-root>\src\Tunner.Database\bin\Debug\net10.0\Tunner.Database.dll
+  Tunner.Database.Migrations -> <repo-root>\src\Tunner.Database.Migrations\bin\Debug\net10.0\Tunner.Database.Migrations.dll
+  Tunner.Testing -> <repo-root>\src\Tunner.Testing\bin\Debug\net10.0\Tunner.Testing.dll
+  Tunner.Accounts -> <repo-root>\src\Modules\Accounts\bin\Debug\net10.0\Tunner.Accounts.dll
+  Tunner.Observability -> <repo-root>\src\Tunner.Observability\bin\Debug\net10.0\Tunner.Observability.dll
+  Tunner.Platform -> <repo-root>\src\Tunner.Platform\bin\Debug\net10.0\Tunner.Platform.dll
+  Tunner.Identity.Persistence -> <repo-root>\src\Modules\Identity\bin\Debug\net10.0\Tunner.Identity.Persistence.dll
+  Tunner.User.Bff -> <repo-root>\src\Tunner.User.Bff\bin\Debug\net10.0\Tunner.User.Bff.dll
+<repo-root>\tests\Tunner.Identity.Persistence.Tests\StepUpTests.cs(354,90): error CA2016: Forward the '_' parameter to the 'OpenAsync' method or pass in 'CancellationToken.None' explicitly to indicate intentionally not propagating the token (https://learn.microsoft.com/dotnet/fundamentals/code-analysis/quality-rules/ca2016) [<repo-root>\tests\Tunner.Identity.Persistence.Tests\Tunner.Identity.Persistence.Tests.csproj]
+
+Build FAILED.
+
+<repo-root>\tests\Tunner.Identity.Persistence.Tests\StepUpTests.cs(354,90): error CA2016: Forward the '_' parameter to the 'OpenAsync' method or pass in 'CancellationToken.None' explicitly to indicate intentionally not propagating the token (https://learn.microsoft.com/dotnet/fundamentals/code-analysis/quality-rules/ca2016) [<repo-root>\tests\Tunner.Identity.Persistence.Tests\Tunner.Identity.Persistence.Tests.csproj]
+    0 Warning(s)
+    1 Error(s)
+
+Time Elapsed 00:00:08.87

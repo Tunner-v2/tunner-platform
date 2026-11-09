@@ -1,6 +1,6 @@
 # P2-006 — assurance and operation-bound step-up
 
-State: governed refinement; backend-first vertical slice. MilestoneP2 is ACTIVE. Monitoring-image remediation is separate release work under P1-RV001, as directly instructed by the user. This scope does not depend on a monitoring image or protected-main merge.
+State: IN_PROGRESS; policy and persistent-proof backend slices validated at32a682ebce4b4b83523936d4bdb8f5312be18b6b. Full Identity regression:127 PASS,0 FAIL,0 SKIP. MilestoneP2 is ACTIVE. Monitoring-image remediation is separate release work under P1-RV001, as directly instructed by the user. This scope does not depend on a monitoring image or protected-main merge.
 
 Authority resolution: FRD17§7 defines versioned method/context assurance and fresh operation-bound step-up;§8 retains server-owned sessions. Catalog32§1 permits executable private field schemas;§§17–18 require immutable approved versions selected by business effective time plus explicit scope, with missing/ambiguous resolution blocked. Reuse the completed P1-013 EffectivePolicyVersionResolver and P1-012 technical conflict contracts. PDR-0011/AMD-0007 Account age/consent boundaries remain unchanged. AMD-0008/0009 apply before any new UI is accepted.
 
@@ -12,8 +12,10 @@ Next slices: bind successful fresh authentication to Account/session/BFF/origin,
 
 Required QA: exact scope, case/context separation, effective intervals, draft/missing/ambiguity, expected-version conflicts, immutable mapping snapshot and safe logging; subsequent slices add wrong-operation/context/session, expiry, concurrent reuse/replay and real browser regressions. Preserve current onboarding/login behavior.
 
-Startup specialist assessments are executing-agent contract reviews, not independent human review, Product acceptance or release approval. They authorize only this backend scope; final per-role and UI acceptance remain pending. Exact next action: native governance next must report eligibility, implement this first slice, commit it, run focused and existing policy tests and retain actual source-bound results.
+Startup specialist assessments are executing-agent contract reviews, not independent human review, Product acceptance or release approval. They authorize only this backend scope; final per-role and UI acceptance remain pending. Exact next action: native governance next must report eligibility; continue the guarded BFF and shared UI integration described in docs/development/P2_006_HANDOFF.md and docs/development/P2_006_UI_AUTHORITY_REVIEW.md. The historical first-slice scope above is implemented, not outstanding.
 
-## Active second slice
+## Validated second slice
 
-Implement the private persistent operation-bound proof lifecycle in docs/contracts/operation-step-up-contract.md. Reuse current credential/session validation and outbox/transaction primitives. Required real-PostgreSQL tests cover fresh credentials, exact bindings, concurrency/replay, expiry/revocation/restrictions, immutable SQL guards, rollback and unchanged session assurance. No HTTP/UI or production policy provider is enabled by this slice.
+Implemented the private persistent operation-bound proof lifecycle in docs/contracts/operation-step-up-contract.md. Reuse current credential/session validation and outbox/transaction primitives. Required real-PostgreSQL tests cover fresh credentials, exact bindings, concurrency/replay, expiry/revocation/restrictions, immutable SQL guards, rollback and unchanged session assurance. No HTTP/UI or production policy provider is enabled by this slice.
+
+Validation receipt: governance/evidence/p2-006-proof-20261108/receipt.json. No final UI/feature acceptance is granted by the backend result.

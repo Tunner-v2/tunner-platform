@@ -1,0 +1,41 @@
+Test run for <repo-root>\tests\Tunner.Identity.Persistence.Tests\bin\Debug\net10.0\Tunner.Identity.Persistence.Tests.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+[xUnit.net 00:02:07.86]     Tunner.Identity.Persistence.Tests.StepUpTests.SqlCannotEditBindingsExtendExpiryOrReviveEndedProofAndCompositeForeignKeyBindsAccount [FAIL]
+  Failed Tunner.Identity.Persistence.Tests.StepUpTests.SqlCannotEditBindingsExtendExpiryOrReviveEndedProofAndCompositeForeignKeyBindsAccount [3 s]
+  Error Message:
+   Microsoft.EntityFrameworkCore.DbUpdateException : An error occurred while saving the entity changes. See the inner exception for details.
+---- Npgsql.PostgresException : 23505: duplicate key value violates unique constraint "IX_verified_contacts_normalized_email"
+
+DETAIL: Detail redacted as it may contain sensitive data. Specify 'Include Error Detail' in the connection string to include this information.
+  Stack Trace:
+     at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalDatabase.SaveChangesAsync(IList`1 entries, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(IList`1 entriesToSave, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(StateManager stateManager, Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at Npgsql.EntityFrameworkCore.PostgreSQL.Storage.Internal.NpgsqlExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync(Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync(Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at Tunner.Identity.Persistence.Tests.AuthenticationTestHost.SeedAsync(IdentityTestDatabase database, AccountState state, Boolean confirmed, String password, Boolean minor) in <repo-root>\tests\Tunner.Identity.Persistence.Tests\AuthenticationTestHost.cs:line 72
+   at Tunner.Identity.Persistence.Tests.AuthenticationTestHost.SeedAsync(IdentityTestDatabase database, AccountState state, Boolean confirmed, String password, Boolean minor) in <repo-root>\tests\Tunner.Identity.Persistence.Tests\AuthenticationTestHost.cs:line 72
+   at Tunner.Identity.Persistence.Tests.StepUpTests.SqlCannotEditBindingsExtendExpiryOrReviveEndedProofAndCompositeForeignKeyBindsAccount() in <repo-root>\tests\Tunner.Identity.Persistence.Tests\StepUpTests.cs:line 260
+   at Tunner.Identity.Persistence.Tests.StepUpTests.SqlCannotEditBindingsExtendExpiryOrReviveEndedProofAndCompositeForeignKeyBindsAccount() in <repo-root>\tests\Tunner.Identity.Persistence.Tests\StepUpTests.cs:line 269
+   at Tunner.Identity.Persistence.Tests.StepUpTests.SqlCannotEditBindingsExtendExpiryOrReviveEndedProofAndCompositeForeignKeyBindsAccount() in <repo-root>\tests\Tunner.Identity.Persistence.Tests\StepUpTests.cs:line 269
+   at Tunner.Identity.Persistence.Tests.StepUpTests.SqlCannotEditBindingsExtendExpiryOrReviveEndedProofAndCompositeForeignKeyBindsAccount() in <repo-root>\tests\Tunner.Identity.Persistence.Tests\StepUpTests.cs:line 269
+--- End of stack trace from previous location ---
+----- Inner Stack Trace -----
+   at Npgsql.Internal.NpgsqlConnector.ReadMessageLong(Boolean async, DataRowLoadingMode dataRowLoadingMode, Boolean readingNotifications, Boolean isReadingPrependedMessage)
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource<TResult>.GetResult(Int16 token)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteDbDataReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+Results File: <repo-root>\artifacts\p2-006-assurance-20261108\test-results\step-up-and-authentication.trx
+
+Failed!  - Failed:     1, Passed:    68, Skipped:     0, Total:    69, Duration: 2 m 10 s - Tunner.Identity.Persistence.Tests.dll (net10.0)

@@ -1,0 +1,113 @@
+{
+  "schema_version": 1,
+  "scope_id": "TUN-P2-006",
+  "result": "PASS_PRIVATE_PROOF_LIFECYCLE_AND_IDENTITY_REGRESSION_ONLY",
+  "tested_commit_sha": "32a682ebce4b4b83523936d4bdb8f5312be18b6b",
+  "validated_commit_sha": "32a682ebce4b4b83523936d4bdb8f5312be18b6b",
+  "tests": {
+    "total": 127,
+    "passed": 127,
+    "failed": 0,
+    "skipped": 0,
+    "groups": {
+      "AssurancePolicyTests": 12,
+      "AuthenticationPolicyTests": 1,
+      "AuthenticationTests": 25,
+      "IdentityFoundationTests": 15,
+      "RegistrationBffTests": 8,
+      "RegistrationTests": 28,
+      "StepUpTests": 38
+    }
+  },
+  "build": {
+    "result": "PASS",
+    "warnings": 0,
+    "errors": 0
+  },
+  "execution": {
+    "container_tests_explicitly_enabled": true,
+    "test_image": "postgres:18-alpine",
+    "isolation": "Disposable fixture containers and per-test databases; existing browser-test database untouched.",
+    "command": "dotnet test tests/Tunner.Identity.Persistence.Tests --no-restore --no-build --logger trx; TUNNER_RUN_CONTAINER_TESTS=1",
+    "raw_trx": "artifacts/p2-006-assurance-20261108/validated-test-results/identity-validated.trx",
+    "raw_trx_sha256": "61544409304415c57a8fbb2d2613b69f721a4c6ab2b8b66dccaa4c7877e1af14"
+  },
+  "source_hash_method": "SHA256 of UTF8 source with CRLF normalized to LF",
+  "owned_behavior_hashes": {
+    "src/Modules/Identity/AssurancePolicy.cs": "4a94d655d6d90e37e397483ce92ca335abd1dc369b942d74387f49f2b4bf3a0f",
+    "src/Modules/Identity/AuthenticationApplication.cs": "bc9f3b8ee3da7279493a163546a6f5bc1f583932390e3475ac123e6da86085f0",
+    "src/Modules/Identity/AuthenticationRows.cs": "8224120b0c996d2612417a2bf1a43fd417b1622fca88b7fa5f659dc29321eacf",
+    "src/Modules/Identity/IdentityPersistenceDbContext.cs": "308b499b1334614938fa162c3a47503363461e028b542f72b7b5007348717df4",
+    "src/Modules/Identity/StepUpApplication.cs": "6133311222d254e579acdad38205dbca0000b3028c049a8b0f29edd57f10774b",
+    "src/Modules/Identity/StepUpContracts.cs": "ae3f04b2172d7591c86f3c999a14211f8cbaf03a21f82e13ef7316d13ff8051f",
+    "src/Modules/Identity/StepUpRows.cs": "173b6d3d546b5765ab029bb2d60f35ae7485ef91690e9ee0efdc5bf83eb19dc6",
+    "src/Modules/Identity/Migrations/20261109033631_P2OperationStepUpProofs.cs": "4acdbc907261c76eabd984efb3e9a3fc953f6c40c9ebd0d5767b4ac4b72fddef",
+    "src/Modules/Identity/Migrations/20261109033631_P2OperationStepUpProofs.Designer.cs": "4d92efcfd5d7ecc778405bab28c482b930e70940fe0450d4271cc6dfd43b1bda",
+    "src/Modules/Identity/Migrations/IdentityPersistenceDbContextModelSnapshot.cs": "8d2398a381a84aba6a0032a22e5ff0b7c772cf43751474d449cb1b199052ed02",
+    "tests/Tunner.Identity.Persistence.Tests/StepUpTests.cs": "eafa871ecb463d494917bc79cd5da700d2c504fb00cc6051c171f553ad352f26",
+    "tests/Tunner.Identity.Persistence.Tests/AuthenticationTestHost.cs": "5cdc340c4e9de530b0134b065a4ea2428da5eed09665e83b2a0acde143fa87d7"
+  },
+  "evidence_sha256": {
+    "governance/evidence/p2-006-proof-20261108/tests.json": "01ab3b47884990d4030bae10ae12c42308747fe9a0b53d9844b1a102e5bcb1e1",
+    "governance/evidence/p2-006-proof-20261108/build-and-tests.log": "ebc0e40c87613ada03abd773d9816ba3a22e375118db86205145bf8f8b13be49",
+    "governance/evidence/p2-006-proof-20261108/initial-focused-test-failure.log": "ae5ddaec06e7b542fb0bf43f12f3c8c5a0afe0486cbf0769982d62c6d8e1b142",
+    "governance/evidence/p2-006-proof-20261108/initial-full-test-failure.log": "e663d49e399a57cd0d4b4a7b28bfc009b7764bab6a078e1481d21d63b580f02b",
+    "governance/evidence/p2-006-proof-20261108/initial-build-failures.log": "9548f5719dbf96f87764675b357ff53dd46ec3b345ddd4e55440404e55025e1b",
+    "governance/evidence/p2-006-proof-20261108/figma-step-up-design-context.txt": "4055a55c3715a09a1cce2649f2b0063fbf68b2f1c00ea80c5234948741691465"
+  },
+  "evidence_normalization": "Logs normalize CRLF and checkout prefix. Committed test summaries omit computer/run identity. Raw TRX and earlier run artifacts remain local and are not substituted with discovery counts.",
+  "prior_failures": [
+    {
+      "source": "793713e188e0cf31b5d0f1a2950e5bcc49453257",
+      "passed": 68,
+      "failed": 1,
+      "cause": "New SQL guard test seeded duplicate verified contact; corrected synthetic second account to unverified. Production uniqueness guard correctly rejected it."
+    },
+    {
+      "source": "2b463a0005eca6fe8914f8b19b56bb911cda4a10",
+      "passed": 126,
+      "failed": 1,
+      "cause": "Existing foundation regression caught missing new-migration downgrade preflight. Reused IdentityMigrationSql.GuardDowngrade before any new schema removal; final full suite passes."
+    },
+    {
+      "phase": "Initial build checks",
+      "cause": "Generated-array, assertion, concrete-return, SQL test safety and cancellation analyzers corrected without suppressions; earlier build logs retained."
+    }
+  ],
+  "implementation": [
+    "Current password reauthentication and explicit versioned assurance selection",
+    "Opaque protected-retry proof bound to Account/session/origin/scheme/stamp and exact operation/correlation/resource/version/context",
+    "Atomic one-use consumption with local Identity mutation/outbox, rollback, concurrency and current authority checks",
+    "Proof expiry and key cleanup; immutable PostgreSQL bindings and ended state; no general session upgrade"
+  ],
+  "reviews": {
+    "provenance": "Executing-agent backend architecture/security/QA assessment; not independent human review or final Product/visual/release approval.",
+    "reviewed_source": "32a682ebce4b4b83523936d4bdb8f5312be18b6b",
+    "findings": "38 proof cases and89 existing Identity cases passed. No known backend defect remains in this limited slice. Real sensitive-operation BFF/UI integration remains unvalidated."
+  },
+  "authority": {
+    "verified_artifacts": 196,
+    "outcome": "VERIFIED",
+    "development_eligibility": "TUN-P2-006 IN_PROGRESS and actionable; P0/P1 closure preserved; security image remediation remains separate."
+  },
+  "figma_read_only_review": {
+    "file_key": "apNbwvAgdn1xIxYH1oiaSC",
+    "page": "7:5",
+    "node": "98:27",
+    "screenshot_returned_and_inspected": true,
+    "reference": "docs/development/P2_006_UI_AUTHORITY_REVIEW.md",
+    "visual_acceptance": "NOT_GRANTED_NO_NEW_UI_IMPLEMENTATION"
+  },
+  "production_runtime_enabled": false,
+  "new_http_route": false,
+  "new_ui_implemented": false,
+  "whole_work_item_complete": false,
+  "remaining": [
+    "Guarded BFF challenge/resume context and actual sensitive-operation owner integration",
+    "Password-detail/state composition authority and required scoped visual consent if materially adapted",
+    "Shared UI route/validation/accessibility and Playwright/Figma comparison evidence",
+    "Actual approved configured runtime assurance policy evidence before enabling affected production paths",
+    "Final work-item role reviews, native acceptance gates and committed handoff"
+  ],
+  "next_action": "Continue TUN-P2-006 BFF/UI integration from approved Figma98:27 and current contract; do not restart custom image rebuild work."
+}
