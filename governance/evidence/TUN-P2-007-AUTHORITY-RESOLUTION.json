@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "scope_id": "TUN-P2-007",
+  "result": "RESOLVED_EXISTING_AUTHORITY_FOR_IMPLEMENTATION",
+  "recorded_at": "2026-11-09T15:45:40.810Z",
+  "authority_refs": [
+    "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md",
+    "docs/authority/current/development/29_Privacy_Data_Lifecycle_and_Processing_Governance_FRD.md",
+    "docs/authority/current/development/31_UI_UX_Screen_and_Control_Center_Requirements_Matrix.md",
+    "docs/authority/current/development/32_Domain_API_Event_Data_and_Policy_Contract_Catalog.md",
+    "docs/authority/baselines/1.6.0/decisions/ADR-0006_Identity_ASPNET_Identity_OpenIddict.md",
+    "docs/authority/current/decisions/AMD-0008_Approved_Figma_Visual_Fidelity_and_Product_Owner_UX_Consent.md",
+    "docs/authority/current/decisions/AMD-0009_URL_Addressable_Routing_and_Governed_Form_Validation.md"
+  ],
+  "prerequisite_proof_ref": "governance/evidence/P2-001-007-POST-CORRECTION-20261109.json",
+  "figjam": {
+    "file_key": "bdJwXt1U7n3iyluSD21OYK",
+    "node_id": "88:6720",
+    "findings": [
+      "Enrollment needs current-session reauthentication/step-up as policy requires; passkey private key never reaches Tunner.",
+      "Primary proof and configured method/context determine session assurance; sensitive-action proof is exact-operation bound and rechecked by its owner.",
+      "Persist only credential/public metadata and version; revocation/reset is separately governed; post-commit security activity evidence is required."
+    ]
+  },
+  "figma_refs": [
+    {
+      "file_key": "apNbwvAgdn1xIxYH1oiaSC",
+      "node_id": "13:2",
+      "purpose": "Account security composition, with sample MFA/activity data that cannot be falsely treated as current account facts."
+    },
+    {
+      "file_key": "apNbwvAgdn1xIxYH1oiaSC",
+      "node_id": "36:2",
+      "purpose": "Passkey/method management composition; runtime availability and state require truthful facts."
+    },
+    {
+      "file_key": "apNbwvAgdn1xIxYH1oiaSC",
+      "node_id": "46:24",
+      "purpose": "Approved520x410 Add a passkey overlay."
+    },
+    {
+      "file_key": "apNbwvAgdn1xIxYH1oiaSC",
+      "node_id": "52:291",
+      "purpose": "Approved overlay/backdrop composition."
+    }
+  ],
+  "repository_reuse": [
+    "Identity store already uses schema3 and migrated AspNetUserPasskeys.",
+    "Existing User/Admin separation, restriction/abuse/session service, shared protected operation step-up, versioned policy resolver, strict JSON, outbox and shared UI/form/dialog capabilities must be reused."
+  ],
+  "ui_boundary": "Initial design/flow read only. Review remaining matching feedback/revocation/responsive variants and prepare a concrete scoped approval packet for genuine missing/material adaptations before final production UX. Backend and tests can continue independently.",
+  "configuration_boundary": "Explicit RP/origin, supported assurance and processing/retention/publication values are trusted approved runtime inputs. No production default invented. P2-019 policy/configuration owner tasks remain applicable."
+}

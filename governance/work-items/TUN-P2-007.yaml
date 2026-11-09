@@ -4,7 +4,7 @@
   "milestone_id": "P2",
   "sprint_id": null,
   "title": "Passkey registration authentication and revocation",
-  "status": "BACKLOG",
+  "status": "READY",
   "type": "FEATURE",
   "authority_refs": [
     "docs/authority/current-authority.json",
@@ -18,7 +18,12 @@
     "docs/authority/current/development/09_Testing_Acceptance_Evidence_and_Quality_Gates.md",
     "docs/authority/current/development/29_Privacy_Data_Lifecycle_and_Processing_Governance_FRD.md",
     "docs/authority/current/decisions/PDR-0011_Universal_Account_Eligibility_Age-Aware_Consent_and_Delegated_Commercial_Authority.md",
-    "docs/authority/current/decisions/AMD-0007_Universal_Registration_Age-Aware_Consent_and_Delegated_Commercial_Authority.md"
+    "docs/authority/current/decisions/AMD-0007_Universal_Registration_Age-Aware_Consent_and_Delegated_Commercial_Authority.md",
+    "docs/authority/current/development/10_UI_UX_Components_Widgets_and_Plugins_Development_Rules.md",
+    "docs/authority/current/development/31_UI_UX_Screen_and_Control_Center_Requirements_Matrix.md",
+    "docs/authority/current/development/35_AI_Agent_Skill_Catalog_and_Review_Contracts.md",
+    "docs/authority/current/decisions/AMD-0008_Approved_Figma_Visual_Fidelity_and_Product_Owner_UX_Consent.md",
+    "docs/authority/current/decisions/AMD-0009_URL_Addressable_Routing_and_Governed_Form_Validation.md"
   ],
   "flow_refs": [
     "docs/authority/current/development/34_Architecture_to_Development_Traceability_Matrix.md"
@@ -48,7 +53,7 @@
     "financial": false,
     "compliance": true,
     "security": true,
-    "devops": false,
+    "devops": true,
     "support": false,
     "api": true,
     "provider": true
@@ -65,7 +70,9 @@
     "frontend-engineer",
     "end-user-ux-reviewer",
     "content-writer",
-    "rd-engineer"
+    "rd-engineer",
+    "devops-engineer",
+    "project-manager"
   ],
   "required_tests": [
     "ceremony origin/challenge/replay failures",
@@ -73,11 +80,17 @@
     "cross-browser accessible approved ceremony UI"
   ],
   "required_evidence": [
-    "governance/evidence/TUN-P2-007-VALIDATION.json"
+    "governance/evidence/TUN-P2-007-VALIDATION.json",
+    "governance/evidence/TUN-P2-007-AUTHORITY-RESOLUTION.json",
+    "governance/evidence/TUN-P2-007-RD-SOURCES.json",
+    "docs/development/P2_007_PASSKEY_SCOPE.md",
+    "governance/evidence/TUN-P2-007-STARTUP-REVIEWS.json",
+    "governance/evidence/TUN-P2-007-ROLE-REVIEWS.json"
   ],
   "context_policy": "TASK",
   "todos": [],
   "defects": [],
   "created_at": "2026-10-16T17:48:49.296Z",
-  "updated_at": "2026-10-16T17:48:49.296Z"
+  "updated_at": "2026-11-09T15:47:39.630Z",
+  "ui_evidence_ref": "governance/evidence/TUN-P2-007-UI-COMPLIANCE.json"
 }
