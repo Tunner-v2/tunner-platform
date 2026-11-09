@@ -1,0 +1,131 @@
+{
+  "schema_version": 1,
+  "scope_id": "P2_RECOVERY_CORRECTIONS",
+  "result": "PASS_SCOPED_ENGINEERING_GATES",
+  "checked_at_commit": "a9086ceca635e86f5b97a0a0fe078a4ea6342789",
+  "validated_source_sha": "c208fdd589ac5bcac9055eb39f8cbe184ccdd123",
+  "recorded_at": "2026-11-09T11:40:32.612Z",
+  "gates": {
+    "global": {
+      "ExitCode": 0,
+      "Command": "ui check",
+      "Payload": {
+        "Outcome": "PASS",
+        "ScopeId": "GLOBAL_UI",
+        "CoveredItems": [
+          "U-AUTH-02",
+          "U-AUTH-03",
+          "U-AUTH-03A",
+          "U-AUTH-CONSENT",
+          "U-AUTH-RESULT",
+          "FORM-REGISTRATION",
+          "FORM-VERIFY-EMAIL",
+          "FORM-PERSONAL-INFORMATION",
+          "SHARED-FORM-USER",
+          "SHARED-FORM-ADMIN",
+          "U-AUTH-01",
+          "U-AUTH-SIGNED-IN",
+          "FORM-LOGIN",
+          "COMP-STEP-UP",
+          "DEV-STEP-UP",
+          "FORM-STEP-UP"
+        ],
+        "Failures": []
+      }
+    },
+    "registration": {
+      "ExitCode": 0,
+      "Command": "ui check",
+      "Payload": {
+        "Outcome": "PASS",
+        "ScopeId": "TUN-P2-004",
+        "CoveredItems": [
+          "U-AUTH-02",
+          "U-AUTH-03",
+          "U-AUTH-03A",
+          "U-AUTH-CONSENT",
+          "U-AUTH-RESULT",
+          "FORM-REGISTRATION",
+          "FORM-VERIFY-EMAIL",
+          "FORM-PERSONAL-INFORMATION"
+        ],
+        "Failures": []
+      }
+    },
+    "stepup": {
+      "ExitCode": 0,
+      "Command": "ui check",
+      "Payload": {
+        "Outcome": "PASS",
+        "ScopeId": "TUN-P2-006",
+        "CoveredItems": [
+          "COMP-STEP-UP",
+          "DEV-STEP-UP",
+          "FORM-STEP-UP"
+        ],
+        "Failures": []
+      }
+    },
+    "sharedRevision": {
+      "ExitCode": 0,
+      "Command": "revision close-check",
+      "Payload": {
+        "RevisionId": "P1-018-RV004",
+        "Outcome": "PASS",
+        "Findings": [],
+        "Satisfied": []
+      }
+    },
+    "visualRevision": {
+      "ExitCode": 0,
+      "Command": "revision close-check",
+      "Payload": {
+        "RevisionId": "P2-004-UI001-RV002",
+        "Outcome": "PASS",
+        "Findings": [],
+        "Satisfied": []
+      }
+    },
+    "routingRevision": {
+      "ExitCode": 0,
+      "Command": "revision close-check",
+      "Payload": {
+        "RevisionId": "P2-004-UI002-RV002",
+        "Outcome": "PASS",
+        "Findings": [],
+        "Satisfied": []
+      }
+    },
+    "sharedTransition": {
+      "ExitCode": 0,
+      "Command": "revision transition check",
+      "Payload": {
+        "RevisionId": "P1-018-RV004",
+        "Outcome": "ALLOWED",
+        "Findings": [],
+        "Satisfied": []
+      }
+    },
+    "visualTransition": {
+      "ExitCode": 0,
+      "Command": "revision transition check",
+      "Payload": {
+        "RevisionId": "P2-004-UI001-RV002",
+        "Outcome": "ALLOWED",
+        "Findings": [],
+        "Satisfied": []
+      }
+    },
+    "routingTransition": {
+      "ExitCode": 0,
+      "Command": "revision transition check",
+      "Payload": {
+        "RevisionId": "P2-004-UI002-RV002",
+        "Outcome": "ALLOWED",
+        "Findings": [],
+        "Satisfied": []
+      }
+    }
+  },
+  "boundary": "Three technical corrections and existing UI only. No whole-P2 acceptance. GOV001 remains OPEN."
+}
