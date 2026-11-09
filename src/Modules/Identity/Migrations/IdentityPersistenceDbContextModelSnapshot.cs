@@ -1048,6 +1048,156 @@ namespace Tunner.Identity.Persistence.Migrations
                         });
                 });
 
+            modelBuilder.Entity("Tunner.Identity.Persistence.StepUpProofRow", b =>
+                {
+                    b.Property<Guid>("ProofId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("proof_id");
+
+                    b.Property<string>("AccountId")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("account_id");
+
+                    b.Property<string>("Assurance")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("assurance");
+
+                    b.Property<DateTimeOffset>("AuthenticatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("authenticated_at");
+
+                    b.Property<string>("AuthenticationMethod")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("authentication_method");
+
+                    b.Property<string>("AuthenticationPolicyVersion")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("authentication_policy_version");
+
+                    b.Property<string>("Context")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("context");
+
+                    b.Property<string>("ContextDigest")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("context_digest");
+
+                    b.Property<string>("CorrelationId")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("correlation_id");
+
+                    b.Property<DateTimeOffset?>("EndedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("ended_at");
+
+                    b.Property<long>("ExpectedVersion")
+                        .HasColumnType("bigint")
+                        .HasColumnName("expected_version");
+
+                    b.Property<DateTimeOffset>("ExpiresAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("expires_at");
+
+                    b.Property<string>("KeyDigest")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("key_digest");
+
+                    b.Property<string>("Operation")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("operation");
+
+                    b.Property<string>("OperationId")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("operation_id");
+
+                    b.Property<string>("Origin")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("origin");
+
+                    b.Property<string>("PolicyVersion")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("policy_version");
+
+                    b.Property<string>("ProcessingReference")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("processing_reference");
+
+                    b.Property<string>("ProtectedKey")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("protected_key");
+
+                    b.Property<string>("ResourceId")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("resource_id");
+
+                    b.Property<string>("RetentionReference")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("retention_reference");
+
+                    b.Property<string>("Scheme")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("scheme");
+
+                    b.Property<string>("SecurityStampDigest")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("security_stamp_digest");
+
+                    b.Property<Guid>("SessionId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("session_id");
+
+                    b.Property<string>("State")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("state");
+
+                    b.Property<long>("Version")
+                        .IsConcurrencyToken()
+                        .HasColumnType("bigint")
+                        .HasColumnName("version");
+
+                    b.HasKey("ProofId");
+
+                    b.HasIndex("KeyDigest")
+                        .IsUnique();
+
+                    b.HasIndex("SessionId", "AccountId");
+
+                    b.HasIndex("SessionId", "OperationId")
+                        .IsUnique();
+
+                    b.ToTable("step_up_proofs", "identity", t =>
+                        {
+                            t.HasCheckConstraint("ck_step_up_bounds", "expires_at > authenticated_at AND expected_version >= 0 AND version >= 1");
+
+                            t.HasCheckConstraint("ck_step_up_consumed", "state<>'CONSUMED' OR ended_at < expires_at");
+
+                            t.HasCheckConstraint("ck_step_up_digests", "key_digest ~ '^[0-9A-F]{64}$' AND context_digest ~ '^[0-9A-F]{64}$'");
+
+                            t.HasCheckConstraint("ck_step_up_end", "(state='ACTIVE' AND ended_at IS NULL AND length(protected_key)>0) OR (state<>'ACTIVE' AND ended_at IS NOT NULL AND ended_at >= authenticated_at AND protected_key='')");
+
+                            t.HasCheckConstraint("ck_step_up_state", "state IN ('ACTIVE','CONSUMED','EXPIRED')");
+                        });
+                });
+
             modelBuilder.Entity("Tunner.Identity.Persistence.VerifiedContactRow", b =>
                 {
                     b.Property<Guid>("ContactId")
@@ -1271,6 +1421,16 @@ namespace Tunner.Identity.Persistence.Migrations
                         .WithMany()
                         .HasForeignKey("AccountId")
                         .OnDelete(DeleteBehavior.Restrict);
+                });
+
+            modelBuilder.Entity("Tunner.Identity.Persistence.StepUpProofRow", b =>
+                {
+                    b.HasOne("Tunner.Identity.Persistence.AuthenticationSessionRow", null)
+                        .WithMany()
+                        .HasForeignKey("SessionId", "AccountId")
+                        .HasPrincipalKey("SessionId", "AccountId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Tunner.Identity.Persistence.VerifiedContactRow", b =>

@@ -65,8 +65,6 @@ internal static class AuthenticationModelConfiguration
             b.ToTable("authentication_abuse", "identity");
             b.HasKey(x => new { x.Partition, x.PolicyVersion, x.Window });
         });
-        foreach (var type in new[] { typeof(AuthenticationSessionRow), typeof(AuthenticationAbuseRow) })
-            foreach (var property in model.Entity(type).Metadata.GetProperties())
-                property.SetColumnName(string.Concat(property.Name.Select((c, i) => char.IsUpper(c) ? (i > 0 ? "_" : "") + char.ToLowerInvariant(c) : c.ToString())));
+        IdentityColumnNames.UseSnakeCase(model, typeof(AuthenticationSessionRow), typeof(AuthenticationAbuseRow));
     }
 }

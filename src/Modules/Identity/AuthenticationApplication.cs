@@ -21,6 +21,12 @@ internal sealed class AuthenticationPasswordWork
         { CompatibilityMode = PasswordHasherCompatibilityMode.IdentityV3, IterationCount = policy.PasswordHashIterations }));
     internal string Dummy(AuthenticationPolicy policy) => dummies.GetOrAdd(policy.PasswordHashIterations,
         _ => new Lazy<string>(() => Hasher(policy).HashPassword(new IdentityUserAdapter(), Convert.ToHexString(RandomNumberGenerator.GetBytes(32))))).Value;
+    internal PasswordVerificationResult Verify(AuthenticationPolicy policy, IdentityUserAdapter? user, string password)
+    {
+        try { return Hasher(policy).VerifyHashedPassword(user ?? new IdentityUserAdapter(), user?.PasswordHash ?? Dummy(policy), password); }
+        catch (FormatException) { return PasswordVerificationResult.Failed; }
+    }
+
 }
 
 /// <summary>Identity owner; transactions contain state plus outbox, never HTTP or Product sessions.</summary>
@@ -41,7 +47,7 @@ internal sealed class AuthenticationApplication(IdentityPersistenceDbContext dat
             return new("VALIDATION_ERROR", null);
         var normalized = Normalizer.NormalizeEmail(command.Email.Trim())!;
         var identifier = partitions.Identifier(normalized);
-        var dummy = passwordWork.Dummy(policy); var hasher = AuthenticationPasswordWork.Hasher(policy);
+        var hasher = AuthenticationPasswordWork.Hasher(policy); _ = passwordWork.Dummy(policy);
         await using var transaction = await database.Database.BeginTransactionAsync(ct).ConfigureAwait(false);
         if (!await AllowAsync("N:" + caller.NetworkDigest, policy.NetworkAttemptLimit, policy, now, ct).ConfigureAwait(false) ||
             !await AllowAsync("I:" + identifier, policy.IdentifierAttemptLimit, policy, now, ct).ConfigureAwait(false))
@@ -54,9 +60,7 @@ internal sealed class AuthenticationApplication(IdentityPersistenceDbContext dat
         var user = await (from contact in database.VerifiedContacts join candidate in database.Users on contact.AccountId equals candidate.AccountId
             where contact.NormalizedEmail == normalized && contact.AnonymizedAtUtc == null && contact.State == ContactVerificationState.Verified &&
                 candidate.EmailConfirmed && candidate.NormalizedEmail == normalized select candidate).SingleOrDefaultAsync(ct).ConfigureAwait(false);
-        PasswordVerificationResult verification;
-        try { verification = hasher.VerifyHashedPassword(user ?? new IdentityUserAdapter(), user?.PasswordHash ?? dummy, command.Password); }
-        catch (FormatException) { verification = PasswordVerificationResult.Failed; }
+        var verification = passwordWork.Verify(policy, user, command.Password);
         if (user is null || verification == PasswordVerificationResult.Failed || string.IsNullOrWhiteSpace(user.SecurityStamp))
             return await RejectAsync(transaction, now, ct).ConfigureAwait(false);
         var account = await database.Accounts.SingleAsync(x => x.AccountId == user.AccountId, ct).ConfigureAwait(false);
@@ -170,7 +174,7 @@ internal sealed class AuthenticationApplication(IdentityPersistenceDbContext dat
         var now = clock.GetUtcNow();
         return database.Set<AuthenticationAbuseRow>().Where(x => x.ExpiresAt <= now).ExecuteDeleteAsync(cancellationToken);
     }
-    private static bool Expired(AuthenticationSessionRow row, AuthenticationPolicy policy, DateTimeOffset now)
+    internal static bool Expired(AuthenticationSessionRow row, AuthenticationPolicy policy, DateTimeOffset now)
     {
         var absolute = row.RememberMe ? policy.RememberAbsoluteLifetime : policy.AbsoluteLifetime;
         var idle = row.RememberMe ? policy.RememberIdleLifetime : policy.IdleLifetime;
@@ -201,6 +205,27 @@ internal sealed class AuthenticationApplication(IdentityPersistenceDbContext dat
         row.LastSeenAt = now; row.AccessPolicyVersion = decision.PolicyVersion; row.AccessEvidenceReference = decision.EvidenceReference; row.Version++;
         return ticket;
     }
+
+    // Caller owns the transaction. Session lock matches retrieval/revocation; Account lock freezes restriction state.
+    internal async Task<AuthenticationSessionRow?> LockForOperationAsync(StepUpCaller caller, string operation, CancellationToken ct)
+    {
+        await LockSessionAsync(caller.SessionId, ct).ConfigureAwait(false);
+        var row = await database.Set<AuthenticationSessionRow>().FromSqlInterpolated($"SELECT * FROM identity.tunner_sessions WHERE session_id={caller.SessionId} FOR UPDATE").SingleOrDefaultAsync(ct).ConfigureAwait(false);
+        if (row is null) return null;
+        await database.Entry(row).ReloadAsync(ct).ConfigureAwait(false);
+        if (row.AccountId != caller.AccountId || row.Origin != caller.Origin || row.Scheme != AuthenticationIdentity.Scheme) return null;
+        var account = await database.Accounts.FromSqlInterpolated($"SELECT * FROM accounts.accounts WHERE account_id={caller.AccountId} FOR NO KEY UPDATE").SingleAsync(ct).ConfigureAwait(false);
+        await database.Entry(account).ReloadAsync(ct).ConfigureAwait(false);
+        var user = await database.Users.FromSqlInterpolated($"""SELECT * FROM identity."AspNetUsers" WHERE "AccountId"={caller.AccountId} FOR NO KEY UPDATE""").SingleOrDefaultAsync(ct).ConfigureAwait(false);
+        if (user is not null) await database.Entry(user).ReloadAsync(ct).ConfigureAwait(false);
+        // Freeze the current verified contact against concurrent revocation during the local mutation.
+        _ = await database.VerifiedContacts.FromSqlInterpolated($"SELECT * FROM accounts.verified_contacts WHERE account_id={caller.AccountId} ORDER BY contact_id FOR SHARE").ToArrayAsync(ct).ConfigureAwait(false);
+        var now = clock.GetUtcNow();
+        if (await ValidateAsync(row, caller.Origin, now, ct).ConfigureAwait(false) is null) return null;
+        var decision = await AccessAsync(account, operation, now, ct).ConfigureAwait(false);
+        return decision?.Allowed == true ? row : null;
+    }
+
     private async ValueTask<AccountAuthenticationAccessDecision?> AccessAsync(AccountRow account, string operation, DateTimeOffset now, CancellationToken ct)
     {
         if (account.State is AccountState.Closed or AccountState.VerificationPending) return null;
@@ -210,7 +235,7 @@ internal sealed class AuthenticationApplication(IdentityPersistenceDbContext dat
             throw new InvalidOperationException("Current Account authentication authority is unavailable.");
         return decision;
     }
-    private async Task<bool> AllowAsync(string partition, int limit, AuthenticationPolicy policy, DateTimeOffset now, CancellationToken ct)
+    internal async Task<bool> AllowAsync(string partition, int limit, AuthenticationPolicy policy, DateTimeOffset now, CancellationToken ct)
     {
         var window = now.UtcTicks / policy.AbuseWindow.Ticks;
         await LockAsync("auth-abuse:" + partition, ct).ConfigureAwait(false);
@@ -243,5 +268,5 @@ internal sealed class AuthenticationApplication(IdentityPersistenceDbContext dat
         "tunner/identity", row.SessionId.ToString("N"), "RESTRICTED_SECURITY", JsonSerializer.Serialize(new { reference = row.SessionId.ToString("N") }),
         row.Version.ToString(CultureInfo.InvariantCulture), row.OperationId, row.CorrelationId));
     private Task<int> LockAsync(string resource, CancellationToken ct) => database.Database.ExecuteSqlInterpolatedAsync($"SELECT pg_advisory_xact_lock(hashtextextended({resource}, 0))", ct);
-    private Task<int> LockSessionAsync(Guid id, CancellationToken ct) => LockAsync("auth-session:" + id.ToString("N"), ct);
+    internal Task<int> LockSessionAsync(Guid id, CancellationToken ct) => LockAsync("auth-session:" + id.ToString("N"), ct);
 }

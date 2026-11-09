@@ -13,3 +13,7 @@ Next slices: bind successful fresh authentication to Account/session/BFF/origin,
 Required QA: exact scope, case/context separation, effective intervals, draft/missing/ambiguity, expected-version conflicts, immutable mapping snapshot and safe logging; subsequent slices add wrong-operation/context/session, expiry, concurrent reuse/replay and real browser regressions. Preserve current onboarding/login behavior.
 
 Startup specialist assessments are executing-agent contract reviews, not independent human review, Product acceptance or release approval. They authorize only this backend scope; final per-role and UI acceptance remain pending. Exact next action: native governance next must report eligibility, implement this first slice, commit it, run focused and existing policy tests and retain actual source-bound results.
+
+## Active second slice
+
+Implement the private persistent operation-bound proof lifecycle in docs/contracts/operation-step-up-contract.md. Reuse current credential/session validation and outbox/transaction primitives. Required real-PostgreSQL tests cover fresh credentials, exact bindings, concurrency/replay, expiry/revocation/restrictions, immutable SQL guards, rollback and unchanged session assurance. No HTTP/UI or production policy provider is enabled by this slice.
