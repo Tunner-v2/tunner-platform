@@ -110,6 +110,8 @@ public static class GovernanceApplication
         var allowValidatedP0Prerequisites = HasApprovedP0LocalIntegration(records);
         var next = new List<NextItem>();
         var integrationActions = new List<IntegrationAction>();
+        // A single assessment reuses identical prerequisite proof; new commands always start fresh.
+        var committedReadiness = new Dictionary<(string PrerequisiteId, string EffectiveState), bool>();
         var validation = (ValidationPayload)Validate(repository).Payload;
         diagnostics.AddRange(validation.Diagnostics);
 
@@ -137,7 +139,7 @@ public static class GovernanceApplication
                 continue;
             }
 
-            var reasons = ReadinessReasons(repository, record, workItems, dependencies, integrationPolicy, allowValidatedP0Prerequisites);
+            var reasons = ReadinessReasons(repository, record, workItems, dependencies, integrationPolicy, allowValidatedP0Prerequisites, committedReadiness);
             var revisionReasons = RevisionApplication.BlockingReasons(records, record);
             reasons.AddRange(revisionReasons);
             integrationActions.AddRange(PendingIntegrationActions(repository, record, workItems, dependencies, integrationPolicy));
@@ -648,7 +650,8 @@ public static class GovernanceApplication
         return failures.Distinct(StringComparer.Ordinal).ToArray();
     }
 
-    private static List<string> ReadinessReasons(DirectoryInfo repository, GovernanceRecord workItem, Dictionary<string, GovernanceRecord> workItems, IReadOnlyList<GovernanceRecord> dependencies, IntegrationPolicyDefinition integrationPolicy, bool allowValidatedP0Prerequisites)
+    private static List<string> ReadinessReasons(DirectoryInfo repository, GovernanceRecord workItem, Dictionary<string, GovernanceRecord> workItems, IReadOnlyList<GovernanceRecord> dependencies, IntegrationPolicyDefinition integrationPolicy, bool allowValidatedP0Prerequisites,
+        IDictionary<(string PrerequisiteId, string EffectiveState), bool>? committedReadiness = null)
     {
         var failures = new List<string>();
         foreach (var prerequisite in workItem.StringList("prerequisites"))
@@ -682,7 +685,13 @@ public static class GovernanceApplication
 
             // VALIDATION may satisfy local dependencies only with the same current source proof as LOCAL_VALIDATED.
             var effectiveState = readiness == "LOCAL_VALIDATED" ? "LOCAL_VALIDATED" : null;
-            if (!HasRequiredCommittedState(repository, prerequisiteRecord, effectiveState))
+            var proofKey = (prerequisiteRecord.Identifier, effectiveState ?? prerequisiteRecord.Scalar("status") ?? "UNKNOWN");
+            if (committedReadiness is null || !committedReadiness.TryGetValue(proofKey, out var hasCommittedState))
+            {
+                hasCommittedState = HasRequiredCommittedState(repository, prerequisiteRecord, effectiveState);
+                if (committedReadiness is not null) committedReadiness[proofKey] = hasCommittedState;
+            }
+            if (!hasCommittedState)
             {
                 failures.Add($"prerequisite '{prerequisite}' lacks valid committed-state readiness evidence");
             }

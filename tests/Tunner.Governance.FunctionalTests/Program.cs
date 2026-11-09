@@ -1026,6 +1026,39 @@ static void RunValidationSourceReadinessChecks(DirectoryInfo repositoryRoot, ICo
         Check(AuditCommittedFixture(fixture), "matching current proof must pass audit");
         Check(!OwnFailures().Any(x => x.Contains("committed", StringComparison.Ordinal) || x.Contains("owned behavior", StringComparison.Ordinal)), "matching source proof must satisfy own source gate");
 
+        // A second prerequisite cannot borrow another record's result merely because it names the same SHA/proof file.
+        WriteWorkItem(fixture, "TUN-ALIAS", "VALIDATION", "[]", false);
+        WriteWorkItem(fixture, "TUN-ALIAS-CONSUMER", "READY", "[TUN-ALIAS]");
+        var aliasPath = Path.Combine(fixture.FullName, "governance/work-items/TUN-ALIAS.yaml");
+        var aliasConsumerPath = Path.Combine(fixture.FullName, "governance/work-items/TUN-ALIAS-CONSUMER.yaml");
+        var aliasDependency = Path.Combine(fixture.FullName, "governance/dependencies/DEP-ALIAS.yaml");
+        EditRevision(aliasPath, "required_evidence", new[] { "governance/evidence/TUN-001-proof.json" });
+        EditRevision(aliasPath, "git_state", new
+        {
+            repository_changed = true, validated_commit_sha = candidate, tested_commit_sha = candidate,
+            work_item_commit_shas = new[] { candidate }, closure_commit_sha = (string?)null,
+            remaining_uncommitted_paths = Array.Empty<string>(), remaining_uncommitted_classification = "PREEXISTING_UNRELATED"
+        });
+        File.WriteAllText(aliasDependency, """
+            schema_version: 1
+            dependency_id: DEP-ALIAS
+            work_item_id: TUN-ALIAS-CONSUMER
+            prerequisite_work_item_id: TUN-ALIAS
+            required_readiness: LOCAL_VALIDATED
+            reason: Distinct source identity must not borrow cached proof
+            status: ACTIVE
+            evidence_refs: []
+            created_at: 2026-11-09T00:00:00Z
+            updated_at: 2026-11-09T00:00:00Z
+            """);
+        var scopedProofResults = (NextPayload)GovernanceApplication.Next(fixture).Payload;
+        Check(scopedProofResults.Items.Single(x => x.WorkItemId == "TUN-LOCAL").Actionable, "a bad alias must not poison another prerequisite with valid proof");
+        Check(!scopedProofResults.Items.Single(x => x.WorkItemId == "TUN-ALIAS-CONSUMER").Actionable, "another source identity at the same SHA must not borrow valid proof");
+        Check(scopedProofResults.Items.Single(x => x.WorkItemId == "TUN-ALIAS-CONSUMER").Reason.Contains("lacks valid committed-state", StringComparison.Ordinal), "every consumer retains its own source failure reason");
+        File.Delete(aliasPath);
+        File.Delete(aliasConsumerPath);
+        File.Delete(aliasDependency);
+
         File.WriteAllText(Path.Combine(fixture.FullName, "unrelated-user.txt"), "preserve unrelated work");
         State(candidate, ["unrelated-user.txt"]);
         RunGit(fixture, "add", "--", "governance/work-items/TUN-001.yaml");
