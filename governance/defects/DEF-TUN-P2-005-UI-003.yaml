@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "defect_id": "DEF-TUN-P2-005-UI-003",
+  "work_item_id": "TUN-P2-005",
+  "classification": "UI_ROUTING_DEFECT",
+  "severity": "SEV-3",
+  "status": "OPEN",
+  "environment": "Read-only review of204797f plus the paused staged/unstaged/untracked snapshot",
+  "description": "SPA Back-to-Login reuses bootstrap bound to the old cookie, so the next valid credential submission receives403. Refresh authoritative options before enabling Login on every route entry, fence stale asynchronous responses and preserve safe values.",
+  "expected_behavior_ref": "docs/authority/current/decisions/AMD-0009_URL_Addressable_Routing_and_Governed_Form_Validation.md",
+  "evidence": [
+    "governance/evidence/P2-001-007-REVIEW-FINDINGS-20261109.json"
+  ],
+  "affected_versions": [
+    "204797f9e147f5f3d942baf9074d05cdb2a1f6d7"
+  ],
+  "created_at": "2026-11-09T16:51:56.478Z",
+  "updated_at": "2026-11-09T16:51:56.478Z"
+}
