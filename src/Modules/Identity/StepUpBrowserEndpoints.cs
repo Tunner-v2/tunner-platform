@@ -47,8 +47,15 @@ internal sealed class StepUpBrowserService(IUserStepUpOperationSource owner, IAs
         var caller = Caller(context); var actor = new UserStepUpActor(caller); var operation = await owner.ResolveAsync(actor, context.RequestAborted).ConfigureAwait(false);
         if (!MatchesActor(operation, actor)) return Problem(404, "NOT_FOUND_OR_NOT_DISCLOSABLE");
         var csrf = antiforgery.GetAndStoreTokens(context).RequestToken;
-        if (operation!.Completed) return Results.Json(new { status = "COMPLETED", csrfToken = csrf });
-        var now = clock.GetUtcNow(); var auth = authenticationPolicies.RequireEffective(now); auth.Validate();
+        var now = clock.GetUtcNow();
+        if (operation!.Completed)
+        {
+            // A current owner result is not proof that an earlier dialog completed its own action.
+            Guid? requestId = TryBrowser(context, now, out var completedView) && completedView!.BindingDigest == Digest(operation)
+                ? completedView.RequestId : null;
+            return Results.Json(new { status = "COMPLETED", requestId, csrfToken = csrf });
+        }
+        var auth = authenticationPolicies.RequireEffective(now); auth.Validate();
         var policy = assurancePolicies.RequireEffective(operation.Binding.Scope, now, operation.ExpectedPolicyVersion);
         var presentation = presentations.RequirePublished(policy);
         var binding = Digest(operation);

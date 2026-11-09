@@ -29,3 +29,7 @@ After a lost success response or competing duplicate, the owner's already-commit
 This bridge is activated only when the owner operation source, assurance policy source and published presentation source are explicitly registered on the authenticated User BFF. Default and Admin surfaces remain unactivated. Production configuration is not synthesized. Local/browser/QA fixtures are explicitly synthetic and cannot serve as production policy or Product acceptance.
 
 The reusable dialog stays on its owning canonical screen and keeps OAuth/Product-origin state with the owner. Independent future screens require inventory/route guards. New password-detail composition and material visual states require the scoped AMD-0008 approval recorded in the browser review packet before final production UX implementation.
+
+## Completion recovery binding
+
+A completed options response includes requestId only when the current protected browser view matches the exact current actor/operation/policy digest and has not expired; otherwise requestId is null. A fresh owner view may show its authoritative completed status, but an already-open dialog must compare requestId with its original bootstrap identity before invoking onComplete. Another tab/session/operation completion or an expired/missing view cannot complete that earlier dialog. This status read still needs no new assurance challenge or presentation publication after the operation has committed. Password POST remains independently bound and revalidated before applying or reconciling its action.

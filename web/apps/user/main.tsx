@@ -68,7 +68,7 @@ function Registration({boot}:{boot:Bootstrap}) {
         }else accept(result,true);
       }else{const problem=await response.json() as Problem;if(!active)return;
         if(response.status===403||problem.error_code==='NOT_FOUND_OR_NOT_DISCLOSABLE'){
-          setOperation(undefined);if(pathname!=='/registration'&&pathname!=='/registration/')setError('registration.error.changed');move('register',true);
+          await restart(true);
         }else{setGuardFailed(true);setGuardBusy(false);}
       }
     }).catch(()=>{if(active){setGuardFailed(true);setGuardBusy(false);}});

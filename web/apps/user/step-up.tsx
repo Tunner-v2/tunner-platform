@@ -9,10 +9,11 @@ export interface StepUpBootstrap {status:'PENDING';requestId:string;csrfToken:st
 const pending=z.object({status:z.literal('PENDING'),requestId:z.uuid(),csrfToken:z.string().min(1),passwordMaximumLength:z.number().int().positive(),
   passwordAvailable:z.boolean(),locale:z.string().min(1),content:z.record(z.string(),z.object({key:z.string(),variantRef:z.string().min(1),versionRef:z.string().min(1),publicationRef:z.string().min(1),locale:z.string().min(1),state:z.literal('PUBLISHED'),text:z.string().min(1)}))});
 export function stepUpPasswordSchema(maximum:number){return z.object({password:z.string().refine(value=>Array.from(value).length>0&&Array.from(value).length<=maximum,'stepUp.error.password')});}
-export async function loadStepUpOptions(signal?:AbortSignal):Promise<StepUpBootstrap|{status:'COMPLETED'}>{
+const completed=z.object({status:z.literal('COMPLETED'),requestId:z.uuid().nullable()});
+export async function loadStepUpOptions(signal?:AbortSignal):Promise<StepUpBootstrap|{status:'COMPLETED';requestId:string|null}>{
   const response=await fetch('/authentication/step-up/options',{credentials:'same-origin',cache:'no-store',redirect:'error',...(signal?{signal}:{})});
   if(!response.ok)throw new Error('Step-up unavailable');
-  const raw:unknown=await response.json();if(z.object({status:z.literal('COMPLETED')}).safeParse(raw).success)return {status:'COMPLETED'};
+  const raw:unknown=await response.json();const done=completed.safeParse(raw);if(done.success)return done.data;
   const result=pending.parse(raw);
   if(keys.some(key=>{const item=result.content['stepUp.'+key];return !item||item.key!=='stepUp.'+key||item.locale!==result.locale;}))throw new Error('Step-up publication unavailable');
   return result;
@@ -52,8 +53,8 @@ function Dialog({bootstrap,onComplete,onCancel,returnFocusTo}:StepUpDialogProps)
       try{
         const current=await loadStepUpOptions(controller.current.signal);
         if(closed.current)return;
-        if(current.status==='COMPLETED'){complete();return;}
         if(current.requestId!==bootstrap.requestId){changed();return;}
+        if(current.status==='COMPLETED'){complete();return;}
       }catch{/* Keep the original owner/view binding and allow only an explicit safe retry. */}
       if(!closed.current)setError('stepUp.error.unavailable');
     }finally{if(!closed.current){setPassword('');form.reset();}}
