@@ -100,7 +100,7 @@ public sealed class StepUpBrowserTests(IdentityPostgresFixture fixture) : IClass
         var json = await first.Content.ReadFromJsonAsync<JsonElement>(); var cookies = Merge(signed,first);
         var cookie = Assert.Single(first.Headers.GetValues("Set-Cookie"),x=>x.StartsWith(StepUpBrowserEndpoints.CookieName+"=",StringComparison.Ordinal));
         Assert.Contains("secure",cookie,StringComparison.OrdinalIgnoreCase);Assert.Contains("httponly",cookie,StringComparison.OrdinalIgnoreCase);Assert.Contains("samesite=strict",cookie,StringComparison.OrdinalIgnoreCase);
-        Assert.Equal("no-store",first.Headers.CacheControl?.ToString()); Assert.Equal("no-referrer",Assert.Single(first.Headers.GetValues("Referrer-Policy")));
+        Assert.True(first.Headers.CacheControl?.NoStore); Assert.Equal("no-referrer",Assert.Single(first.Headers.GetValues("Referrer-Policy")));
         Assert.True(json.GetProperty("passwordAvailable").GetBoolean()); Assert.DoesNotContain("fixture-resource",await first.Content.ReadAsStringAsync());
         var boot = await Options(host,cookies); Assert.Equal(json.GetProperty("requestId").GetGuid(),boot.RequestId);
         var command = new { requestId=boot.RequestId,password=Password };

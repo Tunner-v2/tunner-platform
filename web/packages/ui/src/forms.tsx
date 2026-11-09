@@ -1,5 +1,5 @@
-import { useRef, useState } from 'react';
-import type { FormEvent, ReactNode } from 'react';
+import { useLayoutEffect, useRef, useState } from 'react';
+import type { FocusEvent, FormEvent, ReactNode } from 'react';
 import type { ZodType } from 'zod';
 import { ContentText } from './content';
 export { z } from 'zod';
@@ -28,9 +28,22 @@ export function useTunnerForm<T extends Record<string, unknown>>(schema: ZodType
   const [submitted, setSubmitted] = useState(false);
   const [submitPending, setSubmitPending] = useState(false);
   const inFlight = useRef(false);
+  const invalidFocus = useRef<{form:HTMLFormElement;errors:FieldErrors<T>}|null>(null);
+  const [focusRequest,setFocusRequest] = useState(0);
+  useLayoutEffect(()=>{
+    const pending=invalidFocus.current;invalidFocus.current=null;
+    if(!pending?.form.isConnected)return;
+    const first=Array.from(pending.form.elements).find(element=>element instanceof HTMLElement&&
+      'name' in element&&typeof element.name==='string'&&pending.errors[element.name as Extract<keyof T,string>]);
+    if(first instanceof HTMLElement)first.focus();
+  },[focusRequest]);
   const result = validateTunnerForm(schema, values);
   const errors = Object.fromEntries(Object.entries(result.errors).filter(([name]) => submitted || touched[name])) as FieldErrors<T>;
-  function onBlur(name: Extract<keyof T, string>) { setTouched(current => ({ ...current, [name]: true })); }
+  function onBlur(name: Extract<keyof T, string>, event?:FocusEvent<HTMLElement>) {
+    // A form button owns the next submit/reset/action. Avoid moving it between pointerdown and click.
+    if(event?.relatedTarget instanceof HTMLButtonElement&&event.currentTarget.closest('form')===event.relatedTarget.form)return;
+    setTouched(current=>({...current,[name]:true}));
+  }
   function reset() { setTouched({}); setSubmitted(false); }
   async function handleSubmit(event: FormEvent<HTMLFormElement>, onValid: (data: T) => void | Promise<void>) {
     event.preventDefault();
@@ -38,13 +51,8 @@ export function useTunnerForm<T extends Record<string, unknown>>(schema: ZodType
     setSubmitted(true);
     const checked = validateTunnerForm(schema, values);
     if (!checked.valid) {
-      const form = event.currentTarget;
-      requestAnimationFrame(() => {
-        if (!form.isConnected) return;
-        const first = Array.from(form.elements).find(element => element instanceof HTMLElement &&
-          'name' in element && typeof element.name === 'string' && checked.errors[element.name as Extract<keyof T, string>]);
-        if (first instanceof HTMLElement) first.focus();
-      });
+      invalidFocus.current={form:event.currentTarget,errors:checked.errors};
+      setFocusRequest(current=>current+1);
       return;
     }
     inFlight.current = true; setSubmitPending(true);

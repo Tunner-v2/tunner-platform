@@ -10,3 +10,6 @@ export { z, validateTunnerForm, useTunnerForm, FieldError, FormErrorSummary } fr
 export type { FieldErrors, FormValidation } from './forms';
 
 export { navigatePath, usePathname, useRouteLocation } from './navigation';
+
+export { ModalDialog } from './dialog';
+export type { ModalDialogProps } from './dialog';

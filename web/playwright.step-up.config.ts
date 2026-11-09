@@ -1,0 +1,2 @@
+import { defineConfig } from '@playwright/test';
+export default defineConfig({outputDir:'test-results/runs/step-up',testDir:'./tests/step-up',fullyParallel:false,workers:1,reporter:[['list'],['json',{outputFile:'test-results/step-up/results.json'}]],use:{baseURL:'http://127.0.0.1:5192',viewport:{width:1440,height:1100},channel:'msedge'},webServer:{command:'node node_modules/vite/bin/vite.js --config fixtures/step-up/vite.config.ts',url:'http://127.0.0.1:5192/browser-testing/step-up-assets/',reuseExistingServer:process.env.TUNNER_STEP_UP_REUSE_FIXTURE==='1',timeout:30000}});

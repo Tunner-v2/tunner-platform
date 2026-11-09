@@ -58,6 +58,12 @@ try
         builder.Services.AddSingleton<IAuthenticationPolicySource>(new AuthenticationPolicyCatalog([new(authenticationMetadata, authenticationPolicy)]));
         builder.Services.AddSingleton<IAccountAuthenticationAccessSource, BrowserTestAuthenticationAccess>();
         builder.Services.AddSingleton<IAuthenticationPresentationSource>(new BrowserTestAuthenticationPresentation(origin));
+        builder.Services.AddScoped<IUserStepUpOperationSource, BrowserTestStepUpOperations>();
+        builder.Services.AddSingleton<IStepUpPresentationSource, BrowserTestStepUpPresentation>();
+        var stepUpPolicy = new AssurancePolicyVersion(new(BrowserTestStepUpOperations.PolicyVersion, "ACTIVE", BrowserTestStepUpOperations.Scope,
+            new EffectivePolicyInterval(DateTimeOffset.UtcNow.AddDays(-1), true, null, false), null, ["SYNTHETIC-LOCAL-TEST-ONLY"]),
+            "test-only-password-assurance", TimeSpan.FromMinutes(1), new Dictionary<string,string> { ["pwd"] = "test-only-password-assurance" });
+        builder.Services.AddSingleton<IAssurancePolicySource>(new AssurancePolicyCatalog([stepUpPolicy]));
         builder.Services.AddSingleton(new AuthenticationPartitionKey(RandomNumberGenerator.GetBytes(32)));
         builder.Services.AddSingleton<IRegistrationPolicySource>(new RegistrationPolicyCatalog([new(metadata, policy)]));
         builder.Services.AddSingleton<IAccountAgePolicySource>(age);
@@ -82,7 +88,12 @@ try
             .UseNpgsql(connectionString, database => database.MigrationsAssembly(typeof(TunnerMigrationsDbContextFactory).Assembly.FullName)).Options))
             await platform.Database.MigrateAsync();
         await using (var scope = app.Services.CreateAsyncScope())
-            await scope.ServiceProvider.GetRequiredService<IdentityPersistenceDbContext>().Database.MigrateAsync();
+        {
+            var database = scope.ServiceProvider.GetRequiredService<IdentityPersistenceDbContext>();
+            await database.Database.MigrateAsync();
+            await database.Database.ExecuteSqlRawAsync(BrowserTestStepUpOperations.Schema);
+        }
+        BrowserTestStepUpAssets.Map(app);
         app.MapGet("/browser-testing/status", () => new { mode = config.Mode, instanceId = config.InstanceId, ready = true }).AllowAnonymous();
         // Explicit local test notices; these are not published legal or support documents.
         app.MapGet("/browser-testing/{notice}", () => Results.Text("Isolated browser test fixture only. No legal document or production policy is published here.")).AllowAnonymous();

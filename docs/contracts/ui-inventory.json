@@ -30,6 +30,11 @@
       "id": "product-self-service",
       "status": "PLANNED",
       "source_root": null
+    },
+    {
+      "id": "step-up-fixture",
+      "status": "TEST_FIXTURE",
+      "source_root": "web/fixtures/step-up"
     }
   ],
   "items": [
@@ -1674,6 +1679,150 @@
       "design_status": "PRODUCT_OWNER_APPROVED_SNAPSHOT_FIGMA_BACKFILL_DEFERRED",
       "visual_state": "PRODUCT_OWNER_APPROVED_CURRENT_IMPLEMENTATION",
       "acceptance_boundary": "Current implemented P2-005 visuals explicitly approved by the Product Owner. Figma backfill is a nonblocking owner TODO under the scoped exception; no Figma update or new frame ID is claimed. Future features/screens retain their own authority and approval."
+    },
+    {
+      "module": "Identity.StepUp",
+      "owner_scopes": [
+        "TUN-P2-006",
+        "P1-018-RV003"
+      ],
+      "authority_refs": [
+        "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md",
+        "docs/authority/current/decisions/AMD-0008_Approved_Figma_Visual_Fidelity_and_Product_Owner_UX_Consent.md",
+        "docs/authority/current/decisions/AMD-0009_URL_Addressable_Routing_and_Governed_Form_Validation.md"
+      ],
+      "figma_refs": [
+        {
+          "file_key": "apNbwvAgdn1xIxYH1oiaSC",
+          "node_id": "98:27"
+        },
+        {
+          "file_key": "apNbwvAgdn1xIxYH1oiaSC",
+          "node_id": "70:1257"
+        }
+      ],
+      "source_paths": [
+        "web/apps/user/step-up.tsx",
+        "web/apps/user/step-up.css",
+        "web/packages/ui/src/dialog.tsx",
+        "web/packages/ui/src/forms.tsx",
+        "src/Modules/Identity/StepUpBrowserEndpoints.cs",
+        "src/Modules/Identity/StepUpApplication.cs"
+      ],
+      "guard": "Current User server session and trusted owner action; protected view binding, exact policy and operation checks; no browser-selected authority or general session upgrade.",
+      "observed_defects": [],
+      "consent_ref": "governance/evidence/TUN-P2-006-VISUAL-CONSENT-20261108.json",
+      "design_status": "PRODUCT_OWNER_APPROVED_SCOPED_ADAPTATIONS",
+      "visual_state": "IMPLEMENTATION_REQUIRES_CURRENT_RENDERED_EVIDENCE",
+      "acceptance_boundary": "Reusable Identity dialog with explicitly approved password detail and states. Owner integration must opt in; actual production policy/content is not synthesized. Local demonstration is a test fixture and changes no account settings.",
+      "id": "COMP-STEP-UP",
+      "kind": "COMPONENT",
+      "status": "IMPLEMENTED",
+      "app": "user",
+      "title": "Confirm identity for the current action",
+      "pathname": null,
+      "runtime_pathname": null,
+      "form_ids": [
+        "FORM-STEP-UP"
+      ],
+      "interaction": "Same-screen native modal; owner canonical pathname and safe OAuth/Product context remain unchanged."
+    },
+    {
+      "module": "Identity.StepUp",
+      "owner_scopes": [
+        "TUN-P2-006",
+        "P1-018-RV003"
+      ],
+      "authority_refs": [
+        "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md",
+        "docs/authority/current/decisions/AMD-0008_Approved_Figma_Visual_Fidelity_and_Product_Owner_UX_Consent.md",
+        "docs/authority/current/decisions/AMD-0009_URL_Addressable_Routing_and_Governed_Form_Validation.md"
+      ],
+      "figma_refs": [
+        {
+          "file_key": "apNbwvAgdn1xIxYH1oiaSC",
+          "node_id": "98:27"
+        },
+        {
+          "file_key": "apNbwvAgdn1xIxYH1oiaSC",
+          "node_id": "70:1257"
+        }
+      ],
+      "source_paths": [
+        "web/apps/user/step-up.tsx",
+        "web/apps/user/step-up.css",
+        "web/packages/ui/src/dialog.tsx",
+        "web/packages/ui/src/forms.tsx",
+        "src/Modules/Identity/StepUpBrowserEndpoints.cs",
+        "src/Modules/Identity/StepUpApplication.cs",
+        "web/fixtures/step-up",
+        "tools/browser-testing/BrowserTestStepUp.cs"
+      ],
+      "guard": "Current User server session and trusted owner action; protected view binding, exact policy and operation checks; no browser-selected authority or general session upgrade.",
+      "observed_defects": [],
+      "consent_ref": "governance/evidence/TUN-P2-006-VISUAL-CONSENT-20261108.json",
+      "design_status": "PRODUCT_OWNER_APPROVED_SCOPED_ADAPTATIONS",
+      "visual_state": "IMPLEMENTATION_REQUIRES_CURRENT_RENDERED_EVIDENCE",
+      "acceptance_boundary": "Development-only carrier for the approved dialog. Guarded direct entry redirects to /login; static test explanation is not a Product screen or new Account feature.",
+      "id": "DEV-STEP-UP",
+      "kind": "SCREEN",
+      "status": "TEST_FIXTURE",
+      "app": "step-up-fixture",
+      "title": "Isolated identity verification test",
+      "pathname": "/browser-testing/step-up",
+      "runtime_pathname": "/browser-testing/step-up",
+      "parameter_schema": {},
+      "form_ids": [
+        "FORM-STEP-UP"
+      ]
+    },
+    {
+      "module": "Identity.StepUp",
+      "owner_scopes": [
+        "TUN-P2-006",
+        "P1-018-RV003"
+      ],
+      "authority_refs": [
+        "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md",
+        "docs/authority/current/decisions/AMD-0008_Approved_Figma_Visual_Fidelity_and_Product_Owner_UX_Consent.md",
+        "docs/authority/current/decisions/AMD-0009_URL_Addressable_Routing_and_Governed_Form_Validation.md"
+      ],
+      "figma_refs": [
+        {
+          "file_key": "apNbwvAgdn1xIxYH1oiaSC",
+          "node_id": "98:27"
+        },
+        {
+          "file_key": "apNbwvAgdn1xIxYH1oiaSC",
+          "node_id": "70:1257"
+        }
+      ],
+      "source_paths": [
+        "web/apps/user/step-up.tsx",
+        "web/apps/user/step-up.css",
+        "web/packages/ui/src/dialog.tsx",
+        "web/packages/ui/src/forms.tsx",
+        "src/Modules/Identity/StepUpBrowserEndpoints.cs",
+        "src/Modules/Identity/StepUpApplication.cs"
+      ],
+      "guard": "Current User server session and trusted owner action; protected view binding, exact policy and operation checks; no browser-selected authority or general session upgrade.",
+      "observed_defects": [],
+      "consent_ref": "governance/evidence/TUN-P2-006-VISUAL-CONSENT-20261108.json",
+      "design_status": "PRODUCT_OWNER_APPROVED_SCOPED_ADAPTATIONS",
+      "visual_state": "IMPLEMENTATION_REQUIRES_CURRENT_RENDERED_EVIDENCE",
+      "acceptance_boundary": "Reusable Identity dialog with explicitly approved password detail and states. Owner integration must opt in; actual production policy/content is not synthesized. Local demonstration is a test fixture and changes no account settings.",
+      "id": "FORM-STEP-UP",
+      "kind": "FORM",
+      "status": "IMPLEMENTED",
+      "app": "user",
+      "title": "Current-password verification",
+      "screen_id": "COMP-STEP-UP",
+      "pathname": null,
+      "runtime_pathname": null,
+      "fields": [
+        "password"
+      ],
+      "backend_validation": "Independent bounded strict JSON, current credential/policy length/abuse, actor/session/origin/view/operation/version binding, current restrictions, one-use proof and atomic owner mutation/ledger. Password is cleared after submission and never stored in browser storage or URLs."
     }
   ],
   "excluded_historical_designs": [
@@ -1683,5 +1832,5 @@
       "reason": "Hidden historical DOB-only screen, superseded prospectively by PDR-0011/AMD-0007; never implement as active UI."
     }
   ],
-  "updated_at": "2026-10-21T19:14:37.021Z"
+  "updated_at": "2026-11-09T05:16:25.824Z"
 }

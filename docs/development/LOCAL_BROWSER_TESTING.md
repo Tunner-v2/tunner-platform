@@ -53,3 +53,9 @@ No production BFF composition, approved Figma layout or business workflow is cha
 ## Validation
 
 The dedicated browser suite uses real HTTPS requests, real PostgreSQL migrations and SMTP delivery into Mailpit; it does not mock registration responses. It also verifies original origin/CSRF guards. The PowerShell safety suite verifies port collision handling, PID protection, exact TLS pinning, Production refusal and isolated services. Committed results and source SHAs are recorded in governance/evidence/TUN-P2-004-BROWSER-STARTER-VALIDATION.json.
+
+## Operation-bound identity verification test
+
+After signing in, open the printed identity-verification test address, normally https://localhost:24443/browser-testing/step-up. Select Verify identity, then Other method, and enter the same current password. Passkey/Authenticator choices remain unavailable until their own governed implementations. Back/Cancel apply no action. Wrong, empty or excessive passwords cannot authorize the action; pending submission blocks duplicates.
+
+A successful real User BFF verification records one synthetic result for this signed-in session in browser_testing.step_up_results, together with one-use Identity proof/outbox state. It changes no Account settings or Product entitlement. Reload or a lost success response reconciles that committed result instead of repeating the action. A new sign-in session provides a new isolated test operation. The real HTTPS/session/origin/CSRF, versioned policy and one-use transaction boundaries are exercised; fixture policy/content remains explicitly synthetic, and no raw proof is exposed to browser script or URLs. No production step-up policy/provider is enabled by this tool.

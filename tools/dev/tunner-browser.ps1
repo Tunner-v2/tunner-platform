@@ -114,6 +114,7 @@ function Show-BrowserAddresses {
     param($State)
     Write-Host ('Application: https://localhost:' + $State.ApplicationPort + '/registration')
     Write-Host ('Sign-in test: https://localhost:' + $State.ApplicationPort + '/login')
+    Write-Host ('Identity verification test (sign in first): https://localhost:' + $State.ApplicationPort + '/browser-testing/step-up')
     Write-Host ('Verification inbox: http://127.0.0.1:' + $State.MailpitPort)
     Write-Host ('PostgreSQL: 127.0.0.1:' + $State.PostgresPort + ' -> container 5432; database tunner_browser_testing')
     Write-Host 'ISOLATED LOCAL TEST DATA ONLY. Registration, verification, Personal Information and password sign-in/sign-out are available for isolated engineering testing. Production visual acceptance and later P2 features remain pending.'
