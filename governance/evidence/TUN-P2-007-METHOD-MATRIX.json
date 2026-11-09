@@ -1,0 +1,64 @@
+{
+  "schema_version": 1,
+  "scope_id": "TUN-P2-007",
+  "result": "REMAINING_AUTHENTICATOR_PROOF_INTEGRATION_REQUIRED",
+  "recorded_at": "2026-11-09T17:29:58.164Z",
+  "authority_resolution": {
+    "outcome": "RESOLVED_EXISTING_AUTHORITY",
+    "classification": "BACKLOG_OWNERSHIP_REFINEMENT_REQUIRED",
+    "reviewer": "p2_business_arch_qa",
+    "source_refs": [
+      "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md",
+      "docs/authority/current/development/11_Development_Planes_Milestones_and_P0_Backlog.md",
+      "docs/authority/current/development/32_Domain_API_Event_Data_and_Policy_Contract_Catalog.md",
+      "docs/development/P2_ACCOUNT_IDENTITY_REFINEMENT.md",
+      "docs/development/P2_006_UI_AUTHORITY_REVIEW.md",
+      "docs/contracts/operation-step-up-contract.md"
+    ],
+    "figjam": {
+      "file_key": "bdJwXt1U7n3iyluSD21OYK",
+      "node_ids": [
+        "79:5515",
+        "79:5539",
+        "79:5551",
+        "79:5554"
+      ]
+    },
+    "finding": "P2-006 password-only vertical proof slice defers other methods to their authenticator work items, not indefinitely or to P2-017 conformance. Full007/P2 requires the operation-bound passkey adapter; TOTP belongs008 and provider reauthentication010. No new Product authority or runtime assurance mapping is invented."
+  },
+  "methods": [
+    {
+      "method": "PASSWORD",
+      "primary_owner": "TUN-P2-005",
+      "operation_proof_owner": "TUN-P2-006",
+      "status": "IMPLEMENTED_CURRENT_SOURCE_REFRESH_PENDING"
+    },
+    {
+      "method": "PASSKEY",
+      "primary_owner": "TUN-P2-007",
+      "operation_proof_owner": "TUN-P2-007",
+      "status": "PRIMARY_VERTICAL_CANDIDATE_PRELIMINARY41_PASS; OPERATION_PROOF_REQUIRED_NEXT",
+      "todo": "TODO-TUN-P2-007-STEPUP001"
+    },
+    {
+      "method": "TOTP",
+      "operation_proof_owner": "TUN-P2-008",
+      "status": "PLANNED_REQUIRED_METHOD_INTEGRATION",
+      "todo": "TODO-TUN-P2-008-STEPUP001"
+    },
+    {
+      "method": "GOOGLE_MICROSOFT_FEDERATION",
+      "primary_owner": "TUN-P2-010",
+      "operation_proof_owner": "TUN-P2-010",
+      "status": "PLANNED_POLICY_ELIGIBLE_FRESH_PROOF_PATH",
+      "todo": "TODO-TUN-P2-010-STEPUP001"
+    }
+  ],
+  "invariants": [
+    "Reuse shared proof issuance/consumption/owner transaction and native method verifiers; no parallel assurance, session or crypto authority.",
+    "An implemented primary sign-in method is not automatically operation-bound proof. Exact actor/session/operation/resource/version/context/policy and current fact mapping remain authoritative.",
+    "Never require an unauthorized new password for a passwordless federated Account. Implement a policy-eligible fresh proof path and fail closed when no approved mapping exists.",
+    "No passkey/TOTP/federated assurance is assumed from method name alone; mappings remain approved owner configuration."
+  ],
+  "acceptance": "Current primary passkey component can be committed/tested;007 remains IN_PROGRESS until mandatory passkey proof adapter and full applicable gates pass. P2-017 validates conformance and does not substitute for feature implementation."
+}

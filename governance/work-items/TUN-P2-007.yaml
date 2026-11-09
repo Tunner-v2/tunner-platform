@@ -38,7 +38,8 @@
   "acceptance_criteria": [
     "Implement WebAuthn/passkey ceremonies under approved relying-party/origin and security policy configuration.",
     "Keep credentials inactive until successful ceremony, retain public metadata only, and require authorized step-up for mutations.",
-    "Never receive/log passkey private material; use current primary-source standards/framework evidence."
+    "Never receive/log passkey private material; use current primary-source standards/framework evidence.",
+    "Implement actual policy-eligible passkey verification through shared exact-operation proof issuance/consumption and owner transaction before full P2-007 acceptance; primary authentication alone is insufficient."
   ],
   "prerequisites": [
     "TUN-P2-003",
@@ -77,7 +78,8 @@
   "required_tests": [
     "ceremony origin/challenge/replay failures",
     "inactive enrollment and credential revocation",
-    "cross-browser accessible approved ceremony UI"
+    "cross-browser accessible approved ceremony UI",
+    "passkey operation proof valid/wrong-binding/replay/expiry/policy/concurrency/rollback/unknown browser recovery, preserving password consumers"
   ],
   "required_evidence": [
     "governance/evidence/TUN-P2-007-VALIDATION.json",
@@ -87,11 +89,13 @@
     "governance/evidence/TUN-P2-007-STARTUP-REVIEWS.json",
     "governance/evidence/TUN-P2-007-ROLE-REVIEWS.json",
     "governance/evidence/TUN-P2-007-UI-PROPOSAL.json",
-    "governance/evidence/TUN-P2-007-SECURITY-REVIEW.json"
+    "governance/evidence/TUN-P2-007-SECURITY-REVIEW.json",
+    "governance/evidence/TUN-P2-007-METHOD-MATRIX.json"
   ],
   "context_policy": "TASK",
   "todos": [
-    "TODO-TUN-P2-007-DESIGN001"
+    "TODO-TUN-P2-007-DESIGN001",
+    "TODO-TUN-P2-007-STEPUP001"
   ],
   "defects": [
     "DEF-TUN-P2-007-DATA-001",
@@ -99,6 +103,6 @@
     "DEF-TUN-P2-007-SEC-001"
   ],
   "created_at": "2026-10-16T17:48:49.296Z",
-  "updated_at": "2026-11-09T17:18:34.136Z",
+  "updated_at": "2026-11-09T17:29:58.164Z",
   "ui_evidence_ref": "governance/evidence/TUN-P2-007-UI-COMPLIANCE.json"
 }
