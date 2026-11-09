@@ -1,0 +1,17 @@
+# P2-006 development handoff
+
+Branch: codex/p2-006-assurance-20261108. Work item TUN-P2-006 is IN_PROGRESS; full feature and milestone acceptance remain pending. Security/development-stack PR21 remains separately based on main; it is draft with automatic merge disabled. No Figma/Drive documentation edits or production release.
+
+Implemented at6e3552234a0cb93ce22d7e1e8d5194de459a7486: src/Modules/Identity/AssurancePolicy.cs and tests/Tunner.Identity.Persistence.Tests/AssurancePolicyTests.cs. Private immutable operation/context scope, approved version metadata, explicit method-to-assurance mappings and policy lifetime. Uses existing EffectivePolicyVersionResolver and VERSION_CONFLICT contract. Missing/draft/ambiguous/out-of-scope/stale expected versions fail closed. Caller dictionaries/catalog inputs are snapshotted; no level ordering, timeouts or production policy values are guessed.
+
+Actual focused .NET run:13 passed,0 failed,0 skipped;12 new assurance-policy cases plus1 existing authentication-policy regression. All referenced projects compile with0 warnings/errors. First analyzer failure retained and corrected. Scope-only source-bound receipt: governance/evidence/p2-006-policy-20261108/receipt.json. This does not implement fresh proof issuance/consumption, a new browser screen or complete P2-006.
+
+Next exact action: add persistent fresh-authentication proof bound to Account/session/BFF/origin, operation/resource/expected version/context, effective policy and lifetime; consume it atomically once with current session/restriction validation and replay/concurrency tests. Then integrate the sensitive-operation BFF/UI path after actual Figma/presentation authority review. Do not turn a step-up into a general session upgrade. Real approved policy evidence is required before production paths are enabled.
+
+Existing browser flow remains ready: https://localhost:24443/registration, verification inbox http://127.0.0.1:28025, password login /login. Synthetic local testing covers registration -> email verification -> Personal Information -> Account Ready -> password login -> sign-out. Google/Microsoft federation, passkeys/TOTP/recovery and later Account Center flows remain separate pending P2 items.
+
+User explicitly stopped custom LGTM rebuild work. Development default is prebuilt grafana/otel-lgtm:0.38.1 at exact0df9bc14142000b161344bd24caf6ddd319b7319055aedaf9b0692b125730af7, with prior41-check compatibility evidence. Vulnerability findings remain release-blocking in P1-RV001. Required image security gates are not waived. Removed16 unused Tunner image references; all other projects' references and all containers/volumes were verified preserved. Cleanup receipt: governance/evidence/P1-RV001-001-UNUSED-IMAGE-CLEANUP-20261108.json.
+
+Preserve the13 pre-existing dirty paths recorded in artifacts/p2-005-auth-20261021/preserved-dirty-before.json. Isolated native context: artifacts/p2-006-assurance-20261108/context. Startup reviews apply all10 activated contracts and are executing-agent scope reviews, not final UI/Product/release acceptance. Keep TUN-P2-006-VALIDATION.json absent until the complete required scope actually passes.
+
+Storage follow-up: two unused, unshared caches explicitly named tunner-lgtm-go1273-mod/build were removed with exact ID/type/description filters. Docker reported17.857GB reclaimed; every image reference was checked intact. No shared caches, containers, volumes or host disk settings were changed. Receipt: governance/evidence/P1-RV001-001-UNUSED-CACHE-CLEANUP-20261108.json.
