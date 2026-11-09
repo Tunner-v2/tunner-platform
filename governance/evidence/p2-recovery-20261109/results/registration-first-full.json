@@ -1,0 +1,1072 @@
+{
+  "config": {
+    "argv": [
+      "<node-executable>",
+      "<repo-root>\\web\\node_modules\\@playwright\\test\\cli.js",
+      "test",
+      "--config",
+      "playwright.registration.config.ts"
+    ],
+    "configFile": "<repo-root>\\web\\playwright.registration.config.ts",
+    "rootDir": "<repo-root>/web/tests/registration",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "<repo-root>/web/test-results/runs/registration",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "<repo-root>/web/tests/registration",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "test-results/registration/results.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.62.1",
+    "workers": 1,
+    "webServer": {
+      "command": "node node_modules/vite/bin/vite.js --config apps/user/vite.config.ts",
+      "url": "http://127.0.0.1:5189/registration/",
+      "reuseExistingServer": false,
+      "timeout": 30000
+    }
+  },
+  "suites": [
+    {
+      "title": "global-compliance.spec.ts",
+      "file": "global-compliance.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "all five canonical screens: direct entry refresh guard and responsive reference at 1440",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 16769,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m0\u001b[39m\nReceived: \u001b[31m3\u001b[39m",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m0\u001b[39m\nReceived: \u001b[31m3\u001b[39m\n    at <repo-root>\\web\\tests\\registration\\global-compliance.spec.ts:29:18",
+                    "location": {
+                      "file": "<repo-root>\\web\\tests\\registration\\global-compliance.spec.ts",
+                      "column": 18,
+                      "line": 29
+                    },
+                    "snippet": "  27 |     await accessible(page,'global-'+stage+'-'+width);\n  28 |    });\n> 29 |   }expect(posts).toBe(0);\n     |                  ^\n  30 |  });\n  31 |  test('FORM-REGISTRATION empty invalid corrected and server-rejected states at '+width,async({page})=>{\n  32 |   await page.setViewportSize({width,height:1024});let posts=0;let reject=true;await page.route('**/registration/register',async route=>{posts++;await sleep(150);await route.fulfill(reject?{status:400,json:{error_code:'VALIDATION_ERROR',detail:'private-server-detail'}}:{status:202,json:pending()});});await boot(page);"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "<repo-root>\\web\\tests\\registration\\global-compliance.spec.ts",
+                        "column": 18,
+                        "line": 29
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m0\u001b[39m\nReceived: \u001b[31m3\u001b[39m\n\n  27 |     await accessible(page,'global-'+stage+'-'+width);\n  28 |    });\n> 29 |   }expect(posts).toBe(0);\n     |                  ^\n  30 |  });\n  31 |  test('FORM-REGISTRATION empty invalid corrected and server-rejected states at '+width,async({page})=>{\n  32 |   await page.setViewportSize({width,height:1024});let posts=0;let reject=true;await page.route('**/registration/register',async route=>{posts++;await sleep(150);await route.fulfill(reject?{status:400,json:{error_code:'VALIDATION_ERROR',detail:'private-server-detail'}}:{status:202,json:pending()});});await boot(page);\n    at <repo-root>\\web\\tests\\registration\\global-compliance.spec.ts:29:18"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "steps": [
+                    {
+                      "title": "U-AUTH-02",
+                      "duration": 4116
+                    },
+                    {
+                      "title": "U-AUTH-03",
+                      "duration": 3233
+                    },
+                    {
+                      "title": "U-AUTH-03A",
+                      "duration": 2993
+                    },
+                    {
+                      "title": "U-AUTH-CONSENT",
+                      "duration": 1993
+                    },
+                    {
+                      "title": "U-AUTH-RESULT",
+                      "duration": 2140
+                    }
+                  ],
+                  "startTime": "2026-11-09T11:09:32.081Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "<repo-root>\\web\\test-results\\runs\\registration\\global-compliance-all-five-0bf1d-esponsive-reference-at-1440\\error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "<repo-root>\\web\\tests\\registration\\global-compliance.spec.ts",
+                    "column": 18,
+                    "line": 29
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "4e6eee3594540d193522-744edcfb9e73e2b452a2",
+          "file": "global-compliance.spec.ts",
+          "line": 18,
+          "column": 2
+        },
+        {
+          "title": "FORM-REGISTRATION empty invalid corrected and server-rejected states at 1440",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 5110,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-09T11:09:53.575Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "4e6eee3594540d193522-6b2cb66b9830d7bc5476",
+          "file": "global-compliance.spec.ts",
+          "line": 31,
+          "column": 2
+        },
+        {
+          "title": "FORM-VERIFY-EMAIL empty format correction server rejection and guarded transition at 1440",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3976,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-09T11:09:59.366Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "4e6eee3594540d193522-b2783abfc5bb4ec64ade",
+          "file": "global-compliance.spec.ts",
+          "line": 41,
+          "column": 2
+        },
+        {
+          "title": "FORM-PERSONAL-INFORMATION required calendar safe correction preserved names and server errors at 1440",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 4515,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-09T11:10:03.372Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "4e6eee3594540d193522-235a3c18d7ada1a2cec0",
+          "file": "global-compliance.spec.ts",
+          "line": 50,
+          "column": 2
+        },
+        {
+          "title": "all five canonical screens: direct entry refresh guard and responsive reference at 768",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 12741,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m0\u001b[39m\nReceived: \u001b[31m3\u001b[39m",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m0\u001b[39m\nReceived: \u001b[31m3\u001b[39m\n    at <repo-root>\\web\\tests\\registration\\global-compliance.spec.ts:29:18",
+                    "location": {
+                      "file": "<repo-root>\\web\\tests\\registration\\global-compliance.spec.ts",
+                      "column": 18,
+                      "line": 29
+                    },
+                    "snippet": "  27 |     await accessible(page,'global-'+stage+'-'+width);\n  28 |    });\n> 29 |   }expect(posts).toBe(0);\n     |                  ^\n  30 |  });\n  31 |  test('FORM-REGISTRATION empty invalid corrected and server-rejected states at '+width,async({page})=>{\n  32 |   await page.setViewportSize({width,height:1024});let posts=0;let reject=true;await page.route('**/registration/register',async route=>{posts++;await sleep(150);await route.fulfill(reject?{status:400,json:{error_code:'VALIDATION_ERROR',detail:'private-server-detail'}}:{status:202,json:pending()});});await boot(page);"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "<repo-root>\\web\\tests\\registration\\global-compliance.spec.ts",
+                        "column": 18,
+                        "line": 29
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m0\u001b[39m\nReceived: \u001b[31m3\u001b[39m\n\n  27 |     await accessible(page,'global-'+stage+'-'+width);\n  28 |    });\n> 29 |   }expect(posts).toBe(0);\n     |                  ^\n  30 |  });\n  31 |  test('FORM-REGISTRATION empty invalid corrected and server-rejected states at '+width,async({page})=>{\n  32 |   await page.setViewportSize({width,height:1024});let posts=0;let reject=true;await page.route('**/registration/register',async route=>{posts++;await sleep(150);await route.fulfill(reject?{status:400,json:{error_code:'VALIDATION_ERROR',detail:'private-server-detail'}}:{status:202,json:pending()});});await boot(page);\n    at <repo-root>\\web\\tests\\registration\\global-compliance.spec.ts:29:18"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "steps": [
+                    {
+                      "title": "U-AUTH-02",
+                      "duration": 2707
+                    },
+                    {
+                      "title": "U-AUTH-03",
+                      "duration": 2351
+                    },
+                    {
+                      "title": "U-AUTH-03A",
+                      "duration": 2219
+                    },
+                    {
+                      "title": "U-AUTH-CONSENT",
+                      "duration": 1975
+                    },
+                    {
+                      "title": "U-AUTH-RESULT",
+                      "duration": 2120
+                    }
+                  ],
+                  "startTime": "2026-11-09T11:10:07.911Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "<repo-root>\\web\\test-results\\runs\\registration\\global-compliance-all-five-9a79c-responsive-reference-at-768\\error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "<repo-root>\\web\\tests\\registration\\global-compliance.spec.ts",
+                    "column": 18,
+                    "line": 29
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "4e6eee3594540d193522-4f76b2199fd4bc8984a2",
+          "file": "global-compliance.spec.ts",
+          "line": 18,
+          "column": 2
+        },
+        {
+          "title": "FORM-REGISTRATION empty invalid corrected and server-rejected states at 768",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 5570,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-09T11:10:23.261Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "4e6eee3594540d193522-896a719b14b34d94ffc3",
+          "file": "global-compliance.spec.ts",
+          "line": 31,
+          "column": 2
+        },
+        {
+          "title": "FORM-VERIFY-EMAIL empty format correction server rejection and guarded transition at 768",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 4684,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-09T11:10:29.503Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "4e6eee3594540d193522-2325307a3650246c6a89",
+          "file": "global-compliance.spec.ts",
+          "line": 41,
+          "column": 2
+        },
+        {
+          "title": "FORM-PERSONAL-INFORMATION required calendar safe correction preserved names and server errors at 768",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 5795,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-09T11:10:34.221Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "4e6eee3594540d193522-191927128921bb0883be",
+          "file": "global-compliance.spec.ts",
+          "line": 50,
+          "column": 2
+        },
+        {
+          "title": "all five canonical screens: direct entry refresh guard and responsive reference at 320",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 16166,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m0\u001b[39m\nReceived: \u001b[31m3\u001b[39m",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m0\u001b[39m\nReceived: \u001b[31m3\u001b[39m\n    at <repo-root>\\web\\tests\\registration\\global-compliance.spec.ts:29:18",
+                    "location": {
+                      "file": "<repo-root>\\web\\tests\\registration\\global-compliance.spec.ts",
+                      "column": 18,
+                      "line": 29
+                    },
+                    "snippet": "  27 |     await accessible(page,'global-'+stage+'-'+width);\n  28 |    });\n> 29 |   }expect(posts).toBe(0);\n     |                  ^\n  30 |  });\n  31 |  test('FORM-REGISTRATION empty invalid corrected and server-rejected states at '+width,async({page})=>{\n  32 |   await page.setViewportSize({width,height:1024});let posts=0;let reject=true;await page.route('**/registration/register',async route=>{posts++;await sleep(150);await route.fulfill(reject?{status:400,json:{error_code:'VALIDATION_ERROR',detail:'private-server-detail'}}:{status:202,json:pending()});});await boot(page);"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "<repo-root>\\web\\tests\\registration\\global-compliance.spec.ts",
+                        "column": 18,
+                        "line": 29
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m0\u001b[39m\nReceived: \u001b[31m3\u001b[39m\n\n  27 |     await accessible(page,'global-'+stage+'-'+width);\n  28 |    });\n> 29 |   }expect(posts).toBe(0);\n     |                  ^\n  30 |  });\n  31 |  test('FORM-REGISTRATION empty invalid corrected and server-rejected states at '+width,async({page})=>{\n  32 |   await page.setViewportSize({width,height:1024});let posts=0;let reject=true;await page.route('**/registration/register',async route=>{posts++;await sleep(150);await route.fulfill(reject?{status:400,json:{error_code:'VALIDATION_ERROR',detail:'private-server-detail'}}:{status:202,json:pending()});});await boot(page);\n    at <repo-root>\\web\\tests\\registration\\global-compliance.spec.ts:29:18"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "steps": [
+                    {
+                      "title": "U-AUTH-02",
+                      "duration": 3792
+                    },
+                    {
+                      "title": "U-AUTH-03",
+                      "duration": 2560
+                    },
+                    {
+                      "title": "U-AUTH-03A",
+                      "duration": 3222
+                    },
+                    {
+                      "title": "U-AUTH-CONSENT",
+                      "duration": 2269
+                    },
+                    {
+                      "title": "U-AUTH-RESULT",
+                      "duration": 2716
+                    }
+                  ],
+                  "startTime": "2026-11-09T11:10:40.044Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "<repo-root>\\web\\test-results\\runs\\registration\\global-compliance-all-five-40fd6-responsive-reference-at-320\\error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "<repo-root>\\web\\tests\\registration\\global-compliance.spec.ts",
+                    "column": 18,
+                    "line": 29
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "4e6eee3594540d193522-b5267e01fe755f7dcf3c",
+          "file": "global-compliance.spec.ts",
+          "line": 18,
+          "column": 2
+        },
+        {
+          "title": "FORM-REGISTRATION empty invalid corrected and server-rejected states at 320",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 5500,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-09T11:11:04.535Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "4e6eee3594540d193522-3a5872d5a91b3cce9404",
+          "file": "global-compliance.spec.ts",
+          "line": 31,
+          "column": 2
+        },
+        {
+          "title": "FORM-VERIFY-EMAIL empty format correction server rejection and guarded transition at 320",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 4251,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-09T11:11:11.019Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "4e6eee3594540d193522-43dc467c1cdafb0ec454",
+          "file": "global-compliance.spec.ts",
+          "line": 41,
+          "column": 2
+        },
+        {
+          "title": "FORM-PERSONAL-INFORMATION required calendar safe correction preserved names and server errors at 320",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 4336,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-09T11:11:15.302Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "4e6eee3594540d193522-9751a3b4965df1adfe2c",
+          "file": "global-compliance.spec.ts",
+          "line": 50,
+          "column": 2
+        },
+        {
+          "title": "browser history reconstructs server stages including duplicate path entries and restart",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2378,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-09T11:11:19.681Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "4e6eee3594540d193522-3304e8ac0a73b8cd6b2b",
+          "file": "global-compliance.spec.ts",
+          "line": 60,
+          "column": 1
+        },
+        {
+          "title": "unauthorized purged and forged history stages redirect safely; query/hash never grant a screen or redirect",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 4046,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-09T11:11:22.084Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "4e6eee3594540d193522-f20149270aa20493f7a8",
+          "file": "global-compliance.spec.ts",
+          "line": 67,
+          "column": 1
+        },
+        {
+          "title": "Retained expired registration requires a fresh protected pointer false",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1873,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-09T11:11:26.154Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "4e6eee3594540d193522-c9549578e3fdaca8fa41",
+          "file": "global-compliance.spec.ts",
+          "line": 74,
+          "column": 2
+        },
+        {
+          "title": "Retained expired registration requires a fresh protected pointer true",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1700,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-09T11:11:28.050Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "4e6eee3594540d193522-c2677b33586200ed8414",
+          "file": "global-compliance.spec.ts",
+          "line": 74,
+          "column": 2
+        }
+      ]
+    },
+    {
+      "title": "registration.spec.ts",
+      "file": "registration.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "registration reference geometry, local assets/fonts and no DOB or stored sensitive state",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2479,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-09T11:11:29.809Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "1e5aa7b6f95ae669165d-f891684346e131fc919a",
+          "file": "registration.spec.ts",
+          "line": 5,
+          "column": 1
+        },
+        {
+          "title": "confirmation and notice acceptance precede direct registration without age fields",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1707,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-09T11:11:32.319Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "1e5aa7b6f95ae669165d-cede2c269b30781e2f48",
+          "file": "registration.spec.ts",
+          "line": 23,
+          "column": 1
+        },
+        {
+          "title": "proof errors/version/resend lead to normal Personal Information and under18 completion without Product/session action",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 5221,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-09T11:11:34.063Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "1e5aa7b6f95ae669165d-f8dbd7e79102b4030772",
+          "file": "registration.spec.ts",
+          "line": 30,
+          "column": 1
+        },
+        {
+          "title": "policy-required consent uses trusted status and cannot be asserted by a browser checkbox",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3341,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-09T11:11:39.322Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "1e5aa7b6f95ae669165d-0c377d50abccb45ad9af",
+          "file": "registration.spec.ts",
+          "line": 47,
+          "column": 1
+        },
+        {
+          "title": "uncertain registration recovers same identity and clears credentials without automatically resubmitting",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1493,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-09T11:11:42.691Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "1e5aa7b6f95ae669165d-a4ccd5094c72f6602ba6",
+          "file": "registration.spec.ts",
+          "line": 53,
+          "column": 1
+        },
+        {
+          "title": "320px layout remains accessible across registration, verification, normal profile, consent and completion",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 8071,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-09T11:11:44.212Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "1e5aa7b6f95ae669165d-e1f9ec6c15de3910ed97",
+          "file": "registration.spec.ts",
+          "line": 59,
+          "column": 1
+        },
+        {
+          "title": "expired proof disables verification and unavailable policy does not render a registration form",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1739,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-09T11:11:52.309Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "1e5aa7b6f95ae669165d-cf12cc9ef1f1c1cfc32f",
+          "file": "registration.spec.ts",
+          "line": 65,
+          "column": 1
+        },
+        {
+          "title": "uncertain Personal Information submission clears DOB and recovers without another profile POST",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1393,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-09T11:11:54.071Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "1e5aa7b6f95ae669165d-78d561d808443a23de15",
+          "file": "registration.spec.ts",
+          "line": 69,
+          "column": 1
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-11-09T11:09:27.155Z",
+    "duration": 149055.32299999997,
+    "expected": 21,
+    "skipped": 0,
+    "unexpected": 3,
+    "flaky": 0
+  }
+}

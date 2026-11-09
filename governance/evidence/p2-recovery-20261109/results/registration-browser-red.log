@@ -1,0 +1,52 @@
+
+Running 2 tests using 1 worker
+
+  x  1 tests\registration\global-compliance.spec.ts:74:2 › Retained expired registration requires a fresh protected pointer false (13.6s)
+  x  2 tests\registration\global-compliance.spec.ts:74:2 › Retained expired registration requires a fresh protected pointer true (6.7s)
+
+
+  1) tests\registration\global-compliance.spec.ts:74:2 › Retained expired registration requires a fresh protected pointer false
+
+    Error: expect(received).toBe(expected) // Object.is equality
+
+    Expected: 1
+    Received: 0
+
+    Call Log:
+    - Timeout 5000ms exceeded while waiting on the predicate
+
+      78 |   let restarts=0;let posts=0;await page.route('**/registration/restart',route=>{restarts++;expect(route.request().headers()['x-tunner-csrf']).toBe('fixture-token');return route.fulfill(restartFails?{status:503,json:{error_code:'DEPENDENCY_UNAVAILABLE'}}:{json:{registrationKey:replacement}});});
+      79 |   await page.route('**/registration/register',route=>{posts++;expect(route.request().postDataJSON().idempotencyKey).toBe(replacement);return route.fulfill({status:202,json:pending()});});
+    > 80 |   await page.goto('/registration/verify-email');await expect.poll(()=>restarts).toBe(1);
+         |                                                                                 ^
+      81 |   if(restartFails){await expect(page.getByRole('heading',{name:headings.register})).toHaveCount(0);await expect(page.getByLabel('Email address')).toHaveCount(0);expect(posts).toBe(0);}
+      82 |   else{await expect(page).toHaveURL(/\/registration$/);await fill(page);await page.getByRole('button',{name:'Continue',exact:true}).click();await expect(page.getByRole('heading',{name:headings.verify})).toBeVisible();expect(posts).toBe(1);}
+      83 |  });
+        at <repo-root>\web\tests\registration\global-compliance.spec.ts:80:81
+
+    Error Context: test-results\runs\registration\global-compliance-Retained-8472d-esh-protected-pointer-false\error-context.md
+
+  2) tests\registration\global-compliance.spec.ts:74:2 › Retained expired registration requires a fresh protected pointer true
+
+    Error: expect(received).toBe(expected) // Object.is equality
+
+    Expected: 1
+    Received: 0
+
+    Call Log:
+    - Timeout 5000ms exceeded while waiting on the predicate
+
+      78 |   let restarts=0;let posts=0;await page.route('**/registration/restart',route=>{restarts++;expect(route.request().headers()['x-tunner-csrf']).toBe('fixture-token');return route.fulfill(restartFails?{status:503,json:{error_code:'DEPENDENCY_UNAVAILABLE'}}:{json:{registrationKey:replacement}});});
+      79 |   await page.route('**/registration/register',route=>{posts++;expect(route.request().postDataJSON().idempotencyKey).toBe(replacement);return route.fulfill({status:202,json:pending()});});
+    > 80 |   await page.goto('/registration/verify-email');await expect.poll(()=>restarts).toBe(1);
+         |                                                                                 ^
+      81 |   if(restartFails){await expect(page.getByRole('heading',{name:headings.register})).toHaveCount(0);await expect(page.getByLabel('Email address')).toHaveCount(0);expect(posts).toBe(0);}
+      82 |   else{await expect(page).toHaveURL(/\/registration$/);await fill(page);await page.getByRole('button',{name:'Continue',exact:true}).click();await expect(page.getByRole('heading',{name:headings.verify})).toBeVisible();expect(posts).toBe(1);}
+      83 |  });
+        at <repo-root>\web\tests\registration\global-compliance.spec.ts:80:81
+
+    Error Context: test-results\runs\registration\global-compliance-Retained-1b102-resh-protected-pointer-true\error-context.md
+
+  2 failed
+    tests\registration\global-compliance.spec.ts:74:2 › Retained expired registration requires a fresh protected pointer false
+    tests\registration\global-compliance.spec.ts:74:2 › Retained expired registration requires a fresh protected pointer true

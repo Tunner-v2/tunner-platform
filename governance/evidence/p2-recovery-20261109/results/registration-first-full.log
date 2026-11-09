@@ -1,0 +1,88 @@
+
+Running 24 tests using 1 worker
+
+  x   1 tests\registration\global-compliance.spec.ts:18:2 › all five canonical screens: direct entry refresh guard and responsive reference at 1440 (16.8s)
+  ok  2 tests\registration\global-compliance.spec.ts:31:2 › FORM-REGISTRATION empty invalid corrected and server-rejected states at 1440 (5.1s)
+  ok  3 tests\registration\global-compliance.spec.ts:41:2 › FORM-VERIFY-EMAIL empty format correction server rejection and guarded transition at 1440 (4.0s)
+  ok  4 tests\registration\global-compliance.spec.ts:50:2 › FORM-PERSONAL-INFORMATION required calendar safe correction preserved names and server errors at 1440 (4.5s)
+  x   5 tests\registration\global-compliance.spec.ts:18:2 › all five canonical screens: direct entry refresh guard and responsive reference at 768 (12.7s)
+  ok  6 tests\registration\global-compliance.spec.ts:31:2 › FORM-REGISTRATION empty invalid corrected and server-rejected states at 768 (5.6s)
+  ok  7 tests\registration\global-compliance.spec.ts:41:2 › FORM-VERIFY-EMAIL empty format correction server rejection and guarded transition at 768 (4.7s)
+  ok  8 tests\registration\global-compliance.spec.ts:50:2 › FORM-PERSONAL-INFORMATION required calendar safe correction preserved names and server errors at 768 (5.8s)
+  x   9 tests\registration\global-compliance.spec.ts:18:2 › all five canonical screens: direct entry refresh guard and responsive reference at 320 (16.2s)
+  ok 10 tests\registration\global-compliance.spec.ts:31:2 › FORM-REGISTRATION empty invalid corrected and server-rejected states at 320 (5.5s)
+  ok 11 tests\registration\global-compliance.spec.ts:41:2 › FORM-VERIFY-EMAIL empty format correction server rejection and guarded transition at 320 (4.3s)
+  ok 12 tests\registration\global-compliance.spec.ts:50:2 › FORM-PERSONAL-INFORMATION required calendar safe correction preserved names and server errors at 320 (4.3s)
+  ok 13 tests\registration\global-compliance.spec.ts:60:1 › browser history reconstructs server stages including duplicate path entries and restart (2.4s)
+  ok 14 tests\registration\global-compliance.spec.ts:67:1 › unauthorized purged and forged history stages redirect safely; query/hash never grant a screen or redirect (4.0s)
+  ok 15 tests\registration\global-compliance.spec.ts:74:2 › Retained expired registration requires a fresh protected pointer false (1.9s)
+  ok 16 tests\registration\global-compliance.spec.ts:74:2 › Retained expired registration requires a fresh protected pointer true (1.7s)
+  ok 17 tests\registration\registration.spec.ts:5:1 › registration reference geometry, local assets/fonts and no DOB or stored sensitive state (2.5s)
+  ok 18 tests\registration\registration.spec.ts:23:1 › confirmation and notice acceptance precede direct registration without age fields (1.7s)
+  ok 19 tests\registration\registration.spec.ts:30:1 › proof errors/version/resend lead to normal Personal Information and under18 completion without Product/session action (5.2s)
+  ok 20 tests\registration\registration.spec.ts:47:1 › policy-required consent uses trusted status and cannot be asserted by a browser checkbox (3.3s)
+  ok 21 tests\registration\registration.spec.ts:53:1 › uncertain registration recovers same identity and clears credentials without automatically resubmitting (1.5s)
+  ok 22 tests\registration\registration.spec.ts:59:1 › 320px layout remains accessible across registration, verification, normal profile, consent and completion (8.1s)
+  ok 23 tests\registration\registration.spec.ts:65:1 › expired proof disables verification and unavailable policy does not render a registration form (1.7s)
+  ok 24 tests\registration\registration.spec.ts:69:1 › uncertain Personal Information submission clears DOB and recovers without another profile POST (1.4s)
+
+
+  1) tests\registration\global-compliance.spec.ts:18:2 › all five canonical screens: direct entry refresh guard and responsive reference at 1440
+
+    Error: expect(received).toBe(expected) // Object.is equality
+
+    Expected: 0
+    Received: 3
+
+      27 |     await accessible(page,'global-'+stage+'-'+width);
+      28 |    });
+    > 29 |   }expect(posts).toBe(0);
+         |                  ^
+      30 |  });
+      31 |  test('FORM-REGISTRATION empty invalid corrected and server-rejected states at '+width,async({page})=>{
+      32 |   await page.setViewportSize({width,height:1024});let posts=0;let reject=true;await page.route('**/registration/register',async route=>{posts++;await sleep(150);await route.fulfill(reject?{status:400,json:{error_code:'VALIDATION_ERROR',detail:'private-server-detail'}}:{status:202,json:pending()});});await boot(page);
+        at <repo-root>\web\tests\registration\global-compliance.spec.ts:29:18
+
+    Error Context: test-results\runs\registration\global-compliance-all-five-0bf1d-esponsive-reference-at-1440\error-context.md
+
+  2) tests\registration\global-compliance.spec.ts:18:2 › all five canonical screens: direct entry refresh guard and responsive reference at 768
+
+    Error: expect(received).toBe(expected) // Object.is equality
+
+    Expected: 0
+    Received: 3
+
+      27 |     await accessible(page,'global-'+stage+'-'+width);
+      28 |    });
+    > 29 |   }expect(posts).toBe(0);
+         |                  ^
+      30 |  });
+      31 |  test('FORM-REGISTRATION empty invalid corrected and server-rejected states at '+width,async({page})=>{
+      32 |   await page.setViewportSize({width,height:1024});let posts=0;let reject=true;await page.route('**/registration/register',async route=>{posts++;await sleep(150);await route.fulfill(reject?{status:400,json:{error_code:'VALIDATION_ERROR',detail:'private-server-detail'}}:{status:202,json:pending()});});await boot(page);
+        at <repo-root>\web\tests\registration\global-compliance.spec.ts:29:18
+
+    Error Context: test-results\runs\registration\global-compliance-all-five-9a79c-responsive-reference-at-768\error-context.md
+
+  3) tests\registration\global-compliance.spec.ts:18:2 › all five canonical screens: direct entry refresh guard and responsive reference at 320
+
+    Error: expect(received).toBe(expected) // Object.is equality
+
+    Expected: 0
+    Received: 3
+
+      27 |     await accessible(page,'global-'+stage+'-'+width);
+      28 |    });
+    > 29 |   }expect(posts).toBe(0);
+         |                  ^
+      30 |  });
+      31 |  test('FORM-REGISTRATION empty invalid corrected and server-rejected states at '+width,async({page})=>{
+      32 |   await page.setViewportSize({width,height:1024});let posts=0;let reject=true;await page.route('**/registration/register',async route=>{posts++;await sleep(150);await route.fulfill(reject?{status:400,json:{error_code:'VALIDATION_ERROR',detail:'private-server-detail'}}:{status:202,json:pending()});});await boot(page);
+        at <repo-root>\web\tests\registration\global-compliance.spec.ts:29:18
+
+    Error Context: test-results\runs\registration\global-compliance-all-five-40fd6-responsive-reference-at-320\error-context.md
+
+  3 failed
+    tests\registration\global-compliance.spec.ts:18:2 › all five canonical screens: direct entry refresh guard and responsive reference at 1440
+    tests\registration\global-compliance.spec.ts:18:2 › all five canonical screens: direct entry refresh guard and responsive reference at 768
+    tests\registration\global-compliance.spec.ts:18:2 › all five canonical screens: direct entry refresh guard and responsive reference at 320
+  21 passed (2.5m)

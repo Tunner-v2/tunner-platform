@@ -15,3 +15,5 @@ Exact next authorized action: prepare TUN-P2-007 (passkey registration/authentic
 No new P2 PR published. Existing branch-push automation creates a main PR with auto-merge when no PR exists; use controlled draft publication before any push. No protected-main merge, registry publication, production deployment or release authorized. Security PR21 remains separate draft; open vulnerabilities remain release-blocking.
 
 All13 pre-existing dirty paths in artifacts/p2-005-auth-20261021/preserved-dirty-before.json are hash-identical and excluded. Do not overwrite docs/context/current or docs/project. Final native receipt: governance/evidence/TUN-P2-006-NATIVE-GATES.json. Refresh and verify isolated native context at artifacts/p2-006-assurance-20261108/context after metadata commits; leave all default context/project paths unchanged.
+
+Current audit/correction continuation: see [P2 remaining handoff](P2_REMAINING_HANDOFF.md). Its source-proof enforcement boundary supersedes the prior immediate next-feature instruction.
