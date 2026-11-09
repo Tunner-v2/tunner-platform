@@ -1032,7 +1032,8 @@ static void RunValidationSourceReadinessChecks(DirectoryInfo repositoryRoot, ICo
         var aliasPath = Path.Combine(fixture.FullName, "governance/work-items/TUN-ALIAS.yaml");
         var aliasConsumerPath = Path.Combine(fixture.FullName, "governance/work-items/TUN-ALIAS-CONSUMER.yaml");
         var aliasDependency = Path.Combine(fixture.FullName, "governance/dependencies/DEP-ALIAS.yaml");
-        EditRevision(aliasPath, "required_evidence", new[] { "governance/evidence/TUN-001-proof.json" });
+        string[] aliasEvidence = ["governance/evidence/TUN-001-proof.json"];
+        EditRevision(aliasPath, "required_evidence", aliasEvidence);
         EditRevision(aliasPath, "git_state", new
         {
             repository_changed = true, validated_commit_sha = candidate, tested_commit_sha = candidate,
