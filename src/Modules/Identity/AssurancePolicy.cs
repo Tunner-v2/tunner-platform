@@ -27,7 +27,7 @@ public sealed class AssurancePolicyVersion
         ArgumentNullException.ThrowIfNull(metadata);
         ArgumentException.ThrowIfNullOrWhiteSpace(requiredAssurance);
         ArgumentNullException.ThrowIfNull(methodAssurances);
-        if (proofLifetime <= TimeSpan.Zero) throw new ArgumentOutOfRangeException(nameof(proofLifetime));
+        ArgumentOutOfRangeException.ThrowIfLessThanOrEqual(proofLifetime, TimeSpan.Zero);
         if (methodAssurances.Count == 0 || methodAssurances.Any(x => string.IsNullOrWhiteSpace(x.Key) || string.IsNullOrWhiteSpace(x.Value)))
             throw new ArgumentException("Explicit supported method assurance mappings are required.", nameof(methodAssurances));
         Metadata = metadata; RequiredAssurance = requiredAssurance; ProofLifetime = proofLifetime;
@@ -76,5 +76,5 @@ public sealed class AssurancePolicyCatalog : IAssurancePolicySource
 public sealed class AssurancePolicyVersionConflictException : InvalidOperationException
 {
     public AssurancePolicyVersionConflictException() : base("The effective assurance policy changed.") { }
-    public string ProblemCode => TechnicalProblemCodes.VersionConflict;
+    public string ProblemCode { get; } = TechnicalProblemCodes.VersionConflict;
 }
