@@ -5,12 +5,12 @@ import './step-up.css';
 
 const keys=['heading','description','passkey','passkey.description','authenticator','authenticator.description','other','unavailable','password.description',
   'password.label','password.placeholder','back','cancel','confirm','working','error.password','error.highlighted','error.credentials','error.limited','error.unavailable','error.changed'] as const;
-export interface StepUpBootstrap {status:'PENDING';requestId:string;csrfToken:string;passwordMaximumLength:number;passwordAvailable:boolean;locale:string;content:Record<string,PublishedContent>}
+export interface StepUpBootstrap {status:'PENDING';requestId:string;csrfToken:string;passwordMaximumLength:number;passwordAvailable:boolean;locale:string;content:Record<string,PublishedContent>;operationReference?:string|undefined}
 const pending=z.object({status:z.literal('PENDING'),requestId:z.uuid(),csrfToken:z.string().min(1),passwordMaximumLength:z.number().int().positive(),
-  passwordAvailable:z.boolean(),locale:z.string().min(1),content:z.record(z.string(),z.object({key:z.string(),variantRef:z.string().min(1),versionRef:z.string().min(1),publicationRef:z.string().min(1),locale:z.string().min(1),state:z.literal('PUBLISHED'),text:z.string().min(1)}))});
+  passwordAvailable:z.boolean(),operationReference:z.string().min(1).optional(),locale:z.string().min(1),content:z.record(z.string(),z.object({key:z.string(),variantRef:z.string().min(1),versionRef:z.string().min(1),publicationRef:z.string().min(1),locale:z.string().min(1),state:z.literal('PUBLISHED'),text:z.string().min(1)}))});
 export function stepUpPasswordSchema(maximum:number){return z.object({password:z.string().refine(value=>Array.from(value).length>0&&Array.from(value).length<=maximum,'stepUp.error.password')});}
-const completed=z.object({status:z.literal('COMPLETED'),requestId:z.uuid().nullable()});
-export async function loadStepUpOptions(signal?:AbortSignal):Promise<StepUpBootstrap|{status:'COMPLETED';requestId:string|null}>{
+const completed=z.object({status:z.literal('COMPLETED'),requestId:z.uuid().nullable(),operationReference:z.string().min(1).optional()});
+export async function loadStepUpOptions(signal?:AbortSignal):Promise<StepUpBootstrap|{status:'COMPLETED';requestId:string|null;operationReference?:string|undefined}>{
   const response=await fetch('/authentication/step-up/options',{credentials:'same-origin',cache:'no-store',redirect:'error',...(signal?{signal}:{})});
   if(!response.ok)throw new Error('Step-up unavailable');
   const raw:unknown=await response.json();const done=completed.safeParse(raw);if(done.success)return done.data;
@@ -18,11 +18,12 @@ export async function loadStepUpOptions(signal?:AbortSignal):Promise<StepUpBoots
   if(keys.some(key=>{const item=result.content['stepUp.'+key];return !item||item.key!=='stepUp.'+key||item.locale!==result.locale;}))throw new Error('Step-up publication unavailable');
   return result;
 }
-export interface StepUpDialogProps{bootstrap:StepUpBootstrap;onComplete:()=>void;onCancel:()=>void;returnFocusTo?:HTMLElement|null}
-export function StepUpDialog({bootstrap,onComplete,onCancel,returnFocusTo}:StepUpDialogProps){
-  return <ContentProvider locale={bootstrap.locale} audience="step-up" resolve={key=>bootstrap.content[key]}><Dialog bootstrap={bootstrap} onComplete={onComplete} onCancel={onCancel} {...(returnFocusTo?{returnFocusTo}:{})}/></ContentProvider>;
+export interface StepUpCompletion{status:'COMPLETED';signInRequired:boolean;operationReference?:string}
+export interface StepUpDialogProps{bootstrap:StepUpBootstrap;onComplete:(outcome:StepUpCompletion)=>void;onCancel:()=>void;returnFocusTo?:HTMLElement|null;reconcile?:(signal:AbortSignal)=>Promise<StepUpCompletion|null>}
+export function StepUpDialog({bootstrap,onComplete,onCancel,returnFocusTo,reconcile}:StepUpDialogProps){
+  return <ContentProvider locale={bootstrap.locale} audience="step-up" resolve={key=>bootstrap.content[key]}><Dialog bootstrap={bootstrap} onComplete={onComplete} onCancel={onCancel} {...(returnFocusTo?{returnFocusTo}:{})} {...(reconcile?{reconcile}:{})}/></ContentProvider>;
 }
-function Dialog({bootstrap,onComplete,onCancel,returnFocusTo}:StepUpDialogProps){
+function Dialog({bootstrap,onComplete,onCancel,returnFocusTo,reconcile}:StepUpDialogProps){
   const [view,setView]=useState<'chooser'|'password'|'changed'>('chooser');const [password,setPassword]=useState('');
   const [error,setError]=useState<string>();const [serverField,setServerField]=useState<string>();
   const form=useTunnerForm(stepUpPasswordSchema(bootstrap.passwordMaximumLength),{password});
@@ -31,7 +32,8 @@ function Dialog({bootstrap,onComplete,onCancel,returnFocusTo}:StepUpDialogProps)
   useEffect(()=>{document.getElementById(view==='password'?id+'-password':id+'-heading')?.focus();},[view,id]);
   useEffect(()=>{if(serverField&&!form.submitPending)document.getElementById(id+'-password')?.focus();},[serverField,id,form.submitPending]);
   function cancel(){if(form.submitPending)return;closed.current=true;setPassword('');onCancel();}
-  function complete(){if(closed.current)return;closed.current=true;setPassword('');onComplete();}
+  function complete(outcome:StepUpCompletion={status:'COMPLETED',signInRequired:false}){if(closed.current)return;closed.current=true;setPassword('');onComplete(outcome);}
+  async function reconcileOwner(){if(!reconcile)return false;const outcome=await reconcile(controller.current.signal);if(closed.current)return false;if(outcome?.status==='COMPLETED'){complete(outcome);return true;}return false;}
   function changed(){setPassword('');setError(undefined);setServerField(undefined);setView('changed');}
   async function submit(){
     setError(undefined);setServerField(undefined);
@@ -39,18 +41,19 @@ function Dialog({bootstrap,onComplete,onCancel,returnFocusTo}:StepUpDialogProps)
       const response=await fetch('/authentication/step-up/password',{method:'POST',credentials:'same-origin',cache:'no-store',redirect:'error',signal:controller.current.signal,
         headers:{'Content-Type':'application/json','X-Tunner-CSRF':bootstrap.csrfToken},body:JSON.stringify({requestId:bootstrap.requestId,password})});
       if(closed.current)return;
-      if(response.ok){const result:unknown=await response.json();if(!z.object({status:z.literal('COMPLETED')}).safeParse(result).success)throw new Error('Uncertain');complete();return;}
+      if(response.ok){const result=z.object({status:z.literal('COMPLETED'),signInRequired:z.boolean().optional(),operationReference:z.string().min(1).optional()}).parse(await response.json());if(bootstrap.operationReference!==undefined&&result.operationReference!==bootstrap.operationReference)throw new Error('Uncertain');complete({status:'COMPLETED',signInRequired:result.signInRequired===true,...(result.operationReference?{operationReference:result.operationReference}:{})});return;}
       const problem=await response.json() as {error_code?:string};
       if(response.status===401&&problem.error_code==='AUTHENTICATION_FAILED'){
         const session=await fetch('/authentication/session',{credentials:'same-origin',cache:'no-store',redirect:'error',signal:controller.current.signal});
-        if(!session.ok){changed();return;}setServerField('stepUp.error.credentials');
+        if(!session.ok){if(await reconcileOwner())return;changed();return;}setServerField('stepUp.error.credentials');
       }else if(response.status===429)setError('stepUp.error.limited');
       else if(response.status===400&&problem.error_code==='VALIDATION_ERROR')setServerField('stepUp.error.password');
-      else if([401,403,404,409].includes(response.status))changed();
+      else if([401,403,404,409].includes(response.status)){if(await reconcileOwner())return;changed();}
       else setError('stepUp.error.unavailable');
     }catch{
       if(closed.current)return;
       try{
+        if(await reconcileOwner())return;
         const current=await loadStepUpOptions(controller.current.signal);
         if(closed.current)return;
         if(current.requestId!==bootstrap.requestId){changed();return;}

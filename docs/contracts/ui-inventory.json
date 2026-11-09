@@ -432,7 +432,8 @@
       "guard": "Anonymous credential transaction; protected browser context, policy, origin and CSRF required for sign-in",
       "owner_scopes": [
         "TUN-P2-005",
-        "P1-018-RV003"
+        "P1-018-RV003",
+        "TUN-P2-007"
       ],
       "authority_refs": [
         "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md",
@@ -450,21 +451,27 @@
         "web/apps/user/authentication.routes.ts",
         "web/apps/user/authentication.validation.ts",
         "src/Modules/Identity/AuthenticationEndpoints.cs",
-        "src/Modules/Identity/IdentityWebAssets.cs"
+        "src/Modules/Identity/IdentityWebAssets.cs",
+        "web/apps/user/passkeys.sign-in.tsx",
+        "web/apps/user/passkeys.native.ts",
+        "web/apps/user/passkeys.api.ts"
       ],
-      "planning_status": "PASSWORD_SLICE_IMPLEMENTED_FUTURE_AUTH_FEATURES_DEFERRED",
-      "design_status": "PRODUCT_OWNER_APPROVED_SNAPSHOT_FIGMA_BACKFILL_DEFERRED",
-      "acceptance_boundary": "Current implemented P2-005 visuals explicitly approved by the Product Owner. Figma backfill is a nonblocking owner TODO under the scoped exception; no Figma update or new frame ID is claimed. Future features/screens retain their own authority and approval.",
+      "planning_status": "PASSWORD_AND_PRIMARY_PASSKEY_SLICE_IMPLEMENTED_VALIDATION_PENDING",
+      "design_status": "PRODUCT_OWNER_APPROVED_SCOPED_ADAPTATIONS",
+      "acceptance_boundary": "Actual V01–V06 scoped consent is recorded. Current source is implemented with known recovery/fidelity corrections and native/browser/rendered validation pending. No PASS inherited from another screen; owner Figma backfill, whole007/P2, runtime production policy, protected-main merge and release remain separate.",
       "parameter_schema": {},
       "form_ids": [
         "FORM-LOGIN"
       ],
       "observed_defects": [
-        "UI_FIDELITY_DEFECT"
+        "UI_ROUTING_DEFECT"
       ],
       "routing_state": "IMPLEMENTED",
-      "visual_state": "PRODUCT_OWNER_APPROVED_CURRENT_IMPLEMENTATION",
-      "consent_ref": "governance/evidence/TUN-P2-005-VISUAL-ACCEPTANCE-DEFERRAL-20261021.json"
+      "visual_state": "IMPLEMENTATION_REQUIRES_CURRENT_RENDERED_EVIDENCE",
+      "consent_ref": "governance/evidence/TUN-P2-007-VISUAL-CONSENT-20261109.json",
+      "additional_consent_refs": [
+        "governance/evidence/TUN-P2-005-VISUAL-ACCEPTANCE-DEFERRAL-20261021.json"
+      ]
     },
     {
       "id": "U-AUTH-04",
@@ -489,24 +496,61 @@
     },
     {
       "id": "U-AUTH-05",
-      "kind": "SCREEN",
-      "status": "PLANNED",
+      "kind": "COMPONENT",
+      "status": "IMPLEMENTED",
       "app": "user",
-      "module": "U-AUTH",
+      "module": "Identity.Passkeys",
       "title": "Passkey Setup",
       "requirements": "WebAuthn ceremony; no private-key visibility",
       "pathname": null,
       "runtime_pathname": null,
-      "guard": "Resolve from owning FRD and current authorization before implementation",
-      "owner_scopes": [],
-      "authority_refs": [
-        "docs/authority/current/development/31_UI_UX_Screen_and_Control_Center_Requirements_Matrix.md"
+      "guard": "Current User session plus reviewed owner operation, exact shared step-up and native attestation; no active credential before verified atomic commit",
+      "owner_scopes": [
+        "TUN-P2-007"
       ],
-      "figma_refs": [],
-      "source_paths": [],
-      "planning_status": "OWNER_AND_ROUTE_REFINEMENT_REQUIRED",
-      "design_status": "UI_REQUIRED_BEFORE_IMPLEMENTATION",
-      "acceptance_boundary": "Unimplemented: no PASS inherited from registration and no feature implementation authorized by this inventory."
+      "authority_refs": [
+        "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md",
+        "docs/authority/current/development/31_UI_UX_Screen_and_Control_Center_Requirements_Matrix.md",
+        "docs/authority/current/decisions/AMD-0008_Approved_Figma_Visual_Fidelity_and_Product_Owner_UX_Consent.md",
+        "docs/authority/current/decisions/AMD-0009_URL_Addressable_Routing_and_Governed_Form_Validation.md"
+      ],
+      "figma_refs": [
+        {
+          "file_key": "apNbwvAgdn1xIxYH1oiaSC",
+          "node_id": "46:24"
+        },
+        {
+          "file_key": "apNbwvAgdn1xIxYH1oiaSC",
+          "node_id": "52:291"
+        }
+      ],
+      "source_paths": [
+        "web/apps/user/passkeys.tsx",
+        "web/apps/user/passkeys.css",
+        "web/apps/user/passkeys.api.ts",
+        "web/apps/user/passkeys.routes.ts",
+        "web/apps/user/passkeys.native.ts",
+        "web/apps/user/step-up.tsx",
+        "src/Modules/Identity/PasskeyEndpoints.cs"
+      ],
+      "planning_status": "OWNER_AND_MODAL_REFINEMENT_RESOLVED_IMPLEMENTED_VALIDATION_PENDING",
+      "design_status": "PRODUCT_OWNER_APPROVED_SCOPED_ADAPTATIONS",
+      "acceptance_boundary": "Actual V01–V06 scoped consent is recorded. Current source is implemented with known recovery/fidelity corrections and native/browser/rendered validation pending. No PASS inherited from another screen; owner Figma backfill, whole007/P2, runtime production policy, protected-main merge and release remain separate.",
+      "owner_pathnames": [
+        "/account/security",
+        "/account/security/sign-in-methods"
+      ],
+      "parent_screen_ids": [
+        "U-ACCT-SECURITY",
+        "U-ACCT-03"
+      ],
+      "interaction": "Same-screen Add modal; protected original operation on reload/unknown responses, never a separate primary pathname or browser-storage authority.",
+      "observed_defects": [
+        "UI_ROUTING_DEFECT",
+        "UI_VALIDATION_DEFECT"
+      ],
+      "consent_ref": "governance/evidence/TUN-P2-007-VISUAL-CONSENT-20261109.json",
+      "visual_state": "IMPLEMENTATION_REQUIRES_CURRENT_RENDERED_EVIDENCE"
     },
     {
       "id": "U-AUTH-06",
@@ -616,23 +660,49 @@
     {
       "id": "U-ACCT-03",
       "kind": "SCREEN",
-      "status": "PLANNED",
+      "status": "IMPLEMENTED",
       "app": "user",
-      "module": "U-ACCT",
+      "module": "Identity.Passkeys",
       "title": "Sign-in Methods",
       "requirements": "password/passkeys/Google/Microsoft/TOTP links with safe add/remove eligibility",
-      "pathname": null,
-      "runtime_pathname": null,
-      "guard": "Resolve from owning FRD and current authorization before implementation",
-      "owner_scopes": [],
-      "authority_refs": [
-        "docs/authority/current/development/31_UI_UX_Screen_and_Control_Center_Requirements_Matrix.md"
+      "pathname": "/account/security/sign-in-methods",
+      "runtime_pathname": "/account/security/sign-in-methods",
+      "guard": "Current authenticated User session; trusted Account access, owner-only safe methods, policy/eligibility and exact operation prerequisites enforced by BFF on every command/read",
+      "owner_scopes": [
+        "TUN-P2-007"
       ],
-      "figma_refs": [],
-      "source_paths": [],
-      "planning_status": "OWNER_AND_ROUTE_REFINEMENT_REQUIRED",
-      "design_status": "UI_REQUIRED_BEFORE_IMPLEMENTATION",
-      "acceptance_boundary": "Unimplemented: no PASS inherited from registration and no feature implementation authorized by this inventory."
+      "authority_refs": [
+        "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md",
+        "docs/authority/current/development/31_UI_UX_Screen_and_Control_Center_Requirements_Matrix.md",
+        "docs/authority/current/decisions/AMD-0008_Approved_Figma_Visual_Fidelity_and_Product_Owner_UX_Consent.md",
+        "docs/authority/current/decisions/AMD-0009_URL_Addressable_Routing_and_Governed_Form_Validation.md"
+      ],
+      "figma_refs": [
+        {
+          "file_key": "apNbwvAgdn1xIxYH1oiaSC",
+          "node_id": "36:2"
+        }
+      ],
+      "source_paths": [
+        "web/apps/user/passkeys.tsx",
+        "web/apps/user/passkeys.css",
+        "web/apps/user/passkeys.api.ts",
+        "web/apps/user/passkeys.routes.ts",
+        "web/apps/user/passkeys.native.ts",
+        "web/apps/user/step-up.tsx",
+        "src/Modules/Identity/PasskeyEndpoints.cs"
+      ],
+      "planning_status": "PASSKEY_SLICE_IMPLEMENTED_FUTURE_METHODS_PENDING",
+      "design_status": "PRODUCT_OWNER_APPROVED_SCOPED_ADAPTATIONS",
+      "acceptance_boundary": "Actual V01–V06 scoped consent is recorded. Current source is implemented with known recovery/fidelity corrections and native/browser/rendered validation pending. No PASS inherited from another screen; owner Figma backfill, whole007/P2, runtime production policy, protected-main merge and release remain separate.",
+      "routing_state": "IMPLEMENTED_VALIDATION_PENDING",
+      "observed_defects": [
+        "UI_ROUTING_DEFECT",
+        "UI_VALIDATION_DEFECT",
+        "UI_FIDELITY_DEFECT"
+      ],
+      "consent_ref": "governance/evidence/TUN-P2-007-VISUAL-CONSENT-20261109.json",
+      "visual_state": "IMPLEMENTATION_REQUIRES_CURRENT_RENDERED_EVIDENCE"
     },
     {
       "id": "U-ACCT-04",
@@ -1642,7 +1712,8 @@
       "guard": "Anonymous credential transaction requires protected browser operation, CSRF and same-origin checks; independent server credential/policy/Account validation",
       "owner_scopes": [
         "TUN-P2-005",
-        "P1-018-RV003"
+        "P1-018-RV003",
+        "TUN-P2-007"
       ],
       "authority_refs": [
         "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md",
@@ -1668,7 +1739,7 @@
       ],
       "observed_defects": [],
       "validation_state": "IMPLEMENTED_SOURCE_VALIDATION_PENDING",
-      "consent_ref": "governance/evidence/TUN-P2-005-VISUAL-ACCEPTANCE-DEFERRAL-20261021.json",
+      "consent_ref": "governance/evidence/TUN-P2-007-VISUAL-CONSENT-20261109.json",
       "screen_id": "U-AUTH-01",
       "fields": [
         "email",
@@ -1676,15 +1747,19 @@
         "remember"
       ],
       "backend_validation": "Independent strict JSON, policy length, current verified contact, framework credential verification, Account restriction, origin/CSRF/context and abuse/idempotency checks",
-      "design_status": "PRODUCT_OWNER_APPROVED_SNAPSHOT_FIGMA_BACKFILL_DEFERRED",
-      "visual_state": "PRODUCT_OWNER_APPROVED_CURRENT_IMPLEMENTATION",
-      "acceptance_boundary": "Current implemented P2-005 visuals explicitly approved by the Product Owner. Figma backfill is a nonblocking owner TODO under the scoped exception; no Figma update or new frame ID is claimed. Future features/screens retain their own authority and approval."
+      "design_status": "PRODUCT_OWNER_APPROVED_SCOPED_ADAPTATIONS",
+      "visual_state": "IMPLEMENTATION_REQUIRES_CURRENT_RENDERED_EVIDENCE",
+      "acceptance_boundary": "Actual V01–V06 scoped consent is recorded. Current source is implemented with known recovery/fidelity corrections and native/browser/rendered validation pending. No PASS inherited from another screen; owner Figma backfill, whole007/P2, runtime production policy, protected-main merge and release remain separate.",
+      "additional_consent_refs": [
+        "governance/evidence/TUN-P2-005-VISUAL-ACCEPTANCE-DEFERRAL-20261021.json"
+      ]
     },
     {
       "module": "Identity.StepUp",
       "owner_scopes": [
         "TUN-P2-006",
-        "P1-018-RV003"
+        "P1-018-RV003",
+        "TUN-P2-007"
       ],
       "authority_refs": [
         "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md",
@@ -1711,10 +1786,10 @@
       ],
       "guard": "Current User server session and trusted owner action; protected view binding, exact policy and operation checks; no browser-selected authority or general session upgrade.",
       "observed_defects": [],
-      "consent_ref": "governance/evidence/TUN-P2-006-VISUAL-CONSENT-20261108.json",
+      "consent_ref": "governance/evidence/TUN-P2-007-VISUAL-CONSENT-20261109.json",
       "design_status": "PRODUCT_OWNER_APPROVED_SCOPED_ADAPTATIONS",
       "visual_state": "IMPLEMENTATION_REQUIRES_CURRENT_RENDERED_EVIDENCE",
-      "acceptance_boundary": "Reusable Identity dialog with explicitly approved password detail and states. Owner integration must opt in; actual production policy/content is not synthesized. Local demonstration is a test fixture and changes no account settings.",
+      "acceptance_boundary": "Actual V01–V06 scoped consent is recorded. Current source is implemented with known recovery/fidelity corrections and native/browser/rendered validation pending. No PASS inherited from another screen; owner Figma backfill, whole007/P2, runtime production policy, protected-main merge and release remain separate.",
       "id": "COMP-STEP-UP",
       "kind": "COMPONENT",
       "status": "IMPLEMENTED",
@@ -1725,7 +1800,10 @@
       "form_ids": [
         "FORM-STEP-UP"
       ],
-      "interaction": "Same-screen native modal; owner canonical pathname and safe OAuth/Product context remain unchanged."
+      "interaction": "Same-screen native modal; owner canonical pathname and safe OAuth/Product context remain unchanged.",
+      "additional_consent_refs": [
+        "governance/evidence/TUN-P2-006-VISUAL-CONSENT-20261108.json"
+      ]
     },
     {
       "module": "Identity.StepUp",
@@ -1780,7 +1858,8 @@
       "module": "Identity.StepUp",
       "owner_scopes": [
         "TUN-P2-006",
-        "P1-018-RV003"
+        "P1-018-RV003",
+        "TUN-P2-007"
       ],
       "authority_refs": [
         "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md",
@@ -1807,10 +1886,10 @@
       ],
       "guard": "Current User server session and trusted owner action; protected view binding, exact policy and operation checks; no browser-selected authority or general session upgrade.",
       "observed_defects": [],
-      "consent_ref": "governance/evidence/TUN-P2-006-VISUAL-CONSENT-20261108.json",
+      "consent_ref": "governance/evidence/TUN-P2-007-VISUAL-CONSENT-20261109.json",
       "design_status": "PRODUCT_OWNER_APPROVED_SCOPED_ADAPTATIONS",
       "visual_state": "IMPLEMENTATION_REQUIRES_CURRENT_RENDERED_EVIDENCE",
-      "acceptance_boundary": "Reusable Identity dialog with explicitly approved password detail and states. Owner integration must opt in; actual production policy/content is not synthesized. Local demonstration is a test fixture and changes no account settings.",
+      "acceptance_boundary": "Actual V01–V06 scoped consent is recorded. Current source is implemented with known recovery/fidelity corrections and native/browser/rendered validation pending. No PASS inherited from another screen; owner Figma backfill, whole007/P2, runtime production policy, protected-main merge and release remain separate.",
       "id": "FORM-STEP-UP",
       "kind": "FORM",
       "status": "IMPLEMENTED",
@@ -1822,7 +1901,155 @@
       "fields": [
         "password"
       ],
-      "backend_validation": "Independent bounded strict JSON, current credential/policy length/abuse, actor/session/origin/view/operation/version binding, current restrictions, one-use proof and atomic owner mutation/ledger. Password is cleared after submission and never stored in browser storage or URLs."
+      "backend_validation": "Independent bounded strict JSON, current credential/policy length/abuse, actor/session/origin/view/operation/version binding, current restrictions, one-use proof and atomic owner mutation/ledger. Password is cleared after submission and never stored in browser storage or URLs.",
+      "additional_consent_refs": [
+        "governance/evidence/TUN-P2-006-VISUAL-CONSENT-20261108.json"
+      ]
+    },
+    {
+      "id": "U-ACCT-SECURITY",
+      "kind": "SCREEN",
+      "status": "IMPLEMENTED",
+      "app": "user",
+      "module": "Identity.Passkeys",
+      "title": "Account security",
+      "requirements": "Account security composition with truthful passkey facts/capabilities and safe navigation to owned method management; future activity/protection features are not fabricated",
+      "pathname": "/account/security",
+      "runtime_pathname": "/account/security",
+      "guard": "Current authenticated User session; trusted Account access, owner-only safe methods, policy/eligibility and exact operation prerequisites enforced by BFF on every command/read",
+      "owner_scopes": [
+        "TUN-P2-007"
+      ],
+      "authority_refs": [
+        "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md",
+        "docs/authority/current/development/31_UI_UX_Screen_and_Control_Center_Requirements_Matrix.md",
+        "docs/authority/current/decisions/AMD-0008_Approved_Figma_Visual_Fidelity_and_Product_Owner_UX_Consent.md",
+        "docs/authority/current/decisions/AMD-0009_URL_Addressable_Routing_and_Governed_Form_Validation.md"
+      ],
+      "figma_refs": [
+        {
+          "file_key": "apNbwvAgdn1xIxYH1oiaSC",
+          "node_id": "13:2"
+        }
+      ],
+      "source_paths": [
+        "web/apps/user/passkeys.tsx",
+        "web/apps/user/passkeys.css",
+        "web/apps/user/passkeys.api.ts",
+        "web/apps/user/passkeys.routes.ts",
+        "web/apps/user/passkeys.native.ts",
+        "web/apps/user/step-up.tsx",
+        "src/Modules/Identity/PasskeyEndpoints.cs"
+      ],
+      "planning_status": "APPROVED_SECURITY_COMPOSITION_REFINEMENT_IMPLEMENTED_VALIDATION_PENDING",
+      "routing_state": "IMPLEMENTED_VALIDATION_PENDING",
+      "observed_defects": [
+        "UI_ROUTING_DEFECT",
+        "UI_VALIDATION_DEFECT"
+      ],
+      "consent_ref": "governance/evidence/TUN-P2-007-VISUAL-CONSENT-20261109.json",
+      "design_status": "PRODUCT_OWNER_APPROVED_SCOPED_ADAPTATIONS",
+      "visual_state": "IMPLEMENTATION_REQUIRES_CURRENT_RENDERED_EVIDENCE",
+      "acceptance_boundary": "Actual V01–V06 scoped consent is recorded. Current source is implemented with known recovery/fidelity corrections and native/browser/rendered validation pending. No PASS inherited from another screen; owner Figma backfill, whole007/P2, runtime production policy, protected-main merge and release remain separate."
+    },
+    {
+      "id": "COMP-PASSKEY-SIGN-IN",
+      "kind": "COMPONENT",
+      "status": "IMPLEMENTED",
+      "app": "user",
+      "module": "Identity.Passkeys",
+      "title": "Sign in with a passkey",
+      "pathname": null,
+      "runtime_pathname": null,
+      "owner_pathnames": [
+        "/login"
+      ],
+      "parent_screen_ids": [
+        "U-AUTH-01"
+      ],
+      "guard": "Anonymous protected credential transaction; server nonce/origin/policy and native assertion plus exact current result session; no Account enumeration or tokens in browser storage",
+      "owner_scopes": [
+        "TUN-P2-007"
+      ],
+      "authority_refs": [
+        "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md",
+        "docs/authority/current/development/31_UI_UX_Screen_and_Control_Center_Requirements_Matrix.md",
+        "docs/authority/current/decisions/AMD-0008_Approved_Figma_Visual_Fidelity_and_Product_Owner_UX_Consent.md",
+        "docs/authority/current/decisions/AMD-0009_URL_Addressable_Routing_and_Governed_Form_Validation.md"
+      ],
+      "figma_refs": [
+        {
+          "file_key": "apNbwvAgdn1xIxYH1oiaSC",
+          "node_id": "2:4"
+        }
+      ],
+      "source_paths": [
+        "web/apps/user/passkeys.sign-in.tsx",
+        "web/apps/user/passkeys.native.ts",
+        "web/apps/user/passkeys.api.ts",
+        "web/apps/user/authentication.tsx",
+        "src/Modules/Identity/PasskeyEndpoints.cs"
+      ],
+      "interaction": "Explicit native browser sign-in gesture and same-screen pending/recovery states; success navigates to existing guarded /signed-in.",
+      "observed_defects": [
+        "UI_ROUTING_DEFECT"
+      ],
+      "consent_ref": "governance/evidence/TUN-P2-007-VISUAL-CONSENT-20261109.json",
+      "design_status": "PRODUCT_OWNER_APPROVED_SCOPED_ADAPTATIONS",
+      "visual_state": "IMPLEMENTATION_REQUIRES_CURRENT_RENDERED_EVIDENCE",
+      "acceptance_boundary": "Actual V01–V06 scoped consent is recorded. Current source is implemented with known recovery/fidelity corrections and native/browser/rendered validation pending. No PASS inherited from another screen; owner Figma backfill, whole007/P2, runtime production policy, protected-main merge and release remain separate."
+    },
+    {
+      "id": "COMP-PASSKEY-REVOKE",
+      "kind": "COMPONENT",
+      "status": "IMPLEMENTED",
+      "app": "user",
+      "module": "Identity.Passkeys",
+      "title": "Remove an owned passkey",
+      "pathname": null,
+      "runtime_pathname": null,
+      "owner_pathnames": [
+        "/account/security",
+        "/account/security/sign-in-methods"
+      ],
+      "parent_screen_ids": [
+        "U-ACCT-SECURITY",
+        "U-ACCT-03"
+      ],
+      "guard": "Current Account/session, owned credential lifecycle version, approved explicit session-effect/eligibility, exact operation-bound proof and atomic owner mutation",
+      "owner_scopes": [
+        "TUN-P2-007"
+      ],
+      "authority_refs": [
+        "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md",
+        "docs/authority/current/development/31_UI_UX_Screen_and_Control_Center_Requirements_Matrix.md",
+        "docs/authority/current/decisions/AMD-0008_Approved_Figma_Visual_Fidelity_and_Product_Owner_UX_Consent.md",
+        "docs/authority/current/decisions/AMD-0009_URL_Addressable_Routing_and_Governed_Form_Validation.md"
+      ],
+      "figma_refs": [
+        {
+          "file_key": "apNbwvAgdn1xIxYH1oiaSC",
+          "node_id": "46:44"
+        }
+      ],
+      "source_paths": [
+        "web/apps/user/passkeys.tsx",
+        "web/apps/user/passkeys.css",
+        "web/apps/user/passkeys.api.ts",
+        "web/apps/user/passkeys.routes.ts",
+        "web/apps/user/passkeys.native.ts",
+        "web/apps/user/step-up.tsx",
+        "src/Modules/Identity/PasskeyEndpoints.cs"
+      ],
+      "interaction": "Same-screen confirmation and shared step-up; policy-specific impact disclosure, safe metadata and exact terminal result only.",
+      "observed_defects": [
+        "UI_ROUTING_DEFECT",
+        "UI_VALIDATION_DEFECT"
+      ],
+      "consent_ref": "governance/evidence/TUN-P2-007-VISUAL-CONSENT-20261109.json",
+      "design_status": "PRODUCT_OWNER_APPROVED_SCOPED_ADAPTATIONS",
+      "visual_state": "IMPLEMENTATION_REQUIRES_CURRENT_RENDERED_EVIDENCE",
+      "acceptance_boundary": "Actual V01–V06 scoped consent is recorded. Current source is implemented with known recovery/fidelity corrections and native/browser/rendered validation pending. No PASS inherited from another screen; owner Figma backfill, whole007/P2, runtime production policy, protected-main merge and release remain separate."
     }
   ],
   "excluded_historical_designs": [
@@ -1832,5 +2059,5 @@
       "reason": "Hidden historical DOB-only screen, superseded prospectively by PDR-0011/AMD-0007; never implement as active UI."
     }
   ],
-  "updated_at": "2026-11-09T05:16:25.824Z"
+  "updated_at": "2026-11-09T17:55:50.487Z"
 }

@@ -1,0 +1,44 @@
+{
+  "schema_version": 1,
+  "scope_id": "TUN-P2-007",
+  "result": "CORRECTIONS_REQUIRED_BEFORE_ACCEPTANCE",
+  "recorded_at": "2026-11-09T17:55:50.500Z",
+  "reviewer": "p2_business_arch_qa",
+  "method": "Read-only static review of frozen frontend18 paths; no tests or source changes by reviewer.",
+  "findings": [
+    {
+      "id": "DEF-TUN-P2-007-UI-002",
+      "path": "web/apps/user/passkeys.sign-in.tsx",
+      "line": 19,
+      "classification": "UI_ROUTING_DEFECT",
+      "scenario": "Hard reload after uncertain SIGN_IN loses original request/ceremony because bootstrap recovers terminal REVOKE only.",
+      "remedy": "Purpose-protected original SIGN_IN pointer projected before context replacement; reconcile exact original result or proved safe next-auth state before new intent; no credential persistence/session restoration."
+    },
+    {
+      "id": "DEF-TUN-P2-007-UI-003",
+      "path": "web/apps/user/passkeys.tsx",
+      "line": 108,
+      "classification": "UI_VALIDATION_DEFECT",
+      "scenario": "Ambiguous start5xx clears original binding, even if PENDING start committed; a later rate-limited retry does not prove original absence.",
+      "remedy": "Preserve immutable original request/kind/target/version through uncertainty; clear only a proved definitive outcome/pre-submit failure."
+    },
+    {
+      "id": "DEF-TUN-P2-007-UI-004",
+      "path": "web/apps/user/passkeys.tsx",
+      "line": 41,
+      "classification": "UI_ROUTING_DEFECT",
+      "scenario": "Route bootstrap adopts recoveryB while unresolved startingA remains, bypassing recover() original-identity check.",
+      "remedy": "Share exact starting snapshot predicate across bootstrap and recovery; retain A unresolved if B appears."
+    },
+    {
+      "id": "DEF-TUN-P2-007-UI-005",
+      "path": "web/apps/user/passkeys.tsx",
+      "classification": "UI_FIDELITY_DEFECT",
+      "scenario": "Approved enrolled prototype includes an actual available Password row, omitted because current methods API lacks the safe owner fact.",
+      "remedy": "Expose authoritative passwordAvailable and retain approved row only when true; no invented password requirement or management action.",
+      "provenance": "Root matched approved rendered/enrolled-1440.png to source omission; UI engineer confirmed omission was not an approved exclusion."
+    }
+  ],
+  "regressions": "Three focused @regression cases written/frozen for RED before corrections; no execution claimed yet.",
+  "authority": "Resolved existing FRD17, AMD8/9 and actual V01–V06 consent; no new Product semantics required."
+}

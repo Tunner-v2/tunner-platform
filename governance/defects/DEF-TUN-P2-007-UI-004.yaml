@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "defect_id": "DEF-TUN-P2-007-UI-004",
+  "work_item_id": "TUN-P2-007",
+  "classification": "UI_ROUTING_DEFECT",
+  "severity": "SEV-2",
+  "status": "OPEN",
+  "environment": "Frozen primary frontend review before browser acceptance",
+  "description": "Route bootstrap adopts recoveryB while unresolved startingA remains, bypassing recover() original-identity check. Required correction: Share exact starting snapshot predicate across bootstrap and recovery; retain A unresolved if B appears.",
+  "expected_behavior_ref": "docs/authority/current/decisions/AMD-0009_URL_Addressable_Routing_and_Governed_Form_Validation.md",
+  "evidence": [
+    "governance/evidence/TUN-P2-007-FRONTEND-REVIEW.json"
+  ],
+  "affected_versions": [],
+  "created_at": "2026-11-09T17:55:50.503Z",
+  "updated_at": "2026-11-09T17:55:50.503Z"
+}
