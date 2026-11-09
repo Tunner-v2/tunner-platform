@@ -1,0 +1,83 @@
+[WebServer] (node:33244) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 3 tests using 1 worker
+
+(node:34616) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  1 tests\authentication\authentication.spec.ts:61:1 › Uncertain password login does not accept a surviving session from another account (6.7s)
+(node:19628) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  2 tests\authentication\authentication.spec.ts:70:1 › Lost password-login body requires the exact original attempted result and fresh CSRF (1.6s)
+(node:34076) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  3 tests\authentication\authentication.spec.ts:78:1 › History entry refreshes Login bootstrap before enabling another credential submission (6.5s)
+
+
+  1) tests\authentication\authentication.spec.ts:61:1 › Uncertain password login does not accept a surviving session from another account
+
+    Error: expect(locator).toHaveText(expected) failed
+
+    Locator: getByRole('alert')
+    Expected: "We couldn’t complete the request. Please try again."
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toHaveText" with timeout 5000ms
+      - waiting for getByRole('alert')
+
+
+      64 |  await page.route('**/authentication/result',route=>{resultReads++;return route.fulfill({status:404,json:{error_code:'RESULT_UNAVAILABLE'}});});
+      65 |  await page.goto('/login');await fill(page);await page.getByRole('button',{name:'Sign in',exact:true}).click();
+    > 66 |  await expect(page.getByRole('alert')).toHaveText(proposal.content['authentication.error.unavailable'],{timeout:5000});
+         |                                        ^
+      67 |  await expect(page).toHaveURL(root+'/login');expect(resultReads).toBe(1);
+      68 | });
+      69 |
+        at <repo-root>\web\tests\authentication\authentication.spec.ts:66:40
+
+    Error Context: test-results\runs\authentication\authentication-Uncertain-p-665bc-ession-from-another-account\error-context.md
+
+  2) tests\authentication\authentication.spec.ts:70:1 › Lost password-login body requires the exact original attempted result and fresh CSRF
+
+    Error: expect(received).toBe(expected) // Object.is equality
+
+    Expected: 1
+    Received: 0
+
+      73 |  await page.route('**/authentication/result',route=>{resultReads++;expect(route.request().headers()['x-tunner-csrf']).toBe('fixture-authenticated-csrf');expect(route.request().postDataJSON()).toEqual({idempotencyKey:'12121212-3434-4567-8989-121212121212',email:'person@example.test',rememberMe:true});return route.fulfill({json:{status:'COMPLETED',idempotencyKey:'12121212-3434-4567-8989-121212121212'}});});
+      74 |  await page.goto('/login');await fill(page);await page.getByRole('checkbox',{name:'Remember me'}).check();await page.getByRole('button',{name:'Sign in',exact:true}).click();
+    > 75 |  await expect(page).toHaveURL(root+'/signed-in');expect(resultReads).toBe(1);
+         |                                                                      ^
+      76 | });
+      77 |
+      78 | test('History entry refreshes Login bootstrap before enabling another credential submission',async({page})=>{
+        at <repo-root>\web\tests\authentication\authentication.spec.ts:75:70
+
+    Error Context: test-results\runs\authentication\authentication-Lost-passwo-558f9-mpted-result-and-fresh-CSRF\error-context.md
+
+  3) tests\authentication\authentication.spec.ts:78:1 › History entry refreshes Login bootstrap before enabling another credential submission
+
+    Error: expect(received).toBeGreaterThan(expected)
+
+    Expected: > 1
+    Received:   1
+
+    Call Log:
+    - Timeout 5000ms exceeded while waiting on the predicate
+
+      82 |  await page.route('**/authentication/sign-in',route=>{posts++;expect(route.request().postDataJSON().idempotencyKey).toBe(latestKey);expect(route.request().headers()['x-tunner-csrf']).toBe(latestCsrf);state.authenticated=true;return route.fulfill({json:{authenticated:true}});});
+      83 |  await page.goto('/login');await fill(page);await page.getByRole('button',{name:'Sign in',exact:true}).click();await expect(page).toHaveURL(root+'/signed-in');await expect(page.getByRole('heading',{name:'You’re signed in'})).toBeVisible();const beforeBack=optionReads;
+    > 84 |  await page.goBack();await expect(page).toHaveURL(root+'/login');await expect.poll(()=>optionReads,{timeout:5000}).toBeGreaterThan(beforeBack);await fill(page);await page.getByRole('button',{name:'Sign in',exact:true}).click();await expect(page).toHaveURL(root+'/signed-in');expect(posts).toBe(2);
+         |                                                                                                                    ^
+      85 | });
+      86 |
+        at <repo-root>\web\tests\authentication\authentication.spec.ts:84:116
+
+    Error Context: test-results\runs\authentication\authentication-History-ent-9f4b6-other-credential-submission\error-context.md
+
+  3 failed
+    tests\authentication\authentication.spec.ts:61:1 › Uncertain password login does not accept a surviving session from another account
+    tests\authentication\authentication.spec.ts:70:1 › Lost password-login body requires the exact original attempted result and fresh CSRF
+    tests\authentication\authentication.spec.ts:78:1 › History entry refreshes Login bootstrap before enabling another credential submission

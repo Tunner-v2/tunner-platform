@@ -1,0 +1,156 @@
+{
+  "schema_version": 1,
+  "scope_id": "TUN-P2-005",
+  "validation_kind": "COMPONENT_EXECUTION",
+  "result": "PASS_FRONTEND_COMPONENT_ONLY",
+  "recorded_at": "2026-11-09T17:14:56.391Z",
+  "source_commit_sha": "d4b85365e039cf2ac3c3eea0453cc607c77333c2",
+  "initial_fix_commit_sha": "5f3c2be",
+  "owned_behavior_paths": [
+    "web/apps/user/authentication.tsx",
+    "web/tests/authentication/authentication.spec.ts"
+  ],
+  "execution": {
+    "initial_red": "3 of3 failed against unchanged implementation at69956d5; exact failures retained.",
+    "focused_after_fix": "3 of3 PASS",
+    "expanded_authentication_browser": "21 PASS, zero failed/skipped/flaky",
+    "web_build": "PASS",
+    "unit_theme": "31 PASS (10 theme plus21 shared contracts), zero failed/skipped",
+    "typescript": "PASS"
+  },
+  "qualifications": [
+    "This is executed frontend regression evidence; mocked session behavior does not prove native server actor/result matching. Native integration/migration/full committed cohort remains pending.",
+    "Existing Login/signed-in renders captured across1440/1024/768/390/320 and server-error variants; this receipt does not claim a new Figma comparison or approve P2-007 UI.",
+    "Playwright assertions finished but the runner waited for its owned Vite fixture to terminate. Only the exact log-linked node PID+start time was stopped after all test workers exited; final runs returned the recorded expected exit codes. No application host, Docker service or other project was changed.",
+    "Later V01–V06 implementation changes must be validated again at their own committed source; this earlier component receipt is retained as historical evidence."
+  ],
+  "review": {
+    "reviewer": "p2_business_arch_qa",
+    "method": "Independent child read-only review of source5f3c2be and regression tests69956d5; no remaining concrete Login correctness issue found, no tests executed by reviewer."
+  },
+  "receipts": [
+    {
+      "raw_ref": "artifacts/p2-audit-20261109/login-review-red.log",
+      "raw_sha256": "31cb399d2a4b09dec264f55598538919e4c0c0ea41125444743c0f14ceda7ed3",
+      "portable_ref": "governance/evidence/p2-recovery-20261109/login-review/login-review-red.log",
+      "portable_sha256": "9250babc0bbd21cb7414f464b76574d10223b260bfd9ae0774cab8f75f6463fe"
+    },
+    {
+      "raw_ref": "artifacts/p2-audit-20261109/login-review-red-results.json",
+      "raw_sha256": "3dbb13fbe43f495c9d4be1d2ab7b22ea6c4798f6575bf93e5fd00521a01f90b8",
+      "portable_ref": "governance/evidence/p2-recovery-20261109/login-review/login-review-red-results.json",
+      "portable_sha256": "b84278ea31483d095751f91cb4f1c1e6e6448c166d7147f8a182ffdfb5ad7336"
+    },
+    {
+      "raw_ref": "artifacts/p2-audit-20261109/login-review-green.log",
+      "raw_sha256": "29e03f1b7a30bf2e37147c4668c987837b4acea9579acaf809a7e3dbb7568f45",
+      "portable_ref": "governance/evidence/p2-recovery-20261109/login-review/login-review-green.log",
+      "portable_sha256": "072e69e97e126f94d691bef06b56c2decedd999cddd0c2470256ea35ee8c937f"
+    },
+    {
+      "raw_ref": "artifacts/p2-audit-20261109/login-review-green-results.json",
+      "raw_sha256": "41015ddd4c626290cefa68f95995a895e795beb4066d8a545ee4e697185285f0",
+      "portable_ref": "governance/evidence/p2-recovery-20261109/login-review/login-review-green-results.json",
+      "portable_sha256": "4cb8ce30bb3af9b8665c035bf1961faa2ddfc86fbfd24480f32863f63e2b401d"
+    },
+    {
+      "raw_ref": "artifacts/p2-audit-20261109/login-review-browser-full.log",
+      "raw_sha256": "06cb003cdd4da0db1035edd5d4674d9f198abb321665c370f0254ebd3c2827b8",
+      "portable_ref": "governance/evidence/p2-recovery-20261109/login-review/login-review-browser-full.log",
+      "portable_sha256": "18d93d9e8e7c604c2052230a76c8fc73264f94d3e9c6a13de3fc3ed46009390e"
+    },
+    {
+      "raw_ref": "artifacts/p2-audit-20261109/login-review-browser-full-results.json",
+      "raw_sha256": "bde4493eb834d0a90bac6281aede649ee534fdade213ca6868eef5352993c819",
+      "portable_ref": "governance/evidence/p2-recovery-20261109/login-review/login-review-browser-full-results.json",
+      "portable_sha256": "a99f368ac3b47340942bee817dfbe9071a043fba2628bd64d1450cc3198d0f34"
+    },
+    {
+      "raw_ref": "artifacts/p2-audit-20261109/login-review-web-build.log",
+      "raw_sha256": "f9f592b1728d903fdafa5a5099afe8835e209ba8588c26f4da7245641d1370ea",
+      "portable_ref": "governance/evidence/p2-recovery-20261109/login-review/login-review-web-build.log",
+      "portable_sha256": "9a3052c9bb191bf848df57ef3b4cb19c3c29cf121bdf4f8e192d83123d84abc1"
+    },
+    {
+      "raw_ref": "artifacts/p2-audit-20261109/login-review-web-unit.log",
+      "raw_sha256": "047c3423212802d0e3eb0a5996371263dbdc62a686417116ce2e95b4178f5328",
+      "portable_ref": "governance/evidence/p2-recovery-20261109/login-review/login-review-web-unit.log",
+      "portable_sha256": "6ae54b347b73826dd3339d4f33f548a2050c4e2529faeddd285e20b7e3d4d167"
+    },
+    {
+      "raw_ref": "artifacts/p2-audit-20261109/login-review-typecheck.log",
+      "raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "portable_ref": "governance/evidence/p2-recovery-20261109/login-review/login-review-typecheck.log",
+      "portable_sha256": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
+    }
+  ],
+  "screenshots": [
+    {
+      "raw_ref": "web/test-results/authentication/login-1024.png",
+      "portable_ref": "governance/evidence/p2-recovery-20261109/login-review/screenshots/login-1024.png",
+      "sha256": "b1ac243fdc0063aa387200bd3647ef511e0f2d117277a69167d215b826a0f10c"
+    },
+    {
+      "raw_ref": "web/test-results/authentication/login-1440.png",
+      "portable_ref": "governance/evidence/p2-recovery-20261109/login-review/screenshots/login-1440.png",
+      "sha256": "b97005afb4f70e0ff947d0b48542bf578c9c31ca53090e1e3895f79553b93e32"
+    },
+    {
+      "raw_ref": "web/test-results/authentication/login-320.png",
+      "portable_ref": "governance/evidence/p2-recovery-20261109/login-review/screenshots/login-320.png",
+      "sha256": "f3041699fb8ec7fb804fc56c87db7f357eb340d284e1b2ee63e2e5539b9389db"
+    },
+    {
+      "raw_ref": "web/test-results/authentication/login-390.png",
+      "portable_ref": "governance/evidence/p2-recovery-20261109/login-review/screenshots/login-390.png",
+      "sha256": "2784c48acc47212959caa2ce783fb272a85b708f4e7d4e4519c86f6998b78b53"
+    },
+    {
+      "raw_ref": "web/test-results/authentication/login-768.png",
+      "portable_ref": "governance/evidence/p2-recovery-20261109/login-review/screenshots/login-768.png",
+      "sha256": "bc381235bab2c34a6c26c4a09674e53b8b38247301637f60f9e6765b48a221f5"
+    },
+    {
+      "raw_ref": "web/test-results/authentication/login-server-error-1440.png",
+      "portable_ref": "governance/evidence/p2-recovery-20261109/login-review/screenshots/login-server-error-1440.png",
+      "sha256": "e5c784f92dd0ab829d2ef2f044a20ed1e3726fe8283d0e93bf47842f19ac1dc4"
+    },
+    {
+      "raw_ref": "web/test-results/authentication/login-server-error-320.png",
+      "portable_ref": "governance/evidence/p2-recovery-20261109/login-review/screenshots/login-server-error-320.png",
+      "sha256": "917befdcfe02f76c142b707b28ab9fe3a8ae37e57731c63b04f4f0cc9e86b165"
+    },
+    {
+      "raw_ref": "web/test-results/authentication/login-server-error-768.png",
+      "portable_ref": "governance/evidence/p2-recovery-20261109/login-review/screenshots/login-server-error-768.png",
+      "sha256": "e109f3914af8ca8f42231f49568ee8788636ed707218820f49c890bdc9e025bf"
+    },
+    {
+      "raw_ref": "web/test-results/authentication/signed-in-1024.png",
+      "portable_ref": "governance/evidence/p2-recovery-20261109/login-review/screenshots/signed-in-1024.png",
+      "sha256": "9807dffdc39540e8882ab8e9dcf23204c1d946ccfcb7977092e8dd4c242df59f"
+    },
+    {
+      "raw_ref": "web/test-results/authentication/signed-in-1440.png",
+      "portable_ref": "governance/evidence/p2-recovery-20261109/login-review/screenshots/signed-in-1440.png",
+      "sha256": "3f43a91de7fdf7b4f2b4826502b462c54a66125f1225cce184843c02b5cc671c"
+    },
+    {
+      "raw_ref": "web/test-results/authentication/signed-in-320.png",
+      "portable_ref": "governance/evidence/p2-recovery-20261109/login-review/screenshots/signed-in-320.png",
+      "sha256": "1420bd1ab1f816e4330c25724522fe04add20fb95ba175d82dc8844ae0a9d17a"
+    },
+    {
+      "raw_ref": "web/test-results/authentication/signed-in-390.png",
+      "portable_ref": "governance/evidence/p2-recovery-20261109/login-review/screenshots/signed-in-390.png",
+      "sha256": "ddaa63e96f16de165e7b79d638d7654fe5489c4e38f690676cd50367725b6621"
+    },
+    {
+      "raw_ref": "web/test-results/authentication/signed-in-768.png",
+      "portable_ref": "governance/evidence/p2-recovery-20261109/login-review/screenshots/signed-in-768.png",
+      "sha256": "374135ce1d5ed1dd9a79483536a3da129ab22f4aa725c4201c88fb07d263ceb6"
+    }
+  ],
+  "portable_transform": "LF, trailing line whitespace removed, exact checkout path normalized; raw/portable hashes retained.",
+  "acceptance": "NOT_FINAL_FEATURE_ACCEPTANCE"
+}
