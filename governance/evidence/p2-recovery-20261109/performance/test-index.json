@@ -1,0 +1,110 @@
+{
+  "schema_version": 1,
+  "scope_id": "P0-004-RV004",
+  "result": "PASS_EXECUTED_ENGINEERING_SCOPE",
+  "tested_commit_sha": "9a01dac5a9cf83acc5150eb69b3afc1fbea24ab5",
+  "validated_commit_sha": "9a01dac5a9cf83acc5150eb69b3afc1fbea24ab5",
+  "recorded_at": "2026-11-09T16:50:06.031Z",
+  "actual_checks": {
+    "full_governance_functional": "PASS",
+    "focused_effective_source_cases": 28,
+    "build": "PASS zero warnings/errors",
+    "static_source": "PASS",
+    "sast": "PASS 3049 tracked or unignored files",
+    "secret_scan": "PASS 3049 files"
+  },
+  "semantic_coverage": "Existing25 missing/stale/dirty/wrong-scope/no-change/historical/merged-main/freshness cases plus3 distinct prerequisite-scope alias assertions. Every invocation owns a new cache; no persistent reuse.",
+  "execution_binding": "Focused pass and full native execution followed source commit9a01dac. Current governance source/test/shared build inputs are Git-object identical to that commit. Later204797f changed only a private Identity contract. Global scans inspect the actual worktree, including in-progress Identity files; they do not prove uncommitted P2 acceptance.",
+  "latency": {
+    "earlier_observation_ref": "governance/evidence/P0-004-RV004-SCOPE.json",
+    "current_command_elapsed_seconds": 142.4633825,
+    "qualification": "Actual concurrent-worktree observation only; earlier different command/context entry took roughly11.5minutes. Not a controlled like-for-like benchmark or approved Product SLO."
+  },
+  "failures_retained": [
+    "CA1859 interface parameter analyzer required concrete Dictionary; fixedf6f5f7a.",
+    "CA1861 repeated constant fixture array analyzer; fixed9a01dac.",
+    "Three Windows PowerShell5 launches were blocked by that host execution policy before script execution; unchanged scripts passed using installed PowerShell7."
+  ],
+  "receipts": [
+    {
+      "raw_ref": "artifacts/p2-audit-20261109/perf-source-focused.log",
+      "raw_sha256": "c4bc7bb65c0493ded45194cd45e3916c9b97f8b738d3c92b3437e66f40bd2991",
+      "portable_ref": "governance/evidence/p2-recovery-20261109/performance/perf-source-focused.log",
+      "portable_sha256": "7409e89eb08682252ec73ff20bcac65fb2d54d8c164a601a4ca0afc2ed6093bd"
+    },
+    {
+      "raw_ref": "artifacts/p2-audit-20261109/perf-source-focused-final.log",
+      "raw_sha256": "1c2b62e654a57b5d32a199fc5485c418d7d06d561705de5e4f29e6881b350147",
+      "portable_ref": "governance/evidence/p2-recovery-20261109/performance/perf-source-focused-final.log",
+      "portable_sha256": "d8545b98cd2192bd2643d59d384536e51106bd51341b7a0360af4fbd935546f4"
+    },
+    {
+      "raw_ref": "artifacts/p2-audit-20261109/perf-source-focused-pass.log",
+      "raw_sha256": "c056263bbbe04b2541057d17b6b13d2b847a34bb8f4eec2158627fe006a7989f",
+      "portable_ref": "governance/evidence/p2-recovery-20261109/performance/perf-source-focused-pass.log",
+      "portable_sha256": "7959c42109fe8468649c143b436e8926db4c100b53da9ea1bf27fe49f5e22e00"
+    },
+    {
+      "raw_ref": "artifacts/p2-audit-20261109/perf-functional-full.log",
+      "raw_sha256": "9ba5c25cf1419a91249606050f61970a27a50e234559bbda965342a1020f17bf",
+      "portable_ref": "governance/evidence/p2-recovery-20261109/performance/perf-functional-full.log",
+      "portable_sha256": "7bf55648faee4584487c9093822cb6aec098099ca9ce267842c9fb6cd65f758a"
+    },
+    {
+      "raw_ref": "artifacts/p2-audit-20261109/perf-next-observation.json",
+      "raw_sha256": "d6a31d2fca1124d3adc51392c6a387ae771d555a91a5b2be82e01c80382428dc",
+      "portable_ref": "governance/evidence/p2-recovery-20261109/performance/perf-next-observation.json",
+      "portable_sha256": "14824af52911620449a6953fab7139b099b66b5b503b9cf584519e12ad7b0de7"
+    },
+    {
+      "raw_ref": "artifacts/p2-audit-20261109/perf-next-timing.json",
+      "raw_sha256": "383cafe714ea40f7575e375ca6584e0557d432bd21cd0a66970ad63637f1ecf7",
+      "portable_ref": "governance/evidence/p2-recovery-20261109/performance/perf-next-timing.json",
+      "portable_sha256": "57f10929a07acb932b70e9c2253b3671e791f14c50bae8d5804374ba984e74a7"
+    },
+    {
+      "raw_ref": "artifacts/p2-audit-20261109/perf-build-resume.log",
+      "raw_sha256": "e15f11c1cd520a7c4d9c2b60aac290da70f5bf18a3b12d0892d9586a2753f528",
+      "portable_ref": "governance/evidence/p2-recovery-20261109/performance/perf-build-resume.log",
+      "portable_sha256": "cf2cb488054f693d77f75df682895b4caec48040c7e7dbac99095a1cc4a366b9"
+    },
+    {
+      "raw_ref": "artifacts/p2-audit-20261109/perf-static.log",
+      "raw_sha256": "ef2f38ad3109b31fa0d9163f728a395ba5a07f8538ca54877a8733db856bc73d",
+      "portable_ref": "governance/evidence/p2-recovery-20261109/performance/perf-static.log",
+      "portable_sha256": "860e82d37817bc364e7a232b887794283fa29911a7d9ebc398260e263c3ef84d"
+    },
+    {
+      "raw_ref": "artifacts/p2-audit-20261109/perf-secret-scan.log",
+      "raw_sha256": "a31fcb6ef2e67a73caa625e1a9a9df0f23049ff9b203d72a41ec09d7bc07bf30",
+      "portable_ref": "governance/evidence/p2-recovery-20261109/performance/perf-secret-scan.log",
+      "portable_sha256": "85e8d636987f1068c2fa520eae6ea42ffad25b2a5d21837cacb4910b5ee2ed67"
+    },
+    {
+      "raw_ref": "artifacts/p2-audit-20261109/perf-sast.log",
+      "raw_sha256": "067521e5ca6a33c3d8316cf4880214d53c403312e6866dd46ae862ad60440586",
+      "portable_ref": "governance/evidence/p2-recovery-20261109/performance/perf-sast.log",
+      "portable_sha256": "16b09fb7cc642bacce7c8777c46d501fb495c76351d0ff9c7dcdb3fe8197b4a2"
+    },
+    {
+      "raw_ref": "artifacts/p2-audit-20261109/perf-static-pwsh.log",
+      "raw_sha256": "c7c360fe549d4094b91e8a39aa39c2cde36dc731dc81144c39392d7a06a98bca",
+      "portable_ref": "governance/evidence/p2-recovery-20261109/performance/perf-static-pwsh.log",
+      "portable_sha256": "9caa3b0ee5e8b868c4ee073ff5c45cb9a80b9dbfd5922b5da406727b51107829"
+    },
+    {
+      "raw_ref": "artifacts/p2-audit-20261109/perf-secret-scan-pwsh.log",
+      "raw_sha256": "011e15baac0da91d6b2484a59ab693f6b3f49f3fa36f2e7206802d15a96a7b8c",
+      "portable_ref": "governance/evidence/p2-recovery-20261109/performance/perf-secret-scan-pwsh.log",
+      "portable_sha256": "6828e283dd00d29cd530bda00532f1a1765c63019d3be9b67e54ce8e9d4a0576"
+    },
+    {
+      "raw_ref": "artifacts/p2-audit-20261109/perf-sast-pwsh.log",
+      "raw_sha256": "26ea2eac217325e0ed242599298ee27b4a03b603bf11ba8b2ff19ef13143932e",
+      "portable_ref": "governance/evidence/p2-recovery-20261109/performance/perf-sast-pwsh.log",
+      "portable_sha256": "59034c1a71bda226b079a88c8d99324b31f50ee61b7cec5459372735298abc7b"
+    }
+  ],
+  "portable_transform": "UTF-8 LF, trailing line whitespace removed, exact checkout path replaced with <repo-root>; raw and portable hashes retained.",
+  "boundary": "Technical governance latency correction only; no Product, release or P2 acceptance."
+}
