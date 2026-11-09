@@ -67,13 +67,13 @@ test('Uncertain password login does not accept a surviving session from another 
  await expect(page).toHaveURL(root+'/login');expect(resultReads).toBe(1);
 });
 
-test('Lost password-login body requires the exact original attempted result and fresh CSRF',async({page})=>{
+for(const lost of ['network','body'] as const){test('Lost password-login '+lost+' requires the exact original attempted result and fresh CSRF',async({page})=>{
  const state=await setup(page);let resultReads=0;
- await page.route('**/authentication/sign-in',async route=>{state.authenticated=true;await route.abort('connectionreset');});
+ await page.route('**/authentication/sign-in',async route=>{state.authenticated=true;if(lost==='network')await route.abort('connectionreset');else await route.fulfill({status:200,contentType:'application/json',body:'{'});});
  await page.route('**/authentication/result',route=>{resultReads++;expect(route.request().headers()['x-tunner-csrf']).toBe('fixture-authenticated-csrf');expect(route.request().postDataJSON()).toEqual({idempotencyKey:'12121212-3434-4567-8989-121212121212',email:'person@example.test',rememberMe:true});return route.fulfill({json:{status:'COMPLETED',idempotencyKey:'12121212-3434-4567-8989-121212121212'}});});
  await page.goto('/login');await fill(page);await page.getByRole('checkbox',{name:'Remember me'}).check();await page.getByRole('button',{name:'Sign in',exact:true}).click();
  await expect(page).toHaveURL(root+'/signed-in');expect(resultReads).toBe(1);
-});
+});}
 
 test('History entry refreshes Login bootstrap before enabling another credential submission',async({page})=>{
  const state=await setup(page);let optionReads=0;let latestKey='';let latestCsrf='';let posts=0;
@@ -82,4 +82,12 @@ test('History entry refreshes Login bootstrap before enabling another credential
  await page.route('**/authentication/sign-in',route=>{posts++;expect(route.request().postDataJSON().idempotencyKey).toBe(latestKey);expect(route.request().headers()['x-tunner-csrf']).toBe(latestCsrf);state.authenticated=true;return route.fulfill({json:{authenticated:true}});});
  await page.goto('/login');await fill(page);await page.getByRole('button',{name:'Sign in',exact:true}).click();await expect(page).toHaveURL(root+'/signed-in');await expect(page.getByRole('heading',{name:'You’re signed in'})).toBeVisible();const beforeBack=optionReads;
  await page.goBack();await expect(page).toHaveURL(root+'/login');await expect.poll(()=>optionReads,{timeout:5000}).toBeGreaterThan(beforeBack);await fill(page);await page.getByRole('button',{name:'Sign in',exact:true}).click();await expect(page).toHaveURL(root+'/signed-in');expect(posts).toBe(2);
+});
+
+
+test('An unrelated completed login result cannot complete the current attempted login',async({page})=>{
+ await setup(page,true);let resultReads=0;
+ await page.route('**/authentication/sign-in',route=>route.abort('connectionreset'));
+ await page.route('**/authentication/result',route=>{resultReads++;return route.fulfill({json:{status:'COMPLETED',idempotencyKey:'34343434-5656-4789-8989-343434343434'}});});
+ await page.goto('/login');await fill(page);await page.getByRole('button',{name:'Sign in',exact:true}).click();await expect(page.getByRole('alert')).toHaveText(proposal.content['authentication.error.unavailable']);await expect(page).toHaveURL(root+'/login');expect(resultReads).toBe(1);
 });
