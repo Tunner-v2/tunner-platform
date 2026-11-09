@@ -4,16 +4,18 @@
   "work_item_id": "TUN-P2-017",
   "classification": "GOVERNANCE_DEFECT",
   "severity": "SEV-2",
-  "status": "OPEN",
+  "status": "RESOLVED",
   "environment": "Current governed prerequisite calculation at 16a06672058dbc4074647611f893481bbb87e6e2",
   "description": "IsRequired checks only literal LOCAL_VALIDATED/READY_FOR_MERGE/DONE statuses. LOCAL_VALIDATED dependencies also consume VALIDATION, but ReadinessReasons passes the current VALIDATION status to HasRequiredCommittedState, so it returns true without checking owned source. Audit similarly omits these consumed VALIDATION records. Observed current password-auth prerequisite owned16 paths changed after its recorded tested SHA, while downstream start remained ELIGIBLE. Resolve through governed P0 tooling revision; preserve original closure and refresh active source proofs.",
   "expected_behavior_ref": "docs/authority/current/development/AMD-0002_Non-Blocking_PR_Approval_and_Continuous_Local_Execution.md",
   "evidence": [
-    "governance/evidence/P2-001-007-AUDIT-SUPPLEMENT-GOV-20261109.json"
+    "governance/evidence/P2-001-007-AUDIT-SUPPLEMENT-GOV-20261109.json",
+    "governance/evidence/p2-recovery-20261109/governance/test-index.json",
+    "governance/evidence/P0-004-RV003-VALIDATION.json"
   ],
   "affected_versions": [
     "16a06672058dbc4074647611f893481bbb87e6e2"
   ],
   "created_at": "2026-11-09T11:11:32.209Z",
-  "updated_at": "2026-11-09T11:11:32.209Z"
+  "updated_at": "2026-11-09T12:06:00.126Z"
 }

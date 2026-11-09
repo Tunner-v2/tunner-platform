@@ -1,0 +1,16 @@
+FAIL: 25 effective VALIDATION source-readiness checks
+VALIDATION source readiness: missing git_state on a VALIDATION prerequisite must block the LOCAL_VALIDATED consumer
+VALIDATION source readiness: missing git_state on a VALIDATION prerequisite must be included in committed readiness audit
+VALIDATION source readiness: final gate must refuse missing source state even before DONE
+VALIDATION source readiness: uncommitted owned behavior after validation must block the LOCAL_VALIDATED consumer
+VALIDATION source readiness: uncommitted owned behavior after validation must be included in committed readiness audit
+VALIDATION source readiness: committed but unvalidated owned behavior must block the LOCAL_VALIDATED consumer
+VALIDATION source readiness: committed but unvalidated owned behavior must be included in committed readiness audit
+VALIDATION source readiness: wrong-scope proof must block the LOCAL_VALIDATED consumer
+VALIDATION source readiness: wrong-scope proof must be included in committed readiness audit
+VALIDATION source readiness: proof SHA disagreeing with source state must block the LOCAL_VALIDATED consumer
+VALIDATION source readiness: proof SHA disagreeing with source state must be included in committed readiness audit
+VALIDATION source readiness: empty or changed candidate ownership must block the LOCAL_VALIDATED consumer
+VALIDATION source readiness: empty or changed candidate ownership must be included in committed readiness audit
+VALIDATION source readiness: missing proof envelope must block the LOCAL_VALIDATED consumer
+VALIDATION source readiness: missing proof envelope must be included in committed readiness audit

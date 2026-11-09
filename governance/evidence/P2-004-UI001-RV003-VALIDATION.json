@@ -2,11 +2,29 @@
   "schema_version": 1,
   "scope_id": "P2-004-UI001-RV003",
   "validation_kind": "COMMITTED",
-  "result": "PENDING_CURRENT_SOURCE_BINDING",
-  "tested_commit_sha": null,
-  "validated_commit_sha": null,
+  "result": "PASS",
+  "tested_commit_sha": "b23753e07bc8be08a766e27201fe76c3517c0dd3",
+  "validated_commit_sha": "b23753e07bc8be08a766e27201fe76c3517c0dd3",
   "owned_behavior_paths": [
     "web/tests/registration/global-compliance.spec.ts",
     "web/tests/registration/support.ts"
-  ]
+  ],
+  "execution_evidence_ref": "governance/evidence/p2-recovery-20261109/test-index.json",
+  "execution_binding": {
+    "method": "Actual24 registration browser cases at c208fdd plus complete unchanged registered application/test/build inputs to this committed candidate.",
+    "executed_at_sha": "c208fdd589ac5bcac9055eb39f8cbe184ccdd123",
+    "validated_at_sha": "b23753e07bc8be08a766e27201fe76c3517c0dd3",
+    "compared_paths": [
+      "web/apps",
+      "web/packages",
+      "web/fixtures",
+      "web/tests/registration",
+      "web/package.json",
+      "web/pnpm-lock.yaml",
+      "web/pnpm-workspace.yaml",
+      "web/tsconfig.json",
+      "web/playwright.registration.config.ts"
+    ],
+    "result": "GIT_OBJECT_IDENTICAL"
+  }
 }

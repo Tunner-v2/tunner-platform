@@ -1,0 +1,27 @@
+Harness failure reporting checks: 1
+Resolved UI_REQUIRED lifecycle checks: 15
+Global UI evidence gate checks: 16
+Milestone Revision review checks: 9
+PASS: 60 RV schema/lifecycle/context/recovery/portability checks
+PASS: 15 closed-revision committed ownership checks
+FAIL: 25 effective VALIDATION source-readiness checks
+VALIDATION source readiness: missing git_state on a VALIDATION prerequisite must block the LOCAL_VALIDATED consumer
+VALIDATION source readiness: missing git_state on a VALIDATION prerequisite must be included in committed readiness audit
+VALIDATION source readiness: final gate must refuse missing source state even before DONE
+VALIDATION source readiness: uncommitted owned behavior after validation must block the LOCAL_VALIDATED consumer
+VALIDATION source readiness: uncommitted owned behavior after validation must be included in committed readiness audit
+VALIDATION source readiness: committed but unvalidated owned behavior must block the LOCAL_VALIDATED consumer
+VALIDATION source readiness: committed but unvalidated owned behavior must be included in committed readiness audit
+VALIDATION source readiness: wrong-scope proof must block the LOCAL_VALIDATED consumer
+VALIDATION source readiness: wrong-scope proof must be included in committed readiness audit
+VALIDATION source readiness: proof SHA disagreeing with source state must block the LOCAL_VALIDATED consumer
+VALIDATION source readiness: proof SHA disagreeing with source state must be included in committed readiness audit
+VALIDATION source readiness: empty or changed candidate ownership must block the LOCAL_VALIDATED consumer
+VALIDATION source readiness: empty or changed candidate ownership must be included in committed readiness audit
+VALIDATION source readiness: missing proof envelope must block the LOCAL_VALIDATED consumer
+VALIDATION source readiness: missing proof envelope must be included in committed readiness audit
+FAIL: unexpected governance harness error: System.InvalidOperationException: Fixture cleanup target is outside the generated test-fixture boundary.
+   at Program.<<Main>$>g__DeleteFixture|0_15(DirectoryInfo fixtureRoot) in <repo-root>\tests\Tunner.Governance.FunctionalTests\Program.cs:line 1102
+   at Program.<<Main>$>g__RunValidationSourceReadinessChecks|0_11(DirectoryInfo repositoryRoot, ICollection`1 failures) in <repo-root>\tests\Tunner.Governance.FunctionalTests\Program.cs:line 1061
+   at Program.<<Main>$>g__RunValidationSourceReadinessChecks|0_11(DirectoryInfo repositoryRoot, ICollection`1 failures)
+   at Program.<Main>$(String[] args) in <repo-root>\tests\Tunner.Governance.FunctionalTests\Program.cs:line 26
