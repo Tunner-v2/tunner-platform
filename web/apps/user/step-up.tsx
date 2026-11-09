@@ -26,7 +26,7 @@ function Dialog({bootstrap,onComplete,onCancel,returnFocusTo}:StepUpDialogProps)
   const [error,setError]=useState<string>();const [serverField,setServerField]=useState<string>();
   const form=useTunnerForm(stepUpPasswordSchema(bootstrap.passwordMaximumLength),{password});
   const id=useId();const controller=useRef(new AbortController());const closed=useRef(false);
-  useEffect(()=>()=>{closed.current=true;controller.current.abort();},[]);
+  useEffect(()=>{closed.current=false;controller.current=new AbortController();return()=>{closed.current=true;controller.current.abort();};},[]);
   useEffect(()=>{document.getElementById(view==='password'?id+'-password':id+'-heading')?.focus();},[view,id]);
   useEffect(()=>{if(serverField&&!form.submitPending)document.getElementById(id+'-password')?.focus();},[serverField,id,form.submitPending]);
   function cancel(){if(form.submitPending)return;closed.current=true;setPassword('');onCancel();}

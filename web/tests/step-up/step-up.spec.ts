@@ -37,7 +37,7 @@ for(const width of [1440,1024,768,390,320]){
  });
 }
 test('Modal keyboard containment Escape and focus restoration do not submit an action',async({page})=>{
- const state=await setup(page);await open(page);await page.keyboard.press('Tab');await expect(page.getByRole('button',{name:'Other method',exact:true})).toBeFocused();
+ const state=await setup(page);await open(page);await page.keyboard.press('Shift+Tab');await expect(page.getByRole('button',{name:'Cancel',exact:true})).toBeFocused();await page.keyboard.press('Tab');await expect(page.getByRole('button',{name:'Other method',exact:true})).toBeFocused();
  await page.keyboard.press('Tab');await expect(page.getByRole('button',{name:'Cancel',exact:true})).toBeFocused();
  await page.keyboard.press('Tab');await expect(page.getByRole('button',{name:'Other method',exact:true})).toBeFocused();
  await page.keyboard.press('Escape');await expect(page.getByRole('dialog')).toHaveCount(0);await expect(page.getByRole('button',{name:'Verify identity',exact:true})).toBeFocused();expect(state.posts).toBe(0);

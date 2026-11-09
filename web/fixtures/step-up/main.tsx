@@ -1,5 +1,5 @@
 import { createRoot } from 'react-dom/client';
-import { useRef, useState } from 'react';
+import { StrictMode, useRef, useState } from 'react';
 import { ThemeProvider } from '../../packages/ui/src/index';
 import '../../packages/ui/styles/index.css';
 import { loadStepUpOptions, StepUpDialog } from '../../apps/user/step-up';
@@ -16,4 +16,4 @@ function App(){
    {boot&&<StepUpDialog bootstrap={boot} returnFocusTo={trigger.current} onCancel={()=>{setBoot(undefined);setStatus('Cancelled');}} onComplete={()=>{setBoot(undefined);setStatus('Verification completed');}}/>}
  </main></ThemeProvider>;
 }
-createRoot(document.getElementById('root')!).render(<App/>);
+createRoot(document.getElementById('root')!).render(<StrictMode><App/></StrictMode>);

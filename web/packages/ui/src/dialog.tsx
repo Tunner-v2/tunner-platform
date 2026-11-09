@@ -20,7 +20,7 @@ export function ModalDialog({labelledBy,describedBy,busy=false,className='',retu
       const fields=Array.from(dialog.querySelectorAll<HTMLElement>('button:not(:disabled),input:not(:disabled),select:not(:disabled),textarea:not(:disabled),a[href],[tabindex]:not([tabindex="-1"])')).filter(field=>field.getClientRects().length>0);
       const first=fields[0],last=fields.at(-1);
       if(!first){event.preventDefault();dialog.focus();return;}
-      if(event.shiftKey&&document.activeElement===first){event.preventDefault();last?.focus();}
+      if(event.shiftKey&&(document.activeElement===first||!fields.includes(document.activeElement as HTMLElement))){event.preventDefault();last?.focus();}
       else if(!event.shiftKey&&document.activeElement===last){event.preventDefault();first.focus();}
     }}
     onCancel={event=>{event.preventDefault();if(!busy)onRequestClose();}}>{children}</dialog>;
