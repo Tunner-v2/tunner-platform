@@ -16,7 +16,7 @@ async function accessible(page:Page,name:string){
 async function fieldError(page:Page,name:string){const field=page.getByLabel(name,{exact:true});await expect(field).toHaveAttribute('aria-invalid','true');const id=await field.getAttribute('aria-describedby');expect(id).toBeTruthy();const error=page.locator('[id="'+id?.split(' ').at(-1)+'"]');await expect(error).toBeVisible();expect(await error.evaluate(e=>({size:getComputedStyle(e).fontSize,color:getComputedStyle(e).color}))).toEqual({size:'12px',color:'rgb(185, 28, 28)'});return field;}
 for(const width of [1440,768,320]){
  test('all five canonical screens: direct entry refresh guard and responsive reference at '+width,async({page})=>{
-  test.setTimeout(60000);await page.setViewportSize({width,height:1024});let current:TestOperation|undefined;let posts=0;page.on('request',r=>{if(r.method()==='POST')posts++;});
+  test.setTimeout(60000);await page.setViewportSize({width,height:1024});let current:TestOperation|undefined;const posts:{path:string;body:string|null;csrf:string|undefined}[]=[];page.on('request',r=>{if(r.method()==='POST')posts.push({path:new URL(r.url()).pathname,body:r.postData(),csrf:r.headers()['x-tunner-csrf']});});
   await boot(page,'/registration/',()=>current);
   for(const stage of ['register','verify','personal','consent','ready'] as const){
    await test.step(registrationRoutes[stage].id,async()=>{
@@ -26,7 +26,9 @@ for(const width of [1440,768,320]){
     expect(await page.evaluate(()=>history.state)).toBeNull();expect(await page.evaluate(()=>({local:localStorage.length,session:sessionStorage.length}))).toEqual({local:0,session:0});
     await accessible(page,'global-'+stage+'-'+width);
    });
-  }expect(posts).toBe(0);
+  }
+  // Restart rotates only a protected browser pointer. Navigation must not replay an authoritative form command.
+  expect(posts.every(p=>p.path==='/registration/restart'&&p.body==='{}'&&p.csrf==='fixture-token')).toBe(true);
  });
  test('FORM-REGISTRATION empty invalid corrected and server-rejected states at '+width,async({page})=>{
   await page.setViewportSize({width,height:1024});let posts=0;let reject=true;await page.route('**/registration/register',async route=>{posts++;await sleep(150);await route.fulfill(reject?{status:400,json:{error_code:'VALIDATION_ERROR',detail:'private-server-detail'}}:{status:202,json:pending()});});await boot(page);
