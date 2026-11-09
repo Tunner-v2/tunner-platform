@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "scope_id": "P0-004-RV004",
+  "result": "RESOLVED_EXISTING_AUTHORITY",
+  "recorded_at": "2026-11-09T16:13:52.228Z",
+  "authority_refs": [
+    "docs/authority/current/development/04_Governance_and_Context_Tooling_Specification.md",
+    "docs/authority/current/development/12_AI_Development_Protocol_Context_and_Project_Memory.md"
+  ],
+  "observed_baseline": {
+    "work_start_process_started_utc": "2026-11-09T15:47:58Z",
+    "work_start_result_file_written_utc": "2026-11-09T15:59:27.385Z",
+    "context_process_started_utc": "2026-11-09T15:48:10Z",
+    "context_generated_at": "2026-11-09T15:59:42.0601719+00:00",
+    "provenance": "Start times observed via Get-Process; output/manifest times are actual filesystem/generated timestamps. Observational current-worktree timing, not an approved Product SLO or controlled benchmark."
+  },
+  "finding": "Next calls ReadinessReasons for every nonterminal work item and repeats HasRequiredCommittedState for identical prerequisite/effective-state inputs. Function depends only on loaded prerequisite, repository and effective state; it has no dependent-consumer-specific semantics.",
+  "correction": "A dictionary lives only inside one Next invocation and is keyed by prerequisite identifier plus effective state. Cache both successful and failed source checks for that assessment; preserve every consumer reason. Never static/persistent or shared across commands. Own gate checks remain direct. Re-run missing/stale/dirty/wrong-scope tests across separate invocations and distinct-key alias cases.",
+  "boundary": "No source gate skipped, weakened, or made durable. No Product policy/lifecycle/merge bypass; historical closure remains immutable."
+}
