@@ -11,7 +11,7 @@ RUN --mount=type=cache,id=tunner-lgtm-go1273-mod,target=/go/pkg/mod,sharing=shar
     go build -mod=readonly -p=2 -trimpath -tags netgo -ldflags='-s -w -X github.com/grafana/loki/v3/pkg/util/build.Version=3.7.9 -X github.com/grafana/loki/v3/pkg/util/build.Revision=d3b4a2f76bfc5625abee7ceb00b8896fa3c31549 -X github.com/grafana/loki/v3/pkg/util/build.Branch=v3.7.9-tunner-dev' -o /out/bin/loki ./cmd/loki; \
     /out/bin/loki -version > /out/provenance/loki/version.txt 2>&1; \
     go version -m /out/bin/loki > /out/provenance/loki/buildinfo.txt; \
-    cp go.mod go.sum LICENSE NOTICE /out/provenance/loki/; go list -mod=readonly -m -json all > /out/provenance/loki/modules.json
+    cp go.mod go.sum LICENSE /out/provenance/loki/; go list -mod=readonly -m -json all > /out/provenance/loki/modules.json
 FROM scratch AS candidate
 COPY --from=builder /out/ /
 LABEL io.tunner.scope="unsigned-dev-service-candidate-not-runtime-accepted" io.tunner.loki.source="d3b4a2f76bfc5625abee7ceb00b8896fa3c31549"
