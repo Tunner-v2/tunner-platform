@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "defect_id": "DEF-TUN-P2-006-UI-004",
+  "work_item_id": "TUN-P2-006",
+  "classification": "UI_VALIDATION_DEFECT",
+  "severity": "SEV-3",
+  "status": "OPEN",
+  "environment": "P2 audit at 16a06672058dbc4074647611f893481bbb87e6e2",
+  "description": "An original dialog recovering an uncertain request can accept a different completed operation/session from another tab because completion is not tied to its requestId. Required correction: Return the protected original request binding on completion and compare it before invoking the original callback; never weaken the existing proof/action transaction.",
+  "expected_behavior_ref": "docs/authority/current/decisions/AMD-0009_URL_Addressable_Routing_and_Governed_Form_Validation.md",
+  "evidence": [
+    "governance/evidence/P2-001-007-AUDIT-20261109.json"
+  ],
+  "affected_versions": [
+    "16a06672058dbc4074647611f893481bbb87e6e2"
+  ],
+  "created_at": "2026-11-09T10:46:27.012Z",
+  "updated_at": "2026-11-09T10:46:27.012Z"
+}

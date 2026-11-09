@@ -1,0 +1,96 @@
+{
+  "schema_version": 1,
+  "work_item_id": "TUN-P2-019",
+  "milestone_id": "P2",
+  "sprint_id": null,
+  "title": "Governed Identity presentation content and approved configuration administration",
+  "status": "BACKLOG",
+  "type": "FEATURE",
+  "authority_refs": [
+    "docs/authority/current-authority.json",
+    "docs/authority/current/development/11_Development_Planes_Milestones_and_P0_Backlog.md",
+    "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md",
+    "docs/authority/current/development/32_Domain_API_Event_Data_and_Policy_Contract_Catalog.md",
+    "docs/authority/current/development/34_Architecture_to_Development_Traceability_Matrix.md",
+    "docs/authority/baselines/1.6.0/decisions/ADR-0006_Identity_ASPNET_Identity_OpenIddict.md",
+    "docs/authority/current/development/AMD-0002_Non-Blocking_PR_Approval_and_Continuous_Local_Execution.md",
+    "docs/authority/current/development/02_Repository_Solution_and_Module_Architecture.md",
+    "docs/authority/current/development/09_Testing_Acceptance_Evidence_and_Quality_Gates.md",
+    "docs/authority/current/development/29_Privacy_Data_Lifecycle_and_Processing_Governance_FRD.md",
+    "docs/authority/current/decisions/PDR-0011_Universal_Account_Eligibility_Age-Aware_Consent_and_Delegated_Commercial_Authority.md",
+    "docs/authority/current/decisions/AMD-0007_Universal_Registration_Age-Aware_Consent_and_Delegated_Commercial_Authority.md",
+    "docs/authority/current/development/10_UI_UX_Components_Widgets_and_Plugins_Development_Rules.md",
+    "docs/authority/current/development/31_UI_UX_Screen_and_Control_Center_Requirements_Matrix.md"
+  ],
+  "flow_refs": [
+    "docs/authority/current/development/34_Architecture_to_Development_Traceability_Matrix.md"
+  ],
+  "contract_refs": [
+    "docs/authority/current/development/32_Domain_API_Event_Data_and_Policy_Contract_Catalog.md"
+  ],
+  "decision_refs": [
+    "ADR-0006",
+    "PDR-0011"
+  ],
+  "acceptance_criteria": [
+    "Provide the documented PresentationContent-owned semantic keys, allowlisted variants, immutable versions/publications/proposals and deterministic effective resolution/fallback for active P2 surfaces. Reuse existing policy, outbox, audit and shared UI capabilities; no separate deployable or cross-domain writable repository.",
+    "Provide secure role-authorized guided contextual draft/preview/validation/diff/required approval/publish/history/rollback workflows. AI output remains draft. Sensitive text and security configuration require explicit approval provenance and configured separation of duties; presentation editing never changes domain behavior.",
+    "Persist and administer approved Identity runtime configuration through domain-owned typed validation, immutable version/effective-scope selection and audit, without inventing policy/retention/legal values or exposing secrets. Keep production enablement blocked until required owners supply approved configuration.",
+    "Replace synthetic test publication at production composition boundaries with the governed resolver. Retain explicitly isolated local test fixtures. Verify production-oriented audience copy, strict authorization/bypass/concurrency tests and current Figma/routing/form/accessibility/performance evidence before acceptance."
+  ],
+  "prerequisites": [
+    "TUN-P2-003",
+    "TUN-P2-005",
+    "TUN-P2-006",
+    "TUN-P1-013",
+    "TUN-P1-019"
+  ],
+  "blockers": [],
+  "impact": {
+    "architecture": true,
+    "ui": true,
+    "sdk": false,
+    "financial": false,
+    "compliance": true,
+    "security": true,
+    "devops": true,
+    "support": false,
+    "content": true,
+    "api": true
+  },
+  "activated_roles": [
+    "full-stack-engineer",
+    "tester-qa-engineer",
+    "solution-architect",
+    "cyber-security-engineer",
+    "auditor",
+    "compliance-specialist",
+    "sdk-engineer",
+    "ui-ux-engineer",
+    "frontend-engineer",
+    "end-user-ux-reviewer",
+    "content-writer",
+    "rd-engineer",
+    "devops-engineer"
+  ],
+  "required_tests": [
+    "content resolution effective-time/scope/locale/variant/fallback and sensitive missing-content denial",
+    "draft/publication immutability and optimistic concurrency; author/approver/publisher permission and separation-of-duties negative cases",
+    "policy/configuration typed backend validation and authoritative business/presentation separation",
+    "real PostgreSQL/HTTPS User/Admin integration, routing/form/visual/accessibility and approved performance profile"
+  ],
+  "required_evidence": [
+    "governance/evidence/TUN-P2-019-VALIDATION.json",
+    "governance/evidence/P2-001-007-AUDIT-20261109.json"
+  ],
+  "context_policy": "TASK",
+  "todos": [
+    "TODO-TUN-P2-019-DESIGN001",
+    "TODO-TUN-P2-019-POLICY001"
+  ],
+  "defects": [
+    "DEF-TUN-P2-019-CONTENT-001"
+  ],
+  "created_at": "2026-11-09T10:46:27.012Z",
+  "updated_at": "2026-11-09T10:46:27.012Z"
+}

@@ -1,0 +1,549 @@
+{
+  "schema_version": 1,
+  "scope_id": "TUN-P2-017",
+  "audit_kind": "P2_001_THROUGH_007_PRE_IMPLEMENTATION_REQUIREMENTS_AUDIT",
+  "result": "GAPS_FOUND",
+  "audited_commit_sha": "16a06672058dbc4074647611f893481bbb87e6e2",
+  "recorded_at": "2026-11-09T10:46:27.012Z",
+  "previous_goal_turn_classification": "PROGRESS: independent reviewer produced two specific findings that change the next authorized action",
+  "authority_readback_ref": "governance/evidence/P2-001-007-AUTHORITY-READBACK-20261109.json",
+  "native_startup": {
+    "authority": "VERIFIED196",
+    "context": "CURRENT",
+    "status": "P0/P1 CLOSED;P2 ACTIVE;001 DONE;002-006 VALIDATION;007 BACKLOG"
+  },
+  "items": [
+    {
+      "scope": "TUN-P2-001",
+      "status": "DONE",
+      "title": "Account & Identity authority-backed refinement",
+      "criteria": [
+        {
+          "index": 1,
+          "requirement": "Map every FRD 17 state/resource/operation/event/UI/acceptance family to bounded governed P2 work items with explicit owner, non-goals, source references and LOCAL_VALIDATED prerequisites.",
+          "outcome": "PROVEN_HISTORICAL_REFINEMENT"
+        },
+        {
+          "index": 2,
+          "requirement": "Resolve existing authority before declaring missing Product contracts; preserve existing FRD/ADR/PDR semantics and cross-domain ownership.",
+          "outcome": "PROVEN_HISTORICAL_REFINEMENT"
+        },
+        {
+          "index": 3,
+          "requirement": "Identify and scope the first implementation slice, its tests/evidence, activated roles and any genuine policy/UX/provider prerequisites.",
+          "outcome": "PROVEN_HISTORICAL_REFINEMENT"
+        },
+        {
+          "index": 4,
+          "requirement": "Retain P1 PR/integration and acceptance boundaries while permitting authorized local P2 work under AMD-0002.",
+          "outcome": "PROVEN_HISTORICAL_REFINEMENT"
+        },
+        {
+          "index": 5,
+          "requirement": "Do not implement Account/Identity runtime behavior, provider adapters, persistence or user interfaces in this refinement work.",
+          "outcome": "PROVEN_HISTORICAL_NON_RUNTIME_BOUNDARY"
+        }
+      ],
+      "evidence_refs": [
+        "governance/evidence/TUN-P2-001-AUTHORITY-RESOLUTION.json",
+        "governance/evidence/TUN-P2-001-VALIDATION.json",
+        "governance/evidence/TUN-P2-001-BACKLOG-SNAPSHOT.json",
+        "docs/development/P2_ACCOUNT_IDENTITY_REFINEMENT.md",
+        "governance/evidence/TUN-P2-001-ROLE-REVIEWS.json"
+      ],
+      "tests": [
+        "authority verify",
+        "governance validate and role calculation",
+        "native next eligibility and work transitions",
+        "bounded TASK context build/verify",
+        "FRD-to-backlog coverage and dependency graph review"
+      ],
+      "assessment": "HISTORICAL_REFINEMENT_VALID",
+      "inspected_sources": [
+        {
+          "path": "docs/development/P2_ACCOUNT_IDENTITY_REFINEMENT.md",
+          "sha256": "f956768ee173a2661d79128081fc9d12bda84a2fc53fd0b76951e6548c955584"
+        },
+        {
+          "path": "governance/evidence/TUN-P2-001-BACKLOG-SNAPSHOT.json",
+          "sha256": "8180a99cfdc364182049df2aa3f6945df3cc149adf2e901d8752583118f5503e"
+        }
+      ]
+    },
+    {
+      "scope": "TUN-P2-002",
+      "status": "VALIDATION",
+      "title": "Calendar-safe age classification and consent/commercial capability policy",
+      "criteria": [
+        {
+          "index": 1,
+          "requirement": "Retain historical DOB-based evidence reader and shared calendar arithmetic without applying old global ineligibility to current Account lifecycle.",
+          "outcome": "PROVEN_CURRENT_CODE_AND_57_TESTS"
+        },
+        {
+          "index": 2,
+          "requirement": "Resolve PDR-0011 age classification, jurisdiction-scoped consent and independent commercial eligibility with server clock, effective policy and safe evidence references.",
+          "outcome": "PROVEN_CURRENT_CODE_AND_57_TESTS"
+        },
+        {
+          "index": 3,
+          "requirement": "Re-evaluate age/capability without replacing Account identity; no DOB in returned/diagnostic derived evidence.",
+          "outcome": "PROVEN_CURRENT_CODE_AND_57_TESTS"
+        }
+      ],
+      "evidence_refs": [
+        "governance/evidence/TUN-P2-002-VALIDATION.json",
+        "governance/evidence/TUN-P2-002-AUTHORITY-RESOLUTION.json",
+        "governance/evidence/TUN-P2-002-ROLE-REVIEWS.json",
+        "docs/development/P2_002_ADULT_ELIGIBILITY.md"
+      ],
+      "tests": [
+        "birthday/leap/year boundaries and invalid dates",
+        "restricted DOB minimization and explicit policy/evidence provenance",
+        "domain dependency direction and platform regression"
+      ],
+      "assessment": "ENGINEERING_IMPLEMENTED_FINAL_ACCEPTANCE_PENDING",
+      "inspected_sources": [
+        {
+          "path": "src/Modules/Accounts/AccountAgeCapabilities.cs",
+          "sha256": "588f59dd3e671fe9287e808d5af6d60dbbfe1016ad4539450087091c64f5f67b"
+        },
+        {
+          "path": "src/Modules/Accounts/AgeEligibilityEvaluator.cs",
+          "sha256": "16634bc2d602406b49d26294b232e459e681597dc9b16945fb72f6c7a995e316"
+        },
+        {
+          "path": "tests/Tunner.Accounts.Tests/AccountAgeCapabilityTests.cs",
+          "sha256": "f752a3ba0b79b008e9d55eae0df9b8201038f22faf4c293086a666438912a3e3"
+        }
+      ]
+    },
+    {
+      "scope": "TUN-P2-003",
+      "status": "VALIDATION",
+      "title": "Account and Identity persistence/framework foundation",
+      "criteria": [
+        {
+          "index": 1,
+          "requirement": "Refine and implement Accounts/Identity-owned canonical resources and state versions with ASP.NET Core Identity + OpenIddict at currently researched supported versions.",
+          "outcome": "PROVEN_FOUNDATION_ONLY"
+        },
+        {
+          "index": 2,
+          "requirement": "Preserve stable Tunner-owned identifiers and domain boundaries; framework/provider types are not cross-domain authority.",
+          "outcome": "PROVEN_CURRENT_CODE_AND_REAL_DATABASE_TESTS"
+        },
+        {
+          "index": 3,
+          "requirement": "Rehearse forward/rollback-safe database changes and uniqueness/concurrency behavior; configure explicit operator/policy values without inventing security defaults.",
+          "outcome": "PROVEN_MIGRATION_AND_CONCURRENCY_TESTS"
+        }
+      ],
+      "evidence_refs": [
+        "governance/evidence/TUN-P2-003-VALIDATION.json",
+        "governance/evidence/TUN-P2-003-AUTHORITY-RESOLUTION.json",
+        "governance/evidence/TUN-P2-003-RD-SOURCES.json",
+        "governance/evidence/TUN-P2-003-ROLE-REVIEWS.json",
+        "docs/development/P2_003_IDENTITY_PERSISTENCE.md",
+        "governance/evidence/TUN-P2-003-DATA-INVENTORY.json"
+      ],
+      "tests": [
+        "real PostgreSQL migration rehearsal and uniqueness/concurrency",
+        "module dependency/ownership checks",
+        "primary-source package compatibility and dependency scan"
+      ],
+      "assessment": "ENGINEERING_IMPLEMENTED_FINAL_ACCEPTANCE_PENDING",
+      "inspected_sources": [
+        {
+          "path": "src/Modules/Identity/IdentityModelConfiguration.cs",
+          "sha256": "a31e1d937723b142e12849d1bb9fac757c177f36a7cc14e5fc67d83cb6995efe"
+        },
+        {
+          "path": "src/Modules/Identity/IdentityPersistenceDbContext.cs",
+          "sha256": "cad78de2ae78515fd7cdf85add2de907459e7718885d7113277c9b62845fe395"
+        },
+        {
+          "path": "src/Modules/Identity/IdentityMigrationSql.cs",
+          "sha256": "e11911449e22c38a41b2e02caaca0574223e59c5204fb629c95d54ea1906ff65"
+        },
+        {
+          "path": "tests/Tunner.Identity.Persistence.Tests/IdentityFoundationTests.cs",
+          "sha256": "61ef1535e6c0c8d7239c801216e631e0e5f123b5e8aa04f83d64e9f911cb8db5"
+        }
+      ]
+    },
+    {
+      "scope": "TUN-P2-004",
+      "status": "VALIDATION",
+      "title": "Registration and verified-contact activation vertical slice",
+      "criteria": [
+        {
+          "index": 1,
+          "requirement": "Register with email/password/confirmation and current terms/privacy acknowledgement, without DOB or age rejection; verify contact before normal Personal Information.",
+          "outcome": "GAP_EXPIRED_OPERATION_RESTART"
+        },
+        {
+          "index": 2,
+          "requirement": "Personal Information collects DOB using shared calendar-safe server evaluation; age below18 does not itself deny Account activation, normal authentication/session or ordinary Product relationship.",
+          "outcome": "PROVEN_CURRENT_AGE_AWARE_FLOW"
+        },
+        {
+          "index": 3,
+          "requirement": "Resolve current jurisdiction-scoped age/consent policy and trusted consent evidence; independent payer/payment-method/paid-term capabilities remain restricted under18, while existing BillingAuthority/sponsorship contracts own paid access.",
+          "outcome": "PROVEN_CONFIGURED_POLICY_MECHANICS_PRODUCTION_CONFIG_PENDING"
+        },
+        {
+          "index": 4,
+          "requirement": "Preserve PDR-0007 evidence and existing idempotency, proof, uniqueness, privacy, framework credential and outbox behavior; no new minor identity/payment resources.",
+          "outcome": "PROVEN_TRANSACTION_PRIVACY_BOUNDARIES_WITH_RETRY_GAP"
+        }
+      ],
+      "evidence_refs": [
+        "governance/evidence/TUN-P2-004-VALIDATION.json",
+        "governance/evidence/TUN-P2-004-AUTHORITY-RESOLUTION.json",
+        "docs/development/P2_004_REGISTRATION_SCOPE.md",
+        "docs/development/P2_004_REGISTRATION.md",
+        "governance/evidence/TUN-P2-004-RD-SOURCES.json",
+        "governance/evidence/TUN-P2-004-DATA-INVENTORY.json",
+        "governance/evidence/TUN-P2-004-UI-ALIGNMENT.json",
+        "governance/evidence/TUN-P2-004-ROLE-REVIEWS.json",
+        "governance/evidence/PDR0011-AMD0007-IMPACT-AUDIT.json",
+        "docs/development/PDR0011_AMD0007_IMPLEMENTATION.md",
+        "governance/evidence/AMD0008-UI-AUDIT.json",
+        "docs/development/AMD0008_UI_REVIEW.md",
+        "governance/evidence/AMD0008-UI-VISUAL-VALIDATION.json",
+        "docs/development/AMD0008_HANDOFF.md",
+        "governance/gates/UI_VISUAL_APPROVAL.yaml",
+        "governance/work-items/TUN-P2-004-UI001.yaml",
+        "governance/todos/TODO-AMD0008-GOV001.yaml",
+        "governance/evidence/TUN-P2-004-SECURITY-REVALIDATION-20261021.json",
+        "docs/development/LOCAL_BROWSER_TESTING.md",
+        "governance/evidence/TUN-P2-004-BROWSER-STARTER-SCOPE.json",
+        "docs/development/BROWSER_STARTER_HANDOFF.md",
+        "governance/evidence/TUN-P2-004-UI-COMPLIANCE.json",
+        "docs/development/GLOBAL_UI_COMPLIANCE_REPORT.md",
+        "docs/development/GLOBAL_UI_HANDOFF_20261018.md",
+        "governance/evidence/AMD0009-FINAL-GATES-20261018.json"
+      ],
+      "tests": [
+        "registration and verification without DOB; no age-based Account activation rejection",
+        "Personal Information proof binding, policy/consent/evidence, encrypted retention and re-evaluation at18",
+        "current commercial eligibility and consent/BillingAuthority separation; future-plane contract conformance",
+        "calendar, privacy, replay/concurrency, real PostgreSQL/HTTPS BFF and accessible browser regressions",
+        "isolated manual browser starter: real HTTPS/SMTP/database flow, safe lifecycle, TLS/Production/PID/port guards"
+      ],
+      "assessment": "CONFIRMED_CORRECTIVE_GAP",
+      "inspected_sources": [
+        {
+          "path": "src/Modules/Identity/RegistrationApplication.cs",
+          "sha256": "9b3478e60d31d55c25fe542ed8d3e622cc6cc7e73c1d08f02dc61deda1da44a7"
+        },
+        {
+          "path": "src/Modules/Identity/RegistrationPersonalInformation.cs",
+          "sha256": "c59b02a7eb77620b57e5304b8bd17205601a7949d75bd1edfba121af2fb9e6b0"
+        },
+        {
+          "path": "src/Modules/Identity/RegistrationEndpoints.cs",
+          "sha256": "6d74b388478d1314481b4420622cd583f1d66e809c5c71ef6e39c0ed71e1e7ba"
+        },
+        {
+          "path": "src/Modules/Identity/AccountPersonalInformationApplication.cs",
+          "sha256": "568c9e0c58462de7b004b40965b36c8e0aefa2f4023b1c88342bb548c8dd883b"
+        },
+        {
+          "path": "web/apps/user/main.tsx",
+          "sha256": "fe9995894dc0d9d6fa9d90fe2ece6b4d640c075672062440000734069fad1533"
+        },
+        {
+          "path": "tests/Tunner.Identity.Persistence.Tests/RegistrationTests.cs",
+          "sha256": "50d8b66c5243fc923d67283580c3db666450fc4ba6379a79dc693f884499f44a"
+        },
+        {
+          "path": "tests/Tunner.Identity.Persistence.Tests/RegistrationBffTests.cs",
+          "sha256": "66cb3920b559d74fd0f78d480acc0707370662991d4c8ee54f195e7fe1d617b8"
+        },
+        {
+          "path": "web/tests/registration/global-compliance.spec.ts",
+          "sha256": "b5572274c843e387a6595ae0a593901034eaa022cf9b00b1dbc55ca4440b67e8"
+        }
+      ]
+    },
+    {
+      "scope": "TUN-P2-005",
+      "status": "VALIDATION",
+      "title": "Authentication and server-managed BFF sessions",
+      "criteria": [
+        {
+          "index": 1,
+          "requirement": "Implement password authentication and sign-out through server-managed Tunner/BFF sessions and versioned policy values.",
+          "outcome": "PROVEN_PASSWORD_SESSION_FRAMEWORK"
+        },
+        {
+          "index": 2,
+          "requirement": "Rotate identifiers at authentication/material privilege changes, enforce active Account restrictions and expiry, and keep OAuth tokens out of browser JavaScript.",
+          "outcome": "PROVEN_CURRENT_SESSION_ROTATION_RESTRICTIONS_EXPIRY"
+        },
+        {
+          "index": 3,
+          "requirement": "Reuse User/Admin BFF separation and shared error/authorization mechanics.",
+          "outcome": "PROVEN_USER_ADMIN_SEPARATION"
+        }
+      ],
+      "evidence_refs": [
+        "governance/evidence/TUN-P2-005-VALIDATION.json"
+      ],
+      "tests": [
+        "cookie/session boundary; policy-scoped restricted/closing Account access and closed Account rejection; no age-only denial",
+        "rotation/expiry/revocation/idempotent sign-out",
+        "browser token absence and approved login UX"
+      ],
+      "assessment": "ENGINEERING_IMPLEMENTED_FINAL_ACCEPTANCE_PENDING",
+      "inspected_sources": [
+        {
+          "path": "src/Modules/Identity/AuthenticationApplication.cs",
+          "sha256": "7c9ab11c64f0d9b6afdf867d14ac669dba8479408998367585c97f6bdaf0503c"
+        },
+        {
+          "path": "src/Modules/Identity/AuthenticationEndpoints.cs",
+          "sha256": "4cf453926cf877ca7f4dd65e3a8b31475bf09a3f0f6fcabfe436561cec1cf639"
+        },
+        {
+          "path": "web/apps/user/authentication.tsx",
+          "sha256": "22f6a898b1341871d500d8443de2c80991db54272258852410ac9f7df283f006"
+        },
+        {
+          "path": "tests/Tunner.Identity.Persistence.Tests/AuthenticationTests.cs",
+          "sha256": "ca69d6df831d5d866bda8fffc522733b6afc53fdb8e334224919d3282e5b699a"
+        }
+      ]
+    },
+    {
+      "scope": "TUN-P2-006",
+      "status": "VALIDATION",
+      "title": "Versioned assurance and operation-bound step-up",
+      "criteria": [
+        {
+          "index": 1,
+          "requirement": "Resolve approved assurance requirements at sensitive-operation execution from versioned policy.",
+          "outcome": "PROVEN_EXPLICIT_VERSIONED_SELECTION"
+        },
+        {
+          "index": 2,
+          "requirement": "Bind fresh step-up proof to the operation/context and policy lifetime; prevent reuse as a general session upgrade.",
+          "outcome": "GAP_BROWSER_COMPLETION_RECONCILIATION_BINDING"
+        },
+        {
+          "index": 3,
+          "requirement": "Do not invent assurance mappings, timeouts or risk thresholds; obtain actual configured policy evidence before enabling affected runtime paths.",
+          "outcome": "PROVEN_FAIL_CLOSED_PRODUCTION_CONFIGURATION_PENDING"
+        }
+      ],
+      "evidence_refs": [
+        "governance/evidence/TUN-P2-006-VALIDATION.json",
+        "governance/evidence/TUN-P2-006-STARTUP-REVIEWS.json",
+        "governance/evidence/p2-006-policy-20261108/receipt.json",
+        "docs/development/P2_006_HANDOFF.md",
+        "governance/evidence/p2-006-proof-20261108/receipt.json",
+        "governance/evidence/TUN-P2-006-COMMITTED-SOURCE.json"
+      ],
+      "tests": [
+        "wrong operation/context, expiry and replay rejection",
+        "policy-version selection and expected-version conflicts",
+        "sensitive action UX and safe error outcomes"
+      ],
+      "assessment": "CONFIRMED_CORRECTIVE_GAP",
+      "inspected_sources": [
+        {
+          "path": "src/Modules/Identity/AssurancePolicy.cs",
+          "sha256": "ee14ebf75195298efc0045b38706a351e8b0e3411d9779fc527e4eae4a051d8d"
+        },
+        {
+          "path": "src/Modules/Identity/StepUpApplication.cs",
+          "sha256": "6ab50bceb44ba123b978264e337b7b5d8db376d71f127e7b38d449d011ddccb7"
+        },
+        {
+          "path": "src/Modules/Identity/StepUpBrowserEndpoints.cs",
+          "sha256": "11aeea2e1943205313560a8ff0cd23207f3fea3a51f97a2d334cee5567cfc190"
+        },
+        {
+          "path": "web/apps/user/step-up.tsx",
+          "sha256": "fe0c5d9e63cf58516cd521dc7bf5e3b73473e7efafee900f7b0034373c1b3436"
+        },
+        {
+          "path": "tests/Tunner.Identity.Persistence.Tests/StepUpTests.cs",
+          "sha256": "900d689bc2144a3a090c781bd0f28e86bea98a4d53c1ff5a5b314e1b48d52546"
+        },
+        {
+          "path": "tests/Tunner.Identity.Persistence.Tests/StepUpBrowserTests.cs",
+          "sha256": "1bf4eee8e7c1d8ca309c85c3ec490fe942a90daf37c5a60055162bcf13d6dac3"
+        }
+      ]
+    },
+    {
+      "scope": "TUN-P2-007",
+      "status": "BACKLOG",
+      "title": "Passkey registration authentication and revocation",
+      "criteria": [
+        {
+          "index": 1,
+          "requirement": "Implement WebAuthn/passkey ceremonies under approved relying-party/origin and security policy configuration.",
+          "outcome": "NOT_IMPLEMENTED"
+        },
+        {
+          "index": 2,
+          "requirement": "Keep credentials inactive until successful ceremony, retain public metadata only, and require authorized step-up for mutations.",
+          "outcome": "NOT_IMPLEMENTED"
+        },
+        {
+          "index": 3,
+          "requirement": "Never receive/log passkey private material; use current primary-source standards/framework evidence.",
+          "outcome": "NOT_IMPLEMENTED"
+        }
+      ],
+      "evidence_refs": [
+        "governance/evidence/TUN-P2-007-VALIDATION.json"
+      ],
+      "tests": [
+        "ceremony origin/challenge/replay failures",
+        "inactive enrollment and credential revocation",
+        "cross-browser accessible approved ceremony UI"
+      ],
+      "assessment": "NOT_IMPLEMENTED",
+      "inspected_sources": [
+        {
+          "path": "governance/work-items/TUN-P2-007.yaml",
+          "sha256": "882022fed28d135de0c39efe4c45ae4821801400f1a1cbdf4ec58eb28824e5d7"
+        }
+      ]
+    }
+  ],
+  "current_executed_baseline": {
+    "accounts": 57,
+    "identity": 147,
+    "architecture": 237,
+    "failed": 0,
+    "skipped": 0,
+    "identity_groups": {
+      "IdentityFoundationTests": 15,
+      "RegistrationTests": 28,
+      "StepUpTests": 38,
+      "AuthenticationTests": 25,
+      "AssurancePolicyTests": 12,
+      "StepUpBrowserTests": 20,
+      "RegistrationBffTests": 8,
+      "AuthenticationPolicyTests": 1
+    },
+    "raw_refs": [
+      "artifacts/p2-audit-20261109/tests/accounts-audit.trx",
+      "artifacts/p2-audit-20261109/tests/identity-baseline.trx",
+      "artifacts/p2-audit-20261109/tests/architecture-audit.trx"
+    ],
+    "receipts": [
+      {
+        "raw_ref": "artifacts/p2-audit-20261109/tests/accounts-audit.trx",
+        "raw_sha256": "0c38362baad68bf04657e2b78d7509c1513ba7cc411290d356815edd3dbfd23f",
+        "portable_ref": "governance/evidence/p2-audit-20261109/accounts.trx",
+        "portable_sha256": "d1ec154a571ed2e8188d6b6a41117431ef99701ce700800dc915b076a14d07c7"
+      },
+      {
+        "raw_ref": "artifacts/p2-audit-20261109/tests/identity-baseline.trx",
+        "raw_sha256": "0b259fcc825042e4e71d20c2a284d3474f924642de4085877ec0fa251bc7ac6e",
+        "portable_ref": "governance/evidence/p2-audit-20261109/identity.trx",
+        "portable_sha256": "6616e7867fc3ae8c6de67075769a805dff649be9613ecc09abda22d5c32015d9"
+      },
+      {
+        "raw_ref": "artifacts/p2-audit-20261109/tests/architecture-audit.trx",
+        "raw_sha256": "b4df848a8d844db26e94813cd10354b6b7b10463f11f099de9de16f985c300fe",
+        "portable_ref": "governance/evidence/p2-audit-20261109/architecture.trx",
+        "portable_sha256": "25ac025a3ca225a22f36469252875d3fe6ae399319ebc910788c28529810d697"
+      },
+      {
+        "raw_ref": "artifacts/p2-audit-20261109/accounts.log",
+        "raw_sha256": "0349cddf94c4248f5a4508408bb3367f345c3f8a413801cec5bce834ce07d97e",
+        "portable_ref": "governance/evidence/p2-audit-20261109/accounts.log",
+        "portable_sha256": "60b50e0d9a2009f06ddabd94a341b59d215eb1c336ede3be6bb62973bf4d2c42"
+      },
+      {
+        "raw_ref": "artifacts/p2-audit-20261109/identity-baseline.log",
+        "raw_sha256": "93e725126d5ac3ec28866a9a6428beb07d3184fcd3cd8470af0cdd660c7ee191",
+        "portable_ref": "governance/evidence/p2-audit-20261109/identity.log",
+        "portable_sha256": "759d828c2ec2dfd905028f83ed389306bed4cd70de8ff74bfee2ea6414e7838c"
+      },
+      {
+        "raw_ref": "artifacts/p2-audit-20261109/architecture.log",
+        "raw_sha256": "46d27dc8747b5e744f3eab365a27f2b545d3676530555eb993529ee608ad1020",
+        "portable_ref": "governance/evidence/p2-audit-20261109/architecture.log",
+        "portable_sha256": "5ae5f661862cde76567925b134b6aa5fa552481493a286a5c58cb6fa18ed3a7c"
+      },
+      {
+        "raw_ref": "artifacts/p2-audit-20261109/identity-dependency-audit.log",
+        "raw_sha256": "28d40775976f22a3bee6060d284219a8de48bd0ec99054c469916bac78e70938",
+        "portable_ref": "governance/evidence/p2-audit-20261109/dependency-audit.log",
+        "portable_sha256": "78ec073cd3fd515d2153e1377e0388eec1654610a86cc6eeebf0f397af972988"
+      }
+    ]
+  },
+  "existing_browser_evidence": {
+    "ref": "governance/evidence/ui/step-up-20261109/test-index.json",
+    "boundary": "77 prior executed browser cases at unchanged executable source; inspected test scope. The two newly confirmed edge cases are not covered. This audit does not claim a fresh browser run or full P2 acceptance."
+  },
+  "confirmed_findings": [
+    {
+      "id": "DEF-TUN-P2-006-UI-004",
+      "scope": "TUN-P2-006",
+      "classification": "UI_VALIDATION_DEFECT",
+      "source": "src/Modules/Identity/StepUpBrowserEndpoints.cs:50;web/apps/user/step-up.tsx:55",
+      "scenario": "An original dialog recovering an uncertain request can accept a different completed operation/session from another tab because completion is not tied to its requestId.",
+      "remedy": "Return the protected original request binding on completion and compare it before invoking the original callback; never weaken the existing proof/action transaction."
+    },
+    {
+      "id": "DEF-TUN-P2-004-UI-003",
+      "scope": "TUN-P2-004",
+      "classification": "UI_ROUTING_DEFECT",
+      "source": "web/apps/user/main.tsx:70",
+      "scenario": "When operation material expires before the still-valid browser context, progress returns NOT_FOUND but the UI keeps the same key; every retry targets the retained expired row.",
+      "remedy": "Use the existing protected restart endpoint before exposing a new registration form, preserving old Account/evidence and unknown-response idempotency."
+    },
+    {
+      "id": "DEF-TUN-P2-019-CONTENT-001",
+      "scope": "TUN-P2-019",
+      "classification": "FUNCTIONAL_GAP",
+      "source": "documents02/10/31/32;src/Modules;web/packages/ui/src/content.tsx",
+      "scenario": "Production content provenance interfaces exist, but there is no Content/PresentationContent-owned persistent version/publication model or secure Admin workflow; current runnable providers/content are synthetic local fixtures.",
+      "remedy": "Implement the existing governed global capability for P2 surfaces, reusing policy/authorization/audit/outbox primitives, through a bounded work item. Do not invent text/publication or domain/security-policy values."
+    }
+  ],
+  "remaining_requirements": [
+    "P2-007..016 Identity features remain in BACKLOG; framework passkey tables are not ceremonies",
+    "P2-017 full security/privacy/UX/performance conformance and P2-018 acceptance remain pending",
+    "Production content/configuration and secure administration require the added P2-019 enabling slice",
+    "Current approved policy/legal/retention/approval and performance targets must be resolved from authorized owners before dependent production enablement",
+    "Existing security image/CI findings and protected-main/release gates remain separate and unwaived"
+  ],
+  "authority_resolution": {
+    "result": "RESOLVED_EXISTING_AUTHORITY",
+    "refs": [
+      "FRD17§§7,13,15,16",
+      "AMD0009§§4-5",
+      "docs02 PresentationContent module",
+      "docs10§3A",
+      "docs31§10 A-CNT-01",
+      "catalog32 Global Presentation Content contracts",
+      "user active goal explicitly requires production content/configuration through secure administration"
+    ],
+    "no_new_product_semantics": true,
+    "external_sources": "Drive/Figma/FigJam strictly read-only"
+  },
+  "next_actions": [
+    "Register defects and add bounded content/configuration work/dependency without modifying historical closure",
+    "Use current active004/006 acceptance work plus later revisions for closed UI/shared ownership",
+    "Commit minimal regressions that fail for the confirmed scenarios, then apply and validate focused fixes",
+    "Continue eligible P2-007 and P2-019 slices after their required role/context/native gates"
+  ],
+  "dependency_audit": {
+    "result": "NO_VULNERABLE_PACKAGES_REPORTED",
+    "source": "https://api.nuget.org/v3/index.json",
+    "evidence": "governance/evidence/p2-audit-20261109/dependency-audit.log",
+    "boundary": "Identity package/transitive audit only; container findings and whole-solution/release gates remain separate."
+  }
+}
