@@ -170,7 +170,7 @@ public static class GovernanceApplication
 
         var failures = ReadinessReasons(repository, workItem, workItems, DependencyRecords(records), IntegrationPolicy.Load(repository, diagnostics), HasApprovedP0LocalIntegration(records));
         failures.AddRange(RevisionApplication.BlockingReasons(records, workItem));
-        failures.AddRange(CommitReadinessApplication.Check(repository, workItem));
+        failures.AddRange(CommitReadinessApplication.Check(repository, workItem, "LOCAL_VALIDATED"));
         var authority = AuthorityApplication.Verify(repository);
         if (authority.ExitCode != 0)
         {
@@ -674,16 +674,17 @@ public static class GovernanceApplication
                 continue;
             }
 
-            if (!HasRequiredCommittedState(repository, prerequisiteRecord))
-            {
-                failures.Add($"prerequisite '{prerequisite}' lacks valid committed-state readiness evidence");
-                continue;
-            }
-
-
             if (!IsPrerequisiteReady(repository, workItem, prerequisiteRecord, declaration, readiness, allowValidatedP0Prerequisites))
             {
                 failures.Add($"prerequisite '{prerequisite}' requires {readiness} but is {prerequisiteRecord.Scalar("status") ?? "UNKNOWN"}");
+                continue;
+            }
+
+            // VALIDATION may satisfy local dependencies only with the same current source proof as LOCAL_VALIDATED.
+            var effectiveState = readiness == "LOCAL_VALIDATED" ? "LOCAL_VALIDATED" : null;
+            if (!HasRequiredCommittedState(repository, prerequisiteRecord, effectiveState))
+            {
+                failures.Add($"prerequisite '{prerequisite}' lacks valid committed-state readiness evidence");
             }
         }
 
@@ -746,7 +747,7 @@ public static class GovernanceApplication
         }
 
         return CommitReadinessApplication.Read(record) is not null
-            && CommitReadinessApplication.Check(repository, record).Count == 0;
+            && CommitReadinessApplication.Check(repository, record, state).Count == 0;
     }
 
     private static bool IsPrerequisiteReady(DirectoryInfo repository, GovernanceRecord workItem, GovernanceRecord prerequisite, GovernanceRecord? declaration, string readiness, bool allowValidatedP0Prerequisites)

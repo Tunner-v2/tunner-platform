@@ -34,12 +34,12 @@ internal static class CommitReadinessApplication
             NullIfEmpty(GovernanceApplication.Scalar(fields, "remaining_uncommitted_classification")));
     }
 
-    public static IReadOnlyList<string> Check(DirectoryInfo repository, GovernanceRecord record)
+    public static IReadOnlyList<string> Check(DirectoryInfo repository, GovernanceRecord record, string? effectiveState = null)
     {
         var state = Read(record);
         if (state is null)
         {
-            return IsRequired(repository, record) ? ["git_state is absent; current committed-state readiness is not evidenced"] : [];
+            return IsRequired(repository, record, effectiveState) ? ["git_state is absent; current committed-state readiness is not evidenced"] : [];
         }
 
         var failures = new List<string>();
@@ -72,11 +72,9 @@ internal static class CommitReadinessApplication
         var diagnostics = new List<Diagnostic>();
         var records = GovernanceApplication.LoadRecords(repository, diagnostics);
         var findings = diagnostics.Where(item => item.Severity == "ERROR").Select(item => $"record parse issue: {item.Code}").ToList();
-        foreach (var record in records.Where(item => item.Type.DefinitionName == "work-item" && (milestoneId is null || StringComparer.Ordinal.Equals(item.Scalar("milestone_id"), milestoneId)) && new[] { "LOCAL_VALIDATED", "READY_FOR_MERGE", "DONE" }.Contains(item.Scalar("status"), StringComparer.Ordinal)).OrderBy(item => item.Identifier, StringComparer.Ordinal))
+        foreach (var record in records.Where(item => item.Type.DefinitionName == "work-item" && (milestoneId is null || StringComparer.Ordinal.Equals(item.Scalar("milestone_id"), milestoneId)) && new[] { "VALIDATION", "PRODUCT_ACCEPTANCE", "LOCAL_VALIDATED", "READY_FOR_MERGE", "DONE" }.Contains(item.Scalar("status"), StringComparer.Ordinal)).OrderBy(item => item.Identifier, StringComparer.Ordinal))
         {
-            var state = Read(record);
-            if (state is null && IsRequired(repository, record)) findings.Add($"{record.Identifier}: git_state is absent; current committed-state readiness is not evidenced");
-            else findings.AddRange(Check(repository, record).Select(item => $"{record.Identifier}: {item}"));
+            findings.AddRange(Check(repository, record, "LOCAL_VALIDATED").Select(item => $"{record.Identifier}: {item}"));
         }
         return findings;
     }
