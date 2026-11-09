@@ -14,55 +14,82 @@ function App(){
   const [boot,setBoot]=useState<Bootstrap>();const [unavailable,setUnavailable]=useState(false);
   useEffect(()=>{const controller=new AbortController();void options(controller.signal).then(setBoot).catch(()=>{if(!controller.signal.aborted)setUnavailable(true);});return()=>controller.abort();},[]);
   if(unavailable)return <ContentUnavailable/>;if(!boot)return <main aria-busy="true"/>;
-  return <ThemeProvider surface="user" mode="light"><ContentProvider locale={boot.locale} audience="authentication" resolve={key=>boot.content[key]}><Screens initial={boot}/></ContentProvider></ThemeProvider>;
+  return <ThemeProvider surface="user" mode="light"><Screens initial={boot}/></ThemeProvider>;
 }
 function Screens({initial}:{initial:Bootstrap}){
   const location=useRouteLocation();const [boot,setBoot]=useState(initial);const [session,setSession]=useState<Session>();const [guard,setGuard]=useState(true);
+  const [readyRevision,setReadyRevision]=useState(-1);const [entryUnavailable,setEntryUnavailable]=useState(false);
+  const routeRevision=useRef(location.revision);routeRevision.current=location.revision;
+  const attemptRef=useRef<symbol|undefined>(undefined);const attemptController=useRef<AbortController|undefined>(undefined);
   const [email,setEmail]=useState('');const [password,setPassword]=useState('');const [remember,setRemember]=useState(false);const [visible,setVisible]=useState(false);
   const [error,setError]=useState<string>();const [logoutBusy,setLogoutBusy]=useState(false);const logoutPending=useRef(false);const heading=useRef<HTMLHeadingElement>(null);
   const form=useTunnerForm(passwordSignInSchema(boot.passwordMaximumLength),{email,password,remember});
   const show=boot.content[visible?'login.hide':'login.show']!;const unavailable=boot.content['login.unavailable']!;
-  const signedIn=location.pathname===authenticationRoutes.signedIn.pathname;
+  const signedIn=location.pathname===authenticationRoutes.signedIn.pathname;const guarded=guard||readyRevision!==location.revision;
   useEffect(()=>{
-    const controller=new AbortController();let active=true;setPassword('');setVisible(false);setError(undefined);setSession(undefined);setGuard(true);form.reset();
-    if(location.pathname!==authenticationRoutes.login.pathname&&location.pathname!==authenticationRoutes.signedIn.pathname){navigatePath(authenticationRoutes.login.pathname,true);return()=>controller.abort();}
+    const controller=new AbortController();let active=true;const finish=()=>{if(active){setReadyRevision(location.revision);setGuard(false);}};
+    attemptRef.current=undefined;attemptController.current?.abort();attemptController.current=undefined;
+    setPassword('');setVisible(false);setError(undefined);setSession(undefined);setGuard(true);setEntryUnavailable(false);form.reset();
+    const cleanup=()=>{active=false;controller.abort();};
+    if(location.pathname!==authenticationRoutes.login.pathname&&location.pathname!==authenticationRoutes.signedIn.pathname){navigatePath(authenticationRoutes.login.pathname,true);return cleanup;}
     if(window.location.search||window.location.hash)navigatePath(location.pathname,true);
-    if(!signedIn){setGuard(false);return()=>controller.abort();}
+    if(!signedIn){
+      void options(controller.signal).then(value=>{if(active){setBoot(value);finish();}}).catch(()=>{if(active){setEntryUnavailable(true);finish();}});
+      return cleanup;
+    }
     void fetch('/authentication/session',{credentials:'same-origin',cache:'no-store',redirect:'error',signal:controller.signal}).then(async response=>{
       if(response.status===401){if(active)navigatePath(authenticationRoutes.login.pathname,true);return;}
       if(!response.ok)throw new Error('Unavailable');const result=await response.json() as Session;
-      if(!result.authenticated||!result.csrfToken)throw new Error('Unavailable');if(active){setSession(result);setGuard(false);}
-    }).catch(()=>{if(active){setError('authentication.error.unavailable');setGuard(false);}});
-    return()=>{active=false;controller.abort();};
+      if(!result.authenticated||!result.csrfToken)throw new Error('Unavailable');if(active){setSession(result);finish();}
+    }).catch(()=>{if(active){setError('authentication.error.unavailable');finish();}});
+    return cleanup;
   },[location.revision]);
-  useEffect(()=>{if(!guard)heading.current?.focus();},[guard,signedIn]);
+  useEffect(()=>{if(!guarded)heading.current?.focus();},[guarded,signedIn]);
   async function signIn(){
+    const attempt={idempotencyKey:boot.idempotencyKey,email,rememberMe:remember};const revision=location.revision;const token=Symbol();const controller=new AbortController();
+    attemptRef.current=token;attemptController.current=controller;
+    const current=()=>attemptRef.current===token&&routeRevision.current===revision&&!controller.signal.aborted;
     setError(undefined);
     try{
-      const response=await fetch('/authentication/sign-in',{method:'POST',credentials:'same-origin',cache:'no-store',redirect:'error',headers:{'Content-Type':'application/json','X-Tunner-CSRF':boot.csrfToken},body:JSON.stringify({idempotencyKey:boot.idempotencyKey,email,password,rememberMe:remember})});
-      if(response.ok){navigatePath(authenticationRoutes.signedIn.pathname);return;}
-      const problem=await response.json() as {error_code?:string};setError(errors[problem.error_code??'']??'authentication.error.unavailable');
-      if(response.status===403||response.status===409)setBoot(await options());
+      const response=await fetch('/authentication/sign-in',{method:'POST',credentials:'same-origin',cache:'no-store',redirect:'error',signal:controller.signal,headers:{'Content-Type':'application/json','X-Tunner-CSRF':boot.csrfToken},body:JSON.stringify({...attempt,password})});
+      if(!current())return;
+      if(response.ok){const result=await response.json() as {authenticated?:boolean};if(result.authenticated!==true)throw new Error('Unavailable');if(current())navigatePath(authenticationRoutes.signedIn.pathname);return;}
+      const problem=await response.json() as {error_code?:string};if(!current())return;setError(errors[problem.error_code??'']??'authentication.error.unavailable');
+      if(response.status===403||response.status===409){const next=await options(controller.signal);if(current())setBoot(next);}
     }catch{
-      // A lost success response may already have installed its cookie. Resolve authoritative state before another credential submission.
-      try{const response=await fetch('/authentication/session',{credentials:'same-origin',cache:'no-store',redirect:'error'});if(response.ok){navigatePath(authenticationRoutes.signedIn.pathname);return;}}catch{/* Safe generic presentation below. */}
-      setError('authentication.error.unavailable');
-    }finally{setPassword('');setVisible(false);form.reset();}
+      if(!current())return;
+      // Current-session existence supplies CSRF only; exact attempted-operation evidence owns recovered success.
+      try{
+        const sessionResponse=await fetch('/authentication/session',{credentials:'same-origin',cache:'no-store',redirect:'error',signal:controller.signal});
+        if(sessionResponse.ok){
+          const present=await sessionResponse.json() as Session;
+          if(current()&&present.authenticated===true&&present.csrfToken){
+            const response=await fetch('/authentication/result',{method:'POST',credentials:'same-origin',cache:'no-store',redirect:'error',signal:controller.signal,headers:{'Content-Type':'application/json','X-Tunner-CSRF':present.csrfToken},body:JSON.stringify(attempt)});
+            if(response.ok){const result=await response.json() as {status?:string;idempotencyKey?:string};if(current()&&result.status==='COMPLETED'&&result.idempotencyKey===attempt.idempotencyKey){navigatePath(authenticationRoutes.signedIn.pathname);return;}}
+          }
+        }
+      }catch{/* Preserve the original attempt; never infer completion or replay credentials. */}
+      if(current())setError('authentication.error.unavailable');
+    }finally{
+      if(current()){setPassword('');setVisible(false);form.reset();}
+      if(attemptController.current===controller)attemptController.current=undefined;
+    }
   }
   async function signOut(){
     if(logoutPending.current||!session)return;logoutPending.current=true;setLogoutBusy(true);setError(undefined);
     try{
       const response=await fetch('/authentication/sign-out',{method:'POST',credentials:'same-origin',cache:'no-store',redirect:'error',headers:{'Content-Type':'application/json','X-Tunner-CSRF':session.csrfToken},body:'{}'});
-      if(!response.ok&&response.status!==401)throw new Error('Unavailable');setSession(undefined);navigatePath(authenticationRoutes.login.pathname);setBoot(await options());
+      if(!response.ok&&response.status!==401)throw new Error('Unavailable');setSession(undefined);navigatePath(authenticationRoutes.login.pathname);
     }catch{setError('authentication.error.unavailable');}
     finally{logoutPending.current=false;setLogoutBusy(false);}
   }
   function changed(){setError(undefined);}
-  return <div className="authentication-page">
+  if(entryUnavailable)return <ContentUnavailable/>;
+  return <ContentProvider locale={boot.locale} audience="authentication" resolve={key=>boot.content[key]}><div className="authentication-page">
     <img className="authentication-glow indigo" src="/registration/assets/login-bg-indigo.svg" alt=""/><img className="authentication-glow violet" src="/registration/assets/login-bg-violet.svg" alt=""/>
     <header className="authentication-header"><TunnerBrand contentKey="brand.tunner"/></header>
-    <main className="authentication-stage" aria-busy={guard}>
-      {!guard&&<section className={'authentication-card'+(signedIn?' signed-in':'')} data-tunner-screen={signedIn?authenticationRoutes.signedIn.id:authenticationRoutes.login.id}>
+    <main className="authentication-stage" aria-busy={guarded}>
+      {!guarded&&<section className={'authentication-card'+(signedIn?' signed-in':'')} data-tunner-screen={signedIn?authenticationRoutes.signedIn.id:authenticationRoutes.login.id}>
         {signedIn?<>{session&&<>
           <div className="authentication-check" aria-hidden="true"><img src="/registration/assets/ready-imgEllipse1.svg" alt=""/><img className="approved-check" src="/registration/assets/ready-approved-check.svg" alt=""/></div>
           <div className="authentication-intro"><h1 ref={heading} tabIndex={-1}><ContentText contentKey="signedIn.heading"/></h1><p><ContentText contentKey="signedIn.description"/></p></div>
@@ -87,6 +114,6 @@ function Screens({initial}:{initial:Bootstrap}){
       </section>}
     </main>
     <footer className="authentication-footer"><a href={boot.privacyUri}><ContentText contentKey="authentication.footer.privacy"/></a><span aria-hidden="true">•</span><a href={boot.termsUri}><ContentText contentKey="authentication.footer.terms"/></a>{boot.supportUri&&<><span aria-hidden="true">•</span><a href={boot.supportUri}><ContentText contentKey="authentication.footer.support"/></a></>}</footer>
-  </div>;
+  </div></ContentProvider>;
 }
 createRoot(document.getElementById('root')!).render(<App/>);
