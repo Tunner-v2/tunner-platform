@@ -1,0 +1,597 @@
+  Tunner.Accounts -> <repo-root>\src\Modules\Accounts\bin\Debug\net10.0\Tunner.Accounts.dll
+  Tunner.Database -> <repo-root>\src\Tunner.Database\bin\Debug\net10.0\Tunner.Database.dll
+  Tunner.Observability -> <repo-root>\src\Tunner.Observability\bin\Debug\net10.0\Tunner.Observability.dll
+  Tunner.Platform -> <repo-root>\src\Tunner.Platform\bin\Debug\net10.0\Tunner.Platform.dll
+  Tunner.Worker -> <repo-root>\src\Tunner.Worker\bin\Debug\net10.0\Tunner.Worker.dll
+  Tunner.Admin.Bff -> <repo-root>\src\Tunner.Admin.Bff\bin\Debug\net10.0\Tunner.Admin.Bff.dll
+  Tunner.Api -> <repo-root>\src\Tunner.Api\bin\Debug\net10.0\Tunner.Api.dll
+
+  GenerateOpenApiDocuments:
+    dotnet "<package-cache>\packages\microsoft.extensions.apidescription.server\10.0.13\build\../tools/dotnet-getdocument.dll" --assembly "<repo-root>\src\Tunner.Api\bin\Debug\net10.0\Tunner.Api.dll" --file-list "obj\Tunner.Api.OpenApiFiles.cache" --framework ".NETCoreApp,Version=v10.0" --output "<repo-root>\src\Tunner.Api\obj\openapi" --project "Tunner.Api" --assets-file "<repo-root>\src\Tunner.Api\obj\project.assets.json" --platform "AnyCPU" --file-name tunner-openapi --openapi-version OpenApi3_1
+  Generating document named 'v1'.
+  Using discovered `GenerateAsync` overload with version parameter.
+  info: Microsoft.AspNetCore.Mvc.Infrastructure.DefaultActionDescriptorCollectionProvider[1]
+        No action descriptors found. This may indicate an incorrectly configured application or missing application parts. To learn more, visit https://aka.ms/aspnet/mvc/app-parts
+  Writing document named 'v1' to '<repo-root>\src\Tunner.Api\obj\openapi\tunner-openapi.json'.
+  Tunner.Identity.Persistence -> <repo-root>\src\Modules\Identity\bin\Debug\net10.0\Tunner.Identity.Persistence.dll
+  Tunner.User.Bff -> <repo-root>\src\Tunner.User.Bff\bin\Debug\net10.0\Tunner.User.Bff.dll
+  Tunner.Platform.ArchitectureTests -> <repo-root>\tests\Tunner.Platform.ArchitectureTests\bin\Debug\net10.0\Tunner.Platform.ArchitectureTests.dll
+Test run for <repo-root>\tests\Tunner.Platform.ArchitectureTests\bin\Debug\net10.0\Tunner.Platform.ArchitectureTests.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+[xUnit.net 00:00:01.00]     Tunner.Platform.ArchitectureTests.BffFoundationTests.EveryUnsafeVerbRequiresAValidBoundCsrfToken(verb: "PUT") [FAIL]
+[xUnit.net 00:00:01.01]     Tunner.Platform.ArchitectureTests.BffFoundationTests.EveryUnsafeVerbRequiresAValidBoundCsrfToken(verb: "DELETE") [FAIL]
+[xUnit.net 00:00:01.01]     Tunner.Platform.ArchitectureTests.BffFoundationTests.EveryUnsafeVerbRequiresAValidBoundCsrfToken(verb: "POST") [FAIL]
+[xUnit.net 00:00:01.01]     Tunner.Platform.ArchitectureTests.BffFoundationTests.EveryUnsafeVerbRequiresAValidBoundCsrfToken(verb: "PATCH") [FAIL]
+[xUnit.net 00:00:01.02]     Tunner.Platform.ArchitectureTests.BffFoundationTests.ShippedHostsHaveOnlyHealthAndSeparateFrameworkBoundaries(surface: Admin) [FAIL]
+  Failed Tunner.Platform.ArchitectureTests.BffFoundationTests.EveryUnsafeVerbRequiresAValidBoundCsrfToken(verb: "PUT") [1 ms]
+  Error Message:
+   System.Security.Cryptography.CryptographicException : The system cannot find the file specified.
+  Stack Trace:
+     at System.Security.Cryptography.X509Certificates.X509CertificateLoader.ImportPfx(ReadOnlySpan`1 data, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.ImportPfx(BagState& bagState, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.LoadPkcs12(BagState& bagState, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.LoadPkcs12(ReadOnlyMemory`1 data, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags, Pkcs12LoaderLimits loaderLimits)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.LoadPkcs12(Byte[] data, String password, X509KeyStorageFlags keyStorageFlags, Pkcs12LoaderLimits loaderLimits)
+   at Tunner.Platform.ArchitectureTests.BffFoundationFixture.InitializeAsync() in <repo-root>\tests\Tunner.Platform.ArchitectureTests\BffFoundationTests.cs:line 375
+  Failed Tunner.Platform.ArchitectureTests.BffFoundationTests.EveryUnsafeVerbRequiresAValidBoundCsrfToken(verb: "DELETE") [1 ms]
+  Error Message:
+   System.Security.Cryptography.CryptographicException : The system cannot find the file specified.
+  Stack Trace:
+     at System.Security.Cryptography.X509Certificates.X509CertificateLoader.ImportPfx(ReadOnlySpan`1 data, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.ImportPfx(BagState& bagState, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.LoadPkcs12(BagState& bagState, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.LoadPkcs12(ReadOnlyMemory`1 data, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags, Pkcs12LoaderLimits loaderLimits)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.LoadPkcs12(Byte[] data, String password, X509KeyStorageFlags keyStorageFlags, Pkcs12LoaderLimits loaderLimits)
+   at Tunner.Platform.ArchitectureTests.BffFoundationFixture.InitializeAsync() in <repo-root>\tests\Tunner.Platform.ArchitectureTests\BffFoundationTests.cs:line 375
+  Failed Tunner.Platform.ArchitectureTests.BffFoundationTests.EveryUnsafeVerbRequiresAValidBoundCsrfToken(verb: "POST") [1 ms]
+  Error Message:
+   System.Security.Cryptography.CryptographicException : The system cannot find the file specified.
+  Stack Trace:
+     at System.Security.Cryptography.X509Certificates.X509CertificateLoader.ImportPfx(ReadOnlySpan`1 data, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.ImportPfx(BagState& bagState, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.LoadPkcs12(BagState& bagState, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.LoadPkcs12(ReadOnlyMemory`1 data, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags, Pkcs12LoaderLimits loaderLimits)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.LoadPkcs12(Byte[] data, String password, X509KeyStorageFlags keyStorageFlags, Pkcs12LoaderLimits loaderLimits)
+   at Tunner.Platform.ArchitectureTests.BffFoundationFixture.InitializeAsync() in <repo-root>\tests\Tunner.Platform.ArchitectureTests\BffFoundationTests.cs:line 375
+  Failed Tunner.Platform.ArchitectureTests.BffFoundationTests.EveryUnsafeVerbRequiresAValidBoundCsrfToken(verb: "PATCH") [1 ms]
+  Error Message:
+   System.Security.Cryptography.CryptographicException : The system cannot find the file specified.
+  Stack Trace:
+     at System.Security.Cryptography.X509Certificates.X509CertificateLoader.ImportPfx(ReadOnlySpan`1 data, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.ImportPfx(BagState& bagState, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.LoadPkcs12(BagState& bagState, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.LoadPkcs12(ReadOnlyMemory`1 data, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags, Pkcs12LoaderLimits loaderLimits)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.LoadPkcs12(Byte[] data, String password, X509KeyStorageFlags keyStorageFlags, Pkcs12LoaderLimits loaderLimits)
+   at Tunner.Platform.ArchitectureTests.BffFoundationFixture.InitializeAsync() in <repo-root>\tests\Tunner.Platform.ArchitectureTests\BffFoundationTests.cs:line 375
+  Failed Tunner.Platform.ArchitectureTests.BffFoundationTests.ShippedHostsHaveOnlyHealthAndSeparateFrameworkBoundaries(surface: Admin) [1 ms]
+  Error Message:
+   System.Security.Cryptography.CryptographicException : The system cannot find the file specified.
+  Stack Trace:
+     at System.Security.Cryptography.X509Certificates.X509CertificateLoader.ImportPfx(ReadOnlySpan`1 data, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.ImportPfx(BagState& bagState, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.LoadPkcs12(BagState& bagState, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.LoadPkcs12(ReadOnlyMemory`1 data, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags, Pkcs12LoaderLimits loaderLimits)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.LoadPkcs12(Byte[] data, String password, X509KeyStorageFlags keyStorageFlags, Pkcs12LoaderLimits loaderLimits)
+   at Tunner.Platform.ArchitectureTests.BffFoundationFixture.InitializeAsync() in <repo-root>\tests\Tunner.Platform.ArchitectureTests\BffFoundationTests.cs:line 375
+[xUnit.net 00:00:01.02]     Tunner.Platform.ArchitectureTests.BffFoundationTests.ShippedHostsHaveOnlyHealthAndSeparateFrameworkBoundaries(surface: User) [FAIL]
+[xUnit.net 00:00:01.02]     Tunner.Platform.ArchitectureTests.BffFoundationTests.InvalidClientCookieDoesNotLeakOrActivateBearerAuthentication(surface: User) [FAIL]
+[xUnit.net 00:00:01.03]     Tunner.Platform.ArchitectureTests.BffFoundationTests.InvalidClientCookieDoesNotLeakOrActivateBearerAuthentication(surface: Admin) [FAIL]
+[xUnit.net 00:00:01.03]     Tunner.Platform.ArchitectureTests.BffFoundationTests.ForbidAndExceptionsReturnSafeProblemsWithoutDetailsOrRedirect [FAIL]
+[xUnit.net 00:00:01.03]     Tunner.Platform.ArchitectureTests.BffFoundationTests.DuplicateSecurityHeadersAreRejected(header: "X-Tunner-CSRF") [FAIL]
+[xUnit.net 00:00:01.03]     Tunner.Platform.ArchitectureTests.BffFoundationTests.DuplicateSecurityHeadersAreRejected(header: "Origin") [FAIL]
+[xUnit.net 00:00:01.04]     Tunner.Platform.ArchitectureTests.BffFoundationTests.WrongRequestHostIsRejectedEvenWithValidOriginAndCsrf [FAIL]
+  Failed Tunner.Platform.ArchitectureTests.BffFoundationTests.ShippedHostsHaveOnlyHealthAndSeparateFrameworkBoundaries(surface: User) [1 ms]
+  Error Message:
+   System.Security.Cryptography.CryptographicException : The system cannot find the file specified.
+  Stack Trace:
+     at System.Security.Cryptography.X509Certificates.X509CertificateLoader.ImportPfx(ReadOnlySpan`1 data, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.ImportPfx(BagState& bagState, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.LoadPkcs12(BagState& bagState, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.LoadPkcs12(ReadOnlyMemory`1 data, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags, Pkcs12LoaderLimits loaderLimits)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.LoadPkcs12(Byte[] data, String password, X509KeyStorageFlags keyStorageFlags, Pkcs12LoaderLimits loaderLimits)
+   at Tunner.Platform.ArchitectureTests.BffFoundationFixture.InitializeAsync() in <repo-root>\tests\Tunner.Platform.ArchitectureTests\BffFoundationTests.cs:line 375
+  Failed Tunner.Platform.ArchitectureTests.BffFoundationTests.InvalidClientCookieDoesNotLeakOrActivateBearerAuthentication(surface: User) [1 ms]
+  Error Message:
+   System.Security.Cryptography.CryptographicException : The system cannot find the file specified.
+  Stack Trace:
+     at System.Security.Cryptography.X509Certificates.X509CertificateLoader.ImportPfx(ReadOnlySpan`1 data, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.ImportPfx(BagState& bagState, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.LoadPkcs12(BagState& bagState, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.LoadPkcs12(ReadOnlyMemory`1 data, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags, Pkcs12LoaderLimits loaderLimits)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.LoadPkcs12(Byte[] data, String password, X509KeyStorageFlags keyStorageFlags, Pkcs12LoaderLimits loaderLimits)
+   at Tunner.Platform.ArchitectureTests.BffFoundationFixture.InitializeAsync() in <repo-root>\tests\Tunner.Platform.ArchitectureTests\BffFoundationTests.cs:line 375
+  Failed Tunner.Platform.ArchitectureTests.BffFoundationTests.InvalidClientCookieDoesNotLeakOrActivateBearerAuthentication(surface: Admin) [1 ms]
+  Error Message:
+   System.Security.Cryptography.CryptographicException : The system cannot find the file specified.
+  Stack Trace:
+     at System.Security.Cryptography.X509Certificates.X509CertificateLoader.ImportPfx(ReadOnlySpan`1 data, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.ImportPfx(BagState& bagState, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.LoadPkcs12(BagState& bagState, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.LoadPkcs12(ReadOnlyMemory`1 data, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags, Pkcs12LoaderLimits loaderLimits)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.LoadPkcs12(Byte[] data, String password, X509KeyStorageFlags keyStorageFlags, Pkcs12LoaderLimits loaderLimits)
+   at Tunner.Platform.ArchitectureTests.BffFoundationFixture.InitializeAsync() in <repo-root>\tests\Tunner.Platform.ArchitectureTests\BffFoundationTests.cs:line 375
+  Failed Tunner.Platform.ArchitectureTests.BffFoundationTests.ForbidAndExceptionsReturnSafeProblemsWithoutDetailsOrRedirect [1 ms]
+  Error Message:
+   System.Security.Cryptography.CryptographicException : The system cannot find the file specified.
+  Stack Trace:
+     at System.Security.Cryptography.X509Certificates.X509CertificateLoader.ImportPfx(ReadOnlySpan`1 data, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.ImportPfx(BagState& bagState, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.LoadPkcs12(BagState& bagState, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.LoadPkcs12(ReadOnlyMemory`1 data, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags, Pkcs12LoaderLimits loaderLimits)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.LoadPkcs12(Byte[] data, String password, X509KeyStorageFlags keyStorageFlags, Pkcs12LoaderLimits loaderLimits)
+   at Tunner.Platform.ArchitectureTests.BffFoundationFixture.InitializeAsync() in <repo-root>\tests\Tunner.Platform.ArchitectureTests\BffFoundationTests.cs:line 375
+  Failed Tunner.Platform.ArchitectureTests.BffFoundationTests.DuplicateSecurityHeadersAreRejected(header: "X-Tunner-CSRF") [1 ms]
+  Error Message:
+   System.Security.Cryptography.CryptographicException : The system cannot find the file specified.
+  Stack Trace:
+     at System.Security.Cryptography.X509Certificates.X509CertificateLoader.ImportPfx(ReadOnlySpan`1 data, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.ImportPfx(BagState& bagState, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.LoadPkcs12(BagState& bagState, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.LoadPkcs12(ReadOnlyMemory`1 data, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags, Pkcs12LoaderLimits loaderLimits)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.LoadPkcs12(Byte[] data, String password, X509KeyStorageFlags keyStorageFlags, Pkcs12LoaderLimits loaderLimits)
+   at Tunner.Platform.ArchitectureTests.BffFoundationFixture.InitializeAsync() in <repo-root>\tests\Tunner.Platform.ArchitectureTests\BffFoundationTests.cs:line 375
+  Failed Tunner.Platform.ArchitectureTests.BffFoundationTests.DuplicateSecurityHeadersAreRejected(header: "Origin") [1 ms]
+  Error Message:
+   System.Security.Cryptography.CryptographicException : The system cannot find the file specified.
+  Stack Trace:
+     at System.Security.Cryptography.X509Certificates.X509CertificateLoader.ImportPfx(ReadOnlySpan`1 data, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.ImportPfx(BagState& bagState, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.LoadPkcs12(BagState& bagState, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.LoadPkcs12(ReadOnlyMemory`1 data, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags, Pkcs12LoaderLimits loaderLimits)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.LoadPkcs12(Byte[] data, String password, X509KeyStorageFlags keyStorageFlags, Pkcs12LoaderLimits loaderLimits)
+   at Tunner.Platform.ArchitectureTests.BffFoundationFixture.InitializeAsync() in <repo-root>\tests\Tunner.Platform.ArchitectureTests\BffFoundationTests.cs:line 375
+  Failed Tunner.Platform.ArchitectureTests.BffFoundationTests.WrongRequestHostIsRejectedEvenWithValidOriginAndCsrf [1 ms]
+  Error Message:
+   System.Security.Cryptography.CryptographicException : The system cannot find the file specified.
+  Stack Trace:
+     at System.Security.Cryptography.X509Certificates.X509CertificateLoader.ImportPfx(ReadOnlySpan`1 data, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.ImportPfx(BagState& bagState, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.LoadPkcs12(BagState& bagState, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.LoadPkcs12(ReadOnlyMemory`1 data, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags, Pkcs12LoaderLimits loaderLimits)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.LoadPkcs12(Byte[] data, String password, X509KeyStorageFlags keyStorageFlags, Pkcs12LoaderLimits loaderLimits)
+   at Tunner.Platform.ArchitectureTests.BffFoundationFixture.InitializeAsync() in <repo-root>\tests\Tunner.Platform.ArchitectureTests\BffFoundationTests.cs:line 375
+[xUnit.net 00:00:01.04]     Tunner.Platform.ArchitectureTests.BffFoundationTests.AnonymousEndpointsDoNotBypassCsrfAndForeignSurfaceTokensFail [FAIL]
+[xUnit.net 00:00:01.04]     Tunner.Platform.ArchitectureTests.BffFoundationTests.InvalidConfiguredOriginFailsWithoutEchoingInput(origin: "https://user-bff.example.test/?q=x") [FAIL]
+[xUnit.net 00:00:01.04]     Tunner.Platform.ArchitectureTests.BffFoundationTests.InvalidConfiguredOriginFailsWithoutEchoingInput(origin: " https://user-bff.example.test") [FAIL]
+[xUnit.net 00:00:01.04]     Tunner.Platform.ArchitectureTests.BffFoundationTests.InvalidConfiguredOriginFailsWithoutEchoingInput(origin: "http://user-bff.example.test") [FAIL]
+[xUnit.net 00:00:01.05]     Tunner.Platform.ArchitectureTests.BffFoundationTests.InvalidConfiguredOriginFailsWithoutEchoingInput(origin: "https://user-bff.example.test/path") [FAIL]
+[xUnit.net 00:00:01.05]     Tunner.Platform.ArchitectureTests.BffFoundationTests.InvalidConfiguredOriginFailsWithoutEchoingInput(origin: "https://user-bff.example.test/#x") [FAIL]
+[xUnit.net 00:00:01.05]     Tunner.Platform.ArchitectureTests.BffFoundationTests.InvalidConfiguredOriginFailsWithoutEchoingInput(origin: "https://user:pass@user-bff.example.test") [FAIL]
+[xUnit.net 00:00:01.05]     Tunner.Platform.ArchitectureTests.BffFoundationTests.RevokedSessionIsDeniedOnTheVeryNextRequest(surface: Admin) [FAIL]
+  Failed Tunner.Platform.ArchitectureTests.BffFoundationTests.AnonymousEndpointsDoNotBypassCsrfAndForeignSurfaceTokensFail [1 ms]
+  Error Message:
+   System.Security.Cryptography.CryptographicException : The system cannot find the file specified.
+  Stack Trace:
+     at System.Security.Cryptography.X509Certificates.X509CertificateLoader.ImportPfx(ReadOnlySpan`1 data, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.ImportPfx(BagState& bagState, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.LoadPkcs12(BagState& bagState, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.LoadPkcs12(ReadOnlyMemory`1 data, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags, Pkcs12LoaderLimits loaderLimits)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.LoadPkcs12(Byte[] data, String password, X509KeyStorageFlags keyStorageFlags, Pkcs12LoaderLimits loaderLimits)
+   at Tunner.Platform.ArchitectureTests.BffFoundationFixture.InitializeAsync() in <repo-root>\tests\Tunner.Platform.ArchitectureTests\BffFoundationTests.cs:line 375
+  Failed Tunner.Platform.ArchitectureTests.BffFoundationTests.InvalidConfiguredOriginFailsWithoutEchoingInput(origin: "https://user-bff.example.test/?q=x") [1 ms]
+  Error Message:
+   System.Security.Cryptography.CryptographicException : The system cannot find the file specified.
+  Stack Trace:
+     at System.Security.Cryptography.X509Certificates.X509CertificateLoader.ImportPfx(ReadOnlySpan`1 data, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.ImportPfx(BagState& bagState, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.LoadPkcs12(BagState& bagState, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.LoadPkcs12(ReadOnlyMemory`1 data, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags, Pkcs12LoaderLimits loaderLimits)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.LoadPkcs12(Byte[] data, String password, X509KeyStorageFlags keyStorageFlags, Pkcs12LoaderLimits loaderLimits)
+   at Tunner.Platform.ArchitectureTests.BffFoundationFixture.InitializeAsync() in <repo-root>\tests\Tunner.Platform.ArchitectureTests\BffFoundationTests.cs:line 375
+  Failed Tunner.Platform.ArchitectureTests.BffFoundationTests.InvalidConfiguredOriginFailsWithoutEchoingInput(origin: " https://user-bff.example.test") [1 ms]
+  Error Message:
+   System.Security.Cryptography.CryptographicException : The system cannot find the file specified.
+  Stack Trace:
+     at System.Security.Cryptography.X509Certificates.X509CertificateLoader.ImportPfx(ReadOnlySpan`1 data, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.ImportPfx(BagState& bagState, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.LoadPkcs12(BagState& bagState, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.LoadPkcs12(ReadOnlyMemory`1 data, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags, Pkcs12LoaderLimits loaderLimits)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.LoadPkcs12(Byte[] data, String password, X509KeyStorageFlags keyStorageFlags, Pkcs12LoaderLimits loaderLimits)
+   at Tunner.Platform.ArchitectureTests.BffFoundationFixture.InitializeAsync() in <repo-root>\tests\Tunner.Platform.ArchitectureTests\BffFoundationTests.cs:line 375
+  Failed Tunner.Platform.ArchitectureTests.BffFoundationTests.InvalidConfiguredOriginFailsWithoutEchoingInput(origin: "http://user-bff.example.test") [1 ms]
+  Error Message:
+   System.Security.Cryptography.CryptographicException : The system cannot find the file specified.
+  Stack Trace:
+     at System.Security.Cryptography.X509Certificates.X509CertificateLoader.ImportPfx(ReadOnlySpan`1 data, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.ImportPfx(BagState& bagState, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.LoadPkcs12(BagState& bagState, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.LoadPkcs12(ReadOnlyMemory`1 data, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags, Pkcs12LoaderLimits loaderLimits)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.LoadPkcs12(Byte[] data, String password, X509KeyStorageFlags keyStorageFlags, Pkcs12LoaderLimits loaderLimits)
+   at Tunner.Platform.ArchitectureTests.BffFoundationFixture.InitializeAsync() in <repo-root>\tests\Tunner.Platform.ArchitectureTests\BffFoundationTests.cs:line 375
+  Failed Tunner.Platform.ArchitectureTests.BffFoundationTests.InvalidConfiguredOriginFailsWithoutEchoingInput(origin: "https://user-bff.example.test/path") [1 ms]
+  Error Message:
+   System.Security.Cryptography.CryptographicException : The system cannot find the file specified.
+  Stack Trace:
+     at System.Security.Cryptography.X509Certificates.X509CertificateLoader.ImportPfx(ReadOnlySpan`1 data, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.ImportPfx(BagState& bagState, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.LoadPkcs12(BagState& bagState, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.LoadPkcs12(ReadOnlyMemory`1 data, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags, Pkcs12LoaderLimits loaderLimits)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.LoadPkcs12(Byte[] data, String password, X509KeyStorageFlags keyStorageFlags, Pkcs12LoaderLimits loaderLimits)
+   at Tunner.Platform.ArchitectureTests.BffFoundationFixture.InitializeAsync() in <repo-root>\tests\Tunner.Platform.ArchitectureTests\BffFoundationTests.cs:line 375
+  Failed Tunner.Platform.ArchitectureTests.BffFoundationTests.InvalidConfiguredOriginFailsWithoutEchoingInput(origin: "https://user-bff.example.test/#x") [1 ms]
+  Error Message:
+   System.Security.Cryptography.CryptographicException : The system cannot find the file specified.
+  Stack Trace:
+     at System.Security.Cryptography.X509Certificates.X509CertificateLoader.ImportPfx(ReadOnlySpan`1 data, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.ImportPfx(BagState& bagState, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.LoadPkcs12(BagState& bagState, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.LoadPkcs12(ReadOnlyMemory`1 data, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags, Pkcs12LoaderLimits loaderLimits)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.LoadPkcs12(Byte[] data, String password, X509KeyStorageFlags keyStorageFlags, Pkcs12LoaderLimits loaderLimits)
+   at Tunner.Platform.ArchitectureTests.BffFoundationFixture.InitializeAsync() in <repo-root>\tests\Tunner.Platform.ArchitectureTests\BffFoundationTests.cs:line 375
+  Failed Tunner.Platform.ArchitectureTests.BffFoundationTests.InvalidConfiguredOriginFailsWithoutEchoingInput(origin: "https://user:pass@user-bff.example.test") [1 ms]
+  Error Message:
+   System.Security.Cryptography.CryptographicException : The system cannot find the file specified.
+  Stack Trace:
+     at System.Security.Cryptography.X509Certificates.X509CertificateLoader.ImportPfx(ReadOnlySpan`1 data, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.ImportPfx(BagState& bagState, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.LoadPkcs12(BagState& bagState, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.LoadPkcs12(ReadOnlyMemory`1 data, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags, Pkcs12LoaderLimits loaderLimits)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.LoadPkcs12(Byte[] data, String password, X509KeyStorageFlags keyStorageFlags, Pkcs12LoaderLimits loaderLimits)
+   at Tunner.Platform.ArchitectureTests.BffFoundationFixture.InitializeAsync() in <repo-root>\tests\Tunner.Platform.ArchitectureTests\BffFoundationTests.cs:line 375
+  Failed Tunner.Platform.ArchitectureTests.BffFoundationTests.RevokedSessionIsDeniedOnTheVeryNextRequest(surface: Admin) [1 ms]
+  Error Message:
+   System.Security.Cryptography.CryptographicException : The system cannot find the file specified.
+  Stack Trace:
+     at System.Security.Cryptography.X509Certificates.X509CertificateLoader.ImportPfx(ReadOnlySpan`1 data, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.ImportPfx(BagState& bagState, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.LoadPkcs12(BagState& bagState, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.LoadPkcs12(ReadOnlyMemory`1 data, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags, Pkcs12LoaderLimits loaderLimits)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.LoadPkcs12(Byte[] data, String password, X509KeyStorageFlags keyStorageFlags, Pkcs12LoaderLimits loaderLimits)
+   at Tunner.Platform.ArchitectureTests.BffFoundationFixture.InitializeAsync() in <repo-root>\tests\Tunner.Platform.ArchitectureTests\BffFoundationTests.cs:line 375
+[xUnit.net 00:00:01.05]     Tunner.Platform.ArchitectureTests.BffFoundationTests.RevokedSessionIsDeniedOnTheVeryNextRequest(surface: User) [FAIL]
+[xUnit.net 00:00:01.05]     Tunner.Platform.ArchitectureTests.BffFoundationTests.FallbackAuthorizationReturnsSafe401WithoutLoginRedirect(surface: Admin) [FAIL]
+[xUnit.net 00:00:01.06]     Tunner.Platform.ArchitectureTests.BffFoundationTests.FallbackAuthorizationReturnsSafe401WithoutLoginRedirect(surface: User) [FAIL]
+[xUnit.net 00:00:01.06]     Tunner.Platform.ArchitectureTests.BffFoundationTests.UserCookieCannotBeRenamedIntoAnAdminSession [FAIL]
+[xUnit.net 00:00:01.06]     Tunner.Platform.ArchitectureTests.BffFoundationTests.InvalidServerTicketMetadataNeverAuthenticates(surface: User, kind: "missing-issued") [FAIL]
+[xUnit.net 00:00:01.06]     Tunner.Platform.ArchitectureTests.BffFoundationTests.InvalidServerTicketMetadataNeverAuthenticates(surface: Admin, kind: "expired") [FAIL]
+[xUnit.net 00:00:01.06]     Tunner.Platform.ArchitectureTests.BffFoundationTests.InvalidServerTicketMetadataNeverAuthenticates(surface: User, kind: "foreign-identity") [FAIL]
+[xUnit.net 00:00:01.06]     Tunner.Platform.ArchitectureTests.BffFoundationTests.InvalidServerTicketMetadataNeverAuthenticates(surface: Admin, kind: "missing-expiry") [FAIL]
+[xUnit.net 00:00:01.06]     Tunner.Platform.ArchitectureTests.BffFoundationTests.InvalidServerTicketMetadataNeverAuthenticates(surface: Admin, kind: "missing-issued") [FAIL]
+  Failed Tunner.Platform.ArchitectureTests.BffFoundationTests.RevokedSessionIsDeniedOnTheVeryNextRequest(surface: User) [1 ms]
+  Error Message:
+   System.Security.Cryptography.CryptographicException : The system cannot find the file specified.
+  Stack Trace:
+     at System.Security.Cryptography.X509Certificates.X509CertificateLoader.ImportPfx(ReadOnlySpan`1 data, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.ImportPfx(BagState& bagState, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.LoadPkcs12(BagState& bagState, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.LoadPkcs12(ReadOnlyMemory`1 data, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags, Pkcs12LoaderLimits loaderLimits)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.LoadPkcs12(Byte[] data, String password, X509KeyStorageFlags keyStorageFlags, Pkcs12LoaderLimits loaderLimits)
+   at Tunner.Platform.ArchitectureTests.BffFoundationFixture.InitializeAsync() in <repo-root>\tests\Tunner.Platform.ArchitectureTests\BffFoundationTests.cs:line 375
+  Failed Tunner.Platform.ArchitectureTests.BffFoundationTests.FallbackAuthorizationReturnsSafe401WithoutLoginRedirect(surface: Admin) [1 ms]
+  Error Message:
+   System.Security.Cryptography.CryptographicException : The system cannot find the file specified.
+  Stack Trace:
+     at System.Security.Cryptography.X509Certificates.X509CertificateLoader.ImportPfx(ReadOnlySpan`1 data, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.ImportPfx(BagState& bagState, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.LoadPkcs12(BagState& bagState, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.LoadPkcs12(ReadOnlyMemory`1 data, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags, Pkcs12LoaderLimits loaderLimits)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.LoadPkcs12(Byte[] data, String password, X509KeyStorageFlags keyStorageFlags, Pkcs12LoaderLimits loaderLimits)
+   at Tunner.Platform.ArchitectureTests.BffFoundationFixture.InitializeAsync() in <repo-root>\tests\Tunner.Platform.ArchitectureTests\BffFoundationTests.cs:line 375
+  Failed Tunner.Platform.ArchitectureTests.BffFoundationTests.FallbackAuthorizationReturnsSafe401WithoutLoginRedirect(surface: User) [1 ms]
+  Error Message:
+   System.Security.Cryptography.CryptographicException : The system cannot find the file specified.
+  Stack Trace:
+     at System.Security.Cryptography.X509Certificates.X509CertificateLoader.ImportPfx(ReadOnlySpan`1 data, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.ImportPfx(BagState& bagState, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.LoadPkcs12(BagState& bagState, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.LoadPkcs12(ReadOnlyMemory`1 data, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags, Pkcs12LoaderLimits loaderLimits)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.LoadPkcs12(Byte[] data, String password, X509KeyStorageFlags keyStorageFlags, Pkcs12LoaderLimits loaderLimits)
+   at Tunner.Platform.ArchitectureTests.BffFoundationFixture.InitializeAsync() in <repo-root>\tests\Tunner.Platform.ArchitectureTests\BffFoundationTests.cs:line 375
+  Failed Tunner.Platform.ArchitectureTests.BffFoundationTests.UserCookieCannotBeRenamedIntoAnAdminSession [1 ms]
+  Error Message:
+   System.Security.Cryptography.CryptographicException : The system cannot find the file specified.
+  Stack Trace:
+     at System.Security.Cryptography.X509Certificates.X509CertificateLoader.ImportPfx(ReadOnlySpan`1 data, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.ImportPfx(BagState& bagState, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.LoadPkcs12(BagState& bagState, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.LoadPkcs12(ReadOnlyMemory`1 data, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags, Pkcs12LoaderLimits loaderLimits)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.LoadPkcs12(Byte[] data, String password, X509KeyStorageFlags keyStorageFlags, Pkcs12LoaderLimits loaderLimits)
+   at Tunner.Platform.ArchitectureTests.BffFoundationFixture.InitializeAsync() in <repo-root>\tests\Tunner.Platform.ArchitectureTests\BffFoundationTests.cs:line 375
+  Failed Tunner.Platform.ArchitectureTests.BffFoundationTests.InvalidServerTicketMetadataNeverAuthenticates(surface: User, kind: "missing-issued") [1 ms]
+  Error Message:
+   System.Security.Cryptography.CryptographicException : The system cannot find the file specified.
+  Stack Trace:
+     at System.Security.Cryptography.X509Certificates.X509CertificateLoader.ImportPfx(ReadOnlySpan`1 data, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.ImportPfx(BagState& bagState, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.LoadPkcs12(BagState& bagState, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.LoadPkcs12(ReadOnlyMemory`1 data, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags, Pkcs12LoaderLimits loaderLimits)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.LoadPkcs12(Byte[] data, String password, X509KeyStorageFlags keyStorageFlags, Pkcs12LoaderLimits loaderLimits)
+   at Tunner.Platform.ArchitectureTests.BffFoundationFixture.InitializeAsync() in <repo-root>\tests\Tunner.Platform.ArchitectureTests\BffFoundationTests.cs:line 375
+  Failed Tunner.Platform.ArchitectureTests.BffFoundationTests.InvalidServerTicketMetadataNeverAuthenticates(surface: Admin, kind: "expired") [1 ms]
+  Error Message:
+   System.Security.Cryptography.CryptographicException : The system cannot find the file specified.
+  Stack Trace:
+     at System.Security.Cryptography.X509Certificates.X509CertificateLoader.ImportPfx(ReadOnlySpan`1 data, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.ImportPfx(BagState& bagState, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.LoadPkcs12(BagState& bagState, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.LoadPkcs12(ReadOnlyMemory`1 data, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags, Pkcs12LoaderLimits loaderLimits)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.LoadPkcs12(Byte[] data, String password, X509KeyStorageFlags keyStorageFlags, Pkcs12LoaderLimits loaderLimits)
+   at Tunner.Platform.ArchitectureTests.BffFoundationFixture.InitializeAsync() in <repo-root>\tests\Tunner.Platform.ArchitectureTests\BffFoundationTests.cs:line 375
+  Failed Tunner.Platform.ArchitectureTests.BffFoundationTests.InvalidServerTicketMetadataNeverAuthenticates(surface: User, kind: "foreign-identity") [1 ms]
+  Error Message:
+   System.Security.Cryptography.CryptographicException : The system cannot find the file specified.
+  Stack Trace:
+     at System.Security.Cryptography.X509Certificates.X509CertificateLoader.ImportPfx(ReadOnlySpan`1 data, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.ImportPfx(BagState& bagState, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.LoadPkcs12(BagState& bagState, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.LoadPkcs12(ReadOnlyMemory`1 data, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags, Pkcs12LoaderLimits loaderLimits)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.LoadPkcs12(Byte[] data, String password, X509KeyStorageFlags keyStorageFlags, Pkcs12LoaderLimits loaderLimits)
+   at Tunner.Platform.ArchitectureTests.BffFoundationFixture.InitializeAsync() in <repo-root>\tests\Tunner.Platform.ArchitectureTests\BffFoundationTests.cs:line 375
+  Failed Tunner.Platform.ArchitectureTests.BffFoundationTests.InvalidServerTicketMetadataNeverAuthenticates(surface: Admin, kind: "missing-expiry") [1 ms]
+  Error Message:
+   System.Security.Cryptography.CryptographicException : The system cannot find the file specified.
+  Stack Trace:
+     at System.Security.Cryptography.X509Certificates.X509CertificateLoader.ImportPfx(ReadOnlySpan`1 data, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.ImportPfx(BagState& bagState, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.LoadPkcs12(BagState& bagState, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.LoadPkcs12(ReadOnlyMemory`1 data, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags, Pkcs12LoaderLimits loaderLimits)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.LoadPkcs12(Byte[] data, String password, X509KeyStorageFlags keyStorageFlags, Pkcs12LoaderLimits loaderLimits)
+   at Tunner.Platform.ArchitectureTests.BffFoundationFixture.InitializeAsync() in <repo-root>\tests\Tunner.Platform.ArchitectureTests\BffFoundationTests.cs:line 375
+  Failed Tunner.Platform.ArchitectureTests.BffFoundationTests.InvalidServerTicketMetadataNeverAuthenticates(surface: Admin, kind: "missing-issued") [1 ms]
+  Error Message:
+   System.Security.Cryptography.CryptographicException : The system cannot find the file specified.
+  Stack Trace:
+     at System.Security.Cryptography.X509Certificates.X509CertificateLoader.ImportPfx(ReadOnlySpan`1 data, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.ImportPfx(BagState& bagState, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.LoadPkcs12(BagState& bagState, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.LoadPkcs12(ReadOnlyMemory`1 data, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags, Pkcs12LoaderLimits loaderLimits)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.LoadPkcs12(Byte[] data, String password, X509KeyStorageFlags keyStorageFlags, Pkcs12LoaderLimits loaderLimits)
+   at Tunner.Platform.ArchitectureTests.BffFoundationFixture.InitializeAsync() in <repo-root>\tests\Tunner.Platform.ArchitectureTests\BffFoundationTests.cs:line 375
+[xUnit.net 00:00:01.07]     Tunner.Platform.ArchitectureTests.BffFoundationTests.InvalidServerTicketMetadataNeverAuthenticates(surface: User, kind: "expired") [FAIL]
+[xUnit.net 00:00:01.07]     Tunner.Platform.ArchitectureTests.BffFoundationTests.InvalidServerTicketMetadataNeverAuthenticates(surface: Admin, kind: "foreign-identity") [FAIL]
+[xUnit.net 00:00:01.07]     Tunner.Platform.ArchitectureTests.BffFoundationTests.InvalidServerTicketMetadataNeverAuthenticates(surface: User, kind: "future-issued") [FAIL]
+[xUnit.net 00:00:01.07]     Tunner.Platform.ArchitectureTests.BffFoundationTests.InvalidServerTicketMetadataNeverAuthenticates(surface: User, kind: "missing-expiry") [FAIL]
+[xUnit.net 00:00:01.07]     Tunner.Platform.ArchitectureTests.BffFoundationTests.InvalidServerTicketMetadataNeverAuthenticates(surface: Admin, kind: "future-issued") [FAIL]
+[xUnit.net 00:00:01.07]     Tunner.Platform.ArchitectureTests.BffFoundationTests.UnsafeRequestsRejectMissingOpaqueAndForeignOrigins(origin: "null") [FAIL]
+[xUnit.net 00:00:01.08]     Tunner.Platform.ArchitectureTests.BffFoundationTests.UnsafeRequestsRejectMissingOpaqueAndForeignOrigins(origin: "https://outside.example.test") [FAIL]
+  Failed Tunner.Platform.ArchitectureTests.BffFoundationTests.InvalidServerTicketMetadataNeverAuthenticates(surface: User, kind: "expired") [1 ms]
+  Error Message:
+   System.Security.Cryptography.CryptographicException : The system cannot find the file specified.
+  Stack Trace:
+     at System.Security.Cryptography.X509Certificates.X509CertificateLoader.ImportPfx(ReadOnlySpan`1 data, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.ImportPfx(BagState& bagState, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.LoadPkcs12(BagState& bagState, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.LoadPkcs12(ReadOnlyMemory`1 data, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags, Pkcs12LoaderLimits loaderLimits)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.LoadPkcs12(Byte[] data, String password, X509KeyStorageFlags keyStorageFlags, Pkcs12LoaderLimits loaderLimits)
+   at Tunner.Platform.ArchitectureTests.BffFoundationFixture.InitializeAsync() in <repo-root>\tests\Tunner.Platform.ArchitectureTests\BffFoundationTests.cs:line 375
+  Failed Tunner.Platform.ArchitectureTests.BffFoundationTests.InvalidServerTicketMetadataNeverAuthenticates(surface: Admin, kind: "foreign-identity") [1 ms]
+  Error Message:
+   System.Security.Cryptography.CryptographicException : The system cannot find the file specified.
+  Stack Trace:
+     at System.Security.Cryptography.X509Certificates.X509CertificateLoader.ImportPfx(ReadOnlySpan`1 data, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.ImportPfx(BagState& bagState, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.LoadPkcs12(BagState& bagState, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.LoadPkcs12(ReadOnlyMemory`1 data, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags, Pkcs12LoaderLimits loaderLimits)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.LoadPkcs12(Byte[] data, String password, X509KeyStorageFlags keyStorageFlags, Pkcs12LoaderLimits loaderLimits)
+   at Tunner.Platform.ArchitectureTests.BffFoundationFixture.InitializeAsync() in <repo-root>\tests\Tunner.Platform.ArchitectureTests\BffFoundationTests.cs:line 375
+  Failed Tunner.Platform.ArchitectureTests.BffFoundationTests.InvalidServerTicketMetadataNeverAuthenticates(surface: User, kind: "future-issued") [1 ms]
+  Error Message:
+   System.Security.Cryptography.CryptographicException : The system cannot find the file specified.
+  Stack Trace:
+     at System.Security.Cryptography.X509Certificates.X509CertificateLoader.ImportPfx(ReadOnlySpan`1 data, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.ImportPfx(BagState& bagState, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.LoadPkcs12(BagState& bagState, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.LoadPkcs12(ReadOnlyMemory`1 data, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags, Pkcs12LoaderLimits loaderLimits)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.LoadPkcs12(Byte[] data, String password, X509KeyStorageFlags keyStorageFlags, Pkcs12LoaderLimits loaderLimits)
+   at Tunner.Platform.ArchitectureTests.BffFoundationFixture.InitializeAsync() in <repo-root>\tests\Tunner.Platform.ArchitectureTests\BffFoundationTests.cs:line 375
+  Failed Tunner.Platform.ArchitectureTests.BffFoundationTests.InvalidServerTicketMetadataNeverAuthenticates(surface: User, kind: "missing-expiry") [1 ms]
+  Error Message:
+   System.Security.Cryptography.CryptographicException : The system cannot find the file specified.
+  Stack Trace:
+     at System.Security.Cryptography.X509Certificates.X509CertificateLoader.ImportPfx(ReadOnlySpan`1 data, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.ImportPfx(BagState& bagState, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.LoadPkcs12(BagState& bagState, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.LoadPkcs12(ReadOnlyMemory`1 data, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags, Pkcs12LoaderLimits loaderLimits)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.LoadPkcs12(Byte[] data, String password, X509KeyStorageFlags keyStorageFlags, Pkcs12LoaderLimits loaderLimits)
+   at Tunner.Platform.ArchitectureTests.BffFoundationFixture.InitializeAsync() in <repo-root>\tests\Tunner.Platform.ArchitectureTests\BffFoundationTests.cs:line 375
+  Failed Tunner.Platform.ArchitectureTests.BffFoundationTests.InvalidServerTicketMetadataNeverAuthenticates(surface: Admin, kind: "future-issued") [1 ms]
+  Error Message:
+   System.Security.Cryptography.CryptographicException : The system cannot find the file specified.
+  Stack Trace:
+     at System.Security.Cryptography.X509Certificates.X509CertificateLoader.ImportPfx(ReadOnlySpan`1 data, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.ImportPfx(BagState& bagState, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.LoadPkcs12(BagState& bagState, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.LoadPkcs12(ReadOnlyMemory`1 data, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags, Pkcs12LoaderLimits loaderLimits)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.LoadPkcs12(Byte[] data, String password, X509KeyStorageFlags keyStorageFlags, Pkcs12LoaderLimits loaderLimits)
+   at Tunner.Platform.ArchitectureTests.BffFoundationFixture.InitializeAsync() in <repo-root>\tests\Tunner.Platform.ArchitectureTests\BffFoundationTests.cs:line 375
+  Failed Tunner.Platform.ArchitectureTests.BffFoundationTests.UnsafeRequestsRejectMissingOpaqueAndForeignOrigins(origin: "null") [1 ms]
+  Error Message:
+   System.Security.Cryptography.CryptographicException : The system cannot find the file specified.
+  Stack Trace:
+     at System.Security.Cryptography.X509Certificates.X509CertificateLoader.ImportPfx(ReadOnlySpan`1 data, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.ImportPfx(BagState& bagState, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.LoadPkcs12(BagState& bagState, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.LoadPkcs12(ReadOnlyMemory`1 data, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags, Pkcs12LoaderLimits loaderLimits)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.LoadPkcs12(Byte[] data, String password, X509KeyStorageFlags keyStorageFlags, Pkcs12LoaderLimits loaderLimits)
+   at Tunner.Platform.ArchitectureTests.BffFoundationFixture.InitializeAsync() in <repo-root>\tests\Tunner.Platform.ArchitectureTests\BffFoundationTests.cs:line 375
+  Failed Tunner.Platform.ArchitectureTests.BffFoundationTests.UnsafeRequestsRejectMissingOpaqueAndForeignOrigins(origin: "https://outside.example.test") [1 ms]
+  Error Message:
+   System.Security.Cryptography.CryptographicException : The system cannot find the file specified.
+  Stack Trace:
+     at System.Security.Cryptography.X509Certificates.X509CertificateLoader.ImportPfx(ReadOnlySpan`1 data, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.ImportPfx(BagState& bagState, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.LoadPkcs12(BagState& bagState, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.LoadPkcs12(ReadOnlyMemory`1 data, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags, Pkcs12LoaderLimits loaderLimits)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.LoadPkcs12(Byte[] data, String password, X509KeyStorageFlags keyStorageFlags, Pkcs12LoaderLimits loaderLimits)
+   at Tunner.Platform.ArchitectureTests.BffFoundationFixture.InitializeAsync() in <repo-root>\tests\Tunner.Platform.ArchitectureTests\BffFoundationTests.cs:line 375
+[xUnit.net 00:00:01.08]     Tunner.Platform.ArchitectureTests.BffFoundationTests.UnsafeRequestsRejectMissingOpaqueAndForeignOrigins(origin: null) [FAIL]
+[xUnit.net 00:00:01.08]     Tunner.Platform.ArchitectureTests.BffFoundationTests.UnsafeRequestsRejectMissingOpaqueAndForeignOrigins(origin: "https://user-bff.example.test.outside.example.test") [FAIL]
+[xUnit.net 00:00:01.08]     Tunner.Platform.ArchitectureTests.BffFoundationTests.HttpAndSpoofedForwardedHttpsAreRejected(surface: User) [FAIL]
+[xUnit.net 00:00:01.08]     Tunner.Platform.ArchitectureTests.BffFoundationTests.HttpAndSpoofedForwardedHttpsAreRejected(surface: Admin) [FAIL]
+[xUnit.net 00:00:01.08]     Tunner.Platform.ArchitectureTests.BffFoundationTests.HttpsHealthWorksWithoutActivatingAnyIdentity(surface: User) [FAIL]
+[xUnit.net 00:00:01.08]     Tunner.Platform.ArchitectureTests.BffFoundationTests.HttpsHealthWorksWithoutActivatingAnyIdentity(surface: Admin) [FAIL]
+[xUnit.net 00:00:01.08]     Tunner.Platform.ArchitectureTests.BffFoundationTests.FrameworkCookiesKeepPrincipalAndTokensOnlyOnServer(surface: Admin) [FAIL]
+[xUnit.net 00:00:01.08]     Tunner.Platform.ArchitectureTests.BffFoundationTests.FrameworkCookiesKeepPrincipalAndTokensOnlyOnServer(surface: User) [FAIL]
+[xUnit.net 00:00:01.09]     Tunner.Platform.ArchitectureTests.BffFoundationTests.MissingOriginConfigurationLeavesOnlyHttpsHealthUsable [FAIL]
+  Failed Tunner.Platform.ArchitectureTests.BffFoundationTests.UnsafeRequestsRejectMissingOpaqueAndForeignOrigins(origin: null) [1 ms]
+  Error Message:
+   System.Security.Cryptography.CryptographicException : The system cannot find the file specified.
+  Stack Trace:
+     at System.Security.Cryptography.X509Certificates.X509CertificateLoader.ImportPfx(ReadOnlySpan`1 data, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.ImportPfx(BagState& bagState, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.LoadPkcs12(BagState& bagState, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.LoadPkcs12(ReadOnlyMemory`1 data, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags, Pkcs12LoaderLimits loaderLimits)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.LoadPkcs12(Byte[] data, String password, X509KeyStorageFlags keyStorageFlags, Pkcs12LoaderLimits loaderLimits)
+   at Tunner.Platform.ArchitectureTests.BffFoundationFixture.InitializeAsync() in <repo-root>\tests\Tunner.Platform.ArchitectureTests\BffFoundationTests.cs:line 375
+  Failed Tunner.Platform.ArchitectureTests.BffFoundationTests.UnsafeRequestsRejectMissingOpaqueAndForeignOrigins(origin: "https://user-bff.example.test.outside.example.test") [1 ms]
+  Error Message:
+   System.Security.Cryptography.CryptographicException : The system cannot find the file specified.
+  Stack Trace:
+     at System.Security.Cryptography.X509Certificates.X509CertificateLoader.ImportPfx(ReadOnlySpan`1 data, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.ImportPfx(BagState& bagState, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.LoadPkcs12(BagState& bagState, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.LoadPkcs12(ReadOnlyMemory`1 data, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags, Pkcs12LoaderLimits loaderLimits)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.LoadPkcs12(Byte[] data, String password, X509KeyStorageFlags keyStorageFlags, Pkcs12LoaderLimits loaderLimits)
+   at Tunner.Platform.ArchitectureTests.BffFoundationFixture.InitializeAsync() in <repo-root>\tests\Tunner.Platform.ArchitectureTests\BffFoundationTests.cs:line 375
+  Failed Tunner.Platform.ArchitectureTests.BffFoundationTests.HttpAndSpoofedForwardedHttpsAreRejected(surface: User) [1 ms]
+  Error Message:
+   System.Security.Cryptography.CryptographicException : The system cannot find the file specified.
+  Stack Trace:
+     at System.Security.Cryptography.X509Certificates.X509CertificateLoader.ImportPfx(ReadOnlySpan`1 data, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.ImportPfx(BagState& bagState, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.LoadPkcs12(BagState& bagState, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.LoadPkcs12(ReadOnlyMemory`1 data, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags, Pkcs12LoaderLimits loaderLimits)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.LoadPkcs12(Byte[] data, String password, X509KeyStorageFlags keyStorageFlags, Pkcs12LoaderLimits loaderLimits)
+   at Tunner.Platform.ArchitectureTests.BffFoundationFixture.InitializeAsync() in <repo-root>\tests\Tunner.Platform.ArchitectureTests\BffFoundationTests.cs:line 375
+  Failed Tunner.Platform.ArchitectureTests.BffFoundationTests.HttpAndSpoofedForwardedHttpsAreRejected(surface: Admin) [1 ms]
+  Error Message:
+   System.Security.Cryptography.CryptographicException : The system cannot find the file specified.
+  Stack Trace:
+     at System.Security.Cryptography.X509Certificates.X509CertificateLoader.ImportPfx(ReadOnlySpan`1 data, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.ImportPfx(BagState& bagState, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.LoadPkcs12(BagState& bagState, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.LoadPkcs12(ReadOnlyMemory`1 data, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags, Pkcs12LoaderLimits loaderLimits)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.LoadPkcs12(Byte[] data, String password, X509KeyStorageFlags keyStorageFlags, Pkcs12LoaderLimits loaderLimits)
+   at Tunner.Platform.ArchitectureTests.BffFoundationFixture.InitializeAsync() in <repo-root>\tests\Tunner.Platform.ArchitectureTests\BffFoundationTests.cs:line 375
+  Failed Tunner.Platform.ArchitectureTests.BffFoundationTests.HttpsHealthWorksWithoutActivatingAnyIdentity(surface: User) [1 ms]
+  Error Message:
+   System.Security.Cryptography.CryptographicException : The system cannot find the file specified.
+  Stack Trace:
+     at System.Security.Cryptography.X509Certificates.X509CertificateLoader.ImportPfx(ReadOnlySpan`1 data, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.ImportPfx(BagState& bagState, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.LoadPkcs12(BagState& bagState, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.LoadPkcs12(ReadOnlyMemory`1 data, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags, Pkcs12LoaderLimits loaderLimits)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.LoadPkcs12(Byte[] data, String password, X509KeyStorageFlags keyStorageFlags, Pkcs12LoaderLimits loaderLimits)
+   at Tunner.Platform.ArchitectureTests.BffFoundationFixture.InitializeAsync() in <repo-root>\tests\Tunner.Platform.ArchitectureTests\BffFoundationTests.cs:line 375
+  Failed Tunner.Platform.ArchitectureTests.BffFoundationTests.HttpsHealthWorksWithoutActivatingAnyIdentity(surface: Admin) [1 ms]
+  Error Message:
+   System.Security.Cryptography.CryptographicException : The system cannot find the file specified.
+  Stack Trace:
+     at System.Security.Cryptography.X509Certificates.X509CertificateLoader.ImportPfx(ReadOnlySpan`1 data, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.ImportPfx(BagState& bagState, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.LoadPkcs12(BagState& bagState, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.LoadPkcs12(ReadOnlyMemory`1 data, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags, Pkcs12LoaderLimits loaderLimits)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.LoadPkcs12(Byte[] data, String password, X509KeyStorageFlags keyStorageFlags, Pkcs12LoaderLimits loaderLimits)
+   at Tunner.Platform.ArchitectureTests.BffFoundationFixture.InitializeAsync() in <repo-root>\tests\Tunner.Platform.ArchitectureTests\BffFoundationTests.cs:line 375
+  Failed Tunner.Platform.ArchitectureTests.BffFoundationTests.FrameworkCookiesKeepPrincipalAndTokensOnlyOnServer(surface: Admin) [1 ms]
+  Error Message:
+   System.Security.Cryptography.CryptographicException : The system cannot find the file specified.
+  Stack Trace:
+     at System.Security.Cryptography.X509Certificates.X509CertificateLoader.ImportPfx(ReadOnlySpan`1 data, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.ImportPfx(BagState& bagState, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.LoadPkcs12(BagState& bagState, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.LoadPkcs12(ReadOnlyMemory`1 data, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags, Pkcs12LoaderLimits loaderLimits)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.LoadPkcs12(Byte[] data, String password, X509KeyStorageFlags keyStorageFlags, Pkcs12LoaderLimits loaderLimits)
+   at Tunner.Platform.ArchitectureTests.BffFoundationFixture.InitializeAsync() in <repo-root>\tests\Tunner.Platform.ArchitectureTests\BffFoundationTests.cs:line 375
+  Failed Tunner.Platform.ArchitectureTests.BffFoundationTests.FrameworkCookiesKeepPrincipalAndTokensOnlyOnServer(surface: User) [1 ms]
+  Error Message:
+   System.Security.Cryptography.CryptographicException : The system cannot find the file specified.
+  Stack Trace:
+     at System.Security.Cryptography.X509Certificates.X509CertificateLoader.ImportPfx(ReadOnlySpan`1 data, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.ImportPfx(BagState& bagState, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.LoadPkcs12(BagState& bagState, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.LoadPkcs12(ReadOnlyMemory`1 data, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags, Pkcs12LoaderLimits loaderLimits)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.LoadPkcs12(Byte[] data, String password, X509KeyStorageFlags keyStorageFlags, Pkcs12LoaderLimits loaderLimits)
+   at Tunner.Platform.ArchitectureTests.BffFoundationFixture.InitializeAsync() in <repo-root>\tests\Tunner.Platform.ArchitectureTests\BffFoundationTests.cs:line 375
+  Failed Tunner.Platform.ArchitectureTests.BffFoundationTests.MissingOriginConfigurationLeavesOnlyHttpsHealthUsable [1 ms]
+  Error Message:
+   System.Security.Cryptography.CryptographicException : The system cannot find the file specified.
+  Stack Trace:
+     at System.Security.Cryptography.X509Certificates.X509CertificateLoader.ImportPfx(ReadOnlySpan`1 data, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.ImportPfx(BagState& bagState, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.LoadPkcs12(BagState& bagState, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.LoadPkcs12(ReadOnlyMemory`1 data, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags, Pkcs12LoaderLimits loaderLimits)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.LoadPkcs12(Byte[] data, String password, X509KeyStorageFlags keyStorageFlags, Pkcs12LoaderLimits loaderLimits)
+   at Tunner.Platform.ArchitectureTests.BffFoundationFixture.InitializeAsync() in <repo-root>\tests\Tunner.Platform.ArchitectureTests\BffFoundationTests.cs:line 375
+[xUnit.net 00:00:01.09]     Tunner.Platform.ArchitectureTests.BffFoundationTests.NearlyExpiredTicketDoesNotAutomaticallyRenew [FAIL]
+[xUnit.net 00:00:01.09]     Tunner.Platform.ArchitectureTests.BffFoundationTests.StoreFailureNeverFallsBackToClientIdentityAndDoesNotLeakDetails [FAIL]
+[xUnit.net 00:00:01.09]     Tunner.Platform.ArchitectureTests.BffFoundationTests.DuplicateSurfaceRegistrationAndWeakenedCookieConfigurationFail [FAIL]
+[xUnit.net 00:00:01.09]     Tunner.Platform.ArchitectureTests.BffFoundationTests.DefaultProductionStoreAndSignInStayDenied [FAIL]
+[xUnit.net 00:00:01.10]     [Test Class Cleanup Failure (Tunner.Platform.ArchitectureTests.BffFoundationTests)] System.NullReferenceException
+[xUnit.net 00:00:01.10]     Tunner.Platform.ArchitectureTests.RealtimeTransportTests.RealConnectionRatePolicyRejectsExcessConnections [FAIL]
+[xUnit.net 00:00:01.11]     Tunner.Platform.ArchitectureTests.RealtimeTransportTests.ReconnectReauthorizesAndHintCarriesNoDomainStateBeforeAuthoritativeRead [FAIL]
+  Failed Tunner.Platform.ArchitectureTests.BffFoundationTests.NearlyExpiredTicketDoesNotAutomaticallyRenew [1 ms]
+  Error Message:
+   System.Security.Cryptography.CryptographicException : The system cannot find the file specified.
+  Stack Trace:
+     at System.Security.Cryptography.X509Certificates.X509CertificateLoader.ImportPfx(ReadOnlySpan`1 data, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.ImportPfx(BagState& bagState, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.LoadPkcs12(BagState& bagState, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.LoadPkcs12(ReadOnlyMemory`1 data, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags, Pkcs12LoaderLimits loaderLimits)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.LoadPkcs12(Byte[] data, String password, X509KeyStorageFlags keyStorageFlags, Pkcs12LoaderLimits loaderLimits)
+   at Tunner.Platform.ArchitectureTests.BffFoundationFixture.InitializeAsync() in <repo-root>\tests\Tunner.Platform.ArchitectureTests\BffFoundationTests.cs:line 375
+  Failed Tunner.Platform.ArchitectureTests.BffFoundationTests.StoreFailureNeverFallsBackToClientIdentityAndDoesNotLeakDetails [1 ms]
+  Error Message:
+   System.Security.Cryptography.CryptographicException : The system cannot find the file specified.
+  Stack Trace:
+     at System.Security.Cryptography.X509Certificates.X509CertificateLoader.ImportPfx(ReadOnlySpan`1 data, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.ImportPfx(BagState& bagState, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.LoadPkcs12(BagState& bagState, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.LoadPkcs12(ReadOnlyMemory`1 data, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags, Pkcs12LoaderLimits loaderLimits)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.LoadPkcs12(Byte[] data, String password, X509KeyStorageFlags keyStorageFlags, Pkcs12LoaderLimits loaderLimits)
+   at Tunner.Platform.ArchitectureTests.BffFoundationFixture.InitializeAsync() in <repo-root>\tests\Tunner.Platform.ArchitectureTests\BffFoundationTests.cs:line 375
+  Failed Tunner.Platform.ArchitectureTests.BffFoundationTests.DuplicateSurfaceRegistrationAndWeakenedCookieConfigurationFail [1 ms]
+  Error Message:
+   System.Security.Cryptography.CryptographicException : The system cannot find the file specified.
+  Stack Trace:
+     at System.Security.Cryptography.X509Certificates.X509CertificateLoader.ImportPfx(ReadOnlySpan`1 data, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.ImportPfx(BagState& bagState, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.LoadPkcs12(BagState& bagState, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.LoadPkcs12(ReadOnlyMemory`1 data, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags, Pkcs12LoaderLimits loaderLimits)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.LoadPkcs12(Byte[] data, String password, X509KeyStorageFlags keyStorageFlags, Pkcs12LoaderLimits loaderLimits)
+   at Tunner.Platform.ArchitectureTests.BffFoundationFixture.InitializeAsync() in <repo-root>\tests\Tunner.Platform.ArchitectureTests\BffFoundationTests.cs:line 375
+  Failed Tunner.Platform.ArchitectureTests.BffFoundationTests.DefaultProductionStoreAndSignInStayDenied [1 ms]
+  Error Message:
+   System.Security.Cryptography.CryptographicException : The system cannot find the file specified.
+  Stack Trace:
+     at System.Security.Cryptography.X509Certificates.X509CertificateLoader.ImportPfx(ReadOnlySpan`1 data, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.ImportPfx(BagState& bagState, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.LoadPkcs12(BagState& bagState, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.LoadPkcs12(ReadOnlyMemory`1 data, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags, Pkcs12LoaderLimits loaderLimits)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.LoadPkcs12(Byte[] data, String password, X509KeyStorageFlags keyStorageFlags, Pkcs12LoaderLimits loaderLimits)
+   at Tunner.Platform.ArchitectureTests.BffFoundationFixture.InitializeAsync() in <repo-root>\tests\Tunner.Platform.ArchitectureTests\BffFoundationTests.cs:line 375
+  Failed Tunner.Platform.ArchitectureTests.RealtimeTransportTests.RealConnectionRatePolicyRejectsExcessConnections [1 ms]
+  Error Message:
+   System.Security.Cryptography.CryptographicException : The system cannot find the file specified.
+  Stack Trace:
+     at System.Security.Cryptography.X509Certificates.X509CertificateLoader.ImportPfx(ReadOnlySpan`1 data, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.ImportPfx(BagState& bagState, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.LoadPkcs12(BagState& bagState, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.LoadPkcs12(ReadOnlyMemory`1 data, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags, Pkcs12LoaderLimits loaderLimits)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.LoadPkcs12(Byte[] data, String password, X509KeyStorageFlags keyStorageFlags, Pkcs12LoaderLimits loaderLimits)
+   at Tunner.Platform.ArchitectureTests.BffFoundationFixture.InitializeAsync() in <repo-root>\tests\Tunner.Platform.ArchitectureTests\BffFoundationTests.cs:line 375
+  Failed Tunner.Platform.ArchitectureTests.RealtimeTransportTests.ReconnectReauthorizesAndHintCarriesNoDomainStateBeforeAuthoritativeRead [1 ms]
+  Error Message:
+   System.Security.Cryptography.CryptographicException : The system cannot find the file specified.
+  Stack Trace:
+     at System.Security.Cryptography.X509Certificates.X509CertificateLoader.ImportPfx(ReadOnlySpan`1 data, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.ImportPfx(BagState& bagState, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.LoadPkcs12(BagState& bagState, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.LoadPkcs12(ReadOnlyMemory`1 data, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags, Pkcs12LoaderLimits loaderLimits)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.LoadPkcs12(Byte[] data, String password, X509KeyStorageFlags keyStorageFlags, Pkcs12LoaderLimits loaderLimits)
+   at Tunner.Platform.ArchitectureTests.BffFoundationFixture.InitializeAsync() in <repo-root>\tests\Tunner.Platform.ArchitectureTests\BffFoundationTests.cs:line 375
+[xUnit.net 00:00:01.11]     Tunner.Platform.ArchitectureTests.RealtimeTransportTests.RealTransportRejectsAnonymousAndForeignOriginRequests [FAIL]
+[xUnit.net 00:00:01.11]     [Test Class Cleanup Failure (Tunner.Platform.ArchitectureTests.RealtimeTransportTests)] System.NullReferenceException
+  Failed Tunner.Platform.ArchitectureTests.RealtimeTransportTests.RealTransportRejectsAnonymousAndForeignOriginRequests [1 ms]
+  Error Message:
+   System.Security.Cryptography.CryptographicException : The system cannot find the file specified.
+  Stack Trace:
+     at System.Security.Cryptography.X509Certificates.X509CertificateLoader.ImportPfx(ReadOnlySpan`1 data, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.ImportPfx(BagState& bagState, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.LoadPkcs12(BagState& bagState, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.LoadPkcs12(ReadOnlyMemory`1 data, ReadOnlySpan`1 password, X509KeyStorageFlags keyStorageFlags, Pkcs12LoaderLimits loaderLimits)
+   at System.Security.Cryptography.X509Certificates.X509CertificateLoader.LoadPkcs12(Byte[] data, String password, X509KeyStorageFlags keyStorageFlags, Pkcs12LoaderLimits loaderLimits)
+   at Tunner.Platform.ArchitectureTests.BffFoundationFixture.InitializeAsync() in <repo-root>\tests\Tunner.Platform.ArchitectureTests\BffFoundationTests.cs:line 375
+Results File: <repo-root>\artifacts\p2-audit-20261109\tests\architecture-governance.trx
+
+Failed!  - Failed:    52, Passed:   185, Skipped:     0, Total:   237, Duration: 642 ms - Tunner.Platform.ArchitectureTests.dll (net10.0)

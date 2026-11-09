@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "defect_id": "DEF-TUN-P2-017-GOV-002",
+  "work_item_id": "TUN-P2-017",
+  "classification": "GOVERNANCE_DEFECT",
+  "severity": "SEV-2",
+  "status": "OPEN",
+  "environment": "Current P1 source audit on c01dd8d989e4285a71f171a51bc68980e670be13",
+  "description": "Actual audit reports 34 current inherited source-proof mismatches after later integration/authority changes, including shared solution/packages/testing, BFF, UI and governance sources. Historical closure is not overwritten; scoped later ownership and current execution evidence are required for integration reconciliation. This is separate from the now-corrected VALIDATION consumption bypass and does not by itself cancel current native P2 source PASS.",
+  "expected_behavior_ref": "docs/authority/current/development/04_Governance_and_Context_Tooling_Specification.md",
+  "evidence": [
+    "governance/evidence/P2-001-007-POST-CORRECTION-20261109.json",
+    "governance/evidence/p2-recovery-20261109/governance/p1-inherited-source-audit.json"
+  ],
+  "affected_versions": [
+    "c01dd8d989e4285a71f171a51bc68980e670be13"
+  ],
+  "created_at": "2026-11-09T12:25:21.339Z",
+  "updated_at": "2026-11-09T12:25:21.339Z"
+}
