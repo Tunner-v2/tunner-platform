@@ -16,7 +16,11 @@ try
     fixtureRoot = Directory.CreateTempSubdirectory("tunner-governance-fixture-");
     if (args.Contains("--self-test-failure-reporting", StringComparer.Ordinal))
         throw new InvalidOperationException("Controlled harness failure reporting check");
-    if (!args.Contains("--self-test-cleanup-failure", StringComparer.Ordinal))
+    if (args.Contains("--validation-source-only", StringComparer.Ordinal))
+    {
+        RunValidationSourceReadinessChecks(repositoryRoot, failures);
+    }
+    else if (!args.Contains("--self-test-cleanup-failure", StringComparer.Ordinal))
     {
         RunHarnessFailureReportingCheck(failures);
         RunGlobalUiEvidenceChecks(repositoryRoot, failures);
@@ -970,7 +974,7 @@ static void RunRevisionCommittedProofChecks(DirectoryInfo repositoryRoot, IColle
 
 static void RunValidationSourceReadinessChecks(DirectoryInfo repositoryRoot, ICollection<string> failures)
 {
-    var fixture = Directory.CreateTempSubdirectory("tunner-validation-source-fixture-");
+    var fixture = Directory.CreateTempSubdirectory("tunner-governance-validation-source-fixture-");
     var assertions = 0;
     var previousFailures = failures.Count;
     void Check(bool condition, string message) { assertions++; Expect(condition, "VALIDATION source readiness: " + message, failures); }
