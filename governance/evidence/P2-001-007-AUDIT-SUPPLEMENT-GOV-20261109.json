@@ -1,0 +1,56 @@
+{
+  "schema_version": 1,
+  "scope_id": "TUN-P2-017",
+  "audit_kind": "COMMITTED_READINESS_ENFORCEMENT_SUPPLEMENT",
+  "result": "CONFIRMED_GAP",
+  "audited_commit_sha": "16a06672058dbc4074647611f893481bbb87e6e2",
+  "recorded_at": "2026-11-09T11:11:32.208Z",
+  "authority_resolution": {
+    "result": "RESOLVED_EXISTING_AUTHORITY",
+    "refs": [
+      "docs/authority/current/development/AMD-0002_Non-Blocking_PR_Approval_and_Continuous_Local_Execution.md§2B",
+      "AGENTS.md mandatory committed-state completion rule"
+    ],
+    "invariant": "A repository-changing prerequisite may satisfy LOCAL_VALIDATED only when required final proof matches committed current owned source; changing behavior after tested SHA invalidates readiness."
+  },
+  "finding": {
+    "id": "DEF-TUN-P2-017-GOV-001",
+    "code_refs": [
+      "src/Tunner.Governance/CommitReadinessApplication.cs:89",
+      "src/Tunner.Governance/CommitReadinessApplication.cs:101",
+      "src/Tunner.Governance/GovernanceApplication.cs:677",
+      "src/Tunner.Governance/GovernanceApplication.cs:761"
+    ],
+    "mechanism": "IsRequired checks only literal LOCAL_VALIDATED/READY_FOR_MERGE/DONE statuses. LOCAL_VALIDATED dependencies also consume VALIDATION, but ReadinessReasons passes the current VALIDATION status to HasRequiredCommittedState, so it returns true without checking owned source. Audit similarly omits these consumed VALIDATION records.",
+    "observed_case": {
+      "prerequisite": "TUN-P2-005",
+      "required_readiness": "LOCAL_VALIDATED",
+      "recorded_tested_sha": "f132e0fbf5322650d2cdcb3f7cacb78e659cfded",
+      "audited_sha": "16a06672058dbc4074647611f893481bbb87e6e2",
+      "changed_owned_paths": [
+        "docs/contracts/ui-inventory.json",
+        "src/Modules/Identity/AuthenticationApplication.cs",
+        "src/Modules/Identity/AuthenticationEndpoints.cs",
+        "src/Modules/Identity/AuthenticationRows.cs",
+        "src/Modules/Identity/IdentityPersistenceDbContext.cs",
+        "src/Modules/Identity/Migrations/IdentityPersistenceDbContextModelSnapshot.cs",
+        "src/Tunner.User.Bff/TunnerAuthenticatedUserBffHost.cs",
+        "tests/Tunner.Identity.Persistence.Tests/AuthenticationTestHost.cs",
+        "tests/Tunner.Identity.Persistence.Tests/Tunner.Identity.Persistence.Tests.csproj",
+        "tools/browser-testing/Program.cs",
+        "tools/browser-testing/Tunner.BrowserTesting.csproj",
+        "tools/dev/tunner-browser.ps1",
+        "web/apps/user/authentication.tsx",
+        "web/package.json",
+        "web/tests/browser-testing/authentication-flow.spec.ts",
+        "web/tests/contracts.test.tsx"
+      ],
+      "downstream": "TUN-P2-006",
+      "actual_work_start": "ELIGIBLE",
+      "raw_evidence": "artifacts/p2-audit-20261109/start-p2-006-corrections.json"
+    },
+    "scope_limit": "This is an enforcement gap, not evidence that the implemented password/session behavior fails; fresh147 tests passed. Native green terminal audit cannot substitute for validating every active prerequisite source."
+  },
+  "required_correction": "Resolve exact closed governance-tool owner and use later P0 Revision lineage. Add failing native regressions for VALIDATION prerequisite stale/dirty source and scope-bound candidate proof; require effective readiness checks before consumption, preserving unrelated dirty files and closed history. Refresh current active P2 source-bound evidence rather than changing historical tested SHAs.",
+  "dependent_feature_boundary": "Complete this governed control correction before relying on local-readiness gates to start further dependent P2 feature implementation; independent regression/evidence and already-authorized correction work continue."
+}
