@@ -1,0 +1,41 @@
+{
+  "validated_source_sha": "d7d7509e86c59895d63fedda32e36f5573200185",
+  "command": "TUNNER_RUN_CONTAINER_TESTS=1 dotnet test tests/Tunner.Identity.Persistence.Tests/Tunner.Identity.Persistence.Tests.csproj --no-restore -m:1 -p:UseSharedCompilation=false --logger trx;LogFileName=identity-primary-d7d7509.trx --results-directory artifacts/p2-007-passkeys-20261109/primary-d7d7509/native",
+  "exit_code": 0,
+  "counters": {
+    "total": "192",
+    "executed": "192",
+    "passed": "192",
+    "failed": "0",
+    "error": "0",
+    "timeout": "0",
+    "aborted": "0",
+    "inconclusive": "0",
+    "passedButRunAborted": "0",
+    "notRunnable": "0",
+    "notExecuted": "0",
+    "disconnected": "0",
+    "warning": "0",
+    "completed": "0",
+    "inProgress": "0",
+    "pending": "0"
+  },
+  "times": {
+    "creation": "2026-11-09T12:46:38.7651145-05:00",
+    "queuing": "2026-11-09T12:46:38.7651149-05:00",
+    "start": "2026-11-09T12:46:34.2886208-05:00",
+    "finish": "2026-11-09T12:51:09.7036984-05:00"
+  },
+  "file_sha256": {
+    "web/apps/user/authentication.content.proposal.json": "311ce6f340fd126bf1ed513be72bf0c8be0f11c55ad4e1e4d249b371fe79f677",
+    "web/apps/user/step-up.content.proposal.json": "4350423c2ad3d67d8edbb3b148d97bd14c0c95103df39fe132afb56fa2d8b85c",
+    "web/apps/user/passkeys.content.proposal.json": "3e433b6db514cf3174d82217a88b46a5e6ca5906aaa134df93046cd892b8ad28",
+    "tests/Tunner.Identity.Persistence.Tests/bin/Debug/net10.0/authentication-content.proposal.json": "311ce6f340fd126bf1ed513be72bf0c8be0f11c55ad4e1e4d249b371fe79f677",
+    "tests/Tunner.Identity.Persistence.Tests/bin/Debug/net10.0/step-up-content.proposal.json": "4350423c2ad3d67d8edbb3b148d97bd14c0c95103df39fe132afb56fa2d8b85c",
+    "tests/Tunner.Identity.Persistence.Tests/bin/Debug/net10.0/passkeys-content.proposal.json": "3e433b6db514cf3174d82217a88b46a5e6ca5906aaa134df93046cd892b8ad28",
+    "tests/Tunner.Identity.Persistence.Tests/bin/Debug/net10.0/Tunner.Identity.Persistence.Tests.dll": "ee8a261ff004fa1112f43f0aea73d68f985a7c3bbf3c4380e8250f66916801d6",
+    "src/Modules/Identity/bin/Debug/net10.0/Tunner.Identity.Persistence.dll": "2bd03076938a4b40505b1afc9ff2f52b3cc90b1a9e64a0b14ab19d58556a3501",
+    "artifacts/p2-007-passkeys-20261109/primary-d7d7509/native/identity-primary-d7d7509.trx": "9be53a9c03784367b08bc3df0240e508154b98be4cbada5854d4ec835f77a2b2"
+  },
+  "scope": "Full current Identity native cohort PASS. P2-007 remains IN_PROGRESS: operation-bound passkey proof and final frontend evidence outstanding. Synthetic authenticator with real native verifier, PostgreSQL and HTTPS; no physical authenticator acceptance."
+}

@@ -1,0 +1,108 @@
+{
+  "schema_version": 1,
+  "scope_id": "TUN-P2-007",
+  "validation_kind": "COMPONENT_EXECUTION",
+  "result": "PASS_PRIMARY_NATIVE_COMPONENT_ONLY",
+  "recorded_at": "2026-11-09T18:04:17.494Z",
+  "native_execution": {
+    "source_commit_sha": "d7d7509e86c59895d63fedda32e36f5573200185",
+    "total": 192,
+    "passed": 192,
+    "failed": 0,
+    "skipped": 0,
+    "method": "Full real PostgreSQL/HTTPS Identity cohort, native .NET verifier and synthetic test-only authenticator. Actual copied content and binary hashes are retained in native-pass.json; not physical-authenticator or rendered-browser acceptance."
+  },
+  "retained_failure": {
+    "source_commit_sha": "61058fd7312c0f17e48847825b3dd455e1afd3b9",
+    "total": 192,
+    "passed": 190,
+    "failed": 2,
+    "skipped": 0,
+    "correction": "Two obsolete exact completed-body/latest-migration assumptions corrected. Retains safe fields/no-proof-material, single consumption, full migration chain/roundtrip, proof trigger and all5 constraints."
+  },
+  "architecture_execution": {
+    "source_commit_sha": "61058fd7312c0f17e48847825b3dd455e1afd3b9",
+    "configuration": "Release",
+    "total": 237,
+    "passed": 237,
+    "failed": 0,
+    "skipped": 0,
+    "source_equivalence_to_native_anchor": "Git diff confirms all production source, architecture-test source and shared build inputs unchanged between61058fd andd7d7509. Binary equality is not asserted."
+  },
+  "build": {
+    "source_commit_sha": "61058fd7312c0f17e48847825b3dd455e1afd3b9",
+    "configuration": "Release",
+    "scope": "Isolated browser-testing executable",
+    "result": "PASS zero warnings/errors",
+    "first_debug_attempt": "Failed because the already-running owned Debug browser host held DLL files. Preserved failure; Release validation used separate build output. No process/trust/security control was changed for this build."
+  },
+  "security_scans": {
+    "result": "PASS",
+    "files": 3121,
+    "qualification": "Actual worktree scans include then-in-progress frontend source; this is not final source proof for later edits."
+  },
+  "authority_and_acceptance": "Current primary component only. TUN-P2-007 remains IN_PROGRESS: actual passkey operation-proof adapter, additive usage concurrency, corrected reload/unknown/cross-tab frontend and Password fact, matched visual/browser evidence, compatibility/current-source refresh and required gates remain.",
+  "portable_transform": "BOM removed, LF and trailing whitespace normalized, exact checkout/NuGet paths replaced; XML placeholders escaped. Raw and portable hashes retained. Embedded native receipt hashes refer to original raw inputs/TRX, not transformed copies.",
+  "receipts": [
+    {
+      "raw_ref": "artifacts/p2-007-passkeys-20261109/primary-61058fd/native/identity-primary-61058fd.trx",
+      "raw_sha256": "6c2e1281916050ef3570a7896f3fbc7fa10725f13fe93fab688bdae553787e47",
+      "portable_ref": "governance/evidence/p2-recovery-20261109/passkey-primary/native-before-correction.trx",
+      "portable_sha256": "5179cefa8e13ec20bceb4e717589574ccc89a01a81557ce2175103b0184d4dd4"
+    },
+    {
+      "raw_ref": "artifacts/p2-007-passkeys-20261109/primary-61058fd/native/receipt.json",
+      "raw_sha256": "d2a03738aba67cf60604eb99517117ca560d01d5fa35d1844ae04d0e85034a74",
+      "portable_ref": "governance/evidence/p2-recovery-20261109/passkey-primary/native-before-correction.json",
+      "portable_sha256": "7aa12ed4641a7a8635cb21383ad0db90aece485d1252238fb739955d7f314dfb"
+    },
+    {
+      "raw_ref": "artifacts/p2-007-passkeys-20261109/primary-d7d7509/native/identity-primary-d7d7509.trx",
+      "raw_sha256": "9be53a9c03784367b08bc3df0240e508154b98be4cbada5854d4ec835f77a2b2",
+      "portable_ref": "governance/evidence/p2-recovery-20261109/passkey-primary/native-pass.trx",
+      "portable_sha256": "c1563106fa1efe426e9197befaa5d9194bc7245d723038f2916909c6214dfe60"
+    },
+    {
+      "raw_ref": "artifacts/p2-007-passkeys-20261109/primary-d7d7509/native/receipt.json",
+      "raw_sha256": "78ca69fbf173ba800fe746ec6d55db38a1f5a269f7486e0811f895b9cfb68b70",
+      "portable_ref": "governance/evidence/p2-recovery-20261109/passkey-primary/native-pass.json",
+      "portable_sha256": "d892659844a2749fe30d02dbc8f95f6cc2a34cb0421e74203cc8687e0bd3498b"
+    },
+    {
+      "raw_ref": "artifacts/p2-007-passkeys-20261109/primary-architecture/architecture-primary.trx",
+      "raw_sha256": "a89db584ecc9d0e0631b99c63962004d9a8364acfeef0c1534485e8f025753e3",
+      "portable_ref": "governance/evidence/p2-recovery-20261109/passkey-primary/architecture-pass.trx",
+      "portable_sha256": "3fea5300e2f7f8f0a0be6ec51cd79f466a2563af3ab190dab0e3d6d6c4b8508f"
+    },
+    {
+      "raw_ref": "artifacts/p2-007-passkeys-20261109/primary-architecture.log",
+      "raw_sha256": "cdf884aed186cae9211718f8d220a57cda5c760c35b1ec78192e37c301341932",
+      "portable_ref": "governance/evidence/p2-recovery-20261109/passkey-primary/architecture-pass.log",
+      "portable_sha256": "3e16b8d5bacfd330d6d922f39752ae03966e5c0fc6957a79eb3de4a59ef4c88c"
+    },
+    {
+      "raw_ref": "artifacts/p2-007-passkeys-20261109/browser-tool-primary-committed-build.log",
+      "raw_sha256": "2f57a0dd28261f71020cd3de934fa3ca2f0f27e2ac81277065979614eaf76448",
+      "portable_ref": "governance/evidence/p2-recovery-20261109/passkey-primary/browser-tool-committed-build.log",
+      "portable_sha256": "16de288ebe7601085b791bdb110e74c54eda55faba96c3ab92bf5e00f06f9da8"
+    },
+    {
+      "raw_ref": "artifacts/p2-007-passkeys-20261109/browser-tool-build.log",
+      "raw_sha256": "4d52a1ff444eaa33467fdbc130fafdae92c3b38712331ec2174ebbca6857889c",
+      "portable_ref": "governance/evidence/p2-recovery-20261109/passkey-primary/browser-tool-first-debug-locked.log",
+      "portable_sha256": "a12b87310b9558c10d629454d236deb5e280bbff160c11fbc33182e749a8cc82"
+    },
+    {
+      "raw_ref": "artifacts/p2-007-passkeys-20261109/primary-secret-scan.log",
+      "raw_sha256": "7a1fb8e3497a8b6df90ebb30b082340e9477a17cda169d17ec71ab914733ff2f",
+      "portable_ref": "governance/evidence/p2-recovery-20261109/passkey-primary/secret-scan.log",
+      "portable_sha256": "782271c901816a31b567beba4b27ade0523e8380f1f83db6eaef559a7f9ff759"
+    },
+    {
+      "raw_ref": "artifacts/p2-007-passkeys-20261109/primary-sast.log",
+      "raw_sha256": "33fd982f49995e09f5580809e9a4f66071f29ba83503123f6fac9374cf7e80d9",
+      "portable_ref": "governance/evidence/p2-recovery-20261109/passkey-primary/sast.log",
+      "portable_sha256": "e2f014068fce347f958e72ecbbb1d0bbf9054686bade09d9b8869c0eacb3a372"
+    }
+  ]
+}
