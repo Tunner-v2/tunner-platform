@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "scope_id": "TUN-P2-007",
+  "result": "CORRECTION_IN_PROGRESS",
+  "recorded_at": "2026-11-09T17:18:34.121Z",
+  "reviewer": "p2_business_arch_qa",
+  "review_provenance": "Independent child static review; no tests executed and no source edits by reviewer.",
+  "authority_resolution": "RESOLVED_EXISTING_AUTHORITY: current proof/authorization validity and atomic owner mutation are already required; no new Product policy or runtime value selected.",
+  "authority_refs": [
+    "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md",
+    "docs/authority/current/development/32_Domain_API_Event_Data_and_Policy_Contract_Catalog.md",
+    "docs/contracts/operation-step-up-contract.md"
+  ],
+  "consolidated_finding": {
+    "defect_id": "DEF-TUN-P2-007-SEC-001",
+    "scope": "Passkey terminal self-session revocation after awaited persistence/authority checks",
+    "scenario": "Owner eligibility/access or proof/session/policy validity can expire during later awaited verification; earlier sampled time or owner interval alone cannot establish current final authorization.",
+    "required_remedy": "Carry actual owner eligibility/access validity bounds and provenance through the narrow typed outcome/receipt and existing operation state. After all awaited authority verification, make one fresh synchronous final decision check of those bounds, proof/session expiry, policy/version and exact causal binding immediately before final atomic flush/commit. On failure roll back credential/session/proof/outbox effects. No recursive verification, skip flag or parallel authorization ledger.",
+    "regressions": [
+      "Eligibility expiry during terminal persistence",
+      "Access interval expiry during final source await",
+      "Proof expiry or policy rollover during verifier",
+      "Valid once-only outcome under both explicit effects"
+    ]
+  },
+  "other_reviewed_boundaries": "Migration/model/guards; exact password current actor/session/identifier+remember result; required current UV/BE/BS classification; explicit session effects and cause; preissued bounded read-only terminal handle; savepoint-preserved abuse accounting. No other supported blocker identified in the inspected candidate.",
+  "acceptance": "Pending final corrected committed-source execution and review."
+}
