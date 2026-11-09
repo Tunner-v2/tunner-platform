@@ -32,6 +32,8 @@ export const requiredPasskeyKeys = [
   "passkeys.methods.description",
   "passkeys.methods.label",
   "passkeys.methods.plural",
+  "passkeys.methods.password",
+  "passkeys.methods.passwordAvailable",
   "passkeys.methods.empty",
   "passkeys.methods.added",
   "passkeys.methods.lastUsed",

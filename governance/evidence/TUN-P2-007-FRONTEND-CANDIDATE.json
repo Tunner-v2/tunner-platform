@@ -2,8 +2,8 @@
   "schema_version": 1,
   "scope_id": "TUN-P2-007",
   "validation_kind": "COMPONENT_CANDIDATE",
-  "result": "FROZEN_BEFORE_RED_REGRESSION",
-  "recorded_at": "2026-11-09T17:55:50.518Z",
+  "result": "CORRECTED_PRIMARY_SOURCE_FROZEN_BEFORE_GREEN",
+  "recorded_at": "2026-11-09T18:10:42.056Z",
   "owned_behavior_paths": [
     "web/apps/user/authentication.css",
     "web/apps/user/authentication.tsx",
@@ -30,5 +30,40 @@
   "known_findings_ref": "governance/evidence/TUN-P2-007-FRONTEND-REVIEW.json",
   "preflight": "TypeScript passed;21 cases and3 focused regressions discovered only. No browser execution/cryptographic or UI acceptance claimed.",
   "boundary": "Primary frontend candidate only; four known recovery/fidelity corrections, actual operation-proof adapter and full applicable gates remain.",
-  "vendor_license_note": "Preserve the upstream OFL bytes, including its original trailing space; the local font attributes exempt only that vendor license trailing-space check and retain binary TTF/LF provenance."
+  "vendor_license_note": "Preserve the upstream OFL bytes, including its original trailing space; the local font attributes exempt only that vendor license trailing-space check and retain binary TTF/LF provenance.",
+  "red_execution": {
+    "source_commit_sha": "efbb750b55645419a0dddbd7dcc2272324c55637",
+    "executed": 3,
+    "failed": 3,
+    "skipped": 0,
+    "flaky": 0,
+    "exit_code": 1,
+    "receipt_ref": "artifacts/p2-007-passkeys-20261109/ui-review/production-red-efbb750/results.json",
+    "qualification": "Actual intended failures; own5193 Vite teardown required scoped cleanup after bodies finished."
+  },
+  "corrected_paths": [
+    "web/apps/user/authentication.tsx",
+    "web/apps/user/passkeys.api.ts",
+    "web/apps/user/passkeys.content-keys.ts",
+    "web/apps/user/passkeys.content.proposal.json",
+    "web/apps/user/passkeys.sign-in.tsx",
+    "web/apps/user/passkeys.tsx",
+    "web/tests/passkeys/fixtures.ts",
+    "web/tests/passkeys/passkeys.spec.ts"
+  ],
+  "frozen_content_inputs": [
+    {
+      "path": "web/apps/user/passkeys.content.proposal.json",
+      "sha256": "e0472c5d02653cdc40888426a03d011934777e554551efcc31ac3197ae50c952"
+    },
+    {
+      "path": "web/apps/user/authentication.content.proposal.json",
+      "sha256": "311ce6f340fd126bf1ed513be72bf0c8be0f11c55ad4e1e4d249b371fe79f677"
+    },
+    {
+      "path": "web/apps/user/step-up.content.proposal.json",
+      "sha256": "4350423c2ad3d67d8edbb3b148d97bd14c0c95103df39fe132afb56fa2d8b85c"
+    }
+  ],
+  "acceptance": "GREEN/full native/browser-native/visual evidence pending; operation-bound passkey adapter remains next slice. Current mocked UI contracts do not prove new backend implementation."
 }

@@ -7,7 +7,7 @@ import './authentication.css';
 import { passwordSignInSchema } from './authentication.validation';
 import { authenticationRoutes } from './authentication.routes';
 import { loginPasskeyKeys, PasskeySignIn } from './passkeys.sign-in';
-import { requirePublished } from './passkeys.api';
+import { parseAuthenticationPasskeyRecovery, requirePublished } from './passkeys.api';
 interface Bootstrap {csrfToken:string;idempotencyKey:string;passwordMaximumLength:number;locale:string;content:Record<string,PublishedContent>;termsUri:string;privacyUri:string;supportUri:string|null;passkeyAvailable?:boolean;maximumCredentialJsonBytes?:number|null;passkeyRecovery?:unknown}
 interface Session {authenticated:true;csrfToken:string}
 const errors:Readonly<Record<string,string>>={AUTHENTICATION_FAILED:'authentication.error.credentials',RATE_OR_ABUSE_LIMITED:'authentication.error.limited'};
@@ -89,7 +89,7 @@ function Screens({initial}:{initial:Bootstrap}){
   }
   function changed(){setError(undefined);}
   if(entryUnavailable)return <ContentUnavailable/>;
-  if(boot.passkeyAvailable===true||boot.passkeyRecovery){try{requirePublished(boot.content,boot.locale,loginPasskeyKeys);if(boot.passkeyAvailable===true&&(!Number.isInteger(boot.maximumCredentialJsonBytes)||boot.maximumCredentialJsonBytes!<1024||boot.maximumCredentialJsonBytes!>1048576))throw new Error('Explicit passkey bounds required.');}catch{return <ContentUnavailable/>;}}
+  if(boot.passkeyAvailable===true||boot.passkeyRecovery){try{requirePublished(boot.content,boot.locale,loginPasskeyKeys);parseAuthenticationPasskeyRecovery(boot.passkeyRecovery);if(boot.passkeyAvailable===true&&(!Number.isInteger(boot.maximumCredentialJsonBytes)||boot.maximumCredentialJsonBytes!<1024||boot.maximumCredentialJsonBytes!>1048576))throw new Error('Explicit passkey bounds required.');}catch{return <ContentUnavailable/>;}}
   return <ContentProvider locale={boot.locale} audience="authentication" resolve={key=>boot.content[key]}><div className="authentication-page">
     <img className="authentication-glow indigo" src="/registration/assets/login-bg-indigo.svg" alt=""/><img className="authentication-glow violet" src="/registration/assets/login-bg-violet.svg" alt=""/>
     <header className="authentication-header"><TunnerBrand contentKey="brand.tunner"/></header>
