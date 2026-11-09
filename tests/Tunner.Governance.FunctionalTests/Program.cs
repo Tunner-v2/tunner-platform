@@ -608,6 +608,14 @@ milestone_id: P0
 sprint_id: null
 title: Role matrix fixture
 status: VALIDATION
+git_state:
+  repository_changed: false
+  validated_commit_sha: null
+  tested_commit_sha: null
+  work_item_commit_shas: []
+  closure_commit_sha: null
+  remaining_uncommitted_paths: []
+  remaining_uncommitted_classification: NONE
 type: GOVERNANCE_TOOLING
 authority_refs: [authority]
 flow_refs: []
