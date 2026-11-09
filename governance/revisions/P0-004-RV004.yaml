@@ -7,7 +7,7 @@
   "parent_milestone_revision_id": null,
   "title": "Reuse prerequisite source proof within one native readiness assessment",
   "revision_type": "PERFORMANCE",
-  "status": "VALIDATION",
+  "status": "CLOSED",
   "reason": "Verified live P2-007 work/context entry repeatedly validates identical prerequisite records across queued consumers, causing multi-minute command latency. Reuse only within one command; every new call must re-read and reject changed source.",
   "authority_refs": [
     "docs/authority/current/development/04_Governance_and_Context_Tooling_Specification.md",
@@ -38,10 +38,11 @@
   "evidence_refs": [
     "governance/evidence/P0-004-RV004-SCOPE.json",
     "governance/evidence/P0-004-RV004-VALIDATION.json",
-    "governance/evidence/P0-004-RV004-ROLE-REVIEWS.json"
+    "governance/evidence/P0-004-RV004-ROLE-REVIEWS.json",
+    "governance/evidence/p2-recovery-20261109/performance/native-closure.json"
   ],
   "created_at": "2026-11-09T16:00:56.3298354+00:00",
-  "closed_at": null,
+  "closed_at": "2026-11-09T17:00:48.929Z",
   "product_acceptance_required": false,
   "git_state": {
     "repository_changed": true,
