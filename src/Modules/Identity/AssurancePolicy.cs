@@ -28,10 +28,11 @@ public sealed class AssurancePolicyVersion
         ArgumentException.ThrowIfNullOrWhiteSpace(requiredAssurance);
         ArgumentNullException.ThrowIfNull(methodAssurances);
         ArgumentOutOfRangeException.ThrowIfLessThanOrEqual(proofLifetime, TimeSpan.Zero);
-        if (methodAssurances.Count == 0 || methodAssurances.Any(x => string.IsNullOrWhiteSpace(x.Key) || string.IsNullOrWhiteSpace(x.Value)))
+        var snapshot = methodAssurances.ToDictionary(x => x.Key, x => x.Value, StringComparer.Ordinal);
+        if (snapshot.Count == 0 || snapshot.Any(x => string.IsNullOrWhiteSpace(x.Key) || string.IsNullOrWhiteSpace(x.Value)))
             throw new ArgumentException("Explicit supported method assurance mappings are required.", nameof(methodAssurances));
         Metadata = metadata; RequiredAssurance = requiredAssurance; ProofLifetime = proofLifetime;
-        MethodAssurances = new ReadOnlyDictionary<string, string>(methodAssurances.ToDictionary(x => x.Key, x => x.Value, StringComparer.Ordinal));
+        MethodAssurances = new ReadOnlyDictionary<string, string>(snapshot);
     }
     public PolicyVersionCandidate<AssurancePolicyScope> Metadata { get; }
     public string RequiredAssurance { get; }
