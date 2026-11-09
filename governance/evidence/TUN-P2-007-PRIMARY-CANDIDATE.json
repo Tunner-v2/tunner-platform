@@ -2,8 +2,8 @@
   "schema_version": 1,
   "scope_id": "TUN-P2-007",
   "validation_kind": "COMPONENT_CANDIDATE",
-  "result": "FROZEN_BEFORE_NATIVE_EXECUTION",
-  "recorded_at": "2026-11-09T17:34:50.546Z",
+  "result": "FROZEN_WITH_TEST_COMPATIBILITY_CORRECTION",
+  "recorded_at": "2026-11-09T17:44:51.169Z",
   "owned_behavior_paths": [
     "src/Modules/Identity/AuthenticationApplication.cs",
     "src/Modules/Identity/AuthenticationContracts.cs",
@@ -35,7 +35,9 @@
     "tools/browser-testing/BrowserTestPasskeys.cs",
     "tools/browser-testing/Tunner.BrowserTesting.csproj",
     "web/apps/user/authentication.content.proposal.json",
-    "web/apps/user/passkeys.content.proposal.json"
+    "web/apps/user/passkeys.content.proposal.json",
+    "tests/Tunner.Identity.Persistence.Tests/StepUpBrowserTests.cs",
+    "tests/Tunner.Identity.Persistence.Tests/StepUpTests.cs"
   ],
   "frozen_content_inputs": [
     {
@@ -175,10 +177,27 @@
     {
       "path": "web/apps/user/passkeys.content.proposal.json",
       "sha256": "3e433b6db514cf3174d82217a88b46a5e6ca5906aaa134df93046cd892b8ad28"
+    },
+    {
+      "path": "tests/Tunner.Identity.Persistence.Tests/StepUpBrowserTests.cs",
+      "sha256": "f96d0bcb9d33a3321eaa957ddd16b238b27c00803d7e05352e44e34e2d6c1702"
+    },
+    {
+      "path": "tests/Tunner.Identity.Persistence.Tests/StepUpTests.cs",
+      "sha256": "d553b172790d000dcc58a1d576b8fec86d22a8f53dd667c5603918878570ec20"
     }
   ],
   "accepted_preliminary_receipt": null,
   "preliminary_result": "41 native tests passed before final compatible continued-session refinement and extra timing cases; not committed final evidence.",
   "remaining_feature_scope": "Frontend integration/rendered evidence, actual passkey operation-proof adapter, source refresh and required acceptance remain. TUN-P2-007 stays IN_PROGRESS.",
-  "validation_boundary": "Current primary backend/tool/content component only. No LOCAL_VALIDATED, full feature, Product or release acceptance."
+  "validation_boundary": "Current primary backend/tool/content component only. No LOCAL_VALIDATED, full feature, Product or release acceptance.",
+  "prior_full_run": {
+    "source_commit_sha": "61058fd7312c0f17e48847825b3dd455e1afd3b9",
+    "total": 192,
+    "passed": 190,
+    "failed": 2,
+    "skipped": 0,
+    "qualification": "Actual fail. Two obsolete exact payload/latest-migration assumptions corrected without weakening proof material, immutable guard or constraints; rerun required.",
+    "receipt_ref": "artifacts/p2-007-passkeys-20261109/primary-61058fd/native/receipt.json"
+  }
 }

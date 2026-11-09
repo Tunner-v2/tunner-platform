@@ -131,14 +131,25 @@ public sealed class StepUpBrowserTests(IdentityPostgresFixture fixture) : IClass
         Assert.True(json.GetProperty("passwordAvailable").GetBoolean()); Assert.DoesNotContain("fixture-resource",await first.Content.ReadAsStringAsync());
         var boot = await Options(host,cookies); Assert.Equal(json.GetProperty("requestId").GetGuid(),boot.RequestId);
         var command = new { requestId=boot.RequestId,password=Password };
+        string completedJson;
         using (var result = await host.Post("/authentication/step-up/password",command,boot.Cookies,boot.Csrf))
-        { Assert.Equal(HttpStatusCode.OK,result.StatusCode);Assert.Equal("{\"status\":\"COMPLETED\"}",await result.Content.ReadAsStringAsync()); }
+        {
+            Assert.Equal(HttpStatusCode.OK,result.StatusCode); completedJson = await result.Content.ReadAsStringAsync();
+            var completed = JsonSerializer.Deserialize<JsonElement>(completedJson);
+            Assert.Equal(3, completed.EnumerateObject().Count());
+            Assert.Equal("COMPLETED", completed.GetProperty("status").GetString());
+            Assert.Equal(json.GetProperty("operationReference").GetString(), completed.GetProperty("operationReference").GetString());
+            Assert.False(completed.GetProperty("signInRequired").GetBoolean());
+            Assert.DoesNotContain(Password, completedJson); Assert.DoesNotContain("person@example.test", completedJson);
+            Assert.DoesNotContain("fixture-resource", completedJson);
+        }
         using (var retry = await host.Post("/authentication/step-up/password",command,boot.Cookies,boot.Csrf)) Assert.Equal(HttpStatusCode.OK,retry.StatusCode);
         using (var status = await host.Get("/authentication/step-up/options",boot.Cookies))
             Assert.Equal("COMPLETED",(await status.Content.ReadFromJsonAsync<JsonElement>()).GetProperty("status").GetString());
         Assert.Equal(1,await Value(db)); await using var check = db.Context(); var proof = await check.Set<StepUpProofRow>().SingleAsync();
         Assert.Equal("CONSUMED",proof.State);Assert.Empty(proof.ProtectedKey);Assert.Equal(1,await check.Set<OutboxMessage>().CountAsync(x=>x.EventType=="StepUpProofConsumed"));
         Assert.DoesNotContain(proof.KeyDigest,await first.Content.ReadAsStringAsync());
+        Assert.DoesNotContain(proof.KeyDigest,completedJson);
     }
 
     [Theory]

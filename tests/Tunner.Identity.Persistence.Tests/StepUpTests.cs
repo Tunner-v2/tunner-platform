@@ -364,10 +364,17 @@ public sealed class StepUpTests(IdentityPostgresFixture fixture) : IClassFixture
     {
         await using var db = await fixture.CreateDatabaseAsync(); await using var context = db.Context();
         var migrations = (await context.Database.GetAppliedMigrationsAsync()).ToArray();
-        Assert.EndsWith("_P2OperationStepUpProofs", migrations[^1]);
-        await context.GetService<IMigrator>().MigrateAsync(migrations[^2]);
+        var declared = context.Database.GetMigrations().ToArray();
+        Assert.Contains("20261109033631_P2OperationStepUpProofs", migrations);
+        Assert.Contains("20261109164622_P2PasskeyCeremonies", migrations);
+        Assert.Equal(declared, migrations); // The actual declared latest migration, including passkeys, must be applied.
+        var proofIndex = Array.FindIndex(migrations, x => x.EndsWith("_P2OperationStepUpProofs", StringComparison.Ordinal));
+        Assert.True(proofIndex > 0);
+        await context.GetService<IMigrator>().MigrateAsync(migrations[proofIndex - 1]);
         await context.Database.MigrateAsync();
         Assert.False(context.Database.HasPendingModelChanges());
+        Assert.Equal(declared, (await context.Database.GetAppliedMigrationsAsync()).ToArray());
         Assert.Equal(1, await context.Database.SqlQueryRaw<int>("SELECT count(*)::integer AS \"Value\" FROM pg_trigger WHERE tgname='step_up_proof_guard'").SingleAsync());
+        Assert.Equal(5, await context.Database.SqlQueryRaw<int>("SELECT count(*)::integer AS \"Value\" FROM pg_constraint WHERE conrelid='identity.step_up_proofs'::regclass AND contype='c' AND conname IN ('ck_step_up_state','ck_step_up_bounds','ck_step_up_digests','ck_step_up_end','ck_step_up_consumed')").SingleAsync());
     }
 }
