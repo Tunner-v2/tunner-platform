@@ -257,7 +257,7 @@ public sealed class StepUpTests(IdentityPostgresFixture fixture) : IClassFixture
             var error = await Assert.ThrowsAsync<PostgresException>(() => Attack(check, "UPDATE identity.step_up_proofs SET " + assignment));
             Assert.Equal("23514", error.SqlState);
         }
-        var wrongAccount = await host.SeedAsync(db);
+        var wrongAccount = await host.SeedAsync(db, confirmed: false);
         var columns = string.Join(",", check.Model.FindEntityType(typeof(StepUpProofRow))!.GetProperties().Select(p => p.GetColumnName()));
         var selections = string.Join(",", check.Model.FindEntityType(typeof(StepUpProofRow))!.GetProperties().Select(p => p.Name switch
         { "ProofId" => "gen_random_uuid()", "AccountId" => "@account", "KeyDigest" => "repeat('D',64)", "OperationId" => "'OP-wrong-account'", _ => p.GetColumnName() }));
@@ -281,6 +281,82 @@ public sealed class StepUpTests(IdentityPostgresFixture fixture) : IClassFixture
         Assert.Throws<ArgumentException>(() => StepUpCaller.FromPrincipal(new(new ClaimsIdentity(claims, AuthenticationIdentity.Scheme)), "https://other.example.test", Digest));
         Assert.Throws<ArgumentException>(() => StepUpCaller.FromPrincipal(new(new ClaimsIdentity(claims, AuthenticationIdentity.Scheme)), Origin, "untrusted"));
         Assert.Throws<ArgumentException>(() => new StepUpOperation("op","correlation",PolicyScope,"resource",1,"bad"));
+    }
+
+
+    [Theory]
+    [InlineData("session")][InlineData("policy")]
+    public async Task ProofExpiryIsClippedToCurrentSessionAndPolicyInterval(string bound)
+    {
+        await using var db = await fixture.CreateDatabaseAsync(); await using var host = await Start(db); await host.SeedAsync(db);
+        if (bound == "session") host.Policies.Policy = host.Policies.Policy with { AbsoluteLifetime = TimeSpan.FromSeconds(20), IdleLifetime = TimeSpan.FromSeconds(20) };
+        var caller = await SignIn(host); var now = host.Clock.GetUtcNow(); var op = Operation();
+        var configured = bound == "policy"
+            ? new AssurancePolicyVersion(new("fixture-step-v1", "ACTIVE", PolicyScope, new EffectivePolicyInterval(now.AddHours(-1), true, now.AddSeconds(10), false),
+                null, ["synthetic-test-only"]), "fixture-password", TimeSpan.FromSeconds(30), new Dictionary<string,string> { ["pwd"] = "fixture-password" })
+            : Policy(host);
+        await using var scope = new ProofScope(host, new AssurancePolicyCatalog([configured]));
+        var result = await scope.Application.IssuePasswordAsync(caller, op, "fixture-step-v1", Password);
+        Assert.Null(result.ErrorCode); Assert.NotNull(result.Grant);
+        Assert.Equal(now.AddSeconds(bound == "policy" ? 10 : 20), result.Grant.ExpiresAt);
+        host.Clock.Advance(TimeSpan.FromSeconds(20));
+        if (bound == "session")
+            Assert.Equal("AUTHENTICATION_FAILED", (await scope.Application.ExecuteAsync(caller, op, result.Grant.Key, _ => throw new InvalidOperationException("Expired session executed."))).ErrorCode);
+        else
+            await Assert.ThrowsAnyAsync<InvalidOperationException>(() => scope.Application.ExecuteAsync(caller, op, result.Grant.Key, _ => throw new InvalidOperationException("Expired policy executed.")));
+    }
+
+    [Fact]
+    public async Task StepUpAbuseLimitsAreIndependentButReuseCurrentAuthenticationPolicyValues()
+    {
+        await using var db = await fixture.CreateDatabaseAsync(); await using var host = await Start(db); await host.SeedAsync(db);
+        host.Policies.Policy = host.Policies.Policy with { IdentifierAttemptLimit = 1 };
+        var caller = await SignIn(host); var op = Operation();
+        await using var scope = new ProofScope(host, Source(host));
+        Assert.Equal("AUTHENTICATION_FAILED", (await scope.Application.IssuePasswordAsync(caller, op, "fixture-step-v1", "wrong")).ErrorCode);
+        Assert.Equal("RATE_OR_ABUSE_LIMITED", (await scope.Application.IssuePasswordAsync(caller, op, "fixture-step-v1", Password)).ErrorCode);
+        await using var check = db.Context(); Assert.Empty(await check.Set<StepUpProofRow>().ToArrayAsync());
+        Assert.Equal("ACTIVE", (await check.Set<AuthenticationSessionRow>().SingleAsync()).State);
+    }
+
+    [Fact]
+    public async Task ExactOperationRestrictionDoesNotBecomeGeneralSessionRevocation()
+    {
+        await using var db = await fixture.CreateDatabaseAsync(); await using var host = await Start(db); await host.SeedAsync(db);
+        var caller = await SignIn(host); var op = Operation(); var grant = await Issue(host, caller, op);
+        host.Access.DeniedOperation = op.Scope.Operation;
+        await using var scope = new ProofScope(host, Source(host));
+        Assert.Equal("AUTHENTICATION_FAILED", (await scope.Application.ExecuteAsync(caller, op, grant.Key, _ => throw new InvalidOperationException("Denied operation executed."))).ErrorCode);
+        await using var check = db.Context(); Assert.Equal("ACTIVE", (await check.Set<AuthenticationSessionRow>().SingleAsync()).State);
+        Assert.Equal("ACTIVE", (await check.Set<StepUpProofRow>().SingleAsync()).State);
+    }
+
+    [Fact]
+    public async Task PolicyFailureAfterLocalMutationRollsBackInsteadOfConsumingProof()
+    {
+        await using var db = await fixture.CreateDatabaseAsync(); await using var host = await Start(db); await host.SeedAsync(db);
+        await Target(db); var caller = await SignIn(host); var op = Operation(); var grant = await Issue(host, caller, op);
+        await using var scope = new ProofScope(host, Source(host));
+        await Assert.ThrowsAnyAsync<InvalidOperationException>(() => scope.Application.ExecuteAsync(caller, op, grant.Key, async ct =>
+        { await Change(scope.Database, ct); host.Policies.Available = false; return true; }));
+        Assert.Equal(0, await Value(db)); await using var check = db.Context();
+        Assert.Equal("ACTIVE", (await check.Set<StepUpProofRow>().SingleAsync()).State);
+    }
+
+    [Fact]
+    public async Task VerifiedContactCannotBeRevokedConcurrentlyInsideTheAuthorizedMutation()
+    {
+        await using var db = await fixture.CreateDatabaseAsync(); await using var host = await Start(db); await host.SeedAsync(db);
+        var caller = await SignIn(host); var op = Operation(); var grant = await Issue(host, caller, op);
+        await using var scope = new ProofScope(host, Source(host));
+        Assert.True((await scope.Application.ExecuteAsync(caller, op, grant.Key, async ct =>
+        {
+            await using var competing = new NpgsqlConnection(db.ConnectionString); await competing.OpenAsync(ct);
+            await using var command = new NpgsqlCommand("SET lock_timeout='250ms'; UPDATE accounts.verified_contacts SET state='REVOKED', version=version+1", competing);
+            var blocked = await Assert.ThrowsAsync<PostgresException>(() => command.ExecuteNonQueryAsync(ct));
+            Assert.Equal("55P03", blocked.SqlState); return true;
+        })).Applied);
+        await using var check = db.Context(); Assert.Equal(ContactVerificationState.Verified, (await check.VerifiedContacts.SingleAsync()).State);
     }
 
     [Fact]
