@@ -1,0 +1,47 @@
+{
+  "schema_version": 1,
+  "scope_id": "TUN-P2-005",
+  "state": "IMPLEMENTED_VALIDATION_PENDING",
+  "resources": [
+    {
+      "name": "identity.tunner_sessions",
+      "classification": "RESTRICTED_SECURITY",
+      "personal_identifiers": [
+        "Account reference (server-owned)",
+        "HMAC identifier partition; no raw email",
+        "Purpose-protected framework ticket (server only)"
+      ],
+      "bearer_storage": "SHA256 lookup-key index; purpose-protected retry key and ticket; raw key only in trusted in-memory grant and framework-protected HttpOnly cookie",
+      "lifecycle": "Absolute/idle expiry is checked on every retrieval; immediate idempotent revoke and owner-invoked bounded expiry maintenance clear protected bearer material. Metadata retention remains governed by persisted trusted retention/processing references; no retention duration is invented.",
+      "mutable_identity": "Database trigger rejects key/Account/browser/scheme/origin/authentication/assurance/lifetime replacement and resurrection of ended sessions."
+    },
+    {
+      "name": "identity.authentication_abuse",
+      "classification": "RESTRICTED_SECURITY",
+      "personal_identifiers": [
+        "HMAC real network peer partition",
+        "HMAC normalized identifier partition"
+      ],
+      "lifecycle": "Versioned policy window expiry; trusted maintenance deletes expired counters, with no raw IP/email/password retained."
+    },
+    {
+      "name": "User BFF browser context and session cookies",
+      "classification": "RESTRICTED_SECURITY",
+      "transport": "HTTPS; host-only; Secure; HttpOnly; purpose-protected bootstrap; Strict bootstrap/antiforgery and existing Lax User cookie.",
+      "browser_js_boundary": "Only anti-CSRF request tokens, safe form values and authenticated=true enter JS state. No session bearer/OAuth tokens, account identifier, email or password in URLs/history/storage."
+    },
+    {
+      "name": "platform.outbox_messages",
+      "classification": "RESTRICTED_SECURITY",
+      "events": [
+        "TunnerSessionAuthenticated",
+        "TunnerSessionRevoked",
+        "TunnerSessionExpired",
+        "AuthenticationRejected"
+      ],
+      "payload": "Opaque operation/session reference only; no credential, email, network address, DOB or raw session lookup key."
+    }
+  ],
+  "providers": "Trusted effective policy, Account access, processing/retention and published presentation sources are explicit; isolated fixtures are not production authority.",
+  "external_authority_ref": "governance/evidence/TUN-P2-005-EXTERNAL-AUTHORITY-BOUNDARY.json"
+}

@@ -26,6 +26,7 @@ public static class Program
         governance.Subcommands.Add(CreateRolesCommand(repositoryOption));
         governance.Subcommands.Add(CreateCommitReadinessCommand(repositoryOption));
         governance.Subcommands.Add(CreateRevisionCommand(repositoryOption));
+        governance.Subcommands.Add(CreateUiComplianceCommand(repositoryOption));
         root.Subcommands.Add(governance);
         root.Subcommands.Add(CreateWorkCommand(repositoryOption));
         var bootstrapReplay = new Command("replay", "Replay bootstrap records and refuse unresolved exceptions.");
@@ -40,6 +41,15 @@ public static class Program
         return root.Parse(args).Invoke();
     }
 
+    private static Command CreateUiComplianceCommand(Option<DirectoryInfo?> repositoryOption)
+    {
+        var scope = new Option<string>("--scope") { DefaultValueFactory = _ => "GLOBAL_UI" };
+        var evidence = new Option<string>("--evidence") { DefaultValueFactory = _ => "governance/evidence/GLOBAL-UI-COMPLIANCE.json" };
+        var check = new Command("check", "Verify global per-route/form AMD-0008/0009 acceptance evidence.");
+        check.Options.Add(scope); check.Options.Add(evidence);
+        check.SetAction(p => WriteResult(UiComplianceApplication.Check(Repository(p, repositoryOption), p.GetValue(scope)!, p.GetValue(evidence)!)));
+        var command = new Command("ui", "Governed global UI acceptance controls."); command.Subcommands.Add(check); return command;
+    }
     private static Command CreateRevisionCommand(Option<DirectoryInfo?> repositoryOption)
     {
         var scope = new Option<string>("--scope");

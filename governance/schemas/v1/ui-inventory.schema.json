@@ -1,0 +1,90 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Tunner global UI inventory v1",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "apps",
+    "items"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "apps": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "status",
+          "source_root"
+        ]
+      }
+    },
+    "items": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "kind",
+          "status",
+          "app",
+          "module",
+          "owner_scopes",
+          "authority_refs",
+          "figma_refs",
+          "source_paths"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "kind": {
+            "enum": [
+              "SCREEN",
+              "FORM",
+              "COMPONENT"
+            ]
+          },
+          "status": {
+            "enum": [
+              "IMPLEMENTED",
+              "TEST_FIXTURE",
+              "PLANNED"
+            ]
+          },
+          "pathname": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "runtime_pathname": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "owner_scopes": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "source_paths": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        }
+      }
+    }
+  }
+}

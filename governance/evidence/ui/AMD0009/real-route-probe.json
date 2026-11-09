@@ -1,0 +1,73 @@
+{
+  "schema_version": 1,
+  "source_commit": "bea01cfcd813bf8000a7e1c64b8c74492c4b4e31",
+  "provenance": "Supplemental operator Playwright probe; real isolated HTTPS/PostgreSQL/SMTP; no mocked responses",
+  "result": "PASS",
+  "checks": [
+    {
+      "name": "Registration canonical entry with normal trusted HTTPS",
+      "result": "PASS",
+      "pathname": "/registration"
+    },
+    {
+      "name": "Registration POST transitions to canonical verification path",
+      "result": "PASS",
+      "pathname": "/registration/verify-email"
+    },
+    {
+      "name": "Verification refresh reconstructs server-bound pending operation without proof storage",
+      "result": "PASS",
+      "pathname": "/registration/verify-email"
+    },
+    {
+      "name": "Real Back and Forward enforce current workflow, including duplicate pathname entries",
+      "result": "PASS",
+      "pathname": "/registration/verify-email"
+    },
+    {
+      "name": "Verified proof transitions to canonical Personal Information path",
+      "result": "PASS",
+      "pathname": "/registration/personal-information"
+    },
+    {
+      "name": "Personal Information refresh reconstructs current server-owned email and prerequisites",
+      "result": "PASS",
+      "pathname": "/registration/personal-information"
+    },
+    {
+      "name": "Personal Information submission transitions to canonical Account Ready path",
+      "result": "PASS",
+      "pathname": "/registration/complete"
+    },
+    {
+      "name": "Completed workflow survives refresh and blocks obsolete Personal Information history entry",
+      "result": "PASS",
+      "pathname": "/registration/complete"
+    },
+    {
+      "name": "URLs and browser history/storage contain no operation secrets or PII",
+      "result": "PASS",
+      "pathname": "/registration/complete"
+    },
+    {
+      "name": "New browser cannot deep-link into another browser completed operation",
+      "result": "PASS",
+      "pathname": "/registration"
+    }
+  ],
+  "responses": [
+    {
+      "pathname": "/registration/register",
+      "status": 202
+    },
+    {
+      "pathname": "/registration/verify",
+      "status": 202
+    },
+    {
+      "pathname": "/registration/personal-information",
+      "status": 200
+    }
+  ],
+  "checked_at": "2026-10-18T03:57:23.108Z"
+}

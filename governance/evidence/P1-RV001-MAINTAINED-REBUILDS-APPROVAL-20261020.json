@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "scope_id": "P1-RV001",
+  "decision": "APPROVED_MAINTAINED_TUNNER_SECURITY_REBUILDS",
+  "recorded_on": "2026-10-20",
+  "question_item_id": "[\"request_user_input_async\",\"call_8b1edd65417f497598d29fc57bf9f5d3\",0]",
+  "answer": "Maintain Tunner security rebuilds (Recommended)",
+  "options_packet": {
+    "path": "artifacts/security-remediation-20261020/vendor-remediation-options.html",
+    "sha256": "bf46fd00750a7fea47a4ca0093d58c7136018c23926ed42505773251c9baba22"
+  },
+  "authorized_scope": [
+    "Prepare, maintain and validate security rebuilds of PostgreSQL, OpenBao and the complete LGTM stack from pinned public vendor sources.",
+    "Preserve domain behavior, APIs, storage, complete component coverage, licensing and integrity verification.",
+    "Use private local builds and CI evidence without registry publication."
+  ],
+  "not_authorized": [
+    "Registry publication",
+    "Protected-main merge or approval bypass",
+    "Deployment or release",
+    "CVE suppression, reduced scanning severity, removal of components or disabled integrity checks"
+  ],
+  "status": "SCOPE_AUTHORIZED_NOT_VALIDATION",
+  "provenance": "Direct user answer to the scan-backed options question in this conversation."
+}

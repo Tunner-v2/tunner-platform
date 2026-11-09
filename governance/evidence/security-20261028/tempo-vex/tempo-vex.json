@@ -1,0 +1,52 @@
+{
+  "@context": "https://openvex.dev/ns/v0.2.0",
+  "@id": "urn:tunner:vex:tempo-plugin:20261028",
+  "author": "Tunner engineering proposal",
+  "role": "Tunner dev/test applicability assessment",
+  "timestamp": "2026-10-28T20:16:10.596Z",
+  "version": 1,
+  "statements": [
+    {
+      "vulnerability": {
+        "name": "CVE-2026-21728"
+      },
+      "products": [
+        {
+          "@id": "pkg:golang/github.com/grafana/grafana-tempo-datasource",
+          "hashes": {
+            "sha-256": "963c415f3eb286c4d9a1001cab275d9563d4bd4b548ad5b6dd84953e17be61b9"
+          },
+          "subcomponents": [
+            {
+              "@id": "pkg:golang/github.com/grafana/tempo@v1.5.1-0.20261021152436-9db7df79d2af"
+            }
+          ]
+        }
+      ],
+      "status": "not_affected",
+      "justification": "vulnerable_code_not_present",
+      "impact_statement": "The rebuilt data-source links only Tempo protobuf packages. The vulnerable HTTP query/config-serving implementations are absent. Dependency source is verified official Tempo3.1.1 commit9db7df79d2af105a90d96484e6403e1fda0d011e; per-build executable/source/expiry guards and explicit scope consent are mandatory before consuming this draft."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-28377"
+      },
+      "products": [
+        {
+          "@id": "pkg:golang/github.com/grafana/grafana-tempo-datasource",
+          "hashes": {
+            "sha-256": "963c415f3eb286c4d9a1001cab275d9563d4bd4b548ad5b6dd84953e17be61b9"
+          },
+          "subcomponents": [
+            {
+              "@id": "pkg:golang/github.com/grafana/tempo@v1.5.1-0.20261021152436-9db7df79d2af"
+            }
+          ]
+        }
+      ],
+      "status": "not_affected",
+      "justification": "vulnerable_code_not_present",
+      "impact_statement": "The rebuilt data-source links only Tempo protobuf packages. The vulnerable HTTP query/config-serving implementations are absent. Dependency source is verified official Tempo3.1.1 commit9db7df79d2af105a90d96484e6403e1fda0d011e; per-build executable/source/expiry guards and explicit scope consent are mandatory before consuming this draft."
+    }
+  ]
+}

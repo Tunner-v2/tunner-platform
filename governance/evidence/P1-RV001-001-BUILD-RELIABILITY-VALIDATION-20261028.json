@@ -1,0 +1,52 @@
+{
+  "schema_version": 1,
+  "scope_id": "P1-RV001-001",
+  "status": "PASS_HELPER_AND_NEGATIVE_CONTROL_ONLY",
+  "tested_commit": "a1097490d3757362e8d66663b7251d5d315dcd87",
+  "helper_results": {
+    "passed_test_cases": 67,
+    "failed_test_cases": 0,
+    "skipped_test_cases": 0,
+    "package_without_tests": [
+      "tunner.dev/lgtm-signing/cmd/vex-check"
+    ],
+    "go_vet": "PASS",
+    "isolated_network": "none"
+  },
+  "download_retries": {
+    "maximum_attempts": 3,
+    "delays_seconds": [
+      2,
+      4
+    ],
+    "operations": [
+      "Go get dependency resolution only"
+    ],
+    "never_retried": [
+      "upstream tests",
+      "compilation",
+      "checksum validation",
+      "source materialization guards",
+      "HTTP authorization errors"
+    ],
+    "retained_failure_log": "artifacts/security-followup-20261028/complete-lgtm-concurrent-build.log",
+    "observed_failure": "net/http TLS handshake timeout retrieving github.com/VividCortex/mysqlerr v1.0.0"
+  },
+  "negative_scan": {
+    "tested_commit": "d12e446b33831b123b9f71ca94e67a20a2cdfff5",
+    "fixture_image": "tunner-security/lgtm:negative-complete-20261028",
+    "full_executable_coverage": 23,
+    "os_node_coverage": true,
+    "java_dependency_coverage": 2,
+    "unrelated_findings_blocked": 101,
+    "vex_used": false,
+    "expected_exit_code": 1,
+    "result": "PASS_FAIL_CLOSED"
+  },
+  "evidence_root": "governance/evidence/security-20261028/build-reliability",
+  "evidence_sha256": {
+    "helper-tests.jsonl": "8b84f0aa6550d9785776a76f0eec88da414685b9838ba8113d1173d4d58fe590",
+    "negative-control.json": "f599d9bca0dddc82f2073f2db01a8c474b0c5e68b60150cb283c2ae7ce8f89dc"
+  },
+  "boundary": "Full LGTM build, current runtime scan/compatibility, final role reviews and acceptance remain pending. No runtime-default change or vulnerability waiver."
+}

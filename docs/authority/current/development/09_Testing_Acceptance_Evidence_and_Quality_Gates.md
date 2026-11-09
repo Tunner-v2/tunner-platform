@@ -1,16 +1,22 @@
-> **Tunner Development Authority Package**  
+﻿> **Tunner Development Authority Package**  
 > **Status:** ACTIVE — LOCKED DEVELOPMENT BASELINE 1.6.0  
 > **Closure revision date:** 2026-09-29  
 
+
 # 09 — Testing, Acceptance, Evidence & Quality Gates
+
 
 ## 1. Principle
 
+
 A milestone is not complete until its behavior is independently reproducible from scripts and evidence.
+
 
 ## 2. Test layers
 
+
 ### Unit
+
 
 - domain invariants;
 - value objects;
@@ -18,9 +24,12 @@ A milestone is not complete until its behavior is independently reproducible fro
 - calculations;
 - state transitions.
 
+
 ### Integration
 
+
 Run real dependencies in Docker/Testcontainers where practical:
+
 
 - PostgreSQL;
 - RabbitMQ;
@@ -30,9 +39,12 @@ Run real dependencies in Docker/Testcontainers where practical:
 - local provider stubs;
 - HTTP integrations.
 
+
 Do not mock the database for behavior that depends on transaction/concurrency semantics.
 
+
 ### Contract
+
 
 - OpenAPI compatibility;
 - AsyncAPI/event schemas;
@@ -40,11 +52,15 @@ Do not mock the database for behavior that depends on transaction/concurrency se
 - webhook signature vectors;
 - backward-compatibility cases.
 
+
 ### End-to-end
+
 
 Critical guided user/operator journeys.
 
+
 ### Security
+
 
 - authn/authz;
 - object/property-level authorization;
@@ -56,49 +72,75 @@ Critical guided user/operator journeys.
 - dependency scanning;
 - container/security configuration.
 
+
 ### Performance/reliability
+
 
 Run when the milestone introduces behavior needing capacity/latency/concurrency validation.
 
+
 No invented SLO; tests use approved target policy.
+
 
 ## 3. Browser testing
 
+
 Use Playwright for web acceptance and screenshot evidence.
 
+
 Capture:
+
 
 - happy path;
 - material error state;
 - review/confirmation state for sensitive actions;
 - responsive/wide-screen requirement where applicable.
 
+
 Screenshots are evidence, not pixel-perfect authority over the Figma source.
+
+
+## 3A. Global route and form validation testing — AMD-0009
+
+
+The URL and validation testing contract applies **to all Tunner-owned apps and every independently navigable screen/form**, existing and future; registration is just the initial example. Source: https://drive.google.com/file/d/1VeaNofocTrsbXwdePg8VSVuembRQxr7A/view. Maintain a route manifest mapping each screen to canonical pathname, guards and approved design/FRD. Execute `URL-001..006` per route for navigation, direct-link, reload, Back/Forward, access denial and safe redirect. For every form, verify typed application-level validation, backend enforcement independent of browser checks, relevant domain error semantics, approved shared Figma-derived field/error-summary states and accessibility; run `VAL-001..008` per affected form, including visual regression and responsive checks against the correct Figma component. Figma registration-validation-errors `70:1257` is a **shared style exemplar**, not the only form that must pass. Missing coverage blocks the affected work/release; passing registration does not cover Admin, Finance, Billing or any other form.
+
 
 ## 4. Environment test packs
 
+
 ### Development
+
 
 May reset/reseed local data.
 
+
 ### Sandbox
+
 
 Uses Product test clients/providers.
 
+
 ### Staging
+
 
 Production-like, non-destructive where possible, migration rehearsal and integration verification.
 
+
 ### Production-safe
 
+
 Only:
+
 
 - health;
 - read-only diagnostics;
 - synthetic operations explicitly designed for production safety;
 - non-destructive contract probes.
 
+
 ## 5. Release evidence pack
+
 
 ```text
 release-evidence/
@@ -118,9 +160,12 @@ release-evidence/
     acceptance-checklist.md
 ```
 
+
 ## 6. Evidence manifest
 
+
 Must record:
+
 
 - release;
 - Git SHA/tag;
@@ -135,9 +180,12 @@ Must record:
 - Product acceptance status;
 - unresolved accepted risks/issues.
 
+
 ## 7. Milestone closure gates
 
+
 Minimum:
+
 
 - requirements/acceptance criteria complete;
 - code complete;
@@ -150,9 +198,12 @@ Minimum:
 - no unresolved blocking defect;
 - Product Acceptance complete where required.
 
+
 ## 8. Test case structure
 
+
 Every business acceptance test should include:
+
 
 ```yaml
 id:
@@ -165,9 +216,12 @@ evidence:
 environment_profiles:
 ```
 
+
 ## 9. Mandatory generic edge cases
 
+
 For applicable flows:
+
 
 - unauthorized actor;
 - invalid state;
@@ -185,11 +239,15 @@ For applicable flows:
 - audit evidence;
 - subscriber failure isolation.
 
+
 ## 10. Real example — payment unknown
+
 
 Given provider accepted the TCP/TLS request but Tunner timed out before receiving a conclusive result.
 
+
 Then:
+
 
 - payment becomes unknown/waiting state;
 - retry/failover blocked;
@@ -198,7 +256,9 @@ Then:
 - UI shows accurate unresolved state;
 - evidence includes provider request reference/correlation.
 
+
 ## 11. Acceptance cases for test system
+
 
 | ID | Scenario | Expected |
 |---|---|---|
@@ -208,7 +268,9 @@ Then:
 | TEST-004 | release evidence regenerated | same Git/build identifiers resolve consistently |
 | TEST-005 | flaky test threshold breached | governance marks quality gate failed rather than auto-ignoring |
 
+
 ## 12. Runtime infrastructure acceptance tests
+
 
 | ID | Scenario | Expected |
 |---|---|---|
@@ -223,7 +285,9 @@ Then:
 | OBJ-002 | storage unavailable | domain preserves pending/failed file operation state without corrupting authoritative metadata |
 | RPC-001 | gRPC-Web feature disabled | equivalent required business capability remains available through canonical REST path unless ADR explicitly makes gRPC-Web required for that internal UI |
 
+
 ## Constitutional business-rule tests
+
 
 | ID | Given | When | Then |
 |---|---|---|---|
@@ -239,7 +303,9 @@ Then:
 | TREAS-005 | operator clicks complete without authoritative bank evidence | completion attempted | completion is rejected |
 | TREAS-006 | bank transfer is confirmed and matched | reconciliation runs | case transitions to reconciled/closed exactly once and preserves bank reference/evidence |
 
+
 ## Global commerce, checkout and FX acceptance cases
+
 
 | ID | Scenario | Expected evidence |
 |---|---|---|
@@ -269,7 +335,9 @@ Then:
 | FX-009 | guided operator config has unsupported currency/corridor, overlapping scope, invalid split or missing approval | activation attempted | activation is blocked with actionable validation; no ambiguous policy becomes ACTIVE |
 | FX-010 | operator previews payout conversion | provider quote/indicative rate is available | UI labels preview as estimate; actual ledger allocation uses executed/observed FxConversion evidence only |
 
+
 ## Provider integration acceptance cases
+
 
 | ID | Given | When | Then |
 |---|---|---|---|
@@ -283,7 +351,10 @@ Then:
 | PROV-008 | forged/duplicate Stripe webhook | ingestion executes | invalid signature is rejected; valid duplicate is deduplicated by provider-event/inbox identity |
 
 
+
+
 ## Tunner checkout acceptance cases
+
 
 | ID | Given | When | Then |
 |---|---|---|---|
@@ -293,15 +364,22 @@ Then:
 | CHK-UNK-001 | external submission may have occurred | outcome becomes unknown | provider failover/retry is blocked until reconciliation establishes safe finality |
 
 
+
+
 ## Governed presentation-content quality gate
+
 
 Automated/acceptance coverage must include: semantic key resolution; locale/audience/surface/context precedence; deterministic fallback; missing mandatory sensitive content blocking; immutable version/history behavior; concurrent edit/version conflict; authorization and approval/SoD for sensitive content; prospective publication and rollback; cache invalidation; unsafe rich-content/link handling where applicable; reusable-component rendering without raw technical constants; exact historical content-version evidence for consent/notification/disclosure where required; and model-generated content remaining unpublished until the normal validation/authorization/publication path completes.
 
+
 ## Shared primitive and formatter conformance gate
+
 
 Reusable technical primitives that affect persisted canonical values, public contracts, security-sensitive normalization or consistent UI presentation require focused tests.
 
+
 Minimum applicable coverage:
+
 
 - deterministic input/output vectors;
 - null/empty/boundary/Unicode/culture/timezone cases;
@@ -311,7 +389,9 @@ Minimum applicable coverage:
 - regression tests when a shared primitive changes;
 - architecture/static checks that prevent known screen-local/module-local duplicate implementations where practical.
 
+
 Examples:
+
 
 - Money display tests prove `amount + ISO currency` is preserved while locale formatting changes only representation.
 - Slug tests prove canonicalization mechanics separately from domain uniqueness/reserved-name/mutability rules.

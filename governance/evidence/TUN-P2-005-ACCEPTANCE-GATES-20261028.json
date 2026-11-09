@@ -1,0 +1,83 @@
+{
+  "schema_version": 1,
+  "scope_id": "TUN-P2-005",
+  "recorded_at": "2026-10-28T18:09:50.590Z",
+  "validated_tested_sha": "f63e81b062049f2ce65a623d29c1fc311400fcd7",
+  "committed_evidence_sha": "64f1a19d34108dc2ae8d998bb18628b4fb62e3c5",
+  "result": "LOCAL_ENGINEERING_VALIDATED_CURRENT_UI_ACCEPTED",
+  "native_work_item_gate": {
+    "ExitCode": 0,
+    "Command": "gate check",
+    "Payload": {
+      "WorkItemId": "TUN-P2-005",
+      "Outcome": "READY",
+      "Failures": [],
+      "Satisfied": [
+        "evidence exists: governance/evidence/TUN-P2-005-VALIDATION.json",
+        "role review evidence exists",
+        "AMD-0008/0009 per-route/form UI compliance passed",
+        "mandatory role review passed: auditor",
+        "mandatory role review passed: compliance-specialist",
+        "mandatory role review passed: content-writer",
+        "mandatory role review passed: cyber-security-engineer",
+        "mandatory role review passed: devops-engineer",
+        "mandatory role review passed: end-user-ux-reviewer",
+        "mandatory role review passed: frontend-engineer",
+        "mandatory role review passed: full-stack-engineer",
+        "mandatory role review passed: sdk-engineer",
+        "mandatory role review passed: solution-architect",
+        "mandatory role review passed: tester-qa-engineer",
+        "mandatory role review passed: ui-ux-engineer"
+      ]
+    }
+  },
+  "native_ui_checks": [
+    {
+      "ExitCode": 0,
+      "Command": "ui check",
+      "Payload": {
+        "Outcome": "PASS",
+        "ScopeId": "TUN-P2-005",
+        "CoveredItems": [
+          "U-AUTH-01",
+          "U-AUTH-SIGNED-IN",
+          "FORM-LOGIN"
+        ],
+        "Failures": []
+      }
+    },
+    {
+      "ExitCode": 0,
+      "Command": "ui check",
+      "Payload": {
+        "Outcome": "PASS",
+        "ScopeId": "GLOBAL_UI",
+        "CoveredItems": [
+          "U-AUTH-02",
+          "U-AUTH-03",
+          "U-AUTH-03A",
+          "U-AUTH-CONSENT",
+          "U-AUTH-RESULT",
+          "FORM-REGISTRATION",
+          "FORM-VERIFY-EMAIL",
+          "FORM-PERSONAL-INFORMATION",
+          "SHARED-FORM-USER",
+          "SHARED-FORM-ADMIN",
+          "U-AUTH-01",
+          "U-AUTH-SIGNED-IN",
+          "FORM-LOGIN"
+        ],
+        "Failures": []
+      }
+    }
+  ],
+  "screen_acceptance_ref": "governance/evidence/TUN-P2-005-VISUAL-ACCEPTANCE-DEFERRAL-20261021.json",
+  "figma_todo": {
+    "id": "TODO-TUN-P2-005-FIGMA001",
+    "status": "OPEN",
+    "blocking": false
+  },
+  "release_authorized": false,
+  "whole_p2_complete": false,
+  "feature_product_acceptance": "Not inferred from visual approval; work item remains VALIDATION."
+}

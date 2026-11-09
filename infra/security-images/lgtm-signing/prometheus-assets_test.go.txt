@@ -1,0 +1,49 @@
+//go:build builtinassets
+
+package ui
+
+import (
+	"io"
+	"regexp"
+	"strings"
+	"testing"
+)
+
+// Exercise the actual embedded filesystem consumed by both upstream UI variants.
+// A successful frontend build alone cannot prove that Go retained its output.
+func TestTunnerCompleteProductionUIAssets(t *testing.T) {
+	refs := regexp.MustCompile("(?:src|href)=\"([^\"]+\\.(?:js|css))\"")
+	for _, variant := range []string{"mantine-ui", "react-app"} {
+		t.Run(variant, func(t *testing.T) {
+			root := "/static/" + variant
+			index, err := Assets.Open(root + "/index.html")
+			if err != nil {
+				t.Fatal(err)
+			}
+			html, err := io.ReadAll(index)
+			index.Close()
+			if err != nil {
+				t.Fatal(err)
+			}
+			if !strings.Contains(string(html), "id=\"root\"") {
+				t.Fatal("complete application root is missing")
+			}
+			matches := refs.FindAllSubmatch(html, -1)
+			if len(matches) < 2 {
+				t.Fatal("production script and stylesheet references are missing")
+			}
+			for _, match := range matches {
+				relative := strings.TrimPrefix(strings.TrimPrefix(string(match[1]), "./"), "/")
+				asset, err := Assets.Open(root + "/" + relative)
+				if err != nil {
+					t.Fatalf("missing production asset %s: %v", relative, err)
+				}
+				payload, err := io.ReadAll(asset)
+				asset.Close()
+				if err != nil || len(payload) < 128 {
+					t.Fatalf("incomplete production asset %s: %v", relative, err)
+				}
+			}
+		})
+	}
+}

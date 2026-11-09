@@ -1,0 +1,75 @@
+{
+  "schema_version": 1,
+  "scope_id": "P1-RV001-001",
+  "status": "PASS_THREE_BROWSER_RUNTIME_IMAGES_LGTM_PENDING",
+  "supersedes_current_runtime_of": "governance/evidence/P1-RV001-001-RUNTIME-REVALIDATION-20261028.json",
+  "history": "Earlier Mailpit-r1 OS/Go scan result remains preserved. A subsequent production UI audit found DOMPurify advisories and required the separately validated-r2 patch; earlier evidence is not retroactively rewritten.",
+  "build_source_commit": "c64b4bb1526c11f3ae5557c40312913e75411ecb",
+  "browser_tested_commit": "638394c1b86d5ae3c40e4831e1e1ec670df9725d",
+  "images": [
+    {
+      "component": "postgres",
+      "image": "tunner-security/postgres:18.6-r1",
+      "image_id": "sha256:b1ad717174d38e38cc6dcffd86d00e7ce63c5b3a5bb11837ef651f451a890cf9",
+      "source": "c64b4bb1526c11f3ae5557c40312913e75411ecb",
+      "recipe_dirty": false,
+      "targets": 2,
+      "findings": 0
+    },
+    {
+      "component": "openbao",
+      "image": "tunner-security/openbao:2.7.1-r2",
+      "image_id": "sha256:5ddf6165d067d2de1ca61dc6449819f9de3c0599c865009cee8077e047ca5891",
+      "source": "c64b4bb1526c11f3ae5557c40312913e75411ecb",
+      "recipe_dirty": false,
+      "targets": 2,
+      "findings": 0
+    },
+    {
+      "component": "mailpit",
+      "image": "tunner-security/mailpit:1.31.6-r2",
+      "image_id": "sha256:54a32573888d1bf58a285a6c074319d9d11e9a7e972ad24514fa29dcbc6c6677",
+      "source": "c64b4bb1526c11f3ae5557c40312913e75411ecb",
+      "recipe_dirty": false,
+      "targets": 2,
+      "findings": 0
+    }
+  ],
+  "compatibility": {
+    "postgres": 8,
+    "openbao": 8,
+    "mailpit": 5,
+    "failed": 0
+  },
+  "real_browser": {
+    "passed": 3,
+    "failed": 0
+  },
+  "starter_safety": {
+    "passed": 7,
+    "failed": 0
+  },
+  "mailpit_ui": {
+    "production_packages": 199,
+    "dompurify": "3.4.17",
+    "fixable_high_critical": 0
+  },
+  "ports": {
+    "postgres": "127.0.0.1:25432 -> 5432",
+    "mailpit_smtp": "127.0.0.1:21025 -> 1025",
+    "mailpit_ui": "127.0.0.1:28025 -> 8025",
+    "application": "https://localhost:24443"
+  },
+  "p2_005_source": "All owned behavior paths remain byte-identical from f132e0fbf5322650d2cdcb3f7cacb78e659cfded to this follow-up; native gate READY and scoped UI PASS checked independently. No additional visual acceptance is inferred.",
+  "evidence_root": "governance/evidence/security-20261028/runtime-r2",
+  "evidence_sha256": {
+    "real-browser.log": "10fc2692aed5023a278da86ed4877fc33bafd81f31f3a60360593ad72bb1481f",
+    "starter-safety.log": "144e30bf64f23d3bf65b5c8d3b5e1d1d3a0647836aa6559eb7bce8fa689cf7c9",
+    "starter.log": "26c3ec6fb929d875006f201ee4790601ef6db57621a1d5a74edda047a51f1958",
+    "mailpit-ui-audit.json": "5b03d09ecd922c349405f711cadfb7ded0d9d2700f3e3990fab78aec85188e64",
+    "postgres-compatibility.log": "a8727a5ef38dcffe7b5baa5fdb709976502958a4f6e7a95758ae7f3056bb4d9e",
+    "openbao-compatibility.log": "f41669b5cb33a3649a25bbf79b841043318d997ee698471fe79ec8dc7c2862e4",
+    "mailpit-compatibility.log": "27f2a76d151b22dbd3366ec924a9c6d8ef5f60d6f9dbc7cf1920a059c9b94e68"
+  },
+  "boundary": "Only three browser-runtime dependencies are validated here. LGTM, aggregate container gate and final release readiness remain pending. No merge, publication or production approval."
+}

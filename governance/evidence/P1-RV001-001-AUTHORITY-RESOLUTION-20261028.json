@@ -1,0 +1,67 @@
+{
+  "schema_version": 1,
+  "scope_id": "P1-RV001-001",
+  "reviewed_at": "2026-10-28T18:22:28.265Z",
+  "method": "AMD-0005 authority resolution",
+  "refs": [
+    "docs/authority/baselines/1.6.0/08_Security_Privacy_Compliance_and_Global_Market_Governance.md",
+    "docs/authority/current/development/09_Testing_Acceptance_Evidence_and_Quality_Gates.md",
+    "docs/authority/baselines/1.6.0/decisions/ADR-0008_GitHub_and_GitHub_Actions.md",
+    "docs/authority/baselines/1.6.0/decisions/ADR-0009_Local_Observability_OTEL_LGTM.md",
+    "governance/evidence/P1-RV001-MAINTAINED-REBUILDS-APPROVAL-20261020.json",
+    "governance/evidence/P1-RV001-LGTM-SIGNED-PLUGIN-BOUNDARY-20261021.json"
+  ],
+  "latest_human_requests": [
+    "Github report error. Also fix it and others after your job done.",
+    "here are the others."
+  ],
+  "observations": {
+    "failed_run": "https://github.com/Tunner-v2/tunner-platform/actions/runs/39653197908",
+    "four_vendors": [
+      "postgres:18.6",
+      "openbao/openbao:2.7.0",
+      "axllent/mailpit:v1.31.6",
+      "grafana/otel-lgtm:0.34.0"
+    ],
+    "maintained_postgres_fixable_high_critical": 0,
+    "maintained_mailpit_fixable_high_critical": 0,
+    "maintained_openbao": {
+      "finding": "CVE-2026-116587",
+      "package": "github.com/go-jose/go-jose/v4",
+      "installed": "4.1.4",
+      "fixed": "4.1.6"
+    },
+    "latest_lgtm": {
+      "image": "grafana/otel-lgtm:0.38.1",
+      "fixable_high_critical": 87,
+      "targets": 25,
+      "signed_postgres_plugin_latest": "13.0.4"
+    }
+  },
+  "resolution": "Existing maintenance approval plus the explicit CI-fix request authorizes compatible security repairs and validation in private local/CI development scope. Repair OpenBao, retain complete image scans and verify runtime/CI references before changing defaults. No release, registry publication, protected-main integration, vulnerability waiver or plugin trust change is authorized. Preserve P0 closure via P0-RV010. Fresh signed-plugin findings keep LGTM and release blocked; no duplicate business requirement is invented.",
+  "scope_boundary": "Implementation may proceed on independent repairs; final acceptance must not be claimed while LGTM, signing or required scans fail.",
+  "subsequent_approval": {
+    "evidence_ref": "governance/evidence/P1-RV001-001-LGTM-SIGNING-APPROVAL-20261028.json",
+    "adr_ref": "docs/development/ADR-LGTM-DEV-SIGNING-20261028.md",
+    "outcome": "Explicit bounded dev/test trust extension authorized; original release/publication/main/deployment/waiver exclusions unchanged."
+  },
+  "followup_ci_findings": {
+    "observed_at": "2026-10-28T19:19:20.559Z",
+    "run": "https://github.com/Tunner-v2/tunner-platform/actions/runs/40751668912",
+    "mailpit_ui": {
+      "package": "dompurify",
+      "installed": "3.4.16",
+      "fixed": "3.4.17",
+      "advisories": [
+        "GHSA-cg2g-xh64-v4q7",
+        "GHSA-mrv2-3pqr-j5jr"
+      ],
+      "repair": "Pin only the sanitizer and exact vendor lockfile entries. Force each actual image build to run its mandatory UI audit; keep the HIGH/CRITICAL failure."
+    },
+    "backend_packaging": {
+      "failure": "CanonicalScreensGuardDirectEntryAndDoNotExposeAnAlternateHtmlRoute: /login Unauthorized on clean Linux CI",
+      "resolution": "Existing Tunner.User.Bff.csproj packages web/apps/user/dist. Build frozen-lock frontend assets before .NET compilation in the existing security job; preserve application routes and authorization checks."
+    },
+    "authority_resolution": "Existing maintained dependency, CI reproducibility, packaged User-UI and testing contracts resolve both failures without a business decision or UI redesign. P0-RV010 preserves historical P0 closure; the active P1 security revision owns these repairs."
+  }
+}

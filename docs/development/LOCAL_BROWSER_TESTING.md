@@ -13,17 +13,17 @@ Local HTTPS is required by the real BFF. On the first run Windows may ask you to
 3. Open the local Mailpit inbox tab and copy the six-digit verification code. All email stays in this local test sink.
 4. Enter the code, complete names and required DOB within Personal Information, then continue to Account Ready.
 
-Available now: registration, email verification, Personal Information/DOB and Account Ready. Sign-in, authenticated sessions, connected Product access and later P2 features remain under development. This starter does not present an unfinished sign-in flow as complete.
+Available for isolated engineering testing: registration, email verification, Personal Information/DOB, Account Ready, password sign-in, guarded signed-in confirmation and Sign out. After creating a test account, open https://localhost:24443/login (use the actual printed port if different) and use the same verified test credentials. The server owns the session; browser reload and Sign out preserve real security boundaries. Google/Microsoft and password recovery remain disabled until their separate work items; GitHub is deferred. P2-005 scoped engineering and UI checks pass. The Product Owner approved the listed screens and deferred the Figma backfill as a nonblocking governed follow-up in docs/development/P2_005_EXTERNAL_UPDATES.md; production deployment and release remain separate gates.
 
 ## Services and ports
 
-The starter starts the services actually required by this isolated registration composition: PostgreSQL, Mailpit and the ASP.NET User BFF serving the already approved packaged UI. It derives image/health defaults from infra/docker/compose.yaml and its committed .env.example. It does not read operator .env.local, reuse the foundation's volume names, or require unrelated RabbitMQ/Redis/OpenBao/Grafana services for this synthetic host. The existing full foundation starter remains tools/dev/tunner-dev.ps1 start for other development scopes.
+The starter starts the services actually required by this isolated registration/authentication composition: PostgreSQL, Mailpit and the ASP.NET User BFF serving the already approved packaged UI. It derives image/health defaults from infra/docker/compose.yaml and its committed .env.example. It does not read operator .env.local, reuse the foundation's volume names, or require unrelated RabbitMQ/Redis/OpenBao/Grafana services for this synthetic host. The existing full foundation starter remains tools/dev/tunner-dev.ps1 start for other development scopes.
 
 | Service | Preferred host port | Container port |
 |---|---:|---:|
 | HTTPS application |24443|Host .NET process|
-| PostgreSQL18.6 (current pinned image)|25432|5432|
-| Mailpit SMTP|21025|1025|
+| PostgreSQL18.6, tunner-security/postgres:18.6-r1|25432|5432|
+| Mailpit1.33.1, tunner-security/mailpit:1.33.1-r1 SMTP|21025|1025|
 | Mailpit inbox|28025|8025|
 
 If a preferred port is occupied on first setup, the starter chooses a free nearby port and prints/saves the actual address. It never stops an unrelated port owner. Subsequent starts reuse saved ports; an unexpected later conflict is reported. Each checkout has an isolated Compose project and volume; the database is tunner_browser_testing.
@@ -46,7 +46,7 @@ The -NoBrowser -SkipCertificateTrust switches support automated local validation
 
 ## Isolation and authority
 
-The user explicitly selected isolated local browser testing. The separate tools/browser-testing host opts into Development and a local-test command; Production execution is rejected. Existing real BFF HTTPS/origin/CSRF/registration/migration behavior is reused. Synthetic policy, content-publication, jurisdiction/consent and password-list adapters are test fixtures derived from existing tests, with no production policy/legal publication implied. The content proposal stays DRAFT. Personal data should be synthetic. Data Protection keys are isolated and protected with the current Windows user; the network key is stored only as a protected local payload. No live email/provider credentials are requested.
+The user explicitly selected isolated local browser testing. The separate tools/browser-testing host opts into Development and a local-test command; Production execution is rejected. Existing real BFF HTTPS/origin/CSRF/registration/authentication/session/migration behavior is reused. Synthetic policy, content-publication, jurisdiction/consent and password-list adapters are test fixtures derived from existing tests, with no production policy/legal publication implied. The content proposal stays DRAFT. Personal data should be synthetic. Data Protection keys are isolated and protected with the current Windows user; the network key is stored only as a protected local payload. No live email/provider credentials are requested.
 
 No production BFF composition, approved Figma layout or business workflow is changed. Existing P2 production/visual/release gates remain in force.
 

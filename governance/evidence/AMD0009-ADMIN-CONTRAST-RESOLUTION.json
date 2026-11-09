@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "outcome": "RESOLVED_EXISTING_AUTHORITY_REQUIRES_SCOPED_VISUAL_CONSENT",
+  "scope_id": "P1-018-RV001",
+  "reviewed_authority_refs": [
+    "docs/authority/current-authority.json",
+    "docs/authority/current/decisions/AMD-0008_Approved_Figma_Visual_Fidelity_and_Product_Owner_UX_Consent.md",
+    "docs/authority/current/decisions/AMD-0009_URL_Addressable_Routing_and_Governed_Form_Validation.md",
+    "docs/development/P1_STRUCTURAL_UI_THEMING.md",
+    "governance/evidence/TUN-P1-018-ROLE-REVIEWS.json",
+    "governance/evidence/AMD0008-PRODUCT-OWNER-VISUAL-CONSENT.json"
+  ],
+  "figma_ref": "3F9tAviUejTYpYvRJt8gM1/49:132",
+  "finding": "Current Admin idle border #616975 differs from approved #dbdfe5. P1 documented engineering AA reconciliation before AMD8. Existing four-scope consent names shared slate #475569 adaptations but does not explicitly approve this Admin-specific #616975 border.",
+  "conclusion": "No new FRD/ADR/PDR is needed. AMD8 §4 requires a concrete scoped visual exception approval and Figma synchronization before current shared Admin/global UI acceptance.",
+  "contrast_against_white": {
+    "figma": 1.3377063272395582,
+    "current": 5.5470758889224125
+  },
+  "primary_source": "https://www.w3.org/WAI/WCAG22/Understanding/non-text-contrast.html",
+  "proposal": "artifacts/global-ui-20261017/admin-contrast-review.html",
+  "status": "PRODUCT_OWNER_APPROVED_AND_FIGMA_SYNCHRONIZED",
+  "checked_at": "2026-10-18T03:31:47.680Z",
+  "approval_ref": "governance/evidence/AMD0009-ADMIN-BORDER-PRODUCT-OWNER-CONSENT.json"
+}

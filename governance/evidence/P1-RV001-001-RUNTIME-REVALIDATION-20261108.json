@@ -1,0 +1,105 @@
+{
+  "schema_version": 1,
+  "scope_id": "P1-RV001-001",
+  "reviewed_at": "2026-11-08T20:24:35.722Z",
+  "status": "PASS_FIVE_RUNTIME_DEPENDENCIES_LGTM_PENDING",
+  "supersedes_current_runtime_of": "governance/evidence/P1-RV001-001-RUNTIME-R2-REVALIDATION-20261028.json",
+  "history": "Historical October PASS evidence remains unchanged. Fresh November scans exposed additional APT/zlib/libc/x/net/UI findings, resolved by current compatible maintained repairs or exact clean vendor variants.",
+  "images": [
+    {
+      "component": "postgres",
+      "image": "tunner-security/postgres:18.6-r1",
+      "image_id": "sha256:bce97fab7c09d4274696b1e952625ec27d3700c9e636b4eeaf3a4da49de6c7cb",
+      "source_commit": "1e30d6211a04fed83c56005391d88bcada1b0acd",
+      "recipe_sha256": "689a102f991e883cfbcd8a7065963583bd64ab261d26509687acc132a6c83e17",
+      "recipe_dirty": false,
+      "scan_targets": 2,
+      "fixable_high_critical": 0
+    },
+    {
+      "component": "openbao",
+      "image": "tunner-security/openbao:2.7.2-r1",
+      "image_id": "sha256:ba7e23bc9bd531679973e70f7612d487df3a593b18d85e8b1b6bf3e6cc9d6a0f",
+      "source_commit": "1e30d6211a04fed83c56005391d88bcada1b0acd",
+      "recipe_sha256": "b7a68960b5a715892e6d456086b3d4c36f282a423680f671b80821a7d9fa1d9f",
+      "recipe_dirty": false,
+      "scan_targets": 2,
+      "fixable_high_critical": 0
+    },
+    {
+      "component": "mailpit",
+      "image": "tunner-security/mailpit:1.33.1-r1",
+      "image_id": "sha256:bace9203ae3f60fd06521bc4d774d1fa14a1a6990a845c70858c7c523bebd44d",
+      "source_commit": "1e30d6211a04fed83c56005391d88bcada1b0acd",
+      "recipe_sha256": "c0084b5eb63f2508ba6cde3dffcbdc98dee5f84a6799557464d3ce54b376529a",
+      "recipe_dirty": false,
+      "scan_targets": 2,
+      "fixable_high_critical": 0
+    }
+  ],
+  "public_vendor_images": [
+    {
+      "component": "redis",
+      "image": "redis:8.10.3-alpine@sha256:71885d8cc6e42f2bc0aa2eb853bfc4be200b5108a46ac50e117ae1df0531fb80",
+      "fixable_high_critical": 0,
+      "actual_client_tests": 2
+    },
+    {
+      "component": "rabbitmq",
+      "image": "rabbitmq:4.3.7-management-alpine@sha256:eb338b3fc8f5c251028c0022ac0de3fe1db2d599d1c6a08b45898f756f248881",
+      "fixable_high_critical": 0,
+      "actual_client_tests": 2,
+      "management_quorum_restart_tests": 1
+    }
+  ],
+  "private_image_compatibility": {
+    "postgres": 8,
+    "openbao": 8,
+    "mailpit": 5,
+    "failed": 0
+  },
+  "real_browser": {
+    "tested_commit": "1e30d6211a04fed83c56005391d88bcada1b0acd",
+    "passed": 3,
+    "failed": 0,
+    "scope": "Real HTTPS registration/SMTP verification, personal information, password login, reload, sign-out and origin/CSRF boundaries."
+  },
+  "starter_safety": {
+    "passed": 7,
+    "failed": 0
+  },
+  "mailpit_ui": {
+    "production_packages": 112,
+    "fixable_high_critical": 0,
+    "mode": "Complete exact vendor1.33.1 binary and embedded UI are byte-identical; wrapper adds only independent checksum-pinned production-lockfile audit evidence."
+  },
+  "earlier_restart_fixture_failure": {
+    "source": "1185e4b",
+    "reason": "The fixture reused its pre-restart random host port. Refreshing GetMappedPublicPort after Docker restart at5fbd1e8 corrected the fixture; no production assertion was weakened.",
+    "raw_result": "artifacts/security-followup-20261028/rabbitmq-restart-tests"
+  },
+  "ports": {
+    "application": "https://localhost:24443",
+    "postgres": "127.0.0.1:25432 -> 5432",
+    "mailpit_smtp": "127.0.0.1:21025 -> 1025",
+    "mailpit_ui": "127.0.0.1:28025 -> 8025"
+  },
+  "operator_services_changed": false,
+  "production_authorized": false,
+  "remaining": "LGTM source/UI/OS repairs, updated exact Tempo applicability-consent binding if the executable changes, full private-image scan/compatibility, final role reviews and current CI remain required.",
+  "evidence_hashes": {
+    "governance/evidence/security-20261108/runtime-refresh/postgres-scan.json": "f2753aa24689ad7fc802e7c6ceb37259c10a6a7e2aadb8cf3fc51775c13cac2f",
+    "governance/evidence/security-20261108/runtime-refresh/postgres-compatibility.log": "a8727a5ef38dcffe7b5baa5fdb709976502958a4f6e7a95758ae7f3056bb4d9e",
+    "governance/evidence/security-20261108/runtime-refresh/openbao-scan.json": "488432f00d7c27741e7ee620f02391d9bf468f68f7d61a49f425086e549037cf",
+    "governance/evidence/security-20261108/runtime-refresh/openbao-compatibility.log": "f41669b5cb33a3649a25bbf79b841043318d997ee698471fe79ec8dc7c2862e4",
+    "governance/evidence/security-20261108/runtime-refresh/mailpit-scan.json": "d9463adc94bae8f9abbcfac94fbd7524b1d7459c5fcf0d5dbe441db99e9d7e66",
+    "governance/evidence/security-20261108/runtime-refresh/mailpit-compatibility.log": "27f2a76d151b22dbd3366ec924a9c6d8ef5f60d6f9dbc7cf1920a059c9b94e68",
+    "governance/evidence/security-20261108/runtime-refresh/redis-vendor-scan.json": "7f55e26b2a917338456cfa3a0c2c304fb2b16acb9833380414ad1e53b2949c0a",
+    "governance/evidence/security-20261108/runtime-refresh/rabbitmq-vendor-scan.json": "cd0d3dd3e1f89c1b5e1a713046ef359fdf43c9fd18144333f8ca359d73e6fef6",
+    "governance/evidence/security-20261108/runtime-refresh/mailpit-ui-audit.json": "51e751f9c08794ff087814ad1b1a2781151e9b5ea86e6477b09842f8a5003d65",
+    "governance/evidence/security-20261108/runtime-refresh/mailpit-vendor-equivalence.json": "9306cb869b2efa6f61e6874294cbd3865eb8978c64709b976ea7ffdbaa6191f2",
+    "governance/evidence/security-20261108/runtime-refresh/real-browser.log": "f3cb021b9025f57ceb0e6f83b62986dcb574691ce6783d6effc151d2d135accc",
+    "governance/evidence/security-20261108/runtime-refresh/starter-safety.log": "95038430c5bf4e5458ada14882246a0c944585a3612371a0118830632a4abe78",
+    "governance/evidence/security-20261108/runtime-refresh/native-client-tests.json": "e3321e0c92a1888612d383bcc1a14dd5733f96caaef9532b98709d919d2eaefb"
+  }
+}

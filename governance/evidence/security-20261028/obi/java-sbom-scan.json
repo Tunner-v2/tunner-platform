@@ -1,0 +1,61 @@
+{
+  "SchemaVersion": 2,
+  "Trivy": {
+    "Version": "0.70.0"
+  },
+  "ReportID": "01a1845c-1eea-7d0e-b652-511385d67253",
+  "CreatedAt": "2026-10-28T21:13:12.170859899Z",
+  "ArtifactName": "/audit/obi-java-agent-v0.15.2.cyclonedx.json",
+  "ArtifactType": "cyclonedx",
+  "Results": [
+    {
+      "Target": "Java",
+      "Class": "lang-pkgs",
+      "Type": "jar",
+      "Packages": [
+        {
+          "ID": "io.opentelemetry.obi:obi-java-agent:v0.15.2",
+          "Name": "io.opentelemetry.obi:obi-java-agent",
+          "Identifier": {
+            "PURL": "pkg:maven/io.opentelemetry.obi/obi-java-agent@v0.15.2?project_path=:agent",
+            "UID": "bcdbcfe5a32310e8",
+            "BOMRef": "pkg:maven/io.opentelemetry.obi/obi-java-agent@v0.15.2?project_path=%3Aagent"
+          },
+          "Version": "v0.15.2",
+          "DependsOn": [
+            "net.bytebuddy:byte-buddy-agent:1.18.14-jdk5",
+            "net.bytebuddy:byte-buddy:1.18.14-jdk5"
+          ]
+        },
+        {
+          "ID": "net.bytebuddy:byte-buddy:1.18.14-jdk5",
+          "Name": "net.bytebuddy:byte-buddy",
+          "Identifier": {
+            "PURL": "pkg:maven/net.bytebuddy/byte-buddy@1.18.14-jdk5?type=jar",
+            "UID": "a4d1083de70dbbe5",
+            "BOMRef": "pkg:maven/net.bytebuddy/byte-buddy@1.18.14-jdk5?type=jar"
+          },
+          "Version": "1.18.14-jdk5",
+          "Licenses": [
+            "Apache-2.0"
+          ],
+          "Digest": "md5:171592705a4b1552f5904fa58d5201f5"
+        },
+        {
+          "ID": "net.bytebuddy:byte-buddy-agent:1.18.14-jdk5",
+          "Name": "net.bytebuddy:byte-buddy-agent",
+          "Identifier": {
+            "PURL": "pkg:maven/net.bytebuddy/byte-buddy-agent@1.18.14-jdk5?type=jar",
+            "UID": "2017b5fc0ad5a254",
+            "BOMRef": "pkg:maven/net.bytebuddy/byte-buddy-agent@1.18.14-jdk5?type=jar"
+          },
+          "Version": "1.18.14-jdk5",
+          "Licenses": [
+            "Apache-2.0"
+          ],
+          "Digest": "md5:ced75742508a3bb378281ac2f5dc8054"
+        }
+      ]
+    }
+  ]
+}

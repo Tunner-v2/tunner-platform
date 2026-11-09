@@ -1,0 +1,163 @@
+package compat
+
+import (
+	asap "bitbucket.org/atlassian/go-asap/v2"
+	"crypto"
+	"crypto/ecdsa"
+	"crypto/elliptic"
+	"crypto/rand"
+	"crypto/rsa"
+	"errors"
+	josecrypto "github.com/SermoDigital/jose/crypto"
+	"github.com/SermoDigital/jose/jws"
+	"strings"
+	"testing"
+	"time"
+)
+
+type fixtureFetcher struct {
+	key   any
+	calls *int
+}
+
+func (f fixtureFetcher) Fetch(string) (any, error) {
+	if f.calls != nil {
+		*f.calls++
+	}
+	if f.key == nil {
+		return nil, errors.New("synthetic missing key")
+	}
+	return f.key, nil
+}
+
+func TestTunnerLegacyHashZeroIsNotRegistered(t *testing.T) {
+	if crypto.Hash(0).Available() {
+		t.Fatal("the unsupported global hash must remain unavailable")
+	}
+	if jws.GetSigningMethod("none") != josecrypto.Unsecured {
+		t.Fatal("existing library method registry changed")
+	}
+	if josecrypto.Unsecured.Alg() != "none" || josecrypto.Unsecured.Hasher() != crypto.Hash(0) {
+		t.Fatal("existing unsecured method metadata changed")
+	}
+	sig, err := josecrypto.Unsecured.Sign(nil, nil)
+	if err != nil || sig != nil || josecrypto.Unsecured.Verify(nil, nil, nil) != nil {
+		t.Fatal("existing low-level method implementation changed")
+	}
+}
+
+func TestTunnerAsapSupportedSignaturesRemainValid(t *testing.T) {
+	rsaKey, err := rsa.GenerateKey(rand.Reader, 2048)
+	if err != nil {
+		t.Fatal(err)
+	}
+	wrongRSA, err := rsa.GenerateKey(rand.Reader, 2048)
+	if err != nil {
+		t.Fatal(err)
+	}
+	methods := []struct {
+		method             josecrypto.SigningMethod
+		key, public, wrong any
+	}{
+		{josecrypto.SigningMethodRS256, rsaKey, &rsaKey.PublicKey, &wrongRSA.PublicKey}, {josecrypto.SigningMethodRS384, rsaKey, &rsaKey.PublicKey, &wrongRSA.PublicKey}, {josecrypto.SigningMethodRS512, rsaKey, &rsaKey.PublicKey, &wrongRSA.PublicKey},
+		{josecrypto.SigningMethodPS256, rsaKey, &rsaKey.PublicKey, &wrongRSA.PublicKey}, {josecrypto.SigningMethodPS384, rsaKey, &rsaKey.PublicKey, &wrongRSA.PublicKey}, {josecrypto.SigningMethodPS512, rsaKey, &rsaKey.PublicKey, &wrongRSA.PublicKey},
+	}
+	for _, curve := range []struct {
+		curve  elliptic.Curve
+		method josecrypto.SigningMethod
+	}{{elliptic.P256(), josecrypto.SigningMethodES256}, {elliptic.P384(), josecrypto.SigningMethodES384}, {elliptic.P521(), josecrypto.SigningMethodES512}} {
+		key, e := ecdsa.GenerateKey(curve.curve, rand.Reader)
+		if e != nil {
+			t.Fatal(e)
+		}
+		wrongKey, e := ecdsa.GenerateKey(curve.curve, rand.Reader)
+		if e != nil {
+			t.Fatal(e)
+		}
+		methods = append(methods, struct {
+			method             josecrypto.SigningMethod
+			key, public, wrong any
+		}{curve.method, key, &key.PublicKey, &wrongKey.PublicKey})
+	}
+	for _, tc := range methods {
+		t.Run(tc.method.Alg(), func(t *testing.T) {
+			token, e := asap.NewProvisioner("fixture-issuer/key", time.Minute, "fixture-issuer", []string{"fixture-audience"}, tc.method).Provision()
+			if e != nil {
+				t.Fatal(e)
+			}
+			raw, e := token.Serialize(tc.key)
+			if e != nil {
+				t.Fatal(e)
+			}
+			parsed, e := asap.ParseToken(string(raw))
+			if e != nil {
+				t.Fatal(e)
+			}
+			if e = asap.DefaultValidator.Validate(parsed); e != nil {
+				t.Fatal(e)
+			}
+			if e = asap.NewSignatureValidator(fixtureFetcher{key: tc.public}).Validate(parsed); e != nil {
+				t.Fatal(e)
+			}
+			if e = asap.NewSignatureValidator(fixtureFetcher{key: tc.wrong}).Validate(parsed); e == nil {
+				t.Fatal("wrong key accepted")
+			}
+			if e = asap.NewAllowedAudienceValidator("fixture-audience").Validate(parsed); e != nil {
+				t.Fatal(e)
+			}
+			if e = asap.NewAllowedAudienceValidator("other-audience").Validate(parsed); e == nil {
+				t.Fatal("wrong audience accepted")
+			}
+			if e = asap.NewAllowedStringsValidator("iss", "other-issuer").Validate(parsed); e == nil {
+				t.Fatal("wrong issuer accepted")
+			}
+			pieces := strings.Split(string(raw), ".")
+			if len(pieces) != 3 || len(pieces[2]) == 0 {
+				t.Fatal("unexpected signed token")
+			}
+			replacement := "A"
+			if pieces[2][0] == 'A' {
+				replacement = "B"
+			}
+			pieces[2] = replacement + pieces[2][1:]
+			tampered, e := asap.ParseToken(strings.Join(pieces, "."))
+			if e == nil && asap.NewSignatureValidator(fixtureFetcher{key: tc.public}).Validate(tampered) == nil {
+				t.Fatal("tampered signature accepted")
+			}
+			expired, e := asap.NewProvisioner("fixture-issuer/key", -5*time.Minute, "fixture-issuer", []string{"fixture-audience"}, tc.method).Provision()
+			if e != nil {
+				t.Fatal(e)
+			}
+			expiredRaw, e := expired.Serialize(tc.key)
+			if e != nil {
+				t.Fatal(e)
+			}
+			expiredParsed, e := asap.ParseToken(string(expiredRaw))
+			if e != nil {
+				t.Fatal(e)
+			}
+			if e = asap.NewSignatureValidator(fixtureFetcher{key: tc.public}).Validate(expiredParsed); e == nil {
+				t.Fatal("expired token accepted")
+			}
+		})
+	}
+}
+
+func TestTunnerAsapStillRejectsUnsupportedAlgorithms(t *testing.T) {
+	for _, method := range []josecrypto.SigningMethod{josecrypto.Unsecured, josecrypto.SigningMethodHS256, josecrypto.SigningMethodHS384, josecrypto.SigningMethodHS512} {
+		t.Run(method.Alg(), func(t *testing.T) {
+			token, e := asap.NewProvisioner("fixture-issuer/key", time.Minute, "fixture-issuer", []string{"fixture-audience"}, method).Provision()
+			if e != nil {
+				t.Fatal(e)
+			}
+			token.(jws.JWS).Protected().Set("alg", method.Alg())
+			if e = asap.AlgorithmValidator.Validate(token); e == nil || !strings.Contains(e.Error(), "Unsupported algorithm") {
+				t.Fatal("existing algorithm rejection changed")
+			}
+			calls := 0
+			if e = asap.NewSignatureValidator(fixtureFetcher{calls: &calls}).Validate(token); e == nil || !strings.Contains(e.Error(), "Unsupported algorithm") || calls != 0 {
+				t.Fatal("unsupported algorithm reached key lookup or was accepted")
+			}
+		})
+	}
+}

@@ -1,0 +1,50 @@
+{
+  "schema_version": 1,
+  "scope_id": "P1-RV001",
+  "status": "PASS_SCOPE_PREPARATION",
+  "reviewed_at": "2026-10-20T20:06:05.131Z",
+  "source_commit": "14a54ec847488f6255e6ccb8e86af3422cc5d8d3",
+  "provenance": "Executing agent applying activated technical contracts; not final implementation validation or independent human review.",
+  "authority": {
+    "mirror": "PASS:196 artifacts",
+    "drive_index": {
+      "id": "1c5Ni8LGgQ-2JxpacoPAopSCO-al23ut2",
+      "modified_time": "2026-10-17T23:24:42.127Z",
+      "effective": "Baseline1.6.0 + AMD0001..0005,0007..0009; same authority line read on2026-10-20",
+      "comparison": "Readable Drive text reviewed; not represented as byte-exact raw import."
+    },
+    "resolution_ref": "governance/evidence/P1-RV001-AUTHORITY-RESOLUTION.json"
+  },
+  "roles": [
+    "project-manager",
+    "solution-architect",
+    "governance-engineer",
+    "tester-qa-engineer",
+    "auditor",
+    "full-stack-engineer",
+    "cyber-security-engineer",
+    "devops-engineer",
+    "rd-engineer"
+  ],
+  "findings": [
+    "Current main rules preserve one codeowner approval and stale-review dismissal, but expose no required-status-check rule.",
+    "Current upstream stable release metadata has been checked from vendor primary APIs; actual candidate scans and compatibility tests remain mandatory.",
+    "An actual scanner run reproduces4 HIGH OpenBao findings; latest2.7.1 retains them. Mailpit1.31.6 currently scans clean; no production/source conformance is claimed from these preparation observations.",
+    "Closed P0 source ownership must be preserved through a new corrective Revision before changing CI or foundation image pins.",
+    "P1-RV001-002 explicitly requires merged-main evidence; source/role preparation and independent P2 work continue without release or merge approval."
+  ],
+  "planned_constraints": [
+    "Do not reduceHIGH/CRITICAL thresholds or add ignores/VEX without genuine authorization.",
+    "Keep supported service contracts/ports and persistent data intact; no running dependency restarts or secret access.",
+    "Keep main human review and bypass settings intact when adding enforced checks.",
+    "Final source-owned commits,actual scans,affected environment regressions and refreshed role reviews are required beforeDONE."
+  ],
+  "primary_sources": [
+    "https://github.com/openbao/openbao/releases/tag/v2.7.1",
+    "https://github.com/axllent/mailpit/releases/tag/v1.31.6",
+    "https://github.com/grafana/docker-otel-lgtm/releases/tag/v0.37.0",
+    "https://raw.githubusercontent.com/docker-library/docs/master/postgres/README.md",
+    "https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-rulesets/available-rules-for-rulesets"
+  ],
+  "remaining_tests": "PENDING:remaining candidate image scans,source changes,compatibility,current actual CI and effective required-check readback."
+}

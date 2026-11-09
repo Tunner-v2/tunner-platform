@@ -1,0 +1,50 @@
+{
+  "schema_version": 1,
+  "scope_id": "P1-RV001-001",
+  "status": "PASS_PROMETHEUS_UI_COMPONENT_ONLY",
+  "source_commit": "4b0e6185fdd63dce7c48a2657c90765421bbbf8d",
+  "proof_export_commit": "a1d6ef76a0d5e225e914a863d8f92c20441f51c5",
+  "source": {
+    "version": "3.15.1",
+    "commit": "bae3eced0a5369e050e83ea73bc381d7c4b1a719",
+    "archive_sha256": "4636cc523bda30bdf92bf7b05b4491bb3d3038d89ebb3223c7b9a71f23e9e9c9",
+    "patch": "infra/security-images/lgtm-signing/prometheus-ui-security.patch",
+    "patch_sha256": "48d7b7c26360d5687c7e37ae261b5371e30e9eb81d5c336fd4c75ddaa3eb356e"
+  },
+  "build": {
+    "all_modules": true,
+    "legacy_ui_index": true,
+    "mantine_ui_index": true,
+    "pnpm": "11.19.0",
+    "frozen_lockfiles": true,
+    "upstream_supply_chain_policies_preserved": true
+  },
+  "tests": {
+    "lezer": 72,
+    "codemirror": 386,
+    "mantine": 176,
+    "legacy_react": 225,
+    "legacy_lint_regressions": 19,
+    "total_passed": 878,
+    "failed": 0,
+    "skipped": 0
+  },
+  "audit": {
+    "root_production_packages": 229,
+    "legacy_production_packages": 150,
+    "nested_generator_go_modules": 18,
+    "fixable_high_critical": 0,
+    "threshold_unchanged": true,
+    "filtering": false
+  },
+  "warnings": "Unmodified upstream Vite chunk-size notice and legacy React console warnings remain in full logs. No tests or coverage were disabled.",
+  "evidence_sha256": {
+    "governance/evidence/security-20261108/prometheus-ui/build.log": "140d531025bfe528651e6c84b226d7361cd42ae1e1d50f6faf25568e5fc836aa",
+    "governance/evidence/security-20261108/prometheus-ui/workspace-tests.log": "0849fcf559aac71c59e6b61307fce5fb561a40a6959b6047d63ba34bf9201bf0",
+    "governance/evidence/security-20261108/prometheus-ui/legacy-tests.log": "8c18e799c8ab441c8eeedf835ce0370f1f5bbacaeb4beba20f0b84b2ff706717",
+    "governance/evidence/security-20261108/prometheus-ui/assets.sha256": "76aaa8a0c5a6590ce20f25f6ee6400f808a3ce32d42efd3d56ee302cb77c9b2a",
+    "governance/evidence/security-20261108/prometheus-ui/production-audit.json": "b66ba381387f98b03329d57631fbed231e1dbc4a9a5e086e5e114de3f4675711"
+  },
+  "remaining": "Both Go executables, linked production-asset serving, full LGTM scan/signatures/compatibility, final source and CI acceptance remain pending.",
+  "production_authorized": false
+}

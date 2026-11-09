@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "scope_id": "P0-019-RV001",
+  "recorded_at": "2026-10-21T19:00:37.883Z",
+  "human_answer": "Approve this scoped automation fix",
+  "question_item_id": "[\"request_user_input_async\",\"call_c31e572181cc4a6780a85b7259fd76a2\",0]",
+  "scope": "Remove only --base main from existing-PR lookup; reuse draft PR19 on its current parent branch; preserve draft guard, main protections, current merge/release boundaries and read-only Figma/Drive.",
+  "question_packet_ref": "artifacts/p2-005-auth-20261021/pr-publication-review.md",
+  "question_packet_sha256": "1fa7beaf405eebb5433f1a695ef2d5ddf8fbbb2e8a78954fb34b93fe7b144774",
+  "original_scope": "TUN-P0-019",
+  "authority_resolution": {
+    "pass": "AMD-0005",
+    "reviewed_refs": [
+      "docs/authority/baselines/1.6.0/decisions/ADR-0008_GitHub_and_GitHub_Actions.md",
+      "docs/authority/current/development/09_Testing_Acceptance_Evidence_and_Quality_Gates.md",
+      "governance/bootstrap/source/GITHUB_BOOTSTRAP_POLICY.md",
+      ".github/workflows/create-pull-request.yml",
+      "governance/evidence/GITHUB-PR-CREATION-WORKFLOW.json"
+    ],
+    "finding": "ADR0008 and native GitHub foundation already govern this workflow. Current user explicitly authorizes a lookup correction, not merge/deploy or new business policy. Use append-only RV because P0-019 is historically DONE. No new Product decision or Drive amendment is required.",
+    "primary_source": {
+      "url": "https://cli.github.com/manual/gh_pr_list",
+      "verified_on": "2026-10-21",
+      "finding": "The optional base flag restricts returned pull requests by base branch. Retain the head/open filters and omit only base to locate the existing stacked draft PR."
+    }
+  },
+  "rejected_alternative": "Automatic approval review rejected retargeting PR19 to main as a contradiction of the recorded parent-branch scope. That alternative was not performed.",
+  "initial_native_create_rejection": "Non-mirror bootstrap/current AMD0002 references were rejected; native creation succeeded with verified ADR0008 and current testing authority. No reference verifier was weakened."
+}

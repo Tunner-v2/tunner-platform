@@ -1,0 +1,66 @@
+{
+  "schema_version": 1,
+  "scope_id": "P1-RV001-001",
+  "component": "obi",
+  "result": "PASS_COMPONENT_CANDIDATE_ONLY",
+  "tested_commit": "0b59aaa40248961ee791be5bbdb1b25da09ec20b",
+  "image": "tunner-security/lgtm-obi-candidate:20261028",
+  "image_id": "sha256:173d18891eafaa80b5a6a5a3f218bcbc31d6ea36371764764af77c465d639b62",
+  "source": {
+    "release": "v0.15.2",
+    "revision": "b28e4e7",
+    "archive_sha256": "d3cbec602e3ab7b357d2f4a57b29e502365f9098808418e8b4d96dec8fa9281f",
+    "url": "https://github.com/open-telemetry/opentelemetry-ebpf-instrumentation/releases/download/v0.15.2/obi-v0.15.2-source-generated.tar.gz"
+  },
+  "tests": {
+    "passed": 180,
+    "failed": 0,
+    "skipped": 0
+  },
+  "executable_scan": {
+    "targets": 1,
+    "packages": 176,
+    "fixable_high_critical": 0,
+    "exit_code": 0
+  },
+  "embedded_java": {
+    "jar_sha256": "21d35cb644013fc164fce5d9ba537e394181f27e08236033a434f5c5e9da9cdf",
+    "direct_jar_scan": "INCONCLUSIVE_NO_PACKAGE_METADATA",
+    "reason": "Upstream shadowJar relocates ByteBuddy and excludes META-INF metadata. Exit0 with no discovered packages is not accepted as dependency coverage.",
+    "official_runtime_sbom_sha256": "769e2467372c3333f646a1894be7c8cc80dfea3c49b0eaa9809fc7740a950d5d",
+    "sbom_coverage": {
+      "language_targets": 1,
+      "total_packages": 3,
+      "third_party_runtime_dependencies": 2,
+      "fixable_high_critical": 0,
+      "exit_code": 0
+    },
+    "libraries": [
+      {
+        "name": "net.bytebuddy:byte-buddy",
+        "version": "1.18.14-jdk5"
+      },
+      {
+        "name": "net.bytebuddy:byte-buddy-agent",
+        "version": "1.18.14-jdk5"
+      }
+    ]
+  },
+  "evidence_root": "governance/evidence/security-20261028/obi",
+  "evidence_sha256": {
+    "upstream-tests.jsonl": "187296253fa8c4320e8b19786a96d3cdee27ed4dc833f7baeab94207f3e6a25c",
+    "buildinfo.txt": "73d834c847024435df62b531ef83517e62870a34fca53ca4b068bb60c9df2860",
+    "embedded-assets.sha256": "a1bdd020c9db0cdc2eb1a67f1ae3e017c1263298771c5ea6e20b1c13b2f31248",
+    "executable-scan.json": "16335c0f8adf1574677b514b1d9ed6a03a762f148e59420440e640b7f65da650",
+    "java-agent.sbom.json": "769e2467372c3333f646a1894be7c8cc80dfea3c49b0eaa9809fc7740a950d5d",
+    "java-sbom-scan.json": "744e6c51c43ab7282a4400f45e20333f3b3b4699577f4f7f0dbaaf098690474b",
+    "jar-direct-scan-inconclusive.json": "00f694c9ca4edc4eb146836db9c13e9c757d7e872903c12cd32c1e110a3de22f"
+  },
+  "boundaries": [
+    "Retains both generated BPF architectures and Java agent",
+    "No CVE filter or suppression used",
+    "Full LGTM API/storage/runtime compatibility and final scan acceptance pending",
+    "Kernel instrumentation end-to-end tests are not claimed by cmd/config unit tests",
+    "No publication, merge or production release approval"
+  ]
+}

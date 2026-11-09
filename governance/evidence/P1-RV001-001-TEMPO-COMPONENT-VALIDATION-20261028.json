@@ -1,0 +1,51 @@
+{
+  "schema_version": 1,
+  "scope_id": "P1-RV001-001",
+  "component": "tempo-services",
+  "status": "PASS_COMPONENT_CANDIDATE_ONLY",
+  "tested_commit": "f3e51bc1dd2cf78097ae6d877c0d6ab91b325dcb",
+  "source_commit": "9db7df79d2af105a90d96484e6403e1fda0d011e",
+  "release": "3.1.1",
+  "source_archive_sha256": "a42f9ffacb3f8fdca315f15fd9fda855607c43cfb9c20e4ec86c084585036497",
+  "jose_version": "4.1.6",
+  "image": "tunner-security/lgtm-tempo-services-candidate:20261028",
+  "image_id": "sha256:867b2fe6994c284f71d755cb114bbc4437a9547b2efc828617dfbf7e7c51491a",
+  "tests": {
+    "redaction-tests.json": {
+      "pass": 1,
+      "fail": 0,
+      "skip": 0
+    },
+    "query-limit-tests.json": {
+      "pass": 57,
+      "fail": 0,
+      "skip": 0
+    }
+  },
+  "unfiltered_scan": {
+    "targets": 3,
+    "fixable_high_critical": 0,
+    "exit_code": 0,
+    "vex_applied": false
+  },
+  "source_assurance": "Full official3.1.1 source is retained and the two vendor-advisory regressions are tested. Normal source builds report(devel) in Go main-module metadata; explicit vendor release/revision ldflags, pinned source and raw buildinfo are retained rather than relying on scanner version inference alone.",
+  "previous_attempt": {
+    "log": "artifacts/security-followup-20261028/tempo-services-repaired-build.log",
+    "result": "FAIL_BUILD",
+    "detail": "Original test stdout was redirected inside the failed stage; exact assertion was not recovered. The diagnostic rebuild retains the same test selection and reports failure contents if encountered. The subsequent58 passed results are recorded; clean final CI remains required."
+  },
+  "evidence_root": "governance/evidence/security-20261028/tempo-services",
+  "evidence_sha256": {
+    "redaction-tests.jsonl": "5de8c70d5271f38758d76ad0dbd2e66395338d42fba2f91f74d2218243413f8a",
+    "query-tests.jsonl": "a8687e49c766f6360be69b660b346ce3a0d6fc166f76142d0f6eb91df5c2174f",
+    "tempo-buildinfo.txt": "0ea573bf925941d031116daf46490e54e85a5529ab7f25099c5f2c7024a82e34",
+    "tempo-cli-buildinfo.txt": "4a4f6241fb1c9f40e4a43c465ad9a8301b73482c814a47cf121cdd59301d3f90",
+    "tempo-query-buildinfo.txt": "1e368ed9f883a7085b007d62e5273e1d6e7c29d5ba439ad626131576b148f09f",
+    "unfiltered-scan.json": "afe08e280beb0cf693a02471afd80efb478112c7e63b66010495820cda230e16"
+  },
+  "boundaries": [
+    "Only three service candidates; complete LGTM acceptance pending",
+    "No plugin VEX was used on these service binaries",
+    "No runtime adoption, registry publication, merge or production release"
+  ]
+}
