@@ -1,0 +1,993 @@
+{
+  "schema_version": 1,
+  "result": "PASS",
+  "tested_commit_sha": "a2df3359f8092e1e816125fe384e7a8a86785c68",
+  "inventory_sha256": "d913273d5110297402b30ae61ee6042a73b1d4eb0578c3e98b9cc21cd93f2669",
+  "owned_behavior_paths": [
+    "docs/contracts/ui-inventory.json",
+    "src/Modules/Identity/StepUpApplication.cs",
+    "src/Modules/Identity/StepUpBrowserEndpoints.cs",
+    "tools/browser-testing/BrowserTestStepUp.cs",
+    "web/apps/user/step-up.css",
+    "web/apps/user/step-up.tsx",
+    "web/fixtures/step-up/fixture.css",
+    "web/fixtures/step-up/index.html",
+    "web/fixtures/step-up/main.tsx",
+    "web/fixtures/step-up/vite.config.ts",
+    "web/packages/ui/src/dialog.tsx",
+    "web/packages/ui/src/forms.tsx"
+  ],
+  "items": [
+    {
+      "id": "COMP-STEP-UP",
+      "figma_refs": [
+        {
+          "file_key": "apNbwvAgdn1xIxYH1oiaSC",
+          "node_id": "98:27"
+        },
+        {
+          "file_key": "apNbwvAgdn1xIxYH1oiaSC",
+          "node_id": "70:1257"
+        }
+      ],
+      "checks": [
+        {
+          "id": "VAL-001",
+          "result": "PASS",
+          "description": "Current password required and authoritative policy maximum; no unrelated registration password rules. Shared field error and summary.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/ui/step-up-20261109/test-index.json",
+              "sha256": "6eaef133cd92179bbce2aa8cdab76bf4994a5f7a4906bce0ee8509f7c262ba44"
+            },
+            {
+              "path": "governance/evidence/ui/step-up-20261109/visual-review.json",
+              "sha256": "cad961bdfa070744fd6449dde1b9aea1252a72deb428a3422bc2f7da8bb29f48"
+            }
+          ]
+        },
+        {
+          "id": "VAL-002",
+          "result": "PASS",
+          "description": "Typed Zod+shared form; noValidate and governed field/form feedback; native bubbles are not primary.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/ui/step-up-20261109/test-index.json",
+              "sha256": "6eaef133cd92179bbce2aa8cdab76bf4994a5f7a4906bce0ee8509f7c262ba44"
+            },
+            {
+              "path": "governance/evidence/ui/step-up-20261109/visual-review.json",
+              "sha256": "cad961bdfa070744fd6449dde1b9aea1252a72deb428a3422bc2f7da8bb29f48"
+            }
+          ]
+        },
+        {
+          "id": "VAL-003",
+          "result": "PASS",
+          "description": "Real strict bounded JSON, empty/long credentials, unknown/duplicate properties, forged request/context/actor/session/origin and changed policy rejected.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/ui/step-up-20261109/test-index.json",
+              "sha256": "6eaef133cd92179bbce2aa8cdab76bf4994a5f7a4906bce0ee8509f7c262ba44"
+            },
+            {
+              "path": "governance/evidence/ui/step-up-20261109/visual-review.json",
+              "sha256": "cad961bdfa070744fd6449dde1b9aea1252a72deb428a3422bc2f7da8bb29f48"
+            }
+          ]
+        },
+        {
+          "id": "VAL-004",
+          "result": "PASS",
+          "description": "Credential failure mapped to generic shared field error; policy/scope/session failure has safe form outcome with no account existence leakage.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/ui/step-up-20261109/test-index.json",
+              "sha256": "6eaef133cd92179bbce2aa8cdab76bf4994a5f7a4906bce0ee8509f7c262ba44"
+            },
+            {
+              "path": "governance/evidence/ui/step-up-20261109/visual-review.json",
+              "sha256": "cad961bdfa070744fd6449dde1b9aea1252a72deb428a3422bc2f7da8bb29f48"
+            }
+          ]
+        },
+        {
+          "id": "VAL-005",
+          "result": "PASS",
+          "description": "Submission/blur/correction/first-invalid focus, aria associations, value clearing, duplicate prevention and modal keyboard behavior pass. Password is deliberately cleared after an attempt.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/ui/step-up-20261109/test-index.json",
+              "sha256": "6eaef133cd92179bbce2aa8cdab76bf4994a5f7a4906bce0ee8509f7c262ba44"
+            },
+            {
+              "path": "governance/evidence/ui/step-up-20261109/visual-review.json",
+              "sha256": "cad961bdfa070744fd6449dde1b9aea1252a72deb428a3422bc2f7da8bb29f48"
+            }
+          ]
+        },
+        {
+          "id": "VAL-006",
+          "result": "PASS",
+          "description": "Approved Figma98:27 and existing70:1257 styling patterns with exact scoped Product consent; desktop/mobile error screenshots reviewed.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/ui/step-up-20261109/test-index.json",
+              "sha256": "6eaef133cd92179bbce2aa8cdab76bf4994a5f7a4906bce0ee8509f7c262ba44"
+            },
+            {
+              "path": "governance/evidence/ui/step-up-20261109/visual-review.json",
+              "sha256": "cad961bdfa070744fd6449dde1b9aea1252a72deb428a3422bc2f7da8bb29f48"
+            }
+          ]
+        },
+        {
+          "id": "VAL-007",
+          "result": "PASS",
+          "description": "Current credential validation derives limit from auth policy; no new password complexity or authenticator/assurance fallback invented.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/ui/step-up-20261109/test-index.json",
+              "sha256": "6eaef133cd92179bbce2aa8cdab76bf4994a5f7a4906bce0ee8509f7c262ba44"
+            },
+            {
+              "path": "governance/evidence/ui/step-up-20261109/visual-review.json",
+              "sha256": "cad961bdfa070744fd6449dde1b9aea1252a72deb428a3422bc2f7da8bb29f48"
+            }
+          ]
+        },
+        {
+          "id": "VAL-008",
+          "result": "PASS",
+          "description": "Five modal viewport cases plus real HTTPS/PostgreSQL flow, history/reload and cross-surface regressions pass.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/ui/step-up-20261109/test-index.json",
+              "sha256": "6eaef133cd92179bbce2aa8cdab76bf4994a5f7a4906bce0ee8509f7c262ba44"
+            },
+            {
+              "path": "governance/evidence/ui/step-up-20261109/visual-review.json",
+              "sha256": "cad961bdfa070744fd6449dde1b9aea1252a72deb428a3422bc2f7da8bb29f48"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-001",
+          "result": "PASS",
+          "description": "Chooser geometry and composition match98:27; approved availability adaptations and exact password-detail proposal retained.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/ui/step-up-20261109/test-index.json",
+              "sha256": "6eaef133cd92179bbce2aa8cdab76bf4994a5f7a4906bce0ee8509f7c262ba44"
+            },
+            {
+              "path": "governance/evidence/ui/step-up-20261109/visual-review.json",
+              "sha256": "cad961bdfa070744fd6449dde1b9aea1252a72deb428a3422bc2f7da8bb29f48"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-002",
+          "result": "PASS",
+          "description": "Approved overlay border/shadow/backdrop retained. Test-carrier background is explicitly local-only; no Account Center acceptance claimed.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/ui/step-up-20261109/test-index.json",
+              "sha256": "6eaef133cd92179bbce2aa8cdab76bf4994a5f7a4906bce0ee8509f7c262ba44"
+            },
+            {
+              "path": "governance/evidence/ui/step-up-20261109/visual-review.json",
+              "sha256": "cad961bdfa070744fd6449dde1b9aea1252a72deb428a3422bc2f7da8bb29f48"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-003",
+          "result": "PASS",
+          "description": "Uses shared tokens, fields, buttons and error presentation; no separate per-screen validator infrastructure.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/ui/step-up-20261109/test-index.json",
+              "sha256": "6eaef133cd92179bbce2aa8cdab76bf4994a5f7a4906bce0ee8509f7c262ba44"
+            },
+            {
+              "path": "governance/evidence/ui/step-up-20261109/visual-review.json",
+              "sha256": "cad961bdfa070744fd6449dde1b9aea1252a72deb428a3422bc2f7da8bb29f48"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-004",
+          "result": "PASS",
+          "description": "All three material adaptations have explicit direct Product Owner consent in the immutable scoped record.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/ui/step-up-20261109/test-index.json",
+              "sha256": "6eaef133cd92179bbce2aa8cdab76bf4994a5f7a4906bce0ee8509f7c262ba44"
+            },
+            {
+              "path": "governance/evidence/ui/step-up-20261109/visual-review.json",
+              "sha256": "cad961bdfa070744fd6449dde1b9aea1252a72deb428a3422bc2f7da8bb29f48"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-005",
+          "result": "PASS",
+          "description": "Domain behavior followsFRD17/catalog32/PDR11; unavailable methods never weaken assurance; visual variation resolved by actual scoped approval.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/ui/step-up-20261109/test-index.json",
+              "sha256": "6eaef133cd92179bbce2aa8cdab76bf4994a5f7a4906bce0ee8509f7c262ba44"
+            },
+            {
+              "path": "governance/evidence/ui/step-up-20261109/visual-review.json",
+              "sha256": "cad961bdfa070744fd6449dde1b9aea1252a72deb428a3422bc2f7da8bb29f48"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-006",
+          "result": "PASS",
+          "description": "Tunner styles retained; TailAdmin default appearance does not replace approved composition.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/ui/step-up-20261109/test-index.json",
+              "sha256": "6eaef133cd92179bbce2aa8cdab76bf4994a5f7a4906bce0ee8509f7c262ba44"
+            },
+            {
+              "path": "governance/evidence/ui/step-up-20261109/visual-review.json",
+              "sha256": "cad961bdfa070744fd6449dde1b9aea1252a72deb428a3422bc2f7da8bb29f48"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-007",
+          "result": "PASS",
+          "description": "Five widths and short viewport, no overflow, keyboard Tab/ShiftTab/Escape/restore and axe2.2AA engineering tags pass.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/ui/step-up-20261109/test-index.json",
+              "sha256": "6eaef133cd92179bbce2aa8cdab76bf4994a5f7a4906bce0ee8509f7c262ba44"
+            },
+            {
+              "path": "governance/evidence/ui/step-up-20261109/visual-review.json",
+              "sha256": "cad961bdfa070744fd6449dde1b9aea1252a72deb428a3422bc2f7da8bb29f48"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-008",
+          "result": "PASS",
+          "description": "Current source, results, exact reference/actual screenshots, approvals and review provenance are hash-bound in this receipt.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/ui/step-up-20261109/test-index.json",
+              "sha256": "6eaef133cd92179bbce2aa8cdab76bf4994a5f7a4906bce0ee8509f7c262ba44"
+            },
+            {
+              "path": "governance/evidence/ui/step-up-20261109/visual-review.json",
+              "sha256": "cad961bdfa070744fd6449dde1b9aea1252a72deb428a3422bc2f7da8bb29f48"
+            }
+          ]
+        }
+      ],
+      "screenshots": [
+        {
+          "path": "governance/evidence/ui/step-up-20261109/actual/step-up/changed-AUTHENTICATION_REQUIRED.png",
+          "sha256": "5b444a0a8fb2125fe40730caf9d4aa285917585055004bfe359d900c38c03269"
+        },
+        {
+          "path": "governance/evidence/ui/step-up-20261109/actual/step-up/changed-FORBIDDEN_SCOPE.png",
+          "sha256": "5b444a0a8fb2125fe40730caf9d4aa285917585055004bfe359d900c38c03269"
+        },
+        {
+          "path": "governance/evidence/ui/step-up-20261109/actual/step-up/changed-VERSION_CONFLICT.png",
+          "sha256": "5b444a0a8fb2125fe40730caf9d4aa285917585055004bfe359d900c38c03269"
+        },
+        {
+          "path": "governance/evidence/ui/step-up-20261109/actual/step-up/chooser-1024.png",
+          "sha256": "596ec0d7d40dfd99d427f9a29849b1c555489c1ead76a4ab28280f0c5c2c0d39"
+        },
+        {
+          "path": "governance/evidence/ui/step-up-20261109/actual/step-up/chooser-1440.png",
+          "sha256": "f4047c3995cb3f51ed02d6d08c37d850ec498d6164e484251759f70b3c4d0c13"
+        },
+        {
+          "path": "governance/evidence/ui/step-up-20261109/actual/step-up/chooser-320.png",
+          "sha256": "eb24bb1b7abe58e9ca26ad0a4a1dfa5facab41da4ad68e89212faae29ca05f35"
+        },
+        {
+          "path": "governance/evidence/ui/step-up-20261109/actual/step-up/chooser-390.png",
+          "sha256": "7b57720ca989a9db69dd31c6dee6d96419849607e4f5c80aaffb53363ff53f20"
+        },
+        {
+          "path": "governance/evidence/ui/step-up-20261109/actual/step-up/chooser-768.png",
+          "sha256": "ae989a1a7b284f26c9c46ff8db1679f6c7c7d1c2dbabbfd90010798da466366b"
+        },
+        {
+          "path": "governance/evidence/ui/step-up-20261109/actual/step-up/password-1024.png",
+          "sha256": "d3d3437fc0fd03f2c8c458eb2e5cfde5b0c6e27afa5e2a25023f8db315a3f962"
+        },
+        {
+          "path": "governance/evidence/ui/step-up-20261109/actual/step-up/password-1440.png",
+          "sha256": "b70fd2a16d78a16ff8ebee758cd64fccffc53e88cf419d344b6c094ab65ffa09"
+        },
+        {
+          "path": "governance/evidence/ui/step-up-20261109/actual/step-up/password-320.png",
+          "sha256": "eca274980aa6294a02d29217e281629ae72445d7cdbbb5c9a6cf5c62834cdd8f"
+        },
+        {
+          "path": "governance/evidence/ui/step-up-20261109/actual/step-up/password-390.png",
+          "sha256": "9615a5c8a9eb0beeee54957fa7e5b97e4b5f0937de92539aa2a6b6f94ec52db0"
+        },
+        {
+          "path": "governance/evidence/ui/step-up-20261109/actual/step-up/password-768.png",
+          "sha256": "9193fcd72b4892f9a9cd890957d3c28c32ae5c2d444d3e87930a49e5715f23a8"
+        },
+        {
+          "path": "governance/evidence/ui/step-up-20261109/actual/step-up/server-error-1024.png",
+          "sha256": "10304b52d6eae205198b9f51dfa396fa82be32a23788b2e19e8b61b148ae3f9a"
+        },
+        {
+          "path": "governance/evidence/ui/step-up-20261109/actual/step-up/server-error-1440.png",
+          "sha256": "29f5e41d44a69ad1c6075bce15155b13afd7207cc37c4ee876da26b48457aff9"
+        },
+        {
+          "path": "governance/evidence/ui/step-up-20261109/actual/step-up/server-error-320.png",
+          "sha256": "81dcbc85cadfdb73b0640ae50ad4df69bbc70df277290df133f178e96ed9473e"
+        },
+        {
+          "path": "governance/evidence/ui/step-up-20261109/actual/step-up/server-error-390.png",
+          "sha256": "f96cbb908b9b1afaf4f3ecf39714fef629eb8341be1303b60d1d5c0f831487a9"
+        },
+        {
+          "path": "governance/evidence/ui/step-up-20261109/actual/step-up/server-error-768.png",
+          "sha256": "cc1546e5e9bfbf11db552cbf4f56bb34bdb9d897972c0af40ad2f95953e1a761"
+        },
+        {
+          "path": "governance/evidence/ui/step-up-20261109/actual/step-up/short-viewport.png",
+          "sha256": "170d820c7c7e65433188df8da4843853379a3825d954afd5b833d7f17d7d8e79"
+        },
+        {
+          "path": "governance/evidence/ui/step-up-20261109/reference/figma-98-27.png",
+          "sha256": "fd7e613982e3f8f2ca2e9abe1fe725a86f86b177f3cbef0be3c9ffa50db03616"
+        },
+        {
+          "path": "governance/evidence/ui/step-up-20261109/reference/password-1440.png",
+          "sha256": "dd270a71a32a0dee4420b0109ef58ecbf35bd196f97892c2d4e73c4d09ac61e8"
+        }
+      ],
+      "deviations": [
+        {
+          "status": "PRODUCT_OWNER_APPROVED",
+          "approval_evidence": {
+            "path": "governance/evidence/TUN-P2-006-VISUAL-CONSENT-20261108.json",
+            "sha256": "881ffda9f2b7431c9077922789aa585780022651d5a2c8a628365a85de5fc3b2"
+          },
+          "scope": "Only method availability, reviewed password detail/copy and shared responsive/interaction states. Local carrier is development-only. No external write or production policy approval."
+        }
+      ]
+    },
+    {
+      "id": "DEV-STEP-UP",
+      "figma_refs": [
+        {
+          "file_key": "apNbwvAgdn1xIxYH1oiaSC",
+          "node_id": "98:27"
+        },
+        {
+          "file_key": "apNbwvAgdn1xIxYH1oiaSC",
+          "node_id": "70:1257"
+        }
+      ],
+      "checks": [
+        {
+          "id": "URL-001",
+          "result": "PASS",
+          "description": "Local independent carrier has canonical /browser-testing/step-up; registration/login existing canonical paths preserved.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/ui/step-up-20261109/test-index.json",
+              "sha256": "6eaef133cd92179bbce2aa8cdab76bf4994a5f7a4906bce0ee8509f7c262ba44"
+            },
+            {
+              "path": "governance/evidence/ui/step-up-20261109/visual-review.json",
+              "sha256": "cad961bdfa070744fd6449dde1b9aea1252a72deb428a3422bc2f7da8bb29f48"
+            }
+          ]
+        },
+        {
+          "id": "URL-002",
+          "result": "PASS",
+          "description": "No hash-based full-screen router; path assertion and hostile-query/hash regressions pass.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/ui/step-up-20261109/test-index.json",
+              "sha256": "6eaef133cd92179bbce2aa8cdab76bf4994a5f7a4906bce0ee8509f7c262ba44"
+            },
+            {
+              "path": "governance/evidence/ui/step-up-20261109/visual-review.json",
+              "sha256": "cad961bdfa070744fd6449dde1b9aea1252a72deb428a3422bc2f7da8bb29f48"
+            }
+          ]
+        },
+        {
+          "id": "URL-003",
+          "result": "PASS",
+          "description": "Real HTTPS direct entry, reload and Back/Forward reconstruct authenticated carrier; existing seven User screens retested.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/ui/step-up-20261109/test-index.json",
+              "sha256": "6eaef133cd92179bbce2aa8cdab76bf4994a5f7a4906bce0ee8509f7c262ba44"
+            },
+            {
+              "path": "governance/evidence/ui/step-up-20261109/visual-review.json",
+              "sha256": "cad961bdfa070744fd6449dde1b9aea1252a72deb428a3422bc2f7da8bb29f48"
+            }
+          ]
+        },
+        {
+          "id": "URL-004",
+          "result": "PASS",
+          "description": "Chooser/password detail stays in same native modal and owner pathname; closing/back/attempts clear secrets.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/ui/step-up-20261109/test-index.json",
+              "sha256": "6eaef133cd92179bbce2aa8cdab76bf4994a5f7a4906bce0ee8509f7c262ba44"
+            },
+            {
+              "path": "governance/evidence/ui/step-up-20261109/visual-review.json",
+              "sha256": "cad961bdfa070744fd6449dde1b9aea1252a72deb428a3422bc2f7da8bb29f48"
+            }
+          ]
+        },
+        {
+          "id": "URL-005",
+          "result": "PASS",
+          "description": "Real unsigned entry redirects to /login; backend expiry/session/context guards independently fail closed.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/ui/step-up-20261109/test-index.json",
+              "sha256": "6eaef133cd92179bbce2aa8cdab76bf4994a5f7a4906bce0ee8509f7c262ba44"
+            },
+            {
+              "path": "governance/evidence/ui/step-up-20261109/visual-review.json",
+              "sha256": "cad961bdfa070744fd6449dde1b9aea1252a72deb428a3422bc2f7da8bb29f48"
+            }
+          ]
+        },
+        {
+          "id": "URL-006",
+          "result": "PASS",
+          "description": "Same-screen step-up does not change origin or redirect context; actual HTTPS Origin/CSRF and exact actor-origin binding negative cases pass. Existing OAuth protocol is not implemented or newly authorized.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/ui/step-up-20261109/test-index.json",
+              "sha256": "6eaef133cd92179bbce2aa8cdab76bf4994a5f7a4906bce0ee8509f7c262ba44"
+            },
+            {
+              "path": "governance/evidence/ui/step-up-20261109/visual-review.json",
+              "sha256": "cad961bdfa070744fd6449dde1b9aea1252a72deb428a3422bc2f7da8bb29f48"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-001",
+          "result": "PASS",
+          "description": "Chooser geometry and composition match98:27; approved availability adaptations and exact password-detail proposal retained.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/ui/step-up-20261109/test-index.json",
+              "sha256": "6eaef133cd92179bbce2aa8cdab76bf4994a5f7a4906bce0ee8509f7c262ba44"
+            },
+            {
+              "path": "governance/evidence/ui/step-up-20261109/visual-review.json",
+              "sha256": "cad961bdfa070744fd6449dde1b9aea1252a72deb428a3422bc2f7da8bb29f48"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-002",
+          "result": "PASS",
+          "description": "Approved overlay border/shadow/backdrop retained. Test-carrier background is explicitly local-only; no Account Center acceptance claimed.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/ui/step-up-20261109/test-index.json",
+              "sha256": "6eaef133cd92179bbce2aa8cdab76bf4994a5f7a4906bce0ee8509f7c262ba44"
+            },
+            {
+              "path": "governance/evidence/ui/step-up-20261109/visual-review.json",
+              "sha256": "cad961bdfa070744fd6449dde1b9aea1252a72deb428a3422bc2f7da8bb29f48"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-003",
+          "result": "PASS",
+          "description": "Uses shared tokens, fields, buttons and error presentation; no separate per-screen validator infrastructure.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/ui/step-up-20261109/test-index.json",
+              "sha256": "6eaef133cd92179bbce2aa8cdab76bf4994a5f7a4906bce0ee8509f7c262ba44"
+            },
+            {
+              "path": "governance/evidence/ui/step-up-20261109/visual-review.json",
+              "sha256": "cad961bdfa070744fd6449dde1b9aea1252a72deb428a3422bc2f7da8bb29f48"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-004",
+          "result": "PASS",
+          "description": "All three material adaptations have explicit direct Product Owner consent in the immutable scoped record.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/ui/step-up-20261109/test-index.json",
+              "sha256": "6eaef133cd92179bbce2aa8cdab76bf4994a5f7a4906bce0ee8509f7c262ba44"
+            },
+            {
+              "path": "governance/evidence/ui/step-up-20261109/visual-review.json",
+              "sha256": "cad961bdfa070744fd6449dde1b9aea1252a72deb428a3422bc2f7da8bb29f48"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-005",
+          "result": "PASS",
+          "description": "Domain behavior followsFRD17/catalog32/PDR11; unavailable methods never weaken assurance; visual variation resolved by actual scoped approval.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/ui/step-up-20261109/test-index.json",
+              "sha256": "6eaef133cd92179bbce2aa8cdab76bf4994a5f7a4906bce0ee8509f7c262ba44"
+            },
+            {
+              "path": "governance/evidence/ui/step-up-20261109/visual-review.json",
+              "sha256": "cad961bdfa070744fd6449dde1b9aea1252a72deb428a3422bc2f7da8bb29f48"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-006",
+          "result": "PASS",
+          "description": "Tunner styles retained; TailAdmin default appearance does not replace approved composition.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/ui/step-up-20261109/test-index.json",
+              "sha256": "6eaef133cd92179bbce2aa8cdab76bf4994a5f7a4906bce0ee8509f7c262ba44"
+            },
+            {
+              "path": "governance/evidence/ui/step-up-20261109/visual-review.json",
+              "sha256": "cad961bdfa070744fd6449dde1b9aea1252a72deb428a3422bc2f7da8bb29f48"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-007",
+          "result": "PASS",
+          "description": "Five widths and short viewport, no overflow, keyboard Tab/ShiftTab/Escape/restore and axe2.2AA engineering tags pass.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/ui/step-up-20261109/test-index.json",
+              "sha256": "6eaef133cd92179bbce2aa8cdab76bf4994a5f7a4906bce0ee8509f7c262ba44"
+            },
+            {
+              "path": "governance/evidence/ui/step-up-20261109/visual-review.json",
+              "sha256": "cad961bdfa070744fd6449dde1b9aea1252a72deb428a3422bc2f7da8bb29f48"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-008",
+          "result": "PASS",
+          "description": "Current source, results, exact reference/actual screenshots, approvals and review provenance are hash-bound in this receipt.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/ui/step-up-20261109/test-index.json",
+              "sha256": "6eaef133cd92179bbce2aa8cdab76bf4994a5f7a4906bce0ee8509f7c262ba44"
+            },
+            {
+              "path": "governance/evidence/ui/step-up-20261109/visual-review.json",
+              "sha256": "cad961bdfa070744fd6449dde1b9aea1252a72deb428a3422bc2f7da8bb29f48"
+            }
+          ]
+        }
+      ],
+      "screenshots": [
+        {
+          "path": "governance/evidence/ui/step-up-20261109/actual/real/signed-in-browser-test.png",
+          "sha256": "423766743d243a84e563dbe3e4e86f5343cdfdfad9db07676538013cc05f8eeb"
+        },
+        {
+          "path": "governance/evidence/ui/step-up-20261109/actual/real/step-up-real-completed.png",
+          "sha256": "69b0759401bfc92b03a926e04a9285698f9d5adaa4834eb7ecc9e873e9c12b38"
+        },
+        {
+          "path": "governance/evidence/ui/step-up-20261109/reference/figma-98-27.png",
+          "sha256": "fd7e613982e3f8f2ca2e9abe1fe725a86f86b177f3cbef0be3c9ffa50db03616"
+        },
+        {
+          "path": "governance/evidence/ui/step-up-20261109/reference/password-1440.png",
+          "sha256": "dd270a71a32a0dee4420b0109ef58ecbf35bd196f97892c2d4e73c4d09ac61e8"
+        }
+      ],
+      "deviations": [
+        {
+          "status": "PRODUCT_OWNER_APPROVED",
+          "approval_evidence": {
+            "path": "governance/evidence/TUN-P2-006-VISUAL-CONSENT-20261108.json",
+            "sha256": "881ffda9f2b7431c9077922789aa585780022651d5a2c8a628365a85de5fc3b2"
+          },
+          "scope": "Only method availability, reviewed password detail/copy and shared responsive/interaction states. Local carrier is development-only. No external write or production policy approval."
+        }
+      ]
+    },
+    {
+      "id": "FORM-STEP-UP",
+      "figma_refs": [
+        {
+          "file_key": "apNbwvAgdn1xIxYH1oiaSC",
+          "node_id": "98:27"
+        },
+        {
+          "file_key": "apNbwvAgdn1xIxYH1oiaSC",
+          "node_id": "70:1257"
+        }
+      ],
+      "checks": [
+        {
+          "id": "VAL-001",
+          "result": "PASS",
+          "description": "Current password required and authoritative policy maximum; no unrelated registration password rules. Shared field error and summary.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/ui/step-up-20261109/test-index.json",
+              "sha256": "6eaef133cd92179bbce2aa8cdab76bf4994a5f7a4906bce0ee8509f7c262ba44"
+            },
+            {
+              "path": "governance/evidence/ui/step-up-20261109/visual-review.json",
+              "sha256": "cad961bdfa070744fd6449dde1b9aea1252a72deb428a3422bc2f7da8bb29f48"
+            }
+          ]
+        },
+        {
+          "id": "VAL-002",
+          "result": "PASS",
+          "description": "Typed Zod+shared form; noValidate and governed field/form feedback; native bubbles are not primary.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/ui/step-up-20261109/test-index.json",
+              "sha256": "6eaef133cd92179bbce2aa8cdab76bf4994a5f7a4906bce0ee8509f7c262ba44"
+            },
+            {
+              "path": "governance/evidence/ui/step-up-20261109/visual-review.json",
+              "sha256": "cad961bdfa070744fd6449dde1b9aea1252a72deb428a3422bc2f7da8bb29f48"
+            }
+          ]
+        },
+        {
+          "id": "VAL-003",
+          "result": "PASS",
+          "description": "Real strict bounded JSON, empty/long credentials, unknown/duplicate properties, forged request/context/actor/session/origin and changed policy rejected.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/ui/step-up-20261109/test-index.json",
+              "sha256": "6eaef133cd92179bbce2aa8cdab76bf4994a5f7a4906bce0ee8509f7c262ba44"
+            },
+            {
+              "path": "governance/evidence/ui/step-up-20261109/visual-review.json",
+              "sha256": "cad961bdfa070744fd6449dde1b9aea1252a72deb428a3422bc2f7da8bb29f48"
+            }
+          ]
+        },
+        {
+          "id": "VAL-004",
+          "result": "PASS",
+          "description": "Credential failure mapped to generic shared field error; policy/scope/session failure has safe form outcome with no account existence leakage.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/ui/step-up-20261109/test-index.json",
+              "sha256": "6eaef133cd92179bbce2aa8cdab76bf4994a5f7a4906bce0ee8509f7c262ba44"
+            },
+            {
+              "path": "governance/evidence/ui/step-up-20261109/visual-review.json",
+              "sha256": "cad961bdfa070744fd6449dde1b9aea1252a72deb428a3422bc2f7da8bb29f48"
+            }
+          ]
+        },
+        {
+          "id": "VAL-005",
+          "result": "PASS",
+          "description": "Submission/blur/correction/first-invalid focus, aria associations, value clearing, duplicate prevention and modal keyboard behavior pass. Password is deliberately cleared after an attempt.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/ui/step-up-20261109/test-index.json",
+              "sha256": "6eaef133cd92179bbce2aa8cdab76bf4994a5f7a4906bce0ee8509f7c262ba44"
+            },
+            {
+              "path": "governance/evidence/ui/step-up-20261109/visual-review.json",
+              "sha256": "cad961bdfa070744fd6449dde1b9aea1252a72deb428a3422bc2f7da8bb29f48"
+            }
+          ]
+        },
+        {
+          "id": "VAL-006",
+          "result": "PASS",
+          "description": "Approved Figma98:27 and existing70:1257 styling patterns with exact scoped Product consent; desktop/mobile error screenshots reviewed.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/ui/step-up-20261109/test-index.json",
+              "sha256": "6eaef133cd92179bbce2aa8cdab76bf4994a5f7a4906bce0ee8509f7c262ba44"
+            },
+            {
+              "path": "governance/evidence/ui/step-up-20261109/visual-review.json",
+              "sha256": "cad961bdfa070744fd6449dde1b9aea1252a72deb428a3422bc2f7da8bb29f48"
+            }
+          ]
+        },
+        {
+          "id": "VAL-007",
+          "result": "PASS",
+          "description": "Current credential validation derives limit from auth policy; no new password complexity or authenticator/assurance fallback invented.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/ui/step-up-20261109/test-index.json",
+              "sha256": "6eaef133cd92179bbce2aa8cdab76bf4994a5f7a4906bce0ee8509f7c262ba44"
+            },
+            {
+              "path": "governance/evidence/ui/step-up-20261109/visual-review.json",
+              "sha256": "cad961bdfa070744fd6449dde1b9aea1252a72deb428a3422bc2f7da8bb29f48"
+            }
+          ]
+        },
+        {
+          "id": "VAL-008",
+          "result": "PASS",
+          "description": "Five modal viewport cases plus real HTTPS/PostgreSQL flow, history/reload and cross-surface regressions pass.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/ui/step-up-20261109/test-index.json",
+              "sha256": "6eaef133cd92179bbce2aa8cdab76bf4994a5f7a4906bce0ee8509f7c262ba44"
+            },
+            {
+              "path": "governance/evidence/ui/step-up-20261109/visual-review.json",
+              "sha256": "cad961bdfa070744fd6449dde1b9aea1252a72deb428a3422bc2f7da8bb29f48"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-001",
+          "result": "PASS",
+          "description": "Chooser geometry and composition match98:27; approved availability adaptations and exact password-detail proposal retained.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/ui/step-up-20261109/test-index.json",
+              "sha256": "6eaef133cd92179bbce2aa8cdab76bf4994a5f7a4906bce0ee8509f7c262ba44"
+            },
+            {
+              "path": "governance/evidence/ui/step-up-20261109/visual-review.json",
+              "sha256": "cad961bdfa070744fd6449dde1b9aea1252a72deb428a3422bc2f7da8bb29f48"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-002",
+          "result": "PASS",
+          "description": "Approved overlay border/shadow/backdrop retained. Test-carrier background is explicitly local-only; no Account Center acceptance claimed.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/ui/step-up-20261109/test-index.json",
+              "sha256": "6eaef133cd92179bbce2aa8cdab76bf4994a5f7a4906bce0ee8509f7c262ba44"
+            },
+            {
+              "path": "governance/evidence/ui/step-up-20261109/visual-review.json",
+              "sha256": "cad961bdfa070744fd6449dde1b9aea1252a72deb428a3422bc2f7da8bb29f48"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-003",
+          "result": "PASS",
+          "description": "Uses shared tokens, fields, buttons and error presentation; no separate per-screen validator infrastructure.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/ui/step-up-20261109/test-index.json",
+              "sha256": "6eaef133cd92179bbce2aa8cdab76bf4994a5f7a4906bce0ee8509f7c262ba44"
+            },
+            {
+              "path": "governance/evidence/ui/step-up-20261109/visual-review.json",
+              "sha256": "cad961bdfa070744fd6449dde1b9aea1252a72deb428a3422bc2f7da8bb29f48"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-004",
+          "result": "PASS",
+          "description": "All three material adaptations have explicit direct Product Owner consent in the immutable scoped record.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/ui/step-up-20261109/test-index.json",
+              "sha256": "6eaef133cd92179bbce2aa8cdab76bf4994a5f7a4906bce0ee8509f7c262ba44"
+            },
+            {
+              "path": "governance/evidence/ui/step-up-20261109/visual-review.json",
+              "sha256": "cad961bdfa070744fd6449dde1b9aea1252a72deb428a3422bc2f7da8bb29f48"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-005",
+          "result": "PASS",
+          "description": "Domain behavior followsFRD17/catalog32/PDR11; unavailable methods never weaken assurance; visual variation resolved by actual scoped approval.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/ui/step-up-20261109/test-index.json",
+              "sha256": "6eaef133cd92179bbce2aa8cdab76bf4994a5f7a4906bce0ee8509f7c262ba44"
+            },
+            {
+              "path": "governance/evidence/ui/step-up-20261109/visual-review.json",
+              "sha256": "cad961bdfa070744fd6449dde1b9aea1252a72deb428a3422bc2f7da8bb29f48"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-006",
+          "result": "PASS",
+          "description": "Tunner styles retained; TailAdmin default appearance does not replace approved composition.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/ui/step-up-20261109/test-index.json",
+              "sha256": "6eaef133cd92179bbce2aa8cdab76bf4994a5f7a4906bce0ee8509f7c262ba44"
+            },
+            {
+              "path": "governance/evidence/ui/step-up-20261109/visual-review.json",
+              "sha256": "cad961bdfa070744fd6449dde1b9aea1252a72deb428a3422bc2f7da8bb29f48"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-007",
+          "result": "PASS",
+          "description": "Five widths and short viewport, no overflow, keyboard Tab/ShiftTab/Escape/restore and axe2.2AA engineering tags pass.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/ui/step-up-20261109/test-index.json",
+              "sha256": "6eaef133cd92179bbce2aa8cdab76bf4994a5f7a4906bce0ee8509f7c262ba44"
+            },
+            {
+              "path": "governance/evidence/ui/step-up-20261109/visual-review.json",
+              "sha256": "cad961bdfa070744fd6449dde1b9aea1252a72deb428a3422bc2f7da8bb29f48"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-008",
+          "result": "PASS",
+          "description": "Current source, results, exact reference/actual screenshots, approvals and review provenance are hash-bound in this receipt.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/ui/step-up-20261109/test-index.json",
+              "sha256": "6eaef133cd92179bbce2aa8cdab76bf4994a5f7a4906bce0ee8509f7c262ba44"
+            },
+            {
+              "path": "governance/evidence/ui/step-up-20261109/visual-review.json",
+              "sha256": "cad961bdfa070744fd6449dde1b9aea1252a72deb428a3422bc2f7da8bb29f48"
+            }
+          ]
+        }
+      ],
+      "screenshots": [
+        {
+          "path": "governance/evidence/ui/step-up-20261109/actual/step-up/changed-AUTHENTICATION_REQUIRED.png",
+          "sha256": "5b444a0a8fb2125fe40730caf9d4aa285917585055004bfe359d900c38c03269"
+        },
+        {
+          "path": "governance/evidence/ui/step-up-20261109/actual/step-up/changed-FORBIDDEN_SCOPE.png",
+          "sha256": "5b444a0a8fb2125fe40730caf9d4aa285917585055004bfe359d900c38c03269"
+        },
+        {
+          "path": "governance/evidence/ui/step-up-20261109/actual/step-up/changed-VERSION_CONFLICT.png",
+          "sha256": "5b444a0a8fb2125fe40730caf9d4aa285917585055004bfe359d900c38c03269"
+        },
+        {
+          "path": "governance/evidence/ui/step-up-20261109/actual/step-up/chooser-1024.png",
+          "sha256": "596ec0d7d40dfd99d427f9a29849b1c555489c1ead76a4ab28280f0c5c2c0d39"
+        },
+        {
+          "path": "governance/evidence/ui/step-up-20261109/actual/step-up/chooser-1440.png",
+          "sha256": "f4047c3995cb3f51ed02d6d08c37d850ec498d6164e484251759f70b3c4d0c13"
+        },
+        {
+          "path": "governance/evidence/ui/step-up-20261109/actual/step-up/chooser-320.png",
+          "sha256": "eb24bb1b7abe58e9ca26ad0a4a1dfa5facab41da4ad68e89212faae29ca05f35"
+        },
+        {
+          "path": "governance/evidence/ui/step-up-20261109/actual/step-up/chooser-390.png",
+          "sha256": "7b57720ca989a9db69dd31c6dee6d96419849607e4f5c80aaffb53363ff53f20"
+        },
+        {
+          "path": "governance/evidence/ui/step-up-20261109/actual/step-up/chooser-768.png",
+          "sha256": "ae989a1a7b284f26c9c46ff8db1679f6c7c7d1c2dbabbfd90010798da466366b"
+        },
+        {
+          "path": "governance/evidence/ui/step-up-20261109/actual/step-up/password-1024.png",
+          "sha256": "d3d3437fc0fd03f2c8c458eb2e5cfde5b0c6e27afa5e2a25023f8db315a3f962"
+        },
+        {
+          "path": "governance/evidence/ui/step-up-20261109/actual/step-up/password-1440.png",
+          "sha256": "b70fd2a16d78a16ff8ebee758cd64fccffc53e88cf419d344b6c094ab65ffa09"
+        },
+        {
+          "path": "governance/evidence/ui/step-up-20261109/actual/step-up/password-320.png",
+          "sha256": "eca274980aa6294a02d29217e281629ae72445d7cdbbb5c9a6cf5c62834cdd8f"
+        },
+        {
+          "path": "governance/evidence/ui/step-up-20261109/actual/step-up/password-390.png",
+          "sha256": "9615a5c8a9eb0beeee54957fa7e5b97e4b5f0937de92539aa2a6b6f94ec52db0"
+        },
+        {
+          "path": "governance/evidence/ui/step-up-20261109/actual/step-up/password-768.png",
+          "sha256": "9193fcd72b4892f9a9cd890957d3c28c32ae5c2d444d3e87930a49e5715f23a8"
+        },
+        {
+          "path": "governance/evidence/ui/step-up-20261109/actual/step-up/server-error-1024.png",
+          "sha256": "10304b52d6eae205198b9f51dfa396fa82be32a23788b2e19e8b61b148ae3f9a"
+        },
+        {
+          "path": "governance/evidence/ui/step-up-20261109/actual/step-up/server-error-1440.png",
+          "sha256": "29f5e41d44a69ad1c6075bce15155b13afd7207cc37c4ee876da26b48457aff9"
+        },
+        {
+          "path": "governance/evidence/ui/step-up-20261109/actual/step-up/server-error-320.png",
+          "sha256": "81dcbc85cadfdb73b0640ae50ad4df69bbc70df277290df133f178e96ed9473e"
+        },
+        {
+          "path": "governance/evidence/ui/step-up-20261109/actual/step-up/server-error-390.png",
+          "sha256": "f96cbb908b9b1afaf4f3ecf39714fef629eb8341be1303b60d1d5c0f831487a9"
+        },
+        {
+          "path": "governance/evidence/ui/step-up-20261109/actual/step-up/server-error-768.png",
+          "sha256": "cc1546e5e9bfbf11db552cbf4f56bb34bdb9d897972c0af40ad2f95953e1a761"
+        },
+        {
+          "path": "governance/evidence/ui/step-up-20261109/actual/step-up/short-viewport.png",
+          "sha256": "170d820c7c7e65433188df8da4843853379a3825d954afd5b833d7f17d7d8e79"
+        },
+        {
+          "path": "governance/evidence/ui/step-up-20261109/reference/figma-98-27.png",
+          "sha256": "fd7e613982e3f8f2ca2e9abe1fe725a86f86b177f3cbef0be3c9ffa50db03616"
+        },
+        {
+          "path": "governance/evidence/ui/step-up-20261109/reference/password-1440.png",
+          "sha256": "dd270a71a32a0dee4420b0109ef58ecbf35bd196f97892c2d4e73c4d09ac61e8"
+        }
+      ],
+      "deviations": [
+        {
+          "status": "PRODUCT_OWNER_APPROVED",
+          "approval_evidence": {
+            "path": "governance/evidence/TUN-P2-006-VISUAL-CONSENT-20261108.json",
+            "sha256": "881ffda9f2b7431c9077922789aa585780022651d5a2c8a628365a85de5fc3b2"
+          },
+          "scope": "Only method availability, reviewed password detail/copy and shared responsive/interaction states. Local carrier is development-only. No external write or production policy approval."
+        }
+      ]
+    }
+  ],
+  "pending_owner_update_ref": "docs/development/P2_005_EXTERNAL_UPDATES.md",
+  "prior_evidence_ref": "governance/evidence/ui/step-up-20261109/history/GLOBAL-UI-COMPLIANCE-before.json",
+  "revalidation_ref": "governance/evidence/ui/step-up-20261109/test-index.json",
+  "boundary": "Current 16 existing/test-fixture inventory items only, with original scope-specific PO exceptions and new three-scope approval. Production providers, broader modules, whole P2, external document synchronization, merge and release remain separate.",
+  "scope_id": "TUN-P2-006",
+  "acceptance_override_ref": "governance/evidence/TUN-P2-005-VISUAL-ACCEPTANCE-DEFERRAL-20261021.json",
+  "validated_at": "2026-11-09T05:51:00.864Z",
+  "recorded_at": "2026-11-09T05:50:35.081Z",
+  "historical_receipt_ref": "governance/evidence/ui/step-up-20261109/history/GLOBAL-UI-COMPLIANCE-before.json",
+  "source_binding": {
+    "method": "Full current-behavior rerun plus metadata-only inventory validation",
+    "behavior_executed_at_sha": "d141823d792ecbd11eedc0632d562c3a4f58431f",
+    "validated_commit_sha": "a2df3359f8092e1e816125fe384e7a8a86785c68",
+    "metadata_delta": "Only UI inventory source_paths classifies tools/browser-testing/BrowserTestStepUp.cs as local_test_host_ref; typed contract/unit suite rerun at validated SHA. All executable source and test bytes remain identical.",
+    "production_boundary": "Assurance mappings, lifetimes, published copy and sensitive-operation owner source require explicit trusted providers. Isolated local tool uses labelled synthetic fixtures. No production enablement, merge or release."
+  }
+}

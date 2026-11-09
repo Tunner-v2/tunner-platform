@@ -2,9 +2,9 @@
   "schema_version": 1,
   "scope_id": "TUN-P2-006",
   "validation_kind": "COMMITTED",
-  "result": "PENDING_EXECUTION",
-  "tested_commit_sha": null,
-  "validated_commit_sha": null,
+  "result": "PASS",
+  "tested_commit_sha": "a2df3359f8092e1e816125fe384e7a8a86785c68",
+  "validated_commit_sha": "a2df3359f8092e1e816125fe384e7a8a86785c68",
   "owned_behavior_paths": [
     "docs/contracts/ui-inventory.json",
     "src/Modules/Identity/AssurancePolicy.cs",
@@ -51,5 +51,8 @@
     "web/tests/contracts.test.tsx",
     "web/tests/step-up/step-up.spec.ts"
   ],
-  "note": "Candidate ownership classification committed before execution; final PASS and tested SHA require actual current-source test and review results. Historical closure is unchanged."
+  "note": "Ownership arrays match the precommitted validation candidate. Full executable behavior tested at d141823d792ecbd11eedc0632d562c3a4f58431f; metadata-only carrier reference correction and typed inventory contracts validated at a2df3359f8092e1e816125fe384e7a8a86785c68. Final Product/release approval is not inferred.",
+  "checked_at": "2026-11-09T05:52:09.293Z",
+  "test_index_ref": "governance/evidence/ui/step-up-20261109/test-index.json",
+  "validation_boundary": "ENGINEERING_CURRENT_SOURCE_WITH_EXPLICIT_SCOPED_VISUAL_CONSENT"
 }
