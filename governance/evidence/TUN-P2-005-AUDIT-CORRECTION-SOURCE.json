@@ -2,9 +2,9 @@
   "schema_version": 1,
   "scope_id": "TUN-P2-005",
   "validation_kind": "COMMITTED",
-  "result": "PENDING_CURRENT_SOURCE_REVALIDATION",
-  "tested_commit_sha": null,
-  "validated_commit_sha": null,
+  "result": "PASS",
+  "tested_commit_sha": "80ea799cbfc0f9f9ad721723d1944fefae7e97bd",
+  "validated_commit_sha": "80ea799cbfc0f9f9ad721723d1944fefae7e97bd",
   "owned_behavior_paths": [
     "docs/contracts/authentication-session-contract.md",
     "docs/contracts/ui-inventory.json",
@@ -56,5 +56,6 @@
     "web/tests/contracts.test.tsx"
   ],
   "historical_validation_ref": "governance/evidence/TUN-P2-005-VALIDATION.json",
-  "note": "Precommitted current-source classification; original ownership retained exactly. Actual per-component execution SHA and exact source equivalence must be recorded before PASS. No rewrite of historical tested SHA or Product/release claim."
+  "note": "Current candidate includes exact precommitted ownership. Actual executed component SHAs and complete unchanged-input equivalence retained in source_binding_ref; historical receipt remains unchanged. No new execution or Product/release acceptance claimed.",
+  "source_binding_ref": "governance/evidence/p2-recovery-20261109/active-source-refresh.json"
 }

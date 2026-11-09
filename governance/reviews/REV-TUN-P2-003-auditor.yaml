@@ -5,7 +5,7 @@
   "role": "auditor",
   "status": "PASS",
   "result": "PASS",
-  "reviewed_at": "2026-10-17T20:15:56.211Z",
+  "reviewed_at": "2026-11-09T11:56:23.513Z",
   "skill_id": "auditor",
   "skill_version": "1.0.0",
   "skill_hash": "191c796fc5df0332ff2c3c464ca611d2c6d3ffc5ba7e2807986a71ad2e40d921",
@@ -28,14 +28,13 @@
     "docs/development/P2_003_IDENTITY_PERSISTENCE.md"
   ],
   "evidence_refs": [
-    "governance/evidence/TUN-P2-003-VALIDATION.json",
-    "governance/evidence/PDR0011-AMD0007-IMPACT-AUDIT.json"
+    "governance/evidence/p2-recovery-20261109/active-source-refresh.json",
+    "governance/evidence/p2-recovery-20261109/test-index.json",
+    "governance/evidence/TUN-P2-003-AUDIT-CORRECTION-ROLE-REVIEWS.json"
   ],
   "findings": [
-    "Original P2-004 VALIDATION and PDR-0007 receipts preserved. No RV, closure rewrite, new Product decision or inferred acceptance. All57 behavior paths match the tested committed SHA.",
-    "P2-003 shared snapshot/test-project overlap is revalidated at this SHA. Unrelated dirty files remain byte-identical and unstaged.",
-    "P2-003 perspective is bounded to reusable foundation/migration and shared model/test-project overlap; its ownership is revalidated at c6fa8e7690095f8eb2401587c407501fced29a4d.",
-    "Executing-agent engineering perspective, not independent human/Product/legal/release approval."
+    "Executing-agent current-source refresh at 80ea799cbfc0f9f9ad721723d1944fefae7e97bd under current skill contract; prior scope-specific reviews preserved in historical aggregate. Not independent human, new Product or release approval.",
+    "Historical validated SHA/receipts remain intact. New precommitted ownership arrays exactly retain original scope, current component results and Git-input equivalence are explicit,13 unrelated dirty paths preserved. Native current-source gates still required."
   ],
   "blocking_findings": [],
   "required_actions": [],

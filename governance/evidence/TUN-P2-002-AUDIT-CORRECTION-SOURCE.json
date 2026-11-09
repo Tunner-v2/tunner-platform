@@ -2,9 +2,9 @@
   "schema_version": 1,
   "scope_id": "TUN-P2-002",
   "validation_kind": "COMMITTED",
-  "result": "PENDING_CURRENT_SOURCE_REVALIDATION",
-  "tested_commit_sha": null,
-  "validated_commit_sha": null,
+  "result": "PASS",
+  "tested_commit_sha": "80ea799cbfc0f9f9ad721723d1944fefae7e97bd",
+  "validated_commit_sha": "80ea799cbfc0f9f9ad721723d1944fefae7e97bd",
   "owned_behavior_paths": [
     "src/Modules/Accounts/Tunner.Accounts.csproj",
     "src/Modules/Accounts/AgeEligibilityEvaluator.cs",
@@ -16,5 +16,6 @@
     "tests/Tunner.Accounts.Tests/AccountAgeCapabilityTests.cs"
   ],
   "historical_validation_ref": "governance/evidence/TUN-P2-002-VALIDATION.json",
-  "note": "Precommitted current-source classification with original exact ownership retained. Shared solution changed after the historical source SHA; use executed current Accounts cohort and unchanged-source proof before PASS."
+  "note": "Current candidate includes exact precommitted ownership. Actual executed component SHAs and complete unchanged-input equivalence retained in source_binding_ref; historical receipt remains unchanged. No new execution or Product/release acceptance claimed.",
+  "source_binding_ref": "governance/evidence/p2-recovery-20261109/active-source-refresh.json"
 }
