@@ -53,7 +53,8 @@
     "governance/evidence/p2-006-proof-20261108/initial-focused-test-failure.log": "ae5ddaec06e7b542fb0bf43f12f3c8c5a0afe0486cbf0769982d62c6d8e1b142",
     "governance/evidence/p2-006-proof-20261108/initial-full-test-failure.log": "e663d49e399a57cd0d4b4a7b28bfc009b7764bab6a078e1481d21d63b580f02b",
     "governance/evidence/p2-006-proof-20261108/initial-build-failures.log": "9548f5719dbf96f87764675b357ff53dd46ec3b345ddd4e55440404e55025e1b",
-    "governance/evidence/p2-006-proof-20261108/figma-step-up-design-context.txt": "4055a55c3715a09a1cce2649f2b0063fbf68b2f1c00ea80c5234948741691465"
+    "governance/evidence/p2-006-proof-20261108/figma-step-up-design-context.txt": "4055a55c3715a09a1cce2649f2b0063fbf68b2f1c00ea80c5234948741691465",
+    "governance/evidence/p2-006-proof-20261108/native-gates.json": "db457001d3350f0e66e91632010a7e399ee24c5427c8628a50a475e0a8cc244d"
   },
   "evidence_normalization": "Logs normalize CRLF and checkout prefix. Committed test summaries omit computer/run identity. Raw TRX and earlier run artifacts remain local and are not substituted with discovery counts.",
   "prior_failures": [
@@ -109,5 +110,20 @@
     "Actual approved configured runtime assurance policy evidence before enabling affected production paths",
     "Final work-item role reviews, native acceptance gates and committed handoff"
   ],
-  "next_action": "Continue TUN-P2-006 BFF/UI integration from approved Figma98:27 and current contract; do not restart custom image rebuild work."
+  "next_action": "Continue TUN-P2-006 BFF/UI integration from approved Figma98:27 and current contract; do not restart custom image rebuild work.",
+  "native_acceptance": {
+    "work_item": "NOT_READY",
+    "reasons": [
+      "required evidence missing: governance/evidence/TUN-P2-006-VALIDATION.json",
+      "role review evidence missing: governance/evidence/TUN-P2-006-ROLE-REVIEWS.json",
+      "AMD-0009 UI scope requires ui_evidence_ref and per-route/form acceptance"
+    ],
+    "commit_readiness": "REMEDIATION_REQUIRED",
+    "affected_historical_work_items": [
+      "TUN-P2-004-UI001",
+      "TUN-P2-004-UI002"
+    ],
+    "governed_follow_up": "TODO-TUN-P2-006-EVIDENCE001",
+    "interpretation": "Backend127-test receipt remains scoped and valid; historical UI/integration evidence must be reconciled through governed follow-up before claiming affected readiness. No completed acceptance is overwritten."
+  }
 }

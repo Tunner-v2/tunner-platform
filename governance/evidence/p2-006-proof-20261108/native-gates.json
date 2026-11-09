@@ -1,0 +1,65 @@
+{
+  "work_item": {
+    "ExitCode": 1,
+    "Command": "gate check",
+    "Payload": {
+      "WorkItemId": "TUN-P2-006",
+      "Outcome": "NOT_READY",
+      "Failures": [
+        "required evidence missing: governance/evidence/TUN-P2-006-VALIDATION.json",
+        "role review evidence missing: governance/evidence/TUN-P2-006-ROLE-REVIEWS.json",
+        "AMD-0009 UI scope requires ui_evidence_ref and per-route/form acceptance"
+      ],
+      "Satisfied": [
+        "evidence exists: governance/evidence/TUN-P2-006-STARTUP-REVIEWS.json",
+        "evidence exists: governance/evidence/p2-006-policy-20261108/receipt.json",
+        "evidence exists: docs/development/P2_006_HANDOFF.md",
+        "evidence exists: governance/evidence/p2-006-proof-20261108/receipt.json",
+        "mandatory role review passed: auditor",
+        "mandatory role review passed: content-writer",
+        "mandatory role review passed: cyber-security-engineer",
+        "mandatory role review passed: end-user-ux-reviewer",
+        "mandatory role review passed: frontend-engineer",
+        "mandatory role review passed: full-stack-engineer",
+        "mandatory role review passed: sdk-engineer",
+        "mandatory role review passed: solution-architect",
+        "mandatory role review passed: tester-qa-engineer",
+        "mandatory role review passed: ui-ux-engineer"
+      ]
+    }
+  },
+  "commit_readiness": {
+    "ExitCode": 1,
+    "Command": "commit-readiness audit",
+    "Payload": {
+      "Outcome": "REMEDIATION_REQUIRED",
+      "Findings": [
+        "TUN-P2-004-UI001: owned behavior changed after validated SHA: docs/contracts/ui-inventory.json",
+        "TUN-P2-004-UI001: owned behavior changed after validated SHA: src/Modules/Identity/IdentityPersistenceDbContext.cs",
+        "TUN-P2-004-UI001: owned behavior changed after validated SHA: src/Modules/Identity/Migrations/IdentityPersistenceDbContextModelSnapshot.cs",
+        "TUN-P2-004-UI001: owned behavior changed after validated SHA: src/Modules/Identity/RegistrationApplication.cs",
+        "TUN-P2-004-UI001: owned behavior changed after validated SHA: src/Modules/Identity/RegistrationEndpoints.cs",
+        "TUN-P2-004-UI001: owned behavior changed after validated SHA: tests/Tunner.Identity.Persistence.Tests/Tunner.Identity.Persistence.Tests.csproj",
+        "TUN-P2-004-UI001: owned behavior changed after validated SHA: web/apps/user/vite.config.ts",
+        "TUN-P2-004-UI001: owned behavior changed after validated SHA: web/package.json",
+        "TUN-P2-004-UI001: owned behavior changed after validated SHA: web/playwright.config.ts",
+        "TUN-P2-004-UI001: owned behavior changed after validated SHA: web/playwright.registration.config.ts",
+        "TUN-P2-004-UI001: owned behavior changed after validated SHA: web/pnpm-lock.yaml",
+        "TUN-P2-004-UI001: owned behavior changed after validated SHA: web/tests/contracts.test.tsx",
+        "TUN-P2-004-UI002: owned behavior changed after validated SHA: docs/contracts/ui-inventory.json",
+        "TUN-P2-004-UI002: owned behavior changed after validated SHA: src/Modules/Identity/IdentityPersistenceDbContext.cs",
+        "TUN-P2-004-UI002: owned behavior changed after validated SHA: src/Modules/Identity/Migrations/IdentityPersistenceDbContextModelSnapshot.cs",
+        "TUN-P2-004-UI002: owned behavior changed after validated SHA: src/Modules/Identity/RegistrationApplication.cs",
+        "TUN-P2-004-UI002: owned behavior changed after validated SHA: src/Modules/Identity/RegistrationEndpoints.cs",
+        "TUN-P2-004-UI002: owned behavior changed after validated SHA: tests/Tunner.Identity.Persistence.Tests/Tunner.Identity.Persistence.Tests.csproj",
+        "TUN-P2-004-UI002: owned behavior changed after validated SHA: web/apps/user/vite.config.ts",
+        "TUN-P2-004-UI002: owned behavior changed after validated SHA: web/package.json",
+        "TUN-P2-004-UI002: owned behavior changed after validated SHA: web/playwright.registration.config.ts",
+        "TUN-P2-004-UI002: owned behavior changed after validated SHA: web/pnpm-lock.yaml",
+        "TUN-P2-004-UI002: owned behavior changed after validated SHA: web/tests/contracts.test.tsx"
+      ]
+    }
+  },
+  "checked_at_source": "27e02face25cb8d8317fa1422019326eb7fd682a",
+  "scope": "Read-only final native checks; no historical acceptance record rewritten."
+}
