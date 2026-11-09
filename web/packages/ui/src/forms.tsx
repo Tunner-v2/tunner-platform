@@ -40,8 +40,8 @@ export function useTunnerForm<T extends Record<string, unknown>>(schema: ZodType
   const result = validateTunnerForm(schema, values);
   const errors = Object.fromEntries(Object.entries(result.errors).filter(([name]) => submitted || touched[name])) as FieldErrors<T>;
   function onBlur(name: Extract<keyof T, string>, event?:FocusEvent<HTMLElement>) {
-    // A form button owns the next submit/reset/action. Avoid moving it between pointerdown and click.
-    if(event?.relatedTarget instanceof HTMLButtonElement&&event.currentTarget.closest('form')===event.relatedTarget.form)return;
+    // A pointer-active form button owns the next action. Keyboard blur still validates normally.
+    if(event?.relatedTarget instanceof HTMLButtonElement&&event.relatedTarget.matches(':active')&&event.currentTarget.closest('form')===event.relatedTarget.form)return;
     setTouched(current=>({...current,[name]:true}));
   }
   function reset() { setTouched({}); setSubmitted(false); }

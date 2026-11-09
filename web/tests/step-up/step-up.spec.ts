@@ -78,3 +78,7 @@ test('Short viewport remains scrollable and keyboard-reachable',async({page})=>{
  await page.setViewportSize({width:320,height:360});await setup(page);await open(page);await password(page);
  await page.getByRole('button',{name:'Confirm',exact:true}).focus();await expect(page.getByRole('button',{name:'Confirm',exact:true})).toBeInViewport();await evidence(page,'short-viewport');
 });
+
+test('Keyboard blur still validates before a button is activated',async({page})=>{
+ await setup(page);await open(page);await password(page);await page.keyboard.press('Tab');await expect(page.getByLabel('Password',{exact:true})).toHaveAttribute('aria-invalid','true');await expect(page.getByRole('button',{name:'Back',exact:true})).toBeFocused();
+});
