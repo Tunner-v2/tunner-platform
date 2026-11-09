@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
@@ -110,18 +109,7 @@ public static class AuthenticationEndpoints
                 browser.PreviousCookieDigest != CookieDigest(context) || context.Connection.RemoteIpAddress is null)
                 return Problem(403, TechnicalProblemCodes.ForbiddenScope);
             var maximum = checked((long)policy.PasswordMaximumLength * 6 + 4096);
-            if (context.Request.ContentLength > maximum) return Problem(413, "VALIDATION_ERROR");
-            var feature = context.Features.Get<IHttpMaxRequestBodySizeFeature>();
-            if (feature is null || feature.IsReadOnly) return Problem(503, "DEPENDENCY_UNAVAILABLE");
-            feature.MaxRequestBodySize = maximum;
-            using var buffer = new MemoryStream();
-            await context.Request.Body.CopyToAsync(buffer, context.RequestAborted).ConfigureAwait(false);
-            if (buffer.Length > maximum) return Problem(413, "VALIDATION_ERROR");
-            using var json = JsonDocument.Parse(buffer.ToArray());
-            if (json.RootElement.ValueKind != JsonValueKind.Object) return Problem(400, "VALIDATION_ERROR");
-            var names = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
-            if (json.RootElement.EnumerateObject().Any(p => !names.Add(p.Name))) return Problem(400, "VALIDATION_ERROR");
-            var command = json.Deserialize<PasswordSignInCommand>(WebJson);
+            var command = await IdentityJsonCommand.ReadAsync<PasswordSignInCommand>(context, maximum).ConfigureAwait(false);
             if (command is null || command.IdempotencyKey != browser.Key) return Problem(400, "VALIDATION_ERROR");
             var caller = new AuthenticationCaller(AuthenticationIdentity.Digest(browser.Nonce), partitions.Network(context.Connection.RemoteIpAddress), surface.Origin, browser.PreviousSessionId);
             var result = await application.SignInAsync(caller, command, context.RequestAborted).ConfigureAwait(false);

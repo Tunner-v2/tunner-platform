@@ -31,7 +31,7 @@ internal sealed class AuthenticationTestHost : IAsyncDisposable
     internal IServiceProvider Services => application.Services;
     private AuthenticationTestHost(WebApplication application, HttpClient client, X509Certificate2 certificate, TestClock clock, TestAccess access, TestPolicies policies)
     { this.application = application; this.client = client; this.certificate = certificate; Clock = clock; Access = access; Policies = policies; }
-    internal static async Task<AuthenticationTestHost> Start(IdentityTestDatabase database)
+    internal static async Task<AuthenticationTestHost> Start(IdentityTestDatabase database, Action<IServiceCollection>? configure = null)
     {
         using var rsa = RSA.Create(2048); var request = new CertificateRequest("CN=localhost", rsa, HashAlgorithmName.SHA256, RSASignaturePadding.Pkcs1);
         using var generated = request.CreateSelfSigned(DateTimeOffset.UtcNow.AddMinutes(-1), DateTimeOffset.UtcNow.AddHours(2));
@@ -50,6 +50,7 @@ internal sealed class AuthenticationTestHost : IAsyncDisposable
             builder.Services.AddSingleton<IAccountAuthenticationAccessSource>(access);
             builder.Services.AddSingleton<IAuthenticationPresentationSource, TestPresentation>();
             builder.Services.AddSingleton(new AuthenticationPartitionKey(RandomNumberGenerator.GetBytes(32)));
+            configure?.Invoke(builder.Services);
         });
         await application.StartAsync();
         var address = application.Services.GetRequiredService<IServer>().Features.Get<IServerAddressesFeature>()!.Addresses.Single();
