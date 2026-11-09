@@ -1,0 +1,453 @@
+{
+  "schema_version": 1,
+  "scope_id": "TUN-P2-007",
+  "status": "PROPOSAL_ONLY_CONSENT_PENDING",
+  "recorded_at": "2026-11-09T17:04:41.870Z",
+  "authority_resolution": "Existing FRD17 excludes SMS initial factor and repeat recovery-code reveal; Figma presentation conflicts are explicitly presented for scoped Product Owner consultation, without changing functional authority.",
+  "proposal_ref": "docs/development/P2_007_VISUAL_PROPOSAL.md",
+  "proposal_sha256": "681f7d9c2d61da0f43831869c9467db1dac126d3458053127581aa31a2622338",
+  "review_gallery": "artifacts/p2-007-passkeys-20261109/ui-review/index.html",
+  "source_read_only": true,
+  "product_approval": null,
+  "validated_commit_sha": null,
+  "scopes": [
+    "P2-007-V01 FRD conflicts and truthful server facts",
+    "P2-007-V02 outlined Login passkey entry",
+    "P2-007-V03 feedback and exact result reconciliation",
+    "P2-007-V04 policy-driven removal disclosure",
+    "P2-007-V05 passkey-specific responsive adaptation",
+    "P2-007-V06 scoped contrast/focus/error treatment"
+  ],
+  "actual_proposal_checks": {
+    "isolated_render_keyboard_passed": 85,
+    "isolated_render_keyboard_failed": 0,
+    "automated_accessibility_cases": 24,
+    "automated_violations": 0,
+    "incomplete_manual_contrast_items": 19,
+    "qualification": "Prototype-only local harness; no production React/WebAuthn, functional acceptance or committed validated source claim. Actual screenshots inspected; affected opaque color ratios calculated4.59–20.07:1."
+  },
+  "review_provenance": "UI/UX child produced and froze the packet; root inspected desktop methods and mobile removal renders before asking the user for explicit V01–V06 consent.",
+  "packet_manifest": [
+    {
+      "path": "artifacts/p2-007-passkeys-20261109/ui-review/acceptance-matrix.md",
+      "sha256": "08c3b0de9b0d645b30893b849b3094686d3324ff416ac5dd231f71db4eb6d237",
+      "bytes": 6184
+    },
+    {
+      "path": "artifacts/p2-007-passkeys-20261109/ui-review/accessibility.mjs",
+      "sha256": "2a361425a5b9640bf1070c24491746c40434fa4b02c0298f915d44cf22ac05a1",
+      "bytes": 1767
+    },
+    {
+      "path": "artifacts/p2-007-passkeys-20261109/ui-review/assets/Geist-OFL.txt",
+      "sha256": "1781d2806a07d91c4edf4740b88449fab7d0eadad53f7c351b94cd4d4eb8c00f",
+      "bytes": 4387
+    },
+    {
+      "path": "artifacts/p2-007-passkeys-20261109/ui-review/assets/Geist-wght.ttf",
+      "sha256": "73894e0448cae90a92b6c2f8732b7bb9acb7b94c418bff559dad4a18e1de9659",
+      "bytes": 169056
+    },
+    {
+      "path": "artifacts/p2-007-passkeys-20261109/ui-review/assets/GeistMono-OFL.txt",
+      "sha256": "1781d2806a07d91c4edf4740b88449fab7d0eadad53f7c351b94cd4d4eb8c00f",
+      "bytes": 4387
+    },
+    {
+      "path": "artifacts/p2-007-passkeys-20261109/ui-review/assets/GeistMono-wght.ttf",
+      "sha256": "d00e590b8eb3a59acc329b2d044fd143ae935090b7da33199ebee27cc7de8196",
+      "bytes": 171948
+    },
+    {
+      "path": "artifacts/p2-007-passkeys-20261109/ui-review/assets/Inter-latin-wght-normal.woff2",
+      "sha256": "3100e775e8616cd2611beecfa23a4263d7037586789b43f035236a2e6fbd4c62",
+      "bytes": 48256
+    },
+    {
+      "path": "artifacts/p2-007-passkeys-20261109/ui-review/assets/Inter-OFL.txt",
+      "sha256": "3b0a5fca3d17942cde889069889dedbbbd075e9b599968c82a95f4d944e9b345",
+      "bytes": 4477
+    },
+    {
+      "path": "artifacts/p2-007-passkeys-20261109/ui-review/capture.mjs",
+      "sha256": "fb121e3997ebd1db73df3411cc5e5ee3920619003054e85414bc3817398d806a",
+      "bytes": 4316
+    },
+    {
+      "path": "artifacts/p2-007-passkeys-20261109/ui-review/content.proposal.json",
+      "sha256": "16a0c54dd3adc4360d27337ffc3646057da5fd63a89bca2edcfd019f702f7dc4",
+      "bytes": 4342
+    },
+    {
+      "path": "artifacts/p2-007-passkeys-20261109/ui-review/index.html",
+      "sha256": "8ed09f1560f04d5be2d009a5b4efe764f0a89f1525304a8ad1a438119588b420",
+      "bytes": 11277
+    },
+    {
+      "path": "artifacts/p2-007-passkeys-20261109/ui-review/proposal.css",
+      "sha256": "e0df2b07551af085f965db6ae9874ae4fe9d520062e457f73726988345ce1700",
+      "bytes": 11751
+    },
+    {
+      "path": "artifacts/p2-007-passkeys-20261109/ui-review/proposal.html",
+      "sha256": "edae3bf06137deb54a41938991f95389a0ae4aa1ac1b468e0cbca8c748922fb9",
+      "bytes": 536
+    },
+    {
+      "path": "artifacts/p2-007-passkeys-20261109/ui-review/proposal.js",
+      "sha256": "95a0b8f78cbc4e303d4f436108b60dbfc0ca922a467722bb1c29b2903827e364",
+      "bytes": 12380
+    },
+    {
+      "path": "artifacts/p2-007-passkeys-20261109/ui-review/provenance.json",
+      "sha256": "554774826c589d4d55c793e60f330512ee36b2061ca061e794baddb1e244f0e1",
+      "bytes": 23470
+    },
+    {
+      "path": "artifacts/p2-007-passkeys-20261109/ui-review/record-provenance.mjs",
+      "sha256": "febc5a26c6f7d63be5808cc8ace04fe1a82f29dfa33c50ddd14ac38cfe7dbbad",
+      "bytes": 4334
+    },
+    {
+      "path": "artifacts/p2-007-passkeys-20261109/ui-review/reference/13-2.txt",
+      "sha256": "46f17e771c10526b1a55272b6156aea2c611b71cfce0ede30e267ec8a27213b0",
+      "bytes": 26253
+    },
+    {
+      "path": "artifacts/p2-007-passkeys-20261109/ui-review/reference/2-4.txt",
+      "sha256": "f4102d68a74e2be53d9cd9461dc2887e3ac8a07bf0d9e90e31d180f632cd5808",
+      "bytes": 14596
+    },
+    {
+      "path": "artifacts/p2-007-passkeys-20261109/ui-review/reference/36-2.txt",
+      "sha256": "ea788bd35325f7cd7f7625508a6ad09ae36fbe8f7bac270fdb0293bb2966871e",
+      "bytes": 21223
+    },
+    {
+      "path": "artifacts/p2-007-passkeys-20261109/ui-review/reference/46-116.txt",
+      "sha256": "d3698dc0aaa87b42b0cb35169f6f14cc88acf3e8b3c575aa1ae00030181595ba",
+      "bytes": 1862
+    },
+    {
+      "path": "artifacts/p2-007-passkeys-20261109/ui-review/reference/46-44.txt",
+      "sha256": "017bde483b0efb2955e7a30c48d78269de604449ecc8a9af19fcc11162af0257",
+      "bytes": 2986
+    },
+    {
+      "path": "artifacts/p2-007-passkeys-20261109/ui-review/reference/54-81.txt",
+      "sha256": "288cb23193c40fe200340cc6ebcbef0d066843eade712f6957bdbbc335d63d5d",
+      "bytes": 13007
+    },
+    {
+      "path": "artifacts/p2-007-passkeys-20261109/ui-review/reference/98-28.txt",
+      "sha256": "575436cbc41f42624927e3bfdfac0882d2f3812a7806eed5ffbedd321843e10d",
+      "bytes": 4536
+    },
+    {
+      "path": "artifacts/p2-007-passkeys-20261109/ui-review/reference/dialogContext.txt",
+      "sha256": "d335d7bd744a91f453f9a98d57d75a2233d8fffca20bc0a503237af2efd286c8",
+      "bytes": 3556
+    },
+    {
+      "path": "artifacts/p2-007-passkeys-20261109/ui-review/reference/figjam.txt",
+      "sha256": "fb970e407b4bbb059e69583203b59c53d4730853c40d473f6b32e3ad6060eac5",
+      "bytes": 10860
+    },
+    {
+      "path": "artifacts/p2-007-passkeys-20261109/ui-review/reference/figma-13-2.png",
+      "sha256": "bd851601401d6f00052765d6ae184f3c4e5545f91e49c037818b4029df3bc565",
+      "bytes": 158333
+    },
+    {
+      "path": "artifacts/p2-007-passkeys-20261109/ui-review/reference/figma-2-4.png",
+      "sha256": "b847c61833c053614ca4b33fa15d4231f4851ce0504b44c37668dc1fb5657d73",
+      "bytes": 211033
+    },
+    {
+      "path": "artifacts/p2-007-passkeys-20261109/ui-review/reference/figma-36-2.png",
+      "sha256": "c6ed14acb9a898acbe08f6fa26733ef22be7f025554c39269a42c53a785df9cd",
+      "bytes": 129002
+    },
+    {
+      "path": "artifacts/p2-007-passkeys-20261109/ui-review/reference/figma-46-116.png",
+      "sha256": "14a7b69b98be038391403fdfd2b689f980188380cafa3e9a6efb24849b1099ba",
+      "bytes": 6126
+    },
+    {
+      "path": "artifacts/p2-007-passkeys-20261109/ui-review/reference/figma-46-24.png",
+      "sha256": "4bbb0f8a2931b48ce2ca3391a7635ef3b15289fae32666ffa3fb086830b30cb0",
+      "bytes": 19549
+    },
+    {
+      "path": "artifacts/p2-007-passkeys-20261109/ui-review/reference/figma-46-44.png",
+      "sha256": "c72db0ddc0c5186a62a43a4d861e6c33f607350d1711d55b0b86ad9a08ab5e9a",
+      "bytes": 15242
+    },
+    {
+      "path": "artifacts/p2-007-passkeys-20261109/ui-review/reference/figma-52-291.png",
+      "sha256": "b09916b6d10132dc2dfcbc31a06794962c1831f115df566b97f44d66ebc055bb",
+      "bytes": 28027
+    },
+    {
+      "path": "artifacts/p2-007-passkeys-20261109/ui-review/reference/figma-54-81.png",
+      "sha256": "65ba6a2593632d2713e50cb2f6e080568c4e9f1c958a26ea1947a21828772574",
+      "bytes": 82810
+    },
+    {
+      "path": "artifacts/p2-007-passkeys-20261109/ui-review/reference/figma-70-1257.png",
+      "sha256": "0b1e8d0a4516747f85501f828cb62dd7adbb938ce9f1244e34e5a1eb5db0d5fa",
+      "bytes": 252557
+    },
+    {
+      "path": "artifacts/p2-007-passkeys-20261109/ui-review/reference/figma-98-28.png",
+      "sha256": "3fcb345a9475b6776cfc62bf77388ab8512bff8f9362453e9dbd330f7f75a643",
+      "bytes": 46853
+    },
+    {
+      "path": "artifacts/p2-007-passkeys-20261109/ui-review/rendered/accessibility.json",
+      "sha256": "021488b136d4c381ade1724cce812990c652e4f13abcb0a33455c4afe16b2077",
+      "bytes": 17785
+    },
+    {
+      "path": "artifacts/p2-007-passkeys-20261109/ui-review/rendered/add-1440.png",
+      "sha256": "e076b9c1c9f995b9b19276be02f089a41f618f8eae089434464f5d1459f6a68d",
+      "bytes": 109862
+    },
+    {
+      "path": "artifacts/p2-007-passkeys-20261109/ui-review/rendered/add-320.png",
+      "sha256": "20cb0b1e2e773b0f455d5adf618e5d055b7a30efa1fd42b7b7cb6cb439b11bcd",
+      "bytes": 44528
+    },
+    {
+      "path": "artifacts/p2-007-passkeys-20261109/ui-review/rendered/add-390.png",
+      "sha256": "f149df5b4b325641e94f27d76b2abd2111f706aa2f6172664fdbd6c2be306ae2",
+      "bytes": 46953
+    },
+    {
+      "path": "artifacts/p2-007-passkeys-20261109/ui-review/rendered/add-component-1440.png",
+      "sha256": "3f1dc7528949741340bfaa9f6d6cbab9da69e5d89ebb5c6d4532797561a73d79",
+      "bytes": 21976
+    },
+    {
+      "path": "artifacts/p2-007-passkeys-20261109/ui-review/rendered/checks.json",
+      "sha256": "2e82699d064e6ec8ccc5b73450c74f37504cd3139fff3cfa9524a2b4efa665d8",
+      "bytes": 22848
+    },
+    {
+      "path": "artifacts/p2-007-passkeys-20261109/ui-review/rendered/empty-1440.png",
+      "sha256": "128a51cb28de9ece3a24bf68e4aa1d86784cd07266d07f6db6e388962e377f25",
+      "bytes": 108894
+    },
+    {
+      "path": "artifacts/p2-007-passkeys-20261109/ui-review/rendered/empty-320.png",
+      "sha256": "742d89c5c061b83a58839a17b82cd17f96acb29f81b20c017fd1de2a40234904",
+      "bytes": 72528
+    },
+    {
+      "path": "artifacts/p2-007-passkeys-20261109/ui-review/rendered/empty-390.png",
+      "sha256": "3faf5787384cdfe938df660d701124a4e8c2cb9d39c73e0b2236e14764c1d10b",
+      "bytes": 72342
+    },
+    {
+      "path": "artifacts/p2-007-passkeys-20261109/ui-review/rendered/enrolled-1440.png",
+      "sha256": "5b928f54653bc1524f73bd38cec45a6f10a26263aa631b01acdbacf7ea10c6b5",
+      "bytes": 115575
+    },
+    {
+      "path": "artifacts/p2-007-passkeys-20261109/ui-review/rendered/enrolled-320.png",
+      "sha256": "3a9d073e93f7fcdcc4971b145662a620a29c1066d5d2602cb7e3f2385ef38a39",
+      "bytes": 79037
+    },
+    {
+      "path": "artifacts/p2-007-passkeys-20261109/ui-review/rendered/enrolled-390.png",
+      "sha256": "486c4eb5eb0c99f42d4ef5744d578225338afd6a0fe8f07016520898a7163a81",
+      "bytes": 78769
+    },
+    {
+      "path": "artifacts/p2-007-passkeys-20261109/ui-review/rendered/error-1440.png",
+      "sha256": "60e1b4c04920b0887bb557894e89f0efecf14af55a9efe0aabee846b0721e26c",
+      "bytes": 101880
+    },
+    {
+      "path": "artifacts/p2-007-passkeys-20261109/ui-review/rendered/error-320.png",
+      "sha256": "dc76ae4539782ec6db551916f7aaee1a6a3e547d8faa29aaed52ed0c715ab907",
+      "bytes": 47963
+    },
+    {
+      "path": "artifacts/p2-007-passkeys-20261109/ui-review/rendered/error-390.png",
+      "sha256": "da3b7586dd35c4cfae229575dcca0852c9bf6c69d6f37294febd7313138df274",
+      "bytes": 50430
+    },
+    {
+      "path": "artifacts/p2-007-passkeys-20261109/ui-review/rendered/login-1440.png",
+      "sha256": "7813039b03d5a0e55c9fcd9db11c5623583dbd2f164cde21904eb1a77b9362fa",
+      "bytes": 95503
+    },
+    {
+      "path": "artifacts/p2-007-passkeys-20261109/ui-review/rendered/login-320.png",
+      "sha256": "17c31b4827f5309ee475e311ee77f5ab97b62cf40d81579710c5d6a47da828bf",
+      "bytes": 42118
+    },
+    {
+      "path": "artifacts/p2-007-passkeys-20261109/ui-review/rendered/login-390.png",
+      "sha256": "df273d435c6e47c7553fe0b7d30c08925fb248e64e662c0445bbc05b31b2e493",
+      "bytes": 43541
+    },
+    {
+      "path": "artifacts/p2-007-passkeys-20261109/ui-review/rendered/loginCancelled-1440.png",
+      "sha256": "420f9730b8dacaac36392318fefa5c0fe7cd29dd532b6c75bc357a0417ee87a3",
+      "bytes": 100794
+    },
+    {
+      "path": "artifacts/p2-007-passkeys-20261109/ui-review/rendered/loginCancelled-320.png",
+      "sha256": "d05d2c373ac9dfc951285a109dce6b2cde316a6ea04ec4ecbc11aaf2650a95c6",
+      "bytes": 47003
+    },
+    {
+      "path": "artifacts/p2-007-passkeys-20261109/ui-review/rendered/loginCancelled-390.png",
+      "sha256": "188eb3d0a01b1b1f1246b1eaec53bf16bc17a02ec0f3c76c1820028e05467727",
+      "bytes": 47909
+    },
+    {
+      "path": "artifacts/p2-007-passkeys-20261109/ui-review/rendered/loginUnavailable-1440.png",
+      "sha256": "82f1c033e8aa380cb19d5e0fa1e8d6ab70785e01f50db3a43b17fde20a3d30c9",
+      "bytes": 101463
+    },
+    {
+      "path": "artifacts/p2-007-passkeys-20261109/ui-review/rendered/loginUnavailable-320.png",
+      "sha256": "47478282b8989274fdec3a37a39b580dc5b4e96cd8258c54a293a804dd16a411",
+      "bytes": 46865
+    },
+    {
+      "path": "artifacts/p2-007-passkeys-20261109/ui-review/rendered/loginUnavailable-390.png",
+      "sha256": "291b70d14ce1ab80e7966fe8e7fb1c229161ad9f8d26545036bf69ef5bf1e2d6",
+      "bytes": 48322
+    },
+    {
+      "path": "artifacts/p2-007-passkeys-20261109/ui-review/rendered/remove-1440.png",
+      "sha256": "85dc721552d8861b184738d847c9b8188695b02b5463ea26abb437f3a0c68a7f",
+      "bytes": 114171
+    },
+    {
+      "path": "artifacts/p2-007-passkeys-20261109/ui-review/rendered/remove-320.png",
+      "sha256": "551606abb14adf1029a24395eb7606342d3905b68fe1581c2a1776212f5fc8d8",
+      "bytes": 48275
+    },
+    {
+      "path": "artifacts/p2-007-passkeys-20261109/ui-review/rendered/remove-390.png",
+      "sha256": "7f972ae6b87b4c1fb868fc43374e5fa3f67ee4f69b255033249430142748bb65",
+      "bytes": 48582
+    },
+    {
+      "path": "artifacts/p2-007-passkeys-20261109/ui-review/rendered/remove-component-1440.png",
+      "sha256": "90f614623c5f49e896265a21e3df4975bde210d6570cee783c8bcd764057de10",
+      "bytes": 21345
+    },
+    {
+      "path": "artifacts/p2-007-passkeys-20261109/ui-review/rendered/removeEndSessions-1440.png",
+      "sha256": "6edc55c04bd69f7897dfd541f637af225647908204522b491047f2c370ac12c1",
+      "bytes": 117212
+    },
+    {
+      "path": "artifacts/p2-007-passkeys-20261109/ui-review/rendered/removeEndSessions-320.png",
+      "sha256": "cd8508d31a1724ce3e14410729797a74c10b206105603f7fd8cd937fd0467f67",
+      "bytes": 50236
+    },
+    {
+      "path": "artifacts/p2-007-passkeys-20261109/ui-review/rendered/removeEndSessions-390.png",
+      "sha256": "ac0ceadc3486bfbcdb7ecb51eca3d82eeb5a6d0434c407c860441b3d0995cbe8",
+      "bytes": 50728
+    },
+    {
+      "path": "artifacts/p2-007-passkeys-20261109/ui-review/rendered/revokedSignedOut-1440.png",
+      "sha256": "8febc7f8af8de8d6a4df005d8fb137f36a8ad1bdbf7ea59a96b0e06e6beadf3d",
+      "bytes": 99085
+    },
+    {
+      "path": "artifacts/p2-007-passkeys-20261109/ui-review/rendered/revokedSignedOut-320.png",
+      "sha256": "9345068f8454a143ee41e6dfb8e1a8c7e755d08eaa593afd5316b59ecfa68d55",
+      "bytes": 45649
+    },
+    {
+      "path": "artifacts/p2-007-passkeys-20261109/ui-review/rendered/revokedSignedOut-390.png",
+      "sha256": "aa18104a98bcf99af883353fd544a1e4760d8759f0c0487928c8aad00d47e25d",
+      "bytes": 46951
+    },
+    {
+      "path": "artifacts/p2-007-passkeys-20261109/ui-review/rendered/sessionExpired-1440.png",
+      "sha256": "64caae0962caf8f73c4b6b350e01b6e499bc7e12b082c41e3cc58a5f15a5ca5f",
+      "bytes": 98018
+    },
+    {
+      "path": "artifacts/p2-007-passkeys-20261109/ui-review/rendered/sessionExpired-320.png",
+      "sha256": "05ed0c93c0ceef886bf49f19bc44192336802aea5776e60ec68f1ae351b173c0",
+      "bytes": 44890
+    },
+    {
+      "path": "artifacts/p2-007-passkeys-20261109/ui-review/rendered/sessionExpired-390.png",
+      "sha256": "b7b2f45638b66e9cf5e93bc567afdfd6eda8f80642ea89cbd0d64cf818b31a46",
+      "bytes": 46293
+    },
+    {
+      "path": "artifacts/p2-007-passkeys-20261109/ui-review/rendered/success-1440.png",
+      "sha256": "d1a90622a4fe7b6debf75cf82f5c769f4774ec3da1787178891da010998ba646",
+      "bytes": 122268
+    },
+    {
+      "path": "artifacts/p2-007-passkeys-20261109/ui-review/rendered/success-320.png",
+      "sha256": "9973cb874941573720f4cd9e715e00103e169537ed27c072c133de64153da092",
+      "bytes": 77431
+    },
+    {
+      "path": "artifacts/p2-007-passkeys-20261109/ui-review/rendered/success-390.png",
+      "sha256": "1c1c4b4f2f7a53614c1efae9d5722aa303ba08e178bc455cd4771f1e20c9dfc2",
+      "bytes": 76885
+    },
+    {
+      "path": "artifacts/p2-007-passkeys-20261109/ui-review/rendered/unknown-1440.png",
+      "sha256": "c75bb1b17838064fd5a75d53cfee45267ea048ade03f4559704387d3b6e6fa25",
+      "bytes": 104341
+    },
+    {
+      "path": "artifacts/p2-007-passkeys-20261109/ui-review/rendered/unknown-320.png",
+      "sha256": "f0ad1808526bc2f455597ea36559ffd0acd9ce416736f1165f80dde295164403",
+      "bytes": 49101
+    },
+    {
+      "path": "artifacts/p2-007-passkeys-20261109/ui-review/rendered/unknown-390.png",
+      "sha256": "26fa22b49aa5f0c8a9465ee446aeae86d6ea60a87f706662da425098b4d8d6b3",
+      "bytes": 51906
+    },
+    {
+      "path": "artifacts/p2-007-passkeys-20261109/ui-review/rendered/unsupported-1440.png",
+      "sha256": "57f1c2213d84b192c65290da494f8eff1c5a65e1b7e5ede8faef49c79f6c97a5",
+      "bytes": 114500
+    },
+    {
+      "path": "artifacts/p2-007-passkeys-20261109/ui-review/rendered/unsupported-320.png",
+      "sha256": "ad5cc5305ff2c16e1bac59f174873b113ade96e1c6f8df4d7d40c179d1eb3b5b",
+      "bytes": 78175
+    },
+    {
+      "path": "artifacts/p2-007-passkeys-20261109/ui-review/rendered/unsupported-390.png",
+      "sha256": "b7abfd59114dd71e700d1d60c73a1fce7d653f87bc626027f843323236c2224c",
+      "bytes": 77914
+    },
+    {
+      "path": "artifacts/p2-007-passkeys-20261109/ui-review/RESULTS.md",
+      "sha256": "7aee5312b14e5f610c3dde283d7e53de6605a64e78b6c2467b69ca36f69fa9b1",
+      "bytes": 3482
+    },
+    {
+      "path": "artifacts/p2-007-passkeys-20261109/ui-review/REVIEW.md",
+      "sha256": "681f7d9c2d61da0f43831869c9467db1dac126d3458053127581aa31a2622338",
+      "bytes": 18360
+    },
+    {
+      "path": "artifacts/p2-007-passkeys-20261109/ui-review/session-policy.html",
+      "sha256": "cf617ea7f896923460f56dc63fd807fb452c338dfbc00c738991f8c08ff1b756",
+      "bytes": 3252
+    }
+  ],
+  "boundary": "No production UI implementation until actual scoped consent. Backend, tests and existing Login technical corrections continue independently. No production session policy or external Figma/Drive edit authorized."
+}
