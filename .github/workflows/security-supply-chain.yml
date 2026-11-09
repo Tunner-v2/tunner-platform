@@ -148,12 +148,16 @@ jobs:
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
           persist-credentials: false
+      - name: LGTM signing and applicability helper regressions
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force artifacts/security-images | Out-Null
+          docker run --rm --network none --cap-drop ALL --read-only --tmpfs /tmp:rw,exec,nosuid,size=1073741824 -e GOCACHE=/tmp/go-cache -e GOMAXPROCS=2 --mount "type=bind,src=$PWD/infra/security-images/lgtm-signing,dst=/src,readonly" -w /src golang:1.27.3-bookworm@sha256:5c3e9b43cfd3bb95c7937462e29d87ada57b481a96fa23ad0eb61778d7a00110 sh -c 'go vet ./... && go test -p=2 -count=1 -json ./...' > artifacts/security-images/lgtm-go-helper-tests.jsonl
+          if ($LASTEXITCODE -ne 0) { throw 'LGTM signing/applicability helper regressions failed.' }
       - name: Build complete private dev/test candidate
+        id: lgtm-build
         shell: pwsh
         run: ./tools/security/Build-TunnerLgtmSecurityImage.ps1
-      - name: Require complete image and embedded dependency scans
-        shell: pwsh
-        run: ./tools/security/Scan-TunnerLgtmImage.ps1 -Image tunner-security/lgtm:0.38.1-r1 -Environment test
       - name: Set up approved .NET SDK for real gRPC compatibility
         uses: actions/setup-dotnet@a98b56852c35b8e3190ac28c8c2271da59106c68
         with:
@@ -161,6 +165,10 @@ jobs:
       - name: Verify native signatures telemetry persistence and rollback
         shell: pwsh
         run: ./tools/validation/Test-TunnerLgtmImage.ps1 -Image tunner-security/lgtm:0.38.1-r1
+      - name: Require complete image and embedded dependency scans
+        if: ${{ !cancelled() && steps.lgtm-build.outcome == 'success' }}
+        shell: pwsh
+        run: ./tools/security/Scan-TunnerLgtmImage.ps1 -Image tunner-security/lgtm:0.38.1-r1 -Environment test
       - name: Retain candidate proof without publishing an image
         if: always()
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a

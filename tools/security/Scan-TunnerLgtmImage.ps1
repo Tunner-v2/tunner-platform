@@ -18,7 +18,7 @@ if ($LASTEXITCODE -ne 0 -or $ownedDirty.Count) { throw 'Commit scanner and gover
 $runId = [Guid]::NewGuid().ToString('N')
 $output = Join-Path $RepositoryRoot ('artifacts/security-images/lgtm-scan-'+$runId)
 [IO.Directory]::CreateDirectory($output) | Out-Null
-$approved = Join-Path $RepositoryRoot 'governance/evidence/security-20261028/tempo-vex'
+$approved = Join-Path $RepositoryRoot 'governance/evidence/security-20261108/tempo-vex'
 $source = Join-Path $RepositoryRoot 'infra/security-images/lgtm-signing'
 $imageId = (& docker image inspect $Image --format '{{.Id}}').Trim()
 if ($LASTEXITCODE -ne 0 -or $imageId -notmatch '^sha256:[a-f0-9]{64}$') { throw 'Cannot bind immutable local image.' }

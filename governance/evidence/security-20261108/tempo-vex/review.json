@@ -1,0 +1,56 @@
+{
+  "schema_version": 1,
+  "scope_id": "P1-RV001-001",
+  "result": "PASS_SCOPED_DEV_TEST_VEX",
+  "roles": [
+    "solution-architect",
+    "cyber-security-engineer",
+    "governance-engineer"
+  ],
+  "review_provenance": "Executing agent applied the activated specialist contracts. This is not independent human review or release acceptance; direct Product consent is recorded separately.",
+  "reviewed_at": "2026-11-09T02:02:26.107Z",
+  "tested_commit": "4b0e6185fdd63dce7c48a2657c90765421bbbf8d",
+  "reviewed_commit": "0982ca429e6edb0c913de1c5467838421861aaec",
+  "validator_source_sha256": "d7004ffb467190fcb8d25d3dc977cf19bf2581ac87354cea743ac82d22aeaa22",
+  "evidence_sha256": {
+    "approval": "133fe880fea67582bb38d91b9eb71cadf644110f2b1539da8fbbf1eb9110fae5",
+    "binding": "a06c3e624807fa91500dbfefcb4ca2687508f987d327a8363bcfd780cebb5b08",
+    "source": "b6843bd7d467137344ea232048ac76fd789de3c77a7d806e667e462fc3bc7b86",
+    "vex": "b8811266739791fff9a4793a1d039fea0afe809ebe292851401ebef5337d167d",
+    "tests": "8febcab715e0727a840d706223e2e2d5d27e130d5d6f55977a79ea4028a24f48"
+  },
+  "tests": {
+    "pass": 69,
+    "fail": 0,
+    "skip": 0,
+    "scope": "All69 root/signing/VEX and rebuild-helper test cases; cmd/vex-check has no additional test files."
+  },
+  "plugin_tests": {
+    "pass": 90,
+    "fail": 0,
+    "skip": 0
+  },
+  "assessments": [
+    {
+      "role": "solution-architect",
+      "finding": "Same exact plugin/dependency source and four protobuf-only packages; shared typed guard is unchanged. No service/query/config handler or feature was removed."
+    },
+    {
+      "role": "cyber-security-engineer",
+      "finding": "Real x/net vulnerability is repaired. New exact ELF36d85399e4d2fa0e38e8d33ea6f6171ee3fc494184b3275dcd322b1e268d91c7 is separately consented; same two pseudo-version alerts and fixed November27 expiry only. Old approval rejected the ELF, raw reports retained, all69 tests pass. Full-image consumer scan remains required."
+    },
+    {
+      "role": "governance-engineer",
+      "finding": "AMD-0005 resolution reused existing authorities and the explicit prior binary exclusion. Actual direct call_dd1f326b85204d9885c846684fbabb3b consent is recorded; historical evidence unchanged; no production/publication/main-merge approval."
+    }
+  ],
+  "exclusions": [
+    "Any other CVE, package version, plugin or binary",
+    "General ignore files or threshold reduction",
+    "Component removal",
+    "Registry publication",
+    "Protected-main merge",
+    "Production release or deployment"
+  ],
+  "next_action": "Consume through the unchanged exact source/hash/test/review/image/expiry guard, then retain unfiltered and corrected scans. Complete private-image gates remain separate."
+}
