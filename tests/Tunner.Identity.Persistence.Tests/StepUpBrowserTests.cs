@@ -92,6 +92,33 @@ public sealed class StepUpBrowserTests(IdentityPostgresFixture fixture) : IClass
     private static async Task<string?> Code(HttpResponseMessage response) => (await response.Content.ReadFromJsonAsync<JsonElement>()).GetProperty("error_code").GetString();
 
     [Fact]
+    public async Task CompletionRecoveryIdentifiesTheProtectedRequestAndNeverAttributesAnotherSessionsResult()
+    {
+        await using var db = await fixture.CreateDatabaseAsync(); await Initialize(db); var owner = new Owner(db);
+        await using var host = await StartBridge(db, owner); await host.SeedAsync(db);
+        var first = await Options(host, await Login(host));
+        var second = await Options(host, await Login(host)); Assert.NotEqual(first.RequestId, second.RequestId);
+        using (var applied = await host.Post("/authentication/step-up/password", new { requestId = second.RequestId, password = Password }, second.Cookies, second.Csrf))
+            Assert.Equal(HttpStatusCode.OK, applied.StatusCode);
+        using (var completed = await host.Get("/authentication/step-up/options", second.Cookies))
+        {
+            var json = await completed.Content.ReadFromJsonAsync<JsonElement>();
+            Assert.Equal("COMPLETED", json.GetProperty("status").GetString());
+            Assert.Equal(second.RequestId, json.GetProperty("requestId").GetGuid());
+        }
+        var firstView = first.Cookies.Split(';', StringSplitOptions.TrimEntries).Single(x => x.StartsWith(StepUpBrowserEndpoints.CookieName + "=", StringComparison.Ordinal));
+        var staleView = string.Join("; ", second.Cookies.Split(';', StringSplitOptions.TrimEntries)
+            .Where(x => !x.StartsWith(StepUpBrowserEndpoints.CookieName + "=", StringComparison.Ordinal)).Append(firstView));
+        using (var completed = await host.Get("/authentication/step-up/options", staleView))
+        {
+            var json = await completed.Content.ReadFromJsonAsync<JsonElement>();
+            Assert.Equal("COMPLETED", json.GetProperty("status").GetString());
+            Assert.Equal(JsonValueKind.Null, json.GetProperty("requestId").ValueKind);
+        }
+        Assert.Equal(1, await Value(db));
+    }
+
+    [Fact]
     public async Task BoundBrowserActionCompletesOnceReconcilesRetryAndNeverReturnsProofMaterial()
     {
         await using var db = await fixture.CreateDatabaseAsync(); await Initialize(db); var owner = new Owner(db);

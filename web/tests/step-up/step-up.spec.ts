@@ -6,7 +6,7 @@ const initialId='12121212-3434-4567-8989-121212121212';
 async function setup(page:Page){
  const content=Object.fromEntries(Object.entries(proposal.content).map(([key,text])=>[key,{key,text,state:'PUBLISHED',locale:'en',variantRef:'synthetic',versionRef:'synthetic',publicationRef:'SYNTHETIC-TEST-ONLY'}]));
  const state={completed:false,allowed:true,id:initialId,posts:0};
- await page.route('**/authentication/step-up/options',route=>route.fulfill({json:state.completed?{status:'COMPLETED'}:{status:'PENDING',requestId:state.id,csrfToken:'fixture-authenticated-csrf',passwordMaximumLength:128,passwordAvailable:state.allowed,locale:'en',content}}));
+ await page.route('**/authentication/step-up/options',route=>route.fulfill({json:state.completed?{status:'COMPLETED',requestId:state.id}:{status:'PENDING',requestId:state.id,csrfToken:'fixture-authenticated-csrf',passwordMaximumLength:128,passwordAvailable:state.allowed,locale:'en',content}}));
  await page.route('**/authentication/session',route=>route.fulfill({json:{authenticated:true}}));
  return state;
 }
@@ -82,3 +82,14 @@ test('Short viewport remains scrollable and keyboard-reachable',async({page})=>{
 test('Keyboard blur still validates before a button is activated',async({page})=>{
  await setup(page);await open(page);await password(page);await page.keyboard.press('Tab');await expect(page.getByLabel('Password',{exact:true})).toHaveAttribute('aria-invalid','true');await expect(page.getByRole('button',{name:'Back',exact:true})).toBeFocused();
 });
+
+for(const completionRequestId of ['99999999-3434-4567-8989-121212121212',null]){
+ test('Completion recovery refuses an unrelated request binding '+String(completionRequestId),async({page})=>{
+  const state=await setup(page);
+  await page.route('**/authentication/step-up/options',route=>state.completed?route.fulfill({json:{status:'COMPLETED',requestId:completionRequestId}}):route.fallback());
+  await page.route('**/authentication/step-up/password',route=>{state.posts++;state.completed=true;return route.abort();});
+  await open(page);await password(page);await page.getByLabel('Password',{exact:true}).fill('fixture existing password');await page.getByRole('button',{name:'Confirm',exact:true}).click();
+  await expect(page.getByRole('alert')).toHaveText(proposal.content['stepUp.error.changed']);
+  await expect(page.getByLabel('Password',{exact:true})).toHaveCount(0);await expect(page.getByRole('status')).toHaveText('Ready');expect(state.posts).toBe(1);
+ });
+}

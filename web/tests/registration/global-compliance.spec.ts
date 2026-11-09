@@ -58,8 +58,8 @@ for(const width of [1440,768,320]){
  });
 }
 test('browser history reconstructs server stages including duplicate path entries and restart',async({page})=>{
- let current:TestOperation|undefined;let reads=0;await page.route('**/registration/register',route=>{current=pending();return route.fulfill({status:202,json:current});});await page.route('**/registration/verify',route=>{current=personal();return route.fulfill({status:202,json:current});});await page.route('**/registration/restart',route=>{current=undefined;return route.fulfill({json:{registrationKey:crypto.randomUUID()}});});
- await boot(page,'/registration/',()=>{reads++;return current;});await fill(page);await page.getByRole('button',{name:'Continue',exact:true}).click();await expect(page).toHaveURL(/verify-email$/);
+ let current:TestOperation|undefined;let reads=0;await page.route('**/registration/register',route=>{current=pending();return route.fulfill({status:202,json:current});});await page.route('**/registration/verify',route=>{current=personal();return route.fulfill({status:202,json:current});});
+ await boot(page,'/registration/',()=>{reads++;return current;});await page.route('**/registration/restart',route=>{current=undefined;return route.fulfill({json:{registrationKey:crypto.randomUUID()}});});await fill(page);await page.getByRole('button',{name:'Continue',exact:true}).click();await expect(page).toHaveURL(/verify-email$/);
  const before=reads;await page.goBack();await expect(page).toHaveURL(/verify-email$/);await expect.poll(()=>reads).toBeGreaterThan(before);const again=reads;await page.goForward();await expect(page.getByRole('heading',{name:'Check your email'})).toBeVisible();await expect.poll(()=>reads).toBeGreaterThan(again);
  await page.getByLabel('Verification code').fill('123456');await page.getByRole('button',{name:'Verify email',exact:true}).click();await expect(page.getByRole('heading',{name:'Personal Information'})).toBeVisible();await expect(page).toHaveURL(/personal-information$/);await page.goBack();await expect(page.getByRole('heading',{name:'Personal Information'})).toBeVisible();await expect(page).toHaveURL(/personal-information$/);
  current=pending();await page.goto('/registration/verify-email');await expect(page.getByRole('button',{name:'Go back',exact:true})).toBeVisible();await page.getByRole('button',{name:'Go back',exact:true}).click();await expect(page).toHaveURL(new RegExp(registrationRoutes.register.pathname+'$'));await expect(page.getByRole('heading',{name:headings.register})).toBeVisible();
@@ -69,3 +69,16 @@ test('unauthorized purged and forged history stages redirect safely; query/hash 
  await page.evaluate(()=>{history.pushState({stage:'ready'},'', '/registration/complete');dispatchEvent(new PopStateEvent('popstate'));});await expect(page).toHaveURL(new RegExp(registrationRoutes.register.pathname+'$'));expect(await page.evaluate(()=>history.state)).toBeNull();
  const external:string[]=[];page.on('request',r=>{if(r.url().startsWith('https://outside.example.test'))external.push(r.url());});await page.goto('/registration?redirect=https%3A%2F%2Foutside.example.test%2F#ready');await expect(page).toHaveURL(new RegExp(registrationRoutes.register.pathname+'$'));await expect(page.getByRole('heading',{name:headings.register})).toBeVisible();expect(external).toEqual([]);
 });
+
+for(const restartFails of [false,true]){
+ test('Retained expired registration requires a fresh protected pointer '+String(restartFails),async({page})=>{
+  await boot(page);const previous='11111111-2222-4333-8444-555555555555';const replacement='aaaaaaaa-bbbb-4ccc-8ddd-eeeeeeeeeeee';
+  const options=await page.evaluate(async()=>await(await fetch('/registration/options')).json());
+  await page.route('**/registration/options',route=>route.fulfill({json:{...options,registrationKey:previous}}));
+  let restarts=0;let posts=0;await page.route('**/registration/restart',route=>{restarts++;expect(route.request().headers()['x-tunner-csrf']).toBe('fixture-token');return route.fulfill(restartFails?{status:503,json:{error_code:'DEPENDENCY_UNAVAILABLE'}}:{json:{registrationKey:replacement}});});
+  await page.route('**/registration/register',route=>{posts++;expect(route.request().postDataJSON().idempotencyKey).toBe(replacement);return route.fulfill({status:202,json:pending()});});
+  await page.goto('/registration/verify-email');await expect.poll(()=>restarts).toBe(1);
+  if(restartFails){await expect(page.getByRole('heading',{name:headings.register})).toHaveCount(0);await expect(page.getByLabel('Email address')).toHaveCount(0);expect(posts).toBe(0);}
+  else{await expect(page).toHaveURL(/\/registration$/);await fill(page);await page.getByRole('button',{name:'Continue',exact:true}).click();await expect(page.getByRole('heading',{name:headings.verify})).toBeVisible();expect(posts).toBe(1);}
+ });
+}
