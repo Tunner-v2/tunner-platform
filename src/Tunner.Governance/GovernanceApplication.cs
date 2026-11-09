@@ -651,7 +651,7 @@ public static class GovernanceApplication
     }
 
     private static List<string> ReadinessReasons(DirectoryInfo repository, GovernanceRecord workItem, Dictionary<string, GovernanceRecord> workItems, IReadOnlyList<GovernanceRecord> dependencies, IntegrationPolicyDefinition integrationPolicy, bool allowValidatedP0Prerequisites,
-        IDictionary<(string PrerequisiteId, string EffectiveState), bool>? committedReadiness = null)
+        Dictionary<(string PrerequisiteId, string EffectiveState), bool>? committedReadiness = null)
     {
         var failures = new List<string>();
         foreach (var prerequisite in workItem.StringList("prerequisites"))
