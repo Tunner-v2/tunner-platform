@@ -133,8 +133,13 @@ internal sealed class AuthenticationTestHost : IAsyncDisposable
         internal bool Allowed { get; set; } = true;
         internal bool Stale { get; set; }
         internal string? DeniedOperation { get; set; }
-        public ValueTask<AccountAuthenticationAccessDecision> RequireAsync(AccountAuthenticationAccessRequest request, CancellationToken cancellationToken) =>
-            ValueTask.FromResult(new AccountAuthenticationAccessDecision(request.AccountId, request.StateVersion + (Stale ? 1 : 0), request.Operation, Allowed && request.Operation != DeniedOperation,
-                "fixture-access-v1", "fixture-access-evidence", new EffectivePolicyInterval(request.EffectiveAt.AddHours(-1), true, request.EffectiveAt.AddHours(1), false)));
+        internal Action<AccountAuthenticationAccessRequest>? BeforeDecision { get; set; }
+        internal TimeSpan DecisionLifetime { get; set; } = TimeSpan.FromHours(1);
+        public ValueTask<AccountAuthenticationAccessDecision> RequireAsync(AccountAuthenticationAccessRequest request, CancellationToken cancellationToken)
+        {
+            BeforeDecision?.Invoke(request);
+            return ValueTask.FromResult(new AccountAuthenticationAccessDecision(request.AccountId, request.StateVersion + (Stale ? 1 : 0), request.Operation, Allowed && request.Operation != DeniedOperation,
+                "fixture-access-v1", "fixture-access-evidence", new EffectivePolicyInterval(request.EffectiveAt.AddHours(-1), true, request.EffectiveAt + DecisionLifetime, false)));
+        }
     }
 }

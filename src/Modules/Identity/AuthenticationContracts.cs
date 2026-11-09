@@ -67,6 +67,15 @@ public sealed class PasswordSignInCommand
     public override string ToString() => nameof(PasswordSignInCommand);
 }
 
+[JsonUnmappedMemberHandling(JsonUnmappedMemberHandling.Disallow)]
+internal sealed class AuthenticationOutcomeCommand
+{
+    public required Guid IdempotencyKey { get; init; }
+    public required string Email { get; init; }
+    public required bool RememberMe { get; init; }
+    public override string ToString() => nameof(AuthenticationOutcomeCommand);
+}
+
 /// <summary>Only the trusted BFF constructs this from protected state and the real peer.</summary>
 public sealed record AuthenticationCaller(string BrowserDigest, string NetworkDigest, string Origin, Guid? PreviousSessionId)
 {

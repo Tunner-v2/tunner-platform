@@ -9,15 +9,19 @@ public static class TunnerAuthenticatedUserBffHost
     {
         ArgumentNullException.ThrowIfNull(configure);
         var stepUp = false;
+        var passkeys = false;
         var application = TunnerUserBffHost.CreateApplication(args, builder =>
         {
             configure(builder);
             builder.Services.AddTunnerPasswordAuthentication(builder.Configuration["Bff:BrowserOrigin"] ?? throw new InvalidOperationException("User browser origin is required."));
+            passkeys = builder.Services.Any(x => x.ServiceType == typeof(IPasskeyPolicySource));
+            if (passkeys) builder.Services.AddTunnerPasskeys();
             stepUp = builder.Services.Any(x => x.ServiceType == typeof(IUserStepUpOperationSource));
             if (stepUp) builder.Services.AddTunnerOperationStepUp();
         });
         application.MapTunnerPasswordAuthentication();
         if (stepUp) application.MapTunnerOperationStepUp();
+        if (passkeys) application.MapTunnerPasskeys();
         return application;
     }
 }

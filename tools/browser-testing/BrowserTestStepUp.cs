@@ -42,7 +42,8 @@ internal sealed class BrowserTestStepUpPresentation : IStepUpPresentationSource
 {
     public StepUpPresentation RequirePublished(AssurancePolicyVersion policy)
     {
-        if (policy.Metadata.VersionId != BrowserTestStepUpOperations.PolicyVersion) throw new InvalidOperationException("Isolated test presentation only.");
+        if (policy.Metadata.VersionId is not (BrowserTestStepUpOperations.PolicyVersion or BrowserTestPasskeys.EnrollmentPolicyVersion or BrowserTestPasskeys.RevocationPolicyVersion))
+            throw new InvalidOperationException("Isolated test presentation only.");
         using var source = JsonDocument.Parse(File.ReadAllText(Path.Combine(AppContext.BaseDirectory, "browser-test-step-up-content.json")));
         return new("en", source.RootElement.GetProperty("content").EnumerateObject().Select(p =>
             new RegistrationPublishedText(p.Name,"synthetic-local-test","synthetic-local-test","SYNTHETIC-LOCAL-TEST-ONLY","en","PUBLISHED",p.Value.GetString()!)));

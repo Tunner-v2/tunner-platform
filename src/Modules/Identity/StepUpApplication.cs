@@ -77,8 +77,12 @@ internal sealed class StepUpApplication(IdentityPersistenceDbContext database, A
     }
 
     // The callback is an Identity-owner local mutation using this same context/transaction, never provider I/O.
-    internal async Task<StepUpExecutionResult> ExecuteAsync(StepUpCaller caller, StepUpOperation operation, string key,
-        Func<CancellationToken, Task<bool>> applyCurrentOperation, CancellationToken ct = default)
+    internal Task<StepUpExecutionResult> ExecuteAsync(StepUpCaller caller, StepUpOperation operation, string key,
+        Func<CancellationToken, Task<bool>> applyCurrentOperation, CancellationToken ct = default) =>
+        ExecuteOutcomeAsync(caller, operation, key, async token => await applyCurrentOperation(token).ConfigureAwait(false)
+            ? UserStepUpOperationApplyOutcome.SessionContinues() : UserStepUpOperationApplyOutcome.Conflict(), ct);
+    internal async Task<StepUpExecutionResult> ExecuteOutcomeAsync(StepUpCaller caller, StepUpOperation operation, string key,
+        Func<CancellationToken, Task<UserStepUpOperationApplyOutcome>> applyCurrentOperation, CancellationToken ct = default)
     {
         ArgumentNullException.ThrowIfNull(caller); ArgumentNullException.ThrowIfNull(operation); ArgumentNullException.ThrowIfNull(applyCurrentOperation);
         RequireCleanBoundary();
@@ -97,21 +101,33 @@ internal sealed class StepUpApplication(IdentityPersistenceDbContext database, A
             if (!Matches(row, caller, operation)) return await FinishAsync(transaction, new StepUpExecutionResult(false, "STEP_UP_REQUIRED"), ct).ConfigureAwait(false);
             var policy = assurancePolicies.RequireEffective(operation.Scope, now, row.PolicyVersion);
             if (!Valid(row, session, policy, now)) return await FinishAsync(transaction, new StepUpExecutionResult(false, "STEP_UP_REQUIRED"), ct).ConfigureAwait(false);
-            if (!await applyCurrentOperation(ct).ConfigureAwait(false))
+            var validatedSessionVersion = session.Version;
+            var outcome = await applyCurrentOperation(ct).ConfigureAwait(false);
+            if (!outcome.Applied)
             {
                 await transaction.RollbackAsync(ct).ConfigureAwait(false); database.ChangeTracker.Clear();
                 return new(false, "VERSION_CONFLICT");
             }
-            // A slow mutation/lock wait may cross an expiry or policy boundary: roll the entire operation back.
-            now = clock.GetUtcNow(); policy = assurancePolicies.RequireEffective(operation.Scope, now, row.PolicyVersion);
-            var currentAuthentication = authenticationPolicies.RequireEffective(now); currentAuthentication.Validate();
-            if (!Valid(row, session, policy, now) || AuthenticationApplication.Expired(session, currentAuthentication, now) || session.Assurance != currentAuthentication.PasswordAssurance)
+            // Await every current-authority verification first, then decide once against their actual validity bounds.
+            var verificationAt = clock.GetUtcNow(); var verificationPolicy = authenticationPolicies.RequireEffective(verificationAt); verificationPolicy.Validate();
+            var termination = outcome.Receipt is { } receipt
+                ? await authentication.VerifyTerminationAsync(caller, operation, receipt, validatedSessionVersion, verificationPolicy, verificationAt, ct).ConfigureAwait(false) : null;
+            var methodCurrent = outcome.Receipt is not null || await authentication.MethodIsCurrentAsync(session, verificationPolicy, verificationAt, ct).ConfigureAwait(false);
+            var continuation = outcome.Receipt is null ? await authentication.VerifyContinuedOperationAsync(caller, operation, session, ct).ConfigureAwait(false) : null;
+            var decisionAt = clock.GetUtcNow(); policy = assurancePolicies.RequireEffective(operation.Scope, decisionAt, row.PolicyVersion);
+            var currentAuthentication = authenticationPolicies.RequireEffective(decisionAt); currentAuthentication.Validate();
+            var terminal = termination is not null && termination.AccessInterval.Contains(decisionAt);
+            if (!Valid(row, session, policy, decisionAt) || AuthenticationApplication.Expired(session, currentAuthentication, decisionAt) ||
+                !authentication.MethodFactsCurrentAt(session, currentAuthentication, decisionAt) || !authentication.PasskeyOutcomeCurrentAt(outcome, caller, operation, decisionAt) ||
+                (outcome.Receipt is not null ? !terminal : session.State != "ACTIVE" || !methodCurrent || continuation is null ||
+                    !continuation.SessionUseInterval.Contains(decisionAt) || !continuation.OperationInterval.Contains(decisionAt)))
             {
                 await transaction.RollbackAsync(ct).ConfigureAwait(false); database.ChangeTracker.Clear();
                 return new(false, "STEP_UP_REQUIRED");
             }
+            now = decisionAt;
             End(row, "CONSUMED", now); Event(row, "StepUpProofConsumed", now);
-            return await FinishAsync(transaction, new StepUpExecutionResult(true, null), ct).ConfigureAwait(false);
+            return await FinishAsync(transaction, new StepUpExecutionResult(true, null, terminal), ct).ConfigureAwait(false);
         }
         catch { database.ChangeTracker.Clear(); throw; }
     }

@@ -21,9 +21,9 @@ public static class AuthenticationEndpoints
     private static readonly JsonSerializerOptions WebJson = new(JsonSerializerDefaults.Web);
     internal static readonly object GrantItem = new();
     internal const string SignInPath = "/authentication/sign-in";
-    private sealed class CredentialAuthenticationMetadata;
+    internal sealed class CredentialAuthenticationMetadata;
     internal sealed record Surface(string Origin);
-    private sealed record Browser(string Nonce, Guid Key, DateTimeOffset ExpiresAt, string PolicyVersion, string PreviousCookieDigest, Guid? PreviousSessionId);
+    internal sealed record Browser(string Nonce, Guid Key, DateTimeOffset ExpiresAt, string PolicyVersion, string PreviousCookieDigest, Guid? PreviousSessionId);
 
     public static IServiceCollection AddTunnerPasswordAuthentication(this IServiceCollection services, string browserOrigin)
     {
@@ -60,7 +60,7 @@ public static class AuthenticationEndpoints
     public static IEndpointRouteBuilder MapTunnerPasswordAuthentication(this IEndpointRouteBuilder endpoints)
     {
         ArgumentNullException.ThrowIfNull(endpoints);
-        endpoints.MapGet("/authentication/options", (HttpContext context, IAuthenticationPolicySource policies, Surface surface,
+        endpoints.MapGet("/authentication/options", async (HttpContext context, IAuthenticationPolicySource policies, Surface surface,
             IDataProtectionProvider protection, IAntiforgery antiforgery, IAuthenticationPresentationSource presentationSource, TimeProvider clock) =>
         {
             try
@@ -79,13 +79,17 @@ public static class AuthenticationEndpoints
                 var prior = context.User; string? csrf;
                 try { context.User = new ClaimsPrincipal(new ClaimsIdentity()); csrf = antiforgery.GetAndStoreTokens(context).RequestToken; }
                 finally { context.User = prior; }
-                return Results.Json(new { csrfToken = csrf, idempotencyKey = browser!.Key, passwordMaximumLength = policy.PasswordMaximumLength, presentation.Locale, presentation.Content, presentation.TermsUri, presentation.PrivacyUri, presentation.SupportUri });
+                var passkeys = context.RequestServices.GetService<PasskeyBrowserService>(); var capability = passkeys?.Capability();
+                var passkeyRecovery = passkeys is null ? null : await passkeys.RecoveryBootstrapAsync(context, terminalOnly: true).ConfigureAwait(false);
+                return Results.Json(new { csrfToken = csrf, idempotencyKey = browser!.Key, passwordMaximumLength = policy.PasswordMaximumLength,
+                    passkeyAvailable = capability?.Available == true, maximumCredentialJsonBytes = capability?.MaximumCredentialJsonBytes, passkeyRecovery, presentation.Locale, presentation.Content, presentation.TermsUri, presentation.PrivacyUri, presentation.SupportUri });
             }
             catch (InvalidOperationException) { return Problem(503, "DEPENDENCY_UNAVAILABLE"); }
             catch (ArgumentException) { return Problem(503, "DEPENDENCY_UNAVAILABLE"); }
             catch (CryptographicException) { return Problem(503, "DEPENDENCY_UNAVAILABLE"); }
         }).AllowAnonymous();
         endpoints.MapPost(SignInPath, SignInAsync).AllowAnonymous().WithMetadata(new CredentialAuthenticationMetadata());
+        endpoints.MapPost("/authentication/result", PasswordResultAsync).RequireAuthorization();
         endpoints.MapGet("/authentication/session", (HttpContext context, IAntiforgery antiforgery) =>
             Results.Json(new { authenticated = true, csrfToken = antiforgery.GetAndStoreTokens(context).RequestToken })).RequireAuthorization();
         endpoints.MapPost("/authentication/sign-out", async (HttpContext context) =>
@@ -98,6 +102,27 @@ public static class AuthenticationEndpoints
         return endpoints;
     }
 
+    private static async Task<IResult> PasswordResultAsync(HttpContext context, IDataProtectionProvider protection,
+        AuthenticationApplication application, Surface surface, TimeProvider clock)
+    {
+        try
+        {
+            if (context.Request.QueryString.HasValue || !context.Request.HasJsonContentType()) return Problem(400, "VALIDATION_ERROR");
+            var command = await IdentityJsonCommand.ReadAsync<AuthenticationOutcomeCommand>(context, 4096).ConfigureAwait(false);
+            if (command.IdempotencyKey == Guid.Empty || !TryBrowser(context, Protector(protection), clock.GetUtcNow(), out var browser) ||
+                browser!.Key != command.IdempotencyKey || AuthenticationIdentity.SessionId(context.User) is not { } currentSession)
+                return Problem(404, "NOT_FOUND_OR_NOT_DISCLOSABLE");
+            // The old raw cookie digest is deliberately not result proof: a committed response rotates the cookie.
+            var completed = await application.ConfirmPasswordOutcomeAsync(AuthenticationIdentity.Digest(browser.Nonce), command,
+                currentSession, context.User.FindFirstValue(ClaimTypes.NameIdentifier) ?? string.Empty, surface.Origin, context.RequestAborted).ConfigureAwait(false);
+            return completed ? Results.Json(new { status = "COMPLETED", command.IdempotencyKey }) : Problem(404, "NOT_FOUND_OR_NOT_DISCLOSABLE");
+        }
+        catch (JsonException) { return Problem(400, "VALIDATION_ERROR"); }
+        catch (BadHttpRequestException error) { return Problem(error.StatusCode == 413 ? 413 : 400, "VALIDATION_ERROR"); }
+        catch (ArgumentException) { return Problem(400, "VALIDATION_ERROR"); }
+        catch (InvalidOperationException) { return Problem(503, "DEPENDENCY_UNAVAILABLE"); }
+        catch (CryptographicException) { return Problem(503, "DEPENDENCY_UNAVAILABLE"); }
+    }
     private static async Task<IResult> SignInAsync(HttpContext context, IAuthenticationPolicySource policies,
         IDataProtectionProvider protection, AuthenticationPartitionKey partitions, AuthenticationApplication application, Surface surface, TimeProvider clock)
     {
@@ -131,8 +156,8 @@ public static class AuthenticationEndpoints
         assets.MapScreens(endpoints, "authentication.html", ["/login", "/signed-in"],
             static context => context.Request.Path != "/signed-in" || context.User.Identity?.IsAuthenticated == true);
     }
-    private static IDataProtector Protector(IDataProtectionProvider provider) => provider.CreateProtector("Tunner.User.Authentication.Browser.v1");
-    private static bool TryBrowser(HttpContext context, IDataProtector protector, DateTimeOffset now, out Browser? browser)
+    internal static IDataProtector Protector(IDataProtectionProvider provider) => provider.CreateProtector("Tunner.User.Authentication.Browser.v1");
+    internal static bool TryBrowser(HttpContext context, IDataProtector protector, DateTimeOffset now, out Browser? browser)
     {
         browser = null;
         if (!context.Request.Cookies.TryGetValue(BrowserCookieName, out var cookie)) return false;
@@ -141,7 +166,7 @@ public static class AuthenticationEndpoints
         catch (JsonException) { return false; }
         return browser is { Nonce.Length: 64 } && browser.Nonce.All(Uri.IsHexDigit) && browser.Key != Guid.Empty && browser.ExpiresAt > now;
     }
-    private static string CookieDigest(HttpContext context) => AuthenticationIdentity.Digest(new ChunkingCookieManager().GetRequestCookie(context, AuthenticationIdentity.CookieName) ?? string.Empty);
+    internal static string CookieDigest(HttpContext context) => AuthenticationIdentity.Digest(new ChunkingCookieManager().GetRequestCookie(context, AuthenticationIdentity.CookieName) ?? string.Empty);
     private static IResult Problem(int status, string code) => TechnicalProblemDetails.HttpResult(status, "about:blank", "The request could not be completed.",
         new TechnicalProblemMetadata(code, Guid.NewGuid().ToString("N"), "UNSPECIFIED"));
 

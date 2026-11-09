@@ -63,7 +63,8 @@ try
         var stepUpPolicy = new AssurancePolicyVersion(new(BrowserTestStepUpOperations.PolicyVersion, "ACTIVE", BrowserTestStepUpOperations.Scope,
             new EffectivePolicyInterval(DateTimeOffset.UtcNow.AddDays(-1), true, null, false), null, ["SYNTHETIC-LOCAL-TEST-ONLY"]),
             "test-only-password-assurance", TimeSpan.FromMinutes(1), new Dictionary<string,string> { ["pwd"] = "test-only-password-assurance" });
-        builder.Services.AddSingleton<IAssurancePolicySource>(new AssurancePolicyCatalog([stepUpPolicy]));
+        builder.Services.AddSingleton<IAssurancePolicySource>(new AssurancePolicyCatalog([stepUpPolicy, .. BrowserTestPasskeys.AssurancePolicies()]));
+        BrowserTestPasskeys.Configure(builder.Services, origin);
         builder.Services.AddSingleton(new AuthenticationPartitionKey(RandomNumberGenerator.GetBytes(32)));
         builder.Services.AddSingleton<IRegistrationPolicySource>(new RegistrationPolicyCatalog([new(metadata, policy)]));
         builder.Services.AddSingleton<IAccountAgePolicySource>(age);

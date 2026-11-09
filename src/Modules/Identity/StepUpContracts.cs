@@ -51,4 +51,4 @@ internal sealed class StepUpProofGrant(string key, DateTimeOffset expiresAt)
     public override string ToString() => nameof(StepUpProofGrant);
 }
 internal sealed record StepUpIssueResult(string? ErrorCode, StepUpProofGrant? Grant);
-internal sealed record StepUpExecutionResult(bool Applied, string? ErrorCode);
+internal sealed record StepUpExecutionResult(bool Applied, string? ErrorCode, bool SignInRequired = false);

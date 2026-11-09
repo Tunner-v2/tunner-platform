@@ -2,6 +2,7 @@ using System.Globalization;
 using System.Security.Cryptography;
 using System.Text.Json;
 using Microsoft.AspNetCore.Antiforgery;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.DataProtection;
@@ -53,7 +54,7 @@ internal sealed class StepUpBrowserService(IUserStepUpOperationSource owner, IAs
             // A current owner result is not proof that an earlier dialog completed its own action.
             Guid? requestId = TryBrowser(context, now, out var completedView) && completedView!.BindingDigest == Digest(operation)
                 ? completedView.RequestId : null;
-            return Results.Json(new { status = "COMPLETED", requestId, csrfToken = csrf });
+            return Results.Json(new { status = "COMPLETED", requestId, operationReference = operation.Binding.CorrelationId, csrfToken = csrf });
         }
         var auth = authenticationPolicies.RequireEffective(now); auth.Validate();
         var policy = assurancePolicies.RequireEffective(operation.Binding.Scope, now, operation.ExpectedPolicyVersion);
@@ -67,7 +68,7 @@ internal sealed class StepUpBrowserService(IUserStepUpOperationSource owner, IAs
             context.Response.Cookies.Append(StepUpBrowserEndpoints.CookieName, protector.Protect(JsonSerializer.Serialize(browser)),
                 new CookieOptions { Path = "/", HttpOnly = true, Secure = true, SameSite = SameSiteMode.Strict, IsEssential = true, MaxAge = expires - now });
         }
-        return Results.Json(new { status = "PENDING", requestId = browser!.RequestId, csrfToken = csrf, passwordMaximumLength = auth.PasswordMaximumLength,
+        return Results.Json(new { status = "PENDING", requestId = browser!.RequestId, operationReference = operation.Binding.CorrelationId, csrfToken = csrf, passwordMaximumLength = auth.PasswordMaximumLength,
             passwordAvailable = policy.MethodAssurances.TryGetValue("pwd", out var mapped) && mapped == policy.RequiredAssurance,
             presentation.Locale, presentation.Content });
     });
@@ -83,22 +84,28 @@ internal sealed class StepUpBrowserService(IUserStepUpOperationSource owner, IAs
         var operation = await owner.ResolveAsync(actor, context.RequestAborted).ConfigureAwait(false);
         if (!MatchesActor(operation, actor) || Digest(operation!) != browser.BindingDigest || browser.AuthenticationPolicyVersion != auth.Version)
             return Problem(409, TechnicalProblemCodes.VersionConflict);
-        if (operation!.Completed) return Results.Json(new { status = "COMPLETED" }); // Reconcile, never execute again.
+        if (operation!.Completed) return Results.Json(new { status = "COMPLETED", operationReference = operation.Binding.CorrelationId }); // Reconcile, never execute again.
         var issued = await application.IssuePasswordAsync(caller, operation.Binding, operation.ExpectedPolicyVersion, command.Password, context.RequestAborted).ConfigureAwait(false);
         if (issued.ErrorCode is { } issue)
         {
-            if (await CompletedAsync(actor, browser.BindingDigest, context.RequestAborted).ConfigureAwait(false)) return Results.Json(new { status = "COMPLETED" });
+            if (await CompletedAsync(actor, browser.BindingDigest, context.RequestAborted).ConfigureAwait(false)) return Results.Json(new { status = "COMPLETED", operationReference = operation.Binding.CorrelationId });
             return Failure(issue);
         }
-        var execution = await application.ExecuteAsync(caller, operation.Binding, issued.Grant!.Key, async ct =>
+        var execution = await application.ExecuteOutcomeAsync(caller, operation.Binding, issued.Grant!.Key, async ct =>
         {
             var current = await owner.ResolveAsync(actor, ct).ConfigureAwait(false);
-            if (!MatchesActor(current, actor) || current!.Completed || Digest(current) != browser.BindingDigest) return false;
-            return await owner.ApplyAsync(actor, current, database, ct).ConfigureAwait(false);
+            if (!MatchesActor(current, actor) || current!.Completed || Digest(current) != browser.BindingDigest) return UserStepUpOperationApplyOutcome.Conflict();
+            if (owner is IUserStepUpOperationOutcomeSource typed) return await typed.ApplyWithOutcomeAsync(actor, current, database, ct).ConfigureAwait(false);
+            return await owner.ApplyAsync(actor, current, database, ct).ConfigureAwait(false) ? UserStepUpOperationApplyOutcome.SessionContinues() : UserStepUpOperationApplyOutcome.Conflict();
         }, context.RequestAborted).ConfigureAwait(false);
-        if (execution.Applied) return Results.Json(new { status = "COMPLETED" });
+        if (execution.Applied)
+        {
+            if (owner is IUserStepUpBrowserCompletionSource browserOwner) await browserOwner.CompleteBrowserAsync(operation, execution.SignInRequired, context.RequestAborted).ConfigureAwait(false);
+            if (execution.SignInRequired) await context.SignOutAsync(AuthenticationIdentity.Scheme).ConfigureAwait(false);
+            return Results.Json(new { status = "COMPLETED", operationReference = operation.Binding.CorrelationId, signInRequired = execution.SignInRequired });
+        }
         if (await CompletedAsync(actor, browser.BindingDigest, context.RequestAborted).ConfigureAwait(false))
-            return Results.Json(new { status = "COMPLETED" });
+            return Results.Json(new { status = "COMPLETED", operationReference = operation.Binding.CorrelationId });
         return Failure(execution.ErrorCode ?? "STEP_UP_REQUIRED");
     });
 

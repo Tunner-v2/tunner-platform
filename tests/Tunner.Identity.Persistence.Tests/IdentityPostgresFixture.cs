@@ -1,5 +1,7 @@
 using DotNet.Testcontainers.Containers;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.Extensions.DependencyInjection;
 using Npgsql;
 using Tunner.Database;
@@ -21,7 +23,7 @@ public sealed class IdentityPostgresFixture : IAsyncLifetime
         await container.StartAsync();
     }
 
-    public async Task<IdentityTestDatabase> CreateDatabaseAsync()
+    public async Task<IdentityTestDatabase> CreateDatabaseAsync(string? targetMigration = null)
     {
         if (container is null) throw SkipException.ForSkip("Set TUNNER_RUN_CONTAINER_TESTS=1 for disposable PostgreSQL Identity tests.");
         var name = "identity_" + Guid.NewGuid().ToString("N");
@@ -42,8 +44,8 @@ public sealed class IdentityPostgresFixture : IAsyncLifetime
             await platform.Database.MigrateAsync();
         var database = new IdentityTestDatabase(adminConnection.ConnectionString);
         await using var identity = database.Context();
-        await identity.Database.MigrateAsync();
-        if (!(await identity.Database.GetAppliedMigrationsAsync()).Any() || identity.Database.HasPendingModelChanges())
+        await identity.GetService<IMigrator>().MigrateAsync(targetMigration);
+        if (!(await identity.Database.GetAppliedMigrationsAsync()).Any() || targetMigration is null && identity.Database.HasPendingModelChanges())
             throw new InvalidOperationException("Identity test database must have the complete current migration before a test can run.");
         return database;
     }
