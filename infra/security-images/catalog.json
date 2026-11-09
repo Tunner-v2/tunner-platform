@@ -27,10 +27,12 @@
     }
   ],
   "lgtm": {
-    "status": "DEV_TEST_SIGNING_IMPLEMENTATION_APPROVED_NOT_ADOPTED",
-    "existing_image": "grafana/otel-lgtm:0.34.0",
+    "status": "PREBUILT_VENDOR_LOCAL_DEVELOPMENT_RELEASE_BLOCKED",
+    "existing_image": "grafana/otel-lgtm:0.38.1@sha256:0df9bc14142000b161344bd24caf6ddd319b7319055aedaf9b0692b125730af7",
     "candidate_vendor_image": "grafana/otel-lgtm:0.38.1",
     "approval_ref": "governance/evidence/P1-RV001-001-LGTM-SIGNING-APPROVAL-20261028.json",
-    "boundary": "Keep the complete stack and vendor verification. The separately approved additional Tunner signing path is dev/test only and must pass source-pinned signature/tamper/full-stack/full-image gates before runtime adoption. No unsigned bypass, publication, main merge or production release."
+    "boundary": "Use the exact prebuilt vendor image that passed41 dev/test compatibility checks. Custom LGTM rebuild execution is deferred so eligible P2 development continues. Existing vulnerability findings remain release-blocking; required declared-image scans and severity thresholds are unchanged. No security waiver, main merge, publication or production approval.",
+    "private_rebuild_status": "DEFERRED_BY_USER_DIRECTION",
+    "development_direction_ref": "governance/evidence/P1-RV001-001-DEVELOPMENT-PRIORITY-20261108.json"
   }
 }
