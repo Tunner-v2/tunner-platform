@@ -23,6 +23,7 @@ try
         RunMilestoneRevisionReviewChecks(repositoryRoot, failures);
         RunRevisionChecks(repositoryRoot, failures);
         RunRevisionCommittedProofChecks(repositoryRoot, failures);
+        RunValidationSourceReadinessChecks(repositoryRoot, failures);
         CreateFixture(repositoryRoot, fixtureRoot);
         InitializeGit(fixtureRoot);
 
@@ -962,6 +963,100 @@ static void RunRevisionCommittedProofChecks(DirectoryInfo repositoryRoot, IColle
         Close(invalid, true);
         Check(!AuditCommittedFixture(fixture), "a later committed CLOSED claim with empty ownership cannot fall back to older proof");
         Console.WriteLine($"PASS: {assertions} closed-revision committed ownership checks");
+    }
+    finally { DeleteFixture(fixture); }
+}
+
+
+static void RunValidationSourceReadinessChecks(DirectoryInfo repositoryRoot, ICollection<string> failures)
+{
+    var fixture = Directory.CreateTempSubdirectory("tunner-validation-source-fixture-");
+    var assertions = 0;
+    var previousFailures = failures.Count;
+    void Check(bool condition, string message) { assertions++; Expect(condition, "VALIDATION source readiness: " + message, failures); }
+    try
+    {
+        CreateFixture(repositoryRoot, fixture);
+        const string noChangeState = "git_state: {repository_changed: false, validated_commit_sha: null, tested_commit_sha: null, work_item_commit_shas: [], closure_commit_sha: null, remaining_uncommitted_paths: [], remaining_uncommitted_classification: NONE}";
+        const string id = "TUN-001";
+        var upstream = Path.Combine(fixture.FullName, "governance/work-items/TUN-001.yaml");
+        var proofPath = Path.Combine(fixture.FullName, "governance/evidence/TUN-001-proof.json");
+        const string behavior = "docs/TUN-001-behavior.txt";
+        File.WriteAllText(upstream, File.ReadAllText(upstream).Replace(noChangeState, "", StringComparison.Ordinal));
+        InitializeGit(fixture);
+        bool DownstreamReady() => ((NextPayload)GovernanceApplication.Next(fixture).Payload).Items.Single(x => x.WorkItemId == "TUN-LOCAL").Actionable;
+        IReadOnlyList<string> OwnFailures() => ((GatePayload)GovernanceApplication.CheckGate(fixture, id).Payload).Failures;
+        void State(string sha, string[] unrelated) => EditRevision(upstream, "git_state", new
+        {
+            repository_changed = true, validated_commit_sha = sha, tested_commit_sha = sha,
+            work_item_commit_shas = new[] { sha }, closure_commit_sha = (string?)null,
+            remaining_uncommitted_paths = unrelated,
+            remaining_uncommitted_classification = unrelated.Length == 0 ? "NONE" : "PREEXISTING_UNRELATED"
+        });
+        void Proof(string sha, string scope = id) => File.WriteAllText(proofPath, JsonSerializer.Serialize(new
+        {
+            scope_id = scope, validation_kind = "COMMITTED", validated_commit_sha = sha,
+            tested_commit_sha = sha, result = "PASS", owned_behavior_paths = new[] { behavior }
+        }));
+        void Reject(string scenario)
+        {
+            Check(!DownstreamReady(), scenario + " must block the LOCAL_VALIDATED consumer");
+            Check(!AuditCommittedFixture(fixture), scenario + " must be included in committed readiness audit");
+        }
+        Reject("missing git_state on a VALIDATION prerequisite");
+        Check(OwnFailures().Any(x => x.Contains("git_state is absent", StringComparison.Ordinal)), "final gate must refuse missing source state even before DONE");
+
+        var candidate = PrepareCommittedFixture(fixture, id);
+        State(candidate, []);
+        RunGit(fixture, "add", "--", "governance/work-items/TUN-001.yaml", "governance/evidence/TUN-001-proof.json");
+        RunGit(fixture, "commit", "--quiet", "-m", "Current validated source proof");
+        Check(DownstreamReady(), "matching current committed candidate must permit local consumption");
+        Check(AuditCommittedFixture(fixture), "matching current proof must pass audit");
+        Check(!OwnFailures().Any(x => x.Contains("committed", StringComparison.Ordinal) || x.Contains("owned behavior", StringComparison.Ordinal)), "matching source proof must satisfy own source gate");
+
+        File.WriteAllText(Path.Combine(fixture.FullName, "unrelated-user.txt"), "preserve unrelated work");
+        State(candidate, ["unrelated-user.txt"]);
+        RunGit(fixture, "add", "--", "governance/work-items/TUN-001.yaml");
+        RunGit(fixture, "commit", "--quiet", "-m", "Classify unrelated fixture dirt");
+        Check(DownstreamReady() && AuditCommittedFixture(fixture), "classified unrelated dirt must not block valid local work");
+        Check(File.ReadAllText(Path.Combine(fixture.FullName, "unrelated-user.txt")) == "preserve unrelated work", "checks must not alter unrelated work");
+
+        File.AppendAllText(Path.Combine(fixture.FullName, behavior), "\nchanged behavior");
+        Reject("uncommitted owned behavior after validation");
+        Check(OwnFailures().Any(x => x.Contains("owned behavior changed", StringComparison.Ordinal)), "own final gate must detect dirty source");
+        RunGit(fixture, "add", "--", behavior);
+        RunGit(fixture, "commit", "--quiet", "-m", "Later unvalidated owned behavior");
+        Reject("committed but unvalidated owned behavior");
+
+        var current = RunGitOutput(fixture, "rev-parse", "HEAD");
+        State(current, ["unrelated-user.txt"]);
+        Proof(current);
+        RunGit(fixture, "add", "--", "governance/work-items/TUN-001.yaml", "governance/evidence/TUN-001-proof.json");
+        RunGit(fixture, "commit", "--quiet", "-m", "Revalidate later behavior");
+        Check(DownstreamReady() && AuditCommittedFixture(fixture), "new exact committed candidate must restore readiness");
+        var validProof = File.ReadAllText(proofPath);
+        Proof(current, "TUN-OTHER");
+        Reject("wrong-scope proof");
+        Proof(candidate);
+        Reject("proof SHA disagreeing with source state");
+        File.WriteAllText(proofPath, validProof);
+        var emptyProof = JsonNode.Parse(validProof)!;
+        emptyProof["owned_behavior_paths"] = new JsonArray();
+        File.WriteAllText(proofPath, emptyProof.ToJsonString());
+        Reject("empty or changed candidate ownership");
+        File.WriteAllText(proofPath, validProof);
+        File.Delete(proofPath);
+        Reject("missing proof envelope");
+        File.WriteAllText(proofPath, validProof);
+        Check(DownstreamReady() && AuditCommittedFixture(fixture), "restoring exact proof must restore readiness without absorbing unrelated dirt");
+
+        var downstream = Path.Combine(fixture.FullName, "governance/work-items/TUN-LOCAL.yaml");
+        var dependency = Path.Combine(fixture.FullName, "governance/dependencies/DEP-LOCAL.yaml");
+        File.WriteAllText(downstream, File.ReadAllText(downstream).Replace("[TUN-001]", "[TUN-TECHNICAL]", StringComparison.Ordinal));
+        File.WriteAllText(dependency, File.ReadAllText(dependency).Replace("prerequisite_work_item_id: TUN-001", "prerequisite_work_item_id: TUN-TECHNICAL", StringComparison.Ordinal));
+        Check(DownstreamReady(), "explicit repository_changed false work must retain valid no-change local readiness");
+        Check(!((NextPayload)GovernanceApplication.Next(fixture).Payload).Items.Single(x => x.WorkItemId == "TUN-MERGED").Actionable, "local source proof must not satisfy MERGED_TO_MAIN");
+        Console.WriteLine($"{(failures.Count == previousFailures ? "PASS" : "FAIL")}: {assertions} effective VALIDATION source-readiness checks");
     }
     finally { DeleteFixture(fixture); }
 }
