@@ -1,6 +1,6 @@
 # P2-006 current handoff
 
-Branch codex/p2-006-assurance-20261108. Engineering source a2df3359f8092e1e816125fe384e7a8a86785c68; full executable test source d141823d792ecbd11eedc0632d562c3a4f58431f, followed only by typed inventory metadata validation. Work is CODE_REVIEW until native final gates and required compatibility revision closures pass. Do not infer DONE/Product or release approval.
+Branch codex/p2-006-assurance-20261108. Engineering source a2df3359f8092e1e816125fe384e7a8a86785c68; full executable test source d141823d792ecbd11eedc0632d562c3a4f58431f, followed only by typed inventory metadata validation. Work is VALIDATION with engineering LOCAL_VALIDATED readiness. Native scope/global UI gates, all three compatibility revision close-checks and P2 commit-readiness audit PASS; revisions are CLOSED at7001076. Do not infer DONE/Product or release approval.
 
 Implemented the versioned policy, persistent exact-operation one-use proof, trusted User BFF bridge, approved same-screen chooser/password UI, shared form/modal fixes and guarded Development-only browser carrier. Detailed authority, inventory, defects, tests, file ownership and boundaries: P2_006_IMPLEMENTATION_REPORT.md.
 
@@ -10,8 +10,8 @@ Local browser: https://localhost:24443/registration -> inbox http://127.0.0.1:28
 
 Production activation still requires explicit approved assurance mappings/lifetimes, published copy and an owner operation/completion ledger. No synthetic local provider is enabled in production. Current browser flow does not implement future passkey/TOTP/Account features.
 
-Exact next action: commit current evidence, run current scoped/global UI gates, close P1-018-RV003 and the two P2-004 UI compatibility revisions only after native close-check passes, rerun P2 commit-readiness audit, then resolve TODO-TUN-P2-006-EVIDENCE001. Advance TUN-P2-006 to VALIDATION only after READY and record LOCAL_VALIDATED lineage; native next determines the next eligible P2 item. Preserve original historical DONE evidence.
+Exact next authorized action: prepare TUN-P2-007 (passkey registration/authentication/revocation) context, primary-source standards/package research and its12 mandatory startup role assessments; run its native eligibility/start gates before implementation. Native next reports only those missing role reviews, with no P2-006 dependency blocker. P2-006 remains VALIDATION rather than DONE/Product accepted. TODO-TUN-P2-006-EVIDENCE001 is DONE after the current P2 commit-readiness PASS. Original historical DONE evidence is preserved.
 
 No new P2 PR published. Existing branch-push automation creates a main PR with auto-merge when no PR exists; use controlled draft publication before any push. No protected-main merge, registry publication, production deployment or release authorized. Security PR21 remains separate draft; open vulnerabilities remain release-blocking.
 
-All13 pre-existing dirty paths in artifacts/p2-005-auth-20261021/preserved-dirty-before.json are hash-identical and excluded. Do not overwrite docs/context/current or docs/project. Refresh isolated native context at artifacts/p2-006-assurance-20261108/context, verify CURRENT, and record final native outcomes before handoff.
+All13 pre-existing dirty paths in artifacts/p2-005-auth-20261021/preserved-dirty-before.json are hash-identical and excluded. Do not overwrite docs/context/current or docs/project. Final native receipt: governance/evidence/TUN-P2-006-NATIVE-GATES.json. Refresh and verify isolated native context at artifacts/p2-006-assurance-20261108/context after metadata commits; leave all default context/project paths unchanged.

@@ -1,0 +1,167 @@
+{
+  "schema_version": 1,
+  "scope_id": "TUN-P2-006",
+  "result": "PASS",
+  "engineering_readiness": "LOCAL_VALIDATED",
+  "work_item_status": "VALIDATION",
+  "tested_commit_sha": "a2df3359f8092e1e816125fe384e7a8a86785c68",
+  "observed_closure_commit_sha": "7001076b2877621a4d753de7fe766797e959440a",
+  "recorded_at": "2026-11-09T06:01:48.573Z",
+  "gates": {
+    "authority": {
+      "ExitCode": 0,
+      "Command": "authority verify",
+      "Payload": {
+        "Outcome": "VERIFIED",
+        "CheckedArtifacts": 196,
+        "Findings": []
+      }
+    },
+    "governance": {
+      "ExitCode": 0,
+      "Command": "validate",
+      "Payload": {
+        "IsValid": true,
+        "RecordCount": 874,
+        "Diagnostics": []
+      }
+    },
+    "ui_scoped": {
+      "ExitCode": 0,
+      "Command": "ui check",
+      "Payload": {
+        "Outcome": "PASS",
+        "ScopeId": "TUN-P2-006",
+        "CoveredItems": [
+          "COMP-STEP-UP",
+          "DEV-STEP-UP",
+          "FORM-STEP-UP"
+        ],
+        "Failures": []
+      }
+    },
+    "ui_global": {
+      "ExitCode": 0,
+      "Command": "ui check",
+      "Payload": {
+        "Outcome": "PASS",
+        "ScopeId": "GLOBAL_UI",
+        "CoveredItems": [
+          "U-AUTH-02",
+          "U-AUTH-03",
+          "U-AUTH-03A",
+          "U-AUTH-CONSENT",
+          "U-AUTH-RESULT",
+          "FORM-REGISTRATION",
+          "FORM-VERIFY-EMAIL",
+          "FORM-PERSONAL-INFORMATION",
+          "SHARED-FORM-USER",
+          "SHARED-FORM-ADMIN",
+          "U-AUTH-01",
+          "U-AUTH-SIGNED-IN",
+          "FORM-LOGIN",
+          "COMP-STEP-UP",
+          "DEV-STEP-UP",
+          "FORM-STEP-UP"
+        ],
+        "Failures": []
+      }
+    },
+    "commit_readiness": {
+      "ExitCode": 0,
+      "Command": "commit-readiness audit",
+      "Payload": {
+        "Outcome": "PASS",
+        "Findings": []
+      }
+    },
+    "P1-018-RV003": {
+      "ExitCode": 0,
+      "Command": "revision close-check",
+      "Payload": {
+        "RevisionId": "P1-018-RV003",
+        "Outcome": "PASS",
+        "Findings": [],
+        "Satisfied": []
+      }
+    },
+    "P2-004-UI001-RV001": {
+      "ExitCode": 0,
+      "Command": "revision close-check",
+      "Payload": {
+        "RevisionId": "P2-004-UI001-RV001",
+        "Outcome": "PASS",
+        "Findings": [],
+        "Satisfied": []
+      }
+    },
+    "P2-004-UI002-RV001": {
+      "ExitCode": 0,
+      "Command": "revision close-check",
+      "Payload": {
+        "RevisionId": "P2-004-UI002-RV001",
+        "Outcome": "PASS",
+        "Findings": [],
+        "Satisfied": []
+      }
+    },
+    "work_item": {
+      "ExitCode": 0,
+      "Command": "gate check",
+      "Payload": {
+        "WorkItemId": "TUN-P2-006",
+        "Outcome": "READY",
+        "Failures": [],
+        "Satisfied": [
+          "evidence exists: governance/evidence/TUN-P2-006-VALIDATION.json",
+          "evidence exists: governance/evidence/TUN-P2-006-STARTUP-REVIEWS.json",
+          "evidence exists: governance/evidence/p2-006-policy-20261108/receipt.json",
+          "evidence exists: docs/development/P2_006_HANDOFF.md",
+          "evidence exists: governance/evidence/p2-006-proof-20261108/receipt.json",
+          "evidence exists: governance/evidence/TUN-P2-006-COMMITTED-SOURCE.json",
+          "role review evidence exists",
+          "AMD-0008/0009 per-route/form UI compliance passed",
+          "mandatory role review passed: auditor",
+          "mandatory role review passed: content-writer",
+          "mandatory role review passed: cyber-security-engineer",
+          "mandatory role review passed: devops-engineer",
+          "mandatory role review passed: end-user-ux-reviewer",
+          "mandatory role review passed: frontend-engineer",
+          "mandatory role review passed: full-stack-engineer",
+          "mandatory role review passed: sdk-engineer",
+          "mandatory role review passed: solution-architect",
+          "mandatory role review passed: tester-qa-engineer",
+          "mandatory role review passed: ui-ux-engineer"
+        ]
+      }
+    }
+  },
+  "gate_source_commits": {
+    "ui": "b99d522",
+    "revision_preclosure": "85fda95",
+    "postclosure_work_and_audit": "7001076b2877621a4d753de7fe766797e959440a"
+  },
+  "closed_revisions": [
+    "P1-018-RV003",
+    "P2-004-UI001-RV001",
+    "P2-004-UI002-RV001"
+  ],
+  "next_authorized_action": {
+    "work_item": "TUN-P2-007",
+    "action": "Prepare bounded authority/context, current primary-source WebAuthn research and12 mandatory startup role assessments; run native eligibility/start gates before implementation.",
+    "native_next": {
+      "WorkItemId": "TUN-P2-007",
+      "Status": "BACKLOG",
+      "Actionable": false,
+      "Reason": "mandatory role review is missing: auditor; mandatory role review is missing: compliance-specialist; mandatory role review is missing: content-writer; mandatory role review is missing: cyber-security-engineer; mandatory role review is missing: end-user-ux-reviewer; mandatory role review is missing: frontend-engineer; mandatory role review is missing: full-stack-engineer; mandatory role review is missing: rd-engineer; mandatory role review is missing: sdk-engineer; mandatory role review is missing: solution-architect; mandatory role review is missing: tester-qa-engineer; mandatory role review is missing: ui-ux-engineer"
+    }
+  },
+  "boundaries": [
+    "No DONE or whole-P2 Product acceptance claimed",
+    "No protected-main merge, publication, production deployment or release",
+    "Figma and Drive read-only; owner backfill remains separate",
+    "Custom monitoring image repair remains stopped; open security release gates retained",
+    "13 unrelated dirty paths hash-identical and excluded"
+  ],
+  "context": "Refresh isolated context after handoff metadata commit; subsequent context verification is retained under artifacts/p2-006-assurance-20261108."
+}

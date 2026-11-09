@@ -1,6 +1,6 @@
 # P2-006 implementation and global UI compatibility report
 
-Engineering tests pass at a2df3359f8092e1e816125fe384e7a8a86785c68; native acceptance gates must also pass before local validation is declared. Branch: codex/p2-006-assurance-20261108. No new PR is published.
+Engineering LOCAL_VALIDATED readiness is recorded at a2df3359f8092e1e816125fe384e7a8a86785c68. Native scoped/global UI gates and P2 commit-readiness audit PASS; the three compatibility revisions are CLOSED. TUN-P2-006 is VALIDATION; final Product/release acceptance remains separate. Branch: codex/p2-006-assurance-20261108. No new PR is published.
 
 ## Authority and eligibility
 
@@ -57,4 +57,4 @@ Current validated-review.html and visual-review.json contain approved references
 
 No new Product decision is required for these three approved visual scopes. The separate owner Figma backfill remains recorded and read-only access is preserved. Production policy/content/owner configuration, final Product acceptance where applicable, protected-main merge, CI/security publication and release are separate gates. Monitoring image work remains stopped per user direction and open vulnerability findings are not waived.
 
-Native revision closure/current UI/work-item gates must pass and be committed before the final handoff can claim local validation. Exact next action and gate receipts are in P2_006_HANDOFF.md. Preserve the13 unrelated dirty paths; their hashes are recorded in the current test index. Isolated context remains artifacts/p2-006-assurance-20261108/context.
+Native revision closure/current UI/work-item gates PASS; closure metadata is committed at7001076. Current source and evidence satisfy local engineering validation. Exact next action and gate receipts are in P2_006_HANDOFF.md. Preserve the13 unrelated dirty paths; their hashes are recorded in the current test index. Isolated context remains artifacts/p2-006-assurance-20261108/context.
