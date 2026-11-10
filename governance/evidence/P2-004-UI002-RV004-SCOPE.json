@@ -1,0 +1,47 @@
+{
+  "schema_version": 1,
+  "scope_id": "P2-004-UI002-RV004",
+  "result": "RESOLVED_EXISTING_AUTHORITY_STARTUP_ONLY",
+  "created_at": "2026-11-10T09:58:28.391Z",
+  "functional_owners": [
+    "TUN-P2-004",
+    "TUN-P2-005",
+    "TUN-P2-007"
+  ],
+  "authority_refs": [
+    "docs/authority/current/development/03_Governed_Development_Lifecycle_Scrum_Git.md",
+    "docs/authority/current/development/09_Testing_Acceptance_Evidence_and_Quality_Gates.md",
+    "docs/authority/current/development/10_UI_UX_Components_Widgets_and_Plugins_Development_Rules.md",
+    "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md",
+    "docs/authority/current/development/31_UI_UX_Screen_and_Control_Center_Requirements_Matrix.md",
+    "docs/authority/current/development/32_Domain_API_Event_Data_and_Policy_Contract_Catalog.md",
+    "docs/authority/current/development/35_AI_Agent_Skill_Catalog_and_Review_Contracts.md",
+    "docs/authority/current/decisions/AMD-0008_Approved_Figma_Visual_Fidelity_and_Product_Owner_UX_Consent.md",
+    "docs/authority/current/decisions/AMD-0009_URL_Addressable_Routing_and_Governed_Form_Validation.md"
+  ],
+  "consent_refs": [
+    "governance/evidence/TUN-P2-007-NAVIGATION-CONSENT-20261110.json",
+    "governance/evidence/TUN-P2-007-VISUAL-CONSENT-20261109.json"
+  ],
+  "contracts": [
+    "docs/contracts/authentication-session-contract.md",
+    "docs/contracts/operation-step-up-contract.md",
+    "docs/contracts/ui-inventory.json"
+  ],
+  "scope": "Current route/history/refresh/guard and per-screen visual/validation proof for approved Ready, signed-in and passkey shared controls.",
+  "exclusions": [
+    "Prior closed records",
+    "Unrelated13 dirty paths",
+    "Drive/Figma writes",
+    "Product-origin callback contract changes",
+    "Production content/policy publication",
+    "Whole-P2 acceptance or merge/deployment/release"
+  ],
+  "required_execution": [
+    "Committed exact owned source before acceptance tests",
+    "Applicable URL-001..006, VAL-001..008, UX-FID-001..008 per-route evidence",
+    "Real HTTPS/Postgres/native WebAuthn E2E distinct from mocked UI tests",
+    "Current native UI/governance gates and role reviews"
+  ],
+  "closure_state": "NOT_VALIDATED_NOT_ACCEPTED"
+}
