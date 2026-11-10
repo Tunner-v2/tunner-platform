@@ -42,5 +42,30 @@
     "to": "ACTIVE",
     "outcome": "ALLOWED",
     "observed_at": "2026-11-10T16:26:14.275Z"
+  },
+  "local_test_bootstrap_extension": {
+    "recorded_at": "2026-11-10T17:49:25.161Z",
+    "scope": "Reuse existing local scoped OpenBao bootstrap for finite synthetic TOTP validation; no production activation.",
+    "authority_refs": [
+      "docs/authority/current/development/06_Environment_Configuration_Secrets_and_Deployment.md",
+      "docs/authority/current/development/09_Testing_Acceptance_Evidence_and_Quality_Gates.md",
+      "docs/authority/current/development/01_Engineering_Technology_Foundation.md"
+    ],
+    "prior_capability": "P1-024-RV001/AutomaticLocalSessionCreatesReusesAndRevokesAgainstRealOpenBao",
+    "source_paths": [
+      "src/Tunner.Installer/LocalOpenBaoSession.cs",
+      "tests/Tunner.Installer.Tests/OpenBaoIntegrationTests.cs"
+    ],
+    "constraints": [
+      "Preserve exact R2 overload/behavior and all existing regression assertions; do not fabricate R2 profile.",
+      "Generalize only a validated trusted loopback credential-prefix scope; application gets bounded nonrenewable child identity via existing Secrets abstraction.",
+      "Autonomous owned disposable cachedOpenBao2.7fixture; generatedbootstrapinmemory, -dev-no-store-token, Dockerlogdriver none, no outputconsumer/GetLogs/environmentdump.",
+      "No-pull/build,127.0.0.1only,no persistentvolumes; verifyallhelperimagescachedbeforestart.",
+      "Explicit finite testseedretention endswith ownedfixture removal; verify tokenrevocation,policydisposal andcontainerremoval beforePASS.",
+      "No production policy/provider/root-tokenfile; secrets nevercommandline/URL/log/evidence.",
+      "Test-only nativeOTP oracle mayreuseexistingframeworkhelper via privatepipes, neverHTTPendpoint/authbypass/newOTPproductionmath."
+    ],
+    "ownership_boundary": "Shared bootstrap/fixture validation is current actionableRV003. Existing browser-tool ownerTUN-P2-004 is not closed; its later test-mode integration must retain current-source compatibility proof and native eligibility. No new Product screen or additional feature is enabled by this scope record.",
+    "validation": "PENDING_IMPLEMENTATION_AND_EXECUTED_REGRESSIONS"
   }
 }

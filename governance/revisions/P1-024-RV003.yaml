@@ -21,7 +21,8 @@
   "impact_classification": "NON_BLOCKING",
   "blocked_scope": [],
   "acceptance_criteria": [
-    "Preserve existing engineering reference, installer, scoped-token, redirect-denial and safe-error behavior; add only version-bound credential provider mechanics and meaningful regressions, with committed source and final security review. Current security/environment authority is resolved in P2-008 authority evidence; no baseline semantics replace it."
+    "Preserve existing engineering reference, installer, scoped-token, redirect-denial and safe-error behavior; add only version-bound credential provider mechanics and meaningful regressions, with committed source and final security review. Current security/environment authority is resolved in P2-008 authority evidence; no baseline semantics replace it.",
+    "Reuse the existing loopback bounded-child vault bootstrap for finite synthetic TOTP test instances, preserving R2 semantics and requiring no-secret/no-pull/loopback/verified-cleanup regressions; never create production bootstrap configuration."
   ],
   "prerequisites": [],
   "work_items": [],
