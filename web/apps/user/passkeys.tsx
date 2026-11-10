@@ -1,5 +1,5 @@
 import {createRoot} from 'react-dom/client';
-import {useEffect,useId,useRef,useState} from 'react';
+import {useEffect,useId,useLayoutEffect,useRef,useState} from 'react';
 import {ContentProvider,ContentText,ContentUnavailable,FormErrorSummary,ModalDialog,PrimaryButton,ThemeProvider,TunnerBrand,navigatePath,useRouteLocation} from '@tunner/ui';
 import '@tunner/ui/styles.css';
 import './passkeys.css';
@@ -22,6 +22,7 @@ function Account(){
   const route=useRouteLocation();const revision=useRef(route.revision);revision.current=route.revision;
   const control=useRef(new AbortController());const flight=useRef(false);const operationRef=useRef<PasskeyOperation|undefined>(undefined);
   const starting=useRef<PasskeyStartSnapshot|undefined>(undefined);
+  const recoveryActions=useRef<HTMLDivElement>(null);const restoreRecoveryFocus=useRef(false);
   const trigger=useRef<HTMLElement|null>(null);const heading=useRef<HTMLHeadingElement>(null);const dialogHeading=useRef<HTMLHeadingElement>(null);const dialogId=useId();
   const [boot,setBoot]=useState<PasskeyBootstrap>();const [methods,setMethods]=useState<PasskeyMethods>();const [ready,setReady]=useState(-1);const [unavailable,setUnavailable]=useState(false);
   const [operation,setOperation]=useState<PasskeyOperation>();const [selected,setSelected]=useState<PasskeyMetadata>();const [modal,setModal]=useState<'ENROLL'|'REVOKE'>();
@@ -33,6 +34,7 @@ function Account(){
   function running(value:boolean){flight.current=value;setBusy(value);}
   const guarded=ready!==route.revision;const methodsPage=route.pathname===passkeyRoutes.methods.pathname;
   useEffect(()=>{
+    restoreRecoveryFocus.current=false;
     control.current.abort();control.current=new AbortController();const work={signal:control.current.signal,revision:route.revision};
     running(false);setReady(-1);setProof(undefined);setModal(undefined);setSelected(undefined);setError(undefined);setNotice(undefined);setToast(false);setEnded(undefined);setUnavailable(false);setMenu(false);
     if(!isPasskeyRoute(route.pathname)){window.location.replace('/login');return()=>control.current.abort();}
@@ -46,6 +48,11 @@ function Account(){
     }).catch(reason=>{if(!current(work))return;if(reason instanceof PasskeyHttpError&&reason.status===401){window.location.replace('/login');return;}setUnavailable(true);setReady(work.revision);});
     return()=>work.signal.aborted?undefined:control.current.abort();
   },[route.revision]);
+  useLayoutEffect(()=>{
+    if(!restoreRecoveryFocus.current||guarded||busy||ended||modal||proof)return;
+    restoreRecoveryFocus.current=false;
+    if(operationRef.current||starting.current)recoveryActions.current?.querySelector<HTMLButtonElement>('button:not(:disabled)')?.focus();
+  },[guarded,busy,ended,modal,proof]);
   useEffect(()=>{if(!guarded&&!unavailable)heading.current?.focus();},[guarded,unavailable,methodsPage]);
   useEffect(()=>{if(modal&&!proof)dialogHeading.current?.focus();},[modal,proof,phase]);
   async function reloadMethods(work:Scope){const list=methodsSchema.parse(await requestJson('/account/passkeys',{signal:work.signal}));if(current(work))setMethods(list);}
@@ -121,8 +128,8 @@ function Account(){
   async function cancelOriginal(original:PasskeyOperation,work:Scope){if(!boot)return;const result=parseOperation(await requestJson('/account/passkeys/cancel',{csrfToken:boot.csrfToken,body:{requestId:original.requestId,ceremonyId:original.ceremonyId},signal:work.signal}),original);await acceptResult(result,work);}
   async function cancel(){
     if(flight.current)return;const original=operationRef.current;
-    if(!original){if(starting.current){setModal(undefined);setNotice('passkeys.operation.pending');return;}setModal(undefined);setError(undefined);return;}
-    if(phase==='unknown'){setProof(undefined);setModal(undefined);setNotice('passkeys.operation.pending');return;}
+    if(!original){if(starting.current){restoreRecoveryFocus.current=true;setModal(undefined);setNotice('passkeys.operation.pending');return;}setModal(undefined);setError(undefined);return;}
+    if(phase==='unknown'){restoreRecoveryFocus.current=true;setProof(undefined);setModal(undefined);setNotice('passkeys.operation.pending');return;}
     if(phase==='cancelled'||phase==='expired'){acknowledged.add(original.ceremonyId);own(undefined);setModal(undefined);setError(undefined);setNotice(undefined);return;}
     const work=scope();running(true);setProof(undefined);try{await cancelOriginal(original,work);}catch(reason){if(current(work)){setPhase('unknown');setNotice('passkeys.operation.pending');setError(passkeyErrorKey(reason));}}finally{if(current(work))running(false);}
   }
@@ -143,7 +150,7 @@ function Account(){
           <section className={'passkeys-summary'+(!methodsPage?' has-action':'')}><p className="passkeys-eyebrow"><ContentText contentKey="passkeys.summary.label"/></p><h2><ContentText contentKey={active.length?'passkeys.summary.active':'passkeys.summary.empty'}/></h2><p><ContentText contentKey={active.length?'passkeys.summary.activeDescription':'passkeys.summary.emptyDescription'}/></p>{!methodsPage&&<div className="passkeys-summary-action">{addButton}</div>}</section>
           {methodsPage?<div className="passkeys-cards"><section className="passkeys-card passkeys-methods"><h2><ContentText contentKey="passkeys.methods.heading"/></h2><p className="passkeys-card-intro"><ContentText contentKey="passkeys.methods.description"/></p>{methods.credentials.length?methods.credentials.map(credential=><div className="passkeys-method-row" key={credential.credentialReference} role="group" aria-label={boot.content['passkeys.methods.label']!.text}><div><p className="passkeys-method-title"><ContentText contentKey="passkeys.methods.label"/></p><Metadata credential={credential} locale={boot.locale}/></div><span className={'passkeys-pill'+(credential.state==='REVOKED'?' revoked':'')}><ContentText contentKey={credential.state==='ACTIVE'?'passkeys.status.active':'passkeys.status.revoked'}/></span>{credential.state==='ACTIVE'&&<PrimaryButton labelKey="passkeys.methods.manage" appearance="outline" disabled={blocked} onClick={()=>review('REVOKE',credential)}/>}</div>):<div className="passkeys-method-row"><div><p className="passkeys-method-title"><ContentText contentKey="passkeys.methods.plural"/></p><p className="passkeys-method-detail"><ContentText contentKey="passkeys.methods.empty"/></p></div></div>}{methods.passwordAvailable&&<div className="passkeys-method-row" role="group" aria-label={boot.content['passkeys.methods.password']!.text}><div><p className="passkeys-method-title"><ContentText contentKey="passkeys.methods.password"/></p><p className="passkeys-method-detail"><ContentText contentKey="passkeys.methods.passwordAvailable"/></p></div></div>}<p className="passkeys-status"><ContentText contentKey="passkeys.methods.otherUnavailable"/></p><div className="passkeys-page-actions">{addButton}</div></section><Guidance/></div>:<div className="passkeys-security-grid"><section className="passkeys-card"><h2><ContentText contentKey="passkeys.methods.heading"/></h2><p><ContentText contentKey={active.length?'passkeys.summary.active':'passkeys.methods.empty'}/></p>{methods.passwordAvailable&&<div className="passkeys-method-row" role="group" aria-label={boot.content['passkeys.methods.password']!.text}><div><p className="passkeys-method-title"><ContentText contentKey="passkeys.methods.password"/></p><p className="passkeys-method-detail"><ContentText contentKey="passkeys.methods.passwordAvailable"/></p></div></div>}<a className="passkeys-inline-link" href={passkeyRoutes.methods.pathname} onClick={event=>{event.preventDefault();navigatePath(passkeyRoutes.methods.pathname);}}><ContentText contentKey="passkeys.methods.review"/></a></section><Guidance/><section className="passkeys-card"><h2><ContentText contentKey="passkeys.activity.heading"/></h2><p><ContentText contentKey="passkeys.activity.unavailable"/></p></section><section className="passkeys-card"><h2><ContentText contentKey="passkeys.other.heading"/></h2><p><ContentText contentKey="passkeys.other.unavailable"/></p></section></div>}
           {!passkeysSupported()&&<p className="passkeys-status" role="status"><ContentText contentKey="passkeys.error.unsupported"/></p>}{!methods.enrollmentAvailable&&<p className="passkeys-status" role="status"><ContentText contentKey="passkeys.error.limit"/></p>}
-          {notice&&<p className="passkeys-status" role="status"><ContentText contentKey={notice}/></p>}{(operation||starting.current)&&<div className="passkeys-page-actions"><PrimaryButton labelKey="passkeys.operation.check" appearance="outline" disabled={busy} onClick={()=>void recover()}/>{starting.current&&!operation&&<PrimaryButton labelKey="passkeys.operation.retry" disabled={busy} onClick={()=>void resumeStart()}/>} {operation?.status==='PENDING'&&<PrimaryButton labelKey="passkeys.operation.resume" disabled={busy} onClick={()=>void resumeProof()}/>}</div>}{!modal&&!proof&&errorNode}
+          {notice&&<p className="passkeys-status" role="status"><ContentText contentKey={notice}/></p>}{(operation||starting.current)&&<div ref={recoveryActions} className="passkeys-page-actions"><PrimaryButton labelKey="passkeys.operation.check" appearance="outline" disabled={busy} onClick={()=>void recover()}/>{starting.current&&!operation&&<PrimaryButton labelKey="passkeys.operation.retry" disabled={busy} onClick={()=>void resumeStart()}/>} {operation?.status==='PENDING'&&<PrimaryButton labelKey="passkeys.operation.resume" disabled={busy} onClick={()=>void resumeProof()}/>}</div>}{!modal&&!proof&&errorNode}
         </main>
       </div>}
       {toast&&!ended&&<div className="passkeys-toast" role="status"><span className="passkeys-toast-mark" aria-hidden="true">✓</span><strong><ContentText contentKey="passkeys.success.heading"/></strong><p><ContentText contentKey="passkeys.success.description"/></p></div>}
@@ -151,7 +158,7 @@ function Account(){
         {['native','submitting'].includes(phase)&&<p className="passkeys-dialog-feedback" role="status"><ContentText contentKey="passkeys.setup.pending"/></p>}{phase==='unknown'&&<p className="passkeys-dialog-feedback" role="status"><ContentText contentKey={dialogKind==='REVOKE'?'passkeys.revoke.unknown':'passkeys.setup.unknown'}/></p>}{phase==='cancelled'&&<p className="passkeys-dialog-feedback" role="status"><ContentText contentKey={dialogKind==='REVOKE'?'passkeys.revoke.notCompleted':'passkeys.setup.cancelled'}/></p>}{phase==='expired'&&<p className="passkeys-dialog-feedback" role="status"><ContentText contentKey="passkeys.setup.expired"/></p>}{errorNode}
         <div className="passkeys-dialog-actions"><PrimaryButton labelKey={phase==='unknown'||phase==='cancelled'||phase==='expired'?'passkeys.operation.close':dialogKind==='REVOKE'?'passkeys.revoke.cancel':'passkeys.setup.cancel'} appearance="outline" disabled={busy} onClick={()=>void cancel()}/>{phase==='review'?<span className={dialogKind==='REVOKE'?'passkeys-danger-wrap':''}><PrimaryButton labelKey={dialogKind==='REVOKE'?'passkeys.revoke.submit':'passkeys.setup.submit'} disabled={busy||dialogKind==='ENROLL'&&!passkeysSupported()} onClick={()=>void start()}/></span>:phase==='authorized'?<PrimaryButton labelKey="passkeys.operation.resume" disabled={busy||!passkeysSupported()} onClick={()=>void continueEnrollment()}/>:phase==='unknown'?<PrimaryButton labelKey="passkeys.operation.check" disabled={busy} onClick={()=>void recover()}/>:null}</div></div></ModalDialog>}
     </div>
-    {proof&&!ended&&<StepUpDialog bootstrap={proof} returnFocusTo={trigger.current} reconcile={proofRecovery} onCancel={outcome=>{if(outcome?.unresolved){setProof(undefined);setPhase('unknown');setNotice('passkeys.operation.pending');}else void cancel();}} onComplete={()=>void afterProof()}/>}
+    {proof&&!ended&&<StepUpDialog bootstrap={proof} returnFocusTo={trigger.current} reconcile={proofRecovery} onCancel={outcome=>{if(outcome?.unresolved){restoreRecoveryFocus.current=true;setProof(undefined);setPhase('unknown');setNotice('passkeys.operation.pending');}else void cancel();}} onComplete={()=>void afterProof()}/>}
   </ContentProvider>;
 }
 function Guidance(){return <aside className="passkeys-card passkeys-guidance"><h2><ContentText contentKey="passkeys.guidance.heading"/></h2><p><ContentText contentKey="passkeys.guidance.description"/></p><div className="passkeys-helpbox"><strong><ContentText contentKey="passkeys.guidance.control"/></strong><p><ContentText contentKey="passkeys.guidance.confirm"/></p></div><p><ContentText contentKey="passkeys.guidance.native"/></p></aside>;}
