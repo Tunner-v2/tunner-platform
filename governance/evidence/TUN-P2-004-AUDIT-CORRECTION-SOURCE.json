@@ -3,8 +3,8 @@
   "scope_id": "TUN-P2-004",
   "validation_kind": "COMMITTED",
   "result": "PASS",
-  "tested_commit_sha": "745f9c2dc1b9060c4be0318b33b4019ae77e9e36",
-  "validated_commit_sha": "745f9c2dc1b9060c4be0318b33b4019ae77e9e36",
+  "tested_commit_sha": "6e562db102ce75d5ed478a15e2970ff55ab98fef",
+  "validated_commit_sha": "6e562db102ce75d5ed478a15e2970ff55ab98fef",
   "owned_behavior_paths": [
     "docs/contracts/.gitattributes",
     "docs/contracts/registration-onboarding.openapi.json",
@@ -85,11 +85,20 @@
     "web/tests/registration/support.ts",
     "web/tsconfig.json"
   ],
-  "note": "Exact precommitted owned array retained. Current per-cohort executions/source equivalence, actualUI checks and role reviews are linked; historical receipts/closed RVs remain unchanged. No new Product or production acceptance.",
+  "note": "Exact precommitted 78-path ownership retained. Actual Identity 260 and architecture 237 evidence is reused at its true SHAs; fresh registration 24 and shared foundation 16 have explicit invocation/source-carrier binding. Historical source/role receipts and VALIDATION status remain unchanged. Per-item current UI compliance remains a separate gate.",
   "evidence_refs": [
     "governance/evidence/p2-recovery-20261109/test-index.json",
     "governance/evidence/p2-recovery-20261109/visual-review.json",
     "governance/evidence/TUN-P2-004-AUDIT-CORRECTION-ROLE-REVIEWS.json"
   ],
-  "source_binding_ref": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/execution-index.json"
+  "source_binding_ref": "governance/evidence/TUN-P2-004-TOTP-COMPATIBILITY-20261110.json",
+  "prior_current_source_bindings": [
+    {
+      "tested_commit_sha": "745f9c2dc1b9060c4be0318b33b4019ae77e9e36",
+      "validated_commit_sha": "745f9c2dc1b9060c4be0318b33b4019ae77e9e36",
+      "source_binding_ref": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/execution-index.json",
+      "source_envelope_git_ref": "eb1c16fd55a82470c7b2c756f017c51b8a00a30a:governance/evidence/TUN-P2-004-AUDIT-CORRECTION-SOURCE.json"
+    }
+  ],
+  "historical_source_binding_ref": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/execution-index.json"
 }
