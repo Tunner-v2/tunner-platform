@@ -4,7 +4,7 @@
   "milestone_id": "P2",
   "sprint_id": null,
   "title": "TOTP enrollment verification and disable lifecycle",
-  "status": "BACKLOG",
+  "status": "REFINEMENT",
   "type": "FEATURE",
   "authority_refs": [
     "docs/authority/current-authority.json",
@@ -17,7 +17,16 @@
     "docs/authority/current/development/02_Repository_Solution_and_Module_Architecture.md",
     "docs/authority/current/development/09_Testing_Acceptance_Evidence_and_Quality_Gates.md",
     "docs/authority/current/decisions/PDR-0011_Universal_Account_Eligibility_Age-Aware_Consent_and_Delegated_Commercial_Authority.md",
-    "docs/authority/current/decisions/AMD-0007_Universal_Registration_Age-Aware_Consent_and_Delegated_Commercial_Authority.md"
+    "docs/authority/current/decisions/AMD-0007_Universal_Registration_Age-Aware_Consent_and_Delegated_Commercial_Authority.md",
+    "docs/authority/current/development/03_Governed_Development_Lifecycle_Scrum_Git.md",
+    "docs/authority/current/development/06_Environment_Configuration_Secrets_and_Deployment.md",
+    "docs/authority/current/development/08_Security_Privacy_Compliance_and_Global_Market_Governance.md",
+    "docs/authority/current/development/29_Privacy_Data_Lifecycle_and_Processing_Governance_FRD.md",
+    "docs/authority/current/development/10_UI_UX_Components_Widgets_and_Plugins_Development_Rules.md",
+    "docs/authority/current/development/31_UI_UX_Screen_and_Control_Center_Requirements_Matrix.md",
+    "docs/authority/current/development/35_AI_Agent_Skill_Catalog_and_Review_Contracts.md",
+    "docs/authority/current/decisions/AMD-0008_Approved_Figma_Visual_Fidelity_and_Product_Owner_UX_Consent.md",
+    "docs/authority/current/decisions/AMD-0009_URL_Addressable_Routing_and_Governed_Form_Validation.md"
   ],
   "flow_refs": [
     "docs/authority/current/development/34_Architecture_to_Development_Traceability_Matrix.md"
@@ -32,7 +41,11 @@
   "acceptance_criteria": [
     "Keep TOTP enrollment inactive until the first valid verification code.",
     "Protect seed material and require approved step-up/policy for enable/disable/reset; do not expose seeds to Admin/Support.",
-    "Preserve operation identity and audit evidence without storing secrets in logs/events."
+    "Preserve operation identity and audit evidence without storing secrets in logs/events.",
+    "Verify active TOTP through the existing shared exact-operation proof lifecycle; adding a primary method or setup screen alone does not satisfy this requirement.",
+    "Integrate policy-required TOTP second-factor completion after primary proof and before issuing a qualifying final Tunner session. Enrollment alone never imposes MFA for every login, and TOTP is not a standalone primary method.",
+    "Enforce one-time seed/QR disclosure, inactive first-code enrollment, exact original result recovery and no secret in configuration, Identity tables, URLs, logs, events or evidence.",
+    "Keep configured cardinality, session effects, replacement ordering, retention, assurance and provider binding explicit; reject unsupported/unapproved profiles without production defaults."
   ],
   "prerequisites": [
     "TUN-P2-003",
@@ -45,11 +58,14 @@
     "ui": true,
     "sdk": false,
     "financial": false,
-    "compliance": false,
+    "compliance": true,
     "security": true,
-    "devops": false,
+    "devops": true,
     "support": false,
-    "api": true
+    "api": true,
+    "provider": true,
+    "data_schema": true,
+    "migration": true
   },
   "activated_roles": [
     "full-stack-engineer",
@@ -61,21 +77,42 @@
     "ui-ux-engineer",
     "frontend-engineer",
     "end-user-ux-reviewer",
-    "content-writer"
+    "content-writer",
+    "compliance-specialist",
+    "rd-engineer",
+    "devops-engineer",
+    "business-analyst",
+    "project-manager",
+    "governance-engineer"
   ],
   "required_tests": [
     "first-code activation, wrong-code and replay/rate controls",
     "step-up and unauthorized mutation rejection",
-    "safe UI, logs and audit evidence"
+    "safe UI, logs and audit evidence",
+    "native TOTP plus atomic used-code-verifier set across activation, sign-in MFA and operation proof; A→B→A replay/concurrency and complete native validity horizon",
+    "policy-required MFA before final session, exact original attempt/result and primary-evidence freshness; no provisional live session",
+    "immutable vault-version owner binding/create-only preparation/reconciliation, one-time disclosure loss, first-code activation/rollback and no secret outputs",
+    "disable/reset source freshness, expected version, explicit configured effects and causal self-disable; no unrelated factor reset",
+    "URL-001..006, VAL-001..008 and UX-FID-001..008 for every applicable new screen/form/component, actual matching Figma and scoped consent"
   ],
   "required_evidence": [
-    "governance/evidence/TUN-P2-008-VALIDATION.json"
+    "governance/evidence/TUN-P2-008-VALIDATION.json",
+    "docs/development/P2_008_TOTP_SCOPE.md",
+    "governance/evidence/TUN-P2-008-AUTHORITY-RESOLUTION.json",
+    "governance/evidence/TUN-P2-008-RD-SOURCES.json",
+    "governance/evidence/TUN-P2-008-UI-AUTHORITY.json",
+    "governance/evidence/TUN-P2-008-STARTUP-REVIEWS.json",
+    "governance/evidence/TUN-P2-008-ROLE-REVIEWS.json"
   ],
   "context_policy": "TASK",
   "todos": [
-    "TODO-TUN-P2-008-STEPUP001"
+    "TODO-TUN-P2-008-STEPUP001",
+    "TODO-TUN-P2-008-DESIGN001"
   ],
-  "defects": [],
+  "defects": [
+    "DEF-TUN-P2-008-UI-001"
+  ],
   "created_at": "2026-10-16T17:48:49.296Z",
-  "updated_at": "2026-11-09T17:29:58.164Z"
+  "updated_at": "2026-11-10T14:14:10.053Z",
+  "ui_evidence_ref": "governance/evidence/TUN-P2-008-UI-COMPLIANCE.json"
 }
