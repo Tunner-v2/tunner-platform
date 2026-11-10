@@ -1,0 +1,33 @@
+
+Running 3 tests using 1 worker
+
+(node:2996) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  1 tests\browser-testing\authentication-flow.spec.ts:4:1 › verified local account signs in and completes operation-bound verification through the real BFF (21.1s)
+(node:4644) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 2 tests\browser-testing\manual-flow.spec.ts:3:1 › real HTTPS registration and SMTP verification complete through the isolated starter (7.6s)
+  ok 3 tests\browser-testing\manual-flow.spec.ts:8:1 › isolated host retains the real HTTPS origin and antiforgery boundaries (363ms)
+
+
+  1) tests\browser-testing\authentication-flow.spec.ts:4:1 › verified local account signs in and completes operation-bound verification through the real BFF
+
+    Error: expect(received).toBe(expected) // Object.is equality
+
+    Expected: "Strict"
+    Received: "None"
+
+      12 |  await page.getByLabel('Password',{exact:true}).fill(password);await page.getByRole('button',{name:'Confirm',exact:true}).click();await expect(page.getByRole('dialog')).toHaveCount(0);await expect(page.getByRole('status')).toHaveText('Verification completed');expect(completedPosts).toBe(1);expect(page.url()).toBe(actionUrl);
+      13 |  await page.reload();await page.getByRole('button',{name:'Verify identity',exact:true}).click();await expect(page.getByRole('status')).toHaveText('Verification completed');await expect(page.getByRole('dialog')).toHaveCount(0);expect(completedPosts).toBe(1);
+    > 14 |  const stepCookie=(await page.context().cookies()).find(c=>c.name==='__Host-Tunner.StepUp');expect(stepCookie?.httpOnly).toBe(true);expect(stepCookie?.secure).toBe(true);expect(stepCookie?.sameSite).toBe('Strict');
+         |                                                                                                                                                                                                        ^
+      15 |  expect(await page.evaluate(()=>({search:location.search,hash:location.hash,visibleProof:document.cookie.includes('__Host-Tunner.StepUp')}))).toEqual({search:'',hash:'',visibleProof:false});await page.screenshot({path:'../artifacts/browser-testing/step-up-real-completed.png',fullPage:true});
+      16 |  await page.goto('/signed-in');
+      17 |  const cookie=(await page.context().cookies()).find(c=>c.name==='__Host-Tunner.User.Session');expect(cookie?.httpOnly).toBe(true);expect(cookie?.secure).toBe(true);expect(await page.evaluate(()=>({local:localStorage.length,session:sessionStorage.length,hasBearer:document.cookie.includes('__Host-Tunner.User.Session')}))).toEqual({local:0,session:0,hasBearer:false});
+        at <repo-root>\web\tests\browser-testing\authentication-flow.spec.ts:14:200
+
+    Error Context: ..\artifacts\p2-007-passkeys-20261109\ui-review\20261110-cross-engine-webkit-real\run-details\authentication-flow-verifi-c1588-cation-through-the-real-BFF\error-context.md
+
+  1 failed
+    tests\browser-testing\authentication-flow.spec.ts:4:1 › verified local account signs in and completes operation-bound verification through the real BFF
+  2 passed (30.9s)

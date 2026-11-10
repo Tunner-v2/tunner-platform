@@ -1,0 +1,220 @@
+[WebServer] (node:24404) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 8 tests using 1 worker
+
+(node:25644) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  1 tests\passkeys\passkeys.spec.ts:97:1 › @feedback-regression Remove error keeps every action within the desktop dialog without scrolling (1.7s)
+(node:27428) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  2 tests\passkeys\passkeys.spec.ts:121:48 › @feedback-regression ENROLL unknown Close focuses existing recovery without replacing the request (6.2s)
+(node:27012) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  3 tests\passkeys\passkeys.spec.ts:121:48 › @feedback-regression REVOKE unknown Close focuses existing recovery without replacing the request (6.3s)
+(node:13764) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  4 tests\passkeys\passkeys.spec.ts:155:61 › @feedback-regression Login native-cancel restores its available action without another attempt (6.3s)
+(node:20476) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  5 tests\passkeys\passkeys.spec.ts:155:61 › @feedback-regression Login http-429 restores its available action without another attempt (6.2s)
+(node:24984) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  6 tests\passkeys\passkeys.spec.ts:176:1 › @feedback-regression Uncertain Login focuses only exact read-only recovery and never resubmits on focus (6.4s)
+(node:20332) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 7 tests\passkeys\passkeys.spec.ts:203:1 › @feedback-regression Aborted Login ceremony cannot steal new-route focus or submit credentials (1.4s)
+  x  8 tests\passkeys\step-up-passkey.spec.ts:61:1 › @feedback-regression Unresolved native-proof Close focuses owner recovery without cancelling or replacing its binding (6.2s)
+
+
+  1) tests\passkeys\passkeys.spec.ts:97:1 › @feedback-regression Remove error keeps every action within the desktop dialog without scrolling
+
+    Error: Close bottom is inside the visible dialog
+
+    expect(received).toBeLessThanOrEqual(expected)
+
+    Expected: <= 714
+    Received:    729
+
+      110 |     const box=await dialog.getByRole('button',{name,exact:true}).boundingBox();
+      111 |     expect(box).not.toBeNull();
+    > 112 |     expect(box!.y+box!.height,name+' bottom is inside the visible dialog').toBeLessThanOrEqual(container!.y+container!.height-1);
+          |                                                                            ^
+      113 |     expect(box!.y,name+' top is inside the visible dialog').toBeGreaterThanOrEqual(container!.y+1);
+      114 |   }
+      115 |   expect(await dialog.evaluate(element=>element.scrollHeight<=element.clientHeight+1)).toBe(true);
+        at <repo-root>\web\tests\passkeys\passkeys.spec.ts:112:76
+
+    Error Context: ..\artifacts\p2-007-passkeys-20261109\ui-review\20261110-feedback-red-312af88\run-details\passkeys--feedback-regress-edc5f-op-dialog-without-scrolling\error-context.md
+
+  2) tests\passkeys\passkeys.spec.ts:121:48 › @feedback-regression ENROLL unknown Close focuses existing recovery without replacing the request
+
+    Error: expect(locator).toBeFocused() failed
+
+    Locator:  getByRole('button', { name: 'Check status', exact: true })
+    Expected: focused
+    Received: inactive
+    Timeout:  5000ms
+
+    Call log:
+      - Expect "toBeFocused" with timeout 5000ms
+      - waiting for getByRole('button', { name: 'Check status', exact: true })
+        14 × locator resolved to <button type="button" class="tn-primary-button" data-appearance="outline" data-presentation="standard">…</button>
+           - unexpected value "inactive"
+
+
+      137 |   await page.screenshot({path:testInfo.outputPath(kind.toLowerCase()+'-unknown-closed.png'),fullPage:true});
+      138 |   const recovery=page.getByRole('button',{name:'Check status',exact:true});
+    > 139 |   await expect(recovery).toBeFocused();
+          |                          ^
+      140 |   await expect(recovery).toBeEnabled();
+      141 |   await expect(trigger).toBeDisabled();
+      142 |   expect(state.starts).toHaveLength(1);
+        at <repo-root>\web\tests\passkeys\passkeys.spec.ts:139:26
+
+    Error Context: ..\artifacts\p2-007-passkeys-20261109\ui-review\20261110-feedback-red-312af88\run-details\passkeys--feedback-regress-f63ef-thout-replacing-the-request\error-context.md
+
+  3) tests\passkeys\passkeys.spec.ts:121:48 › @feedback-regression REVOKE unknown Close focuses existing recovery without replacing the request
+
+    Error: expect(locator).toBeFocused() failed
+
+    Locator:  getByRole('button', { name: 'Check status', exact: true })
+    Expected: focused
+    Received: inactive
+    Timeout:  5000ms
+
+    Call log:
+      - Expect "toBeFocused" with timeout 5000ms
+      - waiting for getByRole('button', { name: 'Check status', exact: true })
+        14 × locator resolved to <button type="button" class="tn-primary-button" data-appearance="outline" data-presentation="standard">…</button>
+           - unexpected value "inactive"
+
+
+      137 |   await page.screenshot({path:testInfo.outputPath(kind.toLowerCase()+'-unknown-closed.png'),fullPage:true});
+      138 |   const recovery=page.getByRole('button',{name:'Check status',exact:true});
+    > 139 |   await expect(recovery).toBeFocused();
+          |                          ^
+      140 |   await expect(recovery).toBeEnabled();
+      141 |   await expect(trigger).toBeDisabled();
+      142 |   expect(state.starts).toHaveLength(1);
+        at <repo-root>\web\tests\passkeys\passkeys.spec.ts:139:26
+
+    Error Context: ..\artifacts\p2-007-passkeys-20261109\ui-review\20261110-feedback-red-312af88\run-details\passkeys--feedback-regress-528bd-thout-replacing-the-request\error-context.md
+
+  4) tests\passkeys\passkeys.spec.ts:155:61 › @feedback-regression Login native-cancel restores its available action without another attempt
+
+    Error: expect(locator).toBeFocused() failed
+
+    Locator:  getByRole('button', { name: 'Sign in with passkey', exact: true })
+    Expected: focused
+    Received: inactive
+    Timeout:  5000ms
+
+    Call log:
+      - Expect "toBeFocused" with timeout 5000ms
+      - waiting for getByRole('button', { name: 'Sign in with passkey', exact: true })
+        14 × locator resolved to <button type="button" aria-busy="false" class="tn-primary-button" data-appearance="outline" data-presentation="standard">…</button>
+           - unexpected value "inactive"
+
+
+      166 |   await expect(action).toBeEnabled();
+      167 |   await page.screenshot({path:testInfo.outputPath('login-'+feedback+'-focus.png'),fullPage:true});
+    > 168 |   await expect(action).toBeFocused();
+          |                        ^
+      169 |   await expect(page.getByRole('button',{name:'Sign in',exact:true})).toBeEnabled();
+      170 |   expect(optionsBodies).toHaveLength(1);
+      171 |   expect(state.assertions).toBe(0);
+        at <repo-root>\web\tests\passkeys\passkeys.spec.ts:168:24
+
+    Error Context: ..\artifacts\p2-007-passkeys-20261109\ui-review\20261110-feedback-red-312af88\run-details\passkeys--feedback-regress-738d8-ion-without-another-attempt\error-context.md
+
+  5) tests\passkeys\passkeys.spec.ts:155:61 › @feedback-regression Login http-429 restores its available action without another attempt
+
+    Error: expect(locator).toBeFocused() failed
+
+    Locator:  getByRole('button', { name: 'Sign in with passkey', exact: true })
+    Expected: focused
+    Received: inactive
+    Timeout:  5000ms
+
+    Call log:
+      - Expect "toBeFocused" with timeout 5000ms
+      - waiting for getByRole('button', { name: 'Sign in with passkey', exact: true })
+        14 × locator resolved to <button type="button" aria-busy="false" class="tn-primary-button" data-appearance="outline" data-presentation="standard">…</button>
+           - unexpected value "inactive"
+
+
+      166 |   await expect(action).toBeEnabled();
+      167 |   await page.screenshot({path:testInfo.outputPath('login-'+feedback+'-focus.png'),fullPage:true});
+    > 168 |   await expect(action).toBeFocused();
+          |                        ^
+      169 |   await expect(page.getByRole('button',{name:'Sign in',exact:true})).toBeEnabled();
+      170 |   expect(optionsBodies).toHaveLength(1);
+      171 |   expect(state.assertions).toBe(0);
+        at <repo-root>\web\tests\passkeys\passkeys.spec.ts:168:24
+
+    Error Context: ..\artifacts\p2-007-passkeys-20261109\ui-review\20261110-feedback-red-312af88\run-details\passkeys--feedback-regress-5f307-ion-without-another-attempt\error-context.md
+
+  6) tests\passkeys\passkeys.spec.ts:176:1 › @feedback-regression Uncertain Login focuses only exact read-only recovery and never resubmits on focus
+
+    Error: expect(locator).toBeFocused() failed
+
+    Locator:  getByRole('button', { name: 'Check sign-in status', exact: true })
+    Expected: focused
+    Received: inactive
+    Timeout:  5000ms
+
+    Call log:
+      - Expect "toBeFocused" with timeout 5000ms
+      - waiting for getByRole('button', { name: 'Check sign-in status', exact: true })
+        14 × locator resolved to <button type="button" class="tn-primary-button" data-appearance="outline" data-presentation="standard">…</button>
+           - unexpected value "inactive"
+
+
+      185 |   await expect(recovery).toBeEnabled();
+      186 |   await page.screenshot({path:testInfo.outputPath('login-uncertain-recovery-focus.png'),fullPage:true});
+    > 187 |   await expect(recovery).toBeFocused();
+          |                          ^
+      188 |   await expect(page.getByRole('button',{name:'Sign in',exact:true})).toBeDisabled();
+      189 |   expect(state.assertions).toBe(1);
+      190 |   expect((await nativeCounts(page)).gets).toBe(1);
+        at <repo-root>\web\tests\passkeys\passkeys.spec.ts:187:26
+
+    Error Context: ..\artifacts\p2-007-passkeys-20261109\ui-review\20261110-feedback-red-312af88\run-details\passkeys--feedback-regress-22335-nd-never-resubmits-on-focus\error-context.md
+
+  7) tests\passkeys\step-up-passkey.spec.ts:61:1 › @feedback-regression Unresolved native-proof Close focuses owner recovery without cancelling or replacing its binding
+
+    Error: expect(locator).toBeFocused() failed
+
+    Locator:  getByRole('button', { name: 'Check status', exact: true })
+    Expected: focused
+    Received: inactive
+    Timeout:  5000ms
+
+    Call log:
+      - Expect "toBeFocused" with timeout 5000ms
+      - waiting for getByRole('button', { name: 'Check status', exact: true })
+        14 × locator resolved to <button type="button" class="tn-primary-button" data-appearance="outline" data-presentation="standard">…</button>
+           - unexpected value "inactive"
+
+
+      76 |   await expect(dialog).toHaveCount(0);
+      77 |   await page.screenshot({path:testInfo.outputPath('unresolved-proof-owner-recovery-focus.png'),fullPage:true});
+    > 78 |   await expect(page.getByRole('button',{name:'Check status',exact:true})).toBeFocused();
+         |                                                                           ^
+      79 |   await expect(page.getByRole('button',{name:'Add passkey',exact:true})).toBeDisabled();
+      80 |   expect(cancellations).toBe(0);
+      81 |   expect(owner.operation).toEqual(originalOwner);
+        at <repo-root>\web\tests\passkeys\step-up-passkey.spec.ts:78:75
+
+    Error Context: ..\artifacts\p2-007-passkeys-20261109\ui-review\20261110-feedback-red-312af88\run-details\step-up-passkey--feedback--110b3-ng-or-replacing-its-binding\error-context.md
+
+  7 failed
+    tests\passkeys\passkeys.spec.ts:97:1 › @feedback-regression Remove error keeps every action within the desktop dialog without scrolling
+    tests\passkeys\passkeys.spec.ts:121:48 › @feedback-regression ENROLL unknown Close focuses existing recovery without replacing the request
+    tests\passkeys\passkeys.spec.ts:121:48 › @feedback-regression REVOKE unknown Close focuses existing recovery without replacing the request
+    tests\passkeys\passkeys.spec.ts:155:61 › @feedback-regression Login native-cancel restores its available action without another attempt
+    tests\passkeys\passkeys.spec.ts:155:61 › @feedback-regression Login http-429 restores its available action without another attempt
+    tests\passkeys\passkeys.spec.ts:176:1 › @feedback-regression Uncertain Login focuses only exact read-only recovery and never resubmits on focus
+    tests\passkeys\step-up-passkey.spec.ts:61:1 › @feedback-regression Unresolved native-proof Close focuses owner recovery without cancelling or replacing its binding
+  1 passed (54.9s)

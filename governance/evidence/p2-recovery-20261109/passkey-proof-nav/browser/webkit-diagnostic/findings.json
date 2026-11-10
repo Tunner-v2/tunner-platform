@@ -1,0 +1,279 @@
+{
+  "status": "DIAGNOSTIC_COMPLETED_NOT_A_SECURITY_WAIVER",
+  "runHead": "516ec0090253ee21b93c7e61922bd9d1f1caecfa",
+  "browser": "26.5",
+  "platform": "win32",
+  "actorOrigin": "https://localhost:24443",
+  "attackerOrigin": "http://127.0.0.1:60861",
+  "positiveControl": "Browser-clicked same-origin top-level GET to the same localhost target",
+  "crossSiteControl": "Browser-clicked top-level GET from127.0.0.1 tolocalhost; distinct sites with matching localhost target cookie domain",
+  "cookieHeaderObservation": "request.allHeaders converted immediately to three name-presence booleans before target landing; no values persisted",
+  "scenarios": [
+    {
+      "scenario": "ordinary-proof",
+      "headerFlags": [
+        {
+          "label": "browser-response",
+          "pathname": "/authentication/sign-in",
+          "name": "__Host-Tunner.User.Session",
+          "httpOnly": true,
+          "secure": true,
+          "sameSiteStrict": false,
+          "sameSiteLax": true,
+          "sameSiteNone": false,
+          "deletion": false
+        },
+        {
+          "label": "browser-response",
+          "pathname": "/authentication/step-up/options",
+          "name": "__Host-Tunner.StepUp",
+          "httpOnly": true,
+          "secure": true,
+          "sameSiteStrict": true,
+          "sameSiteLax": false,
+          "sameSiteNone": false,
+          "deletion": false
+        }
+      ],
+      "projections": [
+        {
+          "label": "immediately-after-ordinary-options-before-proof-or-route-fetch",
+          "cookies": [
+            {
+              "name": "__Host-Tunner.User.Session",
+              "httpOnly": true,
+              "secure": true,
+              "sameSite": "None"
+            },
+            {
+              "name": "__Host-Tunner.StepUp",
+              "httpOnly": true,
+              "secure": true,
+              "sameSite": "None"
+            }
+          ]
+        },
+        {
+          "label": "after-completed-proof-and-owner-reconciliation",
+          "cookies": [
+            {
+              "name": "__Host-Tunner.User.Session",
+              "httpOnly": true,
+              "secure": true,
+              "sameSite": "None"
+            },
+            {
+              "name": "__Host-Tunner.StepUp",
+              "httpOnly": true,
+              "secure": true,
+              "sameSite": "None"
+            }
+          ]
+        },
+        {
+          "label": "after-adding-only-public-synthetic-lax-control",
+          "cookies": [
+            {
+              "name": "__Host-Tunner.User.Session",
+              "httpOnly": true,
+              "secure": true,
+              "sameSite": "None"
+            },
+            {
+              "name": "__Host-Tunner.StepUp",
+              "httpOnly": true,
+              "secure": true,
+              "sameSite": "None"
+            },
+            {
+              "name": "TunnerDiagnosticPublicLaxProbe",
+              "httpOnly": true,
+              "secure": true,
+              "sameSite": "None"
+            }
+          ]
+        }
+      ],
+      "browserNavigations": [
+        {
+          "label": "same-origin-browser-click",
+          "targetPathname": "/authentication/session",
+          "method": "GET",
+          "cookiePresence": {
+            "tunnerSession": true,
+            "stepUp": true,
+            "publicSyntheticLax": true
+          }
+        },
+        {
+          "label": "cross-site-127-to-localhost-browser-click",
+          "targetPathname": "/authentication/session",
+          "method": "GET",
+          "cookiePresence": {
+            "tunnerSession": true,
+            "stepUp": true,
+            "publicSyntheticLax": true
+          }
+        }
+      ],
+      "headerObservationFailures": 0,
+      "sameOriginTargetStatus": 200,
+      "crossSiteTargetStatus": 200,
+      "sameOriginPositiveControl": true,
+      "crossSiteLaxPositiveControl": true,
+      "strictOmissionMatchesContract": false,
+      "completed": true
+    },
+    {
+      "scenario": "route-fetch-abort-proof",
+      "headerFlags": [
+        {
+          "label": "browser-response",
+          "pathname": "/authentication/sign-in",
+          "name": "__Host-Tunner.User.Session",
+          "httpOnly": true,
+          "secure": true,
+          "sameSiteStrict": false,
+          "sameSiteLax": true,
+          "sameSiteNone": false,
+          "deletion": false
+        },
+        {
+          "label": "browser-response",
+          "pathname": "/authentication/step-up/options",
+          "name": "__Host-Tunner.StepUp",
+          "httpOnly": true,
+          "secure": true,
+          "sameSiteStrict": true,
+          "sameSiteLax": false,
+          "sameSiteNone": false,
+          "deletion": false
+        }
+      ],
+      "projections": [
+        {
+          "label": "immediately-after-ordinary-options-before-proof-or-route-fetch",
+          "cookies": [
+            {
+              "name": "__Host-Tunner.User.Session",
+              "httpOnly": true,
+              "secure": true,
+              "sameSite": "None"
+            },
+            {
+              "name": "__Host-Tunner.StepUp",
+              "httpOnly": true,
+              "secure": true,
+              "sameSite": "None"
+            }
+          ]
+        },
+        {
+          "label": "immediately-after-route-fetch-before-abort",
+          "cookies": [
+            {
+              "name": "__Host-Tunner.User.Session",
+              "httpOnly": true,
+              "secure": true,
+              "sameSite": "None"
+            },
+            {
+              "name": "__Host-Tunner.StepUp",
+              "httpOnly": true,
+              "secure": true,
+              "sameSite": "None"
+            }
+          ]
+        },
+        {
+          "label": "immediately-after-route-abort",
+          "cookies": [
+            {
+              "name": "__Host-Tunner.User.Session",
+              "httpOnly": true,
+              "secure": true,
+              "sameSite": "None"
+            },
+            {
+              "name": "__Host-Tunner.StepUp",
+              "httpOnly": true,
+              "secure": true,
+              "sameSite": "None"
+            }
+          ]
+        },
+        {
+          "label": "after-completed-proof-and-owner-reconciliation",
+          "cookies": [
+            {
+              "name": "__Host-Tunner.User.Session",
+              "httpOnly": true,
+              "secure": true,
+              "sameSite": "None"
+            },
+            {
+              "name": "__Host-Tunner.StepUp",
+              "httpOnly": true,
+              "secure": true,
+              "sameSite": "None"
+            }
+          ]
+        },
+        {
+          "label": "after-adding-only-public-synthetic-lax-control",
+          "cookies": [
+            {
+              "name": "__Host-Tunner.User.Session",
+              "httpOnly": true,
+              "secure": true,
+              "sameSite": "None"
+            },
+            {
+              "name": "__Host-Tunner.StepUp",
+              "httpOnly": true,
+              "secure": true,
+              "sameSite": "None"
+            },
+            {
+              "name": "TunnerDiagnosticPublicLaxProbe",
+              "httpOnly": true,
+              "secure": true,
+              "sameSite": "None"
+            }
+          ]
+        }
+      ],
+      "browserNavigations": [
+        {
+          "label": "same-origin-browser-click",
+          "targetPathname": "/authentication/session",
+          "method": "GET",
+          "cookiePresence": {
+            "tunnerSession": false,
+            "stepUp": false,
+            "publicSyntheticLax": false
+          }
+        },
+        {
+          "label": "cross-site-127-to-localhost-browser-click",
+          "targetPathname": "/authentication/session",
+          "method": "GET",
+          "cookiePresence": {
+            "tunnerSession": false,
+            "stepUp": false,
+            "publicSyntheticLax": false
+          }
+        }
+      ],
+      "headerObservationFailures": 0,
+      "interceptedResponseStatus": 200,
+      "sameOriginTargetStatus": 200,
+      "crossSiteTargetStatus": 200,
+      "sameOriginPositiveControl": false,
+      "crossSiteLaxPositiveControl": false,
+      "strictOmissionMatchesContract": false,
+      "completed": true
+    }
+  ],
+  "boundary": "Only sanitized cookie names/attribute flags/status and send/omit booleans. No values/passwords/codes, policy/header changes, mocked BFF responses, security waiver or Safari claim. Original WebKit FAIL retained."
+}

@@ -1,0 +1,184 @@
+{
+  "schema_version": 1,
+  "scope_id": "TUN-P2-007",
+  "result": "EXECUTIONS_RETAINED_CURRENT_UI_ACCEPTANCE_PENDING",
+  "validated_carrier_sha": "516ec0090253ee21b93c7e61922bd9d1f1caecfa",
+  "recorded_at": "2026-11-10T12:15:56.452Z",
+  "source_binding": {
+    "cohort_equivalence": [
+      {
+        "cohort": "Native14/architecture237 and packagedbrowserruntime",
+        "sha": "80a32abb3c215a212bfa34bb7678c742d3cf765d",
+        "paths": [
+          "src",
+          "tests",
+          "tools/browser-testing",
+          "Directory.Build.props",
+          "Directory.Build.targets",
+          "Directory.Packages.props",
+          "global.json",
+          "NuGet.Config",
+          "web/apps/user"
+        ],
+        "carrier_sha": "516ec0090253ee21b93c7e61922bd9d1f1caecfa",
+        "result": "GIT_OBJECT_IDENTICAL_FOR_DECLARED_COHORT_INPUTS",
+        "changed_paths": []
+      },
+      {
+        "cohort": "Mock119 browser suites",
+        "sha": "80a32abb3c215a212bfa34bb7678c742d3cf765d",
+        "paths": [
+          "web/apps/user",
+          "web/packages/ui",
+          "web/fixtures",
+          "web/tests/passkeys",
+          "web/tests/step-up",
+          "web/tests/authentication",
+          "web/tests/registration",
+          "web/playwright.passkeys.config.ts",
+          "web/playwright.step-up.config.ts",
+          "web/playwright.authentication.config.ts",
+          "web/playwright.registration.config.ts",
+          "web/package.json",
+          "web/pnpm-lock.yaml",
+          "web/tsconfig.json",
+          "docs/contracts/ui-inventory.json"
+        ],
+        "carrier_sha": "516ec0090253ee21b93c7e61922bd9d1f1caecfa",
+        "result": "GIT_OBJECT_IDENTICAL_FOR_DECLARED_COHORT_INPUTS",
+        "changed_paths": []
+      },
+      {
+        "cohort": "Foundation16",
+        "sha": "35ef6c3b64881cf50833209b739f0e47a43f5679",
+        "paths": [
+          "web/packages/ui",
+          "web/fixtures/ui",
+          "web/tests/browser",
+          "web/playwright.config.ts",
+          "web/package.json",
+          "web/pnpm-lock.yaml"
+        ],
+        "carrier_sha": "516ec0090253ee21b93c7e61922bd9d1f1caecfa",
+        "result": "GIT_OBJECT_IDENTICAL_FOR_DECLARED_COHORT_INPUTS",
+        "changed_paths": []
+      },
+      {
+        "cohort": "Real native1 browser test and all runtime inputs",
+        "sha": "35ef6c3b64881cf50833209b739f0e47a43f5679",
+        "paths": [
+          "src",
+          "tools/browser-testing",
+          "web/apps/user",
+          "web/packages/ui",
+          "web/tests/browser-testing",
+          "web/playwright.browser-testing.config.ts",
+          "web/package.json",
+          "web/pnpm-lock.yaml"
+        ],
+        "carrier_sha": "516ec0090253ee21b93c7e61922bd9d1f1caecfa",
+        "result": "GIT_OBJECT_IDENTICAL_FOR_DECLARED_COHORT_INPUTS",
+        "changed_paths": []
+      },
+      {
+        "cohort": "Other3real browser cases",
+        "sha": "80a32abb3c215a212bfa34bb7678c742d3cf765d",
+        "paths": [
+          "src",
+          "tools/browser-testing",
+          "web/apps/user",
+          "web/packages/ui",
+          "web/tests/browser-testing/fixtures.ts",
+          "web/tests/browser-testing/manual-flow.spec.ts",
+          "web/tests/browser-testing/authentication-flow.spec.ts",
+          "web/playwright.browser-testing.config.ts",
+          "web/package.json",
+          "web/pnpm-lock.yaml"
+        ],
+        "carrier_sha": "516ec0090253ee21b93c7e61922bd9d1f1caecfa",
+        "result": "GIT_OBJECT_IDENTICAL_FOR_DECLARED_COHORT_INPUTS",
+        "changed_paths": []
+      },
+      {
+        "cohort": "Typed contracts21, theme10 and TypeScript",
+        "sha": "516ec0090253ee21b93c7e61922bd9d1f1caecfa",
+        "carrier_sha": "516ec0090253ee21b93c7e61922bd9d1f1caecfa",
+        "result": "EXECUTED_AT_EXACT_CARRIER",
+        "paths": [
+          "web"
+        ],
+        "changed_paths": []
+      }
+    ],
+    "full_native_predecessor": {
+      "source_sha": "0efbb6ed89b0715d78ddfbcd97b1ee96f829f9dd",
+      "passed": 224,
+      "failed": 0,
+      "skipped": 0,
+      "receipt": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/full-native/receipt.json",
+      "qualification": "Current server delta is only the reviewed two-use local-name clarification in PasskeySignInRecovery.cs; fresh14 recovery tests, source build and architecture237 are at80a, with declared runtime/native input Git equality to this carrier. Full224 is never relabeled as execution at the carrier."
+    }
+  },
+  "counts": {
+    "native_predecessor": 224,
+    "native_current_recovery": 14,
+    "architecture": 237,
+    "passkey_proof_navigation_mock": 52,
+    "shared_step_up_browser": 22,
+    "authentication_browser": 21,
+    "registration_browser": 24,
+    "foundation_browser": 16,
+    "real_native_browser": 1,
+    "other_real_browser": 3,
+    "typed_contracts": 21,
+    "theme": 10
+  },
+  "limits": [
+    "Individual cohorts run at recorded exact SHAs; source-carrier equivalence is scoped to the declared inputs, never a whole-project or binary-equivalence claim.",
+    "Other3 real cases passed in a report whose fourth native test failed only a device-event expectation; the corrected native case separately passes at35ef. No fabricated4/4 report.",
+    "Synthetic isolated policies/content only; no production profile/publication, physical authenticator, hardware/AAL3, fullP2 Product, merge, deployment or release acceptance.",
+    "Recorded historical119Edge+16foundation+52Firefox executions do not resolve newly found feedback UI007/UI008. Current correction b0c0442 must pass new regressions and rendered review before final UI acceptance.",
+    "Windows WebKit real3 report is2PASS/1FAIL at516 with actualStrict cookie port limitation; keepfailedreport,canonicalStrictassertion and governed017followup. Firefox real3 passes. No Safari/nativeWebKit or production browsermatrix acceptance."
+  ],
+  "security": {
+    "source_sha": "80a32abb3c215a212bfa34bb7678c742d3cf765d",
+    "sast": {
+      "result": "PASS",
+      "files": 3179
+    },
+    "secrets": {
+      "result": "PASS",
+      "files": 3179
+    },
+    "controls_changed": false,
+    "provenance": "Actual unchanged tools/security/Invoke-TunnerSastPolicyScan.ps1 and Invoke-TunnerSecretScan.ps1 exits0 observed in root tool results. Final metadata/evidence scan will be recorded separately."
+  },
+  "independent_reviews": [
+    {
+      "reviewer": "p2_business_arch_qa",
+      "scope": "Native proof/owner transaction/persisted source freshness/additive migration/exact4ID source and regression review",
+      "source_sha": "0efbb6ed89b0715d78ddfbcd97b1ee96f829f9dd",
+      "result": "NO_ADDITIONAL_CONFIRMED_BLOCKER",
+      "limits": "Read-only source review; no tests, writes or Product consent. Later server change is the documented local-name clarification."
+    },
+    {
+      "reviewer": "p2_007_ui_ux",
+      "scope": "Current119browser+16foundation+TSC, actual screenshots/geometry/axe and manual review",
+      "source_shas": [
+        "80a32abb3c215a212bfa34bb7678c742d3cf765d",
+        "35ef6c3b64881cf50833209b739f0e47a43f5679"
+      ],
+      "result": "PASS_EXECUTED_SCOPE",
+      "limits": "Mocks do not prove backend bypass; native14/224 and realbrowser receipts supply that separate proof. Root nativeUI/source/role gates remain required."
+    }
+  ],
+  "current_correction": {
+    "source_sha": "b0c04424136aace1b02c486baeaafd53ed61b8ec",
+    "candidate_ref": "governance/evidence/TUN-P2-007-FEEDBACK-FIX-CANDIDATE-20261110.json",
+    "architecture_passed": 237,
+    "architecture_failed": 0,
+    "architecture_skipped": 0,
+    "architecture_report": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/architecture-current/architecture-b0c0442.trx",
+    "ui_status": "Full current-source GREEN/rendered acceptance pending; the8RED report at312af88 remains retained with7fail/1pass."
+  }
+}

@@ -1,0 +1,64 @@
+{
+  "scope": "FULL committed-source Identity native regression; synthetic authenticator + real native .NET verifier/HTTPS/PostgreSQL; no physical-authenticator/browser UX or Product/release acceptance inferred.",
+  "testedHead": "0efbb6ed89b0715d78ddfbcd97b1ee96f829f9dd",
+  "headAtReceipt": "7062bed290017a5e4e45cea56c34e4c65836d5ad",
+  "configuration": "Release",
+  "committedNativeSourceDiffBetweenHeads": "",
+  "sourceFreezeVerifiedThroughRun": true,
+  "sourceVerification": "All24rawsource hashes equal captured inputs; the approved post-run2-use localname rename is reversed in memory only for hash verification. No other changes.",
+  "compiledInputsUnchangedAfterRun": true,
+  "sourceInputs": "artifacts/p2-007-passkeys-20261109/proof-0efbb6e-release/native/source-inputs.json",
+  "sourceInputsSha256": "ed3d0ac6879fa2c1e2db0dd10089f2028cb2e5dbb35c59ab32b5409ba63b9b22",
+  "compiledInputs": "artifacts/p2-007-passkeys-20261109/proof-0efbb6e-release/native/compiled-inputs.json",
+  "compiledInputsSha256": "10329120b0253a60dde2350012763b76ca7ce835565254b6af70bea36be79382",
+  "command": "TUNNER_RUN_CONTAINER_TESTS=1 dotnet test tests/Tunner.Identity.Persistence.Tests/Tunner.Identity.Persistence.Tests.csproj -c Release --no-build --no-restore --logger trx;LogFileName=identity-proof-nav-0efbb6e-release.trx --results-directory artifacts/p2-007-passkeys-20261109/proof-0efbb6e-release/native",
+  "exitCode": 0,
+  "counters": {
+    "total": "224",
+    "executed": "224",
+    "passed": "224",
+    "failed": "0",
+    "error": "0",
+    "timeout": "0",
+    "aborted": "0",
+    "inconclusive": "0",
+    "passedButRunAborted": "0",
+    "notRunnable": "0",
+    "notExecuted": "0",
+    "disconnected": "0",
+    "warning": "0",
+    "completed": "0",
+    "inProgress": "0",
+    "pending": "0"
+  },
+  "times": {
+    "creation": "2026-11-10T05:22:42.9735895-05:00",
+    "queuing": "2026-11-10T05:22:42.9735901-05:00",
+    "start": "2026-11-10T05:22:36.3846703-05:00",
+    "finish": "2026-11-10T05:28:52.3416358-05:00"
+  },
+  "trx": "artifacts/p2-007-passkeys-20261109/proof-0efbb6e-release/native/identity-proof-nav-0efbb6e-release.trx",
+  "trxSha256": "e41cbba6409e0f7f6653cdb7efa6a33d90a1cbcd7f07fe42429a2f3c77855857",
+  "testLogSha256": "423d595255387a56d5de2d52a41f60650a9d1375d9b0cc950a4917a08f2a4e28",
+  "build": {
+    "exitCode": 0,
+    "warnings": 0,
+    "errors": 0,
+    "log": "artifacts/p2-007-passkeys-20261109/proof-0efbb6e-release/native/build-retry.log",
+    "sha256": "11f0e9fc3e988cb492f5f2030a1f379db8022f3e4a58da403eb06630c038fa0f"
+  },
+  "priorBuildFailure": {
+    "exitCode": 1,
+    "applicationBehaviorExercised": false,
+    "cause": "Old fingerprinted dist asset disappeared during overlapping web generation; standard retry after dist freeze passed, no source edits/cleanup.",
+    "log": "artifacts/p2-007-passkeys-20261109/proof-0efbb6e-release/native/build.log",
+    "sha256": "ae1ba0d90c2ae371089dedc6ae281653d0cbf5ef083ebcbbc69483f1a8a27353"
+  },
+  "baselineImage": "sha256:77f585114c32fbca283dc835b0596f4e52b51b4c6662d7810b2f4084f60a1873",
+  "postRunRename": {
+    "path": "src/Modules/Identity/PasskeySignInRecovery.cs",
+    "change": "token local identifier renamed protectedRecovery at declaration and return only; same protection/serialization/value.",
+    "sha256": "f24444e51e549b61b247c6fc27ed83ed3ae501d4bdc167714dba211c8b2f848b",
+    "pendingNewAnchorAndTargetedValidation": true
+  }
+}

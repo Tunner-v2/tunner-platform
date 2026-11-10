@@ -1,0 +1,52 @@
+✔ SSR is browser-independent with plain brand and no icon (13.6594ms)
+✔ native button defaults to button, with explicit owner submit supported (1.7559ms)
+✔ owner disabled and busy state preserved (0.9386ms)
+✔ content text is escaped and provenance is preserved (0.8454ms)
+✔ missing required key fails without fallback (1.5043ms)
+✔ mismatched key or locale and unpublished snapshots fail (2.1242ms)
+✔ missing provenance and blank required copy fail (2.1796ms)
+✔ resolver receives bounded surface/locale/audience context (1.6933ms)
+✔ required theme/content boundaries fail explicitly (0.9541ms)
+✔ invalid modes/surfaces fail rather than silently applying defaults (2.3374ms)
+✔ empty locale/audience is rejected (0.7587ms)
+✔ field label/help/error IDs and noncolor text preserve associations (3.1502ms)
+✔ absent optional slots stay absent (1.0898ms)
+✔ generated label IDs are unique (1.7323ms)
+✔ nested surface providers preserve independent DOM boundaries (1.6062ms)
+✔ placeholder requires its own published copy and provenance while retaining the visible label (1.7681ms)
+✔ typed schemas enforce required, format, range and cross-field rules using domain keys (9.4029ms)
+✔ schema form-level errors and published summary remain separate from field rules (1.4385ms)
+✔ domain schemas use current policy and do not inherit historical Figma password or age restrictions (6.7866ms)
+✔ DOB schema is calendar-safe and rejects future dates without client age eligibility policy (0.2269ms)
+✖ every implemented screen route agrees with the central inventory and known BFF fallback contract (1.4732ms)
+ℹ tests 21
+ℹ suites 0
+ℹ pass 20
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 369.2785
+
+✖ failing tests:
+
+test at tests\dist\contracts.test.js:6555:5
+✖ every implemented screen route agrees with the central inventory and known BFF fallback contract (1.4732ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+
+  9 !== 7
+
+      at TestContext.<anonymous> (<repo-root>/web/tests/dist/contracts.test.js:6557:4)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+      at Test.postRun (node:internal/test_runner/test:1542:19)
+      at Test.run (node:internal/test_runner/test:1467:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 9,
+    expected: 7,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

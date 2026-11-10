@@ -1,0 +1,76 @@
+[WebServer] (node:21828) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 22 tests using 1 worker
+
+(node:2928) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok  1 tests\passkeys\step-up-passkey.spec.ts:5:1 › Operation passkey proof invokes native get and authorizes only the exact enrollment; no password is required (2.3s)
+  ok  2 tests\passkeys\step-up-passkey.spec.ts:9:1 › The shared chooser advertises only trusted available native capability and browser support (2.1s)
+  ok  3 tests\passkeys\step-up-passkey.spec.ts:13:1 › An unsupported browser keeps the trusted native method unavailable and the password alternative usable (1.4s)
+  ok  4 tests\passkeys\step-up-passkey.spec.ts:17:1 › Native cancellation keeps the same pending challenge for an explicit retry and allows another method (1.4s)
+  x   5 tests\passkeys\step-up-passkey.spec.ts:21:1 › Lost native options retain the original proof request and attempt until an explicit continuation (1.5s)
+(node:25588) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok  6 tests\passkeys\step-up-passkey.spec.ts:25:1 › Lost completed assertion reconciles the exact owner without another native get or mutation (1.6s)
+  x   7 tests\passkeys\step-up-passkey.spec.ts:29:1 › Protected PROOF_ISSUED reload continues the same proof without native assertion or new IDs (1.9s)
+(node:24536) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok  8 tests\passkeys\step-up-passkey.spec.ts:33:1 › Closing an unresolved assertion preserves owner and native binding instead of cancelling the operation (2.1s)
+  ok  9 tests\passkeys\step-up-passkey.spec.ts:37:92 › A completion with mismatched requestId cannot complete the owner (1.3s)
+  ok 10 tests\passkeys\step-up-passkey.spec.ts:37:92 › A completion with mismatched attemptId cannot complete the owner (2.0s)
+  ok 11 tests\passkeys\step-up-passkey.spec.ts:37:92 › A completion with mismatched ceremonyId cannot complete the owner (2.3s)
+  ok 12 tests\passkeys\step-up-passkey.spec.ts:37:92 › A completion with mismatched operationReference cannot complete the owner (1.3s)
+  ok 13 tests\passkeys\step-up-passkey.spec.ts:41:1 › Mismatched protected recovery cannot replace the original native attempt after an uncertain assertion (1.4s)
+  ok 14 tests\passkeys\step-up-passkey.spec.ts:45:79 › Mismatched native options requestId cannot invoke the browser ceremony (1.3s)
+  ok 15 tests\passkeys\step-up-passkey.spec.ts:45:79 › Mismatched native options attemptId cannot invoke the browser ceremony (1.2s)
+  ok 16 tests\passkeys\step-up-passkey.spec.ts:45:79 › Mismatched native options operationReference cannot invoke the browser ceremony (1.1s)
+  ok 17 tests\passkeys\step-up-passkey.spec.ts:49:33 › Only exact correlated rejection resolves a submitted native attempt; matching=true (1.1s)
+  ok 18 tests\passkeys\step-up-passkey.spec.ts:49:33 › Only exact correlated rejection resolves a submitted native attempt; matching=false (1.1s)
+  ok 19 tests\passkeys\step-up-passkey.spec.ts:53:1 › Terminal self-revocation from native proof uses the original owner read-only result handle (1.0s)
+  ok 20 tests\passkeys\step-up-passkey.spec.ts:57:35 › Shared native proof feedback retains the approved overlay at 1440px (2.3s)
+  ok 21 tests\passkeys\step-up-passkey.spec.ts:57:35 › Shared native proof feedback retains the approved overlay at 390px (1.8s)
+  ok 22 tests\passkeys\step-up-passkey.spec.ts:57:35 › Shared native proof feedback retains the approved overlay at 320px (1.8s)
+
+
+  1) tests\passkeys\step-up-passkey.spec.ts:21:1 › Lost native options retain the original proof request and attempt until an explicit continuation
+
+    Error: expect(received).toHaveLength(expected)
+
+    Expected length: 2
+    Received length: 1
+    Received array:  [{"attemptId": "e6a594ba-d3e9-4ea1-b497-506531ea2dc1", "requestId": "a8331149-9465-4a45-a7ac-df97895aa572"}]
+
+      20 |
+      21 | test('Lost native options retain the original proof request and attempt until an explicit continuation',async({page})=>{
+    > 22 |   const {native}=await setupProof(page);let first=true;await page.route('**/authentication/step-up/passkey/options',async route=>{if(!first){await route.fallback();return;}first=false;native.options.push(route.request().postDataJSON());await route.abort('connectionreset');});await reviewEnrollment(page);await beginNative(page);await expect(proofDialog(page).getByText('We are checking this verification. Please wait before trying again.')).toBeVisible();expect((await counts(page)).gets).toBe(0);await proofDialog(page).getByRole('button',{name:'Continue this verification',exact:true}).click();await expect(page.getByRole('button',{name:'Continue setup',exact:true})).toBeVisible();expect(native.options).toHaveLength(2);expect(native.options[0]).toEqual(native.options[1]);expect(native.executions).toBe(1);
+         |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     ^
+      23 | });
+      24 |
+      25 | test('Lost completed assertion reconciles the exact owner without another native get or mutation',async({page})=>{
+        at <repo-root>\web\tests\passkeys\step-up-passkey.spec.ts:22:709
+
+    Error Context: ..\artifacts\p2-007-passkeys-20261109\ui-review\20261110-proof-nav-39afa32-proof\run-details\step-up-passkey-Lost-nativ-13251-il-an-explicit-continuation\error-context.md
+
+  2) tests\passkeys\step-up-passkey.spec.ts:29:1 › Protected PROOF_ISSUED reload continues the same proof without native assertion or new IDs
+
+    Error: expect(received).toBe(expected) // Object.is equality
+
+    Expected: 1
+    Received: 0
+
+      28 |
+      29 | test('Protected PROOF_ISSUED reload continues the same proof without native assertion or new IDs',async({page})=>{
+    > 30 |   const {native,owner,requestId}=await setupProof(page);await page.route('**/authentication/step-up/passkey',async route=>{native.submissions.push(route.request().postDataJSON());native.assertions++;native.status='PROOF_ISSUED';await route.abort('connectionreset');});await reviewEnrollment(page);await beginNative(page);await expect(proofDialog(page).getByRole('button',{name:'Continue this verification',exact:true})).toBeVisible();expect(native.executions).toBe(0);const original={requestId,attemptId:native.attemptId,ceremonyId:native.ceremonyId};await page.reload();await page.getByRole('button',{name:'Continue setup',exact:true}).click();await expect(proofDialog(page).getByRole('button',{name:'Continue this verification',exact:true})).toBeVisible();expect((await counts(page)).gets).toBe(0);await proofDialog(page).getByRole('button',{name:'Check verification status',exact:true}).click();expect(native.executions).toBe(0);await proofDialog(page).getByRole('button',{name:'Continue this verification',exact:true}).click();await expect(page.getByRole('button',{name:'Continue setup',exact:true})).toBeVisible();expect(native.continuations).toBe(1);expect(native.submissions.at(-1)).toEqual(original);expect(owner.operation!.status).toBe('AUTHORIZED');expect(native.options).toHaveLength(1);expect((await counts(page)).gets).toBe(0);expect(await page.evaluate(()=>[localStorage.length,sessionStorage.length])).toEqual([0,0]);
+         |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             ^
+      31 | });
+      32 |
+      33 | test('Closing an unresolved assertion preserves owner and native binding instead of cancelling the operation',async({page})=>{
+        at <repo-root>\web\tests\passkeys\step-up-passkey.spec.ts:30:1149
+
+    Error Context: ..\artifacts\p2-007-passkeys-20261109\ui-review\20261110-proof-nav-39afa32-proof\run-details\step-up-passkey-Protected--a8986-native-assertion-or-new-IDs\error-context.md
+
+  2 failed
+    tests\passkeys\step-up-passkey.spec.ts:21:1 › Lost native options retain the original proof request and attempt until an explicit continuation
+    tests\passkeys\step-up-passkey.spec.ts:29:1 › Protected PROOF_ISSUED reload continues the same proof without native assertion or new IDs
+  20 passed (43.4s)

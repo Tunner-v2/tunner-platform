@@ -1,0 +1,1220 @@
+{
+  "config": {
+    "argv": [
+      "C:\\Program Files\\nodejs\\node.exe",
+      "<repo-root>\\web\\node_modules\\@playwright\\test\\cli.js",
+      "test",
+      "--config",
+      "playwright.passkeys.config.ts",
+      "passkeys.spec.ts",
+      "navigation.spec.ts",
+      "--output",
+      "<repo-root>\\artifacts\\p2-007-passkeys-20261109\\ui-review\\20261110-proof-nav-0efbb6e-primary-nav\\run-details"
+    ],
+    "configFile": "<repo-root>\\web\\playwright.passkeys.config.ts",
+    "rootDir": "<repo-root>/web/tests/passkeys",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "<repo-root>/artifacts/p2-007-passkeys-20261109/ui-review/20261110-proof-nav-0efbb6e-primary-nav/run-details",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "<repo-root>/web/tests/passkeys",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "test-results/passkeys/results.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.62.1",
+    "workers": 1,
+    "webServer": {
+      "command": "node node_modules/vite/bin/vite.js --config apps/user/vite.config.ts --port 5193",
+      "url": "http://127.0.0.1:5193/registration/",
+      "reuseExistingServer": false,
+      "timeout": 30000
+    }
+  },
+  "suites": [
+    {
+      "title": "navigation.spec.ts",
+      "file": "navigation.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "Approved Ready and SignedIn navigation retains canonical guarded chain, keyboard and geometry at 1440",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 4660,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mnot\u001b[2m.\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: not \u001b[32m\"none\"\u001b[39m",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mnot\u001b[2m.\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: not \u001b[32m\"none\"\u001b[39m\n    at <repo-root>\\web\\tests\\passkeys\\navigation.spec.ts:16:1067",
+                    "location": {
+                      "file": "<repo-root>\\web\\tests\\passkeys\\navigation.spec.ts",
+                      "column": 1067,
+                      "line": 16
+                    },
+                    "snippet": "  14 | for(const width of [1440,390,320])test('Approved Ready and SignedIn navigation retains canonical guarded chain, keyboard and geometry at '+width,async({page},testInfo)=>{\n  15 |   await page.setViewportSize({width,height:1024});const state=await readyFixture(page);await page.goto('/registration/complete');await expect(page.getByRole('heading',{name:'Your email is verified'})).toBeVisible();expect(state.authenticated).toBe(false);expect(state.assertions).toBe(0);const signIn=page.getByRole('link',{name:'Sign in',exact:true});await expect(signIn).toHaveAttribute('href','/login');expect(await signIn.evaluate(element=>element.getBoundingClientRect().height)).toBe(48);if(width===1440){expect(await signIn.evaluate(element=>element.getBoundingClientRect().width)).toBe(420);expect(await page.locator('.registration-card.ready').evaluate(element=>element.getBoundingClientRect().height)).toBe(612);}await signIn.focus();await expect(signIn).toBeFocused();expect(await signIn.evaluate(element=>getComputedStyle(element).outlineStyle)).not.toBe('none');await page.screenshot({path:testInfo.outputPath('ready-navigation-'+width+'.png'),fullPage:true});expect((await new AxeBuilder({page}).withTags(['wcag2a','wcag2aa','wcag21aa','wcag22aa']).analyze()).violations).toEqual([]);await page.keyboard.press('Enter');await expect(page).toHaveURL(/\\/login$/);await expect(page.getByRole('heading',{name:'Welcome back'})).toBeVisible();\n> 16 |   await page.getByRole('button',{name:'Sign in with passkey',exact:true}).click();await expect(page).toHaveURL(/\\/signed-in$/);await expect(page.getByRole('heading',{name:'You’re signed in'})).toBeVisible();expect(state.assertions).toBe(1);const security=page.getByRole('link',{name:'Account security',exact:true});await expect(security).toHaveAttribute('href','/account/security');await expect(page.getByRole('button',{name:'Sign out',exact:true})).toBeVisible();await expect(page.getByText('Signing out ends your Tunner session. Connected products manage their own sessions.')).toBeVisible();expect(await security.evaluate(element=>element.getBoundingClientRect().height)).toBe(44);if(width===1440){expect(await security.evaluate(element=>element.getBoundingClientRect().width)).toBe(418);expect(await page.locator('.authentication-card.signed-in').evaluate(element=>element.getBoundingClientRect().height)).toBe(588);}await security.focus();await expect(security).toBeFocused();expect(await security.evaluate(element=>getComputedStyle(element).outlineStyle)).not.toBe('none');await page.screenshot({path:testInfo.outputPath('signed-in-navigation-'+width+'.png'),fullPage:true});expect((await new AxeBuilder({page}).withTags(['wcag2a','wcag2aa','wcag21aa','wcag22aa']).analyze()).violations).toEqual([]);expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);await page.keyboard.press('Enter');await expect(page).toHaveURL(/\\/account\\/security$/);await expect(page.getByRole('heading',{name:'Security',exact:true})).toBeVisible();await page.getByRole('link',{name:'Review passkeys',exact:true}).click();await expect(page).toHaveURL(/\\/account\\/security\\/sign-in-methods$/);await page.goBack();await expect(page).toHaveURL(/\\/account\\/security$/);await page.reload();await expect(page.getByRole('heading',{name:'Security',exact:true})).toBeVisible();expect(await page.evaluate(()=>[localStorage.length,sessionStorage.length])).toEqual([0,0]);\n     |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           ^\n  17 | });\n  18 |\n  19 | test('The Account security continuation remains protected after the authoritative session ends',async({page})=>{"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "<repo-root>\\web\\tests\\passkeys\\navigation.spec.ts",
+                        "column": 1067,
+                        "line": 16
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mnot\u001b[2m.\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: not \u001b[32m\"none\"\u001b[39m\n\n  14 | for(const width of [1440,390,320])test('Approved Ready and SignedIn navigation retains canonical guarded chain, keyboard and geometry at '+width,async({page},testInfo)=>{\n  15 |   await page.setViewportSize({width,height:1024});const state=await readyFixture(page);await page.goto('/registration/complete');await expect(page.getByRole('heading',{name:'Your email is verified'})).toBeVisible();expect(state.authenticated).toBe(false);expect(state.assertions).toBe(0);const signIn=page.getByRole('link',{name:'Sign in',exact:true});await expect(signIn).toHaveAttribute('href','/login');expect(await signIn.evaluate(element=>element.getBoundingClientRect().height)).toBe(48);if(width===1440){expect(await signIn.evaluate(element=>element.getBoundingClientRect().width)).toBe(420);expect(await page.locator('.registration-card.ready').evaluate(element=>element.getBoundingClientRect().height)).toBe(612);}await signIn.focus();await expect(signIn).toBeFocused();expect(await signIn.evaluate(element=>getComputedStyle(element).outlineStyle)).not.toBe('none');await page.screenshot({path:testInfo.outputPath('ready-navigation-'+width+'.png'),fullPage:true});expect((await new AxeBuilder({page}).withTags(['wcag2a','wcag2aa','wcag21aa','wcag22aa']).analyze()).violations).toEqual([]);await page.keyboard.press('Enter');await expect(page).toHaveURL(/\\/login$/);await expect(page.getByRole('heading',{name:'Welcome back'})).toBeVisible();\n> 16 |   await page.getByRole('button',{name:'Sign in with passkey',exact:true}).click();await expect(page).toHaveURL(/\\/signed-in$/);await expect(page.getByRole('heading',{name:'You’re signed in'})).toBeVisible();expect(state.assertions).toBe(1);const security=page.getByRole('link',{name:'Account security',exact:true});await expect(security).toHaveAttribute('href','/account/security');await expect(page.getByRole('button',{name:'Sign out',exact:true})).toBeVisible();await expect(page.getByText('Signing out ends your Tunner session. Connected products manage their own sessions.')).toBeVisible();expect(await security.evaluate(element=>element.getBoundingClientRect().height)).toBe(44);if(width===1440){expect(await security.evaluate(element=>element.getBoundingClientRect().width)).toBe(418);expect(await page.locator('.authentication-card.signed-in').evaluate(element=>element.getBoundingClientRect().height)).toBe(588);}await security.focus();await expect(security).toBeFocused();expect(await security.evaluate(element=>getComputedStyle(element).outlineStyle)).not.toBe('none');await page.screenshot({path:testInfo.outputPath('signed-in-navigation-'+width+'.png'),fullPage:true});expect((await new AxeBuilder({page}).withTags(['wcag2a','wcag2aa','wcag21aa','wcag22aa']).analyze()).violations).toEqual([]);expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);await page.keyboard.press('Enter');await expect(page).toHaveURL(/\\/account\\/security$/);await expect(page.getByRole('heading',{name:'Security',exact:true})).toBeVisible();await page.getByRole('link',{name:'Review passkeys',exact:true}).click();await expect(page).toHaveURL(/\\/account\\/security\\/sign-in-methods$/);await page.goBack();await expect(page).toHaveURL(/\\/account\\/security$/);await page.reload();await expect(page.getByRole('heading',{name:'Security',exact:true})).toBeVisible();expect(await page.evaluate(()=>[localStorage.length,sessionStorage.length])).toEqual([0,0]);\n     |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           ^\n  17 | });\n  18 |\n  19 | test('The Account security continuation remains protected after the authoritative session ends',async({page})=>{\n    at <repo-root>\\web\\tests\\passkeys\\navigation.spec.ts:16:1067"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-10T10:20:28.793Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "<repo-root>\\artifacts\\p2-007-passkeys-20261109\\ui-review\\20261110-proof-nav-0efbb6e-primary-nav\\run-details\\navigation-Approved-Ready--045ea-yboard-and-geometry-at-1440\\error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "<repo-root>\\web\\tests\\passkeys\\navigation.spec.ts",
+                    "column": 1067,
+                    "line": 16
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "5d2868f7d23420c27cca-39c7a95bdd35d133e0f1",
+          "file": "navigation.spec.ts",
+          "line": 14,
+          "column": 35
+        },
+        {
+          "title": "Approved Ready and SignedIn navigation retains canonical guarded chain, keyboard and geometry at 390",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 5154,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mnot\u001b[2m.\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: not \u001b[32m\"none\"\u001b[39m",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mnot\u001b[2m.\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: not \u001b[32m\"none\"\u001b[39m\n    at <repo-root>\\web\\tests\\passkeys\\navigation.spec.ts:16:1067",
+                    "location": {
+                      "file": "<repo-root>\\web\\tests\\passkeys\\navigation.spec.ts",
+                      "column": 1067,
+                      "line": 16
+                    },
+                    "snippet": "  14 | for(const width of [1440,390,320])test('Approved Ready and SignedIn navigation retains canonical guarded chain, keyboard and geometry at '+width,async({page},testInfo)=>{\n  15 |   await page.setViewportSize({width,height:1024});const state=await readyFixture(page);await page.goto('/registration/complete');await expect(page.getByRole('heading',{name:'Your email is verified'})).toBeVisible();expect(state.authenticated).toBe(false);expect(state.assertions).toBe(0);const signIn=page.getByRole('link',{name:'Sign in',exact:true});await expect(signIn).toHaveAttribute('href','/login');expect(await signIn.evaluate(element=>element.getBoundingClientRect().height)).toBe(48);if(width===1440){expect(await signIn.evaluate(element=>element.getBoundingClientRect().width)).toBe(420);expect(await page.locator('.registration-card.ready').evaluate(element=>element.getBoundingClientRect().height)).toBe(612);}await signIn.focus();await expect(signIn).toBeFocused();expect(await signIn.evaluate(element=>getComputedStyle(element).outlineStyle)).not.toBe('none');await page.screenshot({path:testInfo.outputPath('ready-navigation-'+width+'.png'),fullPage:true});expect((await new AxeBuilder({page}).withTags(['wcag2a','wcag2aa','wcag21aa','wcag22aa']).analyze()).violations).toEqual([]);await page.keyboard.press('Enter');await expect(page).toHaveURL(/\\/login$/);await expect(page.getByRole('heading',{name:'Welcome back'})).toBeVisible();\n> 16 |   await page.getByRole('button',{name:'Sign in with passkey',exact:true}).click();await expect(page).toHaveURL(/\\/signed-in$/);await expect(page.getByRole('heading',{name:'You’re signed in'})).toBeVisible();expect(state.assertions).toBe(1);const security=page.getByRole('link',{name:'Account security',exact:true});await expect(security).toHaveAttribute('href','/account/security');await expect(page.getByRole('button',{name:'Sign out',exact:true})).toBeVisible();await expect(page.getByText('Signing out ends your Tunner session. Connected products manage their own sessions.')).toBeVisible();expect(await security.evaluate(element=>element.getBoundingClientRect().height)).toBe(44);if(width===1440){expect(await security.evaluate(element=>element.getBoundingClientRect().width)).toBe(418);expect(await page.locator('.authentication-card.signed-in').evaluate(element=>element.getBoundingClientRect().height)).toBe(588);}await security.focus();await expect(security).toBeFocused();expect(await security.evaluate(element=>getComputedStyle(element).outlineStyle)).not.toBe('none');await page.screenshot({path:testInfo.outputPath('signed-in-navigation-'+width+'.png'),fullPage:true});expect((await new AxeBuilder({page}).withTags(['wcag2a','wcag2aa','wcag21aa','wcag22aa']).analyze()).violations).toEqual([]);expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);await page.keyboard.press('Enter');await expect(page).toHaveURL(/\\/account\\/security$/);await expect(page.getByRole('heading',{name:'Security',exact:true})).toBeVisible();await page.getByRole('link',{name:'Review passkeys',exact:true}).click();await expect(page).toHaveURL(/\\/account\\/security\\/sign-in-methods$/);await page.goBack();await expect(page).toHaveURL(/\\/account\\/security$/);await page.reload();await expect(page.getByRole('heading',{name:'Security',exact:true})).toBeVisible();expect(await page.evaluate(()=>[localStorage.length,sessionStorage.length])).toEqual([0,0]);\n     |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           ^\n  17 | });\n  18 |\n  19 | test('The Account security continuation remains protected after the authoritative session ends',async({page})=>{"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "<repo-root>\\web\\tests\\passkeys\\navigation.spec.ts",
+                        "column": 1067,
+                        "line": 16
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mnot\u001b[2m.\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: not \u001b[32m\"none\"\u001b[39m\n\n  14 | for(const width of [1440,390,320])test('Approved Ready and SignedIn navigation retains canonical guarded chain, keyboard and geometry at '+width,async({page},testInfo)=>{\n  15 |   await page.setViewportSize({width,height:1024});const state=await readyFixture(page);await page.goto('/registration/complete');await expect(page.getByRole('heading',{name:'Your email is verified'})).toBeVisible();expect(state.authenticated).toBe(false);expect(state.assertions).toBe(0);const signIn=page.getByRole('link',{name:'Sign in',exact:true});await expect(signIn).toHaveAttribute('href','/login');expect(await signIn.evaluate(element=>element.getBoundingClientRect().height)).toBe(48);if(width===1440){expect(await signIn.evaluate(element=>element.getBoundingClientRect().width)).toBe(420);expect(await page.locator('.registration-card.ready').evaluate(element=>element.getBoundingClientRect().height)).toBe(612);}await signIn.focus();await expect(signIn).toBeFocused();expect(await signIn.evaluate(element=>getComputedStyle(element).outlineStyle)).not.toBe('none');await page.screenshot({path:testInfo.outputPath('ready-navigation-'+width+'.png'),fullPage:true});expect((await new AxeBuilder({page}).withTags(['wcag2a','wcag2aa','wcag21aa','wcag22aa']).analyze()).violations).toEqual([]);await page.keyboard.press('Enter');await expect(page).toHaveURL(/\\/login$/);await expect(page.getByRole('heading',{name:'Welcome back'})).toBeVisible();\n> 16 |   await page.getByRole('button',{name:'Sign in with passkey',exact:true}).click();await expect(page).toHaveURL(/\\/signed-in$/);await expect(page.getByRole('heading',{name:'You’re signed in'})).toBeVisible();expect(state.assertions).toBe(1);const security=page.getByRole('link',{name:'Account security',exact:true});await expect(security).toHaveAttribute('href','/account/security');await expect(page.getByRole('button',{name:'Sign out',exact:true})).toBeVisible();await expect(page.getByText('Signing out ends your Tunner session. Connected products manage their own sessions.')).toBeVisible();expect(await security.evaluate(element=>element.getBoundingClientRect().height)).toBe(44);if(width===1440){expect(await security.evaluate(element=>element.getBoundingClientRect().width)).toBe(418);expect(await page.locator('.authentication-card.signed-in').evaluate(element=>element.getBoundingClientRect().height)).toBe(588);}await security.focus();await expect(security).toBeFocused();expect(await security.evaluate(element=>getComputedStyle(element).outlineStyle)).not.toBe('none');await page.screenshot({path:testInfo.outputPath('signed-in-navigation-'+width+'.png'),fullPage:true});expect((await new AxeBuilder({page}).withTags(['wcag2a','wcag2aa','wcag21aa','wcag22aa']).analyze()).violations).toEqual([]);expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);await page.keyboard.press('Enter');await expect(page).toHaveURL(/\\/account\\/security$/);await expect(page.getByRole('heading',{name:'Security',exact:true})).toBeVisible();await page.getByRole('link',{name:'Review passkeys',exact:true}).click();await expect(page).toHaveURL(/\\/account\\/security\\/sign-in-methods$/);await page.goBack();await expect(page).toHaveURL(/\\/account\\/security$/);await page.reload();await expect(page.getByRole('heading',{name:'Security',exact:true})).toBeVisible();expect(await page.evaluate(()=>[localStorage.length,sessionStorage.length])).toEqual([0,0]);\n     |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           ^\n  17 | });\n  18 |\n  19 | test('The Account security continuation remains protected after the authoritative session ends',async({page})=>{\n    at <repo-root>\\web\\tests\\passkeys\\navigation.spec.ts:16:1067"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-10T10:20:36.918Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "<repo-root>\\artifacts\\p2-007-passkeys-20261109\\ui-review\\20261110-proof-nav-0efbb6e-primary-nav\\run-details\\navigation-Approved-Ready--86776-eyboard-and-geometry-at-390\\error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "<repo-root>\\web\\tests\\passkeys\\navigation.spec.ts",
+                    "column": 1067,
+                    "line": 16
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "5d2868f7d23420c27cca-45da4898bbf033c478c9",
+          "file": "navigation.spec.ts",
+          "line": 14,
+          "column": 35
+        },
+        {
+          "title": "Approved Ready and SignedIn navigation retains canonical guarded chain, keyboard and geometry at 320",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 4699,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mnot\u001b[2m.\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: not \u001b[32m\"none\"\u001b[39m",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mnot\u001b[2m.\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: not \u001b[32m\"none\"\u001b[39m\n    at <repo-root>\\web\\tests\\passkeys\\navigation.spec.ts:16:1067",
+                    "location": {
+                      "file": "<repo-root>\\web\\tests\\passkeys\\navigation.spec.ts",
+                      "column": 1067,
+                      "line": 16
+                    },
+                    "snippet": "  14 | for(const width of [1440,390,320])test('Approved Ready and SignedIn navigation retains canonical guarded chain, keyboard and geometry at '+width,async({page},testInfo)=>{\n  15 |   await page.setViewportSize({width,height:1024});const state=await readyFixture(page);await page.goto('/registration/complete');await expect(page.getByRole('heading',{name:'Your email is verified'})).toBeVisible();expect(state.authenticated).toBe(false);expect(state.assertions).toBe(0);const signIn=page.getByRole('link',{name:'Sign in',exact:true});await expect(signIn).toHaveAttribute('href','/login');expect(await signIn.evaluate(element=>element.getBoundingClientRect().height)).toBe(48);if(width===1440){expect(await signIn.evaluate(element=>element.getBoundingClientRect().width)).toBe(420);expect(await page.locator('.registration-card.ready').evaluate(element=>element.getBoundingClientRect().height)).toBe(612);}await signIn.focus();await expect(signIn).toBeFocused();expect(await signIn.evaluate(element=>getComputedStyle(element).outlineStyle)).not.toBe('none');await page.screenshot({path:testInfo.outputPath('ready-navigation-'+width+'.png'),fullPage:true});expect((await new AxeBuilder({page}).withTags(['wcag2a','wcag2aa','wcag21aa','wcag22aa']).analyze()).violations).toEqual([]);await page.keyboard.press('Enter');await expect(page).toHaveURL(/\\/login$/);await expect(page.getByRole('heading',{name:'Welcome back'})).toBeVisible();\n> 16 |   await page.getByRole('button',{name:'Sign in with passkey',exact:true}).click();await expect(page).toHaveURL(/\\/signed-in$/);await expect(page.getByRole('heading',{name:'You’re signed in'})).toBeVisible();expect(state.assertions).toBe(1);const security=page.getByRole('link',{name:'Account security',exact:true});await expect(security).toHaveAttribute('href','/account/security');await expect(page.getByRole('button',{name:'Sign out',exact:true})).toBeVisible();await expect(page.getByText('Signing out ends your Tunner session. Connected products manage their own sessions.')).toBeVisible();expect(await security.evaluate(element=>element.getBoundingClientRect().height)).toBe(44);if(width===1440){expect(await security.evaluate(element=>element.getBoundingClientRect().width)).toBe(418);expect(await page.locator('.authentication-card.signed-in').evaluate(element=>element.getBoundingClientRect().height)).toBe(588);}await security.focus();await expect(security).toBeFocused();expect(await security.evaluate(element=>getComputedStyle(element).outlineStyle)).not.toBe('none');await page.screenshot({path:testInfo.outputPath('signed-in-navigation-'+width+'.png'),fullPage:true});expect((await new AxeBuilder({page}).withTags(['wcag2a','wcag2aa','wcag21aa','wcag22aa']).analyze()).violations).toEqual([]);expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);await page.keyboard.press('Enter');await expect(page).toHaveURL(/\\/account\\/security$/);await expect(page.getByRole('heading',{name:'Security',exact:true})).toBeVisible();await page.getByRole('link',{name:'Review passkeys',exact:true}).click();await expect(page).toHaveURL(/\\/account\\/security\\/sign-in-methods$/);await page.goBack();await expect(page).toHaveURL(/\\/account\\/security$/);await page.reload();await expect(page.getByRole('heading',{name:'Security',exact:true})).toBeVisible();expect(await page.evaluate(()=>[localStorage.length,sessionStorage.length])).toEqual([0,0]);\n     |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           ^\n  17 | });\n  18 |\n  19 | test('The Account security continuation remains protected after the authoritative session ends',async({page})=>{"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "<repo-root>\\web\\tests\\passkeys\\navigation.spec.ts",
+                        "column": 1067,
+                        "line": 16
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mnot\u001b[2m.\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: not \u001b[32m\"none\"\u001b[39m\n\n  14 | for(const width of [1440,390,320])test('Approved Ready and SignedIn navigation retains canonical guarded chain, keyboard and geometry at '+width,async({page},testInfo)=>{\n  15 |   await page.setViewportSize({width,height:1024});const state=await readyFixture(page);await page.goto('/registration/complete');await expect(page.getByRole('heading',{name:'Your email is verified'})).toBeVisible();expect(state.authenticated).toBe(false);expect(state.assertions).toBe(0);const signIn=page.getByRole('link',{name:'Sign in',exact:true});await expect(signIn).toHaveAttribute('href','/login');expect(await signIn.evaluate(element=>element.getBoundingClientRect().height)).toBe(48);if(width===1440){expect(await signIn.evaluate(element=>element.getBoundingClientRect().width)).toBe(420);expect(await page.locator('.registration-card.ready').evaluate(element=>element.getBoundingClientRect().height)).toBe(612);}await signIn.focus();await expect(signIn).toBeFocused();expect(await signIn.evaluate(element=>getComputedStyle(element).outlineStyle)).not.toBe('none');await page.screenshot({path:testInfo.outputPath('ready-navigation-'+width+'.png'),fullPage:true});expect((await new AxeBuilder({page}).withTags(['wcag2a','wcag2aa','wcag21aa','wcag22aa']).analyze()).violations).toEqual([]);await page.keyboard.press('Enter');await expect(page).toHaveURL(/\\/login$/);await expect(page.getByRole('heading',{name:'Welcome back'})).toBeVisible();\n> 16 |   await page.getByRole('button',{name:'Sign in with passkey',exact:true}).click();await expect(page).toHaveURL(/\\/signed-in$/);await expect(page.getByRole('heading',{name:'You’re signed in'})).toBeVisible();expect(state.assertions).toBe(1);const security=page.getByRole('link',{name:'Account security',exact:true});await expect(security).toHaveAttribute('href','/account/security');await expect(page.getByRole('button',{name:'Sign out',exact:true})).toBeVisible();await expect(page.getByText('Signing out ends your Tunner session. Connected products manage their own sessions.')).toBeVisible();expect(await security.evaluate(element=>element.getBoundingClientRect().height)).toBe(44);if(width===1440){expect(await security.evaluate(element=>element.getBoundingClientRect().width)).toBe(418);expect(await page.locator('.authentication-card.signed-in').evaluate(element=>element.getBoundingClientRect().height)).toBe(588);}await security.focus();await expect(security).toBeFocused();expect(await security.evaluate(element=>getComputedStyle(element).outlineStyle)).not.toBe('none');await page.screenshot({path:testInfo.outputPath('signed-in-navigation-'+width+'.png'),fullPage:true});expect((await new AxeBuilder({page}).withTags(['wcag2a','wcag2aa','wcag21aa','wcag22aa']).analyze()).violations).toEqual([]);expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);await page.keyboard.press('Enter');await expect(page).toHaveURL(/\\/account\\/security$/);await expect(page.getByRole('heading',{name:'Security',exact:true})).toBeVisible();await page.getByRole('link',{name:'Review passkeys',exact:true}).click();await expect(page).toHaveURL(/\\/account\\/security\\/sign-in-methods$/);await page.goBack();await expect(page).toHaveURL(/\\/account\\/security$/);await page.reload();await expect(page.getByRole('heading',{name:'Security',exact:true})).toBeVisible();expect(await page.evaluate(()=>[localStorage.length,sessionStorage.length])).toEqual([0,0]);\n     |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           ^\n  17 | });\n  18 |\n  19 | test('The Account security continuation remains protected after the authoritative session ends',async({page})=>{\n    at <repo-root>\\web\\tests\\passkeys\\navigation.spec.ts:16:1067"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-10T10:20:44.873Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "<repo-root>\\artifacts\\p2-007-passkeys-20261109\\ui-review\\20261110-proof-nav-0efbb6e-primary-nav\\run-details\\navigation-Approved-Ready--6bc49-eyboard-and-geometry-at-320\\error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "<repo-root>\\web\\tests\\passkeys\\navigation.spec.ts",
+                    "column": 1067,
+                    "line": 16
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "5d2868f7d23420c27cca-2c91d6c0add38fbb942c",
+          "file": "navigation.spec.ts",
+          "line": 14,
+          "column": 35
+        },
+        {
+          "title": "The Account security continuation remains protected after the authoritative session ends",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2956,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-10T10:20:52.136Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "5d2868f7d23420c27cca-7938c9c5c823a5f92948",
+          "file": "navigation.spec.ts",
+          "line": 19,
+          "column": 1
+        },
+        {
+          "title": "Missing navigation publication fails safely without invented link text",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1128,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-10T10:20:55.865Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "5d2868f7d23420c27cca-7886e04541fbe90936e4",
+          "file": "navigation.spec.ts",
+          "line": 23,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "passkeys.spec.ts",
+      "file": "passkeys.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "Approved methods/Add composition, actual facts, keyboard and accessibility at 1440",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 4570,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-10T10:20:57.073Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "74b2887b23599a1b6d52-6a921e1e323559c07c33",
+          "file": "passkeys.spec.ts",
+          "line": 12,
+          "column": 3
+        },
+        {
+          "title": "Approved methods/Add composition, actual facts, keyboard and accessibility at 768",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 4570,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-10T10:21:01.674Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "74b2887b23599a1b6d52-2c24d97c55897d079442",
+          "file": "passkeys.spec.ts",
+          "line": 12,
+          "column": 3
+        },
+        {
+          "title": "Approved methods/Add composition, actual facts, keyboard and accessibility at 390",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3893,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-10T10:21:06.275Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "74b2887b23599a1b6d52-918e703bd7ad6ed614b5",
+          "file": "passkeys.spec.ts",
+          "line": 12,
+          "column": 3
+        },
+        {
+          "title": "Approved methods/Add composition, actual facts, keyboard and accessibility at 320",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3651,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-10T10:21:10.193Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "74b2887b23599a1b6d52-f0d2bcf1354a3231646d",
+          "file": "passkeys.spec.ts",
+          "line": 12,
+          "column": 3
+        },
+        {
+          "title": "Canonical security/method routes survive direct entry, refresh and browser history; modal stays local",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2181,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-10T10:21:13.866Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "74b2887b23599a1b6d52-14c58e1f4c9941dec553",
+          "file": "passkeys.spec.ts",
+          "line": 23,
+          "column": 1
+        },
+        {
+          "title": "Unauthenticated direct entry is guarded and missing policy/publication never becomes an empty ready account",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2101,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-10T10:21:16.068Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "74b2887b23599a1b6d52-b619358ee3948dfb8d2d",
+          "file": "passkeys.spec.ts",
+          "line": 27,
+          "column": 1
+        },
+        {
+          "title": "Enrollment stays inactive after step-up; native create and exact committed result own activation",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1689,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-10T10:21:18.193Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "74b2887b23599a1b6d52-b5ad14c04182c4010990",
+          "file": "passkeys.spec.ts",
+          "line": 30,
+          "column": 1
+        },
+        {
+          "title": "Native cancellation cancels only its exact inactive enrollment and the next deliberate request uses a new UUID",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1557,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-10T10:21:19.910Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "74b2887b23599a1b6d52-a73be7271639c14f3f3f",
+          "file": "passkeys.spec.ts",
+          "line": 35,
+          "column": 1
+        },
+        {
+          "title": "Lost enrollment response checks the exact original result without another mutation or native create",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2312,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-10T10:21:21.491Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "74b2887b23599a1b6d52-16d60f10c3f6001dd5c4",
+          "file": "passkeys.spec.ts",
+          "line": 38,
+          "column": 1
+        },
+        {
+          "title": "Reload recovers original authorized metadata from server context without browser storage or new request",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1917,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-10T10:21:23.827Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "74b2887b23599a1b6d52-ac107e5d49775e132455",
+          "file": "passkeys.spec.ts",
+          "line": 41,
+          "column": 1
+        },
+        {
+          "title": "A different tab’s selected proof owner cannot be authenticated under the displayed enrollment review",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1048,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-10T10:21:25.798Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "74b2887b23599a1b6d52-38ba5806399f1571f2c6",
+          "file": "passkeys.spec.ts",
+          "line": 44,
+          "column": 1
+        },
+        {
+          "title": "Revocation uses trusted PreserveExistingSessions and exact terminal recovery; lost proof=false",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1514,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-10T10:21:26.867Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "74b2887b23599a1b6d52-94bdff9547e3156a960c",
+          "file": "passkeys.spec.ts",
+          "line": 48,
+          "column": 3
+        },
+        {
+          "title": "Revocation uses trusted PreserveExistingSessions and exact terminal recovery; lost proof=true",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1832,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-10T10:21:28.406Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "74b2887b23599a1b6d52-d0a2ca8cac94d803dd6f",
+          "file": "passkeys.spec.ts",
+          "line": 48,
+          "column": 3
+        },
+        {
+          "title": "Revocation uses trusted RevokeCredentialSessions and exact terminal recovery; lost proof=false",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3078,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-10T10:21:30.262Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "74b2887b23599a1b6d52-a0c49ff699d04195a0f2",
+          "file": "passkeys.spec.ts",
+          "line": 48,
+          "column": 3
+        },
+        {
+          "title": "Revocation uses trusted RevokeCredentialSessions and exact terminal recovery; lost proof=true",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2714,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-10T10:21:33.369Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "74b2887b23599a1b6d52-28aff6b71f6bfdcd653e",
+          "file": "passkeys.spec.ts",
+          "line": 48,
+          "column": 3
+        },
+        {
+          "title": "An ended session without exact terminal proof cannot claim that removal succeeded",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1570,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-10T10:21:36.109Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "74b2887b23599a1b6d52-8ddf5e1caaebc4956273",
+          "file": "passkeys.spec.ts",
+          "line": 55,
+          "column": 1
+        },
+        {
+          "title": "Primary passkey assertion uses native get and exact original result; lost body=false",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1205,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-10T10:21:37.705Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "74b2887b23599a1b6d52-22897b6c8c176c5c5462",
+          "file": "passkeys.spec.ts",
+          "line": 58,
+          "column": 33
+        },
+        {
+          "title": "Primary passkey assertion uses native get and exact original result; lost body=true",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1203,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-10T10:21:38.934Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "74b2887b23599a1b6d52-81bbae379652c0b2d882",
+          "file": "passkeys.spec.ts",
+          "line": 58,
+          "column": 33
+        },
+        {
+          "title": "An unrelated surviving session/result is not accepted after an uncertain primary assertion",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1397,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-10T10:21:40.162Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "74b2887b23599a1b6d52-f9cafd8522afc5371bc6",
+          "file": "passkeys.spec.ts",
+          "line": 61,
+          "column": 1
+        },
+        {
+          "title": "Lost challenge options explicitly recover the same request/ceremony before native assertion",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1730,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-10T10:21:41.587Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "74b2887b23599a1b6d52-8dfff7c31b94a907dfc2",
+          "file": "passkeys.spec.ts",
+          "line": 64,
+          "column": 1
+        },
+        {
+          "title": "Unsupported browser and known native cancellation remain truthful and preserve password alternative",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1789,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-10T10:21:43.345Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "74b2887b23599a1b6d52-6b0952bc915cf3274636",
+          "file": "passkeys.spec.ts",
+          "line": 67,
+          "column": 1
+        },
+        {
+          "title": "@regression SIGN_IN hard reload retains the protected original IDs and remember setting",
+          "ok": true,
+          "tags": [
+            "regression"
+          ],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2077,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-10T10:21:45.162Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "74b2887b23599a1b6d52-b1a2223ec8606e3b6c7a",
+          "file": "passkeys.spec.ts",
+          "line": 72,
+          "column": 1
+        },
+        {
+          "title": "@regression Committed revocation-start503 and later429 retain the exact immutable start snapshot",
+          "ok": true,
+          "tags": [
+            "regression"
+          ],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1796,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-10T10:21:47.269Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "74b2887b23599a1b6d52-8c9f0155d690e652d31a",
+          "file": "passkeys.spec.ts",
+          "line": 80,
+          "column": 1
+        },
+        {
+          "title": "@regression Unresolved startA cannot adopt another tab completedB during canonical SPA navigation",
+          "ok": true,
+          "tags": [
+            "regression"
+          ],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1855,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-10T10:21:49.091Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "74b2887b23599a1b6d52-a610f779d5c35c6065b3",
+          "file": "passkeys.spec.ts",
+          "line": 87,
+          "column": 1
+        },
+        {
+          "title": "Password row is rendered only from the current owner availability fact, with no invented management action",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2191,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-10T10:21:50.978Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "74b2887b23599a1b6d52-ec1be7c0ccc71ebc9f21",
+          "file": "passkeys.spec.ts",
+          "line": 92,
+          "column": 1
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-11-10T10:20:23.878Z",
+    "duration": 91463.406,
+    "expected": 27,
+    "skipped": 0,
+    "unexpected": 3,
+    "flaky": 0
+  }
+}
