@@ -3,8 +3,9 @@ import {ContentText,FormErrorSummary,PrimaryButton,z} from '@tunner/ui';
 import {assertionCompleted,parseAuthenticationPasskeyRecovery,parseOperation,PasskeyHttpError,requestJson,terminalCompleted} from './passkeys.api';
 import type {PasskeyOperation} from './passkeys.api';
 import {getPasskey,passkeysSupported} from './passkeys.native';
+import {parseMfaRequired} from './totp.api';
 
-export interface PasskeySignInProps{available:boolean;maximumCredentialJsonBytes:number;csrfToken:string;rememberMe:boolean;disabled:boolean;recovery?:unknown;onBusyChange:(busy:boolean)=>void;onAuthenticated:()=>void}
+export interface PasskeySignInProps{available:boolean;maximumCredentialJsonBytes:number;csrfToken:string;rememberMe:boolean;disabled:boolean;recovery?:unknown;onBusyChange:(busy:boolean)=>void;onAuthenticated:()=>void;onMfaRequired?:()=>void}
 export const loginPasskeyKeys=['login.passkey.submit','login.passkey.pending','login.passkey.notCompleted','login.passkey.unknown','login.passkey.check','login.passkey.resume','login.passkey.unsupported','login.passkey.changed','login.passkey.limited','login.passkey.removed','login.passkey.sessionEnded'] as const;
 type Attempt={requestId:string;rememberMe:boolean;csrfToken:string;operation?:PasskeyOperation;credential?:unknown};
 const readOnlyState=z.object({status:z.enum(['PENDING','AUTHORIZED','COMPLETED','REJECTED','EXPIRED']),requestId:z.uuid(),ceremonyId:z.uuid(),authenticated:z.boolean().optional(),signInRequired:z.boolean().optional()});
@@ -31,7 +32,7 @@ export function PasskeySignIn(props:PasskeySignInProps){
   const current=(attempt:Attempt)=>mounted.current&&!controller.current.signal.aborted&&original.current===attempt;
   function pending(value:boolean){inFlight.current=value;setWorking(value);}
   function unresolved(){setPhase('unknown');setNotice('login.passkey.unknown');latest.current.onBusyChange(true);}
-  function completed(attempt:Attempt,value:unknown){const result=assertionCompleted.parse(value);if(!attempt.operation||result.requestId!==attempt.requestId||result.ceremonyId!==attempt.operation.ceremonyId)throw new Error('The original sign-in result changed.');if(current(attempt)){original.current=undefined;latest.current.onBusyChange(false);latest.current.onAuthenticated();}}
+  function completed(attempt:Attempt,value:unknown){if(parseMfaRequired(value,attempt.requestId)){if(!latest.current.onMfaRequired)throw new Error('Additional verification is required.');if(current(attempt)){attempt.credential=undefined;original.current=undefined;latest.current.onBusyChange(false);latest.current.onMfaRequired();}return;}const result=assertionCompleted.parse(value);if(!attempt.operation||result.requestId!==attempt.requestId||result.ceremonyId!==attempt.operation.ceremonyId)throw new Error('The original sign-in result changed.');if(current(attempt)){original.current=undefined;latest.current.onBusyChange(false);latest.current.onAuthenticated();}}
   async function freshCsrf(signal:AbortSignal){
     try{const value=await requestJson('/authentication/session',{signal}) as {authenticated?:unknown;csrfToken?:unknown};if(value.authenticated===true&&typeof value.csrfToken==='string'&&value.csrfToken)return value.csrfToken;}catch{/* A surviving session is never success evidence. */}
     const value=await requestJson('/authentication/options',{signal}) as {csrfToken?:unknown};if(typeof value.csrfToken!=='string'||!value.csrfToken)throw new Error('Fresh CSRF unavailable.');return value.csrfToken;
@@ -44,7 +45,9 @@ export function PasskeySignIn(props:PasskeySignInProps){
   async function result(attempt:Attempt){
     if(!attempt.operation)await recoverChallenge(attempt);if(!attempt.operation||!current(attempt))return false;
     const csrfToken=await freshCsrf(controller.current.signal);if(!current(attempt))return false;
-    const value=readOnlyState.parse(await requestJson('/authentication/passkeys/result',{csrfToken,body:{requestId:attempt.requestId,ceremonyId:attempt.operation.ceremonyId},signal:controller.current.signal}));
+    const raw=await requestJson('/authentication/passkeys/result',{csrfToken,body:{requestId:attempt.requestId,ceremonyId:attempt.operation.ceremonyId},signal:controller.current.signal});
+    if(parseMfaRequired(raw,attempt.requestId)){completed(attempt,raw);return true;}
+    const value=readOnlyState.parse(raw);
     if(value.requestId!==attempt.requestId||value.ceremonyId!==attempt.operation.ceremonyId)throw new Error('The original result changed.');
     if(value.status==='COMPLETED'){if(value.authenticated===true){completed(attempt,value);return true;}if(value.authenticated===false&&value.signInRequired===true){if(current(attempt)){original.current=undefined;setPhase('not-completed');setNotice('login.passkey.notCompleted');latest.current.onBusyChange(false);}return true;}throw new Error('The original authentication result is unresolved.');}
     if(['REJECTED','EXPIRED'].includes(value.status)&&current(attempt)){original.current=undefined;setPhase('not-completed');setNotice('login.passkey.notCompleted');latest.current.onBusyChange(false);return true;}

@@ -1,6 +1,6 @@
 import {z} from '@tunner/ui';
 import {PasskeyHttpError,requestJson,requirePublished} from './passkeys.api';
-import {requiredTotpKeys,requiredTotpMfaKeys} from './totp.content-keys';
+import {requiredTotpKeys,requiredTotpMfaKeys,totpSelectionKeys} from './totp.content-keys';
 
 const uuid=z.uuid(),instant=z.iso.datetime({offset:true});
 const publication=z.object({key:z.string().min(1),locale:z.string().min(1),state:z.literal('PUBLISHED'),text:z.string().min(1),variantRef:z.string().min(1),versionRef:z.string().min(1),publicationRef:z.string().min(1)});
@@ -23,7 +23,7 @@ export function sameTotpOperation(expected:Pick<TotpOperation,'requestId'|'enrol
 
 /** Errors contain bounded safe classifications only, never raw response bodies, OTPs, keys or URIs. */
 export class TotpHttpError extends Error {constructor(readonly status:number,readonly code:string){super('The verification request could not be completed.');}}
-const safeCodes=new Set(['AUTHENTICATION_FAILED','VERSION_CONFLICT','DISCLOSURE_UNAVAILABLE','STEP_UP_REQUIRED','RATE_OR_ABUSE_LIMITED','REPLAY_CAPACITY_EXHAUSTED','VERIFICATION_BUDGET_EXHAUSTED','DEPENDENCY_UNAVAILABLE','CLOCK_OUT_OF_BOUNDS','PREPARATION_UNKNOWN','VALIDATION_ERROR','TOTP_LIMIT_REACHED','NOT_FOUND_OR_NOT_DISCLOSABLE','DISABLE_NOT_ALLOWED','RESET_NOT_ALLOWED','OUTCOME_UNKNOWN']);
+const safeCodes=new Set(['AUTHENTICATION_FAILED','CODE_REPLAYED','VERSION_CONFLICT','DISCLOSURE_UNAVAILABLE','STEP_UP_REQUIRED','RATE_OR_ABUSE_LIMITED','REPLAY_CAPACITY_EXHAUSTED','VERIFICATION_BUDGET_EXHAUSTED','DEPENDENCY_UNAVAILABLE','CLOCK_OUT_OF_BOUNDS','PREPARATION_UNKNOWN','VALIDATION_ERROR','TOTP_LIMIT_REACHED','NOT_FOUND_OR_NOT_DISCLOSABLE','DISABLE_NOT_ALLOWED','RESET_NOT_ALLOWED','OUTCOME_UNKNOWN']);
 export async function requestTotpJson(path:string,options:{csrfToken?:string;body?:unknown;signal?:AbortSignal}={}):Promise<unknown>{
   try{return await requestJson(path,options);}catch(error){if(error instanceof PasskeyHttpError)throw new TotpHttpError(error.status,safeCodes.has(error.code)?error.code:'DEPENDENCY_UNAVAILABLE');throw new TotpHttpError(0,'OUTCOME_UNKNOWN');}
 }
@@ -42,13 +42,18 @@ export function parseTotpDisclosure(value:unknown,expected:Pick<TotpOperation,'r
 }
 export const mfaRequiredSchema=z.object({status:z.literal('MFA_REQUIRED'),authenticated:z.literal(false),requestId:uuid,expiresAt:instant});
 export type TotpMfaRequired=z.infer<typeof mfaRequiredSchema>;
-export function parseMfaRequired(value:unknown,requestId?:string):TotpMfaRequired|null{const result=mfaRequiredSchema.safeParse(value);if(!result.success)return null;if(requestId&&result.data.requestId!==requestId)throw new TotpHttpError(409,'VERSION_CONFLICT');return result.data;}
+export function parseMfaRequired(value:unknown,requestId?:string):TotpMfaRequired|null{const result=mfaRequiredSchema.safeParse(value);if(!result.success){if(value&&typeof value==='object'&&'status' in value&&value.status==='MFA_REQUIRED')throw new TotpHttpError(0,'OUTCOME_UNKNOWN');return null;}if(requestId&&result.data.requestId!==requestId)throw new TotpHttpError(409,'VERSION_CONFLICT');return result.data;}
 const httpsUri=z.string().url().refine(value=>{const uri=new URL(value);return uri.protocol==='https:'&&!uri.username&&!uri.password;});
-export const totpMfaOptionsSchema=z.object({status:z.enum(['PENDING','COMPLETED','EXPIRED']),requestId:uuid,expiresAt:instant,authenticators:z.array(z.object({authenticatorReference:uuid})),csrfToken:z.string().min(1),locale:z.string().min(1),content:z.record(z.string(),publication),termsUri:httpsUri,privacyUri:httpsUri,supportUri:httpsUri.nullable()});
+export const totpChoiceSchema=z.object({authenticatorReference:uuid,version:z.number().int().positive(),state:z.literal('ACTIVE'),createdAt:instant,activatedAt:instant,displayPosition:z.number().int().positive()});
+export type TotpChoice=z.infer<typeof totpChoiceSchema>;
+export const totpMfaOptionsSchema=z.object({status:z.enum(['PENDING','COMPLETED','EXPIRED']),requestId:uuid,expiresAt:instant,authenticators:z.array(totpChoiceSchema),csrfToken:z.string().min(1),locale:z.string().min(1),content:z.record(z.string(),publication),termsUri:httpsUri,privacyUri:httpsUri,supportUri:httpsUri.nullable()});
 export type TotpMfaOptions=z.infer<typeof totpMfaOptionsSchema>;
-export async function loadTotpMfaOptions(signal?:AbortSignal):Promise<TotpMfaOptions>{const result=boundedParse(totpMfaOptionsSchema,await requestTotpJson('/authentication/totp/options',signal?{signal}:{}));requirePublished(result.content,result.locale,requiredTotpMfaKeys);return result;}
+export async function loadTotpMfaOptions(signal?:AbortSignal):Promise<TotpMfaOptions>{const result=boundedParse(totpMfaOptionsSchema,await requestTotpJson('/authentication/totp/options',signal?{signal}:{}));requirePublished(result.content,result.locale,[...requiredTotpMfaKeys,...(result.authenticators.length>1?totpSelectionKeys:[])]);return result;}
 const mfaCompletedSchema=z.object({status:z.literal('COMPLETED'),authenticated:z.literal(true),requestId:uuid});
 export function parseTotpMfaCompleted(value:unknown,requestId:string){const result=boundedParse(mfaCompletedSchema,value);if(result.requestId!==requestId)throw new TotpHttpError(409,'VERSION_CONFLICT');return result;}
 const terminalSchema=z.object({operation:totpOperationSchema,signInRequired:z.literal(true)});
 export function parseTotpTerminal(value:unknown,expected:TotpOperation){const result=boundedParse(terminalSchema,value);if(!sameTotpOperation(expected,result.operation)||result.operation.status!=='COMPLETED'||!['DISABLE','RESET'].includes(result.operation.kind)||!result.operation.currentSessionEnds)throw new TotpHttpError(409,'VERSION_CONFLICT');return result;}
-export function totpErrorKey(error:unknown){if(error instanceof TotpHttpError){if(error.status===429)return 'totp.error.limited';if(error.code==='TOTP_LIMIT_REACHED')return 'totp.error.limit';if(error.code==='DISABLE_NOT_ALLOWED'||error.code==='RESET_NOT_ALLOWED')return 'totp.error.eligibility';if(error.status===409||error.code==='STEP_UP_REQUIRED')return 'totp.error.changed';if(error.code==='VALIDATION_ERROR'||error.status===413||error.status===415)return 'totp.error.validation';if(error.status===503)return 'totp.error.policy';}return 'totp.error.unavailable';}
+const terminalOptionsSchema=z.object({csrfToken:z.string().min(1),recovery:totpOperationSchema,signInRequired:z.literal(true),locale:z.string().min(1),content:z.record(z.string(),publication)});
+export type TotpTerminalOptions=z.infer<typeof terminalOptionsSchema>;
+export async function loadTotpTerminalOptions(signal?:AbortSignal){const result=boundedParse(terminalOptionsSchema,await requestTotpJson('/account/totp/terminal-options',signal?{signal}:{}));requirePublished(result.content,result.locale,requiredTotpKeys);if(result.recovery.status!=='COMPLETED'||!result.recovery.currentSessionEnds||!['DISABLE','RESET'].includes(result.recovery.kind))throw new TotpHttpError(409,'VERSION_CONFLICT');return result;}
+export function totpErrorKey(error:unknown){if(error instanceof TotpHttpError){if(error.code==='CODE_REPLAYED')return 'totp.error.replayed';if(error.status===429)return 'totp.error.limited';if(error.code==='TOTP_LIMIT_REACHED')return 'totp.error.limit';if(error.code==='DISABLE_NOT_ALLOWED'||error.code==='RESET_NOT_ALLOWED')return 'totp.error.eligibility';if(error.status===409||error.code==='STEP_UP_REQUIRED')return 'totp.error.changed';if(error.code==='VALIDATION_ERROR'||error.status===413||error.status===415)return 'totp.error.validation';if(error.status===503)return 'totp.error.policy';}return 'totp.error.unavailable';}

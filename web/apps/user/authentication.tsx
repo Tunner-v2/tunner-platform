@@ -6,13 +6,17 @@ import '@tunner/ui/styles.css';
 import './authentication.css';
 import { passwordSignInSchema } from './authentication.validation';
 import { authenticationRoutes } from './authentication.routes';
+import {totpRoutes} from './totp.routes';
+import {TotpMfaScreen} from './totp.mfa';
+import {loadTotpMfaOptions,parseMfaRequired} from './totp.api';
 import { loginPasskeyKeys, PasskeySignIn } from './passkeys.sign-in';
 import { parseAuthenticationPasskeyRecovery, requirePublished } from './passkeys.api';
 interface Bootstrap {csrfToken:string;idempotencyKey:string;passwordMaximumLength:number;locale:string;content:Record<string,PublishedContent>;termsUri:string;privacyUri:string;supportUri:string|null;passkeyAvailable?:boolean;maximumCredentialJsonBytes?:number|null;passkeyRecovery?:unknown}
 interface Session {authenticated:true;csrfToken:string}
 const errors:Readonly<Record<string,string>>={AUTHENTICATION_FAILED:'authentication.error.credentials',RATE_OR_ABUSE_LIMITED:'authentication.error.limited'};
 async function options(signal?:AbortSignal):Promise<Bootstrap>{const response=await fetch('/authentication/options',{credentials:'same-origin',cache:'no-store',redirect:'error',...(signal?{signal}:{})});if(!response.ok)throw new Error('Unavailable');return response.json() as Promise<Bootstrap>;}
-function App(){
+function App(){const location=useRouteLocation();return location.pathname===totpRoutes.mfa.pathname?<ThemeProvider surface="user" mode="light"><TotpMfaScreen key={location.revision}/></ThemeProvider>:<AuthenticationApp/>;}
+function AuthenticationApp(){
   const [boot,setBoot]=useState<Bootstrap>();const [unavailable,setUnavailable]=useState(false);
   useEffect(()=>{const controller=new AbortController();void options(controller.signal).then(setBoot).catch(()=>{if(!controller.signal.aborted)setUnavailable(true);});return()=>controller.abort();},[]);
   if(unavailable)return <ContentUnavailable/>;if(!boot)return <main aria-busy="true"/>;
@@ -57,11 +61,12 @@ function Screens({initial}:{initial:Bootstrap}){
     try{
       const response=await fetch('/authentication/sign-in',{method:'POST',credentials:'same-origin',cache:'no-store',redirect:'error',signal:controller.signal,headers:{'Content-Type':'application/json','X-Tunner-CSRF':boot.csrfToken},body:JSON.stringify({...attempt,password})});
       if(!current())return;
-      if(response.ok){const result=await response.json() as {authenticated?:boolean};if(result.authenticated!==true)throw new Error('Unavailable');if(current())navigatePath(authenticationRoutes.signedIn.pathname);return;}
+      if(response.ok){const result:unknown=await response.json();if(parseMfaRequired(result,attempt.idempotencyKey)){if(current())navigatePath(totpRoutes.mfa.pathname);return;}if(!result||typeof result!=='object'||!('authenticated' in result)||result.authenticated!==true)throw new Error('Unavailable');if(current())navigatePath(authenticationRoutes.signedIn.pathname);return;}
       const problem=await response.json() as {error_code?:string};if(!current())return;setError(errors[problem.error_code??'']??'authentication.error.unavailable');
       if(response.status===403||response.status===409){const next=await options(controller.signal);if(current())setBoot(next);}
     }catch{
       if(!current())return;
+      try{const pending=await loadTotpMfaOptions(controller.signal);if(current()&&pending.requestId===attempt.idempotencyKey&&pending.status!=='EXPIRED'){navigatePath(totpRoutes.mfa.pathname);return;}}catch{/* Pending MFA is not final authentication, and another original request is never adopted. */}
       // Current-session existence supplies CSRF only; exact attempted-operation evidence owns recovered success.
       try{
         const sessionResponse=await fetch('/authentication/session',{credentials:'same-origin',cache:'no-store',redirect:'error',signal:controller.signal});
@@ -112,7 +117,7 @@ function Screens({initial}:{initial:Bootstrap}){
               <div className="authentication-password"><TextField labelKey="login.password.label" placeholderKey="login.password.placeholder" name="password" type={visible?'text':'password'} required autoComplete="current-password" value={password} disabled={form.submitPending||passkeyBusy} errorKey={form.errors.password} onBlur={event=>form.onBlur('password',event)} onChange={event=>{setPassword(event.target.value);changed();}}/><button className="authentication-reveal" type="button" aria-label={show.text} aria-pressed={visible} disabled={form.submitPending||passkeyBusy} onClick={()=>setVisible(value=>!value)}><img src="/registration/assets/login-eye-off.svg" alt=""/></button></div>
               <div className="authentication-options"><label><input type="checkbox" checked={remember} disabled={form.submitPending||passkeyBusy} onChange={event=>setRemember(event.target.checked)}/><ContentText contentKey="login.remember"/></label><button type="button" disabled title={unavailable.text}><ContentText contentKey="login.forgot"/></button></div>
             </div>
-            <div className="authentication-actions"><PrimaryButton type="submit" labelKey="login.submit" disabled={form.submitPending||passkeyBusy} aria-busy={form.submitPending}/><PasskeySignIn key={location.revision} available={boot.passkeyAvailable===true} maximumCredentialJsonBytes={boot.maximumCredentialJsonBytes??0} csrfToken={boot.csrfToken} rememberMe={remember} disabled={form.submitPending} {...(boot.passkeyRecovery?{recovery:boot.passkeyRecovery}:{})} onBusyChange={value=>{passkeyPending.current=value;setPasskeyBusy(value);if(value){setPassword('');setVisible(false);form.reset();}}} onAuthenticated={()=>navigatePath(authenticationRoutes.signedIn.pathname)}/><p className="authentication-create"><ContentText contentKey="login.create.description"/> <a href="/registration"><ContentText contentKey="login.create"/></a></p></div>
+            <div className="authentication-actions"><PrimaryButton type="submit" labelKey="login.submit" disabled={form.submitPending||passkeyBusy} aria-busy={form.submitPending}/><PasskeySignIn key={location.revision} available={boot.passkeyAvailable===true} maximumCredentialJsonBytes={boot.maximumCredentialJsonBytes??0} csrfToken={boot.csrfToken} rememberMe={remember} disabled={form.submitPending} {...(boot.passkeyRecovery?{recovery:boot.passkeyRecovery}:{})} onBusyChange={value=>{passkeyPending.current=value;setPasskeyBusy(value);if(value){setPassword('');setVisible(false);form.reset();}}} onAuthenticated={()=>navigatePath(authenticationRoutes.signedIn.pathname)} onMfaRequired={()=>navigatePath(totpRoutes.mfa.pathname)}/><p className="authentication-create"><ContentText contentKey="login.create.description"/> <a href="/registration"><ContentText contentKey="login.create"/></a></p></div>
             {form.hasErrors&&<FormErrorSummary contentKey="authentication.error.highlighted"/>}
           </form>
         </>}

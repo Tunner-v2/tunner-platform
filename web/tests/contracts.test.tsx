@@ -1,6 +1,7 @@
 import { authenticationRoutes } from '../apps/user/authentication.routes';
 import './totp.contracts.test';
 import { passkeyRoutes } from '../apps/user/passkeys.routes';
+import {totpRoutes} from '../apps/user/totp.routes';
 import { registrationSchema, verificationSchema, personalInformationSchema, validBirthDate } from '../apps/user/validation';
 import { registrationRoutes } from '../apps/user/routes';
 import inventory from '../../docs/contracts/ui-inventory.json' with { type: 'json' };
@@ -9,7 +10,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { renderToStaticMarkup } from 'react-dom/server';
 import type { ReactNode } from 'react';
-import { ThemeProvider, ContentProvider, PrimaryButton, TextField, TunnerBrand, z, validateTunnerForm, FormErrorSummary } from '../packages/ui/src/index';
+import { ThemeProvider, ContentProvider, ContentText, PrimaryButton, TextField, TunnerBrand, z, validateTunnerForm, FormErrorSummary } from '../packages/ui/src/index';
 import type { PublishedContentResolver, ThemeMode, ThemeSurface } from '../packages/ui/src/index';
 
 const published: PublishedContentResolver = (key, context) => ({ key, text: key === 'brand' ? 'Tunner' : `<${key}>`, locale: context.locale, state: 'PUBLISHED', variantRef: 'fixture', versionRef: 'v1', publicationRef: 'fixture-only' });
@@ -19,6 +20,12 @@ test('SSR is browser-independent with plain brand and no icon', () => { const ht
 test('native button defaults to button, with explicit owner submit supported', () => { assert.match(render(<PrimaryButton labelKey="action"/>), /type="button"/); assert.match(render(<PrimaryButton labelKey="action" type="submit"/>), /type="submit"/); });
 test('owner disabled and busy state preserved', () => { const html = render(<PrimaryButton labelKey="action" disabled aria-busy/>); assert.match(html, /disabled=""/); assert.match(html, /aria-busy="true"/); });
 test('content text is escaped and provenance is preserved', () => { const html = render(<PrimaryButton labelKey="script"/>); assert.match(html, /&lt;script&gt;/); assert.doesNotMatch(html, /<script>/); assert.match(html, /data-content-version="v1"/); assert.match(html, /data-content-publication="fixture-only"/); });
+test('published templates render escaped bounded variables and retain original provenance',()=>{
+  const resolver:PublishedContentResolver=(key,context)=>({...published(key,context)!,text:'Authenticator app {position}'});
+  const html=render(<ContentText contentKey="choice" values={{position:'<2>'}}/>,resolver);assert.match(html,/Authenticator app &lt;2&gt;/);assert.match(html,/data-content-key="choice"/);assert.match(html,/data-content-version="v1"/);
+  assert.throws(()=>render(<ContentText contentKey="choice" values={{other:'2'}}/>,resolver),/variables/);
+  assert.throws(()=>render(<ContentText contentKey="choice" values={{position:'2',other:'ignored'}}/>,resolver),/variables/);
+});
 test('missing required key fails without fallback', () => { assert.throws(() => render(<PrimaryButton labelKey="missing"/>, () => undefined), /Invalid published content/); });
 test('mismatched key or locale and unpublished snapshots fail', () => {
   for (const override of [{key:'other'},{locale:'fr'},{state:'DRAFT'}]) assert.throws(() => render(<PrimaryButton labelKey="action"/>, (key, context) => ({...published(key, context)!, ...override}) as never), /Invalid published content/);
@@ -66,7 +73,7 @@ test('DOB schema is calendar-safe and rejects future dates without client age el
  for(const date of ['2024-02-29','0099-01-01','2026-10-17','2015-01-01'])assert.equal(validBirthDate(date,'2026-10-17'),true,date);
 });
 test('every implemented screen route agrees with the central inventory and known BFF fallback contract',()=>{
- const rows=inventory.items.filter(row=>row.kind==='SCREEN'&&row.status==='IMPLEMENTED'&&row.app==='user');const routes=[...Object.values(registrationRoutes),...Object.values(authenticationRoutes),...Object.values(passkeyRoutes)];assert.equal(rows.length,routes.length);
+ const rows=inventory.items.filter(row=>row.kind==='SCREEN'&&row.status==='IMPLEMENTED'&&row.app==='user');const routes=[...Object.values(registrationRoutes),...Object.values(authenticationRoutes),...Object.values(passkeyRoutes),...Object.values(totpRoutes)];assert.equal(rows.length,routes.length);
  for(const route of routes){const row=rows.find(r=>r.id===route.id);assert.ok(row);assert.equal(row.pathname,route.pathname);assert.equal(row.runtime_pathname,route.pathname);assert.ok(row.guard);assert.ok(row.figma_refs.length);}
  assert.deepEqual(Object.values(registrationRoutes).map(r=>r.pathname),onboarding['x-tunner-screen-paths']);
  const forms=inventory.items.filter(row=>row.kind==='FORM'&&row.status==='IMPLEMENTED');const formScreens=new Map(inventory.items.filter(row=>row.kind==='SCREEN'&&(row.status==='IMPLEMENTED'||row.status==='TEST_FIXTURE')).map(row=>[row.id,row]));assert.ok(forms.every(form=>form.screen_id!==undefined&&formScreens.has(form.screen_id)));for(const form of forms){const parent=formScreens.get(form.screen_id!);assert.ok(parent?.guard);assert.ok(parent?.pathname?.startsWith('/'));}assert.ok(forms.some(form=>form.id==='FORM-LOGIN'));assert.equal(new Set(forms.map(form=>form.id)).size,forms.length);

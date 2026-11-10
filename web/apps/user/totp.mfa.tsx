@@ -1,0 +1,43 @@
+import {useEffect,useRef,useState} from 'react';
+import {flushSync} from 'react-dom';
+import {ContentProvider,ContentText,ContentUnavailable,FormErrorSummary,PrimaryButton,TunnerBrand,navigatePath,useTunnerForm} from '@tunner/ui';
+import {loadTotpMfaOptions,parseTotpMfaCompleted,requestTotpJson,TotpHttpError,totpErrorKey} from './totp.api';
+import type {TotpChoice,TotpMfaOptions} from './totp.api';
+import {totpCodeSchema} from './totp.validation';
+import {TotpCodeField} from './totp.code';
+import {sameTotpChoice,TotpFactorPicker,TotpSelectedFactor} from './totp.picker';
+import './step-up.css';
+import './totp.css';
+
+type Phase='entry'|'pending'|'unknown'|'expired';
+export function TotpMfaScreen(){
+ const [boot,setBoot]=useState<TotpMfaOptions>(),[selected,setSelected]=useState<TotpChoice>(),[phase,setPhase]=useState<Phase>('entry');
+ const [code,setCode]=useState(''),[field,setField]=useState<string>(),[error,setError]=useState<string>(),[unavailable,setUnavailable]=useState(false),[refresh,setRefresh]=useState(0),[ready,setReady]=useState(false);
+ const controller=useRef(new AbortController()),alive=useRef(true),flight=useRef(false),request=useRef<string|undefined>(undefined);const form=useTunnerForm(totpCodeSchema(),{code});
+ const picker=Boolean(boot&&boot.authenticators.length>0&&!selected&&phase==='entry');
+ useEffect(()=>{alive.current=true;controller.current=new AbortController();const signal=controller.current.signal;flight.current=false;setReady(false);setCode('');setSelected(undefined);setError(undefined);setField(undefined);
+  if(window.location.search||window.location.hash){window.location.replace('/login/verify-authenticator');return()=>{alive.current=false;controller.current.abort();};}
+  void loadTotpMfaOptions(signal).then(value=>{if(!alive.current||signal.aborted||signal!==controller.current.signal)return;if(request.current&&request.current!==value.requestId)throw new TotpHttpError(409,'VERSION_CONFLICT');request.current=value.requestId;setBoot(value);setSelected(value.authenticators.length===1?value.authenticators[0]:undefined);setPhase(value.status==='EXPIRED'?'expired':value.status==='COMPLETED'?'unknown':'entry');setReady(true);}).catch(reason=>{if(!alive.current||signal.aborted||signal!==controller.current.signal)return;if(reason instanceof TotpHttpError&&[401,403,404].includes(reason.status)){window.location.replace('/login');return;}setUnavailable(true);setReady(true);});
+  return()=>{alive.current=false;controller.current.abort();};
+ },[refresh]);
+ useEffect(()=>{const hide=()=>{controller.current.abort();flushSync(()=>{setCode('');setSelected(undefined);setReady(false);});};const show=(event:PageTransitionEvent)=>{if(event.persisted)setRefresh(value=>value+1);};window.addEventListener('pagehide',hide);window.addEventListener('pageshow',show);return()=>{window.removeEventListener('pagehide',hide);window.removeEventListener('pageshow',show);};},[]);
+ useEffect(()=>{if(ready)document.getElementById(selected&&phase==='entry'?'totp-mfa-code':'totp-mfa-heading')?.focus();},[ready,selected,phase]);
+ useEffect(()=>{if(field&&phase==='entry')document.getElementById('totp-mfa-code')?.focus();},[field,phase]);
+ function current(signal:AbortSignal=controller.current.signal){return alive.current&&!signal.aborted&&signal===controller.current.signal;}
+ function choose(factor:TotpChoice){setCode('');form.reset();setField(undefined);setError(undefined);setSelected(factor);}
+ async function check(){if(!boot||flight.current)return;const signal=controller.current.signal;flight.current=true;setPhase('pending');setCode('');setError(undefined);
+  try{const value=await loadTotpMfaOptions(signal);if(!current(signal))return;if(value.requestId!==request.current)throw new TotpHttpError(409,'VERSION_CONFLICT');setBoot(value);
+   if(value.status==='COMPLETED'){parseTotpMfaCompleted(await requestTotpJson('/authentication/totp/result',{csrfToken:value.csrfToken,body:{requestId:value.requestId},signal}),value.requestId);if(current(signal))navigatePath('/signed-in');return;}
+   if(value.status==='EXPIRED'){setSelected(undefined);setPhase('expired');return;}
+   setSelected(previous=>previous?(value.authenticators.some(factor=>sameTotpChoice(factor,previous))?previous:undefined):(value.authenticators.length===1?value.authenticators[0]:undefined));setPhase('entry');
+  }catch(reason){if(current(signal)){setPhase('unknown');setError(totpErrorKey(reason));}}finally{if(current(signal))flight.current=false;}
+ }
+ async function submit(data:{code:string}){if(!boot||!selected||flight.current||phase!=='entry')return;const signal=controller.current.signal;flight.current=true;setPhase('pending');setCode('');setError(undefined);setField(undefined);
+  try{parseTotpMfaCompleted(await requestTotpJson('/authentication/totp/complete',{csrfToken:boot.csrfToken,body:{requestId:boot.requestId,authenticatorReference:selected.authenticatorReference,code:data.code},signal}),boot.requestId);if(current(signal))navigatePath('/signed-in');}
+  catch(reason){if(!current(signal))return;if(reason instanceof TotpHttpError&&['AUTHENTICATION_FAILED','VALIDATION_ERROR','CODE_REPLAYED'].includes(reason.code)){setPhase('entry');setField(reason.code==='CODE_REPLAYED'?'totp.error.replayed':reason.code==='VALIDATION_ERROR'?'totp.error.code':'totp.error.credentials');}else if(reason instanceof TotpHttpError&&reason.status===429){setPhase('entry');setError('totp.error.limited');}else{setPhase('unknown');setError(totpErrorKey(reason));}}
+  finally{if(current(signal)){setCode('');form.reset();flight.current=false;}}
+ }
+ if(unavailable)return <ContentUnavailable/>;if(!ready||!boot)return <main aria-busy="true"/>;
+ const canEnter=phase==='entry'&&!!selected;const empty=phase==='entry'&&boot.authenticators.length===0;
+ return <ContentProvider locale={boot.locale} audience="totp-primary-mfa" resolve={key=>boot.content[key]}><div className="authentication-page"><img className="authentication-glow indigo" src="/registration/assets/login-bg-indigo.svg" alt=""/><img className="authentication-glow violet" src="/registration/assets/login-bg-violet.svg" alt=""/><header className="authentication-header"><TunnerBrand contentKey="brand.tunner"/></header><main className="authentication-stage"><section className="authentication-card totp-mfa" data-tunner-screen="U-AUTH-TOTP-MFA"><div className="authentication-intro"><h1 id="totp-mfa-heading" tabIndex={-1}><ContentText contentKey={phase==='expired'?'totp.mfa.expiredHeading':picker?'totp.selection.heading':'totp.mfa.heading'}/></h1><p><ContentText contentKey={phase==='expired'?'totp.mfa.expiredDescription':picker?'totp.selection.loginDescription':'totp.mfa.description'}/></p></div>{picker&&<TotpFactorPicker factors={boot.authenticators} locale={boot.locale} labelledBy="totp-mfa-heading" onSelect={choose}/ >}{empty&&<p role="status"><ContentText contentKey="totp.mfa.unavailable"/></p>}{canEnter&&<form noValidate data-tunner-form="FORM-TOTP-MFA" onSubmit={event=>void form.handleSubmit(event,submit)}>{boot.authenticators.length>1&&<TotpSelectedFactor factor={selected} locale={boot.locale} onChange={()=>{setCode('');setSelected(undefined);setField(undefined);setError(undefined);form.reset();}}/>}<TotpCodeField id="totp-mfa-code" code={code} errorKey={field??form.errors.code} onBlur={event=>form.onBlur('code',event)} onChange={value=>{setCode(value);setField(undefined);setError(undefined);}}/>{form.hasErrors&&<FormErrorSummary contentKey="totp.error.highlighted"/>}<div className="authentication-actions"><PrimaryButton type="submit" labelKey="totp.action.verify" disabled={form.submitPending}/></div></form>}{(phase==='pending'||phase==='unknown')&&<p className="step-up-status" role="status"><ContentText contentKey={phase==='pending'?'totp.mfa.pending':'totp.mfa.unknown'}/></p>}{error&&<FormErrorSummary contentKey={error}/ >}<div className="authentication-actions">{phase==='unknown'&&<PrimaryButton labelKey="totp.action.check" onClick={()=>void check()}/ >}<a className="tn-primary-button" data-appearance="outline" href="/login" aria-disabled={phase==='pending'} onClick={event=>{if(phase==='pending')event.preventDefault();}}><ContentText contentKey="totp.action.signIn"/></a></div></section></main><footer className="authentication-footer"><a href={boot.privacyUri}><ContentText contentKey="authentication.footer.privacy"/></a><span aria-hidden="true">•</span><a href={boot.termsUri}><ContentText contentKey="authentication.footer.terms"/></a>{boot.supportUri&&<><span aria-hidden="true">•</span><a href={boot.supportUri}><ContentText contentKey="authentication.footer.support"/></a></>}</footer></div></ContentProvider>;
+}

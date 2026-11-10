@@ -433,7 +433,9 @@
       "owner_scopes": [
         "TUN-P2-005",
         "P1-018-RV003",
-        "TUN-P2-007"
+        "TUN-P2-007",
+        "TUN-P2-008",
+        "P1-018-RV006"
       ],
       "authority_refs": [
         "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md",
@@ -454,7 +456,16 @@
         "src/Modules/Identity/IdentityWebAssets.cs",
         "web/apps/user/passkeys.sign-in.tsx",
         "web/apps/user/passkeys.native.ts",
-        "web/apps/user/passkeys.api.ts"
+        "web/apps/user/passkeys.api.ts",
+        "web/apps/user/totp.mfa.tsx",
+        "web/apps/user/totp.picker.tsx",
+        "web/apps/user/totp.routes.ts",
+        "web/apps/user/totp.api.ts",
+        "web/apps/user/totp.validation.ts",
+        "web/apps/user/totp.content-keys.ts",
+        "web/apps/user/totp.code.tsx",
+        "web/apps/user/totp.css",
+        "src/Modules/Identity/TotpEndpoints.cs"
       ],
       "planning_status": "PASSWORD_AND_PRIMARY_PASSKEY_SLICE_IMPLEMENTED_VALIDATION_PENDING",
       "design_status": "PRODUCT_OWNER_APPROVED_SCOPED_ADAPTATIONS",
@@ -470,29 +481,72 @@
       "visual_state": "IMPLEMENTATION_REQUIRES_CURRENT_RENDERED_EVIDENCE",
       "consent_ref": "governance/evidence/TUN-P2-007-VISUAL-CONSENT-20261109.json",
       "additional_consent_refs": [
-        "governance/evidence/TUN-P2-005-VISUAL-ACCEPTANCE-DEFERRAL-20261021.json"
-      ]
+        "governance/evidence/TUN-P2-005-VISUAL-ACCEPTANCE-DEFERRAL-20261021.json",
+        "governance/evidence/TUN-P2-008-VISUAL-CONSENT.json",
+        "governance/evidence/TUN-P2-008-FACTOR-PICKER-CONSENT.json"
+      ],
+      "current_revision_ref": "P1-018-RV006",
+      "revision_acceptance_boundary": "Actual008-V01-V05 and separate factor-picker consent are recorded. Current implementation requires committed source-bound URL, VAL, UX-FID, native and rendered evidence. No prototype, prior007 or other-route PASS is inherited. Runtime production policy/publication, Product/release and protected-main gates remain separate."
     },
     {
       "id": "U-AUTH-04",
       "kind": "SCREEN",
-      "status": "PLANNED",
+      "status": "IMPLEMENTED",
       "app": "user",
-      "module": "U-AUTH",
-      "title": "MFA / Authenticator Setup",
+      "module": "Identity.Totp",
+      "title": "Set up an authenticator app",
       "requirements": "TOTP QR/secret one-time presentation; verify first code before activation",
-      "pathname": null,
-      "runtime_pathname": null,
-      "guard": "Resolve from owning FRD and current authorization before implementation",
-      "owner_scopes": [],
-      "authority_refs": [
-        "docs/authority/current/development/31_UI_UX_Screen_and_Control_Center_Requirements_Matrix.md"
+      "pathname": "/account/security/authenticator/setup",
+      "runtime_pathname": "/account/security/authenticator/setup",
+      "guard": "Current authenticated User actor/session and exact protected original ENROLL context; fresh operation-bound proof precedes one-time QR/key disclosure. Reload/history cannot mint or re-reveal. First-code activation stays server-authoritative.",
+      "owner_scopes": [
+        "TUN-P2-008",
+        "P1-018-RV006"
       ],
-      "figma_refs": [],
-      "source_paths": [],
-      "planning_status": "OWNER_AND_ROUTE_REFINEMENT_REQUIRED",
-      "design_status": "UI_REQUIRED_BEFORE_IMPLEMENTATION",
-      "acceptance_boundary": "Unimplemented: no PASS inherited from registration and no feature implementation authorized by this inventory."
+      "authority_refs": [
+        "docs/authority/current/development/31_UI_UX_Screen_and_Control_Center_Requirements_Matrix.md",
+        "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md"
+      ],
+      "figma_refs": [
+        {
+          "file_key": "apNbwvAgdn1xIxYH1oiaSC",
+          "node_id": "83:117"
+        },
+        {
+          "file_key": "apNbwvAgdn1xIxYH1oiaSC",
+          "node_id": "83:287"
+        },
+        {
+          "file_key": "apNbwvAgdn1xIxYH1oiaSC",
+          "node_id": "70:1257"
+        }
+      ],
+      "source_paths": [
+        "web/apps/user/totp.tsx",
+        "web/apps/user/totp.ui.tsx",
+        "web/apps/user/totp.routes.ts",
+        "web/apps/user/totp.api.ts",
+        "web/apps/user/totp.validation.ts",
+        "web/apps/user/totp.content-keys.ts",
+        "web/apps/user/totp.code.tsx",
+        "web/apps/user/totp.css",
+        "src/Modules/Identity/TotpEndpoints.cs",
+        "src/Modules/Identity/IdentityWebAssets.cs",
+        "web/apps/user/totp-qr.ts"
+      ],
+      "planning_status": "SCOPED_IMPLEMENTATION_VALIDATION_PENDING",
+      "design_status": "PRODUCT_OWNER_APPROVED_SCOPED_ADAPTATIONS",
+      "acceptance_boundary": "Actual008-V01-V05 and separate factor-picker consent are recorded. Current implementation requires committed source-bound URL, VAL, UX-FID, native and rendered evidence. No prototype, prior007 or other-route PASS is inherited. Runtime production policy/publication, Product/release and protected-main gates remain separate.",
+      "routing_state": "IMPLEMENTED_VALIDATION_PENDING",
+      "visual_state": "IMPLEMENTATION_REQUIRES_CURRENT_RENDERED_EVIDENCE",
+      "consent_ref": "governance/evidence/TUN-P2-008-VISUAL-CONSENT.json",
+      "form_ids": [
+        "FORM-TOTP-SETUP"
+      ],
+      "parameter_schema": {},
+      "additional_consent_refs": [
+        "governance/evidence/TUN-P2-008-FACTOR-PICKER-CONSENT.json"
+      ]
     },
     {
       "id": "U-AUTH-05",
@@ -669,7 +723,9 @@
       "runtime_pathname": "/account/security/sign-in-methods",
       "guard": "Current authenticated User session; trusted Account access, owner-only safe methods, policy/eligibility and exact operation prerequisites enforced by BFF on every command/read",
       "owner_scopes": [
-        "TUN-P2-007"
+        "TUN-P2-007",
+        "TUN-P2-008",
+        "P1-018-RV006"
       ],
       "authority_refs": [
         "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md",
@@ -690,7 +746,10 @@
         "web/apps/user/passkeys.routes.ts",
         "web/apps/user/passkeys.native.ts",
         "web/apps/user/step-up.tsx",
-        "src/Modules/Identity/PasskeyEndpoints.cs"
+        "src/Modules/Identity/PasskeyEndpoints.cs",
+        "web/apps/user/totp.method-row.tsx",
+        "web/apps/user/totp.api.ts",
+        "web/apps/user/totp.routes.ts"
       ],
       "planning_status": "PASSKEY_SLICE_IMPLEMENTED_FUTURE_METHODS_PENDING",
       "design_status": "PRODUCT_OWNER_APPROVED_SCOPED_ADAPTATIONS",
@@ -702,7 +761,13 @@
         "UI_FIDELITY_DEFECT"
       ],
       "consent_ref": "governance/evidence/TUN-P2-007-VISUAL-CONSENT-20261109.json",
-      "visual_state": "IMPLEMENTATION_REQUIRES_CURRENT_RENDERED_EVIDENCE"
+      "visual_state": "IMPLEMENTATION_REQUIRES_CURRENT_RENDERED_EVIDENCE",
+      "additional_consent_refs": [
+        "governance/evidence/TUN-P2-008-VISUAL-CONSENT.json",
+        "governance/evidence/TUN-P2-008-FACTOR-PICKER-CONSENT.json"
+      ],
+      "current_revision_ref": "P1-018-RV006",
+      "revision_acceptance_boundary": "Actual008-V01-V05 and separate factor-picker consent are recorded. Current implementation requires committed source-bound URL, VAL, UX-FID, native and rendered evidence. No prototype, prior007 or other-route PASS is inherited. Runtime production policy/publication, Product/release and protected-main gates remain separate."
     },
     {
       "id": "U-ACCT-04",
@@ -1713,7 +1778,9 @@
       "owner_scopes": [
         "TUN-P2-005",
         "P1-018-RV003",
-        "TUN-P2-007"
+        "TUN-P2-007",
+        "TUN-P2-008",
+        "P1-018-RV006"
       ],
       "authority_refs": [
         "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md",
@@ -1735,7 +1802,9 @@
         "web/apps/user/authentication.routes.ts",
         "web/apps/user/authentication.validation.ts",
         "src/Modules/Identity/AuthenticationEndpoints.cs",
-        "src/Modules/Identity/IdentityWebAssets.cs"
+        "src/Modules/Identity/IdentityWebAssets.cs",
+        "web/apps/user/totp.api.ts",
+        "web/apps/user/totp.routes.ts"
       ],
       "observed_defects": [],
       "validation_state": "IMPLEMENTED_SOURCE_VALIDATION_PENDING",
@@ -1751,65 +1820,21 @@
       "visual_state": "IMPLEMENTATION_REQUIRES_CURRENT_RENDERED_EVIDENCE",
       "acceptance_boundary": "Actual V01–V06 scoped consent is recorded. Current source is implemented with known recovery/fidelity corrections and native/browser/rendered validation pending. No PASS inherited from another screen; owner Figma backfill, whole007/P2, runtime production policy, protected-main merge and release remain separate.",
       "additional_consent_refs": [
-        "governance/evidence/TUN-P2-005-VISUAL-ACCEPTANCE-DEFERRAL-20261021.json"
-      ]
+        "governance/evidence/TUN-P2-005-VISUAL-ACCEPTANCE-DEFERRAL-20261021.json",
+        "governance/evidence/TUN-P2-008-VISUAL-CONSENT.json",
+        "governance/evidence/TUN-P2-008-FACTOR-PICKER-CONSENT.json"
+      ],
+      "current_revision_ref": "P1-018-RV006",
+      "revision_acceptance_boundary": "Actual008-V01-V05 and separate factor-picker consent are recorded. Current implementation requires committed source-bound URL, VAL, UX-FID, native and rendered evidence. No prototype, prior007 or other-route PASS is inherited. Runtime production policy/publication, Product/release and protected-main gates remain separate."
     },
     {
       "module": "Identity.StepUp",
       "owner_scopes": [
         "TUN-P2-006",
         "P1-018-RV003",
-        "TUN-P2-007"
-      ],
-      "authority_refs": [
-        "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md",
-        "docs/authority/current/decisions/AMD-0008_Approved_Figma_Visual_Fidelity_and_Product_Owner_UX_Consent.md",
-        "docs/authority/current/decisions/AMD-0009_URL_Addressable_Routing_and_Governed_Form_Validation.md"
-      ],
-      "figma_refs": [
-        {
-          "file_key": "apNbwvAgdn1xIxYH1oiaSC",
-          "node_id": "98:27"
-        },
-        {
-          "file_key": "apNbwvAgdn1xIxYH1oiaSC",
-          "node_id": "70:1257"
-        }
-      ],
-      "source_paths": [
-        "web/apps/user/step-up.tsx",
-        "web/apps/user/step-up.css",
-        "web/packages/ui/src/dialog.tsx",
-        "web/packages/ui/src/forms.tsx",
-        "src/Modules/Identity/StepUpBrowserEndpoints.cs",
-        "src/Modules/Identity/StepUpApplication.cs"
-      ],
-      "guard": "Current User server session and trusted owner action; protected view binding, exact policy and operation checks; no browser-selected authority or general session upgrade.",
-      "observed_defects": [],
-      "consent_ref": "governance/evidence/TUN-P2-007-VISUAL-CONSENT-20261109.json",
-      "design_status": "PRODUCT_OWNER_APPROVED_SCOPED_ADAPTATIONS",
-      "visual_state": "IMPLEMENTATION_REQUIRES_CURRENT_RENDERED_EVIDENCE",
-      "acceptance_boundary": "Actual V01–V06 scoped consent is recorded. Current source is implemented with known recovery/fidelity corrections and native/browser/rendered validation pending. No PASS inherited from another screen; owner Figma backfill, whole007/P2, runtime production policy, protected-main merge and release remain separate.",
-      "id": "COMP-STEP-UP",
-      "kind": "COMPONENT",
-      "status": "IMPLEMENTED",
-      "app": "user",
-      "title": "Confirm identity for the current action",
-      "pathname": null,
-      "runtime_pathname": null,
-      "form_ids": [
-        "FORM-STEP-UP"
-      ],
-      "interaction": "Same-screen native modal; owner canonical pathname and safe OAuth/Product context remain unchanged.",
-      "additional_consent_refs": [
-        "governance/evidence/TUN-P2-006-VISUAL-CONSENT-20261108.json"
-      ]
-    },
-    {
-      "module": "Identity.StepUp",
-      "owner_scopes": [
-        "TUN-P2-006",
-        "P1-018-RV003"
+        "TUN-P2-007",
+        "TUN-P2-008",
+        "P1-018-RV006"
       ],
       "authority_refs": [
         "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md",
@@ -1833,7 +1858,74 @@
         "web/packages/ui/src/forms.tsx",
         "src/Modules/Identity/StepUpBrowserEndpoints.cs",
         "src/Modules/Identity/StepUpApplication.cs",
-        "web/fixtures/step-up"
+        "web/apps/user/step-up.totp.tsx",
+        "web/apps/user/totp.picker.tsx",
+        "web/apps/user/totp.api.ts",
+        "web/apps/user/totp.validation.ts",
+        "web/apps/user/totp.content-keys.ts",
+        "web/apps/user/totp.code.tsx",
+        "web/apps/user/totp.css",
+        "src/Modules/Identity/StepUpTotpBrowserEndpoints.cs"
+      ],
+      "guard": "Current User server session and trusted owner action; protected view binding, exact policy and operation checks; no browser-selected authority or general session upgrade.",
+      "observed_defects": [],
+      "consent_ref": "governance/evidence/TUN-P2-007-VISUAL-CONSENT-20261109.json",
+      "design_status": "PRODUCT_OWNER_APPROVED_SCOPED_ADAPTATIONS",
+      "visual_state": "IMPLEMENTATION_REQUIRES_CURRENT_RENDERED_EVIDENCE",
+      "acceptance_boundary": "Actual V01–V06 scoped consent is recorded. Current source is implemented with known recovery/fidelity corrections and native/browser/rendered validation pending. No PASS inherited from another screen; owner Figma backfill, whole007/P2, runtime production policy, protected-main merge and release remain separate.",
+      "id": "COMP-STEP-UP",
+      "kind": "COMPONENT",
+      "status": "IMPLEMENTED",
+      "app": "user",
+      "title": "Confirm identity for the current action",
+      "pathname": null,
+      "runtime_pathname": null,
+      "form_ids": [
+        "FORM-STEP-UP",
+        "FORM-STEP-UP-TOTP"
+      ],
+      "interaction": "Same-screen native modal; owner canonical pathname and safe OAuth/Product context remain unchanged.",
+      "additional_consent_refs": [
+        "governance/evidence/TUN-P2-006-VISUAL-CONSENT-20261108.json",
+        "governance/evidence/TUN-P2-008-VISUAL-CONSENT.json",
+        "governance/evidence/TUN-P2-008-FACTOR-PICKER-CONSENT.json"
+      ],
+      "current_revision_ref": "P1-018-RV006",
+      "revision_acceptance_boundary": "Actual008-V01-V05 and separate factor-picker consent are recorded. Current implementation requires committed source-bound URL, VAL, UX-FID, native and rendered evidence. No prototype, prior007 or other-route PASS is inherited. Runtime production policy/publication, Product/release and protected-main gates remain separate."
+    },
+    {
+      "module": "Identity.StepUp",
+      "owner_scopes": [
+        "TUN-P2-006",
+        "P1-018-RV003",
+        "TUN-P2-008",
+        "P1-018-RV006"
+      ],
+      "authority_refs": [
+        "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md",
+        "docs/authority/current/decisions/AMD-0008_Approved_Figma_Visual_Fidelity_and_Product_Owner_UX_Consent.md",
+        "docs/authority/current/decisions/AMD-0009_URL_Addressable_Routing_and_Governed_Form_Validation.md"
+      ],
+      "figma_refs": [
+        {
+          "file_key": "apNbwvAgdn1xIxYH1oiaSC",
+          "node_id": "98:27"
+        },
+        {
+          "file_key": "apNbwvAgdn1xIxYH1oiaSC",
+          "node_id": "70:1257"
+        }
+      ],
+      "source_paths": [
+        "web/apps/user/step-up.tsx",
+        "web/apps/user/step-up.css",
+        "web/packages/ui/src/dialog.tsx",
+        "web/packages/ui/src/forms.tsx",
+        "src/Modules/Identity/StepUpBrowserEndpoints.cs",
+        "src/Modules/Identity/StepUpApplication.cs",
+        "web/fixtures/step-up",
+        "web/apps/user/step-up.totp.tsx",
+        "web/apps/user/totp.picker.tsx"
       ],
       "guard": "Current User server session and trusted owner action; protected view binding, exact policy and operation checks; no browser-selected authority or general session upgrade.",
       "observed_defects": [],
@@ -1852,14 +1944,22 @@
       "form_ids": [
         "FORM-STEP-UP"
       ],
-      "local_test_host_ref": "tools/browser-testing/BrowserTestStepUp.cs"
+      "local_test_host_ref": "tools/browser-testing/BrowserTestStepUp.cs",
+      "additional_consent_refs": [
+        "governance/evidence/TUN-P2-008-VISUAL-CONSENT.json",
+        "governance/evidence/TUN-P2-008-FACTOR-PICKER-CONSENT.json"
+      ],
+      "current_revision_ref": "P1-018-RV006",
+      "revision_acceptance_boundary": "Actual008-V01-V05 and separate factor-picker consent are recorded. Current implementation requires committed source-bound URL, VAL, UX-FID, native and rendered evidence. No prototype, prior007 or other-route PASS is inherited. Runtime production policy/publication, Product/release and protected-main gates remain separate."
     },
     {
       "module": "Identity.StepUp",
       "owner_scopes": [
         "TUN-P2-006",
         "P1-018-RV003",
-        "TUN-P2-007"
+        "TUN-P2-007",
+        "TUN-P2-008",
+        "P1-018-RV006"
       ],
       "authority_refs": [
         "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md",
@@ -1903,8 +2003,12 @@
       ],
       "backend_validation": "Independent bounded strict JSON, current credential/policy length/abuse, actor/session/origin/view/operation/version binding, current restrictions, one-use proof and atomic owner mutation/ledger. Password is cleared after submission and never stored in browser storage or URLs.",
       "additional_consent_refs": [
-        "governance/evidence/TUN-P2-006-VISUAL-CONSENT-20261108.json"
-      ]
+        "governance/evidence/TUN-P2-006-VISUAL-CONSENT-20261108.json",
+        "governance/evidence/TUN-P2-008-VISUAL-CONSENT.json",
+        "governance/evidence/TUN-P2-008-FACTOR-PICKER-CONSENT.json"
+      ],
+      "current_revision_ref": "P1-018-RV006",
+      "revision_acceptance_boundary": "Actual008-V01-V05 and separate factor-picker consent are recorded. Current implementation requires committed source-bound URL, VAL, UX-FID, native and rendered evidence. No prototype, prior007 or other-route PASS is inherited. Runtime production policy/publication, Product/release and protected-main gates remain separate."
     },
     {
       "id": "U-ACCT-SECURITY",
@@ -1969,7 +2073,9 @@
       ],
       "guard": "Anonymous protected credential transaction; server nonce/origin/policy and native assertion plus exact current result session; no Account enumeration or tokens in browser storage",
       "owner_scopes": [
-        "TUN-P2-007"
+        "TUN-P2-007",
+        "TUN-P2-008",
+        "P1-018-RV006"
       ],
       "authority_refs": [
         "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md",
@@ -1988,7 +2094,9 @@
         "web/apps/user/passkeys.native.ts",
         "web/apps/user/passkeys.api.ts",
         "web/apps/user/authentication.tsx",
-        "src/Modules/Identity/PasskeyEndpoints.cs"
+        "src/Modules/Identity/PasskeyEndpoints.cs",
+        "web/apps/user/totp.api.ts",
+        "web/apps/user/totp.routes.ts"
       ],
       "interaction": "Explicit native browser sign-in gesture and same-screen pending/recovery states; success navigates to existing guarded /signed-in.",
       "observed_defects": [
@@ -1997,7 +2105,13 @@
       "consent_ref": "governance/evidence/TUN-P2-007-VISUAL-CONSENT-20261109.json",
       "design_status": "PRODUCT_OWNER_APPROVED_SCOPED_ADAPTATIONS",
       "visual_state": "IMPLEMENTATION_REQUIRES_CURRENT_RENDERED_EVIDENCE",
-      "acceptance_boundary": "Actual V01–V06 scoped consent is recorded. Current source is implemented with known recovery/fidelity corrections and native/browser/rendered validation pending. No PASS inherited from another screen; owner Figma backfill, whole007/P2, runtime production policy, protected-main merge and release remain separate."
+      "acceptance_boundary": "Actual V01–V06 scoped consent is recorded. Current source is implemented with known recovery/fidelity corrections and native/browser/rendered validation pending. No PASS inherited from another screen; owner Figma backfill, whole007/P2, runtime production policy, protected-main merge and release remain separate.",
+      "additional_consent_refs": [
+        "governance/evidence/TUN-P2-008-VISUAL-CONSENT.json",
+        "governance/evidence/TUN-P2-008-FACTOR-PICKER-CONSENT.json"
+      ],
+      "current_revision_ref": "P1-018-RV006",
+      "revision_acceptance_boundary": "Actual008-V01-V05 and separate factor-picker consent are recorded. Current implementation requires committed source-bound URL, VAL, UX-FID, native and rendered evidence. No prototype, prior007 or other-route PASS is inherited. Runtime production policy/publication, Product/release and protected-main gates remain separate."
     },
     {
       "id": "COMP-PASSKEY-REVOKE",
@@ -2050,6 +2164,526 @@
       "design_status": "PRODUCT_OWNER_APPROVED_SCOPED_ADAPTATIONS",
       "visual_state": "IMPLEMENTATION_REQUIRES_CURRENT_RENDERED_EVIDENCE",
       "acceptance_boundary": "Actual V01–V06 scoped consent is recorded. Current source is implemented with known recovery/fidelity corrections and native/browser/rendered validation pending. No PASS inherited from another screen; owner Figma backfill, whole007/P2, runtime production policy, protected-main merge and release remain separate."
+    },
+    {
+      "id": "U-ACCT-TOTP",
+      "kind": "SCREEN",
+      "status": "IMPLEMENTED",
+      "app": "user",
+      "module": "Identity.Totp",
+      "title": "Authenticator management",
+      "owner_scopes": [
+        "TUN-P2-008",
+        "P1-018-RV006"
+      ],
+      "authority_refs": [
+        "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md",
+        "docs/authority/current/development/31_UI_UX_Screen_and_Control_Center_Requirements_Matrix.md",
+        "docs/authority/current/decisions/AMD-0008_Approved_Figma_Visual_Fidelity_and_Product_Owner_UX_Consent.md",
+        "docs/authority/current/decisions/AMD-0009_URL_Addressable_Routing_and_Governed_Form_Validation.md"
+      ],
+      "figma_refs": [
+        {
+          "file_key": "apNbwvAgdn1xIxYH1oiaSC",
+          "node_id": "83:2"
+        }
+      ],
+      "source_paths": [
+        "web/apps/user/totp.tsx",
+        "web/apps/user/totp.ui.tsx",
+        "web/apps/user/totp.routes.ts",
+        "web/apps/user/totp.api.ts",
+        "web/apps/user/totp.validation.ts",
+        "web/apps/user/totp.content-keys.ts",
+        "web/apps/user/totp.code.tsx",
+        "web/apps/user/totp.css",
+        "src/Modules/Identity/TotpEndpoints.cs",
+        "src/Modules/Identity/IdentityWebAssets.cs"
+      ],
+      "consent_ref": "governance/evidence/TUN-P2-008-VISUAL-CONSENT.json",
+      "additional_consent_refs": [
+        "governance/evidence/TUN-P2-008-FACTOR-PICKER-CONSENT.json"
+      ],
+      "design_status": "PRODUCT_OWNER_APPROVED_SCOPED_ADAPTATIONS",
+      "visual_state": "IMPLEMENTATION_REQUIRES_CURRENT_RENDERED_EVIDENCE",
+      "acceptance_boundary": "Actual008-V01-V05 and separate factor-picker consent are recorded. Current implementation requires committed source-bound URL, VAL, UX-FID, native and rendered evidence. No prototype, prior007 or other-route PASS is inherited. Runtime production policy/publication, Product/release and protected-main gates remain separate.",
+      "pathname": "/account/security/authenticator",
+      "runtime_pathname": "/account/security/authenticator",
+      "parameter_schema": {},
+      "guard": "Current User actor/session and safe owner metadata/capabilities. Only an exact protected causal terminal result may show public signed-out feedback. Every mutation independently rechecks policy/source/eligibility/proof.",
+      "routing_state": "IMPLEMENTED_VALIDATION_PENDING"
+    },
+    {
+      "id": "U-ACCT-TOTP-READY",
+      "kind": "SCREEN",
+      "status": "IMPLEMENTED",
+      "app": "user",
+      "module": "Identity.Totp",
+      "title": "Authenticator app ready",
+      "owner_scopes": [
+        "TUN-P2-008",
+        "P1-018-RV006"
+      ],
+      "authority_refs": [
+        "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md",
+        "docs/authority/current/development/31_UI_UX_Screen_and_Control_Center_Requirements_Matrix.md",
+        "docs/authority/current/decisions/AMD-0008_Approved_Figma_Visual_Fidelity_and_Product_Owner_UX_Consent.md",
+        "docs/authority/current/decisions/AMD-0009_URL_Addressable_Routing_and_Governed_Form_Validation.md"
+      ],
+      "figma_refs": [
+        {
+          "file_key": "apNbwvAgdn1xIxYH1oiaSC",
+          "node_id": "83:298"
+        }
+      ],
+      "source_paths": [
+        "web/apps/user/totp.tsx",
+        "web/apps/user/totp.ui.tsx",
+        "web/apps/user/totp.routes.ts",
+        "web/apps/user/totp.api.ts",
+        "web/apps/user/totp.validation.ts",
+        "web/apps/user/totp.content-keys.ts",
+        "web/apps/user/totp.code.tsx",
+        "web/apps/user/totp.css",
+        "src/Modules/Identity/TotpEndpoints.cs",
+        "src/Modules/Identity/IdentityWebAssets.cs"
+      ],
+      "consent_ref": "governance/evidence/TUN-P2-008-VISUAL-CONSENT.json",
+      "additional_consent_refs": [
+        "governance/evidence/TUN-P2-008-FACTOR-PICKER-CONSENT.json"
+      ],
+      "design_status": "PRODUCT_OWNER_APPROVED_SCOPED_ADAPTATIONS",
+      "visual_state": "IMPLEMENTATION_REQUIRES_CURRENT_RENDERED_EVIDENCE",
+      "acceptance_boundary": "Actual008-V01-V05 and separate factor-picker consent are recorded. Current implementation requires committed source-bound URL, VAL, UX-FID, native and rendered evidence. No prototype, prior007 or other-route PASS is inherited. Runtime production policy/publication, Product/release and protected-main gates remain separate.",
+      "pathname": "/account/security/authenticator/ready",
+      "runtime_pathname": "/account/security/authenticator/ready",
+      "parameter_schema": {},
+      "guard": "Exact committed original ENROLL result plus matching current ACTIVE factor. Neither pathname nor proof authorization proves activation.",
+      "routing_state": "IMPLEMENTED_VALIDATION_PENDING"
+    },
+    {
+      "id": "U-AUTH-TOTP-MFA",
+      "kind": "SCREEN",
+      "status": "IMPLEMENTED",
+      "app": "user",
+      "module": "Identity.Totp",
+      "title": "Policy-required authenticator verification",
+      "owner_scopes": [
+        "TUN-P2-008",
+        "P1-018-RV006"
+      ],
+      "authority_refs": [
+        "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md",
+        "docs/authority/current/development/31_UI_UX_Screen_and_Control_Center_Requirements_Matrix.md",
+        "docs/authority/current/decisions/AMD-0008_Approved_Figma_Visual_Fidelity_and_Product_Owner_UX_Consent.md",
+        "docs/authority/current/decisions/AMD-0009_URL_Addressable_Routing_and_Governed_Form_Validation.md"
+      ],
+      "figma_refs": [
+        {
+          "file_key": "apNbwvAgdn1xIxYH1oiaSC",
+          "node_id": "2:4"
+        },
+        {
+          "file_key": "apNbwvAgdn1xIxYH1oiaSC",
+          "node_id": "98:28"
+        },
+        {
+          "file_key": "apNbwvAgdn1xIxYH1oiaSC",
+          "node_id": "70:1257"
+        }
+      ],
+      "source_paths": [
+        "web/apps/user/authentication.tsx",
+        "web/apps/user/passkeys.sign-in.tsx",
+        "web/apps/user/totp.mfa.tsx",
+        "web/apps/user/totp.picker.tsx",
+        "web/apps/user/totp.routes.ts",
+        "web/apps/user/totp.api.ts",
+        "web/apps/user/totp.validation.ts",
+        "web/apps/user/totp.content-keys.ts",
+        "web/apps/user/totp.code.tsx",
+        "web/apps/user/totp.css",
+        "src/Modules/Identity/TotpEndpoints.cs",
+        "src/Modules/Identity/AuthenticationEndpoints.cs"
+      ],
+      "consent_ref": "governance/evidence/TUN-P2-008-VISUAL-CONSENT.json",
+      "additional_consent_refs": [
+        "governance/evidence/TUN-P2-008-FACTOR-PICKER-CONSENT.json"
+      ],
+      "design_status": "PRODUCT_OWNER_APPROVED_SCOPED_ADAPTATIONS",
+      "visual_state": "IMPLEMENTATION_REQUIRES_CURRENT_RENDERED_EVIDENCE",
+      "acceptance_boundary": "Actual008-V01-V05 and separate factor-picker consent are recorded. Current implementation requires committed source-bound URL, VAL, UX-FID, native and rendered evidence. No prototype, prior007 or other-route PASS is inherited. Runtime production policy/publication, Product/release and protected-main gates remain separate.",
+      "pathname": "/login/verify-authenticator",
+      "runtime_pathname": "/login/verify-authenticator",
+      "parameter_schema": {},
+      "form_ids": [
+        "FORM-TOTP-MFA"
+      ],
+      "guard": "Exact protected pending-primary-authentication request and current source/actor/policy/CSRF. Additional proof precedes a qualifying final session. GET/COMPLETED metadata alone never grants a session; code-free recovery binds the original request.",
+      "routing_state": "IMPLEMENTED_VALIDATION_PENDING"
+    },
+    {
+      "id": "FORM-TOTP-SETUP",
+      "kind": "FORM",
+      "status": "IMPLEMENTED",
+      "app": "user",
+      "module": "Identity.Totp",
+      "title": "Verify first authenticator code",
+      "owner_scopes": [
+        "TUN-P2-008",
+        "P1-018-RV006"
+      ],
+      "authority_refs": [
+        "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md",
+        "docs/authority/current/development/31_UI_UX_Screen_and_Control_Center_Requirements_Matrix.md",
+        "docs/authority/current/decisions/AMD-0008_Approved_Figma_Visual_Fidelity_and_Product_Owner_UX_Consent.md",
+        "docs/authority/current/decisions/AMD-0009_URL_Addressable_Routing_and_Governed_Form_Validation.md"
+      ],
+      "figma_refs": [
+        {
+          "file_key": "apNbwvAgdn1xIxYH1oiaSC",
+          "node_id": "83:287"
+        },
+        {
+          "file_key": "apNbwvAgdn1xIxYH1oiaSC",
+          "node_id": "70:1257"
+        }
+      ],
+      "source_paths": [
+        "web/apps/user/totp.tsx",
+        "web/apps/user/totp.ui.tsx",
+        "web/apps/user/totp.routes.ts",
+        "web/apps/user/totp.api.ts",
+        "web/apps/user/totp.validation.ts",
+        "web/apps/user/totp.content-keys.ts",
+        "web/apps/user/totp.code.tsx",
+        "web/apps/user/totp.css",
+        "src/Modules/Identity/TotpEndpoints.cs",
+        "src/Modules/Identity/IdentityWebAssets.cs"
+      ],
+      "consent_ref": "governance/evidence/TUN-P2-008-VISUAL-CONSENT.json",
+      "additional_consent_refs": [
+        "governance/evidence/TUN-P2-008-FACTOR-PICKER-CONSENT.json"
+      ],
+      "design_status": "PRODUCT_OWNER_APPROVED_SCOPED_ADAPTATIONS",
+      "visual_state": "IMPLEMENTATION_REQUIRES_CURRENT_RENDERED_EVIDENCE",
+      "acceptance_boundary": "Actual008-V01-V05 and separate factor-picker consent are recorded. Current implementation requires committed source-bound URL, VAL, UX-FID, native and rendered evidence. No prototype, prior007 or other-route PASS is inherited. Runtime production policy/publication, Product/release and protected-main gates remain separate.",
+      "screen_id": "U-AUTH-04",
+      "pathname": null,
+      "runtime_pathname": null,
+      "fields": [
+        "code"
+      ],
+      "guard": "Current authenticated User actor/session and exact protected original ENROLL context; fresh operation-bound proof precedes one-time QR/key disclosure. Reload/history cannot mint or re-reveal. First-code activation stays server-authoritative.",
+      "backend_validation": "Independent strict JSON and bounded ASCII code grammar; native verifier/global replay/clock/rate/resource controls; exact actor/session/policy/source/enrollment binding and atomic inactive-to-active result. No code/key/URI in URLs/storage/logs; sensitive presentation removed on navigation/pagehide/submission."
+    },
+    {
+      "id": "FORM-TOTP-MFA",
+      "kind": "FORM",
+      "status": "IMPLEMENTED",
+      "app": "user",
+      "module": "Identity.Totp",
+      "title": "Complete required sign-in verification",
+      "owner_scopes": [
+        "TUN-P2-008",
+        "P1-018-RV006"
+      ],
+      "authority_refs": [
+        "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md",
+        "docs/authority/current/development/31_UI_UX_Screen_and_Control_Center_Requirements_Matrix.md",
+        "docs/authority/current/decisions/AMD-0008_Approved_Figma_Visual_Fidelity_and_Product_Owner_UX_Consent.md",
+        "docs/authority/current/decisions/AMD-0009_URL_Addressable_Routing_and_Governed_Form_Validation.md"
+      ],
+      "figma_refs": [
+        {
+          "file_key": "apNbwvAgdn1xIxYH1oiaSC",
+          "node_id": "2:4"
+        },
+        {
+          "file_key": "apNbwvAgdn1xIxYH1oiaSC",
+          "node_id": "98:28"
+        },
+        {
+          "file_key": "apNbwvAgdn1xIxYH1oiaSC",
+          "node_id": "70:1257"
+        }
+      ],
+      "source_paths": [
+        "web/apps/user/authentication.tsx",
+        "web/apps/user/passkeys.sign-in.tsx",
+        "web/apps/user/totp.mfa.tsx",
+        "web/apps/user/totp.picker.tsx",
+        "web/apps/user/totp.routes.ts",
+        "web/apps/user/totp.api.ts",
+        "web/apps/user/totp.validation.ts",
+        "web/apps/user/totp.content-keys.ts",
+        "web/apps/user/totp.code.tsx",
+        "web/apps/user/totp.css",
+        "src/Modules/Identity/TotpEndpoints.cs",
+        "src/Modules/Identity/AuthenticationEndpoints.cs"
+      ],
+      "consent_ref": "governance/evidence/TUN-P2-008-VISUAL-CONSENT.json",
+      "additional_consent_refs": [
+        "governance/evidence/TUN-P2-008-FACTOR-PICKER-CONSENT.json"
+      ],
+      "design_status": "PRODUCT_OWNER_APPROVED_SCOPED_ADAPTATIONS",
+      "visual_state": "IMPLEMENTATION_REQUIRES_CURRENT_RENDERED_EVIDENCE",
+      "acceptance_boundary": "Actual008-V01-V05 and separate factor-picker consent are recorded. Current implementation requires committed source-bound URL, VAL, UX-FID, native and rendered evidence. No prototype, prior007 or other-route PASS is inherited. Runtime production policy/publication, Product/release and protected-main gates remain separate.",
+      "screen_id": "U-AUTH-TOTP-MFA",
+      "pathname": null,
+      "runtime_pathname": null,
+      "fields": [
+        "authenticator",
+        "code"
+      ],
+      "guard": "Same protected pending primary request and current eligible factor; explicit choice for multiple factors, no automatic choice or general session inference.",
+      "backend_validation": "Independent code/native/replay controls, primary-evidence freshness, current source/actor/policy and atomic final session/result. Exact code-free original-result recovery."
+    },
+    {
+      "id": "FORM-STEP-UP-TOTP",
+      "kind": "FORM",
+      "status": "IMPLEMENTED",
+      "app": "user",
+      "module": "Identity.Totp",
+      "title": "Current-operation authenticator code",
+      "owner_scopes": [
+        "TUN-P2-008",
+        "P1-018-RV006"
+      ],
+      "authority_refs": [
+        "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md",
+        "docs/authority/current/development/31_UI_UX_Screen_and_Control_Center_Requirements_Matrix.md",
+        "docs/authority/current/decisions/AMD-0008_Approved_Figma_Visual_Fidelity_and_Product_Owner_UX_Consent.md",
+        "docs/authority/current/decisions/AMD-0009_URL_Addressable_Routing_and_Governed_Form_Validation.md"
+      ],
+      "figma_refs": [
+        {
+          "file_key": "apNbwvAgdn1xIxYH1oiaSC",
+          "node_id": "98:28"
+        },
+        {
+          "file_key": "apNbwvAgdn1xIxYH1oiaSC",
+          "node_id": "98:35"
+        },
+        {
+          "file_key": "apNbwvAgdn1xIxYH1oiaSC",
+          "node_id": "83:287"
+        },
+        {
+          "file_key": "apNbwvAgdn1xIxYH1oiaSC",
+          "node_id": "70:1257"
+        }
+      ],
+      "source_paths": [
+        "web/apps/user/step-up.tsx",
+        "web/apps/user/step-up.totp.tsx",
+        "web/apps/user/totp.picker.tsx",
+        "web/apps/user/totp.api.ts",
+        "web/apps/user/totp.validation.ts",
+        "web/apps/user/totp.content-keys.ts",
+        "web/apps/user/totp.code.tsx",
+        "web/apps/user/totp.css",
+        "src/Modules/Identity/StepUpBrowserEndpoints.cs",
+        "src/Modules/Identity/StepUpTotpBrowserEndpoints.cs"
+      ],
+      "consent_ref": "governance/evidence/TUN-P2-008-VISUAL-CONSENT.json",
+      "additional_consent_refs": [
+        "governance/evidence/TUN-P2-008-FACTOR-PICKER-CONSENT.json"
+      ],
+      "design_status": "PRODUCT_OWNER_APPROVED_SCOPED_ADAPTATIONS",
+      "visual_state": "IMPLEMENTATION_REQUIRES_CURRENT_RENDERED_EVIDENCE",
+      "acceptance_boundary": "Actual008-V01-V05 and separate factor-picker consent are recorded. Current implementation requires committed source-bound URL, VAL, UX-FID, native and rendered evidence. No prototype, prior007 or other-route PASS is inherited. Runtime production policy/publication, Product/release and protected-main gates remain separate.",
+      "screen_id": "DEV-STEP-UP",
+      "pathname": null,
+      "runtime_pathname": null,
+      "fields": [
+        "authenticator",
+        "code"
+      ],
+      "owner_pathnames": [
+        "/account/security/authenticator",
+        "/account/security",
+        "/account/security/sign-in-methods"
+      ],
+      "guard": "Shared same-screen dialog under current caller URL; exact protected owner/request/attempt/source/policy. Isolated carrier is not Product-screen acceptance.",
+      "backend_validation": "Native verification/replay claim/proof issuance commit together; exact proof/owner transaction rechecks current source. Code-free continuation executes only that original active proof, with no new OTP acceptance or session assurance upgrade."
+    },
+    {
+      "id": "COMP-STEP-UP-TOTP",
+      "kind": "COMPONENT",
+      "status": "IMPLEMENTED",
+      "app": "user",
+      "module": "Identity.Totp",
+      "title": "Authenticator proof detail",
+      "owner_scopes": [
+        "TUN-P2-008",
+        "P1-018-RV006"
+      ],
+      "authority_refs": [
+        "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md",
+        "docs/authority/current/development/31_UI_UX_Screen_and_Control_Center_Requirements_Matrix.md",
+        "docs/authority/current/decisions/AMD-0008_Approved_Figma_Visual_Fidelity_and_Product_Owner_UX_Consent.md",
+        "docs/authority/current/decisions/AMD-0009_URL_Addressable_Routing_and_Governed_Form_Validation.md"
+      ],
+      "figma_refs": [
+        {
+          "file_key": "apNbwvAgdn1xIxYH1oiaSC",
+          "node_id": "98:28"
+        },
+        {
+          "file_key": "apNbwvAgdn1xIxYH1oiaSC",
+          "node_id": "98:35"
+        },
+        {
+          "file_key": "apNbwvAgdn1xIxYH1oiaSC",
+          "node_id": "70:1257"
+        }
+      ],
+      "source_paths": [
+        "web/apps/user/step-up.tsx",
+        "web/apps/user/step-up.totp.tsx",
+        "web/apps/user/totp.picker.tsx",
+        "web/apps/user/totp.api.ts",
+        "web/apps/user/totp.validation.ts",
+        "web/apps/user/totp.content-keys.ts",
+        "web/apps/user/totp.code.tsx",
+        "web/apps/user/totp.css",
+        "src/Modules/Identity/StepUpBrowserEndpoints.cs",
+        "src/Modules/Identity/StepUpTotpBrowserEndpoints.cs"
+      ],
+      "consent_ref": "governance/evidence/TUN-P2-008-VISUAL-CONSENT.json",
+      "additional_consent_refs": [
+        "governance/evidence/TUN-P2-008-FACTOR-PICKER-CONSENT.json"
+      ],
+      "design_status": "PRODUCT_OWNER_APPROVED_SCOPED_ADAPTATIONS",
+      "visual_state": "IMPLEMENTATION_REQUIRES_CURRENT_RENDERED_EVIDENCE",
+      "acceptance_boundary": "Actual008-V01-V05 and separate factor-picker consent are recorded. Current implementation requires committed source-bound URL, VAL, UX-FID, native and rendered evidence. No prototype, prior007 or other-route PASS is inherited. Runtime production policy/publication, Product/release and protected-main gates remain separate.",
+      "pathname": null,
+      "runtime_pathname": null,
+      "form_ids": [
+        "FORM-STEP-UP-TOTP"
+      ],
+      "parent_screen_ids": [
+        "DEV-STEP-UP",
+        "U-ACCT-TOTP",
+        "U-ACCT-03",
+        "U-ACCT-SECURITY"
+      ],
+      "guard": "Current caller and exact reviewed operation, eligible factor and same original proof/result. No independent modal route or general session upgrade.",
+      "interaction": "Shared native dialog, typed code form, source-bound continuation and owner callback/focus restoration."
+    },
+    {
+      "id": "COMP-TOTP-FACTOR-PICKER",
+      "kind": "COMPONENT",
+      "status": "IMPLEMENTED",
+      "app": "user",
+      "module": "Identity.Totp",
+      "title": "Choose an eligible authenticator",
+      "owner_scopes": [
+        "TUN-P2-008",
+        "P1-018-RV006"
+      ],
+      "authority_refs": [
+        "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md",
+        "docs/authority/current/development/31_UI_UX_Screen_and_Control_Center_Requirements_Matrix.md",
+        "docs/authority/current/decisions/AMD-0008_Approved_Figma_Visual_Fidelity_and_Product_Owner_UX_Consent.md",
+        "docs/authority/current/decisions/AMD-0009_URL_Addressable_Routing_and_Governed_Form_Validation.md"
+      ],
+      "figma_refs": [
+        {
+          "file_key": "apNbwvAgdn1xIxYH1oiaSC",
+          "node_id": "98:28"
+        },
+        {
+          "file_key": "apNbwvAgdn1xIxYH1oiaSC",
+          "node_id": "98:35"
+        }
+      ],
+      "source_paths": [
+        "web/apps/user/totp.picker.tsx",
+        "web/apps/user/totp.mfa.tsx",
+        "web/apps/user/step-up.totp.tsx",
+        "web/apps/user/totp.api.ts",
+        "web/apps/user/totp.css",
+        "web/packages/ui/src/content.tsx"
+      ],
+      "consent_ref": "governance/evidence/TUN-P2-008-VISUAL-CONSENT.json",
+      "additional_consent_refs": [
+        "governance/evidence/TUN-P2-008-FACTOR-PICKER-CONSENT.json"
+      ],
+      "design_status": "PRODUCT_OWNER_APPROVED_SCOPED_ADAPTATIONS",
+      "visual_state": "IMPLEMENTATION_REQUIRES_CURRENT_RENDERED_EVIDENCE",
+      "acceptance_boundary": "Actual008-V01-V05 and separate factor-picker consent are recorded. Current implementation requires committed source-bound URL, VAL, UX-FID, native and rendered evidence. No prototype, prior007 or other-route PASS is inherited. Runtime production policy/publication, Product/release and protected-main gates remain separate.",
+      "pathname": null,
+      "runtime_pathname": null,
+      "form_ids": [
+        "FORM-TOTP-MFA",
+        "FORM-STEP-UP-TOTP"
+      ],
+      "parent_screen_ids": [
+        "U-AUTH-TOTP-MFA",
+        "DEV-STEP-UP",
+        "U-ACCT-TOTP"
+      ],
+      "guard": "Only currently eligible server-backed active-factor metadata for the exact pending request/action. Multiple factors begin unselected. Choice binds opaque source/version; changed choice clears code. Published transient numbered labels and trusted timestamps are not persisted nicknames.",
+      "interaction": "Existing button/chevron rows and source-bound selected detail. Local state only; no raw GUID labels, secrets, automatic choice or production cardinality policy."
+    },
+    {
+      "id": "COMP-TOTP-MUTATION-REVIEW",
+      "kind": "COMPONENT",
+      "status": "IMPLEMENTED",
+      "app": "user",
+      "module": "Identity.Totp",
+      "title": "Review authenticator removal or reset",
+      "owner_scopes": [
+        "TUN-P2-008",
+        "P1-018-RV006"
+      ],
+      "authority_refs": [
+        "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md",
+        "docs/authority/current/development/31_UI_UX_Screen_and_Control_Center_Requirements_Matrix.md",
+        "docs/authority/current/decisions/AMD-0008_Approved_Figma_Visual_Fidelity_and_Product_Owner_UX_Consent.md",
+        "docs/authority/current/decisions/AMD-0009_URL_Addressable_Routing_and_Governed_Form_Validation.md"
+      ],
+      "figma_refs": [
+        {
+          "file_key": "apNbwvAgdn1xIxYH1oiaSC",
+          "node_id": "46:44"
+        },
+        {
+          "file_key": "apNbwvAgdn1xIxYH1oiaSC",
+          "node_id": "98:28"
+        }
+      ],
+      "source_paths": [
+        "web/apps/user/totp.tsx",
+        "web/apps/user/totp.ui.tsx",
+        "web/apps/user/totp.routes.ts",
+        "web/apps/user/totp.api.ts",
+        "web/apps/user/totp.validation.ts",
+        "web/apps/user/totp.content-keys.ts",
+        "web/apps/user/totp.code.tsx",
+        "web/apps/user/totp.css",
+        "src/Modules/Identity/TotpEndpoints.cs",
+        "src/Modules/Identity/IdentityWebAssets.cs"
+      ],
+      "consent_ref": "governance/evidence/TUN-P2-008-VISUAL-CONSENT.json",
+      "additional_consent_refs": [
+        "governance/evidence/TUN-P2-008-FACTOR-PICKER-CONSENT.json"
+      ],
+      "design_status": "PRODUCT_OWNER_APPROVED_SCOPED_ADAPTATIONS",
+      "visual_state": "IMPLEMENTATION_REQUIRES_CURRENT_RENDERED_EVIDENCE",
+      "acceptance_boundary": "Actual008-V01-V05 and separate factor-picker consent are recorded. Current implementation requires committed source-bound URL, VAL, UX-FID, native and rendered evidence. No prototype, prior007 or other-route PASS is inherited. Runtime production policy/publication, Product/release and protected-main gates remain separate.",
+      "pathname": null,
+      "runtime_pathname": null,
+      "parent_screen_ids": [
+        "U-ACCT-TOTP"
+      ],
+      "owner_pathnames": [
+        "/account/security/authenticator"
+      ],
+      "guard": "Original owned factor/version and server-selected effect before fresh proof. Cancel cannot reverse a completed action. Reset retires only the affected factor and uses separate enrollment.",
+      "interaction": "Same-screen content-fitting review, explicit session effects and exact terminal feedback."
     }
   ],
   "excluded_historical_designs": [
@@ -2059,5 +2693,5 @@
       "reason": "Hidden historical DOB-only screen, superseded prospectively by PDR-0011/AMD-0007; never implement as active UI."
     }
   ],
-  "updated_at": "2026-11-09T17:55:50.487Z"
+  "updated_at": "2026-11-10T18:16:59.996785Z"
 }
