@@ -3,7 +3,8 @@ import type {CDPSession,Page} from '@playwright/test';
 import {registerVerifiedAccount} from './fixtures';
 
 async function authenticator(cdp:CDPSession){
-  return (await cdp.send('WebAuthn.addVirtualAuthenticator',{options:{protocol:'ctap2',ctap2Version:'ctap2_1',transport:'internal',
+  // Chromium permits multiple virtual roaming authenticators, but only one internal authenticator.
+  return (await cdp.send('WebAuthn.addVirtualAuthenticator',{options:{protocol:'ctap2',ctap2Version:'ctap2_1',transport:'usb',
     hasResidentKey:true,hasUserVerification:true,isUserVerified:true,automaticPresenceSimulation:true,
     defaultBackupEligibility:false,defaultBackupState:false}})).authenticatorId;
 }
