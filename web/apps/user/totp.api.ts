@@ -9,7 +9,7 @@ export const totpOperationSchema=z.object({requestId:uuid,enrollmentId:uuid,kind
   expectedVersion:z.number().int().nonnegative(),status:z.enum(['PENDING_PROOF','AUTHORIZED','PREPARING','AWAITING_FIRST_CODE','COMPLETED','EXPIRED','REJECTED']),expiresAt:instant,
   disclosureAvailable:z.boolean(),disclosureConsumed:z.boolean(),activationCompleted:z.boolean(),factorSessionEffect:sessionEffect.nullable(),currentSessionEnds:z.boolean()});
 export type TotpOperation=z.infer<typeof totpOperationSchema>;
-export const totpMetadataSchema=z.object({authenticatorReference:uuid,state:z.enum(['INACTIVE','ACTIVE','DISABLED']),version:z.number().int().positive(),createdAt:instant,activatedAt:instant.nullable(),lastUsedAt:instant.nullable(),disabledAt:instant.nullable()});
+export const totpMetadataSchema=z.object({authenticatorReference:uuid,state:z.enum(['INACTIVE','ACTIVE','DISABLED']),version:z.number().int().positive(),createdAt:instant,activatedAt:instant.nullable(),lastUsedAt:instant.nullable(),disabledAt:instant.nullable(),canStartDisable:z.boolean(),canStartReset:z.boolean()});
 export type TotpMetadata=z.infer<typeof totpMetadataSchema>;
 export const totpMethodsSchema=z.object({authenticators:z.array(totpMetadataSchema)});
 export type TotpMethods=z.infer<typeof totpMethodsSchema>;

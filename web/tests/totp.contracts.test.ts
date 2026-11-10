@@ -2,7 +2,7 @@ import {test} from 'node:test';
 import assert from 'node:assert/strict';
 import {validateTunnerForm} from '../packages/ui/src/index';
 import {canonicalTotpCode,totpCodeSchema} from '../apps/user/totp.validation';
-import {matchesTotpStart,parseMfaRequired,parseTotpDisclosure,parseTotpMfaCompleted,parseTotpOperation,parseTotpTerminal,requestTotpJson,TotpHttpError,totpErrorKey} from '../apps/user/totp.api';
+import {loadTotpMethods,matchesTotpStart,parseMfaRequired,parseTotpDisclosure,parseTotpMfaCompleted,parseTotpOperation,parseTotpTerminal,requestTotpJson,TotpHttpError,totpErrorKey} from '../apps/user/totp.api';
 
 const requestId='11111111-1111-4111-8111-111111111111',enrollmentId='22222222-2222-4222-8222-222222222222',reference='33333333-3333-4333-8333-333333333333',other='44444444-4444-4444-8444-444444444444';
 const operation={requestId,enrollmentId,kind:'ENROLL' as const,authenticatorReference:reference,expectedVersion:0,status:'AWAITING_FIRST_CODE' as const,expiresAt:'2026-11-10T20:00:00Z',disclosureAvailable:false,disclosureConsumed:true,activationCompleted:false,factorSessionEffect:null,currentSessionEnds:false};
@@ -44,5 +44,15 @@ test('server replay rejection keeps its safe classification and selects the publ
   globalThis.fetch=async()=>new Response(JSON.stringify({error_code:'CODE_REPLAYED',detail:marker}),{status:400,headers:{'Content-Type':'application/json'}});
   try{let caught:unknown;try{await requestTotpJson('/account/totp/enrollment/activate',{csrfToken:'public-fixture',body:{code:'000000'}});}catch(error){caught=error;}
     assert.ok(caught instanceof TotpHttpError);assert.equal(caught.code,'CODE_REPLAYED');assert.equal(totpErrorKey(caught),'totp.error.replayed');assert.equal(JSON.stringify(caught).includes(marker),false);
+  }finally{globalThis.fetch=before;}
+});
+
+test('current factor capabilities remain explicit and a missing server capability fails closed without raw diagnostics',async()=>{
+  const before=globalThis.fetch,marker='PUBLIC_NONFUNCTIONAL_CAPABILITY_SENTINEL';
+  const row={authenticatorReference:reference,state:'ACTIVE',version:2,createdAt:operation.expiresAt,activatedAt:operation.expiresAt,lastUsedAt:null,disabledAt:null,canStartDisable:false,canStartReset:true};
+  try{globalThis.fetch=async()=>new Response(JSON.stringify({authenticators:[row]}),{status:200,headers:{'Content-Type':'application/json'}});
+    const result=await loadTotpMethods();assert.equal(result.authenticators[0]?.canStartDisable,false);assert.equal(result.authenticators[0]?.canStartReset,true);
+    globalThis.fetch=async()=>new Response(JSON.stringify({authenticators:[{...row,canStartDisable:undefined,unexpected:marker}]}),{status:200,headers:{'Content-Type':'application/json'}});
+    await assert.rejects(loadTotpMethods(),error=>error instanceof TotpHttpError&&!String(error).includes(marker)&&!JSON.stringify(error).includes(marker));
   }finally{globalThis.fetch=before;}
 });

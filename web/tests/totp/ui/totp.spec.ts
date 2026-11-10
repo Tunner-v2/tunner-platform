@@ -19,7 +19,7 @@ async function account(page:Page,options:{lostStart?:boolean;unknownActivation?:
  const state={operation:options.alreadyShown?op('AWAITING_FIRST_CODE'):null as ReturnType<typeof op>|null,active:false,starts:0,disclosures:0,activations:0,startResultReads:0};
  await page.route('**/account/totp**',async route=>{const path=new URL(route.request().url()).pathname;const body=route.request().method()==='POST'?route.request().postDataJSON():{};
   if(path==='/account/totp/options')return json(route,{csrfToken:'public-csrf',requestId:request,version:'PUBLIC-UI-ONLY',maximumActiveAuthenticators:2,maximumPendingOperations:2,disableSessionEffect:'PreserveExistingSessions',resetSessionEffect:'PreserveExistingSessions',resetBehavior:'RetireAffectedFactorThenSeparateEnrollment',replacementOrdering:'IndependentEnrollment',canStartEnrollment:!state.active,canStartDisable:state.active,canStartReset:state.active,finalEligibilityRequired:true,recovery:options.lostStart&&state.startResultReads===0?null:state.operation,locale:'en',content});
-  if(path==='/account/totp')return json(route,{authenticators:state.active?[{...choice(factor,1),lastUsedAt:null,disabledAt:null}]:[]});
+  if(path==='/account/totp')return json(route,{authenticators:state.active?[{...choice(factor,1),lastUsedAt:null,disabledAt:null,canStartDisable:true,canStartReset:true}]:[]});
   if(path==='/account/totp/enrollment/start'){state.starts++;state.operation={...op(),requestId:body.requestId};if(options.lostStart)return route.abort('failed');return json(route,state.operation);}
   if(path==='/account/totp/start-result'){state.startResultReads++;expect(body.requestId).toBe(state.operation?.requestId);return json(route,state.operation);}
   if(path==='/account/totp/result')return json(route,state.operation);
@@ -56,4 +56,49 @@ for(const capability of ['absent','false'] as const)test(`methods owner with TOT
   if(path==='/account/passkeys')return json(route,{credentials:[],passwordAvailable:true,enrollmentAvailable:true,revocationRequiresCurrentEligibility:true,protectionFactsAvailable:false,activityAvailable:false});return json(route,{},404);
  });
  await page.goto('/account/security/sign-in-methods');await expect(page.getByText(passkeys.content['passkeys.methods.otherUnavailable'],{exact:true})).toBeVisible();await expect(page.locator('a[href="/account/security/authenticator"]')).toHaveCount(0);expect(totpRequests).toBe(0);
+});
+
+for(const available of [true,false])test(`management combines current row capabilities with account capability ${available}`,async({page})=>{
+ const starts:unknown[]=[];
+ await account(page);
+ await page.route('**/account/totp',route=>json(route,{authenticators:[
+  {...choice(factor,1),lastUsedAt:null,disabledAt:null,canStartDisable:false,canStartReset:false},
+  {...choice(second,2),lastUsedAt:null,disabledAt:null,canStartDisable:true,canStartReset:true}]}));
+ await page.route('**/account/totp/options',route=>json(route,{csrfToken:'public-csrf',requestId:request,version:'PUBLIC-UI-ONLY',maximumActiveAuthenticators:2,maximumPendingOperations:2,disableSessionEffect:'PreserveExistingSessions',resetSessionEffect:'PreserveExistingSessions',resetBehavior:'RetireAffectedFactorThenSeparateEnrollment',replacementOrdering:'IndependentEnrollment',canStartEnrollment:false,canStartDisable:available,canStartReset:available,finalEligibilityRequired:true,recovery:null,locale:'en',content}));
+ await page.route('**/account/totp/reset/start',route=>{const body=route.request().postDataJSON();starts.push(body);return json(route,{...op(),requestId:body.requestId,kind:'RESET',authenticatorReference:body.authenticatorReference,expectedVersion:body.expectedVersion,factorSessionEffect:'PreserveExistingSessions'});});
+ await page.goto('/account/security/authenticator');const rows=page.locator('.totp-factor');await expect(rows).toHaveCount(2);
+ await expect(rows.nth(0).getByRole('button',{name:'Review replacement',exact:true})).toBeDisabled();await expect(rows.nth(0).getByRole('button',{name:'Remove',exact:true})).toBeDisabled();
+ const review=rows.nth(1).getByRole('button',{name:'Review replacement',exact:true}),remove=rows.nth(1).getByRole('button',{name:'Remove',exact:true});
+ if(!available){await expect(review).toBeDisabled();await expect(remove).toBeDisabled();expect(starts).toEqual([]);return;}
+ await expect(review).toBeEnabled();await expect(remove).toBeEnabled();await review.click();await expect(page.getByRole('heading',{name:totp.content['totp.reset.heading'],exact:true})).toBeVisible();expect(starts).toEqual([{requestId:expect.any(String),authenticatorReference:second,expectedVersion:2}]);await expect(page.getByText(totp.content['totp.reset.preserve'],{exact:true})).toBeVisible();
+});
+
+for(const stateName of ['expired','unknown'] as const)test(`setup ${stateName} uses truthful copy with no scan instruction or disclosure`,async({page})=>{
+ const state=await account(page);state.operation={...op(stateName==='expired'?'EXPIRED':'PREPARING'),disclosureAvailable:false};
+ await page.goto('/account/security/authenticator/setup');await expect(page.getByRole('heading',{name:totp.content[stateName==='expired'?'totp.setup.expiredHeading':'totp.setup.unknownHeading'],exact:true})).toBeVisible();
+ await expect(page.getByText(totp.content['totp.setup.scanDescription'],{exact:true})).toHaveCount(0);await expect(page.getByText(totp.content['totp.setup.description'],{exact:true})).toHaveCount(0);await expect(page.locator('.manual-key,.totp-qr')).toHaveCount(0);await expect(page.getByLabel('Verification code',{exact:true})).toHaveCount(0);
+ if(stateName==='unknown'){await page.getByRole('button',{name:'Check status',exact:true}).click();await expect(page.getByRole('button',{name:'Check status',exact:true})).toBeEnabled();}
+ expect(state.starts).toBe(0);expect(state.disclosures).toBe(0);expect(state.activations).toBe(0);
+});
+
+test('preparing and verifying setup replace scan instructions while the exact request is pending',async({page})=>{
+ const state=await account(page);state.operation=op('AUTHORIZED');let disclose:Route|undefined,activate:Route|undefined;
+ await page.route('**/account/totp/enrollment/disclose',route=>{disclose=route;});
+ await page.goto('/account/security/authenticator/setup');await expect(page.getByRole('heading',{name:totp.content['totp.setup.preparingHeading'],exact:true})).toBeVisible();await expect(page.getByText(totp.content['totp.setup.scanDescription'],{exact:true})).toHaveCount(0);await expect(page.locator('.manual-key,.totp-qr')).toHaveCount(0);
+ await expect.poll(()=>Boolean(disclose)).toBe(true);state.operation={...op('AWAITING_FIRST_CODE'),disclosureAvailable:false,disclosureConsumed:true};await json(disclose!,{status:'AWAITING_FIRST_CODE',requestId:request,enrollmentId:enrollment,manualKey:marker,otpAuthUri:'otpauth://totp/Public?secret='+marker,expiresAt:expires});
+ await page.route('**/account/totp/enrollment/activate',route=>{activate=route;});await page.getByLabel('Verification code',{exact:true}).fill('000123');await page.getByRole('button',{name:'Verify',exact:true}).click();await expect(page.getByRole('heading',{name:totp.content['totp.setup.verifyingHeading'],exact:true})).toBeVisible();await expect(page.getByText(totp.content['totp.setup.scanDescription'],{exact:true})).toHaveCount(0);await expect(page.locator('.manual-key,.totp-qr')).toHaveCount(0);await expect.poll(()=>Boolean(activate)).toBe(true);await json(activate!,{error_code:'AUTHENTICATION_FAILED'},400);
+});
+
+test('management danger title uses its published non-question heading',async({page})=>{
+ const state=await account(page);state.active=true;await page.goto('/account/security/authenticator');await expect(page.getByRole('heading',{name:totp.content['totp.manage.removeHeading'],exact:true})).toBeVisible();await expect(page.getByRole('heading',{name:totp.content['totp.disable.heading'],exact:true})).toHaveCount(0);
+});
+
+for(const receipt of [true,false])test(`unknown proof without discovery cookie keeps exact original continuation; receipt ${receipt}`,async({page})=>{
+ let accepted=0,continued=0,reads=0;let original:Record<string,unknown>|undefined;
+ await page.route('**/authentication/step-up/**',async route=>{const path=new URL(route.request().url()).pathname;if(path.endsWith('/options')){reads++;return json(route,shared({totpAvailable:true,totpAuthenticators:[choice(factor,1)],totpRecovery:null}));}
+  const body=route.request().postDataJSON();if(path.endsWith('/totp')){accepted++;original={requestId:body.requestId,attemptId:body.attemptId,authenticatorReference:body.authenticatorReference};return route.abort('failed');}
+  if(path.endsWith('/totp/continue')){continued++;expect(body).toEqual(original);expect('code' in body).toBe(false);return receipt?json(route,{status:'COMPLETED',signInRequired:false,operationReference:enrollment.replaceAll('-','')}):json(route,{error_code:'VERSION_CONFLICT'},409);}return json(route,{},404);
+ });
+ await page.goto('http://127.0.0.1:5195/browser-testing/step-up-assets/');await page.getByRole('button',{name:'Verify identity',exact:true}).click();await page.getByRole('button',{name:/Authenticator/}).click();await page.getByLabel('Verification code',{exact:true}).fill('000123');await page.getByRole('button',{name:'Confirm',exact:true}).click();const check=page.getByRole('button',{name:totp.step_up_content['stepUp.totp.check'],exact:true});await expect(check).toBeVisible();const before=reads;await check.click();await expect.poll(()=>reads).toBeGreaterThan(before);await expect(check).toBeEnabled();expect(continued).toBe(0);expect(accepted).toBe(1);await expect(page.getByLabel('Verification code',{exact:true})).toHaveCount(0);
+ await page.getByRole('button',{name:step.content['stepUp.passkey.resume'],exact:true}).click();if(receipt)await expect(page.getByText('Verification completed',{exact:true})).toBeVisible();else{await expect(check).toBeVisible();await expect(page.getByRole('button',{name:step.content['stepUp.passkey.resume'],exact:true})).toBeEnabled();await expect(page.getByLabel('Verification code',{exact:true})).toHaveCount(0);await expect(page.getByText('Verification completed',{exact:true})).toHaveCount(0);}expect(accepted).toBe(1);expect(continued).toBe(1);
 });
