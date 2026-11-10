@@ -36,6 +36,7 @@ public static class StepUpBrowserEndpoints
         endpoints.MapPost("/authentication/step-up/passkey/continue", (HttpContext context, StepUpBrowserService service) => service.PasskeyContinueAsync(context)).RequireAuthorization(authorization);
         endpoints.MapPost("/authentication/step-up/password", (HttpContext context, StepUpBrowserService service) => service.PasswordAsync(context)).RequireAuthorization(authorization);
         endpoints.MapPost("/authentication/step-up/totp", (HttpContext context, StepUpBrowserService service) => service.TotpAsync(context)).RequireAuthorization(authorization);
+        endpoints.MapPost("/authentication/step-up/totp/continue", (HttpContext context, StepUpBrowserService service) => service.TotpContinueAsync(context)).RequireAuthorization(authorization);
         return endpoints;
     }
 }
@@ -59,7 +60,9 @@ internal sealed partial class StepUpBrowserService(IUserStepUpOperationSource ow
             // A current owner result is not proof that an earlier dialog completed its own action.
             Guid? requestId = TryBrowser(context, now, out var completedView) && completedView!.BindingDigest == Digest(operation)
                 ? completedView.RequestId : null;
-            return Results.Json(new { status = "COMPLETED", requestId, operationReference = operation.Binding.CorrelationId, csrfToken = csrf });
+            var completedTotp = requestId is not null && totpApplications?.SingleOrDefault() is { } completedNative
+                ? await ReadTotpRecoveryAsync(context, new(caller, actor, operation, completedView!), completedNative).ConfigureAwait(false) : null;
+            return Results.Json(new { status = "COMPLETED", requestId, operationReference = operation.Binding.CorrelationId, csrfToken = csrf, totpRecovery = completedTotp });
         }
         var auth = authenticationPolicies.RequireEffective(now); auth.Validate();
         var policy = assurancePolicies.RequireEffective(operation.Binding.Scope, now, operation.ExpectedPolicyVersion);
@@ -80,10 +83,12 @@ internal sealed partial class StepUpBrowserService(IUserStepUpOperationSource ow
         var passkeyRecovery = native is null ? null : await ReadPasskeyRecoveryAsync(context, new(caller, actor, operation, browser!), native).ConfigureAwait(false);
         var hasPassword = await database.Users.AnyAsync(x => x.AccountId == caller.AccountId && x.PasswordHash != null, context.RequestAborted).ConfigureAwait(false);
         var totp = totpApplications?.SingleOrDefault(); var totpAvailable = totp is not null && await totp.ProofCapabilityAsync(caller, policy, context.RequestAborted).ConfigureAwait(false);
-        var totpAuthenticators = totpAvailable ? await database.Set<TotpAuthenticatorRow>().AsNoTracking().Where(x => x.AccountId == caller.AccountId && x.State == "ACTIVE").Select(x => x.AuthenticatorReference).ToArrayAsync(context.RequestAborted).ConfigureAwait(false) : [];
+        if (totpAvailable) presentation.RequireTotpPublished();
+        var totpAuthenticators = totpAvailable ? await totp!.ActiveFactorViewsAsync(caller.AccountId, context.RequestAborted).ConfigureAwait(false) : [];
+        var totpRecovery = totp is null ? null : await ReadTotpRecoveryAsync(context, new(caller, actor, operation, browser!), totp).ConfigureAwait(false);
         return Results.Json(new { status = "PENDING", requestId = browser!.RequestId, operationReference = operation.Binding.CorrelationId, csrfToken = csrf, passwordMaximumLength = auth.PasswordMaximumLength,
             passkeyAvailable = capability.Available, maximumCredentialJsonBytes = capability.MaximumCredentialJsonBytes, passkeyRecovery,
-            totpAvailable, totpAuthenticators,
+            totpAvailable, totpAuthenticators, totpRecovery,
             passwordAvailable = hasPassword && policy.MethodAssurances.TryGetValue("pwd", out var mapped) && mapped == policy.RequiredAssurance,
             presentation.Locale, presentation.Content });
     });
@@ -94,13 +99,14 @@ internal sealed partial class StepUpBrowserService(IUserStepUpOperationSource ow
         if (!context.Request.HasJsonContentType()) return Problem(415, "VALIDATION_ERROR");
         var command = await IdentityJsonCommand.ReadAsync<TotpCodeCommand>(context, 4096).ConfigureAwait(false);
         var frame = await CurrentProofOperationAsync(context, command.RequestId).ConfigureAwait(false); if (frame is null) return Problem(409, "VERSION_CONFLICT");
-        if (frame.Operation.Completed) return Results.Json(new { status = "COMPLETED", operationReference = frame.Operation.Binding.CorrelationId });
+        if (frame.Operation.Completed) return await CompletedTotpAsync(context, frame, native, command.AttemptId, command.AuthenticatorReference).ConfigureAwait(false);
         var issued = await native.IssueOperationProofAsync(frame.Caller, frame.Operation, command, context.RequestAborted).ConfigureAwait(false);
         if (issued.ErrorCode is { } error)
         {
-            if (await CompletedAsync(frame.Actor, frame.Browser.BindingDigest, context.RequestAborted).ConfigureAwait(false)) return Results.Json(new { status = "COMPLETED", operationReference = frame.Operation.Binding.CorrelationId });
+            if (await CompletedAsync(frame.Actor, frame.Browser.BindingDigest, context.RequestAborted).ConfigureAwait(false)) return await CompletedTotpAsync(context, frame, native, command.AttemptId, command.AuthenticatorReference).ConfigureAwait(false);
             return Failure(error);
         }
+        SelectTotpProof(context, frame, native, command.AttemptId, command.AuthenticatorReference, issued.Grant!.ExpiresAt);
         return await ExecuteProofAsync(context, frame, issued.Grant!.Key).ConfigureAwait(false);
     });
 

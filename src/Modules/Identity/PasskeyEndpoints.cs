@@ -274,9 +274,24 @@ internal sealed partial class PasskeyBrowserService(PasskeyApplication applicati
             var status = row.State == "PENDING" && (!originalContext || !application.CurrentBinding(row, application.Current(surface.Origin), now)) ? "EXPIRED" : row.State;
             return Results.Json(new { status, command.RequestId, command.CeremonyId, rememberMe = row.RememberMe });
         }
+        var finalSessionId = row.ResultSessionId; var finalMethod = "passkey";
+        if (finalSessionId is null)
+        {
+            var pending = await database.Set<TotpPendingAuthenticationRow>().AsNoTracking().SingleOrDefaultAsync(x => x.BrowserDigest == row.BrowserDigest && x.RequestId == row.RequestId &&
+                x.AccountId == row.AccountId && x.Origin == row.Origin && x.PrimaryMethod == "passkey" && x.PasskeyCredentialReference == row.CredentialReference, http.RequestAborted).ConfigureAwait(false);
+            if (pending is null || pending.RecoveryExpiresAt <= now) return Problem(404, "NOT_FOUND_OR_NOT_DISCLOSABLE");
+            if (http.User.Identity?.IsAuthenticated == true && pending.State == "COMPLETED" && AuthenticationIdentity.SessionId(http.User) == pending.ResultSessionId)
+            { finalSessionId = pending.ResultSessionId; finalMethod = "passkey+totp"; }
+            else
+            {
+                if (!AuthenticationEndpoints.TryBrowser(http, AuthenticationEndpoints.Protector(protection), now, out var original) || AuthenticationIdentity.Digest(original!.Nonce) != row.BrowserDigest)
+                    return Problem(409, "VERSION_CONFLICT");
+                return TotpBrowserService.PendingMfa(http, pending, protection, now);
+            }
+        }
         if (http.User.Identity?.IsAuthenticated != true) return Results.Json(new { status = "COMPLETED", command.RequestId, command.CeremonyId, authenticated = false, signInRequired = true });
-        if (AuthenticationIdentity.SessionId(http.User) != row.ResultSessionId || row.ResultSessionId is not { } resultSession ||
-            !await http.RequestServices.GetRequiredService<AuthenticationApplication>().ConfirmOutcomeAsync(digest, row.RequestId, resultSession, http.User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value ?? string.Empty, surface.Origin, "passkey", http.RequestAborted).ConfigureAwait(false))
+        if (AuthenticationIdentity.SessionId(http.User) != finalSessionId || finalSessionId is not { } resultSession ||
+            !await http.RequestServices.GetRequiredService<AuthenticationApplication>().ConfirmOutcomeAsync(digest, row.RequestId, resultSession, http.User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value ?? string.Empty, surface.Origin, finalMethod, http.RequestAborted).ConfigureAwait(false))
             return Problem(409, "VERSION_CONFLICT");
         return Results.Json(new { status = "COMPLETED", command.RequestId, command.CeremonyId, authenticated = true, signInRequired = false });
     });
@@ -318,7 +333,7 @@ internal sealed partial class PasskeyBrowserService(PasskeyApplication applicati
         var row = result.Ceremony!;
         if (row.State is "PENDING" or "AUTHORIZED" && row.ExpiresAt > clock.GetUtcNow()) PasskeyStepUpOwner.Select(http, row, protection, clock.GetUtcNow());
         var handle = PasskeyStepUpOwner.ResultProtector(protection).Protect(JsonSerializer.Serialize(new PasskeyReadOnlyResult(row.CeremonyId, row.RequestId, row.SessionId!.Value,
-            row.AccountId!, row.Origin, row.RecoveryExpiresAt)));
+            row.AccountId!, row.Origin, IdentityPersistenceTime.Normalize(row.RecoveryExpiresAt))));
         http.Response.Cookies.Append(PasskeyStepUpOwner.ResultCookieName, handle, new CookieOptions { Path = "/", HttpOnly = true, Secure = true, SameSite = SameSiteMode.Strict, IsEssential = true });
         return CeremonyResponse(row, resultHandle: handle);
     }

@@ -13,7 +13,7 @@ internal sealed partial class PasskeyBrowserService
     private IDataProtector SignInRecoveryProtection => protection.CreateProtector("Tunner.User.Passkey.SignInRecovery.v1");
     private void SetSignInRecovery(HttpContext http, PasskeyCeremonyRow row)
     {
-        var selected = new PasskeySignInSelection(row.RequestId, row.CeremonyId, row.BrowserDigest, row.Origin, row.RememberMe, row.RecoveryExpiresAt);
+        var selected = new PasskeySignInSelection(row.RequestId, row.CeremonyId, row.BrowserDigest, row.Origin, row.RememberMe, IdentityPersistenceTime.Normalize(row.RecoveryExpiresAt));
         http.Response.Cookies.Append(SignInRecoveryCookie, SignInRecoveryProtection.Protect(JsonSerializer.Serialize(selected)),
             new CookieOptions { Path = "/", HttpOnly = true, Secure = true, SameSite = SameSiteMode.Strict, IsEssential = true, MaxAge = row.RecoveryExpiresAt - clock.GetUtcNow() });
     }
@@ -36,6 +36,17 @@ internal sealed partial class PasskeyBrowserService
         var row = await database.Set<PasskeyCeremonyRow>().AsNoTracking().SingleOrDefaultAsync(x => x.CeremonyId == selected.CeremonyId && x.RequestId == selected.RequestId &&
             x.Kind == "SIGN_IN" && x.BrowserDigest == selected.BrowserDigest && x.Origin == selected.Origin && x.RememberMe == selected.RememberMe, http.RequestAborted).ConfigureAwait(false);
         if (row is null || row.RecoveryExpiresAt != selected.ExpiresAt) return null;
+        if (row.State == "COMPLETED" && row.ResultSessionId is null)
+        {
+            var pending = await database.Set<TotpPendingAuthenticationRow>().AsNoTracking().SingleOrDefaultAsync(x => x.RequestId == row.RequestId && x.BrowserDigest == row.BrowserDigest &&
+                x.AccountId == row.AccountId && x.Origin == row.Origin && x.PrimaryMethod == "passkey" && x.PasskeyCredentialReference == row.CredentialReference, http.RequestAborted).ConfigureAwait(false);
+            if (pending is null || !hasOriginalBrowser || pending.RecoveryExpiresAt <= now) return null;
+            var currentSession = AuthenticationIdentity.SessionId(http.User);
+            if (http.User.Identity?.IsAuthenticated == true && currentSession != row.PreviousSessionId && currentSession != pending.ResultSessionId) return null;
+            var exactFinal = pending.State == "COMPLETED" && currentSession == pending.ResultSessionId;
+            return new(row.RequestId, row.CeremonyId, "SIGN_IN", exactFinal ? "COMPLETED" : "MFA_REQUIRED", null, 0, row.ExpiresAt,
+                SignInRecoveryProtection.Protect(JsonSerializer.Serialize(selected)), false, RememberMe: row.RememberMe);
+        }
         var current = AuthenticationIdentity.SessionId(http.User);
         if (http.User.Identity?.IsAuthenticated == true && current != (row.State == "COMPLETED" ? row.ResultSessionId : row.PreviousSessionId)) return null;
         var signInRequired = row.State == "COMPLETED" && current != row.ResultSessionId;

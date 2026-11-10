@@ -4,6 +4,48 @@ namespace Tunner.Identity.Persistence;
 
 internal sealed partial class TotpApplication
 {
+    internal async Task<TotpFactorView[]> ActiveFactorViewsAsync(string accountId, CancellationToken ct)
+    {
+        var values = await database.Set<TotpAuthenticatorRow>().AsNoTracking().Where(x => x.AccountId == accountId && x.State == "ACTIVE")
+            .OrderBy(x => x.CreatedAt).ThenBy(x => x.AuthenticatorReference).Select(x => new { x.AuthenticatorReference, x.Version, x.State, x.CreatedAt, x.ActivatedAt }).ToArrayAsync(ct).ConfigureAwait(false);
+        return values.Select((x, i) => new TotpFactorView(x.AuthenticatorReference, x.Version, x.State, x.CreatedAt, x.ActivatedAt, i + 1)).ToArray();
+    }
+    private static bool ProofAttemptMatches(TotpProofAttemptRow row, StepUpCaller caller, UserStepUpOperationContext owner, Guid reference) =>
+        row.SessionId == caller.SessionId && row.AccountId == caller.AccountId && row.OperationId == owner.Binding.OperationId &&
+        row.ContextDigest == owner.Binding.ContextDigest && row.AuthenticatorReference == reference;
+    internal async Task<StepUpIssueResult> RecoverOperationProofAsync(StepUpCaller caller, UserStepUpOperationContext owner, Guid attemptId, Guid reference, CancellationToken ct)
+    {
+        Clean(); if (attemptId == Guid.Empty || reference == Guid.Empty) return new("VALIDATION_ERROR", null);
+        await using var transaction = await database.Database.BeginTransactionAsync(ct).ConfigureAwait(false);
+        var session = await authentication.LockForOperationAsync(caller, owner.Binding.Scope.Operation, ct).ConfigureAwait(false);
+        if (session is null) return await Finish(transaction, new StepUpIssueResult("AUTHENTICATION_FAILED", null), ct).ConfigureAwait(false);
+        await LockOwner(caller.AccountId, ct).ConfigureAwait(false);
+        var attempt = await database.Set<TotpProofAttemptRow>().AsNoTracking().SingleOrDefaultAsync(x => x.SessionId == caller.SessionId && x.AttemptId == attemptId, ct).ConfigureAwait(false);
+        if (attempt is null || !ProofAttemptMatches(attempt, caller, owner, reference)) return await Finish(transaction, new StepUpIssueResult("VERSION_CONFLICT", null), ct).ConfigureAwait(false);
+        var result = await stepUp.RecoverProofAsync(caller, owner.Binding, attempt.ProofId, owner.ExpectedPolicyVersion, ct).ConfigureAwait(false);
+        return await Finish(transaction, result, ct).ConfigureAwait(false);
+    }
+    internal async Task<TotpProofRecovery?> ReadProofRecoveryAsync(StepUpCaller caller, UserStepUpOperationContext owner, Guid requestId, Guid attemptId, Guid reference, CancellationToken ct)
+    {
+        var attempt = await database.Set<TotpProofAttemptRow>().AsNoTracking().SingleOrDefaultAsync(x => x.SessionId == caller.SessionId && x.AttemptId == attemptId, ct).ConfigureAwait(false);
+        if (attempt is null || !ProofAttemptMatches(attempt, caller, owner, reference)) return null;
+        var proof = await database.Set<StepUpProofRow>().AsNoTracking().SingleOrDefaultAsync(x => x.ProofId == attempt.ProofId, ct).ConfigureAwait(false);
+        if (proof is null || proof.AccountId != caller.AccountId || proof.SessionId != caller.SessionId || proof.Origin != caller.Origin || proof.AuthenticationMethod != "totp" ||
+            proof.TotpAuthenticatorReference != reference || proof.TotpGeneration != attempt.Generation || proof.OperationId != owner.Binding.OperationId || proof.ContextDigest != owner.Binding.ContextDigest) return null;
+        var now = clock.GetUtcNow();
+        if (owner.Completed && proof.State == "CONSUMED") return new(requestId, attemptId, reference, "CONSUMED", proof.ExpiresAt);
+        var source = await authentication.ReadProofCredentialAsync(proof, ct, refresh: true).ConfigureAwait(false); now = clock.GetUtcNow();
+        var status = "EXPIRED";
+        try
+        {
+            var assurance = assurancePolicies.RequireEffective(owner.Binding.Scope, now, owner.ExpectedPolicyVersion);
+            if (proof.State == "ACTIVE" && proof.ExpiresAt > now && now >= proof.AuthenticatedAt && now - proof.AuthenticatedAt < assurance.ProofLifetime &&
+                assurance.MethodAssurances.TryGetValue("totp", out var mapped) && mapped == proof.Assurance && mapped == assurance.RequiredAssurance &&
+                authentication.ProofMethodCurrentAt(proof, source, owner.Binding, now, false)) status = "PROOF_ACTIVE";
+        }
+        catch (AssurancePolicyVersionConflictException) { }
+        return new(requestId, attemptId, reference, status, proof.ExpiresAt);
+    }
     internal async Task<bool> ProofCapabilityAsync(StepUpCaller caller, AssurancePolicyVersion assurance, CancellationToken ct)
     {
         TotpPolicy policy; try { policy = Current(caller.Origin); } catch (InvalidOperationException) { return false; }

@@ -91,11 +91,12 @@ public interface ITotpSeedStore
 }
 public sealed class TotpPresentation
 {
+    public static IReadOnlyList<string> RequiredKeys { get; } = Array.AsReadOnly<string>(["brand.tunner", "passkeys.header.accountCenter", "passkeys.header.account", "passkeys.header.search", "passkeys.header.notifications", "passkeys.header.menu", "passkeys.navigation.account", "passkeys.navigation.overview", "passkeys.navigation.profile", "passkeys.navigation.security", "passkeys.navigation.sessions", "passkeys.navigation.billing", "passkeys.navigation.notifications", "passkeys.navigation.products", "passkeys.navigation.activity", "passkeys.navigation.help", "passkeys.navigation.helpDescription", "totp.heading", "totp.description", "totp.eyebrow", "totp.status.label", "totp.status.activeHeading", "totp.status.activeDescription", "totp.status.inactiveHeading", "totp.status.inactiveDescription", "totp.status.unavailableHeading", "totp.status.unavailableDescription", "totp.status.active", "totp.status.inactive", "totp.status.disabled", "totp.manage.heading", "totp.manage.description", "totp.manage.method", "totp.manage.added", "totp.manage.lastUsed", "totp.manage.notUsed", "totp.manage.guidanceHeading", "totp.manage.guidanceDescription", "totp.manage.guidanceEffects", "totp.manage.removeHeading", "totp.methods.label", "totp.methods.description", "totp.methods.inactiveDescription", "totp.methods.unavailable", "totp.methods.manage", "totp.setup.heading", "totp.setup.description", "totp.setup.scanHeading", "totp.setup.scanDescription", "totp.setup.manualHeading", "totp.setup.manualDescription", "totp.setup.warning", "totp.setup.codeHeading", "totp.setup.codeDescription", "totp.setup.consumedHeading", "totp.setup.consumedDescription", "totp.setup.alreadyShownHeading", "totp.setup.alreadyShownDescription", "totp.setup.guidanceHeading", "totp.setup.guidanceDescription", "totp.setup.compatibleApps", "totp.setup.preparingHeading", "totp.setup.preparingDescription", "totp.setup.verifyingHeading", "totp.setup.verifyingDescription", "totp.setup.expiredHeading", "totp.setup.expiredDescription", "totp.setup.unknownHeading", "totp.setup.unknownDescription", "totp.setup.codeUnavailable", "totp.setup.qrUnavailable", "totp.ready.heading", "totp.ready.description", "totp.disable.heading", "totp.disable.description", "totp.disable.preserve", "totp.disable.affectedSessions", "totp.disable.currentSessionEnds", "totp.disable.confirmDescription", "totp.reset.heading", "totp.reset.description", "totp.reset.separateEnrollment", "totp.reset.preserve", "totp.reset.affectedSessions", "totp.reset.currentSessionEnds", "totp.terminal.disableHeading", "totp.terminal.resetHeading", "totp.terminal.preserveDescription", "totp.terminal.endedHeading", "totp.terminal.endedDescription", "totp.terminal.resetDescription", "totp.terminal.unknown", "totp.code.label", "totp.code.placeholder", "totp.action.setup", "totp.action.reviewReset", "totp.action.remove", "totp.action.verify", "totp.action.cancel", "totp.action.back", "totp.action.done", "totp.action.close", "totp.action.check", "totp.action.signIn", "totp.action.continue", "totp.error.required", "totp.error.code", "totp.error.highlighted", "totp.error.credentials", "totp.error.replayed", "totp.error.limited", "totp.error.changed", "totp.error.unavailable", "totp.error.eligibility", "totp.error.limit", "totp.error.validation", "totp.error.qr", "totp.error.policy", "totp.mfa.heading", "totp.mfa.description", "totp.mfa.pending", "totp.mfa.unknown", "totp.mfa.expiredHeading", "totp.mfa.expiredDescription", "totp.mfa.unavailable", "totp.selection.heading", "totp.selection.proofDescription", "totp.selection.loginDescription", "totp.selection.optionLabel", "totp.selection.added", "totp.selection.numberExplanation", "totp.selection.selectedDescription", "totp.selection.change"]);
     public TotpPresentation(string locale, IEnumerable<RegistrationPublishedText> content)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(locale); ArgumentNullException.ThrowIfNull(content);
         var values = content.ToDictionary(x => x.Key, StringComparer.Ordinal);
-        if (values.Count == 0 || values.Values.Any(x => x.State != "PUBLISHED" || x.Locale != locale ||
+        if (RequiredKeys.Any(x => !values.ContainsKey(x)) || values.Values.Any(x => x.State != "PUBLISHED" || x.Locale != locale ||
             new[] { x.Key, x.VariantRef, x.VersionRef, x.PublicationRef, x.Text }.Any(string.IsNullOrWhiteSpace)))
             throw new ArgumentException("TOTP requires published content with provenance.", nameof(content));
         Locale = locale; Content = new ReadOnlyDictionary<string, RegistrationPublishedText>(values);
@@ -136,6 +137,23 @@ internal sealed class TotpMfaResultCommand
 {
     public required Guid RequestId { get; init; }
 }
+[JsonUnmappedMemberHandling(JsonUnmappedMemberHandling.Disallow)]
+internal sealed class TotpStartResultCommand
+{
+    public required Guid RequestId { get; init; }
+    public required string Kind { get; init; }
+    public Guid? AuthenticatorReference { get; init; }
+    public long ExpectedVersion { get; init; }
+}
+[JsonUnmappedMemberHandling(JsonUnmappedMemberHandling.Disallow)]
+internal sealed class TotpProofContinueCommand
+{
+    public required Guid RequestId { get; init; }
+    public required Guid AttemptId { get; init; }
+    public required Guid AuthenticatorReference { get; init; }
+}
+internal sealed record TotpFactorView(Guid AuthenticatorReference, long Version, string State, DateTimeOffset CreatedAt, DateTimeOffset? ActivatedAt, int DisplayPosition);
+internal sealed record TotpProofRecovery(Guid RequestId, Guid AttemptId, Guid AuthenticatorReference, string Status, DateTimeOffset ExpiresAt);
 internal sealed record TotpOperationResult(string? ErrorCode, TotpOperationRow? Operation = null);
 internal sealed class TotpDisclosure(TotpOperationRow operation, string key, string uri)
 {

@@ -39,6 +39,11 @@ public interface IUserStepUpOperationSource
 
 public sealed class StepUpPresentation
 {
+    internal static readonly string[] TotpRequiredKeys = ["stepUp.totp.description", "stepUp.totp.code.label", "stepUp.totp.code.placeholder", "stepUp.totp.pending", "stepUp.totp.unknown", "stepUp.totp.expired", "stepUp.totp.error.required", "stepUp.totp.error.code", "stepUp.totp.error.credentials", "stepUp.totp.error.replayed", "stepUp.totp.check", "stepUp.totp.close", "totp.selection.heading", "totp.selection.proofDescription", "totp.selection.loginDescription", "totp.selection.optionLabel", "totp.selection.added", "totp.selection.numberExplanation", "totp.selection.selectedDescription", "totp.selection.change"];
+    internal void RequireTotpPublished()
+    {
+        if (TotpRequiredKeys.Any(x => !Content.ContainsKey(x))) throw new ArgumentException("TOTP operation proof requires its published field, pending, recovery and error variants.");
+    }
     private static readonly string[] RequiredKeys = ["stepUp.heading","stepUp.description","stepUp.passkey","stepUp.passkey.description",
         "stepUp.authenticator","stepUp.authenticator.description","stepUp.other","stepUp.unavailable","stepUp.password.description",
         "stepUp.password.label","stepUp.password.placeholder","stepUp.back","stepUp.cancel","stepUp.confirm","stepUp.working",

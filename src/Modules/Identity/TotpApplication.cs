@@ -190,8 +190,12 @@ internal sealed partial class TotpApplication(IdentityPersistenceDbContext datab
         await database.SaveChangesAsync(ct).ConfigureAwait(false); await transaction.CreateSavepointAsync("totp_activation", ct).ConfigureAwait(false);
         var error = await verifier.AcceptAsync(factor, policy, seed.Require(), code, ct).ConfigureAwait(false);
         if (error is not null) return await Finish(transaction, new TotpOperationResult(error, row), ct).ConfigureAwait(false);
+        var authorization = await ReadAuthorizationSource(row, ct).ConfigureAwait(false);
         var authority = await authentication.VerifyContinuedOperationAsync(caller, Operation(row), session, ct).ConfigureAwait(false); var now = clock.GetUtcNow();
-        if (authority is null || !authority.SessionUseInterval.Contains(now) || !authority.OperationInterval.Contains(now) || !CurrentBinding(row, Current(caller.Origin), now))
+        var finalAuthentication = authenticationPolicies.RequireEffective(now); finalAuthentication.Validate();
+        if (authority is null || !authority.SessionUseInterval.Contains(now) || !authority.OperationInterval.Contains(now) || !CurrentBinding(row, Current(caller.Origin), now) ||
+            AuthenticationApplication.Expired(session, finalAuthentication, now) || !authentication.MethodFactsCurrentAt(session, finalAuthentication, now) ||
+            !AuthorizationCurrent(authorization, row, session, caller, Current(caller.Origin), now))
         {
             await transaction.RollbackToSavepointAsync("totp_activation", ct).ConfigureAwait(false); database.ChangeTracker.Clear();
             return await Finish(transaction, new TotpOperationResult("STEP_UP_REQUIRED"), ct).ConfigureAwait(false);
@@ -205,6 +209,22 @@ internal sealed partial class TotpApplication(IdentityPersistenceDbContext datab
         var row = await database.Set<TotpOperationRow>().AsNoTracking().SingleOrDefaultAsync(x => x.EnrollmentId == id && x.RequestId == request, ct).ConfigureAwait(false);
         return row is not null && Actor(row, caller) ? row : null;
     }
+    internal async Task<TotpOperationRow?> ReadStartResultAsync(StepUpCaller caller, TotpStartResultCommand command, CancellationToken ct)
+    {
+        if (command.RequestId == Guid.Empty || command.Kind is not ("ENROLL" or "DISABLE" or "RESET")) return null;
+        var row = await database.Set<TotpOperationRow>().AsNoTracking().SingleOrDefaultAsync(x => x.SessionId == caller.SessionId && x.RequestId == command.RequestId, ct).ConfigureAwait(false);
+        return row is not null && Actor(row, caller) && row.Kind == command.Kind && row.ExpectedVersion == command.ExpectedVersion &&
+            (row.Kind == "ENROLL" ? command.AuthenticatorReference is null : row.AuthenticatorReference == command.AuthenticatorReference) && row.RecoveryExpiresAt > clock.GetUtcNow() ? row : null;
+    }
+    internal async Task<TotpOperationResult> CancelAsync(StepUpCaller caller, TotpOperationCommand command, CancellationToken ct)
+    {
+        Clean(); await using var transaction = await database.Database.BeginTransactionAsync(ct).ConfigureAwait(false);
+        if (await authentication.LockForOperationAsync(caller, "CANCEL_TOTP_OPERATION", ct).ConfigureAwait(false) is null) return await Finish(transaction, new TotpOperationResult("AUTHENTICATION_FAILED"), ct).ConfigureAwait(false);
+        await LockOwner(caller.AccountId, ct).ConfigureAwait(false); var row = await TrackedOperation(caller, command, ct).ConfigureAwait(false);
+        if (row is null) return await Finish(transaction, new TotpOperationResult("VERSION_CONFLICT"), ct).ConfigureAwait(false);
+        if (row.EndedAt is null) { End(row, "REJECTED", clock.GetUtcNow()); Event(row, "TotpOperationCancelled", clock.GetUtcNow()); }
+        return await Finish(transaction, new TotpOperationResult(null, row), ct).ConfigureAwait(false);
+    }
     private async Task<TotpOperationRow?> TrackedOperation(StepUpCaller caller, TotpOperationCommand command, CancellationToken ct)
     {
         var row = await database.Set<TotpOperationRow>().SingleOrDefaultAsync(x => x.EnrollmentId == command.EnrollmentId && x.RequestId == command.RequestId, ct).ConfigureAwait(false);
@@ -212,9 +232,20 @@ internal sealed partial class TotpApplication(IdentityPersistenceDbContext datab
     }
     private async Task<bool> Authorized(TotpOperationRow row, AuthenticationSessionRow session, StepUpCaller caller, TotpPolicy policy, CancellationToken ct)
     {
-        var now = clock.GetUtcNow(); if (!CurrentBinding(row, policy, now) || row.SecurityStampDigest != session.SecurityStampDigest || row.ProofReference is null) return false;
-        var proof = await database.Set<StepUpProofRow>().SingleOrDefaultAsync(x => x.ProofId == row.ProofReference, ct).ConfigureAwait(false); if (proof is null) return false;
-        var source = await authentication.ReadProofCredentialAsync(proof, ct, refresh: true).ConfigureAwait(false); now = clock.GetUtcNow();
+        var snapshot = await ReadAuthorizationSource(row, ct).ConfigureAwait(false); return AuthorizationCurrent(snapshot, row, session, caller, policy, clock.GetUtcNow());
+    }
+    private sealed record ConsumedAuthorization(StepUpProofRow Proof, AuthenticatorProofSource? Source);
+    private async Task<ConsumedAuthorization?> ReadAuthorizationSource(TotpOperationRow row, CancellationToken ct)
+    {
+        if (row.ProofReference is null) return null;
+        var proof = await database.Set<StepUpProofRow>().SingleOrDefaultAsync(x => x.ProofId == row.ProofReference, ct).ConfigureAwait(false); if (proof is null) return null;
+        await database.Entry(proof).ReloadAsync(ct).ConfigureAwait(false);
+        var source = await authentication.ReadProofCredentialAsync(proof, ct, refresh: true).ConfigureAwait(false); return new(proof, source);
+    }
+    private bool AuthorizationCurrent(ConsumedAuthorization? snapshot, TotpOperationRow row, AuthenticationSessionRow session, StepUpCaller caller, TotpPolicy policy, DateTimeOffset now)
+    {
+        if (snapshot is null || !CurrentBinding(row, policy, now) || row.SecurityStampDigest != session.SecurityStampDigest) return false;
+        var proof = snapshot.Proof; var source = snapshot.Source;
         var operation = Operation(row); var assurance = assurancePolicies.RequireEffective(operation.Scope, now, row.AssurancePolicyVersion);
         return proof.State == "CONSUMED" && proof.AccountId == caller.AccountId && proof.SessionId == caller.SessionId && proof.Origin == caller.Origin &&
             proof.SecurityStampDigest == session.SecurityStampDigest && proof.OperationId == operation.OperationId && proof.ContextDigest == operation.ContextDigest &&

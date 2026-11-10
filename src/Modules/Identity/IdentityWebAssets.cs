@@ -27,6 +27,12 @@ internal sealed class IdentityWebAssets
         if (!File.Exists(entry)) return;
         foreach (var path in paths) endpoints.MapGet(path, (HttpContext context) => allowed(context) ? Render(context, entry, "text/html") : Results.LocalRedirect("/login")).AllowAnonymous();
     }
+    internal void MapScreensAsync(IEndpointRouteBuilder endpoints, string entryName, IEnumerable<string> paths, Func<HttpContext, Task<bool>> allowed, Func<HttpContext, string>? rejected = null)
+    {
+        var entry = Path.Combine(root, entryName); if (!File.Exists(entry)) return;
+        foreach (var path in paths) endpoints.MapGet(path, async (HttpContext context) => await allowed(context).ConfigureAwait(false)
+            ? Render(context, entry, "text/html") : Results.LocalRedirect(rejected?.Invoke(context) ?? "/login")).AllowAnonymous();
+    }
     private static IResult Render(HttpContext context, string path, string contentType)
     {
         context.Response.Headers.ContentSecurityPolicy = "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self'; font-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'none'; frame-ancestors 'none'; form-action 'self'";

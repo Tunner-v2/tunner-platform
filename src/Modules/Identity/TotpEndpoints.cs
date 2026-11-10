@@ -44,10 +44,19 @@ public static class TotpEndpoints
         endpoints.MapPost("/account/totp/enrollment/disclose", (HttpContext c, TotpBrowserService s) => s.DiscloseAsync(c)).RequireAuthorization(user);
         endpoints.MapPost("/account/totp/enrollment/activate", (HttpContext c, TotpBrowserService s) => s.ActivateAsync(c)).RequireAuthorization(user);
         endpoints.MapPost("/account/totp/result", (HttpContext c, TotpBrowserService s) => s.ResultAsync(c)).RequireAuthorization(user);
+        endpoints.MapPost("/account/totp/start-result", (HttpContext c, TotpBrowserService s) => s.StartResultAsync(c)).RequireAuthorization(user);
+        endpoints.MapPost("/account/totp/cancel", (HttpContext c, TotpBrowserService s) => s.CancelAsync(c)).RequireAuthorization(user);
         endpoints.MapPost("/account/totp/terminal-result", (HttpContext c, TotpBrowserService s) => s.TerminalResultAsync(c)).AllowAnonymous();
+        endpoints.MapGet("/account/totp/terminal-options", (HttpContext c, TotpBrowserService s) => s.TerminalOptionsAsync(c)).AllowAnonymous();
         endpoints.MapGet("/authentication/totp/options", (HttpContext c, TotpBrowserService s) => s.MfaOptionsAsync(c)).AllowAnonymous();
         endpoints.MapPost("/authentication/totp/complete", (HttpContext c, TotpBrowserService s) => s.CompleteMfaAsync(c)).AllowAnonymous().WithMetadata(new AuthenticationEndpoints.CredentialAuthenticationMetadata());
         endpoints.MapPost("/authentication/totp/result", (HttpContext c, TotpBrowserService s) => s.MfaResultAsync(c)).AllowAnonymous().WithMetadata(new AuthenticationEndpoints.CredentialAuthenticationMetadata());
+        var assets = endpoints.ServiceProvider.GetRequiredService<IdentityWebAssets>(); assets.MapAssets(endpoints);
+        assets.MapScreensAsync(endpoints, "totp.html", ["/account/security/authenticator"], static c => c.RequestServices.GetRequiredService<TotpBrowserService>().AllowManagementScreenAsync(c));
+        assets.MapScreensAsync(endpoints, "totp.html", ["/account/security/authenticator/setup", "/account/security/authenticator/ready"],
+            static c => c.RequestServices.GetRequiredService<TotpBrowserService>().AllowAccountScreenAsync(c),
+            static c => c.User.Identity?.IsAuthenticated == true ? "/account/security/authenticator" : "/login");
+        assets.MapScreensAsync(endpoints, "authentication.html", ["/login/verify-authenticator"], static c => c.RequestServices.GetRequiredService<TotpBrowserService>().AllowMfaScreenAsync(c));
         return endpoints;
     }
 }
@@ -68,9 +77,10 @@ internal sealed class TotpStepUpOwner(TotpApplication application, IdentityPersi
     }
     internal static void Select(HttpContext context, TotpOperationRow row, IDataProtectionProvider provider, DateTimeOffset now)
     {
-        var selected = new TotpSelection(row.EnrollmentId, row.RequestId, row.AccountId, row.SessionId, row.Origin, TotpBrowserService.PersistedTimestamp(row.RecoveryExpiresAt));
+        var selected = new TotpSelection(row.EnrollmentId, row.RequestId, row.AccountId, row.SessionId, row.Origin, IdentityPersistenceTime.Normalize(row.RecoveryExpiresAt));
         var value = Protector(provider).Protect(JsonSerializer.Serialize(selected));
-        context.Response.Cookies.Append(CookieName, value, TotpBrowserService.Cookie(row.RecoveryExpiresAt - now));
+        if (row.State == "PENDING_PROOF") context.Response.Cookies.Append(CookieName, value, TotpBrowserService.Cookie(row.RecoveryExpiresAt - now));
+        else context.Response.Cookies.Delete(CookieName, TotpBrowserService.Cookie());
         context.Response.Cookies.Append(ResultCookieName, value, TotpBrowserService.Cookie(row.RecoveryExpiresAt - now));
         context.Response.Cookies.Delete(PasskeyStepUpOwner.CookieName, TotpBrowserService.Cookie());
     }
@@ -107,33 +117,42 @@ internal sealed class TotpStepUpOwner(TotpApplication application, IdentityPersi
             if (fallback.SingleOrDefault()?.Owner is IUserStepUpBrowserCompletionSource hook) await hook.CompleteBrowserAsync(operation, signInRequired, ct).ConfigureAwait(false); return;
         }
         http.Response.Cookies.Append(ResultCookieName, Protector(protection).Protect(JsonSerializer.Serialize(selected)), TotpBrowserService.Cookie(selected.ExpiresAt - DateTimeOffset.UtcNow));
-        // Keep the exact selected result available to shared owner-failure reconciliation.
+        http.Response.Cookies.Delete(CookieName, TotpBrowserService.Cookie());
     }
 }
 internal sealed record TotpMfaSelection(Guid PendingId, Guid RequestId, string BrowserDigest, string Origin, Guid? PreviousSessionId, DateTimeOffset ExpiresAt);
 internal sealed class TotpBrowserService(TotpApplication application, AuthenticationApplication authentication, IdentityPersistenceDbContext database,
     ITotpPresentationSource presentations, ITotpSeedStore seeds, TotpNativeVerifier verifier, AuthenticationPartitionKey partitions,
-    AuthenticationEndpoints.Surface surface, IDataProtectionProvider protection, IAntiforgery antiforgery, TimeProvider clock)
+    AuthenticationEndpoints.Surface surface, IDataProtectionProvider protection, IAntiforgery antiforgery, TimeProvider clock,
+    IAuthenticationPolicySource authenticationPolicies, IAuthenticationPresentationSource authenticationPresentations)
 {
     internal const string MfaCookieName = "__Host-Tunner.Totp.Pending";
-    // PostgreSQL timestamp precision is microseconds; protected selectors must use the same canonical representation.
-    internal static DateTimeOffset PersistedTimestamp(DateTimeOffset value) => new(value.UtcTicks - value.UtcTicks % 10, TimeSpan.Zero);
     internal static CookieOptions Cookie(TimeSpan? age = null) => new() { Path = "/", HttpOnly = true, Secure = true, SameSite = SameSiteMode.Strict, IsEssential = true, MaxAge = age };
     private static IDataProtector MfaProtector(IDataProtectionProvider provider) => provider.CreateProtector("Tunner.User.Totp.PendingAuthentication.v1");
     internal static IResult PendingMfa(HttpContext http, TotpPendingAuthenticationRow pending, IDataProtectionProvider provider, DateTimeOffset now)
     {
-        var selected = new TotpMfaSelection(pending.PendingId, pending.RequestId, pending.BrowserDigest, pending.Origin, pending.PreviousSessionId, PersistedTimestamp(pending.RecoveryExpiresAt));
+        var selected = new TotpMfaSelection(pending.PendingId, pending.RequestId, pending.BrowserDigest, pending.Origin, pending.PreviousSessionId, IdentityPersistenceTime.Normalize(pending.RecoveryExpiresAt));
         http.Response.Cookies.Append(MfaCookieName, MfaProtector(provider).Protect(JsonSerializer.Serialize(selected)), Cookie(pending.RecoveryExpiresAt - now));
         return Results.Json(new { status = "MFA_REQUIRED", authenticated = false, pending.RequestId, pending.ExpiresAt });
     }
     internal Task<IResult> OptionsAsync(HttpContext http) => Guard(http, async () =>
     {
-        _ = Caller(http); var policy = application.Current(surface.Origin); var presentation = presentations.RequirePublished(policy);
-        var selection = TotpStepUpOwner.Selection(http, protection); TotpOperationRow? recovery = null;
+        var caller = Caller(http); var policy = application.Current(surface.Origin); var presentation = presentations.RequirePublished(policy);
+        int active;
+        await using (var transaction = await database.Database.BeginTransactionAsync(http.RequestAborted).ConfigureAwait(false))
+        {
+            if (await authentication.LockForOperationAsync(caller, "LIST_TOTP", http.RequestAborted).ConfigureAwait(false) is null) return Failure("AUTHENTICATION_FAILED");
+            active = await database.Set<TotpAuthenticatorRow>().CountAsync(x => x.AccountId == caller.AccountId && x.State == "ACTIVE", http.RequestAborted).ConfigureAwait(false);
+            await database.SaveChangesAsync(http.RequestAborted).ConfigureAwait(false); await transaction.CommitAsync(http.RequestAborted).ConfigureAwait(false);
+        }
+        var selection = TotpStepUpOwner.Selection(http, protection) ?? TotpStepUpOwner.Selection(http, protection, TotpStepUpOwner.ResultCookieName); TotpOperationRow? recovery = null;
         if (selection is not null) recovery = await application.ReadAsync(Caller(http), selection.EnrollmentId, selection.RequestId, http.RequestAborted).ConfigureAwait(false);
         return Results.Json(new { csrfToken = antiforgery.GetAndStoreTokens(http).RequestToken, requestId = Guid.NewGuid(), policy.Version, policy.MaximumActiveAuthenticators,
             policy.MaximumPendingOperations, disableSessionEffect = policy.DisableSessionEffect.ToString(), resetSessionEffect = policy.ResetSessionEffect.ToString(),
-            resetBehavior = policy.ResetBehavior.ToString(), replacementOrdering = policy.ReplacementOrdering.ToString(), recovery = recovery is null ? null : View(recovery), presentation.Locale, presentation.Content });
+            resetBehavior = policy.ResetBehavior.ToString(), replacementOrdering = policy.ReplacementOrdering.ToString(),
+            canStartEnrollment = active < policy.MaximumActiveAuthenticators && (policy.ReplacementOrdering == TotpReplacementOrdering.IndependentEnrollment || active == 0),
+            canStartDisable = active > 0, canStartReset = active > 0, finalEligibilityRequired = true,
+            recovery = recovery is null ? null : await ViewAsync(recovery, http.RequestAborted).ConfigureAwait(false), presentation.Locale, presentation.Content });
     });
     internal Task<IResult> ListAsync(HttpContext http) => Guard(http, async () =>
     {
@@ -141,13 +160,13 @@ internal sealed class TotpBrowserService(TotpApplication application, Authentica
         await using var transaction = await database.Database.BeginTransactionAsync(http.RequestAborted).ConfigureAwait(false);
         if (await authentication.LockForOperationAsync(caller, "LIST_TOTP", http.RequestAborted).ConfigureAwait(false) is null) return Failure("AUTHENTICATION_FAILED");
         var values = await database.Set<TotpAuthenticatorRow>().AsNoTracking().Where(x => x.AccountId == caller.AccountId).OrderBy(x => x.CreatedAt)
-            .Select(x => new { x.AuthenticatorReference, x.State, x.Version, x.CreatedAt, x.ActivatedAt, x.LastUsedAt, x.DisabledAt }).ToArrayAsync(http.RequestAborted).ConfigureAwait(false);
+            .Select(x => new { x.AuthenticatorReference, x.State, x.Version, x.CreatedAt, x.ActivatedAt, x.LastUsedAt, x.DisabledAt, canStartDisable = x.State == "ACTIVE", canStartReset = x.State == "ACTIVE" }).ToArrayAsync(http.RequestAborted).ConfigureAwait(false);
         await database.SaveChangesAsync(http.RequestAborted).ConfigureAwait(false); await transaction.CommitAsync(http.RequestAborted).ConfigureAwait(false); return Results.Json(new { authenticators = values });
     });
     internal Task<IResult> StartAsync(HttpContext http, string kind) => Guard(http, async () =>
     {
         var command = await Read<TotpStartCommand>(http).ConfigureAwait(false); var result = await application.StartAsync(Caller(http), kind, command, http.RequestAborted).ConfigureAwait(false);
-        if (result.ErrorCode is { } error) return Failure(error); TotpStepUpOwner.Select(http, result.Operation!, protection, clock.GetUtcNow()); return Results.Json(View(result.Operation!));
+        if (result.ErrorCode is { } error) return Failure(error); TotpStepUpOwner.Select(http, result.Operation!, protection, clock.GetUtcNow()); return Results.Json(await ViewAsync(result.Operation!, http.RequestAborted).ConfigureAwait(false));
     });
     internal Task<IResult> DiscloseAsync(HttpContext http) => Guard(http, async () =>
     {
@@ -158,26 +177,73 @@ internal sealed class TotpBrowserService(TotpApplication application, Authentica
     internal Task<IResult> ActivateAsync(HttpContext http) => Guard(http, async () =>
     {
         var command = await Read<TotpCodeCommand>(http).ConfigureAwait(false); var result = await application.ActivateAsync(Caller(http), command, http.RequestAborted).ConfigureAwait(false);
-        return result.ErrorCode is { } error ? Failure(error) : Results.Json(View(result.Operation!));
+        return result.ErrorCode is { } error ? Failure(error) : Results.Json(await ViewAsync(result.Operation!, http.RequestAborted).ConfigureAwait(false));
     });
     internal Task<IResult> ResultAsync(HttpContext http) => Guard(http, async () =>
     {
         var command = await Read<TotpOperationCommand>(http).ConfigureAwait(false); var row = await application.ReadAsync(Caller(http), command.EnrollmentId, command.RequestId, http.RequestAborted).ConfigureAwait(false);
-        return row is null ? Problem(404, "NOT_FOUND_OR_NOT_DISCLOSABLE") : Results.Json(View(row));
+        return row is null ? Problem(404, "NOT_FOUND_OR_NOT_DISCLOSABLE") : Results.Json(await ViewAsync(row, http.RequestAborted).ConfigureAwait(false));
+    });
+    internal Task<IResult> StartResultAsync(HttpContext http) => Guard(http, async () =>
+    {
+        var command = await Read<TotpStartResultCommand>(http).ConfigureAwait(false); var row = await application.ReadStartResultAsync(Caller(http), command, http.RequestAborted).ConfigureAwait(false);
+        if (row is null) return Problem(404, "NOT_FOUND_OR_NOT_DISCLOSABLE");
+        TotpStepUpOwner.Select(http, row, protection, clock.GetUtcNow()); return Results.Json(await ViewAsync(row, http.RequestAborted).ConfigureAwait(false));
+    });
+    internal Task<IResult> CancelAsync(HttpContext http) => Guard(http, async () =>
+    {
+        var command = await Read<TotpOperationCommand>(http).ConfigureAwait(false); var result = await application.CancelAsync(Caller(http), command, http.RequestAborted).ConfigureAwait(false);
+        if (result.ErrorCode is null) http.Response.Cookies.Delete(TotpStepUpOwner.CookieName, Cookie());
+        return result.ErrorCode is { } error ? Failure(error) : Results.Json(await ViewAsync(result.Operation!, http.RequestAborted).ConfigureAwait(false));
     });
     internal Task<IResult> TerminalResultAsync(HttpContext http) => Guard(http, async () =>
     {
-        var command = await Read<TotpOperationCommand>(http).ConfigureAwait(false); var selected = TotpStepUpOwner.Selection(http, protection, TotpStepUpOwner.ResultCookieName);
-        if (selected is null || selected.EnrollmentId != command.EnrollmentId || selected.RequestId != command.RequestId || selected.Origin != surface.Origin || selected.ExpiresAt <= clock.GetUtcNow()) return Problem(404, "NOT_FOUND_OR_NOT_DISCLOSABLE");
-        var row = await database.Set<TotpOperationRow>().AsNoTracking().SingleOrDefaultAsync(x => x.EnrollmentId == selected.EnrollmentId && x.RequestId == selected.RequestId && x.AccountId == selected.AccountId && x.SessionId == selected.SessionId && x.Origin == selected.Origin && x.State == "COMPLETED" && (x.Kind == "DISABLE" || x.Kind == "RESET"), http.RequestAborted).ConfigureAwait(false);
-        if (row is null || row.RecoveryExpiresAt != selected.ExpiresAt || !await database.Set<AuthenticationSessionRow>().AsNoTracking().AnyAsync(x => x.SessionId == selected.SessionId && x.AccountId == selected.AccountId && x.State == "REVOKED" && x.TerminationCause == "TOTP_DISABLED" && x.OperationId == "OP-TOTP-" + row.EnrollmentId.ToString("N"), http.RequestAborted).ConfigureAwait(false)) return Problem(404, "NOT_FOUND_OR_NOT_DISCLOSABLE");
-        return Results.Json(new { operation = View(row), signInRequired = true });
+        var command = await Read<TotpOperationCommand>(http).ConfigureAwait(false); var row = await ReadTerminalRecoveryAsync(http).ConfigureAwait(false);
+        if (row is null || row.EnrollmentId != command.EnrollmentId || row.RequestId != command.RequestId) return Problem(404, "NOT_FOUND_OR_NOT_DISCLOSABLE");
+        return Results.Json(new { operation = await ViewAsync(row, http.RequestAborted).ConfigureAwait(false), signInRequired = true });
     });
+    private async Task<TotpOperationRow?> ReadTerminalRecoveryAsync(HttpContext http)
+    {
+        if (http.User.Identity?.IsAuthenticated == true) return null;
+        var selected = TotpStepUpOwner.Selection(http, protection, TotpStepUpOwner.ResultCookieName);
+        if (selected is null || selected.Origin != surface.Origin || selected.ExpiresAt <= clock.GetUtcNow()) return null;
+        var row = await database.Set<TotpOperationRow>().AsNoTracking().SingleOrDefaultAsync(x => x.EnrollmentId == selected.EnrollmentId && x.RequestId == selected.RequestId && x.AccountId == selected.AccountId &&
+            x.SessionId == selected.SessionId && x.Origin == selected.Origin && x.State == "COMPLETED" && (x.Kind == "DISABLE" || x.Kind == "RESET"), http.RequestAborted).ConfigureAwait(false);
+        if (row is null || row.RecoveryExpiresAt != selected.ExpiresAt) return null;
+        var ended = await database.Set<AuthenticationSessionRow>().AsNoTracking().AnyAsync(x => x.SessionId == selected.SessionId && x.AccountId == selected.AccountId && x.State == "REVOKED" &&
+            x.TerminationCause == "TOTP_DISABLED" && x.OperationId == "OP-TOTP-" + row.EnrollmentId.ToString("N") && x.TotpAuthenticatorReference == row.AuthenticatorReference && x.TotpGeneration == row.Generation, http.RequestAborted).ConfigureAwait(false);
+        return ended ? row : null;
+    }
+    internal Task<IResult> TerminalOptionsAsync(HttpContext http) => Guard(http, async () =>
+    {
+        var row = await ReadTerminalRecoveryAsync(http).ConfigureAwait(false); if (row is null) return Problem(404, "NOT_FOUND_OR_NOT_DISCLOSABLE");
+        var presentation = presentations.RequirePublished(application.Current(surface.Origin));
+        return Results.Json(new { csrfToken = antiforgery.GetAndStoreTokens(http).RequestToken, recovery = await ViewAsync(row, http.RequestAborted).ConfigureAwait(false), signInRequired = true, presentation.Locale, presentation.Content });
+    });
+    internal async Task<bool> AllowManagementScreenAsync(HttpContext http) => http.User.Identity?.IsAuthenticated == true && AuthenticationIdentity.SessionId(http.User) is not null ||
+        await ReadTerminalRecoveryAsync(http).ConfigureAwait(false) is not null;
     private TotpMfaSelection? MfaSelection(HttpContext http)
     {
         if (!http.Request.Cookies.TryGetValue(MfaCookieName, out var value)) return null;
         try { var row = JsonSerializer.Deserialize<TotpMfaSelection>(MfaProtector(protection).Unprotect(value)); return row?.Origin == surface.Origin && row.ExpiresAt > clock.GetUtcNow() ? row : null; }
         catch (CryptographicException) { return null; } catch (JsonException) { return null; }
+    }
+    internal async Task<bool> AllowAccountScreenAsync(HttpContext http)
+    {
+        if (http.User.Identity?.IsAuthenticated != true || AuthenticationIdentity.SessionId(http.User) is null) return false;
+        var selected = TotpStepUpOwner.Selection(http, protection, TotpStepUpOwner.ResultCookieName); if (selected is null || selected.ExpiresAt <= clock.GetUtcNow()) return false;
+        var caller = Caller(http); var row = await application.ReadAsync(caller, selected.EnrollmentId, selected.RequestId, http.RequestAborted).ConfigureAwait(false);
+        if (row is null || row.Kind != "ENROLL" || row.RecoveryExpiresAt != selected.ExpiresAt) return false;
+        if (http.Request.Path == "/account/security/authenticator/ready") return row.State == "COMPLETED" && await database.Set<TotpAuthenticatorRow>().AsNoTracking().AnyAsync(x =>
+            x.AccountId == caller.AccountId && x.AuthenticatorReference == row.AuthenticatorReference && x.Generation == row.Generation && x.State == "ACTIVE", http.RequestAborted).ConfigureAwait(false);
+        return row.State is "AUTHORIZED" or "PREPARING" or "AWAITING_FIRST_CODE" && row.ExpiresAt > clock.GetUtcNow();
+    }
+    internal async Task<bool> AllowMfaScreenAsync(HttpContext http)
+    {
+        var selected = MfaSelection(http); if (selected is null || !AuthenticationEndpoints.TryBrowser(http, AuthenticationEndpoints.Protector(protection), clock.GetUtcNow(), out var browser) ||
+            AuthenticationIdentity.Digest(browser!.Nonce) != selected.BrowserDigest) return false;
+        return await database.Set<TotpPendingAuthenticationRow>().AsNoTracking().AnyAsync(x => x.PendingId == selected.PendingId && x.RequestId == selected.RequestId && x.BrowserDigest == selected.BrowserDigest &&
+            x.Origin == surface.Origin && x.RecoveryExpiresAt == selected.ExpiresAt && (x.State == "PENDING" || x.State == "COMPLETED"), http.RequestAborted).ConfigureAwait(false);
     }
     internal Task<IResult> MfaOptionsAsync(HttpContext http) => Guard(http, async () =>
     {
@@ -187,10 +253,17 @@ internal sealed class TotpBrowserService(TotpApplication application, Authentica
         var pending = await database.Set<TotpPendingAuthenticationRow>().AsNoTracking().SingleOrDefaultAsync(x => x.PendingId == selected.PendingId && x.RequestId == selected.RequestId && x.BrowserDigest == selected.BrowserDigest && x.Origin == selected.Origin, http.RequestAborted).ConfigureAwait(false);
         if (pending is null || pending.RecoveryExpiresAt != selected.ExpiresAt) return Problem(404, "NOT_FOUND_OR_NOT_DISCLOSABLE");
         var policy = application.Current(surface.Origin); var presentation = presentations.RequirePublished(policy);
-        var factors = await database.Set<TotpAuthenticatorRow>().AsNoTracking().Where(x => x.AccountId == pending.AccountId && x.State == "ACTIVE").Select(x => new { x.AuthenticatorReference }).ToArrayAsync(http.RequestAborted).ConfigureAwait(false);
+        var authenticationPresentation = authenticationPresentations.RequirePublished(authenticationPolicies.RequireEffective(clock.GetUtcNow()));
+        if (authenticationPresentation.Locale != presentation.Locale) throw new InvalidOperationException("Published MFA and authentication locale must agree.");
+        var content = presentation.Content.Values.Concat(authenticationPresentation.Content.Values.Where(x => x.Key.StartsWith("authentication.footer.", StringComparison.Ordinal)))
+            .GroupBy(x => x.Key, StringComparer.Ordinal).ToDictionary(x => x.Key, x => x.Last(), StringComparer.Ordinal);
+        var current = pending.State == "PENDING" && pending.ExpiresAt > clock.GetUtcNow() && pending.TotpPolicyVersion == policy.Version &&
+            pending.AuthenticationPolicyVersion == authenticationPolicies.RequireEffective(clock.GetUtcNow()).Version && policy.MfaAssurances.ContainsKey(pending.PrimaryMethod);
+        var factors = current ? await application.ActiveFactorViewsAsync(pending.AccountId, http.RequestAborted).ConfigureAwait(false) : [];
         var prior = http.User; string? csrf;
         try { http.User = new ClaimsPrincipal(new ClaimsIdentity()); csrf = antiforgery.GetAndStoreTokens(http).RequestToken; } finally { http.User = prior; }
-        return Results.Json(new { status = pending.State == "PENDING" && pending.ExpiresAt <= clock.GetUtcNow() ? "EXPIRED" : pending.State, pending.RequestId, pending.ExpiresAt, authenticators = factors, csrfToken = csrf, presentation.Locale, presentation.Content });
+        return Results.Json(new { status = pending.State == "PENDING" && pending.ExpiresAt <= clock.GetUtcNow() ? "EXPIRED" : pending.State, pending.RequestId, pending.ExpiresAt, authenticators = factors, csrfToken = csrf, presentation.Locale, content,
+            authenticationPresentation.TermsUri, authenticationPresentation.PrivacyUri, authenticationPresentation.SupportUri });
     });
     internal Task<IResult> CompleteMfaAsync(HttpContext http) => Guard(http, async () =>
     {
@@ -218,10 +291,33 @@ internal sealed class TotpBrowserService(TotpApplication application, Authentica
         await http.SignInAsync(AuthenticationIdentity.Scheme, grant.Ticket.Principal, grant.Ticket.Properties).ConfigureAwait(false);
         return Results.Json(new { status = "COMPLETED", authenticated = true, command.RequestId });
     });
-    private object View(TotpOperationRow row) => new { row.EnrollmentId, row.RequestId, row.Kind, row.AuthenticatorReference, row.ExpectedVersion,
-        status = row.EndedAt is null && row.ExpiresAt <= clock.GetUtcNow() ? "EXPIRED" : row.State, row.ExpiresAt,
-        disclosureAvailable = row.DisclosureClaimedAt is null && row.State is "AUTHORIZED" or "PREPARING", disclosureConsumed = row.DisclosureClaimedAt is not null,
-        activationCompleted = row.Kind == "ENROLL" && row.State == "COMPLETED" };
+    private async Task<object> ViewAsync(TotpOperationRow row, CancellationToken ct)
+    {
+        string? effect = null; var currentSessionEnds = false;
+        if (row.Kind is "DISABLE" or "RESET")
+        {
+            var factor = await database.Set<TotpAuthenticatorRow>().AsNoTracking().SingleOrDefaultAsync(x => x.AuthenticatorReference == row.AuthenticatorReference && x.AccountId == row.AccountId && x.Generation == row.Generation, ct).ConfigureAwait(false);
+            var session = await database.Set<AuthenticationSessionRow>().AsNoTracking().SingleOrDefaultAsync(x => x.SessionId == row.SessionId && x.AccountId == row.AccountId, ct).ConfigureAwait(false);
+            if (row.State == "COMPLETED" && factor?.DisableOperationId == OperationId(row))
+            {
+                effect = factor.DisableSessionEffect; currentSessionEnds = session?.TerminationCause == "TOTP_DISABLED" && session.OperationId == OperationId(row);
+            }
+            else
+            {
+                var policy = application.Current(row.Origin);
+                if (policy.Version == row.PolicyVersion)
+                {
+                    effect = (row.Kind == "DISABLE" ? policy.DisableSessionEffect : policy.ResetSessionEffect).ToString();
+                    currentSessionEnds = effect == nameof(TotpSessionEffect.RevokeFactorSessions) && session?.TotpAuthenticatorReference == row.AuthenticatorReference && session.TotpGeneration == row.Generation;
+                }
+            }
+        }
+        return new { row.EnrollmentId, row.RequestId, row.Kind, row.AuthenticatorReference, row.ExpectedVersion,
+            status = row.EndedAt is null && row.ExpiresAt <= clock.GetUtcNow() ? "EXPIRED" : row.State, row.ExpiresAt,
+            disclosureAvailable = row.DisclosureClaimedAt is null && row.State is "AUTHORIZED" or "PREPARING", disclosureConsumed = row.DisclosureClaimedAt is not null,
+            activationCompleted = row.Kind == "ENROLL" && row.State == "COMPLETED", factorSessionEffect = effect, currentSessionEnds };
+    }
+    private static string OperationId(TotpOperationRow row) => "OP-TOTP-" + row.EnrollmentId.ToString("N");
     private StepUpCaller Caller(HttpContext http) => StepUpCaller.FromPrincipal(http.User, surface.Origin, partitions.Network(http.Connection.RemoteIpAddress ?? throw new ArgumentException("Current peer required.")));
     private static Task<T> Read<T>(HttpContext http) where T : class { if (!http.Request.HasJsonContentType()) throw new BadHttpRequestException("JSON required.", 415); return IdentityJsonCommand.ReadAsync<T>(http, 4096); }
     private static IResult Failure(string error) => Problem(error switch { "AUTHENTICATION_FAILED" => 401, "VERSION_CONFLICT" or "DISCLOSURE_UNAVAILABLE" => 409, "STEP_UP_REQUIRED" => 403,

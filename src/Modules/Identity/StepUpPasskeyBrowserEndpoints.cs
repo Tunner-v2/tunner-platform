@@ -57,7 +57,7 @@ internal sealed partial class StepUpBrowserService
         if (result.ErrorCode is { } error) return await NativeProofFailureAsync(error, result.Ceremony, frame, native, http.RequestAborted).ConfigureAwait(false);
         var row = result.Ceremony!;
         var selected = new PasskeyProofSelection(command.RequestId, command.AttemptId, row.CeremonyId, frame.Operation.Binding.CorrelationId, frame.Browser.BindingDigest,
-            frame.Caller.AccountId, frame.Caller.SessionId, frame.Caller.Origin, row.RecoveryExpiresAt);
+            frame.Caller.AccountId, frame.Caller.SessionId, frame.Caller.Origin, IdentityPersistenceTime.Normalize(row.RecoveryExpiresAt));
         http.Response.Cookies.Append(ProofRecoveryCookie, ProofRecoveryProtection.Protect(JsonSerializer.Serialize(selected)),
             new CookieOptions { Path = "/", HttpOnly = true, Secure = true, SameSite = SameSiteMode.Strict, IsEssential = true, MaxAge = row.RecoveryExpiresAt - clock.GetUtcNow() });
         return Results.Json(new { command.RequestId, command.AttemptId, row.CeremonyId, operationReference = selected.OperationReference,
