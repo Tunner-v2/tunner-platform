@@ -2,7 +2,7 @@
   "schema_version": 1,
   "result": "PRESERVED_EXECUTION_EVIDENCE",
   "scope_id": "TUN-P2-007",
-  "recorded_at": "2026-11-10T13:18:13.279Z",
+  "recorded_at": "2026-11-10T13:30:17.285Z",
   "normalization": "Original files remain in execution artifacts. Portable UTF8 strips BOM, usesLF and substitutes checkout root with <repo-root>; TRX XML-escapes the placeholder. PNG bytes unchanged. Embedded raw input digests remain original; each row records raw and portable hashes. One duplicate historical source patch is explicitly replaced by immutable Git comparison plus original patch digest, recorded on its row; no scanner controls or test outcomes change. Portable terminal trailing whitespace is trimmed where present, with each affected row explicitly marked; original raw logs remain unchanged. Failed CLI-launch image rows are explicitly classified preexisting/unbound; they are not evidence of a render or executed test. New long Playwright case paths are compacted using deterministic case hashes; original source paths and prior portable spellings remain recorded on rows, bytes unchanged. Already committed historical copies remain in place.",
   "files": [
     {
@@ -1373,6 +1373,24 @@
       "source_sha256": "9efaed8edb278e54ee472fa817605fc9294bba85ff7772a4e5df71aed47164e4",
       "sha256": "14ae81245ea870bbcb831c269f056380791ae5bd0f30077c16e3635421598508",
       "bytes": 41,
+      "transformed": true
+    },
+    {
+      "group": "failures-component-receipt-classification",
+      "source": "artifacts/p2-007-passkeys-20261109/governance-20261110/p2-007-final-gate.json",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/failures/component-receipt-classification/p2-007-final-gate.json",
+      "source_sha256": "e664ea558e2741a6ad3c612dad41fa8e867a3614d22fcead72ceae5072155a66",
+      "sha256": "4857ad65a98d5b0368bc480b1c0d6f2b7e8c8aaa608019673287bf21ba304ada",
+      "bytes": 3128,
+      "transformed": true
+    },
+    {
+      "group": "failures-component-receipt-classification",
+      "source": "artifacts/p2-007-passkeys-20261109/governance-20261110/p2-committed-readiness-audit.json",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/failures/component-receipt-classification/p2-committed-readiness-audit.json",
+      "source_sha256": "8144a933cb93b73b11581fb581e1dfaaab4a8ee4019520608833fcd063d3245e",
+      "sha256": "472744265814d5a7cd6f1e35fe73842d46bc1b5219d92c2be4cd2b86dca183bc",
+      "bytes": 497,
       "transformed": true
     },
     {

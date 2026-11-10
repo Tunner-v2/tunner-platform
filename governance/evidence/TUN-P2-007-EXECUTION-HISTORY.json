@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "scope_id": "TUN-P2-007",
+  "result": "HISTORICAL_COMPONENT_EXECUTION_RETAINED",
+  "recorded_at": "2026-11-10T13:29:20.483Z",
+  "historical_primary_component": {
+    "path": "governance/evidence/TUN-P2-007-PRIMARY-EXECUTION.json",
+    "sha256": "d4b7c69babc1911d7f96c496e3b4ebb3952fb9c0b4fb0625df2e13a890da2b9e"
+  },
+  "current_final_validation_ref": "governance/evidence/TUN-P2-007-VALIDATION.json",
+  "current_execution_index_ref": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/execution-index.json",
+  "classification": "Original COMPONENT_EXECUTION receipt remains unchanged and is not a final COMMITTED source-proof envelope. Current final proof still directly enforcesPASS,exacttested/validatedSHAandcompleteprecommittedownedpaths.",
+  "native_gate_observation": {
+    "result": "NOT_READY",
+    "failed_fields": [
+      "historicalcomponentkindisnotfinalCOMMITTED",
+      "historicalcomponenthasitsownexecutionSHA",
+      "componentresultisnotfullPASS",
+      "componentdoesnotclaimfinalownedbehaviorpaths"
+    ],
+    "evidence_refs": [
+      {
+        "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/failures/component-receipt-classification/p2-007-final-gate.json",
+        "sha256": "4857ad65a98d5b0368bc480b1c0d6f2b7e8c8aaa608019673287bf21ba304ada"
+      },
+      {
+        "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/failures/component-receipt-classification/p2-committed-readiness-audit.json",
+        "sha256": "472744265814d5a7cd6f1e35fe73842d46bc1b5219d92c2be4cd2b86dca183bc"
+      }
+    ]
+  },
+  "controls_changed": false
+}
