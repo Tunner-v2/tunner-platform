@@ -208,11 +208,15 @@ internal sealed partial class AuthenticationApplication(IdentityPersistenceDbCon
             row.RevokedAt is not { } ended || ended < row.AuthenticatedAt || ended > now || Expired(row, policy, now)) return null;
         var credential = await database.Set<PasskeyCredentialRow>().AsNoTracking().SingleOrDefaultAsync(x => x.CredentialReference == receipt.CredentialReference, ct).ConfigureAwait(false);
         var passkey = passkeyPolicies.SingleOrDefault()?.RequireEffective(now);
+        var composite = row.AuthenticationMethods == "passkey+totp";
+        if (!composite && row.AuthenticationMethods != "passkey") return null;
         if (credential is null || credential.AccountId != caller.AccountId || credential.State != "REVOKED" || credential.Version != receipt.CredentialVersion ||
             credential.RevocationSessionEffect != nameof(PasskeyRevocationSessionEffect.RevokeCredentialSessions) || credential.RevocationPolicyVersion != receipt.PasskeyPolicyVersion ||
             credential.RevocationOperationId != operation.OperationId || credential.RevocationCorrelationId != operation.CorrelationId || passkey is null ||
             passkey.Version != receipt.PasskeyPolicyVersion || passkey.RevocationSessionEffect != PasskeyRevocationSessionEffect.RevokeCredentialSessions ||
-            row.PasskeyAssuranceKey is null || passkey.RequireAssurance(row.PasskeyAssuranceKey) != row.Assurance) return null;
+            row.PasskeyAssuranceKey is null || !composite && passkey.RequireAssurance(row.PasskeyAssuranceKey) != row.Assurance) return null;
+        // The receipt excuses only this exact primary revocation; every unaffected TOTP source fact remains authoritative.
+        var unaffectedFactor = composite ? await ReadTotpSessionFactorAsync(row, ct).ConfigureAwait(false) : null;
         var account = await database.Accounts.SingleAsync(x => x.AccountId == caller.AccountId, ct).ConfigureAwait(false);
         await database.Entry(account).ReloadAsync(ct).ConfigureAwait(false);
         var user = await database.Users.SingleAsync(x => x.AccountId == caller.AccountId, ct).ConfigureAwait(false); await database.Entry(user).ReloadAsync(ct).ConfigureAwait(false);
@@ -220,7 +224,10 @@ internal sealed partial class AuthenticationApplication(IdentityPersistenceDbCon
             !await database.VerifiedContacts.AnyAsync(x => x.AccountId == caller.AccountId && x.State == ContactVerificationState.Verified && x.AnonymizedAtUtc == null && x.NormalizedEmail == user.NormalizedEmail, ct).ConfigureAwait(false)) return null;
         var decision = await AccessAsync(account, operation.Scope.Operation, now, ct).ConfigureAwait(false);
         var decisionAt = clock.GetUtcNow();
+        var finalAuthentication = policies.RequireEffective(decisionAt); finalAuthentication.Validate();
         return decision?.Allowed == true && decision.EffectiveInterval.Contains(decisionAt) && passkeyPolicies.Single().RequireEffective(decisionAt).Version == receipt.PasskeyPolicyVersion
+            && !Expired(row, finalAuthentication, decisionAt) && MethodFactsCurrentAt(row, finalAuthentication, decisionAt) &&
+            (!composite || TotpSessionFactorCurrentAt(row, unaffectedFactor))
             ? new AuthenticationTerminalVerification(decision.EffectiveInterval) : null;
     }
     internal async Task<AuthenticatorProofSource?> ReadProofCredentialAsync(StepUpProofRow proof, CancellationToken ct, bool refresh = false)

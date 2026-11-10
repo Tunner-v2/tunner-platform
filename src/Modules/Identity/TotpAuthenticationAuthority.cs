@@ -29,14 +29,20 @@ internal sealed partial class AuthenticationApplication
             row.MfaRequirementPolicyVersion is null || !current.MfaAssurances.TryGetValue(primary, out var mapped) || mapped != row.Assurance) return false;
         if (primary == "pwd") return row.PasskeyCredentialReference is null && !string.IsNullOrWhiteSpace(auth.PasswordAssurance);
         var passkey = passkeyPolicies.SingleOrDefault()?.RequireEffective(now);
-        return passkey is not null && passkey.Origin == row.Origin && row.PasskeyAssuranceKey is not null && row.PasskeyPolicyVersion == passkey.Version;
+        return passkey is not null && passkey.Origin == row.Origin && row.PasskeyAssuranceKey is not null && row.PasskeyPolicyVersion == passkey.Version &&
+            passkey.AssuranceMappings.ContainsKey(row.PasskeyAssuranceKey);
     }
+    private Task<TotpAuthenticatorRow?> ReadTotpSessionFactorAsync(AuthenticationSessionRow row, CancellationToken ct) =>
+        database.Set<TotpAuthenticatorRow>().AsNoTracking().SingleOrDefaultAsync(x => x.AuthenticatorReference == row.TotpAuthenticatorReference && x.AccountId == row.AccountId, ct);
+    private static bool TotpSessionFactorCurrentAt(AuthenticationSessionRow row, TotpAuthenticatorRow? factor) =>
+        factor is not null && factor.AccountId == row.AccountId && factor.AuthenticatorReference == row.TotpAuthenticatorReference && factor.Generation == row.TotpGeneration &&
+        (factor.State == "ACTIVE" && factor.Version == row.TotpAuthenticatorVersion ||
+            factor.State == "DISABLED" && factor.Version == row.TotpAuthenticatorVersion + 1 && factor.DisableSessionEffect == nameof(TotpSessionEffect.PreserveExistingSessions));
     private async Task<bool> TotpSessionCurrentAsync(AuthenticationSessionRow row, AuthenticationPolicy auth, DateTimeOffset now, CancellationToken ct)
     {
         if (!TotpSessionFactsCurrentAt(row, auth, now)) return false;
-        var factor = await database.Set<TotpAuthenticatorRow>().AsNoTracking().SingleOrDefaultAsync(x => x.AuthenticatorReference == row.TotpAuthenticatorReference && x.AccountId == row.AccountId, ct).ConfigureAwait(false);
-        if (factor is null || factor.Generation != row.TotpGeneration || !(factor.State == "ACTIVE" && factor.Version == row.TotpAuthenticatorVersion ||
-            factor.State == "DISABLED" && factor.Version == row.TotpAuthenticatorVersion + 1 && factor.DisableSessionEffect == nameof(TotpSessionEffect.PreserveExistingSessions))) return false;
+        var factor = await ReadTotpSessionFactorAsync(row, ct).ConfigureAwait(false);
+        if (!TotpSessionFactorCurrentAt(row, factor)) return false;
         if (row.AuthenticationMethods == "pwd+totp") return true;
         var credential = await database.Set<PasskeyCredentialRow>().AsNoTracking().SingleOrDefaultAsync(x => x.CredentialReference == row.PasskeyCredentialReference && x.AccountId == row.AccountId, ct).ConfigureAwait(false);
         return credential is not null && (credential.State == "ACTIVE" || credential.State == "REVOKED" && credential.RevocationSessionEffect == nameof(PasskeyRevocationSessionEffect.PreserveExistingSessions));
