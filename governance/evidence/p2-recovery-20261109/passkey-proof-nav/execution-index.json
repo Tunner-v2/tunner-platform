@@ -1,51 +1,31 @@
 {
   "schema_version": 1,
   "scope_id": "TUN-P2-007",
-  "result": "EXECUTIONS_RETAINED_CURRENT_UI_ACCEPTANCE_PENDING",
-  "validated_carrier_sha": "516ec0090253ee21b93c7e61922bd9d1f1caecfa",
-  "recorded_at": "2026-11-10T12:15:56.452Z",
+  "result": "PASS_EXECUTED_ENGINEERING_COHORTS_NATIVE_ACCEPTANCE_GATES_PENDING",
+  "recorded_at": "2026-11-10T12:36:44.196Z",
+  "validated_source_carrier_sha": "745f9c2dc1b9060c4be0318b33b4019ae77e9e36",
   "source_binding": {
+    "tested_carrier_sha": "745f9c2dc1b9060c4be0318b33b4019ae77e9e36",
+    "actual_execution_shas_retained": true,
     "cohort_equivalence": [
       {
-        "cohort": "Native14/architecture237 and packagedbrowserruntime",
-        "sha": "80a32abb3c215a212bfa34bb7678c742d3cf765d",
-        "paths": [
-          "src",
-          "tests",
-          "tools/browser-testing",
-          "Directory.Build.props",
-          "Directory.Build.targets",
-          "Directory.Packages.props",
-          "global.json",
-          "NuGet.Config",
-          "web/apps/user"
-        ],
-        "carrier_sha": "516ec0090253ee21b93c7e61922bd9d1f1caecfa",
-        "result": "GIT_OBJECT_IDENTICAL_FOR_DECLARED_COHORT_INPUTS",
-        "changed_paths": []
-      },
-      {
-        "cohort": "Mock119 browser suites",
-        "sha": "80a32abb3c215a212bfa34bb7678c742d3cf765d",
+        "cohort": "Current authentication21 and shared verification22",
+        "sha": "b0c04424136aace1b02c486baeaafd53ed61b8ec",
         "paths": [
           "web/apps/user",
           "web/packages/ui",
-          "web/fixtures",
-          "web/tests/passkeys",
-          "web/tests/step-up",
+          "web/fixtures/authentication",
           "web/tests/authentication",
-          "web/tests/registration",
-          "web/playwright.passkeys.config.ts",
-          "web/playwright.step-up.config.ts",
+          "web/fixtures/step-up",
+          "web/tests/step-up",
           "web/playwright.authentication.config.ts",
-          "web/playwright.registration.config.ts",
+          "web/playwright.step-up.config.ts",
           "web/package.json",
           "web/pnpm-lock.yaml",
-          "web/tsconfig.json",
-          "docs/contracts/ui-inventory.json"
+          "web/tsconfig.json"
         ],
-        "carrier_sha": "516ec0090253ee21b93c7e61922bd9d1f1caecfa",
-        "result": "GIT_OBJECT_IDENTICAL_FOR_DECLARED_COHORT_INPUTS",
+        "carrier_sha": "745f9c2dc1b9060c4be0318b33b4019ae77e9e36",
+        "result": "GIT_OBJECT_IDENTICAL_FOR_DECLARED_INPUTS",
         "changed_paths": []
       },
       {
@@ -59,126 +39,239 @@
           "web/package.json",
           "web/pnpm-lock.yaml"
         ],
-        "carrier_sha": "516ec0090253ee21b93c7e61922bd9d1f1caecfa",
-        "result": "GIT_OBJECT_IDENTICAL_FOR_DECLARED_COHORT_INPUTS",
+        "carrier_sha": "745f9c2dc1b9060c4be0318b33b4019ae77e9e36",
+        "result": "GIT_OBJECT_IDENTICAL_FOR_DECLARED_INPUTS",
         "changed_paths": []
       },
       {
-        "cohort": "Real native1 browser test and all runtime inputs",
-        "sha": "35ef6c3b64881cf50833209b739f0e47a43f5679",
-        "paths": [
-          "src",
-          "tools/browser-testing",
-          "web/apps/user",
-          "web/packages/ui",
-          "web/tests/browser-testing",
-          "web/playwright.browser-testing.config.ts",
-          "web/package.json",
-          "web/pnpm-lock.yaml"
-        ],
-        "carrier_sha": "516ec0090253ee21b93c7e61922bd9d1f1caecfa",
-        "result": "GIT_OBJECT_IDENTICAL_FOR_DECLARED_COHORT_INPUTS",
-        "changed_paths": []
-      },
-      {
-        "cohort": "Other3real browser cases",
+        "cohort": "Current native14 recovery and runtime server",
         "sha": "80a32abb3c215a212bfa34bb7678c742d3cf765d",
         "paths": [
           "src",
+          "tests",
           "tools/browser-testing",
-          "web/apps/user",
-          "web/packages/ui",
-          "web/tests/browser-testing/fixtures.ts",
-          "web/tests/browser-testing/manual-flow.spec.ts",
-          "web/tests/browser-testing/authentication-flow.spec.ts",
-          "web/playwright.browser-testing.config.ts",
-          "web/package.json",
-          "web/pnpm-lock.yaml"
+          "Directory.Build.props",
+          "Directory.Build.targets",
+          "Directory.Packages.props",
+          "global.json",
+          "NuGet.Config"
         ],
-        "carrier_sha": "516ec0090253ee21b93c7e61922bd9d1f1caecfa",
-        "result": "GIT_OBJECT_IDENTICAL_FOR_DECLARED_COHORT_INPUTS",
-        "changed_paths": []
-      },
-      {
-        "cohort": "Typed contracts21, theme10 and TypeScript",
-        "sha": "516ec0090253ee21b93c7e61922bd9d1f1caecfa",
-        "carrier_sha": "516ec0090253ee21b93c7e61922bd9d1f1caecfa",
-        "result": "EXECUTED_AT_EXACT_CARRIER",
-        "paths": [
-          "web"
-        ],
+        "carrier_sha": "745f9c2dc1b9060c4be0318b33b4019ae77e9e36",
+        "result": "GIT_OBJECT_IDENTICAL_FOR_DECLARED_INPUTS",
         "changed_paths": []
       }
     ],
-    "full_native_predecessor": {
+    "native_full_predecessor": {
+      "source_sha": "0efbb6ed89b0715d78ddfbcd97b1ee96f829f9dd",
+      "passed": 224,
+      "limitation": "Full224 remains actual executionat0ef; onlylaterC#delta is two-use localname clarification in PasskeySignInRecovery.cs, followedby actual14 recoveryat80a. No fullrun relabeling."
+    }
+  },
+  "ui_item_evidence": {
+    "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-item-evidence.json",
+    "sha256": "4bcde80142708f051f2820718a3c7961b4261ee0e43f432d4ce54095c0c12d23"
+  },
+  "executions": {
+    "native_full": {
       "source_sha": "0efbb6ed89b0715d78ddfbcd97b1ee96f829f9dd",
       "passed": 224,
       "failed": 0,
       "skipped": 0,
-      "receipt": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/full-native/receipt.json",
-      "qualification": "Current server delta is only the reviewed two-use local-name clarification in PasskeySignInRecovery.cs; fresh14 recovery tests, source build and architecture237 are at80a, with declared runtime/native input Git equality to this carrier. Full224 is never relabeled as execution at the carrier."
+      "exit_code": 0,
+      "receipt": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/full-native/receipt.json"
+    },
+    "native_current_recovery": {
+      "source_sha": "80a32abb3c215a212bfa34bb7678c742d3cf765d",
+      "passed": 14,
+      "failed": 0,
+      "skipped": 0,
+      "exit_code": 0,
+      "receipt": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/current-native/receipt.json"
+    },
+    "architecture": {
+      "source_sha": "b0c04424136aace1b02c486baeaafd53ed61b8ec",
+      "passed": 237,
+      "failed": 0,
+      "skipped": 0,
+      "exit_code": 0,
+      "trx": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/architecture-current/architecture-b0c0442.trx"
+    },
+    "edge": {
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-edge/results.json",
+      "sha256": "6b1142f4250cfbfb2603c259ee8495580a44999ac85331f638f92f0170a816e6",
+      "stats": {
+        "startTime": "2026-11-10T12:22:24.139Z",
+        "duration": 118198.001,
+        "expected": 60,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "source_sha": "745f9c2dc1b9060c4be0318b33b4019ae77e9e36",
+      "exit_code": 0
+    },
+    "firefox": {
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/browser/current-firefox/results.json",
+      "sha256": "d8c77bc6651c01817ba92a6d332b989caffd484c227ae91bd2fcb98abdb3da20",
+      "stats": {
+        "startTime": "2026-11-10T12:24:58.837Z",
+        "duration": 118904.827,
+        "expected": 60,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "source_sha": "745f9c2dc1b9060c4be0318b33b4019ae77e9e36",
+      "exit_code": 0
+    },
+    "registration": {
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-registration/results.json",
+      "sha256": "dbc5e33b99d38f353c177058621d43b7e009348c47a8498c505d39fb8b69d194",
+      "stats": {
+        "startTime": "2026-11-10T12:22:26.964Z",
+        "duration": 104303.53700000001,
+        "expected": 24,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "source_sha": "745f9c2dc1b9060c4be0318b33b4019ae77e9e36",
+      "exit_code": 0
+    },
+    "authentication": {
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-authentication/results.json",
+      "sha256": "4db227f6975b42a1770f904bbd9845bd51ee82cb3f9ab59d1a467bc9c0ec3688",
+      "stats": {
+        "startTime": "2026-11-10T12:15:32.619Z",
+        "duration": 35077.455,
+        "expected": 21,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "source_sha": "b0c04424136aace1b02c486baeaafd53ed61b8ec",
+      "exit_code": 0
+    },
+    "stepup": {
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-step-up/results.json",
+      "sha256": "9e14d43f977ce0d72cfc60fb5a81e06433a5cfab11afff53963ef0ae9a9de146",
+      "stats": {
+        "startTime": "2026-11-10T12:14:07.673Z",
+        "duration": 46300.145,
+        "expected": 22,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "source_sha": "b0c04424136aace1b02c486baeaafd53ed61b8ec",
+      "exit_code": 0
+    },
+    "focused": {
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-focused/results.json",
+      "sha256": "9ad49ee1280ad985e50fff96b69eae0e7302882f493bf3ac277a6263985783fc",
+      "stats": {
+        "startTime": "2026-11-10T12:12:17.343Z",
+        "duration": 14089.562,
+        "expected": 8,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "source_sha": "b0c04424136aace1b02c486baeaafd53ed61b8ec",
+      "exit_code": 0
+    },
+    "real": {
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/real-current/results.json",
+      "sha256": "e1859cf07228730480eac26c87f985f129891ae31ca8f7956ff371015dd95af5",
+      "stats": {
+        "startTime": "2026-11-10T12:24:25.723Z",
+        "duration": 25755.38,
+        "expected": 4,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "source_sha": "745f9c2dc1b9060c4be0318b33b4019ae77e9e36",
+      "exit_code": 0
+    },
+    "foundation": {
+      "source_sha": "35ef6c3b64881cf50833209b739f0e47a43f5679",
+      "passed": 16,
+      "failed": 0,
+      "skipped": 0,
+      "exit_code": 0,
+      "report": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/foundation/results.json"
+    },
+    "unit": {
+      "source_sha": "745f9c2dc1b9060c4be0318b33b4019ae77e9e36",
+      "theme": 10,
+      "contracts": 21,
+      "failed": 0,
+      "skipped": 0,
+      "exit_code": 0,
+      "log": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/unit/current-final/unit.log"
+    },
+    "typescript": {
+      "source_sha": "745f9c2dc1b9060c4be0318b33b4019ae77e9e36",
+      "exit_code": 0,
+      "folder": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-checks"
     }
   },
-  "counts": {
-    "native_predecessor": 224,
-    "native_current_recovery": 14,
-    "architecture": 237,
-    "passkey_proof_navigation_mock": 52,
-    "shared_step_up_browser": 22,
-    "authentication_browser": 21,
-    "registration_browser": 24,
-    "foundation_browser": 16,
-    "real_native_browser": 1,
-    "other_real_browser": 3,
-    "typed_contracts": 21,
-    "theme": 10
+  "counting": "187current component cases=Edge60+Firefox60+shared22+authentication21+registration24. Focused8 is a repeated subset. Real4 includes nativejourney; native14 overlapsfull224. Counts are executions, not a unique summedcoverage figure.",
+  "feedback_verification": {
+    "production_sha": "b0c04424136aace1b02c486baeaafd53ed61b8ec",
+    "test_sha": "745f9c2dc1b9060c4be0318b33b4019ae77e9e36",
+    "states": 8,
+    "axe_violations": 0,
+    "confirmed_findings": 0,
+    "addon": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/item-review/FEEDBACK-GREEN-ITEM-ADDON-20261110.json",
+    "root_inspected": [
+      "remove-error-1440.png",
+      "login-error-320.png"
+    ],
+    "scope": "Desktop/mobile actualcurrent render+keyboard; all8manuallyinspectedbyUI specialist. No blanketWCAGcertification."
   },
+  "retained_failures": [
+    {
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/failures/feedback-red/results.json",
+      "source_sha": "312af8855526c8e557f5156957f5386237738b15",
+      "passed": 1,
+      "failed": 7,
+      "resolution": "Narrowthree-path productioncorrection b0 andactual8/60/60GREEN atrecordedSHAs."
+    },
+    {
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/failures/background-completion-wait/results.json",
+      "source_sha": "b0c04424136aace1b02c486baeaafd53ed61b8ec",
+      "passed": 59,
+      "failed": 1,
+      "resolution": "Three exactwaitsscopedtoactivedialog at745; originalcounter/bindingassertionspreserved. New60Edge/60FirefoxPASS."
+    },
+    {
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/browser/webkit-real/results.json",
+      "passed": 2,
+      "failed": 1,
+      "resolution": "WindowsCurlportdoesnotenforceSameSiteStrict; canonicalassertionkept. NoTunnersecuritypolicychange; TODO-TUN-P2-017-WEBKIT001 remains."
+    },
+    {
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/failures/real-cli-reporter-launch/playwright.log",
+      "tests_executed": 0,
+      "resolution": "PowerShellcommaargumentcorrectlyquoted; distinctactual4PASSreportretained. ThreePNGsincopiedfailedlauncherfolderarepreexisting/unbound,notfreshcaptures."
+    }
+  ],
   "limits": [
-    "Individual cohorts run at recorded exact SHAs; source-carrier equivalence is scoped to the declared inputs, never a whole-project or binary-equivalence claim.",
-    "Other3 real cases passed in a report whose fourth native test failed only a device-event expectation; the corrected native case separately passes at35ef. No fabricated4/4 report.",
-    "Synthetic isolated policies/content only; no production profile/publication, physical authenticator, hardware/AAL3, fullP2 Product, merge, deployment or release acceptance.",
-    "Recorded historical119Edge+16foundation+52Firefox executions do not resolve newly found feedback UI007/UI008. Current correction b0c0442 must pass new regressions and rendered review before final UI acceptance.",
-    "Windows WebKit real3 report is2PASS/1FAIL at516 with actualStrict cookie port limitation; keepfailedreport,canonicalStrictassertion and governed017followup. Firefox real3 passes. No Safari/nativeWebKit or production browsermatrix acceptance."
+    "CurrentEdge60/Firefox60 andregistration24 execute at745; authentication21/shared22 atb0 have exact unchanged declared inputs. Foundation16 staysat35ef with unchanged sharedfixture inputs. Native224 remainsat0ef and recovery14at80a; currentC#unchanged80a→745.",
+    "Realreport has4PASS at745; native virtualauthenticator case is included in4 and is not counted twice. Physical hardware, nativeFirefox/Safari and production session policy are not certified.",
+    "Original historical map andRED7of8/b0backgroundwait59of60 reports remain retained. Current8feedbackcaptures and8regressions resolveclipping/focus; all17narrowperitemNAs convertedtoapplicablechecks.",
+    "WindowsPlaywrightWebKit actualStrictfailure retained withunchangedassertion andgoverned017followup; localtechnicalscope doesnotclaimproductionbrowsermatrixacceptance.",
+    "Axe0 isboundedautomation; recordedcontrastincompletes retain manualcontrastfacts. No blanketWCAGcertification, futureOAuth014 or allP2acceptance.",
+    "ScopedProductvisualconsent isactualuserapproval; manualFigma/Driveupdates remain owner-held andread-onlyforAI."
   ],
+  "provenance": "Executing-agent scope-by-scope technical review, with actual UI specialist187checks/all8currentrenders and independent read-only native/source reviews. Root inspected corrected Remove1440/Login320, owning Figma/reference evidence and actual current reports. No new Product consent or independent human role is claimed.",
   "security": {
-    "source_sha": "80a32abb3c215a212bfa34bb7678c742d3cf765d",
-    "sast": {
-      "result": "PASS",
-      "files": 3179
-    },
-    "secrets": {
-      "result": "PASS",
-      "files": 3179
-    },
+    "source_correction_sha": "b0c04424136aace1b02c486baeaafd53ed61b8ec",
+    "sast_observed_pass_files": 3554,
+    "secrets_observed_pass_files": 3558,
     "controls_changed": false,
-    "provenance": "Actual unchanged tools/security/Invoke-TunnerSastPolicyScan.ps1 and Invoke-TunnerSecretScan.ps1 exits0 observed in root tool results. Final metadata/evidence scan will be recorded separately."
-  },
-  "independent_reviews": [
-    {
-      "reviewer": "p2_business_arch_qa",
-      "scope": "Native proof/owner transaction/persisted source freshness/additive migration/exact4ID source and regression review",
-      "source_sha": "0efbb6ed89b0715d78ddfbcd97b1ee96f829f9dd",
-      "result": "NO_ADDITIONAL_CONFIRMED_BLOCKER",
-      "limits": "Read-only source review; no tests, writes or Product consent. Later server change is the documented local-name clarification."
-    },
-    {
-      "reviewer": "p2_007_ui_ux",
-      "scope": "Current119browser+16foundation+TSC, actual screenshots/geometry/axe and manual review",
-      "source_shas": [
-        "80a32abb3c215a212bfa34bb7678c742d3cf765d",
-        "35ef6c3b64881cf50833209b739f0e47a43f5679"
-      ],
-      "result": "PASS_EXECUTED_SCOPE",
-      "limits": "Mocks do not prove backend bypass; native14/224 and realbrowser receipts supply that separate proof. Root nativeUI/source/role gates remain required."
-    }
-  ],
-  "current_correction": {
-    "source_sha": "b0c04424136aace1b02c486baeaafd53ed61b8ec",
-    "candidate_ref": "governance/evidence/TUN-P2-007-FEEDBACK-FIX-CANDIDATE-20261110.json",
-    "architecture_passed": 237,
-    "architecture_failed": 0,
-    "architecture_skipped": 0,
-    "architecture_report": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/architecture-current/architecture-b0c0442.trx",
-    "ui_status": "Full current-source GREEN/rendered acceptance pending; the8RED report at312af88 remains retained with7fail/1pass."
+    "final_metadata_scan": "PENDING_AFTER_EVIDENCE_COMMIT"
   }
 }

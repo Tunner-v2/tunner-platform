@@ -1,0 +1,314 @@
+{
+  "schema_version": 1,
+  "status": "ARTIFACT_QA_SUPPLEMENT_WEBKIT_COOKIE_ASSERTION_UNRESOLVED",
+  "head": "516ec0090253ee21b93c7e61922bd9d1f1caecfa",
+  "application_input_equivalence": "80a32abb3c215a212bfa34bb7678c742d3cf765d",
+  "platform": "win32",
+  "enabled_login": {
+    "result": "PASS",
+    "captures": 3,
+    "exit": 0,
+    "browser": "157.0.4341.42",
+    "provenance": {
+      "path": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-enabled-login-516ec00/provenance.json",
+      "sha256": "0b9f8cecae3c6b668d06008661223e4cb13ddbdcb983e2b8db08c609c3f31fe0"
+    },
+    "boundary": "Fresh anonymous Edge contexts, existing synthetic local runtime publication/policy; no credentials entered, native create/get invoked, cookies dumped, mutation submitted or host lifecycle changed. Not production publication or native authentication acceptance."
+  },
+  "firefox52": {
+    "result": "PASS",
+    "exit": 0,
+    "actual": {
+      "startTime": "2026-11-10T11:16:08.631Z",
+      "duration": 105086.609,
+      "expected": 52,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "report": {
+      "path": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-cross-engine-firefox/results.json",
+      "sha256": "a6169434ee09e1373e16db26a4c6eb7cb9324237841efe114142c5bf5c89ad04"
+    },
+    "scope": "Existing52 unchanged client/fixture cases; native methods are mocked. No actual Firefox crypto/physical-device acceptance."
+  },
+  "firefox_real3": {
+    "result": "PASS",
+    "exit": 0,
+    "actual": {
+      "startTime": "2026-11-10T11:36:18.586Z",
+      "duration": 15314.077000000001,
+      "expected": 3,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "report": {
+      "path": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-cross-engine-firefox-real/results.json",
+      "sha256": "eee9bc2c67a61d0489575c9e59972552424e9f350987cd6f1feaab880f8cc0e7"
+    },
+    "scope": "Existing real password/session/operation-bound proof and Strict assertion, registration/SMTP, origin/CSRF. Not a native WebAuthn or physical-device proof."
+  },
+  "webkit_forced52": {
+    "result": "INTERRUPTED_NOT_COMPLETED",
+    "receipt": {
+      "path": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-cross-engine-webkit/interruption-receipt.json",
+      "sha256": "35641176ebea11f7b8319c8be3097355e2ef8bf618a896d080dfa10f317be720"
+    },
+    "boundary": "Root stopped the forced positive-native fixture profile after actual engine capability was established. One completed failure remains logged; no final52 JSON/count fabricated."
+  },
+  "webkit_real3": {
+    "result": "FAIL",
+    "exit": 1,
+    "actual": {
+      "startTime": "2026-11-10T11:21:14.885Z",
+      "duration": 30920.671,
+      "expected": 2,
+      "skipped": 0,
+      "unexpected": 1,
+      "flaky": 0
+    },
+    "report": {
+      "path": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-cross-engine-webkit-real/results.json",
+      "sha256": "a743eeedb85fdf7e49f4c719f5d445927f4c76c4ae619950da8a71d119a03776"
+    },
+    "passed": [
+      "real HTTPS registration and SMTP verification complete through the isolated starter",
+      "isolated host retains the real HTTPS origin and antiforgery boundaries"
+    ],
+    "failed": "verified local account signs in and completes operation-bound verification through the real BFF",
+    "failure": "At unchanged authentication-flow.spec.ts:14 cookie.sameSite expected Strict; context.cookies reported None after password owner operation completed. httpOnly/secure assertions passed. Server source requests Strict; header-vs-engine projection attribution is not established."
+  },
+  "webkit_unsupported_login": {
+    "result": "PASS",
+    "captures": 2,
+    "exit": 0,
+    "browser": "26.5",
+    "native_positive_status": "UNAVAILABLE_ENGINE_CAPABILITY",
+    "provenance": {
+      "path": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-webkit-unsupported-login/provenance.json",
+      "sha256": "7d1e613b8ccc3f2035410ca4069a2af26421a53dfd1391e620c20890b0612537"
+    },
+    "scope": "Unmocked actual Login with disabled passkey, published unsupported feedback, editable password fields/action, keyboard and zero-violation axe. Not Safari or physical-device coverage."
+  },
+  "actual_unmocked_api_probe": {
+    "ref": {
+      "path": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-cross-engine-native-api-probe.json",
+      "sha256": "d995031dee34f9dfd00f511a6d5d3ce86251cbdf9f7dc9ce76fd6d39ccec7a61"
+    },
+    "results": [
+      {
+        "engine": "firefox",
+        "browserVersion": "153.0",
+        "actualNativeApiPresence": {
+          "secureContext": true,
+          "publicKeyCredential": true,
+          "prototypePresent": true,
+          "parseCreationOptions": true,
+          "parseRequestOptions": true,
+          "credentialToJSON": true,
+          "credentialsCreate": true,
+          "credentialsGet": true
+        },
+        "allRequiredApisPresent": true,
+        "renderedPasskeyButtonEnabled": true,
+        "blockedMutationRequests": [],
+        "context": "Fresh anonymous actual-engine HTTPS page before any test fixture injection; no native create/get invocation or credential/cookie dump."
+      },
+      {
+        "engine": "webkit",
+        "browserVersion": "26.5",
+        "actualNativeApiPresence": {
+          "secureContext": true,
+          "publicKeyCredential": true,
+          "prototypePresent": false,
+          "parseCreationOptions": false,
+          "parseRequestOptions": false,
+          "credentialToJSON": false,
+          "credentialsCreate": false,
+          "credentialsGet": false
+        },
+        "allRequiredApisPresent": false,
+        "renderedPasskeyButtonEnabled": false,
+        "blockedMutationRequests": [],
+        "context": "Fresh anonymous actual-engine HTTPS page before any test fixture injection; no native create/get invocation or credential/cookie dump."
+      }
+    ],
+    "initial_probe_error": {
+      "path": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-cross-engine-native-api-probe-attempt-1.json",
+      "sha256": "da375433f92efd18f2eb2ff66173160134996026fa5f1395228acc795fb20d17"
+    }
+  },
+  "webkit_samesite_diagnostic": {
+    "findings": {
+      "path": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-webkit-samesite-diagnostic/findings.json",
+      "sha256": "d6d110579a1e5e49a9a1e7b9a81d1e90e0d0b30762ea78a720a7c48620dfdef8"
+    },
+    "assessment": {
+      "path": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-webkit-samesite-diagnostic/assessment.json",
+      "sha256": "4616ba63d522a668ea4b9c274a3eb76b994de6e909ec92cbf1abebed9a519726"
+    },
+    "result": "ORDINARY_STRICT_STEP_UP_SENT_CROSS_SITE_WITH_VALID_CONTROLS; ROUTED_OBSERVER_INCONCLUSIVE",
+    "scope": "Actual response flags confirm UserSessionLax and StepUpStrict, bothSecure/HttpOnly. ProjectionNone occurs before interception. Distinct-site browser-click navigation sends actualStrictStepUp in ordinary control. No cookie values persisted or policy/expectation changed."
+  },
+  "item_updates": [
+    {
+      "id": "U-AUTH-01",
+      "screenshots": [
+        {
+          "path": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-enabled-login-516ec00/login-enabled-1440.png",
+          "sha256": "1e0bef623ac22136fefbca0170e04e69fb2cfbd449fbcb2cb06d7e7013bc5e06",
+          "viewport": {
+            "width": 1440,
+            "height": 1024
+          },
+          "profile": "ACTUAL_EDGE_ENABLED_ANONYMOUS",
+          "figma": {
+            "file_key": "apNbwvAgdn1xIxYH1oiaSC",
+            "node_id": "2:4"
+          },
+          "consent": "governance/evidence/TUN-P2-007-VISUAL-CONSENT-20261109.json"
+        },
+        {
+          "path": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-enabled-login-516ec00/login-enabled-390.png",
+          "sha256": "cbe59cb806f561d284300a1447a8e0d3f11b48be35f4388479d72fe5bbb9b80e",
+          "viewport": {
+            "width": 390,
+            "height": 1024
+          },
+          "profile": "ACTUAL_EDGE_ENABLED_ANONYMOUS",
+          "figma": {
+            "file_key": "apNbwvAgdn1xIxYH1oiaSC",
+            "node_id": "2:4"
+          },
+          "consent": "governance/evidence/TUN-P2-007-VISUAL-CONSENT-20261109.json"
+        },
+        {
+          "path": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-enabled-login-516ec00/login-enabled-320.png",
+          "sha256": "60ec61a800356722500ca370c8b3b16d2980b0931a15109b2cd5fe18d2473873",
+          "viewport": {
+            "width": 320,
+            "height": 1024
+          },
+          "profile": "ACTUAL_EDGE_ENABLED_ANONYMOUS",
+          "figma": {
+            "file_key": "apNbwvAgdn1xIxYH1oiaSC",
+            "node_id": "2:4"
+          },
+          "consent": "governance/evidence/TUN-P2-007-VISUAL-CONSENT-20261109.json"
+        },
+        {
+          "path": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-webkit-unsupported-login/login-webkit-unsupported-1440.png",
+          "sha256": "e1c20fb66be7bf3246a5b4a687533ffa3d1aceadf5cd604ed2f85011d72455ed",
+          "viewport": {
+            "width": 1440,
+            "height": 1024
+          },
+          "profile": "ACTUAL_WINDOWS_WEBKIT_UNSUPPORTED_ANONYMOUS",
+          "figma": {
+            "file_key": "apNbwvAgdn1xIxYH1oiaSC",
+            "node_id": "2:4"
+          },
+          "consent": "governance/evidence/TUN-P2-007-VISUAL-CONSENT-20261109.json"
+        },
+        {
+          "path": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-webkit-unsupported-login/login-webkit-unsupported-320.png",
+          "sha256": "3104e69ecf46038e870e2a553d6e755c66f2da45914dd436edd253db38132d9c",
+          "viewport": {
+            "width": 320,
+            "height": 1024
+          },
+          "profile": "ACTUAL_WINDOWS_WEBKIT_UNSUPPORTED_ANONYMOUS",
+          "figma": {
+            "file_key": "apNbwvAgdn1xIxYH1oiaSC",
+            "node_id": "2:4"
+          },
+          "consent": "governance/evidence/TUN-P2-007-VISUAL-CONSENT-20261109.json"
+        }
+      ]
+    },
+    {
+      "id": "COMP-PASSKEY-SIGN-IN",
+      "screenshots": [
+        {
+          "path": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-enabled-login-516ec00/login-enabled-1440.png",
+          "sha256": "1e0bef623ac22136fefbca0170e04e69fb2cfbd449fbcb2cb06d7e7013bc5e06",
+          "viewport": {
+            "width": 1440,
+            "height": 1024
+          },
+          "profile": "ACTUAL_EDGE_ENABLED_ANONYMOUS",
+          "figma": {
+            "file_key": "apNbwvAgdn1xIxYH1oiaSC",
+            "node_id": "2:4"
+          },
+          "consent": "governance/evidence/TUN-P2-007-VISUAL-CONSENT-20261109.json"
+        },
+        {
+          "path": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-enabled-login-516ec00/login-enabled-390.png",
+          "sha256": "cbe59cb806f561d284300a1447a8e0d3f11b48be35f4388479d72fe5bbb9b80e",
+          "viewport": {
+            "width": 390,
+            "height": 1024
+          },
+          "profile": "ACTUAL_EDGE_ENABLED_ANONYMOUS",
+          "figma": {
+            "file_key": "apNbwvAgdn1xIxYH1oiaSC",
+            "node_id": "2:4"
+          },
+          "consent": "governance/evidence/TUN-P2-007-VISUAL-CONSENT-20261109.json"
+        },
+        {
+          "path": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-enabled-login-516ec00/login-enabled-320.png",
+          "sha256": "60ec61a800356722500ca370c8b3b16d2980b0931a15109b2cd5fe18d2473873",
+          "viewport": {
+            "width": 320,
+            "height": 1024
+          },
+          "profile": "ACTUAL_EDGE_ENABLED_ANONYMOUS",
+          "figma": {
+            "file_key": "apNbwvAgdn1xIxYH1oiaSC",
+            "node_id": "2:4"
+          },
+          "consent": "governance/evidence/TUN-P2-007-VISUAL-CONSENT-20261109.json"
+        },
+        {
+          "path": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-webkit-unsupported-login/login-webkit-unsupported-1440.png",
+          "sha256": "e1c20fb66be7bf3246a5b4a687533ffa3d1aceadf5cd604ed2f85011d72455ed",
+          "viewport": {
+            "width": 1440,
+            "height": 1024
+          },
+          "profile": "ACTUAL_WINDOWS_WEBKIT_UNSUPPORTED_ANONYMOUS",
+          "figma": {
+            "file_key": "apNbwvAgdn1xIxYH1oiaSC",
+            "node_id": "2:4"
+          },
+          "consent": "governance/evidence/TUN-P2-007-VISUAL-CONSENT-20261109.json"
+        },
+        {
+          "path": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-webkit-unsupported-login/login-webkit-unsupported-320.png",
+          "sha256": "3104e69ecf46038e870e2a553d6e755c66f2da45914dd436edd253db38132d9c",
+          "viewport": {
+            "width": 320,
+            "height": 1024
+          },
+          "profile": "ACTUAL_WINDOWS_WEBKIT_UNSUPPORTED_ANONYMOUS",
+          "figma": {
+            "file_key": "apNbwvAgdn1xIxYH1oiaSC",
+            "node_id": "2:4"
+          },
+          "consent": "governance/evidence/TUN-P2-007-VISUAL-CONSENT-20261109.json"
+        }
+      ]
+    }
+  ],
+  "limits": [
+    "No production/test/source/dist or fixture/expectation change was made. Artifact configs override engine/channel and output locations only.",
+    "Existing Edge119@80a and foundation16@35ef remain distinct unchanged evidence. Firefox52 is additional fixture evidence, not a native verifier test.",
+    "Prior hardcoded PNGs were copied before each engine could overwrite them. Source hashes/real asset hashes and safe content publication metadata are in capture provenance.",
+    "No credentials/native operations/cookie dumps occurred in anonymous captures/probes. Existing authorized real3 private test flows have their original behavior.",
+    "No WebKit security PASS, SameSite contract waiver, positive native crypto or Safari/physical-device acceptance is inferred. Root decides required diagnosis and further cohorts.",
+    "All owned browsers/helpers closed; existing HTTPS host was left running."
+  ]
+}

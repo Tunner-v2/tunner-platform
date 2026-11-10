@@ -2,8 +2,8 @@
   "schema_version": 1,
   "result": "PRESERVED_EXECUTION_EVIDENCE",
   "scope_id": "TUN-P2-007",
-  "recorded_at": "2026-11-10T12:15:56.413Z",
-  "normalization": "Original files remain in execution artifacts. Portable UTF8 strips BOM, usesLF and substitutes checkout root with <repo-root>; TRX XML-escapes the placeholder. PNG bytes unchanged. Embedded raw input digests remain original; each row records raw and portable hashes. One duplicate historical source patch is explicitly replaced by immutable Git comparison plus original patch digest, recorded on its row; no scanner controls or test outcomes change. Portable terminal trailing whitespace is trimmed where present, with each affected row explicitly marked; original raw logs remain unchanged.",
+  "recorded_at": "2026-11-10T12:36:44.194Z",
+  "normalization": "Original files remain in execution artifacts. Portable UTF8 strips BOM, usesLF and substitutes checkout root with <repo-root>; TRX XML-escapes the placeholder. PNG bytes unchanged. Embedded raw input digests remain original; each row records raw and portable hashes. One duplicate historical source patch is explicitly replaced by immutable Git comparison plus original patch digest, recorded on its row; no scanner controls or test outcomes change. Portable terminal trailing whitespace is trimmed where present, with each affected row explicitly marked; original raw logs remain unchanged. Failed CLI-launch image rows are explicitly classified preexisting/unbound; they are not evidence of a render or executed test. New long Playwright case paths are compacted using deterministic case hashes; original source paths and prior portable spellings remain recorded on rows, bytes unchanged. Already committed historical copies remain in place.",
   "files": [
     {
       "group": "architecture-current",
@@ -61,6 +61,286 @@
       "transformations": [
         "Portable copy removes terminal trailing whitespace only; original raw evidence hash retained."
       ]
+    },
+    {
+      "group": "browser-current-firefox",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-745f9c2-firefox/add-1440.png",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/browser/current-firefox/add-1440.png",
+      "source_sha256": "d230eca7250295ce6f4dc3a90d3449307ee0e08fd5e956a1cadc78f7afd8caad",
+      "sha256": "d230eca7250295ce6f4dc3a90d3449307ee0e08fd5e956a1cadc78f7afd8caad",
+      "bytes": 99159,
+      "transformed": false
+    },
+    {
+      "group": "browser-current-firefox",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-745f9c2-firefox/add-320.png",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/browser/current-firefox/add-320.png",
+      "source_sha256": "d35cf6b14793b77c9c8061aeafbddb242a5c1d7687c6c87b22fe0d3c07bc31f7",
+      "sha256": "d35cf6b14793b77c9c8061aeafbddb242a5c1d7687c6c87b22fe0d3c07bc31f7",
+      "bytes": 47246,
+      "transformed": false
+    },
+    {
+      "group": "browser-current-firefox",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-745f9c2-firefox/add-390.png",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/browser/current-firefox/add-390.png",
+      "source_sha256": "b1663f13830afd7d97b825e74decd927fd5bf2833751d25d38a3403fb47c047c",
+      "sha256": "b1663f13830afd7d97b825e74decd927fd5bf2833751d25d38a3403fb47c047c",
+      "bytes": 52350,
+      "transformed": false
+    },
+    {
+      "group": "browser-current-firefox",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-745f9c2-firefox/add-768.png",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/browser/current-firefox/add-768.png",
+      "source_sha256": "0d811adbdef2d8850a3b6a9f2f8ec902a736708a59f6ed76f961648a8610aff8",
+      "sha256": "0d811adbdef2d8850a3b6a9f2f8ec902a736708a59f6ed76f961648a8610aff8",
+      "bytes": 73484,
+      "transformed": false
+    },
+    {
+      "group": "browser-current-firefox",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-745f9c2-firefox/run-details/passkeys--feedback-regress-528bd-thout-replacing-the-request/revoke-unknown-closed.png",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/browser/current-firefox/cases/0bc36610bac7/revoke-unknown-closed.png",
+      "source_sha256": "e07eb680d2869423448dc291625db050ab7f37eb395b5fa4c91b3f9625299381",
+      "sha256": "e07eb680d2869423448dc291625db050ab7f37eb395b5fa4c91b3f9625299381",
+      "bytes": 104255,
+      "transformed": false,
+      "portable_path_compacted_from": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/browser/current-firefox/run-details/passkeys--feedback-regress-528bd-thout-replacing-the-request/revoke-unknown-closed.png"
+    },
+    {
+      "group": "browser-current-firefox",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-745f9c2-firefox/run-details/navigation-Approved-Ready--045ea-yboard-and-geometry-at-1440/ready-navigation-1440.png",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/browser/current-firefox/cases/313283c817dc/ready-navigation-1440.png",
+      "source_sha256": "d10c1902e4a22d3c2ec217d10e6dd729f89a8d64b5eee727bd844a3cb74fb9a2",
+      "sha256": "d10c1902e4a22d3c2ec217d10e6dd729f89a8d64b5eee727bd844a3cb74fb9a2",
+      "bytes": 259744,
+      "transformed": false,
+      "portable_path_compacted_from": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/browser/current-firefox/run-details/navigation-Approved-Ready--045ea-yboard-and-geometry-at-1440/ready-navigation-1440.png"
+    },
+    {
+      "group": "browser-current-firefox",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-745f9c2-firefox/run-details/navigation-Approved-Ready--045ea-yboard-and-geometry-at-1440/signed-in-navigation-1440.png",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/browser/current-firefox/cases/313283c817dc/signed-in-navigation-1440.png",
+      "source_sha256": "8f22d732feb4164764322551f52e39cbe19bf66af8f56b8ec9545c0bbf29c8b1",
+      "sha256": "8f22d732feb4164764322551f52e39cbe19bf66af8f56b8ec9545c0bbf29c8b1",
+      "bytes": 255882,
+      "transformed": false,
+      "portable_path_compacted_from": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/browser/current-firefox/run-details/navigation-Approved-Ready--045ea-yboard-and-geometry-at-1440/signed-in-navigation-1440.png"
+    },
+    {
+      "group": "browser-current-firefox",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-745f9c2-firefox/run-details/navigation-Approved-Ready--86776-eyboard-and-geometry-at-390/signed-in-navigation-390.png",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/browser/current-firefox/cases/65980af791ff/signed-in-navigation-390.png",
+      "source_sha256": "b37dfb4fc6e5b6499b0577b75a434ad55c4556bfb06b455284a79f35a44b45e9",
+      "sha256": "b37dfb4fc6e5b6499b0577b75a434ad55c4556bfb06b455284a79f35a44b45e9",
+      "bytes": 66829,
+      "transformed": false,
+      "portable_path_compacted_from": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/browser/current-firefox/run-details/navigation-Approved-Ready--86776-eyboard-and-geometry-at-390/signed-in-navigation-390.png"
+    },
+    {
+      "group": "browser-current-firefox",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-745f9c2-firefox/run-details/navigation-Approved-Ready--6bc49-eyboard-and-geometry-at-320/signed-in-navigation-320.png",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/browser/current-firefox/cases/6599bf2ad5ee/signed-in-navigation-320.png",
+      "source_sha256": "b8cb4768b34e884f22c3a8a6990fea79a0ae44bc4c52ac77666268bd3575c552",
+      "sha256": "b8cb4768b34e884f22c3a8a6990fea79a0ae44bc4c52ac77666268bd3575c552",
+      "bytes": 60551,
+      "transformed": false,
+      "portable_path_compacted_from": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/browser/current-firefox/run-details/navigation-Approved-Ready--6bc49-eyboard-and-geometry-at-320/signed-in-navigation-320.png"
+    },
+    {
+      "group": "browser-current-firefox",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-745f9c2-firefox/run-details/passkeys--feedback-regress-f63ef-thout-replacing-the-request/enroll-unknown-closed.png",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/browser/current-firefox/cases/95fa2eaf7f7e/enroll-unknown-closed.png",
+      "source_sha256": "8b6ccb28f3160920e959d64ed10980012afdf760553928cea669b8d572a4ffe1",
+      "sha256": "8b6ccb28f3160920e959d64ed10980012afdf760553928cea669b8d572a4ffe1",
+      "bytes": 100265,
+      "transformed": false,
+      "portable_path_compacted_from": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/browser/current-firefox/run-details/passkeys--feedback-regress-f63ef-thout-replacing-the-request/enroll-unknown-closed.png"
+    },
+    {
+      "group": "browser-current-firefox",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-745f9c2-firefox/run-details/passkeys--feedback-regress-738d8-ion-without-another-attempt/login-native-cancel-focus.png",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/browser/current-firefox/cases/b3df849eb5a9/login-native-cancel-focus.png",
+      "source_sha256": "2f4d69fde4f021f7a71ba214148215cb3c4f3c297f3b2c933f6137e9731e46ab",
+      "sha256": "2f4d69fde4f021f7a71ba214148215cb3c4f3c297f3b2c933f6137e9731e46ab",
+      "bytes": 264688,
+      "transformed": false,
+      "portable_path_compacted_from": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/browser/current-firefox/run-details/passkeys--feedback-regress-738d8-ion-without-another-attempt/login-native-cancel-focus.png"
+    },
+    {
+      "group": "browser-current-firefox",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-745f9c2-firefox/run-details/passkeys--feedback-regress-9c709-focus-or-submit-credentials/aborted-login-new-route-focus.png",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/browser/current-firefox/cases/de40258d6b57/aborted-login-new-route-focus.png",
+      "source_sha256": "a32d339b5984177e412b27639ff36bc4ad6b79a4a5809e9debb6f58cba82dcf1",
+      "sha256": "a32d339b5984177e412b27639ff36bc4ad6b79a4a5809e9debb6f58cba82dcf1",
+      "bytes": 255434,
+      "transformed": false,
+      "portable_path_compacted_from": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/browser/current-firefox/run-details/passkeys--feedback-regress-9c709-focus-or-submit-credentials/aborted-login-new-route-focus.png"
+    },
+    {
+      "group": "browser-current-firefox",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-745f9c2-firefox/run-details/step-up-passkey--feedback--110b3-ng-or-replacing-its-binding/unresolved-proof-owner-recovery-focus.png",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/browser/current-firefox/cases/eef0e8c337e4/unresolved-proof-owner-recovery-focus.png",
+      "source_sha256": "48ea28dc998695e945bc038f44736900ad2bf2fb44dbe6a297684cc7275cdf90",
+      "sha256": "48ea28dc998695e945bc038f44736900ad2bf2fb44dbe6a297684cc7275cdf90",
+      "bytes": 101402,
+      "transformed": false,
+      "portable_path_compacted_from": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/browser/current-firefox/run-details/step-up-passkey--feedback--110b3-ng-or-replacing-its-binding/unresolved-proof-owner-recovery-focus.png"
+    },
+    {
+      "group": "browser-current-firefox",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-745f9c2-firefox/run-details/passkeys--feedback-regress-22335-nd-never-resubmits-on-focus/login-uncertain-recovery-focus.png",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/browser/current-firefox/cases/fc56565824c0/login-uncertain-recovery-focus.png",
+      "source_sha256": "f6c4320e9643615b18ee7398ce2f656da0ecd31ce148292f3c857c1971b23e49",
+      "sha256": "f6c4320e9643615b18ee7398ce2f656da0ecd31ce148292f3c857c1971b23e49",
+      "bytes": 263105,
+      "transformed": false,
+      "portable_path_compacted_from": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/browser/current-firefox/run-details/passkeys--feedback-regress-22335-nd-never-resubmits-on-focus/login-uncertain-recovery-focus.png"
+    },
+    {
+      "group": "browser-current-firefox",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-745f9c2-firefox/exit-code.txt",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/browser/current-firefox/exit-code.txt",
+      "source_sha256": "13bf7b3039c63bf5a50491fa3cfd8eb4e699d1ba1436315aef9cbe5711530354",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "bytes": 2,
+      "transformed": true
+    },
+    {
+      "group": "browser-current-firefox",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-745f9c2-firefox/methods-1440.png",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/browser/current-firefox/methods-1440.png",
+      "source_sha256": "5968bb2fc83e0c3b8e87a292240a74f9013cbea1ab54bdccedf182b0685e14f5",
+      "sha256": "5968bb2fc83e0c3b8e87a292240a74f9013cbea1ab54bdccedf182b0685e14f5",
+      "bytes": 88904,
+      "transformed": false
+    },
+    {
+      "group": "browser-current-firefox",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-745f9c2-firefox/methods-320.png",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/browser/current-firefox/methods-320.png",
+      "source_sha256": "8db667c5a8fb3f9337884562d5c22d16899c4f956bf199b1615a634166cefd59",
+      "sha256": "8db667c5a8fb3f9337884562d5c22d16899c4f956bf199b1615a634166cefd59",
+      "bytes": 54657,
+      "transformed": false
+    },
+    {
+      "group": "browser-current-firefox",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-745f9c2-firefox/methods-390.png",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/browser/current-firefox/methods-390.png",
+      "source_sha256": "f91e8daaa7026aa21b7148f5450d975d16f84940134d73e6e1517cca737c9e86",
+      "sha256": "f91e8daaa7026aa21b7148f5450d975d16f84940134d73e6e1517cca737c9e86",
+      "bytes": 54681,
+      "transformed": false
+    },
+    {
+      "group": "browser-current-firefox",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-745f9c2-firefox/methods-768.png",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/browser/current-firefox/methods-768.png",
+      "source_sha256": "f26ed502475c93135eed3636362037b080b9d63cfed54ad2cc56943c68d264f1",
+      "sha256": "f26ed502475c93135eed3636362037b080b9d63cfed54ad2cc56943c68d264f1",
+      "bytes": 80072,
+      "transformed": false
+    },
+    {
+      "group": "browser-current-firefox",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-745f9c2-firefox/playwright.log",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/browser/current-firefox/playwright.log",
+      "source_sha256": "4f767db05082c7b0071931b4427d7e13c1f985b6f49fe4a7a50f374b6b3bb316",
+      "sha256": "7bca712cb7c506990f99da93e60936a7bcd36b9784cb4e43472ee510f8763aa2",
+      "bytes": 9419,
+      "transformed": true
+    },
+    {
+      "group": "browser-current-firefox",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-745f9c2-firefox/results.json",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/browser/current-firefox/results.json",
+      "source_sha256": "b291f702ee68e1009c4d9cb67c7fc88bc80d6b5da24d92296eb7055c581afb61",
+      "sha256": "d8c77bc6651c01817ba92a6d332b989caffd484c227ae91bd2fcb98abdb3da20",
+      "bytes": 320699,
+      "transformed": true
+    },
+    {
+      "group": "browser-current-firefox",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-745f9c2-firefox/run-details/.last-run.json",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/browser/current-firefox/run-details/.last-run.json",
+      "source_sha256": "91d1c43004802cd49950d78eb11c8fa7d05da8ffffe219a8b13b2f561bc00903",
+      "sha256": "91d1c43004802cd49950d78eb11c8fa7d05da8ffffe219a8b13b2f561bc00903",
+      "bytes": 45,
+      "transformed": false
+    },
+    {
+      "group": "browser-current-firefox",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-745f9c2-firefox/run-details/navigation-Approved-Ready--6bc49-eyboard-and-geometry-at-320/ready-navigation-320.png",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/browser/current-firefox/run-details/navigation-Approved-Ready--6bc49-eyboard-and-geometry-at-320/ready-navigation-320.png",
+      "source_sha256": "b14f1a0d2f84ccc999556933a9b48a944033b28d8ba24d77157045bcc3cdd9b1",
+      "sha256": "b14f1a0d2f84ccc999556933a9b48a944033b28d8ba24d77157045bcc3cdd9b1",
+      "bytes": 61935,
+      "transformed": false
+    },
+    {
+      "group": "browser-current-firefox",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-745f9c2-firefox/run-details/navigation-Approved-Ready--86776-eyboard-and-geometry-at-390/ready-navigation-390.png",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/browser/current-firefox/run-details/navigation-Approved-Ready--86776-eyboard-and-geometry-at-390/ready-navigation-390.png",
+      "source_sha256": "a2055559919485393e197837844534c9ea9a0adcf8143ad6a95e89d48a1472a9",
+      "sha256": "a2055559919485393e197837844534c9ea9a0adcf8143ad6a95e89d48a1472a9",
+      "bytes": 69728,
+      "transformed": false
+    },
+    {
+      "group": "browser-current-firefox",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-745f9c2-firefox/run-details/passkeys--feedback-regress-5f307-ion-without-another-attempt/login-http-429-focus.png",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/browser/current-firefox/run-details/passkeys--feedback-regress-5f307-ion-without-another-attempt/login-http-429-focus.png",
+      "source_sha256": "d56d5e691e841f5c3b781095846ea7ea37c311cfbe70cd2c8aa29c14e74184eb",
+      "sha256": "d56d5e691e841f5c3b781095846ea7ea37c311cfbe70cd2c8aa29c14e74184eb",
+      "bytes": 264036,
+      "transformed": false
+    },
+    {
+      "group": "browser-current-firefox",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-745f9c2-firefox/run-details/passkeys--feedback-regress-edc5f-op-dialog-without-scrolling/remove-error-desktop.png",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/browser/current-firefox/run-details/passkeys--feedback-regress-edc5f-op-dialog-without-scrolling/remove-error-desktop.png",
+      "source_sha256": "78dc00ad1c57a8323709c311af08c41a36106da4e7e40eeb021cd4caba78038b",
+      "sha256": "78dc00ad1c57a8323709c311af08c41a36106da4e7e40eeb021cd4caba78038b",
+      "bytes": 117099,
+      "transformed": false
+    },
+    {
+      "group": "browser-current-firefox",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-745f9c2-firefox/run-details/step-up-passkey-Shared-nat-26fc7-e-approved-overlay-at-320px/native-proof-320.png",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/browser/current-firefox/run-details/step-up-passkey-Shared-nat-26fc7-e-approved-overlay-at-320px/native-proof-320.png",
+      "source_sha256": "0451a5ecdb6906b934a31ecabd70026403b0a74804cf947b1d6dfd5eb901d1d5",
+      "sha256": "0451a5ecdb6906b934a31ecabd70026403b0a74804cf947b1d6dfd5eb901d1d5",
+      "bytes": 63110,
+      "transformed": false
+    },
+    {
+      "group": "browser-current-firefox",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-745f9c2-firefox/run-details/step-up-passkey-Shared-nat-381e3--approved-overlay-at-1440px/native-proof-1440.png",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/browser/current-firefox/run-details/step-up-passkey-Shared-nat-381e3--approved-overlay-at-1440px/native-proof-1440.png",
+      "source_sha256": "7ad7af2d252c01565489bff0a69e713eb2b6578843dbffc198e7d3b4b66c9775",
+      "sha256": "7ad7af2d252c01565489bff0a69e713eb2b6578843dbffc198e7d3b4b66c9775",
+      "bytes": 114139,
+      "transformed": false
+    },
+    {
+      "group": "browser-current-firefox",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-745f9c2-firefox/run-details/step-up-passkey-Shared-nat-3e7d6-e-approved-overlay-at-390px/native-proof-390.png",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/browser/current-firefox/run-details/step-up-passkey-Shared-nat-3e7d6-e-approved-overlay-at-390px/native-proof-390.png",
+      "source_sha256": "cecac8b468fa7d5ebf41ec30be6218c86b60ec7a5791930d70b57bd461011939",
+      "sha256": "cecac8b468fa7d5ebf41ec30be6218c86b60ec7a5791930d70b57bd461011939",
+      "bytes": 62947,
+      "transformed": false
+    },
+    {
+      "group": "browser-current-firefox",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-745f9c2-firefox/source-sha.txt",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/browser/current-firefox/source-sha.txt",
+      "source_sha256": "947f0a59c3cb6e3f137e9f09b995647026ae69e29ce74f2feb09ad97042f988f",
+      "sha256": "762bd2764335e086c51ae91f8937a7d8efd17589b158f5067c40ed9254ebd6a0",
+      "bytes": 41,
+      "transformed": true
     },
     {
       "group": "firefox-real",
@@ -718,6 +998,381 @@
       "source_sha256": "b2aef847251cc1e75a6a700e3169e3e136d2f7df9fd393ea81ab83cdbbb54eb6",
       "sha256": "d78382cf5082ea28e7acfbac893a2402fe248b2d1efe99723be5e6d24daa505a",
       "bytes": 480,
+      "transformed": true
+    },
+    {
+      "group": "failures-background-completion-wait",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-b0c0442-edge/add-1440.png",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/failures/background-completion-wait/add-1440.png",
+      "source_sha256": "a79930cfac7c204e0f01309e4623e0459a5f29c9eacf6a4e515f074ad4dae639",
+      "sha256": "a79930cfac7c204e0f01309e4623e0459a5f29c9eacf6a4e515f074ad4dae639",
+      "bytes": 106995,
+      "transformed": false
+    },
+    {
+      "group": "failures-background-completion-wait",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-b0c0442-edge/add-320.png",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/failures/background-completion-wait/add-320.png",
+      "source_sha256": "1a20f890c00aedf9ab610f8caa1ebeee40ac48e5f333f539acb99f1b4f8a02cf",
+      "sha256": "1a20f890c00aedf9ab610f8caa1ebeee40ac48e5f333f539acb99f1b4f8a02cf",
+      "bytes": 57951,
+      "transformed": false
+    },
+    {
+      "group": "failures-background-completion-wait",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-b0c0442-edge/add-390.png",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/failures/background-completion-wait/add-390.png",
+      "source_sha256": "3c2a4bdd396eb729a99895133a30836e388147fbb8f20aa329e5d2032f538952",
+      "sha256": "3c2a4bdd396eb729a99895133a30836e388147fbb8f20aa329e5d2032f538952",
+      "bytes": 64321,
+      "transformed": false
+    },
+    {
+      "group": "failures-background-completion-wait",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-b0c0442-edge/add-768.png",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/failures/background-completion-wait/add-768.png",
+      "source_sha256": "3bc9c5305e7641f8000953d94f37bb65dc28e0aa75cb30c46eb0d83c0bc2bb37",
+      "sha256": "3bc9c5305e7641f8000953d94f37bb65dc28e0aa75cb30c46eb0d83c0bc2bb37",
+      "bytes": 83598,
+      "transformed": false
+    },
+    {
+      "group": "failures-background-completion-wait",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-b0c0442-edge/run-details/passkeys--feedback-regress-528bd-thout-replacing-the-request/revoke-unknown-closed.png",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/failures/background-completion-wait/cases/0bc36610bac7/revoke-unknown-closed.png",
+      "source_sha256": "fc76a52f66af8f671aaaa0a532ac3fbe2fa4a6c0f61adee34f81045b5dbbf5b0",
+      "sha256": "fc76a52f66af8f671aaaa0a532ac3fbe2fa4a6c0f61adee34f81045b5dbbf5b0",
+      "bytes": 122226,
+      "transformed": false,
+      "portable_path_compacted_from": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/failures/background-completion-wait/run-details/passkeys--feedback-regress-528bd-thout-replacing-the-request/revoke-unknown-closed.png"
+    },
+    {
+      "group": "failures-background-completion-wait",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-b0c0442-edge/run-details/navigation-Approved-Ready--045ea-yboard-and-geometry-at-1440/ready-navigation-1440.png",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/failures/background-completion-wait/cases/313283c817dc/ready-navigation-1440.png",
+      "source_sha256": "fac7afad6c31a834aff47aa36300d0ed314c2e0b1c6edcf64623350af3eb4059",
+      "sha256": "fac7afad6c31a834aff47aa36300d0ed314c2e0b1c6edcf64623350af3eb4059",
+      "bytes": 94105,
+      "transformed": false,
+      "portable_path_compacted_from": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/failures/background-completion-wait/run-details/navigation-Approved-Ready--045ea-yboard-and-geometry-at-1440/ready-navigation-1440.png"
+    },
+    {
+      "group": "failures-background-completion-wait",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-b0c0442-edge/run-details/navigation-Approved-Ready--045ea-yboard-and-geometry-at-1440/signed-in-navigation-1440.png",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/failures/background-completion-wait/cases/313283c817dc/signed-in-navigation-1440.png",
+      "source_sha256": "5c74205567968b33fa7857483f4ff1ced4fe6ef2ea84d05263137ca0a809b9dd",
+      "sha256": "5c74205567968b33fa7857483f4ff1ced4fe6ef2ea84d05263137ca0a809b9dd",
+      "bytes": 91636,
+      "transformed": false,
+      "portable_path_compacted_from": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/failures/background-completion-wait/run-details/navigation-Approved-Ready--045ea-yboard-and-geometry-at-1440/signed-in-navigation-1440.png"
+    },
+    {
+      "group": "failures-background-completion-wait",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-b0c0442-edge/run-details/navigation-Approved-Ready--86776-eyboard-and-geometry-at-390/ready-navigation-390.png",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/failures/background-completion-wait/cases/65980af791ff/ready-navigation-390.png",
+      "source_sha256": "08836a8d2b1dd612edc1986736e477cac716e8615abb78905299b361bf10f0c0",
+      "sha256": "08836a8d2b1dd612edc1986736e477cac716e8615abb78905299b361bf10f0c0",
+      "bytes": 46658,
+      "transformed": false,
+      "portable_path_compacted_from": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/failures/background-completion-wait/run-details/navigation-Approved-Ready--86776-eyboard-and-geometry-at-390/ready-navigation-390.png"
+    },
+    {
+      "group": "failures-background-completion-wait",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-b0c0442-edge/run-details/navigation-Approved-Ready--86776-eyboard-and-geometry-at-390/signed-in-navigation-390.png",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/failures/background-completion-wait/cases/65980af791ff/signed-in-navigation-390.png",
+      "source_sha256": "c3a8dae2a0b8e57194019163fb037b92da17eb456a79b0bbf905b74b5790406f",
+      "sha256": "c3a8dae2a0b8e57194019163fb037b92da17eb456a79b0bbf905b74b5790406f",
+      "bytes": 44289,
+      "transformed": false,
+      "portable_path_compacted_from": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/failures/background-completion-wait/run-details/navigation-Approved-Ready--86776-eyboard-and-geometry-at-390/signed-in-navigation-390.png"
+    },
+    {
+      "group": "failures-background-completion-wait",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-b0c0442-edge/run-details/navigation-Approved-Ready--6bc49-eyboard-and-geometry-at-320/ready-navigation-320.png",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/failures/background-completion-wait/cases/6599bf2ad5ee/ready-navigation-320.png",
+      "source_sha256": "6c12d71d559aac6c6c9af6bcb8e9b6fac738957cd8a2a1f892b22f4973d45bc0",
+      "sha256": "6c12d71d559aac6c6c9af6bcb8e9b6fac738957cd8a2a1f892b22f4973d45bc0",
+      "bytes": 44246,
+      "transformed": false,
+      "portable_path_compacted_from": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/failures/background-completion-wait/run-details/navigation-Approved-Ready--6bc49-eyboard-and-geometry-at-320/ready-navigation-320.png"
+    },
+    {
+      "group": "failures-background-completion-wait",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-b0c0442-edge/run-details/navigation-Approved-Ready--6bc49-eyboard-and-geometry-at-320/signed-in-navigation-320.png",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/failures/background-completion-wait/cases/6599bf2ad5ee/signed-in-navigation-320.png",
+      "source_sha256": "7dcaef4ba76df8bf6236659831a9ef51083348288d8c699d6e1ed742783fbfd8",
+      "sha256": "7dcaef4ba76df8bf6236659831a9ef51083348288d8c699d6e1ed742783fbfd8",
+      "bytes": 41414,
+      "transformed": false,
+      "portable_path_compacted_from": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/failures/background-completion-wait/run-details/navigation-Approved-Ready--6bc49-eyboard-and-geometry-at-320/signed-in-navigation-320.png"
+    },
+    {
+      "group": "failures-background-completion-wait",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-b0c0442-edge/run-details/step-up-passkey-Shared-nat-381e3--approved-overlay-at-1440px/native-proof-1440.png",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/failures/background-completion-wait/cases/690e8e1a13e7/native-proof-1440.png",
+      "source_sha256": "5180e83af255ff55678a9ff510cb980dc1380de884a81369a1814b0ae68773f8",
+      "sha256": "5180e83af255ff55678a9ff510cb980dc1380de884a81369a1814b0ae68773f8",
+      "bytes": 125176,
+      "transformed": false,
+      "portable_path_compacted_from": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/failures/background-completion-wait/run-details/step-up-passkey-Shared-nat-381e3--approved-overlay-at-1440px/native-proof-1440.png"
+    },
+    {
+      "group": "failures-background-completion-wait",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-b0c0442-edge/run-details/passkeys--feedback-regress-5f307-ion-without-another-attempt/login-http-429-focus.png",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/failures/background-completion-wait/cases/70325a41a115/login-http-429-focus.png",
+      "source_sha256": "d0e5e896045aba236fa85cd32d3df30bf2b6a9eee2563dce09fd569884a60eb8",
+      "sha256": "d0e5e896045aba236fa85cd32d3df30bf2b6a9eee2563dce09fd569884a60eb8",
+      "bytes": 103642,
+      "transformed": false,
+      "portable_path_compacted_from": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/failures/background-completion-wait/run-details/passkeys--feedback-regress-5f307-ion-without-another-attempt/login-http-429-focus.png"
+    },
+    {
+      "group": "failures-background-completion-wait",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-b0c0442-edge/run-details/passkeys--feedback-regress-edc5f-op-dialog-without-scrolling/remove-error-desktop.png",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/failures/background-completion-wait/cases/9122f6ab1cdc/remove-error-desktop.png",
+      "source_sha256": "56590b46c3dbb57b59d1f3f2ff4debbd62839f29070c9c2018e890565b6ef262",
+      "sha256": "56590b46c3dbb57b59d1f3f2ff4debbd62839f29070c9c2018e890565b6ef262",
+      "bytes": 132025,
+      "transformed": false,
+      "portable_path_compacted_from": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/failures/background-completion-wait/run-details/passkeys--feedback-regress-edc5f-op-dialog-without-scrolling/remove-error-desktop.png"
+    },
+    {
+      "group": "failures-background-completion-wait",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-b0c0442-edge/run-details/passkeys--feedback-regress-f63ef-thout-replacing-the-request/enroll-unknown-closed.png",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/failures/background-completion-wait/cases/95fa2eaf7f7e/enroll-unknown-closed.png",
+      "source_sha256": "5f8f0e3a7b9432cf89273433371e5a7ace9c85eb003f78469c291547c708ae74",
+      "sha256": "5f8f0e3a7b9432cf89273433371e5a7ace9c85eb003f78469c291547c708ae74",
+      "bytes": 117126,
+      "transformed": false,
+      "portable_path_compacted_from": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/failures/background-completion-wait/run-details/passkeys--feedback-regress-f63ef-thout-replacing-the-request/enroll-unknown-closed.png"
+    },
+    {
+      "group": "failures-background-completion-wait",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-b0c0442-edge/run-details/passkeys--feedback-regress-738d8-ion-without-another-attempt/login-native-cancel-focus.png",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/failures/background-completion-wait/cases/b3df849eb5a9/login-native-cancel-focus.png",
+      "source_sha256": "92e9fff4d71d93b7d695ff70c82b73b1a872afed33ca18add0a6e03090818e7a",
+      "sha256": "92e9fff4d71d93b7d695ff70c82b73b1a872afed33ca18add0a6e03090818e7a",
+      "bytes": 106008,
+      "transformed": false,
+      "portable_path_compacted_from": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/failures/background-completion-wait/run-details/passkeys--feedback-regress-738d8-ion-without-another-attempt/login-native-cancel-focus.png"
+    },
+    {
+      "group": "failures-background-completion-wait",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-b0c0442-edge/run-details/step-up-passkey-Shared-nat-26fc7-e-approved-overlay-at-320px/native-proof-320.png",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/failures/background-completion-wait/cases/c8ec2e3a549f/native-proof-320.png",
+      "source_sha256": "20097eaa6eaf6dfd8b87854667a5c7e3331f0597f4819dfda72c4c2953c37245",
+      "sha256": "20097eaa6eaf6dfd8b87854667a5c7e3331f0597f4819dfda72c4c2953c37245",
+      "bytes": 79382,
+      "transformed": false,
+      "portable_path_compacted_from": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/failures/background-completion-wait/run-details/step-up-passkey-Shared-nat-26fc7-e-approved-overlay-at-320px/native-proof-320.png"
+    },
+    {
+      "group": "failures-background-completion-wait",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-b0c0442-edge/run-details/passkeys--feedback-regress-9c709-focus-or-submit-credentials/aborted-login-new-route-focus.png",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/failures/background-completion-wait/cases/de40258d6b57/aborted-login-new-route-focus.png",
+      "source_sha256": "d645b0879898fd66f7f74744af481ca78d3fe0cae52bd7f2584ad4be1dbb3fdb",
+      "sha256": "d645b0879898fd66f7f74744af481ca78d3fe0cae52bd7f2584ad4be1dbb3fdb",
+      "bytes": 91956,
+      "transformed": false,
+      "portable_path_compacted_from": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/failures/background-completion-wait/run-details/passkeys--feedback-regress-9c709-focus-or-submit-credentials/aborted-login-new-route-focus.png"
+    },
+    {
+      "group": "failures-background-completion-wait",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-b0c0442-edge/run-details/step-up-passkey-Shared-nat-3e7d6-e-approved-overlay-at-390px/native-proof-390.png",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/failures/background-completion-wait/cases/e2da6c2fc362/native-proof-390.png",
+      "source_sha256": "2f65bb19532e7c29814c649737722791d8ed12251c52a46653983cfab674c5f9",
+      "sha256": "2f65bb19532e7c29814c649737722791d8ed12251c52a46653983cfab674c5f9",
+      "bytes": 77642,
+      "transformed": false,
+      "portable_path_compacted_from": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/failures/background-completion-wait/run-details/step-up-passkey-Shared-nat-3e7d6-e-approved-overlay-at-390px/native-proof-390.png"
+    },
+    {
+      "group": "failures-background-completion-wait",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-b0c0442-edge/run-details/step-up-passkey-Lost-compl-9243a-ther-native-get-or-mutation/error-context.md",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/failures/background-completion-wait/cases/ebc5f958d0a0/error-context.md",
+      "source_sha256": "63b090b8c081d8772dee456518dfab69e67c9b894d2e8c72a3cd53ed09b3bd6a",
+      "sha256": "bea9f13637d617cb369ef312f0ff6cf2f94e6522189490ff54cd5425ac87887c",
+      "bytes": 20585,
+      "transformed": true,
+      "transformations": [
+        "Portable terminal trailing whitespace trimmed; raw original hash retained."
+      ],
+      "portable_path_compacted_from": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/failures/background-completion-wait/run-details/step-up-passkey-Lost-compl-9243a-ther-native-get-or-mutation/error-context.md"
+    },
+    {
+      "group": "failures-background-completion-wait",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-b0c0442-edge/run-details/step-up-passkey--feedback--110b3-ng-or-replacing-its-binding/unresolved-proof-owner-recovery-focus.png",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/failures/background-completion-wait/cases/eef0e8c337e4/unresolved-proof-owner-recovery-focus.png",
+      "source_sha256": "34aa8b27d04a304d2442c3750282befd1322d7964ebdd2313e6aa173156cf360",
+      "sha256": "34aa8b27d04a304d2442c3750282befd1322d7964ebdd2313e6aa173156cf360",
+      "bytes": 118549,
+      "transformed": false,
+      "portable_path_compacted_from": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/failures/background-completion-wait/run-details/step-up-passkey--feedback--110b3-ng-or-replacing-its-binding/unresolved-proof-owner-recovery-focus.png"
+    },
+    {
+      "group": "failures-background-completion-wait",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-b0c0442-edge/run-details/passkeys--feedback-regress-22335-nd-never-resubmits-on-focus/login-uncertain-recovery-focus.png",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/failures/background-completion-wait/cases/fc56565824c0/login-uncertain-recovery-focus.png",
+      "source_sha256": "0c308df931cc980b4ba04af3976da369493a60158c67e52cdfdfe4d7ccc70802",
+      "sha256": "0c308df931cc980b4ba04af3976da369493a60158c67e52cdfdfe4d7ccc70802",
+      "bytes": 108026,
+      "transformed": false,
+      "portable_path_compacted_from": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/failures/background-completion-wait/run-details/passkeys--feedback-regress-22335-nd-never-resubmits-on-focus/login-uncertain-recovery-focus.png"
+    },
+    {
+      "group": "failures-background-completion-wait",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-b0c0442-edge/exit-code.txt",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/failures/background-completion-wait/exit-code.txt",
+      "source_sha256": "f1b2f662800122bed0ff255693df89c4487fbdcf453d3524a42d4ec20c3d9c04",
+      "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+      "bytes": 2,
+      "transformed": true
+    },
+    {
+      "group": "failures-background-completion-wait",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-b0c0442-edge/methods-1440.png",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/failures/background-completion-wait/methods-1440.png",
+      "source_sha256": "048f6621c602bcb0e260812ff2d20b4c1436890e900d040e1d30065bde941238",
+      "sha256": "048f6621c602bcb0e260812ff2d20b4c1436890e900d040e1d30065bde941238",
+      "bytes": 103067,
+      "transformed": false
+    },
+    {
+      "group": "failures-background-completion-wait",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-b0c0442-edge/methods-320.png",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/failures/background-completion-wait/methods-320.png",
+      "source_sha256": "e84d07a786c8013a150cf43d33c3d1cff381d9309275992a68448667b04314d5",
+      "sha256": "e84d07a786c8013a150cf43d33c3d1cff381d9309275992a68448667b04314d5",
+      "bytes": 70805,
+      "transformed": false
+    },
+    {
+      "group": "failures-background-completion-wait",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-b0c0442-edge/methods-390.png",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/failures/background-completion-wait/methods-390.png",
+      "source_sha256": "9f5cadd0560a07684bb87c081cab4ba56f410368a0168b6b0c472d5790fe9fca",
+      "sha256": "9f5cadd0560a07684bb87c081cab4ba56f410368a0168b6b0c472d5790fe9fca",
+      "bytes": 71115,
+      "transformed": false
+    },
+    {
+      "group": "failures-background-completion-wait",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-b0c0442-edge/methods-768.png",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/failures/background-completion-wait/methods-768.png",
+      "source_sha256": "56e7f736d11c361bc6bf3755d926f5e811c9916360041b0d92edd98f595f4f8f",
+      "sha256": "56e7f736d11c361bc6bf3755d926f5e811c9916360041b0d92edd98f595f4f8f",
+      "bytes": 98042,
+      "transformed": false
+    },
+    {
+      "group": "failures-background-completion-wait",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-b0c0442-edge/playwright.log",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/failures/background-completion-wait/playwright.log",
+      "source_sha256": "fdacff507670ccf7ddddacd557713f3c649aac65f7f8e3492147a6c3e23492df",
+      "sha256": "9eb843fb29ef7d951727527cb60379cbe3884e35dab853f0b0f192af35223f53",
+      "bytes": 11551,
+      "transformed": true,
+      "transformations": [
+        "Portable terminal trailing whitespace trimmed; raw original hash retained."
+      ]
+    },
+    {
+      "group": "failures-background-completion-wait",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-b0c0442-edge/pre-existing-pngs/add-1440.png",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/failures/background-completion-wait/pre-existing-pngs/add-1440.png",
+      "source_sha256": "d230eca7250295ce6f4dc3a90d3449307ee0e08fd5e956a1cadc78f7afd8caad",
+      "sha256": "d230eca7250295ce6f4dc3a90d3449307ee0e08fd5e956a1cadc78f7afd8caad",
+      "bytes": 99159,
+      "transformed": false
+    },
+    {
+      "group": "failures-background-completion-wait",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-b0c0442-edge/pre-existing-pngs/add-320.png",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/failures/background-completion-wait/pre-existing-pngs/add-320.png",
+      "source_sha256": "d35cf6b14793b77c9c8061aeafbddb242a5c1d7687c6c87b22fe0d3c07bc31f7",
+      "sha256": "d35cf6b14793b77c9c8061aeafbddb242a5c1d7687c6c87b22fe0d3c07bc31f7",
+      "bytes": 47246,
+      "transformed": false
+    },
+    {
+      "group": "failures-background-completion-wait",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-b0c0442-edge/pre-existing-pngs/add-390.png",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/failures/background-completion-wait/pre-existing-pngs/add-390.png",
+      "source_sha256": "b1663f13830afd7d97b825e74decd927fd5bf2833751d25d38a3403fb47c047c",
+      "sha256": "b1663f13830afd7d97b825e74decd927fd5bf2833751d25d38a3403fb47c047c",
+      "bytes": 52350,
+      "transformed": false
+    },
+    {
+      "group": "failures-background-completion-wait",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-b0c0442-edge/pre-existing-pngs/add-768.png",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/failures/background-completion-wait/pre-existing-pngs/add-768.png",
+      "source_sha256": "0d811adbdef2d8850a3b6a9f2f8ec902a736708a59f6ed76f961648a8610aff8",
+      "sha256": "0d811adbdef2d8850a3b6a9f2f8ec902a736708a59f6ed76f961648a8610aff8",
+      "bytes": 73484,
+      "transformed": false
+    },
+    {
+      "group": "failures-background-completion-wait",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-b0c0442-edge/pre-existing-pngs/methods-1440.png",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/failures/background-completion-wait/pre-existing-pngs/methods-1440.png",
+      "source_sha256": "5968bb2fc83e0c3b8e87a292240a74f9013cbea1ab54bdccedf182b0685e14f5",
+      "sha256": "5968bb2fc83e0c3b8e87a292240a74f9013cbea1ab54bdccedf182b0685e14f5",
+      "bytes": 88904,
+      "transformed": false
+    },
+    {
+      "group": "failures-background-completion-wait",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-b0c0442-edge/pre-existing-pngs/methods-320.png",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/failures/background-completion-wait/pre-existing-pngs/methods-320.png",
+      "source_sha256": "8db667c5a8fb3f9337884562d5c22d16899c4f956bf199b1615a634166cefd59",
+      "sha256": "8db667c5a8fb3f9337884562d5c22d16899c4f956bf199b1615a634166cefd59",
+      "bytes": 54657,
+      "transformed": false
+    },
+    {
+      "group": "failures-background-completion-wait",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-b0c0442-edge/pre-existing-pngs/methods-390.png",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/failures/background-completion-wait/pre-existing-pngs/methods-390.png",
+      "source_sha256": "f91e8daaa7026aa21b7148f5450d975d16f84940134d73e6e1517cca737c9e86",
+      "sha256": "f91e8daaa7026aa21b7148f5450d975d16f84940134d73e6e1517cca737c9e86",
+      "bytes": 54681,
+      "transformed": false
+    },
+    {
+      "group": "failures-background-completion-wait",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-b0c0442-edge/pre-existing-pngs/methods-768.png",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/failures/background-completion-wait/pre-existing-pngs/methods-768.png",
+      "source_sha256": "f26ed502475c93135eed3636362037b080b9d63cfed54ad2cc56943c68d264f1",
+      "sha256": "f26ed502475c93135eed3636362037b080b9d63cfed54ad2cc56943c68d264f1",
+      "bytes": 80072,
+      "transformed": false
+    },
+    {
+      "group": "failures-background-completion-wait",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-b0c0442-edge/results.json",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/failures/background-completion-wait/results.json",
+      "source_sha256": "00fbf6c2c5fea08f1204993a7b9de7bb7fb79c5ca7241e56dd51d41def1ec214",
+      "sha256": "6ae63d71b3bc38cbbb1627c97cc4445c282e9153e4c258a8b1514ff572734432",
+      "bytes": 325537,
+      "transformed": true
+    },
+    {
+      "group": "failures-background-completion-wait",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-b0c0442-edge/run-details/.last-run.json",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/failures/background-completion-wait/run-details/.last-run.json",
+      "source_sha256": "9cf6a6cd5547a9aede14566ee5e3a5ea16a24f7a1880aaf76594c88f6f8b4e73",
+      "sha256": "9cf6a6cd5547a9aede14566ee5e3a5ea16a24f7a1880aaf76594c88f6f8b4e73",
+      "bytes": 96,
+      "transformed": false
+    },
+    {
+      "group": "failures-background-completion-wait",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-b0c0442-edge/source-sha.txt",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/failures/background-completion-wait/source-sha.txt",
+      "source_sha256": "9efaed8edb278e54ee472fa817605fc9294bba85ff7772a4e5df71aed47164e4",
+      "sha256": "14ae81245ea870bbcb831c269f056380791ae5bd0f30077c16e3635421598508",
+      "bytes": 41,
       "transformed": true
     },
     {
@@ -1390,6 +2045,93 @@
       "transformed": true
     },
     {
+      "group": "failures-real-cli-reporter-launch",
+      "source": "artifacts/p2-007-passkeys-20261109/real-native-745f9c2/exit-code.txt",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/failures/real-cli-reporter-launch/exit-code.txt",
+      "source_sha256": "f1b2f662800122bed0ff255693df89c4487fbdcf453d3524a42d4ec20c3d9c04",
+      "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+      "bytes": 2,
+      "transformed": true
+    },
+    {
+      "group": "failures-real-cli-reporter-launch",
+      "source": "artifacts/p2-007-passkeys-20261109/real-native-745f9c2/host-restart-exit.txt",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/failures/real-cli-reporter-launch/host-restart-exit.txt",
+      "source_sha256": "13bf7b3039c63bf5a50491fa3cfd8eb4e699d1ba1436315aef9cbe5711530354",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "bytes": 2,
+      "transformed": true
+    },
+    {
+      "group": "failures-real-cli-reporter-launch",
+      "source": "artifacts/p2-007-passkeys-20261109/real-native-745f9c2/host-restart.log",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/failures/real-cli-reporter-launch/host-restart.log",
+      "source_sha256": "619c3fc6565017cd242085c3ab8a6ae37cbed57869d0a06a825d3d3d9b77bc7b",
+      "sha256": "a5bc1fd4c2a4ebbd5973f3253597138d03b4ad8cfef8052e7127998022c1a02c",
+      "bytes": 8995,
+      "transformed": true,
+      "transformations": [
+        "Portable terminal trailing whitespace trimmed; raw original hash retained."
+      ]
+    },
+    {
+      "group": "failures-real-cli-reporter-launch",
+      "source": "artifacts/p2-007-passkeys-20261109/real-native-745f9c2/host-source-sha.txt",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/failures/real-cli-reporter-launch/host-source-sha.txt",
+      "source_sha256": "947f0a59c3cb6e3f137e9f09b995647026ae69e29ce74f2feb09ad97042f988f",
+      "sha256": "762bd2764335e086c51ae91f8937a7d8efd17589b158f5067c40ed9254ebd6a0",
+      "bytes": 41,
+      "transformed": true
+    },
+    {
+      "group": "failures-real-cli-reporter-launch",
+      "source": "artifacts/p2-007-passkeys-20261109/real-native-745f9c2/playwright.log",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/failures/real-cli-reporter-launch/playwright.log",
+      "source_sha256": "21a4f6d9c19137f724bf93c7605ba47790c4413a2e77fd5457d6f2ceb0be749f",
+      "sha256": "ff0c833397a01706982eea3e843976fea0d4ddc35c0e1cccd06a6ccc9badcc8d",
+      "bytes": 1689,
+      "transformed": true
+    },
+    {
+      "group": "failures-real-cli-reporter-launch",
+      "source": "artifacts/p2-007-passkeys-20261109/real-native-745f9c2/ready-browser-test.png",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/failures/real-cli-reporter-launch/ready-browser-test.png",
+      "source_sha256": "83010f91df346861ec55671638b619f2353c9f4ec5421c5697e10eb1e267741f",
+      "sha256": "83010f91df346861ec55671638b619f2353c9f4ec5421c5697e10eb1e267741f",
+      "bytes": 258238,
+      "transformed": false,
+      "classification": "PREEXISTING_IMAGE_COPIED_AFTER_CLI_LAUNCH_FAILURE_NO_TEST_EXECUTED_NOT_A_NEW_RENDER"
+    },
+    {
+      "group": "failures-real-cli-reporter-launch",
+      "source": "artifacts/p2-007-passkeys-20261109/real-native-745f9c2/signed-in-browser-test.png",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/failures/real-cli-reporter-launch/signed-in-browser-test.png",
+      "source_sha256": "af01414214740d70fe3e4a4b2b2fef0919059ba2f05143f2c961ba1d6144fc16",
+      "sha256": "af01414214740d70fe3e4a4b2b2fef0919059ba2f05143f2c961ba1d6144fc16",
+      "bytes": 255541,
+      "transformed": false,
+      "classification": "PREEXISTING_IMAGE_COPIED_AFTER_CLI_LAUNCH_FAILURE_NO_TEST_EXECUTED_NOT_A_NEW_RENDER"
+    },
+    {
+      "group": "failures-real-cli-reporter-launch",
+      "source": "artifacts/p2-007-passkeys-20261109/real-native-745f9c2/step-up-real-completed.png",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/failures/real-cli-reporter-launch/step-up-real-completed.png",
+      "source_sha256": "7cf046152f1191649f98bd22d8ef90d821cdf1829f713dfcf6c780c6a2c2caf2",
+      "sha256": "7cf046152f1191649f98bd22d8ef90d821cdf1829f713dfcf6c780c6a2c2caf2",
+      "bytes": 24267,
+      "transformed": false,
+      "classification": "PREEXISTING_IMAGE_COPIED_AFTER_CLI_LAUNCH_FAILURE_NO_TEST_EXECUTED_NOT_A_NEW_RENDER"
+    },
+    {
+      "group": "failures-real-cli-reporter-launch",
+      "source": "artifacts/p2-007-passkeys-20261109/real-native-745f9c2/test-source-sha.txt",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/failures/real-cli-reporter-launch/test-source-sha.txt",
+      "source_sha256": "947f0a59c3cb6e3f137e9f09b995647026ae69e29ce74f2feb09ad97042f988f",
+      "sha256": "762bd2764335e086c51ae91f8937a7d8efd17589b158f5067c40ed9254ebd6a0",
+      "bytes": 41,
+      "transformed": true
+    },
+    {
       "group": "failures/real-device-selection",
       "source": "artifacts/p2-007-passkeys-20261109/real-native-7062bed-red/browser-results.json",
       "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/failures/real-device-selection/browser-results.json",
@@ -1492,6 +2234,87 @@
       "source_sha256": "423d595255387a56d5de2d52a41f60650a9d1375d9b0cc950a4917a08f2a4e28",
       "sha256": "cb4016acb0bd6a60f81b25089cbb0916ce3e2d7bf36e019f82be02059186bb5c",
       "bytes": 475,
+      "transformed": true
+    },
+    {
+      "group": "real-current",
+      "source": "artifacts/p2-007-passkeys-20261109/real-native-745f9c2-green/exit-code.txt",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/real-current/exit-code.txt",
+      "source_sha256": "13bf7b3039c63bf5a50491fa3cfd8eb4e699d1ba1436315aef9cbe5711530354",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "bytes": 2,
+      "transformed": true
+    },
+    {
+      "group": "real-current",
+      "source": "artifacts/p2-007-passkeys-20261109/real-native-745f9c2-green/playwright.log",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/real-current/playwright.log",
+      "source_sha256": "ab19f80e32c3abecc98064e9c1e0c23e2fb12b5845dc918a7c810359958493b8",
+      "sha256": "a435550c878643acbcdb4fa996494c5d1602068f68f34de126ed09ad470ae20b",
+      "bytes": 831,
+      "transformed": true
+    },
+    {
+      "group": "real-current",
+      "source": "artifacts/p2-007-passkeys-20261109/real-native-745f9c2-green/ready-browser-test.png",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/real-current/ready-browser-test.png",
+      "source_sha256": "332ada64b92d2e3e4cb10fbb944ff36cfe863d30a8f35306d278456ca953b7e6",
+      "sha256": "332ada64b92d2e3e4cb10fbb944ff36cfe863d30a8f35306d278456ca953b7e6",
+      "bytes": 93080,
+      "transformed": false
+    },
+    {
+      "group": "real-current",
+      "source": "artifacts/p2-007-passkeys-20261109/real-native-745f9c2-green/results.json",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/real-current/results.json",
+      "source_sha256": "ba9b77561522d8b9f118ef1a6c2312e7e20a5a8082db0843cf0b9e197c284d45",
+      "sha256": "e1859cf07228730480eac26c87f985f129891ae31ca8f7956ff371015dd95af5",
+      "bytes": 6993,
+      "transformed": true
+    },
+    {
+      "group": "real-current",
+      "source": "artifacts/p2-007-passkeys-20261109/real-native-745f9c2-green/run-details/.last-run.json",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/real-current/run-details/.last-run.json",
+      "source_sha256": "91d1c43004802cd49950d78eb11c8fa7d05da8ffffe219a8b13b2f561bc00903",
+      "sha256": "91d1c43004802cd49950d78eb11c8fa7d05da8ffffe219a8b13b2f561bc00903",
+      "bytes": 45,
+      "transformed": false
+    },
+    {
+      "group": "real-current",
+      "source": "artifacts/p2-007-passkeys-20261109/real-native-745f9c2-green/run-details/passkeys-flow-real-native--9c306-enrollment-and-self-removal/real-native-passkeys-removed.png",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/real-current/run-details/passkeys-flow-real-native--9c306-enrollment-and-self-removal/real-native-passkeys-removed.png",
+      "source_sha256": "a6b5c37ba8e372dc5e1403162750272be7fb1ccddea1e02b4d36557f76c975ba",
+      "sha256": "a6b5c37ba8e372dc5e1403162750272be7fb1ccddea1e02b4d36557f76c975ba",
+      "bytes": 124728,
+      "transformed": false
+    },
+    {
+      "group": "real-current",
+      "source": "artifacts/p2-007-passkeys-20261109/real-native-745f9c2-green/signed-in-browser-test.png",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/real-current/signed-in-browser-test.png",
+      "source_sha256": "50ceb99d80f59ba60443237bdef31849cabe46139cac0189e24037d591f84fb1",
+      "sha256": "50ceb99d80f59ba60443237bdef31849cabe46139cac0189e24037d591f84fb1",
+      "bytes": 91725,
+      "transformed": false
+    },
+    {
+      "group": "real-current",
+      "source": "artifacts/p2-007-passkeys-20261109/real-native-745f9c2-green/step-up-real-completed.png",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/real-current/step-up-real-completed.png",
+      "source_sha256": "69b0759401bfc92b03a926e04a9285698f9d5adaa4834eb7ecc9e873e9c12b38",
+      "sha256": "69b0759401bfc92b03a926e04a9285698f9d5adaa4834eb7ecc9e873e9c12b38",
+      "bytes": 26547,
+      "transformed": false
+    },
+    {
+      "group": "real-current",
+      "source": "artifacts/p2-007-passkeys-20261109/real-native-745f9c2-green/test-source-sha.txt",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/real-current/test-source-sha.txt",
+      "source_sha256": "947f0a59c3cb6e3f137e9f09b995647026ae69e29ce74f2feb09ad97042f988f",
+      "sha256": "762bd2764335e086c51ae91f8937a7d8efd17589b158f5067c40ed9254ebd6a0",
+      "bytes": 41,
       "transformed": true
     },
     {
@@ -1894,6 +2717,1380 @@
       "transformed": true
     },
     {
+      "group": "ui-current-authentication",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-b0c0442-authentication/exit-code.txt",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-authentication/exit-code.txt",
+      "source_sha256": "13bf7b3039c63bf5a50491fa3cfd8eb4e699d1ba1436315aef9cbe5711530354",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "bytes": 2,
+      "transformed": true
+    },
+    {
+      "group": "ui-current-authentication",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-b0c0442-authentication/login-1024.png",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-authentication/login-1024.png",
+      "source_sha256": "b1ac243fdc0063aa387200bd3647ef511e0f2d117277a69167d215b826a0f10c",
+      "sha256": "b1ac243fdc0063aa387200bd3647ef511e0f2d117277a69167d215b826a0f10c",
+      "bytes": 83682,
+      "transformed": false
+    },
+    {
+      "group": "ui-current-authentication",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-b0c0442-authentication/login-1440.png",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-authentication/login-1440.png",
+      "source_sha256": "b97005afb4f70e0ff947d0b48542bf578c9c31ca53090e1e3895f79553b93e32",
+      "sha256": "b97005afb4f70e0ff947d0b48542bf578c9c31ca53090e1e3895f79553b93e32",
+      "bytes": 98723,
+      "transformed": false
+    },
+    {
+      "group": "ui-current-authentication",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-b0c0442-authentication/login-320.png",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-authentication/login-320.png",
+      "source_sha256": "f3041699fb8ec7fb804fc56c87db7f357eb340d284e1b2ee63e2e5539b9389db",
+      "sha256": "f3041699fb8ec7fb804fc56c87db7f357eb340d284e1b2ee63e2e5539b9389db",
+      "bytes": 46460,
+      "transformed": false
+    },
+    {
+      "group": "ui-current-authentication",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-b0c0442-authentication/login-390.png",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-authentication/login-390.png",
+      "source_sha256": "2784c48acc47212959caa2ce783fb272a85b708f4e7d4e4519c86f6998b78b53",
+      "sha256": "2784c48acc47212959caa2ce783fb272a85b708f4e7d4e4519c86f6998b78b53",
+      "bytes": 48925,
+      "transformed": false
+    },
+    {
+      "group": "ui-current-authentication",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-b0c0442-authentication/login-768.png",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-authentication/login-768.png",
+      "source_sha256": "1131ac1413dd4a99757f44ad973369ea44777c2b6005c73d1234e1ae298a552a",
+      "sha256": "1131ac1413dd4a99757f44ad973369ea44777c2b6005c73d1234e1ae298a552a",
+      "bytes": 66521,
+      "transformed": false
+    },
+    {
+      "group": "ui-current-authentication",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-b0c0442-authentication/login-server-error-1440.png",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-authentication/login-server-error-1440.png",
+      "source_sha256": "e5c784f92dd0ab829d2ef2f044a20ed1e3726fe8283d0e93bf47842f19ac1dc4",
+      "sha256": "e5c784f92dd0ab829d2ef2f044a20ed1e3726fe8283d0e93bf47842f19ac1dc4",
+      "bytes": 108835,
+      "transformed": false
+    },
+    {
+      "group": "ui-current-authentication",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-b0c0442-authentication/login-server-error-320.png",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-authentication/login-server-error-320.png",
+      "source_sha256": "c0363322e04f025662f03baca37d97b4cdcee2631ecb932342bc874e8e96a7b9",
+      "sha256": "c0363322e04f025662f03baca37d97b4cdcee2631ecb932342bc874e8e96a7b9",
+      "bytes": 55297,
+      "transformed": false
+    },
+    {
+      "group": "ui-current-authentication",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-b0c0442-authentication/login-server-error-768.png",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-authentication/login-server-error-768.png",
+      "source_sha256": "e109f3914af8ca8f42231f49568ee8788636ed707218820f49c890bdc9e025bf",
+      "sha256": "e109f3914af8ca8f42231f49568ee8788636ed707218820f49c890bdc9e025bf",
+      "bytes": 75505,
+      "transformed": false
+    },
+    {
+      "group": "ui-current-authentication",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-b0c0442-authentication/playwright.log",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-authentication/playwright.log",
+      "source_sha256": "10f8a98eceffa2281af6129dbc4a3a929a416784cc4bd4e1a4a0cdbd972a85e5",
+      "sha256": "9194a741e5af6f564e53b09e231eeda7018e3df6d7c7ce14bb46d63d1c6d0e74",
+      "bytes": 3368,
+      "transformed": true
+    },
+    {
+      "group": "ui-current-authentication",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-b0c0442-authentication/results.json",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-authentication/results.json",
+      "source_sha256": "69775e2af1976796cd39c8ff610de22dcac488aa2cd29f5a338605d44b277123",
+      "sha256": "4db227f6975b42a1770f904bbd9845bd51ee82cb3f9ab59d1a467bc9c0ec3688",
+      "bytes": 24653,
+      "transformed": true
+    },
+    {
+      "group": "ui-current-authentication",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-b0c0442-authentication/run-details/.last-run.json",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-authentication/run-details/.last-run.json",
+      "source_sha256": "91d1c43004802cd49950d78eb11c8fa7d05da8ffffe219a8b13b2f561bc00903",
+      "sha256": "91d1c43004802cd49950d78eb11c8fa7d05da8ffffe219a8b13b2f561bc00903",
+      "bytes": 45,
+      "transformed": false
+    },
+    {
+      "group": "ui-current-authentication",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-b0c0442-authentication/signed-in-1024.png",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-authentication/signed-in-1024.png",
+      "source_sha256": "658e6a2d50c5dabcc3e31223b2f2e0e1977e399056f32708378e2e4337ee62bc",
+      "sha256": "658e6a2d50c5dabcc3e31223b2f2e0e1977e399056f32708378e2e4337ee62bc",
+      "bytes": 77707,
+      "transformed": false
+    },
+    {
+      "group": "ui-current-authentication",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-b0c0442-authentication/signed-in-1440.png",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-authentication/signed-in-1440.png",
+      "source_sha256": "9c9e75e9052e0f26f7c59a64034fb396925535861bbcef82fe51041fa1fe4aa1",
+      "sha256": "9c9e75e9052e0f26f7c59a64034fb396925535861bbcef82fe51041fa1fe4aa1",
+      "bytes": 91614,
+      "transformed": false
+    },
+    {
+      "group": "ui-current-authentication",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-b0c0442-authentication/signed-in-320.png",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-authentication/signed-in-320.png",
+      "source_sha256": "53deab375fe1c33747848bfba60e722f4dfb3852254d3eeb26fe4250879523e0",
+      "sha256": "53deab375fe1c33747848bfba60e722f4dfb3852254d3eeb26fe4250879523e0",
+      "bytes": 41857,
+      "transformed": false
+    },
+    {
+      "group": "ui-current-authentication",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-b0c0442-authentication/signed-in-390.png",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-authentication/signed-in-390.png",
+      "source_sha256": "21fad68ecd6ea985b8e1cb849f77dd1650ebe3fdb23af4bc5950eca1058a5669",
+      "sha256": "21fad68ecd6ea985b8e1cb849f77dd1650ebe3fdb23af4bc5950eca1058a5669",
+      "bytes": 44752,
+      "transformed": false
+    },
+    {
+      "group": "ui-current-authentication",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-b0c0442-authentication/signed-in-768.png",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-authentication/signed-in-768.png",
+      "source_sha256": "26ca19796aaea9b053a4361d635459ca7d9b557cf4859bd901183bf9832d2c02",
+      "sha256": "26ca19796aaea9b053a4361d635459ca7d9b557cf4859bd901183bf9832d2c02",
+      "bytes": 58922,
+      "transformed": false
+    },
+    {
+      "group": "ui-current-authentication",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-b0c0442-authentication/source-sha.txt",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-authentication/source-sha.txt",
+      "source_sha256": "9efaed8edb278e54ee472fa817605fc9294bba85ff7772a4e5df71aed47164e4",
+      "sha256": "14ae81245ea870bbcb831c269f056380791ae5bd0f30077c16e3635421598508",
+      "bytes": 41,
+      "transformed": true
+    },
+    {
+      "group": "ui-current-checks",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-745f9c2-checks/source-sha.txt",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-checks/source-sha.txt",
+      "source_sha256": "947f0a59c3cb6e3f137e9f09b995647026ae69e29ce74f2feb09ad97042f988f",
+      "sha256": "762bd2764335e086c51ae91f8937a7d8efd17589b158f5067c40ed9254ebd6a0",
+      "bytes": 41,
+      "transformed": true
+    },
+    {
+      "group": "ui-current-checks",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-745f9c2-checks/typecheck-exit-code.txt",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-checks/typecheck-exit-code.txt",
+      "source_sha256": "13bf7b3039c63bf5a50491fa3cfd8eb4e699d1ba1436315aef9cbe5711530354",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "bytes": 2,
+      "transformed": true
+    },
+    {
+      "group": "ui-current-edge",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-745f9c2-edge/add-1440.png",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-edge/add-1440.png",
+      "source_sha256": "a79930cfac7c204e0f01309e4623e0459a5f29c9eacf6a4e515f074ad4dae639",
+      "sha256": "a79930cfac7c204e0f01309e4623e0459a5f29c9eacf6a4e515f074ad4dae639",
+      "bytes": 106995,
+      "transformed": false
+    },
+    {
+      "group": "ui-current-edge",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-745f9c2-edge/add-320.png",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-edge/add-320.png",
+      "source_sha256": "1a20f890c00aedf9ab610f8caa1ebeee40ac48e5f333f539acb99f1b4f8a02cf",
+      "sha256": "1a20f890c00aedf9ab610f8caa1ebeee40ac48e5f333f539acb99f1b4f8a02cf",
+      "bytes": 57951,
+      "transformed": false
+    },
+    {
+      "group": "ui-current-edge",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-745f9c2-edge/add-390.png",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-edge/add-390.png",
+      "source_sha256": "3c2a4bdd396eb729a99895133a30836e388147fbb8f20aa329e5d2032f538952",
+      "sha256": "3c2a4bdd396eb729a99895133a30836e388147fbb8f20aa329e5d2032f538952",
+      "bytes": 64321,
+      "transformed": false
+    },
+    {
+      "group": "ui-current-edge",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-745f9c2-edge/add-768.png",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-edge/add-768.png",
+      "source_sha256": "3bc9c5305e7641f8000953d94f37bb65dc28e0aa75cb30c46eb0d83c0bc2bb37",
+      "sha256": "3bc9c5305e7641f8000953d94f37bb65dc28e0aa75cb30c46eb0d83c0bc2bb37",
+      "bytes": 83598,
+      "transformed": false
+    },
+    {
+      "group": "ui-current-edge",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-745f9c2-edge/run-details/passkeys--feedback-regress-9c709-focus-or-submit-credentials/aborted-login-new-route-focus.png",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-edge/cases/de40258d6b57/aborted-login-new-route-focus.png",
+      "source_sha256": "d645b0879898fd66f7f74744af481ca78d3fe0cae52bd7f2584ad4be1dbb3fdb",
+      "sha256": "d645b0879898fd66f7f74744af481ca78d3fe0cae52bd7f2584ad4be1dbb3fdb",
+      "bytes": 91956,
+      "transformed": false,
+      "portable_path_compacted_from": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-edge/run-details/passkeys--feedback-regress-9c709-focus-or-submit-credentials/aborted-login-new-route-focus.png"
+    },
+    {
+      "group": "ui-current-edge",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-745f9c2-edge/run-details/step-up-passkey--feedback--110b3-ng-or-replacing-its-binding/unresolved-proof-owner-recovery-focus.png",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-edge/cases/eef0e8c337e4/unresolved-proof-owner-recovery-focus.png",
+      "source_sha256": "34aa8b27d04a304d2442c3750282befd1322d7964ebdd2313e6aa173156cf360",
+      "sha256": "34aa8b27d04a304d2442c3750282befd1322d7964ebdd2313e6aa173156cf360",
+      "bytes": 118549,
+      "transformed": false,
+      "portable_path_compacted_from": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-edge/run-details/step-up-passkey--feedback--110b3-ng-or-replacing-its-binding/unresolved-proof-owner-recovery-focus.png"
+    },
+    {
+      "group": "ui-current-edge",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-745f9c2-edge/run-details/passkeys--feedback-regress-22335-nd-never-resubmits-on-focus/login-uncertain-recovery-focus.png",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-edge/cases/fc56565824c0/login-uncertain-recovery-focus.png",
+      "source_sha256": "0c308df931cc980b4ba04af3976da369493a60158c67e52cdfdfe4d7ccc70802",
+      "sha256": "0c308df931cc980b4ba04af3976da369493a60158c67e52cdfdfe4d7ccc70802",
+      "bytes": 108026,
+      "transformed": false,
+      "portable_path_compacted_from": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-edge/run-details/passkeys--feedback-regress-22335-nd-never-resubmits-on-focus/login-uncertain-recovery-focus.png"
+    },
+    {
+      "group": "ui-current-edge",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-745f9c2-edge/exit-code.txt",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-edge/exit-code.txt",
+      "source_sha256": "13bf7b3039c63bf5a50491fa3cfd8eb4e699d1ba1436315aef9cbe5711530354",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "bytes": 2,
+      "transformed": true
+    },
+    {
+      "group": "ui-current-edge",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-745f9c2-edge/methods-1440.png",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-edge/methods-1440.png",
+      "source_sha256": "048f6621c602bcb0e260812ff2d20b4c1436890e900d040e1d30065bde941238",
+      "sha256": "048f6621c602bcb0e260812ff2d20b4c1436890e900d040e1d30065bde941238",
+      "bytes": 103067,
+      "transformed": false
+    },
+    {
+      "group": "ui-current-edge",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-745f9c2-edge/methods-320.png",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-edge/methods-320.png",
+      "source_sha256": "e84d07a786c8013a150cf43d33c3d1cff381d9309275992a68448667b04314d5",
+      "sha256": "e84d07a786c8013a150cf43d33c3d1cff381d9309275992a68448667b04314d5",
+      "bytes": 70805,
+      "transformed": false
+    },
+    {
+      "group": "ui-current-edge",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-745f9c2-edge/methods-390.png",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-edge/methods-390.png",
+      "source_sha256": "9f5cadd0560a07684bb87c081cab4ba56f410368a0168b6b0c472d5790fe9fca",
+      "sha256": "9f5cadd0560a07684bb87c081cab4ba56f410368a0168b6b0c472d5790fe9fca",
+      "bytes": 71115,
+      "transformed": false
+    },
+    {
+      "group": "ui-current-edge",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-745f9c2-edge/methods-768.png",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-edge/methods-768.png",
+      "source_sha256": "56e7f736d11c361bc6bf3755d926f5e811c9916360041b0d92edd98f595f4f8f",
+      "sha256": "56e7f736d11c361bc6bf3755d926f5e811c9916360041b0d92edd98f595f4f8f",
+      "bytes": 98042,
+      "transformed": false
+    },
+    {
+      "group": "ui-current-edge",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-745f9c2-edge/playwright.log",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-edge/playwright.log",
+      "source_sha256": "c25df11dd00067c59128acc0812e66fd64e3d871b834416cb132e40c94e17421",
+      "sha256": "cccb362266ecb2bd4a21a37ca9df50e5541692ab1e678ba98bbd7cbe62cc5d20",
+      "bytes": 9421,
+      "transformed": true
+    },
+    {
+      "group": "ui-current-edge",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-745f9c2-edge/pre-existing-pngs/add-1440.png",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-edge/pre-existing-pngs/add-1440.png",
+      "source_sha256": "a79930cfac7c204e0f01309e4623e0459a5f29c9eacf6a4e515f074ad4dae639",
+      "sha256": "a79930cfac7c204e0f01309e4623e0459a5f29c9eacf6a4e515f074ad4dae639",
+      "bytes": 106995,
+      "transformed": false
+    },
+    {
+      "group": "ui-current-edge",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-745f9c2-edge/pre-existing-pngs/add-320.png",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-edge/pre-existing-pngs/add-320.png",
+      "source_sha256": "1a20f890c00aedf9ab610f8caa1ebeee40ac48e5f333f539acb99f1b4f8a02cf",
+      "sha256": "1a20f890c00aedf9ab610f8caa1ebeee40ac48e5f333f539acb99f1b4f8a02cf",
+      "bytes": 57951,
+      "transformed": false
+    },
+    {
+      "group": "ui-current-edge",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-745f9c2-edge/pre-existing-pngs/add-390.png",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-edge/pre-existing-pngs/add-390.png",
+      "source_sha256": "3c2a4bdd396eb729a99895133a30836e388147fbb8f20aa329e5d2032f538952",
+      "sha256": "3c2a4bdd396eb729a99895133a30836e388147fbb8f20aa329e5d2032f538952",
+      "bytes": 64321,
+      "transformed": false
+    },
+    {
+      "group": "ui-current-edge",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-745f9c2-edge/pre-existing-pngs/add-768.png",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-edge/pre-existing-pngs/add-768.png",
+      "source_sha256": "3bc9c5305e7641f8000953d94f37bb65dc28e0aa75cb30c46eb0d83c0bc2bb37",
+      "sha256": "3bc9c5305e7641f8000953d94f37bb65dc28e0aa75cb30c46eb0d83c0bc2bb37",
+      "bytes": 83598,
+      "transformed": false
+    },
+    {
+      "group": "ui-current-edge",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-745f9c2-edge/pre-existing-pngs/methods-1440.png",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-edge/pre-existing-pngs/methods-1440.png",
+      "source_sha256": "048f6621c602bcb0e260812ff2d20b4c1436890e900d040e1d30065bde941238",
+      "sha256": "048f6621c602bcb0e260812ff2d20b4c1436890e900d040e1d30065bde941238",
+      "bytes": 103067,
+      "transformed": false
+    },
+    {
+      "group": "ui-current-edge",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-745f9c2-edge/pre-existing-pngs/methods-320.png",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-edge/pre-existing-pngs/methods-320.png",
+      "source_sha256": "e84d07a786c8013a150cf43d33c3d1cff381d9309275992a68448667b04314d5",
+      "sha256": "e84d07a786c8013a150cf43d33c3d1cff381d9309275992a68448667b04314d5",
+      "bytes": 70805,
+      "transformed": false
+    },
+    {
+      "group": "ui-current-edge",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-745f9c2-edge/pre-existing-pngs/methods-390.png",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-edge/pre-existing-pngs/methods-390.png",
+      "source_sha256": "9f5cadd0560a07684bb87c081cab4ba56f410368a0168b6b0c472d5790fe9fca",
+      "sha256": "9f5cadd0560a07684bb87c081cab4ba56f410368a0168b6b0c472d5790fe9fca",
+      "bytes": 71115,
+      "transformed": false
+    },
+    {
+      "group": "ui-current-edge",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-745f9c2-edge/pre-existing-pngs/methods-768.png",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-edge/pre-existing-pngs/methods-768.png",
+      "source_sha256": "56e7f736d11c361bc6bf3755d926f5e811c9916360041b0d92edd98f595f4f8f",
+      "sha256": "56e7f736d11c361bc6bf3755d926f5e811c9916360041b0d92edd98f595f4f8f",
+      "bytes": 98042,
+      "transformed": false
+    },
+    {
+      "group": "ui-current-edge",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-745f9c2-edge/results.json",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-edge/results.json",
+      "source_sha256": "004539ba2ed9e95751cc548fc3a67f4b84e38047277de8cdd8d68a56969b6984",
+      "sha256": "6b1142f4250cfbfb2603c259ee8495580a44999ac85331f638f92f0170a816e6",
+      "bytes": 320764,
+      "transformed": true
+    },
+    {
+      "group": "ui-current-edge",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-745f9c2-edge/run-details/.last-run.json",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-edge/run-details/.last-run.json",
+      "source_sha256": "91d1c43004802cd49950d78eb11c8fa7d05da8ffffe219a8b13b2f561bc00903",
+      "sha256": "91d1c43004802cd49950d78eb11c8fa7d05da8ffffe219a8b13b2f561bc00903",
+      "bytes": 45,
+      "transformed": false
+    },
+    {
+      "group": "ui-current-edge",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-745f9c2-edge/run-details/navigation-Approved-Ready--045ea-yboard-and-geometry-at-1440/ready-navigation-1440.png",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-edge/run-details/navigation-Approved-Ready--045ea-yboard-and-geometry-at-1440/ready-navigation-1440.png",
+      "source_sha256": "fac7afad6c31a834aff47aa36300d0ed314c2e0b1c6edcf64623350af3eb4059",
+      "sha256": "fac7afad6c31a834aff47aa36300d0ed314c2e0b1c6edcf64623350af3eb4059",
+      "bytes": 94105,
+      "transformed": false
+    },
+    {
+      "group": "ui-current-edge",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-745f9c2-edge/run-details/navigation-Approved-Ready--045ea-yboard-and-geometry-at-1440/signed-in-navigation-1440.png",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-edge/run-details/navigation-Approved-Ready--045ea-yboard-and-geometry-at-1440/signed-in-navigation-1440.png",
+      "source_sha256": "5c74205567968b33fa7857483f4ff1ced4fe6ef2ea84d05263137ca0a809b9dd",
+      "sha256": "5c74205567968b33fa7857483f4ff1ced4fe6ef2ea84d05263137ca0a809b9dd",
+      "bytes": 91636,
+      "transformed": false
+    },
+    {
+      "group": "ui-current-edge",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-745f9c2-edge/run-details/navigation-Approved-Ready--6bc49-eyboard-and-geometry-at-320/ready-navigation-320.png",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-edge/run-details/navigation-Approved-Ready--6bc49-eyboard-and-geometry-at-320/ready-navigation-320.png",
+      "source_sha256": "6c12d71d559aac6c6c9af6bcb8e9b6fac738957cd8a2a1f892b22f4973d45bc0",
+      "sha256": "6c12d71d559aac6c6c9af6bcb8e9b6fac738957cd8a2a1f892b22f4973d45bc0",
+      "bytes": 44246,
+      "transformed": false
+    },
+    {
+      "group": "ui-current-edge",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-745f9c2-edge/run-details/navigation-Approved-Ready--6bc49-eyboard-and-geometry-at-320/signed-in-navigation-320.png",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-edge/run-details/navigation-Approved-Ready--6bc49-eyboard-and-geometry-at-320/signed-in-navigation-320.png",
+      "source_sha256": "7dcaef4ba76df8bf6236659831a9ef51083348288d8c699d6e1ed742783fbfd8",
+      "sha256": "7dcaef4ba76df8bf6236659831a9ef51083348288d8c699d6e1ed742783fbfd8",
+      "bytes": 41414,
+      "transformed": false
+    },
+    {
+      "group": "ui-current-edge",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-745f9c2-edge/run-details/navigation-Approved-Ready--86776-eyboard-and-geometry-at-390/ready-navigation-390.png",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-edge/run-details/navigation-Approved-Ready--86776-eyboard-and-geometry-at-390/ready-navigation-390.png",
+      "source_sha256": "08836a8d2b1dd612edc1986736e477cac716e8615abb78905299b361bf10f0c0",
+      "sha256": "08836a8d2b1dd612edc1986736e477cac716e8615abb78905299b361bf10f0c0",
+      "bytes": 46658,
+      "transformed": false
+    },
+    {
+      "group": "ui-current-edge",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-745f9c2-edge/run-details/navigation-Approved-Ready--86776-eyboard-and-geometry-at-390/signed-in-navigation-390.png",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-edge/run-details/navigation-Approved-Ready--86776-eyboard-and-geometry-at-390/signed-in-navigation-390.png",
+      "source_sha256": "c3a8dae2a0b8e57194019163fb037b92da17eb456a79b0bbf905b74b5790406f",
+      "sha256": "c3a8dae2a0b8e57194019163fb037b92da17eb456a79b0bbf905b74b5790406f",
+      "bytes": 44289,
+      "transformed": false
+    },
+    {
+      "group": "ui-current-edge",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-745f9c2-edge/run-details/passkeys--feedback-regress-528bd-thout-replacing-the-request/revoke-unknown-closed.png",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-edge/run-details/passkeys--feedback-regress-528bd-thout-replacing-the-request/revoke-unknown-closed.png",
+      "source_sha256": "fc76a52f66af8f671aaaa0a532ac3fbe2fa4a6c0f61adee34f81045b5dbbf5b0",
+      "sha256": "fc76a52f66af8f671aaaa0a532ac3fbe2fa4a6c0f61adee34f81045b5dbbf5b0",
+      "bytes": 122226,
+      "transformed": false
+    },
+    {
+      "group": "ui-current-edge",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-745f9c2-edge/run-details/passkeys--feedback-regress-5f307-ion-without-another-attempt/login-http-429-focus.png",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-edge/run-details/passkeys--feedback-regress-5f307-ion-without-another-attempt/login-http-429-focus.png",
+      "source_sha256": "d0e5e896045aba236fa85cd32d3df30bf2b6a9eee2563dce09fd569884a60eb8",
+      "sha256": "d0e5e896045aba236fa85cd32d3df30bf2b6a9eee2563dce09fd569884a60eb8",
+      "bytes": 103642,
+      "transformed": false
+    },
+    {
+      "group": "ui-current-edge",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-745f9c2-edge/run-details/passkeys--feedback-regress-738d8-ion-without-another-attempt/login-native-cancel-focus.png",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-edge/run-details/passkeys--feedback-regress-738d8-ion-without-another-attempt/login-native-cancel-focus.png",
+      "source_sha256": "92e9fff4d71d93b7d695ff70c82b73b1a872afed33ca18add0a6e03090818e7a",
+      "sha256": "92e9fff4d71d93b7d695ff70c82b73b1a872afed33ca18add0a6e03090818e7a",
+      "bytes": 106008,
+      "transformed": false
+    },
+    {
+      "group": "ui-current-edge",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-745f9c2-edge/run-details/passkeys--feedback-regress-edc5f-op-dialog-without-scrolling/remove-error-desktop.png",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-edge/run-details/passkeys--feedback-regress-edc5f-op-dialog-without-scrolling/remove-error-desktop.png",
+      "source_sha256": "56590b46c3dbb57b59d1f3f2ff4debbd62839f29070c9c2018e890565b6ef262",
+      "sha256": "56590b46c3dbb57b59d1f3f2ff4debbd62839f29070c9c2018e890565b6ef262",
+      "bytes": 132025,
+      "transformed": false
+    },
+    {
+      "group": "ui-current-edge",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-745f9c2-edge/run-details/passkeys--feedback-regress-f63ef-thout-replacing-the-request/enroll-unknown-closed.png",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-edge/run-details/passkeys--feedback-regress-f63ef-thout-replacing-the-request/enroll-unknown-closed.png",
+      "source_sha256": "5f8f0e3a7b9432cf89273433371e5a7ace9c85eb003f78469c291547c708ae74",
+      "sha256": "5f8f0e3a7b9432cf89273433371e5a7ace9c85eb003f78469c291547c708ae74",
+      "bytes": 117126,
+      "transformed": false
+    },
+    {
+      "group": "ui-current-edge",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-745f9c2-edge/run-details/step-up-passkey-Shared-nat-26fc7-e-approved-overlay-at-320px/native-proof-320.png",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-edge/run-details/step-up-passkey-Shared-nat-26fc7-e-approved-overlay-at-320px/native-proof-320.png",
+      "source_sha256": "20097eaa6eaf6dfd8b87854667a5c7e3331f0597f4819dfda72c4c2953c37245",
+      "sha256": "20097eaa6eaf6dfd8b87854667a5c7e3331f0597f4819dfda72c4c2953c37245",
+      "bytes": 79382,
+      "transformed": false
+    },
+    {
+      "group": "ui-current-edge",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-745f9c2-edge/run-details/step-up-passkey-Shared-nat-381e3--approved-overlay-at-1440px/native-proof-1440.png",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-edge/run-details/step-up-passkey-Shared-nat-381e3--approved-overlay-at-1440px/native-proof-1440.png",
+      "source_sha256": "5180e83af255ff55678a9ff510cb980dc1380de884a81369a1814b0ae68773f8",
+      "sha256": "5180e83af255ff55678a9ff510cb980dc1380de884a81369a1814b0ae68773f8",
+      "bytes": 125176,
+      "transformed": false
+    },
+    {
+      "group": "ui-current-edge",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-745f9c2-edge/run-details/step-up-passkey-Shared-nat-3e7d6-e-approved-overlay-at-390px/native-proof-390.png",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-edge/run-details/step-up-passkey-Shared-nat-3e7d6-e-approved-overlay-at-390px/native-proof-390.png",
+      "source_sha256": "2f65bb19532e7c29814c649737722791d8ed12251c52a46653983cfab674c5f9",
+      "sha256": "2f65bb19532e7c29814c649737722791d8ed12251c52a46653983cfab674c5f9",
+      "bytes": 77642,
+      "transformed": false
+    },
+    {
+      "group": "ui-current-edge",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-745f9c2-edge/source-sha.txt",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-edge/source-sha.txt",
+      "source_sha256": "947f0a59c3cb6e3f137e9f09b995647026ae69e29ce74f2feb09ad97042f988f",
+      "sha256": "762bd2764335e086c51ae91f8937a7d8efd17589b158f5067c40ed9254ebd6a0",
+      "bytes": 41,
+      "transformed": true
+    },
+    {
+      "group": "ui-current-feedback",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-states-745f9c2/add-error-1440-axe.json",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-feedback/add-error-1440-axe.json",
+      "source_sha256": "dc8e91735b16f70143a84408a6173e5b825c202238a9274171786eb56747e3a8",
+      "sha256": "dc8e91735b16f70143a84408a6173e5b825c202238a9274171786eb56747e3a8",
+      "bytes": 70585,
+      "transformed": false
+    },
+    {
+      "group": "ui-current-feedback",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-states-745f9c2/add-error-1440.png",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-feedback/add-error-1440.png",
+      "source_sha256": "3fe3ec5017b8c213be0f6b05bf70bddb64a4073d6c9f8d80bd84cb0cd0a16fb0",
+      "sha256": "3fe3ec5017b8c213be0f6b05bf70bddb64a4073d6c9f8d80bd84cb0cd0a16fb0",
+      "bytes": 126012,
+      "transformed": false
+    },
+    {
+      "group": "ui-current-feedback",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-states-745f9c2/add-error-320-axe.json",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-feedback/add-error-320-axe.json",
+      "source_sha256": "3cd4235a782abdc575c205f18b58a16f0b6fc2e6711648e8baa2dc2c8ad0aff9",
+      "sha256": "3cd4235a782abdc575c205f18b58a16f0b6fc2e6711648e8baa2dc2c8ad0aff9",
+      "bytes": 70775,
+      "transformed": false
+    },
+    {
+      "group": "ui-current-feedback",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-states-745f9c2/add-error-320.png",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-feedback/add-error-320.png",
+      "source_sha256": "f1910f263b796871e0a306d49598fc2e0b105e5440c02a875739ee4df5970e0c",
+      "sha256": "f1910f263b796871e0a306d49598fc2e0b105e5440c02a875739ee4df5970e0c",
+      "bytes": 78460,
+      "transformed": false
+    },
+    {
+      "group": "ui-current-feedback",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-states-745f9c2/exit-code.txt",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-feedback/exit-code.txt",
+      "source_sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "bytes": 2,
+      "transformed": false
+    },
+    {
+      "group": "ui-current-feedback",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-states-745f9c2/login-cancel-1440-axe.json",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-feedback/login-cancel-1440-axe.json",
+      "source_sha256": "7eb6a0223763488c86c52cf45da5c7606af4f7b4783ca8858c17b87ede66da9e",
+      "sha256": "7eb6a0223763488c86c52cf45da5c7606af4f7b4783ca8858c17b87ede66da9e",
+      "bytes": 129874,
+      "transformed": false
+    },
+    {
+      "group": "ui-current-feedback",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-states-745f9c2/login-cancel-1440.png",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-feedback/login-cancel-1440.png",
+      "source_sha256": "9094db1e7369c7a886e8180d1000071f5a4b062ac76b99532d829c6d96e0c2d8",
+      "sha256": "9094db1e7369c7a886e8180d1000071f5a4b062ac76b99532d829c6d96e0c2d8",
+      "bytes": 105391,
+      "transformed": false
+    },
+    {
+      "group": "ui-current-feedback",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-states-745f9c2/login-cancel-320-axe.json",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-feedback/login-cancel-320-axe.json",
+      "source_sha256": "f59a0055c85cf00f16b55c6617fde9d06954346e2bfecc0b08f9796b50fbdc49",
+      "sha256": "f59a0055c85cf00f16b55c6617fde9d06954346e2bfecc0b08f9796b50fbdc49",
+      "bytes": 129686,
+      "transformed": false
+    },
+    {
+      "group": "ui-current-feedback",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-states-745f9c2/login-cancel-320.png",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-feedback/login-cancel-320.png",
+      "source_sha256": "118f6f9dceb45ff39f8aafc66a0deb08032e648ba02ddece63efa8fcdaa43788",
+      "sha256": "118f6f9dceb45ff39f8aafc66a0deb08032e648ba02ddece63efa8fcdaa43788",
+      "bytes": 52428,
+      "transformed": false
+    },
+    {
+      "group": "ui-current-feedback",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-states-745f9c2/login-error-1440-axe.json",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-feedback/login-error-1440-axe.json",
+      "source_sha256": "11f2782d4debff9839ed5a5789f6aed094d05537a72c81fe1652c9cfa76636a4",
+      "sha256": "11f2782d4debff9839ed5a5789f6aed094d05537a72c81fe1652c9cfa76636a4",
+      "bytes": 129692,
+      "transformed": false
+    },
+    {
+      "group": "ui-current-feedback",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-states-745f9c2/login-error-1440.png",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-feedback/login-error-1440.png",
+      "source_sha256": "a2bb6b77e53cd6948970ad66fe90ae7c3297ab16c67e4cf351bede900587b9ba",
+      "sha256": "a2bb6b77e53cd6948970ad66fe90ae7c3297ab16c67e4cf351bede900587b9ba",
+      "bytes": 102851,
+      "transformed": false
+    },
+    {
+      "group": "ui-current-feedback",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-states-745f9c2/login-error-320-axe.json",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-feedback/login-error-320-axe.json",
+      "source_sha256": "553fb788d172c30b49e09f1486aa5eda4d7f67917225ba37b1b62332cdbdf824",
+      "sha256": "553fb788d172c30b49e09f1486aa5eda4d7f67917225ba37b1b62332cdbdf824",
+      "bytes": 129691,
+      "transformed": false
+    },
+    {
+      "group": "ui-current-feedback",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-states-745f9c2/login-error-320.png",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-feedback/login-error-320.png",
+      "source_sha256": "d4297f3b9143dc23226b26e8d980bc92827a6e96e1bb62fa323accf33bdd46c1",
+      "sha256": "d4297f3b9143dc23226b26e8d980bc92827a6e96e1bb62fa323accf33bdd46c1",
+      "bytes": 50806,
+      "transformed": false
+    },
+    {
+      "group": "ui-current-feedback",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-states-745f9c2/provenance.json",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-feedback/provenance.json",
+      "source_sha256": "cb4a3ec5eb6396bf04feef05e2764d1194d420535de828aa43d89d31c5f9334e",
+      "sha256": "cb4a3ec5eb6396bf04feef05e2764d1194d420535de828aa43d89d31c5f9334e",
+      "bytes": 73036,
+      "transformed": false
+    },
+    {
+      "group": "ui-current-feedback",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-states-745f9c2/remove-error-1440-axe.json",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-feedback/remove-error-1440-axe.json",
+      "source_sha256": "2d491ed50836fd6f15454f353262f803f41b2c368fdbce3e7e9fb78fdd82cb31",
+      "sha256": "2d491ed50836fd6f15454f353262f803f41b2c368fdbce3e7e9fb78fdd82cb31",
+      "bytes": 73285,
+      "transformed": false
+    },
+    {
+      "group": "ui-current-feedback",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-states-745f9c2/remove-error-1440.png",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-feedback/remove-error-1440.png",
+      "source_sha256": "d7673bea0e881bd504b78d98887873612952775d5fd26e796119d971c6cb62c3",
+      "sha256": "d7673bea0e881bd504b78d98887873612952775d5fd26e796119d971c6cb62c3",
+      "bytes": 132043,
+      "transformed": false
+    },
+    {
+      "group": "ui-current-feedback",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-states-745f9c2/remove-error-320-axe.json",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-feedback/remove-error-320-axe.json",
+      "source_sha256": "5828308dcb0f0ef76e5565567f868d8b6503c80cc8d849f82300993175e1ff5c",
+      "sha256": "5828308dcb0f0ef76e5565567f868d8b6503c80cc8d849f82300993175e1ff5c",
+      "bytes": 73849,
+      "transformed": false
+    },
+    {
+      "group": "ui-current-feedback",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-states-745f9c2/remove-error-320.png",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-feedback/remove-error-320.png",
+      "source_sha256": "d429fc932f1b7344572659bf80c87f679199b34253630b7d878428a24664d5ab",
+      "sha256": "d429fc932f1b7344572659bf80c87f679199b34253630b7d878428a24664d5ab",
+      "bytes": 85709,
+      "transformed": false
+    },
+    {
+      "group": "ui-current-focused",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-b0c0442-focused/run-details/passkeys--feedback-regress-9c709-focus-or-submit-credentials/aborted-login-new-route-focus.png",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-focused/cases/de40258d6b57/aborted-login-new-route-focus.png",
+      "source_sha256": "d645b0879898fd66f7f74744af481ca78d3fe0cae52bd7f2584ad4be1dbb3fdb",
+      "sha256": "d645b0879898fd66f7f74744af481ca78d3fe0cae52bd7f2584ad4be1dbb3fdb",
+      "bytes": 91956,
+      "transformed": false,
+      "portable_path_compacted_from": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-focused/run-details/passkeys--feedback-regress-9c709-focus-or-submit-credentials/aborted-login-new-route-focus.png"
+    },
+    {
+      "group": "ui-current-focused",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-b0c0442-focused/run-details/step-up-passkey--feedback--110b3-ng-or-replacing-its-binding/unresolved-proof-owner-recovery-focus.png",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-focused/cases/eef0e8c337e4/unresolved-proof-owner-recovery-focus.png",
+      "source_sha256": "34aa8b27d04a304d2442c3750282befd1322d7964ebdd2313e6aa173156cf360",
+      "sha256": "34aa8b27d04a304d2442c3750282befd1322d7964ebdd2313e6aa173156cf360",
+      "bytes": 118549,
+      "transformed": false,
+      "portable_path_compacted_from": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-focused/run-details/step-up-passkey--feedback--110b3-ng-or-replacing-its-binding/unresolved-proof-owner-recovery-focus.png"
+    },
+    {
+      "group": "ui-current-focused",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-b0c0442-focused/run-details/passkeys--feedback-regress-22335-nd-never-resubmits-on-focus/login-uncertain-recovery-focus.png",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-focused/cases/fc56565824c0/login-uncertain-recovery-focus.png",
+      "source_sha256": "0c308df931cc980b4ba04af3976da369493a60158c67e52cdfdfe4d7ccc70802",
+      "sha256": "0c308df931cc980b4ba04af3976da369493a60158c67e52cdfdfe4d7ccc70802",
+      "bytes": 108026,
+      "transformed": false,
+      "portable_path_compacted_from": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-focused/run-details/passkeys--feedback-regress-22335-nd-never-resubmits-on-focus/login-uncertain-recovery-focus.png"
+    },
+    {
+      "group": "ui-current-focused",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-b0c0442-focused/exit-code.txt",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-focused/exit-code.txt",
+      "source_sha256": "13bf7b3039c63bf5a50491fa3cfd8eb4e699d1ba1436315aef9cbe5711530354",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "bytes": 2,
+      "transformed": true
+    },
+    {
+      "group": "ui-current-focused",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-b0c0442-focused/playwright.log",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-focused/playwright.log",
+      "source_sha256": "8f29a565afd207e4da8016a633856156cbebef77c45a175cd900ad53481424f2",
+      "sha256": "25d25b96d1d44eda2e9f1dc98ab0d5eb1c41f523b97572f9d896204b7a68f0e5",
+      "bytes": 1656,
+      "transformed": true
+    },
+    {
+      "group": "ui-current-focused",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-b0c0442-focused/results.json",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-focused/results.json",
+      "source_sha256": "ad758f9cbcb048e3ad62bb924e2f4885e682d6b43f2cd89514e214cc5bd86500",
+      "sha256": "9ad49ee1280ad985e50fff96b69eae0e7302882f493bf3ac277a6263985783fc",
+      "bytes": 11540,
+      "transformed": true
+    },
+    {
+      "group": "ui-current-focused",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-b0c0442-focused/run-details/.last-run.json",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-focused/run-details/.last-run.json",
+      "source_sha256": "91d1c43004802cd49950d78eb11c8fa7d05da8ffffe219a8b13b2f561bc00903",
+      "sha256": "91d1c43004802cd49950d78eb11c8fa7d05da8ffffe219a8b13b2f561bc00903",
+      "bytes": 45,
+      "transformed": false
+    },
+    {
+      "group": "ui-current-focused",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-b0c0442-focused/run-details/passkeys--feedback-regress-528bd-thout-replacing-the-request/revoke-unknown-closed.png",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-focused/run-details/passkeys--feedback-regress-528bd-thout-replacing-the-request/revoke-unknown-closed.png",
+      "source_sha256": "fc76a52f66af8f671aaaa0a532ac3fbe2fa4a6c0f61adee34f81045b5dbbf5b0",
+      "sha256": "fc76a52f66af8f671aaaa0a532ac3fbe2fa4a6c0f61adee34f81045b5dbbf5b0",
+      "bytes": 122226,
+      "transformed": false
+    },
+    {
+      "group": "ui-current-focused",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-b0c0442-focused/run-details/passkeys--feedback-regress-5f307-ion-without-another-attempt/login-http-429-focus.png",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-focused/run-details/passkeys--feedback-regress-5f307-ion-without-another-attempt/login-http-429-focus.png",
+      "source_sha256": "d0e5e896045aba236fa85cd32d3df30bf2b6a9eee2563dce09fd569884a60eb8",
+      "sha256": "d0e5e896045aba236fa85cd32d3df30bf2b6a9eee2563dce09fd569884a60eb8",
+      "bytes": 103642,
+      "transformed": false
+    },
+    {
+      "group": "ui-current-focused",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-b0c0442-focused/run-details/passkeys--feedback-regress-738d8-ion-without-another-attempt/login-native-cancel-focus.png",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-focused/run-details/passkeys--feedback-regress-738d8-ion-without-another-attempt/login-native-cancel-focus.png",
+      "source_sha256": "d50cb1e2384df0f1e6480c67685949bf10112671936b96843df3d49558d46ad8",
+      "sha256": "d50cb1e2384df0f1e6480c67685949bf10112671936b96843df3d49558d46ad8",
+      "bytes": 105390,
+      "transformed": false
+    },
+    {
+      "group": "ui-current-focused",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-b0c0442-focused/run-details/passkeys--feedback-regress-edc5f-op-dialog-without-scrolling/remove-error-desktop.png",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-focused/run-details/passkeys--feedback-regress-edc5f-op-dialog-without-scrolling/remove-error-desktop.png",
+      "source_sha256": "56590b46c3dbb57b59d1f3f2ff4debbd62839f29070c9c2018e890565b6ef262",
+      "sha256": "56590b46c3dbb57b59d1f3f2ff4debbd62839f29070c9c2018e890565b6ef262",
+      "bytes": 132025,
+      "transformed": false
+    },
+    {
+      "group": "ui-current-focused",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-b0c0442-focused/run-details/passkeys--feedback-regress-f63ef-thout-replacing-the-request/enroll-unknown-closed.png",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-focused/run-details/passkeys--feedback-regress-f63ef-thout-replacing-the-request/enroll-unknown-closed.png",
+      "source_sha256": "5f8f0e3a7b9432cf89273433371e5a7ace9c85eb003f78469c291547c708ae74",
+      "sha256": "5f8f0e3a7b9432cf89273433371e5a7ace9c85eb003f78469c291547c708ae74",
+      "bytes": 117126,
+      "transformed": false
+    },
+    {
+      "group": "ui-current-focused",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-b0c0442-focused/source-sha.txt",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-focused/source-sha.txt",
+      "source_sha256": "9efaed8edb278e54ee472fa817605fc9294bba85ff7772a4e5df71aed47164e4",
+      "sha256": "14ae81245ea870bbcb831c269f056380791ae5bd0f30077c16e3635421598508",
+      "bytes": 41,
+      "transformed": true
+    },
+    {
+      "group": "ui-current-registration",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-745f9c2-registration/consent-desktop.png",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-registration/consent-desktop.png",
+      "source_sha256": "cd2208c6feb04bf5a29a79d43f8bd311555a23b2dbe2e654c0dc8a25704a5256",
+      "sha256": "cd2208c6feb04bf5a29a79d43f8bd311555a23b2dbe2e654c0dc8a25704a5256",
+      "bytes": 99660,
+      "transformed": false
+    },
+    {
+      "group": "ui-current-registration",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-745f9c2-registration/consent-narrow.png",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-registration/consent-narrow.png",
+      "source_sha256": "a96bb400f9bb2ee8f5282717844afe7890ab8bdeb3d16e382cf984704f0a7067",
+      "sha256": "a96bb400f9bb2ee8f5282717844afe7890ab8bdeb3d16e382cf984704f0a7067",
+      "bytes": 45147,
+      "transformed": false
+    },
+    {
+      "group": "ui-current-registration",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-745f9c2-registration/exit-code.txt",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-registration/exit-code.txt",
+      "source_sha256": "13bf7b3039c63bf5a50491fa3cfd8eb4e699d1ba1436315aef9cbe5711530354",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "bytes": 2,
+      "transformed": true
+    },
+    {
+      "group": "ui-current-registration",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-745f9c2-registration/global-consent-1440.png",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-registration/global-consent-1440.png",
+      "source_sha256": "96475af21f1dfb706b36583f5d2c6b6a11b65885f37c895580be86d1be36c8c5",
+      "sha256": "96475af21f1dfb706b36583f5d2c6b6a11b65885f37c895580be86d1be36c8c5",
+      "bytes": 100146,
+      "transformed": false
+    },
+    {
+      "group": "ui-current-registration",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-745f9c2-registration/global-consent-320.png",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-registration/global-consent-320.png",
+      "source_sha256": "5e425c91d0d31fdf4c87902e03d0c68c08858b8ff1c2c110aec57e4462159e00",
+      "sha256": "5e425c91d0d31fdf4c87902e03d0c68c08858b8ff1c2c110aec57e4462159e00",
+      "bytes": 45773,
+      "transformed": false
+    },
+    {
+      "group": "ui-current-registration",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-745f9c2-registration/global-consent-768.png",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-registration/global-consent-768.png",
+      "source_sha256": "069b237a02f9e664e7d99e268f4ffd51f288429d52febc7f2a37508445efddd3",
+      "sha256": "069b237a02f9e664e7d99e268f4ffd51f288429d52febc7f2a37508445efddd3",
+      "bytes": 68995,
+      "transformed": false
+    },
+    {
+      "group": "ui-current-registration",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-745f9c2-registration/global-personal-1440.png",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-registration/global-personal-1440.png",
+      "source_sha256": "cc738ae30fd7d7b06c5c328229db8e5fde8a53b981298f523586519a34125e29",
+      "sha256": "cc738ae30fd7d7b06c5c328229db8e5fde8a53b981298f523586519a34125e29",
+      "bytes": 87028,
+      "transformed": false
+    },
+    {
+      "group": "ui-current-registration",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-745f9c2-registration/global-personal-320.png",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-registration/global-personal-320.png",
+      "source_sha256": "14813390b24df9db014392189d7b89adc472dead6b720936aaff59fc2552a5d8",
+      "sha256": "14813390b24df9db014392189d7b89adc472dead6b720936aaff59fc2552a5d8",
+      "bytes": 45243,
+      "transformed": false
+    },
+    {
+      "group": "ui-current-registration",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-745f9c2-registration/global-personal-768.png",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-registration/global-personal-768.png",
+      "source_sha256": "09a645110814d074fe288b38fa6bf2ad8a9502ba86690d18589e6a07dd1235bd",
+      "sha256": "09a645110814d074fe288b38fa6bf2ad8a9502ba86690d18589e6a07dd1235bd",
+      "bytes": 51999,
+      "transformed": false
+    },
+    {
+      "group": "ui-current-registration",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-745f9c2-registration/global-personal-errors-1440.png",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-registration/global-personal-errors-1440.png",
+      "source_sha256": "dd1156f5dfeac742c984719a3a0918a7c8037384eb999ce31eadb5a715d250a4",
+      "sha256": "dd1156f5dfeac742c984719a3a0918a7c8037384eb999ce31eadb5a715d250a4",
+      "bytes": 92793,
+      "transformed": false
+    },
+    {
+      "group": "ui-current-registration",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-745f9c2-registration/global-personal-errors-320.png",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-registration/global-personal-errors-320.png",
+      "source_sha256": "a96f9dd336557f5b5c3876e33489fc3852096c911a3ef139f5d28bdbe4586a5f",
+      "sha256": "a96f9dd336557f5b5c3876e33489fc3852096c911a3ef139f5d28bdbe4586a5f",
+      "bytes": 50995,
+      "transformed": false
+    },
+    {
+      "group": "ui-current-registration",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-745f9c2-registration/global-personal-errors-768.png",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-registration/global-personal-errors-768.png",
+      "source_sha256": "020e363d74b2514d39f91a49b7c4042f75d369554b795a91cfd903e4e1f21612",
+      "sha256": "020e363d74b2514d39f91a49b7c4042f75d369554b795a91cfd903e4e1f21612",
+      "bytes": 57332,
+      "transformed": false
+    },
+    {
+      "group": "ui-current-registration",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-745f9c2-registration/global-ready-1440.png",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-registration/global-ready-1440.png",
+      "source_sha256": "332ada64b92d2e3e4cb10fbb944ff36cfe863d30a8f35306d278456ca953b7e6",
+      "sha256": "332ada64b92d2e3e4cb10fbb944ff36cfe863d30a8f35306d278456ca953b7e6",
+      "bytes": 93080,
+      "transformed": false
+    },
+    {
+      "group": "ui-current-registration",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-745f9c2-registration/global-ready-320.png",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-registration/global-ready-320.png",
+      "source_sha256": "3d2117513396640dacfabcc0ed1b8c4b82a1fe8ffa2926e74685c5931c92eda4",
+      "sha256": "3d2117513396640dacfabcc0ed1b8c4b82a1fe8ffa2926e74685c5931c92eda4",
+      "bytes": 43321,
+      "transformed": false
+    },
+    {
+      "group": "ui-current-registration",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-745f9c2-registration/global-ready-768.png",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-registration/global-ready-768.png",
+      "source_sha256": "60e66b4bdd3abfbc609cb91a61bab28c566f2d6dc40514633a23a3a4b6404d3e",
+      "sha256": "60e66b4bdd3abfbc609cb91a61bab28c566f2d6dc40514633a23a3a4b6404d3e",
+      "bytes": 60584,
+      "transformed": false
+    },
+    {
+      "group": "ui-current-registration",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-745f9c2-registration/global-register-1440.png",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-registration/global-register-1440.png",
+      "source_sha256": "7c51f87606d2f22f5e94914d488a381a640c3130bc6424c22758cc40da3af9bc",
+      "sha256": "7c51f87606d2f22f5e94914d488a381a640c3130bc6424c22758cc40da3af9bc",
+      "bytes": 102361,
+      "transformed": false
+    },
+    {
+      "group": "ui-current-registration",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-745f9c2-registration/global-register-320.png",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-registration/global-register-320.png",
+      "source_sha256": "e56976f391855bf2f72a7f2879e94b15117164020c23f6010d457953cb16441d",
+      "sha256": "e56976f391855bf2f72a7f2879e94b15117164020c23f6010d457953cb16441d",
+      "bytes": 52555,
+      "transformed": false
+    },
+    {
+      "group": "ui-current-registration",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-745f9c2-registration/global-register-768.png",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-registration/global-register-768.png",
+      "source_sha256": "bdc70f0a7a0d3b553fbf23c4988613713d019392601573632570c38e5e9e8303",
+      "sha256": "bdc70f0a7a0d3b553fbf23c4988613713d019392601573632570c38e5e9e8303",
+      "bytes": 69139,
+      "transformed": false
+    },
+    {
+      "group": "ui-current-registration",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-745f9c2-registration/global-registration-errors-1440.png",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-registration/global-registration-errors-1440.png",
+      "source_sha256": "7ff5697dd008707ead3ae71b79ac284641ea589b15aaf0e5c0472bfee576d240",
+      "sha256": "7ff5697dd008707ead3ae71b79ac284641ea589b15aaf0e5c0472bfee576d240",
+      "bytes": 116184,
+      "transformed": false
+    },
+    {
+      "group": "ui-current-registration",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-745f9c2-registration/global-registration-errors-320.png",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-registration/global-registration-errors-320.png",
+      "source_sha256": "7b4380a31f92c5ff2c70bf43f7f3bfcb71826b7ab537d459d0a4ba43438f465d",
+      "sha256": "7b4380a31f92c5ff2c70bf43f7f3bfcb71826b7ab537d459d0a4ba43438f465d",
+      "bytes": 65751,
+      "transformed": false
+    },
+    {
+      "group": "ui-current-registration",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-745f9c2-registration/global-registration-errors-768.png",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-registration/global-registration-errors-768.png",
+      "source_sha256": "ccdc49527cf20984a64396aa7bc0787536094822e5bf670f37f861d3fdc7bdec",
+      "sha256": "ccdc49527cf20984a64396aa7bc0787536094822e5bf670f37f861d3fdc7bdec",
+      "bytes": 81224,
+      "transformed": false
+    },
+    {
+      "group": "ui-current-registration",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-745f9c2-registration/global-verification-errors-1440.png",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-registration/global-verification-errors-1440.png",
+      "source_sha256": "160316e44f228e89e5224a9a47cde46d6eb2a84d0587e61ac84cb3cde03bcc68",
+      "sha256": "160316e44f228e89e5224a9a47cde46d6eb2a84d0587e61ac84cb3cde03bcc68",
+      "bytes": 106050,
+      "transformed": false
+    },
+    {
+      "group": "ui-current-registration",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-745f9c2-registration/global-verification-errors-320.png",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-registration/global-verification-errors-320.png",
+      "source_sha256": "3016882ee2fff13417ecf4f8737a5d88c1e638f5ea679fe3a6f7f8e51b7b9432",
+      "sha256": "3016882ee2fff13417ecf4f8737a5d88c1e638f5ea679fe3a6f7f8e51b7b9432",
+      "bytes": 53321,
+      "transformed": false
+    },
+    {
+      "group": "ui-current-registration",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-745f9c2-registration/global-verification-errors-768.png",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-registration/global-verification-errors-768.png",
+      "source_sha256": "f11b29363231b99c828c1f5dadeea8c7867a23a3fa18e27756f8f97216325c78",
+      "sha256": "f11b29363231b99c828c1f5dadeea8c7867a23a3fa18e27756f8f97216325c78",
+      "bytes": 72038,
+      "transformed": false
+    },
+    {
+      "group": "ui-current-registration",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-745f9c2-registration/global-verify-1440.png",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-registration/global-verify-1440.png",
+      "source_sha256": "f2e0893e64eec1c110966bfd87828aeaed3a119a937034920a377bb6382a4e6c",
+      "sha256": "f2e0893e64eec1c110966bfd87828aeaed3a119a937034920a377bb6382a4e6c",
+      "bytes": 98085,
+      "transformed": false
+    },
+    {
+      "group": "ui-current-registration",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-745f9c2-registration/global-verify-320.png",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-registration/global-verify-320.png",
+      "source_sha256": "d4d9f2fefada4f01260fb5ff78d35711ab2912a5140dd61b4343092ce25280e1",
+      "sha256": "d4d9f2fefada4f01260fb5ff78d35711ab2912a5140dd61b4343092ce25280e1",
+      "bytes": 46663,
+      "transformed": false
+    },
+    {
+      "group": "ui-current-registration",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-745f9c2-registration/global-verify-768.png",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-registration/global-verify-768.png",
+      "source_sha256": "abb7d72d8244d7988d29f2133c124a4cf879082a828ea850e18bc013b009ab0c",
+      "sha256": "abb7d72d8244d7988d29f2133c124a4cf879082a828ea850e18bc013b009ab0c",
+      "bytes": 65809,
+      "transformed": false
+    },
+    {
+      "group": "ui-current-registration",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-745f9c2-registration/personal-desktop.png",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-registration/personal-desktop.png",
+      "source_sha256": "cc738ae30fd7d7b06c5c328229db8e5fde8a53b981298f523586519a34125e29",
+      "sha256": "cc738ae30fd7d7b06c5c328229db8e5fde8a53b981298f523586519a34125e29",
+      "bytes": 87028,
+      "transformed": false
+    },
+    {
+      "group": "ui-current-registration",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-745f9c2-registration/personal-narrow.png",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-registration/personal-narrow.png",
+      "source_sha256": "e157403aae53723443c5e440d9226f05688bd3ba1df94e194f59d2016ad44eef",
+      "sha256": "e157403aae53723443c5e440d9226f05688bd3ba1df94e194f59d2016ad44eef",
+      "bytes": 45178,
+      "transformed": false
+    },
+    {
+      "group": "ui-current-registration",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-745f9c2-registration/playwright.log",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-registration/playwright.log",
+      "source_sha256": "950044613fdd054714916ff8969d768946adc36cb4bc9c4d4406bca9fa93fe77",
+      "sha256": "2ebe8548604b36f0f9153902a1373313fc9e9d8803dacdc5e5ab21e0491a3764",
+      "bytes": 4201,
+      "transformed": true
+    },
+    {
+      "group": "ui-current-registration",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-745f9c2-registration/ready-desktop.png",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-registration/ready-desktop.png",
+      "source_sha256": "332ada64b92d2e3e4cb10fbb944ff36cfe863d30a8f35306d278456ca953b7e6",
+      "sha256": "332ada64b92d2e3e4cb10fbb944ff36cfe863d30a8f35306d278456ca953b7e6",
+      "bytes": 93080,
+      "transformed": false
+    },
+    {
+      "group": "ui-current-registration",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-745f9c2-registration/ready-narrow.png",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-registration/ready-narrow.png",
+      "source_sha256": "30848dcc62b933a8b1a4de9314654bb7598dd20db0bc53f82a207c512d39b1d1",
+      "sha256": "30848dcc62b933a8b1a4de9314654bb7598dd20db0bc53f82a207c512d39b1d1",
+      "bytes": 42976,
+      "transformed": false
+    },
+    {
+      "group": "ui-current-registration",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-745f9c2-registration/register-desktop.png",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-registration/register-desktop.png",
+      "source_sha256": "7c51f87606d2f22f5e94914d488a381a640c3130bc6424c22758cc40da3af9bc",
+      "sha256": "7c51f87606d2f22f5e94914d488a381a640c3130bc6424c22758cc40da3af9bc",
+      "bytes": 102361,
+      "transformed": false
+    },
+    {
+      "group": "ui-current-registration",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-745f9c2-registration/register-narrow.png",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-registration/register-narrow.png",
+      "source_sha256": "2496c5047313c38b74293b86751449a454a084a052db988c0f8b5217480ef794",
+      "sha256": "2496c5047313c38b74293b86751449a454a084a052db988c0f8b5217480ef794",
+      "bytes": 52473,
+      "transformed": false
+    },
+    {
+      "group": "ui-current-registration",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-745f9c2-registration/results.json",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-registration/results.json",
+      "source_sha256": "d0cb97c00656c0439e0b72b927a1c3c03c581f4ce2aa3c64080489fa8dd30c0a",
+      "sha256": "dbc5e33b99d38f353c177058621d43b7e009348c47a8498c505d39fb8b69d194",
+      "bytes": 30488,
+      "transformed": true
+    },
+    {
+      "group": "ui-current-registration",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-745f9c2-registration/run-details/.last-run.json",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-registration/run-details/.last-run.json",
+      "source_sha256": "91d1c43004802cd49950d78eb11c8fa7d05da8ffffe219a8b13b2f561bc00903",
+      "sha256": "91d1c43004802cd49950d78eb11c8fa7d05da8ffffe219a8b13b2f561bc00903",
+      "bytes": 45,
+      "transformed": false
+    },
+    {
+      "group": "ui-current-registration",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-745f9c2-registration/source-sha.txt",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-registration/source-sha.txt",
+      "source_sha256": "947f0a59c3cb6e3f137e9f09b995647026ae69e29ce74f2feb09ad97042f988f",
+      "sha256": "762bd2764335e086c51ae91f8937a7d8efd17589b158f5067c40ed9254ebd6a0",
+      "bytes": 41,
+      "transformed": true
+    },
+    {
+      "group": "ui-current-registration",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-745f9c2-registration/verify-desktop.png",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-registration/verify-desktop.png",
+      "source_sha256": "f2e0893e64eec1c110966bfd87828aeaed3a119a937034920a377bb6382a4e6c",
+      "sha256": "f2e0893e64eec1c110966bfd87828aeaed3a119a937034920a377bb6382a4e6c",
+      "bytes": 98085,
+      "transformed": false
+    },
+    {
+      "group": "ui-current-registration",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-745f9c2-registration/verify-narrow.png",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-registration/verify-narrow.png",
+      "source_sha256": "b75df0739cc5bbae986fcb8352f46fe424e4ff93d7ab19df23065849cc3beac9",
+      "sha256": "b75df0739cc5bbae986fcb8352f46fe424e4ff93d7ab19df23065849cc3beac9",
+      "bytes": 46614,
+      "transformed": false
+    },
+    {
+      "group": "ui-current-step-up",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-b0c0442-step-up/changed-AUTHENTICATION_REQUIRED.png",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-step-up/changed-AUTHENTICATION_REQUIRED.png",
+      "source_sha256": "5b444a0a8fb2125fe40730caf9d4aa285917585055004bfe359d900c38c03269",
+      "sha256": "5b444a0a8fb2125fe40730caf9d4aa285917585055004bfe359d900c38c03269",
+      "bytes": 44300,
+      "transformed": false
+    },
+    {
+      "group": "ui-current-step-up",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-b0c0442-step-up/changed-FORBIDDEN_SCOPE.png",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-step-up/changed-FORBIDDEN_SCOPE.png",
+      "source_sha256": "5b444a0a8fb2125fe40730caf9d4aa285917585055004bfe359d900c38c03269",
+      "sha256": "5b444a0a8fb2125fe40730caf9d4aa285917585055004bfe359d900c38c03269",
+      "bytes": 44300,
+      "transformed": false
+    },
+    {
+      "group": "ui-current-step-up",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-b0c0442-step-up/changed-VERSION_CONFLICT.png",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-step-up/changed-VERSION_CONFLICT.png",
+      "source_sha256": "5b444a0a8fb2125fe40730caf9d4aa285917585055004bfe359d900c38c03269",
+      "sha256": "5b444a0a8fb2125fe40730caf9d4aa285917585055004bfe359d900c38c03269",
+      "bytes": 44300,
+      "transformed": false
+    },
+    {
+      "group": "ui-current-step-up",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-b0c0442-step-up/chooser-1024.png",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-step-up/chooser-1024.png",
+      "source_sha256": "596ec0d7d40dfd99d427f9a29849b1c555489c1ead76a4ab28280f0c5c2c0d39",
+      "sha256": "596ec0d7d40dfd99d427f9a29849b1c555489c1ead76a4ab28280f0c5c2c0d39",
+      "bytes": 49530,
+      "transformed": false
+    },
+    {
+      "group": "ui-current-step-up",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-b0c0442-step-up/chooser-1440.png",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-step-up/chooser-1440.png",
+      "source_sha256": "f4047c3995cb3f51ed02d6d08c37d850ec498d6164e484251759f70b3c4d0c13",
+      "sha256": "f4047c3995cb3f51ed02d6d08c37d850ec498d6164e484251759f70b3c4d0c13",
+      "bytes": 51810,
+      "transformed": false
+    },
+    {
+      "group": "ui-current-step-up",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-b0c0442-step-up/chooser-320.png",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-step-up/chooser-320.png",
+      "source_sha256": "eb24bb1b7abe58e9ca26ad0a4a1dfa5facab41da4ad68e89212faae29ca05f35",
+      "sha256": "eb24bb1b7abe58e9ca26ad0a4a1dfa5facab41da4ad68e89212faae29ca05f35",
+      "bytes": 41246,
+      "transformed": false
+    },
+    {
+      "group": "ui-current-step-up",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-b0c0442-step-up/chooser-390.png",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-step-up/chooser-390.png",
+      "source_sha256": "7b57720ca989a9db69dd31c6dee6d96419849607e4f5c80aaffb53363ff53f20",
+      "sha256": "7b57720ca989a9db69dd31c6dee6d96419849607e4f5c80aaffb53363ff53f20",
+      "bytes": 43612,
+      "transformed": false
+    },
+    {
+      "group": "ui-current-step-up",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-b0c0442-step-up/chooser-768.png",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-step-up/chooser-768.png",
+      "source_sha256": "ae989a1a7b284f26c9c46ff8db1679f6c7c7d1c2dbabbfd90010798da466366b",
+      "sha256": "ae989a1a7b284f26c9c46ff8db1679f6c7c7d1c2dbabbfd90010798da466366b",
+      "bytes": 47619,
+      "transformed": false
+    },
+    {
+      "group": "ui-current-step-up",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-b0c0442-step-up/exit-code.txt",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-step-up/exit-code.txt",
+      "source_sha256": "13bf7b3039c63bf5a50491fa3cfd8eb4e699d1ba1436315aef9cbe5711530354",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "bytes": 2,
+      "transformed": true
+    },
+    {
+      "group": "ui-current-step-up",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-b0c0442-step-up/password-1024.png",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-step-up/password-1024.png",
+      "source_sha256": "d3d3437fc0fd03f2c8c458eb2e5cfde5b0c6e27afa5e2a25023f8db315a3f962",
+      "sha256": "d3d3437fc0fd03f2c8c458eb2e5cfde5b0c6e27afa5e2a25023f8db315a3f962",
+      "bytes": 42819,
+      "transformed": false
+    },
+    {
+      "group": "ui-current-step-up",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-b0c0442-step-up/password-1440.png",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-step-up/password-1440.png",
+      "source_sha256": "b70fd2a16d78a16ff8ebee758cd64fccffc53e88cf419d344b6c094ab65ffa09",
+      "sha256": "b70fd2a16d78a16ff8ebee758cd64fccffc53e88cf419d344b6c094ab65ffa09",
+      "bytes": 44916,
+      "transformed": false
+    },
+    {
+      "group": "ui-current-step-up",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-b0c0442-step-up/password-320.png",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-step-up/password-320.png",
+      "source_sha256": "eca274980aa6294a02d29217e281629ae72445d7cdbbb5c9a6cf5c62834cdd8f",
+      "sha256": "eca274980aa6294a02d29217e281629ae72445d7cdbbb5c9a6cf5c62834cdd8f",
+      "bytes": 35780,
+      "transformed": false
+    },
+    {
+      "group": "ui-current-step-up",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-b0c0442-step-up/password-390.png",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-step-up/password-390.png",
+      "source_sha256": "9615a5c8a9eb0beeee54957fa7e5b97e4b5f0937de92539aa2a6b6f94ec52db0",
+      "sha256": "9615a5c8a9eb0beeee54957fa7e5b97e4b5f0937de92539aa2a6b6f94ec52db0",
+      "bytes": 36598,
+      "transformed": false
+    },
+    {
+      "group": "ui-current-step-up",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-b0c0442-step-up/password-768.png",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-step-up/password-768.png",
+      "source_sha256": "9193fcd72b4892f9a9cd890957d3c28c32ae5c2d444d3e87930a49e5715f23a8",
+      "sha256": "9193fcd72b4892f9a9cd890957d3c28c32ae5c2d444d3e87930a49e5715f23a8",
+      "bytes": 41774,
+      "transformed": false
+    },
+    {
+      "group": "ui-current-step-up",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-b0c0442-step-up/playwright.log",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-step-up/playwright.log",
+      "source_sha256": "f8f7034e44e7b2d0896bd2dfa2662fdb55faf96f6a80d6b1f3ee50ea3f8a2b58",
+      "sha256": "a7ee9c109b26d5312d9839dbfa4c1874beae248c461d8a2a1c18f551791190ca",
+      "bytes": 3116,
+      "transformed": true
+    },
+    {
+      "group": "ui-current-step-up",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-b0c0442-step-up/results.json",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-step-up/results.json",
+      "source_sha256": "426dfea58da2c9779be407bb2902864490cab8f2cbae24862c593a02bfc2d933",
+      "sha256": "9e14d43f977ce0d72cfc60fb5a81e06433a5cfab11afff53963ef0ae9a9de146",
+      "bytes": 25444,
+      "transformed": true
+    },
+    {
+      "group": "ui-current-step-up",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-b0c0442-step-up/run-details/.last-run.json",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-step-up/run-details/.last-run.json",
+      "source_sha256": "91d1c43004802cd49950d78eb11c8fa7d05da8ffffe219a8b13b2f561bc00903",
+      "sha256": "91d1c43004802cd49950d78eb11c8fa7d05da8ffffe219a8b13b2f561bc00903",
+      "bytes": 45,
+      "transformed": false
+    },
+    {
+      "group": "ui-current-step-up",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-b0c0442-step-up/server-error-1024.png",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-step-up/server-error-1024.png",
+      "source_sha256": "10304b52d6eae205198b9f51dfa396fa82be32a23788b2e19e8b61b148ae3f9a",
+      "sha256": "10304b52d6eae205198b9f51dfa396fa82be32a23788b2e19e8b61b148ae3f9a",
+      "bytes": 47024,
+      "transformed": false
+    },
+    {
+      "group": "ui-current-step-up",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-b0c0442-step-up/server-error-1440.png",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-step-up/server-error-1440.png",
+      "source_sha256": "29f5e41d44a69ad1c6075bce15155b13afd7207cc37c4ee876da26b48457aff9",
+      "sha256": "29f5e41d44a69ad1c6075bce15155b13afd7207cc37c4ee876da26b48457aff9",
+      "bytes": 49512,
+      "transformed": false
+    },
+    {
+      "group": "ui-current-step-up",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-b0c0442-step-up/server-error-320.png",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-step-up/server-error-320.png",
+      "source_sha256": "81dcbc85cadfdb73b0640ae50ad4df69bbc70df277290df133f178e96ed9473e",
+      "sha256": "81dcbc85cadfdb73b0640ae50ad4df69bbc70df277290df133f178e96ed9473e",
+      "bytes": 38300,
+      "transformed": false
+    },
+    {
+      "group": "ui-current-step-up",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-b0c0442-step-up/server-error-390.png",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-step-up/server-error-390.png",
+      "source_sha256": "f96cbb908b9b1afaf4f3ecf39714fef629eb8341be1303b60d1d5c0f831487a9",
+      "sha256": "f96cbb908b9b1afaf4f3ecf39714fef629eb8341be1303b60d1d5c0f831487a9",
+      "bytes": 40172,
+      "transformed": false
+    },
+    {
+      "group": "ui-current-step-up",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-b0c0442-step-up/server-error-768.png",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-step-up/server-error-768.png",
+      "source_sha256": "cc1546e5e9bfbf11db552cbf4f56bb34bdb9d897972c0af40ad2f95953e1a761",
+      "sha256": "cc1546e5e9bfbf11db552cbf4f56bb34bdb9d897972c0af40ad2f95953e1a761",
+      "bytes": 45760,
+      "transformed": false
+    },
+    {
+      "group": "ui-current-step-up",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-b0c0442-step-up/short-viewport.png",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-step-up/short-viewport.png",
+      "source_sha256": "170d820c7c7e65433188df8da4843853379a3825d954afd5b833d7f17d7d8e79",
+      "sha256": "170d820c7c7e65433188df8da4843853379a3825d954afd5b833d7f17d7d8e79",
+      "bytes": 22609,
+      "transformed": false
+    },
+    {
+      "group": "ui-current-step-up",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-b0c0442-step-up/source-sha.txt",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-step-up/source-sha.txt",
+      "source_sha256": "9efaed8edb278e54ee472fa817605fc9294bba85ff7772a4e5df71aed47164e4",
+      "sha256": "14ae81245ea870bbcb831c269f056380791ae5bd0f30077c16e3635421598508",
+      "bytes": 41,
+      "transformed": true
+    },
+    {
       "group": "ui/enabled-login",
       "source": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-enabled-login-516ec00/exit-code.txt",
       "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/enabled-login/exit-code.txt",
@@ -2252,6 +4449,42 @@
       "sha256": "0a6010f05f77c3ce105325d13ccc576883e77e4b441b8e4d424300fca34d39ad",
       "bytes": 41,
       "transformed": true
+    },
+    {
+      "group": "ui-item-review",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/CROSS-ENGINE-QA-20261110.json",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/item-review/CROSS-ENGINE-QA-20261110.json",
+      "source_sha256": "5ea2c66b9f9978cf4284d717e2219b4524147b64f27f0f3a494bbc414a973107",
+      "sha256": "5ea2c66b9f9978cf4284d717e2219b4524147b64f27f0f3a494bbc414a973107",
+      "bytes": 13931,
+      "transformed": false
+    },
+    {
+      "group": "ui-item-review",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/FEEDBACK-GREEN-ITEM-ADDON-20261110.json",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/item-review/FEEDBACK-GREEN-ITEM-ADDON-20261110.json",
+      "source_sha256": "75db4badf74dc07d9b235b214424f06084a098fb51525fed9d7e223cc1329d34",
+      "sha256": "75db4badf74dc07d9b235b214424f06084a098fb51525fed9d7e223cc1329d34",
+      "bytes": 250167,
+      "transformed": false
+    },
+    {
+      "group": "ui-item-review",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/FEEDBACK-GREEN-NOTES-20261110.md",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/item-review/FEEDBACK-GREEN-NOTES-20261110.md",
+      "source_sha256": "f7af490dfa8b1e4c61f21902a9883b94e53faa5c94e7bcd94f1882aea7e9419c",
+      "sha256": "f7af490dfa8b1e4c61f21902a9883b94e53faa5c94e7bcd94f1882aea7e9419c",
+      "bytes": 4870,
+      "transformed": false
+    },
+    {
+      "group": "ui-item-review",
+      "source": "artifacts/p2-007-passkeys-20261109/ui-review/ITEM-EVIDENCE-MAP-20261110.json",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/item-review/ITEM-EVIDENCE-MAP-20261110.json",
+      "source_sha256": "6f8da82ebf2a94f9552b5519456a5ea29ed67f1929a29c6b1f7b0ad911783233",
+      "sha256": "6f8da82ebf2a94f9552b5519456a5ea29ed67f1929a29c6b1f7b0ad911783233",
+      "bytes": 300028,
+      "transformed": false
     },
     {
       "group": "ui/passkeys",
@@ -3334,6 +5567,42 @@
       "transformed": false
     },
     {
+      "group": "unit-current-final",
+      "source": "artifacts/p2-007-passkeys-20261109/unit-745f9c2/exit-code.txt",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/unit/current-final/exit-code.txt",
+      "source_sha256": "13bf7b3039c63bf5a50491fa3cfd8eb4e699d1ba1436315aef9cbe5711530354",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "bytes": 2,
+      "transformed": true
+    },
+    {
+      "group": "unit-current-final",
+      "source": "artifacts/p2-007-passkeys-20261109/unit-745f9c2/source-sha.txt",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/unit/current-final/source-sha.txt",
+      "source_sha256": "947f0a59c3cb6e3f137e9f09b995647026ae69e29ce74f2feb09ad97042f988f",
+      "sha256": "762bd2764335e086c51ae91f8937a7d8efd17589b158f5067c40ed9254ebd6a0",
+      "bytes": 41,
+      "transformed": true
+    },
+    {
+      "group": "unit-current-final",
+      "source": "artifacts/p2-007-passkeys-20261109/unit-745f9c2/theme-check.log",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/unit/current-final/theme-check.log",
+      "source_sha256": "3002c11eb625a98b0734bafce4c5c6ff3c6193c27cfbcd3a8503bb57e195789c",
+      "sha256": "1056bb9b1d8519f8dd28ed304379bbe7389cd401d47e6bda32d56e879cc7109e",
+      "bytes": 71,
+      "transformed": true
+    },
+    {
+      "group": "unit-current-final",
+      "source": "artifacts/p2-007-passkeys-20261109/unit-745f9c2/unit.log",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/unit/current-final/unit.log",
+      "source_sha256": "bc4e7bae6a82ae55c9af008d337ae478e1349468d73a3c7491ab7ba353194cb7",
+      "sha256": "29c3f16437ea2d087137b16040267c8348e1c00005c7b2d2b2a920a369b56351",
+      "bytes": 2899,
+      "transformed": true
+    },
+    {
       "group": "unit/earlier-failure-and-theme",
       "source": "artifacts/p2-007-passkeys-20261109/web-contracts-20261110/contracts-build.log",
       "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/unit/earlier-failure-and-theme/contracts-build.log",
@@ -3377,6 +5646,12 @@
     {
       "source": "artifacts/p2-007-passkeys-20261109/recovery-80a32ab-release/native/native-source-diff-from-full-pass.patch",
       "reason": "Temporary helper/source-diff/binary is retained in original execution artifacts or immutable Git; not duplicated as committed evidence."
+    }
+  ],
+  "root_generated_refs": [
+    {
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-item-evidence.json",
+      "sha256": "4bcde80142708f051f2820718a3c7961b4261ee0e43f432d4ce54095c0c12d23"
     }
   ]
 }

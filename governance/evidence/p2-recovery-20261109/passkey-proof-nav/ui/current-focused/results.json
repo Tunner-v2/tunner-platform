@@ -1,0 +1,392 @@
+{
+  "config": {
+    "argv": [
+      "C:\\Program Files\\nodejs\\node.exe",
+      "<repo-root>\\web\\node_modules\\@playwright\\test\\cli.js",
+      "test",
+      "--config",
+      "playwright.passkeys.config.ts",
+      "--grep",
+      "@feedback-regression",
+      "--output",
+      "<repo-root>\\artifacts\\p2-007-passkeys-20261109\\ui-review\\20261110-feedback-green-b0c0442-focused\\run-details"
+    ],
+    "configFile": "<repo-root>\\web\\playwright.passkeys.config.ts",
+    "rootDir": "<repo-root>/web/tests/passkeys",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "<repo-root>/artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-green-b0c0442-focused/run-details",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "<repo-root>/web/tests/passkeys",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "test-results/passkeys/results.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.62.1",
+    "workers": 1,
+    "webServer": {
+      "command": "node node_modules/vite/bin/vite.js --config apps/user/vite.config.ts --port 5193",
+      "url": "http://127.0.0.1:5193/registration/",
+      "reuseExistingServer": false,
+      "timeout": 30000
+    }
+  },
+  "suites": [
+    {
+      "title": "passkeys.spec.ts",
+      "file": "passkeys.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "@feedback-regression Remove error keeps every action within the desktop dialog without scrolling",
+          "ok": true,
+          "tags": [
+            "feedback-regression"
+          ],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1529,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-10T12:12:19.377Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "74b2887b23599a1b6d52-432b8decd71a42b58998",
+          "file": "passkeys.spec.ts",
+          "line": 97,
+          "column": 1
+        },
+        {
+          "title": "@feedback-regression ENROLL unknown Close focuses existing recovery without replacing the request",
+          "ok": true,
+          "tags": [
+            "feedback-regression"
+          ],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1318,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-10T12:12:21.562Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "74b2887b23599a1b6d52-0109fbd4114acdddd223",
+          "file": "passkeys.spec.ts",
+          "line": 121,
+          "column": 48
+        },
+        {
+          "title": "@feedback-regression REVOKE unknown Close focuses existing recovery without replacing the request",
+          "ok": true,
+          "tags": [
+            "feedback-regression"
+          ],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1336,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-10T12:12:22.904Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "74b2887b23599a1b6d52-391a88c955138797b780",
+          "file": "passkeys.spec.ts",
+          "line": 121,
+          "column": 48
+        },
+        {
+          "title": "@feedback-regression Login native-cancel restores its available action without another attempt",
+          "ok": true,
+          "tags": [
+            "feedback-regression"
+          ],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1265,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-10T12:12:24.263Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "74b2887b23599a1b6d52-22e9b62c60def1c0ae6c",
+          "file": "passkeys.spec.ts",
+          "line": 155,
+          "column": 61
+        },
+        {
+          "title": "@feedback-regression Login http-429 restores its available action without another attempt",
+          "ok": true,
+          "tags": [
+            "feedback-regression"
+          ],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1412,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-10T12:12:25.550Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "74b2887b23599a1b6d52-879be12ac5fe2a28abce",
+          "file": "passkeys.spec.ts",
+          "line": 155,
+          "column": 61
+        },
+        {
+          "title": "@feedback-regression Uncertain Login focuses only exact read-only recovery and never resubmits on focus",
+          "ok": true,
+          "tags": [
+            "feedback-regression"
+          ],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1440,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-10T12:12:26.980Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "74b2887b23599a1b6d52-9bec91c52b49b14fe657",
+          "file": "passkeys.spec.ts",
+          "line": 176,
+          "column": 1
+        },
+        {
+          "title": "@feedback-regression Aborted Login ceremony cannot steal new-route focus or submit credentials",
+          "ok": true,
+          "tags": [
+            "feedback-regression"
+          ],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1152,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-10T12:12:28.442Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "74b2887b23599a1b6d52-2d738d0cc6a05d7e3161",
+          "file": "passkeys.spec.ts",
+          "line": 203,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "step-up-passkey.spec.ts",
+      "file": "step-up-passkey.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "@feedback-regression Unresolved native-proof Close focuses owner recovery without cancelling or replacing its binding",
+          "ok": true,
+          "tags": [
+            "feedback-regression"
+          ],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1115,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-10T12:12:29.656Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "3257a4c9219e0434f46b-36a004b9f064a0a6643a",
+          "file": "step-up-passkey.spec.ts",
+          "line": 61,
+          "column": 1
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-11-10T12:12:17.343Z",
+    "duration": 14089.562,
+    "expected": 8,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}
