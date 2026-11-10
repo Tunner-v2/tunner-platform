@@ -2,11 +2,13 @@ import {createRequire} from 'node:module';
 import {dirname, join} from 'node:path';
 import {existsSync} from 'node:fs';
 import assert from 'node:assert/strict';
-import {failureCodes, predicateIds, publicMarker, publicUri, scanSurface, scenarios, validSurfacePath, version} from './contract.mjs';
+import {browserEngines, failureCodes, predicateIds, publicMarker, publicUri, scanSurface, scenarios, validSurfacePath, version} from './contract.mjs';
 
 // No Playwright code is imported before the environment and fatal handlers exist.
 const scenario = process.argv[2];
 const surface = process.argv[3];
+const browserEngine = process.argv[4];
+let browserVersion = null;
 let stage = 'START';
 let failedStage;
 let failureCode = 'NONE';
@@ -39,7 +41,7 @@ const check = (id, passed) => {
 };
 try {
   stage = 'ENVIRONMENT';
-  if (!scenarios.includes(scenario) || !validSurfacePath(surface)) throw new Error('INPUT_INVALID');
+  if (!scenarios.includes(scenario) || !browserEngines.includes(browserEngine) || !validSurfacePath(surface)) throw new Error('INPUT_INVALID');
   for (const key of Object.keys(process.env)) {
     if (/^(?:DEBUG|PWDEBUG|NODE_OPTIONS|NODE_V8_COVERAGE|NODE_INSPECT_RESUME_ON_START)$/i.test(key) || /^(?:PLAYWRIGHT|PW_TEST).*(?:DEBUG|LOG|TRACE|REPORT|SCREENSHOT|VIDEO|HAR)/i.test(key)) delete process.env[key];
   }
@@ -56,9 +58,22 @@ try {
   const raw = require.resolve('playwright', {paths: [from]});
   const {chromium} = require(raw);
   stage = 'BROWSER';
-  const programFiles = Object.entries(process.env).filter(([key]) => ['PROGRAMFILES(X86)', 'PROGRAMFILES'].includes(key.toUpperCase())).map(([, value]) => value);
-  const edge = programFiles.map(root => join(root, 'Microsoft', 'Edge', 'Application', 'msedge.exe')).find(existsSync);
-  browser = await chromium.launch({headless: true, ...(edge ? {executablePath: edge} : {channel: 'msedge'}), timeout: 10000, downloadsPath: surface + '/downloads', tracesDir: surface + '/traces'});
+  let executable;
+  if (browserEngine === 'edge') {
+    const programFiles = Object.entries(process.env).filter(([key]) => ['PROGRAMFILES(X86)', 'PROGRAMFILES'].includes(key.toUpperCase())).map(([, value]) => value);
+    executable = programFiles.map(root => join(root, 'Microsoft', 'Edge', 'Application', 'msedge.exe')).find(existsSync);
+    if (!executable) throw new Error('BROWSER_NOT_INSTALLED');
+  }
+  // Each engine is explicit. Missing binaries fail; no engine fallback or installation.
+  browser = await chromium.launch({headless: true, ...(executable ? {executablePath: executable} : {}), timeout: 10000, downloadsPath: surface + '/downloads', tracesDir: surface + '/traces'});
+  browserVersion = browser.version();
+  let expectedVersion = null;
+  if (browserEngine === 'chromium') {
+    const core = require.resolve('playwright-core/package.json', {paths: [dirname(packagePath)]});
+    const registered = require(join(dirname(core), 'browsers.json'));
+    expectedVersion = registered.browsers.find(item => item.name === 'chromium-headless-shell')?.browserVersion;
+  }
+  check('BROWSER_ENGINE', /^\d{1,5}\.\d{1,5}\.\d{1,5}\.\d{1,5}$/.test(browserVersion) && (browserEngine === 'edge' || browserVersion === expectedVersion));
   context = await browser.newContext({acceptDownloads: false, serviceWorkers: 'block'});
   const page = await context.newPage();
   page.setDefaultTimeout(250);
@@ -126,7 +141,7 @@ try {
 }
 stage = 'COMPLETE';
 if (unexpectedFatal) status = 'BOUNDARY_FAILED';
-const result = {version, scenario, status, stage: failedStage ?? stage, failureCode, checks, filesScanned, surfaceClean, cleanupCompleted};
+const result = {version, scenario, browserEngine, browserVersion, status, stage: failedStage ?? stage, failureCode, checks, filesScanned, surfaceClean, cleanupCompleted};
 if (scenario === 'unexpected-output') process.stderr.write(publicMarker + publicUri);
 if (scenario === 'invalid-result') result.extra = publicMarker;
 await send({type: 'result', result});

@@ -3,7 +3,7 @@ import {mkdtemp, rm, lstat, realpath} from 'node:fs/promises';
 import {dirname, join, resolve} from 'node:path';
 import {tmpdir} from 'node:os';
 import {fileURLToPath} from 'node:url';
-import {hasMarker, predicatesSatisfied, scanSurface, scenarios, validResult, validSurfacePath, version} from './contract.mjs';
+import {browserEngines, hasMarker, predicatesSatisfied, scanSurface, scenarios, validResult, validSurfacePath, version} from './contract.mjs';
 
 const childPath = fileURLToPath(new URL('./child.mjs', import.meta.url));
 function childEnvironment(surface) {
@@ -33,8 +33,8 @@ async function removeOwnedSurface(surface) {
   await rm(surface, {recursive: true, force: true, maxRetries: 3, retryDelay: 100});
   try { await lstat(surface); return false; } catch (error) { return error?.code === 'ENOENT'; }
 }
-export async function runPublicScenario(scenario) {
-  if (!scenarios.includes(scenario)) throw new Error('SCENARIO_INVALID');
+export async function runPublicScenario(scenario, browserEngine = 'edge') {
+  if (!scenarios.includes(scenario) || !browserEngines.includes(browserEngine)) throw new Error('SCENARIO_INVALID');
   const surface = await mkdtemp(join(await realpath(tmpdir()), 'tunner-p2-008-public-sensitive-'));
   let child;
   let result;
@@ -49,7 +49,7 @@ export async function runPublicScenario(scenario) {
   let surfaceRemoved = false;
   let timer;
   try {
-    child = fork(childPath, [scenario, surface], {execArgv: [], env: childEnvironment(surface), stdio: ['ignore', 'pipe', 'pipe', 'ipc'], windowsHide: true, detached: process.platform !== 'win32'});
+    child = fork(childPath, [scenario, surface, browserEngine], {execArgv: [], env: childEnvironment(surface), stdio: ['ignore', 'pipe', 'pipe', 'ipc'], windowsHide: true, detached: process.platform !== 'win32'});
     const terminal = new Promise(resolve => {
       const failAfter = milliseconds => {
         clearTimeout(timer);
@@ -70,7 +70,7 @@ export async function runPublicScenario(scenario) {
       child.stderr.on('data', consume);
       child.on('message', message => {
         if (message && Object.keys(message).sort().join('|') === 'scenario|type|version' && message.type === 'armed' && message.version === version && message.scenario === 'supervisor-timeout' && scenario === 'supervisor-timeout') { failAfter(500); return; }
-        if (!message || Object.keys(message).sort().join('|') !== 'result|type' || message.type !== 'result' || result || !validResult(message.result, scenario)) { protocolFailed = true; return; }
+        if (!message || Object.keys(message).sort().join('|') !== 'result|type' || message.type !== 'result' || result || !validResult(message.result, scenario, browserEngine)) { protocolFailed = true; return; }
         result = message.result;
       });
       child.once('error', () => { protocolFailed = true; resolve(); });
@@ -100,7 +100,7 @@ export async function runPublicScenario(scenario) {
     }
   }
   const cleanOutput = outputBytes === 0;
-  const predicatesAccepted = predicatesSatisfied(result, scenario);
+  const predicatesAccepted = predicatesSatisfied(result, scenario, browserEngine);
   const normal = !timedOut && closed && exitCode === 0 && result?.cleanupCompleted === true && predicatesAccepted && surfaceClean && surfaceRemoved;
   let passed = normal && !protocolFailed && cleanOutput;
   if (scenario === 'supervisor-timeout') passed = timedOut && result?.status === 'BOUNDARY_FAILED' && result?.failureCode === 'SUPERVISOR_TIMEOUT' && exitCode === 1 && predicatesAccepted && cleanOutput && !protocolFailed && surfaceClean && surfaceRemoved && closed;
@@ -109,5 +109,5 @@ export async function runPublicScenario(scenario) {
   if (scenario === 'cleanup') passed = closed && exitCode === 1 && result?.status === 'BOUNDARY_FAILED' && result?.failureCode === 'CLEANUP_FAILED' && result?.cleanupCompleted === false && predicatesAccepted && !protocolFailed && cleanOutput && surfaceClean && surfaceRemoved;
   const expectedStatus = scenario === 'happy' ? 'PUBLIC_CANARY_OK' : ['unhandled', 'uncaught'].includes(scenario) ? 'EXPECTED_FATAL_CONTAINED' : 'EXPECTED_ERROR_CONTAINED';
   if (!['cleanup', 'supervisor-timeout', 'unexpected-output', 'invalid-result'].includes(scenario)) passed &&= result?.status === expectedStatus;
-  return {scenario, passed, childStatus: result?.status ?? 'NOT_ACCEPTED', childStage: result?.stage ?? 'NOT_ACCEPTED', childFailureCode: result?.failureCode ?? 'NOT_ACCEPTED', envelopeAccepted: Boolean(result) && !protocolFailed && cleanOutput, predicatesAccepted, sensitiveRunAccepted: normal && !protocolFailed && cleanOutput && result?.status === 'PUBLIC_CANARY_OK', rawOutputRejected: !cleanOutput, invalidResultRejected: protocolFailed && !result, supervisorTimedOut: timedOut, surfaceClean, surfaceRemoved, filesScanned};
+  return {scenario, browserEngine, browserVersion: result?.browserVersion ?? null, passed, childStatus: result?.status ?? 'NOT_ACCEPTED', childStage: result?.stage ?? 'NOT_ACCEPTED', childFailureCode: result?.failureCode ?? 'NOT_ACCEPTED', envelopeAccepted: Boolean(result) && !protocolFailed && cleanOutput, predicatesAccepted, sensitiveRunAccepted: normal && !protocolFailed && cleanOutput && result?.status === 'PUBLIC_CANARY_OK', rawOutputRejected: !cleanOutput, invalidResultRejected: protocolFailed && !result, supervisorTimedOut: timedOut, surfaceClean, surfaceRemoved, filesScanned};
 }
