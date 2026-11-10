@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "scope_id": "TUN-P2-008",
+  "result": "PLAN_ONLY_NOT_EXECUTED",
+  "recorded_at": "2026-11-10T14:48:18.005Z",
+  "authority_ref": "docs/authority/current/development/06_Environment_Configuration_Secrets_and_Deployment.md",
+  "pinned_tool": "Playwright1.62.1",
+  "findings": [
+    "Runner failure snapshots persist independently of screenshot/video/trace switches.",
+    "Locator failures can capture full-body aria snapshots and input actions can log values; an environment toggle alone is insufficient."
+  ],
+  "required_design": [
+    "Use a dedicated raw Playwright-library process for real one-time disclosure/code entry/verification, without runner automatic artifact collection.",
+    "Retain real BFF/native calls and every equivalent predicate/counter/binding assertion; no silent response mocking or weakened acceptance.",
+    "Disable trace/video/screenshot/HAR/debug/API dumps; catch raw secret-bearing errors inside the process and emit only allowlisted safe enums/status/booleans/counters.",
+    "Close contexts in finally and sanitize timeout/unhandled-error paths.",
+    "Run injected nonfunctional public-sentinel failure/timeout canaries before live secrets; assert outputs contain no marker/QR/URI.",
+    "Use nonfunctional public fixtures for visual/keyboard/field variants; real captures only after confirmed secret removal/redaction."
+  ],
+  "primary_sources": [
+    "https://raw.githubusercontent.com/microsoft/playwright/v1.62.1/packages/playwright/src/index.ts",
+    "https://raw.githubusercontent.com/microsoft/playwright/v1.62.1/packages/playwright/src/errorContext.ts",
+    "https://raw.githubusercontent.com/microsoft/playwright/v1.62.1/packages/playwright-core/src/server/frames.ts",
+    "https://raw.githubusercontent.com/microsoft/playwright/v1.62.1/packages/playwright-core/src/server/dom.ts"
+  ],
+  "limits": "No canary, real008test or privacy acceptance has executed in this preparation."
+}

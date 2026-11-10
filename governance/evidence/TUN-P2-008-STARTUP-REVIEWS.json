@@ -1,0 +1,123 @@
+{
+  "schema_version": 1,
+  "scope_id": "TUN-P2-008",
+  "result": "PASS_STARTUP_ONLY",
+  "recorded_at": "2026-11-10T14:48:18.005Z",
+  "provenance": "Executing-agent current role-contract startup review, informed by actual independent read-only backend/business/architecture/UI research. It is not final implementation or Product/release approval.",
+  "reviews": [
+    {
+      "role": "full-stack-engineer",
+      "skill_hash": "59adbe2133cf4ce88cbc9ca4eafce1d5a9d83b9562b6580c1571e6fc148d46b5",
+      "result": "PASS_STARTUP_ONLY",
+      "assessment": "Startup scope: reuse native Identity, current policy/source locks, shared proof/owner/outbox and session authority. Implement small vertical slices; no code or test acceptance exists yet.",
+      "review_ref": "governance/reviews/REV-TUN-P2-008-full-stack-engineer.yaml"
+    },
+    {
+      "role": "tester-qa-engineer",
+      "skill_hash": "52aee18f251a614e339adba9f7c886a5da1ef4ab0482ae6b77044184128415c6",
+      "result": "PASS_STARTUP_ONLY",
+      "assessment": "Startup test plan covers first-code activation, one-time disclosure, full-window A→B→A replay/concurrency, exact recovery, MFA before final session, source disable, rollback and existing regression consumers. Actual008tests remain unexecuted.",
+      "review_ref": "governance/reviews/REV-TUN-P2-008-tester-qa-engineer.yaml"
+    },
+    {
+      "role": "solution-architect",
+      "skill_hash": "664ffba70d0f97e75951c3548b7f8391854781e4cf90cc50fc8829543783a35b",
+      "result": "PASS_STARTUP_ONLY",
+      "assessment": "Seed preparation is outside the owner SQL callback. Use immutable owner-bound vault references, transactional replay/proof or final MFA session, and a protected pre-session record rather than a provisional session or duplicate identity authority.",
+      "review_ref": "governance/reviews/REV-TUN-P2-008-solution-architect.yaml"
+    },
+    {
+      "role": "cyber-security-engineer",
+      "skill_hash": "2d32ff3d7fb503f29cf930e9852ed4a757bb48a08e3fa4e3f6d5a23139a47f97",
+      "result": "PASS_STARTUP_ONLY",
+      "assessment": "Plan native verification plus bounded framework-hashed code history under Account lock; full native horizon/clock bounds, no custom crypto or new key. Seeds/OTP never reach tables/logs/events/Admin/Support/evidence; implicit security-stamp effects are prohibited.",
+      "review_ref": "governance/reviews/REV-TUN-P2-008-cyber-security-engineer.yaml"
+    },
+    {
+      "role": "auditor",
+      "skill_hash": "191c796fc5df0332ff2c3c464ca611d2c6d3ffc5ba7e2807986a71ad2e40d921",
+      "result": "PASS_STARTUP_ONLY",
+      "assessment": "Inherited007source/gates are retained at their actual SHAs.008validation remainsPENDING; complete behavior ownership must be committed before candidate tests. StartupPASS does not certify implementation, Product consent or release. Preserve unrelated13.",
+      "review_ref": "governance/reviews/REV-TUN-P2-008-auditor.yaml"
+    },
+    {
+      "role": "sdk-engineer",
+      "skill_hash": "c64a66b2e19bccdbf69f13c9db62e9e2cbb0403f384591a93b5b787dc33b07ae",
+      "result": "PASS_STARTUP_ONLY",
+      "assessment": "Refine strict private BFF commands/results, stable operation identity, expected versions and exact original recovery. No secret in URLs or public metadata; existing callbacks/Product-origin behavior stays intact.",
+      "review_ref": "governance/reviews/REV-TUN-P2-008-sdk-engineer.yaml"
+    },
+    {
+      "role": "ui-ux-engineer",
+      "skill_hash": "498ff7e4b46012b1e90773cd29ebac903d7ac83767d739cc327d9b69a3b4c5c2",
+      "result": "PASS_STARTUP_ONLY",
+      "assessment": "Actual83:2/117/298 references are verified. Production material states remain UI_REQUIRED pending a pictured scoped review; do not borrow007consent or silently substitute default TailAdmin styling.",
+      "review_ref": "governance/reviews/REV-TUN-P2-008-ui-ux-engineer.yaml"
+    },
+    {
+      "role": "frontend-engineer",
+      "skill_hash": "3472e745aa478457939b1aeeba319f72989bb9e97791e458f0b9979ec1b538d7",
+      "result": "PASS_STARTUP_ONLY",
+      "assessment": "Plan shared typed code forms and independent backend validation, canonical guarded full-screen routes, safe refresh/history, field/form summaries, first-invalid focus and pending/duplicate guards. No frontend implementation yet.",
+      "review_ref": "governance/reviews/REV-TUN-P2-008-frontend-engineer.yaml"
+    },
+    {
+      "role": "end-user-ux-reviewer",
+      "skill_hash": "cfaa2eeffd945eef70a6ff1023b1af42fc0413add7b357b2fcd914473e976665",
+      "result": "PASS_STARTUP_ONLY",
+      "assessment": "Plan honest inactive→first-code→ready flow and policy-required login MFA. Unknown operations preserve original identity; one-time secret loss never becomes automatic re-reveal. No invented minimum-factor, remembered-device or replacement promise.",
+      "review_ref": "governance/reviews/REV-TUN-P2-008-end-user-ux-reviewer.yaml"
+    },
+    {
+      "role": "content-writer",
+      "skill_hash": "9683a7f4aa8e50e2922fb7bbc74238d2d7bdb8ce2a81f922030c45ce9258e130",
+      "result": "PASS_STARTUP_ONLY",
+      "assessment": "Use semantic published content and actual server facts. Prototype name/app/date/key/internal note and request-new-code wording are not runtime text. Production content publication remains separate; no008copy approval is claimed.",
+      "review_ref": "governance/reviews/REV-TUN-P2-008-content-writer.yaml"
+    },
+    {
+      "role": "compliance-specialist",
+      "skill_hash": "38f8de27e31b3ae5cec070320d9b408d6f75682b024322f5e37585c76921303e",
+      "result": "PASS_STARTUP_ONLY",
+      "assessment": "Doc06/08/29 govern seed secrecy, reference-only storage, processing and retention. Use explicit approved inputs; no new legal/age/commercial rule or long-lived DataProtection key contract is invented.",
+      "review_ref": "governance/reviews/REV-TUN-P2-008-compliance-specialist.yaml"
+    },
+    {
+      "role": "rd-engineer",
+      "skill_hash": "2834c223dfd847a6d7cd28f52de4113efc574d621391d059e8dc1469bdf33187",
+      "result": "PASS_STARTUP_ONLY",
+      "assessment": "Primary-source native/vault/replay research supports existing framework/store reuse. QR renderer is a necessary capability gap with a pinned MIT candidate awaiting package/security review; no package or production profile is selected.",
+      "review_ref": "governance/reviews/REV-TUN-P2-008-rd-engineer.yaml"
+    },
+    {
+      "role": "devops-engineer",
+      "skill_hash": "0def19cfd8cf73f9fe47851ab171d3154e7e80b4675ded65964f10856789b50c",
+      "result": "PASS_STARTUP_ONLY",
+      "assessment": "Reuse current secret-store transport with scoped short-lived identity and fail-closed bindings. No image rebuild, other-project mutation, permanent root-token config or production activation. Sensitive real tests need a raw sanitized Playwright boundary and failure canary.",
+      "review_ref": "governance/reviews/REV-TUN-P2-008-devops-engineer.yaml"
+    },
+    {
+      "role": "business-analyst",
+      "skill_hash": "ca6e24da90c6dac80b7b75124f04a81a2d590e73cc1e99781546c4aad1bca04f",
+      "result": "PASS_STARTUP_ONLY",
+      "assessment": "ActualFigJam38/42 andFRD17 resolve one-time setup, first-code activation,005/008MFA before qualifying session and shared proof.009/011/014retain separate ownership; cardinality/effects/replacement/profile values stay explicit owner inputs.",
+      "review_ref": "governance/reviews/REV-TUN-P2-008-business-analyst.yaml"
+    },
+    {
+      "role": "project-manager",
+      "skill_hash": "ae262bf4c9a2e26c688106c7af420fbc4dc26a116048e04ae01a5e4e01ead927",
+      "result": "PASS_STARTUP_ONLY",
+      "assessment": "Refinement is nativeALLOWED. Finish startup context/entry eligibility before code, and actual current tests/reviews/gates before local readiness. Eligible backend work can continue while scoped visual proposals await real Product consent.",
+      "review_ref": "governance/reviews/REV-TUN-P2-008-project-manager.yaml"
+    },
+    {
+      "role": "governance-engineer",
+      "skill_hash": "3c948ff290690b012d3736b561021989681c2b6fcac3f115b96ca1083672536f",
+      "result": "PASS_STARTUP_ONLY",
+      "assessment": "Use current baseline/amendments, exact scope and verified skill hashes. Nativeworkstart must reportELIGIBLE and isolatedcontextCURRENT before implementation; final validation staysPENDING until committed source and executed evidence satisfy gates.",
+      "review_ref": "governance/reviews/REV-TUN-P2-008-governance-engineer.yaml"
+    }
+  ],
+  "entry_gates": "NativecontextCURRENTandworkstartELIGIBLE stillrequired before implementation.",
+  "production_ux": "Material gaps remain UI_REQUIRED until a pictured scope and actual Product consent; backend authority is separately resolved."
+}

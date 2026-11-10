@@ -35,6 +35,14 @@
     {
       "url": "https://openbao.org/docs/api/secret/totp/",
       "finding": "Considered remote verifier; its documented valid response does not supply a SQL-joined idempotent attempt receipt. Inference: timeout/owner rollback would need additional finality handling, so it is not the minimal native-verifier replacement."
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/aspnet/core/security/authentication/identity-enable-qrcodes?view=aspnetcore-10.0",
+      "finding": "Identity templates do not themselves generate QR; current approved application dependencies have no renderer."
+    },
+    {
+      "url": "https://raw.githubusercontent.com/nayuki/QR-Code-generator/v1.8.0/typescript-javascript/qrcodegen.ts",
+      "finding": "Necessary local renderer candidate only: dependency-free MIT TypeScript encoder, stablev1.8.0 resolves720f62bddb7226106071d4728c292cb1df519ceb; decodedUTF8source41025bytesSHA256c4749095a91bf9696e3a303998b9905e467094f53041e64393e65e6d887737fd. Retain license and complete package/security review before selection."
     }
   ],
   "decision": "Reuse approved native Identity verification, existing framework PasswordHasher and current OpenBao transport behind a narrow per-credential versioned-reference adapter. Use transactional replay state across activation/MFA/operation proof; no new OTP math, hashing key or package is selected.",
@@ -48,5 +56,6 @@
     "Native bool result requires conservative full acceptance-horizon retention and supported clock bounds; repeated numeric values may be conservatively rejected within that bound.",
     "QR rendering package/capability must follow package governance if an existing approved compatible implementation is unavailable. No renderer dependency is selected by this preparation."
   ],
-  "boundary": "Primary-source R&D and test fixtures do not approve production values/provider bindings/retention/assurance/session effects or UX deviations."
+  "boundary": "Primary-source R&D and test fixtures do not approve production values/provider bindings/retention/assurance/session effects or UX deviations.",
+  "sensitive_qa_plan_ref": "governance/evidence/TUN-P2-008-SENSITIVE-QA-PLAN.json"
 }
