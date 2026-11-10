@@ -1,0 +1,50 @@
+{
+  "schema_version": 1,
+  "revision_id": "P1-018-RV006",
+  "revision_scope": "WORK_ITEM",
+  "original_scope_id": "TUN-P1-018",
+  "parent_revision_id": "P1-018-RV005",
+  "parent_milestone_revision_id": null,
+  "title": "Reuse shared UI for TOTP routes and verification",
+  "revision_type": "COMPATIBILITY",
+  "status": "PROPOSED",
+  "reason": "P2-008 extends the closed shared form, dialog, navigation and inventory capability using existing approved authenticator frames and separately pending scoped visual consent. Preserve historical UI closure and require current route/form/rendered evidence.",
+  "authority_refs": [
+    "docs/authority/current/development/03_Governed_Development_Lifecycle_Scrum_Git.md"
+  ],
+  "decision_refs": [],
+  "defect_refs": [],
+  "change_refs": [
+    "governance/evidence/TUN-P2-008-VISUAL-CONSENT.json",
+    "docs/development/P2_008_TOTP_SCOPE.md"
+  ],
+  "impact_classification": "NON_BLOCKING",
+  "blocked_scope": [],
+  "acceptance_criteria": [
+    "Preserve existing forms and consumers; reuse typed validation and approved visual controls for scoped TOTP routes/proof only after explicit missing/material visual consent. Execute all applicable URL, VAL and UX-FID checks with committed source and exact ownership before closure."
+  ],
+  "prerequisites": [],
+  "work_items": [],
+  "required_gates": [],
+  "required_roles": [
+    "project-manager",
+    "governance-engineer",
+    "full-stack-engineer",
+    "tester-qa-engineer",
+    "solution-architect",
+    "cyber-security-engineer",
+    "auditor",
+    "ui-ux-engineer",
+    "frontend-engineer",
+    "end-user-ux-reviewer",
+    "content-writer"
+  ],
+  "evidence_refs": [
+    "governance/evidence/TUN-P2-008-VISUAL-PROPOSAL.json",
+    "governance/evidence/TUN-P2-008-VISUAL-CONSENT.json",
+    "governance/evidence/TUN-P2-008-STARTUP-REVIEWS.json"
+  ],
+  "created_at": "2026-11-10T16:39:52.9620346+00:00",
+  "closed_at": null,
+  "product_acceptance_required": false
+}
