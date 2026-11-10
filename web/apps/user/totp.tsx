@@ -12,7 +12,7 @@ import {loadTotpMethods,loadTotpOptions,loadTotpTerminalOptions,matchesTotpStart
 import type {TotpBootstrap,TotpDisclosure,TotpMetadata,TotpMethods,TotpOperation,TotpStartSnapshot,TotpTerminalOptions} from './totp.api';
 import {isTotpAccountRoute,totpRoutes} from './totp.routes';
 import {totpCodeSchema} from './totp.validation';
-import {TotpAccountShell,TotpManagement,TotpReady,TotpSetup} from './totp.ui';
+import {TotpAccountShell,TotpManagement,TotpManagementUnavailable,TotpReady,TotpSetup} from './totp.ui';
 import type {TotpSetupMode} from './totp.ui';
 
 type Work={signal:AbortSignal;revision:number};
@@ -25,7 +25,7 @@ function Account(){
  const control=useRef(new AbortController()),flight=useRef(false),original=useRef<TotpOperation|undefined>(undefined),starting=useRef<TotpStartSnapshot|undefined>(undefined);
  const attempt=useRef<{enrollmentId:string;attemptId:string}|undefined>(undefined),trigger=useRef<HTMLElement|null>(null);
  const [boot,setBoot]=useState<TotpBootstrap>(),[methods,setMethods]=useState<TotpMethods>(),[operation,setOperation]=useState<TotpOperation>();
- const [ready,setReady]=useState(-1),[refresh,setRefresh]=useState(0),[unavailable,setUnavailable]=useState(false),[busy,setBusy]=useState(false);
+ const [ready,setReady]=useState(-1),[refresh,setRefresh]=useState(0),[unavailable,setUnavailable]=useState(false),[methodsUnavailable,setMethodsUnavailable]=useState(false),[busy,setBusy]=useState(false);
  const [mode,setMode]=useState<TotpSetupMode>('unknown'),[disclosure,setDisclosure]=useState<TotpDisclosure>(),[code,setCode]=useState('');
  const [error,setError]=useState<string>(),[serverField,setServerField]=useState<string>(),[proof,setProof]=useState<StepUpBootstrap>(),[review,setReview]=useState(false);
  const [terminal,setTerminal]=useState<TotpOperation>(),[ended,setEnded]=useState(false),[unresolved,setUnresolved]=useState(false);
@@ -40,11 +40,13 @@ function Account(){
 
  useEffect(()=>{
   control.current.abort();control.current=new AbortController();const scope={signal:control.current.signal,revision:route.revision};
-  running(false);setReady(-1);removeSensitive();form.reset();setServerField(undefined);setError(undefined);setProof(undefined);setReview(false);setUnavailable(false);
+  running(false);setReady(-1);removeSensitive();form.reset();setServerField(undefined);setError(undefined);setProof(undefined);setReview(false);setUnavailable(false);setMethodsUnavailable(false);
   if(!isTotpAccountRoute(route.pathname)){window.location.replace('/login');return()=>control.current.abort();}
   if(window.location.search||window.location.hash){navigatePath(route.pathname,true);return()=>control.current.abort();}
-  void Promise.all([loadTotpOptions(scope.signal),loadTotpMethods(scope.signal)]).then(async([options,list])=>{
-   if(!current(scope))return;setBoot(options);setMethods(list);
+  void loadTotpOptions(scope.signal).then(async options=>{
+   if(!current(scope))return;setBoot(options);let list:TotpMethods;
+   try{list=await loadTotpMethods(scope.signal);}catch(reason){if(reason instanceof TotpHttpError&&reason.status===401)throw reason;if(!current(scope))return;if(route.pathname!==totpRoutes.manage.pathname){navigatePath(totpRoutes.manage.pathname,true);return;}setMethodsUnavailable(true);setReady(scope.revision);return;}
+   if(!current(scope))return;setMethods(list);
    const retained=original.current;const pending=starting.current;let recovered=options.recovery??undefined;
    if(retained)recovered=parseTotpOperation(await requestTotpJson('/account/totp/result',{csrfToken:options.csrfToken,body:body(retained),signal:scope.signal}),retained);
    else if(pending&&recovered&&!matchesTotpStart(pending,recovered))recovered=undefined;
@@ -66,7 +68,7 @@ function Account(){
   const show=(event:PageTransitionEvent)=>{if(event.persisted)setRefresh(value=>value+1);};
   window.addEventListener('pagehide',hide);window.addEventListener('pageshow',show);return()=>{window.removeEventListener('pagehide',hide);window.removeEventListener('pageshow',show);};
  },[]);
- useEffect(()=>{if(!guarded&&!proof&&!review)document.getElementById('totp-page-heading')?.focus();},[guarded,proof,review,mode]);
+ useEffect(()=>{if(!guarded&&!proof&&!review&&document.activeElement!==trigger.current)document.getElementById('totp-page-heading')?.focus();},[guarded,proof,review,mode]);
  useEffect(()=>{if(review&&!proof)document.getElementById('totp-review-title')?.focus();},[review,proof]);
  useEffect(()=>{if(serverField&&!busy)document.getElementById('totp-setup-code')?.focus();},[serverField,busy]);
 
@@ -112,7 +114,7 @@ function Account(){
   setReview(false);setProof(result);
  }
  async function start(kind:'ENROLL'|'DISABLE'|'RESET',factor?:TotpMetadata){
-  if(!boot||flight.current||original.current||starting.current)return;
+  if(!boot||methodsUnavailable||flight.current||original.current||starting.current)return;
   if(kind==='ENROLL'?!boot.canStartEnrollment:!factor||factor.state!=='ACTIVE'||(kind==='DISABLE'?!boot.canStartDisable||!factor.canStartDisable:!boot.canStartReset||!factor.canStartReset))return;
   trigger.current=document.activeElement instanceof HTMLElement?document.activeElement:null;
   const snapshot:TotpStartSnapshot=Object.freeze({requestId:crypto.randomUUID(),kind,authenticatorReference:factor?.authenticatorReference??null,expectedVersion:factor?.version??0});starting.current=snapshot;
@@ -147,10 +149,10 @@ function Account(){
  if(unavailable)return <ContentUnavailable/>;
  if(guarded)return <main className="passkeys-load" aria-busy="true"/>;
  if(ended)return terminalPresentation&&terminal?<EndedResult presentation={terminalPresentation} value={terminal}/>:<ContentUnavailable/>;
- if(!boot||!methods)return <main className="passkeys-load" aria-busy="true"/>;
+ if(!boot||!methods&&!methodsUnavailable)return <main className="passkeys-load" aria-busy="true"/>;
  const setup=route.pathname===totpRoutes.setup.pathname,readyPage=route.pathname===totpRoutes.ready.pathname;
  const blocked=busy||Boolean(operation)||Boolean(starting.current);
- const content=<>{terminal?<section className="totp-panel totp-terminal"><h2><ContentText contentKey={terminal.kind==='RESET'?'totp.terminal.resetHeading':'totp.terminal.disableHeading'}/></h2><p><ContentText contentKey={ended?'totp.terminal.endedDescription':'totp.terminal.preserveDescription'}/></p>{terminal.kind==='RESET'&&<p><ContentText contentKey="totp.terminal.resetDescription"/></p>}<div className="totp-actions">{ended?<a className="tn-primary-button" href="/login"><ContentText contentKey="totp.action.signIn"/></a>:<PrimaryButton labelKey="totp.action.done" onClick={done}/>}</div></section>:readyPage?<TotpReady onDone={done}/>:setup?<TotpSetup mode={mode} disclosure={disclosure} code={code} fieldError={serverField??form.errors.code} summaryKey={error??(form.hasErrors?'totp.error.highlighted':undefined)} busy={busy} onCode={value=>{setCode(value);setServerField(undefined);setError(undefined);}} onBlur={event=>form.onBlur('code',event)} onSubmit={event=>void form.handleSubmit(event,submitCode)} onCancel={()=>void cancel()} onCheck={()=>void check()}/>:<TotpManagement factors={methods.authenticators} locale={boot.locale} canEnroll={boot.canStartEnrollment} canDisable={boot.canStartDisable} canReset={boot.canStartReset} busy={blocked} onEnroll={()=>void start('ENROLL')} onReview={(kind,factor)=>void start(kind,factor)}/ >}
+ const content=<>{methodsUnavailable?<TotpManagementUnavailable busy={busy} onCheck={()=>setRefresh(value=>value+1)}/>:terminal?<section className="totp-panel totp-terminal"><h2><ContentText contentKey={terminal.kind==='RESET'?'totp.terminal.resetHeading':'totp.terminal.disableHeading'}/></h2><p><ContentText contentKey={ended?'totp.terminal.endedDescription':'totp.terminal.preserveDescription'}/></p>{terminal.kind==='RESET'&&<p><ContentText contentKey="totp.terminal.resetDescription"/></p>}<div className="totp-actions">{ended?<a className="tn-primary-button" href="/login"><ContentText contentKey="totp.action.signIn"/></a>:<PrimaryButton labelKey="totp.action.done" onClick={done}/>}</div></section>:readyPage?<TotpReady onDone={done}/>:setup?<TotpSetup mode={mode} disclosure={disclosure} code={code} fieldError={serverField??form.errors.code} summaryKey={error??(form.hasErrors?'totp.error.highlighted':undefined)} busy={busy} onCode={value=>{setCode(value);setServerField(undefined);setError(undefined);}} onBlur={event=>form.onBlur('code',event)} onSubmit={event=>void form.handleSubmit(event,submitCode)} onCancel={()=>void cancel()} onCheck={()=>void check()}/>:<TotpManagement factors={methods!.authenticators} locale={boot.locale} canEnroll={boot.canStartEnrollment} canDisable={boot.canStartDisable} canReset={boot.canStartReset} busy={blocked} onEnroll={()=>void start('ENROLL')} onReview={(kind,factor)=>void start(kind,factor)}/ >}
  {!setup&&!terminal&&!readyPage&&(operation||starting.current)&&<section className="totp-recovery" role="status"><p><ContentText contentKey="totp.setup.unknownDescription"/></p><div className="totp-actions"><PrimaryButton labelKey="totp.action.check" disabled={busy} onClick={()=>void check()}/></div></section>}{!setup&&error&&<FormErrorSummary contentKey={error}/>}</>;
  return <ContentProvider locale={boot.locale} audience="account-totp" resolve={key=>boot.content[key]}>{ended?<div className="authentication-page"><img className="authentication-glow indigo" src="/registration/assets/login-bg-indigo.svg" alt=""/><img className="authentication-glow violet" src="/registration/assets/login-bg-violet.svg" alt=""/><header className="authentication-header"><TunnerBrand contentKey="brand.tunner"/></header><main className="authentication-stage"><section className="authentication-card totp-terminal"><h1 tabIndex={-1} id="totp-page-heading"><ContentText contentKey="totp.terminal.endedHeading"/></h1>{content}</section></main></div>:<TotpAccountShell screenId={readyPage?totpRoutes.ready.id:setup?totpRoutes.setup.id:totpRoutes.manage.id} titleKey={setup?(mode==='consumed'?'totp.setup.consumedHeading':'totp.setup.heading'):'totp.heading'} descriptionKey={setup?(mode==='disclosed'?'totp.setup.description':mode==='consumed'?'totp.setup.consumedDescription':'totp.setup.'+mode+'Description'):'totp.description'} ready={readyPage} labels={{navigation:boot.content['passkeys.header.menu']!.text,notifications:boot.content['passkeys.header.notifications']!.text}}>{content}</TotpAccountShell>}
  {review&&operation&&!proof&&<ModalDialog labelledBy="totp-review-title" className="passkeys-dialog remove feedback totp-review-dialog" busy={busy} returnFocusTo={trigger.current} onRequestClose={()=>void cancel()}><div className="passkeys-dialog-content" data-tunner-component="COMP-TOTP-MUTATION-REVIEW"><h2 id="totp-review-title" tabIndex={-1}><ContentText contentKey={operation.kind==='RESET'?'totp.reset.heading':operation.kind==='DISABLE'?'totp.disable.heading':'totp.setup.heading'}/></h2><p className="passkeys-dialog-description"><ContentText contentKey={operation.kind==='RESET'?'totp.reset.separateEnrollment':operation.kind==='DISABLE'?'totp.disable.description':'totp.setup.description'}/></p>{operation.kind!=='ENROLL'&&operation.factorSessionEffect&&<p className="passkeys-impact"><ContentText contentKey={'totp.'+(operation.kind==='RESET'?'reset':'disable')+'.'+(operation.currentSessionEnds?'currentSessionEnds':operation.factorSessionEffect==='RevokeFactorSessions'?'affectedSessions':'preserve')}/></p>}<div className="passkeys-dialog-actions"><PrimaryButton labelKey="totp.action.cancel" appearance="outline" disabled={busy} onClick={()=>void cancel()}/><PrimaryButton labelKey="totp.action.continue" disabled={busy||operation.status!=='PENDING_PROOF'} onClick={()=>{const scope=work();running(true);void launchProof(operation,scope).catch(reason=>{if(current(scope)){setError(totpErrorKey(reason));setUnresolved(true);}}).finally(()=>{if(current(scope))running(false);});}}/></div></div></ModalDialog>}

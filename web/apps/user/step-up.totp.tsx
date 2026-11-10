@@ -19,7 +19,7 @@ export function StepUpTotpDialog(props:Props){
  const original=useRef<Attempt|undefined>(bootstrap.totpRecovery??undefined),controller=useRef(new AbortController()),alive=useRef(true),flight=useRef(false),csrf=useRef(bootstrap.csrfToken);
  const [phase,setPhase]=useState<'entry'|'pending'|'unknown'|'issued'|'expired'>(original.current?original.current.status==='EXPIRED'?'expired':'unknown':'entry'),[code,setCode]=useState(''),[field,setField]=useState<string>(),[error,setError]=useState<string>();
  const form=useTunnerForm(totpCodeSchema({required:'stepUp.totp.error.required',invalid:'stepUp.totp.error.code'}),{code});
- useEffect(()=>{alive.current=true;controller.current=new AbortController();return()=>{alive.current=false;controller.current.abort();};},[]);
+ useEffect(()=>{alive.current=true;controller.current=new AbortController();form.reset();return()=>{alive.current=false;controller.current.abort();};},[]);
  useEffect(()=>{document.getElementById(selected&&phase==='entry'?id+'-code':id+'-heading')?.focus();},[selected,phase,id]);
  useEffect(()=>{if(field&&phase==='entry')document.getElementById(id+'-code')?.focus();},[field,phase,id]);
  const picker=!selected&&factors.length>0&&phase==='entry';const current=()=>alive.current&&!controller.current.signal.aborted;
