@@ -1,0 +1,766 @@
+{
+  "schema_version": 1,
+  "scope_id": "TUN-P2-008",
+  "execution_scope": "PUBLIC_PRODUCTION_REACT_RENDER_DEFECT_OBSERVATIONS_ONLY",
+  "status": "OPEN_DEFECTS_NOT_UI_ACCEPTANCE",
+  "recorded_at": "2026-11-10T18:58:45.442618Z",
+  "tested_ui_sha": "e6e3d9da368871887c015764be273e354b6aff48",
+  "observed_head_at_capture": "215b61d62fe43a6c0ef5d43237c6dee270fc2963",
+  "owning_revision": "P1-018-RV006",
+  "review_provenance": "UI role executed the public render capture; QA independently inspected proof/fallback images, capture arrange logic and all six desktop focus results. No additional browser or live-secret run by QA.",
+  "boundary": "Public nonfunctional fixtures and route mocks only. No native/backend TOTP journey, full UI/VAL/UX acceptance, Product decision, production policy or gate PASS. Existing pictured states are already approved; these defects need implementation corrections, not new Product decisions.",
+  "source_checks_path": "artifacts/p2-008-totp-20261110/production-ui/e6e3d9d/rendered/checks.json",
+  "source_checks_observed_sha256": "aac0ce8060e1eab18fba98052855fb95ed2cbf1337f513cb348f61ca500ac1f1",
+  "source_checks_status": "Full matrix still appending at snapshot time. The eight desktop entries below are an immutable selected snapshot; no complete-matrix result or final source checks hash is claimed. UI owner will preserve all e6e baseline pictures and freeze its final checks separately.",
+  "source_manifest_path": "artifacts/p2-008-totp-20261110/production-ui/e6e3d9d/manifest.json",
+  "observations": [
+    {
+      "defect_id": "DEF-TUN-P2-008-UI-002",
+      "ui_items": [
+        "FORM-STEP-UP-TOTP",
+        "COMP-STEP-UP-TOTP"
+      ],
+      "check_ids": [
+        "VAL-005",
+        "VAL-006",
+        "UX-FID-007"
+      ],
+      "actual": "Initial proof-code dialog has a red Verification code field and Enter the6-digit code message before fill or submit; arrange(proof-code) only opens the detail. The captured metric has input focus; its calls contain no proof POST.",
+      "expected": "Opening an untouched code detail must not mark it invalid. Genuine blur/submit must retain governed field errors, accessible associations and first-invalid focus.",
+      "states": [
+        "proof-code"
+      ]
+    },
+    {
+      "defect_id": "DEF-TUN-P2-008-UI-003",
+      "ui_items": [
+        "COMP-TOTP-MUTATION-REVIEW"
+      ],
+      "check_ids": [
+        "VAL-005",
+        "UX-FID-007"
+      ],
+      "actual": "Escape closes all six desktop Remove/Review replacement review variants; forward and reverse focus containment succeed, but restoredTrigger is false and focus lands on Authenticator app rather than the invoking button.",
+      "expected": "When its invoking button still exists and is enabled, closing/canceling review returns focus to that logical trigger. Preserve route, exact operation identity, cancel and pending guards.",
+      "states": [
+        "remove-preserve",
+        "remove-affected",
+        "remove-current",
+        "reset-preserve",
+        "reset-affected",
+        "reset-current"
+      ],
+      "additional_frozen_matrix_confirmation": "Final frozen matrix independently confirms24 failed trigger restorations: all six variants at1440,768,390,320."
+    },
+    {
+      "defect_id": "DEF-TUN-P2-008-UI-004",
+      "ui_items": [
+        "U-ACCT-TOTP"
+      ],
+      "check_ids": [
+        "UX-FID-001",
+        "UX-FID-007"
+      ],
+      "actual": "GET/account/totp/options supplies valid published content; only metadata GET/account/totp returns503. Render becomes an unbranded technical alert reading The request could not be completed instead of the approved management-unavailable composition.",
+      "expected": "Reuse the approved branded management-unavailable state and trusted published copy while denying unsafe actions; retain fail-closed behavior if publication itself is unavailable.",
+      "states": [
+        "manage-unavailable"
+      ]
+    }
+  ],
+  "selected_desktop_results": [
+    {
+      "state": "proof-code",
+      "width": 1440,
+      "metrics": {
+        "url": "/browser-testing/step-up-assets/",
+        "active": {
+          "tag": "INPUT",
+          "id": "_r_1_-code"
+        },
+        "dialog": {
+          "x": 470,
+          "y": 300,
+          "width": 500,
+          "height": 410
+        },
+        "status": null,
+        "details": null,
+        "danger": null
+      },
+      "keyboard": {
+        "first": {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "Back"
+        },
+        "after": {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "Back"
+        },
+        "forwardWrapped": true,
+        "reverseContained": true,
+        "closed": true,
+        "expectedTrigger": "Verify identity",
+        "actualFocus": "Verify identity",
+        "restoredTrigger": true
+      },
+      "validation": null,
+      "errors": [],
+      "calls": [
+        {
+          "method": "GET",
+          "path": "/browser-testing/step-up-assets/"
+        },
+        {
+          "method": "GET",
+          "path": "/authentication/step-up/options"
+        }
+      ]
+    },
+    {
+      "state": "manage-unavailable",
+      "width": 1440,
+      "metrics": {
+        "url": "/account/security/authenticator",
+        "active": {
+          "tag": "BODY",
+          "id": ""
+        },
+        "dialog": null,
+        "status": null,
+        "details": null,
+        "danger": null
+      },
+      "keyboard": null,
+      "validation": null,
+      "errors": [],
+      "calls": [
+        {
+          "method": "GET",
+          "path": "/account/security/authenticator"
+        },
+        {
+          "method": "GET",
+          "path": "/account/totp/options"
+        },
+        {
+          "method": "GET",
+          "path": "/account/totp"
+        }
+      ]
+    },
+    {
+      "state": "remove-preserve",
+      "width": 1440,
+      "metrics": {
+        "url": "/account/security/authenticator",
+        "active": {
+          "tag": "H2",
+          "id": "totp-review-title"
+        },
+        "dialog": {
+          "x": 470,
+          "y": 385,
+          "width": 500,
+          "height": 330
+        },
+        "status": {
+          "x": 288,
+          "y": 226,
+          "width": 1112,
+          "height": 138
+        },
+        "details": {
+          "x": 288,
+          "y": 388,
+          "width": 712,
+          "height": 276
+        },
+        "danger": {
+          "x": 288,
+          "y": 690,
+          "width": 1112,
+          "height": 126
+        }
+      },
+      "keyboard": {
+        "first": {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "Cancel"
+        },
+        "after": {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "Cancel"
+        },
+        "forwardWrapped": true,
+        "reverseContained": true,
+        "closed": true,
+        "expectedTrigger": "Remove",
+        "actualFocus": "Authenticator app",
+        "restoredTrigger": false
+      },
+      "validation": null,
+      "errors": [],
+      "calls": [
+        {
+          "method": "GET",
+          "path": "/account/security/authenticator"
+        },
+        {
+          "method": "GET",
+          "path": "/account/totp/options"
+        },
+        {
+          "method": "GET",
+          "path": "/account/totp"
+        },
+        {
+          "method": "POST",
+          "path": "/account/totp/disable/start"
+        },
+        {
+          "method": "POST",
+          "path": "/account/totp/cancel"
+        }
+      ]
+    },
+    {
+      "state": "remove-affected",
+      "width": 1440,
+      "metrics": {
+        "url": "/account/security/authenticator",
+        "active": {
+          "tag": "H2",
+          "id": "totp-review-title"
+        },
+        "dialog": {
+          "x": 470,
+          "y": 385,
+          "width": 500,
+          "height": 330
+        },
+        "status": {
+          "x": 288,
+          "y": 226,
+          "width": 1112,
+          "height": 138
+        },
+        "details": {
+          "x": 288,
+          "y": 388,
+          "width": 712,
+          "height": 276
+        },
+        "danger": {
+          "x": 288,
+          "y": 690,
+          "width": 1112,
+          "height": 126
+        }
+      },
+      "keyboard": {
+        "first": {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "Cancel"
+        },
+        "after": {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "Cancel"
+        },
+        "forwardWrapped": true,
+        "reverseContained": true,
+        "closed": true,
+        "expectedTrigger": "Remove",
+        "actualFocus": "Authenticator app",
+        "restoredTrigger": false
+      },
+      "validation": null,
+      "errors": [],
+      "calls": [
+        {
+          "method": "GET",
+          "path": "/account/security/authenticator"
+        },
+        {
+          "method": "GET",
+          "path": "/account/totp/options"
+        },
+        {
+          "method": "GET",
+          "path": "/account/totp"
+        },
+        {
+          "method": "POST",
+          "path": "/account/totp/disable/start"
+        },
+        {
+          "method": "POST",
+          "path": "/account/totp/cancel"
+        }
+      ]
+    },
+    {
+      "state": "remove-current",
+      "width": 1440,
+      "metrics": {
+        "url": "/account/security/authenticator",
+        "active": {
+          "tag": "H2",
+          "id": "totp-review-title"
+        },
+        "dialog": {
+          "x": 470,
+          "y": 385,
+          "width": 500,
+          "height": 330
+        },
+        "status": {
+          "x": 288,
+          "y": 226,
+          "width": 1112,
+          "height": 138
+        },
+        "details": {
+          "x": 288,
+          "y": 388,
+          "width": 712,
+          "height": 276
+        },
+        "danger": {
+          "x": 288,
+          "y": 690,
+          "width": 1112,
+          "height": 126
+        }
+      },
+      "keyboard": {
+        "first": {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "Cancel"
+        },
+        "after": {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "Cancel"
+        },
+        "forwardWrapped": true,
+        "reverseContained": true,
+        "closed": true,
+        "expectedTrigger": "Remove",
+        "actualFocus": "Authenticator app",
+        "restoredTrigger": false
+      },
+      "validation": null,
+      "errors": [],
+      "calls": [
+        {
+          "method": "GET",
+          "path": "/account/security/authenticator"
+        },
+        {
+          "method": "GET",
+          "path": "/account/totp/options"
+        },
+        {
+          "method": "GET",
+          "path": "/account/totp"
+        },
+        {
+          "method": "POST",
+          "path": "/account/totp/disable/start"
+        },
+        {
+          "method": "POST",
+          "path": "/account/totp/cancel"
+        }
+      ]
+    },
+    {
+      "state": "reset-preserve",
+      "width": 1440,
+      "metrics": {
+        "url": "/account/security/authenticator",
+        "active": {
+          "tag": "H2",
+          "id": "totp-review-title"
+        },
+        "dialog": {
+          "x": 470,
+          "y": 385,
+          "width": 500,
+          "height": 330
+        },
+        "status": {
+          "x": 288,
+          "y": 226,
+          "width": 1112,
+          "height": 138
+        },
+        "details": {
+          "x": 288,
+          "y": 388,
+          "width": 712,
+          "height": 276
+        },
+        "danger": {
+          "x": 288,
+          "y": 690,
+          "width": 1112,
+          "height": 126
+        }
+      },
+      "keyboard": {
+        "first": {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "Cancel"
+        },
+        "after": {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "Cancel"
+        },
+        "forwardWrapped": true,
+        "reverseContained": true,
+        "closed": true,
+        "expectedTrigger": "Review replacement",
+        "actualFocus": "Authenticator app",
+        "restoredTrigger": false
+      },
+      "validation": null,
+      "errors": [],
+      "calls": [
+        {
+          "method": "GET",
+          "path": "/account/security/authenticator"
+        },
+        {
+          "method": "GET",
+          "path": "/account/totp/options"
+        },
+        {
+          "method": "GET",
+          "path": "/account/totp"
+        },
+        {
+          "method": "POST",
+          "path": "/account/totp/reset/start"
+        },
+        {
+          "method": "POST",
+          "path": "/account/totp/cancel"
+        }
+      ]
+    },
+    {
+      "state": "reset-affected",
+      "width": 1440,
+      "metrics": {
+        "url": "/account/security/authenticator",
+        "active": {
+          "tag": "H2",
+          "id": "totp-review-title"
+        },
+        "dialog": {
+          "x": 470,
+          "y": 385,
+          "width": 500,
+          "height": 330
+        },
+        "status": {
+          "x": 288,
+          "y": 226,
+          "width": 1112,
+          "height": 138
+        },
+        "details": {
+          "x": 288,
+          "y": 388,
+          "width": 712,
+          "height": 276
+        },
+        "danger": {
+          "x": 288,
+          "y": 690,
+          "width": 1112,
+          "height": 126
+        }
+      },
+      "keyboard": {
+        "first": {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "Cancel"
+        },
+        "after": {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "Cancel"
+        },
+        "forwardWrapped": true,
+        "reverseContained": true,
+        "closed": true,
+        "expectedTrigger": "Review replacement",
+        "actualFocus": "Authenticator app",
+        "restoredTrigger": false
+      },
+      "validation": null,
+      "errors": [],
+      "calls": [
+        {
+          "method": "GET",
+          "path": "/account/security/authenticator"
+        },
+        {
+          "method": "GET",
+          "path": "/account/totp/options"
+        },
+        {
+          "method": "GET",
+          "path": "/account/totp"
+        },
+        {
+          "method": "POST",
+          "path": "/account/totp/reset/start"
+        },
+        {
+          "method": "POST",
+          "path": "/account/totp/cancel"
+        }
+      ]
+    },
+    {
+      "state": "reset-current",
+      "width": 1440,
+      "metrics": {
+        "url": "/account/security/authenticator",
+        "active": {
+          "tag": "H2",
+          "id": "totp-review-title"
+        },
+        "dialog": {
+          "x": 470,
+          "y": 385,
+          "width": 500,
+          "height": 330
+        },
+        "status": {
+          "x": 288,
+          "y": 226,
+          "width": 1112,
+          "height": 138
+        },
+        "details": {
+          "x": 288,
+          "y": 388,
+          "width": 712,
+          "height": 276
+        },
+        "danger": {
+          "x": 288,
+          "y": 690,
+          "width": 1112,
+          "height": 126
+        }
+      },
+      "keyboard": {
+        "first": {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "Cancel"
+        },
+        "after": {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "Cancel"
+        },
+        "forwardWrapped": true,
+        "reverseContained": true,
+        "closed": true,
+        "expectedTrigger": "Review replacement",
+        "actualFocus": "Authenticator app",
+        "restoredTrigger": false
+      },
+      "validation": null,
+      "errors": [],
+      "calls": [
+        {
+          "method": "GET",
+          "path": "/account/security/authenticator"
+        },
+        {
+          "method": "GET",
+          "path": "/account/totp/options"
+        },
+        {
+          "method": "GET",
+          "path": "/account/totp"
+        },
+        {
+          "method": "POST",
+          "path": "/account/totp/reset/start"
+        },
+        {
+          "method": "POST",
+          "path": "/account/totp/cancel"
+        }
+      ]
+    }
+  ],
+  "artifact_manifest": [
+    {
+      "path": "artifacts/p2-008-totp-20261110/production-ui/e6e3d9d/manifest.json",
+      "sha256": "0b64180e3ae59db0aeedd0e98a68b97570f8ec28acde7b45b1432defcb4e9fba",
+      "bytes": 34099
+    },
+    {
+      "path": "artifacts/p2-008-totp-20261110/production-ui/e6e3d9d/capture.mjs",
+      "sha256": "d740786d4f29d8401f019b54e23cadd3e017342dace8e2c3d1b28b3dd6da62a9",
+      "bytes": 18711
+    },
+    {
+      "path": "artifacts/p2-008-totp-20261110/production-ui/e6e3d9d/rendered/proof-code-1440.png",
+      "sha256": "9daf748852bdefc64837406bb083d4b868aa314f17f54e540bb089f7ba8d9a1d",
+      "bytes": 47931
+    },
+    {
+      "path": "artifacts/p2-008-totp-20261110/production-ui/e6e3d9d/rendered/proof-code-component-1440.png",
+      "sha256": "a9508b4e9268d24e3a991a6a11bc3e3fbc6b8fe8f8575c89261b35cdd1bdafa9",
+      "bytes": 20802
+    },
+    {
+      "path": "artifacts/p2-008-totp-20261110/production-ui/e6e3d9d/rendered/manage-unavailable-1440.png",
+      "sha256": "548444b61cd6d7f3622aaa50bffe41341bcd2b151a3eb6fde0a46f93129f6322",
+      "bytes": 11007
+    },
+    {
+      "path": "artifacts/p2-008-totp-20261110/production-ui/e6e3d9d/rendered/remove-preserve-1440.png",
+      "sha256": "e7e75b6499c567248c735f598bc433281d330de9926fce35cd0c605840ae7976",
+      "bytes": 100901
+    },
+    {
+      "path": "artifacts/p2-008-totp-20261110/production-ui/e6e3d9d/rendered/remove-affected-1440.png",
+      "sha256": "fff179f3d58390889f43ac5d0119878b3c0d08b9515733917d18763aa718bbbc",
+      "bytes": 101567
+    },
+    {
+      "path": "artifacts/p2-008-totp-20261110/production-ui/e6e3d9d/rendered/remove-current-1440.png",
+      "sha256": "e1c5710fadd0a392a10ab49b22f24d72ca31a00c233f934c15c5a1145213c1e5",
+      "bytes": 101346
+    },
+    {
+      "path": "artifacts/p2-008-totp-20261110/production-ui/e6e3d9d/rendered/reset-preserve-1440.png",
+      "sha256": "646b90b56cf2054e26a668552113fac57767df9f592f334acaf1df1fde3ad292",
+      "bytes": 102910
+    },
+    {
+      "path": "artifacts/p2-008-totp-20261110/production-ui/e6e3d9d/rendered/reset-affected-1440.png",
+      "sha256": "a010cc4d172f8fcd981629eafdb5423ded2af1d8cfd2743fd268b5abeff012d3",
+      "bytes": 103630
+    },
+    {
+      "path": "artifacts/p2-008-totp-20261110/production-ui/e6e3d9d/rendered/reset-current-1440.png",
+      "sha256": "861d9228c1d5b68b27b654fe7f35a2603de1b44616798d9ad250a5772e281e99",
+      "bytes": 103375
+    },
+    {
+      "path": "governance/evidence/p2-008-totp-20261110/ui-proposal/rendered/manage-unavailable-1440.png",
+      "sha256": "233f0b3d431a3e6835106df96fe8014222de05608b0649776b80e9949fe14c3c",
+      "bytes": 83771
+    }
+  ],
+  "next_action": "Register the three OPEN records against008 and RV006. UI owner implements bounded fixes, commits them and runs source-bound current renders/focus/validation regression before any resolution. No fix, closure or acceptance is claimed.",
+  "final_source_checks": {
+    "path": "artifacts/p2-008-totp-20261110/production-ui/e6e3d9d/rendered/checks.json",
+    "sha256": "aac0ce8060e1eab18fba98052855fb95ed2cbf1337f513cb348f61ca500ac1f1",
+    "bytes": 394082,
+    "frozen_observed_utc": "2026-11-10T19:00:03.863697Z",
+    "states": 41,
+    "widths": [
+      1440,
+      768,
+      390,
+      320
+    ],
+    "rows": 164,
+    "fixture_failure_rows": 0,
+    "overflow_rows": 0,
+    "clipped_rows": 0,
+    "runtime_error_rows": 0,
+    "automated_axe_violation_nodes": 0,
+    "automated_axe_incomplete_nodes": 192,
+    "contrast_samples": 368,
+    "minimum_measured_contrast": 5.2832420497441746,
+    "review_focus_failures": 24,
+    "focus_failure_matrix": [
+      {
+        "state": "remove-preserve",
+        "widths_with_failed_trigger_restoration": [
+          320,
+          390,
+          768,
+          1440
+        ],
+        "actual_focus": "Authenticator app"
+      },
+      {
+        "state": "remove-affected",
+        "widths_with_failed_trigger_restoration": [
+          320,
+          390,
+          768,
+          1440
+        ],
+        "actual_focus": "Authenticator app"
+      },
+      {
+        "state": "remove-current",
+        "widths_with_failed_trigger_restoration": [
+          320,
+          390,
+          768,
+          1440
+        ],
+        "actual_focus": "Authenticator app"
+      },
+      {
+        "state": "reset-preserve",
+        "widths_with_failed_trigger_restoration": [
+          320,
+          390,
+          768,
+          1440
+        ],
+        "actual_focus": "Authenticator app"
+      },
+      {
+        "state": "reset-affected",
+        "widths_with_failed_trigger_restoration": [
+          320,
+          390,
+          768,
+          1440
+        ],
+        "actual_focus": "Authenticator app"
+      },
+      {
+        "state": "reset-current",
+        "widths_with_failed_trigger_restoration": [
+          320,
+          390,
+          768,
+          1440
+        ],
+        "actual_focus": "Authenticator app"
+      }
+    ],
+    "limits": "Automated zero counts do not resolve the three observed UI defects or establish comprehensive UI/native/Product acceptance. Incomplete accessibility results are retained, not counted as passes."
+  }
+}
