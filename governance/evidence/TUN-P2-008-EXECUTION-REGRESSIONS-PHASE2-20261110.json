@@ -1,0 +1,289 @@
+{
+  "schema_version": 1,
+  "scope_id": "TUN-P2-008",
+  "phase": "EXECUTION_REGRESSIONS_PHASE2",
+  "execution_scope": "HISTORICAL_NATIVE_AND_INSTALLER_COMPONENT_EXECUTIONS_ONLY",
+  "status": "EXECUTION_HISTORY_RECORDED_FINAL_008_PENDING",
+  "recorded_at": "2026-11-10T18:43:04.775Z",
+  "recorded_source_head": "72d2f53295ab9c87c857e20440e0dbb740f7d780",
+  "prior_execution_receipt": "governance/evidence/TUN-P2-008-EXECUTION-PROGRESS-20261110.json",
+  "final_008_status": "PENDING",
+  "provenance": {
+    "backend_execution_owner": "Existing actual runs by backend author/root; this receipt reparses and copies their TRX. No backend test rerun by the evidence preparer.",
+    "installer_execution_owner": "Security/QA agent executed full Installer cohort with container opt-in, no-build/no-restore, isolated Docker config, and local Docker API endpoint.",
+    "preservation": "Original artifacts and earlier evidence remain unchanged. Portable files are new immutable copies; both original and portable SHA256 values are retained.",
+    "normalization": "Decode UTF-8/BOM; write UTF-8 without BOM and LF; remove trailing whitespace; dynamically resolve checkout root and replace raw/backslash-escaped/slash root forms. TRX uses &lt;repo-root&gt; so XML remains valid; other text uses <repo-root>. No outcomes or test names changed.",
+    "checks": "Every portable TRX reparsed; all test-name/outcome pairs and all counter attributes equal the original. All JSON reparsed.",
+    "privacy": "No live TOTP journey, seed/oracle/bootstrap read, container environment inspection, server logs, image pull/build, or new acceptance workload was performed for this receipt. Configured sensitive-pattern scan found only a source-proven public invalid-endpoint fixture.",
+    "public_negative_fixture": "Two Installer TRX test-name attributes contain the literal public invalid query secret=x from tests/Tunner.Installer.Tests/InstallerTests.cs:48. Context and exact literal were checked; no credential payload was captured.",
+    "embedded_hashes": "Portable installer validation.json preserves its original embedded raw-artifact hashes. Use this receipt's source_manifest to resolve raw versus normalized portable hashes."
+  },
+  "executions": [
+    {
+      "scope": "Focused TOTP final-activation, projection, and native passkey/MFA regressions",
+      "source_commit_sha": "70d19f41f5ef0780c80e3e1378c97fee3e2312e6",
+      "execution_status": "PASS",
+      "total": 6,
+      "executed": 6,
+      "passed": 6,
+      "failed": 0,
+      "skipped": 0,
+      "started": "2026-11-10T12:51:27.6506595-05:00",
+      "finished": "2026-11-10T12:52:16.6085492-05:00",
+      "receipt": "governance/evidence/p2-008-totp-20261110/execution-regressions/backend-tests/70d19f4/focused-70d19f4.trx",
+      "interpretation": "Actual focused execution; this subset did not establish full Identity acceptance."
+    },
+    {
+      "scope": "Full Identity cohort before historical migration fixture correction",
+      "source_commit_sha": "70d19f41f5ef0780c80e3e1378c97fee3e2312e6",
+      "execution_status": "FAIL",
+      "total": 254,
+      "executed": 254,
+      "passed": 253,
+      "failed": 1,
+      "skipped": 0,
+      "started": "2026-11-10T12:53:00.4617232-05:00",
+      "finished": "2026-11-10T12:59:46.7152997-05:00",
+      "receipt": "governance/evidence/p2-008-totp-20261110/execution-regressions/backend-tests/70d19f4/identity-full-70d19f4.trx",
+      "failed_tests": [
+        "Tunner.Identity.Persistence.Tests.PasskeyTests.OperationProofUpgradePreservesHistoricalLifecycleNativeCounterSessionAndPendingReview"
+      ],
+      "interpretation": "One historical-schema fixture returned HTTP500 through the current login path. Failure retained; b583842 corrected fixture setup."
+    },
+    {
+      "scope": "Historical migration upgrade fixture after test-only correction",
+      "source_commit_sha": "b58384205e407f037567aa514ea70696d0bbaabd",
+      "execution_status": "PASS",
+      "total": 1,
+      "executed": 1,
+      "passed": 1,
+      "failed": 0,
+      "skipped": 0,
+      "started": "2026-11-10T13:04:55.4857909-05:00",
+      "finished": "2026-11-10T13:05:15.1959490-05:00",
+      "receipt": "governance/evidence/p2-008-totp-20261110/execution-regressions/backend-tests/b583842/historical-upgrade-b583842.trx",
+      "interpretation": "The historical fixture now seeds its historical session before migration instead of invoking current login against an old schema."
+    },
+    {
+      "scope": "Full Identity cohort after historical migration fixture correction",
+      "source_commit_sha": "b58384205e407f037567aa514ea70696d0bbaabd",
+      "execution_status": "PASS",
+      "total": 254,
+      "executed": 254,
+      "passed": 254,
+      "failed": 0,
+      "skipped": 0,
+      "started": "2026-11-10T13:05:30.6401346-05:00",
+      "finished": "2026-11-10T13:12:03.1180755-05:00",
+      "receipt": "governance/evidence/p2-008-totp-20261110/execution-regressions/backend-tests/b583842/identity-full-b583842.trx",
+      "interpretation": "All 254 cases executed with no failures or skips at this source; later final-authority regressions were not yet included."
+    },
+    {
+      "scope": "Three expected-red final-authority transition regressions against unchanged production behavior",
+      "source_commit_sha": "183b557a37833fe658d60652b946860986e99ac6",
+      "execution_status": "EXPECTED_RED",
+      "total": 3,
+      "executed": 3,
+      "passed": 0,
+      "failed": 3,
+      "skipped": 0,
+      "started": "2026-11-10T13:19:27.0314765-05:00",
+      "finished": "2026-11-10T13:20:01.3248532-05:00",
+      "receipt": "governance/evidence/p2-008-totp-20261110/execution-regressions/backend-tests/183b557/boundaries-red-183b557.trx",
+      "failed_tests": [
+        "Tunner.Identity.Persistence.Tests.PasskeyTests.MfaFinalAccessPasskeyPolicyTransitionCannotCommitSessionReplayOrCompletedResult",
+        "Tunner.Identity.Persistence.Tests.TotpFinalBoundaryTests.OperationProofFinalAccessTransitionCannotCommitReplayProofOrAttempt(transition: \"idle\")",
+        "Tunner.Identity.Persistence.Tests.TotpFinalBoundaryTests.OperationProofFinalAccessTransitionCannotCommitReplayProofOrAttempt(transition: \"method\")"
+      ],
+      "interpretation": "All three expected failures occurred: idle expiry, authentication-policy/method change, and pending passkey-policy change at the last Access decision. This is defect evidence, not a passing run."
+    },
+    {
+      "scope": "Same three final-authority transition regressions after minimal production fix",
+      "source_commit_sha": "e79f482c3859d944f031a2846e36988cf90f0098",
+      "execution_status": "PASS",
+      "total": 3,
+      "executed": 3,
+      "passed": 3,
+      "failed": 0,
+      "skipped": 0,
+      "started": "2026-11-10T13:26:26.0402789-05:00",
+      "finished": "2026-11-10T13:26:50.9121423-05:00",
+      "receipt": "governance/evidence/p2-008-totp-20261110/execution-regressions/backend-tests/e79f482/boundaries-green-e79f482.trx",
+      "interpretation": "All three previously failing cases passed. Assertions require no newly committed replay/proof/attempt or completed MFA session/result after invalidation."
+    },
+    {
+      "scope": "Full Identity cohort after final-authority production fix",
+      "source_commit_sha": "e79f482c3859d944f031a2846e36988cf90f0098",
+      "execution_status": "PASS",
+      "total": 257,
+      "executed": 257,
+      "passed": 257,
+      "failed": 0,
+      "skipped": 0,
+      "started": "2026-11-10T13:29:12.9937092-05:00",
+      "finished": "2026-11-10T13:35:23.7405594-05:00",
+      "receipt": "governance/evidence/p2-008-totp-20261110/execution-regressions/backend-tests/e79f482/identity-full-e79f482.trx",
+      "interpretation": "All 257 cases executed with no failures or skips. This does not cover the subsequently confirmed composite-session termination defect."
+    },
+    {
+      "scope": "Full Installer/shared local vault compatibility cohort",
+      "execution_head": "183b557a37833fe658d60652b946860986e99ac6",
+      "input_commit_sha": "19617c5a2d15466ddc05260b05004506c7cde3f3",
+      "input_binding": "Seven current Installer/fixture blobs equal the committed input set; no build performed during execution.",
+      "input_equivalence_receipt": "governance/evidence/p2-008-totp-20261110/execution-regressions/installer-19617c5/input-equivalence.json",
+      "execution_status": "PASS",
+      "total": 113,
+      "executed": 113,
+      "passed": 113,
+      "failed": 0,
+      "skipped": 0,
+      "started": "2026-11-10T13:25:51.0536994-05:00",
+      "finished": "2026-11-10T13:26:11.0167115-05:00",
+      "receipt": "governance/evidence/p2-008-totp-20261110/execution-regressions/installer-19617c5/installer-full-19617c5.trx",
+      "interpretation": "All 113 cases executed; includes old R2 assertions, three real OpenBao integrations, 14 daemon preflight cases and 5 fixture cleanup cases. Only the seven committed Installer/fixture inputs are claimed equivalent."
+    }
+  ],
+  "installer_cleanup": {
+    "source_receipt": "governance/evidence/p2-008-totp-20261110/execution-regressions/installer-19617c5/validation.json",
+    "asserted_inside_passing_tests": [
+      "Scoped token revocation and temporary ACL policy removal",
+      "Immutable credential version1 remains readable after administrative version2 write",
+      "Loopback host binding, log driver none, no volumes, cached-only image and no helper pull",
+      "Sticky failed cleanup behavior and container absence before cleanup success"
+    ],
+    "additional_post_run_check": "Canonical Docker CLI local named-pipe spelling found zero fixture-owned labeled containers.",
+    "failed_check_preserved": "governance/evidence/p2-008-totp-20261110/execution-regressions/installer-19617c5/post-run-docker-check-failed.json",
+    "corrected_check": "governance/evidence/p2-008-totp-20261110/execution-regressions/installer-19617c5/post-run-docker-check.json",
+    "correction": "The first supplementary Docker CLI check used library-form npipe://./pipe/docker_engine and failed. Canonical CLI npipe:////./pipe/docker_engine succeeded; no Desktop change or resource deletion was performed.",
+    "cached_image_reference": "openbao/openbao:2.7.0",
+    "cached_image_id_observed_after_run": "sha256:71156a1c6623a5fa3f5e61b0c6a8ead0faf0df29a778339188443551995d1315",
+    "remaining_fixture_owned_containers": 0,
+    "limits": "Post-run cache image identity is distinct from per-fixture runtime metadata assertions. This disposable test image is not a production or maintained-image security acceptance."
+  },
+  "security_review": {
+    "reviewed_commit_sha": "e79f482c3859d944f031a2846e36988cf90f0098",
+    "confirmed_fixed": "Final TOTP operation proof now checks current authentication policy/version, expiry and method facts after the last continued-operation await. Pending MFA now checks current primary-source/passkey policy facts after its last Access await. Three red/green regressions exercise these changes.",
+    "open_followup": {
+      "status": "OPEN_AT_REVIEWED_SOURCE",
+      "path": "src/Modules/Identity/AuthenticationApplication.cs",
+      "line": 215,
+      "defect": "Passkey causal termination compares native passkey assurance to the session composite MFA assurance. Legitimate passkey+totp own-credential revocation under RevokeCredentialSessions can therefore roll back despite distinct valid primary/composite mappings.",
+      "required_invariant": "Preserve exact receipt-bound causal self-revocation. Keep native assurance equality for passkey-only sessions; composite sessions require current composite method facts and the unaffected immutable TOTP source/lifecycle, without treating native primary assurance as composite assurance or bypassing source validation.",
+      "next_action": "Backend owner to commit tests-first bounded combination coverage, minimal fix and actual committed-source green regression evidence; no fix or new passing result is claimed here."
+    }
+  },
+  "remaining_acceptance": [
+    "Final P2-008 validation envelope and current parent-source/native eligibility proofs remain pending.",
+    "Confirmed composite-session causal passkey termination follow-up remains open at this immutable receipt.",
+    "Finite real-browser runtime composition and the real BFF/native/OpenBao TOTP journey have not executed.",
+    "Existing committed Chromium public privacy canaries are bounded component evidence; changes to that boundary require their own actual committed-source rerun.",
+    "Edge automatic cv_debug.log privacy check remains open; no log allowlist or browser matrix waiver.",
+    "No Product, milestone, production profile/provider activation, merge or release acceptance."
+  ],
+  "source_manifest": [
+    {
+      "source_path": "artifacts/p2-008-totp-20261110/backend-tests/70d19f4/focused-70d19f4.trx",
+      "path": "governance/evidence/p2-008-totp-20261110/execution-regressions/backend-tests/70d19f4/focused-70d19f4.trx",
+      "source_sha256": "7c375524e6cd0a47f43da1030da0aeaca3be9304f4cae9e664b75b06db62d1e3",
+      "sha256": "3edc17bf42202ecca27610ad8c63258e3532fe40c452ad86546c8db4b0fe8016",
+      "source_bytes": 19589,
+      "bytes": 19277
+    },
+    {
+      "source_path": "artifacts/p2-008-totp-20261110/backend-tests/70d19f4/identity-full-70d19f4.trx",
+      "path": "governance/evidence/p2-008-totp-20261110/execution-regressions/backend-tests/70d19f4/identity-full-70d19f4.trx",
+      "source_sha256": "be3c1a3992f25f2cf2067dfeada427208a94913377b02e57b6e9cf5ba3bd9538",
+      "sha256": "78f2809a47f303f19a2edecdf5f7393bbbd0d4771318e400c7d588d2e5ca365b",
+      "source_bytes": 432960,
+      "bytes": 420396
+    },
+    {
+      "source_path": "artifacts/p2-008-totp-20261110/backend-tests/b583842/historical-upgrade-b583842.trx",
+      "path": "governance/evidence/p2-008-totp-20261110/execution-regressions/backend-tests/b583842/historical-upgrade-b583842.trx",
+      "source_sha256": "cf86f48017adddcb760959ed25d00bb66ab0b962fd8db3d9c6cdac3b55e971e9",
+      "sha256": "41a9ad9e5eef7dbfe9007b1b158f84b7ee4b3f0231cfbfb36a55cdef5ed1ba47",
+      "source_bytes": 5422,
+      "bytes": 5350
+    },
+    {
+      "source_path": "artifacts/p2-008-totp-20261110/backend-tests/b583842/identity-full-b583842.trx",
+      "path": "governance/evidence/p2-008-totp-20261110/execution-regressions/backend-tests/b583842/identity-full-b583842.trx",
+      "source_sha256": "b6838d062ad68d8781a7c49c2c2d789c66a329a05d00783bf1ecb96263f617cd",
+      "sha256": "48e17f3136e930d40be7425620dcc6fec13280faa4be5eb536f87f04751a632b",
+      "source_bytes": 430656,
+      "bytes": 418440
+    },
+    {
+      "source_path": "artifacts/p2-008-totp-20261110/backend-tests/183b557/boundaries-red-183b557.trx",
+      "path": "governance/evidence/p2-008-totp-20261110/execution-regressions/backend-tests/183b557/boundaries-red-183b557.trx",
+      "source_sha256": "c2d169309443e1aee3e614eac23ca969c2de2dba3c0f247644a222fa8b74e686",
+      "sha256": "f83a4b7a22ed45dbbb0946c984a245170b374c2323bf8593fe7c7cffa57e360c",
+      "source_bytes": 21237,
+      "bytes": 19861
+    },
+    {
+      "source_path": "artifacts/p2-008-totp-20261110/backend-tests/e79f482/boundaries-green-e79f482.trx",
+      "path": "governance/evidence/p2-008-totp-20261110/execution-regressions/backend-tests/e79f482/boundaries-green-e79f482.trx",
+      "source_sha256": "b00e2a33fdce534f44e197b7acad1f84907cea4590e8536e63a1de9494ef5156",
+      "sha256": "172dc3e6484cd31317e41f852db4ad3e1d40ad04f764051254bcd0fc3bb33ce1",
+      "source_bytes": 10102,
+      "bytes": 9934
+    },
+    {
+      "source_path": "artifacts/p2-008-totp-20261110/backend-tests/e79f482/identity-full-e79f482.trx",
+      "path": "governance/evidence/p2-008-totp-20261110/execution-regressions/backend-tests/e79f482/identity-full-e79f482.trx",
+      "source_sha256": "565cff721dc3e19b7f8a50a8e0f26eacba203ea084527d24dc34f9b109be4f9d",
+      "sha256": "6a75f08ee77e4af89cc37ee482e8683769faa88061c90eab854c57ed0bcabd3f",
+      "source_bytes": 436715,
+      "bytes": 424355
+    },
+    {
+      "source_path": "artifacts/p2-008-totp-20261110/installer-19617c5/input-equivalence.json",
+      "path": "governance/evidence/p2-008-totp-20261110/execution-regressions/installer-19617c5/input-equivalence.json",
+      "source_sha256": "35a704976e3e7ff34d6c904a1e174339442374e80eb2d48d74e33f24791c0869",
+      "sha256": "5a87d43ddb21e77a1c5f3dc5a7d242a8b3a74c40ebf03329129ded8e41860c42",
+      "source_bytes": 2149,
+      "bytes": 2093
+    },
+    {
+      "source_path": "artifacts/p2-008-totp-20261110/installer-19617c5/installer-full-19617c5.trx",
+      "path": "governance/evidence/p2-008-totp-20261110/execution-regressions/installer-19617c5/installer-full-19617c5.trx",
+      "source_sha256": "9c666b46e3a9c898311d5784f7dd28c480b4afc532c7250a41f741eccf3c435a",
+      "sha256": "ac9e6cc3003e0da188756d889c031757976ea1b5429e58dfcedd36ba94099661",
+      "source_bytes": 174684,
+      "bytes": 169236
+    },
+    {
+      "source_path": "artifacts/p2-008-totp-20261110/installer-19617c5/installer-full.console.log",
+      "path": "governance/evidence/p2-008-totp-20261110/execution-regressions/installer-19617c5/installer-full.console.log",
+      "source_sha256": "d17696c80f65142c9f628a15a563939966f952cdb0d028c26d627267aad4bbdb",
+      "sha256": "c70451d19571fa9693552633b904d9feef6b71d397c1b0a29ea4961c5cc8b012",
+      "source_bytes": 511,
+      "bytes": 410
+    },
+    {
+      "source_path": "artifacts/p2-008-totp-20261110/installer-19617c5/post-run-docker-check-failed.json",
+      "path": "governance/evidence/p2-008-totp-20261110/execution-regressions/installer-19617c5/post-run-docker-check-failed.json",
+      "source_sha256": "99fbe30f001f8f20a9f21b43f979ca16c17c51efa52161a4e849ce96ac5a3090",
+      "sha256": "4abbb4db61bf9851ba7b14c2c9217462c5693fe031d5b86a8593c642e5b4727b",
+      "source_bytes": 447,
+      "bytes": 436
+    },
+    {
+      "source_path": "artifacts/p2-008-totp-20261110/installer-19617c5/post-run-docker-check.json",
+      "path": "governance/evidence/p2-008-totp-20261110/execution-regressions/installer-19617c5/post-run-docker-check.json",
+      "source_sha256": "a65d78ee9bd2bfe589844d63de1212b17cf17a987b13c95ee3c5ede27838bc9d",
+      "sha256": "7aa19734320f04abffe0770e3f31489db9e9d3178cfd76060af276d9ac882a5c",
+      "source_bytes": 781,
+      "bytes": 766
+    },
+    {
+      "source_path": "artifacts/p2-008-totp-20261110/installer-19617c5/validation.json",
+      "path": "governance/evidence/p2-008-totp-20261110/execution-regressions/installer-19617c5/validation.json",
+      "source_sha256": "09b853d31e2f1f719254a971cf4085f5f72a09bb4ad38eed9bc1f859e2bc8b13",
+      "sha256": "7acaac7b00a1aff9fb1c19d7a9991a24fcb5825696db49e861c9ac832de35cce",
+      "source_bytes": 3273,
+      "bytes": 3191
+    }
+  ]
+}
