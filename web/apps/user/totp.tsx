@@ -23,7 +23,7 @@ function EndedResult({presentation,value}:{presentation:TotpTerminalOptions;valu
 function Account(){
  const route=useRouteLocation(),revision=useRef(route.revision);revision.current=route.revision;
  const control=useRef(new AbortController()),flight=useRef(false),original=useRef<TotpOperation|undefined>(undefined),starting=useRef<TotpStartSnapshot|undefined>(undefined);
- const attempt=useRef<{enrollmentId:string;attemptId:string}|undefined>(undefined),trigger=useRef<HTMLElement|null>(null);
+ const attempt=useRef<{enrollmentId:string;attemptId:string}|undefined>(undefined),trigger=useRef<HTMLElement|null>(null),restoreTrigger=useRef(false);
  const [boot,setBoot]=useState<TotpBootstrap>(),[methods,setMethods]=useState<TotpMethods>(),[operation,setOperation]=useState<TotpOperation>();
  const [ready,setReady]=useState(-1),[refresh,setRefresh]=useState(0),[unavailable,setUnavailable]=useState(false),[methodsUnavailable,setMethodsUnavailable]=useState(false),[busy,setBusy]=useState(false);
  const [mode,setMode]=useState<TotpSetupMode>('unknown'),[disclosure,setDisclosure]=useState<TotpDisclosure>(),[code,setCode]=useState('');
@@ -68,7 +68,8 @@ function Account(){
   const show=(event:PageTransitionEvent)=>{if(event.persisted)setRefresh(value=>value+1);};
   window.addEventListener('pagehide',hide);window.addEventListener('pageshow',show);return()=>{window.removeEventListener('pagehide',hide);window.removeEventListener('pageshow',show);};
  },[]);
- useEffect(()=>{if(!guarded&&!proof&&!review&&document.activeElement!==trigger.current)document.getElementById('totp-page-heading')?.focus();},[guarded,proof,review,mode]);
+ useEffect(()=>{if(!guarded&&!proof&&!review&&!restoreTrigger.current&&document.activeElement!==trigger.current)document.getElementById('totp-page-heading')?.focus();},[guarded,proof,review,mode]);
+ useEffect(()=>{if(!restoreTrigger.current||busy||guarded||proof||review)return;restoreTrigger.current=false;if(trigger.current?.isConnected){trigger.current.focus({preventScroll:true});if(document.activeElement===trigger.current)return;}document.getElementById('totp-page-heading')?.focus();},[busy,guarded,proof,review]);
  useEffect(()=>{if(review&&!proof)document.getElementById('totp-review-title')?.focus();},[review,proof]);
  useEffect(()=>{if(serverField&&!busy)document.getElementById('totp-setup-code')?.focus();},[serverField,busy]);
 
@@ -132,7 +133,7 @@ function Account(){
   if(flight.current)return;const value=original.current;removeSensitive();setProof(undefined);
   if(!value||unresolved){setReview(false);navigatePath(totpRoutes.manage.pathname);return;}
   if(value.status==='COMPLETED'){done();return;}if(!boot)return;const scope=work();running(true);setError(undefined);
-  try{const result=parseTotpOperation(await requestTotpJson('/account/totp/cancel',{csrfToken:boot.csrfToken,body:body(value),signal:scope.signal}),value);if(!current(scope))return;if(result.status==='COMPLETED'){await accept(result,scope);return;}if(result.status!=='REJECTED'&&result.status!=='EXPIRED')throw new TotpHttpError(409,'VERSION_CONFLICT');acknowledged.add(result.enrollmentId);own(undefined);starting.current=undefined;setReview(false);setUnresolved(false);navigatePath(totpRoutes.manage.pathname);}
+  try{const result=parseTotpOperation(await requestTotpJson('/account/totp/cancel',{csrfToken:boot.csrfToken,body:body(value),signal:scope.signal}),value);if(!current(scope))return;if(result.status==='COMPLETED'){await accept(result,scope);return;}if(result.status!=='REJECTED'&&result.status!=='EXPIRED')throw new TotpHttpError(409,'VERSION_CONFLICT');acknowledged.add(result.enrollmentId);restoreTrigger.current=route.pathname===totpRoutes.manage.pathname;own(undefined);starting.current=undefined;setReview(false);setUnresolved(false);navigatePath(totpRoutes.manage.pathname);}
   catch(reason){if(current(scope)){setUnresolved(true);setError(totpErrorKey(reason));}}finally{if(current(scope))running(false);}
  }
  async function submitCode(data:{code:string}){
