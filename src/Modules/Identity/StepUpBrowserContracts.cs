@@ -42,6 +42,7 @@ public sealed class StepUpPresentation
     private static readonly string[] RequiredKeys = ["stepUp.heading","stepUp.description","stepUp.passkey","stepUp.passkey.description",
         "stepUp.authenticator","stepUp.authenticator.description","stepUp.other","stepUp.unavailable","stepUp.password.description",
         "stepUp.password.label","stepUp.password.placeholder","stepUp.back","stepUp.cancel","stepUp.confirm","stepUp.working",
+        "stepUp.passkey.pending","stepUp.passkey.notCompleted","stepUp.passkey.unknown","stepUp.passkey.check","stepUp.passkey.resume","stepUp.passkey.unsupported","stepUp.passkey.close",
         "stepUp.error.password","stepUp.error.highlighted","stepUp.error.credentials","stepUp.error.limited","stepUp.error.unavailable","stepUp.error.changed"];
     public StepUpPresentation(string locale, IEnumerable<RegistrationPublishedText> content)
     {

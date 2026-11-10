@@ -22,6 +22,9 @@ internal sealed class StepUpProofRow
     public string PolicyVersion { get; set; } = string.Empty;
     public string AuthenticationPolicyVersion { get; set; } = string.Empty;
     public string AuthenticationMethod { get; set; } = string.Empty;
+    public Guid? PasskeyCredentialReference { get; set; }
+    public string? PasskeyPolicyVersion { get; set; }
+    public string? PasskeyAssuranceKey { get; set; }
     public string Assurance { get; set; } = string.Empty;
     public string ProcessingReference { get; set; } = string.Empty;
     public string RetentionReference { get; set; } = string.Empty;
@@ -40,12 +43,14 @@ internal static class StepUpModelConfiguration
         {
             b.ToTable("step_up_proofs", "identity", t =>
             {
+                t.HasCheckConstraint("ck_step_up_method", "(authentication_method='pwd' AND passkey_credential_reference IS NULL AND passkey_policy_version IS NULL AND passkey_assurance_key IS NULL) OR (authentication_method LIKE 'passkey:%' AND passkey_credential_reference IS NOT NULL AND passkey_policy_version IS NOT NULL AND passkey_assurance_key IS NOT NULL)");
                 t.HasCheckConstraint("ck_step_up_state", "state IN ('ACTIVE','CONSUMED','EXPIRED')");
                 t.HasCheckConstraint("ck_step_up_bounds", "expires_at > authenticated_at AND expected_version >= 0 AND version >= 1");
                 t.HasCheckConstraint("ck_step_up_digests", "key_digest ~ '^[0-9A-F]{64}$' AND context_digest ~ '^[0-9A-F]{64}$'");
                 t.HasCheckConstraint("ck_step_up_end", "(state='ACTIVE' AND ended_at IS NULL AND length(protected_key)>0) OR (state<>'ACTIVE' AND ended_at IS NOT NULL AND ended_at >= authenticated_at AND protected_key='')");
                 t.HasCheckConstraint("ck_step_up_consumed", "state<>'CONSUMED' OR ended_at < expires_at");
             });
+            b.HasOne<PasskeyCredentialRow>().WithMany().HasForeignKey(x => x.PasskeyCredentialReference).OnDelete(DeleteBehavior.Restrict);
             b.HasKey(x => x.ProofId); b.Property(x => x.ProofId).ValueGeneratedNever();
             b.HasIndex(x => x.KeyDigest).IsUnique(); b.HasIndex(x => new { x.SessionId, x.OperationId }).IsUnique();
             b.Property(x => x.Version).IsConcurrencyToken();

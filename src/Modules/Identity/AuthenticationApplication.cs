@@ -202,6 +202,30 @@ internal sealed class AuthenticationApplication(IdentityPersistenceDbContext dat
         return decision?.Allowed == true && decision.EffectiveInterval.Contains(decisionAt) && passkeyPolicies.Single().RequireEffective(decisionAt).Version == receipt.PasskeyPolicyVersion
             ? new AuthenticationTerminalVerification(decision.EffectiveInterval) : null;
     }
+    internal async Task<PasskeyCredentialRow?> ReadProofCredentialAsync(StepUpProofRow proof, CancellationToken ct, bool refresh = false)
+    {
+        if (proof.PasskeyCredentialReference is not { } id) return null;
+        var credential = await database.Set<PasskeyCredentialRow>().SingleOrDefaultAsync(x => x.CredentialReference == id && x.AccountId == proof.AccountId, ct).ConfigureAwait(false);
+        // Issuance and execution use separate transactions on one scoped context. Refresh at the pre-action
+        // boundary; after the owner callback retain its tracked, possibly unflushed causal revocation.
+        if (refresh && credential is not null)
+        {
+            await database.Entry(credential).ReloadAsync(ct).ConfigureAwait(false);
+            if (database.Entry(credential).State == EntityState.Detached) return null;
+        }
+        return credential;
+    }
+    internal bool ProofMethodCurrentAt(StepUpProofRow proof, PasskeyCredentialRow? credential, StepUpOperation operation, DateTimeOffset decisionAt, bool appliedOwnRevocation)
+    {
+        if (proof.AuthenticationMethod == "pwd") return proof.PasskeyCredentialReference is null && proof.PasskeyPolicyVersion is null && proof.PasskeyAssuranceKey is null;
+        var current = passkeyPolicies.SingleOrDefault()?.RequireEffective(decisionAt);
+        if (current is null || current.Version != proof.PasskeyPolicyVersion || current.Origin != proof.Origin || proof.PasskeyAssuranceKey is null ||
+            proof.AuthenticationMethod != "passkey:" + proof.PasskeyAssuranceKey || credential is null || credential.AccountId != proof.AccountId || credential.CredentialReference != proof.PasskeyCredentialReference) return false;
+        if (credential.State == "ACTIVE") return true;
+        return appliedOwnRevocation && operation.Scope == PasskeyApplication.RevocationScope && operation.ResourceId == credential.CredentialReference.ToString("N") &&
+            operation.ExpectedVersion + 1 == credential.Version && credential.State == "REVOKED" && credential.RevocationOperationId == operation.OperationId &&
+            credential.RevocationCorrelationId == operation.CorrelationId && credential.RevocationPolicyVersion == current.Version;
+    }
     internal async Task<AuthenticationOperationVerification?> VerifyContinuedOperationAsync(StepUpCaller caller, StepUpOperation operation,
         AuthenticationSessionRow session, CancellationToken ct)
     {

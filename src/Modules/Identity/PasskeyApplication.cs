@@ -14,9 +14,9 @@ using Tunner.Platform.Policies;
 namespace Tunner.Identity.Persistence;
 
 /// <summary>Identity-owned native ceremonies. All credential/state transitions share the Tunner transaction and outbox.</summary>
-internal sealed class PasskeyApplication(IdentityPersistenceDbContext database, UserManager<IdentityUserAdapter> users,
+internal sealed partial class PasskeyApplication(IdentityPersistenceDbContext database, UserManager<IdentityUserAdapter> users,
     AuthenticationApplication authentication, IPasskeyPolicySource policies, IAuthenticationPolicySource authenticationPolicies,
-    IAssurancePolicySource assurancePolicies, IPasskeyRevocationEligibilitySource revocationEligibility,
+    IAssurancePolicySource assurancePolicies, IPasskeyRevocationEligibilitySource revocationEligibility, StepUpApplication stepUp,
     IDataProtectionProvider protection, TimeProvider clock) : IPasskeyCeremonyMaintenance
 {
     private readonly IDataProtector stateProtection = protection.CreateProtector("Tunner.Identity.Passkey.State.v1");
@@ -78,7 +78,7 @@ internal sealed class PasskeyApplication(IdentityPersistenceDbContext database, 
     internal async Task<UserStepUpOperationContext?> ResolveMutationAsync(StepUpCaller caller, Guid ceremonyId, Guid requestId, CancellationToken ct)
     {
         var row = await database.Set<PasskeyCeremonyRow>().AsNoTracking().SingleOrDefaultAsync(x => x.CeremonyId == ceremonyId && x.RequestId == requestId, ct).ConfigureAwait(false);
-        if (row is null || !Actor(row, caller) || row.Kind == "SIGN_IN") return null;
+        if (row is null || !Actor(row, caller) || row.Kind is not ("ENROLL" or "REVOKE")) return null;
         var policy = Current(caller.Origin);
         if (row.PolicyVersion != policy.Version || row.AuthenticationPolicyVersion != authenticationPolicies.RequireEffective(clock.GetUtcNow()).Version ||
             row.ExpiresAt <= clock.GetUtcNow() || row.State is "REJECTED" or "EXPIRED") return null;
@@ -112,7 +112,7 @@ internal sealed class PasskeyApplication(IdentityPersistenceDbContext database, 
                 .OrderBy(x => x.CredentialReference).Select(x => new { x.CredentialReference, x.Version }).ToArrayAsync(ct).ConfigureAwait(false);
             var links = await database.ExternalIdentityLinks.FromSqlInterpolated($"SELECT * FROM identity.external_identity_links WHERE account_id={caller.AccountId} ORDER BY link_id FOR SHARE").AsNoTracking().ToArrayAsync(ct).ConfigureAwait(false);
             var digest = AuthenticationIdentity.Digest(JsonSerializer.Serialize(new { alternatives, password = user.PasswordHash is not null,
-                passwordStamp = user.ConcurrencyStamp, links }));
+                passwordSecurityStamp = AuthenticationIdentity.Digest(user.SecurityStamp!), links }));
             var decision = await revocationEligibility.RequireAsync(new(caller.AccountId, account.Version, credential.CredentialReference, credential.Version,
                 alternatives.Length, user.PasswordHash is not null, digest, now), ct).ConfigureAwait(false);
             if (decision.AccountId != caller.AccountId || decision.AccountVersion != account.Version || decision.CredentialReference != credential.CredentialReference ||
@@ -157,10 +157,13 @@ internal sealed class PasskeyApplication(IdentityPersistenceDbContext database, 
         if (row.State == "COMPLETED") return await Finish(transaction, new PasskeyResult(row.RequestDigest == digest ? null : "VERSION_CONFLICT", row), ct).ConfigureAwait(false);
         var now = clock.GetUtcNow();
         var proof = await database.Set<StepUpProofRow>().SingleOrDefaultAsync(x => x.ProofId == row.ProofReference, ct).ConfigureAwait(false);
-        var operation = Operation(row); var assurance = assurancePolicies.RequireEffective(operation.Scope, now, row.AssurancePolicyVersion);
+        var operation = Operation(row);
+        var proofCredential = proof is null ? null : await authentication.ReadProofCredentialAsync(proof, ct, refresh: true).ConfigureAwait(false);
+        var assurance = assurancePolicies.RequireEffective(operation.Scope, now, row.AssurancePolicyVersion);
         if (row.State != "AUTHORIZED" || !CurrentBinding(row, policy, now) || session.SecurityStampDigest != row.SecurityStampDigest || proof is null ||
             proof.State != "CONSUMED" || proof.AccountId != caller.AccountId || proof.SessionId != caller.SessionId || proof.Origin != caller.Origin ||
             proof.SecurityStampDigest != session.SecurityStampDigest || proof.OperationId != operation.OperationId || proof.ContextDigest != operation.ContextDigest ||
+            !authentication.ProofMethodCurrentAt(proof, proofCredential, operation, now, false) ||
             proof.PolicyVersion != row.AssurancePolicyVersion || proof.AuthenticatedAt != row.AuthorizedAt || proof.EndedAt is null || proof.EndedAt >= proof.ExpiresAt ||
             now >= proof.ExpiresAt || now - proof.AuthenticatedAt >= assurance.ProofLifetime || assurance.RequireMethodAssurance(proof.AuthenticationMethod) != proof.Assurance || proof.Assurance != assurance.RequiredAssurance)
             return await FailCeremony(transaction, row, "STEP_UP_REQUIRED", now, ct).ConfigureAwait(false);
@@ -183,8 +186,12 @@ internal sealed class PasskeyApplication(IdentityPersistenceDbContext database, 
         if (!CurrentBinding(row, Current(caller.Origin), clock.GetUtcNow()) ||
             await authentication.LockForOperationAsync(caller, EnrollmentScope.Operation, ct).ConfigureAwait(false) is null)
         { await transaction.RollbackAsync(ct).ConfigureAwait(false); database.ChangeTracker.Clear(); return new("STEP_UP_REQUIRED"); }
+        var finalSession = await database.Set<AuthenticationSessionRow>().SingleAsync(x => x.SessionId == caller.SessionId, ct).ConfigureAwait(false);
+        var finalAuthority = await authentication.VerifyContinuedOperationAsync(caller, operation, finalSession, ct).ConfigureAwait(false);
         now = clock.GetUtcNow(); assurance = assurancePolicies.RequireEffective(operation.Scope, now, row.AssurancePolicyVersion);
-        if (now >= proof.ExpiresAt || now - proof.AuthenticatedAt >= assurance.ProofLifetime || assurance.RequireMethodAssurance(proof.AuthenticationMethod) != proof.Assurance || proof.Assurance != assurance.RequiredAssurance)
+        var finalAuthentication = authenticationPolicies.RequireEffective(now); finalAuthentication.Validate();
+        if (AuthenticationApplication.Expired(finalSession, finalAuthentication, now) || !authentication.MethodFactsCurrentAt(finalSession, finalAuthentication, now) || finalAuthority is null || !finalAuthority.SessionUseInterval.Contains(now) || !finalAuthority.OperationInterval.Contains(now) ||
+            !CurrentBinding(row, policies.RequireEffective(now), now) || !authentication.ProofMethodCurrentAt(proof, proofCredential, operation, now, false) || now >= proof.ExpiresAt || now - proof.AuthenticatedAt >= assurance.ProofLifetime || assurance.RequireMethodAssurance(proof.AuthenticationMethod) != proof.Assurance || proof.Assurance != assurance.RequiredAssurance)
         { await transaction.RollbackAsync(ct).ConfigureAwait(false); database.ChangeTracker.Clear(); return new("STEP_UP_REQUIRED"); }
         var credential = new PasskeyCredentialRow { CredentialReference = Guid.NewGuid(), AccountId = caller.AccountId,
             CredentialId = stored.CredentialId, CredentialDigest = CredentialDigest(stored.CredentialId), CreatedAt = now,
@@ -266,7 +273,7 @@ internal sealed class PasskeyApplication(IdentityPersistenceDbContext database, 
         }
         row.ResultSessionId = AuthenticationIdentity.SessionId(issued.Grant!.Ticket.Principal); row.AccountId = credential.AccountId;
         row.CredentialReference = credential.CredentialReference; row.RequestDigest = requestDigest;
-        credential.LastUsedAt = clock.GetUtcNow(); credential.Version++;
+        credential.LastUsedAt = clock.GetUtcNow(); credential.UsageVersion++;
         End(row, "COMPLETED", clock.GetUtcNow()); Event(row, "PasskeyAuthenticated", clock.GetUtcNow());
         return await Finish(transaction, new PasskeyResult(null, row, issued.Grant), ct).ConfigureAwait(false);
     }
@@ -302,7 +309,7 @@ internal sealed class PasskeyApplication(IdentityPersistenceDbContext database, 
         Clean(); await using var transaction = await database.Database.BeginTransactionAsync(ct).ConfigureAwait(false);
         if (await authentication.LockForOperationAsync(caller, "CANCEL_PASSKEY_OPERATION", ct).ConfigureAwait(false) is null) return null;
         await LockCeremony(ceremonyId, ct).ConfigureAwait(false);
-        var row = await database.Set<PasskeyCeremonyRow>().SingleOrDefaultAsync(x => x.CeremonyId == ceremonyId && x.RequestId == requestId && x.Kind != "SIGN_IN", ct).ConfigureAwait(false);
+        var row = await database.Set<PasskeyCeremonyRow>().SingleOrDefaultAsync(x => x.CeremonyId == ceremonyId && x.RequestId == requestId && (x.Kind == "ENROLL" || x.Kind == "REVOKE"), ct).ConfigureAwait(false);
         if (row is null || !Actor(row, caller)) return null;
         await database.Entry(row).ReloadAsync(ct).ConfigureAwait(false);
         if (row.State is "PENDING" or "AUTHORIZED") { End(row, "REJECTED", clock.GetUtcNow()); Event(row, "PasskeyCeremonyCancelled", clock.GetUtcNow()); }
@@ -310,7 +317,7 @@ internal sealed class PasskeyApplication(IdentityPersistenceDbContext database, 
     }
     internal async Task<PasskeyCeremonyRow?> ReadMutationResultAsync(StepUpCaller caller, Guid ceremonyId, Guid requestId, CancellationToken ct)
     {
-        var row = await database.Set<PasskeyCeremonyRow>().AsNoTracking().SingleOrDefaultAsync(x => x.CeremonyId == ceremonyId && x.RequestId == requestId && x.Kind != "SIGN_IN", ct).ConfigureAwait(false);
+        var row = await database.Set<PasskeyCeremonyRow>().AsNoTracking().SingleOrDefaultAsync(x => x.CeremonyId == ceremonyId && x.RequestId == requestId && (x.Kind == "ENROLL" || x.Kind == "REVOKE"), ct).ConfigureAwait(false);
         return row is not null && Actor(row, caller) ? row : null;
     }
     private static PasskeyExecutionValidity ExecutionValidity(PasskeyCeremonyRow row) => new(row.CeremonyId, row.AccountId!, row.SessionId!.Value, row.Origin, row.PolicyVersion,
@@ -354,5 +361,6 @@ internal sealed class PasskeyApplication(IdentityPersistenceDbContext database, 
     { await database.SaveChangesAsync(ct).ConfigureAwait(false); await transaction.CommitAsync(ct).ConfigureAwait(false); return result; }
     private void Event(PasskeyCeremonyRow row, string type, DateTimeOffset now) => database.Add(new OutboxMessage(Guid.NewGuid(), "1.0", type, "1", now,
         "tunner/identity", row.Kind == "REVOKE" ? row.CredentialReference!.Value.ToString("N") : row.CeremonyId.ToString("N"), "RESTRICTED_SECURITY",
-        JsonSerializer.Serialize(new PasskeySecurityIntent("1", row.CeremonyId, row.CredentialReference, "PASSKEY", row.Kind switch { "ENROLL" => "REGISTER_PASSKEY", "REVOKE" => "REVOKE_PASSKEY", _ => "AUTHENTICATE_PASSKEY" }, type)), row.Version.ToString(CultureInfo.InvariantCulture), "OP-PASSKEY-" + row.CeremonyId.ToString("N"), row.CeremonyId.ToString("N")));
+        JsonSerializer.Serialize(new PasskeySecurityIntent("1", row.CeremonyId, row.CredentialReference, "PASSKEY", row.Kind switch { "ENROLL" => "REGISTER_PASSKEY", "REVOKE" => "REVOKE_PASSKEY", "STEP_UP" => row.BoundOperation!, _ => "AUTHENTICATE_PASSKEY" }, type)), row.Version.ToString(CultureInfo.InvariantCulture),
+        row.Kind == "STEP_UP" ? row.BoundOperationId! : "OP-PASSKEY-" + row.CeremonyId.ToString("N"), row.Kind == "STEP_UP" ? row.BoundCorrelationId! : row.CeremonyId.ToString("N")));
 }

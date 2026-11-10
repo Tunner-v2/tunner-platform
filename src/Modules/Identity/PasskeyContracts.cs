@@ -61,6 +61,7 @@ public sealed class PasskeyPolicy
     public string ProcessingReference { get; }
     public string RetentionReference { get; }
     public IReadOnlyDictionary<string, string> AssuranceMappings { get; }
+    public static string MethodKey(bool backupEligible, bool backedUp) => "passkey:" + AssuranceKey(backupEligible, backedUp);
     public static string AssuranceKey(bool backupEligible, bool backedUp) => $"uv:required;backupEligible:{backupEligible};backedUp:{backedUp};attestation:unverified";
     internal string RequireAssurance(string key) => AssuranceMappings.TryGetValue(key, out var value) ? value : throw new InvalidOperationException("Verified passkey facts have no approved assurance mapping.");
     public override string ToString() => nameof(PasskeyPolicy);
@@ -126,6 +127,8 @@ public sealed class PasskeyPresentation
         "passkeys.summary.activeDescription",
         "passkeys.methods.heading",
         "passkeys.methods.description",
+        "passkeys.methods.password",
+        "passkeys.methods.passwordAvailable",
         "passkeys.methods.label",
         "passkeys.methods.plural",
         "passkeys.methods.empty",
@@ -247,6 +250,6 @@ internal sealed class PasskeyTerminalResultCommand
 }
 internal sealed record PasskeyCapability(bool Available, int? MaximumCredentialJsonBytes);
 internal sealed record PasskeyRecoveryView(Guid RequestId, Guid CeremonyId, string Kind, string Status, Guid? CredentialReference,
-    long ExpectedVersion, DateTimeOffset ExpiresAt, string ResultHandle, bool SignInRequired, JsonElement? PublicKey = null);
+    long ExpectedVersion, DateTimeOffset ExpiresAt, string ResultHandle, bool SignInRequired, JsonElement? PublicKey = null, bool? RememberMe = null);
 internal sealed record PasskeySecurityIntent(string SchemaVersion, Guid OperationReference, Guid? AuthenticatorReference, string AuthenticatorType, string Operation, string EventType);
 internal sealed record PasskeyResult(string? ErrorCode, PasskeyCeremonyRow? Ceremony = null, AuthenticationGrant? Grant = null);

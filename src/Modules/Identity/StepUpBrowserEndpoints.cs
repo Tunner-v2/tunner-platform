@@ -31,18 +31,21 @@ public static class StepUpBrowserEndpoints
         ArgumentNullException.ThrowIfNull(endpoints);
         var authorization = new AuthorizeAttribute { AuthenticationSchemes = AuthenticationIdentity.Scheme };
         endpoints.MapGet("/authentication/step-up/options", (HttpContext context, StepUpBrowserService service) => service.OptionsAsync(context)).RequireAuthorization(authorization);
+        endpoints.MapPost("/authentication/step-up/passkey/options", (HttpContext context, StepUpBrowserService service) => service.PasskeyOptionsAsync(context)).RequireAuthorization(authorization);
+        endpoints.MapPost("/authentication/step-up/passkey", (HttpContext context, StepUpBrowserService service) => service.PasskeyAsync(context)).RequireAuthorization(authorization);
+        endpoints.MapPost("/authentication/step-up/passkey/continue", (HttpContext context, StepUpBrowserService service) => service.PasskeyContinueAsync(context)).RequireAuthorization(authorization);
         endpoints.MapPost("/authentication/step-up/password", (HttpContext context, StepUpBrowserService service) => service.PasswordAsync(context)).RequireAuthorization(authorization);
         return endpoints;
     }
 }
 
-internal sealed class StepUpBrowserService(IUserStepUpOperationSource owner, IAssurancePolicySource assurancePolicies,
+internal sealed partial class StepUpBrowserService(IUserStepUpOperationSource owner, IAssurancePolicySource assurancePolicies,
     IAuthenticationPolicySource authenticationPolicies, IStepUpPresentationSource presentations,
     AuthenticationPartitionKey partitions, AuthenticationEndpoints.Surface surface, IDataProtectionProvider protection,
-    IAntiforgery antiforgery, StepUpApplication application, IdentityPersistenceDbContext database, TimeProvider clock)
+    IAntiforgery antiforgery, StepUpApplication application, IdentityPersistenceDbContext database, TimeProvider clock, IEnumerable<PasskeyApplication> passkeyApplications)
 {
     private readonly IDataProtector protector = protection.CreateProtector("Tunner.User.StepUp.Browser.v1");
-    private sealed record Browser(Guid RequestId, string BindingDigest, string AuthenticationPolicyVersion, DateTimeOffset ExpiresAt);
+    internal sealed record Browser(Guid RequestId, string BindingDigest, string AuthenticationPolicyVersion, DateTimeOffset ExpiresAt);
     internal Task<IResult> OptionsAsync(HttpContext context) => GuardAsync(context, async () =>
     {
         var caller = Caller(context); var actor = new UserStepUpActor(caller); var operation = await owner.ResolveAsync(actor, context.RequestAborted).ConfigureAwait(false);
@@ -58,7 +61,9 @@ internal sealed class StepUpBrowserService(IUserStepUpOperationSource owner, IAs
         }
         var auth = authenticationPolicies.RequireEffective(now); auth.Validate();
         var policy = assurancePolicies.RequireEffective(operation.Binding.Scope, now, operation.ExpectedPolicyVersion);
-        var presentation = presentations.RequirePublished(policy);
+        StepUpPresentation presentation;
+        try { presentation = presentations.RequirePublished(policy); }
+        catch (ArgumentException) { return Problem(503, "DEPENDENCY_UNAVAILABLE"); }
         var binding = Digest(operation);
         if (!TryBrowser(context, now, out var browser) || browser!.BindingDigest != binding || browser.AuthenticationPolicyVersion != auth.Version)
         {
@@ -68,8 +73,13 @@ internal sealed class StepUpBrowserService(IUserStepUpOperationSource owner, IAs
             context.Response.Cookies.Append(StepUpBrowserEndpoints.CookieName, protector.Protect(JsonSerializer.Serialize(browser)),
                 new CookieOptions { Path = "/", HttpOnly = true, Secure = true, SameSite = SameSiteMode.Strict, IsEssential = true, MaxAge = expires - now });
         }
+        var native = passkeyApplications.SingleOrDefault();
+        var capability = native is null ? new PasskeyCapability(false, null) : await native.ProofCapabilityAsync(caller, policy, context.RequestAborted).ConfigureAwait(false);
+        var passkeyRecovery = native is null ? null : await ReadPasskeyRecoveryAsync(context, new(caller, actor, operation, browser!), native).ConfigureAwait(false);
+        var hasPassword = await database.Users.AnyAsync(x => x.AccountId == caller.AccountId && x.PasswordHash != null, context.RequestAborted).ConfigureAwait(false);
         return Results.Json(new { status = "PENDING", requestId = browser!.RequestId, operationReference = operation.Binding.CorrelationId, csrfToken = csrf, passwordMaximumLength = auth.PasswordMaximumLength,
-            passwordAvailable = policy.MethodAssurances.TryGetValue("pwd", out var mapped) && mapped == policy.RequiredAssurance,
+            passkeyAvailable = capability.Available, maximumCredentialJsonBytes = capability.MaximumCredentialJsonBytes, passkeyRecovery,
+            passwordAvailable = hasPassword && policy.MethodAssurances.TryGetValue("pwd", out var mapped) && mapped == policy.RequiredAssurance,
             presentation.Locale, presentation.Content });
     });
 
@@ -91,7 +101,13 @@ internal sealed class StepUpBrowserService(IUserStepUpOperationSource owner, IAs
             if (await CompletedAsync(actor, browser.BindingDigest, context.RequestAborted).ConfigureAwait(false)) return Results.Json(new { status = "COMPLETED", operationReference = operation.Binding.CorrelationId });
             return Failure(issue);
         }
-        var execution = await application.ExecuteOutcomeAsync(caller, operation.Binding, issued.Grant!.Key, async ct =>
+        return await ExecuteProofAsync(context, new(caller, actor, operation, browser), issued.Grant!.Key).ConfigureAwait(false);
+    });
+
+    private async Task<IResult> ExecuteProofAsync(HttpContext context, StepUpBrowserOperation frame, string proofKey, NativeProofCompletion? nativeCompletion = null)
+    {
+        var caller = frame.Caller; var actor = frame.Actor; var operation = frame.Operation; var browser = frame.Browser;
+        var execution = await application.ExecuteOutcomeAsync(caller, operation.Binding, proofKey, async ct =>
         {
             var current = await owner.ResolveAsync(actor, ct).ConfigureAwait(false);
             if (!MatchesActor(current, actor) || current!.Completed || Digest(current) != browser.BindingDigest) return UserStepUpOperationApplyOutcome.Conflict();
@@ -102,12 +118,12 @@ internal sealed class StepUpBrowserService(IUserStepUpOperationSource owner, IAs
         {
             if (owner is IUserStepUpBrowserCompletionSource browserOwner) await browserOwner.CompleteBrowserAsync(operation, execution.SignInRequired, context.RequestAborted).ConfigureAwait(false);
             if (execution.SignInRequired) await context.SignOutAsync(AuthenticationIdentity.Scheme).ConfigureAwait(false);
-            return Results.Json(new { status = "COMPLETED", operationReference = operation.Binding.CorrelationId, signInRequired = execution.SignInRequired });
+            return ProofCompleted(operation, execution.SignInRequired, nativeCompletion);
         }
         if (await CompletedAsync(actor, browser.BindingDigest, context.RequestAborted).ConfigureAwait(false))
-            return Results.Json(new { status = "COMPLETED", operationReference = operation.Binding.CorrelationId });
+            return ProofCompleted(operation, false, nativeCompletion);
         return Failure(execution.ErrorCode ?? "STEP_UP_REQUIRED");
-    });
+    }
 
     private async Task<bool> CompletedAsync(UserStepUpActor actor, string binding, CancellationToken ct)
     {

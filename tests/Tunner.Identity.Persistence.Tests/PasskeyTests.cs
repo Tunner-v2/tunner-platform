@@ -11,7 +11,7 @@ using static Tunner.Identity.Persistence.Tests.AuthenticationTestHost;
 
 namespace Tunner.Identity.Persistence.Tests;
 
-public sealed class PasskeyTests(IdentityPostgresFixture fixture) : IClassFixture<IdentityPostgresFixture>
+public sealed partial class PasskeyTests(IdentityPostgresFixture fixture) : IClassFixture<IdentityPostgresFixture>
 {
     private sealed class Policies : IPasskeyPolicySource
     {
@@ -46,11 +46,14 @@ public sealed class PasskeyTests(IdentityPostgresFixture fixture) : IClassFixtur
             return new("en", document.RootElement.GetProperty("content").EnumerateObject().Select(x => new RegistrationPublishedText(x.Name, "fixture", "fixture-v1", "fixture-publication", "en", "PUBLISHED", x.Value.GetString()!)));
         }
     }
-    private static async Task<AuthenticationTestHost> StartPasskeys(IdentityTestDatabase db, Policies? policies = null, Eligibility? eligibility = null, Action<IServiceCollection>? configure = null)
+    private static async Task<AuthenticationTestHost> StartPasskeys(IdentityTestDatabase db, Policies? policies = null, Eligibility? eligibility = null, Action<IServiceCollection>? configure = null, bool passkeyProof = false)
     {
         var now = new TestClock().GetUtcNow();
         AssurancePolicyVersion Policy(string version, AssurancePolicyScope scope) => new(new(version, "ACTIVE", scope, new(now.AddHours(-1), true, now.AddHours(1), false), null, ["synthetic-test-only"]),
-            "fixture-password", TimeSpan.FromSeconds(45), new Dictionary<string, string> { ["pwd"] = "fixture-password" });
+            "fixture-password", TimeSpan.FromSeconds(45), new Dictionary<string, string> { ["pwd"] = "fixture-password",
+                [PasskeyPolicy.MethodKey(false, false)] = passkeyProof ? "fixture-password" : "fixture-insufficient",
+                [PasskeyPolicy.MethodKey(true, false)] = passkeyProof ? "fixture-password" : "fixture-insufficient",
+                [PasskeyPolicy.MethodKey(true, true)] = passkeyProof ? "fixture-password" : "fixture-insufficient" });
         return await Start(db, services =>
         {
             services.AddSingleton<IPasskeyPolicySource>(policies ?? new()); services.AddSingleton<IPasskeyRevocationEligibilitySource>(eligibility ?? new());
@@ -102,7 +105,7 @@ public sealed class PasskeyTests(IdentityPostgresFixture fixture) : IClassFixtur
     private static async Task<(Bootstrap Bootstrap, JsonElement Ceremony)> AssertionOptions(AuthenticationTestHost host)
     {
         var boot = await host.Options(); using var response = await host.Post("/authentication/passkeys/options", new { requestId = boot.Key, rememberMe = false }, boot.Cookies, boot.Csrf);
-        Assert.True(response.IsSuccessStatusCode, await response.Content.ReadAsStringAsync()); return (boot, await response.Content.ReadFromJsonAsync<JsonElement>());
+        Assert.True(response.IsSuccessStatusCode, await response.Content.ReadAsStringAsync()); return (boot with { Cookies = Merge(boot.Cookies, response) }, await response.Content.ReadFromJsonAsync<JsonElement>());
     }
     [Fact]
     public async Task NativeEnrollmentRemainsInactiveUntilVerifiedAndSessionUsesConfiguredVerifiedAssurance()
@@ -122,7 +125,8 @@ public sealed class PasskeyTests(IdentityPostgresFixture fixture) : IClassFixtur
         using var retried = await host.Post("/authentication/passkeys/sign-in", command, assertion.Bootstrap.Cookies, assertion.Bootstrap.Csrf); Assert.Equal(HttpStatusCode.OK, retried.StatusCode);
         await using var context = db.Context(); var sessions = await context.Set<AuthenticationSessionRow>().Where(x => x.AuthenticationMethods == "passkey").ToArrayAsync();
         Assert.Single(sessions); Assert.Equal("fixture-passkey-assurance", sessions[0].Assurance); Assert.NotNull(sessions[0].PasskeyCredentialReference);
-        Assert.Equal(2, await context.Set<PasskeyCredentialRow>().Select(x => x.Version).SingleAsync());
+        Assert.Equal(1, await context.Set<PasskeyCredentialRow>().Select(x => x.Version).SingleAsync());
+        Assert.Equal(1, await context.Set<PasskeyCredentialRow>().Select(x => x.UsageVersion).SingleAsync());
         var events = await context.Set<OutboxMessage>().Where(x => x.EventType == "AuthenticatorAdded" || x.EventType == "PasskeyAuthenticated").ToArrayAsync(); Assert.Equal(2, events.Length);
         foreach (var item in events) { Assert.DoesNotContain(Password, item.Payload); Assert.DoesNotContain("person@example.test", item.Payload); Assert.DoesNotContain("clientDataJSON", item.Payload); }
     }
@@ -202,7 +206,7 @@ public sealed class PasskeyTests(IdentityPostgresFixture fixture) : IClassFixtur
         await using var db = await fixture.CreateDatabaseAsync(); var policies = new Policies { Effect = effect }; await using var host = await StartPasskeys(db, policies); await host.SeedAsync(db);
         using var authenticator = new PasskeyAuthenticator(); var enrolled = await Enroll(host, await Login(host), authenticator);
         var first = await SignInPasskey(host, authenticator); var second = await SignInPasskey(host, authenticator);
-        var pending = await Begin(host, first, enrolled.Reference, 3); var original = pending; pending = await Authorize(host, pending);
+        var pending = await Begin(host, first, enrolled.Reference, 1); var original = pending; pending = await Authorize(host, pending);
         Assert.Equal(effect == PasskeyRevocationSessionEffect.RevokeCredentialSessions, pending.SignInRequired);
         using var firstLive = await host.Get("/authentication/session", first); using var secondLive = await host.Get("/authentication/session", second);
         var expected = effect == PasskeyRevocationSessionEffect.RevokeCredentialSessions ? HttpStatusCode.Unauthorized : HttpStatusCode.OK;
@@ -315,7 +319,7 @@ public sealed class PasskeyTests(IdentityPostgresFixture fixture) : IClassFixtur
         using var session = await host.Get("/authentication/session", cookies); var csrf = (await session.Content.ReadFromJsonAsync<JsonElement>()).GetProperty("csrfToken").GetString()!;
         using var result = await host.Post("/authentication/passkeys/result", new { requestId, ceremonyId }, cookies, csrf); Assert.Equal(HttpStatusCode.OK, result.StatusCode); Assert.False(result.Headers.Contains("Set-Cookie"));
         using var other = await host.Post("/authentication/passkeys/result", new { requestId = original.Bootstrap.Key, ceremonyId = originalId }, cookies, csrf);
-        Assert.NotEqual("COMPLETED", (await other.Content.ReadFromJsonAsync<JsonElement>()).GetProperty("status").GetString());
+        Assert.Equal(HttpStatusCode.Conflict, other.StatusCode); Assert.Equal("VERSION_CONFLICT", (await other.Content.ReadFromJsonAsync<JsonElement>()).GetProperty("error_code").GetString());
         using var passwordResult = await host.Post("/authentication/result", new { idempotencyKey = original.Bootstrap.Key, email = "person@example.test", rememberMe = false }, cookies, csrf); Assert.Equal(HttpStatusCode.NotFound, passwordResult.StatusCode);
     }
     [Fact]
@@ -350,7 +354,7 @@ public sealed class PasskeyTests(IdentityPostgresFixture fixture) : IClassFixtur
         await using var host = await StartPasskeys(db, new Policies { Effect = PasskeyRevocationSessionEffect.RevokeCredentialSessions }, eligibility,
             services => services.AddDbContext<IdentityPersistenceDbContext>(options => options.AddInterceptors(interceptor))); await host.SeedAsync(db);
         using var authenticator = new PasskeyAuthenticator(); var enrolled = await Enroll(host, await Login(host), authenticator); var cookies = await SignInPasskey(host, authenticator);
-        var pending = await Begin(host, cookies, enrolled.Reference, 2); interceptor.Advance = () => host.Clock.Advance(TimeSpan.FromSeconds(2));
+        var pending = await Begin(host, cookies, enrolled.Reference, 1); interceptor.Advance = () => host.Clock.Advance(TimeSpan.FromSeconds(2));
         using var options = await host.Get("/authentication/step-up/options", pending.Cookies); var view = await options.Content.ReadFromJsonAsync<JsonElement>();
         using var rejected = await host.Post("/authentication/step-up/password", new { requestId = view.GetProperty("requestId").GetGuid(), password = Password }, Merge(pending.Cookies, options), view.GetProperty("csrfToken").GetString());
         Assert.Equal(HttpStatusCode.Conflict, rejected.StatusCode); Assert.True(interceptor.Fired);
@@ -374,7 +378,7 @@ public sealed class PasskeyTests(IdentityPostgresFixture fixture) : IClassFixtur
         await using var db = await fixture.CreateDatabaseAsync(); var eligibility = new Eligibility { Validity = expired == "eligibility" ? TimeSpan.FromSeconds(1) : TimeSpan.FromHours(1) };
         await using var host = await StartPasskeys(db, new Policies { Effect = effect }, eligibility); await host.SeedAsync(db);
         using var authenticator = new PasskeyAuthenticator(); var enrolled = await Enroll(host, await Login(host), authenticator); var cookies = await SignInPasskey(host, authenticator);
-        var pending = await Begin(host, cookies, enrolled.Reference, 2); var calls = 0;
+        var pending = await Begin(host, cookies, enrolled.Reference, 1); var calls = 0;
         if (expired == "access") host.Access.DecisionLifetime = TimeSpan.FromSeconds(1);
         host.Access.BeforeDecision = request => { if (request.Operation == "REVOKE_PASSKEY" && ++calls == 4) host.Clock.Advance(expired == "proof" ? TimeSpan.FromSeconds(46) : TimeSpan.FromSeconds(2)); };
         using var options = await host.Get("/authentication/step-up/options", pending.Cookies); var view = await options.Content.ReadFromJsonAsync<JsonElement>();

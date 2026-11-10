@@ -7,13 +7,14 @@ using Tunner.Platform.Policies;
 // Production values and eligibility remain Security/Compliance owner inputs under P2-019.
 internal static class BrowserTestPasskeys
 {
-    internal const string EnrollmentPolicyVersion = "browser-test-passkey-enrollment-v1";
-    internal const string RevocationPolicyVersion = "browser-test-passkey-revocation-v1";
+    internal const string EnrollmentPolicyVersion = "browser-test-passkey-enrollment-v2";
+    internal const string RevocationPolicyVersion = "browser-test-passkey-revocation-v2";
     private const string FixtureAssurance = "test-only-passkey-assurance";
+    private const string OperationAssurance = "test-only-sensitive-operation-assurance";
     private static readonly int[] Algorithms = [-7, -257];
     internal static void Configure(IServiceCollection services, string origin)
     {
-        var policy = new PasskeyPolicy("browser-test-passkeys-v1", "localhost", origin,
+        var policy = new PasskeyPolicy("browser-test-passkeys-v2", "localhost", origin,
             TimeSpan.FromMinutes(5), TimeSpan.FromMinutes(1), TimeSpan.FromMinutes(20),
             PasskeyRevocationSessionEffect.PreserveExistingSessions, "required", Algorithms, 32, 131072, 10, 5,
             EnrollmentPolicyVersion, RevocationPolicyVersion, "test-only-processing", "test-only-retention", "required", "none",
@@ -36,7 +37,13 @@ internal static class BrowserTestPasskeys
         foreach (var (version, operation) in new[] { (EnrollmentPolicyVersion, "REGISTER_PASSKEY"), (RevocationPolicyVersion, "REVOKE_PASSKEY") })
             yield return new(new(version, "ACTIVE", new(operation, "USER_BFF"),
                 new EffectivePolicyInterval(now.AddDays(-1), true, null, false), null, ["SYNTHETIC-LOCAL-TEST-ONLY"]),
-                "test-only-password-assurance", TimeSpan.FromMinutes(1), new Dictionary<string, string> { ["pwd"] = "test-only-password-assurance" });
+                OperationAssurance, TimeSpan.FromMinutes(1), new Dictionary<string, string>
+                {
+                    ["pwd"] = OperationAssurance,
+                    [PasskeyPolicy.MethodKey(false, false)] = OperationAssurance,
+                    [PasskeyPolicy.MethodKey(true, false)] = OperationAssurance,
+                    [PasskeyPolicy.MethodKey(true, true)] = OperationAssurance
+                });
     }
 }
 internal sealed class BrowserTestPasskeyEligibility : IPasskeyRevocationEligibilitySource

@@ -49,6 +49,7 @@ public sealed class RegistrationPresentation
         "registration.ready.description",
         "registration.ready.boundary",
         "registration.ready.next",
+        "registration.ready.signIn",
         "registration.support",
         "registration.working",
         "registration.checkProgress",

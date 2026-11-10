@@ -20,11 +20,20 @@ internal sealed class PasskeyCredentialRow
     public string ProcessingReference { get; set; } = string.Empty;
     public string RetentionReference { get; set; } = string.Empty;
     public long Version { get; set; } = 1;
+    public long UsageVersion { get; set; }
 }
 internal sealed class PasskeyCeremonyRow
 {
     public Guid CeremonyId { get; set; }
     public Guid RequestId { get; set; }
+    public Guid? StepUpRequestId { get; set; }
+    public string? BoundOperationId { get; set; }
+    public string? BoundCorrelationId { get; set; }
+    public string? BoundOperation { get; set; }
+    public string? BoundContext { get; set; }
+    public string? BoundResourceId { get; set; }
+    public long? BoundExpectedVersion { get; set; }
+    public string? BoundContextDigest { get; set; }
     public string Kind { get; set; } = string.Empty;
     public string BrowserDigest { get; set; } = string.Empty;
     public string? AccountId { get; set; }
@@ -67,12 +76,12 @@ internal static class PasskeyModelConfiguration
         {
             b.ToTable("passkey_credentials", "identity", t =>
             {
-                t.HasCheckConstraint("ck_passkey_state", "state IN ('ACTIVE','REVOKED') AND version >= 1");
+                t.HasCheckConstraint("ck_passkey_state", "state IN ('ACTIVE','REVOKED') AND version >= 1 AND usage_version >= 0");
                 t.HasCheckConstraint("ck_passkey_public_id", "octet_length(credential_id) BETWEEN 1 AND 1023 AND length(credential_digest)=64");
                 t.HasCheckConstraint("ck_passkey_revoked", "(state='ACTIVE' AND revoked_at IS NULL AND revocation_session_effect IS NULL AND revocation_policy_version IS NULL AND revocation_operation_id IS NULL AND revocation_correlation_id IS NULL) OR (state='REVOKED' AND revoked_at IS NOT NULL AND revoked_at >= created_at AND revocation_session_effect IS NOT NULL AND revocation_session_effect IN ('PreserveExistingSessions','RevokeCredentialSessions') AND revocation_policy_version IS NOT NULL AND revocation_operation_id IS NOT NULL AND revocation_correlation_id IS NOT NULL)");
             });
             b.HasKey(x => x.CredentialReference); b.Property(x => x.CredentialReference).ValueGeneratedNever();
-            b.HasIndex(x => x.CredentialDigest).IsUnique(); b.HasIndex(x => x.AccountId); b.Property(x => x.Version).IsConcurrencyToken();
+            b.HasIndex(x => x.CredentialDigest).IsUnique(); b.HasIndex(x => x.AccountId); b.Property(x => x.Version).IsConcurrencyToken(); b.Property(x => x.UsageVersion).IsConcurrencyToken();
             b.HasOne<AccountRow>().WithMany().HasForeignKey(x => x.AccountId).OnDelete(DeleteBehavior.Restrict);
         });
         model.Entity<AuthenticationSessionRow>().HasOne<PasskeyCredentialRow>().WithMany().HasForeignKey(x => x.PasskeyCredentialReference).OnDelete(DeleteBehavior.Restrict);
@@ -81,7 +90,8 @@ internal static class PasskeyModelConfiguration
             b.ToTable("passkey_ceremonies", "identity", t =>
             {
                 t.HasCheckConstraint("ck_passkey_eligibility_evidence", "kind<>'REVOKE' OR state<>'COMPLETED' OR (eligibility_policy_version IS NOT NULL AND eligibility_evidence_reference IS NOT NULL AND eligibility_from IS NOT NULL AND eligibility_includes_from IS NOT NULL AND eligibility_includes_until IS NOT NULL)");
-                t.HasCheckConstraint("ck_passkey_ceremony_state", "state IN ('PENDING','AUTHORIZED','COMPLETED','REJECTED','EXPIRED') AND kind IN ('ENROLL','SIGN_IN','REVOKE')");
+                t.HasCheckConstraint("ck_passkey_ceremony_state", "state IN ('PENDING','AUTHORIZED','COMPLETED','REJECTED','EXPIRED') AND kind IN ('ENROLL','SIGN_IN','REVOKE','STEP_UP')");
+                t.HasCheckConstraint("ck_passkey_proof_binding", "kind<>'STEP_UP' OR (step_up_request_id IS NOT NULL AND account_id IS NOT NULL AND session_id IS NOT NULL AND bound_operation_id IS NOT NULL AND bound_correlation_id IS NOT NULL AND bound_operation IS NOT NULL AND bound_context IS NOT NULL AND bound_resource_id IS NOT NULL AND bound_expected_version IS NOT NULL AND bound_expected_version >= 0 AND bound_context_digest IS NOT NULL)");
                 t.HasCheckConstraint("ck_passkey_ceremony_bounds", "expires_at > created_at AND recovery_expires_at > created_at AND version >= 1 AND expected_version >= 0 AND length(browser_digest)=64");
                 t.HasCheckConstraint("ck_passkey_ceremony_end", "(state IN ('PENDING','AUTHORIZED') AND ended_at IS NULL) OR (state NOT IN ('PENDING','AUTHORIZED') AND ended_at IS NOT NULL AND ended_at >= created_at AND protected_state='')");
             });

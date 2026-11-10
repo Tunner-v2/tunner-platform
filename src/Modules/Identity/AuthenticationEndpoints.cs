@@ -67,8 +67,11 @@ public static class AuthenticationEndpoints
             {
                 var now = clock.GetUtcNow(); var policy = policies.RequireEffective(now); policy.Validate();
                 var presentation = presentationSource.RequirePublished(policy);
+                var passkeys = context.RequestServices.GetService<PasskeyBrowserService>();
+                var signInRecovery = passkeys is null ? null : await passkeys.SignInRecoveryBootstrapAsync(context).ConfigureAwait(false);
                 var protector = Protector(protection); var fingerprint = CookieDigest(context);
-                if (!TryBrowser(context, protector, now, out var browser) || browser!.PreviousCookieDigest != fingerprint || browser.PolicyVersion != policy.Version)
+                if (!TryBrowser(context, protector, now, out var browser) || browser!.PolicyVersion != policy.Version ||
+                    browser.PreviousCookieDigest != fingerprint && signInRecovery is null)
                 {
                     browser = new Browser(Convert.ToHexString(RandomNumberGenerator.GetBytes(32)), Guid.NewGuid(), now + policy.BrowserContextLifetime,
                         policy.Version, fingerprint, AuthenticationIdentity.SessionId(context.User));
@@ -79,8 +82,9 @@ public static class AuthenticationEndpoints
                 var prior = context.User; string? csrf;
                 try { context.User = new ClaimsPrincipal(new ClaimsIdentity()); csrf = antiforgery.GetAndStoreTokens(context).RequestToken; }
                 finally { context.User = prior; }
-                var passkeys = context.RequestServices.GetService<PasskeyBrowserService>(); var capability = passkeys?.Capability();
-                var passkeyRecovery = passkeys is null ? null : await passkeys.RecoveryBootstrapAsync(context, terminalOnly: true).ConfigureAwait(false);
+                var capability = passkeys?.Capability();
+                var terminalRecovery = passkeys is null ? null : await passkeys.RecoveryBootstrapAsync(context, terminalOnly: true).ConfigureAwait(false);
+                var passkeyRecovery = terminalRecovery ?? signInRecovery;
                 return Results.Json(new { csrfToken = csrf, idempotencyKey = browser!.Key, passwordMaximumLength = policy.PasswordMaximumLength,
                     passkeyAvailable = capability?.Available == true, maximumCredentialJsonBytes = capability?.MaximumCredentialJsonBytes, passkeyRecovery, presentation.Locale, presentation.Content, presentation.TermsUri, presentation.PrivacyUri, presentation.SupportUri });
             }
@@ -95,6 +99,7 @@ public static class AuthenticationEndpoints
         endpoints.MapPost("/authentication/sign-out", async (HttpContext context) =>
         {
             await context.SignOutAsync(AuthenticationIdentity.Scheme).ConfigureAwait(false);
+            context.Response.Cookies.Delete(PasskeyBrowserService.SignInRecoveryCookie, new CookieOptions { Path = "/", HttpOnly = true, Secure = true, SameSite = SameSiteMode.Strict });
             context.Response.Cookies.Delete(BrowserCookieName, new CookieOptions { Path = "/", HttpOnly = true, Secure = true, SameSite = SameSiteMode.Strict });
             return Results.Json(new { authenticated = false });
         }).RequireAuthorization();

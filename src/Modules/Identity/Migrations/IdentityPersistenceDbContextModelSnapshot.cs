@@ -933,6 +933,34 @@ namespace Tunner.Identity.Persistence.Migrations
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("authorized_at");
 
+                    b.Property<string>("BoundContext")
+                        .HasColumnType("text")
+                        .HasColumnName("bound_context");
+
+                    b.Property<string>("BoundContextDigest")
+                        .HasColumnType("text")
+                        .HasColumnName("bound_context_digest");
+
+                    b.Property<string>("BoundCorrelationId")
+                        .HasColumnType("text")
+                        .HasColumnName("bound_correlation_id");
+
+                    b.Property<long?>("BoundExpectedVersion")
+                        .HasColumnType("bigint")
+                        .HasColumnName("bound_expected_version");
+
+                    b.Property<string>("BoundOperation")
+                        .HasColumnType("text")
+                        .HasColumnName("bound_operation");
+
+                    b.Property<string>("BoundOperationId")
+                        .HasColumnType("text")
+                        .HasColumnName("bound_operation_id");
+
+                    b.Property<string>("BoundResourceId")
+                        .HasColumnType("text")
+                        .HasColumnName("bound_resource_id");
+
                     b.Property<string>("BrowserDigest")
                         .IsRequired()
                         .HasColumnType("text")
@@ -1060,6 +1088,10 @@ namespace Tunner.Identity.Persistence.Migrations
                         .HasColumnType("text")
                         .HasColumnName("state");
 
+                    b.Property<Guid?>("StepUpRequestId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("step_up_request_id");
+
                     b.Property<long>("Version")
                         .IsConcurrencyToken()
                         .HasColumnType("bigint")
@@ -1080,9 +1112,11 @@ namespace Tunner.Identity.Persistence.Migrations
 
                             t.HasCheckConstraint("ck_passkey_ceremony_end", "(state IN ('PENDING','AUTHORIZED') AND ended_at IS NULL) OR (state NOT IN ('PENDING','AUTHORIZED') AND ended_at IS NOT NULL AND ended_at >= created_at AND protected_state='')");
 
-                            t.HasCheckConstraint("ck_passkey_ceremony_state", "state IN ('PENDING','AUTHORIZED','COMPLETED','REJECTED','EXPIRED') AND kind IN ('ENROLL','SIGN_IN','REVOKE')");
+                            t.HasCheckConstraint("ck_passkey_ceremony_state", "state IN ('PENDING','AUTHORIZED','COMPLETED','REJECTED','EXPIRED') AND kind IN ('ENROLL','SIGN_IN','REVOKE','STEP_UP')");
 
                             t.HasCheckConstraint("ck_passkey_eligibility_evidence", "kind<>'REVOKE' OR state<>'COMPLETED' OR (eligibility_policy_version IS NOT NULL AND eligibility_evidence_reference IS NOT NULL AND eligibility_from IS NOT NULL AND eligibility_includes_from IS NOT NULL AND eligibility_includes_until IS NOT NULL)");
+
+                            t.HasCheckConstraint("ck_passkey_proof_binding", "kind<>'STEP_UP' OR (step_up_request_id IS NOT NULL AND account_id IS NOT NULL AND session_id IS NOT NULL AND bound_operation_id IS NOT NULL AND bound_correlation_id IS NOT NULL AND bound_operation IS NOT NULL AND bound_context IS NOT NULL AND bound_resource_id IS NOT NULL AND bound_expected_version IS NOT NULL AND bound_expected_version >= 0 AND bound_context_digest IS NOT NULL)");
                         });
                 });
 
@@ -1155,6 +1189,11 @@ namespace Tunner.Identity.Persistence.Migrations
                         .HasColumnType("text")
                         .HasColumnName("state");
 
+                    b.Property<long>("UsageVersion")
+                        .IsConcurrencyToken()
+                        .HasColumnType("bigint")
+                        .HasColumnName("usage_version");
+
                     b.Property<long>("Version")
                         .IsConcurrencyToken()
                         .HasColumnType("bigint")
@@ -1173,7 +1212,7 @@ namespace Tunner.Identity.Persistence.Migrations
 
                             t.HasCheckConstraint("ck_passkey_revoked", "(state='ACTIVE' AND revoked_at IS NULL AND revocation_session_effect IS NULL AND revocation_policy_version IS NULL AND revocation_operation_id IS NULL AND revocation_correlation_id IS NULL) OR (state='REVOKED' AND revoked_at IS NOT NULL AND revoked_at >= created_at AND revocation_session_effect IS NOT NULL AND revocation_session_effect IN ('PreserveExistingSessions','RevokeCredentialSessions') AND revocation_policy_version IS NOT NULL AND revocation_operation_id IS NOT NULL AND revocation_correlation_id IS NOT NULL)");
 
-                            t.HasCheckConstraint("ck_passkey_state", "state IN ('ACTIVE','REVOKED') AND version >= 1");
+                            t.HasCheckConstraint("ck_passkey_state", "state IN ('ACTIVE','REVOKED') AND version >= 1 AND usage_version >= 0");
                         });
                 });
 
@@ -1423,6 +1462,18 @@ namespace Tunner.Identity.Persistence.Migrations
                         .HasColumnType("text")
                         .HasColumnName("origin");
 
+                    b.Property<string>("PasskeyAssuranceKey")
+                        .HasColumnType("text")
+                        .HasColumnName("passkey_assurance_key");
+
+                    b.Property<Guid?>("PasskeyCredentialReference")
+                        .HasColumnType("uuid")
+                        .HasColumnName("passkey_credential_reference");
+
+                    b.Property<string>("PasskeyPolicyVersion")
+                        .HasColumnType("text")
+                        .HasColumnName("passkey_policy_version");
+
                     b.Property<string>("PolicyVersion")
                         .IsRequired()
                         .HasColumnType("text")
@@ -1477,6 +1528,8 @@ namespace Tunner.Identity.Persistence.Migrations
                     b.HasIndex("KeyDigest")
                         .IsUnique();
 
+                    b.HasIndex("PasskeyCredentialReference");
+
                     b.HasIndex("SessionId", "AccountId");
 
                     b.HasIndex("SessionId", "OperationId")
@@ -1491,6 +1544,8 @@ namespace Tunner.Identity.Persistence.Migrations
                             t.HasCheckConstraint("ck_step_up_digests", "key_digest ~ '^[0-9A-F]{64}$' AND context_digest ~ '^[0-9A-F]{64}$'");
 
                             t.HasCheckConstraint("ck_step_up_end", "(state='ACTIVE' AND ended_at IS NULL AND length(protected_key)>0) OR (state<>'ACTIVE' AND ended_at IS NOT NULL AND ended_at >= authenticated_at AND protected_key='')");
+
+                            t.HasCheckConstraint("ck_step_up_method", "(authentication_method='pwd' AND passkey_credential_reference IS NULL AND passkey_policy_version IS NULL AND passkey_assurance_key IS NULL) OR (authentication_method LIKE 'passkey:%' AND passkey_credential_reference IS NOT NULL AND passkey_policy_version IS NOT NULL AND passkey_assurance_key IS NOT NULL)");
 
                             t.HasCheckConstraint("ck_step_up_state", "state IN ('ACTIVE','CONSUMED','EXPIRED')");
                         });
@@ -1745,6 +1800,11 @@ namespace Tunner.Identity.Persistence.Migrations
 
             modelBuilder.Entity("Tunner.Identity.Persistence.StepUpProofRow", b =>
                 {
+                    b.HasOne("Tunner.Identity.Persistence.PasskeyCredentialRow", null)
+                        .WithMany()
+                        .HasForeignKey("PasskeyCredentialReference")
+                        .OnDelete(DeleteBehavior.Restrict);
+
                     b.HasOne("Tunner.Identity.Persistence.AuthenticationSessionRow", null)
                         .WithMany()
                         .HasForeignKey("SessionId", "AccountId")

@@ -128,13 +128,16 @@ internal sealed class PasskeyStepUpOwner(PasskeyApplication application, Identit
         return await application.ApplyMutationAsync(StepUpCaller.FromPrincipal(http.User, surface.Origin, partitions.Network(http.Connection.RemoteIpAddress)), operation, http, cancellationToken).ConfigureAwait(false);
     }
 }
-internal sealed class PasskeyBrowserService(PasskeyApplication application, IdentityPersistenceDbContext database,
+internal sealed partial class PasskeyBrowserService(PasskeyApplication application, IdentityPersistenceDbContext database,
     IPasskeyPresentationSource presentations, IAuthenticationPolicySource authenticationPolicies, AuthenticationPartitionKey partitions,
     AuthenticationEndpoints.Surface surface, IDataProtectionProvider protection, IAntiforgery antiforgery, TimeProvider clock)
 {
     internal Task<IResult> OptionsAsync(HttpContext http) => Guard(http, async () =>
     {
-        var policy = application.Current(surface.Origin); var presentation = presentations.RequirePublished(policy); _ = Caller(http);
+        var policy = application.Current(surface.Origin); PasskeyPresentation presentation;
+        try { presentation = presentations.RequirePublished(policy); }
+        catch (ArgumentException) { return Problem(503, "DEPENDENCY_UNAVAILABLE"); }
+        _ = Caller(http);
         var recovery = await RecoveryBootstrapAsync(http, terminalOnly: false).ConfigureAwait(false);
         return Results.Json(new { csrfToken = antiforgery.GetAndStoreTokens(http).RequestToken, requestId = Guid.NewGuid(),
             policy.MaximumCredentialJsonBytes, revocationSessionEffect = policy.RevocationSessionEffect.ToString(), recovery, presentation.Locale, presentation.Content });
@@ -156,7 +159,7 @@ internal sealed class PasskeyBrowserService(PasskeyApplication application, Iden
         var selected = terminalOnly ? null : PasskeyStepUpOwner.Selection(http, protection);
         var id = selected?.CeremonyId ?? handle?.CeremonyId; var request = selected?.RequestId ?? handle?.RequestId;
         if (id is null || request is null) return null;
-        var row = await database.Set<PasskeyCeremonyRow>().AsNoTracking().SingleOrDefaultAsync(x => x.CeremonyId == id && x.RequestId == request && x.Kind != "SIGN_IN" && x.Origin == surface.Origin,
+        var row = await database.Set<PasskeyCeremonyRow>().AsNoTracking().SingleOrDefaultAsync(x => x.CeremonyId == id && x.RequestId == request && (x.Kind == "ENROLL" || x.Kind == "REVOKE") && x.Origin == surface.Origin,
             http.RequestAborted).ConfigureAwait(false);
         if (row is null || row.RecoveryExpiresAt <= now) return null;
         if (terminalOnly)
@@ -184,8 +187,9 @@ internal sealed class PasskeyBrowserService(PasskeyApplication application, Iden
         if (await auth.LockForOperationAsync(caller, "LIST_PASSKEYS", http.RequestAborted).ConfigureAwait(false) is null) return Problem(401, "AUTHENTICATION_FAILED");
         var rows = await database.Set<PasskeyCredentialRow>().AsNoTracking().Where(x => x.AccountId == caller.AccountId).OrderBy(x => x.CreatedAt)
             .Select(x => new { x.CredentialReference, x.State, x.Version, x.CreatedAt, x.LastUsedAt, x.RevokedAt }).ToArrayAsync(http.RequestAborted).ConfigureAwait(false);
+        var currentUser = await database.Users.SingleAsync(x => x.AccountId == caller.AccountId, http.RequestAborted).ConfigureAwait(false);
         await database.SaveChangesAsync(http.RequestAborted).ConfigureAwait(false); await transaction.CommitAsync(http.RequestAborted).ConfigureAwait(false);
-        return Results.Json(new { credentials = rows, enrollmentAvailable = rows.Count(x => x.State == "ACTIVE") < policy.MaximumActiveCredentials,
+        return Results.Json(new { credentials = rows, passwordAvailable = currentUser.PasswordHash is not null, enrollmentAvailable = rows.Count(x => x.State == "ACTIVE") < policy.MaximumActiveCredentials,
             revocationRequiresCurrentEligibility = true, protectionFactsAvailable = false, activityAvailable = false });
     });
     internal Task<IResult> StartEnrollmentAsync(HttpContext http) => Guard(http, async () =>
@@ -251,24 +255,37 @@ internal sealed class PasskeyBrowserService(PasskeyApplication application, Iden
     internal Task<IResult> AssertionResultAsync(HttpContext http) => Guard(http, async () =>
     {
         var command = await Read<PasskeyResultCommand>(http, 4096).ConfigureAwait(false);
-        var now = clock.GetUtcNow();
-        if (!AuthenticationEndpoints.TryBrowser(http, AuthenticationEndpoints.Protector(protection), now, out var browser) || command.RequestId == Guid.Empty) return Problem(409, "VERSION_CONFLICT");
-        var digest = AuthenticationIdentity.Digest(browser!.Nonce);
+        var now = clock.GetUtcNow(); var pointer = ReadSignInRecovery(http);
+        string? digest = pointer is not null && pointer.RequestId == command.RequestId && pointer.CeremonyId == command.CeremonyId ? pointer.BrowserDigest : null;
+        if (digest is null && AuthenticationEndpoints.TryBrowser(http, AuthenticationEndpoints.Protector(protection), now, out var browser)) digest = AuthenticationIdentity.Digest(browser!.Nonce);
+        if (digest is null || command.RequestId == Guid.Empty) return Problem(409, "VERSION_CONFLICT");
         var row = await database.Set<PasskeyCeremonyRow>().AsNoTracking().SingleOrDefaultAsync(x => x.CeremonyId == command.CeremonyId && x.RequestId == command.RequestId &&
             x.BrowserDigest == digest && x.Kind == "SIGN_IN" && x.Origin == surface.Origin, http.RequestAborted).ConfigureAwait(false);
         if (row is null || row.RecoveryExpiresAt <= now) return Problem(404, "NOT_FOUND_OR_NOT_DISCLOSABLE");
-        if (row.State != "COMPLETED") return Results.Json(new { status = row.State, command.RequestId, command.CeremonyId });
+        if (row.State != "COMPLETED")
+        {
+            if (http.User.Identity?.IsAuthenticated == true && AuthenticationIdentity.SessionId(http.User) != row.PreviousSessionId) return Problem(409, "VERSION_CONFLICT");
+            var originalContext = AuthenticationEndpoints.TryBrowser(http, AuthenticationEndpoints.Protector(protection), now, out var originalBrowser) &&
+                AuthenticationIdentity.Digest(originalBrowser!.Nonce) == row.BrowserDigest && originalBrowser.PolicyVersion == authenticationPolicies.RequireEffective(now).Version;
+            var status = row.State == "PENDING" && (!originalContext || !application.CurrentBinding(row, application.Current(surface.Origin), now)) ? "EXPIRED" : row.State;
+            return Results.Json(new { status, command.RequestId, command.CeremonyId, rememberMe = row.RememberMe });
+        }
+        if (http.User.Identity?.IsAuthenticated != true) return Results.Json(new { status = "COMPLETED", command.RequestId, command.CeremonyId, authenticated = false, signInRequired = true });
         if (AuthenticationIdentity.SessionId(http.User) != row.ResultSessionId || row.ResultSessionId is not { } resultSession ||
             !await http.RequestServices.GetRequiredService<AuthenticationApplication>().ConfirmOutcomeAsync(digest, row.RequestId, resultSession, http.User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value ?? string.Empty, surface.Origin, "passkey", http.RequestAborted).ConfigureAwait(false))
             return Problem(409, "VERSION_CONFLICT");
-        return Results.Json(new { status = "COMPLETED", command.RequestId, command.CeremonyId, authenticated = true });
+        return Results.Json(new { status = "COMPLETED", command.RequestId, command.CeremonyId, authenticated = true, signInRequired = false });
     });
     internal Task<IResult> AssertionOptionsAsync(HttpContext http) => Guard(http, async () =>
     {
         var caller = AnonymousCaller(http); var command = await Read<PasskeyAssertionOptionsCommand>(http, 4096).ConfigureAwait(false);
         if (command.RequestId == Guid.Empty) return Problem(409, "VERSION_CONFLICT");
+        var original = ReadSignInRecovery(http);
+        if (original is not null && original.RequestId == command.RequestId && (original.BrowserDigest != caller.BrowserDigest || original.RememberMe != command.RememberMe)) return Problem(409, "VERSION_CONFLICT");
         var result = await application.StartSignInAsync(caller, command.RequestId, command.RememberMe, http, http.RequestAborted).ConfigureAwait(false);
-        return result.ErrorCode is { } error ? Failure(error) : CeremonyResponse(result.Ceremony!, includeOptions: true);
+        if (result.ErrorCode is { } error) return Failure(error);
+        SetSignInRecovery(http, result.Ceremony!);
+        return CeremonyResponse(result.Ceremony!, includeOptions: true);
     });
     internal Task<IResult> SignInAsync(HttpContext http) => Guard(http, async () =>
     {
@@ -279,7 +296,7 @@ internal sealed class PasskeyBrowserService(PasskeyApplication application, Iden
         if (result.ErrorCode is { } error) return Failure(error);
         var grant = result.Grant!; http.Items[AuthenticationEndpoints.GrantItem] = grant;
         await http.SignInAsync(AuthenticationIdentity.Scheme, grant.Ticket.Principal, grant.Ticket.Properties).ConfigureAwait(false);
-        return Results.Json(new { status = "COMPLETED", command.RequestId, command.CeremonyId, authenticated = true });
+        return Results.Json(new { status = "COMPLETED", command.RequestId, command.CeremonyId, authenticated = true, signInRequired = false });
     });
     private AuthenticationCaller AnonymousCaller(HttpContext http)
     {

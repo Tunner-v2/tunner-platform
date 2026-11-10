@@ -40,40 +40,68 @@ internal sealed class StepUpApplication(IdentityPersistenceDbContext database, A
                     "1", operation.OperationId, operation.CorrelationId));
                 return await FinishAsync(transaction, new StepUpIssueResult("AUTHENTICATION_FAILED", null), ct).ConfigureAwait(false);
             }
+            var verifiedAt = clock.GetUtcNow();
             // Re-read time, policy and live authority after credential work, without extending a prior proof.
             session = await authentication.LockForOperationAsync(caller, operation.Scope.Operation, ct).ConfigureAwait(false);
             now = clock.GetUtcNow(); policy = assurancePolicies.RequireEffective(operation.Scope, now, expectedPolicyVersion);
             authPolicy = authenticationPolicies.RequireEffective(now); authPolicy.Validate();
             if (session is null) return await FinishAsync(transaction, new StepUpIssueResult("AUTHENTICATION_FAILED", null), ct).ConfigureAwait(false);
             if (policy.RequireMethodAssurance("pwd") != policy.RequiredAssurance) return await FinishAsync(transaction, new StepUpIssueResult("STEP_UP_REQUIRED", null), ct).ConfigureAwait(false);
-            var prior = await database.Set<StepUpProofRow>().SingleOrDefaultAsync(x => x.SessionId == caller.SessionId && x.OperationId == operation.OperationId, ct).ConfigureAwait(false);
-            if (prior is not null)
-            {
-                await database.Entry(prior).ReloadAsync(ct).ConfigureAwait(false);
-                if (!Matches(prior, caller, operation) || !Valid(prior, session, policy, now))
-                    return await FinishAsync(transaction, new StepUpIssueResult("VERSION_CONFLICT", null), ct).ConfigureAwait(false);
-                return await FinishAsync(transaction, new StepUpIssueResult(null, new(retryProtection.Unprotect(prior.ProtectedKey), prior.ExpiresAt)), ct).ConfigureAwait(false);
-            }
-            var expires = now + policy.ProofLifetime;
-            if (session.ExpiresAt < expires) expires = session.ExpiresAt;
-            if (policy.Metadata.EffectiveInterval.Until is { } until && until < expires) expires = until;
-            if (expires <= now) throw new InvalidOperationException("No current step-up validity interval is available.");
-            var key = Convert.ToHexString(RandomNumberGenerator.GetBytes(32));
-            var row = new StepUpProofRow
-            {
-                ProofId = Guid.NewGuid(), SessionId = caller.SessionId, AccountId = caller.AccountId, Origin = caller.Origin,
-                Scheme = session.Scheme, SecurityStampDigest = session.SecurityStampDigest, KeyDigest = AuthenticationIdentity.Digest(key),
-                ProtectedKey = retryProtection.Protect(key), OperationId = operation.OperationId, CorrelationId = operation.CorrelationId,
-                Operation = operation.Scope.Operation, Context = operation.Scope.Context, ResourceId = operation.ResourceId,
-                ExpectedVersion = operation.ExpectedVersion, ContextDigest = operation.ContextDigest, PolicyVersion = policy.Metadata.VersionId,
-                AuthenticationPolicyVersion = authPolicy.Version, AuthenticationMethod = "pwd", Assurance = policy.RequiredAssurance,
-                ProcessingReference = authPolicy.ProcessingReference, RetentionReference = authPolicy.RetentionReference,
-                AuthenticatedAt = now, ExpiresAt = expires
-            };
-            database.Add(row); Event(row, "StepUpProofIssued", now);
-            return await FinishAsync(transaction, new StepUpIssueResult(null, new(key, expires)), ct).ConfigureAwait(false);
+            var issued = await IssueVerifiedProofAsync(caller, session, operation, expectedPolicyVersion, "pwd", null, null, null, verifiedAt, ct).ConfigureAwait(false);
+            return await FinishAsync(transaction, issued, ct).ConfigureAwait(false);
         }
         catch { database.ChangeTracker.Clear(); throw; }
+    }
+
+    // Only Identity's verified authenticators call this; no browser can supply a method, credential, or proof bearer.
+    internal async Task<StepUpIssueResult> IssueVerifiedProofAsync(StepUpCaller caller, AuthenticationSessionRow session, StepUpOperation operation,
+        string expectedPolicyVersion, string method, PasskeyCredentialRow? credential, string? passkeyPolicyVersion, string? passkeyAssuranceKey, DateTimeOffset verifiedAt, CancellationToken ct)
+    {
+        if (database.Database.CurrentTransaction is null || session.State != "ACTIVE" || session.AccountId != caller.AccountId || session.SessionId != caller.SessionId || session.Origin != caller.Origin)
+            throw new InvalidOperationException("A current locked Identity transaction is required.");
+        var prior = await database.Set<StepUpProofRow>().SingleOrDefaultAsync(x => x.SessionId == caller.SessionId && x.OperationId == operation.OperationId, ct).ConfigureAwait(false);
+        var now = clock.GetUtcNow(); var policy = assurancePolicies.RequireEffective(operation.Scope, now, expectedPolicyVersion);
+        var authPolicy = authenticationPolicies.RequireEffective(now); authPolicy.Validate();
+        if (!policy.MethodAssurances.TryGetValue(method, out var mapped) || mapped != policy.RequiredAssurance ||
+            method.StartsWith("passkey:", StringComparison.Ordinal) && mapped.Equals("AAL3", StringComparison.OrdinalIgnoreCase)) return new("STEP_UP_REQUIRED", null);
+        if (prior is not null)
+        {
+            await database.Entry(prior).ReloadAsync(ct).ConfigureAwait(false);
+            var sourceCredential = await authentication.ReadProofCredentialAsync(prior, ct, refresh: true).ConfigureAwait(false);
+            now = clock.GetUtcNow(); policy = assurancePolicies.RequireEffective(operation.Scope, now, expectedPolicyVersion);
+            if (!Matches(prior, caller, operation) || !Valid(prior, session, policy, now) || prior.AuthenticationMethod != method ||
+                prior.PasskeyCredentialReference != credential?.CredentialReference || !authentication.ProofMethodCurrentAt(prior, sourceCredential, operation, now, false)) return new("VERSION_CONFLICT", null);
+            return new(null, new(retryProtection.Unprotect(prior.ProtectedKey), prior.ExpiresAt));
+        }
+        var expires = verifiedAt + policy.ProofLifetime;
+        if (session.ExpiresAt < expires) expires = session.ExpiresAt;
+        if (policy.Metadata.EffectiveInterval.Until is { } until && until < expires) expires = until;
+        if (verifiedAt > now || expires <= now || AuthenticationApplication.Expired(session, authPolicy, now)) return new("STEP_UP_REQUIRED", null);
+        var key = Convert.ToHexString(RandomNumberGenerator.GetBytes(32));
+        var row = new StepUpProofRow
+        {
+            ProofId = Guid.NewGuid(), SessionId = caller.SessionId, AccountId = caller.AccountId, Origin = caller.Origin,
+            Scheme = session.Scheme, SecurityStampDigest = session.SecurityStampDigest, KeyDigest = AuthenticationIdentity.Digest(key),
+            ProtectedKey = retryProtection.Protect(key), OperationId = operation.OperationId, CorrelationId = operation.CorrelationId,
+            Operation = operation.Scope.Operation, Context = operation.Scope.Context, ResourceId = operation.ResourceId,
+            ExpectedVersion = operation.ExpectedVersion, ContextDigest = operation.ContextDigest, PolicyVersion = policy.Metadata.VersionId,
+            AuthenticationPolicyVersion = authPolicy.Version, AuthenticationMethod = method, Assurance = policy.RequiredAssurance,
+            PasskeyCredentialReference = credential?.CredentialReference, PasskeyPolicyVersion = passkeyPolicyVersion, PasskeyAssuranceKey = passkeyAssuranceKey,
+            ProcessingReference = authPolicy.ProcessingReference, RetentionReference = authPolicy.RetentionReference, AuthenticatedAt = verifiedAt, ExpiresAt = expires
+        };
+        if (!authentication.ProofMethodCurrentAt(row, credential, operation, now, false)) return new("STEP_UP_REQUIRED", null);
+        database.Add(row); Event(row, "StepUpProofIssued", now); return new(null, new(key, expires));
+    }
+    internal async Task<StepUpIssueResult> RecoverProofAsync(StepUpCaller caller, StepUpOperation operation, Guid proofId, string expectedVersion, CancellationToken ct)
+    {
+        var row = await database.Set<StepUpProofRow>().SingleOrDefaultAsync(x => x.ProofId == proofId, ct).ConfigureAwait(false);
+        if (row is null) return new("STEP_UP_REQUIRED", null);
+        await database.Entry(row).ReloadAsync(ct).ConfigureAwait(false);
+        var credential = await authentication.ReadProofCredentialAsync(row, ct, refresh: true).ConfigureAwait(false);
+        var now = clock.GetUtcNow(); var policy = assurancePolicies.RequireEffective(operation.Scope, now, expectedVersion);
+        var session = await database.Set<AuthenticationSessionRow>().SingleAsync(x => x.SessionId == caller.SessionId, ct).ConfigureAwait(false);
+        return Matches(row, caller, operation) && Valid(row, session, policy, now) && authentication.ProofMethodCurrentAt(row, credential, operation, now, false)
+            ? new(null, new(retryProtection.Unprotect(row.ProtectedKey), row.ExpiresAt)) : new("STEP_UP_REQUIRED", null);
     }
 
     // The callback is an Identity-owner local mutation using this same context/transaction, never provider I/O.
@@ -100,7 +128,9 @@ internal sealed class StepUpApplication(IdentityPersistenceDbContext database, A
             await database.Entry(row).ReloadAsync(ct).ConfigureAwait(false);
             if (!Matches(row, caller, operation)) return await FinishAsync(transaction, new StepUpExecutionResult(false, "STEP_UP_REQUIRED"), ct).ConfigureAwait(false);
             var policy = assurancePolicies.RequireEffective(operation.Scope, now, row.PolicyVersion);
-            if (!Valid(row, session, policy, now)) return await FinishAsync(transaction, new StepUpExecutionResult(false, "STEP_UP_REQUIRED"), ct).ConfigureAwait(false);
+            var proofCredential = await authentication.ReadProofCredentialAsync(row, ct, refresh: true).ConfigureAwait(false);
+            now = clock.GetUtcNow(); policy = assurancePolicies.RequireEffective(operation.Scope, now, row.PolicyVersion);
+            if (!Valid(row, session, policy, now) || !authentication.ProofMethodCurrentAt(row, proofCredential, operation, now, false)) return await FinishAsync(transaction, new StepUpExecutionResult(false, "STEP_UP_REQUIRED"), ct).ConfigureAwait(false);
             var validatedSessionVersion = session.Version;
             var outcome = await applyCurrentOperation(ct).ConfigureAwait(false);
             if (!outcome.Applied)
@@ -114,11 +144,13 @@ internal sealed class StepUpApplication(IdentityPersistenceDbContext database, A
                 ? await authentication.VerifyTerminationAsync(caller, operation, receipt, validatedSessionVersion, verificationPolicy, verificationAt, ct).ConfigureAwait(false) : null;
             var methodCurrent = outcome.Receipt is not null || await authentication.MethodIsCurrentAsync(session, verificationPolicy, verificationAt, ct).ConfigureAwait(false);
             var continuation = outcome.Receipt is null ? await authentication.VerifyContinuedOperationAsync(caller, operation, session, ct).ConfigureAwait(false) : null;
+            proofCredential = await authentication.ReadProofCredentialAsync(row, ct).ConfigureAwait(false);
             var decisionAt = clock.GetUtcNow(); policy = assurancePolicies.RequireEffective(operation.Scope, decisionAt, row.PolicyVersion);
             var currentAuthentication = authenticationPolicies.RequireEffective(decisionAt); currentAuthentication.Validate();
             var terminal = termination is not null && termination.AccessInterval.Contains(decisionAt);
             if (!Valid(row, session, policy, decisionAt) || AuthenticationApplication.Expired(session, currentAuthentication, decisionAt) ||
-                !authentication.MethodFactsCurrentAt(session, currentAuthentication, decisionAt) || !authentication.PasskeyOutcomeCurrentAt(outcome, caller, operation, decisionAt) ||
+                !authentication.MethodFactsCurrentAt(session, currentAuthentication, decisionAt) ||
+                !authentication.ProofMethodCurrentAt(row, proofCredential, operation, decisionAt, outcome.PasskeyValidity is not null) || !authentication.PasskeyOutcomeCurrentAt(outcome, caller, operation, decisionAt) ||
                 (outcome.Receipt is not null ? !terminal : session.State != "ACTIVE" || !methodCurrent || continuation is null ||
                     !continuation.SessionUseInterval.Contains(decisionAt) || !continuation.OperationInterval.Contains(decisionAt)))
             {
