@@ -39,6 +39,15 @@ test('real native passkeys complete approved onboarding, sign-in, proof, enrollm
   expect((await status.json()).mode).toBe('ISOLATED_LOCAL_BROWSER_TESTING');
   const cdp=await page.context().newCDPSession(page);await cdp.send('WebAuthn.enable',{enableUI:false});
   const first=await authenticator(cdp);let created=0,asserted=0;
+  const submitted={signIn:0,passwordProof:0,passkeyProof:0,enrollment:0};
+  page.on('request',outbound=>{
+    if(outbound.method()!=='POST')return;
+    const pathname=new URL(outbound.url()).pathname;
+    if(pathname==='/authentication/passkeys/sign-in')submitted.signIn++;
+    if(pathname==='/authentication/step-up/password')submitted.passwordProof++;
+    if(pathname==='/authentication/step-up/passkey')submitted.passkeyProof++;
+    if(pathname==='/account/passkeys/enrollment/complete')submitted.enrollment++;
+  });
   // Never export private authenticator state or retain protocol event payloads.
   cdp.on('WebAuthn.credentialAdded',()=>created++);cdp.on('WebAuthn.credentialAsserted',()=>asserted++);
   const account=await registerVerifiedAccount(page,request);
@@ -90,7 +99,10 @@ test('real native passkeys complete approved onboarding, sign-in, proof, enrollm
     await expect(page.getByText('Changes saved successfully',{exact:true})).toBeVisible();
     await expect(page.getByRole('dialog')).toHaveCount(0);
   }
-  expect(asserted).toBe(4);expect(created).toBe(2);
+  // Device events count authenticator activity; exact Tunner submissions establish duplicate safety.
+  expect(asserted).toBeGreaterThanOrEqual(4);expect(created).toBe(2);
+  expect(submitted).toEqual({signIn:1,passwordProof:1,passkeyProof:3,enrollment:2});
+  await testInfo.attach('native-operation-counts',{body:Buffer.from(JSON.stringify({deviceAssertions:asserted,credentialsCreated:created,submitted})),contentType:'application/json'});
   await page.reload();await expect(page.getByRole('heading',{name:'Passkeys & two-step verification'})).toBeVisible();
   await page.screenshot({path:testInfo.outputPath('real-native-passkeys-removed.png'),fullPage:true});
   expect(await page.evaluate(()=>({local:localStorage.length,session:sessionStorage.length,search:location.search,hash:location.hash})))
