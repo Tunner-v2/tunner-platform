@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "defect_id": "DEF-TUN-P2-007-SEC-002",
+  "work_item_id": "TUN-P2-007",
+  "classification": "SECURITY_DEFECT",
+  "severity": "SEV-2",
+  "status": "OPEN",
+  "environment": "Read-only review of in-progress native passkey shared-operation proof before backend candidate commit",
+  "description": "Native proof issuance and later owner execution use separate transactions in the same scoped Identity DbContext. A tracked source credential can retain ACTIVE after another request revokes it between those transactions. Reload persisted proof-source credential before the owner action under the established account lock; retain exact final freshness checks and only the causal in-transaction self-revocation exception. Add a deterministic issuer-to-executor source-revocation regression and preserve rollback/no-side-effect assertions.",
+  "expected_behavior_ref": "docs/contracts/operation-step-up-contract.md",
+  "evidence": [
+    "governance/evidence/TUN-P2-007-PROOF-SOURCE-RACE-20261110.json"
+  ],
+  "affected_versions": [],
+  "created_at": "2026-11-10T10:14:48.786Z",
+  "updated_at": "2026-11-10T10:14:48.786Z"
+}
