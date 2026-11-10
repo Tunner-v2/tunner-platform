@@ -2,7 +2,7 @@
   "schema_version": 1,
   "result": "PRESERVED_EXECUTION_EVIDENCE",
   "scope_id": "TUN-P2-007",
-  "recorded_at": "2026-11-10T12:48:20.365Z",
+  "recorded_at": "2026-11-10T13:06:25.093Z",
   "normalization": "Original files remain in execution artifacts. Portable UTF8 strips BOM, usesLF and substitutes checkout root with <repo-root>; TRX XML-escapes the placeholder. PNG bytes unchanged. Embedded raw input digests remain original; each row records raw and portable hashes. One duplicate historical source patch is explicitly replaced by immutable Git comparison plus original patch digest, recorded on its row; no scanner controls or test outcomes change. Portable terminal trailing whitespace is trimmed where present, with each affected row explicitly marked; original raw logs remain unchanged. Failed CLI-launch image rows are explicitly classified preexisting/unbound; they are not evidence of a render or executed test. New long Playwright case paths are compacted using deterministic case hashes; original source paths and prior portable spellings remain recorded on rows, bytes unchanged. Already committed historical copies remain in place.",
   "files": [
     {
@@ -2255,6 +2255,15 @@
       "transformed": true
     },
     {
+      "group": "native-revision-gates",
+      "source": "artifacts/p2-007-passkeys-20261109/governance-20261110/p1-018-rv005-to-validation.json",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/gates/p1-018-rv005-to-validation.json",
+      "source_sha256": "28c57f34a4797becb4a34e186cc6013999f0683ed646a2da42865b0ebbeaa995",
+      "sha256": "84091cea9aa054381fd55cbda72241026c2666dbf9ef95a48752a0f93d1ce0a6",
+      "bytes": 182,
+      "transformed": true
+    },
+    {
       "group": "native-gates",
       "source": "artifacts/p2-007-passkeys-20261109/governance-20261110/p1-018-rv005-ui-check.json",
       "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/gates/p1-018-rv005-ui-check.json",
@@ -2309,12 +2318,30 @@
       "transformed": true
     },
     {
+      "group": "native-revision-gates",
+      "source": "artifacts/p2-007-passkeys-20261109/governance-20261110/ui001-rv004-to-validation.json",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/gates/ui001-rv004-to-validation.json",
+      "source_sha256": "011c1fb23afc84e51cb3a79c551ad04794a1cab81f919c17eda8743ef4ed83d4",
+      "sha256": "aa6b12f9fabf9eaa2ee5430db215c92b4da86d89029527d6f0a3eff265205769",
+      "bytes": 188,
+      "transformed": true
+    },
+    {
       "group": "native-gates",
       "source": "artifacts/p2-007-passkeys-20261109/governance-20261110/ui001-rv004-ui-check.json",
       "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/gates/ui001-rv004-ui-check.json",
       "source_sha256": "61e320032d903ade6aa8086e2f24b1948bfb6edf4c3533dd8d9c3cc05d606e7e",
       "sha256": "86c2a402d7abb41ba9b8c9ee6bf58a510da8c8a8b763675aa4dba417944c53d1",
       "bytes": 364,
+      "transformed": true
+    },
+    {
+      "group": "native-revision-gates",
+      "source": "artifacts/p2-007-passkeys-20261109/governance-20261110/ui002-rv004-to-validation.json",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/gates/ui002-rv004-to-validation.json",
+      "source_sha256": "e3eedae0ad77779b6d014751c0a586506e569aab2f536278c13e659d5b9e595f",
+      "sha256": "dadbb058db4f9182071428707029cb0ff1dda8a01e54963bd1be3be03930f8eb",
+      "bytes": 188,
       "transformed": true
     },
     {
