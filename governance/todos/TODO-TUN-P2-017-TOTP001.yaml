@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "id": "TODO-TUN-P2-017-TOTP001",
+  "work_item_id": "TUN-P2-017",
+  "title": "Complete and verify policy-bound TOTP physical retention and vault retirement before production",
+  "status": "OPEN",
+  "priority": "P1",
+  "owner_role": "full-stack-engineer",
+  "prerequisites": [],
+  "acceptance_condition": "Using the scoped AMD0005 resolution in governance/evidence/TUN-P2-008-DATA-LIFECYCLE-ASSESSMENT-20261110.json and inventory in governance/evidence/TUN-P2-008-DATA-INVENTORY.json, Identity implements bounded owner cleanup in existing008/shared-provider scope or a governed later revision if closed. P2-019 supplies approved trigger/action/hold inputs; do not invent legal duration, destruction default, provider activation or Product blocker. P2-017 must prove maintenance of eligible replay, expired pending/operation and proof-attempt metadata, plus disabled/abandoned immutable vault generations before production activation. Preserve every live replay horizon, current operation/result recovery, exact owner/generation/version, holds and immutable required security evidence; do not equate expiry/disable with physical deletion. Verify selected retention actions, hold/not-yet-eligible denial, bounded concurrency/idempotency, provider unknown/failure/retry reconciliation, unrelated-generation isolation and safe reference-only outputs against actual disposable infrastructure. No cleanup failure may become success or leak seed/OTP/bootstrap. Record committed source and actual outcomes; preserve historical closures. This is remaining engineering work and does not block independent authorized local development.",
+  "created_at": "2026-11-10T19:11:50.312401Z",
+  "updated_at": "2026-11-10T19:11:50.312401Z"
+}

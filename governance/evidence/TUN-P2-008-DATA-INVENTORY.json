@@ -1,0 +1,328 @@
+{
+  "schema_version": 1,
+  "scope_id": "TUN-P2-008",
+  "status": "TECHNICAL_INVENTORY_PRODUCTION_INACTIVE_NOT_FINAL_COMPLIANCE",
+  "reviewed_at": "2026-11-10T19:07:26.812009Z",
+  "reviewed_backend_head": "fbbd53b9fdb70ed7cbeb7448cadc722478b43c1e",
+  "reviewed_ui_commit": "e6e3d9da368871887c015764be273e354b6aff48",
+  "authority_refs": [
+    "docs/authority/current/development/06_Environment_Configuration_Secrets_and_Deployment.md",
+    "docs/authority/current/development/08_Security_Privacy_Compliance_and_Global_Market_Governance.md",
+    "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md",
+    "docs/authority/current/development/29_Privacy_Data_Lifecycle_and_Processing_Governance_FRD.md"
+  ],
+  "assessment_ref": "governance/evidence/TUN-P2-008-DATA-LIFECYCLE-ASSESSMENT-20261110.json",
+  "resources": [
+    {
+      "resource": "OpenBao KV-v2 immutable credential version",
+      "store": "Configured owner-scoped secret provider, outside Identity PostgreSQL",
+      "fields": [
+        "seed",
+        "account",
+        "authenticator",
+        "generation",
+        "enrollment",
+        "binding"
+      ],
+      "purpose": "Native verification for first-code activation, primary MFA and exact-operation proof",
+      "access_recipients": "Server-side real ITotpSeedStore via finite scoped transport; the authorized User receives seed/URI once. No Admin/Support seed interface or Product recipient is introduced.",
+      "binding": "Server allocation only; account/authenticator/generation/enrollment/binding-version exact match, resource prefix plus authenticator/generation, version1 and create-only CAS. Reads stay pinned to version1.",
+      "lifecycle": "Disabled/abandoned references remain in the vault. Adapter has no delete/retire API. Logical disable blocks new verification via Identity metadata; provider retirement/destruction requires a separate explicit retention action.",
+      "processing_retention_refs": "Policy ProcessingReference/RetentionReference are copied into owner metadata; provider binding/retention rules and processor/residency are not selected for production.",
+      "rights_and_protection": "No direct privacy export/erase path for seeds; any owner-authorized retirement must honor holds/evidence and never export the seed as ordinary evidence. Production vault encryption/key custody is not certified by this code review.",
+      "owner": "Tunner Identity; Account references remain Accounts-owned. No Product membership or entitlement authority.",
+      "subject_category": "Account holder authentication/security data",
+      "classification": "RESTRICTED authentication/security material; RESTRICTED_SECURITY is the implementation event label. Hashes and opaque references are not assumed anonymous.",
+      "production_activation": "Inactive/unselected. Approved purpose/processing, retention/holds, processor/residency and access controls must be bound before production. No jurisdiction or legal basis is inferred."
+    },
+    {
+      "resource": "identity.totp_authenticators",
+      "logical_fields": [
+        "AuthenticatorReference",
+        "AccountId",
+        "Generation",
+        "EnrollmentId",
+        "SecretStoreReference",
+        "SecretResourceReference",
+        "SecretVersion",
+        "SecretBindingVersion",
+        "State",
+        "CreatedAt",
+        "ActivatedAt",
+        "DisabledAt",
+        "LastUsedAt",
+        "ClockHighWaterAt",
+        "DisableSessionEffect",
+        "DisablePolicyVersion",
+        "DisableOperationId",
+        "DisableCorrelationId",
+        "PolicyVersion",
+        "ProcessingReference",
+        "RetentionReference",
+        "Version",
+        "UsageVersion"
+      ],
+      "purpose": "Immutable owner/generation/vault-version binding and inactive/active/disabled factor metadata",
+      "access_recipients": "Identity owner transactions; User metadata DTO emits factor reference, state/version and safe activity dates, not vault path/version or seed.",
+      "lifecycle": "First valid code advances inactive to active. Disable/reset retires the affected generation with explicit effect/cause/version; no row deletion or provider purge follows automatically. Processing/retention references are stored.",
+      "protection": "Unique generation and provider-version binding, Account FK, concurrency versions and update guards prevent owner/reference replacement or resurrection.",
+      "owner": "Tunner Identity; Account references remain Accounts-owned. No Product membership or entitlement authority.",
+      "subject_category": "Account holder authentication/security data",
+      "classification": "RESTRICTED authentication/security material; RESTRICTED_SECURITY is the implementation event label. Hashes and opaque references are not assumed anonymous.",
+      "production_activation": "Inactive/unselected. Approved purpose/processing, retention/holds, processor/residency and access controls must be bound before production. No jurisdiction or legal basis is inferred."
+    },
+    {
+      "resource": "identity.totp_operations",
+      "logical_fields": [
+        "EnrollmentId",
+        "RequestId",
+        "AccountId",
+        "SessionId",
+        "Origin",
+        "Kind",
+        "AuthenticatorReference",
+        "Generation",
+        "ExpectedVersion",
+        "State",
+        "PolicyVersion",
+        "AuthenticationPolicyVersion",
+        "SecurityStampDigest",
+        "AssurancePolicyVersion",
+        "ProofReference",
+        "AuthorizedAt",
+        "DisclosureClaimedAt",
+        "ActivationRequestId",
+        "EligibilityPolicyVersion",
+        "EligibilityEvidenceReference",
+        "EligibilityFrom",
+        "EligibilityIncludesFrom",
+        "EligibilityUntil",
+        "EligibilityIncludesUntil",
+        "CreatedAt",
+        "ExpiresAt",
+        "RecoveryExpiresAt",
+        "EndedAt",
+        "ProcessingReference",
+        "RetentionReference",
+        "Version"
+      ],
+      "purpose": "Exact enrollment/disable/reset idempotency, one-time disclosure claim, consumed proof/eligibility lineage and result recovery",
+      "access_recipients": "Current Account/session/origin and exact original request via User BFF; terminal recovery requires protected owner selection.",
+      "lifecycle": "ExpiresAt bounds execution; RecoveryExpiresAt bounds original-result recovery. EndedAt/state record completion/cancel; expired is also projected at reads. No general expiry-state or physical metadata purge worker exists. Processing/retention references remain stored.",
+      "protection": "Owner/session FK, unique session/request, immutable original binding and disclosure/authorization guards. No seed or OTP field.",
+      "owner": "Tunner Identity; Account references remain Accounts-owned. No Product membership or entitlement authority.",
+      "subject_category": "Account holder authentication/security data",
+      "classification": "RESTRICTED authentication/security material; RESTRICTED_SECURITY is the implementation event label. Hashes and opaque references are not assumed anonymous.",
+      "production_activation": "Inactive/unselected. Approved purpose/processing, retention/holds, processor/residency and access controls must be bound before production. No jurisdiction or legal basis is inferred."
+    },
+    {
+      "resource": "identity.totp_used_codes",
+      "logical_fields": [
+        "ClaimId",
+        "AuthenticatorReference",
+        "Generation",
+        "Verifier",
+        "AcceptedAt",
+        "ExpiresAt",
+        "PolicyVersion"
+      ],
+      "purpose": "Cross-context replay denial including A-to-B-to-A for the same immutable factor generation",
+      "access_recipients": "Server-only native verifier under the shared owner lock; never a User/Admin/Support response.",
+      "representation": "Salted ASP.NET IdentityV3 password-hasher verifier of canonical6-digit code, with explicit supported iteration/resource bounds; not a plaintext OTP or a secret seed. Small code space means verifier rows remain restricted.",
+      "lifecycle": "ExpiresAt marks the conservative native acceptance horizon, including clock/work bounds. Expired rows are removed only during the next successful acceptance for that factor/generation; no periodic sweep. ReplayRetention is a technical anti-replay horizon, not evidence that a legal maximum-retention deadline is enforced.",
+      "protection": "All live claims checked; time and live-claim/CPU limits fail closed. Never evict an unexpired claim to accept another code.",
+      "owner": "Tunner Identity; Account references remain Accounts-owned. No Product membership or entitlement authority.",
+      "subject_category": "Account holder authentication/security data",
+      "classification": "RESTRICTED authentication/security material; RESTRICTED_SECURITY is the implementation event label. Hashes and opaque references are not assumed anonymous.",
+      "production_activation": "Inactive/unselected. Approved purpose/processing, retention/holds, processor/residency and access controls must be bound before production. No jurisdiction or legal basis is inferred."
+    },
+    {
+      "resource": "identity.totp_proof_attempts and TOTP extensions on identity.step_up_proofs",
+      "logical_fields": [
+        "AttemptId",
+        "SessionId",
+        "AccountId",
+        "OperationId",
+        "ContextDigest",
+        "AuthenticatorReference",
+        "Generation",
+        "ProofId",
+        "ExpiresAt"
+      ],
+      "additional_fields": [
+        "TotpAuthenticatorReference",
+        "TotpGeneration",
+        "TotpAuthenticatorVersion",
+        "TotpPolicyVersion"
+      ],
+      "purpose": "Recover the same original accepted code/proof/operation before considering a new code; exact owner consume semantics",
+      "access_recipients": "Server proof owner; browser receives safe status/expiry only and a purpose-protected selection cookie, not the proof bearer.",
+      "lifecycle": "Attempt ExpiresAt/proof expiry limit use; no TOTP attempt deletion entry point. Existing shared proof expiry handling is separate from durable metadata retention.",
+      "protection": "Proof FK and immutable attempt update guard; replay/proof/attempt acceptance rollback together. No OTP/seed stored.",
+      "owner": "Tunner Identity; Account references remain Accounts-owned. No Product membership or entitlement authority.",
+      "subject_category": "Account holder authentication/security data",
+      "classification": "RESTRICTED authentication/security material; RESTRICTED_SECURITY is the implementation event label. Hashes and opaque references are not assumed anonymous.",
+      "production_activation": "Inactive/unselected. Approved purpose/processing, retention/holds, processor/residency and access controls must be bound before production. No jurisdiction or legal basis is inferred."
+    },
+    {
+      "resource": "identity.totp_pending_authentication",
+      "logical_fields": [
+        "PendingId",
+        "RequestId",
+        "BrowserDigest",
+        "AccountId",
+        "Origin",
+        "RememberMe",
+        "PreviousSessionId",
+        "IdentifierDigest",
+        "PrimaryMethod",
+        "PrimaryAssurance",
+        "PrimarySourceDigest",
+        "PasskeyCredentialReference",
+        "PasskeyCredentialVersion",
+        "PasskeyPolicyVersion",
+        "PasskeyAssuranceKey",
+        "SecurityStampDigest",
+        "AuthenticationPolicyVersion",
+        "TotpPolicyVersion",
+        "RequirementPolicyVersion",
+        "RequirementEvidenceReference",
+        "PrimaryVerifiedAt",
+        "ExpiresAt",
+        "RecoveryExpiresAt",
+        "State",
+        "ResultSessionId",
+        "AcceptedAuthenticatorReference",
+        "AcceptedGeneration",
+        "Version"
+      ],
+      "purpose": "Bind verified primary password/passkey evidence to required second factor before a qualifying final session exists",
+      "access_recipients": "Server authentication owner; browser holds protected pending selector and receives safe request/status/expiry/factor choices.",
+      "representation": "Browser/identifier/security-stamp/primary-source digests; primary method/assurance and passkey fact/version references. Identifier digest is not a raw email or IP and is not claimed anonymous.",
+      "lifecycle": "Primary-evidence and ExpiresAt checks reject stale pending proof; completed original result has bounded RecoveryExpiresAt and exact accepted factor/generation/session. EXPIRED can be projected while stored state remains PENDING; no pending-row purge/expiry maintenance entry point is present.",
+      "protection": "Unique browser/request, immutable primary facts, Account lock/current-source revalidation, one-use state/version guard. No provisional live session, seed, password or submitted OTP column.",
+      "owner": "Tunner Identity; Account references remain Accounts-owned. No Product membership or entitlement authority.",
+      "subject_category": "Account holder authentication/security data",
+      "classification": "RESTRICTED authentication/security material; RESTRICTED_SECURITY is the implementation event label. Hashes and opaque references are not assumed anonymous.",
+      "production_activation": "Inactive/unselected. Approved purpose/processing, retention/holds, processor/residency and access controls must be bound before production. No jurisdiction or legal basis is inferred."
+    },
+    {
+      "resource": "TOTP extensions on identity.tunner_sessions",
+      "fields": [
+        "TotpAuthenticatorReference",
+        "TotpGeneration",
+        "TotpAuthenticatorVersion",
+        "TotpPolicyVersion",
+        "MfaRequirementPolicyVersion"
+      ],
+      "purpose": "Current composite MFA source and explicit factor-session effects",
+      "access_recipients": "Existing server session authority only; framework protected cookie/ticket mechanisms remain owned by005.",
+      "lifecycle": "Inherited session expiry/revocation clears protected bearer material through existing session mechanisms; TOTP metadata and existing processing/retention references remain. No erasure of session/security history is inferred.",
+      "protection": "Immutable linked factor identity/generation and session guard; explicit narrow causal disable/revocation, without general session assurance upgrade.",
+      "owner": "Tunner Identity; Account references remain Accounts-owned. No Product membership or entitlement authority.",
+      "subject_category": "Account holder authentication/security data",
+      "classification": "RESTRICTED authentication/security material; RESTRICTED_SECURITY is the implementation event label. Hashes and opaque references are not assumed anonymous.",
+      "production_activation": "Inactive/unselected. Approved purpose/processing, retention/holds, processor/residency and access controls must be bound before production. No jurisdiction or legal basis is inferred."
+    },
+    {
+      "resource": "platform.outbox_messages and transient HTTP/browser state",
+      "fields": [
+        "Outbox schema/type/reference/authenticatorReference/authenticatorType/operation and version/operation/correlation IDs",
+        "One-time HTTP manual key and provisioning URI",
+        "Transient typed code input and locally rendered QR"
+      ],
+      "purpose": "Safe audit/notification intent plus authorized setup/verification",
+      "access_recipients": "Shared post-commit outbox consumers receive references only. HTTPS User receives one-time setup material; local client QR renderer receives it in memory, with no external QR service.",
+      "lifecycle": "DisclosureClaimedAt commits before returning key/URI; a lost response does not disclose again. Browser clears secret state on relevant submit/transition/cancel/pagehide flows; no promise of managed-string zeroization, OS-memory erasure or passive timed display erasure. Outbox security metadata follows its shared policy, not seed deletion.",
+      "protection": "Cache-Control no-store, Pragma no-cache, no-referrer; reject query strings; Secure/HttpOnly/Strict protected owner/pending selection cookies. No seed/OTP in Identity tables, outbox payloads, URLs, storage-state exports, logs, screenshots or evidence is intended. Actual live browser secrecy remains unexecuted.",
+      "owner": "Tunner Identity; Account references remain Accounts-owned. No Product membership or entitlement authority.",
+      "subject_category": "Account holder authentication/security data",
+      "classification": "RESTRICTED authentication/security material; RESTRICTED_SECURITY is the implementation event label. Hashes and opaque references are not assumed anonymous.",
+      "production_activation": "Inactive/unselected. Approved purpose/processing, retention/holds, processor/residency and access controls must be bound before production. No jurisdiction or legal basis is inferred."
+    }
+  ],
+  "processing_governance": {
+    "legal_basis_and_notice": "No production legal basis, notice/consent category or applicability is selected. User-initiated enrollment is not treated as blanket legal consent for processing.",
+    "processor_recipients": "Configured secret-provider processing and the authorized User disclosure are described above. No additional Product or external QR processor is introduced.",
+    "residency_transfer_profile": "Unselected for production; a test-only loopback vault is not evidence of production residency, transfer or processor approval.",
+    "privacy_request_capabilities": "No TOTP-specific export, erase or anonymization endpoint is introduced. Future owner projections/actions must exclude secret values and preserve required security evidence and holds.",
+    "retention_holds": "No TOTP hold-aware destruction pipeline is implemented. References/expiry timestamps do not substitute for an approved trigger/action/hold policy or successful physical deletion."
+  },
+  "output_exclusions": [
+    "No raw seed or submitted OTP in Identity persistence, outbox/event payloads, diagnostic output, URLs or evidence. Seed storage is the explicitly bound secret provider.",
+    "No Admin/Support password/seed/private-material projection; ordinary metadata views omit provider resource references.",
+    "Public rendering/privacy canaries do not constitute real BFF/native/vault end-to-end validation. No new runtime or test execution was performed for this inventory."
+  ],
+  "retention_boundary": "Access expiry, business disable and physical deletion are separate. Current code enforces authentication/recovery validity and opportunistic replay cleanup, not a full periodic metadata/vault retention pipeline. Exact legal periods, approved processor/residency, hold policy, publication and production provider/profile remain unselected. No blanket compliance/production PASS.",
+  "source_binding": [
+    {
+      "path": "src/Modules/Identity/TotpRows.cs",
+      "git_blob": "b21525aac7d6f7dc401563d7181559a5ae5f7646",
+      "working_sha256": "f197596ec89f0ec6d6394dfe408da8d88ce58015587c839fb3553948a3bfb35a"
+    },
+    {
+      "path": "src/Modules/Identity/TotpContracts.cs",
+      "git_blob": "704bdca320a3693365afd872628a21e65d4a0b9d",
+      "working_sha256": "c2274e9dcadec8394c52b52b2d6af88b4b4dff4e92a4678229762ad771b73dd3"
+    },
+    {
+      "path": "src/Modules/Identity/TotpApplication.cs",
+      "git_blob": "2ad4928ff62a33f614969a57df9c5217eb5163fc",
+      "working_sha256": "d212dfa6ce4c9050fb857b72343b89073911bc88c9ff218e63215f441a5100cb"
+    },
+    {
+      "path": "src/Modules/Identity/TotpNativeVerifier.cs",
+      "git_blob": "19683f384c698453db529f96a9e1081e42fd946a",
+      "working_sha256": "a55332e5bc5b2b43305215bbaf4ea4565ac67f4f1eaf6c6087afc43429b96fe6"
+    },
+    {
+      "path": "src/Modules/Identity/TotpPrimaryMfa.cs",
+      "git_blob": "a5aedb27862dd4ecb16cf23d4ce65b281f6b8307",
+      "working_sha256": "c5a3353c0e87b814847afbfe7842e7ec494d117b1f7e6eebad55efeb17fec2de"
+    },
+    {
+      "path": "src/Modules/Identity/TotpOperationProof.cs",
+      "git_blob": "c1af44bf55777e21c6f97118bf5fdea5a9eb631c",
+      "working_sha256": "809680ff5410f3b944d8d73016c5cecf21996dd1e16bfd0e33d33a1c7e73d1c6"
+    },
+    {
+      "path": "src/Modules/Identity/TotpEndpoints.cs",
+      "git_blob": "e3e5d257ac52f5514d7b50b3bce6b494f8d4e73d",
+      "working_sha256": "de2f4ede87c8b2127e83a451b2018ff7186c07ce53275a4aa3ea691221e781a4"
+    },
+    {
+      "path": "src/Modules/Identity/TotpMigrationSql.cs",
+      "git_blob": "3ba8c8ed32531e9c86c8b76394b32b077a7c1341",
+      "working_sha256": "da4b8a4f891037ec864614acf3548aa10f5f52568af6626ce19c8c7387958edc"
+    },
+    {
+      "path": "src/Modules/Identity/OpenBaoTotpSeedStore.cs",
+      "git_blob": "787c39683a7b4fe426a4a0148c8e4a09db19a6cc",
+      "working_sha256": "7480a7e660e581c8010ba40c00a7ba747ce64cf45ddc37431ca39eb476f54e86"
+    },
+    {
+      "path": "src/Modules/Identity/Migrations/20261110164421_P2TotpLifecycle.cs",
+      "git_blob": "4d37cb15ff963c78c6b9f820352ce0610ce00992",
+      "working_sha256": "fef2c040491e69026669b0e81f05805a54818137a54c0cb48311019ab93429bd"
+    },
+    {
+      "path": "src/Modules/Identity/TotpAuthenticationAuthority.cs",
+      "git_blob": "f852f5b1996b2ca93c7128f2d7f4aa1657efa425",
+      "working_sha256": "8474f7a96f8cb99567d59d104c3a6d35a71a1e12edc2c440a99c139cbda99328"
+    },
+    {
+      "path": "src/Tunner.User.Bff/TunnerAuthenticatedUserBffHost.cs",
+      "git_blob": "7174de500cbef6e6e47f4ba6fa57d94c44c56e66",
+      "working_sha256": "225754fa24c95d28cf7f837e24ad5fbad2a8748dfc77af242559b26f25f49c62"
+    }
+  ],
+  "governed_followup": {
+    "todo_id": "TODO-TUN-P2-017-TOTP001",
+    "record_ref": "governance/todos/TODO-TUN-P2-017-TOTP001.yaml",
+    "coordinating_work_item": "TUN-P2-017",
+    "implementation_owner": "Identity in existing008/shared-provider scope, or a governed later revision if that ownership has closed.",
+    "approved_inputs_owner": "TUN-P2-019 supplies approved trigger/action/hold configuration; no duration or default is selected here.",
+    "timing": "Must be implemented and actually verified before production activation. It does not block independent authorized local development."
+  },
+  "next_action": "Execute TODO-TUN-P2-017-TOTP001 through its recorded Identity implementation and017 conformance ownership before production activation; preserve production inactivity until approved lifecycle controls and evidence exist."
+}
