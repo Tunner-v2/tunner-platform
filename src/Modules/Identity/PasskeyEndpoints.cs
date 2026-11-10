@@ -143,8 +143,9 @@ internal sealed partial class PasskeyBrowserService(PasskeyApplication applicati
         catch (ArgumentException) { return Problem(503, "DEPENDENCY_UNAVAILABLE"); }
         _ = Caller(http);
         var recovery = await RecoveryBootstrapAsync(http, terminalOnly: false).ConfigureAwait(false);
+        var totpAvailable = http.RequestServices.GetService<TotpBrowserService>()?.Capability() == true;
         return Results.Json(new { csrfToken = antiforgery.GetAndStoreTokens(http).RequestToken, requestId = Guid.NewGuid(),
-            policy.MaximumCredentialJsonBytes, revocationSessionEffect = policy.RevocationSessionEffect.ToString(), recovery, presentation.Locale, presentation.Content });
+            policy.MaximumCredentialJsonBytes, revocationSessionEffect = policy.RevocationSessionEffect.ToString(), recovery, totpAvailable, presentation.Locale, presentation.Content });
     });
     internal PasskeyCapability Capability()
     {

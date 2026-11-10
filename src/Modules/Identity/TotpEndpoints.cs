@@ -127,6 +127,11 @@ internal sealed class TotpBrowserService(TotpApplication application, Authentica
     IAuthenticationPolicySource authenticationPolicies, IAuthenticationPresentationSource authenticationPresentations)
 {
     internal const string MfaCookieName = "__Host-Tunner.Totp.Pending";
+    internal bool Capability()
+    {
+        try { var policy = application.Current(surface.Origin); _ = presentations.RequirePublished(policy); return true; }
+        catch (InvalidOperationException) { return false; } catch (ArgumentException) { return false; }
+    }
     internal static CookieOptions Cookie(TimeSpan? age = null) => new() { Path = "/", HttpOnly = true, Secure = true, SameSite = SameSiteMode.Strict, IsEssential = true, MaxAge = age };
     private static IDataProtector MfaProtector(IDataProtectionProvider provider) => provider.CreateProtector("Tunner.User.Totp.PendingAuthentication.v1");
     internal static IResult PendingMfa(HttpContext http, TotpPendingAuthenticationRow pending, IDataProtectionProvider provider, DateTimeOffset now)

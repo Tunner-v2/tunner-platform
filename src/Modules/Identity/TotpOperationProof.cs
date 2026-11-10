@@ -103,14 +103,18 @@ internal sealed partial class TotpApplication
         var issued = await stepUp.IssueVerifiedProofAsync(caller, currentSession, owner.Binding, owner.ExpectedPolicyVersion, "totp", null, null, null, verifiedAt, ct, factor, policy.Version).ConfigureAwait(false);
         var authority = await authentication.VerifyContinuedOperationAsync(caller, owner.Binding, currentSession, ct).ConfigureAwait(false); var decisionAt = clock.GetUtcNow();
         assurance = assurancePolicies.RequireEffective(scope, decisionAt, owner.ExpectedPolicyVersion);
+        var finalAuthentication = authenticationPolicies.RequireEffective(decisionAt); finalAuthentication.Validate();
         if (issued.ErrorCode is not null || authority is null || !authority.SessionUseInterval.Contains(decisionAt) || !authority.OperationInterval.Contains(decisionAt) ||
+            finalAuthentication.Version != auth.Version || AuthenticationApplication.Expired(currentSession, finalAuthentication, decisionAt) ||
+            !authentication.MethodFactsCurrentAt(currentSession, finalAuthentication, decisionAt) ||
             Current(caller.Origin).Version != policy.Version || !assurance.MethodAssurances.TryGetValue("totp", out mapped) || mapped != policy.OperationProofAssurance || mapped != assurance.RequiredAssurance)
         {
             await transaction.RollbackToSavepointAsync("totp_proof", ct).ConfigureAwait(false); database.ChangeTracker.Clear();
             return await Finish(transaction, new StepUpIssueResult(issued.ErrorCode ?? "STEP_UP_REQUIRED", null), ct).ConfigureAwait(false);
         }
         var proof = database.ChangeTracker.Entries<StepUpProofRow>().Select(x => x.Entity).Single(x => x.SessionId == caller.SessionId && x.OperationId == owner.Binding.OperationId);
-        if (decisionAt >= proof.ExpiresAt || !authentication.ProofMethodCurrentAt(proof, new AuthenticatorProofSource(null, factor), owner.Binding, decisionAt, false))
+        if (decisionAt >= proof.ExpiresAt || proof.AuthenticationPolicyVersion != finalAuthentication.Version ||
+            !authentication.ProofMethodCurrentAt(proof, new AuthenticatorProofSource(null, factor), owner.Binding, decisionAt, false))
         {
             await transaction.RollbackToSavepointAsync("totp_proof", ct).ConfigureAwait(false); database.ChangeTracker.Clear();
             return await Finish(transaction, new StepUpIssueResult("STEP_UP_REQUIRED", null), ct).ConfigureAwait(false);

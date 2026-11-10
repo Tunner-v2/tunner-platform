@@ -96,8 +96,9 @@ internal sealed partial class AuthenticationApplication
         requirement = await RequirePendingAuthority(pending, user, account, caller, ct).ConfigureAwait(false);
         accessDecision = await AccessAsync(account, "SIGN_IN", clock.GetUtcNow(), ct).ConfigureAwait(false); now = clock.GetUtcNow();
         var finalAuth = policies.RequireEffective(now); finalAuth.Validate(); var finalPolicy = CurrentTotpPolicy(now);
-        if (requirement is null || !requirement.EffectiveInterval.Contains(now) || accessDecision?.Allowed != true || !accessDecision.EffectiveInterval.Contains(now) || finalPolicy is null ||
-            !PendingCurrent(pending, caller, user, finalAuth, finalPolicy, now) || !finalPolicy.MfaAssurances.TryGetValue(pending.PrimaryMethod, out var finalAssurance) || finalAssurance != assurance)
+        if (requirement is null || !requirement.Decision.EffectiveInterval.Contains(now) || accessDecision?.Allowed != true || !accessDecision.EffectiveInterval.Contains(now) || finalPolicy is null ||
+            !PendingCurrent(pending, caller, user, finalAuth, finalPolicy, now) || !PendingPrimaryFactsCurrentAt(pending, user, caller, requirement, finalAuth, now) ||
+            !finalPolicy.MfaAssurances.TryGetValue(pending.PrimaryMethod, out var finalAssurance) || finalAssurance != assurance)
         {
             await transaction.RollbackToSavepointAsync("totp_mfa", ct).ConfigureAwait(false); database.ChangeTracker.Clear(); return await FinishMfa(transaction, new("AUTHENTICATION_FAILED", null), ct).ConfigureAwait(false);
         }
@@ -111,7 +112,8 @@ internal sealed partial class AuthenticationApplication
         pending.AcceptedAuthenticatorReference = factor.AuthenticatorReference; pending.AcceptedGeneration = factor.Generation; pending.Version++;
         return await FinishMfa(transaction, result, ct).ConfigureAwait(false);
     }
-    private async Task<TotpMfaRequirementDecision?> RequirePendingAuthority(TotpPendingAuthenticationRow pending, IdentityUserAdapter user, AccountRow account, AuthenticationCaller caller, CancellationToken ct)
+    private sealed record PendingPrimaryAuthority(TotpMfaRequirementDecision Decision, PasskeyCredentialRow? Passkey);
+    private async Task<PendingPrimaryAuthority?> RequirePendingAuthority(TotpPendingAuthenticationRow pending, IdentityUserAdapter user, AccountRow account, AuthenticationCaller caller, CancellationToken ct)
     {
         var now = clock.GetUtcNow(); var source = mfaRequirements?.SingleOrDefault() ?? throw new InvalidOperationException("MFA authority is unavailable.");
         var decision = await source.RequireAsync(new(pending.AccountId, account.Version, pending.PrimaryMethod, pending.PrimaryAssurance, now), ct).ConfigureAwait(false);
@@ -119,12 +121,26 @@ internal sealed partial class AuthenticationApplication
         if (!decision.Required || decision.PolicyVersion != pending.RequirementPolicyVersion || decision.EvidenceReference != pending.RequirementEvidenceReference ||
             now - pending.PrimaryVerifiedAt >= decision.PrimaryEvidenceLifetime || !user.EmailConfirmed ||
             !await database.VerifiedContacts.AnyAsync(x => x.AccountId == user.AccountId && x.State == ContactVerificationState.Verified && x.AnonymizedAtUtc == null && x.NormalizedEmail == user.NormalizedEmail, ct).ConfigureAwait(false)) return null;
-        if (pending.PrimaryMethod == "pwd") return pending.PrimarySourceDigest == AuthenticationIdentity.Digest(user.PasswordHash ?? string.Empty) ? decision : null;
+        if (pending.PrimaryMethod == "pwd") return pending.PrimarySourceDigest == AuthenticationIdentity.Digest(user.PasswordHash ?? string.Empty) ? new(decision, null) : null;
         var credential = await database.Set<PasskeyCredentialRow>().SingleOrDefaultAsync(x => x.CredentialReference == pending.PasskeyCredentialReference && x.AccountId == pending.AccountId, ct).ConfigureAwait(false);
         if (credential is null) return null; await database.Entry(credential).ReloadAsync(ct).ConfigureAwait(false);
         var passkey = passkeyPolicies.SingleOrDefault()?.RequireEffective(clock.GetUtcNow());
         return credential.State == "ACTIVE" && credential.Version == pending.PasskeyCredentialVersion && passkey is not null && passkey.Version == pending.PasskeyPolicyVersion && passkey.Origin == caller.Origin && pending.PasskeyAssuranceKey is not null &&
-            passkey.RequireAssurance(pending.PasskeyAssuranceKey) == pending.PrimaryAssurance ? decision : null;
+            passkey.RequireAssurance(pending.PasskeyAssuranceKey) == pending.PrimaryAssurance ? new(decision, credential) : null;
+    }
+    // Evaluate the locked persisted primary source against the policy selected AFTER every asynchronous final-boundary check.
+    private bool PendingPrimaryFactsCurrentAt(TotpPendingAuthenticationRow pending, IdentityUserAdapter user, AuthenticationCaller caller,
+        PendingPrimaryAuthority authority, AuthenticationPolicy auth, DateTimeOffset now)
+    {
+        if (now < pending.PrimaryVerifiedAt || now - pending.PrimaryVerifiedAt >= authority.Decision.PrimaryEvidenceLifetime) return false;
+        if (pending.PrimaryMethod == "pwd") return authority.Passkey is null && pending.PrimaryAssurance == auth.PasswordAssurance &&
+            pending.PrimarySourceDigest == AuthenticationIdentity.Digest(user.PasswordHash ?? string.Empty);
+        var credential = authority.Passkey; var current = passkeyPolicies.SingleOrDefault()?.RequireEffective(now);
+        return pending.PrimaryMethod == "passkey" && credential is not null && credential.AccountId == pending.AccountId && credential.State == "ACTIVE" &&
+            credential.CredentialReference == pending.PasskeyCredentialReference && credential.Version == pending.PasskeyCredentialVersion &&
+            current is not null && current.Version == pending.PasskeyPolicyVersion && current.Origin == caller.Origin && pending.PasskeyAssuranceKey is not null &&
+            current.AssuranceMappings.TryGetValue(pending.PasskeyAssuranceKey, out var mapped) && mapped == pending.PrimaryAssurance &&
+            pending.PrimarySourceDigest == AuthenticationIdentity.Digest(credential.CredentialDigest + "|" + credential.Version.ToString(System.Globalization.CultureInfo.InvariantCulture) + "|" + pending.PasskeyAssuranceKey);
     }
     private static bool PendingCurrent(TotpPendingAuthenticationRow pending, AuthenticationCaller caller, IdentityUserAdapter user, AuthenticationPolicy auth, TotpPolicy policy, DateTimeOffset now) =>
         pending.State == "PENDING" && pending.BrowserDigest == caller.BrowserDigest && pending.Origin == caller.Origin && pending.PreviousSessionId == caller.PreviousSessionId &&
