@@ -1,4 +1,5 @@
 import { authenticationRoutes } from '../apps/user/authentication.routes';
+import './totp.contracts.test';
 import { passkeyRoutes } from '../apps/user/passkeys.routes';
 import { registrationSchema, verificationSchema, personalInformationSchema, validBirthDate } from '../apps/user/validation';
 import { registrationRoutes } from '../apps/user/routes';
