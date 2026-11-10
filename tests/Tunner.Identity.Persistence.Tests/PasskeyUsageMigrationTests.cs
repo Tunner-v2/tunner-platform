@@ -20,7 +20,8 @@ public sealed partial class PasskeyTests
     public async Task OperationProofUpgradePreservesHistoricalLifecycleNativeCounterSessionAndPendingReview()
     {
         await using var db = await fixture.CreateDatabaseAsync("20261109164622_P2PasskeyCeremonies"); await using var host = await StartPasskeys(db); var account = await host.SeedAsync(db);
-        var cookies = await Login(host); using var key = new PasskeyAuthenticator(); var reference = Guid.NewGuid(); var ceremony = Guid.NewGuid(); var request = Guid.NewGuid(); var now = host.Clock.GetUtcNow();
+        var session = await host.SeedHistoricalPasswordSessionAsync(db, account); var cookies = session.Cookies;
+        using var key = new PasskeyAuthenticator(); var reference = Guid.NewGuid(); var ceremony = Guid.NewGuid(); var request = Guid.NewGuid(); var now = host.Clock.GetUtcNow();
         await using (var scope = host.Services.CreateAsyncScope())
         {
             var manager = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUserAdapter>>(); var user = (await manager.FindByEmailAsync("person@example.test"))!;
@@ -31,7 +32,7 @@ public sealed partial class PasskeyTests
             var verified = await handler.PerformAttestationAsync(new PasskeyAttestationContext { HttpContext = http, AttestationState = options.AttestationState!, CredentialJson = key.Attest(JsonSerializer.Deserialize<JsonElement>(options.CreationOptionsJson), Origin).GetRawText() });
             Assert.True(verified.Succeeded, verified.Failure?.Message); var value = verified.Passkey;
             Assert.True((await manager.AddOrUpdatePasskeyAsync(user, new UserPasskeyInfo(value.CredentialId, value.PublicKey, now, 37, value.Transports, value.IsUserVerified, value.IsBackupEligible, value.IsBackedUp, [], []))).Succeeded);
-            await using var before = db.Context(); var session = await before.Set<AuthenticationSessionRow>().AsNoTracking().SingleAsync();
+            await using var before = db.Context();
             var digest = Convert.ToHexString(System.Security.Cryptography.SHA256.HashData(key.CredentialId)); var browser = AuthenticationIdentity.Digest(session.SessionId.ToString("N") + "|" + account + "|" + Origin);
             await before.Database.ExecuteSqlInterpolatedAsync($"""
                 INSERT INTO identity.passkey_credentials(credential_reference,account_id,credential_id,credential_digest,state,created_at,last_used_at,policy_version,processing_reference,retention_reference,version)

@@ -1,9 +1,12 @@
 using System.Net;
 using System.Net.Http.Json;
+using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
 using System.Text.Json;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Hosting.Server;
@@ -12,6 +15,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using Tunner.Accounts;
 using Tunner.Platform.Policies;
 using Tunner.User.Bff;
@@ -71,6 +75,37 @@ internal sealed class AuthenticationTestHost : IAsyncDisposable
         context.VerifiedContacts.Add(new VerifiedContactRow { ContactId = Guid.NewGuid(), AccountId = id, NormalizedEmail = user.NormalizedEmail,
             State = confirmed ? ContactVerificationState.Verified : ContactVerificationState.Unverified, Version = 1, EvidenceReference = "fixture-contact" });
         await context.SaveChangesAsync(); return id;
+    }
+    // Historical migration fixtures must write the historical schema, then exercise current HTTP behavior only after upgrade.
+    // This is the same SQL/framework-ticket pattern as PasskeyMigrationTests; no production old-schema fallback is introduced.
+    internal async Task<HistoricalSession> SeedHistoricalPasswordSessionAsync(IdentityTestDatabase database, string accountId)
+    {
+        await using var scope = Services.CreateAsyncScope(); var provider = scope.ServiceProvider.GetRequiredService<IDataProtectionProvider>();
+        await using var context = database.Context(); var user = await context.Users.SingleAsync(x => x.AccountId == accountId);
+        var id = Guid.NewGuid(); var key = Convert.ToHexString(RandomNumberGenerator.GetBytes(32)); var now = Clock.GetUtcNow(); var expires = now + Policies.Policy.AbsoluteLifetime;
+        var principal = new ClaimsPrincipal(new ClaimsIdentity([new(ClaimTypes.NameIdentifier, accountId), new(AuthenticationIdentity.SessionClaim, id.ToString("N")),
+            new(AuthenticationIdentity.OriginClaim, Origin), new("amr", "pwd"), new("acr", Policies.Policy.PasswordAssurance)], AuthenticationIdentity.Scheme));
+        var ticket = new AuthenticationTicket(principal, new AuthenticationProperties { IssuedUtc = now, ExpiresUtc = expires, IsPersistent = false, AllowRefresh = false }, AuthenticationIdentity.Scheme);
+        var protectedTicket = provider.CreateProtector("Tunner.User.Session.Ticket.v1").Protect(Convert.ToBase64String(TicketSerializer.Default.Serialize(ticket)));
+        var protectedKey = provider.CreateProtector("Tunner.User.Session.RetryKey.v1").Protect(key); var digest = AuthenticationIdentity.Digest(key);
+        var browser = Convert.ToHexString(RandomNumberGenerator.GetBytes(32)); var requestId = Guid.NewGuid(); var stamp = AuthenticationIdentity.Digest(user.SecurityStamp!);
+        var identifier = scope.ServiceProvider.GetRequiredService<AuthenticationPartitionKey>().Identifier(user.NormalizedEmail!); var idle = Policies.Policy.IdleLifetime.Ticks;
+        await context.Database.ExecuteSqlInterpolatedAsync($"""
+            INSERT INTO identity.tunner_sessions(session_id,key_digest,protected_key,protected_ticket,browser_digest,idempotency_key,identifier_digest,remember_me,account_id,security_stamp_digest,
+              scheme,origin,authentication_methods,assurance,authenticated_at,last_seen_at,expires_at,idle_ticks,state,policy_version,access_policy_version,access_evidence_reference,
+              processing_reference,retention_reference,operation_id,correlation_id,version)
+            VALUES ({id},{digest},{protectedKey},{protectedTicket},{browser},{requestId},{identifier},false,{accountId},{stamp},{AuthenticationIdentity.Scheme},{Origin},'pwd',
+              {Policies.Policy.PasswordAssurance},{now},{now},{expires},{idle},'ACTIVE',{Policies.Policy.Version},'fixture-access-v1','fixture-access-evidence','fixture-processing','fixture-retention','OP-historical-fixture','fixture-historical',1)
+            """);
+        // Native CookieAuthenticationHandler v10.0.13 stores only this lookup claim when ITicketStore is configured.
+        var options = scope.ServiceProvider.GetRequiredService<IOptionsMonitor<CookieAuthenticationOptions>>().Get(AuthenticationIdentity.Scheme);
+        var lookup = new ClaimsPrincipal(new ClaimsIdentity([new Claim("Microsoft.AspNetCore.Authentication.Cookies-SessionId", key, ClaimValueTypes.String, options.ClaimsIssuer)], options.ClaimsIssuer));
+        var cookie = options.TicketDataFormat.Protect(new AuthenticationTicket(lookup, new AuthenticationProperties(), AuthenticationIdentity.Scheme));
+        return new(id, stamp, AuthenticationIdentity.CookieName + "=" + cookie);
+    }
+    internal sealed record HistoricalSession(Guid SessionId, string SecurityStampDigest, string Cookies)
+    {
+        public override string ToString() => nameof(HistoricalSession);
     }
     internal async Task<HttpResponseMessage> Get(string path, string? cookies = null)
     { using var request = Request(HttpMethod.Get, path, cookies); return await client.SendAsync(request); }
