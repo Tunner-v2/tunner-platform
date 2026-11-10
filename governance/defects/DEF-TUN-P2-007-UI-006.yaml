@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "defect_id": "DEF-TUN-P2-007-UI-006",
+  "work_item_id": "TUN-P2-007",
+  "classification": "UI_FIDELITY_DEFECT",
+  "severity": "SEV-3",
+  "status": "OPEN",
+  "environment": "Source0efbb6e actual1440x1100 Playwright direct Account methods render",
+  "description": "Passkeys entry lacks the body margin reset used by sibling apps. Browser default8px margin insets the full-width approved Account shell/header and expands full-page height to1116. Approved Figma36:2 shell reaches x0/y0 and1440viewportwidth. Add only the missing margin reset, assert header origin/full viewport width on direct entry and approved navigation at supported viewports, and rerender affected state/reference evidence before acceptance.",
+  "expected_behavior_ref": "docs/authority/current/decisions/AMD-0008_Approved_Figma_Visual_Fidelity_and_Product_Owner_UX_Consent.md",
+  "evidence": [
+    "governance/evidence/TUN-P2-007-OUTER-MARGIN-FIDELITY-20261110.json",
+    "governance/evidence/p2-recovery-20261109/passkey-proof-nav/defects/before-margin-1440.png"
+  ],
+  "affected_versions": [
+    "0efbb6ed89b0715d78ddfbcd97b1ee96f829f9dd"
+  ],
+  "created_at": "2026-11-10T10:32:03.398Z",
+  "updated_at": "2026-11-10T10:32:03.398Z"
+}

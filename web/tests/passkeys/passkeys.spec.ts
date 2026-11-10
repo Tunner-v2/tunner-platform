@@ -11,6 +11,7 @@ async function noBrowserStorage(page:Page){expect(await page.evaluate(()=>({loca
 for(const width of [1440,768,390,320]){
   test('Approved methods/Add composition, actual facts, keyboard and accessibility at '+width,async({page})=>{
     await page.setViewportSize({width,height:1100});await setup(page);await page.goto(paths.methods);await expect(page.getByRole('heading',{name:'Passkeys & two-step verification'})).toBeVisible();await expect(page.getByText('No passkey added yet',{exact:true})).toBeVisible();
+    expect(await page.locator('.passkeys-header').boundingBox()).toMatchObject({x:0,y:0,width});
     await expect(page.getByText(/Farhan|Taylor|PROTECTED|STRONG|SMS backup|View codes|Authenticator app enabled/)).toHaveCount(0);await expect(page.getByRole('button',{name:'Add passkey',exact:true})).toBeEnabled();
     await page.evaluate(()=>document.fonts.ready);expect((await new AxeBuilder({page}).withTags(['wcag2a','wcag2aa','wcag21aa','wcag22aa']).analyze()).violations).toEqual([]);expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
     await page.screenshot({path:'test-results/passkeys/methods-'+width+'.png',fullPage:true});await page.getByRole('button',{name:'Add passkey',exact:true}).click();await expect(page).toHaveURL(new RegExp(paths.methods+'$'));

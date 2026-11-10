@@ -41,7 +41,7 @@ internal sealed partial class PasskeyBrowserService
         var signInRequired = row.State == "COMPLETED" && current != row.ResultSessionId;
         var status = row.State;
         if (status == "PENDING" && (!hasOriginalBrowser || browser!.PolicyVersion != authenticationPolicies.RequireEffective(now).Version || !application.CurrentBinding(row, application.Current(surface.Origin), now))) status = "EXPIRED";
-        var token = SignInRecoveryProtection.Protect(JsonSerializer.Serialize(selected));
-        return new(row.RequestId, row.CeremonyId, "SIGN_IN", status, null, 0, row.ExpiresAt, token, signInRequired, RememberMe: row.RememberMe);
+        var protectedRecovery = SignInRecoveryProtection.Protect(JsonSerializer.Serialize(selected));
+        return new(row.RequestId, row.CeremonyId, "SIGN_IN", status, null, 0, row.ExpiresAt, protectedRecovery, signInRequired, RememberMe: row.RememberMe);
     }
 }

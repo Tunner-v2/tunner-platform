@@ -71,6 +71,8 @@ test('real native passkeys complete approved onboarding, sign-in, proof, enrollm
   await cdp.send('WebAuthn.setAutomaticPresenceSimulation',{authenticatorId:first,enabled:false});const second=await authenticator(cdp);
   await page.getByRole('dialog').getByRole('button',{name:'Continue setup',exact:true}).click();
   await expect.poll(()=>activeCount(page)).toBe(2);expect(created).toBe(2);
+  await expect(page.getByRole('group',{name:'Passkey',exact:true}).filter({has:page.getByText('ACTIVE',{exact:true})})).toHaveCount(2);
+  await expect(page.getByRole('dialog')).toHaveCount(0);
   await cdp.send('WebAuthn.setAutomaticPresenceSimulation',{authenticatorId:second,enabled:false});
   await cdp.send('WebAuthn.setAutomaticPresenceSimulation',{authenticatorId:first,enabled:true});
 
@@ -84,6 +86,7 @@ test('real native passkeys complete approved onboarding, sign-in, proof, enrollm
     const operationReference=(await(await options).json()).operationReference as string;
     expect(typeof operationReference).toBe('string');await nativeProof(page,operationReference);
     await expect.poll(()=>activeCount(page)).toBe(remaining);
+    await expect(page.getByRole('group',{name:'Passkey',exact:true}).filter({has:page.getByText('ACTIVE',{exact:true})})).toHaveCount(remaining);
     await expect(page.getByText('Changes saved successfully',{exact:true})).toBeVisible();
     await expect(page.getByRole('dialog')).toHaveCount(0);
   }
