@@ -4,21 +4,22 @@ using Tunner.Platform.Secrets;
 
 namespace Tunner.Installer;
 
-/// <summary>Local operator bootstrap only. Application secrets always use the bounded child identity.</summary>
+/// <summary>Local coordinator bootstrap only. Application secrets always use the bounded child identity.</summary>
 public sealed class LocalOpenBaoSession : ILocalOpenBaoSession
 {
     private readonly HttpClient client;
     private readonly string bootstrapCredential;
-    private readonly string policyName = "tunner-r2-local-" + Guid.NewGuid().ToString("N");
+    private readonly string policyName;
     private OpenBaoSecretStore? secrets;
     private string? accessor;
     private bool policyAttempted;
     private bool tokenAttempted;
     private bool disposed;
 
-    private LocalOpenBaoSession(Uri endpoint, string bootstrapCredential, HttpMessageHandler handler)
+    private LocalOpenBaoSession(Uri endpoint, string bootstrapCredential, string policyPrefix, HttpMessageHandler handler)
     {
         this.bootstrapCredential = bootstrapCredential;
+        policyName = policyPrefix + Guid.NewGuid().ToString("N");
         client = new HttpClient(handler)
         {
             BaseAddress = endpoint, Timeout = TimeSpan.FromSeconds(15), MaxResponseContentBufferSize = 65536
@@ -26,6 +27,7 @@ public sealed class LocalOpenBaoSession : ILocalOpenBaoSession
     }
 
     public OpenBaoSecretStore Secrets => secrets ?? throw new InvalidOperationException("LOCAL_SESSION_UNAVAILABLE");
+    public bool CleanupVerified { get; private set; }
 
     public static Task<LocalOpenBaoSession> CreateAsync(R2InstallationProfile profile, string bootstrapCredential,
         CancellationToken cancellationToken = default)
@@ -45,10 +47,35 @@ public sealed class LocalOpenBaoSession : ILocalOpenBaoSession
                 throw new InvalidOperationException("LOCAL_BOOTSTRAP_INPUT_REQUIRED");
         }
         catch { handler.Dispose(); throw; }
-        var session = new LocalOpenBaoSession(new Uri(profile.OpenBaoEndpoint), bootstrapCredential, handler);
+        return await CreateCoreAsync(new Uri(profile.OpenBaoEndpoint), profile.SecretStoreReference,
+            profile.CredentialResourceReference, "tunner-r2-local-", bootstrapCredential, handler, cancellationToken).ConfigureAwait(false);
+    }
+
+    public static Task<LocalOpenBaoSession> CreateAsync(LocalOpenBaoCredentialScope scope, string bootstrapCredential,
+        CancellationToken cancellationToken = default)
+        => CreateAsync(scope, bootstrapCredential, new HttpClientHandler { AllowAutoRedirect = false }, cancellationToken);
+
+    internal static Task<LocalOpenBaoSession> CreateAsync(LocalOpenBaoCredentialScope scope, string bootstrapCredential,
+        HttpMessageHandler handler, CancellationToken cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(scope);
+        ArgumentNullException.ThrowIfNull(handler);
+        if (string.IsNullOrWhiteSpace(bootstrapCredential) || bootstrapCredential.Any(char.IsControl))
+        {
+            handler.Dispose();
+            throw new InvalidOperationException("LOCAL_BOOTSTRAP_INPUT_REQUIRED");
+        }
+        return CreateCoreAsync(scope.Endpoint, scope.StoreReference, scope.PolicyResource, "tunner-local-credential-",
+            bootstrapCredential, handler, cancellationToken);
+    }
+
+    private static async Task<LocalOpenBaoSession> CreateCoreAsync(Uri endpoint, string storeReference, string policyResource,
+        string policyPrefix, string bootstrapCredential, HttpMessageHandler handler, CancellationToken cancellationToken)
+    {
+        var session = new LocalOpenBaoSession(endpoint, bootstrapCredential, policyPrefix, handler);
         try
         {
-            await session.InitializeAsync(profile, cancellationToken).ConfigureAwait(false);
+            await session.InitializeAsync(storeReference, policyResource, cancellationToken).ConfigureAwait(false);
             return session;
         }
         catch (Exception exception) when (exception is not OutOfMemoryException)
@@ -59,14 +86,14 @@ public sealed class LocalOpenBaoSession : ILocalOpenBaoSession
         }
     }
 
-    private async Task InitializeAsync(R2InstallationProfile profile, CancellationToken cancellationToken)
+    private async Task InitializeAsync(string storeReference, string policyResource, CancellationToken cancellationToken)
     {
         using (var identity = await RequestAsync(HttpMethod.Get, "v1/auth/token/lookup-self", null, cancellationToken).ConfigureAwait(false))
         {
             if (!identity.RootElement.GetProperty("data").GetProperty("policies").EnumerateArray().Any(p => p.GetString() == "root"))
                 throw new InvalidOperationException("LOCAL_ADMIN_BOOTSTRAP_REQUIRED");
         }
-        var policy = "path \"" + profile.CredentialResourceReference +
+        var policy = "path \"" + policyResource +
             "\" { capabilities = [\"create\", \"update\", \"read\"] }\n" +
             "path \"auth/token/lookup-self\" { capabilities = [\"read\"] }";
         policyAttempted = true; // A timed-out write can still have created the uniquely named policy.
@@ -87,7 +114,7 @@ public sealed class LocalOpenBaoSession : ILocalOpenBaoSession
             lifetime is <= 0 or > 1800 || auth.GetProperty("renewable").GetBoolean() ||
             policies.Length != 1 || policies[0] != policyName)
             throw new InvalidOperationException("LOCAL_CHILD_IDENTITY_INVALID");
-        secrets = new OpenBaoSecretStore(new Uri(profile.OpenBaoEndpoint), profile.SecretStoreReference, issuedCredential);
+        secrets = new OpenBaoSecretStore(client.BaseAddress!, storeReference, issuedCredential);
     }
 
     private async Task<JsonDocument> RequestAsync(HttpMethod method, string path, object? body, CancellationToken cancellationToken)
@@ -110,7 +137,11 @@ public sealed class LocalOpenBaoSession : ILocalOpenBaoSession
 
     public async ValueTask DisposeAsync()
     {
-        if (disposed) return;
+        if (disposed)
+        {
+            if (!CleanupVerified) throw new InvalidOperationException("LOCAL_BOOTSTRAP_CLEANUP_UNVERIFIED");
+            return;
+        }
         disposed = true;
         secrets?.Dispose();
         var revoked = !tokenAttempted;
@@ -141,7 +172,8 @@ public sealed class LocalOpenBaoSession : ILocalOpenBaoSession
             }
         }
         finally { client.Dispose(); GC.SuppressFinalize(this); }
-        if (!revoked || !removed) throw new InvalidOperationException("LOCAL_BOOTSTRAP_CLEANUP_UNVERIFIED");
+        CleanupVerified = revoked && removed;
+        if (!CleanupVerified) throw new InvalidOperationException("LOCAL_BOOTSTRAP_CLEANUP_UNVERIFIED");
     }
 
     public override string ToString() => "[local bootstrap session redacted]";

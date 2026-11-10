@@ -36,6 +36,7 @@ public sealed class LocalBootstrapTests
         await session.DisposeAsync();
         Assert.Equal(1, handler.Revocations);
         Assert.Equal(1, handler.Deletions);
+        Assert.True(session.CleanupVerified);
         Assert.All(handler.Headers, value => Assert.Equal("fixture-bootstrap", value));
     }
 
@@ -88,6 +89,8 @@ public sealed class LocalBootstrapTests
         Assert.Equal("LOCAL_BOOTSTRAP_CLEANUP_UNVERIFIED", error.Message);
         Assert.Equal(1, handler.Revocations);
         Assert.Equal(1, handler.Deletions);
+        Assert.False(session.CleanupVerified);
+        await Assert.ThrowsAsync<InvalidOperationException>(async () => await session.DisposeAsync());
     }
 
     [Fact]
@@ -101,6 +104,52 @@ public sealed class LocalBootstrapTests
         Assert.Equal(1, handler.Revocations);
         Assert.Equal(1, handler.Deletions);
     }
+
+    [Fact]
+    public async Task CredentialScopeIssuesOnlyItsUniqueDescendantNamespace()
+    {
+        var scope = new LocalOpenBaoCredentialScope("EPHEMERAL_TEST", new Uri("http://127.0.0.1:8200"),
+            "fixture-vault", "fixture/data/totp", Guid.NewGuid());
+        var handler = new AdminHandler();
+        var session = await LocalOpenBaoSession.CreateAsync(scope, "fixture-bootstrap", handler);
+        Assert.Contains("path \"" + scope.ResourcePrefix + "/*\"", handler.Policy, StringComparison.Ordinal);
+        Assert.DoesNotContain("path \"fixture/data/*\"", handler.Policy, StringComparison.Ordinal);
+        Assert.DoesNotContain("delete", handler.Policy, StringComparison.Ordinal);
+        Assert.DoesNotContain("list", handler.Policy, StringComparison.Ordinal);
+        using var issued = JsonDocument.Parse(handler.IssueBody!);
+        Assert.True(issued.RootElement.GetProperty("no_default_policy").GetBoolean());
+        Assert.False(issued.RootElement.GetProperty("renewable").GetBoolean());
+        Assert.Equal("30m", issued.RootElement.GetProperty("explicit_max_ttl").GetString());
+        Assert.DoesNotContain("fixture-bootstrap", scope.ToString(), StringComparison.Ordinal);
+        await session.DisposeAsync();
+        Assert.True(session.CleanupVerified);
+        Assert.Equal(1, handler.Revocations);
+        Assert.Equal(1, handler.Deletions);
+    }
+
+    [Theory]
+    [InlineData("fixture/data")]
+    [InlineData("fixture/data/")]
+    [InlineData("fixture/data/totp/*")]
+    [InlineData("fixture/data/../other")]
+    [InlineData("fixture/data/totp?scope=other")]
+    [InlineData("fixture/data/totp\nother")]
+    public void CredentialScopeRejectsBroadOrUntrustedResourcePatterns(string prefix) =>
+        Assert.ThrowsAny<ArgumentException>(() => new LocalOpenBaoCredentialScope("EPHEMERAL_TEST",
+            new Uri("http://127.0.0.1:8200"), "fixture-vault", prefix, Guid.NewGuid()));
+
+    [Theory]
+    [InlineData("PRODUCTION", "https://127.0.0.1:8200")]
+    [InlineData("SANDBOX", "https://127.0.0.1:8200")]
+    [InlineData("EPHEMERAL_TEST", "https://vault.example.com")]
+    public void CredentialScopeRejectsNonEngineeringOrRemoteBootstrap(string environment, string endpoint) =>
+        Assert.Throws<InvalidOperationException>(() => new LocalOpenBaoCredentialScope(environment,
+            new Uri(endpoint), "fixture-vault", "fixture/data/totp", Guid.NewGuid()));
+
+    [Fact]
+    public void CredentialScopeRequiresAnExplicitInstanceIdentity() =>
+        Assert.Throws<ArgumentException>(() => new LocalOpenBaoCredentialScope("EPHEMERAL_TEST",
+            new Uri("http://127.0.0.1:8200"), "fixture-vault", "fixture/data/totp", Guid.Empty));
 
     private sealed class AdminHandler : HttpMessageHandler
     {
