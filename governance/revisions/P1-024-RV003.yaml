@@ -1,0 +1,48 @@
+{
+  "schema_version": 1,
+  "revision_id": "P1-024-RV003",
+  "revision_scope": "WORK_ITEM",
+  "original_scope_id": "TUN-P1-024",
+  "parent_revision_id": "P1-024-RV002",
+  "parent_milestone_revision_id": null,
+  "title": "Reuse versioned OpenBao credential transport for TOTP",
+  "revision_type": "COMPATIBILITY",
+  "status": "APPROVED",
+  "reason": "P2-008 needs immutable owner-bound credential versions while preserving the closed installer and engineering-reference behavior; additive shared transport avoids duplicate provider mechanics.",
+  "authority_refs": [
+    "docs/authority/current/development/03_Governed_Development_Lifecycle_Scrum_Git.md"
+  ],
+  "decision_refs": [],
+  "defect_refs": [],
+  "change_refs": [
+    "docs/development/P2_008_TOTP_SCOPE.md",
+    "governance/evidence/TUN-P2-008-AUTHORITY-RESOLUTION.json"
+  ],
+  "impact_classification": "NON_BLOCKING",
+  "blocked_scope": [],
+  "acceptance_criteria": [
+    "Preserve existing engineering reference, installer, scoped-token, redirect-denial and safe-error behavior; add only version-bound credential provider mechanics and meaningful regressions, with committed source and final security review. Current security/environment authority is resolved in P2-008 authority evidence; no baseline semantics replace it."
+  ],
+  "prerequisites": [],
+  "work_items": [],
+  "required_gates": [],
+  "required_roles": [
+    "project-manager",
+    "governance-engineer",
+    "full-stack-engineer",
+    "solution-architect",
+    "tester-qa-engineer",
+    "cyber-security-engineer",
+    "devops-engineer",
+    "rd-engineer",
+    "auditor",
+    "compliance-specialist"
+  ],
+  "evidence_refs": [
+    "governance/evidence/P1-024-RV003-SCOPE.json",
+    "governance/evidence/TUN-P2-008-STARTUP-REVIEWS.json"
+  ],
+  "created_at": "2026-11-10T16:22:14.3349044+00:00",
+  "closed_at": null,
+  "product_acceptance_required": false
+}
