@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "scope_id": "TUN-P2-007",
+  "status": "EXPLICIT_USER_AUTHORIZED_IMPLEMENTATION_AND_QA",
+  "recorded_at": "2026-11-10T09:37:03.808Z",
+  "provenance": "Actual user send_user_message_question_reply to call_478a49dad05246b4b04bfa6d92cfecf0 item0, after two automatic approval review rejections.",
+  "user_answer": "Authorize P2-007 UI/QA implementation (Recommended)",
+  "authorized_scope": [
+    "UI/QA agent continues current P2-007 implementation and confirmed defect fixes under active goal.",
+    "Scope existing Password helper in web/tests/passkeys/fixtures.ts to active dialog; preserve original labels, test input and assertions.",
+    "Complete actual passkey proof UI within approved V01–V06."
+  ],
+  "supersession": "Fresh direct authorization resolves the earlier completed read-only-review restriction for this current implementation/QA scope only.",
+  "exclusions": [
+    "Figma/Drive source writes",
+    "Unrelated dirty files",
+    "Unapproved visual scope",
+    "Production policy selection",
+    "Final feature acceptance, merge or release"
+  ],
+  "approval_review_history": {
+    "rejections": 2,
+    "reason": "Earlier read-only review interpreted as controlling; relayed later goal treated as untrusted agent context.",
+    "resolution": "Fresh actual user answer; same minimal patch then approved/applied by assigned UI/QA agent."
+  }
+}
