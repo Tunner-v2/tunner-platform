@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "defect_id": "DEF-TUN-P2-007-UI-008",
+  "work_item_id": "TUN-P2-007",
+  "classification": "UI_VALIDATION_DEFECT",
+  "severity": "SEV-3",
+  "status": "OPEN",
+  "environment": "Actual pending Add/Remove Close and Login native/error feedback at1440/320",
+  "description": "Focus returns to BODY when the original trigger is disabled or removed during pending/native feedback. Restore focus to an existing visible enabled logical entry/recovery action after current-route transition; preserve immutable operation IDs, disabled guards, unknown/cancel semantics and other-route focus. Reuse existing focus/dialog primitives; no security or business behavior change.",
+  "expected_behavior_ref": "docs/authority/current/decisions/AMD-0009_URL_Addressable_Routing_and_Governed_Form_Validation.md",
+  "evidence": [
+    "governance/evidence/TUN-P2-007-FEEDBACK-STATE-DEFECTS-20261110.json",
+    "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/feedback-before/provenance.json"
+  ],
+  "affected_versions": [
+    "516ec0090253ee21b93c7e61922bd9d1f1caecfa"
+  ],
+  "created_at": "2026-11-10T12:01:04.290Z",
+  "updated_at": "2026-11-10T12:01:04.290Z"
+}

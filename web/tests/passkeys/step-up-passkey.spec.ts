@@ -57,3 +57,29 @@ test('Terminal self-revocation from native proof uses the original owner read-on
 for(const width of [1440,390,320])test('Shared native proof feedback retains the approved overlay at '+width+'px',async({page},testInfo)=>{
   await page.setViewportSize({width,height:900});await setupProof(page);await page.route('**/authentication/step-up/passkey',route=>route.abort('connectionreset'));await reviewEnrollment(page);await beginNative(page);await expect(proofDialog(page).getByRole('button',{name:'Check verification status',exact:true})).toBeVisible();expect(await proofDialog(page).evaluate(element=>element.scrollWidth<=element.clientWidth+1)).toBe(true);await expect(proofDialog(page).getByRole('heading',{name:'Confirm it’s you'})).toBeFocused();await page.screenshot({path:testInfo.outputPath('native-proof-'+width+'.png'),fullPage:true});const audit=await new AxeBuilder({page}).analyze();await testInfo.attach('native-proof-accessibility',{body:JSON.stringify(audit),contentType:'application/json'});expect(audit.violations).toEqual([]);
 });
+
+test('@feedback-regression Unresolved native-proof Close focuses owner recovery without cancelling or replacing its binding',async({page},testInfo)=>{
+  const {native,owner}=await setupProof(page);
+  let cancellations=0;
+  page.on('request',request=>{if(request.url().endsWith('/account/passkeys/cancel'))cancellations++;});
+  await page.route('**/authentication/step-up/passkey',route=>route.abort('connectionreset'));
+  await reviewEnrollment(page);
+  await beginNative(page);
+  const dialog=proofDialog(page);
+  await expect(dialog.getByRole('button',{name:'Check verification status',exact:true})).toBeEnabled();
+  const originalOwner={...owner.operation!};
+  const originalNative={...native.options[0]!};
+  await dialog.getByRole('heading',{name:'Confirm it’s you',exact:true}).focus();
+  await page.keyboard.press('Tab');
+  await expect(dialog.getByRole('button',{name:'Close',exact:true})).toBeFocused();
+  await page.keyboard.press('Enter');
+  await expect(dialog).toHaveCount(0);
+  await page.screenshot({path:testInfo.outputPath('unresolved-proof-owner-recovery-focus.png'),fullPage:true});
+  await expect(page.getByRole('button',{name:'Check status',exact:true})).toBeFocused();
+  await expect(page.getByRole('button',{name:'Add passkey',exact:true})).toBeDisabled();
+  expect(cancellations).toBe(0);
+  expect(owner.operation).toEqual(originalOwner);
+  expect(owner.starts).toHaveLength(1);
+  expect(native.options).toEqual([originalNative]);
+  expect(native.executions).toBe(0);
+});
