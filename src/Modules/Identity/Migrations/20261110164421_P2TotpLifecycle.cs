@@ -403,6 +403,7 @@ namespace Tunner.Identity.Persistence.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.Sql(IdentityMigrationSql.GuardDowngrade);
             migrationBuilder.Sql(TotpMigrationSql.RemoveGuards);
             migrationBuilder.Sql(TotpMigrationSql.RestoreSessionGuard);
             migrationBuilder.DropForeignKey(

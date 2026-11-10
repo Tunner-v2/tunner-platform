@@ -31,7 +31,6 @@ internal sealed partial class AuthenticationApplication
         _ = await database.Users.FromSqlInterpolated($"SELECT * FROM identity.\"AspNetUsers\" WHERE \"AccountId\"={user.AccountId} FOR NO KEY UPDATE").SingleAsync(ct).ConfigureAwait(false);
         var now = clock.GetUtcNow(); var requirement = await source.RequireAsync(new(user.AccountId, account.Version, method, primaryAssurance, now), ct).ConfigureAwait(false);
         ValidateRequirement(requirement, user.AccountId, account.Version, method, primaryAssurance, now);
-        if (!requirement.Required) return null;
         if (!policy.MfaAssurances.ContainsKey(method)) return new("STEP_UP_REQUIRED", null);
         var primaryDigest = method == "pwd" ? AuthenticationIdentity.Digest(user.PasswordHash ?? string.Empty) : AuthenticationIdentity.Digest(passkey!.CredentialDigest + "|" + passkey.Version.ToString(System.Globalization.CultureInfo.InvariantCulture) + "|" + passkeyFacts);
         var prior = await database.Set<TotpPendingAuthenticationRow>().SingleOrDefaultAsync(x => x.BrowserDigest == caller.BrowserDigest && x.RequestId == request, ct).ConfigureAwait(false);
@@ -40,8 +39,11 @@ internal sealed partial class AuthenticationApplication
             await database.Entry(prior).ReloadAsync(ct).ConfigureAwait(false);
             return prior.AccountId == user.AccountId && prior.Origin == caller.Origin && prior.RememberMe == remember && prior.PreviousSessionId == caller.PreviousSessionId &&
                 prior.PrimaryMethod == method && prior.PrimarySourceDigest == primaryDigest && prior.SecurityStampDigest == AuthenticationIdentity.Digest(user.SecurityStamp!) && prior.State == "PENDING" && prior.ExpiresAt > now
+                && requirement.Required && prior.RequirementPolicyVersion == requirement.PolicyVersion && prior.RequirementEvidenceReference == requirement.EvidenceReference &&
+                prior.TotpPolicyVersion == policy.Version && prior.AuthenticationPolicyVersion == policies.RequireEffective(now).Version
                 ? new(null, null, prior) : new("VERSION_CONFLICT", null);
         }
+        if (!requirement.Required) return null;
         var auth = policies.RequireEffective(now); auth.Validate();
         var expires = verifiedAt + requirement.PrimaryEvidenceLifetime; if (requirement.EffectiveInterval.Until is { } until && until < expires) expires = until;
         if (now < verifiedAt || expires <= now) return new("AUTHENTICATION_FAILED", null);

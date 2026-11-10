@@ -180,6 +180,8 @@ internal sealed class TotpBrowserService(TotpApplication application, Authentica
     internal Task<IResult> MfaOptionsAsync(HttpContext http) => Guard(http, async () =>
     {
         var selected = MfaSelection(http); if (selected is null) return Problem(404, "NOT_FOUND_OR_NOT_DISCLOSABLE");
+        if (!AuthenticationEndpoints.TryBrowser(http, AuthenticationEndpoints.Protector(protection), clock.GetUtcNow(), out var browser) || AuthenticationIdentity.Digest(browser!.Nonce) != selected.BrowserDigest)
+            return Problem(404, "NOT_FOUND_OR_NOT_DISCLOSABLE");
         var pending = await database.Set<TotpPendingAuthenticationRow>().AsNoTracking().SingleOrDefaultAsync(x => x.PendingId == selected.PendingId && x.RequestId == selected.RequestId && x.BrowserDigest == selected.BrowserDigest && x.Origin == selected.Origin, http.RequestAborted).ConfigureAwait(false);
         if (pending is null || pending.RecoveryExpiresAt != selected.ExpiresAt) return Problem(404, "NOT_FOUND_OR_NOT_DISCLOSABLE");
         var policy = application.Current(surface.Origin); var presentation = presentations.RequirePublished(policy);

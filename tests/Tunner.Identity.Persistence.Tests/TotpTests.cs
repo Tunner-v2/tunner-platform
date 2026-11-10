@@ -194,4 +194,32 @@ public sealed class TotpTests(IdentityPostgresFixture fixture) : IClassFixture<I
         var guards = await context.Database.SqlQueryRaw<int>("SELECT count(*)::integer AS \"Value\" FROM pg_trigger WHERE tgname IN ('totp_authenticator_guard','totp_operation_guard','totp_pending_guard','totp_replay_guard','totp_attempt_guard') AND NOT tgisinternal").SingleAsync(); Assert.Equal(5, guards);
         await context.GetService<IMigrator>().MigrateAsync("20261110092326_P2PasskeyOperationProofs"); await context.Database.MigrateAsync(); Assert.False(context.Database.HasPendingModelChanges());
     }
+    [Fact]
+    public async Task LiveTotpEvidencePreventsDestructiveMigrationDowngrade()
+    {
+        await using var db = await fixture.CreateDatabaseAsync(); var profile = new Profile(); await using var host = await StartTotp(db, profile); await host.SeedAsync(db);
+        var enrolled = await Enroll(host, profile, await Login(host)); await using var context = db.Context();
+        var error = await Assert.ThrowsAsync<Npgsql.PostgresException>(() => context.GetService<IMigrator>().MigrateAsync("20261110092326_P2PasskeyOperationProofs"));
+        Assert.Equal("23514", error.SqlState); Assert.True(await context.Set<TotpAuthenticatorRow>().AnyAsync(x => x.AuthenticatorReference == enrolled.Reference && x.State == "ACTIVE"));
+        Assert.Single(await context.Set<TotpUsedCodeRow>().ToArrayAsync());
+    }
+    [Fact]
+    public async Task OriginalPendingAttemptCannotBecomePrimaryOnlyAfterRequirementChanges()
+    {
+        await using var db = await fixture.CreateDatabaseAsync(); var profile = new Profile { RequireMfa = true }; await using var host = await StartTotp(db, profile); await host.SeedAsync(db);
+        var boot = await host.Options(); using var first = await host.Post("/authentication/sign-in", Command(boot.Key), boot.Cookies, boot.Csrf); Assert.Equal(HttpStatusCode.OK, first.StatusCode);
+        profile.RequireMfa = false;
+        using var changed = await host.Post("/authentication/sign-in", Command(boot.Key), Merge(boot.Cookies, first), boot.Csrf); Assert.Equal(HttpStatusCode.Conflict, changed.StatusCode);
+        await using var context = db.Context(); Assert.Empty(await context.Set<AuthenticationSessionRow>().ToArrayAsync()); Assert.Equal("PENDING", (await context.Set<TotpPendingAuthenticationRow>().SingleAsync()).State);
+    }
+    [Fact]
+    public async Task PendingMfaOptionsRequireItsExactOriginalAuthenticationBrowser()
+    {
+        await using var db = await fixture.CreateDatabaseAsync(); var profile = new Profile { RequireMfa = true }; await using var host = await StartTotp(db, profile); await host.SeedAsync(db);
+        var boot = await host.Options(); using var primary = await host.Post("/authentication/sign-in", Command(boot.Key), boot.Cookies, boot.Csrf); Assert.Equal(HttpStatusCode.OK, primary.StatusCode);
+        var original = Merge(boot.Cookies, primary); var other = await host.Options();
+        var pendingSelection = original.Split(';', StringSplitOptions.TrimEntries).Single(x => x.StartsWith(TotpBrowserService.MfaCookieName + "=", StringComparison.Ordinal));
+        using var wrongBrowser = await host.Get("/authentication/totp/options", other.Cookies + "; " + pendingSelection); Assert.Equal(HttpStatusCode.NotFound, wrongBrowser.StatusCode);
+        using var correct = await host.Get("/authentication/totp/options", original); Assert.Equal(HttpStatusCode.OK, correct.StatusCode);
+    }
 }
