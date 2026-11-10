@@ -86,6 +86,49 @@ public sealed class OpenBaoSecretStore : ISecretStore, IDisposable
         using var document = await SendAsync(HttpMethod.Post, "v1/" + reference.ResourceReference, content, cancellationToken).ConfigureAwait(false);
     }
 
+    /// <summary>Create-only immutable credential version. An unknown result must be reconciled by versioned read, never another write.</summary>
+    public async Task CreateCredentialVersionAsync(CredentialSecretReference reference, IReadOnlyDictionary<string, string> values,
+        CancellationToken cancellationToken = default)
+    {
+        ValidateCredentialReference(reference);
+        ArgumentNullException.ThrowIfNull(values);
+        if (reference.Version != 1 || values.Count == 0 || values.Any(p => string.IsNullOrWhiteSpace(p.Key) || string.IsNullOrWhiteSpace(p.Value)))
+            throw new ArgumentException("SECRET_INPUT_INVALID", nameof(values));
+        await ValidateTokenAsync(cancellationToken).ConfigureAwait(false);
+        using var content = JsonContent.Create(new { options = new { cas = 0 }, data = values });
+        using var document = await SendAsync(HttpMethod.Post, "v1/" + reference.ResourceReference, content, cancellationToken, credentialResponse: true).ConfigureAwait(false);
+        try { if (document.RootElement.GetProperty("data").GetProperty("version").GetInt64() != reference.Version) throw new InvalidOperationException("SECRET_RESPONSE_INVALID"); }
+        catch (Exception exception) when (exception is KeyNotFoundException or FormatException or InvalidOperationException or OverflowException) { throw new InvalidOperationException("SECRET_RESPONSE_INVALID"); }
+    }
+
+    /// <summary>Read exactly the immutable version. Latest-version reads cannot satisfy a credential binding.</summary>
+    public async Task<SecretValues?> ReadCredentialVersionAsync(CredentialSecretReference reference, CancellationToken cancellationToken = default)
+    {
+        ValidateCredentialReference(reference);
+        await ValidateTokenAsync(cancellationToken).ConfigureAwait(false);
+        using var document = await SendOptionalAsync(HttpMethod.Get, "v1/" + reference.ResourceReference + "?version=" + reference.Version.ToString(System.Globalization.CultureInfo.InvariantCulture),
+            null, allowNotFound: true, cancellationToken, credentialResponse: true).ConfigureAwait(false);
+        if (document is null) return null;
+        try
+        {
+            var outer = document.RootElement.GetProperty("data"); var metadata = outer.GetProperty("metadata");
+            if (metadata.GetProperty("version").GetInt64() != reference.Version || metadata.GetProperty("destroyed").GetBoolean() ||
+                metadata.GetProperty("deletion_time").GetString() is not "") throw new InvalidOperationException("SECRET_RESPONSE_INVALID");
+            var values = new Dictionary<string, string>(StringComparer.Ordinal);
+            foreach (var item in outer.GetProperty("data").EnumerateObject())
+                if (item.Value.ValueKind != JsonValueKind.String || !values.TryAdd(item.Name, item.Value.GetString()!)) throw new InvalidOperationException("SECRET_RESPONSE_INVALID");
+            return new SecretValues(values);
+        }
+        catch (Exception exception) when (exception is KeyNotFoundException or FormatException or InvalidOperationException or OverflowException) { throw new InvalidOperationException("SECRET_RESPONSE_INVALID"); }
+    }
+    private void ValidateCredentialReference(CredentialSecretReference reference)
+    {
+        ArgumentNullException.ThrowIfNull(reference);
+        if (reference.Version <= 0 || !StringComparer.Ordinal.Equals(storeReference, reference.StoreReference))
+            throw new ArgumentException("SECRET_REFERENCE_INVALID", nameof(reference));
+        ValidateResourceReference(reference.ResourceReference);
+    }
+
     private void ValidateReference(EngineeringSecretReference reference)
     {
         ArgumentNullException.ThrowIfNull(reference);
@@ -110,12 +153,12 @@ public sealed class OpenBaoSecretStore : ISecretStore, IDisposable
         }
     }
 
-    private async Task<JsonDocument> SendAsync(HttpMethod method, string path, HttpContent? content, CancellationToken cancellationToken)
-        => await SendOptionalAsync(method, path, content, allowNotFound: false, cancellationToken).ConfigureAwait(false)
+    private async Task<JsonDocument> SendAsync(HttpMethod method, string path, HttpContent? content, CancellationToken cancellationToken, bool credentialResponse = false)
+        => await SendOptionalAsync(method, path, content, allowNotFound: false, cancellationToken, credentialResponse).ConfigureAwait(false)
             ?? throw new InvalidOperationException("SECRET_REQUEST_REJECTED");
 
     private async Task<JsonDocument?> SendOptionalAsync(HttpMethod method, string path, HttpContent? content,
-        bool allowNotFound, CancellationToken cancellationToken)
+        bool allowNotFound, CancellationToken cancellationToken, bool credentialResponse = false)
     {
         try
         {
@@ -130,7 +173,11 @@ public sealed class OpenBaoSecretStore : ISecretStore, IDisposable
         {
             throw new InvalidOperationException("SECRET_REQUEST_TIMEOUT");
         }
-        catch (Exception exception) when (exception is HttpRequestException or JsonException)
+        catch (JsonException)
+        {
+            throw new InvalidOperationException(credentialResponse ? "SECRET_RESPONSE_INVALID" : "SECRET_REQUEST_FAILED");
+        }
+        catch (HttpRequestException)
         {
             throw new InvalidOperationException("SECRET_REQUEST_FAILED");
         }

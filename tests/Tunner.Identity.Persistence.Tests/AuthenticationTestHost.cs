@@ -119,6 +119,7 @@ internal sealed class AuthenticationTestHost : IAsyncDisposable
         private long ticks = new DateTimeOffset(2026, 10, 21, 12, 0, 0, TimeSpan.Zero).Ticks;
         public override DateTimeOffset GetUtcNow() => new(Interlocked.Read(ref ticks), TimeSpan.Zero);
         internal void Advance(TimeSpan span) => Interlocked.Add(ref ticks, span.Ticks);
+        internal void SynchronizeToSystem() => Interlocked.Exchange(ref ticks, DateTimeOffset.UtcNow.Ticks);
     }
     internal sealed class TestPolicies : IAuthenticationPolicySource
     {

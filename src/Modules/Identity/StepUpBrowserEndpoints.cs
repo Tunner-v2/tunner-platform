@@ -35,6 +35,7 @@ public static class StepUpBrowserEndpoints
         endpoints.MapPost("/authentication/step-up/passkey", (HttpContext context, StepUpBrowserService service) => service.PasskeyAsync(context)).RequireAuthorization(authorization);
         endpoints.MapPost("/authentication/step-up/passkey/continue", (HttpContext context, StepUpBrowserService service) => service.PasskeyContinueAsync(context)).RequireAuthorization(authorization);
         endpoints.MapPost("/authentication/step-up/password", (HttpContext context, StepUpBrowserService service) => service.PasswordAsync(context)).RequireAuthorization(authorization);
+        endpoints.MapPost("/authentication/step-up/totp", (HttpContext context, StepUpBrowserService service) => service.TotpAsync(context)).RequireAuthorization(authorization);
         return endpoints;
     }
 }
@@ -42,7 +43,8 @@ public static class StepUpBrowserEndpoints
 internal sealed partial class StepUpBrowserService(IUserStepUpOperationSource owner, IAssurancePolicySource assurancePolicies,
     IAuthenticationPolicySource authenticationPolicies, IStepUpPresentationSource presentations,
     AuthenticationPartitionKey partitions, AuthenticationEndpoints.Surface surface, IDataProtectionProvider protection,
-    IAntiforgery antiforgery, StepUpApplication application, IdentityPersistenceDbContext database, TimeProvider clock, IEnumerable<PasskeyApplication> passkeyApplications)
+    IAntiforgery antiforgery, StepUpApplication application, IdentityPersistenceDbContext database, TimeProvider clock, IEnumerable<PasskeyApplication> passkeyApplications,
+    IEnumerable<TotpApplication>? totpApplications = null)
 {
     private readonly IDataProtector protector = protection.CreateProtector("Tunner.User.StepUp.Browser.v1");
     internal sealed record Browser(Guid RequestId, string BindingDigest, string AuthenticationPolicyVersion, DateTimeOffset ExpiresAt);
@@ -77,10 +79,29 @@ internal sealed partial class StepUpBrowserService(IUserStepUpOperationSource ow
         var capability = native is null ? new PasskeyCapability(false, null) : await native.ProofCapabilityAsync(caller, policy, context.RequestAborted).ConfigureAwait(false);
         var passkeyRecovery = native is null ? null : await ReadPasskeyRecoveryAsync(context, new(caller, actor, operation, browser!), native).ConfigureAwait(false);
         var hasPassword = await database.Users.AnyAsync(x => x.AccountId == caller.AccountId && x.PasswordHash != null, context.RequestAborted).ConfigureAwait(false);
+        var totp = totpApplications?.SingleOrDefault(); var totpAvailable = totp is not null && await totp.ProofCapabilityAsync(caller, policy, context.RequestAborted).ConfigureAwait(false);
+        var totpAuthenticators = totpAvailable ? await database.Set<TotpAuthenticatorRow>().AsNoTracking().Where(x => x.AccountId == caller.AccountId && x.State == "ACTIVE").Select(x => x.AuthenticatorReference).ToArrayAsync(context.RequestAborted).ConfigureAwait(false) : [];
         return Results.Json(new { status = "PENDING", requestId = browser!.RequestId, operationReference = operation.Binding.CorrelationId, csrfToken = csrf, passwordMaximumLength = auth.PasswordMaximumLength,
             passkeyAvailable = capability.Available, maximumCredentialJsonBytes = capability.MaximumCredentialJsonBytes, passkeyRecovery,
+            totpAvailable, totpAuthenticators,
             passwordAvailable = hasPassword && policy.MethodAssurances.TryGetValue("pwd", out var mapped) && mapped == policy.RequiredAssurance,
             presentation.Locale, presentation.Content });
+    });
+
+    internal Task<IResult> TotpAsync(HttpContext context) => GuardAsync(context, async () =>
+    {
+        var native = totpApplications?.SingleOrDefault(); if (native is null) return Problem(404, "NOT_FOUND_OR_NOT_DISCLOSABLE");
+        if (!context.Request.HasJsonContentType()) return Problem(415, "VALIDATION_ERROR");
+        var command = await IdentityJsonCommand.ReadAsync<TotpCodeCommand>(context, 4096).ConfigureAwait(false);
+        var frame = await CurrentProofOperationAsync(context, command.RequestId).ConfigureAwait(false); if (frame is null) return Problem(409, "VERSION_CONFLICT");
+        if (frame.Operation.Completed) return Results.Json(new { status = "COMPLETED", operationReference = frame.Operation.Binding.CorrelationId });
+        var issued = await native.IssueOperationProofAsync(frame.Caller, frame.Operation, command, context.RequestAborted).ConfigureAwait(false);
+        if (issued.ErrorCode is { } error)
+        {
+            if (await CompletedAsync(frame.Actor, frame.Browser.BindingDigest, context.RequestAborted).ConfigureAwait(false)) return Results.Json(new { status = "COMPLETED", operationReference = frame.Operation.Binding.CorrelationId });
+            return Failure(error);
+        }
+        return await ExecuteProofAsync(context, frame, issued.Grant!.Key).ConfigureAwait(false);
     });
 
     internal Task<IResult> PasswordAsync(HttpContext context) => GuardAsync(context, async () =>

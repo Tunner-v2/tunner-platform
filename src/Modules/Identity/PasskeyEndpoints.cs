@@ -69,9 +69,13 @@ internal sealed class PasskeyStepUpOwner(PasskeyApplication application, Identit
 {
     internal const string CookieName = "__Host-Tunner.Passkey.Operation";
     internal static IDataProtector Protector(IDataProtectionProvider protection) => protection.CreateProtector("Tunner.User.Passkey.Operation.v1");
-    internal static void Select(HttpContext context, PasskeyCeremonyRow row, IDataProtectionProvider protection, DateTimeOffset now) => context.Response.Cookies.Append(CookieName,
+    internal static void Select(HttpContext context, PasskeyCeremonyRow row, IDataProtectionProvider protection, DateTimeOffset now)
+    {
+        context.Response.Cookies.Delete(TotpStepUpOwner.CookieName, TotpBrowserService.Cookie());
+        context.Response.Cookies.Append(CookieName,
         Protector(protection).Protect(JsonSerializer.Serialize(new PasskeySelection(row.CeremonyId, row.RequestId, row.SessionId!.Value, row.AccountId!, row.Origin))),
         new CookieOptions { Path = "/", HttpOnly = true, Secure = true, SameSite = SameSiteMode.Strict, IsEssential = true, MaxAge = row.ExpiresAt - now });
+    }
     internal static PasskeySelection? Selection(HttpContext context, IDataProtectionProvider protection)
     {
         if (!context.Request.Cookies.TryGetValue(CookieName, out var cookie)) return null;
@@ -294,6 +298,7 @@ internal sealed partial class PasskeyBrowserService(PasskeyApplication applicati
         if (command.RequestId == Guid.Empty) return Problem(400, "VALIDATION_ERROR");
         var result = await application.CompleteSignInAsync(caller, command, http, http.RequestAborted).ConfigureAwait(false);
         if (result.ErrorCode is { } error) return Failure(error);
+        if (result.PendingMfa is { } pending) return TotpBrowserService.PendingMfa(http, pending, protection, clock.GetUtcNow());
         var grant = result.Grant!; http.Items[AuthenticationEndpoints.GrantItem] = grant;
         await http.SignInAsync(AuthenticationIdentity.Scheme, grant.Ticket.Principal, grant.Ticket.Properties).ConfigureAwait(false);
         return Results.Json(new { status = "COMPLETED", command.RequestId, command.CeremonyId, authenticated = true, signInRequired = false });

@@ -678,6 +678,10 @@ namespace Tunner.Identity.Persistence.Migrations
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("last_seen_at");
 
+                    b.Property<string>("MfaRequirementPolicyVersion")
+                        .HasColumnType("text")
+                        .HasColumnName("mfa_requirement_policy_version");
+
                     b.Property<string>("OperationId")
                         .IsRequired()
                         .HasColumnType("text")
@@ -760,6 +764,22 @@ namespace Tunner.Identity.Persistence.Migrations
                         .HasColumnType("text")
                         .HasColumnName("termination_policy_version");
 
+                    b.Property<Guid?>("TotpAuthenticatorReference")
+                        .HasColumnType("uuid")
+                        .HasColumnName("totp_authenticator_reference");
+
+                    b.Property<long?>("TotpAuthenticatorVersion")
+                        .HasColumnType("bigint")
+                        .HasColumnName("totp_authenticator_version");
+
+                    b.Property<Guid?>("TotpGeneration")
+                        .HasColumnType("uuid")
+                        .HasColumnName("totp_generation");
+
+                    b.Property<string>("TotpPolicyVersion")
+                        .HasColumnType("text")
+                        .HasColumnName("totp_policy_version");
+
                     b.Property<long>("Version")
                         .IsConcurrencyToken()
                         .HasColumnType("bigint")
@@ -774,6 +794,8 @@ namespace Tunner.Identity.Persistence.Migrations
 
                     b.HasIndex("PasskeyCredentialReference");
 
+                    b.HasIndex("TotpAuthenticatorReference");
+
                     b.HasIndex("BrowserDigest", "IdempotencyKey")
                         .IsUnique();
 
@@ -783,11 +805,11 @@ namespace Tunner.Identity.Persistence.Migrations
 
                             t.HasCheckConstraint("ck_session_key", "length(key_digest) = 64 AND length(browser_digest) = 64");
 
-                            t.HasCheckConstraint("ck_session_method", "(authentication_methods='pwd' AND passkey_credential_reference IS NULL AND passkey_policy_version IS NULL AND passkey_assurance_key IS NULL) OR (authentication_methods='passkey' AND passkey_credential_reference IS NOT NULL AND passkey_policy_version IS NOT NULL AND passkey_assurance_key IS NOT NULL)");
+                            t.HasCheckConstraint("ck_session_method", "((authentication_methods IN ('pwd','pwd+totp') AND passkey_credential_reference IS NULL AND passkey_policy_version IS NULL AND passkey_assurance_key IS NULL) OR (authentication_methods IN ('passkey','passkey+totp') AND passkey_credential_reference IS NOT NULL AND passkey_policy_version IS NOT NULL AND passkey_assurance_key IS NOT NULL)) AND ((authentication_methods IN ('pwd','passkey') AND totp_authenticator_reference IS NULL AND totp_generation IS NULL AND totp_authenticator_version IS NULL AND totp_policy_version IS NULL AND mfa_requirement_policy_version IS NULL) OR (authentication_methods IN ('pwd+totp','passkey+totp') AND totp_authenticator_reference IS NOT NULL AND totp_generation IS NOT NULL AND totp_authenticator_version>=2 AND totp_policy_version IS NOT NULL AND mfa_requirement_policy_version IS NOT NULL))");
 
                             t.HasCheckConstraint("ck_session_state", "state IN ('ACTIVE','REVOKED','EXPIRED')");
 
-                            t.HasCheckConstraint("ck_session_termination", "(termination_cause IS NULL AND termination_policy_version IS NULL AND termination_credential_version IS NULL) OR (state='REVOKED' AND authentication_methods='passkey' AND termination_cause='PASSKEY_REVOKED' AND termination_policy_version IS NOT NULL AND termination_credential_version IS NOT NULL AND termination_credential_version >= 2)");
+                            t.HasCheckConstraint("ck_session_termination", "(termination_cause IS NULL AND termination_policy_version IS NULL AND termination_credential_version IS NULL) OR (state='REVOKED' AND termination_cause IN ('PASSKEY_REVOKED','TOTP_DISABLED') AND termination_policy_version IS NOT NULL AND termination_credential_version IS NOT NULL AND termination_credential_version >= 2)");
                         });
                 });
 
@@ -1518,6 +1540,22 @@ namespace Tunner.Identity.Persistence.Migrations
                         .HasColumnType("text")
                         .HasColumnName("state");
 
+                    b.Property<Guid?>("TotpAuthenticatorReference")
+                        .HasColumnType("uuid")
+                        .HasColumnName("totp_authenticator_reference");
+
+                    b.Property<long?>("TotpAuthenticatorVersion")
+                        .HasColumnType("bigint")
+                        .HasColumnName("totp_authenticator_version");
+
+                    b.Property<Guid?>("TotpGeneration")
+                        .HasColumnType("uuid")
+                        .HasColumnName("totp_generation");
+
+                    b.Property<string>("TotpPolicyVersion")
+                        .HasColumnType("text")
+                        .HasColumnName("totp_policy_version");
+
                     b.Property<long>("Version")
                         .IsConcurrencyToken()
                         .HasColumnType("bigint")
@@ -1529,6 +1567,8 @@ namespace Tunner.Identity.Persistence.Migrations
                         .IsUnique();
 
                     b.HasIndex("PasskeyCredentialReference");
+
+                    b.HasIndex("TotpAuthenticatorReference");
 
                     b.HasIndex("SessionId", "AccountId");
 
@@ -1545,9 +1585,516 @@ namespace Tunner.Identity.Persistence.Migrations
 
                             t.HasCheckConstraint("ck_step_up_end", "(state='ACTIVE' AND ended_at IS NULL AND length(protected_key)>0) OR (state<>'ACTIVE' AND ended_at IS NOT NULL AND ended_at >= authenticated_at AND protected_key='')");
 
-                            t.HasCheckConstraint("ck_step_up_method", "(authentication_method='pwd' AND passkey_credential_reference IS NULL AND passkey_policy_version IS NULL AND passkey_assurance_key IS NULL) OR (authentication_method LIKE 'passkey:%' AND passkey_credential_reference IS NOT NULL AND passkey_policy_version IS NOT NULL AND passkey_assurance_key IS NOT NULL)");
+                            t.HasCheckConstraint("ck_step_up_method", "((authentication_method='pwd' AND passkey_credential_reference IS NULL AND passkey_policy_version IS NULL AND passkey_assurance_key IS NULL) OR (authentication_method LIKE 'passkey:%' AND passkey_credential_reference IS NOT NULL AND passkey_policy_version IS NOT NULL AND passkey_assurance_key IS NOT NULL)) AND totp_authenticator_reference IS NULL AND totp_generation IS NULL AND totp_authenticator_version IS NULL AND totp_policy_version IS NULL OR (authentication_method='totp' AND passkey_credential_reference IS NULL AND passkey_policy_version IS NULL AND passkey_assurance_key IS NULL AND totp_authenticator_reference IS NOT NULL AND totp_generation IS NOT NULL AND totp_authenticator_version>=2 AND totp_policy_version IS NOT NULL)");
 
                             t.HasCheckConstraint("ck_step_up_state", "state IN ('ACTIVE','CONSUMED','EXPIRED')");
+                        });
+                });
+
+            modelBuilder.Entity("Tunner.Identity.Persistence.TotpAuthenticatorRow", b =>
+                {
+                    b.Property<Guid>("AuthenticatorReference")
+                        .HasColumnType("uuid")
+                        .HasColumnName("authenticator_reference");
+
+                    b.Property<string>("AccountId")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("account_id");
+
+                    b.Property<DateTimeOffset?>("ActivatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("activated_at");
+
+                    b.Property<DateTimeOffset?>("ClockHighWaterAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("clock_high_water_at");
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("created_at");
+
+                    b.Property<string>("DisableCorrelationId")
+                        .HasColumnType("text")
+                        .HasColumnName("disable_correlation_id");
+
+                    b.Property<string>("DisableOperationId")
+                        .HasColumnType("text")
+                        .HasColumnName("disable_operation_id");
+
+                    b.Property<string>("DisablePolicyVersion")
+                        .HasColumnType("text")
+                        .HasColumnName("disable_policy_version");
+
+                    b.Property<string>("DisableSessionEffect")
+                        .HasColumnType("text")
+                        .HasColumnName("disable_session_effect");
+
+                    b.Property<DateTimeOffset?>("DisabledAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("disabled_at");
+
+                    b.Property<Guid>("EnrollmentId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("enrollment_id");
+
+                    b.Property<Guid>("Generation")
+                        .HasColumnType("uuid")
+                        .HasColumnName("generation");
+
+                    b.Property<DateTimeOffset?>("LastUsedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("last_used_at");
+
+                    b.Property<string>("PolicyVersion")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("policy_version");
+
+                    b.Property<string>("ProcessingReference")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("processing_reference");
+
+                    b.Property<string>("RetentionReference")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("retention_reference");
+
+                    b.Property<string>("SecretBindingVersion")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("secret_binding_version");
+
+                    b.Property<string>("SecretResourceReference")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("secret_resource_reference");
+
+                    b.Property<string>("SecretStoreReference")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("secret_store_reference");
+
+                    b.Property<long>("SecretVersion")
+                        .HasColumnType("bigint")
+                        .HasColumnName("secret_version");
+
+                    b.Property<string>("State")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("state");
+
+                    b.Property<long>("UsageVersion")
+                        .IsConcurrencyToken()
+                        .HasColumnType("bigint")
+                        .HasColumnName("usage_version");
+
+                    b.Property<long>("Version")
+                        .IsConcurrencyToken()
+                        .HasColumnType("bigint")
+                        .HasColumnName("version");
+
+                    b.HasKey("AuthenticatorReference");
+
+                    b.HasIndex("AccountId");
+
+                    b.HasIndex("Generation")
+                        .IsUnique();
+
+                    b.HasIndex("SecretStoreReference", "SecretResourceReference", "SecretVersion")
+                        .IsUnique();
+
+                    b.ToTable("totp_authenticators", "identity", t =>
+                        {
+                            t.HasCheckConstraint("ck_totp_lifecycle", "(state='INACTIVE' AND activated_at IS NULL AND disabled_at IS NULL) OR (state='ACTIVE' AND activated_at>=created_at AND disabled_at IS NULL) OR (state='DISABLED' AND disabled_at>=created_at AND disable_session_effect IN ('PreserveExistingSessions','RevokeFactorSessions') AND disable_policy_version IS NOT NULL AND disable_operation_id IS NOT NULL AND disable_correlation_id IS NOT NULL)");
+
+                            t.HasCheckConstraint("ck_totp_state", "state IN ('INACTIVE','ACTIVE','DISABLED') AND version>=1 AND usage_version>=0 AND secret_version=1");
+                        });
+                });
+
+            modelBuilder.Entity("Tunner.Identity.Persistence.TotpOperationRow", b =>
+                {
+                    b.Property<Guid>("EnrollmentId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("enrollment_id");
+
+                    b.Property<string>("AccountId")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("account_id");
+
+                    b.Property<Guid?>("ActivationRequestId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("activation_request_id");
+
+                    b.Property<string>("AssurancePolicyVersion")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("assurance_policy_version");
+
+                    b.Property<string>("AuthenticationPolicyVersion")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("authentication_policy_version");
+
+                    b.Property<Guid>("AuthenticatorReference")
+                        .HasColumnType("uuid")
+                        .HasColumnName("authenticator_reference");
+
+                    b.Property<DateTimeOffset?>("AuthorizedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("authorized_at");
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("created_at");
+
+                    b.Property<DateTimeOffset?>("DisclosureClaimedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("disclosure_claimed_at");
+
+                    b.Property<string>("EligibilityEvidenceReference")
+                        .HasColumnType("text")
+                        .HasColumnName("eligibility_evidence_reference");
+
+                    b.Property<DateTimeOffset?>("EligibilityFrom")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("eligibility_from");
+
+                    b.Property<bool?>("EligibilityIncludesFrom")
+                        .HasColumnType("boolean")
+                        .HasColumnName("eligibility_includes_from");
+
+                    b.Property<bool?>("EligibilityIncludesUntil")
+                        .HasColumnType("boolean")
+                        .HasColumnName("eligibility_includes_until");
+
+                    b.Property<string>("EligibilityPolicyVersion")
+                        .HasColumnType("text")
+                        .HasColumnName("eligibility_policy_version");
+
+                    b.Property<DateTimeOffset?>("EligibilityUntil")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("eligibility_until");
+
+                    b.Property<DateTimeOffset?>("EndedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("ended_at");
+
+                    b.Property<long>("ExpectedVersion")
+                        .HasColumnType("bigint")
+                        .HasColumnName("expected_version");
+
+                    b.Property<DateTimeOffset>("ExpiresAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("expires_at");
+
+                    b.Property<Guid>("Generation")
+                        .HasColumnType("uuid")
+                        .HasColumnName("generation");
+
+                    b.Property<string>("Kind")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("kind");
+
+                    b.Property<string>("Origin")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("origin");
+
+                    b.Property<string>("PolicyVersion")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("policy_version");
+
+                    b.Property<string>("ProcessingReference")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("processing_reference");
+
+                    b.Property<Guid?>("ProofReference")
+                        .HasColumnType("uuid")
+                        .HasColumnName("proof_reference");
+
+                    b.Property<DateTimeOffset>("RecoveryExpiresAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("recovery_expires_at");
+
+                    b.Property<Guid>("RequestId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("request_id");
+
+                    b.Property<string>("RetentionReference")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("retention_reference");
+
+                    b.Property<string>("SecurityStampDigest")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("security_stamp_digest");
+
+                    b.Property<Guid>("SessionId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("session_id");
+
+                    b.Property<string>("State")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("state");
+
+                    b.Property<long>("Version")
+                        .IsConcurrencyToken()
+                        .HasColumnType("bigint")
+                        .HasColumnName("version");
+
+                    b.HasKey("EnrollmentId");
+
+                    b.HasIndex("SessionId", "AccountId");
+
+                    b.HasIndex("SessionId", "RequestId")
+                        .IsUnique();
+
+                    b.ToTable("totp_operations", "identity", t =>
+                        {
+                            t.HasCheckConstraint("ck_totp_disclosure", "disclosure_claimed_at IS NULL OR (kind='ENROLL' AND proof_reference IS NOT NULL AND authorized_at IS NOT NULL)");
+
+                            t.HasCheckConstraint("ck_totp_operation", "kind IN ('ENROLL','DISABLE','RESET') AND state IN ('PENDING_PROOF','AUTHORIZED','PREPARING','AWAITING_FIRST_CODE','COMPLETED','EXPIRED','REJECTED') AND version>=1 AND expected_version>=0 AND expires_at>created_at AND recovery_expires_at>expires_at");
+                        });
+                });
+
+            modelBuilder.Entity("Tunner.Identity.Persistence.TotpPendingAuthenticationRow", b =>
+                {
+                    b.Property<Guid>("PendingId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("pending_id");
+
+                    b.Property<Guid?>("AcceptedAuthenticatorReference")
+                        .HasColumnType("uuid")
+                        .HasColumnName("accepted_authenticator_reference");
+
+                    b.Property<Guid?>("AcceptedGeneration")
+                        .HasColumnType("uuid")
+                        .HasColumnName("accepted_generation");
+
+                    b.Property<string>("AccountId")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("account_id");
+
+                    b.Property<string>("AuthenticationPolicyVersion")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("authentication_policy_version");
+
+                    b.Property<string>("BrowserDigest")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("browser_digest");
+
+                    b.Property<DateTimeOffset>("ExpiresAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("expires_at");
+
+                    b.Property<string>("IdentifierDigest")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("identifier_digest");
+
+                    b.Property<string>("Origin")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("origin");
+
+                    b.Property<string>("PasskeyAssuranceKey")
+                        .HasColumnType("text")
+                        .HasColumnName("passkey_assurance_key");
+
+                    b.Property<Guid?>("PasskeyCredentialReference")
+                        .HasColumnType("uuid")
+                        .HasColumnName("passkey_credential_reference");
+
+                    b.Property<long?>("PasskeyCredentialVersion")
+                        .HasColumnType("bigint")
+                        .HasColumnName("passkey_credential_version");
+
+                    b.Property<string>("PasskeyPolicyVersion")
+                        .HasColumnType("text")
+                        .HasColumnName("passkey_policy_version");
+
+                    b.Property<Guid?>("PreviousSessionId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("previous_session_id");
+
+                    b.Property<string>("PrimaryAssurance")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("primary_assurance");
+
+                    b.Property<string>("PrimaryMethod")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("primary_method");
+
+                    b.Property<string>("PrimarySourceDigest")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("primary_source_digest");
+
+                    b.Property<DateTimeOffset>("PrimaryVerifiedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("primary_verified_at");
+
+                    b.Property<DateTimeOffset>("RecoveryExpiresAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("recovery_expires_at");
+
+                    b.Property<bool>("RememberMe")
+                        .HasColumnType("boolean")
+                        .HasColumnName("remember_me");
+
+                    b.Property<Guid>("RequestId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("request_id");
+
+                    b.Property<string>("RequirementEvidenceReference")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("requirement_evidence_reference");
+
+                    b.Property<string>("RequirementPolicyVersion")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("requirement_policy_version");
+
+                    b.Property<Guid?>("ResultSessionId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("result_session_id");
+
+                    b.Property<string>("SecurityStampDigest")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("security_stamp_digest");
+
+                    b.Property<string>("State")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("state");
+
+                    b.Property<string>("TotpPolicyVersion")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("totp_policy_version");
+
+                    b.Property<long>("Version")
+                        .IsConcurrencyToken()
+                        .HasColumnType("bigint")
+                        .HasColumnName("version");
+
+                    b.HasKey("PendingId");
+
+                    b.HasIndex("AccountId");
+
+                    b.HasIndex("BrowserDigest", "RequestId")
+                        .IsUnique();
+
+                    b.ToTable("totp_pending_authentication", "identity", t =>
+                        {
+                            t.HasCheckConstraint("ck_totp_pending", "state IN ('PENDING','COMPLETED','EXPIRED') AND primary_method IN ('pwd','passkey') AND expires_at>primary_verified_at AND recovery_expires_at>expires_at AND version>=1");
+
+                            t.HasCheckConstraint("ck_totp_pending_result", "(state='COMPLETED' AND result_session_id IS NOT NULL AND accepted_authenticator_reference IS NOT NULL AND accepted_generation IS NOT NULL) OR (state<>'COMPLETED' AND result_session_id IS NULL AND accepted_authenticator_reference IS NULL AND accepted_generation IS NULL)");
+                        });
+                });
+
+            modelBuilder.Entity("Tunner.Identity.Persistence.TotpProofAttemptRow", b =>
+                {
+                    b.Property<Guid>("SessionId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("session_id");
+
+                    b.Property<Guid>("AttemptId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("attempt_id");
+
+                    b.Property<string>("AccountId")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("account_id");
+
+                    b.Property<Guid>("AuthenticatorReference")
+                        .HasColumnType("uuid")
+                        .HasColumnName("authenticator_reference");
+
+                    b.Property<string>("ContextDigest")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("context_digest");
+
+                    b.Property<DateTimeOffset>("ExpiresAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("expires_at");
+
+                    b.Property<Guid>("Generation")
+                        .HasColumnType("uuid")
+                        .HasColumnName("generation");
+
+                    b.Property<string>("OperationId")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("operation_id");
+
+                    b.Property<Guid>("ProofId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("proof_id");
+
+                    b.HasKey("SessionId", "AttemptId");
+
+                    b.HasIndex("ProofId");
+
+                    b.ToTable("totp_proof_attempts", "identity");
+                });
+
+            modelBuilder.Entity("Tunner.Identity.Persistence.TotpUsedCodeRow", b =>
+                {
+                    b.Property<Guid>("ClaimId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("claim_id");
+
+                    b.Property<DateTimeOffset>("AcceptedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("accepted_at");
+
+                    b.Property<Guid>("AuthenticatorReference")
+                        .HasColumnType("uuid")
+                        .HasColumnName("authenticator_reference");
+
+                    b.Property<DateTimeOffset>("ExpiresAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("expires_at");
+
+                    b.Property<Guid>("Generation")
+                        .HasColumnType("uuid")
+                        .HasColumnName("generation");
+
+                    b.Property<string>("PolicyVersion")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("policy_version");
+
+                    b.Property<string>("Verifier")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("verifier");
+
+                    b.HasKey("ClaimId");
+
+                    b.HasIndex("AuthenticatorReference", "Generation", "ExpiresAt");
+
+                    b.ToTable("totp_used_codes", "identity", t =>
+                        {
+                            t.HasCheckConstraint("ck_totp_replay_bounds", "expires_at>accepted_at AND length(verifier)>0");
                         });
                 });
 
@@ -1744,6 +2291,11 @@ namespace Tunner.Identity.Persistence.Migrations
                         .WithMany()
                         .HasForeignKey("PasskeyCredentialReference")
                         .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("Tunner.Identity.Persistence.TotpAuthenticatorRow", null)
+                        .WithMany()
+                        .HasForeignKey("TotpAuthenticatorReference")
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("Tunner.Identity.Persistence.ExternalIdentityLinkRow", b =>
@@ -1805,10 +2357,61 @@ namespace Tunner.Identity.Persistence.Migrations
                         .HasForeignKey("PasskeyCredentialReference")
                         .OnDelete(DeleteBehavior.Restrict);
 
+                    b.HasOne("Tunner.Identity.Persistence.TotpAuthenticatorRow", null)
+                        .WithMany()
+                        .HasForeignKey("TotpAuthenticatorReference")
+                        .OnDelete(DeleteBehavior.Restrict);
+
                     b.HasOne("Tunner.Identity.Persistence.AuthenticationSessionRow", null)
                         .WithMany()
                         .HasForeignKey("SessionId", "AccountId")
                         .HasPrincipalKey("SessionId", "AccountId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Tunner.Identity.Persistence.TotpAuthenticatorRow", b =>
+                {
+                    b.HasOne("Tunner.Identity.Persistence.AccountRow", null)
+                        .WithMany()
+                        .HasForeignKey("AccountId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Tunner.Identity.Persistence.TotpOperationRow", b =>
+                {
+                    b.HasOne("Tunner.Identity.Persistence.AuthenticationSessionRow", null)
+                        .WithMany()
+                        .HasForeignKey("SessionId", "AccountId")
+                        .HasPrincipalKey("SessionId", "AccountId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Tunner.Identity.Persistence.TotpPendingAuthenticationRow", b =>
+                {
+                    b.HasOne("Tunner.Identity.Persistence.AccountRow", null)
+                        .WithMany()
+                        .HasForeignKey("AccountId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Tunner.Identity.Persistence.TotpProofAttemptRow", b =>
+                {
+                    b.HasOne("Tunner.Identity.Persistence.StepUpProofRow", null)
+                        .WithMany()
+                        .HasForeignKey("ProofId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Tunner.Identity.Persistence.TotpUsedCodeRow", b =>
+                {
+                    b.HasOne("Tunner.Identity.Persistence.TotpAuthenticatorRow", null)
+                        .WithMany()
+                        .HasForeignKey("AuthenticatorReference")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });

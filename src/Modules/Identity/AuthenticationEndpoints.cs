@@ -144,6 +144,7 @@ public static class AuthenticationEndpoints
             var caller = new AuthenticationCaller(AuthenticationIdentity.Digest(browser.Nonce), partitions.Network(context.Connection.RemoteIpAddress), surface.Origin, browser.PreviousSessionId);
             var result = await application.SignInAsync(caller, command, context.RequestAborted).ConfigureAwait(false);
             if (result.ErrorCode is { } error) return Problem(error switch { "RATE_OR_ABUSE_LIMITED" => 429, "VERSION_CONFLICT" => 409, "AUTHENTICATION_FAILED" => 401, _ => 400 }, error);
+            if (result.PendingMfa is { } pending) return TotpBrowserService.PendingMfa(context, pending, protection, clock.GetUtcNow());
             var grant = result.Grant!; context.Items[GrantItem] = grant;
             await context.SignInAsync(AuthenticationIdentity.Scheme, grant.Ticket.Principal, grant.Ticket.Properties).ConfigureAwait(false);
             return Results.Json(new { authenticated = true });

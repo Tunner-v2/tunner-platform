@@ -252,4 +252,4 @@ internal sealed record PasskeyCapability(bool Available, int? MaximumCredentialJ
 internal sealed record PasskeyRecoveryView(Guid RequestId, Guid CeremonyId, string Kind, string Status, Guid? CredentialReference,
     long ExpectedVersion, DateTimeOffset ExpiresAt, string ResultHandle, bool SignInRequired, JsonElement? PublicKey = null, bool? RememberMe = null);
 internal sealed record PasskeySecurityIntent(string SchemaVersion, Guid OperationReference, Guid? AuthenticatorReference, string AuthenticatorType, string Operation, string EventType);
-internal sealed record PasskeyResult(string? ErrorCode, PasskeyCeremonyRow? Ceremony = null, AuthenticationGrant? Grant = null);
+internal sealed record PasskeyResult(string? ErrorCode, PasskeyCeremonyRow? Ceremony = null, AuthenticationGrant? Grant = null, TotpPendingAuthenticationRow? PendingMfa = null);

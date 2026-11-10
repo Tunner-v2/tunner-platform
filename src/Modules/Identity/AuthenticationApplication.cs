@@ -30,9 +30,10 @@ internal sealed class AuthenticationPasswordWork
 }
 
 /// <summary>Identity owner; transactions contain state plus outbox, never HTTP or Product sessions.</summary>
-internal sealed class AuthenticationApplication(IdentityPersistenceDbContext database, IAuthenticationPolicySource policies,
+internal sealed partial class AuthenticationApplication(IdentityPersistenceDbContext database, IAuthenticationPolicySource policies,
     IAccountAuthenticationAccessSource access, AuthenticationPartitionKey partitions, IDataProtectionProvider protection,
-    AuthenticationPasswordWork passwordWork, TimeProvider clock, IEnumerable<IPasskeyPolicySource> passkeyPolicies) : IAuthenticationSessionMaintenance
+    AuthenticationPasswordWork passwordWork, TimeProvider clock, IEnumerable<IPasskeyPolicySource> passkeyPolicies,
+    IEnumerable<ITotpPolicySource>? totpPolicies = null, IEnumerable<ITotpMfaRequirementSource>? mfaRequirements = null) : IAuthenticationSessionMaintenance
 {
     private readonly IDataProtector ticketProtection = protection.CreateProtector("Tunner.User.Session.Ticket.v1");
     private readonly IDataProtector keyProtection = protection.CreateProtector("Tunner.User.Session.RetryKey.v1");
@@ -60,6 +61,14 @@ internal sealed class AuthenticationApplication(IdentityPersistenceDbContext dat
         var user = await (from contact in database.VerifiedContacts join candidate in database.Users on contact.AccountId equals candidate.AccountId
             where contact.NormalizedEmail == normalized && contact.AnonymizedAtUtc == null && contact.State == ContactVerificationState.Verified &&
                 candidate.EmailConfirmed && candidate.NormalizedEmail == normalized select candidate).SingleOrDefaultAsync(ct).ConfigureAwait(false);
+        if (user is not null && CurrentTotpPolicy(clock.GetUtcNow()) is not null)
+        {
+            if (caller.PreviousSessionId is { } previousSession) await LockSessionAsync(previousSession, ct).ConfigureAwait(false);
+            _ = await database.Accounts.FromSqlInterpolated($"SELECT * FROM accounts.accounts WHERE account_id={user.AccountId} FOR NO KEY UPDATE").SingleAsync(ct).ConfigureAwait(false);
+            _ = await database.Users.FromSqlInterpolated($"SELECT * FROM identity.\"AspNetUsers\" WHERE \"AccountId\"={user.AccountId} FOR NO KEY UPDATE").SingleAsync(ct).ConfigureAwait(false);
+            await database.Entry(user).ReloadAsync(ct).ConfigureAwait(false);
+            _ = await database.VerifiedContacts.FromSqlInterpolated($"SELECT * FROM accounts.verified_contacts WHERE account_id={user.AccountId} ORDER BY contact_id FOR SHARE").ToArrayAsync(ct).ConfigureAwait(false);
+        }
         var verification = passwordWork.Verify(policy, user, command.Password);
         if (user is null || verification == PasswordVerificationResult.Failed || string.IsNullOrWhiteSpace(user.SecurityStamp))
             return await RejectAsync(transaction, now, ct).ConfigureAwait(false);
@@ -79,15 +88,20 @@ internal sealed class AuthenticationApplication(IdentityPersistenceDbContext dat
             await database.SaveChangesAsync(ct).ConfigureAwait(false); await transaction.CommitAsync(ct).ConfigureAwait(false);
             return valid is null ? new("AUTHENTICATION_FAILED", null) : new(null, new AuthenticationGrant(keyProtection.Unprotect(prior.ProtectedKey), valid));
         }
+        if (verification == PasswordVerificationResult.SuccessRehashNeeded)
+        {
+            user.PasswordHash = hasher.HashPassword(user, command.Password); user.ConcurrencyStamp = Guid.NewGuid().ToString("N");
+        }
+        var mfa = await PrepareTotpMfaAsync(caller, command.IdempotencyKey, command.RememberMe, user, identifier, "pwd", policy.PasswordAssurance, now, ct).ConfigureAwait(false);
+        if (mfa is not null)
+        {
+            await database.SaveChangesAsync(ct).ConfigureAwait(false); await transaction.CommitAsync(ct).ConfigureAwait(false); return mfa;
+        }
         if (caller.PreviousSessionId is { } previous)
         {
             await LockSessionAsync(previous, ct).ConfigureAwait(false);
             var old = await database.Set<AuthenticationSessionRow>().SingleOrDefaultAsync(x => x.SessionId == previous && x.Origin == caller.Origin && x.Scheme == AuthenticationIdentity.Scheme, ct).ConfigureAwait(false);
             if (old is not null) Revoke(old, now);
-        }
-        if (verification == PasswordVerificationResult.SuccessRehashNeeded)
-        {
-            user.PasswordHash = hasher.HashPassword(user, command.Password); user.ConcurrencyStamp = Guid.NewGuid().ToString("N");
         }
         var result = CreateSession(caller, command.IdempotencyKey, command.RememberMe, user, identifier, "pwd", policy.PasswordAssurance, policy, decision, now);
         await database.SaveChangesAsync(ct).ConfigureAwait(false); await transaction.CommitAsync(ct).ConfigureAwait(false);
@@ -96,7 +110,8 @@ internal sealed class AuthenticationApplication(IdentityPersistenceDbContext dat
 
     private AuthenticationAttempt CreateSession(AuthenticationCaller caller, Guid idempotencyKey, bool rememberMe, IdentityUserAdapter user,
         string identifier, string method, string assurance, AuthenticationPolicy policy, AccountAuthenticationAccessDecision decision, DateTimeOffset now,
-        Guid? credentialReference = null, string? passkeyPolicyVersion = null, string? passkeyAssuranceKey = null)
+        Guid? credentialReference = null, string? passkeyPolicyVersion = null, string? passkeyAssuranceKey = null,
+        TotpAuthenticatorRow? totp = null, string? totpPolicyVersion = null, string? requirementPolicyVersion = null)
     {
         var sessionId = Guid.NewGuid(); var key = Convert.ToHexString(RandomNumberGenerator.GetBytes(32));
         var absolute = rememberMe ? policy.RememberAbsoluteLifetime : policy.AbsoluteLifetime;
@@ -115,6 +130,7 @@ internal sealed class AuthenticationApplication(IdentityPersistenceDbContext dat
             AccountId = user.AccountId, SecurityStampDigest = AuthenticationIdentity.Digest(user.SecurityStamp!), Scheme = AuthenticationIdentity.Scheme,
             Origin = caller.Origin, AuthenticationMethods = method, Assurance = assurance,
             PasskeyCredentialReference = credentialReference, PasskeyPolicyVersion = passkeyPolicyVersion, PasskeyAssuranceKey = passkeyAssuranceKey, AuthenticatedAt = ticket.Properties.IssuedUtc!.Value, LastSeenAt = ticket.Properties.IssuedUtc.Value,
+            TotpAuthenticatorReference = totp?.AuthenticatorReference, TotpGeneration = totp?.Generation, TotpAuthenticatorVersion = totp?.Version, TotpPolicyVersion = totpPolicyVersion, MfaRequirementPolicyVersion = requirementPolicyVersion,
             ExpiresAt = ticket.Properties.ExpiresUtc!.Value, IdleTicks = idle.Ticks, PolicyVersion = policy.Version, AccessPolicyVersion = decision.PolicyVersion,
             AccessEvidenceReference = decision.EvidenceReference, ProcessingReference = policy.ProcessingReference, RetentionReference = policy.RetentionReference,
             OperationId = "OP-" + Guid.NewGuid().ToString("N"), CorrelationId = Guid.NewGuid().ToString("N"), Version = 1
@@ -136,6 +152,9 @@ internal sealed class AuthenticationApplication(IdentityPersistenceDbContext dat
         if (decision?.Allowed != true || !user.EmailConfirmed || string.IsNullOrWhiteSpace(user.SecurityStamp) ||
             !await database.VerifiedContacts.AnyAsync(x => x.AccountId == user.AccountId && x.State == ContactVerificationState.Verified &&
                 x.AnonymizedAtUtc == null && x.NormalizedEmail == user.NormalizedEmail, ct).ConfigureAwait(false)) return new("AUTHENTICATION_FAILED", null);
+        var mfa = await PrepareTotpMfaAsync(caller, requestId, rememberMe, user, credential.CredentialDigest, "passkey", passkeyPolicy.RequireAssurance(assuranceKey), now, ct,
+            credential, passkeyPolicy.Version, assuranceKey).ConfigureAwait(false);
+        if (mfa is not null) return mfa;
         if (caller.PreviousSessionId is { } previous)
         {
             await LockSessionAsync(previous, ct).ConfigureAwait(false);
@@ -147,6 +166,7 @@ internal sealed class AuthenticationApplication(IdentityPersistenceDbContext dat
     }
     internal async Task<bool> MethodIsCurrentAsync(AuthenticationSessionRow row, AuthenticationPolicy policy, DateTimeOffset now, CancellationToken ct)
     {
+        if (row.TotpAuthenticatorReference is not null) return await TotpSessionCurrentAsync(row, policy, now, ct).ConfigureAwait(false);
         if (row.AuthenticationMethods == "pwd") return row.PasskeyCredentialReference is null && row.Assurance == policy.PasswordAssurance;
         if (row.AuthenticationMethods != "passkey" || row.PasskeyCredentialReference is not { } credential || row.PasskeyAssuranceKey is null) return false;
         var source = passkeyPolicies.SingleOrDefault(); if (source is null) return false;
@@ -175,6 +195,7 @@ internal sealed class AuthenticationApplication(IdentityPersistenceDbContext dat
     internal async Task<AuthenticationTerminalVerification?> VerifyTerminationAsync(StepUpCaller caller, StepUpOperation operation, AuthenticationSessionTerminationReceipt receipt,
         long validatedSessionVersion, AuthenticationPolicy policy, DateTimeOffset now, CancellationToken ct)
     {
+        if (receipt.AuthenticatorType == "TOTP") return await VerifyTotpTerminationAsync(caller, operation, receipt, validatedSessionVersion, policy, now, ct).ConfigureAwait(false);
         var row = await database.Set<AuthenticationSessionRow>().AsNoTracking().SingleOrDefaultAsync(x => x.SessionId == caller.SessionId, ct).ConfigureAwait(false);
         if (operation.Scope != PasskeyApplication.RevocationScope || operation.ResourceId != receipt.CredentialReference.ToString("N") ||
             operation.ExpectedVersion + 1 != receipt.CredentialVersion || receipt.PriorSessionVersion != validatedSessionVersion ||
@@ -202,8 +223,14 @@ internal sealed class AuthenticationApplication(IdentityPersistenceDbContext dat
         return decision?.Allowed == true && decision.EffectiveInterval.Contains(decisionAt) && passkeyPolicies.Single().RequireEffective(decisionAt).Version == receipt.PasskeyPolicyVersion
             ? new AuthenticationTerminalVerification(decision.EffectiveInterval) : null;
     }
-    internal async Task<PasskeyCredentialRow?> ReadProofCredentialAsync(StepUpProofRow proof, CancellationToken ct, bool refresh = false)
+    internal async Task<AuthenticatorProofSource?> ReadProofCredentialAsync(StepUpProofRow proof, CancellationToken ct, bool refresh = false)
     {
+        if (proof.TotpAuthenticatorReference is { } factorId)
+        {
+            var factor = await database.Set<TotpAuthenticatorRow>().SingleOrDefaultAsync(x => x.AuthenticatorReference == factorId && x.AccountId == proof.AccountId, ct).ConfigureAwait(false);
+            if (refresh && factor is not null) { await database.Entry(factor).ReloadAsync(ct).ConfigureAwait(false); if (database.Entry(factor).State == EntityState.Detached) return null; }
+            return factor is null ? null : new(null, factor);
+        }
         if (proof.PasskeyCredentialReference is not { } id) return null;
         var credential = await database.Set<PasskeyCredentialRow>().SingleOrDefaultAsync(x => x.CredentialReference == id && x.AccountId == proof.AccountId, ct).ConfigureAwait(false);
         // Issuance and execution use separate transactions on one scoped context. Refresh at the pre-action
@@ -213,11 +240,16 @@ internal sealed class AuthenticationApplication(IdentityPersistenceDbContext dat
             await database.Entry(credential).ReloadAsync(ct).ConfigureAwait(false);
             if (database.Entry(credential).State == EntityState.Detached) return null;
         }
-        return credential;
+        return credential is null ? null : new(credential, null);
     }
-    internal bool ProofMethodCurrentAt(StepUpProofRow proof, PasskeyCredentialRow? credential, StepUpOperation operation, DateTimeOffset decisionAt, bool appliedOwnRevocation)
+    internal bool ProofMethodCurrentAt(StepUpProofRow proof, PasskeyCredentialRow? credential, StepUpOperation operation, DateTimeOffset decisionAt, bool appliedOwnRevocation) =>
+        ProofMethodCurrentAt(proof, credential is null ? null : new AuthenticatorProofSource(credential, null), operation, decisionAt, appliedOwnRevocation);
+    internal bool ProofMethodCurrentAt(StepUpProofRow proof, AuthenticatorProofSource? source, StepUpOperation operation, DateTimeOffset decisionAt, bool appliedOwnRevocation)
     {
+        if (proof.AuthenticationMethod == "totp") return TotpProofCurrentAt(proof, source?.Totp, operation, decisionAt, appliedOwnRevocation);
+        if (proof.TotpAuthenticatorReference is not null || proof.TotpGeneration is not null || proof.TotpAuthenticatorVersion is not null || proof.TotpPolicyVersion is not null) return false;
         if (proof.AuthenticationMethod == "pwd") return proof.PasskeyCredentialReference is null && proof.PasskeyPolicyVersion is null && proof.PasskeyAssuranceKey is null;
+        var credential = source?.Passkey;
         var current = passkeyPolicies.SingleOrDefault()?.RequireEffective(decisionAt);
         if (current is null || current.Version != proof.PasskeyPolicyVersion || current.Origin != proof.Origin || proof.PasskeyAssuranceKey is null ||
             proof.AuthenticationMethod != "passkey:" + proof.PasskeyAssuranceKey || credential is null || credential.AccountId != proof.AccountId || credential.CredentialReference != proof.PasskeyCredentialReference) return false;
@@ -240,12 +272,14 @@ internal sealed class AuthenticationApplication(IdentityPersistenceDbContext dat
     }
     internal bool MethodFactsCurrentAt(AuthenticationSessionRow row, AuthenticationPolicy policy, DateTimeOffset decisionAt)
     {
+        if (row.TotpAuthenticatorReference is not null) return TotpSessionFactsCurrentAt(row, policy, decisionAt);
         if (row.AuthenticationMethods == "pwd") return row.PasskeyCredentialReference is null && row.Assurance == policy.PasswordAssurance;
         var current = passkeyPolicies.SingleOrDefault()?.RequireEffective(decisionAt);
         return row.AuthenticationMethods == "passkey" && current is not null && current.Origin == row.Origin && row.PasskeyAssuranceKey is not null && current.RequireAssurance(row.PasskeyAssuranceKey) == row.Assurance;
     }
     internal bool PasskeyOutcomeCurrentAt(UserStepUpOperationApplyOutcome outcome, StepUpCaller caller, StepUpOperation operation, DateTimeOffset decisionAt)
     {
+        if (outcome.TotpValidity is not null) return TotpOutcomeCurrentAt(outcome, caller, operation, decisionAt);
         if (outcome.PasskeyValidity is not { } validity) return outcome.Receipt is null;
         var row = database.ChangeTracker.Entries<PasskeyCeremonyRow>().Select(x => x.Entity).SingleOrDefault(x => x.CeremonyId == validity.CeremonyId);
         var current = passkeyPolicies.SingleOrDefault()?.RequireEffective(decisionAt);
@@ -261,6 +295,15 @@ internal sealed class AuthenticationApplication(IdentityPersistenceDbContext dat
     }
     private async Task RevokeInvalidMethodAsync(AuthenticationSessionRow row, DateTimeOffset now, CancellationToken ct)
     {
+        if (row.TotpAuthenticatorReference is { } factorId)
+        {
+            var factor = await database.Set<TotpAuthenticatorRow>().AsNoTracking().SingleOrDefaultAsync(x => x.AuthenticatorReference == factorId && x.AccountId == row.AccountId, ct).ConfigureAwait(false);
+            if (factor is { State: "DISABLED", DisableSessionEffect: nameof(TotpSessionEffect.RevokeFactorSessions) })
+            {
+                row.TerminationCause = "TOTP_DISABLED"; row.TerminationPolicyVersion = factor.DisablePolicyVersion; row.TerminationCredentialVersion = factor.Version;
+                End(row, "REVOKED", "TunnerSessionRevoked", now, factor.DisableOperationId, factor.DisableCorrelationId); return;
+            }
+        }
         var credential = row.PasskeyCredentialReference is { } id
             ? await database.Set<PasskeyCredentialRow>().AsNoTracking().SingleOrDefaultAsync(x => x.CredentialReference == id && x.AccountId == row.AccountId, ct).ConfigureAwait(false) : null;
         if (credential is { State: "REVOKED", RevocationSessionEffect: nameof(PasskeyRevocationSessionEffect.RevokeCredentialSessions) })
@@ -272,7 +315,13 @@ internal sealed class AuthenticationApplication(IdentityPersistenceDbContext dat
     }
     internal async Task<AuthenticationGrant?> RecoverPasskeyGrantAsync(PasskeyCeremonyRow ceremony, AuthenticationCaller caller, CancellationToken ct)
     {
-        if (ceremony.ResultSessionId is not { } sessionId) return null;
+        var finalSession = ceremony.ResultSessionId;
+        if (finalSession is null)
+        {
+            var pending = await FindTotpMfaAsync(caller, ceremony.RequestId, ct).ConfigureAwait(false);
+            if (pending?.State == "COMPLETED" && pending.PrimaryMethod == "passkey" && pending.PasskeyCredentialReference == ceremony.CredentialReference) finalSession = pending.ResultSessionId;
+        }
+        if (finalSession is not { } sessionId) return null;
         await LockSessionAsync(sessionId, ct).ConfigureAwait(false);
         var row = await database.Set<AuthenticationSessionRow>().SingleOrDefaultAsync(x => x.SessionId == sessionId && x.BrowserDigest == caller.BrowserDigest && x.IdempotencyKey == ceremony.RequestId, ct).ConfigureAwait(false);
         if (row is null) return null;

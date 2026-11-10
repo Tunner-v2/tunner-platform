@@ -20,6 +20,11 @@ internal sealed class AuthenticationSessionRow
     public Guid? PasskeyCredentialReference { get; set; }
     public string? PasskeyPolicyVersion { get; set; }
     public string? PasskeyAssuranceKey { get; set; }
+    public Guid? TotpAuthenticatorReference { get; set; }
+    public Guid? TotpGeneration { get; set; }
+    public long? TotpAuthenticatorVersion { get; set; }
+    public string? TotpPolicyVersion { get; set; }
+    public string? MfaRequirementPolicyVersion { get; set; }
     public string? TerminationCause { get; set; }
     public string? TerminationPolicyVersion { get; set; }
     public long? TerminationCredentialVersion { get; set; }
@@ -58,8 +63,8 @@ internal static class AuthenticationModelConfiguration
                 t.HasCheckConstraint("ck_session_state", "state IN ('ACTIVE','REVOKED','EXPIRED')");
                 t.HasCheckConstraint("ck_session_bounds", "expires_at > authenticated_at AND last_seen_at >= authenticated_at AND idle_ticks > 0 AND version >= 1");
                 t.HasCheckConstraint("ck_session_key", "length(key_digest) = 64 AND length(browser_digest) = 64");
-                t.HasCheckConstraint("ck_session_method", "(authentication_methods='pwd' AND passkey_credential_reference IS NULL AND passkey_policy_version IS NULL AND passkey_assurance_key IS NULL) OR (authentication_methods='passkey' AND passkey_credential_reference IS NOT NULL AND passkey_policy_version IS NOT NULL AND passkey_assurance_key IS NOT NULL)");
-                t.HasCheckConstraint("ck_session_termination", "(termination_cause IS NULL AND termination_policy_version IS NULL AND termination_credential_version IS NULL) OR (state='REVOKED' AND authentication_methods='passkey' AND termination_cause='PASSKEY_REVOKED' AND termination_policy_version IS NOT NULL AND termination_credential_version IS NOT NULL AND termination_credential_version >= 2)");
+                t.HasCheckConstraint("ck_session_method", "((authentication_methods IN ('pwd','pwd+totp') AND passkey_credential_reference IS NULL AND passkey_policy_version IS NULL AND passkey_assurance_key IS NULL) OR (authentication_methods IN ('passkey','passkey+totp') AND passkey_credential_reference IS NOT NULL AND passkey_policy_version IS NOT NULL AND passkey_assurance_key IS NOT NULL)) AND ((authentication_methods IN ('pwd','passkey') AND totp_authenticator_reference IS NULL AND totp_generation IS NULL AND totp_authenticator_version IS NULL AND totp_policy_version IS NULL AND mfa_requirement_policy_version IS NULL) OR (authentication_methods IN ('pwd+totp','passkey+totp') AND totp_authenticator_reference IS NOT NULL AND totp_generation IS NOT NULL AND totp_authenticator_version>=2 AND totp_policy_version IS NOT NULL AND mfa_requirement_policy_version IS NOT NULL))");
+                t.HasCheckConstraint("ck_session_termination", "(termination_cause IS NULL AND termination_policy_version IS NULL AND termination_credential_version IS NULL) OR (state='REVOKED' AND termination_cause IN ('PASSKEY_REVOKED','TOTP_DISABLED') AND termination_policy_version IS NOT NULL AND termination_credential_version IS NOT NULL AND termination_credential_version >= 2)");
             });
             b.HasKey(x => x.SessionId); b.Property(x => x.SessionId).ValueGeneratedNever();
             b.HasIndex(x => x.KeyDigest).IsUnique();
@@ -67,6 +72,7 @@ internal static class AuthenticationModelConfiguration
             b.HasIndex(x => x.AccountId);
             b.Property(x => x.Version).IsConcurrencyToken();
             b.HasOne<AccountRow>().WithMany().HasForeignKey(x => x.AccountId).OnDelete(DeleteBehavior.Restrict);
+            b.HasOne<TotpAuthenticatorRow>().WithMany().HasForeignKey(x => x.TotpAuthenticatorReference).OnDelete(DeleteBehavior.Restrict);
         });
         model.Entity<AuthenticationAbuseRow>(b =>
         {

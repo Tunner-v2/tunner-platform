@@ -113,7 +113,7 @@ internal sealed class AuthenticationGrant(string key, AuthenticationTicket ticke
     internal AuthenticationTicket Ticket { get; } = ticket;
     public override string ToString() => nameof(AuthenticationGrant);
 }
-internal sealed record AuthenticationAttempt(string? ErrorCode, AuthenticationGrant? Grant);
+internal sealed record AuthenticationAttempt(string? ErrorCode, AuthenticationGrant? Grant, TotpPendingAuthenticationRow? PendingMfa = null);
 
 internal static class AuthenticationIdentity
 {

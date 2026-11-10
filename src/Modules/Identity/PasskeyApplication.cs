@@ -236,6 +236,8 @@ internal sealed partial class PasskeyApplication(IdentityPersistenceDbContext da
         if (row.State == "COMPLETED")
         {
             if (row.RequestDigest != requestDigest) return await Finish(transaction, new PasskeyResult("VERSION_CONFLICT"), ct).ConfigureAwait(false);
+            var pending = await authentication.FindTotpMfaAsync(caller, row.RequestId, ct).ConfigureAwait(false);
+            if (pending is { State: "PENDING" }) return await Finish(transaction, new PasskeyResult(null, row, PendingMfa: pending), ct).ConfigureAwait(false);
             var recovered = await authentication.RecoverPasskeyGrantAsync(row, caller, ct).ConfigureAwait(false);
             return await Finish(transaction, new PasskeyResult(recovered is null ? "AUTHENTICATION_FAILED" : null, row, recovered), ct).ConfigureAwait(false);
         }
@@ -271,11 +273,11 @@ internal sealed partial class PasskeyApplication(IdentityPersistenceDbContext da
         {
             return await RollbackRejectedSignIn(transaction, command.CeremonyId, issued.ErrorCode ?? "AUTHENTICATION_FAILED", ct).ConfigureAwait(false);
         }
-        row.ResultSessionId = AuthenticationIdentity.SessionId(issued.Grant!.Ticket.Principal); row.AccountId = credential.AccountId;
+        row.ResultSessionId = issued.Grant is null ? null : AuthenticationIdentity.SessionId(issued.Grant.Ticket.Principal); row.AccountId = credential.AccountId;
         row.CredentialReference = credential.CredentialReference; row.RequestDigest = requestDigest;
         credential.LastUsedAt = clock.GetUtcNow(); credential.UsageVersion++;
         End(row, "COMPLETED", clock.GetUtcNow()); Event(row, "PasskeyAuthenticated", clock.GetUtcNow());
-        return await Finish(transaction, new PasskeyResult(null, row, issued.Grant), ct).ConfigureAwait(false);
+        return await Finish(transaction, new PasskeyResult(null, row, issued.Grant, issued.PendingMfa), ct).ConfigureAwait(false);
     }
     private async Task<PasskeyResult> RollbackRejectedSignIn(IDbContextTransaction transaction, Guid ceremonyId, string error, CancellationToken ct)
     {

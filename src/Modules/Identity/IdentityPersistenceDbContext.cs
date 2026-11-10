@@ -23,6 +23,7 @@ public sealed class IdentityPersistenceDbContext(DbContextOptions<IdentityPersis
         AuthenticationModelConfiguration.Configure(builder);
         StepUpModelConfiguration.Configure(builder);
         PasskeyModelConfiguration.Configure(builder);
+        TotpModelConfiguration.Configure(builder);
     }
 
     public async Task<AccountSnapshot?> ReadAccountAsync(string accountId, CancellationToken cancellationToken = default)
