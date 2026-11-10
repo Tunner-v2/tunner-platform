@@ -19,11 +19,11 @@ export const assertionCompleted=z.object({status:z.literal('COMPLETED'),requestI
 export const terminalCompleted=z.object({status:z.literal('COMPLETED'),requestId:uuid,ceremonyId:uuid,signInRequired:z.literal(true)});
 
 export class PasskeyHttpError extends Error {
-  constructor(readonly status:number,readonly code:string){super('The passkey request could not be completed.');}
+  constructor(readonly status:number,readonly code:string,readonly details:unknown=null){super('The passkey request could not be completed.');}
 }
 export async function requestJson(path:string,options:{csrfToken?:string;body?:unknown;signal?:AbortSignal}={}):Promise<unknown>{
   const response=await fetch(path,{method:options.body===undefined?'GET':'POST',credentials:'same-origin',cache:'no-store',redirect:'error',...(options.signal?{signal:options.signal}:{}),...(options.body===undefined?{}:{headers:{'Content-Type':'application/json',...(options.csrfToken?{'X-Tunner-CSRF':options.csrfToken}:{})},body:JSON.stringify(options.body)})});
-  if(!response.ok){let code='DEPENDENCY_UNAVAILABLE';try{const problem=await response.json() as {error_code?:unknown;code?:unknown};const candidate=problem.error_code??problem.code;if(typeof candidate==='string')code=candidate;}catch{/* HTTP status remains authoritative. */}throw new PasskeyHttpError(response.status,code);}
+  if(!response.ok){let code='DEPENDENCY_UNAVAILABLE';let details:unknown=null;try{const problem=await response.json() as {error_code?:unknown;code?:unknown};details=problem;const candidate=problem.error_code??problem.code;if(typeof candidate==='string')code=candidate;}catch{/* HTTP status remains authoritative. */}throw new PasskeyHttpError(response.status,code,details);}
   return response.json() as Promise<unknown>;
 }
 export function sameOperation(expected:Pick<PasskeyOperation,'requestId'|'ceremonyId'|'kind'>,actual:Pick<PasskeyOperation,'requestId'|'ceremonyId'|'kind'>){return expected.requestId===actual.requestId&&expected.ceremonyId===actual.ceremonyId&&expected.kind===actual.kind;}

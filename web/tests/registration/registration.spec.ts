@@ -41,7 +41,7 @@ test('proof errors/version/resend lead to normal Personal Information and under1
  await expect(page.getByLabel('Primary email')).toHaveValue('fixture@example.test');await expect(page.getByLabel('Primary email')).toHaveAttribute('readonly','');
  await snapshot(page,'personal-desktop');await fillPersonal(page);
  await page.route('**/registration/personal-information',async route=>{const body=route.request().postDataJSON() as Record<string,unknown>;expect(body).toMatchObject({expectedVersion:4,dateOfBirth:'2015-01-01',fullName:'Fixture Person',displayName:'Fixture'});expect(body).not.toHaveProperty('independentCommercialEligible');await route.fulfill({json:complete()});});
- await page.getByRole('button',{name:'Continue',exact:true}).click();await expect(page.getByRole('heading',{name:'Your email is verified'})).toBeVisible();await expect(page.getByRole('link',{name:'Sign in',exact:true})).toHaveCount(0);await expect(page.locator('input[type=date]')).toHaveCount(0);await snapshot(page,'ready-desktop');
+ await page.getByRole('button',{name:'Continue',exact:true}).click();await expect(page.getByRole('heading',{name:'Your email is verified'})).toBeVisible();await expect(page.getByRole('link',{name:'Sign in',exact:true})).toHaveAttribute('href','/login');await expect(page.locator('input[type=date]')).toHaveCount(0);await snapshot(page,'ready-desktop');
  expect(await page.evaluate(()=>({local:localStorage.length,session:sessionStorage.length}))).toEqual({local:0,session:0});
 });
 test('policy-required consent uses trusted status and cannot be asserted by a browser checkbox',async({page})=>{

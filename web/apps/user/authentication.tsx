@@ -89,6 +89,7 @@ function Screens({initial}:{initial:Bootstrap}){
   }
   function changed(){setError(undefined);}
   if(entryUnavailable)return <ContentUnavailable/>;
+  if(signedIn){try{requirePublished(boot.content,boot.locale,['signedIn.security']);}catch{return <ContentUnavailable/>;}}
   if(boot.passkeyAvailable===true||boot.passkeyRecovery){try{requirePublished(boot.content,boot.locale,loginPasskeyKeys);parseAuthenticationPasskeyRecovery(boot.passkeyRecovery);if(boot.passkeyAvailable===true&&(!Number.isInteger(boot.maximumCredentialJsonBytes)||boot.maximumCredentialJsonBytes!<1024||boot.maximumCredentialJsonBytes!>1048576))throw new Error('Explicit passkey bounds required.');}catch{return <ContentUnavailable/>;}}
   return <ContentProvider locale={boot.locale} audience="authentication" resolve={key=>boot.content[key]}><div className="authentication-page">
     <img className="authentication-glow indigo" src="/registration/assets/login-bg-indigo.svg" alt=""/><img className="authentication-glow violet" src="/registration/assets/login-bg-violet.svg" alt=""/>
@@ -100,6 +101,7 @@ function Screens({initial}:{initial:Bootstrap}){
           <div className="authentication-intro"><h1 ref={heading} tabIndex={-1}><ContentText contentKey="signedIn.heading"/></h1><p><ContentText contentKey="signedIn.description"/></p></div>
           <aside className="authentication-note"><strong><ContentText contentKey="signedIn.note.heading"/></strong><p><ContentText contentKey="signedIn.note.description"/></p></aside>
           <PrimaryButton labelKey="signedIn.signOut" disabled={logoutBusy} aria-busy={logoutBusy} onClick={()=>void signOut()}/>
+          <a className="tn-primary-button authentication-security" data-presentation="standard" data-appearance="outline" href="/account/security"><ContentText contentKey="signedIn.security"/></a>
           <p className="authentication-caption"><ContentText contentKey="signedIn.caption"/></p>
         </>}</>:<>
           <div className="authentication-intro"><h1 ref={heading} tabIndex={-1}><ContentText contentKey="login.heading"/></h1><p><ContentText contentKey="login.description"/></p></div>

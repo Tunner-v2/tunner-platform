@@ -8,6 +8,7 @@ import './registration.css';
 import { registrationRoutes, stageForAction } from './routes';
 import type { RegistrationStage } from './routes';
 import { registrationSchema, verificationSchema, personalInformationSchema } from './validation';
+import { requirePublished } from './passkeys.api';
 
 interface Bootstrap {
   csrfToken: string; registrationKey?: string; serverTime: string; policyVersion: string; termsVersion: string; privacyVersion: string;
@@ -118,6 +119,7 @@ function Registration({boot}:{boot:Bootstrap}) {
   const expiry=operation?.expiresAt?new Date(operation.expiresAt):undefined;
   const resendDisabled=busy||!operation||Boolean(operation.resendAfter&&now<Date.parse(operation.resendAfter));
   if(guardBusy||guardFailed)return <ContentUnavailable />;
+  if(stage==='ready'){try{requirePublished(boot.content,boot.locale,['registration.ready.signIn']);}catch{return <ContentUnavailable/>;}}
   return <div className="registration-page">
     <img className="registration-glow indigo" src={'/registration/assets/'+scene+'-imgBgGlowIndigo.svg'} alt="" aria-hidden="true" />
     <img className="registration-glow violet" src={'/registration/assets/'+scene+'-imgBgGlowViolet.svg'} alt="" aria-hidden="true" />
@@ -169,6 +171,7 @@ function Registration({boot}:{boot:Bootstrap}) {
           <h1 ref={heading} tabIndex={-1}><ContentText contentKey="registration.ready.heading" /></h1>
           <p className="subtitle"><ContentText contentKey="registration.ready.description" /></p>
           <aside className="verification-note"><strong><ContentText contentKey="registration.context.heading" /></strong><p><ContentText contentKey="registration.ready.boundary" /></p></aside>
+          <a className="tn-primary-button registration-ready-sign-in" data-presentation="spacious" data-appearance="filled" href="/login"><ContentText contentKey="registration.ready.signIn"/></a>
           <p className="ready-help"><ContentText contentKey="registration.ready.next" /></p>
           {boot.supportUri&&<p className="ready-support"><span><ContentText contentKey="registration.ready.needHelp" /></span> <a href={boot.supportUri}><ContentText contentKey="registration.ready.contact" /></a></p>}
         </>}

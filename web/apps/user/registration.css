@@ -76,6 +76,9 @@ body { margin:0; }
 .wrong-email { display:inline-block; min-inline-size:90px; }
 .ready-support { display:flex; align-items:baseline; gap:4px; }
 .ready-support>span { min-inline-size:76px; }
+.registration-card.ready .registration-ready-sign-in{display:flex;margin-block-start:36px;color:var(--tn-component-button-color);text-decoration:none;block-size:48px;font-size:var(--tn-component-button-size);line-height:var(--tn-component-button-line)}
+.registration-card.ready .ready-help{margin-block-start:34px}
+@media(max-width:600px){.registration-card.ready .registration-ready-sign-in{margin-block-start:28px}.registration-card.ready .ready-help{margin-block-start:24px}}
 
 .registration-card.verify .tn-input::placeholder { color:var(--tn-semantic-text); font-weight:600; }
 
