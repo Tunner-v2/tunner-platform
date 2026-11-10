@@ -1,0 +1,2511 @@
+{
+  "schema_version": 1,
+  "scope_id": "TUN-P2-005",
+  "result": "PASS",
+  "tested_commit_sha": "6e562db102ce75d5ed478a15e2970ff55ab98fef",
+  "inventory_sha256": "ae982b8df6310b2c486637db8857e93c5a63090a152c0bf50d832a121a4dcbac",
+  "owned_behavior_paths": [
+    "docs/contracts/ui-inventory.json",
+    "src/Modules/Identity/AuthenticationEndpoints.cs",
+    "src/Modules/Identity/IdentityWebAssets.cs",
+    "web/apps/user/authentication.css",
+    "web/apps/user/authentication.routes.ts",
+    "web/apps/user/authentication.tsx",
+    "web/apps/user/authentication.validation.ts",
+    "web/apps/user/passkeys.api.ts",
+    "web/apps/user/passkeys.native.ts",
+    "web/apps/user/passkeys.sign-in.tsx",
+    "src/Modules/Identity/TotpEndpoints.cs",
+    "web/apps/user/totp.api.ts",
+    "web/apps/user/totp.code.tsx",
+    "web/apps/user/totp.content-keys.ts",
+    "web/apps/user/totp.css",
+    "web/apps/user/totp.mfa.tsx",
+    "web/apps/user/totp.picker.tsx",
+    "web/apps/user/totp.routes.ts",
+    "web/apps/user/totp.validation.ts"
+  ],
+  "historical_ui_compliance": {
+    "path": "governance/evidence/TUN-P2-005-UI-COMPLIANCE.json",
+    "sha256": "5a8e600f98cd4636a81bca0d108f795daf70eab8ce99947ef99644d986cec2ae",
+    "git_ref": "20ccd936b483178cade6a0a1ce85dce84ef39af4:governance/evidence/TUN-P2-005-UI-COMPLIANCE.json",
+    "tested_commit_sha": "745f9c2dc1b9060c4be0318b33b4019ae77e9e36",
+    "owned_behavior_paths": [
+      "docs/contracts/ui-inventory.json",
+      "src/Modules/Identity/AuthenticationEndpoints.cs",
+      "src/Modules/Identity/IdentityWebAssets.cs",
+      "web/apps/user/authentication.css",
+      "web/apps/user/authentication.routes.ts",
+      "web/apps/user/authentication.tsx",
+      "web/apps/user/authentication.validation.ts",
+      "web/apps/user/passkeys.api.ts",
+      "web/apps/user/passkeys.native.ts",
+      "web/apps/user/passkeys.sign-in.tsx"
+    ],
+    "item_ids": [
+      "U-AUTH-01",
+      "U-AUTH-SIGNED-IN",
+      "FORM-LOGIN"
+    ]
+  },
+  "items": [
+    {
+      "id": "U-AUTH-01",
+      "figma_refs": [
+        {
+          "file_key": "apNbwvAgdn1xIxYH1oiaSC",
+          "node_id": "2:4"
+        }
+      ],
+      "additional_observed_design_refs": [],
+      "checks": [
+        {
+          "id": "URL-001",
+          "result": "PASS",
+          "description": "Observed canonical full-screen pathname transitions in named route cases. Item-specific basis: Login card, glows and spacing match actual Figma2:4 with existing scoped truthful provider/availability/contrast adaptations. New imported TOTP modules preserve the parent Login variant; separate008MFA ownership and real journey are not approved here.",
+          "case_groups": [
+            "authentication/Login fidelity accessible fields at1440,1024,768,390,320",
+            "authentication/canonical direct entry refresh history",
+            "authentication/exact lost-result and unrelated session rejection",
+            "totp/policy-required MFA explicit factor choice before final session"
+          ],
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/manifest.json",
+              "sha256": "03ada820284b4f14354d2a10c912831ebfb3f181b22b215d0e35f53ec2663bc4",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/manifest.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/manifest.json",
+              "sha256": "fdde6352a2f927feacf576d2484614df77f73e4c88116f42a95cc9b163db765c",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/manifest.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/render-manifest-final.json",
+              "sha256": "5be639e38a6f67ad65ff454a9b229f0bf68af8f3e9487369301b951542c17887",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/render-manifest-final.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/navigation-results.json",
+              "sha256": "667558ae2fb966497abd7983511c3441dfc321fcd06da51a132225d72a2f0971",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/navigation-results.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/contrast-resolution-final.json",
+              "sha256": "68ef7dff051dc6dfa5c5266532b7978d58ed0a0444ad19cf1aa6e6b17d1323e0",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/contrast-resolution-final.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/legacy/authentication/login-1440.png",
+              "sha256": "b97005afb4f70e0ff947d0b48542bf578c9c31ca53090e1e3895f79553b93e32",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/legacy/authentication/login-1440.png"
+            },
+            {
+              "path": "governance/evidence/ui/authentication-20261028/reference/login-figma-1440.png",
+              "sha256": "b847c61833c053614ca4b33fa15d4231f4851ce0504b44c37668dc1fb5657d73"
+            }
+          ],
+          "boundary": "Existing parent item compatibility only; historical Product/scoped decisions are reused, never renewed or expanded."
+        },
+        {
+          "id": "URL-002",
+          "result": "PASS",
+          "description": "Query/fragment and forged history cannot replace a guarded owning pathname. Item-specific basis: Login card, glows and spacing match actual Figma2:4 with existing scoped truthful provider/availability/contrast adaptations. New imported TOTP modules preserve the parent Login variant; separate008MFA ownership and real journey are not approved here.",
+          "case_groups": [
+            "authentication/Login fidelity accessible fields at1440,1024,768,390,320",
+            "authentication/canonical direct entry refresh history",
+            "authentication/exact lost-result and unrelated session rejection",
+            "totp/policy-required MFA explicit factor choice before final session"
+          ],
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/manifest.json",
+              "sha256": "03ada820284b4f14354d2a10c912831ebfb3f181b22b215d0e35f53ec2663bc4",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/manifest.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/manifest.json",
+              "sha256": "fdde6352a2f927feacf576d2484614df77f73e4c88116f42a95cc9b163db765c",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/manifest.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/render-manifest-final.json",
+              "sha256": "5be639e38a6f67ad65ff454a9b229f0bf68af8f3e9487369301b951542c17887",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/render-manifest-final.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/navigation-results.json",
+              "sha256": "667558ae2fb966497abd7983511c3441dfc321fcd06da51a132225d72a2f0971",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/navigation-results.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/contrast-resolution-final.json",
+              "sha256": "68ef7dff051dc6dfa5c5266532b7978d58ed0a0444ad19cf1aa6e6b17d1323e0",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/contrast-resolution-final.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/legacy/authentication/login-1440.png",
+              "sha256": "b97005afb4f70e0ff947d0b48542bf578c9c31ca53090e1e3895f79553b93e32",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/legacy/authentication/login-1440.png"
+            },
+            {
+              "path": "governance/evidence/ui/authentication-20261028/reference/login-figma-1440.png",
+              "sha256": "b847c61833c053614ca4b33fa15d4231f4851ce0504b44c37668dc1fb5657d73"
+            }
+          ],
+          "boundary": "Existing parent item compatibility only; historical Product/scoped decisions are reused, never renewed or expanded."
+        },
+        {
+          "id": "URL-003",
+          "result": "PASS",
+          "description": "Named direct-entry, reload and Back/Forward cases reconstruct the actual owning server-metadata view. Item-specific basis: Login card, glows and spacing match actual Figma2:4 with existing scoped truthful provider/availability/contrast adaptations. New imported TOTP modules preserve the parent Login variant; separate008MFA ownership and real journey are not approved here.",
+          "case_groups": [
+            "authentication/Login fidelity accessible fields at1440,1024,768,390,320",
+            "authentication/canonical direct entry refresh history",
+            "authentication/exact lost-result and unrelated session rejection",
+            "totp/policy-required MFA explicit factor choice before final session"
+          ],
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/manifest.json",
+              "sha256": "03ada820284b4f14354d2a10c912831ebfb3f181b22b215d0e35f53ec2663bc4",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/manifest.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/manifest.json",
+              "sha256": "fdde6352a2f927feacf576d2484614df77f73e4c88116f42a95cc9b163db765c",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/manifest.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/render-manifest-final.json",
+              "sha256": "5be639e38a6f67ad65ff454a9b229f0bf68af8f3e9487369301b951542c17887",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/render-manifest-final.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/navigation-results.json",
+              "sha256": "667558ae2fb966497abd7983511c3441dfc321fcd06da51a132225d72a2f0971",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/navigation-results.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/contrast-resolution-final.json",
+              "sha256": "68ef7dff051dc6dfa5c5266532b7978d58ed0a0444ad19cf1aa6e6b17d1323e0",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/contrast-resolution-final.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/legacy/authentication/login-1440.png",
+              "sha256": "b97005afb4f70e0ff947d0b48542bf578c9c31ca53090e1e3895f79553b93e32",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/legacy/authentication/login-1440.png"
+            },
+            {
+              "path": "governance/evidence/ui/authentication-20261028/reference/login-figma-1440.png",
+              "sha256": "b847c61833c053614ca4b33fa15d4231f4851ce0504b44c37668dc1fb5657d73"
+            }
+          ],
+          "boundary": "Existing parent item compatibility only; historical Product/scoped decisions are reused, never renewed or expanded."
+        },
+        {
+          "id": "URL-005",
+          "result": "PASS",
+          "description": "Expired/unauthorized/missing-stage fixtures are blocked or safely redirected; backend authority is separately evidenced. Item-specific basis: Login card, glows and spacing match actual Figma2:4 with existing scoped truthful provider/availability/contrast adaptations. New imported TOTP modules preserve the parent Login variant; separate008MFA ownership and real journey are not approved here.",
+          "case_groups": [
+            "authentication/Login fidelity accessible fields at1440,1024,768,390,320",
+            "authentication/canonical direct entry refresh history",
+            "authentication/exact lost-result and unrelated session rejection",
+            "totp/policy-required MFA explicit factor choice before final session"
+          ],
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/manifest.json",
+              "sha256": "03ada820284b4f14354d2a10c912831ebfb3f181b22b215d0e35f53ec2663bc4",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/manifest.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/manifest.json",
+              "sha256": "fdde6352a2f927feacf576d2484614df77f73e4c88116f42a95cc9b163db765c",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/manifest.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/render-manifest-final.json",
+              "sha256": "5be639e38a6f67ad65ff454a9b229f0bf68af8f3e9487369301b951542c17887",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/render-manifest-final.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/navigation-results.json",
+              "sha256": "667558ae2fb966497abd7983511c3441dfc321fcd06da51a132225d72a2f0971",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/navigation-results.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/contrast-resolution-final.json",
+              "sha256": "68ef7dff051dc6dfa5c5266532b7978d58ed0a0444ad19cf1aa6e6b17d1323e0",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/contrast-resolution-final.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/legacy/authentication/login-1440.png",
+              "sha256": "b97005afb4f70e0ff947d0b48542bf578c9c31ca53090e1e3895f79553b93e32",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/legacy/authentication/login-1440.png"
+            },
+            {
+              "path": "governance/evidence/ui/authentication-20261028/reference/login-figma-1440.png",
+              "sha256": "b847c61833c053614ca4b33fa15d4231f4851ce0504b44c37668dc1fb5657d73"
+            }
+          ],
+          "boundary": "Existing parent item compatibility only; historical Product/scoped decisions are reused, never renewed or expanded."
+        },
+        {
+          "id": "URL-004",
+          "result": "PASS",
+          "description": "Same-screen visibility/dialog state retains caller URL and blocks accidental side effects. Item-specific basis: Login card, glows and spacing match actual Figma2:4 with existing scoped truthful provider/availability/contrast adaptations. New imported TOTP modules preserve the parent Login variant; separate008MFA ownership and real journey are not approved here.",
+          "case_groups": [
+            "authentication/Login fidelity accessible fields at1440,1024,768,390,320",
+            "authentication/canonical direct entry refresh history",
+            "authentication/exact lost-result and unrelated session rejection",
+            "totp/policy-required MFA explicit factor choice before final session"
+          ],
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/manifest.json",
+              "sha256": "03ada820284b4f14354d2a10c912831ebfb3f181b22b215d0e35f53ec2663bc4",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/manifest.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/manifest.json",
+              "sha256": "fdde6352a2f927feacf576d2484614df77f73e4c88116f42a95cc9b163db765c",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/manifest.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/render-manifest-final.json",
+              "sha256": "5be639e38a6f67ad65ff454a9b229f0bf68af8f3e9487369301b951542c17887",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/render-manifest-final.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/navigation-results.json",
+              "sha256": "667558ae2fb966497abd7983511c3441dfc321fcd06da51a132225d72a2f0971",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/navigation-results.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/contrast-resolution-final.json",
+              "sha256": "68ef7dff051dc6dfa5c5266532b7978d58ed0a0444ad19cf1aa6e6b17d1323e0",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/contrast-resolution-final.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/legacy/authentication/login-1440.png",
+              "sha256": "b97005afb4f70e0ff947d0b48542bf578c9c31ca53090e1e3895f79553b93e32",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/legacy/authentication/login-1440.png"
+            },
+            {
+              "path": "governance/evidence/ui/authentication-20261028/reference/login-figma-1440.png",
+              "sha256": "b847c61833c053614ca4b33fa15d4231f4851ce0504b44c37668dc1fb5657d73"
+            }
+          ],
+          "boundary": "Existing parent item compatibility only; historical Product/scoped decisions are reused, never renewed or expanded."
+        },
+        {
+          "id": "URL-006",
+          "result": "NOT_APPLICABLE",
+          "reason": "Product-origin OAuth/callback is not implemented in this feature slice (future P2-014). No future-flow PASS is claimed. Existing callback source was not changed; external query/fragment attempts do not authorize navigation.",
+          "authority_refs": [
+            "docs/authority/current/decisions/AMD-0008_Approved_Figma_Visual_Fidelity_and_Product_Owner_UX_Consent.md",
+            "docs/authority/current/decisions/AMD-0009_URL_Addressable_Routing_and_Governed_Form_Validation.md",
+            "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md",
+            "docs/authority/current/development/31_UI_UX_Screen_and_Control_Center_Requirements_Matrix.md"
+          ],
+          "assessment": "Rechecked scope: no new Product-origin OAuth integration is implemented by this parent compatibility refresh; preserve its prior exact exclusion."
+        },
+        {
+          "id": "UX-FID-001",
+          "result": "PASS",
+          "description": "Manual current/reference comparison in item notes; scoped existing composition retained. Item-specific basis: Login card, glows and spacing match actual Figma2:4 with existing scoped truthful provider/availability/contrast adaptations. New imported TOTP modules preserve the parent Login variant; separate008MFA ownership and real journey are not approved here.",
+          "case_groups": [
+            "authentication/Login fidelity accessible fields at1440,1024,768,390,320",
+            "authentication/canonical direct entry refresh history",
+            "authentication/exact lost-result and unrelated session rejection",
+            "totp/policy-required MFA explicit factor choice before final session"
+          ],
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/manifest.json",
+              "sha256": "03ada820284b4f14354d2a10c912831ebfb3f181b22b215d0e35f53ec2663bc4",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/manifest.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/manifest.json",
+              "sha256": "fdde6352a2f927feacf576d2484614df77f73e4c88116f42a95cc9b163db765c",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/manifest.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/render-manifest-final.json",
+              "sha256": "5be639e38a6f67ad65ff454a9b229f0bf68af8f3e9487369301b951542c17887",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/render-manifest-final.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/navigation-results.json",
+              "sha256": "667558ae2fb966497abd7983511c3441dfc321fcd06da51a132225d72a2f0971",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/navigation-results.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/contrast-resolution-final.json",
+              "sha256": "68ef7dff051dc6dfa5c5266532b7978d58ed0a0444ad19cf1aa6e6b17d1323e0",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/contrast-resolution-final.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/legacy/authentication/login-1440.png",
+              "sha256": "b97005afb4f70e0ff947d0b48542bf578c9c31ca53090e1e3895f79553b93e32",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/legacy/authentication/login-1440.png"
+            },
+            {
+              "path": "governance/evidence/ui/authentication-20261028/reference/login-figma-1440.png",
+              "sha256": "b847c61833c053614ca4b33fa15d4231f4851ce0504b44c37668dc1fb5657d73"
+            }
+          ],
+          "boundary": "Existing parent item compatibility only; historical Product/scoped decisions are reused, never renewed or expanded."
+        },
+        {
+          "id": "UX-FID-002",
+          "result": "PASS",
+          "description": "Local page/glow/assets are present in current captures and local-asset tests. Item-specific basis: Login card, glows and spacing match actual Figma2:4 with existing scoped truthful provider/availability/contrast adaptations. New imported TOTP modules preserve the parent Login variant; separate008MFA ownership and real journey are not approved here.",
+          "case_groups": [
+            "authentication/Login fidelity accessible fields at1440,1024,768,390,320",
+            "authentication/canonical direct entry refresh history",
+            "authentication/exact lost-result and unrelated session rejection",
+            "totp/policy-required MFA explicit factor choice before final session"
+          ],
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/manifest.json",
+              "sha256": "03ada820284b4f14354d2a10c912831ebfb3f181b22b215d0e35f53ec2663bc4",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/manifest.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/manifest.json",
+              "sha256": "fdde6352a2f927feacf576d2484614df77f73e4c88116f42a95cc9b163db765c",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/manifest.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/render-manifest-final.json",
+              "sha256": "5be639e38a6f67ad65ff454a9b229f0bf68af8f3e9487369301b951542c17887",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/render-manifest-final.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/navigation-results.json",
+              "sha256": "667558ae2fb966497abd7983511c3441dfc321fcd06da51a132225d72a2f0971",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/navigation-results.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/contrast-resolution-final.json",
+              "sha256": "68ef7dff051dc6dfa5c5266532b7978d58ed0a0444ad19cf1aa6e6b17d1323e0",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/contrast-resolution-final.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/legacy/authentication/login-1440.png",
+              "sha256": "b97005afb4f70e0ff947d0b48542bf578c9c31ca53090e1e3895f79553b93e32",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/legacy/authentication/login-1440.png"
+            },
+            {
+              "path": "governance/evidence/ui/authentication-20261028/reference/login-figma-1440.png",
+              "sha256": "b847c61833c053614ca4b33fa15d4231f4851ce0504b44c37668dc1fb5657d73"
+            }
+          ],
+          "boundary": "Existing parent item compatibility only; historical Product/scoped decisions are reused, never renewed or expanded."
+        },
+        {
+          "id": "UX-FID-003",
+          "result": "PASS",
+          "description": "Shared typed fields/buttons/error geometry and token variants are reused. Item-specific basis: Login card, glows and spacing match actual Figma2:4 with existing scoped truthful provider/availability/contrast adaptations. New imported TOTP modules preserve the parent Login variant; separate008MFA ownership and real journey are not approved here.",
+          "case_groups": [
+            "authentication/Login fidelity accessible fields at1440,1024,768,390,320",
+            "authentication/canonical direct entry refresh history",
+            "authentication/exact lost-result and unrelated session rejection",
+            "totp/policy-required MFA explicit factor choice before final session"
+          ],
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/manifest.json",
+              "sha256": "03ada820284b4f14354d2a10c912831ebfb3f181b22b215d0e35f53ec2663bc4",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/manifest.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/manifest.json",
+              "sha256": "fdde6352a2f927feacf576d2484614df77f73e4c88116f42a95cc9b163db765c",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/manifest.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/render-manifest-final.json",
+              "sha256": "5be639e38a6f67ad65ff454a9b229f0bf68af8f3e9487369301b951542c17887",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/render-manifest-final.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/navigation-results.json",
+              "sha256": "667558ae2fb966497abd7983511c3441dfc321fcd06da51a132225d72a2f0971",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/navigation-results.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/contrast-resolution-final.json",
+              "sha256": "68ef7dff051dc6dfa5c5266532b7978d58ed0a0444ad19cf1aa6e6b17d1323e0",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/contrast-resolution-final.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/legacy/authentication/login-1440.png",
+              "sha256": "b97005afb4f70e0ff947d0b48542bf578c9c31ca53090e1e3895f79553b93e32",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/legacy/authentication/login-1440.png"
+            },
+            {
+              "path": "governance/evidence/ui/authentication-20261028/reference/login-figma-1440.png",
+              "sha256": "b847c61833c053614ca4b33fa15d4231f4851ce0504b44c37668dc1fb5657d73"
+            }
+          ],
+          "boundary": "Existing parent item compatibility only; historical Product/scoped decisions are reused, never renewed or expanded."
+        },
+        {
+          "id": "UX-FID-004",
+          "result": "PASS",
+          "description": "Only previously approved scoped deviations/consents apply; preserve their exact references. Item-specific basis: Login card, glows and spacing match actual Figma2:4 with existing scoped truthful provider/availability/contrast adaptations. New imported TOTP modules preserve the parent Login variant; separate008MFA ownership and real journey are not approved here.",
+          "case_groups": [
+            "authentication/Login fidelity accessible fields at1440,1024,768,390,320",
+            "authentication/canonical direct entry refresh history",
+            "authentication/exact lost-result and unrelated session rejection",
+            "totp/policy-required MFA explicit factor choice before final session"
+          ],
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/manifest.json",
+              "sha256": "03ada820284b4f14354d2a10c912831ebfb3f181b22b215d0e35f53ec2663bc4",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/manifest.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/manifest.json",
+              "sha256": "fdde6352a2f927feacf576d2484614df77f73e4c88116f42a95cc9b163db765c",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/manifest.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/render-manifest-final.json",
+              "sha256": "5be639e38a6f67ad65ff454a9b229f0bf68af8f3e9487369301b951542c17887",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/render-manifest-final.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/navigation-results.json",
+              "sha256": "667558ae2fb966497abd7983511c3441dfc321fcd06da51a132225d72a2f0971",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/navigation-results.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/contrast-resolution-final.json",
+              "sha256": "68ef7dff051dc6dfa5c5266532b7978d58ed0a0444ad19cf1aa6e6b17d1323e0",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/contrast-resolution-final.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/legacy/authentication/login-1440.png",
+              "sha256": "b97005afb4f70e0ff947d0b48542bf578c9c31ca53090e1e3895f79553b93e32",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/legacy/authentication/login-1440.png"
+            },
+            {
+              "path": "governance/evidence/ui/authentication-20261028/reference/login-figma-1440.png",
+              "sha256": "b847c61833c053614ca4b33fa15d4231f4851ce0504b44c37668dc1fb5657d73"
+            }
+          ],
+          "boundary": "Existing parent item compatibility only; historical Product/scoped decisions are reused, never renewed or expanded."
+        },
+        {
+          "id": "UX-FID-005",
+          "result": "PASS",
+          "description": "Previously resolved domain/Figma conflicts remain truthful; no new material conflict observed in this compatibility scope. Item-specific basis: Login card, glows and spacing match actual Figma2:4 with existing scoped truthful provider/availability/contrast adaptations. New imported TOTP modules preserve the parent Login variant; separate008MFA ownership and real journey are not approved here.",
+          "case_groups": [
+            "authentication/Login fidelity accessible fields at1440,1024,768,390,320",
+            "authentication/canonical direct entry refresh history",
+            "authentication/exact lost-result and unrelated session rejection",
+            "totp/policy-required MFA explicit factor choice before final session"
+          ],
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/manifest.json",
+              "sha256": "03ada820284b4f14354d2a10c912831ebfb3f181b22b215d0e35f53ec2663bc4",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/manifest.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/manifest.json",
+              "sha256": "fdde6352a2f927feacf576d2484614df77f73e4c88116f42a95cc9b163db765c",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/manifest.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/render-manifest-final.json",
+              "sha256": "5be639e38a6f67ad65ff454a9b229f0bf68af8f3e9487369301b951542c17887",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/render-manifest-final.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/navigation-results.json",
+              "sha256": "667558ae2fb966497abd7983511c3441dfc321fcd06da51a132225d72a2f0971",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/navigation-results.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/contrast-resolution-final.json",
+              "sha256": "68ef7dff051dc6dfa5c5266532b7978d58ed0a0444ad19cf1aa6e6b17d1323e0",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/contrast-resolution-final.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/legacy/authentication/login-1440.png",
+              "sha256": "b97005afb4f70e0ff947d0b48542bf578c9c31ca53090e1e3895f79553b93e32",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/legacy/authentication/login-1440.png"
+            },
+            {
+              "path": "governance/evidence/ui/authentication-20261028/reference/login-figma-1440.png",
+              "sha256": "b847c61833c053614ca4b33fa15d4231f4851ce0504b44c37668dc1fb5657d73"
+            }
+          ],
+          "boundary": "Existing parent item compatibility only; historical Product/scoped decisions are reused, never renewed or expanded."
+        },
+        {
+          "id": "UX-FID-006",
+          "result": "PASS",
+          "description": "Current source and screenshots retain approved screen-specific styling rather than library defaults. Item-specific basis: Login card, glows and spacing match actual Figma2:4 with existing scoped truthful provider/availability/contrast adaptations. New imported TOTP modules preserve the parent Login variant; separate008MFA ownership and real journey are not approved here.",
+          "case_groups": [
+            "authentication/Login fidelity accessible fields at1440,1024,768,390,320",
+            "authentication/canonical direct entry refresh history",
+            "authentication/exact lost-result and unrelated session rejection",
+            "totp/policy-required MFA explicit factor choice before final session"
+          ],
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/manifest.json",
+              "sha256": "03ada820284b4f14354d2a10c912831ebfb3f181b22b215d0e35f53ec2663bc4",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/manifest.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/manifest.json",
+              "sha256": "fdde6352a2f927feacf576d2484614df77f73e4c88116f42a95cc9b163db765c",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/manifest.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/render-manifest-final.json",
+              "sha256": "5be639e38a6f67ad65ff454a9b229f0bf68af8f3e9487369301b951542c17887",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/render-manifest-final.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/navigation-results.json",
+              "sha256": "667558ae2fb966497abd7983511c3441dfc321fcd06da51a132225d72a2f0971",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/navigation-results.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/contrast-resolution-final.json",
+              "sha256": "68ef7dff051dc6dfa5c5266532b7978d58ed0a0444ad19cf1aa6e6b17d1323e0",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/contrast-resolution-final.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/legacy/authentication/login-1440.png",
+              "sha256": "b97005afb4f70e0ff947d0b48542bf578c9c31ca53090e1e3895f79553b93e32",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/legacy/authentication/login-1440.png"
+            },
+            {
+              "path": "governance/evidence/ui/authentication-20261028/reference/login-figma-1440.png",
+              "sha256": "b847c61833c053614ca4b33fa15d4231f4851ce0504b44c37668dc1fb5657d73"
+            }
+          ],
+          "boundary": "Existing parent item compatibility only; historical Product/scoped decisions are reused, never renewed or expanded."
+        },
+        {
+          "id": "UX-FID-007",
+          "result": "PASS",
+          "description": "Named responsive/Axe/keyboard/focus cases are current; detailed new shared-module contrast report resolves all194current incomplete nodes. Item-specific basis: Login card, glows and spacing match actual Figma2:4 with existing scoped truthful provider/availability/contrast adaptations. New imported TOTP modules preserve the parent Login variant; separate008MFA ownership and real journey are not approved here.",
+          "case_groups": [
+            "authentication/Login fidelity accessible fields at1440,1024,768,390,320",
+            "authentication/canonical direct entry refresh history",
+            "authentication/exact lost-result and unrelated session rejection",
+            "totp/policy-required MFA explicit factor choice before final session"
+          ],
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/manifest.json",
+              "sha256": "03ada820284b4f14354d2a10c912831ebfb3f181b22b215d0e35f53ec2663bc4",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/manifest.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/manifest.json",
+              "sha256": "fdde6352a2f927feacf576d2484614df77f73e4c88116f42a95cc9b163db765c",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/manifest.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/render-manifest-final.json",
+              "sha256": "5be639e38a6f67ad65ff454a9b229f0bf68af8f3e9487369301b951542c17887",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/render-manifest-final.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/navigation-results.json",
+              "sha256": "667558ae2fb966497abd7983511c3441dfc321fcd06da51a132225d72a2f0971",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/navigation-results.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/contrast-resolution-final.json",
+              "sha256": "68ef7dff051dc6dfa5c5266532b7978d58ed0a0444ad19cf1aa6e6b17d1323e0",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/contrast-resolution-final.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/legacy/authentication/login-1440.png",
+              "sha256": "b97005afb4f70e0ff947d0b48542bf578c9c31ca53090e1e3895f79553b93e32",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/legacy/authentication/login-1440.png"
+            },
+            {
+              "path": "governance/evidence/ui/authentication-20261028/reference/login-figma-1440.png",
+              "sha256": "b847c61833c053614ca4b33fa15d4231f4851ce0504b44c37668dc1fb5657d73"
+            }
+          ],
+          "boundary": "Existing parent item compatibility only; historical Product/scoped decisions are reused, never renewed or expanded."
+        },
+        {
+          "id": "UX-FID-008",
+          "result": "PASS",
+          "description": "Current actual reports/screenshots, reference provenance, source identity and existing scoped consent are linked without redating historical evidence. Item-specific basis: Login card, glows and spacing match actual Figma2:4 with existing scoped truthful provider/availability/contrast adaptations. New imported TOTP modules preserve the parent Login variant; separate008MFA ownership and real journey are not approved here.",
+          "case_groups": [
+            "authentication/Login fidelity accessible fields at1440,1024,768,390,320",
+            "authentication/canonical direct entry refresh history",
+            "authentication/exact lost-result and unrelated session rejection",
+            "totp/policy-required MFA explicit factor choice before final session"
+          ],
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/manifest.json",
+              "sha256": "03ada820284b4f14354d2a10c912831ebfb3f181b22b215d0e35f53ec2663bc4",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/manifest.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/manifest.json",
+              "sha256": "fdde6352a2f927feacf576d2484614df77f73e4c88116f42a95cc9b163db765c",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/manifest.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/render-manifest-final.json",
+              "sha256": "5be639e38a6f67ad65ff454a9b229f0bf68af8f3e9487369301b951542c17887",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/render-manifest-final.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/navigation-results.json",
+              "sha256": "667558ae2fb966497abd7983511c3441dfc321fcd06da51a132225d72a2f0971",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/navigation-results.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/contrast-resolution-final.json",
+              "sha256": "68ef7dff051dc6dfa5c5266532b7978d58ed0a0444ad19cf1aa6e6b17d1323e0",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/contrast-resolution-final.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/legacy/authentication/login-1440.png",
+              "sha256": "b97005afb4f70e0ff947d0b48542bf578c9c31ca53090e1e3895f79553b93e32",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/legacy/authentication/login-1440.png"
+            },
+            {
+              "path": "governance/evidence/ui/authentication-20261028/reference/login-figma-1440.png",
+              "sha256": "b847c61833c053614ca4b33fa15d4231f4851ce0504b44c37668dc1fb5657d73"
+            }
+          ],
+          "boundary": "Existing parent item compatibility only; historical Product/scoped decisions are reused, never renewed or expanded."
+        }
+      ],
+      "screenshots": [
+        {
+          "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/legacy/authentication/login-1440.png",
+          "sha256": "b97005afb4f70e0ff947d0b48542bf578c9c31ca53090e1e3895f79553b93e32",
+          "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/legacy/authentication/login-1440.png",
+          "role": "CURRENT_SOURCE_RENDER",
+          "source_carrier_sha": "6e562db102ce75d5ed478a15e2970ff55ab98fef"
+        },
+        {
+          "path": "governance/evidence/ui/authentication-20261028/reference/login-figma-1440.png",
+          "sha256": "b847c61833c053614ca4b33fa15d4231f4851ce0504b44c37668dc1fb5657d73",
+          "role": "APPROVED_REFERENCE_OR_SCOPED_PROPOSAL"
+        }
+      ],
+      "deviations": [
+        {
+          "status": "PRODUCT_OWNER_APPROVED",
+          "approval_evidence": {
+            "path": "governance/evidence/TUN-P2-005-VISUAL-CONSENT-20261021.json",
+            "sha256": "58eff6b8b41bd790a55afc048a139874a60ee12e72013e3a0e316ce2ed815145"
+          }
+        },
+        {
+          "status": "PRODUCT_OWNER_APPROVED",
+          "approval_evidence": {
+            "path": "governance/evidence/TUN-P2-005-VISUAL-ACCEPTANCE-DEFERRAL-20261021.json",
+            "sha256": "2a2ed7402e090eeab3a73ef0726c0209b62db34de1f720234e7a23c0ae5cf37f"
+          }
+        },
+        {
+          "status": "PRODUCT_OWNER_APPROVED",
+          "approval_evidence": {
+            "path": "governance/evidence/TUN-P2-007-VISUAL-CONSENT-20261109.json",
+            "sha256": "c9415304746bb882a0c49a3b42e16c0e312882f6b48401b1d51666a18d775dfd"
+          }
+        }
+      ],
+      "historical_item_ref": {
+        "path": "governance/evidence/TUN-P2-005-UI-COMPLIANCE.json",
+        "item_id": "U-AUTH-01",
+        "sha256": "5a8e600f98cd4636a81bca0d108f795daf70eab8ce99947ef99644d986cec2ae"
+      },
+      "historical_screenshots": [
+        {
+          "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-authentication/login-1024.png",
+          "sha256": "b1ac243fdc0063aa387200bd3647ef511e0f2d117277a69167d215b826a0f10c",
+          "role": "CURRENT_SOURCE_RENDER",
+          "original_execution_ref": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-final-80a32ab-authentication/login-1024.png"
+        },
+        {
+          "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-authentication/login-1440.png",
+          "sha256": "b97005afb4f70e0ff947d0b48542bf578c9c31ca53090e1e3895f79553b93e32",
+          "role": "CURRENT_SOURCE_RENDER",
+          "original_execution_ref": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-final-80a32ab-authentication/login-1440.png"
+        },
+        {
+          "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-authentication/login-320.png",
+          "sha256": "f3041699fb8ec7fb804fc56c87db7f357eb340d284e1b2ee63e2e5539b9389db",
+          "role": "CURRENT_SOURCE_RENDER",
+          "original_execution_ref": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-final-80a32ab-authentication/login-320.png"
+        },
+        {
+          "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-authentication/login-390.png",
+          "sha256": "2784c48acc47212959caa2ce783fb272a85b708f4e7d4e4519c86f6998b78b53",
+          "role": "CURRENT_SOURCE_RENDER",
+          "original_execution_ref": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-final-80a32ab-authentication/login-390.png"
+        },
+        {
+          "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-authentication/login-768.png",
+          "sha256": "1131ac1413dd4a99757f44ad973369ea44777c2b6005c73d1234e1ae298a552a",
+          "role": "CURRENT_SOURCE_RENDER",
+          "original_execution_ref": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-final-80a32ab-authentication/login-768.png"
+        },
+        {
+          "path": "governance/evidence/ui/authentication-20261028/reference/login-proposal-1440.png",
+          "sha256": "ff5fe2e31abd267ac820cc8c829d74888f40dca354558ab98b5b9ec809a576eb",
+          "role": "APPROVED_REFERENCE_OR_SCOPED_PROPOSAL",
+          "original_execution_ref": "governance/evidence/ui/authentication-20261028/reference/login-proposal-1440.png"
+        },
+        {
+          "path": "governance/evidence/ui/authentication-20261028/reference/login-figma-1440.png",
+          "sha256": "b847c61833c053614ca4b33fa15d4231f4851ce0504b44c37668dc1fb5657d73",
+          "role": "APPROVED_REFERENCE_OR_SCOPED_PROPOSAL",
+          "original_execution_ref": "governance/evidence/ui/authentication-20261028/reference/login-figma-1440.png"
+        },
+        {
+          "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-feedback/login-error-1440.png",
+          "sha256": "a2bb6b77e53cd6948970ad66fe90ae7c3297ab16c67e4cf351bede900587b9ba",
+          "role": "CURRENT_FEEDBACK_RENDER",
+          "viewport": {
+            "width": 1440,
+            "height": 1024
+          }
+        },
+        {
+          "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-feedback/login-error-320.png",
+          "sha256": "d4297f3b9143dc23226b26e8d980bc92827a6e96e1bb62fa323accf33bdd46c1",
+          "role": "CURRENT_FEEDBACK_RENDER",
+          "viewport": {
+            "width": 320,
+            "height": 1024
+          }
+        },
+        {
+          "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-feedback/login-cancel-1440.png",
+          "sha256": "9094db1e7369c7a886e8180d1000071f5a4b062ac76b99532d829c6d96e0c2d8",
+          "role": "CURRENT_FEEDBACK_RENDER",
+          "viewport": {
+            "width": 1440,
+            "height": 1024
+          }
+        },
+        {
+          "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-feedback/login-cancel-320.png",
+          "sha256": "118f6f9dceb45ff39f8aafc66a0deb08032e648ba02ddece63efa8fcdaa43788",
+          "role": "CURRENT_FEEDBACK_RENDER",
+          "viewport": {
+            "width": 320,
+            "height": 1024
+          }
+        }
+      ],
+      "case_groups": [
+        "authentication/Login fidelity accessible fields at1440,1024,768,390,320",
+        "authentication/canonical direct entry refresh history",
+        "authentication/exact lost-result and unrelated session rejection",
+        "totp/policy-required MFA explicit factor choice before final session"
+      ],
+      "manual_comparison": {
+        "result": "PASS_WITH_EXISTING_SCOPED_ADAPTATIONS",
+        "notes": "Login card, glows and spacing match actual Figma2:4 with existing scoped truthful provider/availability/contrast adaptations. New imported TOTP modules preserve the parent Login variant; separate008MFA ownership and real journey are not approved here.",
+        "reviewer_roles": [
+          "ui-ux-engineer",
+          "frontend-engineer",
+          "tester-qa-engineer",
+          "end-user-ux-reviewer"
+        ]
+      },
+      "unresolved_findings": []
+    },
+    {
+      "id": "U-AUTH-SIGNED-IN",
+      "figma_refs": [
+        {
+          "file_key": "apNbwvAgdn1xIxYH1oiaSC",
+          "node_id": "70:630"
+        }
+      ],
+      "additional_observed_design_refs": [],
+      "checks": [
+        {
+          "id": "URL-001",
+          "result": "PASS",
+          "description": "Observed canonical full-screen pathname transitions in named route cases. Item-specific basis: Existing approved signed-in card, exact sign-out feedback and separately approved Account-security continuation remain. Added continuation changes card height under existing consent; no new account/session fact is invented.",
+          "case_groups": [
+            "authentication/Signed-in fidelity accessibility at1440,1024,768,390,320",
+            "authentication/canonical sign-out guard and unavailable retry",
+            "passkeys/approved Ready and SignedIn navigation guarded chain"
+          ],
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/manifest.json",
+              "sha256": "03ada820284b4f14354d2a10c912831ebfb3f181b22b215d0e35f53ec2663bc4",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/manifest.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/manifest.json",
+              "sha256": "fdde6352a2f927feacf576d2484614df77f73e4c88116f42a95cc9b163db765c",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/manifest.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/render-manifest-final.json",
+              "sha256": "5be639e38a6f67ad65ff454a9b229f0bf68af8f3e9487369301b951542c17887",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/render-manifest-final.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/navigation-results.json",
+              "sha256": "667558ae2fb966497abd7983511c3441dfc321fcd06da51a132225d72a2f0971",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/navigation-results.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/contrast-resolution-final.json",
+              "sha256": "68ef7dff051dc6dfa5c5266532b7978d58ed0a0444ad19cf1aa6e6b17d1323e0",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/contrast-resolution-final.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/legacy/authentication/signed-in-1440.png",
+              "sha256": "9c9e75e9052e0f26f7c59a64034fb396925535861bbcef82fe51041fa1fe4aa1",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/legacy/authentication/signed-in-1440.png"
+            },
+            {
+              "path": "governance/evidence/ui/authentication-20261028/reference/signed-in-proposal-1440.png",
+              "sha256": "3f43a91de7fdf7b4f2b4826502b462c54a66125f1225cce184843c02b5cc671c"
+            }
+          ],
+          "boundary": "Existing parent item compatibility only; historical Product/scoped decisions are reused, never renewed or expanded."
+        },
+        {
+          "id": "URL-002",
+          "result": "PASS",
+          "description": "Query/fragment and forged history cannot replace a guarded owning pathname. Item-specific basis: Existing approved signed-in card, exact sign-out feedback and separately approved Account-security continuation remain. Added continuation changes card height under existing consent; no new account/session fact is invented.",
+          "case_groups": [
+            "authentication/Signed-in fidelity accessibility at1440,1024,768,390,320",
+            "authentication/canonical sign-out guard and unavailable retry",
+            "passkeys/approved Ready and SignedIn navigation guarded chain"
+          ],
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/manifest.json",
+              "sha256": "03ada820284b4f14354d2a10c912831ebfb3f181b22b215d0e35f53ec2663bc4",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/manifest.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/manifest.json",
+              "sha256": "fdde6352a2f927feacf576d2484614df77f73e4c88116f42a95cc9b163db765c",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/manifest.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/render-manifest-final.json",
+              "sha256": "5be639e38a6f67ad65ff454a9b229f0bf68af8f3e9487369301b951542c17887",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/render-manifest-final.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/navigation-results.json",
+              "sha256": "667558ae2fb966497abd7983511c3441dfc321fcd06da51a132225d72a2f0971",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/navigation-results.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/contrast-resolution-final.json",
+              "sha256": "68ef7dff051dc6dfa5c5266532b7978d58ed0a0444ad19cf1aa6e6b17d1323e0",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/contrast-resolution-final.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/legacy/authentication/signed-in-1440.png",
+              "sha256": "9c9e75e9052e0f26f7c59a64034fb396925535861bbcef82fe51041fa1fe4aa1",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/legacy/authentication/signed-in-1440.png"
+            },
+            {
+              "path": "governance/evidence/ui/authentication-20261028/reference/signed-in-proposal-1440.png",
+              "sha256": "3f43a91de7fdf7b4f2b4826502b462c54a66125f1225cce184843c02b5cc671c"
+            }
+          ],
+          "boundary": "Existing parent item compatibility only; historical Product/scoped decisions are reused, never renewed or expanded."
+        },
+        {
+          "id": "URL-003",
+          "result": "PASS",
+          "description": "Named direct-entry, reload and Back/Forward cases reconstruct the actual owning server-metadata view. Item-specific basis: Existing approved signed-in card, exact sign-out feedback and separately approved Account-security continuation remain. Added continuation changes card height under existing consent; no new account/session fact is invented.",
+          "case_groups": [
+            "authentication/Signed-in fidelity accessibility at1440,1024,768,390,320",
+            "authentication/canonical sign-out guard and unavailable retry",
+            "passkeys/approved Ready and SignedIn navigation guarded chain"
+          ],
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/manifest.json",
+              "sha256": "03ada820284b4f14354d2a10c912831ebfb3f181b22b215d0e35f53ec2663bc4",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/manifest.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/manifest.json",
+              "sha256": "fdde6352a2f927feacf576d2484614df77f73e4c88116f42a95cc9b163db765c",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/manifest.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/render-manifest-final.json",
+              "sha256": "5be639e38a6f67ad65ff454a9b229f0bf68af8f3e9487369301b951542c17887",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/render-manifest-final.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/navigation-results.json",
+              "sha256": "667558ae2fb966497abd7983511c3441dfc321fcd06da51a132225d72a2f0971",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/navigation-results.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/contrast-resolution-final.json",
+              "sha256": "68ef7dff051dc6dfa5c5266532b7978d58ed0a0444ad19cf1aa6e6b17d1323e0",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/contrast-resolution-final.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/legacy/authentication/signed-in-1440.png",
+              "sha256": "9c9e75e9052e0f26f7c59a64034fb396925535861bbcef82fe51041fa1fe4aa1",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/legacy/authentication/signed-in-1440.png"
+            },
+            {
+              "path": "governance/evidence/ui/authentication-20261028/reference/signed-in-proposal-1440.png",
+              "sha256": "3f43a91de7fdf7b4f2b4826502b462c54a66125f1225cce184843c02b5cc671c"
+            }
+          ],
+          "boundary": "Existing parent item compatibility only; historical Product/scoped decisions are reused, never renewed or expanded."
+        },
+        {
+          "id": "URL-005",
+          "result": "PASS",
+          "description": "Expired/unauthorized/missing-stage fixtures are blocked or safely redirected; backend authority is separately evidenced. Item-specific basis: Existing approved signed-in card, exact sign-out feedback and separately approved Account-security continuation remain. Added continuation changes card height under existing consent; no new account/session fact is invented.",
+          "case_groups": [
+            "authentication/Signed-in fidelity accessibility at1440,1024,768,390,320",
+            "authentication/canonical sign-out guard and unavailable retry",
+            "passkeys/approved Ready and SignedIn navigation guarded chain"
+          ],
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/manifest.json",
+              "sha256": "03ada820284b4f14354d2a10c912831ebfb3f181b22b215d0e35f53ec2663bc4",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/manifest.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/manifest.json",
+              "sha256": "fdde6352a2f927feacf576d2484614df77f73e4c88116f42a95cc9b163db765c",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/manifest.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/render-manifest-final.json",
+              "sha256": "5be639e38a6f67ad65ff454a9b229f0bf68af8f3e9487369301b951542c17887",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/render-manifest-final.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/navigation-results.json",
+              "sha256": "667558ae2fb966497abd7983511c3441dfc321fcd06da51a132225d72a2f0971",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/navigation-results.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/contrast-resolution-final.json",
+              "sha256": "68ef7dff051dc6dfa5c5266532b7978d58ed0a0444ad19cf1aa6e6b17d1323e0",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/contrast-resolution-final.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/legacy/authentication/signed-in-1440.png",
+              "sha256": "9c9e75e9052e0f26f7c59a64034fb396925535861bbcef82fe51041fa1fe4aa1",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/legacy/authentication/signed-in-1440.png"
+            },
+            {
+              "path": "governance/evidence/ui/authentication-20261028/reference/signed-in-proposal-1440.png",
+              "sha256": "3f43a91de7fdf7b4f2b4826502b462c54a66125f1225cce184843c02b5cc671c"
+            }
+          ],
+          "boundary": "Existing parent item compatibility only; historical Product/scoped decisions are reused, never renewed or expanded."
+        },
+        {
+          "id": "URL-004",
+          "result": "NOT_APPLICABLE",
+          "reason": "No independent modal/tab/filter/anchor workflow on this screen; canonical routing/guard handling is covered separately.",
+          "authority_refs": [
+            "docs/authority/current/decisions/AMD-0008_Approved_Figma_Visual_Fidelity_and_Product_Owner_UX_Consent.md",
+            "docs/authority/current/decisions/AMD-0009_URL_Addressable_Routing_and_Governed_Form_Validation.md",
+            "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md",
+            "docs/authority/current/development/31_UI_UX_Screen_and_Control_Center_Requirements_Matrix.md"
+          ],
+          "assessment": "Rechecked current item: the exact stated modal/tab/anchor or new editable-field exclusion remains true. Owning route and editable-field cases are separately reviewed above."
+        },
+        {
+          "id": "URL-006",
+          "result": "NOT_APPLICABLE",
+          "reason": "Product-origin OAuth/callback is not implemented in this feature slice (future P2-014). No future-flow PASS is claimed. Existing callback source was not changed; external query/fragment attempts do not authorize navigation.",
+          "authority_refs": [
+            "docs/authority/current/decisions/AMD-0008_Approved_Figma_Visual_Fidelity_and_Product_Owner_UX_Consent.md",
+            "docs/authority/current/decisions/AMD-0009_URL_Addressable_Routing_and_Governed_Form_Validation.md",
+            "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md",
+            "docs/authority/current/development/31_UI_UX_Screen_and_Control_Center_Requirements_Matrix.md"
+          ],
+          "assessment": "Rechecked scope: no new Product-origin OAuth integration is implemented by this parent compatibility refresh; preserve its prior exact exclusion."
+        },
+        {
+          "id": "UX-FID-001",
+          "result": "PASS",
+          "description": "Manual current/reference comparison in item notes; scoped existing composition retained. Item-specific basis: Existing approved signed-in card, exact sign-out feedback and separately approved Account-security continuation remain. Added continuation changes card height under existing consent; no new account/session fact is invented.",
+          "case_groups": [
+            "authentication/Signed-in fidelity accessibility at1440,1024,768,390,320",
+            "authentication/canonical sign-out guard and unavailable retry",
+            "passkeys/approved Ready and SignedIn navigation guarded chain"
+          ],
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/manifest.json",
+              "sha256": "03ada820284b4f14354d2a10c912831ebfb3f181b22b215d0e35f53ec2663bc4",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/manifest.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/manifest.json",
+              "sha256": "fdde6352a2f927feacf576d2484614df77f73e4c88116f42a95cc9b163db765c",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/manifest.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/render-manifest-final.json",
+              "sha256": "5be639e38a6f67ad65ff454a9b229f0bf68af8f3e9487369301b951542c17887",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/render-manifest-final.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/navigation-results.json",
+              "sha256": "667558ae2fb966497abd7983511c3441dfc321fcd06da51a132225d72a2f0971",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/navigation-results.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/contrast-resolution-final.json",
+              "sha256": "68ef7dff051dc6dfa5c5266532b7978d58ed0a0444ad19cf1aa6e6b17d1323e0",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/contrast-resolution-final.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/legacy/authentication/signed-in-1440.png",
+              "sha256": "9c9e75e9052e0f26f7c59a64034fb396925535861bbcef82fe51041fa1fe4aa1",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/legacy/authentication/signed-in-1440.png"
+            },
+            {
+              "path": "governance/evidence/ui/authentication-20261028/reference/signed-in-proposal-1440.png",
+              "sha256": "3f43a91de7fdf7b4f2b4826502b462c54a66125f1225cce184843c02b5cc671c"
+            }
+          ],
+          "boundary": "Existing parent item compatibility only; historical Product/scoped decisions are reused, never renewed or expanded."
+        },
+        {
+          "id": "UX-FID-002",
+          "result": "PASS",
+          "description": "Local page/glow/assets are present in current captures and local-asset tests. Item-specific basis: Existing approved signed-in card, exact sign-out feedback and separately approved Account-security continuation remain. Added continuation changes card height under existing consent; no new account/session fact is invented.",
+          "case_groups": [
+            "authentication/Signed-in fidelity accessibility at1440,1024,768,390,320",
+            "authentication/canonical sign-out guard and unavailable retry",
+            "passkeys/approved Ready and SignedIn navigation guarded chain"
+          ],
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/manifest.json",
+              "sha256": "03ada820284b4f14354d2a10c912831ebfb3f181b22b215d0e35f53ec2663bc4",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/manifest.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/manifest.json",
+              "sha256": "fdde6352a2f927feacf576d2484614df77f73e4c88116f42a95cc9b163db765c",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/manifest.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/render-manifest-final.json",
+              "sha256": "5be639e38a6f67ad65ff454a9b229f0bf68af8f3e9487369301b951542c17887",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/render-manifest-final.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/navigation-results.json",
+              "sha256": "667558ae2fb966497abd7983511c3441dfc321fcd06da51a132225d72a2f0971",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/navigation-results.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/contrast-resolution-final.json",
+              "sha256": "68ef7dff051dc6dfa5c5266532b7978d58ed0a0444ad19cf1aa6e6b17d1323e0",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/contrast-resolution-final.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/legacy/authentication/signed-in-1440.png",
+              "sha256": "9c9e75e9052e0f26f7c59a64034fb396925535861bbcef82fe51041fa1fe4aa1",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/legacy/authentication/signed-in-1440.png"
+            },
+            {
+              "path": "governance/evidence/ui/authentication-20261028/reference/signed-in-proposal-1440.png",
+              "sha256": "3f43a91de7fdf7b4f2b4826502b462c54a66125f1225cce184843c02b5cc671c"
+            }
+          ],
+          "boundary": "Existing parent item compatibility only; historical Product/scoped decisions are reused, never renewed or expanded."
+        },
+        {
+          "id": "UX-FID-003",
+          "result": "NOT_APPLICABLE",
+          "reason": "No new editable field is introduced by this item. Existing action/control tokens and field-owning items are reviewed separately.",
+          "authority_refs": [
+            "docs/authority/current/decisions/AMD-0008_Approved_Figma_Visual_Fidelity_and_Product_Owner_UX_Consent.md",
+            "docs/authority/current/decisions/AMD-0009_URL_Addressable_Routing_and_Governed_Form_Validation.md",
+            "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md",
+            "docs/authority/current/development/31_UI_UX_Screen_and_Control_Center_Requirements_Matrix.md"
+          ],
+          "assessment": "Rechecked current item: the exact stated modal/tab/anchor or new editable-field exclusion remains true. Owning route and editable-field cases are separately reviewed above."
+        },
+        {
+          "id": "UX-FID-004",
+          "result": "PASS",
+          "description": "Only previously approved scoped deviations/consents apply; preserve their exact references. Item-specific basis: Existing approved signed-in card, exact sign-out feedback and separately approved Account-security continuation remain. Added continuation changes card height under existing consent; no new account/session fact is invented.",
+          "case_groups": [
+            "authentication/Signed-in fidelity accessibility at1440,1024,768,390,320",
+            "authentication/canonical sign-out guard and unavailable retry",
+            "passkeys/approved Ready and SignedIn navigation guarded chain"
+          ],
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/manifest.json",
+              "sha256": "03ada820284b4f14354d2a10c912831ebfb3f181b22b215d0e35f53ec2663bc4",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/manifest.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/manifest.json",
+              "sha256": "fdde6352a2f927feacf576d2484614df77f73e4c88116f42a95cc9b163db765c",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/manifest.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/render-manifest-final.json",
+              "sha256": "5be639e38a6f67ad65ff454a9b229f0bf68af8f3e9487369301b951542c17887",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/render-manifest-final.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/navigation-results.json",
+              "sha256": "667558ae2fb966497abd7983511c3441dfc321fcd06da51a132225d72a2f0971",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/navigation-results.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/contrast-resolution-final.json",
+              "sha256": "68ef7dff051dc6dfa5c5266532b7978d58ed0a0444ad19cf1aa6e6b17d1323e0",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/contrast-resolution-final.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/legacy/authentication/signed-in-1440.png",
+              "sha256": "9c9e75e9052e0f26f7c59a64034fb396925535861bbcef82fe51041fa1fe4aa1",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/legacy/authentication/signed-in-1440.png"
+            },
+            {
+              "path": "governance/evidence/ui/authentication-20261028/reference/signed-in-proposal-1440.png",
+              "sha256": "3f43a91de7fdf7b4f2b4826502b462c54a66125f1225cce184843c02b5cc671c"
+            }
+          ],
+          "boundary": "Existing parent item compatibility only; historical Product/scoped decisions are reused, never renewed or expanded."
+        },
+        {
+          "id": "UX-FID-005",
+          "result": "PASS",
+          "description": "Previously resolved domain/Figma conflicts remain truthful; no new material conflict observed in this compatibility scope. Item-specific basis: Existing approved signed-in card, exact sign-out feedback and separately approved Account-security continuation remain. Added continuation changes card height under existing consent; no new account/session fact is invented.",
+          "case_groups": [
+            "authentication/Signed-in fidelity accessibility at1440,1024,768,390,320",
+            "authentication/canonical sign-out guard and unavailable retry",
+            "passkeys/approved Ready and SignedIn navigation guarded chain"
+          ],
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/manifest.json",
+              "sha256": "03ada820284b4f14354d2a10c912831ebfb3f181b22b215d0e35f53ec2663bc4",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/manifest.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/manifest.json",
+              "sha256": "fdde6352a2f927feacf576d2484614df77f73e4c88116f42a95cc9b163db765c",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/manifest.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/render-manifest-final.json",
+              "sha256": "5be639e38a6f67ad65ff454a9b229f0bf68af8f3e9487369301b951542c17887",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/render-manifest-final.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/navigation-results.json",
+              "sha256": "667558ae2fb966497abd7983511c3441dfc321fcd06da51a132225d72a2f0971",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/navigation-results.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/contrast-resolution-final.json",
+              "sha256": "68ef7dff051dc6dfa5c5266532b7978d58ed0a0444ad19cf1aa6e6b17d1323e0",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/contrast-resolution-final.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/legacy/authentication/signed-in-1440.png",
+              "sha256": "9c9e75e9052e0f26f7c59a64034fb396925535861bbcef82fe51041fa1fe4aa1",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/legacy/authentication/signed-in-1440.png"
+            },
+            {
+              "path": "governance/evidence/ui/authentication-20261028/reference/signed-in-proposal-1440.png",
+              "sha256": "3f43a91de7fdf7b4f2b4826502b462c54a66125f1225cce184843c02b5cc671c"
+            }
+          ],
+          "boundary": "Existing parent item compatibility only; historical Product/scoped decisions are reused, never renewed or expanded."
+        },
+        {
+          "id": "UX-FID-006",
+          "result": "PASS",
+          "description": "Current source and screenshots retain approved screen-specific styling rather than library defaults. Item-specific basis: Existing approved signed-in card, exact sign-out feedback and separately approved Account-security continuation remain. Added continuation changes card height under existing consent; no new account/session fact is invented.",
+          "case_groups": [
+            "authentication/Signed-in fidelity accessibility at1440,1024,768,390,320",
+            "authentication/canonical sign-out guard and unavailable retry",
+            "passkeys/approved Ready and SignedIn navigation guarded chain"
+          ],
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/manifest.json",
+              "sha256": "03ada820284b4f14354d2a10c912831ebfb3f181b22b215d0e35f53ec2663bc4",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/manifest.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/manifest.json",
+              "sha256": "fdde6352a2f927feacf576d2484614df77f73e4c88116f42a95cc9b163db765c",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/manifest.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/render-manifest-final.json",
+              "sha256": "5be639e38a6f67ad65ff454a9b229f0bf68af8f3e9487369301b951542c17887",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/render-manifest-final.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/navigation-results.json",
+              "sha256": "667558ae2fb966497abd7983511c3441dfc321fcd06da51a132225d72a2f0971",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/navigation-results.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/contrast-resolution-final.json",
+              "sha256": "68ef7dff051dc6dfa5c5266532b7978d58ed0a0444ad19cf1aa6e6b17d1323e0",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/contrast-resolution-final.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/legacy/authentication/signed-in-1440.png",
+              "sha256": "9c9e75e9052e0f26f7c59a64034fb396925535861bbcef82fe51041fa1fe4aa1",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/legacy/authentication/signed-in-1440.png"
+            },
+            {
+              "path": "governance/evidence/ui/authentication-20261028/reference/signed-in-proposal-1440.png",
+              "sha256": "3f43a91de7fdf7b4f2b4826502b462c54a66125f1225cce184843c02b5cc671c"
+            }
+          ],
+          "boundary": "Existing parent item compatibility only; historical Product/scoped decisions are reused, never renewed or expanded."
+        },
+        {
+          "id": "UX-FID-007",
+          "result": "PASS",
+          "description": "Named responsive/Axe/keyboard/focus cases are current; detailed new shared-module contrast report resolves all194current incomplete nodes. Item-specific basis: Existing approved signed-in card, exact sign-out feedback and separately approved Account-security continuation remain. Added continuation changes card height under existing consent; no new account/session fact is invented.",
+          "case_groups": [
+            "authentication/Signed-in fidelity accessibility at1440,1024,768,390,320",
+            "authentication/canonical sign-out guard and unavailable retry",
+            "passkeys/approved Ready and SignedIn navigation guarded chain"
+          ],
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/manifest.json",
+              "sha256": "03ada820284b4f14354d2a10c912831ebfb3f181b22b215d0e35f53ec2663bc4",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/manifest.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/manifest.json",
+              "sha256": "fdde6352a2f927feacf576d2484614df77f73e4c88116f42a95cc9b163db765c",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/manifest.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/render-manifest-final.json",
+              "sha256": "5be639e38a6f67ad65ff454a9b229f0bf68af8f3e9487369301b951542c17887",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/render-manifest-final.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/navigation-results.json",
+              "sha256": "667558ae2fb966497abd7983511c3441dfc321fcd06da51a132225d72a2f0971",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/navigation-results.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/contrast-resolution-final.json",
+              "sha256": "68ef7dff051dc6dfa5c5266532b7978d58ed0a0444ad19cf1aa6e6b17d1323e0",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/contrast-resolution-final.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/legacy/authentication/signed-in-1440.png",
+              "sha256": "9c9e75e9052e0f26f7c59a64034fb396925535861bbcef82fe51041fa1fe4aa1",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/legacy/authentication/signed-in-1440.png"
+            },
+            {
+              "path": "governance/evidence/ui/authentication-20261028/reference/signed-in-proposal-1440.png",
+              "sha256": "3f43a91de7fdf7b4f2b4826502b462c54a66125f1225cce184843c02b5cc671c"
+            }
+          ],
+          "boundary": "Existing parent item compatibility only; historical Product/scoped decisions are reused, never renewed or expanded."
+        },
+        {
+          "id": "UX-FID-008",
+          "result": "PASS",
+          "description": "Current actual reports/screenshots, reference provenance, source identity and existing scoped consent are linked without redating historical evidence. Item-specific basis: Existing approved signed-in card, exact sign-out feedback and separately approved Account-security continuation remain. Added continuation changes card height under existing consent; no new account/session fact is invented.",
+          "case_groups": [
+            "authentication/Signed-in fidelity accessibility at1440,1024,768,390,320",
+            "authentication/canonical sign-out guard and unavailable retry",
+            "passkeys/approved Ready and SignedIn navigation guarded chain"
+          ],
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/manifest.json",
+              "sha256": "03ada820284b4f14354d2a10c912831ebfb3f181b22b215d0e35f53ec2663bc4",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/manifest.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/manifest.json",
+              "sha256": "fdde6352a2f927feacf576d2484614df77f73e4c88116f42a95cc9b163db765c",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/manifest.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/render-manifest-final.json",
+              "sha256": "5be639e38a6f67ad65ff454a9b229f0bf68af8f3e9487369301b951542c17887",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/render-manifest-final.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/navigation-results.json",
+              "sha256": "667558ae2fb966497abd7983511c3441dfc321fcd06da51a132225d72a2f0971",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/navigation-results.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/contrast-resolution-final.json",
+              "sha256": "68ef7dff051dc6dfa5c5266532b7978d58ed0a0444ad19cf1aa6e6b17d1323e0",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/contrast-resolution-final.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/legacy/authentication/signed-in-1440.png",
+              "sha256": "9c9e75e9052e0f26f7c59a64034fb396925535861bbcef82fe51041fa1fe4aa1",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/legacy/authentication/signed-in-1440.png"
+            },
+            {
+              "path": "governance/evidence/ui/authentication-20261028/reference/signed-in-proposal-1440.png",
+              "sha256": "3f43a91de7fdf7b4f2b4826502b462c54a66125f1225cce184843c02b5cc671c"
+            }
+          ],
+          "boundary": "Existing parent item compatibility only; historical Product/scoped decisions are reused, never renewed or expanded."
+        }
+      ],
+      "screenshots": [
+        {
+          "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/legacy/authentication/signed-in-1440.png",
+          "sha256": "9c9e75e9052e0f26f7c59a64034fb396925535861bbcef82fe51041fa1fe4aa1",
+          "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/legacy/authentication/signed-in-1440.png",
+          "role": "CURRENT_SOURCE_RENDER",
+          "source_carrier_sha": "6e562db102ce75d5ed478a15e2970ff55ab98fef"
+        },
+        {
+          "path": "governance/evidence/ui/authentication-20261028/reference/signed-in-proposal-1440.png",
+          "sha256": "3f43a91de7fdf7b4f2b4826502b462c54a66125f1225cce184843c02b5cc671c",
+          "role": "APPROVED_REFERENCE_OR_SCOPED_PROPOSAL"
+        }
+      ],
+      "deviations": [
+        {
+          "status": "PRODUCT_OWNER_APPROVED",
+          "approval_evidence": {
+            "path": "governance/evidence/TUN-P2-005-VISUAL-CONSENT-20261021.json",
+            "sha256": "58eff6b8b41bd790a55afc048a139874a60ee12e72013e3a0e316ce2ed815145"
+          }
+        },
+        {
+          "status": "PRODUCT_OWNER_APPROVED",
+          "approval_evidence": {
+            "path": "governance/evidence/TUN-P2-005-VISUAL-ACCEPTANCE-DEFERRAL-20261021.json",
+            "sha256": "2a2ed7402e090eeab3a73ef0726c0209b62db34de1f720234e7a23c0ae5cf37f"
+          }
+        },
+        {
+          "status": "PRODUCT_OWNER_APPROVED",
+          "approval_evidence": {
+            "path": "governance/evidence/TUN-P2-007-NAVIGATION-CONSENT-20261110.json",
+            "sha256": "4862f0b05265a1679ff99b714becc567e067e7b9d14acded43dbce426d2becf1"
+          }
+        }
+      ],
+      "historical_item_ref": {
+        "path": "governance/evidence/TUN-P2-005-UI-COMPLIANCE.json",
+        "item_id": "U-AUTH-SIGNED-IN",
+        "sha256": "5a8e600f98cd4636a81bca0d108f795daf70eab8ce99947ef99644d986cec2ae"
+      },
+      "historical_screenshots": [
+        {
+          "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-authentication/signed-in-1024.png",
+          "sha256": "658e6a2d50c5dabcc3e31223b2f2e0e1977e399056f32708378e2e4337ee62bc",
+          "role": "CURRENT_SOURCE_RENDER",
+          "original_execution_ref": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-final-80a32ab-authentication/signed-in-1024.png"
+        },
+        {
+          "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-authentication/signed-in-1440.png",
+          "sha256": "9c9e75e9052e0f26f7c59a64034fb396925535861bbcef82fe51041fa1fe4aa1",
+          "role": "CURRENT_SOURCE_RENDER",
+          "original_execution_ref": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-final-80a32ab-authentication/signed-in-1440.png"
+        },
+        {
+          "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-authentication/signed-in-320.png",
+          "sha256": "53deab375fe1c33747848bfba60e722f4dfb3852254d3eeb26fe4250879523e0",
+          "role": "CURRENT_SOURCE_RENDER",
+          "original_execution_ref": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-final-80a32ab-authentication/signed-in-320.png"
+        },
+        {
+          "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-authentication/signed-in-390.png",
+          "sha256": "21fad68ecd6ea985b8e1cb849f77dd1650ebe3fdb23af4bc5950eca1058a5669",
+          "role": "CURRENT_SOURCE_RENDER",
+          "original_execution_ref": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-final-80a32ab-authentication/signed-in-390.png"
+        },
+        {
+          "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-authentication/signed-in-768.png",
+          "sha256": "26ca19796aaea9b053a4361d635459ca7d9b557cf4859bd901183bf9832d2c02",
+          "role": "CURRENT_SOURCE_RENDER",
+          "original_execution_ref": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-final-80a32ab-authentication/signed-in-768.png"
+        },
+        {
+          "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/passkeys/run-details/navigation-Approved-Ready--045ea-yboard-and-geometry-at-1440/signed-in-navigation-1440.png",
+          "sha256": "8705adce1c0d6fec255eba17d429974af1d812f155d83aedb8be3096f873206e",
+          "role": "CURRENT_SOURCE_RENDER",
+          "original_execution_ref": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-final-80a32ab-passkeys/run-details/navigation-Approved-Ready--045ea-yboard-and-geometry-at-1440/signed-in-navigation-1440.png"
+        },
+        {
+          "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/passkeys/run-details/navigation-Approved-Ready--6bc49-eyboard-and-geometry-at-320/signed-in-navigation-320.png",
+          "sha256": "7dcaef4ba76df8bf6236659831a9ef51083348288d8c699d6e1ed742783fbfd8",
+          "role": "CURRENT_SOURCE_RENDER",
+          "original_execution_ref": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-final-80a32ab-passkeys/run-details/navigation-Approved-Ready--6bc49-eyboard-and-geometry-at-320/signed-in-navigation-320.png"
+        },
+        {
+          "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/passkeys/run-details/navigation-Approved-Ready--86776-eyboard-and-geometry-at-390/signed-in-navigation-390.png",
+          "sha256": "c3a8dae2a0b8e57194019163fb037b92da17eb456a79b0bbf905b74b5790406f",
+          "role": "CURRENT_SOURCE_RENDER",
+          "original_execution_ref": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-final-80a32ab-passkeys/run-details/navigation-Approved-Ready--86776-eyboard-and-geometry-at-390/signed-in-navigation-390.png"
+        },
+        {
+          "path": "governance/evidence/ui/authentication-20261028/reference/signed-in-proposal-1440.png",
+          "sha256": "3f43a91de7fdf7b4f2b4826502b462c54a66125f1225cce184843c02b5cc671c",
+          "role": "APPROVED_REFERENCE_OR_SCOPED_PROPOSAL",
+          "original_execution_ref": "governance/evidence/ui/authentication-20261028/reference/signed-in-proposal-1440.png"
+        }
+      ],
+      "case_groups": [
+        "authentication/Signed-in fidelity accessibility at1440,1024,768,390,320",
+        "authentication/canonical sign-out guard and unavailable retry",
+        "passkeys/approved Ready and SignedIn navigation guarded chain"
+      ],
+      "manual_comparison": {
+        "result": "PASS_WITH_EXISTING_SCOPED_ADAPTATIONS",
+        "notes": "Existing approved signed-in card, exact sign-out feedback and separately approved Account-security continuation remain. Added continuation changes card height under existing consent; no new account/session fact is invented.",
+        "reviewer_roles": [
+          "ui-ux-engineer",
+          "frontend-engineer",
+          "tester-qa-engineer",
+          "end-user-ux-reviewer"
+        ]
+      },
+      "unresolved_findings": []
+    },
+    {
+      "id": "FORM-LOGIN",
+      "figma_refs": [
+        {
+          "file_key": "apNbwvAgdn1xIxYH1oiaSC",
+          "node_id": "2:4"
+        },
+        {
+          "file_key": "apNbwvAgdn1xIxYH1oiaSC",
+          "node_id": "70:1257"
+        }
+      ],
+      "additional_observed_design_refs": [],
+      "checks": [
+        {
+          "id": "VAL-001",
+          "result": "PASS",
+          "description": "Named empty/format/confirmation cases render approved shared field errors. Item-specific basis: Existing Login form uses shared typed field/summary errors, current password policy, safe email retention, password clearing and duplicate guards. New TOTP result parsing never treats MFA-required as a final session.",
+          "case_groups": [
+            "authentication/Login blur correction first-invalid and server errors at1440,768,320",
+            "authentication/pending duplicate and visibility keyboard guard",
+            "authentication/exact original result recovery",
+            "shared-foundation/shared validation"
+          ],
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/manifest.json",
+              "sha256": "03ada820284b4f14354d2a10c912831ebfb3f181b22b215d0e35f53ec2663bc4",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/manifest.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/manifest.json",
+              "sha256": "fdde6352a2f927feacf576d2484614df77f73e4c88116f42a95cc9b163db765c",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/manifest.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/render-manifest-final.json",
+              "sha256": "5be639e38a6f67ad65ff454a9b229f0bf68af8f3e9487369301b951542c17887",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/render-manifest-final.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/navigation-results.json",
+              "sha256": "667558ae2fb966497abd7983511c3441dfc321fcd06da51a132225d72a2f0971",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/navigation-results.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/contrast-resolution-final.json",
+              "sha256": "68ef7dff051dc6dfa5c5266532b7978d58ed0a0444ad19cf1aa6e6b17d1323e0",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/contrast-resolution-final.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/legacy/authentication/login-server-error-320.png",
+              "sha256": "917befdcfe02f76c142b707b28ab9fe3a8ae37e57731c63b04f4f0cc9e86b165",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/legacy/authentication/login-server-error-320.png"
+            },
+            {
+              "path": "governance/evidence/ui/AMD0009/figma-registration-validation-errors.png",
+              "sha256": "0b1e8d0a4516747f85501f828cb62dd7adbb938ce9f1244e34e5a1eb5db0d5fa"
+            }
+          ],
+          "boundary": "Existing parent item compatibility only; historical Product/scoped decisions are reused, never renewed or expanded."
+        },
+        {
+          "id": "VAL-002",
+          "result": "PASS",
+          "description": "Typed application errors and form noValidate are exercised; native bubbles are not sole feedback. Item-specific basis: Existing Login form uses shared typed field/summary errors, current password policy, safe email retention, password clearing and duplicate guards. New TOTP result parsing never treats MFA-required as a final session.",
+          "case_groups": [
+            "authentication/Login blur correction first-invalid and server errors at1440,768,320",
+            "authentication/pending duplicate and visibility keyboard guard",
+            "authentication/exact original result recovery",
+            "shared-foundation/shared validation"
+          ],
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/manifest.json",
+              "sha256": "03ada820284b4f14354d2a10c912831ebfb3f181b22b215d0e35f53ec2663bc4",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/manifest.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/manifest.json",
+              "sha256": "fdde6352a2f927feacf576d2484614df77f73e4c88116f42a95cc9b163db765c",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/manifest.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/render-manifest-final.json",
+              "sha256": "5be639e38a6f67ad65ff454a9b229f0bf68af8f3e9487369301b951542c17887",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/render-manifest-final.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/navigation-results.json",
+              "sha256": "667558ae2fb966497abd7983511c3441dfc321fcd06da51a132225d72a2f0971",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/navigation-results.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/contrast-resolution-final.json",
+              "sha256": "68ef7dff051dc6dfa5c5266532b7978d58ed0a0444ad19cf1aa6e6b17d1323e0",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/contrast-resolution-final.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/legacy/authentication/login-server-error-320.png",
+              "sha256": "917befdcfe02f76c142b707b28ab9fe3a8ae37e57731c63b04f4f0cc9e86b165",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/legacy/authentication/login-server-error-320.png"
+            },
+            {
+              "path": "governance/evidence/ui/AMD0009/figma-registration-validation-errors.png",
+              "sha256": "0b1e8d0a4516747f85501f828cb62dd7adbb938ce9f1244e34e5a1eb5db0d5fa"
+            }
+          ],
+          "boundary": "Existing parent item compatibility only; historical Product/scoped decisions are reused, never renewed or expanded."
+        },
+        {
+          "id": "VAL-003",
+          "result": "PASS",
+          "description": "Independent native backend tests are actual PASS in the linked260 receipt; source carrier equality is bound by the parent compatibility receipt, not inferred from mocks. Item-specific basis: Existing Login form uses shared typed field/summary errors, current password policy, safe email retention, password clearing and duplicate guards. New TOTP result parsing never treats MFA-required as a final session.",
+          "case_groups": [
+            "authentication/Login blur correction first-invalid and server errors at1440,768,320",
+            "authentication/pending duplicate and visibility keyboard guard",
+            "authentication/exact original result recovery",
+            "shared-foundation/shared validation"
+          ],
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/parent005006-compatibility/native-execution-index.json",
+              "sha256": "dd31918f974b5e7294df49a4be45ca03c7323667cd8907752693d71c0f02803f"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/manifest.json",
+              "sha256": "03ada820284b4f14354d2a10c912831ebfb3f181b22b215d0e35f53ec2663bc4",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/manifest.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/manifest.json",
+              "sha256": "fdde6352a2f927feacf576d2484614df77f73e4c88116f42a95cc9b163db765c",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/manifest.json"
+            }
+          ],
+          "boundary": "Existing parent item compatibility only; historical Product/scoped decisions are reused, never renewed or expanded."
+        },
+        {
+          "id": "VAL-004",
+          "result": "PASS",
+          "description": "Named server rejections map to governed field/form messages without invented account existence or finality. Item-specific basis: Existing Login form uses shared typed field/summary errors, current password policy, safe email retention, password clearing and duplicate guards. New TOTP result parsing never treats MFA-required as a final session.",
+          "case_groups": [
+            "authentication/Login blur correction first-invalid and server errors at1440,768,320",
+            "authentication/pending duplicate and visibility keyboard guard",
+            "authentication/exact original result recovery",
+            "shared-foundation/shared validation"
+          ],
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/manifest.json",
+              "sha256": "03ada820284b4f14354d2a10c912831ebfb3f181b22b215d0e35f53ec2663bc4",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/manifest.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/manifest.json",
+              "sha256": "fdde6352a2f927feacf576d2484614df77f73e4c88116f42a95cc9b163db765c",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/manifest.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/render-manifest-final.json",
+              "sha256": "5be639e38a6f67ad65ff454a9b229f0bf68af8f3e9487369301b951542c17887",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/render-manifest-final.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/navigation-results.json",
+              "sha256": "667558ae2fb966497abd7983511c3441dfc321fcd06da51a132225d72a2f0971",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/navigation-results.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/contrast-resolution-final.json",
+              "sha256": "68ef7dff051dc6dfa5c5266532b7978d58ed0a0444ad19cf1aa6e6b17d1323e0",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/contrast-resolution-final.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/legacy/authentication/login-server-error-320.png",
+              "sha256": "917befdcfe02f76c142b707b28ab9fe3a8ae37e57731c63b04f4f0cc9e86b165",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/legacy/authentication/login-server-error-320.png"
+            },
+            {
+              "path": "governance/evidence/ui/AMD0009/figma-registration-validation-errors.png",
+              "sha256": "0b1e8d0a4516747f85501f828cb62dd7adbb938ce9f1244e34e5a1eb5db0d5fa"
+            }
+          ],
+          "boundary": "Existing parent item compatibility only; historical Product/scoped decisions are reused, never renewed or expanded."
+        },
+        {
+          "id": "VAL-005",
+          "result": "PASS",
+          "description": "Named cases exercise blur/correction, first-invalid focus, descriptions, safe-value handling and pending duplicate protection. Item-specific basis: Existing Login form uses shared typed field/summary errors, current password policy, safe email retention, password clearing and duplicate guards. New TOTP result parsing never treats MFA-required as a final session.",
+          "case_groups": [
+            "authentication/Login blur correction first-invalid and server errors at1440,768,320",
+            "authentication/pending duplicate and visibility keyboard guard",
+            "authentication/exact original result recovery",
+            "shared-foundation/shared validation"
+          ],
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/manifest.json",
+              "sha256": "03ada820284b4f14354d2a10c912831ebfb3f181b22b215d0e35f53ec2663bc4",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/manifest.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/manifest.json",
+              "sha256": "fdde6352a2f927feacf576d2484614df77f73e4c88116f42a95cc9b163db765c",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/manifest.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/render-manifest-final.json",
+              "sha256": "5be639e38a6f67ad65ff454a9b229f0bf68af8f3e9487369301b951542c17887",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/render-manifest-final.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/navigation-results.json",
+              "sha256": "667558ae2fb966497abd7983511c3441dfc321fcd06da51a132225d72a2f0971",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/navigation-results.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/contrast-resolution-final.json",
+              "sha256": "68ef7dff051dc6dfa5c5266532b7978d58ed0a0444ad19cf1aa6e6b17d1323e0",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/contrast-resolution-final.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/legacy/authentication/login-server-error-320.png",
+              "sha256": "917befdcfe02f76c142b707b28ab9fe3a8ae37e57731c63b04f4f0cc9e86b165",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/legacy/authentication/login-server-error-320.png"
+            },
+            {
+              "path": "governance/evidence/ui/AMD0009/figma-registration-validation-errors.png",
+              "sha256": "0b1e8d0a4516747f85501f828cb62dd7adbb938ce9f1244e34e5a1eb5db0d5fa"
+            }
+          ],
+          "boundary": "Existing parent item compatibility only; historical Product/scoped decisions are reused, never renewed or expanded."
+        },
+        {
+          "id": "VAL-006",
+          "result": "PASS",
+          "description": "Current actual error screenshots reviewed against approved70:1257 treatment and existing scoped adaptations. Item-specific basis: Existing Login form uses shared typed field/summary errors, current password policy, safe email retention, password clearing and duplicate guards. New TOTP result parsing never treats MFA-required as a final session.",
+          "case_groups": [
+            "authentication/Login blur correction first-invalid and server errors at1440,768,320",
+            "authentication/pending duplicate and visibility keyboard guard",
+            "authentication/exact original result recovery",
+            "shared-foundation/shared validation"
+          ],
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/manifest.json",
+              "sha256": "03ada820284b4f14354d2a10c912831ebfb3f181b22b215d0e35f53ec2663bc4",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/manifest.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/manifest.json",
+              "sha256": "fdde6352a2f927feacf576d2484614df77f73e4c88116f42a95cc9b163db765c",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/manifest.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/render-manifest-final.json",
+              "sha256": "5be639e38a6f67ad65ff454a9b229f0bf68af8f3e9487369301b951542c17887",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/render-manifest-final.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/navigation-results.json",
+              "sha256": "667558ae2fb966497abd7983511c3441dfc321fcd06da51a132225d72a2f0971",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/navigation-results.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/contrast-resolution-final.json",
+              "sha256": "68ef7dff051dc6dfa5c5266532b7978d58ed0a0444ad19cf1aa6e6b17d1323e0",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/contrast-resolution-final.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/legacy/authentication/login-server-error-320.png",
+              "sha256": "917befdcfe02f76c142b707b28ab9fe3a8ae37e57731c63b04f4f0cc9e86b165",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/legacy/authentication/login-server-error-320.png"
+            },
+            {
+              "path": "governance/evidence/ui/AMD0009/figma-registration-validation-errors.png",
+              "sha256": "0b1e8d0a4516747f85501f828cb62dd7adbb938ce9f1244e34e5a1eb5db0d5fa"
+            }
+          ],
+          "boundary": "Existing parent item compatibility only; historical Product/scoped decisions are reused, never renewed or expanded."
+        },
+        {
+          "id": "VAL-007",
+          "result": "PASS",
+          "description": "Current domain/policy rules govern fields, code/password grammar and messages; historical Figma wording is not business authority. Item-specific basis: Existing Login form uses shared typed field/summary errors, current password policy, safe email retention, password clearing and duplicate guards. New TOTP result parsing never treats MFA-required as a final session.",
+          "case_groups": [
+            "authentication/Login blur correction first-invalid and server errors at1440,768,320",
+            "authentication/pending duplicate and visibility keyboard guard",
+            "authentication/exact original result recovery",
+            "shared-foundation/shared validation"
+          ],
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/manifest.json",
+              "sha256": "03ada820284b4f14354d2a10c912831ebfb3f181b22b215d0e35f53ec2663bc4",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/manifest.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/manifest.json",
+              "sha256": "fdde6352a2f927feacf576d2484614df77f73e4c88116f42a95cc9b163db765c",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/manifest.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/render-manifest-final.json",
+              "sha256": "5be639e38a6f67ad65ff454a9b229f0bf68af8f3e9487369301b951542c17887",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/render-manifest-final.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/navigation-results.json",
+              "sha256": "667558ae2fb966497abd7983511c3441dfc321fcd06da51a132225d72a2f0971",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/navigation-results.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/contrast-resolution-final.json",
+              "sha256": "68ef7dff051dc6dfa5c5266532b7978d58ed0a0444ad19cf1aa6e6b17d1323e0",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/contrast-resolution-final.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/legacy/authentication/login-server-error-320.png",
+              "sha256": "917befdcfe02f76c142b707b28ab9fe3a8ae37e57731c63b04f4f0cc9e86b165",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/legacy/authentication/login-server-error-320.png"
+            },
+            {
+              "path": "governance/evidence/ui/AMD0009/figma-registration-validation-errors.png",
+              "sha256": "0b1e8d0a4516747f85501f828cb62dd7adbb938ce9f1244e34e5a1eb5db0d5fa"
+            }
+          ],
+          "boundary": "Existing parent item compatibility only; historical Product/scoped decisions are reused, never renewed or expanded."
+        },
+        {
+          "id": "VAL-008",
+          "result": "PASS",
+          "description": "Existing parent cross-device route/form regressions actually pass with independent native receipt/source binding. This does not approve the separate008real browser OTP journey. Item-specific basis: Existing Login form uses shared typed field/summary errors, current password policy, safe email retention, password clearing and duplicate guards. New TOTP result parsing never treats MFA-required as a final session.",
+          "case_groups": [
+            "authentication/Login blur correction first-invalid and server errors at1440,768,320",
+            "authentication/pending duplicate and visibility keyboard guard",
+            "authentication/exact original result recovery",
+            "shared-foundation/shared validation"
+          ],
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/manifest.json",
+              "sha256": "03ada820284b4f14354d2a10c912831ebfb3f181b22b215d0e35f53ec2663bc4",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/manifest.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/manifest.json",
+              "sha256": "fdde6352a2f927feacf576d2484614df77f73e4c88116f42a95cc9b163db765c",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/manifest.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/render-manifest-final.json",
+              "sha256": "5be639e38a6f67ad65ff454a9b229f0bf68af8f3e9487369301b951542c17887",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/render-manifest-final.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/navigation-results.json",
+              "sha256": "667558ae2fb966497abd7983511c3441dfc321fcd06da51a132225d72a2f0971",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/navigation-results.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/contrast-resolution-final.json",
+              "sha256": "68ef7dff051dc6dfa5c5266532b7978d58ed0a0444ad19cf1aa6e6b17d1323e0",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/contrast-resolution-final.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/legacy/authentication/login-server-error-320.png",
+              "sha256": "917befdcfe02f76c142b707b28ab9fe3a8ae37e57731c63b04f4f0cc9e86b165",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/legacy/authentication/login-server-error-320.png"
+            },
+            {
+              "path": "governance/evidence/ui/AMD0009/figma-registration-validation-errors.png",
+              "sha256": "0b1e8d0a4516747f85501f828cb62dd7adbb938ce9f1244e34e5a1eb5db0d5fa"
+            }
+          ],
+          "boundary": "Existing parent item compatibility only; historical Product/scoped decisions are reused, never renewed or expanded."
+        },
+        {
+          "id": "UX-FID-001",
+          "result": "PASS",
+          "description": "Manual current/reference comparison in item notes; scoped existing composition retained. Item-specific basis: Existing Login form uses shared typed field/summary errors, current password policy, safe email retention, password clearing and duplicate guards. New TOTP result parsing never treats MFA-required as a final session.",
+          "case_groups": [
+            "authentication/Login blur correction first-invalid and server errors at1440,768,320",
+            "authentication/pending duplicate and visibility keyboard guard",
+            "authentication/exact original result recovery",
+            "shared-foundation/shared validation"
+          ],
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/manifest.json",
+              "sha256": "03ada820284b4f14354d2a10c912831ebfb3f181b22b215d0e35f53ec2663bc4",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/manifest.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/manifest.json",
+              "sha256": "fdde6352a2f927feacf576d2484614df77f73e4c88116f42a95cc9b163db765c",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/manifest.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/render-manifest-final.json",
+              "sha256": "5be639e38a6f67ad65ff454a9b229f0bf68af8f3e9487369301b951542c17887",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/render-manifest-final.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/navigation-results.json",
+              "sha256": "667558ae2fb966497abd7983511c3441dfc321fcd06da51a132225d72a2f0971",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/navigation-results.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/contrast-resolution-final.json",
+              "sha256": "68ef7dff051dc6dfa5c5266532b7978d58ed0a0444ad19cf1aa6e6b17d1323e0",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/contrast-resolution-final.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/legacy/authentication/login-server-error-320.png",
+              "sha256": "917befdcfe02f76c142b707b28ab9fe3a8ae37e57731c63b04f4f0cc9e86b165",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/legacy/authentication/login-server-error-320.png"
+            },
+            {
+              "path": "governance/evidence/ui/AMD0009/figma-registration-validation-errors.png",
+              "sha256": "0b1e8d0a4516747f85501f828cb62dd7adbb938ce9f1244e34e5a1eb5db0d5fa"
+            }
+          ],
+          "boundary": "Existing parent item compatibility only; historical Product/scoped decisions are reused, never renewed or expanded."
+        },
+        {
+          "id": "UX-FID-002",
+          "result": "PASS",
+          "description": "Local page/glow/assets are present in current captures and local-asset tests. Item-specific basis: Existing Login form uses shared typed field/summary errors, current password policy, safe email retention, password clearing and duplicate guards. New TOTP result parsing never treats MFA-required as a final session.",
+          "case_groups": [
+            "authentication/Login blur correction first-invalid and server errors at1440,768,320",
+            "authentication/pending duplicate and visibility keyboard guard",
+            "authentication/exact original result recovery",
+            "shared-foundation/shared validation"
+          ],
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/manifest.json",
+              "sha256": "03ada820284b4f14354d2a10c912831ebfb3f181b22b215d0e35f53ec2663bc4",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/manifest.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/manifest.json",
+              "sha256": "fdde6352a2f927feacf576d2484614df77f73e4c88116f42a95cc9b163db765c",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/manifest.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/render-manifest-final.json",
+              "sha256": "5be639e38a6f67ad65ff454a9b229f0bf68af8f3e9487369301b951542c17887",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/render-manifest-final.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/navigation-results.json",
+              "sha256": "667558ae2fb966497abd7983511c3441dfc321fcd06da51a132225d72a2f0971",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/navigation-results.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/contrast-resolution-final.json",
+              "sha256": "68ef7dff051dc6dfa5c5266532b7978d58ed0a0444ad19cf1aa6e6b17d1323e0",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/contrast-resolution-final.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/legacy/authentication/login-server-error-320.png",
+              "sha256": "917befdcfe02f76c142b707b28ab9fe3a8ae37e57731c63b04f4f0cc9e86b165",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/legacy/authentication/login-server-error-320.png"
+            },
+            {
+              "path": "governance/evidence/ui/AMD0009/figma-registration-validation-errors.png",
+              "sha256": "0b1e8d0a4516747f85501f828cb62dd7adbb938ce9f1244e34e5a1eb5db0d5fa"
+            }
+          ],
+          "boundary": "Existing parent item compatibility only; historical Product/scoped decisions are reused, never renewed or expanded."
+        },
+        {
+          "id": "UX-FID-003",
+          "result": "PASS",
+          "description": "Shared typed fields/buttons/error geometry and token variants are reused. Item-specific basis: Existing Login form uses shared typed field/summary errors, current password policy, safe email retention, password clearing and duplicate guards. New TOTP result parsing never treats MFA-required as a final session.",
+          "case_groups": [
+            "authentication/Login blur correction first-invalid and server errors at1440,768,320",
+            "authentication/pending duplicate and visibility keyboard guard",
+            "authentication/exact original result recovery",
+            "shared-foundation/shared validation"
+          ],
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/manifest.json",
+              "sha256": "03ada820284b4f14354d2a10c912831ebfb3f181b22b215d0e35f53ec2663bc4",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/manifest.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/manifest.json",
+              "sha256": "fdde6352a2f927feacf576d2484614df77f73e4c88116f42a95cc9b163db765c",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/manifest.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/render-manifest-final.json",
+              "sha256": "5be639e38a6f67ad65ff454a9b229f0bf68af8f3e9487369301b951542c17887",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/render-manifest-final.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/navigation-results.json",
+              "sha256": "667558ae2fb966497abd7983511c3441dfc321fcd06da51a132225d72a2f0971",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/navigation-results.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/contrast-resolution-final.json",
+              "sha256": "68ef7dff051dc6dfa5c5266532b7978d58ed0a0444ad19cf1aa6e6b17d1323e0",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/contrast-resolution-final.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/legacy/authentication/login-server-error-320.png",
+              "sha256": "917befdcfe02f76c142b707b28ab9fe3a8ae37e57731c63b04f4f0cc9e86b165",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/legacy/authentication/login-server-error-320.png"
+            },
+            {
+              "path": "governance/evidence/ui/AMD0009/figma-registration-validation-errors.png",
+              "sha256": "0b1e8d0a4516747f85501f828cb62dd7adbb938ce9f1244e34e5a1eb5db0d5fa"
+            }
+          ],
+          "boundary": "Existing parent item compatibility only; historical Product/scoped decisions are reused, never renewed or expanded."
+        },
+        {
+          "id": "UX-FID-004",
+          "result": "PASS",
+          "description": "Only previously approved scoped deviations/consents apply; preserve their exact references. Item-specific basis: Existing Login form uses shared typed field/summary errors, current password policy, safe email retention, password clearing and duplicate guards. New TOTP result parsing never treats MFA-required as a final session.",
+          "case_groups": [
+            "authentication/Login blur correction first-invalid and server errors at1440,768,320",
+            "authentication/pending duplicate and visibility keyboard guard",
+            "authentication/exact original result recovery",
+            "shared-foundation/shared validation"
+          ],
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/manifest.json",
+              "sha256": "03ada820284b4f14354d2a10c912831ebfb3f181b22b215d0e35f53ec2663bc4",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/manifest.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/manifest.json",
+              "sha256": "fdde6352a2f927feacf576d2484614df77f73e4c88116f42a95cc9b163db765c",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/manifest.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/render-manifest-final.json",
+              "sha256": "5be639e38a6f67ad65ff454a9b229f0bf68af8f3e9487369301b951542c17887",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/render-manifest-final.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/navigation-results.json",
+              "sha256": "667558ae2fb966497abd7983511c3441dfc321fcd06da51a132225d72a2f0971",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/navigation-results.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/contrast-resolution-final.json",
+              "sha256": "68ef7dff051dc6dfa5c5266532b7978d58ed0a0444ad19cf1aa6e6b17d1323e0",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/contrast-resolution-final.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/legacy/authentication/login-server-error-320.png",
+              "sha256": "917befdcfe02f76c142b707b28ab9fe3a8ae37e57731c63b04f4f0cc9e86b165",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/legacy/authentication/login-server-error-320.png"
+            },
+            {
+              "path": "governance/evidence/ui/AMD0009/figma-registration-validation-errors.png",
+              "sha256": "0b1e8d0a4516747f85501f828cb62dd7adbb938ce9f1244e34e5a1eb5db0d5fa"
+            }
+          ],
+          "boundary": "Existing parent item compatibility only; historical Product/scoped decisions are reused, never renewed or expanded."
+        },
+        {
+          "id": "UX-FID-005",
+          "result": "PASS",
+          "description": "Previously resolved domain/Figma conflicts remain truthful; no new material conflict observed in this compatibility scope. Item-specific basis: Existing Login form uses shared typed field/summary errors, current password policy, safe email retention, password clearing and duplicate guards. New TOTP result parsing never treats MFA-required as a final session.",
+          "case_groups": [
+            "authentication/Login blur correction first-invalid and server errors at1440,768,320",
+            "authentication/pending duplicate and visibility keyboard guard",
+            "authentication/exact original result recovery",
+            "shared-foundation/shared validation"
+          ],
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/manifest.json",
+              "sha256": "03ada820284b4f14354d2a10c912831ebfb3f181b22b215d0e35f53ec2663bc4",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/manifest.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/manifest.json",
+              "sha256": "fdde6352a2f927feacf576d2484614df77f73e4c88116f42a95cc9b163db765c",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/manifest.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/render-manifest-final.json",
+              "sha256": "5be639e38a6f67ad65ff454a9b229f0bf68af8f3e9487369301b951542c17887",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/render-manifest-final.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/navigation-results.json",
+              "sha256": "667558ae2fb966497abd7983511c3441dfc321fcd06da51a132225d72a2f0971",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/navigation-results.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/contrast-resolution-final.json",
+              "sha256": "68ef7dff051dc6dfa5c5266532b7978d58ed0a0444ad19cf1aa6e6b17d1323e0",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/contrast-resolution-final.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/legacy/authentication/login-server-error-320.png",
+              "sha256": "917befdcfe02f76c142b707b28ab9fe3a8ae37e57731c63b04f4f0cc9e86b165",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/legacy/authentication/login-server-error-320.png"
+            },
+            {
+              "path": "governance/evidence/ui/AMD0009/figma-registration-validation-errors.png",
+              "sha256": "0b1e8d0a4516747f85501f828cb62dd7adbb938ce9f1244e34e5a1eb5db0d5fa"
+            }
+          ],
+          "boundary": "Existing parent item compatibility only; historical Product/scoped decisions are reused, never renewed or expanded."
+        },
+        {
+          "id": "UX-FID-006",
+          "result": "PASS",
+          "description": "Current source and screenshots retain approved screen-specific styling rather than library defaults. Item-specific basis: Existing Login form uses shared typed field/summary errors, current password policy, safe email retention, password clearing and duplicate guards. New TOTP result parsing never treats MFA-required as a final session.",
+          "case_groups": [
+            "authentication/Login blur correction first-invalid and server errors at1440,768,320",
+            "authentication/pending duplicate and visibility keyboard guard",
+            "authentication/exact original result recovery",
+            "shared-foundation/shared validation"
+          ],
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/manifest.json",
+              "sha256": "03ada820284b4f14354d2a10c912831ebfb3f181b22b215d0e35f53ec2663bc4",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/manifest.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/manifest.json",
+              "sha256": "fdde6352a2f927feacf576d2484614df77f73e4c88116f42a95cc9b163db765c",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/manifest.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/render-manifest-final.json",
+              "sha256": "5be639e38a6f67ad65ff454a9b229f0bf68af8f3e9487369301b951542c17887",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/render-manifest-final.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/navigation-results.json",
+              "sha256": "667558ae2fb966497abd7983511c3441dfc321fcd06da51a132225d72a2f0971",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/navigation-results.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/contrast-resolution-final.json",
+              "sha256": "68ef7dff051dc6dfa5c5266532b7978d58ed0a0444ad19cf1aa6e6b17d1323e0",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/contrast-resolution-final.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/legacy/authentication/login-server-error-320.png",
+              "sha256": "917befdcfe02f76c142b707b28ab9fe3a8ae37e57731c63b04f4f0cc9e86b165",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/legacy/authentication/login-server-error-320.png"
+            },
+            {
+              "path": "governance/evidence/ui/AMD0009/figma-registration-validation-errors.png",
+              "sha256": "0b1e8d0a4516747f85501f828cb62dd7adbb938ce9f1244e34e5a1eb5db0d5fa"
+            }
+          ],
+          "boundary": "Existing parent item compatibility only; historical Product/scoped decisions are reused, never renewed or expanded."
+        },
+        {
+          "id": "UX-FID-007",
+          "result": "PASS",
+          "description": "Named responsive/Axe/keyboard/focus cases are current; detailed new shared-module contrast report resolves all194current incomplete nodes. Item-specific basis: Existing Login form uses shared typed field/summary errors, current password policy, safe email retention, password clearing and duplicate guards. New TOTP result parsing never treats MFA-required as a final session.",
+          "case_groups": [
+            "authentication/Login blur correction first-invalid and server errors at1440,768,320",
+            "authentication/pending duplicate and visibility keyboard guard",
+            "authentication/exact original result recovery",
+            "shared-foundation/shared validation"
+          ],
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/manifest.json",
+              "sha256": "03ada820284b4f14354d2a10c912831ebfb3f181b22b215d0e35f53ec2663bc4",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/manifest.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/manifest.json",
+              "sha256": "fdde6352a2f927feacf576d2484614df77f73e4c88116f42a95cc9b163db765c",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/manifest.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/render-manifest-final.json",
+              "sha256": "5be639e38a6f67ad65ff454a9b229f0bf68af8f3e9487369301b951542c17887",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/render-manifest-final.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/navigation-results.json",
+              "sha256": "667558ae2fb966497abd7983511c3441dfc321fcd06da51a132225d72a2f0971",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/navigation-results.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/contrast-resolution-final.json",
+              "sha256": "68ef7dff051dc6dfa5c5266532b7978d58ed0a0444ad19cf1aa6e6b17d1323e0",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/contrast-resolution-final.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/legacy/authentication/login-server-error-320.png",
+              "sha256": "917befdcfe02f76c142b707b28ab9fe3a8ae37e57731c63b04f4f0cc9e86b165",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/legacy/authentication/login-server-error-320.png"
+            },
+            {
+              "path": "governance/evidence/ui/AMD0009/figma-registration-validation-errors.png",
+              "sha256": "0b1e8d0a4516747f85501f828cb62dd7adbb938ce9f1244e34e5a1eb5db0d5fa"
+            }
+          ],
+          "boundary": "Existing parent item compatibility only; historical Product/scoped decisions are reused, never renewed or expanded."
+        },
+        {
+          "id": "UX-FID-008",
+          "result": "PASS",
+          "description": "Current actual reports/screenshots, reference provenance, source identity and existing scoped consent are linked without redating historical evidence. Item-specific basis: Existing Login form uses shared typed field/summary errors, current password policy, safe email retention, password clearing and duplicate guards. New TOTP result parsing never treats MFA-required as a final session.",
+          "case_groups": [
+            "authentication/Login blur correction first-invalid and server errors at1440,768,320",
+            "authentication/pending duplicate and visibility keyboard guard",
+            "authentication/exact original result recovery",
+            "shared-foundation/shared validation"
+          ],
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/manifest.json",
+              "sha256": "03ada820284b4f14354d2a10c912831ebfb3f181b22b215d0e35f53ec2663bc4",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/manifest.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/manifest.json",
+              "sha256": "fdde6352a2f927feacf576d2484614df77f73e4c88116f42a95cc9b163db765c",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/manifest.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/render-manifest-final.json",
+              "sha256": "5be639e38a6f67ad65ff454a9b229f0bf68af8f3e9487369301b951542c17887",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/render-manifest-final.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/navigation-results.json",
+              "sha256": "667558ae2fb966497abd7983511c3441dfc321fcd06da51a132225d72a2f0971",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/navigation-results.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/contrast-resolution-final.json",
+              "sha256": "68ef7dff051dc6dfa5c5266532b7978d58ed0a0444ad19cf1aa6e6b17d1323e0",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/contrast-resolution-final.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/legacy/authentication/login-server-error-320.png",
+              "sha256": "917befdcfe02f76c142b707b28ab9fe3a8ae37e57731c63b04f4f0cc9e86b165",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/legacy/authentication/login-server-error-320.png"
+            },
+            {
+              "path": "governance/evidence/ui/AMD0009/figma-registration-validation-errors.png",
+              "sha256": "0b1e8d0a4516747f85501f828cb62dd7adbb938ce9f1244e34e5a1eb5db0d5fa"
+            }
+          ],
+          "boundary": "Existing parent item compatibility only; historical Product/scoped decisions are reused, never renewed or expanded."
+        }
+      ],
+      "screenshots": [
+        {
+          "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/legacy/authentication/login-server-error-320.png",
+          "sha256": "917befdcfe02f76c142b707b28ab9fe3a8ae37e57731c63b04f4f0cc9e86b165",
+          "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/legacy/authentication/login-server-error-320.png",
+          "role": "CURRENT_SOURCE_RENDER",
+          "source_carrier_sha": "6e562db102ce75d5ed478a15e2970ff55ab98fef"
+        },
+        {
+          "path": "governance/evidence/ui/AMD0009/figma-registration-validation-errors.png",
+          "sha256": "0b1e8d0a4516747f85501f828cb62dd7adbb938ce9f1244e34e5a1eb5db0d5fa",
+          "role": "APPROVED_REFERENCE_OR_SCOPED_PROPOSAL"
+        }
+      ],
+      "deviations": [
+        {
+          "status": "PRODUCT_OWNER_APPROVED",
+          "approval_evidence": {
+            "path": "governance/evidence/TUN-P2-005-VISUAL-CONSENT-20261021.json",
+            "sha256": "58eff6b8b41bd790a55afc048a139874a60ee12e72013e3a0e316ce2ed815145"
+          }
+        },
+        {
+          "status": "PRODUCT_OWNER_APPROVED",
+          "approval_evidence": {
+            "path": "governance/evidence/TUN-P2-005-VISUAL-ACCEPTANCE-DEFERRAL-20261021.json",
+            "sha256": "2a2ed7402e090eeab3a73ef0726c0209b62db34de1f720234e7a23c0ae5cf37f"
+          }
+        },
+        {
+          "status": "PRODUCT_OWNER_APPROVED",
+          "approval_evidence": {
+            "path": "governance/evidence/TUN-P2-007-VISUAL-CONSENT-20261109.json",
+            "sha256": "c9415304746bb882a0c49a3b42e16c0e312882f6b48401b1d51666a18d775dfd"
+          }
+        }
+      ],
+      "historical_item_ref": {
+        "path": "governance/evidence/TUN-P2-005-UI-COMPLIANCE.json",
+        "item_id": "FORM-LOGIN",
+        "sha256": "5a8e600f98cd4636a81bca0d108f795daf70eab8ce99947ef99644d986cec2ae"
+      },
+      "historical_screenshots": [
+        {
+          "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-authentication/login-server-error-1440.png",
+          "sha256": "e5c784f92dd0ab829d2ef2f044a20ed1e3726fe8283d0e93bf47842f19ac1dc4",
+          "role": "CURRENT_SOURCE_RENDER",
+          "original_execution_ref": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-final-80a32ab-authentication/login-server-error-1440.png"
+        },
+        {
+          "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-authentication/login-server-error-320.png",
+          "sha256": "c0363322e04f025662f03baca37d97b4cdcee2631ecb932342bc874e8e96a7b9",
+          "role": "CURRENT_SOURCE_RENDER",
+          "original_execution_ref": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-final-80a32ab-authentication/login-server-error-320.png"
+        },
+        {
+          "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-authentication/login-server-error-768.png",
+          "sha256": "e109f3914af8ca8f42231f49568ee8788636ed707218820f49c890bdc9e025bf",
+          "role": "CURRENT_SOURCE_RENDER",
+          "original_execution_ref": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-final-80a32ab-authentication/login-server-error-768.png"
+        },
+        {
+          "path": "governance/evidence/ui/authentication-20261028/reference/login-proposal-1440.png",
+          "sha256": "ff5fe2e31abd267ac820cc8c829d74888f40dca354558ab98b5b9ec809a576eb",
+          "role": "APPROVED_REFERENCE_OR_SCOPED_PROPOSAL",
+          "original_execution_ref": "governance/evidence/ui/authentication-20261028/reference/login-proposal-1440.png"
+        },
+        {
+          "path": "governance/evidence/ui/authentication-20261028/reference/login-figma-1440.png",
+          "sha256": "b847c61833c053614ca4b33fa15d4231f4851ce0504b44c37668dc1fb5657d73",
+          "role": "APPROVED_REFERENCE_OR_SCOPED_PROPOSAL",
+          "original_execution_ref": "governance/evidence/ui/authentication-20261028/reference/login-figma-1440.png"
+        },
+        {
+          "path": "governance/evidence/ui/AMD0009/figma-registration-validation-errors.png",
+          "sha256": "0b1e8d0a4516747f85501f828cb62dd7adbb938ce9f1244e34e5a1eb5db0d5fa",
+          "role": "APPROVED_REFERENCE_OR_SCOPED_PROPOSAL",
+          "original_execution_ref": "governance/evidence/ui/AMD0009/figma-registration-validation-errors.png"
+        },
+        {
+          "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-feedback/login-error-1440.png",
+          "sha256": "a2bb6b77e53cd6948970ad66fe90ae7c3297ab16c67e4cf351bede900587b9ba",
+          "role": "CURRENT_FEEDBACK_RENDER",
+          "viewport": {
+            "width": 1440,
+            "height": 1024
+          }
+        },
+        {
+          "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-feedback/login-error-320.png",
+          "sha256": "d4297f3b9143dc23226b26e8d980bc92827a6e96e1bb62fa323accf33bdd46c1",
+          "role": "CURRENT_FEEDBACK_RENDER",
+          "viewport": {
+            "width": 320,
+            "height": 1024
+          }
+        },
+        {
+          "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-feedback/login-cancel-1440.png",
+          "sha256": "9094db1e7369c7a886e8180d1000071f5a4b062ac76b99532d829c6d96e0c2d8",
+          "role": "CURRENT_FEEDBACK_RENDER",
+          "viewport": {
+            "width": 1440,
+            "height": 1024
+          }
+        },
+        {
+          "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-feedback/login-cancel-320.png",
+          "sha256": "118f6f9dceb45ff39f8aafc66a0deb08032e648ba02ddece63efa8fcdaa43788",
+          "role": "CURRENT_FEEDBACK_RENDER",
+          "viewport": {
+            "width": 320,
+            "height": 1024
+          }
+        }
+      ],
+      "case_groups": [
+        "authentication/Login blur correction first-invalid and server errors at1440,768,320",
+        "authentication/pending duplicate and visibility keyboard guard",
+        "authentication/exact original result recovery",
+        "shared-foundation/shared validation"
+      ],
+      "manual_comparison": {
+        "result": "PASS_WITH_EXISTING_SCOPED_ADAPTATIONS",
+        "notes": "Existing Login form uses shared typed field/summary errors, current password policy, safe email retention, password clearing and duplicate guards. New TOTP result parsing never treats MFA-required as a final session.",
+        "reviewer_roles": [
+          "ui-ux-engineer",
+          "frontend-engineer",
+          "tester-qa-engineer",
+          "end-user-ux-reviewer"
+        ]
+      },
+      "unresolved_findings": []
+    }
+  ],
+  "native_execution_index_ref": "governance/evidence/p2-008-totp-20261110/parent005006-compatibility/native-execution-index.json",
+  "note": "Additive current compatibility wrapper for the exact existing parent inventory items. Historical ownership, checks, screenshots, deviations and approvals remain in the unchanged linked prior receipt. The exact current registered source union is retained. No TUN-P2-008 real native browser journey, whole-work-item, Product or release acceptance is claimed.",
+  "recorded_at": "2026-11-10T20:11:33.145396+00:00",
+  "current_item_review_ref": {
+    "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-item-current-review.json",
+    "sha256": "9f90b5ff1b3479b53044eb5e3d1a16a3870d783dbbbe063b4ab94b5027a323ab"
+  },
+  "current_ui_role_skill_bindings": [
+    {
+      "role": "ui-ux-engineer",
+      "skill_ref": ".agent/skills/ui-ux-engineer/SKILL.md",
+      "skill_hash": "498ff7e4b46012b1e90773cd29ebac903d7ac83767d739cc327d9b69a3b4c5c2"
+    },
+    {
+      "role": "frontend-engineer",
+      "skill_ref": ".agent/skills/frontend-engineer/SKILL.md",
+      "skill_hash": "3472e745aa478457939b1aeeba319f72989bb9e97791e458f0b9979ec1b538d7"
+    },
+    {
+      "role": "tester-qa-engineer",
+      "skill_ref": ".agent/skills/tester-qa-engineer/SKILL.md",
+      "skill_hash": "52aee18f251a614e339adba9f7c886a5da1ef4ab0482ae6b77044184128415c6"
+    },
+    {
+      "role": "end-user-ux-reviewer",
+      "skill_ref": ".agent/skills/end-user-ux-reviewer/SKILL.md",
+      "skill_hash": "cfaa2eeffd945eef70a6ff1023b1af42fc0413add7b357b2fcd914473e976665"
+    }
+  ],
+  "source_binding": {
+    "tested_carrier_sha": "6e562db102ce75d5ed478a15e2970ff55ab98fef",
+    "current_input_manifest_ref": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/source-inputs.json",
+    "native_execution_index": {
+      "path": "governance/evidence/p2-008-totp-20261110/parent005006-compatibility/native-execution-index.json",
+      "sha256": "dd31918f974b5e7294df49a4be45ca03c7323667cd8907752693d71c0f02803f"
+    },
+    "actual_35_plus_103_ui_execution_index_ref": "governance/evidence/p2-008-totp-20261110/parent005006-compatibility/ui-execution-index.json",
+    "actual_registration24_foundation16_execution_index_ref": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/execution-index.json",
+    "fresh40_actual_invocation_sha": "eb1c16fd55a82470c7b2c756f017c51b8a00a30a",
+    "all_declared_inputs_equal": true,
+    "historical_tested_shas_not_relabelled": true
+  },
+  "supplemental_laptop_evidence": {
+    "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-laptop/manifest.json",
+    "sha256": "873cc37eaf3d0aaea4310ec9dcfc378537081711a2b7ebe9351964b068ca8744",
+    "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-laptop/manifest.json"
+  },
+  "review_provenance": "Actual UI-role item decisions, manual current/reference comparisons and source-bound public fixture executions; packaging agent verified exact references, source identity and historical preservation. No human/Product approval is impersonated.",
+  "remaining_separate_requirements": [
+    "TUN-P2-008 real native browser OTP/vault journey is NOTEXECUTED by these public fixtures.",
+    "New008 full per-item/native gate/role/evidence closure remains separate.",
+    "Production policy/publication/provider configuration, Product/release and protected-main approval remain separate."
+  ],
+  "conditional_shared_visual_authority": {
+    "authority_scope_id": "TUN-P2-008",
+    "relationship": "CROSS_SCOPE_CONDITIONAL_SHARED_COMPONENT_TRACEABILITY",
+    "applicability": "Login conditionally imports the already approved primary-login TOTP MFA adaptation (008-V05) and its approved factor-choice component. Existing parent Login/signed-in decisions remain bounded to their own items.",
+    "registered_conditional_source_paths": [
+      "web/apps/user/totp.api.ts",
+      "web/apps/user/totp.code.tsx",
+      "web/apps/user/totp.content-keys.ts",
+      "web/apps/user/totp.css",
+      "web/apps/user/totp.mfa.tsx",
+      "web/apps/user/totp.picker.tsx",
+      "web/apps/user/totp.routes.ts",
+      "web/apps/user/totp.validation.ts"
+    ],
+    "references": [
+      {
+        "path": "governance/evidence/TUN-P2-008-VISUAL-CONSENT.json",
+        "sha256": "d5a91c23c34ab6cd134648ab73867e9afce14c35f795f1a1eecdfe5d60040014",
+        "approval_status": "APPROVED_SCOPED_VISUAL_ADAPTATIONS",
+        "approved_scope_ids": [
+          "008-V01",
+          "008-V02",
+          "008-V03",
+          "008-V04",
+          "008-V05"
+        ],
+        "relied_on_scope_ids": [
+          "008-V05"
+        ],
+        "supports": "Only the already approved pictured proof/MFA adaptations that are applicable to these conditional shared imports."
+      },
+      {
+        "path": "governance/evidence/TUN-P2-008-FACTOR-PICKER-CONSENT.json",
+        "sha256": "b6ce7663148cd555d69bd4f8081f4553dbcb114662e3523f2faab65bb3636d30",
+        "approval_status": "APPROVED_SCOPED_FACTOR_PICKER_VISUAL_ADAPTATION",
+        "relied_on_adaptation": "Additional scoped 008-V04 factor picker, including the pictured proof and login picker variants.",
+        "supports": "Only the already approved choice among currently eligible TOTP factors; no new factor limit, assurance or production policy."
+      }
+    ],
+    "parent_deviations_and_consent_refs": "All prior per-item deviations and consent references are retained unchanged; this metadata appends the actual cross-scope authority and replaces no parent decision.",
+    "boundary": "Supports only already approved visual adaptations in conditional shared components. It does not renew or expand parent decisions, establish final TUN-P2-008 UI compliance or integrated/native-browser acceptance, select domain or production policy, or provide Product, merge, deployment or release approval."
+  }
+}

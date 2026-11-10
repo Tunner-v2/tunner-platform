@@ -1,0 +1,35 @@
+{
+  "sha": "eb1c16fd55a82470c7b2c756f017c51b8a00a30a",
+  "commands": [
+    {
+      "script": "artifacts/p2-008-totp-20261110/production-ui/6e562db/capture-laptop.mjs",
+      "sha256": "5b0c71d5c366b012d9fa7e30a2696cad8b1a84a9711c454c53a1cca7ee4c2024",
+      "exit_code": 0
+    }
+  ],
+  "servers": [
+    {
+      "name": "user",
+      "pid": 22024,
+      "started_at": "2026-11-10T19:58:27.792Z",
+      "cwd": "web",
+      "config": "apps/user/vite.config.ts",
+      "port": 5194,
+      "url": "http://127.0.0.1:5194/registration/",
+      "ready": true,
+      "stopped_at": "2026-11-10T19:59:18.849Z"
+    },
+    {
+      "name": "step-up",
+      "pid": 30188,
+      "started_at": "2026-11-10T19:58:28.567Z",
+      "cwd": "web",
+      "config": "fixtures/step-up/vite.config.ts",
+      "port": 5195,
+      "url": "http://127.0.0.1:5195/browser-testing/step-up-assets/",
+      "ready": true,
+      "stopped_at": "2026-11-10T19:59:18.850Z"
+    }
+  ],
+  "boundary": "Public synthetic rendering/navigation only. Prior connection-refused results remain immutable."
+}

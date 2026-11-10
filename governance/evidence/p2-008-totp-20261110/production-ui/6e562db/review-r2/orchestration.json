@@ -1,0 +1,40 @@
+{
+  "sha": "eb1c16fd55a82470c7b2c756f017c51b8a00a30a",
+  "commands": [
+    {
+      "script": "artifacts/p2-008-totp-20261110/production-ui/6e562db/navigation-review-r2.mjs",
+      "sha256": "fc641193ef96d9e5b0edd51051791c10251b21c1925115628ec6c30ed942bee3",
+      "exit_code": 0
+    },
+    {
+      "script": "artifacts/p2-008-totp-20261110/production-ui/6e562db/capture-review-r2.mjs",
+      "sha256": "2255b821e7edae59b3c09abcb67e76d9e7ed3285c76ade76c12cea673d0455bb",
+      "exit_code": 0
+    }
+  ],
+  "servers": [
+    {
+      "name": "user",
+      "pid": 20264,
+      "started_at": "2026-11-10T19:46:57.771Z",
+      "cwd": "web",
+      "config": "apps/user/vite.config.ts",
+      "port": 5194,
+      "url": "http://127.0.0.1:5194/registration/",
+      "ready": true,
+      "stopped_at": "2026-11-10T19:53:27.912Z"
+    },
+    {
+      "name": "step-up",
+      "pid": 19712,
+      "started_at": "2026-11-10T19:46:58.752Z",
+      "cwd": "web",
+      "config": "fixtures/step-up/vite.config.ts",
+      "port": 5195,
+      "url": "http://127.0.0.1:5195/browser-testing/step-up-assets/",
+      "ready": true,
+      "stopped_at": "2026-11-10T19:53:27.913Z"
+    }
+  ],
+  "boundary": "Public synthetic rendering/navigation only. Prior connection-refused results remain immutable."
+}

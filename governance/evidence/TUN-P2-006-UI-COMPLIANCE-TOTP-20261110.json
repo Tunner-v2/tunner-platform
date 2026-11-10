@@ -1,0 +1,2811 @@
+{
+  "schema_version": 1,
+  "scope_id": "TUN-P2-006",
+  "result": "PASS",
+  "tested_commit_sha": "6e562db102ce75d5ed478a15e2970ff55ab98fef",
+  "inventory_sha256": "ae982b8df6310b2c486637db8857e93c5a63090a152c0bf50d832a121a4dcbac",
+  "owned_behavior_paths": [
+    "docs/contracts/ui-inventory.json",
+    "src/Modules/Identity/StepUpApplication.cs",
+    "src/Modules/Identity/StepUpBrowserEndpoints.cs",
+    "web/apps/user/step-up.css",
+    "web/apps/user/step-up.tsx",
+    "web/fixtures/step-up/fixture.css",
+    "web/fixtures/step-up/index.html",
+    "web/fixtures/step-up/main.tsx",
+    "web/fixtures/step-up/vite.config.ts",
+    "web/packages/ui/src/dialog.tsx",
+    "web/packages/ui/src/forms.tsx",
+    "src/Modules/Identity/StepUpTotpBrowserEndpoints.cs",
+    "web/apps/user/step-up.totp.tsx",
+    "web/apps/user/totp.api.ts",
+    "web/apps/user/totp.code.tsx",
+    "web/apps/user/totp.content-keys.ts",
+    "web/apps/user/totp.css",
+    "web/apps/user/totp.picker.tsx",
+    "web/apps/user/totp.validation.ts"
+  ],
+  "historical_ui_compliance": {
+    "path": "governance/evidence/TUN-P2-006-UI-COMPLIANCE.json",
+    "sha256": "25c2fd7e001d81ee637e68a8edc418d5a9702cb91db9ba3e4a34d1698d34bc3a",
+    "git_ref": "20ccd936b483178cade6a0a1ce85dce84ef39af4:governance/evidence/TUN-P2-006-UI-COMPLIANCE.json",
+    "tested_commit_sha": "745f9c2dc1b9060c4be0318b33b4019ae77e9e36",
+    "owned_behavior_paths": [
+      "docs/contracts/ui-inventory.json",
+      "src/Modules/Identity/StepUpApplication.cs",
+      "src/Modules/Identity/StepUpBrowserEndpoints.cs",
+      "web/apps/user/step-up.css",
+      "web/apps/user/step-up.tsx",
+      "web/fixtures/step-up/fixture.css",
+      "web/fixtures/step-up/index.html",
+      "web/fixtures/step-up/main.tsx",
+      "web/fixtures/step-up/vite.config.ts",
+      "web/packages/ui/src/dialog.tsx",
+      "web/packages/ui/src/forms.tsx"
+    ],
+    "item_ids": [
+      "COMP-STEP-UP",
+      "DEV-STEP-UP",
+      "FORM-STEP-UP"
+    ]
+  },
+  "items": [
+    {
+      "id": "COMP-STEP-UP",
+      "figma_refs": [
+        {
+          "file_key": "apNbwvAgdn1xIxYH1oiaSC",
+          "node_id": "98:27"
+        },
+        {
+          "file_key": "apNbwvAgdn1xIxYH1oiaSC",
+          "node_id": "70:1257"
+        }
+      ],
+      "additional_observed_design_refs": [
+        {
+          "file_key": "apNbwvAgdn1xIxYH1oiaSC",
+          "node_id": "98:28",
+          "reference_image": "artifacts/p2-007-passkeys-20261109/ui-review/reference/figma-98-28.png"
+        }
+      ],
+      "checks": [
+        {
+          "id": "VAL-001",
+          "result": "PASS",
+          "description": "Named empty/format/confirmation cases render approved shared field errors. Item-specific basis: Existing chooser/password layout and reviewed responsive/error adaptation remain. Actual TOTP detail/chooser tests and194-node contrast resolution cover newly imported shared modules; no live native factor or release approval is inferred.",
+          "case_groups": [
+            "step-up/chooser and password layout accessibility atfive widths",
+            "step-up/modal containment Escape focus restoration",
+            "step-up/pending blocks duplicates Back Cancel Escape",
+            "step-up/exact original result and changed authority",
+            "totp/35 current TOTP including4-width code validation/picker/recovery"
+          ],
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/manifest.json",
+              "sha256": "03ada820284b4f14354d2a10c912831ebfb3f181b22b215d0e35f53ec2663bc4",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/manifest.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/manifest.json",
+              "sha256": "fdde6352a2f927feacf576d2484614df77f73e4c88116f42a95cc9b163db765c",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/manifest.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/render-manifest-final.json",
+              "sha256": "5be639e38a6f67ad65ff454a9b229f0bf68af8f3e9487369301b951542c17887",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/render-manifest-final.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/navigation-results.json",
+              "sha256": "667558ae2fb966497abd7983511c3441dfc321fcd06da51a132225d72a2f0971",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/navigation-results.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/contrast-resolution-final.json",
+              "sha256": "68ef7dff051dc6dfa5c5266532b7978d58ed0a0444ad19cf1aa6e6b17d1323e0",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/contrast-resolution-final.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/legacy/step-up/password-1440.png",
+              "sha256": "b70fd2a16d78a16ff8ebee758cd64fccffc53e88cf419d344b6c094ab65ffa09",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/legacy/step-up/password-1440.png"
+            },
+            {
+              "path": "governance/evidence/ui/step-up-20261109/reference/password-1440.png",
+              "sha256": "dd270a71a32a0dee4420b0109ef58ecbf35bd196f97892c2d4e73c4d09ac61e8"
+            }
+          ],
+          "boundary": "Existing parent item compatibility only; historical Product/scoped decisions are reused, never renewed or expanded."
+        },
+        {
+          "id": "VAL-002",
+          "result": "PASS",
+          "description": "Typed application errors and form noValidate are exercised; native bubbles are not sole feedback. Item-specific basis: Existing chooser/password layout and reviewed responsive/error adaptation remain. Actual TOTP detail/chooser tests and194-node contrast resolution cover newly imported shared modules; no live native factor or release approval is inferred.",
+          "case_groups": [
+            "step-up/chooser and password layout accessibility atfive widths",
+            "step-up/modal containment Escape focus restoration",
+            "step-up/pending blocks duplicates Back Cancel Escape",
+            "step-up/exact original result and changed authority",
+            "totp/35 current TOTP including4-width code validation/picker/recovery"
+          ],
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/manifest.json",
+              "sha256": "03ada820284b4f14354d2a10c912831ebfb3f181b22b215d0e35f53ec2663bc4",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/manifest.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/manifest.json",
+              "sha256": "fdde6352a2f927feacf576d2484614df77f73e4c88116f42a95cc9b163db765c",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/manifest.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/render-manifest-final.json",
+              "sha256": "5be639e38a6f67ad65ff454a9b229f0bf68af8f3e9487369301b951542c17887",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/render-manifest-final.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/navigation-results.json",
+              "sha256": "667558ae2fb966497abd7983511c3441dfc321fcd06da51a132225d72a2f0971",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/navigation-results.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/contrast-resolution-final.json",
+              "sha256": "68ef7dff051dc6dfa5c5266532b7978d58ed0a0444ad19cf1aa6e6b17d1323e0",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/contrast-resolution-final.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/legacy/step-up/password-1440.png",
+              "sha256": "b70fd2a16d78a16ff8ebee758cd64fccffc53e88cf419d344b6c094ab65ffa09",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/legacy/step-up/password-1440.png"
+            },
+            {
+              "path": "governance/evidence/ui/step-up-20261109/reference/password-1440.png",
+              "sha256": "dd270a71a32a0dee4420b0109ef58ecbf35bd196f97892c2d4e73c4d09ac61e8"
+            }
+          ],
+          "boundary": "Existing parent item compatibility only; historical Product/scoped decisions are reused, never renewed or expanded."
+        },
+        {
+          "id": "VAL-003",
+          "result": "PASS",
+          "description": "Independent native backend tests are actual PASS in the linked260 receipt; source carrier equality is bound by the parent compatibility receipt, not inferred from mocks. Item-specific basis: Existing chooser/password layout and reviewed responsive/error adaptation remain. Actual TOTP detail/chooser tests and194-node contrast resolution cover newly imported shared modules; no live native factor or release approval is inferred.",
+          "case_groups": [
+            "step-up/chooser and password layout accessibility atfive widths",
+            "step-up/modal containment Escape focus restoration",
+            "step-up/pending blocks duplicates Back Cancel Escape",
+            "step-up/exact original result and changed authority",
+            "totp/35 current TOTP including4-width code validation/picker/recovery"
+          ],
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/parent005006-compatibility/native-execution-index.json",
+              "sha256": "dd31918f974b5e7294df49a4be45ca03c7323667cd8907752693d71c0f02803f"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/manifest.json",
+              "sha256": "03ada820284b4f14354d2a10c912831ebfb3f181b22b215d0e35f53ec2663bc4",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/manifest.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/manifest.json",
+              "sha256": "fdde6352a2f927feacf576d2484614df77f73e4c88116f42a95cc9b163db765c",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/manifest.json"
+            }
+          ],
+          "boundary": "Existing parent item compatibility only; historical Product/scoped decisions are reused, never renewed or expanded."
+        },
+        {
+          "id": "VAL-004",
+          "result": "PASS",
+          "description": "Named server rejections map to governed field/form messages without invented account existence or finality. Item-specific basis: Existing chooser/password layout and reviewed responsive/error adaptation remain. Actual TOTP detail/chooser tests and194-node contrast resolution cover newly imported shared modules; no live native factor or release approval is inferred.",
+          "case_groups": [
+            "step-up/chooser and password layout accessibility atfive widths",
+            "step-up/modal containment Escape focus restoration",
+            "step-up/pending blocks duplicates Back Cancel Escape",
+            "step-up/exact original result and changed authority",
+            "totp/35 current TOTP including4-width code validation/picker/recovery"
+          ],
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/manifest.json",
+              "sha256": "03ada820284b4f14354d2a10c912831ebfb3f181b22b215d0e35f53ec2663bc4",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/manifest.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/manifest.json",
+              "sha256": "fdde6352a2f927feacf576d2484614df77f73e4c88116f42a95cc9b163db765c",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/manifest.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/render-manifest-final.json",
+              "sha256": "5be639e38a6f67ad65ff454a9b229f0bf68af8f3e9487369301b951542c17887",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/render-manifest-final.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/navigation-results.json",
+              "sha256": "667558ae2fb966497abd7983511c3441dfc321fcd06da51a132225d72a2f0971",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/navigation-results.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/contrast-resolution-final.json",
+              "sha256": "68ef7dff051dc6dfa5c5266532b7978d58ed0a0444ad19cf1aa6e6b17d1323e0",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/contrast-resolution-final.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/legacy/step-up/password-1440.png",
+              "sha256": "b70fd2a16d78a16ff8ebee758cd64fccffc53e88cf419d344b6c094ab65ffa09",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/legacy/step-up/password-1440.png"
+            },
+            {
+              "path": "governance/evidence/ui/step-up-20261109/reference/password-1440.png",
+              "sha256": "dd270a71a32a0dee4420b0109ef58ecbf35bd196f97892c2d4e73c4d09ac61e8"
+            }
+          ],
+          "boundary": "Existing parent item compatibility only; historical Product/scoped decisions are reused, never renewed or expanded."
+        },
+        {
+          "id": "VAL-005",
+          "result": "PASS",
+          "description": "Named cases exercise blur/correction, first-invalid focus, descriptions, safe-value handling and pending duplicate protection. Item-specific basis: Existing chooser/password layout and reviewed responsive/error adaptation remain. Actual TOTP detail/chooser tests and194-node contrast resolution cover newly imported shared modules; no live native factor or release approval is inferred.",
+          "case_groups": [
+            "step-up/chooser and password layout accessibility atfive widths",
+            "step-up/modal containment Escape focus restoration",
+            "step-up/pending blocks duplicates Back Cancel Escape",
+            "step-up/exact original result and changed authority",
+            "totp/35 current TOTP including4-width code validation/picker/recovery"
+          ],
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/manifest.json",
+              "sha256": "03ada820284b4f14354d2a10c912831ebfb3f181b22b215d0e35f53ec2663bc4",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/manifest.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/manifest.json",
+              "sha256": "fdde6352a2f927feacf576d2484614df77f73e4c88116f42a95cc9b163db765c",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/manifest.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/render-manifest-final.json",
+              "sha256": "5be639e38a6f67ad65ff454a9b229f0bf68af8f3e9487369301b951542c17887",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/render-manifest-final.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/navigation-results.json",
+              "sha256": "667558ae2fb966497abd7983511c3441dfc321fcd06da51a132225d72a2f0971",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/navigation-results.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/contrast-resolution-final.json",
+              "sha256": "68ef7dff051dc6dfa5c5266532b7978d58ed0a0444ad19cf1aa6e6b17d1323e0",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/contrast-resolution-final.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/legacy/step-up/password-1440.png",
+              "sha256": "b70fd2a16d78a16ff8ebee758cd64fccffc53e88cf419d344b6c094ab65ffa09",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/legacy/step-up/password-1440.png"
+            },
+            {
+              "path": "governance/evidence/ui/step-up-20261109/reference/password-1440.png",
+              "sha256": "dd270a71a32a0dee4420b0109ef58ecbf35bd196f97892c2d4e73c4d09ac61e8"
+            }
+          ],
+          "boundary": "Existing parent item compatibility only; historical Product/scoped decisions are reused, never renewed or expanded."
+        },
+        {
+          "id": "VAL-006",
+          "result": "PASS",
+          "description": "Current actual error screenshots reviewed against approved70:1257 treatment and existing scoped adaptations. Item-specific basis: Existing chooser/password layout and reviewed responsive/error adaptation remain. Actual TOTP detail/chooser tests and194-node contrast resolution cover newly imported shared modules; no live native factor or release approval is inferred.",
+          "case_groups": [
+            "step-up/chooser and password layout accessibility atfive widths",
+            "step-up/modal containment Escape focus restoration",
+            "step-up/pending blocks duplicates Back Cancel Escape",
+            "step-up/exact original result and changed authority",
+            "totp/35 current TOTP including4-width code validation/picker/recovery"
+          ],
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/manifest.json",
+              "sha256": "03ada820284b4f14354d2a10c912831ebfb3f181b22b215d0e35f53ec2663bc4",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/manifest.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/manifest.json",
+              "sha256": "fdde6352a2f927feacf576d2484614df77f73e4c88116f42a95cc9b163db765c",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/manifest.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/render-manifest-final.json",
+              "sha256": "5be639e38a6f67ad65ff454a9b229f0bf68af8f3e9487369301b951542c17887",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/render-manifest-final.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/navigation-results.json",
+              "sha256": "667558ae2fb966497abd7983511c3441dfc321fcd06da51a132225d72a2f0971",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/navigation-results.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/contrast-resolution-final.json",
+              "sha256": "68ef7dff051dc6dfa5c5266532b7978d58ed0a0444ad19cf1aa6e6b17d1323e0",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/contrast-resolution-final.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/legacy/step-up/password-1440.png",
+              "sha256": "b70fd2a16d78a16ff8ebee758cd64fccffc53e88cf419d344b6c094ab65ffa09",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/legacy/step-up/password-1440.png"
+            },
+            {
+              "path": "governance/evidence/ui/step-up-20261109/reference/password-1440.png",
+              "sha256": "dd270a71a32a0dee4420b0109ef58ecbf35bd196f97892c2d4e73c4d09ac61e8"
+            }
+          ],
+          "boundary": "Existing parent item compatibility only; historical Product/scoped decisions are reused, never renewed or expanded."
+        },
+        {
+          "id": "VAL-007",
+          "result": "PASS",
+          "description": "Current domain/policy rules govern fields, code/password grammar and messages; historical Figma wording is not business authority. Item-specific basis: Existing chooser/password layout and reviewed responsive/error adaptation remain. Actual TOTP detail/chooser tests and194-node contrast resolution cover newly imported shared modules; no live native factor or release approval is inferred.",
+          "case_groups": [
+            "step-up/chooser and password layout accessibility atfive widths",
+            "step-up/modal containment Escape focus restoration",
+            "step-up/pending blocks duplicates Back Cancel Escape",
+            "step-up/exact original result and changed authority",
+            "totp/35 current TOTP including4-width code validation/picker/recovery"
+          ],
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/manifest.json",
+              "sha256": "03ada820284b4f14354d2a10c912831ebfb3f181b22b215d0e35f53ec2663bc4",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/manifest.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/manifest.json",
+              "sha256": "fdde6352a2f927feacf576d2484614df77f73e4c88116f42a95cc9b163db765c",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/manifest.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/render-manifest-final.json",
+              "sha256": "5be639e38a6f67ad65ff454a9b229f0bf68af8f3e9487369301b951542c17887",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/render-manifest-final.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/navigation-results.json",
+              "sha256": "667558ae2fb966497abd7983511c3441dfc321fcd06da51a132225d72a2f0971",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/navigation-results.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/contrast-resolution-final.json",
+              "sha256": "68ef7dff051dc6dfa5c5266532b7978d58ed0a0444ad19cf1aa6e6b17d1323e0",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/contrast-resolution-final.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/legacy/step-up/password-1440.png",
+              "sha256": "b70fd2a16d78a16ff8ebee758cd64fccffc53e88cf419d344b6c094ab65ffa09",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/legacy/step-up/password-1440.png"
+            },
+            {
+              "path": "governance/evidence/ui/step-up-20261109/reference/password-1440.png",
+              "sha256": "dd270a71a32a0dee4420b0109ef58ecbf35bd196f97892c2d4e73c4d09ac61e8"
+            }
+          ],
+          "boundary": "Existing parent item compatibility only; historical Product/scoped decisions are reused, never renewed or expanded."
+        },
+        {
+          "id": "VAL-008",
+          "result": "PASS",
+          "description": "Existing parent cross-device route/form regressions actually pass with independent native receipt/source binding. This does not approve the separate008real browser OTP journey. Item-specific basis: Existing chooser/password layout and reviewed responsive/error adaptation remain. Actual TOTP detail/chooser tests and194-node contrast resolution cover newly imported shared modules; no live native factor or release approval is inferred.",
+          "case_groups": [
+            "step-up/chooser and password layout accessibility atfive widths",
+            "step-up/modal containment Escape focus restoration",
+            "step-up/pending blocks duplicates Back Cancel Escape",
+            "step-up/exact original result and changed authority",
+            "totp/35 current TOTP including4-width code validation/picker/recovery"
+          ],
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/manifest.json",
+              "sha256": "03ada820284b4f14354d2a10c912831ebfb3f181b22b215d0e35f53ec2663bc4",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/manifest.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/manifest.json",
+              "sha256": "fdde6352a2f927feacf576d2484614df77f73e4c88116f42a95cc9b163db765c",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/manifest.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/render-manifest-final.json",
+              "sha256": "5be639e38a6f67ad65ff454a9b229f0bf68af8f3e9487369301b951542c17887",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/render-manifest-final.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/navigation-results.json",
+              "sha256": "667558ae2fb966497abd7983511c3441dfc321fcd06da51a132225d72a2f0971",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/navigation-results.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/contrast-resolution-final.json",
+              "sha256": "68ef7dff051dc6dfa5c5266532b7978d58ed0a0444ad19cf1aa6e6b17d1323e0",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/contrast-resolution-final.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/legacy/step-up/password-1440.png",
+              "sha256": "b70fd2a16d78a16ff8ebee758cd64fccffc53e88cf419d344b6c094ab65ffa09",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/legacy/step-up/password-1440.png"
+            },
+            {
+              "path": "governance/evidence/ui/step-up-20261109/reference/password-1440.png",
+              "sha256": "dd270a71a32a0dee4420b0109ef58ecbf35bd196f97892c2d4e73c4d09ac61e8"
+            }
+          ],
+          "boundary": "Existing parent item compatibility only; historical Product/scoped decisions are reused, never renewed or expanded."
+        },
+        {
+          "id": "UX-FID-001",
+          "result": "PASS",
+          "description": "Manual current/reference comparison in item notes; scoped existing composition retained. Item-specific basis: Existing chooser/password layout and reviewed responsive/error adaptation remain. Actual TOTP detail/chooser tests and194-node contrast resolution cover newly imported shared modules; no live native factor or release approval is inferred.",
+          "case_groups": [
+            "step-up/chooser and password layout accessibility atfive widths",
+            "step-up/modal containment Escape focus restoration",
+            "step-up/pending blocks duplicates Back Cancel Escape",
+            "step-up/exact original result and changed authority",
+            "totp/35 current TOTP including4-width code validation/picker/recovery"
+          ],
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/manifest.json",
+              "sha256": "03ada820284b4f14354d2a10c912831ebfb3f181b22b215d0e35f53ec2663bc4",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/manifest.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/manifest.json",
+              "sha256": "fdde6352a2f927feacf576d2484614df77f73e4c88116f42a95cc9b163db765c",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/manifest.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/render-manifest-final.json",
+              "sha256": "5be639e38a6f67ad65ff454a9b229f0bf68af8f3e9487369301b951542c17887",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/render-manifest-final.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/navigation-results.json",
+              "sha256": "667558ae2fb966497abd7983511c3441dfc321fcd06da51a132225d72a2f0971",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/navigation-results.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/contrast-resolution-final.json",
+              "sha256": "68ef7dff051dc6dfa5c5266532b7978d58ed0a0444ad19cf1aa6e6b17d1323e0",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/contrast-resolution-final.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/legacy/step-up/password-1440.png",
+              "sha256": "b70fd2a16d78a16ff8ebee758cd64fccffc53e88cf419d344b6c094ab65ffa09",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/legacy/step-up/password-1440.png"
+            },
+            {
+              "path": "governance/evidence/ui/step-up-20261109/reference/password-1440.png",
+              "sha256": "dd270a71a32a0dee4420b0109ef58ecbf35bd196f97892c2d4e73c4d09ac61e8"
+            }
+          ],
+          "boundary": "Existing parent item compatibility only; historical Product/scoped decisions are reused, never renewed or expanded."
+        },
+        {
+          "id": "UX-FID-002",
+          "result": "PASS",
+          "description": "Local page/glow/assets are present in current captures and local-asset tests. Item-specific basis: Existing chooser/password layout and reviewed responsive/error adaptation remain. Actual TOTP detail/chooser tests and194-node contrast resolution cover newly imported shared modules; no live native factor or release approval is inferred.",
+          "case_groups": [
+            "step-up/chooser and password layout accessibility atfive widths",
+            "step-up/modal containment Escape focus restoration",
+            "step-up/pending blocks duplicates Back Cancel Escape",
+            "step-up/exact original result and changed authority",
+            "totp/35 current TOTP including4-width code validation/picker/recovery"
+          ],
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/manifest.json",
+              "sha256": "03ada820284b4f14354d2a10c912831ebfb3f181b22b215d0e35f53ec2663bc4",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/manifest.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/manifest.json",
+              "sha256": "fdde6352a2f927feacf576d2484614df77f73e4c88116f42a95cc9b163db765c",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/manifest.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/render-manifest-final.json",
+              "sha256": "5be639e38a6f67ad65ff454a9b229f0bf68af8f3e9487369301b951542c17887",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/render-manifest-final.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/navigation-results.json",
+              "sha256": "667558ae2fb966497abd7983511c3441dfc321fcd06da51a132225d72a2f0971",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/navigation-results.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/contrast-resolution-final.json",
+              "sha256": "68ef7dff051dc6dfa5c5266532b7978d58ed0a0444ad19cf1aa6e6b17d1323e0",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/contrast-resolution-final.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/legacy/step-up/password-1440.png",
+              "sha256": "b70fd2a16d78a16ff8ebee758cd64fccffc53e88cf419d344b6c094ab65ffa09",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/legacy/step-up/password-1440.png"
+            },
+            {
+              "path": "governance/evidence/ui/step-up-20261109/reference/password-1440.png",
+              "sha256": "dd270a71a32a0dee4420b0109ef58ecbf35bd196f97892c2d4e73c4d09ac61e8"
+            }
+          ],
+          "boundary": "Existing parent item compatibility only; historical Product/scoped decisions are reused, never renewed or expanded."
+        },
+        {
+          "id": "UX-FID-003",
+          "result": "PASS",
+          "description": "Shared typed fields/buttons/error geometry and token variants are reused. Item-specific basis: Existing chooser/password layout and reviewed responsive/error adaptation remain. Actual TOTP detail/chooser tests and194-node contrast resolution cover newly imported shared modules; no live native factor or release approval is inferred.",
+          "case_groups": [
+            "step-up/chooser and password layout accessibility atfive widths",
+            "step-up/modal containment Escape focus restoration",
+            "step-up/pending blocks duplicates Back Cancel Escape",
+            "step-up/exact original result and changed authority",
+            "totp/35 current TOTP including4-width code validation/picker/recovery"
+          ],
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/manifest.json",
+              "sha256": "03ada820284b4f14354d2a10c912831ebfb3f181b22b215d0e35f53ec2663bc4",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/manifest.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/manifest.json",
+              "sha256": "fdde6352a2f927feacf576d2484614df77f73e4c88116f42a95cc9b163db765c",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/manifest.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/render-manifest-final.json",
+              "sha256": "5be639e38a6f67ad65ff454a9b229f0bf68af8f3e9487369301b951542c17887",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/render-manifest-final.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/navigation-results.json",
+              "sha256": "667558ae2fb966497abd7983511c3441dfc321fcd06da51a132225d72a2f0971",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/navigation-results.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/contrast-resolution-final.json",
+              "sha256": "68ef7dff051dc6dfa5c5266532b7978d58ed0a0444ad19cf1aa6e6b17d1323e0",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/contrast-resolution-final.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/legacy/step-up/password-1440.png",
+              "sha256": "b70fd2a16d78a16ff8ebee758cd64fccffc53e88cf419d344b6c094ab65ffa09",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/legacy/step-up/password-1440.png"
+            },
+            {
+              "path": "governance/evidence/ui/step-up-20261109/reference/password-1440.png",
+              "sha256": "dd270a71a32a0dee4420b0109ef58ecbf35bd196f97892c2d4e73c4d09ac61e8"
+            }
+          ],
+          "boundary": "Existing parent item compatibility only; historical Product/scoped decisions are reused, never renewed or expanded."
+        },
+        {
+          "id": "UX-FID-004",
+          "result": "PASS",
+          "description": "Only previously approved scoped deviations/consents apply; preserve their exact references. Item-specific basis: Existing chooser/password layout and reviewed responsive/error adaptation remain. Actual TOTP detail/chooser tests and194-node contrast resolution cover newly imported shared modules; no live native factor or release approval is inferred.",
+          "case_groups": [
+            "step-up/chooser and password layout accessibility atfive widths",
+            "step-up/modal containment Escape focus restoration",
+            "step-up/pending blocks duplicates Back Cancel Escape",
+            "step-up/exact original result and changed authority",
+            "totp/35 current TOTP including4-width code validation/picker/recovery"
+          ],
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/manifest.json",
+              "sha256": "03ada820284b4f14354d2a10c912831ebfb3f181b22b215d0e35f53ec2663bc4",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/manifest.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/manifest.json",
+              "sha256": "fdde6352a2f927feacf576d2484614df77f73e4c88116f42a95cc9b163db765c",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/manifest.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/render-manifest-final.json",
+              "sha256": "5be639e38a6f67ad65ff454a9b229f0bf68af8f3e9487369301b951542c17887",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/render-manifest-final.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/navigation-results.json",
+              "sha256": "667558ae2fb966497abd7983511c3441dfc321fcd06da51a132225d72a2f0971",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/navigation-results.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/contrast-resolution-final.json",
+              "sha256": "68ef7dff051dc6dfa5c5266532b7978d58ed0a0444ad19cf1aa6e6b17d1323e0",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/contrast-resolution-final.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/legacy/step-up/password-1440.png",
+              "sha256": "b70fd2a16d78a16ff8ebee758cd64fccffc53e88cf419d344b6c094ab65ffa09",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/legacy/step-up/password-1440.png"
+            },
+            {
+              "path": "governance/evidence/ui/step-up-20261109/reference/password-1440.png",
+              "sha256": "dd270a71a32a0dee4420b0109ef58ecbf35bd196f97892c2d4e73c4d09ac61e8"
+            }
+          ],
+          "boundary": "Existing parent item compatibility only; historical Product/scoped decisions are reused, never renewed or expanded."
+        },
+        {
+          "id": "UX-FID-005",
+          "result": "PASS",
+          "description": "Previously resolved domain/Figma conflicts remain truthful; no new material conflict observed in this compatibility scope. Item-specific basis: Existing chooser/password layout and reviewed responsive/error adaptation remain. Actual TOTP detail/chooser tests and194-node contrast resolution cover newly imported shared modules; no live native factor or release approval is inferred.",
+          "case_groups": [
+            "step-up/chooser and password layout accessibility atfive widths",
+            "step-up/modal containment Escape focus restoration",
+            "step-up/pending blocks duplicates Back Cancel Escape",
+            "step-up/exact original result and changed authority",
+            "totp/35 current TOTP including4-width code validation/picker/recovery"
+          ],
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/manifest.json",
+              "sha256": "03ada820284b4f14354d2a10c912831ebfb3f181b22b215d0e35f53ec2663bc4",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/manifest.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/manifest.json",
+              "sha256": "fdde6352a2f927feacf576d2484614df77f73e4c88116f42a95cc9b163db765c",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/manifest.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/render-manifest-final.json",
+              "sha256": "5be639e38a6f67ad65ff454a9b229f0bf68af8f3e9487369301b951542c17887",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/render-manifest-final.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/navigation-results.json",
+              "sha256": "667558ae2fb966497abd7983511c3441dfc321fcd06da51a132225d72a2f0971",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/navigation-results.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/contrast-resolution-final.json",
+              "sha256": "68ef7dff051dc6dfa5c5266532b7978d58ed0a0444ad19cf1aa6e6b17d1323e0",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/contrast-resolution-final.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/legacy/step-up/password-1440.png",
+              "sha256": "b70fd2a16d78a16ff8ebee758cd64fccffc53e88cf419d344b6c094ab65ffa09",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/legacy/step-up/password-1440.png"
+            },
+            {
+              "path": "governance/evidence/ui/step-up-20261109/reference/password-1440.png",
+              "sha256": "dd270a71a32a0dee4420b0109ef58ecbf35bd196f97892c2d4e73c4d09ac61e8"
+            }
+          ],
+          "boundary": "Existing parent item compatibility only; historical Product/scoped decisions are reused, never renewed or expanded."
+        },
+        {
+          "id": "UX-FID-006",
+          "result": "PASS",
+          "description": "Current source and screenshots retain approved screen-specific styling rather than library defaults. Item-specific basis: Existing chooser/password layout and reviewed responsive/error adaptation remain. Actual TOTP detail/chooser tests and194-node contrast resolution cover newly imported shared modules; no live native factor or release approval is inferred.",
+          "case_groups": [
+            "step-up/chooser and password layout accessibility atfive widths",
+            "step-up/modal containment Escape focus restoration",
+            "step-up/pending blocks duplicates Back Cancel Escape",
+            "step-up/exact original result and changed authority",
+            "totp/35 current TOTP including4-width code validation/picker/recovery"
+          ],
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/manifest.json",
+              "sha256": "03ada820284b4f14354d2a10c912831ebfb3f181b22b215d0e35f53ec2663bc4",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/manifest.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/manifest.json",
+              "sha256": "fdde6352a2f927feacf576d2484614df77f73e4c88116f42a95cc9b163db765c",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/manifest.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/render-manifest-final.json",
+              "sha256": "5be639e38a6f67ad65ff454a9b229f0bf68af8f3e9487369301b951542c17887",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/render-manifest-final.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/navigation-results.json",
+              "sha256": "667558ae2fb966497abd7983511c3441dfc321fcd06da51a132225d72a2f0971",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/navigation-results.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/contrast-resolution-final.json",
+              "sha256": "68ef7dff051dc6dfa5c5266532b7978d58ed0a0444ad19cf1aa6e6b17d1323e0",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/contrast-resolution-final.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/legacy/step-up/password-1440.png",
+              "sha256": "b70fd2a16d78a16ff8ebee758cd64fccffc53e88cf419d344b6c094ab65ffa09",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/legacy/step-up/password-1440.png"
+            },
+            {
+              "path": "governance/evidence/ui/step-up-20261109/reference/password-1440.png",
+              "sha256": "dd270a71a32a0dee4420b0109ef58ecbf35bd196f97892c2d4e73c4d09ac61e8"
+            }
+          ],
+          "boundary": "Existing parent item compatibility only; historical Product/scoped decisions are reused, never renewed or expanded."
+        },
+        {
+          "id": "UX-FID-007",
+          "result": "PASS",
+          "description": "Named responsive/Axe/keyboard/focus cases are current; detailed new shared-module contrast report resolves all194current incomplete nodes. Item-specific basis: Existing chooser/password layout and reviewed responsive/error adaptation remain. Actual TOTP detail/chooser tests and194-node contrast resolution cover newly imported shared modules; no live native factor or release approval is inferred.",
+          "case_groups": [
+            "step-up/chooser and password layout accessibility atfive widths",
+            "step-up/modal containment Escape focus restoration",
+            "step-up/pending blocks duplicates Back Cancel Escape",
+            "step-up/exact original result and changed authority",
+            "totp/35 current TOTP including4-width code validation/picker/recovery"
+          ],
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/manifest.json",
+              "sha256": "03ada820284b4f14354d2a10c912831ebfb3f181b22b215d0e35f53ec2663bc4",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/manifest.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/manifest.json",
+              "sha256": "fdde6352a2f927feacf576d2484614df77f73e4c88116f42a95cc9b163db765c",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/manifest.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/render-manifest-final.json",
+              "sha256": "5be639e38a6f67ad65ff454a9b229f0bf68af8f3e9487369301b951542c17887",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/render-manifest-final.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/navigation-results.json",
+              "sha256": "667558ae2fb966497abd7983511c3441dfc321fcd06da51a132225d72a2f0971",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/navigation-results.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/contrast-resolution-final.json",
+              "sha256": "68ef7dff051dc6dfa5c5266532b7978d58ed0a0444ad19cf1aa6e6b17d1323e0",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/contrast-resolution-final.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/legacy/step-up/password-1440.png",
+              "sha256": "b70fd2a16d78a16ff8ebee758cd64fccffc53e88cf419d344b6c094ab65ffa09",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/legacy/step-up/password-1440.png"
+            },
+            {
+              "path": "governance/evidence/ui/step-up-20261109/reference/password-1440.png",
+              "sha256": "dd270a71a32a0dee4420b0109ef58ecbf35bd196f97892c2d4e73c4d09ac61e8"
+            }
+          ],
+          "boundary": "Existing parent item compatibility only; historical Product/scoped decisions are reused, never renewed or expanded."
+        },
+        {
+          "id": "UX-FID-008",
+          "result": "PASS",
+          "description": "Current actual reports/screenshots, reference provenance, source identity and existing scoped consent are linked without redating historical evidence. Item-specific basis: Existing chooser/password layout and reviewed responsive/error adaptation remain. Actual TOTP detail/chooser tests and194-node contrast resolution cover newly imported shared modules; no live native factor or release approval is inferred.",
+          "case_groups": [
+            "step-up/chooser and password layout accessibility atfive widths",
+            "step-up/modal containment Escape focus restoration",
+            "step-up/pending blocks duplicates Back Cancel Escape",
+            "step-up/exact original result and changed authority",
+            "totp/35 current TOTP including4-width code validation/picker/recovery"
+          ],
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/manifest.json",
+              "sha256": "03ada820284b4f14354d2a10c912831ebfb3f181b22b215d0e35f53ec2663bc4",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/manifest.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/manifest.json",
+              "sha256": "fdde6352a2f927feacf576d2484614df77f73e4c88116f42a95cc9b163db765c",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/manifest.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/render-manifest-final.json",
+              "sha256": "5be639e38a6f67ad65ff454a9b229f0bf68af8f3e9487369301b951542c17887",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/render-manifest-final.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/navigation-results.json",
+              "sha256": "667558ae2fb966497abd7983511c3441dfc321fcd06da51a132225d72a2f0971",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/navigation-results.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/contrast-resolution-final.json",
+              "sha256": "68ef7dff051dc6dfa5c5266532b7978d58ed0a0444ad19cf1aa6e6b17d1323e0",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/contrast-resolution-final.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/legacy/step-up/password-1440.png",
+              "sha256": "b70fd2a16d78a16ff8ebee758cd64fccffc53e88cf419d344b6c094ab65ffa09",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/legacy/step-up/password-1440.png"
+            },
+            {
+              "path": "governance/evidence/ui/step-up-20261109/reference/password-1440.png",
+              "sha256": "dd270a71a32a0dee4420b0109ef58ecbf35bd196f97892c2d4e73c4d09ac61e8"
+            }
+          ],
+          "boundary": "Existing parent item compatibility only; historical Product/scoped decisions are reused, never renewed or expanded."
+        }
+      ],
+      "screenshots": [
+        {
+          "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/legacy/step-up/password-1440.png",
+          "sha256": "b70fd2a16d78a16ff8ebee758cd64fccffc53e88cf419d344b6c094ab65ffa09",
+          "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/legacy/step-up/password-1440.png",
+          "role": "CURRENT_SOURCE_RENDER",
+          "source_carrier_sha": "6e562db102ce75d5ed478a15e2970ff55ab98fef"
+        },
+        {
+          "path": "governance/evidence/ui/step-up-20261109/reference/password-1440.png",
+          "sha256": "dd270a71a32a0dee4420b0109ef58ecbf35bd196f97892c2d4e73c4d09ac61e8",
+          "role": "APPROVED_REFERENCE_OR_SCOPED_PROPOSAL"
+        }
+      ],
+      "deviations": [
+        {
+          "status": "PRODUCT_OWNER_APPROVED",
+          "approval_evidence": {
+            "path": "governance/evidence/TUN-P2-006-VISUAL-CONSENT-20261108.json",
+            "sha256": "881ffda9f2b7431c9077922789aa585780022651d5a2c8a628365a85de5fc3b2"
+          }
+        },
+        {
+          "status": "PRODUCT_OWNER_APPROVED",
+          "approval_evidence": {
+            "path": "governance/evidence/TUN-P2-007-VISUAL-CONSENT-20261109.json",
+            "sha256": "c9415304746bb882a0c49a3b42e16c0e312882f6b48401b1d51666a18d775dfd"
+          }
+        }
+      ],
+      "historical_item_ref": {
+        "path": "governance/evidence/TUN-P2-006-UI-COMPLIANCE.json",
+        "item_id": "COMP-STEP-UP",
+        "sha256": "25c2fd7e001d81ee637e68a8edc418d5a9702cb91db9ba3e4a34d1698d34bc3a"
+      },
+      "historical_screenshots": [
+        {
+          "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-step-up/changed-AUTHENTICATION_REQUIRED.png",
+          "sha256": "5b444a0a8fb2125fe40730caf9d4aa285917585055004bfe359d900c38c03269",
+          "role": "CURRENT_SOURCE_RENDER",
+          "original_execution_ref": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-final-80a32ab-step-up/changed-AUTHENTICATION_REQUIRED.png"
+        },
+        {
+          "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-step-up/changed-FORBIDDEN_SCOPE.png",
+          "sha256": "5b444a0a8fb2125fe40730caf9d4aa285917585055004bfe359d900c38c03269",
+          "role": "CURRENT_SOURCE_RENDER",
+          "original_execution_ref": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-final-80a32ab-step-up/changed-FORBIDDEN_SCOPE.png"
+        },
+        {
+          "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-step-up/changed-VERSION_CONFLICT.png",
+          "sha256": "5b444a0a8fb2125fe40730caf9d4aa285917585055004bfe359d900c38c03269",
+          "role": "CURRENT_SOURCE_RENDER",
+          "original_execution_ref": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-final-80a32ab-step-up/changed-VERSION_CONFLICT.png"
+        },
+        {
+          "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-step-up/chooser-1024.png",
+          "sha256": "596ec0d7d40dfd99d427f9a29849b1c555489c1ead76a4ab28280f0c5c2c0d39",
+          "role": "CURRENT_SOURCE_RENDER",
+          "original_execution_ref": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-final-80a32ab-step-up/chooser-1024.png"
+        },
+        {
+          "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-step-up/chooser-1440.png",
+          "sha256": "f4047c3995cb3f51ed02d6d08c37d850ec498d6164e484251759f70b3c4d0c13",
+          "role": "CURRENT_SOURCE_RENDER",
+          "original_execution_ref": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-final-80a32ab-step-up/chooser-1440.png"
+        },
+        {
+          "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-step-up/chooser-320.png",
+          "sha256": "eb24bb1b7abe58e9ca26ad0a4a1dfa5facab41da4ad68e89212faae29ca05f35",
+          "role": "CURRENT_SOURCE_RENDER",
+          "original_execution_ref": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-final-80a32ab-step-up/chooser-320.png"
+        },
+        {
+          "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-step-up/chooser-390.png",
+          "sha256": "7b57720ca989a9db69dd31c6dee6d96419849607e4f5c80aaffb53363ff53f20",
+          "role": "CURRENT_SOURCE_RENDER",
+          "original_execution_ref": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-final-80a32ab-step-up/chooser-390.png"
+        },
+        {
+          "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-step-up/chooser-768.png",
+          "sha256": "ae989a1a7b284f26c9c46ff8db1679f6c7c7d1c2dbabbfd90010798da466366b",
+          "role": "CURRENT_SOURCE_RENDER",
+          "original_execution_ref": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-final-80a32ab-step-up/chooser-768.png"
+        },
+        {
+          "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-step-up/password-1024.png",
+          "sha256": "d3d3437fc0fd03f2c8c458eb2e5cfde5b0c6e27afa5e2a25023f8db315a3f962",
+          "role": "CURRENT_SOURCE_RENDER",
+          "original_execution_ref": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-final-80a32ab-step-up/password-1024.png"
+        },
+        {
+          "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-step-up/password-1440.png",
+          "sha256": "b70fd2a16d78a16ff8ebee758cd64fccffc53e88cf419d344b6c094ab65ffa09",
+          "role": "CURRENT_SOURCE_RENDER",
+          "original_execution_ref": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-final-80a32ab-step-up/password-1440.png"
+        },
+        {
+          "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-step-up/password-320.png",
+          "sha256": "eca274980aa6294a02d29217e281629ae72445d7cdbbb5c9a6cf5c62834cdd8f",
+          "role": "CURRENT_SOURCE_RENDER",
+          "original_execution_ref": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-final-80a32ab-step-up/password-320.png"
+        },
+        {
+          "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-step-up/password-390.png",
+          "sha256": "9615a5c8a9eb0beeee54957fa7e5b97e4b5f0937de92539aa2a6b6f94ec52db0",
+          "role": "CURRENT_SOURCE_RENDER",
+          "original_execution_ref": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-final-80a32ab-step-up/password-390.png"
+        },
+        {
+          "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-step-up/password-768.png",
+          "sha256": "9193fcd72b4892f9a9cd890957d3c28c32ae5c2d444d3e87930a49e5715f23a8",
+          "role": "CURRENT_SOURCE_RENDER",
+          "original_execution_ref": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-final-80a32ab-step-up/password-768.png"
+        },
+        {
+          "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-step-up/server-error-1024.png",
+          "sha256": "10304b52d6eae205198b9f51dfa396fa82be32a23788b2e19e8b61b148ae3f9a",
+          "role": "CURRENT_SOURCE_RENDER",
+          "original_execution_ref": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-final-80a32ab-step-up/server-error-1024.png"
+        },
+        {
+          "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-step-up/server-error-1440.png",
+          "sha256": "29f5e41d44a69ad1c6075bce15155b13afd7207cc37c4ee876da26b48457aff9",
+          "role": "CURRENT_SOURCE_RENDER",
+          "original_execution_ref": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-final-80a32ab-step-up/server-error-1440.png"
+        },
+        {
+          "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-step-up/server-error-320.png",
+          "sha256": "81dcbc85cadfdb73b0640ae50ad4df69bbc70df277290df133f178e96ed9473e",
+          "role": "CURRENT_SOURCE_RENDER",
+          "original_execution_ref": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-final-80a32ab-step-up/server-error-320.png"
+        },
+        {
+          "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-step-up/server-error-390.png",
+          "sha256": "f96cbb908b9b1afaf4f3ecf39714fef629eb8341be1303b60d1d5c0f831487a9",
+          "role": "CURRENT_SOURCE_RENDER",
+          "original_execution_ref": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-final-80a32ab-step-up/server-error-390.png"
+        },
+        {
+          "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-step-up/server-error-768.png",
+          "sha256": "cc1546e5e9bfbf11db552cbf4f56bb34bdb9d897972c0af40ad2f95953e1a761",
+          "role": "CURRENT_SOURCE_RENDER",
+          "original_execution_ref": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-final-80a32ab-step-up/server-error-768.png"
+        },
+        {
+          "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-step-up/short-viewport.png",
+          "sha256": "170d820c7c7e65433188df8da4843853379a3825d954afd5b833d7f17d7d8e79",
+          "role": "CURRENT_SOURCE_RENDER",
+          "original_execution_ref": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-final-80a32ab-step-up/short-viewport.png"
+        },
+        {
+          "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/passkeys/run-details/step-up-passkey-Shared-nat-26fc7-e-approved-overlay-at-320px/native-proof-320.png",
+          "sha256": "20097eaa6eaf6dfd8b87854667a5c7e3331f0597f4819dfda72c4c2953c37245",
+          "role": "CURRENT_SOURCE_RENDER",
+          "original_execution_ref": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-final-80a32ab-passkeys/run-details/step-up-passkey-Shared-nat-26fc7-e-approved-overlay-at-320px/native-proof-320.png"
+        },
+        {
+          "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/passkeys/run-details/step-up-passkey-Shared-nat-381e3--approved-overlay-at-1440px/native-proof-1440.png",
+          "sha256": "5180e83af255ff55678a9ff510cb980dc1380de884a81369a1814b0ae68773f8",
+          "role": "CURRENT_SOURCE_RENDER",
+          "original_execution_ref": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-final-80a32ab-passkeys/run-details/step-up-passkey-Shared-nat-381e3--approved-overlay-at-1440px/native-proof-1440.png"
+        },
+        {
+          "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/passkeys/run-details/step-up-passkey-Shared-nat-3e7d6-e-approved-overlay-at-390px/native-proof-390.png",
+          "sha256": "2f65bb19532e7c29814c649737722791d8ed12251c52a46653983cfab674c5f9",
+          "role": "CURRENT_SOURCE_RENDER",
+          "original_execution_ref": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-final-80a32ab-passkeys/run-details/step-up-passkey-Shared-nat-3e7d6-e-approved-overlay-at-390px/native-proof-390.png"
+        },
+        {
+          "path": "governance/evidence/ui/step-up-20261109/reference/figma-98-27.png",
+          "sha256": "fd7e613982e3f8f2ca2e9abe1fe725a86f86b177f3cbef0be3c9ffa50db03616",
+          "role": "APPROVED_REFERENCE_OR_SCOPED_PROPOSAL",
+          "original_execution_ref": "governance/evidence/ui/step-up-20261109/reference/figma-98-27.png"
+        },
+        {
+          "path": "governance/evidence/ui/step-up-20261109/reference/password-1440.png",
+          "sha256": "dd270a71a32a0dee4420b0109ef58ecbf35bd196f97892c2d4e73c4d09ac61e8",
+          "role": "APPROVED_REFERENCE_OR_SCOPED_PROPOSAL",
+          "original_execution_ref": "governance/evidence/ui/step-up-20261109/reference/password-1440.png"
+        },
+        {
+          "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/reference/figma/figma-98-28.png",
+          "sha256": "3fcb345a9475b6776cfc62bf77388ab8512bff8f9362453e9dbd330f7f75a643",
+          "role": "APPROVED_REFERENCE_OR_SCOPED_PROPOSAL",
+          "original_execution_ref": "artifacts/p2-007-passkeys-20261109/ui-review/reference/figma-98-28.png"
+        }
+      ],
+      "case_groups": [
+        "step-up/chooser and password layout accessibility atfive widths",
+        "step-up/modal containment Escape focus restoration",
+        "step-up/pending blocks duplicates Back Cancel Escape",
+        "step-up/exact original result and changed authority",
+        "totp/35 current TOTP including4-width code validation/picker/recovery"
+      ],
+      "manual_comparison": {
+        "result": "PASS_WITH_EXISTING_SCOPED_ADAPTATIONS",
+        "notes": "Existing chooser/password layout and reviewed responsive/error adaptation remain. Actual TOTP detail/chooser tests and194-node contrast resolution cover newly imported shared modules; no live native factor or release approval is inferred.",
+        "reviewer_roles": [
+          "ui-ux-engineer",
+          "frontend-engineer",
+          "tester-qa-engineer",
+          "end-user-ux-reviewer"
+        ]
+      },
+      "unresolved_findings": []
+    },
+    {
+      "id": "DEV-STEP-UP",
+      "figma_refs": [
+        {
+          "file_key": "apNbwvAgdn1xIxYH1oiaSC",
+          "node_id": "98:27"
+        },
+        {
+          "file_key": "apNbwvAgdn1xIxYH1oiaSC",
+          "node_id": "70:1257"
+        }
+      ],
+      "additional_observed_design_refs": [],
+      "checks": [
+        {
+          "id": "URL-001",
+          "result": "PASS",
+          "description": "Observed canonical full-screen pathname transitions in named route cases. Item-specific basis: Development carrier is still a test fixture, not a Product page. The approved shared dialog remains modal under the caller route, with containment and return focus.390reference and320runtime are distinct responsive samples; no pixel equality is asserted.",
+          "case_groups": [
+            "step-up/modal stays under caller URL",
+            "step-up/keyboard containment and no action submission",
+            "step-up/short viewport scrollability",
+            "totp/40 route probes account and pending guards"
+          ],
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/manifest.json",
+              "sha256": "03ada820284b4f14354d2a10c912831ebfb3f181b22b215d0e35f53ec2663bc4",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/manifest.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/manifest.json",
+              "sha256": "fdde6352a2f927feacf576d2484614df77f73e4c88116f42a95cc9b163db765c",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/manifest.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/render-manifest-final.json",
+              "sha256": "5be639e38a6f67ad65ff454a9b229f0bf68af8f3e9487369301b951542c17887",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/render-manifest-final.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/navigation-results.json",
+              "sha256": "667558ae2fb966497abd7983511c3441dfc321fcd06da51a132225d72a2f0971",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/navigation-results.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/contrast-resolution-final.json",
+              "sha256": "68ef7dff051dc6dfa5c5266532b7978d58ed0a0444ad19cf1aa6e6b17d1323e0",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/contrast-resolution-final.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/legacy/step-up/chooser-320.png",
+              "sha256": "eb24bb1b7abe58e9ca26ad0a4a1dfa5facab41da4ad68e89212faae29ca05f35",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/legacy/step-up/chooser-320.png"
+            },
+            {
+              "path": "governance/evidence/ui/step-up-20261109/reference/chooser-390.png",
+              "sha256": "8146225f15945f1a0e1fcab350bfa90046994f7b88052d51127ea8565e7a013f"
+            }
+          ],
+          "boundary": "Existing parent item compatibility only; historical Product/scoped decisions are reused, never renewed or expanded."
+        },
+        {
+          "id": "URL-002",
+          "result": "PASS",
+          "description": "Query/fragment and forged history cannot replace a guarded owning pathname. Item-specific basis: Development carrier is still a test fixture, not a Product page. The approved shared dialog remains modal under the caller route, with containment and return focus.390reference and320runtime are distinct responsive samples; no pixel equality is asserted.",
+          "case_groups": [
+            "step-up/modal stays under caller URL",
+            "step-up/keyboard containment and no action submission",
+            "step-up/short viewport scrollability",
+            "totp/40 route probes account and pending guards"
+          ],
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/manifest.json",
+              "sha256": "03ada820284b4f14354d2a10c912831ebfb3f181b22b215d0e35f53ec2663bc4",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/manifest.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/manifest.json",
+              "sha256": "fdde6352a2f927feacf576d2484614df77f73e4c88116f42a95cc9b163db765c",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/manifest.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/render-manifest-final.json",
+              "sha256": "5be639e38a6f67ad65ff454a9b229f0bf68af8f3e9487369301b951542c17887",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/render-manifest-final.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/navigation-results.json",
+              "sha256": "667558ae2fb966497abd7983511c3441dfc321fcd06da51a132225d72a2f0971",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/navigation-results.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/contrast-resolution-final.json",
+              "sha256": "68ef7dff051dc6dfa5c5266532b7978d58ed0a0444ad19cf1aa6e6b17d1323e0",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/contrast-resolution-final.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/legacy/step-up/chooser-320.png",
+              "sha256": "eb24bb1b7abe58e9ca26ad0a4a1dfa5facab41da4ad68e89212faae29ca05f35",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/legacy/step-up/chooser-320.png"
+            },
+            {
+              "path": "governance/evidence/ui/step-up-20261109/reference/chooser-390.png",
+              "sha256": "8146225f15945f1a0e1fcab350bfa90046994f7b88052d51127ea8565e7a013f"
+            }
+          ],
+          "boundary": "Existing parent item compatibility only; historical Product/scoped decisions are reused, never renewed or expanded."
+        },
+        {
+          "id": "URL-003",
+          "result": "PASS",
+          "description": "Named direct-entry, reload and Back/Forward cases reconstruct the actual owning server-metadata view. Item-specific basis: Development carrier is still a test fixture, not a Product page. The approved shared dialog remains modal under the caller route, with containment and return focus.390reference and320runtime are distinct responsive samples; no pixel equality is asserted.",
+          "case_groups": [
+            "step-up/modal stays under caller URL",
+            "step-up/keyboard containment and no action submission",
+            "step-up/short viewport scrollability",
+            "totp/40 route probes account and pending guards"
+          ],
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/manifest.json",
+              "sha256": "03ada820284b4f14354d2a10c912831ebfb3f181b22b215d0e35f53ec2663bc4",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/manifest.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/manifest.json",
+              "sha256": "fdde6352a2f927feacf576d2484614df77f73e4c88116f42a95cc9b163db765c",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/manifest.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/render-manifest-final.json",
+              "sha256": "5be639e38a6f67ad65ff454a9b229f0bf68af8f3e9487369301b951542c17887",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/render-manifest-final.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/navigation-results.json",
+              "sha256": "667558ae2fb966497abd7983511c3441dfc321fcd06da51a132225d72a2f0971",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/navigation-results.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/contrast-resolution-final.json",
+              "sha256": "68ef7dff051dc6dfa5c5266532b7978d58ed0a0444ad19cf1aa6e6b17d1323e0",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/contrast-resolution-final.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/legacy/step-up/chooser-320.png",
+              "sha256": "eb24bb1b7abe58e9ca26ad0a4a1dfa5facab41da4ad68e89212faae29ca05f35",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/legacy/step-up/chooser-320.png"
+            },
+            {
+              "path": "governance/evidence/ui/step-up-20261109/reference/chooser-390.png",
+              "sha256": "8146225f15945f1a0e1fcab350bfa90046994f7b88052d51127ea8565e7a013f"
+            }
+          ],
+          "boundary": "Existing parent item compatibility only; historical Product/scoped decisions are reused, never renewed or expanded."
+        },
+        {
+          "id": "URL-005",
+          "result": "PASS",
+          "description": "Expired/unauthorized/missing-stage fixtures are blocked or safely redirected; backend authority is separately evidenced. Item-specific basis: Development carrier is still a test fixture, not a Product page. The approved shared dialog remains modal under the caller route, with containment and return focus.390reference and320runtime are distinct responsive samples; no pixel equality is asserted.",
+          "case_groups": [
+            "step-up/modal stays under caller URL",
+            "step-up/keyboard containment and no action submission",
+            "step-up/short viewport scrollability",
+            "totp/40 route probes account and pending guards"
+          ],
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/manifest.json",
+              "sha256": "03ada820284b4f14354d2a10c912831ebfb3f181b22b215d0e35f53ec2663bc4",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/manifest.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/manifest.json",
+              "sha256": "fdde6352a2f927feacf576d2484614df77f73e4c88116f42a95cc9b163db765c",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/manifest.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/render-manifest-final.json",
+              "sha256": "5be639e38a6f67ad65ff454a9b229f0bf68af8f3e9487369301b951542c17887",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/render-manifest-final.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/navigation-results.json",
+              "sha256": "667558ae2fb966497abd7983511c3441dfc321fcd06da51a132225d72a2f0971",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/navigation-results.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/contrast-resolution-final.json",
+              "sha256": "68ef7dff051dc6dfa5c5266532b7978d58ed0a0444ad19cf1aa6e6b17d1323e0",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/contrast-resolution-final.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/legacy/step-up/chooser-320.png",
+              "sha256": "eb24bb1b7abe58e9ca26ad0a4a1dfa5facab41da4ad68e89212faae29ca05f35",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/legacy/step-up/chooser-320.png"
+            },
+            {
+              "path": "governance/evidence/ui/step-up-20261109/reference/chooser-390.png",
+              "sha256": "8146225f15945f1a0e1fcab350bfa90046994f7b88052d51127ea8565e7a013f"
+            }
+          ],
+          "boundary": "Existing parent item compatibility only; historical Product/scoped decisions are reused, never renewed or expanded."
+        },
+        {
+          "id": "URL-004",
+          "result": "PASS",
+          "description": "Same-screen visibility/dialog state retains caller URL and blocks accidental side effects. Item-specific basis: Development carrier is still a test fixture, not a Product page. The approved shared dialog remains modal under the caller route, with containment and return focus.390reference and320runtime are distinct responsive samples; no pixel equality is asserted.",
+          "case_groups": [
+            "step-up/modal stays under caller URL",
+            "step-up/keyboard containment and no action submission",
+            "step-up/short viewport scrollability",
+            "totp/40 route probes account and pending guards"
+          ],
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/manifest.json",
+              "sha256": "03ada820284b4f14354d2a10c912831ebfb3f181b22b215d0e35f53ec2663bc4",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/manifest.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/manifest.json",
+              "sha256": "fdde6352a2f927feacf576d2484614df77f73e4c88116f42a95cc9b163db765c",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/manifest.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/render-manifest-final.json",
+              "sha256": "5be639e38a6f67ad65ff454a9b229f0bf68af8f3e9487369301b951542c17887",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/render-manifest-final.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/navigation-results.json",
+              "sha256": "667558ae2fb966497abd7983511c3441dfc321fcd06da51a132225d72a2f0971",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/navigation-results.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/contrast-resolution-final.json",
+              "sha256": "68ef7dff051dc6dfa5c5266532b7978d58ed0a0444ad19cf1aa6e6b17d1323e0",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/contrast-resolution-final.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/legacy/step-up/chooser-320.png",
+              "sha256": "eb24bb1b7abe58e9ca26ad0a4a1dfa5facab41da4ad68e89212faae29ca05f35",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/legacy/step-up/chooser-320.png"
+            },
+            {
+              "path": "governance/evidence/ui/step-up-20261109/reference/chooser-390.png",
+              "sha256": "8146225f15945f1a0e1fcab350bfa90046994f7b88052d51127ea8565e7a013f"
+            }
+          ],
+          "boundary": "Existing parent item compatibility only; historical Product/scoped decisions are reused, never renewed or expanded."
+        },
+        {
+          "id": "URL-006",
+          "result": "NOT_APPLICABLE",
+          "reason": "Product-origin OAuth/callback is not implemented in this feature slice (future P2-014). No future-flow PASS is claimed. Existing callback source was not changed; external query/fragment attempts do not authorize navigation.",
+          "authority_refs": [
+            "docs/authority/current/decisions/AMD-0008_Approved_Figma_Visual_Fidelity_and_Product_Owner_UX_Consent.md",
+            "docs/authority/current/decisions/AMD-0009_URL_Addressable_Routing_and_Governed_Form_Validation.md",
+            "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md"
+          ],
+          "assessment": "Rechecked scope: no new Product-origin OAuth integration is implemented by this parent compatibility refresh; preserve its prior exact exclusion."
+        },
+        {
+          "id": "UX-FID-001",
+          "result": "PASS",
+          "description": "Manual current/reference comparison in item notes; scoped existing composition retained. Item-specific basis: Development carrier is still a test fixture, not a Product page. The approved shared dialog remains modal under the caller route, with containment and return focus.390reference and320runtime are distinct responsive samples; no pixel equality is asserted.",
+          "case_groups": [
+            "step-up/modal stays under caller URL",
+            "step-up/keyboard containment and no action submission",
+            "step-up/short viewport scrollability",
+            "totp/40 route probes account and pending guards"
+          ],
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/manifest.json",
+              "sha256": "03ada820284b4f14354d2a10c912831ebfb3f181b22b215d0e35f53ec2663bc4",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/manifest.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/manifest.json",
+              "sha256": "fdde6352a2f927feacf576d2484614df77f73e4c88116f42a95cc9b163db765c",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/manifest.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/render-manifest-final.json",
+              "sha256": "5be639e38a6f67ad65ff454a9b229f0bf68af8f3e9487369301b951542c17887",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/render-manifest-final.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/navigation-results.json",
+              "sha256": "667558ae2fb966497abd7983511c3441dfc321fcd06da51a132225d72a2f0971",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/navigation-results.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/contrast-resolution-final.json",
+              "sha256": "68ef7dff051dc6dfa5c5266532b7978d58ed0a0444ad19cf1aa6e6b17d1323e0",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/contrast-resolution-final.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/legacy/step-up/chooser-320.png",
+              "sha256": "eb24bb1b7abe58e9ca26ad0a4a1dfa5facab41da4ad68e89212faae29ca05f35",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/legacy/step-up/chooser-320.png"
+            },
+            {
+              "path": "governance/evidence/ui/step-up-20261109/reference/chooser-390.png",
+              "sha256": "8146225f15945f1a0e1fcab350bfa90046994f7b88052d51127ea8565e7a013f"
+            }
+          ],
+          "boundary": "Existing parent item compatibility only; historical Product/scoped decisions are reused, never renewed or expanded."
+        },
+        {
+          "id": "UX-FID-002",
+          "result": "PASS",
+          "description": "Local page/glow/assets are present in current captures and local-asset tests. Item-specific basis: Development carrier is still a test fixture, not a Product page. The approved shared dialog remains modal under the caller route, with containment and return focus.390reference and320runtime are distinct responsive samples; no pixel equality is asserted.",
+          "case_groups": [
+            "step-up/modal stays under caller URL",
+            "step-up/keyboard containment and no action submission",
+            "step-up/short viewport scrollability",
+            "totp/40 route probes account and pending guards"
+          ],
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/manifest.json",
+              "sha256": "03ada820284b4f14354d2a10c912831ebfb3f181b22b215d0e35f53ec2663bc4",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/manifest.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/manifest.json",
+              "sha256": "fdde6352a2f927feacf576d2484614df77f73e4c88116f42a95cc9b163db765c",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/manifest.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/render-manifest-final.json",
+              "sha256": "5be639e38a6f67ad65ff454a9b229f0bf68af8f3e9487369301b951542c17887",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/render-manifest-final.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/navigation-results.json",
+              "sha256": "667558ae2fb966497abd7983511c3441dfc321fcd06da51a132225d72a2f0971",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/navigation-results.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/contrast-resolution-final.json",
+              "sha256": "68ef7dff051dc6dfa5c5266532b7978d58ed0a0444ad19cf1aa6e6b17d1323e0",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/contrast-resolution-final.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/legacy/step-up/chooser-320.png",
+              "sha256": "eb24bb1b7abe58e9ca26ad0a4a1dfa5facab41da4ad68e89212faae29ca05f35",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/legacy/step-up/chooser-320.png"
+            },
+            {
+              "path": "governance/evidence/ui/step-up-20261109/reference/chooser-390.png",
+              "sha256": "8146225f15945f1a0e1fcab350bfa90046994f7b88052d51127ea8565e7a013f"
+            }
+          ],
+          "boundary": "Existing parent item compatibility only; historical Product/scoped decisions are reused, never renewed or expanded."
+        },
+        {
+          "id": "UX-FID-003",
+          "result": "PASS",
+          "description": "Shared typed fields/buttons/error geometry and token variants are reused. Item-specific basis: Development carrier is still a test fixture, not a Product page. The approved shared dialog remains modal under the caller route, with containment and return focus.390reference and320runtime are distinct responsive samples; no pixel equality is asserted.",
+          "case_groups": [
+            "step-up/modal stays under caller URL",
+            "step-up/keyboard containment and no action submission",
+            "step-up/short viewport scrollability",
+            "totp/40 route probes account and pending guards"
+          ],
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/manifest.json",
+              "sha256": "03ada820284b4f14354d2a10c912831ebfb3f181b22b215d0e35f53ec2663bc4",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/manifest.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/manifest.json",
+              "sha256": "fdde6352a2f927feacf576d2484614df77f73e4c88116f42a95cc9b163db765c",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/manifest.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/render-manifest-final.json",
+              "sha256": "5be639e38a6f67ad65ff454a9b229f0bf68af8f3e9487369301b951542c17887",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/render-manifest-final.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/navigation-results.json",
+              "sha256": "667558ae2fb966497abd7983511c3441dfc321fcd06da51a132225d72a2f0971",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/navigation-results.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/contrast-resolution-final.json",
+              "sha256": "68ef7dff051dc6dfa5c5266532b7978d58ed0a0444ad19cf1aa6e6b17d1323e0",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/contrast-resolution-final.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/legacy/step-up/chooser-320.png",
+              "sha256": "eb24bb1b7abe58e9ca26ad0a4a1dfa5facab41da4ad68e89212faae29ca05f35",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/legacy/step-up/chooser-320.png"
+            },
+            {
+              "path": "governance/evidence/ui/step-up-20261109/reference/chooser-390.png",
+              "sha256": "8146225f15945f1a0e1fcab350bfa90046994f7b88052d51127ea8565e7a013f"
+            }
+          ],
+          "boundary": "Existing parent item compatibility only; historical Product/scoped decisions are reused, never renewed or expanded."
+        },
+        {
+          "id": "UX-FID-004",
+          "result": "PASS",
+          "description": "Only previously approved scoped deviations/consents apply; preserve their exact references. Item-specific basis: Development carrier is still a test fixture, not a Product page. The approved shared dialog remains modal under the caller route, with containment and return focus.390reference and320runtime are distinct responsive samples; no pixel equality is asserted.",
+          "case_groups": [
+            "step-up/modal stays under caller URL",
+            "step-up/keyboard containment and no action submission",
+            "step-up/short viewport scrollability",
+            "totp/40 route probes account and pending guards"
+          ],
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/manifest.json",
+              "sha256": "03ada820284b4f14354d2a10c912831ebfb3f181b22b215d0e35f53ec2663bc4",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/manifest.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/manifest.json",
+              "sha256": "fdde6352a2f927feacf576d2484614df77f73e4c88116f42a95cc9b163db765c",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/manifest.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/render-manifest-final.json",
+              "sha256": "5be639e38a6f67ad65ff454a9b229f0bf68af8f3e9487369301b951542c17887",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/render-manifest-final.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/navigation-results.json",
+              "sha256": "667558ae2fb966497abd7983511c3441dfc321fcd06da51a132225d72a2f0971",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/navigation-results.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/contrast-resolution-final.json",
+              "sha256": "68ef7dff051dc6dfa5c5266532b7978d58ed0a0444ad19cf1aa6e6b17d1323e0",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/contrast-resolution-final.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/legacy/step-up/chooser-320.png",
+              "sha256": "eb24bb1b7abe58e9ca26ad0a4a1dfa5facab41da4ad68e89212faae29ca05f35",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/legacy/step-up/chooser-320.png"
+            },
+            {
+              "path": "governance/evidence/ui/step-up-20261109/reference/chooser-390.png",
+              "sha256": "8146225f15945f1a0e1fcab350bfa90046994f7b88052d51127ea8565e7a013f"
+            }
+          ],
+          "boundary": "Existing parent item compatibility only; historical Product/scoped decisions are reused, never renewed or expanded."
+        },
+        {
+          "id": "UX-FID-005",
+          "result": "PASS",
+          "description": "Previously resolved domain/Figma conflicts remain truthful; no new material conflict observed in this compatibility scope. Item-specific basis: Development carrier is still a test fixture, not a Product page. The approved shared dialog remains modal under the caller route, with containment and return focus.390reference and320runtime are distinct responsive samples; no pixel equality is asserted.",
+          "case_groups": [
+            "step-up/modal stays under caller URL",
+            "step-up/keyboard containment and no action submission",
+            "step-up/short viewport scrollability",
+            "totp/40 route probes account and pending guards"
+          ],
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/manifest.json",
+              "sha256": "03ada820284b4f14354d2a10c912831ebfb3f181b22b215d0e35f53ec2663bc4",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/manifest.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/manifest.json",
+              "sha256": "fdde6352a2f927feacf576d2484614df77f73e4c88116f42a95cc9b163db765c",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/manifest.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/render-manifest-final.json",
+              "sha256": "5be639e38a6f67ad65ff454a9b229f0bf68af8f3e9487369301b951542c17887",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/render-manifest-final.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/navigation-results.json",
+              "sha256": "667558ae2fb966497abd7983511c3441dfc321fcd06da51a132225d72a2f0971",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/navigation-results.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/contrast-resolution-final.json",
+              "sha256": "68ef7dff051dc6dfa5c5266532b7978d58ed0a0444ad19cf1aa6e6b17d1323e0",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/contrast-resolution-final.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/legacy/step-up/chooser-320.png",
+              "sha256": "eb24bb1b7abe58e9ca26ad0a4a1dfa5facab41da4ad68e89212faae29ca05f35",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/legacy/step-up/chooser-320.png"
+            },
+            {
+              "path": "governance/evidence/ui/step-up-20261109/reference/chooser-390.png",
+              "sha256": "8146225f15945f1a0e1fcab350bfa90046994f7b88052d51127ea8565e7a013f"
+            }
+          ],
+          "boundary": "Existing parent item compatibility only; historical Product/scoped decisions are reused, never renewed or expanded."
+        },
+        {
+          "id": "UX-FID-006",
+          "result": "PASS",
+          "description": "Current source and screenshots retain approved screen-specific styling rather than library defaults. Item-specific basis: Development carrier is still a test fixture, not a Product page. The approved shared dialog remains modal under the caller route, with containment and return focus.390reference and320runtime are distinct responsive samples; no pixel equality is asserted.",
+          "case_groups": [
+            "step-up/modal stays under caller URL",
+            "step-up/keyboard containment and no action submission",
+            "step-up/short viewport scrollability",
+            "totp/40 route probes account and pending guards"
+          ],
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/manifest.json",
+              "sha256": "03ada820284b4f14354d2a10c912831ebfb3f181b22b215d0e35f53ec2663bc4",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/manifest.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/manifest.json",
+              "sha256": "fdde6352a2f927feacf576d2484614df77f73e4c88116f42a95cc9b163db765c",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/manifest.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/render-manifest-final.json",
+              "sha256": "5be639e38a6f67ad65ff454a9b229f0bf68af8f3e9487369301b951542c17887",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/render-manifest-final.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/navigation-results.json",
+              "sha256": "667558ae2fb966497abd7983511c3441dfc321fcd06da51a132225d72a2f0971",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/navigation-results.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/contrast-resolution-final.json",
+              "sha256": "68ef7dff051dc6dfa5c5266532b7978d58ed0a0444ad19cf1aa6e6b17d1323e0",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/contrast-resolution-final.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/legacy/step-up/chooser-320.png",
+              "sha256": "eb24bb1b7abe58e9ca26ad0a4a1dfa5facab41da4ad68e89212faae29ca05f35",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/legacy/step-up/chooser-320.png"
+            },
+            {
+              "path": "governance/evidence/ui/step-up-20261109/reference/chooser-390.png",
+              "sha256": "8146225f15945f1a0e1fcab350bfa90046994f7b88052d51127ea8565e7a013f"
+            }
+          ],
+          "boundary": "Existing parent item compatibility only; historical Product/scoped decisions are reused, never renewed or expanded."
+        },
+        {
+          "id": "UX-FID-007",
+          "result": "PASS",
+          "description": "Named responsive/Axe/keyboard/focus cases are current; detailed new shared-module contrast report resolves all194current incomplete nodes. Item-specific basis: Development carrier is still a test fixture, not a Product page. The approved shared dialog remains modal under the caller route, with containment and return focus.390reference and320runtime are distinct responsive samples; no pixel equality is asserted.",
+          "case_groups": [
+            "step-up/modal stays under caller URL",
+            "step-up/keyboard containment and no action submission",
+            "step-up/short viewport scrollability",
+            "totp/40 route probes account and pending guards"
+          ],
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/manifest.json",
+              "sha256": "03ada820284b4f14354d2a10c912831ebfb3f181b22b215d0e35f53ec2663bc4",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/manifest.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/manifest.json",
+              "sha256": "fdde6352a2f927feacf576d2484614df77f73e4c88116f42a95cc9b163db765c",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/manifest.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/render-manifest-final.json",
+              "sha256": "5be639e38a6f67ad65ff454a9b229f0bf68af8f3e9487369301b951542c17887",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/render-manifest-final.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/navigation-results.json",
+              "sha256": "667558ae2fb966497abd7983511c3441dfc321fcd06da51a132225d72a2f0971",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/navigation-results.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/contrast-resolution-final.json",
+              "sha256": "68ef7dff051dc6dfa5c5266532b7978d58ed0a0444ad19cf1aa6e6b17d1323e0",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/contrast-resolution-final.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/legacy/step-up/chooser-320.png",
+              "sha256": "eb24bb1b7abe58e9ca26ad0a4a1dfa5facab41da4ad68e89212faae29ca05f35",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/legacy/step-up/chooser-320.png"
+            },
+            {
+              "path": "governance/evidence/ui/step-up-20261109/reference/chooser-390.png",
+              "sha256": "8146225f15945f1a0e1fcab350bfa90046994f7b88052d51127ea8565e7a013f"
+            }
+          ],
+          "boundary": "Existing parent item compatibility only; historical Product/scoped decisions are reused, never renewed or expanded."
+        },
+        {
+          "id": "UX-FID-008",
+          "result": "PASS",
+          "description": "Current actual reports/screenshots, reference provenance, source identity and existing scoped consent are linked without redating historical evidence. Item-specific basis: Development carrier is still a test fixture, not a Product page. The approved shared dialog remains modal under the caller route, with containment and return focus.390reference and320runtime are distinct responsive samples; no pixel equality is asserted.",
+          "case_groups": [
+            "step-up/modal stays under caller URL",
+            "step-up/keyboard containment and no action submission",
+            "step-up/short viewport scrollability",
+            "totp/40 route probes account and pending guards"
+          ],
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/manifest.json",
+              "sha256": "03ada820284b4f14354d2a10c912831ebfb3f181b22b215d0e35f53ec2663bc4",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/manifest.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/manifest.json",
+              "sha256": "fdde6352a2f927feacf576d2484614df77f73e4c88116f42a95cc9b163db765c",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/manifest.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/render-manifest-final.json",
+              "sha256": "5be639e38a6f67ad65ff454a9b229f0bf68af8f3e9487369301b951542c17887",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/render-manifest-final.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/navigation-results.json",
+              "sha256": "667558ae2fb966497abd7983511c3441dfc321fcd06da51a132225d72a2f0971",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/navigation-results.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/contrast-resolution-final.json",
+              "sha256": "68ef7dff051dc6dfa5c5266532b7978d58ed0a0444ad19cf1aa6e6b17d1323e0",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/contrast-resolution-final.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/legacy/step-up/chooser-320.png",
+              "sha256": "eb24bb1b7abe58e9ca26ad0a4a1dfa5facab41da4ad68e89212faae29ca05f35",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/legacy/step-up/chooser-320.png"
+            },
+            {
+              "path": "governance/evidence/ui/step-up-20261109/reference/chooser-390.png",
+              "sha256": "8146225f15945f1a0e1fcab350bfa90046994f7b88052d51127ea8565e7a013f"
+            }
+          ],
+          "boundary": "Existing parent item compatibility only; historical Product/scoped decisions are reused, never renewed or expanded."
+        }
+      ],
+      "screenshots": [
+        {
+          "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/legacy/step-up/chooser-320.png",
+          "sha256": "eb24bb1b7abe58e9ca26ad0a4a1dfa5facab41da4ad68e89212faae29ca05f35",
+          "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/legacy/step-up/chooser-320.png",
+          "role": "CURRENT_SOURCE_RENDER",
+          "source_carrier_sha": "6e562db102ce75d5ed478a15e2970ff55ab98fef"
+        },
+        {
+          "path": "governance/evidence/ui/step-up-20261109/reference/chooser-390.png",
+          "sha256": "8146225f15945f1a0e1fcab350bfa90046994f7b88052d51127ea8565e7a013f",
+          "role": "APPROVED_REFERENCE_OR_SCOPED_PROPOSAL"
+        }
+      ],
+      "deviations": [
+        {
+          "status": "PRODUCT_OWNER_APPROVED",
+          "approval_evidence": {
+            "path": "governance/evidence/TUN-P2-006-VISUAL-CONSENT-20261108.json",
+            "sha256": "881ffda9f2b7431c9077922789aa585780022651d5a2c8a628365a85de5fc3b2"
+          }
+        }
+      ],
+      "historical_item_ref": {
+        "path": "governance/evidence/TUN-P2-006-UI-COMPLIANCE.json",
+        "item_id": "DEV-STEP-UP",
+        "sha256": "25c2fd7e001d81ee637e68a8edc418d5a9702cb91db9ba3e4a34d1698d34bc3a"
+      },
+      "historical_screenshots": [
+        {
+          "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-step-up/chooser-1024.png",
+          "sha256": "596ec0d7d40dfd99d427f9a29849b1c555489c1ead76a4ab28280f0c5c2c0d39",
+          "role": "CURRENT_SOURCE_RENDER",
+          "original_execution_ref": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-final-80a32ab-step-up/chooser-1024.png"
+        },
+        {
+          "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-step-up/chooser-1440.png",
+          "sha256": "f4047c3995cb3f51ed02d6d08c37d850ec498d6164e484251759f70b3c4d0c13",
+          "role": "CURRENT_SOURCE_RENDER",
+          "original_execution_ref": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-final-80a32ab-step-up/chooser-1440.png"
+        },
+        {
+          "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-step-up/chooser-320.png",
+          "sha256": "eb24bb1b7abe58e9ca26ad0a4a1dfa5facab41da4ad68e89212faae29ca05f35",
+          "role": "CURRENT_SOURCE_RENDER",
+          "original_execution_ref": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-final-80a32ab-step-up/chooser-320.png"
+        },
+        {
+          "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-step-up/chooser-390.png",
+          "sha256": "7b57720ca989a9db69dd31c6dee6d96419849607e4f5c80aaffb53363ff53f20",
+          "role": "CURRENT_SOURCE_RENDER",
+          "original_execution_ref": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-final-80a32ab-step-up/chooser-390.png"
+        },
+        {
+          "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-step-up/chooser-768.png",
+          "sha256": "ae989a1a7b284f26c9c46ff8db1679f6c7c7d1c2dbabbfd90010798da466366b",
+          "role": "CURRENT_SOURCE_RENDER",
+          "original_execution_ref": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-final-80a32ab-step-up/chooser-768.png"
+        },
+        {
+          "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-step-up/password-1024.png",
+          "sha256": "d3d3437fc0fd03f2c8c458eb2e5cfde5b0c6e27afa5e2a25023f8db315a3f962",
+          "role": "CURRENT_SOURCE_RENDER",
+          "original_execution_ref": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-final-80a32ab-step-up/password-1024.png"
+        },
+        {
+          "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-step-up/password-1440.png",
+          "sha256": "b70fd2a16d78a16ff8ebee758cd64fccffc53e88cf419d344b6c094ab65ffa09",
+          "role": "CURRENT_SOURCE_RENDER",
+          "original_execution_ref": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-final-80a32ab-step-up/password-1440.png"
+        },
+        {
+          "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-step-up/password-320.png",
+          "sha256": "eca274980aa6294a02d29217e281629ae72445d7cdbbb5c9a6cf5c62834cdd8f",
+          "role": "CURRENT_SOURCE_RENDER",
+          "original_execution_ref": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-final-80a32ab-step-up/password-320.png"
+        },
+        {
+          "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-step-up/password-390.png",
+          "sha256": "9615a5c8a9eb0beeee54957fa7e5b97e4b5f0937de92539aa2a6b6f94ec52db0",
+          "role": "CURRENT_SOURCE_RENDER",
+          "original_execution_ref": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-final-80a32ab-step-up/password-390.png"
+        },
+        {
+          "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-step-up/password-768.png",
+          "sha256": "9193fcd72b4892f9a9cd890957d3c28c32ae5c2d444d3e87930a49e5715f23a8",
+          "role": "CURRENT_SOURCE_RENDER",
+          "original_execution_ref": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-final-80a32ab-step-up/password-768.png"
+        },
+        {
+          "path": "governance/evidence/ui/step-up-20261109/reference/figma-98-27.png",
+          "sha256": "fd7e613982e3f8f2ca2e9abe1fe725a86f86b177f3cbef0be3c9ffa50db03616",
+          "role": "APPROVED_REFERENCE_OR_SCOPED_PROPOSAL",
+          "original_execution_ref": "governance/evidence/ui/step-up-20261109/reference/figma-98-27.png"
+        },
+        {
+          "path": "governance/evidence/ui/step-up-20261109/reference/password-1440.png",
+          "sha256": "dd270a71a32a0dee4420b0109ef58ecbf35bd196f97892c2d4e73c4d09ac61e8",
+          "role": "APPROVED_REFERENCE_OR_SCOPED_PROPOSAL",
+          "original_execution_ref": "governance/evidence/ui/step-up-20261109/reference/password-1440.png"
+        }
+      ],
+      "case_groups": [
+        "step-up/modal stays under caller URL",
+        "step-up/keyboard containment and no action submission",
+        "step-up/short viewport scrollability",
+        "totp/40 route probes account and pending guards"
+      ],
+      "manual_comparison": {
+        "result": "PASS_WITH_EXISTING_SCOPED_ADAPTATIONS",
+        "notes": "Development carrier is still a test fixture, not a Product page. The approved shared dialog remains modal under the caller route, with containment and return focus.390reference and320runtime are distinct responsive samples; no pixel equality is asserted.",
+        "reviewer_roles": [
+          "ui-ux-engineer",
+          "frontend-engineer",
+          "tester-qa-engineer",
+          "end-user-ux-reviewer"
+        ]
+      },
+      "unresolved_findings": []
+    },
+    {
+      "id": "FORM-STEP-UP",
+      "figma_refs": [
+        {
+          "file_key": "apNbwvAgdn1xIxYH1oiaSC",
+          "node_id": "98:27"
+        },
+        {
+          "file_key": "apNbwvAgdn1xIxYH1oiaSC",
+          "node_id": "70:1257"
+        }
+      ],
+      "additional_observed_design_refs": [
+        {
+          "file_key": "apNbwvAgdn1xIxYH1oiaSC",
+          "node_id": "70:1257",
+          "reference_image": "artifacts/p2-007-passkeys-20261109/ui-review/reference/figma-70-1257.png"
+        }
+      ],
+      "checks": [
+        {
+          "id": "VAL-001",
+          "result": "PASS",
+          "description": "Named empty/format/confirmation cases render approved shared field errors. Item-specific basis: Current-password form keeps shared typed validation and independent server authority, safe error mapping, first-invalid focus and credential clearing. TOTP-specific domain rules remain owned by the separate form.",
+          "case_groups": [
+            "step-up/empty blur correction rejection field focus atfive widths",
+            "step-up/long password independently rejected",
+            "step-up/pending duplicate and weaker-method refusal",
+            "shared-foundation/shared validation"
+          ],
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/manifest.json",
+              "sha256": "03ada820284b4f14354d2a10c912831ebfb3f181b22b215d0e35f53ec2663bc4",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/manifest.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/manifest.json",
+              "sha256": "fdde6352a2f927feacf576d2484614df77f73e4c88116f42a95cc9b163db765c",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/manifest.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/render-manifest-final.json",
+              "sha256": "5be639e38a6f67ad65ff454a9b229f0bf68af8f3e9487369301b951542c17887",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/render-manifest-final.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/navigation-results.json",
+              "sha256": "667558ae2fb966497abd7983511c3441dfc321fcd06da51a132225d72a2f0971",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/navigation-results.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/contrast-resolution-final.json",
+              "sha256": "68ef7dff051dc6dfa5c5266532b7978d58ed0a0444ad19cf1aa6e6b17d1323e0",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/contrast-resolution-final.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/legacy/step-up/server-error-320.png",
+              "sha256": "81dcbc85cadfdb73b0640ae50ad4df69bbc70df277290df133f178e96ed9473e",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/legacy/step-up/server-error-320.png"
+            },
+            {
+              "path": "governance/evidence/ui/AMD0009/figma-registration-validation-errors.png",
+              "sha256": "0b1e8d0a4516747f85501f828cb62dd7adbb938ce9f1244e34e5a1eb5db0d5fa"
+            }
+          ],
+          "boundary": "Existing parent item compatibility only; historical Product/scoped decisions are reused, never renewed or expanded."
+        },
+        {
+          "id": "VAL-002",
+          "result": "PASS",
+          "description": "Typed application errors and form noValidate are exercised; native bubbles are not sole feedback. Item-specific basis: Current-password form keeps shared typed validation and independent server authority, safe error mapping, first-invalid focus and credential clearing. TOTP-specific domain rules remain owned by the separate form.",
+          "case_groups": [
+            "step-up/empty blur correction rejection field focus atfive widths",
+            "step-up/long password independently rejected",
+            "step-up/pending duplicate and weaker-method refusal",
+            "shared-foundation/shared validation"
+          ],
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/manifest.json",
+              "sha256": "03ada820284b4f14354d2a10c912831ebfb3f181b22b215d0e35f53ec2663bc4",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/manifest.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/manifest.json",
+              "sha256": "fdde6352a2f927feacf576d2484614df77f73e4c88116f42a95cc9b163db765c",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/manifest.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/render-manifest-final.json",
+              "sha256": "5be639e38a6f67ad65ff454a9b229f0bf68af8f3e9487369301b951542c17887",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/render-manifest-final.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/navigation-results.json",
+              "sha256": "667558ae2fb966497abd7983511c3441dfc321fcd06da51a132225d72a2f0971",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/navigation-results.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/contrast-resolution-final.json",
+              "sha256": "68ef7dff051dc6dfa5c5266532b7978d58ed0a0444ad19cf1aa6e6b17d1323e0",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/contrast-resolution-final.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/legacy/step-up/server-error-320.png",
+              "sha256": "81dcbc85cadfdb73b0640ae50ad4df69bbc70df277290df133f178e96ed9473e",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/legacy/step-up/server-error-320.png"
+            },
+            {
+              "path": "governance/evidence/ui/AMD0009/figma-registration-validation-errors.png",
+              "sha256": "0b1e8d0a4516747f85501f828cb62dd7adbb938ce9f1244e34e5a1eb5db0d5fa"
+            }
+          ],
+          "boundary": "Existing parent item compatibility only; historical Product/scoped decisions are reused, never renewed or expanded."
+        },
+        {
+          "id": "VAL-003",
+          "result": "PASS",
+          "description": "Independent native backend tests are actual PASS in the linked260 receipt; source carrier equality is bound by the parent compatibility receipt, not inferred from mocks. Item-specific basis: Current-password form keeps shared typed validation and independent server authority, safe error mapping, first-invalid focus and credential clearing. TOTP-specific domain rules remain owned by the separate form.",
+          "case_groups": [
+            "step-up/empty blur correction rejection field focus atfive widths",
+            "step-up/long password independently rejected",
+            "step-up/pending duplicate and weaker-method refusal",
+            "shared-foundation/shared validation"
+          ],
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/parent005006-compatibility/native-execution-index.json",
+              "sha256": "dd31918f974b5e7294df49a4be45ca03c7323667cd8907752693d71c0f02803f"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/manifest.json",
+              "sha256": "03ada820284b4f14354d2a10c912831ebfb3f181b22b215d0e35f53ec2663bc4",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/manifest.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/manifest.json",
+              "sha256": "fdde6352a2f927feacf576d2484614df77f73e4c88116f42a95cc9b163db765c",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/manifest.json"
+            }
+          ],
+          "boundary": "Existing parent item compatibility only; historical Product/scoped decisions are reused, never renewed or expanded."
+        },
+        {
+          "id": "VAL-004",
+          "result": "PASS",
+          "description": "Named server rejections map to governed field/form messages without invented account existence or finality. Item-specific basis: Current-password form keeps shared typed validation and independent server authority, safe error mapping, first-invalid focus and credential clearing. TOTP-specific domain rules remain owned by the separate form.",
+          "case_groups": [
+            "step-up/empty blur correction rejection field focus atfive widths",
+            "step-up/long password independently rejected",
+            "step-up/pending duplicate and weaker-method refusal",
+            "shared-foundation/shared validation"
+          ],
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/manifest.json",
+              "sha256": "03ada820284b4f14354d2a10c912831ebfb3f181b22b215d0e35f53ec2663bc4",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/manifest.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/manifest.json",
+              "sha256": "fdde6352a2f927feacf576d2484614df77f73e4c88116f42a95cc9b163db765c",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/manifest.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/render-manifest-final.json",
+              "sha256": "5be639e38a6f67ad65ff454a9b229f0bf68af8f3e9487369301b951542c17887",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/render-manifest-final.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/navigation-results.json",
+              "sha256": "667558ae2fb966497abd7983511c3441dfc321fcd06da51a132225d72a2f0971",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/navigation-results.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/contrast-resolution-final.json",
+              "sha256": "68ef7dff051dc6dfa5c5266532b7978d58ed0a0444ad19cf1aa6e6b17d1323e0",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/contrast-resolution-final.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/legacy/step-up/server-error-320.png",
+              "sha256": "81dcbc85cadfdb73b0640ae50ad4df69bbc70df277290df133f178e96ed9473e",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/legacy/step-up/server-error-320.png"
+            },
+            {
+              "path": "governance/evidence/ui/AMD0009/figma-registration-validation-errors.png",
+              "sha256": "0b1e8d0a4516747f85501f828cb62dd7adbb938ce9f1244e34e5a1eb5db0d5fa"
+            }
+          ],
+          "boundary": "Existing parent item compatibility only; historical Product/scoped decisions are reused, never renewed or expanded."
+        },
+        {
+          "id": "VAL-005",
+          "result": "PASS",
+          "description": "Named cases exercise blur/correction, first-invalid focus, descriptions, safe-value handling and pending duplicate protection. Item-specific basis: Current-password form keeps shared typed validation and independent server authority, safe error mapping, first-invalid focus and credential clearing. TOTP-specific domain rules remain owned by the separate form.",
+          "case_groups": [
+            "step-up/empty blur correction rejection field focus atfive widths",
+            "step-up/long password independently rejected",
+            "step-up/pending duplicate and weaker-method refusal",
+            "shared-foundation/shared validation"
+          ],
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/manifest.json",
+              "sha256": "03ada820284b4f14354d2a10c912831ebfb3f181b22b215d0e35f53ec2663bc4",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/manifest.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/manifest.json",
+              "sha256": "fdde6352a2f927feacf576d2484614df77f73e4c88116f42a95cc9b163db765c",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/manifest.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/render-manifest-final.json",
+              "sha256": "5be639e38a6f67ad65ff454a9b229f0bf68af8f3e9487369301b951542c17887",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/render-manifest-final.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/navigation-results.json",
+              "sha256": "667558ae2fb966497abd7983511c3441dfc321fcd06da51a132225d72a2f0971",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/navigation-results.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/contrast-resolution-final.json",
+              "sha256": "68ef7dff051dc6dfa5c5266532b7978d58ed0a0444ad19cf1aa6e6b17d1323e0",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/contrast-resolution-final.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/legacy/step-up/server-error-320.png",
+              "sha256": "81dcbc85cadfdb73b0640ae50ad4df69bbc70df277290df133f178e96ed9473e",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/legacy/step-up/server-error-320.png"
+            },
+            {
+              "path": "governance/evidence/ui/AMD0009/figma-registration-validation-errors.png",
+              "sha256": "0b1e8d0a4516747f85501f828cb62dd7adbb938ce9f1244e34e5a1eb5db0d5fa"
+            }
+          ],
+          "boundary": "Existing parent item compatibility only; historical Product/scoped decisions are reused, never renewed or expanded."
+        },
+        {
+          "id": "VAL-006",
+          "result": "PASS",
+          "description": "Current actual error screenshots reviewed against approved70:1257 treatment and existing scoped adaptations. Item-specific basis: Current-password form keeps shared typed validation and independent server authority, safe error mapping, first-invalid focus and credential clearing. TOTP-specific domain rules remain owned by the separate form.",
+          "case_groups": [
+            "step-up/empty blur correction rejection field focus atfive widths",
+            "step-up/long password independently rejected",
+            "step-up/pending duplicate and weaker-method refusal",
+            "shared-foundation/shared validation"
+          ],
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/manifest.json",
+              "sha256": "03ada820284b4f14354d2a10c912831ebfb3f181b22b215d0e35f53ec2663bc4",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/manifest.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/manifest.json",
+              "sha256": "fdde6352a2f927feacf576d2484614df77f73e4c88116f42a95cc9b163db765c",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/manifest.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/render-manifest-final.json",
+              "sha256": "5be639e38a6f67ad65ff454a9b229f0bf68af8f3e9487369301b951542c17887",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/render-manifest-final.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/navigation-results.json",
+              "sha256": "667558ae2fb966497abd7983511c3441dfc321fcd06da51a132225d72a2f0971",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/navigation-results.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/contrast-resolution-final.json",
+              "sha256": "68ef7dff051dc6dfa5c5266532b7978d58ed0a0444ad19cf1aa6e6b17d1323e0",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/contrast-resolution-final.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/legacy/step-up/server-error-320.png",
+              "sha256": "81dcbc85cadfdb73b0640ae50ad4df69bbc70df277290df133f178e96ed9473e",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/legacy/step-up/server-error-320.png"
+            },
+            {
+              "path": "governance/evidence/ui/AMD0009/figma-registration-validation-errors.png",
+              "sha256": "0b1e8d0a4516747f85501f828cb62dd7adbb938ce9f1244e34e5a1eb5db0d5fa"
+            }
+          ],
+          "boundary": "Existing parent item compatibility only; historical Product/scoped decisions are reused, never renewed or expanded."
+        },
+        {
+          "id": "VAL-007",
+          "result": "PASS",
+          "description": "Current domain/policy rules govern fields, code/password grammar and messages; historical Figma wording is not business authority. Item-specific basis: Current-password form keeps shared typed validation and independent server authority, safe error mapping, first-invalid focus and credential clearing. TOTP-specific domain rules remain owned by the separate form.",
+          "case_groups": [
+            "step-up/empty blur correction rejection field focus atfive widths",
+            "step-up/long password independently rejected",
+            "step-up/pending duplicate and weaker-method refusal",
+            "shared-foundation/shared validation"
+          ],
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/manifest.json",
+              "sha256": "03ada820284b4f14354d2a10c912831ebfb3f181b22b215d0e35f53ec2663bc4",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/manifest.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/manifest.json",
+              "sha256": "fdde6352a2f927feacf576d2484614df77f73e4c88116f42a95cc9b163db765c",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/manifest.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/render-manifest-final.json",
+              "sha256": "5be639e38a6f67ad65ff454a9b229f0bf68af8f3e9487369301b951542c17887",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/render-manifest-final.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/navigation-results.json",
+              "sha256": "667558ae2fb966497abd7983511c3441dfc321fcd06da51a132225d72a2f0971",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/navigation-results.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/contrast-resolution-final.json",
+              "sha256": "68ef7dff051dc6dfa5c5266532b7978d58ed0a0444ad19cf1aa6e6b17d1323e0",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/contrast-resolution-final.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/legacy/step-up/server-error-320.png",
+              "sha256": "81dcbc85cadfdb73b0640ae50ad4df69bbc70df277290df133f178e96ed9473e",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/legacy/step-up/server-error-320.png"
+            },
+            {
+              "path": "governance/evidence/ui/AMD0009/figma-registration-validation-errors.png",
+              "sha256": "0b1e8d0a4516747f85501f828cb62dd7adbb938ce9f1244e34e5a1eb5db0d5fa"
+            }
+          ],
+          "boundary": "Existing parent item compatibility only; historical Product/scoped decisions are reused, never renewed or expanded."
+        },
+        {
+          "id": "VAL-008",
+          "result": "PASS",
+          "description": "Existing parent cross-device route/form regressions actually pass with independent native receipt/source binding. This does not approve the separate008real browser OTP journey. Item-specific basis: Current-password form keeps shared typed validation and independent server authority, safe error mapping, first-invalid focus and credential clearing. TOTP-specific domain rules remain owned by the separate form.",
+          "case_groups": [
+            "step-up/empty blur correction rejection field focus atfive widths",
+            "step-up/long password independently rejected",
+            "step-up/pending duplicate and weaker-method refusal",
+            "shared-foundation/shared validation"
+          ],
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/manifest.json",
+              "sha256": "03ada820284b4f14354d2a10c912831ebfb3f181b22b215d0e35f53ec2663bc4",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/manifest.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/manifest.json",
+              "sha256": "fdde6352a2f927feacf576d2484614df77f73e4c88116f42a95cc9b163db765c",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/manifest.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/render-manifest-final.json",
+              "sha256": "5be639e38a6f67ad65ff454a9b229f0bf68af8f3e9487369301b951542c17887",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/render-manifest-final.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/navigation-results.json",
+              "sha256": "667558ae2fb966497abd7983511c3441dfc321fcd06da51a132225d72a2f0971",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/navigation-results.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/contrast-resolution-final.json",
+              "sha256": "68ef7dff051dc6dfa5c5266532b7978d58ed0a0444ad19cf1aa6e6b17d1323e0",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/contrast-resolution-final.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/legacy/step-up/server-error-320.png",
+              "sha256": "81dcbc85cadfdb73b0640ae50ad4df69bbc70df277290df133f178e96ed9473e",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/legacy/step-up/server-error-320.png"
+            },
+            {
+              "path": "governance/evidence/ui/AMD0009/figma-registration-validation-errors.png",
+              "sha256": "0b1e8d0a4516747f85501f828cb62dd7adbb938ce9f1244e34e5a1eb5db0d5fa"
+            }
+          ],
+          "boundary": "Existing parent item compatibility only; historical Product/scoped decisions are reused, never renewed or expanded."
+        },
+        {
+          "id": "UX-FID-001",
+          "result": "PASS",
+          "description": "Manual current/reference comparison in item notes; scoped existing composition retained. Item-specific basis: Current-password form keeps shared typed validation and independent server authority, safe error mapping, first-invalid focus and credential clearing. TOTP-specific domain rules remain owned by the separate form.",
+          "case_groups": [
+            "step-up/empty blur correction rejection field focus atfive widths",
+            "step-up/long password independently rejected",
+            "step-up/pending duplicate and weaker-method refusal",
+            "shared-foundation/shared validation"
+          ],
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/manifest.json",
+              "sha256": "03ada820284b4f14354d2a10c912831ebfb3f181b22b215d0e35f53ec2663bc4",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/manifest.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/manifest.json",
+              "sha256": "fdde6352a2f927feacf576d2484614df77f73e4c88116f42a95cc9b163db765c",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/manifest.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/render-manifest-final.json",
+              "sha256": "5be639e38a6f67ad65ff454a9b229f0bf68af8f3e9487369301b951542c17887",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/render-manifest-final.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/navigation-results.json",
+              "sha256": "667558ae2fb966497abd7983511c3441dfc321fcd06da51a132225d72a2f0971",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/navigation-results.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/contrast-resolution-final.json",
+              "sha256": "68ef7dff051dc6dfa5c5266532b7978d58ed0a0444ad19cf1aa6e6b17d1323e0",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/contrast-resolution-final.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/legacy/step-up/server-error-320.png",
+              "sha256": "81dcbc85cadfdb73b0640ae50ad4df69bbc70df277290df133f178e96ed9473e",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/legacy/step-up/server-error-320.png"
+            },
+            {
+              "path": "governance/evidence/ui/AMD0009/figma-registration-validation-errors.png",
+              "sha256": "0b1e8d0a4516747f85501f828cb62dd7adbb938ce9f1244e34e5a1eb5db0d5fa"
+            }
+          ],
+          "boundary": "Existing parent item compatibility only; historical Product/scoped decisions are reused, never renewed or expanded."
+        },
+        {
+          "id": "UX-FID-002",
+          "result": "PASS",
+          "description": "Local page/glow/assets are present in current captures and local-asset tests. Item-specific basis: Current-password form keeps shared typed validation and independent server authority, safe error mapping, first-invalid focus and credential clearing. TOTP-specific domain rules remain owned by the separate form.",
+          "case_groups": [
+            "step-up/empty blur correction rejection field focus atfive widths",
+            "step-up/long password independently rejected",
+            "step-up/pending duplicate and weaker-method refusal",
+            "shared-foundation/shared validation"
+          ],
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/manifest.json",
+              "sha256": "03ada820284b4f14354d2a10c912831ebfb3f181b22b215d0e35f53ec2663bc4",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/manifest.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/manifest.json",
+              "sha256": "fdde6352a2f927feacf576d2484614df77f73e4c88116f42a95cc9b163db765c",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/manifest.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/render-manifest-final.json",
+              "sha256": "5be639e38a6f67ad65ff454a9b229f0bf68af8f3e9487369301b951542c17887",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/render-manifest-final.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/navigation-results.json",
+              "sha256": "667558ae2fb966497abd7983511c3441dfc321fcd06da51a132225d72a2f0971",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/navigation-results.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/contrast-resolution-final.json",
+              "sha256": "68ef7dff051dc6dfa5c5266532b7978d58ed0a0444ad19cf1aa6e6b17d1323e0",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/contrast-resolution-final.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/legacy/step-up/server-error-320.png",
+              "sha256": "81dcbc85cadfdb73b0640ae50ad4df69bbc70df277290df133f178e96ed9473e",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/legacy/step-up/server-error-320.png"
+            },
+            {
+              "path": "governance/evidence/ui/AMD0009/figma-registration-validation-errors.png",
+              "sha256": "0b1e8d0a4516747f85501f828cb62dd7adbb938ce9f1244e34e5a1eb5db0d5fa"
+            }
+          ],
+          "boundary": "Existing parent item compatibility only; historical Product/scoped decisions are reused, never renewed or expanded."
+        },
+        {
+          "id": "UX-FID-003",
+          "result": "PASS",
+          "description": "Shared typed fields/buttons/error geometry and token variants are reused. Item-specific basis: Current-password form keeps shared typed validation and independent server authority, safe error mapping, first-invalid focus and credential clearing. TOTP-specific domain rules remain owned by the separate form.",
+          "case_groups": [
+            "step-up/empty blur correction rejection field focus atfive widths",
+            "step-up/long password independently rejected",
+            "step-up/pending duplicate and weaker-method refusal",
+            "shared-foundation/shared validation"
+          ],
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/manifest.json",
+              "sha256": "03ada820284b4f14354d2a10c912831ebfb3f181b22b215d0e35f53ec2663bc4",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/manifest.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/manifest.json",
+              "sha256": "fdde6352a2f927feacf576d2484614df77f73e4c88116f42a95cc9b163db765c",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/manifest.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/render-manifest-final.json",
+              "sha256": "5be639e38a6f67ad65ff454a9b229f0bf68af8f3e9487369301b951542c17887",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/render-manifest-final.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/navigation-results.json",
+              "sha256": "667558ae2fb966497abd7983511c3441dfc321fcd06da51a132225d72a2f0971",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/navigation-results.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/contrast-resolution-final.json",
+              "sha256": "68ef7dff051dc6dfa5c5266532b7978d58ed0a0444ad19cf1aa6e6b17d1323e0",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/contrast-resolution-final.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/legacy/step-up/server-error-320.png",
+              "sha256": "81dcbc85cadfdb73b0640ae50ad4df69bbc70df277290df133f178e96ed9473e",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/legacy/step-up/server-error-320.png"
+            },
+            {
+              "path": "governance/evidence/ui/AMD0009/figma-registration-validation-errors.png",
+              "sha256": "0b1e8d0a4516747f85501f828cb62dd7adbb938ce9f1244e34e5a1eb5db0d5fa"
+            }
+          ],
+          "boundary": "Existing parent item compatibility only; historical Product/scoped decisions are reused, never renewed or expanded."
+        },
+        {
+          "id": "UX-FID-004",
+          "result": "PASS",
+          "description": "Only previously approved scoped deviations/consents apply; preserve their exact references. Item-specific basis: Current-password form keeps shared typed validation and independent server authority, safe error mapping, first-invalid focus and credential clearing. TOTP-specific domain rules remain owned by the separate form.",
+          "case_groups": [
+            "step-up/empty blur correction rejection field focus atfive widths",
+            "step-up/long password independently rejected",
+            "step-up/pending duplicate and weaker-method refusal",
+            "shared-foundation/shared validation"
+          ],
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/manifest.json",
+              "sha256": "03ada820284b4f14354d2a10c912831ebfb3f181b22b215d0e35f53ec2663bc4",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/manifest.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/manifest.json",
+              "sha256": "fdde6352a2f927feacf576d2484614df77f73e4c88116f42a95cc9b163db765c",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/manifest.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/render-manifest-final.json",
+              "sha256": "5be639e38a6f67ad65ff454a9b229f0bf68af8f3e9487369301b951542c17887",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/render-manifest-final.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/navigation-results.json",
+              "sha256": "667558ae2fb966497abd7983511c3441dfc321fcd06da51a132225d72a2f0971",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/navigation-results.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/contrast-resolution-final.json",
+              "sha256": "68ef7dff051dc6dfa5c5266532b7978d58ed0a0444ad19cf1aa6e6b17d1323e0",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/contrast-resolution-final.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/legacy/step-up/server-error-320.png",
+              "sha256": "81dcbc85cadfdb73b0640ae50ad4df69bbc70df277290df133f178e96ed9473e",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/legacy/step-up/server-error-320.png"
+            },
+            {
+              "path": "governance/evidence/ui/AMD0009/figma-registration-validation-errors.png",
+              "sha256": "0b1e8d0a4516747f85501f828cb62dd7adbb938ce9f1244e34e5a1eb5db0d5fa"
+            }
+          ],
+          "boundary": "Existing parent item compatibility only; historical Product/scoped decisions are reused, never renewed or expanded."
+        },
+        {
+          "id": "UX-FID-005",
+          "result": "PASS",
+          "description": "Previously resolved domain/Figma conflicts remain truthful; no new material conflict observed in this compatibility scope. Item-specific basis: Current-password form keeps shared typed validation and independent server authority, safe error mapping, first-invalid focus and credential clearing. TOTP-specific domain rules remain owned by the separate form.",
+          "case_groups": [
+            "step-up/empty blur correction rejection field focus atfive widths",
+            "step-up/long password independently rejected",
+            "step-up/pending duplicate and weaker-method refusal",
+            "shared-foundation/shared validation"
+          ],
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/manifest.json",
+              "sha256": "03ada820284b4f14354d2a10c912831ebfb3f181b22b215d0e35f53ec2663bc4",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/manifest.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/manifest.json",
+              "sha256": "fdde6352a2f927feacf576d2484614df77f73e4c88116f42a95cc9b163db765c",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/manifest.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/render-manifest-final.json",
+              "sha256": "5be639e38a6f67ad65ff454a9b229f0bf68af8f3e9487369301b951542c17887",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/render-manifest-final.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/navigation-results.json",
+              "sha256": "667558ae2fb966497abd7983511c3441dfc321fcd06da51a132225d72a2f0971",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/navigation-results.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/contrast-resolution-final.json",
+              "sha256": "68ef7dff051dc6dfa5c5266532b7978d58ed0a0444ad19cf1aa6e6b17d1323e0",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/contrast-resolution-final.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/legacy/step-up/server-error-320.png",
+              "sha256": "81dcbc85cadfdb73b0640ae50ad4df69bbc70df277290df133f178e96ed9473e",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/legacy/step-up/server-error-320.png"
+            },
+            {
+              "path": "governance/evidence/ui/AMD0009/figma-registration-validation-errors.png",
+              "sha256": "0b1e8d0a4516747f85501f828cb62dd7adbb938ce9f1244e34e5a1eb5db0d5fa"
+            }
+          ],
+          "boundary": "Existing parent item compatibility only; historical Product/scoped decisions are reused, never renewed or expanded."
+        },
+        {
+          "id": "UX-FID-006",
+          "result": "PASS",
+          "description": "Current source and screenshots retain approved screen-specific styling rather than library defaults. Item-specific basis: Current-password form keeps shared typed validation and independent server authority, safe error mapping, first-invalid focus and credential clearing. TOTP-specific domain rules remain owned by the separate form.",
+          "case_groups": [
+            "step-up/empty blur correction rejection field focus atfive widths",
+            "step-up/long password independently rejected",
+            "step-up/pending duplicate and weaker-method refusal",
+            "shared-foundation/shared validation"
+          ],
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/manifest.json",
+              "sha256": "03ada820284b4f14354d2a10c912831ebfb3f181b22b215d0e35f53ec2663bc4",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/manifest.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/manifest.json",
+              "sha256": "fdde6352a2f927feacf576d2484614df77f73e4c88116f42a95cc9b163db765c",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/manifest.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/render-manifest-final.json",
+              "sha256": "5be639e38a6f67ad65ff454a9b229f0bf68af8f3e9487369301b951542c17887",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/render-manifest-final.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/navigation-results.json",
+              "sha256": "667558ae2fb966497abd7983511c3441dfc321fcd06da51a132225d72a2f0971",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/navigation-results.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/contrast-resolution-final.json",
+              "sha256": "68ef7dff051dc6dfa5c5266532b7978d58ed0a0444ad19cf1aa6e6b17d1323e0",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/contrast-resolution-final.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/legacy/step-up/server-error-320.png",
+              "sha256": "81dcbc85cadfdb73b0640ae50ad4df69bbc70df277290df133f178e96ed9473e",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/legacy/step-up/server-error-320.png"
+            },
+            {
+              "path": "governance/evidence/ui/AMD0009/figma-registration-validation-errors.png",
+              "sha256": "0b1e8d0a4516747f85501f828cb62dd7adbb938ce9f1244e34e5a1eb5db0d5fa"
+            }
+          ],
+          "boundary": "Existing parent item compatibility only; historical Product/scoped decisions are reused, never renewed or expanded."
+        },
+        {
+          "id": "UX-FID-007",
+          "result": "PASS",
+          "description": "Named responsive/Axe/keyboard/focus cases are current; detailed new shared-module contrast report resolves all194current incomplete nodes. Item-specific basis: Current-password form keeps shared typed validation and independent server authority, safe error mapping, first-invalid focus and credential clearing. TOTP-specific domain rules remain owned by the separate form.",
+          "case_groups": [
+            "step-up/empty blur correction rejection field focus atfive widths",
+            "step-up/long password independently rejected",
+            "step-up/pending duplicate and weaker-method refusal",
+            "shared-foundation/shared validation"
+          ],
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/manifest.json",
+              "sha256": "03ada820284b4f14354d2a10c912831ebfb3f181b22b215d0e35f53ec2663bc4",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/manifest.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/manifest.json",
+              "sha256": "fdde6352a2f927feacf576d2484614df77f73e4c88116f42a95cc9b163db765c",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/manifest.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/render-manifest-final.json",
+              "sha256": "5be639e38a6f67ad65ff454a9b229f0bf68af8f3e9487369301b951542c17887",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/render-manifest-final.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/navigation-results.json",
+              "sha256": "667558ae2fb966497abd7983511c3441dfc321fcd06da51a132225d72a2f0971",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/navigation-results.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/contrast-resolution-final.json",
+              "sha256": "68ef7dff051dc6dfa5c5266532b7978d58ed0a0444ad19cf1aa6e6b17d1323e0",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/contrast-resolution-final.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/legacy/step-up/server-error-320.png",
+              "sha256": "81dcbc85cadfdb73b0640ae50ad4df69bbc70df277290df133f178e96ed9473e",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/legacy/step-up/server-error-320.png"
+            },
+            {
+              "path": "governance/evidence/ui/AMD0009/figma-registration-validation-errors.png",
+              "sha256": "0b1e8d0a4516747f85501f828cb62dd7adbb938ce9f1244e34e5a1eb5db0d5fa"
+            }
+          ],
+          "boundary": "Existing parent item compatibility only; historical Product/scoped decisions are reused, never renewed or expanded."
+        },
+        {
+          "id": "UX-FID-008",
+          "result": "PASS",
+          "description": "Current actual reports/screenshots, reference provenance, source identity and existing scoped consent are linked without redating historical evidence. Item-specific basis: Current-password form keeps shared typed validation and independent server authority, safe error mapping, first-invalid focus and credential clearing. TOTP-specific domain rules remain owned by the separate form.",
+          "case_groups": [
+            "step-up/empty blur correction rejection field focus atfive widths",
+            "step-up/long password independently rejected",
+            "step-up/pending duplicate and weaker-method refusal",
+            "shared-foundation/shared validation"
+          ],
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/manifest.json",
+              "sha256": "03ada820284b4f14354d2a10c912831ebfb3f181b22b215d0e35f53ec2663bc4",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/manifest.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/manifest.json",
+              "sha256": "fdde6352a2f927feacf576d2484614df77f73e4c88116f42a95cc9b163db765c",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/manifest.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/render-manifest-final.json",
+              "sha256": "5be639e38a6f67ad65ff454a9b229f0bf68af8f3e9487369301b951542c17887",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/render-manifest-final.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/navigation-results.json",
+              "sha256": "667558ae2fb966497abd7983511c3441dfc321fcd06da51a132225d72a2f0971",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/navigation-results.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/contrast-resolution-final.json",
+              "sha256": "68ef7dff051dc6dfa5c5266532b7978d58ed0a0444ad19cf1aa6e6b17d1323e0",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-r2/contrast-resolution-final.json"
+            },
+            {
+              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/legacy/step-up/server-error-320.png",
+              "sha256": "81dcbc85cadfdb73b0640ae50ad4df69bbc70df277290df133f178e96ed9473e",
+              "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/legacy/step-up/server-error-320.png"
+            },
+            {
+              "path": "governance/evidence/ui/AMD0009/figma-registration-validation-errors.png",
+              "sha256": "0b1e8d0a4516747f85501f828cb62dd7adbb938ce9f1244e34e5a1eb5db0d5fa"
+            }
+          ],
+          "boundary": "Existing parent item compatibility only; historical Product/scoped decisions are reused, never renewed or expanded."
+        }
+      ],
+      "screenshots": [
+        {
+          "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/legacy/step-up/server-error-320.png",
+          "sha256": "81dcbc85cadfdb73b0640ae50ad4df69bbc70df277290df133f178e96ed9473e",
+          "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/legacy/step-up/server-error-320.png",
+          "role": "CURRENT_SOURCE_RENDER",
+          "source_carrier_sha": "6e562db102ce75d5ed478a15e2970ff55ab98fef"
+        },
+        {
+          "path": "governance/evidence/ui/AMD0009/figma-registration-validation-errors.png",
+          "sha256": "0b1e8d0a4516747f85501f828cb62dd7adbb938ce9f1244e34e5a1eb5db0d5fa",
+          "role": "APPROVED_REFERENCE_OR_SCOPED_PROPOSAL"
+        }
+      ],
+      "deviations": [
+        {
+          "status": "PRODUCT_OWNER_APPROVED",
+          "approval_evidence": {
+            "path": "governance/evidence/TUN-P2-006-VISUAL-CONSENT-20261108.json",
+            "sha256": "881ffda9f2b7431c9077922789aa585780022651d5a2c8a628365a85de5fc3b2"
+          }
+        },
+        {
+          "status": "PRODUCT_OWNER_APPROVED",
+          "approval_evidence": {
+            "path": "governance/evidence/TUN-P2-007-VISUAL-CONSENT-20261109.json",
+            "sha256": "c9415304746bb882a0c49a3b42e16c0e312882f6b48401b1d51666a18d775dfd"
+          }
+        }
+      ],
+      "historical_item_ref": {
+        "path": "governance/evidence/TUN-P2-006-UI-COMPLIANCE.json",
+        "item_id": "FORM-STEP-UP",
+        "sha256": "25c2fd7e001d81ee637e68a8edc418d5a9702cb91db9ba3e4a34d1698d34bc3a"
+      },
+      "historical_screenshots": [
+        {
+          "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-step-up/password-1024.png",
+          "sha256": "d3d3437fc0fd03f2c8c458eb2e5cfde5b0c6e27afa5e2a25023f8db315a3f962",
+          "role": "CURRENT_SOURCE_RENDER",
+          "original_execution_ref": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-final-80a32ab-step-up/password-1024.png"
+        },
+        {
+          "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-step-up/password-1440.png",
+          "sha256": "b70fd2a16d78a16ff8ebee758cd64fccffc53e88cf419d344b6c094ab65ffa09",
+          "role": "CURRENT_SOURCE_RENDER",
+          "original_execution_ref": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-final-80a32ab-step-up/password-1440.png"
+        },
+        {
+          "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-step-up/password-320.png",
+          "sha256": "eca274980aa6294a02d29217e281629ae72445d7cdbbb5c9a6cf5c62834cdd8f",
+          "role": "CURRENT_SOURCE_RENDER",
+          "original_execution_ref": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-final-80a32ab-step-up/password-320.png"
+        },
+        {
+          "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-step-up/password-390.png",
+          "sha256": "9615a5c8a9eb0beeee54957fa7e5b97e4b5f0937de92539aa2a6b6f94ec52db0",
+          "role": "CURRENT_SOURCE_RENDER",
+          "original_execution_ref": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-final-80a32ab-step-up/password-390.png"
+        },
+        {
+          "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-step-up/password-768.png",
+          "sha256": "9193fcd72b4892f9a9cd890957d3c28c32ae5c2d444d3e87930a49e5715f23a8",
+          "role": "CURRENT_SOURCE_RENDER",
+          "original_execution_ref": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-final-80a32ab-step-up/password-768.png"
+        },
+        {
+          "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-step-up/server-error-1024.png",
+          "sha256": "10304b52d6eae205198b9f51dfa396fa82be32a23788b2e19e8b61b148ae3f9a",
+          "role": "CURRENT_SOURCE_RENDER",
+          "original_execution_ref": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-final-80a32ab-step-up/server-error-1024.png"
+        },
+        {
+          "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-step-up/server-error-1440.png",
+          "sha256": "29f5e41d44a69ad1c6075bce15155b13afd7207cc37c4ee876da26b48457aff9",
+          "role": "CURRENT_SOURCE_RENDER",
+          "original_execution_ref": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-final-80a32ab-step-up/server-error-1440.png"
+        },
+        {
+          "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-step-up/server-error-320.png",
+          "sha256": "81dcbc85cadfdb73b0640ae50ad4df69bbc70df277290df133f178e96ed9473e",
+          "role": "CURRENT_SOURCE_RENDER",
+          "original_execution_ref": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-final-80a32ab-step-up/server-error-320.png"
+        },
+        {
+          "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-step-up/server-error-390.png",
+          "sha256": "f96cbb908b9b1afaf4f3ecf39714fef629eb8341be1303b60d1d5c0f831487a9",
+          "role": "CURRENT_SOURCE_RENDER",
+          "original_execution_ref": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-final-80a32ab-step-up/server-error-390.png"
+        },
+        {
+          "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-step-up/server-error-768.png",
+          "sha256": "cc1546e5e9bfbf11db552cbf4f56bb34bdb9d897972c0af40ad2f95953e1a761",
+          "role": "CURRENT_SOURCE_RENDER",
+          "original_execution_ref": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-final-80a32ab-step-up/server-error-768.png"
+        },
+        {
+          "path": "governance/evidence/ui/step-up-20261109/reference/figma-98-27.png",
+          "sha256": "fd7e613982e3f8f2ca2e9abe1fe725a86f86b177f3cbef0be3c9ffa50db03616",
+          "role": "APPROVED_REFERENCE_OR_SCOPED_PROPOSAL",
+          "original_execution_ref": "governance/evidence/ui/step-up-20261109/reference/figma-98-27.png"
+        },
+        {
+          "path": "governance/evidence/ui/step-up-20261109/reference/password-1440.png",
+          "sha256": "dd270a71a32a0dee4420b0109ef58ecbf35bd196f97892c2d4e73c4d09ac61e8",
+          "role": "APPROVED_REFERENCE_OR_SCOPED_PROPOSAL",
+          "original_execution_ref": "governance/evidence/ui/step-up-20261109/reference/password-1440.png"
+        },
+        {
+          "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/reference/figma/figma-70-1257.png",
+          "sha256": "0b1e8d0a4516747f85501f828cb62dd7adbb938ce9f1244e34e5a1eb5db0d5fa",
+          "role": "APPROVED_REFERENCE_OR_SCOPED_PROPOSAL",
+          "original_execution_ref": "artifacts/p2-007-passkeys-20261109/ui-review/reference/figma-70-1257.png"
+        }
+      ],
+      "case_groups": [
+        "step-up/empty blur correction rejection field focus atfive widths",
+        "step-up/long password independently rejected",
+        "step-up/pending duplicate and weaker-method refusal",
+        "shared-foundation/shared validation"
+      ],
+      "manual_comparison": {
+        "result": "PASS_WITH_EXISTING_SCOPED_ADAPTATIONS",
+        "notes": "Current-password form keeps shared typed validation and independent server authority, safe error mapping, first-invalid focus and credential clearing. TOTP-specific domain rules remain owned by the separate form.",
+        "reviewer_roles": [
+          "ui-ux-engineer",
+          "frontend-engineer",
+          "tester-qa-engineer",
+          "end-user-ux-reviewer"
+        ]
+      },
+      "unresolved_findings": []
+    }
+  ],
+  "native_execution_index_ref": "governance/evidence/p2-008-totp-20261110/parent005006-compatibility/native-execution-index.json",
+  "note": "Additive current compatibility wrapper for the exact existing parent inventory items. Historical ownership, checks, screenshots, deviations and approvals remain in the unchanged linked prior receipt. The exact current registered source union is retained. No TUN-P2-008 real native browser journey, whole-work-item, Product or release acceptance is claimed.",
+  "recorded_at": "2026-11-10T20:11:33.998607+00:00",
+  "current_item_review_ref": {
+    "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-item-current-review.json",
+    "sha256": "9f90b5ff1b3479b53044eb5e3d1a16a3870d783dbbbe063b4ab94b5027a323ab"
+  },
+  "current_ui_role_skill_bindings": [
+    {
+      "role": "ui-ux-engineer",
+      "skill_ref": ".agent/skills/ui-ux-engineer/SKILL.md",
+      "skill_hash": "498ff7e4b46012b1e90773cd29ebac903d7ac83767d739cc327d9b69a3b4c5c2"
+    },
+    {
+      "role": "frontend-engineer",
+      "skill_ref": ".agent/skills/frontend-engineer/SKILL.md",
+      "skill_hash": "3472e745aa478457939b1aeeba319f72989bb9e97791e458f0b9979ec1b538d7"
+    },
+    {
+      "role": "tester-qa-engineer",
+      "skill_ref": ".agent/skills/tester-qa-engineer/SKILL.md",
+      "skill_hash": "52aee18f251a614e339adba9f7c886a5da1ef4ab0482ae6b77044184128415c6"
+    },
+    {
+      "role": "end-user-ux-reviewer",
+      "skill_ref": ".agent/skills/end-user-ux-reviewer/SKILL.md",
+      "skill_hash": "cfaa2eeffd945eef70a6ff1023b1af42fc0413add7b357b2fcd914473e976665"
+    }
+  ],
+  "source_binding": {
+    "tested_carrier_sha": "6e562db102ce75d5ed478a15e2970ff55ab98fef",
+    "current_input_manifest_ref": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/source-inputs.json",
+    "native_execution_index": {
+      "path": "governance/evidence/p2-008-totp-20261110/parent005006-compatibility/native-execution-index.json",
+      "sha256": "dd31918f974b5e7294df49a4be45ca03c7323667cd8907752693d71c0f02803f"
+    },
+    "actual_35_plus_103_ui_execution_index_ref": "governance/evidence/p2-008-totp-20261110/parent005006-compatibility/ui-execution-index.json",
+    "actual_registration24_foundation16_execution_index_ref": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/execution-index.json",
+    "fresh40_actual_invocation_sha": "eb1c16fd55a82470c7b2c756f017c51b8a00a30a",
+    "all_declared_inputs_equal": true,
+    "historical_tested_shas_not_relabelled": true
+  },
+  "supplemental_laptop_evidence": {
+    "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-laptop/manifest.json",
+    "sha256": "873cc37eaf3d0aaea4310ec9dcfc378537081711a2b7ebe9351964b068ca8744",
+    "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/review-laptop/manifest.json"
+  },
+  "review_provenance": "Actual UI-role item decisions, manual current/reference comparisons and source-bound public fixture executions; packaging agent verified exact references, source identity and historical preservation. No human/Product approval is impersonated.",
+  "remaining_separate_requirements": [
+    "TUN-P2-008 real native browser OTP/vault journey is NOTEXECUTED by these public fixtures.",
+    "New008 full per-item/native gate/role/evidence closure remains separate.",
+    "Production policy/publication/provider configuration, Product/release and protected-main approval remain separate."
+  ],
+  "conditional_shared_visual_authority": {
+    "authority_scope_id": "TUN-P2-008",
+    "relationship": "CROSS_SCOPE_CONDITIONAL_SHARED_COMPONENT_TRACEABILITY",
+    "applicability": "The shared step-up dialog conditionally imports the already approved TOTP operation-proof adaptation (008-V04) and its approved factor-choice component. Existing parent chooser/password decisions remain bounded to their own items.",
+    "registered_conditional_source_paths": [
+      "web/apps/user/step-up.totp.tsx",
+      "web/apps/user/totp.api.ts",
+      "web/apps/user/totp.code.tsx",
+      "web/apps/user/totp.content-keys.ts",
+      "web/apps/user/totp.css",
+      "web/apps/user/totp.picker.tsx",
+      "web/apps/user/totp.validation.ts"
+    ],
+    "references": [
+      {
+        "path": "governance/evidence/TUN-P2-008-VISUAL-CONSENT.json",
+        "sha256": "d5a91c23c34ab6cd134648ab73867e9afce14c35f795f1a1eecdfe5d60040014",
+        "approval_status": "APPROVED_SCOPED_VISUAL_ADAPTATIONS",
+        "approved_scope_ids": [
+          "008-V01",
+          "008-V02",
+          "008-V03",
+          "008-V04",
+          "008-V05"
+        ],
+        "relied_on_scope_ids": [
+          "008-V04"
+        ],
+        "supports": "Only the already approved pictured proof/MFA adaptations that are applicable to these conditional shared imports."
+      },
+      {
+        "path": "governance/evidence/TUN-P2-008-FACTOR-PICKER-CONSENT.json",
+        "sha256": "b6ce7663148cd555d69bd4f8081f4553dbcb114662e3523f2faab65bb3636d30",
+        "approval_status": "APPROVED_SCOPED_FACTOR_PICKER_VISUAL_ADAPTATION",
+        "relied_on_adaptation": "Additional scoped 008-V04 factor picker, including the pictured proof and login picker variants.",
+        "supports": "Only the already approved choice among currently eligible TOTP factors; no new factor limit, assurance or production policy."
+      }
+    ],
+    "parent_deviations_and_consent_refs": "All prior per-item deviations and consent references are retained unchanged; this metadata appends the actual cross-scope authority and replaces no parent decision.",
+    "boundary": "Supports only already approved visual adaptations in conditional shared components. It does not renew or expand parent decisions, establish final TUN-P2-008 UI compliance or integrated/native-browser acceptance, select domain or production policy, or provide Product, merge, deployment or release approval."
+  }
+}
