@@ -4,6 +4,8 @@ using System.Net.Http.Json;
 using System.Reflection;
 using System.Text.Json;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.DataProtection;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
@@ -178,7 +180,9 @@ public sealed class TotpTests(IdentityPostgresFixture fixture) : IClassFixture<I
         using var primary = await host.Post("/authentication/sign-in", Command(boot.Key), boot.Cookies, boot.Csrf); Assert.Equal(HttpStatusCode.OK, primary.StatusCode);
         Assert.Equal("MFA_REQUIRED", (await primary.Content.ReadFromJsonAsync<JsonElement>()).GetProperty("status").GetString()); var cookies = Merge(boot.Cookies, primary);
         await using (var read = db.Context()) { Assert.Equal(1, await read.Set<AuthenticationSessionRow>().CountAsync()); Assert.Single(await read.Set<TotpPendingAuthenticationRow>().ToArrayAsync()); }
-        using var options = await host.Get("/authentication/totp/options", cookies); var view = await options.Content.ReadFromJsonAsync<JsonElement>(); cookies = Merge(cookies, options); var csrf = view.GetProperty("csrfToken").GetString();
+        await AssertPendingSelectorBindings(db, host, cookies);
+        using var options = await host.Get("/authentication/totp/options", cookies); Assert.Equal(HttpStatusCode.OK, options.StatusCode);
+        var view = await options.Content.ReadFromJsonAsync<JsonElement>(); cookies = Merge(cookies, options); var csrf = view.GetProperty("csrfToken").GetString();
         var code = NativeCode(profile.Seed(enrolled.Reference), 1);
         using (var completed = await host.Post("/authentication/totp/complete", new { requestId = boot.Key, authenticatorReference = enrolled.Reference, code }, cookies, csrf)) Assert.Equal(HttpStatusCode.OK, completed.StatusCode);
         // Deliberately discard final Set-Cookie response, then recover using original protected pending attempt only.
@@ -186,6 +190,17 @@ public sealed class TotpTests(IdentityPostgresFixture fixture) : IClassFixture<I
         using var session = await host.Get("/authentication/session", Merge(cookies, recovered)); Assert.Equal(HttpStatusCode.OK, session.StatusCode);
         await using var check = db.Context(); Assert.Equal(2, await check.Set<AuthenticationSessionRow>().CountAsync()); Assert.Equal(2, await check.Set<TotpUsedCodeRow>().CountAsync());
         Assert.Equal("COMPLETED", (await check.Set<TotpPendingAuthenticationRow>().SingleAsync()).State);
+    }
+    private static async Task AssertPendingSelectorBindings(IdentityTestDatabase db, AuthenticationTestHost host, string cookies)
+    {
+        using var scope = host.Services.CreateScope(); var provider = scope.ServiceProvider.GetRequiredService<IDataProtectionProvider>();
+        var http = new DefaultHttpContext(); http.Request.Headers.Cookie = cookies;
+        Assert.True(AuthenticationEndpoints.TryBrowser(http, AuthenticationEndpoints.Protector(provider), host.Clock.GetUtcNow(), out var browser), "MFA_ORIGINAL_BROWSER_UNAVAILABLE");
+        var selected = JsonSerializer.Deserialize<TotpMfaSelection>(provider.CreateProtector("Tunner.User.Totp.PendingAuthentication.v1").Unprotect(http.Request.Cookies[TotpBrowserService.MfaCookieName]!))!;
+        Assert.True(AuthenticationIdentity.Digest(browser!.Nonce) == selected.BrowserDigest, "MFA_BROWSER_NONCE_MISMATCH");
+        await using var context = db.Context(); var pending = await context.Set<TotpPendingAuthenticationRow>().SingleAsync();
+        Assert.True(pending.PendingId == selected.PendingId && pending.RequestId == selected.RequestId && pending.BrowserDigest == selected.BrowserDigest && pending.Origin == selected.Origin, "MFA_PENDING_SELECTOR_BINDING_MISMATCH");
+        Assert.True(pending.RecoveryExpiresAt == selected.ExpiresAt, "MFA_SELECTOR_PERSISTED_TIMESTAMP_MISMATCH");
     }
     [Fact]
     public async Task AdditiveMigrationRoundTripPreservesOldAuthModelAndInstallsImmutableGuards()

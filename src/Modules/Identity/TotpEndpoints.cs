@@ -68,7 +68,7 @@ internal sealed class TotpStepUpOwner(TotpApplication application, IdentityPersi
     }
     internal static void Select(HttpContext context, TotpOperationRow row, IDataProtectionProvider provider, DateTimeOffset now)
     {
-        var selected = new TotpSelection(row.EnrollmentId, row.RequestId, row.AccountId, row.SessionId, row.Origin, row.RecoveryExpiresAt);
+        var selected = new TotpSelection(row.EnrollmentId, row.RequestId, row.AccountId, row.SessionId, row.Origin, TotpBrowserService.PersistedTimestamp(row.RecoveryExpiresAt));
         var value = Protector(provider).Protect(JsonSerializer.Serialize(selected));
         context.Response.Cookies.Append(CookieName, value, TotpBrowserService.Cookie(row.RecoveryExpiresAt - now));
         context.Response.Cookies.Append(ResultCookieName, value, TotpBrowserService.Cookie(row.RecoveryExpiresAt - now));
@@ -116,11 +116,13 @@ internal sealed class TotpBrowserService(TotpApplication application, Authentica
     AuthenticationEndpoints.Surface surface, IDataProtectionProvider protection, IAntiforgery antiforgery, TimeProvider clock)
 {
     internal const string MfaCookieName = "__Host-Tunner.Totp.Pending";
+    // PostgreSQL timestamp precision is microseconds; protected selectors must use the same canonical representation.
+    internal static DateTimeOffset PersistedTimestamp(DateTimeOffset value) => new(value.UtcTicks - value.UtcTicks % 10, TimeSpan.Zero);
     internal static CookieOptions Cookie(TimeSpan? age = null) => new() { Path = "/", HttpOnly = true, Secure = true, SameSite = SameSiteMode.Strict, IsEssential = true, MaxAge = age };
     private static IDataProtector MfaProtector(IDataProtectionProvider provider) => provider.CreateProtector("Tunner.User.Totp.PendingAuthentication.v1");
     internal static IResult PendingMfa(HttpContext http, TotpPendingAuthenticationRow pending, IDataProtectionProvider provider, DateTimeOffset now)
     {
-        var selected = new TotpMfaSelection(pending.PendingId, pending.RequestId, pending.BrowserDigest, pending.Origin, pending.PreviousSessionId, pending.RecoveryExpiresAt);
+        var selected = new TotpMfaSelection(pending.PendingId, pending.RequestId, pending.BrowserDigest, pending.Origin, pending.PreviousSessionId, PersistedTimestamp(pending.RecoveryExpiresAt));
         http.Response.Cookies.Append(MfaCookieName, MfaProtector(provider).Protect(JsonSerializer.Serialize(selected)), Cookie(pending.RecoveryExpiresAt - now));
         return Results.Json(new { status = "MFA_REQUIRED", authenticated = false, pending.RequestId, pending.ExpiresAt });
     }
