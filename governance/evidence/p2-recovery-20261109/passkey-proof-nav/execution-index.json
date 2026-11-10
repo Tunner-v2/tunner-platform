@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "scope_id": "TUN-P2-007",
-  "result": "PASS_EXECUTED_ENGINEERING_COHORTS_NATIVE_ACCEPTANCE_GATES_PENDING",
+  "result": "PASS_ENGINEERING_AND_NATIVE_UI_CURRENT_SOURCE_LIFECYCLE_GATES_NEXT",
   "recorded_at": "2026-11-10T12:36:44.196Z",
   "validated_source_carrier_sha": "745f9c2dc1b9060c4be0318b33b4019ae77e9e36",
   "source_binding": {
@@ -268,10 +268,83 @@
   ],
   "provenance": "Executing-agent scope-by-scope technical review, with actual UI specialist187checks/all8currentrenders and independent read-only native/source reviews. Root inspected corrected Remove1440/Login320, owning Figma/reference evidence and actual current reports. No new Product consent or independent human role is claimed.",
   "security": {
-    "source_correction_sha": "b0c04424136aace1b02c486baeaafd53ed61b8ec",
-    "sast_observed_pass_files": 3554,
-    "secrets_observed_pass_files": 3558,
+    "result": "PASS",
+    "files_inspected": 3859,
+    "sast_exit": 0,
+    "secrets_exit": 0,
     "controls_changed": false,
-    "final_metadata_scan": "PENDING_AFTER_EVIDENCE_COMMIT"
-  }
+    "receipt_ref": "governance/evidence/TUN-P2-007-SECURITY-SCANS-20261110.json"
+  },
+  "native_ui_gates": [
+    {
+      "scope": "GLOBAL_UI",
+      "outcome": "PASS",
+      "covered_items": 21,
+      "evidence_commit_sha": "baffd2d0f3ad71fe8ca270e5372b422d721ec67f",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/gates/global-ui-check.json",
+      "sha256": "c037014aa5c32980e7c644485dcb707ff535c516a423c5e8e8301afdb226b39f"
+    },
+    {
+      "scope": "TUN-P2-004",
+      "outcome": "PASS",
+      "covered_items": 8,
+      "evidence_commit_sha": "baffd2d0f3ad71fe8ca270e5372b422d721ec67f",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/gates/p2-004-ui-check.json",
+      "sha256": "f12c9896fbd4a016ed4afaea75e457f4fca01c9f531c8e6065c1a1accfc3212e"
+    },
+    {
+      "scope": "TUN-P2-005",
+      "outcome": "PASS",
+      "covered_items": 3,
+      "evidence_commit_sha": "baffd2d0f3ad71fe8ca270e5372b422d721ec67f",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/gates/p2-005-ui-check.json",
+      "sha256": "440030758b7313aba9bd9c55b989ef3fc21368ba026909bbf848142ddf7d0702"
+    },
+    {
+      "scope": "TUN-P2-006",
+      "outcome": "PASS",
+      "covered_items": 3,
+      "evidence_commit_sha": "baffd2d0f3ad71fe8ca270e5372b422d721ec67f",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/gates/p2-006-ui-check.json",
+      "sha256": "c7588f0683bf796c78ddf36ddac0680fcd08e907e32923e2537c322522e0f0de"
+    },
+    {
+      "scope": "TUN-P2-007",
+      "outcome": "PASS",
+      "covered_items": 9,
+      "evidence_commit_sha": "baffd2d0f3ad71fe8ca270e5372b422d721ec67f",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/gates/p2-007-ui-check.json",
+      "sha256": "cb8b97b0b7106d9fcb507cd4294b4ebcbd344e833731181d74f765227d86be92"
+    },
+    {
+      "scope": "TUN-P2-004-UI001",
+      "outcome": "PASS",
+      "covered_items": 8,
+      "evidence_commit_sha": "baffd2d0f3ad71fe8ca270e5372b422d721ec67f",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/gates/ui001-rv004-ui-check.json",
+      "sha256": "86c2a402d7abb41ba9b8c9ee6bf58a510da8c8a8b763675aa4dba417944c53d1"
+    },
+    {
+      "scope": "TUN-P2-004-UI002",
+      "outcome": "PASS",
+      "covered_items": 8,
+      "evidence_commit_sha": "baffd2d0f3ad71fe8ca270e5372b422d721ec67f",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/gates/ui002-rv004-ui-check.json",
+      "sha256": "1eb3e8b357c27dc7006b983a54c73358d70e6bd32987bae1635088d6caac11b1"
+    },
+    {
+      "scope": "TUN-P1-018",
+      "outcome": "PASS",
+      "covered_items": 2,
+      "evidence_commit_sha": "baffd2d0f3ad71fe8ca270e5372b422d721ec67f",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/gates/p1-018-rv005-ui-check.json",
+      "sha256": "d920f998c68550d994917b028001862bdc84600fc7a111176b52e7b3f7f45596"
+    }
+  ],
+  "parent_foundation_gate": {
+    "scope": "TUN-P2-003",
+    "outcome": "READY",
+    "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/gates/p2-003-current-gate.json"
+  },
+  "final_engineering_review_ref": "governance/evidence/TUN-P2-007-FINAL-REVIEW-PROVENANCE-20261110.json"
 }

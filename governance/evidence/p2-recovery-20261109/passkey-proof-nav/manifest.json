@@ -2,7 +2,7 @@
   "schema_version": 1,
   "result": "PRESERVED_EXECUTION_EVIDENCE",
   "scope_id": "TUN-P2-007",
-  "recorded_at": "2026-11-10T12:36:44.194Z",
+  "recorded_at": "2026-11-10T12:48:20.365Z",
   "normalization": "Original files remain in execution artifacts. Portable UTF8 strips BOM, usesLF and substitutes checkout root with <repo-root>; TRX XML-escapes the placeholder. PNG bytes unchanged. Embedded raw input digests remain original; each row records raw and portable hashes. One duplicate historical source patch is explicitly replaced by immutable Git comparison plus original patch digest, recorded on its row; no scanner controls or test outcomes change. Portable terminal trailing whitespace is trimmed where present, with each affected row explicitly marked; original raw logs remain unchanged. Failed CLI-launch image rows are explicitly classified preexisting/unbound; they are not evidence of a render or executed test. New long Playwright case paths are compacted using deterministic case hashes; original source paths and prior portable spellings remain recorded on rows, bytes unchanged. Already committed historical copies remain in place.",
   "files": [
     {
@@ -2192,6 +2192,15 @@
       "transformed": true
     },
     {
+      "group": "native-case-catalog",
+      "source": "artifacts/p2-007-passkeys-20261109/full-native-case-catalog.json",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/full-native/case-catalog.json",
+      "source_sha256": "f22d301f1a4ad9c538387befc4a7a0fe589f3a105e812236f9ab442a911034dc",
+      "sha256": "8f6ca5093a47fb1c74cd40a98ffb27eeee65e914f2219870bde42dad52f067e0",
+      "bytes": 63576,
+      "transformed": true
+    },
+    {
       "group": "full-native",
       "source": "artifacts/p2-007-passkeys-20261109/proof-0efbb6e-release/native/compiled-inputs.json",
       "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/full-native/compiled-inputs.json",
@@ -2234,6 +2243,87 @@
       "source_sha256": "423d595255387a56d5de2d52a41f60650a9d1375d9b0cc950a4917a08f2a4e28",
       "sha256": "cb4016acb0bd6a60f81b25089cbb0916ce3e2d7bf36e019f82be02059186bb5c",
       "bytes": 475,
+      "transformed": true
+    },
+    {
+      "group": "native-gates",
+      "source": "artifacts/p2-007-passkeys-20261109/governance-20261110/global-ui-check.json",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/gates/global-ui-check.json",
+      "source_sha256": "ac7171caaa076eaa1dc7c618c5fc40fbc5124d1128936a8534d6e1ecfd2d0c88",
+      "sha256": "c037014aa5c32980e7c644485dcb707ff535c516a423c5e8e8301afdb226b39f",
+      "bytes": 662,
+      "transformed": true
+    },
+    {
+      "group": "native-gates",
+      "source": "artifacts/p2-007-passkeys-20261109/governance-20261110/p1-018-rv005-ui-check.json",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/gates/p1-018-rv005-ui-check.json",
+      "source_sha256": "9a5438b6814e9fcbd60f827cfdebc43e8d23197ce573bb43a85b80a82aa42d73",
+      "sha256": "d920f998c68550d994917b028001862bdc84600fc7a111176b52e7b3f7f45596",
+      "bytes": 217,
+      "transformed": true
+    },
+    {
+      "group": "native-gates",
+      "source": "artifacts/p2-007-passkeys-20261109/governance-20261110/p2-003-current-gate.json",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/gates/p2-003-current-gate.json",
+      "source_sha256": "37edf1e352bd91c44e6d46f301c157bafe0ec6730f635f9dd738ef3e69b1026e",
+      "sha256": "449d2b926cf3fd1d21804595128bdea2d48d6920893671ba742fb2d7f41a4824",
+      "bytes": 1255,
+      "transformed": true
+    },
+    {
+      "group": "native-gates",
+      "source": "artifacts/p2-007-passkeys-20261109/governance-20261110/p2-004-ui-check.json",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/gates/p2-004-ui-check.json",
+      "source_sha256": "9a3f10b5172ba2facd013fcc5e9f65f1f20b59dd1058b6a084184f25ab35a9dd",
+      "sha256": "f12c9896fbd4a016ed4afaea75e457f4fca01c9f531c8e6065c1a1accfc3212e",
+      "bytes": 358,
+      "transformed": true
+    },
+    {
+      "group": "native-gates",
+      "source": "artifacts/p2-007-passkeys-20261109/governance-20261110/p2-005-ui-check.json",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/gates/p2-005-ui-check.json",
+      "source_sha256": "ed438c3230063ccea7d5bddad6f7613389f1207abac1a2020f4c3d7536f9aca2",
+      "sha256": "440030758b7313aba9bd9c55b989ef3fc21368ba026909bbf848142ddf7d0702",
+      "bytes": 229,
+      "transformed": true
+    },
+    {
+      "group": "native-gates",
+      "source": "artifacts/p2-007-passkeys-20261109/governance-20261110/p2-006-ui-check.json",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/gates/p2-006-ui-check.json",
+      "source_sha256": "ffae992378a71fe0da35964a1d3959f8d2cc6cf06d38be6852170545fe69136f",
+      "sha256": "c7588f0683bf796c78ddf36ddac0680fcd08e907e32923e2537c322522e0f0de",
+      "bytes": 229,
+      "transformed": true
+    },
+    {
+      "group": "native-gates",
+      "source": "artifacts/p2-007-passkeys-20261109/governance-20261110/p2-007-ui-check.json",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/gates/p2-007-ui-check.json",
+      "source_sha256": "a19a960382e5732d8c3f006caa4c85878c8deb64a49c951afec8543393616ccd",
+      "sha256": "cb8b97b0b7106d9fcb507cd4294b4ebcbd344e833731181d74f765227d86be92",
+      "bytes": 369,
+      "transformed": true
+    },
+    {
+      "group": "native-gates",
+      "source": "artifacts/p2-007-passkeys-20261109/governance-20261110/ui001-rv004-ui-check.json",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/gates/ui001-rv004-ui-check.json",
+      "source_sha256": "61e320032d903ade6aa8086e2f24b1948bfb6edf4c3533dd8d9c3cc05d606e7e",
+      "sha256": "86c2a402d7abb41ba9b8c9ee6bf58a510da8c8a8b763675aa4dba417944c53d1",
+      "bytes": 364,
+      "transformed": true
+    },
+    {
+      "group": "native-gates",
+      "source": "artifacts/p2-007-passkeys-20261109/governance-20261110/ui002-rv004-ui-check.json",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/gates/ui002-rv004-ui-check.json",
+      "source_sha256": "b958682de9fd7ee2e7e8ef6f7fb9eda1f241f578da476a6ddb4a6d48f4d8ce38",
+      "sha256": "1eb3e8b357c27dc7006b983a54c73358d70e6bd32987bae1635088d6caac11b1",
+      "bytes": 364,
       "transformed": true
     },
     {
@@ -2526,6 +2616,42 @@
       "sha256": "3fcb345a9475b6776cfc62bf77388ab8512bff8f9362453e9dbd330f7f75a643",
       "bytes": 46853,
       "transformed": false
+    },
+    {
+      "group": "security-final",
+      "source": "artifacts/p2-007-passkeys-20261109/security-final-745f9c2/sast-exit.txt",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/security-final/sast-exit.txt",
+      "source_sha256": "13bf7b3039c63bf5a50491fa3cfd8eb4e699d1ba1436315aef9cbe5711530354",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "bytes": 2,
+      "transformed": true
+    },
+    {
+      "group": "security-final",
+      "source": "artifacts/p2-007-passkeys-20261109/security-final-745f9c2/sast.log",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/security-final/sast.log",
+      "source_sha256": "8076a3ecce221a0161da5c5fdc1372324875c83d23502003828be9945ec79501",
+      "sha256": "c07379efa3e6d2d6d92ac5e32ddbf9b792bf802c13a8de241135bfca97bcbf79",
+      "bytes": 98,
+      "transformed": true
+    },
+    {
+      "group": "security-final",
+      "source": "artifacts/p2-007-passkeys-20261109/security-final-745f9c2/secrets-exit.txt",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/security-final/secrets-exit.txt",
+      "source_sha256": "13bf7b3039c63bf5a50491fa3cfd8eb4e699d1ba1436315aef9cbe5711530354",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "bytes": 2,
+      "transformed": true
+    },
+    {
+      "group": "security-final",
+      "source": "artifacts/p2-007-passkeys-20261109/security-final-745f9c2/secrets.log",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/security-final/secrets.log",
+      "source_sha256": "b8fe279e658849952ec4f80110558c9cc4f6aa92c70b30f8e788a52e6f3ed787",
+      "sha256": "8131c1ea9af4176cef4a847ac36cbcb6516d6215d78395c7512569e828563fd3",
+      "bytes": 72,
+      "transformed": true
     },
     {
       "group": "ui/authentication",

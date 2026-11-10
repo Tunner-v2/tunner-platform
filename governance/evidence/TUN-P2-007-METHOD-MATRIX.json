@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "scope_id": "TUN-P2-007",
-  "result": "REMAINING_AUTHENTICATOR_PROOF_INTEGRATION_REQUIRED",
-  "recorded_at": "2026-11-09T17:29:58.164Z",
+  "result": "PASSKEY_PRIMARY_AND_SHARED_OPERATION_PROOF_IMPLEMENTED_VERIFIED",
+  "recorded_at": "2026-11-10T12:48:20.365Z",
   "authority_resolution": {
     "outcome": "RESOLVED_EXISTING_AUTHORITY",
     "classification": "BACKLOG_OWNERSHIP_REFINEMENT_REQUIRED",
@@ -31,14 +31,15 @@
       "method": "PASSWORD",
       "primary_owner": "TUN-P2-005",
       "operation_proof_owner": "TUN-P2-006",
-      "status": "IMPLEMENTED_CURRENT_SOURCE_REFRESH_PENDING"
+      "status": "IMPLEMENTED_CURRENT_SOURCE_PROOF_REFRESH_RECORDED_NATIVE_PARENT_GATES_NEXT"
     },
     {
       "method": "PASSKEY",
       "primary_owner": "TUN-P2-007",
       "operation_proof_owner": "TUN-P2-007",
-      "status": "PRIMARY_VERTICAL_CANDIDATE_PRELIMINARY41_PASS; OPERATION_PROOF_REQUIRED_NEXT",
-      "todo": "TODO-TUN-P2-007-STEPUP001"
+      "status": "IMPLEMENTED_PRIMARY_AND_SHARED_OPERATION_PROOF_VERIFIED",
+      "todo": "TODO-TUN-P2-007-STEPUP001",
+      "evidence_ref": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/execution-index.json"
     },
     {
       "method": "TOTP",
@@ -60,5 +61,5 @@
     "Never require an unauthorized new password for a passwordless federated Account. Implement a policy-eligible fresh proof path and fail closed when no approved mapping exists.",
     "No passkey/TOTP/federated assurance is assumed from method name alone; mappings remain approved owner configuration."
   ],
-  "acceptance": "Current primary passkey component can be committed/tested;007 remains IN_PROGRESS until mandatory passkey proof adapter and full applicable gates pass. P2-017 validates conformance and does not substitute for feature implementation."
+  "acceptance": "Passkeyprimaryandoperationproof mandatory implementation and technical evidence verified. Nativefinalsource/lifecyclegates remain required; no wholeP2/Product/release acceptance. TOTP008/federation010 remainplanned, notborrowedfrompasskeyPASS."
 }

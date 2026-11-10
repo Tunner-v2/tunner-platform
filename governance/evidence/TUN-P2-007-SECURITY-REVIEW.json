@@ -1,10 +1,10 @@
 {
   "schema_version": 1,
   "scope_id": "TUN-P2-007",
-  "result": "CORRECTION_IN_PROGRESS",
+  "result": "PASS_CURRENT_NATIVE_SECURITY_SCOPE",
   "recorded_at": "2026-11-09T17:18:34.121Z",
   "reviewer": "p2_business_arch_qa",
-  "review_provenance": "Independent child static review; no tests executed and no source edits by reviewer.",
+  "review_provenance": "Independent child static review; no tests executed and no source edits by reviewer. Current independent read-only correctednative review at0ef and actualfull224/targeted14/real4 regressions verify repairs; root applies finaltechnical review withoutclaiming independenthuman approval.",
   "authority_resolution": "RESOLVED_EXISTING_AUTHORITY: current proof/authorization validity and atomic owner mutation are already required; no new Product policy or runtime value selected.",
   "authority_refs": [
     "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md",
@@ -24,5 +24,8 @@
     ]
   },
   "other_reviewed_boundaries": "Migration/model/guards; exact password current actor/session/identifier+remember result; required current UV/BE/BS classification; explicit session effects and cause; preissued bounded read-only terminal handle; savepoint-preserved abuse accounting. No other supported blocker identified in the inspected candidate.",
-  "acceptance": "Pending final corrected committed-source execution and review."
+  "acceptance": "Native security repairs verified. CurrentlocalUI/nativechecks pass; productionconfiguration/securityimage/browsermatrix/release approvals remain separate.",
+  "verified_at": "2026-11-10T12:48:20.365Z",
+  "verification_ref": "governance/evidence/TUN-P2-007-DEFECT-VERIFICATION-20261110.json",
+  "execution_ref": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/execution-index.json"
 }
