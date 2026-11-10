@@ -2,7 +2,7 @@
   "schema_version": 1,
   "result": "PRESERVED_EXECUTION_EVIDENCE",
   "scope_id": "TUN-P2-007",
-  "recorded_at": "2026-11-10T13:30:17.285Z",
+  "recorded_at": "2026-11-10T13:54:57.024Z",
   "normalization": "Original files remain in execution artifacts. Portable UTF8 strips BOM, usesLF and substitutes checkout root with <repo-root>; TRX XML-escapes the placeholder. PNG bytes unchanged. Embedded raw input digests remain original; each row records raw and portable hashes. One duplicate historical source patch is explicitly replaced by immutable Git comparison plus original patch digest, recorded on its row; no scanner controls or test outcomes change. Portable terminal trailing whitespace is trimmed where present, with each affected row explicitly marked; original raw logs remain unchanged. Failed CLI-launch image rows are explicitly classified preexisting/unbound; they are not evidence of a render or executed test. New long Playwright case paths are compacted using deterministic case hashes; original source paths and prior portable spellings remain recorded on rows, bytes unchanged. Already committed historical copies remain in place.",
   "files": [
     {
@@ -2372,6 +2372,15 @@
       "transformed": true
     },
     {
+      "group": "native-handoff-gates",
+      "source": "artifacts/p2-007-passkeys-20261109/governance-20261110/p2-007-classified-final-gate.json",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/gates/p2-007-classified-final-gate.json",
+      "source_sha256": "8efb2c2e4d4b1b9f751c8de744ecd6234eab15409865ac400fc826dda48f529d",
+      "sha256": "69575a7c90c75f98071c6f53b9d4a8362ac893d3188c396faed4437974f73f45",
+      "bytes": 2812,
+      "transformed": true
+    },
+    {
       "group": "native-current-gates",
       "source": "artifacts/p2-007-passkeys-20261109/governance-20261110/p2-007-code-review-transition.json",
       "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/gates/p2-007-code-review-transition.json",
@@ -2396,6 +2405,42 @@
       "source_sha256": "db1cd060ac7fed9c04b8389633b644d2753e5437a98a28486c663c5dece2273c",
       "sha256": "cb71be5f8bd585e20ac0767e386deaf0d71583b6ba49585138db5b84390e6e24",
       "bytes": 268,
+      "transformed": true
+    },
+    {
+      "group": "native-handoff-gates",
+      "source": "artifacts/p2-007-passkeys-20261109/governance-20261110/p2-classified-committed-readiness-audit.json",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/gates/p2-classified-committed-readiness-audit.json",
+      "source_sha256": "40127aef8da9c87afe0fb3200dac969a29ca6a881edff117f68f770cb2ef00a1",
+      "sha256": "cde8b865e65656ffdd8cdb516264a0c76e0b979b6e63e30f1cb3528578b7537e",
+      "bytes": 121,
+      "transformed": true
+    },
+    {
+      "group": "native-handoff-gates",
+      "source": "artifacts/p2-007-passkeys-20261109/governance-20261110/p2-next-after-current-proofs.json",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/gates/p2-next-after-current-proofs.json",
+      "source_sha256": "4915a54170e561941810e9a261199764ae63a805bdaad206558ea45a605c7944",
+      "sha256": "96ec6f09f152ce43ed0ca4d7d6ed36e1958ca3f01eed7991e4d26b27c932f021",
+      "bytes": 11958,
+      "transformed": true
+    },
+    {
+      "group": "native-handoff-gates",
+      "source": "artifacts/p2-007-passkeys-20261109/governance-20261110/p2-next-authority-verify.json",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/gates/p2-next-authority-verify.json",
+      "source_sha256": "0c5af37d75a7543723a3030046c3c75ed00dd999e3f443cb128bdb1b54ca67c5",
+      "sha256": "828cfacea8745aff25828b927e48da2056bff8350f045a0e599ae936c984e95d",
+      "bytes": 148,
+      "transformed": true
+    },
+    {
+      "group": "native-handoff-gates",
+      "source": "artifacts/p2-007-passkeys-20261109/governance-20261110/p2-next-status.json",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/gates/p2-next-status.json",
+      "source_sha256": "8ab1e7fa84e9d970c75ec4e8d6f8766ee9f71e6d5ba99d3306813fa9b0b15d4e",
+      "sha256": "1ca4e1e2a68a347058c241369dea55ceadaa299e6c5ab6d27b94360b711a2c78",
+      "bytes": 77870,
       "transformed": true
     },
     {
