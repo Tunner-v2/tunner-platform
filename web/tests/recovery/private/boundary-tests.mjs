@@ -1,13 +1,14 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {mkdtemp, mkdir, writeFile, realpath, lstat} from 'node:fs/promises';
+import {mkdtemp, mkdir, writeFile, realpath, lstat, link, rename, symlink, unlink} from 'node:fs/promises';
+import {Readable} from 'node:stream';
 import {join} from 'node:path';
 import {tmpdir} from 'node:os';
 import {createAdmission} from '../sensitive/contract.mjs';
 import {parsePrivateJson} from '../../totp/sensitive/private-frames.mjs';
 import {version, journeys, childChecks, supervisorChecks, coordinatorChecks, validControl, validChildResult, childAccepted, realAccepted, fixedError, failureOf, observedMap, publicMarker, publicBody} from './contract.mjs';
-import {ownedSurface, removeOwnedSurface, validSurfacePath, downloadIdentity, privateMarkers, inspectSurface} from './surface.mjs';
-import {runJourney} from './journeys.mjs';
+import {ownedSurface, removeOwnedSurface, validSurfacePath, downloadIdentity, sameDownload, privateMarkers, inspectSurface} from './surface.mjs';
+import {runJourney, inspectRequestedDownload} from './journeys.mjs';
 
 // Public synthetic maps test reducer mechanics. They never enter actual receipts.
 const journeyId = 'RECOVERY_GENERATE_PASSWORD_V1';
@@ -203,4 +204,44 @@ test('actual metadata header guard follows session versus Recovery and StepUp ow
  for(const pathname of ['/account/recovery-codes/options','/authentication/step-up/options']){assert.equal(recoveryMetadataProtection(pathname,onlyStore),false);assert.equal(recoveryMetadataProtection(pathname,protectedHeaders),true);}
  for(const pathname of ['/authentication/session','/account/recovery-codes/options','/authentication/step-up/options'])assert.equal(recoveryMetadataProtection(pathname,{'referrer-policy':'no-referrer'}),false);
  assert.throws(()=>recoveryMetadataProtection('/unregistered',protectedHeaders));
+});
+
+test('current download identity rejects an owned hardlink and replacement at the same pathname',async()=>{
+ await fixture(async identity=>{
+  const folder=join(identity.path,'downloads');await mkdir(folder);const file=join(folder,'public-file'),alias=join(identity.path,'public-alias');await writeFile(file,publicBody);
+  const admitted=await downloadIdentity(identity,file);await link(file,alias);
+  try{await assert.rejects(downloadIdentity(identity,file),error=>failureOf(error)==='PATH_REJECTED');}finally{await unlink(alias);}
+  await rename(file,join(folder,'public-original'));await writeFile(file,publicBody);
+  assert.equal(await sameDownload(identity,admitted),false);
+ });
+});
+
+test('current download identity rejects a symlink or Windows junction inside its owned temp root',async()=>{
+ await fixture(async identity=>{
+  const backing=join(identity.path,'public-backing'),folder=join(identity.path,'downloads');await mkdir(backing);await writeFile(join(backing,'public-file'),publicBody);
+  await symlink(backing,folder,process.platform==='win32'?'junction':'dir');
+  try{assert.equal((await lstat(folder)).isSymbolicLink(),true);assert.equal(await realpath(folder),await realpath(backing));await assert.rejects(downloadIdentity(identity,join(folder,'public-file')),error=>failureOf(error)==='PATH_REJECTED');}
+  finally{await unlink(folder);}
+ });
+});
+
+for(const shape of ['empty','truncated'])test('actual inspector rejects a completed '+shape+' public stream',async()=>{
+ await fixture(async identity=>{
+  const folder=join(identity.path,'downloads');await mkdir(folder);const file=join(folder,'public-file'),expected=Buffer.from(publicBody),received=shape==='empty'?Buffer.alloc(0):Buffer.from(expected.subarray(0,expected.length-1));await writeFile(file,received);
+  const stream=Readable.from([received]);let deletes=0,failure='NONE';const download={path:async()=>file,createReadStream:async()=>stream,delete:async()=>{deletes++;await unlink(file);}};
+  try{try{await inspectRequestedDownload(download,identity,expected);}catch(error){failure=failureOf(error);}assert.equal(failure,'BYTES_MISMATCH');assert.equal(stream.destroyed,true);assert.equal(deletes,0);}
+  finally{expected.fill(0);received.fill(0);}
+ });
+});
+
+for(const stage of ['stream','delete'])test('actual '+stage+' exception with public sentinel reduces without exporting its error',async()=>{
+ await fixture(async identity=>{
+  const folder=join(identity.path,'downloads');await mkdir(folder);const file=join(folder,'public-file'),expected=Buffer.from(publicBody);await writeFile(file,expected);
+  let thrown=false,deletes=0,failure='NONE';const stream=stage==='stream'?Readable.from((async function*(){thrown=true;throw new Error(publicMarker);})()):Readable.from([Buffer.from(expected)]);
+  const download={path:async()=>file,createReadStream:async()=>stream,delete:async()=>{deletes++;if(stage==='delete'){thrown=true;throw new Error(publicMarker);}await unlink(file);}};
+  // Exercise the actual async stage and the same fixed reducer used by raw child catch.
+  // Do not retain/read/stringify the Error, its message or stack in a test/report.
+  try{try{await inspectRequestedDownload(download,identity,expected);}catch(error){failure=failureOf(error);}assert.equal(thrown,true);assert.equal(failure,'BOUNDARY_ERROR');assert.equal(stream.destroyed,true);assert.equal(deletes,stage==='delete'?1:0);}
+  finally{expected.fill(0);}
+ });
 });

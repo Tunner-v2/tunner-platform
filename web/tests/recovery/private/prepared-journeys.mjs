@@ -99,6 +99,7 @@ class RecoveryJourney {
   this.prove('CANONICAL_FIRST_DELIVERY',codes.length===op.codesPerSet&&codes.length<=op.maximumCodesPerSet&&codes.every(c=>typeof c==='string'&&/^[0-9A-F]{32}$/.test(c))&&new Set(codes).size===codes.length);
   await page.locator('.recovery-codes-grid code').first().waitFor();
   this.prove('CANONICAL_FIRST_DELIVERY',same(await page.locator('.recovery-codes-grid code').allTextContents(),codes));
+  await this.privacy();
   return{codes,held,response};
  }
  async duplicate(held,complete){
@@ -158,6 +159,8 @@ class RecoveryJourney {
    try{await this.requestOwnedDownload(this.page,expected);}finally{expected.fill(0);}
    const status=this.page.getByRole('status');this.prove('REQUESTED_NOT_SAVED',(await status.textContent()).includes('Download requested')&&(await status.textContent()).includes('cannot confirm that the file was saved'));
    this.prove('ONE_REQUESTED_DOWNLOAD',await this.page.getByRole('button',{name:'Download',exact:true}).isDisabled());
+   this.prove('CANONICAL_FIRST_DELIVERY',same(await this.page.locator('.recovery-codes-grid code').allTextContents(),completed.codes));
+   await this.privacy();
    await this.clear();this.prove('CLOSE_NO_REVEAL',true);
   }else if(completed.bodyLost){await this.page.getByRole('button',{name:'Close',exact:true}).click();await this.page.reload();this.prove('VOLATILE_CLEAR',await this.page.locator('.recovery-codes-grid code').count()===0);this.prove('REQUESTED_NOT_SAVED',await this.page.getByRole('status').count()===0);}
   else await this.clear({pagehide:this.control.journeyId==='RECOVERY_GENERATE_TOTP_V1'});
