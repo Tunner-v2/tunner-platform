@@ -282,9 +282,23 @@ class Journey {
     const response = await page.request.get(resource,{timeout:5000,failOnStatusCode:false}), bytes = await response.body();
     this.prove('UI_ASSET_TYPOGRAPHY',this.monoVerified === true && response.ok() && /font|octet-stream/i.test(response.headers()['content-type'] ?? '') && createHash('sha256').update(bytes).digest('hex') === '3100e775e8616cd2611beecfa23a4263d7037586789b43f035236a2e6fbd4c62' && selected.chosen.includes('Inter Variable') && selected.faces.some(face => face.family === 'Inter Variable' && face.status === 'loaded'));
   }
-  async cancelHeld(page) {
-    const dialog = page.getByRole('dialog'); if (await dialog.count()) await dialog.getByRole('button',{name:/^(Close|Cancel)$/}).click();
-    const recovery = page.locator('.totp-recovery'); if (await recovery.count()) { await recovery.getByRole('button',{name:'Check status',exact:true}).click(); await page.locator('.totp-review-dialog').getByRole('button',{name:'Cancel',exact:true}).click(); }
+  async cancelHeld(page,operation) {
+    const cancelled = async action => {
+      const result = await this.response(page,'/account/totp/cancel',action);
+      requireTrue(result.ok && sameOperation(operation,result.body) && ['REJECTED','EXPIRED'].includes(result.body.status));
+    };
+    const dialog = page.getByRole('dialog'); requireTrue(await dialog.count() === 1);
+    const close = dialog.getByRole('button',{name:/^(Close|Cancel)$/});
+    // Wait for pending inspection to settle before choosing its fixed close behavior.
+    await close.click({trial:true});
+    if (await dialog.getByRole('button',{name:'Cancel',exact:true}).count()) {
+      await cancelled(() => dialog.getByRole('button',{name:'Cancel',exact:true}).click());
+    } else {
+      await dialog.getByRole('button',{name:'Close',exact:true}).click(); await dialog.waitFor({state:'hidden'});
+      await page.locator('.totp-recovery').getByRole('button',{name:'Check status',exact:true}).click();
+      await cancelled(() => page.locator('.totp-review-dialog').getByRole('button',{name:'Cancel',exact:true}).click());
+    }
+    await dialog.waitFor({state:'hidden'}); await page.locator('.totp-recovery').waitFor({state:'hidden'});
     await this.at(page,manage);
   }
   async rejectDisabledProof(page,factor) {
@@ -351,7 +365,7 @@ async function operationProofCausalRevoke(run) {
   const staleOperation = await run.beginMutation(causal,'DISABLE',a), held = await run.finishMutationProof(causal,staleOperation,b,{deny:true});
   await run.finishMutationPassword(run.page,'DISABLE',b,account.password); await run.page.getByRole('button',{name:'Done',exact:true}).click(); await run.continueProof(causal,held,{expectSuccess:false});
   // The rejected exact original action is explicitly cancelled through its UI.
-  await run.cancelHeld(causal);
+  await run.cancelHeld(causal,held.operation);
   const unrelated = (await run.factors(run.page)).find(value => value.authenticatorReference === b.reference), operation = await run.beginMutation(causal,'DISABLE',a), failed = await run.finishMutationProof(causal,operation,a,{deny:true});
   const completed = await run.continueProof(causal,failed); requireTrue(completed.body.signInRequired === true); await causal.getByRole('heading',{name:'Sign in again to continue',exact:true}).waitFor();
   const terminal = await run.get(causal,'/account/totp/terminal-options'); requireTrue(terminal.ok && terminal.body.recovery?.enrollmentId === operation.enrollmentId);

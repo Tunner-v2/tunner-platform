@@ -215,7 +215,7 @@ internal static class FiniteTotpCoordinator
         var start = new ProcessStartInfo(FindNode()) { WorkingDirectory = root.FullName, UseShellExecute = false, CreateNoWindow = true,
             RedirectStandardInput = true, RedirectStandardOutput = true, RedirectStandardError = true };
         start.ArgumentList.Add(Path.Combine(root.FullName, "web", "tests", "totp", "sensitive", "real-supervisor.mjs"));
-        var allowed = new[] { "PATH", "SystemRoot", "WINDIR", "COMSPEC", "PATHEXT", "PROCESSOR_ARCHITECTURE", "OS", "LOCALAPPDATA", "APPDATA", "USERPROFILE", "TEMP", "TMP" };
+        var allowed = new[] { "PATH", "SystemRoot", "SystemDrive", "ProgramData", "WINDIR", "COMSPEC", "PATHEXT", "PROCESSOR_ARCHITECTURE", "OS", "LOCALAPPDATA", "APPDATA", "USERPROFILE", "TEMP", "TMP" };
         start.Environment.Clear();
         foreach (var name in allowed) if (Environment.GetEnvironmentVariable(name) is { } value) start.Environment[name] = value;
         start.Environment["ASPNETCORE_ENVIRONMENT"] = "Development"; start.Environment["NODE_OPTIONS"] = string.Empty;
