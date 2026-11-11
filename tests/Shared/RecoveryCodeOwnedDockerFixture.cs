@@ -1,6 +1,7 @@
 using System.Globalization;
 using System.Net;
 using System.Security.Cryptography;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Text.Json;
 using Docker.DotNet;
@@ -18,6 +19,38 @@ using Tunner.Identity.Persistence;
 using Tunner.Installer;
 
 namespace Tunner.Testing.Recovery;
+
+// Finite Windows TLS borrows the already approved key; Schannel cannot use the fixture's ephemeral import.
+internal static class RecoveryCodeFiniteTls
+{
+    internal static X509Certificate2 LoadApprovedCertificate()
+    {
+        if (!OperatingSystem.IsWindows()) throw new InvalidOperationException("RECOVERY_FINITE_TLS_CERTIFICATE_UNAVAILABLE");
+        var root = Tunner.Governance.RepositoryRootResolver.Resolve(new DirectoryInfo(Directory.GetCurrentDirectory()));
+        var path = FiniteTotpBuildBinding.ResolveEvidence(root, "artifacts/browser-testing/runtime.json");
+        var file = new FileInfo(path);
+        if (!file.Exists || file.LinkTarget is not null || (file.Attributes & FileAttributes.ReparsePoint) != 0 || file.Length > 65536)
+            throw new InvalidOperationException("RECOVERY_FINITE_TLS_CERTIFICATE_UNAVAILABLE");
+        using var metadata = JsonDocument.Parse(File.ReadAllBytes(path));
+        var thumbprint = metadata.RootElement.GetProperty("CertificateThumbprint").GetString();
+        var expected = metadata.RootElement.GetProperty("CertificateSha256").GetString();
+        if (metadata.RootElement.GetProperty("Mode").GetString() != "ISOLATED_LOCAL_BROWSER_TESTING" ||
+            thumbprint is not { Length: 40 } || !thumbprint.All(Uri.IsHexDigit) || expected is not { Length: 64 } || !expected.All(Uri.IsHexDigit))
+            throw new InvalidOperationException("RECOVERY_FINITE_TLS_CERTIFICATE_UNAVAILABLE");
+        using var store = new X509Store(StoreName.My, StoreLocation.CurrentUser); store.Open(OpenFlags.ReadOnly);
+        var certificates = store.Certificates;
+        try
+        {
+            var now = DateTime.Now;
+            var certificate = certificates.OfType<X509Certificate2>().Single(x => string.Equals(x.Thumbprint, thumbprint, StringComparison.OrdinalIgnoreCase) &&
+                x.HasPrivateKey && x.NotBefore <= now && x.NotAfter > now);
+            if (certificate.GetCertHashString(HashAlgorithmName.SHA256) != expected)
+                throw new InvalidOperationException("RECOVERY_FINITE_TLS_CERTIFICATE_UNAVAILABLE");
+            return new X509Certificate2(certificate); // Clone only the handle; never export/import or persist private key material.
+        }
+        finally { foreach (var certificate in certificates) certificate.Dispose(); }
+    }
+}
 
 /// <summary>Qualified public metadata, never endpoint/config/credential discovery.</summary>
 internal sealed class RecoveryCodeLocalDockerEndpoint : IDisposable

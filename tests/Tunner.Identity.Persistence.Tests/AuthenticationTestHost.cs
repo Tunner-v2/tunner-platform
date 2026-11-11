@@ -19,6 +19,7 @@ using Microsoft.Extensions.Options;
 using Tunner.Accounts;
 using Tunner.Platform.Policies;
 using Tunner.User.Bff;
+using Tunner.Testing.Recovery;
 
 namespace Tunner.Identity.Persistence.Tests;
 
@@ -37,11 +38,16 @@ internal sealed class AuthenticationTestHost : IAsyncDisposable
     { this.application = application; this.client = client; this.certificate = certificate; Clock = clock; Access = access; Policies = policies; }
     internal static async Task<AuthenticationTestHost> Start(IdentityTestDatabase database, Action<IServiceCollection>? configure = null)
     {
-        using var rsa = RSA.Create(2048); var request = new CertificateRequest("CN=localhost", rsa, HashAlgorithmName.SHA256, RSASignaturePadding.Pkcs1);
-        using var generated = request.CreateSelfSigned(DateTimeOffset.UtcNow.AddMinutes(-1), DateTimeOffset.UtcNow.AddHours(2));
-        var bytes = generated.Export(X509ContentType.Pkcs12); X509Certificate2 certificate;
-        try { certificate = X509CertificateLoader.LoadPkcs12(bytes, null, database.FiniteOwner is null ? X509KeyStorageFlags.DefaultKeySet : X509KeyStorageFlags.EphemeralKeySet); }
-        finally { CryptographicOperations.ZeroMemory(bytes); }
+        X509Certificate2 certificate;
+        if (database.FiniteOwner is not null && OperatingSystem.IsWindows()) certificate = RecoveryCodeFiniteTls.LoadApprovedCertificate();
+        else
+        {
+            using var rsa = RSA.Create(2048); var request = new CertificateRequest("CN=localhost", rsa, HashAlgorithmName.SHA256, RSASignaturePadding.Pkcs1);
+            using var generated = request.CreateSelfSigned(DateTimeOffset.UtcNow.AddMinutes(-1), DateTimeOffset.UtcNow.AddHours(2));
+            var bytes = generated.Export(X509ContentType.Pkcs12);
+            try { certificate = X509CertificateLoader.LoadPkcs12(bytes, null, database.FiniteOwner is null ? X509KeyStorageFlags.DefaultKeySet : X509KeyStorageFlags.EphemeralKeySet); }
+            finally { CryptographicOperations.ZeroMemory(bytes); }
+        }
         var clock = new TestClock(); var access = new TestAccess(); var policies = new TestPolicies();
         var application = TunnerAuthenticatedUserBffHost.CreateApplication([], builder =>
         {

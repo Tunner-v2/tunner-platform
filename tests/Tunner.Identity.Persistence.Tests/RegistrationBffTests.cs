@@ -15,6 +15,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Tunner.Platform.Policies;
 using Tunner.User.Bff;
 using Xunit;
+using Tunner.Testing.Recovery;
 
 namespace Tunner.Identity.Persistence.Tests;
 
@@ -187,9 +188,14 @@ public sealed class RegistrationBffTests(IdentityPostgresFixture fixture) : ICla
         private Host(WebApplication app,X509Certificate2 certificate,HttpClient client,Uri http,NoticeSink notices){this.app=app;this.certificate=certificate;this.client=client;this.http=http;Notices=notices;}
         public static async Task<Host> Start(IdentityTestDatabase database)
         {
-            using var rsa=RSA.Create(2048);var request=new CertificateRequest("CN=localhost",rsa,HashAlgorithmName.SHA256,RSASignaturePadding.Pkcs1);
-            using var generated=request.CreateSelfSigned(DateTimeOffset.UtcNow.AddMinutes(-1),DateTimeOffset.UtcNow.AddHours(1));var bytes=generated.Export(X509ContentType.Pkcs12);
-            X509Certificate2 certificate;try{certificate=X509CertificateLoader.LoadPkcs12(bytes,null,database.FiniteOwner is null ? X509KeyStorageFlags.DefaultKeySet : X509KeyStorageFlags.EphemeralKeySet);}finally{CryptographicOperations.ZeroMemory(bytes);}
+            X509Certificate2 certificate;
+            if(database.FiniteOwner is not null && OperatingSystem.IsWindows())certificate=RecoveryCodeFiniteTls.LoadApprovedCertificate();
+            else
+            {
+                using var rsa=RSA.Create(2048);var request=new CertificateRequest("CN=localhost",rsa,HashAlgorithmName.SHA256,RSASignaturePadding.Pkcs1);
+                using var generated=request.CreateSelfSigned(DateTimeOffset.UtcNow.AddMinutes(-1),DateTimeOffset.UtcNow.AddHours(1));var bytes=generated.Export(X509ContentType.Pkcs12);
+                try{certificate=X509CertificateLoader.LoadPkcs12(bytes,null,database.FiniteOwner is null ? X509KeyStorageFlags.DefaultKeySet : X509KeyStorageFlags.EphemeralKeySet);}finally{CryptographicOperations.ZeroMemory(bytes);}
+            }
             var notices=new NoticeSink();var policy=new RegistrationPolicy("fixture-registration-v2","PDR-0011","fixture-processing","fixture-retention","fixture-terms","fixture-privacy","fixture-proof","fixture-existing","PASSWORD_AND_VERIFIED_EMAIL",15,128,10000,6,TimeSpan.FromMinutes(5),2,TimeSpan.FromSeconds(30),2,TimeSpan.FromMinutes(1),1000,1000,1000,1000,TimeSpan.FromMinutes(30),TimeSpan.FromHours(1));
             var version=new RegistrationPolicyVersion(new(policy.Version,"ACTIVE","REGISTRATION",new EffectivePolicyInterval(DateTimeOffset.UtcNow.AddDays(-1),true,null,false),null,["fixture-only-approval"]),policy);
             var agePolicies=new FixtureAccountAgePolicies();
