@@ -70,7 +70,7 @@ class Journey {
   async goManage(page) { if (new URL(page.url()).pathname !== manage) await page.goto(this.url(manage)); await this.at(page,manage); await page.locator('[data-tunner-screen="U-ACCT-TOTP"]').waitFor({state:'visible'}); }
   async newPage() {
     const context = await this.browser.newContext({baseURL:this.origin,acceptDownloads:false,serviceWorkers:'block'});
-    this.ownedContexts.push(context); this.contexts.push(context); const page = await context.newPage(); page.setDefaultTimeout(5000); this.pages.push(page); return page;
+    this.ownedContexts.push(context); this.contexts.push(context); this.onPreparedContext?.(context); const page = await context.newPage(); page.setDefaultTimeout(5000); this.pages.push(page); return page;
   }
   async bootstrap() {
     const status = await this.get(this.page,'/browser-testing/status');
@@ -440,8 +440,8 @@ export async function runPublicJourneyCanary({page,context,browser,signal}) {
 // Explicit preparation capability for the separate recovery child. No TOTP dispatcher/default changes.
 export function createRecoveryAccountMechanics(input){
  const ids=['RECOVERY_GENERATE_PASSWORD_V1','RECOVERY_REPLACE_PASSWORD_V1','RECOVERY_GENERATE_PASSKEY_V1','RECOVERY_REPLACE_PASSKEY_V1','RECOVERY_GENERATE_TOTP_V1','RECOVERY_REPLACE_TOTP_V1'];
- requireTrue(object(input)&&ids.includes(input.journeyId)&&typeof input.runId==='string'&&/^[a-f0-9]{32}$/.test(input.runId)&&typeof input.remember==='function'&&typeof input.fixtureControl==='function'&&typeof input.nativeCode==='function');
- const run=new Journey({...input,reportStep:()=>{},recoveryPreparation:true,identityMode:'FINITE_RECOVERY_BROWSER_TESTING',safeCountKeys:['ownerCommits','operations','sets','replacedSets','entries','proofs','consumedProofs','sessions','outbox','codeAcceptances'],privateRemember:input.remember,fixtureControl:async action=>{requireTrue(action==='READ_SAFE_COUNTS');return input.fixtureControl(action);}});
+ requireTrue(object(input)&&ids.includes(input.journeyId)&&typeof input.runId==='string'&&/^[a-f0-9]{32}$/.test(input.runId)&&typeof input.remember==='function'&&typeof input.fixtureControl==='function'&&typeof input.nativeCode==='function'&&typeof input.onContext==='function');
+ const run=new Journey({...input,reportStep:()=>{},recoveryPreparation:true,onPreparedContext:input.onContext,identityMode:'FINITE_RECOVERY_BROWSER_TESTING',safeCountKeys:['ownerCommits','operations','sets','replacedSets','entries','proofs','consumedProofs','sessions','outbox','codeAcceptances'],privateRemember:input.remember,fixtureControl:async action=>{requireTrue(action==='READ_SAFE_COUNTS');return input.fixtureControl(action);}});
  const port={};for(const method of ['bootstrap','read','get','post','response','request','at','session','newPage','passwordLogin'])port[method]=run[method].bind(run);
  return Object.freeze({...port,setupPasskey:async(page,password)=>{await run.passkeyDevice(page);await run.enrollPasskey(page,password);},enrollTotp:run.enroll.bind(run),nextTotpCode:async factor=>{const code=await run.code(factor);factor.used.add(code);return code;},passkeyStats:()=>({created:run.created,asserted:run.asserted}),close:run.cleanup.bind(run),revokePasskey:async(page,password)=>{
   await page.goto(run.url('/account/security/sign-in-methods'));await page.getByRole('button',{name:'Manage',exact:true}).click();

@@ -28,12 +28,12 @@ export const journeys = Object.freeze({
   RECOVERY_GENERATE_TOTP_V1: Object.freeze([...common, 'NATIVE_TOTP_PROOF', 'OWNER_FAILURE_SAME_PROOF', 'PAGEHIDE_NO_REVEAL']),
   RECOVERY_REPLACE_TOTP_V1: Object.freeze([...common, 'NATIVE_TOTP_PROOF', 'CURRENT_PUBLICATION', 'NO_SESSION_MUTATION']),
 });
-export const childChecks = Object.freeze(['BROWSER_ENGINE', 'PUBLIC_ENTRY', 'ERROR_CONTAINED', 'DOWNLOAD_ADMITTED', 'DOWNLOAD_REMOVED', 'SURFACE_CHECKED', 'PRODUCTION_CONTROLLER_PUBLIC', 'FIXTURE_RELAY_PUBLIC', ...new Set(Object.values(journeys).flat())]);
+export const childChecks = Object.freeze(['BROWSER_ENGINE', 'PUBLIC_ENTRY', 'ERROR_CONTAINED', 'DOWNLOAD_ADMITTED', 'DOWNLOAD_REMOVED', 'SURFACE_CHECKED', 'PRODUCTION_CONTROLLER_PUBLIC', 'FIXTURE_RELAY_PUBLIC', 'STAGE_SETTLED_PUBLIC', ...new Set(Object.values(journeys).flat())]);
 export const supervisorChecks = Object.freeze(['SOURCE_CURRENT', 'PROTOCOL_VALID', 'OUTPUT_CONTAINED', 'CHILD_CLOSED', 'ORACLE_CLOSED', 'CHILD_SURFACES_CLOSED', 'SURFACE_REMOVED']);
 export const coordinatorChecks = Object.freeze(['SOURCE_BUILD_CURRENT', 'OWNED_DATABASE', 'OWNED_MAILPIT', 'EPHEMERAL_DP', 'CURRENT_MIGRATIONS', 'SAFE_PERSISTENCE', 'SAFE_OUTBOX', 'HOST_STOPPED', 'RESOURCES_REMOVED', 'BORROWED_POSTGRES_PRESERVED']);
 export const conditionalCoordinatorChecks=Object.freeze({RECOVERY_REPLACE_PASSWORD_V1:Object.freeze(['EXACT_SUBSET_REPLACEMENT']),RECOVERY_REPLACE_TOTP_V1:Object.freeze(['PUBLICATION_DRIFT_ROLLED_BACK'])});
 export const requiredCoordinatorChecks=id=>[...coordinatorChecks,...(conditionalCoordinatorChecks[id]??[])];
-export const publicFaults = Object.freeze(['happy', 'unarmed', 'duplicate', 'wrong-page', 'wrong-bytes', 'oversize', 'outside-identity', 'stream-error', 'delete-error', 'unexpected-output', 'invalid-result', 'action-timeout', 'child-timeout', 'unexpected-artifact', 'fatal-rejection', 'journey-entry', 'missing-predicate', 'cross-component', 'cleanup', 'oracle-roundtrip', 'oracle-input', 'oracle-exit', 'oracle-timeout', 'oracle-stderr', 'production-controller', 'relay-roundtrip', 'relay-malformed', 'relay-timeout']);
+export const publicFaults = Object.freeze(['happy', 'unarmed', 'duplicate', 'wrong-page', 'wrong-bytes', 'oversize', 'outside-identity', 'stream-error', 'delete-error', 'unexpected-output', 'invalid-result', 'action-timeout', 'child-timeout', 'unexpected-artifact', 'fatal-rejection', 'journey-entry', 'missing-predicate', 'cross-component', 'cleanup', 'oracle-roundtrip', 'oracle-input', 'oracle-exit', 'oracle-timeout', 'oracle-stderr', 'production-controller', 'relay-roundtrip', 'relay-malformed', 'relay-timeout', 'popup-extra', 'iframe-extra', 'simultaneous-extra', 'cancel-initiation', 'stalled-partial-read', 'cancel-stream-read', 'stalled-delete', 'cancel-delete', 'secondary-context-extra']);
 export const oracleFaults = Object.freeze(publicFaults.filter(value => value.startsWith('oracle-')));
 export const registeredJourney = value => typeof value === 'string' && Object.hasOwn(journeys, value);
 const origin = (value, protocol, hostname) => {
@@ -95,3 +95,10 @@ export function recordPublicDownloadChecks(mode,checks){
  requireTrue(mode==='public'||mode==='live','INPUT_INVALID');
  if(mode==='public'){checks.DOWNLOAD_ADMITTED=true;checks.DOWNLOAD_REMOVED=true;}
 }
+
+export const publicCancelFaults=Object.freeze(['child-timeout','cancel-initiation','cancel-stream-read','cancel-delete']);
+export const publicStageFaults=Object.freeze(['cancel-initiation','stalled-partial-read','cancel-stream-read','stalled-delete','cancel-delete']);
+export function recordPublicStageCheck(mode,checks,settled){requireTrue(mode==='public'||mode==='live','INPUT_INVALID');requireTrue(typeof settled==='boolean','INPUT_INVALID');if(mode==='public')checks.STAGE_SETTLED_PUBLIC=settled;}
+
+export const publicExtraFaults=Object.freeze(['popup-extra','iframe-extra','simultaneous-extra','secondary-context-extra']);
+export function requireTwoDownloadRejection(count,admissions){requireTrue(count===2&&Array.isArray(admissions)&&admissions.length===2&&admissions[0]===true&&admissions[1]===false,'PREDICATE_FAILED');}

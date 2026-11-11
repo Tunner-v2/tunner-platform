@@ -16,7 +16,11 @@ using Tunner.Testing.Recovery;
 /// <summary>One finite Development-only recovery browser composition; no owner consumption workflow.</summary>
 internal static class FiniteRecoveryCoordinator
 {
-    private static readonly string[] PublicFaults = ["happy", "unarmed", "duplicate", "wrong-page", "wrong-bytes", "oversize", "outside-identity", "stream-error", "delete-error", "unexpected-output", "invalid-result", "action-timeout", "child-timeout", "unexpected-artifact", "fatal-rejection", "journey-entry", "missing-predicate", "cross-component", "cleanup", "oracle-roundtrip", "oracle-input", "oracle-exit", "oracle-timeout", "oracle-stderr", "production-controller", "relay-roundtrip", "relay-malformed", "relay-timeout"];
+    private static readonly string[] PublicFaults = ["happy", "unarmed", "duplicate", "wrong-page", "wrong-bytes", "oversize", "outside-identity", "stream-error", "delete-error", "unexpected-output", "invalid-result", "action-timeout", "child-timeout", "unexpected-artifact", "fatal-rejection", "journey-entry", "missing-predicate", "cross-component", "cleanup", "oracle-roundtrip", "oracle-input", "oracle-exit", "oracle-timeout", "oracle-stderr", "production-controller", "relay-roundtrip", "relay-malformed", "relay-timeout", "popup-extra", "iframe-extra", "simultaneous-extra", "cancel-initiation", "stalled-partial-read", "cancel-stream-read", "stalled-delete", "cancel-delete", "secondary-context-extra"];
+    private static readonly string[] PublicCancelFaults = ["child-timeout", "cancel-initiation", "cancel-stream-read", "cancel-delete"];
+    private static readonly string[] PublicStageFaults = ["cancel-initiation", "stalled-partial-read", "cancel-stream-read", "stalled-delete", "cancel-delete"];
+    private static readonly string[] PublicExtraFaults = ["popup-extra", "iframe-extra", "simultaneous-extra", "secondary-context-extra"];
+    private static readonly string[] PublicTransferCheckIds = ["BROWSER_ENGINE", "SURFACE_CHECKED", "PUBLIC_ENTRY", "STAGE_SETTLED_PUBLIC", "DOWNLOAD_ADMITTED", "DOWNLOAD_REMOVED"];
     private static readonly string[] ResourceFaults = ["after-db", "after-mailpit", "after-vault-session", "after-app-start", "cleanup-reject"];
     private static readonly string[] SupervisorIds = ["SOURCE_CURRENT", "PROTOCOL_VALID", "OUTPUT_CONTAINED", "CHILD_CLOSED", "ORACLE_CLOSED", "CHILD_SURFACES_CLOSED", "SURFACE_REMOVED"];
     private static readonly string[] CoordinatorIds = ["SOURCE_BUILD_CURRENT", "OWNED_DATABASE", "OWNED_MAILPIT", "EPHEMERAL_DP", "CURRENT_MIGRATIONS", "SAFE_PERSISTENCE", "SAFE_OUTBOX", "HOST_STOPPED", "RESOURCES_REMOVED", "BORROWED_POSTGRES_PRESERVED"];
@@ -31,7 +35,7 @@ internal static class FiniteRecoveryCoordinator
     private static readonly string[] PublicProtocolIds = ["REAL_EXACT_WINNING_MAP", "REAL_EACH_MISSING_FALSE", "REAL_EXTRA_CROSS_COMPONENT", "CONDITIONAL_COORDINATOR_OWNER", "STRICT_SCALAR_AND_KEY_SHAPE", "SERVER_LIFECYCLE", "PUBLIC_FAILURE_NEVER_REAL", "RELAY_PUBLIC_TOPOLOGY", "PRODUCTION_CONTROLLER_FACTS", "PUBLIC_CONTAINMENT_NEGATIVES", "RAW_MANAGED_OUTPUT", "SOURCE_SELECTOR_COMPATIBILITY"];
     private static readonly string[] PublicProtocolBrowserFacts = ["BROWSER_ENGINE", "SURFACE_CHECKED", "PUBLIC_ENTRY", "ERROR_CONTAINED", "DOWNLOAD_ADMITTED", "DOWNLOAD_REMOVED", "PRODUCTION_CONTROLLER_PUBLIC", "FIXTURE_RELAY_PUBLIC"];
     private static readonly string[] PublicProtocolComponents = ["checks", "supervisor"];
-    private static readonly string[] PublicProtocolExtraChecks = ["PUBLIC_ENTRY", "SOURCE_BUILD_CURRENT", "EXACT_SUBSET_REPLACEMENT", "PUBLIC_NONFUNCTIONAL_UNKNOWN"];
+    private static readonly string[] PublicProtocolExtraChecks = ["PUBLIC_ENTRY", "SOURCE_BUILD_CURRENT", "EXACT_SUBSET_REPLACEMENT", "STAGE_SETTLED_PUBLIC", "PUBLIC_NONFUNCTIONAL_UNKNOWN"];
     private static readonly string[] PublicProtocolTrueFlags = ["sourceCommitted", "childResultAccepted", .. ClosedLiveFacts];
     private static readonly string[] PublicProtocolFalseFlags = ["protocolRejected", "rawOutputRejected", "timedOut", "cleanupForced", "publicFaultObserved"];
     private static readonly string[] PublicProtocolBooleanFlags = [.. PublicProtocolTrueFlags, .. PublicProtocolFalseFlags, "accepted"];
@@ -98,7 +102,7 @@ internal static class FiniteRecoveryCoordinator
             sourceBuildCurrent = current, buildBinding = before, cases, qualified, accepted = false, sensitiveRunAccepted = false,
             unexpectedManagedOutput = managed.Count != 0, failureCode = qualified ? "NONE" : "PUBLIC_PROTOCOL_FAILED",
             scope = "Synthetic in-process validators/reducers/framing only; no browser, Docker, native values or real journey.",
-            relayTopology = "NOT_EXECUTED; actual28 browser/oracle/relay/controller matrix remains required",
+            relayTopology = "NOT_EXECUTED; actual37 browser/oracle/relay/controller matrix remains required",
             recorderCompatibility = "Default/JS recorder branches unchanged and statically reviewed; recorder not executed" }, cancellationToken: write.Token).ConfigureAwait(false);
         await output.WriteAsync("\n"u8.ToArray(), write.Token).ConfigureAwait(false);
         return qualified ? 0 : 1;
@@ -126,6 +130,8 @@ internal static class FiniteRecoveryCoordinator
         value["checks"] = ProtocolMap(PublicProtocolBrowserFacts);
         value["publicOwnership"] = new JsonObject { ["surface"] = null, ["childPid"] = 1, ["oraclePid"] = null, ["serverPid"] = fault == "production-controller" ? 2 : null };
         var checks = value["checks"]!.AsObject();
+        if (PublicStageFaults.Contains(fault, StringComparer.Ordinal)) checks["STAGE_SETTLED_PUBLIC"] = true;
+        if (PublicExtraFaults.Contains(fault, StringComparer.Ordinal) || PublicStageFaults.Contains(fault, StringComparer.Ordinal)) value["stage"] = "PUBLIC_ENTRY";
         if (fault == "missing-predicate") checks.Remove("PUBLIC_ENTRY");
         if (fault is "invalid-result" or "cross-component" or "relay-malformed" or "relay-timeout")
         {
@@ -137,13 +143,13 @@ internal static class FiniteRecoveryCoordinator
         else if (fault == "unexpected-output") { value["rawOutputRejected"] = true; value["supervisor"]!["OUTPUT_CONTAINED"] = false; }
         else if (fault == "unexpected-artifact") { value["surfaceClean"] = false; Failed("SURFACE_FAILED"); }
         else if (fault == "cleanup") { value["cleanupCompleted"] = false; Failed("CLEANUP_FAILED"); }
-        else if (fault == "child-timeout") { value["timedOut"] = true; Failed("SUPERVISOR_TIMEOUT"); }
+        else if (PublicCancelFaults.Contains(fault, StringComparer.Ordinal)) { value["timedOut"] = true; Failed("SUPERVISOR_TIMEOUT"); }
         else
         {
             var code = fault switch
             {
-                "unarmed" or "duplicate" or "wrong-page" => "ADMISSION_REJECTED", "wrong-bytes" => "BYTES_MISMATCH", "oversize" => "SIZE_LIMIT",
-                "outside-identity" => "PATH_REJECTED", "stream-error" => "STREAM_FAILED", "delete-error" => "DELETE_FAILED", "action-timeout" => "ACTION_FAILED", "fatal-rejection" => "SUPERVISOR_TIMEOUT", _ => null
+                "unarmed" or "duplicate" or "wrong-page" or "popup-extra" or "iframe-extra" or "simultaneous-extra" or "secondary-context-extra" => "ADMISSION_REJECTED", "wrong-bytes" => "BYTES_MISMATCH", "oversize" => "SIZE_LIMIT",
+                "outside-identity" => "PATH_REJECTED", "stream-error" or "stalled-partial-read" => "STREAM_FAILED", "delete-error" or "stalled-delete" => "DELETE_FAILED", "action-timeout" => "ACTION_FAILED", "fatal-rejection" => "SUPERVISOR_TIMEOUT", _ => null
             };
             if (code is not null) Failed(code);
         }
@@ -304,13 +310,25 @@ internal static class FiniteRecoveryCoordinator
     }
     private static bool ProtocolPublicNegatives()
     {
-        if (PublicFaults.Length != 28 || PublicFaults.Distinct(StringComparer.Ordinal).Count() != 28) return false;
+        if (PublicFaults.Length != 37 || PublicFaults.Distinct(StringComparer.Ordinal).Count() != 37) return false;
         foreach (var fault in PublicFaults)
         {
             var value = ProtocolPublic(fault); if (!ProtocolQualifies(value, fault) || ProtocolQualifies(value, "PUBLIC_NONFUNCTIONAL_UNREGISTERED")) return false;
             foreach (var key in ClosedPublicFacts) if (ProtocolQualifies(ProtocolChanged(value, key, false), fault)) return false;
             foreach (var key in ClosedPublicSupervisorFacts) { var copy = value.DeepClone().AsObject(); copy["supervisor"]![key] = false; if (ProtocolQualifies(copy, fault)) return false; }
             if (ProtocolQualifies(ProtocolChanged(value, "cleanupForced", true), fault) || ProtocolQualifies(ProtocolChanged(value, "exitCode", 7), fault)) return false;
+            if (PublicExtraFaults.Contains(fault, StringComparer.Ordinal) || PublicStageFaults.Contains(fault, StringComparer.Ordinal))
+            {
+                if (ProtocolQualifies(ProtocolChanged(value, "stage", "COMPLETE"), fault) || ProtocolQualifies(ProtocolChanged(value, "oracleGraceful", false), fault)) return false;
+                foreach (var id in SupervisorIds) { var copy = value.DeepClone().AsObject(); copy["supervisor"]![id] = false; if (ProtocolQualifies(copy, fault)) return false; }
+                foreach (var id in PublicTransferCheckIds)
+                {
+                    if (id == "STAGE_SETTLED_PUBLIC" && !PublicStageFaults.Contains(fault, StringComparer.Ordinal) || (id is "DOWNLOAD_ADMITTED" or "DOWNLOAD_REMOVED") && fault == "cancel-initiation") continue;
+                    var copy = value.DeepClone().AsObject(); copy["checks"]![id] = false; if (ProtocolQualifies(copy, fault)) return false;
+                    copy["checks"]!.AsObject().Remove(id); if (ProtocolQualifies(copy, fault)) return false;
+                }
+                if (ProtocolQualifies(ProtocolChanged(value, "timedOut", !PublicCancelFaults.Contains(fault, StringComparer.Ordinal)), fault)) return false;
+            }
         }
         foreach (var key in PublicProtocolPidFields) { var value = ProtocolPublic("production-controller"); value["publicOwnership"]![key] = -1; if (ProtocolAdmitted(value)) return false; }
         var badPath = ProtocolPublic("happy"); badPath["publicOwnership"]!["surface"] = "PUBLIC_NONFUNCTIONAL_RELATIVE"; return !ProtocolAdmitted(badPath);
@@ -506,7 +524,7 @@ internal static class FiniteRecoveryCoordinator
             (browserVersion.ValueKind != JsonValueKind.String || !Regex.IsMatch(browserVersion.GetString() ?? "", "^\\d{1,5}\\.\\d{1,5}\\.\\d{1,5}\\.\\d{1,5}$", RegexOptions.CultureInvariant))) throw new InvalidOperationException();
         if (value.GetProperty("exitCode") is { ValueKind: not JsonValueKind.Null } exit && (!exit.TryGetInt32(out var code) || code > 255)) throw new InvalidOperationException();
         FiniteTotpCoordinator.RequireKeys(value.GetProperty("supervisor"), SupervisorIds); foreach (var flag in value.GetProperty("supervisor").EnumerateObject()) if (flag.Value.ValueKind is not (JsonValueKind.True or JsonValueKind.False)) throw new InvalidOperationException();
-        var allowed = BrowserIds(journey).Concat(["PUBLIC_ENTRY", "ERROR_CONTAINED", "DOWNLOAD_ADMITTED", "DOWNLOAD_REMOVED", "PRODUCTION_CONTROLLER_PUBLIC", "FIXTURE_RELAY_PUBLIC"]).ToHashSet(StringComparer.Ordinal); var checkRows = value.GetProperty("checks").EnumerateObject().ToArray();
+        var allowed = BrowserIds(journey).Concat(["PUBLIC_ENTRY", "ERROR_CONTAINED", "DOWNLOAD_ADMITTED", "DOWNLOAD_REMOVED", "PRODUCTION_CONTROLLER_PUBLIC", "FIXTURE_RELAY_PUBLIC", "STAGE_SETTLED_PUBLIC"]).ToHashSet(StringComparer.Ordinal); var checkRows = value.GetProperty("checks").EnumerateObject().ToArray();
         if (checkRows.Select(x => x.Name).Distinct(StringComparer.Ordinal).Count() != checkRows.Length || checkRows.Any(x => !allowed.Contains(x.Name) || x.Value.ValueKind is not (JsonValueKind.True or JsonValueKind.False))) throw new InvalidOperationException();
         if (publicMode)
         {
@@ -549,14 +567,20 @@ internal static class FiniteRecoveryCoordinator
         if (!True(value, "surfaceClean")) return false;
         if (fault == "cleanup") return childExit == 1 && !True(value, "cleanupCompleted") && value.GetProperty("failureCode").GetString() == "CLEANUP_FAILED";
         if (!True(value, "cleanupCompleted")) return false;
-        if (fault == "child-timeout") return childExit == 1 && True(value, "timedOut") && value.GetProperty("failureCode").GetString() == "SUPERVISOR_TIMEOUT" && True(value, "publicFaultObserved");
+        if (PublicExtraFaults.Contains(fault, StringComparer.Ordinal) || PublicStageFaults.Contains(fault, StringComparer.Ordinal))
+        {
+            if (value.GetProperty("stage").GetString() != "PUBLIC_ENTRY" || !True(value, "oracleGraceful") || SupervisorIds.Any(id => !True(value.GetProperty("supervisor"), id))) return false;
+            if (PublicExtraFaults.Contains(fault, StringComparer.Ordinal) && (!True(checks, "DOWNLOAD_ADMITTED") || !True(checks, "DOWNLOAD_REMOVED"))) return false;
+            if (PublicStageFaults.Contains(fault, StringComparer.Ordinal) && (!True(checks, "STAGE_SETTLED_PUBLIC") || fault != "cancel-initiation" && (!True(checks, "DOWNLOAD_ADMITTED") || !True(checks, "DOWNLOAD_REMOVED")))) return false;
+        }
+        if (PublicCancelFaults.Contains(fault, StringComparer.Ordinal)) return childExit == 1 && True(value, "timedOut") && value.GetProperty("failureCode").GetString() == "SUPERVISOR_TIMEOUT" && True(value, "publicFaultObserved") && (fault == "child-timeout" || value.GetProperty("status").GetString() == "BOUNDARY_FAILED");
         if (True(value, "timedOut")) return false;
         if (fault.StartsWith("oracle-", StringComparison.Ordinal)) return childExit == 0 && True(value, "publicFaultObserved") && (fault != "oracle-roundtrip" || True(value, "oracleGraceful"));
         if (fault == "happy") return childExit == 0 && value.GetProperty("status").GetString() == "PUBLIC_BOUNDARY_OK" && value.GetProperty("failureCode").GetString() == "NONE" && True(checks, "DOWNLOAD_ADMITTED") && True(checks, "DOWNLOAD_REMOVED");
         if (fault == "journey-entry") return childExit == 0 && True(checks, "ERROR_CONTAINED") && True(value, "publicFaultObserved");
         if (fault == "production-controller") return childExit == 0 && True(value, "publicFaultObserved") && value.GetProperty("publicOwnership").GetProperty("serverPid").ValueKind == JsonValueKind.Number && True(checks, "PRODUCTION_CONTROLLER_PUBLIC") && True(checks, "DOWNLOAD_ADMITTED") && True(checks, "DOWNLOAD_REMOVED");
         if (fault == "relay-roundtrip") return childExit == 0 && value.GetProperty("status").GetString() == "PUBLIC_BOUNDARY_OK" && value.GetProperty("failureCode").GetString() == "NONE" && True(value, "publicFaultObserved") && True(checks, "FIXTURE_RELAY_PUBLIC");
-        var expected = fault switch { "unarmed" or "duplicate" or "wrong-page" => "ADMISSION_REJECTED", "wrong-bytes" => "BYTES_MISMATCH", "oversize" => "SIZE_LIMIT", "outside-identity" => "PATH_REJECTED", "stream-error" => "STREAM_FAILED", "delete-error" => "DELETE_FAILED", "action-timeout" => "ACTION_FAILED", "fatal-rejection" => "SUPERVISOR_TIMEOUT", _ => "INVALID" };
+        var expected = fault switch { "unarmed" or "duplicate" or "wrong-page" or "popup-extra" or "iframe-extra" or "simultaneous-extra" or "secondary-context-extra" => "ADMISSION_REJECTED", "wrong-bytes" => "BYTES_MISMATCH", "oversize" => "SIZE_LIMIT", "outside-identity" => "PATH_REJECTED", "stream-error" or "stalled-partial-read" => "STREAM_FAILED", "delete-error" or "stalled-delete" => "DELETE_FAILED", "action-timeout" => "ACTION_FAILED", "fatal-rejection" => "SUPERVISOR_TIMEOUT", _ => "INVALID" };
         return childExit == 1 && value.GetProperty("status").GetString() == "BOUNDARY_FAILED" && value.GetProperty("failureCode").GetString() == expected && True(value, "publicFaultObserved");
     }
     private static async Task<bool> InspectOwnerOutcomeAsync(string connectionString, BrowserTestRecoveryCodes profile, bool completed, CancellationToken token)

@@ -1,5 +1,5 @@
 import {createRecoveryAccountMechanics} from '../../totp/sensitive/real-journey.mjs';
-import {budgets, fixedError, requireTrue, observedMap, journeys, registeredJourney} from './contract.mjs';
+import {budgets, fixedError, requireTrue, bounded, observedMap, journeys, registeredJourney} from './contract.mjs';
 
 // Imported only by the protected child. No process, artifact, reporter or file API.
 // The committed dispatcher remains closed; root must qualify and separately open it.
@@ -14,7 +14,7 @@ const privateFill=async(locator,value)=>{try{await locator.fill(value);}catch{th
 
 class RecoveryJourney {
  constructor(input){
-  Object.assign(this,input);this.observations=observedMap(journeys[input.control.journeyId]);this.values=new Set();this.controlCalls=0;
+  Object.assign(this,input);this.observations=observedMap(journeys[input.control.journeyId]);this.values=new Set();this.controlCalls=0;this.pages=[input.page];this.headerFacts=[];
   this.method=input.control.journeyId.includes('_PASSWORD_')?'password':input.control.journeyId.includes('_PASSKEY_')?'passkey':'totp';
   this.kind=input.control.journeyId.startsWith('RECOVERY_REPLACE_')?'REPLACE':'GENERATE';
   this.mechanics=createRecoveryAccountMechanics({...input,origin:input.control.origin,mailpitOrigin:input.control.mailpitOrigin,journeyId:input.control.journeyId,runId:input.control.runId,remember:(...values)=>this.remember(...values),fixtureControl:action=>this.fixture(action)});
@@ -37,7 +37,7 @@ class RecoveryJourney {
   if(new URL(page.url()).pathname!==security)await page.goto(new URL(security,this.control.origin).href);
   await this.mechanics.at(page,security);const boot=await this.options(page);
   requireTrue(boot[kind==='GENERATE'?'canGenerate':'canReplace']===true);
-  const start=await this.mechanics.response(page,prefix+'/'+kind.toLowerCase()+'/start',()=>page.getByRole('button',{name:kind==='GENERATE'?'Generate codes':'Replace codes',exact:true}).click());
+  const start=await this.response(page,prefix+'/'+kind.toLowerCase()+'/start',()=>page.getByRole('button',{name:kind==='GENERATE'?'Generate codes':'Replace codes',exact:true}).click());
   const op=start.body;
   this.prove('EXACT_OWNER_AND_STEP_UP_BINDING',start.ok&&op.status==='PENDING_PROOF'&&op.ownerRequestId===start.sent.ownerRequestId&&op.expectedVersion===start.sent.expectedVersion&&op.kind===kind&&op.codesPerSet===boot.codesPerSet&&op.maximumCodesPerSet===boot.maximumCodesPerSet&&op.impact.canContinue===false);
   if(kind==='REPLACE'){
@@ -70,7 +70,7 @@ class RecoveryJourney {
    this.prove('BODY_LOSS_NO_REDISCLOSURE',safe.status==='COMPLETED'&&safe.codesUnavailable===true&&await page.locator('.recovery-codes-grid code').count()===0&&await page.getByRole('button',{name:'Download',exact:true}).count()===0&&!await page.getByRole('dialog').getByText('These codes were already shown',{exact:true}).count());
    this.prove('ACTUAL_PROOF_METHOD',this.method==='password');return{safe,sent,bodyLost:true};
   }
-  const response=await this.mechanics.response(page,route,submit);
+  const response=await this.response(page,route,submit);
   this.prove('EXACT_OWNER_AND_STEP_UP_BINDING',response.sent.requestId===held.proof.requestId);
   this.prove('ACTUAL_PROOF_METHOD',this.method==='password'?typeof response.sent.password==='string'&&response.sent.password===this.account.password:this.method==='passkey'?object(response.sent.credential)&&this.mechanics.passkeyStats().asserted===stats.asserted+1:response.sent.authenticatorReference===this.factor.reference&&/^\d{6}$/.test(response.sent.code));
   if(this.method==='passkey')this.prove('NATIVE_PASSKEY_PROOF',this.mechanics.passkeyStats().created===1&&this.mechanics.passkeyStats().asserted>stats.asserted);
@@ -85,7 +85,7 @@ class RecoveryJourney {
    requireTrue(current.ok&&native?.requestId===held.proof.requestId&&native.attemptId===response.sent.attemptId&&native.operationReference===op.operationReference&&native.status===(this.method==='passkey'?'PROOF_ISSUED':'PROOF_ACTIVE'));
    if(hold)return{held,response,native};
    const before=await this.counts(),assertions=this.mechanics.passkeyStats().asserted;
-   const resumed=await this.mechanics.response(page,route+'/continue',()=>dialog.getByRole('button',{name:'Continue this verification',exact:true}).click());
+   const resumed=await this.response(page,route+'/continue',()=>dialog.getByRole('button',{name:'Continue this verification',exact:true}).click());
    const after=await this.counts();
    this.prove('OWNER_FAILURE_SAME_PROOF',resumed.ok&&resumed.sent.requestId===response.sent.requestId&&resumed.sent.attemptId===response.sent.attemptId&&!Object.hasOwn(resumed.sent,'code')&&!Object.hasOwn(resumed.sent,'credential')&&after.proofs===before.proofs&&after.codeAcceptances===before.codeAcceptances&&after.ownerCommits===before.ownerCommits+1&&after.consumedProofs===before.consumedProofs+1&&this.mechanics.passkeyStats().asserted===assertions);
    return this.capture(held,resumed);
@@ -106,12 +106,33 @@ class RecoveryJourney {
   const duplicate=await this.mechanics.post(held.page,prefix+'/start-result',{ownerRequestId:held.op.ownerRequestId,expectedVersion:held.op.expectedVersion,kind:held.op.kind},boot.csrfToken),after=await this.counts();
   this.prove('DUPLICATE_NO_REDISCLOSURE',safe.status==='COMPLETED'&&safe.codesUnavailable===true&&duplicate.ok&&noDelivery(duplicate.body)&&sameOperation(held.op,duplicate.body)&&duplicate.body.status==='COMPLETED'&&sameCounts(before,after)&&noDelivery(boot)&&(!complete.codes||same(await held.page.locator('.recovery-codes-grid code').allTextContents(),complete.codes)));
  }
- async privacy(){
-  const state=await this.page.evaluate(()=>({url:location.href,referrer:document.referrer,name:window.name,history:JSON.stringify(history.state),local:Object.entries(localStorage),session:Object.entries(sessionStorage)}));
-  const cookies=await this.context.cookies(),protectedCookies=cookies.filter(c=>c.name.startsWith('__Host-'));
-  this.prove('COOKIE_FLAGS',protectedCookies.length>0&&protectedCookies.every(c=>c.httpOnly&&c.secure&&c.path==='/'&&['Strict','Lax'].includes(c.sameSite)));
-  const carrier=JSON.stringify({...state,cookies});this.prove('NO_SECRET_URL_OR_STORAGE',state.local.length===0&&state.session.length===0&&[...this.values].every(v=>!carrier.includes(v))&&!carrier.includes('otpauth://'));
+ async response(page,pathname,action){
+  // Observe selected protection headers on this exact response, never a broad payload listener.
+  const protection=page.waitForResponse(r=>new URL(r.url()).origin===this.control.origin&&new URL(r.url()).pathname===pathname&&r.request().method()==='POST',{timeout:budgets.action}).then(async r=>{const h=await r.allHeaders();return /(?:^|,)\s*no-store\s*(?:,|$)/i.test(h['cache-control']??'')&&h['referrer-policy']==='no-referrer';}).catch(()=>false);
+  const result=await this.mechanics.response(page,pathname,action);this.headerFacts.push(await protection);return result;
  }
+ async privacy(){
+  requireExpectedRecoveryPages(this.browser,this.pages);let safe=true,cookiesSafe=true,hadProtected=false,headersSafe=this.headerFacts.length>0&&this.headerFacts.every(Boolean);
+  for(const page of this.pages){
+   requireTrue(!page.isClosed());
+   const state=await bounded(page.evaluate(async()=>{
+    const registrations='serviceWorker'in navigator?await navigator.serviceWorker.getRegistrations():[];
+    const cacheNames='caches'in window?await caches.keys():[];
+    return{url:location.href,referrer:document.referrer,name:window.name,history:JSON.stringify(history.state),local:Object.entries(localStorage),session:Object.entries(sessionStorage),service_worker_controller:!!navigator.serviceWorker?.controller,service_worker_registrations:registrations.length,cache_storage_names:cacheNames.length};
+   }),budgets.action,'PREDICATE_FAILED');
+   const cookies=await page.context().cookies(),protectedCookies=cookies.filter(c=>c.name.startsWith('__Host-'));hadProtected ||= protectedCookies.length>0;
+   cookiesSafe &&= protectedCookies.every(c=>c.httpOnly&&c.secure&&c.path==='/'&&['Strict','Lax'].includes(c.sameSite));
+   const carrier=JSON.stringify({...state,cookies});safe &&= state.local.length===0&&state.session.length===0&&!state.service_worker_controller&&state.service_worker_registrations===0&&state.cache_storage_names===0&&[...this.values].every(v=>!carrier.includes(v))&&!carrier.includes('otpauth://');
+  }
+  // Safe metadata reads only. Error/status responses must retain the same protections.
+  for(const pathname of ['/authentication/session','/account/recovery-codes/options','/authentication/step-up/options']){
+   const response=await this.page.request.get(new URL(pathname,this.control.origin).href,{timeout:budgets.action,failOnStatusCode:false});
+   try{const h=response.headers();headersSafe &&= recoveryMetadataProtection(pathname,h);requireTrue(noDelivery((await this.mechanics.read(response)).body));}finally{await response.dispose();}
+  }
+  this.prove('COOKIE_FLAGS',cookiesSafe&&hadProtected);
+  this.prove('NO_SECRET_URL_OR_STORAGE',safe&&headersSafe);
+ }
+
  async clear({pagehide=false}={}){
   if(pagehide){
    // Real full-page departure. BFCache persistence is observed, never assumed.
@@ -147,9 +168,9 @@ class RecoveryJourney {
   }
   if(this.control.journeyId==='RECOVERY_REPLACE_PASSKEY_V1'){
    const pending=await this.begin(),retained=await this.proof(pending,{denial:true,hold:true});
-   const other=await this.mechanics.newPage();await this.mechanics.passwordLogin(other,this.account,false);
+   const other=await this.mechanics.newPage();this.pages.push(other);await this.mechanics.passwordLogin(other,this.account,false);
    await this.mechanics.revokePasskey(other,this.account.password);
-   const current=await this.counts(),rejected=await this.mechanics.response(this.page,'/authentication/step-up/passkey/continue',()=>this.page.getByRole('dialog').getByRole('button',{name:'Continue this verification',exact:true}).click()),end=await this.counts();
+   const current=await this.counts(),rejected=await this.response(this.page,'/authentication/step-up/passkey/continue',()=>this.page.getByRole('dialog').getByRole('button',{name:'Continue this verification',exact:true}).click()),end=await this.counts();
    this.prove('SOURCE_FRESHNESS',!rejected.ok&&['STEP_UP_REQUIRED','VERSION_CONFLICT'].includes(rejected.body.error_code)&&rejected.sent.requestId===retained.response.sent.requestId&&rejected.sent.attemptId===retained.response.sent.attemptId&&end.ownerCommits===current.ownerCommits&&end.sets===current.sets&&end.replacedSets===current.replacedSets&&end.entries===current.entries&&end.consumedProofs===current.consumedProofs&&noDelivery(rejected.body)&&await this.page.locator('.recovery-codes-grid code').count()===0);
   }
   await this.privacy();this.prove('STRICT_OWNED_SURFACE',await this.inspectOwnedSurface());
@@ -158,10 +179,26 @@ class RecoveryJourney {
 }
 
 export async function runPreparedJourney(input){
- requireTrue(registeredJourney(input.control?.journeyId)&&typeof input.fixtureControl==='function'&&typeof input.nativeCode==='function'&&typeof input.requestOwnedDownload==='function'&&typeof input.inspectOwnedSurface==='function','INPUT_INVALID');
+ requireTrue(registeredJourney(input.control?.journeyId)&&typeof input.browser?.contexts==='function'&&typeof input.onContext==='function'&&typeof input.fixtureControl==='function'&&typeof input.nativeCode==='function'&&typeof input.requestOwnedDownload==='function'&&typeof input.inspectOwnedSurface==='function','INPUT_INVALID');
  const run=new RecoveryJourney(input);let failed=false;
  try{await run.execute();}catch{failed=true;}
  try{run.observations.finish(input.check);}catch{failed=true;}
  try{await run.close();}catch{throw fixedError('CLEANUP_FAILED');}
  if(failed)throw fixedError('PREDICATE_FAILED');
+}
+
+/** Exact inventory of this positively owned browser only; closed/unobserved pages fail. */
+export function requireExpectedRecoveryPages(browser,pages){
+ requireTrue(Array.isArray(pages)&&pages.length>=1&&pages.length<=2&&new Set(pages).size===pages.length);
+ for(const page of pages)requireTrue(!page.isClosed());
+ const expectedContexts=[...new Set(pages.map(page=>page.context()))],contexts=browser.contexts();
+ requireTrue(contexts.length===expectedContexts.length&&contexts.every(context=>expectedContexts.includes(context)));
+ const actual=contexts.flatMap(context=>context.pages());requireTrue(actual.length===pages.length&&actual.every(page=>pages.includes(page)));
+}
+
+/** Exact existing route ownership, not a new global BFF header policy. */
+export function recoveryMetadataProtection(pathname,headers){
+ requireTrue(['/authentication/session','/account/recovery-codes/options','/authentication/step-up/options'].includes(pathname),'INPUT_INVALID');
+ const noStore=/(?:^|,)\s*no-store\s*(?:,|$)/i.test(headers['cache-control']??'');
+ return noStore&&(pathname==='/authentication/session'||headers['referrer-policy']==='no-referrer');
 }

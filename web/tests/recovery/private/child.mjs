@@ -3,10 +3,11 @@ import {dirname, join, resolve} from 'node:path';
 import {lstat, readdir, writeFile} from 'node:fs/promises';
 import {createAdmission} from '../sensitive/contract.mjs';
 import {createNativeOracle, fixedOracleAssembly} from '../../totp/sensitive/oracle-bridge.mjs';
-import {version, budgets, publicMarker, publicBody, fixedError, failureOf, requireTrue, bounded, exactKeys, validInitialize, oracleFaults, childAccepted, childChecks, validFixtureRequest, validFixtureResult, publicFixtureResult, recordPublicDownloadChecks} from './contract.mjs';
+import {version, budgets, publicMarker, publicBody, fixedError, failureOf, requireTrue, bounded, exactKeys, validInitialize, oracleFaults, childAccepted, childChecks, validFixtureRequest, validFixtureResult, publicFixtureResult, recordPublicDownloadChecks, publicCancelFaults, publicStageFaults, recordPublicStageCheck, publicExtraFaults, requireTwoDownloadRejection} from './contract.mjs';
 import {ownedSurface, privateMarkers, downloadIdentity, inspectSurface} from './surface.mjs';
 import {publicEntry, publicJourneyEntry, inspectRequestedDownload, runJourney} from './journeys.mjs';
 import {runControllerPublic} from './controller-public.mjs';
+import {createRecoveryAccountMechanics} from '../../totp/sensitive/real-journey.mjs';
 
 const abort = new AbortController(), checks = Object.create(null), admission = createAdmission(), downloads = [], markers = privateMarkers();
 let control, root, browser, context, page, oracle, browserVersion = null, stage = 'START', failedStage, failureCode = 'NONE';
@@ -26,29 +27,40 @@ const initial = new Promise((resolveInitial, reject) => {
     onFatal();
   });
 });
-let pendingDownload;
+const downloadAdmissions=[];let pendingDownload,downloadActionTask,downloadWaitSettled=true,downloadActionSettled=true;const publicTransferFacts={};
 function wire(owner) {
   owner.on('download', download => {
-    downloads.push(download); const accepted = admission.accept(owner);
+    downloads.push(download); const accepted = admission.accept(owner);downloadAdmissions.push(accepted);
     pendingDownload?.({download, accepted}); pendingDownload = null;
     if (!accepted && control?.mode !== 'public') { failureCode = 'ADMISSION_REJECTED'; abort.abort(); }
   });
 }
-async function request(owner) {
-  cancel(); const event = new Promise(resolveEvent => { pendingDownload = resolveEvent; });
-  await owner.locator('#download').click({timeout: budgets.action});
-  const value = await bounded(event, budgets.action, 'ACTION_FAILED'); cancel();
-  requireTrue(value.accepted, 'ADMISSION_REJECTED'); return value.download;
+async function waitForDownload(action){
+ cancel();requireTrue(!pendingDownload,'PROTOCOL_FAILED');downloadWaitSettled=false;downloadActionSettled=false;
+ let rejectEvent;const event=new Promise((resolve,reject)=>{pendingDownload=resolve;rejectEvent=reject;});event.catch(()=>{});
+ const interrupted=()=>rejectEvent(fixedError('SUPERVISOR_TIMEOUT'));abort.signal.addEventListener('abort',interrupted,{once:true});
+ downloadActionTask=Promise.resolve().then(action).finally(()=>{downloadActionSettled=true;});downloadActionTask.catch(()=>{});
+ try{await bounded(downloadActionTask,budgets.action,'ACTION_FAILED');const value=await bounded(event,budgets.action,'ACTION_FAILED');cancel();return value;}
+ finally{abort.signal.removeEventListener('abort',interrupted);pendingDownload=null;downloadWaitSettled=true;}
+}
+async function request(owner){
+ const value=await waitForDownload(()=>owner.locator('#download').click({timeout:budgets.action}));
+ requireTrue(value.accepted,'ADMISSION_REJECTED');return value.download;
+}
+async function rejectExtraDownload(owner){
+ try{await request(owner);throw fixedError('PREDICATE_FAILED');}
+ catch(error){requireTrue(failureOf(error)==='ADMISSION_REJECTED','PREDICATE_FAILED');requireTwoDownloadRejection(downloads.length,downloadAdmissions);throw fixedError('ADMISSION_REJECTED');}
 }
 async function requestOwnedDownload(owner,expected){
- cancel();admission.arm(owner);const count=downloads.length,event=new Promise(resolve=>{pendingDownload=resolve;});
- await owner.getByRole('button',{name:'Download',exact:true}).click({timeout:budgets.action});const value=await bounded(event,budgets.action,'ACTION_FAILED');
+ cancel();admission.arm(owner);const count=downloads.length;
+ const value=await waitForDownload(()=>owner.getByRole('button',{name:'Download',exact:true}).click({timeout:budgets.action}));
  const capability=value.download.url(),expectedOrigin=new URL(owner.url()).origin;
  requireTrue(value.accepted&&value.download.suggestedFilename()==='tunner-backup-codes.txt'&&capability.startsWith('blob:'+expectedOrigin+'/')&&/^[a-f0-9-]{36}$/.test(capability.slice(('blob:'+expectedOrigin+'/').length)),'ADMISSION_REJECTED');
  await inspectRequestedDownload(value.download,root,expected,{signal:abort.signal});admission.settle();
  await owner.getByRole('button',{name:'Download',exact:true}).dispatchEvent('click');await owner.evaluate(()=>new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r))));requireTrue(downloads.length===count+1,'ADMISSION_REJECTED');
  recordPublicDownloadChecks(control.mode,checks);
 }
+
 const nativeCode=async(seed,offset=0)=>{if(!oracle){oracleExited=false;oracleGraceful=false;oracle=await createNativeOracle({oracleAssemblyPath:fixedOracleAssembly,oracleNativeVersion:'10.0.13',publicFault:null},root.path,abort.signal);}return oracle.nativeCode(seed,offset);};
 try {
   const surface = await initial; stage = 'ENVIRONMENT';
@@ -63,7 +75,7 @@ try {
   context = await browser.newContext({acceptDownloads: true, serviceWorkers: 'block'}); context.on('page', wire);
   page = await context.newPage(); page.setDefaultTimeout(budgets.action);
   if (control.mode === 'live') {
-    stage = 'JOURNEY'; await runJourney({control, page, context, browser, signal: abort.signal, markers, fixtureControl, nativeCode, requestOwnedDownload, inspectOwnedSurface:async()=> (await inspectSurface(root,{markers})).clean, check(id, flag) { if (!childChecks.includes(id) || Object.hasOwn(checks, id) || typeof flag !== 'boolean') throw fixedError('PREDICATE_FAILED'); checks[id] = flag; if (!flag) throw fixedError('PREDICATE_FAILED'); }});
+    stage = 'JOURNEY'; await runJourney({control, page, context, browser, signal: abort.signal, markers, fixtureControl, nativeCode, onContext:ownedContext=>ownedContext.on('page',wire), requestOwnedDownload, inspectOwnedSurface:async()=> (await inspectSurface(root,{markers})).clean, check(id, flag) { if (!childChecks.includes(id) || Object.hasOwn(checks, id) || typeof flag !== 'boolean') throw fixedError('PREDICATE_FAILED'); checks[id] = flag; if (!flag) throw fixedError('PREDICATE_FAILED'); }});
   } else {
     stage = 'PUBLIC_ENTRY'; const fault = control.publicFault;
     const body = fault === 'wrong-bytes' ? 'PUBLIC WRONG NONFUNCTIONAL FIXTURE' : fault === 'oversize' ? publicBody.repeat(Math.ceil((budgets.maximumDownloadBytes + 1) / publicBody.length)) : publicBody;
@@ -80,26 +92,55 @@ try {
     else if (fault === 'missing-predicate' || fault === 'cross-component') publicFaultObserved = true;
     else if (fault === 'action-timeout') { try { await page.locator('#public-does-not-exist').click({timeout: 200}); } catch { publicFaultObserved = true; throw fixedError('ACTION_FAILED'); } }
     else if (fault === 'fatal-rejection') { void Promise.reject(new Error(publicMarker)); await new Promise(resolveTurn => setTimeout(resolveTurn, 20)); publicFaultObserved = fatal; cancel(); }
+    else if(fault==='cancel-initiation'){
+      admission.arm(page);await page.locator('#download').evaluate(button=>{const copy=button.cloneNode(true);button.replaceWith(copy);copy.addEventListener('click',()=>{copy.dataset.initiated='true';});});
+      const waiting=request(page);waiting.catch(()=>{});await page.waitForFunction(()=>document.querySelector('#download').dataset.initiated==='true');
+      await bounded(downloadActionTask,budgets.action,'ACTION_FAILED');publicTransferFacts.initiated=true;
+      await send({version,type:'recoveryPrivateArmed',publicFault:fault});await waiting;
+    }
     else if (fault === 'child-timeout') { await send({version, type: 'recoveryPrivateArmed', publicFault: fault}); await new Promise(resolveAbort => { if (abort.signal.aborted) resolveAbort(); else abort.signal.addEventListener('abort', resolveAbort, {once: true}); }); publicFaultObserved = true; cancel(); }
     else {
       if (fault !== 'unarmed') admission.arm(page);
       let owner = page; if (fault === 'wrong-page') { owner = await context.newPage(); await publicEntry(owner); }
+      let simultaneous;
+      if(fault==='simultaneous-extra'){
+       await page.evaluate(body=>document.querySelector('#download').addEventListener('click',()=>{const url=URL.createObjectURL(new Blob([body],{type:'text/plain'})),anchor=document.createElement('a');anchor.href=url;anchor.download='public-extra.txt';anchor.click();setTimeout(()=>URL.revokeObjectURL(url),1000);}),publicBody);
+       simultaneous=page.waitForEvent('download',{predicate:()=>downloads.length>=2,timeout:budgets.action});simultaneous.catch(()=>{});
+      }
       const download = await request(owner);
+      if(publicExtraFaults.includes(fault))checks.DOWNLOAD_ADMITTED=true;
+      if(simultaneous){await simultaneous;requireTwoDownloadRejection(downloads.length,downloadAdmissions);throw fixedError('ADMISSION_REJECTED');}
+      if(publicStageFaults.includes(fault))checks.DOWNLOAD_ADMITTED=true;
       if (fault === 'outside-identity') { await downloadIdentity(root, resolve(root.path, '..', 'not-an-owned-download')); throw fixedError(); }
       const expected = Buffer.from(publicBody);
       try {
-        const identity = await inspectRequestedDownload(download, root, expected, {signal: abort.signal, fault});
+        const identity = await inspectRequestedDownload(download, root, expected, {signal:abort.signal,fault,publicFacts:publicTransferFacts,onPublicStage:phase=>{if((fault==='cancel-stream-read'&&phase==='PARTIAL_READ')||(fault==='cancel-delete'&&phase==='DELETE_STARTED'))void send({version,type:'recoveryPrivateArmed',publicFault:fault});}});
         try { await lstat(identity.path); throw fixedError('DELETE_FAILED'); } catch (error) { if (error?.code !== 'ENOENT') throw error; }
         admission.settle(); checks.DOWNLOAD_ADMITTED = true; checks.DOWNLOAD_REMOVED = true;
       } finally { expected.fill(0); }
       if (fault === 'duplicate') await request(page);
+      if(fault==='popup-extra'){
+       await page.evaluate(()=>{const button=document.createElement('button');button.id='open-public-popup';button.textContent='Open public popup';button.onclick=()=>window.open('about:blank');document.body.append(button);});
+       const pending=page.waitForEvent('popup',{timeout:budgets.action});pending.catch(()=>{});await page.locator('#open-public-popup').click();const popup=await pending;await publicEntry(popup);await rejectExtraDownload(popup);
+      }
+      if(fault==='secondary-context-extra'){
+       // Constructor/newPage only: no bootstrap, BFF, fixture account or oracle call.
+       // This is the same required recovery onContext capability used by live preparation.
+       const mechanics=createRecoveryAccountMechanics({page,context,browser,origin:'https://localhost:24443',mailpitOrigin:'http://127.0.0.1:28025',runId:control.runId,journeyId:control.journeyId,signal:abort.signal,remember:()=>{},nativeCode:async()=>{throw fixedError('DEPENDENCY_NOT_READY');},fixtureControl:async()=>{throw fixedError('DEPENDENCY_NOT_READY');},onContext:ownedContext=>ownedContext.on('page',wire)});
+       try{const secondary=await mechanics.newPage();await publicEntry(secondary);await rejectExtraDownload(secondary);}finally{await bounded(mechanics.close(),budgets.close,'CLEANUP_FAILED');}
+      }
+      if(fault==='iframe-extra'){
+       await page.evaluate(()=>{const frame=document.createElement('iframe');frame.id='public-extra-frame';frame.src='about:blank';document.body.append(frame);});
+       const handle=await page.locator('#public-extra-frame').elementHandle(),frame=await handle.contentFrame();requireTrue(!!frame);try{await publicEntry(frame);await rejectExtraDownload(frame);}finally{await handle.dispose();}
+      }
+
       if (fault === 'unexpected-artifact') await writeFile(join(root.path, 'unexpected-public-artifact.txt'), publicMarker, {flag: 'wx'});
       if (fault === 'unexpected-output' || fault === 'invalid-result' || fault === 'cleanup') publicFaultObserved = true;
     }
   }
 } catch (error) {
   failureCode = failureOf(error); failedStage = stage;
-  const expected = {unarmed: 'ADMISSION_REJECTED', duplicate: 'ADMISSION_REJECTED', 'wrong-page': 'ADMISSION_REJECTED', 'wrong-bytes': 'BYTES_MISMATCH', oversize: 'SIZE_LIMIT', 'outside-identity': 'PATH_REJECTED', 'stream-error': 'STREAM_FAILED', 'delete-error': 'DELETE_FAILED', 'action-timeout': 'ACTION_FAILED', 'child-timeout': 'SUPERVISOR_TIMEOUT', 'fatal-rejection': 'SUPERVISOR_TIMEOUT'};
+  const expected = {unarmed: 'ADMISSION_REJECTED', duplicate: 'ADMISSION_REJECTED', 'wrong-page': 'ADMISSION_REJECTED', 'wrong-bytes': 'BYTES_MISMATCH', oversize: 'SIZE_LIMIT', 'outside-identity': 'PATH_REJECTED', 'stream-error': 'STREAM_FAILED', 'delete-error': 'DELETE_FAILED', 'action-timeout': 'ACTION_FAILED', 'child-timeout': 'SUPERVISOR_TIMEOUT', 'fatal-rejection': 'SUPERVISOR_TIMEOUT', 'popup-extra':'ADMISSION_REJECTED','iframe-extra':'ADMISSION_REJECTED','simultaneous-extra':'ADMISSION_REJECTED','secondary-context-extra':'ADMISSION_REJECTED','cancel-initiation':'SUPERVISOR_TIMEOUT','stalled-partial-read':'STREAM_FAILED','cancel-stream-read':'SUPERVISOR_TIMEOUT','stalled-delete':'DELETE_FAILED','cancel-delete':'SUPERVISOR_TIMEOUT'};
   if (control?.mode === 'public' && expected[control.publicFault] === failureCode) publicFaultObserved = true;
 } finally {
   stage = 'CLEANUP'; admission.close(); pendingDownload = null;
@@ -110,6 +151,11 @@ try {
   let downloadsRemoved = downloads.length === 0;
   if (root && downloads.length) { try { downloadsRemoved = (await readdir(join(root.path, 'downloads'))).length === 0; } catch (error) { downloadsRemoved = error?.code === 'ENOENT'; } }
   try { if (root) { surfaceClean = (await inspectSurface(root, {markers})).clean; checks.SURFACE_CHECKED = true; } } catch {}
+  if(control?.mode==='public'&&publicExtraFaults.includes(control.publicFault))checks.DOWNLOAD_REMOVED=downloadsRemoved;
+  if(control?.mode==='public'&&publicStageFaults.includes(control.publicFault)){
+   const fault=control.publicFault,settled=fault==='cancel-initiation'?publicTransferFacts.initiated===true&&downloadWaitSettled&&downloadActionSettled:fault.includes('read')?publicTransferFacts.partialRead===true&&publicTransferFacts.readSettled===true:publicTransferFacts.deleteStarted===true&&publicTransferFacts.deleteSettled===true&&publicTransferFacts.deleteWaitSettled===true;
+   recordPublicStageCheck(control.mode,checks,settled);if(downloads.length)checks.DOWNLOAD_REMOVED=downloadsRemoved;
+  }
   cleanupCompleted = contextClosed && browserClosed && serverExited && oracleExited && downloadsRemoved;
   if (control?.publicFault === 'unexpected-artifact' && !surfaceClean) { publicFaultObserved = true; failureCode = 'SURFACE_FAILED'; }
   if (control?.publicFault === 'cleanup') { cleanupCompleted = false; failureCode = 'CLEANUP_FAILED'; }

@@ -7,7 +7,7 @@ import {fileURLToPath} from 'node:url';
 import {childEnvironment, stopOwnedChild} from '../../totp/sensitive/supervisor.mjs';
 import {PrivateFrameReader, writePrivateFrame} from '../../totp/sensitive/private-frames.mjs';
 import {sameCanonicalPath} from '../../totp/sensitive/contract.mjs';
-import {version, budgets, publicMarker, validControl, validChildResult, validCleanup, childAccepted, exactKeys, oracleFaults, bounded, validFixtureRequest, validFixtureResult, fixtureCountKeys} from './contract.mjs';
+import {version, budgets, publicMarker, validControl, validChildResult, validCleanup, childAccepted, exactKeys, oracleFaults, bounded, validFixtureRequest, validFixtureResult, fixtureCountKeys, publicCancelFaults} from './contract.mjs';
 import {ownedSurface, removeOwnedSurface, inspectSurface, privateMarkers} from './surface.mjs';
 
 const repository = await realpath(fileURLToPath(new URL('../../../../', import.meta.url)));
@@ -43,7 +43,7 @@ export async function runScenario(control, {signal, publicProgress = false, fixt
     child.stdout.on('data', consume); child.stderr.on('data', consume);
     child.on('error', () => { protocolFailed = true; cancel(); });
     child.on('message', message => {
-      if (control.mode === 'public' && exactKeys(message, ['version', 'type', 'publicFault']) && message.version === version && message.type === 'recoveryPrivateArmed' && message.publicFault === 'child-timeout' && control.publicFault === 'child-timeout') { clearTimeout(timer); timer = setTimeout(cancel, 250); return; }
+      if (control.mode === 'public' && exactKeys(message, ['version', 'type', 'publicFault']) && message.version === version && message.type === 'recoveryPrivateArmed' && publicCancelFaults.includes(message.publicFault) && control.publicFault === message.publicFault) { clearTimeout(timer); timer = setTimeout(cancel, 250); return; }
       // Existing fixed oracle bridge publishes only its positively spawned PID.
       if (control.mode === 'public' && oracleFaults.includes(control.publicFault) && exactKeys(message, ['version', 'type', 'kind', 'processId']) && message.version === 3 && message.type === 'publicProcess' && message.kind === 'ORACLE' && Number.isSafeInteger(message.processId) && message.processId > 0 && !oracleProcessRecorded) { oracleProcessRecorded = true; oraclePid = message.processId; ownership('ORACLE'); return; }
       if(control.mode==='public'&&control.publicFault==='production-controller'&&exactKeys(message,['version','type','kind','processId'])&&message.version===version&&message.type==='publicProcess'&&message.kind==='PUBLIC_SERVER'&&Number.isSafeInteger(message.processId)&&message.processId>0&&serverPid===null){serverPid=message.processId;ownership('PUBLIC_SERVER');return;}
