@@ -72,10 +72,12 @@ internal sealed class BrowserTestTotp(string origin, string journeyId, string co
             "finite-test-mfa-requirement-v1", "SYNTHETIC-FINITE-TEST-ONLY", Interval(request.EffectiveAt), TimeSpan.FromMinutes(2));
     }
     public TotpPresentation RequirePublished(TotpPolicy policy) => new("en", PublishedContent());
-    internal static IEnumerable<RegistrationPublishedText> PublishedContent()
+    internal static IEnumerable<RegistrationPublishedText> PublishedContent(bool includeStepUp = false)
     {
         using var source = JsonDocument.Parse(File.ReadAllText(Path.Combine(AppContext.BaseDirectory, "browser-test-totp-content.json")));
-        return source.RootElement.GetProperty("content").EnumerateObject().Select(property => new RegistrationPublishedText(property.Name,
+        IEnumerable<JsonProperty> values = source.RootElement.GetProperty("content").EnumerateObject();
+        if (includeStepUp) values = values.Concat(source.RootElement.GetProperty("step_up_content").EnumerateObject());
+        return values.Select(property => new RegistrationPublishedText(property.Name,
             "synthetic-finite-test", "synthetic-finite-test-v1", "SYNTHETIC-FINITE-TEST-NOT-A-PUBLICATION", "en", "PUBLISHED", property.Value.GetString()!)).ToArray();
     }
     internal bool ConsumeOwnerFailure() => Interlocked.Exchange(ref denyOwner, 0) == 1;

@@ -50,7 +50,7 @@ internal sealed class BrowserTestStepUpPresentation(IEnumerable<BrowserTestTotp>
         using var source = JsonDocument.Parse(File.ReadAllText(Path.Combine(AppContext.BaseDirectory, "browser-test-step-up-content.json")));
         var values = source.RootElement.GetProperty("content").EnumerateObject().Select(p =>
             new RegistrationPublishedText(p.Name,"synthetic-local-test","synthetic-local-test","SYNTHETIC-LOCAL-TEST-ONLY","en","PUBLISHED",p.Value.GetString()!)).ToArray();
-        return new("en", finite ? values.Concat(BrowserTestTotp.PublishedContent()).GroupBy(value => value.Key, StringComparer.Ordinal).Select(group => group.Last()) : values);
+        return new("en", finite ? values.Concat(BrowserTestTotp.PublishedContent(includeStepUp: true)).GroupBy(value => value.Key, StringComparer.Ordinal).Select(group => group.Last()) : values);
     }
 }
 internal static class BrowserTestStepUpAssets
