@@ -52,4 +52,7 @@ public interface IRecoveryCodeMutationAdmissionSource
 {
     /// <summary>Local trusted authority only. No provider/network I/O or mutation; caller already holds common owner locks.</summary>
     ValueTask<RecoveryCodeMutationAdmission> RequireAsync(RecoveryCodeMutationAdmissionRequest request, CancellationToken cancellationToken);
+    /// <summary>Pure synchronous current resolution at the final decision instant, using the original pre-mutation facts.
+    /// No network/provider I/O, transaction mutation, cached-decision fallback or irrevocability assumption.</summary>
+    RecoveryCodeMutationAdmission RequireCurrent(RecoveryCodeMutationAdmissionRequest request);
 }

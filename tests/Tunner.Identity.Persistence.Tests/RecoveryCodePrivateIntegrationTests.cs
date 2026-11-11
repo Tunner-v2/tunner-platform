@@ -25,6 +25,10 @@ public sealed class RecoveryCodePrivateIntegrationTests(IdentityPostgresFixture 
         internal bool Published { get; set; } = true;
         internal string PublicationVersion { get; set; } = "fixture-recovery-publication-v1";
         internal int PublicationReads { get; private set; }
+        internal bool RetireFirstOnly { get; set; }
+        internal string FinalAdmissionChange { get; set; } = "unchanged";
+        internal int FinalAdmissionReads { get; private set; }
+        internal bool FinalFactsOriginal { get; private set; }
         internal EffectivePolicyInterval PublicationInterval { get; set; } = Interval;
         internal static EffectivePolicyInterval Interval => new(new(2020, 1, 1, 0, 0, 0, TimeSpan.Zero), true, new DateTimeOffset(2040, 1, 1, 0, 0, 0, TimeSpan.Zero), false);
         internal Profile() => Policy = new("fixture-recovery-v1", Origin, Crypto, "NATIVE_HEX32_V1", "fixture-recovery-delivery-v1", TimeSpan.FromMinutes(5), TimeSpan.FromMinutes(5),
@@ -32,11 +36,29 @@ public sealed class RecoveryCodePrivateIntegrationTests(IdentityPostgresFixture 
             RecoveryCodeSessionEffect.NoSessionMutation, RecoveryCodeDeliveryMechanism.OneVolatileViewWithOptionalSingleLocalDownload, "fixture-recovery-proof", "fixture-recovery-proof",
             20, 100, "fixture-processing", "fixture-retention");
         public RecoveryCodePolicyVersion RequireEffective(DateTimeOffset at) => new(new(Policy.Version, "ACTIVE", "RECOVERY_CODES", Interval, null, ["SYNTHETIC-TEST-ONLY"]), Policy);
-        public ValueTask<RecoveryCodeMutationAdmission> RequireAsync(RecoveryCodeMutationAdmissionRequest request, CancellationToken ct)
+        public ValueTask<RecoveryCodeMutationAdmission> RequireAsync(RecoveryCodeMutationAdmissionRequest request, CancellationToken ct) => ValueTask.FromResult(Decide(request));
+        private RecoveryCodeMutationAdmission Decide(RecoveryCodeMutationAdmissionRequest request)
         {
-            var targets = request.Kind == "REPLACE" ? request.ActiveSets.Select(x => new RecoveryCodeRetirementTarget(x.SetReference, x.LifecycleVersion)).ToArray() : [];
+            var candidates = RetireFirstOnly ? request.ActiveSets.Take(1) : request.ActiveSets;
+            var targets = request.Kind == "REPLACE" ? candidates.Select(x => new RecoveryCodeRetirementTarget(x.SetReference, x.LifecycleVersion)).ToArray() : [];
             var allowed = request.Kind == "GENERATE" ? request.ActiveSets.Count < Policy.MaximumActiveSets : targets.Length != 0;
-            return ValueTask.FromResult(new RecoveryCodeMutationAdmission(request.AccountId, request.AccountVersion, request.Kind, request.FactsDigest, allowed, targets, "fixture-recovery-admission", "fixture-evidence", Interval));
+            return new(request.AccountId, request.AccountVersion, request.Kind, request.FactsDigest, allowed, targets, "fixture-recovery-admission", "fixture-evidence", Interval);
+        }
+        public RecoveryCodeMutationAdmission RequireCurrent(RecoveryCodeMutationAdmissionRequest request)
+        {
+            FinalAdmissionReads++;
+            FinalFactsOriginal = request.PolicyVersion == Policy.Version && request.ActiveSets.Count == 2 &&
+                request.ActiveSets.All(x => x.LifecycleVersion == 1 && x.UsageVersion == 0 && x.RemainingCodeCount == Crypto.CodesPerSet);
+            var decision = Decide(request);
+            if (FinalAdmissionChange == "missing") throw new InvalidOperationException("Synthetic final admission is unavailable.");
+            var targets = FinalAdmissionChange == "target"
+                ? request.ActiveSets.Skip(1).Take(1).Select(x => new RecoveryCodeRetirementTarget(x.SetReference, x.LifecycleVersion)).ToArray()
+                : decision.RetirementTargets.ToArray();
+            return new(request.AccountId, request.AccountVersion, request.Kind, request.FactsDigest,
+                decision.Allowed && FinalAdmissionChange != "withdrawal", targets,
+                FinalAdmissionChange == "policy" ? "fixture-recovery-admission-v2" : decision.PolicyVersion,
+                FinalAdmissionChange == "evidence" ? "fixture-evidence-v2" : decision.EvidenceReference,
+                FinalAdmissionChange == "interval" ? new(Interval.From, true, request.EffectiveAt, false) : Interval);
         }
         public RecoveryCodePresentation RequirePublished(RecoveryCodePolicy policy, RecoveryCodeImpactFacts facts, DateTimeOffset at)
         {
@@ -151,6 +173,52 @@ public sealed class RecoveryCodePrivateIntegrationTests(IdentityPostgresFixture 
         Assert.True(await check.Set<RecoveryCodeOperationRow>().AllAsync(x => x.State == "PENDING_PROOF"));
         Assert.True(await check.Set<StepUpProofRow>().CountAsync(x => x.State == "CONSUMED") == 0);
         Assert.True(await check.Set<OutboxMessage>().CountAsync(x => x.EventType == "RecoveryCodeSetGenerated") == 0);
+    }
+
+    [Theory]
+    [InlineData("withdrawal")]
+    [InlineData("policy")]
+    [InlineData("evidence")]
+    [InlineData("target")]
+    [InlineData("interval")]
+    [InlineData("missing")]
+    [InlineData("unchanged")]
+    public async Task OwnerAdmissionChangeAfterApplyUsesOriginalFactsAndRejectsDrift(string change)
+    {
+        await using var db = await fixture.CreateDatabaseAsync(); var profile = new Profile { RetireFirstOnly = true };
+        await using var host = await Host(db, profile); await host.SeedAsync(db);
+        using var first = await Generate(host, await Login(host)); using var second = await Generate(host, first.Pending.Cookies);
+        var pending = await Begin(host, second.Pending.Cookies, "REPLACE");
+        var readsBeforeProof = profile.PublicationReads; var admissionsBeforeProof = profile.FinalAdmissionReads; var injected = false;
+        host.Access.BeforeDecision = request =>
+        {
+            if (injected || profile.PublicationReads <= readsBeforeProof || request.Operation != "SESSION_USE") return;
+            injected = true; profile.FinalAdmissionChange = change;
+        };
+        using var response = await Prove(host, pending); using var body = await response.Content.ReadFromJsonAsync<JsonDocument>();
+        Assert.True(injected && profile.FinalAdmissionReads > admissionsBeforeProof && profile.FinalFactsOriginal);
+        var positive = change == "unchanged";
+        Assert.True(positive ? response.StatusCode == HttpStatusCode.OK : response.StatusCode != HttpStatusCode.OK);
+        Assert.True(body!.RootElement.TryGetProperty("recoveryCodeFirstDelivery", out var delivery) == positive);
+        if (positive) Assert.True(delivery.GetProperty("ownerRequestId").GetGuid() == pending.Request && delivery.GetProperty("setReference").GetGuid() == pending.Set && delivery.GetProperty("codes").GetArrayLength() == profile.Crypto.CodesPerSet);
+        await using var check = db.Context();
+        var operation = await check.Set<RecoveryCodeOperationRow>().SingleAsync(x => x.OperationId == pending.Operation);
+        Assert.True(positive ? operation.State == "COMPLETED" && operation.Version == 2 : operation.State == "PENDING_PROOF" && operation.Version == 1 && operation.ProofReference == null && operation.CompletedAt == null && operation.FirstResponseCommittedAt == null);
+        Assert.True(await check.Set<RecoveryCodeSetRow>().CountAsync() == (positive ? 3 : 2));
+        Assert.True(await check.Set<RecoveryCodeSetRow>().CountAsync(x => x.State == "ACTIVE") == 2);
+        Assert.True(await check.Set<RecoveryCodeSetRow>().CountAsync(x => x.State == "REPLACED") == (positive ? 1 : 0));
+        Assert.True(await check.Set<RecoveryCodeEntryRow>().CountAsync() == (positive ? 6 : 4));
+        Assert.True(await check.Set<StepUpProofRow>().CountAsync(x => x.State == "CONSUMED") == (positive ? 3 : 2));
+        Assert.True(await check.Set<OutboxMessage>().CountAsync(x => x.EventType == "RecoveryCodeSetGenerated") == 2);
+        Assert.True(await check.Set<OutboxMessage>().CountAsync(x => x.EventType == "RecoveryCodeSetReplaced") == (positive ? 1 : 0));
+        if (!positive)
+        {
+            Assert.True(await check.Set<RecoveryCodeSetRow>().AllAsync(x => x.State == "ACTIVE" && x.LifecycleVersion == 1 && x.UsageVersion == 0 && x.RetiredAt == null && x.RetiredByOperationId == null));
+            Assert.True(await check.Set<StepUpProofRow>().AnyAsync(x => x.OperationId == "OP-RECOVERY-CODE-" + pending.Operation.ToString("N") && x.State == "ACTIVE"));
+        }
+        using var read = await host.Post("/account/recovery-codes/result", new { ownerRequestId = pending.Request, operationReference = pending.Operation.ToString("N") }, pending.Cookies, pending.Csrf);
+        Assert.True(read.StatusCode == HttpStatusCode.OK); using var safe = await read.Content.ReadFromJsonAsync<JsonDocument>();
+        Assert.True(!safe!.RootElement.TryGetProperty("recoveryCodeFirstDelivery", out _));
     }
 
     private sealed class AccountOwner(Guid set, TimeProvider clock) : IRecoveryCodeConsumptionOwner

@@ -99,7 +99,9 @@ internal sealed partial class RecoveryCodeApplication(IdentityPersistenceDbConte
             row.SecurityStampDigest != session.SecurityStampDigest || Operation(row).OperationId != context.Binding.OperationId || row.ContextDigest != context.Binding.ContextDigest ||
             row.AssurancePolicyVersion != context.ExpectedPolicyVersion) return UserStepUpOperationApplyOutcome.Conflict();
         var snapshot = await FactsAsync(caller.AccountId, policy, ct).ConfigureAwait(false);
-        var decision = await AdmissionAsync(caller.AccountId, account.Version, row.Kind, current, snapshot, ct).ConfigureAwait(false);
+        var admissionRequest = new RecoveryCodeMutationAdmissionRequest(caller.AccountId, account.Version, row.Kind,
+            current.Values.Version, snapshot.Digest, snapshot.Facts, clock.GetUtcNow());
+        var decision = await ResolveAdmissionAsync(admissionRequest, current, snapshot, ct).ConfigureAwait(false);
         var plan = PlanJson(decision.RetirementTargets);
         if (!decision.Allowed || snapshot.Digest != row.ImpactFactsDigest || plan != row.RetirementPlanJson || AuthenticationIdentity.Digest(plan) != row.PriorSetPlanDigest ||
             decision.PolicyVersion != row.AdmissionPolicyVersion || decision.EvidenceReference != row.AdmissionEvidenceReference || !SameInterval(row, decision.EffectiveInterval)) return UserStepUpOperationApplyOutcome.Conflict();
@@ -122,7 +124,7 @@ internal sealed partial class RecoveryCodeApplication(IdentityPersistenceDbConte
             row.State = "COMPLETED"; row.CompletedAt = now; row.FirstResponseCommittedAt = now; row.ProofReference = proof.ProofId; row.Version++;
             Event(row, row.Kind == "GENERATE" ? "RecoveryCodeSetGenerated" : "RecoveryCodeSetReplaced", now);
             var validity = new RecoveryCodeExecutionValidity(database, database.Database.CurrentTransaction!, caller, context.Binding, row, current, session, account, proof,
-                snapshot.Facts, snapshot.Sets, issued, entries, decision.EffectiveInterval, presentations, Impact(row.Kind, snapshot, decision.RetirementTargets, policy));
+                snapshot.Facts, snapshot.Sets, issued, entries, admissions, admissionRequest, decision, presentations, Impact(row.Kind, snapshot, decision.RetirementTargets, policy));
             var outcome = UserStepUpOperationApplyOutcome.RecoveryCodes(delivery, validity); delivery = null; return outcome;
         }
         finally { delivery?.Dispose(); }
@@ -168,15 +170,17 @@ internal sealed partial class RecoveryCodeApplication(IdentityPersistenceDbConte
         var ordered = facts.OrderBy(x => x.SetReference).ToArray();
         return new(sets, ordered, AuthenticationIdentity.Digest(JsonSerializer.Serialize(ordered)));
     }
-    internal async Task<RecoveryCodeMutationAdmission> AdmissionAsync(string account, long version, string kind, RecoveryCodePolicyVersion current, Snapshot snapshot, CancellationToken ct)
+    internal Task<RecoveryCodeMutationAdmission> AdmissionAsync(string account, long version, string kind, RecoveryCodePolicyVersion current, Snapshot snapshot, CancellationToken ct) =>
+        ResolveAdmissionAsync(new(account, version, kind, current.Values.Version, snapshot.Digest, snapshot.Facts, clock.GetUtcNow()), current, snapshot, ct);
+    private async Task<RecoveryCodeMutationAdmission> ResolveAdmissionAsync(RecoveryCodeMutationAdmissionRequest request, RecoveryCodePolicyVersion current, Snapshot snapshot, CancellationToken ct)
     {
-        var decision = await admissions.RequireAsync(new(account, version, kind, current.Values.Version, snapshot.Digest, snapshot.Facts, clock.GetUtcNow()), ct).ConfigureAwait(false);
-        if (decision.AccountId != account || decision.AccountVersion != version || decision.Kind != kind || decision.FactsDigest != snapshot.Digest ||
+        var decision = await admissions.RequireAsync(request, ct).ConfigureAwait(false);
+        if (decision.AccountId != request.AccountId || decision.AccountVersion != request.AccountVersion || decision.Kind != request.Kind || decision.FactsDigest != snapshot.Digest ||
             string.IsNullOrWhiteSpace(decision.PolicyVersion) || string.IsNullOrWhiteSpace(decision.EvidenceReference) || decision.EffectiveInterval is null || !decision.EffectiveInterval.Contains(clock.GetUtcNow()) ||
             decision.RetirementTargets.Count > snapshot.Sets.Length || decision.RetirementTargets.Select(x => x.SetReference).Distinct().Count() != decision.RetirementTargets.Count ||
             decision.RetirementTargets.Any(x => !snapshot.Facts.Any(f => f.SetReference == x.SetReference && f.LifecycleVersion == x.LifecycleVersion)))
             throw new InvalidOperationException("Current recovery-code owner admission is unavailable.");
-        if (decision.Allowed && (kind == "GENERATE" && decision.RetirementTargets.Count != 0 || kind == "REPLACE" && decision.RetirementTargets.Count == 0 ||
+        if (decision.Allowed && (request.Kind == "GENERATE" && decision.RetirementTargets.Count != 0 || request.Kind == "REPLACE" && decision.RetirementTargets.Count == 0 ||
             (long)snapshot.Sets.Length - decision.RetirementTargets.Count + 1 > current.Values.MaximumActiveSets))
             throw new InvalidOperationException("The recovery-code owner plan is not supported or exceeds approved capacity.");
         return decision;

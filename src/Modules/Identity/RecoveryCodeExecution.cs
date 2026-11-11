@@ -110,19 +110,23 @@ internal sealed class RecoveryCodeExecutionValidity
     private readonly RecoveryCodeSetRow issued;
     private readonly RecoveryCodeEntryRow[] entries;
     private readonly (Guid Reference, string Verifier, string Profile)[] expectedEntries;
-    private readonly EffectivePolicyInterval admissionInterval;
+    private readonly IRecoveryCodeMutationAdmissionSource admissions;
+    private readonly RecoveryCodeMutationAdmissionRequest originalAdmissionRequest;
+    private readonly RecoveryCodeMutationAdmission originalAdmission;
     private readonly IRecoveryCodePresentationSource publications;
     private readonly RecoveryCodeImpactFacts impact;
     internal RecoveryCodeExecutionValidity(IdentityPersistenceDbContext database, IDbContextTransaction transaction, StepUpCaller actor, StepUpOperation binding,
         RecoveryCodeOperationRow operation, RecoveryCodePolicyVersion policy, AuthenticationSessionRow session, AccountRow account, StepUpProofRow proof,
-        RecoveryCodeSetFacts[] priorFacts, RecoveryCodeSetRow[] priorSets, RecoveryCodeSetRow issued, RecoveryCodeEntryRow[] entries, EffectivePolicyInterval admissionInterval,
+        RecoveryCodeSetFacts[] priorFacts, RecoveryCodeSetRow[] priorSets, RecoveryCodeSetRow issued, RecoveryCodeEntryRow[] entries, IRecoveryCodeMutationAdmissionSource admissions,
+        RecoveryCodeMutationAdmissionRequest originalAdmissionRequest, RecoveryCodeMutationAdmission originalAdmission,
         IRecoveryCodePresentationSource publications, RecoveryCodeImpactFacts impact)
     {
         this.database = database; this.transaction = transaction; accountId = actor.AccountId; sessionId = actor.SessionId; origin = actor.Origin;
         operationId = binding.OperationId; contextDigest = binding.ContextDigest; this.operation = operation; policyDigest = policy.Digest();
         this.session = session; sessionVersion = session.Version; this.account = account; accountState = account.State; this.proof = proof;
         this.priorFacts = priorFacts.ToArray(); this.priorSets = priorSets.ToArray(); this.issued = issued; this.entries = entries.ToArray();
-        expectedEntries = entries.Select(x => (x.EntryReference, x.Verifier, x.CryptoProfileVersion)).ToArray(); this.admissionInterval = admissionInterval;
+        expectedEntries = entries.Select(x => (x.EntryReference, x.Verifier, x.CryptoProfileVersion)).ToArray();
+        this.admissions = admissions; this.originalAdmissionRequest = originalAdmissionRequest; this.originalAdmission = originalAdmission;
         this.publications = publications; this.impact = impact;
     }
     internal bool Matches(RecoveryCodeFirstDelivery delivery) => delivery.Matches(operation);
@@ -136,11 +140,26 @@ internal sealed class RecoveryCodeExecutionValidity
         var published = publications.RequirePublished(current.Values, impact, at);
         if (!published.EffectiveInterval.Contains(at) || published.Version != operation.PublicationVersion || published.ImpactFactsDigest != impact.FactsDigest ||
             published.ImpactKey != operation.PublishedImpactKey || RecoveryCodeApplication.PublicationDigest(published) != operation.PublicationDigest) return false;
+        // Resolve again only from the immutable request observed before this owner mutated its tracked rows.
+        var request = new RecoveryCodeMutationAdmissionRequest(originalAdmissionRequest.AccountId, originalAdmissionRequest.AccountVersion,
+            originalAdmissionRequest.Kind, originalAdmissionRequest.PolicyVersion, originalAdmissionRequest.FactsDigest, originalAdmissionRequest.ActiveSets, at);
+        var admission = admissions.RequireCurrent(request);
+        if (admission is null || !originalAdmission.Allowed || !admission.Allowed || admission.AccountId != originalAdmissionRequest.AccountId ||
+            admission.AccountVersion != originalAdmissionRequest.AccountVersion || admission.Kind != originalAdmissionRequest.Kind || admission.FactsDigest != originalAdmissionRequest.FactsDigest ||
+            originalAdmissionRequest.AccountId != accountId || originalAdmissionRequest.AccountVersion != operation.ExpectedVersion || originalAdmissionRequest.Kind != operation.Kind ||
+            originalAdmissionRequest.PolicyVersion != current.Values.Version || originalAdmissionRequest.FactsDigest != operation.ImpactFactsDigest ||
+            admission.PolicyVersion != originalAdmission.PolicyVersion || admission.PolicyVersion != operation.AdmissionPolicyVersion ||
+            admission.EvidenceReference != originalAdmission.EvidenceReference || admission.EvidenceReference != operation.AdmissionEvidenceReference ||
+            admission.RetirementTargets.Count != originalAdmission.RetirementTargets.Count ||
+            RecoveryCodeApplication.PlanJson(admission.RetirementTargets) != RecoveryCodeApplication.PlanJson(originalAdmission.RetirementTargets) ||
+            RecoveryCodeApplication.PlanJson(admission.RetirementTargets) != operation.RetirementPlanJson || admission.EffectiveInterval is null ||
+            !originalAdmission.EffectiveInterval.Contains(at) || !admission.EffectiveInterval.Contains(at) ||
+            !RecoveryCodeApplication.SameInterval(operation, originalAdmission.EffectiveInterval) || !RecoveryCodeApplication.SameInterval(operation, admission.EffectiveInterval)) return false;
         if (current.Digest() != policyDigest || !RecoveryCodeApplication.CurrentBinding(operation, current, at) || operation.State != "COMPLETED" || operation.Version != 2 ||
             operation.ProofReference != proof.ProofId || operation.CompletedAt is null || operation.CompletedAt > at || operation.FirstResponseCommittedAt != operation.CompletedAt ||
             operation.AuthenticationPolicyVersion != authenticationPolicy.Version || session.State != "ACTIVE" || session.AccountId != accountId || session.SessionId != sessionId ||
             session.Origin != origin || session.Version != sessionVersion || session.SecurityStampDigest != operation.SecurityStampDigest ||
-            account.AccountId != accountId || account.Version != operation.ExpectedVersion || account.State != accountState || !admissionInterval.Contains(at) ||
+            account.AccountId != accountId || account.Version != operation.ExpectedVersion || account.State != accountState ||
             proof.State != "ACTIVE" || proof.AccountId != accountId || proof.SessionId != sessionId || proof.OperationId != operationId || proof.ContextDigest != contextDigest) return false;
         db.ChangeTracker.DetectChanges();
         if (db.Entry(operation).State != EntityState.Modified || db.Entry(issued).State != EntityState.Added || issued.AccountId != accountId || issued.SetReference != operation.SetReference ||
