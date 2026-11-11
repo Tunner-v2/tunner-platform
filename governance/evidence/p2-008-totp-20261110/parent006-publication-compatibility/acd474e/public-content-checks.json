@@ -1,0 +1,127 @@
+{
+  "schema_version": 1,
+  "type": "STATIC_PUBLIC_FIXTURE_PUBLICATION_CHECKS",
+  "passed": true,
+  "required_totp_keys": 20,
+  "proof_keys": 12,
+  "picker_keys": 8,
+  "base_required_keys": 28,
+  "all_required_keys_materialized": true,
+  "all_text_and_provenance_nonempty": true,
+  "ordinary_output_identical": true,
+  "account_output_identical": true,
+  "negative_checks": [
+    {
+      "case": "OMIT_REQUIRED_KEY",
+      "key": "stepUp.totp.description",
+      "rejected": true
+    },
+    {
+      "case": "OMIT_REQUIRED_KEY",
+      "key": "stepUp.totp.code.label",
+      "rejected": true
+    },
+    {
+      "case": "OMIT_REQUIRED_KEY",
+      "key": "stepUp.totp.code.placeholder",
+      "rejected": true
+    },
+    {
+      "case": "OMIT_REQUIRED_KEY",
+      "key": "stepUp.totp.pending",
+      "rejected": true
+    },
+    {
+      "case": "OMIT_REQUIRED_KEY",
+      "key": "stepUp.totp.unknown",
+      "rejected": true
+    },
+    {
+      "case": "OMIT_REQUIRED_KEY",
+      "key": "stepUp.totp.expired",
+      "rejected": true
+    },
+    {
+      "case": "OMIT_REQUIRED_KEY",
+      "key": "stepUp.totp.error.required",
+      "rejected": true
+    },
+    {
+      "case": "OMIT_REQUIRED_KEY",
+      "key": "stepUp.totp.error.code",
+      "rejected": true
+    },
+    {
+      "case": "OMIT_REQUIRED_KEY",
+      "key": "stepUp.totp.error.credentials",
+      "rejected": true
+    },
+    {
+      "case": "OMIT_REQUIRED_KEY",
+      "key": "stepUp.totp.error.replayed",
+      "rejected": true
+    },
+    {
+      "case": "OMIT_REQUIRED_KEY",
+      "key": "stepUp.totp.check",
+      "rejected": true
+    },
+    {
+      "case": "OMIT_REQUIRED_KEY",
+      "key": "stepUp.totp.close",
+      "rejected": true
+    },
+    {
+      "case": "OMIT_REQUIRED_KEY",
+      "key": "totp.selection.heading",
+      "rejected": true
+    },
+    {
+      "case": "OMIT_REQUIRED_KEY",
+      "key": "totp.selection.proofDescription",
+      "rejected": true
+    },
+    {
+      "case": "OMIT_REQUIRED_KEY",
+      "key": "totp.selection.loginDescription",
+      "rejected": true
+    },
+    {
+      "case": "OMIT_REQUIRED_KEY",
+      "key": "totp.selection.optionLabel",
+      "rejected": true
+    },
+    {
+      "case": "OMIT_REQUIRED_KEY",
+      "key": "totp.selection.added",
+      "rejected": true
+    },
+    {
+      "case": "OMIT_REQUIRED_KEY",
+      "key": "totp.selection.numberExplanation",
+      "rejected": true
+    },
+    {
+      "case": "OMIT_REQUIRED_KEY",
+      "key": "totp.selection.selectedDescription",
+      "rejected": true
+    },
+    {
+      "case": "OMIT_REQUIRED_KEY",
+      "key": "totp.selection.change",
+      "rejected": true
+    },
+    {
+      "case": "OMIT_STEP_UP_SECTION",
+      "missing_required_count": 12,
+      "rejected": true
+    },
+    {
+      "case": "OMIT_ACCOUNT_PICKER_SECTION",
+      "missing_required_count": 8,
+      "rejected": true
+    }
+  ],
+  "runtime_execution": "NOT_EXECUTED",
+  "boundary": "Public JSON/source static checks only; not compiled provider, actual HTTP, integrated journey or Product publication evidence."
+}

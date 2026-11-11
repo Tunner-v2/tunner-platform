@@ -1,0 +1,230 @@
+{
+  "schema_version": 1,
+  "scope_id": "TUN-P2-006",
+  "execution_scope": "FINITE_STEP_UP_FIXTURE_PUBLICATION_COMPATIBILITY_ONLY",
+  "result": "PASS_BOUNDED_CURRENT_SOURCE_PARENT006_COMPATIBILITY",
+  "recorded_at": "2026-11-11T04:22:44.698Z",
+  "current_source_carrier_sha": "acd474e6d028b7abe5a48b2361a984f960384674",
+  "actual_finite_invocation_sha": "acd474e6d028b7abe5a48b2361a984f960384674",
+  "actual_identity_invocation_sha": "f1dd54a3a6a4f4d3f0e1d66e92c02fb52053d7a1",
+  "actual_architecture_invocation_sha": "a933b5f004b0341b2f1e2f26568928ec98603f21",
+  "actual_ordinary_host_invocation_sha": "eb9228cc3ed832980deb92407d80ab92e7b8a00e",
+  "actual_finite_receipt": {
+    "path": "governance/evidence/p2-008-totp-20261110/parent006-publication-compatibility/acd474e/enrollment-password-mfa-preserve.json",
+    "sha256": "7923ec54eee73b2ed12ecb091959e50e6d79a5beae3ab8aff2745626165d78a7",
+    "bytes": 3052
+  },
+  "actual_finite_result": {
+    "journey_id": "TOTP_ENROLLMENT_PASSWORD_MFA_PRESERVE_V1",
+    "status": "REAL_JOURNEY_OK",
+    "accepted": true,
+    "browser_predicates": 24,
+    "coordinator_predicates": 21,
+    "persistence_booleans": 5,
+    "raw_output_rejected": false,
+    "all_owned_cleanup_checks_passed": true,
+    "scope": "This one retained current-source journey only; it does not stand in for other TOTP journeys."
+  },
+  "build_binding": {
+    "path": "governance/evidence/p2-008-totp-20261110/parent006-publication-compatibility/acd474e/runtime-build-binding.json",
+    "sha256": "fe52f9803989b619b56c85aa35d4741390e0701171890b38c6068b10a5d3364a",
+    "bytes": 108485
+  },
+  "source_equivalence": {
+    "path": "governance/evidence/p2-008-totp-20261110/parent006-publication-compatibility/acd474e/source-witness.json",
+    "sha256": "039301f0b83574742eafb7f69fa128269f8d78b9780c79c7dd2538fd47118ac8",
+    "bytes": 27688
+  },
+  "ownership": {
+    "scope_id": "TUN-P2-006",
+    "source_envelope_ref": "governance/evidence/TUN-P2-006-AUDIT-CORRECTION-SOURCE.json",
+    "work_item_ref": "governance/work-items/TUN-P2-006.yaml",
+    "owned_count": 45,
+    "ordered_owned_behavior_paths": [
+      "docs/contracts/ui-inventory.json",
+      "src/Modules/Identity/AssurancePolicy.cs",
+      "src/Modules/Identity/AuthenticationApplication.cs",
+      "src/Modules/Identity/AuthenticationEndpoints.cs",
+      "src/Modules/Identity/AuthenticationRows.cs",
+      "src/Modules/Identity/IdentityJsonCommand.cs",
+      "src/Modules/Identity/IdentityPersistenceDbContext.cs",
+      "src/Modules/Identity/Migrations/20261109033631_P2OperationStepUpProofs.Designer.cs",
+      "src/Modules/Identity/Migrations/20261109033631_P2OperationStepUpProofs.cs",
+      "src/Modules/Identity/Migrations/IdentityPersistenceDbContextModelSnapshot.cs",
+      "src/Modules/Identity/StepUpApplication.cs",
+      "src/Modules/Identity/StepUpBrowserContracts.cs",
+      "src/Modules/Identity/StepUpBrowserEndpoints.cs",
+      "src/Modules/Identity/StepUpContracts.cs",
+      "src/Modules/Identity/StepUpRows.cs",
+      "src/Tunner.User.Bff/TunnerAuthenticatedUserBffHost.cs",
+      "tests/Tunner.Identity.Persistence.Tests/AuthenticationTestHost.cs",
+      "tests/Tunner.Identity.Persistence.Tests/StepUpBrowserTests.cs",
+      "tests/Tunner.Identity.Persistence.Tests/StepUpTests.cs",
+      "tests/Tunner.Identity.Persistence.Tests/Tunner.Identity.Persistence.Tests.csproj",
+      "tools/browser-testing/BrowserTestStepUp.cs",
+      "tools/browser-testing/Program.cs",
+      "tools/browser-testing/Tunner.BrowserTesting.csproj",
+      "tools/dev/tunner-browser.ps1",
+      "web/apps/user/authentication.tsx",
+      "web/apps/user/main.tsx",
+      "web/apps/user/step-up.content.proposal.json",
+      "web/apps/user/step-up.css",
+      "web/apps/user/step-up.tsx",
+      "web/fixtures/step-up/fixture.css",
+      "web/fixtures/step-up/index.html",
+      "web/fixtures/step-up/main.tsx",
+      "web/fixtures/step-up/vite.config.ts",
+      "web/fixtures/ui/main.tsx",
+      "web/package.json",
+      "web/packages/ui/src/dialog.tsx",
+      "web/packages/ui/src/forms.tsx",
+      "web/packages/ui/src/index.ts",
+      "web/packages/ui/styles/tokens.generated.css",
+      "web/packages/ui/theme.tokens.json",
+      "web/playwright.step-up.config.ts",
+      "web/tests/browser-testing/authentication-flow.spec.ts",
+      "web/tests/contracts.test.tsx",
+      "web/tests/step-up/step-up.spec.ts",
+      "docs/contracts/operation-step-up-contract.md"
+    ],
+    "ordered_owned_paths_sha256": "c45f3a78e3d9aa9ced99ebceceb2ad050194894ddbd6cd1a59ccc1e051dbebbf",
+    "all_owned_working_blobs_equal_actual_carrier": true,
+    "changed_owned_paths": [
+      "tools/browser-testing/BrowserTestStepUp.cs"
+    ]
+  },
+  "fixture_change": {
+    "paths": [
+      "tools/browser-testing/BrowserTestTotp.cs",
+      "tools/browser-testing/BrowserTestStepUp.cs"
+    ],
+    "new_copy_or_business_values": false,
+    "required_proof_keys": 12,
+    "required_picker_keys": 8,
+    "required_base_keys": 28,
+    "conclusion": "One existing JSON mapper optionally includes the existing step_up_content only for the finite step-up branch. Ordinary Totp:null values and account default content remain unchanged; all production/missing-content guards remain fail-closed."
+  },
+  "public_static_content_checks": {
+    "path": "governance/evidence/p2-008-totp-20261110/parent006-publication-compatibility/acd474e/public-content-checks.json",
+    "sha256": "647e66136066a089e700368831d4d81d7d503837c79a2976db2c13581109ea28",
+    "bytes": 3033
+  },
+  "static_security_review": {
+    "path": "governance/evidence/p2-008-totp-20261110/parent006-publication-compatibility/acd474e/security-static-review-acd474e.json",
+    "sha256": "4829a956abbf781fb424f49583a7a03f6060f27f2eb7f58ed4601993cad6184e",
+    "bytes": 6252
+  },
+  "static_review_boundary": "The copied Security review remains an immutable static review with NOT_EXECUTED_BY_THIS_REVIEW; the separate root-owned actual journey receipt supplies runtime evidence. Original artifact references inside copied reports are historical provenance, not relabelled governed executions.",
+  "frozen_source_observation_boundary": {
+    "scope": "The immutable acd372 witness describes the already executed source snapshot. Later008-only working edits below are outside parent006 ordered45 and are neither absorbed nor asserted equal to the executed snapshot. All45 parent-owned paths and133 output hashes are still exact at packet preparation; each executed source Git object remains verified atacd.",
+    "later_nonparent_working_differences": [
+      {
+        "path": "web/tests/totp/sensitive/real-journey.mjs",
+        "executed_source_git_blob": "d624bb14cd4ad2ade2a2db4ddfec898b9629dd39",
+        "executed_source_sha256": "5623a88b5f0269f51fb25ce775908267a561d30f0fca4a111d0f2659151dd245",
+        "later_working_sha256": "af7d2456084bbabf67e86a1715210b20dd54f337234cea16dd887b1606152b65"
+      }
+    ]
+  },
+  "reused_native_evidence": {
+    "execution_index": {
+      "path": "governance/evidence/p2-008-totp-20261110/parent-runtime-compatibility/f1dd54a/execution-index.json",
+      "sha256": "27b77aeca97dd27bb46979d436ffaf885f3d38c1cca58bbc77ea8d6c6d296779",
+      "bytes": 9431
+    },
+    "source_witness": {
+      "path": "governance/evidence/p2-008-totp-20261110/parent-runtime-compatibility/f1dd54a/source-inputs.json",
+      "sha256": "6f30aa5b0e25b3e481a11b1ef69638d4b7dd97ead41bdf1d9011c6624949ab5c",
+      "bytes": 104606
+    },
+    "identity_total_passed": 260,
+    "architecture_total_passed": 237,
+    "exact_scope": "Git diff from actual Identity f1 to acd across src/tests/Directory.Build.props/Directory.Build.targets/Directory.Packages.props/global.json is empty. Of broad272 rows,268 are equal and4 changed test-tool rows are explicitly listed; no blanket272/372 equivalence or invocation redate is claimed."
+  },
+  "reused_ordinary_host_evidence": {
+    "receipt": {
+      "path": "governance/evidence/p2-008-totp-20261110/parent-runtime-compatibility/eb9228c/legacy-host-smoke/v4/actual-receipt.json",
+      "sha256": "cd587aa4c0e8a968af9e9488c045c026cac3d023251dc545216d359df6fdc665",
+      "bytes": 1825
+    },
+    "browser_predicates": 13,
+    "coordinator_checks": 16,
+    "scope": "Actual eb9228c normal-host execution remains at its original source/build identity. Reuse is restricted to unchanged ordinary Totp:null control-flow/public-data semantics established by the committed two-file diff and static review; it does not claim current whole-tool byte equality."
+  },
+  "reused_ui_evidence": {
+    "receipt": {
+      "path": "governance/evidence/TUN-P2-006-UI-COMPLIANCE-TOTP-20261110.json",
+      "sha256": "044554f8152455963ca98641352b6afa3d9c504c280311d767d731f0e08eb423",
+      "bytes": 189251
+    },
+    "actual_ui_tested_source": "6e562db102ce75d5ed478a15e2970ff55ab98fef",
+    "owned_paths": 19,
+    "all19_git_objects_unchanged": true,
+    "scope": "Existing per-item rendered/reference checks and consent stay at their actual historical provenance; no new UI acceptance or source redate."
+  },
+  "prior_current_source_compatibility": {
+    "path": "governance/evidence/TUN-P2-004-005-006-FINITE-RUNTIME-COMPATIBILITY-20261110.json",
+    "sha256": "9514f55d4b04a023a654e69fddb95626182bfa44422ff93bf1f0616f47899f28",
+    "bytes": 72693
+  },
+  "scoped_engineering_review": {
+    "roles": [
+      "tester-qa-engineer",
+      "solution-architect"
+    ],
+    "skill_inputs": [
+      {
+        "path": ".agent/skills/tester-qa-engineer/SKILL.md",
+        "sha256": "52aee18f251a614e339adba9f7c886a5da1ef4ab0482ae6b77044184128415c6",
+        "bytes": 2710
+      },
+      {
+        "path": ".agent/skills/solution-architect/SKILL.md",
+        "sha256": "664ffba70d0f97e75951c3548b7f8391854781e4cf90cc50fc8829543783a35b",
+        "bytes": 1621
+      }
+    ],
+    "reviewed_at": "2026-11-11T04:22:44.698Z",
+    "result": "PASS_BOUNDED_PARENT006_FIXTURE_COMPATIBILITY_ONLY",
+    "conclusion": "Exact ordered45 ownership retained; the one changed owned fixture path selects only existing finite proof copy. Actual committed journey1 reaches successful operation proof with active factors and all24/21/5 checks true. Core native and owned UI identities are unchanged in their declared scopes; the separate static Security review found no discrete fixture boundary issue.",
+    "history": "No historical specialist/human review was fabricated or redated."
+  },
+  "immutable_copy_provenance": [
+    {
+      "original_path": "artifacts/p2-008-totp-20261110/parent006-publication-refresh/source-witness.json",
+      "governed_copy": "governance/evidence/p2-008-totp-20261110/parent006-publication-compatibility/acd474e/source-witness.json",
+      "sha256": "039301f0b83574742eafb7f69fa128269f8d78b9780c79c7dd2538fd47118ac8",
+      "byte_identical": true
+    },
+    {
+      "original_path": "artifacts/p2-008-totp-20261110/real-journeys-acd474e/enrollment-password-mfa-preserve.json",
+      "governed_copy": "governance/evidence/p2-008-totp-20261110/parent006-publication-compatibility/acd474e/enrollment-password-mfa-preserve.json",
+      "sha256": "7923ec54eee73b2ed12ecb091959e50e6d79a5beae3ab8aff2745626165d78a7",
+      "byte_identical": true
+    },
+    {
+      "original_path": "artifacts/p2-008-totp-20261110/runtime-build-binding.json",
+      "governed_copy": "governance/evidence/p2-008-totp-20261110/parent006-publication-compatibility/acd474e/runtime-build-binding.json",
+      "sha256": "fe52f9803989b619b56c85aa35d4741390e0701171890b38c6068b10a5d3364a",
+      "byte_identical": true
+    },
+    {
+      "original_path": "artifacts/p2-008-totp-20261110/finite-step-up-publication/public-content-checks.json",
+      "governed_copy": "governance/evidence/p2-008-totp-20261110/parent006-publication-compatibility/acd474e/public-content-checks.json",
+      "sha256": "647e66136066a089e700368831d4d81d7d503837c79a2976db2c13581109ea28",
+      "byte_identical": true
+    },
+    {
+      "original_path": "artifacts/p2-008-totp-20261110/finite-step-up-publication/security-static-review-acd474e.json",
+      "governed_copy": "governance/evidence/p2-008-totp-20261110/parent006-publication-compatibility/acd474e/security-static-review-acd474e.json",
+      "sha256": "4829a956abbf781fb424f49583a7a03f6060f27f2eb7f58ed4601993cad6184e",
+      "byte_identical": true
+    }
+  ],
+  "remaining_boundaries": [
+    "Parent006 remains VALIDATION. Actual native gate readiness is determined only after this reviewed metadata is committed.",
+    "Other008 journey outcomes remain outside this bounded packet. The separate operation-proof journey has an unresolved failure; this packet does not relabel it or claim whole008 acceptance.",
+    "No global filesystem absence, production policy/publication, Product, merge, deployment or release approval is claimed. Actual cleanup statements cover the retained coordinator-owned resource/surface checks only."
+  ],
+  "exact_next_action": "Commit the reviewed eight owned paths, then dotnet run --no-restore --no-build --project src/Tunner.Governance -- governance gate check TUN-P2-006; governance next/context determine subsequent eligibility."
+}
