@@ -180,7 +180,7 @@ public static class RecoveryCodeFiniteNativeExecution
             failure = "CAPACITY_REPORT_FAILED";
             await channel.ReportCapacityAsync(created, databaseBytes, walBytes, deadline.Token).ConfigureAwait(false);
             failure = "CAPACITY_LIMIT_FAILED";
-            if (created != expected || databaseBytes <= 0 || walBytes < 0 || databaseBytes + walBytes >= 512L * 1024 * 1024)
+            if (created != expected || databaseBytes <= 0 || walBytes < 0 || databaseBytes + walBytes >= RecoveryCodeOwnedDockerFixture.NativePostgresCapacityBytes)
                 return failure;
             failure = "CAPACITY_FINALIZE_FAILED";
             return "NONE";
