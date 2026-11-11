@@ -172,13 +172,18 @@ public sealed class RecoveryCodePrivateIntegrationTests(IdentityPostgresFixture 
 
     public async Task PublicationChangeAfterOwnerWorkBeforeFinalDecisionRollsBackCodeSetProofConsumeAndOutbox(string change)
     {
-        await using var db = await fixture.CreateFiniteDatabaseAsync(CancellationToken.None); var profile = new Profile(); await using var host = await Host(db, profile); await host.SeedAsync(db);
+        await using var db = await fixture.CreateFiniteDatabaseAsync(CancellationToken.None); var profile = new Profile(); var proofExpiry = change == "proof-expiry";
+        if (proofExpiry) profile.Policy = profile.Policy with { OperationLifetime = TimeSpan.FromMinutes(10) };
+        await using var host = await Host(db, profile);
+        if (proofExpiry) host.Policies.Policy = host.Policies.Policy with { IdleLifetime = TimeSpan.FromMinutes(10) };
+        await host.SeedAsync(db);
         var pending = await Begin(host, await Login(host)); var readsBeforeProof = profile.PublicationReads; var injected = false;
         host.Access.BeforeDecision = request =>
         {
             if (injected || profile.PublicationReads <= readsBeforeProof || request.Operation != "SESSION_USE") return;
             injected = true;
-            if (change == "withdrawal") profile.Published = false;
+            if (proofExpiry) host.Clock.Advance(TimeSpan.FromMinutes(6));
+            else if (change == "withdrawal") profile.Published = false;
             else if (change == "version") profile.PublicationVersion = "fixture-recovery-publication-v2";
             else profile.PublicationInterval = new(Profile.Interval.From, true, host.Clock.GetUtcNow(), false);
         };
@@ -186,6 +191,14 @@ public sealed class RecoveryCodePrivateIntegrationTests(IdentityPostgresFixture 
         Assert.True(injected && response.StatusCode != HttpStatusCode.OK);
         using var body = await response.Content.ReadFromJsonAsync<JsonDocument>(); Assert.True(!body!.RootElement.TryGetProperty("recoveryCodeFirstDelivery", out _));
         await using var check = db.Context();
+        if (proofExpiry)
+        {
+            var at = host.Clock.GetUtcNow(); var session = await check.Set<AuthenticationSessionRow>().SingleAsync();
+            var operation = await check.Set<RecoveryCodeOperationRow>().SingleAsync(); var proof = await check.Set<StepUpProofRow>().SingleAsync();
+            Assert.True(session.State == "ACTIVE" && !AuthenticationApplication.Expired(session, host.Policies.Policy, at) && operation.ExpiresAt > at);
+            Assert.True(proof.ExpiresAt - proof.AuthenticatedAt == TimeSpan.FromMinutes(5) && proof.ExpiresAt <= at);
+            Assert.True(profile.Published && profile.PublicationVersion == "fixture-recovery-publication-v1" && profile.PublicationInterval == Profile.Interval && profile.FinalAdmissionChange == "unchanged");
+        }
         Assert.True(!await check.Set<RecoveryCodeSetRow>().AnyAsync() && !await check.Set<RecoveryCodeEntryRow>().AnyAsync());
         Assert.True(await check.Set<RecoveryCodeOperationRow>().AllAsync(x => x.State == "PENDING_PROOF"));
         Assert.True(await check.Set<StepUpProofRow>().CountAsync(x => x.State == "CONSUMED") == 0);

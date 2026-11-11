@@ -16,7 +16,7 @@ public static class RecoveryCodeFiniteNativeExecution
     private static readonly string[] PublicIds = [.. CanaryIds, "OWNERSHIP_REJECT", "NO_LOG_REJECT", "SENSITIVE_REJECT"];
     private static readonly string[] CapacityIds = ["MIGRATION_CAPACITY"];
     private static readonly string[] SqlIds = ["ISSUANCE_BINDING", "RETIREMENT_BINDING", "ENTRY_ONE_WAY", "SET_ONE_WAY", "OPERATION_ONE_WAY"];
-    private static readonly string[] PrivateIds = ["WINNER_SAFE_READ_REPLACE", "PUBLICATION_WITHDRAWAL", "PUBLICATION_VERSION", "PUBLICATION_INTERVAL",
+    private static readonly string[] PrivateIds = ["WINNER_SAFE_READ_REPLACE", "PUBLICATION_WITHDRAWAL", "PUBLICATION_VERSION", "PUBLICATION_INTERVAL", "FINAL_PROOF_EXPIRY",
         "SAME_CODE_CONCURRENCY", "OWNER_REJECTION", "FINAL_DRIFT", "TRANSACTION_ADMISSION", "SAFE_DUPLICATE", "DEFAULT_ABSENCE",
         "ADMISSION_WITHDRAWAL", "ADMISSION_POLICY", "ADMISSION_EVIDENCE", "ADMISSION_TARGET", "ADMISSION_INTERVAL", "ADMISSION_MISSING", "ADMISSION_UNCHANGED",
         "DISTINCT_CODES_ANY_DIFFERENT_OWNER", "DISTINCT_CODES_ANY_SAME_OWNER", "DISTINCT_CODES_EXACT_DIFFERENT_OWNER", "DISTINCT_CODES_EXACT_SAME_OWNER",
@@ -188,6 +188,7 @@ public static class RecoveryCodeFiniteNativeExecution
             "PUBLICATION_WITHDRAWAL" => tests.PublicationChangeAfterOwnerWorkBeforeFinalDecisionRollsBackCodeSetProofConsumeAndOutbox("withdrawal"),
             "PUBLICATION_VERSION" => tests.PublicationChangeAfterOwnerWorkBeforeFinalDecisionRollsBackCodeSetProofConsumeAndOutbox("version"),
             "PUBLICATION_INTERVAL" => tests.PublicationChangeAfterOwnerWorkBeforeFinalDecisionRollsBackCodeSetProofConsumeAndOutbox("interval"),
+            "FINAL_PROOF_EXPIRY" => tests.PublicationChangeAfterOwnerWorkBeforeFinalDecisionRollsBackCodeSetProofConsumeAndOutbox("proof-expiry"),
             "SAME_CODE_CONCURRENCY" => tests.SameCodeTwoOwnerOperationsCommitOnlyOneRealAccountMutationAndOutbox(),
             "OWNER_REJECTION" => tests.OwnerRejectionOrFinalDriftRollsBackClaimActualAccountEffectAndOutbox(false),
             "FINAL_DRIFT" => tests.OwnerRejectionOrFinalDriftRollsBackClaimActualAccountEffectAndOutbox(true),

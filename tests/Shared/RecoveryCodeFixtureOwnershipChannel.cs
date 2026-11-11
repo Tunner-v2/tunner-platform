@@ -118,9 +118,16 @@ internal sealed class RecoveryCodeFixtureOwnershipChannel : IDisposable
             await WriteAsync(output, new { version = 2, type, sequence, runId = RunId, ownerId = owner.OwnerId, canaryId = containerId }, deadline.Token).ConfigureAwait(false);
         else await WriteAsync(output, new { version = 2, type, sequence, runId = RunId, ownerId = owner.OwnerId }, deadline.Token).ConfigureAwait(false);
         JsonDocument ack;
-        try { ack = await ReadAsync(input, deadline.Token).ConfigureAwait(false); }
-        catch (OperationCanceledException) { LastFailure = "ACK_TIMEOUT"; throw; }
-        catch { LastFailure = "ACK_INVALID"; throw; }
+        var pendingRead = ReadAsync(input, deadline.Token);
+        try { ack = await pendingRead.WaitAsync(deadline.Token).ConfigureAwait(false); deadline.Token.ThrowIfCancellationRequested(); }
+        catch (OperationCanceledException)
+        {
+            failed = true; LastFailure = "ACK_TIMEOUT"; _ = DisposeSettledFailedAckAsync(pendingRead); throw;
+        }
+        catch
+        {
+            failed = true; LastFailure = "ACK_INVALID"; _ = DisposeSettledFailedAckAsync(pendingRead); throw;
+        }
         using var ownedAck = ack; var value = ack.RootElement;
         LastFailure = "ACK_INVALID";
         Keys(value, "version", "type", "sequence", "runId", "ownerId", "stage", "status");
@@ -129,6 +136,14 @@ internal sealed class RecoveryCodeFixtureOwnershipChannel : IDisposable
             value.GetProperty("stage").GetString() != stage ? "ACK_STAGE" : value.GetProperty("status").GetString() != "OK" ? "ACK_REJECTED" : "NONE";
         if (LastFailure != "NONE")
             throw new InvalidOperationException("RECOVERY_OWNERSHIP_ACK_REJECTED");
+    }
+    // A failed channel never reads again. WaitAsync bounds the logical ACK wait, not Windows console I/O.
+    // Retain/observe the one pending metadata read and dispose any late document. The outside finite owner
+    // closes stdin on terminal, then requires actual process closure; an UNKNOWN process/root is held.
+    private static async Task DisposeSettledFailedAckAsync(Task<JsonDocument> pendingRead)
+    {
+        try { using var ignored = await pendingRead.ConfigureAwait(false); }
+        catch { /* Observe eventual read faults only; never project raw metadata or exceptions. */ }
     }
     internal static void Validate(RecoveryCodePreparedFixtureOwner owner)
     {
