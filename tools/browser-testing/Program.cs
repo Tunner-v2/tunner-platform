@@ -18,6 +18,8 @@ using Tunner.Platform.Policies;
 using Tunner.User.Bff;
 
 // This separate tool is never composed into the production BFF. Values are explicit synthetic fixtures.
+if (args.Length == 1 && args[0] == "--finite-recovery-protocol-canary")
+    return await FiniteRecoveryCoordinator.RunPublicProtocolAsync();
 if (args.Length == 1 && args[0] == "--sensitive-native-totp-oracle")
     return await BrowserTestTotpOracle.RunAsync();
 if (args.Length == 2 && args[0] is "--finite-totp-browser-testing" or "--finite-totp-public-fault")

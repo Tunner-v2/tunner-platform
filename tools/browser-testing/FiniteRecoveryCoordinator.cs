@@ -3,6 +3,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Security.Cryptography.X509Certificates;
 using System.Text.Json;
+using System.Text.Json.Nodes;
 using System.Text;
 using System.Text.RegularExpressions;
 using Microsoft.AspNetCore.Builder;
@@ -25,6 +26,310 @@ internal static class FiniteRecoveryCoordinator
     private static readonly string[] ClosedPublicSupervisorFacts = ["SOURCE_CURRENT", "CHILD_CLOSED", "ORACLE_CLOSED", "CHILD_SURFACES_CLOSED", "SURFACE_REMOVED"];
     private static readonly string[] Stages = ["START", "ENVIRONMENT", "LIBRARY", "BROWSER", "PUBLIC_ENTRY", "ORACLE", "JOURNEY", "SURFACE", "CLEANUP", "COMPLETE"];
     private static readonly string[] FailureCodes = ["NONE", "INPUT_INVALID", "SOURCE_INVALID", "DEPENDENCY_NOT_READY", "PROTOCOL_FAILED", "BOUNDARY_ERROR", "PREDICATE_FAILED", "ADMISSION_REJECTED", "PATH_REJECTED", "SIZE_LIMIT", "BYTES_MISMATCH", "STREAM_FAILED", "DELETE_FAILED", "ACTION_FAILED", "ORACLE_FAILED", "SUPERVISOR_TIMEOUT", "SURFACE_FAILED", "CLEANUP_FAILED"];
+
+    private const string PublicProtocolSource = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
+    private static readonly string[] PublicProtocolIds = ["REAL_EXACT_WINNING_MAP", "REAL_EACH_MISSING_FALSE", "REAL_EXTRA_CROSS_COMPONENT", "CONDITIONAL_COORDINATOR_OWNER", "STRICT_SCALAR_AND_KEY_SHAPE", "SERVER_LIFECYCLE", "PUBLIC_FAILURE_NEVER_REAL", "RELAY_PUBLIC_TOPOLOGY", "PRODUCTION_CONTROLLER_FACTS", "PUBLIC_CONTAINMENT_NEGATIVES", "RAW_MANAGED_OUTPUT", "SOURCE_SELECTOR_COMPATIBILITY"];
+    private static readonly string[] PublicProtocolBrowserFacts = ["BROWSER_ENGINE", "SURFACE_CHECKED", "PUBLIC_ENTRY", "ERROR_CONTAINED", "DOWNLOAD_ADMITTED", "DOWNLOAD_REMOVED", "PRODUCTION_CONTROLLER_PUBLIC", "FIXTURE_RELAY_PUBLIC"];
+    private static readonly string[] PublicProtocolComponents = ["checks", "supervisor"];
+    private static readonly string[] PublicProtocolExtraChecks = ["PUBLIC_ENTRY", "SOURCE_BUILD_CURRENT", "EXACT_SUBSET_REPLACEMENT", "PUBLIC_NONFUNCTIONAL_UNKNOWN"];
+    private static readonly string[] PublicProtocolTrueFlags = ["sourceCommitted", "childResultAccepted", .. ClosedLiveFacts];
+    private static readonly string[] PublicProtocolFalseFlags = ["protocolRejected", "rawOutputRejected", "timedOut", "cleanupForced", "publicFaultObserved"];
+    private static readonly string[] PublicProtocolBooleanFlags = [.. PublicProtocolTrueFlags, .. PublicProtocolFalseFlags, "accepted"];
+    private static readonly string[] PublicProtocolRelayFaults = ["relay-malformed", "relay-timeout"];
+    private static readonly string[] PublicProtocolControllerFacts = ["PRODUCTION_CONTROLLER_PUBLIC", "DOWNLOAD_ADMITTED", "DOWNLOAD_REMOVED"];
+    private static readonly string[] PublicProtocolPidFields = ["childPid", "oraclePid", "serverPid"];
+    private static readonly Dictionary<string, object> PublicProtocolBadScalars = new(StringComparer.Ordinal)
+    {
+        ["version"] = 2, ["type"] = "PUBLIC_NONFUNCTIONAL", ["journeyId"] = "PUBLIC_NONFUNCTIONAL", ["mode"] = "PUBLIC_NONFUNCTIONAL",
+        ["sourceCommit"] = new string('c', 40), ["sourceFingerprint"] = "PUBLIC_NONFUNCTIONAL", ["browserVersion"] = "PUBLIC_NONFUNCTIONAL",
+        ["status"] = "PUBLIC_NONFUNCTIONAL", ["stage"] = "PUBLIC_NONFUNCTIONAL", ["failureCode"] = "PUBLIC_NONFUNCTIONAL", ["exitCode"] = 1,
+        ["checks"] = "PUBLIC_NONFUNCTIONAL", ["supervisor"] = "PUBLIC_NONFUNCTIONAL", ["publicFault"] = "happy", ["publicOwnership"] = "PUBLIC_NONFUNCTIONAL"
+    };
+
+    private static string AdmitFixtureRequest(JsonElement frame, int sequence, bool publicMode, string? publicFault)
+    {
+        FiniteTotpCoordinator.RequireKeys(frame, "version", "type", "requestId", "action");
+        var action = frame.GetProperty("action").GetString();
+        if (frame.GetProperty("version").GetInt32() != 1 || frame.GetProperty("type").GetString() != "recoveryFixtureRequest" ||
+            sequence is < 1 or > 16 || frame.GetProperty("requestId").GetInt32() != sequence || !BrowserTestRecoveryCodes.Actions.Contains(action, StringComparer.Ordinal) ||
+            publicMode && (sequence != 1 || action != "READ_SAFE_COUNTS" || publicFault is not ("relay-roundtrip" or "relay-malformed" or "relay-timeout")))
+            throw new InvalidOperationException("FINITE_RECOVERY_RELAY_INVALID");
+        return action!;
+    }
+    private static JsonElement? PublicFixtureReply(string fault, int requestId)
+    {
+        if (requestId != 1) throw new InvalidOperationException("FINITE_RECOVERY_RELAY_INVALID");
+        if (fault == "relay-timeout") return null;
+        if (fault == "relay-malformed") return JsonSerializer.SerializeToElement(new { version = 1, type = "recoveryFixtureResult", requestId, status = "PUBLIC_INVALID", counts = new { } });
+        if (fault != "relay-roundtrip") throw new InvalidOperationException("FINITE_RECOVERY_RELAY_INVALID");
+        return JsonSerializer.SerializeToElement(new { version = 1, type = "recoveryFixtureResult", requestId, status = "OK", counts = BrowserTestRecoveryCodes.CountKeys.ToDictionary(id => id, _ => 0, StringComparer.Ordinal) });
+    }
+
+    // Public synthetic protocol vectors only. No browser, fixture, code, account or owner is created.
+    internal static async Task<int> RunPublicProtocolAsync()
+    {
+        await using var output = Console.OpenStandardOutput();
+        var managed = new ManagedOutputCounter(); Console.SetOut(managed); Console.SetError(managed);
+        var cases = PublicProtocolIds.ToDictionary(id => id, _ => false, StringComparer.Ordinal);
+        DirectoryInfo? root = null; FiniteTotpBuildIdentity? before = null; var source = string.Empty; var current = false;
+        try
+        {
+            if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") != "Development") throw new InvalidOperationException();
+            root = RepositoryRootResolver.Resolve(); source = FiniteTotpCoordinator.Git(root, "rev-parse", "HEAD");
+            before = FiniteTotpBuildBinding.Verify(root, recovery: true);
+            try { cases["REAL_EXACT_WINNING_MAP"] = ProtocolWinningMaps(); } catch (Exception error) when (error is not OutOfMemoryException) { }
+            try { cases["REAL_EACH_MISSING_FALSE"] = ProtocolMissingFalse(); } catch (Exception error) when (error is not OutOfMemoryException) { }
+            try { cases["REAL_EXTRA_CROSS_COMPONENT"] = ProtocolExtraChecks(); } catch (Exception error) when (error is not OutOfMemoryException) { }
+            try { cases["CONDITIONAL_COORDINATOR_OWNER"] = ProtocolConditionalChecks(); } catch (Exception error) when (error is not OutOfMemoryException) { }
+            try { cases["STRICT_SCALAR_AND_KEY_SHAPE"] = ProtocolShapes(); } catch (Exception error) when (error is not OutOfMemoryException) { }
+            try { cases["SERVER_LIFECYCLE"] = ProtocolServerClosure(); } catch (Exception error) when (error is not OutOfMemoryException) { }
+            try { cases["PUBLIC_FAILURE_NEVER_REAL"] = ProtocolSeparation(); } catch (Exception error) when (error is not OutOfMemoryException) { }
+            try { cases["RELAY_PUBLIC_TOPOLOGY"] = await ProtocolRelayAsync().ConfigureAwait(false); } catch (Exception error) when (error is not OutOfMemoryException) { }
+            try { cases["PRODUCTION_CONTROLLER_FACTS"] = ProtocolControllerFacts(); } catch (Exception error) when (error is not OutOfMemoryException) { }
+            try { cases["PUBLIC_CONTAINMENT_NEGATIVES"] = ProtocolPublicNegatives(); } catch (Exception error) when (error is not OutOfMemoryException) { }
+            try { cases["RAW_MANAGED_OUTPUT"] = ProtocolManagedOutput(); } catch (Exception error) when (error is not OutOfMemoryException) { }
+            try { cases["SOURCE_SELECTOR_COMPATIBILITY"] = ProtocolSourceBoundary(root, before); } catch (Exception error) when (error is not OutOfMemoryException) { }
+            current = FiniteTotpBuildBinding.Verify(root, recovery: true) == before && FiniteTotpCoordinator.Git(root, "rev-parse", "HEAD") == source;
+        }
+        catch (Exception error) when (error is not OutOfMemoryException) { }
+        var qualified = current && cases.Count == PublicProtocolIds.Length && cases.Values.All(flag => flag) && managed.Count == 0;
+        using var write = new CancellationTokenSource(TimeSpan.FromSeconds(5));
+        await JsonSerializer.SerializeAsync(output, new { version = 1, type = "recoveryPublicProtocolQualification", sourceCommit = source.Length == 40 ? source : null,
+            sourceBuildCurrent = current, buildBinding = before, cases, qualified, accepted = false, sensitiveRunAccepted = false,
+            unexpectedManagedOutput = managed.Count != 0, failureCode = qualified ? "NONE" : "PUBLIC_PROTOCOL_FAILED",
+            scope = "Synthetic in-process validators/reducers/framing only; no browser, Docker, native values or real journey.",
+            relayTopology = "NOT_EXECUTED; actual28 browser/oracle/relay/controller matrix remains required",
+            recorderCompatibility = "Default/JS recorder branches unchanged and statically reviewed; recorder not executed" }, cancellationToken: write.Token).ConfigureAwait(false);
+        await output.WriteAsync("\n"u8.ToArray(), write.Token).ConfigureAwait(false);
+        return qualified ? 0 : 1;
+    }
+    private static JsonObject ProtocolMap(string[] ids)
+    {
+        var map = new JsonObject(); foreach (var id in ids) map[id] = true; return map;
+    }
+    private static JsonObject ProtocolReceipt(string journey)
+    {
+        return new JsonObject
+        {
+            ["version"] = 1, ["type"] = "recoveryPrivateBrowserReceipt", ["journeyId"] = journey, ["mode"] = "live", ["publicFault"] = null,
+            ["sourceCommit"] = PublicProtocolSource, ["sourceCommitted"] = true, ["sourceFingerprint"] = new string('b', 64), ["browserVersion"] = "1.2.3.4",
+            ["status"] = "JOURNEY_OK", ["stage"] = "COMPLETE", ["failureCode"] = "NONE", ["checks"] = ProtocolMap(BrowserIds(journey)), ["supervisor"] = ProtocolMap(SupervisorIds),
+            ["childResultAccepted"] = true, ["protocolRejected"] = false, ["rawOutputRejected"] = false, ["timedOut"] = false, ["cleanupForced"] = false, ["exitCode"] = 0,
+            ["contextClosed"] = true, ["browserClosed"] = true, ["serverExited"] = true, ["oracleExited"] = true, ["oracleGraceful"] = true,
+            ["surfaceClean"] = true, ["surfaceRemoved"] = true, ["cleanupCompleted"] = true, ["publicFaultObserved"] = false, ["publicOwnership"] = null, ["accepted"] = true
+        };
+    }
+    private static JsonObject ProtocolPublic(string fault)
+    {
+        var value = ProtocolReceipt(BrowserTestRecoveryCodes.JourneyIds[0]);
+        value["mode"] = "public"; value["publicFault"] = fault; value["status"] = "PUBLIC_BOUNDARY_OK"; value["accepted"] = false; value["publicFaultObserved"] = true;
+        value["checks"] = ProtocolMap(PublicProtocolBrowserFacts);
+        value["publicOwnership"] = new JsonObject { ["surface"] = null, ["childPid"] = 1, ["oraclePid"] = null, ["serverPid"] = fault == "production-controller" ? 2 : null };
+        var checks = value["checks"]!.AsObject();
+        if (fault == "missing-predicate") checks.Remove("PUBLIC_ENTRY");
+        if (fault is "invalid-result" or "cross-component" or "relay-malformed" or "relay-timeout")
+        {
+            value["protocolRejected"] = true; value["childResultAccepted"] = false; value["publicFaultObserved"] = false;
+            value["supervisor"]!["PROTOCOL_VALID"] = false;
+            value["failureCode"] = "PROTOCOL_FAILED"; value["status"] = "NOT_ACCEPTED";
+            if (fault.StartsWith("relay-", StringComparison.Ordinal)) value["exitCode"] = 1;
+        }
+        else if (fault == "unexpected-output") { value["rawOutputRejected"] = true; value["supervisor"]!["OUTPUT_CONTAINED"] = false; }
+        else if (fault == "unexpected-artifact") { value["surfaceClean"] = false; Failed("SURFACE_FAILED"); }
+        else if (fault == "cleanup") { value["cleanupCompleted"] = false; Failed("CLEANUP_FAILED"); }
+        else if (fault == "child-timeout") { value["timedOut"] = true; Failed("SUPERVISOR_TIMEOUT"); }
+        else
+        {
+            var code = fault switch
+            {
+                "unarmed" or "duplicate" or "wrong-page" => "ADMISSION_REJECTED", "wrong-bytes" => "BYTES_MISMATCH", "oversize" => "SIZE_LIMIT",
+                "outside-identity" => "PATH_REJECTED", "stream-error" => "STREAM_FAILED", "delete-error" => "DELETE_FAILED", "action-timeout" => "ACTION_FAILED", "fatal-rejection" => "SUPERVISOR_TIMEOUT", _ => null
+            };
+            if (code is not null) Failed(code);
+        }
+        return value;
+        void Failed(string code) { value["status"] = "BOUNDARY_FAILED"; value["failureCode"] = code; value["exitCode"] = 1; }
+    }
+    private static JsonObject ProtocolChanged(JsonObject value, string key, object? replacement)
+    {
+        var copy = value.DeepClone().AsObject(); copy[key] = JsonSerializer.SerializeToNode(replacement); return copy;
+    }
+    private static bool ProtocolAdmitted(JsonObject value)
+    {
+        try
+        {
+            var journey = value["journeyId"]?.GetValue<string>();
+            return ProtocolAdmitted(JsonSerializer.SerializeToElement(value), BrowserTestRecoveryCodes.JourneyIds.Contains(journey, StringComparer.Ordinal) ? journey! : BrowserTestRecoveryCodes.JourneyIds[0], value["mode"]?.GetValue<string>() == "public");
+        }
+        catch (Exception error) when (error is not OutOfMemoryException) { return false; }
+    }
+    private static bool ProtocolAdmitted(JsonElement value, string journey, bool publicMode)
+    {
+        try { RequireReceipt(value, journey, PublicProtocolSource, publicMode); return true; }
+        catch (Exception error) when (error is not OutOfMemoryException) { return false; }
+    }
+    private static bool ProtocolQualifies(JsonObject value, string fault) => ProtocolAdmitted(value) && PublicContained(JsonSerializer.SerializeToElement(value), fault);
+    private static bool ProtocolWinningMaps()
+    {
+        foreach (var journey in BrowserTestRecoveryCodes.JourneyIds)
+            if (!ProtocolAdmitted(ProtocolReceipt(journey)) || !Accepted(0, true, "NONE", true, CoordinatorIdsFor(journey).ToDictionary(id => id, _ => true, StringComparer.Ordinal), journey)) return false;
+        return true;
+    }
+    private static bool ProtocolMissingFalse()
+    {
+        foreach (var journey in BrowserTestRecoveryCodes.JourneyIds)
+        {
+            foreach (var component in PublicProtocolComponents)
+                foreach (var id in component == "checks" ? BrowserIds(journey) : SupervisorIds)
+                {
+                    var value = ProtocolReceipt(journey); value[component]!.AsObject().Remove(id); if (ProtocolAdmitted(value)) return false;
+                    value = ProtocolReceipt(journey); value[component]![id] = false; if (ProtocolAdmitted(value)) return false;
+                }
+            foreach (var id in CoordinatorIdsFor(journey))
+            {
+                var map = CoordinatorIdsFor(journey).ToDictionary(key => key, _ => true, StringComparer.Ordinal); map.Remove(id);
+                if (Accepted(0, true, "NONE", true, map, journey)) return false;
+                map[id] = false; if (Accepted(0, true, "NONE", true, map, journey)) return false;
+            }
+        }
+        return true;
+    }
+    private static bool ProtocolExtraChecks()
+    {
+        foreach (var journey in BrowserTestRecoveryCodes.JourneyIds)
+            foreach (var extra in PublicProtocolExtraChecks)
+            {
+                var value = ProtocolReceipt(journey); value["checks"]![extra] = true; if (ProtocolAdmitted(value)) return false;
+                value["checks"]!.AsObject().Remove(BrowserIds(journey)[0]); if (ProtocolAdmitted(value)) return false;
+            }
+        return true;
+    }
+    private static bool ProtocolConditionalChecks()
+    {
+        foreach (var journey in BrowserTestRecoveryCodes.JourneyIds)
+        {
+            var map = CoordinatorIdsFor(journey).ToDictionary(id => id, _ => true, StringComparer.Ordinal);
+            var subset = journey == "RECOVERY_REPLACE_PASSWORD_V1"; var publication = journey == "RECOVERY_REPLACE_TOTP_V1";
+            if (map.ContainsKey("EXACT_SUBSET_REPLACEMENT") != subset || map.ContainsKey("PUBLICATION_DRIFT_ROLLED_BACK") != publication) return false;
+            map[subset ? "PUBLICATION_DRIFT_ROLLED_BACK" : "EXACT_SUBSET_REPLACEMENT"] = true;
+            if (Accepted(0, true, "NONE", true, map, journey)) return false;
+        }
+        return true;
+    }
+    private static bool ProtocolShapes()
+    {
+        var live = ProtocolReceipt(BrowserTestRecoveryCodes.JourneyIds[0]);
+        foreach (var key in live.Select(property => property.Key).ToArray()) { var copy = live.DeepClone().AsObject(); copy.Remove(key); if (ProtocolAdmitted(copy)) return false; }
+        foreach (var key in PublicProtocolTrueFlags) if (ProtocolAdmitted(ProtocolChanged(live, key, false))) return false;
+        foreach (var key in PublicProtocolFalseFlags) if (ProtocolAdmitted(ProtocolChanged(live, key, true))) return false;
+        foreach (var key in PublicProtocolBooleanFlags) if (ProtocolAdmitted(ProtocolChanged(live, key, "PUBLIC_NONFUNCTIONAL"))) return false;
+        foreach (var pair in PublicProtocolBadScalars) if (ProtocolAdmitted(ProtocolChanged(live, pair.Key, pair.Value))) return false;
+        if (ProtocolAdmitted(ProtocolChanged(live, "browserVersion", null)) || ProtocolAdmitted(ProtocolChanged(live, "exitCode", null))) return false;
+        using var duplicate = JsonDocument.Parse(live.ToJsonString().Insert(1, "\"version\":1,"));
+        if (ProtocolAdmitted(duplicate.RootElement, BrowserTestRecoveryCodes.JourneyIds[0], false)) return false;
+        using var duplicateCheck = JsonDocument.Parse(live.ToJsonString().Replace("\"checks\":{", "\"checks\":{\"BROWSER_ENGINE\":true,", StringComparison.Ordinal));
+        if (ProtocolAdmitted(duplicateCheck.RootElement, BrowserTestRecoveryCodes.JourneyIds[0], false)) return false;
+        var wrongCheck = live.DeepClone().AsObject(); wrongCheck["checks"]!["BROWSER_ENGINE"] = "PUBLIC_NONFUNCTIONAL";
+        if (ProtocolAdmitted(wrongCheck)) return false;
+        var expected = JsonSerializer.SerializeToElement(live);
+        return !ProtocolAdmitted(expected, "RECOVERY_REPLACE_PASSWORD_V1", false) && !ProtocolAdmitted(expected, BrowserTestRecoveryCodes.JourneyIds[0], true);
+    }
+    private static bool ProtocolServerClosure()
+    {
+        var live = ProtocolReceipt(BrowserTestRecoveryCodes.JourneyIds[0]);
+        if (ProtocolAdmitted(ProtocolChanged(live, "serverExited", false))) return false;
+        foreach (var fault in PublicFaults)
+        {
+            var value = ProtocolPublic(fault); if (ProtocolQualifies(ProtocolChanged(value, "serverExited", false), fault)) return false;
+            value.Remove("serverExited"); if (ProtocolAdmitted(value)) return false;
+        }
+        var publicValue = ProtocolPublic("happy"); publicValue["publicOwnership"]!["serverPid"] = 2; return !ProtocolAdmitted(publicValue);
+    }
+    private static bool ProtocolSeparation()
+    {
+        foreach (var fault in PublicFaults)
+        {
+            var value = ProtocolPublic(fault); if (!ProtocolQualifies(value, fault) || ProtocolAdmitted(ProtocolChanged(value, "accepted", true))) return false;
+            if (Accepted(0, false, "NONE", true, CoordinatorIdsFor(BrowserTestRecoveryCodes.JourneyIds[0]).ToDictionary(id => id, _ => true, StringComparer.Ordinal), BrowserTestRecoveryCodes.JourneyIds[0])) return false;
+        }
+        var failed = ProtocolReceipt(BrowserTestRecoveryCodes.JourneyIds[0]); failed["accepted"] = false; failed["status"] = "BOUNDARY_FAILED"; failed["failureCode"] = "PREDICATE_FAILED";
+        return ProtocolAdmitted(failed) && !Accepted(0, true, "NONE", false, CoordinatorIdsFor(BrowserTestRecoveryCodes.JourneyIds[0]).ToDictionary(id => id, _ => true, StringComparer.Ordinal), BrowserTestRecoveryCodes.JourneyIds[0]);
+    }
+    private static async Task<bool> ProtocolRelayAsync()
+    {
+        using var deadline = new CancellationTokenSource(TimeSpan.FromSeconds(2));
+        using var request = JsonDocument.Parse("{\"version\":1,\"type\":\"recoveryFixtureRequest\",\"requestId\":1,\"action\":\"READ_SAFE_COUNTS\"}");
+        if (AdmitFixtureRequest(request.RootElement, 1, true, "relay-roundtrip") != "READ_SAFE_COUNTS") return false;
+        await using var stream = new MemoryStream();
+        var reply = PublicFixtureReply("relay-roundtrip", 1); if (reply is null) return false;
+        await FiniteTotpCoordinator.WriteFrameAsync(stream, reply.Value, deadline.Token).ConfigureAwait(false); stream.Position = 0;
+        var frame = await FiniteTotpCoordinator.ReadFrameAsync(stream, deadline.Token).ConfigureAwait(false);
+        FiniteTotpCoordinator.RequireKeys(frame, "version", "type", "requestId", "status", "counts");
+        FiniteTotpCoordinator.RequireKeys(frame.GetProperty("counts"), BrowserTestRecoveryCodes.CountKeys);
+        if (frame.GetProperty("version").GetInt32() != 1 || frame.GetProperty("type").GetString() != "recoveryFixtureResult" || frame.GetProperty("status").GetString() != "OK" || frame.GetProperty("requestId").GetInt32() != 1 || BrowserTestRecoveryCodes.CountKeys.Any(key => frame.GetProperty("counts").GetProperty(key).GetInt32() != 0)) return false;
+        foreach (var action in BrowserTestRecoveryCodes.Actions)
+        {
+            var live = JsonSerializer.SerializeToElement(new { version = 1, type = "recoveryFixtureRequest", requestId = 16, action });
+            if (AdmitFixtureRequest(live, 16, false, null) != action) return false;
+        }
+        var unknown = JsonSerializer.SerializeToElement(new { version = 1, type = "recoveryFixtureRequest", requestId = 1, action = "PUBLIC_NONFUNCTIONAL_UNKNOWN" });
+        var wrongType = JsonSerializer.SerializeToElement(new { version = 1, type = "PUBLIC_NONFUNCTIONAL_UNKNOWN", requestId = 1, action = "READ_SAFE_COUNTS" });
+        if (ProtocolRequestAdmitted(unknown, 1, false, null) || ProtocolRequestAdmitted(wrongType, 1, false, null)) return false;
+        foreach (var fault in PublicProtocolRelayFaults)
+        {
+            var value = ProtocolPublic(fault); if (!ProtocolQualifies(value, fault) || ProtocolQualifies(ProtocolChanged(value, "protocolRejected", false), fault) || ProtocolQualifies(ProtocolChanged(value, "cleanupCompleted", false), fault)) return false;
+        }
+        if (PublicFixtureReply("relay-timeout", 1) is not null || PublicFixtureReply("relay-malformed", 1)?.GetProperty("status").GetString() != "PUBLIC_INVALID") return false;
+        if (ProtocolRequestAdmitted(request.RootElement, 2, true, "relay-roundtrip") || ProtocolRequestAdmitted(request.RootElement, 1, true, "happy") || ProtocolRequestAdmitted(request.RootElement, 17, false, null)) return false;
+        using var duplicate = JsonDocument.Parse("{\"version\":1,\"version\":1,\"type\":\"recoveryFixtureRequest\",\"requestId\":1,\"action\":\"READ_SAFE_COUNTS\"}");
+        if (ProtocolRequestAdmitted(duplicate.RootElement, 1, true, "relay-roundtrip")) return false;
+        using var cancelled = new CancellationTokenSource(); cancelled.Cancel();
+        try { await FiniteTotpCoordinator.ReadFrameAsync(stream, cancelled.Token).ConfigureAwait(false); return false; }
+        catch (OperationCanceledException) { return true; }
+    }
+    private static bool ProtocolRequestAdmitted(JsonElement value, int sequence, bool publicMode, string? fault)
+    {
+        try { _ = AdmitFixtureRequest(value, sequence, publicMode, fault); return true; }
+        catch (Exception error) when (error is not OutOfMemoryException) { return false; }
+    }
+    private static bool ProtocolControllerFacts()
+    {
+        var value = ProtocolPublic("production-controller"); if (!ProtocolQualifies(value, "production-controller")) return false;
+        foreach (var id in PublicProtocolControllerFacts)
+        {
+            var copy = value.DeepClone().AsObject(); copy["checks"]![id] = false; if (ProtocolQualifies(copy, "production-controller")) return false;
+            copy["checks"]!.AsObject().Remove(id); if (ProtocolQualifies(copy, "production-controller")) return false;
+        }
+        value["publicOwnership"]!["serverPid"] = null; return !ProtocolQualifies(value, "production-controller");
+    }
+    private static bool ProtocolPublicNegatives()
+    {
+        if (PublicFaults.Length != 28 || PublicFaults.Distinct(StringComparer.Ordinal).Count() != 28) return false;
+        foreach (var fault in PublicFaults)
+        {
+            var value = ProtocolPublic(fault); if (!ProtocolQualifies(value, fault) || ProtocolQualifies(value, "PUBLIC_NONFUNCTIONAL_UNREGISTERED")) return false;
+            foreach (var key in ClosedPublicFacts) if (ProtocolQualifies(ProtocolChanged(value, key, false), fault)) return false;
+            foreach (var key in ClosedPublicSupervisorFacts) { var copy = value.DeepClone().AsObject(); copy["supervisor"]![key] = false; if (ProtocolQualifies(copy, fault)) return false; }
+            if (ProtocolQualifies(ProtocolChanged(value, "cleanupForced", true), fault) || ProtocolQualifies(ProtocolChanged(value, "exitCode", 7), fault)) return false;
+        }
+        foreach (var key in PublicProtocolPidFields) { var value = ProtocolPublic("production-controller"); value["publicOwnership"]![key] = -1; if (ProtocolAdmitted(value)) return false; }
+        var badPath = ProtocolPublic("happy"); badPath["publicOwnership"]!["surface"] = "PUBLIC_NONFUNCTIONAL_RELATIVE"; return !ProtocolAdmitted(badPath);
+    }
+    private static bool ProtocolManagedOutput()
+    {
+        var counter = new ManagedOutputCounter(); const string marker = "TUNNER_PUBLIC_NONFUNCTIONAL_PROTOCOL_OUTPUT";
+        var journey = BrowserTestRecoveryCodes.JourneyIds[0]; var map = CoordinatorIdsFor(journey).ToDictionary(id => id, _ => true, StringComparer.Ordinal);
+        if (!Accepted(counter.Count, true, "NONE", true, map, journey)) return false;
+        counter.Write(marker);
+        return counter.Count == marker.Length && !Accepted(counter.Count, true, "NONE", true, map, journey) && ProtocolQualifies(ProtocolPublic("unexpected-output"), "unexpected-output") && !ProtocolAdmitted(ProtocolChanged(ProtocolReceipt(journey), "rawOutputRejected", true));
+    }
+    private static bool ProtocolSourceBoundary(DirectoryInfo root, FiniteTotpBuildIdentity binding)
+    {
+        var live = ProtocolReceipt(BrowserTestRecoveryCodes.JourneyIds[0]);
+        return FiniteTotpBuildBinding.Verify(root, recovery: true) == binding && binding.SourceInputs > 0 && binding.BuildOutputs > 0 &&
+            FiniteTotpBuildBinding.SourceSelectors.Contains("tests/Shared", StringComparer.Ordinal) && FiniteTotpBuildBinding.SourceSelectors.Contains("tools/dev/new-tunner-totp-build-binding.mjs", StringComparer.Ordinal) &&
+            !ProtocolAdmitted(ProtocolChanged(live, "receiptPath", "PUBLIC_NONFUNCTIONAL")) && !ProtocolAdmitted(ProtocolChanged(live, "sourceCommit", new string('c', 40))) && !ProtocolAdmitted(ProtocolChanged(live, "sourceFingerprint", "PUBLIC_NONFUNCTIONAL"));
+    }
 
     internal static async Task<int> RunAsync(string selection, string mode)
     {
@@ -131,11 +436,11 @@ internal static class FiniteRecoveryCoordinator
         var managedBeforeCanary = managed.Count;
         if (publicMode && selection == "unexpected-output") Console.Write(publicManagedMarker);
         var managedQualified = publicMode && selection == "unexpected-output" ? managedBeforeCanary == 0 && managed.Count == publicManagedMarker.Length : managed.Count == 0;
-        var accepted = managed.Count == 0 && Accepted(mode == "browser", failure, browserAccepted, checks, journey);
+        var accepted = Accepted(managed.Count, mode == "browser", failure, browserAccepted, checks, journey);
         var publicContained = managedQualified && publicMode && failure == "NONE" && checks["SOURCE_BUILD_CURRENT"] && browser is { } observed && PublicContained(observed, selection) && browserExited && browserExit == 1 && !raw;
         var resourceContained = managed.Count == 0 && resourceMode && checks["SOURCE_BUILD_CURRENT"] && interrupted && !accepted && cleanup.Values.All(x => x) && checks["BORROWED_POSTGRES_PRESERVED"];
         var cleanupRejection = false;
-        if (resourceContained && selection == "cleanup-reject") { var synthetic = CoordinatorIdsFor(journey).ToDictionary(x => x, _ => true, StringComparer.Ordinal); var positive = Accepted(true, "NONE", true, synthetic, journey); synthetic["HOST_STOPPED"] = false; cleanupRejection = positive && !Accepted(true, "NONE", true, synthetic, journey); resourceContained &= cleanupRejection; }
+        if (resourceContained && selection == "cleanup-reject") { var synthetic = CoordinatorIdsFor(journey).ToDictionary(x => x, _ => true, StringComparer.Ordinal); var positive = Accepted(0, true, "NONE", true, synthetic, journey); synthetic["HOST_STOPPED"] = false; cleanupRejection = positive && !Accepted(0, true, "NONE", true, synthetic, journey); resourceContained &= cleanupRejection; }
         if (!publicMode && failure == "NONE" && !accepted) failure = "PREDICATE_OR_CLEANUP_FAILED";
         var selected = PublicFaults.Contains(selection, StringComparer.Ordinal) || ResourceFaults.Contains(selection, StringComparer.Ordinal) || BrowserTestRecoveryCodes.JourneyIds.Contains(selection, StringComparer.Ordinal) ? selection : null;
         await JsonSerializer.SerializeAsync(output, new { version = 1, sourceCommit = source.Length == 40 ? source : null, runId, journeyId = journey, mode = new[] { "browser", "public-fault", "resource-canary" }.Contains(mode, StringComparer.Ordinal) ? mode : "INVALID", selection = selected,
@@ -158,32 +463,22 @@ internal static class FiniteRecoveryCoordinator
         {
             using (var write = CancellationTokenSource.CreateLinkedTokenSource(token)) { write.CancelAfter(TimeSpan.FromSeconds(4)); await FiniteTotpCoordinator.WriteFrameAsync(process.StandardInput.BaseStream, control, write.Token).ConfigureAwait(false); }
             JsonElement receipt;
+            var publicFault = publicMode ? JsonSerializer.SerializeToElement(control).GetProperty("publicFault").GetString() : null;
             for (;;)
             {
                 var frame = await FiniteTotpCoordinator.ReadFrameAsync(process.StandardOutput.BaseStream, token).ConfigureAwait(false);
                 if (frame.TryGetProperty("type", out var type) && type.GetString() == "recoveryFixtureRequest")
                 {
-                    FiniteTotpCoordinator.RequireKeys(frame, "version", "type", "requestId", "action");
-                    if (frame.GetProperty("version").GetInt32() != 1 || frame.GetProperty("requestId").GetInt32() != ++sequence || sequence > 16 || !BrowserTestRecoveryCodes.Actions.Contains(frame.GetProperty("action").GetString(), StringComparer.Ordinal)) throw new InvalidOperationException("FINITE_RECOVERY_RELAY_INVALID");
+                    var action = AdmitFixtureRequest(frame, ++sequence, publicMode, publicFault);
                     using var request = CancellationTokenSource.CreateLinkedTokenSource(token); request.CancelAfter(TimeSpan.FromSeconds(4));
-                    IReadOnlyDictionary<string, int> counts;
                     if (publicMode)
                     {
-                        using var admitted = JsonSerializer.SerializeToDocument(control);
-                        var fault = admitted.RootElement.GetProperty("publicFault").GetString();
-                        if (sequence != 1 || frame.GetProperty("action").GetString() != "READ_SAFE_COUNTS" || fault is not ("relay-roundtrip" or "relay-malformed" or "relay-timeout")) throw new InvalidOperationException("FINITE_RECOVERY_RELAY_INVALID");
-                        if (fault == "relay-timeout") continue;
-                        if (fault == "relay-malformed")
-                        {
-                            await FiniteTotpCoordinator.WriteFrameAsync(process.StandardInput.BaseStream, new { version = 1, type = "recoveryFixtureResult", requestId = sequence, status = "PUBLIC_INVALID", counts = new { } }, request.Token).ConfigureAwait(false); continue;
-                        }
-                        counts = BrowserTestRecoveryCodes.CountKeys.ToDictionary(x => x, _ => 0, StringComparer.Ordinal);
+                        var reply = PublicFixtureReply(publicFault!, sequence);
+                        if (reply is { } answer) await FiniteTotpCoordinator.WriteFrameAsync(process.StandardInput.BaseStream, answer, request.Token).ConfigureAwait(false);
+                        continue;
                     }
-                    else
-                    {
-                        if (profile is null) throw new InvalidOperationException("FINITE_RECOVERY_RELAY_INVALID");
-                        profile.Arm(frame.GetProperty("action").GetString()!); counts = await profile.CountsAsync(request.Token).ConfigureAwait(false);
-                    }
+                    if (profile is null) throw new InvalidOperationException("FINITE_RECOVERY_RELAY_INVALID");
+                    profile.Arm(action); var counts = await profile.CountsAsync(request.Token).ConfigureAwait(false);
                     await FiniteTotpCoordinator.WriteFrameAsync(process.StandardInput.BaseStream, new { version = 1, type = "recoveryFixtureResult", requestId = sequence, status = "OK", counts }, request.Token).ConfigureAwait(false); continue;
                 }
                 RequireReceipt(frame, journey, source, publicMode); receipt = frame; break;
@@ -236,7 +531,7 @@ internal static class FiniteRecoveryCoordinator
     })];
     private static bool True(JsonElement value, string key) => value.ValueKind == JsonValueKind.Object && value.TryGetProperty(key, out var property) && property.ValueKind == JsonValueKind.True;
     private static string[] CoordinatorIdsFor(string journey) => [.. CoordinatorIds, .. (journey switch { "RECOVERY_REPLACE_PASSWORD_V1" => new[] { "EXACT_SUBSET_REPLACEMENT" }, "RECOVERY_REPLACE_TOTP_V1" => ["PUBLICATION_DRIFT_ROLLED_BACK"], _ => [] })];
-    private static bool Accepted(bool real, string failure, bool browser, Dictionary<string, bool> checks, string journey) => real && failure == "NONE" && browser && checks.Count == CoordinatorIdsFor(journey).Length && CoordinatorIdsFor(journey).All(id => checks.TryGetValue(id, out var observed) && observed);
+    private static bool Accepted(long managedOutput, bool real, string failure, bool browser, Dictionary<string, bool> checks, string journey) => managedOutput == 0 && real && failure == "NONE" && browser && checks.Count == CoordinatorIdsFor(journey).Length && CoordinatorIdsFor(journey).All(id => checks.TryGetValue(id, out var observed) && observed);
     private static bool PublicContained(JsonElement value, string fault)
     {
         if (value.GetProperty("publicFault").GetString() != fault || True(value, "accepted") || !True(value, "sourceCommitted") || True(value, "cleanupForced") || ClosedPublicFacts.Any(x => !True(value, x))) return false;
