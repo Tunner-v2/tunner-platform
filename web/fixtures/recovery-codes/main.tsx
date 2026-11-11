@@ -1,9 +1,9 @@
 // Public nonfunctional presentation only: no BFF, account, proof or file transport.
 import {createRoot} from 'react-dom/client';
 import {useRef,useState} from 'react';
-import {ContentProvider,ThemeProvider} from '@tunner/ui';
-import type {PublishedContent} from '@tunner/ui';
-import '@tunner/ui/styles.css';
+import {ContentProvider,ThemeProvider} from '../../packages/ui/src/index';
+import type {PublishedContent} from '../../packages/ui/src/index';
+import '../../packages/ui/styles/index.css';
 import '../../apps/user/passkeys.css';
 import {RecoveryCodesCard,RecoveryCodesDialog} from '../../apps/user/recovery-codes.ui';
 import type {RecoveryCodesView} from '../../apps/user/recovery-codes.ui';
