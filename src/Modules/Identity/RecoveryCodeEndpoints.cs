@@ -49,7 +49,7 @@ public static class RecoveryCodeEndpoints
 internal sealed class RecoveryCodeFallbackOwner(IUserStepUpOperationSource owner) { internal IUserStepUpOperationSource Owner { get; } = owner; }
 internal sealed record RecoveryCodeSelection(Guid OperationId, Guid OwnerRequestId, string AccountId, Guid SessionId, string Origin, DateTimeOffset ExpiresAt);
 internal sealed class RecoveryCodeStepUpOwner(RecoveryCodeApplication application, IdentityPersistenceDbContext database, IHttpContextAccessor accessor,
-    IDataProtectionProvider protection, AuthenticationPartitionKey partitions, AuthenticationEndpoints.Surface surface, IEnumerable<RecoveryCodeFallbackOwner> fallback)
+    IDataProtectionProvider protection, AuthenticationPartitionKey partitions, AuthenticationEndpoints.Surface surface, IEnumerable<RecoveryCodeFallbackOwner> fallback, TimeProvider clock)
     : IUserStepUpOperationOutcomeSource, IUserStepUpBrowserCompletionSource
 {
     internal const string CookieName = "__Host-Tunner.RecoveryCode.Operation";
@@ -114,7 +114,7 @@ internal sealed class RecoveryCodeStepUpOwner(RecoveryCodeApplication applicatio
             selected.OperationId.ToString("N") != operation.Binding.CorrelationId) throw new InvalidOperationException("Recovery completion does not match its selected owner.");
         var row = await application.ReadAsync(Caller(http), selected.OperationId, selected.OwnerRequestId, ct).ConfigureAwait(false);
         if (row?.State != "COMPLETED" || row.ContextDigest != operation.Binding.ContextDigest) throw new InvalidOperationException("Recovery completion is not current.");
-        Select(http, row, protection, DateTimeOffset.UtcNow);
+        Select(http, row, protection, clock.GetUtcNow());
     }
 }
 

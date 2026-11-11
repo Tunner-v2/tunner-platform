@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "defect_id": "DEF-TUN-P2-009-COOKIE-001",
+  "work_item_id": "TUN-P2-009",
+  "classification": "FUNCTIONAL_DEFECT",
+  "severity": "SEV-3",
+  "status": "OPEN",
+  "environment": "Static review of committed b3eb4ac8cb72dad932b36898ab8c46e70806bf85; actual private execution remains pending migration and qualified native topology.",
+  "description": "RecoveryCodeStepUpOwner.CompleteBrowserAsync selects the result cookie using DateTimeOffset.UtcNow while the operation and other browser services use injected TimeProvider. A controlled host clock can therefore produce a zero/negative cookie MaxAge after successful commit and lose safe original-result reconciliation. Inject the existing TimeProvider and use clock.GetUtcNow. A fixed boolean regression in the actual winning HTTP helper checks the explicit finite operation-plus-recovery lifetime. Correction is authored; keep OPEN until executed current-source regression confirms it.",
+  "expected_behavior_ref": "docs/contracts/operation-step-up-contract.md",
+  "evidence": [
+    "artifacts/p2-009-recovery-20261111/security-refinement/implementation-candidate-v1-review.json",
+    "artifacts/p2-009-recovery-20261111/implementation-candidate-v1/cookie-clock.patch",
+    "artifacts/p2-009-recovery-20261111/implementation-candidate-v1/cookie-clock-test.patch"
+  ],
+  "affected_versions": [
+    "b3eb4ac8cb72dad932b36898ab8c46e70806bf85"
+  ],
+  "created_at": "2026-11-11T10:41:51.104Z",
+  "updated_at": "2026-11-11T10:41:51.104Z"
+}

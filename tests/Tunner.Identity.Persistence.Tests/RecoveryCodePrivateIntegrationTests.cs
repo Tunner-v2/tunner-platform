@@ -100,7 +100,11 @@ public sealed class RecoveryCodePrivateIntegrationTests(IdentityPostgresFixture 
     private static async Task<Winning> Generate(AuthenticationTestHost host, string cookies, string kind = "GENERATE")
     {
         var pending = await Begin(host, cookies, kind); using var response = await Prove(host, pending);
-        Assert.True(response.StatusCode == HttpStatusCode.OK); using var doc = await response.Content.ReadFromJsonAsync<JsonDocument>(); var root = doc!.RootElement;
+        Assert.True(response.StatusCode == HttpStatusCode.OK);
+        var resultCookie = Microsoft.Net.Http.Headers.SetCookieHeaderValue.ParseList(response.Headers.GetValues("Set-Cookie").ToList())
+            .SingleOrDefault(x => x.Name.Value == RecoveryCodeStepUpOwner.ResultCookieName);
+        Assert.True(resultCookie?.MaxAge == TimeSpan.FromMinutes(10)); // Explicit finite profile, measured against the controlled host clock.
+        using var doc = await response.Content.ReadFromJsonAsync<JsonDocument>(); var root = doc!.RootElement;
         var delivery = root.GetProperty("recoveryCodeFirstDelivery");
         Assert.True(delivery.GetProperty("ownerRequestId").GetGuid() == pending.Request && delivery.GetProperty("setReference").GetGuid() == pending.Set);
         Assert.True(delivery.GetProperty("codes").GetArrayLength() == 2 && !root.GetProperty("signInRequired").GetBoolean());
@@ -143,7 +147,7 @@ public sealed class RecoveryCodePrivateIntegrationTests(IdentityPostgresFixture 
         Assert.True(injected && response.StatusCode != HttpStatusCode.OK);
         using var body = await response.Content.ReadFromJsonAsync<JsonDocument>(); Assert.True(!body!.RootElement.TryGetProperty("recoveryCodeFirstDelivery", out _));
         await using var check = db.Context();
-        Assert.True(await check.Set<RecoveryCodeSetRow>().CountAsync() == 0 && await check.Set<RecoveryCodeEntryRow>().CountAsync() == 0);
+        Assert.True(!await check.Set<RecoveryCodeSetRow>().AnyAsync() && !await check.Set<RecoveryCodeEntryRow>().AnyAsync());
         Assert.True(await check.Set<RecoveryCodeOperationRow>().AllAsync(x => x.State == "PENDING_PROOF"));
         Assert.True(await check.Set<StepUpProofRow>().CountAsync(x => x.State == "CONSUMED") == 0);
         Assert.True(await check.Set<OutboxMessage>().CountAsync(x => x.EventType == "RecoveryCodeSetGenerated") == 0);
