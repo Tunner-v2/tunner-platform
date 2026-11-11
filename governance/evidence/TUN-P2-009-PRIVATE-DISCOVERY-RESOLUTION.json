@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "work_item_id": "TUN-P2-009",
+  "defect_id": "DEF-TUN-P2-009-PRIVATE-001",
+  "status": "RESOLVED_EXACT_STANDARD_DISCOVERY_AND_FINITE_ENTRY_SCOPE",
+  "validated_source_commit": "61551a20af7929f95c7e163d9d1469d74869b8ca",
+  "recorded_at": "2026-11-11T13:51:27.460Z",
+  "build": {
+    "exit_code": 0,
+    "warnings": 0,
+    "errors": 0,
+    "log": "artifacts/p2-009-recovery-20261111/private-discovery-boundary-v2/build-61551a2.log",
+    "sha256": "39b234156c62089026eb4626f8966137eaebb182b542bb9b92a8380a203ec372"
+  },
+  "public_tests": {
+    "passed": 14,
+    "failed": 0,
+    "skipped": 0,
+    "exit_code": 0,
+    "scope": "Native/model/response +passive known-type discovery metadata and existing empty-default-fixture positive-owner guard; no functional Account/database/provider/browser.",
+    "log": "artifacts/p2-009-recovery-20261111/private-discovery-boundary-v2/public-61551a2.log",
+    "log_sha256": "292d65f2e5edab44dacfef3a5abb1ee2c9247c41a39fe79fa7762c0ab2013563",
+    "trx": "artifacts/p2-009-recovery-20261111/private-discovery-boundary-v2/public-61551a2-results/public-recovery.trx",
+    "trx_sha256": "ae34d800305ca964036207aa8b6d92f91897a7449d8c990b7b82c07bb7c6036a"
+  },
+  "actual_regression": "PrivateRecoveryCohortIsNotDiscoverableAndRejectsAnUnownedFixtureBeforeAllocation",
+  "source_controls": {
+    "ordinary_private_discovery_annotations": 0,
+    "private_IClassFixture_removed": true,
+    "unqualified_private_database_calls": 0,
+    "positive_existing_finite_database_guards": 15,
+    "all_authored_methods_and_assertions_preserved": true
+  },
+  "source_bindings": [
+    {
+      "path": "tests/Tunner.Identity.Persistence.Tests/RecoveryCodePrivateIntegrationTests.cs",
+      "utf8_lf_sha256": "0c0b0fe931e749cd71b9b93365263e75ce6197c4ce5fa06c458259fd222308c8"
+    },
+    {
+      "path": "tests/Tunner.Identity.Persistence.Tests/RecoveryCodeResponseTests.cs",
+      "utf8_lf_sha256": "ae0a17504e87ce83185eb11b57129434135a8cf80b7be06e4a3586e0294556c1"
+    },
+    {
+      "path": "tests/Tunner.Identity.Persistence.Tests/IdentityPostgresFixture.cs",
+      "utf8_lf_sha256": "5cae0e16043db6f034fb40266508f6851962b4141e9ae9800d0028fafdac2dc9"
+    }
+  ],
+  "privacy": {
+    "private_cases_executed": 0,
+    "functional_account_database_provider_browser_created": false,
+    "raw_private_values_accessed_or_exported": false,
+    "actual_incident_claimed": false
+  },
+  "remaining": {
+    "authored_private_invocations": 43,
+    "committed_dispatcher_current_cases": 10,
+    "full_fixed_catalog_registration_pending": true,
+    "outer_ownership_qualification_pending": true,
+    "native_private43_execution_pending": true,
+    "whole_feature_acceptance": false
+  },
+  "original_open_audit": "governance/evidence/TUN-P2-009-PRIVATE-DISCOVERY-AUDIT.json",
+  "original_packet_manifest": "artifacts/p2-009-recovery-20261111/private-discovery-boundary-v2/manifest.json",
+  "original_packet_sha256": "28221063423f83959d31a9e7f86ebc6f4d25e4bdc26d615156e57cf3d5bcca0b"
+}
