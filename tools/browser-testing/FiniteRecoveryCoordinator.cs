@@ -470,7 +470,7 @@ internal static class FiniteRecoveryCoordinator
             if (postgres is not null) { try { await postgres.DisposeAsync().AsTask().WaitAsync(TimeSpan.FromSeconds(30)).ConfigureAwait(false); cleanup["postgres"] = postgres.CleanupVerified && postgres.ContainerAbsentVerified; } catch (Exception error) when (error is not OutOfMemoryException) { } }
             if (borrowed is not null) { using var verify = new CancellationTokenSource(TimeSpan.FromSeconds(20)); try { checks["BORROWED_POSTGRES_PRESERVED"] = await borrowed.VerifyPreservedAsync(verify.Token).ConfigureAwait(false); } catch (Exception error) when (error is not OutOfMemoryException) { } }
             if (docker is not null) { try { docker.Dispose(); cleanup["dockerConfig"] = docker.CleanupVerified; } catch (Exception error) when (error is not OutOfMemoryException) { } }
-            checks["RESOURCES_REMOVED"] = cleanup.Values.All(x => x); certificate?.Dispose();
+            checks["RESOURCES_REMOVED"] = cleanup.Values.All(x => x); certificate?.Dispose(); ownership?.Dispose();
         }
         if (root is not null && binding is not null && nativeBinding is not null)
         {

@@ -38,7 +38,7 @@ public static class RecoveryCodeFiniteNativeProtocol
         RequireRegistry();
         var runId = frame.GetProperty("runId").GetString()!; var engine = frame.GetProperty("expectedEngineId").GetString()!;
         var endpoint = new Uri(frame.GetProperty("localDockerEndpoint").GetString()!, UriKind.Absolute);
-        var channel = new RecoveryCodeFixtureOwnershipChannel(input, output, runId, engine);
+        using var channel = new RecoveryCodeFixtureOwnershipChannel(input, output, runId, engine);
         var cohort = frame.GetProperty("cohort").GetString();
         if (cohort == "PUBLIC_PROTOCOL") return new(null, null, await PublicProtocolAsync(endpoint, channel, frame).ConfigureAwait(false));
         if (frame.GetProperty("publicFault").ValueKind != JsonValueKind.Null || frame.GetProperty("publicProbeOrigin").ValueKind != JsonValueKind.Null || frame.GetProperty("publicTelemetryOrigin").ValueKind != JsonValueKind.Null)

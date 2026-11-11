@@ -10,7 +10,7 @@ internal sealed record RecoveryCodePreparedFixtureOwner(string OwnerId, string R
 }
 
 /// <summary>One closed metadata-only private stream. There is no callback, no no-op implementation and no resource fallback.</summary>
-internal sealed class RecoveryCodeFixtureOwnershipChannel
+internal sealed class RecoveryCodeFixtureOwnershipChannel : IDisposable
 {
     private static readonly string[] ProtocolQualificationKeys = ["SOURCE_BOUND", "FRAMES_STRICT", "ACK_REQUIRED", "OUTPUT_CONTAINED", "PROCESS_CLOSED", "SURFACES_REMOVED", "PROXY_DIRECT", "TELEMETRY_DISABLED"];
     private static readonly string[] ResourceQualificationKeys = ["SOURCE_BOUND", "OWNERS_RETAINED", "CREATED_BEFORE_START", "FORCED_CLOSE_VERIFIED", "RECONCILED_EXACT", "CONTAINERS_ABSENT", "VOLUMES_ABSENT", "CONFIGURATIONS_ABSENT", "BORROWED_PRESERVED", "CAPACITY_VERIFIED"];
@@ -31,6 +31,7 @@ internal sealed class RecoveryCodeFixtureOwnershipChannel
         RecoveryCodeFixtureOwnershipChannel.Keys(checks, expected);
         if (expected.Any(key => !checks.GetProperty(key).GetBoolean())) throw new InvalidOperationException("RECOVERY_NATIVE_QUALIFICATION_REQUIRED");
     }
+    private static readonly JsonSerializerOptions WireJson = new() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase };
     private readonly Stream input;
     private readonly Stream output;
     private readonly SemaphoreSlim gate = new(1, 1);
@@ -182,9 +183,10 @@ internal sealed class RecoveryCodeFixtureOwnershipChannel
             foreach (var item in value.EnumerateArray()) Unique(item);
         }
     }
+    public void Dispose() => gate.Dispose();
     internal static async Task WriteAsync<T>(Stream stream, T value, CancellationToken ct)
     {
-        var bytes = JsonSerializer.SerializeToUtf8Bytes(value, new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase });
+        var bytes = JsonSerializer.SerializeToUtf8Bytes(value, WireJson);
         if (bytes.Length is < 2 or > 8192) throw new InvalidOperationException("RECOVERY_PRIVATE_FRAME_INVALID");
         var header = new byte[4]; BinaryPrimitives.WriteInt32BigEndian(header, bytes.Length);
         await stream.WriteAsync(header, ct).ConfigureAwait(false); await stream.WriteAsync(bytes, ct).ConfigureAwait(false); await stream.FlushAsync(ct).ConfigureAwait(false);

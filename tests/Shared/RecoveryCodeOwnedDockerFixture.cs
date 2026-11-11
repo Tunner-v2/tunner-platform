@@ -113,7 +113,7 @@ internal sealed class RecoveryCodeLocalDockerEndpoint : IDisposable
             folder.EnumerateFileSystemInfos().Count() != 1) throw new InvalidOperationException("RECOVERY_RECONCILIATION_CONFIG_INVALID");
         return ClientForConfiguration(RequireLocalEndpoint(endpoint), folder.FullName);
     }
-    private static IDockerClient ClientForConfiguration(Uri endpoint, string path)
+    private static DockerClient ClientForConfiguration(Uri endpoint, string path)
     {
         Environment.SetEnvironmentVariable("DOCKER_CONFIG", path);
         return new DockerClientBuilder(new DockerConfig(new ClosedSettings(path)))
