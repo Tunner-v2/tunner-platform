@@ -1,6 +1,6 @@
 # P2-009 recovery-code issuance, replacement and consumption
 
-Status: REFINEMENT. Native work-start and refreshed isolated context must permit implementation. P2-001–007 were audited; P2-008 remains VALIDATION/READY, with its technical revisions closed. This feature is unfinished.
+Status: IN_PROGRESS following legal native READY/IN_PROGRESS transitions. Native work-start and refreshed isolated context must still permit implementation. P2-001–007 were audited; P2-008 remains VALIDATION/READY, with its technical revisions closed. This feature is unfinished.
 
 ## Authority and ownership
 
