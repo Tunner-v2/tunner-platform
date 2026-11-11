@@ -66,17 +66,24 @@ function startOwned(surface,helper,proxyOrigin=null,browser=null){
   child.stderr.on('data',bytes=>{state.stderr+=bytes.length;if(state.stderr>16384)void stopOwnedChild(child);});
   const reader=new PrivateFrameReader(child.stdout,{maximum:8192,total:262144,queue:2});return {child,state,reader};
 }
+const borrowedFailureStages=Object.freeze(['BORROWED_CONTROL','BORROWED_SOURCE_PIN','BORROWED_EMPTY_CONFIG','BORROWED_ENGINE_QUERY','BORROWED_ENGINE_IDENTITY','BORROWED_METADATA','BORROWED_CLIENT_DISPOSE']);
 async function helper(context,control){
-  const owned=startOwned(context.surface.path,true);let ready;let terminal;let protocol=false;
+  const owned=startOwned(context.surface.path,true);let ready;let terminal;let protocol=false;let failureCode='HELPER_READY';
   try{
     ready=await owned.reader.next(10000);requireTrue(validReady(ready,owned.child));
+    failureCode='HELPER_CONTROL_WRITE';
     await writePrivateFrame(owned.child.stdin,control,8192,{timeout:2000});owned.child.stdin.end();
+    failureCode='HELPER_TERMINAL';
     terminal=await owned.reader.next(65000);requireTrue(validTerminal(terminal));
+    failureCode='HELPER_CLOSE_OR_OUTPUT';
     requireTrue(await waitClose(owned.state,3000)&&owned.reader.drained&&!owned.reader.failed&&owned.state.stderr===0&&!terminal.unexpectedManagedOutput);
     protocol=true;
+    const rejectedStage=terminal.result?.fixture?.action;
+    failureCode=owned.state.exitCode===0&&terminal.accepted===true?'NONE':borrowedFailureStages.includes(rejectedStage)?rejectedStage:'HELPER_REJECTED';
   }catch{/* Never retain or stringify raw diagnostics. */}
   finally{if(!owned.state.closed){await stopOwnedChild(owned.child);await waitClose(owned.state,3000);}owned.reader.dispose();}
-  context.helperProcesses.push({processId:ready?.processId??owned.child.pid??null,processStartUtc:ready?.processStartUtc??null,closed:owned.state.closed});
+  context.helperProcesses.push({processId:owned.child.pid??null,processStartUtc:validReady(ready,owned.child)?ready.processStartUtc:null,closed:owned.state.closed,
+    exitCode:owned.state.exitCode,protocolValid:protocol,unexpectedManagedOutput:terminal?.unexpectedManagedOutput===true,rawOutputRejected:owned.state.stderr!==0,failureCode});
   return protocol&&owned.state.exitCode===0&&terminal.accepted===true?terminal.result:null;
 }
 async function processVerified(context,ready){

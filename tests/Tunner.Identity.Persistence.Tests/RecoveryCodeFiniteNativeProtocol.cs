@@ -61,18 +61,33 @@ public static class RecoveryCodeFiniteNativeProtocol
     {
         if (frame.GetProperty("type").GetString() == "borrowedCheck")
         {
-            RecoveryCodeFixtureOwnershipChannel.Keys(frame, "version", "type", "runId", "localDockerEndpoint", "expectedEngineId", "expectedContainerId", "buildBindingSha256");
-            _ = FiniteTotpBuildBinding.VerifyPinnedRecoveryNativeOutputs(root, frame.GetProperty("buildBindingSha256").GetString()!);
-            var run = frame.GetProperty("runId").GetString()!; var expected = frame.GetProperty("expectedContainerId").GetString();
-            if (frame.GetProperty("version").GetInt32() != 2 || !RecoveryCodeFixtureOwnershipChannel.Hex(run, 32) || expected is not null && !RecoveryCodeFixtureOwnershipChannel.Hex(expected, 64))
-                throw new InvalidOperationException("RECOVERY_BORROWED_CHECK_INVALID");
-            using var borrowedDeadline = new CancellationTokenSource(TimeSpan.FromSeconds(20));
-            using var borrowedClient = RecoveryCodeLocalDockerEndpoint.ReconciliationClient(new Uri(frame.GetProperty("localDockerEndpoint").GetString()!), run);
-            var info = await borrowedClient.System.GetSystemInfoAsync(borrowedDeadline.Token).ConfigureAwait(false);
-            if (info.ID != frame.GetProperty("expectedEngineId").GetString() || info.OSType != "linux") throw new InvalidOperationException("RECOVERY_DOCKER_ENGINE_CHANGED");
-            var repository = Convert.ToHexStringLower(System.Security.Cryptography.SHA256.HashData(Encoding.UTF8.GetBytes(root.FullName.ToLowerInvariant())))[..10];
-            var borrowed = await RecoveryCodeBorrowedPostgres.VerifyUsingClientAsync(borrowedClient, null, "tunner-browser-" + repository, borrowedDeadline.Token).ConfigureAwait(false);
-            return new("VERIFY_BORROWED", run, expected is null || expected == borrowed.ContainerId, false, false, borrowed.ContainerId);
+            var run = string.Empty; var stage = "BORROWED_CONTROL";
+            try
+            {
+                RecoveryCodeFixtureOwnershipChannel.Keys(frame, "version", "type", "runId", "localDockerEndpoint", "expectedEngineId", "expectedContainerId", "buildBindingSha256");
+                run = frame.GetProperty("runId").GetString()!; var expected = frame.GetProperty("expectedContainerId").GetString();
+                if (frame.GetProperty("version").GetInt32() != 2 || !RecoveryCodeFixtureOwnershipChannel.Hex(run, 32) || expected is not null && !RecoveryCodeFixtureOwnershipChannel.Hex(expected, 64))
+                    throw new InvalidOperationException("RECOVERY_BORROWED_CHECK_INVALID");
+                stage = "BORROWED_SOURCE_PIN";
+                _ = FiniteTotpBuildBinding.VerifyPinnedRecoveryNativeOutputs(root, frame.GetProperty("buildBindingSha256").GetString()!);
+                using var borrowedDeadline = new CancellationTokenSource(TimeSpan.FromSeconds(20));
+                stage = "BORROWED_EMPTY_CONFIG";
+                using var borrowedClient = RecoveryCodeLocalDockerEndpoint.ReconciliationClient(new Uri(frame.GetProperty("localDockerEndpoint").GetString()!), run);
+                stage = "BORROWED_ENGINE_QUERY";
+                var info = await borrowedClient.System.GetSystemInfoAsync(borrowedDeadline.Token).ConfigureAwait(false);
+                stage = "BORROWED_ENGINE_IDENTITY";
+                if (info.ID != frame.GetProperty("expectedEngineId").GetString() || info.OSType != "linux") throw new InvalidOperationException("RECOVERY_DOCKER_ENGINE_CHANGED");
+                stage = "BORROWED_METADATA";
+                var repository = Convert.ToHexStringLower(System.Security.Cryptography.SHA256.HashData(Encoding.UTF8.GetBytes(root.FullName.ToLowerInvariant())))[..10];
+                var borrowed = await RecoveryCodeBorrowedPostgres.VerifyUsingClientAsync(borrowedClient, null, "tunner-browser-" + repository, borrowedDeadline.Token).ConfigureAwait(false);
+                stage = "BORROWED_CLIENT_DISPOSE";
+                return new("VERIFY_BORROWED", run, expected is null || expected == borrowed.ContainerId, false, false, borrowed.ContainerId);
+            }
+            catch (Exception error) when (error is not OutOfMemoryException)
+            {
+                // This existing metadata action field carries only a closed stage on rejection. Never project the exception.
+                return new(stage, RecoveryCodeFixtureOwnershipChannel.Hex(run, 32) ? run : string.Empty, false, false, false);
+            }
         }
         if (frame.GetProperty("type").GetString() == "processCheck")
         {

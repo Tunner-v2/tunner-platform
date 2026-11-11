@@ -25,6 +25,7 @@ using (var process = Process.GetCurrentProcess())
 }
 try
 {
+    if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") != "Development") throw new InvalidOperationException("RECOVERY_NATIVE_DEVELOPMENT_REQUIRED");
     var fixtureCheck = args.Length == 1 && args[0] == "--recovery-fixture-check";
     if (args.Length != 0 && !fixtureCheck) throw new InvalidOperationException("RECOVERY_NATIVE_INPUT_INVALID");
     var root = RepositoryRootResolver.Resolve(new DirectoryInfo(Directory.GetCurrentDirectory()));
