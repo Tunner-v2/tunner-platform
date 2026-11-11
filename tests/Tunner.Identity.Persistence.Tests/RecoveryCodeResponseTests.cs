@@ -146,7 +146,7 @@ public sealed class RecoveryCodeResponseTests
         Assert.Equal("CAPACITY_PROVISION_CLIENT_IO", RecoveryCodeFiniteNativeExecution.CapacityProvisionFailure(new IOException(marker)));
         Assert.Equal("CAPACITY_PROVISION_EF_UPDATE_FAILED", RecoveryCodeFiniteNativeExecution.CapacityProvisionFailure(new Microsoft.EntityFrameworkCore.DbUpdateException(marker)));
         Assert.Equal("CAPACITY_PROVISION_INVALID_OPERATION", RecoveryCodeFiniteNativeExecution.CapacityProvisionFailure(new InvalidOperationException(marker)));
-        Assert.Equal("CAPACITY_PROVISION_FAILED", RecoveryCodeFiniteNativeExecution.CapacityProvisionFailure(new Exception(marker, Pg("53100"))));
+        Assert.Equal("CAPACITY_PROVISION_FAILED", RecoveryCodeFiniteNativeExecution.CapacityProvisionFailure(new System.Reflection.TargetInvocationException(marker, Pg("53100"))));
         Assert.Equal("CAPACITY_PROVISION_FAILED", RecoveryCodeFiniteNativeExecution.CapacityProvisionFailure(new AggregateException(Pg("53100"))));
     }
 }
