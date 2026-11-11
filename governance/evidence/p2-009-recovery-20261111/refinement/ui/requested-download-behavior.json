@@ -1,0 +1,39 @@
+{
+  "status": "CONTINGENT_REFINEMENT_CANDIDATE_NOT_APPROVED_RUNTIME_CONTRACT",
+  "existing_authority": [
+    "FRD17§6 one-time handling and verifier-safe storage",
+    "FigJam38 node79:5572 one-time reveal/download",
+    "Doc10 WCAG2.2AA/UX001/UX006/UX008"
+  ],
+  "primary_refs": [
+    {
+      "path": "artifacts/p2-009-recovery-20261111/ui-refinement/accessibility-primary-sources.json",
+      "sha256": "6e3a245699552688442ed496ba31f26ea0a85070d69e29a86c3d536f4ad3a940"
+    }
+  ],
+  "owner_admission": "No dual display/download permission is inferred by the UI. If owner semantics permit local requested download from the same authorized volatile presentation, the action can use only that currently held payload. Other approved delivery modes need separate contract alignment; current visual concept is not an additional grant.",
+  "accessible_action": [
+    "Use a semantic published native button, keyboard Enter/Space activation and no automatic request on open/focus/hover.",
+    "The exact current request/presentation must permit the action. Latch one explicit request synchronously and guard duplicate invocation.",
+    "Existing PrimaryButton supports disabled/aria-busy. No aria-disabled/ref prop extension or new shared control is required for the illustrated approach.",
+    "After this explicit action disables the invoking Download button, put focus on the still-available Done control in the same current modal. Do not focus status merely to announce it, or move focus on unrelated polling. Real native browser prompt/return focus remains to be verified.",
+    "Create the safe role=status/polite/atomic region before the update; announce only requested/unknown feedback, not code values or the whole modal.",
+    "Say Download requested and do not claim Downloaded/Saved. Browser request or completion evidence is not a claim that a user saved the file.",
+    "Done/Escape/close/unmount clear the transient plaintext and restore the connected invoking Security action; use a logical heading fallback if it disappears. No status/history reload recreates plaintext."
+  ],
+  "security_constraints": [
+    "No server read-again, status-to-codes, regeneration retry, clipboard, URL/query/data URI, storage/history/telemetry or raw diagnostic path.",
+    "If the reviewed mechanism uses a Blob/objectURL, it is only an opaque temporary local capability, never raw code encoding or logged/exported metadata; revoke/clear through the reviewed lifecycle. Mechanism and lifetime are not selected here.",
+    "No invented file type/name/retention, production set count/format, replacement/session timing or global filesystem cleanliness assertion.",
+    "Loss without an admitted payload stays nondisclosing; check original safe status. A replacement is a separate freshly authorized operation under current policy, not an automatic retry.",
+    "TOTP default download prohibition remains unchanged. Security requires a separate recovery-only static registration/public fault canaries and one generated canonical owned download-file admission before live values; no folder-wide exception."
+  ],
+  "public_illustration": {
+    "manifest": {
+      "path": "artifacts/p2-009-recovery-20261111/ui-refinement/pictured/manifest.json",
+      "sha256": "25bf03467b5522dc83fba7e614f74741a9b6ad1534e1287212d99deaf7e4fd69"
+    },
+    "executed": "Public button→requested safe live-region+Done focus at390/320 only; no browser file/download/owner operation was executed.",
+    "limits": "No screen-reader, native save dialog, real file delivery, complete009keyboard/contrast or sensitive-boundary PASS."
+  }
+}

@@ -1,0 +1,78 @@
+{
+  "schema_version": 1,
+  "work_item_id": "TUN-P2-009",
+  "recorded_at": "2026-11-11T06:56:55.872023+00:00",
+  "requested_review_head": "667afadc21541acb1c70fd7cc1e21a2b40c33007",
+  "observed_head": "ebfd9af892a7c771a7b5b76a860a5883cedc6cf7",
+  "work_item_state": "REFINEMENT",
+  "phase": "ARTIFACT_ONLY_REFINEMENT_AND_STARTUP_REVIEW",
+  "implementation_authorized": false,
+  "tests_executed": false,
+  "product_or_human_approval": false,
+  "role": "full-stack-engineer",
+  "role_contract": {
+    "path": ".agent/skills/full-stack-engineer/SKILL.md",
+    "sha256": "59adbe2133cf4ce88cbc9ca4eafce1d5a9d83b9562b6580c1571e6fc148d46b5",
+    "version": "1.0.0"
+  },
+  "result": "PASS_STARTUP_ONLY",
+  "assignment": "Explicit root startup/refinement role request; native activation/registration remains root-owned.",
+  "mandatory_checks": [
+    {
+      "check": "Boundary ownership",
+      "startup_assessment": "Keep the primitive in Identity and the existing User BFF; reuse proof/currentness/outbox and existing security/content primitives."
+    },
+    {
+      "check": "Server authorization",
+      "startup_assessment": "Fresh current User proof for Generate/Replace; trusted recovery-case admission for Consume. No browser actor/policy authority or alternate sign-in bypass."
+    },
+    {
+      "check": "Persistence/concurrency",
+      "startup_assessment": "One owner transaction binds proof/set effects/individual claim/dependent result/outbox. Verifier-only rows and exact original-result reads preserve finality."
+    },
+    {
+      "check": "Result mapping",
+      "startup_assessment": "At-most-one server disclosure attempt after confirmed commit; lost/duplicate/UNKNOWN status is safe and never returns existing codes."
+    },
+    {
+      "check": "BFF consistency",
+      "startup_assessment": "Actual fixed completion JSON lacks typed first-delivery payload. Narrow owner-specific integration needs root technical review before module API change."
+    },
+    {
+      "check": "Tests",
+      "startup_assessment": "Only proposed matrices exist; no009 test execution or final implementation evidence is claimed."
+    }
+  ],
+  "evidence": [
+    {
+      "path": "artifacts/p2-009-recovery-20261111/contract-refinement/authority-and-native-resolution.json",
+      "sha256": "4f2b67bec77b5796142531b0147060681ac50a79542420060a34f51b7b0223f8"
+    },
+    {
+      "path": "artifacts/p2-009-recovery-20261111/contract-refinement/execution-boundaries.json",
+      "sha256": "3b05fd003d6aeee172056a7357a149e9cd8af7075a7eef775af436d804f05929"
+    },
+    {
+      "path": "artifacts/p2-009-recovery-20261111/contract-refinement/owner-runtime-inputs.json",
+      "sha256": "0e3b27ae9a72dc380dce1f1d5f303b2c13c9742f0ea86cb3ac9782df286b2559"
+    },
+    {
+      "path": "artifacts/p2-009-recovery-20261111/contract-refinement/typed-contract-proposal.cs.txt",
+      "sha256": "971dea48798d1d853543fb931a892a013c89b31e52ae97a56848c5e6e0c9b845"
+    },
+    {
+      "path": "artifacts/p2-009-recovery-20261111/ui-authority-lean-v2/comparison-and-scopes.json",
+      "sha256": "ca458974bc08ba25b1b33ade20ec834cdba2ead9b9dccdeaeb22d4c24bbf8a2b"
+    }
+  ],
+  "blocking_findings": [],
+  "required_before_implementation_or_acceptance": [
+    "Native work-start/context eligibility",
+    "Supported owner profile and precise delivery/replacement inputs",
+    "Root-reviewed first-delivery BFF seam before module API edits",
+    "Actual tests and applicable UI consent/evidence"
+  ],
+  "final_role_review": false,
+  "final_work_item_pass": false,
+  "test_results_claimed": []
+}

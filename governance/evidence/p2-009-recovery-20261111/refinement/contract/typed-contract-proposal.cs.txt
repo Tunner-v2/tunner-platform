@@ -1,0 +1,98 @@
+// P2-009 REFINEMENT PROPOSAL ONLY. Not production source, compiled code or an approved API.
+// Names are illustrative. Existing Identity/BFF/transaction contracts remain authoritative.
+// No code count, format, timing, assurance, replacement effect or production value is selected.
+
+enum RecoveryCodeSetChange { Generate, Replace }
+enum RecoveryCodeOperationStatus { PendingProof, Completed, Rejected, Expired }
+
+// Browser-selected optimistic concurrency is checked against the server-owned review/context.
+// No Account, session, origin, proof bearer, policy, timestamp or old-set effect is accepted here.
+sealed record RecoveryCodeSetChangeCommand(
+    Guid RequestId, RecoveryCodeSetChange Change, long ExpectedVersion);
+
+// Safe owner-only metadata; the collection shape does not assume a single usable set.
+sealed record RecoveryCodeSetMetadata(
+    Guid SetReference, long LifecycleVersion, int RemainingCodes,
+    bool UsableUnderCurrentPolicy, string PolicyVersion);
+
+sealed record RecoveryCodeOperationView(
+    Guid RequestId, string OperationReference, RecoveryCodeOperationStatus Status,
+    string? ProblemCode);
+
+// Sensitive first-delivery value must be a sealed class with safe ToString and explicit
+// serialization only at the authorized BFF response. No auto-record printing/deconstruction,
+// generic command logging, cache, durable DTO, event or provider-store serialization.
+// It exists only in the winning current request; rollback/UNKNOWN abandons it.
+sealed class RecoveryCodeFirstDelivery /* bounded owned plaintext, no implementation here */;
+
+sealed record RecoveryCodeSetChangeOutcome(
+    RecoveryCodeOperationView View, RecoveryCodeFirstDelivery? FirstDelivery);
+
+// Typed values supplied by the trusted owner; every value is required, supported and versioned.
+// Reference fields are resolved to closed, implemented profiles, never arbitrary callbacks.
+// Generation implementation candidate: built-in .NET RandomNumberGenerator + built-in encoding.
+// Verifier candidate: native Identity PasswordHasher with a recovery-purpose/owner/set binding.
+sealed record RecoveryCodeRuntimeProfile(
+    string Version, string Origin,
+    string GenerationProfileReference, int CodesPerSet,
+    string VerifierProfileReference, string NativeImplementationBinding,
+    string GenerateAssurancePolicyVersion, string ReplaceAssurancePolicyVersion,
+    string ReplacementProfileReference, string OneTimeDeliveryProfileReference,
+    string RecoveryConsumptionPolicyReference, string AbuseAndWorkProfileReference,
+    TimeSpan PendingOperationLifetime,
+    string ProcessingReference, string RetentionReference,
+    string SecurityNotificationPolicyReference);
+
+interface IRecoveryCodePolicySource {
+    RecoveryCodeRuntimeProfile RequireEffective(DateTimeOffset effectiveAt);
+}
+
+// Trusted Identity owner/case input, NOT a browser command and NOT an authenticated User
+// session assumption. P2-011 supplies authorized recovery precedence and current case binding.
+// A constructor/factory must stay internal and derive these facts from current owner state.
+sealed class RecoveryCodeConsumeContext {
+    internal string AccountId { get; }
+    internal string RecoveryOperationId { get; }
+    internal string CorrelationId { get; }
+    internal Guid SetReference { get; }
+    internal long ExpectedSetLifecycleVersion { get; }
+    internal string RecoveryPolicyVersion { get; }
+    internal string ContextDigest { get; }
+    internal DateTimeOffset AuthorizedUntil { get; }
+}
+sealed class RecoveryCodeInput /* bounded sensitive value, no record/value printing */;
+
+// An internal claim is provisional until the exact owner transaction commits. It cannot
+// itself mint a session, upgrade assurance, complete recovery or be used by another operation.
+sealed record RecoveryCodeConsumptionClaim(
+    string RecoveryOperationId, Guid SetReference, Guid CodeEntryReference, string PolicyVersion);
+
+// One cohesive Identity application. Reuse IUserStepUpOperationOutcomeSource for changes,
+// IAssurancePolicySource, StepUpApplication, current Account/session authority and same DbContext.
+// No generic credential repository, standalone validation endpoint or alternate identity host.
+// The existing browser completion emits fixed JSON and has no first-delivery projection.
+// Root must review the narrow owner-specific response seam before any module API change.
+class RecoveryCodeApplication /* signatures only */ {
+    Task<IReadOnlyList<RecoveryCodeSetMetadata>> ReadMetadataAsync(
+        UserStepUpActor actor, CancellationToken ct);
+    Task<RecoveryCodeOperationView> StartChangeAsync(
+        UserStepUpActor actor, RecoveryCodeSetChangeCommand command, CancellationToken ct);
+    Task<UserStepUpOperationContext?> ResolveAsync(
+        UserStepUpActor actor, CancellationToken ct);
+    Task<UserStepUpOperationApplyOutcome> ApplyWithOutcomeAsync(
+        UserStepUpActor actor, UserStepUpOperationContext operation,
+        IdentityPersistenceDbContext database, CancellationToken ct);
+    Task<RecoveryCodeOperationView> ReadOriginalResultAsync(
+        UserStepUpActor actor, Guid requestId, CancellationToken ct);
+    Task<RecoveryCodeConsumptionClaim?> ConsumeInOwnerTransactionAsync(
+        RecoveryCodeConsumeContext context, RecoveryCodeInput code,
+        IdentityPersistenceDbContext sameOwnerDatabase, CancellationToken ct);
+}
+
+// DELIVERY CONTRACT CONSTRAINT, NOT A NEW GENERIC HOOK:
+// A successful proof+set-verifiers+replacement+operation/outbox transaction may expose its
+// transient FirstDelivery only in that winning response after COMMIT. There is no plaintext
+// escrow for a later GET. A duplicate/UNKNOWN/result read returns safe status only.
+// Whether display and one local download share that delivery, or are exclusive, remains an
+// explicit owner admission refinement. HTTP send is not an atomic guarantee of user receipt.
+// Full P2-011 recovery and P2-016 notification delivery remain separate owner orchestration.

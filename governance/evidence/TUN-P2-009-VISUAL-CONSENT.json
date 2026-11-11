@@ -1,0 +1,77 @@
+{
+  "schema_version": 1,
+  "scope_id": "TUN-P2-009",
+  "result": "APPROVED_SCOPED_PRODUCT_OWNER_VISUAL_AND_SAME_VIEW_DOWNLOAD_CONSENT",
+  "recorded_at": "2026-11-11T08:51:03.105Z",
+  "approval_date": "2026-11-11",
+  "approver": "Authorized Product Owner in this conversation",
+  "source": {
+    "tool": "request_user_input_async",
+    "call_id": "call_1cc72d20b0e74d889c7f6c05a30e3196",
+    "verbatim_answer": "Approve L01–L03 and same-view download (Recommended)"
+  },
+  "authority_ref": "docs/authority/current/decisions/AMD-0008_Approved_Figma_Visual_Fidelity_and_Product_Owner_UX_Consent.md section4",
+  "review_packet": {
+    "original_path": "artifacts/p2-009-recovery-20261111/root-review/review.html",
+    "sha256": "6a76ab29d48e011e12a71f6b0c4cadfcbc30da03a10c77caacc2fc2b2e806773",
+    "portable_source": "governance/evidence/p2-009-recovery-20261111/refinement/approved-review-source.html.txt"
+  },
+  "approved_scopes": [
+    {
+      "id": "009-L01",
+      "scope": "One authorized volatile display with one optional explicitly requested local download from that same current payload, and truthful requested-not-saved feedback. No subsequent server disclosure or stored plaintext escrow."
+    },
+    {
+      "id": "009-L02",
+      "scope": "Safe already-presented or uncertain-original-result feedback in the existing modal. A completed server attempt with lost payload does not establish display or save; use neutral unavailability, never re-reveal or auto-regenerate."
+    },
+    {
+      "id": "009-L03",
+      "scope": "Existing-modal replacement review with a slot for complete approved current server-selected effects/publication. Block Continue when those details are absent or stale. Layout consent does not choose effects or approve incomplete production copy."
+    }
+  ],
+  "pictured_scope_ref": "governance/evidence/p2-009-recovery-20261111/refinement/ui/scoped-proposal.json",
+  "pictures": [
+    {
+      "path": "governance/evidence/p2-009-recovery-20261111/refinement/ui/pictures/download-ready-1440.png",
+      "sha256": "bd65e8348515b7b0e442fa84b69391274273de0cbb031ecb3597e2fb6824e7ac"
+    },
+    {
+      "path": "governance/evidence/p2-009-recovery-20261111/refinement/ui/pictures/download-390.png",
+      "sha256": "ff1c8ef1f2d257dd523d9ea2de43293a1784cfd829b3bf268b492f010179b148"
+    },
+    {
+      "path": "governance/evidence/p2-009-recovery-20261111/refinement/ui/pictures/consumed-390.png",
+      "sha256": "395974e45111880ff937c520ea7fab885664a465c15c4e8a45f22b71a32ba643"
+    },
+    {
+      "path": "governance/evidence/p2-009-recovery-20261111/refinement/ui/pictures/unknown-1440.png",
+      "sha256": "d73107c03b826f591fff6bfa8011661079ffdc11a1d645283762504e7cd50edf"
+    },
+    {
+      "path": "governance/evidence/p2-009-recovery-20261111/refinement/ui/pictures/replacement-review-1440.png",
+      "sha256": "383e61b5a26845a5cdf9cb86f86406e157d125f8f4c82c118d38e352a30c2adc"
+    },
+    {
+      "path": "governance/evidence/p2-009-recovery-20261111/refinement/ui/pictures/replacement-review-390.png",
+      "sha256": "f84bf33e7fd83c05734442287c285c715fb43c2e18ded56da4cfdd592a79e3f7"
+    },
+    {
+      "path": "governance/evidence/p2-009-recovery-20261111/refinement/ui/pictures/replacement-blocked-1440.png",
+      "sha256": "b17e7a330e0ccd464e78b937212728bd4b5f71d1213aca6606301c58cbb13816"
+    }
+  ],
+  "unchanged_design": [
+    "Account Security13:2/recovery13:136",
+    "Backup card34:401",
+    "Reveal48:115/backdrop52:566"
+  ],
+  "excluded": [
+    "Production code count/format and runtime policy selection",
+    "Replacement invalidation/session policy or notification delivery selection",
+    "Content publication or whole-feature acceptance",
+    "Figma/Drive/FigJam writes",
+    "Protected-main merge, production activation, publication and release"
+  ],
+  "external_authority_disposition": "Read-only. Manual Figma backfill stays owner-held under TODO-TUN-P2-009-DESIGN001."
+}

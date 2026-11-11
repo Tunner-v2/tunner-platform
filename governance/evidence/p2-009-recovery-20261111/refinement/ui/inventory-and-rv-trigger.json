@@ -1,0 +1,111 @@
+{
+  "proposal_only": true,
+  "applied": false,
+  "inventory_ref": {
+    "path": "docs/contracts/ui-inventory.json",
+    "sha256": "ae982b8df6310b2c486637db8857e93c5a63090a152c0bf50d832a121a4dcbac"
+  },
+  "current_item": {
+    "id": "U-AUTH-06",
+    "kind": "SCREEN",
+    "status": "PLANNED",
+    "app": "user",
+    "module": "U-AUTH",
+    "title": "Recovery Codes",
+    "requirements": "one-time reveal/download and replacement warning",
+    "pathname": null,
+    "runtime_pathname": null,
+    "guard": "Resolve from owning FRD and current authorization before implementation",
+    "owner_scopes": [],
+    "authority_refs": [
+      "docs/authority/current/development/31_UI_UX_Screen_and_Control_Center_Requirements_Matrix.md"
+    ],
+    "figma_refs": [],
+    "source_paths": [],
+    "planning_status": "OWNER_AND_ROUTE_REFINEMENT_REQUIRED",
+    "design_status": "UI_REQUIRED_BEFORE_IMPLEMENTATION",
+    "acceptance_boundary": "Unimplemented: no PASS inherited from registration and no feature implementation authorized by this inventory."
+  },
+  "recommended_planning_item": {
+    "id": "U-AUTH-06",
+    "kind": "COMPONENT",
+    "status": "PLANNED",
+    "app": "user",
+    "module": "Identity.RecoveryCodes",
+    "title": "Recovery Codes",
+    "requirements": "one-time reveal/download and replacement warning",
+    "pathname": null,
+    "runtime_pathname": null,
+    "guard": "Current Account/session, owner eligibility and exact operation-bound fresh proof; current authoritative owner/policy/version before commit; one-time transient presentation only",
+    "owner_scopes": [
+      "TUN-P2-009"
+    ],
+    "authority_refs": [
+      "docs/authority/current/development/31_UI_UX_Screen_and_Control_Center_Requirements_Matrix.md"
+    ],
+    "figma_refs": [
+      {
+        "file_key": "apNbwvAgdn1xIxYH1oiaSC",
+        "node_id": "13:136"
+      },
+      {
+        "file_key": "apNbwvAgdn1xIxYH1oiaSC",
+        "node_id": "34:401"
+      },
+      {
+        "file_key": "apNbwvAgdn1xIxYH1oiaSC",
+        "node_id": "48:115"
+      },
+      {
+        "file_key": "apNbwvAgdn1xIxYH1oiaSC",
+        "node_id": "52:566"
+      }
+    ],
+    "source_paths": [],
+    "planning_status": "PROPOSED_REFINEMENT_NOT_APPLIED",
+    "design_status": "EXISTING_BASE_DESIGN_RESOLVED_L01_L02_L03_SCOPED_CONSENT_PENDING",
+    "acceptance_boundary": "Unimplemented: no PASS inherited from registration and no feature implementation authorized by this inventory.",
+    "owner_pathnames": [
+      "/account/security"
+    ],
+    "parent_screen_ids": [
+      "U-ACCT-SECURITY"
+    ],
+    "interaction": "Same-screen recovery card/action and protected modal. No new full-screen route, safe status never recreates plaintext."
+  },
+  "source_paths_limit": "Planning source_paths remain empty until actual module/endpoint/component design is eligible and selected; do not register invented file paths or mark IMPLEMENTED early.",
+  "parent_delta": {
+    "item": "U-ACCT-SECURITY",
+    "retain_pathname": "/account/security",
+    "retain_existing_owner_scopes": [
+      "TUN-P2-007"
+    ],
+    "add_feature_owner_scope": "TUN-P2-009",
+    "source_and_requirement_delta": "Register actual recovery row/card integration and source ownership after design; preserve passkey/security guards and all existing owners. No whole34:278page swap under the unchanged path."
+  },
+  "shared_form_ownership": "Password/passkey/TOTP proof inputs retain existing shared proof/form owners; U-AUTH06 action/review has no new editable recovery-code field. Full recovery/redemption screen remains P2-011.",
+  "rv_trigger": {
+    "current_closed_original": "TUN-P1-018 DONE",
+    "current_latest": "P1-018-RV006 CLOSED/TOTP scoped",
+    "trigger": "Implementation/registration extends the central shared UI inventory and existing shared dialog/form consumer compatibility after historical closure. That actual inventory/closed-capability change needs new scoped compatibility lineage before code; read-only artifacts and unchanged primitive imports alone do not constitute shared-source modifications.",
+    "precedent_refs": [
+      {
+        "path": "governance/revisions/P1-018-RV003.yaml",
+        "sha256": "79d9764e5a54be88a1ed0764a519432bdd8887b4c9f740f5bdfe89f04c007df3"
+      },
+      {
+        "path": "governance/revisions/P1-018-RV005.yaml",
+        "sha256": "8a3a3e82afdca1dcb29d48450b86fcd0f38bebe09fec090b053f24c5517d2650"
+      },
+      {
+        "path": "governance/revisions/P1-018-RV006.yaml",
+        "sha256": "19bc6ac55d4eb4900adc1a8c23af60af86a98a11f96e9821b5d1d902fcc24bf0"
+      }
+    ],
+    "authority": "Doc03§19 append-only post-closure revisions; native allocator chooses next monotonic ID. Existing directory currently endsRV006; do not allocate or repurpose006 from this proposal.",
+    "native_owner": "Root/PM/Governance; no revision or lifecycle write by UI task.",
+    "additional_if_changed": "Any actual closed shared primitive/prop/content/form/navigation change is an additional concrete RV-owned source delta and requires relevant regression proof. The pictured requested approach uses current controls unchanged."
+  },
+  "compatibility_consequences": "Inventory hash and parent passkeys.tsx integration can make current007/008/shared-scope receipts stale. Preserve their ordered ownership/history; refresh actual affected source/behavior cohorts rather than omit009dependencies or blanket reuse oldPASS.",
+  "native_check_implications": "Parent screen retains URL checks. Recovery component requires applicable VAL+UXFID checks and justified item-specific exclusions, with current source/Figma/consent refs. Do not drop original U-AUTH06 traceability or gate a fake separate route."
+}

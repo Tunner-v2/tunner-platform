@@ -1,0 +1,52 @@
+{
+  "schema_version": 1,
+  "revision_id": "P1-018-RV007",
+  "revision_scope": "WORK_ITEM",
+  "original_scope_id": "TUN-P1-018",
+  "parent_revision_id": "P1-018-RV006",
+  "parent_milestone_revision_id": null,
+  "title": "Reuse shared Account Security UI for recovery codes",
+  "revision_type": "COMPATIBILITY",
+  "status": "PROPOSED",
+  "reason": "P2-009 reuses the existing Account Security card, disclosure modal, typed controls and inventory for one-time recovery-code management. Preserve the original shared UI closure and TOTP revision history. Current AMD-0008/0009 govern exact scope through the P2-009 authority resolution and scoped consent; BOOT-only reference catalog parity remains tracked in TODO-TUN-P2-017-GOV003.",
+  "authority_refs": [
+    "docs/authority/current/development/03_Governed_Development_Lifecycle_Scrum_Git.md"
+  ],
+  "decision_refs": [],
+  "defect_refs": [],
+  "change_refs": [
+    "docs/development/P2_009_RECOVERY_CODES_SCOPE.md",
+    "governance/evidence/TUN-P2-009-VISUAL-CONSENT.json",
+    "governance/evidence/p2-009-recovery-20261111/refinement/authority-resolution.json"
+  ],
+  "impact_classification": "NON_BLOCKING",
+  "blocked_scope": [],
+  "acceptance_criteria": [
+    "Preserve existing consumers and approved composition; reuse the current Account Security route and shared controls. Refine exact inventory ownership and enforce one-time secret disclosure, protected requested download, route/form/fidelity evidence and actual scoped visual consent before affected production UX implementation or acceptance."
+  ],
+  "prerequisites": [],
+  "work_items": [],
+  "required_gates": [],
+  "required_roles": [
+    "project-manager",
+    "governance-engineer",
+    "full-stack-engineer",
+    "solution-architect",
+    "tester-qa-engineer",
+    "cyber-security-engineer",
+    "auditor",
+    "ui-ux-engineer",
+    "frontend-engineer",
+    "end-user-ux-reviewer",
+    "content-writer"
+  ],
+  "evidence_refs": [
+    "governance/evidence/TUN-P2-009-STARTUP-REVIEWS.json",
+    "governance/evidence/TUN-P2-009-VISUAL-CONSENT.json",
+    "governance/evidence/p2-009-recovery-20261111/refinement/native-rv-created.json",
+    "governance/evidence/p2-009-recovery-20261111/refinement/ui/inventory-and-rv-trigger.json"
+  ],
+  "created_at": "2026-11-11T08:44:36.7479328+00:00",
+  "closed_at": null,
+  "product_acceptance_required": false
+}

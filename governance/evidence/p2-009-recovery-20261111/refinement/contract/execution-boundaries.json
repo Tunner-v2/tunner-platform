@@ -1,0 +1,66 @@
+{
+  "schema_version": 1,
+  "work_item_id": "TUN-P2-009",
+  "recorded_at": "2026-11-11T06:56:55.872023+00:00",
+  "requested_review_head": "667afadc21541acb1c70fd7cc1e21a2b40c33007",
+  "observed_head": "ebfd9af892a7c771a7b5b76a860a5883cedc6cf7",
+  "work_item_state": "REFINEMENT",
+  "phase": "ARTIFACT_ONLY_REFINEMENT_AND_STARTUP_REVIEW",
+  "implementation_authorized": false,
+  "tests_executed": false,
+  "product_or_human_approval": false,
+  "typed_sketch": {
+    "path": "artifacts/p2-009-recovery-20261111/contract-refinement/typed-contract-proposal.cs.txt",
+    "sha256": "971dea48798d1d853543fb931a892a013c89b31e52ae97a56848c5e6e0c9b845"
+  },
+  "persistence_candidate": [
+    "One Identity-owned set row per immutable set reference (the set reference is also its generation boundary), with owner, lifecycle version and current profile/classification references.",
+    "Individual code rows contain a native salted verifier, internal entry reference and one-way consumption/cause metadata. Lifecycle version changes for replacement/admission drift; individual usage does not silently redefine all other codes' bindings.",
+    "A recovery-code owner operation row binds exact request/Account/session/origin/change/context/expected resource-version/policy and safe result. Reuse existing identity owner-ledger/outbox patterns; do not build a general credential repository or proof-outcome ledger.",
+    "Do not store redeemable code strings, native RecoveryCodes tokens, reversible recovery escrow, URI/download bodies or verifier blobs in events/logs/evidence. Native hasher input is purpose/Account/set/format bound through unambiguous versioned serialization, not the generic user parameter."
+  ],
+  "generate_replace": [
+    "Start/read resolves real User actor and current owner policy; current metadata read never generates. Stable duplicate identity returns the same safe owner operation.",
+    "Use the existing IUserStepUpOperationOutcomeSource/StepUpApplication owner callback. Lock current Account/session and recovery target in existing order; re-resolve approved policy, current source, expected versions, expiry and replacement plan.",
+    "Within the same local proof-consumption transaction, create native random values/verifiers under bounded work or validate a same-request prepared snapshot; persist complete distinct verifiers, approved old-set effects, safe owner result and outbox. No provider/network I/O in the callback.",
+    "Recheck all authority after native work and immediately before commit, including profile origin/scope/current operation and expected effective version. Owner failure rolls back code/set/proof/effects/outbox together; no falsely completed operation or discarded live verifier claim.",
+    "Only the winning request can retain a transient first-delivery value. Emit it after confirmed COMMIT via an explicitly reviewed BFF projection; discard it on rollback/UNKNOWN. Mark no-more-server-disclosure at the transaction boundary without pretending the user received or saved the response.",
+    "Duplicate, reload, back/forward, another tab or uncertain commit reconciles safe exact original status only; never regenerate or recover plaintext. A fresh replacement is a new current authorized owner operation if policy allows.",
+    "Use the existing HTTPS/same-origin/CSRF/strict-body security boundary and explicit no-store/no-referrer responses. No secret in URL/history/cookie escrow/telemetry; retained transient plaintext has no cross-request cache and no promise of complete managed-runtime memory zeroization."
+  ],
+  "consume": [
+    "Consume is internal to the trusted Identity recovery owner, not a public code-validity endpoint. P2-011 supplies the current authorized recovery-operation/set context; no existing strong-factor session or automatic authentication is inferred.",
+    "Use bounded canonical input and native verifier mechanics with recovery-purpose/owner/set binding. If expensive verification happens outside locks, pin its verifier/set/policy snapshot, then re-lock and recheck the exact unchanged rows and current authority before a claim.",
+    "Reject absent, inactive or mismatched same-owner transaction/DbContext. Atomically mark one unused entry consumed with its exact cause and commit the dependent recovery-owner mutation/result/outbox in that transaction; losing concurrent attempts cannot consume again. Revalidate current recovery-case/policy/set bindings after awaited verification at the final commit boundary.",
+    "Same-operation duplicate recovery is a safe owner-result read; a consumed code never becomes another proof. Different-operation same-code contention, replacement races, policy/set drift and owner rollback must have one current linearization.",
+    "The returned claim is provisional until the owner commits. P2-009 does not mint a final session, upgrade assurance, replace all codes after use or apply full011 effects."
+  ],
+  "actual_browser_seam": {
+    "source_refs": [
+      "src/Modules/Identity/StepUpBrowserEndpoints.cs ExecuteAsync",
+      "src/Modules/Identity/StepUpPasskeyBrowserEndpoints.cs ProofCompleted",
+      "src/Modules/Identity/StepUpOutcomes.cs IUserStepUpBrowserCompletionSource"
+    ],
+    "observed": "Existing CompleteBrowserAsync returns Task, followed by fixed ProofCompleted JSON; it cannot currently project a typed one-time set response.",
+    "proposed_review": "Root reviews a narrow recovery-owner first-delivery projection in the existing completion path, or an owner endpoint using the exact same internal proof transaction. Do not implement a generic secret transport, duplicate proof engine or module API change without that review.",
+    "rejected_shortcuts": [
+      "Later GET generation or second disclosure",
+      "DP/cookie/DB/vault escrow merely to redisclose",
+      "Deterministic regeneration from a retained master secret",
+      "Separate native token-store path or HTTP recovery-code oracle"
+    ]
+  },
+  "download_boundary": "Owner must first admit exact display/download semantics. Then a recovery-only private child may admit one exact owned download and privately verify bounded bytes/cleanup. Existing TOTP no-download boundary remains intact; requested is not proof of human custody or storage success.",
+  "independent_security_cross_review": {
+    "path": "artifacts/p2-009-recovery-20261111/security-refinement/security-review.json",
+    "sha256": "d866ed0a7ddd91362dd84b40421da07d89dca882011f0aa65a7e7b783f401573"
+  },
+  "test_design_handoff": [
+    "Native format/canonical uniqueness and cross-owner/set/purpose rejection",
+    "Same-code/different-operation concurrency and distinct-code isolation",
+    "Consume-versus-replace/current-policy races and post-hash drift",
+    "Exact-proof issue/replace rollback, duplicates and UNKNOWN status",
+    "One-time disclosure loss/no plaintext persistence/redaction",
+    "Public boundary canaries before any actual code, including intentional download cleanup"
+  ]
+}

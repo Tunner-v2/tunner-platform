@@ -1,0 +1,82 @@
+{
+  "schema_version": 1,
+  "work_item_id": "TUN-P2-009",
+  "recorded_at": "2026-11-11T06:56:55.872023+00:00",
+  "requested_review_head": "667afadc21541acb1c70fd7cc1e21a2b40c33007",
+  "observed_head": "ebfd9af892a7c771a7b5b76a860a5883cedc6cf7",
+  "work_item_state": "REFINEMENT",
+  "phase": "ARTIFACT_ONLY_REFINEMENT_AND_STARTUP_REVIEW",
+  "implementation_authorized": false,
+  "tests_executed": false,
+  "product_or_human_approval": false,
+  "role": "sdk-engineer",
+  "role_contract": {
+    "path": ".agent/skills/sdk-engineer/SKILL.md",
+    "sha256": "c64a66b2e19bccdbf69f13c9db62e9e2cbb0403f384591a93b5b787dc33b07ae",
+    "version": "1.0.0"
+  },
+  "result": "PASS_STARTUP_ONLY",
+  "assignment": "Explicit root startup/refinement role request; native activation/registration remains root-owned.",
+  "mandatory_checks": [
+    {
+      "check": "Contract surface",
+      "startup_assessment": "A private User BFF and internal Identity owner contract; no Product API/SDK/OAuth protocol extension is proposed."
+    },
+    {
+      "check": "Generation boundaries",
+      "startup_assessment": "Do not invent OpenAPI/SDK generation or a generic credential SDK for a private feature; executable private schemas remain strict/typed when implementation starts."
+    },
+    {
+      "check": "Authentication",
+      "startup_assessment": "No code/proof/token in URL, storage, public SDK return, cookie escrow or general-purpose validation oracle."
+    },
+    {
+      "check": "Retry/idempotency",
+      "startup_assessment": "Native owner operation identity and safe exact result reconciliation; no automatic retry of uncertain generation or consumed-code proof."
+    },
+    {
+      "check": "Errors",
+      "startup_assessment": "Closed safe outcomes and current actor/case-bound reads; avoid account enumeration and raw native errors."
+    },
+    {
+      "check": "Events/webhooks",
+      "startup_assessment": "Safe owner outbox only; no code payload/provider type or public webhook/version change inferred."
+    },
+    {
+      "check": "Examples/tests",
+      "startup_assessment": "SDK impact remains untriggered. No new SDK test/release claim; native/private contract conformance is planned."
+    }
+  ],
+  "evidence": [
+    {
+      "path": "artifacts/p2-009-recovery-20261111/contract-refinement/authority-and-native-resolution.json",
+      "sha256": "4f2b67bec77b5796142531b0147060681ac50a79542420060a34f51b7b0223f8"
+    },
+    {
+      "path": "artifacts/p2-009-recovery-20261111/contract-refinement/execution-boundaries.json",
+      "sha256": "3b05fd003d6aeee172056a7357a149e9cd8af7075a7eef775af436d804f05929"
+    },
+    {
+      "path": "artifacts/p2-009-recovery-20261111/contract-refinement/owner-runtime-inputs.json",
+      "sha256": "0e3b27ae9a72dc380dce1f1d5f303b2c13c9742f0ea86cb3ac9782df286b2559"
+    },
+    {
+      "path": "artifacts/p2-009-recovery-20261111/contract-refinement/typed-contract-proposal.cs.txt",
+      "sha256": "971dea48798d1d853543fb931a892a013c89b31e52ae97a56848c5e6e0c9b845"
+    },
+    {
+      "path": "artifacts/p2-009-recovery-20261111/ui-authority-lean-v2/comparison-and-scopes.json",
+      "sha256": "ca458974bc08ba25b1b33ade20ec834cdba2ead9b9dccdeaeb22d4c24bbf8a2b"
+    }
+  ],
+  "blocking_findings": [],
+  "required_before_implementation_or_acceptance": [
+    "Native work-start/context eligibility",
+    "Supported owner profile and precise delivery/replacement inputs",
+    "Root-reviewed first-delivery BFF seam before module API edits",
+    "Actual tests and applicable UI consent/evidence"
+  ],
+  "final_role_review": false,
+  "final_work_item_pass": false,
+  "test_results_claimed": []
+}

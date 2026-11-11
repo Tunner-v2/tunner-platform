@@ -1,0 +1,49 @@
+{
+  "schema_version": 1,
+  "status": "PROPOSAL_ONLY_NOT_IMPLEMENTED_OR_QUALIFIED",
+  "admission_dependency": "Identity must first refine one-time delivery and any combined reveal/requested-local-download permission. Current UI concept is inert and not a second grant. No live recovery value may be used to qualify a new boundary.",
+  "invariants": [
+    "Keep existing TOTP v2/v3 literal registries, acceptDownloads:false and empty non-profile artifact rules. No global switch, folder/extension allowlist, reporter override or secret-bearing test-runner invocation.",
+    "Use a separate literal recovery journey/canary registration with fixed required component-owned predicates and fixed module dispatch. No arbitrary module, callback, shell, output path or policy injection from control input.",
+    "Use the existing protected raw-browser process, environment isolation, bounded private control, source/build binding and owned-resource cleanup mechanics. Current surface path grammar is P2-008-only; any P2-009 adaptation must be a separately reviewed static grammar/reuse seam, not an arbitrary-root validator.",
+    "The only candidate download input is the already held authorized transient payload from the one-time response. No server read-again, plaintext escrow, status-to-code endpoint or blind regeneration. Loss before possession stays nondisclosing.",
+    "Default state is DISARMED. Arm exactly one request immediately before the explicit approved action in the owning page/context and operation. Every unsolicited, second, popup/iframe, stale-operation or post-disposal download rejects the run even if its bytes look benign.",
+    "If Blob/objectURL is chosen, allow only the owning page's opaque local temporary capability and revoke it on completion/exit. Never place codes in data: URLs, query/fragment, filenames, navigation, storage or exported URL fields. Exact transport mechanism remains reviewed, not implemented here.",
+    "Do not trust suggestedFilename, download.url or download.failure as safe diagnostics. Never print them. Browser-generated path must resolve to one regular nonlinked file under the exact newly owned download root; reject traversal, alternate roots, symlinks/reparse ambiguity and changed file identity. Do not saveAs a user/global directory.",
+    "Count and size limits are finite reviewed test-protocol constants derived from the selected supported profile, not business defaults. Inspect the bounded stream only inside the protected child; compare exactly to its held payload and return booleans. Do not export bytes, digest, code list, assertion diff, download path or raw errors to coordinator/evidence.",
+    "An admitted file is permitted only during its exact transfer/inspection interval. All other artifact roots remain empty. Reconcile live inventory with the exact admitted identity; deleting an unexpected artifact does not convert the boundary to PASS.",
+    "After bounded complete/cancel, call bounded artifact deletion and verify actual file absence, closed context/browser/child, clean owned surface and surface removal. A timed-out API promise alone is not cleanup. Use known-owned-process containment fallback, then verify actual close/absence; forced termination or unknown cleanup rejects acceptance under the existing contract.",
+    "Clear references/DOM on Done, close, operation change and cancellation; dispose object URLs/streams/buffers where applicable. Do not claim managed-string, OS-memory or global-filesystem erasure. User-facing feedback proves request initiation, never user-save/backup confirmation.",
+    "Neither coordinator nor supervisor receives recovery codes. Coordinator proves actual owner/persistence/resource observations; browser proves actual DOM/download/private-surface observations. Neither echoes the other's asserted PASS inputs. Missing/false/unknown/extra/cross-component predicates reject acceptance."
+  ],
+  "test_layer_ownership": {
+    "native_integration": "The test process privately owns generated inputs and tests actual verifier rows, native token fallback absence, atomic state/outbox and safe diagnostics. Use fixed boolean assertions, never expected-secret assertion rendering.",
+    "real_browser_child": "Owns volatile response and one admitted download; bounded byte equality and clearing are checked internally. No secret fixture value goes into argv, env, file-based control, IPC receipt or HTTP test oracle.",
+    "coordinator": "Structured actual safe-column/token/outbox audit and exact resource cleanup; source-proven write paths plus native tests complement browser evidence. Do not forward codes to expand a database scan or claim exhaustive global database/host absence.",
+    "supervisor": "Owns finite lifetime, raw-output rejection, known process identities and exact owned-root removal. Keep failure envelopes representable but non-accepting."
+  },
+  "public_fault_canaries_required_before_live": [
+    "One armed public fixture download with expected public bytes, actual bounded stream check and removal through the exact new registration",
+    "Unexpected and duplicate downloads before/after admission; wrong page/context/operation and race with close",
+    "Wrong content, zero/oversized/truncated content, adversarial suggested name and owned-path/link mismatch",
+    "Timeout/cancellation at start, partial transfer, stream failure, delete failure and controller/child termination",
+    "Public marker in raw stdout/stderr, thrown download error, assertion-like text, unexpected file or attempted capture",
+    "Missing/false/extra predicates, malformed control/result and valid failed envelope; failure remains failure",
+    "Existing TOTP public boundary matrix still rejects download artifacts and retains all original output controls"
+  ],
+  "unresolved_technical_facts_before_implementation": [
+    "Final owner admission semantics and exact UI consent scope for requested download",
+    "Pinned Playwright actual download staging path/lifecycle under the reviewed configuration, before allowing any secret file",
+    "Exact static module/path ownership and finite transfer/stream/delete/time/size budgets",
+    "How the single admitted file identity is reconciled during live inventory without admitting unrelated artifacts",
+    "Public canary outcomes and committed source/build binding for the new recovery boundary"
+  ],
+  "existing_library_seam": {
+    "version": "Installed Playwright1.62.1 source read only",
+    "path": "web/node_modules/.pnpm/playwright-core@1.62.1/node_modules/playwright-core/lib/coreBundle.js",
+    "scope": "Download.path/createReadStream/cancel/delete delegate to Artifact; path waits for completion and can throw. types/types.d.ts documents context-close deletion. These are reuse candidates, not proof of bounded cleanup or an executed download."
+  },
+  "real_download_executed": false,
+  "totp_controls_relaxed": false,
+  "global_host_filesystem_absence_claimed": false
+}
