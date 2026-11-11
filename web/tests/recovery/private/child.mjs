@@ -109,7 +109,13 @@ try {
       }
       const download = await request(owner);
       if(publicExtraFaults.includes(fault))checks.DOWNLOAD_ADMITTED=true;
-      if(simultaneous){await simultaneous;requireTwoDownloadRejection(downloads.length,downloadAdmissions);throw fixedError('ADMISSION_REJECTED');}
+      if(simultaneous){
+       await simultaneous;requireTwoDownloadRejection(downloads.length,downloadAdmissions);
+       // Only the two public canary transfers finish native deletion before cancel fallback.
+       // Download.delete() waits for completion; any failure keeps the existing finally cleanup.
+       await Promise.all(downloads.map(item=>bounded(item.delete(),budgets.close).catch(()=>{})));
+       throw fixedError('ADMISSION_REJECTED');
+      }
       if(publicStageFaults.includes(fault))checks.DOWNLOAD_ADMITTED=true;
       if (fault === 'outside-identity') { await downloadIdentity(root, resolve(root.path, '..', 'not-an-owned-download')); throw fixedError(); }
       const expected = Buffer.from(publicBody);
