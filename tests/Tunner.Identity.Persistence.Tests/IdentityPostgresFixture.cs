@@ -1,12 +1,8 @@
 using DotNet.Testcontainers.Containers;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.Extensions.DependencyInjection;
 using Npgsql;
-using Tunner.Database;
-using Tunner.Database.Migrations;
 using Tunner.Testing;
+using Tunner.Testing.Recovery;
 using Xunit;
 using Xunit.Sdk;
 
@@ -15,39 +11,37 @@ namespace Tunner.Identity.Persistence.Tests;
 public sealed class IdentityPostgresFixture : IAsyncLifetime
 {
     private IContainer? container;
+    private readonly RecoveryCodeOwnedPostgres? finiteOwner;
+    public IdentityPostgresFixture() { }
+    internal IdentityPostgresFixture(RecoveryCodeOwnedPostgres finiteOwner)
+    { finiteOwner.RequireReady(); this.finiteOwner = finiteOwner; }
 
     public async Task InitializeAsync()
     {
+        if (finiteOwner is not null) { finiteOwner.RequireReady(); return; }
         if (!TestHarnessProfiles.IsContainerExecutionEnabled()) return;
         container = TestcontainersBaseline.CreatePostgresContainer();
         await container.StartAsync();
     }
 
-    public async Task<IdentityTestDatabase> CreateDatabaseAsync(string? targetMigration = null)
+    public Task<IdentityTestDatabase> CreateDatabaseAsync(string? targetMigration = null) => CreateDatabaseCoreAsync(targetMigration, default);
+    internal Task<IdentityTestDatabase> CreateFiniteDatabaseAsync(CancellationToken ct)
     {
-        if (container is null) throw SkipException.ForSkip("Set TUNNER_RUN_CONTAINER_TESTS=1 for disposable PostgreSQL Identity tests.");
-        var name = "identity_" + Guid.NewGuid().ToString("N");
-        var adminConnection = new NpgsqlConnectionStringBuilder
-        {
-            Host = container.Hostname, Port = container.GetMappedPublicPort(5432), Database = "postgres", Username = "tunner"
-        };
-        await using (var connection = new NpgsqlConnection(adminConnection.ConnectionString))
-        {
-            await connection.OpenAsync();
-            await using var command = connection.CreateCommand();
-            command.CommandText = "CREATE DATABASE " + name;
-            await command.ExecuteNonQueryAsync();
-        }
-        adminConnection.Database = name;
-        await using (var platform = new TunnerMigrationsDbContext(new DbContextOptionsBuilder<TunnerMigrationsDbContext>()
-            .UseNpgsql(adminConnection.ConnectionString, x => x.MigrationsAssembly(typeof(TunnerMigrationsDbContextFactory).Assembly.FullName)).Options))
-            await platform.Database.MigrateAsync();
-        var database = new IdentityTestDatabase(adminConnection.ConnectionString);
-        await using var identity = database.Context();
-        await identity.GetService<IMigrator>().MigrateAsync(targetMigration);
-        if (!(await identity.Database.GetAppliedMigrationsAsync()).Any() || targetMigration is null && identity.Database.HasPendingModelChanges())
-            throw new InvalidOperationException("Identity test database must have the complete current migration before a test can run.");
-        return database;
+        if (finiteOwner is null) throw new InvalidOperationException("RECOVERY_FINITE_DATABASE_OWNER_REQUIRED");
+        return CreateDatabaseCoreAsync(null, ct);
+    }
+    private async Task<IdentityTestDatabase> CreateDatabaseCoreAsync(string? targetMigration, CancellationToken ct)
+    {
+        if (container is null && finiteOwner is null) throw SkipException.ForSkip("Set TUNNER_RUN_CONTAINER_TESTS=1 for disposable PostgreSQL Identity tests.");
+        finiteOwner?.RequireReady();
+        var adminConnection = finiteOwner is not null
+            ? new NpgsqlConnectionStringBuilder(finiteOwner.Connection("postgres"))
+            : new NpgsqlConnectionStringBuilder
+            {
+                Host = container!.Hostname, Port = container!.GetMappedPublicPort(5432), Database = "postgres", Username = "tunner"
+            };
+        var connectionString = await RecoveryCodeIdentityDatabaseProvisioning.CreateAsync(adminConnection, targetMigration, ct);
+        return new IdentityTestDatabase(connectionString, finiteOwner);
     }
 
     public async Task DisposeAsync()
@@ -58,19 +52,20 @@ public sealed class IdentityPostgresFixture : IAsyncLifetime
 
 public sealed class IdentityTestDatabase : IAsyncDisposable
 {
-    public IdentityTestDatabase(string connectionString)
+    public IdentityTestDatabase(string connectionString) : this(connectionString, null) { }
+    internal IdentityTestDatabase(string connectionString, RecoveryCodeOwnedPostgres? finiteOwner)
     {
+        finiteOwner?.RequireReady(); FiniteOwner = finiteOwner;
         ConnectionString = connectionString;
         Services = new ServiceCollection().AddTunnerIdentityPersistence(connectionString).BuildServiceProvider();
     }
 
+    internal RecoveryCodeOwnedPostgres? FiniteOwner { get; }
     public string ConnectionString { get; }
     public ServiceProvider Services { get; }
     public IdentityPersistenceDbContext Context()
     {
-        var builder = new DbContextOptionsBuilder<IdentityPersistenceDbContext>().UseApplicationServiceProvider(Services);
-        IdentityPersistenceRegistration.ConfigureDatabase(builder, ConnectionString);
-        return new IdentityPersistenceDbContext(builder.Options);
+        return RecoveryCodeIdentityDatabaseProvisioning.Context(Services, ConnectionString);
     }
 
     public ValueTask DisposeAsync() => Services.DisposeAsync();

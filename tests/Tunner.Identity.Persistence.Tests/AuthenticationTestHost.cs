@@ -40,7 +40,7 @@ internal sealed class AuthenticationTestHost : IAsyncDisposable
         using var rsa = RSA.Create(2048); var request = new CertificateRequest("CN=localhost", rsa, HashAlgorithmName.SHA256, RSASignaturePadding.Pkcs1);
         using var generated = request.CreateSelfSigned(DateTimeOffset.UtcNow.AddMinutes(-1), DateTimeOffset.UtcNow.AddHours(2));
         var bytes = generated.Export(X509ContentType.Pkcs12); X509Certificate2 certificate;
-        try { certificate = X509CertificateLoader.LoadPkcs12(bytes, null, X509KeyStorageFlags.DefaultKeySet); }
+        try { certificate = X509CertificateLoader.LoadPkcs12(bytes, null, database.FiniteOwner is null ? X509KeyStorageFlags.DefaultKeySet : X509KeyStorageFlags.EphemeralKeySet); }
         finally { CryptographicOperations.ZeroMemory(bytes); }
         var clock = new TestClock(); var access = new TestAccess(); var policies = new TestPolicies();
         var application = TunnerAuthenticatedUserBffHost.CreateApplication([], builder =>
@@ -58,7 +58,7 @@ internal sealed class AuthenticationTestHost : IAsyncDisposable
         });
         await application.StartAsync();
         var address = application.Services.GetRequiredService<IServer>().Features.Get<IServerAddressesFeature>()!.Addresses.Single();
-        var handler = new HttpClientHandler { UseCookies = false, AllowAutoRedirect = false,
+        var handler = new HttpClientHandler { UseCookies = false, AllowAutoRedirect = false, UseProxy = database.FiniteOwner is null,
             ServerCertificateCustomValidationCallback = (_, presented, _, _) => presented is not null && presented.GetCertHashString(HashAlgorithmName.SHA256) == certificate.GetCertHashString(HashAlgorithmName.SHA256) };
         return new(application, new HttpClient(handler) { BaseAddress = new Uri(address) }, certificate, clock, access, policies);
     }

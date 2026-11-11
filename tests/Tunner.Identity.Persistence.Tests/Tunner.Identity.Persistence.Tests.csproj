@@ -11,10 +11,12 @@
     <ProjectReference Include="../../src/Modules/Identity/Tunner.Identity.Persistence.csproj" />
     <ProjectReference Include="../../src/Tunner.Database.Migrations/Tunner.Database.Migrations.csproj" />
     <ProjectReference Include="../../src/Tunner.Testing/Tunner.Testing.csproj" />
+    <ProjectReference Include="../../src/Tunner.Installer/Tunner.Installer.csproj" />
     <ProjectReference Include="../../src/Tunner.User.Bff/Tunner.User.Bff.csproj" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="../Shared/NativeTotpCodeFixture.cs" Link="Shared/NativeTotpCodeFixture.cs" />
+    <Compile Include="../Shared/RecoveryCodeOwnedDockerFixture.cs" Link="Shared/RecoveryCodeOwnedDockerFixture.cs" />
     <None Include="../../web/apps/user/passkeys.content.proposal.json" Link="passkeys-content.proposal.json" CopyToOutputDirectory="PreserveNewest" />
     <None Include="../../web/apps/user/step-up.content.proposal.json" Link="step-up-content.proposal.json" CopyToOutputDirectory="PreserveNewest" />
     <None Include="../../web/apps/user/authentication.content.proposal.json" Link="authentication-content.proposal.json" CopyToOutputDirectory="PreserveNewest" />
