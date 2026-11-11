@@ -14,6 +14,32 @@ using static Tunner.Identity.Persistence.Tests.AuthenticationTestHost;
 
 namespace Tunner.Identity.Persistence.Tests;
 
+// Fixed first-case checkpoints only. No exception payload or cross-request cache is retained.
+internal enum RecoveryCodeFirstCasePhase { SETUP, LOGIN, GENERATE, SAFE_READ, REPLACE, STATE }
+internal enum RecoveryCodeFirstCaseStage
+{
+    DATABASE, HOST, SEED, OPTIONS_GET, OPTIONS_STATUS, OPTIONS_BODY, SIGN_IN_POST, SIGN_IN_STATUS,
+    START_POST, START_STATUS, START_BODY, CURRENT_OPTIONS_GET, CURRENT_OPTIONS_STATUS, CURRENT_OPTIONS_BODY,
+    CAN_CONTINUE, PROOF_OPTIONS_GET, PROOF_OPTIONS_STATUS, PROOF_OPTIONS_BODY, PROOF_BINDING, PASSWORD_PROOF_POST,
+    PROOF_STATUS, RESULT_COOKIE, COOKIE_MAX_AGE, DELIVERY_BODY, DELIVERY_BINDING, DELIVERY_COUNT, RETAIN_CODES,
+    RESULT_POST, RESULT_STATUS, RESULT_BODY, SAFE_RESULT, CHECK_CONTEXT, ACTIVE_SET_STATES, CAUSAL_RETIREMENT,
+    CONSUMED_PROOFS, DISPOSAL
+}
+internal sealed class RecoveryCodeFirstCaseCheckpoint
+{
+    internal RecoveryCodeFirstCasePhase Phase { get; set; } = RecoveryCodeFirstCasePhase.SETUP;
+    internal RecoveryCodeFirstCaseStage Stage { get; private set; } = RecoveryCodeFirstCaseStage.DATABASE;
+    internal void Mark(RecoveryCodeFirstCaseStage stage) => Stage = stage;
+    public override string ToString() => nameof(RecoveryCodeFirstCaseCheckpoint);
+}
+internal sealed class RecoveryCodeFirstCaseFailure(RecoveryCodeFirstCasePhase phase, RecoveryCodeFirstCaseStage stage)
+    : Exception("RECOVERY_FIRST_CASE_FAILED")
+{
+    internal string FailureCode { get; } = Enum.IsDefined(phase) && Enum.IsDefined(stage)
+        ? "FIRST_CASE_" + Enum.GetName(phase) + "_" + Enum.GetName(stage) : "CASE_FAILED";
+    public override string ToString() => nameof(RecoveryCodeFirstCaseFailure);
+}
+
 /// <summary>Private in-process native cohort. Never output a response/code/verifier/context/buffer value.
 /// Execute only after root commits source, generates migration and qualifies the private native topology.</summary>
 
@@ -102,54 +128,84 @@ public sealed class RecoveryCodePrivateIntegrationTests(IdentityPostgresFixture 
         public void Dispose() { foreach (var code in Codes) code.Dispose(); }
         public override string ToString() => nameof(Winning);
     }
-    private static async Task<string> Login(AuthenticationTestHost host, string email = "person@example.test")
+    private static async Task<string> Login(AuthenticationTestHost host, string email = "person@example.test", RecoveryCodeFirstCaseCheckpoint? checkpoint = null)
     {
-        var boot = await host.Options(); using var response = await host.Post("/authentication/sign-in", Command(boot.Key, email: email), boot.Cookies, boot.Csrf);
+        checkpoint?.Mark(RecoveryCodeFirstCaseStage.OPTIONS_GET);
+        var boot = await host.Options();
+        checkpoint?.Mark(RecoveryCodeFirstCaseStage.SIGN_IN_POST);
+        using var response = await host.Post("/authentication/sign-in", Command(boot.Key, email: email), boot.Cookies, boot.Csrf);
+        checkpoint?.Mark(RecoveryCodeFirstCaseStage.SIGN_IN_STATUS);
         Assert.True(response.StatusCode == HttpStatusCode.OK); return Merge(boot.Cookies, response);
     }
-    private static async Task<Pending> Begin(AuthenticationTestHost host, string cookies, string kind = "GENERATE")
+    private static async Task<Pending> Begin(AuthenticationTestHost host, string cookies, string kind = "GENERATE", RecoveryCodeFirstCaseCheckpoint? checkpoint = null)
     {
-        using var options = await host.Get("/account/recovery-codes/options", cookies); Assert.True(options.StatusCode == HttpStatusCode.OK);
+        checkpoint?.Mark(RecoveryCodeFirstCaseStage.OPTIONS_GET);
+        using var options = await host.Get("/account/recovery-codes/options", cookies);
+        checkpoint?.Mark(RecoveryCodeFirstCaseStage.OPTIONS_STATUS);
+        Assert.True(options.StatusCode == HttpStatusCode.OK);
+        checkpoint?.Mark(RecoveryCodeFirstCaseStage.OPTIONS_BODY);
         using var doc = await options.Content.ReadFromJsonAsync<JsonDocument>(); var body = doc!.RootElement;
         var request = body.GetProperty("ownerRequestId").GetGuid(); var version = body.GetProperty("expectedVersion").GetInt64(); var csrf = body.GetProperty("csrfToken").GetString()!;
         cookies = Merge(cookies, options);
+        checkpoint?.Mark(RecoveryCodeFirstCaseStage.START_POST);
         using var response = await host.Post("/account/recovery-codes/" + kind.ToLowerInvariant() + "/start", new { ownerRequestId = request, expectedVersion = version }, cookies, csrf);
-        Assert.True(response.StatusCode == HttpStatusCode.OK); using var started = await response.Content.ReadFromJsonAsync<JsonDocument>(); var root = started!.RootElement;
+        checkpoint?.Mark(RecoveryCodeFirstCaseStage.START_STATUS);
+        Assert.True(response.StatusCode == HttpStatusCode.OK);
+        checkpoint?.Mark(RecoveryCodeFirstCaseStage.START_BODY);
+        using var started = await response.Content.ReadFromJsonAsync<JsonDocument>(); var root = started!.RootElement;
         var pending = new Pending(request, Guid.ParseExact(root.GetProperty("operationReference").GetString()!, "N"), root.GetProperty("setReference").GetGuid(), Merge(cookies, response), csrf);
-        using var current = await host.Get("/account/recovery-codes/options", pending.Cookies); Assert.True(current.StatusCode == HttpStatusCode.OK);
+        checkpoint?.Mark(RecoveryCodeFirstCaseStage.CURRENT_OPTIONS_GET);
+        using var current = await host.Get("/account/recovery-codes/options", pending.Cookies);
+        checkpoint?.Mark(RecoveryCodeFirstCaseStage.CURRENT_OPTIONS_STATUS);
+        Assert.True(current.StatusCode == HttpStatusCode.OK);
+        checkpoint?.Mark(RecoveryCodeFirstCaseStage.CURRENT_OPTIONS_BODY);
         using var currentDoc = await current.Content.ReadFromJsonAsync<JsonDocument>();
+        checkpoint?.Mark(RecoveryCodeFirstCaseStage.CAN_CONTINUE);
         Assert.True(currentDoc!.RootElement.GetProperty("recovery").GetProperty("impact").GetProperty("canContinue").GetBoolean());
         pending.Cookies = Merge(pending.Cookies, current); pending.Csrf = currentDoc.RootElement.GetProperty("csrfToken").GetString()!;
         return pending;
     }
-    private static async Task<Guid> PreparePasswordRequest(AuthenticationTestHost host, Pending pending)
+    private static async Task<Guid> PreparePasswordRequest(AuthenticationTestHost host, Pending pending, RecoveryCodeFirstCaseCheckpoint? checkpoint = null)
     {
-        using var options = await host.Get("/authentication/step-up/options", pending.Cookies); Assert.True(options.StatusCode == HttpStatusCode.OK);
+        checkpoint?.Mark(RecoveryCodeFirstCaseStage.PROOF_OPTIONS_GET);
+        using var options = await host.Get("/authentication/step-up/options", pending.Cookies);
+        checkpoint?.Mark(RecoveryCodeFirstCaseStage.PROOF_OPTIONS_STATUS);
+        Assert.True(options.StatusCode == HttpStatusCode.OK);
+        checkpoint?.Mark(RecoveryCodeFirstCaseStage.PROOF_OPTIONS_BODY);
         using var doc = await options.Content.ReadFromJsonAsync<JsonDocument>(); var root = doc!.RootElement;
+        checkpoint?.Mark(RecoveryCodeFirstCaseStage.PROOF_BINDING);
         Assert.True(root.GetProperty("operationReference").GetString() == pending.Operation.ToString("N"));
         pending.Cookies = Merge(pending.Cookies, options); pending.Csrf = root.GetProperty("csrfToken").GetString()!;
         return root.GetProperty("requestId").GetGuid();
     }
-    private static async Task<HttpResponseMessage> Prove(AuthenticationTestHost host, Pending pending)
+    private static async Task<HttpResponseMessage> Prove(AuthenticationTestHost host, Pending pending, RecoveryCodeFirstCaseCheckpoint? checkpoint = null)
     {
-        var request = await PreparePasswordRequest(host, pending);
+        var request = await PreparePasswordRequest(host, pending, checkpoint);
+        checkpoint?.Mark(RecoveryCodeFirstCaseStage.PASSWORD_PROOF_POST);
         return await host.Post("/authentication/step-up/password", new { requestId = request, password = Password }, pending.Cookies, pending.Csrf);
     }
-    private static async Task<Winning> Generate(AuthenticationTestHost host, string cookies, string kind = "GENERATE")
+    private static async Task<Winning> Generate(AuthenticationTestHost host, string cookies, string kind = "GENERATE", RecoveryCodeFirstCaseCheckpoint? checkpoint = null)
     {
-        var pending = await Begin(host, cookies, kind); using var response = await Prove(host, pending);
+        var pending = await Begin(host, cookies, kind, checkpoint); using var response = await Prove(host, pending, checkpoint);
+        checkpoint?.Mark(RecoveryCodeFirstCaseStage.PROOF_STATUS);
         Assert.True(response.StatusCode == HttpStatusCode.OK);
+        checkpoint?.Mark(RecoveryCodeFirstCaseStage.RESULT_COOKIE);
         var resultCookie = Microsoft.Net.Http.Headers.SetCookieHeaderValue.ParseList(response.Headers.GetValues("Set-Cookie").ToList())
             .SingleOrDefault(x => x.Name.Value == RecoveryCodeStepUpOwner.ResultCookieName);
+        checkpoint?.Mark(RecoveryCodeFirstCaseStage.COOKIE_MAX_AGE);
         Assert.True(resultCookie?.MaxAge == TimeSpan.FromMinutes(10)); // Explicit finite profile, measured against the controlled host clock.
+        checkpoint?.Mark(RecoveryCodeFirstCaseStage.DELIVERY_BODY);
         using var doc = await response.Content.ReadFromJsonAsync<JsonDocument>(); var root = doc!.RootElement;
         var delivery = root.GetProperty("recoveryCodeFirstDelivery");
+        checkpoint?.Mark(RecoveryCodeFirstCaseStage.DELIVERY_BINDING);
         Assert.True(delivery.GetProperty("ownerRequestId").GetGuid() == pending.Request && delivery.GetProperty("setReference").GetGuid() == pending.Set);
+        checkpoint?.Mark(RecoveryCodeFirstCaseStage.DELIVERY_COUNT);
         Assert.True(delivery.GetProperty("codes").GetArrayLength() == 2 && !root.GetProperty("signInRequired").GetBoolean());
         pending.Cookies = Merge(pending.Cookies, response);
         var retained = new List<RecoveryCodeValue>();
         try
         {
+            checkpoint?.Mark(RecoveryCodeFirstCaseStage.RETAIN_CODES);
             foreach (var value in delivery.GetProperty("codes").EnumerateArray()) retained.Add(new(value.GetString()!.ToCharArray()));
             var result = new Winning(pending, retained.ToArray()); retained.Clear(); return result;
         }
@@ -158,16 +214,45 @@ public sealed class RecoveryCodePrivateIntegrationTests(IdentityPostgresFixture 
 
     public async Task WinningDeliveryIsAbsentFromEverySafeOriginalReadAndReplacementRetiresExactPriorSet()
     {
-        await using var db = await fixture.CreateFiniteDatabaseAsync(CancellationToken.None); var profile = new Profile(); await using var host = await Host(db, profile); await host.SeedAsync(db);
-        var cookies = await Login(host); using var first = await Generate(host, cookies);
-        using var read = await host.Post("/account/recovery-codes/result", new { ownerRequestId = first.Pending.Request, operationReference = first.Pending.Operation.ToString("N") }, first.Pending.Cookies, first.Pending.Csrf);
-        Assert.True(read.StatusCode == HttpStatusCode.OK); using var result = await read.Content.ReadFromJsonAsync<JsonDocument>();
-        Assert.True(result!.RootElement.GetProperty("codesUnavailable").GetBoolean() && !result.RootElement.TryGetProperty("recoveryCodeFirstDelivery", out _));
-        using var second = await Generate(host, first.Pending.Cookies, "REPLACE");
-        await using var check = db.Context();
-        Assert.True(await check.Set<RecoveryCodeSetRow>().CountAsync(x => x.State == "ACTIVE") == 1 && await check.Set<RecoveryCodeSetRow>().CountAsync(x => x.State == "REPLACED") == 1);
-        Assert.True(await check.Set<RecoveryCodeSetRow>().AnyAsync(x => x.SetReference == first.Pending.Set && x.RetiredByOperationId == second.Pending.Operation && x.LifecycleVersion == 2 && x.UsageVersion == 0));
-        Assert.True(await check.Set<StepUpProofRow>().CountAsync(x => x.State == "CONSUMED") == 2);
+        var checkpoint = new RecoveryCodeFirstCaseCheckpoint();
+        try
+        {
+            checkpoint.Mark(RecoveryCodeFirstCaseStage.DATABASE);
+            await using var db = await fixture.CreateFiniteDatabaseAsync(CancellationToken.None); var profile = new Profile();
+            checkpoint.Mark(RecoveryCodeFirstCaseStage.HOST);
+            await using var host = await Host(db, profile);
+            checkpoint.Mark(RecoveryCodeFirstCaseStage.SEED);
+            await host.SeedAsync(db);
+            checkpoint.Phase = RecoveryCodeFirstCasePhase.LOGIN;
+            var cookies = await Login(host, checkpoint: checkpoint);
+            checkpoint.Phase = RecoveryCodeFirstCasePhase.GENERATE;
+            using var first = await Generate(host, cookies, checkpoint: checkpoint);
+            checkpoint.Phase = RecoveryCodeFirstCasePhase.SAFE_READ;
+            checkpoint.Mark(RecoveryCodeFirstCaseStage.RESULT_POST);
+            using var read = await host.Post("/account/recovery-codes/result", new { ownerRequestId = first.Pending.Request, operationReference = first.Pending.Operation.ToString("N") }, first.Pending.Cookies, first.Pending.Csrf);
+            checkpoint.Mark(RecoveryCodeFirstCaseStage.RESULT_STATUS);
+            Assert.True(read.StatusCode == HttpStatusCode.OK);
+            checkpoint.Mark(RecoveryCodeFirstCaseStage.RESULT_BODY);
+            using var result = await read.Content.ReadFromJsonAsync<JsonDocument>();
+            checkpoint.Mark(RecoveryCodeFirstCaseStage.SAFE_RESULT);
+            Assert.True(result!.RootElement.GetProperty("codesUnavailable").GetBoolean() && !result.RootElement.TryGetProperty("recoveryCodeFirstDelivery", out _));
+            checkpoint.Phase = RecoveryCodeFirstCasePhase.REPLACE;
+            using var second = await Generate(host, first.Pending.Cookies, "REPLACE", checkpoint);
+            checkpoint.Phase = RecoveryCodeFirstCasePhase.STATE;
+            checkpoint.Mark(RecoveryCodeFirstCaseStage.CHECK_CONTEXT);
+            await using var check = db.Context();
+            checkpoint.Mark(RecoveryCodeFirstCaseStage.ACTIVE_SET_STATES);
+            Assert.True(await check.Set<RecoveryCodeSetRow>().CountAsync(x => x.State == "ACTIVE") == 1 && await check.Set<RecoveryCodeSetRow>().CountAsync(x => x.State == "REPLACED") == 1);
+            checkpoint.Mark(RecoveryCodeFirstCaseStage.CAUSAL_RETIREMENT);
+            Assert.True(await check.Set<RecoveryCodeSetRow>().AnyAsync(x => x.SetReference == first.Pending.Set && x.RetiredByOperationId == second.Pending.Operation && x.LifecycleVersion == 2 && x.UsageVersion == 0));
+            checkpoint.Mark(RecoveryCodeFirstCaseStage.CONSUMED_PROOFS);
+            Assert.True(await check.Set<StepUpProofRow>().CountAsync(x => x.State == "CONSUMED") == 2);
+            checkpoint.Mark(RecoveryCodeFirstCaseStage.DISPOSAL);
+        }
+        catch (Exception error) when (error is not OutOfMemoryException)
+        {
+            throw new RecoveryCodeFirstCaseFailure(checkpoint.Phase, checkpoint.Stage);
+        }
     }
 
     public async Task PublicationChangeAfterOwnerWorkBeforeFinalDecisionRollsBackCodeSetProofConsumeAndOutbox(string change)
