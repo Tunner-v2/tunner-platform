@@ -1238,6 +1238,397 @@ namespace Tunner.Identity.Persistence.Migrations
                         });
                 });
 
+            modelBuilder.Entity("Tunner.Identity.Persistence.RecoveryCodeEntryRow", b =>
+                {
+                    b.Property<Guid>("EntryReference")
+                        .HasColumnType("uuid")
+                        .HasColumnName("entry_reference");
+
+                    b.Property<string>("AccountId")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("account_id");
+
+                    b.Property<DateTimeOffset?>("ConsumedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("consumed_at");
+
+                    b.Property<string>("ConsumedByOperationId")
+                        .HasColumnType("text")
+                        .HasColumnName("consumed_by_operation_id");
+
+                    b.Property<string>("ConsumptionContextDigest")
+                        .HasColumnType("text")
+                        .HasColumnName("consumption_context_digest");
+
+                    b.Property<string>("ConsumptionCorrelationId")
+                        .HasColumnType("text")
+                        .HasColumnName("consumption_correlation_id");
+
+                    b.Property<string>("ConsumptionOutcomeReference")
+                        .HasColumnType("text")
+                        .HasColumnName("consumption_outcome_reference");
+
+                    b.Property<string>("ConsumptionOwnerPolicyVersion")
+                        .HasColumnType("text")
+                        .HasColumnName("consumption_owner_policy_version");
+
+                    b.Property<string>("ConsumptionPolicyVersion")
+                        .HasColumnType("text")
+                        .HasColumnName("consumption_policy_version");
+
+                    b.Property<long?>("ConsumptionSetLifecycleVersion")
+                        .HasColumnType("bigint")
+                        .HasColumnName("consumption_set_lifecycle_version");
+
+                    b.Property<string>("CryptoProfileVersion")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("crypto_profile_version");
+
+                    b.Property<Guid>("SetReference")
+                        .HasColumnType("uuid")
+                        .HasColumnName("set_reference");
+
+                    b.Property<string>("Verifier")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("verifier");
+
+                    b.Property<long>("Version")
+                        .IsConcurrencyToken()
+                        .HasColumnType("bigint")
+                        .HasColumnName("version");
+
+                    b.HasKey("EntryReference");
+
+                    b.HasIndex("AccountId", "ConsumedByOperationId")
+                        .IsUnique();
+
+                    b.HasIndex("AccountId", "SetReference");
+
+                    b.ToTable("recovery_code_entries", "identity", t =>
+                        {
+                            t.HasCheckConstraint("ck_recovery_consumption", "(consumed_at IS NULL AND consumed_by_operation_id IS NULL AND consumption_correlation_id IS NULL AND consumption_context_digest IS NULL AND consumption_policy_version IS NULL AND consumption_owner_policy_version IS NULL AND consumption_outcome_reference IS NULL AND consumption_set_lifecycle_version IS NULL AND version=1) OR (consumed_at IS NOT NULL AND consumed_by_operation_id IS NOT NULL AND consumption_correlation_id IS NOT NULL AND consumption_context_digest IS NOT NULL AND consumption_policy_version IS NOT NULL AND consumption_owner_policy_version IS NOT NULL AND consumption_outcome_reference IS NOT NULL AND consumption_set_lifecycle_version IS NOT NULL AND consumption_set_lifecycle_version>=1 AND length(consumed_by_operation_id)>0 AND length(consumption_correlation_id)>0 AND length(consumption_context_digest)=64 AND length(consumption_policy_version)>0 AND length(consumption_owner_policy_version)>0 AND length(consumption_outcome_reference)>0 AND version=2)");
+
+                            t.HasCheckConstraint("ck_recovery_verifier", "length(verifier)=84 AND length(crypto_profile_version)>0");
+                        });
+                });
+
+            modelBuilder.Entity("Tunner.Identity.Persistence.RecoveryCodeOperationRow", b =>
+                {
+                    b.Property<Guid>("OperationId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("operation_id");
+
+                    b.Property<string>("AccountId")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("account_id");
+
+                    b.Property<string>("AdmissionEvidenceReference")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("admission_evidence_reference");
+
+                    b.Property<DateTimeOffset>("AdmissionFrom")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("admission_from");
+
+                    b.Property<bool>("AdmissionIncludesFrom")
+                        .HasColumnType("boolean")
+                        .HasColumnName("admission_includes_from");
+
+                    b.Property<bool>("AdmissionIncludesUntil")
+                        .HasColumnType("boolean")
+                        .HasColumnName("admission_includes_until");
+
+                    b.Property<string>("AdmissionPolicyVersion")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("admission_policy_version");
+
+                    b.Property<DateTimeOffset?>("AdmissionUntil")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("admission_until");
+
+                    b.Property<string>("AssurancePolicyVersion")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("assurance_policy_version");
+
+                    b.Property<string>("AuthenticationPolicyVersion")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("authentication_policy_version");
+
+                    b.Property<int>("CodesPerSet")
+                        .HasColumnType("integer")
+                        .HasColumnName("codes_per_set");
+
+                    b.Property<DateTimeOffset?>("CompletedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("completed_at");
+
+                    b.Property<string>("ContextDigest")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("context_digest");
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("created_at");
+
+                    b.Property<string>("CryptoProfileVersion")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("crypto_profile_version");
+
+                    b.Property<string>("DeliveryProfileVersion")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("delivery_profile_version");
+
+                    b.Property<long>("ExpectedVersion")
+                        .HasColumnType("bigint")
+                        .HasColumnName("expected_version");
+
+                    b.Property<DateTimeOffset>("ExpiresAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("expires_at");
+
+                    b.Property<DateTimeOffset?>("FirstResponseCommittedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("first_response_committed_at");
+
+                    b.Property<string>("FormatProfileVersion")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("format_profile_version");
+
+                    b.Property<string>("ImpactFactsDigest")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("impact_facts_digest");
+
+                    b.Property<string>("Kind")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("kind");
+
+                    b.Property<int>("MaximumCodesPerSet")
+                        .HasColumnType("integer")
+                        .HasColumnName("maximum_codes_per_set");
+
+                    b.Property<string>("Origin")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("origin");
+
+                    b.Property<string>("PolicyDigest")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("policy_digest");
+
+                    b.Property<string>("PolicyVersion")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("policy_version");
+
+                    b.Property<int>("PriorRemainingCodeCount")
+                        .HasColumnType("integer")
+                        .HasColumnName("prior_remaining_code_count");
+
+                    b.Property<int>("PriorSetCount")
+                        .HasColumnType("integer")
+                        .HasColumnName("prior_set_count");
+
+                    b.Property<string>("PriorSetPlanDigest")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("prior_set_plan_digest");
+
+                    b.Property<string>("ProcessingReference")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("processing_reference");
+
+                    b.Property<Guid?>("ProofReference")
+                        .HasColumnType("uuid")
+                        .HasColumnName("proof_reference");
+
+                    b.Property<string>("PublicationDigest")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("publication_digest");
+
+                    b.Property<DateTimeOffset>("PublicationFrom")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("publication_from");
+
+                    b.Property<bool>("PublicationIncludesFrom")
+                        .HasColumnType("boolean")
+                        .HasColumnName("publication_includes_from");
+
+                    b.Property<bool>("PublicationIncludesUntil")
+                        .HasColumnType("boolean")
+                        .HasColumnName("publication_includes_until");
+
+                    b.Property<DateTimeOffset?>("PublicationUntil")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("publication_until");
+
+                    b.Property<string>("PublicationVersion")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("publication_version");
+
+                    b.Property<string>("PublishedImpactKey")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("published_impact_key");
+
+                    b.Property<Guid>("RequestId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("request_id");
+
+                    b.Property<DateTimeOffset>("ResultRecoveryExpiresAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("result_recovery_expires_at");
+
+                    b.Property<string>("RetentionReference")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("retention_reference");
+
+                    b.Property<string>("RetirementPlanJson")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("retirement_plan_json");
+
+                    b.Property<string>("SecurityStampDigest")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("security_stamp_digest");
+
+                    b.Property<Guid>("SessionId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("session_id");
+
+                    b.Property<Guid>("SetReference")
+                        .HasColumnType("uuid")
+                        .HasColumnName("set_reference");
+
+                    b.Property<string>("State")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("state");
+
+                    b.Property<long>("Version")
+                        .IsConcurrencyToken()
+                        .HasColumnType("bigint")
+                        .HasColumnName("version");
+
+                    b.HasKey("OperationId");
+
+                    b.HasIndex("SessionId", "AccountId");
+
+                    b.HasIndex("SessionId", "RequestId")
+                        .IsUnique();
+
+                    b.ToTable("recovery_code_operations", "identity", t =>
+                        {
+                            t.HasCheckConstraint("ck_recovery_first_response", "(state='COMPLETED' AND completed_at IS NOT NULL AND first_response_committed_at IS NOT NULL AND first_response_committed_at=completed_at AND proof_reference IS NOT NULL) OR (state<>'COMPLETED' AND completed_at IS NULL AND first_response_committed_at IS NULL AND proof_reference IS NULL)");
+
+                            t.HasCheckConstraint("ck_recovery_operation", "kind IN ('GENERATE','REPLACE') AND state IN ('PENDING_PROOF','COMPLETED','REJECTED','EXPIRED') AND version>=1 AND expected_version>0 AND expected_version<=9007199254740991 AND expires_at>created_at AND result_recovery_expires_at>expires_at AND codes_per_set>0 AND maximum_codes_per_set>=codes_per_set AND prior_set_count>=0 AND prior_remaining_code_count>=0");
+
+                            t.HasCheckConstraint("ck_recovery_operation_binding", "length(account_id)>0 AND length(origin)>0 AND length(context_digest)=64 AND length(prior_set_plan_digest)=64 AND length(impact_facts_digest)=64 AND length(policy_version)>0 AND length(assurance_policy_version)>0 AND length(processing_reference)>0 AND length(retention_reference)>0");
+
+                            t.HasCheckConstraint("ck_recovery_operation_profile", "length(policy_digest)=64 AND length(security_stamp_digest)=64 AND length(authentication_policy_version)>0 AND length(crypto_profile_version)>0 AND format_profile_version='NATIVE_HEX32_V1' AND length(delivery_profile_version)>0 AND length(retirement_plan_json)>0 AND length(published_impact_key)>0 AND length(publication_digest)=64 AND length(publication_version)>0 AND length(admission_policy_version)>0 AND length(admission_evidence_reference)>0");
+                        });
+                });
+
+            modelBuilder.Entity("Tunner.Identity.Persistence.RecoveryCodeSetRow", b =>
+                {
+                    b.Property<Guid>("SetReference")
+                        .HasColumnType("uuid")
+                        .HasColumnName("set_reference");
+
+                    b.Property<string>("AccountId")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("account_id");
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("created_at");
+
+                    b.Property<string>("CryptoProfileVersion")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("crypto_profile_version");
+
+                    b.Property<Guid>("IssuanceOperationId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("issuance_operation_id");
+
+                    b.Property<long>("LifecycleVersion")
+                        .IsConcurrencyToken()
+                        .HasColumnType("bigint")
+                        .HasColumnName("lifecycle_version");
+
+                    b.Property<string>("PolicyVersion")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("policy_version");
+
+                    b.Property<string>("ProcessingReference")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("processing_reference");
+
+                    b.Property<string>("RetentionReference")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("retention_reference");
+
+                    b.Property<DateTimeOffset?>("RetiredAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("retired_at");
+
+                    b.Property<Guid?>("RetiredByOperationId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("retired_by_operation_id");
+
+                    b.Property<string>("State")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("state");
+
+                    b.Property<long>("UsageVersion")
+                        .IsConcurrencyToken()
+                        .HasColumnType("bigint")
+                        .HasColumnName("usage_version");
+
+                    b.HasKey("SetReference");
+
+                    b.HasIndex("IssuanceOperationId")
+                        .IsUnique();
+
+                    b.HasIndex("AccountId", "RetiredByOperationId");
+
+                    b.HasIndex("AccountId", "IssuanceOperationId", "SetReference");
+
+                    b.ToTable("recovery_code_sets", "identity", t =>
+                        {
+                            t.HasCheckConstraint("ck_recovery_set", "state IN ('ACTIVE','REPLACED') AND lifecycle_version>=1 AND usage_version>=0");
+
+                            t.HasCheckConstraint("ck_recovery_set_binding", "length(account_id)>0 AND length(policy_version)>0 AND length(crypto_profile_version)>0 AND length(processing_reference)>0 AND length(retention_reference)>0");
+
+                            t.HasCheckConstraint("ck_recovery_set_retirement", "(state='ACTIVE' AND retired_at IS NULL AND retired_by_operation_id IS NULL) OR (state='REPLACED' AND retired_at IS NOT NULL AND retired_at>=created_at AND retired_by_operation_id IS NOT NULL)");
+                        });
+                });
+
             modelBuilder.Entity("Tunner.Identity.Persistence.RegistrationAbuseBucketRow", b =>
                 {
                     b.Property<string>("Partition")
@@ -2329,6 +2720,48 @@ namespace Tunner.Identity.Persistence.Migrations
                     b.HasOne("Tunner.Identity.Persistence.AccountRow", null)
                         .WithMany()
                         .HasForeignKey("AccountId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Tunner.Identity.Persistence.RecoveryCodeEntryRow", b =>
+                {
+                    b.HasOne("Tunner.Identity.Persistence.RecoveryCodeSetRow", null)
+                        .WithMany()
+                        .HasForeignKey("AccountId", "SetReference")
+                        .HasPrincipalKey("AccountId", "SetReference")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Tunner.Identity.Persistence.RecoveryCodeOperationRow", b =>
+                {
+                    b.HasOne("Tunner.Identity.Persistence.AuthenticationSessionRow", null)
+                        .WithMany()
+                        .HasForeignKey("SessionId", "AccountId")
+                        .HasPrincipalKey("SessionId", "AccountId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Tunner.Identity.Persistence.RecoveryCodeSetRow", b =>
+                {
+                    b.HasOne("Tunner.Identity.Persistence.AccountRow", null)
+                        .WithMany()
+                        .HasForeignKey("AccountId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Tunner.Identity.Persistence.RecoveryCodeOperationRow", null)
+                        .WithMany()
+                        .HasForeignKey("AccountId", "RetiredByOperationId")
+                        .HasPrincipalKey("AccountId", "OperationId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("Tunner.Identity.Persistence.RecoveryCodeOperationRow", null)
+                        .WithMany()
+                        .HasForeignKey("AccountId", "IssuanceOperationId", "SetReference")
+                        .HasPrincipalKey("AccountId", "OperationId", "SetReference")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });
