@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "scope_id": "P1-018-RV001",
+  "checked_at": "2026-10-18T03:31:47.680Z",
+  "decision": "Use exactly pinned Zod 4.6.7 with the existing controlled React fields and one shared typed useTunnerForm adapter; avoid a second form-state dependency.",
+  "authority_refs": [
+    "docs/authority/current/decisions/AMD-0009_URL_Addressable_Routing_and_Governed_Form_Validation.md"
+  ],
+  "primary_sources": [
+    {
+      "url": "https://zod.dev/basics",
+      "finding": "Typed schemas, safeParse and structured issues support field and form errors."
+    },
+    {
+      "url": "https://github.com/colinhacks/zod/releases",
+      "finding": "Current 4.6.7 release and prior 4.6.6 release security explanation reviewed; upstream states reverted malicious repository changes did not reach published npm releases."
+    },
+    {
+      "url": "https://github.com/react-hook-form/resolvers",
+      "finding": "RHF/Zod integration considered; existing controlled components already own state, and the small shared adapter satisfies current contract without another form library."
+    },
+    {
+      "url": "https://registry.npmjs.org/zod/4.6.7",
+      "finding": "Exact package metadata and MIT license checked; npm provenance metadata available."
+    }
+  ],
+  "package": {
+    "name": "zod",
+    "version": "4.6.7",
+    "license": "MIT",
+    "integrity": "sha512-g8W2D2kU6a8untc053fX1uVBKzM7yqAxW/3zwk83+6RyF2+SKOuV+c0wBDhUwzV1PaGapmZH+rmcUzPf+3CGwg==",
+    "attestation_metadata": "https://registry.npmjs.org/-/npm/v1/attestations/zod@4.6.7"
+  },
+  "verification": {
+    "pinned_package_manager": "pnpm@11.19.0 via corepack",
+    "frozen_install": "PASS",
+    "advisory_audit": "PASS: zero known advisories at check time",
+    "audit_ref": "artifacts/global-ui-20261017/global-dependency-audit.json"
+  },
+  "limits": "Metadata and lockfile integrity verified; no claim of manual cryptographic npm attestation validation. Advisory status is time-bounded. Domain schemas and authoritative backend validation remain separate."
+}

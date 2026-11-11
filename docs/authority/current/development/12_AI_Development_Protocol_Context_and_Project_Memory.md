@@ -3,19 +3,55 @@
 > **Baseline revision date:** 2026-09-29  
 
 
+
+
+
+
+
+
 # 12 — AI Development Protocol, Context & Project Memory
+
+
+
+
+
+
 
 
 ## 1. Principle
 
 
+
+
+
+
+
+
 No critical Tunner knowledge may exist only in an AI chat session.
+
+
+
+
+
+
 
 
 The repository is the transferable project memory.
 
 
+
+
+
+
+
+
 ## 2. Mandatory startup sequence for AI/human contributor
+
+
+
+
+
+
 
 
 1. Read `README.md`.
@@ -31,7 +67,19 @@ The repository is the transferable project memory.
 11. Only then propose/implement.
 
 
+
+
+
+
+
+
 ## 3. Context pack structure
+
+
+
+
+
+
 
 
 ```text
@@ -50,13 +98,37 @@ docs/context/current/
 ```
 
 
+
+
+
+
+
+
 Generated; do not hand-edit generated pack.
+
+
+
+
+
+
 
 
 ## 4. Memory quality rules
 
 
+
+
+
+
+
+
 Context must distinguish:
+
+
+
+
+
+
 
 
 - approved fact;
@@ -67,13 +139,37 @@ Context must distinguish:
 - external research.
 
 
+
+
+
+
+
+
 Never summarize an unresolved question as a decision.
+
+
+
+
+
+
 
 
 ## 5. Assumption handling
 
 
+
+
+
+
+
+
 If ambiguity could affect:
+
+
+
+
+
+
 
 
 - business behavior;
@@ -86,10 +182,28 @@ If ambiguity could affect:
 - user-visible workflow;
 
 
+
+
+
+
+
+
 the work item enters a blocking state.
 
 
+
+
+
+
+
+
 The AI creates a compact Product Decision request containing:
+
+
+
+
+
+
 
 
 - missing information;
@@ -101,13 +215,37 @@ The AI creates a compact Product Decision request containing:
 - exact items blocked.
 
 
+
+
+
+
+
+
 Unrelated work continues.
+
+
+
+
+
+
 
 
 ## 6. No silent “cleanup”
 
 
+
+
+
+
+
+
 AI must not:
+
+
+
+
+
+
 
 
 - rename public contract fields casually;
@@ -118,10 +256,28 @@ AI must not:
 - change tests to make a defect disappear.
 
 
+
+
+
+
+
+
 ## 7. Handoff
 
 
+
+
+
+
+
+
 At work stop/transfer:
+
+
+
+
+
+
 
 
 - working tree state recorded;
@@ -135,7 +291,19 @@ At work stop/transfer:
 - generated context refreshed.
 
 
+
+
+
+
+
+
 ## 8. AI-generated code expectations
+
+
+
+
+
+
 
 
 - compile;
@@ -148,10 +316,28 @@ At work stop/transfer:
 - no disabled security control merely to make tests pass.
 
 
+
+
+
+
+
+
 ## 9. Internet research protocol
 
 
+
+
+
+
+
+
 Search before implementing:
+
+
+
+
+
+
 
 
 - current .NET/library features;
@@ -163,16 +349,46 @@ Search before implementing:
 - breaking changes.
 
 
+
+
+
+
+
+
 Record primary sources in `13_RD_Source_Register.md` or ADR-specific evidence.
+
+
+
+
+
+
 
 
 ## 10. Context minimization
 
 
+
+
+
+
+
+
 AI should receive the smallest sufficient context.
 
 
+
+
+
+
+
+
 `tunner-context` resolves dependency graph from:
+
+
+
+
+
+
 
 
 - module;
@@ -182,10 +398,28 @@ AI should receive the smallest sufficient context.
 - decisions.
 
 
+
+
+
+
+
+
 Avoid loading complete Finance docs into a simple Identity UI task unless referenced.
 
 
+
+
+
+
+
+
 ## 11. Acceptance tests
+
+
+
+
+
+
 
 
 | ID | Scenario | Expected |
@@ -197,19 +431,55 @@ Avoid loading complete Finance docs into a simple Identity UI task unless refere
 | AI-005 | AI tries to complete item with TODO placeholder | governance gate fails |
 
 
+
+
+
+
+
+
 ## Decision records
+
+
+
+
+
+
 
 
 Every AI/human handoff must include applicable files from `decisions/`. Product Decision Records are mandatory business authority and ADRs are mandatory technical authority. A model may recommend an amendment but must not silently override an accepted record.
 
 
+
+
+
+
+
+
 ## 12. Multidisciplinary AI role and skill registry
+
+
+
+
+
+
 
 
 AI development uses one shared authority/context/memory system. Roles are review lenses and capability contracts, not independent sources of truth and not separate project memories.
 
 
+
+
+
+
+
+
 Repository location:
+
+
+
+
+
+
 
 
 ```text
@@ -239,10 +509,28 @@ Repository location:
 ```
 
 
+
+
+
+
+
+
 `AGENTS.md` is the concise agent entry contract and repository map. It points to authoritative documentation, context tooling and available skills; it does not duplicate the FRD or become a large project encyclopedia. Skill manifests are loaded only when the task activates them. Supporting references/scripts/templates may live beside each `SKILL.md`.
 
 
+
+
+
+
+
+
 Every skill file defines at minimum:
+
+
+
+
+
+
 
 
 - mission and scope;
@@ -254,7 +542,19 @@ Every skill file defines at minimum:
 - handoff requirements.
 
 
+
+
+
+
+
+
 Required roles:
+
+
+
+
+
+
 
 
 | Role | Mandatory responsibility |
@@ -281,13 +581,37 @@ Required roles:
 | DevOps engineer | owns Docker/runtime automation, CI/CD, environment promotion, observability infrastructure, deployment controls, secrets integration, provenance, rollback and IaC when authorized |
 
 
+
+
+
+
+
+
 A single work item may activate several roles. Role activation is risk-based and declared in the work item/context manifest. Detailed normative skill contracts, blockers and structured review outputs are defined in `35_AI_Agent_Skill_Catalog_and_Review_Contracts.md`.
+
+
+
+
+
+
 
 
 ## 13. Persistent project state
 
 
+
+
+
+
+
+
 The repository must maintain durable state independently of chat history:
+
+
+
+
+
+
 
 
 ```text
@@ -297,6 +621,12 @@ docs/project/
   DECISION_INDEX.md
   RISK_REGISTER.md
   HANDOFF.md
+
+
+
+
+
+
 
 
 governance/
@@ -309,7 +639,19 @@ governance/
 ```
 
 
+
+
+
+
+
+
 Rules:
+
+
+
+
+
+
 
 
 1. `PROJECT_CONTEXT.md` summarizes stable project purpose, architecture and authority links; generated/verified from authority where practical.
@@ -321,10 +663,28 @@ Rules:
 7. Generated summaries never become higher authority than their source documents.
 
 
+
+
+
+
+
+
 ## 14. Mandatory AI development loop
 
 
+
+
+
+
+
+
 For every work item:
+
+
+
+
+
+
 
 
 ```text
@@ -344,10 +704,28 @@ CONTEXT SYNC
 ```
 
 
+
+
+
+
+
+
 The agent must not batch multiple milestones into an unreviewable implementation.
 
 
+
+
+
+
+
+
 Before implementation it records:
+
+
+
+
+
+
 
 
 - work-item ID and milestone;
@@ -359,7 +737,19 @@ Before implementation it records:
 - required tests/evidence.
 
 
+
+
+
+
+
+
 Before DONE it records:
+
+
+
+
+
+
 
 
 - changed files/contracts/migrations;
@@ -376,16 +766,46 @@ Before DONE it records:
 - commit/release evidence.
 
 
+
+
+
+
+
+
 ## 14A. Commit/readiness discipline — AMD-0002 clarification
+
+
+
+
+
+
 
 
 For every repository-changing work item, the AI/human contributor must create a cohesive validation-candidate commit before claiming local readiness or completion.
 
 
+
+
+
+
+
+
 Final validation must correspond to that commit identity.
 
 
+
+
+
+
+
+
 Do not:
+
+
+
+
+
+
 
 
 - mark repository-changing work `DONE` while current work-item changes remain only in the working tree;
@@ -394,13 +814,37 @@ Do not:
 - modify behavior-affecting files after final validation without invalidating and rerunning the applicable gates.
 
 
+
+
+
+
+
+
 A later commit containing only governance/evidence/handoff closure metadata may follow the validated candidate. Record both SHAs when distinct.
+
+
+
+
+
+
 
 
 If a work item changes no repository artifact, record that fact explicitly; do not create a meaningless commit merely for ceremony.
 
 
+
+
+
+
+
+
 ### Commit/readiness acceptance cases
+
+
+
+
+
+
 
 
 | ID | Scenario | Expected |
@@ -410,10 +854,28 @@ If a work item changes no repository artifact, record that fact explicitly; do n
 | AI-031 | unrelated user changes exist in worktree | agent preserves/classifies them and does not absorb them into its commit |
 
 
+
+
+
+
+
+
 ## 15. Mandatory review matrix
 
 
+
+
+
+
+
+
 Role review is triggered by impact, not by convenience.
+
+
+
+
+
+
 
 
 - Any architecture/module/integration change → Solution Architect.
@@ -432,13 +894,37 @@ Role review is triggered by impact, not by convenience.
 - Founder/Product Owner activation occurs only for explicit acceptance or a decision that existing authority does not resolve.
 
 
+
+
+
+
+
+
 A role finding blocks only the affected scope unless its risk is systemic.
+
+
+
+
+
+
 
 
 ## 16. Agent entry contract
 
 
+
+
+
+
+
+
 `.agent/AGENTS.md` must require an AI developer to:
+
+
+
+
+
+
 
 
 1. never use chat history as the sole project memory;
@@ -455,13 +941,43 @@ A role finding blocks only the affected scope unless its risk is systemic.
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
 ## 17. Governance-controlled orchestration
+
+
+
+
+
+
 
 
 The execution orchestrator is subordinate to governance. It may sequence work and specialist reviews but cannot start, skip, close or release work contrary to governance state.
 
 
+
+
+
+
+
+
 Required control flow:
+
+
+
+
+
+
 
 
 ```text
@@ -478,34 +994,121 @@ AUTHORITY / WORK ITEM
 ```
 
 
+
+
+
+
+
+
 Governance decides whether work is eligible, which mandatory reviews apply, which blockers exist and what evidence is required. The orchestrator decides only the efficient execution sequence inside those constraints.
+
+
+
+
+
+
 
 
 ## 17A. Mandatory Figma-first visual fidelity and owner-consent gate — AMD-0008
 
 
+
+
+
+
+
+
 **Active authority:** https://drive.google.com/file/d/1DErZZpc3rIwzfpADnDzD9a361draTuhW/view. Applicable to all AI/human agents implementing, drafting, reviewing or testing Tunner User/Admin/Connected Product-facing UI.
+
+
+
+
+
+
 
 
 Before editing a visual screen, agents MUST resolve the approved Figma frame/node/version, applicable approved components/tokens/assets, screen ID and FRD/flow; retrieve actual design geometry/states rather than infer a replacement style. Existing designs (especially Login, Registration, Verify Email and Account Ready) require exact matching of approved background gradients/glows, full-page composition, fields, cards, typography, icons, spacing and controls. TailAdmin code scaffolding does not license its default visuals. Do not omit aesthetically significant layers as optional.
 
 
+
+
+
+
+
+
 When a component/state/screen lacks a matching design, AI may propose on-theme variants and state a recommendation, but may not approve or implement a final unapproved UX. Any material change to existing Figma requires **explicit Product Owner visual consent** and recorded before/after scope. Business/identity contract conflicts are resolved under applicable FRD/PDR and governed Figma revision, not by silently changing the design or ignoring functional authority.
+
+
+
+
+
+
 
 
 Activation: `UI/UX Engineer + Frontend Engineer + End-user UX Reviewer + Tester/QA` must check `UX-FID-001..008`, Figma screenshot/diff at matched viewport, responsive/accessibility states, `UI_FIDELITY_DEFECT` remediation, and evidence of Product Owner approval for deviations. Governance blocks `UI_VISUAL_APPROVAL` and production UI acceptance when visual proof/approval is missing. This is a required specialist review contract; it cannot be waived by passing unit tests or AI self-review.
 
 
+
+
+
+
+
+
+## 17B. AI routing and validation authority — AMD-0009
+
+
+
+
+Active authority: https://drive.google.com/file/d/1VeaNofocTrsbXwdePg8VSVuembRQxr7A/view. Before implementing any screen/form, resolve the approved route inventory and matching Figma screen/component/error state, current FRD and existing validators. Never implement a full-screen workflow as an invisible local state swap with a stale URL or hash-only pseudo-route. Use History API/path routing with safe refresh/deep-link/Back/Forward, guarded workflow stages and correct Product-origin login context. Do not expose secrets/verification codes/PII in URLs.
+
+
+
+
+Native browser form validation cannot be the only validation or feedback. Apply approved typed reusable application validation, authoritative backend checks, accessible field/form error mapping, and the exact Figma error treatment including `registration-validation-errors` node `70:1257`; do not invent generic error red borders/tooltips and do not enforce obsolete Figma copy as business identity policy. AI may recommend implementation libraries (such as React Hook Form + Zod) subject to existing package governance. Frontend, UI/UX, QA and End-user UX review must evidence `URL-001..006`, `VAL-001..008`, plus AMD-0008 fidelity; any unapproved visual adaptation goes to Product Owner.
+
+
+
+
+## 17C. AMD-0009 is a GLOBAL AI/frontend rule, not registration-only
+
+
+AMD-0009 globally governs **every Tunner-controlled form and independent screen in every application/module, including future modules**, not just Login or Registration. For each UI work item AI must load applicable Figma components/error states, FRD and route registry. The Figma `registration-validation-errors` node `70:1257` provides a **shared style reference**; reusing its registration-specific fields/copy outside registration is prohibited. All forms must use governed reusable field validation presentation components (including inline/form errors, state variants, accessibility and responsive checks), typed client schemas and authoritative domain-specific server validation. AI must not invent visual patterns in place of approved Figma variants. Every full-screen independently navigable view must own a proper URL pathname with safe browser history/deep links, not unchanged or hash-only routing. Require `URL-001..006` and `VAL-001..008` evidence across all applicable forms/screens, not a single registration happy path. Product Owner approval required for any material new design under AMD-0008.
+
+
 ## 18. Adaptive context and token-cost governance
+
+
+
+
+
+
 
 
 Repository access and prompt/context inclusion are separate controls.
 
 
+
+
+
+
+
+
 A specialist may have full repository **access** while receiving only bounded, relevant prompt context. Repository-wide visibility must not imply repository-wide prompt injection.
 
 
+
+
+
+
+
+
 Context modes:
+
+
+
+
+
+
 
 
 | Mode | Use | Default contents |
@@ -516,10 +1119,28 @@ Context modes:
 | `FULL_AUDIT` | release/audit/security/architecture/finance-wide investigation | repository-wide index/access with partitioned retrieval and synthesis, not blind one-shot prompt loading |
 
 
+
+
+
+
+
+
 Context policy is versioned and may define configurable token/input budgets, dependency depth, history depth, evidence scope and maximum escalation mode. Exact token budgets are operational configuration, not hard-coded business rules.
 
 
+
+
+
+
+
+
 The default strategy is:
+
+
+
+
+
+
 
 
 ```text
@@ -531,13 +1152,37 @@ MAP → RETRIEVE MINIMUM SUFFICIENT CONTEXT → EXECUTE/REVIEW
 ```
 
 
+
+
+
+
+
+
 Auditor, Tester/QA, Cyber Security Engineer, Solution Architect and other authorized roles may request repository-wide access. The context engine still supplies information incrementally unless a full snapshot is specifically required.
+
+
+
+
+
+
 
 
 ## 19. Context index, freshness and integrity
 
 
+
+
+
+
+
+
 `tunner-context` maintains a repository/authority knowledge index. Indexed metadata should include, as applicable:
+
+
+
+
+
+
 
 
 ```text
@@ -566,19 +1211,55 @@ summary_hash
 ```
 
 
+
+
+
+
+
+
 Generated summaries/context fragments must record their source hash, authority version, generator/tool version and generation time. If the underlying source hash changes, the derived context is `STALE` until regenerated or revalidated.
+
+
+
+
+
+
 
 
 A generated summary never outranks its source authority.
 
 
+
+
+
+
+
+
 ## 20. Context escalation contract
+
+
+
+
+
+
 
 
 An AI/agent must be allowed to return `INSUFFICIENT_CONTEXT` instead of guessing.
 
 
+
+
+
+
+
+
 Escalation is controlled:
+
+
+
+
+
+
 
 
 1. task-local dependency expansion;
@@ -587,12 +1268,36 @@ Escalation is controlled:
 4. repository-wide investigation.
 
 
+
+
+
+
+
+
 Governance records the reason for escalation, the additional artifacts loaded and whether the context budget changed. Sensitive data and secrets remain subject to authorization even during `FULL_AUDIT`.
 
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
 ## 21. Additional acceptance tests
+
+
+
+
+
+
 
 
 | ID | Scenario | Expected |
@@ -612,25 +1317,73 @@ Governance records the reason for escalation, the additional artifacts loaded an
 | AI-018 | SDK contract changes | SDK Engineer review and compatibility/contract evidence are required |
 
 
+
+
+
+
+
+
 ## 22. Pre-repository startup state
+
+
+
+
+
+
 
 
 Before P0 repository bootstrap, Drive-hosted locked authority + active amendments are the source package.
 
 
+
+
+
+
+
+
 Once P0 creates the repository, the repository becomes the transferable working project-memory surface by importing the immutable baseline and active amendment lineage. The GitHub URL and Actions links are then recorded in document 13 and `PROJECT_CONTEXT.md`.
+
+
+
+
+
+
 
 
 An AI must never infer or fabricate those links before creation.
 
 
+
+
+
+
+
+
 ## 23. Authority mirror rule
+
+
+
+
+
+
 
 
 After P0 repository bootstrap, normal AI/human development reads the hash-verified repository mirror for speed, availability and reproducibility.
 
 
+
+
+
+
+
+
 The mirror must preserve:
+
+
+
+
+
+
 
 
 - immutable baseline version;
@@ -641,19 +1394,55 @@ The mirror must preserve:
 - verification result.
 
 
+
+
+
+
+
+
 A mirror mismatch is not resolved by AI judgment. The affected work is blocked pending `tunner authority diff` and governed reconciliation.
+
+
+
+
+
+
 
 
 ## 22. Pending PR approval does not imply agent idling
 
 
+
+
+
+
+
+
 When a pull request is awaiting required human approval, an AI/human contributor must not treat the entire project as blocked solely because the merge gate is pending.
+
+
+
+
+
+
 
 
 The contributor must run governance status/next and continue all eligible work that does not require the pending change to be merged into protected `main`.
 
 
+
+
+
+
+
+
 Allowed while approval is pending, when governance permits:
+
+
+
+
+
+
 
 
 - additional local/branch implementation on the governed lineage;
@@ -665,16 +1454,46 @@ Allowed while approval is pending, when governance permits:
 - preparation of another reviewable PR when concurrency policy allows it.
 
 
+
+
+
+
+
+
 The contributor stops only the affected scope when a declared dependency requires `MERGED_TO_MAIN` or a genuine human-authority gate is pending.
+
+
+
+
+
+
 
 
 The exact next action must therefore distinguish **human integration action** from **agent-executable work**. A pending human action may remain visible while the agent continues other authorized work.
 
 
+
+
+
+
+
+
 Do not create an arbitrarily long chain of dependent unmerged changes. Respect the configured PR/dependency concurrency policy and prefer cohesive, reviewable increments.
 
 
+
+
+
+
+
+
 ### Additional AI acceptance tests
+
+
+
+
+
+
 
 
 | ID | Scenario | Expected |
@@ -688,10 +1507,34 @@ Do not create an arbitrarily long chain of dependent unmerged changes. Respect t
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
 ## Location-independent execution rule
 
 
+
+
+
+
+
+
 AI/human contributors must treat repository location as runtime context, not project authority.
+
+
+
+
+
+
 
 
 - Never write a developer-specific drive letter, home directory, checkout directory, CI workspace or container mount path into committed Tunner source/config/governance/evidence merely because that is the current execution location.
@@ -702,7 +1545,19 @@ AI/human contributors must treat repository location as runtime context, not pro
 - A fresh agent working from a relocated checkout must reconstruct the same logical project state without path edits.
 
 
+
+
+
+
+
+
 Additional acceptance test:
+
+
+
+
+
+
 
 
 | ID | Scenario | Expected |
@@ -712,19 +1567,61 @@ Additional acceptance test:
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
 ## 24. Authority-first decision protocol — AMD-0005
+
+
+
+
+
+
 
 
 The mandatory startup sequence is not satisfied merely by reading a generated summary. Before declaring a requirement/contract/architecture gap, the contributor must resolve the question against verified source authority.
 
 
+
+
+
+
+
+
 ### Required sequence
+
+
+
+
+
+
 
 
 `QUESTION → AUTHORITY VERIFY → APPLICABLE AUTHORITY RESOLUTION → CONFLICT/GAP CLASSIFICATION → R&D IF MATERIAL → DECISION/BLOCKER ONLY IF STILL UNRESOLVED`
 
 
+
+
+
+
+
+
 The Authority Resolution Pass reviews, as applicable:
+
+
+
+
+
+
 
 
 - Current Authority Index / verified authority mirror;
@@ -737,34 +1634,100 @@ The Authority Resolution Pass reviews, as applicable:
 - primary-source research for freshness-sensitive external facts.
 
 
+
+
+
+
+
+
 Only after this pass may the agent create a decision or missing-authority blocker.
+
+
+
+
+
+
 
 
 If active authority answers the question, use it.
 
 
+
+
+
+
+
+
 If implementation contradicts active authority, classify the problem as implementation nonconformance/defect unless a deliberate authority change is proposed.
+
+
+
+
+
+
 
 
 If current external best practice differs, report the evidence and use ADR/PDR/amendment governance; do not replace Tunner authority in place.
 
 
+
+
+
+
+
+
 If retrieval is inadequate, return `INSUFFICIENT_CONTEXT` and expand context before deciding that authority is absent.
+
+
+
+
+
+
 
 
 ### Conditional capabilities
 
 
+
+
+
+
+
+
 An optional/selective capability without its activation trigger is not an ambiguity. Do not ask the Product Owner to invent a use case and do not create `CONTRACT_REQUIRED` merely because no trigger exists.
+
+
+
+
+
+
 
 
 ### Decision evidence
 
 
+
+
+
+
+
+
 Every proposed material decision/missing-authority blocker records its Authority Resolution Pass. Duplicate decisions overlapping applicable active authority are rejected unless explicit correction/supersession/conflict/revisit lineage is present.
 
 
+
+
+
+
+
+
 ### Additional acceptance cases
+
+
+
+
+
+
 
 
 | ID | Scenario | Expected |
@@ -778,13 +1741,43 @@ Every proposed material decision/missing-authority blocker records its Authority
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
 ## 25. Revision-aware AI and project-memory protocol
+
+
+
+
+
+
 
 
 AI/human contributors must distinguish historical closure from later Revision work.
 
 
+
+
+
+
+
+
 For a historically closed milestone/work item:
+
+
+
+
+
+
 
 
 - do not overwrite the original closure/evidence;
@@ -795,20 +1788,56 @@ For a historically closed milestone/work item:
 - link any required ADR/PDR/amendment rather than treating the Revision as authority.
 
 
+
+
+
+
+
+
 Generated `CURRENT_STATE`, `PROJECT_CONTEXT` and `HANDOFF` must represent both:
+
+
+
+
+
+
 
 
 1. the historical original milestone/work-item status; and
 2. active/latest Revision state and its dependency impact.
 
 
+
+
+
+
+
+
 A fresh agent must be able to answer: which original scope is closed, which Revision is active, why it exists, what it blocks, what prior evidence remains valid, and the exact next Revision action.
+
+
+
+
+
+
 
 
 Revision-aware context selection remains bounded. The existence of a Revision does not justify rereading every historical artifact; retrieve the original/evidence/delta neighborhood relevant to the Revision and expand only when required.
 
 
+
+
+
+
+
+
 Acceptance:
+
+
+
+
+
+
 
 
 | ID | Scenario | Expected |

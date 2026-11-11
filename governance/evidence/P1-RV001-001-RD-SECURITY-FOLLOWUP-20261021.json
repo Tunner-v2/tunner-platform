@@ -1,0 +1,49 @@
+{
+  "schema_version": 1,
+  "evidence_id": "P1-RV001-001-RD-SECURITY-FOLLOWUP-20261021",
+  "scope_type": "WORK_ITEM",
+  "scope_id": "P1-RV001-001",
+  "status": "PASS_RESEARCH_NOT_RELEASE",
+  "reviewed_at": "2026-10-21",
+  "supersedes_current_selection": "governance/evidence/P1-RV001-001-RD-SECURITY-REBUILDS-20261021.json",
+  "sources": [
+    {
+      "component": "Fresh Mailpit finding",
+      "url": "https://go.dev/doc/devel/release#go1.27.3",
+      "finding": "Fresh21October CI identifies HIGH CVE2026-111943 in the vendor1.31.6 binary built withGo1.27.2. Its20October clean scan is superseded. Build unchanged Mailpit1.31.6 source and locked UI usingGo1.27.3; no new release claims until actual complete-image scans and SMTP/UI checks pass."
+    },
+    {
+      "component": "Mailpit source and UI",
+      "url": "https://github.com/axllent/mailpit/tree/a028b01f4a24b4b36bdad95b8e09e070ebf2bad4",
+      "finding": "Annotated tag1.31.6 resolves to pinned commit. Upstream recipe compiles npm-locked UI, generates third-party Go licenses, and embeds the UI into its Go binary; preserve these components."
+    },
+    {
+      "component": "Vite patched line",
+      "url": "https://github.com/vitejs/launch-editor/security/advisories/GHSA-587h-7wmj-h5pm",
+      "finding": "Official advisory fixes Windows editor-launch issues in Vite8.2.4. Actual CI reports1 HIGH and2 MODERATE advisories in8.2.2. Generated8.2.4 lockfile is minimal; staged pnpm audit reports zero advisories. No Tunner component, style, content, route, form or domain validation rule is changed."
+    },
+    {
+      "component": "Node builder",
+      "url": "https://nodejs.org/dist/index.json",
+      "finding": "Node24.22.1 LTS published20October is pinned by OCI digest for Mailpit UI compilation. Repository runtime Node>=24.15<25 and pnpm11.19 remain unchanged."
+    },
+    {
+      "component": "Vendor UI dependency coverage",
+      "url": "https://www.trivy.dev/docs/latest/guide/coverage/language/nodejs/",
+      "finding": "Npm audit service returnedHTTP503 on two actual Mailpit build attempts. Existing approved Trivy0.70 supports package-lock production transitive scanning. Use the same fixable HIGH/CRITICAL policy and fail closed; explicitly require a nonempty npm package result so an undiscovered graph cannot be called clean. This does not represent the failed npm endpoint calls as passing."
+    },
+    {
+      "component": "LGTM boundary",
+      "url": "https://grafana.com/developers/plugin-tools/publish-a-plugin/sign-a-plugin",
+      "finding": "Keep the previously recorded complete-stack and signed-plugin blocker. No unsigned-plugin allowance, removal, trust-root change or scanner suppression is authorized."
+    }
+  ],
+  "evidence_refs": [
+    "governance/evidence/P1-RV001-LGTM-SIGNED-PLUGIN-BOUNDARY-20261021.json",
+    "governance/evidence/P0-RV009-REQUIRED-CHECKS-20261021.json"
+  ],
+  "limitations": [
+    "Remaining vendor defaults and LGTM acceptance remain blocked under P1-RV001; private rebuild candidates are not default adoption, publication or release.",
+    "Final committed source SHA, actual reruns and mandatory technical reviews are pending."
+  ]
+}

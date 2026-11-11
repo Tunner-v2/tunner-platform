@@ -580,6 +580,187 @@ namespace Tunner.Identity.Persistence.Migrations
                     b.ToTable("account_state_versions", "accounts");
                 });
 
+            modelBuilder.Entity("Tunner.Identity.Persistence.AuthenticationAbuseRow", b =>
+                {
+                    b.Property<string>("Partition")
+                        .HasColumnType("text")
+                        .HasColumnName("partition");
+
+                    b.Property<string>("PolicyVersion")
+                        .HasColumnType("text")
+                        .HasColumnName("policy_version");
+
+                    b.Property<long>("Window")
+                        .HasColumnType("bigint")
+                        .HasColumnName("window");
+
+                    b.Property<int>("Count")
+                        .HasColumnType("integer")
+                        .HasColumnName("count");
+
+                    b.Property<DateTimeOffset>("ExpiresAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("expires_at");
+
+                    b.HasKey("Partition", "PolicyVersion", "Window");
+
+                    b.ToTable("authentication_abuse", "identity");
+                });
+
+            modelBuilder.Entity("Tunner.Identity.Persistence.AuthenticationSessionRow", b =>
+                {
+                    b.Property<Guid>("SessionId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("session_id");
+
+                    b.Property<string>("AccessEvidenceReference")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("access_evidence_reference");
+
+                    b.Property<string>("AccessPolicyVersion")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("access_policy_version");
+
+                    b.Property<string>("AccountId")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("account_id");
+
+                    b.Property<string>("Assurance")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("assurance");
+
+                    b.Property<DateTimeOffset>("AuthenticatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("authenticated_at");
+
+                    b.Property<string>("AuthenticationMethods")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("authentication_methods");
+
+                    b.Property<string>("BrowserDigest")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("browser_digest");
+
+                    b.Property<string>("CorrelationId")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("correlation_id");
+
+                    b.Property<DateTimeOffset>("ExpiresAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("expires_at");
+
+                    b.Property<Guid>("IdempotencyKey")
+                        .HasColumnType("uuid")
+                        .HasColumnName("idempotency_key");
+
+                    b.Property<string>("IdentifierDigest")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("identifier_digest");
+
+                    b.Property<long>("IdleTicks")
+                        .HasColumnType("bigint")
+                        .HasColumnName("idle_ticks");
+
+                    b.Property<string>("KeyDigest")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("key_digest");
+
+                    b.Property<DateTimeOffset>("LastSeenAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("last_seen_at");
+
+                    b.Property<string>("OperationId")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("operation_id");
+
+                    b.Property<string>("Origin")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("origin");
+
+                    b.Property<string>("PolicyVersion")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("policy_version");
+
+                    b.Property<string>("ProcessingReference")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("processing_reference");
+
+                    b.Property<string>("ProtectedKey")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("protected_key");
+
+                    b.Property<string>("ProtectedTicket")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("protected_ticket");
+
+                    b.Property<bool>("RememberMe")
+                        .HasColumnType("boolean")
+                        .HasColumnName("remember_me");
+
+                    b.Property<string>("RetentionReference")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("retention_reference");
+
+                    b.Property<DateTimeOffset?>("RevokedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("revoked_at");
+
+                    b.Property<string>("Scheme")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("scheme");
+
+                    b.Property<string>("SecurityStampDigest")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("security_stamp_digest");
+
+                    b.Property<string>("State")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("state");
+
+                    b.Property<long>("Version")
+                        .IsConcurrencyToken()
+                        .HasColumnType("bigint")
+                        .HasColumnName("version");
+
+                    b.HasKey("SessionId");
+
+                    b.HasIndex("AccountId");
+
+                    b.HasIndex("KeyDigest")
+                        .IsUnique();
+
+                    b.HasIndex("BrowserDigest", "IdempotencyKey")
+                        .IsUnique();
+
+                    b.ToTable("tunner_sessions", "identity", t =>
+                        {
+                            t.HasCheckConstraint("ck_session_bounds", "expires_at > authenticated_at AND last_seen_at >= authenticated_at AND idle_ticks > 0 AND version >= 1");
+
+                            t.HasCheckConstraint("ck_session_key", "length(key_digest) = 64 AND length(browser_digest) = 64");
+
+                            t.HasCheckConstraint("ck_session_state", "state IN ('ACTIVE','REVOKED','EXPIRED')");
+                        });
+                });
+
             modelBuilder.Entity("Tunner.Identity.Persistence.ExternalIdentityLinkRow", b =>
                 {
                     b.Property<Guid>("LinkId")
@@ -1040,6 +1221,15 @@ namespace Tunner.Identity.Persistence.Migrations
                 });
 
             modelBuilder.Entity("Tunner.Identity.Persistence.AccountStateRow", b =>
+                {
+                    b.HasOne("Tunner.Identity.Persistence.AccountRow", null)
+                        .WithMany()
+                        .HasForeignKey("AccountId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Tunner.Identity.Persistence.AuthenticationSessionRow", b =>
                 {
                     b.HasOne("Tunner.Identity.Persistence.AccountRow", null)
                         .WithMany()

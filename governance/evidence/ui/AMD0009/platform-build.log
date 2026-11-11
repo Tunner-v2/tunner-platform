@@ -1,0 +1,32 @@
+  Tunner.Database -> <repo-root>\src\Tunner.Database\bin\Debug\net10.0\Tunner.Database.dll
+  Tunner.Accounts -> <repo-root>\src\Modules\Accounts\bin\Debug\net10.0\Tunner.Accounts.dll
+  Tunner.Observability -> <repo-root>\src\Tunner.Observability\bin\Debug\net10.0\Tunner.Observability.dll
+  Tunner.Testing -> <repo-root>\src\Tunner.Testing\bin\Debug\net10.0\Tunner.Testing.dll
+  Tunner.Platform -> <repo-root>\src\Tunner.Platform\bin\Debug\net10.0\Tunner.Platform.dll
+  Tunner.Database.Migrations -> <repo-root>\src\Tunner.Database.Migrations\bin\Debug\net10.0\Tunner.Database.Migrations.dll
+  Tunner.Identity.Persistence -> <repo-root>\src\Modules\Identity\bin\Debug\net10.0\Tunner.Identity.Persistence.dll
+  Tunner.Accounts.Tests -> <repo-root>\tests\Tunner.Accounts.Tests\bin\Debug\net10.0\Tunner.Accounts.Tests.dll
+  Tunner.User.Bff -> <repo-root>\src\Tunner.User.Bff\bin\Debug\net10.0\Tunner.User.Bff.dll
+  Tunner.Observability.FunctionalTests -> <repo-root>\tests\Tunner.Observability.FunctionalTests\bin\Debug\net10.0\Tunner.Observability.FunctionalTests.dll
+  Tunner.Worker -> <repo-root>\src\Tunner.Worker\bin\Debug\net10.0\Tunner.Worker.dll
+  Tunner.Api -> <repo-root>\src\Tunner.Api\bin\Debug\net10.0\Tunner.Api.dll
+  
+  GenerateOpenApiDocuments:
+    dotnet "C:\Users\Chacha Tech\.nuget\packages\microsoft.extensions.apidescription.server\10.0.13\build\../tools/dotnet-getdocument.dll" --assembly "<repo-root>\src\Tunner.Api\bin\Debug\net10.0\Tunner.Api.dll" --file-list "obj\Tunner.Api.OpenApiFiles.cache" --framework ".NETCoreApp,Version=v10.0" --output "<repo-root>\src\Tunner.Api\obj\openapi" --project "Tunner.Api" --assets-file "<repo-root>\src\Tunner.Api\obj\project.assets.json" --platform "AnyCPU" --file-name tunner-openapi --openapi-version OpenApi3_1
+  Generating document named 'v1'.
+  Using discovered `GenerateAsync` overload with version parameter.
+  info: Microsoft.AspNetCore.Mvc.Infrastructure.DefaultActionDescriptorCollectionProvider[1]
+        No action descriptors found. This may indicate an incorrectly configured application or missing application parts. To learn more, visit https://aka.ms/aspnet/mvc/app-parts
+  Writing document named 'v1' to '<repo-root>\src\Tunner.Api\obj\openapi\tunner-openapi.json'.
+  Tunner.Admin.Bff -> <repo-root>\src\Tunner.Admin.Bff\bin\Debug\net10.0\Tunner.Admin.Bff.dll
+  Tunner.Identity.Persistence.Tests -> <repo-root>\tests\Tunner.Identity.Persistence.Tests\bin\Debug\net10.0\Tunner.Identity.Persistence.Tests.dll
+  Tunner.TestHarness.Tests -> <repo-root>\tests\Tunner.TestHarness.Tests\bin\Debug\net10.0\Tunner.TestHarness.Tests.dll
+  Tunner.Database.IntegrationTests -> <repo-root>\tests\Tunner.Database.IntegrationTests\bin\Debug\net10.0\Tunner.Database.IntegrationTests.dll
+  Tunner.Worker.Tests -> <repo-root>\tests\Tunner.Worker.Tests\bin\Debug\net10.0\Tunner.Worker.Tests.dll
+  Tunner.Platform.ArchitectureTests -> <repo-root>\tests\Tunner.Platform.ArchitectureTests\bin\Debug\net10.0\Tunner.Platform.ArchitectureTests.dll
+
+Build succeeded.
+    0 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:25.79

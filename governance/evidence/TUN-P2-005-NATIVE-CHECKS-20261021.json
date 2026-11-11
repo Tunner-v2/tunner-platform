@@ -1,0 +1,338 @@
+{
+  "schema_version": 1,
+  "scope_id": "TUN-P2-005",
+  "recorded_at": "2026-10-21T18:57:58.324Z",
+  "behavior_validated_tested_sha": "100cccd26f34211810e6c2bcf2a72242f5872c22",
+  "committed_evidence_sha": "3069d03a2c0a599d7490a3c1dba4e4ac3c4c81a8",
+  "schema_checked_at_sha": "38b9a6e07a40a5be74064e492da74483008bed8d",
+  "result": "ENGINEERING_PASS_UI_ACCEPTANCE_BLOCKED",
+  "authority": {
+    "outcome": "VERIFIED",
+    "artifacts": 196,
+    "raw_ref": "artifacts/p2-005-auth-20261021/authority-candidate.json"
+  },
+  "schema": {
+    "ExitCode": 0,
+    "Command": "validate",
+    "Payload": {
+      "IsValid": true,
+      "RecordCount": 806,
+      "Diagnostics": []
+    }
+  },
+  "roles": {
+    "ExitCode": 0,
+    "Command": "roles calculate",
+    "Payload": {
+      "WorkItemId": "TUN-P2-005",
+      "RequiredRoles": [
+        "auditor",
+        "compliance-specialist",
+        "content-writer",
+        "cyber-security-engineer",
+        "devops-engineer",
+        "end-user-ux-reviewer",
+        "frontend-engineer",
+        "full-stack-engineer",
+        "sdk-engineer",
+        "solution-architect",
+        "tester-qa-engineer",
+        "ui-ux-engineer"
+      ],
+      "DeclaredRoles": [
+        "full-stack-engineer",
+        "tester-qa-engineer",
+        "solution-architect",
+        "cyber-security-engineer",
+        "auditor",
+        "compliance-specialist",
+        "sdk-engineer",
+        "ui-ux-engineer",
+        "frontend-engineer",
+        "end-user-ux-reviewer",
+        "content-writer",
+        "rd-engineer",
+        "devops-engineer"
+      ],
+      "ImpactClassifications": [
+        "architecture_or_module_or_integration_change",
+        "authentication_authorization_secrets_crypto_sensitive_data_supply_chain",
+        "ci_cd_container_environment_observability_deployment_iac",
+        "compliance_or_privacy_or_regulated_impact",
+        "every_implementation",
+        "product_api_sdk_event_webhook_change",
+        "user_or_admin_ui_change"
+      ],
+      "MissingMandatoryRoles": [],
+      "Findings": []
+    }
+  },
+  "source_freshness": {
+    "ExitCode": 0,
+    "Command": "sources check",
+    "Payload": {
+      "Outcome": "CURRENT",
+      "ScopeId": "TUN-P2-005",
+      "AsOf": "2026-10-21",
+      "MaxAgeDays": 0,
+      "Entries": [
+        {
+          "ScopeType": "WORK_ITEM",
+          "ScopeId": "TUN-P2-005",
+          "EvidencePath": "governance/evidence/TUN-P2-005-RD-SOURCES.json",
+          "EvidenceSha256": "ef256b7c3c521d0862a744103a2303d38d7c8a2a96e416816fee116422a13b64",
+          "ReviewedOn": "2026-10-21",
+          "AgeDays": 0
+        }
+      ],
+      "Findings": []
+    }
+  },
+  "work_item_gates": [
+    {
+      "ExitCode": 0,
+      "Command": "gate check",
+      "Payload": {
+        "WorkItemId": "TUN-P2-003",
+        "Outcome": "READY",
+        "Failures": [],
+        "Satisfied": [
+          "evidence exists: governance/evidence/TUN-P2-003-VALIDATION.json",
+          "evidence exists: governance/evidence/TUN-P2-003-AUTHORITY-RESOLUTION.json",
+          "evidence exists: governance/evidence/TUN-P2-003-RD-SOURCES.json",
+          "evidence exists: governance/evidence/TUN-P2-003-ROLE-REVIEWS.json",
+          "evidence exists: docs/development/P2_003_IDENTITY_PERSISTENCE.md",
+          "evidence exists: governance/evidence/TUN-P2-003-DATA-INVENTORY.json",
+          "role review evidence exists",
+          "mandatory role review passed: auditor",
+          "mandatory role review passed: compliance-specialist",
+          "mandatory role review passed: cyber-security-engineer",
+          "mandatory role review passed: full-stack-engineer",
+          "mandatory role review passed: rd-engineer",
+          "mandatory role review passed: solution-architect",
+          "mandatory role review passed: tester-qa-engineer"
+        ]
+      }
+    },
+    {
+      "ExitCode": 0,
+      "Command": "gate check",
+      "Payload": {
+        "WorkItemId": "TUN-P2-004",
+        "Outcome": "READY",
+        "Failures": [],
+        "Satisfied": [
+          "evidence exists: governance/evidence/TUN-P2-004-VALIDATION.json",
+          "evidence exists: governance/evidence/TUN-P2-004-AUTHORITY-RESOLUTION.json",
+          "evidence exists: docs/development/P2_004_REGISTRATION_SCOPE.md",
+          "evidence exists: docs/development/P2_004_REGISTRATION.md",
+          "evidence exists: governance/evidence/TUN-P2-004-RD-SOURCES.json",
+          "evidence exists: governance/evidence/TUN-P2-004-DATA-INVENTORY.json",
+          "evidence exists: governance/evidence/TUN-P2-004-UI-ALIGNMENT.json",
+          "evidence exists: governance/evidence/TUN-P2-004-ROLE-REVIEWS.json",
+          "evidence exists: governance/evidence/PDR0011-AMD0007-IMPACT-AUDIT.json",
+          "evidence exists: docs/development/PDR0011_AMD0007_IMPLEMENTATION.md",
+          "evidence exists: governance/evidence/AMD0008-UI-AUDIT.json",
+          "evidence exists: docs/development/AMD0008_UI_REVIEW.md",
+          "evidence exists: governance/evidence/AMD0008-UI-VISUAL-VALIDATION.json",
+          "evidence exists: docs/development/AMD0008_HANDOFF.md",
+          "evidence exists: governance/gates/UI_VISUAL_APPROVAL.yaml",
+          "evidence exists: governance/work-items/TUN-P2-004-UI001.yaml",
+          "evidence exists: governance/todos/TODO-AMD0008-GOV001.yaml",
+          "evidence exists: governance/evidence/TUN-P2-004-SECURITY-REVALIDATION-20261021.json",
+          "evidence exists: docs/development/LOCAL_BROWSER_TESTING.md",
+          "evidence exists: governance/evidence/TUN-P2-004-BROWSER-STARTER-SCOPE.json",
+          "evidence exists: docs/development/BROWSER_STARTER_HANDOFF.md",
+          "evidence exists: governance/evidence/TUN-P2-004-UI-COMPLIANCE.json",
+          "evidence exists: docs/development/GLOBAL_UI_COMPLIANCE_REPORT.md",
+          "evidence exists: docs/development/GLOBAL_UI_HANDOFF_20261018.md",
+          "evidence exists: governance/evidence/AMD0009-FINAL-GATES-20261018.json",
+          "role review evidence exists",
+          "AMD-0008/0009 per-route/form UI compliance passed",
+          "mandatory role review passed: auditor",
+          "mandatory role review passed: compliance-specialist",
+          "mandatory role review passed: content-writer",
+          "mandatory role review passed: cyber-security-engineer",
+          "mandatory role review passed: devops-engineer",
+          "mandatory role review passed: end-user-ux-reviewer",
+          "mandatory role review passed: financial-specialist",
+          "mandatory role review passed: frontend-engineer",
+          "mandatory role review passed: full-stack-engineer",
+          "mandatory role review passed: rd-engineer",
+          "mandatory role review passed: sdk-engineer",
+          "mandatory role review passed: solution-architect",
+          "mandatory role review passed: tester-qa-engineer",
+          "mandatory role review passed: ui-ux-engineer"
+        ]
+      }
+    },
+    {
+      "ExitCode": 1,
+      "Command": "gate check",
+      "Payload": {
+        "WorkItemId": "TUN-P2-005",
+        "Outcome": "NOT_READY",
+        "Failures": [
+          "Revision P1-018-RV003 blocks declared affected scope (SCOPED_BLOCKING)",
+          "UI evidence must bind the requested scope and result PASS",
+          "U-AUTH-01: UX-FID-001 is not PASS",
+          "U-AUTH-01: UX-FID-005 is not PASS",
+          "U-AUTH-01: UX-FID-008 is not PASS",
+          "U-AUTH-SIGNED-IN: UX-FID-001 is not PASS",
+          "U-AUTH-SIGNED-IN: UX-FID-005 is not PASS",
+          "U-AUTH-SIGNED-IN: UX-FID-008 is not PASS",
+          "FORM-LOGIN: UX-FID-001 is not PASS",
+          "FORM-LOGIN: UX-FID-005 is not PASS",
+          "FORM-LOGIN: UX-FID-008 is not PASS"
+        ],
+        "Satisfied": [
+          "evidence exists: governance/evidence/TUN-P2-005-VALIDATION.json",
+          "role review evidence exists",
+          "mandatory role review passed: auditor",
+          "mandatory role review passed: compliance-specialist",
+          "mandatory role review passed: content-writer",
+          "mandatory role review passed: cyber-security-engineer",
+          "mandatory role review passed: devops-engineer",
+          "mandatory role review passed: end-user-ux-reviewer",
+          "mandatory role review passed: frontend-engineer",
+          "mandatory role review passed: full-stack-engineer",
+          "mandatory role review passed: sdk-engineer",
+          "mandatory role review passed: solution-architect",
+          "mandatory role review passed: tester-qa-engineer",
+          "mandatory role review passed: ui-ux-engineer"
+        ]
+      }
+    }
+  ],
+  "ui_gates": [
+    {
+      "ExitCode": 0,
+      "Command": "ui check",
+      "Payload": {
+        "Outcome": "PASS",
+        "ScopeId": "TUN-P2-004",
+        "CoveredItems": [
+          "U-AUTH-02",
+          "U-AUTH-03",
+          "U-AUTH-03A",
+          "U-AUTH-CONSENT",
+          "U-AUTH-RESULT",
+          "FORM-REGISTRATION",
+          "FORM-VERIFY-EMAIL",
+          "FORM-PERSONAL-INFORMATION"
+        ],
+        "Failures": []
+      }
+    },
+    {
+      "ExitCode": 1,
+      "Command": "ui check",
+      "Payload": {
+        "Outcome": "BLOCKED",
+        "ScopeId": "TUN-P2-005",
+        "CoveredItems": [
+          "U-AUTH-01",
+          "U-AUTH-SIGNED-IN",
+          "FORM-LOGIN"
+        ],
+        "Failures": [
+          "UI evidence must bind the requested scope and result PASS",
+          "U-AUTH-01: UX-FID-001 is not PASS",
+          "U-AUTH-01: UX-FID-005 is not PASS",
+          "U-AUTH-01: UX-FID-008 is not PASS",
+          "U-AUTH-SIGNED-IN: UX-FID-001 is not PASS",
+          "U-AUTH-SIGNED-IN: UX-FID-005 is not PASS",
+          "U-AUTH-SIGNED-IN: UX-FID-008 is not PASS",
+          "FORM-LOGIN: UX-FID-001 is not PASS",
+          "FORM-LOGIN: UX-FID-005 is not PASS",
+          "FORM-LOGIN: UX-FID-008 is not PASS"
+        ]
+      }
+    },
+    {
+      "ExitCode": 1,
+      "Command": "ui check",
+      "Payload": {
+        "Outcome": "BLOCKED",
+        "ScopeId": "GLOBAL_UI",
+        "CoveredItems": [
+          "U-AUTH-02",
+          "U-AUTH-03",
+          "U-AUTH-03A",
+          "U-AUTH-CONSENT",
+          "U-AUTH-RESULT",
+          "FORM-REGISTRATION",
+          "FORM-VERIFY-EMAIL",
+          "FORM-PERSONAL-INFORMATION",
+          "SHARED-FORM-USER",
+          "SHARED-FORM-ADMIN",
+          "U-AUTH-01",
+          "U-AUTH-SIGNED-IN",
+          "FORM-LOGIN"
+        ],
+        "Failures": [
+          "UI evidence must bind the requested scope and result PASS",
+          "U-AUTH-01: UX-FID-001 is not PASS",
+          "U-AUTH-01: UX-FID-005 is not PASS",
+          "U-AUTH-01: UX-FID-008 is not PASS",
+          "U-AUTH-SIGNED-IN: UX-FID-001 is not PASS",
+          "U-AUTH-SIGNED-IN: UX-FID-005 is not PASS",
+          "U-AUTH-SIGNED-IN: UX-FID-008 is not PASS",
+          "FORM-LOGIN: UX-FID-001 is not PASS",
+          "FORM-LOGIN: UX-FID-005 is not PASS",
+          "FORM-LOGIN: UX-FID-008 is not PASS"
+        ]
+      }
+    }
+  ],
+  "context": {
+    "build": "GENERATED",
+    "verification": "CURRENT",
+    "output": "artifacts/p2-005-auth-20261021/handoff-context",
+    "checked_at_sha": "4c39352bd9c97a9c43acf9023bd8502dba78eda8",
+    "refresh_after_handoff_commit": true
+  },
+  "preservation": {
+    "unrelated_dirty_paths": [
+      "docs/context/current/HANDOFF.md",
+      "docs/context/current/adaptive-selection.json",
+      "docs/context/current/authority.md",
+      "docs/context/current/contracts.md",
+      "docs/context/current/git-changes.md",
+      "docs/context/current/manifest.json",
+      "docs/context/current/relevant-flows.md",
+      "docs/context/current/summary.md",
+      "docs/context/current/tests.md",
+      "docs/project/CURRENT_STATE.md",
+      "docs/project/HANDOFF.md",
+      "docs/project/PROJECT_CONTEXT.md",
+      ".vscode/settings.json"
+    ],
+    "hashes_unchanged": true
+  },
+  "next_action": "Product Owner manually updates Login2:4 and creates the approved signed-in frame; return its node URL. Read-only comparison and native UI/revision closure checks follow. P2-005 stays CODE_REVIEW; P2-006 remains ineligible.",
+  "external_authority_mutations": false,
+  "production_acceptance": false,
+  "pr": {
+    "url": "https://github.com/Tunner-v2/tunner-platform/pull/19",
+    "draft": true,
+    "base": "codex/global-ui-compliance",
+    "dependency": "https://github.com/Tunner-v2/tunner-platform/pull/18",
+    "final_push": "PUBLISHED_DRAFT_VERIFIED",
+    "proposal_ref": "artifacts/p2-005-auth-20261021/pr-publication-review.md",
+    "automation_revision": "P0-019-RV001",
+    "live_evidence_ref": "governance/evidence/P0-019-RV001-LIVE-PR.json",
+    "verified_head_sha": "38b9a6e07a40a5be74064e492da74483008bed8d",
+    "one_open_head_pr": true,
+    "auto_merge": false
+  },
+  "additional_ci_validation": {
+    "tested_sha": "45c8fba6c60a905194d9937aa5d1181627ed6b76",
+    "checks_passed": 27,
+    "exact_one_line_delta": "PASS",
+    "native_close_check": "PASS",
+    "original_scope_preserved": "TUN-P0-019",
+    "live_result": "PASS",
+    "workflow_run_url": "https://github.com/Tunner-v2/tunner-platform/actions/runs/39658297369"
+  }
+}

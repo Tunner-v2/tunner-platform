@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "scope_id": "P1-018-RV001",
+  "outcome": "RESOLVED_EXISTING_AUTHORITY",
+  "reviewed_authority_refs": [
+    "docs/authority/current-authority.json",
+    "docs/authority/current/development/37_Current_Authority_Index.md",
+    "docs/authority/current/decisions/AMD-0009_URL_Addressable_Routing_and_Governed_Form_Validation.md",
+    "docs/authority/current/development/10_UI_UX_Components_Widgets_and_Plugins_Development_Rules.md",
+    "docs/authority/baselines/1.6.0/decisions/ADR-0007_Frontend_React_TypeScript_Vite_TailAdmin.md"
+  ],
+  "conclusion": "AMD9 explicitly authorizes shared typed schema validation. Existing controlled native fields are compatible presentation primitives, but no existing generic schema validator is installed. Reuse those fields and React with a single pinned Zod schema dependency; React Hook Form was considered but its additional binding/resolver packages are unnecessary for the existing controlled forms.",
+  "figma_refs": [
+    "apNbwvAgdn1xIxYH1oiaSC/70:1257",
+    "3F9tAviUejTYpYvRJt8gM1/49:131",
+    "3F9tAviUejTYpYvRJt8gM1/49:132",
+    "3F9tAviUejTYpYvRJt8gM1/49:133",
+    "3F9tAviUejTYpYvRJt8gM1/49:127",
+    "3F9tAviUejTYpYvRJt8gM1/49:128"
+  ],
+  "p0_enablement": {
+    "result": "PASS",
+    "commit": "aee518b699e44e33be215a0cfe1cc2c805f81611",
+    "receipt": "artifacts/global-ui-20261017/p0-current-enablement.json"
+  },
+  "boundary": "Shared technical presentation, not business rules, production content publication, authentication implementation or approval of unseen UX."
+}

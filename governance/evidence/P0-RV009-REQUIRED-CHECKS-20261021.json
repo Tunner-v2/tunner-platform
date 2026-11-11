@@ -1,0 +1,67 @@
+{
+  "schema_version": 1,
+  "scope_id": "P0-RV009",
+  "result": "PASS_EFFECTIVE_CONFIGURATION",
+  "checked_on": "2026-10-21",
+  "repository": "Tunner-v2/tunner-platform",
+  "branch": "main",
+  "ruleset_id": 24217332,
+  "required_status_checks": {
+    "strict_required_status_checks_policy": true,
+    "do_not_enforce_on_create": false,
+    "required_status_checks": [
+      {
+        "context": "Security baseline",
+        "integration_id": 15368
+      },
+      {
+        "context": "Container security gate",
+        "integration_id": 15368
+      },
+      {
+        "context": "Web build tests and dependency audit",
+        "integration_id": 15368
+      }
+    ]
+  },
+  "unchanged_controls": {
+    "required_codeowner_approval": 1,
+    "dismiss_stale_reviews": true,
+    "bypass_actors": [],
+    "deletion_protection": true,
+    "force_push_protection": true
+  },
+  "source_binding": {
+    "published_head_sha": "4cb8460809c489d6a738cb570a5c9757a711ffa7",
+    "actions_app_id": 15368,
+    "observed_contexts": [
+      "Security baseline",
+      "Container security gate",
+      "Web build tests and dependency audit"
+    ]
+  },
+  "negative_runtime_evidence": "The published Container security gate actually failed when its declared image matrix failed; no failure/skip/cancellation is accepted as success.",
+  "receipts": [
+    {
+      "path": "artifacts/security-remediation-20261020/main-ruleset-current.json",
+      "sha256": "4b540dc36aca7289a7f5e21d42ede162f797736a716ab5c5876b724fec776024"
+    },
+    {
+      "path": "artifacts/security-remediation-20261020/required-checks-ruleset-payload.json",
+      "sha256": "574ea783a29df1e2c244e520530f68a3ce50948296e3b25cb415e51776339d33"
+    },
+    {
+      "path": "artifacts/security-remediation-20261020/main-ruleset-updated.json",
+      "sha256": "057c16e713bb858ec7e0c983c75b0af6724b407191cc51fca9a9370b6dbc244d"
+    },
+    {
+      "path": "artifacts/security-remediation-20261020/main-effective-rules-after.json",
+      "sha256": "88ae59043aa70a465b627e6bafc2d03e69b62aeb53d62af5905da569f2a29b8c"
+    },
+    {
+      "path": "artifacts/security-remediation-20261020/ci-4cb8460-current.json",
+      "sha256": "f8e955ddd5a066bd07fc3042e61ed125a9a5d152aeff8ff7ffa118a54c3220c6"
+    }
+  ],
+  "boundary": "Configuration enforcement only. Failing checks remain integration blockers; no human review bypass, merge or release approval."
+}

@@ -1,0 +1,40 @@
+{
+  "schema_version": 1,
+  "scope_type": "MILESTONE",
+  "scope_id": "P0",
+  "revision_ref": "P0-RV008",
+  "status": "PASS",
+  "reviewed_commit_sha": "623d3db08ee73182904a12dd08351260a715449c",
+  "reviewed_scope_sha256": "555e4ee909c7566759e9fea9c3ceb7066984d2ee21369612d407c776ec04d6e8",
+  "reviewed_at": "2026-10-18T21:49:04.022Z",
+  "provenance": "Fresh executing-agent technical review through this corrective Revision; original historical receipts preserved.",
+  "reviews": [
+    {
+      "role": "governance-engineer",
+      "conclusion": "PASS",
+      "evidence_ref": "governance/evidence/P0-RV008-VALIDATION.json",
+      "checks": [
+        "Separate P0-RV008 lineage preserves original P0 and closed P0-RV007 receipts; no lifecycle or Product authority changes.",
+        "Actual startup/body/cleanup failures remain failures; scope and historical-cause limitation are recorded."
+      ]
+    },
+    {
+      "role": "tester-qa-engineer",
+      "conclusion": "PASS",
+      "evidence_ref": "governance/evidence/P0-RV008-VALIDATION.json",
+      "checks": [
+        "Six child-process fault cases require exactly exit1, matching stderr marker, no unhandled-exception output and no false PASS; timeout stops only the launched child tree.",
+        "Both actual ordinary suites must pass at the same committed source; initial analyzer-failed build remains excluded."
+      ]
+    },
+    {
+      "role": "auditor",
+      "conclusion": "PASS",
+      "evidence_ref": "governance/evidence/P0-RV008-VALIDATION.json",
+      "checks": [
+        "Original screenshots show a generic CLR code; no unsupported claim about the historical stack is made.",
+        "Source SHA, normalized durable logs, failing attempt and seven executing-agent specialist perspectives are traceable;13 unrelated files remain byte-identical."
+      ]
+    }
+  ]
+}

@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "status": "APPROVED_SCOPED_ACCEPTANCE",
+  "approval_date": "2026-10-18",
+  "recorded_at": "2026-10-18T21:02:41.965Z",
+  "approved_source_commit": "bea01cfcd813bf8000a7e1c64b8c74492c4b4e31",
+  "approver": "Authorized Product Owner, direct human response in this chat",
+  "question_item_id": "[\"request_user_input_async\",\"call_ef72a53cf94140b39fa76b4698efe200\",0]",
+  "question": "Do you accept the validated current UI at commit bea01cf and authorize the exact updates in the review packet: record test/specialist reviews, close four verified UI defects and TODO-AMD0008-GOV001, mark UI_VISUAL_APPROVAL PASS for the five existing screens/three forms/shared controls, and complete UI001, UI002 and P1-018-RV001 only after native gates pass? This excludes whole-P2 completion, protected-main merge, production deployment and release.",
+  "answer": "Approve this scoped acceptance (Recommended)",
+  "review_packet": {
+    "path": "artifacts/global-ui-20261017/acceptance-authorization-20261018.html",
+    "sha256": "028fecf44851943b925db935652aaa1d3f655be7512747e88eb6f2e036e85676",
+    "machine_readable_path": "artifacts/global-ui-20261017/acceptance-authorization-20261018.json",
+    "machine_readable_sha256": "a05cc98257da30059af72b19b88eade64a282eb9efb9943fbce6270ad16adf62"
+  },
+  "accepted_scope": {
+    "screens": 5,
+    "forms": 3,
+    "shared_development_fixtures": 2,
+    "scopes": [
+      "TUN-P2-004-UI001",
+      "TUN-P2-004-UI002",
+      "P1-018-RV001"
+    ]
+  },
+  "conditions": [
+    "Commit actual test/evidence and technical specialist reviews.",
+    "Close only the four resolved UI defects and completed TODO-AMD0008-GOV001.",
+    "Set the current implemented UI visual gate to PASS only when applicable native evidence checks pass.",
+    "Complete the three named scopes only after native transition/closure checks pass; no unsupported transition override."
+  ],
+  "excluded": [
+    "Whole P2 milestone completion",
+    "53 planned screens or future feature implementation",
+    "Protected-main merge",
+    "Production deployment or release",
+    "New visual, business, age, financial or security policy deviations",
+    "Independent human specialist or legal/security waivers"
+  ]
+}

@@ -1,0 +1,55 @@
+{
+  "schema_version": 1,
+  "scope_id": "GLOBAL_UI",
+  "status": "AUDIT_FINDINGS_OPEN",
+  "audited_commit_sha": "27e21bf3a1e02fa013d4899d79d59023845d3936",
+  "authority_resolution_ref": "governance/evidence/P0-RV006-AUTHORITY-RESOLUTION.json",
+  "inventory_ref": "docs/contracts/ui-inventory.json",
+  "current_coverage": {
+    "full_screen_views": 5,
+    "live_forms": 3,
+    "shared_surface_fixtures": 2,
+    "planned_items": 53
+  },
+  "findings": [
+    {
+      "id": "DEF-AMD0009-ROUTING-001",
+      "classification": "UI_ROUTING_DEFECT",
+      "scope": "Five existing registration views",
+      "evidence": "web/apps/user/main.tsx uses a local stage state; every full-screen view remains under /registration. RegistrationEndpoints only maps /registration SPA shell; no guarded deep-link fallback or refresh resume."
+    },
+    {
+      "id": "DEF-AMD0009-VALIDATION-001",
+      "classification": "UI_VALIDATION_DEFECT",
+      "scope": "Registration, verification, Personal Information and shared User/Admin fixture controls",
+      "evidence": "Native required/email/date constraints remain primary; handwritten submit checks are not a shared typed schema. Error state is one general paragraph; blur/correction and first-invalid field focus are absent."
+    },
+    {
+      "id": "DEF-AMD0009-FIDELITY-001",
+      "classification": "UI_FIDELITY_DEFECT",
+      "scope": "Shared validation presentation",
+      "evidence": "Approved 70:1257 uses #b91c1c 1.5px invalid borders, 12px inline errors and 13px semibold summary. Current user error token is #c7241a and fields are not given errorKey by live forms."
+    },
+    {
+      "id": "P0-REVIEW-BINDING",
+      "classification": "GOVERNANCE_EVIDENCE_GAP",
+      "scope": "P0 current enablement",
+      "evidence": "Original historical role receipt has no reviewed_commit_sha/reviewed_scope_sha256. Preserve it and add current proof through validated closed Revision lineage."
+    }
+  ],
+  "preserved_behaviors": [
+    "PDR-0011/AMD-0007 verified contact precedes Personal Information/DOB; no blanket under18 account rejection.",
+    "No Product authorization, sign-in, legal/content publication or future-plane implementation inferred.",
+    "Existing registration URL and BFF APIs remain supported."
+  ],
+  "harness_followup": {
+    "user_request": "Fix the reported application error after the current process",
+    "screenshot": "User attachment codex-clipboard-1b0f4867-c3c5-48ee-b7e2-635fb20c2241.png",
+    "observed_process": "Tunner.Governance.FunctionalTests.exe",
+    "reproduced_exit_code": -532462766,
+    "exit_hex": "0xE0434352",
+    "log": "artifacts/global-ui-20261017/p0-controls-smoke-corrected.log",
+    "observed_exception": "Unhandled UnauthorizedAccessException deleting read-only Git fixture objects",
+    "action": "Reuse verified DeleteFixture helper; verify final harness execution and then address any remaining top-level crash behavior."
+  }
+}

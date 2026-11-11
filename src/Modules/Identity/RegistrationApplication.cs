@@ -1,5 +1,4 @@
 using System.Globalization;
-using System.Net.Mail;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
@@ -281,11 +280,7 @@ public sealed partial class RegistrationApplication(
     private static byte[] Digest(RegistrationOperationRow row, string code) => SHA256.HashData(Encoding.UTF8.GetBytes(row.OperationId.ToString("N") + ":" + row.PolicyVersion + ":" + code));
     private static PasswordHasher<IdentityUserAdapter> Hasher(RegistrationPolicy policy) => new(Options.Create(new PasswordHasherOptions
         { CompatibilityMode = PasswordHasherCompatibilityMode.IdentityV3, IterationCount = policy.PasswordHashIterations }));
-    private static bool ValidEmail(string? email)
-    {
-        if (string.IsNullOrWhiteSpace(email) || email.Trim().Length > 256) return false;
-        return MailAddress.TryCreate(email.Trim(), out var parsed) && StringComparer.Ordinal.Equals(parsed.Address, email.Trim());
-    }
+    private static bool ValidEmail(string? email) => IdentityEmail.IsValid(email);
     private static string OperationReference(Guid id) => "OP-" + id.ToString("N");
     private static RegistrationResult Result(RegistrationOperationRow row) => new(row.OperationId, row.CorrelationId, row.Status,
         row.Version, row.ErrorCode, row.Status == "REQUIRES_ACTION" ? row.Stage == "VERIFY_CONTACT" || row.Stage == "LEGACY" ? row.ExpiresAt : row.PurgeAfter : null,
