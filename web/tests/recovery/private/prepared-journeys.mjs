@@ -2,7 +2,8 @@ import {createRecoveryAccountMechanics} from '../../totp/sensitive/real-journey.
 import {budgets, fixedError, requireTrue, bounded, observedMap, journeys, registeredJourney} from './contract.mjs';
 
 // Imported only by the protected child. No process, artifact, reporter or file API.
-// The committed dispatcher remains closed; root must qualify and separately open it.
+// Fixed delegation still requires coordinator-owned current qualifications before
+// private resources. Source presence does not prove a journey has executed.
 const security='/account/security',prefix='/account/recovery-codes';
 const object=v=>v!==null&&typeof v==='object'&&!Array.isArray(v);
 const same=(a,b)=>JSON.stringify(a)===JSON.stringify(b);

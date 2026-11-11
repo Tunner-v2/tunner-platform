@@ -106,9 +106,15 @@ test('private marker overlap detects public sentinel across an owned profile chu
     try { assert.equal((await inspectSurface(identity, {markers})).clean, false); } finally { markers.clear(); }
   });
 });
-test('unfinished live dispatcher flushes all false facts and rejects before account or value work', async () => {
-  const seen = []; await assert.rejects(runJourney({control: liveControl(), check(id, value) { seen.push([id, value]); }}), error => failureOf(error) === 'DEPENDENCY_NOT_READY');
-  assert.equal(seen.length, journeys[journeyId].length); assert.equal(seen.every(([, value]) => value === false), true);
+test('guarded registered dispatcher rejects each missing dependency before work or observations', async () => {
+  const ids=Object.keys(journeys);assert.equal(ids.length,6);
+  for(const id of ids)for(const missing of ['browser','onContext','fixtureControl','nativeCode','requestOwnedDownload','inspectOwnedSurface']){
+    let work=0;const seen=[],attempted=()=>{work++;throw fixedError('PREDICATE_FAILED');};
+    const input={control:{...liveControl(),journeyId:id},check(key,value){seen.push([key,value]);},browser:{contexts:attempted},onContext:attempted,fixtureControl:attempted,nativeCode:attempted,requestOwnedDownload:attempted,inspectOwnedSurface:attempted};
+    Object.defineProperty(input,'page',{enumerable:true,get:attempted});delete input[missing];
+    await assert.rejects(runJourney(input),error=>failureOf(error)==='INPUT_INVALID');
+    assert.equal(work,0);assert.deepEqual(seen,[]);
+  }
 });
 
 // Public reducer assertions only; no live coordinator/values/resources.

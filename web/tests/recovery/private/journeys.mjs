@@ -1,7 +1,8 @@
-import {budgets, fixedError, requireTrue, bounded, publicMarker, publicBody, registeredJourney, observedMap, journeys} from './contract.mjs';
+import {budgets, fixedError, requireTrue, bounded, publicMarker, publicBody, registeredJourney, observedMap} from './contract.mjs';
 import {downloadIdentity, sameDownload, inspectSurface} from './surface.mjs';
+import {runPreparedJourney} from './prepared-journeys.mjs';
 
-export {runPreparedJourney} from './prepared-journeys.mjs';
+export {runPreparedJourney};
 
 // No process/report/file export API. Private values must stay in the protected child.
 function waitAtPublicGate(signal){
@@ -74,15 +75,10 @@ export async function publicJourneyEntry(page) {
   requireTrue(rejected && emitted.length === 2 && emitted[0][1] === false && emitted[1][1] === true);
 }
 
-export async function runJourney({control, check}) {
-  requireTrue(registeredJourney(control.journeyId), 'INPUT_INVALID');
-  // The prepared six-case implementation is deliberately unreachable here.
-  // Root must commit, compile/bind, qualify the exact production-controller public
-  // topology and separately review the one-line live-opening change.
-  // Recovery coordinator, method setup and final compiled owner wire have not been
-  // source-frozen for this slice. Do not create accounts or values on assumptions.
-  // A later reviewed delta must implement every registered fact before live dispatch.
-  const observation = observedMap(journeys[control.journeyId]);
-  for (const id of journeys[control.journeyId]) { try { check(id, observation.snapshot()[id]); } catch { /* Flush all fixed false observations. */ } }
-  throw fixedError('DEPENDENCY_NOT_READY');
+export async function runJourney(input) {
+  requireTrue(registeredJourney(input?.control?.journeyId), 'INPUT_INVALID');
+  // Only the fixed protected child supplies these capabilities. The coordinator
+  // requires current native protocol/resource and browser-public qualifications
+  // before private resources; source presence is not execution or acceptance.
+  return runPreparedJourney(input);
 }

@@ -23,7 +23,8 @@ public static class RecoveryCodeFiniteNativeExecution
         "ATTEMPT_LIMIT_ACCOUNT", "ATTEMPT_LIMIT_NETWORK", "REPLACEMENT_SAME_FACTS_RACE", "CONSUME_BEFORE_REPLACE", "REPLACE_BEFORE_CONSUME",
         "PROOF_ABSENT", "PROOF_WRONG_PASSWORD", "PROOF_INSUFFICIENT", "PROOF_EXPIRED", "PROOF_CONSUMED",
         "BIND_OPERATION", "BIND_CORRELATION", "BIND_SCOPE", "BIND_CONTEXT", "BIND_RESOURCE", "BIND_VERSION", "BIND_DIGEST", "BIND_SESSION", "BIND_ACCOUNT", "BIND_ORIGIN", "BIND_KEY", "BFF_CSRF_ORIGIN_OWNER",
-        "STABLE_GENERATE_DUPLICATE", "STABLE_REPLACE_DUPLICATE", "CONSUME_OWNER_THROW", "CONSUME_OWNER_CANCEL", "GENERATE_POST_COMMIT_OBSERVER", "REPLACE_POST_COMMIT_OBSERVER", "CONSUME_POST_COMMIT_OBSERVER", "CORRUPT_VERIFIER_FAIL_CLOSED"];
+        "STABLE_GENERATE_DUPLICATE", "STABLE_REPLACE_DUPLICATE", "CONSUME_OWNER_THROW", "CONSUME_OWNER_CANCEL", "GENERATE_POST_COMMIT_OBSERVER", "REPLACE_POST_COMMIT_OBSERVER", "CONSUME_POST_COMMIT_OBSERVER", "CORRUPT_VERIFIER_FAIL_CLOSED",
+        "PARENT003_REGISTRATION_BOUNDARY", "PARENT003_REGISTRATION_FLOW", "PARENT003_REGISTRATION_PROGRESS", "PARENT005_AUTH_SESSION", "PARENT005_AUTH_DUPLICATE", "PARENT005_AUTH_CONTACT_CURRENT", "PARENT006_PROOF_SESSION", "PARENT006_PROOF_ROLLBACK", "PARENT006_BROWSER_ORIGINAL", "PARENT006_BROWSER_ABSENCE"];
 
     internal static async Task<RecoveryCodeNativeReceipt> RunAsync(RecoveryCodeNativeCohort cohort, Uri qualifiedLocalEndpoint, DirectoryInfo repository, RecoveryCodeFixtureOwnershipChannel ownershipChannel)
     {
@@ -234,6 +235,16 @@ public static class RecoveryCodeFiniteNativeExecution
             "REPLACE_POST_COMMIT_OBSERVER" => tests.IssuancePostCommitObserverFailureReturnsNoPayloadAndOnlySafeOriginal(true),
             "CONSUME_POST_COMMIT_OBSERVER" => tests.ConsumePostCommitObserverFailureReconcilesOnlyOriginalSafeOutcome(),
             "CORRUPT_VERIFIER_FAIL_CLOSED" => tests.CorruptedPersistedVerifierFailsClosedBeforeAnyOwnerApplication(),
+            "PARENT003_REGISTRATION_BOUNDARY" => new RegistrationBffTests(fixture).ActualHttpsBffKeepsRegistrationAnonymousAndRequiresOriginCsrfAndProtectedBrowserContext(),
+            "PARENT003_REGISTRATION_FLOW" => new RegistrationBffTests(fixture).ActualHttpsFlowVerifiesContactBeforePersonalInformationAndActivatesUnder18WithoutSession(),
+            "PARENT003_REGISTRATION_PROGRESS" => new RegistrationBffTests(fixture).ProtectedProgressRecoversOnlyItsOwnServerStageAndRestartPreservesAccountEvidence(),
+            "PARENT005_AUTH_SESSION" => new AuthenticationTests(fixture).PasswordEstablishesOpaqueHostOnlySessionAndSignOutRevokesIt(),
+            "PARENT005_AUTH_DUPLICATE" => new AuthenticationTests(fixture).ConcurrentSuccessfulRetryKeepsOneSessionAndCannotReviveAfterLogout(),
+            "PARENT005_AUTH_CONTACT_CURRENT" => new AuthenticationTests(fixture).CurrentAuthorityImmediatelyInvalidatesExistingSession("contact"),
+            "PARENT006_PROOF_SESSION" => new StepUpTests(fixture).FreshProofIsConsumedOnceWithoutUpgradingSessionAndEventsContainOnlySafeReferences(),
+            "PARENT006_PROOF_ROLLBACK" => new StepUpTests(fixture).TargetConflictAndThrownMutationRollBackBothProofAndTargetAndAllowSafeRetry(),
+            "PARENT006_BROWSER_ORIGINAL" => new StepUpBrowserTests(fixture).BoundBrowserActionCompletesOnceReconcilesRetryAndNeverReturnsProofMaterial(),
+            "PARENT006_BROWSER_ABSENCE" => new StepUpBrowserTests(fixture).UnauthenticatedOrUnactivatedSurfaceHasNoUsableBridge(),
             _ => throw new InvalidOperationException("RECOVERY_NATIVE_CASE_INVALID")
         };
     }

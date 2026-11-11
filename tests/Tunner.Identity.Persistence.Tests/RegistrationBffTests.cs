@@ -189,7 +189,7 @@ public sealed class RegistrationBffTests(IdentityPostgresFixture fixture) : ICla
         {
             using var rsa=RSA.Create(2048);var request=new CertificateRequest("CN=localhost",rsa,HashAlgorithmName.SHA256,RSASignaturePadding.Pkcs1);
             using var generated=request.CreateSelfSigned(DateTimeOffset.UtcNow.AddMinutes(-1),DateTimeOffset.UtcNow.AddHours(1));var bytes=generated.Export(X509ContentType.Pkcs12);
-            X509Certificate2 certificate;try{certificate=X509CertificateLoader.LoadPkcs12(bytes,null,X509KeyStorageFlags.DefaultKeySet);}finally{CryptographicOperations.ZeroMemory(bytes);}
+            X509Certificate2 certificate;try{certificate=X509CertificateLoader.LoadPkcs12(bytes,null,database.FiniteOwner is null ? X509KeyStorageFlags.DefaultKeySet : X509KeyStorageFlags.EphemeralKeySet);}finally{CryptographicOperations.ZeroMemory(bytes);}
             var notices=new NoticeSink();var policy=new RegistrationPolicy("fixture-registration-v2","PDR-0011","fixture-processing","fixture-retention","fixture-terms","fixture-privacy","fixture-proof","fixture-existing","PASSWORD_AND_VERIFIED_EMAIL",15,128,10000,6,TimeSpan.FromMinutes(5),2,TimeSpan.FromSeconds(30),2,TimeSpan.FromMinutes(1),1000,1000,1000,1000,TimeSpan.FromMinutes(30),TimeSpan.FromHours(1));
             var version=new RegistrationPolicyVersion(new(policy.Version,"ACTIVE","REGISTRATION",new EffectivePolicyInterval(DateTimeOffset.UtcNow.AddDays(-1),true,null,false),null,["fixture-only-approval"]),policy);
             var agePolicies=new FixtureAccountAgePolicies();
@@ -206,7 +206,7 @@ public sealed class RegistrationBffTests(IdentityPostgresFixture fixture) : ICla
                 builder.Services.AddSingleton(new RegistrationNetworkPartitionKey(RandomNumberGenerator.GetBytes(32)));
             });
             await app.StartAsync();var addresses=app.Services.GetRequiredService<IServer>().Features.Get<IServerAddressesFeature>()!.Addresses;
-            var handler=new HttpClientHandler{UseCookies=false,AllowAutoRedirect=false,ServerCertificateCustomValidationCallback=(_,presented,_,_)=>presented is not null && presented.GetCertHashString(HashAlgorithmName.SHA256)==certificate.GetCertHashString(HashAlgorithmName.SHA256)};
+            var handler=new HttpClientHandler{UseCookies=false,AllowAutoRedirect=false,UseProxy=database.FiniteOwner is null,ServerCertificateCustomValidationCallback=(_,presented,_,_)=>presented is not null && presented.GetCertHashString(HashAlgorithmName.SHA256)==certificate.GetCertHashString(HashAlgorithmName.SHA256)};
             return new(app,certificate,new HttpClient(handler){BaseAddress=new Uri(addresses.Single(x=>x.StartsWith("https://",StringComparison.Ordinal)))},new Uri(addresses.Single(x=>x.StartsWith("http://",StringComparison.Ordinal))),notices);
         }
         public async Task<HttpResponseMessage> Get(string path,string? cookie=null,bool http=false){using var request=new HttpRequestMessage(HttpMethod.Get,http?new Uri(this.http,path):new Uri(client.BaseAddress!,path));request.Headers.Host=new Uri(Origin).Host;if(cookie is not null)request.Headers.TryAddWithoutValidation("Cookie",cookie);return await client.SendAsync(request);}
