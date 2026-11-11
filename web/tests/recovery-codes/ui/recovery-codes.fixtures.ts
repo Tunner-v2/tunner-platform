@@ -59,5 +59,5 @@ export async function beginRecovery(page:Page,kind:'GENERATE'|'REPLACE'){
 export async function completeRecoveryProof(page:Page,method:'password'|'passkey'|'totp'){
  const dialog=page.getByRole('dialog');if(method==='password'){await dialog.getByRole('button',{name:'Other method',exact:true}).click();await dialog.getByLabel('Password',{exact:true}).fill('public-nonfunctional-password');await dialog.getByRole('button',{name:'Confirm',exact:true}).click();}
  else if(method==='passkey')await dialog.getByRole('button',{name:'Passkey',exact:true}).click();
- else{await dialog.getByRole('button',{name:'Authenticator',exact:true}).click();await dialog.getByLabel('Verification code',{exact:true}).fill('000123');await dialog.getByRole('button',{name:'Confirm',exact:true}).click();}
+ else{await dialog.getByRole('button',{name:'Authenticator Enter a 6-digit code',exact:true}).click();await dialog.getByLabel('Verification code',{exact:true}).fill('000123');await dialog.getByRole('button',{name:'Confirm',exact:true}).click();}
 }
