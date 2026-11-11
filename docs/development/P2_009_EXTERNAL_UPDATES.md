@@ -1,6 +1,6 @@
 # P2-009 owner-held external updates
 
-AI keeps Figma, FigJam and Google Drive strictly read-only. The authorized Product Owner approved exact009-L01–L03 and same-view optional single download; see [recorded consent](../../governance/evidence/TUN-P2-009-VISUAL-CONSENT.json). These instructions are a bounded manual backfill request, not a new approval or production publication.
+AI keeps Figma, FigJam and Google Drive strictly read-only. The authorized Product Owner approved exact009-L01–L03 and same-view optional single download, plus [009-L04](../../governance/evidence/TUN-P2-009-VISUAL-CONSENT-L04.json); see [recorded consent](../../governance/evidence/TUN-P2-009-VISUAL-CONSENT.json). These instructions are a bounded manual backfill request, not a new approval or production publication.
 
 ## Figma: existing Account Security and disclosure flow
 
@@ -9,6 +9,8 @@ Use the Tunner Platform UX Master. Preserve Account Security13:2/Recovery option
 - **009-L01:** Add the pictured Download control to the existing once-only reveal. The same authorized temporary view permits one optional user-requested local file. Show requested feedback and move focus to the available Done control after disabling Download. Keep polite status separate from code values. Closing/departure clears the temporary values; no server show-again action or saved-file success claim.
 - **009-L02:** Add the pictured nondisclosing original-result/uncertainty feedback. A completed server operation with a lost response means the old values are unavailable, not necessarily shown or saved. Reserve already-shown wording for known presentation. Check status does not regenerate/reveal codes or automatically replace them.
 - **009-L03:** Add the pictured replacement review slot and unavailable state. Runtime displays complete current approved server-selected impact with publication/version binding. Continue is unavailable for absent, stale or incomplete effects. The neutral public picture demonstrates layout; do not promote its placeholder sentence to a complete production security warning or select old-set/session effects from it.
+
+- **009-L04:** Show both Generate codes and Replace codes only when each is permitted by authoritative server flags. Retain the existing card/buttons/action row and dimensions at desktop/390; use existing wrapping at320. No UI-selected capacity or retirement plan. The actual two-action comparison and consent are recorded in the L04 receipt.
 
 [Exact approved scope and pictured evidence](../../governance/evidence/p2-009-recovery-20261111/refinement/ui/scoped-proposal.json). Final rendered implementation evidence will supplement these proposal images after actual tests; this document does not assert implementation or final visual acceptance.
 

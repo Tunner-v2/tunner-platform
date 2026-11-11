@@ -1,0 +1,57 @@
+{
+  "schema_version": 1,
+  "scope_id": "TUN-P2-009",
+  "recorded_at": "2026-11-11T10:12:53.773Z",
+  "result": "EXPLICIT_USER_AUTHORIZATION_SCOPED_IMPLEMENTATION_AND_TESTING",
+  "source": {
+    "call_id": "call_95dc547938194b08a21cc43a8875245e",
+    "verbatim_answer": "Authorize this scoped integration (Recommended)"
+  },
+  "review_packet": {
+    "path": "artifacts/p2-009-recovery-20261111/shared-boundary-authorization/review.html",
+    "sha256": "1a39e03b71d117cf93a93d923445e100418ccf563d101f61cd02388066dda65b"
+  },
+  "prepared_csharp_patch": {
+    "path": "artifacts/p2-009-recovery-20261111/shared-boundary-authorization/proposed-shared-boundary.patch",
+    "sha256": "d0460a2a56f35c66f7c58da4296f0614a1b4c418077b37d6c11ce1a519407f5c",
+    "files": [
+      {
+        "path": "src/Modules/Identity/StepUpOutcomes.cs",
+        "before_worktree_sha256": "8508200be4f34b781f94a1db5c8273e8558ba2775aba03f8ab88b2e908c1af2f",
+        "before_git_lf_sha256": "0acc1ba4d7f69d89188f609b7f4ca1baaff4ba46fce8ce2bf7b15b4f098a492e",
+        "proposed_after_utf8_lf_sha256": "2a3c3fc27577b00e8191c7b0b6afb2e38543a8f7a068c44eee623dd0a0efba61"
+      },
+      {
+        "path": "src/Modules/Identity/StepUpContracts.cs",
+        "before_worktree_sha256": "a1a139b32ed70ac6ae7d88a237d07fd2fc72b8a83594c377cf92afed7f7988eb",
+        "before_git_lf_sha256": "6c8075420e53da3dfc87e362bf12225e9359a63a7713f684d13d3a98127f3ec8",
+        "proposed_after_utf8_lf_sha256": "2ba1a2e042ae9c2b1926c45e33b64024631599c482dc5c4cbfb324ac895b6ea2"
+      },
+      {
+        "path": "src/Modules/Identity/StepUpApplication.cs",
+        "before_worktree_sha256": "e80e497052b44deb2f9b3fef8181b1089060480f89cfa80ba98a72d30d58f119",
+        "before_git_lf_sha256": "61c5864fa5935a5fce5b68ac1a2caa70621c9eed76a545fc08fc877226bd5160",
+        "proposed_after_utf8_lf_sha256": "0a8beafa56a52d6bbea6b1d981fa22a427da631ba632a78ba578540cfeffd978"
+      }
+    ]
+  },
+  "scope": "Implement/test the reviewed recovery-only winning response through existing shared password/passkey/TOTP execution, BFF/owner wrappers and typed frontend completion, including the exact3-fileC#patch and bounded follow-on paths in the packet.",
+  "prior_automatic_rejection": "This patch changes the shared step-up authentication execution/result lifecycle and recovery-secret disposal across passkey/TOTP paths, creating a broad security and service-disruption blast radius; the available trusted user authorization does not specifically cover this high-impact shared-boundary change.",
+  "regressions": [
+    "Existing password/passkey/TOTP proof/session/current-policy/expiry/composite causal revoke regressions unchanged.",
+    "Recovery winner exists only after confirmed commit and successful transaction disposal; save/commit/UNKNOWN/dispose failure clears pending carrier.",
+    "Owner rejection/final recovery policy or row drift rolls back mutation/proof/outbox and disposes carrier.",
+    "ForPasskey/ForTotp preserve unrelated witness/carrier fields; incompatible closed shape is rejected, never silently dropped or treated as causal exception.",
+    "Legacy boolean entry rejects recovery scope before mutation delegate is invoked.",
+    "Duplicate/completed/native continuation reads return safe metadata only; an ACTIVE original proof may win after owner rollback.",
+    "Dedicated BFF follow-on: completion-hook failure, cancellation before write, midwrite abort and safe body-loss reconciliation never redisclose.",
+    "All new tests/assertions/logs/TRX report fixed facts only, never codes/verifiers/buffers/context values."
+  ],
+  "exclusions": [
+    "No new production policy/capacity/session or replacement selection",
+    "No generic secret transport, second proof engine or read-again escrow",
+    "No Figma/Drive/FigJam mutation",
+    "No protected-main merge, production publication/activation or release"
+  ],
+  "acceptance": "Not final implementation/security/work-item acceptance; all required tests and gates remain."
+}
