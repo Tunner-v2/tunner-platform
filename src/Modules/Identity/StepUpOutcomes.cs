@@ -3,19 +3,29 @@ using Tunner.Platform.Policies;
 namespace Tunner.Identity.Persistence;
 
 /// <summary>Optional trusted-owner outcome. A terminal receipt remains private and is independently verified by Identity.</summary>
-public sealed class UserStepUpOperationApplyOutcome
+public sealed class UserStepUpOperationApplyOutcome : IDisposable
 {
-    private UserStepUpOperationApplyOutcome(bool applied, AuthenticationSessionTerminationReceipt? receipt, PasskeyExecutionValidity? validity = null, TotpExecutionValidity? totpValidity = null)
-    { Applied = applied; Receipt = receipt; PasskeyValidity = validity; TotpValidity = totpValidity; }
+    private RecoveryCodeFirstDelivery? recoveryDelivery;
+    private UserStepUpOperationApplyOutcome(bool applied, AuthenticationSessionTerminationReceipt? receipt, PasskeyExecutionValidity? validity = null,
+        TotpExecutionValidity? totpValidity = null, RecoveryCodeExecutionValidity? recoveryValidity = null, RecoveryCodeFirstDelivery? recoveryDelivery = null)
+    { Applied = applied; Receipt = receipt; PasskeyValidity = validity; TotpValidity = totpValidity; RecoveryValidity = recoveryValidity; this.recoveryDelivery = recoveryDelivery; }
     public bool Applied { get; }
     internal AuthenticationSessionTerminationReceipt? Receipt { get; }
     internal PasskeyExecutionValidity? PasskeyValidity { get; }
     internal TotpExecutionValidity? TotpValidity { get; }
-    internal UserStepUpOperationApplyOutcome ForPasskey(PasskeyExecutionValidity validity) => new(Applied, Receipt, validity);
-    internal UserStepUpOperationApplyOutcome ForTotp(TotpExecutionValidity validity) => new(Applied, Receipt, null, validity);
+    internal RecoveryCodeExecutionValidity? RecoveryValidity { get; }
+    internal UserStepUpOperationApplyOutcome ForPasskey(PasskeyExecutionValidity validity) => new(Applied, Receipt, validity, TotpValidity, RecoveryValidity, TakeRecoveryDelivery());
+    internal UserStepUpOperationApplyOutcome ForTotp(TotpExecutionValidity validity) => new(Applied, Receipt, PasskeyValidity, validity, RecoveryValidity, TakeRecoveryDelivery());
+    internal RecoveryCodeFirstDelivery? TakeRecoveryDelivery() => Interlocked.Exchange(ref recoveryDelivery, null);
+    internal bool ClosedFor(StepUpOperation operation) => RecoveryCodeApplication.Owns(operation.Scope)
+        ? Applied && Receipt is null && PasskeyValidity is null && TotpValidity is null && RecoveryValidity is not null && recoveryDelivery is not null && RecoveryValidity.Matches(recoveryDelivery)
+        : RecoveryValidity is null && recoveryDelivery is null && !(PasskeyValidity is not null && TotpValidity is not null);
     public static UserStepUpOperationApplyOutcome Conflict() => new(false, null);
     public static UserStepUpOperationApplyOutcome SessionContinues() => new(true, null);
     internal static UserStepUpOperationApplyOutcome SessionEnded(AuthenticationSessionTerminationReceipt receipt) => new(true, receipt);
+    internal static UserStepUpOperationApplyOutcome RecoveryCodes(RecoveryCodeFirstDelivery delivery, RecoveryCodeExecutionValidity validity) => new(true, null, null, null, validity, delivery);
+    public void Dispose() => TakeRecoveryDelivery()?.Dispose();
+    public override string ToString() => nameof(UserStepUpOperationApplyOutcome);
 }
 public interface IUserStepUpOperationOutcomeSource : IUserStepUpOperationSource
 {

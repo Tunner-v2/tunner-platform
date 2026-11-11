@@ -5,7 +5,7 @@ using Tunner.Platform.Policies;
 namespace Tunner.Identity.Persistence;
 
 public enum RecoveryCodeGenerationAdmission { WithinApprovedActiveSetCapacity = 1 }
-public enum RecoveryCodeReplacementMechanism { RetireExactActiveSetsAtIssueCommit = 1 }
+public enum RecoveryCodeReplacementMechanism { RetireExactExpectedSetsAtIssueCommit = 1 }
 public enum RecoveryCodeSessionEffect { NoSessionMutation = 1 }
 public enum RecoveryCodeDeliveryMechanism { OneVolatileViewWithOptionalSingleLocalDownload = 1 }
 
@@ -19,11 +19,12 @@ public sealed record RecoveryCodePolicy(string Version, string Origin, RecoveryC
 {
     public void Validate()
     {
-        if (new[] { Version, Origin, DeliveryProfileVersion, GenerateAssurancePolicyVersion, ReplaceAssurancePolicyVersion, ProcessingReference, RetentionReference }.Any(string.IsNullOrWhiteSpace) ||
+        if (new[] { Version, DeliveryProfileVersion, GenerateAssurancePolicyVersion, ReplaceAssurancePolicyVersion }.Any(x => string.IsNullOrWhiteSpace(x) || x.Length > 256 || x.Any(char.IsControl)) ||
+            new[] { Origin, ProcessingReference, RetentionReference }.Any(string.IsNullOrWhiteSpace) ||
             Crypto is null || FormatProfileVersion != "NATIVE_HEX32_V1" || !Uri.TryCreate(Origin, UriKind.Absolute, out var origin) || origin.Scheme != "https" ||
             origin.UserInfo.Length != 0 || Origin != origin.GetLeftPart(UriPartial.Authority) || OperationLifetime <= TimeSpan.Zero || ResultRecoveryLifetime <= TimeSpan.Zero ||
-            MaximumActiveSets <= 0 || MaximumPendingOperations <= 0 || ConsumptionAccountAttemptLimit <= 0 || ConsumptionNetworkAttemptLimit <= 0 ||
-            GenerationAdmission != RecoveryCodeGenerationAdmission.WithinApprovedActiveSetCapacity || ReplacementMechanism != RecoveryCodeReplacementMechanism.RetireExactActiveSetsAtIssueCommit ||
+            MaximumActiveSets <= 0 || (long)MaximumActiveSets * Crypto.MaximumCodesPerSet > int.MaxValue || MaximumPendingOperations <= 0 || ConsumptionAccountAttemptLimit <= 0 || ConsumptionNetworkAttemptLimit <= 0 ||
+            GenerationAdmission != RecoveryCodeGenerationAdmission.WithinApprovedActiveSetCapacity || ReplacementMechanism != RecoveryCodeReplacementMechanism.RetireExactExpectedSetsAtIssueCommit ||
             SessionEffect != RecoveryCodeSessionEffect.NoSessionMutation || DeliveryMechanism != RecoveryCodeDeliveryMechanism.OneVolatileViewWithOptionalSingleLocalDownload)
             throw new InvalidOperationException("A complete supported approved recovery-code policy is required.");
     }
@@ -65,28 +66,36 @@ public sealed record RecoveryCodeImpactFacts(string Kind, int PriorSetCount, int
 /// <summary>Publication must be selected for the exact current owner facts, including replacement impact.</summary>
 public sealed class RecoveryCodePresentation
 {
-    public RecoveryCodePresentation(string locale, IEnumerable<RegistrationPublishedText> content, string impactKey, string impactFactsDigest)
+    public RecoveryCodePresentation(string locale, IEnumerable<RegistrationPublishedText> content, string impactKey, string impactFactsDigest,
+        string version, EffectivePolicyInterval effectiveInterval)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(locale); ArgumentNullException.ThrowIfNull(content);
         var values = content.ToDictionary(x => x.Key, StringComparer.Ordinal);
-        if (string.IsNullOrWhiteSpace(impactKey) || impactFactsDigest is not { Length: 64 } || !impactFactsDigest.All(Uri.IsHexDigit) ||
+        if (string.IsNullOrWhiteSpace(impactKey) || impactKey.Length > 256 || impactKey.Any(char.IsControl) || string.IsNullOrWhiteSpace(version) || version.Length > 256 || version.Any(char.IsControl) || effectiveInterval is null ||
+            impactFactsDigest is not { Length: 64 } || !impactFactsDigest.All(Uri.IsHexDigit) ||
             !values.ContainsKey(impactKey) || RequiredKeys.Any(x => !values.ContainsKey(x)) || values.Values.Any(x => x.State != "PUBLISHED" || x.Locale != locale ||
                 new[] { x.Key, x.VariantRef, x.VersionRef, x.PublicationRef, x.Text }.Any(string.IsNullOrWhiteSpace)))
             throw new ArgumentException("Recovery codes require complete current published impact and content provenance.", nameof(content));
         Locale = locale; Content = new ReadOnlyDictionary<string, RegistrationPublishedText>(values); ImpactKey = impactKey; ImpactFactsDigest = impactFactsDigest;
+        Version = version; EffectiveInterval = effectiveInterval;
     }
     public string Locale { get; }
     public IReadOnlyDictionary<string, RegistrationPublishedText> Content { get; }
     public string ImpactKey { get; }
     public string ImpactFactsDigest { get; }
+    public string Version { get; }
+    public EffectivePolicyInterval EffectiveInterval { get; }
     public static IReadOnlyList<string> RequiredKeys { get; } = Array.AsReadOnly<string>([
         "recoveryCodes.heading", "recoveryCodes.card.description", "recoveryCodes.card.unavailable", "recoveryCodes.action.generate", "recoveryCodes.action.replace",
         "recoveryCodes.action.cancel", "recoveryCodes.action.continue", "recoveryCodes.action.close", "recoveryCodes.action.check", "recoveryCodes.action.download", "recoveryCodes.action.done",
         "recoveryCodes.review.heading", "recoveryCodes.review.description", "recoveryCodes.review.details", "recoveryCodes.review.unavailable", "recoveryCodes.reveal.heading",
         "recoveryCodes.reveal.description", "recoveryCodes.reveal.once", "recoveryCodes.reveal.warning", "recoveryCodes.download.requested", "recoveryCodes.download.description",
-        "recoveryCodes.unavailable.heading", "recoveryCodes.unavailable.description", "recoveryCodes.presented.heading", "recoveryCodes.presented.description", "recoveryCodes.unknown.heading", "recoveryCodes.unknown.description"]);
+        "recoveryCodes.unavailable.heading", "recoveryCodes.unavailable.description", "recoveryCodes.presented.heading", "recoveryCodes.presented.description", "recoveryCodes.unknown.heading", "recoveryCodes.unknown.description",
+        "recoveryCodes.card.pending", "recoveryCodes.error.unavailable", "recoveryCodes.download.unavailable"]);
 }
 public interface IRecoveryCodePresentationSource
 {
-    RecoveryCodePresentation RequirePublished(RecoveryCodePolicy policy, RecoveryCodeImpactFacts facts);
+    /// <summary>Resolve the complete current publication at this exact instant. Version/content/interval are immutable;
+    /// withdrawn, superseded, missing or ambiguous publications fail closed. Local synchronous authority, no network I/O.</summary>
+    RecoveryCodePresentation RequirePublished(RecoveryCodePolicy policy, RecoveryCodeImpactFacts facts, DateTimeOffset effectiveAt);
 }

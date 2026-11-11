@@ -11,6 +11,7 @@ public static class TunnerAuthenticatedUserBffHost
         var stepUp = false;
         var passkeys = false;
         var totp = false;
+        var recoveryCodes = false;
         var application = TunnerUserBffHost.CreateApplication(args, builder =>
         {
             configure(builder);
@@ -20,6 +21,14 @@ public static class TunnerAuthenticatedUserBffHost
             // Capability composition only. No provider/profile is registered here; default production Main does not use this opt-in host.
             totp = builder.Services.Any(x => x.ServiceType == typeof(ITotpPolicySource));
             if (totp) builder.Services.AddTunnerTotp();
+            recoveryCodes = builder.Services.Any(x => x.ServiceType == typeof(IRecoveryCodePolicySource));
+            if (recoveryCodes)
+            {
+                var profiles = builder.Services.Where(x => x.ServiceType == typeof(RecoveryCodeCryptoProfile)).ToArray();
+                if (profiles.Length != 1 || profiles[0].ImplementationInstance is not RecoveryCodeCryptoProfile admitted)
+                    throw new InvalidOperationException("Recovery-code composition requires one explicit admitted crypto profile instance.");
+                builder.Services.AddTunnerRecoveryCodes(admitted);
+            }
             stepUp = builder.Services.Any(x => x.ServiceType == typeof(IUserStepUpOperationSource));
             if (stepUp) builder.Services.AddTunnerOperationStepUp();
         });
@@ -27,6 +36,7 @@ public static class TunnerAuthenticatedUserBffHost
         if (stepUp) application.MapTunnerOperationStepUp();
         if (passkeys) application.MapTunnerPasskeys();
         if (totp) application.MapTunnerTotp();
+        if (recoveryCodes) application.MapTunnerRecoveryCodes();
         return application;
     }
 }

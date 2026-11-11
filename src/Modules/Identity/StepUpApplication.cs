@@ -12,7 +12,7 @@ namespace Tunner.Identity.Persistence;
 /// <summary>Private Identity transaction boundary. No HTTP route or implicit runtime policy activation.</summary>
 internal sealed class StepUpApplication(IdentityPersistenceDbContext database, AuthenticationApplication authentication,
     IAuthenticationPolicySource authenticationPolicies, IAssurancePolicySource assurancePolicies,
-    AuthenticationPasswordWork passwordWork, IDataProtectionProvider protection, TimeProvider clock)
+    AuthenticationPasswordWork passwordWork, IDataProtectionProvider protection, TimeProvider clock, IRecoveryCodePolicySource? recoveryPolicies = null)
 {
     private readonly IDataProtector retryProtection = protection.CreateProtector("Tunner.User.StepUp.Proof.RetryKey.v1");
     internal async Task<StepUpIssueResult> IssuePasswordAsync(StepUpCaller caller, StepUpOperation operation,
@@ -110,6 +110,7 @@ internal sealed class StepUpApplication(IdentityPersistenceDbContext database, A
     // The callback is an Identity-owner local mutation using this same context/transaction, never provider I/O.
     internal Task<StepUpExecutionResult> ExecuteAsync(StepUpCaller caller, StepUpOperation operation, string key,
         Func<CancellationToken, Task<bool>> applyCurrentOperation, CancellationToken ct = default) =>
+        RecoveryCodeApplication.Owns(operation.Scope) ? throw new InvalidOperationException("Recovery issuance requires its typed winning outcome path.") :
         ExecuteOutcomeAsync(caller, operation, key, async token => await applyCurrentOperation(token).ConfigureAwait(false)
             ? UserStepUpOperationApplyOutcome.SessionContinues() : UserStepUpOperationApplyOutcome.Conflict(), ct);
     internal async Task<StepUpExecutionResult> ExecuteOutcomeAsync(StepUpCaller caller, StepUpOperation operation, string key,
@@ -119,9 +120,12 @@ internal sealed class StepUpApplication(IdentityPersistenceDbContext database, A
         RequireCleanBoundary();
         if (key is not { Length: 64 } || !key.All(Uri.IsHexDigit)) return new(false, "STEP_UP_REQUIRED");
         var now = clock.GetUtcNow();
-        await using var transaction = await database.Database.BeginTransactionAsync(ct).ConfigureAwait(false);
+        RecoveryCodeFirstDelivery? pending = null;
         try
         {
+          bool committedTerminal;
+          await using (var transaction = await database.Database.BeginTransactionAsync(ct).ConfigureAwait(false))
+          {
             var session = await authentication.LockForOperationAsync(caller, operation.Scope.Operation, ct).ConfigureAwait(false);
             if (session is null) return await FinishAsync(transaction, new StepUpExecutionResult(false, "AUTHENTICATION_FAILED"), ct).ConfigureAwait(false);
             now = clock.GetUtcNow();
@@ -135,11 +139,16 @@ internal sealed class StepUpApplication(IdentityPersistenceDbContext database, A
             now = clock.GetUtcNow(); policy = assurancePolicies.RequireEffective(operation.Scope, now, row.PolicyVersion);
             if (!Valid(row, session, policy, now) || !authentication.ProofMethodCurrentAt(row, proofCredential, operation, now, false)) return await FinishAsync(transaction, new StepUpExecutionResult(false, "STEP_UP_REQUIRED"), ct).ConfigureAwait(false);
             var validatedSessionVersion = session.Version;
-            var outcome = await applyCurrentOperation(ct).ConfigureAwait(false);
+            using var outcome = await applyCurrentOperation(ct).ConfigureAwait(false);
             if (!outcome.Applied)
             {
                 await transaction.RollbackAsync(ct).ConfigureAwait(false); database.ChangeTracker.Clear();
                 return new(false, "VERSION_CONFLICT");
+            }
+            if (!outcome.ClosedFor(operation))
+            {
+                await transaction.RollbackAsync(ct).ConfigureAwait(false); database.ChangeTracker.Clear();
+                return new(false, "STEP_UP_REQUIRED");
             }
             // Await every current-authority verification first, then decide once against their actual validity bounds.
             var verificationAt = clock.GetUtcNow(); var verificationPolicy = authenticationPolicies.RequireEffective(verificationAt); verificationPolicy.Validate();
@@ -154,6 +163,7 @@ internal sealed class StepUpApplication(IdentityPersistenceDbContext database, A
             if (!Valid(row, session, policy, decisionAt) || AuthenticationApplication.Expired(session, currentAuthentication, decisionAt) ||
                 !authentication.MethodFactsCurrentAt(session, currentAuthentication, decisionAt) ||
                 !authentication.ProofMethodCurrentAt(row, proofCredential, operation, decisionAt, outcome.PasskeyValidity is not null || outcome.TotpValidity is not null) || !authentication.PasskeyOutcomeCurrentAt(outcome, caller, operation, decisionAt) ||
+                outcome.RecoveryValidity is { } recovery && !recovery.CurrentAt(database, caller, operation, recoveryPolicies, currentAuthentication, decisionAt) ||
                 (outcome.Receipt is not null ? !terminal : session.State != "ACTIVE" || !methodCurrent || continuation is null ||
                     !continuation.SessionUseInterval.Contains(decisionAt) || !continuation.OperationInterval.Contains(decisionAt)))
             {
@@ -162,9 +172,14 @@ internal sealed class StepUpApplication(IdentityPersistenceDbContext database, A
             }
             now = decisionAt;
             End(row, "CONSUMED", now); Event(row, "StepUpProofConsumed", now);
-            return await FinishAsync(transaction, new StepUpExecutionResult(true, null, terminal), ct).ConfigureAwait(false);
+            await FinishAsync(transaction, true, ct).ConfigureAwait(false);
+            pending = outcome.TakeRecoveryDelivery(); committedTerminal = terminal;
+          }
+          // The payload remains in the outer guard until successful COMMIT and transaction disposal.
+          var result = StepUpExecutionResult.Committed(committedTerminal, pending); pending = null; return result;
         }
         catch { database.ChangeTracker.Clear(); throw; }
+        finally { pending?.Dispose(); }
     }
 
     internal async Task<int> ExpireAsync(CancellationToken ct = default)

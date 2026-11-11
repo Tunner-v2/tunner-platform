@@ -40,6 +40,8 @@ internal sealed class RecoveryCodeNative : IDisposable
         Array.Clear(output); return null;
     }
 
+    internal bool Supports(RecoveryCodeCryptoProfile expected) => JsonSerializer.Serialize(profile) == JsonSerializer.Serialize(expected);
+
     internal RecoveryCodePreparedSet Generate(string accountId, Guid setReference, CancellationToken ct = default)
     {
         if (string.IsNullOrWhiteSpace(accountId) || setReference == Guid.Empty) throw new ArgumentException("A recovery-code set owner is required.");

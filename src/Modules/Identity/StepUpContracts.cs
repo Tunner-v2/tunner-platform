@@ -51,4 +51,19 @@ internal sealed class StepUpProofGrant(string key, DateTimeOffset expiresAt)
     public override string ToString() => nameof(StepUpProofGrant);
 }
 internal sealed record StepUpIssueResult(string? ErrorCode, StepUpProofGrant? Grant);
-internal sealed record StepUpExecutionResult(bool Applied, string? ErrorCode, bool SignInRequired = false);
+internal sealed class StepUpExecutionResult(bool applied, string? errorCode, bool signInRequired = false) : IDisposable
+{
+    private RecoveryCodeFirstDelivery? recoveryDelivery;
+    internal bool Applied { get; } = applied;
+    internal string? ErrorCode { get; } = errorCode;
+    internal bool SignInRequired { get; } = signInRequired;
+    internal bool HasRecoveryDelivery => recoveryDelivery is not null;
+    internal static StepUpExecutionResult Committed(bool signInRequired, RecoveryCodeFirstDelivery? delivery)
+    {
+        if (signInRequired && delivery is not null) throw new InvalidOperationException("Recovery delivery cannot accompany a terminal session effect.");
+        return new(true, null, signInRequired) { recoveryDelivery = delivery };
+    }
+    internal RecoveryCodeFirstDelivery? TakeRecoveryDelivery() => Interlocked.Exchange(ref recoveryDelivery, null);
+    public void Dispose() => TakeRecoveryDelivery()?.Dispose();
+    public override string ToString() => nameof(StepUpExecutionResult);
+}

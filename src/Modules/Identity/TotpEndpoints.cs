@@ -83,6 +83,7 @@ internal sealed class TotpStepUpOwner(TotpApplication application, IdentityPersi
         else context.Response.Cookies.Delete(CookieName, TotpBrowserService.Cookie());
         context.Response.Cookies.Append(ResultCookieName, value, TotpBrowserService.Cookie(row.RecoveryExpiresAt - now));
         context.Response.Cookies.Delete(PasskeyStepUpOwner.CookieName, TotpBrowserService.Cookie());
+        context.Response.Cookies.Delete(RecoveryCodeStepUpOwner.CookieName, RecoveryCodeStepUpOwner.Cookie());
     }
     private StepUpCaller Caller(HttpContext http) => StepUpCaller.FromPrincipal(http.User, surface.Origin, partitions.Network(http.Connection.RemoteIpAddress ?? throw new ArgumentException("Current peer required.")));
     public async Task<UserStepUpOperationContext?> ResolveAsync(UserStepUpActor actor, CancellationToken ct)
@@ -93,8 +94,11 @@ internal sealed class TotpStepUpOwner(TotpApplication application, IdentityPersi
         return selected is not null && selected.AccountId == actor.AccountId && selected.SessionId == actor.SessionId && selected.Origin == actor.Origin
             ? await application.ResolveAsync(Caller(http), selected.EnrollmentId, selected.RequestId, ct).ConfigureAwait(false) : null;
     }
-    public async Task<bool> ApplyAsync(UserStepUpActor actor, UserStepUpOperationContext operation, IdentityPersistenceDbContext context, CancellationToken ct) =>
-        (await ApplyWithOutcomeAsync(actor, operation, context, ct).ConfigureAwait(false)).Applied;
+    public async Task<bool> ApplyAsync(UserStepUpActor actor, UserStepUpOperationContext operation, IdentityPersistenceDbContext context, CancellationToken ct)
+    {
+        if (RecoveryCodeApplication.Owns(operation.Binding.Scope)) throw new InvalidOperationException("Recovery issuance requires its typed winning outcome path.");
+        using var outcome = await ApplyWithOutcomeAsync(actor, operation, context, ct).ConfigureAwait(false); return outcome.Applied;
+    }
     public async Task<UserStepUpOperationApplyOutcome> ApplyWithOutcomeAsync(UserStepUpActor actor, UserStepUpOperationContext operation, IdentityPersistenceDbContext context, CancellationToken ct)
     {
         if (context != database) throw new InvalidOperationException("Shared Identity transaction required.");
@@ -102,6 +106,7 @@ internal sealed class TotpStepUpOwner(TotpApplication application, IdentityPersi
         if (!http.Request.Cookies.ContainsKey(CookieName))
         {
             var other = fallback.SingleOrDefault()?.Owner;
+            if (other is not IUserStepUpOperationOutcomeSource && RecoveryCodeApplication.Owns(operation.Binding.Scope)) throw new InvalidOperationException("Recovery issuance requires its typed winning outcome path.");
             return other is IUserStepUpOperationOutcomeSource typed ? await typed.ApplyWithOutcomeAsync(actor, operation, context, ct).ConfigureAwait(false) :
                 other is not null && await other.ApplyAsync(actor, operation, context, ct).ConfigureAwait(false) ? UserStepUpOperationApplyOutcome.SessionContinues() : UserStepUpOperationApplyOutcome.Conflict();
         }

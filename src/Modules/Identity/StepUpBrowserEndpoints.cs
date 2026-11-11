@@ -134,17 +134,28 @@ internal sealed partial class StepUpBrowserService(IUserStepUpOperationSource ow
     private async Task<IResult> ExecuteProofAsync(HttpContext context, StepUpBrowserOperation frame, string proofKey, NativeProofCompletion? nativeCompletion = null)
     {
         var caller = frame.Caller; var actor = frame.Actor; var operation = frame.Operation; var browser = frame.Browser;
-        var execution = await application.ExecuteOutcomeAsync(caller, operation.Binding, proofKey, async ct =>
+        using var execution = await application.ExecuteOutcomeAsync(caller, operation.Binding, proofKey, async ct =>
         {
             var current = await owner.ResolveAsync(actor, ct).ConfigureAwait(false);
             if (!MatchesActor(current, actor) || current!.Completed || Digest(current) != browser.BindingDigest) return UserStepUpOperationApplyOutcome.Conflict();
             if (owner is IUserStepUpOperationOutcomeSource typed) return await typed.ApplyWithOutcomeAsync(actor, current, database, ct).ConfigureAwait(false);
+            if (RecoveryCodeApplication.Owns(current.Binding.Scope)) throw new InvalidOperationException("Recovery issuance requires its typed winning outcome path.");
             return await owner.ApplyAsync(actor, current, database, ct).ConfigureAwait(false) ? UserStepUpOperationApplyOutcome.SessionContinues() : UserStepUpOperationApplyOutcome.Conflict();
         }, context.RequestAborted).ConfigureAwait(false);
         if (execution.Applied)
         {
             if (owner is IUserStepUpBrowserCompletionSource browserOwner) await browserOwner.CompleteBrowserAsync(operation, execution.SignInRequired, context.RequestAborted).ConfigureAwait(false);
             if (execution.SignInRequired) await context.SignOutAsync(AuthenticationIdentity.Scheme).ConfigureAwait(false);
+            if (execution.HasRecoveryDelivery)
+            {
+                RecoveryCodeFirstDelivery? delivery = execution.TakeRecoveryDelivery()!;
+                try
+                {
+                    context.RequestAborted.ThrowIfCancellationRequested();
+                    var response = new RecoveryCodeProofCompletedResult(context, frame, delivery, nativeCompletion); delivery = null; return response;
+                }
+                finally { delivery?.Dispose(); }
+            }
             return ProofCompleted(operation, execution.SignInRequired, nativeCompletion);
         }
         if (await CompletedAsync(actor, browser.BindingDigest, context.RequestAborted).ConfigureAwait(false))

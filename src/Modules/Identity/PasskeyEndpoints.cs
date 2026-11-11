@@ -72,6 +72,7 @@ internal sealed class PasskeyStepUpOwner(PasskeyApplication application, Identit
     internal static void Select(HttpContext context, PasskeyCeremonyRow row, IDataProtectionProvider protection, DateTimeOffset now)
     {
         context.Response.Cookies.Delete(TotpStepUpOwner.CookieName, TotpBrowserService.Cookie());
+        context.Response.Cookies.Delete(RecoveryCodeStepUpOwner.CookieName, RecoveryCodeStepUpOwner.Cookie());
         context.Response.Cookies.Append(CookieName,
         Protector(protection).Protect(JsonSerializer.Serialize(new PasskeySelection(row.CeremonyId, row.RequestId, row.SessionId!.Value, row.AccountId!, row.Origin))),
         new CookieOptions { Path = "/", HttpOnly = true, Secure = true, SameSite = SameSiteMode.Strict, IsEssential = true, MaxAge = row.ExpiresAt - now });
@@ -113,8 +114,11 @@ internal sealed class PasskeyStepUpOwner(PasskeyApplication application, Identit
         var caller = StepUpCaller.FromPrincipal(http.User, surface.Origin, partitions.Network(http.Connection.RemoteIpAddress));
         return await application.ResolveMutationAsync(caller, selected.CeremonyId, selected.RequestId, cancellationToken).ConfigureAwait(false);
     }
-    public async Task<bool> ApplyAsync(UserStepUpActor actor, UserStepUpOperationContext operation, IdentityPersistenceDbContext context, CancellationToken cancellationToken) =>
-        (await ApplyWithOutcomeAsync(actor, operation, context, cancellationToken).ConfigureAwait(false)).Applied;
+    public async Task<bool> ApplyAsync(UserStepUpActor actor, UserStepUpOperationContext operation, IdentityPersistenceDbContext context, CancellationToken cancellationToken)
+    {
+        if (RecoveryCodeApplication.Owns(operation.Binding.Scope)) throw new InvalidOperationException("Recovery issuance requires its typed winning outcome path.");
+        using var outcome = await ApplyWithOutcomeAsync(actor, operation, context, cancellationToken).ConfigureAwait(false); return outcome.Applied;
+    }
     public async Task<UserStepUpOperationApplyOutcome> ApplyWithOutcomeAsync(UserStepUpActor actor, UserStepUpOperationContext operation, IdentityPersistenceDbContext context, CancellationToken cancellationToken)
     {
         var http = accessor.HttpContext ?? throw new InvalidOperationException("A current User BFF context is required.");
@@ -123,6 +127,7 @@ internal sealed class PasskeyStepUpOwner(PasskeyApplication application, Identit
         {
             var other = fallback.SingleOrDefault();
             if (other?.Owner is IUserStepUpOperationOutcomeSource typed) return await typed.ApplyWithOutcomeAsync(actor, operation, context, cancellationToken).ConfigureAwait(false);
+            if (RecoveryCodeApplication.Owns(operation.Binding.Scope)) throw new InvalidOperationException("Recovery issuance requires its typed winning outcome path.");
             return other is not null && await other.Owner.ApplyAsync(actor, operation, context, cancellationToken).ConfigureAwait(false)
                 ? UserStepUpOperationApplyOutcome.SessionContinues() : UserStepUpOperationApplyOutcome.Conflict();
         }
@@ -134,7 +139,8 @@ internal sealed class PasskeyStepUpOwner(PasskeyApplication application, Identit
 }
 internal sealed partial class PasskeyBrowserService(PasskeyApplication application, IdentityPersistenceDbContext database,
     IPasskeyPresentationSource presentations, IAuthenticationPolicySource authenticationPolicies, AuthenticationPartitionKey partitions,
-    AuthenticationEndpoints.Surface surface, IDataProtectionProvider protection, IAntiforgery antiforgery, TimeProvider clock)
+    AuthenticationEndpoints.Surface surface, IDataProtectionProvider protection, IAntiforgery antiforgery, TimeProvider clock,
+    IEnumerable<RecoveryCodeApplication>? recoveryApplications = null)
 {
     internal Task<IResult> OptionsAsync(HttpContext http) => Guard(http, async () =>
     {
@@ -144,8 +150,14 @@ internal sealed partial class PasskeyBrowserService(PasskeyApplication applicati
         _ = Caller(http);
         var recovery = await RecoveryBootstrapAsync(http, terminalOnly: false).ConfigureAwait(false);
         var totpAvailable = http.RequestServices.GetService<TotpBrowserService>()?.Capability() == true;
+        var recoveryCodesAvailable = false;
+        if (recoveryApplications?.SingleOrDefault() is { } recoveryApplication)
+        {
+            try { _ = recoveryApplication.Current(surface.Origin); recoveryCodesAvailable = true; }
+            catch (InvalidOperationException) { } catch (ArgumentException) { }
+        }
         return Results.Json(new { csrfToken = antiforgery.GetAndStoreTokens(http).RequestToken, requestId = Guid.NewGuid(),
-            policy.MaximumCredentialJsonBytes, revocationSessionEffect = policy.RevocationSessionEffect.ToString(), recovery, totpAvailable, presentation.Locale, presentation.Content });
+            policy.MaximumCredentialJsonBytes, revocationSessionEffect = policy.RevocationSessionEffect.ToString(), recovery, totpAvailable, recoveryCodesAvailable, presentation.Locale, presentation.Content });
     });
     internal PasskeyCapability Capability()
     {
