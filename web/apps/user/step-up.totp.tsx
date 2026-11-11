@@ -7,12 +7,14 @@ import {TotpCodeField} from './totp.code';
 import {sameTotpChoice,TotpFactorPicker,TotpSelectedFactor} from './totp.picker';
 import {totpCodeSchema} from './totp.validation';
 import './totp.css';
+import {parseStepUpCompletion,rejectStepUpRecoveryDelivery} from './step-up.completion';
+import type {RecoveryCodeDeliveryReceiver} from './recovery-codes.api';
 
 export const stepUpTotpRecoverySchema=z.object({requestId:z.uuid(),attemptId:z.uuid(),authenticatorReference:z.uuid(),status:z.enum(['PROOF_ACTIVE','CONSUMED','EXPIRED']),expiresAt:z.iso.datetime({offset:true})});
 type Recovery=z.infer<typeof stepUpTotpRecoverySchema>;
 type Attempt=Pick<Recovery,'requestId'|'attemptId'|'authenticatorReference'>&{expiresAt?:string;status?:Recovery['status']};
 type Context=StepUpBootstrap|{status:'COMPLETED';requestId:string|null;operationReference?:string|undefined;totpRecovery?:Recovery|null|undefined};
-interface Props {bootstrap:StepUpBootstrap;load:(signal:AbortSignal)=>Promise<Context>;onComplete:(value:StepUpCompletion)=>void;onCancel:(value?:StepUpDismissal)=>void;onBack:()=>void;returnFocusTo?:HTMLElement|null|undefined;reconcile?:((signal:AbortSignal)=>Promise<StepUpCompletion|null>)|undefined}
+interface Props {bootstrap:StepUpBootstrap;load:(signal:AbortSignal)=>Promise<Context>;onComplete:(value:StepUpCompletion)=>void;onCancel:(value?:StepUpDismissal)=>void;onBack:()=>void;returnFocusTo?:HTMLElement|null|undefined;reconcile?:((signal:AbortSignal)=>Promise<StepUpCompletion|null>)|undefined;recoveryCodeDelivery?:RecoveryCodeDeliveryReceiver|undefined}
 const completion=z.object({status:z.literal('COMPLETED'),operationReference:z.string().min(1),signInRequired:z.boolean()});
 export function StepUpTotpDialog(props:Props){
  const {bootstrap}=props,id=useId();const [factors,setFactors]=useState(bootstrap.totpAuthenticators??[]),[selected,setSelected]=useState<TotpChoice|undefined>(bootstrap.totpAuthenticators?.length===1?bootstrap.totpAuthenticators[0]:undefined);
@@ -25,7 +27,7 @@ export function StepUpTotpDialog(props:Props){
  const picker=!selected&&factors.length>0&&phase==='entry';const current=()=>alive.current&&!controller.current.signal.aborted;
  function choose(factor:TotpChoice){if(flight.current)return;setCode('');form.reset();setSelected(factor);original.current=undefined;setError(undefined);setField(undefined);}
  function finish(value:StepUpCompletion){if(value.operationReference!==bootstrap.operationReference)throw new TotpHttpError(409,'VERSION_CONFLICT');if(current()){setCode('');props.onComplete(value);}}
- async function owner(){if(!props.reconcile)return false;const result=await props.reconcile(controller.current.signal);if(!current())return true;if(result){finish(result);return true;}return false;}
+ async function owner(){if(!props.reconcile)return false;const result=await props.reconcile(controller.current.signal);if(!current())return true;rejectStepUpRecoveryDelivery(result);if(result){finish(result);return true;}return false;}
  async function inspect(){
   if(await owner())return true;const value=await props.load(controller.current.signal);if(!current())return true;
   if(value.requestId!==bootstrap.requestId||value.operationReference!==bootstrap.operationReference)throw new TotpHttpError(409,'VERSION_CONFLICT');
@@ -37,7 +39,7 @@ export function StepUpTotpDialog(props:Props){
   else{setSelected(previous=>previous&&(value.totpAuthenticators??[]).some(factor=>sameTotpChoice(previous,factor))?previous:undefined);setPhase(original.current?'unknown':'entry');}
   return false;
  }
- function completed(value:unknown){const parsed=completion.safeParse(value);if(!parsed.success)throw new TotpHttpError(0,'OUTCOME_UNKNOWN');finish(parsed.data);}
+ function completed(value:unknown){if(!current())return;const parsed=completion.safeParse(value);if(!parsed.success||parsed.data.operationReference!==bootstrap.operationReference)throw new TotpHttpError(0,'OUTCOME_UNKNOWN');finish(parseStepUpCompletion(value,bootstrap.requestId,bootstrap.operationReference,props.recoveryCodeDelivery));}
  async function submit(data:{code:string}){
   if(flight.current||!selected||!bootstrap.operationReference)return;flight.current=true;setPhase('pending');setCode('');setField(undefined);setError(undefined);
   original.current??={requestId:bootstrap.requestId,attemptId:crypto.randomUUID(),authenticatorReference:selected.authenticatorReference};

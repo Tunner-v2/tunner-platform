@@ -1,5 +1,6 @@
 import { authenticationRoutes } from '../apps/user/authentication.routes';
 import './totp.contracts.test';
+import './recovery-codes.contracts.test';
 import { passkeyRoutes } from '../apps/user/passkeys.routes';
 import {totpRoutes} from '../apps/user/totp.routes';
 import { registrationSchema, verificationSchema, personalInformationSchema, validBirthDate } from '../apps/user/validation';

@@ -608,24 +608,90 @@
     },
     {
       "id": "U-AUTH-06",
-      "kind": "SCREEN",
-      "status": "PLANNED",
+      "kind": "COMPONENT",
+      "status": "IMPLEMENTED",
       "app": "user",
-      "module": "U-AUTH",
+      "module": "Identity.RecoveryCodes",
       "title": "Recovery Codes",
       "requirements": "one-time reveal/download and replacement warning",
       "pathname": null,
       "runtime_pathname": null,
-      "guard": "Resolve from owning FRD and current authorization before implementation",
-      "owner_scopes": [],
-      "authority_refs": [
-        "docs/authority/current/development/31_UI_UX_Screen_and_Control_Center_Requirements_Matrix.md"
+      "guard": "Existing authenticated User Account Security route; explicit optional server capability, original owner/start/context/set/publication binding, current shared proof and winning response only. No generation/reveal on GET, history, status or another operation; no new independent pathname.",
+      "owner_scopes": [
+        "TUN-P2-009",
+        "P1-018-RV007"
       ],
-      "figma_refs": [],
-      "source_paths": [],
-      "planning_status": "OWNER_AND_ROUTE_REFINEMENT_REQUIRED",
-      "design_status": "UI_REQUIRED_BEFORE_IMPLEMENTATION",
-      "acceptance_boundary": "Unimplemented: no PASS inherited from registration and no feature implementation authorized by this inventory."
+      "authority_refs": [
+        "docs/authority/current/development/31_UI_UX_Screen_and_Control_Center_Requirements_Matrix.md",
+        "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md",
+        "docs/authority/current/decisions/AMD-0008_Approved_Figma_Visual_Fidelity_and_Product_Owner_UX_Consent.md",
+        "docs/authority/current/decisions/AMD-0009_URL_Addressable_Routing_and_Governed_Form_Validation.md"
+      ],
+      "figma_refs": [
+        {
+          "file_key": "apNbwvAgdn1xIxYH1oiaSC",
+          "node_id": "13:136"
+        },
+        {
+          "file_key": "apNbwvAgdn1xIxYH1oiaSC",
+          "node_id": "34:278"
+        },
+        {
+          "file_key": "apNbwvAgdn1xIxYH1oiaSC",
+          "node_id": "34:401"
+        },
+        {
+          "file_key": "apNbwvAgdn1xIxYH1oiaSC",
+          "node_id": "48:115"
+        },
+        {
+          "file_key": "apNbwvAgdn1xIxYH1oiaSC",
+          "node_id": "52:566"
+        }
+      ],
+      "source_paths": [
+        "web/apps/user/passkeys.tsx",
+        "web/apps/user/passkeys.api.ts",
+        "web/apps/user/recovery-codes.tsx",
+        "web/apps/user/recovery-codes.ui.tsx",
+        "web/apps/user/recovery-codes.api.ts",
+        "web/apps/user/recovery-codes.css",
+        "web/apps/user/recovery-codes.content.proposal.json",
+        "web/apps/user/step-up.completion.ts",
+        "web/apps/user/step-up.tsx",
+        "web/apps/user/step-up.passkey.ts",
+        "web/apps/user/step-up.totp.tsx",
+        "web/packages/ui/src/dialog.tsx",
+        "web/packages/ui/src/controls.tsx",
+        "web/packages/ui/src/content.tsx",
+        "src/Modules/Identity/RecoveryCodeEndpoints.cs",
+        "src/Modules/Identity/RecoveryCodeProofCompletedResult.cs",
+        "src/Modules/Identity/RecoveryCodeAccountView.cs",
+        "src/Modules/Identity/RecoveryCodeExecution.cs"
+      ],
+      "planning_status": "CURRENT_OWNER_AND_EXISTING_PARENT_ROUTE_RESOLVED",
+      "design_status": "PRODUCT_OWNER_APPROVED_SCOPED_ADAPTATIONS",
+      "acceptance_boundary": "Implementation candidate only. Actual L01–L04 consent and shared integration authorization do not select count, format, replacement/session policy, runtime publication or whole-feature acceptance. Integrated committed-source native/public/private/file evidence and scoped roles remain PENDING.",
+      "additional_consent_refs": [
+        "governance/evidence/TUN-P2-009-VISUAL-CONSENT.json",
+        "governance/evidence/TUN-P2-009-VISUAL-CONSENT-L04.json"
+      ],
+      "integration_authorization_ref": "governance/evidence/TUN-P2-009-SHARED-INTEGRATION-AUTHORIZATION.json",
+      "current_revision_ref": "P1-018-RV007",
+      "revision_acceptance_boundary": "P2-009 same-screen recovery owner integration under ACTIVE RV007 and actual L01–L04/shared-integration grants. All current committed-source per-item URL/VAL/UX-FID, all-method first-delivery, native owner/currentness and qualified download evidence remains PENDING. Prior30 presentation/other-owner proof is historical scoped input only; no integrated PASS, production policy/publication, human-saved or Product/release acceptance is inherited.",
+      "owner_pathnames": [
+        "/account/security"
+      ],
+      "parent_screen_ids": [
+        "U-ACCT-SECURITY"
+      ],
+      "form_ids": [
+        "FORM-STEP-UP",
+        "FORM-STEP-UP-TOTP"
+      ],
+      "visual_state": "IMPLEMENTATION_REQUIRES_CURRENT_RENDERED_EVIDENCE",
+      "consent_ref": "governance/evidence/TUN-P2-009-VISUAL-CONSENT.json",
+      "interaction": "One existing Security card, same-screen replacement review, shared password/native passkey/TOTP proof and one authorized volatile modal. Independent server action flags retained; one optional same-view local request. Requested is not saved. Close/pagehide/BFCache/unmount dispose plaintext/local URL."
     },
     {
       "id": "U-AUTH-07",
@@ -1834,7 +1900,9 @@
         "P1-018-RV003",
         "TUN-P2-007",
         "TUN-P2-008",
-        "P1-018-RV006"
+        "P1-018-RV006",
+        "TUN-P2-009",
+        "P1-018-RV007"
       ],
       "authority_refs": [
         "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md",
@@ -1865,7 +1933,11 @@
         "web/apps/user/totp.content-keys.ts",
         "web/apps/user/totp.code.tsx",
         "web/apps/user/totp.css",
-        "src/Modules/Identity/StepUpTotpBrowserEndpoints.cs"
+        "src/Modules/Identity/StepUpTotpBrowserEndpoints.cs",
+        "web/apps/user/recovery-codes.api.ts",
+        "web/apps/user/step-up.completion.ts",
+        "src/Modules/Identity/RecoveryCodeProofCompletedResult.cs",
+        "web/apps/user/step-up.passkey.ts"
       ],
       "guard": "Current User server session and trusted owner action; protected view binding, exact policy and operation checks; no browser-selected authority or general session upgrade.",
       "observed_defects": [],
@@ -1888,10 +1960,25 @@
       "additional_consent_refs": [
         "governance/evidence/TUN-P2-006-VISUAL-CONSENT-20261108.json",
         "governance/evidence/TUN-P2-008-VISUAL-CONSENT.json",
-        "governance/evidence/TUN-P2-008-FACTOR-PICKER-CONSENT.json"
+        "governance/evidence/TUN-P2-008-FACTOR-PICKER-CONSENT.json",
+        "governance/evidence/TUN-P2-009-VISUAL-CONSENT.json",
+        "governance/evidence/TUN-P2-009-VISUAL-CONSENT-L04.json"
       ],
-      "current_revision_ref": "P1-018-RV006",
-      "revision_acceptance_boundary": "Actual008-V01-V05 and separate factor-picker consent are recorded. Current implementation requires committed source-bound URL, VAL, UX-FID, native and rendered evidence. No prototype, prior007 or other-route PASS is inherited. Runtime production policy/publication, Product/release and protected-main gates remain separate."
+      "current_revision_ref": "P1-018-RV007",
+      "revision_acceptance_boundary": "P2-009 same-screen recovery owner integration under ACTIVE RV007 and actual L01–L04/shared-integration grants. All current committed-source per-item URL/VAL/UX-FID, all-method first-delivery, native owner/currentness and qualified download evidence remains PENDING. Prior30 presentation/other-owner proof is historical scoped input only; no integrated PASS, production policy/publication, human-saved or Product/release acceptance is inherited.",
+      "integration_authorization_ref": "governance/evidence/TUN-P2-009-SHARED-INTEGRATION-AUTHORIZATION.json",
+      "previous_revision_refs": [
+        "P1-018-RV006"
+      ],
+      "prior_revision_acceptance_boundaries": [
+        {
+          "revision_id": "P1-018-RV006",
+          "text": "Actual008-V01-V05 and separate factor-picker consent are recorded. Current implementation requires committed source-bound URL, VAL, UX-FID, native and rendered evidence. No prototype, prior007 or other-route PASS is inherited. Runtime production policy/publication, Product/release and protected-main gates remain separate."
+        }
+      ],
+      "owner_pathnames": [
+        "/account/security"
+      ]
     },
     {
       "module": "Identity.StepUp",
@@ -1959,7 +2046,9 @@
         "P1-018-RV003",
         "TUN-P2-007",
         "TUN-P2-008",
-        "P1-018-RV006"
+        "P1-018-RV006",
+        "TUN-P2-009",
+        "P1-018-RV007"
       ],
       "authority_refs": [
         "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md",
@@ -1982,7 +2071,10 @@
         "web/packages/ui/src/dialog.tsx",
         "web/packages/ui/src/forms.tsx",
         "src/Modules/Identity/StepUpBrowserEndpoints.cs",
-        "src/Modules/Identity/StepUpApplication.cs"
+        "src/Modules/Identity/StepUpApplication.cs",
+        "web/apps/user/recovery-codes.api.ts",
+        "web/apps/user/step-up.completion.ts",
+        "src/Modules/Identity/RecoveryCodeProofCompletedResult.cs"
       ],
       "guard": "Current User server session and trusted owner action; protected view binding, exact policy and operation checks; no browser-selected authority or general session upgrade.",
       "observed_defects": [],
@@ -2005,10 +2097,25 @@
       "additional_consent_refs": [
         "governance/evidence/TUN-P2-006-VISUAL-CONSENT-20261108.json",
         "governance/evidence/TUN-P2-008-VISUAL-CONSENT.json",
-        "governance/evidence/TUN-P2-008-FACTOR-PICKER-CONSENT.json"
+        "governance/evidence/TUN-P2-008-FACTOR-PICKER-CONSENT.json",
+        "governance/evidence/TUN-P2-009-VISUAL-CONSENT.json",
+        "governance/evidence/TUN-P2-009-VISUAL-CONSENT-L04.json"
       ],
-      "current_revision_ref": "P1-018-RV006",
-      "revision_acceptance_boundary": "Actual008-V01-V05 and separate factor-picker consent are recorded. Current implementation requires committed source-bound URL, VAL, UX-FID, native and rendered evidence. No prototype, prior007 or other-route PASS is inherited. Runtime production policy/publication, Product/release and protected-main gates remain separate."
+      "current_revision_ref": "P1-018-RV007",
+      "revision_acceptance_boundary": "P2-009 same-screen recovery owner integration under ACTIVE RV007 and actual L01–L04/shared-integration grants. All current committed-source per-item URL/VAL/UX-FID, all-method first-delivery, native owner/currentness and qualified download evidence remains PENDING. Prior30 presentation/other-owner proof is historical scoped input only; no integrated PASS, production policy/publication, human-saved or Product/release acceptance is inherited.",
+      "integration_authorization_ref": "governance/evidence/TUN-P2-009-SHARED-INTEGRATION-AUTHORIZATION.json",
+      "previous_revision_refs": [
+        "P1-018-RV006"
+      ],
+      "prior_revision_acceptance_boundaries": [
+        {
+          "revision_id": "P1-018-RV006",
+          "text": "Actual008-V01-V05 and separate factor-picker consent are recorded. Current implementation requires committed source-bound URL, VAL, UX-FID, native and rendered evidence. No prototype, prior007 or other-route PASS is inherited. Runtime production policy/publication, Product/release and protected-main gates remain separate."
+        }
+      ],
+      "owner_pathnames": [
+        "/account/security"
+      ]
     },
     {
       "id": "U-ACCT-SECURITY",
@@ -2017,12 +2124,14 @@
       "app": "user",
       "module": "Identity.Passkeys",
       "title": "Account security",
-      "requirements": "Account security composition with truthful passkey facts/capabilities and safe navigation to owned method management; future activity/protection features are not fabricated",
+      "requirements": "Account security composition with truthful passkey facts/capabilities and safe navigation to owned method management; future activity/protection features are not fabricated; conditional approved recovery-code card/modal uses current independent server action flags in the existing slot, without new page, duplicate shell or fabricated recovery facts",
       "pathname": "/account/security",
       "runtime_pathname": "/account/security",
       "guard": "Current authenticated User session; trusted Account access, owner-only safe methods, policy/eligibility and exact operation prerequisites enforced by BFF on every command/read",
       "owner_scopes": [
-        "TUN-P2-007"
+        "TUN-P2-007",
+        "TUN-P2-009",
+        "P1-018-RV007"
       ],
       "authority_refs": [
         "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md",
@@ -2043,7 +2152,22 @@
         "web/apps/user/passkeys.routes.ts",
         "web/apps/user/passkeys.native.ts",
         "web/apps/user/step-up.tsx",
-        "src/Modules/Identity/PasskeyEndpoints.cs"
+        "src/Modules/Identity/PasskeyEndpoints.cs",
+        "web/apps/user/recovery-codes.tsx",
+        "web/apps/user/recovery-codes.ui.tsx",
+        "web/apps/user/recovery-codes.api.ts",
+        "web/apps/user/recovery-codes.css",
+        "web/apps/user/recovery-codes.content.proposal.json",
+        "web/apps/user/step-up.completion.ts",
+        "web/apps/user/step-up.passkey.ts",
+        "web/apps/user/step-up.totp.tsx",
+        "web/packages/ui/src/dialog.tsx",
+        "web/packages/ui/src/controls.tsx",
+        "web/packages/ui/src/content.tsx",
+        "src/Modules/Identity/RecoveryCodeEndpoints.cs",
+        "src/Modules/Identity/RecoveryCodeProofCompletedResult.cs",
+        "src/Modules/Identity/RecoveryCodeAccountView.cs",
+        "src/Modules/Identity/RecoveryCodeExecution.cs"
       ],
       "planning_status": "APPROVED_SECURITY_COMPOSITION_REFINEMENT_IMPLEMENTED_VALIDATION_PENDING",
       "routing_state": "IMPLEMENTED_VALIDATION_PENDING",
@@ -2054,7 +2178,17 @@
       "consent_ref": "governance/evidence/TUN-P2-007-VISUAL-CONSENT-20261109.json",
       "design_status": "PRODUCT_OWNER_APPROVED_SCOPED_ADAPTATIONS",
       "visual_state": "IMPLEMENTATION_REQUIRES_CURRENT_RENDERED_EVIDENCE",
-      "acceptance_boundary": "Actual V01–V06 scoped consent is recorded. Current source is implemented with known recovery/fidelity corrections and native/browser/rendered validation pending. No PASS inherited from another screen; owner Figma backfill, whole007/P2, runtime production policy, protected-main merge and release remain separate."
+      "acceptance_boundary": "Actual V01–V06 scoped consent is recorded. Current source is implemented with known recovery/fidelity corrections and native/browser/rendered validation pending. No PASS inherited from another screen; owner Figma backfill, whole007/P2, runtime production policy, protected-main merge and release remain separate.",
+      "additional_consent_refs": [
+        "governance/evidence/TUN-P2-009-VISUAL-CONSENT.json",
+        "governance/evidence/TUN-P2-009-VISUAL-CONSENT-L04.json"
+      ],
+      "integration_authorization_ref": "governance/evidence/TUN-P2-009-SHARED-INTEGRATION-AUTHORIZATION.json",
+      "current_revision_ref": "P1-018-RV007",
+      "revision_acceptance_boundary": "P2-009 same-screen recovery owner integration under ACTIVE RV007 and actual L01–L04/shared-integration grants. All current committed-source per-item URL/VAL/UX-FID, all-method first-delivery, native owner/currentness and qualified download evidence remains PENDING. Prior30 presentation/other-owner proof is historical scoped input only; no integrated PASS, production policy/publication, human-saved or Product/release acceptance is inherited.",
+      "owner_pathnames": [
+        "/account/security"
+      ]
     },
     {
       "id": "COMP-PASSKEY-SIGN-IN",
@@ -2448,7 +2582,9 @@
       "title": "Current-operation authenticator code",
       "owner_scopes": [
         "TUN-P2-008",
-        "P1-018-RV006"
+        "P1-018-RV006",
+        "TUN-P2-009",
+        "P1-018-RV007"
       ],
       "authority_refs": [
         "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md",
@@ -2484,11 +2620,16 @@
         "web/apps/user/totp.code.tsx",
         "web/apps/user/totp.css",
         "src/Modules/Identity/StepUpBrowserEndpoints.cs",
-        "src/Modules/Identity/StepUpTotpBrowserEndpoints.cs"
+        "src/Modules/Identity/StepUpTotpBrowserEndpoints.cs",
+        "web/apps/user/recovery-codes.api.ts",
+        "web/apps/user/step-up.completion.ts",
+        "src/Modules/Identity/RecoveryCodeProofCompletedResult.cs"
       ],
       "consent_ref": "governance/evidence/TUN-P2-008-VISUAL-CONSENT.json",
       "additional_consent_refs": [
-        "governance/evidence/TUN-P2-008-FACTOR-PICKER-CONSENT.json"
+        "governance/evidence/TUN-P2-008-FACTOR-PICKER-CONSENT.json",
+        "governance/evidence/TUN-P2-009-VISUAL-CONSENT.json",
+        "governance/evidence/TUN-P2-009-VISUAL-CONSENT-L04.json"
       ],
       "design_status": "PRODUCT_OWNER_APPROVED_SCOPED_ADAPTATIONS",
       "visual_state": "IMPLEMENTATION_REQUIRES_CURRENT_RENDERED_EVIDENCE",
@@ -2506,7 +2647,10 @@
         "/account/security/sign-in-methods"
       ],
       "guard": "Shared same-screen dialog under current caller URL; exact protected owner/request/attempt/source/policy. Isolated carrier is not Product-screen acceptance.",
-      "backend_validation": "Native verification/replay claim/proof issuance commit together; exact proof/owner transaction rechecks current source. Code-free continuation executes only that original active proof, with no new OTP acceptance or session assurance upgrade."
+      "backend_validation": "Native verification/replay claim/proof issuance commit together; exact proof/owner transaction rechecks current source. Code-free continuation executes only that original active proof, with no new OTP acceptance or session assurance upgrade.",
+      "integration_authorization_ref": "governance/evidence/TUN-P2-009-SHARED-INTEGRATION-AUTHORIZATION.json",
+      "current_revision_ref": "P1-018-RV007",
+      "revision_acceptance_boundary": "P2-009 same-screen recovery owner integration under ACTIVE RV007 and actual L01–L04/shared-integration grants. All current committed-source per-item URL/VAL/UX-FID, all-method first-delivery, native owner/currentness and qualified download evidence remains PENDING. Prior30 presentation/other-owner proof is historical scoped input only; no integrated PASS, production policy/publication, human-saved or Product/release acceptance is inherited."
     },
     {
       "id": "COMP-STEP-UP-TOTP",
@@ -2517,7 +2661,9 @@
       "title": "Authenticator proof detail",
       "owner_scopes": [
         "TUN-P2-008",
-        "P1-018-RV006"
+        "P1-018-RV006",
+        "TUN-P2-009",
+        "P1-018-RV007"
       ],
       "authority_refs": [
         "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md",
@@ -2549,11 +2695,16 @@
         "web/apps/user/totp.code.tsx",
         "web/apps/user/totp.css",
         "src/Modules/Identity/StepUpBrowserEndpoints.cs",
-        "src/Modules/Identity/StepUpTotpBrowserEndpoints.cs"
+        "src/Modules/Identity/StepUpTotpBrowserEndpoints.cs",
+        "web/apps/user/recovery-codes.api.ts",
+        "web/apps/user/step-up.completion.ts",
+        "src/Modules/Identity/RecoveryCodeProofCompletedResult.cs"
       ],
       "consent_ref": "governance/evidence/TUN-P2-008-VISUAL-CONSENT.json",
       "additional_consent_refs": [
-        "governance/evidence/TUN-P2-008-FACTOR-PICKER-CONSENT.json"
+        "governance/evidence/TUN-P2-008-FACTOR-PICKER-CONSENT.json",
+        "governance/evidence/TUN-P2-009-VISUAL-CONSENT.json",
+        "governance/evidence/TUN-P2-009-VISUAL-CONSENT-L04.json"
       ],
       "design_status": "PRODUCT_OWNER_APPROVED_SCOPED_ADAPTATIONS",
       "visual_state": "IMPLEMENTATION_REQUIRES_CURRENT_RENDERED_EVIDENCE",
@@ -2570,7 +2721,13 @@
         "U-ACCT-SECURITY"
       ],
       "guard": "Current caller and exact reviewed operation, eligible factor and same original proof/result. No independent modal route or general session upgrade.",
-      "interaction": "Shared native dialog, typed code form, source-bound continuation and owner callback/focus restoration."
+      "interaction": "Shared native dialog, typed code form, source-bound continuation and owner callback/focus restoration.",
+      "integration_authorization_ref": "governance/evidence/TUN-P2-009-SHARED-INTEGRATION-AUTHORIZATION.json",
+      "current_revision_ref": "P1-018-RV007",
+      "revision_acceptance_boundary": "P2-009 same-screen recovery owner integration under ACTIVE RV007 and actual L01–L04/shared-integration grants. All current committed-source per-item URL/VAL/UX-FID, all-method first-delivery, native owner/currentness and qualified download evidence remains PENDING. Prior30 presentation/other-owner proof is historical scoped input only; no integrated PASS, production policy/publication, human-saved or Product/release acceptance is inherited.",
+      "owner_pathnames": [
+        "/account/security"
+      ]
     },
     {
       "id": "COMP-TOTP-FACTOR-PICKER",
@@ -2581,7 +2738,9 @@
       "title": "Choose an eligible authenticator",
       "owner_scopes": [
         "TUN-P2-008",
-        "P1-018-RV006"
+        "P1-018-RV006",
+        "TUN-P2-009",
+        "P1-018-RV007"
       ],
       "authority_refs": [
         "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md",
@@ -2605,11 +2764,16 @@
         "web/apps/user/step-up.totp.tsx",
         "web/apps/user/totp.api.ts",
         "web/apps/user/totp.css",
-        "web/packages/ui/src/content.tsx"
+        "web/packages/ui/src/content.tsx",
+        "web/apps/user/recovery-codes.api.ts",
+        "web/apps/user/step-up.completion.ts",
+        "src/Modules/Identity/RecoveryCodeProofCompletedResult.cs"
       ],
       "consent_ref": "governance/evidence/TUN-P2-008-VISUAL-CONSENT.json",
       "additional_consent_refs": [
-        "governance/evidence/TUN-P2-008-FACTOR-PICKER-CONSENT.json"
+        "governance/evidence/TUN-P2-008-FACTOR-PICKER-CONSENT.json",
+        "governance/evidence/TUN-P2-009-VISUAL-CONSENT.json",
+        "governance/evidence/TUN-P2-009-VISUAL-CONSENT-L04.json"
       ],
       "design_status": "PRODUCT_OWNER_APPROVED_SCOPED_ADAPTATIONS",
       "visual_state": "IMPLEMENTATION_REQUIRES_CURRENT_RENDERED_EVIDENCE",
@@ -2626,7 +2790,13 @@
         "U-ACCT-TOTP"
       ],
       "guard": "Only currently eligible server-backed active-factor metadata for the exact pending request/action. Multiple factors begin unselected. Choice binds opaque source/version; changed choice clears code. Published transient numbered labels and trusted timestamps are not persisted nicknames.",
-      "interaction": "Existing button/chevron rows and source-bound selected detail. Local state only; no raw GUID labels, secrets, automatic choice or production cardinality policy."
+      "interaction": "Existing button/chevron rows and source-bound selected detail. Local state only; no raw GUID labels, secrets, automatic choice or production cardinality policy.",
+      "integration_authorization_ref": "governance/evidence/TUN-P2-009-SHARED-INTEGRATION-AUTHORIZATION.json",
+      "current_revision_ref": "P1-018-RV007",
+      "revision_acceptance_boundary": "P2-009 same-screen recovery owner integration under ACTIVE RV007 and actual L01–L04/shared-integration grants. All current committed-source per-item URL/VAL/UX-FID, all-method first-delivery, native owner/currentness and qualified download evidence remains PENDING. Prior30 presentation/other-owner proof is historical scoped input only; no integrated PASS, production policy/publication, human-saved or Product/release acceptance is inherited.",
+      "owner_pathnames": [
+        "/account/security"
+      ]
     },
     {
       "id": "COMP-TOTP-MUTATION-REVIEW",
@@ -2693,5 +2863,5 @@
       "reason": "Hidden historical DOB-only screen, superseded prospectively by PDR-0011/AMD-0007; never implement as active UI."
     }
   ],
-  "updated_at": "2026-11-10T18:16:59.996785Z"
+  "updated_at": "2026-11-11T10:39:39.137Z"
 }

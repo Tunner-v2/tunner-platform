@@ -53,6 +53,12 @@ test('variable controlled sample count and no-download choice do not imply six c
 test('shared modal traps Tab in both directions around requested controls',async({page})=>{
  await open(page,'Show eight samples');const download=page.getByRole('button',{name:'Download',exact:true}),done=page.getByRole('button',{name:'Done',exact:true});await done.focus();await page.keyboard.press('Tab');await expect(download).toBeFocused();await page.keyboard.press('Shift+Tab');await expect(done).toBeFocused();
 });
+test('both authoritative card actions retain distinct callbacks in the same card',async({page})=>{
+ await page.goto(fixture);await page.getByRole('button',{name:'Show both card actions',exact:true}).click();await page.getByRole('button',{name:'Generate codes',exact:true}).click();await expect(count(page,'last-action')).toHaveText('generate');await page.getByRole('button',{name:'Replace codes',exact:true}).click();await expect(count(page,'last-action')).toHaveText('replace');await expect(count(page,'starts')).toHaveText('2');await expect(page.locator('.recovery-codes-card')).toHaveCount(1);
+});
+test('a pending original request exposes Check status and blocks fresh card starts',async({page})=>{
+ await page.goto(fixture);await page.getByRole('button',{name:'Show pending request',exact:true}).click();await expect(page.getByRole('button',{name:'Generate codes',exact:true})).toBeDisabled();await expect(page.getByRole('button',{name:'Replace codes',exact:true})).toBeDisabled();await page.locator('.recovery-codes-card').getByRole('button',{name:'Check status',exact:true}).click();await expect(page.getByRole('dialog')).toContainText('We couldn’t confirm the result');await expect(count(page,'starts')).toHaveText('0');await expect(count(page,'checks')).toHaveText('1');
+});
 
 for(const [width,height] of [[390,844],[390,640],[320,568],[390,480],[320,480],[1366,768]] as const){
  test('requested Download keeps keyboard Done fully inside the scroll viewport at '+width+'x'+height,async({page})=>{
