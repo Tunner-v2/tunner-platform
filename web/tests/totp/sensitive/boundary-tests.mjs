@@ -1,16 +1,40 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {PassThrough} from 'node:stream';
+import {spawnSync} from 'node:child_process';
 import {EventEmitter} from 'node:events';
 import {resolve} from 'node:path';
 import {parsePrivateJson, PrivateFrameReader, writePrivateFrame} from './private-frames.mjs';
 import {realJourneys, realPredicatesSatisfied, validRealChecks, validRealControl, validRealReceipt, realReceiptAccepted, validFixtureRequest, validFixtureResult, fixtureCountKeys, sameCanonicalPath} from './contract.mjs';
-import {runRealScenario, sensitiveSourceFacts} from './supervisor.mjs';
+import {childEnvironment, runRealScenario, sensitiveSourceFacts} from './supervisor.mjs';
 import {waitForOwnedProcessClose} from './oracle-bridge.mjs';
 
 const journeyId = Object.keys(realJourneys)[0];
 const control = () => ({version: 3, type: 'run', journeyId, browserEngine: 'chromium', origin: 'https://localhost:24443', mailpitOrigin: 'http://127.0.0.1:28025', sourceCommit: 'a'.repeat(40), sourceCommitted: true, runId: 'b'.repeat(32), oracleAssemblyPath: resolve('tools/browser-testing/bin/Debug/net10.0/Tunner.BrowserTesting.dll'), oracleNativeVersion: '10.0.13', publicFault: null});
 const receipt = () => ({version: 3, type: 'browserReceipt', journeyId, browserEngine: 'chromium', browserVersion: '151.0.7922.34', status: 'REAL_JOURNEY_OK', stage: 'COMPLETE', failureCode: 'NONE', checks: Object.fromEntries(realJourneys[journeyId].map(id => [id, true])), oracleRequests: 1, rawOutputRejected: false, processExited: true, oracleExited: true, surfaceClean: true, surfaceRemoved: true, cleanupCompleted: true, publicFaultObserved: false, sourceCommit: 'a'.repeat(40), sourceCommitted: true, accepted: false});
+
+test('child environment fixes OS trust and excludes operator TLS/debug overrides', () => {
+  const overrides = {
+    NODE_USE_SYSTEM_CA: '0', NODE_TLS_REJECT_UNAUTHORIZED: '0', NoDe_OpTiOnS: '--require=PUBLIC_FORBIDDEN_PRELOAD',
+    NODE_EXTRA_CA_CERTS: 'PUBLIC_FORBIDDEN_CA', sSl_CeRt_FiLe: 'PUBLIC_FORBIDDEN_CA', SSL_CERT_DIR: 'PUBLIC_FORBIDDEN_CA_DIR',
+    OPENSSL_CONF: 'PUBLIC_FORBIDDEN_OPENSSL_CONFIG', NODE_USE_ENV_PROXY: '1', HTTPS_PROXY: 'http://public.invalid:9',
+    DEBUG: 'PUBLIC_DEBUG', PWDEBUG: '1', NODE_V8_COVERAGE: 'PUBLIC_FORBIDDEN_COVERAGE',
+    NODE_REDIRECT_WARNINGS: 'PUBLIC_FORBIDDEN_WARNINGS', PLAYWRIGHT_DEBUG_LOG: 'PUBLIC_FORBIDDEN_LOG'
+  };
+  const saved = Object.entries(overrides).map(([key]) => [key, process.env[key]]);
+  const surface = resolve('PUBLIC_ENVIRONMENT_SURFACE'); let env;
+  try { for (const [key, value] of Object.entries(overrides)) process.env[key] = value; env = childEnvironment(surface); }
+  finally { for (const [key, value] of saved.reverse()) { if (value === undefined) delete process.env[key]; else process.env[key] = value; } }
+  assert.equal(env.NODE_USE_SYSTEM_CA, '1');
+  const blocked = Object.keys(overrides).map(key => key.toUpperCase()).filter(key => key !== 'NODE_USE_SYSTEM_CA');
+  assert.equal(Object.keys(env).some(key => blocked.includes(key.toUpperCase())), false);
+  assert.equal(env.TMP, surface); assert.equal(env.TEMP, surface); assert.equal(env.TMPDIR, surface);
+  const child = spawnSync(process.execPath, ['--input-type=module', '-e',
+    "const blocked = ['NODE_TLS_REJECT_UNAUTHORIZED','NODE_OPTIONS','NODE_EXTRA_CA_CERTS','SSL_CERT_FILE','SSL_CERT_DIR','OPENSSL_CONF','NODE_USE_ENV_PROXY','HTTPS_PROXY','DEBUG','PWDEBUG','NODE_V8_COVERAGE','NODE_REDIRECT_WARNINGS','PLAYWRIGHT_DEBUG_LOG']; process.stdout.write(JSON.stringify({fixedSystemTrust:process.env.NODE_USE_SYSTEM_CA==='1',operatorOverridesAbsent:!Object.keys(process.env).some(key=>blocked.includes(key.toUpperCase())),temporarySurfaceBound:process.env.TMP===process.env.TEMP&&process.env.TEMP===process.env.TMPDIR}));"
+  ], {env, encoding: 'utf8', timeout: 5000, maxBuffer: 1024, windowsHide: true});
+  assert.equal(child.error, undefined); assert.equal(child.signal, null); assert.equal(child.status, 0); assert.equal(child.stderr, '');
+  assert.deepEqual(JSON.parse(child.stdout), {fixedSystemTrust: true, operatorOverridesAbsent: true, temporarySurfaceBound: true});
+});
 
 test('each static journey has unique required browser predicates', () => { for (const ids of Object.values(realJourneys)) assert.equal(new Set(ids).size, ids.length); });
 test('only a complete executed predicate map is accepted', () => {

@@ -170,7 +170,7 @@ internal static class FiniteTotpCoordinator
         var browserAccepted = browser is { } result && ValidReceipt(result, journey, source, !publicFaultMode) && Flag(result, "accepted");
         var accepted = RealAcceptance(!publicFaultMode && !resourceCanaryMode, failure, browserAccepted, checks);
         var publicObserved = publicFaultMode && browser is { } canary && ValidReceipt(canary, journey, source, false) && Flag(canary, "publicFaultObserved") &&
-            browserExited && !Flag(canary, "accepted") && Flag(canary, "processExited") && Flag(canary, "oracleExited") && Flag(canary, "surfaceClean") && Flag(canary, "surfaceRemoved") &&
+            browserExited && browserExitCode == 1 && !rawOutput && !Flag(canary, "accepted") && Flag(canary, "processExited") && Flag(canary, "oracleExited") && Flag(canary, "surfaceClean") && Flag(canary, "surfaceRemoved") &&
             Flag(canary, "cleanupCompleted") == !ExpectedFailedCleanupFaults.Contains(selection, StringComparer.Ordinal);
         if (!publicFaultMode && failure == "NONE" && !accepted) failure = "CLEANUP_OR_PREDICATE_FAILED";
         var resourceContained = resourceCanaryMode && resourceFaultObserved && !accepted &&

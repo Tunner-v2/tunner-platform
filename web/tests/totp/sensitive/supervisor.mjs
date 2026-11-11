@@ -12,7 +12,7 @@ export function childEnvironment(surface) {
   const keep = new Set(['PATH', 'PATHEXT', 'SYSTEMROOT', 'WINDIR', 'SYSTEMDRIVE', 'COMSPEC', 'PROGRAMFILES', 'PROGRAMFILES(X86)', 'PROGRAMDATA', 'LOCALAPPDATA', 'APPDATA', 'USERPROFILE', 'HOMEDRIVE', 'HOMEPATH', 'LANG', 'LC_ALL', 'PLAYWRIGHT_BROWSERS_PATH']);
   const env = {};
   for (const [key, value] of Object.entries(process.env)) if (keep.has(key.toUpperCase())) env[key] = value;
-  return {...env, TMP: surface, TEMP: surface, TMPDIR: surface, TUNNER_CANARY_OS_TEMP_ROOT: dirname(surface)};
+  return {...env, TMP: surface, TEMP: surface, TMPDIR: surface, TUNNER_CANARY_OS_TEMP_ROOT: dirname(surface), NODE_USE_SYSTEM_CA: '1'};
 }
 export async function stopOwnedChild(child) {
   if (!child.pid || child.exitCode !== null || child.signalCode !== null) return;
