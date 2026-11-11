@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "work_item_id": "TUN-P2-009",
+  "recorded_at": "2026-11-11T09:07:44.198110+00:00",
+  "observed_head": "3c9d4c388b2acff1c61f9f01ed6fee55d39b2d70",
+  "observed_work_item_state": "IN_PROGRESS",
+  "phase": "ARTIFACT_ONLY_TECHNICAL_SEAM_REVIEW",
+  "implementation_authorized_by_this_packet": false,
+  "tests_executed": false,
+  "production_profile_selected": false,
+  "consumption_boundary": "Propose one internal RecoveryCodeApplication.ExecuteConsumptionOutcomeAsync transaction executor plus narrow IRecoveryCodeConsumptionOwner admission/apply/final-currentness seam. It requires clean entry and creates one transaction, rejecting nested/foreign/inactive contexts. It creates no RecoveryCase table or fake-case workflow; P2-011 owns that future resource. This refines v1 ConsumeInOwnerTransactionAsync; a provisional claim alone cannot prove later owner finality.",
+  "ordered_steps": [
+    "Require clean exact Identity context; trusted same-Identity owner supplies current Account/operation/context/policy admission and locks on its actual state, with no existing strong-factor-session precondition. Acquire the complete existing common owner/Account/(when relevant)session locks before recovery set/entry locks; Apply may not acquire an earlier-order lock.",
+    "Admit bounded native verifier format/work and canonical code; lock/revalidate exact owner/set/entry/version/effective interval using existing ordering. Any outside-lock hashing snapshot is rechecked after reacquiring.",
+    "Mark exactly one unused code claimed, apply the dependent recovery-owner mutation/result/outbox in the same transaction; typed owner seam performs no network/provider I/O.",
+    "After every awaited effect/source check, owner supplies closed currentness receipt over pinned real state binding sameDb/current transaction identity/operation/policy intervals/tracked mutations; re-resolve recovery policy and check exact claim/set/owner/interval at last decisionAt, then commit together.",
+    "Failure/currentness drift rolls back individual use and owner effects. Same-operation status returns exact safe original outcome; different operations cannot consume twice. Lifecycle version and per-entry usage are distinct.",
+    "No automatic session mint, full011 recovery, replenishment or notification-delivery claim. These remain explicit011/016 owner effects."
+  ],
+  "test_owner": "Use existing Account state/locks and actual outbox effects to prove rollback/currentness/duplicate lineage. Do not introduce a production or fake RecoveryCase table merely to test009.",
+  "before_any_source": "Root reports native work-start/context eligible at3c9d4c3; exact implementation path authorization and shared-seam cross-review acknowledgement remain separate. This packet itself grants no source edits.",
+  "backend_independent_of_visual_consent": [
+    "Recovery-owned rows/contracts/native crypto and resource-profile validation",
+    "Shared proof outcome/result carrier and all source/currentness/rollback paths using public synthetic values",
+    "Domain transaction/concurrency/duplicate/UNKNOWN tests and fallback-wrapper regressions",
+    "Explicit supported profile/performance admission and privacy public canaries"
+  ],
+  "ui_and_real_values": "Actual consent is now recorded, but nonvisual parser integration and actual UI/download changes still require committed source review, eligible work-start, complete owner profiles and the recovery-only private QA boundary before sensitive browser runs.",
+  "required_verification_after_source_change": [
+    "Current meaningful native Identity regression for shared proof/outcome changes",
+    "Architecture and ordinary password/passkey/TOTP consumers as affected",
+    "All method/continue/completed/race response branches and deferred writer disposal",
+    "Public failure-frontier canaries before real recovery values",
+    "Actual private single-download cleanup and native UI/source gate after implementation"
+  ],
+  "no_test_relabel": "Existing008260/237 and earlier browser results remain historical; future changed core must be actually revalidated, not called source-equivalent."
+}

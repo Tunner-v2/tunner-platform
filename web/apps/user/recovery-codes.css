@@ -1,0 +1,15 @@
+/* Approved existing reveal/backdrop and L01–L03 additions; shell and controls stay shared. */
+.recovery-codes-dialog{inline-size:560px;block-size:fit-content;max-inline-size:calc(100vw - 32px);max-block-size:calc(100svh - 32px)}
+.recovery-codes-dialog .passkeys-dialog-description{max-inline-size:none}
+.recovery-codes-once{font-size:13px;line-height:1.5;color:var(--pk-muted,#475969);margin-block-start:20px!important}
+.recovery-codes-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:48px 24px;align-content:start;min-block-size:250px;padding:24px;margin:20px 0;list-style:none;border:1px solid var(--pk-overlay-border,#e0e8f0);border-radius:8px;background:#fafcff;color:var(--tn-semantic-text)}
+.recovery-codes-grid li{min-inline-size:0}
+.recovery-codes-grid code{font-family:inherit;font-size:14px;line-height:1.5;overflow-wrap:anywhere;white-space:normal}
+.recovery-codes-warning{font-size:12px;line-height:1.5;color:#b85c0f;margin-block-start:16px!important}
+.recovery-codes-download-status{font-size:13px;line-height:1.5;color:var(--pk-muted,#475969)}
+.recovery-codes-download-status:not(:empty),.recovery-codes-impact{border:1px solid var(--pk-border,#e2e8f0);border-radius:8px;padding:14px;margin-block-start:20px}
+.recovery-codes-download-status p{margin-block-start:6px!important}
+.recovery-codes-impact{margin-block-start:32px}
+.recovery-codes-impact h3{font-size:14px;line-height:20px;font-weight:600;margin:0 0 14px}
+.recovery-codes-impact p{font-size:13px;line-height:1.5;white-space:pre-line;overflow-wrap:anywhere}
+@media(max-width:480px){.recovery-codes-grid{grid-template-columns:minmax(0,1fr);min-block-size:0;gap:12px;padding:18px}.recovery-codes-dialog .passkeys-dialog-actions>*{flex:1 1 100%}}

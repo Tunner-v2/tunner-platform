@@ -1,0 +1,108 @@
+{
+  "schema_version": 1,
+  "work_item_id": "TUN-P2-009",
+  "recorded_at": "2026-11-11T09:07:44.198110+00:00",
+  "observed_head": "3c9d4c388b2acff1c61f9f01ed6fee55d39b2d70",
+  "observed_work_item_state": "IN_PROGRESS",
+  "phase": "ARTIFACT_ONLY_TECHNICAL_SEAM_REVIEW",
+  "implementation_authorized_by_this_packet": false,
+  "tests_executed": false,
+  "production_profile_selected": false,
+  "paths": [
+    {
+      "entry": "GET step-up/options; owner already completed",
+      "actual_source_seam": "StepUpBrowserEndpoints.cs OptionsAsync completed branch",
+      "delivery_rule": "SAFE_ONLY",
+      "reason": "No apply, carrier construction or delivery grant."
+    },
+    {
+      "entry": "password POST; operation.Completed",
+      "actual_source_seam": "StepUpBrowserEndpoints.cs PasswordAsync",
+      "delivery_rule": "SAFE_ONLY",
+      "reason": "Existing completed owner result; never regenerate."
+    },
+    {
+      "entry": "password issuance error followed by CompletedAsync race",
+      "actual_source_seam": "StepUpBrowserEndpoints.cs PasswordAsync",
+      "delivery_rule": "SAFE_ONLY",
+      "reason": "Other winning request owns any delivery."
+    },
+    {
+      "entry": "password newly issued proof",
+      "actual_source_seam": "StepUpBrowserEndpoints.cs PasswordAsync -> ExecuteProofAsync",
+      "delivery_rule": "MAY_WIN",
+      "reason": "Only actual applied/confirmed-commit result may transfer delivery."
+    },
+    {
+      "entry": "passkey/options; completed owner",
+      "actual_source_seam": "StepUpPasskeyBrowserEndpoints.cs PasskeyOptionsAsync -> ReadNativeCompletedAsync",
+      "delivery_rule": "SAFE_ONLY",
+      "reason": "Native identity match proves status only."
+    },
+    {
+      "entry": "passkey complete/continue; completed owner",
+      "actual_source_seam": "StepUpPasskeyBrowserEndpoints.cs PasskeyAsync/PasskeyContinueAsync -> ReadNativeCompletedAsync",
+      "delivery_rule": "SAFE_ONLY",
+      "reason": "No native options, proof replay or first-delivery field."
+    },
+    {
+      "entry": "passkey complete/continue; active proof and uncommitted owner",
+      "actual_source_seam": "StepUpPasskeyBrowserEndpoints.cs -> ExecuteProofAsync",
+      "delivery_rule": "MAY_WIN",
+      "reason": "A first successful application after earlier rollback may deliver once; native metadata remains bound."
+    },
+    {
+      "entry": "TOTP POST/continue; completed owner",
+      "actual_source_seam": "StepUpBrowserEndpoints.cs TotpAsync; StepUpTotpBrowserEndpoints.cs CompletedTotpAsync",
+      "delivery_rule": "SAFE_ONLY",
+      "reason": "Original consumed proof metadata is not a delivery grant."
+    },
+    {
+      "entry": "TOTP issuance error followed by completed owner",
+      "actual_source_seam": "StepUpBrowserEndpoints.cs TotpAsync",
+      "delivery_rule": "SAFE_ONLY",
+      "reason": "Safe original status only."
+    },
+    {
+      "entry": "TOTP POST/continue; active proof and uncommitted owner",
+      "actual_source_seam": "StepUpBrowserEndpoints.cs/StepUpTotpBrowserEndpoints.cs -> ExecuteProofAsync",
+      "delivery_rule": "MAY_WIN",
+      "reason": "Same original active proof may be first successful application; no second OTP acceptance after owner failure."
+    },
+    {
+      "entry": "ExecuteProofAsync failed/losing apply then CompletedAsync",
+      "actual_source_seam": "StepUpBrowserEndpoints.cs ExecuteProofAsync",
+      "delivery_rule": "SAFE_ONLY",
+      "reason": "Never attach pending/discarded or another request's carrier."
+    },
+    {
+      "entry": "ExecuteProofAsync applied result",
+      "actual_source_seam": "StepUpBrowserEndpoints.cs ExecuteProofAsync",
+      "delivery_rule": "ONE_SHARED_DELIVERY_BRANCH",
+      "reason": "After confirmed commit/disposal and safe completion hook; exact owner/frame binding, no response cache."
+    },
+    {
+      "entry": "legacy bool ExecuteAsync/ApplyAsync",
+      "actual_source_seam": "StepUpApplication.cs; Passkey/Totp/Recovery owner wrappers",
+      "delivery_rule": "REJECT_RECOVERY_BEFORE_APPLY",
+      "reason": "Boolean adapters cannot represent a recovery delivery; no mutate-then-drop behavior."
+    },
+    {
+      "entry": "new recovery original result/cancel/status",
+      "actual_source_seam": "Proposed RecoveryCode owner safe operations",
+      "delivery_rule": "SAFE_ONLY",
+      "reason": "No server disclosure route or code-bearing ledger read."
+    }
+  ],
+  "fallback_wrappers": {
+    "current": "PasskeyStepUpOwner then TotpStepUpOwner wrap the prior source; typed outcomes forward unchanged, boolean Apply methods currently project to .Applied.",
+    "proposed": "RecoveryCodeStepUpOwner last explicit opt-in. Preserve complete typed outcome/carrier/validities and existing safe completion hooks; never cache the payload in an owner instance.",
+    "selection": "Extend the existing mutually exclusive pending-owner cookie selection to all3 owners. Clear other pending selections on new action; invalid present own selection remains fail-closed. Result cookies stay safe and separate."
+  },
+  "frontend_actual_projection_sites": [
+    "web/apps/user/step-up.tsx password response parse",
+    "web/apps/user/step-up.passkey.ts final",
+    "web/apps/user/step-up.totp.tsx completion.safeParse"
+  ],
+  "frontend_change": "One optional recovery-only same-stack consumer, invoked before safe parent completion/unmount/redirect. Keep StepUpCompletion secret-free; no generic payload registry. Reject/discard an unexpected first-delivery field, never log it."
+}
