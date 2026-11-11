@@ -109,7 +109,8 @@ internal sealed class RecoveryCodeFixtureOwnershipChannel : IDisposable
     private async Task ExchangeAsync(RecoveryCodePreparedFixtureOwner owner, string stage, string type, string? containerId, CancellationToken ct)
     {
         if (++sequence > 24) throw new InvalidOperationException("RECOVERY_OWNERSHIP_CONTROL_INVALID");
-        using var deadline = CancellationTokenSource.CreateLinkedTokenSource(ct); deadline.CancelAfter(TimeSpan.FromSeconds(3));
+        // Config ACKs are local filesystem checks. Resource ACKs include the fixed external metadata helper's bounded startup, pinning and query.
+        using var deadline = CancellationTokenSource.CreateLinkedTokenSource(ct); deadline.CancelAfter(TimeSpan.FromSeconds(owner.Role == "config" ? 3 : 90));
         if (type == "ownerPrepared")
             await WriteAsync(output, new { version = 2, type, sequence, runId = RunId, ownerId = owner.OwnerId, role = owner.Role, name = owner.Name, imageId = owner.ImageId }, deadline.Token).ConfigureAwait(false);
         else if (type == "ownerCreated")

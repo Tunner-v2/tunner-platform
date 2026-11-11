@@ -72,8 +72,18 @@ public static class RecoveryCodeFiniteNativeExecution
                         foreach (var id in cases.Keys.ToArray())
                         {
                             // Literal calls to existing authored methods; no reflection, discovery, dynamic names or xUnit execution.
-                            var execution = cohort == RecoveryCodeNativeCohort.PublicCapacity ? CapacityAsync(fixture, ownershipChannel) : Dispatch(cohort, id, fixture);
-                            try { await execution.WaitAsync(TimeSpan.FromSeconds(90)).ConfigureAwait(false); cases[id] = true; }
+                            var capacityExecution = cohort == RecoveryCodeNativeCohort.PublicCapacity ? CapacityAsync(fixture, ownershipChannel) : null;
+                            Task execution = capacityExecution is null ? Dispatch(cohort, id, fixture) : capacityExecution;
+                            try
+                            {
+                                await execution.WaitAsync(TimeSpan.FromSeconds(90)).ConfigureAwait(false);
+                                if (capacityExecution is not null)
+                                {
+                                    var capacityFailure = await capacityExecution.ConfigureAwait(false);
+                                    if (capacityFailure != "NONE") { failure = capacityFailure; break; }
+                                }
+                                cases[id] = true;
+                            }
                             catch (TimeoutException)
                             {
                                 failure = "CASE_TIMEOUT"; settled = false;
@@ -146,24 +156,49 @@ public static class RecoveryCodeFiniteNativeExecution
             (receipt.Cohort == nameof(RecoveryCodeNativeCohort.PrivateRecovery) ? receipt.SensitiveAccepted : !receipt.SensitiveAccepted);
     }
 
-    private static async Task CapacityAsync(IdentityPostgresFixture fixture, RecoveryCodeFixtureOwnershipChannel channel)
+    private static async Task<string> CapacityAsync(IdentityPostgresFixture fixture, RecoveryCodeFixtureOwnershipChannel channel)
     {
         // Actual public migration-only load: one DB per fixed private invocation plus the existing foreign-transaction DB.
         var expected = PrivateIds.Length + 1; var created = 0; string? connectionString = null;
+        var failure = "CAPACITY_PROVISION_FAILED";
         using var deadline = new CancellationTokenSource(TimeSpan.FromSeconds(85));
-        while (created < expected)
+        try
         {
-            await using var database = await fixture.CreateFiniteDatabaseAsync(deadline.Token).ConfigureAwait(false);
-            connectionString = database.ConnectionString; created++;
+            while (created < expected)
+            {
+                await using var database = await fixture.CreateFiniteDatabaseAsync(deadline.Token).ConfigureAwait(false);
+                connectionString = database.ConnectionString; created++;
+            }
+            failure = "CAPACITY_CONNECT_FAILED";
+            await using var connection = new Npgsql.NpgsqlConnection(connectionString ?? throw new InvalidOperationException("RECOVERY_PUBLIC_CAPACITY_NOT_VERIFIED")); await connection.OpenAsync(deadline.Token).ConfigureAwait(false);
+            failure = "CAPACITY_DATABASE_BYTES_FAILED";
+            await using var databases = new Npgsql.NpgsqlCommand("SELECT COALESCE(sum(pg_database_size(datname)),0)::bigint FROM pg_database WHERE datname LIKE 'identity_%'", connection);
+            var databaseBytes = (long)(await databases.ExecuteScalarAsync(deadline.Token).ConfigureAwait(false))!;
+            failure = "CAPACITY_WAL_BYTES_FAILED";
+            await using var wal = new Npgsql.NpgsqlCommand("SELECT COALESCE(sum(size),0)::bigint FROM pg_ls_waldir()", connection);
+            var walBytes = (long)(await wal.ExecuteScalarAsync(deadline.Token).ConfigureAwait(false))!;
+            failure = "CAPACITY_REPORT_FAILED";
+            await channel.ReportCapacityAsync(created, databaseBytes, walBytes, deadline.Token).ConfigureAwait(false);
+            failure = "CAPACITY_LIMIT_FAILED";
+            if (created != expected || databaseBytes <= 0 || walBytes < 0 || databaseBytes + walBytes >= 512L * 1024 * 1024)
+                return failure;
+            failure = "CAPACITY_FINALIZE_FAILED";
+            return "NONE";
         }
-        await using var connection = new Npgsql.NpgsqlConnection(connectionString ?? throw new InvalidOperationException("RECOVERY_PUBLIC_CAPACITY_NOT_VERIFIED")); await connection.OpenAsync(deadline.Token).ConfigureAwait(false);
-        await using var databases = new Npgsql.NpgsqlCommand("SELECT COALESCE(sum(pg_database_size(datname)),0)::bigint FROM pg_database WHERE datname LIKE 'identity_%'", connection);
-        var databaseBytes = (long)(await databases.ExecuteScalarAsync(deadline.Token).ConfigureAwait(false))!;
-        await using var wal = new Npgsql.NpgsqlCommand("SELECT COALESCE(sum(size),0)::bigint FROM pg_ls_waldir()", connection);
-        var walBytes = (long)(await wal.ExecuteScalarAsync(deadline.Token).ConfigureAwait(false))!;
-        await channel.ReportCapacityAsync(created, databaseBytes, walBytes, deadline.Token).ConfigureAwait(false);
-        if (created != expected || databaseBytes <= 0 || walBytes < 0 || databaseBytes + walBytes >= 512L * 1024 * 1024)
-            throw new InvalidOperationException("RECOVERY_PUBLIC_CAPACITY_NOT_VERIFIED");
+        catch (Exception error) when (error is not OutOfMemoryException)
+        {
+            // Closed public stages only. No exception type/message, SQL values, or provider diagnostics leave this method.
+            return deadline.IsCancellationRequested ? failure switch
+            {
+                "CAPACITY_PROVISION_FAILED" => "CAPACITY_PROVISION_DEADLINE",
+                "CAPACITY_CONNECT_FAILED" => "CAPACITY_CONNECT_DEADLINE",
+                "CAPACITY_DATABASE_BYTES_FAILED" => "CAPACITY_DATABASE_BYTES_DEADLINE",
+                "CAPACITY_WAL_BYTES_FAILED" => "CAPACITY_WAL_BYTES_DEADLINE",
+                "CAPACITY_REPORT_FAILED" => "CAPACITY_REPORT_DEADLINE",
+                "CAPACITY_FINALIZE_FAILED" => "CAPACITY_FINALIZE_DEADLINE",
+                _ => "CAPACITY_LIMIT_FAILED"
+            } : failure;
+        }
     }
 
     private static Task Dispatch(RecoveryCodeNativeCohort cohort, string id, IdentityPostgresFixture fixture)
