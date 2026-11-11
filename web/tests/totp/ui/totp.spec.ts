@@ -151,7 +151,7 @@ for(const width of [1440,768,390,320])for(const kind of ['DISABLE','RESET'] as c
  await expect.poll(()=>metadataReads).toBeGreaterThan(before);await expect.poll(()=>Boolean(refreshRoute)).toBe(true);
  await expect(page.locator('.totp-factor button:enabled,.totp-panel.danger button:enabled')).toHaveCount(0);
  await json(refreshRoute!,metadata());await expect(dialog).toHaveCount(0);await expect(page.locator('.totp-factor')).toHaveCount(1);
- expect(cancels).toEqual([{requestId:starts[0].requestId,enrollmentId:enrollment}]);
+ expect(starts).toHaveLength(1);expect(cancels).toEqual([{requestId:starts[0]!.requestId,enrollmentId:enrollment}]);
  const remainingRemove=page.locator('.totp-panel.danger').getByRole('button',{name:'Remove',exact:true});await expect(remainingRemove).toBeEnabled();
  await remainingRemove.focus();await page.keyboard.press('Enter');await expect(dialog.getByRole('button',{name:'Continue',exact:true})).toBeEnabled();
  expect(starts).toHaveLength(2);expect(starts[1]).toEqual({requestId:expect.any(String),authenticatorReference:factor,expectedVersion:2});expect(state.activations).toBe(0);expect(state.disclosures).toBe(0);
