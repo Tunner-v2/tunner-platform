@@ -44,12 +44,11 @@ export function RecoveryCodesDialog({view,busy,returnFocusTo,onClose,onContinue,
 }
 
 function RecoveryCodesReveal({view,busy,onClose,onDownload}:{view:Extract<RecoveryCodesView,{kind:'reveal'}>;busy:boolean;onClose:()=>void;onDownload:()=>void}){
- const requested=useRef(false),[invoked,setInvoked]=useState(false),doneId=useId();
+ const requested=useRef(false),focusDone=useRef(false),[invoked,setInvoked]=useState(false),doneId=useId();
+ useLayoutEffect(()=>{if(!focusDone.current||busy||view.download!=='requested')return;focusDone.current=false;document.getElementById(doneId)?.focus();},[busy,view.download,doneId]);
  function requestDownload(){
   if(busy||view.download!=='available'||requested.current)return;
-  requested.current=true;setInvoked(true);onDownload();
-  // The explicitly invoked control becomes disabled; retain useful keyboard focus.
-  document.getElementById(doneId)?.focus({preventScroll:true});
+  requested.current=true;focusDone.current=true;setInvoked(true);onDownload();
  }
  return <>
   <p className="recovery-codes-once"><ContentText contentKey="recoveryCodes.reveal.once"/></p>

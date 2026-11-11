@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import {mkdtemp, mkdir, writeFile, link, unlink, rename, realpath} from 'node:fs/promises';
 import {join} from 'node:path';
 import {tmpdir} from 'node:os';
-import {version, scenarios, publicBody, publicMarker, budgets, createAdmission, validChildResult, requiredChecks, canaryPassed, failureOf, fixedError, validSurfacePath, downloadIdentity, sameDownload, inspectSurface, removeOwnedSurface} from './contract.mjs';
+import {version, scenarios, publicBody, publicMarker, budgets, createAdmission, validChildResult, requiredChecks, canaryPassed, failureOf, fixedError, validSurfacePath, requireOwnedSurface, downloadIdentity, sameDownload, inspectSurface, removeOwnedSurface} from './contract.mjs';
 
 // These are public synthetic contract fixtures, never browser execution evidence.
 function happy() {
@@ -67,7 +67,15 @@ test('only the exact admitted regular file is exempt during transfer', async () 
   await writeFile(join(surface, 'downloads', 'second-extensionless-file'), 'PUBLIC');
   assert.equal((await inspectSurface(surface, {admitted: identity})).clean, false);
 }));
-test('outside paths, hard links, oversized files and replaced identities are rejected', async () => owned(async surface => {
+test('OS temp aliases preserve the boundary; outside paths, links, size and replacement are rejected', async () => owned(async surface => {
+  const previous = process.env.TUNNER_CANARY_OS_TEMP_ROOT;
+  try {
+    for (const parentSpelling of [tmpdir(), await realpath(tmpdir())]) {
+      process.env.TUNNER_CANARY_OS_TEMP_ROOT = parentSpelling;
+      assert.equal(validSurfacePath(surface), true, 'BOTH_ACTUAL_TEMP_PARENT_SPELLINGS_REQUIRED');
+      await requireOwnedSurface(surface);
+    }
+  } finally { if (previous === undefined) delete process.env.TUNNER_CANARY_OS_TEMP_ROOT; else process.env.TUNNER_CANARY_OS_TEMP_ROOT = previous; }
   assert.equal(validSurfacePath(join(surface, 'nested')), false);
   await assert.rejects(downloadIdentity(surface, join(surface, '..', 'not-owned')));
   const path = join(surface, 'downloads', 'public-file'); await writeFile(path, publicBody);

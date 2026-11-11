@@ -54,6 +54,13 @@ test('shared modal traps Tab in both directions around requested controls',async
  await open(page,'Show eight samples');const download=page.getByRole('button',{name:'Download',exact:true}),done=page.getByRole('button',{name:'Done',exact:true});await done.focus();await page.keyboard.press('Tab');await expect(download).toBeFocused();await page.keyboard.press('Shift+Tab');await expect(done).toBeFocused();
 });
 
+for(const [width,height] of [[390,844],[390,640],[320,568],[390,480],[320,480],[1366,768]] as const){
+ test('requested Download keeps keyboard Done fully inside the scroll viewport at '+width+'x'+height,async({page})=>{
+  await page.setViewportSize({width,height});await open(page,'Show eight samples');await page.keyboard.press('Tab');await expect(page.getByRole('button',{name:'Download',exact:true})).toBeFocused();await page.keyboard.press('Enter');await expect(page.getByRole('status')).toContainText('Download requested');
+  const done=page.getByRole('button',{name:'Done',exact:true});await expect(done).toBeFocused();await expect.poll(()=>done.evaluate(button=>{const dialog=button.closest('dialog')!,box=button.getBoundingClientRect(),frame=dialog.getBoundingClientRect(),top=Math.max(frame.top+dialog.clientTop,0),bottom=Math.min(frame.top+dialog.clientTop+dialog.clientHeight,innerHeight);return box.top>=top-1&&box.bottom<=bottom+1;})).toBe(true);
+ });
+}
+
 for(const width of [1440,1366,1101,1100,768,390,320]){
  test('39-character public samples reflow without clipping at '+width,async({page})=>{
   await page.setViewportSize({width,height:width===1366?768:1100});await open(page,'Show eight samples');await expect(page.locator('.recovery-codes-grid code')).toHaveText(Array.from({length:8},()=>marker));
