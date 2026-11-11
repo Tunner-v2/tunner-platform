@@ -4,7 +4,7 @@
   "milestone_id": "P2",
   "sprint_id": null,
   "title": "TOTP enrollment verification and disable lifecycle",
-  "status": "IN_PROGRESS",
+  "status": "CODE_REVIEW",
   "type": "FEATURE",
   "authority_refs": [
     "docs/authority/current-authority.json",
@@ -89,7 +89,7 @@
     "first-code activation, wrong-code and replay/rate controls",
     "step-up and unauthorized mutation rejection",
     "safe UI, logs and audit evidence",
-    "native TOTP plus atomic used-code-verifier set across activation, sign-in MFA and operation proof; A\u2192B\u2192A replay/concurrency and complete native validity horizon",
+    "native TOTP plus atomic used-code-verifier set across activation, sign-in MFA and operation proof; A→B→A replay/concurrency and complete native validity horizon",
     "policy-required MFA before final session, exact original attempt/result and primary-evidence freshness; no provisional live session",
     "immutable vault-version owner binding/create-only preparation/reconciliation, one-time disclosure loss, first-code activation/rollback and no secret outputs",
     "disable/reset source freshness, expected version, explicit configured effects and causal self-disable; no unrelated factor reset",
@@ -103,7 +103,8 @@
     "governance/evidence/TUN-P2-008-UI-AUTHORITY.json",
     "governance/evidence/TUN-P2-008-STARTUP-REVIEWS.json",
     "governance/evidence/TUN-P2-008-ROLE-REVIEWS.json",
-    "governance/evidence/TUN-P2-008-SENSITIVE-QA-PLAN.json"
+    "governance/evidence/TUN-P2-008-SENSITIVE-QA-PLAN.json",
+    "governance/evidence/p2-008-totp-20261110/final-integration/947f8b0/execution-index.json"
   ],
   "context_policy": "TASK",
   "todos": [
@@ -118,6 +119,61 @@
     "DEF-TUN-P2-008-UI-005"
   ],
   "created_at": "2026-10-16T17:48:49.296Z",
-  "updated_at": "2026-11-10T18:58:45.442618Z",
-  "ui_evidence_ref": "governance/evidence/TUN-P2-008-UI-COMPLIANCE.json"
+  "updated_at": "2026-11-11T05:35:42.148Z",
+  "ui_evidence_ref": "governance/evidence/TUN-P2-008-UI-COMPLIANCE.json",
+  "git_state": {
+    "repository_changed": true,
+    "validated_commit_sha": "2b15d5cffc306f44797c237b50894c85586013d9",
+    "tested_commit_sha": "947f8b090b4f74a474a71e47badcb595424bd734",
+    "work_item_commit_shas": [
+      "1ea7c69181acb2ccab78e42266d852195dc96f47",
+      "01dd89174c0202d29610826408c4e69d4427ffb9",
+      "764aee057d6503e9488cddc6d90a8ddabe8a2839",
+      "4467fd42112bcff579ca28eaa024245da77b799b",
+      "771834330bf2ddb764aa6b81fcf974185e37a0b2",
+      "28e20dc733dde257c4f731b9e90803710be7a9e2",
+      "95331c7a3de34a70129bafc79d14f9b4b5b94124",
+      "4849b2329e1f681eec11c081633dade15ec28656",
+      "70d19f41f5ef0780c80e3e1378c97fee3e2312e6",
+      "b58384205e407f037567aa514ea70696d0bbaabd",
+      "19617c5a2d15466ddc05260b05004506c7cde3f3",
+      "183b557a37833fe658d60652b946860986e99ac6",
+      "e79f482c3859d944f031a2846e36988cf90f0098",
+      "72d2f53295ab9c87c857e20440e0dbb740f7d780",
+      "e6e3d9da368871887c015764be273e354b6aff48",
+      "1b2a3bf6b4d3e43526888a23d873c5c5e7044597",
+      "3603243ed68234af0d89b8c1c8f2dcf7807ea640",
+      "fbbd53b9fdb70ed7cbeb7448cadc722478b43c1e",
+      "6e562db102ce75d5ed478a15e2970ff55ab98fef",
+      "f1dd54a3a6a4f4d3f0e1d66e92c02fb52053d7a1",
+      "8ceb64bd7c2032b145fdaba522d4261a2a1a807b",
+      "3f883e046b4a9d8c7dd9324db12f3e091a72e040",
+      "acd474e6d028b7abe5a48b2361a984f960384674",
+      "abfea16f940d8967fcda35a6a8958cddfa72fe36",
+      "75988ad1004685bededfa1b22cc306e09b87b89c",
+      "37f50383e43c9fd8747f894b83d6e552ad4402b5",
+      "6653a3cac663394d3cd32776d519988f99a410ad",
+      "947f8b090b4f74a474a71e47badcb595424bd734",
+      "d3f14fa49c11a89784a75d8318354f90eff180d5",
+      "2b15d5cffc306f44797c237b50894c85586013d9"
+    ],
+    "closure_commit_sha": null,
+    "remaining_uncommitted_paths": [
+      "docs/context/current/HANDOFF.md",
+      "docs/context/current/adaptive-selection.json",
+      "docs/context/current/authority.md",
+      "docs/context/current/contracts.md",
+      "docs/context/current/git-changes.md",
+      "docs/context/current/manifest.json",
+      "docs/context/current/relevant-flows.md",
+      "docs/context/current/summary.md",
+      "docs/context/current/tests.md",
+      "docs/project/CURRENT_STATE.md",
+      "docs/project/HANDOFF.md",
+      "docs/project/PROJECT_CONTEXT.md",
+      ".vscode/settings.json",
+      "%SystemDrive%/"
+    ],
+    "remaining_uncommitted_classification": "UNRELATED_ACTIVE_WORK"
+  }
 }

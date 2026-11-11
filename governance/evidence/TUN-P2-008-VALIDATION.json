@@ -2,9 +2,9 @@
   "schema_version": 1,
   "scope_id": "TUN-P2-008",
   "validation_kind": "COMMITTED",
-  "result": "PENDING_IMPLEMENTATION_AND_FINAL_VALIDATION",
-  "tested_commit_sha": null,
-  "validated_commit_sha": null,
+  "result": "PASS",
+  "tested_commit_sha": "947f8b090b4f74a474a71e47badcb595424bd734",
+  "validated_commit_sha": "2b15d5cffc306f44797c237b50894c85586013d9",
   "owned_behavior_paths": [
     "docs/contracts/ui-inventory.json",
     "docs/development/P2_008_TOTP_SCOPE.md",
@@ -119,6 +119,9 @@
     "web/tests/totp/sensitive/real-journey.mjs",
     "web/tests/totp/sensitive/real-supervisor.mjs"
   ],
-  "note": "Validation remains pending. The committed core at 3603243 has actual 260/260 Identity and 237/237 Architecture PASS evidence; current rendered UI at 6e562db has 35/35 TOTP and 103/103 existing workflow PASS evidence. Earlier expected-red failures remain retained. The finite real-browser coordinator and native test-helper extraction require their own current source-bound regression, failure-boundary and real-journey execution evidence before acceptance. Public-only canaries do not prove real BFF journeys or coordinator resource cleanup.",
-  "initial_candidate_commit_sha": "771834330bf2ddb764aa6b81fcf974185e37a0b2"
+  "note": "Final local engineering validation. Actual947 native-provider browser70/coordinator63/persistence15, publicTOTP43/contracts29/TypeScript/composition4 pass. Identity260 atf1,Architecture237 ata933 andInstaller113 at183b retain exact invocation and unchanged-input evidence. Native UI008/RV006 each17PASS. Ordered112 is unchanged; only the nonexecuting scope-status document differs between tested947 and validated2b. No wholeP2/Product/production/merge/release approval.",
+  "initial_candidate_commit_sha": "771834330bf2ddb764aa6b81fcf974185e37a0b2",
+  "source_binding_ref": "governance/evidence/p2-008-totp-20261110/final-integration/947f8b0/execution-index.json",
+  "role_reviews_ref": "governance/evidence/TUN-P2-008-ROLE-REVIEWS.json",
+  "ui_evidence_ref": "governance/evidence/TUN-P2-008-UI-COMPLIANCE.json"
 }
