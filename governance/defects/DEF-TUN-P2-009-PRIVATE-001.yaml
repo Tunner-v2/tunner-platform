@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "defect_id": "DEF-TUN-P2-009-PRIVATE-001",
+  "work_item_id": "TUN-P2-009",
+  "classification": "SECURITY_DEFECT",
+  "severity": "SEV-2",
+  "status": "OPEN",
+  "environment": "Read-only confirmed at committed fd412b20be51383ce4bf2d0b776f92529afeb60a. No observed private execution or disclosure incident.",
+  "description": "Fact/Theory/InlineData plus IClassFixture opt the private methods into ordinary discovery. Trait is metadata, not an execution gate. The CI workflow sets TUNNER_RUN_CONTAINER_TESTS=1 and invokes the full solution with TRX without excluding this trait. Default IdentityPostgresFixture can create baseline Testcontainers and unqualified databases; the class previously called CreateDatabaseAsync without positive finite ownership. Remove ordinary discovery/fixture annotations and require the existing positive finite database owner. Preserve every authored method/assertion, register all43 invocations in the fixed native catalog and keep their actual qualified execution mandatory. Add a public no-resource metadata/default-fixture rejection regression.",
+  "expected_behavior_ref": "docs/development/P2_009_RECOVERY_CODES_SCOPE.md",
+  "evidence": [
+    "governance/evidence/TUN-P2-009-PRIVATE-DISCOVERY-AUDIT.json",
+    "governance/evidence/p2-009-recovery-20261111/refinement/security/test-matrix.json"
+  ],
+  "affected_versions": [
+    "fd412b20be51383ce4bf2d0b776f92529afeb60a"
+  ],
+  "created_at": "2026-11-11T13:41:14.965Z",
+  "updated_at": "2026-11-11T13:41:14.965Z"
+}
