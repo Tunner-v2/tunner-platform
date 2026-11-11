@@ -37,7 +37,7 @@ test('child environment fixes OS trust and excludes operator TLS/debug overrides
 });
 
 test('fixed journey steps are failure metadata and cannot substitute for completion', () => {
-  assert.deepEqual(realJourneyStages, ['JOURNEY','JOURNEY_ENROLL_BEGIN','JOURNEY_ENROLL_DISCLOSURE','JOURNEY_ENROLL_RESULT_BINDING','JOURNEY_ENROLL_DUPLICATE','JOURNEY_ENROLL_DONE']);
+  assert.deepEqual(realJourneyStages, ['JOURNEY','JOURNEY_ENROLL_BEGIN','JOURNEY_ENROLL_DISCLOSURE','JOURNEY_ENROLL_RESULT_BINDING','JOURNEY_ENROLL_DUPLICATE','JOURNEY_ENROLL_DONE','JOURNEY_MUTATION_BEGIN','JOURNEY_MUTATION_READY','JOURNEY_PROOF_ENTRY','JOURNEY_PROOF_RESPONSE','JOURNEY_PROOF_RECOVERY','JOURNEY_PROOF_CONTINUE','JOURNEY_PROOF_CONTINUED','JOURNEY_MUTATION_CANCEL','JOURNEY_MUTATION_CANCELLED']);
   for (const stage of realJourneyStages) {
     const failed = {...receipt(), status: 'BOUNDARY_FAILED', stage, failureCode: 'PREDICATE_FAILED'};
     assert.equal(validRealReceipt(failed), true); assert.equal(realReceiptAccepted(failed), false);

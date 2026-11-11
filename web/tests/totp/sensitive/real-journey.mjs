@@ -213,13 +213,14 @@ class Journey {
     this.prove('DUPLICATE_COUNTS',after.ownerCommits === before.ownerCommits && after.operations === before.operations && after.proofs === before.proofs && after.outbox >= before.outbox + 1);
   }
   async beginMutation(page,kind,factor) {
+    this.reportStep('JOURNEY_MUTATION_BEGIN');
     await this.goManage(page); const rows = await this.factors(page), active = rows.filter(value => value.state === 'ACTIVE'), index = active.findIndex(value => value.authenticatorReference === factor.reference); requireTrue(index >= 0);
     const target = kind === 'RESET' ? page.locator('.totp-factor').nth(index).getByRole('button',{name:'Review replacement',exact:true}) : active.length === 1 ? page.locator('.totp-panel.danger').getByRole('button',{name:'Remove',exact:true}) : page.locator('.totp-factor').nth(index).getByRole('button',{name:'Remove',exact:true});
     const result = await this.response(page,'/account/totp/'+kind.toLowerCase()+'/start',() => target.click()); const operation = result.body;
     this.prove('REQUEST_BINDING',result.ok && operation.requestId === result.sent.requestId && operation.authenticatorReference === factor.reference && operation.expectedVersion === active[index].version && operation.kind === kind && operation.status === 'PENDING_PROOF');
     const pending = page.waitForResponse(response => new URL(response.url()).origin === this.origin && new URL(response.url()).pathname === '/authentication/step-up/options' && response.request().method() === 'GET',{timeout:5000}); pending.catch(() => {});
     await page.getByRole('dialog').getByRole('button',{name:'Continue',exact:true}).click(); const options = await this.read(await pending);
-    this.prove('OPERATION_BINDING',options.ok && options.body.operationReference === operation.enrollmentId.replaceAll('-','') && uuid(options.body.requestId)); return operation;
+    this.prove('OPERATION_BINDING',options.ok && options.body.operationReference === operation.enrollmentId.replaceAll('-','') && uuid(options.body.requestId)); this.reportStep('JOURNEY_MUTATION_READY'); return operation;
   }
   async finishMutationPassword(page,kind,factor,password) {
     const operation = await this.beginMutation(page,kind,factor); await this.passwordProof(page,password,operation); await page.locator('.totp-terminal').waitFor();
@@ -227,12 +228,15 @@ class Journey {
     return {operation,result:result.body};
   }
   async finishMutationProof(page,operation,factor,{deny=false}={}) {
+    this.reportStep('JOURNEY_PROOF_ENTRY');
     if (deny) await this.control('DENY_OWNER_ONCE');
     await page.getByRole('dialog').getByRole('button',{name:/^Authenticator(?:\s|$)/}).click(); const input = await this.select(page,factor,true), code = await this.code(factor); await fillPrivate(input,code);
     await this.proofFonts(page);
     const issued = await this.response(page,'/authentication/step-up/totp',() => page.getByRole('dialog').getByRole('button',{name:'Confirm',exact:true}).click());
+    this.reportStep('JOURNEY_PROOF_RESPONSE');
     this.prove('OPERATION_BINDING',uuid(issued.sent.attemptId) && issued.sent.authenticatorReference === factor.reference && typeof issued.sent.requestId === 'string'); factor.used.add(code);
     if (deny) {
+      this.reportStep('JOURNEY_PROOF_RECOVERY');
       requireTrue(!issued.ok); await page.getByRole('dialog').getByRole('button',{name:'Continue this verification',exact:true}).waitFor();
       const options = await this.get(page,'/authentication/step-up/options'), recovery = options.body.totpRecovery;
       requireTrue(options.ok && recovery?.status === 'PROOF_ACTIVE' && recovery.requestId === issued.sent.requestId && recovery.attemptId === issued.sent.attemptId && recovery.authenticatorReference === factor.reference);
@@ -241,7 +245,9 @@ class Journey {
     this.prove('NATIVE_OPERATION_PROOF',issued.ok && issued.body.status === 'COMPLETED' && issued.body.operationReference === operation.enrollmentId.replaceAll('-','')); return {issued,code,operation};
   }
   async continueProof(page,held,{expectSuccess=true}={}) {
+    this.reportStep('JOURNEY_PROOF_CONTINUE');
     const before = await this.control('READ_SAFE_COUNTS'), result = await this.response(page,'/authentication/step-up/totp/continue',() => page.getByRole('dialog').getByRole('button',{name:'Continue this verification',exact:true}).click()), after = await this.control('READ_SAFE_COUNTS');
+    this.reportStep('JOURNEY_PROOF_CONTINUED');
     requireTrue(result.sent.requestId === held.issued.sent.requestId && result.sent.attemptId === held.issued.sent.attemptId && result.sent.authenticatorReference === held.issued.sent.authenticatorReference && !Object.hasOwn(result.sent,'code'));
     if (expectSuccess) {
       this.prove('NATIVE_OPERATION_PROOF',result.ok && result.body.status === 'COMPLETED' && result.body.operationReference === held.operation.enrollmentId.replaceAll('-',''));
@@ -283,6 +289,7 @@ class Journey {
     this.prove('UI_ASSET_TYPOGRAPHY',this.monoVerified === true && response.ok() && /font|octet-stream/i.test(response.headers()['content-type'] ?? '') && createHash('sha256').update(bytes).digest('hex') === '3100e775e8616cd2611beecfa23a4263d7037586789b43f035236a2e6fbd4c62' && selected.chosen.includes('Inter Variable') && selected.faces.some(face => face.family === 'Inter Variable' && face.status === 'loaded'));
   }
   async cancelHeld(page,operation) {
+    this.reportStep('JOURNEY_MUTATION_CANCEL');
     const cancelled = async action => {
       const result = await this.response(page,'/account/totp/cancel',action);
       requireTrue(result.ok && sameOperation(operation,result.body) && ['REJECTED','EXPIRED'].includes(result.body.status));
@@ -299,7 +306,7 @@ class Journey {
       await cancelled(() => page.locator('.totp-review-dialog').getByRole('button',{name:'Cancel',exact:true}).click());
     }
     await dialog.waitFor({state:'hidden'}); await page.locator('.totp-recovery').waitFor({state:'hidden'});
-    await this.at(page,manage);
+    await this.at(page,manage); this.reportStep('JOURNEY_MUTATION_CANCELLED');
   }
   async rejectDisabledProof(page,factor) {
     await page.goto(this.url('/browser-testing/step-up'));
