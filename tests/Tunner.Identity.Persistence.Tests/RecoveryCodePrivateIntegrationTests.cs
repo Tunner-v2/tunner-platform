@@ -28,6 +28,7 @@ public sealed class RecoveryCodePrivateIntegrationTests(IdentityPostgresFixture 
         internal bool RetireFirstOnly { get; set; }
         internal string FinalAdmissionChange { get; set; } = "unchanged";
         internal int FinalAdmissionReads { get; private set; }
+        internal Func<RecoveryCodeMutationAdmissionRequest, CancellationToken, Task>? BeforeAdmission { get; set; }
         internal bool FinalFactsOriginal { get; private set; }
         internal EffectivePolicyInterval PublicationInterval { get; set; } = Interval;
         internal static EffectivePolicyInterval Interval => new(new(2020, 1, 1, 0, 0, 0, TimeSpan.Zero), true, new DateTimeOffset(2040, 1, 1, 0, 0, 0, TimeSpan.Zero), false);
@@ -36,7 +37,11 @@ public sealed class RecoveryCodePrivateIntegrationTests(IdentityPostgresFixture 
             RecoveryCodeSessionEffect.NoSessionMutation, RecoveryCodeDeliveryMechanism.OneVolatileViewWithOptionalSingleLocalDownload, "fixture-recovery-proof", "fixture-recovery-proof",
             20, 100, "fixture-processing", "fixture-retention");
         public RecoveryCodePolicyVersion RequireEffective(DateTimeOffset at) => new(new(Policy.Version, "ACTIVE", "RECOVERY_CODES", Interval, null, ["SYNTHETIC-TEST-ONLY"]), Policy);
-        public ValueTask<RecoveryCodeMutationAdmission> RequireAsync(RecoveryCodeMutationAdmissionRequest request, CancellationToken ct) => ValueTask.FromResult(Decide(request));
+        public async ValueTask<RecoveryCodeMutationAdmission> RequireAsync(RecoveryCodeMutationAdmissionRequest request, CancellationToken ct)
+        {
+            if (BeforeAdmission is { } barrier) await barrier(request, ct);
+            return Decide(request);
+        }
         private RecoveryCodeMutationAdmission Decide(RecoveryCodeMutationAdmissionRequest request)
         {
             var candidates = RetireFirstOnly ? request.ActiveSets.Take(1) : request.ActiveSets;
@@ -86,10 +91,12 @@ public sealed class RecoveryCodePrivateIntegrationTests(IdentityPostgresFixture 
         internal string Cookies { get; set; } = cookies; internal string Csrf { get; set; } = csrf;
         public override string ToString() => nameof(Pending);
     }
-    private sealed class Winning(Pending pending, RecoveryCodeValue code) : IDisposable
+    private sealed class Winning(Pending pending, RecoveryCodeValue[] codes) : IDisposable
     {
-        internal Pending Pending { get; } = pending; internal RecoveryCodeValue Code { get; } = code;
-        public void Dispose() => Code.Dispose(); public override string ToString() => nameof(Winning);
+        internal Pending Pending { get; } = pending; internal RecoveryCodeValue Code => Codes[0];
+        internal RecoveryCodeValue[] Codes { get; } = codes;
+        public void Dispose() { foreach (var code in Codes) code.Dispose(); }
+        public override string ToString() => nameof(Winning);
     }
     private static async Task<string> Login(AuthenticationTestHost host)
     {
@@ -111,13 +118,18 @@ public sealed class RecoveryCodePrivateIntegrationTests(IdentityPostgresFixture 
         pending.Cookies = Merge(pending.Cookies, current); pending.Csrf = currentDoc.RootElement.GetProperty("csrfToken").GetString()!;
         return pending;
     }
-    private static async Task<HttpResponseMessage> Prove(AuthenticationTestHost host, Pending pending)
+    private static async Task<Guid> PreparePasswordRequest(AuthenticationTestHost host, Pending pending)
     {
         using var options = await host.Get("/authentication/step-up/options", pending.Cookies); Assert.True(options.StatusCode == HttpStatusCode.OK);
         using var doc = await options.Content.ReadFromJsonAsync<JsonDocument>(); var root = doc!.RootElement;
         Assert.True(root.GetProperty("operationReference").GetString() == pending.Operation.ToString("N"));
         pending.Cookies = Merge(pending.Cookies, options); pending.Csrf = root.GetProperty("csrfToken").GetString()!;
-        return await host.Post("/authentication/step-up/password", new { requestId = root.GetProperty("requestId").GetGuid(), password = Password }, pending.Cookies, pending.Csrf);
+        return root.GetProperty("requestId").GetGuid();
+    }
+    private static async Task<HttpResponseMessage> Prove(AuthenticationTestHost host, Pending pending)
+    {
+        var request = await PreparePasswordRequest(host, pending);
+        return await host.Post("/authentication/step-up/password", new { requestId = request, password = Password }, pending.Cookies, pending.Csrf);
     }
     private static async Task<Winning> Generate(AuthenticationTestHost host, string cookies, string kind = "GENERATE")
     {
@@ -131,7 +143,13 @@ public sealed class RecoveryCodePrivateIntegrationTests(IdentityPostgresFixture 
         Assert.True(delivery.GetProperty("ownerRequestId").GetGuid() == pending.Request && delivery.GetProperty("setReference").GetGuid() == pending.Set);
         Assert.True(delivery.GetProperty("codes").GetArrayLength() == 2 && !root.GetProperty("signInRequired").GetBoolean());
         pending.Cookies = Merge(pending.Cookies, response);
-        return new(pending, new(delivery.GetProperty("codes")[0].GetString()!.ToCharArray()));
+        var retained = new List<RecoveryCodeValue>();
+        try
+        {
+            foreach (var value in delivery.GetProperty("codes").EnumerateArray()) retained.Add(new(value.GetString()!.ToCharArray()));
+            var result = new Winning(pending, retained.ToArray()); retained.Clear(); return result;
+        }
+        finally { foreach (var value in retained) value.Dispose(); }
     }
 
     [Fact]
@@ -227,6 +245,10 @@ public sealed class RecoveryCodePrivateIntegrationTests(IdentityPostgresFixture 
         internal bool FinalCurrent { get; set; } = true;
         internal IdentityPersistenceDbContext? ForeignDatabase { get; set; }
         internal bool WrongRequest { get; set; }
+        internal RecoveryCodeUsageAdmission UsageAdmission { get; set; } = RecoveryCodeUsageAdmission.IndependentUnusedEntry;
+        internal long? ExpectedUsageVersion { get; set; }
+        internal bool KeepAccountActive { get; set; }
+        internal Func<CancellationToken, Task>? AfterAdmission { get; set; }
         internal int Admissions { get; private set; }
         private AccountRow? account;
         private Guid eventId;
@@ -239,12 +261,13 @@ public sealed class RecoveryCodePrivateIntegrationTests(IdentityPostgresFixture 
             var prior = await db.Set<RecoveryCodeEntryRow>().AsNoTracking().SingleOrDefaultAsync(x => x.AccountId == request.AccountId && x.ConsumedByOperationId == request.OwnerOperationId, ct);
             priorObserved = prior is not null && await db.Set<OutboxMessage>().AnyAsync(x => x.OperationId == request.OwnerOperationId && x.CorrelationId == request.CorrelationId, ct);
             var bound = WrongRequest ? new RecoveryCodeConsumptionRequest(request.AccountId, request.OwnerOperationId, request.CorrelationId, request.ContextDigest, request.Origin, request.NetworkDigest) : request;
-            return new(ForeignDatabase ?? db, db.Database.CurrentTransaction!, bound, account, set, 1, RecoveryCodeUsageAdmission.IndependentUnusedEntry, null,
+            if (AfterAdmission is { } barrier) await barrier(ct);
+            return new(ForeignDatabase ?? db, db.Database.CurrentTransaction!, bound, account, set, 1, UsageAdmission, ExpectedUsageVersion,
                 "fixture-recovery-owner-v1", "fixture-owner-evidence", Profile.Interval, prior?.ConsumptionOutcomeReference);
         }
         public Task<RecoveryCodeConsumptionOwnerOutcome> ApplyAsync(IdentityPersistenceDbContext db, RecoveryCodeConsumptionRequest request, RecoveryCodeConsumptionAdmission admission, CancellationToken ct)
         {
-            account!.State = AccountState.Restricted; account.Version++; account.RecordedAtUtc = clock.GetUtcNow(); account.OperationId = request.OwnerOperationId;
+            account!.State = KeepAccountActive ? AccountState.Active : AccountState.Restricted; account.Version++; account.RecordedAtUtc = clock.GetUtcNow(); account.OperationId = request.OwnerOperationId;
             account.CorrelationId = request.CorrelationId; account.EvidenceReference = "fixture-owner-result"; eventId = Guid.NewGuid();
             db.Add(new OutboxMessage(eventId, "1.0", "FixtureRecoveryOwnerApplied", "1", clock.GetUtcNow(), "tunner/identity", account.AccountId, "RESTRICTED_SECURITY",
                 JsonSerializer.Serialize(new { reference = request.OwnerOperationId }), account.Version.ToString(CultureInfo.InvariantCulture), request.OwnerOperationId, request.CorrelationId));
@@ -340,6 +363,168 @@ public sealed class RecoveryCodePrivateIntegrationTests(IdentityPostgresFixture 
         }
         await using var check = db.Context(); Assert.True(await check.Set<RecoveryCodeEntryRow>().CountAsync(x => x.ConsumedAt != null) == 1);
         Assert.True(await check.Set<OutboxMessage>().CountAsync(x => x.EventType == "FixtureRecoveryOwnerApplied") == 1);
+    }
+
+
+    // Fixed private fixtures only. Existing owner declares each usage-admission choice explicitly.
+    [Theory]
+    [InlineData(false, false)]
+    [InlineData(false, true)]
+    [InlineData(true, false)]
+    [InlineData(true, true)]
+    public async Task DifferentCodesLinearizeUnderSelectedOwnerUsageAdmissionWithoutASurvivingSession(bool exactUsage, bool sameOperation)
+    {
+        await using var db = await fixture.CreateDatabaseAsync(); var profile = new Profile(); await using var host = await Host(db, profile); var account = await host.SeedAsync(db);
+        using var winning = await Generate(host, await Login(host));
+        using (var signedOut = await host.Post("/authentication/sign-out", new { }, winning.Pending.Cookies, winning.Pending.Csrf)) Assert.True(signedOut.StatusCode == HttpStatusCode.OK);
+        var firstRequest = ConsumeRequest(account); var secondRequest = sameOperation ? firstRequest : ConsumeRequest(account);
+        async Task<RecoveryCodeConsumptionResult> Consume(RecoveryCodeConsumptionRequest request, RecoveryCodeValue code)
+        {
+            await using var scope = host.Services.CreateAsyncScope();
+            var owner = new AccountOwner(winning.Pending.Set, host.Clock) { UsageAdmission = exactUsage ? RecoveryCodeUsageAdmission.ExactUsageSnapshot : RecoveryCodeUsageAdmission.IndependentUnusedEntry, ExpectedUsageVersion = exactUsage ? 0 : null };
+            return await scope.ServiceProvider.GetRequiredService<RecoveryCodeApplication>().ExecuteConsumptionOutcomeAsync(request, code.NativeInput(), owner);
+        }
+        var results = await Task.WhenAll(Consume(firstRequest, winning.Codes[0]), Consume(secondRequest, winning.Codes[1]));
+        var expected = exactUsage || sameOperation ? 1 : 2;
+        Assert.True(results.Count(x => x.Consumed) == expected);
+        Assert.True(sameOperation ? results.Count(x => x.Reconciled && !x.Consumed) == 1 : results.Count(x => !x.Consumed) == 2 - expected);
+        await using var check = db.Context();
+        Assert.True(await check.Set<RecoveryCodeEntryRow>().CountAsync(x => x.ConsumedAt != null) == expected);
+        Assert.True(await check.Set<RecoveryCodeEntryRow>().CountAsync(x => x.ConsumedAt == null && x.Version == 1) == 2 - expected);
+        Assert.True(await check.Set<RecoveryCodeSetRow>().AllAsync(x => x.State == "ACTIVE" && x.LifecycleVersion == 1 && x.UsageVersion == expected));
+        Assert.True(await check.Set<OutboxMessage>().CountAsync(x => x.EventType == "FixtureRecoveryOwnerApplied") == expected);
+        Assert.True(!await check.Set<AuthenticationSessionRow>().AnyAsync(x => x.State == "ACTIVE"));
+        Assert.True(await check.Set<AuthenticationSessionRow>().CountAsync() == 1);
+    }
+
+    [Theory]
+    [InlineData(false)]
+    [InlineData(true)]
+    public async Task MalformedFailuresPersistSelectedAccountAndNetworkAttemptLimits(bool networkLimited)
+    {
+        await using var db = await fixture.CreateDatabaseAsync(); var profile = new Profile();
+        profile.Policy = profile.Policy with { ConsumptionAccountAttemptLimit = networkLimited ? 100 : 2, ConsumptionNetworkAttemptLimit = networkLimited ? 2 : 100 };
+        await using var host = await Host(db, profile); var account = await host.SeedAsync(db); using var winning = await Generate(host, await Login(host));
+        foreach (var input in new[] { "not-a-code", string.Empty })
+        {
+            await using var scope = host.Services.CreateAsyncScope();
+            var result = await scope.ServiceProvider.GetRequiredService<RecoveryCodeApplication>().ExecuteConsumptionOutcomeAsync(ConsumeRequest(account), input, new AccountOwner(winning.Pending.Set, host.Clock));
+            Assert.True(!result.Consumed && result.ErrorCode == "RECOVERY_CODE_REJECTED");
+        }
+        await using (var scope = host.Services.CreateAsyncScope())
+        {
+            var result = await scope.ServiceProvider.GetRequiredService<RecoveryCodeApplication>().ExecuteConsumptionOutcomeAsync(ConsumeRequest(account), winning.Code.NativeInput(), new AccountOwner(winning.Pending.Set, host.Clock));
+            Assert.True(!result.Consumed && result.ErrorCode == "RATE_OR_ABUSE_LIMITED");
+        }
+        await using var check = db.Context();
+        Assert.True(await check.Set<AuthenticationAbuseRow>().AnyAsync(x => x.Partition == "recovery-code:A:" + account && x.Count == 2));
+        Assert.True(await check.Set<AuthenticationAbuseRow>().AnyAsync(x => x.Partition == "recovery-code:N:" + new string('B', 64) && x.Count == (networkLimited ? 2 : 3)));
+        Assert.True(await check.Set<RecoveryCodeEntryRow>().AllAsync(x => x.ConsumedAt == null && x.Version == 1));
+        Assert.True(!await check.Set<OutboxMessage>().AnyAsync(x => x.EventType == "FixtureRecoveryOwnerApplied"));
+        Assert.True(await check.Accounts.AllAsync(x => x.State == AccountState.Active && x.Version == 1));
+    }
+
+    [Fact]
+    public async Task ConcurrentReplacementsOfSameOriginalFactsReleaseOnlyOneGeneration()
+    {
+        await using var db = await fixture.CreateDatabaseAsync(); var profile = new Profile(); await using var host = await Host(db, profile); await host.SeedAsync(db);
+        using var winning = await Generate(host, await Login(host));
+        var first = await Begin(host, winning.Pending.Cookies, "REPLACE"); var second = await Begin(host, winning.Pending.Cookies, "REPLACE");
+        var firstProof = await PreparePasswordRequest(host, first); var secondProof = await PreparePasswordRequest(host, second);
+        var firstTask = host.Post("/authentication/step-up/password", new { requestId = firstProof, password = Password }, first.Cookies, first.Csrf);
+        var secondTask = host.Post("/authentication/step-up/password", new { requestId = secondProof, password = Password }, second.Cookies, second.Csrf);
+        try
+        {
+            var replies = await Task.WhenAll(firstTask, secondTask);
+            var disclosures = 0;
+            foreach (var reply in replies) { using var body = await reply.Content.ReadFromJsonAsync<JsonDocument>(); if (body!.RootElement.TryGetProperty("recoveryCodeFirstDelivery", out _)) { Assert.True(reply.StatusCode == HttpStatusCode.OK); disclosures++; } }
+            Assert.True(disclosures == 1);
+            await using var check = db.Context();
+            Assert.True(await check.Set<RecoveryCodeSetRow>().CountAsync() == 2);
+            Assert.True(await check.Set<RecoveryCodeSetRow>().CountAsync(x => x.State == "ACTIVE") == 1);
+            Assert.True(await check.Set<RecoveryCodeSetRow>().CountAsync(x => x.SetReference == winning.Pending.Set && x.State == "REPLACED" && x.LifecycleVersion == 2) == 1);
+            Assert.True(await check.Set<RecoveryCodeOperationRow>().CountAsync(x => x.Kind == "REPLACE" && x.State == "COMPLETED") == 1);
+            Assert.True(await check.Set<OutboxMessage>().CountAsync(x => x.EventType == "RecoveryCodeSetReplaced") == 1);
+            Assert.True(await check.Set<StepUpProofRow>().CountAsync(x => x.State == "CONSUMED") == 2);
+        }
+        finally
+        {
+            if (firstTask.IsCompletedSuccessfully) firstTask.Result.Dispose();
+            if (secondTask.IsCompletedSuccessfully) secondTask.Result.Dispose();
+        }
+    }
+
+    private static async Task WaitForActualDatabaseLockWait(IdentityTestDatabase db)
+    {
+        await using var check = db.Context();
+        for (var attempt = 0; attempt < 200; attempt++)
+        {
+            var blocked = await check.Database.SqlQueryRaw<bool>("SELECT EXISTS(SELECT 1 FROM pg_stat_activity WHERE datname=current_database() AND pid<>pg_backend_pid() AND wait_event_type='Lock') AS \"Value\"").SingleAsync();
+            if (blocked) return;
+            await Task.Delay(25);
+        }
+        Assert.True(false, "Expected private fixture lock barrier was not reached.");
+    }
+
+    [Theory]
+    [InlineData(false)]
+    [InlineData(true)]
+    public async Task ConsumeAndReplacementRespectBothActualLockOrderings(bool replaceFirst)
+    {
+        await using var db = await fixture.CreateDatabaseAsync(); var profile = new Profile(); await using var host = await Host(db, profile); var account = await host.SeedAsync(db);
+        using var winning = await Generate(host, await Login(host)); var pending = await Begin(host, winning.Pending.Cookies, "REPLACE"); var proofRequest = await PreparePasswordRequest(host, pending);
+        var entered = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously); var release = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
+        Task<RecoveryCodeConsumptionResult>? consumeTask = null; Task<HttpResponseMessage>? proofTask = null; RecoveryCodeConsumptionResult? consumed = null; HttpResponseMessage? proofReply = null;
+        try
+        {
+        async Task<RecoveryCodeConsumptionResult> Consume(AccountOwner owner)
+        {
+            await using var scope = host.Services.CreateAsyncScope();
+            return await scope.ServiceProvider.GetRequiredService<RecoveryCodeApplication>().ExecuteConsumptionOutcomeAsync(ConsumeRequest(account), winning.Code.NativeInput(), owner);
+        }
+        Task<HttpResponseMessage> ProveHeld() => host.Post("/authentication/step-up/password", new { requestId = proofRequest, password = Password }, pending.Cookies, pending.Csrf);
+        try
+        {
+            if (replaceFirst)
+            {
+                profile.BeforeAdmission = async (request, ct) => { if (request.Kind == "REPLACE") { entered.TrySetResult(); await release.Task.WaitAsync(ct); } };
+                proofTask = ProveHeld(); await entered.Task.WaitAsync(TimeSpan.FromSeconds(15));
+                consumeTask = Consume(new AccountOwner(winning.Pending.Set, host.Clock) { KeepAccountActive = true });
+            }
+            else
+            {
+                consumeTask = Consume(new AccountOwner(winning.Pending.Set, host.Clock) { KeepAccountActive = true, AfterAdmission = async ct => { entered.TrySetResult(); await release.Task.WaitAsync(ct); } });
+                await entered.Task.WaitAsync(TimeSpan.FromSeconds(15)); proofTask = ProveHeld();
+            }
+            await WaitForActualDatabaseLockWait(db);
+        }
+        finally
+        {
+            release.TrySetResult(); profile.BeforeAdmission = null;
+            try { if (proofTask is not null) proofReply = await proofTask; }
+            finally { if (consumeTask is not null) consumed = await consumeTask; }
+        }
+        using (proofReply)
+        {
+            Assert.True(proofReply is not null && consumed is not null);
+            using var body = await proofReply!.Content.ReadFromJsonAsync<JsonDocument>();
+            Assert.True(body!.RootElement.TryGetProperty("recoveryCodeFirstDelivery", out _) == replaceFirst);
+            Assert.True(replaceFirst ? !consumed!.Consumed && consumed.ErrorCode == "RECOVERY_CODE_REJECTED" : consumed!.Consumed);
+            await using var check = db.Context();
+            var original = await check.Set<RecoveryCodeSetRow>().SingleAsync(x => x.SetReference == winning.Pending.Set);
+            Assert.True(replaceFirst ? original.State == "REPLACED" && original.LifecycleVersion == 2 && original.UsageVersion == 0 : original.State == "ACTIVE" && original.LifecycleVersion == 1 && original.UsageVersion == 1);
+            Assert.True(await check.Set<OutboxMessage>().CountAsync(x => x.EventType == "FixtureRecoveryOwnerApplied") == (replaceFirst ? 0 : 1));
+            Assert.True(await check.Set<OutboxMessage>().CountAsync(x => x.EventType == "RecoveryCodeSetReplaced") == (replaceFirst ? 1 : 0));
+        }
+        if (!replaceFirst)
+        {
+            using var fresh = await Generate(host, winning.Pending.Cookies, "REPLACE");
+            await using var check = db.Context();
+            Assert.True(await check.Set<RecoveryCodeSetRow>().AnyAsync(x => x.SetReference == winning.Pending.Set && x.State == "REPLACED" && x.UsageVersion == 1));
+            Assert.True(await check.Set<RecoveryCodeEntryRow>().CountAsync(x => x.SetReference == winning.Pending.Set && x.ConsumedAt != null) == 1);
+        }
+        }
+        finally { proofReply?.Dispose(); }
     }
 
     [Fact]
