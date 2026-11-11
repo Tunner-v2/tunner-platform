@@ -22,7 +22,8 @@ public static class RecoveryCodeFiniteNativeExecution
         "DISTINCT_CODES_ANY_DIFFERENT_OWNER", "DISTINCT_CODES_ANY_SAME_OWNER", "DISTINCT_CODES_EXACT_DIFFERENT_OWNER", "DISTINCT_CODES_EXACT_SAME_OWNER",
         "ATTEMPT_LIMIT_ACCOUNT", "ATTEMPT_LIMIT_NETWORK", "REPLACEMENT_SAME_FACTS_RACE", "CONSUME_BEFORE_REPLACE", "REPLACE_BEFORE_CONSUME",
         "PROOF_ABSENT", "PROOF_WRONG_PASSWORD", "PROOF_INSUFFICIENT", "PROOF_EXPIRED", "PROOF_CONSUMED",
-        "BIND_OPERATION", "BIND_CORRELATION", "BIND_SCOPE", "BIND_CONTEXT", "BIND_RESOURCE", "BIND_VERSION", "BIND_DIGEST", "BIND_SESSION", "BIND_ACCOUNT", "BIND_ORIGIN", "BIND_KEY", "BFF_CSRF_ORIGIN_OWNER"];
+        "BIND_OPERATION", "BIND_CORRELATION", "BIND_SCOPE", "BIND_CONTEXT", "BIND_RESOURCE", "BIND_VERSION", "BIND_DIGEST", "BIND_SESSION", "BIND_ACCOUNT", "BIND_ORIGIN", "BIND_KEY", "BFF_CSRF_ORIGIN_OWNER",
+        "STABLE_GENERATE_DUPLICATE", "STABLE_REPLACE_DUPLICATE", "CONSUME_OWNER_THROW", "CONSUME_OWNER_CANCEL", "GENERATE_POST_COMMIT_OBSERVER", "REPLACE_POST_COMMIT_OBSERVER", "CONSUME_POST_COMMIT_OBSERVER", "CORRUPT_VERIFIER_FAIL_CLOSED"];
 
     internal static async Task<RecoveryCodeNativeReceipt> RunAsync(RecoveryCodeNativeCohort cohort, Uri qualifiedLocalEndpoint, DirectoryInfo repository, RecoveryCodeFixtureOwnershipChannel ownershipChannel)
     {
@@ -225,6 +226,14 @@ public static class RecoveryCodeFiniteNativeExecution
             "BIND_ORIGIN" => tests.RecoveryProofRejectsEverySubstitutedOwnerBindingBeforeCallback("origin"),
             "BIND_KEY" => tests.RecoveryProofRejectsEverySubstitutedOwnerBindingBeforeCallback("key"),
             "BFF_CSRF_ORIGIN_OWNER" => tests.RecoveryBffRejectsCrossOwnerCsrfOriginAndUnmappedAccountSelectorsWithoutEnumeration(),
+            "STABLE_GENERATE_DUPLICATE" => tests.StableGenerateOrReplaceRequestRacesAndChangedBindingAreIdempotent(false),
+            "STABLE_REPLACE_DUPLICATE" => tests.StableGenerateOrReplaceRequestRacesAndChangedBindingAreIdempotent(true),
+            "CONSUME_OWNER_THROW" => tests.ConsumeOwnerThrowOrCancellationRollsBackProvisionalClaim(false),
+            "CONSUME_OWNER_CANCEL" => tests.ConsumeOwnerThrowOrCancellationRollsBackProvisionalClaim(true),
+            "GENERATE_POST_COMMIT_OBSERVER" => tests.IssuancePostCommitObserverFailureReturnsNoPayloadAndOnlySafeOriginal(false),
+            "REPLACE_POST_COMMIT_OBSERVER" => tests.IssuancePostCommitObserverFailureReturnsNoPayloadAndOnlySafeOriginal(true),
+            "CONSUME_POST_COMMIT_OBSERVER" => tests.ConsumePostCommitObserverFailureReconcilesOnlyOriginalSafeOutcome(),
+            "CORRUPT_VERIFIER_FAIL_CLOSED" => tests.CorruptedPersistedVerifierFailsClosedBeforeAnyOwnerApplication(),
             _ => throw new InvalidOperationException("RECOVERY_NATIVE_CASE_INVALID")
         };
     }

@@ -1,8 +1,10 @@
+using System.Data.Common;
 using System.Globalization;
 using System.Net;
 using System.Net.Http.Json;
 using System.Text.Json;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.DependencyInjection;
 using Tunner.Accounts;
 using Tunner.Database.Outbox;
@@ -81,10 +83,11 @@ public sealed class RecoveryCodePrivateIntegrationTests(IdentityPostgresFixture 
         }
         public StepUpPresentation RequirePublished(AssurancePolicyVersion policy) => new StepUpBrowserTests.Presentation().RequirePublished(policy);
     }
-    private static Task<AuthenticationTestHost> Host(IdentityTestDatabase db, Profile profile) => Start(db, services =>
+    private static Task<AuthenticationTestHost> Host(IdentityTestDatabase db, Profile profile, DbTransactionInterceptor? commitObserver = null) => Start(db, services =>
     {
         services.AddSingleton(profile.Crypto); services.AddSingleton<IRecoveryCodePolicySource>(profile); services.AddSingleton<IRecoveryCodeMutationAdmissionSource>(profile);
         services.AddSingleton<IRecoveryCodePresentationSource>(profile); services.AddSingleton<IAssurancePolicySource>(profile); services.AddSingleton<IStepUpPresentationSource>(profile);
+        if (commitObserver is not null) services.AddDbContext<IdentityPersistenceDbContext>(options => options.AddInterceptors(commitObserver));
     });
     private sealed class Pending(Guid request, Guid operation, Guid set, string cookies, string csrf) // Safe refs only; no values in auto-record printing.
     {
@@ -230,6 +233,9 @@ public sealed class RecoveryCodePrivateIntegrationTests(IdentityPostgresFixture 
     private sealed class AccountOwner(Guid set, TimeProvider clock) : IRecoveryCodeConsumptionOwner
     {
         internal bool RejectAfterMutation { get; set; }
+        internal bool ThrowAfterMutation { get; set; }
+        internal CancellationTokenSource? CancelAfterMutation { get; set; }
+        internal bool ProvisionalClaimObserved { get; private set; }
         internal bool FinalCurrent { get; set; } = true;
         internal IdentityPersistenceDbContext? ForeignDatabase { get; set; }
         internal bool WrongRequest { get; set; }
@@ -238,6 +244,7 @@ public sealed class RecoveryCodePrivateIntegrationTests(IdentityPostgresFixture 
         internal bool KeepAccountActive { get; set; }
         internal Func<CancellationToken, Task>? AfterAdmission { get; set; }
         internal int Admissions { get; private set; }
+        internal int Applications { get; private set; }
         private AccountRow? account;
         private Guid eventId;
         private bool priorObserved;
@@ -255,10 +262,19 @@ public sealed class RecoveryCodePrivateIntegrationTests(IdentityPostgresFixture 
         }
         public Task<RecoveryCodeConsumptionOwnerOutcome> ApplyAsync(IdentityPersistenceDbContext db, RecoveryCodeConsumptionRequest request, RecoveryCodeConsumptionAdmission admission, CancellationToken ct)
         {
+            Applications++;
             account!.State = KeepAccountActive ? AccountState.Active : AccountState.Restricted; account.Version++; account.RecordedAtUtc = clock.GetUtcNow(); account.OperationId = request.OwnerOperationId;
             account.CorrelationId = request.CorrelationId; account.EvidenceReference = "fixture-owner-result"; eventId = Guid.NewGuid();
             db.Add(new OutboxMessage(eventId, "1.0", "FixtureRecoveryOwnerApplied", "1", clock.GetUtcNow(), "tunner/identity", account.AccountId, "RESTRICTED_SECURITY",
                 JsonSerializer.Serialize(new { reference = request.OwnerOperationId }), account.Version.ToString(CultureInfo.InvariantCulture), request.OwnerOperationId, request.CorrelationId));
+            if (ThrowAfterMutation || CancelAfterMutation is not null)
+            {
+                ProvisionalClaimObserved = db.Database.CurrentTransaction is not null &&
+                    db.ChangeTracker.Entries<RecoveryCodeEntryRow>().Any(x => x.Entity.ConsumedByOperationId == request.OwnerOperationId && x.Entity.ConsumedAt != null && x.Entity.Version == 2 && x.State == EntityState.Modified) &&
+                    db.ChangeTracker.Entries<OutboxMessage>().Any(x => x.Entity.EventId == eventId && x.State == EntityState.Added);
+                if (CancelAfterMutation is { } cancellation) { cancellation.Cancel(); ct.ThrowIfCancellationRequested(); }
+                throw new PrivateOwnerFault();
+            }
             return Task.FromResult(new RecoveryCodeConsumptionOwnerOutcome(db, db.Database.CurrentTransaction!, admission, !RejectAfterMutation, "fixture-owner-result", account.Version, account.State,
                 "fixture-recovery-owner-v1", Profile.Interval, [eventId]));
         }
@@ -621,10 +637,236 @@ public sealed class RecoveryCodePrivateIntegrationTests(IdentityPostgresFixture 
         Assert.True(!await check.Set<OutboxMessage>().AnyAsync(x => x.EventType == "RecoveryCodeSetGenerated"));
     }
 
+    public async Task StableGenerateOrReplaceRequestRacesAndChangedBindingAreIdempotent(bool replace)
+    {
+        await using var db = await fixture.CreateFiniteDatabaseAsync(CancellationToken.None); var profile = new Profile(); await using var host = await Host(db, profile); await host.SeedAsync(db);
+        using var previous = replace ? await Generate(host, await Login(host)) : null;
+        var caller = await TrustedSignIn(host); var ownerRequest = Guid.NewGuid(); var kind = replace ? "REPLACE" : "GENERATE";
+        async Task<RecoveryCodeOperationResult> StartOriginal(string requestedKind, long expectedVersion)
+        {
+            await using var scope = host.Services.CreateAsyncScope();
+            return await scope.ServiceProvider.GetRequiredService<RecoveryCodeApplication>().StartAsync(caller, requestedKind, new RecoveryCodeStartCommand { OwnerRequestId = ownerRequest, ExpectedVersion = expectedVersion }, CancellationToken.None);
+        }
+        var entered = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously); var release = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
+        Task<RecoveryCodeOperationResult>? first = null, second = null; RecoveryCodeOperationResult[] starts = [];
+        try
+        {
+            profile.BeforeAdmission = async (_, ct) => { entered.TrySetResult(); await release.Task.WaitAsync(ct); };
+            first = StartOriginal(kind, 1); await entered.Task.WaitAsync(TimeSpan.FromSeconds(15)); second = StartOriginal(kind, 1);
+            await WaitForActualDatabaseLockWait(db); release.TrySetResult(); starts = await Task.WhenAll(first, second);
+        }
+        finally
+        {
+            release.TrySetResult(); profile.BeforeAdmission = null;
+            if (first is not null) try { await first; } catch (Exception error) when (error is not OutOfMemoryException) { }
+            if (second is not null) try { await second; } catch (Exception error) when (error is not OutOfMemoryException) { }
+        }
+        Assert.True(starts.Length == 2 && starts[0].ErrorCode is null && starts[0].Operation is not null && starts[1].ErrorCode is null && starts[1].Operation is not null);
+        var original = starts[0].Operation!;
+        Assert.True(starts[1].Operation!.OperationId == original.OperationId && starts[1].Operation!.SetReference == original.SetReference && starts[1].Operation!.ContextDigest == original.ContextDigest);
+        var changedVersion = await StartOriginal(kind, 2); var changedKind = await StartOriginal(replace ? "GENERATE" : "REPLACE", 1);
+        Assert.True(changedVersion.ErrorCode == "VERSION_CONFLICT" && changedKind.ErrorCode == "VERSION_CONFLICT");
+        UserStepUpOperationContext context;
+        await using (var scope = host.Services.CreateAsyncScope())
+        {
+            var resolved = await scope.ServiceProvider.GetRequiredService<RecoveryCodeApplication>().ResolveAsync(caller, original.OperationId, ownerRequest, CancellationToken.None);
+            Assert.True(resolved is not null); context = resolved!;
+        }
+        var proof = await IssueTrustedRecoveryProof(host, caller, context); Assert.True(proof.ErrorCode is null && proof.Grant is not null);
+        await using (var scope = host.Services.CreateAsyncScope())
+        {
+            var binding = context.Binding; var changed = new StepUpOperation(binding.OperationId, binding.CorrelationId, binding.Scope, binding.ResourceId, binding.ExpectedVersion, new('E', 64)); var callback = false;
+            using var rejected = await scope.ServiceProvider.GetRequiredService<StepUpApplication>().ExecuteOutcomeAsync(caller, changed, proof.Grant!.Key, _ => { callback = true; return Task.FromResult(UserStepUpOperationApplyOutcome.Conflict()); });
+            Assert.True(!rejected.Applied && !rejected.HasRecoveryDelivery && !callback);
+        }
+        async Task<StepUpExecutionResult> Execute()
+        {
+            await using var scope = host.Services.CreateAsyncScope(); var recovery = scope.ServiceProvider.GetRequiredService<RecoveryCodeApplication>();
+            return await scope.ServiceProvider.GetRequiredService<StepUpApplication>().ExecuteOutcomeAsync(caller, context.Binding, proof.Grant!.Key, ct => recovery.ApplyAsync(caller, context, ct));
+        }
+        Task<StepUpExecutionResult>? firstExecution = null, secondExecution = null;
+        try
+        {
+            firstExecution = Execute(); secondExecution = Execute(); var executions = await Task.WhenAll(firstExecution, secondExecution);
+            Assert.True(executions.Count(x => x.Applied) == 1 && executions.Count(x => x.HasRecoveryDelivery) == 1 && executions.All(x => x.Applied || !x.HasRecoveryDelivery));
+        }
+        finally
+        {
+            // Retain and settle both owned tasks even if only one completed successfully with a disposable payload.
+            if (firstExecution is not null) try { await firstExecution; } catch (Exception error) when (error is not OutOfMemoryException) { }
+            if (secondExecution is not null) try { await secondExecution; } catch (Exception error) when (error is not OutOfMemoryException) { }
+            if (firstExecution?.IsCompletedSuccessfully == true) (await firstExecution).Dispose();
+            if (secondExecution?.IsCompletedSuccessfully == true) (await secondExecution).Dispose();
+        }
+        var safe = await StartOriginal(kind, 1); Assert.True(safe.ErrorCode is null && safe.Operation is { State: "COMPLETED" } completed && completed.OperationId == original.OperationId);
+        await using var check = db.Context();
+        Assert.True(await check.Set<RecoveryCodeOperationRow>().CountAsync(x => x.RequestId == ownerRequest) == 1);
+        Assert.True(await check.Set<RecoveryCodeSetRow>().CountAsync(x => x.IssuanceOperationId == original.OperationId) == 1);
+        Assert.True(await check.Set<RecoveryCodeEntryRow>().CountAsync(x => x.SetReference == original.SetReference) == profile.Crypto.CodesPerSet);
+        Assert.True(await check.Set<StepUpProofRow>().CountAsync(x => x.OperationId == context.Binding.OperationId && x.State == "CONSUMED") == 1);
+        Assert.True(await check.Set<OutboxMessage>().CountAsync(x => x.OperationId == context.Binding.OperationId && x.EventType == (replace ? "RecoveryCodeSetReplaced" : "RecoveryCodeSetGenerated")) == 1);
+    }
+
+    public async Task ConsumeOwnerThrowOrCancellationRollsBackProvisionalClaim(bool cancel)
+    {
+        await using var db = await fixture.CreateFiniteDatabaseAsync(CancellationToken.None); var profile = new Profile(); await using var host = await Host(db, profile); var account = await host.SeedAsync(db);
+        using var winning = await Generate(host, await Login(host)); using var cancellation = new CancellationTokenSource();
+        var owner = new AccountOwner(winning.Pending.Set, host.Clock) { ThrowAfterMutation = !cancel, CancelAfterMutation = cancel ? cancellation : null }; var caught = false; var returned = false;
+        await using (var scope = host.Services.CreateAsyncScope())
+        {
+            try { _ = await scope.ServiceProvider.GetRequiredService<RecoveryCodeApplication>().ExecuteConsumptionOutcomeAsync(ConsumeRequest(account), winning.Code.NativeInput(), owner, cancellation.Token); returned = true; }
+            catch (PrivateOwnerFault) when (!cancel) { caught = true; }
+            catch (OperationCanceledException) when (cancel && cancellation.IsCancellationRequested) { caught = true; }
+        }
+        Assert.True(caught && !returned && owner.ProvisionalClaimObserved);
+        await using (var check = db.Context())
+        {
+            Assert.True(await check.Set<RecoveryCodeEntryRow>().AllAsync(x => x.ConsumedAt == null && x.Version == 1 && x.ConsumedByOperationId == null));
+            Assert.True(await check.Set<RecoveryCodeSetRow>().AllAsync(x => x.UsageVersion == 0 && x.LifecycleVersion == 1));
+            Assert.True(await check.Accounts.AllAsync(x => x.State == AccountState.Active && x.Version == 1));
+            Assert.True(!await check.Set<OutboxMessage>().AnyAsync(x => x.EventType == "FixtureRecoveryOwnerApplied"));
+        }
+        await using var retry = host.Services.CreateAsyncScope();
+        var accepted = await retry.ServiceProvider.GetRequiredService<RecoveryCodeApplication>().ExecuteConsumptionOutcomeAsync(ConsumeRequest(account), winning.Code.NativeInput(), new AccountOwner(winning.Pending.Set, host.Clock));
+        Assert.True(accepted.Consumed && !accepted.Reconciled && accepted.ErrorCode is null && accepted.OutcomeReference == "fixture-owner-result");
+    }
+
+    // The existing EF post-COMMIT observer is a simulated observation failure, not a physical network fault.
+    private sealed class PostCommitObserverFailure(bool issuance) : DbTransactionInterceptor
+    {
+        internal bool Armed { get; set; }
+        internal bool Fired { get; private set; }
+        public override Task TransactionCommittedAsync(DbTransaction transaction, TransactionEndEventData eventData, CancellationToken cancellationToken = default)
+        {
+            if (!Armed || Fired || eventData.Context is not IdentityPersistenceDbContext db) return Task.CompletedTask;
+            var matches = issuance ? db.ChangeTracker.Entries<RecoveryCodeOperationRow>().Any(x => x.Entity.State == "COMPLETED") :
+                db.ChangeTracker.Entries<RecoveryCodeEntryRow>().Any(x => x.Entity.ConsumedAt != null && x.Entity.ConsumptionOutcomeReference == "fixture-owner-result");
+            if (!matches) return Task.CompletedTask;
+            Fired = true; throw new PrivateCommitObservationFault();
+        }
+    }
+    private sealed class PrivateCommitObservationFault : Exception;
+    private sealed class PrivateOwnerFault : Exception;
+
+    public async Task IssuancePostCommitObserverFailureReturnsNoPayloadAndOnlySafeOriginal(bool replace)
+    {
+        await using var db = await fixture.CreateFiniteDatabaseAsync(CancellationToken.None); var profile = new Profile(); var fault = new PostCommitObserverFailure(true);
+        await using var host = await Host(db, profile, fault); await host.SeedAsync(db); using var previous = replace ? await Generate(host, await Login(host)) : null;
+        var caller = await TrustedSignIn(host); var kind = replace ? "REPLACE" : "GENERATE"; var request = Guid.NewGuid(); UserStepUpOperationContext context;
+        await using (var scope = host.Services.CreateAsyncScope())
+        {
+            var application = scope.ServiceProvider.GetRequiredService<RecoveryCodeApplication>();
+            var started = await application.StartAsync(caller, kind, new RecoveryCodeStartCommand { OwnerRequestId = request, ExpectedVersion = 1 }, CancellationToken.None);
+            Assert.True(started.ErrorCode is null && started.Operation is not null);
+            var resolved = await application.ResolveAsync(caller, started.Operation!.OperationId, request, CancellationToken.None); Assert.True(resolved is not null); context = resolved!;
+        }
+        var proof = await IssueTrustedRecoveryProof(host, caller, context); Assert.True(proof.ErrorCode is null && proof.Grant is not null);
+        fault.Armed = true; var caught = false; StepUpExecutionResult? returned = null;
+        await using (var scope = host.Services.CreateAsyncScope())
+        {
+            var application = scope.ServiceProvider.GetRequiredService<RecoveryCodeApplication>();
+            try { returned = await scope.ServiceProvider.GetRequiredService<StepUpApplication>().ExecuteOutcomeAsync(caller, context.Binding, proof.Grant!.Key, ct => application.ApplyAsync(caller, context, ct)); }
+            catch (PrivateCommitObservationFault) { caught = true; }
+            finally { returned?.Dispose(); }
+        }
+        Assert.True(fault.Fired && caught && returned is null); // The application caller has no committed outcome/payload.
+        await using (var check = db.Context())
+        {
+            Assert.True(await check.Set<RecoveryCodeOperationRow>().CountAsync(x => x.RequestId == request && x.State == "COMPLETED" && x.FirstResponseCommittedAt != null) == 1);
+            Assert.True(await check.Set<RecoveryCodeSetRow>().CountAsync(x => x.IssuanceOperationId == Guid.ParseExact(context.Binding.CorrelationId, "N")) == 1);
+            Assert.True(await check.Set<StepUpProofRow>().CountAsync(x => x.OperationId == context.Binding.OperationId && x.State == "CONSUMED") == 1);
+            Assert.True(await check.Set<OutboxMessage>().CountAsync(x => x.OperationId == context.Binding.OperationId && x.EventType == (replace ? "RecoveryCodeSetReplaced" : "RecoveryCodeSetGenerated")) == 1);
+        }
+        await using var retry = host.Services.CreateAsyncScope(); var recovery = retry.ServiceProvider.GetRequiredService<RecoveryCodeApplication>();
+        var safe = await recovery.ReadAsync(caller, Guid.ParseExact(context.Binding.CorrelationId, "N"), request, CancellationToken.None);
+        Assert.True(safe is { State: "COMPLETED", FirstResponseCommittedAt: not null });
+        var callback = false;
+        using var repeated = await retry.ServiceProvider.GetRequiredService<StepUpApplication>().ExecuteOutcomeAsync(caller, context.Binding, proof.Grant!.Key, ct => { callback = true; return recovery.ApplyAsync(caller, context, ct); });
+        Assert.True(!repeated.Applied && !repeated.HasRecoveryDelivery && !callback);
+    }
+
+    public async Task ConsumePostCommitObserverFailureReconcilesOnlyOriginalSafeOutcome()
+    {
+        await using var db = await fixture.CreateFiniteDatabaseAsync(CancellationToken.None); var profile = new Profile(); var fault = new PostCommitObserverFailure(false);
+        await using var host = await Host(db, profile, fault); var account = await host.SeedAsync(db); using var winning = await Generate(host, await Login(host)); var request = ConsumeRequest(account);
+        fault.Armed = true; var caught = false; RecoveryCodeConsumptionResult? returned = null;
+        await using (var scope = host.Services.CreateAsyncScope())
+        {
+            try { returned = await scope.ServiceProvider.GetRequiredService<RecoveryCodeApplication>().ExecuteConsumptionOutcomeAsync(request, winning.Code.NativeInput(), new AccountOwner(winning.Pending.Set, host.Clock)); }
+            catch (PrivateCommitObservationFault) { caught = true; }
+        }
+        Assert.True(fault.Fired && caught && returned is null); // Actual outcome is unknown to this failed application call.
+        await using (var check = db.Context())
+        {
+            Assert.True(await check.Set<RecoveryCodeEntryRow>().CountAsync(x => x.ConsumedByOperationId == request.OwnerOperationId && x.ConsumedAt != null && x.Version == 2) == 1);
+            Assert.True(await check.Set<RecoveryCodeSetRow>().AllAsync(x => x.UsageVersion == 1 && x.LifecycleVersion == 1));
+            Assert.True(await check.Accounts.AllAsync(x => x.State == AccountState.Restricted && x.Version == 2 && x.OperationId == request.OwnerOperationId && x.CorrelationId == request.CorrelationId));
+            var intent = await check.Set<OutboxMessage>().SingleAsync(x => x.EventType == "FixtureRecoveryOwnerApplied");
+            using var payload = JsonDocument.Parse(intent.Payload);
+            Assert.True(intent.Source == "tunner/identity" && intent.OperationId == request.OwnerOperationId && intent.CorrelationId == request.CorrelationId &&
+                payload.RootElement.EnumerateObject().Count() == 1 && payload.RootElement.GetProperty("reference").GetString() == request.OwnerOperationId);
+            await using var verifierScope = host.Services.CreateAsyncScope(); var native = verifierScope.ServiceProvider.GetRequiredService<RecoveryCodeNative>();
+            var stored = await check.Set<RecoveryCodeEntryRow>().ToArrayAsync(); var verifierSafe = stored.All(x => native.AdmittedVerifier(x.Verifier));
+            Assert.True(verifierSafe && !await check.UserTokens.AnyAsync(x => x.Name == "RecoveryCodes"));
+        }
+        await using (var retry = host.Services.CreateAsyncScope())
+        {
+            var safe = await retry.ServiceProvider.GetRequiredService<RecoveryCodeApplication>().ExecuteConsumptionOutcomeAsync(request, null, new AccountOwner(winning.Pending.Set, host.Clock));
+            Assert.True(safe.Reconciled && !safe.Consumed && safe.ErrorCode is null && safe.OutcomeReference == "fixture-owner-result");
+        }
+        foreach (var change in new[] { "correlation", "context" })
+        {
+            var substituted = new RecoveryCodeConsumptionRequest(request.AccountId, request.OwnerOperationId, change == "correlation" ? Guid.NewGuid().ToString("N") : request.CorrelationId,
+                change == "context" ? new('F', 64) : request.ContextDigest, request.Origin, request.NetworkDigest);
+            await using var scope = host.Services.CreateAsyncScope();
+            var conflict = await scope.ServiceProvider.GetRequiredService<RecoveryCodeApplication>().ExecuteConsumptionOutcomeAsync(substituted, null, new AccountOwner(winning.Pending.Set, host.Clock));
+            Assert.True(!conflict.Consumed && !conflict.Reconciled && conflict.ErrorCode == "VERSION_CONFLICT");
+        }
+        await using var wrong = host.Services.CreateAsyncScope();
+        var rejected = await wrong.ServiceProvider.GetRequiredService<RecoveryCodeApplication>().ExecuteConsumptionOutcomeAsync(ConsumeRequest(account), null, new AccountOwner(winning.Pending.Set, host.Clock));
+        Assert.True(!rejected.Consumed && !rejected.Reconciled && rejected.ErrorCode == "RECOVERY_CODE_REJECTED");
+        await using var final = db.Context(); Assert.True(await final.Set<RecoveryCodeEntryRow>().CountAsync(x => x.ConsumedAt != null) == 1 && await final.Set<OutboxMessage>().CountAsync(x => x.EventType == "FixtureRecoveryOwnerApplied") == 1);
+    }
+
+
     public async Task OrdinaryAuthenticatedHostDoesNotRegisterRecoveryRoutesOrOwnerByDefault()
     {
         await using var db = await fixture.CreateFiniteDatabaseAsync(CancellationToken.None); await using var host = await Start(db); await host.SeedAsync(db); var cookies = await Login(host);
         using var response = await host.Get("/account/recovery-codes/options", cookies);
         Assert.True(response.StatusCode == HttpStatusCode.NotFound && host.Services.GetService<RecoveryCodeApplication>() is null);
+    }
+
+    public async Task CorruptedPersistedVerifierFailsClosedBeforeAnyOwnerApplication()
+    {
+        await using var db = await fixture.CreateFiniteDatabaseAsync(CancellationToken.None); var profile = new Profile();
+        await using var host = await Host(db, profile); var account = await host.SeedAsync(db); var pending = await Begin(host, await Login(host));
+        // Deliberate stored fault fixture: same real owner/planned-set FKs and native profile,
+        // exact candidate count, invalid nonfunctional84-character verifier. SQL guards stay enabled.
+        await using (var seed = db.Context())
+        {
+            seed.Add(new RecoveryCodeSetRow { AccountId = account, SetReference = pending.Set, IssuanceOperationId = pending.Operation,
+                State = "ACTIVE", CreatedAt = host.Clock.GetUtcNow(), PolicyVersion = profile.Policy.Version, CryptoProfileVersion = profile.Crypto.Version,
+                ProcessingReference = profile.Policy.ProcessingReference, RetentionReference = profile.Policy.RetentionReference });
+            for (var index = 0; index < profile.Crypto.CodesPerSet; index++)
+                seed.Add(new RecoveryCodeEntryRow { AccountId = account, SetReference = pending.Set, EntryReference = Guid.NewGuid(),
+                    Verifier = new('!', 84), CryptoProfileVersion = profile.Crypto.Version });
+            await seed.SaveChangesAsync();
+        }
+        var owner = new AccountOwner(pending.Set, host.Clock); var rejected = false;
+        await using (var scope = host.Services.CreateAsyncScope())
+        {
+            try { _ = await scope.ServiceProvider.GetRequiredService<RecoveryCodeApplication>().ExecuteConsumptionOutcomeAsync(ConsumeRequest(account), new string('0', 32), owner); }
+            catch (InvalidOperationException) { rejected = true; }
+        }
+        Assert.True(rejected && owner.Admissions == 1 && owner.Applications == 0);
+        await using var check = db.Context(); var entries = await check.Set<RecoveryCodeEntryRow>().ToArrayAsync();
+        using var native = new RecoveryCodeNative(profile.Crypto);
+        Assert.True(entries.Length == profile.Crypto.CodesPerSet && entries.All(entry => entry.AccountId == account && entry.SetReference == pending.Set &&
+            entry.CryptoProfileVersion == profile.Crypto.Version && !native.AdmittedVerifier(entry.Verifier) && entry.Version == 1 && entry.ConsumedAt == null && entry.ConsumedByOperationId == null));
+        Assert.True(await check.Set<RecoveryCodeSetRow>().AllAsync(set => set.State == "ACTIVE" && set.LifecycleVersion == 1 && set.UsageVersion == 0));
+        Assert.True(await check.Accounts.AllAsync(row => row.State == AccountState.Active && row.Version == 1));
+        Assert.True(!await check.Set<OutboxMessage>().AnyAsync(row => row.EventType == "FixtureRecoveryOwnerApplied"));
+        Assert.True(await check.Set<RecoveryCodeOperationRow>().AllAsync(operation => operation.State == "PENDING_PROOF" && operation.Version == 1 && operation.ProofReference == null));
+        // Failure-counter policy is not inferred from a corrupted dependency row.
     }
 }

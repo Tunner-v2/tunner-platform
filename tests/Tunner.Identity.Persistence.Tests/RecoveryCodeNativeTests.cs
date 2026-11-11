@@ -130,4 +130,65 @@ public sealed class RecoveryCodeNativeTests
         using var retry = native.Generate("PUBLIC_NONFUNCTIONAL_RNG_NO_ACCOUNT", Guid.NewGuid());
         Assert.True(retry.Entries.Count == Profile().CodesPerSet);
     }
+
+    // Occupied-gate witness using the existing test-only framework RNG seam.
+    // Reentry exercises the same fail-fast semaphore admission without detached tasks.
+    private sealed class OccupiedGateRandom(RecoveryCodeNative native) : RandomNumberGenerator
+    {
+        internal bool GateRejected { get; private set; }
+        private int draws;
+        public override void GetBytes(byte[] data) { ArgumentNullException.ThrowIfNull(data); GetBytes(data.AsSpan()); }
+        public override void GetBytes(Span<byte> data)
+        {
+            if (++draws == 1)
+            {
+                try { using var unexpected = native.Generate("PUBLIC_NONFUNCTIONAL_GATE_NO_ACCOUNT", Guid.NewGuid()); }
+                catch (InvalidOperationException) { GateRejected = true; }
+            }
+            data.Fill(draws == 1 ? (byte)0x11 : (byte)0x22);
+        }
+    }
+
+    private sealed class BudgetRandom(TimeSpan duration) : RandomNumberGenerator
+    {
+        internal int Draws { get; private set; }
+        internal bool DelayObserved { get; private set; }
+        public override void GetBytes(byte[] data) { ArgumentNullException.ThrowIfNull(data); GetBytes(data.AsSpan()); }
+        public override void GetBytes(Span<byte> data)
+        {
+            Draws++;
+            var timer = System.Diagnostics.Stopwatch.StartNew();
+            DelayObserved = SpinWait.SpinUntil(() => timer.Elapsed > duration, TimeSpan.FromSeconds(3));
+            if (!DelayObserved) throw new InvalidOperationException("PUBLIC_NONFUNCTIONAL_BUDGET_WAIT_FAILED");
+            data.Fill(0x11);
+        }
+    }
+
+    [Fact]
+    public void OccupiedNativeWorkGateRejectsAnotherCallAndIsReleasedAfterCompletion()
+    {
+        using var native = new RecoveryCodeNative(Profile()); using var random = new OccupiedGateRandom(native);
+        using var prepared = native.Generate("PUBLIC_NONFUNCTIONAL_GATE_NO_ACCOUNT", Guid.NewGuid(), random, CancellationToken.None);
+        Assert.True(random.GateRejected && prepared.Entries.Count == Profile().CodesPerSet);
+        using var canceled = new CancellationTokenSource(); canceled.Cancel(); var enteredAfterRelease = false;
+        try { using var unexpected = native.Generate("PUBLIC_NONFUNCTIONAL_GATE_NO_ACCOUNT", Guid.NewGuid(), canceled.Token); }
+        catch (OperationCanceledException) { enteredAfterRelease = true; }
+        Assert.True(enteredAfterRelease);
+    }
+
+    [Fact]
+    public void NativeElapsedWorkBudgetRejectsTheFirstDelayedDrawAndReleasesItsGate()
+    {
+        var source = Profile(); var duration = TimeSpan.FromMilliseconds(100);
+        var profile = new RecoveryCodeCryptoProfile(source.Version, source.NativeIdentityVersion, source.CodesPerSet, source.MaximumCodesPerSet,
+            source.HashIterations, source.MaximumHashWork, source.MaximumGenerationAttempts, source.MaximumConcurrentWork, duration);
+        using var native = new RecoveryCodeNative(profile); using var random = new BudgetRandom(duration); var exhausted = false;
+        try { using var unexpected = native.Generate("PUBLIC_NONFUNCTIONAL_BUDGET_NO_ACCOUNT", Guid.NewGuid(), random, CancellationToken.None); }
+        catch (InvalidOperationException) { exhausted = true; }
+        Assert.True(exhausted && random.DelayObserved && random.Draws == 1);
+        using var canceled = new CancellationTokenSource(); canceled.Cancel(); var enteredAfterRelease = false;
+        try { using var unexpected = native.Generate("PUBLIC_NONFUNCTIONAL_BUDGET_NO_ACCOUNT", Guid.NewGuid(), canceled.Token); }
+        catch (OperationCanceledException) { enteredAfterRelease = true; }
+        Assert.True(enteredAfterRelease && random.Draws == 1);
+    }
 }
