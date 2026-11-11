@@ -27,7 +27,7 @@ const initial = new Promise((resolveInitial, reject) => {
     onFatal();
   });
 });
-const downloadAdmissions=[];let pendingDownload,downloadActionTask,downloadWaitSettled=true,downloadActionSettled=true;const publicTransferFacts={};
+const downloadAdmissions=[],publicSimDeletedDownloads=new Set();let pendingDownload,downloadActionTask,downloadWaitSettled=true,downloadActionSettled=true;const publicTransferFacts={};
 function wire(owner) {
   owner.on('download', download => {
     downloads.push(download); const accepted = admission.accept(owner);downloadAdmissions.push(accepted);
@@ -113,7 +113,7 @@ try {
        await simultaneous;requireTwoDownloadRejection(downloads.length,downloadAdmissions);
        // Only the two public canary transfers finish native deletion before cancel fallback.
        // Download.delete() waits for completion; any failure keeps the existing finally cleanup.
-       await Promise.all(downloads.map(item=>bounded(item.delete(),budgets.close).catch(()=>{})));
+       await Promise.all(downloads.map(item=>bounded(item.delete(),budgets.close).then(()=>publicSimDeletedDownloads.add(item)).catch(()=>{})));
        throw fixedError('ADMISSION_REJECTED');
       }
       if(publicStageFaults.includes(fault))checks.DOWNLOAD_ADMITTED=true;
@@ -150,7 +150,11 @@ try {
   if (control?.mode === 'public' && expected[control.publicFault] === failureCode) publicFaultObserved = true;
 } finally {
   stage = 'CLEANUP'; admission.close(); pendingDownload = null;
-  for (const download of downloads) { try { await bounded(download.cancel(), budgets.close); } catch {} try { await bounded(download.delete(), budgets.close); } catch {} }
+  for (const download of downloads) {
+    if (control?.mode === 'public' && control.publicFault === 'simultaneous-extra' && publicSimDeletedDownloads.has(download)) continue;
+    try { await bounded(download.cancel(), budgets.close); } catch {}
+    try { await bounded(download.delete(), budgets.close); } catch {}
+  }
   try { if (context) { await bounded(context.close(), budgets.close); contextClosed = true; } } catch {}
   try { if (browser) { await bounded(browser.close(), budgets.close); browserClosed = true; } } catch {}
   try { if (oracle) { const result = await oracle.close(); oracleExited = result.exited; oracleGraceful = result.graceful; } } catch { oracleExited = false; oracleGraceful = false; }
