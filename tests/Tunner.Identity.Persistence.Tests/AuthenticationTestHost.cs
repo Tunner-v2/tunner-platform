@@ -62,15 +62,15 @@ internal sealed class AuthenticationTestHost : IAsyncDisposable
             ServerCertificateCustomValidationCallback = (_, presented, _, _) => presented is not null && presented.GetCertHashString(HashAlgorithmName.SHA256) == certificate.GetCertHashString(HashAlgorithmName.SHA256) };
         return new(application, new HttpClient(handler) { BaseAddress = new Uri(address) }, certificate, clock, access, policies);
     }
-    internal async Task<string> SeedAsync(IdentityTestDatabase database, AccountState state = AccountState.Active, bool confirmed = true, string password = Password, bool minor = false)
+    internal async Task<string> SeedAsync(IdentityTestDatabase database, AccountState state = AccountState.Active, bool confirmed = true, string password = Password, bool minor = false, bool foreignEmail = false)
     {
         await using var context = database.Context(); var id = "ACC-" + Guid.NewGuid().ToString("N");
         context.Accounts.Add(new AccountRow { AccountId = id, State = state, Version = 1, RecordedAtUtc = Clock.GetUtcNow(),
             OperationId = "OP-fixture-seed", CorrelationId = "fixture-correlation", EvidenceReference = "fixture-account",
             AgeEligibilityStatus = minor ? "INELIGIBLE" : null, AgeEvaluatedAtUtc = minor ? Clock.GetUtcNow() : null,
             AgePolicyVersion = minor ? "fixture-age" : null, AgeEvidenceReference = minor ? "fixture-age-evidence" : null });
-        var user = new IdentityUserAdapter { AccountId = id, UserName = id, NormalizedUserName = id.ToUpperInvariant(), Email = "person@example.test",
-            NormalizedEmail = "PERSON@EXAMPLE.TEST", EmailConfirmed = confirmed, SecurityStamp = Guid.NewGuid().ToString("N"), ConcurrencyStamp = Guid.NewGuid().ToString("N") };
+        var user = new IdentityUserAdapter { AccountId = id, UserName = id, NormalizedUserName = id.ToUpperInvariant(), Email = foreignEmail ? "foreign@example.test" : "person@example.test",
+            NormalizedEmail = foreignEmail ? "FOREIGN@EXAMPLE.TEST" : "PERSON@EXAMPLE.TEST", EmailConfirmed = confirmed, SecurityStamp = Guid.NewGuid().ToString("N"), ConcurrencyStamp = Guid.NewGuid().ToString("N") };
         user.PasswordHash = AuthenticationPasswordWork.Hasher(Policies.Policy).HashPassword(user, password); context.Users.Add(user);
         context.VerifiedContacts.Add(new VerifiedContactRow { ContactId = Guid.NewGuid(), AccountId = id, NormalizedEmail = user.NormalizedEmail,
             State = confirmed ? ContactVerificationState.Verified : ContactVerificationState.Unverified, Version = 1, EvidenceReference = "fixture-contact" });

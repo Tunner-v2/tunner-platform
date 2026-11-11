@@ -23,6 +23,7 @@ public sealed class RecoveryCodePrivateIntegrationTests(IdentityPostgresFixture 
         internal RecoveryCodeCryptoProfile Crypto { get; } = RecoveryCodeNativeTests.Profile();
         internal RecoveryCodePolicy Policy { get; set; }
         internal bool Published { get; set; } = true;
+        internal string RequiredProofAssurance { get; set; } = "fixture-proof";
         internal string PublicationVersion { get; set; } = "fixture-recovery-publication-v1";
         internal int PublicationReads { get; private set; }
         internal bool RetireFirstOnly { get; set; }
@@ -76,7 +77,7 @@ public sealed class RecoveryCodePrivateIntegrationTests(IdentityPostgresFixture 
         public AssurancePolicyVersion RequireEffective(AssurancePolicyScope scope, DateTimeOffset at, string? expectedVersion = null)
         {
             if (expectedVersion is not null && expectedVersion != "fixture-recovery-proof") throw new AssurancePolicyVersionConflictException();
-            return new(new("fixture-recovery-proof", "ACTIVE", scope, Interval, null, ["SYNTHETIC-TEST-ONLY"]), "fixture-proof", TimeSpan.FromMinutes(5), new Dictionary<string, string> { ["pwd"] = "fixture-proof" });
+            return new(new("fixture-recovery-proof", "ACTIVE", scope, Interval, null, ["SYNTHETIC-TEST-ONLY"]), RequiredProofAssurance, TimeSpan.FromMinutes(5), new Dictionary<string, string> { ["pwd"] = "fixture-proof" });
         }
         public StepUpPresentation RequirePublished(AssurancePolicyVersion policy) => new StepUpBrowserTests.Presentation().RequirePublished(policy);
     }
@@ -98,9 +99,9 @@ public sealed class RecoveryCodePrivateIntegrationTests(IdentityPostgresFixture 
         public void Dispose() { foreach (var code in Codes) code.Dispose(); }
         public override string ToString() => nameof(Winning);
     }
-    private static async Task<string> Login(AuthenticationTestHost host)
+    private static async Task<string> Login(AuthenticationTestHost host, string email = "person@example.test")
     {
-        var boot = await host.Options(); using var response = await host.Post("/authentication/sign-in", Command(boot.Key), boot.Cookies, boot.Csrf);
+        var boot = await host.Options(); using var response = await host.Post("/authentication/sign-in", Command(boot.Key, email: email), boot.Cookies, boot.Csrf);
         Assert.True(response.StatusCode == HttpStatusCode.OK); return Merge(boot.Cookies, response);
     }
     private static async Task<Pending> Begin(AuthenticationTestHost host, string cookies, string kind = "GENERATE")
@@ -449,8 +450,8 @@ public sealed class RecoveryCodePrivateIntegrationTests(IdentityPostgresFixture 
         }
         finally
         {
-            if (firstTask.IsCompletedSuccessfully) firstTask.Result.Dispose();
-            if (secondTask.IsCompletedSuccessfully) secondTask.Result.Dispose();
+            if (firstTask.IsCompletedSuccessfully) (await firstTask).Dispose();
+            if (secondTask.IsCompletedSuccessfully) (await secondTask).Dispose();
         }
     }
 
@@ -463,7 +464,7 @@ public sealed class RecoveryCodePrivateIntegrationTests(IdentityPostgresFixture 
             if (blocked) return;
             await Task.Delay(25);
         }
-        Assert.True(false, "Expected private fixture lock barrier was not reached.");
+        Assert.Fail("Expected private fixture lock barrier was not reached.");
     }
 
     [Theory]
@@ -525,6 +526,145 @@ public sealed class RecoveryCodePrivateIntegrationTests(IdentityPostgresFixture 
         }
         }
         finally { proofReply?.Dispose(); }
+    }
+
+
+    private static async Task<StepUpCaller> TrustedSignIn(AuthenticationTestHost host)
+    {
+        await using var scope = host.Services.CreateAsyncScope();
+        var attempt = await scope.ServiceProvider.GetRequiredService<AuthenticationApplication>().SignInAsync(new(new string('A', 64), new string('B', 64), Origin, null), Command(Guid.NewGuid()), CancellationToken.None);
+        Assert.True(attempt.ErrorCode is null && attempt.Grant is not null);
+        return StepUpCaller.FromPrincipal(attempt.Grant!.Ticket.Principal, Origin, new('B', 64));
+    }
+    private static async Task<UserStepUpOperationContext> StartTrustedRecovery(AuthenticationTestHost host, StepUpCaller caller)
+    {
+        await using var scope = host.Services.CreateAsyncScope(); var application = scope.ServiceProvider.GetRequiredService<RecoveryCodeApplication>();
+        var started = await application.StartAsync(caller, "GENERATE", new RecoveryCodeStartCommand { OwnerRequestId = Guid.NewGuid(), ExpectedVersion = 1 }, CancellationToken.None);
+        Assert.True(started.ErrorCode is null && started.Operation is not null);
+        var context = await application.ResolveAsync(caller, started.Operation!.OperationId, started.Operation.RequestId, CancellationToken.None);
+        Assert.True(context is not null); return context!;
+    }
+    private static async Task<StepUpIssueResult> IssueTrustedRecoveryProof(AuthenticationTestHost host, StepUpCaller caller, UserStepUpOperationContext context, string password = Password)
+    {
+        await using var scope = host.Services.CreateAsyncScope();
+        return await scope.ServiceProvider.GetRequiredService<StepUpApplication>().IssuePasswordAsync(caller, context.Binding, context.ExpectedPolicyVersion, password);
+    }
+
+    [Theory]
+    [InlineData("absent")]
+    [InlineData("wrong-password")]
+    [InlineData("insufficient")]
+    [InlineData("expired")]
+    [InlineData("consumed")]
+    public async Task RecoveryOwnerCannotRunWithoutFreshSufficientUnconsumedProof(string state)
+    {
+        await using var db = await fixture.CreateDatabaseAsync(); var profile = new Profile();
+        if (state == "insufficient") profile.RequiredProofAssurance = "fixture-stronger-proof";
+        await using var host = await Host(db, profile); await host.SeedAsync(db); var caller = await TrustedSignIn(host); var context = await StartTrustedRecovery(host, caller);
+        StepUpProofGrant? grant = null;
+        if (state != "absent")
+        {
+            var issued = await IssueTrustedRecoveryProof(host, caller, context, state == "wrong-password" ? "Incorrect synthetic password" : Password);
+            Assert.True(state is "wrong-password" or "insufficient" ? issued.Grant is null && issued.ErrorCode is not null : issued.Grant is not null && issued.ErrorCode is null);
+            grant = issued.Grant;
+        }
+        if (state == "expired") host.Clock.Advance(TimeSpan.FromMinutes(6));
+        if (state == "consumed")
+        {
+            await using var firstScope = host.Services.CreateAsyncScope(); var firstApp = firstScope.ServiceProvider.GetRequiredService<RecoveryCodeApplication>();
+            using var first = await firstScope.ServiceProvider.GetRequiredService<StepUpApplication>().ExecuteOutcomeAsync(caller, context.Binding, grant!.Key, ct => firstApp.ApplyAsync(caller, context, ct));
+            Assert.True(first.Applied && first.HasRecoveryDelivery);
+        }
+        var callback = false;
+        await using (var scope = host.Services.CreateAsyncScope())
+        {
+            var application = scope.ServiceProvider.GetRequiredService<RecoveryCodeApplication>();
+            using var rejected = await scope.ServiceProvider.GetRequiredService<StepUpApplication>().ExecuteOutcomeAsync(caller, context.Binding, grant?.Key ?? new string('C', 64), ct => { callback = true; return application.ApplyAsync(caller, context, ct); });
+            Assert.True(!rejected.Applied && !rejected.HasRecoveryDelivery && !callback);
+        }
+        await using var check = db.Context(); var expected = state == "consumed" ? 1 : 0;
+        Assert.True(await check.Set<RecoveryCodeSetRow>().CountAsync() == expected);
+        Assert.True(await check.Set<RecoveryCodeEntryRow>().CountAsync() == expected * 2);
+        Assert.True(await check.Set<StepUpProofRow>().CountAsync(x => x.State == "CONSUMED") == expected);
+        Assert.True(await check.Set<OutboxMessage>().CountAsync(x => x.EventType == "RecoveryCodeSetGenerated") == expected);
+    }
+
+    [Theory]
+    [InlineData("operation")]
+    [InlineData("correlation")]
+    [InlineData("scope")]
+    [InlineData("context")]
+    [InlineData("resource")]
+    [InlineData("version")]
+    [InlineData("digest")]
+    [InlineData("session")]
+    [InlineData("account")]
+    [InlineData("origin")]
+    [InlineData("key")]
+    public async Task RecoveryProofRejectsEverySubstitutedOwnerBindingBeforeCallback(string change)
+    {
+        await using var db = await fixture.CreateDatabaseAsync(); var profile = new Profile(); await using var host = await Host(db, profile); await host.SeedAsync(db);
+        var original = await TrustedSignIn(host); var context = await StartTrustedRecovery(host, original); var issued = await IssueTrustedRecoveryProof(host, original, context);
+        Assert.True(issued.ErrorCode is null && issued.Grant is not null); var binding = context.Binding; var caller = original;
+        if (change == "session") caller = await TrustedSignIn(host);
+        if (change is "account" or "origin")
+        {
+            var account = change == "account" ? "ACC-unrelated-fixture-owner" : original.AccountId; var origin = change == "origin" ? "https://different.example.test" : original.Origin;
+            var claims = new[] { new System.Security.Claims.Claim(System.Security.Claims.ClaimTypes.NameIdentifier, account), new System.Security.Claims.Claim(AuthenticationIdentity.SessionClaim, original.SessionId.ToString("N")), new System.Security.Claims.Claim(AuthenticationIdentity.OriginClaim, origin) };
+            caller = StepUpCaller.FromPrincipal(new(new System.Security.Claims.ClaimsIdentity(claims, AuthenticationIdentity.Scheme)), origin, original.NetworkDigest);
+        }
+        var attempted = new StepUpOperation(change == "operation" ? "OP-other-fixture" : binding.OperationId, change == "correlation" ? "other-fixture-correlation" : binding.CorrelationId,
+            new(change == "scope" ? "OTHER_FIXTURE_OPERATION" : binding.Scope.Operation, change == "context" ? "OTHER_FIXTURE_CONTEXT" : binding.Scope.Context),
+            change == "resource" ? Guid.NewGuid().ToString("N") : binding.ResourceId, change == "version" ? binding.ExpectedVersion + 1 : binding.ExpectedVersion, change == "digest" ? new('E', 64) : binding.ContextDigest);
+        var callback = false; var rejected = false;
+        await using (var scope = host.Services.CreateAsyncScope())
+        {
+            var application = scope.ServiceProvider.GetRequiredService<RecoveryCodeApplication>();
+            try
+            {
+                using var result = await scope.ServiceProvider.GetRequiredService<StepUpApplication>().ExecuteOutcomeAsync(caller, attempted, change == "key" ? new('C', 64) : issued.Grant!.Key, ct => { callback = true; return application.ApplyAsync(original, context, ct); });
+                rejected = !result.Applied && !result.HasRecoveryDelivery;
+            }
+            catch (ArgumentException) when (change == "origin") { rejected = true; }
+        }
+        Assert.True(rejected && !callback);
+        await using var check = db.Context();
+        Assert.True(!await check.Set<RecoveryCodeSetRow>().AnyAsync() && !await check.Set<RecoveryCodeEntryRow>().AnyAsync());
+        Assert.True(await check.Set<StepUpProofRow>().AllAsync(x => x.State == "ACTIVE"));
+        Assert.True(!await check.Set<OutboxMessage>().AnyAsync(x => x.EventType == "RecoveryCodeSetGenerated"));
+    }
+
+    [Fact]
+    public async Task RecoveryBffRejectsCrossOwnerCsrfOriginAndUnmappedAccountSelectorsWithoutEnumeration()
+    {
+        await using var db = await fixture.CreateDatabaseAsync(); var profile = new Profile(); await using var host = await Host(db, profile);
+        await host.SeedAsync(db); await host.SeedAsync(db, foreignEmail: true); var cookies = await Login(host); var pending = await Begin(host, cookies);
+        using (var anonymous = await host.Get("/account/recovery-codes/options")) Assert.True(anonymous.StatusCode == HttpStatusCode.Unauthorized);
+        using (var missingCsrf = await host.Post("/account/recovery-codes/generate/start", new { ownerRequestId = Guid.NewGuid(), expectedVersion = 1 }, cookies, null)) Assert.True(missingCsrf.StatusCode == HttpStatusCode.BadRequest);
+        using (var wrongOrigin = await host.Post("/account/recovery-codes/generate/start", new { ownerRequestId = Guid.NewGuid(), expectedVersion = 1 }, pending.Cookies, pending.Csrf, "https://different.example.test")) Assert.True(wrongOrigin.StatusCode == HttpStatusCode.Forbidden);
+        using (var extra = await host.RawPost("/account/recovery-codes/generate/start", "{\"ownerRequestId\":\"" + Guid.NewGuid() + "\",\"expectedVersion\":1,\"accountId\":\"ACC-unrelated-fixture\"}", pending.Cookies, pending.Csrf)) Assert.True(extra.StatusCode == HttpStatusCode.BadRequest);
+        using (var query = await host.Get("/account/recovery-codes/options?accountId=ACC-unrelated-fixture", pending.Cookies)) Assert.True(query.StatusCode == HttpStatusCode.BadRequest);
+        foreach (var email in new[] { "person@example.test", "foreign@example.test" })
+        {
+            var otherCookies = await Login(host, email); using var options = await host.Get("/account/recovery-codes/options", otherCookies); Assert.True(options.StatusCode == HttpStatusCode.OK);
+            using var doc = await options.Content.ReadFromJsonAsync<JsonDocument>(); otherCookies = Merge(otherCookies, options); var csrf = doc!.RootElement.GetProperty("csrfToken").GetString();
+            using var existing = await host.Post("/account/recovery-codes/result", new { ownerRequestId = pending.Request, operationReference = pending.Operation.ToString("N") }, otherCookies, csrf);
+            using var absent = await host.Post("/account/recovery-codes/result", new { ownerRequestId = Guid.NewGuid(), operationReference = Guid.NewGuid().ToString("N") }, otherCookies, csrf);
+            Assert.True(existing.StatusCode == HttpStatusCode.NotFound && absent.StatusCode == existing.StatusCode);
+            using var existingBody = await existing.Content.ReadFromJsonAsync<JsonDocument>(); using var absentBody = await absent.Content.ReadFromJsonAsync<JsonDocument>();
+            Assert.True(existingBody!.RootElement.GetProperty("error_code").GetString() == "NOT_FOUND_OR_NOT_DISCLOSABLE" && absentBody!.RootElement.GetProperty("error_code").GetString() == "NOT_FOUND_OR_NOT_DISCLOSABLE");
+            Assert.True(!existingBody.RootElement.TryGetProperty("recoveryCodeFirstDelivery", out _) && !absentBody.RootElement.TryGetProperty("recoveryCodeFirstDelivery", out _));
+        }
+        var claims = new[] { new System.Security.Claims.Claim(System.Security.Claims.ClaimTypes.NameIdentifier, "ACC-unrelated-fixture"), new System.Security.Claims.Claim(AuthenticationIdentity.SessionClaim, Guid.NewGuid().ToString("N")), new System.Security.Claims.Claim(AuthenticationIdentity.OriginClaim, Origin) };
+        foreach (var scheme in new[] { "Admin", "Support", string.Empty })
+        {
+            var rejected = false; try { _ = StepUpCaller.FromPrincipal(new(new System.Security.Claims.ClaimsIdentity(claims, scheme)), Origin, new('B', 64)); } catch (ArgumentException) { rejected = true; }
+            Assert.True(rejected);
+        }
+        await using var check = db.Context();
+        Assert.True(await check.Set<RecoveryCodeOperationRow>().CountAsync() == 1);
+        Assert.True(!await check.Set<RecoveryCodeSetRow>().AnyAsync() && !await check.Set<RecoveryCodeEntryRow>().AnyAsync() && !await check.Set<StepUpProofRow>().AnyAsync());
+        Assert.True(!await check.Set<OutboxMessage>().AnyAsync(x => x.EventType == "RecoveryCodeSetGenerated"));
     }
 
     [Fact]
