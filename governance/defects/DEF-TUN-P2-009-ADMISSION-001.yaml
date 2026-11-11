@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "defect_id": "DEF-TUN-P2-009-ADMISSION-001",
+  "work_item_id": "TUN-P2-009",
+  "classification": "SECURITY_DEFECT",
+  "severity": "SEV-2",
+  "status": "OPEN",
+  "environment": "Read-only confirmed in committed29b8d113612a85f5053e25f2845293a486d1af4a production sources, unchanged by later fixture-only1fd3763. No private execution/exploit/production policy is claimed.",
+  "description": "Generate/Replace captures the owner mutation admission before later awaited shared authentication/continuation checks. Its final witness re-resolves global recovery policy and publication but checks only the old admission interval. A separately withdrawn/superseded owner decision can therefore pass with unchanged global policy/rows. Existing current-execution authority requires final resolution of that same typed owner source from immutable original pre-mutation facts and full Allowed/binding/policy/evidence/target/interval comparison at decisionAt. No irrevocability guarantee exists; no new Product decision is required. Fix and post-apply drift/rollback/disposal regressions remain pending.",
+  "expected_behavior_ref": "docs/contracts/operation-step-up-contract.md",
+  "evidence": [
+    "governance/evidence/TUN-P2-009-ADMISSION-CURRENTNESS-AUDIT.json",
+    "docs/development/P2_009_RECOVERY_CODES_SCOPE.md",
+    "governance/evidence/TUN-P2-009-SHARED-INTEGRATION-AUTHORIZATION.json"
+  ],
+  "affected_versions": [
+    "b3eb4ac8cb72dad932b36898ab8c46e70806bf85",
+    "29b8d113612a85f5053e25f2845293a486d1af4a"
+  ],
+  "created_at": "2026-11-11T12:30:29.771Z",
+  "updated_at": "2026-11-11T12:30:29.771Z"
+}
