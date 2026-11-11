@@ -14,8 +14,8 @@ namespace Tunner.Identity.Persistence.Tests;
 
 /// <summary>Private in-process native cohort. Never output a response/code/verifier/context/buffer value.
 /// Execute only after root commits source, generates migration and qualifies the private native topology.</summary>
-[Trait("Boundary", "PrivateRecoveryIntegration")]
-public sealed class RecoveryCodePrivateIntegrationTests(IdentityPostgresFixture fixture) : IClassFixture<IdentityPostgresFixture>
+
+public sealed class RecoveryCodePrivateIntegrationTests(IdentityPostgresFixture fixture)
 {
     internal sealed class Profile : IRecoveryCodePolicySource, IRecoveryCodeMutationAdmissionSource, IRecoveryCodePresentationSource, IAssurancePolicySource, IStepUpPresentationSource
     {
@@ -153,10 +153,9 @@ public sealed class RecoveryCodePrivateIntegrationTests(IdentityPostgresFixture 
         finally { foreach (var value in retained) value.Dispose(); }
     }
 
-    [Fact]
     public async Task WinningDeliveryIsAbsentFromEverySafeOriginalReadAndReplacementRetiresExactPriorSet()
     {
-        await using var db = await fixture.CreateDatabaseAsync(); var profile = new Profile(); await using var host = await Host(db, profile); await host.SeedAsync(db);
+        await using var db = await fixture.CreateFiniteDatabaseAsync(CancellationToken.None); var profile = new Profile(); await using var host = await Host(db, profile); await host.SeedAsync(db);
         var cookies = await Login(host); using var first = await Generate(host, cookies);
         using var read = await host.Post("/account/recovery-codes/result", new { ownerRequestId = first.Pending.Request, operationReference = first.Pending.Operation.ToString("N") }, first.Pending.Cookies, first.Pending.Csrf);
         Assert.True(read.StatusCode == HttpStatusCode.OK); using var result = await read.Content.ReadFromJsonAsync<JsonDocument>();
@@ -168,13 +167,9 @@ public sealed class RecoveryCodePrivateIntegrationTests(IdentityPostgresFixture 
         Assert.True(await check.Set<StepUpProofRow>().CountAsync(x => x.State == "CONSUMED") == 2);
     }
 
-    [Theory]
-    [InlineData("withdrawal")]
-    [InlineData("version")]
-    [InlineData("interval")]
     public async Task PublicationChangeAfterOwnerWorkBeforeFinalDecisionRollsBackCodeSetProofConsumeAndOutbox(string change)
     {
-        await using var db = await fixture.CreateDatabaseAsync(); var profile = new Profile(); await using var host = await Host(db, profile); await host.SeedAsync(db);
+        await using var db = await fixture.CreateFiniteDatabaseAsync(CancellationToken.None); var profile = new Profile(); await using var host = await Host(db, profile); await host.SeedAsync(db);
         var pending = await Begin(host, await Login(host)); var readsBeforeProof = profile.PublicationReads; var injected = false;
         host.Access.BeforeDecision = request =>
         {
@@ -194,17 +189,9 @@ public sealed class RecoveryCodePrivateIntegrationTests(IdentityPostgresFixture 
         Assert.True(await check.Set<OutboxMessage>().CountAsync(x => x.EventType == "RecoveryCodeSetGenerated") == 0);
     }
 
-    [Theory]
-    [InlineData("withdrawal")]
-    [InlineData("policy")]
-    [InlineData("evidence")]
-    [InlineData("target")]
-    [InlineData("interval")]
-    [InlineData("missing")]
-    [InlineData("unchanged")]
     public async Task OwnerAdmissionChangeAfterApplyUsesOriginalFactsAndRejectsDrift(string change)
     {
-        await using var db = await fixture.CreateDatabaseAsync(); var profile = new Profile { RetireFirstOnly = true };
+        await using var db = await fixture.CreateFiniteDatabaseAsync(CancellationToken.None); var profile = new Profile { RetireFirstOnly = true };
         await using var host = await Host(db, profile); await host.SeedAsync(db);
         using var first = await Generate(host, await Login(host)); using var second = await Generate(host, first.Pending.Cookies);
         var pending = await Begin(host, second.Pending.Cookies, "REPLACE");
@@ -283,10 +270,9 @@ public sealed class RecoveryCodePrivateIntegrationTests(IdentityPostgresFixture 
     }
     private static RecoveryCodeConsumptionRequest ConsumeRequest(string account) { var op = "OP-fixture-recovery-" + Guid.NewGuid().ToString("N"); return new(account, op, Guid.NewGuid().ToString("N"), AuthenticationIdentity.Digest(op), Origin, new('B', 64)); }
 
-    [Fact]
     public async Task SameCodeTwoOwnerOperationsCommitOnlyOneRealAccountMutationAndOutbox()
     {
-        await using var db = await fixture.CreateDatabaseAsync(); var profile = new Profile(); await using var host = await Host(db, profile); var account = await host.SeedAsync(db);
+        await using var db = await fixture.CreateFiniteDatabaseAsync(CancellationToken.None); var profile = new Profile(); await using var host = await Host(db, profile); var account = await host.SeedAsync(db);
         using var winning = await Generate(host, await Login(host));
         async Task<RecoveryCodeConsumptionResult> Consume()
         {
@@ -299,12 +285,9 @@ public sealed class RecoveryCodePrivateIntegrationTests(IdentityPostgresFixture 
         Assert.True(await check.Set<RecoveryCodeSetRow>().AllAsync(x => x.LifecycleVersion == 1 && x.UsageVersion == 1));
     }
 
-    [Theory]
-    [InlineData(false)]
-    [InlineData(true)]
     public async Task OwnerRejectionOrFinalDriftRollsBackClaimActualAccountEffectAndOutbox(bool drift)
     {
-        await using var db = await fixture.CreateDatabaseAsync(); var profile = new Profile(); await using var host = await Host(db, profile); var account = await host.SeedAsync(db);
+        await using var db = await fixture.CreateFiniteDatabaseAsync(CancellationToken.None); var profile = new Profile(); await using var host = await Host(db, profile); var account = await host.SeedAsync(db);
         using var winning = await Generate(host, await Login(host));
         await using (var scope = host.Services.CreateAsyncScope())
         {
@@ -320,10 +303,9 @@ public sealed class RecoveryCodePrivateIntegrationTests(IdentityPostgresFixture 
         Assert.True(accepted.Consumed);
     }
 
-    [Fact]
     public async Task ConsumeRejectsNestedForeignOrWrongOwnerTransactionBeforeClaim()
     {
-        await using var db = await fixture.CreateDatabaseAsync(); var profile = new Profile(); await using var host = await Host(db, profile); var account = await host.SeedAsync(db);
+        await using var db = await fixture.CreateFiniteDatabaseAsync(CancellationToken.None); var profile = new Profile(); await using var host = await Host(db, profile); var account = await host.SeedAsync(db);
         using var winning = await Generate(host, await Login(host));
         await using (var nested = host.Services.CreateAsyncScope())
         {
@@ -345,10 +327,9 @@ public sealed class RecoveryCodePrivateIntegrationTests(IdentityPostgresFixture 
         Assert.True(await check.Set<OutboxMessage>().CountAsync(x => x.EventType == "FixtureRecoveryOwnerApplied") == 0);
     }
 
-    [Fact]
     public async Task SameOwnerDuplicateReadsOnlyOriginalSafeResultWithoutSecondCodeAcceptance()
     {
-        await using var db = await fixture.CreateDatabaseAsync(); var profile = new Profile(); await using var host = await Host(db, profile); var account = await host.SeedAsync(db);
+        await using var db = await fixture.CreateFiniteDatabaseAsync(CancellationToken.None); var profile = new Profile(); await using var host = await Host(db, profile); var account = await host.SeedAsync(db);
         using var winning = await Generate(host, await Login(host)); var request = ConsumeRequest(account);
         await using (var first = host.Services.CreateAsyncScope())
             Assert.True((await first.ServiceProvider.GetRequiredService<RecoveryCodeApplication>().ExecuteConsumptionOutcomeAsync(request, winning.Code.NativeInput(), new AccountOwner(winning.Pending.Set, host.Clock))).Consumed);
@@ -368,14 +349,10 @@ public sealed class RecoveryCodePrivateIntegrationTests(IdentityPostgresFixture 
 
 
     // Fixed private fixtures only. Existing owner declares each usage-admission choice explicitly.
-    [Theory]
-    [InlineData(false, false)]
-    [InlineData(false, true)]
-    [InlineData(true, false)]
-    [InlineData(true, true)]
+
     public async Task DifferentCodesLinearizeUnderSelectedOwnerUsageAdmissionWithoutASurvivingSession(bool exactUsage, bool sameOperation)
     {
-        await using var db = await fixture.CreateDatabaseAsync(); var profile = new Profile(); await using var host = await Host(db, profile); var account = await host.SeedAsync(db);
+        await using var db = await fixture.CreateFiniteDatabaseAsync(CancellationToken.None); var profile = new Profile(); await using var host = await Host(db, profile); var account = await host.SeedAsync(db);
         using var winning = await Generate(host, await Login(host));
         using (var signedOut = await host.Post("/authentication/sign-out", new { }, winning.Pending.Cookies, winning.Pending.Csrf)) Assert.True(signedOut.StatusCode == HttpStatusCode.OK);
         var firstRequest = ConsumeRequest(account); var secondRequest = sameOperation ? firstRequest : ConsumeRequest(account);
@@ -398,12 +375,9 @@ public sealed class RecoveryCodePrivateIntegrationTests(IdentityPostgresFixture 
         Assert.True(await check.Set<AuthenticationSessionRow>().CountAsync() == 1);
     }
 
-    [Theory]
-    [InlineData(false)]
-    [InlineData(true)]
     public async Task MalformedFailuresPersistSelectedAccountAndNetworkAttemptLimits(bool networkLimited)
     {
-        await using var db = await fixture.CreateDatabaseAsync(); var profile = new Profile();
+        await using var db = await fixture.CreateFiniteDatabaseAsync(CancellationToken.None); var profile = new Profile();
         profile.Policy = profile.Policy with { ConsumptionAccountAttemptLimit = networkLimited ? 100 : 2, ConsumptionNetworkAttemptLimit = networkLimited ? 2 : 100 };
         await using var host = await Host(db, profile); var account = await host.SeedAsync(db); using var winning = await Generate(host, await Login(host));
         foreach (var input in new[] { "not-a-code", string.Empty })
@@ -425,10 +399,9 @@ public sealed class RecoveryCodePrivateIntegrationTests(IdentityPostgresFixture 
         Assert.True(await check.Accounts.AllAsync(x => x.State == AccountState.Active && x.Version == 1));
     }
 
-    [Fact]
     public async Task ConcurrentReplacementsOfSameOriginalFactsReleaseOnlyOneGeneration()
     {
-        await using var db = await fixture.CreateDatabaseAsync(); var profile = new Profile(); await using var host = await Host(db, profile); await host.SeedAsync(db);
+        await using var db = await fixture.CreateFiniteDatabaseAsync(CancellationToken.None); var profile = new Profile(); await using var host = await Host(db, profile); await host.SeedAsync(db);
         using var winning = await Generate(host, await Login(host));
         var first = await Begin(host, winning.Pending.Cookies, "REPLACE"); var second = await Begin(host, winning.Pending.Cookies, "REPLACE");
         var firstProof = await PreparePasswordRequest(host, first); var secondProof = await PreparePasswordRequest(host, second);
@@ -467,12 +440,9 @@ public sealed class RecoveryCodePrivateIntegrationTests(IdentityPostgresFixture 
         Assert.Fail("Expected private fixture lock barrier was not reached.");
     }
 
-    [Theory]
-    [InlineData(false)]
-    [InlineData(true)]
     public async Task ConsumeAndReplacementRespectBothActualLockOrderings(bool replaceFirst)
     {
-        await using var db = await fixture.CreateDatabaseAsync(); var profile = new Profile(); await using var host = await Host(db, profile); var account = await host.SeedAsync(db);
+        await using var db = await fixture.CreateFiniteDatabaseAsync(CancellationToken.None); var profile = new Profile(); await using var host = await Host(db, profile); var account = await host.SeedAsync(db);
         using var winning = await Generate(host, await Login(host)); var pending = await Begin(host, winning.Pending.Cookies, "REPLACE"); var proofRequest = await PreparePasswordRequest(host, pending);
         var entered = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously); var release = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
         Task<RecoveryCodeConsumptionResult>? consumeTask = null; Task<HttpResponseMessage>? proofTask = null; RecoveryCodeConsumptionResult? consumed = null; HttpResponseMessage? proofReply = null;
@@ -550,15 +520,9 @@ public sealed class RecoveryCodePrivateIntegrationTests(IdentityPostgresFixture 
         return await scope.ServiceProvider.GetRequiredService<StepUpApplication>().IssuePasswordAsync(caller, context.Binding, context.ExpectedPolicyVersion, password);
     }
 
-    [Theory]
-    [InlineData("absent")]
-    [InlineData("wrong-password")]
-    [InlineData("insufficient")]
-    [InlineData("expired")]
-    [InlineData("consumed")]
     public async Task RecoveryOwnerCannotRunWithoutFreshSufficientUnconsumedProof(string state)
     {
-        await using var db = await fixture.CreateDatabaseAsync(); var profile = new Profile();
+        await using var db = await fixture.CreateFiniteDatabaseAsync(CancellationToken.None); var profile = new Profile();
         if (state == "insufficient") profile.RequiredProofAssurance = "fixture-stronger-proof";
         await using var host = await Host(db, profile); await host.SeedAsync(db); var caller = await TrustedSignIn(host); var context = await StartTrustedRecovery(host, caller);
         StepUpProofGrant? grant = null;
@@ -589,21 +553,9 @@ public sealed class RecoveryCodePrivateIntegrationTests(IdentityPostgresFixture 
         Assert.True(await check.Set<OutboxMessage>().CountAsync(x => x.EventType == "RecoveryCodeSetGenerated") == expected);
     }
 
-    [Theory]
-    [InlineData("operation")]
-    [InlineData("correlation")]
-    [InlineData("scope")]
-    [InlineData("context")]
-    [InlineData("resource")]
-    [InlineData("version")]
-    [InlineData("digest")]
-    [InlineData("session")]
-    [InlineData("account")]
-    [InlineData("origin")]
-    [InlineData("key")]
     public async Task RecoveryProofRejectsEverySubstitutedOwnerBindingBeforeCallback(string change)
     {
-        await using var db = await fixture.CreateDatabaseAsync(); var profile = new Profile(); await using var host = await Host(db, profile); await host.SeedAsync(db);
+        await using var db = await fixture.CreateFiniteDatabaseAsync(CancellationToken.None); var profile = new Profile(); await using var host = await Host(db, profile); await host.SeedAsync(db);
         var original = await TrustedSignIn(host); var context = await StartTrustedRecovery(host, original); var issued = await IssueTrustedRecoveryProof(host, original, context);
         Assert.True(issued.ErrorCode is null && issued.Grant is not null); var binding = context.Binding; var caller = original;
         if (change == "session") caller = await TrustedSignIn(host);
@@ -634,10 +586,9 @@ public sealed class RecoveryCodePrivateIntegrationTests(IdentityPostgresFixture 
         Assert.True(!await check.Set<OutboxMessage>().AnyAsync(x => x.EventType == "RecoveryCodeSetGenerated"));
     }
 
-    [Fact]
     public async Task RecoveryBffRejectsCrossOwnerCsrfOriginAndUnmappedAccountSelectorsWithoutEnumeration()
     {
-        await using var db = await fixture.CreateDatabaseAsync(); var profile = new Profile(); await using var host = await Host(db, profile);
+        await using var db = await fixture.CreateFiniteDatabaseAsync(CancellationToken.None); var profile = new Profile(); await using var host = await Host(db, profile);
         await host.SeedAsync(db); await host.SeedAsync(db, foreignEmail: true); var cookies = await Login(host); var pending = await Begin(host, cookies);
         using (var anonymous = await host.Get("/account/recovery-codes/options")) Assert.True(anonymous.StatusCode == HttpStatusCode.Unauthorized);
         using (var missingCsrf = await host.Post("/account/recovery-codes/generate/start", new { ownerRequestId = Guid.NewGuid(), expectedVersion = 1 }, cookies, null)) Assert.True(missingCsrf.StatusCode == HttpStatusCode.BadRequest);
@@ -667,10 +618,9 @@ public sealed class RecoveryCodePrivateIntegrationTests(IdentityPostgresFixture 
         Assert.True(!await check.Set<OutboxMessage>().AnyAsync(x => x.EventType == "RecoveryCodeSetGenerated"));
     }
 
-    [Fact]
     public async Task OrdinaryAuthenticatedHostDoesNotRegisterRecoveryRoutesOrOwnerByDefault()
     {
-        await using var db = await fixture.CreateDatabaseAsync(); await using var host = await Start(db); await host.SeedAsync(db); var cookies = await Login(host);
+        await using var db = await fixture.CreateFiniteDatabaseAsync(CancellationToken.None); await using var host = await Start(db); await host.SeedAsync(db); var cookies = await Login(host);
         using var response = await host.Get("/account/recovery-codes/options", cookies);
         Assert.True(response.StatusCode == HttpStatusCode.NotFound && host.Services.GetService<RecoveryCodeApplication>() is null);
     }

@@ -108,4 +108,20 @@ public sealed class RecoveryCodeResponseTests
         var scope = new StepUpOperation(marker, marker, new(marker, marker), marker, 1, new('A', 64));
         Assert.True(!cloned.ClosedFor(scope));
     }
+
+    [Fact]
+    public async Task PrivateRecoveryCohortIsNotDiscoverableAndRejectsAnUnownedFixtureBeforeAllocation()
+    {
+        // Passive metadata only: never instantiate or dispatch the private cohort.
+        var privateType = typeof(RecoveryCodePrivateIntegrationTests);
+        Assert.True(!privateType.GetInterfaces().Any(type => type.IsGenericType && type.GetGenericTypeDefinition() == typeof(IClassFixture<>)));
+        Assert.True(privateType.GetMethods(System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Static)
+            .All(method => method.GetCustomAttributesData().All(attribute => !typeof(FactAttribute).IsAssignableFrom(attribute.AttributeType))));
+        var fixture = new IdentityPostgresFixture(); var rejected = false;
+        try { await fixture.CreateFiniteDatabaseAsync(CancellationToken.None); }
+        catch (InvalidOperationException) { rejected = true; }
+        catch (Exception error) when (error is not OutOfMemoryException) { }
+        finally { await fixture.DisposeAsync(); } // No InitializeAsync and no container exists.
+        Assert.True(rejected);
+    }
 }
