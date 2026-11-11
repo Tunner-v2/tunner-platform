@@ -5,7 +5,7 @@ import {spawnSync} from 'node:child_process';
 import {EventEmitter} from 'node:events';
 import {resolve} from 'node:path';
 import {parsePrivateJson, PrivateFrameReader, writePrivateFrame} from './private-frames.mjs';
-import {realJourneys, realPredicatesSatisfied, validRealChecks, validRealControl, validRealReceipt, realReceiptAccepted, validFixtureRequest, validFixtureResult, fixtureCountKeys, sameCanonicalPath} from './contract.mjs';
+import {realJourneys, realJourneyStages, realPredicatesSatisfied, validRealChecks, validRealControl, validRealReceipt, realReceiptAccepted, validFixtureRequest, validFixtureResult, fixtureCountKeys, sameCanonicalPath} from './contract.mjs';
 import {childEnvironment, runRealScenario, sensitiveSourceFacts} from './supervisor.mjs';
 import {waitForOwnedProcessClose} from './oracle-bridge.mjs';
 
@@ -34,6 +34,24 @@ test('child environment fixes OS trust and excludes operator TLS/debug overrides
   ], {env, encoding: 'utf8', timeout: 5000, maxBuffer: 1024, windowsHide: true});
   assert.equal(child.error, undefined); assert.equal(child.signal, null); assert.equal(child.status, 0); assert.equal(child.stderr, '');
   assert.deepEqual(JSON.parse(child.stdout), {fixedSystemTrust: true, operatorOverridesAbsent: true, temporarySurfaceBound: true});
+});
+
+test('fixed journey steps are failure metadata and cannot substitute for completion', () => {
+  assert.deepEqual(realJourneyStages, ['JOURNEY','JOURNEY_ENROLL_BEGIN','JOURNEY_ENROLL_DISCLOSURE','JOURNEY_ENROLL_RESULT_BINDING','JOURNEY_ENROLL_DUPLICATE','JOURNEY_ENROLL_DONE']);
+  for (const stage of realJourneyStages) {
+    const failed = {...receipt(), status: 'BOUNDARY_FAILED', stage, failureCode: 'PREDICATE_FAILED'};
+    assert.equal(validRealReceipt(failed), true); assert.equal(realReceiptAccepted(failed), false);
+    assert.equal(realReceiptAccepted({...receipt(), stage}), false);
+  }
+  for (const stage of ['JOURNEY_ENROLL_UNKNOWN','PUBLIC_ERROR_MESSAGE','https://public.invalid/path',null]) assert.equal(validRealReceipt({...receipt(), stage}), false);
+});
+test('failed reporting may retain every later observed truth without acquiring success', () => {
+  const checks = {...receipt().checks, REPLAY_REJECTED: false, RESULT_RECOVERY: true, UI_ASSET_TYPOGRAPHY: true};
+  const failed = {...receipt(), status: 'BOUNDARY_FAILED', stage: 'JOURNEY_ENROLL_DONE', failureCode: 'PREDICATE_FAILED', checks};
+  assert.equal(validRealChecks(checks, journeyId), true); assert.equal(validRealReceipt(failed), true);
+  assert.equal(failed.checks.RESULT_RECOVERY, true); assert.equal(failed.checks.UI_ASSET_TYPOGRAPHY, true);
+  assert.equal(realPredicatesSatisfied(checks, journeyId), false); assert.equal(realReceiptAccepted(failed), false);
+  assert.equal(realReceiptAccepted({...failed, accepted: true, status: 'REAL_JOURNEY_OK', stage: 'COMPLETE', failureCode: 'NONE'}), false);
 });
 
 test('each static journey has unique required browser predicates', () => { for (const ids of Object.values(realJourneys)) assert.equal(new Set(ids).size, ids.length); });

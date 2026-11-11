@@ -1,6 +1,6 @@
 import {createRequire} from 'node:module';
 import {dirname, join} from 'node:path';
-import {realBudgets, realExactKeys, realFailureCodes, realJourneys, realPredicatesSatisfied, realVersion, validFixtureRequest, validFixtureResult, validRealControl, validSurfacePath, scanSurface, publicMarker, publicUri} from './contract.mjs';
+import {realBudgets, realExactKeys, realFailureCodes, realJourneyStages, realJourneys, realPredicatesSatisfied, realVersion, validFixtureRequest, validFixtureResult, validRealControl, validSurfacePath, scanSurface, publicMarker, publicUri} from './contract.mjs';
 import {createNativeOracle} from './oracle-bridge.mjs';
 
 const abort = new AbortController();
@@ -16,6 +16,10 @@ process.on('uncaughtException', onFatal); process.on('unhandledRejection', onFat
 const check = (id, passed) => {
   if (!control || !realJourneys[control.journeyId].includes(id) || Object.hasOwn(checks, id) || typeof passed !== 'boolean') throw new Error('PREDICATE_FAILED');
   checks[id] = passed; if (!passed) throw new Error('PREDICATE_FAILED');
+};
+const reportStep = value => {
+  if (!realJourneyStages.includes(value) || !realJourneyStages.includes(stage)) throw new Error('BOUNDARY_ERROR');
+  stage = value;
 };
 const initial = new Promise((resolve, reject) => {
   const timer = setTimeout(() => reject(new Error('INPUT_INVALID')), 10000);
@@ -81,7 +85,7 @@ try {
   }
   const {runRealJourney} = await import('./real-journey.mjs');
   const interruption = new Promise((_, reject) => { if (abort.signal.aborted) reject(cancelled()); else abort.signal.addEventListener('abort', () => reject(cancelled()), {once: true}); });
-  await Promise.race([runRealJourney({page, context, browser, origin: control.origin, mailpitOrigin: control.mailpitOrigin, runId: control.runId, journeyId: control.journeyId, check, nativeCode: (seed, offset = 0) => oracle.nativeCode(seed, offset), fixtureControl, signal: abort.signal}), interruption]);
+  await Promise.race([runRealJourney({page, context, browser, origin: control.origin, mailpitOrigin: control.mailpitOrigin, runId: control.runId, journeyId: control.journeyId, check, reportStep, nativeCode: (seed, offset = 0) => oracle.nativeCode(seed, offset), fixtureControl, signal: abort.signal}), interruption]);
   stage = 'SURFACE_SCAN'; surfaceClean = (await scanSurface(surface, {readContents: false})).clean;
   if (!surfaceClean) throw new Error('SURFACE_FAILED');
   status = 'REAL_JOURNEY_OK';

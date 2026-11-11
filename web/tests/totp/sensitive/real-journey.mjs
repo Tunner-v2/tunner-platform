@@ -137,6 +137,7 @@ class Journey {
     this.prove('OPERATION_BINDING',proof.ok && proof.body.status === 'COMPLETED' && proof.body.operationReference === operation.enrollmentId.replaceAll('-','')); return proof;
   }
   async beginEnrollment(page,password) {
+    this.reportStep('JOURNEY_ENROLL_BEGIN');
     await this.goManage(page); const before = await this.factors(page);
     const started = await this.response(page,'/account/totp/enrollment/start',() => page.getByRole('button',{name:'Set up app',exact:true}).click());
     const operation = started.body; this.prove('REQUEST_BINDING',started.ok && uuid(started.sent.requestId) && operation.requestId === started.sent.requestId && uuid(operation.enrollmentId) && uuid(operation.authenticatorReference) && operation.kind === 'ENROLL' && operation.status === 'PENDING_PROOF');
@@ -152,9 +153,10 @@ class Journey {
     this.prove('DISCLOSURE_LOSS_NO_REVEAL',duplicate.status === 409 && duplicate.body.error_code === 'DISCLOSURE_UNAVAILABLE' && await page.locator('.manual-key,.totp-qr').count() === 0 && boot.recovery?.enrollmentId === started.operation.enrollmentId && boot.recovery?.disclosureConsumed === true);
     this.observe('ONE_TIME_DISCLOSURE',duplicate.status === 409 && boot.recovery?.disclosureAvailable === false);
     await page.getByRole('button',{name:'Cancel',exact:true}).click(); await this.at(page,manage); requireTrue((await this.factors(page)).every(value => value.state !== 'ACTIVE'));
+    this.reportStep('JOURNEY');
   }
   async enroll(page,password,{dropActivation=false}={}) {
-    const started = await this.beginEnrollment(page,password); await page.locator('.manual-key code').waitFor({state:'visible'});
+    const started = await this.beginEnrollment(page,password); this.reportStep('JOURNEY_ENROLL_DISCLOSURE'); await page.locator('.manual-key code').waitFor({state:'visible'});
     const seed = (await page.locator('.manual-key code').textContent())?.trim(); requireTrue(typeof seed === 'string' && /^[A-Z2-7]{1,128}$/.test(seed)); this.remember(seed);
     const disclosure = await started.disclosureResponse, sent = await started.disclosureRequest;
     this.prove('REQUEST_BINDING',object(sent) && sent.requestId === started.operation.requestId && sent.enrollmentId === started.operation.enrollmentId && disclosure?.ok === true && disclosure.body.requestId === sent.requestId && disclosure.body.enrollmentId === sent.enrollmentId && disclosure.body.manualKey === seed);
@@ -171,11 +173,13 @@ class Journey {
     const recovered = await this.operationResult(page,started.operation);
     this.prove('NATIVE_FIRST_CODE_ACTIVE',recovered.ok && sameOperation(started.operation,recovered.body) && recovered.body.status === 'COMPLETED' && recovered.body.activationCompleted === true && (await this.factors(page)).find(value => value.authenticatorReference === factor.reference)?.state === 'ACTIVE');
     factor.used.add(code); factor.activationCode = code;
+    this.reportStep('JOURNEY_ENROLL_RESULT_BINDING');
     const boundOptions = await this.options(page), mismatched = await this.post(page,'/account/totp/result',{requestId:randomUUID(),enrollmentId:started.operation.enrollmentId},boundOptions.csrfToken);
     this.prove('REQUEST_BINDING',mismatched.status === 404 && mismatched.body.error_code === 'NOT_FOUND_OR_NOT_DISCLOSABLE');
+    this.reportStep('JOURNEY_ENROLL_DUPLICATE');
     const before = await this.control('READ_SAFE_COUNTS'), fresh = await this.options(page), duplicate = await this.post(page,'/account/totp/enrollment/activate',activation,fresh.csrfToken), after = await this.control('READ_SAFE_COUNTS');
     this.prove('RESULT_RECOVERY',duplicate.ok && sameOperation(recovered.body,duplicate.body) && duplicate.body.status === 'COMPLETED' && duplicate.body.activationCompleted === true);
-    this.prove('DUPLICATE_COUNTS',sameCounts(before,after)); await page.getByRole('button',{name:'Done',exact:true}).click(); await this.at(page,manage); return factor;
+    this.prove('DUPLICATE_COUNTS',sameCounts(before,after)); this.reportStep('JOURNEY_ENROLL_DONE'); await page.getByRole('button',{name:'Done',exact:true}).click(); await this.at(page,manage); this.reportStep('JOURNEY'); return factor;
   }
   async rejectMfa(page,pending,factor,code,expected='CODE_REPLAYED') {
     const boot = await this.mfaOptions(page); requireTrue(boot.requestId === pending.requestId);
@@ -313,7 +317,13 @@ class Journey {
     for (const context of this.ownedContexts) { try { await context.close(); } catch { failed = true; } }
     this.secrets.clear(); if (failed) fail();
   }
-  finish() { for (const id of [...common,...extra[this.journeyId]]) this.check(id,this.observed.get(id) === true); }
+  finish() {
+    let rejected = false;
+    for (const id of [...common,...extra[this.journeyId]]) {
+      try { this.check(id,this.observed.get(id) === true); } catch { rejected = true; }
+    }
+    if (rejected) throw new Error('PREDICATE_FAILED');
+  }
 }
 
 async function enrollmentPasswordPreserve(run) {
@@ -373,16 +383,20 @@ const journeys = Object.freeze({
 });
 
 export async function runRealJourney(input) {
-  requireTrue(object(input) && Object.hasOwn(journeys,input.journeyId) && typeof input.runId === 'string' && /^[0-9a-f]{32}$/.test(input.runId) && typeof input.check === 'function' && typeof input.nativeCode === 'function' && typeof input.fixtureControl === 'function');
+  requireTrue(object(input) && Object.hasOwn(journeys,input.journeyId) && typeof input.runId === 'string' && /^[0-9a-f]{32}$/.test(input.runId) && typeof input.check === 'function' && typeof input.nativeCode === 'function' && typeof input.fixtureControl === 'function' && typeof input.reportStep === 'function');
   const run = new Journey(input);
-  try { await journeys[input.journeyId](run); }
-  catch { throw new Error('REAL_JOURNEY_FAILED'); }
-  finally { try { run.finish(); } finally { await run.cleanup(); } }
+  let journeyFailed = false, flushFailed = false, cleanupFailed = false;
+  try { await journeys[input.journeyId](run); } catch { journeyFailed = true; }
+  try { run.finish(); } catch { flushFailed = true; }
+  try { await run.cleanup(); } catch { cleanupFailed = true; }
+  // Preserve the current fixed journey step; finalization never substitutes its frontier.
+  if (journeyFailed || flushFailed) throw new Error('PREDICATE_FAILED');
+  if (cleanupFailed) throw new Error('CLEANUP_FAILED');
 }
 
 // Literal protected public rehearsal. It exercises the same private-fill and
 // browser-state helpers on a real public DOM, with no account/BFF/provider call.
-export async function runPublicJourneyCanary({page,signal}) {
+export async function runPublicJourneyCanary({page,context,browser,signal}) {
   if (signal?.aborted) fail();
   await page.setContent('<main><h1>Public journey rehearsal</h1><label for="public-enabled">Public enabled code</label><input id="public-enabled"><label for="public-disabled">Public disabled code</label><input id="public-disabled" disabled></main>');
   const enabled = page.getByLabel('Public enabled code',{exact:true}), disabled = page.getByLabel('Public disabled code',{exact:true});
@@ -391,5 +405,13 @@ export async function runPublicJourneyCanary({page,signal}) {
   try { await fillPrivate(disabled,publicMarker,{timeout:100}); }
   catch (error) { helperErrorContained = error instanceof Error && error.message === 'REAL_JOURNEY_FAILED' && await disabled.inputValue() === ''; }
   const state = await browserState(page); requireTrue(state.local.length === 0 && state.session.length === 0 && !JSON.stringify(state).includes(publicMarker));
-  return {publicDom,helperErrorContained};
+  // Public-only synthetic map: exercise the actual finish helper without emitting real checks.
+  const emitted = [], journeyId = 'TOTP_ENROLLMENT_PASSWORD_MFA_PRESERVE_V1';
+  const probe = new Journey({page,context,browser,signal,journeyId,origin:'https://localhost',mailpitOrigin:'http://127.0.0.1',check:(id,value) => { emitted.push([id,value]); if (!value) throw new Error('PREDICATE_FAILED'); }});
+  probe.observe('BFF_ISOLATED',false); probe.observe('UI_ASSET_TYPOGRAPHY',true);
+  let rejected = false; try { probe.finish(); } catch (error) { rejected = error instanceof Error && error.message === 'PREDICATE_FAILED'; }
+  const expected = [...common,...extra[journeyId]];
+  const flushed = rejected && emitted.length === expected.length && emitted.every(([id],index) => id === expected[index]) && emitted[0][1] === false && emitted.find(([id]) => id === 'UI_ASSET_TYPOGRAPHY')?.[1] === true;
+  requireTrue(flushed);
+  return {publicDom:publicDom && flushed,helperErrorContained};
 }

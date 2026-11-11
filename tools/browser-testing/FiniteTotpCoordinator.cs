@@ -32,6 +32,7 @@ internal static class FiniteTotpCoordinator
         var failure = "INPUT_INVALID";
         var source = string.Empty; var committed = false;
         FiniteTotpBuildIdentity? buildBinding = null;
+        var persistenceDiagnostics = new FiniteTotpPersistenceObservations(false, false, false, false, false);
         FiniteBorrowedPostgres? borrowedPostgres = null;
         DirectoryInfo? repository = null;
         var resourceFaultObserved = false;
@@ -121,8 +122,8 @@ internal static class FiniteTotpCoordinator
                 if (finalBinding != buildBinding) throw new InvalidOperationException();
                 checks["SOURCE_BUILD_CURRENT"] = true;
                 var scope = vault.CredentialScope();
-                var persistence = await database.InspectSafePersistenceAsync(scope.StoreReference, scope.ResourcePrefix, workDeadline.Token).ConfigureAwait(false);
-                checks["SAFE_PERSISTENCE_AND_AUDIT"] = persistence.Safe; checks["VAULT_OWNER_VERSION_BINDING"] = persistence.Bound;
+                persistenceDiagnostics = await database.InspectSafePersistenceAsync(scope.StoreReference, scope.ResourcePrefix, workDeadline.Token).ConfigureAwait(false);
+                checks["SAFE_PERSISTENCE_AND_AUDIT"] = persistenceDiagnostics.Safe; checks["VAULT_OWNER_VERSION_BINDING"] = persistenceDiagnostics.Bound;
             }
             failure = "NONE";
         }
@@ -196,7 +197,7 @@ internal static class FiniteTotpCoordinator
             resourceFaultObserved, injectedCleanupFailure = resourceCanaryMode && selection == "cleanup-reject" && resourceFaultObserved,
             publicCleanupReducerRejected,
             buildBinding, borrowedPostgres, postgresVersion = database?.ServerVersion,
-            browserReceipt = browser, coordinatorChecks = checks,
+            browserReceipt = browser, coordinatorChecks = checks, persistenceDiagnostics,
             boundary = "Finite local synthetic evidence only. No production policy, Product, merge or release approval." };
         await JsonSerializer.SerializeAsync(finalOutput, summary).ConfigureAwait(false);
         await finalOutput.WriteAsync("\n"u8.ToArray()).ConfigureAwait(false);
@@ -292,7 +293,7 @@ internal static class FiniteTotpCoordinator
             if (checks.Select(check => check.Name).Distinct(StringComparer.Ordinal).Count() != checks.Length ||
                 checks.Any(check => !required.Contains(check.Name, StringComparer.Ordinal) || check.Value.ValueKind is not (JsonValueKind.True or JsonValueKind.False))) return false;
             if (!new[] { "REAL_JOURNEY_OK", "BOUNDARY_FAILED" }.Contains(value.GetProperty("status").GetString(), StringComparer.Ordinal) ||
-                !new[] { "START", "ENVIRONMENT", "LIBRARY", "BROWSER", "ORACLE", "JOURNEY", "SURFACE_SCAN", "CLEANUP", "COMPLETE" }.Contains(value.GetProperty("stage").GetString(), StringComparer.Ordinal) ||
+                !new[] { "START", "ENVIRONMENT", "LIBRARY", "BROWSER", "ORACLE", "JOURNEY", "JOURNEY_ENROLL_BEGIN", "JOURNEY_ENROLL_DISCLOSURE", "JOURNEY_ENROLL_RESULT_BINDING", "JOURNEY_ENROLL_DUPLICATE", "JOURNEY_ENROLL_DONE", "SURFACE_SCAN", "CLEANUP", "COMPLETE" }.Contains(value.GetProperty("stage").GetString(), StringComparer.Ordinal) ||
                 !new[] { "NONE", "INPUT_INVALID", "BOUNDARY_ERROR", "PREDICATE_FAILED", "ORACLE_FAILED", "SUPERVISOR_TIMEOUT", "CLEANUP_FAILED", "SURFACE_FAILED", "SOURCE_INVALID" }.Contains(value.GetProperty("failureCode").GetString(), StringComparer.Ordinal)) return false;
             if (!requireSuccess) return true;
             return value.GetProperty("status").GetString() == "REAL_JOURNEY_OK" && value.GetProperty("stage").GetString() == "COMPLETE" && value.GetProperty("failureCode").GetString() == "NONE" &&

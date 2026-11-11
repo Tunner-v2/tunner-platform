@@ -9,6 +9,13 @@ using DotNet.Testcontainers.Containers;
 using Microsoft.Extensions.Logging.Abstractions;
 using Npgsql;
 
+internal sealed record FiniteTotpPersistenceObservations(bool Evaluated, bool SafeColumns, bool EmptyIdentityTokens,
+    bool SafeIdentityOutbox, bool VaultOwnerVersionBinding)
+{
+    internal bool Safe => Evaluated && SafeColumns && EmptyIdentityTokens && SafeIdentityOutbox;
+    internal bool Bound => Evaluated && VaultOwnerVersionBinding;
+}
+
 internal sealed record FiniteBorrowedPostgres(string ContainerId, string ImageId, string ProjectName, int Port);
 
 internal static class FiniteTotpPostgresIdentity
@@ -142,9 +149,9 @@ internal sealed class FiniteTotpDatabase(string runId)
         }
         return counts;
     }
-    internal async Task<(bool Safe, bool Bound)> InspectSafePersistenceAsync(string storeReference, string prefix, CancellationToken cancellationToken)
+    internal async Task<FiniteTotpPersistenceObservations> InspectSafePersistenceAsync(string storeReference, string prefix, CancellationToken cancellationToken)
     {
-        if (!OwnershipVerified) return (false, false);
+        if (!OwnershipVerified) return new(false, false, false, false, false);
         await using var connection = new NpgsqlConnection(ConnectionString);
         await connection.OpenAsync(cancellationToken).ConfigureAwait(false);
         await using var shape = new NpgsqlCommand("SELECT count(*) FROM information_schema.columns WHERE table_schema='identity' AND table_name LIKE 'totp_%' AND column_name IN ('seed','secret','code','otp','manual_key','provisioning_uri')", connection);
@@ -155,7 +162,10 @@ internal sealed class FiniteTotpDatabase(string runId)
             SELECT count(*) FROM platform.outbox_messages m WHERE source='tunner/identity' AND
             (jsonb_typeof(payload)<>'object' OR EXISTS
               (SELECT 1 FROM jsonb_each(m.payload) p WHERE NOT CASE lower(p.key)
-                WHEN 'reference' THEN jsonb_typeof(p.value)='string' AND (p.value #>> '{}') ~ '^(ACC-|OP-|OP-TOTP-|OP-PASSKEY-|OP-LOCAL-STEP-UP-)?[A-Fa-f0-9-]{32,36}$'
+                WHEN 'reference' THEN jsonb_typeof(p.value)='string' AND
+                  ((p.value #>> '{}') ~ '^(ACC-|OP-|OP-TOTP-|OP-PASSKEY-|OP-LOCAL-STEP-UP-)?[A-Fa-f0-9-]{32,36}$' OR
+                   (m.source='tunner/identity' AND m.event_type='AccountAgeEvaluated' AND (p.value #>> '{}')=m.subject AND
+                    (p.value #>> '{}') ~ '^account-age:[a-f0-9]{32}$'))
                 WHEN 'operationreference' THEN jsonb_typeof(p.value)='string' AND (p.value #>> '{}') ~ '^[A-Fa-f0-9-]{32,36}$'
                 WHEN 'authenticatorreference' THEN p.value='null'::jsonb OR (jsonb_typeof(p.value)='string' AND (p.value #>> '{}') ~ '^[A-Fa-f0-9-]{32,36}$')
                 WHEN 'schemaversion' THEN p.value='"1"'::jsonb
@@ -169,7 +179,7 @@ internal sealed class FiniteTotpDatabase(string runId)
         await using var binding = new NpgsqlCommand("SELECT count(*)>0 AND bool_and(secret_store_reference=@store AND secret_resource_reference LIKE @prefix AND secret_version=1 AND secret_binding_version=@binding) FROM identity.totp_authenticators", connection);
         binding.Parameters.AddWithValue("store", storeReference); binding.Parameters.AddWithValue("prefix", prefix + "/%"); binding.Parameters.AddWithValue("binding", BrowserTestTotp.BindingVersion);
         var bound = await binding.ExecuteScalarAsync(cancellationToken).ConfigureAwait(false) is true;
-        return (safeColumns && emptyTokens && safeEvents, bound);
+        return new(true, safeColumns, emptyTokens, safeEvents, bound);
     }
     public override string ToString() => nameof(FiniteTotpDatabase);
 }

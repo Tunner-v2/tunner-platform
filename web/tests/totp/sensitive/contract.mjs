@@ -88,7 +88,8 @@ export async function scanSurface(surface, {readContents = true} = {}) {
 
 // Independent v3 registration. V2 public canaries retain their original contract.
 export const realVersion = 3;
-export const realStages = Object.freeze(['START', 'ENVIRONMENT', 'LIBRARY', 'BROWSER', 'ORACLE', 'JOURNEY', 'SURFACE_SCAN', 'CLEANUP', 'COMPLETE']);
+export const realJourneyStages = Object.freeze(['JOURNEY', 'JOURNEY_ENROLL_BEGIN', 'JOURNEY_ENROLL_DISCLOSURE', 'JOURNEY_ENROLL_RESULT_BINDING', 'JOURNEY_ENROLL_DUPLICATE', 'JOURNEY_ENROLL_DONE']);
+export const realStages = Object.freeze(['START', 'ENVIRONMENT', 'LIBRARY', 'BROWSER', 'ORACLE', ...realJourneyStages, 'SURFACE_SCAN', 'CLEANUP', 'COMPLETE']);
 export const realFailureCodes = Object.freeze(['NONE', 'INPUT_INVALID', 'BOUNDARY_ERROR', 'PREDICATE_FAILED', 'ORACLE_FAILED', 'SUPERVISOR_TIMEOUT', 'CLEANUP_FAILED', 'SURFACE_FAILED', 'SOURCE_INVALID']);
 export const realCommonChecks = Object.freeze(['BROWSER_ENGINE', 'BFF_ISOLATED', 'REQUEST_BINDING', 'OPERATION_BINDING', 'DUPLICATE_COUNTS', 'ONE_TIME_DISCLOSURE', 'INACTIVE_BEFORE_ACTIVATION', 'NATIVE_ORACLE_IDENTITY', 'NATIVE_FIRST_CODE_ACTIVE', 'WRONG_CODE_REJECTED', 'REPLAY_REJECTED', 'RESULT_RECOVERY', 'COOKIE_FLAGS', 'NO_URL_OR_STORAGE_SECRET', 'UI_ASSET_TYPOGRAPHY', 'CLEANUP_ATTEMPTED']);
 export const realJourneys = Object.freeze({
