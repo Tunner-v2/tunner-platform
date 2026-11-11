@@ -1,0 +1,2400 @@
+{
+  "schema_version": 1,
+  "source_commit_sha": "947f8b090b4f74a474a71e47badcb595424bd734",
+  "source_inputs": [
+    {
+      "path": ".editorconfig",
+      "sha256": "06711c6d1789b0921f9134beb1fb3f782a317710aa7367c8b2deb721af531eb4",
+      "git_blob": "f81a5da0bae3515a7635520df8130f440c0635f0"
+    },
+    {
+      "path": ".gitattributes",
+      "sha256": "026ad839574f02871dc3480689ca5e08ca607460c2e9b7e1fc9136e5fd37c9b7",
+      "git_blob": "d7be5fd7d027055fe8f94d9dea1a0f1fdff0aa73"
+    },
+    {
+      "path": "Directory.Build.props",
+      "sha256": "d2c60e4dc287b5c9095093d601dfe5790dfebc128044825e05e4126e7d580c4c",
+      "git_blob": "ccc1679ea4a5b14c8219599c4ad5a4d047b89aa0"
+    },
+    {
+      "path": "Directory.Packages.props",
+      "sha256": "f5a382659daa556590eed5adc1ddf69b818fb25abb48ec9f2fbad1daff1d3e7b",
+      "git_blob": "59f3bfb360cc8c5b5074e2dcaf8ee646364580e7"
+    },
+    {
+      "path": "Tunner.Platform.slnx",
+      "sha256": "31650e363a1a887547b7c06bde6341afc05dc8dc83c2f2ad3a2402caeb886251",
+      "git_blob": "4639ea94294035daf121f82c73415beaaa1eafb0"
+    },
+    {
+      "path": "global.json",
+      "sha256": "d303cb1266b0a3a0fadab5cc73ade7c75e3cbcbb09b336a6de9418ece4448090",
+      "git_blob": "6916a33774630d06b6925a2350f0dcd11f276f9b"
+    },
+    {
+      "path": "src/Modules/Accounts/AccountAgeCapabilities.cs",
+      "sha256": "588f59dd3e671fe9287e808d5af6d60dbbfe1016ad4539450087091c64f5f67b",
+      "git_blob": "825194aff7d865e8555b2978eb293ec7e61580c8"
+    },
+    {
+      "path": "src/Modules/Accounts/AccountSnapshot.cs",
+      "sha256": "ae2332ae9bf7a4a176a0da85c4a68247bf382013992e0ee8949798f6f91dfb66",
+      "git_blob": "7203863419fe4501ca57e9570f12c15205bfc200"
+    },
+    {
+      "path": "src/Modules/Accounts/AgeEligibilityEvaluator.cs",
+      "sha256": "16634bc2d602406b49d26294b232e459e681597dc9b16945fb72f6c7a995e316",
+      "git_blob": "8934aa549cb523993c3d12ce293454c067231a46"
+    },
+    {
+      "path": "src/Modules/Accounts/Tunner.Accounts.csproj",
+      "sha256": "e6fcb8e1e93a724d47a829cffd19d47840a5eb088e9ace43f3a34bbaf1524b07",
+      "git_blob": "6b512ec9245ec39fc1b7b533a704aa5d6434ca52"
+    },
+    {
+      "path": "src/Modules/Identity/AccountPersonalInformationApplication.cs",
+      "sha256": "568c9e0c58462de7b004b40965b36c8e0aefa2f4023b1c88342bb548c8dd883b",
+      "git_blob": "fe72ff5cecebb539b0f82d6ad8b4fe80bb5c48c6"
+    },
+    {
+      "path": "src/Modules/Identity/AccountPersonalInformationContracts.cs",
+      "sha256": "bd6345a4cb584289f1b2eb1660d5d9367355118b089ae8fdac322da2b549a16e",
+      "git_blob": "1906c3ac7c63cbf0a966c4500f200c521fb6c497"
+    },
+    {
+      "path": "src/Modules/Identity/AccountPersonalInformationRows.cs",
+      "sha256": "cb0e74cbff0bd05550f1e19dfd2aa06805c567e18fb40efdfa1339d5ff455295",
+      "git_blob": "c6c1d3c9796f26202d41e2440f537ab3cc8b034d"
+    },
+    {
+      "path": "src/Modules/Identity/AssemblyInfo.cs",
+      "sha256": "5000be29372650e883a39aeeec1a1e4809608dd2e2fa528486fb329ece23b4c0",
+      "git_blob": "763d20e370042cf8e1ffb41751ff0ceba59b43c4"
+    },
+    {
+      "path": "src/Modules/Identity/AssurancePolicy.cs",
+      "sha256": "ee14ebf75195298efc0045b38706a351e8b0e3411d9779fc527e4eae4a051d8d",
+      "git_blob": "8d3a48477e8b09afe213c2d4e6def24e8e568e68"
+    },
+    {
+      "path": "src/Modules/Identity/AuthenticationApplication.cs",
+      "sha256": "c22887267d3eaf7a9ccf5391a32219602ca25504cda9a27829acf631b0332cb8",
+      "git_blob": "b33f36a98f898143ee8a33f296db2639f611ca8b"
+    },
+    {
+      "path": "src/Modules/Identity/AuthenticationContracts.cs",
+      "sha256": "57773b68f8b41c2dcef18ff3ab0f74ff5b9d91c93da5c1dbcbfbdd8347729bf3",
+      "git_blob": "c85c1e2597b0b3bdfe89d65e621753415b8d45b4"
+    },
+    {
+      "path": "src/Modules/Identity/AuthenticationEndpoints.cs",
+      "sha256": "d6e513b1e5964dc14e364084bfcbaee1e51e910fd2f90821e8808e300e40fac2",
+      "git_blob": "e2bb76e34c2741413fdc21c906ff9800c17f2bcd"
+    },
+    {
+      "path": "src/Modules/Identity/AuthenticationMigrationSql.cs",
+      "sha256": "7eb75270edf3f77ab65666b1615f2e32fe6f06d72cb9e738fb717c2e79ffd530",
+      "git_blob": "f10b32dca51c6936d428c05851d7641b30a6edea"
+    },
+    {
+      "path": "src/Modules/Identity/AuthenticationPresentation.cs",
+      "sha256": "9c04b451b64d4ed350036350e7802daf1ef0d386e170a0cab1c65645c67eb765",
+      "git_blob": "c4528022bc07c204e328c3ff9c3da37620773ffb"
+    },
+    {
+      "path": "src/Modules/Identity/AuthenticationRows.cs",
+      "sha256": "9858a31a91797de47205e9c7116d06029874f8403c178c07d6edb310bd18a7c6",
+      "git_blob": "a4fd6c99fe9632a5c76533876a844db668104fa4"
+    },
+    {
+      "path": "src/Modules/Identity/IdentityEmail.cs",
+      "sha256": "5a68a661d78ddbc0b37216eaf9ab21afe1ca4229016c93d9dc6f716f7b59c118",
+      "git_blob": "987737059106ea417b876e745f617cb5f585ea97"
+    },
+    {
+      "path": "src/Modules/Identity/IdentityJsonCommand.cs",
+      "sha256": "f836a2046c1c264061919b20560f96c19276c7c27b71219eddb041f31726dbe9",
+      "git_blob": "76cb994ecd8b995baef569978f5d0e8c95efcc81"
+    },
+    {
+      "path": "src/Modules/Identity/IdentityMigrationSql.cs",
+      "sha256": "e11911449e22c38a41b2e02caaca0574223e59c5204fb629c95d54ea1906ff65",
+      "git_blob": "6c2b6ffe0ff13f5beed1cfdb404dc4b76e2cd6c2"
+    },
+    {
+      "path": "src/Modules/Identity/IdentityModelConfiguration.cs",
+      "sha256": "a31e1d937723b142e12849d1bb9fac757c177f36a7cc14e5fc67d83cb6995efe",
+      "git_blob": "67a2ee1624d56f08693e6f37cf61eee5c69f2057"
+    },
+    {
+      "path": "src/Modules/Identity/IdentityPersistenceDbContext.cs",
+      "sha256": "99fddd1135de5e9bee8a0c898979e0e13050e6120d8600434f72c00f64f8ef1e",
+      "git_blob": "bffb856d8150def131106d1e11a71c974e4c1cf9"
+    },
+    {
+      "path": "src/Modules/Identity/IdentityPersistenceDbContextFactory.cs",
+      "sha256": "29983cdca9f75670503ee87a42b11434ee67523fe587bed4e5f12085eb17e60c",
+      "git_blob": "8cbdbd2b03c8eb571cc3cf4cc8aebeb6e123faed"
+    },
+    {
+      "path": "src/Modules/Identity/IdentityPersistenceRegistration.cs",
+      "sha256": "e9be038a7de7c8a72531c238aacd696d51e197fd042890d4781bb578516de8d6",
+      "git_blob": "5c8699e94286a0dc86596065c4a2bebdcaed5203"
+    },
+    {
+      "path": "src/Modules/Identity/IdentityPersistenceTime.cs",
+      "sha256": "c70e137c261cfe043bee5d66f114b86484c576c2f3a6e35185cffc43ee4422df",
+      "git_blob": "20a280b63bfbc3d6c7afa70054908daed3e55c6a"
+    },
+    {
+      "path": "src/Modules/Identity/IdentityRows.cs",
+      "sha256": "5d61cff35f21c62bbd579e48f4d898c2045d6bff12f57db0087b990ce6e65ff1",
+      "git_blob": "3bf1a9190694a83665c11dd937f5c43058df0325"
+    },
+    {
+      "path": "src/Modules/Identity/IdentityWebAssets.cs",
+      "sha256": "5e2ffcb4f61fe5a3afa875a8858b77d56470bd943efe2858c0e5e1235d172446",
+      "git_blob": "399e054f1b7d9f2373e4c4fb35b3ac2187c5619c"
+    },
+    {
+      "path": "src/Modules/Identity/Migrations/20261016200608_P2IdentityFoundation.Designer.cs",
+      "sha256": "5decafcdbe27fe59496f81db17283de4f1c76720bfe6661a67e8826f73135a7c",
+      "git_blob": "815115986f5ba0bcef9a7f084aa7264a6e489dca"
+    },
+    {
+      "path": "src/Modules/Identity/Migrations/20261016200608_P2IdentityFoundation.cs",
+      "sha256": "55337209f1849217ce0991656c0a84d398414a43e4cdfb070a484fab626aecea",
+      "git_blob": "00afccea52471eb26f68600ee364b4f33ace37be"
+    },
+    {
+      "path": "src/Modules/Identity/Migrations/20261016211325_P2Registration.Designer.cs",
+      "sha256": "382f305309c64e69959b1ceed09300259c66ad79a44046ff13cba9537ad7be44",
+      "git_blob": "8a00592fbab05ff82e78ee7246a6193c5693c4cd"
+    },
+    {
+      "path": "src/Modules/Identity/Migrations/20261016211325_P2Registration.cs",
+      "sha256": "f47527cb9e389ef8d903bd4be63859bb6b0267c9318a4518496f10a531357715",
+      "git_blob": "ca51982e23496720ee776de2073e42d5350043ac"
+    },
+    {
+      "path": "src/Modules/Identity/Migrations/20261017194133_Pdr0011AccountAgePolicy.Designer.cs",
+      "sha256": "24cff7ed74b7f56cb36c2df4fb7494b4f1e5dd518319c089cdc89847bbe6c5be",
+      "git_blob": "4b46874ac0b44515f0c3d332a91a213669c04fb9"
+    },
+    {
+      "path": "src/Modules/Identity/Migrations/20261017194133_Pdr0011AccountAgePolicy.cs",
+      "sha256": "9109eaf89024aafffb07fb16f9f3c3fee2b0a506440f062505cc46def92d4f24",
+      "git_blob": "c4db120eebb9b88506b1fceffa7bda860e824898"
+    },
+    {
+      "path": "src/Modules/Identity/Migrations/20261017195227_Pdr0011RegistrationOnboarding.Designer.cs",
+      "sha256": "fd3ae1ea1fa6f9f2d91ba766eda3f42a7f076e3088572ad95f2a21dd98320acb",
+      "git_blob": "fb4e389a0f4e46967a453f37d2e7892262968a1f"
+    },
+    {
+      "path": "src/Modules/Identity/Migrations/20261017195227_Pdr0011RegistrationOnboarding.cs",
+      "sha256": "9681019ab9a019b9014533e9637dfcc112bf8e082a31ac189495436f70afa452",
+      "git_blob": "c67d4295a8419e8224eaab93274edd96e5dfc33f"
+    },
+    {
+      "path": "src/Modules/Identity/Migrations/20261021174404_P2PasswordSessions.Designer.cs",
+      "sha256": "e75449dc139f6b0672610644b9f23edb603288ce0cb10053a06aaffd010883b5",
+      "git_blob": "80075b64adc2408cd97c8c34f914bc95cc5dd302"
+    },
+    {
+      "path": "src/Modules/Identity/Migrations/20261021174404_P2PasswordSessions.cs",
+      "sha256": "c5dbf95fe682c2f7f5133cd6fa46c5f6f4c8d95d9fb763fc5a2966a1e712e387",
+      "git_blob": "ddd668443fd463666624f9cf9c211da8ffafbc87"
+    },
+    {
+      "path": "src/Modules/Identity/Migrations/20261109033631_P2OperationStepUpProofs.Designer.cs",
+      "sha256": "5acec5f14958647b002f0a894aa67bb260820232ce096611b53cd3c58b37d398",
+      "git_blob": "ef28bb63969cc7c8e24ff2c30815b5667f109c4c"
+    },
+    {
+      "path": "src/Modules/Identity/Migrations/20261109033631_P2OperationStepUpProofs.cs",
+      "sha256": "3b558b2ee829dab335545923a1eb598bbb722ef8d4e04ab9bc5cf85b90a472a2",
+      "git_blob": "45ad8ec9b8f0302c65ff31f2d2ed4785ec158c06"
+    },
+    {
+      "path": "src/Modules/Identity/Migrations/20261109164622_P2PasskeyCeremonies.Designer.cs",
+      "sha256": "707e0ac4930fa99bfe91946f831332c6287672bb6ed0fd8981437db9b6e3e69a",
+      "git_blob": "6a395c4fa48a583cb310e5644da16ca4cd68ca3b"
+    },
+    {
+      "path": "src/Modules/Identity/Migrations/20261109164622_P2PasskeyCeremonies.cs",
+      "sha256": "dbb0acb15684b66800cec4eb77e53743732d22b06f78b778c2ea553b24134b3d",
+      "git_blob": "d7e750e282a34129cebe11bf2834f752f424d185"
+    },
+    {
+      "path": "src/Modules/Identity/Migrations/20261110092326_P2PasskeyOperationProofs.Designer.cs",
+      "sha256": "460ddc2be1f4b976e0ffee7ba069f5f2ac18f094ea2fd94520985019983f22c3",
+      "git_blob": "fc6e018208cbc977d5301f76e202dc7773b7ab5c"
+    },
+    {
+      "path": "src/Modules/Identity/Migrations/20261110092326_P2PasskeyOperationProofs.cs",
+      "sha256": "ec39f0b007f19834510600e7da6b483093e804e3ae5bfb5fbb9af451120fc103",
+      "git_blob": "d3df2383c0eb612b106a1a74f45a44444faedb23"
+    },
+    {
+      "path": "src/Modules/Identity/Migrations/20261110164421_P2TotpLifecycle.Designer.cs",
+      "sha256": "ee45c1fdf2a0c1135e3df491a3848d9a354cfed8d8e1f9ede14496a723c09399",
+      "git_blob": "e20362a6997ac47a30b4c434907437e7277630f7"
+    },
+    {
+      "path": "src/Modules/Identity/Migrations/20261110164421_P2TotpLifecycle.cs",
+      "sha256": "fef2c040491e69026669b0e81f05805a54818137a54c0cb48311019ab93429bd",
+      "git_blob": "4d37cb15ff963c78c6b9f820352ce0610ce00992"
+    },
+    {
+      "path": "src/Modules/Identity/Migrations/IdentityPersistenceDbContextModelSnapshot.cs",
+      "sha256": "b76f1dd978d47d3e05488a13c4e7e0aa2a09d7ccf29bec683b5f4ce66bb0686d",
+      "git_blob": "b79988b9d063b49d39d1e4396753f383c709688d"
+    },
+    {
+      "path": "src/Modules/Identity/OpenBaoTotpSeedStore.cs",
+      "sha256": "7480a7e660e581c8010ba40c00a7ba747ce64cf45ddc37431ca39eb476f54e86",
+      "git_blob": "787c39683a7b4fe426a4a0148c8e4a09db19a6cc"
+    },
+    {
+      "path": "src/Modules/Identity/PasskeyApplication.cs",
+      "sha256": "44fa23b30991386ce470ed31718da57189a8c9418f50d95bfc0a8a79d79542a4",
+      "git_blob": "dbcbfcf31fb5c9c45455a2e549e5f42e6b6d25c0"
+    },
+    {
+      "path": "src/Modules/Identity/PasskeyContracts.cs",
+      "sha256": "8fc296902cb4d627547c4224351726c013836c76acaf82dc2dc485b3e6c0d9b1",
+      "git_blob": "84d34da9071fedf238760904748704468e6b5f7f"
+    },
+    {
+      "path": "src/Modules/Identity/PasskeyEndpoints.cs",
+      "sha256": "1b1ebf8169d1c1c806f51559c267a666171f7bc687de79cc3c831224227751af",
+      "git_blob": "dd41f50b49e3d04af67e766852b49036868607f6"
+    },
+    {
+      "path": "src/Modules/Identity/PasskeyMigrationSql.cs",
+      "sha256": "0c0aca130eab08a1dd170964e287381fcb93e5f25fb22872ab73cb1a9becad1d",
+      "git_blob": "2b4696d13a9a5eff2382a3d74357426b89ea1d5c"
+    },
+    {
+      "path": "src/Modules/Identity/PasskeyOperationProofApplication.cs",
+      "sha256": "8eb158758c2fd42126ba8e7ff7f50782bc2db6e07c434f8426021e0f2aa070c5",
+      "git_blob": "e88da439bb9ede58996e65d5cbe65066b0a99f6b"
+    },
+    {
+      "path": "src/Modules/Identity/PasskeyOperationProofMigrationSql.cs",
+      "sha256": "4d109c899523686a8053c069504b1f18d0315eda33eae51df7a777a59056eb97",
+      "git_blob": "4ed0aa92d32e3fe9696053a436e1a270189cde9a"
+    },
+    {
+      "path": "src/Modules/Identity/PasskeyRows.cs",
+      "sha256": "874b816117404b52cfe98e37db219e6666e2453d8e082600246a5d90d867c160",
+      "git_blob": "ecd01aa4c7aa790a8a173a0677845f2e67590722"
+    },
+    {
+      "path": "src/Modules/Identity/PasskeySignInRecovery.cs",
+      "sha256": "d696450803652a8a12fb3992cca81b23d24ad72a0b3867f79802f2910c5f0d6b",
+      "git_blob": "65ac0dbaf17bac8c60c57729a72ea883c83ed397"
+    },
+    {
+      "path": "src/Modules/Identity/RegistrationApplication.cs",
+      "sha256": "9b3478e60d31d55c25fe542ed8d3e622cc6cc7e73c1d08f02dc61deda1da44a7",
+      "git_blob": "abf71f970dca88d343f5f7b22ed40fc11cefea26"
+    },
+    {
+      "path": "src/Modules/Identity/RegistrationContracts.cs",
+      "sha256": "74178674eeb10b05be6201fed14ff92fb05c69b2b955f44f586c4cd4f74afac9",
+      "git_blob": "bb7309120bb6ec3fe45885a66e5451e020ce64b6"
+    },
+    {
+      "path": "src/Modules/Identity/RegistrationEndpoints.cs",
+      "sha256": "6d74b388478d1314481b4420622cd583f1d66e809c5c71ef6e39c0ed71e1e7ba",
+      "git_blob": "2f64bd6a2b4c942887a5932c8500aa7ef303718c"
+    },
+    {
+      "path": "src/Modules/Identity/RegistrationPersonalInformation.cs",
+      "sha256": "c59b02a7eb77620b57e5304b8bd17205601a7949d75bd1edfba121af2fb9e6b0",
+      "git_blob": "903542a505d6d7fec99ec7c80f6deb44056d995a"
+    },
+    {
+      "path": "src/Modules/Identity/RegistrationRows.cs",
+      "sha256": "f5ba8b885d90bb0fd33b38eacf1e8521c2b95611ba950a69b00a404f320e6c59",
+      "git_blob": "2ed53f1e4f40b2c5605a93ef381bc607a794d3e0"
+    },
+    {
+      "path": "src/Modules/Identity/RegistrationWebContracts.cs",
+      "sha256": "1c385b8fcac72eb86a8a8ce09e4da11808fbc1de777a81b32992a7e0888c3f52",
+      "git_blob": "2d5abf765da9b51c735ff496140f9cd0c9c66ab0"
+    },
+    {
+      "path": "src/Modules/Identity/StepUpApplication.cs",
+      "sha256": "e80e497052b44deb2f9b3fef8181b1089060480f89cfa80ba98a72d30d58f119",
+      "git_blob": "6dcfd096c603ec5318d3c7f9a59f72c5212a0e7b"
+    },
+    {
+      "path": "src/Modules/Identity/StepUpBrowserContracts.cs",
+      "sha256": "9d9f14bb7fcb573f769dca1949eda222c947b3c3f510a146ae44ad7a5e344933",
+      "git_blob": "48030967eace07ffe281900766864ad0bd627cf8"
+    },
+    {
+      "path": "src/Modules/Identity/StepUpBrowserEndpoints.cs",
+      "sha256": "491a34b2e740cf4940dbafabb6da62deb6e39375b82cdf8afe50d43ec17040ed",
+      "git_blob": "8f7bf101045edef2f4ff88fa6cc62dcbacffb3d1"
+    },
+    {
+      "path": "src/Modules/Identity/StepUpContracts.cs",
+      "sha256": "a1a139b32ed70ac6ae7d88a237d07fd2fc72b8a83594c377cf92afed7f7988eb",
+      "git_blob": "0b3d478a21bcad375924c95aaa151d137d61b9f7"
+    },
+    {
+      "path": "src/Modules/Identity/StepUpOutcomes.cs",
+      "sha256": "8508200be4f34b781f94a1db5c8273e8558ba2775aba03f8ab88b2e908c1af2f",
+      "git_blob": "23c81408f3998b3bd8f93e90a5029eebcc530087"
+    },
+    {
+      "path": "src/Modules/Identity/StepUpPasskeyBrowserEndpoints.cs",
+      "sha256": "b4f78f3d90801418ef5d2245696a9902a97654f83950e5e3bd4dfa70f6c801f0",
+      "git_blob": "0fd852523b30f59337ed5aafc685aaa23f1e3881"
+    },
+    {
+      "path": "src/Modules/Identity/StepUpRows.cs",
+      "sha256": "274b05fb6b64eba582b8134fc12baefbbc9d3aedf011dd848fe3d086da0083bb",
+      "git_blob": "f0c88429d086fada2c6c579a4e1b539c57fac4d2"
+    },
+    {
+      "path": "src/Modules/Identity/StepUpTotpBrowserEndpoints.cs",
+      "sha256": "7e33cae39f2b0bac7dc4a63de5471275a97b57eb55e2b8589f22a788690b0175",
+      "git_blob": "39d6cd455e2cca0ede757098d723d1c534a2f2c1"
+    },
+    {
+      "path": "src/Modules/Identity/TotpApplication.cs",
+      "sha256": "d212dfa6ce4c9050fb857b72343b89073911bc88c9ff218e63215f441a5100cb",
+      "git_blob": "2ad4928ff62a33f614969a57df9c5217eb5163fc"
+    },
+    {
+      "path": "src/Modules/Identity/TotpAuthenticationAuthority.cs",
+      "sha256": "8474f7a96f8cb99567d59d104c3a6d35a71a1e12edc2c440a99c139cbda99328",
+      "git_blob": "f852f5b1996b2ca93c7128f2d7f4aa1657efa425"
+    },
+    {
+      "path": "src/Modules/Identity/TotpContracts.cs",
+      "sha256": "c2274e9dcadec8394c52b52b2d6af88b4b4dff4e92a4678229762ad771b73dd3",
+      "git_blob": "704bdca320a3693365afd872628a21e65d4a0b9d"
+    },
+    {
+      "path": "src/Modules/Identity/TotpEndpoints.cs",
+      "sha256": "de2f4ede87c8b2127e83a451b2018ff7186c07ce53275a4aa3ea691221e781a4",
+      "git_blob": "e3e5d257ac52f5514d7b50b3bce6b494f8d4e73d"
+    },
+    {
+      "path": "src/Modules/Identity/TotpMigrationSql.cs",
+      "sha256": "da4b8a4f891037ec864614acf3548aa10f5f52568af6626ce19c8c7387958edc",
+      "git_blob": "3ba8c8ed32531e9c86c8b76394b32b077a7c1341"
+    },
+    {
+      "path": "src/Modules/Identity/TotpNativeVerifier.cs",
+      "sha256": "a55332e5bc5b2b43305215bbaf4ea4565ac67f4f1eaf6c6087afc43429b96fe6",
+      "git_blob": "19683f384c698453db529f96a9e1081e42fd946a"
+    },
+    {
+      "path": "src/Modules/Identity/TotpOperationProof.cs",
+      "sha256": "809680ff5410f3b944d8d73016c5cecf21996dd1e16bfd0e33d33a1c7e73d1c6",
+      "git_blob": "c1af44bf55777e21c6f97118bf5fdea5a9eb631c"
+    },
+    {
+      "path": "src/Modules/Identity/TotpPrimaryMfa.cs",
+      "sha256": "c5a3353c0e87b814847afbfe7842e7ec494d117b1f7e6eebad55efeb17fec2de",
+      "git_blob": "a5aedb27862dd4ecb16cf23d4ce65b281f6b8307"
+    },
+    {
+      "path": "src/Modules/Identity/TotpRows.cs",
+      "sha256": "f197596ec89f0ec6d6394dfe408da8d88ce58015587c839fb3553948a3bfb35a",
+      "git_blob": "b21525aac7d6f7dc401563d7181559a5ae5f7646"
+    },
+    {
+      "path": "src/Modules/Identity/Tunner.Identity.Persistence.csproj",
+      "sha256": "52a7934a2605814df946518253469e9f44a344e9e1bb2b6a60b4d669ba41aa07",
+      "git_blob": "bb3d6b333b26b08e3d128b329287acec92278a3c"
+    },
+    {
+      "path": "src/Tunner.Admin.Bff/Program.cs",
+      "sha256": "c7a753043fe5c37fe8863af58fa504d98258cbe919ba5270b7805b32cbfea047",
+      "git_blob": "d639087ee55d11b436bb3db70c5b9cfb9f3eb20a"
+    },
+    {
+      "path": "src/Tunner.Admin.Bff/Tunner.Admin.Bff.csproj",
+      "sha256": "4e667989aa832276b86be3889cd9fee00eca20a3596332f46abdc9181e80a11c",
+      "git_blob": "3678ee99b5bafa60e1205997814748f786e8d342"
+    },
+    {
+      "path": "src/Tunner.Api/Program.cs",
+      "sha256": "39acff02f1b13c1c9d04948157f2f6f3e07a31228a42c9e999a4f4fca5dbc3f9",
+      "git_blob": "f29cb3b52e8083f2640527b6a0e59e3bf663ce06"
+    },
+    {
+      "path": "src/Tunner.Api/Tunner.Api.csproj",
+      "sha256": "2db75995cd1f9f0be586332fcdd4032490322174fd131800d81421a073a7251f",
+      "git_blob": "4c071c2b0076302272dbc8e56899a4dd0bb35c5c"
+    },
+    {
+      "path": "src/Tunner.Database.Migrations/Migrations/20260930173000_P0MigrationFoundation.cs",
+      "sha256": "c676e628e7df31a38a7aa14c30228dc2047d61cbfb2cc51670c40c057b3f66c3",
+      "git_blob": "808e605f2c8a5c048569bbee44f85565db87d128"
+    },
+    {
+      "path": "src/Tunner.Database.Migrations/Migrations/20261001230000_P1TransactionalOutbox.cs",
+      "sha256": "a7875b9ea2d9b2e93086aaefedb26319d0303892eec65c220b55a1018b70ff7a",
+      "git_blob": "63c550c09a6b2216969b243ac9711b75a141c6ba"
+    },
+    {
+      "path": "src/Tunner.Database.Migrations/Migrations/20261002190000_P1DurableWorkInbox.cs",
+      "sha256": "a9edcc535051b1b049a53669016429cb0c9ef6276cc6699de28b5e331abcddb7",
+      "git_blob": "985dbf01a3ab74217b51ec6b9bfb0cf56b5199b1"
+    },
+    {
+      "path": "src/Tunner.Database.Migrations/Migrations/20261005220000_P1AuditAppend.cs",
+      "sha256": "b424691a2eeda64c17029af1c7015ebc9e613831bf4e31d120cb0a4f7c11f20a",
+      "git_blob": "011037288fbb5d60878a01cddbdbf9d0c920d944"
+    },
+    {
+      "path": "src/Tunner.Database.Migrations/Migrations/TunnerMigrationsDbContextModelSnapshot.cs",
+      "sha256": "23954f6e5e6fb63e75fc6cbe2d02153330c4fd4c00d34c1a7645755fb80ffeaa",
+      "git_blob": "1fe5f626310250dcbfa81c86dec136693ce18699"
+    },
+    {
+      "path": "src/Tunner.Database.Migrations/Tunner.Database.Migrations.csproj",
+      "sha256": "fa92b2a8c7e00220a45e6fe0245c0d9ece0c5a9da71ef4154ea20953d5899c0b",
+      "git_blob": "153b699c4c165b72dd3a412cdffa766817429722"
+    },
+    {
+      "path": "src/Tunner.Database.Migrations/TunnerMigrationsDbContextFactory.cs",
+      "sha256": "a01e6903b55bbf60af33946cac4952221653166c7e2260c182cfb46b410972ff",
+      "git_blob": "618c888ce49ed573da209b474a6d046befda59c4"
+    },
+    {
+      "path": "src/Tunner.Database/Audit/AuditEvent.cs",
+      "sha256": "b812cf9217fddb833df4795ffafc2e967c24735a41abfcf81b14dfdaaad61458",
+      "git_blob": "98519c74b180b7c3a85866edec317df36cb31164"
+    },
+    {
+      "path": "src/Tunner.Database/Audit/AuditEventRecord.cs",
+      "sha256": "234aabe0039a8d1872ac8bb8deafc17c838e5c1aa09c375cce234668fda790db",
+      "git_blob": "8ecdf6d319d91107cf7c23116fc637a3c0ad6d75"
+    },
+    {
+      "path": "src/Tunner.Database/Audit/AuditModelConfiguration.cs",
+      "sha256": "c83521d9981e4ce8787621c31539efa2c9f524e1f118fdb64e407fe3b225905b",
+      "git_blob": "2cc6e7f8753b7ee994283e3c78025e6388d52cd2"
+    },
+    {
+      "path": "src/Tunner.Database/DurableWork/ClaimedDurableWork.cs",
+      "sha256": "c596c1346f02b6628599336ef4655f3e26b5a6a4848f04d66fe204072bae18b5",
+      "git_blob": "ab367890d8097411c8d69fdfa96b7f524f2cc2e9"
+    },
+    {
+      "path": "src/Tunner.Database/DurableWork/ConsumerInboxEntry.cs",
+      "sha256": "7d8a346a8ebe74730731cd09107bbb9092f9fa426b619c99610e8c252ae1b498",
+      "git_blob": "79b8e6f4cfa24c8ff4d66a95ffafe6de8fa4486c"
+    },
+    {
+      "path": "src/Tunner.Database/DurableWork/DurableWorkItem.cs",
+      "sha256": "34a53f4bbbc101089deeff184bbc6ca8c81f858e9b5358e1fcda7c5009c47ec4",
+      "git_blob": "d7dce94609a19d09f92964fc3b8af66996a2f8af"
+    },
+    {
+      "path": "src/Tunner.Database/DurableWork/DurableWorkModelConfiguration.cs",
+      "sha256": "640e047f84977cd3eff9cebcf5bf524b422948ff6ee5062193efa6c77e477bda",
+      "git_blob": "f3673fbf3ba0eaaea86f0db23106f363fe1fc84d"
+    },
+    {
+      "path": "src/Tunner.Database/DurableWork/EfConsumerInboxStore.cs",
+      "sha256": "a7ba815055f9ea3fbf0da5f06ed845c0b21159440afdaa76532e45ff0d0be066",
+      "git_blob": "2dd7df22941e51834739fc9ed2778d08b305125e"
+    },
+    {
+      "path": "src/Tunner.Database/DurableWork/EfDurableWorkStore.cs",
+      "sha256": "bcf40c574d74c4af5451d0efafded12bb1c281ca8fe549be88d4d642c64cb14c",
+      "git_blob": "c6bedf1be964d982cdd543d28d1be1ea45798771"
+    },
+    {
+      "path": "src/Tunner.Database/DurableWork/IConsumerInboxStore.cs",
+      "sha256": "5af44af81b01eca6a95bbb5f3c83295d055faeaca6066afbd3d8c8f2b3aed613",
+      "git_blob": "03284f10f3aef3c41b8ff7b8f9eb01a6af6b5c63"
+    },
+    {
+      "path": "src/Tunner.Database/DurableWork/IDurableWorkStore.cs",
+      "sha256": "6e43aff193d40f090ae20ee154916e9b37f401685abf5ec05e03aa9239106914",
+      "git_blob": "c5aece51775ca95750b572254df497dee6583dc5"
+    },
+    {
+      "path": "src/Tunner.Database/Outbox/EfOutboxDispatchStore.cs",
+      "sha256": "e6183e09375210c8f8d87d1f0fa8b0c3c565d48d5407efa1395df624349ccfa7",
+      "git_blob": "b6832d2926dc8a7fa56e384f33e2517590d37c32"
+    },
+    {
+      "path": "src/Tunner.Database/Outbox/EfTransactionalOutbox.cs",
+      "sha256": "9c3eb2c1e148229f86957a3376b43eea9f3a566c51259c129905a48e451a3c27",
+      "git_blob": "7acd36ace35f5b64ef7e492e17926ac2f2bc9c29"
+    },
+    {
+      "path": "src/Tunner.Database/Outbox/IOutboxDispatchStore.cs",
+      "sha256": "7ec2bc96e7637ca0791e36dc0d1ac9d155d6f5e6750a4e6839b6236cc1d1c7dd",
+      "git_blob": "ab0948fa8c07fd5b42646a4289d4911203808549"
+    },
+    {
+      "path": "src/Tunner.Database/Outbox/ITransactionalOutbox.cs",
+      "sha256": "5d21d7b890792d1b1acaaa8e7dbd10d74710dfa44288515bc5383add7aaaa372",
+      "git_blob": "8d1473fe194b3fec35283b03eebd653b9567fb74"
+    },
+    {
+      "path": "src/Tunner.Database/Outbox/ITransactionalOutboxContext.cs",
+      "sha256": "fdd1df604a65d89a947ad3201afa60e978bd5019766a99782cb268bcc7228a6f",
+      "git_blob": "7cf1ddd669855d692852c7331299b6ac4bf5c0a4"
+    },
+    {
+      "path": "src/Tunner.Database/Outbox/OutboxMessage.cs",
+      "sha256": "276a30245a1579a3cd407f7fd4469a8533db9fe0cc520de177267a0bd6212f0e",
+      "git_blob": "89669144909a5cdc865c8c3f273d617cf7dc9b5e"
+    },
+    {
+      "path": "src/Tunner.Database/Outbox/OutboxModelConfiguration.cs",
+      "sha256": "1da1d634da44a2c31d232785b71a9bb3e3179003cf86493f4a5680865c2f68d8",
+      "git_blob": "b3dd98e6aaffb3d129649a056ea282bea8d30879"
+    },
+    {
+      "path": "src/Tunner.Database/Outbox/PendingOutboxMessage.cs",
+      "sha256": "d3f7d9dfa777e17390ff101eb814fd94b0fabbd26a532a3fca31043f9449e1d0",
+      "git_blob": "a3cb63a07fcfbe9e2931583c35bfd3f2af2cc024"
+    },
+    {
+      "path": "src/Tunner.Database/Tunner.Database.csproj",
+      "sha256": "4ffb2375e571a611d8f54f7da69c55f019890d1fe5e3eeb4eb03bc593b196221",
+      "git_blob": "d396f2c9e75eb9c6e7d3b37e0048e6a65d7c0fa0"
+    },
+    {
+      "path": "src/Tunner.Database/TunnerMigrationsDbContext.cs",
+      "sha256": "c8a0efe7993e63799606d200c9e547f16614208aa3252dc1a2b420766c70b8f6",
+      "git_blob": "c8bf369e08c82a9e15403e3457168615f48447d2"
+    },
+    {
+      "path": "src/Tunner.Governance/AdaptiveContextApplication.cs",
+      "sha256": "01c870311e3431f6cc3aec773a70d437f5e266edd3458693ca292b684d0b6ef7",
+      "git_blob": "41c4e43ec142e5d5dd6d2f0307b85cf01fe38dc4"
+    },
+    {
+      "path": "src/Tunner.Governance/AuthorityApplication.cs",
+      "sha256": "a1805a7b2a47a3b14db247afc46adacd181dc3e08a7d258518f2dcfb8e1ecff0",
+      "git_blob": "4afb75da2ed81f1aa2d9ba7afc51f5ab1b1156be"
+    },
+    {
+      "path": "src/Tunner.Governance/BootstrapApplication.cs",
+      "sha256": "1e1d8e4bc039cbb4e2d33c818183955d1c47e7648889958761f981e03ca0079a",
+      "git_blob": "b59f7b29dd22d5184a7f95a38fe76313a4295942"
+    },
+    {
+      "path": "src/Tunner.Governance/CommitReadinessApplication.cs",
+      "sha256": "13610cb7bdc24f2a94f9956f2edf3ed3348b59e547a64d65b65502ac8e8e3d26",
+      "git_blob": "1fba68255f8b17f450fcc9e3a826f5205eb7f65d"
+    },
+    {
+      "path": "src/Tunner.Governance/CommittedEvidenceApplication.cs",
+      "sha256": "0b707f767c707f6082753fe5e13621f9a29170d32d1aead7aa8a04511ee0a7b1",
+      "git_blob": "1cd53b9dfe4362be972595bacd628b52d0c4f991"
+    },
+    {
+      "path": "src/Tunner.Governance/ContextApplication.cs",
+      "sha256": "206e43eeb019b0ce786a2f5edbdad0beb7d5680f8f0aa392844e1862972d8e6c",
+      "git_blob": "954ceeeab455c4deac7077e2a2c737759ec5d912"
+    },
+    {
+      "path": "src/Tunner.Governance/ContextTelemetryApplication.cs",
+      "sha256": "eda77279e464c0724e80bb7e031f1b1a042cbec7bbeffe9d7fd1a44cc6a8a309",
+      "git_blob": "9d4bbc6285ec03566ded8dfa2357555ff2d10266"
+    },
+    {
+      "path": "src/Tunner.Governance/EvidenceApplication.cs",
+      "sha256": "042047c346480a86a29f7e094c8e0218851dfeb412b0aaa736df31674e0e20bf",
+      "git_blob": "913f2f16f7ada8b106a3dfdf1d3c01b2e4720eb8"
+    },
+    {
+      "path": "src/Tunner.Governance/GovernanceApplication.cs",
+      "sha256": "cc6a8336a8744f0127a23d22b9c356c72a270d20ffe895938b9d6aa093aaf509",
+      "git_blob": "c177b31527683c373878dac106a0fe0533821dfe"
+    },
+    {
+      "path": "src/Tunner.Governance/MilestoneReviewRevalidation.cs",
+      "sha256": "f4859d063b7f9c8eaf68448d7bc124d6cc47226375bf68f851d4183927dad6e5",
+      "git_blob": "5a4139c3ccca08abc53e9d6a13e8a912dbb88aa0"
+    },
+    {
+      "path": "src/Tunner.Governance/OrchestratorApplication.cs",
+      "sha256": "52464683922b4880db91144f8fd678c69ec49ad4dc79e8a03e3dc764a190505c",
+      "git_blob": "593318e7d479d5ffe2004b78851fc7128a654d63"
+    },
+    {
+      "path": "src/Tunner.Governance/Program.cs",
+      "sha256": "d76e277b5dc7b20800d171cdf32c55058b4e5c32cc676aa82c12d63f8c8dba6b",
+      "git_blob": "08a414b917bb3e5d580c08b1dcaacd2741a33770"
+    },
+    {
+      "path": "src/Tunner.Governance/README.md",
+      "sha256": "e39c19204901485648163f874fca4ed8649275b5e439ed6c03570f5c72ddec1b",
+      "git_blob": "cbb391fb2d4dea751140fdb008d65581265fefd4"
+    },
+    {
+      "path": "src/Tunner.Governance/RepositoryRootResolver.cs",
+      "sha256": "2891022250a499cd23ba906be91fd6495fbcf8e8d08cd5565a37fa9d76e1262d",
+      "git_blob": "576c371c136dd90b88d35c14ac3b24696c20368f"
+    },
+    {
+      "path": "src/Tunner.Governance/RevisionApplication.cs",
+      "sha256": "c42a213c27937eee9f8920692d80f34f8fffcdad4025ec26153467e0fd725bf7",
+      "git_blob": "c487afc0bd0dae71b75dd7908b369915e3d8593a"
+    },
+    {
+      "path": "src/Tunner.Governance/RevisionCommittedProofResolver.cs",
+      "sha256": "5ff3f9908a49e8c57ebc3310a52e2b3a4ff8d1fb0d0868a603dcf8aaa33970f1",
+      "git_blob": "81127550704a019fddff5e2741db1a1b88cf6657"
+    },
+    {
+      "path": "src/Tunner.Governance/RoleActivationApplication.cs",
+      "sha256": "e264ed3f373a3a98775b40c67344a2918559062c19d44f569eb85f239161daf2",
+      "git_blob": "012a1d7de8ebdb840ea78323b928bfa79a4aef41"
+    },
+    {
+      "path": "src/Tunner.Governance/SourceRegistryApplication.cs",
+      "sha256": "d2439d830691f04cee48ab83b7b6ff60ac40d99ffacd9ee8d5be6b3d8f70762d",
+      "git_blob": "8488761c27b6c42e5ad2c42d46b6d580a868fff3"
+    },
+    {
+      "path": "src/Tunner.Governance/SupplementalAuthorityMirrors.cs",
+      "sha256": "188a2f995a542c1d2877bdadb0860e44aa4a183a1876c7bc50c0bc9677d0c076",
+      "git_blob": "cd418ef4becd202624a2ac43a6f5a2bbc2ac3f80"
+    },
+    {
+      "path": "src/Tunner.Governance/Tunner.Governance.csproj",
+      "sha256": "00b2483929f3cedaa0287bab38dfea4500ef8d3f535ab6e467c9d01d4eb56b38",
+      "git_blob": "03bcce0daefb74a99a5f290311e1faf173c240ec"
+    },
+    {
+      "path": "src/Tunner.Governance/UiComplianceApplication.cs",
+      "sha256": "73f79e829484d906726efee1cd5763c94b3b61de8910acb699f04845a3b143c6",
+      "git_blob": "0ed1436dcbc89760b37a2ec396bdd0e7208914f5"
+    },
+    {
+      "path": "src/Tunner.Installer/ConfiguredR2Storage.cs",
+      "sha256": "beafd4520939e33c45b3a2aba7315ce58d03d486b0075764ff3a0e79daf4355d",
+      "git_blob": "40f22fedde86465981301b5004730c24482093c0"
+    },
+    {
+      "path": "src/Tunner.Installer/LocalOpenBaoCredentialScope.cs",
+      "sha256": "df7f87a548143ba0a9e19f686b415ea9942a14df08613e34dcc2c7e9009fe60d",
+      "git_blob": "565600c714eda3e94db3835ea266581cc241eb07"
+    },
+    {
+      "path": "src/Tunner.Installer/LocalOpenBaoSession.cs",
+      "sha256": "416cbf0324e7f6c7f0c3f745ccc5726e25ff92d34b25d80bc5f24803e47083bd",
+      "git_blob": "5c217515ed18657e43840f54ffc6c3ca6172f41c"
+    },
+    {
+      "path": "src/Tunner.Installer/LocalR2Setup.cs",
+      "sha256": "21c3efea4ee6d0ac235eafe991e734f5d2a88416f65d2135967ade1ff91c413e",
+      "git_blob": "79c964df0e170863528f7d04b1aca8df632bab75"
+    },
+    {
+      "path": "src/Tunner.Installer/Program.cs",
+      "sha256": "4563b2df69fc54fbd6a6d623d758847fff43b084147c79353aebe6c19dc4b0e9",
+      "git_blob": "2d776afc813d9762800670ea9783b166f090ce56"
+    },
+    {
+      "path": "src/Tunner.Installer/R2ContractProbe.cs",
+      "sha256": "2cff3caf57fccaf0723348a7dd706baee5b2364630d6d5d16981fe34c836dc02",
+      "git_blob": "3c29362a46e4e19f87559c3cc0c5cbb318d884f8"
+    },
+    {
+      "path": "src/Tunner.Installer/R2ExecutionReceipt.cs",
+      "sha256": "aa5f8e24a3fd190d4cf4a11344eaa785e81022ce5e6529ce6370e170935415aa",
+      "git_blob": "345c29daa43169d04146640d60ea42eccf7e6d07"
+    },
+    {
+      "path": "src/Tunner.Installer/R2InstallationProfile.cs",
+      "sha256": "0386ccbf451301039e0caf4a9ef54302aea5014ca8621d0507a5ec7b6ffda3d5",
+      "git_blob": "07af5567a779083ca859f072fc38907b68af43c6"
+    },
+    {
+      "path": "src/Tunner.Installer/Tunner.Installer.csproj",
+      "sha256": "70a8fa894988662296299b71a12abf1c454cecdbe6cbb2b4ee25567646593e21",
+      "git_blob": "59909eaf1cfabe5bf9e073b0f6b25741298c2196"
+    },
+    {
+      "path": "src/Tunner.Observability/TelemetryAttributePolicy.cs",
+      "sha256": "7c83becc9ae15164b7c54d7ae6878511716e48c078dbdabdf699ec5a03ca1910",
+      "git_blob": "d7be4e4948c66b288f62bca23107c1434ca342de"
+    },
+    {
+      "path": "src/Tunner.Observability/Tunner.Observability.csproj",
+      "sha256": "50c0a3ee5821f317b35935fcc3cb2adfed61878fd62b4691c1f4660e34dcc80e",
+      "git_blob": "d5f149975a0f50656fa36b0a465c6456077234eb"
+    },
+    {
+      "path": "src/Tunner.Observability/TunnerObservabilityOptions.cs",
+      "sha256": "da59987cdb6bfc17cd8441f4648cc18d3a28f32459c8793e262ef24bf2a06242",
+      "git_blob": "d681af89c0a8838f344fa4d0a254f4806960d34b"
+    },
+    {
+      "path": "src/Tunner.Observability/TunnerObservabilityServiceCollectionExtensions.cs",
+      "sha256": "d63e8fa8faaf95b22df3cb5ffbe9cc67aca8db07363de7e764fbc9e4cd940ccd",
+      "git_blob": "0742e4e44ec359e11b44c69aff2ff77dad9fa038"
+    },
+    {
+      "path": "src/Tunner.Observability/TunnerTelemetry.cs",
+      "sha256": "f42e407fe38f1fedef894c2f5c4fdbd18c645f6cf6547fa5378d3152a09bf79c",
+      "git_blob": "eb726c80b74c491a47c20051c9dae3d29f2e8300"
+    },
+    {
+      "path": "src/Tunner.Observability/TunnerTelemetryProcessors.cs",
+      "sha256": "eb7362dd95da6947bc818d27fb37cd77b199181f76fb9f2fdce5bb0e1c3f119c",
+      "git_blob": "9dfe34ee345d62a0887ec40fc2e9a8d4ff434977"
+    },
+    {
+      "path": "src/Tunner.Observability/TunnerTelemetryScope.cs",
+      "sha256": "9f793b0be7ad458832df87072efefb48248e1cbfa68495cdaba06ec78a8762da",
+      "git_blob": "1f9c2d74ad3e8bd969f958a879e0b623e522925d"
+    },
+    {
+      "path": "src/Tunner.Platform/Bff/BffBoundaryProfile.cs",
+      "sha256": "ca6b14c3f16e8c990b47377e7f86938d5ee974a8dc23f4dc6ace64031923fdb7",
+      "git_blob": "2ab64e44736568c6ea9befef930930a05cb6bbf0"
+    },
+    {
+      "path": "src/Tunner.Platform/Bff/TunnerBffFoundation.cs",
+      "sha256": "c72af29baeabca6bfd142723ac8ad32b5e6bc419b078b4a6aca80ee9e8230817",
+      "git_blob": "4f63cbf5d8d629bbb95d39230cd636ab7d14fda7"
+    },
+    {
+      "path": "src/Tunner.Platform/Bff/UnavailableBffTicketStore.cs",
+      "sha256": "4ed7f94ae34db23d3327e9dc4800012c3e91e9c2208bef54f9ad3165ce83805d",
+      "git_blob": "95e6590dbd13229b595d4a872b07795a2749666d"
+    },
+    {
+      "path": "src/Tunner.Platform/Configuration/EngineeringEnvironmentConfiguration.cs",
+      "sha256": "7c95475a9ad84d865b52f8fc627fedcc1726368103240bdc7c9d49be6821fcbc",
+      "git_blob": "2095223127769804078b76eb704ec31094fccfe2"
+    },
+    {
+      "path": "src/Tunner.Platform/Configuration/EngineeringEnvironmentModule.cs",
+      "sha256": "3be3ba591393502aae3515efc6e3db24ac55c18430e949ee31ea8df5f0b60f20",
+      "git_blob": "3d6fca1fc7b62bdbfe42dfff9e6707726a87a6dc"
+    },
+    {
+      "path": "src/Tunner.Platform/ObjectStorage/IObjectStorage.cs",
+      "sha256": "a49ea8ea8bf9a58c8a0c9e3ba6f4d4f5450e183c431b1914aa6befb69058f1a5",
+      "git_blob": "75178b8bc29ec65363c0e4319967f807cc30cee1"
+    },
+    {
+      "path": "src/Tunner.Platform/ObjectStorage/ObjectStorageAddress.cs",
+      "sha256": "ce787cc9609e7f2883f93a80250cfa0b5f96edd91fb6bfbea67b71797d9d641f",
+      "git_blob": "d64c94a9c39a0842a8ca88023c1d9f2f5f359c2c"
+    },
+    {
+      "path": "src/Tunner.Platform/ObjectStorage/ObjectStorageReadResult.cs",
+      "sha256": "7684189a569ede5abc3b3cf810fc09f8679df87d6f824a72e56f67fa879a10c2",
+      "git_blob": "b8213f3d9f4c2d9146f03b2819b41a3f824aa3f2"
+    },
+    {
+      "path": "src/Tunner.Platform/ObjectStorage/ObjectStorageWriteRequest.cs",
+      "sha256": "1c679fbd62e6eb231397d9ebbdeb16020250a4302db781bc28edcf4ee70b4bde",
+      "git_blob": "7c664ae04c6e075f89f49f0a18fff3734736ddc1"
+    },
+    {
+      "path": "src/Tunner.Platform/ObjectStorage/R2/AwsR2S3Client.cs",
+      "sha256": "2837fa8e954d0473cadc50a616b1a799454b859dd03f67229e287f6d8fcd03b1",
+      "git_blob": "9f45d8a8311ad345e2f3aba60c53213f633821f8"
+    },
+    {
+      "path": "src/Tunner.Platform/ObjectStorage/R2/IR2S3Client.cs",
+      "sha256": "9f2b312feb3e7d368a9e0f684dbf487355a78e59fab5f0849d8d7183c20f8e13",
+      "git_blob": "ef3ca8e502b5b0cf62b628c561c54c66b9176316"
+    },
+    {
+      "path": "src/Tunner.Platform/ObjectStorage/R2/R2ObjectStorage.cs",
+      "sha256": "4f26ee1a14c33a662967a97d782bf083dd234623ec4e6773d13ef8a6b573de59",
+      "git_blob": "c27d9b0e639dd11b72aad2eaa71fbf807aa92db6"
+    },
+    {
+      "path": "src/Tunner.Platform/Operations/TechnicalCommandPrimitives.cs",
+      "sha256": "1f1b820d216e22dd12e2d268051ab962afc1b5533742463e6d47c6f9dbdfe3ba",
+      "git_blob": "aa0a60124d445126099a19a37724d7ac43fcd888"
+    },
+    {
+      "path": "src/Tunner.Platform/Operations/TechnicalProblemDetails.cs",
+      "sha256": "aae4edaf953ebb3626c4a51ea6fc76204eb4d14ca26eb6f59db274258d0f9129",
+      "git_blob": "1cd7ef6f972234c74748f1532dde476291cfa9b9"
+    },
+    {
+      "path": "src/Tunner.Platform/Policies/EffectivePolicyVersionResolver.cs",
+      "sha256": "ad46a28d058e8d18c718d8529eaef006e72d570bd0e84f0c619b4ac8d947f6d0",
+      "git_blob": "1e64f27f88ccfd9ab411667be3bef25434fbc02d"
+    },
+    {
+      "path": "src/Tunner.Platform/Providers/ProviderCorrelationBoundary.cs",
+      "sha256": "5c2ec1b9108e1e00a059f1c62445c262cf496cb396ccd55aa513bec091ad4ed6",
+      "git_blob": "9f4a422b95153bf2244c6b2606dbdef022f02430"
+    },
+    {
+      "path": "src/Tunner.Platform/Realtime/RealtimeAudience.cs",
+      "sha256": "da6eb307aa47b34ed93261c6267af4b1043bb3b3deed86918da7f532ea310759",
+      "git_blob": "f0eef81196977104592cfd55ff1580781da9b387"
+    },
+    {
+      "path": "src/Tunner.Platform/Realtime/RealtimeResynchronizationHint.cs",
+      "sha256": "b92cebd844b9b300f1714f98f9b334bdf91e52b1a958e8c95cc775dd8ff37fb9",
+      "git_blob": "32244a82311e9f82d63124c93ad4197029a82deb"
+    },
+    {
+      "path": "src/Tunner.Platform/Realtime/TunnerRealtimeHub.cs",
+      "sha256": "6a283f1f95bc941a36a397a5dc4f29ba06051f07d99f4f2d99a66cfc10fc4591",
+      "git_blob": "1c30147f266fdeb7a9e0b81b4634afdcf89c2fdc"
+    },
+    {
+      "path": "src/Tunner.Platform/Realtime/TunnerRealtimeServiceCollectionExtensions.cs",
+      "sha256": "11f7086d391df5adbe0e2b7a24a9c8e6f5b6ed969105d9fef7cd124c6996a786",
+      "git_blob": "7550040cc190080c86c8f4b37f377ef0279ad7bf"
+    },
+    {
+      "path": "src/Tunner.Platform/Redis/IEphemeralCache.cs",
+      "sha256": "5de043f856d91f67b8c0995b35b0745d2b88037302e96d29cfd34d9fe8a1a4dd",
+      "git_blob": "642293fc0cc9582f371ef624909a70402bd4f1ff"
+    },
+    {
+      "path": "src/Tunner.Platform/Redis/IEphemeralCoordination.cs",
+      "sha256": "9b6f2575f294215f6a78811e0bf7b514e8151d810cc6b13777b702986f5c6fca",
+      "git_blob": "12b555c4b164c4d7cd4805681022de18e4f94eb5"
+    },
+    {
+      "path": "src/Tunner.Platform/Redis/RedisEphemeralStore.cs",
+      "sha256": "8e082dd4dfee337c22b6eff96624d10cbce852e26cb61293f356c1cf471d6d49",
+      "git_blob": "57e3fcc2b5bbe3942b7f0dac2ddddc7c5b614666"
+    },
+    {
+      "path": "src/Tunner.Platform/Secrets/AssemblyInfo.cs",
+      "sha256": "604bcfffe8e2e45e27d1c2a6ed3e9e9e4fa2466e39ee2c9942a5f5524e03d056",
+      "git_blob": "28937310fa25b8dd259923427be7543f70cc06dd"
+    },
+    {
+      "path": "src/Tunner.Platform/Secrets/CredentialSecretReference.cs",
+      "sha256": "700666e9d953a521c90577e3a60803c5ea495640087f5bc870296649a2d6f03d",
+      "git_blob": "ac803867c86323dbd5a9cd0d4911c543f610cb8a"
+    },
+    {
+      "path": "src/Tunner.Platform/Secrets/ISecretStore.cs",
+      "sha256": "2aeabffd77cf83960265b7bdbc474d9a6f42a1b80b62fd2f28fab522ccbc7cdf",
+      "git_blob": "35a0d9a41111c0cc976859aad9810104a09f6470"
+    },
+    {
+      "path": "src/Tunner.Platform/Secrets/OpenBaoSecretStore.cs",
+      "sha256": "9ce3b669ccd7926da9419f3e9dda76441ba616853c15120cd7c5399951774f68",
+      "git_blob": "e48e74811bfbc225ecfcc3d31768cefcba5678ff"
+    },
+    {
+      "path": "src/Tunner.Platform/Tunner.Platform.csproj",
+      "sha256": "ab0a346df25b7ff895932bc973fc3c1176843ffaedb04c9a56a6d99290b517f9",
+      "git_blob": "54a374c22b7a6fd661e708dc4aa30bef557feb31"
+    },
+    {
+      "path": "src/Tunner.Platform/TunnerModuleRegistration.cs",
+      "sha256": "f2a79520d450769c337aadb99113af882ed90c71468fc68d77f86ca62b819245",
+      "git_blob": "a5175bea9aa36ea91a98f7af6fdaa00c969fca65"
+    },
+    {
+      "path": "src/Tunner.Testing/PlaywrightSkeleton.cs",
+      "sha256": "052f34590c5b701f97da5659609535ec2be95e7c243ef1ffbfac5f44a1dfe884",
+      "git_blob": "1d94fed4818b9729e7b82a6346dc0fedfc4ebc6a"
+    },
+    {
+      "path": "src/Tunner.Testing/TestHarnessProfiles.cs",
+      "sha256": "86060d7e00f869f6109783c5b68e688e1fcbeb2b5374f4ea7bbed4b0baec901d",
+      "git_blob": "d3b983f555e3e72274d72050f280c17f0262934d"
+    },
+    {
+      "path": "src/Tunner.Testing/TestcontainersBaseline.cs",
+      "sha256": "5c4b41de0ab38d4adc2fe3aa8a70b3a4276765a6e06c869a8cb3097dade4bd95",
+      "git_blob": "317ab71179044658c1574f51d4feb86b77720e18"
+    },
+    {
+      "path": "src/Tunner.Testing/Tunner.Testing.csproj",
+      "sha256": "49e3582f146d8f403c31e275685d54211e162cc302c7f675a818e5fdd61b0c01",
+      "git_blob": "a14a23b06c322336cca5148e2d9886e615f26502"
+    },
+    {
+      "path": "src/Tunner.User.Bff/Program.cs",
+      "sha256": "b3062397aca152f8ef1d81740a31915cc2228b639f10b1b9ddb2cc60d4964b86",
+      "git_blob": "80740e9ca49eb40618aa6069ea2626bec8f7bcbd"
+    },
+    {
+      "path": "src/Tunner.User.Bff/Tunner.User.Bff.csproj",
+      "sha256": "023ca86413a84056b82b71e09cbbae6632d08c312cb6035fb2343d7494947d61",
+      "git_blob": "3dfc3d84fa1e9c9516817fa5e52263b60c4c8963"
+    },
+    {
+      "path": "src/Tunner.User.Bff/TunnerAuthenticatedUserBffHost.cs",
+      "sha256": "225754fa24c95d28cf7f837e24ad5fbad2a8748dfc77af242559b26f25f49c62",
+      "git_blob": "7174de500cbef6e6e47f4ba6fa57d94c44c56e66"
+    },
+    {
+      "path": "src/Tunner.Worker/Messaging/IConfirmedOutboxPublisher.cs",
+      "sha256": "3e7e50cccffb611acfa86d3c238dda19c8aa6e80a1eed2e43cb0c589d9a68740",
+      "git_blob": "ce17c5a5211e634f230a03106b2104e185906bbe"
+    },
+    {
+      "path": "src/Tunner.Worker/Messaging/OutboxDispatchCoordinator.cs",
+      "sha256": "4561dfa554d69df66c9ea4d367367d84a40b90dc571b0f553a61c97f76d109e4",
+      "git_blob": "37ca385692d25f81fee1260e96d718336f74016b"
+    },
+    {
+      "path": "src/Tunner.Worker/Messaging/RabbitMqConfirmedOutboxPublisher.cs",
+      "sha256": "672d8b17dfac77c910f7d7e0660d49d708fd24c542a722e1af4cdeec581a0d9b",
+      "git_blob": "fdc69ec14132481a2c7a6a7f36540b25163510db"
+    },
+    {
+      "path": "src/Tunner.Worker/Program.cs",
+      "sha256": "7ee6cb24bb1260ea37a75a7211f16292f36a37e70211e6b81000d10025bd3466",
+      "git_blob": "753238edbe368f8bd99a351578669638f824c0ab"
+    },
+    {
+      "path": "src/Tunner.Worker/Tunner.Worker.csproj",
+      "sha256": "0e8a81536df4e7e0f75000066558ace8900cec8b6fbd7bd69b53513bb7beaa88",
+      "git_blob": "cf38f8ecd2d95a96381bee9c93f7665e138a7a8c"
+    },
+    {
+      "path": "tests/Shared/NativeTotpCodeFixture.cs",
+      "sha256": "e747ac0bbd93a6bb72171b9c394e89cc29669cee160c911f2da45f63fe5ee222",
+      "git_blob": "b239703dbd00e49fbb291ce9e4dd24782f3a353f"
+    },
+    {
+      "path": "tests/Shared/OpenBao/DisposableOpenBaoFixture.cs",
+      "sha256": "6124192a103273002c9bfac58b759e7de3f823da0866740688be79c9437e0009",
+      "git_blob": "5dcdc9ccbdc8ae795f38a5413dcbf09b1e207dc0"
+    },
+    {
+      "path": "tests/Shared/OpenBao/README.md",
+      "sha256": "21d32924e8c79f9b5cc8ff40af58c91c2baf4e607c7830a4eb2448d331a80dd0",
+      "git_blob": "0668c052842818ecfe6e9b6932629d8c0626de11"
+    },
+    {
+      "path": "tests/Tunner.Identity.Persistence.Tests/AssurancePolicyTests.cs",
+      "sha256": "232d6f2ba7292b8478364077d8b36ac9196345f66bfadda5b8e3d9d66787dd11",
+      "git_blob": "100196674a682605e438161dc3d308803dd0d648"
+    },
+    {
+      "path": "tests/Tunner.Identity.Persistence.Tests/AuthenticationOutcomeTests.cs",
+      "sha256": "741a639c516a8208eb0313b797f3fe89207e331ef88882206891bf238e532e9a",
+      "git_blob": "289c15bcd68d2ad43d59d935a4b4af6f93839d6d"
+    },
+    {
+      "path": "tests/Tunner.Identity.Persistence.Tests/AuthenticationPolicyTests.cs",
+      "sha256": "60db736093c21e4057ef61c3c373ae0202ab7672fc608ac2eb76e3b1efc3c282",
+      "git_blob": "0d6c74b83a76ff7b99642d48b9e00c8025f2317b"
+    },
+    {
+      "path": "tests/Tunner.Identity.Persistence.Tests/AuthenticationTestHost.cs",
+      "sha256": "916dc18077e84ee63766f0241f7fe77560bf1f9cc70996037fa1b50e08886467",
+      "git_blob": "1919b2a986ee7ede5ca4df45ce8b07c16b8aa300"
+    },
+    {
+      "path": "tests/Tunner.Identity.Persistence.Tests/AuthenticationTests.cs",
+      "sha256": "ca69d6df831d5d866bda8fffc522733b6afc53fdb8e334224919d3282e5b699a",
+      "git_blob": "3629b30ce6dfede48e7849d7e0428cace21a3e37"
+    },
+    {
+      "path": "tests/Tunner.Identity.Persistence.Tests/FixtureAccountAgePolicies.cs",
+      "sha256": "df7ba4628f03d3e4be1fdc197fb641016a159dc261d65fb5c714acda734c5010",
+      "git_blob": "c6b083354a2a1ac241bc2913ca7c9052f70b6559"
+    },
+    {
+      "path": "tests/Tunner.Identity.Persistence.Tests/IdentityFoundationTests.cs",
+      "sha256": "61ef1535e6c0c8d7239c801216e631e0e5f123b5e8aa04f83d64e9f911cb8db5",
+      "git_blob": "cad9e4401cfd49f801e688bad07d4897f47089e4"
+    },
+    {
+      "path": "tests/Tunner.Identity.Persistence.Tests/IdentityPostgresFixture.cs",
+      "sha256": "dc4f0b0d55e3967528fd966942136ec2f8c48a738a72a3fb1eab4123a577821f",
+      "git_blob": "c049ef03023875661ff887a528b5c1d97f22d96e"
+    },
+    {
+      "path": "tests/Tunner.Identity.Persistence.Tests/PasskeyAuthenticator.cs",
+      "sha256": "c2a8553d605045f56b2630ebc01e13d04596490237acf134bc83b05eb0f6ae5e",
+      "git_blob": "d5cfc9473c270c2c3d29dbbabdc92c6fb976f11f"
+    },
+    {
+      "path": "tests/Tunner.Identity.Persistence.Tests/PasskeyMigrationTests.cs",
+      "sha256": "710f6cc7ec63109b3d06de7ef0dddd9feee961e48121806339f782454170f765",
+      "git_blob": "3d7b01a2e62811ad04b0c902c0e7eeca2b21102f"
+    },
+    {
+      "path": "tests/Tunner.Identity.Persistence.Tests/PasskeyOperationProofTests.cs",
+      "sha256": "4d6b2ab37c0e3f83aa9d0b3f6b99207f41ffbeb8461a8840ee1ed84958e04112",
+      "git_blob": "b93c04c601e7d46aff1504cd7d6d8b1de173431e"
+    },
+    {
+      "path": "tests/Tunner.Identity.Persistence.Tests/PasskeyProofFreshnessTests.cs",
+      "sha256": "bf09515fbf3f890a42e804c9d6c4d911e5c6057037d9a96c77c31d1c05cbe00d",
+      "git_blob": "3a9d44af2fd5f74438fb08f8357dddf6b4364ab3"
+    },
+    {
+      "path": "tests/Tunner.Identity.Persistence.Tests/PasskeyRecoveryTests.cs",
+      "sha256": "80f5973fd07cb5f546e066cf553d8023abd03cdea4cbb23a064aacea6f27a780",
+      "git_blob": "00a1ee2d9d74a2c93902d1dbe25a78fc28bd5046"
+    },
+    {
+      "path": "tests/Tunner.Identity.Persistence.Tests/PasskeyTests.cs",
+      "sha256": "d4d844c401a1605ee71baed3b58fd97c6965d05ccbded3943f21a58a44ceb7ec",
+      "git_blob": "34868e3bf253d91b141714ebb6ea51ef78483645"
+    },
+    {
+      "path": "tests/Tunner.Identity.Persistence.Tests/PasskeyUsageMigrationTests.cs",
+      "sha256": "b1c5b31e3a885d8f1895708b8a4087e23fc1e6f8c6475d49787100c48e13b537",
+      "git_blob": "b4b81492c9d79e1ae5c590992ef05ff6ca1c72ee"
+    },
+    {
+      "path": "tests/Tunner.Identity.Persistence.Tests/RegistrationBffTests.cs",
+      "sha256": "66cb3920b559d74fd0f78d480acc0707370662991d4c8ee54f195e7fe1d617b8",
+      "git_blob": "8022ca726e12f0488c933ee01bc8f492edd5cb0e"
+    },
+    {
+      "path": "tests/Tunner.Identity.Persistence.Tests/RegistrationTests.cs",
+      "sha256": "50d8b66c5243fc923d67283580c3db666450fc4ba6379a79dc693f884499f44a",
+      "git_blob": "6a025fc18da3145e237cdd3263efb8ea084cba73"
+    },
+    {
+      "path": "tests/Tunner.Identity.Persistence.Tests/StepUpBrowserTests.cs",
+      "sha256": "f96d0bcb9d33a3321eaa957ddd16b238b27c00803d7e05352e44e34e2d6c1702",
+      "git_blob": "ee095cc6325ff41429e41948a0a888a131a92401"
+    },
+    {
+      "path": "tests/Tunner.Identity.Persistence.Tests/StepUpTests.cs",
+      "sha256": "d553b172790d000dcc58a1d576b8fec86d22a8f53dd667c5603918878570ec20",
+      "git_blob": "5eacab77e231765fe4e1215577ea201be731991c"
+    },
+    {
+      "path": "tests/Tunner.Identity.Persistence.Tests/TotpCompositeTerminationTests.cs",
+      "sha256": "80d1cb9eb013c68369c8d93781ade25347305a03bb643b8bd2522ff7b3ef0b8b",
+      "git_blob": "35c6322e974079b72f1f21bfde6814f3033f2516"
+    },
+    {
+      "path": "tests/Tunner.Identity.Persistence.Tests/TotpFinalBoundaryTests.cs",
+      "sha256": "c61b293691368b372baf46bd49bb76f4442f098b39f1db866e92ff615369ecf1",
+      "git_blob": "537f5c895bf77f5258a91ac4a5a461bdef5aeda9"
+    },
+    {
+      "path": "tests/Tunner.Identity.Persistence.Tests/TotpOpenBaoIntegrationTests.cs",
+      "sha256": "dbd5dd1b88ab2bfa41d9cfb48e6aee09725be2b757a0deec3bcec3fcf9c7340c",
+      "git_blob": "670eb8e1e4d18aa7159b601aca50dbdb787fbf1c"
+    },
+    {
+      "path": "tests/Tunner.Identity.Persistence.Tests/TotpPasskeyMfaTests.cs",
+      "sha256": "3ec4da684e2257197ed4a78f0716795d07171c99133861d9854072ed14877b8b",
+      "git_blob": "22e59761790610ca1a96288d85bd6d9a4d718742"
+    },
+    {
+      "path": "tests/Tunner.Identity.Persistence.Tests/TotpProofContinuationTests.cs",
+      "sha256": "3da7b6f327078ab08dc855ad08c1a84d6e3db80a3e55c782dcaefd780c463028",
+      "git_blob": "65f80f274372d4f44a45d32e24ba9426b004f87f"
+    },
+    {
+      "path": "tests/Tunner.Identity.Persistence.Tests/TotpReplayTests.cs",
+      "sha256": "aff41e982b4a90f14e0315f5eda6cd6ba2e289d02349dde3965a4cbe2bfe1150",
+      "git_blob": "3fba09a7bc020b3ec16b5eb51a0c74e5be70a8ca"
+    },
+    {
+      "path": "tests/Tunner.Identity.Persistence.Tests/TotpTests.cs",
+      "sha256": "282c595b6b73e86774432e8fcdfeb6a0ea99fa246c308452ec7718b759882a81",
+      "git_blob": "b230e608ddd6a866e37b232c00cb51e5718c61fb"
+    },
+    {
+      "path": "tests/Tunner.Identity.Persistence.Tests/Tunner.Identity.Persistence.Tests.csproj",
+      "sha256": "efa798313275df4b200e5b8c95e8d266f3e78fc07ee571490265bf0084c13a3c",
+      "git_blob": "3b87871dce43d847e61955afc965b57dc9f0364a"
+    },
+    {
+      "path": "tools/browser-testing/BrowserTestHost.cs",
+      "sha256": "1e1178b5409e1b08d7b122b398f0259e73c1d42bf21df24a91f5d6bd969c9fd0",
+      "git_blob": "9797792d4058eb1fe9032ba70b202183ffb2807e"
+    },
+    {
+      "path": "tools/browser-testing/BrowserTestPasskeys.cs",
+      "sha256": "a6c7927ea226dcdeefced4af7f7107c67329951cd1a3e463ead7ee2f5a1f7eb9",
+      "git_blob": "e9b77712c3c09ab73a6cd3f6d02fed442157345f"
+    },
+    {
+      "path": "tools/browser-testing/BrowserTestStepUp.cs",
+      "sha256": "4ac72ee108566a4ae38a4cc28d1330d83d1a25f8d17b4d9d7a21fa43248c8c44",
+      "git_blob": "715bb1070446818dcd4a1e2cacacd9a799bcce2d"
+    },
+    {
+      "path": "tools/browser-testing/BrowserTestTotp.cs",
+      "sha256": "57626ea45b1eb1ce4a4bddbd3e07fb7cc0bceb520b14accdd20e39e11376a065",
+      "git_blob": "fd8b89731644e0f54269fba9ccaa0adf0af1331b"
+    },
+    {
+      "path": "tools/browser-testing/BrowserTestTotpOracle.cs",
+      "sha256": "a9a47790c3a6a625c5ccb3f21737cb861498daa7cab64b5db8f30662cee0c8e5",
+      "git_blob": "7c8cc6a4bb3950c2f748087eff86f5777a40baac"
+    },
+    {
+      "path": "tools/browser-testing/FiniteTotpBuildBinding.cs",
+      "sha256": "9002c1acbdaaf77ec1e836d0f01ab0cdf995d5adb2a7fd7919d779e1112115f6",
+      "git_blob": "53e49964d114b5cfa3fd9c3b5f96954759245f77"
+    },
+    {
+      "path": "tools/browser-testing/FiniteTotpCoordinator.cs",
+      "sha256": "22b484c6df334080197627098a4e722f0c8d50595d6a35f9d845cf256f267b72",
+      "git_blob": "dd4e77f09329f96e176c699e77ca9a03a2699a92"
+    },
+    {
+      "path": "tools/browser-testing/FiniteTotpResources.cs",
+      "sha256": "1d6e79715cbd9a737f427953ed17da0bad3a0c2384afe268f25a0752711e49e2",
+      "git_blob": "b5450dbff82ace761f31db5dfabd5d0873c57f10"
+    },
+    {
+      "path": "tools/browser-testing/Program.cs",
+      "sha256": "a975162c7b534fbbc1311ad36764bfcf0eab523343e99824c1faa681221385cc",
+      "git_blob": "50346ab34923d8898d7ecdde1de6aba97b630045"
+    },
+    {
+      "path": "tools/browser-testing/Tunner.BrowserTesting.csproj",
+      "sha256": "e0c6d32bd5462fb4cd18adddafe8dd906635f907fa203700e0801ff6cf1c1c3b",
+      "git_blob": "6696de6cc928cf500f80ed483a76d91169dcbd5a"
+    },
+    {
+      "path": "tools/dev/new-tunner-totp-build-binding.mjs",
+      "sha256": "16e12f8f846639fd844fb11a0446fad099226dbc5237ed40ea3ed757a7811e46",
+      "git_blob": "37d01eade9f519f1fbbd0ea6a2360d2d1ea1074c"
+    },
+    {
+      "path": "web/apps/user/authentication.content.proposal.json",
+      "sha256": "e19bd31789e99a47762a41ad6415fc17d4b5001820803a468bc62aec957a2bf3",
+      "git_blob": "a7921ddd02543c06404c0b9e1ab7390033d225fb"
+    },
+    {
+      "path": "web/apps/user/authentication.css",
+      "sha256": "b4ca27a562578a5f5819771e14d3b80ecbb62e0081e8cfafa1fa6a07b6a841c3",
+      "git_blob": "d6f0a07ee01faac2dfe12489f3a2859b2acfaefd"
+    },
+    {
+      "path": "web/apps/user/authentication.html",
+      "sha256": "a0891814bbd3b039d80ecdaffd8439a3d3d0a71bfad6352c9bfeaf9251c80c5f",
+      "git_blob": "722e85c784e57a7a58291ee663da5fe0f941fd01"
+    },
+    {
+      "path": "web/apps/user/authentication.routes.ts",
+      "sha256": "54d191d6325ed6f1c08ca8452ae91066e7e9aad47e73f1c7bd016b23e6f157a4",
+      "git_blob": "d260a48dd3ca56d31ee46d71b9bf309382286fc8"
+    },
+    {
+      "path": "web/apps/user/authentication.tsx",
+      "sha256": "047185ebe1075e29d4d93ddb4c9e307f541a5155ded32d9b1990bc257ff79022",
+      "git_blob": "e82584122116bf0759bd2e00db730bf09fd8efb4"
+    },
+    {
+      "path": "web/apps/user/authentication.validation.ts",
+      "sha256": "be9733137efd4acff22401b8a410ce8f78f71b4f945b3cabc86fa15ae64e228b",
+      "git_blob": "eb022c851bb4747683a5f40b75d23a33b4f6e9f1"
+    },
+    {
+      "path": "web/apps/user/content.proposal.json",
+      "sha256": "a98bc51db45d230f81813247f8e163b8e463c87de07501f5ba04c4a745ab052e",
+      "git_blob": "774b13aba26360d6a07ebf955348c121a414657b"
+    },
+    {
+      "path": "web/apps/user/index.html",
+      "sha256": "6f45c0e1bd0cfcbdf5ad6b053ac02552bfb7011c169d66d5b24e3db7f02c443f",
+      "git_blob": "ade197bb8f59d56dc8205811f66c03680a368f57"
+    },
+    {
+      "path": "web/apps/user/main.tsx",
+      "sha256": "a14d7d37377e16a7427ddbb6e7fb31af8c83060192a59914b28ed3e02e70daa0",
+      "git_blob": "ddc9d200f77b543ffe19f9f642f4d722dff27637"
+    },
+    {
+      "path": "web/apps/user/package.json",
+      "sha256": "9b421209901dd2e21128a571c8aca8e93887c4acfb9dd9da47d4650de23871b2",
+      "git_blob": "068e2b0d3b0cdb17d1c48c340de21031bbb14085"
+    },
+    {
+      "path": "web/apps/user/passkeys.api.ts",
+      "sha256": "26ab921aac35bc68ccc836fb93ba64635585853e473c306228084c1310588538",
+      "git_blob": "ff7d6cf6a086686116b7ea82f0ba55d13fec91e0"
+    },
+    {
+      "path": "web/apps/user/passkeys.content-keys.ts",
+      "sha256": "7f46d87e9a91a1f09c99965fc64648c058dcff38509a59313e93905fd502f1bf",
+      "git_blob": "6e99a2e50be9e9ec9a0e1c52cc2e5e30b5390a79"
+    },
+    {
+      "path": "web/apps/user/passkeys.content.proposal.json",
+      "sha256": "e0472c5d02653cdc40888426a03d011934777e554551efcc31ac3197ae50c952",
+      "git_blob": "96cce51130bf1c3f2880b09972b0c7ddbc9e46de"
+    },
+    {
+      "path": "web/apps/user/passkeys.css",
+      "sha256": "9ae2febede1b4bd8d42c8ba6d5ab0f76fb4fd74e420f223f2fada8e0c0e4964d",
+      "git_blob": "25419ead4b822a92db7fd8366cfad92b7ca4f60e"
+    },
+    {
+      "path": "web/apps/user/passkeys.html",
+      "sha256": "b4c650f83f9839c963061f8a017432bcd7973662cf5edc569c9a5a509a0bad8d",
+      "git_blob": "40f8eb3832a7a22faaeb31fe503feeeb601c6b25"
+    },
+    {
+      "path": "web/apps/user/passkeys.native.ts",
+      "sha256": "920ac10073374a890b1209e1839d2c50027bc8a80eb76dacf0f1da0af702230e",
+      "git_blob": "2c1c8232cc1ab6e5c45d8db4bbf7a6d4a6361000"
+    },
+    {
+      "path": "web/apps/user/passkeys.routes.ts",
+      "sha256": "7f9f01d27bb5500036c504e4b452959936140a1296af144334b604a9d2087ead",
+      "git_blob": "2006461c5b4fda742d1d75302aa153c59566c1cf"
+    },
+    {
+      "path": "web/apps/user/passkeys.sign-in.tsx",
+      "sha256": "79e37f9b12072c1ac593a870acf7f40116ff30bd69c34ebb298b79839fa6d8c4",
+      "git_blob": "eae11b5880c8f74b4584789d2565c6258ec3ed92"
+    },
+    {
+      "path": "web/apps/user/passkeys.tsx",
+      "sha256": "1bd87e396386977975e4c2bcbfbaf13fa65d9e0a7e9bd2dd0f6e7f8bd30b3e05",
+      "git_blob": "b029de547e82c32ba9b1a1196441c0c63c3f6780"
+    },
+    {
+      "path": "web/apps/user/public/assets/fonts/.gitattributes",
+      "sha256": "31e7fc8dc7929bd077f7007c92a797978826b1408b52f459b3a126820d59db4d",
+      "git_blob": "a98ddfbaa5e53e75f60314cd5cc6739da04e1b43"
+    },
+    {
+      "path": "web/apps/user/public/assets/fonts/GeistMono-wght.ttf",
+      "sha256": "d00e590b8eb3a59acc329b2d044fd143ae935090b7da33199ebee27cc7de8196",
+      "git_blob": "173867dce0580ea751e4b9c558740d34f20ce549"
+    },
+    {
+      "path": "web/apps/user/public/assets/fonts/OFL-GeistMono.txt",
+      "sha256": "1781d2806a07d91c4edf4740b88449fab7d0eadad53f7c351b94cd4d4eb8c00f",
+      "git_blob": "61f6f4b7853081236aec6407f2dd3c7170997f84"
+    },
+    {
+      "path": "web/apps/user/public/assets/fonts/passkeys-fonts.provenance.json",
+      "sha256": "4981045902443bb2fad12318823243b90d25d5b2da5cdc5340ab30a2a19b42e5",
+      "git_blob": "4273e82442e2e1df20dd64820425048c3b653034"
+    },
+    {
+      "path": "web/apps/user/public/assets/login-bg-indigo.svg",
+      "sha256": "386769332e5a7536059a3a539aba330945509dd625def3c26f653524ded5ee54",
+      "git_blob": "9fec2413eac856c0352f68e68628d6a39cea03c1"
+    },
+    {
+      "path": "web/apps/user/public/assets/login-bg-violet.svg",
+      "sha256": "1a645630b6d50a23c85669b264d54fee83c2e0b282b35be4c58284f9a2d3adf5",
+      "git_blob": "59d3743f25e3f9d51f62c0fea99d6deaeaf3b0a4"
+    },
+    {
+      "path": "web/apps/user/public/assets/login-eye-off.svg",
+      "sha256": "2884ce04366a7fb8bdb338e15f42232ce98e88c325ad89855aec7c99aa18a924",
+      "git_blob": "22bcdd3f9fcb22b9ca814912b6a6936c0de08487"
+    },
+    {
+      "path": "web/apps/user/public/assets/login-google.svg",
+      "sha256": "8e0909066d645c6f7032ade6b7fea6033f51ebbbfde1fa40be4625ebf2d5011e",
+      "git_blob": "3d5f59d2f77d983d1acc2cc8b1518d5bb93a1b81"
+    },
+    {
+      "path": "web/apps/user/public/assets/ready-approved-check.svg",
+      "sha256": "5cf00b5b003b98f240bf74151841185904247362b74039bf350ce8574bbb36db",
+      "git_blob": "f2a574212a36476e41ece6813428f33acfa7fab4"
+    },
+    {
+      "path": "web/apps/user/public/assets/ready-imgBgGlowIndigo.svg",
+      "sha256": "54934000b01f421419fc9a104dcf5068f48b525394d0587534600695fcc37859",
+      "git_blob": "50ce088d7a324ad9a8766f8c8ce5f04d98e85087"
+    },
+    {
+      "path": "web/apps/user/public/assets/ready-imgBgGlowViolet.svg",
+      "sha256": "517d39c4c5d721617a76ccd97aff0f56124cc817d032004c1d20f38d0aae0691",
+      "git_blob": "52a654265eecfc71022dee729077676c2465a9e4"
+    },
+    {
+      "path": "web/apps/user/public/assets/ready-imgEllipse.svg",
+      "sha256": "eb37331f873999d6fb122fa3594881a0a935da1b41d20101227761c4194a4a2d",
+      "git_blob": "e62f5fa248c046baf4b4b9ec920bba6c13c798c2"
+    },
+    {
+      "path": "web/apps/user/public/assets/ready-imgEllipse1.svg",
+      "sha256": "716e0ee704ab22493cf82ceccfb7c671d1273e61790636451df1f1eb75458bd4",
+      "git_blob": "43fc01cd2c19a6e1e6980780111a6d67d0124293"
+    },
+    {
+      "path": "web/apps/user/public/assets/register-imgBgGlowIndigo.svg",
+      "sha256": "3f46d383407fee017a39de72f9a287348d25736b2747e28874da0c7028efbb78",
+      "git_blob": "316636215995f2622e135defc03374bb077cb287"
+    },
+    {
+      "path": "web/apps/user/public/assets/register-imgBgGlowViolet.svg",
+      "sha256": "6057cd9d95e1b7ee08ba24451f9b5a93e997cb96305ad1401b65718999d0f434",
+      "git_blob": "c37619a12e95724d86983d90c34e5e00cf471b7e"
+    },
+    {
+      "path": "web/apps/user/public/assets/register-imgEllipse.svg",
+      "sha256": "eb37331f873999d6fb122fa3594881a0a935da1b41d20101227761c4194a4a2d",
+      "git_blob": "e62f5fa248c046baf4b4b9ec920bba6c13c798c2"
+    },
+    {
+      "path": "web/apps/user/public/assets/verify-imgBgGlowIndigo.svg",
+      "sha256": "1cad56a901f56e0bd762afb54fbcf56e388bb865cc48ffa6347704588b6d51c1",
+      "git_blob": "d36a00fe57b0af52fabfc3065b841a080aa9771f"
+    },
+    {
+      "path": "web/apps/user/public/assets/verify-imgBgGlowViolet.svg",
+      "sha256": "517d39c4c5d721617a76ccd97aff0f56124cc817d032004c1d20f38d0aae0691",
+      "git_blob": "52a654265eecfc71022dee729077676c2465a9e4"
+    },
+    {
+      "path": "web/apps/user/public/assets/verify-imgEllipse.svg",
+      "sha256": "eb37331f873999d6fb122fa3594881a0a935da1b41d20101227761c4194a4a2d",
+      "git_blob": "e62f5fa248c046baf4b4b9ec920bba6c13c798c2"
+    },
+    {
+      "path": "web/apps/user/public/third-party-notices.txt",
+      "sha256": "8f0b059bb262488010314fac9b75a704836a6bb2e40f6659ef78af31eb8b8b13",
+      "git_blob": "4f45b0b4823bf069a733a402e53a991c299cc32f"
+    },
+    {
+      "path": "web/apps/user/registration.css",
+      "sha256": "e6f6336ee414524c1c6bc6b6f03528811c587c8d12af913f317ba30759d24e15",
+      "git_blob": "c2df25c9a04bad9a0fca9fe2b21a7be224d55414"
+    },
+    {
+      "path": "web/apps/user/routes.ts",
+      "sha256": "5266d62b07d6cf4e98612eaf5fffea6cecbd95efd9bd90d4a77e99b4ae4f3299",
+      "git_blob": "60b19ccbe5f2b4d28cc6e15040a4c81363ba7147"
+    },
+    {
+      "path": "web/apps/user/step-up.content.proposal.json",
+      "sha256": "32a5e53b10a6f8ec054772de008457668db7dd3783d3ecc72a154bb5e057d397",
+      "git_blob": "4e4b69b62d103ea611ca815e30eb28ba6e7be8a5"
+    },
+    {
+      "path": "web/apps/user/step-up.css",
+      "sha256": "bb46ce2087006f3aad303de6df2fec36293f8b96dff87303b8b1a75f0e755a1a",
+      "git_blob": "e69cce43757d8b1422c0348675665fa393898dd8"
+    },
+    {
+      "path": "web/apps/user/step-up.passkey.ts",
+      "sha256": "dd6420910c0cbbd8951aa219fb7baafea1fa927115fa24e8e55232e58ab369f1",
+      "git_blob": "f6f340d69d0de75e604215ce1be5171ce02b3522"
+    },
+    {
+      "path": "web/apps/user/step-up.totp.tsx",
+      "sha256": "3d0ce9786848aee8635ac2a39ae546f56302f3c9a5ee8f69de80b19cb0a3c448",
+      "git_blob": "e65fb7ab67307d7ea3d7fcbbfe2e1c83e57df8c5"
+    },
+    {
+      "path": "web/apps/user/step-up.tsx",
+      "sha256": "ac2abdad2bb47b2fd4e4832192b630119a58dabcfa05e096b38b79e2ec956907",
+      "git_blob": "88489cf653aa03ad20218f3ade6ab16f7e98665d"
+    },
+    {
+      "path": "web/apps/user/totp-qr.ts",
+      "sha256": "c9195bfb5e7fa209cfebb7913f238b6e919531b627ac8e67cf9d102f4091e59a",
+      "git_blob": "52ee8c525249a0bbb857aa4e8ded01ee7337c2f1"
+    },
+    {
+      "path": "web/apps/user/totp.api.ts",
+      "sha256": "4ec05c3c846acb3237f47964ba3bf4c3258a6929feb65d56cdbba5d875929580",
+      "git_blob": "7e8a4c5f2ca3e46ef78b97eeec93bc9b74a31679"
+    },
+    {
+      "path": "web/apps/user/totp.code.tsx",
+      "sha256": "2bc7d8a675ad6b793e5025c430abaa21b7c035d073e3da919521312a80206357",
+      "git_blob": "cc263705496709cb4192d45c83e64bc4d4d5670d"
+    },
+    {
+      "path": "web/apps/user/totp.content-keys.ts",
+      "sha256": "e0af7e50a591041c674fb992ec33ffbda1630e33149119706627c5cbd328fe14",
+      "git_blob": "cedfa5020970e1fb973c3fb1662954d87879a34c"
+    },
+    {
+      "path": "web/apps/user/totp.content.proposal.json",
+      "sha256": "4bf3b0a31a80bb15a7ffa5d8f955605af42205d8d0467a0f9f25cc8ec376798d",
+      "git_blob": "a62636f37197f6e27388cd81fbd8dfb91c4c7b2e"
+    },
+    {
+      "path": "web/apps/user/totp.css",
+      "sha256": "7b75dabcd05092f584ebebef75b100da52b130a3b2b067e43cef93754c807470",
+      "git_blob": "ac46a8f3077c4e4cc3ea5a3e7b57c62b9caa4741"
+    },
+    {
+      "path": "web/apps/user/totp.html",
+      "sha256": "b29c38372de46e787943ff4665e32e197edf46be36c9262d0cf22d28bda31f34",
+      "git_blob": "dd839a53053eeece2c9023ec00a06dc8cd4aa1d5"
+    },
+    {
+      "path": "web/apps/user/totp.method-row.tsx",
+      "sha256": "63637468dc5e8b54894cfb8d39bf36114cb833c14ee2b8763564593e79e9db4b",
+      "git_blob": "03ca8b437eea31dab3803cd0b6fc69e791fcdd3f"
+    },
+    {
+      "path": "web/apps/user/totp.mfa.tsx",
+      "sha256": "0cac4a920e582cfc4b2abc0184bb7649d2b35264bba07bb5bd5663f05a2b3647",
+      "git_blob": "91a48a99bebed78166992e787f1ed96552b5ef28"
+    },
+    {
+      "path": "web/apps/user/totp.picker.tsx",
+      "sha256": "18143e2ed9bc1b52709386939ed2cab66bc9b68264c79b476d1d11701a6c441c",
+      "git_blob": "c40ab5255bce748d8f56a5cffbff49f7792f3162"
+    },
+    {
+      "path": "web/apps/user/totp.routes.ts",
+      "sha256": "83b1953fb18aea21a25d1dff1af31d2d9ff79c685fbf93cfdeb2ef367fe92898",
+      "git_blob": "d706c1e9bf2c5435f109881995c54664ad32fcf7"
+    },
+    {
+      "path": "web/apps/user/totp.tsx",
+      "sha256": "dcf925a2891a179eb483e62f665480e19b7ac8ba5a27ab49bb5a3fea960a4f29",
+      "git_blob": "308a8e4c0429c0ebd6a5cffd41edd3939cb73f77"
+    },
+    {
+      "path": "web/apps/user/totp.ui.tsx",
+      "sha256": "83a698aa4db1f887ec538f8deeb15024c57740ccb5576be20782d9eccdb45aba",
+      "git_blob": "73d658316490a225400c5f5d818def3f8ddf2243"
+    },
+    {
+      "path": "web/apps/user/totp.validation.ts",
+      "sha256": "3eb9b3316bc680398d337ea95a3374a9c95482030d83e9bff8e517fac97f21da",
+      "git_blob": "ad876cde4f9b1a293562782526222517c989bd58"
+    },
+    {
+      "path": "web/apps/user/validation.ts",
+      "sha256": "54cca3b0c3456301c865bd76b5e84f8ddea77806f51aafe7aabf79676ad9b0cd",
+      "git_blob": "81cf69f2cfcde7cf2a829992bb00b191a8f99cbe"
+    },
+    {
+      "path": "web/apps/user/vite.config.ts",
+      "sha256": "e77cbf5ef8a9975bcf11e6743c1afef8c3965ef6c75a4e05e6a1c9e67b8b907d",
+      "git_blob": "e5d6a24ebe118af182e3041e0c823d704fdb6709"
+    },
+    {
+      "path": "web/fixtures/step-up/fixture.css",
+      "sha256": "2614e20ae93ef286b670d6adce280481245c062cc224fcc570f167fe8c6b9def",
+      "git_blob": "c532bef191e2ed42d54f5cdf2f992092d761cf88"
+    },
+    {
+      "path": "web/fixtures/step-up/index.html",
+      "sha256": "9fee196152e342822c43183a10cab09ba271db115b24e7d4d69c32a886dabc46",
+      "git_blob": "d1711540f51ec066993cb1b4f5fb90bf46a35d61"
+    },
+    {
+      "path": "web/fixtures/step-up/main.tsx",
+      "sha256": "afce80fc7998b10a688722b659a0ed574c1cf15b9b43175d97e08f4629d540c3",
+      "git_blob": "d9cec43de95b62ed4075250b46f79ea9541b50ed"
+    },
+    {
+      "path": "web/fixtures/step-up/vite.config.ts",
+      "sha256": "7aa43dff66a2c6f12dc7aaa88c7c60b33193fe8dcbfa058039f9f39469fe0984",
+      "git_blob": "23b682c47a73c52e2363aa94727177e9b2d7c5e7"
+    },
+    {
+      "path": "web/fixtures/ui/fixture.css",
+      "sha256": "b9c2ae81f216eb3bfb941658fdd7c9656ac042132e29b24742e73e2afe70ec6f",
+      "git_blob": "a2eda42ec81fcbb71a736546480420f38c58e798"
+    },
+    {
+      "path": "web/fixtures/ui/index.html",
+      "sha256": "e635408db30cb6b59220a5017068da1c1f0664701b25281a8963f5333b6dad49",
+      "git_blob": "77193d5c2121a135c3251fe91e3f2f92490aee61"
+    },
+    {
+      "path": "web/fixtures/ui/main.tsx",
+      "sha256": "17fcbe7cdb857dfbc3e2d04a2bfc899f7c3b5470346caeab28894eac474899ae",
+      "git_blob": "94759d515f274323f5110a763fe9f20715c604fc"
+    },
+    {
+      "path": "web/fixtures/ui/package.json",
+      "sha256": "0d62e5cfa65b5daea90bc3ca34d00bffe70474fe39a918f7a404fdcc76d46c2d",
+      "git_blob": "d7c3195d66e3e191667060f81aaf8683c5573ab2"
+    },
+    {
+      "path": "web/fixtures/ui/vite.config.ts",
+      "sha256": "8aae1e731016368f7cdaa08f6c837fd42ab32e34d56d22e7e93f1ecdff2ee6da",
+      "git_blob": "09456009ca8f37cbcb1e0297b7a9a38c6bbdf4cc"
+    },
+    {
+      "path": "web/package.json",
+      "sha256": "46f497033bdab30d8bda42718fba2d3af353c95cd82dcd3e471082c0c6bc6e95",
+      "git_blob": "17528ac713eb830c4202905944fbaaad0aa521a2"
+    },
+    {
+      "path": "web/packages/ui/package.json",
+      "sha256": "b7c555afbb824533ffd657267a86cd1f295e3fb098e3e6214a0cf3664f6ab95a",
+      "git_blob": "c967243d08c62fbfc4259611ec9adc0a9b0a5df2"
+    },
+    {
+      "path": "web/packages/ui/src/content.tsx",
+      "sha256": "38e6efb190d36c1b1744d55cf200d3c7bd555661a4c78eb20015bff6278e94b6",
+      "git_blob": "e9b10d155b9bf06bc80454e4714e33c75b08029f"
+    },
+    {
+      "path": "web/packages/ui/src/controls.tsx",
+      "sha256": "1efa6f238ddc65c1cf6adcb3639eceb1bc44837d6a20f1c5e26ffa3f37281b78",
+      "git_blob": "ae1d997a7b76eae8a76b74af3328ac1573329c7e"
+    },
+    {
+      "path": "web/packages/ui/src/dialog.tsx",
+      "sha256": "29004f6f70676a49fadaca48020b02c363e61a1d2647130d3963eb0d4ef8560c",
+      "git_blob": "376d07c8953aa24ffe2c03fa4938050b8cd8b0d7"
+    },
+    {
+      "path": "web/packages/ui/src/forms.tsx",
+      "sha256": "c68bbf115c0cb0b5ff80938b56cc09b99e136abe10a218e93a8b24264b16acb3",
+      "git_blob": "a60383e7bbe73eaefc55c250be209fd2eff85b2c"
+    },
+    {
+      "path": "web/packages/ui/src/index.ts",
+      "sha256": "209685a35101961cd76d9d1ad87191559497c7db5ff444856125467768a6b0ac",
+      "git_blob": "650dfdc4736db157004ebde577e29f003a334cd6"
+    },
+    {
+      "path": "web/packages/ui/src/navigation.ts",
+      "sha256": "5a6baa41b6c5b09d5b071844352ced774928d0d7e4eaa9d9f24d72da3878688b",
+      "git_blob": "b6f5541dc8daf14c5ce43f73e99039dd1f86066b"
+    },
+    {
+      "path": "web/packages/ui/src/theme.generated.ts",
+      "sha256": "1a2f5a30ee76a5d11bfbb942d2574bea1048162741dabe550ec6fd9970d73848",
+      "git_blob": "91a639f208ce9ece4f940d27577b3f17467aba45"
+    },
+    {
+      "path": "web/packages/ui/src/theme.tsx",
+      "sha256": "6e88e911d98bc0b19e093302722e52a31606e9af3591a20a3074ad6158b18fa6",
+      "git_blob": "10b5e8d27dd4fc5be41bc2a47be31d919f4c2682"
+    },
+    {
+      "path": "web/packages/ui/styles/components.css",
+      "sha256": "e7d9b15241ab8d0500f090015bf99f9844f1f3c404cfdffb71d27913bdf8a321",
+      "git_blob": "092761c08561df062720631a1977195851ab4273"
+    },
+    {
+      "path": "web/packages/ui/styles/index.css",
+      "sha256": "eb2c9df01fcbfa0bd676fd7dd310f9213ecd47a885cec76318e6edee47f992e1",
+      "git_blob": "4aa6376d43f2d259573e3b9284789efbf550d7c2"
+    },
+    {
+      "path": "web/packages/ui/styles/tailwind.generated.css",
+      "sha256": "fef6ffcc84bb4ea6a9f267dc30656c7e81abf1600c195711030954f42c518dfa",
+      "git_blob": "fee04df0480ff042544ec4c22948dc8115ae76c2"
+    },
+    {
+      "path": "web/packages/ui/styles/tokens.generated.css",
+      "sha256": "a16f8f2495ea4e3b8de58da14315d5bb65499b3f5e746514b3734ad00d3b1373",
+      "git_blob": "8a0ca6dacc0a7d8589716558ee6dd2ea141efbb0"
+    },
+    {
+      "path": "web/packages/ui/theme.tokens.json",
+      "sha256": "e2eaaf4ab92a3d1137ad8e66be0c2d59f30ef6753d731db7a0356d3d96f67266",
+      "git_blob": "b2119a6503fc2abc8d3acd5b7f6f7c76b819cc9e"
+    },
+    {
+      "path": "web/packages/ui/tools/build-theme.mjs",
+      "sha256": "d56bee95ccfc4f43bee47e5b8744d3e30557b111a48924ed10d5231418e25f3d",
+      "git_blob": "12a5cb57c7f4feb2b663482c776672eeed6ba58a"
+    },
+    {
+      "path": "web/packages/ui/vite.config.ts",
+      "sha256": "4fa22352f8e405a1d905c433b14060f74db1572f8e6b3f0ffa2509d574ad6249",
+      "git_blob": "236f142d4a56a80d8032ad79fe12fbe921796eef"
+    },
+    {
+      "path": "web/playwright.authentication.config.ts",
+      "sha256": "95467dd11d3ea6485a0abf826322c2953d44ef9a0fb7972740a18369d5bae118",
+      "git_blob": "a2b82f480e4fc80b56334c561143e5a9e5cbd39f"
+    },
+    {
+      "path": "web/playwright.browser-testing.config.ts",
+      "sha256": "b9cdec14ad0b70e84dd36df2bd6e042b165560f8d93d3b73e1efd41bfcb7057c",
+      "git_blob": "011da8722f71a854734f79e7e358fa37a872c28d"
+    },
+    {
+      "path": "web/playwright.config.ts",
+      "sha256": "7bb33b595cb9b57204dc17df70c875047890d8b0e899962d26d1581c9a5cc84d",
+      "git_blob": "e1fecedb81a03b47e3ce0ca5d8b64f46cccacd75"
+    },
+    {
+      "path": "web/playwright.passkeys.config.ts",
+      "sha256": "e996d351edafd776928aa955e9ddb2699fb5f003db61587e3294e23814d06db5",
+      "git_blob": "93d64d5e63f52a8dba16e85c257a7f7dd4f13dd4"
+    },
+    {
+      "path": "web/playwright.registration.config.ts",
+      "sha256": "ddffc499fb583333e1118a74d5896288709724ef522704a96dad56fccc13a18c",
+      "git_blob": "a94acb15abe55cb9b74d57e73dea35b91a0bd3c3"
+    },
+    {
+      "path": "web/playwright.step-up.config.ts",
+      "sha256": "bb17fe3538db0e2b5b068ccb6096d03d9346430bba14c49084b30d9d46d1223c",
+      "git_blob": "78b124f0ae40cff290c769d4e2bc940062d0f37c"
+    },
+    {
+      "path": "web/playwright.totp.config.ts",
+      "sha256": "4ce17bcabf93922d225c8c628130431bb0872bf3df0f4caadde1310ffd6049b8",
+      "git_blob": "98c96b96ba823a6b86ad7ea2d7a964464ac1098f"
+    },
+    {
+      "path": "web/pnpm-lock.yaml",
+      "sha256": "4359f7d23d443e4f89577321d03247d50e505c1072cf98016c380f33c7e1cd3d",
+      "git_blob": "39990993c01c11e4228031b5dc1f53de15f53e75"
+    },
+    {
+      "path": "web/pnpm-workspace.yaml",
+      "sha256": "089661df06729950428d6a62e2d96a3e98aba85696d0d91300d50a1d3bdd9546",
+      "git_blob": "779b553344c988738b9c3bc6e5d1a28af3996c4a"
+    },
+    {
+      "path": "web/tests/authentication/authentication.spec.ts",
+      "sha256": "0105f0a7370d1b4b7a7c82a37da8c9c69ad803d33e98feb43ff6c6a787e20dcb",
+      "git_blob": "1a177cce59ac27dd651cafbe3f3c421bdc93bce5"
+    },
+    {
+      "path": "web/tests/browser-testing/authentication-flow.spec.ts",
+      "sha256": "c1e9ab677a61529e40df9e95a0e1a1e19c5199c80b60c919f462fc45b835adab",
+      "git_blob": "391d1a88c57c34609cd3b6937272d8574e503bbb"
+    },
+    {
+      "path": "web/tests/browser-testing/fixtures.ts",
+      "sha256": "5597f953e482fa0ece951ebd04257f566999b2e34702c44a584131fefd97d402",
+      "git_blob": "fb02ee0222981890a6b1cadd51b82754658e5e77"
+    },
+    {
+      "path": "web/tests/browser-testing/manual-flow.spec.ts",
+      "sha256": "91ef2aae3e3e22081de41c03e1d16418d3ab149c6e879b232a4f5b045b176286",
+      "git_blob": "38cd33da0a48d6f43d6502523e92b6579783e00a"
+    },
+    {
+      "path": "web/tests/browser-testing/passkeys-flow.spec.ts",
+      "sha256": "51d92ec189118a38f1e6db773af088dd81425a8c2610198b98f29f1a82188522",
+      "git_blob": "8569f7723e89a47781265737dea19dbfb4fa6712"
+    },
+    {
+      "path": "web/tests/browser/admin-contrast-review.spec.ts",
+      "sha256": "459d0f1f79487777213a52ae8b27567b942ed938ccc79567dc75b96821420e64",
+      "git_blob": "abf773c2957279cbb9f40da41380becd9c730696"
+    },
+    {
+      "path": "web/tests/browser/foundation.spec.ts",
+      "sha256": "4013ca1b41be8007dfc580265178ca4d23e7265dc69b1194b7927501ca0a9ea7",
+      "git_blob": "594f945ecc2b05dc9496c7e3a131f1e5baf709f4"
+    },
+    {
+      "path": "web/tests/contracts.test.tsx",
+      "sha256": "dfc1659d84cc9fac1cf7d07c8cc2acf7e13fe08fb60cb1fb727053fbc6dcce2c",
+      "git_blob": "6021b66f32e758e622bee26c3cf15e7e205a145b"
+    },
+    {
+      "path": "web/tests/passkeys/fixtures.ts",
+      "sha256": "4f87655cbae18426863a76cbd45ea40cc4c886447afafa5df1c19745edc8ae00",
+      "git_blob": "30056ced33098efeba095449206894a233bb1ede"
+    },
+    {
+      "path": "web/tests/passkeys/navigation.spec.ts",
+      "sha256": "be0ee8cfaf06f4db5c51c29052d4cda9575a26a766c63f732bc61927c2043971",
+      "git_blob": "966c10a440e05daf9241f416ab8e48a04a2368dd"
+    },
+    {
+      "path": "web/tests/passkeys/passkeys.spec.ts",
+      "sha256": "1ab24aa07a677c3a6b30baf9260e25217d54f872692c08011d932c4367f5435b",
+      "git_blob": "a6840747bafebaea3e4686b1efc317785cee2456"
+    },
+    {
+      "path": "web/tests/passkeys/step-up-passkey.fixtures.ts",
+      "sha256": "14d06fe7a6eb725932ebf072181bb394c1427be083e931d47a61beddb7210fa6",
+      "git_blob": "9d93a4997fcca3983a5d0868d58dd2fd02d351e3"
+    },
+    {
+      "path": "web/tests/passkeys/step-up-passkey.spec.ts",
+      "sha256": "415a2088b3236cb32351a4e8693605379c4bc9cb5647b27cd3b4865b5005495a",
+      "git_blob": "a350b5a594a6a86bd3ee908d795ca5991176e4b1"
+    },
+    {
+      "path": "web/tests/registration/global-compliance.spec.ts",
+      "sha256": "5ac95939cfb1b87d2fcff54332b14d4e8d8ef82af0722168e2ba525bbcebe029",
+      "git_blob": "75e733c11069359c1ab55ffe0a3928d5b3e6aaa2"
+    },
+    {
+      "path": "web/tests/registration/registration.spec.ts",
+      "sha256": "b8536b08f4c4cbedd8a5e6c8191ea453aed2331296d74a78528cbd0bcbd705b9",
+      "git_blob": "12b0339438362425ef5eec9e3676bb1d2d56ac4b"
+    },
+    {
+      "path": "web/tests/registration/support.ts",
+      "sha256": "c934109f4e10f9149f140dc037b70762eae879d9d029927283edd1cf00a35f58",
+      "git_blob": "18ef89d918331ff5d260d0cd4e9cf1f04acb5d49"
+    },
+    {
+      "path": "web/tests/step-up/step-up.spec.ts",
+      "sha256": "2ef6d6db2d8f8edd8e6d6936e4170e2aba3f864efa021f978c631e820c7c57e9",
+      "git_blob": "4445d1fd2e126355a3b82967c877e6978aede5d9"
+    },
+    {
+      "path": "web/tests/theme.test.mjs",
+      "sha256": "9f895564d15f303c76243b2d15ec3a011c7a3eb5cbf70f1a3033f77a85b43e09",
+      "git_blob": "ff4770544996bfa23b1631878726f7a8f5fe2109"
+    },
+    {
+      "path": "web/tests/totp.contracts.test.ts",
+      "sha256": "24b2b7d1f650d93eefe9a9b274b3bf9dca6efdc502c98227a3ec07b7367abf04",
+      "git_blob": "5db42f0eec5c3208fb4f163f4cf5a1bf378c41d1"
+    },
+    {
+      "path": "web/tests/totp/QR_VALIDATION.md",
+      "sha256": "776ca779f62eaba630e4978a4539f5b6a06684bdf84172606bcce010660915dc",
+      "git_blob": "bab7f96004660264c1436963e689982941255d97"
+    },
+    {
+      "path": "web/tests/totp/qr.test.mjs",
+      "sha256": "6023b95f89f00767939de645a37212201c713423b1e7d3447105416ce932d981",
+      "git_blob": "cc088eaff559914252cfd0ca7fdee7b8efb493fb"
+    },
+    {
+      "path": "web/tests/totp/sensitive/README.md",
+      "sha256": "b3295c2eb3f57e29aef229f5125004dd7a5bd45bb939ee80e72e15b8d279b07a",
+      "git_blob": "1ff3f9967f71f82a7574439d3f6e908fce5b189e"
+    },
+    {
+      "path": "web/tests/totp/sensitive/boundary-tests.mjs",
+      "sha256": "912d896e9ba7f36557982367bd8f27494f9802df7cc8a8cc9a72f1e175414230",
+      "git_blob": "61e4979a49421b6b25f9c71d7b6307fec1ff308c"
+    },
+    {
+      "path": "web/tests/totp/sensitive/child.mjs",
+      "sha256": "7f82584ace21fdfefe8fefa8997c99f64e63dbf80f9d0242afa6a22b2fcc72a4",
+      "git_blob": "dd4a5d0cffea3421d90cb6fd06e899c0b562e993"
+    },
+    {
+      "path": "web/tests/totp/sensitive/contract.mjs",
+      "sha256": "3ef3c1a5dd44c81d56bcf6fa12f0e37c4801d5973e3891fb4febeb3b9adf356a",
+      "git_blob": "327b760c1a24b7918681645a066f9f39f8148a60"
+    },
+    {
+      "path": "web/tests/totp/sensitive/oracle-bridge.mjs",
+      "sha256": "e0533177f0f3b0904ca09b7d29df34e88d4a8899e3e8f354e1074f9c2881dd94",
+      "git_blob": "becf0277bcd21b29dd395fc941cb1a3fd769f0d4"
+    },
+    {
+      "path": "web/tests/totp/sensitive/private-frames.mjs",
+      "sha256": "1d72b5cdb42415ee1fdaf2b16f91362dd519363f531d94867efdc9888dd4e33e",
+      "git_blob": "7086727be5982939315012caee9ac52c0907b50d"
+    },
+    {
+      "path": "web/tests/totp/sensitive/public-canaries.mjs",
+      "sha256": "60a7fc8a8559443d8e2b2d9c12ebc73f5c8959a796b00c49b2090dafd92ca1a4",
+      "git_blob": "b0e42c68a8962c66fb7017f2bb9400bf716d89bb"
+    },
+    {
+      "path": "web/tests/totp/sensitive/public-real-canaries.mjs",
+      "sha256": "67ac7a9b10b856bcf5117ff971e803b545c18e4cd0ba481e874413289b094571",
+      "git_blob": "b785345005a0bdb88bec3c5b87d81a26d541a79e"
+    },
+    {
+      "path": "web/tests/totp/sensitive/real-child.mjs",
+      "sha256": "2ca20a10562a815c5b23e756f2886f3eb93dc15fff21250ea75877fc404fbd5e",
+      "git_blob": "c64e7deb7d4937fe78c03f5bb18eeb09ad454b86"
+    },
+    {
+      "path": "web/tests/totp/sensitive/real-journey.mjs",
+      "sha256": "ee9f4b7d868868567d55ff5e130a312c3ce798472dc293fd74185ff9ef548714",
+      "git_blob": "5af9802e35ecf2a34eadaf3589dcf3966c28b4d2"
+    },
+    {
+      "path": "web/tests/totp/sensitive/real-supervisor.mjs",
+      "sha256": "7f1c7f73b3418b425cd84101f39f0a67cd157a0d1aba9f5d53c071c6e66234ac",
+      "git_blob": "9c251501625adc02fb9d79afb00281c71ce2c2c8"
+    },
+    {
+      "path": "web/tests/totp/sensitive/supervisor.mjs",
+      "sha256": "3bc08144358150795d9131a26073a87df139365cd613f112a0a553cf030ea396",
+      "git_blob": "4af37a38cd2341552f40a21682e20304ffd93240"
+    },
+    {
+      "path": "web/tests/totp/ui/totp.spec.ts",
+      "sha256": "d0ee44b41069f4b391cef6a5fcf4afce6f402d1ff7b939de2ffc9ba65ca59c48",
+      "git_blob": "2b14911777cbfb81b868c62e05caa88a9c19aed5"
+    },
+    {
+      "path": "web/tests/vite.config.ts",
+      "sha256": "a89dd6cb47d9292d05e3977a623205d544ac8211b5f0f0d256aa675b9732a4ee",
+      "git_blob": "d02e4a36212ba12cba4579819f39694e89166cc1"
+    },
+    {
+      "path": "web/tools/build-qr-vendor.mjs",
+      "sha256": "0d6915f701d39c8762c53ad1090a2b3faa2a4d1f4eaf5c4322cce04fe6567bda",
+      "git_blob": "2aa786f13b72d2389efca8415e59f74145faeaec"
+    },
+    {
+      "path": "web/tsconfig.json",
+      "sha256": "f27ae967a3fca6ae31958cd9a08524a4c42ebc36e339c3beb03e8e4025b1ff0c",
+      "git_blob": "b6b8a3fed78b450451d6a22285902610dbe6ad9a"
+    },
+    {
+      "path": "web/vendor/nayuki/.gitattributes",
+      "sha256": "93c1f982e874382f1029ad38ff70cf969b16c6482e6808ca4eb84899544f8d96",
+      "git_blob": "5b3015a00178ec051ebf0b236886565d6fad6672"
+    },
+    {
+      "path": "web/vendor/nayuki/qrcodegen.d.mts",
+      "sha256": "e5b8a66a1856947a116f784e52f39dbcb8bd8707fdb68f02adc84f5e4e2b1b0c",
+      "git_blob": "7a08b1355e73e921a9c82ce0974994639e095571"
+    },
+    {
+      "path": "web/vendor/nayuki/qrcodegen.mjs",
+      "sha256": "4beab5d288a523ccf61dc0582a29f91be9d4dd6f74b93aa9faef9ae2261b1bee",
+      "git_blob": "c891fa7527e1d351f16d5127f07f141cb4c7a20c"
+    },
+    {
+      "path": "web/vendor/nayuki/upstream/qrcodegen.ts",
+      "sha256": "c4749095a91bf9696e3a303998b9905e467094f53041e64393e65e6d887737fd",
+      "git_blob": "4a2d0acce5a24760245d43c1644a4e1993d70834"
+    }
+  ],
+  "build_outputs": [
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/AWSSDK.Core.dll",
+      "sha256": "8f6bdd4ed0308531bc2ff1c3b7dca6ffca5cce95ddb71b0d008f563d3d62824a"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/AWSSDK.S3.dll",
+      "sha256": "aad004d401202eb19fe8c6727c6cfd11e0ed3f7817ae8893e649bc9f30246574"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/BouncyCastle.Cryptography.dll",
+      "sha256": "ef92fc661e8d7ba8ec4d39a7cdfcdba41f14cb327f0d24fe79d0b5bb428899b5"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/Docker.DotNet.Handler.Abstractions.dll",
+      "sha256": "020151a5729f4c05fd0ddce04e11d7d05f5a0317d00742dc112b99c43ba714c9"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/Docker.DotNet.LegacyHttp.dll",
+      "sha256": "b2dcade7fd991c63e8628222170bfd0d8f6ca7479d25f687ea55a283ad24021f"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/Docker.DotNet.NPipe.dll",
+      "sha256": "dd366e86f1ad474e390e98b01b4a93582fc2bec30191bd9098fc8b346d213cae"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/Docker.DotNet.NativeHttp.dll",
+      "sha256": "419cb6b91178711705fca2b0adbcbaa0460cc129647eb941b13421de08f0e8ad"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/Docker.DotNet.Unix.dll",
+      "sha256": "dc24e10dc567492da12c48a45b6963cacefdc245a3c7c74dc0c5e4897ff197f6"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/Docker.DotNet.X509.dll",
+      "sha256": "17f423bae61e2b7677b608e83673e9140e69ab6b503d96be73e4b9c5666b1fa8"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/Docker.DotNet.dll",
+      "sha256": "00a8a4af181137cccd815f9c06cc4b4ddd6d8fb8a367b0630a2e51307f2f7c1e"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/ICSharpCode.SharpZipLib.dll",
+      "sha256": "32ea2d0ce3512e74f1c7ad82591fe67e6b8939d76a8a4ff9c93ead030131e71c"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/Microsoft.AspNetCore.Identity.EntityFrameworkCore.dll",
+      "sha256": "7c4d1a714aa878935a99c33a5df24dd1854a5577e55d4632e63e1f15d7e55fbf"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/Microsoft.Bcl.Cryptography.dll",
+      "sha256": "91c6bab93638c268569a38bc87770a5e3ef9932676f5b7a6d47aef4208062925"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/Microsoft.EntityFrameworkCore.Abstractions.dll",
+      "sha256": "24596b62ac0546c641e308a06bb9ea4bb153e9a776ed2311e730832465f34f5d"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/Microsoft.EntityFrameworkCore.Relational.dll",
+      "sha256": "078ad42527c893d858e1c48b7edc5a0ec755c60b28395e996bc438ede3555cf0"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/Microsoft.EntityFrameworkCore.dll",
+      "sha256": "87faf0bf54de5f62c7d30eb686018b11c53d4acf6c280adb39965b303c5b2b59"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/Microsoft.IdentityModel.Abstractions.dll",
+      "sha256": "84a6c307fe84453c9fc3a1af45bf2302b5d2aba4d5b9bfb7d581d6a28787461f"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/Microsoft.IdentityModel.Logging.dll",
+      "sha256": "2bc4582ae62236f066901a7dcb2a88d04a181ad1978f2db2f4314df6ae1a50c6"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/Microsoft.IdentityModel.Tokens.dll",
+      "sha256": "106db045348a9b767f3002d4ec3bb582c9141f6d8e9966e1e0ad58a71ba42b8b"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/Microsoft.Net.Http.Client.dll",
+      "sha256": "65743129c2b8a72e8b3841e3813f5b3d129034585a04ca6fd955c043290859e3"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/Npgsql.EntityFrameworkCore.PostgreSQL.dll",
+      "sha256": "94fcf66e8e953fdb02c40c72ca89821dd5eed5324d4c0f12a7219ea8cd3d5a5e"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/Npgsql.dll",
+      "sha256": "e2bcafe1660fe4543fe9dfcabed972ec8d32259e5ea8009462ce1de23c7034c2"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/OpenIddict.Abstractions.dll",
+      "sha256": "d72ca0187cc63f9608aadc0e4225552141c387496b785cd93cc0dad67362618e"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/OpenIddict.Core.dll",
+      "sha256": "a4f06b46bdda9a0bf9ad5d1fb57c1b2fcd656c6d55c4d4d4b2192bafc1b8add4"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/OpenIddict.EntityFrameworkCore.Models.dll",
+      "sha256": "e0bc409ed043609a387f775489a1189e76dce8c4040f72e4419b8d9002d7e3d6"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/OpenIddict.EntityFrameworkCore.dll",
+      "sha256": "7520299821f35f307819a4725347854f2b31336825ab2e1b205195a35ff690eb"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/OpenTelemetry.Api.ProviderBuilderExtensions.dll",
+      "sha256": "dec906a34dbafcfd2c23b73fd05e58defc7f8c1627890fad4e4461c23b8de989"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/OpenTelemetry.Api.dll",
+      "sha256": "b92d1b32ba9f7ddf4f06a7efab22c6424beba8760976f0eb5811ed3713d81f4c"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/OpenTelemetry.Exporter.OpenTelemetryProtocol.dll",
+      "sha256": "be37059eb65a9f4af95081c2d4795afd198a657dbf2e35363cca6444fd75b2ab"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/OpenTelemetry.Extensions.Hosting.dll",
+      "sha256": "5f5157a8042853b21077855d5888ef0178bfda07a1fac815b8e6145b283f72a7"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/OpenTelemetry.dll",
+      "sha256": "6623430269ed62f1a8e097e3909b9c8d778ae72b9b69f096140c71d06e0eb043"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/RESPite.dll",
+      "sha256": "c12704def103a2391c70cb4faf96a839c22d50d32aa0d65528e89926a968daa3"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/Renci.SshNet.dll",
+      "sha256": "1eea433e249e328d60512b72a134961074e059c22cfdf5427d03a893ca46ff1e"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/StackExchange.Redis.dll",
+      "sha256": "b23e03f4f8b4264060074e1c0cb2ff2461d02611ae705ab28273d32db6c59078"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/System.IO.Hashing.dll",
+      "sha256": "cea6795cf9f7b139b2215ff6de794a6f6e44e78640fb30fa4c0d5fa8472df8e5"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/Testcontainers.dll",
+      "sha256": "da04fa0dafff62c19da23da5f5b8d9d2ea55b8df586447d20133439e946a077d"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/Tunner.Accounts.dll",
+      "sha256": "17e6e1767afd1278f36a20ff488175ca42a6d5cbfb2fcb622369baeead1b3f05"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/Tunner.Accounts.pdb",
+      "sha256": "b9e571f3817c060acf68b8b9471c6245033d7c0d86407862067998c5b3b74576"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/Tunner.BrowserTesting.deps.json",
+      "sha256": "77427f508cbbd99d212938828984ce3e0dbf0cc46db8f4054222bda86f567a15"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/Tunner.BrowserTesting.dll",
+      "sha256": "3b33a107b16f37d0612a7df99b47fa288176e6b47fb43b41ad15efe8c1811451"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/Tunner.BrowserTesting.pdb",
+      "sha256": "b32ac0e0bd5b4af3ddbf9cad24bb432358270747aa1f4b7c91f5d4e33c9c6c38"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/Tunner.BrowserTesting.runtimeconfig.json",
+      "sha256": "a5e0a6135c8fc7f0463848f9b69b73f63ec806597dcec65cacdef1fb0832252a"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/Tunner.Database.Migrations.dll",
+      "sha256": "aa9ac3a59d62a4ac8bab3b194d77d61160cee6c5fe56fd45c635a8eff1aa20b5"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/Tunner.Database.Migrations.pdb",
+      "sha256": "c53593dca77007451f9ad37666de34ef88a417880dfe87c27be0ee9288e50bcc"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/Tunner.Database.dll",
+      "sha256": "e3e3b093ecee2c4e546d1c85dc8dbfbe7a09062c1100c662c806d443bdf3b084"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/Tunner.Database.pdb",
+      "sha256": "fd59d604299d8b34740694a6acacd0d406915924e49f8be7c72a70542989802a"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/Tunner.Identity.Persistence.dll",
+      "sha256": "c6a10bdf3c0e45ca6d27c0e520c8a403ce460e97b83dd54ff556ec97893d0178"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/Tunner.Identity.Persistence.pdb",
+      "sha256": "6a0312712647f250cf173421f4fc762e2fe2cefba2b9dc831e7970f8bfeacd5c"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/Tunner.Installer.deps.json",
+      "sha256": "dcb1338edb11cc15259a0681a0f80f8963f3112340bed77b8d2896d720439bc2"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/Tunner.Installer.dll",
+      "sha256": "80c7849dffd86cc99e8cf195c01ee5f720c0fe67c469f245df84d21f62c4ba1f"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/Tunner.Installer.exe",
+      "sha256": "cc97f5e1f180280c4445a9f695c38fcd45f70ed862ca48b1cc6caf09687740b4"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/Tunner.Installer.pdb",
+      "sha256": "f15e45f55d2c44ea8073e060aae25748ab04e8155f14d7613540834ccd246f64"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/Tunner.Installer.runtimeconfig.json",
+      "sha256": "501d9a7d5e2b71a3ba56f3f76f421199364e699895ba531a80d370172b551f36"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/Tunner.Observability.dll",
+      "sha256": "c046204ce1a4e63101e098074d57817626682d54e145f9b6bcf7d1e4a0566fb6"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/Tunner.Observability.pdb",
+      "sha256": "ceb695621b8fea54d80c83b33cc89a7306a2764831c4a0926674fc1393a27409"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/Tunner.Platform.dll",
+      "sha256": "cd500f5eecd2140d1db6c90a8e21654011d96916c7cfc6c20b57e0dc10086122"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/Tunner.Platform.pdb",
+      "sha256": "f1d5485d9f91ce11cf9549e1a3e6b99d7b4f7245bccb66d91db81f57cf5b91f2"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/Tunner.User.Bff.deps.json",
+      "sha256": "52d7a700a7af58b73d87635ac006f382be9de16423b1d4e7d84c975da0bd3ee2"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/Tunner.User.Bff.dll",
+      "sha256": "2bf6cab4d8d7102be2d65327d5cc29b5ed8deda4746c653290392362485d32ac"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/Tunner.User.Bff.exe",
+      "sha256": "27dc4e1914e10c803ae0ff0446f83bf24070bd3819c48a87760f3fc7af007ad1"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/Tunner.User.Bff.pdb",
+      "sha256": "ee8432307ff750d1f71dcf6a578f8c368ef9a45295fcc54182c7109ea5426cd7"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/Tunner.User.Bff.runtimeconfig.json",
+      "sha256": "5a26de741a59e2654c7badfe3d6d9a134bf09fe67f621f584e7746147c9d2686"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/Tunner.User.Bff.staticwebassets.endpoints.json",
+      "sha256": "559e42e207d521ee6c7a5369c741f7f40858f274bf478e922badf1e689c29790"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/Tunner.User.Bff.staticwebassets.runtime.json",
+      "sha256": "053eae8e1ff6c828299f389c69965634618024f9faf2dcad06e894da4aef8bc3"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/browser-test-authentication-content.json",
+      "sha256": "e19bd31789e99a47762a41ad6415fc17d4b5001820803a468bc62aec957a2bf3"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/browser-test-content.json",
+      "sha256": "a98bc51db45d230f81813247f8e163b8e463c87de07501f5ba04c4a745ab052e"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/browser-test-passkey-content.json",
+      "sha256": "e0472c5d02653cdc40888426a03d011934777e554551efcc31ac3197ae50c952"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/browser-test-step-up-content.json",
+      "sha256": "32a5e53b10a6f8ec054772de008457668db7dd3783d3ecc72a154bb5e057d397"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/browser-test-totp-content.json",
+      "sha256": "4bf3b0a31a80bb15a7ffa5d8f955605af42205d8d0467a0f9f25cc8ec376798d"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/wwwroot/registration/assets/authentication-BVNnUBGv.js",
+      "sha256": "99fd0d8a0bcdd07585b9858056d29bd7e68f5ea8a2b9d927fc080d75a9040b8d"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/wwwroot/registration/assets/authentication-cuxZ4Yta.css",
+      "sha256": "3a5a192c5743f875c1c0cb4ca1970bbd62c48ff43c400b75b996203649e0cc53"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/wwwroot/registration/assets/fonts/.gitattributes",
+      "sha256": "31e7fc8dc7929bd077f7007c92a797978826b1408b52f459b3a126820d59db4d"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/wwwroot/registration/assets/fonts/GeistMono-wght.ttf",
+      "sha256": "d00e590b8eb3a59acc329b2d044fd143ae935090b7da33199ebee27cc7de8196"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/wwwroot/registration/assets/fonts/OFL-GeistMono.txt",
+      "sha256": "1781d2806a07d91c4edf4740b88449fab7d0eadad53f7c351b94cd4d4eb8c00f"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/wwwroot/registration/assets/fonts/passkeys-fonts.provenance.json",
+      "sha256": "4981045902443bb2fad12318823243b90d25d5b2da5cdc5340ab30a2a19b42e5"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/wwwroot/registration/assets/geist-cyrillic-ext-wght-normal-DjL33-gN.woff2",
+      "sha256": "2317fa4bb293c9c0b110e18315d529235c47a0ddd3338cea3d8c7955e927899e"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/wwwroot/registration/assets/geist-cyrillic-wght-normal-BEAKL7Jp.woff2",
+      "sha256": "6894439694946a589d157ece003086960a6a4013d74a813dab7602efdb3d8c09"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/wwwroot/registration/assets/geist-latin-ext-wght-normal-DC-KSUi6.woff2",
+      "sha256": "824f485b5d26e2f2da3c2b236132ece1bc8e4e43373452950bb0e40548b4313f"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/wwwroot/registration/assets/geist-latin-wght-normal-BgDaEnEv.woff2",
+      "sha256": "19f9c92546aa300c312235e3125af1b81394d8db9a4bc4a425cd5b641d2d54e1"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/wwwroot/registration/assets/geist-vietnamese-wght-normal-6IgcOCM7.woff2",
+      "sha256": "8fa40e5d248247735eb97a0bd593b8852440430600d6ba01364c31fe0abc1fe1"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/wwwroot/registration/assets/inter-cyrillic-ext-wght-normal-BOeWTOD4.woff2",
+      "sha256": "ca157063339ac4ad418f214f3abfed119b0798ab4d377386ce5c9e5a7a435ebd"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/wwwroot/registration/assets/inter-cyrillic-wght-normal-DqGufNeO.woff2",
+      "sha256": "71d5ee93cc1e9f1d520a3a8b66456de18c7879d8df09d57fcd2eaff75fef0075"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/wwwroot/registration/assets/inter-greek-ext-wght-normal-DlzME5K_.woff2",
+      "sha256": "6e9e020a25f9b56d418f2c085b1d3c09725a4da23fe693a5b463064606732190"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/wwwroot/registration/assets/inter-greek-wght-normal-CkhJZR-_.woff2",
+      "sha256": "1be3448e292fbf05ffe176fe1e43f135013d50b1e7d324ad1a558f623d3bb6f6"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/wwwroot/registration/assets/inter-latin-ext-wght-normal-DO1Apj_S.woff2",
+      "sha256": "34b9c504cab7a73e37b746343a449132e56cf7b5481af2cb81dc74dcff25c956"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/wwwroot/registration/assets/inter-latin-wght-normal-Dx4kXJAl.woff2",
+      "sha256": "3100e775e8616cd2611beecfa23a4263d7037586789b43f035236a2e6fbd4c62"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/wwwroot/registration/assets/inter-vietnamese-wght-normal-CBcvBZtf.woff2",
+      "sha256": "5c66f9e07e90c6d4ac4922cc68d60de26c17b1858e677fb5e603fce3952b3ff2"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/wwwroot/registration/assets/login-bg-indigo.svg",
+      "sha256": "386769332e5a7536059a3a539aba330945509dd625def3c26f653524ded5ee54"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/wwwroot/registration/assets/login-bg-violet.svg",
+      "sha256": "1a645630b6d50a23c85669b264d54fee83c2e0b282b35be4c58284f9a2d3adf5"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/wwwroot/registration/assets/login-eye-off.svg",
+      "sha256": "2884ce04366a7fb8bdb338e15f42232ce98e88c325ad89855aec7c99aa18a924"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/wwwroot/registration/assets/login-google.svg",
+      "sha256": "8e0909066d645c6f7032ade6b7fea6033f51ebbbfde1fa40be4625ebf2d5011e"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/wwwroot/registration/assets/passkeys-BVcXMqTz.js",
+      "sha256": "72914f9965788ae59f886284d8c0925a52c14ac8d18bd7709be4e20e0d131267"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/wwwroot/registration/assets/passkeys-DMez9Jr9.css",
+      "sha256": "86e51fa1c64f6beaf851e38a8c154984a9d0a347d05635623fe815643010671b"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/wwwroot/registration/assets/passkeys-DSD_Tx-d.css",
+      "sha256": "fe1644a2fd2e785a6ec8d022f2a610adc88544b47781362ff7e447e7e424174d"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/wwwroot/registration/assets/passkeys.api-CM1KqFPm.js",
+      "sha256": "157637c7e71370677d3019e2ce3c650e794a4de94101c61a021dd0cbe347aa34"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/wwwroot/registration/assets/passkeys.native-IbT3vWeR.js",
+      "sha256": "6953e0e93437d2a411fe4e37ac7d1df7df33c3a82ec81748014f390401657c84"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/wwwroot/registration/assets/ready-approved-check.svg",
+      "sha256": "5cf00b5b003b98f240bf74151841185904247362b74039bf350ce8574bbb36db"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/wwwroot/registration/assets/ready-imgBgGlowIndigo.svg",
+      "sha256": "54934000b01f421419fc9a104dcf5068f48b525394d0587534600695fcc37859"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/wwwroot/registration/assets/ready-imgBgGlowViolet.svg",
+      "sha256": "517d39c4c5d721617a76ccd97aff0f56124cc817d032004c1d20f38d0aae0691"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/wwwroot/registration/assets/ready-imgEllipse.svg",
+      "sha256": "eb37331f873999d6fb122fa3594881a0a935da1b41d20101227761c4194a4a2d"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/wwwroot/registration/assets/ready-imgEllipse1.svg",
+      "sha256": "716e0ee704ab22493cf82ceccfb7c671d1273e61790636451df1f1eb75458bd4"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/wwwroot/registration/assets/register-imgBgGlowIndigo.svg",
+      "sha256": "3f46d383407fee017a39de72f9a287348d25736b2747e28874da0c7028efbb78"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/wwwroot/registration/assets/register-imgBgGlowViolet.svg",
+      "sha256": "6057cd9d95e1b7ee08ba24451f9b5a93e997cb96305ad1401b65718999d0f434"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/wwwroot/registration/assets/register-imgEllipse.svg",
+      "sha256": "eb37331f873999d6fb122fa3594881a0a935da1b41d20101227761c4194a4a2d"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/wwwroot/registration/assets/registration-Bgdx1cPd.css",
+      "sha256": "ddbecb820c713c473f9047418e11c90345c2809c9251e4ab864f5868fa37762a"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/wwwroot/registration/assets/registration-DK5qaqxf.js",
+      "sha256": "8400c74395fca98188bd1ec3e0156c1857ed2e57c5d97e8b9371e5abbdc3904a"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/wwwroot/registration/assets/step-up-BUfe8r1S.css",
+      "sha256": "f3211b2be324bff045d71d1936b2248b58ded25aa0cef50fe1897e47ed2298e3"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/wwwroot/registration/assets/step-up-DK9oj62s.js",
+      "sha256": "a1648618d88a119ce324908e0920f151cec3dc2a63a0138ba0debd317a01c352"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/wwwroot/registration/assets/totp-CtvLvSqN.js",
+      "sha256": "70264a811d945de76cb3b626fef3d3d6f9b5ea64fdf3b3811ac0f0a5090d4c99"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/wwwroot/registration/assets/validation-DdHT5WUZ.js",
+      "sha256": "428019ac215e2a99ed58e5f29bd50cf5df749c335b7196ebe500336f7b92fcfa"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/wwwroot/registration/assets/verify-imgBgGlowIndigo.svg",
+      "sha256": "1cad56a901f56e0bd762afb54fbcf56e388bb865cc48ffa6347704588b6d51c1"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/wwwroot/registration/assets/verify-imgBgGlowViolet.svg",
+      "sha256": "517d39c4c5d721617a76ccd97aff0f56124cc817d032004c1d20f38d0aae0691"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/wwwroot/registration/assets/verify-imgEllipse.svg",
+      "sha256": "eb37331f873999d6fb122fa3594881a0a935da1b41d20101227761c4194a4a2d"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/wwwroot/registration/authentication.html",
+      "sha256": "f593e14dd61211d4d1a322ea744c2e1ebc8cee63beee609b2b5d7770665ff85e"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/wwwroot/registration/index.html",
+      "sha256": "0334284a09e037a518baeaf202b0afeed7a01b2887bfd2e06c5b606e4acfe228"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/wwwroot/registration/passkeys.html",
+      "sha256": "d5b7c64a4cc7b1aa94ecaddf749d6d016274a3f0c02e5ba6a9053b16ccf77725"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/wwwroot/registration/third-party-notices.txt",
+      "sha256": "8f0b059bb262488010314fac9b75a704836a6bb2e40f6659ef78af31eb8b8b13"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/wwwroot/registration/totp.html",
+      "sha256": "57332a4a3a2320cf34c4333ffcfcff19294416433a1fb8f61e19f94105f43ba5"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/wwwroot/step-up/assets/geist-cyrillic-ext-wght-normal-DjL33-gN.woff2",
+      "sha256": "2317fa4bb293c9c0b110e18315d529235c47a0ddd3338cea3d8c7955e927899e"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/wwwroot/step-up/assets/geist-cyrillic-wght-normal-BEAKL7Jp.woff2",
+      "sha256": "6894439694946a589d157ece003086960a6a4013d74a813dab7602efdb3d8c09"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/wwwroot/step-up/assets/geist-latin-ext-wght-normal-DC-KSUi6.woff2",
+      "sha256": "824f485b5d26e2f2da3c2b236132ece1bc8e4e43373452950bb0e40548b4313f"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/wwwroot/step-up/assets/geist-latin-wght-normal-BgDaEnEv.woff2",
+      "sha256": "19f9c92546aa300c312235e3125af1b81394d8db9a4bc4a425cd5b641d2d54e1"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/wwwroot/step-up/assets/geist-vietnamese-wght-normal-6IgcOCM7.woff2",
+      "sha256": "8fa40e5d248247735eb97a0bd593b8852440430600d6ba01364c31fe0abc1fe1"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/wwwroot/step-up/assets/index-C_qU3GIu.js",
+      "sha256": "c927f9319df9cff18f0849f4c91d2c925f93824f4838748519455cbc3711feb5"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/wwwroot/step-up/assets/index-DbImAJY8.css",
+      "sha256": "c6b71993e428eb910e914bc355b4497c604d7921d34a41478c695784665b7dae"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/wwwroot/step-up/assets/inter-cyrillic-ext-wght-normal-BOeWTOD4.woff2",
+      "sha256": "ca157063339ac4ad418f214f3abfed119b0798ab4d377386ce5c9e5a7a435ebd"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/wwwroot/step-up/assets/inter-cyrillic-wght-normal-DqGufNeO.woff2",
+      "sha256": "71d5ee93cc1e9f1d520a3a8b66456de18c7879d8df09d57fcd2eaff75fef0075"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/wwwroot/step-up/assets/inter-greek-ext-wght-normal-DlzME5K_.woff2",
+      "sha256": "6e9e020a25f9b56d418f2c085b1d3c09725a4da23fe693a5b463064606732190"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/wwwroot/step-up/assets/inter-greek-wght-normal-CkhJZR-_.woff2",
+      "sha256": "1be3448e292fbf05ffe176fe1e43f135013d50b1e7d324ad1a558f623d3bb6f6"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/wwwroot/step-up/assets/inter-latin-ext-wght-normal-DO1Apj_S.woff2",
+      "sha256": "34b9c504cab7a73e37b746343a449132e56cf7b5481af2cb81dc74dcff25c956"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/wwwroot/step-up/assets/inter-latin-wght-normal-Dx4kXJAl.woff2",
+      "sha256": "3100e775e8616cd2611beecfa23a4263d7037586789b43f035236a2e6fbd4c62"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/wwwroot/step-up/assets/inter-vietnamese-wght-normal-CBcvBZtf.woff2",
+      "sha256": "5c66f9e07e90c6d4ac4922cc68d60de26c17b1858e677fb5e603fce3952b3ff2"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/wwwroot/step-up/index.html",
+      "sha256": "74518be5204c0ff515d8a1f4c15859061bf06f0c8763d64b2c4de5cd443e67b0"
+    }
+  ]
+}

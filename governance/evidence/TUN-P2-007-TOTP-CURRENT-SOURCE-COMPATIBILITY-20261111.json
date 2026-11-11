@@ -1,0 +1,284 @@
+{
+  "schema_version": 1,
+  "scope_id": "TUN-P2-007",
+  "recorded_at": "2026-11-11T05:30:06.510107+00:00",
+  "current_source_carrier_sha": "947f8b090b4f74a474a71e47badcb595424bd734",
+  "observed_metadata_head": "52bbbdc43ab745777048e67c0f85a639f78cfa14",
+  "scope": "BOUNDED_CURRENT_SOURCE_COMPATIBILITY",
+  "gate_executed_by_preparer": false,
+  "product_human_or_release_approval": false,
+  "result": "PASS_BOUNDED_CURRENT_SOURCE_PARENT007_COMPATIBILITY",
+  "validation_scope": "Current shared native/BFF/UI compatibility, not a new whole007 implementation or lifecycle closure",
+  "historical_validation_snapshot": {
+    "git_ref": "947f8b090b4f74a474a71e47badcb595424bd734:governance/evidence/TUN-P2-007-VALIDATION.json",
+    "git_object_sha256": "b9f88aa13b2c53e63521f91e6ec1638fc77aa402be1c1dbc95777609b70ca349",
+    "tested_commit_sha": "745f9c2dc1b9060c4be0318b33b4019ae77e9e36",
+    "ordered82": [
+      "src/Modules/Identity/AuthenticationApplication.cs",
+      "src/Modules/Identity/AuthenticationContracts.cs",
+      "src/Modules/Identity/AuthenticationEndpoints.cs",
+      "src/Modules/Identity/AuthenticationRows.cs",
+      "src/Modules/Identity/IdentityPersistenceDbContext.cs",
+      "src/Modules/Identity/Migrations/20261109164622_P2PasskeyCeremonies.cs",
+      "src/Modules/Identity/Migrations/20261109164622_P2PasskeyCeremonies.Designer.cs",
+      "src/Modules/Identity/Migrations/IdentityPersistenceDbContextModelSnapshot.cs",
+      "src/Modules/Identity/PasskeyApplication.cs",
+      "src/Modules/Identity/PasskeyContracts.cs",
+      "src/Modules/Identity/PasskeyEndpoints.cs",
+      "src/Modules/Identity/PasskeyMigrationSql.cs",
+      "src/Modules/Identity/PasskeyRows.cs",
+      "src/Modules/Identity/StepUpApplication.cs",
+      "src/Modules/Identity/StepUpBrowserEndpoints.cs",
+      "src/Modules/Identity/StepUpContracts.cs",
+      "src/Modules/Identity/StepUpOutcomes.cs",
+      "src/Tunner.User.Bff/TunnerAuthenticatedUserBffHost.cs",
+      "tests/Tunner.Identity.Persistence.Tests/AuthenticationOutcomeTests.cs",
+      "tests/Tunner.Identity.Persistence.Tests/AuthenticationTestHost.cs",
+      "tests/Tunner.Identity.Persistence.Tests/IdentityPostgresFixture.cs",
+      "tests/Tunner.Identity.Persistence.Tests/PasskeyAuthenticator.cs",
+      "tests/Tunner.Identity.Persistence.Tests/PasskeyMigrationTests.cs",
+      "tests/Tunner.Identity.Persistence.Tests/PasskeyTests.cs",
+      "tests/Tunner.Identity.Persistence.Tests/Tunner.Identity.Persistence.Tests.csproj",
+      "tools/browser-testing/Program.cs",
+      "tools/browser-testing/BrowserTestStepUp.cs",
+      "tools/browser-testing/BrowserTestPasskeys.cs",
+      "tools/browser-testing/Tunner.BrowserTesting.csproj",
+      "web/apps/user/authentication.content.proposal.json",
+      "web/apps/user/passkeys.content.proposal.json",
+      "web/apps/user/authentication.tsx",
+      "web/tests/authentication/authentication.spec.ts",
+      "tests/Tunner.Identity.Persistence.Tests/StepUpBrowserTests.cs",
+      "tests/Tunner.Identity.Persistence.Tests/StepUpTests.cs",
+      "web/apps/user/authentication.css",
+      "web/apps/user/step-up.tsx",
+      "web/apps/user/vite.config.ts",
+      "web/apps/user/passkeys.api.ts",
+      "web/apps/user/passkeys.content-keys.ts",
+      "web/apps/user/passkeys.css",
+      "web/apps/user/passkeys.html",
+      "web/apps/user/passkeys.native.ts",
+      "web/apps/user/passkeys.routes.ts",
+      "web/apps/user/passkeys.sign-in.tsx",
+      "web/apps/user/passkeys.tsx",
+      "web/apps/user/public/assets/fonts/GeistMono-wght.ttf",
+      "web/apps/user/public/assets/fonts/OFL-GeistMono.txt",
+      "web/apps/user/public/assets/fonts/passkeys-fonts.provenance.json",
+      "web/playwright.passkeys.config.ts",
+      "web/tests/passkeys/fixtures.ts",
+      "web/tests/passkeys/passkeys.spec.ts",
+      "docs/contracts/ui-inventory.json",
+      "web/apps/user/content.proposal.json",
+      "web/apps/user/main.tsx",
+      "web/apps/user/registration.css",
+      "web/apps/user/step-up.content.proposal.json",
+      "web/apps/user/step-up.css",
+      "web/apps/user/step-up.passkey.ts",
+      "web/tests/browser-testing/authentication-flow.spec.ts",
+      "web/tests/browser-testing/fixtures.ts",
+      "web/tests/browser-testing/manual-flow.spec.ts",
+      "web/tests/browser-testing/passkeys-flow.spec.ts",
+      "web/tests/passkeys/navigation.spec.ts",
+      "web/tests/passkeys/step-up-passkey.fixtures.ts",
+      "web/tests/passkeys/step-up-passkey.spec.ts",
+      "web/tests/registration/registration.spec.ts",
+      "src/Modules/Identity/AuthenticationPresentation.cs",
+      "src/Modules/Identity/Migrations/20261110092326_P2PasskeyOperationProofs.Designer.cs",
+      "src/Modules/Identity/Migrations/20261110092326_P2PasskeyOperationProofs.cs",
+      "src/Modules/Identity/PasskeyOperationProofApplication.cs",
+      "src/Modules/Identity/PasskeyOperationProofMigrationSql.cs",
+      "src/Modules/Identity/PasskeySignInRecovery.cs",
+      "src/Modules/Identity/RegistrationWebContracts.cs",
+      "src/Modules/Identity/StepUpBrowserContracts.cs",
+      "src/Modules/Identity/StepUpPasskeyBrowserEndpoints.cs",
+      "src/Modules/Identity/StepUpRows.cs",
+      "tests/Tunner.Identity.Persistence.Tests/PasskeyOperationProofTests.cs",
+      "tests/Tunner.Identity.Persistence.Tests/PasskeyProofFreshnessTests.cs",
+      "tests/Tunner.Identity.Persistence.Tests/PasskeyRecoveryTests.cs",
+      "tests/Tunner.Identity.Persistence.Tests/PasskeyUsageMigrationTests.cs",
+      "web/tests/contracts.test.tsx"
+    ],
+    "prior_refs": {
+      "current_component_ref": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/execution-index.json",
+      "frontend_component_ref": "governance/evidence/TUN-P2-007-UI-COMPLIANCE.json",
+      "source_binding_ref": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/execution-index.json",
+      "role_reviews_ref": "governance/evidence/TUN-P2-007-ROLE-REVIEWS.json",
+      "ui_evidence_ref": "governance/evidence/TUN-P2-007-UI-COMPLIANCE.json",
+      "historical_candidate_ref": "governance/evidence/TUN-P2-007-ACCEPTANCE-CANDIDATE-20261110.json",
+      "historical_primary_execution_ref": "governance/evidence/TUN-P2-007-PRIMARY-EXECUTION.json",
+      "historical_component_classification_ref": "governance/evidence/TUN-P2-007-EXECUTION-HISTORY.json"
+    }
+  },
+  "historical_git_state": {
+    "repository_changed": true,
+    "validated_commit_sha": "745f9c2dc1b9060c4be0318b33b4019ae77e9e36",
+    "tested_commit_sha": "745f9c2dc1b9060c4be0318b33b4019ae77e9e36",
+    "work_item_commit_shas": [
+      "6e587c32f094c5582f1c3aeefe3a582644f01594",
+      "39afa3221aedf6da4cdcde95ba256f4d86bb95b4",
+      "0efbb6ed89b0715d78ddfbcd97b1ee96f829f9dd",
+      "80a32abb3c215a212bfa34bb7678c742d3cf765d",
+      "35ef6c3b64881cf50833209b739f0e47a43f5679",
+      "516ec0090253ee21b93c7e61922bd9d1f1caecfa",
+      "312af8855526c8e557f5156957f5386237738b15",
+      "b0c04424136aace1b02c486baeaafd53ed61b8ec",
+      "745f9c2dc1b9060c4be0318b33b4019ae77e9e36",
+      "baffd2d0f3ad71fe8ca270e5372b422d721ec67f",
+      "c1981e77094211f3e2dcc4c7658911b89ed66825",
+      "dc064a8dcdbca461c81d8d2f0469cea5efc44a65",
+      "9b46232a2fa5925953fbdf0232a34a5ebb8b1ad6"
+    ],
+    "closure_commit_sha": null,
+    "remaining_uncommitted_paths": [
+      "docs/context/current/HANDOFF.md",
+      "docs/context/current/adaptive-selection.json",
+      "docs/context/current/authority.md",
+      "docs/context/current/contracts.md",
+      "docs/context/current/git-changes.md",
+      "docs/context/current/manifest.json",
+      "docs/context/current/relevant-flows.md",
+      "docs/context/current/summary.md",
+      "docs/context/current/tests.md",
+      "docs/project/CURRENT_STATE.md",
+      "docs/project/HANDOFF.md",
+      "docs/project/PROJECT_CONTEXT.md",
+      ".vscode/settings.json"
+    ],
+    "remaining_uncommitted_classification": "PREEXISTING_UNRELATED"
+  },
+  "source_witness": {
+    "path": "governance/evidence/p2-008-totp-20261110/parent007-compatibility/947f8b0/source-witness.json",
+    "sha256": "1596a3ac272b0c5ec3ef16513bccaea050e1eee2beea75380477106f3c0463a7"
+  },
+  "ui_input_resolution": {
+    "path": "governance/evidence/p2-008-totp-20261110/parent007-compatibility/947f8b0/ui-cohort-input-resolution.json",
+    "sha256": "42c45df515d06880f33b07c468b5385ae000f9f87992c096ad18aed8f0c20d6a"
+  },
+  "item_resolution": {
+    "path": "governance/evidence/p2-008-totp-20261110/parent007-compatibility/947f8b0/authority-and-item-resolution.json",
+    "sha256": "3eea7064b0782d2790b644cf01bc80f068e7dc69388793a76dfa8fe287b9f7cd"
+  },
+  "native_executions": [
+    {
+      "cohort": "identity",
+      "actual_invocation_sha": "f1dd54a3a6a4f4d3f0e1d66e92c02fb52053d7a1",
+      "passed": 260,
+      "failed": 0,
+      "report": {
+        "path": "governance/evidence/p2-008-totp-20261110/parent-runtime-compatibility/f1dd54a/identity-full-f1dd54a.trx",
+        "sha256": "b55b2914a75706326c015a2f929884dd3ef8bd8fbcdcdbc4c455b144a01e369a",
+        "bytes": 430431
+      }
+    },
+    {
+      "cohort": "architecture",
+      "actual_invocation_sha": "a933b5f004b0341b2f1e2f26568928ec98603f21",
+      "passed": 237,
+      "failed": 0,
+      "report": {
+        "path": "governance/evidence/p2-008-totp-20261110/parent-runtime-compatibility/f1dd54a/architecture-a933b5f.trx",
+        "sha256": "417bc827b9735865f8450121583598cfcd298929f90af7b19b78899e0492ba3d",
+        "bytes": 369720
+      }
+    }
+  ],
+  "actual_legacy_browser_executions": [
+    {
+      "cohort": "authentication",
+      "actual_invocation_sha": "6e562db102ce75d5ed478a15e2970ff55ab98fef",
+      "passed": 21,
+      "failed": 0,
+      "report": {
+        "path": "governance/evidence/p2-008-totp-20261110/parent005006-compatibility/ui/authentication-report.json",
+        "sha256": "bc1ff2075a5288b6385dd5d5cb89fe33f8598608a90fe0968c6a890873b1b0b5"
+      }
+    },
+    {
+      "cohort": "step-up",
+      "actual_invocation_sha": "6e562db102ce75d5ed478a15e2970ff55ab98fef",
+      "passed": 22,
+      "failed": 0,
+      "report": {
+        "path": "governance/evidence/p2-008-totp-20261110/parent005006-compatibility/ui/step-up-report.json",
+        "sha256": "d51e32291a86ec5d60f7d243e2c3149ef108eccb390eae433ceaaf942e1a81ed"
+      }
+    },
+    {
+      "cohort": "passkeys",
+      "actual_invocation_sha": "6e562db102ce75d5ed478a15e2970ff55ab98fef",
+      "passed": 60,
+      "failed": 0,
+      "report": {
+        "path": "governance/evidence/p2-008-totp-20261110/parent005006-compatibility/ui/passkeys-report.json",
+        "sha256": "2c8cb8f3ea54c212c6fe7b5c34878f2d438f56970f0b92673215a7854934a997"
+      }
+    }
+  ],
+  "original007_execution_index": {
+    "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/execution-index.json",
+    "sha256": "0a353d076b72029cff2a779627350fc1d7142caf06e4463a30d260c08de2673c"
+  },
+  "historical_execution_rule": "Original native224@0ef/native14@80a/Edge60+Firefox60+real4@745 and other cohorts retain those exact identities. Later native260 and source-resolved6e cohorts provide the applicable compatibility evidence; none is relabelled as a947 or new007 execution.",
+  "current947_integration": {
+    "safe_summary": {
+      "path": "governance/evidence/p2-008-totp-20261110/final-ui/947f8b0/safe-execution-summary.json",
+      "sha256": "4b0bbbd12e117d2a2e70db50df3617534a48c837f857238aba98f0c29eef13c9"
+    },
+    "receipts": [
+      {
+        "path": "governance/evidence/p2-008-totp-20261110/final-ui/947f8b0/enrollment-password-mfa-preserve.json",
+        "sha256": "78e3f9a36fe47f8ba25739dc5ab4b98e6498ca62363861f660b954c4e874a4c3"
+      },
+      {
+        "path": "governance/evidence/p2-008-totp-20261110/final-ui/947f8b0/operation-proof-causal-revoke.json",
+        "sha256": "bccf0b17a6d71e936bb5721e28033f78188691ec8332e0b537fefe074ea9cee8"
+      },
+      {
+        "path": "governance/evidence/p2-008-totp-20261110/final-ui/947f8b0/passkey-mfa-reset.json",
+        "sha256": "0ce0c98e5b87cc7318af88da665df9e5e7158d0d6c43dd6d3ad5d46dc4675a46"
+      }
+    ],
+    "build_binding": {
+      "path": "governance/evidence/p2-008-totp-20261110/parent007-compatibility/947f8b0/runtime-build-binding.json",
+      "sha256": "4f9d1ac2e4882df92d08948589613572f24e9be7c44892db895e711fef764960"
+    },
+    "public43": {
+      "path": "governance/evidence/p2-008-totp-20261110/final-ui/947f8b0/public-ui/manifest.json",
+      "sha256": "4838a7511b4bc5e423f08697629cf166aa7c34a6cdfb6ea8d2f17527c7837e73"
+    },
+    "composition4": {
+      "path": "governance/evidence/p2-008-totp-20261110/final-ui/947f8b0/public-ui/composition-r2/composition.json",
+      "sha256": "b31813840b9c5239c7eeff8f430024ba316d885ea764a9084363c1d2a490e0e4"
+    },
+    "boundary": "Current finite password/passkey MFA, exact TOTP proof and reset/causal composition; individual007 rows additionally require their own retained passkey/legacy evidence and source identity."
+  },
+  "ordinary_host": {
+    "receipt": {
+      "path": "governance/evidence/p2-008-totp-20261110/parent-runtime-compatibility/eb9228c/legacy-host-smoke/v4/actual-receipt.json",
+      "sha256": "cd587aa4c0e8a968af9e9488c045c026cac3d023251dc545216d359df6fdc665"
+    },
+    "actual_invocation_sha": "eb9228cc3ed832980deb92407d80ab92e7b8a00e",
+    "actual_build_sha": "a933b5f004b0341b2f1e2f26568928ec98603f21",
+    "passed_browser_predicates": 13,
+    "passed_coordinator_checks": 16,
+    "unchanged_exact_tool_inputs": [
+      "tools/browser-testing/Program.cs",
+      "tools/browser-testing/Tunner.BrowserTesting.csproj",
+      "tools/browser-testing/BrowserTestHost.cs",
+      "tools/browser-testing/BrowserTestPasskeys.cs"
+    ],
+    "later_finite_only_publication_delta": [
+      "tools/browser-testing/BrowserTestStepUp.cs",
+      "tools/browser-testing/BrowserTestTotp.cs"
+    ],
+    "static_content_review": {
+      "path": "governance/evidence/p2-008-totp-20261110/parent006-publication-compatibility/acd474e/security-static-review-acd474e.json",
+      "sha256": "4829a956abbf781fb424f49583a7a03f6060f27f2eb7f58ed4601993cad6184e"
+    },
+    "public_content_checks": {
+      "path": "governance/evidence/p2-008-totp-20261110/parent006-publication-compatibility/acd474e/public-content-checks.json",
+      "sha256": "647e66136066a089e700368831d4d81d7d503837c79a2976db2c13581109ea28"
+    },
+    "rule": "Ordinary Totp:null branch and default account publication remain unchanged by the optional finite step_up_content inclusion; no blanket runtime-source equivalence is asserted."
+  },
+  "state_boundary": "VALIDATION and ordered82 remain unchanged. This candidate is not a native007 gate result; root must commit reviewed metadata then run UI and generic gates. P2-009 refinement does not depend on007; future011 readiness does."
+}
