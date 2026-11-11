@@ -20,6 +20,9 @@ internal static class FiniteRecoveryCoordinator
     private static readonly string[] SupervisorIds = ["SOURCE_CURRENT", "PROTOCOL_VALID", "OUTPUT_CONTAINED", "CHILD_CLOSED", "ORACLE_CLOSED", "CHILD_SURFACES_CLOSED", "SURFACE_REMOVED"];
     private static readonly string[] CoordinatorIds = ["SOURCE_BUILD_CURRENT", "OWNED_DATABASE", "OWNED_MAILPIT", "EPHEMERAL_DP", "CURRENT_MIGRATIONS", "SAFE_PERSISTENCE", "SAFE_OUTBOX", "HOST_STOPPED", "RESOURCES_REMOVED", "BORROWED_POSTGRES_PRESERVED"];
     private static readonly string[] CommonBrowserIds = ["BROWSER_ENGINE", "SURFACE_CHECKED", "BFF_IDENTITY", "ACTUAL_PROOF_METHOD", "EXACT_OWNER_AND_STEP_UP_BINDING", "CANONICAL_FIRST_DELIVERY", "DUPLICATE_NO_REDISCLOSURE", "NO_EARLY_DELIVERY", "COOKIE_FLAGS", "NO_SECRET_URL_OR_STORAGE", "VOLATILE_CLEAR", "REQUESTED_NOT_SAVED", "STRICT_OWNED_SURFACE"];
+    private static readonly string[] ClosedLiveFacts = ["contextClosed", "browserClosed", "serverExited", "oracleExited", "oracleGraceful", "surfaceClean", "surfaceRemoved", "cleanupCompleted"];
+    private static readonly string[] ClosedPublicFacts = ["contextClosed", "browserClosed", "serverExited", "oracleExited", "surfaceRemoved"];
+    private static readonly string[] ClosedPublicSupervisorFacts = ["SOURCE_CURRENT", "CHILD_CLOSED", "ORACLE_CLOSED", "CHILD_SURFACES_CLOSED", "SURFACE_REMOVED"];
     private static readonly string[] Stages = ["START", "ENVIRONMENT", "LIBRARY", "BROWSER", "PUBLIC_ENTRY", "ORACLE", "JOURNEY", "SURFACE", "CLEANUP", "COMPLETE"];
     private static readonly string[] FailureCodes = ["NONE", "INPUT_INVALID", "SOURCE_INVALID", "DEPENDENCY_NOT_READY", "PROTOCOL_FAILED", "BOUNDARY_ERROR", "PREDICATE_FAILED", "ADMISSION_REJECTED", "PATH_REJECTED", "SIZE_LIMIT", "BYTES_MISMATCH", "STREAM_FAILED", "DELETE_FAILED", "ACTION_FAILED", "ORACLE_FAILED", "SUPERVISOR_TIMEOUT", "SURFACE_FAILED", "CLEANUP_FAILED"];
 
@@ -61,7 +64,7 @@ internal static class FiniteRecoveryCoordinator
                 if (borrowed.ProjectName != metadata.RootElement.GetProperty("ProjectName").GetString()) throw new InvalidOperationException();
                 using (var store = new X509Store(StoreName.My, StoreLocation.CurrentUser))
                 {
-                    store.Open(OpenFlags.ReadOnly); certificate = store.Certificates.Find(X509FindType.FindByThumbprint, metadata.RootElement.GetProperty("CertificateThumbprint").GetString(), false)
+                    store.Open(OpenFlags.ReadOnly); certificate = store.Certificates.Find(X509FindType.FindByThumbprint, metadata.RootElement.GetProperty("CertificateThumbprint").GetString() ?? throw new InvalidOperationException("FINITE_RECOVERY_CERTIFICATE_METADATA_INVALID"), false)
                         .OfType<X509Certificate2>().Single(x => x.HasPrivateKey && x.NotAfter > DateTime.Now);
                 }
                 if (certificate.GetCertHashString(System.Security.Cryptography.HashAlgorithmName.SHA256) != metadata.RootElement.GetProperty("CertificateSha256").GetString()) throw new InvalidOperationException();
@@ -191,9 +194,9 @@ internal static class FiniteRecoveryCoordinator
         finally
         {
             if (!process.HasExited) { try { using var cancel = new CancellationTokenSource(TimeSpan.FromSeconds(1)); await FiniteTotpCoordinator.WriteFrameAsync(process.StandardInput.BaseStream, new { version = 1, type = "cancelRecoveryPrivate" }, cancel.Token).ConfigureAwait(false); } catch (Exception error) when (error is not OutOfMemoryException) { } }
-            if (!process.HasExited) { try { await process.WaitForExitAsync(CancellationToken.None).WaitAsync(TimeSpan.FromSeconds(2)).ConfigureAwait(false); } catch (Exception error) when (error is not OutOfMemoryException) { } }
-            if (!process.HasExited) { try { process.Kill(true); await process.WaitForExitAsync(CancellationToken.None).WaitAsync(TimeSpan.FromSeconds(3)).ConfigureAwait(false); } catch (Exception error) when (error is not OutOfMemoryException) { } }
-            errorsDeadline.Cancel(); try { await errors.WaitAsync(TimeSpan.FromSeconds(2)).ConfigureAwait(false); } catch (Exception error) when (error is not OutOfMemoryException) { }
+            if (!process.HasExited) { try { await process.WaitForExitAsync(CancellationToken.None).WaitAsync(TimeSpan.FromSeconds(2), CancellationToken.None).ConfigureAwait(false); } catch (Exception error) when (error is not OutOfMemoryException) { } }
+            if (!process.HasExited) { try { process.Kill(true); await process.WaitForExitAsync(CancellationToken.None).WaitAsync(TimeSpan.FromSeconds(3), CancellationToken.None).ConfigureAwait(false); } catch (Exception error) when (error is not OutOfMemoryException) { } }
+            errorsDeadline.Cancel(); try { await errors.WaitAsync(TimeSpan.FromSeconds(2), CancellationToken.None).ConfigureAwait(false); } catch (Exception error) when (error is not OutOfMemoryException) { }
         }
         async Task Drain() { var bytes = new byte[4096]; try { while (await process.StandardError.BaseStream.ReadAsync(bytes, errorsDeadline.Token).ConfigureAwait(false) > 0) raw = true; } catch (OperationCanceledException) { } finally { Array.Clear(bytes); } }
     }
@@ -223,7 +226,7 @@ internal static class FiniteRecoveryCoordinator
             if (value.GetProperty("publicFault").GetString() != "production-controller" && ownership.GetProperty("serverPid").ValueKind != JsonValueKind.Null) throw new InvalidOperationException();
         }
         else if (value.GetProperty("publicFault").ValueKind != JsonValueKind.Null || value.GetProperty("publicOwnership").ValueKind != JsonValueKind.Null) throw new InvalidOperationException();
-        if (True(value, "accepted") && (publicMode || value.GetProperty("status").GetString() != "JOURNEY_OK" || value.GetProperty("stage").GetString() != "COMPLETE" || value.GetProperty("failureCode").GetString() != "NONE" || !True(value, "childResultAccepted") || True(value, "protocolRejected") || value.GetProperty("browserVersion").ValueKind == JsonValueKind.Null || value.GetProperty("exitCode").ValueKind != JsonValueKind.Number || !value.GetProperty("exitCode").TryGetInt32(out var acceptedChildExit) || acceptedChildExit != 0 || checkRows.Length != BrowserIds(journey).Length || BrowserIds(journey).Any(id => !True(value.GetProperty("checks"), id)) || checkRows.Any(x => x.Value.ValueKind != JsonValueKind.True) || SupervisorIds.Any(x => !True(value.GetProperty("supervisor"), x)) || !True(value, "sourceCommitted") || True(value, "publicFaultObserved") || True(value, "rawOutputRejected") || True(value, "timedOut") || True(value, "cleanupForced") || new[] { "contextClosed", "browserClosed", "serverExited", "oracleExited", "oracleGraceful", "surfaceClean", "surfaceRemoved", "cleanupCompleted" }.Any(x => !True(value, x)))) throw new InvalidOperationException();
+        if (True(value, "accepted") && (publicMode || value.GetProperty("status").GetString() != "JOURNEY_OK" || value.GetProperty("stage").GetString() != "COMPLETE" || value.GetProperty("failureCode").GetString() != "NONE" || !True(value, "childResultAccepted") || True(value, "protocolRejected") || value.GetProperty("browserVersion").ValueKind == JsonValueKind.Null || value.GetProperty("exitCode").ValueKind != JsonValueKind.Number || !value.GetProperty("exitCode").TryGetInt32(out var acceptedChildExit) || acceptedChildExit != 0 || checkRows.Length != BrowserIds(journey).Length || BrowserIds(journey).Any(id => !True(value.GetProperty("checks"), id)) || checkRows.Any(x => x.Value.ValueKind != JsonValueKind.True) || SupervisorIds.Any(x => !True(value.GetProperty("supervisor"), x)) || !True(value, "sourceCommitted") || True(value, "publicFaultObserved") || True(value, "rawOutputRejected") || True(value, "timedOut") || True(value, "cleanupForced") || ClosedLiveFacts.Any(x => !True(value, x)))) throw new InvalidOperationException();
     }
     private static string[] BrowserIds(string journey) => [.. CommonBrowserIds, .. (journey switch
     {
@@ -236,8 +239,8 @@ internal static class FiniteRecoveryCoordinator
     private static bool Accepted(bool real, string failure, bool browser, Dictionary<string, bool> checks, string journey) => real && failure == "NONE" && browser && checks.Count == CoordinatorIdsFor(journey).Length && CoordinatorIdsFor(journey).All(id => checks.TryGetValue(id, out var observed) && observed);
     private static bool PublicContained(JsonElement value, string fault)
     {
-        if (value.GetProperty("publicFault").GetString() != fault || True(value, "accepted") || !True(value, "sourceCommitted") || True(value, "cleanupForced") || new[] { "contextClosed", "browserClosed", "serverExited", "oracleExited", "surfaceRemoved" }.Any(x => !True(value, x))) return false;
-        if (new[] { "SOURCE_CURRENT", "CHILD_CLOSED", "ORACLE_CLOSED", "CHILD_SURFACES_CLOSED", "SURFACE_REMOVED" }.Any(id => !True(value.GetProperty("supervisor"), id))) return false;
+        if (value.GetProperty("publicFault").GetString() != fault || True(value, "accepted") || !True(value, "sourceCommitted") || True(value, "cleanupForced") || ClosedPublicFacts.Any(x => !True(value, x))) return false;
+        if (ClosedPublicSupervisorFacts.Any(id => !True(value.GetProperty("supervisor"), id))) return false;
         if (value.GetProperty("exitCode").ValueKind != JsonValueKind.Number || !value.GetProperty("exitCode").TryGetInt32(out var childExit)) return false;
         if (fault is "relay-malformed" or "relay-timeout") return childExit == 1 && True(value, "protocolRejected") && !True(value, "rawOutputRejected") && value.GetProperty("failureCode").GetString() == "PROTOCOL_FAILED" && True(value, "surfaceClean") && True(value, "cleanupCompleted");
         if (new[] { "invalid-result", "cross-component" }.Contains(fault, StringComparer.Ordinal)) return childExit == 0 && True(value, "protocolRejected") && !True(value, "childResultAccepted") && !True(value, "rawOutputRejected") && True(value, "surfaceClean");
