@@ -1,0 +1,178 @@
+{
+  "schema_version": 1,
+  "scope_id": "TUN-P2-008",
+  "recorded_at": "2026-11-11T05:08:15.562852+00:00",
+  "review_type": "FINAL_INCREMENTAL_LOCAL_ENGINEERING_REVIEW",
+  "tested_behavior_sha": "947f8b090b4f74a474a71e47badcb595424bd734",
+  "reviewed_metadata_carrier_sha": "d3f14fa49c11a89784a75d8318354f90eff180d5",
+  "scope_boundary": "Local synthetic engineering evidence only; no human, Product, production-policy, merge or release approval.",
+  "whole_work_item_acceptance": false,
+  "role": "business-analyst",
+  "role_contract": {
+    "path": ".agent/skills/business-analyst/SKILL.md",
+    "sha256": "ca6e24da90c6dac80b7b75124f04a81a2d590e73cc1e99781546c4aad1bca04f",
+    "version": "1.0.0"
+  },
+  "result": "PASS",
+  "local_engineering_scope_pass": true,
+  "new_blocking_findings": [],
+  "incremental_basis": {
+    "path": "artifacts/p2-008-totp-20261110/final-engineering-review/business-analyst.json",
+    "sha256": "0308a548929a6b7ef4f72466cac032ebe229f9a5572360edc9a3b5880b81eec3"
+  },
+  "prior_startup_snapshot": {
+    "git_commit": "947f8b090b4f74a474a71e47badcb595424bd734",
+    "path": "governance/reviews/REV-TUN-P2-008-business-analyst.yaml",
+    "sha256": "86eb9a7477485139b9b8ce95301e2bc857406c1a1b1f2dd61356a540a19e881d"
+  },
+  "reviewed_delta": [
+    "web/apps/user/totp.tsx",
+    "web/tests/totp/ui/totp.spec.ts"
+  ],
+  "evidence": {
+    "current_three_journeys": {
+      "path": "artifacts/p2-008-totp-20261110/final-integration-947f8b0/safe-execution-summary.json",
+      "sha256": "4b0bbbd12e117d2a2e70db50df3617534a48c837f857238aba98f0c29eef13c9"
+    },
+    "real_receipts": [
+      {
+        "path": "artifacts/p2-008-totp-20261110/real-journeys-947f8b0/enrollment-password-mfa-preserve.json",
+        "sha256": "78e3f9a36fe47f8ba25739dc5ab4b98e6498ca62363861f660b954c4e874a4c3",
+        "journey_id": "TOTP_ENROLLMENT_PASSWORD_MFA_PRESERVE_V1",
+        "actual_invocation_sha": "947f8b090b4f74a474a71e47badcb595424bd734",
+        "browser_passed": 24,
+        "coordinator_passed": 21,
+        "persistence_true": 5,
+        "accepted": true,
+        "cleanup_verified": true,
+        "build_binding_sha256": "4f9d1ac2e4882df92d08948589613572f24e9be7c44892db895e711fef764960"
+      },
+      {
+        "path": "artifacts/p2-008-totp-20261110/real-journeys-947f8b0/operation-proof-causal-revoke.json",
+        "sha256": "bccf0b17a6d71e936bb5721e28033f78188691ec8332e0b537fefe074ea9cee8",
+        "journey_id": "TOTP_OPERATION_PROOF_CAUSAL_REVOKE_V1",
+        "actual_invocation_sha": "947f8b090b4f74a474a71e47badcb595424bd734",
+        "browser_passed": 23,
+        "coordinator_passed": 21,
+        "persistence_true": 5,
+        "accepted": true,
+        "cleanup_verified": true,
+        "build_binding_sha256": "4f9d1ac2e4882df92d08948589613572f24e9be7c44892db895e711fef764960"
+      },
+      {
+        "path": "artifacts/p2-008-totp-20261110/real-journeys-947f8b0/passkey-mfa-reset.json",
+        "sha256": "0ce0c98e5b87cc7318af88da665df9e5e7158d0d6c43dd6d3ad5d46dc4675a46",
+        "journey_id": "TOTP_PASSKEY_MFA_RESET_V1",
+        "actual_invocation_sha": "947f8b090b4f74a474a71e47badcb595424bd734",
+        "browser_passed": 23,
+        "coordinator_passed": 21,
+        "persistence_true": 5,
+        "accepted": true,
+        "cleanup_verified": true,
+        "build_binding_sha256": "4f9d1ac2e4882df92d08948589613572f24e9be7c44892db895e711fef764960"
+      }
+    ],
+    "public43_tsc_contracts29": {
+      "path": "artifacts/p2-008-totp-20261110/ui005-review/green-947f8b0/manifest.json",
+      "sha256": "4838a7511b4bc5e423f08697629cf166aa7c34a6cdfb6ea8d2f17527c7837e73"
+    },
+    "public_composition_keyboard4": {
+      "path": "artifacts/p2-008-totp-20261110/ui005-review/green-947f8b0/composition-r2/composition.json",
+      "sha256": "b31813840b9c5239c7eeff8f430024ba316d885ea764a9084363c1d2a490e0e4"
+    },
+    "build_binding": {
+      "path": "artifacts/p2-008-totp-20261110/runtime-build-binding.json",
+      "sha256": "4f9d1ac2e4882df92d08948589613572f24e9be7c44892db895e711fef764960"
+    },
+    "native_index": {
+      "path": "governance/evidence/p2-008-totp-20261110/parent-runtime-compatibility/f1dd54a/execution-index.json",
+      "sha256": "27b77aeca97dd27bb46979d436ffaf885f3d38c1cca58bbc77ea8d6c6d296779"
+    },
+    "installer113": {
+      "path": "artifacts/p2-008-totp-20261110/installer-19617c5/validation.json",
+      "sha256": "09b853d31e2f1f719254a971cf4085f5f72a09bb4ad38eed9bc1f859e2bc8b13"
+    },
+    "stage_cross_review": {
+      "path": "artifacts/p2-008-totp-20261110/final-engineering-review/stage-cross-review-f5c143c.json",
+      "sha256": "371b46cebd06ee514ee32e95bb32e5af49a45c620a97592306993a3866a68c2e"
+    },
+    "ui005_static_review": {
+      "path": "artifacts/p2-008-totp-20261110/ui005-review/security-async-cross-review-6653a3c.json",
+      "sha256": "55668c8adb6c6c24e63eef78cb10031aaa778fa78883fd075decf0d2584ca36a"
+    },
+    "ui005_red_source_test_review": {
+      "path": "artifacts/p2-008-totp-20261110/ui005-review/security-source-test-delta-6653a3c.json",
+      "sha256": "1ebabe6c8123c51c25aade1ad08b074b180133b556edea65cda70a61ae169e0e"
+    }
+  },
+  "mandatory_checks": [
+    {
+      "requirement": "Actors/ownership",
+      "assessment": "Authenticated Account owner and legitimate pending-primary browser remain the actors. No Admin/Support reveal, recovery009/011 behavior or Product session authority is introduced.",
+      "result": "PASS"
+    },
+    {
+      "requirement": "Preconditions/postconditions",
+      "assessment": "Fresh operation proof precedes enrollment/mutation; first native code activates; required second factor precedes a qualifying final session. All three current runs establish the corresponding postconditions.",
+      "result": "PASS"
+    },
+    {
+      "requirement": "Business rules",
+      "assessment": "Synthetic two-factor profiles remain test-only. Cardinality, assurance, retention, replacement ordering and session effects stay explicit; no universal MFA/default policy is selected.",
+      "result": "PASS"
+    },
+    {
+      "requirement": "Alternate/exception paths",
+      "assessment": "Current tests cover lost disclosure/result, replay/concurrency, stale source, owner failure/same proof, cancellation after external change, causal revoke and separate reset reenrollment.",
+      "result": "PASS"
+    },
+    {
+      "requirement": "State transitions",
+      "assessment": "The UI correction refreshes current persisted state after acknowledged cancellation; it adds no new business state or request semantics.",
+      "result": "PASS"
+    },
+    {
+      "requirement": "Data/evidence needs",
+      "assessment": "Current21 coordinator plus five persistence observations per run verify scoped storage/audit/provider binding and owned cleanup; no global Windows/cache absence claim is made.",
+      "result": "PASS"
+    },
+    {
+      "requirement": "Acceptance completeness",
+      "assessment": "All seven criteria have current native and three-journey LOCAL traceability. Final governed/UI/specialist/lifecycle aggregation remains root-owned; no human Product acceptance is supplied.",
+      "result": "PASS"
+    },
+    {
+      "requirement": "Cross-domain consistency",
+      "assessment": "Existing Account/session/proof/provider/outbox authority remains unchanged. P2-009 preparation stays frozen and separate; P2-011 parent007 compatibility is planned separately.",
+      "result": "PASS"
+    }
+  ],
+  "finding_dispositions": [
+    {
+      "id": "TUN-P2-008-ENG-REVIEW-001",
+      "status": "RESOLVED_FOR_SCOPED_LOCAL_ENGINEERING_REVIEW",
+      "evidence": {
+        "path": "artifacts/p2-008-totp-20261110/real-journeys-947f8b0/operation-proof-causal-revoke.json",
+        "sha256": "bccf0b17a6d71e936bb5721e28033f78188691ec8332e0b537fefe074ea9cee8",
+        "journey_id": "TOTP_OPERATION_PROOF_CAUSAL_REVOKE_V1",
+        "actual_invocation_sha": "947f8b090b4f74a474a71e47badcb595424bd734",
+        "browser_passed": 23,
+        "coordinator_passed": 21,
+        "persistence_true": 5,
+        "accepted": true,
+        "cleanup_verified": true,
+        "build_binding_sha256": "4f9d1ac2e4882df92d08948589613572f24e9be7c44892db895e711fef764960"
+      },
+      "finding": "Current947 operation-proof journey completes native proof, owner failure followed by original proof continuation, stale-source denial, exact causal self-revoke and unrelated-factor preservation. All prior failed receipts remain historical and unchanged."
+    },
+    {
+      "id": "TUN-P2-008-ENG-REVIEW-002",
+      "status": "VERIFIED_FIXED_FOR_SCOPED_LOCAL_ENGINEERING_REVIEW",
+      "source_commit": "6653a3cac663394d3cd32776d519988f99a410ad",
+      "finding": "Acknowledged same-path cancellation now schedules the existing owner-scoped options/method/recovery refresh. Flight/busy remains guarded until its current scope settles; obsolete loads cannot unblock newer work. Public red8 -> green43, keyboard/composition4 and real947 operation proof verify the fix; no helper reload/assertion relaxation hides stale state.",
+      "governance_defect_closure": "Root-owned final record, not performed by this artifact."
+    }
+  ],
+  "test_execution_by_reviewer": "NONE; retained actual reports parsed and hashed",
+  "next_action": "Root reviews/applies/commits the additive evidence, aggregates remaining specialist/UI reviews, and runs native final gates/context. No lifecycle transition is performed here."
+}

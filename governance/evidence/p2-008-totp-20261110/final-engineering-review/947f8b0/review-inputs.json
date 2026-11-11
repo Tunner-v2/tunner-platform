@@ -1,0 +1,304 @@
+{
+  "schema_version": 1,
+  "scope_id": "TUN-P2-008",
+  "recorded_at": "2026-11-11T05:08:15.562852+00:00",
+  "review_type": "FINAL_INCREMENTAL_LOCAL_ENGINEERING_REVIEW",
+  "tested_behavior_sha": "947f8b090b4f74a474a71e47badcb595424bd734",
+  "reviewed_metadata_carrier_sha": "d3f14fa49c11a89784a75d8318354f90eff180d5",
+  "scope_boundary": "Local synthetic engineering evidence only; no human, Product, production-policy, merge or release approval.",
+  "whole_work_item_acceptance": false,
+  "prior_review_manifest": {
+    "path": "artifacts/p2-008-totp-20261110/final-engineering-review/role-assessment-manifest.json",
+    "sha256": "25e90b6b51df4f193413495bdf4a9c4a22f999677c64b6f8a9676e59f13a2205"
+  },
+  "prior_review_inputs": {
+    "path": "artifacts/p2-008-totp-20261110/final-engineering-review/review-inputs.json",
+    "sha256": "b2f9a8e3ae7715b06c6cba1d22cb9440425a408a4f8fb93742e3993844556bb7"
+  },
+  "inputs": [
+    {
+      "path": "docs/authority/current/development/01_Engineering_Technology_Foundation.md",
+      "sha256": "b5f3a50ba74ae2ec8d63921ac2154f3a6f1c41aa37fa9a420b275add52dbefb9"
+    },
+    {
+      "path": "docs/authority/current/development/02_Repository_Solution_and_Module_Architecture.md",
+      "sha256": "ff05f2b4dbfebe75d148245499245f2f163df81f9db19c6ad170d9f1188e7497"
+    },
+    {
+      "path": "docs/authority/current/development/03_Governed_Development_Lifecycle_Scrum_Git.md",
+      "sha256": "48207ed1c49ea4c9f2d5ab2b2af586b621cada316bce5c490982810815e8105d"
+    },
+    {
+      "path": "docs/authority/current/development/06_Environment_Configuration_Secrets_and_Deployment.md",
+      "sha256": "b9e09e4669f0831d711b2c7c89b4ec1649e75b72cc1d4b3d3a485e52bccee0f1"
+    },
+    {
+      "path": "docs/authority/current/development/09_Testing_Acceptance_Evidence_and_Quality_Gates.md",
+      "sha256": "52a732494a5278a30077f72b6a8cb57b0a2d075ed2d7102e87f2a04d089ad8fb"
+    },
+    {
+      "path": "docs/authority/current/development/14_Glossary_and_Canonical_Terms.md",
+      "sha256": "5ea6c2e03111ac6c38b291c0f2766bc47399bdba6400ab006fd9799ad6c35b71"
+    },
+    {
+      "path": "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md",
+      "sha256": "e21bc59400b9db52a0dd7d94dde861bb952ce4688111dc9b4d97446f0488de74"
+    },
+    {
+      "path": "docs/authority/current/development/32_Domain_API_Event_Data_and_Policy_Contract_Catalog.md",
+      "sha256": "2030e8eb6b3c80ba8d26e1aaf849eef9e57db78c1ac3cf400f9b18ffb99f3ab7"
+    },
+    {
+      "path": "docs/authority/current/development/33_Production_Readiness_Compliance_and_Release_Gates.md",
+      "sha256": "5270f6da82dd7e58e7cd346a020d864f8571d4a1664f6bb31fb0e08e63657a50"
+    },
+    {
+      "path": "docs/authority/current/development/35_AI_Agent_Skill_Catalog_and_Review_Contracts.md",
+      "sha256": "d732dfd11da51596a4042746eae1e05655d29190a63898dd6df00fe98f0711f3"
+    },
+    {
+      "path": "docs/authority/baselines/1.6.0/05_Versioning_Compatibility_and_Release_Management.md",
+      "sha256": "2cb16390505a8c37f8014ea8009686842910f4162754a7cab1f1bd6460e16773"
+    },
+    {
+      "path": "docs/authority/baselines/1.6.0/07_API_SDK_Event_and_Connected_Product_Foundation.md",
+      "sha256": "c750445e916fc6734e2df7039df93bcac51f8fbf6b4a2ee2f9df60e7ca864d95"
+    },
+    {
+      "path": "docs/authority/baselines/1.6.0/15_Runtime_Communication_and_Infrastructure_Technology_Scope.md",
+      "sha256": "eadcbad3ab6bc47aae683cf8f6038f6f1b51b5cc2d13c63af0696ae6f3bc5cd6"
+    },
+    {
+      "path": "docs/authority/baselines/1.6.0/19_Connected_Product_and_SDK_Lifecycle_FRD.md",
+      "sha256": "2fd3537b0f4deb4c71193ca228af0579627a9648a34941c45e6832dd95f8c735"
+    },
+    {
+      "path": "docs/authority/baselines/1.6.0/30_Platform_Reliability_Change_DR_and_Automation_FRD.md",
+      "sha256": "fbacc813b8f6bb0103eda6330784494069860f53c7cd14e35deed036055cd277"
+    },
+    {
+      "path": "docs/authority/baselines/1.6.0/decisions/ADR-0006_Identity_ASPNET_Identity_OpenIddict.md",
+      "sha256": "9bdf9b66aa5de34aa90077b5296794d3e29bb3ba02e5b8f28c8f7b0204285c0a"
+    },
+    {
+      "path": "docs/contracts/authentication-session-contract.md",
+      "sha256": "c1c4d17b08fadd9a4ed305cac847729cd1ca5345dcda743767431249ac24ea15"
+    },
+    {
+      "path": "docs/contracts/operation-step-up-contract.md",
+      "sha256": "96d512b6a14ad52e8625a3fac130284832c3d4b21c649a88169327aa8b22ff7c"
+    },
+    {
+      "path": "docs/development/P2_008_TOTP_SCOPE.md",
+      "sha256": "c182570d6bece1ed0da6d61acc3273db5c2b40408f3b59b37a4d490b07fc4058"
+    },
+    {
+      "path": "web/apps/user/totp.tsx",
+      "sha256": "dcf925a2891a179eb483e62f665480e19b7ac8ba5a27ab49bb5a3fea960a4f29"
+    },
+    {
+      "path": "web/tests/totp/ui/totp.spec.ts",
+      "sha256": "d0ee44b41069f4b391cef6a5fcf4afce6f402d1ff7b939de2ffc9ba65ca59c48"
+    },
+    {
+      "path": "web/tests/totp/sensitive/real-journey.mjs",
+      "sha256": "ee9f4b7d868868567d55ff5e130a312c3ce798472dc293fd74185ff9ef548714"
+    },
+    {
+      "path": "web/tests/totp/sensitive/contract.mjs",
+      "sha256": "3ef3c1a5dd44c81d56bcf6fa12f0e37c4801d5973e3891fb4febeb3b9adf356a"
+    },
+    {
+      "path": "tools/browser-testing/FiniteTotpCoordinator.cs",
+      "sha256": "22b484c6df334080197627098a4e722f0c8d50595d6a35f9d845cf256f267b72"
+    },
+    {
+      "path": "governance/evidence/TUN-P2-008-VALIDATION.json",
+      "sha256": "e68ac03a411ce7467fb7a172e3be6fd055f571504531a2f820312b4643ee64b3"
+    },
+    {
+      "path": "governance/reviews/REV-TUN-P2-008-full-stack-engineer.yaml",
+      "sha256": "20445b5e4c52b3f587b1acccaf8886720c906ffc914b2419a12af9c0f3cb01c5"
+    },
+    {
+      "path": "governance/reviews/REV-TUN-P2-008-solution-architect.yaml",
+      "sha256": "8c72073cc4cf28b6a4dd14a38362aeb2bf2c97105d22f8529530ff0879bef874"
+    },
+    {
+      "path": "governance/reviews/REV-TUN-P2-008-sdk-engineer.yaml",
+      "sha256": "285a46ce72763fa8e903b91f915403cd76084e1a868d423bea915ff143dff9ee"
+    },
+    {
+      "path": "governance/reviews/REV-TUN-P2-008-business-analyst.yaml",
+      "sha256": "768764b46e6f6ddee900c9b5dc3943f7bbef72cf3b20cad685e7aaca4da02655"
+    },
+    {
+      "path": "governance/reviews/REV-TUN-P2-008-devops-engineer.yaml",
+      "sha256": "f1e8d6a03e0511cee05c2e5721b900022edb94aa44e535502bf8e480be24565b"
+    },
+    {
+      "path": ".agent/skills/full-stack-engineer/SKILL.md",
+      "sha256": "59adbe2133cf4ce88cbc9ca4eafce1d5a9d83b9562b6580c1571e6fc148d46b5"
+    },
+    {
+      "path": ".agent/skills/solution-architect/SKILL.md",
+      "sha256": "664ffba70d0f97e75951c3548b7f8391854781e4cf90cc50fc8829543783a35b"
+    },
+    {
+      "path": ".agent/skills/sdk-engineer/SKILL.md",
+      "sha256": "c64a66b2e19bccdbf69f13c9db62e9e2cbb0403f384591a93b5b787dc33b07ae"
+    },
+    {
+      "path": ".agent/skills/business-analyst/SKILL.md",
+      "sha256": "ca6e24da90c6dac80b7b75124f04a81a2d590e73cc1e99781546c4aad1bca04f"
+    },
+    {
+      "path": ".agent/skills/devops-engineer/SKILL.md",
+      "sha256": "0def19cfd8cf73f9fe47851ab171d3154e7e80b4675ded65964f10856789b50c"
+    }
+  ],
+  "source_equivalence": {
+    "core_scope": [
+      "src",
+      "tests",
+      "Directory.Build.props",
+      "Directory.Build.targets",
+      "Directory.Packages.props",
+      "global.json",
+      "Tunner.Platform.slnx"
+    ],
+    "identity_actual_sha": "f1dd54a3a6a4f4d3f0e1d66e92c02fb52053d7a1",
+    "architecture_actual_sha": "a933b5f004b0341b2f1e2f26568928ec98603f21",
+    "changed_committed_core_inputs_since_those_runs": [],
+    "working_core_inputs_dirty": [],
+    "installer_actual_invocation_sha": "183b557a37833fe658d60652b946860986e99ac6",
+    "installer_input_commit": "19617c5a2d15466ddc05260b05004506c7cde3f3",
+    "installer_scope": [
+      "src/Tunner.Installer",
+      "src/Tunner.Platform",
+      "src/Tunner.Database",
+      "tests/Tunner.Installer.Tests",
+      "tests/Shared/OpenBao",
+      "Directory.Build.props",
+      "Directory.Build.targets",
+      "Directory.Packages.props",
+      "global.json"
+    ],
+    "installer_changed_inputs": [],
+    "installer_seven_declared_rows_equal": true,
+    "delta_since_preliminary_review": [
+      "web/apps/user/totp.tsx",
+      "web/tests/totp/ui/totp.spec.ts"
+    ],
+    "no_blanket_old272_or372_current_equivalence": true
+  },
+  "ordered_owned_paths": {
+    "envelope": "governance/evidence/TUN-P2-008-VALIDATION.json",
+    "count": 112,
+    "ordered_array_sha256": "b5b1195484c54efba80dcccc76750f229f9b146ce33c0a6512f275933aab56dc",
+    "same_as_preliminary_commit": "b49ba2b3db997055cca1cf6f4b8b2e25a002ab3b",
+    "exact_order_unchanged": true
+  },
+  "original_assertions": {
+    "stage_review": {
+      "path": "artifacts/p2-008-totp-20261110/final-engineering-review/stage-cross-review-f5c143c.json",
+      "sha256": "371b46cebd06ee514ee32e95bb32e5af49a45c620a97592306993a3866a68c2e"
+    },
+    "require_true_and_prove": 110,
+    "all117_with_observe": 117,
+    "current_sensitive_helper_equal_759": true,
+    "original35_public_test_bodies_byte_prefix": true,
+    "added_public_cases": 8,
+    "947_typing_assertion_added": 1
+  },
+  "evidence": {
+    "current_three_journeys": {
+      "path": "artifacts/p2-008-totp-20261110/final-integration-947f8b0/safe-execution-summary.json",
+      "sha256": "4b0bbbd12e117d2a2e70db50df3617534a48c837f857238aba98f0c29eef13c9"
+    },
+    "real_receipts": [
+      {
+        "path": "artifacts/p2-008-totp-20261110/real-journeys-947f8b0/enrollment-password-mfa-preserve.json",
+        "sha256": "78e3f9a36fe47f8ba25739dc5ab4b98e6498ca62363861f660b954c4e874a4c3",
+        "journey_id": "TOTP_ENROLLMENT_PASSWORD_MFA_PRESERVE_V1",
+        "actual_invocation_sha": "947f8b090b4f74a474a71e47badcb595424bd734",
+        "browser_passed": 24,
+        "coordinator_passed": 21,
+        "persistence_true": 5,
+        "accepted": true,
+        "cleanup_verified": true,
+        "build_binding_sha256": "4f9d1ac2e4882df92d08948589613572f24e9be7c44892db895e711fef764960"
+      },
+      {
+        "path": "artifacts/p2-008-totp-20261110/real-journeys-947f8b0/operation-proof-causal-revoke.json",
+        "sha256": "bccf0b17a6d71e936bb5721e28033f78188691ec8332e0b537fefe074ea9cee8",
+        "journey_id": "TOTP_OPERATION_PROOF_CAUSAL_REVOKE_V1",
+        "actual_invocation_sha": "947f8b090b4f74a474a71e47badcb595424bd734",
+        "browser_passed": 23,
+        "coordinator_passed": 21,
+        "persistence_true": 5,
+        "accepted": true,
+        "cleanup_verified": true,
+        "build_binding_sha256": "4f9d1ac2e4882df92d08948589613572f24e9be7c44892db895e711fef764960"
+      },
+      {
+        "path": "artifacts/p2-008-totp-20261110/real-journeys-947f8b0/passkey-mfa-reset.json",
+        "sha256": "0ce0c98e5b87cc7318af88da665df9e5e7158d0d6c43dd6d3ad5d46dc4675a46",
+        "journey_id": "TOTP_PASSKEY_MFA_RESET_V1",
+        "actual_invocation_sha": "947f8b090b4f74a474a71e47badcb595424bd734",
+        "browser_passed": 23,
+        "coordinator_passed": 21,
+        "persistence_true": 5,
+        "accepted": true,
+        "cleanup_verified": true,
+        "build_binding_sha256": "4f9d1ac2e4882df92d08948589613572f24e9be7c44892db895e711fef764960"
+      }
+    ],
+    "public43_tsc_contracts29": {
+      "path": "artifacts/p2-008-totp-20261110/ui005-review/green-947f8b0/manifest.json",
+      "sha256": "4838a7511b4bc5e423f08697629cf166aa7c34a6cdfb6ea8d2f17527c7837e73"
+    },
+    "public_composition_keyboard4": {
+      "path": "artifacts/p2-008-totp-20261110/ui005-review/green-947f8b0/composition-r2/composition.json",
+      "sha256": "b31813840b9c5239c7eeff8f430024ba316d885ea764a9084363c1d2a490e0e4"
+    },
+    "build_binding": {
+      "path": "artifacts/p2-008-totp-20261110/runtime-build-binding.json",
+      "sha256": "4f9d1ac2e4882df92d08948589613572f24e9be7c44892db895e711fef764960"
+    },
+    "native_index": {
+      "path": "governance/evidence/p2-008-totp-20261110/parent-runtime-compatibility/f1dd54a/execution-index.json",
+      "sha256": "27b77aeca97dd27bb46979d436ffaf885f3d38c1cca58bbc77ea8d6c6d296779"
+    },
+    "installer113": {
+      "path": "artifacts/p2-008-totp-20261110/installer-19617c5/validation.json",
+      "sha256": "09b853d31e2f1f719254a971cf4085f5f72a09bb4ad38eed9bc1f859e2bc8b13"
+    },
+    "stage_cross_review": {
+      "path": "artifacts/p2-008-totp-20261110/final-engineering-review/stage-cross-review-f5c143c.json",
+      "sha256": "371b46cebd06ee514ee32e95bb32e5af49a45c620a97592306993a3866a68c2e"
+    },
+    "ui005_static_review": {
+      "path": "artifacts/p2-008-totp-20261110/ui005-review/security-async-cross-review-6653a3c.json",
+      "sha256": "55668c8adb6c6c24e63eef78cb10031aaa778fa78883fd075decf0d2584ca36a"
+    },
+    "ui005_red_source_test_review": {
+      "path": "artifacts/p2-008-totp-20261110/ui005-review/security-source-test-delta-6653a3c.json",
+      "sha256": "1ebabe6c8123c51c25aade1ad08b074b180133b556edea65cda70a61ae169e0e"
+    }
+  },
+  "all_13_unrelated_hashes_preserved": true,
+  "frozen009_packet": {
+    "path": "artifacts/p2-009-recovery-20261111/refinement-prep-v1/manifest.json",
+    "sha256": "2e894c787a3ea3d337241a45f9e7a3a9fe3dd9ffa63cac31ce1c4855c3030a4c"
+  },
+  "nonexecuting_metadata_delta": {
+    "reviewed_carrier_sha": "d3f14fa49c11a89784a75d8318354f90eff180d5",
+    "paths_since_tested947": [
+      "docs/development/P2_008_TOTP_SCOPE.md"
+    ],
+    "review": "Reviewed factual progress/result and existing consent references only:7 additions/3 removals; no domain rule, code, test, policy value or372-source/133-output runtime input change.",
+    "all372_runtime_source_and133_output_hashes_match": true
+  },
+  "metadata_only_descendants": "Tested behavior stays947. A later source-owned progress-document/evidence commit is a separately recorded metadata delta; no requirement that the entire HEAD equal947 is imposed. Behavior/build inputs must remain exact or be revalidated."
+}
