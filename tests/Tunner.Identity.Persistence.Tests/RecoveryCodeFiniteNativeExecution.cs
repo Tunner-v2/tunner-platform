@@ -202,8 +202,14 @@ public static class RecoveryCodeFiniteNativeExecution
         }
     }
 
+    internal const string NpgsqlTransientFailureMessage = "An exception has been raised that is likely due to a transient failure.";
     internal static string CapacityProvisionFailure(Exception error)
     {
+        // Pinned Npgsql10.0.3 execution strategy: admit exactly one known envelope, never recursively unwrap.
+        if (error.GetType() == typeof(InvalidOperationException) && error.Message == NpgsqlTransientFailureMessage &&
+            error.InnerException is { } cause && (cause is Npgsql.NpgsqlException or TimeoutException ||
+                cause is Microsoft.EntityFrameworkCore.DbUpdateException { InnerException: Npgsql.PostgresException }))
+            error = cause;
         // Only the direct provider type or this existing EF wrapper is admitted; never walk an arbitrary exception graph.
         var postgres = error as Npgsql.PostgresException ??
             (error is Microsoft.EntityFrameworkCore.DbUpdateException { InnerException: Npgsql.PostgresException wrapped } ? wrapped : null);
