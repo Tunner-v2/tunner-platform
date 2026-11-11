@@ -8,9 +8,11 @@ import {fileURLToPath} from 'node:url';
 // This receipt records a local build; it does not invoke a build or claim acceptance.
 const root = await realpath(fileURLToPath(new URL('../../', import.meta.url)));
 const sourceRoots = ['src', 'tools/browser-testing', 'tests/Shared', 'tests/Tunner.Identity.Persistence.Tests', 'web', 'tools/dev/new-tunner-totp-build-binding.mjs', 'Directory.Build.props', 'Directory.Build.targets', 'Directory.Packages.props', 'global.json', 'Tunner.Platform.slnx', '.editorconfig', '.gitattributes', 'NuGet.Config'];
-const outputRoot = 'tools/browser-testing/bin/Debug/net10.0';
+const native = process.argv.length === 3 && process.argv[2] === '--recovery-native';
 const recovery = process.argv.length === 3 && process.argv[2] === '--recovery';
-const receiptPath = recovery ? 'artifacts/p2-009-recovery-20261111/runtime-build-binding.json' : 'artifacts/p2-008-totp-20261110/runtime-build-binding.json';
+if (native || recovery) sourceRoots.push('tools/recovery-native-testing');
+const outputRoot = native ? 'tools/recovery-native-testing/bin/Debug/net10.0' : 'tools/browser-testing/bin/Debug/net10.0';
+const receiptPath = native ? 'artifacts/p2-009-recovery-20261111/native-runtime-build-binding.json' : recovery ? 'artifacts/p2-009-recovery-20261111/runtime-build-binding.json' : 'artifacts/p2-008-totp-20261110/runtime-build-binding.json';
 const digest = bytes => createHash('sha256').update(bytes).digest('hex');
 const git = args => execFileSync('git', args, {cwd: root, encoding: 'utf8', maxBuffer: 16 * 1024 * 1024, stdio: ['ignore', 'pipe', 'pipe']});
 const ordinal = (left, right) => left < right ? -1 : left > right ? 1 : 0;
@@ -25,7 +27,7 @@ async function checkedPath(path, directory = false) {
   return absolute;
 }
 try {
-  if (process.argv.length !== 2 && !recovery) throw new Error();
+  if (process.argv.length !== 2 && !recovery && !native) throw new Error();
   const sourceCommit = git(['rev-parse', 'HEAD']).trim();
   if (!/^[a-f0-9]{40}$/.test(sourceCommit) || git(['status', '--porcelain', '--untracked-files=all', '--', ...sourceRoots]).trim()) throw new Error();
   const entries = git(['ls-tree', '-rz', '--full-tree', sourceCommit, '--', ...sourceRoots]).split('\0').filter(Boolean);
@@ -49,7 +51,7 @@ try {
   }
   await visit(outputRoot);
   buildOutputs.sort((left, right) => ordinal(left.path, right.path));
-  if (!buildOutputs.some(value => value.path === outputRoot + '/Tunner.BrowserTesting.dll')) throw new Error();
+  if (!buildOutputs.some(value => value.path === outputRoot + (native ? '/Tunner.Recovery.NativeTesting.dll' : '/Tunner.BrowserTesting.dll'))) throw new Error();
   if (git(['rev-parse', 'HEAD']).trim() !== sourceCommit || git(['status', '--porcelain', '--untracked-files=all', '--', ...sourceRoots]).trim()) throw new Error();
   const bytes = JSON.stringify({schema_version: 1, source_commit_sha: sourceCommit, source_inputs: sourceInputs, build_outputs: buildOutputs}, null, 2) + '\n';
   const receipt = resolve(root, receiptPath);

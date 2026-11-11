@@ -24,27 +24,37 @@ internal sealed class RecoveryCodeLocalDockerEndpoint : IDisposable
 {
     private readonly DirectoryInfo configuration;
     private readonly string configurationParent;
+    internal RecoveryCodeFixtureOwnershipChannel Ownership { get; }
+    private readonly RecoveryCodePreparedFixtureOwner configurationOwner;
+    private readonly SemaphoreSlim configurationGate = new(1, 1);
     private bool disposed;
     private string? engineId;
     private bool configurationInitialized;
     private bool configurationCreateAttempted;
-    private RecoveryCodeLocalDockerEndpoint(Uri endpoint)
+    private RecoveryCodeLocalDockerEndpoint(Uri endpoint, RecoveryCodeFixtureOwnershipChannel ownership)
     {
-        Value = endpoint;
+        Value = endpoint; Ownership = ownership;
         configuration = new DirectoryInfo(Path.Combine(Path.GetTempPath(), "tunner-p2-009-docker-" + Guid.NewGuid().ToString("N")));
         configurationParent = configuration.Parent!.FullName;
+        configurationOwner = new(configuration.Name[^32..], "config", configuration.Name, null);
     }
     internal Uri Value { get; }
+    internal bool ConfigurationCreated => configurationCreateAttempted;
     internal bool CleanupVerified { get; private set; }
     internal async Task VerifyEngineAsync(CancellationToken ct)
     {
-        using var client = Client();
+        using var client = await ClientAsync(ct).ConfigureAwait(false);
         var actual = await client.System.GetSystemInfoAsync(ct).ConfigureAwait(false);
-        if (string.IsNullOrWhiteSpace(actual.ID) || actual.ID.Length > 200 || actual.ID.Any(char.IsControl) || actual.OSType != "linux" ||
+        if (string.IsNullOrWhiteSpace(actual.ID) || actual.ID.Length > 200 || actual.ID.Any(char.IsControl) || actual.OSType != "linux" || actual.ID != Ownership.ExpectedEngineId ||
             engineId is not null && engineId != actual.ID) throw new InvalidOperationException("RECOVERY_DOCKER_ENGINE_CHANGED");
         engineId ??= actual.ID;
     }
-    internal static RecoveryCodeLocalDockerEndpoint Admit(Uri endpoint)
+    internal static RecoveryCodeLocalDockerEndpoint Admit(Uri endpoint, RecoveryCodeFixtureOwnershipChannel ownership)
+    {
+        ArgumentNullException.ThrowIfNull(ownership);
+        return new(RequireLocalEndpoint(endpoint), ownership);
+    }
+    private static Uri RequireLocalEndpoint(Uri endpoint)
     {
         ArgumentNullException.ThrowIfNull(endpoint);
         var original = endpoint.OriginalString;
@@ -64,19 +74,20 @@ internal sealed class RecoveryCodeLocalDockerEndpoint : IDisposable
         if (!pipe && !socket) throw new InvalidOperationException("RECOVERY_LOCAL_DOCKER_REQUIRED");
         // Finite test process only: native clients must never discover operator proxy credentials/routes.
         HttpClient.DefaultProxy = new WebProxy();
-        return new(endpoint);
+        return endpoint;
     }
-    internal IDockerClient Client()
+    internal async Task<IDockerClient> ClientAsync(CancellationToken ct)
     {
         ObjectDisposedException.ThrowIf(disposed, this);
-        InitializeConfiguration();
-        return new DockerClientBuilder(new DockerConfig(new ClosedSettings(configuration.FullName)))
-            .WithEndpoint(Value).WithAuthProvider(NoopAuthProvider.Instance).WithLogger(NullLogger.Instance)
-            .WithTimeout(TimeSpan.FromSeconds(15)).Build();
+        await configurationGate.WaitAsync(ct).ConfigureAwait(false);
+        try { await InitializeConfigurationAsync(ct).ConfigureAwait(false); }
+        finally { configurationGate.Release(); }
+        return ClientForConfiguration(Value, configuration.FullName);
     }
-    private void InitializeConfiguration()
+    private async Task InitializeConfigurationAsync(CancellationToken ct)
     {
         if (configurationInitialized) return;
+        await Ownership.PrepareAsync(configurationOwner, ct).ConfigureAwait(false);
         if (configurationCreateAttempted) throw new InvalidOperationException("RECOVERY_DOCKER_CONFIGURATION_UNAVAILABLE");
         configuration.Refresh();
         if (configuration.Exists || File.Exists(configuration.FullName)) throw new InvalidOperationException("RECOVERY_DOCKER_CONFIGURATION_OCCUPIED");
@@ -84,11 +95,30 @@ internal sealed class RecoveryCodeLocalDockerEndpoint : IDisposable
         // Endpoint owner has already been returned/retained before any directory/file allocation.
         Directory.CreateDirectory(configuration.FullName);
         File.WriteAllText(Path.Combine(configuration.FullName, "config.json"), "{}");
+        await Ownership.InitializedConfigurationAsync(configurationOwner, ct).ConfigureAwait(false);
         // Also constrain incidental static client configuration initialization to this process-owned empty file.
         Environment.SetEnvironmentVariable("DOCKER_CONFIG", configuration.FullName);
         foreach (var key in new[] { "DOCKER_AUTH_CONFIG", "DOCKER_CONTEXT", "DOCKER_TLS_VERIFY", "DOCKER_CERT_PATH", "REGISTRY_AUTH_FILE" })
             Environment.SetEnvironmentVariable(key, null);
         configurationInitialized = true;
+    }
+    // Reconciliation uses only the outside controller's already-owned public empty configuration.
+    internal static IDockerClient ReconciliationClient(Uri endpoint, string runId)
+    {
+        if (!RecoveryCodeFixtureOwnershipChannel.Hex(runId, 32)) throw new InvalidOperationException("RECOVERY_RECONCILIATION_INVALID");
+        var folder = new DirectoryInfo(Path.Combine(Path.GetTempPath(), "tunner-p2-009-helper-" + runId));
+        var file = new FileInfo(Path.Combine(folder.FullName, "config.json"));
+        if (!folder.Exists || folder.LinkTarget is not null || (folder.Attributes & FileAttributes.ReparsePoint) != 0 ||
+            !file.Exists || file.LinkTarget is not null || (file.Attributes & FileAttributes.ReparsePoint) != 0 || file.Length != 2 || File.ReadAllText(file.FullName) != "{}" ||
+            folder.EnumerateFileSystemInfos().Count() != 1) throw new InvalidOperationException("RECOVERY_RECONCILIATION_CONFIG_INVALID");
+        return ClientForConfiguration(RequireLocalEndpoint(endpoint), folder.FullName);
+    }
+    private static IDockerClient ClientForConfiguration(Uri endpoint, string path)
+    {
+        Environment.SetEnvironmentVariable("DOCKER_CONFIG", path);
+        return new DockerClientBuilder(new DockerConfig(new ClosedSettings(path)))
+            .WithEndpoint(endpoint).WithAuthProvider(NoopAuthProvider.Instance).WithLogger(NullLogger.Instance)
+            .WithTimeout(TimeSpan.FromSeconds(15)).Build();
     }
     // Explicit settings prevent the pinned client's default DockerConfig discovery. No file is opened.
     private sealed class ClosedSettings(string path) : IDockerCliSettings
@@ -153,8 +183,12 @@ internal abstract class RecoveryCodeOwnedContainer : IAsyncDisposable
     private readonly int[] ports;
     private readonly Dictionary<string, int> published = new(StringComparer.Ordinal);
     private readonly HashSet<string> ownedAnonymousVolumes = new(StringComparer.Ordinal);
-    private readonly IDockerClient docker;
-    private readonly RecoveryCodeLocalDockerEndpoint endpoint;
+    private IDockerClient? docker;
+    private IDockerClient Docker => docker ?? throw new InvalidOperationException("RECOVERY_RESOURCE_CLIENT_UNAVAILABLE");
+    private readonly RecoveryCodeLocalDockerEndpoint? endpoint;
+    private readonly string runId;
+    private readonly RecoveryCodePreparedFixtureOwner descriptor;
+    private bool registered;
     private string? containerId;
     private bool createAttempted;
     private bool absentBeforeCreate;
@@ -163,9 +197,46 @@ internal abstract class RecoveryCodeOwnedContainer : IAsyncDisposable
     private readonly string name;
     protected RecoveryCodeOwnedContainer(RecoveryCodeLocalDockerEndpoint endpoint, string repository, string role, string imageId, int[] ports)
     {
-        InstanceId = Guid.NewGuid(); this.endpoint = endpoint; this.repository = repository; this.role = role; ImageId = imageId; this.ports = ports;
-        name = "tunner-p2-009-" + role + "-" + InstanceId.ToString("N"); docker = endpoint.Client();
+        InstanceId = Guid.NewGuid(); this.endpoint = endpoint; this.repository = repository; this.role = role; ImageId = imageId; this.ports = ports; runId = endpoint.Ownership.RunId;
+        name = "tunner-p2-009-" + role + "-" + InstanceId.ToString("N");
+        descriptor = new(InstanceId.ToString("N"), role, name, imageId);
     }
+    protected RecoveryCodeOwnedContainer(IDockerClient client, string repository, string runId, RecoveryCodePreparedFixtureOwner descriptor, string? knownId)
+    {
+        RecoveryCodeFixtureOwnershipChannel.Validate(descriptor);
+        if (descriptor.Role == "config" || descriptor.ImageId is null || !RecoveryCodeFixtureOwnershipChannel.Hex(runId, 32) ||
+            knownId is not null && !RecoveryCodeFixtureOwnershipChannel.Hex(knownId, 64)) throw new InvalidOperationException("RECOVERY_RECONCILIATION_INVALID");
+        this.repository = repository; this.runId = runId; this.descriptor = descriptor; role = descriptor.Role; name = descriptor.Name;
+        InstanceId = Guid.ParseExact(descriptor.OwnerId, "N"); ImageId = descriptor.ImageId;
+        ports = role == "native-postgres" ? [5432] : role == "mailpit" ? [1025, 8025] : [8200];
+        docker = client; containerId = knownId; createAttempted = true; absentBeforeCreate = true;
+    }
+    internal async Task<bool> VerifyPreparedIdentityAsync(CancellationToken ct)
+    {
+        var image = await Docker.Images.InspectImageAsync(ImageId, ct).ConfigureAwait(false);
+        var volumes = image.Config?.Volumes?.Keys.ToArray() ?? [];
+        return image.ID == ImageId && image.Config is not null &&
+            (role == "native-postgres" ? !volumes.Any(p => p is not ("/var/lib/postgresql" or "/var/lib/postgresql/data")) : volumes.Length == 0) &&
+            await InspectAsync(name, ct).ConfigureAwait(false) is null;
+    }
+    internal async Task<bool> VerifyCreatedIdentityAsync(CancellationToken ct, bool expectedRunning = false)
+    {
+        if (containerId is null) return false;
+        var actual = await InspectAsync(containerId, ct).ConfigureAwait(false);
+        var image = await Docker.Images.InspectImageAsync(ImageId, ct).ConfigureAwait(false);
+        var tmpfs = new HashSet<string>(StringComparer.Ordinal);
+        if (role == "native-postgres")
+        {
+            tmpfs.Add("/var/lib/postgresql");
+            if (image.Config?.Volumes is { } volumes) foreach (var target in volumes.Keys) tmpfs.Add(target);
+        }
+        var network = actual?.NetworkSettings?.Ports;
+        var loopback = !expectedRunning || network is not null && network.Count == ports.Length && ports.All(p => network.TryGetValue(Key(p), out var values) &&
+            values is { Count: 1 } && values[0].HostIP == "127.0.0.1" && int.TryParse(values[0].HostPort, NumberStyles.None, CultureInfo.InvariantCulture, out var publishedPort) && publishedPort is > 0 and <= 65535 && publishedPort != 25432);
+        return actual is not null && Owns(actual) && actual.State?.Running == expectedRunning && SafeConfiguration(actual, tmpfs) && loopback;
+    }
+    internal async Task<bool> VerifyAbsenceAsync(CancellationToken ct) => await InspectAsync(name, ct).ConfigureAwait(false) is null &&
+        (containerId is null || await InspectAsync(containerId, ct).ConfigureAwait(false) is null);
     internal Guid InstanceId { get; }
     internal string ImageId { get; }
     internal bool OwnershipVerified { get; private set; }
@@ -188,8 +259,11 @@ internal abstract class RecoveryCodeOwnedContainer : IAsyncDisposable
     {
         if (started || disposed) throw new InvalidOperationException("RECOVERY_RESOURCE_ALREADY_STARTED");
         started = true;
+        if (endpoint is null) throw new InvalidOperationException("RECOVERY_RECONCILIATION_CANNOT_START");
+        await endpoint.Ownership.PrepareAsync(descriptor, ct).ConfigureAwait(false); registered = true;
+        docker = await endpoint.ClientAsync(ct).ConfigureAwait(false);
         await endpoint.VerifyEngineAsync(ct).ConfigureAwait(false);
-        var image = await docker.Images.InspectImageAsync(ImageId, ct).ConfigureAwait(false);
+        var image = await Docker.Images.InspectImageAsync(ImageId, ct).ConfigureAwait(false);
         if (image.ID != ImageId || image.Config is null) throw new InvalidOperationException("RECOVERY_CACHED_IMAGE_INVALID");
         var volumes = image.Config.Volumes?.Keys.ToArray() ?? [];
         var postgres = role == "native-postgres";
@@ -207,7 +281,7 @@ internal abstract class RecoveryCodeOwnedContainer : IAsyncDisposable
         {
             Name = name, Image = ImageId, Env = EnvironmentValues,
             Labels = new Dictionary<string, string>(StringComparer.Ordinal)
-            { [OwnerLabel] = InstanceId.ToString("N"), [RoleLabel] = role, [RepositoryLabel] = repository },
+            { [OwnerLabel] = InstanceId.ToString("N"), [RoleLabel] = role, [RepositoryLabel] = repository, ["tunner.p2-009.run"] = runId },
             ExposedPorts = ports.ToDictionary(Key, _ => default(EmptyStruct)),
             HostConfig = new HostConfig
             {
@@ -218,17 +292,18 @@ internal abstract class RecoveryCodeOwnedContainer : IAsyncDisposable
         };
         if (Command is { } command) parameters.Cmd = command;
         createAttempted = true;
-        var created = await docker.Containers.CreateContainerAsync(parameters, ct).ConfigureAwait(false);
-        containerId = created.ID; // Retain positive identity before Start/readiness/any other fallible work.
+        var created = await Docker.Containers.CreateContainerAsync(parameters, ct).ConfigureAwait(false);
+        containerId = created.ID; // Retain before the next fallible action; ACK is mandatory before inspect/start.
+        await endpoint.Ownership.CreatedAsync(descriptor, containerId, ct).ConfigureAwait(false);
         var actual = await InspectAsync(containerId, ct).ConfigureAwait(false);
         if (actual is not null && Owns(actual) && !CaptureOwnedAnonymousVolumes(actual))
             throw new InvalidOperationException("RECOVERY_UNEXPECTED_VOLUME_OWNER");
         if (actual is null || !Owns(actual) || !SafeConfiguration(actual, tmpfs.Keys))
             throw new InvalidOperationException("RECOVERY_RESOURCE_IDENTITY_INVALID");
         if (stopAfterCreate) return;
-        if (!await docker.Containers.StartContainerAsync(containerId, new ContainerStartParameters(), ct).ConfigureAwait(false))
+        if (!await Docker.Containers.StartContainerAsync(containerId, new ContainerStartParameters(), ct).ConfigureAwait(false))
             throw new InvalidOperationException("RECOVERY_RESOURCE_START_REJECTED");
-        actual = await docker.Containers.InspectContainerAsync(containerId, ct).ConfigureAwait(false);
+        actual = await Docker.Containers.InspectContainerAsync(containerId, ct).ConfigureAwait(false);
         if (!Owns(actual) || actual.State?.Running != true || !SafeConfiguration(actual, tmpfs.Keys))
             throw new InvalidOperationException("RECOVERY_RESOURCE_IDENTITY_INVALID");
         var network = actual.NetworkSettings?.Ports;
@@ -247,6 +322,7 @@ internal abstract class RecoveryCodeOwnedContainer : IAsyncDisposable
         actual.Config?.Labels is { } labels && labels.TryGetValue(OwnerLabel, out var owner) && owner == InstanceId.ToString("N") &&
         labels.TryGetValue(RoleLabel, out var observedRole) && observedRole == role &&
         labels.TryGetValue(RepositoryLabel, out var root) && root == repository &&
+        labels.TryGetValue("tunner.p2-009.run", out var observedRun) && observedRun == runId &&
         (containerId is null || containerId == actual.ID);
     private bool SafeConfiguration(ContainerInspectResponse actual, IEnumerable<string> expectedTmpfs)
     {
@@ -276,7 +352,7 @@ internal abstract class RecoveryCodeOwnedContainer : IAsyncDisposable
     }
     private async Task<ContainerInspectResponse?> InspectAsync(string id, CancellationToken ct)
     {
-        try { return await docker.Containers.InspectContainerAsync(id, ct).ConfigureAwait(false); }
+        try { return await Docker.Containers.InspectContainerAsync(id, ct).ConfigureAwait(false); }
         catch (DockerApiException error) when (error.StatusCode == HttpStatusCode.NotFound) { return null; }
     }
     public async ValueTask DisposeAsync()
@@ -288,6 +364,12 @@ internal abstract class RecoveryCodeOwnedContainer : IAsyncDisposable
         try
         {
             using var deadline = new CancellationTokenSource(TimeSpan.FromSeconds(30));
+            if (docker is null)
+            {
+                if (endpoint is null) throw new InvalidOperationException("RECOVERY_RESOURCE_CLIENT_UNAVAILABLE");
+                if (!registered) { await endpoint.Ownership.PrepareAsync(descriptor, deadline.Token).ConfigureAwait(false); registered = true; }
+                docker = await endpoint.ClientAsync(deadline.Token).ConfigureAwait(false);
+            }
             var actual = await InspectAsync(containerId ?? name, deadline.Token).ConfigureAwait(false);
             if (actual is not null)
             {
@@ -296,12 +378,12 @@ internal abstract class RecoveryCodeOwnedContainer : IAsyncDisposable
                 containerId ??= actual.ID;
                 volumeOwnership = CaptureOwnedAnonymousVolumes(actual);
                 using var stopDeadline = new CancellationTokenSource(TimeSpan.FromSeconds(5));
-                try { _ = await docker.Containers.StopContainerAsync(actual.ID, new ContainerStopParameters { WaitBeforeKillSeconds = 3 }, stopDeadline.Token).ConfigureAwait(false); }
+                try { _ = await Docker.Containers.StopContainerAsync(actual.ID, new ContainerStopParameters { WaitBeforeKillSeconds = 3 }, stopDeadline.Token).ConfigureAwait(false); }
                 catch (DockerApiException error) when (error.StatusCode is HttpStatusCode.NotModified or HttpStatusCode.NotFound) { }
                 catch (Exception error) when (error is not OutOfMemoryException) { stopSucceeded = false; }
                 // A failed graceful stop must not suppress the separate removal attempt for this positively owned ID.
                 using var removeDeadline = new CancellationTokenSource(TimeSpan.FromSeconds(20));
-                await docker.Containers.RemoveContainerAsync(actual.ID, new ContainerRemoveParameters { Force = true, RemoveVolumes = volumeOwnership }, removeDeadline.Token).ConfigureAwait(false);
+                await Docker.Containers.RemoveContainerAsync(actual.ID, new ContainerRemoveParameters { Force = true, RemoveVolumes = volumeOwnership }, removeDeadline.Token).ConfigureAwait(false);
             }
             removal = true;
         }
@@ -314,12 +396,12 @@ internal abstract class RecoveryCodeOwnedContainer : IAsyncDisposable
             AnonymousVolumesAbsentVerified = volumeOwnership;
             foreach (var volume in ownedAnonymousVolumes)
             {
-                try { _ = await docker.Volumes.InspectAsync(volume, deadline.Token).ConfigureAwait(false); AnonymousVolumesAbsentVerified = false; }
+                try { _ = await Docker.Volumes.InspectAsync(volume, deadline.Token).ConfigureAwait(false); AnonymousVolumesAbsentVerified = false; }
                 catch (DockerApiException error) when (error.StatusCode == HttpStatusCode.NotFound) { }
             }
         }
         catch (Exception error) when (error is not OutOfMemoryException) { }
-        finally { docker.Dispose(); }
+        finally { docker?.Dispose(); }
         CleanupVerified = sessionsEnded && stopSucceeded && removal && ContainerAbsentVerified && AnonymousVolumesAbsentVerified;
         if (!CleanupVerified) throw new InvalidOperationException("RECOVERY_RESOURCE_CLEANUP_UNVERIFIED");
     }
@@ -429,8 +511,8 @@ internal sealed class RecoveryCodeOwnedOpenBao(RecoveryCodeLocalDockerEndpoint e
 internal sealed class RecoveryCodeBorrowedPostgres
 {
     private const string ExpectedImage = "sha256:c6a5b95f7348a70e743a9b5e2a3fd78cf22767a039ae81b36e1e561f138cb09c";
-    private readonly RecoveryCodeLocalDockerEndpoint endpoint;
-    private RecoveryCodeBorrowedPostgres(RecoveryCodeLocalDockerEndpoint endpoint, string id, string project)
+    private readonly RecoveryCodeLocalDockerEndpoint? endpoint;
+    private RecoveryCodeBorrowedPostgres(RecoveryCodeLocalDockerEndpoint? endpoint, string id, string project)
     { this.endpoint = endpoint; ContainerId = id; ProjectName = project; }
     internal string ContainerId { get; }
     internal string ImageId { get; } = ExpectedImage;
@@ -440,7 +522,11 @@ internal sealed class RecoveryCodeBorrowedPostgres
     internal static async Task<RecoveryCodeBorrowedPostgres> VerifyAsync(RecoveryCodeLocalDockerEndpoint endpoint, string project, CancellationToken ct)
     {
         await endpoint.VerifyEngineAsync(ct).ConfigureAwait(false);
-        using var docker = endpoint.Client();
+        using var docker = await endpoint.ClientAsync(ct).ConfigureAwait(false);
+        return await VerifyUsingClientAsync(docker, endpoint, project, ct).ConfigureAwait(false);
+    }
+    internal static async Task<RecoveryCodeBorrowedPostgres> VerifyUsingClientAsync(IDockerClient docker, RecoveryCodeLocalDockerEndpoint? endpoint, string project, CancellationToken ct)
+    {
         var matches = await docker.Containers.ListContainersAsync(new ContainersListParameters
         {
             All = true, Filters = new Dictionary<string, IDictionary<string, bool>>(StringComparer.Ordinal)
@@ -461,6 +547,7 @@ internal sealed class RecoveryCodeBorrowedPostgres
     }
     internal async Task<bool> VerifyPreservedAsync(CancellationToken ct)
     {
+        if (endpoint is null) return false;
         try { var current = await VerifyAsync(endpoint, ProjectName, ct).ConfigureAwait(false); return current.ContainerId == ContainerId; }
         catch (Exception error) when (error is not OutOfMemoryException) { return false; }
     }
@@ -499,4 +586,12 @@ internal static class RecoveryCodeIdentityDatabaseProvisioning
             throw new InvalidOperationException("Identity test database must have the complete current migration before a test can run.");
         return adminConnection.ConnectionString;
     }
+}
+
+/// <summary>Metadata-helper-only restoration. Start is rejected before any container mutation.</summary>
+internal sealed class RecoveryCodeReconciliationContainer(IDockerClient client, string repository, string runId,
+    RecoveryCodePreparedFixtureOwner descriptor, string? knownId)
+    : RecoveryCodeOwnedContainer(client, repository, runId, descriptor, knownId)
+{
+    protected override Task ReadyAsync(CancellationToken ct) => throw new InvalidOperationException("RECOVERY_RECONCILIATION_CANNOT_START");
 }

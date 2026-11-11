@@ -2,7 +2,7 @@ using Tunner.Testing.Recovery;
 
 namespace Tunner.Identity.Persistence.Tests;
 
-public enum RecoveryCodeNativeCohort { PublicCanaries, PublicSql, PrivateRecovery }
+public enum RecoveryCodeNativeCohort { PublicCanaries, PublicSql, PrivateRecovery, PublicCapacity }
 
 /// <summary>Only fixed booleans and enums cross the test-assembly boundary. No xUnit runner/TRX is used.</summary>
 public sealed record RecoveryCodeNativeReceipt(int Version, string Type, string Cohort, string FailureCode,
@@ -14,13 +14,19 @@ public static class RecoveryCodeFiniteNativeExecution
 {
     private static readonly string[] CanaryIds = ["BEFORE_CREATE", "AFTER_CREATE", "AFTER_START", "AFTER_MIGRATION", "CASE_FAILURE", "CLEANUP_REJECT"];
     private static readonly string[] PublicIds = [.. CanaryIds, "OWNERSHIP_REJECT", "NO_LOG_REJECT", "SENSITIVE_REJECT"];
+    private static readonly string[] CapacityIds = ["MIGRATION_CAPACITY"];
     private static readonly string[] SqlIds = ["ISSUANCE_BINDING", "RETIREMENT_BINDING", "ENTRY_ONE_WAY", "SET_ONE_WAY", "OPERATION_ONE_WAY"];
     private static readonly string[] PrivateIds = ["WINNER_SAFE_READ_REPLACE", "PUBLICATION_WITHDRAWAL", "PUBLICATION_VERSION", "PUBLICATION_INTERVAL",
-        "SAME_CODE_CONCURRENCY", "OWNER_REJECTION", "FINAL_DRIFT", "TRANSACTION_ADMISSION", "SAFE_DUPLICATE", "DEFAULT_ABSENCE"];
+        "SAME_CODE_CONCURRENCY", "OWNER_REJECTION", "FINAL_DRIFT", "TRANSACTION_ADMISSION", "SAFE_DUPLICATE", "DEFAULT_ABSENCE",
+        "ADMISSION_WITHDRAWAL", "ADMISSION_POLICY", "ADMISSION_EVIDENCE", "ADMISSION_TARGET", "ADMISSION_INTERVAL", "ADMISSION_MISSING", "ADMISSION_UNCHANGED",
+        "DISTINCT_CODES_ANY_DIFFERENT_OWNER", "DISTINCT_CODES_ANY_SAME_OWNER", "DISTINCT_CODES_EXACT_DIFFERENT_OWNER", "DISTINCT_CODES_EXACT_SAME_OWNER",
+        "ATTEMPT_LIMIT_ACCOUNT", "ATTEMPT_LIMIT_NETWORK", "REPLACEMENT_SAME_FACTS_RACE", "CONSUME_BEFORE_REPLACE", "REPLACE_BEFORE_CONSUME",
+        "PROOF_ABSENT", "PROOF_WRONG_PASSWORD", "PROOF_INSUFFICIENT", "PROOF_EXPIRED", "PROOF_CONSUMED",
+        "BIND_OPERATION", "BIND_CORRELATION", "BIND_SCOPE", "BIND_CONTEXT", "BIND_RESOURCE", "BIND_VERSION", "BIND_DIGEST", "BIND_SESSION", "BIND_ACCOUNT", "BIND_ORIGIN", "BIND_KEY", "BFF_CSRF_ORIGIN_OWNER"];
 
-    public static async Task<RecoveryCodeNativeReceipt> RunAsync(RecoveryCodeNativeCohort cohort, Uri qualifiedLocalEndpoint, DirectoryInfo repository)
+    internal static async Task<RecoveryCodeNativeReceipt> RunAsync(RecoveryCodeNativeCohort cohort, Uri qualifiedLocalEndpoint, DirectoryInfo repository, RecoveryCodeFixtureOwnershipChannel ownershipChannel)
     {
-        var cases = (cohort == RecoveryCodeNativeCohort.PublicCanaries ? PublicIds : cohort == RecoveryCodeNativeCohort.PublicSql ? SqlIds : PrivateIds)
+        var cases = (cohort == RecoveryCodeNativeCohort.PublicCanaries ? PublicIds : cohort == RecoveryCodeNativeCohort.PublicSql ? SqlIds : cohort == RecoveryCodeNativeCohort.PublicCapacity ? CapacityIds : PrivateIds)
             .ToDictionary(id => id, _ => false, StringComparer.Ordinal);
         var failure = "NONE"; var settled = true; var ownership = false; var noLogs = false; var absence = false; var cleanup = false;
         RecoveryCodeBorrowedPostgres? borrowed = null; var preserved = false;
@@ -29,7 +35,7 @@ public static class RecoveryCodeFiniteNativeExecution
         {
             if (!Enum.IsDefined(cohort) || Environment.GetEnvironmentVariable("OTEL_SDK_DISABLED") != "true")
                 throw new InvalidOperationException("RECOVERY_NATIVE_INPUT_INVALID");
-            endpoint = RecoveryCodeLocalDockerEndpoint.Admit(qualifiedLocalEndpoint);
+            endpoint = RecoveryCodeLocalDockerEndpoint.Admit(qualifiedLocalEndpoint, ownershipChannel);
             using var setupDeadline = new CancellationTokenSource(TimeSpan.FromSeconds(30));
             borrowed = await RecoveryCodeOwnedDockerFixture.VerifyBorrowedBrowserPostgresAsync(endpoint, repository, setupDeadline.Token).ConfigureAwait(false);
             if (cohort == RecoveryCodeNativeCohort.PublicCanaries)
@@ -64,7 +70,7 @@ public static class RecoveryCodeFiniteNativeExecution
                         foreach (var id in cases.Keys.ToArray())
                         {
                             // Literal calls to existing authored methods; no reflection, discovery, dynamic names or xUnit execution.
-                            var execution = Dispatch(cohort, id, fixture);
+                            var execution = cohort == RecoveryCodeNativeCohort.PublicCapacity ? CapacityAsync(fixture, ownershipChannel) : Dispatch(cohort, id, fixture);
                             try { await execution.WaitAsync(TimeSpan.FromSeconds(90)).ConfigureAwait(false); cases[id] = true; }
                             catch (TimeoutException)
                             {
@@ -93,7 +99,8 @@ public static class RecoveryCodeFiniteNativeExecution
             if (borrowed is not null)
             {
                 using var deadline = new CancellationTokenSource(TimeSpan.FromSeconds(20));
-                preserved = await borrowed.VerifyPreservedAsync(deadline.Token).ConfigureAwait(false);
+                try { preserved = await borrowed.VerifyPreservedAsync(deadline.Token).ConfigureAwait(false); }
+                catch (Exception error) when (error is not OutOfMemoryException) { preserved = false; }
             }
             if (endpoint is not null)
             {
@@ -108,6 +115,16 @@ public static class RecoveryCodeFiniteNativeExecution
     }
 
     private static bool AcceptSensitive(bool casesPass, bool ownership, bool noLogs, bool containment) => casesPass && ownership && noLogs && containment;
+    internal static void RequireCaseRegistry(System.Text.Json.JsonElement registry)
+    {
+        var names = new[] { "PUBLIC_CANARIES", "PUBLIC_SQL", "PRIVATE_RECOVERY", "PUBLIC_CAPACITY" };
+        var expected = new[] { PublicIds, SqlIds, PrivateIds, CapacityIds };
+        for (var i = 0; i < names.Length; i++)
+        {
+            var current = registry.GetProperty(names[i]).EnumerateArray().Select(x => x.GetString() ?? throw new InvalidOperationException("RECOVERY_CASE_REGISTRY_INVALID"));
+            if (!current.SequenceEqual(expected[i], StringComparer.Ordinal)) throw new InvalidOperationException("RECOVERY_CASE_REGISTRY_INVALID");
+        }
+    }
 
     public static bool AcceptReceipt(RecoveryCodeNativeReceipt receipt)
     {
@@ -115,6 +132,7 @@ public static class RecoveryCodeFiniteNativeExecution
         {
             nameof(RecoveryCodeNativeCohort.PublicCanaries) => PublicIds,
             nameof(RecoveryCodeNativeCohort.PublicSql) => SqlIds,
+            nameof(RecoveryCodeNativeCohort.PublicCapacity) => CapacityIds,
             nameof(RecoveryCodeNativeCohort.PrivateRecovery) => PrivateIds,
             _ => null
         };
@@ -124,6 +142,26 @@ public static class RecoveryCodeFiniteNativeExecution
             receipt.BorrowedPostgresPreserved && receipt.CleanupVerified && receipt.DockerConfigurationAbsentVerified;
         return AcceptSensitive(complete, receipt.OwnershipVerified, receipt.NoLogPersistenceVerified, contained) &&
             (receipt.Cohort == nameof(RecoveryCodeNativeCohort.PrivateRecovery) ? receipt.SensitiveAccepted : !receipt.SensitiveAccepted);
+    }
+
+    private static async Task CapacityAsync(IdentityPostgresFixture fixture, RecoveryCodeFixtureOwnershipChannel channel)
+    {
+        // Actual public migration-only load: one DB per fixed private invocation plus the existing foreign-transaction DB.
+        var expected = PrivateIds.Length + 1; var created = 0; string? connectionString = null;
+        using var deadline = new CancellationTokenSource(TimeSpan.FromSeconds(85));
+        while (created < expected)
+        {
+            await using var database = await fixture.CreateFiniteDatabaseAsync(deadline.Token).ConfigureAwait(false);
+            connectionString = database.ConnectionString; created++;
+        }
+        await using var connection = new Npgsql.NpgsqlConnection(connectionString ?? throw new InvalidOperationException("RECOVERY_PUBLIC_CAPACITY_NOT_VERIFIED")); await connection.OpenAsync(deadline.Token).ConfigureAwait(false);
+        await using var databases = new Npgsql.NpgsqlCommand("SELECT COALESCE(sum(pg_database_size(datname)),0)::bigint FROM pg_database WHERE datname LIKE 'identity_%'", connection);
+        var databaseBytes = (long)(await databases.ExecuteScalarAsync(deadline.Token).ConfigureAwait(false))!;
+        await using var wal = new Npgsql.NpgsqlCommand("SELECT COALESCE(sum(size),0)::bigint FROM pg_ls_waldir()", connection);
+        var walBytes = (long)(await wal.ExecuteScalarAsync(deadline.Token).ConfigureAwait(false))!;
+        await channel.ReportCapacityAsync(created, databaseBytes, walBytes, deadline.Token).ConfigureAwait(false);
+        if (created != expected || databaseBytes <= 0 || walBytes < 0 || databaseBytes + walBytes >= 512L * 1024 * 1024)
+            throw new InvalidOperationException("RECOVERY_PUBLIC_CAPACITY_NOT_VERIFIED");
     }
 
     private static Task Dispatch(RecoveryCodeNativeCohort cohort, string id, IdentityPostgresFixture fixture)
@@ -154,6 +192,39 @@ public static class RecoveryCodeFiniteNativeExecution
             "TRANSACTION_ADMISSION" => tests.ConsumeRejectsNestedForeignOrWrongOwnerTransactionBeforeClaim(),
             "SAFE_DUPLICATE" => tests.SameOwnerDuplicateReadsOnlyOriginalSafeResultWithoutSecondCodeAcceptance(),
             "DEFAULT_ABSENCE" => tests.OrdinaryAuthenticatedHostDoesNotRegisterRecoveryRoutesOrOwnerByDefault(),
+            "ADMISSION_WITHDRAWAL" => tests.OwnerAdmissionChangeAfterApplyUsesOriginalFactsAndRejectsDrift("withdrawal"),
+            "ADMISSION_POLICY" => tests.OwnerAdmissionChangeAfterApplyUsesOriginalFactsAndRejectsDrift("policy"),
+            "ADMISSION_EVIDENCE" => tests.OwnerAdmissionChangeAfterApplyUsesOriginalFactsAndRejectsDrift("evidence"),
+            "ADMISSION_TARGET" => tests.OwnerAdmissionChangeAfterApplyUsesOriginalFactsAndRejectsDrift("target"),
+            "ADMISSION_INTERVAL" => tests.OwnerAdmissionChangeAfterApplyUsesOriginalFactsAndRejectsDrift("interval"),
+            "ADMISSION_MISSING" => tests.OwnerAdmissionChangeAfterApplyUsesOriginalFactsAndRejectsDrift("missing"),
+            "ADMISSION_UNCHANGED" => tests.OwnerAdmissionChangeAfterApplyUsesOriginalFactsAndRejectsDrift("unchanged"),
+            "DISTINCT_CODES_ANY_DIFFERENT_OWNER" => tests.DifferentCodesLinearizeUnderSelectedOwnerUsageAdmissionWithoutASurvivingSession(false, false),
+            "DISTINCT_CODES_ANY_SAME_OWNER" => tests.DifferentCodesLinearizeUnderSelectedOwnerUsageAdmissionWithoutASurvivingSession(false, true),
+            "DISTINCT_CODES_EXACT_DIFFERENT_OWNER" => tests.DifferentCodesLinearizeUnderSelectedOwnerUsageAdmissionWithoutASurvivingSession(true, false),
+            "DISTINCT_CODES_EXACT_SAME_OWNER" => tests.DifferentCodesLinearizeUnderSelectedOwnerUsageAdmissionWithoutASurvivingSession(true, true),
+            "ATTEMPT_LIMIT_ACCOUNT" => tests.MalformedFailuresPersistSelectedAccountAndNetworkAttemptLimits(false),
+            "ATTEMPT_LIMIT_NETWORK" => tests.MalformedFailuresPersistSelectedAccountAndNetworkAttemptLimits(true),
+            "REPLACEMENT_SAME_FACTS_RACE" => tests.ConcurrentReplacementsOfSameOriginalFactsReleaseOnlyOneGeneration(),
+            "CONSUME_BEFORE_REPLACE" => tests.ConsumeAndReplacementRespectBothActualLockOrderings(false),
+            "REPLACE_BEFORE_CONSUME" => tests.ConsumeAndReplacementRespectBothActualLockOrderings(true),
+            "PROOF_ABSENT" => tests.RecoveryOwnerCannotRunWithoutFreshSufficientUnconsumedProof("absent"),
+            "PROOF_WRONG_PASSWORD" => tests.RecoveryOwnerCannotRunWithoutFreshSufficientUnconsumedProof("wrong-password"),
+            "PROOF_INSUFFICIENT" => tests.RecoveryOwnerCannotRunWithoutFreshSufficientUnconsumedProof("insufficient"),
+            "PROOF_EXPIRED" => tests.RecoveryOwnerCannotRunWithoutFreshSufficientUnconsumedProof("expired"),
+            "PROOF_CONSUMED" => tests.RecoveryOwnerCannotRunWithoutFreshSufficientUnconsumedProof("consumed"),
+            "BIND_OPERATION" => tests.RecoveryProofRejectsEverySubstitutedOwnerBindingBeforeCallback("operation"),
+            "BIND_CORRELATION" => tests.RecoveryProofRejectsEverySubstitutedOwnerBindingBeforeCallback("correlation"),
+            "BIND_SCOPE" => tests.RecoveryProofRejectsEverySubstitutedOwnerBindingBeforeCallback("scope"),
+            "BIND_CONTEXT" => tests.RecoveryProofRejectsEverySubstitutedOwnerBindingBeforeCallback("context"),
+            "BIND_RESOURCE" => tests.RecoveryProofRejectsEverySubstitutedOwnerBindingBeforeCallback("resource"),
+            "BIND_VERSION" => tests.RecoveryProofRejectsEverySubstitutedOwnerBindingBeforeCallback("version"),
+            "BIND_DIGEST" => tests.RecoveryProofRejectsEverySubstitutedOwnerBindingBeforeCallback("digest"),
+            "BIND_SESSION" => tests.RecoveryProofRejectsEverySubstitutedOwnerBindingBeforeCallback("session"),
+            "BIND_ACCOUNT" => tests.RecoveryProofRejectsEverySubstitutedOwnerBindingBeforeCallback("account"),
+            "BIND_ORIGIN" => tests.RecoveryProofRejectsEverySubstitutedOwnerBindingBeforeCallback("origin"),
+            "BIND_KEY" => tests.RecoveryProofRejectsEverySubstitutedOwnerBindingBeforeCallback("key"),
+            "BFF_CSRF_ORIGIN_OWNER" => tests.RecoveryBffRejectsCrossOwnerCsrfOriginAndUnmappedAccountSelectorsWithoutEnumeration(),
             _ => throw new InvalidOperationException("RECOVERY_NATIVE_CASE_INVALID")
         };
     }
@@ -178,6 +249,7 @@ public static class RecoveryCodeFiniteNativeExecution
                 }
             }
             else reached = true;
+            if (id != "BEFORE_CREATE" && reached) await endpoint.Ownership.PublicStageAsync(owner.InstanceId.ToString("N"), id, deadline.Token).ConfigureAwait(false);
             // This unmistakable public sentinel occurs without calling any account/code-producing method.
             if (id == "CASE_FAILURE") throw new PublicCanaryException();
         }

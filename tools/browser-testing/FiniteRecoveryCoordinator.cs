@@ -351,19 +351,27 @@ internal static class FiniteRecoveryCoordinator
 
     internal static async Task<int> RunAsync(string selection, string mode)
     {
-        await using var output = Console.OpenStandardOutput(); var managed = new ManagedOutputCounter(); Console.SetOut(managed); Console.SetError(managed);
+        await using var output = Console.OpenStandardOutput(); await using var input = Console.OpenStandardInput();
+        var managed = new ManagedOutputCounter(); Console.SetOut(managed); Console.SetError(managed);
         var checks = CoordinatorIds.ToDictionary(x => x, _ => false, StringComparer.Ordinal);
         var cleanup = new Dictionary<string, bool>(StringComparer.Ordinal) { ["app"] = true, ["postgres"] = true, ["mailpit"] = true, ["vaultSession"] = true, ["vaultContainer"] = true, ["dockerConfig"] = true };
-        var runId = Guid.NewGuid().ToString("N"); var failure = "INPUT_INVALID"; var source = string.Empty;
+        var runId = string.Empty; var failure = "INPUT_INVALID"; var source = string.Empty;
         var publicMode = mode == "public-fault"; var resourceMode = mode == "resource-canary";
         var journey = BrowserTestRecoveryCodes.JourneyIds[0];
-        JsonElement? browser = null; FiniteTotpBuildIdentity? binding = null; RecoveryCodeBorrowedPostgres? borrowed = null; DirectoryInfo? root = null;
+        JsonElement? browser = null; FiniteTotpBuildIdentity? binding = null; FiniteTotpBuildIdentity? nativeBinding = null; RecoveryCodeBorrowedPostgres? borrowed = null; DirectoryInfo? root = null;
+        RecoveryCodeFixtureOwnershipChannel? ownership = null; Uri? localDockerEndpoint = null;
         BrowserTestRecoveryCodes? profile = null; RecoveryCodeOwnedPostgres? postgres = null; RecoveryCodeOwnedMailpit? mailpit = null; RecoveryCodeLocalDockerEndpoint? docker = null;
         RecoveryCodeOwnedOpenBao? vault = null; LocalOpenBaoSession? session = null; WebApplication? app = null; X509Certificate2? certificate = null; string? databaseConnection = null;
         var interrupted = false; var browserExited = false; var raw = false; var browserExit = -1;
         using var deadline = new CancellationTokenSource(TimeSpan.FromSeconds(270));
         try
         {
+            using (var process = Process.GetCurrentProcess())
+            {
+                using var ready = new CancellationTokenSource(TimeSpan.FromSeconds(3));
+                await RecoveryCodeFixtureOwnershipChannel.WriteAsync(output, new { version = 2, type = "processReady", processId = Environment.ProcessId,
+                    processStartUtc = process.StartTime.ToUniversalTime().ToString("O", System.Globalization.CultureInfo.InvariantCulture) }, ready.Token).ConfigureAwait(false);
+            }
             if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") != "Development" || !new[] { "browser", "public-fault", "resource-canary" }.Contains(mode, StringComparer.Ordinal) ||
                 !(publicMode ? PublicFaults.Contains(selection, StringComparer.Ordinal) : resourceMode ? ResourceFaults.Contains(selection, StringComparer.Ordinal) : BrowserTestRecoveryCodes.JourneyIds.Contains(selection, StringComparer.Ordinal))) throw new InvalidOperationException();
             journey = publicMode || resourceMode ? "RECOVERY_GENERATE_TOTP_V1" : selection;
@@ -371,14 +379,34 @@ internal static class FiniteRecoveryCoordinator
             // This dedicated finite process has no outbound proxy authority. Never read the prior proxy value.
             HttpClient.DefaultProxy = new WebProxy();
             root = RepositoryRootResolver.Resolve(); source = FiniteTotpCoordinator.Git(root, "rev-parse", "HEAD");
-            failure = "SOURCE_BUILD_BINDING_INVALID"; binding = FiniteTotpBuildBinding.Verify(root, recovery: true); checks["SOURCE_BUILD_CURRENT"] = true;
+            failure = "SOURCE_BUILD_BINDING_INVALID"; binding = FiniteTotpBuildBinding.Verify(root, recovery: true); nativeBinding = FiniteTotpBuildBinding.VerifyRecoveryNative(root);
+            using (var initialize = CancellationTokenSource.CreateLinkedTokenSource(deadline.Token))
+            {
+                initialize.CancelAfter(TimeSpan.FromSeconds(30));
+                using var initialControl = await RecoveryCodeFixtureOwnershipChannel.ReadAsync(input, initialize.Token).ConfigureAwait(false);
+                var initial = initialControl.RootElement;
+                RecoveryCodeFixtureOwnershipChannel.Keys(initial, "version", "type", "runId", "localDockerEndpoint", "expectedEngineId", "sourceCommit", "buildBindingSha256", "nativeBuildBindingSha256");
+                if (initial.GetProperty("version").GetInt32() != 2 || initial.GetProperty("type").GetString() != "browserRun" ||
+                    initial.GetProperty("sourceCommit").GetString() != source || initial.GetProperty("buildBindingSha256").GetString() != binding.ManifestSha256 ||
+                    initial.GetProperty("nativeBuildBindingSha256").GetString() != nativeBinding.ManifestSha256) throw new InvalidOperationException("FINITE_RECOVERY_CONTROL_INVALID");
+                runId = initial.GetProperty("runId").GetString() ?? throw new InvalidOperationException("FINITE_RECOVERY_CONTROL_INVALID");
+                ownership = new(input, output, runId, initial.GetProperty("expectedEngineId").GetString() ?? throw new InvalidOperationException("FINITE_RECOVERY_CONTROL_INVALID"));
+                localDockerEndpoint = new(initial.GetProperty("localDockerEndpoint").GetString() ?? throw new InvalidOperationException("FINITE_RECOVERY_CONTROL_INVALID"), UriKind.Absolute);
+            }
+            checks["SOURCE_BUILD_CURRENT"] = true;
             var assembly = Path.GetFullPath(Path.Combine(root.FullName, "tools", "browser-testing", "bin", "Debug", "net10.0", "Tunner.BrowserTesting.dll"));
             if (!string.Equals(Path.GetFullPath(typeof(FiniteRecoveryCoordinator).Assembly.Location), assembly, OperatingSystem.IsWindows() ? StringComparison.OrdinalIgnoreCase : StringComparison.Ordinal)) throw new InvalidOperationException();
             string? origin = null, mailpitOrigin = null;
             if (!publicMode)
             {
+                RecoveryCodeFixtureOwnershipChannel.RequireQualified(root, nativeBinding.ManifestSha256, "protocol");
+                if (!resourceMode)
+                {
+                    RecoveryCodeFixtureOwnershipChannel.RequireQualified(root, nativeBinding.ManifestSha256, "resources");
+                    RequireBrowserQualified(root, binding.ManifestSha256, nativeBinding.ManifestSha256);
+                }
                 failure = "RESOURCE_START_FAILED"; cleanup["dockerConfig"] = false;
-                docker = RecoveryCodeLocalDockerEndpoint.Admit(new Uri("npipe:////./pipe/dockerDesktopLinuxEngine"));
+                docker = RecoveryCodeLocalDockerEndpoint.Admit(localDockerEndpoint, ownership);
                 Environment.SetEnvironmentVariable("OTEL_SDK_DISABLED", "true");
                 using var metadata = JsonDocument.Parse(await File.ReadAllTextAsync(Path.Combine(root.FullName, "artifacts", "browser-testing", "runtime.json"), deadline.Token).ConfigureAwait(false));
                 if (metadata.RootElement.GetProperty("Mode").GetString() != "ISOLATED_LOCAL_BROWSER_TESTING" || metadata.RootElement.GetProperty("PostgresPort").GetInt32() != 25432) throw new InvalidOperationException();
@@ -416,7 +444,7 @@ internal static class FiniteRecoveryCoordinator
             var control = new { version = 1, type = "runRecoveryPrivate", mode = publicMode ? "public" : "live", journeyId = journey, publicFault = publicMode ? selection : null,
                 sourceCommit = source, sourceCommitted = true, origin, mailpitOrigin, runId };
             (browser, browserExited, browserExit, raw) = await RunBrowserAsync(root, control, journey, source, publicMode, profile, deadline.Token).ConfigureAwait(false);
-            if (FiniteTotpBuildBinding.Verify(root, recovery: true) != binding) { checks["SOURCE_BUILD_CURRENT"] = false; throw new InvalidOperationException(); }
+            if (FiniteTotpBuildBinding.Verify(root, recovery: true) != binding || FiniteTotpBuildBinding.VerifyRecoveryNative(root) != nativeBinding || FiniteTotpCoordinator.Git(root, "rev-parse", "HEAD") != source) { checks["SOURCE_BUILD_CURRENT"] = false; throw new InvalidOperationException(); }
             if (!publicMode && databaseConnection is not null && postgres is not null) (checks["SAFE_PERSISTENCE"], checks["SAFE_OUTBOX"]) = await InspectPersistenceAsync(databaseConnection, postgres.OwnershipVerified, deadline.Token).ConfigureAwait(false);
             if (!publicMode && databaseConnection is not null && profile is not null)
             {
@@ -444,9 +472,9 @@ internal static class FiniteRecoveryCoordinator
             if (docker is not null) { try { docker.Dispose(); cleanup["dockerConfig"] = docker.CleanupVerified; } catch (Exception error) when (error is not OutOfMemoryException) { } }
             checks["RESOURCES_REMOVED"] = cleanup.Values.All(x => x); certificate?.Dispose();
         }
-        if (root is not null && binding is not null)
+        if (root is not null && binding is not null && nativeBinding is not null)
         {
-            try { checks["SOURCE_BUILD_CURRENT"] = FiniteTotpBuildBinding.Verify(root, recovery: true) == binding; }
+            try { checks["SOURCE_BUILD_CURRENT"] = FiniteTotpBuildBinding.Verify(root, recovery: true) == binding && FiniteTotpBuildBinding.VerifyRecoveryNative(root) == nativeBinding && FiniteTotpCoordinator.Git(root, "rev-parse", "HEAD") == source; }
             catch (Exception error) when (error is not OutOfMemoryException) { checks["SOURCE_BUILD_CURRENT"] = false; }
         }
         var browserAccepted = browser is { } receipt && True(receipt, "accepted") && browserExited && browserExit == 0 && !raw;
@@ -461,12 +489,34 @@ internal static class FiniteRecoveryCoordinator
         if (resourceContained && selection == "cleanup-reject") { var synthetic = CoordinatorIdsFor(journey).ToDictionary(x => x, _ => true, StringComparer.Ordinal); var positive = Accepted(0, true, "NONE", true, synthetic, journey); synthetic["HOST_STOPPED"] = false; cleanupRejection = positive && !Accepted(0, true, "NONE", true, synthetic, journey); resourceContained &= cleanupRejection; }
         if (!publicMode && failure == "NONE" && !accepted) failure = "PREDICATE_OR_CLEANUP_FAILED";
         var selected = PublicFaults.Contains(selection, StringComparer.Ordinal) || ResourceFaults.Contains(selection, StringComparer.Ordinal) || BrowserTestRecoveryCodes.JourneyIds.Contains(selection, StringComparer.Ordinal) ? selection : null;
-        await JsonSerializer.SerializeAsync(output, new { version = 1, sourceCommit = source.Length == 40 ? source : null, runId, journeyId = journey, mode = new[] { "browser", "public-fault", "resource-canary" }.Contains(mode, StringComparer.Ordinal) ? mode : "INVALID", selection = selected,
+        var result = new { version = 1, sourceCommit = source.Length == 40 ? source : null, runId, journeyId = journey, mode = new[] { "browser", "public-fault", "resource-canary" }.Contains(mode, StringComparer.Ordinal) ? mode : "INVALID", selection = selected,
             accepted, failureCode = failure, managedOutputRejected = managed.Count != 0, publicBoundaryContained = publicContained, publicResourceContained = resourceContained, publicCleanupReducerRejected = cleanupRejection,
             buildBinding = binding, browserReceipt = browser, coordinatorChecks = checks, cleanup, fixtureObservations = profile is null ? null : new { profile.OwnerFailureObserved, profile.PublicationFinalFaultObserved, profile.BodyDropObserved },
-            boundary = "Finite local test only; no production policy, P2-011 workflow, Product or global filesystem acceptance." }).ConfigureAwait(false);
-        await output.WriteAsync("\n"u8.ToArray()).ConfigureAwait(false); return accepted || publicContained || resourceContained ? 0 : 1;
+            boundary = "Finite local test only; no production policy, P2-011 workflow, Product or global filesystem acceptance." };
+        var cohortAccepted = accepted || publicContained || resourceContained;
+        using (var terminal = new CancellationTokenSource(TimeSpan.FromSeconds(5)))
+            await RecoveryCodeFixtureOwnershipChannel.WriteAsync(output, new { version = 2, type = "recoveryBrowserTerminal", result,
+                unexpectedManagedOutput = managed.Count != 0, accepted = cohortAccepted }, terminal.Token).ConfigureAwait(false);
+        return cohortAccepted ? 0 : 1;
         void Interrupt(string stage) { if (resourceMode && selection == stage) throw new ResourceInterruption(); }
+    }
+
+    private static void RequireBrowserQualified(DirectoryInfo root, string browserBindingHash, string nativeBindingHash)
+    {
+        var path = FiniteTotpBuildBinding.ResolveEvidence(root, "artifacts/p2-009-recovery-20261111/browser-public-qualification.json");
+        var file = new FileInfo(path);
+        if (!file.Exists || file.LinkTarget is not null || (file.Attributes & FileAttributes.ReparsePoint) != 0 || file.Length > 65536)
+            throw new InvalidOperationException("FINITE_RECOVERY_BROWSER_QUALIFICATION_REQUIRED");
+        var bytes = File.ReadAllBytes(path); if (bytes.Length > 65536) throw new InvalidOperationException("FINITE_RECOVERY_BROWSER_QUALIFICATION_REQUIRED");
+        using var document = JsonDocument.Parse(bytes); var value = document.RootElement;
+        RecoveryCodeFixtureOwnershipChannel.Keys(value, "version", "kind", "buildBindingSha256", "nativeBuildBindingSha256", "passed", "checks", "protocolChecks");
+        if (value.GetProperty("version").GetInt32() != 2 || value.GetProperty("kind").GetString() != "browser-public" ||
+            value.GetProperty("buildBindingSha256").GetString() != browserBindingHash || value.GetProperty("nativeBuildBindingSha256").GetString() != nativeBindingHash || !value.GetProperty("passed").GetBoolean())
+            throw new InvalidOperationException("FINITE_RECOVERY_BROWSER_QUALIFICATION_REQUIRED");
+        var checks = value.GetProperty("checks"); var protocol = value.GetProperty("protocolChecks");
+        RecoveryCodeFixtureOwnershipChannel.Keys(checks, PublicFaults); RecoveryCodeFixtureOwnershipChannel.Keys(protocol, PublicProtocolIds);
+        if (PublicFaults.Any(id => !checks.GetProperty(id).GetBoolean()) || PublicProtocolIds.Any(id => !protocol.GetProperty(id).GetBoolean()))
+            throw new InvalidOperationException("FINITE_RECOVERY_BROWSER_QUALIFICATION_REQUIRED");
     }
 
     private static async Task<(JsonElement Receipt, bool Exited, int ExitCode, bool Raw)> RunBrowserAsync<T>(DirectoryInfo root, T control, string journey, string source, bool publicMode, BrowserTestRecoveryCodes? profile, CancellationToken token)
