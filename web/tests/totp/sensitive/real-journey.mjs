@@ -15,7 +15,7 @@ const fail = () => { throw new Error('REAL_JOURNEY_FAILED'); };
 const requireTrue = value => { if (value !== true) fail(); };
 const object = value => value !== null && typeof value === 'object' && !Array.isArray(value);
 const uuid = value => typeof value === 'string' && /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(value);
-const sameCounts = (left,right) => countKeys.every(key => left[key] === right[key]);
+const sameCounts = (left,right) => Object.keys(left).length === Object.keys(right).length && Object.keys(left).every(key => left[key] === right[key]);
 const operationIds = value => ({requestId:value.requestId,enrollmentId:value.enrollmentId});
 const sameOperation = (left,right) => left.requestId === right.requestId && left.enrollmentId === right.enrollmentId && left.authenticatorReference === right.authenticatorReference && left.kind === right.kind;
 const factorIdentity = value => JSON.stringify([value.authenticatorReference,value.state,value.version,value.createdAt,value.activatedAt,value.disabledAt]);
@@ -35,7 +35,7 @@ class Journey {
   observe(id,value) { requireTrue(common.includes(id) || extra[this.journeyId].includes(id)); this.observed.set(id,(this.observed.get(id) ?? true) && value === true); }
   supports(id) { return common.includes(id) || extra[this.journeyId].includes(id); }
   prove(id,value) { this.observe(id,value); requireTrue(value === true); }
-  remember(...values) { for (const value of values) if (typeof value === 'string' && value.length) this.secrets.add(value); requireTrue(this.secrets.size <= 256); }
+  remember(...values) { for (const value of values) if (typeof value === 'string' && value.length) this.secrets.add(value); this.privateRemember?.(...values); requireTrue(this.secrets.size <= 256); }
   active() { if (this.signal?.aborted) fail(); }
   url(path) { return new URL(path,this.origin).href; }
   async read(response) {
@@ -61,7 +61,7 @@ class Journey {
     requireTrue(['READ_SAFE_COUNTS','DENY_OWNER_ONCE','DROP_DISCLOSURE_ONCE','DROP_ACTIVATION_ONCE','DROP_MFA_ONCE'].includes(action));
     requireTrue(++this.controlCalls <= 16);
     const reply = await this.fixtureControl(action); requireTrue(object(reply) && reply.status === 'OK' && object(reply.counts));
-    requireTrue(Object.keys(reply.counts).sort().join('|') === [...countKeys].sort().join('|') && countKeys.every(key => Number.isSafeInteger(reply.counts[key]) && reply.counts[key] >= 0 && reply.counts[key] <= 1000)); return reply.counts;
+    requireTrue(Object.keys(reply.counts).sort().join('|') === [...(this.safeCountKeys ?? countKeys)].sort().join('|') && (this.safeCountKeys ?? countKeys).every(key => Number.isSafeInteger(reply.counts[key]) && reply.counts[key] >= 0 && reply.counts[key] <= 1000)); return reply.counts;
   }
   async session(page) { return this.get(page,'/authentication/session'); }
   async factors(page) { const result = await this.get(page,'/account/totp'); requireTrue(result.ok && Array.isArray(result.body.authenticators)); return result.body.authenticators; }
@@ -74,7 +74,7 @@ class Journey {
   }
   async bootstrap() {
     const status = await this.get(this.page,'/browser-testing/status');
-    this.prove('BFF_ISOLATED',status.ok && status.body.mode === 'FINITE_TOTP_BROWSER_TESTING' && status.body.ready === true && status.body.journeyId === this.journeyId && status.body.runId === this.runId);
+    this.prove('BFF_ISOLATED',status.ok && status.body.mode === (this.identityMode ?? 'FINITE_TOTP_BROWSER_TESTING') && status.body.ready === true && status.body.journeyId === this.journeyId && status.body.runId === this.runId);
     const account = {email:'sensitive-'+randomUUID()+'@example.test',password:'Synthetic unique passphrase '+randomUUID()}; this.remember(account.email,account.password);
     await this.page.goto(this.url('/registration')); await this.page.getByRole('heading',{name:'Create your Tunner account',exact:true}).waitFor();
     requireTrue(await this.page.locator('input[type=date]').count() === 0);
@@ -93,7 +93,7 @@ class Journey {
     await this.page.getByLabel('Verification code',{exact:true}).fill(verification); await this.page.getByRole('button',{name:'Verify email',exact:true}).click(); await this.page.getByRole('heading',{name:'Personal Information',exact:true}).waitFor();
     requireTrue(await this.page.getByLabel('Primary email',{exact:true}).inputValue() === account.email);
     await this.page.getByLabel('Full name',{exact:true}).fill('Synthetic Sensitive Test'); await this.page.getByLabel('Display name',{exact:true}).fill('Sensitive Tester'); await this.page.getByLabel('Date of birth (required)',{exact:true}).fill('1990-01-01'); await this.page.getByRole('button',{name:'Continue',exact:true}).click(); await this.page.getByRole('heading',{name:'Your email is verified',exact:true}).waitFor();
-    await this.passwordLogin(this.page,account,false); await this.goManage(this.page); await this.accountFonts(this.page); return account;
+    await this.passwordLogin(this.page,account,false); if(this.recoveryPreparation){await this.page.goto(this.url('/account/security'));await this.at(this.page,'/account/security');await this.page.locator('[data-tunner-screen="U-ACCT-SECURITY"]').waitFor({state:'visible'});}else await this.goManage(this.page); await this.accountFonts(this.page); return account;
   }
   async passwordLogin(page,account,expectMfa) {
     await page.goto(this.url('/login')); await page.getByLabel('Email address',{exact:true}).fill(account.email); await page.getByLabel('Password',{exact:true}).fill(account.password);
@@ -435,4 +435,19 @@ export async function runPublicJourneyCanary({page,context,browser,signal}) {
   const flushed = rejected && emitted.length === expected.length && emitted.every(([id],index) => id === expected[index]) && emitted[0][1] === false && emitted.find(([id]) => id === 'UI_ASSET_TYPOGRAPHY')?.[1] === true;
   requireTrue(flushed);
   return {publicDom:publicDom && flushed,helperErrorContained};
+}
+
+// Explicit preparation capability for the separate recovery child. No TOTP dispatcher/default changes.
+export function createRecoveryAccountMechanics(input){
+ const ids=['RECOVERY_GENERATE_PASSWORD_V1','RECOVERY_REPLACE_PASSWORD_V1','RECOVERY_GENERATE_PASSKEY_V1','RECOVERY_REPLACE_PASSKEY_V1','RECOVERY_GENERATE_TOTP_V1','RECOVERY_REPLACE_TOTP_V1'];
+ requireTrue(object(input)&&ids.includes(input.journeyId)&&typeof input.runId==='string'&&/^[a-f0-9]{32}$/.test(input.runId)&&typeof input.remember==='function'&&typeof input.fixtureControl==='function'&&typeof input.nativeCode==='function');
+ const run=new Journey({...input,reportStep:()=>{},recoveryPreparation:true,identityMode:'FINITE_RECOVERY_BROWSER_TESTING',safeCountKeys:['ownerCommits','operations','sets','replacedSets','entries','proofs','consumedProofs','sessions','outbox','codeAcceptances'],privateRemember:input.remember,fixtureControl:async action=>{requireTrue(action==='READ_SAFE_COUNTS');return input.fixtureControl(action);}});
+ const port={};for(const method of ['bootstrap','read','get','post','response','request','at','session','newPage','passwordLogin'])port[method]=run[method].bind(run);
+ return Object.freeze({...port,setupPasskey:async(page,password)=>{await run.passkeyDevice(page);await run.enrollPasskey(page,password);},enrollTotp:run.enroll.bind(run),nextTotpCode:async factor=>{const code=await run.code(factor);factor.used.add(code);return code;},passkeyStats:()=>({created:run.created,asserted:run.asserted}),close:run.cleanup.bind(run),revokePasskey:async(page,password)=>{
+  await page.goto(run.url('/account/security/sign-in-methods'));await page.getByRole('button',{name:'Manage',exact:true}).click();
+  const started=await run.response(page,'/account/passkeys/revocation/start',()=>page.getByRole('dialog').getByRole('button',{name:'Remove passkey',exact:true}).click());requireTrue(started.ok&&started.body.status==='PENDING');
+  await page.getByRole('dialog').getByRole('button',{name:'Other method',exact:true}).click();await fillPrivate(page.getByLabel('Password',{exact:true}),password);
+  const proof=await run.response(page,'/authentication/step-up/password',()=>page.getByRole('dialog').getByRole('button',{name:'Confirm',exact:true}).click());requireTrue(proof.ok&&proof.body.operationReference===started.body.ceremonyId.replaceAll('-',''));
+  await page.getByRole('dialog').waitFor({state:'hidden'});const methods=await run.get(page,'/account/passkeys');requireTrue(methods.ok&&methods.body.credentials.some(value=>value.credentialReference===started.body.credentialReference&&value.state==='REVOKED'));
+ }});
 }

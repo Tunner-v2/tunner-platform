@@ -3,21 +3,25 @@ import {dirname, join, resolve} from 'node:path';
 import {lstat, readdir, writeFile} from 'node:fs/promises';
 import {createAdmission} from '../sensitive/contract.mjs';
 import {createNativeOracle, fixedOracleAssembly} from '../../totp/sensitive/oracle-bridge.mjs';
-import {version, budgets, publicMarker, publicBody, fixedError, failureOf, requireTrue, bounded, exactKeys, validInitialize, oracleFaults, childAccepted} from './contract.mjs';
+import {version, budgets, publicMarker, publicBody, fixedError, failureOf, requireTrue, bounded, exactKeys, validInitialize, oracleFaults, childAccepted, childChecks, validFixtureRequest, validFixtureResult, publicFixtureResult, recordPublicDownloadChecks} from './contract.mjs';
 import {ownedSurface, privateMarkers, downloadIdentity, inspectSurface} from './surface.mjs';
 import {publicEntry, publicJourneyEntry, inspectRequestedDownload, runJourney} from './journeys.mjs';
+import {runControllerPublic} from './controller-public.mjs';
 
 const abort = new AbortController(), checks = Object.create(null), admission = createAdmission(), downloads = [], markers = privateMarkers();
 let control, root, browser, context, page, oracle, browserVersion = null, stage = 'START', failedStage, failureCode = 'NONE';
-let fatal = false, publicFaultObserved = false, contextClosed = false, browserClosed = false, oracleExited = true, oracleGraceful = true, surfaceClean = false, cleanupCompleted = false;
+let fatal = false, publicFaultObserved = false, contextClosed = false, browserClosed = false, serverExited=true, oracleExited = true, oracleGraceful = true, surfaceClean = false, cleanupCompleted = false;
 const send = value => bounded(new Promise(resolveSend => { try { if (process.connected) process.send(value, () => resolveSend()); else resolveSend(); } catch { resolveSend(); } }), budgets.ipc).catch(() => {});
 const cancel = () => { if (abort.signal.aborted) throw fixedError('SUPERVISOR_TIMEOUT'); };
 const onFatal = () => { fatal = true; abort.abort(); };
 process.on('uncaughtException', onFatal); process.on('unhandledRejection', onFatal);
+let fixtureSequence=0,fixturePending;
+const fixtureControl=async action=>{cancel();if(fixturePending)throw fixedError('PROTOCOL_FAILED');const request={version,type:'recoveryFixtureRequest',requestId:++fixtureSequence,action};requireTrue(validFixtureRequest(request),'PROTOCOL_FAILED');try{return await bounded(new Promise((resolve,reject)=>{fixturePending={requestId:request.requestId,resolve,reject};void send(request);}),budgets.relay,'PROTOCOL_FAILED');}finally{fixturePending=null;}};
 const initial = new Promise((resolveInitial, reject) => {
   const timer = setTimeout(() => reject(fixedError('INPUT_INVALID')), budgets.initialize);
   process.on('message', value => {
-    if (exactKeys(value, ['version', 'type']) && value.version === version && value.type === 'cancelRecoveryPrivate') { abort.abort(); return; }
+    if (exactKeys(value, ['version', 'type']) && value.version === version && value.type === 'cancelRecoveryPrivate') { abort.abort(); fixturePending?.reject(fixedError('SUPERVISOR_TIMEOUT')); return; }
+    if(validFixtureResult(value)&&fixturePending&&value.requestId===fixturePending.requestId){fixturePending.resolve(value);return;}
     if (!control && validInitialize(value)) { control = value.control; clearTimeout(timer); resolveInitial(value.surface); return; }
     onFatal();
   });
@@ -36,6 +40,16 @@ async function request(owner) {
   const value = await bounded(event, budgets.action, 'ACTION_FAILED'); cancel();
   requireTrue(value.accepted, 'ADMISSION_REJECTED'); return value.download;
 }
+async function requestOwnedDownload(owner,expected){
+ cancel();admission.arm(owner);const count=downloads.length,event=new Promise(resolve=>{pendingDownload=resolve;});
+ await owner.getByRole('button',{name:'Download',exact:true}).click({timeout:budgets.action});const value=await bounded(event,budgets.action,'ACTION_FAILED');
+ const capability=value.download.url(),expectedOrigin=new URL(owner.url()).origin;
+ requireTrue(value.accepted&&value.download.suggestedFilename()==='tunner-backup-codes.txt'&&capability.startsWith('blob:'+expectedOrigin+'/')&&/^[a-f0-9-]{36}$/.test(capability.slice(('blob:'+expectedOrigin+'/').length)),'ADMISSION_REJECTED');
+ await inspectRequestedDownload(value.download,root,expected,{signal:abort.signal});admission.settle();
+ await owner.getByRole('button',{name:'Download',exact:true}).dispatchEvent('click');await owner.evaluate(()=>new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r))));requireTrue(downloads.length===count+1,'ADMISSION_REJECTED');
+ recordPublicDownloadChecks(control.mode,checks);
+}
+const nativeCode=async(seed,offset=0)=>{if(!oracle){oracleExited=false;oracleGraceful=false;oracle=await createNativeOracle({oracleAssemblyPath:fixedOracleAssembly,oracleNativeVersion:'10.0.13',publicFault:null},root.path,abort.signal);}return oracle.nativeCode(seed,offset);};
 try {
   const surface = await initial; stage = 'ENVIRONMENT';
   requireTrue(process.argv.length === 3 && process.argv[2] === '--recovery-private-child-v1', 'INPUT_INVALID');
@@ -49,12 +63,14 @@ try {
   context = await browser.newContext({acceptDownloads: true, serviceWorkers: 'block'}); context.on('page', wire);
   page = await context.newPage(); page.setDefaultTimeout(budgets.action);
   if (control.mode === 'live') {
-    stage = 'JOURNEY'; await runJourney({control, page, context, signal: abort.signal, markers, check(id, flag) { if (Object.hasOwn(checks, id) || typeof flag !== 'boolean') throw fixedError('PREDICATE_FAILED'); checks[id] = flag; if (!flag) throw fixedError('PREDICATE_FAILED'); }});
+    stage = 'JOURNEY'; await runJourney({control, page, context, browser, signal: abort.signal, markers, fixtureControl, nativeCode, requestOwnedDownload, inspectOwnedSurface:async()=> (await inspectSurface(root,{markers})).clean, check(id, flag) { if (!childChecks.includes(id) || Object.hasOwn(checks, id) || typeof flag !== 'boolean') throw fixedError('PREDICATE_FAILED'); checks[id] = flag; if (!flag) throw fixedError('PREDICATE_FAILED'); }});
   } else {
     stage = 'PUBLIC_ENTRY'; const fault = control.publicFault;
     const body = fault === 'wrong-bytes' ? 'PUBLIC WRONG NONFUNCTIONAL FIXTURE' : fault === 'oversize' ? publicBody.repeat(Math.ceil((budgets.maximumDownloadBytes + 1) / publicBody.length)) : publicBody;
     await publicEntry(page, body); checks.PUBLIC_ENTRY = true;
-    if (oracleFaults.includes(fault)) {
+    if(fault==='production-controller'){checks.PRODUCTION_CONTROLLER_PUBLIC=await runControllerPublic({page,signal:abort.signal,requestOwnedDownload,remember:(...values)=>markers.remember(...values),onOwnedServer:processId=>{serverExited=false;void send({version,type:'publicProcess',kind:'PUBLIC_SERVER',processId});},onServerExit:()=>{serverExited=true;}});requireTrue(checks.PRODUCTION_CONTROLLER_PUBLIC);publicFaultObserved=true;}
+    else if(fault.startsWith('relay-')){const reply=await fixtureControl('READ_SAFE_COUNTS');requireTrue(publicFixtureResult(reply));checks.FIXTURE_RELAY_PUBLIC=true;publicFaultObserved=true;}
+    else if (oracleFaults.includes(fault)) {
       stage = 'ORACLE'; oracleExited = false; oracleGraceful = false;
       oracle = await createNativeOracle({oracleAssemblyPath: fixedOracleAssembly, oracleNativeVersion: '10.0.13', publicFault: fault}, root.path, abort.signal);
       if (fault === 'oracle-roundtrip') { const code = await oracle.nativeCode('JBSWY3DPEHPK3PXP'); publicFaultObserved = /^\d{6}$/.test(code); }
@@ -94,17 +110,17 @@ try {
   let downloadsRemoved = downloads.length === 0;
   if (root && downloads.length) { try { downloadsRemoved = (await readdir(join(root.path, 'downloads'))).length === 0; } catch (error) { downloadsRemoved = error?.code === 'ENOENT'; } }
   try { if (root) { surfaceClean = (await inspectSurface(root, {markers})).clean; checks.SURFACE_CHECKED = true; } } catch {}
-  cleanupCompleted = contextClosed && browserClosed && oracleExited && downloadsRemoved;
+  cleanupCompleted = contextClosed && browserClosed && serverExited && oracleExited && downloadsRemoved;
   if (control?.publicFault === 'unexpected-artifact' && !surfaceClean) { publicFaultObserved = true; failureCode = 'SURFACE_FAILED'; }
   if (control?.publicFault === 'cleanup') { cleanupCompleted = false; failureCode = 'CLEANUP_FAILED'; }
   if (!surfaceClean && failureCode === 'NONE') failureCode = 'SURFACE_FAILED';
   if (!cleanupCompleted && failureCode === 'NONE') failureCode = 'CLEANUP_FAILED';
   markers.clear();
 }
-const result = {version, type: 'recoveryPrivateChildResult', journeyId: control?.journeyId ?? 'RECOVERY_GENERATE_PASSWORD_V1', mode: control?.mode ?? 'live', publicFault: control?.publicFault ?? null, browserVersion, status: failureCode === 'NONE' && !fatal ? control?.mode === 'public' ? 'PUBLIC_BOUNDARY_OK' : 'JOURNEY_OK' : 'BOUNDARY_FAILED', stage: failedStage ?? (failureCode === 'NONE' ? 'COMPLETE' : 'CLEANUP'), failureCode, checks, publicFaultObserved, contextClosed, browserClosed, oracleExited, oracleGraceful, surfaceClean, cleanupCompleted};
+const result = {version, type: 'recoveryPrivateChildResult', journeyId: control?.journeyId ?? 'RECOVERY_GENERATE_PASSWORD_V1', mode: control?.mode ?? 'live', publicFault: control?.publicFault ?? null, browserVersion, status: failureCode === 'NONE' && !fatal ? control?.mode === 'public' ? 'PUBLIC_BOUNDARY_OK' : 'JOURNEY_OK' : 'BOUNDARY_FAILED', stage: failedStage ?? (failureCode === 'NONE' ? 'COMPLETE' : 'CLEANUP'), failureCode, checks, publicFaultObserved, contextClosed, browserClosed, serverExited, oracleExited, oracleGraceful, surfaceClean, cleanupCompleted};
 if (control?.publicFault === 'missing-predicate') delete checks.PUBLIC_ENTRY;
 if (control?.publicFault === 'cross-component') checks.SOURCE_BUILD_CURRENT = true;
-if (contextClosed && browserClosed && oracleExited) await send({version, type: 'recoveryPrivateCleanup', journeyId: result.journeyId, contextClosed: true, browserClosed: true, oracleExited: true});
+if (contextClosed && browserClosed && serverExited && oracleExited) await send({version, type: 'recoveryPrivateCleanup', journeyId: result.journeyId, contextClosed: true, browserClosed: true, serverExited:true, oracleExited: true});
 if (control?.publicFault === 'unexpected-output') process.stderr.write(publicMarker);
 await send(control?.publicFault === 'invalid-result' ? {...result, unexpected: publicMarker} : result);
 const accepted = control && childAccepted(result, control); process.exitCode = accepted || control?.mode === 'public' && failureCode === 'NONE' ? 0 : 1;

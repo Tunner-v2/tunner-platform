@@ -1,6 +1,8 @@
 import {budgets, fixedError, requireTrue, bounded, publicMarker, publicBody, registeredJourney, observedMap, journeys} from './contract.mjs';
 import {downloadIdentity, sameDownload, inspectSurface} from './surface.mjs';
 
+export {runPreparedJourney} from './prepared-journeys.mjs';
+
 // No process/report/file export API. Private values must stay in the protected child.
 export async function inspectRequestedDownload(download, root, expected, {signal, fault = null} = {}) {
   if (!Buffer.isBuffer(expected) || expected.length === 0 || expected.length > budgets.maximumDownloadBytes) throw fixedError('SIZE_LIMIT');
@@ -41,6 +43,9 @@ export async function publicJourneyEntry(page) {
 
 export async function runJourney({control, check}) {
   requireTrue(registeredJourney(control.journeyId), 'INPUT_INVALID');
+  // The prepared six-case implementation is deliberately unreachable here.
+  // Root must commit, compile/bind, qualify the exact production-controller public
+  // topology and separately review the one-line live-opening change.
   // Recovery coordinator, method setup and final compiled owner wire have not been
   // source-frozen for this slice. Do not create accounts or values on assumptions.
   // A later reviewed delta must implement every registered fact before live dispatch.

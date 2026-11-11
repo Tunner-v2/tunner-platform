@@ -22,16 +22,18 @@ const complete = (value, ids) => boolMap(value, ids) && exactKeys(value, ids) &&
 const common = ['BFF_IDENTITY', 'ACTUAL_PROOF_METHOD', 'EXACT_OWNER_AND_STEP_UP_BINDING', 'CANONICAL_FIRST_DELIVERY', 'DUPLICATE_NO_REDISCLOSURE', 'NO_EARLY_DELIVERY', 'COOKIE_FLAGS', 'NO_SECRET_URL_OR_STORAGE', 'VOLATILE_CLEAR', 'REQUESTED_NOT_SAVED', 'STRICT_OWNED_SURFACE'];
 export const journeys = Object.freeze({
   RECOVERY_GENERATE_PASSWORD_V1: Object.freeze([...common, 'ONE_REQUESTED_DOWNLOAD', 'CLOSE_NO_REVEAL']),
-  RECOVERY_REPLACE_PASSWORD_V1: Object.freeze([...common, 'EXACT_SUBSET_REPLACEMENT', 'BODY_LOSS_NO_REDISCLOSURE']),
+  RECOVERY_REPLACE_PASSWORD_V1: Object.freeze([...common, 'PUBLISHED_IMPACT_ORIGINAL_BINDING', 'BODY_LOSS_NO_REDISCLOSURE']),
   RECOVERY_GENERATE_PASSKEY_V1: Object.freeze([...common, 'NATIVE_PASSKEY_PROOF', 'OWNER_FAILURE_SAME_PROOF']),
   RECOVERY_REPLACE_PASSKEY_V1: Object.freeze([...common, 'NATIVE_PASSKEY_PROOF', 'SOURCE_FRESHNESS', 'NO_SESSION_MUTATION']),
   RECOVERY_GENERATE_TOTP_V1: Object.freeze([...common, 'NATIVE_TOTP_PROOF', 'OWNER_FAILURE_SAME_PROOF', 'PAGEHIDE_NO_REVEAL']),
   RECOVERY_REPLACE_TOTP_V1: Object.freeze([...common, 'NATIVE_TOTP_PROOF', 'CURRENT_PUBLICATION', 'NO_SESSION_MUTATION']),
 });
-export const childChecks = Object.freeze(['BROWSER_ENGINE', 'PUBLIC_ENTRY', 'ERROR_CONTAINED', 'DOWNLOAD_ADMITTED', 'DOWNLOAD_REMOVED', 'SURFACE_CHECKED', ...new Set(Object.values(journeys).flat())]);
+export const childChecks = Object.freeze(['BROWSER_ENGINE', 'PUBLIC_ENTRY', 'ERROR_CONTAINED', 'DOWNLOAD_ADMITTED', 'DOWNLOAD_REMOVED', 'SURFACE_CHECKED', 'PRODUCTION_CONTROLLER_PUBLIC', 'FIXTURE_RELAY_PUBLIC', ...new Set(Object.values(journeys).flat())]);
 export const supervisorChecks = Object.freeze(['SOURCE_CURRENT', 'PROTOCOL_VALID', 'OUTPUT_CONTAINED', 'CHILD_CLOSED', 'ORACLE_CLOSED', 'CHILD_SURFACES_CLOSED', 'SURFACE_REMOVED']);
 export const coordinatorChecks = Object.freeze(['SOURCE_BUILD_CURRENT', 'OWNED_DATABASE', 'OWNED_MAILPIT', 'EPHEMERAL_DP', 'CURRENT_MIGRATIONS', 'SAFE_PERSISTENCE', 'SAFE_OUTBOX', 'HOST_STOPPED', 'RESOURCES_REMOVED', 'BORROWED_POSTGRES_PRESERVED']);
-export const publicFaults = Object.freeze(['happy', 'unarmed', 'duplicate', 'wrong-page', 'wrong-bytes', 'oversize', 'outside-identity', 'stream-error', 'delete-error', 'unexpected-output', 'invalid-result', 'action-timeout', 'child-timeout', 'unexpected-artifact', 'fatal-rejection', 'journey-entry', 'missing-predicate', 'cross-component', 'cleanup', 'oracle-roundtrip', 'oracle-input', 'oracle-exit', 'oracle-timeout', 'oracle-stderr']);
+export const conditionalCoordinatorChecks=Object.freeze({RECOVERY_REPLACE_PASSWORD_V1:Object.freeze(['EXACT_SUBSET_REPLACEMENT']),RECOVERY_REPLACE_TOTP_V1:Object.freeze(['PUBLICATION_DRIFT_ROLLED_BACK'])});
+export const requiredCoordinatorChecks=id=>[...coordinatorChecks,...(conditionalCoordinatorChecks[id]??[])];
+export const publicFaults = Object.freeze(['happy', 'unarmed', 'duplicate', 'wrong-page', 'wrong-bytes', 'oversize', 'outside-identity', 'stream-error', 'delete-error', 'unexpected-output', 'invalid-result', 'action-timeout', 'child-timeout', 'unexpected-artifact', 'fatal-rejection', 'journey-entry', 'missing-predicate', 'cross-component', 'cleanup', 'oracle-roundtrip', 'oracle-input', 'oracle-exit', 'oracle-timeout', 'oracle-stderr', 'production-controller', 'relay-roundtrip', 'relay-malformed', 'relay-timeout']);
 export const oracleFaults = Object.freeze(publicFaults.filter(value => value.startsWith('oracle-')));
 export const registeredJourney = value => typeof value === 'string' && Object.hasOwn(journeys, value);
 const origin = (value, protocol, hostname) => {
@@ -47,32 +49,32 @@ export function validControl(value) {
 }
 export function validInitialize(value) { return exactKeys(value, ['version', 'type', 'control', 'surface']) && value.version === version && value.type === 'initializeRecoveryPrivate' && validControl(value.control) && typeof value.surface === 'string' && isAbsolute(value.surface); }
 export function validChildResult(value, control) {
-  return exactKeys(value, ['version', 'type', 'journeyId', 'mode', 'publicFault', 'browserVersion', 'status', 'stage', 'failureCode', 'checks', 'publicFaultObserved', 'contextClosed', 'browserClosed', 'oracleExited', 'oracleGraceful', 'surfaceClean', 'cleanupCompleted']) &&
+  return exactKeys(value, ['version', 'type', 'journeyId', 'mode', 'publicFault', 'browserVersion', 'status', 'stage', 'failureCode', 'checks', 'publicFaultObserved', 'contextClosed', 'browserClosed', 'serverExited', 'oracleExited', 'oracleGraceful', 'surfaceClean', 'cleanupCompleted']) &&
     value.version === version && value.type === 'recoveryPrivateChildResult' && value.journeyId === control.journeyId && value.mode === control.mode && value.publicFault === control.publicFault &&
     (value.browserVersion === null || typeof value.browserVersion === 'string' && /^\d{1,5}\.\d{1,5}\.\d{1,5}\.\d{1,5}$/.test(value.browserVersion)) &&
     ['JOURNEY_OK', 'PUBLIC_BOUNDARY_OK', 'BOUNDARY_FAILED'].includes(value.status) && (value.status !== 'JOURNEY_OK' || control.mode === 'live') && (value.status !== 'PUBLIC_BOUNDARY_OK' || control.mode === 'public') &&
     (value.status === 'BOUNDARY_FAILED' ? value.failureCode !== 'NONE' : value.failureCode === 'NONE') && stages.includes(value.stage) && failures.includes(value.failureCode) && boolMap(value.checks, childChecks) &&
-    ['publicFaultObserved', 'contextClosed', 'browserClosed', 'oracleExited', 'oracleGraceful', 'surfaceClean', 'cleanupCompleted'].every(key => typeof value[key] === 'boolean');
+    ['publicFaultObserved', 'contextClosed', 'browserClosed', 'serverExited', 'oracleExited', 'oracleGraceful', 'surfaceClean', 'cleanupCompleted'].every(key => typeof value[key] === 'boolean');
 }
 export function childAccepted(value, control) {
   return validChildResult(value, control) && control.mode === 'live' && value.status === 'JOURNEY_OK' && value.stage === 'COMPLETE' && value.failureCode === 'NONE' && value.browserVersion !== null &&
-    !value.publicFaultObserved && complete(value.checks, ['BROWSER_ENGINE', 'SURFACE_CHECKED', ...journeys[control.journeyId]]) && value.contextClosed && value.browserClosed && value.oracleExited && value.oracleGraceful && value.surfaceClean && value.cleanupCompleted;
+    !value.publicFaultObserved && complete(value.checks, ['BROWSER_ENGINE', 'SURFACE_CHECKED', ...journeys[control.journeyId]]) && value.contextClosed && value.browserClosed && value.serverExited && value.oracleExited && value.oracleGraceful && value.surfaceClean && value.cleanupCompleted;
 }
 export const validSupervisorChecks = value => boolMap(value, supervisorChecks);
-export function realAccepted(child, control, supervisor, coordinator) { return childAccepted(child, control) && complete(supervisor, supervisorChecks) && complete(coordinator, coordinatorChecks); }
+export function realAccepted(child, control, supervisor, coordinator) { return childAccepted(child, control) && complete(supervisor, supervisorChecks) && complete(coordinator, requiredCoordinatorChecks(control.journeyId)); }
 export function validReceipt(value) {
-  const keys = ['version', 'type', 'journeyId', 'mode', 'publicFault', 'sourceCommit', 'sourceCommitted', 'sourceFingerprint', 'browserVersion', 'status', 'stage', 'failureCode', 'checks', 'supervisor', 'childResultAccepted', 'protocolRejected', 'rawOutputRejected', 'timedOut', 'cleanupForced', 'exitCode', 'contextClosed', 'browserClosed', 'oracleExited', 'oracleGraceful', 'surfaceClean', 'surfaceRemoved', 'cleanupCompleted', 'publicFaultObserved', 'publicOwnership', 'accepted'];
-  const flags = ['sourceCommitted', 'childResultAccepted', 'protocolRejected', 'rawOutputRejected', 'timedOut', 'cleanupForced', 'contextClosed', 'browserClosed', 'oracleExited', 'oracleGraceful', 'surfaceClean', 'surfaceRemoved', 'cleanupCompleted', 'publicFaultObserved', 'accepted'];
+  const keys = ['version', 'type', 'journeyId', 'mode', 'publicFault', 'sourceCommit', 'sourceCommitted', 'sourceFingerprint', 'browserVersion', 'status', 'stage', 'failureCode', 'checks', 'supervisor', 'childResultAccepted', 'protocolRejected', 'rawOutputRejected', 'timedOut', 'cleanupForced', 'exitCode', 'contextClosed', 'browserClosed', 'serverExited', 'oracleExited', 'oracleGraceful', 'surfaceClean', 'surfaceRemoved', 'cleanupCompleted', 'publicFaultObserved', 'publicOwnership', 'accepted'];
+  const flags = ['sourceCommitted', 'childResultAccepted', 'protocolRejected', 'rawOutputRejected', 'timedOut', 'cleanupForced', 'contextClosed', 'browserClosed', 'serverExited', 'oracleExited', 'oracleGraceful', 'surfaceClean', 'surfaceRemoved', 'cleanupCompleted', 'publicFaultObserved', 'accepted'];
   if (!exactKeys(value, keys) || value.version !== version || value.type !== 'recoveryPrivateBrowserReceipt' || !registeredJourney(value.journeyId) || !['public', 'live'].includes(value.mode) || !flags.every(key => typeof value[key] === 'boolean') ||
       !boolMap(value.checks, childChecks) || !completeShape(value.supervisor, supervisorChecks) || !['NOT_ACCEPTED', 'JOURNEY_OK', 'PUBLIC_BOUNDARY_OK', 'BOUNDARY_FAILED'].includes(value.status) || !stages.includes(value.stage) || !failures.includes(value.failureCode) ||
       !(value.sourceCommit === null || typeof value.sourceCommit === 'string' && /^[a-f0-9]{40}$/.test(value.sourceCommit)) || !(value.sourceFingerprint === null || typeof value.sourceFingerprint === 'string' && /^[a-f0-9]{64}$/.test(value.sourceFingerprint)) ||
       !(value.browserVersion === null || typeof value.browserVersion === 'string' && /^\d{1,5}\.\d{1,5}\.\d{1,5}\.\d{1,5}$/.test(value.browserVersion)) || !(value.exitCode === null || Number.isSafeInteger(value.exitCode) && value.exitCode >= -2147483648 && value.exitCode <= 255)) return false;
   if (value.mode === 'live') return value.publicFault === null && value.publicOwnership === null;
   const owner = value.publicOwnership, pid = value => value === null || Number.isSafeInteger(value) && value > 0 && value <= 2147483647;
-  return publicFaults.includes(value.publicFault) && value.accepted === false && exactKeys(owner, ['surface', 'childPid', 'oraclePid']) && (owner.surface === null || typeof owner.surface === 'string' && isAbsolute(owner.surface)) && pid(owner.childPid) && pid(owner.oraclePid);
+  return publicFaults.includes(value.publicFault) && value.accepted === false && exactKeys(owner, ['surface', 'childPid', 'oraclePid', 'serverPid']) && (owner.surface === null || typeof owner.surface === 'string' && isAbsolute(owner.surface)) && pid(owner.childPid) && pid(owner.oraclePid) && pid(owner.serverPid);
 }
 const completeShape = (value, ids) => boolMap(value, ids) && exactKeys(value, ids);
-export function validCleanup(value, control) { return exactKeys(value, ['version', 'type', 'journeyId', 'contextClosed', 'browserClosed', 'oracleExited']) && value.version === version && value.type === 'recoveryPrivateCleanup' && value.journeyId === control.journeyId && value.contextClosed === true && value.browserClosed === true && value.oracleExited === true; }
+export function validCleanup(value, control) { return exactKeys(value, ['version', 'type', 'journeyId', 'contextClosed', 'browserClosed', 'serverExited', 'oracleExited']) && value.version === version && value.type === 'recoveryPrivateCleanup' && value.journeyId === control.journeyId && value.contextClosed === true && value.browserClosed === true && value.serverExited === true && value.oracleExited === true; }
 export function observedMap(ids) {
   const values = Object.create(null);
   return Object.freeze({
@@ -80,4 +82,16 @@ export function observedMap(ids) {
     snapshot() { return Object.fromEntries(ids.map(id => [id, values[id] === true])); },
     finish(check) { let failed = false; for (const id of ids) { const flag = values[id] === true; try { check(id, flag); } catch { failed = true; } failed ||= !flag; } if (failed) throw fixedError('PREDICATE_FAILED'); },
   });
+}
+
+export const fixtureActions=Object.freeze(['READ_SAFE_COUNTS','DENY_OWNER_ONCE','DROP_FIRST_DELIVERY_ONCE','WITHDRAW_PUBLICATION_AFTER_APPLY','SUPERSEDE_PUBLICATION_AFTER_APPLY','EXPIRE_PUBLICATION_AFTER_APPLY']);
+export const fixtureCountKeys=Object.freeze(['ownerCommits','operations','sets','replacedSets','entries','proofs','consumedProofs','sessions','outbox','codeAcceptances']);
+export const validFixtureRequest=value=>exactKeys(value,['version','type','requestId','action'])&&value.version===version&&value.type==='recoveryFixtureRequest'&&Number.isInteger(value.requestId)&&value.requestId>=1&&value.requestId<=16&&fixtureActions.includes(value.action);
+export const validFixtureResult=value=>exactKeys(value,['version','type','requestId','status','counts'])&&value.version===version&&value.type==='recoveryFixtureResult'&&Number.isInteger(value.requestId)&&value.requestId>=1&&value.requestId<=16&&value.status==='OK'&&exactKeys(value.counts,fixtureCountKeys)&&fixtureCountKeys.every(k=>Number.isInteger(value.counts[k])&&value.counts[k]>=0&&value.counts[k]<=1000);
+export const publicFixtureResult=value=>validFixtureResult(value)&&fixtureCountKeys.every(k=>value.counts[k]===0);
+
+// This emitter records public boundary facts only. Private file assertions stay in the child.
+export function recordPublicDownloadChecks(mode,checks){
+ requireTrue(mode==='public'||mode==='live','INPUT_INVALID');
+ if(mode==='public'){checks.DOWNLOAD_ADMITTED=true;checks.DOWNLOAD_REMOVED=true;}
 }

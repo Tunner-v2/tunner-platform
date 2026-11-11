@@ -14,7 +14,7 @@ const journeyId = 'RECOVERY_GENERATE_PASSWORD_V1';
 const publicControl = () => ({version, type: 'runRecoveryPrivate', mode: 'public', journeyId, publicFault: 'happy', sourceCommit: 'a'.repeat(40), sourceCommitted: true, origin: null, mailpitOrigin: null, runId: '0'.repeat(32)});
 const liveControl = () => ({...publicControl(), mode: 'live', publicFault: null, origin: 'https://localhost:24443', mailpitOrigin: 'http://127.0.0.1:28025'});
 const map = ids => Object.fromEntries(ids.map(id => [id, true]));
-const winning = () => ({version, type: 'recoveryPrivateChildResult', journeyId, mode: 'live', publicFault: null, browserVersion: '1.2.3.4', status: 'JOURNEY_OK', stage: 'COMPLETE', failureCode: 'NONE', checks: map(['BROWSER_ENGINE', 'SURFACE_CHECKED', ...journeys[journeyId]]), publicFaultObserved: false, contextClosed: true, browserClosed: true, oracleExited: true, oracleGraceful: true, surfaceClean: true, cleanupCompleted: true});
+const winning = () => ({version, type: 'recoveryPrivateChildResult', journeyId, mode: 'live', publicFault: null, browserVersion: '1.2.3.4', status: 'JOURNEY_OK', stage: 'COMPLETE', failureCode: 'NONE', checks: map(['BROWSER_ENGINE', 'SURFACE_CHECKED', ...journeys[journeyId]]), publicFaultObserved: false, contextClosed: true, browserClosed: true, serverExited:true, oracleExited: true, oracleGraceful: true, surfaceClean: true, cleanupCompleted: true});
 async function fixture(body) {
   // Capture exact canonical ownership before assertions or other fallible work.
   const path = await realpath(await mkdtemp(join(await realpath(tmpdir()), 'tunner-p2-009-private-')));
@@ -108,4 +108,48 @@ test('private marker overlap detects public sentinel across an owned profile chu
 test('unfinished live dispatcher flushes all false facts and rejects before account or value work', async () => {
   const seen = []; await assert.rejects(runJourney({control: liveControl(), check(id, value) { seen.push([id, value]); }}), error => failureOf(error) === 'DEPENDENCY_NOT_READY');
   assert.equal(seen.length, journeys[journeyId].length); assert.equal(seen.every(([, value]) => value === false), true);
+});
+
+// Public reducer assertions only; no live coordinator/values/resources.
+test('conditional coordinator facts cannot be supplied by the browser or another journey',async()=>{
+ const {requiredCoordinatorChecks,validFixtureRequest,validFixtureResult,fixtureCountKeys}=await import('./contract.mjs');
+ const counts=Object.fromEntries(fixtureCountKeys.map(k=>[k,0]));
+ assert.equal(validFixtureRequest({version:1,type:'recoveryFixtureRequest',requestId:1,action:'READ_SAFE_COUNTS'}),true);
+ assert.equal(validFixtureRequest({version:1,type:'recoveryFixtureRequest',requestId:17,action:'READ_SAFE_COUNTS'}),false);
+ assert.equal(validFixtureResult({version:1,type:'recoveryFixtureResult',requestId:1,status:'OK',counts}),true);
+ assert.equal(validFixtureResult({version:1,type:'recoveryFixtureResult',requestId:1,status:'OK',counts:{...counts,code:'PUBLIC'}}),false);
+ assert.equal(requiredCoordinatorChecks('RECOVERY_REPLACE_PASSWORD_V1').includes('EXACT_SUBSET_REPLACEMENT'),true);
+ assert.equal(requiredCoordinatorChecks('RECOVERY_GENERATE_PASSWORD_V1').includes('EXACT_SUBSET_REPLACEMENT'),false);
+ const id='RECOVERY_REPLACE_PASSWORD_V1',control={...liveControl(),journeyId:id},child={...winning(),journeyId:id,checks:map(['BROWSER_ENGINE','SURFACE_CHECKED',...journeys[id]])};
+ const required=map(requiredCoordinatorChecks(id));assert.equal(realAccepted(child,control,map(supervisorChecks),required),true);
+ delete required.EXACT_SUBSET_REPLACEMENT;assert.equal(realAccepted(child,control,map(supervisorChecks),required),false);
+ required.EXACT_SUBSET_REPLACEMENT=false;assert.equal(realAccepted(child,control,map(supervisorChecks),required),false);
+ assert.equal(validChildResult({...child,checks:{...child.checks,EXACT_SUBSET_REPLACEMENT:true}},control),false);
+ required.EXACT_SUBSET_REPLACEMENT=true;required.PUBLICATION_DRIFT_ROLLED_BACK=true;assert.equal(realAccepted(child,control,map(supervisorChecks),required),false);
+ const tid='RECOVERY_REPLACE_TOTP_V1',tc={...liveControl(),journeyId:tid},tchild={...winning(),journeyId:tid,checks:map(['BROWSER_ENGINE','SURFACE_CHECKED',...journeys[tid]])},tr=map(requiredCoordinatorChecks(tid));assert.equal(realAccepted(tchild,tc,map(supervisorChecks),tr),true);tr.PUBLICATION_DRIFT_ROLLED_BACK=false;assert.equal(realAccepted(tchild,tc,map(supervisorChecks),tr),false);
+});
+test('public server exit is required independently of browser closure',async()=>{
+ const {validCleanup}=await import('./contract.mjs'),value=winning(),control=liveControl();delete value.serverExited;assert.equal(validChildResult(value,control),false);value.serverExited=false;assert.equal(validChildResult(value,control),true);assert.equal(childAccepted(value,control),false);
+ assert.equal(validCleanup({version,type:'recoveryPrivateCleanup',journeyId,contextClosed:true,browserClosed:true,serverExited:false,oracleExited:true},control),false);
+});
+test('public relay roundtrip requires every exact count to be zero',async()=>{
+ const {publicFixtureResult,fixtureCountKeys}=await import('./contract.mjs'),counts=Object.fromEntries(fixtureCountKeys.map(k=>[k,0])),reply={version,type:'recoveryFixtureResult',requestId:1,status:'OK',counts};assert.equal(publicFixtureResult(reply),true);
+ for(const key of fixtureCountKeys)assert.equal(publicFixtureResult({...reply,counts:{...counts,[key]:1}}),false);
+});
+
+test('actual download emitter preserves each exact private journey map and public boundary flags',async()=>{
+ const {recordPublicDownloadChecks}=await import('./contract.mjs');
+ for(const id of Object.keys(journeys)){
+  // Synthetic maps exercise the same emitter called by requestOwnedDownload;
+  // they are never substituted for actual browser observations or receipts.
+  const control={...liveControl(),journeyId:id},flags=map(['BROWSER_ENGINE','SURFACE_CHECKED',...journeys[id]]),before=Object.keys(flags).sort();
+  recordPublicDownloadChecks(control.mode,flags);
+  assert.deepEqual(Object.keys(flags).sort(),before);
+  assert.equal(Object.hasOwn(flags,'DOWNLOAD_ADMITTED'),false);assert.equal(Object.hasOwn(flags,'DOWNLOAD_REMOVED'),false);
+  assert.equal(childAccepted({...winning(),journeyId:id,checks:flags},control),true);
+  assert.equal(childAccepted({...winning(),journeyId:id,checks:{...flags,DOWNLOAD_ADMITTED:true,DOWNLOAD_REMOVED:true}},control),false);
+ }
+ const flags=Object.create(null);recordPublicDownloadChecks('public',flags);
+ assert.deepEqual({...flags},{DOWNLOAD_ADMITTED:true,DOWNLOAD_REMOVED:true});
+ assert.throws(()=>recordPublicDownloadChecks('LIVE',Object.create(null)));
 });
