@@ -8,6 +8,15 @@ namespace Tunner.Identity.Persistence.Migrations
     /// <inheritdoc />
     public partial class P2RecoveryCodes : Migration
     {
+        private static readonly string[] SessionOwnerColumns = ["session_id", "account_id"];
+        private static readonly string[] IssuedSetOwnerColumns = ["account_id", "operation_id", "set_reference"];
+        private static readonly string[] OperationOwnerColumns = ["account_id", "operation_id"];
+        private static readonly string[] SetOwnerColumns = ["account_id", "set_reference"];
+        private static readonly string[] ConsumedOwnerOperationColumns = ["account_id", "consumed_by_operation_id"];
+        private static readonly string[] SessionRequestColumns = ["session_id", "request_id"];
+        private static readonly string[] IssuanceOwnerSetColumns = ["account_id", "issuance_operation_id", "set_reference"];
+        private static readonly string[] RetirementOwnerColumns = ["account_id", "retired_by_operation_id"];
+
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -78,7 +87,7 @@ namespace Tunner.Identity.Persistence.Migrations
                         columns: x => new { x.session_id, x.account_id },
                         principalSchema: "identity",
                         principalTable: "tunner_sessions",
-                        principalColumns: new[] { "session_id", "account_id" },
+                        principalColumns: SessionOwnerColumns,
                         onDelete: ReferentialAction.Restrict);
                 });
 
@@ -120,14 +129,14 @@ namespace Tunner.Identity.Persistence.Migrations
                         columns: x => new { x.account_id, x.issuance_operation_id, x.set_reference },
                         principalSchema: "identity",
                         principalTable: "recovery_code_operations",
-                        principalColumns: new[] { "account_id", "operation_id", "set_reference" },
+                        principalColumns: IssuedSetOwnerColumns,
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_recovery_code_sets_recovery_code_operations_account_id_reti~",
                         columns: x => new { x.account_id, x.retired_by_operation_id },
                         principalSchema: "identity",
                         principalTable: "recovery_code_operations",
-                        principalColumns: new[] { "account_id", "operation_id" },
+                        principalColumns: OperationOwnerColumns,
                         onDelete: ReferentialAction.Restrict);
                 });
 
@@ -161,7 +170,7 @@ namespace Tunner.Identity.Persistence.Migrations
                         columns: x => new { x.account_id, x.set_reference },
                         principalSchema: "identity",
                         principalTable: "recovery_code_sets",
-                        principalColumns: new[] { "account_id", "set_reference" },
+                        principalColumns: SetOwnerColumns,
                         onDelete: ReferentialAction.Restrict);
                 });
 
@@ -169,39 +178,39 @@ namespace Tunner.Identity.Persistence.Migrations
                 name: "IX_recovery_code_entries_account_id_consumed_by_operation_id",
                 schema: "identity",
                 table: "recovery_code_entries",
-                columns: new[] { "account_id", "consumed_by_operation_id" },
+                columns: ConsumedOwnerOperationColumns,
                 unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_recovery_code_entries_account_id_set_reference",
                 schema: "identity",
                 table: "recovery_code_entries",
-                columns: new[] { "account_id", "set_reference" });
+                columns: SetOwnerColumns);
 
             migrationBuilder.CreateIndex(
                 name: "IX_recovery_code_operations_session_id_account_id",
                 schema: "identity",
                 table: "recovery_code_operations",
-                columns: new[] { "session_id", "account_id" });
+                columns: SessionOwnerColumns);
 
             migrationBuilder.CreateIndex(
                 name: "IX_recovery_code_operations_session_id_request_id",
                 schema: "identity",
                 table: "recovery_code_operations",
-                columns: new[] { "session_id", "request_id" },
+                columns: SessionRequestColumns,
                 unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_recovery_code_sets_account_id_issuance_operation_id_set_ref~",
                 schema: "identity",
                 table: "recovery_code_sets",
-                columns: new[] { "account_id", "issuance_operation_id", "set_reference" });
+                columns: IssuanceOwnerSetColumns);
 
             migrationBuilder.CreateIndex(
                 name: "IX_recovery_code_sets_account_id_retired_by_operation_id",
                 schema: "identity",
                 table: "recovery_code_sets",
-                columns: new[] { "account_id", "retired_by_operation_id" });
+                columns: RetirementOwnerColumns);
 
             migrationBuilder.CreateIndex(
                 name: "IX_recovery_code_sets_issuance_operation_id",
