@@ -133,3 +133,26 @@ test('@UI-004 trusted publication plus metadata outage retains branded unavailab
 test('@UI-004 absent mandatory publication retains the technical fallback and cannot fetch factor facts',async({page})=>{
  await account(page);let reads=0;const incomplete={...content};delete incomplete['totp.heading'];await page.route('**/account/totp/options',route=>json(route,{csrfToken:'public-csrf',requestId:request,version:'PUBLIC-UI-ONLY',maximumActiveAuthenticators:2,maximumPendingOperations:2,disableSessionEffect:'PreserveExistingSessions',resetSessionEffect:'PreserveExistingSessions',resetBehavior:'RetireAffectedFactorThenSeparateEnrollment',replacementOrdering:'IndependentEnrollment',canStartEnrollment:false,canStartDisable:false,canStartReset:false,finalEligibilityRequired:true,recovery:null,locale:'en',content:incomplete}));await page.route('**/account/totp',route=>{reads++;return json(route,{authenticators:[]});});await page.goto('/account/security/authenticator');await expect(page.getByRole('alert')).toHaveText('The request could not be completed.');await expect(page.locator('.passkeys-header')).toHaveCount(0);expect(reads).toBe(0);
 });
+
+for(const width of [1440,768,390,320])for(const kind of ['DISABLE','RESET'] as const)test(`@UI-005 ${kind} cancellation refreshes externally changed factors and guards actions at ${width}`,async({page})=>{
+ await page.setViewportSize({width,height:width>=768?1100:844});const state=await account(page);state.active=true;
+ let removedElsewhere=false,metadataReads=0,refreshRoute:Route|undefined;const starts:Record<string,unknown>[]=[],cancels:unknown[]=[];
+ const metadata=()=>({authenticators:(removedElsewhere?[choice(factor,1)]:[choice(factor,1),choice(second,2)]).map(value=>({...value,lastUsedAt:null,disabledAt:null,canStartDisable:true,canStartReset:true}))});
+ await page.route('**/account/totp',route=>{metadataReads++;if(removedElsewhere){refreshRoute=route;return;}return json(route,metadata());});
+ for(const action of ['disable','reset'])await page.route(`**/account/totp/${action}/start`,route=>{
+  const body=route.request().postDataJSON();starts.push(body);state.starts++;state.operation={...op(),requestId:body.requestId,enrollmentId:starts.length===1?enrollment:'55555555-5555-4555-8555-555555555555',kind:action==='reset'?'RESET':'DISABLE',authenticatorReference:body.authenticatorReference,expectedVersion:body.expectedVersion,factorSessionEffect:'PreserveExistingSessions'};return json(route,state.operation);
+ });
+ await page.route('**/account/totp/cancel',route=>{cancels.push(route.request().postDataJSON());state.operation={...state.operation!,status:kind==='RESET'?'EXPIRED':'REJECTED',disclosureAvailable:false};return json(route,state.operation);});
+ await page.goto('/account/security/authenticator');await expect(page.locator('.totp-factor')).toHaveCount(2);
+ const originalTrigger=page.locator('.totp-factor').first().getByRole('button',{name:kind==='DISABLE'?'Remove':'Review replacement',exact:true});await originalTrigger.focus();await page.keyboard.press('Enter');
+ const dialog=page.getByRole('dialog');await expect(dialog.getByRole('button',{name:'Cancel',exact:true})).toBeEnabled();
+ // Only the authoritative public fixture changes: no reload, route change or component replacement.
+ removedElsewhere=true;const before=metadataReads;await page.keyboard.press('Escape');
+ await expect.poll(()=>metadataReads).toBeGreaterThan(before);await expect.poll(()=>Boolean(refreshRoute)).toBe(true);
+ await expect(page.locator('.totp-factor button:enabled,.totp-panel.danger button:enabled')).toHaveCount(0);
+ await json(refreshRoute!,metadata());await expect(dialog).toHaveCount(0);await expect(page.locator('.totp-factor')).toHaveCount(1);
+ expect(cancels).toEqual([{requestId:starts[0].requestId,enrollmentId:enrollment}]);
+ const remainingRemove=page.locator('.totp-panel.danger').getByRole('button',{name:'Remove',exact:true});await expect(remainingRemove).toBeEnabled();
+ await remainingRemove.focus();await page.keyboard.press('Enter');await expect(dialog.getByRole('button',{name:'Continue',exact:true})).toBeEnabled();
+ expect(starts).toHaveLength(2);expect(starts[1]).toEqual({requestId:expect.any(String),authenticatorReference:factor,expectedVersion:2});expect(state.activations).toBe(0);expect(state.disclosures).toBe(0);
+});
