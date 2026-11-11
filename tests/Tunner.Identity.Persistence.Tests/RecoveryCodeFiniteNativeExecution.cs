@@ -188,6 +188,7 @@ public static class RecoveryCodeFiniteNativeExecution
         catch (Exception error) when (error is not OutOfMemoryException)
         {
             // Closed public stages only. No exception type/message, SQL values, or provider diagnostics leave this method.
+            if (!deadline.IsCancellationRequested && failure == "CAPACITY_PROVISION_FAILED") return CapacityProvisionFailure(error);
             return deadline.IsCancellationRequested ? failure switch
             {
                 "CAPACITY_PROVISION_FAILED" => "CAPACITY_PROVISION_DEADLINE",
@@ -199,6 +200,34 @@ public static class RecoveryCodeFiniteNativeExecution
                 _ => "CAPACITY_LIMIT_FAILED"
             } : failure;
         }
+    }
+
+    internal static string CapacityProvisionFailure(Exception error)
+    {
+        // Only the direct provider type or this existing EF wrapper is admitted; never walk an arbitrary exception graph.
+        var postgres = error as Npgsql.PostgresException ??
+            (error is Microsoft.EntityFrameworkCore.DbUpdateException { InnerException: Npgsql.PostgresException wrapped } ? wrapped : null);
+        if (postgres is not null) return postgres.SqlState switch
+        {
+            "53100" => "CAPACITY_PROVISION_DISK_FULL",
+            "53200" => "CAPACITY_PROVISION_OUT_OF_MEMORY",
+            "53300" => "CAPACITY_PROVISION_CONNECTION_LIMIT",
+            "57014" => "CAPACITY_PROVISION_QUERY_CANCELED",
+            "3D000" => "CAPACITY_PROVISION_INVALID_CATALOG",
+            _ => "CAPACITY_PROVISION_FAILED"
+        };
+        return error switch
+        {
+            Npgsql.NpgsqlException { InnerException: TimeoutException } => "CAPACITY_PROVISION_CLIENT_TIMEOUT",
+            Npgsql.NpgsqlException { InnerException: IOException } => "CAPACITY_PROVISION_CLIENT_IO",
+            Npgsql.NpgsqlException => "CAPACITY_PROVISION_NPGSQL_FAILED",
+            OperationCanceledException => "CAPACITY_PROVISION_CANCELED",
+            TimeoutException => "CAPACITY_PROVISION_CLIENT_TIMEOUT",
+            IOException => "CAPACITY_PROVISION_CLIENT_IO",
+            Microsoft.EntityFrameworkCore.DbUpdateException => "CAPACITY_PROVISION_EF_UPDATE_FAILED",
+            InvalidOperationException => "CAPACITY_PROVISION_INVALID_OPERATION",
+            _ => "CAPACITY_PROVISION_FAILED"
+        };
     }
 
     private static Task Dispatch(RecoveryCodeNativeCohort cohort, string id, IdentityPostgresFixture fixture)

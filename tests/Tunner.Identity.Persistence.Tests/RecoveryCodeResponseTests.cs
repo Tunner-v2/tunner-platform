@@ -124,4 +124,29 @@ public sealed class RecoveryCodeResponseTests
         finally { await fixture.DisposeAsync(); } // No InitializeAsync and no container exists.
         Assert.True(rejected);
     }
+
+    [Fact]
+    public void CapacityProvisionDiagnosticsAreClosedAndDoNotTraverseUnknownWrappers()
+    {
+        const string marker = "PUBLIC-NONFUNCTIONAL-DIAGNOSTIC";
+        static Npgsql.PostgresException Pg(string code) => new("PUBLIC-NONFUNCTIONAL-DIAGNOSTIC", "ERROR", "ERROR", code);
+        Assert.Equal("CAPACITY_PROVISION_DISK_FULL", RecoveryCodeFiniteNativeExecution.CapacityProvisionFailure(Pg("53100")));
+        Assert.Equal("CAPACITY_PROVISION_OUT_OF_MEMORY", RecoveryCodeFiniteNativeExecution.CapacityProvisionFailure(Pg("53200")));
+        Assert.Equal("CAPACITY_PROVISION_CONNECTION_LIMIT", RecoveryCodeFiniteNativeExecution.CapacityProvisionFailure(Pg("53300")));
+        Assert.Equal("CAPACITY_PROVISION_QUERY_CANCELED", RecoveryCodeFiniteNativeExecution.CapacityProvisionFailure(Pg("57014")));
+        Assert.Equal("CAPACITY_PROVISION_INVALID_CATALOG", RecoveryCodeFiniteNativeExecution.CapacityProvisionFailure(Pg("3D000")));
+        Assert.Equal("CAPACITY_PROVISION_FAILED", RecoveryCodeFiniteNativeExecution.CapacityProvisionFailure(Pg("XX999")));
+        Assert.Equal("CAPACITY_PROVISION_DISK_FULL", RecoveryCodeFiniteNativeExecution.CapacityProvisionFailure(new Microsoft.EntityFrameworkCore.DbUpdateException(marker, Pg("53100"))));
+        Assert.Equal("CAPACITY_PROVISION_FAILED", RecoveryCodeFiniteNativeExecution.CapacityProvisionFailure(new Microsoft.EntityFrameworkCore.DbUpdateException(marker, Pg("XX999"))));
+        Assert.Equal("CAPACITY_PROVISION_NPGSQL_FAILED", RecoveryCodeFiniteNativeExecution.CapacityProvisionFailure(new Npgsql.NpgsqlException(marker)));
+        Assert.Equal("CAPACITY_PROVISION_CLIENT_TIMEOUT", RecoveryCodeFiniteNativeExecution.CapacityProvisionFailure(new Npgsql.NpgsqlException(marker, new TimeoutException(marker))));
+        Assert.Equal("CAPACITY_PROVISION_CLIENT_IO", RecoveryCodeFiniteNativeExecution.CapacityProvisionFailure(new Npgsql.NpgsqlException(marker, new IOException(marker))));
+        Assert.Equal("CAPACITY_PROVISION_CANCELED", RecoveryCodeFiniteNativeExecution.CapacityProvisionFailure(new OperationCanceledException(marker)));
+        Assert.Equal("CAPACITY_PROVISION_CLIENT_TIMEOUT", RecoveryCodeFiniteNativeExecution.CapacityProvisionFailure(new TimeoutException(marker)));
+        Assert.Equal("CAPACITY_PROVISION_CLIENT_IO", RecoveryCodeFiniteNativeExecution.CapacityProvisionFailure(new IOException(marker)));
+        Assert.Equal("CAPACITY_PROVISION_EF_UPDATE_FAILED", RecoveryCodeFiniteNativeExecution.CapacityProvisionFailure(new Microsoft.EntityFrameworkCore.DbUpdateException(marker)));
+        Assert.Equal("CAPACITY_PROVISION_INVALID_OPERATION", RecoveryCodeFiniteNativeExecution.CapacityProvisionFailure(new InvalidOperationException(marker)));
+        Assert.Equal("CAPACITY_PROVISION_FAILED", RecoveryCodeFiniteNativeExecution.CapacityProvisionFailure(new Exception(marker, Pg("53100"))));
+        Assert.Equal("CAPACITY_PROVISION_FAILED", RecoveryCodeFiniteNativeExecution.CapacityProvisionFailure(new AggregateException(Pg("53100"))));
+    }
 }
