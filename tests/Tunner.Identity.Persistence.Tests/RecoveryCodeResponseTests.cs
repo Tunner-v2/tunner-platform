@@ -149,4 +149,24 @@ public sealed class RecoveryCodeResponseTests
         Assert.Equal("CAPACITY_PROVISION_FAILED", RecoveryCodeFiniteNativeExecution.CapacityProvisionFailure(new System.Reflection.TargetInvocationException(marker, Pg("53100"))));
         Assert.Equal("CAPACITY_PROVISION_FAILED", RecoveryCodeFiniteNativeExecution.CapacityProvisionFailure(new AggregateException(Pg("53100"))));
     }
+
+    [Fact]
+    public void CapacityProvisionInvariantsUseOnlyBoundedClosedIdentifiers()
+    {
+        const string marker = "PUBLIC-NONFUNCTIONAL-DIAGNOSTIC";
+        const string prefix = "An error was generated for warning '";
+        var many = prefix + Microsoft.EntityFrameworkCore.Diagnostics.CoreEventId.ManyServiceProvidersCreatedWarning.Name + "': ";
+        var pending = prefix + Microsoft.EntityFrameworkCore.Diagnostics.RelationalEventId.PendingModelChangesWarning.Name + "': ";
+        Assert.Equal("CAPACITY_PROVISION_OBJECT_DISPOSED", RecoveryCodeFiniteNativeExecution.CapacityProvisionFailure(new ObjectDisposedException(marker)));
+        Assert.Equal("CAPACITY_PROVISION_OPTIONS_MISMATCH", RecoveryCodeFiniteNativeExecution.CapacityProvisionFailure(new InvalidOperationException("RECOVERY_IDENTITY_DATABASE_OPTIONS_MISMATCH")));
+        Assert.Equal("CAPACITY_PROVISION_INCOMPLETE_MIGRATION", RecoveryCodeFiniteNativeExecution.CapacityProvisionFailure(new InvalidOperationException("Identity test database must have the complete current migration before a test can run.")));
+        Assert.Equal("CAPACITY_PROVISION_EF_MANY_PROVIDERS", RecoveryCodeFiniteNativeExecution.CapacityProvisionFailure(new InvalidOperationException(many + marker)));
+        Assert.Equal("CAPACITY_PROVISION_EF_PENDING_MODEL", RecoveryCodeFiniteNativeExecution.CapacityProvisionFailure(new InvalidOperationException(pending + marker)));
+        Assert.Equal("CAPACITY_PROVISION_INVALID_OPERATION", RecoveryCodeFiniteNativeExecution.CapacityProvisionFailure(new InvalidOperationException(prefix + marker + "': " + marker)));
+        Assert.Equal("CAPACITY_PROVISION_INVALID_OPERATION", RecoveryCodeFiniteNativeExecution.CapacityProvisionFailure(new InvalidOperationException(marker + many)));
+        Assert.Equal("CAPACITY_PROVISION_INVALID_OPERATION", RecoveryCodeFiniteNativeExecution.CapacityProvisionFailure(new InvalidOperationException(prefix + Microsoft.EntityFrameworkCore.Diagnostics.CoreEventId.ManyServiceProvidersCreatedWarning.Name + "Extra': " + marker)));
+        Assert.Equal("CAPACITY_PROVISION_INVALID_OPERATION", RecoveryCodeFiniteNativeExecution.CapacityProvisionFailure(new InvalidOperationException(many + new string('X', 2049))));
+        Assert.Equal("CAPACITY_PROVISION_INVALID_OPERATION", RecoveryCodeFiniteNativeExecution.CapacityProvisionFailure(new InvalidOperationException(marker)));
+        Assert.Equal("CAPACITY_PROVISION_FAILED", RecoveryCodeFiniteNativeExecution.CapacityProvisionFailure(new System.Reflection.TargetInvocationException(marker, new InvalidOperationException(many + marker))));
+    }
 }

@@ -225,9 +225,25 @@ public static class RecoveryCodeFiniteNativeExecution
             TimeoutException => "CAPACITY_PROVISION_CLIENT_TIMEOUT",
             IOException => "CAPACITY_PROVISION_CLIENT_IO",
             Microsoft.EntityFrameworkCore.DbUpdateException => "CAPACITY_PROVISION_EF_UPDATE_FAILED",
-            InvalidOperationException => "CAPACITY_PROVISION_INVALID_OPERATION",
+            ObjectDisposedException => "CAPACITY_PROVISION_OBJECT_DISPOSED",
+            InvalidOperationException invalid => CapacityProvisionInvariant(invalid.Message),
             _ => "CAPACITY_PROVISION_FAILED"
         };
+    }
+
+    private static string CapacityProvisionInvariant(string message)
+    {
+        // This public-migration-only diagnostic returns identifiers, never text. Unknown/localized/oversized messages stay generic.
+        if (message.Length > 2048) return "CAPACITY_PROVISION_INVALID_OPERATION";
+        if (message == "RECOVERY_IDENTITY_DATABASE_OPTIONS_MISMATCH") return "CAPACITY_PROVISION_OPTIONS_MISMATCH";
+        if (message == "Identity test database must have the complete current migration before a test can run.")
+            return "CAPACITY_PROVISION_INCOMPLETE_MIGRATION";
+        const string prefix = "An error was generated for warning '";
+        if (message.StartsWith(prefix + Microsoft.EntityFrameworkCore.Diagnostics.CoreEventId.ManyServiceProvidersCreatedWarning.Name + "': ", StringComparison.Ordinal))
+            return "CAPACITY_PROVISION_EF_MANY_PROVIDERS";
+        if (message.StartsWith(prefix + Microsoft.EntityFrameworkCore.Diagnostics.RelationalEventId.PendingModelChangesWarning.Name + "': ", StringComparison.Ordinal))
+            return "CAPACITY_PROVISION_EF_PENDING_MODEL";
+        return "CAPACITY_PROVISION_INVALID_OPERATION";
     }
 
     private static Task Dispatch(RecoveryCodeNativeCohort cohort, string id, IdentityPostgresFixture fixture)
