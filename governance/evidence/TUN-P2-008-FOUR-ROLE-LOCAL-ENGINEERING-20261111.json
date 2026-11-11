@@ -1,0 +1,980 @@
+{
+  "schema_version": 1,
+  "scope_id": "TUN-P2-008",
+  "result": "PASS_PROVED_LOCAL_ENGINEERING_FOUR_ROLES",
+  "reviewed_at": "2026-11-11T05:09:20.876Z",
+  "tested_commit_sha": "947f8b090b4f74a474a71e47badcb595424bd734",
+  "validated_source_carrier_sha": "d3f14fa49c11a89784a75d8318354f90eff180d5",
+  "provenance": {
+    "reviewer": "AI agent /root/p2_008_security_resume",
+    "human_approval": false,
+    "authorship_disclosure": "Reviewer previously authored part of the JS boundary. Explicit role/evidence analyses are not independent personnel or human signoff.",
+    "new_runtime_or_native_tests_by_reviewer": false,
+    "source_or_governed_mutation_by_reviewer": false,
+    "execution_owner": "Actual root/UI-agent executions reparsed by reviewer; no test is relabelled as a later commit."
+  },
+  "prior_review": {
+    "behavior": "75988ad1004685bededfa1b22cc306e09b87b89c",
+    "metadata": "b49ba2b3db997055cca1cf6f4b8b2e25a002ab3b",
+    "index_ref": "artifacts/p2-008-totp-20261110/final-engineering-review/four-role-75988ad/assessment-index.json",
+    "index_sha256": "f7c526347c2c996cb6b578e3441bd044e839c4d6e0f606db3f6b19f1301e60a9",
+    "inputs_ref": {
+      "path": "artifacts/p2-008-totp-20261110/final-engineering-review/four-role-75988ad/review-inputs-and-executions.json",
+      "sha256": "07be863783496f7072bf5206a99e6461bbdf74c8a9d97a9796ae22c11f7d33ea"
+    },
+    "source_equivalence": [
+      {
+        "cohort": "Identity260",
+        "inputCommit": "f1dd54a3a6a4f4d3f0e1d66e92c02fb52053d7a1",
+        "actualInvocationHead": "f1dd54a3a6a4f4d3f0e1d66e92c02fb52053d7a1",
+        "selectors": [
+          "src",
+          "tests/Shared",
+          "tests/Tunner.Identity.Persistence.Tests",
+          "Directory.Build.props",
+          "Directory.Build.targets",
+          "Directory.Packages.props",
+          "global.json"
+        ],
+        "changedPaths": "",
+        "currentInputEquivalence": true
+      },
+      {
+        "cohort": "Architecture237",
+        "inputCommit": "a933b5f004b0341b2f1e2f26568928ec98603f21",
+        "actualInvocationHead": "a933b5f004b0341b2f1e2f26568928ec98603f21",
+        "selectors": [
+          "src",
+          "tests/Tunner.Architecture.Tests",
+          "Directory.Build.props",
+          "Directory.Build.targets",
+          "Directory.Packages.props",
+          "global.json"
+        ],
+        "changedPaths": "",
+        "currentInputEquivalence": true
+      },
+      {
+        "cohort": "Installer113",
+        "inputCommit": "19617c5a2d15466ddc05260b05004506c7cde3f3",
+        "actualInvocationHead": "183b557a37833fe658d60652b946860986e99ac6",
+        "selectors": [
+          "src/Tunner.Installer",
+          "src/Tunner.Platform",
+          "tests/Tunner.Installer.Tests",
+          "tests/Shared/OpenBao",
+          "Directory.Build.props",
+          "Directory.Build.targets",
+          "Directory.Packages.props",
+          "global.json"
+        ],
+        "changedPaths": "",
+        "currentInputEquivalence": true
+      }
+    ]
+  },
+  "narrow_delta": [
+    {
+      "commit": "6653a3cac663394d3cd32776d519988f99a410ad",
+      "path": "web/apps/user/totp.tsx",
+      "change": "6+/5- only; acknowledged same-path cancellation hands off busy/abort/current-scope/focus to existing authoritative reload.",
+      "review_ref": "artifacts/p2-008-totp-20261110/ui005-review/security-async-cross-review-6653a3c.json",
+      "review_sha256": "55668c8adb6c6c24e63eef78cb10031aaa778fa78883fd075decf0d2584ca36a"
+    },
+    {
+      "commit": "37f50383e43c9fd8747f894b83d6e552ad4402b5",
+      "path": "web/tests/totp/ui/totp.spec.ts",
+      "change": "8 public expected-red cases added; original35 cases and all predicates retained.",
+      "review_ref": "artifacts/p2-008-totp-20261110/ui005-review/security-source-test-delta-6653a3c.json",
+      "review_sha256": "1ebabe6c8123c51c25aade1ad08b074b180133b556edea65cda70a61ae169e0e"
+    },
+    {
+      "commit": "947f8b090b4f74a474a71e47badcb595424bd734",
+      "path": "web/tests/totp/ui/totp.spec.ts",
+      "change": "One extra expect(starts).toHaveLength(1) before non-null indexed request match; adds runtime precondition and satisfies typing, removes no assertion."
+    },
+    {
+      "commit": "d3f14fa49c11a89784a75d8318354f90eff180d5",
+      "path": "docs/development/P2_008_TOTP_SCOPE.md",
+      "change": "7+/3- factual nonexecuting documentation update; actual consent/test and limited local/privacy boundaries, no domain/code/test/runtime-input change."
+    }
+  ],
+  "actual_final_runtime_receipts": [
+    {
+      "path": "artifacts/p2-008-totp-20261110/real-journeys-947f8b0/enrollment-password-mfa-preserve.json",
+      "sha256": "78e3f9a36fe47f8ba25739dc5ab4b98e6498ca62363861f660b954c4e874a4c3",
+      "actualTestedCommit": "947f8b090b4f74a474a71e47badcb595424bd734",
+      "browserPredicates": 24,
+      "coordinatorPredicates": 21,
+      "persistenceObservations": 5,
+      "receipt": {
+        "version": 3,
+        "journeyId": "TOTP_ENROLLMENT_PASSWORD_MFA_PRESERVE_V1",
+        "runId": "17768084999d43e29e804bafd5616bdb",
+        "sourceCommit": "947f8b090b4f74a474a71e47badcb595424bd734",
+        "sourceCommitted": true,
+        "status": "REAL_JOURNEY_OK",
+        "failureCode": "NONE",
+        "accepted": true,
+        "publicFault": null,
+        "publicBoundaryCanaryPassed": false,
+        "resourceCanary": null,
+        "publicResourceCanaryPassed": false,
+        "resourceFaultObserved": false,
+        "injectedCleanupFailure": false,
+        "publicCleanupReducerRejected": false,
+        "buildBinding": {
+          "SourceCommit": "947f8b090b4f74a474a71e47badcb595424bd734",
+          "ManifestSha256": "4f9d1ac2e4882df92d08948589613572f24e9be7c44892db895e711fef764960",
+          "SourceInputs": 372,
+          "BuildOutputs": 133
+        },
+        "borrowedPostgres": {
+          "ContainerId": "f72775e18f1dc226de5877a5017b4a26681097b60f79d372804293f4f720f143",
+          "ImageId": "sha256:c6a5b95f7348a70e743a9b5e2a3fd78cf22767a039ae81b36e1e561f138cb09c",
+          "ProjectName": "tunner-browser-6ab1259406",
+          "Port": 25432
+        },
+        "postgresVersion": "18.6 (Debian 18.6-1.pgdg13+2)",
+        "browserReceipt": {
+          "version": 3,
+          "type": "browserReceipt",
+          "journeyId": "TOTP_ENROLLMENT_PASSWORD_MFA_PRESERVE_V1",
+          "browserEngine": "chromium",
+          "browserVersion": "151.0.7922.34",
+          "status": "REAL_JOURNEY_OK",
+          "stage": "COMPLETE",
+          "failureCode": "NONE",
+          "checks": {
+            "BROWSER_ENGINE": true,
+            "NATIVE_ORACLE_IDENTITY": true,
+            "BFF_ISOLATED": true,
+            "REQUEST_BINDING": true,
+            "OPERATION_BINDING": true,
+            "DUPLICATE_COUNTS": true,
+            "ONE_TIME_DISCLOSURE": true,
+            "INACTIVE_BEFORE_ACTIVATION": true,
+            "NATIVE_FIRST_CODE_ACTIVE": true,
+            "WRONG_CODE_REJECTED": true,
+            "REPLAY_REJECTED": true,
+            "RESULT_RECOVERY": true,
+            "COOKIE_FLAGS": true,
+            "NO_URL_OR_STORAGE_SECRET": true,
+            "UI_ASSET_TYPOGRAPHY": true,
+            "DISCLOSURE_LOSS_NO_REVEAL": true,
+            "NATIVE_PASSWORD_MFA": true,
+            "NO_EARLY_SESSION": true,
+            "REPLAY_SEQUENCE_REJECTED": true,
+            "CONCURRENT_CODE_SINGLE_ACCEPT": true,
+            "SOURCE_FRESHNESS": true,
+            "PASSWORD_REGRESSION": true,
+            "DISABLE_PRESERVES_CONFIGURED_SESSIONS": true,
+            "CLEANUP_ATTEMPTED": true
+          },
+          "oracleRequests": 18,
+          "rawOutputRejected": false,
+          "processExited": true,
+          "oracleExited": true,
+          "surfaceClean": true,
+          "surfaceRemoved": true,
+          "cleanupCompleted": true,
+          "publicFaultObserved": false,
+          "sourceCommit": "947f8b090b4f74a474a71e47badcb595424bd734",
+          "sourceCommitted": true,
+          "accepted": true
+        },
+        "coordinatorChecks": {
+          "SOURCE_BUILD_CURRENT": true,
+          "BORROWED_POSTGRES_IDENTITY": true,
+          "BORROWED_POSTGRES_PRESERVED": true,
+          "OWNED_DATABASE_IDENTITY": true,
+          "CURRENT_MIGRATIONS": true,
+          "EPHEMERAL_DP": true,
+          "OWNED_MAILPIT_IDENTITY": true,
+          "SCOPED_VAULT_APPLICATION_ACCESS": true,
+          "RAW_DIAGNOSTICS_CONTAINED": true,
+          "BROWSER_EXIT_VERIFIED": true,
+          "ORACLE_EXIT_VERIFIED": true,
+          "APP_STOP_VERIFIED": true,
+          "TOKEN_REVOKED": true,
+          "POLICY_REMOVED": true,
+          "VAULT_CONTAINER_ABSENT": true,
+          "OWNED_DATABASE_ABSENT": true,
+          "MAILPIT_CONTAINER_ABSENT": true,
+          "OWNED_SURFACE_ABSENT": true,
+          "CLEANUP_ALL_STAGES_ATTEMPTED": true,
+          "SAFE_PERSISTENCE_AND_AUDIT": true,
+          "VAULT_OWNER_VERSION_BINDING": true
+        },
+        "persistenceDiagnostics": {
+          "Evaluated": true,
+          "SafeColumns": true,
+          "EmptyIdentityTokens": true,
+          "SafeIdentityOutbox": true,
+          "VaultOwnerVersionBinding": true
+        },
+        "boundary": "Finite local synthetic evidence only. No production policy, Product, merge or release approval."
+      }
+    },
+    {
+      "path": "artifacts/p2-008-totp-20261110/real-journeys-947f8b0/operation-proof-causal-revoke.json",
+      "sha256": "bccf0b17a6d71e936bb5721e28033f78188691ec8332e0b537fefe074ea9cee8",
+      "actualTestedCommit": "947f8b090b4f74a474a71e47badcb595424bd734",
+      "browserPredicates": 23,
+      "coordinatorPredicates": 21,
+      "persistenceObservations": 5,
+      "receipt": {
+        "version": 3,
+        "journeyId": "TOTP_OPERATION_PROOF_CAUSAL_REVOKE_V1",
+        "runId": "aed3bfe446944242be74adcf38c3d2ce",
+        "sourceCommit": "947f8b090b4f74a474a71e47badcb595424bd734",
+        "sourceCommitted": true,
+        "status": "REAL_JOURNEY_OK",
+        "failureCode": "NONE",
+        "accepted": true,
+        "publicFault": null,
+        "publicBoundaryCanaryPassed": false,
+        "resourceCanary": null,
+        "publicResourceCanaryPassed": false,
+        "resourceFaultObserved": false,
+        "injectedCleanupFailure": false,
+        "publicCleanupReducerRejected": false,
+        "buildBinding": {
+          "SourceCommit": "947f8b090b4f74a474a71e47badcb595424bd734",
+          "ManifestSha256": "4f9d1ac2e4882df92d08948589613572f24e9be7c44892db895e711fef764960",
+          "SourceInputs": 372,
+          "BuildOutputs": 133
+        },
+        "borrowedPostgres": {
+          "ContainerId": "f72775e18f1dc226de5877a5017b4a26681097b60f79d372804293f4f720f143",
+          "ImageId": "sha256:c6a5b95f7348a70e743a9b5e2a3fd78cf22767a039ae81b36e1e561f138cb09c",
+          "ProjectName": "tunner-browser-6ab1259406",
+          "Port": 25432
+        },
+        "postgresVersion": "18.6 (Debian 18.6-1.pgdg13+2)",
+        "browserReceipt": {
+          "version": 3,
+          "type": "browserReceipt",
+          "journeyId": "TOTP_OPERATION_PROOF_CAUSAL_REVOKE_V1",
+          "browserEngine": "chromium",
+          "browserVersion": "151.0.7922.34",
+          "status": "REAL_JOURNEY_OK",
+          "stage": "COMPLETE",
+          "failureCode": "NONE",
+          "checks": {
+            "BROWSER_ENGINE": true,
+            "NATIVE_ORACLE_IDENTITY": true,
+            "BFF_ISOLATED": true,
+            "REQUEST_BINDING": true,
+            "OPERATION_BINDING": true,
+            "DUPLICATE_COUNTS": true,
+            "ONE_TIME_DISCLOSURE": true,
+            "INACTIVE_BEFORE_ACTIVATION": true,
+            "NATIVE_FIRST_CODE_ACTIVE": true,
+            "WRONG_CODE_REJECTED": true,
+            "REPLAY_REJECTED": true,
+            "RESULT_RECOVERY": true,
+            "COOKIE_FLAGS": true,
+            "NO_URL_OR_STORAGE_SECRET": true,
+            "UI_ASSET_TYPOGRAPHY": true,
+            "NATIVE_OPERATION_PROOF": true,
+            "OWNER_FAILURE_SAME_PROOF": true,
+            "SOURCE_FRESHNESS": true,
+            "EXPLICIT_CAUSAL_SESSION_EFFECT": true,
+            "UNRELATED_FACTOR_UNCHANGED": true,
+            "DISABLE_REJECTS_OLD_SOURCE": true,
+            "PASSWORD_REGRESSION": true,
+            "CLEANUP_ATTEMPTED": true
+          },
+          "oracleRequests": 18,
+          "rawOutputRejected": false,
+          "processExited": true,
+          "oracleExited": true,
+          "surfaceClean": true,
+          "surfaceRemoved": true,
+          "cleanupCompleted": true,
+          "publicFaultObserved": false,
+          "sourceCommit": "947f8b090b4f74a474a71e47badcb595424bd734",
+          "sourceCommitted": true,
+          "accepted": true
+        },
+        "coordinatorChecks": {
+          "SOURCE_BUILD_CURRENT": true,
+          "BORROWED_POSTGRES_IDENTITY": true,
+          "BORROWED_POSTGRES_PRESERVED": true,
+          "OWNED_DATABASE_IDENTITY": true,
+          "CURRENT_MIGRATIONS": true,
+          "EPHEMERAL_DP": true,
+          "OWNED_MAILPIT_IDENTITY": true,
+          "SCOPED_VAULT_APPLICATION_ACCESS": true,
+          "RAW_DIAGNOSTICS_CONTAINED": true,
+          "BROWSER_EXIT_VERIFIED": true,
+          "ORACLE_EXIT_VERIFIED": true,
+          "APP_STOP_VERIFIED": true,
+          "TOKEN_REVOKED": true,
+          "POLICY_REMOVED": true,
+          "VAULT_CONTAINER_ABSENT": true,
+          "OWNED_DATABASE_ABSENT": true,
+          "MAILPIT_CONTAINER_ABSENT": true,
+          "OWNED_SURFACE_ABSENT": true,
+          "CLEANUP_ALL_STAGES_ATTEMPTED": true,
+          "SAFE_PERSISTENCE_AND_AUDIT": true,
+          "VAULT_OWNER_VERSION_BINDING": true
+        },
+        "persistenceDiagnostics": {
+          "Evaluated": true,
+          "SafeColumns": true,
+          "EmptyIdentityTokens": true,
+          "SafeIdentityOutbox": true,
+          "VaultOwnerVersionBinding": true
+        },
+        "boundary": "Finite local synthetic evidence only. No production policy, Product, merge or release approval."
+      }
+    },
+    {
+      "path": "artifacts/p2-008-totp-20261110/real-journeys-947f8b0/passkey-mfa-reset.json",
+      "sha256": "0ce0c98e5b87cc7318af88da665df9e5e7158d0d6c43dd6d3ad5d46dc4675a46",
+      "actualTestedCommit": "947f8b090b4f74a474a71e47badcb595424bd734",
+      "browserPredicates": 23,
+      "coordinatorPredicates": 21,
+      "persistenceObservations": 5,
+      "receipt": {
+        "version": 3,
+        "journeyId": "TOTP_PASSKEY_MFA_RESET_V1",
+        "runId": "c453b86c190042ca84bd37ebe251d3ea",
+        "sourceCommit": "947f8b090b4f74a474a71e47badcb595424bd734",
+        "sourceCommitted": true,
+        "status": "REAL_JOURNEY_OK",
+        "failureCode": "NONE",
+        "accepted": true,
+        "publicFault": null,
+        "publicBoundaryCanaryPassed": false,
+        "resourceCanary": null,
+        "publicResourceCanaryPassed": false,
+        "resourceFaultObserved": false,
+        "injectedCleanupFailure": false,
+        "publicCleanupReducerRejected": false,
+        "buildBinding": {
+          "SourceCommit": "947f8b090b4f74a474a71e47badcb595424bd734",
+          "ManifestSha256": "4f9d1ac2e4882df92d08948589613572f24e9be7c44892db895e711fef764960",
+          "SourceInputs": 372,
+          "BuildOutputs": 133
+        },
+        "borrowedPostgres": {
+          "ContainerId": "f72775e18f1dc226de5877a5017b4a26681097b60f79d372804293f4f720f143",
+          "ImageId": "sha256:c6a5b95f7348a70e743a9b5e2a3fd78cf22767a039ae81b36e1e561f138cb09c",
+          "ProjectName": "tunner-browser-6ab1259406",
+          "Port": 25432
+        },
+        "postgresVersion": "18.6 (Debian 18.6-1.pgdg13+2)",
+        "browserReceipt": {
+          "version": 3,
+          "type": "browserReceipt",
+          "journeyId": "TOTP_PASSKEY_MFA_RESET_V1",
+          "browserEngine": "chromium",
+          "browserVersion": "151.0.7922.34",
+          "status": "REAL_JOURNEY_OK",
+          "stage": "COMPLETE",
+          "failureCode": "NONE",
+          "checks": {
+            "BROWSER_ENGINE": true,
+            "NATIVE_ORACLE_IDENTITY": true,
+            "BFF_ISOLATED": true,
+            "REQUEST_BINDING": true,
+            "OPERATION_BINDING": true,
+            "DUPLICATE_COUNTS": true,
+            "ONE_TIME_DISCLOSURE": true,
+            "INACTIVE_BEFORE_ACTIVATION": true,
+            "NATIVE_FIRST_CODE_ACTIVE": true,
+            "WRONG_CODE_REJECTED": true,
+            "REPLAY_REJECTED": true,
+            "RESULT_RECOVERY": true,
+            "COOKIE_FLAGS": true,
+            "NO_URL_OR_STORAGE_SECRET": true,
+            "UI_ASSET_TYPOGRAPHY": true,
+            "NATIVE_PASSKEY_MFA": true,
+            "NO_EARLY_SESSION": true,
+            "SOURCE_FRESHNESS": true,
+            "RESET_RETIRE_THEN_SEPARATE_ENROLLMENT": true,
+            "UNRELATED_FACTOR_UNCHANGED": true,
+            "PASSKEY_REGRESSION": true,
+            "PASSWORD_REGRESSION": true,
+            "CLEANUP_ATTEMPTED": true
+          },
+          "oracleRequests": 30,
+          "rawOutputRejected": false,
+          "processExited": true,
+          "oracleExited": true,
+          "surfaceClean": true,
+          "surfaceRemoved": true,
+          "cleanupCompleted": true,
+          "publicFaultObserved": false,
+          "sourceCommit": "947f8b090b4f74a474a71e47badcb595424bd734",
+          "sourceCommitted": true,
+          "accepted": true
+        },
+        "coordinatorChecks": {
+          "SOURCE_BUILD_CURRENT": true,
+          "BORROWED_POSTGRES_IDENTITY": true,
+          "BORROWED_POSTGRES_PRESERVED": true,
+          "OWNED_DATABASE_IDENTITY": true,
+          "CURRENT_MIGRATIONS": true,
+          "EPHEMERAL_DP": true,
+          "OWNED_MAILPIT_IDENTITY": true,
+          "SCOPED_VAULT_APPLICATION_ACCESS": true,
+          "RAW_DIAGNOSTICS_CONTAINED": true,
+          "BROWSER_EXIT_VERIFIED": true,
+          "ORACLE_EXIT_VERIFIED": true,
+          "APP_STOP_VERIFIED": true,
+          "TOKEN_REVOKED": true,
+          "POLICY_REMOVED": true,
+          "VAULT_CONTAINER_ABSENT": true,
+          "OWNED_DATABASE_ABSENT": true,
+          "MAILPIT_CONTAINER_ABSENT": true,
+          "OWNED_SURFACE_ABSENT": true,
+          "CLEANUP_ALL_STAGES_ATTEMPTED": true,
+          "SAFE_PERSISTENCE_AND_AUDIT": true,
+          "VAULT_OWNER_VERSION_BINDING": true
+        },
+        "persistenceDiagnostics": {
+          "Evaluated": true,
+          "SafeColumns": true,
+          "EmptyIdentityTokens": true,
+          "SafeIdentityOutbox": true,
+          "VaultOwnerVersionBinding": true
+        },
+        "boundary": "Finite local synthetic evidence only. No production policy, Product, merge or release approval."
+      }
+    }
+  ],
+  "aggregate": {
+    "browser_predicates": 70,
+    "coordinator_predicates": 63,
+    "persistence_observations": 15,
+    "all_required_checks": true,
+    "all_owned_cleanup": true,
+    "safe_summary_ref": "artifacts/p2-008-totp-20261110/final-integration-947f8b0/safe-execution-summary.json",
+    "safe_summary_sha256": "4b0bbbd12e117d2a2e70db50df3617534a48c837f857238aba98f0c29eef13c9"
+  },
+  "runtime_build_binding": {
+    "path": "artifacts/p2-008-totp-20261110/runtime-build-binding.json",
+    "raw_sha256": "4f9d1ac2e4882df92d08948589613572f24e9be7c44892db895e711fef764960",
+    "tested_commit": "947f8b090b4f74a474a71e47badcb595424bd734",
+    "source_inputs": 372,
+    "build_outputs": 133,
+    "all_current_source_and_output_hashes_rechecked": true
+  },
+  "public_ui": {
+    "actual_invocation_sha": "947f8b090b4f74a474a71e47badcb595424bd734",
+    "production_source_carrier_sha": "6653a3cac663394d3cd32776d519988f99a410ad",
+    "report_ref": "artifacts/p2-008-totp-20261110/ui005-review/green-947f8b0/results.json",
+    "report_sha256": "a5300e7b14f7893b500c4167b15e041cdf0746c6665eef2a0bf355a80e6e1aeb",
+    "stats": {
+      "startTime": "2026-11-11T04:57:07.142Z",
+      "duration": 47616.044,
+      "expected": 43,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "test_outcomes": [
+      {
+        "title": "setup deep link cannot mint or disclose a new enrollment",
+        "results": [
+          "passed"
+        ]
+      },
+      {
+        "title": "one-time presentation disappears on reload and pagehide while original first-code entry remains",
+        "results": [
+          "passed"
+        ]
+      },
+      {
+        "title": "lost Start result is read using original identity without replaying Start",
+        "results": [
+          "passed"
+        ]
+      },
+      {
+        "title": "an activation response lost after commit reconciles original result without another code POST",
+        "results": [
+          "passed"
+        ]
+      },
+      {
+        "title": "authoritative replay error is specific, clears code and never re-discloses",
+        "results": [
+          "passed"
+        ]
+      },
+      {
+        "title": "MFA factor choice is explicit, changing it clears code, and final session waits for exact completion",
+        "results": [
+          "passed"
+        ]
+      },
+      {
+        "title": "shared proof recovers the same accepted proof without a second OTP acceptance",
+        "results": [
+          "passed"
+        ]
+      },
+      {
+        "title": "methods owner with TOTP capability absent preserves disabled-host behavior",
+        "results": [
+          "passed"
+        ]
+      },
+      {
+        "title": "methods owner with TOTP capability false preserves disabled-host behavior",
+        "results": [
+          "passed"
+        ]
+      },
+      {
+        "title": "management combines current row capabilities with account capability true",
+        "results": [
+          "passed"
+        ]
+      },
+      {
+        "title": "management combines current row capabilities with account capability false",
+        "results": [
+          "passed"
+        ]
+      },
+      {
+        "title": "setup expired uses truthful copy with no scan instruction or disclosure",
+        "results": [
+          "passed"
+        ]
+      },
+      {
+        "title": "setup unknown uses truthful copy with no scan instruction or disclosure",
+        "results": [
+          "passed"
+        ]
+      },
+      {
+        "title": "preparing and verifying setup replace scan instructions while the exact request is pending",
+        "results": [
+          "passed"
+        ]
+      },
+      {
+        "title": "management danger title uses its published non-question heading",
+        "results": [
+          "passed"
+        ]
+      },
+      {
+        "title": "unknown proof without discovery cookie keeps exact original continuation; receipt true",
+        "results": [
+          "passed"
+        ]
+      },
+      {
+        "title": "unknown proof without discovery cookie keeps exact original continuation; receipt false",
+        "results": [
+          "passed"
+        ]
+      },
+      {
+        "title": "@UI-002 proof opens without synthetic validation and preserves real blur and submit validation at 1440",
+        "results": [
+          "passed"
+        ]
+      },
+      {
+        "title": "@UI-002 proof opens without synthetic validation and preserves real blur and submit validation at 768",
+        "results": [
+          "passed"
+        ]
+      },
+      {
+        "title": "@UI-002 proof opens without synthetic validation and preserves real blur and submit validation at 390",
+        "results": [
+          "passed"
+        ]
+      },
+      {
+        "title": "@UI-002 proof opens without synthetic validation and preserves real blur and submit validation at 320",
+        "results": [
+          "passed"
+        ]
+      },
+      {
+        "title": "approved proof and login picker remain explicit and clear code with keyboard at 1440",
+        "results": [
+          "passed"
+        ]
+      },
+      {
+        "title": "approved proof and login picker remain explicit and clear code with keyboard at 768",
+        "results": [
+          "passed"
+        ]
+      },
+      {
+        "title": "approved proof and login picker remain explicit and clear code with keyboard at 390",
+        "results": [
+          "passed"
+        ]
+      },
+      {
+        "title": "approved proof and login picker remain explicit and clear code with keyboard at 320",
+        "results": [
+          "passed"
+        ]
+      },
+      {
+        "title": "@UI-003 DISABLE review Escape restores its original trigger at 1440",
+        "results": [
+          "passed"
+        ]
+      },
+      {
+        "title": "@UI-003 RESET review Escape restores its original trigger at 1440",
+        "results": [
+          "passed"
+        ]
+      },
+      {
+        "title": "@UI-003 DISABLE review Escape restores its original trigger at 768",
+        "results": [
+          "passed"
+        ]
+      },
+      {
+        "title": "@UI-003 RESET review Escape restores its original trigger at 768",
+        "results": [
+          "passed"
+        ]
+      },
+      {
+        "title": "@UI-003 DISABLE review Escape restores its original trigger at 390",
+        "results": [
+          "passed"
+        ]
+      },
+      {
+        "title": "@UI-003 RESET review Escape restores its original trigger at 390",
+        "results": [
+          "passed"
+        ]
+      },
+      {
+        "title": "@UI-003 DISABLE review Escape restores its original trigger at 320",
+        "results": [
+          "passed"
+        ]
+      },
+      {
+        "title": "@UI-003 RESET review Escape restores its original trigger at 320",
+        "results": [
+          "passed"
+        ]
+      },
+      {
+        "title": "@UI-004 trusted publication plus metadata outage retains branded unavailable state and read-only retry",
+        "results": [
+          "passed"
+        ]
+      },
+      {
+        "title": "@UI-004 absent mandatory publication retains the technical fallback and cannot fetch factor facts",
+        "results": [
+          "passed"
+        ]
+      },
+      {
+        "title": "@UI-005 DISABLE cancellation refreshes externally changed factors and guards actions at 1440",
+        "results": [
+          "passed"
+        ]
+      },
+      {
+        "title": "@UI-005 RESET cancellation refreshes externally changed factors and guards actions at 1440",
+        "results": [
+          "passed"
+        ]
+      },
+      {
+        "title": "@UI-005 DISABLE cancellation refreshes externally changed factors and guards actions at 768",
+        "results": [
+          "passed"
+        ]
+      },
+      {
+        "title": "@UI-005 RESET cancellation refreshes externally changed factors and guards actions at 768",
+        "results": [
+          "passed"
+        ]
+      },
+      {
+        "title": "@UI-005 DISABLE cancellation refreshes externally changed factors and guards actions at 390",
+        "results": [
+          "passed"
+        ]
+      },
+      {
+        "title": "@UI-005 RESET cancellation refreshes externally changed factors and guards actions at 390",
+        "results": [
+          "passed"
+        ]
+      },
+      {
+        "title": "@UI-005 DISABLE cancellation refreshes externally changed factors and guards actions at 320",
+        "results": [
+          "passed"
+        ]
+      },
+      {
+        "title": "@UI-005 RESET cancellation refreshes externally changed factors and guards actions at 320",
+        "results": [
+          "passed"
+        ]
+      }
+    ],
+    "total": 43,
+    "passed": 43,
+    "failed": 0,
+    "skipped": 0,
+    "flaky": 0,
+    "typecheck_exit": 0,
+    "contracts": {
+      "passed": 29,
+      "failed": 0,
+      "skipped": 0
+    },
+    "manifest_ref": "artifacts/p2-008-totp-20261110/ui005-review/green-947f8b0/manifest.json",
+    "manifest_sha256": "4838a7511b4bc5e423f08697629cf166aa7c34a6cdfb6ea8d2f17527c7837e73",
+    "composition": {
+      "ref": "artifacts/p2-008-totp-20261110/ui005-review/green-947f8b0/composition-r2/composition.json",
+      "sha256": "b31813840b9c5239c7eeff8f430024ba316d885ea764a9084363c1d2a490e0e4",
+      "cases": 4,
+      "all_passed": true
+    },
+    "historical_visual_scope": "188 renders/194 resolved accessibility observations retain actual earlier6e source; no fresh188 claim. Initial composition helper failure remains preserved separately."
+  },
+  "true_earlier_component_executions": [
+    {
+      "path": "artifacts/p2-008-totp-20261110/native-f1dd54a/identity-full-f1dd54a.trx",
+      "counters": {
+        "total": "260",
+        "executed": "260",
+        "passed": "260",
+        "failed": "0",
+        "error": "0",
+        "timeout": "0",
+        "aborted": "0",
+        "inconclusive": "0",
+        "passedButRunAborted": "0",
+        "notRunnable": "0",
+        "notExecuted": "0",
+        "disconnected": "0",
+        "warning": "0",
+        "completed": "0",
+        "inProgress": "0",
+        "pending": "0"
+      }
+    },
+    {
+      "path": "artifacts/p2-008-totp-20261110/native-f1dd54a/architecture-a933b5f.trx",
+      "counters": {
+        "total": "237",
+        "executed": "237",
+        "passed": "237",
+        "failed": "0",
+        "error": "0",
+        "timeout": "0",
+        "aborted": "0",
+        "inconclusive": "0",
+        "passedButRunAborted": "0",
+        "notRunnable": "0",
+        "notExecuted": "0",
+        "disconnected": "0",
+        "warning": "0",
+        "completed": "0",
+        "inProgress": "0",
+        "pending": "0"
+      }
+    },
+    {
+      "path": "artifacts/p2-008-totp-20261110/installer-19617c5/installer-full-19617c5.trx",
+      "counters": {
+        "total": "113",
+        "executed": "113",
+        "passed": "113",
+        "failed": "0",
+        "error": "0",
+        "timeout": "0",
+        "aborted": "0",
+        "inconclusive": "0",
+        "passedButRunAborted": "0",
+        "notRunnable": "0",
+        "notExecuted": "0",
+        "disconnected": "0",
+        "warning": "0",
+        "completed": "0",
+        "inProgress": "0",
+        "pending": "0"
+      }
+    }
+  ],
+  "cache_local_authority_resolution": {
+    "path": "artifacts/p2-008-totp-20261110/unexpected-windows-path/local-authority-resolution-947f8b0.json",
+    "sha256": "405058f22ad408f4384414829aa163bbd29043b44658d96a9390a64e16769605",
+    "classification": {
+      "schemaVersion": 1,
+      "scope": "TUN-P2-008",
+      "type": "BOUNDED_LOCAL_CAPTURE_AUTHORITY_RESOLUTION",
+      "recordedAt": "2026-11-11 05:02:29 UTC",
+      "disposition": "UNKNOWN_ENVIRONMENT_OBSERVATION_RETAINED_NOT_AN_AUTOMATIC_LOCAL_BLOCKER",
+      "authority": [
+        {
+          "path": "docs/authority/amendments/AMD-0005/AMD-0005_Authority-First_Decision_Resolution_and_Duplicate-Decision_Prevention.md",
+          "sections": "3-5",
+          "basis": "Use existing authority; do not invent missing-authority blockers or a new architecture obligation."
+        },
+        {
+          "path": "docs/authority/current/development/06_Environment_Configuration_Secrets_and_Deployment.md",
+          "section": "5",
+          "basis": "Secrets belong behind the secret-store abstraction and must not be in source/logs/screenshots/evidence."
+        },
+        {
+          "path": "docs/authority/current/development/08_Security_Privacy_Compliance_and_Global_Market_Governance.md",
+          "section": "11",
+          "basis": "Authentication secrets/security evidence are RESTRICTED; classification controls access/logging/export/test use."
+        },
+        {
+          "path": "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md",
+          "sections": "6;Admin/Support controls",
+          "basis": "TOTP seed lifecycle and first-code activation; no Admin/Support seed exposure; safe security payloads."
+        },
+        {
+          "path": "docs/authority/current/development/33_Production_Readiness_Compliance_and_Release_Gates.md",
+          "section": "1",
+          "basis": "Production/release promotion is separately governed; technical tests are not release authority."
+        }
+      ],
+      "authorityWitness": {
+        "path": "artifacts/p2-008-totp-20261110/final-engineering-review/four-role-75988ad/review-inputs-and-executions.json",
+        "sha256": "07be863783496f7072bf5206a99e6461bbdf74c8a9d97a9796ae22c11f7d33ea"
+      },
+      "originalControlScope": [
+        "governance/evidence/TUN-P2-008-SENSITIVE-QA-PLAN.json",
+        "web/tests/totp/sensitive/README.md",
+        "Protected private pipes, fixed sanitized receipts, no raw diagnostics or automatic screenshots/trace/video/HAR/debug/reporters, bounded input/process/surface controls, owned ephemeral profiles/artifact roots and verified cleanup.",
+        "These controls remain fully required. They explicitly do not prove exhaustive OS memory/disk representations or global-host filesystem absence."
+      ],
+      "observation": {
+        "relativePath": "%SystemDrive%/ProgramData/Microsoft/Windows/Caches",
+        "files": 4,
+        "creator": "UNKNOWN",
+        "contents": "UNREAD",
+        "ownership": "UNPROVED",
+        "classification": "NEITHER_HARMLESS_NOR_SENSITIVE_ESTABLISHED",
+        "preservation": "Existing bytes remain unmodified/undeleted; metadata only.",
+        "metadataEvidence": {
+          "path": "artifacts/p2-008-totp-20261110/unexpected-windows-path/metadata-only.json",
+          "sha256": "c1de85b0d10b973e6f21f7b5b3801cd2a336f09bddb947a4db25851b755af7b0"
+        }
+      },
+      "publicEvidence": [
+        {
+          "path": "artifacts/p2-008-totp-20261110/windows-env-parity-reviewed/public-probe-20261111T042611989Z.json",
+          "sha256": "b89f4f416e04a63b91bd5cbbdec2e796513463d455d39b3343c3d95810e06959",
+          "result": "Both old/fixed env public happy Chromium/owned cleanup PASS; neither reproduced literal cache."
+        },
+        {
+          "path": "artifacts/p2-008-totp-20261110/windows-env-parity-reviewed/public-webauthn-probe-20261111T043357513Z.json",
+          "result": "Root-executed old/fixed env WebAuthn initialization-only public/owned cleanup PASS; neither reproduced literal cache. No account/credential creation/lookup/export."
+        }
+      ],
+      "resolution": {
+        "automaticLocalBlocker": false,
+        "newGlobalFilesystemRequirement": false,
+        "newProductDecision": false,
+        "reason": "No inspected authority states that unattributed file metadata outside the defined owned control surface itself proves a seed/log leak or fails LOCAL engineering. Existing facts establish neither a secret-bearing diagnostic nor an owned-control violation. Do not silently widen or weaken the original capture boundary.",
+        "localScope": "Local engineering/UI scope may pass when its actual committed tests and every original private/owned/capture/cleanup predicate pass, with this UNKNOWN observation and limitations carried explicitly.",
+        "conditionalBlock": "New evidence of an actual secret/security-boundary violation or failed original owned control blocks the affected acceptance under existing authority; it cannot be waived by this classification.",
+        "prohibitedClaims": [
+          "No global-host filesystem cleanliness or exhaustive privacy proof.",
+          "No harmless-cache, sensitive-cache, seed/OTP exposure or breach conclusion.",
+          "No deletion/cleanup of these existing files based on inferred ownership.",
+          "No Product/human/production/Edge/WebKit/legal-retention approval."
+        ]
+      },
+      "relationToEarlierDisposition": "Append-only authority resolution clarifies that the earlier UNKNOWN/preserved disposition is an observation, not a newly invented automatic LOCAL gate. Earlier metadata, failed runs and public evidence remain unchanged.",
+      "newProbeOrPrivateAccessOrSourceMutation": false
+    },
+    "final_same_four_metadata_comparison": "Root records same sizes/mtimes unchanged in safe-execution-summary; reviewer did not repeat a cache probe or read contents.",
+    "automatic_local_blocker": false,
+    "global_host_filesystem_absence_claim": false
+  },
+  "deferred_nonblocking_scopes": [
+    "TODO-TUN-P2-017-TOTP001 physical retention/retirement and approved019 inputs before production",
+    "TODO-TUN-P2-017-EDGE001 and supported Edge/WebKit matrix",
+    "Production processing/retention/holds/residency/provider/content activation and legal/release gates",
+    "Human/Product/protected-main integration approvals and owner design backfill"
+  ],
+  "local_acceptance_boundary": "Four engineering roles pass only this committed/source-bound LOCAL scope and original private/owned/capture/cleanup controls. All historical failures, native invocation/input SHAs and UNKNOWN unread cache observation remain. No Product/human/production/legal/global-FS/privacy-compliance approval. Root owns aggregate16-role/native/work-item gates.",
+  "final_role_deltas": [
+    {
+      "path": "artifacts/p2-008-totp-20261110/final-engineering-review/four-role-final-947f8b0/cyber-security-engineer-final-delta.json",
+      "sha256": "88e5d95a1aea0a8f0d1c1d16f447fc625dc7104f88b361f7e78935772b396e65"
+    },
+    {
+      "path": "artifacts/p2-008-totp-20261110/final-engineering-review/four-role-final-947f8b0/compliance-specialist-final-delta.json",
+      "sha256": "8ac8171c5c0e22ffffc08e95960f19fff6450a6a137aeed731406d62ac0e791e"
+    },
+    {
+      "path": "artifacts/p2-008-totp-20261110/final-engineering-review/four-role-final-947f8b0/auditor-final-delta.json",
+      "sha256": "f1e78b114f49d337e1a8f3929af571b578e2995d22ffb79bcb3e87a50941e3ee"
+    },
+    {
+      "path": "artifacts/p2-008-totp-20261110/final-engineering-review/four-role-final-947f8b0/rd-engineer-final-delta.json",
+      "sha256": "ae7e211bd3dbbc7c40d6b1b322e24ffef047fe9c8b386207436bd77d41b30995"
+    }
+  ],
+  "prior_governed_role_history": [
+    {
+      "path": "governance/reviews/REV-TUN-P2-008-cyber-security-engineer.yaml",
+      "sha256": "31a1b90143925cb18508c17ca02459327c4aa3150f453ab14a4883f8f1eb7e74",
+      "reviewed_at": "2026-11-10T14:48:18.005Z",
+      "findings": [
+        "Executing-agent startup-only role-contract review with actual read-only specialist authority/R&D contributions. No implementation, executed008tests, final acceptance or independent human approval claimed.",
+        "Plan native verification plus bounded framework-hashed code history under Account lock; full native horizon/clock bounds, no custom crypto or new key. Seeds/OTP never reach tables/logs/events/Admin/Support/evidence; implicit security-stamp effects are prohibited."
+      ]
+    },
+    {
+      "path": "governance/reviews/REV-TUN-P2-008-compliance-specialist.yaml",
+      "sha256": "bc721b89c1fc5fc05d026f54518847f9bebc03af419ecae96e9a01cbb467322f",
+      "reviewed_at": "2026-11-10T14:48:18.005Z",
+      "findings": [
+        "Executing-agent startup-only role-contract review with actual read-only specialist authority/R&D contributions. No implementation, executed008tests, final acceptance or independent human approval claimed.",
+        "Doc06/08/29 govern seed secrecy, reference-only storage, processing and retention. Use explicit approved inputs; no new legal/age/commercial rule or long-lived DataProtection key contract is invented."
+      ]
+    },
+    {
+      "path": "governance/reviews/REV-TUN-P2-008-auditor.yaml",
+      "sha256": "a0d84b9d689b6e0a8314141e92f003bb360e9fef00d9796cb88d01dd6e93c676",
+      "reviewed_at": "2026-11-10T14:48:18.005Z",
+      "findings": [
+        "Executing-agent startup-only role-contract review with actual read-only specialist authority/R&D contributions. No implementation, executed008tests, final acceptance or independent human approval claimed.",
+        "Inherited007source/gates are retained at their actual SHAs.008validation remainsPENDING; complete behavior ownership must be committed before candidate tests. StartupPASS does not certify implementation, Product consent or release. Preserve unrelated13."
+      ]
+    },
+    {
+      "path": "governance/reviews/REV-TUN-P2-008-rd-engineer.yaml",
+      "sha256": "8ed9a22bd7157c038aacabd983eede9b4719b85fb6bf916992bb0c4aa5a2ddb5",
+      "reviewed_at": "2026-11-10T14:48:18.005Z",
+      "findings": [
+        "Executing-agent startup-only role-contract review with actual read-only specialist authority/R&D contributions. No implementation, executed008tests, final acceptance or independent human approval claimed.",
+        "Primary-source native/vault/replay research supports existing framework/store reuse. QR renderer is a necessary capability gap with a pinned MIT candidate awaiting package/security review; no package or production profile is selected."
+      ]
+    }
+  ]
+}
