@@ -4,7 +4,7 @@
   "work_item_id": "TUN-P2-008",
   "classification": "UI_VALIDATION_DEFECT",
   "severity": "SEV-3",
-  "status": "OPEN",
+  "status": "RESOLVED",
   "environment": "Actual committed production React UI rendered with public nonfunctional fixtures at1440x1100; UIe6e3d9d, capture observedHEAD215b61d. No live TOTP/backend acceptance.",
   "description": "COMP-TOTP-MUTATION-REVIEW; VAL-005,UX-FID-007. Escape closes remove-preserve/remove-affected/remove-current/reset-preserve/reset-affected/reset-current at1440 and preserves dialog focus containment, but all six restoredTrigger checks are false: focus lands on the Authenticator app heading instead of the still-present Remove or Review replacement button. Restore the logical invoking trigger on close/cancel without changing request/operation identity, pending or terminal behavior. Linked P1-018-RV006; affected keyboard/accessibility acceptance remains blocked until committed fix and rerun. Final frozen matrix confirms the same24 restoration failures across1440,768,390,320; this does not expand the defect beyond these six variants.",
   "expected_behavior_ref": "docs/authority/current/decisions/AMD-0009_URL_Addressable_Routing_and_Governed_Form_Validation.md",
@@ -17,11 +17,12 @@
     "artifacts/p2-008-totp-20261110/production-ui/e6e3d9d/rendered/remove-current-1440.png",
     "artifacts/p2-008-totp-20261110/production-ui/e6e3d9d/rendered/reset-preserve-1440.png",
     "artifacts/p2-008-totp-20261110/production-ui/e6e3d9d/rendered/reset-affected-1440.png",
-    "artifacts/p2-008-totp-20261110/production-ui/e6e3d9d/rendered/reset-current-1440.png"
+    "artifacts/p2-008-totp-20261110/production-ui/e6e3d9d/rendered/reset-current-1440.png",
+    "governance/evidence/TUN-P2-008-UI-002-004-VERIFICATION-20261110.json"
   ],
   "affected_versions": [
     "e6e3d9da368871887c015764be273e354b6aff48"
   ],
   "created_at": "2026-11-10T18:58:45.442618Z",
-  "updated_at": "2026-11-10T18:58:45.442618Z"
+  "updated_at": "2026-11-11T02:21:16.805Z"
 }

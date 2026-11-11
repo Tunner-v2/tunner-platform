@@ -4,7 +4,7 @@
   "work_item_id": "TUN-P2-008",
   "classification": "UI_VALIDATION_DEFECT",
   "severity": "SEV-3",
-  "status": "OPEN",
+  "status": "RESOLVED",
   "environment": "Actual committed production React UI rendered with public nonfunctional fixtures at1440x1100; UIe6e3d9d, capture observedHEAD215b61d. No live TOTP/backend acceptance.",
   "description": "FORM-STEP-UP-TOTP / COMP-STEP-UP-TOTP; VAL-005,VAL-006,UX-FID-007. At committed UIe6e3d9d, opening the untouched code-proof detail immediately renders its required error before fill/submit. The public arrange(proof-code) only opens the dialog, and no code POST occurs. Keep initial presentation neutral; retain governed error appearance, real blur/submit validation and first-invalid focus. Linked shared UI owner P1-018-RV006. Blocks affected form/component acceptance pending committed fix and actual regression; no new Product decision is needed.",
   "expected_behavior_ref": "docs/authority/current/decisions/AMD-0009_URL_Addressable_Routing_and_Governed_Form_Validation.md",
@@ -13,11 +13,12 @@
     "governance/revisions/P1-018-RV006.yaml",
     "governance/evidence/TUN-P2-008-VISUAL-CONSENT.json",
     "artifacts/p2-008-totp-20261110/production-ui/e6e3d9d/rendered/proof-code-1440.png",
-    "artifacts/p2-008-totp-20261110/production-ui/e6e3d9d/rendered/proof-code-component-1440.png"
+    "artifacts/p2-008-totp-20261110/production-ui/e6e3d9d/rendered/proof-code-component-1440.png",
+    "governance/evidence/TUN-P2-008-UI-002-004-VERIFICATION-20261110.json"
   ],
   "affected_versions": [
     "e6e3d9da368871887c015764be273e354b6aff48"
   ],
   "created_at": "2026-11-10T18:58:45.442618Z",
-  "updated_at": "2026-11-10T18:58:45.442618Z"
+  "updated_at": "2026-11-11T02:21:16.805Z"
 }

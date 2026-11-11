@@ -1,0 +1,1924 @@
+{
+  "schema_version": 1,
+  "scope_id": "TUN-P2-008",
+  "result": "VERIFIED_REPAIRS_UI_002_003_004_ONLY",
+  "reviewed_at": "2026-11-11T02:21:16.805Z",
+  "provenance": "Actual retained public fixture execution and screenshots, re-read committed source and executing-agent specialist review. No new browser/live run was launched for this receipt. No Product or independent human review is asserted.",
+  "tested_ui_source_sha": "6e562db102ce75d5ed478a15e2970ff55ab98fef",
+  "evidence_committed_carrier_sha": "5a168a31ba799e436e02c80523a0ab9813fc9926",
+  "source_binding": {
+    "declared_input_manifest_ref": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/source-inputs-before.json",
+    "declared_input_manifest_sha256": "cbe397f90fd74ac1c0237b690e352248d1b749bb7f80bddbc84c9a08ef272197",
+    "inputs": 107,
+    "all_manifest_blobs_equal_tested_carrier": true,
+    "all_manifest_blobs_equal_evidence_carrier": true,
+    "all_working_input_sha256_equal": false,
+    "working_differences": [
+      {
+        "path": "web/tests/totp/sensitive/README.md",
+        "tested_sha256": "e43f27849aa62657bf690b5dd8c9c1add2cb9f7579d9b4923c1f1227e1444f59",
+        "working_sha256": "5620883e0b73b25001ebfda1941549777ada0ac4d4f552265f5dab40a492c6a2"
+      },
+      {
+        "path": "web/tests/totp/sensitive/child.mjs",
+        "tested_sha256": "5a537f0efabac95ffdaa813e6427c61d1a08d698a36ef39c3acfbe292fcab6b8",
+        "working_sha256": "7f82584ace21fdfefe8fefa8997c99f64e63dbf80f9d0242afa6a22b2fcc72a4"
+      },
+      {
+        "path": "web/tests/totp/sensitive/contract.mjs",
+        "tested_sha256": "132eafa72ebda1e7b0c5ff2458bca49ff6cc3a0eeafd9d689229dbf4cdf6e4ef",
+        "working_sha256": "e4d64aec3ee878234f48858e6fabe03ac9aa069568cb08369d6f33b9c4c98bc3"
+      },
+      {
+        "path": "web/tests/totp/sensitive/supervisor.mjs",
+        "tested_sha256": "15422bcd1052f24d42c8b82b768b00ef53490fccab10e0487744258fc59e3f96",
+        "working_sha256": "d2a81f0ac1ab481f84c869c4852a893ecd21a4903fe79c3aa54754450fd98779"
+      }
+    ],
+    "all_declared_public_inputs_unchanged": true,
+    "declared_public_inputs": 102,
+    "working_boundary": "The committed107 input proof is equal across6e562db and5a168a3. Listed working differences are other-owned finite sensitive-runner changes; they are outside this committed public UI closure candidate and are not validated or approved by this receipt. No blanket107 current-worktree equality is claimed."
+  },
+  "actual_public_cohorts": {
+    "totp": {
+      "total": 35,
+      "passed": 35,
+      "failed": 0,
+      "skipped": 0,
+      "flaky": 0,
+      "defect_tagged_cases": 14,
+      "report_ref": "governance/evidence/p2-008-totp-20261110/parent005006-compatibility/ui/totp-report.json"
+    },
+    "unchanged_legacy": {
+      "authentication": 21,
+      "step_up": 22,
+      "passkeys": 60,
+      "passed": 103,
+      "failed": 0,
+      "index_ref": "governance/evidence/p2-008-totp-20261110/parent005006-compatibility/ui-execution-index.json"
+    },
+    "typecheck_exit_code": 0,
+    "contracts_passed": 29,
+    "cohort_manifest_ref": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/manifest.json"
+  },
+  "actual_public_render_summary": {
+    "states": 41,
+    "widths": [
+      1440,
+      768,
+      390,
+      320
+    ],
+    "renders": 164,
+    "failures": 0,
+    "scoped_rows": 36,
+    "review_focus_rows": 24,
+    "all_review_focus_restored": true,
+    "fresh_axe_incomplete_nodes": 194,
+    "resolved_fresh_nodes": 194,
+    "unresolved_fresh_nodes": 0,
+    "laptop_and_breakpoint_critical_renders": 24,
+    "manual_basis": "Current CSS colors/retained detailed targets and focus outlines, source-proven decorative separators, visible state geometry and actual screenshots. Historical baseline192 targetless incomplete nodes remain historical; the current194 target resolution does not rewrite that baseline."
+  },
+  "defects": [
+    {
+      "defect_id": "DEF-TUN-P2-008-UI-002",
+      "result": "VERIFIED_REPAIR_SCOPED_PUBLIC_UI",
+      "recommended_status": "RESOLVED",
+      "original_record": {
+        "path": "governance/defects/DEF-TUN-P2-008-UI-002.yaml",
+        "sha256": "479fb519cd4611f4361b00a26f9806d24826b281ceab15169b0389f7004d5ca5",
+        "status": "OPEN",
+        "affected_versions": [
+          "e6e3d9da368871887c015764be273e354b6aff48"
+        ]
+      },
+      "items": [
+        "FORM-STEP-UP-TOTP",
+        "COMP-STEP-UP-TOTP"
+      ],
+      "checks_in_defect_scope": [
+        "VAL-005",
+        "VAL-006",
+        "UX-FID-007"
+      ],
+      "root_cause": "The proof form entered with validation state that was not reset on component mount; untouched initial entry exposed a required error.",
+      "repair": "fbbd53b resets the existing shared typed form on proof mount. Real blur, malformed input, correction, empty-submit and first-invalid focus remain authoritative in the UI; no code request is sent for locally invalid values.",
+      "fix_commits": [
+        "fbbd53b9fdb70ed7cbeb7448cadc722478b43c1e"
+      ],
+      "source_files": [
+        {
+          "path": "web/apps/user/step-up.totp.tsx",
+          "sha256": "3d0ce9786848aee8635ac2a39ae546f56302f3c9a5ee8f69de80b19cb0a3c448",
+          "git_blob": "e65fb7ab67307d7ea3d7fcbbfe2e1c83e57df8c5"
+        },
+        {
+          "path": "web/tests/totp/ui/totp.spec.ts",
+          "sha256": "37b1af3627979e295c683745f5d39867e690e9b1537b4eb51bd0c3eff4f94f03",
+          "git_blob": "df7c76981b269f8bee0abcb72a61167681d38306"
+        }
+      ],
+      "verification_criteria": [
+        "At1440,768,390,320 untouched entry focuses code and exposes no field error.",
+        "Real blur produces required; malformed input produces code error; correction clears it; empty submit restores required and focuses the code input.",
+        "All4 exact unchanged tagged regressions passed with zero protected POSTs for these local validation cases; actual neutral/error renders retain shared field styling."
+      ],
+      "actual_cases": [
+        {
+          "title": "@UI-002 proof opens without synthetic validation and preserves real blur and submit validation at 1440",
+          "file": "web/tests/totp/ui/totp.spec.ts",
+          "line": 107,
+          "ok": true,
+          "status": "expected",
+          "results": [
+            {
+              "status": "passed",
+              "errors": 0
+            }
+          ]
+        },
+        {
+          "title": "@UI-002 proof opens without synthetic validation and preserves real blur and submit validation at 768",
+          "file": "web/tests/totp/ui/totp.spec.ts",
+          "line": 107,
+          "ok": true,
+          "status": "expected",
+          "results": [
+            {
+              "status": "passed",
+              "errors": 0
+            }
+          ]
+        },
+        {
+          "title": "@UI-002 proof opens without synthetic validation and preserves real blur and submit validation at 390",
+          "file": "web/tests/totp/ui/totp.spec.ts",
+          "line": 107,
+          "ok": true,
+          "status": "expected",
+          "results": [
+            {
+              "status": "passed",
+              "errors": 0
+            }
+          ]
+        },
+        {
+          "title": "@UI-002 proof opens without synthetic validation and preserves real blur and submit validation at 320",
+          "file": "web/tests/totp/ui/totp.spec.ts",
+          "line": 107,
+          "ok": true,
+          "status": "expected",
+          "results": [
+            {
+              "status": "passed",
+              "errors": 0
+            }
+          ]
+        }
+      ],
+      "actual_render_rows": [
+        {
+          "state": "proof-code",
+          "width": 1440,
+          "runtime_errors": [],
+          "axe_violations": 0,
+          "axe_incomplete": 0,
+          "keyboard": {
+            "first": {
+              "tag": "BUTTON",
+              "id": "",
+              "text": "Cancel"
+            },
+            "after": {
+              "tag": "BUTTON",
+              "id": "",
+              "text": "Cancel"
+            },
+            "forwardWrapped": true,
+            "reverseContained": true,
+            "closed": true,
+            "expectedTrigger": "Verify identity",
+            "actualFocus": "Verify identity",
+            "restoredTrigger": true
+          },
+          "screenshot_ref": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/rendered/proof-code-1440.png"
+        },
+        {
+          "state": "proof-error",
+          "width": 1440,
+          "runtime_errors": [],
+          "axe_violations": 0,
+          "axe_incomplete": 0,
+          "keyboard": {
+            "first": {
+              "tag": "BUTTON",
+              "id": "",
+              "text": "Cancel"
+            },
+            "after": {
+              "tag": "BUTTON",
+              "id": "",
+              "text": "Cancel"
+            },
+            "forwardWrapped": true,
+            "reverseContained": true,
+            "closed": true,
+            "expectedTrigger": "Verify identity",
+            "actualFocus": "Verify identity",
+            "restoredTrigger": true
+          },
+          "screenshot_ref": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/rendered/proof-error-1440.png"
+        },
+        {
+          "state": "proof-code",
+          "width": 768,
+          "runtime_errors": [],
+          "axe_violations": 0,
+          "axe_incomplete": 0,
+          "keyboard": {
+            "first": {
+              "tag": "BUTTON",
+              "id": "",
+              "text": "Cancel"
+            },
+            "after": {
+              "tag": "BUTTON",
+              "id": "",
+              "text": "Cancel"
+            },
+            "forwardWrapped": true,
+            "reverseContained": true,
+            "closed": true,
+            "expectedTrigger": "Verify identity",
+            "actualFocus": "Verify identity",
+            "restoredTrigger": true
+          },
+          "screenshot_ref": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/rendered/proof-code-768.png"
+        },
+        {
+          "state": "proof-error",
+          "width": 768,
+          "runtime_errors": [],
+          "axe_violations": 0,
+          "axe_incomplete": 0,
+          "keyboard": {
+            "first": {
+              "tag": "BUTTON",
+              "id": "",
+              "text": "Cancel"
+            },
+            "after": {
+              "tag": "BUTTON",
+              "id": "",
+              "text": "Cancel"
+            },
+            "forwardWrapped": true,
+            "reverseContained": true,
+            "closed": true,
+            "expectedTrigger": "Verify identity",
+            "actualFocus": "Verify identity",
+            "restoredTrigger": true
+          },
+          "screenshot_ref": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/rendered/proof-error-768.png"
+        },
+        {
+          "state": "proof-code",
+          "width": 390,
+          "runtime_errors": [],
+          "axe_violations": 0,
+          "axe_incomplete": 1,
+          "keyboard": {
+            "first": {
+              "tag": "BUTTON",
+              "id": "",
+              "text": "Cancel"
+            },
+            "after": {
+              "tag": "BUTTON",
+              "id": "",
+              "text": "Cancel"
+            },
+            "forwardWrapped": true,
+            "reverseContained": true,
+            "closed": true,
+            "expectedTrigger": "Verify identity",
+            "actualFocus": "Verify identity",
+            "restoredTrigger": true
+          },
+          "screenshot_ref": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/rendered/proof-code-390.png"
+        },
+        {
+          "state": "proof-error",
+          "width": 390,
+          "runtime_errors": [],
+          "axe_violations": 0,
+          "axe_incomplete": 1,
+          "keyboard": {
+            "first": {
+              "tag": "BUTTON",
+              "id": "",
+              "text": "Cancel"
+            },
+            "after": {
+              "tag": "BUTTON",
+              "id": "",
+              "text": "Cancel"
+            },
+            "forwardWrapped": true,
+            "reverseContained": true,
+            "closed": true,
+            "expectedTrigger": "Verify identity",
+            "actualFocus": "Verify identity",
+            "restoredTrigger": true
+          },
+          "screenshot_ref": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/rendered/proof-error-390.png"
+        },
+        {
+          "state": "proof-code",
+          "width": 320,
+          "runtime_errors": [],
+          "axe_violations": 0,
+          "axe_incomplete": 1,
+          "keyboard": {
+            "first": {
+              "tag": "BUTTON",
+              "id": "",
+              "text": "Cancel"
+            },
+            "after": {
+              "tag": "BUTTON",
+              "id": "",
+              "text": "Cancel"
+            },
+            "forwardWrapped": true,
+            "reverseContained": true,
+            "closed": true,
+            "expectedTrigger": "Verify identity",
+            "actualFocus": "Verify identity",
+            "restoredTrigger": true
+          },
+          "screenshot_ref": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/rendered/proof-code-320.png"
+        },
+        {
+          "state": "proof-error",
+          "width": 320,
+          "runtime_errors": [],
+          "axe_violations": 0,
+          "axe_incomplete": 1,
+          "keyboard": {
+            "first": {
+              "tag": "BUTTON",
+              "id": "",
+              "text": "Cancel"
+            },
+            "after": {
+              "tag": "BUTTON",
+              "id": "",
+              "text": "Cancel"
+            },
+            "forwardWrapped": true,
+            "reverseContained": true,
+            "closed": true,
+            "expectedTrigger": "Verify identity",
+            "actualFocus": "Verify identity",
+            "restoredTrigger": true
+          },
+          "screenshot_ref": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/rendered/proof-error-320.png"
+        }
+      ],
+      "manual_render_refs": [
+        "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/rendered/proof-code-component-1440.png",
+        "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/rendered/proof-error-320.png"
+      ],
+      "per_defect_blocking_findings": [],
+      "role_conclusions": {
+        "ui-ux-engineer": "Neutral initial entry and retained governed error/focus variants remove premature blame without adding a new visual pattern. Current proof render and320px error render preserve clear title, instruction, code label and available recovery controls.",
+        "frontend-engineer": "The repair reuses useTunnerForm.reset on the existing mount lifecycle. It neither substitutes native constraint bubbles nor changes validators, BFF requests, original proof identities or backend rules. Four regression cases explicitly prove blur/submit/correction and first-invalid focus remain active.",
+        "tester-qa-engineer": "Actual4 tagged cases passed at all4 registered widths in the unchanged35-case run; report statuses are expected/passed with no retry, errors or skip. The neutral/error state render rows and current contrast receipt support the stated UI defect only.",
+        "end-user-ux-reviewer": "A person opening confirmation receives a neutral focused field; feedback appears after actual interaction and explains how to correct the code. Keyboard error recovery remains available. This is executing-agent task-perspective review, not a participant usability study."
+      }
+    },
+    {
+      "defect_id": "DEF-TUN-P2-008-UI-003",
+      "result": "VERIFIED_REPAIR_SCOPED_PUBLIC_UI",
+      "recommended_status": "RESOLVED",
+      "original_record": {
+        "path": "governance/defects/DEF-TUN-P2-008-UI-003.yaml",
+        "sha256": "33b876a134ba080312cc146cc00a9ed4ffcb8e5a7be085899bfa83e7b27354a9",
+        "status": "OPEN",
+        "affected_versions": [
+          "e6e3d9da368871887c015764be273e354b6aff48"
+        ]
+      },
+      "items": [
+        "COMP-TOTP-MUTATION-REVIEW"
+      ],
+      "checks_in_defect_scope": [
+        "VAL-005",
+        "UX-FID-007"
+      ],
+      "root_cause": "Review cancellation removed the dialog while its invoking control was still disabled by the in-flight cancellation; focus restoration lost to page-heading focus.",
+      "repair": "6e562db records return intent only after the exact cancellation is acknowledged REJECTED/EXPIRED on management, waits for busy/guards/proof/review to clear, then focuses the same connected trigger, with heading fallback if it cannot receive focus. The original heading-effect dependencies remain narrow, avoiding unrelated status-check focus jumps.",
+      "fix_commits": [
+        "fbbd53b9fdb70ed7cbeb7448cadc722478b43c1e",
+        "6e562db102ce75d5ed478a15e2970ff55ab98fef"
+      ],
+      "source_files": [
+        {
+          "path": "web/apps/user/totp.tsx",
+          "sha256": "d026cf17b25251d58641d21a52b18a4ec3d5467257a347b7bc96336086505066",
+          "git_blob": "b437d23bf906ae056f32dd7506c7e00877f7dd7a"
+        },
+        {
+          "path": "web/tests/totp/ui/totp.spec.ts",
+          "sha256": "37b1af3627979e295c683745f5d39867e690e9b1537b4eb51bd0c3eff4f94f03",
+          "git_blob": "df7c76981b269f8bee0abcb72a61167681d38306"
+        }
+      ],
+      "verification_criteria": [
+        "Actual8 tagged regressions cover DISABLE and RESET at1440,768,390,320: dialog containment, Escape close and the original invoking control focused; starts1/activations0.",
+        "Actual24 detailed public keyboard rows cover all six originally affected preserve/affected/current variants at all4 widths: forwardWrapped, reverseContained, closed and restoredTrigger are true; actualFocus equals expectedTrigger.",
+        "Source review preserves exact cancel parsing, unresolved recovery, completed/terminal transitions and domain operation ownership; no shared ModalDialog or assertion changed for the final narrow correction."
+      ],
+      "actual_cases": [
+        {
+          "title": "@UI-003 DISABLE review Escape restores its original trigger at 1440",
+          "file": "web/tests/totp/ui/totp.spec.ts",
+          "line": 122,
+          "ok": true,
+          "status": "expected",
+          "results": [
+            {
+              "status": "passed",
+              "errors": 0
+            }
+          ]
+        },
+        {
+          "title": "@UI-003 RESET review Escape restores its original trigger at 1440",
+          "file": "web/tests/totp/ui/totp.spec.ts",
+          "line": 122,
+          "ok": true,
+          "status": "expected",
+          "results": [
+            {
+              "status": "passed",
+              "errors": 0
+            }
+          ]
+        },
+        {
+          "title": "@UI-003 DISABLE review Escape restores its original trigger at 768",
+          "file": "web/tests/totp/ui/totp.spec.ts",
+          "line": 122,
+          "ok": true,
+          "status": "expected",
+          "results": [
+            {
+              "status": "passed",
+              "errors": 0
+            }
+          ]
+        },
+        {
+          "title": "@UI-003 RESET review Escape restores its original trigger at 768",
+          "file": "web/tests/totp/ui/totp.spec.ts",
+          "line": 122,
+          "ok": true,
+          "status": "expected",
+          "results": [
+            {
+              "status": "passed",
+              "errors": 0
+            }
+          ]
+        },
+        {
+          "title": "@UI-003 DISABLE review Escape restores its original trigger at 390",
+          "file": "web/tests/totp/ui/totp.spec.ts",
+          "line": 122,
+          "ok": true,
+          "status": "expected",
+          "results": [
+            {
+              "status": "passed",
+              "errors": 0
+            }
+          ]
+        },
+        {
+          "title": "@UI-003 RESET review Escape restores its original trigger at 390",
+          "file": "web/tests/totp/ui/totp.spec.ts",
+          "line": 122,
+          "ok": true,
+          "status": "expected",
+          "results": [
+            {
+              "status": "passed",
+              "errors": 0
+            }
+          ]
+        },
+        {
+          "title": "@UI-003 DISABLE review Escape restores its original trigger at 320",
+          "file": "web/tests/totp/ui/totp.spec.ts",
+          "line": 122,
+          "ok": true,
+          "status": "expected",
+          "results": [
+            {
+              "status": "passed",
+              "errors": 0
+            }
+          ]
+        },
+        {
+          "title": "@UI-003 RESET review Escape restores its original trigger at 320",
+          "file": "web/tests/totp/ui/totp.spec.ts",
+          "line": 122,
+          "ok": true,
+          "status": "expected",
+          "results": [
+            {
+              "status": "passed",
+              "errors": 0
+            }
+          ]
+        }
+      ],
+      "actual_render_rows": [
+        {
+          "state": "remove-preserve",
+          "width": 1440,
+          "runtime_errors": [],
+          "axe_violations": 0,
+          "axe_incomplete": 0,
+          "keyboard": {
+            "first": {
+              "tag": "BUTTON",
+              "id": "",
+              "text": "Continue"
+            },
+            "after": {
+              "tag": "BUTTON",
+              "id": "",
+              "text": "Continue"
+            },
+            "forwardWrapped": true,
+            "reverseContained": true,
+            "closed": true,
+            "expectedTrigger": "Remove",
+            "actualFocus": "Remove",
+            "restoredTrigger": true
+          },
+          "screenshot_ref": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/rendered/remove-preserve-1440.png"
+        },
+        {
+          "state": "remove-affected",
+          "width": 1440,
+          "runtime_errors": [],
+          "axe_violations": 0,
+          "axe_incomplete": 0,
+          "keyboard": {
+            "first": {
+              "tag": "BUTTON",
+              "id": "",
+              "text": "Continue"
+            },
+            "after": {
+              "tag": "BUTTON",
+              "id": "",
+              "text": "Continue"
+            },
+            "forwardWrapped": true,
+            "reverseContained": true,
+            "closed": true,
+            "expectedTrigger": "Remove",
+            "actualFocus": "Remove",
+            "restoredTrigger": true
+          },
+          "screenshot_ref": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/rendered/remove-affected-1440.png"
+        },
+        {
+          "state": "remove-current",
+          "width": 1440,
+          "runtime_errors": [],
+          "axe_violations": 0,
+          "axe_incomplete": 0,
+          "keyboard": {
+            "first": {
+              "tag": "BUTTON",
+              "id": "",
+              "text": "Continue"
+            },
+            "after": {
+              "tag": "BUTTON",
+              "id": "",
+              "text": "Continue"
+            },
+            "forwardWrapped": true,
+            "reverseContained": true,
+            "closed": true,
+            "expectedTrigger": "Remove",
+            "actualFocus": "Remove",
+            "restoredTrigger": true
+          },
+          "screenshot_ref": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/rendered/remove-current-1440.png"
+        },
+        {
+          "state": "reset-preserve",
+          "width": 1440,
+          "runtime_errors": [],
+          "axe_violations": 0,
+          "axe_incomplete": 1,
+          "keyboard": {
+            "first": {
+              "tag": "BUTTON",
+              "id": "",
+              "text": "Continue"
+            },
+            "after": {
+              "tag": "BUTTON",
+              "id": "",
+              "text": "Continue"
+            },
+            "forwardWrapped": true,
+            "reverseContained": true,
+            "closed": true,
+            "expectedTrigger": "Review replacement",
+            "actualFocus": "Review replacement",
+            "restoredTrigger": true
+          },
+          "screenshot_ref": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/rendered/reset-preserve-1440.png"
+        },
+        {
+          "state": "reset-affected",
+          "width": 1440,
+          "runtime_errors": [],
+          "axe_violations": 0,
+          "axe_incomplete": 1,
+          "keyboard": {
+            "first": {
+              "tag": "BUTTON",
+              "id": "",
+              "text": "Continue"
+            },
+            "after": {
+              "tag": "BUTTON",
+              "id": "",
+              "text": "Continue"
+            },
+            "forwardWrapped": true,
+            "reverseContained": true,
+            "closed": true,
+            "expectedTrigger": "Review replacement",
+            "actualFocus": "Review replacement",
+            "restoredTrigger": true
+          },
+          "screenshot_ref": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/rendered/reset-affected-1440.png"
+        },
+        {
+          "state": "reset-current",
+          "width": 1440,
+          "runtime_errors": [],
+          "axe_violations": 0,
+          "axe_incomplete": 1,
+          "keyboard": {
+            "first": {
+              "tag": "BUTTON",
+              "id": "",
+              "text": "Continue"
+            },
+            "after": {
+              "tag": "BUTTON",
+              "id": "",
+              "text": "Continue"
+            },
+            "forwardWrapped": true,
+            "reverseContained": true,
+            "closed": true,
+            "expectedTrigger": "Review replacement",
+            "actualFocus": "Review replacement",
+            "restoredTrigger": true
+          },
+          "screenshot_ref": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/rendered/reset-current-1440.png"
+        },
+        {
+          "state": "remove-preserve",
+          "width": 768,
+          "runtime_errors": [],
+          "axe_violations": 0,
+          "axe_incomplete": 0,
+          "keyboard": {
+            "first": {
+              "tag": "BUTTON",
+              "id": "",
+              "text": "Continue"
+            },
+            "after": {
+              "tag": "BUTTON",
+              "id": "",
+              "text": "Continue"
+            },
+            "forwardWrapped": true,
+            "reverseContained": true,
+            "closed": true,
+            "expectedTrigger": "Remove",
+            "actualFocus": "Remove",
+            "restoredTrigger": true
+          },
+          "screenshot_ref": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/rendered/remove-preserve-768.png"
+        },
+        {
+          "state": "remove-affected",
+          "width": 768,
+          "runtime_errors": [],
+          "axe_violations": 0,
+          "axe_incomplete": 0,
+          "keyboard": {
+            "first": {
+              "tag": "BUTTON",
+              "id": "",
+              "text": "Continue"
+            },
+            "after": {
+              "tag": "BUTTON",
+              "id": "",
+              "text": "Continue"
+            },
+            "forwardWrapped": true,
+            "reverseContained": true,
+            "closed": true,
+            "expectedTrigger": "Remove",
+            "actualFocus": "Remove",
+            "restoredTrigger": true
+          },
+          "screenshot_ref": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/rendered/remove-affected-768.png"
+        },
+        {
+          "state": "remove-current",
+          "width": 768,
+          "runtime_errors": [],
+          "axe_violations": 0,
+          "axe_incomplete": 0,
+          "keyboard": {
+            "first": {
+              "tag": "BUTTON",
+              "id": "",
+              "text": "Continue"
+            },
+            "after": {
+              "tag": "BUTTON",
+              "id": "",
+              "text": "Continue"
+            },
+            "forwardWrapped": true,
+            "reverseContained": true,
+            "closed": true,
+            "expectedTrigger": "Remove",
+            "actualFocus": "Remove",
+            "restoredTrigger": true
+          },
+          "screenshot_ref": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/rendered/remove-current-768.png"
+        },
+        {
+          "state": "reset-preserve",
+          "width": 768,
+          "runtime_errors": [],
+          "axe_violations": 0,
+          "axe_incomplete": 1,
+          "keyboard": {
+            "first": {
+              "tag": "BUTTON",
+              "id": "",
+              "text": "Continue"
+            },
+            "after": {
+              "tag": "BUTTON",
+              "id": "",
+              "text": "Continue"
+            },
+            "forwardWrapped": true,
+            "reverseContained": true,
+            "closed": true,
+            "expectedTrigger": "Review replacement",
+            "actualFocus": "Review replacement",
+            "restoredTrigger": true
+          },
+          "screenshot_ref": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/rendered/reset-preserve-768.png"
+        },
+        {
+          "state": "reset-affected",
+          "width": 768,
+          "runtime_errors": [],
+          "axe_violations": 0,
+          "axe_incomplete": 1,
+          "keyboard": {
+            "first": {
+              "tag": "BUTTON",
+              "id": "",
+              "text": "Continue"
+            },
+            "after": {
+              "tag": "BUTTON",
+              "id": "",
+              "text": "Continue"
+            },
+            "forwardWrapped": true,
+            "reverseContained": true,
+            "closed": true,
+            "expectedTrigger": "Review replacement",
+            "actualFocus": "Review replacement",
+            "restoredTrigger": true
+          },
+          "screenshot_ref": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/rendered/reset-affected-768.png"
+        },
+        {
+          "state": "reset-current",
+          "width": 768,
+          "runtime_errors": [],
+          "axe_violations": 0,
+          "axe_incomplete": 1,
+          "keyboard": {
+            "first": {
+              "tag": "BUTTON",
+              "id": "",
+              "text": "Continue"
+            },
+            "after": {
+              "tag": "BUTTON",
+              "id": "",
+              "text": "Continue"
+            },
+            "forwardWrapped": true,
+            "reverseContained": true,
+            "closed": true,
+            "expectedTrigger": "Review replacement",
+            "actualFocus": "Review replacement",
+            "restoredTrigger": true
+          },
+          "screenshot_ref": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/rendered/reset-current-768.png"
+        },
+        {
+          "state": "remove-preserve",
+          "width": 390,
+          "runtime_errors": [],
+          "axe_violations": 0,
+          "axe_incomplete": 1,
+          "keyboard": {
+            "first": {
+              "tag": "BUTTON",
+              "id": "",
+              "text": "Continue"
+            },
+            "after": {
+              "tag": "BUTTON",
+              "id": "",
+              "text": "Continue"
+            },
+            "forwardWrapped": true,
+            "reverseContained": true,
+            "closed": true,
+            "expectedTrigger": "Remove",
+            "actualFocus": "Remove",
+            "restoredTrigger": true
+          },
+          "screenshot_ref": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/rendered/remove-preserve-390.png"
+        },
+        {
+          "state": "remove-affected",
+          "width": 390,
+          "runtime_errors": [],
+          "axe_violations": 0,
+          "axe_incomplete": 1,
+          "keyboard": {
+            "first": {
+              "tag": "BUTTON",
+              "id": "",
+              "text": "Continue"
+            },
+            "after": {
+              "tag": "BUTTON",
+              "id": "",
+              "text": "Continue"
+            },
+            "forwardWrapped": true,
+            "reverseContained": true,
+            "closed": true,
+            "expectedTrigger": "Remove",
+            "actualFocus": "Remove",
+            "restoredTrigger": true
+          },
+          "screenshot_ref": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/rendered/remove-affected-390.png"
+        },
+        {
+          "state": "remove-current",
+          "width": 390,
+          "runtime_errors": [],
+          "axe_violations": 0,
+          "axe_incomplete": 1,
+          "keyboard": {
+            "first": {
+              "tag": "BUTTON",
+              "id": "",
+              "text": "Continue"
+            },
+            "after": {
+              "tag": "BUTTON",
+              "id": "",
+              "text": "Continue"
+            },
+            "forwardWrapped": true,
+            "reverseContained": true,
+            "closed": true,
+            "expectedTrigger": "Remove",
+            "actualFocus": "Remove",
+            "restoredTrigger": true
+          },
+          "screenshot_ref": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/rendered/remove-current-390.png"
+        },
+        {
+          "state": "reset-preserve",
+          "width": 390,
+          "runtime_errors": [],
+          "axe_violations": 0,
+          "axe_incomplete": 0,
+          "keyboard": {
+            "first": {
+              "tag": "BUTTON",
+              "id": "",
+              "text": "Continue"
+            },
+            "after": {
+              "tag": "BUTTON",
+              "id": "",
+              "text": "Continue"
+            },
+            "forwardWrapped": true,
+            "reverseContained": true,
+            "closed": true,
+            "expectedTrigger": "Review replacement",
+            "actualFocus": "Review replacement",
+            "restoredTrigger": true
+          },
+          "screenshot_ref": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/rendered/reset-preserve-390.png"
+        },
+        {
+          "state": "reset-affected",
+          "width": 390,
+          "runtime_errors": [],
+          "axe_violations": 0,
+          "axe_incomplete": 1,
+          "keyboard": {
+            "first": {
+              "tag": "BUTTON",
+              "id": "",
+              "text": "Continue"
+            },
+            "after": {
+              "tag": "BUTTON",
+              "id": "",
+              "text": "Continue"
+            },
+            "forwardWrapped": true,
+            "reverseContained": true,
+            "closed": true,
+            "expectedTrigger": "Review replacement",
+            "actualFocus": "Review replacement",
+            "restoredTrigger": true
+          },
+          "screenshot_ref": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/rendered/reset-affected-390.png"
+        },
+        {
+          "state": "reset-current",
+          "width": 390,
+          "runtime_errors": [],
+          "axe_violations": 0,
+          "axe_incomplete": 1,
+          "keyboard": {
+            "first": {
+              "tag": "BUTTON",
+              "id": "",
+              "text": "Continue"
+            },
+            "after": {
+              "tag": "BUTTON",
+              "id": "",
+              "text": "Continue"
+            },
+            "forwardWrapped": true,
+            "reverseContained": true,
+            "closed": true,
+            "expectedTrigger": "Review replacement",
+            "actualFocus": "Review replacement",
+            "restoredTrigger": true
+          },
+          "screenshot_ref": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/rendered/reset-current-390.png"
+        },
+        {
+          "state": "remove-preserve",
+          "width": 320,
+          "runtime_errors": [],
+          "axe_violations": 0,
+          "axe_incomplete": 1,
+          "keyboard": {
+            "first": {
+              "tag": "BUTTON",
+              "id": "",
+              "text": "Continue"
+            },
+            "after": {
+              "tag": "BUTTON",
+              "id": "",
+              "text": "Continue"
+            },
+            "forwardWrapped": true,
+            "reverseContained": true,
+            "closed": true,
+            "expectedTrigger": "Remove",
+            "actualFocus": "Remove",
+            "restoredTrigger": true
+          },
+          "screenshot_ref": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/rendered/remove-preserve-320.png"
+        },
+        {
+          "state": "remove-affected",
+          "width": 320,
+          "runtime_errors": [],
+          "axe_violations": 0,
+          "axe_incomplete": 1,
+          "keyboard": {
+            "first": {
+              "tag": "BUTTON",
+              "id": "",
+              "text": "Continue"
+            },
+            "after": {
+              "tag": "BUTTON",
+              "id": "",
+              "text": "Continue"
+            },
+            "forwardWrapped": true,
+            "reverseContained": true,
+            "closed": true,
+            "expectedTrigger": "Remove",
+            "actualFocus": "Remove",
+            "restoredTrigger": true
+          },
+          "screenshot_ref": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/rendered/remove-affected-320.png"
+        },
+        {
+          "state": "remove-current",
+          "width": 320,
+          "runtime_errors": [],
+          "axe_violations": 0,
+          "axe_incomplete": 1,
+          "keyboard": {
+            "first": {
+              "tag": "BUTTON",
+              "id": "",
+              "text": "Continue"
+            },
+            "after": {
+              "tag": "BUTTON",
+              "id": "",
+              "text": "Continue"
+            },
+            "forwardWrapped": true,
+            "reverseContained": true,
+            "closed": true,
+            "expectedTrigger": "Remove",
+            "actualFocus": "Remove",
+            "restoredTrigger": true
+          },
+          "screenshot_ref": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/rendered/remove-current-320.png"
+        },
+        {
+          "state": "reset-preserve",
+          "width": 320,
+          "runtime_errors": [],
+          "axe_violations": 0,
+          "axe_incomplete": 1,
+          "keyboard": {
+            "first": {
+              "tag": "BUTTON",
+              "id": "",
+              "text": "Continue"
+            },
+            "after": {
+              "tag": "BUTTON",
+              "id": "",
+              "text": "Continue"
+            },
+            "forwardWrapped": true,
+            "reverseContained": true,
+            "closed": true,
+            "expectedTrigger": "Review replacement",
+            "actualFocus": "Review replacement",
+            "restoredTrigger": true
+          },
+          "screenshot_ref": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/rendered/reset-preserve-320.png"
+        },
+        {
+          "state": "reset-affected",
+          "width": 320,
+          "runtime_errors": [],
+          "axe_violations": 0,
+          "axe_incomplete": 1,
+          "keyboard": {
+            "first": {
+              "tag": "BUTTON",
+              "id": "",
+              "text": "Continue"
+            },
+            "after": {
+              "tag": "BUTTON",
+              "id": "",
+              "text": "Continue"
+            },
+            "forwardWrapped": true,
+            "reverseContained": true,
+            "closed": true,
+            "expectedTrigger": "Review replacement",
+            "actualFocus": "Review replacement",
+            "restoredTrigger": true
+          },
+          "screenshot_ref": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/rendered/reset-affected-320.png"
+        },
+        {
+          "state": "reset-current",
+          "width": 320,
+          "runtime_errors": [],
+          "axe_violations": 0,
+          "axe_incomplete": 1,
+          "keyboard": {
+            "first": {
+              "tag": "BUTTON",
+              "id": "",
+              "text": "Continue"
+            },
+            "after": {
+              "tag": "BUTTON",
+              "id": "",
+              "text": "Continue"
+            },
+            "forwardWrapped": true,
+            "reverseContained": true,
+            "closed": true,
+            "expectedTrigger": "Review replacement",
+            "actualFocus": "Review replacement",
+            "restoredTrigger": true
+          },
+          "screenshot_ref": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/rendered/reset-current-320.png"
+        }
+      ],
+      "manual_render_refs": [
+        "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/rendered/reset-preserve-component-1440.png",
+        "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/rendered/remove-affected-320.png",
+        "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/rendered/reset-current-320.png"
+      ],
+      "per_defect_blocking_findings": [],
+      "role_conclusions": {
+        "ui-ux-engineer": "The six approved impact variants retain their existing review geometry, server-supplied effect language and trapped keyboard order. The24 detailed post-close probes restore the expected Remove or Review replacement control, matching the logical task continuation.",
+        "frontend-engineer": "The pending return intent is local to acknowledged review cancellation and waits for the DOM control to re-enable. Existing heading dependencies and other-route focus are preserved; connected-trigger check and heading fallback handle a disappearing control. Native mutation, proof and unknown/result mechanics remain unchanged.",
+        "tester-qa-engineer": "The final committed6e carrier passed all8 originally failing tagged focus assertions unchanged, and all24 six-variant keyboard rows independently record correct containment/closure/trigger equality. The earlier fbbd27PASS/8FAIL and original164 baseline remain historical evidence, not reclassified.",
+        "end-user-ux-reviewer": "A keyboard user can review either action, cycle controls, press Escape and continue at the same visible action rather than being sent to the page heading. The retained effect disclosures keep the sensitive-action meaning clear; no session-policy usability shortcut is introduced."
+      }
+    },
+    {
+      "defect_id": "DEF-TUN-P2-008-UI-004",
+      "result": "VERIFIED_REPAIR_SCOPED_PUBLIC_UI",
+      "recommended_status": "RESOLVED",
+      "original_record": {
+        "path": "governance/defects/DEF-TUN-P2-008-UI-004.yaml",
+        "sha256": "5345dbf7d01e01c18ee0e25737c867484be1b62e73e813ce1ed4502e7f64a6f9",
+        "status": "OPEN",
+        "affected_versions": [
+          "e6e3d9da368871887c015764be273e354b6aff48"
+        ]
+      },
+      "items": [
+        "U-ACCT-TOTP"
+      ],
+      "checks_in_defect_scope": [
+        "UX-FID-001",
+        "UX-FID-007"
+      ],
+      "root_cause": "Metadata503 was handled by the same generic technical fallback as a missing mandatory options publication, discarding otherwise trusted presentation content.",
+      "repair": "fbbd53b distinguishes unavailable metadata from unavailable publication, retaining the trusted account shell and governed unavailable composition with a read-only Check status action. Missing mandatory publication continues to fail closed before factor metadata reads.",
+      "fix_commits": [
+        "fbbd53b9fdb70ed7cbeb7448cadc722478b43c1e"
+      ],
+      "source_files": [
+        {
+          "path": "web/apps/user/totp.tsx",
+          "sha256": "d026cf17b25251d58641d21a52b18a4ec3d5467257a347b7bc96336086505066",
+          "git_blob": "b437d23bf906ae056f32dd7506c7e00877f7dd7a"
+        },
+        {
+          "path": "web/apps/user/totp.ui.tsx",
+          "sha256": "83a698aa4db1f887ec538f8deeb15024c57740ccb5576be20782d9eccdb45aba",
+          "git_blob": "73d658316490a225400c5f5d818def3f8ddf2243"
+        },
+        {
+          "path": "web/tests/totp/ui/totp.spec.ts",
+          "sha256": "37b1af3627979e295c683745f5d39867e690e9b1537b4eb51bd0c3eff4f94f03",
+          "git_blob": "df7c76981b269f8bee0abcb72a61167681d38306"
+        }
+      ],
+      "verification_criteria": [
+        "Actual tagged outage case retains branded header/unavailable heading, shows no ACTIVE fact/Remove/Set up app, and issues zero mutation POSTs while retry reads metadata and recovers after the fixture outage clears.",
+        "Actual tagged missing mandatory-publication case retains the technical fallback, shows no branded shell and makes zero factor metadata reads.",
+        "Actual management-unavailable public renders at all4 widths retain approved composition with no overflow, clipping, Axe violation or unresolved contrast finding;1440 and320 retained images were manually reviewed against the consented unavailable proposal."
+      ],
+      "actual_cases": [
+        {
+          "title": "@UI-004 trusted publication plus metadata outage retains branded unavailable state and read-only retry",
+          "file": "web/tests/totp/ui/totp.spec.ts",
+          "line": 126,
+          "ok": true,
+          "status": "expected",
+          "results": [
+            {
+              "status": "passed",
+              "errors": 0
+            }
+          ]
+        },
+        {
+          "title": "@UI-004 absent mandatory publication retains the technical fallback and cannot fetch factor facts",
+          "file": "web/tests/totp/ui/totp.spec.ts",
+          "line": 133,
+          "ok": true,
+          "status": "expected",
+          "results": [
+            {
+              "status": "passed",
+              "errors": 0
+            }
+          ]
+        }
+      ],
+      "actual_render_rows": [
+        {
+          "state": "manage-unavailable",
+          "width": 1440,
+          "runtime_errors": [],
+          "axe_violations": 0,
+          "axe_incomplete": 0,
+          "keyboard": null,
+          "screenshot_ref": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/rendered/manage-unavailable-1440.png"
+        },
+        {
+          "state": "manage-unavailable",
+          "width": 768,
+          "runtime_errors": [],
+          "axe_violations": 0,
+          "axe_incomplete": 0,
+          "keyboard": null,
+          "screenshot_ref": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/rendered/manage-unavailable-768.png"
+        },
+        {
+          "state": "manage-unavailable",
+          "width": 390,
+          "runtime_errors": [],
+          "axe_violations": 0,
+          "axe_incomplete": 1,
+          "keyboard": null,
+          "screenshot_ref": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/rendered/manage-unavailable-390.png"
+        },
+        {
+          "state": "manage-unavailable",
+          "width": 320,
+          "runtime_errors": [],
+          "axe_violations": 0,
+          "axe_incomplete": 1,
+          "keyboard": null,
+          "screenshot_ref": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/rendered/manage-unavailable-320.png"
+        }
+      ],
+      "manual_render_refs": [
+        "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/rendered/manage-unavailable-1440.png",
+        "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/rendered/manage-unavailable-320.png"
+      ],
+      "per_defect_blocking_findings": [],
+      "role_conclusions": {
+        "ui-ux-engineer": "The valid-publication outage now retains the approved account-center header, unavailable status panel, two-panel management/help composition and responsive stacking. It does not claim an active or inactive authenticator. Current1440/320 renders were visually compared with the consented unavailable composition.",
+        "frontend-engineer": "Published content remains the sole source of branded labels; methodsUnavailable is separate from publication unavailability and blocks enrollment/mutation entry. The retry refreshes authoritative options/metadata. The negative publication test proves the repair cannot promote untrusted content or fetch factor facts.",
+        "tester-qa-engineer": "Both exact unchanged tagged outage/publication tests passed in the committed35 run. Four detailed unavailable render rows have zero runtime errors/Axe violations; the final full render receipt resolves all current incomplete contrast targets. These are public UI fixtures, not evidence of actual provider fault behavior.",
+        "end-user-ux-reviewer": "The outage clearly says status is unavailable and offers Check status without suggesting removal or setup is safe. Branding and help remain coherent on desktop/mobile. Source-confirmed mutation controls are absent while facts are unavailable; lost-publication handling remains deliberately fail closed."
+      }
+    }
+  ],
+  "role_reviews": [
+    {
+      "role": "ui-ux-engineer",
+      "skill_id": "ui-ux-engineer",
+      "skill_version": "1.1.0",
+      "skill_ref": ".agent/skills/ui-ux-engineer/SKILL.md",
+      "skill_sha256": "498ff7e4b46012b1e90773cd29ebac903d7ac83767d739cc327d9b69a3b4c5c2",
+      "result": "PASS_SCOPED_DEFECT_VERIFICATION",
+      "reviewed_at": "2026-11-11T02:21:16.805Z",
+      "authority_refs": [
+        "docs/authority/current/development/03_Governed_Development_Lifecycle_Scrum_Git.md",
+        "docs/authority/current/development/09_Testing_Acceptance_Evidence_and_Quality_Gates.md",
+        "docs/authority/current/development/10_UI_UX_Components_Widgets_and_Plugins_Development_Rules.md",
+        "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md",
+        "docs/authority/current/development/31_UI_UX_Screen_and_Control_Center_Requirements_Matrix.md",
+        "docs/authority/current/decisions/AMD-0008_Approved_Figma_Visual_Fidelity_and_Product_Owner_UX_Consent.md",
+        "docs/authority/current/decisions/AMD-0009_URL_Addressable_Routing_and_Governed_Form_Validation.md",
+        "docs/contracts/ui-inventory.json",
+        "governance/revisions/P1-018-RV006.yaml",
+        "governance/evidence/TUN-P2-008-VISUAL-CONSENT.json",
+        "governance/evidence/TUN-P2-008-FACTOR-PICKER-CONSENT.json"
+      ],
+      "context_artifacts": [
+        "governance/work-items/TUN-P2-008.yaml",
+        "docs/development/P2_008_TOTP_SCOPE.md"
+      ],
+      "evidence_refs": [
+        "governance/evidence/p2-008-totp-20261110/parent005006-compatibility/ui-execution-index.json",
+        "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/source-inputs-before.json",
+        "governance/evidence/p2-008-totp-20261110/parent005006-compatibility/ui/totp-report.json",
+        "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/manifest.json",
+        "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/render-manifest-final.json",
+        "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/rendered/checks.json",
+        "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/contrast-resolution-final.json",
+        "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/navigation-results.json",
+        "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-laptop/manifest.json"
+      ],
+      "findings": [
+        {
+          "defect_id": "DEF-TUN-P2-008-UI-002",
+          "conclusion": "Neutral initial entry and retained governed error/focus variants remove premature blame without adding a new visual pattern. Current proof render and320px error render preserve clear title, instruction, code label and available recovery controls."
+        },
+        {
+          "defect_id": "DEF-TUN-P2-008-UI-003",
+          "conclusion": "The six approved impact variants retain their existing review geometry, server-supplied effect language and trapped keyboard order. The24 detailed post-close probes restore the expected Remove or Review replacement control, matching the logical task continuation."
+        },
+        {
+          "defect_id": "DEF-TUN-P2-008-UI-004",
+          "conclusion": "The valid-publication outage now retains the approved account-center header, unavailable status panel, two-panel management/help composition and responsive stacking. It does not claim an active or inactive authenticator. Current1440/320 renders were visually compared with the consented unavailable composition."
+        }
+      ],
+      "blocking_findings": [],
+      "required_actions": [
+        "Preserve this scoped receipt separately from final whole-work-item reviews."
+      ],
+      "context_expansion_requested": false
+    },
+    {
+      "role": "frontend-engineer",
+      "skill_id": "frontend-engineer",
+      "skill_version": "1.1.0",
+      "skill_ref": ".agent/skills/frontend-engineer/SKILL.md",
+      "skill_sha256": "3472e745aa478457939b1aeeba319f72989bb9e97791e458f0b9979ec1b538d7",
+      "result": "PASS_SCOPED_DEFECT_VERIFICATION",
+      "reviewed_at": "2026-11-11T02:21:16.805Z",
+      "authority_refs": [
+        "docs/authority/current/development/03_Governed_Development_Lifecycle_Scrum_Git.md",
+        "docs/authority/current/development/09_Testing_Acceptance_Evidence_and_Quality_Gates.md",
+        "docs/authority/current/development/10_UI_UX_Components_Widgets_and_Plugins_Development_Rules.md",
+        "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md",
+        "docs/authority/current/development/31_UI_UX_Screen_and_Control_Center_Requirements_Matrix.md",
+        "docs/authority/current/decisions/AMD-0008_Approved_Figma_Visual_Fidelity_and_Product_Owner_UX_Consent.md",
+        "docs/authority/current/decisions/AMD-0009_URL_Addressable_Routing_and_Governed_Form_Validation.md",
+        "docs/contracts/ui-inventory.json",
+        "governance/revisions/P1-018-RV006.yaml",
+        "governance/evidence/TUN-P2-008-VISUAL-CONSENT.json",
+        "governance/evidence/TUN-P2-008-FACTOR-PICKER-CONSENT.json"
+      ],
+      "context_artifacts": [
+        "governance/work-items/TUN-P2-008.yaml",
+        "docs/development/P2_008_TOTP_SCOPE.md"
+      ],
+      "evidence_refs": [
+        "governance/evidence/p2-008-totp-20261110/parent005006-compatibility/ui-execution-index.json",
+        "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/source-inputs-before.json",
+        "governance/evidence/p2-008-totp-20261110/parent005006-compatibility/ui/totp-report.json",
+        "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/manifest.json",
+        "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/render-manifest-final.json",
+        "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/rendered/checks.json",
+        "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/contrast-resolution-final.json",
+        "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/navigation-results.json",
+        "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-laptop/manifest.json"
+      ],
+      "findings": [
+        {
+          "defect_id": "DEF-TUN-P2-008-UI-002",
+          "conclusion": "The repair reuses useTunnerForm.reset on the existing mount lifecycle. It neither substitutes native constraint bubbles nor changes validators, BFF requests, original proof identities or backend rules. Four regression cases explicitly prove blur/submit/correction and first-invalid focus remain active."
+        },
+        {
+          "defect_id": "DEF-TUN-P2-008-UI-003",
+          "conclusion": "The pending return intent is local to acknowledged review cancellation and waits for the DOM control to re-enable. Existing heading dependencies and other-route focus are preserved; connected-trigger check and heading fallback handle a disappearing control. Native mutation, proof and unknown/result mechanics remain unchanged."
+        },
+        {
+          "defect_id": "DEF-TUN-P2-008-UI-004",
+          "conclusion": "Published content remains the sole source of branded labels; methodsUnavailable is separate from publication unavailability and blocks enrollment/mutation entry. The retry refreshes authoritative options/metadata. The negative publication test proves the repair cannot promote untrusted content or fetch factor facts."
+        }
+      ],
+      "blocking_findings": [],
+      "required_actions": [
+        "Preserve this scoped receipt separately from final whole-work-item reviews."
+      ],
+      "context_expansion_requested": false
+    },
+    {
+      "role": "tester-qa-engineer",
+      "skill_id": "tester-qa-engineer",
+      "skill_version": "1.1.0",
+      "skill_ref": ".agent/skills/tester-qa-engineer/SKILL.md",
+      "skill_sha256": "52aee18f251a614e339adba9f7c886a5da1ef4ab0482ae6b77044184128415c6",
+      "result": "PASS_SCOPED_DEFECT_VERIFICATION",
+      "reviewed_at": "2026-11-11T02:21:16.805Z",
+      "authority_refs": [
+        "docs/authority/current/development/03_Governed_Development_Lifecycle_Scrum_Git.md",
+        "docs/authority/current/development/09_Testing_Acceptance_Evidence_and_Quality_Gates.md",
+        "docs/authority/current/development/10_UI_UX_Components_Widgets_and_Plugins_Development_Rules.md",
+        "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md",
+        "docs/authority/current/development/31_UI_UX_Screen_and_Control_Center_Requirements_Matrix.md",
+        "docs/authority/current/decisions/AMD-0008_Approved_Figma_Visual_Fidelity_and_Product_Owner_UX_Consent.md",
+        "docs/authority/current/decisions/AMD-0009_URL_Addressable_Routing_and_Governed_Form_Validation.md",
+        "docs/contracts/ui-inventory.json",
+        "governance/revisions/P1-018-RV006.yaml",
+        "governance/evidence/TUN-P2-008-VISUAL-CONSENT.json",
+        "governance/evidence/TUN-P2-008-FACTOR-PICKER-CONSENT.json"
+      ],
+      "context_artifacts": [
+        "governance/work-items/TUN-P2-008.yaml",
+        "docs/development/P2_008_TOTP_SCOPE.md"
+      ],
+      "evidence_refs": [
+        "governance/evidence/p2-008-totp-20261110/parent005006-compatibility/ui-execution-index.json",
+        "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/source-inputs-before.json",
+        "governance/evidence/p2-008-totp-20261110/parent005006-compatibility/ui/totp-report.json",
+        "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/manifest.json",
+        "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/render-manifest-final.json",
+        "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/rendered/checks.json",
+        "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/contrast-resolution-final.json",
+        "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/navigation-results.json",
+        "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-laptop/manifest.json"
+      ],
+      "findings": [
+        {
+          "defect_id": "DEF-TUN-P2-008-UI-002",
+          "conclusion": "Actual4 tagged cases passed at all4 registered widths in the unchanged35-case run; report statuses are expected/passed with no retry, errors or skip. The neutral/error state render rows and current contrast receipt support the stated UI defect only."
+        },
+        {
+          "defect_id": "DEF-TUN-P2-008-UI-003",
+          "conclusion": "The final committed6e carrier passed all8 originally failing tagged focus assertions unchanged, and all24 six-variant keyboard rows independently record correct containment/closure/trigger equality. The earlier fbbd27PASS/8FAIL and original164 baseline remain historical evidence, not reclassified."
+        },
+        {
+          "defect_id": "DEF-TUN-P2-008-UI-004",
+          "conclusion": "Both exact unchanged tagged outage/publication tests passed in the committed35 run. Four detailed unavailable render rows have zero runtime errors/Axe violations; the final full render receipt resolves all current incomplete contrast targets. These are public UI fixtures, not evidence of actual provider fault behavior."
+        }
+      ],
+      "blocking_findings": [],
+      "required_actions": [
+        "Preserve this scoped receipt separately from final whole-work-item reviews."
+      ],
+      "context_expansion_requested": false
+    },
+    {
+      "role": "end-user-ux-reviewer",
+      "skill_id": "end-user-ux-reviewer",
+      "skill_version": "1.1.0",
+      "skill_ref": ".agent/skills/end-user-ux-reviewer/SKILL.md",
+      "skill_sha256": "cfaa2eeffd945eef70a6ff1023b1af42fc0413add7b357b2fcd914473e976665",
+      "result": "PASS_SCOPED_DEFECT_VERIFICATION",
+      "reviewed_at": "2026-11-11T02:21:16.805Z",
+      "authority_refs": [
+        "docs/authority/current/development/03_Governed_Development_Lifecycle_Scrum_Git.md",
+        "docs/authority/current/development/09_Testing_Acceptance_Evidence_and_Quality_Gates.md",
+        "docs/authority/current/development/10_UI_UX_Components_Widgets_and_Plugins_Development_Rules.md",
+        "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md",
+        "docs/authority/current/development/31_UI_UX_Screen_and_Control_Center_Requirements_Matrix.md",
+        "docs/authority/current/decisions/AMD-0008_Approved_Figma_Visual_Fidelity_and_Product_Owner_UX_Consent.md",
+        "docs/authority/current/decisions/AMD-0009_URL_Addressable_Routing_and_Governed_Form_Validation.md",
+        "docs/contracts/ui-inventory.json",
+        "governance/revisions/P1-018-RV006.yaml",
+        "governance/evidence/TUN-P2-008-VISUAL-CONSENT.json",
+        "governance/evidence/TUN-P2-008-FACTOR-PICKER-CONSENT.json"
+      ],
+      "context_artifacts": [
+        "governance/work-items/TUN-P2-008.yaml",
+        "docs/development/P2_008_TOTP_SCOPE.md"
+      ],
+      "evidence_refs": [
+        "governance/evidence/p2-008-totp-20261110/parent005006-compatibility/ui-execution-index.json",
+        "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/source-inputs-before.json",
+        "governance/evidence/p2-008-totp-20261110/parent005006-compatibility/ui/totp-report.json",
+        "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/manifest.json",
+        "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/render-manifest-final.json",
+        "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/rendered/checks.json",
+        "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/contrast-resolution-final.json",
+        "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/navigation-results.json",
+        "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-laptop/manifest.json"
+      ],
+      "findings": [
+        {
+          "defect_id": "DEF-TUN-P2-008-UI-002",
+          "conclusion": "A person opening confirmation receives a neutral focused field; feedback appears after actual interaction and explains how to correct the code. Keyboard error recovery remains available. This is executing-agent task-perspective review, not a participant usability study."
+        },
+        {
+          "defect_id": "DEF-TUN-P2-008-UI-003",
+          "conclusion": "A keyboard user can review either action, cycle controls, press Escape and continue at the same visible action rather than being sent to the page heading. The retained effect disclosures keep the sensitive-action meaning clear; no session-policy usability shortcut is introduced."
+        },
+        {
+          "defect_id": "DEF-TUN-P2-008-UI-004",
+          "conclusion": "The outage clearly says status is unavailable and offers Check status without suggesting removal or setup is safe. Branding and help remain coherent on desktop/mobile. Source-confirmed mutation controls are absent while facts are unavailable; lost-publication handling remains deliberately fail closed."
+        }
+      ],
+      "blocking_findings": [],
+      "required_actions": [
+        "Preserve this scoped receipt separately from final whole-work-item reviews."
+      ],
+      "context_expansion_requested": false
+    }
+  ],
+  "governance_guidance": {
+    "schema_ref": "governance/schemas/v1/governance-record.schema.json#/$defs/defect",
+    "schema_boundary": "Only status/evidence/updated_at change; historical description, environment, original evidence, classification, severity and affected_versions remain identical. Additional defect properties are prohibited.",
+    "native_source_ref": "src/Tunner.Governance/Program.cs",
+    "commands_after_reviewed_integration": [
+      "dotnet run --no-restore --no-build --project src/Tunner.Governance -- governance validate",
+      "dotnet run --no-restore --no-build --project src/Tunner.Governance -- governance status"
+    ],
+    "native_boundary": "There is no dedicated defect-close mutation command in current native CLI. RESOLVED is an existing terminal defect status. Native UI gate and work-item eligibility/acceptance are separate and this receipt is not a replacement global UI-compliance wrapper."
+  },
+  "authority_refs": [
+    "docs/authority/current/development/03_Governed_Development_Lifecycle_Scrum_Git.md",
+    "docs/authority/current/development/09_Testing_Acceptance_Evidence_and_Quality_Gates.md",
+    "docs/authority/current/development/10_UI_UX_Components_Widgets_and_Plugins_Development_Rules.md",
+    "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md",
+    "docs/authority/current/development/31_UI_UX_Screen_and_Control_Center_Requirements_Matrix.md",
+    "docs/authority/current/decisions/AMD-0008_Approved_Figma_Visual_Fidelity_and_Product_Owner_UX_Consent.md",
+    "docs/authority/current/decisions/AMD-0009_URL_Addressable_Routing_and_Governed_Form_Validation.md",
+    "docs/contracts/ui-inventory.json",
+    "governance/revisions/P1-018-RV006.yaml",
+    "governance/evidence/TUN-P2-008-VISUAL-CONSENT.json",
+    "governance/evidence/TUN-P2-008-FACTOR-PICKER-CONSENT.json"
+  ],
+  "matched_reference_refs": [
+    "governance/evidence/p2-008-totp-20261110/reference/figma-83-2.png",
+    "governance/evidence/p2-008-totp-20261110/reference/figma-83-117.png",
+    "governance/evidence/p2-008-totp-20261110/reference/figma-83-298.png",
+    "governance/evidence/p2-008-totp-20261110/ui-proposal/rendered/proof-code-component-1440.png",
+    "governance/evidence/p2-008-totp-20261110/ui-proposal/rendered/remove-preserve-component-1440.png",
+    "governance/evidence/p2-008-totp-20261110/ui-proposal/rendered/manage-unavailable-1440.png",
+    "governance/evidence/p2-008-totp-20261110/ui-proposal/rendered/manage-unavailable-320.png"
+  ],
+  "evidence_files": [
+    {
+      "path": "docs/authority/current/development/03_Governed_Development_Lifecycle_Scrum_Git.md",
+      "sha256": "48207ed1c49ea4c9f2d5ab2b2af586b621cada316bce5c490982810815e8105d",
+      "git_blob_at_evidence_carrier": "b1b2e7e7293f9a228dde39417bf3dc2cb0d19ca1"
+    },
+    {
+      "path": "docs/authority/current/development/09_Testing_Acceptance_Evidence_and_Quality_Gates.md",
+      "sha256": "52a732494a5278a30077f72b6a8cb57b0a2d075ed2d7102e87f2a04d089ad8fb",
+      "git_blob_at_evidence_carrier": "098759f72cd6687a17afe1bf038d04616aa54295"
+    },
+    {
+      "path": "docs/authority/current/development/10_UI_UX_Components_Widgets_and_Plugins_Development_Rules.md",
+      "sha256": "697758f34f7318c736585cffec1634a42aee949f6877f8d4873859d4c44da685",
+      "git_blob_at_evidence_carrier": "0880c29499ec2d11e231f8505bee30dfca5759ae"
+    },
+    {
+      "path": "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md",
+      "sha256": "e21bc59400b9db52a0dd7d94dde861bb952ce4688111dc9b4d97446f0488de74",
+      "git_blob_at_evidence_carrier": "bc813acd4f007f931471eb5bf47184e2e9083bea"
+    },
+    {
+      "path": "docs/authority/current/development/31_UI_UX_Screen_and_Control_Center_Requirements_Matrix.md",
+      "sha256": "19d70b54622c610226d6d2797af4c35aa1d71d2d7387f9e15982723c25fc3302",
+      "git_blob_at_evidence_carrier": "f1432499187694533d938d65a8de2ccfc3be7da1"
+    },
+    {
+      "path": "docs/authority/current/decisions/AMD-0008_Approved_Figma_Visual_Fidelity_and_Product_Owner_UX_Consent.md",
+      "sha256": "f534e3eeebb7723ba5bd34c348338981b7cd745ea5d81c18fa2e214c098d630b",
+      "git_blob_at_evidence_carrier": "1ffa634c17f4b557b879e3debfc6d38be2ea60a4"
+    },
+    {
+      "path": "docs/authority/current/decisions/AMD-0009_URL_Addressable_Routing_and_Governed_Form_Validation.md",
+      "sha256": "052deaa9a0592602dd5510994bf36e3354c41a7e1324308fff61f41207a3d153",
+      "git_blob_at_evidence_carrier": "e7efc299a2265c3b4813b3352d9c3afb578fdf04"
+    },
+    {
+      "path": "docs/contracts/ui-inventory.json",
+      "sha256": "ae982b8df6310b2c486637db8857e93c5a63090a152c0bf50d832a121a4dcbac",
+      "git_blob_at_evidence_carrier": "e9d0050a8d946e3eb07454189641eb594015b513"
+    },
+    {
+      "path": "governance/revisions/P1-018-RV006.yaml",
+      "sha256": "b3136f8f9ee49b50406896720d5f13de3da21eae590378e5bd4e34badd968ef4",
+      "git_blob_at_evidence_carrier": "7917a0d2d55193a14552b98a766212cc1f1cbb09"
+    },
+    {
+      "path": "governance/evidence/TUN-P2-008-VISUAL-CONSENT.json",
+      "sha256": "d5a91c23c34ab6cd134648ab73867e9afce14c35f795f1a1eecdfe5d60040014",
+      "git_blob_at_evidence_carrier": "5c55f086de1d44610cb3f2ee4d8f55bc67b8885d"
+    },
+    {
+      "path": "governance/evidence/TUN-P2-008-FACTOR-PICKER-CONSENT.json",
+      "sha256": "b6ce7663148cd555d69bd4f8081f4553dbcb114662e3523f2faab65bb3636d30",
+      "git_blob_at_evidence_carrier": "f6a7b05aaf7dcf846fafb89b30e9c2d5d4923367"
+    },
+    {
+      "path": "governance/evidence/p2-008-totp-20261110/parent005006-compatibility/ui-execution-index.json",
+      "sha256": "dc3e86a354a95dbd3a106fc022013f9fe3145d1e4d2c1e0b10482ffd601c770f",
+      "git_blob_at_evidence_carrier": "a1e0324b845563a3cf6469d90b44a56cf6329de9"
+    },
+    {
+      "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/source-inputs-before.json",
+      "sha256": "cbe397f90fd74ac1c0237b690e352248d1b749bb7f80bddbc84c9a08ef272197",
+      "git_blob_at_evidence_carrier": "59227da0230f009b213a26656d6bb16d1b6aff02"
+    },
+    {
+      "path": "governance/evidence/p2-008-totp-20261110/parent005006-compatibility/ui/totp-report.json",
+      "sha256": "9ba0413bd8fb2a077555ad75a61ee9e7c0d849cbab12f87c5ecfefd226877080",
+      "git_blob_at_evidence_carrier": "d01a6d662e9062e2956ba458fde76fff13c82faf"
+    },
+    {
+      "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/manifest.json",
+      "sha256": "fdde6352a2f927feacf576d2484614df77f73e4c88116f42a95cc9b163db765c",
+      "git_blob_at_evidence_carrier": "631ca6b21102e036b0364a30f04e79c1a860ed29"
+    },
+    {
+      "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/render-manifest-final.json",
+      "sha256": "5be639e38a6f67ad65ff454a9b229f0bf68af8f3e9487369301b951542c17887",
+      "git_blob_at_evidence_carrier": "7a8c2045c3e4eae1c6d12c2456c6c5d371aa0e14"
+    },
+    {
+      "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/rendered/checks.json",
+      "sha256": "9a871ba182887ce63869cca3032f66f050a29434cf19be8ca3bcd7e43d89f361",
+      "git_blob_at_evidence_carrier": "84e77320763d4349e9b66d2f04a0448e8824e8a8"
+    },
+    {
+      "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/contrast-resolution-final.json",
+      "sha256": "68ef7dff051dc6dfa5c5266532b7978d58ed0a0444ad19cf1aa6e6b17d1323e0",
+      "git_blob_at_evidence_carrier": "657cef2990151a3de7c7fd81da1b4c78844ccaa2"
+    },
+    {
+      "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/navigation-results.json",
+      "sha256": "667558ae2fb966497abd7983511c3441dfc321fcd06da51a132225d72a2f0971",
+      "git_blob_at_evidence_carrier": "75dbdbbd23766b2e16c3d2d49d9fa193bcbc24de"
+    },
+    {
+      "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-laptop/manifest.json",
+      "sha256": "873cc37eaf3d0aaea4310ec9dcfc378537081711a2b7ebe9351964b068ca8744",
+      "git_blob_at_evidence_carrier": "309c84860f8355106e46ab7d57c0cb7fb58c1ae7"
+    },
+    {
+      "path": "governance/evidence/p2-008-totp-20261110/reference/figma-83-2.png",
+      "sha256": "5acd961d2c8dd1b550fbab17c67ac84f966ff320eb2bc5793d783549f482cf6c",
+      "git_blob_at_evidence_carrier": "c9f13ff575ef5d974d056af796bd327edea39399"
+    },
+    {
+      "path": "governance/evidence/p2-008-totp-20261110/reference/figma-83-117.png",
+      "sha256": "e1e41d7dfa657b2ed8bf3aae6e30568dbcc84888bea8b8ab9534a455acdf76da",
+      "git_blob_at_evidence_carrier": "6a91f51da8244fdeb2c8b1f3a597c9149e5795d1"
+    },
+    {
+      "path": "governance/evidence/p2-008-totp-20261110/reference/figma-83-298.png",
+      "sha256": "b919f7beba43df65db0c3efb1937c67bd246aa3065877c0dc05e46550c6ed8a4",
+      "git_blob_at_evidence_carrier": "3e415980269fa71301888db13cb6faddaf7f1d34"
+    },
+    {
+      "path": "governance/evidence/p2-008-totp-20261110/ui-proposal/rendered/proof-code-component-1440.png",
+      "sha256": "cf3233e9deda7f99b25fb82c8aa83de7f95982939674ee9a13f93f30a28c8044",
+      "git_blob_at_evidence_carrier": "aa8b82fc2cd052775fc9cdda25350a70d159eabe"
+    },
+    {
+      "path": "governance/evidence/p2-008-totp-20261110/ui-proposal/rendered/remove-preserve-component-1440.png",
+      "sha256": "177ecf53f0936dfeb24f82a02d751b20e4f01e6fcd452e1f620d8f1a4843f2ab",
+      "git_blob_at_evidence_carrier": "f564e7aa628f8d74f25ed5a40b0cdbc59eaeeb92"
+    },
+    {
+      "path": "governance/evidence/p2-008-totp-20261110/ui-proposal/rendered/manage-unavailable-1440.png",
+      "sha256": "233f0b3d431a3e6835106df96fe8014222de05608b0649776b80e9949fe14c3c",
+      "git_blob_at_evidence_carrier": "746fb9c675ce678ad8d8a5b2674e4d00c3d19d3d"
+    },
+    {
+      "path": "governance/evidence/p2-008-totp-20261110/ui-proposal/rendered/manage-unavailable-320.png",
+      "sha256": "02227d2bb53795a94fec958310a719c85234b1303105fb957bf011761a8f0fd6",
+      "git_blob_at_evidence_carrier": "03870260971912e3354f1c3e350525ed9bdd5bf5"
+    },
+    {
+      "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/rendered/proof-code-component-1440.png",
+      "sha256": "9b19da0a8e1dd8cab3b2179a0097e55a4baf32fb6b1829c2d7b6b84a0c43869a",
+      "git_blob_at_evidence_carrier": "a645e6eb9e2906206189d1f337ed2e16888c72a9"
+    },
+    {
+      "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/rendered/proof-error-320.png",
+      "sha256": "c9a5f82a58917b12c010c60485e2bd14ef66ec89b20c3cd2896fdb1a2bd54552",
+      "git_blob_at_evidence_carrier": "fc76daec51599fc39602b333125b8478f71ea144"
+    },
+    {
+      "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/rendered/proof-code-1440.png",
+      "sha256": "6133ee38b89d9ac66171b0fa135c49f449e27e9f2cb77d502a9cdb7d8144d540",
+      "git_blob_at_evidence_carrier": "9e7f31f6c672fb93649639b6a699582f4199bc5d"
+    },
+    {
+      "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/rendered/proof-error-1440.png",
+      "sha256": "50e698b72098d9b932a4eeeadc3d635194d8ef1508bc499a350a3253dad120cb",
+      "git_blob_at_evidence_carrier": "29fbd6534cee08966c243334b882f52127528659"
+    },
+    {
+      "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/rendered/proof-code-768.png",
+      "sha256": "54bce18edfc806553effc37182e1aedd748ca92b88f3c41ce61e357383dd7078",
+      "git_blob_at_evidence_carrier": "8a69275eb5e29213a32a9060b61781befbf71304"
+    },
+    {
+      "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/rendered/proof-error-768.png",
+      "sha256": "1b7058532b28e1c6316231b4485c033ffbe3626cbcd90145bb547b9c3ae8dc8a",
+      "git_blob_at_evidence_carrier": "d15a224ac8a61844f18319f8f71782e077f82c0f"
+    },
+    {
+      "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/rendered/proof-code-390.png",
+      "sha256": "ff1e1588a7a3c571d45a600c4a377baf168920941c7d18aad37f9f816cb5f4d9",
+      "git_blob_at_evidence_carrier": "6b31b661b9b75e57b896bf14d0d7fd08fffa7ab4"
+    },
+    {
+      "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/rendered/proof-error-390.png",
+      "sha256": "a5d05be38457bbc2557efd58a97abc6b7e5f2fbb8604cbf008a68eef6facfb76",
+      "git_blob_at_evidence_carrier": "a065f4ea4d7d2574c7e860c4ccf180e57d627e32"
+    },
+    {
+      "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/rendered/proof-code-320.png",
+      "sha256": "2d9dbee0e886bc758284063b1d2fd3466296c644b342e17588334f57d4a9a69a",
+      "git_blob_at_evidence_carrier": "808998e1d38ac7272221edf212e796e1325e2576"
+    },
+    {
+      "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/rendered/reset-preserve-component-1440.png",
+      "sha256": "9b155365fd7bb1ca1d6c53adb0e84622bd9924ed8294ac6cfba5bd89e3631866",
+      "git_blob_at_evidence_carrier": "6f70a7f17a778679303cad09f6cd3f45924c9eb6"
+    },
+    {
+      "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/rendered/remove-affected-320.png",
+      "sha256": "3aa488107fba84dd921a61e0ba2fa2e3f992340678f983e0d47863c45f512976",
+      "git_blob_at_evidence_carrier": "69c06a7ec98eeb26db03d27a2cd086574bc71d28"
+    },
+    {
+      "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/rendered/reset-current-320.png",
+      "sha256": "6bd160fa3c3a75dba1045a756591f3182f2d294e3f816842ecb5b9f5a6b04d06",
+      "git_blob_at_evidence_carrier": "0f185c1483fb95d0a8f2060c80bf43f9019144eb"
+    },
+    {
+      "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/rendered/remove-preserve-1440.png",
+      "sha256": "e7e75b6499c567248c735f598bc433281d330de9926fce35cd0c605840ae7976",
+      "git_blob_at_evidence_carrier": "bd113e4403efbae2be22adfc4e0d7b23536cf80f"
+    },
+    {
+      "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/rendered/remove-affected-1440.png",
+      "sha256": "fff179f3d58390889f43ac5d0119878b3c0d08b9515733917d18763aa718bbbc",
+      "git_blob_at_evidence_carrier": "848ade02b990e5d4fafae5d74d6c0c2a5c6d4fbe"
+    },
+    {
+      "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/rendered/remove-current-1440.png",
+      "sha256": "e1c5710fadd0a392a10ab49b22f24d72ca31a00c233f934c15c5a1145213c1e5",
+      "git_blob_at_evidence_carrier": "e06d2bc8d40bc687e6d237b07b94e6364b3344dd"
+    },
+    {
+      "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/rendered/reset-preserve-1440.png",
+      "sha256": "646b90b56cf2054e26a668552113fac57767df9f592f334acaf1df1fde3ad292",
+      "git_blob_at_evidence_carrier": "a6b4ac9b80e21d687de05e2c50f8809dfee9df9c"
+    },
+    {
+      "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/rendered/reset-affected-1440.png",
+      "sha256": "a010cc4d172f8fcd981629eafdb5423ded2af1d8cfd2743fd268b5abeff012d3",
+      "git_blob_at_evidence_carrier": "bce315782d7d56f381df49b31a7524d38275f976"
+    },
+    {
+      "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/rendered/reset-current-1440.png",
+      "sha256": "861d9228c1d5b68b27b654fe7f35a2603de1b44616798d9ad250a5772e281e99",
+      "git_blob_at_evidence_carrier": "22a98da9753526f8055bd8038a4fca1224efed1d"
+    },
+    {
+      "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/rendered/remove-preserve-768.png",
+      "sha256": "a34717516a96174233f6b0cd72961d3032fe92df0ebb45669b5d4703c720b38d",
+      "git_blob_at_evidence_carrier": "f439036191ea092108e25e6bae83740081f57cb6"
+    },
+    {
+      "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/rendered/remove-affected-768.png",
+      "sha256": "3c5415f39b58c70a6da66a93bd44ff2f00ea170537c65a75591d245e0e8a4811",
+      "git_blob_at_evidence_carrier": "73073d24ad36677e44d90a7afbf7b0511e4aef55"
+    },
+    {
+      "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/rendered/remove-current-768.png",
+      "sha256": "413cd0f7fca11d1d317ccaa6b63b89ef51c27de4f0fc42a2701749e069023c0a",
+      "git_blob_at_evidence_carrier": "237e6bebc489fed5691c0b31ab7816d9a933bcbe"
+    },
+    {
+      "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/rendered/reset-preserve-768.png",
+      "sha256": "16b3576eb7a42b9d57047739a018268dc3e23c781876ecc1f86529540c043429",
+      "git_blob_at_evidence_carrier": "407ef1cab302ae9676f1d8182ec3d4791ab63c5c"
+    },
+    {
+      "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/rendered/reset-affected-768.png",
+      "sha256": "dbb8f21413d43abf1a87e43a9d197b467ee5780996d7ccb64307bc65aaf538d4",
+      "git_blob_at_evidence_carrier": "82a9265bc3fe3e1612b5fe0675bda8e8250d5933"
+    },
+    {
+      "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/rendered/reset-current-768.png",
+      "sha256": "e22c5aba61bfa2f10e9cef0dba98951b8331f6cf42a235762051ea80ea0ceb03",
+      "git_blob_at_evidence_carrier": "00f98f217d80dd8a886691351aab990bfa9385c6"
+    },
+    {
+      "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/rendered/remove-preserve-390.png",
+      "sha256": "f4bdb871f4154e9946d222ffaaa149849310e2440eeccaa2745148f51d744673",
+      "git_blob_at_evidence_carrier": "d30882fc5bbf4d594a3103591055c5e587ef26df"
+    },
+    {
+      "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/rendered/remove-affected-390.png",
+      "sha256": "a551c9fb9db890f508fc9957f497e14cc57cb7704cb0538877cad4e6d89eab8b",
+      "git_blob_at_evidence_carrier": "35141a0863e9492d44074663a47b6ec38366c783"
+    },
+    {
+      "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/rendered/remove-current-390.png",
+      "sha256": "9c26d4948fe45863629e42dfaab27c2936f89e51a369597f8a2820b7ebebf0b9",
+      "git_blob_at_evidence_carrier": "be7ca41137bd132261b922b0b14973ef0709797f"
+    },
+    {
+      "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/rendered/reset-preserve-390.png",
+      "sha256": "c9df8ac8d9d7dfaa04092992feb540cd7db953602042d9d43882d9e5d4de5a43",
+      "git_blob_at_evidence_carrier": "b80071516ac82d1486686c054431ae6638977666"
+    },
+    {
+      "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/rendered/reset-affected-390.png",
+      "sha256": "d20c046926e23234256eadf12bc1bb5aacd589dd50399e4268eec0500e54bc05",
+      "git_blob_at_evidence_carrier": "199b79affbe7abb0cdde18bfc1cfd221dd06e8dd"
+    },
+    {
+      "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/rendered/reset-current-390.png",
+      "sha256": "94bf28960daf34dbb43669c6ab6a2256c1b5c82746a5796fef526450fffad72d",
+      "git_blob_at_evidence_carrier": "62aad2299c06016c5d67f680af2abf58146ce1ab"
+    },
+    {
+      "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/rendered/remove-preserve-320.png",
+      "sha256": "2357d86bc566d9e12bca8afd5e18bbea5d14c2b573fe181903b4dcb68aa35589",
+      "git_blob_at_evidence_carrier": "32708fa88564cd98689af1c1595dfd13ed7e85df"
+    },
+    {
+      "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/rendered/remove-current-320.png",
+      "sha256": "40496dcb745261d75d48154a296730d28ab59b1a01c61a10b1cb6f343f56d8e8",
+      "git_blob_at_evidence_carrier": "3913d0b187793a60aadb06014333da149ce1df12"
+    },
+    {
+      "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/rendered/reset-preserve-320.png",
+      "sha256": "20ca28bd23476af855d264f3891b43a30db8c7349d89c8f9de285c9607bd28d3",
+      "git_blob_at_evidence_carrier": "c8c7c7433d24ef41f7f835c7daab6b8592561c2b"
+    },
+    {
+      "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/rendered/reset-affected-320.png",
+      "sha256": "4cf8404cb0a6e7ce772878af9705d0c863f6fc7f56b253ec11ccd630fa7bdd59",
+      "git_blob_at_evidence_carrier": "999b7d21833da88e6d0e704b3d59f90e8a92fada"
+    },
+    {
+      "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/rendered/manage-unavailable-1440.png",
+      "sha256": "358943d11d13f491161ed4a609fd525130104b158f56429f4f77d394e8a53d86",
+      "git_blob_at_evidence_carrier": "7aa9fb32f5d74b285ef20b9b4f6fcc030c7d3601"
+    },
+    {
+      "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/rendered/manage-unavailable-320.png",
+      "sha256": "4b31f60a996e3beadd9064a7d88184c4e26389f0bec86b508e5d4cfa70d71f3e",
+      "git_blob_at_evidence_carrier": "0b5135924a1d3a193cfc618a20747b3e633036ab"
+    },
+    {
+      "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/rendered/manage-unavailable-768.png",
+      "sha256": "8876186e4ac636dfecb75371d26e52a4dd51f372761c2d66d55a107fbcda5b44",
+      "git_blob_at_evidence_carrier": "9f3d5e4c876782c67af04af6f90a01dbd2aadea5"
+    },
+    {
+      "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/rendered/manage-unavailable-390.png",
+      "sha256": "bc2d38952f1013569d99680aa1a9c11f5d37e4174c40c5dee1b1e62fddc4e321",
+      "git_blob_at_evidence_carrier": "a9126c211edc105c3a833e95919d8ccb8493b0fa"
+    }
+  ],
+  "remaining_boundaries": [
+    {
+      "id": "DEF-TUN-P2-008-UI-001",
+      "status": "UNCHANGED_OPEN",
+      "reason": "Whole affected008 design/fidelity/integration scope is outside these three bounded implementation repairs."
+    },
+    {
+      "id": "VAL-008",
+      "status": "NO_FINAL_PASS",
+      "reason": "Authoritative backend bypass/integrated real-journey acceptance is separate; public fixtures do not prove it."
+    },
+    {
+      "id": "UX-FID-008",
+      "status": "NO_FINAL_PASS",
+      "reason": "This additive defect receipt does not complete the whole008 per-item evidence/native UI gate or owner-held design synchronization."
+    },
+    {
+      "id": "TUN-P2-008",
+      "status": "NO_FINAL_ACCEPTANCE",
+      "reason": "No work-item lifecycle transition, real native OTP/vault/BFF end-to-end, Product, production profile/publication, security-role or release acceptance is claimed."
+    }
+  ],
+  "per_defect_unresolved_blockers": [],
+  "exact_next_action": "Root reviews the four-path patch, integrates only these proposed files, runs native governance validate/status and retains final008 boundaries. No implementation or sensitive journey file change is proposed."
+}
