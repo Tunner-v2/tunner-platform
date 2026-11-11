@@ -1,0 +1,177 @@
+{
+  "actual_invocation_sha": "947f8b090b4f74a474a71e47badcb595424bd734",
+  "observed_head": "947f8b090b4f74a474a71e47badcb595424bd734",
+  "helper_sha256": "88d5a4bd49ceb561725d980ab3ee879499ef82c338a165765401989b8e8db01e",
+  "source_delta": {
+    "baseline": "6e562db102ce75d5ed478a15e2970ff55ab98fef",
+    "production_paths": [
+      "web/apps/user/totp.tsx"
+    ],
+    "jsx_text_unchanged": true,
+    "jsx_sha256": "121a810186975276e205e5cc2414c555166817dfebcdc3c77e9143505a380603",
+    "css_copy_shared_components_unchanged": true,
+    "test_delta": [
+      "web/tests/totp/ui/totp.spec.ts"
+    ],
+    "sensitive_test_helpers": "Outside rendered production dependency graph; not claimed source-equivalent to6e"
+  },
+  "historical_evidence": {
+    "renders": 188,
+    "manual_axe_resolutions": 194,
+    "route_probes": 40,
+    "provenance": "Retain original6e source and hashes; existing nonvisual behavior changed only acknowledged same-path cancellation. New43 tests plus bounded composition/keyboard replace affected behavior claim, no new full188 execution claim."
+  },
+  "results": [
+    {
+      "width": 1440,
+      "kind": "DISABLE",
+      "status": "PASS",
+      "acknowledgedStatus": "REJECTED",
+      "metadataReads": 2,
+      "exactOriginalCancel": true,
+      "nextStartTargetsCurrentFactorAndVersion": true,
+      "during": {
+        "managementPreserved": true,
+        "enabledManagementActions": 0
+      },
+      "metrics": {
+        "viewport": {
+          "width": 1440,
+          "height": 1100
+        },
+        "overflow": false,
+        "clipped": [],
+        "focus": {
+          "tag": "H1",
+          "id": "totp-page-heading",
+          "text": "Authenticator app"
+        },
+        "factorRows": 1,
+        "dangerPanel": true,
+        "url": "/account/security/authenticator",
+        "localStorageEntries": 0,
+        "sessionStorageEntries": 0
+      },
+      "keyboardReturn": "HEADING_FALLBACK_TRIGGER_REMOVED",
+      "keyboardNextAction": true
+    },
+    {
+      "width": 1440,
+      "kind": "RESET",
+      "status": "PASS",
+      "acknowledgedStatus": "EXPIRED",
+      "metadataReads": 2,
+      "exactOriginalCancel": true,
+      "nextStartTargetsCurrentFactorAndVersion": true,
+      "during": {
+        "managementPreserved": true,
+        "enabledManagementActions": 0
+      },
+      "metrics": {
+        "viewport": {
+          "width": 1440,
+          "height": 1100
+        },
+        "overflow": false,
+        "clipped": [],
+        "focus": {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "Review replacement"
+        },
+        "factorRows": 1,
+        "dangerPanel": true,
+        "url": "/account/security/authenticator",
+        "localStorageEntries": 0,
+        "sessionStorageEntries": 0
+      },
+      "keyboardReturn": "SAME_CONNECTED_TRIGGER",
+      "keyboardNextAction": true
+    },
+    {
+      "width": 390,
+      "kind": "DISABLE",
+      "status": "PASS",
+      "acknowledgedStatus": "REJECTED",
+      "metadataReads": 2,
+      "exactOriginalCancel": true,
+      "nextStartTargetsCurrentFactorAndVersion": true,
+      "during": {
+        "managementPreserved": true,
+        "enabledManagementActions": 0
+      },
+      "metrics": {
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "overflow": false,
+        "clipped": [],
+        "focus": {
+          "tag": "H1",
+          "id": "totp-page-heading",
+          "text": "Authenticator app"
+        },
+        "factorRows": 1,
+        "dangerPanel": true,
+        "url": "/account/security/authenticator",
+        "localStorageEntries": 0,
+        "sessionStorageEntries": 0
+      },
+      "keyboardReturn": "HEADING_FALLBACK_TRIGGER_REMOVED",
+      "keyboardNextAction": true
+    },
+    {
+      "width": 390,
+      "kind": "RESET",
+      "status": "PASS",
+      "acknowledgedStatus": "EXPIRED",
+      "metadataReads": 2,
+      "exactOriginalCancel": true,
+      "nextStartTargetsCurrentFactorAndVersion": true,
+      "during": {
+        "managementPreserved": true,
+        "enabledManagementActions": 0
+      },
+      "metrics": {
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "overflow": false,
+        "clipped": [],
+        "focus": {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "Review replacement"
+        },
+        "factorRows": 1,
+        "dangerPanel": true,
+        "url": "/account/security/authenticator",
+        "localStorageEntries": 0,
+        "sessionStorageEntries": 0
+      },
+      "keyboardReturn": "SAME_CONNECTED_TRIGGER",
+      "keyboardNextAction": true
+    }
+  ],
+  "pictures": [
+    {
+      "path": "manage-two-1440.png",
+      "sha256": "dfe5e961e0dbf00c7664d06261ac7ad08680359f9a7db50f9ad20763c16b07bc"
+    },
+    {
+      "path": "manage-one-after-cancel-1440.png",
+      "sha256": "1953633fcd78187ae9326a2d257d8dd65c140541b38dc7fcb0b5bdffdcd4805b"
+    },
+    {
+      "path": "manage-two-390.png",
+      "sha256": "1ab66e88a7b43785fb4ec159f60abe20680e581a266e1fb19fe3ad6044cbc63f"
+    },
+    {
+      "path": "manage-one-after-cancel-390.png",
+      "sha256": "49a14631bc4052a356e02fbd33b066a25b91560f8aca38c908f21e6ae6c51307"
+    }
+  ],
+  "boundary": "Public nonfunctional actual React component only; no live BFF/domain authority, privacy acceptance or final008 acceptance."
+}

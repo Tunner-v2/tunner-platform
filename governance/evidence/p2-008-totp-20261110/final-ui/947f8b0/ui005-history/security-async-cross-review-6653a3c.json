@@ -1,0 +1,56 @@
+{
+  "schemaVersion": 1,
+  "scope": "TUN-P2-008",
+  "type": "UI005_FOCUSED_STATIC_ASYNC_SCOPE_CROSS_REVIEW",
+  "result": "NO_DISCRETE_FINDING_IN_REVIEWED_DELTA",
+  "recordedAt": "2026-11-11T04:53:27Z",
+  "reviewedBehaviorCommit": "6653a3cac663394d3cd32776d519988f99a410ad",
+  "baseline": "37f50383e43c9fd8747f894b83d6e552ad4402b5",
+  "path": "web/apps/user/totp.tsx",
+  "patch": {
+    "path": "artifacts/p2-008-totp-20261110/ui005-review/ui005-fix-only.patch",
+    "sha256": "5b37292a778f7e35b696e0113872d080b57996e25cb0a1ac6a08046ac2ad1092"
+  },
+  "sourceIdentity": {
+    "workingSha256": "dcf925a2891a179eb483e62f665480e19b7ac8ba5a27ab49bb5a3fea960a4f29",
+    "candidateLfSha256": "1ee1d5eda8d49ccc1e036c1c1520bd73bd5053841635ab88e2a478bed5c1bce9",
+    "committedGitBlob": "308a8e4c0429c0ebd6a5cffd41edd3939cb73f77",
+    "identity": "Working CRLF content normalizes exactly to reviewed candidate; filtered Git blob equals6653 commit; no scoped dirty source."
+  },
+  "changeScope": "One production UI file,6 insertions/5 deletions; acknowledged same-path REJECTED/EXPIRED cancellation schedules the existing owner-scoped options/method/recovery loader and retains management DOM disabled during it.",
+  "checks": [
+    {
+      "control": "Same-action identity and authority",
+      "finding": "Existing parseTotpOperation(value), original request/enrollment fields, current(scope), allowed terminal statuses and server cancellation call are unchanged. No independent local authority or callback replacement."
+    },
+    {
+      "control": "Cancel finally",
+      "finding": "refreshAfterCancel.current is set synchronously before cancellation finally executes. That finally retains flight/busy for the refresh handoff. Ordinary error/other-route paths still clear their current flight as before."
+    },
+    {
+      "control": "Effect handoff",
+      "finding": "Only flag+management pathname selects refreshingCancel; flag is consumed once, old controller aborted, new scope created and running(true) kept. All other effects retain old ready/guard/loading behavior."
+    },
+    {
+      "control": "Asynchronous scope",
+      "finding": "New load finally clears busy only for refreshingCancel and current(scope). Aborted/stale loads cannot unblock a newer scope. Existing option/method/401/unavailable paths are preserved; no stale metadata fallback introduced."
+    },
+    {
+      "control": "Action guards",
+      "finding": "flight.current remains true while new authority loads; existing start/check guards and disabled management composition remain. Missing/failed owner reads preserve existing unavailable behavior."
+    },
+    {
+      "control": "Focus",
+      "finding": "The existing restoration effect waits !busy/!guarded/!proof/!review and depends on busy; the acknowledged management refresh preserves DOM so connected trigger can be restored after load. No new shared focus policy or selector is introduced."
+    },
+    {
+      "control": "Secret handling",
+      "finding": "Sensitive code/disclosure clearing remains at cancellation and effect start. No new log, capture, request field, local storage, URL value, raw error or policy value."
+    }
+  ],
+  "sourceMutatedByReviewer": false,
+  "newTestsRunByReviewer": false,
+  "humanSignoff": false,
+  "relationToFourRoleSnapshot": "Companion delta only to pinned759/b49 four-role assessments; core/provider/native cohort inputs are unchanged. No whole-cohort rerun or historical redate is implied.",
+  "acceptance": "Static review only. Actual new public red-to-green tests, existing focus/route/form regressions, complete committed build/assets binding and successful exact operation-proof integration are required before UI005 closure or whole008 local acceptance. Unknown Windows metadata remains unattributed/preserved; no global filesystem claim."
+}

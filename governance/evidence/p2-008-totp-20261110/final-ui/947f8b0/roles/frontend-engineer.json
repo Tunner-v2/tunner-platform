@@ -1,0 +1,737 @@
+{
+  "schema_version": 1,
+  "record_kind": "FINAL_SCOPED_EXECUTING_AGENT_UI_CONTRACT_REVIEW",
+  "role": "frontend-engineer",
+  "scope_id": "TUN-P2-008",
+  "result": "PASS",
+  "reviewed_at": "2026-11-11T05:11:48.794Z",
+  "reviewed_commit_sha": "947f8b090b4f74a474a71e47badcb595424bd734",
+  "observed_preparation_head": "27fe961962e2451f14831b4684c1ae0e35d4e170",
+  "skill_ref": ".agent/skills/frontend-engineer/SKILL.md",
+  "skill_version": "1.1.0",
+  "skill_sha256": "3472e745aa478457939b1aeeba319f72989bb9e97791e458f0b9979ec1b538d7",
+  "authority_refs": [
+    {
+      "path": "docs/authority/current/development/09_Testing_Acceptance_Evidence_and_Quality_Gates.md",
+      "sha256": "52a732494a5278a30077f72b6a8cb57b0a2d075ed2d7102e87f2a04d089ad8fb"
+    },
+    {
+      "path": "docs/authority/current/development/10_UI_UX_Components_Widgets_and_Plugins_Development_Rules.md",
+      "sha256": "697758f34f7318c736585cffec1634a42aee949f6877f8d4873859d4c44da685"
+    },
+    {
+      "path": "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md",
+      "sha256": "e21bc59400b9db52a0dd7d94dde861bb952ce4688111dc9b4d97446f0488de74"
+    },
+    {
+      "path": "docs/authority/current/development/31_UI_UX_Screen_and_Control_Center_Requirements_Matrix.md",
+      "sha256": "19d70b54622c610226d6d2797af4c35aa1d71d2d7387f9e15982723c25fc3302"
+    },
+    {
+      "path": "docs/authority/current/development/32_Domain_API_Event_Data_and_Policy_Contract_Catalog.md",
+      "sha256": "2030e8eb6b3c80ba8d26e1aaf849eef9e57db78c1ac3cf400f9b18ffb99f3ab7"
+    },
+    {
+      "path": "docs/authority/current/decisions/AMD-0008_Approved_Figma_Visual_Fidelity_and_Product_Owner_UX_Consent.md",
+      "sha256": "f534e3eeebb7723ba5bd34c348338981b7cd745ea5d81c18fa2e214c098d630b"
+    },
+    {
+      "path": "docs/authority/current/decisions/AMD-0009_URL_Addressable_Routing_and_Governed_Form_Validation.md",
+      "sha256": "052deaa9a0592602dd5510994bf36e3354c41a7e1324308fff61f41207a3d153"
+    }
+  ],
+  "historical_assessment": {
+    "path": "governance/evidence/p2-008-totp-20261110/final-ui/947f8b0/historical/roles/frontend-engineer.json",
+    "sha256": "5c292e3dd4e044d9ee53c5c4be282a6bbe6a8155050e98bba00d4e09da28b2a3"
+  },
+  "prior_ui005_blocking_addendum": {
+    "path": "governance/evidence/p2-008-totp-20261110/final-ui/947f8b0/historical/pre-repair-ui005-blocking-addendum.json",
+    "sha256": "34594c96614b8a30c011d54d270ef63d447b8eadb4338ae8fdf31a2308d7a457"
+  },
+  "source_and_evidence_refs": [
+    {
+      "path": "governance/evidence/p2-008-totp-20261110/final-ui/947f8b0/source-binding.json",
+      "sha256": "f5d5fe3e66915e931667eb4a8445a6548f4c36132ab7a2f8352aded253d8ad15"
+    },
+    {
+      "path": "governance/evidence/p2-008-totp-20261110/final-ui/947f8b0/public-ui/manifest.json",
+      "sha256": "4838a7511b4bc5e423f08697629cf166aa7c34a6cdfb6ea8d2f17527c7837e73"
+    },
+    {
+      "path": "governance/evidence/p2-008-totp-20261110/final-ui/947f8b0/public-ui/results.json",
+      "sha256": "44c27e4aa3463ec7c6fff75e7b98cb48b3de809f71c906d228f477d8746e0953"
+    },
+    {
+      "path": "governance/evidence/p2-008-totp-20261110/final-ui/947f8b0/public-ui/composition-r2/composition.json",
+      "sha256": "b31813840b9c5239c7eeff8f430024ba316d885ea764a9084363c1d2a490e0e4"
+    },
+    {
+      "path": "governance/evidence/p2-008-totp-20261110/final-ui/947f8b0/enrollment-password-mfa-preserve.json",
+      "sha256": "78e3f9a36fe47f8ba25739dc5ab4b98e6498ca62363861f660b954c4e874a4c3"
+    },
+    {
+      "path": "governance/evidence/p2-008-totp-20261110/final-ui/947f8b0/operation-proof-causal-revoke.json",
+      "sha256": "bccf0b17a6d71e936bb5721e28033f78188691ec8332e0b537fefe074ea9cee8"
+    },
+    {
+      "path": "governance/evidence/p2-008-totp-20261110/final-ui/947f8b0/passkey-mfa-reset.json",
+      "sha256": "0ce0c98e5b87cc7318af88da665df9e5e7158d0d6c43dd6d3ad5d46dc4675a46"
+    },
+    {
+      "path": "governance/evidence/p2-008-totp-20261110/final-ui/947f8b0/local-authority-resolution.json",
+      "sha256": "405058f22ad408f4384414829aa163bbd29043b44658d96a9390a64e16769605"
+    },
+    {
+      "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/render-manifest-final.json",
+      "sha256": "5be639e38a6f67ad65ff454a9b229f0bf68af8f3e9487369301b951542c17887"
+    },
+    {
+      "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/contrast-resolution-final.json",
+      "sha256": "68ef7dff051dc6dfa5c5266532b7978d58ed0a0444ad19cf1aa6e6b17d1323e0"
+    },
+    {
+      "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/navigation-results.json",
+      "sha256": "667558ae2fb966497abd7983511c3441dfc321fcd06da51a132225d72a2f0971"
+    },
+    {
+      "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-laptop/manifest.json",
+      "sha256": "873cc37eaf3d0aaea4310ec9dcfc378537081711a2b7ebe9351964b068ca8744"
+    },
+    {
+      "path": "governance/evidence/TUN-P2-008-VISUAL-CONSENT.json",
+      "sha256": "d5a91c23c34ab6cd134648ab73867e9afce14c35f795f1a1eecdfe5d60040014"
+    },
+    {
+      "path": "governance/evidence/TUN-P2-008-FACTOR-PICKER-CONSENT.json",
+      "sha256": "b6ce7663148cd555d69bd4f8081f4553dbcb114662e3523f2faab65bb3636d30"
+    }
+  ],
+  "mandatory_contract_checks": [
+    {
+      "check": "Shared component/form reuse",
+      "result": "PASS",
+      "scope": "Actual current43 public tests/4composition checks/3finite native journeys composed with source-bound historical188render/194contrast/40route evidence; approved scope only."
+    },
+    {
+      "check": "BFF-only auth/data boundary",
+      "result": "PASS",
+      "scope": "Actual current43 public tests/4composition checks/3finite native journeys composed with source-bound historical188render/194contrast/40route evidence; approved scope only."
+    },
+    {
+      "check": "Accessibility",
+      "result": "PASS",
+      "scope": "Actual current43 public tests/4composition checks/3finite native journeys composed with source-bound historical188render/194contrast/40route evidence; approved scope only."
+    },
+    {
+      "check": "Content resolver use",
+      "result": "PASS",
+      "scope": "Actual current43 public tests/4composition checks/3finite native journeys composed with source-bound historical188render/194contrast/40route evidence; approved scope only."
+    },
+    {
+      "check": "Pending/error/recovery handling",
+      "result": "PASS",
+      "scope": "Actual current43 public tests/4composition checks/3finite native journeys composed with source-bound historical188render/194contrast/40route evidence; approved scope only."
+    },
+    {
+      "check": "Frontend regression evidence",
+      "result": "PASS",
+      "scope": "Actual current43 public tests/4composition checks/3finite native journeys composed with source-bound historical188render/194contrast/40route evidence; approved scope only."
+    }
+  ],
+  "items": [
+    {
+      "item_id": "U-AUTH-01",
+      "kind": "SCREEN",
+      "pathname": "/login",
+      "result": "PASS",
+      "reviewed_source_paths": [
+        "web/apps/user/authentication.tsx",
+        "web/apps/user/authentication.css",
+        "web/apps/user/authentication.routes.ts",
+        "web/apps/user/authentication.validation.ts",
+        "src/Modules/Identity/AuthenticationEndpoints.cs",
+        "src/Modules/Identity/IdentityWebAssets.cs",
+        "web/apps/user/passkeys.sign-in.tsx",
+        "web/apps/user/passkeys.native.ts",
+        "web/apps/user/passkeys.api.ts",
+        "web/apps/user/totp.mfa.tsx",
+        "web/apps/user/totp.picker.tsx",
+        "web/apps/user/totp.routes.ts",
+        "web/apps/user/totp.api.ts",
+        "web/apps/user/totp.validation.ts",
+        "web/apps/user/totp.content-keys.ts",
+        "web/apps/user/totp.code.tsx",
+        "web/apps/user/totp.css",
+        "src/Modules/Identity/TotpEndpoints.cs"
+      ],
+      "scoped_conclusion": "Password/passkey completion branches to unfinished MFA rather than rendering signed-in from primary proof alone.",
+      "prior_manual_visual_basis": "Current parent Login variant passes fresh compatibility. Crossing into required008MFA remains part of the separate integrated journey.",
+      "existing_consent_refs": [
+        {
+          "path": "governance/evidence/TUN-P2-005-VISUAL-CONSENT-20261021.json",
+          "sha256": "58eff6b8b41bd790a55afc048a139874a60ee12e72013e3a0e316ce2ed815145"
+        },
+        {
+          "path": "governance/evidence/TUN-P2-005-VISUAL-ACCEPTANCE-DEFERRAL-20261021.json",
+          "sha256": "2a2ed7402e090eeab3a73ef0726c0209b62db34de1f720234e7a23c0ae5cf37f"
+        },
+        {
+          "path": "governance/evidence/TUN-P2-007-VISUAL-CONSENT-20261109.json",
+          "sha256": "c9415304746bb882a0c49a3b42e16c0e312882f6b48401b1d51666a18d775dfd"
+        },
+        {
+          "path": "governance/evidence/TUN-P2-008-VISUAL-CONSENT.json",
+          "sha256": "d5a91c23c34ab6cd134648ab73867e9afce14c35f795f1a1eecdfe5d60040014"
+        },
+        {
+          "path": "governance/evidence/TUN-P2-008-FACTOR-PICKER-CONSENT.json",
+          "sha256": "b6ce7663148cd555d69bd4f8081f4553dbcb114662e3523f2faab65bb3636d30"
+        }
+      ],
+      "new_blocking_findings": []
+    },
+    {
+      "item_id": "U-AUTH-04",
+      "kind": "SCREEN",
+      "pathname": "/account/security/authenticator/setup",
+      "result": "PASS",
+      "reviewed_source_paths": [
+        "web/apps/user/totp.tsx",
+        "web/apps/user/totp.ui.tsx",
+        "web/apps/user/totp.routes.ts",
+        "web/apps/user/totp.api.ts",
+        "web/apps/user/totp.validation.ts",
+        "web/apps/user/totp.content-keys.ts",
+        "web/apps/user/totp.code.tsx",
+        "web/apps/user/totp.css",
+        "src/Modules/Identity/TotpEndpoints.cs",
+        "src/Modules/Identity/IdentityWebAssets.cs",
+        "web/apps/user/totp-qr.ts"
+      ],
+      "scoped_conclusion": "Shared code form, original operation identity, volatile disclosure and guarded setup route remain cohesive.",
+      "prior_manual_visual_basis": "Actual83:117 geometry and approved008-V02 truthful one-time/consumed/pending/error states reviewed. Public sentinel is not a live seed.",
+      "existing_consent_refs": [
+        {
+          "path": "governance/evidence/TUN-P2-008-VISUAL-CONSENT.json",
+          "sha256": "d5a91c23c34ab6cd134648ab73867e9afce14c35f795f1a1eecdfe5d60040014"
+        },
+        {
+          "path": "governance/evidence/TUN-P2-008-FACTOR-PICKER-CONSENT.json",
+          "sha256": "b6ce7663148cd555d69bd4f8081f4553dbcb114662e3523f2faab65bb3636d30"
+        }
+      ],
+      "new_blocking_findings": []
+    },
+    {
+      "item_id": "U-ACCT-03",
+      "kind": "SCREEN",
+      "pathname": "/account/security/sign-in-methods",
+      "result": "PASS",
+      "reviewed_source_paths": [
+        "web/apps/user/passkeys.tsx",
+        "web/apps/user/passkeys.css",
+        "web/apps/user/passkeys.api.ts",
+        "web/apps/user/passkeys.routes.ts",
+        "web/apps/user/passkeys.native.ts",
+        "web/apps/user/step-up.tsx",
+        "src/Modules/Identity/PasskeyEndpoints.cs",
+        "web/apps/user/totp.method-row.tsx",
+        "web/apps/user/totp.api.ts",
+        "web/apps/user/totp.routes.ts"
+      ],
+      "scoped_conclusion": "Capability and current method metadata determine whether the row appears; the owning route still guards actions.",
+      "prior_manual_visual_basis": "Current methods owner advertises only server-backed availability. TOTP link does not invent enrollment or recovery policy.",
+      "existing_consent_refs": [
+        {
+          "path": "governance/evidence/TUN-P2-007-VISUAL-CONSENT-20261109.json",
+          "sha256": "c9415304746bb882a0c49a3b42e16c0e312882f6b48401b1d51666a18d775dfd"
+        },
+        {
+          "path": "governance/evidence/TUN-P2-008-VISUAL-CONSENT.json",
+          "sha256": "d5a91c23c34ab6cd134648ab73867e9afce14c35f795f1a1eecdfe5d60040014"
+        },
+        {
+          "path": "governance/evidence/TUN-P2-008-FACTOR-PICKER-CONSENT.json",
+          "sha256": "b6ce7663148cd555d69bd4f8081f4553dbcb114662e3523f2faab65bb3636d30"
+        }
+      ],
+      "new_blocking_findings": []
+    },
+    {
+      "item_id": "FORM-LOGIN",
+      "kind": "FORM",
+      "pathname": "/login",
+      "result": "PASS",
+      "reviewed_source_paths": [
+        "web/apps/user/authentication.tsx",
+        "web/apps/user/authentication.css",
+        "web/apps/user/authentication.routes.ts",
+        "web/apps/user/authentication.validation.ts",
+        "src/Modules/Identity/AuthenticationEndpoints.cs",
+        "src/Modules/Identity/IdentityWebAssets.cs",
+        "web/apps/user/totp.api.ts",
+        "web/apps/user/totp.routes.ts"
+      ],
+      "scoped_conclusion": "Shared form/schema behavior and clear-on-uncertain handling remain separate from authoritative credential checks.",
+      "prior_manual_visual_basis": "Existing parent form compatibility is current; full primary→TOTP→qualifying-session runtime journey remains pending.",
+      "existing_consent_refs": [
+        {
+          "path": "governance/evidence/TUN-P2-005-VISUAL-CONSENT-20261021.json",
+          "sha256": "58eff6b8b41bd790a55afc048a139874a60ee12e72013e3a0e316ce2ed815145"
+        },
+        {
+          "path": "governance/evidence/TUN-P2-005-VISUAL-ACCEPTANCE-DEFERRAL-20261021.json",
+          "sha256": "2a2ed7402e090eeab3a73ef0726c0209b62db34de1f720234e7a23c0ae5cf37f"
+        },
+        {
+          "path": "governance/evidence/TUN-P2-007-VISUAL-CONSENT-20261109.json",
+          "sha256": "c9415304746bb882a0c49a3b42e16c0e312882f6b48401b1d51666a18d775dfd"
+        },
+        {
+          "path": "governance/evidence/TUN-P2-008-VISUAL-CONSENT.json",
+          "sha256": "d5a91c23c34ab6cd134648ab73867e9afce14c35f795f1a1eecdfe5d60040014"
+        },
+        {
+          "path": "governance/evidence/TUN-P2-008-FACTOR-PICKER-CONSENT.json",
+          "sha256": "b6ce7663148cd555d69bd4f8081f4553dbcb114662e3523f2faab65bb3636d30"
+        }
+      ],
+      "new_blocking_findings": []
+    },
+    {
+      "item_id": "COMP-STEP-UP",
+      "kind": "COMPONENT",
+      "pathname": null,
+      "result": "PASS",
+      "reviewed_source_paths": [
+        "web/apps/user/step-up.tsx",
+        "web/apps/user/step-up.css",
+        "web/packages/ui/src/dialog.tsx",
+        "web/packages/ui/src/forms.tsx",
+        "src/Modules/Identity/StepUpBrowserEndpoints.cs",
+        "src/Modules/Identity/StepUpApplication.cs",
+        "web/apps/user/step-up.totp.tsx",
+        "web/apps/user/totp.picker.tsx",
+        "web/apps/user/totp.api.ts",
+        "web/apps/user/totp.validation.ts",
+        "web/apps/user/totp.content-keys.ts",
+        "web/apps/user/totp.code.tsx",
+        "web/apps/user/totp.css",
+        "src/Modules/Identity/StepUpTotpBrowserEndpoints.cs"
+      ],
+      "scoped_conclusion": "Shared dialog, controlled method state and exact operation/source guards remain in one reusable capability.",
+      "prior_manual_visual_basis": "Existing typed shared native dialog retained; new proof details are covered by approved008-V04 and separate picker consent.",
+      "existing_consent_refs": [
+        {
+          "path": "governance/evidence/TUN-P2-006-VISUAL-CONSENT-20261108.json",
+          "sha256": "881ffda9f2b7431c9077922789aa585780022651d5a2c8a628365a85de5fc3b2"
+        },
+        {
+          "path": "governance/evidence/TUN-P2-007-VISUAL-CONSENT-20261109.json",
+          "sha256": "c9415304746bb882a0c49a3b42e16c0e312882f6b48401b1d51666a18d775dfd"
+        },
+        {
+          "path": "governance/evidence/TUN-P2-008-VISUAL-CONSENT.json",
+          "sha256": "d5a91c23c34ab6cd134648ab73867e9afce14c35f795f1a1eecdfe5d60040014"
+        },
+        {
+          "path": "governance/evidence/TUN-P2-008-FACTOR-PICKER-CONSENT.json",
+          "sha256": "b6ce7663148cd555d69bd4f8081f4553dbcb114662e3523f2faab65bb3636d30"
+        }
+      ],
+      "new_blocking_findings": []
+    },
+    {
+      "item_id": "DEV-STEP-UP",
+      "kind": "SCREEN",
+      "pathname": "/browser-testing/step-up",
+      "result": "PASS",
+      "reviewed_source_paths": [
+        "web/apps/user/step-up.tsx",
+        "web/apps/user/step-up.css",
+        "web/packages/ui/src/dialog.tsx",
+        "web/packages/ui/src/forms.tsx",
+        "src/Modules/Identity/StepUpBrowserEndpoints.cs",
+        "src/Modules/Identity/StepUpApplication.cs",
+        "web/fixtures/step-up",
+        "web/apps/user/step-up.totp.tsx",
+        "web/apps/user/totp.picker.tsx"
+      ],
+      "scoped_conclusion": "It is a fixture entry with the same shared controls; runtime owner/proof and publication remain explicit dependencies.",
+      "prior_manual_visual_basis": "A development-only public carrier, not a Product screen. The runtime warning and font probe are explicit: actual proof selects loaded approved Inter; standalone Mono URL is404 and not selected by proof.",
+      "existing_consent_refs": [
+        {
+          "path": "governance/evidence/TUN-P2-006-VISUAL-CONSENT-20261108.json",
+          "sha256": "881ffda9f2b7431c9077922789aa585780022651d5a2c8a628365a85de5fc3b2"
+        },
+        {
+          "path": "governance/evidence/TUN-P2-008-VISUAL-CONSENT.json",
+          "sha256": "d5a91c23c34ab6cd134648ab73867e9afce14c35f795f1a1eecdfe5d60040014"
+        },
+        {
+          "path": "governance/evidence/TUN-P2-008-FACTOR-PICKER-CONSENT.json",
+          "sha256": "b6ce7663148cd555d69bd4f8081f4553dbcb114662e3523f2faab65bb3636d30"
+        }
+      ],
+      "new_blocking_findings": []
+    },
+    {
+      "item_id": "FORM-STEP-UP",
+      "kind": "FORM",
+      "pathname": null,
+      "result": "PASS",
+      "reviewed_source_paths": [
+        "web/apps/user/step-up.tsx",
+        "web/apps/user/step-up.css",
+        "web/packages/ui/src/dialog.tsx",
+        "web/packages/ui/src/forms.tsx",
+        "src/Modules/Identity/StepUpBrowserEndpoints.cs",
+        "src/Modules/Identity/StepUpApplication.cs"
+      ],
+      "scoped_conclusion": "Schema, duplicate protection, original binding and server rejection handling stay in the common dialog.",
+      "prior_manual_visual_basis": "Current existing password form remains independently validated; TOTP code rules belong FORM-STEP-UP-TOTP.",
+      "existing_consent_refs": [
+        {
+          "path": "governance/evidence/TUN-P2-006-VISUAL-CONSENT-20261108.json",
+          "sha256": "881ffda9f2b7431c9077922789aa585780022651d5a2c8a628365a85de5fc3b2"
+        },
+        {
+          "path": "governance/evidence/TUN-P2-007-VISUAL-CONSENT-20261109.json",
+          "sha256": "c9415304746bb882a0c49a3b42e16c0e312882f6b48401b1d51666a18d775dfd"
+        },
+        {
+          "path": "governance/evidence/TUN-P2-008-VISUAL-CONSENT.json",
+          "sha256": "d5a91c23c34ab6cd134648ab73867e9afce14c35f795f1a1eecdfe5d60040014"
+        },
+        {
+          "path": "governance/evidence/TUN-P2-008-FACTOR-PICKER-CONSENT.json",
+          "sha256": "b6ce7663148cd555d69bd4f8081f4553dbcb114662e3523f2faab65bb3636d30"
+        }
+      ],
+      "new_blocking_findings": []
+    },
+    {
+      "item_id": "COMP-PASSKEY-SIGN-IN",
+      "kind": "COMPONENT",
+      "pathname": null,
+      "result": "PASS",
+      "reviewed_source_paths": [
+        "web/apps/user/passkeys.sign-in.tsx",
+        "web/apps/user/passkeys.native.ts",
+        "web/apps/user/passkeys.api.ts",
+        "web/apps/user/authentication.tsx",
+        "src/Modules/Identity/PasskeyEndpoints.cs",
+        "web/apps/user/totp.api.ts",
+        "web/apps/user/totp.routes.ts"
+      ],
+      "scoped_conclusion": "Native WebAuthn mechanics and primary-to-required-MFA outcome handling remain component-owned.",
+      "prior_manual_visual_basis": "Fresh existing passkey sign-in compatibility is tested after transitive TOTP imports; native primary proof is not TOTP primary login.",
+      "existing_consent_refs": [
+        {
+          "path": "governance/evidence/TUN-P2-007-VISUAL-CONSENT-20261109.json",
+          "sha256": "c9415304746bb882a0c49a3b42e16c0e312882f6b48401b1d51666a18d775dfd"
+        },
+        {
+          "path": "governance/evidence/TUN-P2-008-VISUAL-CONSENT.json",
+          "sha256": "d5a91c23c34ab6cd134648ab73867e9afce14c35f795f1a1eecdfe5d60040014"
+        },
+        {
+          "path": "governance/evidence/TUN-P2-008-FACTOR-PICKER-CONSENT.json",
+          "sha256": "b6ce7663148cd555d69bd4f8081f4553dbcb114662e3523f2faab65bb3636d30"
+        }
+      ],
+      "new_blocking_findings": []
+    },
+    {
+      "item_id": "U-ACCT-TOTP",
+      "kind": "SCREEN",
+      "pathname": "/account/security/authenticator",
+      "result": "PASS",
+      "reviewed_source_paths": [
+        "web/apps/user/totp.tsx",
+        "web/apps/user/totp.ui.tsx",
+        "web/apps/user/totp.routes.ts",
+        "web/apps/user/totp.api.ts",
+        "web/apps/user/totp.validation.ts",
+        "web/apps/user/totp.content-keys.ts",
+        "web/apps/user/totp.code.tsx",
+        "web/apps/user/totp.css",
+        "src/Modules/Identity/TotpEndpoints.cs",
+        "src/Modules/Identity/IdentityWebAssets.cs"
+      ],
+      "scoped_conclusion": "Current acknowledged same-path cancellation reloads authoritative options/factors before actions re-enable. Public2-to-1 composition, unchanged-trigger focus and removed-trigger heading fallback pass. Actual source-freshness causal journey now completes without a reload workaround. Existing approved visual/copy composition is preserved.",
+      "prior_manual_visual_basis": "Actual83:2 shell/status/panel/danger geometry reviewed with approved008-V01/V03 truthful facts and explicit configured effects. Metadata503 now keeps branded unavailable and read-only retry.",
+      "existing_consent_refs": [
+        {
+          "path": "governance/evidence/TUN-P2-008-VISUAL-CONSENT.json",
+          "sha256": "d5a91c23c34ab6cd134648ab73867e9afce14c35f795f1a1eecdfe5d60040014"
+        },
+        {
+          "path": "governance/evidence/TUN-P2-008-FACTOR-PICKER-CONSENT.json",
+          "sha256": "b6ce7663148cd555d69bd4f8081f4553dbcb114662e3523f2faab65bb3636d30"
+        }
+      ],
+      "new_blocking_findings": []
+    },
+    {
+      "item_id": "U-ACCT-TOTP-READY",
+      "kind": "SCREEN",
+      "pathname": "/account/security/authenticator/ready",
+      "result": "PASS",
+      "reviewed_source_paths": [
+        "web/apps/user/totp.tsx",
+        "web/apps/user/totp.ui.tsx",
+        "web/apps/user/totp.routes.ts",
+        "web/apps/user/totp.api.ts",
+        "web/apps/user/totp.validation.ts",
+        "web/apps/user/totp.content-keys.ts",
+        "web/apps/user/totp.code.tsx",
+        "web/apps/user/totp.css",
+        "src/Modules/Identity/TotpEndpoints.cs",
+        "src/Modules/Identity/IdentityWebAssets.cs"
+      ],
+      "scoped_conclusion": "Guarded completion requires the original activated operation and an active matching factor.",
+      "prior_manual_visual_basis": "Actual83:298 center card/check/action geometry reviewed; public completed metadata assumption cannot certify native activation.",
+      "existing_consent_refs": [
+        {
+          "path": "governance/evidence/TUN-P2-008-VISUAL-CONSENT.json",
+          "sha256": "d5a91c23c34ab6cd134648ab73867e9afce14c35f795f1a1eecdfe5d60040014"
+        },
+        {
+          "path": "governance/evidence/TUN-P2-008-FACTOR-PICKER-CONSENT.json",
+          "sha256": "b6ce7663148cd555d69bd4f8081f4553dbcb114662e3523f2faab65bb3636d30"
+        }
+      ],
+      "new_blocking_findings": []
+    },
+    {
+      "item_id": "U-AUTH-TOTP-MFA",
+      "kind": "SCREEN",
+      "pathname": "/login/verify-authenticator",
+      "result": "PASS",
+      "reviewed_source_paths": [
+        "web/apps/user/authentication.tsx",
+        "web/apps/user/passkeys.sign-in.tsx",
+        "web/apps/user/totp.mfa.tsx",
+        "web/apps/user/totp.picker.tsx",
+        "web/apps/user/totp.routes.ts",
+        "web/apps/user/totp.api.ts",
+        "web/apps/user/totp.validation.ts",
+        "web/apps/user/totp.content-keys.ts",
+        "web/apps/user/totp.code.tsx",
+        "web/apps/user/totp.css",
+        "src/Modules/Identity/TotpEndpoints.cs",
+        "src/Modules/Identity/AuthenticationEndpoints.cs"
+      ],
+      "scoped_conclusion": "Pending original request, selected source, private value clearing and code-free recovery remain bound.",
+      "prior_manual_visual_basis": "Approved008-V05 authentication shell and separate picker consent reviewed. Final qualifying session is never inferred from GET metadata alone.",
+      "existing_consent_refs": [
+        {
+          "path": "governance/evidence/TUN-P2-008-VISUAL-CONSENT.json",
+          "sha256": "d5a91c23c34ab6cd134648ab73867e9afce14c35f795f1a1eecdfe5d60040014"
+        },
+        {
+          "path": "governance/evidence/TUN-P2-008-FACTOR-PICKER-CONSENT.json",
+          "sha256": "b6ce7663148cd555d69bd4f8081f4553dbcb114662e3523f2faab65bb3636d30"
+        }
+      ],
+      "new_blocking_findings": []
+    },
+    {
+      "item_id": "FORM-TOTP-SETUP",
+      "kind": "FORM",
+      "pathname": null,
+      "result": "PASS",
+      "reviewed_source_paths": [
+        "web/apps/user/totp.tsx",
+        "web/apps/user/totp.ui.tsx",
+        "web/apps/user/totp.routes.ts",
+        "web/apps/user/totp.api.ts",
+        "web/apps/user/totp.validation.ts",
+        "web/apps/user/totp.content-keys.ts",
+        "web/apps/user/totp.code.tsx",
+        "web/apps/user/totp.css",
+        "src/Modules/Identity/TotpEndpoints.cs",
+        "src/Modules/Identity/IdentityWebAssets.cs"
+      ],
+      "scoped_conclusion": "One typed six-digit ASCII grammar preserves leading zeros and delegates native validity to the backend.",
+      "prior_manual_visual_basis": "Shared typed code field, summary and independent native server verification retained; live first-code browser acceptance is pending.",
+      "existing_consent_refs": [
+        {
+          "path": "governance/evidence/TUN-P2-008-VISUAL-CONSENT.json",
+          "sha256": "d5a91c23c34ab6cd134648ab73867e9afce14c35f795f1a1eecdfe5d60040014"
+        },
+        {
+          "path": "governance/evidence/TUN-P2-008-FACTOR-PICKER-CONSENT.json",
+          "sha256": "b6ce7663148cd555d69bd4f8081f4553dbcb114662e3523f2faab65bb3636d30"
+        }
+      ],
+      "new_blocking_findings": []
+    },
+    {
+      "item_id": "FORM-TOTP-MFA",
+      "kind": "FORM",
+      "pathname": null,
+      "result": "PASS",
+      "reviewed_source_paths": [
+        "web/apps/user/authentication.tsx",
+        "web/apps/user/passkeys.sign-in.tsx",
+        "web/apps/user/totp.mfa.tsx",
+        "web/apps/user/totp.picker.tsx",
+        "web/apps/user/totp.routes.ts",
+        "web/apps/user/totp.api.ts",
+        "web/apps/user/totp.validation.ts",
+        "web/apps/user/totp.content-keys.ts",
+        "web/apps/user/totp.code.tsx",
+        "web/apps/user/totp.css",
+        "src/Modules/Identity/TotpEndpoints.cs",
+        "src/Modules/Identity/AuthenticationEndpoints.cs"
+      ],
+      "scoped_conclusion": "One-factor behavior is retained; multiple factors begin unselected and source changes clear prior code.",
+      "prior_manual_visual_basis": "Multiple factors begin unselected; changing source clears code. No UI-selected cardinality, assurance or production policy.",
+      "existing_consent_refs": [
+        {
+          "path": "governance/evidence/TUN-P2-008-VISUAL-CONSENT.json",
+          "sha256": "d5a91c23c34ab6cd134648ab73867e9afce14c35f795f1a1eecdfe5d60040014"
+        },
+        {
+          "path": "governance/evidence/TUN-P2-008-FACTOR-PICKER-CONSENT.json",
+          "sha256": "b6ce7663148cd555d69bd4f8081f4553dbcb114662e3523f2faab65bb3636d30"
+        }
+      ],
+      "new_blocking_findings": []
+    },
+    {
+      "item_id": "FORM-STEP-UP-TOTP",
+      "kind": "FORM",
+      "pathname": null,
+      "result": "PASS",
+      "reviewed_source_paths": [
+        "web/apps/user/step-up.tsx",
+        "web/apps/user/step-up.totp.tsx",
+        "web/apps/user/totp.picker.tsx",
+        "web/apps/user/totp.api.ts",
+        "web/apps/user/totp.validation.ts",
+        "web/apps/user/totp.content-keys.ts",
+        "web/apps/user/totp.code.tsx",
+        "web/apps/user/totp.css",
+        "src/Modules/Identity/StepUpBrowserEndpoints.cs",
+        "src/Modules/Identity/StepUpTotpBrowserEndpoints.cs"
+      ],
+      "scoped_conclusion": "Mount reset removes synthetic initial validation while keeping real validation, first-invalid focus and exact continuation.",
+      "prior_manual_visual_basis": "No synthetic validation on open. Unknown original proof stays source-bound; native mutation authority remains independent.",
+      "existing_consent_refs": [
+        {
+          "path": "governance/evidence/TUN-P2-008-VISUAL-CONSENT.json",
+          "sha256": "d5a91c23c34ab6cd134648ab73867e9afce14c35f795f1a1eecdfe5d60040014"
+        },
+        {
+          "path": "governance/evidence/TUN-P2-008-FACTOR-PICKER-CONSENT.json",
+          "sha256": "b6ce7663148cd555d69bd4f8081f4553dbcb114662e3523f2faab65bb3636d30"
+        }
+      ],
+      "new_blocking_findings": []
+    },
+    {
+      "item_id": "COMP-STEP-UP-TOTP",
+      "kind": "COMPONENT",
+      "pathname": null,
+      "result": "PASS",
+      "reviewed_source_paths": [
+        "web/apps/user/step-up.tsx",
+        "web/apps/user/step-up.totp.tsx",
+        "web/apps/user/totp.picker.tsx",
+        "web/apps/user/totp.api.ts",
+        "web/apps/user/totp.validation.ts",
+        "web/apps/user/totp.content-keys.ts",
+        "web/apps/user/totp.code.tsx",
+        "web/apps/user/totp.css",
+        "src/Modules/Identity/StepUpBrowserEndpoints.cs",
+        "src/Modules/Identity/StepUpTotpBrowserEndpoints.cs"
+      ],
+      "scoped_conclusion": "Shared code/picker primitives preserve current-source binding and code-free original-proof recovery.",
+      "prior_manual_visual_basis": "Approved008-V04 shared proof detail; no handwritten per-screen validation styles or changed shared ModalDialog.",
+      "existing_consent_refs": [
+        {
+          "path": "governance/evidence/TUN-P2-008-VISUAL-CONSENT.json",
+          "sha256": "d5a91c23c34ab6cd134648ab73867e9afce14c35f795f1a1eecdfe5d60040014"
+        },
+        {
+          "path": "governance/evidence/TUN-P2-008-FACTOR-PICKER-CONSENT.json",
+          "sha256": "b6ce7663148cd555d69bd4f8081f4553dbcb114662e3523f2faab65bb3636d30"
+        }
+      ],
+      "new_blocking_findings": []
+    },
+    {
+      "item_id": "COMP-TOTP-FACTOR-PICKER",
+      "kind": "COMPONENT",
+      "pathname": null,
+      "result": "PASS",
+      "reviewed_source_paths": [
+        "web/apps/user/totp.picker.tsx",
+        "web/apps/user/totp.mfa.tsx",
+        "web/apps/user/step-up.totp.tsx",
+        "web/apps/user/totp.api.ts",
+        "web/apps/user/totp.css",
+        "web/packages/ui/src/content.tsx"
+      ],
+      "scoped_conclusion": "Selection binds opaque source/version/state; displayPosition and dates are presentation, not authorization.",
+      "prior_manual_visual_basis": "Separate actual Product consent: published transient numbered labels/trusted timestamps, no raw GUID/nickname/autoselection. Sources and versions stay server-owned.",
+      "existing_consent_refs": [
+        {
+          "path": "governance/evidence/TUN-P2-008-VISUAL-CONSENT.json",
+          "sha256": "d5a91c23c34ab6cd134648ab73867e9afce14c35f795f1a1eecdfe5d60040014"
+        },
+        {
+          "path": "governance/evidence/TUN-P2-008-FACTOR-PICKER-CONSENT.json",
+          "sha256": "b6ce7663148cd555d69bd4f8081f4553dbcb114662e3523f2faab65bb3636d30"
+        }
+      ],
+      "new_blocking_findings": []
+    },
+    {
+      "item_id": "COMP-TOTP-MUTATION-REVIEW",
+      "kind": "COMPONENT",
+      "pathname": null,
+      "result": "PASS",
+      "reviewed_source_paths": [
+        "web/apps/user/totp.tsx",
+        "web/apps/user/totp.ui.tsx",
+        "web/apps/user/totp.routes.ts",
+        "web/apps/user/totp.api.ts",
+        "web/apps/user/totp.validation.ts",
+        "web/apps/user/totp.content-keys.ts",
+        "web/apps/user/totp.code.tsx",
+        "web/apps/user/totp.css",
+        "src/Modules/Identity/TotpEndpoints.cs",
+        "src/Modules/Identity/IdentityWebAssets.cs"
+      ],
+      "scoped_conclusion": "Current acknowledged same-path cancellation reloads authoritative options/factors before actions re-enable. Public2-to-1 composition, unchanged-trigger focus and removed-trigger heading fallback pass. Actual source-freshness causal journey now completes without a reload workaround. Existing approved visual/copy composition is preserved.",
+      "prior_manual_visual_basis": "Approved008-V03 same-screen review and configured session effects. Narrow pending return intent restores only after exact acknowledged cancellation and DOM reenabling; terminal/unknown flows unchanged.",
+      "existing_consent_refs": [
+        {
+          "path": "governance/evidence/TUN-P2-008-VISUAL-CONSENT.json",
+          "sha256": "d5a91c23c34ab6cd134648ab73867e9afce14c35f795f1a1eecdfe5d60040014"
+        },
+        {
+          "path": "governance/evidence/TUN-P2-008-FACTOR-PICKER-CONSENT.json",
+          "sha256": "b6ce7663148cd555d69bd4f8081f4553dbcb114662e3523f2faab65bb3636d30"
+        }
+      ],
+      "new_blocking_findings": []
+    }
+  ],
+  "review_actions": "Re-read current one-file production delta and canonical43 test source, actual43/TSC29contracts records,4fresh composition/keyboard cases and4public images (after-cancel desktop/mobile manually viewed), all3fixed safe receipts and bounded Security authority resolution. Historical public reference/contrast/route review remains source-qualified. No private values/browser/cache contents or external writes accessed.",
+  "findings": [
+    "UI005 reproduced8/8 red at original production source, corrected by committed6653; actual947green43 incl8prior focus and8new freshness cases.",
+    "Only1of40 registered production paths changed from6e; markup/CSS/copy/shared components unchanged, exact current40 source-bound at947.",
+    "All3current finite native journeys:70browser+63coordinator+15persistence checks true; real typography proof verifies loaded approved font assets.",
+    "UNKNOWN Windows observation retained under explicit Security authority resolution; no new global-FS absence requirement, harmless/exposure/deletion claim or weakened original capture controls."
+  ],
+  "blocking_findings": [],
+  "required_actions": [
+    "Root reviews and commits proposed evidence/role records, then executes native UI/gates. Separate remaining work-item roles/aggregate, Product/release and protected-main approval remain governed."
+  ],
+  "role_boundary": "Same executing agent applies each activated contract perspective; not independent human review, participant usability research, Product approval or production content publication. PASS is limited to this reviewed local engineering UI scope."
+}

@@ -1,0 +1,64 @@
+{
+  "schema_version": 1,
+  "scope_id": "TUN-P2-008",
+  "result": "VERIFIED_SCOPED_UI005_REPAIR",
+  "tested_commit_sha": "947f8b090b4f74a474a71e47badcb595424bd734",
+  "production_fix_sha": "6653a3cac663394d3cd32776d519988f99a410ad",
+  "defect_ref": "governance/defects/DEF-TUN-P2-008-UI-005.yaml",
+  "current_defect_status": "OPEN_PENDING_ROOT_DISPOSITION",
+  "evidence_refs": [
+    {
+      "path": "governance/evidence/p2-008-totp-20261110/final-ui/947f8b0/source-binding.json",
+      "sha256": "f5d5fe3e66915e931667eb4a8445a6548f4c36132ab7a2f8352aded253d8ad15"
+    },
+    {
+      "path": "governance/evidence/p2-008-totp-20261110/final-ui/947f8b0/roles/index.json",
+      "sha256": "1fd97e4cea803bd57dfeca961807a7386f9893b32e387f788ec679d3f4a866fe"
+    },
+    {
+      "path": "governance/evidence/p2-008-totp-20261110/final-ui/947f8b0/ui005-history/red-results.json",
+      "sha256": "b0ca71561de0c706db55506914c2b39f9114d71564436827b1c7785ffe435496"
+    },
+    {
+      "path": "governance/evidence/p2-008-totp-20261110/final-ui/947f8b0/ui005-history/red-public-ui.log",
+      "sha256": "add7472715bb0163581aafd3dd5dd36dc17d9cbdb0fb1bb7d4ec09704c56a719"
+    },
+    {
+      "path": "governance/evidence/p2-008-totp-20261110/final-ui/947f8b0/public-ui/results.json",
+      "sha256": "44c27e4aa3463ec7c6fff75e7b98cb48b3de809f71c906d228f477d8746e0953"
+    },
+    {
+      "path": "governance/evidence/p2-008-totp-20261110/final-ui/947f8b0/public-ui/manifest.json",
+      "sha256": "4838a7511b4bc5e423f08697629cf166aa7c34a6cdfb6ea8d2f17527c7837e73"
+    },
+    {
+      "path": "governance/evidence/p2-008-totp-20261110/final-ui/947f8b0/public-ui/composition-r2/composition.json",
+      "sha256": "b31813840b9c5239c7eeff8f430024ba316d885ea764a9084363c1d2a490e0e4"
+    },
+    {
+      "path": "governance/evidence/p2-008-totp-20261110/final-ui/947f8b0/operation-proof-causal-revoke.json",
+      "sha256": "bccf0b17a6d71e936bb5721e28033f78188691ec8332e0b537fefe074ea9cee8"
+    },
+    {
+      "path": "governance/evidence/p2-008-totp-20261110/final-ui/947f8b0/ui005-history/security-async-cross-review-6653a3c.json",
+      "sha256": "55668c8adb6c6c24e63eef78cb10031aaa778fa78883fd075decf0d2584ca36a"
+    }
+  ],
+  "red": {
+    "actual_sha": "37f50383e43c9fd8747f894b83d6e552ad4402b5",
+    "failed": 8,
+    "precise_failure": "metadataReads expected>1, received1; no authoritative refresh after acknowledged same-path cancel"
+  },
+  "green": {
+    "actual_sha": "947f8b090b4f74a474a71e47badcb595424bd734",
+    "passed": 43,
+    "existing35_including_focus8": true,
+    "new8": true,
+    "typecheck": 0,
+    "contracts": 29,
+    "composition4": true
+  },
+  "scope": "Fix only acknowledged same-path REJECTED/EXPIRED cancel; retain busy/read scope, server authority and current DOM until fresh metadata. Connected trigger restored, removed-trigger heading fallback. No new JSX/CSS/copy/visual decision.",
+  "historical_failures_preserved": "Original real759failure,8red, initial6653 TSC and firstcomposition EOL tooling failure preserved. No test expectation weakened.",
+  "proposed_disposition": "RESOLVED only after root review and committed native UI verification; no whole008/release acceptance."
+}

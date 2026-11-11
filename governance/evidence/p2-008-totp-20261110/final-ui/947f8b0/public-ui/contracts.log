@@ -1,0 +1,184 @@
+TAP version 13
+# Subtest: TOTP code grammar preserves leading zeroes and mirrors the server ASCII separators and raw bound
+ok 1 - TOTP code grammar preserves leading zeroes and mirrors the server ASCII separators and raw bound
+  ---
+  duration_ms: 6.4499
+  type: 'test'
+  ...
+# Subtest: TOTP reconciliation rejects another operation, selected source, kind or expected version
+ok 2 - TOTP reconciliation rejects another operation, selected source, kind or expected version
+  ---
+  duration_ms: 3.6225
+  type: 'test'
+  ...
+# Subtest: one-time disclosure requires exact original IDs and matching local otpauth/manual-key material without raw diagnostics
+ok 3 - one-time disclosure requires exact original IDs and matching local otpauth/manual-key material without raw diagnostics
+  ---
+  duration_ms: 2.7479
+  type: 'test'
+  ...
+# Subtest: MFA-required is not final authentication and final recovery requires the exact request receipt
+ok 4 - MFA-required is not final authentication and final recovery requires the exact request receipt
+  ---
+  duration_ms: 2.4134
+  type: 'test'
+  ...
+# Subtest: terminal result cannot turn a generic session loss or another factor action into confirmed removal
+ok 5 - terminal result cannot turn a generic session loss or another factor action into confirmed removal
+  ---
+  duration_ms: 2.1783
+  type: 'test'
+  ...
+# Subtest: server replay rejection keeps its safe classification and selects the published TOTP replay variant
+ok 6 - server replay rejection keeps its safe classification and selects the published TOTP replay variant
+  ---
+  duration_ms: 51.4319
+  type: 'test'
+  ...
+# Subtest: current factor capabilities remain explicit and a missing server capability fails closed without raw diagnostics
+ok 7 - current factor capabilities remain explicit and a missing server capability fails closed without raw diagnostics
+  ---
+  duration_ms: 5.4602
+  type: 'test'
+  ...
+# Subtest: SSR is browser-independent with plain brand and no icon
+ok 8 - SSR is browser-independent with plain brand and no icon
+  ---
+  duration_ms: 15.906
+  type: 'test'
+  ...
+# Subtest: native button defaults to button, with explicit owner submit supported
+ok 9 - native button defaults to button, with explicit owner submit supported
+  ---
+  duration_ms: 3.0971
+  type: 'test'
+  ...
+# Subtest: owner disabled and busy state preserved
+ok 10 - owner disabled and busy state preserved
+  ---
+  duration_ms: 2.0959
+  type: 'test'
+  ...
+# Subtest: content text is escaped and provenance is preserved
+ok 11 - content text is escaped and provenance is preserved
+# Subtest: published templates render escaped bounded variables and retain original provenance
+ok 12 - published templates render escaped bounded variables and retain original provenance
+  ---
+  duration_ms: 2.8914
+  type: 'test'
+  ...
+  ---
+  duration_ms: 1.5608
+  type: 'test'
+  ...
+# Subtest: missing required key fails without fallback
+ok 13 - missing required key fails without fallback
+  ---
+  duration_ms: 1.3031
+  type: 'test'
+  ...
+# Subtest: mismatched key or locale and unpublished snapshots fail
+ok 14 - mismatched key or locale and unpublished snapshots fail
+  ---
+  duration_ms: 2.9332
+  type: 'test'
+  ...
+# Subtest: missing provenance and blank required copy fail
+ok 15 - missing provenance and blank required copy fail
+  ---
+  duration_ms: 2.6622
+  type: 'test'
+  ...
+# Subtest: resolver receives bounded surface/locale/audience context
+ok 16 - resolver receives bounded surface/locale/audience context
+  ---
+  duration_ms: 9.4026
+  type: 'test'
+  ...
+# Subtest: required theme/content boundaries fail explicitly
+ok 17 - required theme/content boundaries fail explicitly
+  ---
+  duration_ms: 1.3212
+  type: 'test'
+  ...
+# Subtest: invalid modes/surfaces fail rather than silently applying defaults
+ok 18 - invalid modes/surfaces fail rather than silently applying defaults
+  ---
+  duration_ms: 0.7891
+  type: 'test'
+  ...
+# Subtest: empty locale/audience is rejected
+ok 19 - empty locale/audience is rejected
+  ---
+  duration_ms: 0.6219
+  type: 'test'
+  ...
+# Subtest: field label/help/error IDs and noncolor text preserve associations
+ok 20 - field label/help/error IDs and noncolor text preserve associations
+  ---
+  duration_ms: 3.2205
+  type: 'test'
+  ...
+# Subtest: absent optional slots stay absent
+ok 21 - absent optional slots stay absent
+  ---
+  duration_ms: 1.2044
+  type: 'test'
+  ...
+# Subtest: generated label IDs are unique
+ok 22 - generated label IDs are unique
+  ---
+  duration_ms: 1.7401
+  type: 'test'
+  ...
+# Subtest: nested surface providers preserve independent DOM boundaries
+ok 23 - nested surface providers preserve independent DOM boundaries
+  ---
+  duration_ms: 1.7714
+  type: 'test'
+  ...
+# Subtest: placeholder requires its own published copy and provenance while retaining the visible label
+ok 24 - placeholder requires its own published copy and provenance while retaining the visible label
+  ---
+  duration_ms: 2.1972
+  type: 'test'
+  ...
+# Subtest: typed schemas enforce required, format, range and cross-field rules using domain keys
+ok 25 - typed schemas enforce required, format, range and cross-field rules using domain keys
+  ---
+  duration_ms: 2.4417
+  type: 'test'
+  ...
+# Subtest: schema form-level errors and published summary remain separate from field rules
+ok 26 - schema form-level errors and published summary remain separate from field rules
+  ---
+  duration_ms: 4.1376
+  type: 'test'
+  ...
+# Subtest: domain schemas use current policy and do not inherit historical Figma password or age restrictions
+ok 27 - domain schemas use current policy and do not inherit historical Figma password or age restrictions
+  ---
+  duration_ms: 3.8115
+  type: 'test'
+  ...
+# Subtest: DOB schema is calendar-safe and rejects future dates without client age eligibility policy
+ok 28 - DOB schema is calendar-safe and rejects future dates without client age eligibility policy
+  ---
+  duration_ms: 0.363
+  type: 'test'
+  ...
+# Subtest: every implemented screen route agrees with the central inventory and known BFF fallback contract
+ok 29 - every implemented screen route agrees with the central inventory and known BFF fallback contract
+  ---
+  duration_ms: 0.7993
+  type: 'test'
+  ...
+1..29
+# tests 29
+# suites 0
+# pass 29
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 453.7468
