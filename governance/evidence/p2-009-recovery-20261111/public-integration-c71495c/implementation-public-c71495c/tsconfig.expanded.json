@@ -1,0 +1,20 @@
+{
+  "extends": "../../../../../web/tsconfig.json",
+  "compilerOptions": {
+    "typeRoots": [
+      "../../../../../web/node_modules/@types"
+    ]
+  },
+  "include": [
+    "../../../../../web/packages/ui/src",
+    "../../../../../web/packages/ui/vite.config.ts",
+    "../../../../../web/fixtures/ui",
+    "../../../../../web/tests/*.tsx",
+    "../../../../../web/tests/**/*.ts",
+    "../../../../../web/playwright.config.ts",
+    "../../../../../web/playwright.registration.config.ts",
+    "../../../../../web/apps/user",
+    "../../../../../web/fixtures/recovery-codes",
+    "../../../../../web/playwright.recovery-codes.config.ts"
+  ]
+}

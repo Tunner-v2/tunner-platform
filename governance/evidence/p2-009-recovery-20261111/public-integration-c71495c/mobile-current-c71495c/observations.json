@@ -1,0 +1,2456 @@
+{
+  "scope_id": "TUN-P2-009",
+  "defect_id": "DEF-TUN-P2-009-UI-001",
+  "invocation_sha": "c71495cbcb1e0e6f8e1dd89c3f42c59b1ed834a6",
+  "recorded_at": "2026-11-11T11:44:29.513Z",
+  "result": "OBSERVATIONS_COMPLETE",
+  "error": null,
+  "source_before": {
+    "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/mobile-current-c71495c/source-inputs-before.json",
+    "sha256": "85ce23e9541b477d573a41c96e21af04cb6eb7c7afff6e16580596fa3081e5d6"
+  },
+  "source_after": {
+    "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/mobile-current-c71495c/source-inputs-after.json",
+    "sha256": "abcd2f92749abc7c85f0c91038d28a9896efd7308466edc787f18d6d5bc34083"
+  },
+  "all_declared_inputs_equal": true,
+  "helper": {
+    "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/capture-current-mobile.mjs",
+    "sha256": "977a8a5e28137fc70194beadd56d3cc896d5554d23cb3d50b97bd924e1194273"
+  },
+  "rows": [
+    {
+      "name": "390x844",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "download_focused_before_enter": true,
+      "geometry": {
+        "focused": true,
+        "button": {
+          "top": 755.5,
+          "bottom": 795.5,
+          "left": 40,
+          "right": 350
+        },
+        "clip": {
+          "top": 17,
+          "bottom": 827,
+          "left": 17,
+          "right": 373
+        },
+        "fully_visible": true,
+        "ring_fully_visible": true,
+        "scroll_top": 162,
+        "outline": {
+          "color": "rgb(99, 102, 241)",
+          "width": "2px",
+          "style": "solid",
+          "offset": "3px",
+          "adjacent_background": "rgb(255, 255, 255)"
+        },
+        "page_overflow": false,
+        "dialog_overflow_x": false
+      },
+      "keyboard_result": "PASS",
+      "focus_outline": {
+        "contrast_ratio": 4.466894269549531,
+        "required": 3,
+        "result": "PASS_SCOPED"
+      },
+      "screenshot": {
+        "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/mobile-current-c71495c/rendered/requested-390x844.png",
+        "sha256": "32714761ccd1040f450b1365cd2ac49caf59df83167b685fabcf46d7825e64f5"
+      },
+      "axe": {
+        "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/mobile-current-c71495c/axe/requested-390x844.json",
+        "sha256": "aaa9b47c0324013cb8238a64d013d3409fd89d28e83436ecde2ae1031c03145c",
+        "violations": [],
+        "incomplete": [
+          {
+            "id": "color-contrast",
+            "targets": [
+              [
+                "span[data-content-key=\"recoveryCodes.reveal.heading\"]"
+              ],
+              [
+                "#_r_1_ > span"
+              ],
+              [
+                "span[data-content-key=\"recoveryCodes.reveal.once\"]"
+              ]
+            ]
+          }
+        ],
+        "passes": 20
+      },
+      "manual_exact_targets": [
+        {
+          "rule": "color-contrast",
+          "target": [
+            "span[data-content-key=\"recoveryCodes.reveal.heading\"]"
+          ],
+          "foreground": "rgb(15, 23, 42)",
+          "background": "rgb(255, 255, 255)",
+          "font_size": "22px",
+          "font_weight": "600",
+          "layers": [
+            {
+              "tag": "span",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "image": "none"
+            },
+            {
+              "tag": "h2",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "image": "none"
+            },
+            {
+              "tag": "div",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "image": "none"
+            },
+            {
+              "tag": "dialog",
+              "background": "rgb(255, 255, 255)",
+              "opacity": "1",
+              "image": "none"
+            },
+            {
+              "tag": "main",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "image": "none"
+            },
+            {
+              "tag": "div",
+              "background": "rgb(248, 250, 252)",
+              "opacity": "1",
+              "image": "none"
+            },
+            {
+              "tag": "div",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "image": "none"
+            },
+            {
+              "tag": "div",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "image": "none"
+            },
+            {
+              "tag": "body",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "image": "none"
+            },
+            {
+              "tag": "html",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "image": "none"
+            }
+          ],
+          "lines": [
+            {
+              "top": 38,
+              "bottom": 66,
+              "left": 40,
+              "right": 189.5625,
+              "unobscured": true
+            }
+          ],
+          "inactive": false,
+          "contrast_ratio": 17.85253496299567,
+          "required": 4.5,
+          "opaque_ancestry": true,
+          "text_unobscured": true,
+          "audit_only_scroll": true,
+          "result": "PASS_MANUAL_EXACT_TARGET",
+          "scope": "Raw Axe remains incomplete. Audit-only target scroll is separate from the preceding user-keyboard visibility proof."
+        },
+        {
+          "rule": "color-contrast",
+          "target": [
+            "#_r_1_ > span"
+          ],
+          "foreground": "rgb(71, 89, 107)",
+          "background": "rgb(255, 255, 255)",
+          "font_size": "13px",
+          "font_weight": "400",
+          "layers": [
+            {
+              "tag": "span",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "image": "none"
+            },
+            {
+              "tag": "p",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "image": "none"
+            },
+            {
+              "tag": "div",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "image": "none"
+            },
+            {
+              "tag": "dialog",
+              "background": "rgb(255, 255, 255)",
+              "opacity": "1",
+              "image": "none"
+            },
+            {
+              "tag": "main",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "image": "none"
+            },
+            {
+              "tag": "div",
+              "background": "rgb(248, 250, 252)",
+              "opacity": "1",
+              "image": "none"
+            },
+            {
+              "tag": "div",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "image": "none"
+            },
+            {
+              "tag": "div",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "image": "none"
+            },
+            {
+              "tag": "body",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "image": "none"
+            },
+            {
+              "tag": "html",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "image": "none"
+            }
+          ],
+          "lines": [
+            {
+              "top": 73,
+              "bottom": 90,
+              "left": 40,
+              "right": 341.28125,
+              "unobscured": true
+            },
+            {
+              "top": 90,
+              "bottom": 107,
+              "left": 40,
+              "right": 320.78125,
+              "unobscured": true
+            },
+            {
+              "top": 107,
+              "bottom": 124,
+              "left": 40,
+              "right": 171.828125,
+              "unobscured": true
+            }
+          ],
+          "inactive": false,
+          "contrast_ratio": 7.218535441658394,
+          "required": 4.5,
+          "opaque_ancestry": true,
+          "text_unobscured": true,
+          "audit_only_scroll": true,
+          "result": "PASS_MANUAL_EXACT_TARGET",
+          "scope": "Raw Axe remains incomplete. Audit-only target scroll is separate from the preceding user-keyboard visibility proof."
+        },
+        {
+          "rule": "color-contrast",
+          "target": [
+            "span[data-content-key=\"recoveryCodes.reveal.once\"]"
+          ],
+          "foreground": "rgb(71, 89, 105)",
+          "background": "rgb(255, 255, 255)",
+          "font_size": "13px",
+          "font_weight": "400",
+          "layers": [
+            {
+              "tag": "span",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "image": "none"
+            },
+            {
+              "tag": "p",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "image": "none"
+            },
+            {
+              "tag": "div",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "image": "none"
+            },
+            {
+              "tag": "dialog",
+              "background": "rgb(255, 255, 255)",
+              "opacity": "1",
+              "image": "none"
+            },
+            {
+              "tag": "main",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "image": "none"
+            },
+            {
+              "tag": "div",
+              "background": "rgb(248, 250, 252)",
+              "opacity": "1",
+              "image": "none"
+            },
+            {
+              "tag": "div",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "image": "none"
+            },
+            {
+              "tag": "div",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "image": "none"
+            },
+            {
+              "tag": "body",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "image": "none"
+            },
+            {
+              "tag": "html",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "image": "none"
+            }
+          ],
+          "lines": [
+            {
+              "top": 145,
+              "bottom": 162,
+              "left": 40,
+              "right": 335.078125,
+              "unobscured": true
+            },
+            {
+              "top": 164.5,
+              "bottom": 181.5,
+              "left": 40,
+              "right": 180.078125,
+              "unobscured": true
+            }
+          ],
+          "inactive": false,
+          "contrast_ratio": 7.2392469868633755,
+          "required": 4.5,
+          "opaque_ancestry": true,
+          "text_unobscured": true,
+          "audit_only_scroll": true,
+          "result": "PASS_MANUAL_EXACT_TARGET",
+          "scope": "Raw Axe remains incomplete. Audit-only target scroll is separate from the preceding user-keyboard visibility proof."
+        }
+      ],
+      "fonts": {
+        "status": "loaded",
+        "faces": [
+          {
+            "family": "Geist Variable",
+            "status": "unloaded",
+            "weight": "100 900",
+            "style": "normal"
+          },
+          {
+            "family": "Geist Variable",
+            "status": "unloaded",
+            "weight": "100 900",
+            "style": "normal"
+          },
+          {
+            "family": "Geist Variable",
+            "status": "unloaded",
+            "weight": "100 900",
+            "style": "normal"
+          },
+          {
+            "family": "Geist Variable",
+            "status": "unloaded",
+            "weight": "100 900",
+            "style": "normal"
+          },
+          {
+            "family": "Geist Variable",
+            "status": "loaded",
+            "weight": "100 900",
+            "style": "normal"
+          },
+          {
+            "family": "Inter Variable",
+            "status": "unloaded",
+            "weight": "100 900",
+            "style": "normal"
+          },
+          {
+            "family": "Inter Variable",
+            "status": "unloaded",
+            "weight": "100 900",
+            "style": "normal"
+          },
+          {
+            "family": "Inter Variable",
+            "status": "unloaded",
+            "weight": "100 900",
+            "style": "normal"
+          },
+          {
+            "family": "Inter Variable",
+            "status": "unloaded",
+            "weight": "100 900",
+            "style": "normal"
+          },
+          {
+            "family": "Inter Variable",
+            "status": "unloaded",
+            "weight": "100 900",
+            "style": "normal"
+          },
+          {
+            "family": "Inter Variable",
+            "status": "unloaded",
+            "weight": "100 900",
+            "style": "normal"
+          },
+          {
+            "family": "Inter Variable",
+            "status": "unloaded",
+            "weight": "100 900",
+            "style": "normal"
+          },
+          {
+            "family": "Geist Mono",
+            "status": "unloaded",
+            "weight": "100 900",
+            "style": "normal"
+          }
+        ]
+      },
+      "font_responses": [
+        {
+          "pathname": "/browser-testing/recovery-codes-assets/@fs/C:/Workspace/AI%20MCP/Enterprise%20Solution/TunnerPlatform.V2.0/web/node_modules/.pnpm/@fontsource-variable+geist@5.3.0/node_modules/@fontsource-variable/geist/files/geist-latin-wght-normal.woff2",
+          "status": 200,
+          "content_type": "font/woff2",
+          "sha256": "19f9c92546aa300c312235e3125af1b81394d8db9a4bc4a425cd5b641d2d54e1"
+        }
+      ],
+      "owner_http_requests": 0,
+      "download_events": 0,
+      "fixture_download_callback_count": "1"
+    },
+    {
+      "name": "390x640",
+      "viewport": {
+        "width": 390,
+        "height": 640
+      },
+      "download_focused_before_enter": true,
+      "geometry": {
+        "focused": true,
+        "button": {
+          "top": 551.5,
+          "bottom": 591.5,
+          "left": 40,
+          "right": 350
+        },
+        "clip": {
+          "top": 17,
+          "bottom": 623,
+          "left": 17,
+          "right": 373
+        },
+        "fully_visible": true,
+        "ring_fully_visible": true,
+        "scroll_top": 366,
+        "outline": {
+          "color": "rgb(99, 102, 241)",
+          "width": "2px",
+          "style": "solid",
+          "offset": "3px",
+          "adjacent_background": "rgb(255, 255, 255)"
+        },
+        "page_overflow": false,
+        "dialog_overflow_x": false
+      },
+      "keyboard_result": "PASS",
+      "focus_outline": {
+        "contrast_ratio": 4.466894269549531,
+        "required": 3,
+        "result": "PASS_SCOPED"
+      },
+      "screenshot": {
+        "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/mobile-current-c71495c/rendered/requested-390x640.png",
+        "sha256": "5fbc3775f67d21fbc162def2bb95013086aaaa17c31b7ad156ea2fb6ec355113"
+      },
+      "axe": {
+        "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/mobile-current-c71495c/axe/requested-390x640.json",
+        "sha256": "bf3787363b66514f53c4d005f0c6a380d8feb0fedfb1903bb93d00a0db002b3e",
+        "violations": [],
+        "incomplete": [
+          {
+            "id": "color-contrast",
+            "targets": [
+              [
+                "span[data-content-key=\"recoveryCodes.reveal.heading\"]"
+              ],
+              [
+                "#_r_1_ > span"
+              ],
+              [
+                "span[data-content-key=\"recoveryCodes.reveal.once\"]"
+              ]
+            ]
+          }
+        ],
+        "passes": 20
+      },
+      "manual_exact_targets": [
+        {
+          "rule": "color-contrast",
+          "target": [
+            "span[data-content-key=\"recoveryCodes.reveal.heading\"]"
+          ],
+          "foreground": "rgb(15, 23, 42)",
+          "background": "rgb(255, 255, 255)",
+          "font_size": "22px",
+          "font_weight": "600",
+          "layers": [
+            {
+              "tag": "span",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "image": "none"
+            },
+            {
+              "tag": "h2",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "image": "none"
+            },
+            {
+              "tag": "div",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "image": "none"
+            },
+            {
+              "tag": "dialog",
+              "background": "rgb(255, 255, 255)",
+              "opacity": "1",
+              "image": "none"
+            },
+            {
+              "tag": "main",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "image": "none"
+            },
+            {
+              "tag": "div",
+              "background": "rgb(248, 250, 252)",
+              "opacity": "1",
+              "image": "none"
+            },
+            {
+              "tag": "div",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "image": "none"
+            },
+            {
+              "tag": "div",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "image": "none"
+            },
+            {
+              "tag": "body",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "image": "none"
+            },
+            {
+              "tag": "html",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "image": "none"
+            }
+          ],
+          "lines": [
+            {
+              "top": 38,
+              "bottom": 66,
+              "left": 40,
+              "right": 189.5625,
+              "unobscured": true
+            }
+          ],
+          "inactive": false,
+          "contrast_ratio": 17.85253496299567,
+          "required": 4.5,
+          "opaque_ancestry": true,
+          "text_unobscured": true,
+          "audit_only_scroll": true,
+          "result": "PASS_MANUAL_EXACT_TARGET",
+          "scope": "Raw Axe remains incomplete. Audit-only target scroll is separate from the preceding user-keyboard visibility proof."
+        },
+        {
+          "rule": "color-contrast",
+          "target": [
+            "#_r_1_ > span"
+          ],
+          "foreground": "rgb(71, 89, 107)",
+          "background": "rgb(255, 255, 255)",
+          "font_size": "13px",
+          "font_weight": "400",
+          "layers": [
+            {
+              "tag": "span",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "image": "none"
+            },
+            {
+              "tag": "p",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "image": "none"
+            },
+            {
+              "tag": "div",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "image": "none"
+            },
+            {
+              "tag": "dialog",
+              "background": "rgb(255, 255, 255)",
+              "opacity": "1",
+              "image": "none"
+            },
+            {
+              "tag": "main",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "image": "none"
+            },
+            {
+              "tag": "div",
+              "background": "rgb(248, 250, 252)",
+              "opacity": "1",
+              "image": "none"
+            },
+            {
+              "tag": "div",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "image": "none"
+            },
+            {
+              "tag": "div",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "image": "none"
+            },
+            {
+              "tag": "body",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "image": "none"
+            },
+            {
+              "tag": "html",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "image": "none"
+            }
+          ],
+          "lines": [
+            {
+              "top": 73,
+              "bottom": 90,
+              "left": 40,
+              "right": 341.28125,
+              "unobscured": true
+            },
+            {
+              "top": 90,
+              "bottom": 107,
+              "left": 40,
+              "right": 320.78125,
+              "unobscured": true
+            },
+            {
+              "top": 107,
+              "bottom": 124,
+              "left": 40,
+              "right": 171.828125,
+              "unobscured": true
+            }
+          ],
+          "inactive": false,
+          "contrast_ratio": 7.218535441658394,
+          "required": 4.5,
+          "opaque_ancestry": true,
+          "text_unobscured": true,
+          "audit_only_scroll": true,
+          "result": "PASS_MANUAL_EXACT_TARGET",
+          "scope": "Raw Axe remains incomplete. Audit-only target scroll is separate from the preceding user-keyboard visibility proof."
+        },
+        {
+          "rule": "color-contrast",
+          "target": [
+            "span[data-content-key=\"recoveryCodes.reveal.once\"]"
+          ],
+          "foreground": "rgb(71, 89, 105)",
+          "background": "rgb(255, 255, 255)",
+          "font_size": "13px",
+          "font_weight": "400",
+          "layers": [
+            {
+              "tag": "span",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "image": "none"
+            },
+            {
+              "tag": "p",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "image": "none"
+            },
+            {
+              "tag": "div",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "image": "none"
+            },
+            {
+              "tag": "dialog",
+              "background": "rgb(255, 255, 255)",
+              "opacity": "1",
+              "image": "none"
+            },
+            {
+              "tag": "main",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "image": "none"
+            },
+            {
+              "tag": "div",
+              "background": "rgb(248, 250, 252)",
+              "opacity": "1",
+              "image": "none"
+            },
+            {
+              "tag": "div",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "image": "none"
+            },
+            {
+              "tag": "div",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "image": "none"
+            },
+            {
+              "tag": "body",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "image": "none"
+            },
+            {
+              "tag": "html",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "image": "none"
+            }
+          ],
+          "lines": [
+            {
+              "top": 145,
+              "bottom": 162,
+              "left": 40,
+              "right": 335.078125,
+              "unobscured": true
+            },
+            {
+              "top": 164.5,
+              "bottom": 181.5,
+              "left": 40,
+              "right": 180.078125,
+              "unobscured": true
+            }
+          ],
+          "inactive": false,
+          "contrast_ratio": 7.2392469868633755,
+          "required": 4.5,
+          "opaque_ancestry": true,
+          "text_unobscured": true,
+          "audit_only_scroll": true,
+          "result": "PASS_MANUAL_EXACT_TARGET",
+          "scope": "Raw Axe remains incomplete. Audit-only target scroll is separate from the preceding user-keyboard visibility proof."
+        }
+      ],
+      "fonts": {
+        "status": "loaded",
+        "faces": [
+          {
+            "family": "Geist Variable",
+            "status": "unloaded",
+            "weight": "100 900",
+            "style": "normal"
+          },
+          {
+            "family": "Geist Variable",
+            "status": "unloaded",
+            "weight": "100 900",
+            "style": "normal"
+          },
+          {
+            "family": "Geist Variable",
+            "status": "unloaded",
+            "weight": "100 900",
+            "style": "normal"
+          },
+          {
+            "family": "Geist Variable",
+            "status": "unloaded",
+            "weight": "100 900",
+            "style": "normal"
+          },
+          {
+            "family": "Geist Variable",
+            "status": "loaded",
+            "weight": "100 900",
+            "style": "normal"
+          },
+          {
+            "family": "Inter Variable",
+            "status": "unloaded",
+            "weight": "100 900",
+            "style": "normal"
+          },
+          {
+            "family": "Inter Variable",
+            "status": "unloaded",
+            "weight": "100 900",
+            "style": "normal"
+          },
+          {
+            "family": "Inter Variable",
+            "status": "unloaded",
+            "weight": "100 900",
+            "style": "normal"
+          },
+          {
+            "family": "Inter Variable",
+            "status": "unloaded",
+            "weight": "100 900",
+            "style": "normal"
+          },
+          {
+            "family": "Inter Variable",
+            "status": "unloaded",
+            "weight": "100 900",
+            "style": "normal"
+          },
+          {
+            "family": "Inter Variable",
+            "status": "unloaded",
+            "weight": "100 900",
+            "style": "normal"
+          },
+          {
+            "family": "Inter Variable",
+            "status": "unloaded",
+            "weight": "100 900",
+            "style": "normal"
+          },
+          {
+            "family": "Geist Mono",
+            "status": "unloaded",
+            "weight": "100 900",
+            "style": "normal"
+          }
+        ]
+      },
+      "font_responses": [
+        {
+          "pathname": "/browser-testing/recovery-codes-assets/@fs/C:/Workspace/AI%20MCP/Enterprise%20Solution/TunnerPlatform.V2.0/web/node_modules/.pnpm/@fontsource-variable+geist@5.3.0/node_modules/@fontsource-variable/geist/files/geist-latin-wght-normal.woff2",
+          "status": 200,
+          "content_type": "font/woff2",
+          "sha256": "19f9c92546aa300c312235e3125af1b81394d8db9a4bc4a425cd5b641d2d54e1"
+        }
+      ],
+      "owner_http_requests": 0,
+      "download_events": 0,
+      "fixture_download_callback_count": "1"
+    },
+    {
+      "name": "320x568",
+      "viewport": {
+        "width": 320,
+        "height": 568
+      },
+      "download_focused_before_enter": true,
+      "geometry": {
+        "focused": true,
+        "button": {
+          "top": 480,
+          "bottom": 520,
+          "left": 40,
+          "right": 280
+        },
+        "clip": {
+          "top": 17,
+          "bottom": 551,
+          "left": 17,
+          "right": 303
+        },
+        "fully_visible": true,
+        "ring_fully_visible": true,
+        "scroll_top": 492,
+        "outline": {
+          "color": "rgb(99, 102, 241)",
+          "width": "2px",
+          "style": "solid",
+          "offset": "3px",
+          "adjacent_background": "rgb(255, 255, 255)"
+        },
+        "page_overflow": false,
+        "dialog_overflow_x": false
+      },
+      "keyboard_result": "PASS",
+      "focus_outline": {
+        "contrast_ratio": 4.466894269549531,
+        "required": 3,
+        "result": "PASS_SCOPED"
+      },
+      "screenshot": {
+        "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/mobile-current-c71495c/rendered/requested-320x568.png",
+        "sha256": "24908874aa10fb52d552626d8d2b679ed8e349a68bfe994872b7b796f7bd3d97"
+      },
+      "axe": {
+        "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/mobile-current-c71495c/axe/requested-320x568.json",
+        "sha256": "f9476fd9368cd13754a012d73e768cf7a23c373a4f0d5d81d9cf2207ff401b9b",
+        "violations": [],
+        "incomplete": [
+          {
+            "id": "color-contrast",
+            "targets": [
+              [
+                "span[data-content-key=\"recoveryCodes.reveal.heading\"]"
+              ],
+              [
+                "#_r_1_ > span"
+              ],
+              [
+                "span[data-content-key=\"recoveryCodes.reveal.once\"]"
+              ]
+            ]
+          }
+        ],
+        "passes": 20
+      },
+      "manual_exact_targets": [
+        {
+          "rule": "color-contrast",
+          "target": [
+            "span[data-content-key=\"recoveryCodes.reveal.heading\"]"
+          ],
+          "foreground": "rgb(15, 23, 42)",
+          "background": "rgb(255, 255, 255)",
+          "font_size": "22px",
+          "font_weight": "600",
+          "layers": [
+            {
+              "tag": "span",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "image": "none"
+            },
+            {
+              "tag": "h2",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "image": "none"
+            },
+            {
+              "tag": "div",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "image": "none"
+            },
+            {
+              "tag": "dialog",
+              "background": "rgb(255, 255, 255)",
+              "opacity": "1",
+              "image": "none"
+            },
+            {
+              "tag": "main",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "image": "none"
+            },
+            {
+              "tag": "div",
+              "background": "rgb(248, 250, 252)",
+              "opacity": "1",
+              "image": "none"
+            },
+            {
+              "tag": "div",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "image": "none"
+            },
+            {
+              "tag": "div",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "image": "none"
+            },
+            {
+              "tag": "body",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "image": "none"
+            },
+            {
+              "tag": "html",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "image": "none"
+            }
+          ],
+          "lines": [
+            {
+              "top": 38,
+              "bottom": 66,
+              "left": 40,
+              "right": 189.5625,
+              "unobscured": true
+            }
+          ],
+          "inactive": false,
+          "contrast_ratio": 17.85253496299567,
+          "required": 4.5,
+          "opaque_ancestry": true,
+          "text_unobscured": true,
+          "audit_only_scroll": true,
+          "result": "PASS_MANUAL_EXACT_TARGET",
+          "scope": "Raw Axe remains incomplete. Audit-only target scroll is separate from the preceding user-keyboard visibility proof."
+        },
+        {
+          "rule": "color-contrast",
+          "target": [
+            "#_r_1_ > span"
+          ],
+          "foreground": "rgb(71, 89, 107)",
+          "background": "rgb(255, 255, 255)",
+          "font_size": "13px",
+          "font_weight": "400",
+          "layers": [
+            {
+              "tag": "span",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "image": "none"
+            },
+            {
+              "tag": "p",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "image": "none"
+            },
+            {
+              "tag": "div",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "image": "none"
+            },
+            {
+              "tag": "dialog",
+              "background": "rgb(255, 255, 255)",
+              "opacity": "1",
+              "image": "none"
+            },
+            {
+              "tag": "main",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "image": "none"
+            },
+            {
+              "tag": "div",
+              "background": "rgb(248, 250, 252)",
+              "opacity": "1",
+              "image": "none"
+            },
+            {
+              "tag": "div",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "image": "none"
+            },
+            {
+              "tag": "div",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "image": "none"
+            },
+            {
+              "tag": "body",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "image": "none"
+            },
+            {
+              "tag": "html",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "image": "none"
+            }
+          ],
+          "lines": [
+            {
+              "top": 73,
+              "bottom": 90,
+              "left": 40,
+              "right": 277.171875,
+              "unobscured": true
+            },
+            {
+              "top": 90,
+              "bottom": 107,
+              "left": 40,
+              "right": 251.796875,
+              "unobscured": true
+            },
+            {
+              "top": 107,
+              "bottom": 124,
+              "left": 40,
+              "right": 231.625,
+              "unobscured": true
+            },
+            {
+              "top": 124,
+              "bottom": 141,
+              "left": 40,
+              "right": 110.03125,
+              "unobscured": true
+            }
+          ],
+          "inactive": false,
+          "contrast_ratio": 7.218535441658394,
+          "required": 4.5,
+          "opaque_ancestry": true,
+          "text_unobscured": true,
+          "audit_only_scroll": true,
+          "result": "PASS_MANUAL_EXACT_TARGET",
+          "scope": "Raw Axe remains incomplete. Audit-only target scroll is separate from the preceding user-keyboard visibility proof."
+        },
+        {
+          "rule": "color-contrast",
+          "target": [
+            "span[data-content-key=\"recoveryCodes.reveal.once\"]"
+          ],
+          "foreground": "rgb(71, 89, 105)",
+          "background": "rgb(255, 255, 255)",
+          "font_size": "13px",
+          "font_weight": "400",
+          "layers": [
+            {
+              "tag": "span",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "image": "none"
+            },
+            {
+              "tag": "p",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "image": "none"
+            },
+            {
+              "tag": "div",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "image": "none"
+            },
+            {
+              "tag": "dialog",
+              "background": "rgb(255, 255, 255)",
+              "opacity": "1",
+              "image": "none"
+            },
+            {
+              "tag": "main",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "image": "none"
+            },
+            {
+              "tag": "div",
+              "background": "rgb(248, 250, 252)",
+              "opacity": "1",
+              "image": "none"
+            },
+            {
+              "tag": "div",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "image": "none"
+            },
+            {
+              "tag": "div",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "image": "none"
+            },
+            {
+              "tag": "body",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "image": "none"
+            },
+            {
+              "tag": "html",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "image": "none"
+            }
+          ],
+          "lines": [
+            {
+              "top": 162,
+              "bottom": 179,
+              "left": 40,
+              "right": 271.125,
+              "unobscured": true
+            },
+            {
+              "top": 181.5,
+              "bottom": 198.5,
+              "left": 40,
+              "right": 244.046875,
+              "unobscured": true
+            }
+          ],
+          "inactive": false,
+          "contrast_ratio": 7.2392469868633755,
+          "required": 4.5,
+          "opaque_ancestry": true,
+          "text_unobscured": true,
+          "audit_only_scroll": true,
+          "result": "PASS_MANUAL_EXACT_TARGET",
+          "scope": "Raw Axe remains incomplete. Audit-only target scroll is separate from the preceding user-keyboard visibility proof."
+        }
+      ],
+      "fonts": {
+        "status": "loaded",
+        "faces": [
+          {
+            "family": "Geist Variable",
+            "status": "unloaded",
+            "weight": "100 900",
+            "style": "normal"
+          },
+          {
+            "family": "Geist Variable",
+            "status": "unloaded",
+            "weight": "100 900",
+            "style": "normal"
+          },
+          {
+            "family": "Geist Variable",
+            "status": "unloaded",
+            "weight": "100 900",
+            "style": "normal"
+          },
+          {
+            "family": "Geist Variable",
+            "status": "unloaded",
+            "weight": "100 900",
+            "style": "normal"
+          },
+          {
+            "family": "Geist Variable",
+            "status": "loaded",
+            "weight": "100 900",
+            "style": "normal"
+          },
+          {
+            "family": "Inter Variable",
+            "status": "unloaded",
+            "weight": "100 900",
+            "style": "normal"
+          },
+          {
+            "family": "Inter Variable",
+            "status": "unloaded",
+            "weight": "100 900",
+            "style": "normal"
+          },
+          {
+            "family": "Inter Variable",
+            "status": "unloaded",
+            "weight": "100 900",
+            "style": "normal"
+          },
+          {
+            "family": "Inter Variable",
+            "status": "unloaded",
+            "weight": "100 900",
+            "style": "normal"
+          },
+          {
+            "family": "Inter Variable",
+            "status": "unloaded",
+            "weight": "100 900",
+            "style": "normal"
+          },
+          {
+            "family": "Inter Variable",
+            "status": "unloaded",
+            "weight": "100 900",
+            "style": "normal"
+          },
+          {
+            "family": "Inter Variable",
+            "status": "unloaded",
+            "weight": "100 900",
+            "style": "normal"
+          },
+          {
+            "family": "Geist Mono",
+            "status": "unloaded",
+            "weight": "100 900",
+            "style": "normal"
+          }
+        ]
+      },
+      "font_responses": [
+        {
+          "pathname": "/browser-testing/recovery-codes-assets/@fs/C:/Workspace/AI%20MCP/Enterprise%20Solution/TunnerPlatform.V2.0/web/node_modules/.pnpm/@fontsource-variable+geist@5.3.0/node_modules/@fontsource-variable/geist/files/geist-latin-wght-normal.woff2",
+          "status": 200,
+          "content_type": "font/woff2",
+          "sha256": "19f9c92546aa300c312235e3125af1b81394d8db9a4bc4a425cd5b641d2d54e1"
+        }
+      ],
+      "owner_http_requests": 0,
+      "download_events": 0,
+      "fixture_download_callback_count": "1"
+    },
+    {
+      "name": "390x480",
+      "viewport": {
+        "width": 390,
+        "height": 480
+      },
+      "download_focused_before_enter": true,
+      "geometry": {
+        "focused": true,
+        "button": {
+          "top": 391.5,
+          "bottom": 431.5,
+          "left": 40,
+          "right": 350
+        },
+        "clip": {
+          "top": 17,
+          "bottom": 463,
+          "left": 17,
+          "right": 373
+        },
+        "fully_visible": true,
+        "ring_fully_visible": true,
+        "scroll_top": 526,
+        "outline": {
+          "color": "rgb(99, 102, 241)",
+          "width": "2px",
+          "style": "solid",
+          "offset": "3px",
+          "adjacent_background": "rgb(255, 255, 255)"
+        },
+        "page_overflow": false,
+        "dialog_overflow_x": false
+      },
+      "keyboard_result": "PASS",
+      "focus_outline": {
+        "contrast_ratio": 4.466894269549531,
+        "required": 3,
+        "result": "PASS_SCOPED"
+      },
+      "screenshot": {
+        "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/mobile-current-c71495c/rendered/requested-390x480.png",
+        "sha256": "f0f37cdba48ace78d964dbbeeda16802c772a7ae5b3bede0b0c0e4bf3641e483"
+      },
+      "axe": {
+        "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/mobile-current-c71495c/axe/requested-390x480.json",
+        "sha256": "5ad4534c5489cd108648c5898afe19333a29d1aaad1bfbbeac18938194015b73",
+        "violations": [],
+        "incomplete": [
+          {
+            "id": "color-contrast",
+            "targets": [
+              [
+                "span[data-content-key=\"recoveryCodes.reveal.heading\"]"
+              ],
+              [
+                "#_r_1_ > span"
+              ],
+              [
+                "span[data-content-key=\"recoveryCodes.reveal.once\"]"
+              ]
+            ]
+          }
+        ],
+        "passes": 20
+      },
+      "manual_exact_targets": [
+        {
+          "rule": "color-contrast",
+          "target": [
+            "span[data-content-key=\"recoveryCodes.reveal.heading\"]"
+          ],
+          "foreground": "rgb(15, 23, 42)",
+          "background": "rgb(255, 255, 255)",
+          "font_size": "22px",
+          "font_weight": "600",
+          "layers": [
+            {
+              "tag": "span",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "image": "none"
+            },
+            {
+              "tag": "h2",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "image": "none"
+            },
+            {
+              "tag": "div",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "image": "none"
+            },
+            {
+              "tag": "dialog",
+              "background": "rgb(255, 255, 255)",
+              "opacity": "1",
+              "image": "none"
+            },
+            {
+              "tag": "main",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "image": "none"
+            },
+            {
+              "tag": "div",
+              "background": "rgb(248, 250, 252)",
+              "opacity": "1",
+              "image": "none"
+            },
+            {
+              "tag": "div",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "image": "none"
+            },
+            {
+              "tag": "div",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "image": "none"
+            },
+            {
+              "tag": "body",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "image": "none"
+            },
+            {
+              "tag": "html",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "image": "none"
+            }
+          ],
+          "lines": [
+            {
+              "top": 38,
+              "bottom": 66,
+              "left": 40,
+              "right": 189.5625,
+              "unobscured": true
+            }
+          ],
+          "inactive": false,
+          "contrast_ratio": 17.85253496299567,
+          "required": 4.5,
+          "opaque_ancestry": true,
+          "text_unobscured": true,
+          "audit_only_scroll": true,
+          "result": "PASS_MANUAL_EXACT_TARGET",
+          "scope": "Raw Axe remains incomplete. Audit-only target scroll is separate from the preceding user-keyboard visibility proof."
+        },
+        {
+          "rule": "color-contrast",
+          "target": [
+            "#_r_1_ > span"
+          ],
+          "foreground": "rgb(71, 89, 107)",
+          "background": "rgb(255, 255, 255)",
+          "font_size": "13px",
+          "font_weight": "400",
+          "layers": [
+            {
+              "tag": "span",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "image": "none"
+            },
+            {
+              "tag": "p",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "image": "none"
+            },
+            {
+              "tag": "div",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "image": "none"
+            },
+            {
+              "tag": "dialog",
+              "background": "rgb(255, 255, 255)",
+              "opacity": "1",
+              "image": "none"
+            },
+            {
+              "tag": "main",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "image": "none"
+            },
+            {
+              "tag": "div",
+              "background": "rgb(248, 250, 252)",
+              "opacity": "1",
+              "image": "none"
+            },
+            {
+              "tag": "div",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "image": "none"
+            },
+            {
+              "tag": "div",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "image": "none"
+            },
+            {
+              "tag": "body",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "image": "none"
+            },
+            {
+              "tag": "html",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "image": "none"
+            }
+          ],
+          "lines": [
+            {
+              "top": 73,
+              "bottom": 90,
+              "left": 40,
+              "right": 341.28125,
+              "unobscured": true
+            },
+            {
+              "top": 90,
+              "bottom": 107,
+              "left": 40,
+              "right": 320.78125,
+              "unobscured": true
+            },
+            {
+              "top": 107,
+              "bottom": 124,
+              "left": 40,
+              "right": 171.828125,
+              "unobscured": true
+            }
+          ],
+          "inactive": false,
+          "contrast_ratio": 7.218535441658394,
+          "required": 4.5,
+          "opaque_ancestry": true,
+          "text_unobscured": true,
+          "audit_only_scroll": true,
+          "result": "PASS_MANUAL_EXACT_TARGET",
+          "scope": "Raw Axe remains incomplete. Audit-only target scroll is separate from the preceding user-keyboard visibility proof."
+        },
+        {
+          "rule": "color-contrast",
+          "target": [
+            "span[data-content-key=\"recoveryCodes.reveal.once\"]"
+          ],
+          "foreground": "rgb(71, 89, 105)",
+          "background": "rgb(255, 255, 255)",
+          "font_size": "13px",
+          "font_weight": "400",
+          "layers": [
+            {
+              "tag": "span",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "image": "none"
+            },
+            {
+              "tag": "p",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "image": "none"
+            },
+            {
+              "tag": "div",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "image": "none"
+            },
+            {
+              "tag": "dialog",
+              "background": "rgb(255, 255, 255)",
+              "opacity": "1",
+              "image": "none"
+            },
+            {
+              "tag": "main",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "image": "none"
+            },
+            {
+              "tag": "div",
+              "background": "rgb(248, 250, 252)",
+              "opacity": "1",
+              "image": "none"
+            },
+            {
+              "tag": "div",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "image": "none"
+            },
+            {
+              "tag": "div",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "image": "none"
+            },
+            {
+              "tag": "body",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "image": "none"
+            },
+            {
+              "tag": "html",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "image": "none"
+            }
+          ],
+          "lines": [
+            {
+              "top": 145,
+              "bottom": 162,
+              "left": 40,
+              "right": 335.078125,
+              "unobscured": true
+            },
+            {
+              "top": 164.5,
+              "bottom": 181.5,
+              "left": 40,
+              "right": 180.078125,
+              "unobscured": true
+            }
+          ],
+          "inactive": false,
+          "contrast_ratio": 7.2392469868633755,
+          "required": 4.5,
+          "opaque_ancestry": true,
+          "text_unobscured": true,
+          "audit_only_scroll": true,
+          "result": "PASS_MANUAL_EXACT_TARGET",
+          "scope": "Raw Axe remains incomplete. Audit-only target scroll is separate from the preceding user-keyboard visibility proof."
+        }
+      ],
+      "fonts": {
+        "status": "loaded",
+        "faces": [
+          {
+            "family": "Geist Variable",
+            "status": "unloaded",
+            "weight": "100 900",
+            "style": "normal"
+          },
+          {
+            "family": "Geist Variable",
+            "status": "unloaded",
+            "weight": "100 900",
+            "style": "normal"
+          },
+          {
+            "family": "Geist Variable",
+            "status": "unloaded",
+            "weight": "100 900",
+            "style": "normal"
+          },
+          {
+            "family": "Geist Variable",
+            "status": "unloaded",
+            "weight": "100 900",
+            "style": "normal"
+          },
+          {
+            "family": "Geist Variable",
+            "status": "loaded",
+            "weight": "100 900",
+            "style": "normal"
+          },
+          {
+            "family": "Inter Variable",
+            "status": "unloaded",
+            "weight": "100 900",
+            "style": "normal"
+          },
+          {
+            "family": "Inter Variable",
+            "status": "unloaded",
+            "weight": "100 900",
+            "style": "normal"
+          },
+          {
+            "family": "Inter Variable",
+            "status": "unloaded",
+            "weight": "100 900",
+            "style": "normal"
+          },
+          {
+            "family": "Inter Variable",
+            "status": "unloaded",
+            "weight": "100 900",
+            "style": "normal"
+          },
+          {
+            "family": "Inter Variable",
+            "status": "unloaded",
+            "weight": "100 900",
+            "style": "normal"
+          },
+          {
+            "family": "Inter Variable",
+            "status": "unloaded",
+            "weight": "100 900",
+            "style": "normal"
+          },
+          {
+            "family": "Inter Variable",
+            "status": "unloaded",
+            "weight": "100 900",
+            "style": "normal"
+          },
+          {
+            "family": "Geist Mono",
+            "status": "unloaded",
+            "weight": "100 900",
+            "style": "normal"
+          }
+        ]
+      },
+      "font_responses": [
+        {
+          "pathname": "/browser-testing/recovery-codes-assets/@fs/C:/Workspace/AI%20MCP/Enterprise%20Solution/TunnerPlatform.V2.0/web/node_modules/.pnpm/@fontsource-variable+geist@5.3.0/node_modules/@fontsource-variable/geist/files/geist-latin-wght-normal.woff2",
+          "status": 200,
+          "content_type": "font/woff2",
+          "sha256": "19f9c92546aa300c312235e3125af1b81394d8db9a4bc4a425cd5b641d2d54e1"
+        }
+      ],
+      "owner_http_requests": 0,
+      "download_events": 0,
+      "fixture_download_callback_count": "1"
+    },
+    {
+      "name": "320x480",
+      "viewport": {
+        "width": 320,
+        "height": 480
+      },
+      "download_focused_before_enter": true,
+      "geometry": {
+        "focused": true,
+        "button": {
+          "top": 392,
+          "bottom": 432,
+          "left": 40,
+          "right": 280
+        },
+        "clip": {
+          "top": 17,
+          "bottom": 463,
+          "left": 17,
+          "right": 303
+        },
+        "fully_visible": true,
+        "ring_fully_visible": true,
+        "scroll_top": 580,
+        "outline": {
+          "color": "rgb(99, 102, 241)",
+          "width": "2px",
+          "style": "solid",
+          "offset": "3px",
+          "adjacent_background": "rgb(255, 255, 255)"
+        },
+        "page_overflow": false,
+        "dialog_overflow_x": false
+      },
+      "keyboard_result": "PASS",
+      "focus_outline": {
+        "contrast_ratio": 4.466894269549531,
+        "required": 3,
+        "result": "PASS_SCOPED"
+      },
+      "screenshot": {
+        "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/mobile-current-c71495c/rendered/requested-320x480.png",
+        "sha256": "00d7fec5acb4ce11bef49f118ae890240e1a1cc90a4bef0edf4ef2de5a2f450e"
+      },
+      "axe": {
+        "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/mobile-current-c71495c/axe/requested-320x480.json",
+        "sha256": "298ba57c8fe441d9a093ceac46584dadcf2599ed46b79c22bd236341eb566066",
+        "violations": [],
+        "incomplete": [
+          {
+            "id": "color-contrast",
+            "targets": [
+              [
+                "span[data-content-key=\"recoveryCodes.reveal.heading\"]"
+              ],
+              [
+                "#_r_1_ > span"
+              ],
+              [
+                "span[data-content-key=\"recoveryCodes.reveal.once\"]"
+              ]
+            ]
+          }
+        ],
+        "passes": 20
+      },
+      "manual_exact_targets": [
+        {
+          "rule": "color-contrast",
+          "target": [
+            "span[data-content-key=\"recoveryCodes.reveal.heading\"]"
+          ],
+          "foreground": "rgb(15, 23, 42)",
+          "background": "rgb(255, 255, 255)",
+          "font_size": "22px",
+          "font_weight": "600",
+          "layers": [
+            {
+              "tag": "span",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "image": "none"
+            },
+            {
+              "tag": "h2",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "image": "none"
+            },
+            {
+              "tag": "div",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "image": "none"
+            },
+            {
+              "tag": "dialog",
+              "background": "rgb(255, 255, 255)",
+              "opacity": "1",
+              "image": "none"
+            },
+            {
+              "tag": "main",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "image": "none"
+            },
+            {
+              "tag": "div",
+              "background": "rgb(248, 250, 252)",
+              "opacity": "1",
+              "image": "none"
+            },
+            {
+              "tag": "div",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "image": "none"
+            },
+            {
+              "tag": "div",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "image": "none"
+            },
+            {
+              "tag": "body",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "image": "none"
+            },
+            {
+              "tag": "html",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "image": "none"
+            }
+          ],
+          "lines": [
+            {
+              "top": 38,
+              "bottom": 66,
+              "left": 40,
+              "right": 189.5625,
+              "unobscured": true
+            }
+          ],
+          "inactive": false,
+          "contrast_ratio": 17.85253496299567,
+          "required": 4.5,
+          "opaque_ancestry": true,
+          "text_unobscured": true,
+          "audit_only_scroll": true,
+          "result": "PASS_MANUAL_EXACT_TARGET",
+          "scope": "Raw Axe remains incomplete. Audit-only target scroll is separate from the preceding user-keyboard visibility proof."
+        },
+        {
+          "rule": "color-contrast",
+          "target": [
+            "#_r_1_ > span"
+          ],
+          "foreground": "rgb(71, 89, 107)",
+          "background": "rgb(255, 255, 255)",
+          "font_size": "13px",
+          "font_weight": "400",
+          "layers": [
+            {
+              "tag": "span",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "image": "none"
+            },
+            {
+              "tag": "p",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "image": "none"
+            },
+            {
+              "tag": "div",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "image": "none"
+            },
+            {
+              "tag": "dialog",
+              "background": "rgb(255, 255, 255)",
+              "opacity": "1",
+              "image": "none"
+            },
+            {
+              "tag": "main",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "image": "none"
+            },
+            {
+              "tag": "div",
+              "background": "rgb(248, 250, 252)",
+              "opacity": "1",
+              "image": "none"
+            },
+            {
+              "tag": "div",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "image": "none"
+            },
+            {
+              "tag": "div",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "image": "none"
+            },
+            {
+              "tag": "body",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "image": "none"
+            },
+            {
+              "tag": "html",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "image": "none"
+            }
+          ],
+          "lines": [
+            {
+              "top": 73,
+              "bottom": 90,
+              "left": 40,
+              "right": 277.171875,
+              "unobscured": true
+            },
+            {
+              "top": 90,
+              "bottom": 107,
+              "left": 40,
+              "right": 251.796875,
+              "unobscured": true
+            },
+            {
+              "top": 107,
+              "bottom": 124,
+              "left": 40,
+              "right": 231.625,
+              "unobscured": true
+            },
+            {
+              "top": 124,
+              "bottom": 141,
+              "left": 40,
+              "right": 110.03125,
+              "unobscured": true
+            }
+          ],
+          "inactive": false,
+          "contrast_ratio": 7.218535441658394,
+          "required": 4.5,
+          "opaque_ancestry": true,
+          "text_unobscured": true,
+          "audit_only_scroll": true,
+          "result": "PASS_MANUAL_EXACT_TARGET",
+          "scope": "Raw Axe remains incomplete. Audit-only target scroll is separate from the preceding user-keyboard visibility proof."
+        },
+        {
+          "rule": "color-contrast",
+          "target": [
+            "span[data-content-key=\"recoveryCodes.reveal.once\"]"
+          ],
+          "foreground": "rgb(71, 89, 105)",
+          "background": "rgb(255, 255, 255)",
+          "font_size": "13px",
+          "font_weight": "400",
+          "layers": [
+            {
+              "tag": "span",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "image": "none"
+            },
+            {
+              "tag": "p",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "image": "none"
+            },
+            {
+              "tag": "div",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "image": "none"
+            },
+            {
+              "tag": "dialog",
+              "background": "rgb(255, 255, 255)",
+              "opacity": "1",
+              "image": "none"
+            },
+            {
+              "tag": "main",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "image": "none"
+            },
+            {
+              "tag": "div",
+              "background": "rgb(248, 250, 252)",
+              "opacity": "1",
+              "image": "none"
+            },
+            {
+              "tag": "div",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "image": "none"
+            },
+            {
+              "tag": "div",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "image": "none"
+            },
+            {
+              "tag": "body",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "image": "none"
+            },
+            {
+              "tag": "html",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "image": "none"
+            }
+          ],
+          "lines": [
+            {
+              "top": 162,
+              "bottom": 179,
+              "left": 40,
+              "right": 271.125,
+              "unobscured": true
+            },
+            {
+              "top": 181.5,
+              "bottom": 198.5,
+              "left": 40,
+              "right": 244.046875,
+              "unobscured": true
+            }
+          ],
+          "inactive": false,
+          "contrast_ratio": 7.2392469868633755,
+          "required": 4.5,
+          "opaque_ancestry": true,
+          "text_unobscured": true,
+          "audit_only_scroll": true,
+          "result": "PASS_MANUAL_EXACT_TARGET",
+          "scope": "Raw Axe remains incomplete. Audit-only target scroll is separate from the preceding user-keyboard visibility proof."
+        }
+      ],
+      "fonts": {
+        "status": "loaded",
+        "faces": [
+          {
+            "family": "Geist Variable",
+            "status": "unloaded",
+            "weight": "100 900",
+            "style": "normal"
+          },
+          {
+            "family": "Geist Variable",
+            "status": "unloaded",
+            "weight": "100 900",
+            "style": "normal"
+          },
+          {
+            "family": "Geist Variable",
+            "status": "unloaded",
+            "weight": "100 900",
+            "style": "normal"
+          },
+          {
+            "family": "Geist Variable",
+            "status": "unloaded",
+            "weight": "100 900",
+            "style": "normal"
+          },
+          {
+            "family": "Geist Variable",
+            "status": "loaded",
+            "weight": "100 900",
+            "style": "normal"
+          },
+          {
+            "family": "Inter Variable",
+            "status": "unloaded",
+            "weight": "100 900",
+            "style": "normal"
+          },
+          {
+            "family": "Inter Variable",
+            "status": "unloaded",
+            "weight": "100 900",
+            "style": "normal"
+          },
+          {
+            "family": "Inter Variable",
+            "status": "unloaded",
+            "weight": "100 900",
+            "style": "normal"
+          },
+          {
+            "family": "Inter Variable",
+            "status": "unloaded",
+            "weight": "100 900",
+            "style": "normal"
+          },
+          {
+            "family": "Inter Variable",
+            "status": "unloaded",
+            "weight": "100 900",
+            "style": "normal"
+          },
+          {
+            "family": "Inter Variable",
+            "status": "unloaded",
+            "weight": "100 900",
+            "style": "normal"
+          },
+          {
+            "family": "Inter Variable",
+            "status": "unloaded",
+            "weight": "100 900",
+            "style": "normal"
+          },
+          {
+            "family": "Geist Mono",
+            "status": "unloaded",
+            "weight": "100 900",
+            "style": "normal"
+          }
+        ]
+      },
+      "font_responses": [
+        {
+          "pathname": "/browser-testing/recovery-codes-assets/@fs/C:/Workspace/AI%20MCP/Enterprise%20Solution/TunnerPlatform.V2.0/web/node_modules/.pnpm/@fontsource-variable+geist@5.3.0/node_modules/@fontsource-variable/geist/files/geist-latin-wght-normal.woff2",
+          "status": 200,
+          "content_type": "font/woff2",
+          "sha256": "19f9c92546aa300c312235e3125af1b81394d8db9a4bc4a425cd5b641d2d54e1"
+        }
+      ],
+      "owner_http_requests": 0,
+      "download_events": 0,
+      "fixture_download_callback_count": "1"
+    },
+    {
+      "name": "1366x768",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "download_focused_before_enter": true,
+      "geometry": {
+        "focused": true,
+        "button": {
+          "top": 705.5,
+          "bottom": 745.5,
+          "left": 825,
+          "right": 939
+        },
+        "clip": {
+          "top": 17,
+          "bottom": 751,
+          "left": 404,
+          "right": 962
+        },
+        "fully_visible": true,
+        "ring_fully_visible": true,
+        "scroll_top": 0,
+        "outline": {
+          "color": "rgb(99, 102, 241)",
+          "width": "2px",
+          "style": "solid",
+          "offset": "3px",
+          "adjacent_background": "rgb(255, 255, 255)"
+        },
+        "page_overflow": false,
+        "dialog_overflow_x": false
+      },
+      "keyboard_result": "PASS",
+      "focus_outline": {
+        "contrast_ratio": 4.466894269549531,
+        "required": 3,
+        "result": "PASS_SCOPED"
+      },
+      "screenshot": {
+        "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/mobile-current-c71495c/rendered/requested-1366x768.png",
+        "sha256": "9ebc43aeb388c1e3b74e2177c784c6208f88bc595657ea0bd322f79709623bd7"
+      },
+      "axe": {
+        "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/mobile-current-c71495c/axe/requested-1366x768.json",
+        "sha256": "c914467a3402bfd9874fccf1efcf39194cc0dae381efaa0951981e5bfc136b45",
+        "violations": [],
+        "incomplete": [],
+        "passes": 19
+      },
+      "manual_exact_targets": [],
+      "fonts": {
+        "status": "loaded",
+        "faces": [
+          {
+            "family": "Geist Variable",
+            "status": "unloaded",
+            "weight": "100 900",
+            "style": "normal"
+          },
+          {
+            "family": "Geist Variable",
+            "status": "unloaded",
+            "weight": "100 900",
+            "style": "normal"
+          },
+          {
+            "family": "Geist Variable",
+            "status": "unloaded",
+            "weight": "100 900",
+            "style": "normal"
+          },
+          {
+            "family": "Geist Variable",
+            "status": "unloaded",
+            "weight": "100 900",
+            "style": "normal"
+          },
+          {
+            "family": "Geist Variable",
+            "status": "loaded",
+            "weight": "100 900",
+            "style": "normal"
+          },
+          {
+            "family": "Inter Variable",
+            "status": "unloaded",
+            "weight": "100 900",
+            "style": "normal"
+          },
+          {
+            "family": "Inter Variable",
+            "status": "unloaded",
+            "weight": "100 900",
+            "style": "normal"
+          },
+          {
+            "family": "Inter Variable",
+            "status": "unloaded",
+            "weight": "100 900",
+            "style": "normal"
+          },
+          {
+            "family": "Inter Variable",
+            "status": "unloaded",
+            "weight": "100 900",
+            "style": "normal"
+          },
+          {
+            "family": "Inter Variable",
+            "status": "unloaded",
+            "weight": "100 900",
+            "style": "normal"
+          },
+          {
+            "family": "Inter Variable",
+            "status": "unloaded",
+            "weight": "100 900",
+            "style": "normal"
+          },
+          {
+            "family": "Inter Variable",
+            "status": "unloaded",
+            "weight": "100 900",
+            "style": "normal"
+          },
+          {
+            "family": "Geist Mono",
+            "status": "unloaded",
+            "weight": "100 900",
+            "style": "normal"
+          }
+        ]
+      },
+      "font_responses": [
+        {
+          "pathname": "/browser-testing/recovery-codes-assets/@fs/C:/Workspace/AI%20MCP/Enterprise%20Solution/TunnerPlatform.V2.0/web/node_modules/.pnpm/@fontsource-variable+geist@5.3.0/node_modules/@fontsource-variable/geist/files/geist-latin-wght-normal.woff2",
+          "status": 200,
+          "content_type": "font/woff2",
+          "sha256": "19f9c92546aa300c312235e3125af1b81394d8db9a4bc4a425cd5b641d2d54e1"
+        }
+      ],
+      "owner_http_requests": 0,
+      "download_events": 0,
+      "fixture_download_callback_count": "1"
+    }
+  ],
+  "totals": {
+    "captures": 6,
+    "keyboard_pass": 6,
+    "keyboard_fail": 0,
+    "axe_violations": 0,
+    "raw_incomplete_targets": 15,
+    "unresolved_targets": 0
+  },
+  "closure": {
+    "owned_vite_pid": 15168,
+    "started_at": "2026-11-11T11:44:16.381Z",
+    "server_closed": true,
+    "browser_closed": true,
+    "unknown_process_stopped": false
+  },
+  "scope": "Public controlled actual React modal only,39-character nonfunctional samples; same-source52 includes integrated controller mocks. No actual file, native save dialog, private payload, native owner, whole UI acceptance or final role acceptance.",
+  "defect_disposition": "PROPOSED_SCOPED_RESOLUTION_ONLY; root reviews and materializes governed status"
+}

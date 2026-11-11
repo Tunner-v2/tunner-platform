@@ -1,0 +1,1174 @@
+{
+  "scope_id": "TUN-P2-009",
+  "result": "PUBLIC_COHORT_AND_AFFECTED_CONSUMER_REGRESSION_PASS_ONLY",
+  "tested_sha": "c71495cbcb1e0e6f8e1dd89c3f42c59b1ed834a6",
+  "recorded_at": "2026-11-11T11:47:21.207Z",
+  "source": {
+    "before": {
+      "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/implementation-public-c71495c/source-inputs-before.json",
+      "sha256": "b0baa94103a65fdda3e234af345b4cc100ef300464e61b55e89fda3f2c542370"
+    },
+    "after": {
+      "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/implementation-public-c71495c/source-inputs-after.json",
+      "sha256": "1fea56a3bf8f74eaed053fd303efb87a9bdffff5f9c6573a735ef1b5a5c0886e"
+    },
+    "input_count": 167,
+    "selected_scopes": [
+      "web",
+      "docs/contracts/ui-inventory.json"
+    ],
+    "all_declared_inputs_equal": true,
+    "after_input_count": 167
+  },
+  "public": {
+    "total": 52,
+    "passed": 52,
+    "failed": 0,
+    "skipped": 0,
+    "flaky": 0,
+    "presentation": 32,
+    "controller": 20,
+    "summary": {
+      "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/implementation-public-c71495c/public-summary.json",
+      "sha256": "de457d95a523dd07b283a34e19be315d3c6fa94aabc3ae0bec7871548537f5d6"
+    },
+    "report": {
+      "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/implementation-public-c71495c/results.json",
+      "sha256": "221018fcbcb8960f4d2f483c4f859f353527278287622114b1675b6509cb410c"
+    },
+    "execution": {
+      "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/implementation-public-c71495c/playwright-execution.json",
+      "sha256": "08e304fb4b3e8df404eb3c258dff131481ca87ce15de609bec8651872ebc6466"
+    },
+    "cases": [
+      {
+        "id": "57a964c83dbf6a737e02-be6f58209b3d553f2d36",
+        "title": "mounting the controlled component causes no owner calls or local request",
+        "file": "presentation.spec.ts",
+        "line": 9,
+        "project": "",
+        "expected_status": "passed",
+        "status": "expected",
+        "results": [
+          {
+            "status": "passed",
+            "duration_ms": 1072,
+            "retry": 0,
+            "start_time": "2026-11-11T11:30:01.601Z"
+          }
+        ]
+      },
+      {
+        "id": "57a964c83dbf6a737e02-ea504663a3cf80194e6d",
+        "title": "missing or stale impact cannot continue; current owner text is preserved",
+        "file": "presentation.spec.ts",
+        "line": 15,
+        "project": "",
+        "expected_status": "passed",
+        "status": "expected",
+        "results": [
+          {
+            "status": "passed",
+            "duration_ms": 999,
+            "retry": 0,
+            "start_time": "2026-11-11T11:30:03.602Z"
+          }
+        ]
+      },
+      {
+        "id": "57a964c83dbf6a737e02-a0124e260c054ba21a52",
+        "title": "blocked review checks the original owner without enabling Continue",
+        "file": "presentation.spec.ts",
+        "line": 21,
+        "project": "",
+        "expected_status": "passed",
+        "status": "expected",
+        "results": [
+          {
+            "status": "passed",
+            "duration_ms": 850,
+            "retry": 0,
+            "start_time": "2026-11-11T11:30:04.620Z"
+          }
+        ]
+      },
+      {
+        "id": "57a964c83dbf6a737e02-7ecebe65015cb3d55824",
+        "title": "requested callback occurs once and status announces no sample or saved claim",
+        "file": "presentation.spec.ts",
+        "line": 25,
+        "project": "",
+        "expected_status": "passed",
+        "status": "expected",
+        "results": [
+          {
+            "status": "passed",
+            "duration_ms": 801,
+            "retry": 0,
+            "start_time": "2026-11-11T11:30:05.491Z"
+          }
+        ]
+      },
+      {
+        "id": "57a964c83dbf6a737e02-c714f27ad38f01905148",
+        "title": "Escape clears the presentation and returns keyboard focus to its actual trigger",
+        "file": "presentation.spec.ts",
+        "line": 32,
+        "project": "",
+        "expected_status": "passed",
+        "status": "expected",
+        "results": [
+          {
+            "status": "passed",
+            "duration_ms": 711,
+            "retry": 0,
+            "start_time": "2026-11-11T11:30:06.306Z"
+          }
+        ]
+      },
+      {
+        "id": "57a964c83dbf6a737e02-bbb54f809cb72159be14",
+        "title": "busy review blocks Escape and all actions",
+        "file": "presentation.spec.ts",
+        "line": 36,
+        "project": "",
+        "expected_status": "passed",
+        "status": "expected",
+        "results": [
+          {
+            "status": "passed",
+            "duration_ms": 741,
+            "retry": 0,
+            "start_time": "2026-11-11T11:30:07.037Z"
+          }
+        ]
+      },
+      {
+        "id": "57a964c83dbf6a737e02-73254369e11c93537cd8",
+        "title": "lost body stays neutral and distinct from known presentation; neither offers download",
+        "file": "presentation.spec.ts",
+        "line": 40,
+        "project": "",
+        "expected_status": "passed",
+        "status": "expected",
+        "results": [
+          {
+            "status": "passed",
+            "duration_ms": 809,
+            "retry": 0,
+            "start_time": "2026-11-11T11:30:07.797Z"
+          }
+        ]
+      },
+      {
+        "id": "57a964c83dbf6a737e02-25ac95ec87d3f040e00e",
+        "title": "unknown Check status invokes its original-operation callback without generating or revealing",
+        "file": "presentation.spec.ts",
+        "line": 45,
+        "project": "",
+        "expected_status": "passed",
+        "status": "expected",
+        "results": [
+          {
+            "status": "passed",
+            "duration_ms": 686,
+            "retry": 0,
+            "start_time": "2026-11-11T11:30:08.626Z"
+          }
+        ]
+      },
+      {
+        "id": "57a964c83dbf6a737e02-04827ebc10044c0ee63e",
+        "title": "variable controlled sample count and no-download choice do not imply six codes",
+        "file": "presentation.spec.ts",
+        "line": 49,
+        "project": "",
+        "expected_status": "passed",
+        "status": "expected",
+        "results": [
+          {
+            "status": "passed",
+            "duration_ms": 803,
+            "retry": 0,
+            "start_time": "2026-11-11T11:30:09.330Z"
+          }
+        ]
+      },
+      {
+        "id": "57a964c83dbf6a737e02-eb02063f104c1c7b16a5",
+        "title": "shared modal traps Tab in both directions around requested controls",
+        "file": "presentation.spec.ts",
+        "line": 53,
+        "project": "",
+        "expected_status": "passed",
+        "status": "expected",
+        "results": [
+          {
+            "status": "passed",
+            "duration_ms": 669,
+            "retry": 0,
+            "start_time": "2026-11-11T11:30:10.150Z"
+          }
+        ]
+      },
+      {
+        "id": "57a964c83dbf6a737e02-97e88d078e1f17eaa56e",
+        "title": "both authoritative card actions retain distinct callbacks in the same card",
+        "file": "presentation.spec.ts",
+        "line": 56,
+        "project": "",
+        "expected_status": "passed",
+        "status": "expected",
+        "results": [
+          {
+            "status": "passed",
+            "duration_ms": 891,
+            "retry": 0,
+            "start_time": "2026-11-11T11:30:10.834Z"
+          }
+        ]
+      },
+      {
+        "id": "57a964c83dbf6a737e02-6869a4cde01bff2d6b44",
+        "title": "a pending original request exposes Check status and blocks fresh card starts",
+        "file": "presentation.spec.ts",
+        "line": 59,
+        "project": "",
+        "expected_status": "passed",
+        "status": "expected",
+        "results": [
+          {
+            "status": "passed",
+            "duration_ms": 742,
+            "retry": 0,
+            "start_time": "2026-11-11T11:30:11.740Z"
+          }
+        ]
+      },
+      {
+        "id": "57a964c83dbf6a737e02-c44aba159d54f7bc2a60",
+        "title": "requested Download keeps keyboard Done fully inside the scroll viewport at 390x844",
+        "file": "presentation.spec.ts",
+        "line": 64,
+        "project": "",
+        "expected_status": "passed",
+        "status": "expected",
+        "results": [
+          {
+            "status": "passed",
+            "duration_ms": 717,
+            "retry": 0,
+            "start_time": "2026-11-11T11:30:12.497Z"
+          }
+        ]
+      },
+      {
+        "id": "57a964c83dbf6a737e02-c032b85ad44c3eb63c6d",
+        "title": "requested Download keeps keyboard Done fully inside the scroll viewport at 390x640",
+        "file": "presentation.spec.ts",
+        "line": 64,
+        "project": "",
+        "expected_status": "passed",
+        "status": "expected",
+        "results": [
+          {
+            "status": "passed",
+            "duration_ms": 701,
+            "retry": 0,
+            "start_time": "2026-11-11T11:30:13.228Z"
+          }
+        ]
+      },
+      {
+        "id": "57a964c83dbf6a737e02-69f0c0224bfcab405f22",
+        "title": "requested Download keeps keyboard Done fully inside the scroll viewport at 320x568",
+        "file": "presentation.spec.ts",
+        "line": 64,
+        "project": "",
+        "expected_status": "passed",
+        "status": "expected",
+        "results": [
+          {
+            "status": "passed",
+            "duration_ms": 704,
+            "retry": 0,
+            "start_time": "2026-11-11T11:30:13.946Z"
+          }
+        ]
+      },
+      {
+        "id": "57a964c83dbf6a737e02-b13010994e8bccbed09e",
+        "title": "requested Download keeps keyboard Done fully inside the scroll viewport at 390x480",
+        "file": "presentation.spec.ts",
+        "line": 64,
+        "project": "",
+        "expected_status": "passed",
+        "status": "expected",
+        "results": [
+          {
+            "status": "passed",
+            "duration_ms": 784,
+            "retry": 0,
+            "start_time": "2026-11-11T11:30:14.669Z"
+          }
+        ]
+      },
+      {
+        "id": "57a964c83dbf6a737e02-b2f988b96a1f263a78e3",
+        "title": "requested Download keeps keyboard Done fully inside the scroll viewport at 320x480",
+        "file": "presentation.spec.ts",
+        "line": 64,
+        "project": "",
+        "expected_status": "passed",
+        "status": "expected",
+        "results": [
+          {
+            "status": "passed",
+            "duration_ms": 720,
+            "retry": 0,
+            "start_time": "2026-11-11T11:30:15.471Z"
+          }
+        ]
+      },
+      {
+        "id": "57a964c83dbf6a737e02-998cebea3c88036950a6",
+        "title": "requested Download keeps keyboard Done fully inside the scroll viewport at 1366x768",
+        "file": "presentation.spec.ts",
+        "line": 64,
+        "project": "",
+        "expected_status": "passed",
+        "status": "expected",
+        "results": [
+          {
+            "status": "passed",
+            "duration_ms": 647,
+            "retry": 0,
+            "start_time": "2026-11-11T11:30:16.225Z"
+          }
+        ]
+      },
+      {
+        "id": "57a964c83dbf6a737e02-c2b75026992c1106be2a",
+        "title": "39-character public samples reflow without clipping at 1440",
+        "file": "presentation.spec.ts",
+        "line": 71,
+        "project": "",
+        "expected_status": "passed",
+        "status": "expected",
+        "results": [
+          {
+            "status": "passed",
+            "duration_ms": 761,
+            "retry": 0,
+            "start_time": "2026-11-11T11:30:16.893Z"
+          }
+        ]
+      },
+      {
+        "id": "57a964c83dbf6a737e02-2b9c6562f77122922ac6",
+        "title": "long server-impact text reflows and actions remain reachable at 1440",
+        "file": "presentation.spec.ts",
+        "line": 76,
+        "project": "",
+        "expected_status": "passed",
+        "status": "expected",
+        "results": [
+          {
+            "status": "passed",
+            "duration_ms": 783,
+            "retry": 0,
+            "start_time": "2026-11-11T11:30:17.674Z"
+          }
+        ]
+      },
+      {
+        "id": "57a964c83dbf6a737e02-194e8a80810905cd0614",
+        "title": "39-character public samples reflow without clipping at 1366",
+        "file": "presentation.spec.ts",
+        "line": 71,
+        "project": "",
+        "expected_status": "passed",
+        "status": "expected",
+        "results": [
+          {
+            "status": "passed",
+            "duration_ms": 713,
+            "retry": 0,
+            "start_time": "2026-11-11T11:30:18.479Z"
+          }
+        ]
+      },
+      {
+        "id": "57a964c83dbf6a737e02-49f7ef8b7351f52955ba",
+        "title": "long server-impact text reflows and actions remain reachable at 1366",
+        "file": "presentation.spec.ts",
+        "line": 76,
+        "project": "",
+        "expected_status": "passed",
+        "status": "expected",
+        "results": [
+          {
+            "status": "passed",
+            "duration_ms": 980,
+            "retry": 0,
+            "start_time": "2026-11-11T11:30:19.214Z"
+          }
+        ]
+      },
+      {
+        "id": "57a964c83dbf6a737e02-fbd838f2d3ec496ad08a",
+        "title": "39-character public samples reflow without clipping at 1101",
+        "file": "presentation.spec.ts",
+        "line": 71,
+        "project": "",
+        "expected_status": "passed",
+        "status": "expected",
+        "results": [
+          {
+            "status": "passed",
+            "duration_ms": 790,
+            "retry": 0,
+            "start_time": "2026-11-11T11:30:20.226Z"
+          }
+        ]
+      },
+      {
+        "id": "57a964c83dbf6a737e02-4ac2ed636a9c6589c970",
+        "title": "long server-impact text reflows and actions remain reachable at 1101",
+        "file": "presentation.spec.ts",
+        "line": 76,
+        "project": "",
+        "expected_status": "passed",
+        "status": "expected",
+        "results": [
+          {
+            "status": "passed",
+            "duration_ms": 796,
+            "retry": 0,
+            "start_time": "2026-11-11T11:30:21.037Z"
+          }
+        ]
+      },
+      {
+        "id": "57a964c83dbf6a737e02-3148e5582ec4dfeba858",
+        "title": "39-character public samples reflow without clipping at 1100",
+        "file": "presentation.spec.ts",
+        "line": 71,
+        "project": "",
+        "expected_status": "passed",
+        "status": "expected",
+        "results": [
+          {
+            "status": "passed",
+            "duration_ms": 690,
+            "retry": 0,
+            "start_time": "2026-11-11T11:30:21.848Z"
+          }
+        ]
+      },
+      {
+        "id": "57a964c83dbf6a737e02-cf132cc21452e9356ac6",
+        "title": "long server-impact text reflows and actions remain reachable at 1100",
+        "file": "presentation.spec.ts",
+        "line": 76,
+        "project": "",
+        "expected_status": "passed",
+        "status": "expected",
+        "results": [
+          {
+            "status": "passed",
+            "duration_ms": 776,
+            "retry": 0,
+            "start_time": "2026-11-11T11:30:22.554Z"
+          }
+        ]
+      },
+      {
+        "id": "57a964c83dbf6a737e02-c0c7685488425b399f63",
+        "title": "39-character public samples reflow without clipping at 768",
+        "file": "presentation.spec.ts",
+        "line": 71,
+        "project": "",
+        "expected_status": "passed",
+        "status": "expected",
+        "results": [
+          {
+            "status": "passed",
+            "duration_ms": 726,
+            "retry": 0,
+            "start_time": "2026-11-11T11:30:23.347Z"
+          }
+        ]
+      },
+      {
+        "id": "57a964c83dbf6a737e02-d6a9f700f9462d4fae65",
+        "title": "long server-impact text reflows and actions remain reachable at 768",
+        "file": "presentation.spec.ts",
+        "line": 76,
+        "project": "",
+        "expected_status": "passed",
+        "status": "expected",
+        "results": [
+          {
+            "status": "passed",
+            "duration_ms": 770,
+            "retry": 0,
+            "start_time": "2026-11-11T11:30:24.086Z"
+          }
+        ]
+      },
+      {
+        "id": "57a964c83dbf6a737e02-13068244b456a3429348",
+        "title": "39-character public samples reflow without clipping at 390",
+        "file": "presentation.spec.ts",
+        "line": 71,
+        "project": "",
+        "expected_status": "passed",
+        "status": "expected",
+        "results": [
+          {
+            "status": "passed",
+            "duration_ms": 742,
+            "retry": 0,
+            "start_time": "2026-11-11T11:30:24.870Z"
+          }
+        ]
+      },
+      {
+        "id": "57a964c83dbf6a737e02-e5fa3c6e252d71b69f2a",
+        "title": "long server-impact text reflows and actions remain reachable at 390",
+        "file": "presentation.spec.ts",
+        "line": 76,
+        "project": "",
+        "expected_status": "passed",
+        "status": "expected",
+        "results": [
+          {
+            "status": "passed",
+            "duration_ms": 801,
+            "retry": 0,
+            "start_time": "2026-11-11T11:30:25.632Z"
+          }
+        ]
+      },
+      {
+        "id": "57a964c83dbf6a737e02-16c98113c7bc9a3dcd96",
+        "title": "39-character public samples reflow without clipping at 320",
+        "file": "presentation.spec.ts",
+        "line": 71,
+        "project": "",
+        "expected_status": "passed",
+        "status": "expected",
+        "results": [
+          {
+            "status": "passed",
+            "duration_ms": 705,
+            "retry": 0,
+            "start_time": "2026-11-11T11:30:26.453Z"
+          }
+        ]
+      },
+      {
+        "id": "57a964c83dbf6a737e02-d686d3b5054a90f924a5",
+        "title": "long server-impact text reflows and actions remain reachable at 320",
+        "file": "presentation.spec.ts",
+        "line": 76,
+        "project": "",
+        "expected_status": "passed",
+        "status": "expected",
+        "results": [
+          {
+            "status": "passed",
+            "duration_ms": 803,
+            "retry": 0,
+            "start_time": "2026-11-11T11:30:27.176Z"
+          }
+        ]
+      },
+      {
+        "id": "39a8d11e4e8b8d232891-e67611591cdd82354fce",
+        "title": "GENERATE captures only its winning password response before safe completion",
+        "file": "recovery-codes.spec.ts",
+        "line": 9,
+        "project": "",
+        "expected_status": "passed",
+        "status": "expected",
+        "results": [
+          {
+            "status": "passed",
+            "duration_ms": 1269,
+            "retry": 0,
+            "start_time": "2026-11-11T11:30:28.061Z"
+          }
+        ]
+      },
+      {
+        "id": "39a8d11e4e8b8d232891-64bbd1a67bc518e7c3c7",
+        "title": "GENERATE captures only its winning passkey response before safe completion",
+        "file": "recovery-codes.spec.ts",
+        "line": 9,
+        "project": "",
+        "expected_status": "passed",
+        "status": "expected",
+        "results": [
+          {
+            "status": "passed",
+            "duration_ms": 1227,
+            "retry": 0,
+            "start_time": "2026-11-11T11:30:29.350Z"
+          }
+        ]
+      },
+      {
+        "id": "39a8d11e4e8b8d232891-feeefae04e4e33f7707f",
+        "title": "GENERATE captures only its winning totp response before safe completion",
+        "file": "recovery-codes.spec.ts",
+        "line": 9,
+        "project": "",
+        "expected_status": "passed",
+        "status": "expected",
+        "results": [
+          {
+            "status": "passed",
+            "duration_ms": 1348,
+            "retry": 0,
+            "start_time": "2026-11-11T11:30:30.597Z"
+          }
+        ]
+      },
+      {
+        "id": "39a8d11e4e8b8d232891-bfeb9c77783e575d8657",
+        "title": "REPLACE captures only its winning password response before safe completion",
+        "file": "recovery-codes.spec.ts",
+        "line": 9,
+        "project": "",
+        "expected_status": "passed",
+        "status": "expected",
+        "results": [
+          {
+            "status": "passed",
+            "duration_ms": 1345,
+            "retry": 0,
+            "start_time": "2026-11-11T11:30:31.978Z"
+          }
+        ]
+      },
+      {
+        "id": "39a8d11e4e8b8d232891-f9de1dfa5899a04708d7",
+        "title": "REPLACE captures only its winning passkey response before safe completion",
+        "file": "recovery-codes.spec.ts",
+        "line": 9,
+        "project": "",
+        "expected_status": "passed",
+        "status": "expected",
+        "results": [
+          {
+            "status": "passed",
+            "duration_ms": 1184,
+            "retry": 0,
+            "start_time": "2026-11-11T11:30:33.343Z"
+          }
+        ]
+      },
+      {
+        "id": "39a8d11e4e8b8d232891-f2961e0f38ed2ac6e047",
+        "title": "REPLACE captures only its winning totp response before safe completion",
+        "file": "recovery-codes.spec.ts",
+        "line": 9,
+        "project": "",
+        "expected_status": "passed",
+        "status": "expected",
+        "results": [
+          {
+            "status": "passed",
+            "duration_ms": 1230,
+            "retry": 0,
+            "start_time": "2026-11-11T11:30:34.545Z"
+          }
+        ]
+      },
+      {
+        "id": "39a8d11e4e8b8d232891-d173a6b25d0f2a1853d9",
+        "title": "passkey original active-proof continuation is the first winning delivery after owner failure",
+        "file": "recovery-codes.spec.ts",
+        "line": 17,
+        "project": "",
+        "expected_status": "passed",
+        "status": "expected",
+        "results": [
+          {
+            "status": "passed",
+            "duration_ms": 1064,
+            "retry": 0,
+            "start_time": "2026-11-11T11:30:35.792Z"
+          }
+        ]
+      },
+      {
+        "id": "39a8d11e4e8b8d232891-ca89254fed6c9d376dab",
+        "title": "totp original active-proof continuation is the first winning delivery after owner failure",
+        "file": "recovery-codes.spec.ts",
+        "line": 17,
+        "project": "",
+        "expected_status": "passed",
+        "status": "expected",
+        "results": [
+          {
+            "status": "passed",
+            "duration_ms": 1047,
+            "retry": 0,
+            "start_time": "2026-11-11T11:30:36.874Z"
+          }
+        ]
+      },
+      {
+        "id": "39a8d11e4e8b8d232891-85f54fb04bb8ce52b286",
+        "title": "lost Start reads its exact old request despite a new options request ID",
+        "file": "recovery-codes.spec.ts",
+        "line": 23,
+        "project": "",
+        "expected_status": "passed",
+        "status": "expected",
+        "results": [
+          {
+            "status": "passed",
+            "duration_ms": 1010,
+            "retry": 0,
+            "start_time": "2026-11-11T11:30:37.934Z"
+          }
+        ]
+      },
+      {
+        "id": "39a8d11e4e8b8d232891-a61ddfabf310626e464c",
+        "title": "committed response body loss stays neutral and never fetches or regenerates codes",
+        "file": "recovery-codes.spec.ts",
+        "line": 27,
+        "project": "",
+        "expected_status": "passed",
+        "status": "expected",
+        "results": [
+          {
+            "status": "passed",
+            "duration_ms": 1147,
+            "retry": 0,
+            "start_time": "2026-11-11T11:30:38.963Z"
+          }
+        ]
+      },
+      {
+        "id": "39a8d11e4e8b8d232891-1883ef1cc881f28d278b",
+        "title": "wrong owner delivery binding is discarded and safe status cannot restore it",
+        "file": "recovery-codes.spec.ts",
+        "line": 31,
+        "project": "",
+        "expected_status": "passed",
+        "status": "expected",
+        "results": [
+          {
+            "status": "passed",
+            "duration_ms": 1050,
+            "retry": 0,
+            "start_time": "2026-11-11T11:30:40.129Z"
+          }
+        ]
+      },
+      {
+        "id": "39a8d11e4e8b8d232891-0077c265849af5caa010",
+        "title": "missing current impact publication blocks proof without replaying Start",
+        "file": "recovery-codes.spec.ts",
+        "line": 35,
+        "project": "",
+        "expected_status": "passed",
+        "status": "expected",
+        "results": [
+          {
+            "status": "passed",
+            "duration_ms": 1020,
+            "retry": 0,
+            "start_time": "2026-11-11T11:30:41.193Z"
+          }
+        ]
+      },
+      {
+        "id": "39a8d11e4e8b8d232891-5b6f63542384d1d15faf",
+        "title": "publication withdrawal after replacement review blocks proof without changing the held original",
+        "file": "recovery-codes.spec.ts",
+        "line": 40,
+        "project": "",
+        "expected_status": "passed",
+        "status": "expected",
+        "results": [
+          {
+            "status": "passed",
+            "duration_ms": 998,
+            "retry": 0,
+            "start_time": "2026-11-11T11:30:42.229Z"
+          }
+        ]
+      },
+      {
+        "id": "39a8d11e4e8b8d232891-b3f6c704bc2782084a1d",
+        "title": "a changed shared proof operation never becomes an accepted owner verification",
+        "file": "recovery-codes.spec.ts",
+        "line": 44,
+        "project": "",
+        "expected_status": "passed",
+        "status": "expected",
+        "results": [
+          {
+            "status": "passed",
+            "duration_ms": 887,
+            "retry": 0,
+            "start_time": "2026-11-11T11:30:43.247Z"
+          }
+        ]
+      },
+      {
+        "id": "39a8d11e4e8b8d232891-ec05a18955a7f6761df7",
+        "title": "cancel refreshes current same-path action facts before sibling actions reenable",
+        "file": "recovery-codes.spec.ts",
+        "line": 48,
+        "project": "",
+        "expected_status": "passed",
+        "status": "expected",
+        "results": [
+          {
+            "status": "passed",
+            "duration_ms": 1109,
+            "retry": 0,
+            "start_time": "2026-11-11T11:30:44.150Z"
+          }
+        ]
+      },
+      {
+        "id": "39a8d11e4e8b8d232891-022f7dcadaba75abd842",
+        "title": "pagehide clears the volatile view without unmount and persisted pageshow cannot reveal it",
+        "file": "recovery-codes.spec.ts",
+        "line": 52,
+        "project": "",
+        "expected_status": "passed",
+        "status": "expected",
+        "results": [
+          {
+            "status": "passed",
+            "duration_ms": 1160,
+            "retry": 0,
+            "start_time": "2026-11-11T11:30:45.278Z"
+          }
+        ]
+      },
+      {
+        "id": "39a8d11e4e8b8d232891-db29890dedcea1ccc2db",
+        "title": "reload and route history retain safe status rather than the previous display",
+        "file": "recovery-codes.spec.ts",
+        "line": 57,
+        "project": "",
+        "expected_status": "passed",
+        "status": "expected",
+        "results": [
+          {
+            "status": "passed",
+            "duration_ms": 1565,
+            "retry": 0,
+            "start_time": "2026-11-11T11:30:46.455Z"
+          }
+        ]
+      },
+      {
+        "id": "39a8d11e4e8b8d232891-4d8c8d5ee785924595f5",
+        "title": "disabled-host absent capability preserves the old page and makes zero recovery calls",
+        "file": "recovery-codes.spec.ts",
+        "line": 61,
+        "project": "",
+        "expected_status": "passed",
+        "status": "expected",
+        "results": [
+          {
+            "status": "passed",
+            "duration_ms": 1248,
+            "retry": 0,
+            "start_time": "2026-11-11T11:30:48.036Z"
+          }
+        ]
+      },
+      {
+        "id": "39a8d11e4e8b8d232891-90d2648e84364cd7fccb",
+        "title": "disabled-host explicit false capability preserves the old page and makes zero recovery calls",
+        "file": "recovery-codes.spec.ts",
+        "line": 61,
+        "project": "",
+        "expected_status": "passed",
+        "status": "expected",
+        "results": [
+          {
+            "status": "passed",
+            "duration_ms": 1315,
+            "retry": 0,
+            "start_time": "2026-11-11T11:30:49.302Z"
+          }
+        ]
+      },
+      {
+        "id": "39a8d11e4e8b8d232891-1eaea8cd24834fb97048",
+        "title": "one explicit public transport request uses only the held payload and revokes its opaque URL on departure",
+        "file": "recovery-codes.spec.ts",
+        "line": 65,
+        "project": "",
+        "expected_status": "passed",
+        "status": "expected",
+        "results": [
+          {
+            "status": "passed",
+            "duration_ms": 1121,
+            "retry": 0,
+            "start_time": "2026-11-11T11:30:50.630Z"
+          }
+        ]
+      }
+    ]
+  },
+  "typechecks": [
+    {
+      "scope": "Canonical web tsconfig",
+      "exit_code": 0,
+      "execution": {
+        "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/implementation-public-c71495c/typecheck-canonical-execution.json",
+        "sha256": "8b25c8d4811a84448269e75e408bbe24749e0fcd8bef4ce264915dc6c8bd18d4"
+      },
+      "log": {
+        "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/implementation-public-c71495c/typecheck-canonical.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "scope": "Canonical options plus recovery fixture/config inputs",
+      "exit_code": 0,
+      "execution": {
+        "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/implementation-public-c71495c/typecheck-expanded-execution.json",
+        "sha256": "645d0ceefa7e95f0ce1e3af32271587de87398dfb657a01c832956f3140da86f"
+      },
+      "wrapper": {
+        "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/implementation-public-c71495c/tsconfig.expanded.json",
+        "sha256": "a04ce4fac341937e52bc1882ff06ae02df470d73fc70b9f1bd743ef7f7d61cab"
+      },
+      "log": {
+        "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/implementation-public-c71495c/typecheck-expanded.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    }
+  ],
+  "contracts": {
+    "total": 43,
+    "passed": 43,
+    "failed": 0,
+    "skipped": 0,
+    "baseline": 29,
+    "additive_recovery": 14,
+    "build_exit_code": 0,
+    "test_exit_code": 0,
+    "execution": {
+      "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/implementation-public-c71495c/contracts-execution.json",
+      "sha256": "dd5103e92719ea2e5d3fc6191c5bb4fd252c0adb3aa25690a728dfdf84927e5c"
+    },
+    "build_log": {
+      "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/implementation-public-c71495c/contracts-build.log",
+      "sha256": "b018150653bfb00f5855ffa6fb04cdfc2284cac53a5f9d6c54065eeeee35fd73"
+    },
+    "report": {
+      "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/implementation-public-c71495c/contracts.log",
+      "sha256": "be86c8254e56ce5fb98bf83bde157129affd5bfe8066cdd283cb196c463c88b7"
+    }
+  },
+  "focused_prerequisite": {
+    "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/implementation-focused-c71495c/public-summary.json",
+    "sha256": "eb5dc9b3bb3addefa80c2d8cde4c6bfd0963b3bd9f8787ce41bdd8c6733bad9e"
+  },
+  "affected_legacy": {
+    "total": 146,
+    "passed": 146,
+    "failed": 0,
+    "skipped": 0,
+    "index": {
+      "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/consumer-refresh-c71495c/evidence-index.json",
+      "sha256": "f8484eb1ace2a6a4489c595d0d92e2553a50c37722c51103a59d8e2572762002"
+    },
+    "cohorts": [
+      {
+        "name": "authentication",
+        "total": 21,
+        "passed": 21,
+        "failed": 0,
+        "skipped": 0,
+        "flaky": 0,
+        "report": {
+          "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/consumer-refresh-c71495c/authentication/results.json",
+          "sha256": "73e5b23ec049a5667e4a3aef99904407b4836e51295fe80fa37ddf036c0a7f32"
+        },
+        "execution": {
+          "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/consumer-refresh-c71495c/authentication/execution.json",
+          "sha256": "e350849525a0a112c14b3aba84a750ec379ddae10bae315476eae7ae3ac6777a"
+        },
+        "canonical": {
+          "path": "web/playwright.authentication.config.ts",
+          "sha256": "95467dd11d3ea6485a0abf826322c2953d44ef9a0fb7972740a18369d5bae118"
+        },
+        "wrapper": {
+          "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/consumer-refresh-c71495c/authentication.config.mjs",
+          "sha256": "54cae02de99a689312b5d1644c57f185ea02fca950b1449359a93346d7ec4195"
+        },
+        "closure": {
+          "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/consumer-refresh-c71495c/authentication/closure.json",
+          "sha256": "6cc029ec909846b3b256a7685ff028468eb1370620d9436e21263610d27c5865"
+        }
+      },
+      {
+        "name": "step-up",
+        "total": 22,
+        "passed": 22,
+        "failed": 0,
+        "skipped": 0,
+        "flaky": 0,
+        "report": {
+          "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/consumer-refresh-c71495c/step-up/results.json",
+          "sha256": "fb445bf0e1b93e6332eb8fb2d518c4327c596fab9714aa66b77a174cc94edbf2"
+        },
+        "execution": {
+          "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/consumer-refresh-c71495c/step-up/execution.json",
+          "sha256": "579448edcff4cb1c4ec869fd56a7c3c5e0b26387811de0f47faa9d35e412d2aa"
+        },
+        "canonical": {
+          "path": "web/playwright.step-up.config.ts",
+          "sha256": "bb17fe3538db0e2b5b068ccb6096d03d9346430bba14c49084b30d9d46d1223c"
+        },
+        "wrapper": {
+          "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/consumer-refresh-c71495c/step-up.config.mjs",
+          "sha256": "1196fa66f833875c4881146ae71340bb56fd0febbc697744148799796e1cefe7"
+        },
+        "closure": {
+          "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/consumer-refresh-c71495c/step-up/closure.json",
+          "sha256": "ab122851acd160568f3851c58439c8214c8b3b162606b14e7e8f85af479a327d"
+        }
+      },
+      {
+        "name": "passkeys",
+        "total": 60,
+        "passed": 60,
+        "failed": 0,
+        "skipped": 0,
+        "flaky": 0,
+        "report": {
+          "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/consumer-refresh-c71495c/passkeys/results.json",
+          "sha256": "eac395551dd0e5ee3951f72605fa65b89d1a8734bdea381a6f8469332b5eb324"
+        },
+        "execution": {
+          "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/consumer-refresh-c71495c/passkeys/execution.json",
+          "sha256": "c41e96023b856577925ef8913e823030f5babb8887a542a07e842180f333327f"
+        },
+        "canonical": {
+          "path": "web/playwright.passkeys.config.ts",
+          "sha256": "e996d351edafd776928aa955e9ddb2699fb5f003db61587e3294e23814d06db5"
+        },
+        "wrapper": {
+          "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/consumer-refresh-c71495c/passkeys.config.mjs",
+          "sha256": "9f56a435445bc496111547f488f9c2a085cb6a9767115c78a117d9a7116fbd6b"
+        },
+        "closure": {
+          "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/consumer-refresh-c71495c/passkeys/closure.json",
+          "sha256": "762f107f6c5a6053811f15c960a4204350ef19ca1da99068baa7a6576821c50e"
+        }
+      },
+      {
+        "name": "totp",
+        "total": 43,
+        "passed": 43,
+        "failed": 0,
+        "skipped": 0,
+        "flaky": 0,
+        "report": {
+          "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/consumer-refresh-c71495c/totp/results.json",
+          "sha256": "271e204d12dbed7fe5e47e56c454dac150d2edd630047c5b9e850abcaad0c5cc"
+        },
+        "execution": {
+          "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/consumer-refresh-c71495c/totp/execution.json",
+          "sha256": "526b72d041caa24de7a7cf4a2d4f82db1d6589efc0e9358ee13d482d03216cae"
+        },
+        "canonical": {
+          "path": "web/playwright.totp.config.ts",
+          "sha256": "4ce17bcabf93922d225c8c628130431bb0872bf3df0f4caadde1310ffd6049b8"
+        },
+        "wrapper": {
+          "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/consumer-refresh-c71495c/totp.config.mjs",
+          "sha256": "4073110830804d736a775ff7fafce56666da07e2814229b913f5b854185745c6"
+        },
+        "closure": {
+          "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/consumer-refresh-c71495c/totp/closure.json",
+          "sha256": "eb26d9f6ce8d3fd9d803f70bc58badc0de97cca6f3a0779e2b8db984a6746374"
+        }
+      }
+    ],
+    "optional_registration_foundation": "NOT_EXECUTED; explicit hold absent a current source-impact/native-gate diagnostic"
+  },
+  "current_mobile_focus": {
+    "observations": {
+      "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/mobile-current-c71495c/observations.json",
+      "sha256": "7e74d5b3a61b2e555effc757fd39bc6e49b30cfc84c22addf18b352f836c5b4e"
+    },
+    "scoped_review": {
+      "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/mobile-current-c71495c/scoped-defect-review.json",
+      "sha256": "b459cde839d68acfccdcad30170c52073671c687b91572745866b542a95b0b73"
+    },
+    "captures": 6,
+    "keyboard_pass": 6,
+    "axe_violations": 0,
+    "raw_incomplete_targets": 15,
+    "manually_resolved_exact_targets": 15,
+    "unresolved": 0
+  },
+  "retained_failures": [
+    {
+      "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/implementation-public-0fca253/public-summary.json",
+      "sha256": "4fdabccf85d1b9c074f0da0bd1318b71101aaa12340395ecc43f44b55d843903"
+    },
+    {
+      "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/implementation-public-ac9c30f/public-summary.json",
+      "sha256": "5ca56292569cdd640817b39e872da7f2fccbd90e972516e446410be3fb2ace4e"
+    },
+    {
+      "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/mobile-focus-3b251bf/result.json",
+      "sha256": "f2e890b966adf9e50e2a4e8750b3afa2ffe42474a4ecf14752b60a0d65b403e6"
+    }
+  ],
+  "artifact_helpers": [
+    {
+      "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/prepare-implementation-snapshot.mjs",
+      "sha256": "5a087440de54ab7fe560aaca7433c365893ae046100d3f2522f327ecff69c8f2"
+    },
+    {
+      "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/implementation-public-c71495c/run-public.mjs",
+      "sha256": "c34ae6c827170c4bb099d7798f7f60f965c8e1b68ba8227566bf9713cbf5ecd3"
+    },
+    {
+      "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/consumer-refresh-c71495c/run-consumers.mjs",
+      "sha256": "2052a3048a8c368728c9310fa4cacf1c6a8e8593aa09499ac415a5add0fe0446"
+    },
+    {
+      "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/capture-current-mobile.mjs",
+      "sha256": "977a8a5e28137fc70194beadd56d3cc896d5554d23cb3d50b97bd924e1194273"
+    },
+    {
+      "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/finalize-public-current.mjs",
+      "sha256": "1890f48db34bde9d733a213f24ac036b2a292fdab7b990c09b7909547f2169ab"
+    }
+  ],
+  "closure": {
+    "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/implementation-public-c71495c/closure.json",
+    "sha256": "1750e109c62a24b4c9f4410b5c8d4c270cfe69bf2812e4fb51fdc9d84ca239c2"
+  },
+  "pending": [
+    "Actual native owner/database/first-delivery/Consume/session/publication and private six-journey acceptance.",
+    "Registered private topology/production-download-controller public fault rehearsal and separately admitted one-file identity proof.",
+    "Final item-specific URL/VAL/UX-FID evidence and native UI gate for affected inventory; no blanket PASS from these mocks.",
+    "Final integrated role reviews and governance acceptance."
+  ],
+  "scope": "Actual public React, controlled BFF mocks and transport spy only. No real recovery values, native fixture/resources, actual file or private browser run. This index does not approve production policy, claim human save or close P2-009."
+}
