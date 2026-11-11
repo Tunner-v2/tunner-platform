@@ -380,7 +380,10 @@ public sealed class RecoveryCodePrivateIntegrationTests(IdentityPostgresFixture 
         await using var db = await fixture.CreateFiniteDatabaseAsync(CancellationToken.None); var profile = new Profile();
         profile.Policy = profile.Policy with { ConsumptionAccountAttemptLimit = networkLimited ? 100 : 2, ConsumptionNetworkAttemptLimit = networkLimited ? 2 : 100 };
         await using var host = await Host(db, profile); var account = await host.SeedAsync(db); using var winning = await Generate(host, await Login(host));
-        foreach (var input in new[] { "not-a-code", string.Empty })
+        // Three distinct fixed candidates and two held codes guarantee one wrong canonical input.
+        var wrongCanonical = new[] { new string('0', 32), new string('1', 32), new string('2', 32) }
+            .First(candidate => winning.Codes.All(code => !code.Span.SequenceEqual(candidate.AsSpan())));
+        foreach (var input in new[] { "not-a-code", wrongCanonical })
         {
             await using var scope = host.Services.CreateAsyncScope();
             var result = await scope.ServiceProvider.GetRequiredService<RecoveryCodeApplication>().ExecuteConsumptionOutcomeAsync(ConsumeRequest(account), input, new AccountOwner(winning.Pending.Set, host.Clock));
