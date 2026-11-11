@@ -1,4 +1,4 @@
-import {mkdir,realpath,lstat,writeFile} from 'node:fs/promises';
+import {mkdir,realpath,lstat,writeFile,readFile} from 'node:fs/promises';
 import {resolve} from 'node:path';
 import {fileURLToPath} from 'node:url';
 import {execFileSync} from 'node:child_process';
@@ -41,8 +41,15 @@ const folder=resolve(root,'artifacts/p2-009-recovery-20261111');await mkdir(fold
 if((await lstat(folder)).isSymbolicLink()||await realpath(folder)!==folder)throw new Error('BROWSER_PUBLIC_ARTIFACT_INVALID');
 const runFolder=resolve(folder,'browser-public-qualification',sourceCommit??'source-unverified');await mkdir(runFolder,{recursive:true});
 if((await lstat(runFolder)).isSymbolicLink()||await realpath(runFolder)!==runFolder)throw new Error('BROWSER_PUBLIC_ARTIFACT_INVALID');
-await writeFile(resolve(runFolder,'qualification.json'),JSON.stringify(qualification,null,2)+'\n',{flag:'wx'});
+const guardPath=resolve(folder,'browser-public-qualification.json');
+try{
+  const prior=await lstat(guardPath);
+  if(!prior.isFile()||prior.isSymbolicLink()||prior.size>65536||await realpath(guardPath)!==guardPath)throw new Error('BROWSER_PUBLIC_ARTIFACT_INVALID');
+  await writeFile(resolve(runFolder,'previous-canonical.json'),await readFile(guardPath),{flag:'wx'});
+}catch(error){if(error?.code!=='ENOENT')throw new Error('BROWSER_PUBLIC_ARTIFACT_INVALID');}
+const guardBytes=JSON.stringify(qualification,null,2)+'\n';
+await writeFile(resolve(runFolder,'qualification.json'),guardBytes,{flag:'wx'});
 await writeFile(resolve(runFolder,'details.json'),JSON.stringify({version:2,type:'browserPublicQualification',sourceCommit,sourceUnchanged,passed,protocol,results},null,2)+'\n',{flag:'wx'});
-await writeFile(resolve(folder,'browser-public-qualification.json'),JSON.stringify(qualification,null,2)+'\n',{flag:'wx'});
+await writeFile(guardPath,guardBytes);
 process.stdout.write(JSON.stringify({status:passed?'BROWSER_PUBLIC_QUALIFIED':'BROWSER_PUBLIC_NOT_QUALIFIED',completed:results.length,passed:results.filter(row=>row.passed).length,protocolCases:protocolIds.length,buildBindingSha256:workerBinding,nativeBuildBindingSha256:nativeBinding,receipt:'artifacts/p2-009-recovery-20261111/browser-public-qualification.json'})+'\n');
 process.exitCode=passed?0:1;

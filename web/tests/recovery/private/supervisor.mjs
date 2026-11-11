@@ -26,8 +26,8 @@ export async function sourceFacts() {
 }
 const waitClose = (child, state, milliseconds) => state.closed ? Promise.resolve(true) : new Promise(resolveClose => { const done = () => { clearTimeout(timer); resolveClose(true); }; const timer = setTimeout(() => { child.off('close', done); resolveClose(false); }, milliseconds); child.once('close', done); });
 const ipc = (child, message) => bounded(new Promise(resolveSend => { try { child.send(message, () => resolveSend()); } catch { resolveSend(); } }), budgets.ipc).catch(() => {});
-export async function runScenario(control, {signal, publicProgress = false, fixtureRelay} = {}) {
-  if (!validControl(control)) throw new Error('RECOVERY_PRIVATE_INPUT_INVALID');
+export async function runScenario(control, {signal, publicProgress = false, fixtureRelay, publicSurfaceFailure = null} = {}) {
+  if (!validControl(control) || publicSurfaceFailure !== null && (control.mode !== 'public' || control.publicFault !== 'simultaneous-extra' || control.journeyId !== 'RECOVERY_GENERATE_TOTP_V1' || typeof publicSurfaceFailure !== 'function')) throw new Error('RECOVERY_PRIVATE_INPUT_INVALID');
   const before = await sourceFacts(); let after; let root; let child; let result; let cleanupProof = false;
   const state = {closed: false}; let exitCode = null, protocolFailed = false, outputBytes = 0, timedOut = false, timer, stopTimer;
   let surfaceClean = false, surfaceRemoved = false, cleanupForced = false, oracleProcessRecorded = false, oraclePid = null, serverPid=null,fixtureSequence=0,fixturePending=false;
@@ -67,7 +67,7 @@ export async function runScenario(control, {signal, publicProgress = false, fixt
     if (child && !state.closed) { cleanupForced = true; await stopOwnedChild(child); await waitClose(child, state, budgets.close); }
     if (root && state.closed && cleanupProof) {
       const markers = privateMarkers(); markers.remember(publicMarker);
-      try { surfaceClean = (await inspectSurface(root, {markers, readContents: control.mode === 'public'})).clean; } catch {}
+      try { surfaceClean = (await inspectSurface(root, {markers, readContents: control.mode === 'public', publicDiagnostic: publicSurfaceFailure === null ? null : {control, onFailure: publicSurfaceFailure}})).clean; } catch {}
       finally { markers.clear(); }
       try { surfaceRemoved = await removeOwnedSurface(root); } catch {}
     }

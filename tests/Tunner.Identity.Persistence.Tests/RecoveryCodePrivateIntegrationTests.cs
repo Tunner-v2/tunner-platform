@@ -282,7 +282,11 @@ public sealed class RecoveryCodePrivateIntegrationTests(IdentityPostgresFixture 
             var operation = await check.Set<RecoveryCodeOperationRow>().SingleAsync(); var proof = await check.Set<StepUpProofRow>().SingleAsync();
             Assert.True(session.State == "ACTIVE" && !AuthenticationApplication.Expired(session, host.Policies.Policy, at) && operation.ExpiresAt > at);
             Assert.True(proof.ExpiresAt - proof.AuthenticatedAt == TimeSpan.FromMinutes(5) && proof.ExpiresAt <= at);
-            Assert.True(profile.Published && profile.PublicationVersion == "fixture-recovery-publication-v1" && profile.PublicationInterval == Profile.Interval && profile.FinalAdmissionChange == "unchanged");
+            var expectedInterval = Profile.Interval;
+            Assert.True(profile.Published && profile.PublicationVersion == "fixture-recovery-publication-v1" &&
+                profile.PublicationInterval.From == expectedInterval.From && profile.PublicationInterval.IncludesFrom == expectedInterval.IncludesFrom &&
+                profile.PublicationInterval.Until == expectedInterval.Until && profile.PublicationInterval.IncludesUntil == expectedInterval.IncludesUntil &&
+                profile.FinalAdmissionChange == "unchanged");
         }
         Assert.True(!await check.Set<RecoveryCodeSetRow>().AnyAsync() && !await check.Set<RecoveryCodeEntryRow>().AnyAsync());
         Assert.True(await check.Set<RecoveryCodeOperationRow>().AllAsync(x => x.State == "PENDING_PROOF"));
