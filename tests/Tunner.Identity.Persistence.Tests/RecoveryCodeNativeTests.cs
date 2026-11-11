@@ -1,4 +1,5 @@
 using System.Buffers.Binary;
+using System.Security.Cryptography;
 using System.Text.Json;
 using Xunit;
 
@@ -93,5 +94,40 @@ public sealed class RecoveryCodeNativeTests
         try { _ = new RecoveryCodeCryptoProfile("fixture", "unsupported", 2, 2, 10_000, 20_000, 8, 1, TimeSpan.FromSeconds(10)); }
         catch (ArgumentException) { rejected = true; }
         Assert.True(rejected); Assert.True(Profile().ToString() == nameof(RecoveryCodeCryptoProfile));
+    }
+
+    // Fixed public nonfunctional test bytes only; never registered or selectable in production composition.
+    private sealed class CollisionRandom(bool distinctAfterCollision) : RandomNumberGenerator
+    {
+        internal int Draws { get; private set; }
+        public override void GetBytes(byte[] data)
+        {
+            ArgumentNullException.ThrowIfNull(data); GetBytes(data.AsSpan());
+        }
+        public override void GetBytes(Span<byte> data)
+        {
+            Draws++; data.Fill(distinctAfterCollision && Draws > 2 ? (byte)0x22 : (byte)0x11);
+        }
+    }
+
+    [Fact]
+    public void GenerationRetriesOneCollisionWithoutResettingAttemptBudget()
+    {
+        using var native = new RecoveryCodeNative(Profile()); using var random = new CollisionRandom(true);
+        using var prepared = native.Generate("PUBLIC_NONFUNCTIONAL_RNG_NO_ACCOUNT", Guid.NewGuid(), random, CancellationToken.None);
+        Assert.True(random.Draws == 3 && prepared.Entries.Count == 2);
+        Assert.True(!prepared.Entries[0].Code.Span.SequenceEqual(prepared.Entries[1].Code.Span));
+        Assert.True(prepared.Entries.All(entry => native.AdmittedVerifier(entry.Verifier)));
+    }
+
+    [Fact]
+    public void GenerationStopsAtExactAttemptLimitAndReleasesGateAfterCollisions()
+    {
+        using var native = new RecoveryCodeNative(Profile()); using var random = new CollisionRandom(false); var rejected = false;
+        try { using var unexpected = native.Generate("PUBLIC_NONFUNCTIONAL_RNG_NO_ACCOUNT", Guid.NewGuid(), random, CancellationToken.None); }
+        catch (InvalidOperationException) { rejected = true; }
+        Assert.True(rejected && random.Draws == Profile().MaximumGenerationAttempts);
+        using var retry = native.Generate("PUBLIC_NONFUNCTIONAL_RNG_NO_ACCOUNT", Guid.NewGuid());
+        Assert.True(retry.Entries.Count == Profile().CodesPerSet);
     }
 }

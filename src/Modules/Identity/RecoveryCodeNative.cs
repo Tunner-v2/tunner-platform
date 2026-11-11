@@ -42,7 +42,16 @@ internal sealed class RecoveryCodeNative : IDisposable
 
     internal bool Supports(RecoveryCodeCryptoProfile expected) => JsonSerializer.Serialize(profile) == JsonSerializer.Serialize(expected);
 
-    internal RecoveryCodePreparedSet Generate(string accountId, Guid setReference, CancellationToken ct = default)
+    internal RecoveryCodePreparedSet Generate(string accountId, Guid setReference, CancellationToken ct = default) =>
+        GenerateCore(accountId, setReference, null, ct);
+
+    // Test-assembly-only call seam. Production keeps native Fill; no configured or retained random source.
+    internal RecoveryCodePreparedSet Generate(string accountId, Guid setReference, RandomNumberGenerator randomSource, CancellationToken ct)
+    {
+        ArgumentNullException.ThrowIfNull(randomSource);
+        return GenerateCore(accountId, setReference, randomSource, ct);
+    }
+    private RecoveryCodePreparedSet GenerateCore(string accountId, Guid setReference, RandomNumberGenerator? randomSource, CancellationToken ct)
     {
         if (string.IsNullOrWhiteSpace(accountId) || setReference == Guid.Empty) throw new ArgumentException("A recovery-code set owner is required.");
         Enter(); var timer = Stopwatch.StartNew(); var entries = new List<RecoveryCodePreparedEntry>();
@@ -51,7 +60,8 @@ internal sealed class RecoveryCodeNative : IDisposable
         {
             for (var attempts = 0; entries.Count < profile.CodesPerSet && attempts < profile.MaximumGenerationAttempts; attempts++)
             {
-                Check(timer, ct); RandomNumberGenerator.Fill(random);
+                Check(timer, ct);
+                if (randomSource is null) RandomNumberGenerator.Fill(random); else randomSource.GetBytes(random);
                 var text = Convert.ToHexString(random); CryptographicOperations.ZeroMemory(random);
                 using var candidate = Canonical(text) ?? throw new InvalidOperationException("Native recovery-code format is unavailable.");
                 if (entries.Any(entry => entry.Code.Span.SequenceEqual(candidate.Span))) continue;
