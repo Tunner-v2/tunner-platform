@@ -18,6 +18,12 @@ using Tunner.Platform.Policies;
 using Tunner.User.Bff;
 
 // This separate tool is never composed into the production BFF. Values are explicit synthetic fixtures.
+if (args.Length == 1 && args[0] == "--sensitive-native-totp-oracle")
+    return await BrowserTestTotpOracle.RunAsync();
+if (args.Length == 2 && args[0] is "--finite-totp-browser-testing" or "--finite-totp-public-fault")
+    return await FiniteTotpCoordinator.RunAsync(args[1], args[0] == "--finite-totp-public-fault");
+if (args.Length == 2 && args[0] == "--finite-totp-resource-canary")
+    return await FiniteTotpCoordinator.RunAsync(args[1], false, true);
 if (args.Length != 2 || args[0] != "--local-browser-testing" ||
     Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") != "Development")
 {
@@ -36,69 +42,12 @@ try
         .OfType<X509Certificate2>().Single(c => c.HasPrivateKey && c.NotAfter > DateTime.Now);
     var origin = "https://localhost:" + config.ApplicationPort;
     var connectionString = "Host=127.0.0.1;Port=" + config.PostgresPort + ";Database=tunner_browser_testing;Username=tunner;Include Error Detail=false";
-    var policy = new RegistrationPolicy("browser-test-registration-v2", "PDR-0011", "test-only-processing", "test-only-retention",
-        "test-only-terms", "test-only-privacy", "test-only-proof", "test-only-existing", "PASSWORD_AND_VERIFIED_EMAIL",
-        15, 128, 10000, 6, TimeSpan.FromMinutes(5), 2, TimeSpan.FromSeconds(30), 2, TimeSpan.FromMinutes(1),
-        1000, 1000, 1000, 1000, TimeSpan.FromMinutes(30), TimeSpan.FromHours(1));
-    var metadata = new PolicyVersionCandidate<string>(policy.Version, "ACTIVE", "REGISTRATION",
-        new EffectivePolicyInterval(DateTimeOffset.UtcNow.AddDays(-1), true, null, false), null, ["SYNTHETIC-LOCAL-TEST-ONLY"]);
-    var age = new BrowserTestAgePolicies();
-    var authenticationPolicy = new AuthenticationPolicy("browser-test-auth-v1", "test-only-processing", "test-only-retention", "test-only-password-assurance", 128, 10000,
-        TimeSpan.FromMinutes(30), TimeSpan.FromMinutes(5), TimeSpan.FromHours(8), TimeSpan.FromMinutes(20), TimeSpan.FromMinutes(10), TimeSpan.FromMinutes(1), 1000, 100);
-    var authenticationMetadata = new PolicyVersionCandidate<string>(authenticationPolicy.Version, "ACTIVE", "AUTHENTICATION",
-        new EffectivePolicyInterval(DateTimeOffset.UtcNow.AddDays(-1), true, null, false), null, ["SYNTHETIC-LOCAL-TEST-ONLY"]);
-    var app = TunnerAuthenticatedUserBffHost.CreateApplication([], builder =>
-    {
-        builder.Configuration.AddInMemoryCollection(new Dictionary<string, string?> { ["Bff:BrowserOrigin"] = origin });
-        builder.WebHost.ConfigureKestrel(server => server.Listen(IPAddress.Loopback, config.ApplicationPort, endpoint => endpoint.UseHttps(certificate)));
-        var protection = builder.Services.AddDataProtection().SetApplicationName("Tunner.IsolatedBrowserTesting")
-            .PersistKeysToFileSystem(new DirectoryInfo(Path.Combine(directory, "keys")));
-        if (OperatingSystem.IsWindows()) protection.ProtectKeysWithDpapi();
-        builder.Services.AddTunnerIdentityPersistence(connectionString);
-        builder.Services.AddSingleton<IAuthenticationPolicySource>(new AuthenticationPolicyCatalog([new(authenticationMetadata, authenticationPolicy)]));
-        builder.Services.AddSingleton<IAccountAuthenticationAccessSource, BrowserTestAuthenticationAccess>();
-        builder.Services.AddSingleton<IAuthenticationPresentationSource>(new BrowserTestAuthenticationPresentation(origin));
-        builder.Services.AddScoped<IUserStepUpOperationSource, BrowserTestStepUpOperations>();
-        builder.Services.AddSingleton<IStepUpPresentationSource, BrowserTestStepUpPresentation>();
-        var stepUpPolicy = new AssurancePolicyVersion(new(BrowserTestStepUpOperations.PolicyVersion, "ACTIVE", BrowserTestStepUpOperations.Scope,
-            new EffectivePolicyInterval(DateTimeOffset.UtcNow.AddDays(-1), true, null, false), null, ["SYNTHETIC-LOCAL-TEST-ONLY"]),
-            "test-only-password-assurance", TimeSpan.FromMinutes(1), new Dictionary<string,string> { ["pwd"] = "test-only-password-assurance" });
-        builder.Services.AddSingleton<IAssurancePolicySource>(new AssurancePolicyCatalog([stepUpPolicy, .. BrowserTestPasskeys.AssurancePolicies()]));
-        BrowserTestPasskeys.Configure(builder.Services, origin);
-        builder.Services.AddSingleton(new AuthenticationPartitionKey(RandomNumberGenerator.GetBytes(32)));
-        builder.Services.AddSingleton<IRegistrationPolicySource>(new RegistrationPolicyCatalog([new(metadata, policy)]));
-        builder.Services.AddSingleton<IAccountAgePolicySource>(age);
-        builder.Services.AddSingleton<IAccountConsentEvidenceSource>(age);
-        builder.Services.AddSingleton<IRegistrationPasswordBlocklist, BrowserTestBlocklist>();
-        builder.Services.AddSingleton<IRegistrationNotificationDispatcher>(new BrowserTestMailpit(config.SmtpPort));
-        builder.Services.AddSingleton<IRegistrationPresentationSource>(new BrowserTestPresentation(origin));
-        builder.Services.AddSingleton(provider =>
-        {
-            var protector = provider.GetRequiredService<IDataProtectionProvider>().CreateProtector("LocalBrowserTesting.NetworkKey.v1");
-            var keyPath = Path.Combine(directory, "network-key.protected");
-            byte[] key;
-            if (File.Exists(keyPath)) key = protector.Unprotect(File.ReadAllBytes(keyPath));
-            else { key = RandomNumberGenerator.GetBytes(32); File.WriteAllBytes(keyPath, protector.Protect(key)); }
-            try { return new RegistrationNetworkPartitionKey(key); }
-            finally { CryptographicOperations.ZeroMemory(key); }
-        });
-    });
+    var options = new BrowserTestHostOptions(origin, config.ApplicationPort, connectionString, certificate,
+        config.SmtpPort, directory, config.Mode, config.InstanceId);
+    var app = BrowserTestHost.Create(options);
     await using (app)
     {
-        await using (var platform = new TunnerMigrationsDbContext(new DbContextOptionsBuilder<TunnerMigrationsDbContext>()
-            .UseNpgsql(connectionString, database => database.MigrationsAssembly(typeof(TunnerMigrationsDbContextFactory).Assembly.FullName)).Options))
-            await platform.Database.MigrateAsync();
-        await using (var scope = app.Services.CreateAsyncScope())
-        {
-            var database = scope.ServiceProvider.GetRequiredService<IdentityPersistenceDbContext>();
-            await database.Database.MigrateAsync();
-            await database.Database.ExecuteSqlRawAsync(BrowserTestStepUpOperations.Schema);
-        }
-        BrowserTestStepUpAssets.Map(app);
-        app.MapGet("/browser-testing/status", () => new { mode = config.Mode, instanceId = config.InstanceId, ready = true }).AllowAnonymous();
-        // Explicit local test notices; these are not published legal or support documents.
-        app.MapGet("/browser-testing/{notice}", () => Results.Text("Isolated browser test fixture only. No legal document or production policy is published here.")).AllowAnonymous();
-        app.MapGet("/", () => Results.Redirect("/registration")).AllowAnonymous();
+        await BrowserTestHost.MigrateAndMapAsync(app, options);
         await app.RunAsync();
     }
     return 0;

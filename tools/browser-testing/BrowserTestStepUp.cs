@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Tunner.Identity.Persistence;
 
-internal sealed class BrowserTestStepUpOperations(IServiceScopeFactory scopes) : IUserStepUpOperationSource
+internal sealed class BrowserTestStepUpOperations(IServiceScopeFactory scopes, IEnumerable<BrowserTestTotp> finiteProfiles) : IUserStepUpOperationSource
 {
     internal const string PolicyVersion = "browser-test-step-up-v1";
     internal static readonly AssurancePolicyScope Scope = new("LOCAL_TEST_VERIFY_IDENTITY", "ISOLATED_LOCAL_BROWSER_TESTING");
@@ -33,20 +33,24 @@ internal sealed class BrowserTestStepUpOperations(IServiceScopeFactory scopes) :
         if (database.Database.CurrentTransaction is null || operation.ExpectedPolicyVersion != PolicyVersion ||
             operation.Actor.AccountId != actor.AccountId || operation.Actor.SessionId != actor.SessionId || operation.Actor.Origin != actor.Origin)
             throw new InvalidOperationException("A current isolated test action transaction is required.");
+        if (finiteProfiles.SingleOrDefault()?.ConsumeOwnerFailure() == true) throw new InvalidOperationException("FINITE_OWNER_DEPENDENCY_FAILURE");
         var id = Operation(actor); var now = DateTimeOffset.UtcNow;
         return await database.Database.ExecuteSqlInterpolatedAsync($"INSERT INTO browser_testing.step_up_results(operation_id,account_id,session_id,recorded_at_utc,version) VALUES({id},{actor.AccountId},{actor.SessionId},{now},1) ON CONFLICT DO NOTHING", cancellationToken) == 1;
     }
     private static string Operation(UserStepUpActor actor) => "OP-LOCAL-STEP-UP-" + actor.SessionId.ToString("N");
 }
-internal sealed class BrowserTestStepUpPresentation : IStepUpPresentationSource
+internal sealed class BrowserTestStepUpPresentation(IEnumerable<BrowserTestTotp> finiteProfiles) : IStepUpPresentationSource
 {
     public StepUpPresentation RequirePublished(AssurancePolicyVersion policy)
     {
-        if (policy.Metadata.VersionId is not (BrowserTestStepUpOperations.PolicyVersion or BrowserTestPasskeys.EnrollmentPolicyVersion or BrowserTestPasskeys.RevocationPolicyVersion))
+        var finite = finiteProfiles.SingleOrDefault() is not null;
+        if (policy.Metadata.VersionId is not (BrowserTestStepUpOperations.PolicyVersion or BrowserTestPasskeys.EnrollmentPolicyVersion or BrowserTestPasskeys.RevocationPolicyVersion) &&
+            !(finite && policy.Metadata.VersionId is BrowserTestTotp.EnrollmentPolicyVersion or BrowserTestTotp.DisablePolicyVersion or BrowserTestTotp.ResetPolicyVersion))
             throw new InvalidOperationException("Isolated test presentation only.");
         using var source = JsonDocument.Parse(File.ReadAllText(Path.Combine(AppContext.BaseDirectory, "browser-test-step-up-content.json")));
-        return new("en", source.RootElement.GetProperty("content").EnumerateObject().Select(p =>
-            new RegistrationPublishedText(p.Name,"synthetic-local-test","synthetic-local-test","SYNTHETIC-LOCAL-TEST-ONLY","en","PUBLISHED",p.Value.GetString()!)));
+        var values = source.RootElement.GetProperty("content").EnumerateObject().Select(p =>
+            new RegistrationPublishedText(p.Name,"synthetic-local-test","synthetic-local-test","SYNTHETIC-LOCAL-TEST-ONLY","en","PUBLISHED",p.Value.GetString()!)).ToArray();
+        return new("en", finite ? values.Concat(BrowserTestTotp.PublishedContent()).GroupBy(value => value.Key, StringComparer.Ordinal).Select(group => group.Last()) : values);
     }
 }
 internal static class BrowserTestStepUpAssets

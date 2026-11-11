@@ -4,6 +4,9 @@ import {existsSync} from 'node:fs';
 import assert from 'node:assert/strict';
 import {browserEngines, failureCodes, predicateIds, publicMarker, publicUri, scanSurface, scenarios, validSurfacePath, version} from './contract.mjs';
 
+if (process.argv[2] === '--real-sensitive-v3') {
+  await import('./real-child.mjs');
+} else {
 // No Playwright code is imported before the environment and fatal handlers exist.
 const scenario = process.argv[2];
 const surface = process.argv[3];
@@ -148,3 +151,4 @@ await send({type: 'result', result});
 process.disconnect?.();
 // The supervisor bounds teardown even if a native handle remains open.
 process.exitCode = status === 'BOUNDARY_FAILED' ? 1 : 0;
+}

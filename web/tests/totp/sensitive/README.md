@@ -1,4 +1,4 @@
-# P2-008 public sensitive-diagnostic canaries
+# P2-008 protected browser testing
 
 Run from the repository root with the already restored Playwright 1.62.1/browser:
 
@@ -21,4 +21,19 @@ The controlled temporary surface is a newly generated direct child of the operat
 
 The public matrix includes missing locator, disabled fill(value), assertion diff, unhandled rejection, uncaught exception, action timeout, cleanup exception, supervisor timeout, unexpected stderr, and invalid-result fields. The cleanup canary must produce a failed child run even though the public containment test expects that rejection. Successful containment means expected failures remain fixed results and no unexpected diagnostic artifacts/marker-bearing surviving temporary files are observed. It does not prove that live locked browser-profile contents contain no marker, operating-system memory zeroization, or exhaustive decoding of binary representations. Owned ephemeral profile deletion and artifact prohibition close the evidence-capture boundary rather than claiming a full browser-memory/disk secrecy proof. If OS termination is denied, cleanup cannot pass; the supervisor detaches its private pipes after bounded termination attempts and reports failure rather than hanging. A remaining process/surface then requires scoped cleanup and blocks live testing.
 
-For a future real journey, preserve the supervisor/child boundary and add a separately reviewed static journey entry. Evaluate every response and equality inside the child; emit only the fixed predicate IDs in `contract.mjs`, booleans, statuses and bounded counters. Keep the real BFF, native verifier, exact request/operation binding, duplicate counters, inactive-before-activation, no early session, replay, recovery, source freshness, cookie/storage/URL checks and password/passkey regressions. Do not import test-runner assertions, route mocks, actual/expected diffs, dynamic labels or secret arguments into supervisor output. This public-only child deliberately offers no live journey entry yet.
+The version 2 public runner remains public-only. Version 3 adds a separate, literal `real-supervisor.mjs` / `real-child.mjs` entry and three fixed journeys in `real-journey.mjs`. It uses the same protected raw-library boundary, with installed pinned Chromium explicitly selected. Responses, seeds, codes, account details and equality comparisons stay inside the protected child. Only fixed predicate IDs, booleans, safe statuses and bounded counts may reach the coordinator. There are no route mocks, test-runner assertions, screenshots, recordings, traces or exported browser state.
+
+The test-only .NET executable has a private framed native-code oracle (`--sensitive-native-totp-oracle`), a finite coordinator (`--finite-totp-browser-testing <literal-journey-id>`), and public failure probes (`--finite-totp-public-fault <literal-fault-id>`). All require Development mode; they are separate from the production BFF. The ordinary `--local-browser-testing` starter retains its existing persistent behavior. The finite coordinator uses a newly generated owned database on the verified existing local PostgreSQL server, ephemeral Data Protection, its own cached Mailpit container, and the shared disposable OpenBao fixture with application-scoped access. It never resets the ordinary browser-test database or stops the borrowed PostgreSQL service. Image pulls and builds are prohibited in this mode.
+
+The oracle uses the pinned framework's own code generator shared with the identity tests; no copied OTP algorithm is added. Seeds and codes cross only bounded private pipes between the child and oracle. The coordinator receives no OTP or seed. Its private control relay accepts a finite allowlist of one-shot dependency/response faults and read-only safe counts; there is no HTTP test-control or code-generation endpoint.
+
+Public implementation checks are:
+
+```text
+node --test web/tests/totp/sensitive/boundary-tests.mjs
+node web/tests/totp/sensitive/public-real-canaries.mjs
+```
+
+The second command requires the already built reviewed .NET tool. It exercises only the oracle/browser boundary with public nonfunctional fixtures. It does not start the real coordinator's database, Mailpit, vault or application, and does not prove their cleanup. Expected failed runs must remain failed, even when their containment probe passes. Public receipts explicitly distinguish this coverage from real journeys.
+
+Real acceptance additionally requires committed source and current binary/assets binding, exact run/request/operation identity, native activation and MFA/proof verification, duplicate/replay/concurrency checks, lost-result recovery, current factor-source checks, explicit session effects, cookie/URL/storage checks, font delivery and password/passkey regression. Every required predicate must execute and pass. Each owned cleanup stage must be attempted and verified; a timeout, unknown outcome, missing predicate or cleanup failure rejects the run. These implementation instructions are not test results. Until actual source-bound finite receipts are recorded, the live journeys and P2-008 acceptance remain pending.
