@@ -24,6 +24,8 @@ if (args.Length == 2 && args[0] is "--finite-totp-browser-testing" or "--finite-
     return await FiniteTotpCoordinator.RunAsync(args[1], args[0] == "--finite-totp-public-fault");
 if (args.Length == 2 && args[0] == "--finite-totp-resource-canary")
     return await FiniteTotpCoordinator.RunAsync(args[1], false, true);
+if (args.Length == 2 && args[0] is "--finite-recovery-browser-testing" or "--finite-recovery-public-fault" or "--finite-recovery-resource-canary")
+    return await FiniteRecoveryCoordinator.RunAsync(args[1], args[0] switch { "--finite-recovery-public-fault" => "public-fault", "--finite-recovery-resource-canary" => "resource-canary", _ => "browser" });
 if (args.Length != 2 || args[0] != "--local-browser-testing" ||
     Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") != "Development")
 {
@@ -122,11 +124,14 @@ internal sealed class BrowserTestMailpit(int smtpPort) : IRegistrationNotificati
 }
 
 // Synthetic Account access and content providers are confined to this explicitly Development-only executable.
-internal sealed class BrowserTestAuthenticationAccess : IAccountAuthenticationAccessSource
+internal sealed class BrowserTestAuthenticationAccess(IEnumerable<BrowserTestRecoveryCodes> recoveryProfiles) : IAccountAuthenticationAccessSource
 {
-    public ValueTask<AccountAuthenticationAccessDecision> RequireAsync(AccountAuthenticationAccessRequest request, CancellationToken cancellationToken) =>
-        ValueTask.FromResult(new AccountAuthenticationAccessDecision(request.AccountId, request.StateVersion, request.Operation, request.State == AccountState.Active,
+    public ValueTask<AccountAuthenticationAccessDecision> RequireAsync(AccountAuthenticationAccessRequest request, CancellationToken cancellationToken)
+    {
+        recoveryProfiles.SingleOrDefault()?.BeforeAccessDecision(request);
+        return ValueTask.FromResult(new AccountAuthenticationAccessDecision(request.AccountId, request.StateVersion, request.Operation, request.State == AccountState.Active,
             "test-only-access", "SYNTHETIC-LOCAL-TEST-ONLY", new EffectivePolicyInterval(request.EffectiveAt.AddMinutes(-1), true, request.EffectiveAt.AddMinutes(1), false)));
+    }
 }
 internal sealed class BrowserTestAuthenticationPresentation(string origin) : IAuthenticationPresentationSource
 {

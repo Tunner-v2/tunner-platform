@@ -316,13 +316,13 @@ internal static class FiniteTotpCoordinator
         };
         return [.. common, .. extra];
     }
-    private static void RequireKeys(JsonElement value, params string[] keys)
+    internal static void RequireKeys(JsonElement value, params string[] keys)
     {
         if (value.ValueKind != JsonValueKind.Object) throw new InvalidOperationException("FINITE_PROTOCOL_INVALID");
         var actual = value.EnumerateObject().Select(property => property.Name).ToArray();
         if (actual.Length != keys.Length || actual.Distinct(StringComparer.Ordinal).Count() != keys.Length || keys.Except(actual, StringComparer.Ordinal).Any()) throw new InvalidOperationException("FINITE_PROTOCOL_INVALID");
     }
-    private static async Task<JsonElement> ReadFrameAsync(Stream input, CancellationToken cancellationToken)
+    internal static async Task<JsonElement> ReadFrameAsync(Stream input, CancellationToken cancellationToken)
     {
         var header = new byte[4]; await input.ReadExactlyAsync(header, cancellationToken).ConfigureAwait(false);
         var length = BinaryPrimitives.ReadUInt32BigEndian(header);
@@ -331,14 +331,14 @@ internal static class FiniteTotpCoordinator
         using var document = JsonDocument.Parse(bytes);
         return document.RootElement.Clone();
     }
-    private static async Task WriteFrameAsync<T>(Stream output, T value, CancellationToken cancellationToken)
+    internal static async Task WriteFrameAsync<T>(Stream output, T value, CancellationToken cancellationToken)
     {
         var bytes = JsonSerializer.SerializeToUtf8Bytes(value);
         if (bytes.Length is 0 or > 32768) throw new InvalidOperationException("FINITE_PROTOCOL_INVALID");
         var header = new byte[4]; BinaryPrimitives.WriteUInt32BigEndian(header, (uint)bytes.Length);
         await output.WriteAsync(header, cancellationToken).ConfigureAwait(false); await output.WriteAsync(bytes, cancellationToken).ConfigureAwait(false); await output.FlushAsync(cancellationToken).ConfigureAwait(false);
     }
-    private static string FindNode()
+    internal static string FindNode()
     {
         foreach (var directory in (Environment.GetEnvironmentVariable("PATH") ?? "").Split(Path.PathSeparator))
         {
@@ -347,7 +347,7 @@ internal static class FiniteTotpCoordinator
         }
         throw new InvalidOperationException("FINITE_NODE_UNAVAILABLE");
     }
-    private static string Git(DirectoryInfo root, params string[] args)
+    internal static string Git(DirectoryInfo root, params string[] args)
     {
         var start = new ProcessStartInfo("git") { WorkingDirectory = root.FullName, UseShellExecute = false, CreateNoWindow = true, RedirectStandardOutput = true, RedirectStandardError = true };
         foreach (var arg in args) start.ArgumentList.Add(arg);

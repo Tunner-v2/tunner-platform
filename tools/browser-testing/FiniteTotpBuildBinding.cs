@@ -15,9 +15,9 @@ internal static class FiniteTotpBuildBinding
     private const string OutputPrefix = "tools/browser-testing/bin/Debug/net10.0/";
     private const string ReceiptPath = "artifacts/p2-008-totp-20261110/runtime-build-binding.json";
 
-    internal static FiniteTotpBuildIdentity Verify(DirectoryInfo root)
+    internal static FiniteTotpBuildIdentity Verify(DirectoryInfo root, bool recovery = false)
     {
-        var bytes = File.ReadAllBytes(Resolve(root, ReceiptPath));
+        var bytes = File.ReadAllBytes(Resolve(root, recovery ? "artifacts/p2-009-recovery-20261111/runtime-build-binding.json" : ReceiptPath));
         if (bytes.Length > 2_000_000) throw new InvalidOperationException("FINITE_BUILD_BINDING_INVALID");
         using var receipt = JsonDocument.Parse(bytes);
         var value = receipt.RootElement;
