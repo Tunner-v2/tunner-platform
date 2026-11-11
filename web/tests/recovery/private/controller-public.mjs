@@ -3,7 +3,7 @@ import {readFile} from 'node:fs/promises';
 import {join} from 'node:path';
 import {randomUUID} from 'node:crypto';
 import {fixedError,requireTrue,budgets,bounded} from './contract.mjs';
-import {stopOwnedChild} from '../../totp/sensitive/supervisor.mjs';
+import {childEnvironment,stopOwnedChild} from '../../totp/sensitive/supervisor.mjs';
 
 // Only the literal public fault imports this fixture. Real paths never mock HTTP.
 export async function runControllerPublic({page,requestOwnedDownload,signal,onOwnedServer,onServerExit,remember}){
@@ -15,7 +15,7 @@ export async function runControllerPublic({page,requestOwnedDownload,signal,onOw
  const step=JSON.parse(await readFile(join(root,'web/apps/user/step-up.content.proposal.json'),'utf8'));
  const ownerRequestId=randomUUID(),proofId=randomUUID(),codes=['A'.repeat(32),'B'.repeat(32)];remember(...codes);let op=null,downloadCount=0;
  page.on('download',()=>downloadCount++);
- const server=spawn(process.execPath,['node_modules/vite/bin/vite.js','--config','fixtures/recovery-private/vite.config.ts'],{cwd:join(root,'web'),env:process.env,windowsHide:true,detached:process.platform!=='win32',stdio:['ignore','pipe','pipe']});
+ const server=spawn(process.execPath,['node_modules/vite/bin/vite.js','--config','fixtures/recovery-private/vite.config.ts'],{cwd:join(root,'web'),env:{...childEnvironment(process.env.TEMP),NODE_DISABLE_COMPILE_CACHE:'1'},windowsHide:true,detached:process.platform!=='win32',stdio:['ignore','pipe','pipe']});
  let closed=false,spawnFailed=false,bytes=0;const terminal=new Promise(r=>server.once('close',()=>{closed=true;onServerExit();r();}));
  server.once('error',()=>{spawnFailed=true;});
  for(const pipe of [server.stdout,server.stderr])pipe.on('data',chunk=>{bytes+=chunk.length;if(bytes>65536)server.kill();});
