@@ -1,0 +1,161 @@
+{
+  "registration": "PUBLIC_SQL",
+  "passed": true,
+  "casePasses": 5,
+  "receipt": {
+    "version": 2,
+    "type": "nativeControllerReceipt",
+    "registration": null,
+    "cohort": "PUBLIC_SQL",
+    "publicFault": null,
+    "resourceCut": null,
+    "malformedCase": null,
+    "sourceCommit": "5d5439659624aa3413731083a4f1fd94228bb914",
+    "buildSourceCommit": "5d5439659624aa3413731083a4f1fd94228bb914",
+    "buildBindingSha256": "05826e293d0ab62bffea28b88fce3fd324e8e1960682240735037946ceb85d8a",
+    "workerBuildBindingSha256": "05826e293d0ab62bffea28b88fce3fd324e8e1960682240735037946ceb85d8a",
+    "sourceCurrent": true,
+    "protocolValid": true,
+    "processId": 1784,
+    "processStartUtc": "2026-11-11T20:30:48.0391129Z",
+    "processStartVerified": true,
+    "processClosed": true,
+    "exitCode": 0,
+    "rawOutputRejected": false,
+    "unexpectedManagedOutput": false,
+    "timedOut": false,
+    "forced": false,
+    "cutObserved": false,
+    "publicTimeoutObserved": false,
+    "reconciled": true,
+    "borrowedPreserved": true,
+    "surfaceClean": true,
+    "surfaceRemoved": true,
+    "helperProcessesClosed": true,
+    "terminal": {
+      "native": {
+        "version": 1,
+        "type": "nativeReceipt",
+        "cohort": "PublicSql",
+        "failureCode": "NONE",
+        "cases": {
+          "ISSUANCE_BINDING": true,
+          "RETIREMENT_BINDING": true,
+          "ENTRY_ONE_WAY": true,
+          "SET_ONE_WAY": true,
+          "OPERATION_ONE_WAY": true
+        },
+        "caseExecutionSettled": true,
+        "ownershipVerified": true,
+        "noLogPersistenceVerified": true,
+        "containerAbsentVerified": true,
+        "borrowedPostgresPreserved": true,
+        "cleanupVerified": true,
+        "dockerConfigurationAbsentVerified": true,
+        "containmentVerified": true,
+        "sensitiveAccepted": false
+      },
+      "fixture": null,
+      "canary": null
+    },
+    "capacity": null,
+    "heldSurface": null,
+    "helperProcesses": [
+      {
+        "processId": 25568,
+        "processStartUtc": "2026-11-11T20:30:45.9252169Z",
+        "closed": true,
+        "exitCode": 0,
+        "protocolValid": true,
+        "unexpectedManagedOutput": false,
+        "rawOutputRejected": false,
+        "failureCode": "NONE"
+      },
+      {
+        "processId": 22092,
+        "processStartUtc": "2026-11-11T20:30:48.2428155Z",
+        "closed": true,
+        "exitCode": 0,
+        "protocolValid": true,
+        "unexpectedManagedOutput": false,
+        "rawOutputRejected": false,
+        "failureCode": "NONE"
+      },
+      {
+        "processId": 24992,
+        "processStartUtc": "2026-11-11T20:30:53.3466371Z",
+        "closed": true,
+        "exitCode": 0,
+        "protocolValid": true,
+        "unexpectedManagedOutput": false,
+        "rawOutputRejected": false,
+        "failureCode": "NONE"
+      },
+      {
+        "processId": 22824,
+        "processStartUtc": "2026-11-11T20:30:55.7574234Z",
+        "closed": true,
+        "exitCode": 0,
+        "protocolValid": true,
+        "unexpectedManagedOutput": false,
+        "rawOutputRejected": false,
+        "failureCode": "NONE"
+      },
+      {
+        "processId": 22472,
+        "processStartUtc": "2026-11-11T20:31:17.6564134Z",
+        "closed": true,
+        "exitCode": 0,
+        "protocolValid": true,
+        "unexpectedManagedOutput": false,
+        "rawOutputRejected": false,
+        "failureCode": "NONE"
+      },
+      {
+        "processId": 13092,
+        "processStartUtc": "2026-11-11T20:31:19.4734670Z",
+        "closed": true,
+        "exitCode": 0,
+        "protocolValid": true,
+        "unexpectedManagedOutput": false,
+        "rawOutputRejected": false,
+        "failureCode": "NONE"
+      }
+    ],
+    "reconciliationMetadata": {
+      "localDockerEndpoint": "npipe:////./pipe/dockerDesktopLinuxEngine",
+      "expectedEngineId": "b81c329c-42bf-4ce2-812c-2570fbcda327",
+      "borrowedContainerId": "f72775e18f1dc226de5877a5017b4a26681097b60f79d372804293f4f720f143"
+    },
+    "owners": [
+      {
+        "owner": {
+          "ownerId": "cc6414c93a7248f58877eb9e4245e779",
+          "role": "config",
+          "name": "tunner-p2-009-docker-cc6414c93a7248f58877eb9e4245e779",
+          "imageId": null
+        },
+        "preparationVerified": true,
+        "preparedAckSent": true,
+        "createdAckSent": false,
+        "containerId": null,
+        "absent": true
+      },
+      {
+        "owner": {
+          "ownerId": "bfb8c05022de488ea85bc554c82fd405",
+          "role": "native-postgres",
+          "name": "tunner-p2-009-native-postgres-bfb8c05022de488ea85bc554c82fd405",
+          "imageId": "sha256:77f585114c32fbca283dc835b0596f4e52b51b4c6662d7810b2f4084f60a1873"
+        },
+        "preparationVerified": true,
+        "preparedAckSent": true,
+        "createdAckSent": true,
+        "containerId": "40ced07ba427141106925646627a40a7968100f668fbaf9592beb7f14b2b88c4",
+        "absent": true
+      }
+    ],
+    "publicContainmentAccepted": false,
+    "accepted": true
+  }
+}

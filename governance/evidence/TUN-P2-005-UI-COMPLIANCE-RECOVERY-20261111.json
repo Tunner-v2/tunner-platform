@@ -1,0 +1,1417 @@
+{
+  "schema_version": 1,
+  "scope_id": "TUN-P2-005",
+  "result": "PASS",
+  "tested_commit_sha": "ad744fde52aa03404f3944c47ebb79070185e9f2",
+  "inventory_sha256": "83e3013f34780aa22ceb0ce9aaee408e75661cf35aded91afe935a294b262296",
+  "owned_behavior_paths": [
+    "docs/contracts/ui-inventory.json",
+    "src/Modules/Identity/AuthenticationEndpoints.cs",
+    "src/Modules/Identity/IdentityWebAssets.cs",
+    "src/Modules/Identity/TotpEndpoints.cs",
+    "web/apps/user/authentication.css",
+    "web/apps/user/authentication.routes.ts",
+    "web/apps/user/authentication.tsx",
+    "web/apps/user/authentication.validation.ts",
+    "web/apps/user/passkeys.api.ts",
+    "web/apps/user/passkeys.native.ts",
+    "web/apps/user/passkeys.sign-in.tsx",
+    "web/apps/user/totp.api.ts",
+    "web/apps/user/totp.code.tsx",
+    "web/apps/user/totp.content-keys.ts",
+    "web/apps/user/totp.css",
+    "web/apps/user/totp.mfa.tsx",
+    "web/apps/user/totp.picker.tsx",
+    "web/apps/user/totp.routes.ts",
+    "web/apps/user/totp.validation.ts"
+  ],
+  "historical_ui_compliance": {
+    "path": "governance/evidence/TUN-P2-005-UI-COMPLIANCE-TOTP-20261110.json",
+    "sha256": "f8e642cbc90fd90a0aabf1be9ba2ffe4a6f71e5461f163f4128cf539b05e5b67",
+    "tested_commit_sha": "6e562db102ce75d5ed478a15e2970ff55ab98fef",
+    "owned_behavior_paths": [
+      "docs/contracts/ui-inventory.json",
+      "src/Modules/Identity/AuthenticationEndpoints.cs",
+      "src/Modules/Identity/IdentityWebAssets.cs",
+      "web/apps/user/authentication.css",
+      "web/apps/user/authentication.routes.ts",
+      "web/apps/user/authentication.tsx",
+      "web/apps/user/authentication.validation.ts",
+      "web/apps/user/passkeys.api.ts",
+      "web/apps/user/passkeys.native.ts",
+      "web/apps/user/passkeys.sign-in.tsx",
+      "src/Modules/Identity/TotpEndpoints.cs",
+      "web/apps/user/totp.api.ts",
+      "web/apps/user/totp.code.tsx",
+      "web/apps/user/totp.content-keys.ts",
+      "web/apps/user/totp.css",
+      "web/apps/user/totp.mfa.tsx",
+      "web/apps/user/totp.picker.tsx",
+      "web/apps/user/totp.routes.ts",
+      "web/apps/user/totp.validation.ts"
+    ],
+    "item_ids": [
+      "U-AUTH-01",
+      "U-AUTH-SIGNED-IN",
+      "FORM-LOGIN"
+    ]
+  },
+  "items": [
+    {
+      "id": "U-AUTH-01",
+      "figma_refs": [
+        {
+          "file_key": "apNbwvAgdn1xIxYH1oiaSC",
+          "node_id": "2:4"
+        }
+      ],
+      "checks": [
+        {
+          "id": "URL-001",
+          "result": "PASS",
+          "description": "Observed canonical full-screen pathname transitions in named route cases. Item-specific basis: Login card, glows and spacing match actual Figma2:4 with existing scoped truthful provider/availability/contrast adaptations. New imported TOTP modules preserve the parent Login variant; separate008MFA ownership and real journey are not approved here.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/TUN-P2-005-UI-COMPLIANCE-TOTP-20261110.json",
+              "sha256": "f8e642cbc90fd90a0aabf1be9ba2ffe4a6f71e5461f163f4128cf539b05e5b67"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/parent-readiness-ad744fd/parent-ui-compatibility-review-v2.json",
+              "sha256": "a993939d7b0ae3cc159967102dc1ceabd5f0dabcb51ec2e53bb487c58adf4638",
+              "original_artifact_ref": "artifacts/p2-009-recovery-20261111/parent-ui-compatibility-review-v2/review.json"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/consumer-refresh-c71495c/evidence-index.json",
+              "sha256": "6a34813e851965264790ce39703ed7c2b838f0ad7143e65cbc1342d395ea7cac"
+            }
+          ],
+          "current_compatibility_basis": {
+            "actual_ui_evidence": "Actualc714Auth21 with Passkeys60/TOTP43 conditionalconsumer regressions; oldLogin/signedInmarkup/CSS/copyunchanged.",
+            "manual_comparison_reuse": "Originalrowrendered/Figma/consent/manualrefs remain at originaltestedSHA; no freshcapture/pixelequality claim."
+          }
+        },
+        {
+          "id": "URL-002",
+          "result": "PASS",
+          "description": "Query/fragment and forged history cannot replace a guarded owning pathname. Item-specific basis: Login card, glows and spacing match actual Figma2:4 with existing scoped truthful provider/availability/contrast adaptations. New imported TOTP modules preserve the parent Login variant; separate008MFA ownership and real journey are not approved here.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/TUN-P2-005-UI-COMPLIANCE-TOTP-20261110.json",
+              "sha256": "f8e642cbc90fd90a0aabf1be9ba2ffe4a6f71e5461f163f4128cf539b05e5b67"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/parent-readiness-ad744fd/parent-ui-compatibility-review-v2.json",
+              "sha256": "a993939d7b0ae3cc159967102dc1ceabd5f0dabcb51ec2e53bb487c58adf4638",
+              "original_artifact_ref": "artifacts/p2-009-recovery-20261111/parent-ui-compatibility-review-v2/review.json"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/consumer-refresh-c71495c/evidence-index.json",
+              "sha256": "6a34813e851965264790ce39703ed7c2b838f0ad7143e65cbc1342d395ea7cac"
+            }
+          ],
+          "current_compatibility_basis": {
+            "actual_ui_evidence": "Actualc714Auth21 with Passkeys60/TOTP43 conditionalconsumer regressions; oldLogin/signedInmarkup/CSS/copyunchanged.",
+            "manual_comparison_reuse": "Originalrowrendered/Figma/consent/manualrefs remain at originaltestedSHA; no freshcapture/pixelequality claim."
+          }
+        },
+        {
+          "id": "URL-003",
+          "result": "PASS",
+          "description": "Named direct-entry, reload and Back/Forward cases reconstruct the actual owning server-metadata view. Item-specific basis: Login card, glows and spacing match actual Figma2:4 with existing scoped truthful provider/availability/contrast adaptations. New imported TOTP modules preserve the parent Login variant; separate008MFA ownership and real journey are not approved here.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/TUN-P2-005-UI-COMPLIANCE-TOTP-20261110.json",
+              "sha256": "f8e642cbc90fd90a0aabf1be9ba2ffe4a6f71e5461f163f4128cf539b05e5b67"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/parent-readiness-ad744fd/parent-ui-compatibility-review-v2.json",
+              "sha256": "a993939d7b0ae3cc159967102dc1ceabd5f0dabcb51ec2e53bb487c58adf4638",
+              "original_artifact_ref": "artifacts/p2-009-recovery-20261111/parent-ui-compatibility-review-v2/review.json"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/consumer-refresh-c71495c/evidence-index.json",
+              "sha256": "6a34813e851965264790ce39703ed7c2b838f0ad7143e65cbc1342d395ea7cac"
+            }
+          ],
+          "current_compatibility_basis": {
+            "actual_ui_evidence": "Actualc714Auth21 with Passkeys60/TOTP43 conditionalconsumer regressions; oldLogin/signedInmarkup/CSS/copyunchanged.",
+            "manual_comparison_reuse": "Originalrowrendered/Figma/consent/manualrefs remain at originaltestedSHA; no freshcapture/pixelequality claim."
+          }
+        },
+        {
+          "id": "URL-005",
+          "result": "PASS",
+          "description": "Expired/unauthorized/missing-stage fixtures are blocked or safely redirected; backend authority is separately evidenced. Item-specific basis: Login card, glows and spacing match actual Figma2:4 with existing scoped truthful provider/availability/contrast adaptations. New imported TOTP modules preserve the parent Login variant; separate008MFA ownership and real journey are not approved here.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/TUN-P2-005-UI-COMPLIANCE-TOTP-20261110.json",
+              "sha256": "f8e642cbc90fd90a0aabf1be9ba2ffe4a6f71e5461f163f4128cf539b05e5b67"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/parent-readiness-ad744fd/parent-ui-compatibility-review-v2.json",
+              "sha256": "a993939d7b0ae3cc159967102dc1ceabd5f0dabcb51ec2e53bb487c58adf4638",
+              "original_artifact_ref": "artifacts/p2-009-recovery-20261111/parent-ui-compatibility-review-v2/review.json"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/consumer-refresh-c71495c/evidence-index.json",
+              "sha256": "6a34813e851965264790ce39703ed7c2b838f0ad7143e65cbc1342d395ea7cac"
+            }
+          ],
+          "current_compatibility_basis": {
+            "actual_ui_evidence": "Actualc714Auth21 with Passkeys60/TOTP43 conditionalconsumer regressions; oldLogin/signedInmarkup/CSS/copyunchanged.",
+            "manual_comparison_reuse": "Originalrowrendered/Figma/consent/manualrefs remain at originaltestedSHA; no freshcapture/pixelequality claim."
+          }
+        },
+        {
+          "id": "URL-004",
+          "result": "PASS",
+          "description": "Same-screen visibility/dialog state retains caller URL and blocks accidental side effects. Item-specific basis: Login card, glows and spacing match actual Figma2:4 with existing scoped truthful provider/availability/contrast adaptations. New imported TOTP modules preserve the parent Login variant; separate008MFA ownership and real journey are not approved here.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/TUN-P2-005-UI-COMPLIANCE-TOTP-20261110.json",
+              "sha256": "f8e642cbc90fd90a0aabf1be9ba2ffe4a6f71e5461f163f4128cf539b05e5b67"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/parent-readiness-ad744fd/parent-ui-compatibility-review-v2.json",
+              "sha256": "a993939d7b0ae3cc159967102dc1ceabd5f0dabcb51ec2e53bb487c58adf4638",
+              "original_artifact_ref": "artifacts/p2-009-recovery-20261111/parent-ui-compatibility-review-v2/review.json"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/consumer-refresh-c71495c/evidence-index.json",
+              "sha256": "6a34813e851965264790ce39703ed7c2b838f0ad7143e65cbc1342d395ea7cac"
+            }
+          ],
+          "current_compatibility_basis": {
+            "actual_ui_evidence": "Actualc714Auth21 with Passkeys60/TOTP43 conditionalconsumer regressions; oldLogin/signedInmarkup/CSS/copyunchanged.",
+            "manual_comparison_reuse": "Originalrowrendered/Figma/consent/manualrefs remain at originaltestedSHA; no freshcapture/pixelequality claim."
+          }
+        },
+        {
+          "id": "URL-006",
+          "result": "NOT_APPLICABLE",
+          "reason": "Product-origin OAuth/callback is not implemented in this feature slice (future P2-014). No future-flow PASS is claimed. Existing callback source was not changed; external query/fragment attempts do not authorize navigation.",
+          "authority_refs": [
+            "docs/authority/current/decisions/AMD-0008_Approved_Figma_Visual_Fidelity_and_Product_Owner_UX_Consent.md",
+            "docs/authority/current/decisions/AMD-0009_URL_Addressable_Routing_and_Governed_Form_Validation.md",
+            "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md",
+            "docs/authority/current/development/31_UI_UX_Screen_and_Control_Center_Requirements_Matrix.md"
+          ],
+          "assessment": "Rechecked scope: no new Product-origin OAuth integration is implemented by this parent compatibility refresh; preserve its prior exact exclusion."
+        },
+        {
+          "id": "UX-FID-001",
+          "result": "PASS",
+          "description": "Manual current/reference comparison in item notes; scoped existing composition retained. Item-specific basis: Login card, glows and spacing match actual Figma2:4 with existing scoped truthful provider/availability/contrast adaptations. New imported TOTP modules preserve the parent Login variant; separate008MFA ownership and real journey are not approved here.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/TUN-P2-005-UI-COMPLIANCE-TOTP-20261110.json",
+              "sha256": "f8e642cbc90fd90a0aabf1be9ba2ffe4a6f71e5461f163f4128cf539b05e5b67"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/parent-readiness-ad744fd/parent-ui-compatibility-review-v2.json",
+              "sha256": "a993939d7b0ae3cc159967102dc1ceabd5f0dabcb51ec2e53bb487c58adf4638",
+              "original_artifact_ref": "artifacts/p2-009-recovery-20261111/parent-ui-compatibility-review-v2/review.json"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/consumer-refresh-c71495c/evidence-index.json",
+              "sha256": "6a34813e851965264790ce39703ed7c2b838f0ad7143e65cbc1342d395ea7cac"
+            }
+          ],
+          "current_compatibility_basis": {
+            "actual_ui_evidence": "Actualc714Auth21 with Passkeys60/TOTP43 conditionalconsumer regressions; oldLogin/signedInmarkup/CSS/copyunchanged.",
+            "manual_comparison_reuse": "Originalrowrendered/Figma/consent/manualrefs remain at originaltestedSHA; no freshcapture/pixelequality claim."
+          }
+        },
+        {
+          "id": "UX-FID-002",
+          "result": "PASS",
+          "description": "Local page/glow/assets are present in current captures and local-asset tests. Item-specific basis: Login card, glows and spacing match actual Figma2:4 with existing scoped truthful provider/availability/contrast adaptations. New imported TOTP modules preserve the parent Login variant; separate008MFA ownership and real journey are not approved here.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/TUN-P2-005-UI-COMPLIANCE-TOTP-20261110.json",
+              "sha256": "f8e642cbc90fd90a0aabf1be9ba2ffe4a6f71e5461f163f4128cf539b05e5b67"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/parent-readiness-ad744fd/parent-ui-compatibility-review-v2.json",
+              "sha256": "a993939d7b0ae3cc159967102dc1ceabd5f0dabcb51ec2e53bb487c58adf4638",
+              "original_artifact_ref": "artifacts/p2-009-recovery-20261111/parent-ui-compatibility-review-v2/review.json"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/consumer-refresh-c71495c/evidence-index.json",
+              "sha256": "6a34813e851965264790ce39703ed7c2b838f0ad7143e65cbc1342d395ea7cac"
+            }
+          ],
+          "current_compatibility_basis": {
+            "actual_ui_evidence": "Actualc714Auth21 with Passkeys60/TOTP43 conditionalconsumer regressions; oldLogin/signedInmarkup/CSS/copyunchanged.",
+            "manual_comparison_reuse": "Originalrowrendered/Figma/consent/manualrefs remain at originaltestedSHA; no freshcapture/pixelequality claim."
+          }
+        },
+        {
+          "id": "UX-FID-003",
+          "result": "PASS",
+          "description": "Shared typed fields/buttons/error geometry and token variants are reused. Item-specific basis: Login card, glows and spacing match actual Figma2:4 with existing scoped truthful provider/availability/contrast adaptations. New imported TOTP modules preserve the parent Login variant; separate008MFA ownership and real journey are not approved here.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/TUN-P2-005-UI-COMPLIANCE-TOTP-20261110.json",
+              "sha256": "f8e642cbc90fd90a0aabf1be9ba2ffe4a6f71e5461f163f4128cf539b05e5b67"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/parent-readiness-ad744fd/parent-ui-compatibility-review-v2.json",
+              "sha256": "a993939d7b0ae3cc159967102dc1ceabd5f0dabcb51ec2e53bb487c58adf4638",
+              "original_artifact_ref": "artifacts/p2-009-recovery-20261111/parent-ui-compatibility-review-v2/review.json"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/consumer-refresh-c71495c/evidence-index.json",
+              "sha256": "6a34813e851965264790ce39703ed7c2b838f0ad7143e65cbc1342d395ea7cac"
+            }
+          ],
+          "current_compatibility_basis": {
+            "actual_ui_evidence": "Actualc714Auth21 with Passkeys60/TOTP43 conditionalconsumer regressions; oldLogin/signedInmarkup/CSS/copyunchanged.",
+            "manual_comparison_reuse": "Originalrowrendered/Figma/consent/manualrefs remain at originaltestedSHA; no freshcapture/pixelequality claim."
+          }
+        },
+        {
+          "id": "UX-FID-004",
+          "result": "PASS",
+          "description": "Only previously approved scoped deviations/consents apply; preserve their exact references. Item-specific basis: Login card, glows and spacing match actual Figma2:4 with existing scoped truthful provider/availability/contrast adaptations. New imported TOTP modules preserve the parent Login variant; separate008MFA ownership and real journey are not approved here.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/TUN-P2-005-UI-COMPLIANCE-TOTP-20261110.json",
+              "sha256": "f8e642cbc90fd90a0aabf1be9ba2ffe4a6f71e5461f163f4128cf539b05e5b67"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/parent-readiness-ad744fd/parent-ui-compatibility-review-v2.json",
+              "sha256": "a993939d7b0ae3cc159967102dc1ceabd5f0dabcb51ec2e53bb487c58adf4638",
+              "original_artifact_ref": "artifacts/p2-009-recovery-20261111/parent-ui-compatibility-review-v2/review.json"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/consumer-refresh-c71495c/evidence-index.json",
+              "sha256": "6a34813e851965264790ce39703ed7c2b838f0ad7143e65cbc1342d395ea7cac"
+            }
+          ],
+          "current_compatibility_basis": {
+            "actual_ui_evidence": "Actualc714Auth21 with Passkeys60/TOTP43 conditionalconsumer regressions; oldLogin/signedInmarkup/CSS/copyunchanged.",
+            "manual_comparison_reuse": "Originalrowrendered/Figma/consent/manualrefs remain at originaltestedSHA; no freshcapture/pixelequality claim."
+          }
+        },
+        {
+          "id": "UX-FID-005",
+          "result": "PASS",
+          "description": "Previously resolved domain/Figma conflicts remain truthful; no new material conflict observed in this compatibility scope. Item-specific basis: Login card, glows and spacing match actual Figma2:4 with existing scoped truthful provider/availability/contrast adaptations. New imported TOTP modules preserve the parent Login variant; separate008MFA ownership and real journey are not approved here.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/TUN-P2-005-UI-COMPLIANCE-TOTP-20261110.json",
+              "sha256": "f8e642cbc90fd90a0aabf1be9ba2ffe4a6f71e5461f163f4128cf539b05e5b67"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/parent-readiness-ad744fd/parent-ui-compatibility-review-v2.json",
+              "sha256": "a993939d7b0ae3cc159967102dc1ceabd5f0dabcb51ec2e53bb487c58adf4638",
+              "original_artifact_ref": "artifacts/p2-009-recovery-20261111/parent-ui-compatibility-review-v2/review.json"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/consumer-refresh-c71495c/evidence-index.json",
+              "sha256": "6a34813e851965264790ce39703ed7c2b838f0ad7143e65cbc1342d395ea7cac"
+            }
+          ],
+          "current_compatibility_basis": {
+            "actual_ui_evidence": "Actualc714Auth21 with Passkeys60/TOTP43 conditionalconsumer regressions; oldLogin/signedInmarkup/CSS/copyunchanged.",
+            "manual_comparison_reuse": "Originalrowrendered/Figma/consent/manualrefs remain at originaltestedSHA; no freshcapture/pixelequality claim."
+          }
+        },
+        {
+          "id": "UX-FID-006",
+          "result": "PASS",
+          "description": "Current source and screenshots retain approved screen-specific styling rather than library defaults. Item-specific basis: Login card, glows and spacing match actual Figma2:4 with existing scoped truthful provider/availability/contrast adaptations. New imported TOTP modules preserve the parent Login variant; separate008MFA ownership and real journey are not approved here.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/TUN-P2-005-UI-COMPLIANCE-TOTP-20261110.json",
+              "sha256": "f8e642cbc90fd90a0aabf1be9ba2ffe4a6f71e5461f163f4128cf539b05e5b67"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/parent-readiness-ad744fd/parent-ui-compatibility-review-v2.json",
+              "sha256": "a993939d7b0ae3cc159967102dc1ceabd5f0dabcb51ec2e53bb487c58adf4638",
+              "original_artifact_ref": "artifacts/p2-009-recovery-20261111/parent-ui-compatibility-review-v2/review.json"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/consumer-refresh-c71495c/evidence-index.json",
+              "sha256": "6a34813e851965264790ce39703ed7c2b838f0ad7143e65cbc1342d395ea7cac"
+            }
+          ],
+          "current_compatibility_basis": {
+            "actual_ui_evidence": "Actualc714Auth21 with Passkeys60/TOTP43 conditionalconsumer regressions; oldLogin/signedInmarkup/CSS/copyunchanged.",
+            "manual_comparison_reuse": "Originalrowrendered/Figma/consent/manualrefs remain at originaltestedSHA; no freshcapture/pixelequality claim."
+          }
+        },
+        {
+          "id": "UX-FID-007",
+          "result": "PASS",
+          "description": "Named responsive/Axe/keyboard/focus cases are current; detailed new shared-module contrast report resolves all194current incomplete nodes. Item-specific basis: Login card, glows and spacing match actual Figma2:4 with existing scoped truthful provider/availability/contrast adaptations. New imported TOTP modules preserve the parent Login variant; separate008MFA ownership and real journey are not approved here.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/TUN-P2-005-UI-COMPLIANCE-TOTP-20261110.json",
+              "sha256": "f8e642cbc90fd90a0aabf1be9ba2ffe4a6f71e5461f163f4128cf539b05e5b67"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/parent-readiness-ad744fd/parent-ui-compatibility-review-v2.json",
+              "sha256": "a993939d7b0ae3cc159967102dc1ceabd5f0dabcb51ec2e53bb487c58adf4638",
+              "original_artifact_ref": "artifacts/p2-009-recovery-20261111/parent-ui-compatibility-review-v2/review.json"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/consumer-refresh-c71495c/evidence-index.json",
+              "sha256": "6a34813e851965264790ce39703ed7c2b838f0ad7143e65cbc1342d395ea7cac"
+            }
+          ],
+          "current_compatibility_basis": {
+            "actual_ui_evidence": "Actualc714Auth21 with Passkeys60/TOTP43 conditionalconsumer regressions; oldLogin/signedInmarkup/CSS/copyunchanged.",
+            "manual_comparison_reuse": "Originalrowrendered/Figma/consent/manualrefs remain at originaltestedSHA; no freshcapture/pixelequality claim."
+          }
+        },
+        {
+          "id": "UX-FID-008",
+          "result": "PASS",
+          "description": "Current actual reports/screenshots, reference provenance, source identity and existing scoped consent are linked without redating historical evidence. Item-specific basis: Login card, glows and spacing match actual Figma2:4 with existing scoped truthful provider/availability/contrast adaptations. New imported TOTP modules preserve the parent Login variant; separate008MFA ownership and real journey are not approved here.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/TUN-P2-005-UI-COMPLIANCE-TOTP-20261110.json",
+              "sha256": "f8e642cbc90fd90a0aabf1be9ba2ffe4a6f71e5461f163f4128cf539b05e5b67"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/parent-readiness-ad744fd/parent-ui-compatibility-review-v2.json",
+              "sha256": "a993939d7b0ae3cc159967102dc1ceabd5f0dabcb51ec2e53bb487c58adf4638",
+              "original_artifact_ref": "artifacts/p2-009-recovery-20261111/parent-ui-compatibility-review-v2/review.json"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/consumer-refresh-c71495c/evidence-index.json",
+              "sha256": "6a34813e851965264790ce39703ed7c2b838f0ad7143e65cbc1342d395ea7cac"
+            }
+          ],
+          "current_compatibility_basis": {
+            "actual_ui_evidence": "Actualc714Auth21 with Passkeys60/TOTP43 conditionalconsumer regressions; oldLogin/signedInmarkup/CSS/copyunchanged.",
+            "manual_comparison_reuse": "Originalrowrendered/Figma/consent/manualrefs remain at originaltestedSHA; no freshcapture/pixelequality claim."
+          }
+        }
+      ],
+      "screenshots": [
+        {
+          "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/legacy/authentication/login-1440.png",
+          "sha256": "b97005afb4f70e0ff947d0b48542bf578c9c31ca53090e1e3895f79553b93e32",
+          "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/legacy/authentication/login-1440.png",
+          "role": "CURRENT_SOURCE_RENDER",
+          "source_carrier_sha": "6e562db102ce75d5ed478a15e2970ff55ab98fef"
+        },
+        {
+          "path": "governance/evidence/ui/authentication-20261028/reference/login-figma-1440.png",
+          "sha256": "b847c61833c053614ca4b33fa15d4231f4851ce0504b44c37668dc1fb5657d73",
+          "role": "APPROVED_REFERENCE_OR_SCOPED_PROPOSAL"
+        }
+      ],
+      "deviations": [
+        {
+          "status": "PRODUCT_OWNER_APPROVED",
+          "approval_evidence": {
+            "path": "governance/evidence/TUN-P2-005-VISUAL-CONSENT-20261021.json",
+            "sha256": "58eff6b8b41bd790a55afc048a139874a60ee12e72013e3a0e316ce2ed815145"
+          }
+        },
+        {
+          "status": "PRODUCT_OWNER_APPROVED",
+          "approval_evidence": {
+            "path": "governance/evidence/TUN-P2-005-VISUAL-ACCEPTANCE-DEFERRAL-20261021.json",
+            "sha256": "2a2ed7402e090eeab3a73ef0726c0209b62db34de1f720234e7a23c0ae5cf37f"
+          }
+        },
+        {
+          "status": "PRODUCT_OWNER_APPROVED",
+          "approval_evidence": {
+            "path": "governance/evidence/TUN-P2-007-VISUAL-CONSENT-20261109.json",
+            "sha256": "c9415304746bb882a0c49a3b42e16c0e312882f6b48401b1d51666a18d775dfd"
+          }
+        }
+      ],
+      "historical_item_ref": {
+        "path": "governance/evidence/TUN-P2-005-UI-COMPLIANCE-TOTP-20261110.json",
+        "sha256": "f8e642cbc90fd90a0aabf1be9ba2ffe4a6f71e5461f163f4128cf539b05e5b67",
+        "item_id": "U-AUTH-01"
+      },
+      "current_compatibility_review": {
+        "review_ref": {
+          "path": "governance/evidence/p2-009-recovery-20261111/parent-readiness-ad744fd/parent-ui-compatibility-review-v2.json",
+          "sha256": "a993939d7b0ae3cc159967102dc1ceabd5f0dabcb51ec2e53bb487c58adf4638",
+          "original_artifact_ref": "artifacts/p2-009-recovery-20261111/parent-ui-compatibility-review-v2/review.json"
+        },
+        "required_check_ids": [
+          "URL-001",
+          "URL-002",
+          "URL-003",
+          "URL-005",
+          "URL-004",
+          "URL-006",
+          "UX-FID-001",
+          "UX-FID-002",
+          "UX-FID-003",
+          "UX-FID-004",
+          "UX-FID-005",
+          "UX-FID-006",
+          "UX-FID-007",
+          "UX-FID-008"
+        ],
+        "existing_NA": [
+          {
+            "id": "URL-006",
+            "result": "NOT_APPLICABLE",
+            "reason": "Product-origin OAuth/callback is not implemented in this feature slice (future P2-014). No future-flow PASS is claimed. Existing callback source was not changed; external query/fragment attempts do not authorize navigation."
+          }
+        ],
+        "boundary": "Original screenshot hashes, invocation/source carrier identities, manual comparisons and approved deviations are reused at their original scope; no fresh capture or Product consent is claimed."
+      }
+    },
+    {
+      "id": "U-AUTH-SIGNED-IN",
+      "figma_refs": [
+        {
+          "file_key": "apNbwvAgdn1xIxYH1oiaSC",
+          "node_id": "70:630"
+        }
+      ],
+      "checks": [
+        {
+          "id": "URL-001",
+          "result": "PASS",
+          "description": "Observed canonical full-screen pathname transitions in named route cases. Item-specific basis: Existing approved signed-in card, exact sign-out feedback and separately approved Account-security continuation remain. Added continuation changes card height under existing consent; no new account/session fact is invented.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/TUN-P2-005-UI-COMPLIANCE-TOTP-20261110.json",
+              "sha256": "f8e642cbc90fd90a0aabf1be9ba2ffe4a6f71e5461f163f4128cf539b05e5b67"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/parent-readiness-ad744fd/parent-ui-compatibility-review-v2.json",
+              "sha256": "a993939d7b0ae3cc159967102dc1ceabd5f0dabcb51ec2e53bb487c58adf4638",
+              "original_artifact_ref": "artifacts/p2-009-recovery-20261111/parent-ui-compatibility-review-v2/review.json"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/consumer-refresh-c71495c/evidence-index.json",
+              "sha256": "6a34813e851965264790ce39703ed7c2b838f0ad7143e65cbc1342d395ea7cac"
+            }
+          ],
+          "current_compatibility_basis": {
+            "actual_ui_evidence": "Actualc714Auth21 with Passkeys60/TOTP43 conditionalconsumer regressions; oldLogin/signedInmarkup/CSS/copyunchanged.",
+            "manual_comparison_reuse": "Originalrowrendered/Figma/consent/manualrefs remain at originaltestedSHA; no freshcapture/pixelequality claim."
+          }
+        },
+        {
+          "id": "URL-002",
+          "result": "PASS",
+          "description": "Query/fragment and forged history cannot replace a guarded owning pathname. Item-specific basis: Existing approved signed-in card, exact sign-out feedback and separately approved Account-security continuation remain. Added continuation changes card height under existing consent; no new account/session fact is invented.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/TUN-P2-005-UI-COMPLIANCE-TOTP-20261110.json",
+              "sha256": "f8e642cbc90fd90a0aabf1be9ba2ffe4a6f71e5461f163f4128cf539b05e5b67"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/parent-readiness-ad744fd/parent-ui-compatibility-review-v2.json",
+              "sha256": "a993939d7b0ae3cc159967102dc1ceabd5f0dabcb51ec2e53bb487c58adf4638",
+              "original_artifact_ref": "artifacts/p2-009-recovery-20261111/parent-ui-compatibility-review-v2/review.json"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/consumer-refresh-c71495c/evidence-index.json",
+              "sha256": "6a34813e851965264790ce39703ed7c2b838f0ad7143e65cbc1342d395ea7cac"
+            }
+          ],
+          "current_compatibility_basis": {
+            "actual_ui_evidence": "Actualc714Auth21 with Passkeys60/TOTP43 conditionalconsumer regressions; oldLogin/signedInmarkup/CSS/copyunchanged.",
+            "manual_comparison_reuse": "Originalrowrendered/Figma/consent/manualrefs remain at originaltestedSHA; no freshcapture/pixelequality claim."
+          }
+        },
+        {
+          "id": "URL-003",
+          "result": "PASS",
+          "description": "Named direct-entry, reload and Back/Forward cases reconstruct the actual owning server-metadata view. Item-specific basis: Existing approved signed-in card, exact sign-out feedback and separately approved Account-security continuation remain. Added continuation changes card height under existing consent; no new account/session fact is invented.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/TUN-P2-005-UI-COMPLIANCE-TOTP-20261110.json",
+              "sha256": "f8e642cbc90fd90a0aabf1be9ba2ffe4a6f71e5461f163f4128cf539b05e5b67"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/parent-readiness-ad744fd/parent-ui-compatibility-review-v2.json",
+              "sha256": "a993939d7b0ae3cc159967102dc1ceabd5f0dabcb51ec2e53bb487c58adf4638",
+              "original_artifact_ref": "artifacts/p2-009-recovery-20261111/parent-ui-compatibility-review-v2/review.json"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/consumer-refresh-c71495c/evidence-index.json",
+              "sha256": "6a34813e851965264790ce39703ed7c2b838f0ad7143e65cbc1342d395ea7cac"
+            }
+          ],
+          "current_compatibility_basis": {
+            "actual_ui_evidence": "Actualc714Auth21 with Passkeys60/TOTP43 conditionalconsumer regressions; oldLogin/signedInmarkup/CSS/copyunchanged.",
+            "manual_comparison_reuse": "Originalrowrendered/Figma/consent/manualrefs remain at originaltestedSHA; no freshcapture/pixelequality claim."
+          }
+        },
+        {
+          "id": "URL-005",
+          "result": "PASS",
+          "description": "Expired/unauthorized/missing-stage fixtures are blocked or safely redirected; backend authority is separately evidenced. Item-specific basis: Existing approved signed-in card, exact sign-out feedback and separately approved Account-security continuation remain. Added continuation changes card height under existing consent; no new account/session fact is invented.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/TUN-P2-005-UI-COMPLIANCE-TOTP-20261110.json",
+              "sha256": "f8e642cbc90fd90a0aabf1be9ba2ffe4a6f71e5461f163f4128cf539b05e5b67"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/parent-readiness-ad744fd/parent-ui-compatibility-review-v2.json",
+              "sha256": "a993939d7b0ae3cc159967102dc1ceabd5f0dabcb51ec2e53bb487c58adf4638",
+              "original_artifact_ref": "artifacts/p2-009-recovery-20261111/parent-ui-compatibility-review-v2/review.json"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/consumer-refresh-c71495c/evidence-index.json",
+              "sha256": "6a34813e851965264790ce39703ed7c2b838f0ad7143e65cbc1342d395ea7cac"
+            }
+          ],
+          "current_compatibility_basis": {
+            "actual_ui_evidence": "Actualc714Auth21 with Passkeys60/TOTP43 conditionalconsumer regressions; oldLogin/signedInmarkup/CSS/copyunchanged.",
+            "manual_comparison_reuse": "Originalrowrendered/Figma/consent/manualrefs remain at originaltestedSHA; no freshcapture/pixelequality claim."
+          }
+        },
+        {
+          "id": "URL-004",
+          "result": "NOT_APPLICABLE",
+          "reason": "No independent modal/tab/filter/anchor workflow on this screen; canonical routing/guard handling is covered separately.",
+          "authority_refs": [
+            "docs/authority/current/decisions/AMD-0008_Approved_Figma_Visual_Fidelity_and_Product_Owner_UX_Consent.md",
+            "docs/authority/current/decisions/AMD-0009_URL_Addressable_Routing_and_Governed_Form_Validation.md",
+            "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md",
+            "docs/authority/current/development/31_UI_UX_Screen_and_Control_Center_Requirements_Matrix.md"
+          ],
+          "assessment": "Rechecked current item: the exact stated modal/tab/anchor or new editable-field exclusion remains true. Owning route and editable-field cases are separately reviewed above."
+        },
+        {
+          "id": "URL-006",
+          "result": "NOT_APPLICABLE",
+          "reason": "Product-origin OAuth/callback is not implemented in this feature slice (future P2-014). No future-flow PASS is claimed. Existing callback source was not changed; external query/fragment attempts do not authorize navigation.",
+          "authority_refs": [
+            "docs/authority/current/decisions/AMD-0008_Approved_Figma_Visual_Fidelity_and_Product_Owner_UX_Consent.md",
+            "docs/authority/current/decisions/AMD-0009_URL_Addressable_Routing_and_Governed_Form_Validation.md",
+            "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md",
+            "docs/authority/current/development/31_UI_UX_Screen_and_Control_Center_Requirements_Matrix.md"
+          ],
+          "assessment": "Rechecked scope: no new Product-origin OAuth integration is implemented by this parent compatibility refresh; preserve its prior exact exclusion."
+        },
+        {
+          "id": "UX-FID-001",
+          "result": "PASS",
+          "description": "Manual current/reference comparison in item notes; scoped existing composition retained. Item-specific basis: Existing approved signed-in card, exact sign-out feedback and separately approved Account-security continuation remain. Added continuation changes card height under existing consent; no new account/session fact is invented.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/TUN-P2-005-UI-COMPLIANCE-TOTP-20261110.json",
+              "sha256": "f8e642cbc90fd90a0aabf1be9ba2ffe4a6f71e5461f163f4128cf539b05e5b67"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/parent-readiness-ad744fd/parent-ui-compatibility-review-v2.json",
+              "sha256": "a993939d7b0ae3cc159967102dc1ceabd5f0dabcb51ec2e53bb487c58adf4638",
+              "original_artifact_ref": "artifacts/p2-009-recovery-20261111/parent-ui-compatibility-review-v2/review.json"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/consumer-refresh-c71495c/evidence-index.json",
+              "sha256": "6a34813e851965264790ce39703ed7c2b838f0ad7143e65cbc1342d395ea7cac"
+            }
+          ],
+          "current_compatibility_basis": {
+            "actual_ui_evidence": "Actualc714Auth21 with Passkeys60/TOTP43 conditionalconsumer regressions; oldLogin/signedInmarkup/CSS/copyunchanged.",
+            "manual_comparison_reuse": "Originalrowrendered/Figma/consent/manualrefs remain at originaltestedSHA; no freshcapture/pixelequality claim."
+          }
+        },
+        {
+          "id": "UX-FID-002",
+          "result": "PASS",
+          "description": "Local page/glow/assets are present in current captures and local-asset tests. Item-specific basis: Existing approved signed-in card, exact sign-out feedback and separately approved Account-security continuation remain. Added continuation changes card height under existing consent; no new account/session fact is invented.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/TUN-P2-005-UI-COMPLIANCE-TOTP-20261110.json",
+              "sha256": "f8e642cbc90fd90a0aabf1be9ba2ffe4a6f71e5461f163f4128cf539b05e5b67"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/parent-readiness-ad744fd/parent-ui-compatibility-review-v2.json",
+              "sha256": "a993939d7b0ae3cc159967102dc1ceabd5f0dabcb51ec2e53bb487c58adf4638",
+              "original_artifact_ref": "artifacts/p2-009-recovery-20261111/parent-ui-compatibility-review-v2/review.json"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/consumer-refresh-c71495c/evidence-index.json",
+              "sha256": "6a34813e851965264790ce39703ed7c2b838f0ad7143e65cbc1342d395ea7cac"
+            }
+          ],
+          "current_compatibility_basis": {
+            "actual_ui_evidence": "Actualc714Auth21 with Passkeys60/TOTP43 conditionalconsumer regressions; oldLogin/signedInmarkup/CSS/copyunchanged.",
+            "manual_comparison_reuse": "Originalrowrendered/Figma/consent/manualrefs remain at originaltestedSHA; no freshcapture/pixelequality claim."
+          }
+        },
+        {
+          "id": "UX-FID-003",
+          "result": "NOT_APPLICABLE",
+          "reason": "No new editable field is introduced by this item. Existing action/control tokens and field-owning items are reviewed separately.",
+          "authority_refs": [
+            "docs/authority/current/decisions/AMD-0008_Approved_Figma_Visual_Fidelity_and_Product_Owner_UX_Consent.md",
+            "docs/authority/current/decisions/AMD-0009_URL_Addressable_Routing_and_Governed_Form_Validation.md",
+            "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md",
+            "docs/authority/current/development/31_UI_UX_Screen_and_Control_Center_Requirements_Matrix.md"
+          ],
+          "assessment": "Rechecked current item: the exact stated modal/tab/anchor or new editable-field exclusion remains true. Owning route and editable-field cases are separately reviewed above."
+        },
+        {
+          "id": "UX-FID-004",
+          "result": "PASS",
+          "description": "Only previously approved scoped deviations/consents apply; preserve their exact references. Item-specific basis: Existing approved signed-in card, exact sign-out feedback and separately approved Account-security continuation remain. Added continuation changes card height under existing consent; no new account/session fact is invented.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/TUN-P2-005-UI-COMPLIANCE-TOTP-20261110.json",
+              "sha256": "f8e642cbc90fd90a0aabf1be9ba2ffe4a6f71e5461f163f4128cf539b05e5b67"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/parent-readiness-ad744fd/parent-ui-compatibility-review-v2.json",
+              "sha256": "a993939d7b0ae3cc159967102dc1ceabd5f0dabcb51ec2e53bb487c58adf4638",
+              "original_artifact_ref": "artifacts/p2-009-recovery-20261111/parent-ui-compatibility-review-v2/review.json"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/consumer-refresh-c71495c/evidence-index.json",
+              "sha256": "6a34813e851965264790ce39703ed7c2b838f0ad7143e65cbc1342d395ea7cac"
+            }
+          ],
+          "current_compatibility_basis": {
+            "actual_ui_evidence": "Actualc714Auth21 with Passkeys60/TOTP43 conditionalconsumer regressions; oldLogin/signedInmarkup/CSS/copyunchanged.",
+            "manual_comparison_reuse": "Originalrowrendered/Figma/consent/manualrefs remain at originaltestedSHA; no freshcapture/pixelequality claim."
+          }
+        },
+        {
+          "id": "UX-FID-005",
+          "result": "PASS",
+          "description": "Previously resolved domain/Figma conflicts remain truthful; no new material conflict observed in this compatibility scope. Item-specific basis: Existing approved signed-in card, exact sign-out feedback and separately approved Account-security continuation remain. Added continuation changes card height under existing consent; no new account/session fact is invented.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/TUN-P2-005-UI-COMPLIANCE-TOTP-20261110.json",
+              "sha256": "f8e642cbc90fd90a0aabf1be9ba2ffe4a6f71e5461f163f4128cf539b05e5b67"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/parent-readiness-ad744fd/parent-ui-compatibility-review-v2.json",
+              "sha256": "a993939d7b0ae3cc159967102dc1ceabd5f0dabcb51ec2e53bb487c58adf4638",
+              "original_artifact_ref": "artifacts/p2-009-recovery-20261111/parent-ui-compatibility-review-v2/review.json"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/consumer-refresh-c71495c/evidence-index.json",
+              "sha256": "6a34813e851965264790ce39703ed7c2b838f0ad7143e65cbc1342d395ea7cac"
+            }
+          ],
+          "current_compatibility_basis": {
+            "actual_ui_evidence": "Actualc714Auth21 with Passkeys60/TOTP43 conditionalconsumer regressions; oldLogin/signedInmarkup/CSS/copyunchanged.",
+            "manual_comparison_reuse": "Originalrowrendered/Figma/consent/manualrefs remain at originaltestedSHA; no freshcapture/pixelequality claim."
+          }
+        },
+        {
+          "id": "UX-FID-006",
+          "result": "PASS",
+          "description": "Current source and screenshots retain approved screen-specific styling rather than library defaults. Item-specific basis: Existing approved signed-in card, exact sign-out feedback and separately approved Account-security continuation remain. Added continuation changes card height under existing consent; no new account/session fact is invented.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/TUN-P2-005-UI-COMPLIANCE-TOTP-20261110.json",
+              "sha256": "f8e642cbc90fd90a0aabf1be9ba2ffe4a6f71e5461f163f4128cf539b05e5b67"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/parent-readiness-ad744fd/parent-ui-compatibility-review-v2.json",
+              "sha256": "a993939d7b0ae3cc159967102dc1ceabd5f0dabcb51ec2e53bb487c58adf4638",
+              "original_artifact_ref": "artifacts/p2-009-recovery-20261111/parent-ui-compatibility-review-v2/review.json"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/consumer-refresh-c71495c/evidence-index.json",
+              "sha256": "6a34813e851965264790ce39703ed7c2b838f0ad7143e65cbc1342d395ea7cac"
+            }
+          ],
+          "current_compatibility_basis": {
+            "actual_ui_evidence": "Actualc714Auth21 with Passkeys60/TOTP43 conditionalconsumer regressions; oldLogin/signedInmarkup/CSS/copyunchanged.",
+            "manual_comparison_reuse": "Originalrowrendered/Figma/consent/manualrefs remain at originaltestedSHA; no freshcapture/pixelequality claim."
+          }
+        },
+        {
+          "id": "UX-FID-007",
+          "result": "PASS",
+          "description": "Named responsive/Axe/keyboard/focus cases are current; detailed new shared-module contrast report resolves all194current incomplete nodes. Item-specific basis: Existing approved signed-in card, exact sign-out feedback and separately approved Account-security continuation remain. Added continuation changes card height under existing consent; no new account/session fact is invented.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/TUN-P2-005-UI-COMPLIANCE-TOTP-20261110.json",
+              "sha256": "f8e642cbc90fd90a0aabf1be9ba2ffe4a6f71e5461f163f4128cf539b05e5b67"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/parent-readiness-ad744fd/parent-ui-compatibility-review-v2.json",
+              "sha256": "a993939d7b0ae3cc159967102dc1ceabd5f0dabcb51ec2e53bb487c58adf4638",
+              "original_artifact_ref": "artifacts/p2-009-recovery-20261111/parent-ui-compatibility-review-v2/review.json"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/consumer-refresh-c71495c/evidence-index.json",
+              "sha256": "6a34813e851965264790ce39703ed7c2b838f0ad7143e65cbc1342d395ea7cac"
+            }
+          ],
+          "current_compatibility_basis": {
+            "actual_ui_evidence": "Actualc714Auth21 with Passkeys60/TOTP43 conditionalconsumer regressions; oldLogin/signedInmarkup/CSS/copyunchanged.",
+            "manual_comparison_reuse": "Originalrowrendered/Figma/consent/manualrefs remain at originaltestedSHA; no freshcapture/pixelequality claim."
+          }
+        },
+        {
+          "id": "UX-FID-008",
+          "result": "PASS",
+          "description": "Current actual reports/screenshots, reference provenance, source identity and existing scoped consent are linked without redating historical evidence. Item-specific basis: Existing approved signed-in card, exact sign-out feedback and separately approved Account-security continuation remain. Added continuation changes card height under existing consent; no new account/session fact is invented.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/TUN-P2-005-UI-COMPLIANCE-TOTP-20261110.json",
+              "sha256": "f8e642cbc90fd90a0aabf1be9ba2ffe4a6f71e5461f163f4128cf539b05e5b67"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/parent-readiness-ad744fd/parent-ui-compatibility-review-v2.json",
+              "sha256": "a993939d7b0ae3cc159967102dc1ceabd5f0dabcb51ec2e53bb487c58adf4638",
+              "original_artifact_ref": "artifacts/p2-009-recovery-20261111/parent-ui-compatibility-review-v2/review.json"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/consumer-refresh-c71495c/evidence-index.json",
+              "sha256": "6a34813e851965264790ce39703ed7c2b838f0ad7143e65cbc1342d395ea7cac"
+            }
+          ],
+          "current_compatibility_basis": {
+            "actual_ui_evidence": "Actualc714Auth21 with Passkeys60/TOTP43 conditionalconsumer regressions; oldLogin/signedInmarkup/CSS/copyunchanged.",
+            "manual_comparison_reuse": "Originalrowrendered/Figma/consent/manualrefs remain at originaltestedSHA; no freshcapture/pixelequality claim."
+          }
+        }
+      ],
+      "screenshots": [
+        {
+          "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/legacy/authentication/signed-in-1440.png",
+          "sha256": "9c9e75e9052e0f26f7c59a64034fb396925535861bbcef82fe51041fa1fe4aa1",
+          "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/legacy/authentication/signed-in-1440.png",
+          "role": "CURRENT_SOURCE_RENDER",
+          "source_carrier_sha": "6e562db102ce75d5ed478a15e2970ff55ab98fef"
+        },
+        {
+          "path": "governance/evidence/ui/authentication-20261028/reference/signed-in-proposal-1440.png",
+          "sha256": "3f43a91de7fdf7b4f2b4826502b462c54a66125f1225cce184843c02b5cc671c",
+          "role": "APPROVED_REFERENCE_OR_SCOPED_PROPOSAL"
+        }
+      ],
+      "deviations": [
+        {
+          "status": "PRODUCT_OWNER_APPROVED",
+          "approval_evidence": {
+            "path": "governance/evidence/TUN-P2-005-VISUAL-CONSENT-20261021.json",
+            "sha256": "58eff6b8b41bd790a55afc048a139874a60ee12e72013e3a0e316ce2ed815145"
+          }
+        },
+        {
+          "status": "PRODUCT_OWNER_APPROVED",
+          "approval_evidence": {
+            "path": "governance/evidence/TUN-P2-005-VISUAL-ACCEPTANCE-DEFERRAL-20261021.json",
+            "sha256": "2a2ed7402e090eeab3a73ef0726c0209b62db34de1f720234e7a23c0ae5cf37f"
+          }
+        },
+        {
+          "status": "PRODUCT_OWNER_APPROVED",
+          "approval_evidence": {
+            "path": "governance/evidence/TUN-P2-007-NAVIGATION-CONSENT-20261110.json",
+            "sha256": "4862f0b05265a1679ff99b714becc567e067e7b9d14acded43dbce426d2becf1"
+          }
+        }
+      ],
+      "historical_item_ref": {
+        "path": "governance/evidence/TUN-P2-005-UI-COMPLIANCE-TOTP-20261110.json",
+        "sha256": "f8e642cbc90fd90a0aabf1be9ba2ffe4a6f71e5461f163f4128cf539b05e5b67",
+        "item_id": "U-AUTH-SIGNED-IN"
+      },
+      "current_compatibility_review": {
+        "review_ref": {
+          "path": "governance/evidence/p2-009-recovery-20261111/parent-readiness-ad744fd/parent-ui-compatibility-review-v2.json",
+          "sha256": "a993939d7b0ae3cc159967102dc1ceabd5f0dabcb51ec2e53bb487c58adf4638",
+          "original_artifact_ref": "artifacts/p2-009-recovery-20261111/parent-ui-compatibility-review-v2/review.json"
+        },
+        "required_check_ids": [
+          "URL-001",
+          "URL-002",
+          "URL-003",
+          "URL-005",
+          "URL-004",
+          "URL-006",
+          "UX-FID-001",
+          "UX-FID-002",
+          "UX-FID-003",
+          "UX-FID-004",
+          "UX-FID-005",
+          "UX-FID-006",
+          "UX-FID-007",
+          "UX-FID-008"
+        ],
+        "existing_NA": [
+          {
+            "id": "URL-004",
+            "result": "NOT_APPLICABLE",
+            "reason": "No independent modal/tab/filter/anchor workflow on this screen; canonical routing/guard handling is covered separately."
+          },
+          {
+            "id": "URL-006",
+            "result": "NOT_APPLICABLE",
+            "reason": "Product-origin OAuth/callback is not implemented in this feature slice (future P2-014). No future-flow PASS is claimed. Existing callback source was not changed; external query/fragment attempts do not authorize navigation."
+          },
+          {
+            "id": "UX-FID-003",
+            "result": "NOT_APPLICABLE",
+            "reason": "No new editable field is introduced by this item. Existing action/control tokens and field-owning items are reviewed separately."
+          }
+        ],
+        "boundary": "Original screenshot hashes, invocation/source carrier identities, manual comparisons and approved deviations are reused at their original scope; no fresh capture or Product consent is claimed."
+      }
+    },
+    {
+      "id": "FORM-LOGIN",
+      "figma_refs": [
+        {
+          "file_key": "apNbwvAgdn1xIxYH1oiaSC",
+          "node_id": "2:4"
+        },
+        {
+          "file_key": "apNbwvAgdn1xIxYH1oiaSC",
+          "node_id": "70:1257"
+        }
+      ],
+      "checks": [
+        {
+          "id": "VAL-001",
+          "result": "PASS",
+          "description": "Named empty/format/confirmation cases render approved shared field errors. Item-specific basis: Existing Login form uses shared typed field/summary errors, current password policy, safe email retention, password clearing and duplicate guards. New TOTP result parsing never treats MFA-required as a final session.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/TUN-P2-005-UI-COMPLIANCE-TOTP-20261110.json",
+              "sha256": "f8e642cbc90fd90a0aabf1be9ba2ffe4a6f71e5461f163f4128cf539b05e5b67"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/parent-readiness-ad744fd/parent-ui-compatibility-review-v2.json",
+              "sha256": "a993939d7b0ae3cc159967102dc1ceabd5f0dabcb51ec2e53bb487c58adf4638",
+              "original_artifact_ref": "artifacts/p2-009-recovery-20261111/parent-ui-compatibility-review-v2/review.json"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/consumer-refresh-c71495c/evidence-index.json",
+              "sha256": "6a34813e851965264790ce39703ed7c2b838f0ad7143e65cbc1342d395ea7cac"
+            }
+          ],
+          "current_compatibility_basis": {
+            "actual_ui_evidence": "Actualc714Auth21 with Passkeys60/TOTP43 conditionalconsumer regressions; oldLogin/signedInmarkup/CSS/copyunchanged.",
+            "manual_comparison_reuse": "Originalrowrendered/Figma/consent/manualrefs remain at originaltestedSHA; no freshcapture/pixelequality claim."
+          }
+        },
+        {
+          "id": "VAL-002",
+          "result": "PASS",
+          "description": "Typed application errors and form noValidate are exercised; native bubbles are not sole feedback. Item-specific basis: Existing Login form uses shared typed field/summary errors, current password policy, safe email retention, password clearing and duplicate guards. New TOTP result parsing never treats MFA-required as a final session.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/TUN-P2-005-UI-COMPLIANCE-TOTP-20261110.json",
+              "sha256": "f8e642cbc90fd90a0aabf1be9ba2ffe4a6f71e5461f163f4128cf539b05e5b67"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/parent-readiness-ad744fd/parent-ui-compatibility-review-v2.json",
+              "sha256": "a993939d7b0ae3cc159967102dc1ceabd5f0dabcb51ec2e53bb487c58adf4638",
+              "original_artifact_ref": "artifacts/p2-009-recovery-20261111/parent-ui-compatibility-review-v2/review.json"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/consumer-refresh-c71495c/evidence-index.json",
+              "sha256": "6a34813e851965264790ce39703ed7c2b838f0ad7143e65cbc1342d395ea7cac"
+            }
+          ],
+          "current_compatibility_basis": {
+            "actual_ui_evidence": "Actualc714Auth21 with Passkeys60/TOTP43 conditionalconsumer regressions; oldLogin/signedInmarkup/CSS/copyunchanged.",
+            "manual_comparison_reuse": "Originalrowrendered/Figma/consent/manualrefs remain at originaltestedSHA; no freshcapture/pixelequality claim."
+          }
+        },
+        {
+          "id": "VAL-003",
+          "result": "PASS",
+          "description": "Independent native backend tests are actual PASS in the linked260 receipt; source carrier equality is bound by the parent compatibility receipt, not inferred from mocks. Item-specific basis: Existing Login form uses shared typed field/summary errors, current password policy, safe email retention, password clearing and duplicate guards. New TOTP result parsing never treats MFA-required as a final session.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/TUN-P2-005-UI-COMPLIANCE-TOTP-20261110.json",
+              "sha256": "f8e642cbc90fd90a0aabf1be9ba2ffe4a6f71e5461f163f4128cf539b05e5b67"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/parent-readiness-ad744fd/parent-ui-compatibility-review-v2.json",
+              "sha256": "a993939d7b0ae3cc159967102dc1ceabd5f0dabcb51ec2e53bb487c58adf4638",
+              "original_artifact_ref": "artifacts/p2-009-recovery-20261111/parent-ui-compatibility-review-v2/review.json"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/consumer-refresh-c71495c/evidence-index.json",
+              "sha256": "6a34813e851965264790ce39703ed7c2b838f0ad7143e65cbc1342d395ea7cac"
+            }
+          ],
+          "current_compatibility_basis": {
+            "actual_ui_evidence": "Actualc714Auth21 with Passkeys60/TOTP43 conditionalconsumer regressions; oldLogin/signedInmarkup/CSS/copyunchanged.",
+            "manual_comparison_reuse": "Originalrowrendered/Figma/consent/manualrefs remain at originaltestedSHA; no freshcapture/pixelequality claim."
+          }
+        },
+        {
+          "id": "VAL-004",
+          "result": "PASS",
+          "description": "Named server rejections map to governed field/form messages without invented account existence or finality. Item-specific basis: Existing Login form uses shared typed field/summary errors, current password policy, safe email retention, password clearing and duplicate guards. New TOTP result parsing never treats MFA-required as a final session.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/TUN-P2-005-UI-COMPLIANCE-TOTP-20261110.json",
+              "sha256": "f8e642cbc90fd90a0aabf1be9ba2ffe4a6f71e5461f163f4128cf539b05e5b67"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/parent-readiness-ad744fd/parent-ui-compatibility-review-v2.json",
+              "sha256": "a993939d7b0ae3cc159967102dc1ceabd5f0dabcb51ec2e53bb487c58adf4638",
+              "original_artifact_ref": "artifacts/p2-009-recovery-20261111/parent-ui-compatibility-review-v2/review.json"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/consumer-refresh-c71495c/evidence-index.json",
+              "sha256": "6a34813e851965264790ce39703ed7c2b838f0ad7143e65cbc1342d395ea7cac"
+            }
+          ],
+          "current_compatibility_basis": {
+            "actual_ui_evidence": "Actualc714Auth21 with Passkeys60/TOTP43 conditionalconsumer regressions; oldLogin/signedInmarkup/CSS/copyunchanged.",
+            "manual_comparison_reuse": "Originalrowrendered/Figma/consent/manualrefs remain at originaltestedSHA; no freshcapture/pixelequality claim."
+          }
+        },
+        {
+          "id": "VAL-005",
+          "result": "PASS",
+          "description": "Named cases exercise blur/correction, first-invalid focus, descriptions, safe-value handling and pending duplicate protection. Item-specific basis: Existing Login form uses shared typed field/summary errors, current password policy, safe email retention, password clearing and duplicate guards. New TOTP result parsing never treats MFA-required as a final session.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/TUN-P2-005-UI-COMPLIANCE-TOTP-20261110.json",
+              "sha256": "f8e642cbc90fd90a0aabf1be9ba2ffe4a6f71e5461f163f4128cf539b05e5b67"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/parent-readiness-ad744fd/parent-ui-compatibility-review-v2.json",
+              "sha256": "a993939d7b0ae3cc159967102dc1ceabd5f0dabcb51ec2e53bb487c58adf4638",
+              "original_artifact_ref": "artifacts/p2-009-recovery-20261111/parent-ui-compatibility-review-v2/review.json"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/consumer-refresh-c71495c/evidence-index.json",
+              "sha256": "6a34813e851965264790ce39703ed7c2b838f0ad7143e65cbc1342d395ea7cac"
+            }
+          ],
+          "current_compatibility_basis": {
+            "actual_ui_evidence": "Actualc714Auth21 with Passkeys60/TOTP43 conditionalconsumer regressions; oldLogin/signedInmarkup/CSS/copyunchanged.",
+            "manual_comparison_reuse": "Originalrowrendered/Figma/consent/manualrefs remain at originaltestedSHA; no freshcapture/pixelequality claim."
+          }
+        },
+        {
+          "id": "VAL-006",
+          "result": "PASS",
+          "description": "Current actual error screenshots reviewed against approved70:1257 treatment and existing scoped adaptations. Item-specific basis: Existing Login form uses shared typed field/summary errors, current password policy, safe email retention, password clearing and duplicate guards. New TOTP result parsing never treats MFA-required as a final session.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/TUN-P2-005-UI-COMPLIANCE-TOTP-20261110.json",
+              "sha256": "f8e642cbc90fd90a0aabf1be9ba2ffe4a6f71e5461f163f4128cf539b05e5b67"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/parent-readiness-ad744fd/parent-ui-compatibility-review-v2.json",
+              "sha256": "a993939d7b0ae3cc159967102dc1ceabd5f0dabcb51ec2e53bb487c58adf4638",
+              "original_artifact_ref": "artifacts/p2-009-recovery-20261111/parent-ui-compatibility-review-v2/review.json"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/consumer-refresh-c71495c/evidence-index.json",
+              "sha256": "6a34813e851965264790ce39703ed7c2b838f0ad7143e65cbc1342d395ea7cac"
+            }
+          ],
+          "current_compatibility_basis": {
+            "actual_ui_evidence": "Actualc714Auth21 with Passkeys60/TOTP43 conditionalconsumer regressions; oldLogin/signedInmarkup/CSS/copyunchanged.",
+            "manual_comparison_reuse": "Originalrowrendered/Figma/consent/manualrefs remain at originaltestedSHA; no freshcapture/pixelequality claim."
+          }
+        },
+        {
+          "id": "VAL-007",
+          "result": "PASS",
+          "description": "Current domain/policy rules govern fields, code/password grammar and messages; historical Figma wording is not business authority. Item-specific basis: Existing Login form uses shared typed field/summary errors, current password policy, safe email retention, password clearing and duplicate guards. New TOTP result parsing never treats MFA-required as a final session.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/TUN-P2-005-UI-COMPLIANCE-TOTP-20261110.json",
+              "sha256": "f8e642cbc90fd90a0aabf1be9ba2ffe4a6f71e5461f163f4128cf539b05e5b67"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/parent-readiness-ad744fd/parent-ui-compatibility-review-v2.json",
+              "sha256": "a993939d7b0ae3cc159967102dc1ceabd5f0dabcb51ec2e53bb487c58adf4638",
+              "original_artifact_ref": "artifacts/p2-009-recovery-20261111/parent-ui-compatibility-review-v2/review.json"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/consumer-refresh-c71495c/evidence-index.json",
+              "sha256": "6a34813e851965264790ce39703ed7c2b838f0ad7143e65cbc1342d395ea7cac"
+            }
+          ],
+          "current_compatibility_basis": {
+            "actual_ui_evidence": "Actualc714Auth21 with Passkeys60/TOTP43 conditionalconsumer regressions; oldLogin/signedInmarkup/CSS/copyunchanged.",
+            "manual_comparison_reuse": "Originalrowrendered/Figma/consent/manualrefs remain at originaltestedSHA; no freshcapture/pixelequality claim."
+          }
+        },
+        {
+          "id": "VAL-008",
+          "result": "PASS",
+          "description": "Existing parent cross-device route/form regressions actually pass with independent native receipt/source binding. This does not approve the separate008real browser OTP journey. Item-specific basis: Existing Login form uses shared typed field/summary errors, current password policy, safe email retention, password clearing and duplicate guards. New TOTP result parsing never treats MFA-required as a final session.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/TUN-P2-005-UI-COMPLIANCE-TOTP-20261110.json",
+              "sha256": "f8e642cbc90fd90a0aabf1be9ba2ffe4a6f71e5461f163f4128cf539b05e5b67"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/parent-readiness-ad744fd/parent-ui-compatibility-review-v2.json",
+              "sha256": "a993939d7b0ae3cc159967102dc1ceabd5f0dabcb51ec2e53bb487c58adf4638",
+              "original_artifact_ref": "artifacts/p2-009-recovery-20261111/parent-ui-compatibility-review-v2/review.json"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/parent-readiness-ad744fd/native-private62.json",
+              "sha256": "64a5907426512232686f4e09f99e7e476082ef3ee4b1f60a49c87bd0fbab50ed",
+              "original_artifact_ref": "artifacts/p2-009-recovery-20261111/fixed-next-runners-v4/results/native-private62-dfd65dbd81494e08aa92efa46f962a42/01.json"
+            },
+            {
+              "path": "governance/evidence/TUN-P2-003-004-005-006-RECOVERY-COMPATIBILITY-20261111.json",
+              "sha256": "0f6922f027ea8c2edb8d420ce768d8a2aeb06d1fe83b4608d2fec6705790a46d"
+            }
+          ],
+          "current_compatibility_basis": {
+            "actual_invocation_sha": "ad744fde52aa03404f3944c47ebb79070185e9f2",
+            "case_ids": [
+              "PARENT005_AUTH_SESSION",
+              "PARENT005_AUTH_DUPLICATE",
+              "PARENT005_AUTH_CONTACT_CURRENT"
+            ],
+            "scope": "Actual independent backend boundary/proof checks; no mocked UI substitution."
+          }
+        },
+        {
+          "id": "UX-FID-001",
+          "result": "PASS",
+          "description": "Manual current/reference comparison in item notes; scoped existing composition retained. Item-specific basis: Existing Login form uses shared typed field/summary errors, current password policy, safe email retention, password clearing and duplicate guards. New TOTP result parsing never treats MFA-required as a final session.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/TUN-P2-005-UI-COMPLIANCE-TOTP-20261110.json",
+              "sha256": "f8e642cbc90fd90a0aabf1be9ba2ffe4a6f71e5461f163f4128cf539b05e5b67"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/parent-readiness-ad744fd/parent-ui-compatibility-review-v2.json",
+              "sha256": "a993939d7b0ae3cc159967102dc1ceabd5f0dabcb51ec2e53bb487c58adf4638",
+              "original_artifact_ref": "artifacts/p2-009-recovery-20261111/parent-ui-compatibility-review-v2/review.json"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/consumer-refresh-c71495c/evidence-index.json",
+              "sha256": "6a34813e851965264790ce39703ed7c2b838f0ad7143e65cbc1342d395ea7cac"
+            }
+          ],
+          "current_compatibility_basis": {
+            "actual_ui_evidence": "Actualc714Auth21 with Passkeys60/TOTP43 conditionalconsumer regressions; oldLogin/signedInmarkup/CSS/copyunchanged.",
+            "manual_comparison_reuse": "Originalrowrendered/Figma/consent/manualrefs remain at originaltestedSHA; no freshcapture/pixelequality claim."
+          }
+        },
+        {
+          "id": "UX-FID-002",
+          "result": "PASS",
+          "description": "Local page/glow/assets are present in current captures and local-asset tests. Item-specific basis: Existing Login form uses shared typed field/summary errors, current password policy, safe email retention, password clearing and duplicate guards. New TOTP result parsing never treats MFA-required as a final session.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/TUN-P2-005-UI-COMPLIANCE-TOTP-20261110.json",
+              "sha256": "f8e642cbc90fd90a0aabf1be9ba2ffe4a6f71e5461f163f4128cf539b05e5b67"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/parent-readiness-ad744fd/parent-ui-compatibility-review-v2.json",
+              "sha256": "a993939d7b0ae3cc159967102dc1ceabd5f0dabcb51ec2e53bb487c58adf4638",
+              "original_artifact_ref": "artifacts/p2-009-recovery-20261111/parent-ui-compatibility-review-v2/review.json"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/consumer-refresh-c71495c/evidence-index.json",
+              "sha256": "6a34813e851965264790ce39703ed7c2b838f0ad7143e65cbc1342d395ea7cac"
+            }
+          ],
+          "current_compatibility_basis": {
+            "actual_ui_evidence": "Actualc714Auth21 with Passkeys60/TOTP43 conditionalconsumer regressions; oldLogin/signedInmarkup/CSS/copyunchanged.",
+            "manual_comparison_reuse": "Originalrowrendered/Figma/consent/manualrefs remain at originaltestedSHA; no freshcapture/pixelequality claim."
+          }
+        },
+        {
+          "id": "UX-FID-003",
+          "result": "PASS",
+          "description": "Shared typed fields/buttons/error geometry and token variants are reused. Item-specific basis: Existing Login form uses shared typed field/summary errors, current password policy, safe email retention, password clearing and duplicate guards. New TOTP result parsing never treats MFA-required as a final session.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/TUN-P2-005-UI-COMPLIANCE-TOTP-20261110.json",
+              "sha256": "f8e642cbc90fd90a0aabf1be9ba2ffe4a6f71e5461f163f4128cf539b05e5b67"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/parent-readiness-ad744fd/parent-ui-compatibility-review-v2.json",
+              "sha256": "a993939d7b0ae3cc159967102dc1ceabd5f0dabcb51ec2e53bb487c58adf4638",
+              "original_artifact_ref": "artifacts/p2-009-recovery-20261111/parent-ui-compatibility-review-v2/review.json"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/consumer-refresh-c71495c/evidence-index.json",
+              "sha256": "6a34813e851965264790ce39703ed7c2b838f0ad7143e65cbc1342d395ea7cac"
+            }
+          ],
+          "current_compatibility_basis": {
+            "actual_ui_evidence": "Actualc714Auth21 with Passkeys60/TOTP43 conditionalconsumer regressions; oldLogin/signedInmarkup/CSS/copyunchanged.",
+            "manual_comparison_reuse": "Originalrowrendered/Figma/consent/manualrefs remain at originaltestedSHA; no freshcapture/pixelequality claim."
+          }
+        },
+        {
+          "id": "UX-FID-004",
+          "result": "PASS",
+          "description": "Only previously approved scoped deviations/consents apply; preserve their exact references. Item-specific basis: Existing Login form uses shared typed field/summary errors, current password policy, safe email retention, password clearing and duplicate guards. New TOTP result parsing never treats MFA-required as a final session.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/TUN-P2-005-UI-COMPLIANCE-TOTP-20261110.json",
+              "sha256": "f8e642cbc90fd90a0aabf1be9ba2ffe4a6f71e5461f163f4128cf539b05e5b67"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/parent-readiness-ad744fd/parent-ui-compatibility-review-v2.json",
+              "sha256": "a993939d7b0ae3cc159967102dc1ceabd5f0dabcb51ec2e53bb487c58adf4638",
+              "original_artifact_ref": "artifacts/p2-009-recovery-20261111/parent-ui-compatibility-review-v2/review.json"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/consumer-refresh-c71495c/evidence-index.json",
+              "sha256": "6a34813e851965264790ce39703ed7c2b838f0ad7143e65cbc1342d395ea7cac"
+            }
+          ],
+          "current_compatibility_basis": {
+            "actual_ui_evidence": "Actualc714Auth21 with Passkeys60/TOTP43 conditionalconsumer regressions; oldLogin/signedInmarkup/CSS/copyunchanged.",
+            "manual_comparison_reuse": "Originalrowrendered/Figma/consent/manualrefs remain at originaltestedSHA; no freshcapture/pixelequality claim."
+          }
+        },
+        {
+          "id": "UX-FID-005",
+          "result": "PASS",
+          "description": "Previously resolved domain/Figma conflicts remain truthful; no new material conflict observed in this compatibility scope. Item-specific basis: Existing Login form uses shared typed field/summary errors, current password policy, safe email retention, password clearing and duplicate guards. New TOTP result parsing never treats MFA-required as a final session.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/TUN-P2-005-UI-COMPLIANCE-TOTP-20261110.json",
+              "sha256": "f8e642cbc90fd90a0aabf1be9ba2ffe4a6f71e5461f163f4128cf539b05e5b67"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/parent-readiness-ad744fd/parent-ui-compatibility-review-v2.json",
+              "sha256": "a993939d7b0ae3cc159967102dc1ceabd5f0dabcb51ec2e53bb487c58adf4638",
+              "original_artifact_ref": "artifacts/p2-009-recovery-20261111/parent-ui-compatibility-review-v2/review.json"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/consumer-refresh-c71495c/evidence-index.json",
+              "sha256": "6a34813e851965264790ce39703ed7c2b838f0ad7143e65cbc1342d395ea7cac"
+            }
+          ],
+          "current_compatibility_basis": {
+            "actual_ui_evidence": "Actualc714Auth21 with Passkeys60/TOTP43 conditionalconsumer regressions; oldLogin/signedInmarkup/CSS/copyunchanged.",
+            "manual_comparison_reuse": "Originalrowrendered/Figma/consent/manualrefs remain at originaltestedSHA; no freshcapture/pixelequality claim."
+          }
+        },
+        {
+          "id": "UX-FID-006",
+          "result": "PASS",
+          "description": "Current source and screenshots retain approved screen-specific styling rather than library defaults. Item-specific basis: Existing Login form uses shared typed field/summary errors, current password policy, safe email retention, password clearing and duplicate guards. New TOTP result parsing never treats MFA-required as a final session.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/TUN-P2-005-UI-COMPLIANCE-TOTP-20261110.json",
+              "sha256": "f8e642cbc90fd90a0aabf1be9ba2ffe4a6f71e5461f163f4128cf539b05e5b67"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/parent-readiness-ad744fd/parent-ui-compatibility-review-v2.json",
+              "sha256": "a993939d7b0ae3cc159967102dc1ceabd5f0dabcb51ec2e53bb487c58adf4638",
+              "original_artifact_ref": "artifacts/p2-009-recovery-20261111/parent-ui-compatibility-review-v2/review.json"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/consumer-refresh-c71495c/evidence-index.json",
+              "sha256": "6a34813e851965264790ce39703ed7c2b838f0ad7143e65cbc1342d395ea7cac"
+            }
+          ],
+          "current_compatibility_basis": {
+            "actual_ui_evidence": "Actualc714Auth21 with Passkeys60/TOTP43 conditionalconsumer regressions; oldLogin/signedInmarkup/CSS/copyunchanged.",
+            "manual_comparison_reuse": "Originalrowrendered/Figma/consent/manualrefs remain at originaltestedSHA; no freshcapture/pixelequality claim."
+          }
+        },
+        {
+          "id": "UX-FID-007",
+          "result": "PASS",
+          "description": "Named responsive/Axe/keyboard/focus cases are current; detailed new shared-module contrast report resolves all194current incomplete nodes. Item-specific basis: Existing Login form uses shared typed field/summary errors, current password policy, safe email retention, password clearing and duplicate guards. New TOTP result parsing never treats MFA-required as a final session.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/TUN-P2-005-UI-COMPLIANCE-TOTP-20261110.json",
+              "sha256": "f8e642cbc90fd90a0aabf1be9ba2ffe4a6f71e5461f163f4128cf539b05e5b67"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/parent-readiness-ad744fd/parent-ui-compatibility-review-v2.json",
+              "sha256": "a993939d7b0ae3cc159967102dc1ceabd5f0dabcb51ec2e53bb487c58adf4638",
+              "original_artifact_ref": "artifacts/p2-009-recovery-20261111/parent-ui-compatibility-review-v2/review.json"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/consumer-refresh-c71495c/evidence-index.json",
+              "sha256": "6a34813e851965264790ce39703ed7c2b838f0ad7143e65cbc1342d395ea7cac"
+            }
+          ],
+          "current_compatibility_basis": {
+            "actual_ui_evidence": "Actualc714Auth21 with Passkeys60/TOTP43 conditionalconsumer regressions; oldLogin/signedInmarkup/CSS/copyunchanged.",
+            "manual_comparison_reuse": "Originalrowrendered/Figma/consent/manualrefs remain at originaltestedSHA; no freshcapture/pixelequality claim."
+          }
+        },
+        {
+          "id": "UX-FID-008",
+          "result": "PASS",
+          "description": "Current actual reports/screenshots, reference provenance, source identity and existing scoped consent are linked without redating historical evidence. Item-specific basis: Existing Login form uses shared typed field/summary errors, current password policy, safe email retention, password clearing and duplicate guards. New TOTP result parsing never treats MFA-required as a final session.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/TUN-P2-005-UI-COMPLIANCE-TOTP-20261110.json",
+              "sha256": "f8e642cbc90fd90a0aabf1be9ba2ffe4a6f71e5461f163f4128cf539b05e5b67"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/parent-readiness-ad744fd/parent-ui-compatibility-review-v2.json",
+              "sha256": "a993939d7b0ae3cc159967102dc1ceabd5f0dabcb51ec2e53bb487c58adf4638",
+              "original_artifact_ref": "artifacts/p2-009-recovery-20261111/parent-ui-compatibility-review-v2/review.json"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/consumer-refresh-c71495c/evidence-index.json",
+              "sha256": "6a34813e851965264790ce39703ed7c2b838f0ad7143e65cbc1342d395ea7cac"
+            }
+          ],
+          "current_compatibility_basis": {
+            "actual_ui_evidence": "Actualc714Auth21 with Passkeys60/TOTP43 conditionalconsumer regressions; oldLogin/signedInmarkup/CSS/copyunchanged.",
+            "manual_comparison_reuse": "Originalrowrendered/Figma/consent/manualrefs remain at originaltestedSHA; no freshcapture/pixelequality claim."
+          }
+        }
+      ],
+      "screenshots": [
+        {
+          "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/legacy/authentication/login-server-error-320.png",
+          "sha256": "917befdcfe02f76c142b707b28ab9fe3a8ae37e57731c63b04f4f0cc9e86b165",
+          "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/legacy/authentication/login-server-error-320.png",
+          "role": "CURRENT_SOURCE_RENDER",
+          "source_carrier_sha": "6e562db102ce75d5ed478a15e2970ff55ab98fef"
+        },
+        {
+          "path": "governance/evidence/ui/AMD0009/figma-registration-validation-errors.png",
+          "sha256": "0b1e8d0a4516747f85501f828cb62dd7adbb938ce9f1244e34e5a1eb5db0d5fa",
+          "role": "APPROVED_REFERENCE_OR_SCOPED_PROPOSAL"
+        }
+      ],
+      "deviations": [
+        {
+          "status": "PRODUCT_OWNER_APPROVED",
+          "approval_evidence": {
+            "path": "governance/evidence/TUN-P2-005-VISUAL-CONSENT-20261021.json",
+            "sha256": "58eff6b8b41bd790a55afc048a139874a60ee12e72013e3a0e316ce2ed815145"
+          }
+        },
+        {
+          "status": "PRODUCT_OWNER_APPROVED",
+          "approval_evidence": {
+            "path": "governance/evidence/TUN-P2-005-VISUAL-ACCEPTANCE-DEFERRAL-20261021.json",
+            "sha256": "2a2ed7402e090eeab3a73ef0726c0209b62db34de1f720234e7a23c0ae5cf37f"
+          }
+        },
+        {
+          "status": "PRODUCT_OWNER_APPROVED",
+          "approval_evidence": {
+            "path": "governance/evidence/TUN-P2-007-VISUAL-CONSENT-20261109.json",
+            "sha256": "c9415304746bb882a0c49a3b42e16c0e312882f6b48401b1d51666a18d775dfd"
+          }
+        }
+      ],
+      "historical_item_ref": {
+        "path": "governance/evidence/TUN-P2-005-UI-COMPLIANCE-TOTP-20261110.json",
+        "sha256": "f8e642cbc90fd90a0aabf1be9ba2ffe4a6f71e5461f163f4128cf539b05e5b67",
+        "item_id": "FORM-LOGIN"
+      },
+      "current_compatibility_review": {
+        "review_ref": {
+          "path": "governance/evidence/p2-009-recovery-20261111/parent-readiness-ad744fd/parent-ui-compatibility-review-v2.json",
+          "sha256": "a993939d7b0ae3cc159967102dc1ceabd5f0dabcb51ec2e53bb487c58adf4638",
+          "original_artifact_ref": "artifacts/p2-009-recovery-20261111/parent-ui-compatibility-review-v2/review.json"
+        },
+        "required_check_ids": [
+          "VAL-001",
+          "VAL-002",
+          "VAL-003",
+          "VAL-004",
+          "VAL-005",
+          "VAL-006",
+          "VAL-007",
+          "VAL-008",
+          "UX-FID-001",
+          "UX-FID-002",
+          "UX-FID-003",
+          "UX-FID-004",
+          "UX-FID-005",
+          "UX-FID-006",
+          "UX-FID-007",
+          "UX-FID-008"
+        ],
+        "existing_NA": [],
+        "boundary": "Original screenshot hashes, invocation/source carrier identities, manual comparisons and approved deviations are reused at their original scope; no fresh capture or Product consent is claimed."
+      }
+    }
+  ],
+  "current_item_review_ref": {
+    "path": "governance/evidence/p2-009-recovery-20261111/parent-readiness-ad744fd/parent-ui-compatibility-review-v2.json",
+    "sha256": "a993939d7b0ae3cc159967102dc1ceabd5f0dabcb51ec2e53bb487c58adf4638",
+    "original_artifact_ref": "artifacts/p2-009-recovery-20261111/parent-ui-compatibility-review-v2/review.json"
+  },
+  "native_execution_index_ref": "governance/evidence/TUN-P2-003-004-005-006-RECOVERY-COMPATIBILITY-20261111.json",
+  "source_binding": {
+    "current_carrier_sha": "ad744fde52aa03404f3944c47ebb79070185e9f2",
+    "actual_native_sha": "ad744fde52aa03404f3944c47ebb79070185e9f2",
+    "actual_ui146_sha": "c71495cbcb1e0e6f8e1dd89c3f42c59b1ed834a6",
+    "actual_registration24_foundation16_sha": "eb1c16fd55a82470c7b2c756f017c51b8a00a30a",
+    "source_witness": {
+      "path": "governance/evidence/p2-009-recovery-20261111/parent-readiness-ad744fd/source-witness.json",
+      "sha256": "f83cf475357515085d2f18e5bb2c6ea53190c45fbf549cf9c4702d295606fd41"
+    }
+  },
+  "conditional_shared_visual_authority": {
+    "prior_TOTP_authority": {
+      "authority_scope_id": "TUN-P2-008",
+      "relationship": "CROSS_SCOPE_CONDITIONAL_SHARED_COMPONENT_TRACEABILITY",
+      "applicability": "Login conditionally imports the already approved primary-login TOTP MFA adaptation (008-V05) and its approved factor-choice component. Existing parent Login/signed-in decisions remain bounded to their own items.",
+      "registered_conditional_source_paths": [
+        "web/apps/user/totp.api.ts",
+        "web/apps/user/totp.code.tsx",
+        "web/apps/user/totp.content-keys.ts",
+        "web/apps/user/totp.css",
+        "web/apps/user/totp.mfa.tsx",
+        "web/apps/user/totp.picker.tsx",
+        "web/apps/user/totp.routes.ts",
+        "web/apps/user/totp.validation.ts"
+      ],
+      "references": [
+        {
+          "path": "governance/evidence/TUN-P2-008-VISUAL-CONSENT.json",
+          "sha256": "d5a91c23c34ab6cd134648ab73867e9afce14c35f795f1a1eecdfe5d60040014",
+          "approval_status": "APPROVED_SCOPED_VISUAL_ADAPTATIONS",
+          "approved_scope_ids": [
+            "008-V01",
+            "008-V02",
+            "008-V03",
+            "008-V04",
+            "008-V05"
+          ],
+          "relied_on_scope_ids": [
+            "008-V05"
+          ],
+          "supports": "Only the already approved pictured proof/MFA adaptations that are applicable to these conditional shared imports."
+        },
+        {
+          "path": "governance/evidence/TUN-P2-008-FACTOR-PICKER-CONSENT.json",
+          "sha256": "b6ce7663148cd555d69bd4f8081f4553dbcb114662e3523f2faab65bb3636d30",
+          "approval_status": "APPROVED_SCOPED_FACTOR_PICKER_VISUAL_ADAPTATION",
+          "relied_on_adaptation": "Additional scoped 008-V04 factor picker, including the pictured proof and login picker variants.",
+          "supports": "Only the already approved choice among currently eligible TOTP factors; no new factor limit, assurance or production policy."
+        }
+      ],
+      "parent_deviations_and_consent_refs": "All prior per-item deviations and consent references are retained unchanged; this metadata appends the actual cross-scope authority and replaces no parent decision.",
+      "boundary": "Supports only already approved visual adaptations in conditional shared components. It does not renew or expand parent decisions, establish final TUN-P2-008 UI compliance or integrated/native-browser acceptance, select domain or production policy, or provide Product, merge, deployment or release approval."
+    },
+    "current_Recovery_authority": [
+      {
+        "path": "governance/evidence/TUN-P2-009-SHARED-INTEGRATION-AUTHORIZATION.json",
+        "sha256": "2f1b840f236947581b1c7b8c6f8abf4e01ce3f3bf1fca9f19b94769f42d4b46b"
+      },
+      {
+        "path": "governance/evidence/TUN-P2-009-VISUAL-CONSENT.json",
+        "sha256": "4b24a9a648ef659bc8d430f10e6474fb11d70e1945712b41a0ea687567f0d698"
+      },
+      {
+        "path": "governance/evidence/TUN-P2-009-VISUAL-CONSENT-L04.json",
+        "sha256": "69bb0a75f7a71e69b7c3dabc6cd7ecde428f3d5fae6649a87606c99124fe7eaf"
+      }
+    ],
+    "boundary": "Already-approved conditional shared imports only; no expansion of parent decisions or009 final UI/native/download acceptance."
+  },
+  "note": "Additive current parent compatibility. All14 row decisions and17 item-specific NAs are preserved;6 VAL008 rows now have actualad backend companions. Old745/6e renders and40/146 actual invocations are never redated. Native UI gate remains to execute after commit."
+}

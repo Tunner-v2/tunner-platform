@@ -135,12 +135,20 @@ class RecoveryJourney {
   this.prove('NO_SECRET_URL_OR_STORAGE',safe&&headersSafe);
  }
 
- async clear({pagehide=false}={}){
+ async clear(original,{pagehide=false}={}){
   if(pagehide){
    // Real full-page departure. BFCache persistence is observed, never assumed.
    await this.page.goto(new URL('/signed-in',this.control.origin).href);await this.mechanics.at(this.page,'/signed-in');await this.page.goBack();await this.mechanics.at(this.page,security);
   }else await this.page.getByRole('button',{name:'Done',exact:true}).click();
   requireTrue(await this.page.locator('.recovery-codes-grid code').count()===0);await this.page.reload();await this.mechanics.at(this.page,security);
+  requireTrue(await this.page.locator('.recovery-codes-grid code').count()===0);
+  const safe=await this.result(original);requireTrue(safe.status==='COMPLETED'&&safe.codesUnavailable===true);
+  // Reload recovers the safe original result, which is acknowledged through the approved L02 path.
+  await this.page.locator('.recovery-codes-card').getByRole('button',{name:'Check status',exact:true}).click();
+  const dialog=this.page.getByRole('dialog');
+  await dialog.getByRole('heading',{name:'These codes are unavailable',exact:true}).waitFor();
+  requireTrue(await this.page.locator('.recovery-codes-grid code').count()===0&&await this.page.getByRole('button',{name:'Download',exact:true}).count()===0);
+  await dialog.getByRole('button',{name:'Close',exact:true}).click();await dialog.waitFor({state:'detached'});
   requireTrue(await this.page.locator('.recovery-codes-grid code').count()===0);this.prove('VOLATILE_CLEAR',true);
   if(pagehide)this.prove('PAGEHIDE_NO_REVEAL',true);
   const text=await this.page.locator('body').textContent();this.prove('REQUESTED_NOT_SAVED',!text.includes('file was saved')&&!text.includes('Download requested'));
@@ -149,7 +157,7 @@ class RecoveryJourney {
   await this.setup();
   if(this.kind==='REPLACE'){
    const initial=this.control.journeyId==='RECOVERY_REPLACE_PASSWORD_V1'?3:1;
-   for(let i=0;i<initial;i++){const h=await this.begin('GENERATE'),r=await this.proof(h);await this.duplicate(h,r);await this.clear();}
+   for(let i=0;i<initial;i++){const h=await this.begin('GENERATE'),r=await this.proof(h);await this.duplicate(h,r);await this.clear(h.op);}
   }
   const before=await this.counts(),held=await this.begin();
   const completed=await this.proof(held,{denial:this.kind==='GENERATE'&&this.method!=='password',bodyLoss:this.control.journeyId==='RECOVERY_REPLACE_PASSWORD_V1'});
@@ -162,9 +170,9 @@ class RecoveryJourney {
    this.prove('ONE_REQUESTED_DOWNLOAD',await this.page.getByRole('button',{name:'Download',exact:true}).isDisabled());
    this.prove('CANONICAL_FIRST_DELIVERY',same(await this.page.locator('.recovery-codes-grid code').allTextContents(),completed.codes));
    await this.privacy();
-   await this.clear();this.prove('CLOSE_NO_REVEAL',true);
+   await this.clear(held.op);this.prove('CLOSE_NO_REVEAL',true);
   }else if(completed.bodyLost){await this.page.getByRole('button',{name:'Close',exact:true}).click();await this.page.reload();this.prove('VOLATILE_CLEAR',await this.page.locator('.recovery-codes-grid code').count()===0);this.prove('REQUESTED_NOT_SAVED',await this.page.getByRole('status').count()===0);}
-  else await this.clear({pagehide:this.control.journeyId==='RECOVERY_GENERATE_TOTP_V1'});
+  else await this.clear(held.op,{pagehide:this.control.journeyId==='RECOVERY_GENERATE_TOTP_V1'});
   if(this.kind==='REPLACE'){const unchanged=after.sessions===before.sessions&&(await this.mechanics.session(this.page)).ok;requireTrue(unchanged);if(journeys[this.control.journeyId].includes('NO_SESSION_MUTATION'))this.prove('NO_SESSION_MUTATION',unchanged);}
   if(this.control.journeyId==='RECOVERY_REPLACE_TOTP_V1'){
    const current=await this.counts(),pending=await this.begin(),rejected=await this.proof(pending,{publicationFault:true}),end=await this.counts();
