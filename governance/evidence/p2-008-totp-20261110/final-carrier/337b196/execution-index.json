@@ -1,0 +1,94 @@
+{
+  "schema_version": 1,
+  "scope_id": "TUN-P2-008",
+  "result": "PASS_CURRENT_COMMITTED_CARRIER_REVALIDATION",
+  "tested_commit_sha": "337b1967c1581212141a0cc4299731fa79d0ea6d",
+  "validated_commit_sha": "337b1967c1581212141a0cc4299731fa79d0ea6d",
+  "actual_focused_journey": {
+    "source_commit_sha": "337b1967c1581212141a0cc4299731fa79d0ea6d",
+    "journey_id": "TOTP_OPERATION_PROOF_CAUSAL_REVOKE_V1",
+    "accepted": true,
+    "browser_predicates": 23,
+    "coordinator_predicates": 21,
+    "persistence_observations": 5,
+    "reference": "governance/evidence/p2-008-totp-20261110/final-carrier/337b196/operation-proof-causal-revoke.json",
+    "sha256": "a460d9302ce3ffc7a19b796a4dd8574622207e945abec82e29dfe3a44854711f"
+  },
+  "actual_boundary_units": {
+    "source_commit_sha": "337b1967c1581212141a0cc4299731fa79d0ea6d",
+    "passed": 20,
+    "failed": 0,
+    "skipped": 0,
+    "reference": "governance/evidence/p2-008-totp-20261110/final-carrier/337b196/boundary-tests.tap"
+  },
+  "base_full_validation": {
+    "actual_three_journey_sha": "947f8b090b4f74a474a71e47badcb595424bd734",
+    "browser_predicates": 70,
+    "coordinator_predicates": 63,
+    "persistence_observations": 15,
+    "public_totp_cases": 43,
+    "contracts": 29,
+    "composition_cases": 4,
+    "reference": "governance/evidence/p2-008-totp-20261110/final-integration/947f8b0/execution-index.json",
+    "sha256": "4601e57d51d6a1254e469c7c915b58800b613714b93c4f4637536bfdc16dc1ea"
+  },
+  "source_equivalence": {
+    "candidate_owned112_matches_precommitted2b": true,
+    "runtime372_sources_match_actual947": true,
+    "runtime133_outputs_unchanged": true,
+    "binding_sha256": "4f9d1ac2e4882df92d08948589613572f24e9be7c44892db895e711fef764960",
+    "interpretation": "The actual critical native operation-proof journey and20 units execute at337. Full three journeys/public UI/native cohorts retain their original execution SHAs and unchanged executable-source proofs. No earlier run is relabelled."
+  },
+  "lifecycle_checks": "Actual CODE_REVIEW→VALIDATION and both ACTIVE→VALIDATION checks are ALLOWED; closure still requires native gates.",
+  "copy_lineage": [
+    {
+      "path": "governance/evidence/p2-008-totp-20261110/final-carrier/337b196/operation-proof-causal-revoke.json",
+      "raw_sha256": "a460d9302ce3ffc7a19b796a4dd8574622207e945abec82e29dfe3a44854711f",
+      "portable_sha256": "a460d9302ce3ffc7a19b796a4dd8574622207e945abec82e29dfe3a44854711f",
+      "normalization": "UTF8 LF and terminal LF only; values/outcomes unchanged"
+    },
+    {
+      "path": "governance/evidence/p2-008-totp-20261110/final-carrier/337b196/boundary-tests.tap",
+      "raw_sha256": "e1d9862801661fc34bb38d8852dab3fb2bd70e1f2bd085701d147d773ad26062",
+      "portable_sha256": "e1d9862801661fc34bb38d8852dab3fb2bd70e1f2bd085701d147d773ad26062",
+      "normalization": "UTF8 LF and terminal LF only; values/outcomes unchanged"
+    },
+    {
+      "path": "governance/evidence/p2-008-totp-20261110/final-carrier/337b196/to-validation-check.json",
+      "raw_sha256": "1f7591ee5d8b2f29ecbcf22b701e598734bc60455aefa4245cbcc261674a0b1a",
+      "portable_sha256": "066e18f74e2bf18c37e36b02c1db57ddd3edad145db05bb614f4212659fe1bac",
+      "normalization": "UTF8 LF and terminal LF only; values/outcomes unchanged"
+    },
+    {
+      "path": "governance/evidence/p2-008-totp-20261110/final-carrier/337b196/rv003-to-validation-check.json",
+      "raw_sha256": "a98004cf3a572a06e2c6f148068528c40c57efb59c812616534adcd21c5a7842",
+      "portable_sha256": "b7a58dc53024a28eb9a5a0f583ec725d74ca5547aaab253027757ffd0f789a19",
+      "normalization": "UTF8 LF and terminal LF only; values/outcomes unchanged"
+    },
+    {
+      "path": "governance/evidence/p2-008-totp-20261110/final-carrier/337b196/rv006-to-validation-check.json",
+      "raw_sha256": "6f4d373254cb000d10a8d3713bcf9ca03eb42f73a806fd584b7d01c78988c3a1",
+      "portable_sha256": "174807c168aa1a72739cc7b9890217d0f006fd4f79ba97c2ac327c9b3a96b74a",
+      "normalization": "UTF8 LF and terminal LF only; values/outcomes unchanged"
+    },
+    {
+      "path": "governance/evidence/p2-008-totp-20261110/final-carrier/337b196/history/work-gate-sha-equality-failure.json",
+      "raw_sha256": "3e5a506e8f51473df21129953731b592b993dd579bb8451bc38524555d210744",
+      "portable_sha256": "e0e3558b403553b5b62efa42f0e62cd5d057f582fff11b450063937f3597a909",
+      "normalization": "UTF8 LF and terminal LF only; values/outcomes unchanged"
+    },
+    {
+      "path": "governance/evidence/p2-008-totp-20261110/final-carrier/337b196/history/rv003-active-equality-findings.json",
+      "raw_sha256": "36bb04dacc9ad67a2a02c9871add45a3c7232eaefb5de1df7930d4dcdaa0d1c7",
+      "portable_sha256": "44899bcb97689782e76434b6a17a85f278ca2fd156c758bd6411d4a5812fad9c",
+      "normalization": "UTF8 LF and terminal LF only; values/outcomes unchanged"
+    },
+    {
+      "path": "governance/evidence/p2-008-totp-20261110/final-carrier/337b196/history/rv006-active-equality-findings.json",
+      "raw_sha256": "cbca19d78572bbf651a8ab5f1b039401981b32054c7411a5d8a2394610ee776c",
+      "portable_sha256": "eeb6990f17eec321492e2ee52b0e49d3daf40f3592225699142658913295a186",
+      "normalization": "UTF8 LF and terminal LF only; values/outcomes unchanged"
+    }
+  ],
+  "approval_boundary": "LOCAL composite engineering validation only. No Product, production, merge, release or global-host-filesystem absence approval."
+}
