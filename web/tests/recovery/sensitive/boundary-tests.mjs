@@ -52,7 +52,13 @@ test('raw errors are reduced without reading their message or stack', () => {
 });
 async function owned(run) {
   const surface = await mkdtemp(join(await realpath(tmpdir()), 'tunner-p2-009-public-sensitive-'));
-  try { await mkdir(join(surface, 'downloads')); await run(surface); } finally { assert.equal(await removeOwnedSurface(surface), true); }
+  process.stdout.write(JSON.stringify({type: 'publicUnitOwnership', surface, pid: process.pid, createdAt: new Date().toISOString()}) + '\n');
+  let bodyError; let removed = false;
+  try { assert.equal(validSurfacePath(surface), true, 'CANONICAL_TEMP_PARENT_REQUIRED'); await mkdir(join(surface, 'downloads')); await run(surface); } catch (error) { bodyError = error; }
+  try { removed = await removeOwnedSurface(surface); } catch {}
+  process.stdout.write(JSON.stringify({type: 'publicUnitCleanup', surface, bodyFailed: Boolean(bodyError), surfaceRemoved: removed}) + '\n');
+  if (bodyError) throw bodyError;
+  assert.equal(removed, true);
 }
 test('only the exact admitted regular file is exempt during transfer', async () => owned(async surface => {
   const path = join(surface, 'downloads', 'public-file'); await writeFile(path, publicBody);

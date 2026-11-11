@@ -1,4 +1,5 @@
 import {lstat, readdir, realpath, open, rm} from 'node:fs/promises';
+import {realpathSync} from 'node:fs';
 import {isAbsolute, join, relative, resolve, sep} from 'node:path';
 import {tmpdir} from 'node:os';
 import {sameCanonicalPath} from '../../totp/sensitive/contract.mjs';
@@ -23,7 +24,8 @@ export async function bounded(promise, milliseconds, code = 'BOUNDARY_ERROR') {
 }
 export function validSurfacePath(surface) {
   if (typeof surface !== 'string' || !isAbsolute(surface)) return false;
-  const root = resolve(process.env.TUNNER_CANARY_OS_TEMP_ROOT ?? tmpdir());
+  let root;
+  try { root = resolve(realpathSync(process.env.TUNNER_CANARY_OS_TEMP_ROOT ?? tmpdir())); } catch { return false; }
   const part = relative(root, resolve(surface));
   return !part.includes(sep) && /^tunner-p2-009-public-sensitive-[A-Za-z0-9]+$/.test(part);
 }
