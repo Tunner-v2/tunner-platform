@@ -1,0 +1,91 @@
+{
+  "schema_version": 1,
+  "state": "PREPARED_REVIEW_CANDIDATE",
+  "execution_state": "NOT_EXECUTED",
+  "head_sha_at_preparation": "a933b5f004b0341b2f1e2f26568928ec98603f21",
+  "inputs": [
+    {
+      "path": "artifacts/p2-008-totp-20261110/legacy-host-smoke/v2/legacy-child.mjs",
+      "sha256": "47cb7349a149ddfb8e29c32803da7b9dea08c206658fe9bff29c7c3835c5e905"
+    },
+    {
+      "path": "artifacts/p2-008-totp-20261110/legacy-host-smoke/v2/run-reviewed-smoke.mjs",
+      "sha256": "c9b375a395bb30bc297d857e58f26eddc2610c6707bf56f64d1cd2efb6a9998a"
+    },
+    {
+      "path": "web/tests/totp/sensitive/supervisor.mjs",
+      "sha256": "d2a81f0ac1ab481f84c869c4852a893ecd21a4903fe79c3aa54754450fd98779"
+    },
+    {
+      "path": "web/tests/totp/sensitive/contract.mjs",
+      "sha256": "e4d64aec3ee878234f48858e6fabe03ac9aa069568cb08369d6f33b9c4c98bc3"
+    }
+  ],
+  "prepared_dll_observation": {
+    "path": "tools/browser-testing/bin/Debug/net10.0/Tunner.BrowserTesting.dll",
+    "sha256": "a9fda5337d4432e8bb671abb79b26e14a16d761b0897b68e66ecd8c421890bf8",
+    "bytes": 212992,
+    "binding_requirement": "Actual execution verifies the root-generated current complete runtime-build-binding.json; this observation is not a build-source proof."
+  },
+  "native_source_edits": false,
+  "dotnet_build_started": false,
+  "containers_started": false,
+  "accounts_created": false,
+  "unrelated_dirty_paths": {
+    "count": 13,
+    "all_hashes_equal": true
+  },
+  "reused_mechanics": [
+    "childEnvironment",
+    "stopOwnedChild",
+    "removeOwnedSurface",
+    "scanSurface"
+  ],
+  "actual_flow_pending": [
+    "ordinary --local-browser-testing with Totp:null",
+    "registration 202",
+    "owned Mailpit verification",
+    "Personal Information completed",
+    "password login and signed-in reload",
+    "generic password step-up same operation",
+    "code-free completed-owner recovery",
+    "logout and guarded direct entries"
+  ],
+  "resource_scope": {
+    "postgres": "New positively labeled cached c6a image, loopback ephemeral port, tmpfs only; hardcoded ordinary database exists only in that container.",
+    "mailpit": "New positively labeled cached 0306 image, loopback ephemeral SMTP/API, no mounts, logging none.",
+    "borrowed_postgres": "Docker identity/running/started/ports compared before and after; no SQL, lifecycle or volume action.",
+    "config": "New canonical owned temp directory contains public config, empty Docker config/pgpass and ordinary encrypted DP/network state only; removed after owned process exit.",
+    "browser": "Pinned installed raw Chromium; private IPC; no runner, HTTP interception, trace, screenshot, HAR, video or storage-state export."
+  },
+  "boundary_notes": [
+    "Root must review before explicitly executing --execute-reviewed.",
+    "Readiness uses the same fixed approved local certificate pin boundary as the ordinary starter; browser TLS trust is independently required without ignoreHTTPS.",
+    "No passwords, email, verification values, cookies, bodies or raw diagnostics leave the child; exact safe predicates only.",
+    "Ordinary host has no shutdown API. Actual close of its captured process is required; no graceful ASP.NET shutdown claim is made on Windows.",
+    "No TOTP seed or native oracle is involved. This is bounded ordinary-host compatibility, not a TOTP integrated journey or Product acceptance."
+  ],
+  "source_references": [
+    "web/tests/browser-testing/fixtures.ts",
+    "web/tests/browser-testing/authentication-flow.spec.ts",
+    "tools/dev/tunner-browser.ps1",
+    "tools/browser-testing/Program.cs",
+    "tools/browser-testing/BrowserTestHost.cs",
+    "tools/browser-testing/BrowserTestStepUp.cs",
+    "src/Modules/Identity/StepUpBrowserEndpoints.cs"
+  ],
+  "static_checks": {
+    "node_syntax": "PASS_2_OF_2",
+    "runtime": "NOT_EXECUTED",
+    "original_artifacts_preserved": true,
+    "ordinary_options": "totpAvailable===false;passwordAvailable===true",
+    "operation_reference": "OP-LOCAL-STEP-UP-<32 lower hex>; exact options/proof equality"
+  },
+  "artifact_version": 2,
+  "lineage": {
+    "previous_manifest": "artifacts/p2-008-totp-20261110/legacy-host-smoke/review-manifest.json",
+    "previous_sha256": "71e5a575ac90d5a8fadefedcb8df7557131f011c0fee2eae66ad38bebd38b4de",
+    "previous_execution_state": "NOT_EXECUTED",
+    "correction": "Actual Binding.CorrelationId is OP-LOCAL-STEP-UP-<sessionN>; LOCAL-VERIFICATION is ResourceId. Add actual ordinary totpAvailable false and passwordAvailable true assertions. Exact original options/proof equality is preserved."
+  }
+}

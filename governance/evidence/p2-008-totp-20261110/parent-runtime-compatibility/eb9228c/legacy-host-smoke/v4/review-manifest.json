@@ -1,0 +1,119 @@
+{
+  "schema_version": 1,
+  "state": "PREPARED_REVIEW_CANDIDATE",
+  "execution_state": "NOT_EXECUTED",
+  "head_sha_at_preparation": "eb9228cc3ed832980deb92407d80ab92e7b8a00e",
+  "inputs": [
+    {
+      "path": "artifacts/p2-008-totp-20261110/legacy-host-smoke/v4/legacy-child.mjs",
+      "sha256": "e7c621bfccbec07ce44e680e193af4d449f70380187838db2fbd5350d811c535"
+    },
+    {
+      "path": "artifacts/p2-008-totp-20261110/legacy-host-smoke/v4/run-reviewed-smoke.mjs",
+      "sha256": "bda17e55d00d199225df26e04520345ab20698a8608a9a52cd9aa66fac214c99"
+    },
+    {
+      "path": "web/tests/totp/sensitive/supervisor.mjs",
+      "sha256": "d2a81f0ac1ab481f84c869c4852a893ecd21a4903fe79c3aa54754450fd98779"
+    },
+    {
+      "path": "web/tests/totp/sensitive/contract.mjs",
+      "sha256": "e4d64aec3ee878234f48858e6fabe03ac9aa069568cb08369d6f33b9c4c98bc3"
+    }
+  ],
+  "prepared_dll_observation": {
+    "path": "tools/browser-testing/bin/Debug/net10.0/Tunner.BrowserTesting.dll",
+    "sha256": "a9fda5337d4432e8bb671abb79b26e14a16d761b0897b68e66ecd8c421890bf8",
+    "bytes": 212992,
+    "binding_requirement": "Actual execution verifies the root-generated current complete runtime-build-binding.json; this observation is not a build-source proof."
+  },
+  "native_source_edits": false,
+  "dotnet_build_started": false,
+  "containers_started": false,
+  "accounts_created": false,
+  "unrelated_dirty_paths": {
+    "count": 13,
+    "all_hashes_equal": true
+  },
+  "reused_mechanics": [
+    "childEnvironment",
+    "stopOwnedChild",
+    "removeOwnedSurface",
+    "scanSurface"
+  ],
+  "actual_flow_pending": [
+    "ordinary --local-browser-testing with Totp:null",
+    "registration 202",
+    "owned Mailpit verification",
+    "Personal Information completed",
+    "password login and signed-in reload",
+    "generic password step-up same operation",
+    "code-free completed-owner recovery",
+    "logout and guarded direct entries"
+  ],
+  "resource_scope": {
+    "postgres": "New positively labeled cached c6a image, loopback ephemeral port, tmpfs only; hardcoded ordinary database exists only in that container.",
+    "mailpit": "New positively labeled cached 0306 image, loopback ephemeral SMTP/API, no mounts, logging none.",
+    "borrowed_postgres": "Docker identity/running/started/ports compared before and after; no SQL, lifecycle or volume action.",
+    "config": "New canonical owned temp directory contains public config, empty Docker config/pgpass and ordinary encrypted DP/network state only; removed after owned process exit.",
+    "browser": "Pinned installed raw Chromium; private IPC; no runner, HTTP interception, trace, screenshot, HAR, video or storage-state export."
+  },
+  "boundary_notes": [
+    "Root must review before explicitly executing --execute-reviewed.",
+    "Readiness uses the same fixed approved local certificate pin boundary as the ordinary starter; browser TLS trust is independently required without ignoreHTTPS.",
+    "No passwords, email, verification values, cookies, bodies or raw diagnostics leave the child; exact safe predicates only.",
+    "Ordinary host has no shutdown API. Actual close of its captured process is required; no graceful ASP.NET shutdown claim is made on Windows.",
+    "No TOTP seed or native oracle is involved. This is bounded ordinary-host compatibility, not a TOTP integrated journey or Product acceptance."
+  ],
+  "source_references": [
+    "web/tests/browser-testing/fixtures.ts",
+    "web/tests/browser-testing/authentication-flow.spec.ts",
+    "tools/dev/tunner-browser.ps1",
+    "tools/browser-testing/Program.cs",
+    "tools/browser-testing/BrowserTestHost.cs",
+    "tools/browser-testing/BrowserTestStepUp.cs",
+    "src/Modules/Identity/StepUpBrowserEndpoints.cs"
+  ],
+  "static_checks": {
+    "node_syntax": "PASS_3_OF_3",
+    "runtime": "NOT_EXECUTED",
+    "prior_artifacts_and_failure_preserved": true,
+    "ordinary_options": "totpAvailable===false;passwordAvailable===true",
+    "operation_reference": "OP-LOCAL-STEP-UP-<32 lower hex>; exact options/proof equality",
+    "readiness": "Unchanged fresh TLS socket and exact approved pin; raw child separately uses system trust with TLS verification enabled."
+  },
+  "artifact_version": 4,
+  "lineage": {
+    "previous_manifest": "artifacts/p2-008-totp-20261110/legacy-host-smoke/v3/review-manifest.json",
+    "previous_sha256": "d6967e38ed5bc67e28ffbda04732c095910d9a9c691652eccd40e7375ebc8361",
+    "previous_execution_state": "ACTUAL_FAILED_AT_FIRST_PRIVATE_HTTPS_BEFORE_ACCOUNT",
+    "failed_receipt": {
+      "path": "artifacts/p2-008-totp-20261110/legacy-host-smoke/v3/actual-receipt.json",
+      "sha256": "f704180cd3d75c461d0251d4da039d78ff28a52e87591803471a5d1b2bbb1ae8"
+    },
+    "earlier_lineage": {
+      "previous_manifest": "artifacts/p2-008-totp-20261110/legacy-host-smoke/v2/review-manifest.json",
+      "previous_sha256": "09fa0d1adab23758c9e70774588516e550db37d1ea9577eece844f71f873fdbe",
+      "previous_execution_state": "ACTUAL_FAILED_AT_HOST_BEFORE_BROWSER",
+      "failed_receipt": {
+        "path": "artifacts/p2-008-totp-20261110/legacy-host-smoke/v2/actual-receipt.json",
+        "sha256": "45de067aba39b43b79babcedf4448fbb6d4af19fa27233088bc1cbcc3a518068"
+      },
+      "earlier_lineage": {
+        "previous_manifest": "artifacts/p2-008-totp-20261110/legacy-host-smoke/review-manifest.json",
+        "previous_sha256": "71e5a575ac90d5a8fadefedcb8df7557131f011c0fee2eae66ad38bebd38b4de",
+        "previous_execution_state": "NOT_EXECUTED",
+        "correction": "Actual Binding.CorrelationId is OP-LOCAL-STEP-UP-<sessionN>; LOCAL-VERIFICATION is ResourceId. Add actual ordinary totpAvailable false and passwordAvailable true assertions. Exact original options/proof equality is preserved."
+      },
+      "correction": "Readiness helper uses agent:false and captures/verifies exact peer pin in response callback, never response.end or secureConnect listener. Fixed boolean readiness diagnostics only. No application defect is claimed. Add child-memory observed cookie residue markers/longest overlap and canonical config parent check."
+    },
+    "correction": "Fixed NODE_USE_SYSTEM_CA=1 in only the spawned raw child environment uses the existing trusted Windows store. No trust mutation/export/TLS bypass. Add strict fixed child failureReason enum only; preserve every domain assertion, certificate pin and browser TLS requirement."
+  },
+  "node_trust_selection": {
+    "raw_child_only": "NODE_USE_SYSTEM_CA=1",
+    "official_reference": "https://nodejs.org/download/release/v24.22.1/docs/api/cli.html#node_use_system_ca1",
+    "tls_verification_disabled": false,
+    "ca_or_private_key_exported": false,
+    "global_trust_changed": false
+  }
+}

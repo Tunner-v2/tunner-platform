@@ -3,8 +3,8 @@
   "scope_id": "TUN-P2-006",
   "validation_kind": "COMMITTED",
   "result": "PASS",
-  "tested_commit_sha": "6e562db102ce75d5ed478a15e2970ff55ab98fef",
-  "validated_commit_sha": "6e562db102ce75d5ed478a15e2970ff55ab98fef",
+  "tested_commit_sha": "eb9228cc3ed832980deb92407d80ab92e7b8a00e",
+  "validated_commit_sha": "eb9228cc3ed832980deb92407d80ab92e7b8a00e",
   "owned_behavior_paths": [
     "docs/contracts/ui-inventory.json",
     "src/Modules/Identity/AssurancePolicy.cs",
@@ -52,19 +52,25 @@
     "web/tests/step-up/step-up.spec.ts",
     "docs/contracts/operation-step-up-contract.md"
   ],
-  "note": "Exact precommitted 45-path ownership retained. Actual Identity 260/260 at 3603243, architecture 237/237 at fbbd53b, and fresh authentication 21/21, shared step-up 22/22 and passkeys 60/60 at the current UI carrier are explicitly bound through per-cohort input equality. Historical source/role receipts and VALIDATION lifecycle remain unchanged; no Product or production acceptance.",
+  "note": "Exact ordered45-path precommitted ownership retained. Actual Identity260 atf1,Architecture237 ata933 and normal-host13browser+16resource checks ateb9228c are separately source-bound; no invocation is relabelled. Existing5a UI evidence/history and VALIDATION status remain unchanged. Temporary smoke helper lineage/failures are retained separately; no final008/Product/release acceptance.",
   "evidence_refs": [
     "governance/evidence/p2-recovery-20261109/test-index.json",
     "governance/evidence/p2-recovery-20261109/visual-review.json",
     "governance/evidence/TUN-P2-006-AUDIT-CORRECTION-ROLE-REVIEWS.json"
   ],
-  "source_binding_ref": "governance/evidence/TUN-P2-005-006-TOTP-COMPATIBILITY-20261110.json",
+  "source_binding_ref": "governance/evidence/TUN-P2-004-005-006-FINITE-RUNTIME-COMPATIBILITY-20261110.json",
   "prior_current_source_bindings": [
     {
       "tested_commit_sha": "745f9c2dc1b9060c4be0318b33b4019ae77e9e36",
       "validated_commit_sha": "745f9c2dc1b9060c4be0318b33b4019ae77e9e36",
       "source_binding_ref": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/execution-index.json",
       "source_envelope_git_ref": "6e562db102ce75d5ed478a15e2970ff55ab98fef:governance/evidence/TUN-P2-006-AUDIT-CORRECTION-SOURCE.json"
+    },
+    {
+      "tested_commit_sha": "6e562db102ce75d5ed478a15e2970ff55ab98fef",
+      "validated_commit_sha": "6e562db102ce75d5ed478a15e2970ff55ab98fef",
+      "source_binding_ref": "governance/evidence/TUN-P2-005-006-TOTP-COMPATIBILITY-20261110.json",
+      "source_envelope_git_ref": "eb9228cc3ed832980deb92407d80ab92e7b8a00e:governance/evidence/TUN-P2-006-AUDIT-CORRECTION-SOURCE.json"
     }
   ],
   "historical_source_binding_ref": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/execution-index.json"

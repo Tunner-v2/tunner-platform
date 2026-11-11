@@ -1,0 +1,1369 @@
+{
+  "schema_version": 1,
+  "scope_ids": [
+    "TUN-P2-004",
+    "TUN-P2-005",
+    "TUN-P2-006"
+  ],
+  "execution_scope": "CURRENT_SOURCE_PARENT004_005_006_COMPATIBILITY_ONLY",
+  "result": "PASS_BOUNDED_CURRENT_SOURCE_COMPATIBILITY",
+  "recorded_at": "2026-11-11T03:14:50.347Z",
+  "current_source_carrier_sha": "eb9228cc3ed832980deb92407d80ab92e7b8a00e",
+  "actual_identity_invocation_sha": "f1dd54a3a6a4f4d3f0e1d66e92c02fb52053d7a1",
+  "actual_architecture_invocation_sha": "a933b5f004b0341b2f1e2f26568928ec98603f21",
+  "actual_normal_host_invocation_sha": "eb9228cc3ed832980deb92407d80ab92e7b8a00e",
+  "source_equivalence": {
+    "path": "governance/evidence/p2-008-totp-20261110/parent-runtime-compatibility/eb9228c/source-equivalence.json",
+    "sha256": "eda5439a584c2ddbbe27233d4ad6d3db3107a8a7cb7e3799af891acc726c2f13",
+    "bytes": 1752
+  },
+  "ownership": [
+    {
+      "scope_id": "TUN-P2-004",
+      "source_envelope_ref": "governance/evidence/TUN-P2-004-AUDIT-CORRECTION-SOURCE.json",
+      "work_item_ref": "governance/work-items/TUN-P2-004.yaml",
+      "owned_count": 78,
+      "ordered_owned_behavior_paths": [
+        "docs/contracts/.gitattributes",
+        "docs/contracts/registration-onboarding.openapi.json",
+        "docs/contracts/ui-inventory.json",
+        "docs/development/LOCAL_BROWSER_TESTING.md",
+        "docs/development/P2_004_REGISTRATION.md",
+        "docs/development/P2_004_REGISTRATION_SCOPE.md",
+        "docs/development/PDR0011_AMD0007_IMPLEMENTATION.md",
+        "governance/evidence/TUN-P2-004-AUTHORITY-RESOLUTION.json",
+        "governance/evidence/TUN-P2-004-BROWSER-STARTER-SCOPE.json",
+        "governance/evidence/TUN-P2-004-DATA-INVENTORY.json",
+        "governance/evidence/TUN-P2-004-RD-SOURCES.json",
+        "governance/evidence/TUN-P2-004-UI-ALIGNMENT.json",
+        "src/Modules/Identity/AccountPersonalInformationApplication.cs",
+        "src/Modules/Identity/AccountPersonalInformationContracts.cs",
+        "src/Modules/Identity/IdentityPersistenceDbContext.cs",
+        "src/Modules/Identity/Migrations/20261016211325_P2Registration.Designer.cs",
+        "src/Modules/Identity/Migrations/20261016211325_P2Registration.cs",
+        "src/Modules/Identity/Migrations/20261017195227_Pdr0011RegistrationOnboarding.Designer.cs",
+        "src/Modules/Identity/Migrations/20261017195227_Pdr0011RegistrationOnboarding.cs",
+        "src/Modules/Identity/Migrations/IdentityPersistenceDbContextModelSnapshot.cs",
+        "src/Modules/Identity/RegistrationApplication.cs",
+        "src/Modules/Identity/RegistrationContracts.cs",
+        "src/Modules/Identity/RegistrationEndpoints.cs",
+        "src/Modules/Identity/RegistrationPersonalInformation.cs",
+        "src/Modules/Identity/RegistrationRows.cs",
+        "src/Modules/Identity/RegistrationWebContracts.cs",
+        "src/Modules/Identity/Tunner.Identity.Persistence.csproj",
+        "src/Tunner.User.Bff/Program.cs",
+        "src/Tunner.User.Bff/Tunner.User.Bff.csproj",
+        "start-browser.cmd",
+        "stop-browser.cmd",
+        "tests/Tunner.Identity.Persistence.Tests/FixtureAccountAgePolicies.cs",
+        "tests/Tunner.Identity.Persistence.Tests/RegistrationBffTests.cs",
+        "tests/Tunner.Identity.Persistence.Tests/RegistrationTests.cs",
+        "tests/Tunner.Identity.Persistence.Tests/Tunner.Identity.Persistence.Tests.csproj",
+        "tools/browser-testing/Program.cs",
+        "tools/browser-testing/Tunner.BrowserTesting.csproj",
+        "tools/dev/tunner-browser.ps1",
+        "tools/validation/Test-TunnerBrowserStarter.ps1",
+        "web/apps/user/content.proposal.json",
+        "web/apps/user/index.html",
+        "web/apps/user/main.tsx",
+        "web/apps/user/package.json",
+        "web/apps/user/public/assets/ready-approved-check.svg",
+        "web/apps/user/public/assets/ready-imgBgGlowIndigo.svg",
+        "web/apps/user/public/assets/ready-imgBgGlowViolet.svg",
+        "web/apps/user/public/assets/ready-imgEllipse.svg",
+        "web/apps/user/public/assets/ready-imgEllipse1.svg",
+        "web/apps/user/public/assets/register-imgBgGlowIndigo.svg",
+        "web/apps/user/public/assets/register-imgBgGlowViolet.svg",
+        "web/apps/user/public/assets/register-imgEllipse.svg",
+        "web/apps/user/public/assets/verify-imgBgGlowIndigo.svg",
+        "web/apps/user/public/assets/verify-imgBgGlowViolet.svg",
+        "web/apps/user/public/assets/verify-imgEllipse.svg",
+        "web/apps/user/registration.css",
+        "web/apps/user/routes.ts",
+        "web/apps/user/validation.ts",
+        "web/apps/user/vite.config.ts",
+        "web/package.json",
+        "web/packages/ui/package.json",
+        "web/packages/ui/src/content.tsx",
+        "web/packages/ui/src/controls.tsx",
+        "web/packages/ui/src/forms.tsx",
+        "web/packages/ui/src/index.ts",
+        "web/packages/ui/src/navigation.ts",
+        "web/packages/ui/styles/components.css",
+        "web/packages/ui/styles/tokens.generated.css",
+        "web/packages/ui/theme.tokens.json",
+        "web/playwright.browser-testing.config.ts",
+        "web/playwright.registration.config.ts",
+        "web/pnpm-lock.yaml",
+        "web/pnpm-workspace.yaml",
+        "web/tests/browser-testing/manual-flow.spec.ts",
+        "web/tests/contracts.test.tsx",
+        "web/tests/registration/global-compliance.spec.ts",
+        "web/tests/registration/registration.spec.ts",
+        "web/tests/registration/support.ts",
+        "web/tsconfig.json"
+      ],
+      "ordered_array_precommitted_at_actual_candidate": true,
+      "all_owned_working_blobs_equal_actual_source": true,
+      "changed_owned_paths": [
+        "tests/Tunner.Identity.Persistence.Tests/Tunner.Identity.Persistence.Tests.csproj",
+        "tools/browser-testing/Program.cs",
+        "tools/browser-testing/Tunner.BrowserTesting.csproj"
+      ],
+      "rows": [
+        {
+          "path": "docs/contracts/.gitattributes",
+          "prior_validated_blob": "95b62e6e03ee65e1ca7ccf040a84a95416e07142",
+          "actual_source_blob": "95b62e6e03ee65e1ca7ccf040a84a95416e07142",
+          "working_blob": "95b62e6e03ee65e1ca7ccf040a84a95416e07142"
+        },
+        {
+          "path": "docs/contracts/registration-onboarding.openapi.json",
+          "prior_validated_blob": "cb36848905b843ce8fbfd0e279ef55bd25b0ea02",
+          "actual_source_blob": "cb36848905b843ce8fbfd0e279ef55bd25b0ea02",
+          "working_blob": "cb36848905b843ce8fbfd0e279ef55bd25b0ea02"
+        },
+        {
+          "path": "docs/contracts/ui-inventory.json",
+          "prior_validated_blob": "e9d0050a8d946e3eb07454189641eb594015b513",
+          "actual_source_blob": "e9d0050a8d946e3eb07454189641eb594015b513",
+          "working_blob": "e9d0050a8d946e3eb07454189641eb594015b513"
+        },
+        {
+          "path": "docs/development/LOCAL_BROWSER_TESTING.md",
+          "prior_validated_blob": "18161c46b0d955e22fb48c058fc3e0d907a29b99",
+          "actual_source_blob": "18161c46b0d955e22fb48c058fc3e0d907a29b99",
+          "working_blob": "18161c46b0d955e22fb48c058fc3e0d907a29b99"
+        },
+        {
+          "path": "docs/development/P2_004_REGISTRATION.md",
+          "prior_validated_blob": "1a24da7ddbc3b897644f805afaa0abde9e5dd70e",
+          "actual_source_blob": "1a24da7ddbc3b897644f805afaa0abde9e5dd70e",
+          "working_blob": "1a24da7ddbc3b897644f805afaa0abde9e5dd70e"
+        },
+        {
+          "path": "docs/development/P2_004_REGISTRATION_SCOPE.md",
+          "prior_validated_blob": "c2acf1f4166c8737d634bb93abbc3739e3b6e1ee",
+          "actual_source_blob": "c2acf1f4166c8737d634bb93abbc3739e3b6e1ee",
+          "working_blob": "c2acf1f4166c8737d634bb93abbc3739e3b6e1ee"
+        },
+        {
+          "path": "docs/development/PDR0011_AMD0007_IMPLEMENTATION.md",
+          "prior_validated_blob": "ffc65409476f6764063442a2d6e50518584e7577",
+          "actual_source_blob": "ffc65409476f6764063442a2d6e50518584e7577",
+          "working_blob": "ffc65409476f6764063442a2d6e50518584e7577"
+        },
+        {
+          "path": "governance/evidence/TUN-P2-004-AUTHORITY-RESOLUTION.json",
+          "prior_validated_blob": "da71dc7435fd9f9ad81a244e4940cf93371662ab",
+          "actual_source_blob": "da71dc7435fd9f9ad81a244e4940cf93371662ab",
+          "working_blob": "da71dc7435fd9f9ad81a244e4940cf93371662ab"
+        },
+        {
+          "path": "governance/evidence/TUN-P2-004-BROWSER-STARTER-SCOPE.json",
+          "prior_validated_blob": "49428e970fed1f967f76262861870b8126ce5bcf",
+          "actual_source_blob": "49428e970fed1f967f76262861870b8126ce5bcf",
+          "working_blob": "49428e970fed1f967f76262861870b8126ce5bcf"
+        },
+        {
+          "path": "governance/evidence/TUN-P2-004-DATA-INVENTORY.json",
+          "prior_validated_blob": "509093d17f2d6249d99398bf99ad454bf4baf90e",
+          "actual_source_blob": "509093d17f2d6249d99398bf99ad454bf4baf90e",
+          "working_blob": "509093d17f2d6249d99398bf99ad454bf4baf90e"
+        },
+        {
+          "path": "governance/evidence/TUN-P2-004-RD-SOURCES.json",
+          "prior_validated_blob": "6040cd782e763b8b732116b06f8907a4a6e35c7b",
+          "actual_source_blob": "6040cd782e763b8b732116b06f8907a4a6e35c7b",
+          "working_blob": "6040cd782e763b8b732116b06f8907a4a6e35c7b"
+        },
+        {
+          "path": "governance/evidence/TUN-P2-004-UI-ALIGNMENT.json",
+          "prior_validated_blob": "b0c2aa1dc8f750d64c9d104771356ca463f1ebea",
+          "actual_source_blob": "b0c2aa1dc8f750d64c9d104771356ca463f1ebea",
+          "working_blob": "b0c2aa1dc8f750d64c9d104771356ca463f1ebea"
+        },
+        {
+          "path": "src/Modules/Identity/AccountPersonalInformationApplication.cs",
+          "prior_validated_blob": "fe72ff5cecebb539b0f82d6ad8b4fe80bb5c48c6",
+          "actual_source_blob": "fe72ff5cecebb539b0f82d6ad8b4fe80bb5c48c6",
+          "working_blob": "fe72ff5cecebb539b0f82d6ad8b4fe80bb5c48c6"
+        },
+        {
+          "path": "src/Modules/Identity/AccountPersonalInformationContracts.cs",
+          "prior_validated_blob": "1906c3ac7c63cbf0a966c4500f200c521fb6c497",
+          "actual_source_blob": "1906c3ac7c63cbf0a966c4500f200c521fb6c497",
+          "working_blob": "1906c3ac7c63cbf0a966c4500f200c521fb6c497"
+        },
+        {
+          "path": "src/Modules/Identity/IdentityPersistenceDbContext.cs",
+          "prior_validated_blob": "bffb856d8150def131106d1e11a71c974e4c1cf9",
+          "actual_source_blob": "bffb856d8150def131106d1e11a71c974e4c1cf9",
+          "working_blob": "bffb856d8150def131106d1e11a71c974e4c1cf9"
+        },
+        {
+          "path": "src/Modules/Identity/Migrations/20261016211325_P2Registration.Designer.cs",
+          "prior_validated_blob": "8a00592fbab05ff82e78ee7246a6193c5693c4cd",
+          "actual_source_blob": "8a00592fbab05ff82e78ee7246a6193c5693c4cd",
+          "working_blob": "8a00592fbab05ff82e78ee7246a6193c5693c4cd"
+        },
+        {
+          "path": "src/Modules/Identity/Migrations/20261016211325_P2Registration.cs",
+          "prior_validated_blob": "ca51982e23496720ee776de2073e42d5350043ac",
+          "actual_source_blob": "ca51982e23496720ee776de2073e42d5350043ac",
+          "working_blob": "ca51982e23496720ee776de2073e42d5350043ac"
+        },
+        {
+          "path": "src/Modules/Identity/Migrations/20261017195227_Pdr0011RegistrationOnboarding.Designer.cs",
+          "prior_validated_blob": "fb4e389a0f4e46967a453f37d2e7892262968a1f",
+          "actual_source_blob": "fb4e389a0f4e46967a453f37d2e7892262968a1f",
+          "working_blob": "fb4e389a0f4e46967a453f37d2e7892262968a1f"
+        },
+        {
+          "path": "src/Modules/Identity/Migrations/20261017195227_Pdr0011RegistrationOnboarding.cs",
+          "prior_validated_blob": "c67d4295a8419e8224eaab93274edd96e5dfc33f",
+          "actual_source_blob": "c67d4295a8419e8224eaab93274edd96e5dfc33f",
+          "working_blob": "c67d4295a8419e8224eaab93274edd96e5dfc33f"
+        },
+        {
+          "path": "src/Modules/Identity/Migrations/IdentityPersistenceDbContextModelSnapshot.cs",
+          "prior_validated_blob": "b79988b9d063b49d39d1e4396753f383c709688d",
+          "actual_source_blob": "b79988b9d063b49d39d1e4396753f383c709688d",
+          "working_blob": "b79988b9d063b49d39d1e4396753f383c709688d"
+        },
+        {
+          "path": "src/Modules/Identity/RegistrationApplication.cs",
+          "prior_validated_blob": "abf71f970dca88d343f5f7b22ed40fc11cefea26",
+          "actual_source_blob": "abf71f970dca88d343f5f7b22ed40fc11cefea26",
+          "working_blob": "abf71f970dca88d343f5f7b22ed40fc11cefea26"
+        },
+        {
+          "path": "src/Modules/Identity/RegistrationContracts.cs",
+          "prior_validated_blob": "bb7309120bb6ec3fe45885a66e5451e020ce64b6",
+          "actual_source_blob": "bb7309120bb6ec3fe45885a66e5451e020ce64b6",
+          "working_blob": "bb7309120bb6ec3fe45885a66e5451e020ce64b6"
+        },
+        {
+          "path": "src/Modules/Identity/RegistrationEndpoints.cs",
+          "prior_validated_blob": "2f64bd6a2b4c942887a5932c8500aa7ef303718c",
+          "actual_source_blob": "2f64bd6a2b4c942887a5932c8500aa7ef303718c",
+          "working_blob": "2f64bd6a2b4c942887a5932c8500aa7ef303718c"
+        },
+        {
+          "path": "src/Modules/Identity/RegistrationPersonalInformation.cs",
+          "prior_validated_blob": "903542a505d6d7fec99ec7c80f6deb44056d995a",
+          "actual_source_blob": "903542a505d6d7fec99ec7c80f6deb44056d995a",
+          "working_blob": "903542a505d6d7fec99ec7c80f6deb44056d995a"
+        },
+        {
+          "path": "src/Modules/Identity/RegistrationRows.cs",
+          "prior_validated_blob": "2ed53f1e4f40b2c5605a93ef381bc607a794d3e0",
+          "actual_source_blob": "2ed53f1e4f40b2c5605a93ef381bc607a794d3e0",
+          "working_blob": "2ed53f1e4f40b2c5605a93ef381bc607a794d3e0"
+        },
+        {
+          "path": "src/Modules/Identity/RegistrationWebContracts.cs",
+          "prior_validated_blob": "2d5abf765da9b51c735ff496140f9cd0c9c66ab0",
+          "actual_source_blob": "2d5abf765da9b51c735ff496140f9cd0c9c66ab0",
+          "working_blob": "2d5abf765da9b51c735ff496140f9cd0c9c66ab0"
+        },
+        {
+          "path": "src/Modules/Identity/Tunner.Identity.Persistence.csproj",
+          "prior_validated_blob": "bb3d6b333b26b08e3d128b329287acec92278a3c",
+          "actual_source_blob": "bb3d6b333b26b08e3d128b329287acec92278a3c",
+          "working_blob": "bb3d6b333b26b08e3d128b329287acec92278a3c"
+        },
+        {
+          "path": "src/Tunner.User.Bff/Program.cs",
+          "prior_validated_blob": "80740e9ca49eb40618aa6069ea2626bec8f7bcbd",
+          "actual_source_blob": "80740e9ca49eb40618aa6069ea2626bec8f7bcbd",
+          "working_blob": "80740e9ca49eb40618aa6069ea2626bec8f7bcbd"
+        },
+        {
+          "path": "src/Tunner.User.Bff/Tunner.User.Bff.csproj",
+          "prior_validated_blob": "3dfc3d84fa1e9c9516817fa5e52263b60c4c8963",
+          "actual_source_blob": "3dfc3d84fa1e9c9516817fa5e52263b60c4c8963",
+          "working_blob": "3dfc3d84fa1e9c9516817fa5e52263b60c4c8963"
+        },
+        {
+          "path": "start-browser.cmd",
+          "prior_validated_blob": "365a684220cf2d6c8ee19740b57c1200099937cd",
+          "actual_source_blob": "365a684220cf2d6c8ee19740b57c1200099937cd",
+          "working_blob": "365a684220cf2d6c8ee19740b57c1200099937cd"
+        },
+        {
+          "path": "stop-browser.cmd",
+          "prior_validated_blob": "e82f5bdc10e96ece01fae6e17e182054a4d54663",
+          "actual_source_blob": "e82f5bdc10e96ece01fae6e17e182054a4d54663",
+          "working_blob": "e82f5bdc10e96ece01fae6e17e182054a4d54663"
+        },
+        {
+          "path": "tests/Tunner.Identity.Persistence.Tests/FixtureAccountAgePolicies.cs",
+          "prior_validated_blob": "c6b083354a2a1ac241bc2913ca7c9052f70b6559",
+          "actual_source_blob": "c6b083354a2a1ac241bc2913ca7c9052f70b6559",
+          "working_blob": "c6b083354a2a1ac241bc2913ca7c9052f70b6559"
+        },
+        {
+          "path": "tests/Tunner.Identity.Persistence.Tests/RegistrationBffTests.cs",
+          "prior_validated_blob": "8022ca726e12f0488c933ee01bc8f492edd5cb0e",
+          "actual_source_blob": "8022ca726e12f0488c933ee01bc8f492edd5cb0e",
+          "working_blob": "8022ca726e12f0488c933ee01bc8f492edd5cb0e"
+        },
+        {
+          "path": "tests/Tunner.Identity.Persistence.Tests/RegistrationTests.cs",
+          "prior_validated_blob": "6a025fc18da3145e237cdd3263efb8ea084cba73",
+          "actual_source_blob": "6a025fc18da3145e237cdd3263efb8ea084cba73",
+          "working_blob": "6a025fc18da3145e237cdd3263efb8ea084cba73"
+        },
+        {
+          "path": "tests/Tunner.Identity.Persistence.Tests/Tunner.Identity.Persistence.Tests.csproj",
+          "prior_validated_blob": "941606104cf26bd75524e177ff4deee5defebd4d",
+          "actual_source_blob": "3b87871dce43d847e61955afc965b57dc9f0364a",
+          "working_blob": "3b87871dce43d847e61955afc965b57dc9f0364a"
+        },
+        {
+          "path": "tools/browser-testing/Program.cs",
+          "prior_validated_blob": "a2c639b2eab3ceb89ace00a4bff165e3df59c3b1",
+          "actual_source_blob": "50346ab34923d8898d7ecdde1de6aba97b630045",
+          "working_blob": "50346ab34923d8898d7ecdde1de6aba97b630045"
+        },
+        {
+          "path": "tools/browser-testing/Tunner.BrowserTesting.csproj",
+          "prior_validated_blob": "36f2a47cac0f7f071650ce9f11ba2a11e8b128ba",
+          "actual_source_blob": "6696de6cc928cf500f80ed483a76d91169dcbd5a",
+          "working_blob": "6696de6cc928cf500f80ed483a76d91169dcbd5a"
+        },
+        {
+          "path": "tools/dev/tunner-browser.ps1",
+          "prior_validated_blob": "473ae923b3958d52854f0ead5163b25cc44a2617",
+          "actual_source_blob": "473ae923b3958d52854f0ead5163b25cc44a2617",
+          "working_blob": "473ae923b3958d52854f0ead5163b25cc44a2617"
+        },
+        {
+          "path": "tools/validation/Test-TunnerBrowserStarter.ps1",
+          "prior_validated_blob": "56e29cd8eb055a74b3d15a0d8c270b79c54cab37",
+          "actual_source_blob": "56e29cd8eb055a74b3d15a0d8c270b79c54cab37",
+          "working_blob": "56e29cd8eb055a74b3d15a0d8c270b79c54cab37"
+        },
+        {
+          "path": "web/apps/user/content.proposal.json",
+          "prior_validated_blob": "774b13aba26360d6a07ebf955348c121a414657b",
+          "actual_source_blob": "774b13aba26360d6a07ebf955348c121a414657b",
+          "working_blob": "774b13aba26360d6a07ebf955348c121a414657b"
+        },
+        {
+          "path": "web/apps/user/index.html",
+          "prior_validated_blob": "ade197bb8f59d56dc8205811f66c03680a368f57",
+          "actual_source_blob": "ade197bb8f59d56dc8205811f66c03680a368f57",
+          "working_blob": "ade197bb8f59d56dc8205811f66c03680a368f57"
+        },
+        {
+          "path": "web/apps/user/main.tsx",
+          "prior_validated_blob": "ddc9d200f77b543ffe19f9f642f4d722dff27637",
+          "actual_source_blob": "ddc9d200f77b543ffe19f9f642f4d722dff27637",
+          "working_blob": "ddc9d200f77b543ffe19f9f642f4d722dff27637"
+        },
+        {
+          "path": "web/apps/user/package.json",
+          "prior_validated_blob": "068e2b0d3b0cdb17d1c48c340de21031bbb14085",
+          "actual_source_blob": "068e2b0d3b0cdb17d1c48c340de21031bbb14085",
+          "working_blob": "068e2b0d3b0cdb17d1c48c340de21031bbb14085"
+        },
+        {
+          "path": "web/apps/user/public/assets/ready-approved-check.svg",
+          "prior_validated_blob": "f2a574212a36476e41ece6813428f33acfa7fab4",
+          "actual_source_blob": "f2a574212a36476e41ece6813428f33acfa7fab4",
+          "working_blob": "f2a574212a36476e41ece6813428f33acfa7fab4"
+        },
+        {
+          "path": "web/apps/user/public/assets/ready-imgBgGlowIndigo.svg",
+          "prior_validated_blob": "50ce088d7a324ad9a8766f8c8ce5f04d98e85087",
+          "actual_source_blob": "50ce088d7a324ad9a8766f8c8ce5f04d98e85087",
+          "working_blob": "50ce088d7a324ad9a8766f8c8ce5f04d98e85087"
+        },
+        {
+          "path": "web/apps/user/public/assets/ready-imgBgGlowViolet.svg",
+          "prior_validated_blob": "52a654265eecfc71022dee729077676c2465a9e4",
+          "actual_source_blob": "52a654265eecfc71022dee729077676c2465a9e4",
+          "working_blob": "52a654265eecfc71022dee729077676c2465a9e4"
+        },
+        {
+          "path": "web/apps/user/public/assets/ready-imgEllipse.svg",
+          "prior_validated_blob": "e62f5fa248c046baf4b4b9ec920bba6c13c798c2",
+          "actual_source_blob": "e62f5fa248c046baf4b4b9ec920bba6c13c798c2",
+          "working_blob": "e62f5fa248c046baf4b4b9ec920bba6c13c798c2"
+        },
+        {
+          "path": "web/apps/user/public/assets/ready-imgEllipse1.svg",
+          "prior_validated_blob": "43fc01cd2c19a6e1e6980780111a6d67d0124293",
+          "actual_source_blob": "43fc01cd2c19a6e1e6980780111a6d67d0124293",
+          "working_blob": "43fc01cd2c19a6e1e6980780111a6d67d0124293"
+        },
+        {
+          "path": "web/apps/user/public/assets/register-imgBgGlowIndigo.svg",
+          "prior_validated_blob": "316636215995f2622e135defc03374bb077cb287",
+          "actual_source_blob": "316636215995f2622e135defc03374bb077cb287",
+          "working_blob": "316636215995f2622e135defc03374bb077cb287"
+        },
+        {
+          "path": "web/apps/user/public/assets/register-imgBgGlowViolet.svg",
+          "prior_validated_blob": "c37619a12e95724d86983d90c34e5e00cf471b7e",
+          "actual_source_blob": "c37619a12e95724d86983d90c34e5e00cf471b7e",
+          "working_blob": "c37619a12e95724d86983d90c34e5e00cf471b7e"
+        },
+        {
+          "path": "web/apps/user/public/assets/register-imgEllipse.svg",
+          "prior_validated_blob": "e62f5fa248c046baf4b4b9ec920bba6c13c798c2",
+          "actual_source_blob": "e62f5fa248c046baf4b4b9ec920bba6c13c798c2",
+          "working_blob": "e62f5fa248c046baf4b4b9ec920bba6c13c798c2"
+        },
+        {
+          "path": "web/apps/user/public/assets/verify-imgBgGlowIndigo.svg",
+          "prior_validated_blob": "d36a00fe57b0af52fabfc3065b841a080aa9771f",
+          "actual_source_blob": "d36a00fe57b0af52fabfc3065b841a080aa9771f",
+          "working_blob": "d36a00fe57b0af52fabfc3065b841a080aa9771f"
+        },
+        {
+          "path": "web/apps/user/public/assets/verify-imgBgGlowViolet.svg",
+          "prior_validated_blob": "52a654265eecfc71022dee729077676c2465a9e4",
+          "actual_source_blob": "52a654265eecfc71022dee729077676c2465a9e4",
+          "working_blob": "52a654265eecfc71022dee729077676c2465a9e4"
+        },
+        {
+          "path": "web/apps/user/public/assets/verify-imgEllipse.svg",
+          "prior_validated_blob": "e62f5fa248c046baf4b4b9ec920bba6c13c798c2",
+          "actual_source_blob": "e62f5fa248c046baf4b4b9ec920bba6c13c798c2",
+          "working_blob": "e62f5fa248c046baf4b4b9ec920bba6c13c798c2"
+        },
+        {
+          "path": "web/apps/user/registration.css",
+          "prior_validated_blob": "c2df25c9a04bad9a0fca9fe2b21a7be224d55414",
+          "actual_source_blob": "c2df25c9a04bad9a0fca9fe2b21a7be224d55414",
+          "working_blob": "c2df25c9a04bad9a0fca9fe2b21a7be224d55414"
+        },
+        {
+          "path": "web/apps/user/routes.ts",
+          "prior_validated_blob": "60b19ccbe5f2b4d28cc6e15040a4c81363ba7147",
+          "actual_source_blob": "60b19ccbe5f2b4d28cc6e15040a4c81363ba7147",
+          "working_blob": "60b19ccbe5f2b4d28cc6e15040a4c81363ba7147"
+        },
+        {
+          "path": "web/apps/user/validation.ts",
+          "prior_validated_blob": "81cf69f2cfcde7cf2a829992bb00b191a8f99cbe",
+          "actual_source_blob": "81cf69f2cfcde7cf2a829992bb00b191a8f99cbe",
+          "working_blob": "81cf69f2cfcde7cf2a829992bb00b191a8f99cbe"
+        },
+        {
+          "path": "web/apps/user/vite.config.ts",
+          "prior_validated_blob": "e5d6a24ebe118af182e3041e0c823d704fdb6709",
+          "actual_source_blob": "e5d6a24ebe118af182e3041e0c823d704fdb6709",
+          "working_blob": "e5d6a24ebe118af182e3041e0c823d704fdb6709"
+        },
+        {
+          "path": "web/package.json",
+          "prior_validated_blob": "17528ac713eb830c4202905944fbaaad0aa521a2",
+          "actual_source_blob": "17528ac713eb830c4202905944fbaaad0aa521a2",
+          "working_blob": "17528ac713eb830c4202905944fbaaad0aa521a2"
+        },
+        {
+          "path": "web/packages/ui/package.json",
+          "prior_validated_blob": "c967243d08c62fbfc4259611ec9adc0a9b0a5df2",
+          "actual_source_blob": "c967243d08c62fbfc4259611ec9adc0a9b0a5df2",
+          "working_blob": "c967243d08c62fbfc4259611ec9adc0a9b0a5df2"
+        },
+        {
+          "path": "web/packages/ui/src/content.tsx",
+          "prior_validated_blob": "e9b10d155b9bf06bc80454e4714e33c75b08029f",
+          "actual_source_blob": "e9b10d155b9bf06bc80454e4714e33c75b08029f",
+          "working_blob": "e9b10d155b9bf06bc80454e4714e33c75b08029f"
+        },
+        {
+          "path": "web/packages/ui/src/controls.tsx",
+          "prior_validated_blob": "ae1d997a7b76eae8a76b74af3328ac1573329c7e",
+          "actual_source_blob": "ae1d997a7b76eae8a76b74af3328ac1573329c7e",
+          "working_blob": "ae1d997a7b76eae8a76b74af3328ac1573329c7e"
+        },
+        {
+          "path": "web/packages/ui/src/forms.tsx",
+          "prior_validated_blob": "a60383e7bbe73eaefc55c250be209fd2eff85b2c",
+          "actual_source_blob": "a60383e7bbe73eaefc55c250be209fd2eff85b2c",
+          "working_blob": "a60383e7bbe73eaefc55c250be209fd2eff85b2c"
+        },
+        {
+          "path": "web/packages/ui/src/index.ts",
+          "prior_validated_blob": "650dfdc4736db157004ebde577e29f003a334cd6",
+          "actual_source_blob": "650dfdc4736db157004ebde577e29f003a334cd6",
+          "working_blob": "650dfdc4736db157004ebde577e29f003a334cd6"
+        },
+        {
+          "path": "web/packages/ui/src/navigation.ts",
+          "prior_validated_blob": "b6f5541dc8daf14c5ce43f73e99039dd1f86066b",
+          "actual_source_blob": "b6f5541dc8daf14c5ce43f73e99039dd1f86066b",
+          "working_blob": "b6f5541dc8daf14c5ce43f73e99039dd1f86066b"
+        },
+        {
+          "path": "web/packages/ui/styles/components.css",
+          "prior_validated_blob": "092761c08561df062720631a1977195851ab4273",
+          "actual_source_blob": "092761c08561df062720631a1977195851ab4273",
+          "working_blob": "092761c08561df062720631a1977195851ab4273"
+        },
+        {
+          "path": "web/packages/ui/styles/tokens.generated.css",
+          "prior_validated_blob": "8a0ca6dacc0a7d8589716558ee6dd2ea141efbb0",
+          "actual_source_blob": "8a0ca6dacc0a7d8589716558ee6dd2ea141efbb0",
+          "working_blob": "8a0ca6dacc0a7d8589716558ee6dd2ea141efbb0"
+        },
+        {
+          "path": "web/packages/ui/theme.tokens.json",
+          "prior_validated_blob": "b2119a6503fc2abc8d3acd5b7f6f7c76b819cc9e",
+          "actual_source_blob": "b2119a6503fc2abc8d3acd5b7f6f7c76b819cc9e",
+          "working_blob": "b2119a6503fc2abc8d3acd5b7f6f7c76b819cc9e"
+        },
+        {
+          "path": "web/playwright.browser-testing.config.ts",
+          "prior_validated_blob": "011da8722f71a854734f79e7e358fa37a872c28d",
+          "actual_source_blob": "011da8722f71a854734f79e7e358fa37a872c28d",
+          "working_blob": "011da8722f71a854734f79e7e358fa37a872c28d"
+        },
+        {
+          "path": "web/playwright.registration.config.ts",
+          "prior_validated_blob": "a94acb15abe55cb9b74d57e73dea35b91a0bd3c3",
+          "actual_source_blob": "a94acb15abe55cb9b74d57e73dea35b91a0bd3c3",
+          "working_blob": "a94acb15abe55cb9b74d57e73dea35b91a0bd3c3"
+        },
+        {
+          "path": "web/pnpm-lock.yaml",
+          "prior_validated_blob": "39990993c01c11e4228031b5dc1f53de15f53e75",
+          "actual_source_blob": "39990993c01c11e4228031b5dc1f53de15f53e75",
+          "working_blob": "39990993c01c11e4228031b5dc1f53de15f53e75"
+        },
+        {
+          "path": "web/pnpm-workspace.yaml",
+          "prior_validated_blob": "779b553344c988738b9c3bc6e5d1a28af3996c4a",
+          "actual_source_blob": "779b553344c988738b9c3bc6e5d1a28af3996c4a",
+          "working_blob": "779b553344c988738b9c3bc6e5d1a28af3996c4a"
+        },
+        {
+          "path": "web/tests/browser-testing/manual-flow.spec.ts",
+          "prior_validated_blob": "38cd33da0a48d6f43d6502523e92b6579783e00a",
+          "actual_source_blob": "38cd33da0a48d6f43d6502523e92b6579783e00a",
+          "working_blob": "38cd33da0a48d6f43d6502523e92b6579783e00a"
+        },
+        {
+          "path": "web/tests/contracts.test.tsx",
+          "prior_validated_blob": "6021b66f32e758e622bee26c3cf15e7e205a145b",
+          "actual_source_blob": "6021b66f32e758e622bee26c3cf15e7e205a145b",
+          "working_blob": "6021b66f32e758e622bee26c3cf15e7e205a145b"
+        },
+        {
+          "path": "web/tests/registration/global-compliance.spec.ts",
+          "prior_validated_blob": "75e733c11069359c1ab55ffe0a3928d5b3e6aaa2",
+          "actual_source_blob": "75e733c11069359c1ab55ffe0a3928d5b3e6aaa2",
+          "working_blob": "75e733c11069359c1ab55ffe0a3928d5b3e6aaa2"
+        },
+        {
+          "path": "web/tests/registration/registration.spec.ts",
+          "prior_validated_blob": "12b0339438362425ef5eec9e3676bb1d2d56ac4b",
+          "actual_source_blob": "12b0339438362425ef5eec9e3676bb1d2d56ac4b",
+          "working_blob": "12b0339438362425ef5eec9e3676bb1d2d56ac4b"
+        },
+        {
+          "path": "web/tests/registration/support.ts",
+          "prior_validated_blob": "18ef89d918331ff5d260d0cd4e9cf1f04acb5d49",
+          "actual_source_blob": "18ef89d918331ff5d260d0cd4e9cf1f04acb5d49",
+          "working_blob": "18ef89d918331ff5d260d0cd4e9cf1f04acb5d49"
+        },
+        {
+          "path": "web/tsconfig.json",
+          "prior_validated_blob": "b6b8a3fed78b450451d6a22285902610dbe6ad9a",
+          "actual_source_blob": "b6b8a3fed78b450451d6a22285902610dbe6ad9a",
+          "working_blob": "b6b8a3fed78b450451d6a22285902610dbe6ad9a"
+        }
+      ],
+      "prior_source_binding_ref": "governance/evidence/TUN-P2-004-TOTP-COMPATIBILITY-20261110.json",
+      "prior_source_envelope_git_ref": "eb9228cc3ed832980deb92407d80ab92e7b8a00e:governance/evidence/TUN-P2-004-AUDIT-CORRECTION-SOURCE.json"
+    },
+    {
+      "scope_id": "TUN-P2-005",
+      "source_envelope_ref": "governance/evidence/TUN-P2-005-AUDIT-CORRECTION-SOURCE.json",
+      "work_item_ref": "governance/work-items/TUN-P2-005.yaml",
+      "owned_count": 48,
+      "ordered_owned_behavior_paths": [
+        "docs/contracts/authentication-session-contract.md",
+        "docs/contracts/ui-inventory.json",
+        "governance/evidence/TUN-P2-005-AUTHORITY-RESOLUTION.json",
+        "governance/evidence/TUN-P2-005-DATA-INVENTORY.json",
+        "governance/evidence/TUN-P2-005-EXTERNAL-AUTHORITY-BOUNDARY.json",
+        "governance/evidence/TUN-P2-005-PROVIDER-DIRECTION-20261021.json",
+        "governance/evidence/TUN-P2-005-RD-SOURCES.json",
+        "governance/evidence/TUN-P2-005-VISUAL-CONSENT-20261021.json",
+        "src/Modules/Identity/AuthenticationApplication.cs",
+        "src/Modules/Identity/AuthenticationContracts.cs",
+        "src/Modules/Identity/AuthenticationEndpoints.cs",
+        "src/Modules/Identity/AuthenticationMigrationSql.cs",
+        "src/Modules/Identity/AuthenticationPresentation.cs",
+        "src/Modules/Identity/AuthenticationRows.cs",
+        "src/Modules/Identity/IdentityEmail.cs",
+        "src/Modules/Identity/IdentityPersistenceDbContext.cs",
+        "src/Modules/Identity/IdentityWebAssets.cs",
+        "src/Modules/Identity/Migrations/20261021174404_P2PasswordSessions.Designer.cs",
+        "src/Modules/Identity/Migrations/20261021174404_P2PasswordSessions.cs",
+        "src/Modules/Identity/Migrations/IdentityPersistenceDbContextModelSnapshot.cs",
+        "src/Modules/Identity/RegistrationApplication.cs",
+        "src/Modules/Identity/RegistrationEndpoints.cs",
+        "src/Tunner.User.Bff/TunnerAuthenticatedUserBffHost.cs",
+        "tests/Tunner.Identity.Persistence.Tests/AuthenticationPolicyTests.cs",
+        "tests/Tunner.Identity.Persistence.Tests/AuthenticationTestHost.cs",
+        "tests/Tunner.Identity.Persistence.Tests/AuthenticationTests.cs",
+        "tests/Tunner.Identity.Persistence.Tests/Tunner.Identity.Persistence.Tests.csproj",
+        "tools/browser-testing/Program.cs",
+        "tools/browser-testing/Tunner.BrowserTesting.csproj",
+        "tools/dev/tunner-browser.ps1",
+        "web/apps/user/authentication.content.proposal.json",
+        "web/apps/user/authentication.css",
+        "web/apps/user/authentication.html",
+        "web/apps/user/authentication.routes.ts",
+        "web/apps/user/authentication.tsx",
+        "web/apps/user/authentication.validation.ts",
+        "web/apps/user/public/assets/login-bg-indigo.svg",
+        "web/apps/user/public/assets/login-bg-violet.svg",
+        "web/apps/user/public/assets/login-eye-off.svg",
+        "web/apps/user/public/assets/login-google.svg",
+        "web/apps/user/vite.config.ts",
+        "web/package.json",
+        "web/playwright.authentication.config.ts",
+        "web/playwright.config.ts",
+        "web/playwright.registration.config.ts",
+        "web/tests/authentication/authentication.spec.ts",
+        "web/tests/browser-testing/authentication-flow.spec.ts",
+        "web/tests/contracts.test.tsx"
+      ],
+      "ordered_array_precommitted_at_actual_candidate": true,
+      "all_owned_working_blobs_equal_actual_source": true,
+      "changed_owned_paths": [
+        "tests/Tunner.Identity.Persistence.Tests/Tunner.Identity.Persistence.Tests.csproj",
+        "tools/browser-testing/Program.cs",
+        "tools/browser-testing/Tunner.BrowserTesting.csproj"
+      ],
+      "rows": [
+        {
+          "path": "docs/contracts/authentication-session-contract.md",
+          "prior_validated_blob": "0cf45d31adb205b4f9020d940fe99beed89ecc58",
+          "actual_source_blob": "0cf45d31adb205b4f9020d940fe99beed89ecc58",
+          "working_blob": "0cf45d31adb205b4f9020d940fe99beed89ecc58"
+        },
+        {
+          "path": "docs/contracts/ui-inventory.json",
+          "prior_validated_blob": "e9d0050a8d946e3eb07454189641eb594015b513",
+          "actual_source_blob": "e9d0050a8d946e3eb07454189641eb594015b513",
+          "working_blob": "e9d0050a8d946e3eb07454189641eb594015b513"
+        },
+        {
+          "path": "governance/evidence/TUN-P2-005-AUTHORITY-RESOLUTION.json",
+          "prior_validated_blob": "7f9cc4dc7b6692f8533ecf100bf33cddffa89d6a",
+          "actual_source_blob": "7f9cc4dc7b6692f8533ecf100bf33cddffa89d6a",
+          "working_blob": "7f9cc4dc7b6692f8533ecf100bf33cddffa89d6a"
+        },
+        {
+          "path": "governance/evidence/TUN-P2-005-DATA-INVENTORY.json",
+          "prior_validated_blob": "4ceef08b5be9989b9f1ea7b5ca24c4dc590f9575",
+          "actual_source_blob": "4ceef08b5be9989b9f1ea7b5ca24c4dc590f9575",
+          "working_blob": "4ceef08b5be9989b9f1ea7b5ca24c4dc590f9575"
+        },
+        {
+          "path": "governance/evidence/TUN-P2-005-EXTERNAL-AUTHORITY-BOUNDARY.json",
+          "prior_validated_blob": "a68aa99582328067c8f9fb1e599f91974b3c7abd",
+          "actual_source_blob": "a68aa99582328067c8f9fb1e599f91974b3c7abd",
+          "working_blob": "a68aa99582328067c8f9fb1e599f91974b3c7abd"
+        },
+        {
+          "path": "governance/evidence/TUN-P2-005-PROVIDER-DIRECTION-20261021.json",
+          "prior_validated_blob": "2584b20a44aebb79fd99d7acfa16a8838bf04f73",
+          "actual_source_blob": "2584b20a44aebb79fd99d7acfa16a8838bf04f73",
+          "working_blob": "2584b20a44aebb79fd99d7acfa16a8838bf04f73"
+        },
+        {
+          "path": "governance/evidence/TUN-P2-005-RD-SOURCES.json",
+          "prior_validated_blob": "0861e816dc838a820c570b76b3962fba2e664589",
+          "actual_source_blob": "0861e816dc838a820c570b76b3962fba2e664589",
+          "working_blob": "0861e816dc838a820c570b76b3962fba2e664589"
+        },
+        {
+          "path": "governance/evidence/TUN-P2-005-VISUAL-CONSENT-20261021.json",
+          "prior_validated_blob": "cc1978f646a46ede8161d3dfecd641514f4e391a",
+          "actual_source_blob": "cc1978f646a46ede8161d3dfecd641514f4e391a",
+          "working_blob": "cc1978f646a46ede8161d3dfecd641514f4e391a"
+        },
+        {
+          "path": "src/Modules/Identity/AuthenticationApplication.cs",
+          "prior_validated_blob": "b33f36a98f898143ee8a33f296db2639f611ca8b",
+          "actual_source_blob": "b33f36a98f898143ee8a33f296db2639f611ca8b",
+          "working_blob": "b33f36a98f898143ee8a33f296db2639f611ca8b"
+        },
+        {
+          "path": "src/Modules/Identity/AuthenticationContracts.cs",
+          "prior_validated_blob": "c85c1e2597b0b3bdfe89d65e621753415b8d45b4",
+          "actual_source_blob": "c85c1e2597b0b3bdfe89d65e621753415b8d45b4",
+          "working_blob": "c85c1e2597b0b3bdfe89d65e621753415b8d45b4"
+        },
+        {
+          "path": "src/Modules/Identity/AuthenticationEndpoints.cs",
+          "prior_validated_blob": "e2bb76e34c2741413fdc21c906ff9800c17f2bcd",
+          "actual_source_blob": "e2bb76e34c2741413fdc21c906ff9800c17f2bcd",
+          "working_blob": "e2bb76e34c2741413fdc21c906ff9800c17f2bcd"
+        },
+        {
+          "path": "src/Modules/Identity/AuthenticationMigrationSql.cs",
+          "prior_validated_blob": "f10b32dca51c6936d428c05851d7641b30a6edea",
+          "actual_source_blob": "f10b32dca51c6936d428c05851d7641b30a6edea",
+          "working_blob": "f10b32dca51c6936d428c05851d7641b30a6edea"
+        },
+        {
+          "path": "src/Modules/Identity/AuthenticationPresentation.cs",
+          "prior_validated_blob": "c4528022bc07c204e328c3ff9c3da37620773ffb",
+          "actual_source_blob": "c4528022bc07c204e328c3ff9c3da37620773ffb",
+          "working_blob": "c4528022bc07c204e328c3ff9c3da37620773ffb"
+        },
+        {
+          "path": "src/Modules/Identity/AuthenticationRows.cs",
+          "prior_validated_blob": "a4fd6c99fe9632a5c76533876a844db668104fa4",
+          "actual_source_blob": "a4fd6c99fe9632a5c76533876a844db668104fa4",
+          "working_blob": "a4fd6c99fe9632a5c76533876a844db668104fa4"
+        },
+        {
+          "path": "src/Modules/Identity/IdentityEmail.cs",
+          "prior_validated_blob": "987737059106ea417b876e745f617cb5f585ea97",
+          "actual_source_blob": "987737059106ea417b876e745f617cb5f585ea97",
+          "working_blob": "987737059106ea417b876e745f617cb5f585ea97"
+        },
+        {
+          "path": "src/Modules/Identity/IdentityPersistenceDbContext.cs",
+          "prior_validated_blob": "bffb856d8150def131106d1e11a71c974e4c1cf9",
+          "actual_source_blob": "bffb856d8150def131106d1e11a71c974e4c1cf9",
+          "working_blob": "bffb856d8150def131106d1e11a71c974e4c1cf9"
+        },
+        {
+          "path": "src/Modules/Identity/IdentityWebAssets.cs",
+          "prior_validated_blob": "399e054f1b7d9f2373e4c4fb35b3ac2187c5619c",
+          "actual_source_blob": "399e054f1b7d9f2373e4c4fb35b3ac2187c5619c",
+          "working_blob": "399e054f1b7d9f2373e4c4fb35b3ac2187c5619c"
+        },
+        {
+          "path": "src/Modules/Identity/Migrations/20261021174404_P2PasswordSessions.Designer.cs",
+          "prior_validated_blob": "80075b64adc2408cd97c8c34f914bc95cc5dd302",
+          "actual_source_blob": "80075b64adc2408cd97c8c34f914bc95cc5dd302",
+          "working_blob": "80075b64adc2408cd97c8c34f914bc95cc5dd302"
+        },
+        {
+          "path": "src/Modules/Identity/Migrations/20261021174404_P2PasswordSessions.cs",
+          "prior_validated_blob": "ddd668443fd463666624f9cf9c211da8ffafbc87",
+          "actual_source_blob": "ddd668443fd463666624f9cf9c211da8ffafbc87",
+          "working_blob": "ddd668443fd463666624f9cf9c211da8ffafbc87"
+        },
+        {
+          "path": "src/Modules/Identity/Migrations/IdentityPersistenceDbContextModelSnapshot.cs",
+          "prior_validated_blob": "b79988b9d063b49d39d1e4396753f383c709688d",
+          "actual_source_blob": "b79988b9d063b49d39d1e4396753f383c709688d",
+          "working_blob": "b79988b9d063b49d39d1e4396753f383c709688d"
+        },
+        {
+          "path": "src/Modules/Identity/RegistrationApplication.cs",
+          "prior_validated_blob": "abf71f970dca88d343f5f7b22ed40fc11cefea26",
+          "actual_source_blob": "abf71f970dca88d343f5f7b22ed40fc11cefea26",
+          "working_blob": "abf71f970dca88d343f5f7b22ed40fc11cefea26"
+        },
+        {
+          "path": "src/Modules/Identity/RegistrationEndpoints.cs",
+          "prior_validated_blob": "2f64bd6a2b4c942887a5932c8500aa7ef303718c",
+          "actual_source_blob": "2f64bd6a2b4c942887a5932c8500aa7ef303718c",
+          "working_blob": "2f64bd6a2b4c942887a5932c8500aa7ef303718c"
+        },
+        {
+          "path": "src/Tunner.User.Bff/TunnerAuthenticatedUserBffHost.cs",
+          "prior_validated_blob": "7174de500cbef6e6e47f4ba6fa57d94c44c56e66",
+          "actual_source_blob": "7174de500cbef6e6e47f4ba6fa57d94c44c56e66",
+          "working_blob": "7174de500cbef6e6e47f4ba6fa57d94c44c56e66"
+        },
+        {
+          "path": "tests/Tunner.Identity.Persistence.Tests/AuthenticationPolicyTests.cs",
+          "prior_validated_blob": "0d6c74b83a76ff7b99642d48b9e00c8025f2317b",
+          "actual_source_blob": "0d6c74b83a76ff7b99642d48b9e00c8025f2317b",
+          "working_blob": "0d6c74b83a76ff7b99642d48b9e00c8025f2317b"
+        },
+        {
+          "path": "tests/Tunner.Identity.Persistence.Tests/AuthenticationTestHost.cs",
+          "prior_validated_blob": "1919b2a986ee7ede5ca4df45ce8b07c16b8aa300",
+          "actual_source_blob": "1919b2a986ee7ede5ca4df45ce8b07c16b8aa300",
+          "working_blob": "1919b2a986ee7ede5ca4df45ce8b07c16b8aa300"
+        },
+        {
+          "path": "tests/Tunner.Identity.Persistence.Tests/AuthenticationTests.cs",
+          "prior_validated_blob": "3629b30ce6dfede48e7849d7e0428cace21a3e37",
+          "actual_source_blob": "3629b30ce6dfede48e7849d7e0428cace21a3e37",
+          "working_blob": "3629b30ce6dfede48e7849d7e0428cace21a3e37"
+        },
+        {
+          "path": "tests/Tunner.Identity.Persistence.Tests/Tunner.Identity.Persistence.Tests.csproj",
+          "prior_validated_blob": "941606104cf26bd75524e177ff4deee5defebd4d",
+          "actual_source_blob": "3b87871dce43d847e61955afc965b57dc9f0364a",
+          "working_blob": "3b87871dce43d847e61955afc965b57dc9f0364a"
+        },
+        {
+          "path": "tools/browser-testing/Program.cs",
+          "prior_validated_blob": "a2c639b2eab3ceb89ace00a4bff165e3df59c3b1",
+          "actual_source_blob": "50346ab34923d8898d7ecdde1de6aba97b630045",
+          "working_blob": "50346ab34923d8898d7ecdde1de6aba97b630045"
+        },
+        {
+          "path": "tools/browser-testing/Tunner.BrowserTesting.csproj",
+          "prior_validated_blob": "36f2a47cac0f7f071650ce9f11ba2a11e8b128ba",
+          "actual_source_blob": "6696de6cc928cf500f80ed483a76d91169dcbd5a",
+          "working_blob": "6696de6cc928cf500f80ed483a76d91169dcbd5a"
+        },
+        {
+          "path": "tools/dev/tunner-browser.ps1",
+          "prior_validated_blob": "473ae923b3958d52854f0ead5163b25cc44a2617",
+          "actual_source_blob": "473ae923b3958d52854f0ead5163b25cc44a2617",
+          "working_blob": "473ae923b3958d52854f0ead5163b25cc44a2617"
+        },
+        {
+          "path": "web/apps/user/authentication.content.proposal.json",
+          "prior_validated_blob": "a7921ddd02543c06404c0b9e1ab7390033d225fb",
+          "actual_source_blob": "a7921ddd02543c06404c0b9e1ab7390033d225fb",
+          "working_blob": "a7921ddd02543c06404c0b9e1ab7390033d225fb"
+        },
+        {
+          "path": "web/apps/user/authentication.css",
+          "prior_validated_blob": "d6f0a07ee01faac2dfe12489f3a2859b2acfaefd",
+          "actual_source_blob": "d6f0a07ee01faac2dfe12489f3a2859b2acfaefd",
+          "working_blob": "d6f0a07ee01faac2dfe12489f3a2859b2acfaefd"
+        },
+        {
+          "path": "web/apps/user/authentication.html",
+          "prior_validated_blob": "722e85c784e57a7a58291ee663da5fe0f941fd01",
+          "actual_source_blob": "722e85c784e57a7a58291ee663da5fe0f941fd01",
+          "working_blob": "722e85c784e57a7a58291ee663da5fe0f941fd01"
+        },
+        {
+          "path": "web/apps/user/authentication.routes.ts",
+          "prior_validated_blob": "d260a48dd3ca56d31ee46d71b9bf309382286fc8",
+          "actual_source_blob": "d260a48dd3ca56d31ee46d71b9bf309382286fc8",
+          "working_blob": "d260a48dd3ca56d31ee46d71b9bf309382286fc8"
+        },
+        {
+          "path": "web/apps/user/authentication.tsx",
+          "prior_validated_blob": "e82584122116bf0759bd2e00db730bf09fd8efb4",
+          "actual_source_blob": "e82584122116bf0759bd2e00db730bf09fd8efb4",
+          "working_blob": "e82584122116bf0759bd2e00db730bf09fd8efb4"
+        },
+        {
+          "path": "web/apps/user/authentication.validation.ts",
+          "prior_validated_blob": "eb022c851bb4747683a5f40b75d23a33b4f6e9f1",
+          "actual_source_blob": "eb022c851bb4747683a5f40b75d23a33b4f6e9f1",
+          "working_blob": "eb022c851bb4747683a5f40b75d23a33b4f6e9f1"
+        },
+        {
+          "path": "web/apps/user/public/assets/login-bg-indigo.svg",
+          "prior_validated_blob": "9fec2413eac856c0352f68e68628d6a39cea03c1",
+          "actual_source_blob": "9fec2413eac856c0352f68e68628d6a39cea03c1",
+          "working_blob": "9fec2413eac856c0352f68e68628d6a39cea03c1"
+        },
+        {
+          "path": "web/apps/user/public/assets/login-bg-violet.svg",
+          "prior_validated_blob": "59d3743f25e3f9d51f62c0fea99d6deaeaf3b0a4",
+          "actual_source_blob": "59d3743f25e3f9d51f62c0fea99d6deaeaf3b0a4",
+          "working_blob": "59d3743f25e3f9d51f62c0fea99d6deaeaf3b0a4"
+        },
+        {
+          "path": "web/apps/user/public/assets/login-eye-off.svg",
+          "prior_validated_blob": "22bcdd3f9fcb22b9ca814912b6a6936c0de08487",
+          "actual_source_blob": "22bcdd3f9fcb22b9ca814912b6a6936c0de08487",
+          "working_blob": "22bcdd3f9fcb22b9ca814912b6a6936c0de08487"
+        },
+        {
+          "path": "web/apps/user/public/assets/login-google.svg",
+          "prior_validated_blob": "3d5f59d2f77d983d1acc2cc8b1518d5bb93a1b81",
+          "actual_source_blob": "3d5f59d2f77d983d1acc2cc8b1518d5bb93a1b81",
+          "working_blob": "3d5f59d2f77d983d1acc2cc8b1518d5bb93a1b81"
+        },
+        {
+          "path": "web/apps/user/vite.config.ts",
+          "prior_validated_blob": "e5d6a24ebe118af182e3041e0c823d704fdb6709",
+          "actual_source_blob": "e5d6a24ebe118af182e3041e0c823d704fdb6709",
+          "working_blob": "e5d6a24ebe118af182e3041e0c823d704fdb6709"
+        },
+        {
+          "path": "web/package.json",
+          "prior_validated_blob": "17528ac713eb830c4202905944fbaaad0aa521a2",
+          "actual_source_blob": "17528ac713eb830c4202905944fbaaad0aa521a2",
+          "working_blob": "17528ac713eb830c4202905944fbaaad0aa521a2"
+        },
+        {
+          "path": "web/playwright.authentication.config.ts",
+          "prior_validated_blob": "a2b82f480e4fc80b56334c561143e5a9e5cbd39f",
+          "actual_source_blob": "a2b82f480e4fc80b56334c561143e5a9e5cbd39f",
+          "working_blob": "a2b82f480e4fc80b56334c561143e5a9e5cbd39f"
+        },
+        {
+          "path": "web/playwright.config.ts",
+          "prior_validated_blob": "e1fecedb81a03b47e3ce0ca5d8b64f46cccacd75",
+          "actual_source_blob": "e1fecedb81a03b47e3ce0ca5d8b64f46cccacd75",
+          "working_blob": "e1fecedb81a03b47e3ce0ca5d8b64f46cccacd75"
+        },
+        {
+          "path": "web/playwright.registration.config.ts",
+          "prior_validated_blob": "a94acb15abe55cb9b74d57e73dea35b91a0bd3c3",
+          "actual_source_blob": "a94acb15abe55cb9b74d57e73dea35b91a0bd3c3",
+          "working_blob": "a94acb15abe55cb9b74d57e73dea35b91a0bd3c3"
+        },
+        {
+          "path": "web/tests/authentication/authentication.spec.ts",
+          "prior_validated_blob": "1a177cce59ac27dd651cafbe3f3c421bdc93bce5",
+          "actual_source_blob": "1a177cce59ac27dd651cafbe3f3c421bdc93bce5",
+          "working_blob": "1a177cce59ac27dd651cafbe3f3c421bdc93bce5"
+        },
+        {
+          "path": "web/tests/browser-testing/authentication-flow.spec.ts",
+          "prior_validated_blob": "391d1a88c57c34609cd3b6937272d8574e503bbb",
+          "actual_source_blob": "391d1a88c57c34609cd3b6937272d8574e503bbb",
+          "working_blob": "391d1a88c57c34609cd3b6937272d8574e503bbb"
+        },
+        {
+          "path": "web/tests/contracts.test.tsx",
+          "prior_validated_blob": "6021b66f32e758e622bee26c3cf15e7e205a145b",
+          "actual_source_blob": "6021b66f32e758e622bee26c3cf15e7e205a145b",
+          "working_blob": "6021b66f32e758e622bee26c3cf15e7e205a145b"
+        }
+      ],
+      "prior_source_binding_ref": "governance/evidence/TUN-P2-005-006-TOTP-COMPATIBILITY-20261110.json",
+      "prior_source_envelope_git_ref": "eb9228cc3ed832980deb92407d80ab92e7b8a00e:governance/evidence/TUN-P2-005-AUDIT-CORRECTION-SOURCE.json"
+    },
+    {
+      "scope_id": "TUN-P2-006",
+      "source_envelope_ref": "governance/evidence/TUN-P2-006-AUDIT-CORRECTION-SOURCE.json",
+      "work_item_ref": "governance/work-items/TUN-P2-006.yaml",
+      "owned_count": 45,
+      "ordered_owned_behavior_paths": [
+        "docs/contracts/ui-inventory.json",
+        "src/Modules/Identity/AssurancePolicy.cs",
+        "src/Modules/Identity/AuthenticationApplication.cs",
+        "src/Modules/Identity/AuthenticationEndpoints.cs",
+        "src/Modules/Identity/AuthenticationRows.cs",
+        "src/Modules/Identity/IdentityJsonCommand.cs",
+        "src/Modules/Identity/IdentityPersistenceDbContext.cs",
+        "src/Modules/Identity/Migrations/20261109033631_P2OperationStepUpProofs.Designer.cs",
+        "src/Modules/Identity/Migrations/20261109033631_P2OperationStepUpProofs.cs",
+        "src/Modules/Identity/Migrations/IdentityPersistenceDbContextModelSnapshot.cs",
+        "src/Modules/Identity/StepUpApplication.cs",
+        "src/Modules/Identity/StepUpBrowserContracts.cs",
+        "src/Modules/Identity/StepUpBrowserEndpoints.cs",
+        "src/Modules/Identity/StepUpContracts.cs",
+        "src/Modules/Identity/StepUpRows.cs",
+        "src/Tunner.User.Bff/TunnerAuthenticatedUserBffHost.cs",
+        "tests/Tunner.Identity.Persistence.Tests/AuthenticationTestHost.cs",
+        "tests/Tunner.Identity.Persistence.Tests/StepUpBrowserTests.cs",
+        "tests/Tunner.Identity.Persistence.Tests/StepUpTests.cs",
+        "tests/Tunner.Identity.Persistence.Tests/Tunner.Identity.Persistence.Tests.csproj",
+        "tools/browser-testing/BrowserTestStepUp.cs",
+        "tools/browser-testing/Program.cs",
+        "tools/browser-testing/Tunner.BrowserTesting.csproj",
+        "tools/dev/tunner-browser.ps1",
+        "web/apps/user/authentication.tsx",
+        "web/apps/user/main.tsx",
+        "web/apps/user/step-up.content.proposal.json",
+        "web/apps/user/step-up.css",
+        "web/apps/user/step-up.tsx",
+        "web/fixtures/step-up/fixture.css",
+        "web/fixtures/step-up/index.html",
+        "web/fixtures/step-up/main.tsx",
+        "web/fixtures/step-up/vite.config.ts",
+        "web/fixtures/ui/main.tsx",
+        "web/package.json",
+        "web/packages/ui/src/dialog.tsx",
+        "web/packages/ui/src/forms.tsx",
+        "web/packages/ui/src/index.ts",
+        "web/packages/ui/styles/tokens.generated.css",
+        "web/packages/ui/theme.tokens.json",
+        "web/playwright.step-up.config.ts",
+        "web/tests/browser-testing/authentication-flow.spec.ts",
+        "web/tests/contracts.test.tsx",
+        "web/tests/step-up/step-up.spec.ts",
+        "docs/contracts/operation-step-up-contract.md"
+      ],
+      "ordered_array_precommitted_at_actual_candidate": true,
+      "all_owned_working_blobs_equal_actual_source": true,
+      "changed_owned_paths": [
+        "tests/Tunner.Identity.Persistence.Tests/Tunner.Identity.Persistence.Tests.csproj",
+        "tools/browser-testing/BrowserTestStepUp.cs",
+        "tools/browser-testing/Program.cs",
+        "tools/browser-testing/Tunner.BrowserTesting.csproj"
+      ],
+      "rows": [
+        {
+          "path": "docs/contracts/ui-inventory.json",
+          "prior_validated_blob": "e9d0050a8d946e3eb07454189641eb594015b513",
+          "actual_source_blob": "e9d0050a8d946e3eb07454189641eb594015b513",
+          "working_blob": "e9d0050a8d946e3eb07454189641eb594015b513"
+        },
+        {
+          "path": "src/Modules/Identity/AssurancePolicy.cs",
+          "prior_validated_blob": "8d3a48477e8b09afe213c2d4e6def24e8e568e68",
+          "actual_source_blob": "8d3a48477e8b09afe213c2d4e6def24e8e568e68",
+          "working_blob": "8d3a48477e8b09afe213c2d4e6def24e8e568e68"
+        },
+        {
+          "path": "src/Modules/Identity/AuthenticationApplication.cs",
+          "prior_validated_blob": "b33f36a98f898143ee8a33f296db2639f611ca8b",
+          "actual_source_blob": "b33f36a98f898143ee8a33f296db2639f611ca8b",
+          "working_blob": "b33f36a98f898143ee8a33f296db2639f611ca8b"
+        },
+        {
+          "path": "src/Modules/Identity/AuthenticationEndpoints.cs",
+          "prior_validated_blob": "e2bb76e34c2741413fdc21c906ff9800c17f2bcd",
+          "actual_source_blob": "e2bb76e34c2741413fdc21c906ff9800c17f2bcd",
+          "working_blob": "e2bb76e34c2741413fdc21c906ff9800c17f2bcd"
+        },
+        {
+          "path": "src/Modules/Identity/AuthenticationRows.cs",
+          "prior_validated_blob": "a4fd6c99fe9632a5c76533876a844db668104fa4",
+          "actual_source_blob": "a4fd6c99fe9632a5c76533876a844db668104fa4",
+          "working_blob": "a4fd6c99fe9632a5c76533876a844db668104fa4"
+        },
+        {
+          "path": "src/Modules/Identity/IdentityJsonCommand.cs",
+          "prior_validated_blob": "76cb994ecd8b995baef569978f5d0e8c95efcc81",
+          "actual_source_blob": "76cb994ecd8b995baef569978f5d0e8c95efcc81",
+          "working_blob": "76cb994ecd8b995baef569978f5d0e8c95efcc81"
+        },
+        {
+          "path": "src/Modules/Identity/IdentityPersistenceDbContext.cs",
+          "prior_validated_blob": "bffb856d8150def131106d1e11a71c974e4c1cf9",
+          "actual_source_blob": "bffb856d8150def131106d1e11a71c974e4c1cf9",
+          "working_blob": "bffb856d8150def131106d1e11a71c974e4c1cf9"
+        },
+        {
+          "path": "src/Modules/Identity/Migrations/20261109033631_P2OperationStepUpProofs.Designer.cs",
+          "prior_validated_blob": "ef28bb63969cc7c8e24ff2c30815b5667f109c4c",
+          "actual_source_blob": "ef28bb63969cc7c8e24ff2c30815b5667f109c4c",
+          "working_blob": "ef28bb63969cc7c8e24ff2c30815b5667f109c4c"
+        },
+        {
+          "path": "src/Modules/Identity/Migrations/20261109033631_P2OperationStepUpProofs.cs",
+          "prior_validated_blob": "45ad8ec9b8f0302c65ff31f2d2ed4785ec158c06",
+          "actual_source_blob": "45ad8ec9b8f0302c65ff31f2d2ed4785ec158c06",
+          "working_blob": "45ad8ec9b8f0302c65ff31f2d2ed4785ec158c06"
+        },
+        {
+          "path": "src/Modules/Identity/Migrations/IdentityPersistenceDbContextModelSnapshot.cs",
+          "prior_validated_blob": "b79988b9d063b49d39d1e4396753f383c709688d",
+          "actual_source_blob": "b79988b9d063b49d39d1e4396753f383c709688d",
+          "working_blob": "b79988b9d063b49d39d1e4396753f383c709688d"
+        },
+        {
+          "path": "src/Modules/Identity/StepUpApplication.cs",
+          "prior_validated_blob": "6dcfd096c603ec5318d3c7f9a59f72c5212a0e7b",
+          "actual_source_blob": "6dcfd096c603ec5318d3c7f9a59f72c5212a0e7b",
+          "working_blob": "6dcfd096c603ec5318d3c7f9a59f72c5212a0e7b"
+        },
+        {
+          "path": "src/Modules/Identity/StepUpBrowserContracts.cs",
+          "prior_validated_blob": "48030967eace07ffe281900766864ad0bd627cf8",
+          "actual_source_blob": "48030967eace07ffe281900766864ad0bd627cf8",
+          "working_blob": "48030967eace07ffe281900766864ad0bd627cf8"
+        },
+        {
+          "path": "src/Modules/Identity/StepUpBrowserEndpoints.cs",
+          "prior_validated_blob": "8f7bf101045edef2f4ff88fa6cc62dcbacffb3d1",
+          "actual_source_blob": "8f7bf101045edef2f4ff88fa6cc62dcbacffb3d1",
+          "working_blob": "8f7bf101045edef2f4ff88fa6cc62dcbacffb3d1"
+        },
+        {
+          "path": "src/Modules/Identity/StepUpContracts.cs",
+          "prior_validated_blob": "0b3d478a21bcad375924c95aaa151d137d61b9f7",
+          "actual_source_blob": "0b3d478a21bcad375924c95aaa151d137d61b9f7",
+          "working_blob": "0b3d478a21bcad375924c95aaa151d137d61b9f7"
+        },
+        {
+          "path": "src/Modules/Identity/StepUpRows.cs",
+          "prior_validated_blob": "f0c88429d086fada2c6c579a4e1b539c57fac4d2",
+          "actual_source_blob": "f0c88429d086fada2c6c579a4e1b539c57fac4d2",
+          "working_blob": "f0c88429d086fada2c6c579a4e1b539c57fac4d2"
+        },
+        {
+          "path": "src/Tunner.User.Bff/TunnerAuthenticatedUserBffHost.cs",
+          "prior_validated_blob": "7174de500cbef6e6e47f4ba6fa57d94c44c56e66",
+          "actual_source_blob": "7174de500cbef6e6e47f4ba6fa57d94c44c56e66",
+          "working_blob": "7174de500cbef6e6e47f4ba6fa57d94c44c56e66"
+        },
+        {
+          "path": "tests/Tunner.Identity.Persistence.Tests/AuthenticationTestHost.cs",
+          "prior_validated_blob": "1919b2a986ee7ede5ca4df45ce8b07c16b8aa300",
+          "actual_source_blob": "1919b2a986ee7ede5ca4df45ce8b07c16b8aa300",
+          "working_blob": "1919b2a986ee7ede5ca4df45ce8b07c16b8aa300"
+        },
+        {
+          "path": "tests/Tunner.Identity.Persistence.Tests/StepUpBrowserTests.cs",
+          "prior_validated_blob": "ee095cc6325ff41429e41948a0a888a131a92401",
+          "actual_source_blob": "ee095cc6325ff41429e41948a0a888a131a92401",
+          "working_blob": "ee095cc6325ff41429e41948a0a888a131a92401"
+        },
+        {
+          "path": "tests/Tunner.Identity.Persistence.Tests/StepUpTests.cs",
+          "prior_validated_blob": "5eacab77e231765fe4e1215577ea201be731991c",
+          "actual_source_blob": "5eacab77e231765fe4e1215577ea201be731991c",
+          "working_blob": "5eacab77e231765fe4e1215577ea201be731991c"
+        },
+        {
+          "path": "tests/Tunner.Identity.Persistence.Tests/Tunner.Identity.Persistence.Tests.csproj",
+          "prior_validated_blob": "941606104cf26bd75524e177ff4deee5defebd4d",
+          "actual_source_blob": "3b87871dce43d847e61955afc965b57dc9f0364a",
+          "working_blob": "3b87871dce43d847e61955afc965b57dc9f0364a"
+        },
+        {
+          "path": "tools/browser-testing/BrowserTestStepUp.cs",
+          "prior_validated_blob": "87a0faa8119fcef4031de6ab441660d42cd7fa54",
+          "actual_source_blob": "73b95e14983606580f2d50b70664b17017ccd406",
+          "working_blob": "73b95e14983606580f2d50b70664b17017ccd406"
+        },
+        {
+          "path": "tools/browser-testing/Program.cs",
+          "prior_validated_blob": "a2c639b2eab3ceb89ace00a4bff165e3df59c3b1",
+          "actual_source_blob": "50346ab34923d8898d7ecdde1de6aba97b630045",
+          "working_blob": "50346ab34923d8898d7ecdde1de6aba97b630045"
+        },
+        {
+          "path": "tools/browser-testing/Tunner.BrowserTesting.csproj",
+          "prior_validated_blob": "36f2a47cac0f7f071650ce9f11ba2a11e8b128ba",
+          "actual_source_blob": "6696de6cc928cf500f80ed483a76d91169dcbd5a",
+          "working_blob": "6696de6cc928cf500f80ed483a76d91169dcbd5a"
+        },
+        {
+          "path": "tools/dev/tunner-browser.ps1",
+          "prior_validated_blob": "473ae923b3958d52854f0ead5163b25cc44a2617",
+          "actual_source_blob": "473ae923b3958d52854f0ead5163b25cc44a2617",
+          "working_blob": "473ae923b3958d52854f0ead5163b25cc44a2617"
+        },
+        {
+          "path": "web/apps/user/authentication.tsx",
+          "prior_validated_blob": "e82584122116bf0759bd2e00db730bf09fd8efb4",
+          "actual_source_blob": "e82584122116bf0759bd2e00db730bf09fd8efb4",
+          "working_blob": "e82584122116bf0759bd2e00db730bf09fd8efb4"
+        },
+        {
+          "path": "web/apps/user/main.tsx",
+          "prior_validated_blob": "ddc9d200f77b543ffe19f9f642f4d722dff27637",
+          "actual_source_blob": "ddc9d200f77b543ffe19f9f642f4d722dff27637",
+          "working_blob": "ddc9d200f77b543ffe19f9f642f4d722dff27637"
+        },
+        {
+          "path": "web/apps/user/step-up.content.proposal.json",
+          "prior_validated_blob": "4e4b69b62d103ea611ca815e30eb28ba6e7be8a5",
+          "actual_source_blob": "4e4b69b62d103ea611ca815e30eb28ba6e7be8a5",
+          "working_blob": "4e4b69b62d103ea611ca815e30eb28ba6e7be8a5"
+        },
+        {
+          "path": "web/apps/user/step-up.css",
+          "prior_validated_blob": "e69cce43757d8b1422c0348675665fa393898dd8",
+          "actual_source_blob": "e69cce43757d8b1422c0348675665fa393898dd8",
+          "working_blob": "e69cce43757d8b1422c0348675665fa393898dd8"
+        },
+        {
+          "path": "web/apps/user/step-up.tsx",
+          "prior_validated_blob": "88489cf653aa03ad20218f3ade6ab16f7e98665d",
+          "actual_source_blob": "88489cf653aa03ad20218f3ade6ab16f7e98665d",
+          "working_blob": "88489cf653aa03ad20218f3ade6ab16f7e98665d"
+        },
+        {
+          "path": "web/fixtures/step-up/fixture.css",
+          "prior_validated_blob": "c532bef191e2ed42d54f5cdf2f992092d761cf88",
+          "actual_source_blob": "c532bef191e2ed42d54f5cdf2f992092d761cf88",
+          "working_blob": "c532bef191e2ed42d54f5cdf2f992092d761cf88"
+        },
+        {
+          "path": "web/fixtures/step-up/index.html",
+          "prior_validated_blob": "d1711540f51ec066993cb1b4f5fb90bf46a35d61",
+          "actual_source_blob": "d1711540f51ec066993cb1b4f5fb90bf46a35d61",
+          "working_blob": "d1711540f51ec066993cb1b4f5fb90bf46a35d61"
+        },
+        {
+          "path": "web/fixtures/step-up/main.tsx",
+          "prior_validated_blob": "d9cec43de95b62ed4075250b46f79ea9541b50ed",
+          "actual_source_blob": "d9cec43de95b62ed4075250b46f79ea9541b50ed",
+          "working_blob": "d9cec43de95b62ed4075250b46f79ea9541b50ed"
+        },
+        {
+          "path": "web/fixtures/step-up/vite.config.ts",
+          "prior_validated_blob": "23b682c47a73c52e2363aa94727177e9b2d7c5e7",
+          "actual_source_blob": "23b682c47a73c52e2363aa94727177e9b2d7c5e7",
+          "working_blob": "23b682c47a73c52e2363aa94727177e9b2d7c5e7"
+        },
+        {
+          "path": "web/fixtures/ui/main.tsx",
+          "prior_validated_blob": "94759d515f274323f5110a763fe9f20715c604fc",
+          "actual_source_blob": "94759d515f274323f5110a763fe9f20715c604fc",
+          "working_blob": "94759d515f274323f5110a763fe9f20715c604fc"
+        },
+        {
+          "path": "web/package.json",
+          "prior_validated_blob": "17528ac713eb830c4202905944fbaaad0aa521a2",
+          "actual_source_blob": "17528ac713eb830c4202905944fbaaad0aa521a2",
+          "working_blob": "17528ac713eb830c4202905944fbaaad0aa521a2"
+        },
+        {
+          "path": "web/packages/ui/src/dialog.tsx",
+          "prior_validated_blob": "376d07c8953aa24ffe2c03fa4938050b8cd8b0d7",
+          "actual_source_blob": "376d07c8953aa24ffe2c03fa4938050b8cd8b0d7",
+          "working_blob": "376d07c8953aa24ffe2c03fa4938050b8cd8b0d7"
+        },
+        {
+          "path": "web/packages/ui/src/forms.tsx",
+          "prior_validated_blob": "a60383e7bbe73eaefc55c250be209fd2eff85b2c",
+          "actual_source_blob": "a60383e7bbe73eaefc55c250be209fd2eff85b2c",
+          "working_blob": "a60383e7bbe73eaefc55c250be209fd2eff85b2c"
+        },
+        {
+          "path": "web/packages/ui/src/index.ts",
+          "prior_validated_blob": "650dfdc4736db157004ebde577e29f003a334cd6",
+          "actual_source_blob": "650dfdc4736db157004ebde577e29f003a334cd6",
+          "working_blob": "650dfdc4736db157004ebde577e29f003a334cd6"
+        },
+        {
+          "path": "web/packages/ui/styles/tokens.generated.css",
+          "prior_validated_blob": "8a0ca6dacc0a7d8589716558ee6dd2ea141efbb0",
+          "actual_source_blob": "8a0ca6dacc0a7d8589716558ee6dd2ea141efbb0",
+          "working_blob": "8a0ca6dacc0a7d8589716558ee6dd2ea141efbb0"
+        },
+        {
+          "path": "web/packages/ui/theme.tokens.json",
+          "prior_validated_blob": "b2119a6503fc2abc8d3acd5b7f6f7c76b819cc9e",
+          "actual_source_blob": "b2119a6503fc2abc8d3acd5b7f6f7c76b819cc9e",
+          "working_blob": "b2119a6503fc2abc8d3acd5b7f6f7c76b819cc9e"
+        },
+        {
+          "path": "web/playwright.step-up.config.ts",
+          "prior_validated_blob": "78b124f0ae40cff290c769d4e2bc940062d0f37c",
+          "actual_source_blob": "78b124f0ae40cff290c769d4e2bc940062d0f37c",
+          "working_blob": "78b124f0ae40cff290c769d4e2bc940062d0f37c"
+        },
+        {
+          "path": "web/tests/browser-testing/authentication-flow.spec.ts",
+          "prior_validated_blob": "391d1a88c57c34609cd3b6937272d8574e503bbb",
+          "actual_source_blob": "391d1a88c57c34609cd3b6937272d8574e503bbb",
+          "working_blob": "391d1a88c57c34609cd3b6937272d8574e503bbb"
+        },
+        {
+          "path": "web/tests/contracts.test.tsx",
+          "prior_validated_blob": "6021b66f32e758e622bee26c3cf15e7e205a145b",
+          "actual_source_blob": "6021b66f32e758e622bee26c3cf15e7e205a145b",
+          "working_blob": "6021b66f32e758e622bee26c3cf15e7e205a145b"
+        },
+        {
+          "path": "web/tests/step-up/step-up.spec.ts",
+          "prior_validated_blob": "4445d1fd2e126355a3b82967c877e6978aede5d9",
+          "actual_source_blob": "4445d1fd2e126355a3b82967c877e6978aede5d9",
+          "working_blob": "4445d1fd2e126355a3b82967c877e6978aede5d9"
+        },
+        {
+          "path": "docs/contracts/operation-step-up-contract.md",
+          "prior_validated_blob": "e5fb5c6bcfac5b4fcab8b83c00bd649f2c28a780",
+          "actual_source_blob": "e5fb5c6bcfac5b4fcab8b83c00bd649f2c28a780",
+          "working_blob": "e5fb5c6bcfac5b4fcab8b83c00bd649f2c28a780"
+        }
+      ],
+      "prior_source_binding_ref": "governance/evidence/TUN-P2-005-006-TOTP-COMPATIBILITY-20261110.json",
+      "prior_source_envelope_git_ref": "eb9228cc3ed832980deb92407d80ab92e7b8a00e:governance/evidence/TUN-P2-006-AUDIT-CORRECTION-SOURCE.json"
+    }
+  ],
+  "actual_native_index": {
+    "path": "governance/evidence/p2-008-totp-20261110/parent-runtime-compatibility/f1dd54a/execution-index.json",
+    "sha256": "27b77aeca97dd27bb46979d436ffaf885f3d38c1cca58bbc77ea8d6c6d296779"
+  },
+  "actual_normal_host_archive_index": {
+    "path": "governance/evidence/p2-008-totp-20261110/parent-runtime-compatibility/eb9228c/legacy-host-smoke/archive-index.json",
+    "sha256": "4b06037b4805177e133cfca257432779870abb5b1edeb8ff85b695fc5ba2ed15",
+    "bytes": 20079
+  },
+  "actual_results": {
+    "identity": {
+      "passed": 260,
+      "failed": 0,
+      "skipped": 0,
+      "invocation": "f1dd54a3a6a4f4d3f0e1d66e92c02fb52053d7a1"
+    },
+    "architecture": {
+      "passed": 237,
+      "failed": 0,
+      "skipped": 0,
+      "invocation": "a933b5f004b0341b2f1e2f26568928ec98603f21"
+    },
+    "normal_host": {
+      "browser_predicates": 13,
+      "coordinator_resource_checks": 16,
+      "all_passed": true,
+      "duration_ms": 21859,
+      "browser": "151.0.7922.34",
+      "browser_failure_reason": "NONE",
+      "invocation": "eb9228cc3ed832980deb92407d80ab92e7b8a00e",
+      "receipt_ref": "governance/evidence/p2-008-totp-20261110/parent-runtime-compatibility/eb9228c/legacy-host-smoke/v4/actual-receipt.json"
+    }
+  },
+  "ui_evidence_reused_at_true_identity": [
+    {
+      "scope_id": "TUN-P2-004",
+      "ref": "governance/evidence/TUN-P2-004-UI-COMPLIANCE-TOTP-20261110.json",
+      "sha256": "8fbf361ce39cb6b134acbed1395392c37fece107bf20df5e573efd44ef1734b5",
+      "evidence_commit": "5a168a31ba799e436e02c80523a0ab9813fc9926",
+      "actual_ui_tested_source": "6e562db102ce75d5ed478a15e2970ff55ab98fef",
+      "owned_count": 66,
+      "all_owned_ui_source_objects_unchanged": true,
+      "approval_history_preserved": true
+    },
+    {
+      "scope_id": "TUN-P2-005",
+      "ref": "governance/evidence/TUN-P2-005-UI-COMPLIANCE-TOTP-20261110.json",
+      "sha256": "f8e642cbc90fd90a0aabf1be9ba2ffe4a6f71e5461f163f4128cf539b05e5b67",
+      "evidence_commit": "5a168a31ba799e436e02c80523a0ab9813fc9926",
+      "actual_ui_tested_source": "6e562db102ce75d5ed478a15e2970ff55ab98fef",
+      "owned_count": 19,
+      "all_owned_ui_source_objects_unchanged": true,
+      "approval_history_preserved": true
+    },
+    {
+      "scope_id": "TUN-P2-006",
+      "ref": "governance/evidence/TUN-P2-006-UI-COMPLIANCE-TOTP-20261110.json",
+      "sha256": "044554f8152455963ca98641352b6afa3d9c504c280311d767d731f0e08eb423",
+      "evidence_commit": "5a168a31ba799e436e02c80523a0ab9813fc9926",
+      "actual_ui_tested_source": "6e562db102ce75d5ed478a15e2970ff55ab98fef",
+      "owned_count": 19,
+      "all_owned_ui_source_objects_unchanged": true,
+      "approval_history_preserved": true
+    }
+  ],
+  "ui_boundary": "Production UI source is unchanged. Existing scoped consent, per-item checks, rendered/reference screenshots and actual178 browser-case history remain at their true6e/eb1/5a provenance. Broad107/205 manifests also include sensitive runner files changed byf1; this packet does not assert blanket current107/205 equality or redate those historical manifests.",
+  "scoped_qa_review": {
+    "role": "tester-qa-engineer",
+    "skill_ref": ".agent/skills/tester-qa-engineer/SKILL.md",
+    "skill_version": "1.1.0",
+    "skill_sha256": "52aee18f251a614e339adba9f7c886a5da1ef4ab0482ae6b77044184128415c6",
+    "reviewed_at": "2026-11-11T03:14:50.347Z",
+    "result": "PASS_PARENT_COMPATIBILITY_ONLY",
+    "conclusion": "Current changed test-project/shared helper have actual fullIdentity coverage; the extracted ordinary host has actual registration, SMTP verification, profile, password sign-in/reload, exact generic proof, code-free recovery, cookies/private state, domain counts and logout guards. Prior helper failures, strict private/browser TLS boundary and exact source/build ownership are retained. Parent UI source remains equal to its approved current proof.",
+    "blocking_findings": [],
+    "history": "No other specialist/human review is fabricated or redated; historical role records remain unchanged."
+  },
+  "preserved_historical_proofs": [
+    "governance/evidence/TUN-P2-004-TOTP-COMPATIBILITY-20261110.json",
+    "governance/evidence/TUN-P2-005-006-TOTP-COMPATIBILITY-20261110.json",
+    "governance/evidence/TUN-P2-004-UI-COMPLIANCE-TOTP-20261110.json",
+    "governance/evidence/TUN-P2-005-UI-COMPLIANCE-TOTP-20261110.json",
+    "governance/evidence/TUN-P2-006-UI-COMPLIANCE-TOTP-20261110.json"
+  ],
+  "r_and_d_ref": "governance/evidence/p2-008-totp-20261110/parent-runtime-compatibility/eb9228c/node-system-trust-rd.json",
+  "remaining_boundaries": [
+    "Parent004/005/006 lifecycle remains VALIDATION.",
+    "Native readiness remains a separate post-integration gate result.",
+    "No final008 VAL008/UXFID008 or integrated TOTP-browser acceptance.",
+    "No production policy/publication,Product,merge,deployment or release approval."
+  ],
+  "exact_next_action": "Root reviews/applies/commits only this compatibility patch, then native validate, the three parent gates, next and context refresh determine008eligibility."
+}
