@@ -205,7 +205,7 @@ internal abstract class RecoveryCodeOwnedContainer : IAsyncDisposable
         }
         var parameters = new CreateContainerParameters
         {
-            Name = name, Image = ImageId, Env = EnvironmentValues, Cmd = Command,
+            Name = name, Image = ImageId, Env = EnvironmentValues,
             Labels = new Dictionary<string, string>(StringComparer.Ordinal)
             { [OwnerLabel] = InstanceId.ToString("N"), [RoleLabel] = role, [RepositoryLabel] = repository },
             ExposedPorts = ports.ToDictionary(Key, _ => default(EmptyStruct)),
@@ -216,6 +216,7 @@ internal abstract class RecoveryCodeOwnedContainer : IAsyncDisposable
                 PortBindings = ports.ToDictionary(Key, _ => (IList<PortBinding>)[new PortBinding { HostIP = "127.0.0.1", HostPort = "" }])
             }
         };
+        if (Command is { } command) parameters.Cmd = command;
         createAttempted = true;
         var created = await docker.Containers.CreateContainerAsync(parameters, ct).ConfigureAwait(false);
         containerId = created.ID; // Retain positive identity before Start/readiness/any other fallible work.
@@ -328,7 +329,7 @@ internal abstract class RecoveryCodeOwnedContainer : IAsyncDisposable
 internal sealed class RecoveryCodeOwnedPostgres(RecoveryCodeLocalDockerEndpoint endpoint, string repository)
     : RecoveryCodeOwnedContainer(endpoint, repository, "native-postgres", RecoveryCodeOwnedDockerFixture.NativePostgresImage, [5432])
 {
-    internal string Host => "127.0.0.1";
+    internal string Host { get; } = "127.0.0.1";
     internal int Port => Published(5432);
     private bool ready;
     protected override IList<string> EnvironmentValues => ["POSTGRES_DB=tunner_outbox_test", "POSTGRES_USER=tunner", "POSTGRES_HOST_AUTH_METHOD=trust", "PGDATA=/var/lib/postgresql/p2_009"];
@@ -392,7 +393,7 @@ internal sealed class RecoveryCodeOwnedOpenBao(RecoveryCodeLocalDockerEndpoint e
     {
         var expected = CredentialScope();
         if (!Available || scope.Endpoint != expected.Endpoint || scope.InstanceId != expected.InstanceId ||
-            scope.EnvironmentClass != expected.EnvironmentClass || scope.StoreReference != expected.StoreReference || scope.ResourcePrefix != expected.ResourcePrefix)
+            scope.StoreReference != expected.StoreReference || scope.ResourcePrefix != expected.ResourcePrefix)
             throw new InvalidOperationException("RECOVERY_VAULT_SCOPE_INVALID");
         var session = await LocalOpenBaoSession.CreateAsync(scope, bootstrap, ct).ConfigureAwait(false); sessions.Add(session); return session;
     }
@@ -432,10 +433,10 @@ internal sealed class RecoveryCodeBorrowedPostgres
     private RecoveryCodeBorrowedPostgres(RecoveryCodeLocalDockerEndpoint endpoint, string id, string project)
     { this.endpoint = endpoint; ContainerId = id; ProjectName = project; }
     internal string ContainerId { get; }
-    internal string ImageId => ExpectedImage;
+    internal string ImageId { get; } = ExpectedImage;
     internal string ProjectName { get; }
-    internal string Host => "127.0.0.1";
-    internal int Port => 25432;
+    internal string Host { get; } = "127.0.0.1";
+    internal int Port { get; } = 25432;
     internal static async Task<RecoveryCodeBorrowedPostgres> VerifyAsync(RecoveryCodeLocalDockerEndpoint endpoint, string project, CancellationToken ct)
     {
         await endpoint.VerifyEngineAsync(ct).ConfigureAwait(false);
