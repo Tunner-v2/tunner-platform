@@ -1,0 +1,1179 @@
+{
+  "config": {
+    "argv": [
+      "C:\\Program Files\\nodejs\\node.exe",
+      "C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\web\\node_modules\\@playwright\\test\\cli.js",
+      "test",
+      "--config",
+      "playwright.authentication.config.ts",
+      "tests/authentication/federation.spec.ts",
+      "--reporter=list,json",
+      "--output",
+      "C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\artifacts\\p2-010-federation-20261112\\registration-wip-ui\\v01-regression\\runs"
+    ],
+    "configFile": "C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\web\\playwright.authentication.config.ts",
+    "rootDir": "C:/Workspace/AI MCP/Enterprise Solution/TunnerPlatform.V2.0/web/tests/authentication",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "C:/Workspace/AI MCP/Enterprise Solution/TunnerPlatform.V2.0/artifacts/p2-010-federation-20261112/registration-wip-ui/v01-regression/runs",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "C:/Workspace/AI MCP/Enterprise Solution/TunnerPlatform.V2.0/web/tests/authentication",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list"
+      ],
+      [
+        "json"
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.62.1",
+    "workers": 1,
+    "webServer": {
+      "command": "node node_modules/vite/bin/vite.js --config apps/user/vite.config.ts",
+      "url": "http://127.0.0.1:5189/registration/",
+      "reuseExistingServer": false,
+      "timeout": 30000
+    }
+  },
+  "suites": [
+    {
+      "title": "federation.spec.ts",
+      "file": "federation.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "Unset federation does not require new publications or activate old provider slots",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 832,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-12T17:58:00.381Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "3b0c6a39da995ae2526f-041392f98a6d48ad5a9f",
+          "file": "federation.spec.ts",
+          "line": 17,
+          "column": 84
+        },
+        {
+          "title": "Disabled federation does not require new publications or activate old provider slots",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 693,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-12T17:58:02.094Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "3b0c6a39da995ae2526f-eb7ab380c8e3a03a255b",
+          "file": "federation.spec.ts",
+          "line": 17,
+          "column": 84
+        },
+        {
+          "title": "An enabled capability requires its published feedback and fails closed when absent",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 634,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-12T17:58:02.809Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "3b0c6a39da995ae2526f-f2427422386f444d2f89",
+          "file": "federation.spec.ts",
+          "line": 22,
+          "column": 1
+        },
+        {
+          "title": "Google starts without credential validation and navigates only its exact fixed clean challenge",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1035,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-12T17:58:03.462Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "3b0c6a39da995ae2526f-1c01d67961f5798b914c",
+          "file": "federation.spec.ts",
+          "line": 25,
+          "column": 55
+        },
+        {
+          "title": "Microsoft starts without credential validation and navigates only its exact fixed clean challenge",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 844,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-12T17:58:04.518Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "3b0c6a39da995ae2526f-c4c8517ebe90daf4ef85",
+          "file": "federation.spec.ts",
+          "line": 25,
+          "column": 55
+        },
+        {
+          "title": "A current principal supplies Start CSRF only and does not imply sign-in success",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 722,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-12T17:58:05.378Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "3b0c6a39da995ae2526f-fa50d10da189f73ae134",
+          "file": "federation.spec.ts",
+          "line": 34,
+          "column": 1
+        },
+        {
+          "title": "Non401 session failure does not rotate anonymous context or prepare a new operation",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 727,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-12T17:58:06.116Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "3b0c6a39da995ae2526f-280c48325d94c1eb3a65",
+          "file": "federation.spec.ts",
+          "line": 39,
+          "column": 1
+        },
+        {
+          "title": "Start rejects unbound challenge path /authentication/federation/microsoft/challenge",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 707,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-12T17:58:06.863Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "3b0c6a39da995ae2526f-e551e2fbf471e832a7f1",
+          "file": "federation.spec.ts",
+          "line": 45,
+          "column": 180
+        },
+        {
+          "title": "Start rejects unbound challenge path /authentication/federation/google/challenge?attempt=not-allowed",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 809,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-12T17:58:07.588Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "3b0c6a39da995ae2526f-43b79a833d81a6f86c4c",
+          "file": "federation.spec.ts",
+          "line": 45,
+          "column": 180
+        },
+        {
+          "title": "Start rejects unbound challenge path https://fixture.example.test/challenge",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 721,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-12T17:58:08.417Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "3b0c6a39da995ae2526f-98a4b0f310b695b603cb",
+          "file": "federation.spec.ts",
+          "line": 45,
+          "column": 180
+        },
+        {
+          "title": "Restored VERIFIED requires explicit completion with exact original result and current CSRF",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 772,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-12T17:58:09.156Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "3b0c6a39da995ae2526f-ccb353a02811520b7781",
+          "file": "federation.spec.ts",
+          "line": 49,
+          "column": 1
+        },
+        {
+          "title": "Restored UNKNOWN never reissues a challenge or infers a surviving session outcome",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 845,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-12T17:58:09.960Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "3b0c6a39da995ae2526f-7d2f3ba2aacd9e185781",
+          "file": "federation.spec.ts",
+          "line": 55,
+          "column": 77
+        },
+        {
+          "title": "Restored PREPARED never reissues a challenge or infers a surviving session outcome",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 864,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-12T17:58:10.822Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "3b0c6a39da995ae2526f-bde68a152e26e18c31e6",
+          "file": "federation.spec.ts",
+          "line": 55,
+          "column": 77
+        },
+        {
+          "title": "Restored CHALLENGE_ADMITTED never reissues a challenge or infers a surviving session outcome",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 851,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-12T17:58:11.704Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "3b0c6a39da995ae2526f-ad76b8a07b7e6a7b79d9",
+          "file": "federation.spec.ts",
+          "line": 55,
+          "column": 77
+        },
+        {
+          "title": "Restored COMPLETED never reissues a challenge or infers a surviving session outcome",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 899,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-12T17:58:12.571Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "3b0c6a39da995ae2526f-f407cdbac3e2af9b473b",
+          "file": "federation.spec.ts",
+          "line": 55,
+          "column": 77
+        },
+        {
+          "title": "VERIFIED with an error classification remains unresolved instead of enabling completion",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 749,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-12T17:58:13.486Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "3b0c6a39da995ae2526f-c2e95892f482f34223d3",
+          "file": "federation.spec.ts",
+          "line": 63,
+          "column": 1
+        },
+        {
+          "title": "A different requestId cannot complete the retained federation operation",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 817,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-12T17:58:14.254Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "3b0c6a39da995ae2526f-3332c0b3900e1e65e9b9",
+          "file": "federation.spec.ts",
+          "line": 66,
+          "column": 49
+        },
+        {
+          "title": "A different attemptId cannot complete the retained federation operation",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 745,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-12T17:58:15.087Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "3b0c6a39da995ae2526f-5070ac8220fae2ac1fff",
+          "file": "federation.spec.ts",
+          "line": 66,
+          "column": 49
+        },
+        {
+          "title": "Lost completion is not retried; explicit exact-result check recovers with fresh principal CSRF",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 938,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-12T17:58:15.851Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "3b0c6a39da995ae2526f-f19ef660e9d54fa769b5",
+          "file": "federation.spec.ts",
+          "line": 71,
+          "column": 1
+        },
+        {
+          "title": "MFA_REQUIRED preserves the existing additional-verification handoff instead of ordinary signed-in success",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 837,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-12T17:58:16.806Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "3b0c6a39da995ae2526f-d7eeca5d69e4e1e6e194",
+          "file": "federation.spec.ts",
+          "line": 78,
+          "column": 1
+        },
+        {
+          "title": "Terminal acknowledgement clears only the original pointer before returning to ordinary Login",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 987,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-12T17:58:17.662Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "3b0c6a39da995ae2526f-b6cd16583545425a5895",
+          "file": "federation.spec.ts",
+          "line": 84,
+          "column": 1
+        },
+        {
+          "title": "In-flight provider preparation prevents credential and duplicate-provider submissions",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 875,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-12T17:58:18.672Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "3b0c6a39da995ae2526f-862d44e61465465c76b8",
+          "file": "federation.spec.ts",
+          "line": 89,
+          "column": 1
+        },
+        {
+          "title": "Route revision aborts/fences an old completion response before a new Login entry",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 871,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-12T17:58:19.566Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "3b0c6a39da995ae2526f-9b093a7cba9732056e8a",
+          "file": "federation.spec.ts",
+          "line": 96,
+          "column": 1
+        },
+        {
+          "title": "Published federation recovery preserves Login assets accessible controls and layout at 1440",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1560,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-12T17:58:20.451Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "3b0c6a39da995ae2526f-18282778e68606755dc2",
+          "file": "federation.spec.ts",
+          "line": 102,
+          "column": 39
+        },
+        {
+          "title": "Published federation recovery preserves Login assets accessible controls and layout at 768",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1600,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-12T17:58:22.027Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "3b0c6a39da995ae2526f-2e1b9f4d3a54fb392869",
+          "file": "federation.spec.ts",
+          "line": 102,
+          "column": 39
+        },
+        {
+          "title": "Published federation recovery preserves Login assets accessible controls and layout at 390",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1528,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-12T17:58:23.646Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "3b0c6a39da995ae2526f-f68adf460c24863f14ba",
+          "file": "federation.spec.ts",
+          "line": 102,
+          "column": 39
+        },
+        {
+          "title": "Published federation recovery preserves Login assets accessible controls and layout at 320",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1465,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-12T17:58:25.189Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "3b0c6a39da995ae2526f-385d5b8808f51518e7e0",
+          "file": "federation.spec.ts",
+          "line": 102,
+          "column": 39
+        },
+        {
+          "title": "V01 focused canonical reload and Back Forward restore only the original pending federation context",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2821,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-12T17:58:26.670Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "3b0c6a39da995ae2526f-39f5455657f97c8e1dcc",
+          "file": "federation.spec.ts",
+          "line": 109,
+          "column": 1
+        },
+        {
+          "title": "V01 focused UNKNOWN feedback and keyboard controls at desktop and narrow mobile",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3160,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-12T17:58:29.509Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "federation-unknown-1440",
+                      "contentType": "image/png",
+                      "path": "C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\artifacts\\p2-010-federation-20261112\\registration-wip-ui\\v01-regression\\runs\\federation-V01-focused-UNK-79761-t-desktop-and-narrow-mobile\\attachments\\federation-unknown-1440-6276deaa7d127dbd85bf38af08df03b5bab55af8.png"
+                    },
+                    {
+                      "name": "federation-unknown-320",
+                      "contentType": "image/png",
+                      "path": "C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\artifacts\\p2-010-federation-20261112\\registration-wip-ui\\v01-regression\\runs\\federation-V01-focused-UNK-79761-t-desktop-and-narrow-mobile\\attachments\\federation-unknown-320-8b958820ffb99edce254ef38e79ca4f3ce564f33.png"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "3b0c6a39da995ae2526f-0904a8bf2f98938855ed",
+          "file": "federation.spec.ts",
+          "line": 130,
+          "column": 63
+        },
+        {
+          "title": "V01 focused REJECTED feedback and keyboard controls at desktop and narrow mobile",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2999,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-12T17:58:32.685Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "federation-rejected-1440",
+                      "contentType": "image/png",
+                      "path": "C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\artifacts\\p2-010-federation-20261112\\registration-wip-ui\\v01-regression\\runs\\federation-V01-focused-REJ-4cc6b-t-desktop-and-narrow-mobile\\attachments\\federation-rejected-1440-b4b9c5060b1baf96826b05e6de454f5b4fec00e2.png"
+                    },
+                    {
+                      "name": "federation-rejected-320",
+                      "contentType": "image/png",
+                      "path": "C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\artifacts\\p2-010-federation-20261112\\registration-wip-ui\\v01-regression\\runs\\federation-V01-focused-REJ-4cc6b-t-desktop-and-narrow-mobile\\attachments\\federation-rejected-320-d4899529c6dc14da086cb64077489b777cd0542d.png"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "3b0c6a39da995ae2526f-f3b795aa81ebed8ac7b2",
+          "file": "federation.spec.ts",
+          "line": 130,
+          "column": 63
+        },
+        {
+          "title": "V01 focused EXPIRED feedback and keyboard controls at desktop and narrow mobile",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2917,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-12T17:58:35.701Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "federation-expired-1440",
+                      "contentType": "image/png",
+                      "path": "C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\artifacts\\p2-010-federation-20261112\\registration-wip-ui\\v01-regression\\runs\\federation-V01-focused-EXP-996e5-t-desktop-and-narrow-mobile\\attachments\\federation-expired-1440-1d20a44a610661482385b0a4f031aff0cf3fd1e7.png"
+                    },
+                    {
+                      "name": "federation-expired-320",
+                      "contentType": "image/png",
+                      "path": "C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\artifacts\\p2-010-federation-20261112\\registration-wip-ui\\v01-regression\\runs\\federation-V01-focused-EXP-996e5-t-desktop-and-narrow-mobile\\attachments\\federation-expired-320-4069354967ab7895f81704a26e7611be59e59758.png"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "3b0c6a39da995ae2526f-518ce7d373eec82b1e03",
+          "file": "federation.spec.ts",
+          "line": 130,
+          "column": 63
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-11-12T17:57:58.493Z",
+    "duration": 70546.975,
+    "expected": 31,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}

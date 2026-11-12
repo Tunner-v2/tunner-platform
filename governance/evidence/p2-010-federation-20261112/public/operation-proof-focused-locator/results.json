@@ -1,0 +1,159 @@
+{
+  "config": {
+    "argv": [
+      "C:\\Program Files\\nodejs\\node.exe",
+      "C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\web\\node_modules\\@playwright\\test\\cli.js",
+      "test",
+      "--config",
+      "playwright.step-up.config.ts",
+      "tests/step-up/federation.spec.ts",
+      "--grep",
+      "Lost continuation requires",
+      "--output",
+      "../artifacts/p2-010-federation-20261112/operation-proof-focused-locator/runs",
+      "--reporter",
+      "line,json"
+    ],
+    "configFile": "C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\web\\playwright.step-up.config.ts",
+    "rootDir": "C:/Workspace/AI MCP/Enterprise Solution/TunnerPlatform.V2.0/web/tests/step-up",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "C:/Workspace/AI MCP/Enterprise Solution/TunnerPlatform.V2.0/artifacts/p2-010-federation-20261112/operation-proof-focused-locator/runs",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "C:/Workspace/AI MCP/Enterprise Solution/TunnerPlatform.V2.0/web/tests/step-up",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "line"
+      ],
+      [
+        "json"
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.62.1",
+    "workers": 1,
+    "webServer": {
+      "command": "node node_modules/vite/bin/vite.js --config fixtures/step-up/vite.config.ts",
+      "url": "http://127.0.0.1:5192/browser-testing/step-up-assets/",
+      "reuseExistingServer": false,
+      "timeout": 30000
+    }
+  },
+  "suites": [
+    {
+      "title": "federation.spec.ts",
+      "file": "federation.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "Lost continuation requires a safe owner-result read instead of automatic mutation retry",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 6424,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('dialog').getByRole('status')\nExpected: \u001b[32m\"Verification completed\"\u001b[39m\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toHaveText\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('dialog').getByRole('status')\u001b[22m\n\u001b[2m    - locator resolved to <p role=\"status\" class=\"step-up-status\">…</p>\u001b[22m\n\u001b[2m    - unexpected value \"Please wait while we check this verification.\"\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('dialog').getByRole('status')\nExpected: \u001b[32m\"Verification completed\"\u001b[39m\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toHaveText\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('dialog').getByRole('status')\u001b[22m\n\u001b[2m    - locator resolved to <p role=\"status\" class=\"step-up-status\">…</p>\u001b[22m\n\u001b[2m    - unexpected value \"Please wait while we check this verification.\"\u001b[22m\n\n    at C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\web\\tests\\step-up\\federation.spec.ts:67:146",
+                    "location": {
+                      "file": "C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\web\\tests\\step-up\\federation.spec.ts",
+                      "column": 146,
+                      "line": 67
+                    },
+                    "snippet": "  65 | test('Lost continuation requires a safe owner-result read instead of automatic mutation retry',async({page})=>{\n  66 |  const state=await setup(page,restored());state.loseContinue=true;await open(page);await page.getByRole('button',{name:'Continue this verification',exact:true}).click();await expect(page.getByRole('button',{name:'Check verification status',exact:true})).toBeEnabled();expect(state.continues).toBe(1);\n> 67 |  await page.getByRole('button',{name:'Check verification status',exact:true}).click();await expect(page.getByRole('dialog').getByRole('status')).toHaveText('Verification completed');expect(state.continues).toBe(1);expect(state.start).toBe(0);\n     |                                                                                                                                                  ^\n  68 | });\n  69 | for(const wrong of ['requestId','attemptId','operationReference','linkReference'] as const)test('Result cannot replace the retained '+wrong,async({page})=>{\n  70 |  const state=await setup(page,restored());state.wrong=wrong;await open(page);await page.getByRole('button',{name:'Check verification status',exact:true}).click();await expect(page.getByRole('alert')).toHaveText(proposal.content['stepUp.error.changed']);await expect(page.getByRole('dialog')).toBeVisible();await expect(page.getByRole('button',{name:'Continue this verification',exact:true})).toHaveCount(0);expect(state.continues).toBe(0);"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\web\\tests\\step-up\\federation.spec.ts",
+                        "column": 146,
+                        "line": 67
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('dialog').getByRole('status')\nExpected: \u001b[32m\"Verification completed\"\u001b[39m\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toHaveText\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('dialog').getByRole('status')\u001b[22m\n\u001b[2m    - locator resolved to <p role=\"status\" class=\"step-up-status\">…</p>\u001b[22m\n\u001b[2m    - unexpected value \"Please wait while we check this verification.\"\u001b[22m\n\n\n  65 | test('Lost continuation requires a safe owner-result read instead of automatic mutation retry',async({page})=>{\n  66 |  const state=await setup(page,restored());state.loseContinue=true;await open(page);await page.getByRole('button',{name:'Continue this verification',exact:true}).click();await expect(page.getByRole('button',{name:'Check verification status',exact:true})).toBeEnabled();expect(state.continues).toBe(1);\n> 67 |  await page.getByRole('button',{name:'Check verification status',exact:true}).click();await expect(page.getByRole('dialog').getByRole('status')).toHaveText('Verification completed');expect(state.continues).toBe(1);expect(state.start).toBe(0);\n     |                                                                                                                                                  ^\n  68 | });\n  69 | for(const wrong of ['requestId','attemptId','operationReference','linkReference'] as const)test('Result cannot replace the retained '+wrong,async({page})=>{\n  70 |  const state=await setup(page,restored());state.wrong=wrong;await open(page);await page.getByRole('button',{name:'Check verification status',exact:true}).click();await expect(page.getByRole('alert')).toHaveText(proposal.content['stepUp.error.changed']);await expect(page.getByRole('dialog')).toBeVisible();await expect(page.getByRole('button',{name:'Continue this verification',exact:true})).toHaveCount(0);expect(state.continues).toBe(0);\n    at C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\web\\tests\\step-up\\federation.spec.ts:67:146"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-12T16:51:44.260Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\artifacts\\p2-010-federation-20261112\\operation-proof-focused-locator\\runs\\federation-Lost-continuati-d75bc-of-automatic-mutation-retry\\error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\web\\tests\\step-up\\federation.spec.ts",
+                    "column": 146,
+                    "line": 67
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "3b0c6a39da995ae2526f-131bb1b9e542baf1e00a",
+          "file": "federation.spec.ts",
+          "line": 65,
+          "column": 1
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-11-12T16:51:42.198Z",
+    "duration": 9743.115,
+    "expected": 0,
+    "skipped": 0,
+    "unexpected": 1,
+    "flaky": 0
+  }
+}

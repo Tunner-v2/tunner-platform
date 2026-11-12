@@ -1,0 +1,177 @@
+{
+  "schema_version": 1,
+  "scope_id": "TUN-P2-010",
+  "status": "TECHNICAL_INVENTORY_PRODUCTION_INACTIVE_NOT_LEGAL_APPROVAL",
+  "recorded_at_utc": "2026-11-12T20:26:58Z",
+  "reviewed_source_commit": "734828a78d9736eaa8da32c1b80ae0654a7f3641",
+  "authority_refs": [
+    "docs/authority/current/development/08_Security_Privacy_Compliance_and_Global_Market_Governance.md",
+    "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md",
+    "docs/authority/current/development/29_Privacy_Data_Lifecycle_and_Processing_Governance_FRD.md",
+    "docs/authority/current/development/33_Production_Readiness_Compliance_and_Release_Gates.md",
+    "docs/authority/current/decisions/PDR-0011_Universal_Account_Eligibility_Age-Aware_Consent_and_Delegated_Commercial_Authority.md"
+  ],
+  "assessment_ref": "governance/evidence/TUN-P2-010-DATA-LIFECYCLE-ASSESSMENT.json",
+  "resources": [
+    {
+      "resource": "identity.external_identity_links",
+      "owner": "Tunner Identity; Accounts retains Account/contact authority. No Product entitlement or external-provider Account authority.",
+      "logical_fields": "Immutable Account/link/provider namespace/subject; qualification client/profile/map/evidence, LEGACY_UNQUALIFIED/ACTIVE/UNLINKED and version/evidence lineage.",
+      "purpose": "Exact provider identity ownership and explicit authenticated linking; email is not the identity key.",
+      "subject_category": "Account holders or prospective registrants; identifiers/digests are not anonymous.",
+      "classification": "RESTRICTED_SECURITY with personal identifiers.",
+      "store": "Authoritative Identity/Accounts PostgreSQL and associated existing protected owner stores",
+      "recipients_processors": "Owner-authorized User projection and trusted server owners only. Native provider exchange requires explicit Google/Microsoft registration/profile. Production processor/transfer/residency approval is unselected.",
+      "retention_class": "Owner-scoped identity/security/contact evidence subject to approved purpose/class/jurisdiction/holds; no duration or production class version selected.",
+      "authority": "Tunner-owned identity/security/onboarding; provider facts are evidence only; no Product data access granted.",
+      "privacy_request_capabilities": "This increment does not implement or execute complete owner discovery/export/hold/delete/restore orchestration. Exact permissions and retention-conflict actions require the stated owner follow-up.",
+      "protection": "Existing restricted projections, protected contact/handoff material, immutable keys/FKs/version and SQL lifecycle guards; no raw token/claims bag/event/diagnostic export. Deployment encryption, backup and key custody are separate readiness evidence.",
+      "implemented_lifecycle": "Current qualified same-Account link use and immutable history; UNLINKED is logical retirement, not physical deletion.",
+      "source_ref": "src/Modules/Identity/IdentityRows.cs"
+    },
+    {
+      "resource": "identity.federation_attempts",
+      "owner": "Tunner Identity; Accounts retains Account/contact authority. No Product entitlement or external-provider Account authority.",
+      "logical_fields": "Original request/attempt/browser/session digests, profile/client/issuer/owner/proof/result binding, purpose/state/versions/times; protected selected subject or verified registration contact material only where necessary.",
+      "purpose": "One-use native protocol handoff, exact-original recovery and deferred same-origin authority; qualified Google registration evidence and operation proof are explicit purposes.",
+      "subject_category": "Account holders or prospective registrants; identifiers/digests are not anonymous.",
+      "classification": "RESTRICTED_SECURITY; protected verified email is RESTRICTED_PERSONAL.",
+      "store": "Authoritative Identity/Accounts PostgreSQL and associated existing protected owner stores",
+      "recipients_processors": "Owner-authorized User projection and trusted server owners only. Native provider exchange requires explicit Google/Microsoft registration/profile. Production processor/transfer/residency approval is unselected.",
+      "retention_class": "Owner-scoped identity/security/contact evidence subject to approved purpose/class/jurisdiction/holds; no duration or production class version selected.",
+      "authority": "Tunner-owned identity/security/onboarding; provider facts are evidence only; no Product data access granted.",
+      "privacy_request_capabilities": "This increment does not implement or execute complete owner discovery/export/hold/delete/restore orchestration. Exact permissions and retention-conflict actions require the stated owner follow-up.",
+      "protection": "Existing restricted projections, protected contact/handoff material, immutable keys/FKs/version and SQL lifecycle guards; no raw token/claims bag/event/diagnostic export. Deployment encryption, backup and key custody are separate readiness evidence.",
+      "implemented_lifecycle": "PREPARED/VERIFIED/terminal transitions and expiry stop authority; protected registration evidence is cleared on successful intake. Expiry/terminal status does not erase all rows/backups.",
+      "source_ref": "src/Modules/Identity/FederationAttemptRows.cs"
+    },
+    {
+      "resource": "identity.federation_link_operations",
+      "owner": "Tunner Identity; Accounts retains Account/contact authority. No Product entitlement or external-provider Account authority.",
+      "logical_fields": "Account/session/target link, expected versions, explicit confirmation/proof, posture and policy snapshots, session-effect/evidence/processing/retention references, terminal result lineage.",
+      "purpose": "Serialize explicit linking/unlinking, current remaining-path decision and policy-selected session effects.",
+      "subject_category": "Account holders or prospective registrants; identifiers/digests are not anonymous.",
+      "classification": "RESTRICTED_SECURITY with personal identifiers.",
+      "store": "Authoritative Identity/Accounts PostgreSQL and associated existing protected owner stores",
+      "recipients_processors": "Owner-authorized User projection and trusted server owners only. Native provider exchange requires explicit Google/Microsoft registration/profile. Production processor/transfer/residency approval is unselected.",
+      "retention_class": "Owner-scoped identity/security/contact evidence subject to approved purpose/class/jurisdiction/holds; no duration or production class version selected.",
+      "authority": "Tunner-owned identity/security/onboarding; provider facts are evidence only; no Product data access granted.",
+      "privacy_request_capabilities": "This increment does not implement or execute complete owner discovery/export/hold/delete/restore orchestration. Exact permissions and retention-conflict actions require the stated owner follow-up.",
+      "protection": "Existing restricted projections, protected contact/handoff material, immutable keys/FKs/version and SQL lifecycle guards; no raw token/claims bag/event/diagnostic export. Deployment encryption, backup and key custody are separate readiness evidence.",
+      "implemented_lifecycle": "Immutable completed unlink history protects original source generations against revival after relink; preservation is not a generic lifetime-retention rule.",
+      "source_ref": "src/Modules/Identity/FederationLinkOperationRows.cs"
+    },
+    {
+      "resource": "identity.tunner_sessions; identity.totp_pending_authentication; identity.step_up_proofs",
+      "owner": "Tunner Identity; Accounts retains Account/contact authority. No Product entitlement or external-provider Account authority.",
+      "logical_fields": "Federation link/attempt/provider namespace/client/issuer/subject/profile/evidence source lineage, protocol verification bounds and pending assurance; original session/proof ownership and protected keys/tickets.",
+      "purpose": "Current qualified shared session/MFA and exact operation proof; no provider callback, iat or prompt inference of assurance/freshness.",
+      "subject_category": "Account holders or prospective registrants; identifiers/digests are not anonymous.",
+      "classification": "RESTRICTED_SECURITY authentication material.",
+      "store": "Authoritative Identity/Accounts PostgreSQL and associated existing protected owner stores",
+      "recipients_processors": "Owner-authorized User projection and trusted server owners only. Native provider exchange requires explicit Google/Microsoft registration/profile. Production processor/transfer/residency approval is unselected.",
+      "retention_class": "Owner-scoped identity/security/contact evidence subject to approved purpose/class/jurisdiction/holds; no duration or production class version selected.",
+      "authority": "Tunner-owned identity/security/onboarding; provider facts are evidence only; no Product data access granted.",
+      "privacy_request_capabilities": "This increment does not implement or execute complete owner discovery/export/hold/delete/restore orchestration. Exact permissions and retention-conflict actions require the stated owner follow-up.",
+      "protection": "Existing restricted projections, protected contact/handoff material, immutable keys/FKs/version and SQL lifecycle guards; no raw token/claims bag/event/diagnostic export. Deployment encryption, backup and key custody are separate readiness evidence.",
+      "implemented_lifecycle": "Session/proof end and key/ticket disposal plus exact source retirement; pending/ended metadata remains subject to owner retention/holds. No physical purge/restore proof is claimed.",
+      "source_ref": "src/Modules/Identity/AuthenticationRows.cs"
+    },
+    {
+      "resource": "identity.registration_operations; accounts.accounts; accounts.verified_contacts; Identity User and existing PI/age/consent evidence",
+      "owner": "Tunner Identity; Accounts retains Account/contact authority. No Product entitlement or external-provider Account authority.",
+      "logical_fields": "FEDERATED mode, unique native attempt, same-Account link, protected address/verified-contact digest/version/map, registration policy/notices and existing contact/PI/age lineage; no fabricated password.",
+      "purpose": "Reuse shared explicit Tunner notices, contact installation, Personal Information and age/consent activation. Provider consent is insufficient; email collision requires existing Account authentication/link.",
+      "subject_category": "Account holders or prospective registrants; identifiers/digests are not anonymous.",
+      "classification": "RESTRICTED_PERSONAL contact/PI/age data and RESTRICTED_SECURITY lineage.",
+      "store": "Authoritative Identity/Accounts PostgreSQL and associated existing protected owner stores",
+      "recipients_processors": "Owner-authorized User projection and trusted server owners only. Native provider exchange requires explicit Google/Microsoft registration/profile. Production processor/transfer/residency approval is unselected.",
+      "retention_class": "Owner-scoped identity/security/contact evidence subject to approved purpose/class/jurisdiction/holds; no duration or production class version selected.",
+      "authority": "Tunner-owned identity/security/onboarding; provider facts are evidence only; no Product data access granted.",
+      "privacy_request_capabilities": "This increment does not implement or execute complete owner discovery/export/hold/delete/restore orchestration. Exact permissions and retention-conflict actions require the stated owner follow-up.",
+      "protection": "Existing restricted projections, protected contact/handoff material, immutable keys/FKs/version and SQL lifecycle guards; no raw token/claims bag/event/diagnostic export. Deployment encryption, backup and key custody are separate readiness evidence.",
+      "implemented_lifecycle": "Atomic pending contact-v1 then verified contact-v2 sequencing, current final source/notice checks and rollback; registration emits no session. Existing lifecycle/age minimization obligations remain.",
+      "source_ref": "src/Modules/Identity/RegistrationRows.cs"
+    },
+    {
+      "resource": "Transient native protocol and browser handoff",
+      "owner": "Tunner Identity; Accounts retains Account/contact authority. No Product entitlement or external-provider Account authority.",
+      "logical_fields": "Authorization code/token/claims exist only in native processing; protected protocol correlation/nonce, original paired browser/management pointers and opaque session/proof cookies.",
+      "purpose": "Validate protocol and return safely to same-origin owner completion; browser JavaScript receives bounded descriptors, never provider bearer tokens.",
+      "subject_category": "Account holders or prospective registrants; identifiers/digests are not anonymous.",
+      "classification": "RESTRICTED_SECURITY; registration read-only verified email remains personal.",
+      "store": "Native server processing and protected HttpOnly browser cookies",
+      "recipients_processors": "Owner-authorized User projection and trusted server owners only. Native provider exchange requires explicit Google/Microsoft registration/profile. Production processor/transfer/residency approval is unselected.",
+      "retention_class": "Owner-scoped identity/security/contact evidence subject to approved purpose/class/jurisdiction/holds; no duration or production class version selected.",
+      "authority": "Tunner-owned identity/security/onboarding; provider facts are evidence only; no Product data access granted.",
+      "privacy_request_capabilities": "This increment does not implement or execute complete owner discovery/export/hold/delete/restore orchestration. Exact permissions and retention-conflict actions require the stated owner follow-up.",
+      "protection": "Existing restricted projections, protected contact/handoff material, immutable keys/FKs/version and SQL lifecycle guards; no raw token/claims bag/event/diagnostic export. Deployment encryption, backup and key custody are separate readiness evidence.",
+      "implemented_lifecycle": "Native cookie expiry/one-use consumption and guarded original handoff; no global browser/memory/filesystem erasure promise.",
+      "source_ref": "src/Tunner.User.Bff/FederationOidcTransport.cs"
+    }
+  ],
+  "processing_governance": "ProcessingReference/RetentionReference and synthetic profiles are reference inputs, not an ACTIVE Processing Governance Contract. Qualified provider email does not establish legal basis, marketing consent, residency or commercial authority.",
+  "retention_boundary": "Logical unlink/revocation/expiry, protected-key disposal and finite QA cleanup are not owner physical deletion/anonymization, retention hold or restore execution. No default purge or duration is introduced.",
+  "governed_followup": {
+    "implementation_owner": "Identity owns source-scoped discovery/export/restriction/hold/delete/anonymization and restore/reconciliation behavior for its authoritative records; preserve Accounts, Audit/Security and other owner authority. Use active owner work or governed RV lineage.",
+    "approved_inputs_owner": "TUN-P2-019 supplies approved processing/retention/hold/transfer/provider and runtime inputs; it does not implement owner cleanup.",
+    "conformance_owner": "TUN-P2-017 integrates and actually verifies applicable owner lifecycle controls before production activation and privacy/conformance acceptance.",
+    "record_refs": [
+      "governance/work-items/TUN-P2-010.yaml",
+      "governance/work-items/TUN-P2-017.yaml",
+      "governance/work-items/TUN-P2-019.yaml"
+    ],
+    "timing": "These remain activation obligations, not a claim of completed lifecycle execution or a new block on disabled local engineering."
+  },
+  "source_inputs": [
+    {
+      "path": "src/Modules/Identity/IdentityRows.cs",
+      "sha256": "c8116114901817fac6c4695663b22a2ad51d6f5a6fff06b2527be97641730528"
+    },
+    {
+      "path": "src/Modules/Identity/IdentityModelConfiguration.cs",
+      "sha256": "0a48d576beeeb8246f4b7568538b49aee9caee122fe993c614e2dd2cd422717b"
+    },
+    {
+      "path": "src/Modules/Identity/FederationAttemptRows.cs",
+      "sha256": "6ad434280103c1946c01d855da94423a2b662c4c7ffa54f94b7bdfa3aaf94216"
+    },
+    {
+      "path": "src/Modules/Identity/FederationLinkOperationRows.cs",
+      "sha256": "b737458263488c977626d7da99db2996e3ad8545fce8943149b7a5904ba27a4f"
+    },
+    {
+      "path": "src/Modules/Identity/AuthenticationRows.cs",
+      "sha256": "16856a070153fcfc44c5784108c6121075877d596ef771a0182e15f5ea2a5225"
+    },
+    {
+      "path": "src/Modules/Identity/TotpRows.cs",
+      "sha256": "c3ff4e8f4544b56d54b90bad89f4a5e9239e82d02a445f787fda62eb2baf414f"
+    },
+    {
+      "path": "src/Modules/Identity/StepUpRows.cs",
+      "sha256": "48220adbe97dabd41ef7d4d863504c647328dfd85f00777d3dfd36190e1d6d75"
+    },
+    {
+      "path": "src/Modules/Identity/RegistrationRows.cs",
+      "sha256": "f8ebe0b415359615e843126bf6554617b458bb0cf38cda3c5ec16ba8ba3e38c6"
+    },
+    {
+      "path": "src/Modules/Identity/FederationAttemptRegistrationIntake.cs",
+      "sha256": "31441ef715abf459d879525047e843073d132746f821c35449d475eed6e01f30"
+    },
+    {
+      "path": "src/Modules/Identity/RegistrationFederationIntake.cs",
+      "sha256": "cbc6344500b1e9765c69f7e71d7d5b23228962dbcf92a26d489bac8b9397ec76"
+    },
+    {
+      "path": "src/Modules/Identity/RegistrationPersonalInformation.cs",
+      "sha256": "4e998660fcfeb8d590782b5c09a8f29608f6c325294b449fb55923096f499aaa"
+    },
+    {
+      "path": "src/Tunner.User.Bff/FederationOidcTransport.cs",
+      "sha256": "f0553abd0410f8cd9b28f66bd69b988ae87aca9b940786942d0e6a0f2e4a1034"
+    }
+  ],
+  "next_action": "Link this inventory/assessment from010 validation; owners close approved processing/provider/transfer and lifecycle proof before applicable production activation."
+}

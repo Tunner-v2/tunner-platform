@@ -4,7 +4,7 @@
   "milestone_id": "P2",
   "sprint_id": null,
   "title": "Google and Microsoft federation and explicit linking",
-  "status": "IN_PROGRESS",
+  "status": "CODE_REVIEW",
   "type": "FEATURE",
   "authority_refs": [
     "docs/authority/current-authority.json",
@@ -77,9 +77,14 @@
   ],
   "required_evidence": [
     "governance/evidence/TUN-P2-010-VALIDATION.json",
-    "governance/evidence/TUN-P2-010-STARTUP-REVIEWS.json"
+    "governance/evidence/TUN-P2-010-STARTUP-REVIEWS.json",
+    "governance/evidence/TUN-P2-010-UI-COMPLIANCE.json",
+    "governance/evidence/TUN-P2-010-DATA-INVENTORY.json",
+    "governance/evidence/TUN-P2-010-DATA-LIFECYCLE-ASSESSMENT.json",
+    "governance/evidence/p2-010-federation-20261112/final-security-734828a.json"
   ],
   "context_policy": "TASK",
+  "ui_evidence_ref": "governance/evidence/TUN-P2-010-UI-COMPLIANCE.json",
   "todos": [
     "TODO-TUN-P2-010-STEPUP001",
     "TODO-TUN-P2-010-DESIGN001"
@@ -93,5 +98,43 @@
     "DEF-TUN-P2-010-006"
   ],
   "created_at": "2026-10-16T17:48:49.296Z",
-  "updated_at": "2026-11-12T04:09:41Z"
+  "updated_at": "2026-11-12T04:09:41Z",
+  "git_state": {
+    "repository_changed": true,
+    "validated_commit_sha": "734828a78d9736eaa8da32c1b80ae0654a7f3641",
+    "tested_commit_sha": "734828a78d9736eaa8da32c1b80ae0654a7f3641",
+    "work_item_commit_shas": [
+      "055a51a1cfafa01cc959b5200e2f996cb5891431",
+      "6593443efc1acfd064aa93458fd90538dc1bb86b",
+      "d5532e44285906c718765642e8442fa507d7ac0c",
+      "ab05cc5838b7c9f59233d926091390cb93a6fbcf",
+      "370a2c702c625bae462d330f7d88c11ce34d0a38",
+      "5fc094e3743ef9702b1dbcc0b2b11707233b8aab",
+      "350c8d47cd9ff95351bd9c680685fe82a551c984",
+      "bb95498f743c397dce593e21dc2897662493599b",
+      "0eacff82dc9780708b7272abb23aef53afadcc39",
+      "6f50493360041c1e824cc523425429f51989140a",
+      "a3d8e856083ec085f76ce08f106169de7a582c94",
+      "a7f8762c173cfe55316ac32b747d27d8f02f2fcc",
+      "734828a78d9736eaa8da32c1b80ae0654a7f3641"
+    ],
+    "closure_commit_sha": null,
+    "remaining_uncommitted_paths": [
+      "docs/context/current/HANDOFF.md",
+      "docs/context/current/adaptive-selection.json",
+      "docs/context/current/authority.md",
+      "docs/context/current/contracts.md",
+      "docs/context/current/git-changes.md",
+      "docs/context/current/manifest.json",
+      "docs/context/current/relevant-flows.md",
+      "docs/context/current/summary.md",
+      "docs/context/current/tests.md",
+      "docs/project/CURRENT_STATE.md",
+      "docs/project/HANDOFF.md",
+      "docs/project/PROJECT_CONTEXT.md",
+      ".vscode/settings.json",
+      "%SystemDrive%/"
+    ],
+    "remaining_uncommitted_classification": "PREEXISTING_UNRELATED"
+  }
 }
