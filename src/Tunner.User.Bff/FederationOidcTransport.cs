@@ -119,7 +119,8 @@ internal sealed class FederationOidcTransport
             },
             OnTicketReceived = async context =>
             {
-                context.HandleResponse(); context.ReturnUri = null; context.Properties.RedirectUri = null;
+                context.HandleResponse(); context.ReturnUri = null;
+                if (context.Properties is { } properties) properties.RedirectUri = null;
                 var attempt = Attempt(context.Properties);
                 var claims = context.Principal;
                 var subject = SingleClaim(claims, "sub"); var actualIssuer = SingleClaim(claims, "iss"); var audience = SingleClaim(claims, "aud");
