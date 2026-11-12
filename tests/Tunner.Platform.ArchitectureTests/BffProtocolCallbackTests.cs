@@ -95,6 +95,10 @@ public sealed class BffProtocolCallbackTests(BffFoundationFixture fixture) : ICl
         foreach (var path in new[] { "/_fixture/Protocol/callback", "/_fixture/protocol/%63allback" })
         {
             using var request = host.Request(HttpMethod.Post, path, origin: host.Origin);
+            // Ordinary Uri construction canonicalizes %63 before sending it. Preserve the actual
+            // adversarial request target so this checks the server's raw-target guard.
+            request.RequestUri = new Uri(host.Client.BaseAddress!.GetLeftPart(UriPartial.Authority) + path,
+                new UriCreationOptions { DangerousDisablePathAndQueryCanonicalization = true });
             request.Content = new StringContent("state=x", Encoding.UTF8, "application/x-www-form-urlencoded");
             using var response = await host.Client.SendAsync(request);
             Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
