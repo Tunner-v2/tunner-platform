@@ -33,7 +33,7 @@
   "historical_reference_limit": "The native revision reference catalog does not admit several current authority aliases. P2-009-RV001 cites the verified lifecycle authority and retains current business references through the work item/refinement. Existing TODO-TUN-P2-017-GOV003 tracks catalog parity; no authority bytes or validation semantics are changed.",
   "acceptance_boundary": "This records startup scope and actual prior checks only. It is not a final specialist review, committed validation envelope, Product acceptance, production policy, protected-main approval or release approval. Each revision requires its own scoped committed validation before closure.",
   "prerequisite_currentness_refresh": {
-    "phase": "PENDING_COMMITTED_CANDIDATE_BINDING",
+    "phase": "PASS_COMMITTED_CANDIDATE_BINDING",
     "recorded_at": "2026-11-12T13:17:00.788Z",
     "observed_work_start": "GOVERNANCE_REFUSED only003/004 current committed-source proofs",
     "parents": [
@@ -66,6 +66,45 @@
     ],
     "dependency_execution_ref": "artifacts/p2-010-federation-20261112/dependency-qualification/dependency-execution.json",
     "unchanged_cohorts": "Existing domain/schema/native/SQL/browser/UI evidence retains actual SHAs; no other owned source delta. Candidate-scoped public checks will bind unchanged behavior; no private qualification rebuild.",
-    "unaffected_roles": "Unchanged domain/UI/business/content/compliance/SDK/financial roles retain original dates/findings. No new UX review/consent is fabricated."
+    "unaffected_roles": "Unchanged domain/UI/business/content/compliance/SDK/financial roles retain original dates/findings. No new UX review/consent is fabricated.",
+    "tested_commit_sha": "8a932ef09491c80999a5a9c07eb080887c2acecd",
+    "validated_commit_sha": "8a932ef09491c80999a5a9c07eb080887c2acecd",
+    "carrier_execution": {
+      "recorded_at": "2026-11-12T13:27:15.643Z",
+      "source_commit": "8a932ef09491c80999a5a9c07eb080887c2acecd",
+      "checks": 37,
+      "counting": "37 requalification invocations, not37 additional distinct cases; earlier145 split results unchanged.",
+      "receipts": [
+        {
+          "path": "artifacts/p2-010-federation-20261112/carrier-8a932ef/identity23.trx",
+          "sha256": "349456b9d07b65c96d2eafbc42452767d06a79ec3b03c13c565132f69bfc0269",
+          "passed": 23,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "path": "artifacts/p2-010-federation-20261112/carrier-8a932ef/callback14.trx",
+          "sha256": "03cb5cbb9383db861d710ef85591fae4dcdd535b54a830b41efaeb681df23d7c",
+          "passed": 14,
+          "failed": 0,
+          "skipped": 0
+        }
+      ],
+      "builds": {
+        "identity": {
+          "exit_code": 0,
+          "warnings": 0,
+          "errors": 0,
+          "log_ref": "artifacts/p2-010-federation-20261112/carrier-8a932ef/identity-build.log"
+        },
+        "architecture": {
+          "exit_code": 0,
+          "warnings": 0,
+          "errors": 0,
+          "log_ref": "artifacts/p2-010-federation-20261112/carrier-8a932ef/architecture-build.log"
+        }
+      },
+      "source_equivalence": "Candidate8a932ef changes metadata only fromf044cbc; no src/tests/Directory.Packages.props delta. Native/SQL/browser/UI cohorts retain their original SHAs; no new whole-feature, database, provider or production qualification."
+    }
   }
 }
