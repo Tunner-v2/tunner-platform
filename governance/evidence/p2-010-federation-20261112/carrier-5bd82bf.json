@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "scope_id": "TUN-P2-010-COMPATIBILITY-CARRIER",
+  "result": "PASS",
+  "actual_invocation_commit_sha": "5bd82bfee7494513e9c9cd20deb7456f2cdda29d",
+  "build_source_commit_sha": "734828a78d9736eaa8da32c1b80ae0654a7f3641",
+  "command": "dotnet test tests/Tunner.Identity.Persistence.Tests/Tunner.Identity.Persistence.Tests.csproj --no-build --no-restore --filter FullyQualifiedName~FederationFreshAuthenticationTests --logger trx --results-directory artifacts/p2-010-federation-20261112/carrier-5bd82bf",
+  "exit_code": 0,
+  "passed": 11,
+  "failed": 0,
+  "skipped": 0,
+  "trx_sha256": "c2fa52c1db2c726b88f23cf23b49a7213bef7f45259efda815366e128a7bce63",
+  "source_equivalence": "Candidate5bd82bf changes only metadata/evidence from734828a; no src/tests/web/Directory.Packages.props or native build-input changes. Reuses the exact existing build rather than rebuilding/repeating17/6/76. This11-test carrier is not11 additional unique cases or a relabelled76-case invocation.",
+  "primary_evidence_ref": "governance/evidence/TUN-P2-010-VALIDATION.json",
+  "ui_gate": "Actual native UI check PASS after5bd82bf commit for all10 applicable items; no failures."
+}
