@@ -1,6 +1,6 @@
 # P2-010 federation refinement
 
-Current status: engineering gate READY with no failures; feature awaits scoped Product acceptance. Actual source734828a passed the complete76-case private integration run plus17 protocol/6 resource checks. Native UI and12 mandatory roles pass; four technical compatibility revisions are CLOSED. See [current handoff](P2_010_FEDERATION_HANDOFF.md) and governance/evidence/TUN-P2-010-VALIDATION.json before resuming. Earlier execution entries below are preserved historical checkpoints, not instructions to repeat completed work. Domain contracts remain unchanged. No production policy or public Product API is selected. Google and Microsoft only; GitHub future.
+Current status: scoped Product acceptance recorded and native DONE transition allowed; P2-010 is DONE. Actual source734828a passed the complete76-case private integration run plus17 protocol/6 resource checks. Native UI and12 mandatory roles pass; four technical compatibility revisions are CLOSED. See [current handoff](P2_010_FEDERATION_HANDOFF.md) and governance/evidence/TUN-P2-010-VALIDATION.json before resuming. Earlier execution entries below are preserved historical checkpoints, not instructions to repeat completed work. Domain contracts remain unchanged. No production policy or public Product API is selected. Google and Microsoft only; GitHub future.
 
 ## Authority and existing capabilities
 
