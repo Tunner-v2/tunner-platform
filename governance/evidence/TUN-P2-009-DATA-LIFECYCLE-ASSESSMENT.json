@@ -1,0 +1,170 @@
+{
+  "schema_version": 1,
+  "scope_id": "TUN-P2-009",
+  "execution_scope": "BOUNDED_DATA_HANDLING_AMD0005_AUTHORITY_RESOLUTION",
+  "status": "TECHNICAL_PRODUCTION_INACTIVE_OWNER_LIFECYCLE_WORK_OPEN_NO_BLANKET_R04_PASS",
+  "recorded_at_utc": "2026-11-12T08:09:55.154131Z",
+  "reviewed_source_commit": "fe5a8399b55b763d6d551c9eca9c2e40027686fc",
+  "inventory_ref": "governance/evidence/TUN-P2-009-DATA-INVENTORY.json",
+  "authority_resolution": {
+    "method": "Reuse the existing AUTH-07 and contract resolution, current Doc29 and existing008 inventory/follow-up convention. Examine only recovery owner source and applicable current017/019 acceptance. No missing-authority blocker, new Product decision or external policy is created.",
+    "references": [
+      {
+        "path": "docs/authority/current-authority.json",
+        "sha256": "16b89d4cbd7b632f356f1b0e182fc19a354fac90d003621315641d7055331356"
+      },
+      {
+        "path": "docs/authority/amendments/AMD-0005/AMD-0005_Authority-First_Decision_Resolution_and_Duplicate-Decision_Prevention.md",
+        "sha256": "51b259a3757c1f881846d3c17666723d0dc72628ad5d25bcd58360c6f41c0d64"
+      },
+      {
+        "path": "docs/authority/current/development/06_Environment_Configuration_Secrets_and_Deployment.md",
+        "sha256": "b9e09e4669f0831d711b2c7c89b4ec1649e75b72cc1d4b3d3a485e52bccee0f1"
+      },
+      {
+        "path": "docs/authority/current/development/08_Security_Privacy_Compliance_and_Global_Market_Governance.md",
+        "sha256": "65baec50be722393cd0bf0fb5d57cde158055b7d541b59a4fbf61ab263ebe7ab"
+      },
+      {
+        "path": "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md",
+        "sha256": "e21bc59400b9db52a0dd7d94dde861bb952ce4688111dc9b4d97446f0488de74"
+      },
+      {
+        "path": "docs/authority/current/development/29_Privacy_Data_Lifecycle_and_Processing_Governance_FRD.md",
+        "sha256": "e89eb630c0dc5ddcdbadde68ee53be0e7a7f7fc54cdc9a1b6df6abb7fca35366"
+      },
+      {
+        "path": "docs/authority/current/development/32_Domain_API_Event_Data_and_Policy_Contract_Catalog.md",
+        "sha256": "2030e8eb6b3c80ba8d26e1aaf849eef9e57db78c1ac3cf400f9b18ffb99f3ab7"
+      },
+      {
+        "path": "docs/authority/current/development/33_Production_Readiness_Compliance_and_Release_Gates.md",
+        "sha256": "5270f6da82dd7e58e7cd346a020d864f8571d4a1664f6bb31fb0e08e63657a50"
+      },
+      {
+        "path": "governance/evidence/p2-009-recovery-20261111/refinement/security/security-review.json",
+        "sha256": "0d06c7981263f2589a4952c59fe648bdbe6f8cc2919d6ed14724661a9d7ac44f"
+      },
+      {
+        "path": "governance/evidence/p2-009-recovery-20261111/refinement/contract/authority-and-native-resolution.json",
+        "sha256": "7141caa20946e76cc616323aca75e1a1729206cd6f3e40489274621b04a05659"
+      },
+      {
+        "path": "governance/evidence/p2-009-recovery-20261111/refinement/contract/owner-runtime-inputs.json",
+        "sha256": "30297f8c8e23305ab909e8019e44acf94dc68818d40f31403c3084656766ad8f"
+      },
+      {
+        "path": "docs/development/P2_009_RECOVERY_CODES_SCOPE.md",
+        "sha256": "d3e295ef5c86152bca284d053dcf2625cc11e2c0955f63849d3f87e2ad1989b7"
+      },
+      {
+        "path": "governance/evidence/TUN-P2-008-DATA-LIFECYCLE-ASSESSMENT-20261110.json",
+        "sha256": "ac799caf67b3b6dbca8689838b16913b30369c8790dc333b699c993f3de58175"
+      },
+      {
+        "path": "governance/work-items/TUN-P2-017.yaml",
+        "sha256": "237d7eeb115542826fe8fee279b77596874108a38aa3e210271e09ab98651f3f"
+      },
+      {
+        "path": "governance/work-items/TUN-P2-019.yaml",
+        "sha256": "5c83e822073f9ab5d4aa4561f9fea2110176ed8281ec4e6282aab0d6cae8c089"
+      }
+    ],
+    "search_terms": [
+      "recovery_code_sets",
+      "recovery_code_entries",
+      "recovery_code_operations",
+      "ProcessingReference",
+      "RetentionReference",
+      "RetentionHold",
+      "PrivacyDiscoveryHandler",
+      "purge",
+      "delete",
+      "restore",
+      "REC-R04",
+      "DATA-INVENTORY"
+    ],
+    "existing_authority_found": [
+      "Doc29 section4 requires owner resource/data-class inventory; section5 requires approved processing authority before ACTIVE processing.",
+      "Doc29 sections6-8 separate business validity from physical lifecycle and require scoped trigger/action/hold/restore policy; active holds block destructive purge/anonymization.",
+      "Doc29 section11 assigns registered discovery and privacy actions/conflict responses to owner domains; Privacy coordinates without becoming data authority.",
+      "Existing009 refinement AUTH-07 and owner-runtime-inputs already require inventory and owner cleanup/hold duties;009 scope end-state6 preserves production lifecycle follow-ups.",
+      "Current019 acceptance owns approved typed Identity configuration and production composition;017 acceptance coordinates actual end-to-end security/privacy conformance. Identity retains implementation ownership."
+    ],
+    "conflicts_found": [],
+    "unresolved_question": "No authority gap. Approved production inputs and the Identity owner lifecycle implementation/actual proof remain outstanding engineering work.",
+    "scope_actually_gated": "Production activation and corresponding policy/hold/delete/restore conformance acceptance until the registered follow-up is completed; no automatic stop of independent authorized local primitive work."
+  },
+  "implemented_owner_controls": [
+    "Purpose/owner/set/entry-bound verifier-safe storage and exact individual consumption with dependent owner transaction/outbox.",
+    "Exact policy-bound replacement retires selected expected sets; individual usage and set lifecycle versions remain separate.",
+    "Operation/proof/source expiry and safe original-result recovery reject invalid or stale use; one winning first delivery cannot be re-read from durable storage.",
+    "Set/operation rows persist ProcessingReference and RetentionReference; entry lineage remains bound through the owning set. These strings alone prove no ACTIVE processing approval."
+  ],
+  "physical_lifecycle_limits": [
+    {
+      "resource": "Sets and individual verifier entries",
+      "implemented": "Retirement/consumption and immutable one-way lineage; rows/verifiers remain stored.",
+      "not_implemented": "Approved-policy owner purge/anonymization eligibility/action, hold gate and restore reconciliation."
+    },
+    {
+      "resource": "Generate/Replace operation and linked proof/outbox evidence",
+      "implemented": "Action/result validity, safe duplicate recovery and reference-only security intent.",
+      "not_implemented": "Recovery-specific owner discovery/export/restriction/conflict projections and bounded physical metadata maintenance honoring active holds and required evidence."
+    },
+    {
+      "resource": "Transient first delivery and requested local file",
+      "implemented": "Request/view ownership and disposal mechanisms; bounded QA cleanup is a separate boundary.",
+      "not_implemented": "No global memory/filesystem erasure guarantee or server control over copies saved by a User; these are not equivalent to domain retention implementation."
+    }
+  ],
+  "existing_scoped_execution_evidence": [
+    {
+      "path": "artifacts/p2-009-recovery-20261111/fixed-next-runners-v4/results/native-private62-dfd65dbd81494e08aa92efa46f962a42/01.json",
+      "sha256": "64a5907426512232686f4e09f99e7e476082ef3ee4b1f60a49c87bd0fbab50ed",
+      "tested_commit": "ad744fde52aa03404f3944c47ebb79070185e9f2",
+      "case_ids": [
+        "WINNER_SAFE_READ_REPLACE",
+        "CONSUME_BEFORE_REPLACE",
+        "REPLACE_BEFORE_CONSUME"
+      ],
+      "scope": "Actual native validity/retirement/ordering assertions only; not executed privacy hold/delete/restore."
+    },
+    {
+      "path": "artifacts/p2-009-recovery-20261111/fixed-next-runners-v4/results/native-sql5-6ea074abd8a64bebbd034da8d92fbacd/01.json",
+      "sha256": "0930060bc92541d6f7ef417dbec3076534209b6df33516ec5df78fd44cf31d36",
+      "tested_commit": "5d5439659624aa3413731083a4f1fd94228bb914",
+      "case_ids": [
+        "ENTRY_ONE_WAY",
+        "SET_ONE_WAY",
+        "OPERATION_ONE_WAY"
+      ],
+      "scope": "Actual immutable/one-way SQL lineage guards only; not a physical cleanup/restore test."
+    }
+  ],
+  "source_equivalence": "Reviewed recovery production source inputs are unchanged from the actual ad744 native execution to the stated review commit. Later harness/fixture qualification identities remain separate; no historical receipt is relabelled current.",
+  "r04_disposition": {
+    "implemented_validity_lineage": "Scoped native/SQL execution is identified above.",
+    "inventory_registration": "This record and its linked inventory register the actual009 resource/protection/lifecycle boundaries.",
+    "owner_hold_delete_restore": "NOT_IMPLEMENTED_OR_EXECUTED; required follow-up remains OPEN and gates applicable production/conformance activation.",
+    "whole_case_pass": false,
+    "test_execution_in_this_assessment": false
+  },
+  "governed_followup": {
+    "todo_id": "TODO-TUN-P2-017-RECOVERY001",
+    "record_ref": "governance/todos/TODO-TUN-P2-017-RECOVERY001.yaml",
+    "coordinating_work_item": "TUN-P2-017",
+    "implementation_owner": "Identity implements bounded owner discovery, retention eligibility/actions, hold enforcement, deletion/anonymization and restore/reconciliation in the active owner scope, or governed RV lineage if that scope has closed.",
+    "approved_inputs_owner": "TUN-P2-019 supplies approved scoped processing and trigger/action/hold/restore inputs; it does not implement the cleanup handlers.",
+    "timing": "Implement and actually verify the applicable lifecycle controls before production activation and corresponding privacy/conformance acceptance. Independent authorized local primitive development is not blocked."
+  },
+  "not_claimed": [
+    "37/37 security acceptance",
+    "Physical hold/delete/restore test execution",
+    "Production processing/legal/residency/retention approval",
+    "Notification delivery or P2-011 recovery completion",
+    "Global filesystem or memory erasure",
+    "Product/release acceptance or P2-009 DONE"
+  ],
+  "next_action": "Identity implements the registered owner lifecycle controls;019 supplies approved scoped inputs;017 integrates and executes the required proof before activation. Final009 matrix/Cyber review remains a separate held evidence task."
+}

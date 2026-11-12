@@ -1,0 +1,60 @@
+{
+  "schema_version": 1,
+  "evidence_type": "local-supply-chain-provenance-hook",
+  "generated_on": "2026-11-12",
+  "git_commit": "796d316bbc1be878f71d515e06be13d7a77b3c1d",
+  "dependency_scopes": [
+    "Tunner.Governance.sln",
+    "Tunner.Platform.slnx",
+    "tests/Tunner.Installer.Tests/Tunner.Installer.Tests.csproj"
+  ],
+  "working_tree_clean_before_generation": false,
+  "sbom": {
+    "path": "tunner.spdx.json",
+    "sha256": "c3a7b59066ee3daa415f097f44180c6cc841947dde221d65bf3a4fbd410c6ebe",
+    "format": "SPDX-2.3"
+  },
+  "checksum_inputs": [
+    {
+      "path": "Directory.Packages.props",
+      "sha256": "f5a382659daa556590eed5adc1ddf69b818fb25abb48ec9f2fbad1daff1d3e7b"
+    },
+    {
+      "path": "global.json",
+      "sha256": "d303cb1266b0a3a0fadab5cc73ade7c75e3cbcbb09b336a6de9418ece4448090"
+    },
+    {
+      "path": "infra/docker/compose.yaml",
+      "sha256": "b7993dcc84890e5c7f4e5ae72c5ca4c21acaa8d0247ee1007b2d9e4589453024"
+    },
+    {
+      "path": "Tunner.Governance.sln",
+      "sha256": "eb42ad63a9ec7fb3b7b91cca25e3a43211a6c1421335e3aa332b535a737ea3b0"
+    },
+    {
+      "path": "Tunner.Platform.slnx",
+      "sha256": "31650e363a1a887547b7c06bde6341afc05dc8dc83c2f2ad3a2402caeb886251"
+    },
+    {
+      "path": "tests/Tunner.Installer.Tests/Tunner.Installer.Tests.csproj",
+      "sha256": "1a22b4ca46e39ab1026f6961e8382a3007a56df5e2baec160ba4900c29781355"
+    },
+    {
+      "path": "web/package.json",
+      "sha256": "46f497033bdab30d8bda42718fba2d3af353c95cd82dcd3e471082c0c6bc6e95"
+    },
+    {
+      "path": "web/pnpm-lock.yaml",
+      "sha256": "4359f7d23d443e4f89577321d03247d50e505c1072cf98016c380f33c7e1cd3d"
+    },
+    {
+      "path": "docs/authority/current-authority.json",
+      "sha256": "16b89d4cbd7b632f356f1b0e182fc19a354fac90d003621315641d7055331356"
+    }
+  ],
+  "limitations": [
+    "This is unsigned local or CI evidence only.",
+    "It is not a release attestation, production deployment record, or approval.",
+    "Release attestation requires its own governed release scope and immutable build artifact."
+  ]
+}

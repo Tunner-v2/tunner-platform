@@ -1,0 +1,126 @@
+{
+  "version": 1,
+  "sourceCommit": "18d9c00e083196bcde493044e5944d8014f1869a",
+  "bindings": [
+    {
+      "path": "artifacts/p2-009-recovery-20261111/root-review/binding-18d9c00/native-runtime-build-binding.json",
+      "sha256": "9a8af0205305dca159947c18e4c7c8fa6f4bef12a81a9be3625bf75d61b97bb9"
+    },
+    {
+      "path": "artifacts/p2-009-recovery-20261111/root-review/binding-18d9c00/runtime-build-binding.json",
+      "sha256": "057a5cdabf371366614ece88a27f07cec4bbf56921a8fc3f1ed16617b9f80576"
+    }
+  ],
+  "publicTests": {
+    "passed": 19,
+    "failed": 0,
+    "skipped": 0,
+    "trx": "artifacts/p2-009-recovery-20261111/root-review/public-owned-postgres-1g-results/public-recovery.trx",
+    "sha256": "abeea5da69b6b0b037d1e4b95866231af31910a3dd45131c7a33b545d2ad8252"
+  },
+  "protocol17": {
+    "passed": true,
+    "runs": [
+      {
+        "path": "artifacts/p2-009-recovery-20261111/native-protocol-qualification/16604ef9a8f44e19a2786ca0c2fbaae3/details.json",
+        "sha256": "e244dad38a60ba8dc5f5fcceb0939b59d267d1fc20f3831a23c15864cfe3ebf4",
+        "passed": true
+      }
+    ]
+  },
+  "resources6": {
+    "path": "artifacts/p2-009-recovery-20261111/native-resource-qualification/3d0d1b101da442fdaf50815dddbab5c1/details.json",
+    "sha256": "437ae2ab6f2e41ab06a081948136d4710d9886f072b5befa99161ed56c4a0355",
+    "passed": true,
+    "results": [
+      {
+        "cut": null,
+        "passed": true,
+        "capacity": null,
+        "closed": true,
+        "helpersClosed": true,
+        "borrowedPreserved": true,
+        "surfaceRemoved": true,
+        "allOwnersAbsent": true
+      },
+      {
+        "cut": "PREPARED",
+        "passed": true,
+        "capacity": null,
+        "closed": true,
+        "helpersClosed": true,
+        "borrowedPreserved": true,
+        "surfaceRemoved": true,
+        "allOwnersAbsent": true
+      },
+      {
+        "cut": "CREATED",
+        "passed": true,
+        "capacity": null,
+        "closed": true,
+        "helpersClosed": true,
+        "borrowedPreserved": true,
+        "surfaceRemoved": true,
+        "allOwnersAbsent": true
+      },
+      {
+        "cut": "AFTER_START",
+        "passed": true,
+        "capacity": null,
+        "closed": true,
+        "helpersClosed": true,
+        "borrowedPreserved": true,
+        "surfaceRemoved": true,
+        "allOwnersAbsent": true
+      },
+      {
+        "cut": "AFTER_MIGRATION",
+        "passed": true,
+        "capacity": null,
+        "closed": true,
+        "helpersClosed": true,
+        "borrowedPreserved": true,
+        "surfaceRemoved": true,
+        "allOwnersAbsent": true
+      },
+      {
+        "cut": "CAPACITY",
+        "passed": true,
+        "capacity": {
+          "databases": 63,
+          "databaseBytes": 622590209,
+          "walBytes": 402653184
+        },
+        "closed": true,
+        "helpersClosed": true,
+        "borrowedPreserved": true,
+        "surfaceRemoved": true,
+        "allOwnersAbsent": true
+      }
+    ]
+  },
+  "sql5": {
+    "path": "artifacts/p2-009-recovery-20261111/fixed-next-runners-v4/results/native-sql5-8fcb140b812d41bda3fbae96d93de152/01.json",
+    "sha256": "bd589247f30220d16ef7c3102dc4029cca3d769e7043940e4ef12d4308655b5a",
+    "passed": true,
+    "casePasses": 5
+  },
+  "private62": {
+    "path": "artifacts/p2-009-recovery-20261111/fixed-next-runners-v4/results/native-private62-e5e51c7bd7b54e138cd5dca50d79c4c7/01.json",
+    "sha256": "f5d4cb744519eb36c61aa82c1b326aaabe867f1556bdd9b2314ad8b722f52ee2",
+    "passed": false,
+    "firstFailedCase": "WINNER_SAFE_READ_REPLACE",
+    "attempted": 1,
+    "failed": 1,
+    "passedCases": 0,
+    "notInvoked": 61,
+    "failureCode": "CASE_FAILED",
+    "allOuterCleanupPassed": true
+  },
+  "browser37Executed": false,
+  "browserResources5Executed": false,
+  "browserLive6Executed": false,
+  "acceptance": "PENDING",
+  "confirmedResolvedFailure": "512MiB public fixture disk-full corrected and actual63DB load passes at1GiB",
+  "supersedes": "artifacts/p2-009-recovery-20261111/root-review/checkpoint-18d9c00.json"
+}

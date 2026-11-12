@@ -1,0 +1,260 @@
+{
+  "schema_version": 1,
+  "scope_id": "TUN-P2-009",
+  "status": "TECHNICAL_INVENTORY_PRODUCTION_INACTIVE_NOT_FINAL_COMPLIANCE",
+  "recorded_at_utc": "2026-11-12T08:09:55.154131Z",
+  "reviewed_source_commit": "fe5a8399b55b763d6d551c9eca9c2e40027686fc",
+  "authority_refs": [
+    "docs/authority/current/development/06_Environment_Configuration_Secrets_and_Deployment.md",
+    "docs/authority/current/development/08_Security_Privacy_Compliance_and_Global_Market_Governance.md",
+    "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md",
+    "docs/authority/current/development/29_Privacy_Data_Lifecycle_and_Processing_Governance_FRD.md",
+    "docs/authority/current/development/32_Domain_API_Event_Data_and_Policy_Contract_Catalog.md",
+    "docs/authority/current/development/33_Production_Readiness_Compliance_and_Release_Gates.md"
+  ],
+  "assessment_ref": "governance/evidence/TUN-P2-009-DATA-LIFECYCLE-ASSESSMENT.json",
+  "resources": [
+    {
+      "owner": "Tunner Identity. Account identity remains Accounts-owned; no Product membership or entitlement authority is introduced.",
+      "subject_category": "Account-holder authentication and security data; identifiers, digests and verifiers are not treated as anonymous.",
+      "classification": "RESTRICTED_SECURITY authentication/security material; events use the existing RESTRICTED_SECURITY classification.",
+      "authority": "Tunner-owned authentication primitive; no Product recipient or direct Admin/Support recovery-value access.",
+      "retention_class": "Owner-scoped authentication/security metadata. ProcessingReference/RetentionReference identify required policy inputs; this inventory selects no production retention class version or duration.",
+      "residency_processors": "No new processor is selected. Production database, backup, processor and residency/transfer profiles require applicable approved policy references.",
+      "privacy_request_capabilities": "No recovery-specific discovery/export/restriction/delete/restore handler is implemented. Identity owns safe owner projections/actions and retention-conflict responses; the registered follow-up must implement and prove them before activation. Verifiers and recovery values are not ordinary export/evidence payloads.",
+      "production_activation": "Inactive/unselected for production. Nonempty processing/retention reference strings and synthetic finite profiles are not an ACTIVE Processing Governance Contract or legal/residency approval.",
+      "resource": "identity.recovery_code_sets",
+      "store": "Authoritative Identity PostgreSQL",
+      "logical_fields": [
+        "SetReference",
+        "AccountId",
+        "IssuanceOperationId",
+        "State",
+        "LifecycleVersion",
+        "UsageVersion",
+        "CreatedAt",
+        "RetiredAt",
+        "RetiredByOperationId",
+        "PolicyVersion",
+        "CryptoProfileVersion",
+        "ProcessingReference",
+        "RetentionReference"
+      ],
+      "purpose": "Bind immutable Account/set/issuance identity, current profile and processing/retention references; distinguish set lifecycle from per-code usage.",
+      "recipients": "Identity owner transactions; authorized User receives only the existing safe metadata projection.",
+      "implemented_lifecycle": "Issuance creates the set; exact approved replacement retires expected sets atomically. State, RetiredAt and lifecycle/usage versions do not physically erase the row or individual verifiers.",
+      "protection": "Existing Account/operation relationships, version concurrency and SQL immutable/one-way guards. Deployment encryption/backup controls are not certified by this inventory."
+    },
+    {
+      "owner": "Tunner Identity. Account identity remains Accounts-owned; no Product membership or entitlement authority is introduced.",
+      "subject_category": "Account-holder authentication and security data; identifiers, digests and verifiers are not treated as anonymous.",
+      "classification": "RESTRICTED_SECURITY authentication/security material; events use the existing RESTRICTED_SECURITY classification.",
+      "authority": "Tunner-owned authentication primitive; no Product recipient or direct Admin/Support recovery-value access.",
+      "retention_class": "Owner-scoped authentication/security metadata. ProcessingReference/RetentionReference identify required policy inputs; this inventory selects no production retention class version or duration.",
+      "residency_processors": "No new processor is selected. Production database, backup, processor and residency/transfer profiles require applicable approved policy references.",
+      "privacy_request_capabilities": "No recovery-specific discovery/export/restriction/delete/restore handler is implemented. Identity owns safe owner projections/actions and retention-conflict responses; the registered follow-up must implement and prove them before activation. Verifiers and recovery values are not ordinary export/evidence payloads.",
+      "production_activation": "Inactive/unselected for production. Nonempty processing/retention reference strings and synthetic finite profiles are not an ACTIVE Processing Governance Contract or legal/residency approval.",
+      "resource": "identity.recovery_code_entries",
+      "store": "Authoritative Identity PostgreSQL",
+      "logical_fields": [
+        "EntryReference",
+        "SetReference",
+        "AccountId",
+        "Verifier",
+        "CryptoProfileVersion",
+        "ConsumedAt",
+        "ConsumedByOperationId",
+        "ConsumptionCorrelationId",
+        "ConsumptionContextDigest",
+        "ConsumptionPolicyVersion",
+        "ConsumptionOwnerPolicyVersion",
+        "ConsumptionOutcomeReference",
+        "ConsumptionSetLifecycleVersion",
+        "Version"
+      ],
+      "purpose": "Store only native salted owner/set/entry/purpose/profile-bound verifiers and exact individual consumption outcome lineage.",
+      "recipients": "Server-only native verifier and trusted Identity owner transaction; no verifier projection to User, Admin, Support, Product or notifications.",
+      "implemented_lifecycle": "One committed consumption records the individual claim, owner outcome and versions in the same transaction. Consumed or invalidated does not mean purged; rows remain. Processing/retention policy references are resolved through the owning set.",
+      "protection": "Verifier is JsonIgnore; exact native encoding/work admission and context binding, one-way SQL guards and shared transactional rollback. No reversible recovery-code escrow is introduced."
+    },
+    {
+      "owner": "Tunner Identity. Account identity remains Accounts-owned; no Product membership or entitlement authority is introduced.",
+      "subject_category": "Account-holder authentication and security data; identifiers, digests and verifiers are not treated as anonymous.",
+      "classification": "RESTRICTED_SECURITY authentication/security material; events use the existing RESTRICTED_SECURITY classification.",
+      "authority": "Tunner-owned authentication primitive; no Product recipient or direct Admin/Support recovery-value access.",
+      "retention_class": "Owner-scoped authentication/security metadata. ProcessingReference/RetentionReference identify required policy inputs; this inventory selects no production retention class version or duration.",
+      "residency_processors": "No new processor is selected. Production database, backup, processor and residency/transfer profiles require applicable approved policy references.",
+      "privacy_request_capabilities": "No recovery-specific discovery/export/restriction/delete/restore handler is implemented. Identity owns safe owner projections/actions and retention-conflict responses; the registered follow-up must implement and prove them before activation. Verifiers and recovery values are not ordinary export/evidence payloads.",
+      "production_activation": "Inactive/unselected for production. Nonempty processing/retention reference strings and synthetic finite profiles are not an ACTIVE Processing Governance Contract or legal/residency approval.",
+      "resource": "identity.recovery_code_operations",
+      "store": "Authoritative Identity PostgreSQL",
+      "logical_fields": [
+        "OperationId",
+        "RequestId",
+        "AccountId",
+        "SessionId",
+        "Origin",
+        "Kind",
+        "State",
+        "SetReference",
+        "ExpectedVersion",
+        "ContextDigest",
+        "PriorSetPlanDigest",
+        "ImpactFactsDigest",
+        "PolicyVersion",
+        "PolicyDigest",
+        "AuthenticationPolicyVersion",
+        "SecurityStampDigest",
+        "CryptoProfileVersion",
+        "FormatProfileVersion",
+        "DeliveryProfileVersion",
+        "CodesPerSet",
+        "MaximumCodesPerSet",
+        "RetirementPlanJson",
+        "PriorSetCount",
+        "PriorRemainingCodeCount",
+        "PublishedImpactKey",
+        "PublicationDigest",
+        "PublicationVersion",
+        "PublicationFrom",
+        "PublicationIncludesFrom",
+        "PublicationUntil",
+        "PublicationIncludesUntil",
+        "AdmissionPolicyVersion",
+        "AdmissionEvidenceReference",
+        "AdmissionFrom",
+        "AdmissionIncludesFrom",
+        "AdmissionUntil",
+        "AdmissionIncludesUntil",
+        "AssurancePolicyVersion",
+        "ProofReference",
+        "CreatedAt",
+        "ExpiresAt",
+        "ResultRecoveryExpiresAt",
+        "CompletedAt",
+        "FirstResponseCommittedAt",
+        "ProcessingReference",
+        "RetentionReference",
+        "Version"
+      ],
+      "purpose": "Exact Generate/Replace request idempotency, current source/policy/publication/admission binding, safe result recovery and one winning first-response claim.",
+      "recipients": "Identity owner and current authorized Account/session/origin via User BFF; responses are safe metadata except the winning transient first delivery.",
+      "implemented_lifecycle": "ExpiresAt and ResultRecoveryExpiresAt bound action/result validity; completion/cancellation and FirstResponseCommittedAt retain original lineage. They do not schedule physical deletion. No owner purge worker is implemented.",
+      "protection": "Immutable original owner/session/origin/request/context/profile/retirement/publication/admission bindings, version concurrency, one-way terminal guards and no plaintext result column."
+    },
+    {
+      "owner": "Tunner Identity. Account identity remains Accounts-owned; no Product membership or entitlement authority is introduced.",
+      "subject_category": "Account-holder authentication and security data; identifiers, digests and verifiers are not treated as anonymous.",
+      "classification": "RESTRICTED_SECURITY authentication/security material; events use the existing RESTRICTED_SECURITY classification.",
+      "authority": "Tunner-owned authentication primitive; no Product recipient or direct Admin/Support recovery-value access.",
+      "retention_class": "Owner-scoped authentication/security metadata. ProcessingReference/RetentionReference identify required policy inputs; this inventory selects no production retention class version or duration.",
+      "residency_processors": "No new processor is selected. Production database, backup, processor and residency/transfer profiles require applicable approved policy references.",
+      "privacy_request_capabilities": "No recovery-specific discovery/export/restriction/delete/restore handler is implemented. Identity owns safe owner projections/actions and retention-conflict responses; the registered follow-up must implement and prove them before activation. Verifiers and recovery values are not ordinary export/evidence payloads.",
+      "production_activation": "Inactive/unselected for production. Nonempty processing/retention reference strings and synthetic finite profiles are not an ACTIVE Processing Governance Contract or legal/residency approval.",
+      "resource": "Shared operation proof and reference-only security outbox",
+      "store": "Existing identity.step_up_proofs and platform.outbox_messages; no new store",
+      "logical_fields": [
+        "Exact proof/operation/session/resource/context references",
+        "Consumed proof state and current-source provenance",
+        "Event/operation/correlation/set references and safe operation kind"
+      ],
+      "purpose": "Commit fresh Generate/Replace proof consumption, safe owner result and security intent with the exact owner mutation; consumption carries trusted owner outcome/outbox lineage.",
+      "recipients": "Existing Identity proof owner and outbox consumers through their separate approved contracts. P2-016 owns notification delivery/finality; no code-bearing notification is authorized.",
+      "implemented_lifecycle": "Existing proof expiry/consumption and outbox processing remain distinct from durable evidence retention. Recovery-specific owner discovery, hold precedence, deletion and restore integration are not supplied by reference-only events.",
+      "protection": "Recovery issuance Event uses RESTRICTED_SECURITY and reference-only JSON. Actual event processing, audit retention and notification delivery are not inferred from insertion."
+    },
+    {
+      "owner": "Tunner Identity. Account identity remains Accounts-owned; no Product membership or entitlement authority is introduced.",
+      "subject_category": "Account-holder authentication and security data; identifiers, digests and verifiers are not treated as anonymous.",
+      "classification": "RESTRICTED_SECURITY authentication/security material; events use the existing RESTRICTED_SECURITY classification.",
+      "authority": "Tunner-owned authentication primitive; no Product recipient or direct Admin/Support recovery-value access.",
+      "retention_class": "Owner-scoped authentication/security metadata. ProcessingReference/RetentionReference identify required policy inputs; this inventory selects no production retention class version or duration.",
+      "residency_processors": "No new processor is selected. Production database, backup, processor and residency/transfer profiles require applicable approved policy references.",
+      "privacy_request_capabilities": "No recovery-specific discovery/export/restriction/delete/restore handler is implemented. Identity owns safe owner projections/actions and retention-conflict responses; the registered follow-up must implement and prove them before activation. Verifiers and recovery values are not ordinary export/evidence payloads.",
+      "production_activation": "Inactive/unselected for production. Nonempty processing/retention reference strings and synthetic finite profiles are not an ACTIVE Processing Governance Contract or legal/residency approval.",
+      "resource": "Winning first-delivery carrier and authorized volatile User view",
+      "store": "Bounded request-owned buffers, one winning HTTPS response and current DOM/JavaScript references; no durable server plaintext store",
+      "logical_fields": [
+        "Exact owner request/operation/session/Account/origin/set/context/profile binding",
+        "Bounded transient code array",
+        "One-shot emission/disposal and currently held local view"
+      ],
+      "purpose": "Show once after confirmed commit; permit one explicit local download only from that same authorized held payload.",
+      "recipients": "The authorized User in the winning request/view only. Duplicate/status/reload/history cannot re-read values; Admin/Support and Product receive no values.",
+      "implemented_lifecycle": "Rollback/unknown outcomes discard delivery; first response is one-shot. Close, departure or cancellation clears volatile view references and object URLs. Managed/immutable strings, network copies and OS memory are not claimed zeroized.",
+      "protection": "Closed internal disposable carrier, no public code getter/general serialization/record printing; exact delivery binding, BFF TLS/no-store protections and no secret URLs/browser persistence."
+    },
+    {
+      "owner": "Tunner Identity. Account identity remains Accounts-owned; no Product membership or entitlement authority is introduced.",
+      "subject_category": "Account-holder authentication and security data; identifiers, digests and verifiers are not treated as anonymous.",
+      "classification": "RESTRICTED_SECURITY authentication/security material; events use the existing RESTRICTED_SECURITY classification.",
+      "authority": "Tunner-owned authentication primitive; no Product recipient or direct Admin/Support recovery-value access.",
+      "retention_class": "Owner-scoped authentication/security metadata. ProcessingReference/RetentionReference identify required policy inputs; this inventory selects no production retention class version or duration.",
+      "residency_processors": "No new processor is selected. Production database, backup, processor and residency/transfer profiles require applicable approved policy references.",
+      "privacy_request_capabilities": "No recovery-specific discovery/export/restriction/delete/restore handler is implemented. Identity owns safe owner projections/actions and retention-conflict responses; the registered follow-up must implement and prove them before activation. Verifiers and recovery values are not ordinary export/evidence payloads.",
+      "production_activation": "Inactive/unselected for production. Nonempty processing/retention reference strings and synthetic finite profiles are not an ACTIVE Processing Governance Contract or legal/residency approval.",
+      "resource": "Explicit User-requested local download and exact owned QA transfer file",
+      "store": "User-controlled local browser download outside authoritative PostgreSQL; protected QA uses only its exact admitted owned file",
+      "logical_fields": [
+        "One armed request identity",
+        "Transient object URL/stream and exact owned transfer identity"
+      ],
+      "purpose": "Fulfil the approved optional single local request from the current held view; privately verify and remove the exact admitted QA file.",
+      "recipients": "The requesting User. No provider upload, automatic download or new server archive/export recipient is introduced.",
+      "implemented_lifecycle": "App object URLs/streams and exact owned QA files require bounded disposal/removal. The server cannot prove that a user saved, later erased or never copied a local file. QA/container teardown is not domain retention/purge evidence.",
+      "protection": "Exact admission/path identity and private bounded byte checks; no transfer contents, fingerprints, raw errors or broad filesystem inspection in evidence."
+    }
+  ],
+  "retention_boundary": "Credential validity, set retirement, operation expiry, disposable fixture cleanup and physical policy-bound deletion are distinct. No retention period, legal basis, default purge, archive relocation or production processing authority is selected.",
+  "governed_followup": {
+    "todo_id": "TODO-TUN-P2-017-RECOVERY001",
+    "record_ref": "governance/todos/TODO-TUN-P2-017-RECOVERY001.yaml",
+    "coordinating_work_item": "TUN-P2-017",
+    "implementation_owner": "Identity implements bounded owner discovery, retention eligibility/actions, hold enforcement, deletion/anonymization and restore/reconciliation in the active owner scope, or governed RV lineage if that scope has closed.",
+    "approved_inputs_owner": "TUN-P2-019 supplies approved scoped processing and trigger/action/hold/restore inputs; it does not implement the cleanup handlers.",
+    "timing": "Implement and actually verify the applicable lifecycle controls before production activation and corresponding privacy/conformance acceptance. Independent authorized local primitive development is not blocked."
+  },
+  "source_inputs": [
+    {
+      "path": "src/Modules/Identity/RecoveryCodeRows.cs",
+      "sha256": "d54b7e165b430177502070a94b3b3b79012872316b774c776efcd428a7c63735"
+    },
+    {
+      "path": "src/Modules/Identity/RecoveryCodePolicy.cs",
+      "sha256": "107dc44c81cbe1bfc8521e18daf06341248e34ac8c8965f6cad813ce19bbd365"
+    },
+    {
+      "path": "src/Modules/Identity/RecoveryCodeApplication.cs",
+      "sha256": "395cb329a4cef688d8bbddd2981a15a736caaacbb5330c21adca6d971685e23c"
+    },
+    {
+      "path": "src/Modules/Identity/RecoveryCodeConsumption.cs",
+      "sha256": "de9d05ee3d10913bfd25ad41940bcea735a73a60e3f7bd64293f9765900961f8"
+    },
+    {
+      "path": "src/Modules/Identity/RecoveryCodeExecution.cs",
+      "sha256": "f2646159db4c24554d7a6b701a9fc286ed6a1962fc4ae31e8fe54a6f053a2ed6"
+    },
+    {
+      "path": "src/Modules/Identity/RecoveryCodeProofCompletedResult.cs",
+      "sha256": "5057cd4c9dea10a10f8ed7324c5bf5f32dccf94cd10d54d44748bf1b39db75b6"
+    },
+    {
+      "path": "src/Modules/Identity/RecoveryCodeEndpoints.cs",
+      "sha256": "0342ff37974b4fa335da9b65d95fad800d9d954972daac5a8ea385031adff812"
+    },
+    {
+      "path": "src/Modules/Identity/RecoveryCodeMigrationSql.cs",
+      "sha256": "2043ae3cc7c93bed95ab892f52d6fa957d184e7f4830c0c866aae3a3dfea772f"
+    },
+    {
+      "path": "web/apps/user/recovery-codes.tsx",
+      "sha256": "a1cf53b5b541e6951923621e3c72e7aef66a714de3377248ba26f213f6444a0e"
+    },
+    {
+      "path": "web/apps/user/recovery-codes.api.ts",
+      "sha256": "1d81d52c2e2699c46d8a666dad49c765bd5b0b37e9075585e472dd1cdd078d67"
+    }
+  ],
+  "next_action": "Execute the registered Identity-owned lifecycle follow-up with P2-019 approved inputs and P2-017 integration/proof before activation; preserve safe original lineage and all applicable holds."
+}

@@ -79,7 +79,7 @@
   "current146": {
     "index": {
       "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/consumer-refresh-c71495c/evidence-index.json",
-      "sha256": "6a34813e851965264790ce39703ed7c2b838f0ad7143e65cbc1342d395ea7cac"
+      "sha256": "f8484eb1ace2a6a4489c595d0d92e2553a50c37722c51103a59d8e2572762002"
     },
     "actual_invocation": "c71495cbcb1e0e6f8e1dd89c3f42c59b1ed834a6",
     "total": 146,
@@ -116,11 +116,11 @@
     ],
     "before": {
       "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/consumer-refresh-c71495c/source-inputs-before.json",
-      "sha256": "314e2acce3645396e6cedca8d32e1b866659ca278812df8c98720bca68873864"
+      "sha256": "cc81608a119fcbb8ee72d57a6a53881ce999cfbe6a13996d6bcd9165d2e1b295"
     },
     "after": {
       "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/consumer-refresh-c71495c/source-inputs-after.json",
-      "sha256": "56fb0b2c736dd591a7b0b207dfdbad15414979204d8bf45b3bda84d8a7174c31"
+      "sha256": "629fe860c2b3aeebd29cc6488d77206019cf960fad8df6f42710e454f46a082f"
     },
     "original_input_count": 167,
     "all_declared_equal_at_actual_run": true,
@@ -1858,5 +1858,36 @@
     "sha256": "d46c991f4bf6d13880e1d3c52574ad189d14cb309b193c7c0aefe652daf3d7fc",
     "path": "artifacts/p2-009-recovery-20261111/parent-ui-compatibility-review-v1/review.json"
   },
-  "precision": "VAL008pendingonlyforrowsthatactuallyrequireit; screenskeepownURL/UXcheckset. Include unchangedUserapp package declaration inregistrationruntimewitness. Noassessment/test/sourceclaimchanged."
+  "precision": "VAL008pendingonlyforrowsthatactuallyrequireit; screenskeepownURL/UXcheckset. Include unchangedUserapp package declaration inregistrationruntimewitness. Noassessment/test/sourceclaimchanged.",
+  "portability_correction": {
+    "kind": "CURRENT_REFERENCE_PORTABILITY_CORRECTION_ONLY",
+    "basis": "Canonical committed Git bytes verified by the frozen restore plan. Only path-linked current reference hashes are amended; original observations, review and test identities, ordered requirements and historical evidence remain unchanged.",
+    "frozen_restore_plan": {
+      "path": "artifacts/p2-009-recovery-20261111/root-review/c714-eol-preservation-plan.json",
+      "sha256": "adbe40ffdfe07753595f51b3315d6b458f88ed7ede988b53b3da593ae8a459a8"
+    },
+    "original_review_evidence": {
+      "path": "artifacts/p2-009-recovery-20261111/parent-ui-compatibility-review-v2/review.json",
+      "sha256": "a993939d7b0ae3cc159967102dc1ceabd5f0dabcb51ec2e53bb487c58adf4638"
+    },
+    "preserved_original_observations": [
+      {
+        "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/consumer-refresh-c71495c/evidence-index.json",
+        "original_observed_crlf_sha256": "6a34813e851965264790ce39703ed7c2b838f0ad7143e65cbc1342d395ea7cac",
+        "canonical_git_bytes_sha256": "f8484eb1ace2a6a4489c595d0d92e2553a50c37722c51103a59d8e2572762002"
+      },
+      {
+        "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/consumer-refresh-c71495c/source-inputs-before.json",
+        "original_observed_crlf_sha256": "314e2acce3645396e6cedca8d32e1b866659ca278812df8c98720bca68873864",
+        "canonical_git_bytes_sha256": "cc81608a119fcbb8ee72d57a6a53881ce999cfbe6a13996d6bcd9165d2e1b295"
+      },
+      {
+        "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/consumer-refresh-c71495c/source-inputs-after.json",
+        "original_observed_crlf_sha256": "56fb0b2c736dd591a7b0b207dfdbad15414979204d8bf45b3bda84d8a7174c31",
+        "canonical_git_bytes_sha256": "629fe860c2b3aeebd29cc6488d77206019cf960fad8df6f42710e454f46a082f"
+      }
+    ],
+    "new_test_execution_claimed": false,
+    "restoration_boundary": "The 83 clean tracked CRLF-only preimages require the separate guarded checkout-index step after all current heavy runtime ends; this metadata amendment does not execute restoration."
+  }
 }

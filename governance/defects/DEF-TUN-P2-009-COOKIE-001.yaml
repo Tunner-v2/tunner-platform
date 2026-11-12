@@ -4,18 +4,24 @@
   "work_item_id": "TUN-P2-009",
   "classification": "FUNCTIONAL_DEFECT",
   "severity": "SEV-3",
-  "status": "OPEN",
-  "environment": "Static review of committed b3eb4ac8cb72dad932b36898ab8c46e70806bf85; actual private execution remains pending migration and qualified native topology.",
-  "description": "RecoveryCodeStepUpOwner.CompleteBrowserAsync selects the result cookie using DateTimeOffset.UtcNow while the operation and other browser services use injected TimeProvider. A controlled host clock can therefore produce a zero/negative cookie MaxAge after successful commit and lose safe original-result reconciliation. Inject the existing TimeProvider and use clock.GetUtcNow. A fixed boolean regression in the actual winning HTTP helper checks the explicit finite operation-plus-recovery lifetime. Correction is authored; keep OPEN until executed current-source regression confirms it.",
+  "status": "RESOLVED",
+  "environment": "Executed finite native62 at ad744fde52aa03404f3944c47ebb79070185e9f2; production src unchanged through candidate796d316bbc1be878f71d515e06be13d7a77b3c1d as recorded in the source-equivalence witness. Historical affected versions are retained; no production exploit or deployed-policy claim.",
+  "description": "Historical finding (recorded 2026-11-11T10:41:51.104Z; original pending wording retained as history): RecoveryCodeStepUpOwner.CompleteBrowserAsync selects the result cookie using DateTimeOffset.UtcNow while the operation and other browser services use injected TimeProvider. A controlled host clock can therefore produce a zero/negative cookie MaxAge after successful commit and lose safe original-result reconciliation. Inject the existing TimeProvider and use clock.GetUtcNow. A fixed boolean regression in the actual winning HTTP helper checks the explicit finite operation-plus-recovery lifetime. Correction is authored; keep OPEN until executed current-source regression confirms it. Resolution verified 2026-11-12T09:47:11.800Z: RecoveryCodeStepUpOwner now uses injected TimeProvider.GetUtcNow for result selection. The actual native winning Generate HTTP helper asserts result-cookie MaxAge exactly TimeSpan.FromMinutes(10) under the controlled finite host clock; WINNER_SAFE_READ_REPLACE passed in native62. This is the explicit finite profile, not a newly selected production lifetime.",
   "expected_behavior_ref": "docs/contracts/operation-step-up-contract.md",
   "evidence": [
     "artifacts/p2-009-recovery-20261111/security-refinement/implementation-candidate-v1-review.json",
     "artifacts/p2-009-recovery-20261111/implementation-candidate-v1/cookie-clock.patch",
-    "artifacts/p2-009-recovery-20261111/implementation-candidate-v1/cookie-clock-test.patch"
+    "artifacts/p2-009-recovery-20261111/implementation-candidate-v1/cookie-clock-test.patch",
+    "src/Modules/Identity/RecoveryCodeEndpoints.cs",
+    "tests/Tunner.Identity.Persistence.Tests/RecoveryCodePrivateIntegrationTests.cs",
+    "governance/evidence/p2-009-recovery-20261111/parent-readiness-ad744fd/native-private62.json",
+    "governance/evidence/p2-009-recovery-20261111/parent-readiness-ad744fd/native-private62-summary.json",
+    "governance/evidence/p2-009-recovery-20261111/closure-796d316/evidence-index.json",
+    "governance/evidence/p2-009-recovery-20261111/closure-796d316/source-equivalence-witness.json"
   ],
   "affected_versions": [
     "b3eb4ac8cb72dad932b36898ab8c46e70806bf85"
   ],
   "created_at": "2026-11-11T10:41:51.104Z",
-  "updated_at": "2026-11-11T10:41:51.104Z"
+  "updated_at": "2026-11-12T09:47:11.800Z"
 }
