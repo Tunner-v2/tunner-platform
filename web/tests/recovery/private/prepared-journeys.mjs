@@ -33,6 +33,19 @@ class RecoveryJourney {
   if(this.method==='totp')this.factor=await this.mechanics.enrollTotp(this.page,this.account.password);
   await this.page.goto(new URL(security,this.control.origin).href);await this.mechanics.at(this.page,security);
   await this.page.locator('[data-tunner-component="U-AUTH-06"]').first().waitFor();
+  if(this.method==='passkey'){this.checkpoint?.('RECOVERY_BEGIN');await this.acknowledgePreparedPasskey();}
+ }
+ async acknowledgePreparedPasskey(){
+  // A full navigation restores the prepared enrollment's safe result and its ordinary parent guard.
+  const options=await this.mechanics.get(this.page,'/account/passkeys/options');requireTrue(options.ok);
+  const enrollment=options.body.recovery;if(enrollment===null)return;
+  requireTrue(object(enrollment)&&enrollment.kind==='ENROLL'&&enrollment.status==='COMPLETED'&&typeof enrollment.requestId==='string'&&typeof enrollment.ceremonyId==='string');
+  const original=this.preparedPasskeyEnrollment??{requestId:enrollment.requestId,ceremonyId:enrollment.ceremonyId};
+  requireTrue(enrollment.requestId===original.requestId&&enrollment.ceremonyId===original.ceremonyId);this.preparedPasskeyEnrollment=original;
+  const check=this.page.locator('.passkeys-main > .passkeys-page-actions').getByRole('button',{name:'Check status',exact:true});
+  const completed=await this.mechanics.response(this.page,'/account/passkeys/result',()=>check.click());
+  requireTrue(completed.ok&&completed.sent.requestId===original.requestId&&completed.sent.ceremonyId===original.ceremonyId&&completed.body.requestId===original.requestId&&completed.body.ceremonyId===original.ceremonyId&&completed.body.kind==='ENROLL'&&completed.body.status==='COMPLETED');
+  await check.waitFor({state:'detached'});
  }
  async begin(kind=this.kind,page=this.page){
   if(this.method==='passkey')this.checkpoint?.('RECOVERY_BEGIN');
@@ -144,6 +157,7 @@ class RecoveryJourney {
   }else await this.page.getByRole('button',{name:'Done',exact:true}).click();
   requireTrue(await this.page.locator('.recovery-codes-grid code').count()===0);await this.page.reload();await this.mechanics.at(this.page,security);
   requireTrue(await this.page.locator('.recovery-codes-grid code').count()===0);
+  if(this.method==='passkey')await this.acknowledgePreparedPasskey();
   const safe=await this.result(original);requireTrue(safe.status==='COMPLETED'&&safe.codesUnavailable===true);
   // Reload recovers the safe original result, which is acknowledged through the approved L02 path.
   await this.page.locator('.recovery-codes-card').getByRole('button',{name:'Check status',exact:true}).click();
