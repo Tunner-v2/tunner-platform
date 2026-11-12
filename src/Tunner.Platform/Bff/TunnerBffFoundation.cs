@@ -87,6 +87,10 @@ public static class TunnerBffFoundation
     {
         ArgumentNullException.ThrowIfNull(application);
         var profile = application.ApplicationServices.GetRequiredService<BffBoundaryProfile>();
+        var callbacks = application.ApplicationServices.GetServices<BffProtocolCallback>().ToArray();
+        if (callbacks.Length != 0 && profile.ApplicationName != "Tunner.User.Bff" ||
+            callbacks.Select(callback => callback.Path).Distinct(StringComparer.OrdinalIgnoreCase).Count() != callbacks.Length)
+            throw new InvalidOperationException("Protocol callbacks require unique exact registrations on the User BFF.");
         application.UseExceptionHandler(error => error.Run(context => WriteProblem(context, StatusCodes.Status500InternalServerError, "DEPENDENCY_UNAVAILABLE")));
         application.UseRouting();
         application.Use(async (context, next) =>
@@ -98,8 +102,11 @@ public static class TunnerBffFoundation
                 await WriteProblem(context, StatusCodes.Status400BadRequest, "VALIDATION_ERROR").ConfigureAwait(false);
                 return;
             }
+            // Native remote handlers match case-insensitively. Resolve their transport boundary
+            // before health exemptions so a conflicting registration cannot bypass it.
+            var callback = callbacks.SingleOrDefault(candidate => StringComparer.OrdinalIgnoreCase.Equals(candidate.Path, context.Request.Path.Value));
             var safe = IsSafe(context.Request.Method);
-            var health = context.GetEndpoint()?.Metadata.GetMetadata<BffHealthMetadata>() is not null &&
+            var health = callback is null && context.GetEndpoint()?.Metadata.GetMetadata<BffHealthMetadata>() is not null &&
                 (HttpMethods.IsGet(context.Request.Method) || HttpMethods.IsHead(context.Request.Method));
             if (!health)
             {
@@ -114,6 +121,11 @@ public static class TunnerBffFoundation
                     return;
                 }
                 var origins = context.Request.Headers.Origin;
+                if (callback is not null)
+                {
+                    await callback.HandleAsync(context).ConfigureAwait(false);
+                    return;
+                }
                 if ((!safe || origins.Count != 0) && (origins.Count != 1 || !BffBoundaryProfile.TryOrigin(origins[0]!, out var origin) || !profile.Matches(origin)))
                 {
                     await WriteProblem(context, StatusCodes.Status403Forbidden, TechnicalProblemCodes.ForbiddenScope).ConfigureAwait(false);

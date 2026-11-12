@@ -1,0 +1,31 @@
+{
+  "work_item_id": "TUN-P2-010",
+  "phase": "STARTUP_SCOPE_ONLY",
+  "source_commit": "6fd5e68ee3e03384ba084520e86bc2ad402e7c80",
+  "context": "artifacts/p2-010-federation-20261112/context-integration-6fd5e68",
+  "context_result": "CURRENT",
+  "work_context_result": "CONTEXT_READY",
+  "authority_result": "VERIFIED",
+  "authority_artifacts": 196,
+  "startup_reviews": "governance/evidence/TUN-P2-010-STARTUP-REVIEWS.json",
+  "business_contract": "docs/development/P2_010_FEDERATION_REFINEMENT.md",
+  "scopes": {
+    "P1-019-RV001": [
+      "src/Tunner.Platform/Bff/TunnerBffFoundation.cs",
+      "src/Tunner.User.Bff/Tunner.User.Bff.csproj"
+    ],
+    "P1-023-RV001": ["Directory.Packages.props"],
+    "P2-009-RV001": ["src/Tunner.User.Bff/TunnerAuthenticatedUserBffHost.cs"]
+  },
+  "integration_boundary": "The native OIDC client belongs to the User BFF adapter; Identity retains attempts, immutable links, registration, policy, proof and session authority. No Identity project package change is proposed.",
+  "required_callback_checks": [
+    "Preserve no-store, HTTPS and exact target-host checks before an explicitly registered User-only callback.",
+    "Match the exact admitted callback path, method and bounded form body; reject mixed or duplicate security parameters.",
+    "All callback outcomes terminate; no downstream fallback or ordinary authentication cookie issuance.",
+    "Accept protocol success only after terminal native validation, then recheck exact original attempt/profile/purpose/browser/owner currentness.",
+    "Keep starts same-origin and CSRF protected; retain ordinary User/Admin cookie rules and default-host inactivity."
+  ],
+  "dependency_boundary": "Only the exact qualified OIDC client and required transitives are proposed. Existing central pins remain. Metadata/advisory compatibility is not payload integrity, runtime execution or release clearance; host servicing remains separately tracked.",
+  "historical_reference_limit": "The native revision reference catalog does not admit several current authority aliases. P2-009-RV001 cites the verified lifecycle authority and retains current business references through the work item/refinement. Existing TODO-TUN-P2-017-GOV003 tracks catalog parity; no authority bytes or validation semantics are changed.",
+  "acceptance_boundary": "This records startup scope and actual prior checks only. It is not a final specialist review, committed validation envelope, Product acceptance, production policy, protected-main approval or release approval. Each revision requires its own scoped committed validation before closure."
+}

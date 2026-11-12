@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "revision_id": "P2-009-RV001",
+  "revision_scope": "WORK_ITEM",
+  "original_scope_id": "TUN-P2-009",
+  "parent_revision_id": null,
+  "parent_milestone_revision_id": null,
+  "title": "Preserve recovery composition during opt-in federation integration",
+  "revision_type": "COMPATIBILITY",
+  "status": "ACTIVE",
+  "product_acceptance_required": false,
+  "reason": "P2-010 extends the authenticated User BFF composition owned by closed recovery work. Preserve its historical closure. Current business authorities remain in the P2-010 work item and refinement; BOOT-only native reference catalog parity is already tracked by TODO-TUN-P2-017-GOV003.",
+  "authority_refs": [
+    "docs/authority/current/development/03_Governed_Development_Lifecycle_Scrum_Git.md"
+  ],
+  "decision_refs": [],
+  "defect_refs": [],
+  "change_refs": ["docs/development/P2_010_FEDERATION_REFINEMENT.md"],
+  "impact_classification": "NON_BLOCKING",
+  "blocked_scope": [],
+  "acceptance_criteria": [
+    "Keep federation disabled absent explicit admitted registration, preserve Password/Passkey/TOTP/Recovery composition and original owner/proof/cookie boundaries, and validate affected compatibility at true source identities."
+  ],
+  "prerequisites": [],
+  "work_items": [],
+  "required_gates": [],
+  "required_roles": ["full-stack-engineer", "solution-architect", "cyber-security-engineer", "tester-qa-engineer", "auditor", "governance-engineer"],
+  "evidence_refs": ["governance/evidence/P2-010-COMPATIBILITY-SCOPE.json", "governance/evidence/TUN-P2-010-STARTUP-REVIEWS.json"],
+  "created_at": "2026-11-12T12:20:18.6722968\u002B00:00",
+  "closed_at": null
+}

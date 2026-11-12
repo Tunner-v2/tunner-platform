@@ -40,7 +40,15 @@ internal sealed class FederationProviderRegistration
         // Namespace is trusted registered identity, never synthesized from issuer spelling, client or policy version.
         providerNamespace = stableNamespaceId; this.clientId = clientId; this.profileVersion = profileVersion;
         this.mappingEvidenceReference = mappingEvidenceReference; this.maximumSubjectUtf8Bytes = maximumSubjectUtf8Bytes;
+        Provider = provider;
     }
+
+    internal FederationProviderKind Provider { get; }
+    internal string ProviderNamespace => providerNamespace;
+    internal string ClientId => clientId;
+    internal string RegistrationProfileVersion => profileVersion;
+    internal string IssuerMappingEvidenceReference => mappingEvidenceReference;
+    internal IEnumerable<string> AdmittedIssuers => admittedIssuers.Order(StringComparer.Ordinal);
 
     internal FederationIdentityKey BindExternalIdentity(string protocolIssuer, string protocolClientId, string subject)
     {
