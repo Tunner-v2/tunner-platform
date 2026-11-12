@@ -1,0 +1,191 @@
+{
+  "schema_version": 1,
+  "scope_id": "TUN-P2-009",
+  "source_commit": "a095f5fdcdffa2a84c8219e0d0bed3f4655810e0",
+  "status": "UI_CHECKS_PASS_GOVERNANCE_CORRECTION_PASS_FINAL_CARRIER_PENDING",
+  "ui": {
+    "scope_id": "TUN-P2-009",
+    "source_commit": "a095f5fdcdffa2a84c8219e0d0bed3f4655810e0",
+    "command": "dotnet src/Tunner.Governance/bin/Debug/net10.0/tunner.dll governance ui check --scope TUN-P2-009 --evidence governance/evidence/TUN-P2-009-UI-COMPLIANCE.json",
+    "tool_chunk_id": "532a5e",
+    "process_exit_code": 0,
+    "observed_native_result": {
+      "ExitCode": 0,
+      "Command": "ui check",
+      "Payload": {
+        "Outcome": "PASS",
+        "ScopeId": "TUN-P2-009",
+        "CoveredItems": [
+          "U-AUTH-06",
+          "COMP-STEP-UP",
+          "FORM-STEP-UP",
+          "U-ACCT-SECURITY",
+          "FORM-STEP-UP-TOTP",
+          "COMP-STEP-UP-TOTP",
+          "COMP-TOTP-FACTOR-PICKER"
+        ],
+        "Failures": []
+      }
+    },
+    "provenance": "Normalized from the observed native tool result; not a new test or a byte-identical stdout claim."
+  },
+  "parents": [
+    {
+      "scope_id": "TUN-P2-004",
+      "process_exit_code": 0,
+      "tool_chunk_id": "98f346",
+      "observed_native_result": {
+        "ExitCode": 0,
+        "Command": "ui check",
+        "Payload": {
+          "Outcome": "PASS",
+          "ScopeId": "TUN-P2-004",
+          "CoveredItems": [
+            "U-AUTH-02",
+            "U-AUTH-03",
+            "U-AUTH-03A",
+            "U-AUTH-CONSENT",
+            "U-AUTH-RESULT",
+            "FORM-REGISTRATION",
+            "FORM-VERIFY-EMAIL",
+            "FORM-PERSONAL-INFORMATION"
+          ],
+          "Failures": []
+        }
+      }
+    },
+    {
+      "scope_id": "TUN-P2-005",
+      "process_exit_code": 0,
+      "tool_chunk_id": "a870bb",
+      "observed_native_result": {
+        "ExitCode": 0,
+        "Command": "ui check",
+        "Payload": {
+          "Outcome": "PASS",
+          "ScopeId": "TUN-P2-005",
+          "CoveredItems": [
+            "U-AUTH-01",
+            "U-AUTH-SIGNED-IN",
+            "FORM-LOGIN"
+          ],
+          "Failures": []
+        }
+      }
+    },
+    {
+      "scope_id": "TUN-P2-006",
+      "process_exit_code": 0,
+      "tool_chunk_id": "46bb8b",
+      "observed_native_result": {
+        "ExitCode": 0,
+        "Command": "ui check",
+        "Payload": {
+          "Outcome": "PASS",
+          "ScopeId": "TUN-P2-006",
+          "CoveredItems": [
+            "COMP-STEP-UP",
+            "DEV-STEP-UP",
+            "FORM-STEP-UP"
+          ],
+          "Failures": []
+        }
+      }
+    }
+  ],
+  "governance_initial_failure": {
+    "source_commit": "a095f5fdcdffa2a84c8219e0d0bed3f4655810e0",
+    "process_exit_code": 1,
+    "tool_chunk_id": "26b3e2",
+    "record_count": 1118,
+    "diagnostic_count": 14,
+    "diagnostics": [
+      {
+        "path": "governance/reviews/REV-TUN-P2-009-content-writer.yaml",
+        "code": "GOV_UNKNOWN_FIELD",
+        "message": "'review_history' is not declared by specialist-review.schema.json."
+      },
+      {
+        "path": "governance/reviews/REV-TUN-P2-009-content-writer.yaml",
+        "code": "GOV_UNKNOWN_FIELD",
+        "message": "'final_scope' is not declared by specialist-review.schema.json."
+      },
+      {
+        "path": "governance/reviews/REV-TUN-P2-009-cyber-security-engineer.yaml",
+        "code": "GOV_UNKNOWN_FIELD",
+        "message": "'reviewed_source_commit' is not declared by specialist-review.schema.json."
+      },
+      {
+        "path": "governance/reviews/REV-TUN-P2-009-cyber-security-engineer.yaml",
+        "code": "GOV_UNKNOWN_FIELD",
+        "message": "'review_scope' is not declared by specialist-review.schema.json."
+      },
+      {
+        "path": "governance/reviews/REV-TUN-P2-009-cyber-security-engineer.yaml",
+        "code": "GOV_UNKNOWN_FIELD",
+        "message": "'security_scan_evidence' is not declared by specialist-review.schema.json."
+      },
+      {
+        "path": "governance/reviews/REV-TUN-P2-009-cyber-security-engineer.yaml",
+        "code": "GOV_UNKNOWN_FIELD",
+        "message": "'historical_startup_review' is not declared by specialist-review.schema.json."
+      },
+      {
+        "path": "governance/reviews/REV-TUN-P2-009-end-user-ux-reviewer.yaml",
+        "code": "GOV_UNKNOWN_FIELD",
+        "message": "'review_history' is not declared by specialist-review.schema.json."
+      },
+      {
+        "path": "governance/reviews/REV-TUN-P2-009-end-user-ux-reviewer.yaml",
+        "code": "GOV_UNKNOWN_FIELD",
+        "message": "'final_scope' is not declared by specialist-review.schema.json."
+      },
+      {
+        "path": "governance/reviews/REV-TUN-P2-009-frontend-engineer.yaml",
+        "code": "GOV_UNKNOWN_FIELD",
+        "message": "'review_history' is not declared by specialist-review.schema.json."
+      },
+      {
+        "path": "governance/reviews/REV-TUN-P2-009-frontend-engineer.yaml",
+        "code": "GOV_UNKNOWN_FIELD",
+        "message": "'final_scope' is not declared by specialist-review.schema.json."
+      },
+      {
+        "path": "governance/reviews/REV-TUN-P2-009-tester-qa-engineer.yaml",
+        "code": "GOV_UNKNOWN_FIELD",
+        "message": "'review_history' is not declared by specialist-review.schema.json."
+      },
+      {
+        "path": "governance/reviews/REV-TUN-P2-009-tester-qa-engineer.yaml",
+        "code": "GOV_UNKNOWN_FIELD",
+        "message": "'final_scope' is not declared by specialist-review.schema.json."
+      },
+      {
+        "path": "governance/reviews/REV-TUN-P2-009-ui-ux-engineer.yaml",
+        "code": "GOV_UNKNOWN_FIELD",
+        "message": "'review_history' is not declared by specialist-review.schema.json."
+      },
+      {
+        "path": "governance/reviews/REV-TUN-P2-009-ui-ux-engineer.yaml",
+        "code": "GOV_UNKNOWN_FIELD",
+        "message": "'final_scope' is not declared by specialist-review.schema.json."
+      }
+    ],
+    "resolution": "Only six review records were corrected to existing schema-supported fields. Immutable original structured history remains in carrier a095f5f; no schema or behavior change."
+  },
+  "governance_after_focused_correction": {
+    "process_exit_code": 0,
+    "tool_chunk_id": "d5dae5",
+    "observed_native_result": {
+      "ExitCode": 0,
+      "Command": "validate",
+      "Payload": {
+        "IsValid": true,
+        "RecordCount": 1118,
+        "Diagnostics": []
+      }
+    },
+    "subject": "C1 plus six explicit review-field corrections in the working tree; final committed validation follows."
+  },
+  "provenance": "Normalized from observed native CLI tool results; no new functional test execution or byte-identical stdout claim."
+}
