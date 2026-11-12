@@ -1,6 +1,6 @@
 # P2-010 federation refinement
 
-Status: bounded engineering contract proposal in REFINEMENT. This document changes no authority, production policy, runtime capability or public Product API. Native work-start has not been claimed. Google and Microsoft are the only initial providers; GitHub remains future scope.
+Status: bounded engineering contract; work item READY after native-allowed refinement progression for the independent namespace/subject/owned-link backend slice. This document changes no authority, production policy, runtime capability or public Product API. Native work-start has not been claimed. Protocol/dependency qualification remains separate. Google and Microsoft are the only initial providers; GitHub remains future scope.
 
 ## Authority and existing capabilities
 
