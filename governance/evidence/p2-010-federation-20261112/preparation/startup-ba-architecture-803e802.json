@@ -1,0 +1,72 @@
+{
+  "schema_version": 1,
+  "scope_id": "TUN-P2-010",
+  "reviewed_head": "803e802ca65d49a0273d6f1c29fad6f8ffdd3e9e",
+  "phase": "READ_ONLY_STARTUP_AND_REFINEMENT_PREPARATION",
+  "work_item_state": "BACKLOG",
+  "implementation_or_transition_applied": false,
+  "frozen_preparation": {
+    "path": "artifacts/p2-010-federation-20261111/preparation/manifest.json",
+    "sha256": "89474436b0164737a74c2064d6970eb62ed84361f7db70ad15846ccb28d78ea4",
+    "original_head": "fd287d0d1bde81a9f72f54ed335c59d9f5d7a058",
+    "original_inputs": 58,
+    "unchanged_inputs": 53,
+    "changed_inputs": 5,
+    "interpretation": "Original research and transition results retain their original identity. Its obsolete009 shared-grant handoff is historical; no present009 blocker or new010 eligibility is inferred from it."
+  },
+  "startup_assessments": [
+    {
+      "role": "solution-architect",
+      "skill_path": ".agent/skills/solution-architect/SKILL.md",
+      "skill_version": "1.0.0",
+      "skill_hash": "664ffba70d0f97e75951c3548b7f8391854781e4cf90cc50fc8829543783a35b",
+      "result": "STARTUP_SCOPE_SUPPORTED_ONLY",
+      "findings": "ADR0006 already selects Identity/OpenIddict and Google/Microsoft adapters. Keep one Identity owner, existing User BFF/session authority, exact proof engine and local transaction/outbox. Provider network work precedes the final locked local decision. No new host, credential framework, copied token verifier or ADR is justified by the current requirement. OpenIddict EF core registration is not an implemented OIDC client or Product authorization server."
+    },
+    {
+      "role": "business-analyst",
+      "activation": "ADVISORY_PREPARATION; BA is not among the work item's12 currently activated mandatory roles",
+      "skill_path": ".agent/skills/business-analyst/SKILL.md",
+      "skill_version": "1.0.0",
+      "skill_hash": "ca6e24da90c6dac80b7b75124f04a81a2d590e73cc1e99781546c4aad1bca04f",
+      "result": "REQUIREMENTS_RESOLVED_FOR_BOUNDED_REFINEMENT_ONLY",
+      "findings": "Initial providers are Google and Microsoft; GitHub remains later scope. Immutable provider identity never follows mutable email. Verified-email collision requires authentication/recovery of the existing Account and explicit confirmed linking. Unlink preserves the authentication/recovery posture required by active policy. PDR0011 registration/verified-contact/eligibility gates remain authoritative, without invented age, factor-count or provider-assurance rules."
+    }
+  ],
+  "authority_fit": [
+    "FRD17 sections2/3/5/6/7/13/16 and ADR0006 resolve Account ownership, no-email-auto-link, explicit linking, immutable subject and policy-required unlink alternatives.",
+    "Catalog32 common contracts require stable operation/correlation identity, expected-version concurrency, typed same-process calls and safe BFF/error/audit boundaries; Account identity is not Product membership.",
+    "TODO-TUN-P2-010-STEPUP001 is actual010 scope: a current policy-eligible operation-bound proof for passwordless/federated Accounts; neither force a Tunner password nor infer freshness/assurance from callback, token issuance or account selection.",
+    "AMD0005 prior authority-resolution pass remains applicable; no contradictory authority or new Product decision gap was found. Production tenant/count/retention/assurance defaults are not prerequisite Product blockers.",
+    "Doc31 U-AUTH-01/U-ACCT-03 and current inventory govern login/sign-in-method UI. Cached FigJam02/02A/37/38/39/42 mappings retain their recorded provenance; no new live design comparison or expanded UX consent is claimed."
+  ],
+  "reuse_and_real_technical_work": [
+    "Existing ExternalIdentityLinkRow and its Provider+Subject unique key/Account FK/immutable-key version trigger are reusable. Refine the exact validated issuer/client registration namespace and a history-preserving unlink lifecycle; current rows have no terminal unlink state.",
+    "Reuse registration/contact/PersonalInformation/consent and Account restrictions. Current RegisterAsync's protected-password branch is not a federation intake: do not fabricate a password or bypass verification/eligibility.",
+    "Reuse opaque Identity AuthenticationGrant, server session/ticket store, TOTP required-assurance continuation and StepUp final currentness. Current method/source shapes are password/passkey/TOTP; federation needs one deliberate closed evidence/currentness extension, not a password/passkey label or second proof engine.",
+    "Review a narrow framework callback/correlation boundary preserving ordinary Strict cookies/origin/CSRF. Correlation/state/purpose/replay and exact local return binding remain server-owned; no global callback bypass or token persistence.",
+    "Directory.Packages.props still pins Identity10.0.13/OpenIddict.EntityFrameworkCore7.7.2 and has no OIDC client package. The prior framework-client research is a candidate, not an installation/version selection. Recheck applicable primary vendor behavior when selecting the actual supported profile, especially usable fresh-authentication evidence for Google/Microsoft. No provider call or new research project is needed for this startup assessment."
+  ],
+  "changed_input_disposition": [
+    {"path":"docs/contracts/ui-inventory.json","sha256":"83e3013f34780aa22ceb0ce9aaee408e75661cf35aded91afe935a294b262296","review":"009 recovery rows/ownership; no010 callback/link implementation or visual acceptance."},
+    {"path":"src/Modules/Identity/StepUpApplication.cs","sha256":"6605a09dde0ca3359b5ea07265d63314063e292bb223cae8db56168bca375b30","review":"Closed recovery outcome/currentness and postcommit carrier guard; preserve all existing guards when refining010."},
+    {"path":"src/Modules/Identity/StepUpBrowserEndpoints.cs","sha256":"55a6883fc5d1d1c16b995d755ddd9ce18e9a367f90b545d6e54a5a5d85c5ff62","review":"Recovery-only winning response on the existing proof path; no federation authority or generic secret channel."},
+    {"path":"src/Tunner.User.Bff/TunnerAuthenticatedUserBffHost.cs","sha256":"f4947b0600fc52da44c9c331c6d94f78115d7a885098ad76a142a275d8c9dc34","review":"Explicit recovery opt-in composition; ordinary/default provider registration remains absent."},
+    {"path":"web/apps/user/passkeys.tsx","sha256":"c5fc6f1950e161ec92fe7a85806faa5fa9db02827ec9548b9620ce556a497991","review":"009 recovery section/current interaction ownership; does not implement or approve010 linking states."}
+  ],
+  "next_authorized_refinement_step": [
+    "Root registers genuine startup assessments for the12 activated roles; this advisory BA note neither adds a role nor substitutes another role's review.",
+    "Run actual native transition check for TUN-P2-010 REFINEMENT, apply only if allowed, and build/verify the010 context. Prior fd287d0 ALLOWED is historical, not a current applied transition.",
+    "Refine one bounded typed provider-attempt/normalized-identity/current-evidence contract and explicit finite profiles; map collision/confirm/unlink/callback states to current design authority. Public synthetic negative-case design can proceed without provider accounts/credentials.",
+    "Do not implement until native work-start/context and the concrete source scope permit it. No provider registrations, OAuth callbacks, package changes, source/workitem mutations or resources are authorized by this artifact."
+  ],
+  "evidence_boundary": {
+    "native_next_state": "Root reported803e802 BACKLOG/nonActionable solely for12 missing role reviews; not re-executed by this assessment.",
+    "tests_or_runtime_or_provider_activity": false,
+    "external_writes_or_agents": false,
+    "source_or_governed_changes": false,
+    "new_blocker_or_decision_record": false,
+    "startup_only_not_feature_acceptance": true,
+    "P2_009_parent_packet_and_five_role_conclusions": "Preserved unchanged; no009 final acceptance or reopening of completed parents."
+  }
+}

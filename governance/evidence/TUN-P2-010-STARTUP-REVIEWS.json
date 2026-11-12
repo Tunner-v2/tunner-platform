@@ -1,0 +1,169 @@
+{
+  "schema_version": 1,
+  "scope_id": "TUN-P2-010",
+  "result": "PASS_STARTUP_ONLY",
+  "recorded_at": "2026-11-12T03:09:14Z",
+  "reviewed_head": "df84a35790a486fd34d76490087c157929c6ca2c",
+  "branch": "codex/p2-010-federation-20261112",
+  "provenance": "Seven genuine prior role assessments reused with original provenance; five current executing-agent role perspectives. BA preparation remains advisory and is not an activated thirteenth role. No Product/legal/human approval, implementation, test or release acceptance.",
+  "tests_executed": false,
+  "implementation_eligible_claimed": false,
+  "source_changes": false,
+  "scope": "Google and Microsoft only; GitHub future. Backend refinement may proceed when native gates permit. Missing material UI consent blocks affected frontend scope, not unrelated technical refinement.",
+  "frozen_inputs": [
+    {
+      "path": "artifacts/p2-010-federation-20261111/preparation/authority-resolution.json",
+      "original_sha256": "1e8a5d5fdddd25abf0a0a78c98de0b8c3365ef665cf7e01612252b7ed9e9173b",
+      "storage": "Original artifact copied byte-exact to ignored preparation; portable tracked snapshot normalizes line endings only. Original SHA and execution identity remain historical.",
+      "portable_snapshot_ref": "governance/evidence/p2-010-federation-20261112/preparation/authority-resolution.json"
+    },
+    {
+      "path": "artifacts/p2-010-federation-20261111/preparation/primary-research.json",
+      "original_sha256": "794b37427795d2e7173a7ac976d0345f4f2e90155fe44816331c78177519b6e3",
+      "storage": "Original artifact copied byte-exact to ignored preparation; portable tracked snapshot normalizes line endings only. Original SHA and execution identity remain historical.",
+      "portable_snapshot_ref": "governance/evidence/p2-010-federation-20261112/preparation/primary-research.json"
+    },
+    {
+      "path": "artifacts/p2-010-federation-20261111/preparation/inputs.json",
+      "original_sha256": "5c80b03547026741e3f3ed2f9f4e0dd8ad9570e892f292996468f9494c6f702d",
+      "storage": "Original artifact copied byte-exact to ignored preparation; portable tracked snapshot normalizes line endings only. Original SHA and execution identity remain historical.",
+      "portable_snapshot_ref": "governance/evidence/p2-010-federation-20261112/preparation/inputs.json"
+    },
+    {
+      "path": "artifacts/p2-010-federation-20261111/preparation/startup-ba-architecture-803e802.json",
+      "original_sha256": "6b1f1ecacec87be3a16f961668112f7e79f96bcd918c28677cdacb8028a0f7b7",
+      "storage": "Original artifact copied byte-exact to ignored preparation; portable tracked snapshot normalizes line endings only. Original SHA and execution identity remain historical.",
+      "portable_snapshot_ref": "governance/evidence/p2-010-federation-20261112/preparation/startup-ba-architecture-803e802.json"
+    },
+    {
+      "path": "artifacts/p2-010-federation-20261111/security-compliance-startup-803e802.json",
+      "original_sha256": "adb6fa82c331b53142b902aa0e9b7bd3b39dfa51bfacd6ef64d0e95b5d1763fd",
+      "storage": "Original artifact copied byte-exact to ignored preparation; portable tracked snapshot normalizes line endings only. Original SHA and execution identity remain historical.",
+      "portable_snapshot_ref": "governance/evidence/p2-010-federation-20261112/preparation/security-compliance-startup-803e802.json"
+    },
+    {
+      "path": "artifacts/p2-010-federation-20261111/ui-startup-review.json",
+      "original_sha256": "aca86091a3a085337ebe6069f2447cb2464ddf3a2d2fde5adf390506baf966dc",
+      "storage": "Original artifact copied byte-exact to ignored preparation; portable tracked snapshot normalizes line endings only. Original SHA and execution identity remain historical.",
+      "portable_snapshot_ref": "governance/evidence/p2-010-federation-20261112/preparation/ui-startup-review.json"
+    }
+  ],
+  "reviews": [
+    {
+      "role": "full-stack-engineer",
+      "skill_version": "1.0.0",
+      "skill_hash": "ce953abffd89d716a886603c49f938c52405e86bfa452f4aca3348827d26d2fd",
+      "result": "PASS_STARTUP_ONLY",
+      "provenance": "CURRENT_EXECUTING_AGENT",
+      "conclusion": "Keep Identity as Account/link/session owner and User BFF as confidential protocol boundary. Reuse existing registration/contact/intake and shared proof transaction/outbox; no fabricated password, provider token in JavaScript, email auto-link, duplicate proof engine or generic auth framework. Resolve typed issuer/client/subject and callback/current-evidence contracts before source edits.",
+      "review_ref": "governance/reviews/REV-TUN-P2-010-full-stack-engineer.yaml"
+    },
+    {
+      "role": "tester-qa-engineer",
+      "skill_version": "1.1.0",
+      "skill_hash": "52aee18f251a614e339adba9f7c886a5da1ef4ab0482ae6b77044184128415c6",
+      "result": "PASS_STARTUP_ONLY",
+      "provenance": "CURRENT_EXECUTING_AGENT",
+      "conclusion": "Acceptance vectors cover validated immutable issuer/client/provider/subject; no email auto-link; collision authentication/recovery and explicit consent; state/nonce/PKCE/issuer/audience/purpose replay and mix-up; provider denial/unknown; fresh passwordless proof and final source/policy drift; concurrent link/unlink and last policy-required path. Plan public synthetic tests before protected actual-provider tests. No tests executed or functional PASS.",
+      "review_ref": "governance/reviews/REV-TUN-P2-010-tester-qa-engineer.yaml"
+    },
+    {
+      "role": "solution-architect",
+      "skill_version": "1.0.0",
+      "skill_hash": "b010224b318cd4420c2a7146857ed023262614a1ae863ebd29220f3a5bd1ee03",
+      "result": "PASS_STARTUP_ONLY",
+      "provenance": "REUSED_ARCHITECTURE_803E802_AND_CURRENT_SCOPE_REVIEW",
+      "conclusion": "ADR0006 selects Identity/OpenIddict and Google/Microsoft. Existing modular/BFF/session/proof/outbox boundaries fit; provider I/O precedes locked local decisions. OpenIddict EF registration is neither implemented OIDC client nor Product authorization server. No extra host/service/framework or new ADR trigger established.",
+      "review_ref": "governance/reviews/REV-TUN-P2-010-solution-architect.yaml"
+    },
+    {
+      "role": "cyber-security-engineer",
+      "skill_version": "1.0.0",
+      "skill_hash": "de9aec8d9a343eed0433e81e807f143a340fb3ec45a9a4303286936f8238eef5",
+      "result": "PASS_STARTUP_ONLY",
+      "provenance": "REUSED_GENUINE_SECURITY_STARTUP_803E802",
+      "conclusion": "Preserve exact validated identity namespace, server-owned callback/correlation/state/replay and current Account/session restrictions. Fresh provider evidence must meet explicit method/context policy; callback/iat/select-account alone is insufficient. Qualify narrow framework callback transport without waiving ordinary Strict cookies/origin/CSRF. No implemented010 critical/high defect or production approval asserted.",
+      "review_ref": "governance/reviews/REV-TUN-P2-010-cyber-security-engineer.yaml"
+    },
+    {
+      "role": "auditor",
+      "skill_version": "1.0.0",
+      "skill_hash": "1dcfdb25a7a18417540f02da9f84232a2d40d360a8a94a21f0c096f1d6dcefe1",
+      "result": "PASS_STARTUP_ONLY",
+      "provenance": "CURRENT_EXECUTING_AGENT_AUDIT_PERSPECTIVE",
+      "conclusion": "Preserve original preparation and 803e802 review identities; copied six named inputs were byte-hash checked. Current df84a35 startup has no implementation/test acceptance. Original P0/P1 closure and P2-003..006 committed readiness remain unchanged. Require committed source/test evidence and scoped RV lineage for future edits owned by closed scopes. This executing-agent perspective is not independent human approval or separation-of-duties attestation. Portable snapshots retain historical contents with line-ending normalization explicitly declared.",
+      "review_ref": "governance/reviews/REV-TUN-P2-010-auditor.yaml"
+    },
+    {
+      "role": "compliance-specialist",
+      "skill_version": "1.0.0",
+      "skill_hash": "d4764a1fff96b3f6eb1468462219d4e23f9ee4311b50314d34528e721cb1dde2",
+      "result": "PASS_STARTUP_ONLY",
+      "provenance": "REUSED_GENUINE_COMPLIANCE_STARTUP_803E802",
+      "conclusion": "Existing Doc29 governs purpose/minimization/provider processing, retention/holds and protected evidence. Provider acceptance is not legal authorization. Applicable owner processing/provider/legal records are activation requirements; no retention period, lawful basis, residency, market activation or legal approval invented. Federation cannot bypass PDR0011 consent/eligibility or grant commercial/Product rights.",
+      "review_ref": "governance/reviews/REV-TUN-P2-010-compliance-specialist.yaml"
+    },
+    {
+      "role": "sdk-engineer",
+      "skill_version": "1.0.0",
+      "skill_hash": "fa38d568edb52394f4cb42fff515935cbf2d80743bb9b85c5ee8afd14b25db23",
+      "result": "PASS_STARTUP_ONLY",
+      "provenance": "CURRENT_EXECUTING_AGENT",
+      "conclusion": "No Product SDK/public protocol release is triggered by private federation adapter/refinement. Keep strict typed private BFF outcomes, stable original-operation reconciliation and no uncertain mutation retry. Provider library objects/tokens remain internal. Preserve Product-origin context for P2-014 without implementing Product authorization.",
+      "review_ref": "governance/reviews/REV-TUN-P2-010-sdk-engineer.yaml"
+    },
+    {
+      "role": "ui-ux-engineer",
+      "skill_version": "1.1.0",
+      "skill_hash": "498ff7e4b46012b1e90773cd29ebac903d7ac83767d739cc327d9b69a3b4c5c2",
+      "result": "PASS_STARTUP_ONLY",
+      "provenance": "REUSED_GENUINE_UI_STARTUP",
+      "conclusion": "Existing Login2:4, Sign-in Methods36:117 and shared confirmation/proof/validation patterns provide presentation references. Refine scoped collision/link/unlink/callback states against owning inventory. Prior provider-placeholder consent is not new-state approval. Material deviations require scoped Product consent; affected frontend acceptance remains blocked until applicable per-item evidence.",
+      "review_ref": "governance/reviews/REV-TUN-P2-010-ui-ux-engineer.yaml"
+    },
+    {
+      "role": "frontend-engineer",
+      "skill_version": "1.1.0",
+      "skill_hash": "3472e745aa478457939b1aeeba319f72989bb9e97791e458f0b9979ec1b538d7",
+      "result": "PASS_STARTUP_ONLY",
+      "provenance": "REUSED_GENUINE_UI_STARTUP",
+      "conclusion": "Reuse existing Security shell, route guards, typed form/field/summary/dialog/button/content resolver. BFF owns protocol/provider/auth authority; no browser provider client/tokens. Refresh/history must resolve safe current state; UNKNOWN cannot auto-submit or announce success. No new page or duplicate form engine selected.",
+      "review_ref": "governance/reviews/REV-TUN-P2-010-frontend-engineer.yaml"
+    },
+    {
+      "role": "end-user-ux-reviewer",
+      "skill_version": "1.1.0",
+      "skill_hash": "cfaa2eeffd945eef70a6ff1023b1af42fc0413add7b357b2fcd914473e976665",
+      "result": "PASS_STARTUP_ONLY",
+      "provenance": "REUSED_GENUINE_UI_STARTUP",
+      "conclusion": "Distinguish provider sign-in, authentication/recovery of existing Tunner Account and final explicit linking confirmation. Preserve accessible cancel/back, current impact and truthful pending/failure/no-change/unknown feedback without arbitrary Account-existence leakage.",
+      "review_ref": "governance/reviews/REV-TUN-P2-010-end-user-ux-reviewer.yaml"
+    },
+    {
+      "role": "content-writer",
+      "skill_version": "1.0.0",
+      "skill_hash": "108936392f60321d8ea18b0bde16d72d57f6ab0b1869be6b9f5e4c950123782e",
+      "result": "PASS_STARTUP_ONLY",
+      "provenance": "REUSED_GENUINE_UI_STARTUP",
+      "conclusion": "Use governed published semantic keys and approved Google/Microsoft labels. Do not expose issuer/sub/scheme jargon, imply matching emails merge Accounts, provider email changes Tunner contact, or unlink signs out all Products. Server-supplied impact/blockers determine truthful copy.",
+      "review_ref": "governance/reviews/REV-TUN-P2-010-content-writer.yaml"
+    },
+    {
+      "role": "rd-engineer",
+      "skill_version": "1.0.0",
+      "skill_hash": "26076d23437b6b4b30d712a0aff7fde984e2c30ff56e228a74f52d9ca7ef5e55",
+      "result": "PASS_STARTUP_ONLY",
+      "provenance": "CURRENT_EXECUTING_AGENT_REUSING_20261111_PRIMARY_RESEARCH",
+      "conclusion": "2026-11-11 Google/Microsoft official OIDC and ASP.NET/OpenID primary research is preserved, not re-executed. Stable identity is validated issuer plus immutable subject within explicit registration/client namespace. Optional freshness/method evidence is provider/profile-dependent. Native framework OIDC client remains an uninstalled reuse candidate; select exact supported package/version/license/security profile before dependency edits. No implementation/provider capability or deployed compliance inferred.",
+      "review_ref": "governance/reviews/REV-TUN-P2-010-rd-engineer.yaml"
+    }
+  ],
+  "blocking_findings": [],
+  "required_before_implementation": [
+    "Current native eligibility and verified010 context.",
+    "Reviewed closed issuer/client/provider/subject namespace, registration intake, callback correlation/replay, current fresh-proof and unlink contracts.",
+    "Exact supported native provider-library/package governance; no speculative auth framework or production defaults.",
+    "Scoped source ownership/revision and applicable UI consent before affected frontend edits."
+  ],
+  "next_action": "Register startup-only reviews; native BACKLOG-to-REFINEMENT check, then verified010 context. Freeze the smallest concrete contract and supported finite profiles before seeking READY/work-start."
+}

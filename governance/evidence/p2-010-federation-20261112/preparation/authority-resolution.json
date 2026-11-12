@@ -1,0 +1,32 @@
+{
+  "work_item_id": "TUN-P2-010",
+  "phase": "READ_ONLY_REFINEMENT_PREPARATION",
+  "authority_resolution_rule": "AMD-0005 authority-first pass; no new blocker/decision/amendment record is created.",
+  "search_terms": ["Google", "Microsoft", "federation", "ExternalIdentityLink", "verified-email collision", "link/unlink", "fresh proof", "OIDC", "issuer", "immutable subject", "PDR-0011"],
+  "resolved": [
+    {"requirement": "Initial external providers are Google and Microsoft; GitHub login is excluded.", "authority": ["FRD17 sections1/5/6", "ADR-0006", "Doc01 Identity foundation", "TUN-P2-005-VISUAL-CONSENT-20261021"]},
+    {"requirement": "Normalize provider plus immutable provider identity into Tunner-owned links; provider email changes cannot rewrite identity.", "authority": ["FRD17 sections2/5", "ADR-0006 boundaries", "P2-010 acceptance1/3"]},
+    {"requirement": "Matching email never auto-links. Existing verified-email collision requires authentication/recovery of the existing Tunner Account and explicit confirmed link.", "authority": ["FRD17 sections4/5/16", "P2-010 acceptance1/2"]},
+    {"requirement": "Link/unlink is a sensitive authenticator mutation with fresh operation-bound assurance and current authorization/version checks.", "authority": ["FRD17 sections5/7/13", "catalog32 common operation contracts", "TODO-TUN-P2-010-STEPUP001", "FigJam38 nodes79:5515/5551/5554/5560"]},
+    {"requirement": "Unlink must preserve every authentication/recovery path required by active policy; do not invent last-password-only or fixed remaining-factor-count rules.", "authority": ["FRD17 section5", "P2-010 acceptance3"]},
+    {"requirement": "Provider verified email is evidence, not Account activation. All Tunner registration/eligibility/consent gates still apply; initial registration has no DOB/18+ attestation.", "authority": ["FRD17 sections3/11", "PDR-0011", "AMD-0007", "FigJam37/02A"]},
+    {"requirement": "Only Identity issues the authoritative server-side User session after current restrictions and required additional assurance; browser JavaScript receives no provider/access/refresh bearer tokens.", "authority": ["FRD17 sections7/8", "ADR-0006", "existing AuthenticationGrant/ticket-store boundary"]},
+    {"requirement": "Stable operation/idempotency identity, expected-version concurrency, immutable safe audit lineage and explicit UNKNOWN reconciliation apply.", "authority": ["FRD17 sections13/14/16", "catalog32 common/Identity contracts", "FigJam36 execution inheritance"]},
+    {"requirement": "Account activation never creates Product membership/entitlements. Product OAuth authorization/redirect/grant orchestration remains P2-014; preserve its owner context without implementing it in010.", "authority": ["FRD17 sections8/9/16", "FigJam02A/39", "P2_ACCOUNT_IDENTITY_REFINEMENT"]},
+    {"requirement": "User login, sign-in methods, callback/error/confirm states need per-item current visual/routing/validation evidence. Existing provider-label consent approves prior placeholders, not all future callback/link UX.", "authority": ["Doc31 U-AUTH-01/U-ACCT-03", "AMD-0008/0009", "P2-005 visual consent scope"]}
+  ],
+  "figjam_evidence_boundary": {
+    "cached_snapshot": "artifacts/p2-005-auth-20261021/figjam-identity-sections.json",
+    "snapshot_read_at": "2026-10-21T17:21:27.344Z",
+    "sections": {"02": "52:3992", "02A": "52:3993", "36": "88:6714", "37": "88:6717", "38": "88:6720", "39": "88:6723", "40": "88:6726", "41": "88:6729", "42": "88:6732"},
+    "newer_exact38_read": "artifacts/p2-009-recovery-20261111/ui-authority-v1/raw/figjam-88-6720.txt",
+    "claim": "Cached read-only flow mapping, not a new live Figma comparison or approval. Refresh relevant link/callback state designs during native010 refinement."
+  },
+  "authority_conflicts_found": [],
+  "new_missing_authority_blocker_justified": false,
+  "remaining_refinement": [
+    "Concrete closed adapter, callback/cookie and current provider-evidence contracts; these implement existing authority.",
+    "Actual configured provider capability/evidence for fresh passwordless federated proof; absent evidence must fail closed, not assume fresh from iat/redirect/select-account.",
+    "Complete explicit finite/runtime owner profiles and narrowly pictured material UX adaptations. Production defaults are not a new Product blocker."
+  ]
+}

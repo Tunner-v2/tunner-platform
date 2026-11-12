@@ -1,0 +1,283 @@
+{
+  "schema_version": 1,
+  "scope_id": "TUN-P2-010",
+  "phase": "READ_ONLY_SECURITY_COMPLIANCE_STARTUP",
+  "reviewed_head": "803e802ca65d49a0273d6f1c29fad6f8ffdd3e9e",
+  "work_item_state": "BACKLOG",
+  "assessment_agent": "/root/p2_008_security_resume",
+  "scope": "Google and Microsoft federation and explicit Account linking only; GitHub remains future scope.",
+  "startup_provenance": {
+    "native_next": "Root-reported 803e802: blocked solely on mandatory startup role reviews; parents003-006 READY. This assessment did not rerun or override native gates.",
+    "preparation_manifest": {
+      "path": "artifacts/p2-010-federation-20261111/preparation/manifest.json",
+      "sha256": "89474436b0164737a74c2064d6970eb62ed84361f7db70ad15846ccb28d78ea4"
+    },
+    "preparation_reuse": "Original preparation retains its actual fd287d0 source/research/transition identity. Its current803 startup delta was read separately; no old transition is relabelled current.",
+    "context": "No010 implementation eligibility or current isolated context is asserted. Root must build/verify the010 context and native work-start gates before implementation."
+  },
+  "startup_assessments": [
+    {
+      "role": "cyber-security-engineer",
+      "skill_path": ".agent/skills/cyber-security-engineer/SKILL.md",
+      "skill_version": "1.0.0",
+      "skill_sha256": "2d32ff3d7fb503f29cf930e9852ed4a757bb48a08e3fa4e3f6d5a23139a47f97",
+      "result": "STARTUP_SCOPE_SUPPORTED_ONLY",
+      "conclusion": "Existing authority is sufficient for bounded refinement. Preserve Tunner Account/session/proof authority, immutable validated external identity and explicit linking. No confirmed critical/high defect in an implemented010 flow is asserted;010 is not implemented or accepted."
+    },
+    {
+      "role": "compliance-specialist",
+      "skill_path": ".agent/skills/compliance-specialist/SKILL.md",
+      "skill_version": "1.0.0",
+      "skill_sha256": "38f8de27e31b3ae5cec070320d9b408d6f75682b024322f5e37585c76921303e",
+      "result": "STARTUP_SCOPE_SUPPORTED_ONLY",
+      "conclusion": "Purpose, minimization, provider processing, retention and audit obligations are already governed. They require scoped owner evidence before applicable processing/production activation; no legal basis, retention duration, residency promise or human/legal approval is invented."
+    }
+  ],
+  "authority_resolution": {
+    "rule": "AMD-0005 sections3-7; bounded pass across current FRD17/06/08/29/32/33, accepted ADR0006, applicable contracts, work item/TODO and preparation's recorded FigJam/decision mapping.",
+    "discovery_terms": [
+      "Google",
+      "Microsoft",
+      "verified-email collision",
+      "ExternalIdentityLink",
+      "immutable subject",
+      "link/unlink",
+      "fresh proof",
+      "callback",
+      "session",
+      "processing governance",
+      "identity provider"
+    ],
+    "exact_authority": [
+      "FRD17 sections3-5/7-9/13/16",
+      "ADR-0006 Decision and Boundaries",
+      "Doc06 section5",
+      "Doc08 sections10-11",
+      "Doc29 sections4-8/15-16",
+      "Doc32 common and Identity contracts",
+      "Doc33 sections6-7",
+      "Doc28 section9",
+      "Doc22 sections1-2 applicability only",
+      "TODO-TUN-P2-010-STEPUP001"
+    ],
+    "resolved": [
+      "Google and Microsoft are initial adapters. External providers never become Tunner Account authority.",
+      "The external key is validated provider/issuer registration namespace plus immutable subject, never mutable email. No automatic email-match linking.",
+      "Authenticated linking requires provider authentication and explicit confirmation. Verified-email collision requires authentication/recovery of the existing Account before linking; do not disclose arbitrary Account existence.",
+      "Unlink must preserve the authentication/recovery paths required by current policy. No fixed remaining-factor count or last-password-only rule is selected.",
+      "Provider verified email is evidence within the existing registration/contact/eligibility/consent flow, not an Account activation bypass.",
+      "Only Identity issues authoritative server-managed BFF sessions after current Account/restriction and required assurance checks. No OAuth access/refresh bearer tokens in browser JavaScript.",
+      "Link/unlink and passwordless fresh proof retain exact operation, Account/session/origin, expected version, policy, context and final-currentness bindings with atomic owner effect/proof/outbox.",
+      "Data inventory, approved processing purpose/minimization, applicable processor/transfer evidence, retention/holds and permission-aware privacy-safe audit are required by existing authority."
+    ],
+    "figjam_boundary": "Reuse the preparation's recorded read-only flow02/02A/37/38/39/42 provenance. No new live Figma/FigJam comparison, visual consent or expanded screen acceptance was performed.",
+    "conflicts_found": [],
+    "new_decision_or_blocker_required": false,
+    "disposition": "Provider protocol/evidence and lifecycle shapes are concrete refinement work within resolved authority. Do not create a duplicate ADR/Product decision or impose a production-profile default as a general local-development stop."
+  },
+  "existing_reuse_and_limits": [
+    {
+      "source": [
+        "src/Modules/Identity/IdentityRows.cs:49",
+        "src/Modules/Identity/IdentityModelConfiguration.cs:67",
+        "src/Modules/Identity/IdentityMigrationSql.cs:40",
+        "tests/Tunner.Identity.Persistence.Tests/IdentityFoundationTests.cs:65"
+      ],
+      "review": "Reuse ExternalIdentityLinkRow, unique Provider+Subject, Account FK, concurrency version and immutable-key update guard. Existing test source covers duplicate key and subject rewrite. These are inspected source, not new test executions. Define the exact validated provider namespace and history-preserving unlink state; existing rows do not implement a complete unlink lifecycle."
+    },
+    {
+      "source": [
+        "docs/contracts/authentication-session-contract.md",
+        "src/Modules/Identity/AuthenticationApplication.cs",
+        "src/Tunner.User.Bff/TunnerAuthenticatedUserBffHost.cs"
+      ],
+      "review": "Reuse server-owned caller/current Account checks, opaque AuthenticationGrant/ticket store, session rotation and safe original-result reconciliation. A framework external/correlation cookie is temporary evidence, not a Tunner authenticated session. Preserve ordinary origin/CSRF/Strict-cookie behavior while qualifying one narrow protocol callback boundary."
+    },
+    {
+      "source": [
+        "docs/contracts/operation-step-up-contract.md",
+        "src/Modules/Identity/StepUpApplication.cs:153",
+        "src/Modules/Identity/PasskeyApplication.cs:113",
+        "src/Modules/Identity/TotpApplication.cs:93"
+      ],
+      "review": "Reuse the shared proof engine, final decision after awaited current-authority checks, owner transaction/outbox and existing alternative-authenticator locking. Current method/witness shapes are password/passkey/TOTP: federation needs an explicit closed current-evidence extension, not a second proof engine or relabelling as an existing method."
+    },
+    {
+      "source": [
+        "src/Modules/Identity/RegistrationApplication.cs",
+        "src/Modules/Identity/TotpPrimaryMfa.cs"
+      ],
+      "review": "Reuse actual registration/contact/PersonalInformation/consent and required-assurance continuation. Do not fabricate a password, bypass Account gates or infer that provider callback/iat/account selection satisfies fresh proof or required MFA."
+    }
+  ],
+  "required_validation_cases": {
+    "status": "REQUIRED_FOR_IMPLEMENTATION_VALIDATION_NOT_EXECUTED",
+    "cases": [
+      "Immutable validated issuer/provider+subject namespace; provider email change cannot rekey. Same email/different subject never auto-links, including concurrent callback attempts.",
+      "Verified-email collision cannot mint/link a different Account; require exact existing-Account authentication/recovery and explicit confirmation without arbitrary existence disclosure.",
+      "Wrong/missing/expired/replayed state, nonce, PKCE, issuer, audience, purpose and local return binding fail closed; test login/link/proof mix-up, duplicate callback and provider denial/unavailability/UNKNOWN reconciliation.",
+      "Passwordless federated operation proof requires actual current policy-eligible verifier evidence. Test stale/missing/unknown assurance and source/policy/session/Account drift after awaited provider/authentication work, not token issuance time alone.",
+      "Concurrent link/unlink and other authenticator mutations preserve unique ownership, expected version and policy-required alternatives; owner failure/cancellation rolls back proof claim/effect/outbox together.",
+      "Provider success cannot bypass contact/eligibility/restriction or required additional assurance. No premature User session, JavaScript bearer token or Product membership/grant is created.",
+      "Callback, errors, safe status/reconciliation, logs/outbox and user navigation expose no secret/raw provider diagnostic. Freeze and qualify the supported protocol callback transport/correlation boundary; do not silently waive URL or ordinary origin/CSRF controls.",
+      "Inventory every new durable field and transient processing class, minimize provider scopes/claims, test owner discovery/retention/holds and restricted evidence access as applicable. Live credentials/private-value tests require a separately reviewed protected test boundary."
+    ]
+  },
+  "production_input_boundary": [
+    "Explicit configured issuer/client registration, audience/account-type/tenant scope where applicable, redirect/callback registration and secret abstraction are required implementation inputs; this assessment selects no production values.",
+    "Actual supported provider evidence must meet the approved fresh-proof/assurance policy. Missing evidence fails closed; neither mandatory Tunner password nor assumed federation assurance is introduced.",
+    "Owner policy supplies lifetimes, concurrency/admission limits, session effects, required remaining paths, processing/retention/transfer and published user content; no defaults are invented.",
+    "Doc29 requires the applicable inventory/processing/provider record and legal/contract review before processing activation. Actual provider role, jurisdiction and lawful basis must be evidenced rather than inferred from technical provider acceptance.",
+    "Doc22 financial/market rules are not activated merely by a login adapter. Authentication does not grant commercial capability, Product membership or marketing authority."
+  ],
+  "next_refinement_action": [
+    "Root may register these two genuine startup-only role assessments with the remaining activated reviews, then run the actual native REFINEMENT transition and build/verify isolated010 context.",
+    "Freeze one typed provider-attempt/normalized-identity/collision/link/unlink/current-proof contract and complete explicit finite profiles. Backend owns current primary-vendor/library qualification; this assessment does not duplicate or approve that selection.",
+    "Resolve each affected callback/link/confirmation/error route against current UI authority and inventory; prior provider-placeholder approval is not acceptance of new010 states.",
+    "Implement only after native eligibility and a concrete reviewed source scope. No provider registration, credentials, code, package or resource activation is authorized by this receipt."
+  ],
+  "boundaries": {
+    "tests_builds_provider_calls_or_resources_executed": false,
+    "source_or_governed_changes": false,
+    "work_item_transition_applied": false,
+    "external_reads_or_writes_this_assessment": false,
+    "new_agents": false,
+    "human_product_legal_or_release_acceptance": false,
+    "P2_009": "Preserve native62/public19/SQL5 security reviews and the existing37-case evidence proposal. The a0bd39de reload-ack helper no-finding remains scoped static review; final009 browser private6 acceptance awaits root's actual receipts.",
+    "environment": "The13 unrelated dirty paths and unattributed Windows cache remain untouched/unread. No global filesystem absence or host privacy certification is claimed."
+  },
+  "inputs": [
+    {
+      "path": "AGENTS.md",
+      "sha256": "2432cee49b89f8183c944e4d07568cc0826fdba57ea3a71b2feae876b558cb59"
+    },
+    {
+      "path": ".agent/skills/cyber-security-engineer/SKILL.md",
+      "sha256": "2d32ff3d7fb503f29cf930e9852ed4a757bb48a08e3fa4e3f6d5a23139a47f97"
+    },
+    {
+      "path": ".agent/skills/compliance-specialist/SKILL.md",
+      "sha256": "38f8de27e31b3ae5cec070320d9b408d6f75682b024322f5e37585c76921303e"
+    },
+    {
+      "path": "governance/work-items/TUN-P2-010.yaml",
+      "sha256": "23ea7e2dc5a3fcf8c2d63537b6991d0f2000145f642e72ac5db51139f647967e"
+    },
+    {
+      "path": "governance/todos/TODO-TUN-P2-010-STEPUP001.yaml",
+      "sha256": "6aa04dbf109124fb155f5fc8f4f7965c8ccfe01b6a47cdf0e9c9dc87fcb30bb8"
+    },
+    {
+      "path": "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md",
+      "sha256": "e21bc59400b9db52a0dd7d94dde861bb952ce4688111dc9b4d97446f0488de74"
+    },
+    {
+      "path": "docs/authority/baselines/1.6.0/decisions/ADR-0006_Identity_ASPNET_Identity_OpenIddict.md",
+      "sha256": "9bdf9b66aa5de34aa90077b5296794d3e29bb3ba02e5b8f28c8f7b0204285c0a"
+    },
+    {
+      "path": "docs/authority/current/development/06_Environment_Configuration_Secrets_and_Deployment.md",
+      "sha256": "b9e09e4669f0831d711b2c7c89b4ec1649e75b72cc1d4b3d3a485e52bccee0f1"
+    },
+    {
+      "path": "docs/authority/current/development/08_Security_Privacy_Compliance_and_Global_Market_Governance.md",
+      "sha256": "65baec50be722393cd0bf0fb5d57cde158055b7d541b59a4fbf61ab263ebe7ab"
+    },
+    {
+      "path": "docs/authority/current/development/29_Privacy_Data_Lifecycle_and_Processing_Governance_FRD.md",
+      "sha256": "e89eb630c0dc5ddcdbadde68ee53be0e7a7f7fc54cdc9a1b6df6abb7fca35366"
+    },
+    {
+      "path": "docs/authority/current/development/32_Domain_API_Event_Data_and_Policy_Contract_Catalog.md",
+      "sha256": "2030e8eb6b3c80ba8d26e1aaf849eef9e57db78c1ac3cf400f9b18ffb99f3ab7"
+    },
+    {
+      "path": "docs/authority/current/development/33_Production_Readiness_Compliance_and_Release_Gates.md",
+      "sha256": "5270f6da82dd7e58e7cd346a020d864f8571d4a1664f6bb31fb0e08e63657a50"
+    },
+    {
+      "path": "docs/authority/baselines/1.6.0/28_Support_Risk_Audit_and_Internal_Operations_FRD.md",
+      "sha256": "2077b254ad3dadca03e7336339bf208ab7abc3d365f76c4173524c52854b1eb9"
+    },
+    {
+      "path": "docs/authority/baselines/1.6.0/22_Global_Market_Tax_Product_Compliance_and_Remittance_FRD.md",
+      "sha256": "08df2d936071e6d99a7d7d8c2ef1c7b542017739bcf92ff805d9bfb18dae368c"
+    },
+    {
+      "path": "docs/authority/amendments/AMD-0005/AMD-0005_Authority-First_Decision_Resolution_and_Duplicate-Decision_Prevention.md",
+      "sha256": "51b259a3757c1f881846d3c17666723d0dc72628ad5d25bcd58360c6f41c0d64"
+    },
+    {
+      "path": "docs/contracts/authentication-session-contract.md",
+      "sha256": "c1c4d17b08fadd9a4ed305cac847729cd1ca5345dcda743767431249ac24ea15"
+    },
+    {
+      "path": "docs/contracts/operation-step-up-contract.md",
+      "sha256": "96d512b6a14ad52e8625a3fac130284832c3d4b21c649a88169327aa8b22ff7c"
+    },
+    {
+      "path": "src/Modules/Identity/IdentityRows.cs",
+      "sha256": "5d61cff35f21c62bbd579e48f4d898c2045d6bff12f57db0087b990ce6e65ff1"
+    },
+    {
+      "path": "src/Modules/Identity/IdentityModelConfiguration.cs",
+      "sha256": "a31e1d937723b142e12849d1bb9fac757c177f36a7cc14e5fc67d83cb6995efe"
+    },
+    {
+      "path": "src/Modules/Identity/IdentityMigrationSql.cs",
+      "sha256": "e11911449e22c38a41b2e02caaca0574223e59c5204fb629c95d54ea1906ff65"
+    },
+    {
+      "path": "src/Modules/Identity/StepUpApplication.cs",
+      "sha256": "6605a09dde0ca3359b5ea07265d63314063e292bb223cae8db56168bca375b30"
+    },
+    {
+      "path": "src/Modules/Identity/TotpApplication.cs",
+      "sha256": "d212dfa6ce4c9050fb857b72343b89073911bc88c9ff218e63215f441a5100cb"
+    },
+    {
+      "path": "src/Modules/Identity/PasskeyApplication.cs",
+      "sha256": "44fa23b30991386ce470ed31718da57189a8c9418f50d95bfc0a8a79d79542a4"
+    },
+    {
+      "path": "src/Modules/Identity/AuthenticationApplication.cs",
+      "sha256": "c22887267d3eaf7a9ccf5391a32219602ca25504cda9a27829acf631b0332cb8"
+    },
+    {
+      "path": "src/Modules/Identity/RegistrationApplication.cs",
+      "sha256": "9b3478e60d31d55c25fe542ed8d3e622cc6cc7e73c1d08f02dc61deda1da44a7"
+    },
+    {
+      "path": "src/Modules/Identity/TotpPrimaryMfa.cs",
+      "sha256": "c5a3353c0e87b814847afbfe7842e7ec494d117b1f7e6eebad55efeb17fec2de"
+    },
+    {
+      "path": "src/Tunner.User.Bff/TunnerAuthenticatedUserBffHost.cs",
+      "sha256": "f4947b0600fc52da44c9c331c6d94f78115d7a885098ad76a142a275d8c9dc34"
+    },
+    {
+      "path": "tests/Tunner.Identity.Persistence.Tests/IdentityFoundationTests.cs",
+      "sha256": "61ef1535e6c0c8d7239c801216e631e0e5f123b5e8aa04f83d64e9f911cb8db5"
+    },
+    {
+      "path": "artifacts/p2-010-federation-20261111/preparation/manifest.json",
+      "sha256": "89474436b0164737a74c2064d6970eb62ed84361f7db70ad15846ccb28d78ea4"
+    },
+    {
+      "path": "artifacts/p2-010-federation-20261111/preparation/authority-resolution.json",
+      "sha256": "1e8a5d5fdddd25abf0a0a78c98de0b8c3365ef665cf7e01612252b7ed9e9173b"
+    },
+    {
+      "path": "artifacts/p2-010-federation-20261111/preparation/startup-ba-architecture-803e802.json",
+      "sha256": "6b1f1ecacec87be3a16f961668112f7e79f96bcd918c28677cdacb8028a0f7b7"
+    },
+    {
+      "path": "artifacts/p2-010-federation-20261111/preparation/reuse-and-contract-sketch.md",
+      "sha256": "ba7796e7ca3199bbc81e3019d5607d9d52b49b504d3ccc38c74de6f25e4f8117"
+    },
+    {
+      "path": "artifacts/p2-010-federation-20261111/preparation/readiness-and-cases.json",
+      "sha256": "74d552f677d4ff4714ae3cfd5e18c156885daa117fd3d9f0f5854c11d618031f"
+    }
+  ]
+}
