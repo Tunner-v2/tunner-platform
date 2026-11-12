@@ -31,7 +31,7 @@ public sealed record TotpPolicy(string Version, string Origin, string Issuer, st
             ReplayHashIterations is < 10_000 or > 1_000_000 || MaximumLiveReplayClaims is < 1 or > 1024 || (long)MaximumLiveReplayClaims * ReplayHashIterations > 10_000_000 ||
             MaximumActiveAuthenticators <= 0 || MaximumPendingOperations <= 0 || !Enum.IsDefined(DisableSessionEffect) ||
             !Enum.IsDefined(ResetSessionEffect) || !Enum.IsDefined(ReplacementOrdering) || !Enum.IsDefined(ResetBehavior) || MfaAssurances is null || MfaAssurances.Count == 0 ||
-            MfaAssurances.Any(x => x.Key is not ("pwd" or "passkey") || string.IsNullOrWhiteSpace(x.Value) || x.Value.Equals("AAL3", StringComparison.OrdinalIgnoreCase)) ||
+            MfaAssurances.Any(x => x.Key is not ("pwd" or "passkey" or "federation") || string.IsNullOrWhiteSpace(x.Value) || x.Value.Equals("AAL3", StringComparison.OrdinalIgnoreCase)) ||
             OperationProofAssurance.Equals("AAL3", StringComparison.OrdinalIgnoreCase))
             throw new InvalidOperationException("A complete supported approved TOTP profile is required.");
     }

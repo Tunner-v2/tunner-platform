@@ -18,7 +18,8 @@ public static class RecoveryCodeFiniteNativeExecution
     private static readonly string[] CanaryIds = ["BEFORE_CREATE", "AFTER_CREATE", "AFTER_START", "AFTER_MIGRATION", "CASE_FAILURE", "CLEANUP_REJECT"];
     private static readonly string[] PublicIds = [.. CanaryIds, "OWNERSHIP_REJECT", "NO_LOG_REJECT", "SENSITIVE_REJECT"];
     private static readonly string[] CapacityIds = ["MIGRATION_CAPACITY"];
-    private static readonly string[] SqlIds = ["ISSUANCE_BINDING", "RETIREMENT_BINDING", "ENTRY_ONE_WAY", "SET_ONE_WAY", "OPERATION_ONE_WAY"];
+    private static readonly string[] SqlIds = ["ISSUANCE_BINDING", "RETIREMENT_BINDING", "ENTRY_ONE_WAY", "SET_ONE_WAY", "OPERATION_ONE_WAY",
+        "FEDERATION_NAMESPACE_BINDING", "FEDERATION_SINGLE_OWNER", "FEDERATION_OWNER_ROLLBACK", "FEDERATION_IMMUTABLE_VERSION"];
     private static readonly string[] PrivateIds = [
         "PARENT003_REGISTRATION_BOUNDARY", "PARENT003_REGISTRATION_FLOW", "PARENT003_REGISTRATION_PROGRESS", "PARENT005_AUTH_SESSION",
         "PARENT005_AUTH_DUPLICATE", "PARENT005_AUTH_CONTACT_CURRENT", "PARENT006_PROOF_SESSION", "PARENT006_PROOF_ROLLBACK",
@@ -276,6 +277,10 @@ public static class RecoveryCodeFiniteNativeExecution
                 "ENTRY_ONE_WAY" => sql.ConsumedEntryCannotRearmRotateVerifierOrRewriteOwnerOutcome(),
                 "SET_ONE_WAY" => sql.SetUsageCannotRewindOrBecomeLifecycleAndRetirementIsTerminal(),
                 "OPERATION_ONE_WAY" => sql.TerminalOperationCannotReopenOrRewriteContextPublicationOrFirstResponse(),
+                "FEDERATION_NAMESPACE_BINDING" => new FederationIdentityPersistenceTests(fixture).ExactRegistrationNamespacesRoundTripWithoutCrossClientOrSubjectFolding(),
+                "FEDERATION_SINGLE_OWNER" => new FederationIdentityPersistenceTests(fixture).ConcurrentExactIdentityHasOneOwnerAndCannotRewriteThatOwner(),
+                "FEDERATION_OWNER_ROLLBACK" => new FederationIdentityPersistenceTests(fixture).OwnerRollbackLeavesNoPartialIdentityReservation(),
+                "FEDERATION_IMMUTABLE_VERSION" => new FederationIdentityPersistenceTests(fixture).PersistedSubjectIsImmutableAndEvidenceUpdatesDetectStaleVersion(),
                 _ => throw new InvalidOperationException("RECOVERY_NATIVE_CASE_INVALID")
             };
         }

@@ -20,6 +20,21 @@ internal sealed class AuthenticationSessionRow
     public Guid? PasskeyCredentialReference { get; set; }
     public string? PasskeyPolicyVersion { get; set; }
     public string? PasskeyAssuranceKey { get; set; }
+    public Guid? FederationAttemptId { get; set; }
+    public string? FederationProvider { get; set; }
+    public Guid? FederationLinkId { get; set; }
+    public long? FederationLinkVersion { get; set; }
+    public string? FederationNamespace { get; set; }
+    public string? FederationClientId { get; set; }
+    public string? FederationIssuer { get; set; }
+    public string? FederationProfileVersion { get; set; }
+    public string? FederationIssuerMappingEvidenceReference { get; set; }
+    public string? FederationQualificationProfileVersion { get; set; }
+    public string? FederationQualificationEvidenceReference { get; set; }
+    public string? FederationSignInAdmissionPolicyVersion { get; set; }
+    public string? FederationAssuranceMappingEvidenceReference { get; set; }
+    public string? FederationSessionUsePolicyVersion { get; set; }
+    public string? FederationPrimaryAssurance { get; set; }
     public Guid? TotpAuthenticatorReference { get; set; }
     public Guid? TotpGeneration { get; set; }
     public long? TotpAuthenticatorVersion { get; set; }
@@ -63,7 +78,8 @@ internal static class AuthenticationModelConfiguration
                 t.HasCheckConstraint("ck_session_state", "state IN ('ACTIVE','REVOKED','EXPIRED')");
                 t.HasCheckConstraint("ck_session_bounds", "expires_at > authenticated_at AND last_seen_at >= authenticated_at AND idle_ticks > 0 AND version >= 1");
                 t.HasCheckConstraint("ck_session_key", "length(key_digest) = 64 AND length(browser_digest) = 64");
-                t.HasCheckConstraint("ck_session_method", "((authentication_methods IN ('pwd','pwd+totp') AND passkey_credential_reference IS NULL AND passkey_policy_version IS NULL AND passkey_assurance_key IS NULL) OR (authentication_methods IN ('passkey','passkey+totp') AND passkey_credential_reference IS NOT NULL AND passkey_policy_version IS NOT NULL AND passkey_assurance_key IS NOT NULL)) AND ((authentication_methods IN ('pwd','passkey') AND totp_authenticator_reference IS NULL AND totp_generation IS NULL AND totp_authenticator_version IS NULL AND totp_policy_version IS NULL AND mfa_requirement_policy_version IS NULL) OR (authentication_methods IN ('pwd+totp','passkey+totp') AND totp_authenticator_reference IS NOT NULL AND totp_generation IS NOT NULL AND totp_authenticator_version>=2 AND totp_policy_version IS NOT NULL AND mfa_requirement_policy_version IS NOT NULL))");
+                t.HasCheckConstraint("ck_session_method", "((authentication_methods IN ('pwd','pwd+totp','federation','federation+totp') AND passkey_credential_reference IS NULL AND passkey_policy_version IS NULL AND passkey_assurance_key IS NULL) OR (authentication_methods IN ('passkey','passkey+totp') AND passkey_credential_reference IS NOT NULL AND passkey_policy_version IS NOT NULL AND passkey_assurance_key IS NOT NULL)) AND ((authentication_methods IN ('pwd','passkey','federation') AND totp_authenticator_reference IS NULL AND totp_generation IS NULL AND totp_authenticator_version IS NULL AND totp_policy_version IS NULL AND mfa_requirement_policy_version IS NULL) OR (authentication_methods IN ('pwd+totp','passkey+totp','federation+totp') AND totp_authenticator_reference IS NOT NULL AND totp_generation IS NOT NULL AND totp_authenticator_version>=2 AND totp_policy_version IS NOT NULL AND mfa_requirement_policy_version IS NOT NULL))");
+                t.HasCheckConstraint("ck_session_federation", FederationAuthenticationSource.SessionShapeConstraint);
                 t.HasCheckConstraint("ck_session_termination", "(termination_cause IS NULL AND termination_policy_version IS NULL AND termination_credential_version IS NULL) OR (state='REVOKED' AND termination_cause IN ('PASSKEY_REVOKED','TOTP_DISABLED') AND termination_policy_version IS NOT NULL AND termination_credential_version IS NOT NULL AND termination_credential_version >= 2)");
             });
             b.HasKey(x => x.SessionId); b.Property(x => x.SessionId).ValueGeneratedNever();
@@ -73,6 +89,9 @@ internal static class AuthenticationModelConfiguration
             b.Property(x => x.Version).IsConcurrencyToken();
             b.HasOne<AccountRow>().WithMany().HasForeignKey(x => x.AccountId).OnDelete(DeleteBehavior.Restrict);
             b.HasOne<TotpAuthenticatorRow>().WithMany().HasForeignKey(x => x.TotpAuthenticatorReference).OnDelete(DeleteBehavior.Restrict);
+            b.HasOne<ExternalIdentityLinkRow>().WithMany().HasForeignKey(x => new { x.AccountId, x.FederationLinkId })
+                .HasPrincipalKey(x => new { x.AccountId, x.LinkId }).OnDelete(DeleteBehavior.Restrict);
+            b.HasOne<FederationAttemptRow>().WithMany().HasForeignKey(x => x.FederationAttemptId).OnDelete(DeleteBehavior.Restrict);
         });
         model.Entity<AuthenticationAbuseRow>(b =>
         {

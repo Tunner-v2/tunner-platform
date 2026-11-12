@@ -103,6 +103,20 @@ internal sealed class TotpPendingAuthenticationRow
     public long? PasskeyCredentialVersion { get; set; }
     public string? PasskeyPolicyVersion { get; set; }
     public string? PasskeyAssuranceKey { get; set; }
+    public Guid? FederationAttemptId { get; set; }
+    public string? FederationProvider { get; set; }
+    public Guid? FederationLinkId { get; set; }
+    public long? FederationLinkVersion { get; set; }
+    public string? FederationNamespace { get; set; }
+    public string? FederationClientId { get; set; }
+    public string? FederationIssuer { get; set; }
+    public string? FederationProfileVersion { get; set; }
+    public string? FederationIssuerMappingEvidenceReference { get; set; }
+    public string? FederationQualificationProfileVersion { get; set; }
+    public string? FederationQualificationEvidenceReference { get; set; }
+    public string? FederationSignInAdmissionPolicyVersion { get; set; }
+    public string? FederationAssuranceMappingEvidenceReference { get; set; }
+    public string? FederationSessionUsePolicyVersion { get; set; }
     public string SecurityStampDigest { get; set; } = string.Empty;
     public string AuthenticationPolicyVersion { get; set; } = string.Empty;
     public string TotpPolicyVersion { get; set; } = string.Empty;
@@ -160,11 +174,15 @@ internal static class TotpModelConfiguration
         {
             b.ToTable("totp_pending_authentication", "identity", t =>
             {
-                t.HasCheckConstraint("ck_totp_pending", "state IN ('PENDING','COMPLETED','EXPIRED') AND primary_method IN ('pwd','passkey') AND expires_at>primary_verified_at AND recovery_expires_at>expires_at AND version>=1");
+                t.HasCheckConstraint("ck_totp_pending", "state IN ('PENDING','COMPLETED','EXPIRED') AND primary_method IN ('pwd','passkey','federation') AND expires_at>primary_verified_at AND recovery_expires_at>expires_at AND version>=1");
+                t.HasCheckConstraint("ck_totp_pending_federation", FederationAuthenticationSource.PendingShapeConstraint);
                 t.HasCheckConstraint("ck_totp_pending_result", "(state='COMPLETED' AND result_session_id IS NOT NULL AND accepted_authenticator_reference IS NOT NULL AND accepted_generation IS NOT NULL) OR (state<>'COMPLETED' AND result_session_id IS NULL AND accepted_authenticator_reference IS NULL AND accepted_generation IS NULL)");
             });
             b.HasKey(x => x.PendingId); b.Property(x => x.PendingId).ValueGeneratedNever(); b.HasIndex(x => new { x.BrowserDigest, x.RequestId }).IsUnique();
             b.Property(x => x.Version).IsConcurrencyToken(); b.HasOne<AccountRow>().WithMany().HasForeignKey(x => x.AccountId).OnDelete(DeleteBehavior.Restrict);
+            b.HasOne<ExternalIdentityLinkRow>().WithMany().HasForeignKey(x => new { x.AccountId, x.FederationLinkId })
+                .HasPrincipalKey(x => new { x.AccountId, x.LinkId }).OnDelete(DeleteBehavior.Restrict);
+            b.HasOne<FederationAttemptRow>().WithMany().HasForeignKey(x => x.FederationAttemptId).OnDelete(DeleteBehavior.Restrict);
         });
         IdentityColumnNames.UseSnakeCase(model, typeof(TotpAuthenticatorRow), typeof(TotpOperationRow), typeof(TotpUsedCodeRow), typeof(TotpProofAttemptRow), typeof(TotpPendingAuthenticationRow));
     }

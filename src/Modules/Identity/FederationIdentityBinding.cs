@@ -2,7 +2,7 @@ using System.Text;
 
 namespace Tunner.Identity.Persistence;
 
-internal enum FederationProviderKind { Google, Microsoft }
+public enum FederationProviderKind { Google, Microsoft }
 
 /// <summary>
 /// Identity-binding groundwork only; no protocol verification, current-policy resolution or authorization.

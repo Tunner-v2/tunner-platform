@@ -19,11 +19,13 @@ internal sealed partial class AuthenticationApplication
         database.Set<TotpPendingAuthenticationRow>().AsNoTracking().SingleOrDefaultAsync(x => x.BrowserDigest == caller.BrowserDigest && x.RequestId == request && x.Origin == caller.Origin, ct);
     private async Task<AuthenticationAttempt?> PrepareTotpMfaAsync(AuthenticationCaller caller, Guid request, bool remember, IdentityUserAdapter user,
         string identifier, string method, string primaryAssurance, DateTimeOffset verifiedAt, CancellationToken ct,
-        PasskeyCredentialRow? passkey = null, string? passkeyPolicy = null, string? passkeyFacts = null)
+        PasskeyCredentialRow? passkey = null, string? passkeyPolicy = null, string? passkeyFacts = null,
+        FederationAuthenticationSource? federation = null)
     {
-        var policy = CurrentTotpPolicy(clock.GetUtcNow()); if (policy is null) return null;
-        if (policy.Origin != caller.Origin) throw new InvalidOperationException("TOTP origin is unavailable.");
-        var source = mfaRequirements?.SingleOrDefault() ?? throw new InvalidOperationException("An explicit current MFA requirement source is required.");
+        var policy = CurrentTotpPolicy(clock.GetUtcNow()); if (policy is null && federation is null) return null;
+        if (policy is not null && policy.Origin != caller.Origin) throw new InvalidOperationException("TOTP origin is unavailable.");
+        var source = (federation is null ? mfaRequirements?.SingleOrDefault() : FederationMfaSource())
+            ?? throw new InvalidOperationException("An explicit current MFA requirement source is required.");
         if (caller.PreviousSessionId is { } previous) await LockSessionAsync(previous, ct).ConfigureAwait(false);
         var account = await database.Accounts.FromSqlInterpolated($"SELECT * FROM accounts.accounts WHERE account_id={user.AccountId} FOR NO KEY UPDATE").SingleAsync(ct).ConfigureAwait(false);
         await database.Entry(account).ReloadAsync(ct).ConfigureAwait(false);
@@ -31,21 +33,37 @@ internal sealed partial class AuthenticationApplication
         _ = await database.Users.FromSqlInterpolated($"SELECT * FROM identity.\"AspNetUsers\" WHERE \"AccountId\"={user.AccountId} FOR NO KEY UPDATE").SingleAsync(ct).ConfigureAwait(false);
         var now = clock.GetUtcNow(); var requirement = await source.RequireAsync(new(user.AccountId, account.Version, method, primaryAssurance, now), ct).ConfigureAwait(false);
         ValidateRequirement(requirement, user.AccountId, account.Version, method, primaryAssurance, now);
-        if (!policy.MfaAssurances.ContainsKey(method)) return new("STEP_UP_REQUIRED", null);
-        var primaryDigest = method == "pwd" ? AuthenticationIdentity.Digest(user.PasswordHash ?? string.Empty) : AuthenticationIdentity.Digest(passkey!.CredentialDigest + "|" + passkey.Version.ToString(System.Globalization.CultureInfo.InvariantCulture) + "|" + passkeyFacts);
+        if (federation is null && !policy!.MfaAssurances.ContainsKey(method)) return new("STEP_UP_REQUIRED", null);
+        var primaryDigest = federation?.Digest ?? (method == "pwd" ? AuthenticationIdentity.Digest(user.PasswordHash ?? string.Empty) : AuthenticationIdentity.Digest(passkey!.CredentialDigest + "|" + passkey.Version.ToString(System.Globalization.CultureInfo.InvariantCulture) + "|" + passkeyFacts));
         var prior = await database.Set<TotpPendingAuthenticationRow>().SingleOrDefaultAsync(x => x.BrowserDigest == caller.BrowserDigest && x.RequestId == request, ct).ConfigureAwait(false);
+        if (federation is not null)
+        {
+            now = clock.GetUtcNow(); var finalPolicy = CurrentTotpPolicy(now);
+            var link = TrackedFederationLink(federation.LinkId, user.AccountId);
+            if (finalPolicy?.Version != policy?.Version || !requirement.EffectiveInterval.Contains(now) ||
+                now < verifiedAt || federation.VerificationExpiresAt is not { } verifiedUntil || now >= verifiedUntil ||
+                link is null || !FederationCurrentAt(federation, link, user.AccountId, caller.Origin, now, true)) return new("AUTHENTICATION_FAILED", null);
+            policy = finalPolicy;
+            if (requirement.Required && (policy is null || !policy.MfaAssurances.ContainsKey(method))) return new("STEP_UP_REQUIRED", null);
+        }
         if (prior is not null)
         {
+            if (policy is null) return new("VERSION_CONFLICT", null);
             await database.Entry(prior).ReloadAsync(ct).ConfigureAwait(false);
+            if (federation is not null) now = clock.GetUtcNow();
             return prior.AccountId == user.AccountId && prior.Origin == caller.Origin && prior.RememberMe == remember && prior.PreviousSessionId == caller.PreviousSessionId &&
                 prior.PrimaryMethod == method && prior.PrimarySourceDigest == primaryDigest && prior.SecurityStampDigest == AuthenticationIdentity.Digest(user.SecurityStamp!) && prior.State == "PENDING" && prior.ExpiresAt > now
                 && requirement.Required && prior.RequirementPolicyVersion == requirement.PolicyVersion && prior.RequirementEvidenceReference == requirement.EvidenceReference &&
-                prior.TotpPolicyVersion == policy.Version && prior.AuthenticationPolicyVersion == policies.RequireEffective(now).Version
+                prior.TotpPolicyVersion == policy.Version && prior.AuthenticationPolicyVersion == policies.RequireEffective(now).Version &&
+                (federation is null || requirement.EffectiveInterval.Contains(now) && CurrentTotpPolicy(now)?.Version == policy.Version &&
+                    FederationPendingSourceCurrentAt(prior, caller, now))
                 ? new(null, null, prior) : new("VERSION_CONFLICT", null);
         }
         if (!requirement.Required) return null;
+        if (policy is null) return new("STEP_UP_REQUIRED", null);
         var auth = policies.RequireEffective(now); auth.Validate();
         var expires = verifiedAt + requirement.PrimaryEvidenceLifetime; if (requirement.EffectiveInterval.Until is { } until && until < expires) expires = until;
+        if (federation?.VerificationExpiresAt is { } federationUntil && federationUntil < expires) expires = federationUntil;
         if (now < verifiedAt || expires <= now) return new("AUTHENTICATION_FAILED", null);
         var pending = new TotpPendingAuthenticationRow { PendingId = Guid.NewGuid(), RequestId = request, BrowserDigest = caller.BrowserDigest, AccountId = user.AccountId,
             Origin = caller.Origin, RememberMe = remember, PreviousSessionId = caller.PreviousSessionId, IdentifierDigest = identifier, PrimaryMethod = method,
@@ -53,6 +71,7 @@ internal sealed partial class AuthenticationApplication
             PasskeyCredentialReference = passkey?.CredentialReference, PasskeyCredentialVersion = passkey?.Version, PasskeyPolicyVersion = passkeyPolicy, PasskeyAssuranceKey = passkeyFacts,
             AuthenticationPolicyVersion = auth.Version, TotpPolicyVersion = policy.Version, RequirementPolicyVersion = requirement.PolicyVersion, RequirementEvidenceReference = requirement.EvidenceReference,
             PrimaryVerifiedAt = verifiedAt, ExpiresAt = expires, RecoveryExpiresAt = expires + policy.ResultRecoveryLifetime };
+        federation?.Store(pending);
         database.Add(pending); return new(null, null, pending);
     }
     internal async Task<AuthenticationAttempt> CompleteTotpMfaAsync(AuthenticationCaller caller, Guid pendingId, TotpCodeCommand command,
@@ -73,6 +92,7 @@ internal sealed partial class AuthenticationApplication
         var account = await database.Accounts.FromSqlInterpolated($"SELECT * FROM accounts.accounts WHERE account_id={snapshot.AccountId} FOR NO KEY UPDATE").SingleAsync(ct).ConfigureAwait(false); await database.Entry(account).ReloadAsync(ct).ConfigureAwait(false);
         var user = await database.Users.FromSqlInterpolated($"SELECT * FROM identity.\"AspNetUsers\" WHERE \"AccountId\"={snapshot.AccountId} FOR NO KEY UPDATE").SingleAsync(ct).ConfigureAwait(false); await database.Entry(user).ReloadAsync(ct).ConfigureAwait(false);
         _ = await database.VerifiedContacts.FromSqlInterpolated($"SELECT * FROM accounts.verified_contacts WHERE account_id={snapshot.AccountId} ORDER BY contact_id FOR SHARE").ToArrayAsync(ct).ConfigureAwait(false);
+        if (snapshot.FederationLinkId is { } federationLink) _ = await LockFederationLinkAsync(federationLink, snapshot.AccountId, ct).ConfigureAwait(false);
         await LockAsync("totp-owner:" + snapshot.AccountId, ct).ConfigureAwait(false);
         var pending = await database.Set<TotpPendingAuthenticationRow>().SingleAsync(x => x.PendingId == pendingId, ct).ConfigureAwait(false); await database.Entry(pending).ReloadAsync(ct).ConfigureAwait(false);
         if (pending.State == "COMPLETED")
@@ -92,6 +112,10 @@ internal sealed partial class AuthenticationApplication
         await database.SaveChangesAsync(ct).ConfigureAwait(false); await transaction.CreateSavepointAsync("totp_mfa", ct).ConfigureAwait(false);
         var error = await verifier.AcceptAsync(factor, policy, seed.Require(), command.Code, ct).ConfigureAwait(false);
         if (error is not null) return await FinishMfa(transaction, new(error, null), ct).ConfigureAwait(false);
+        AuthenticationSessionRow? federationPrevious = null;
+        if (pending.PrimaryMethod == "federation" && caller.PreviousSessionId is { } federationPreviousId)
+            federationPrevious = await database.Set<AuthenticationSessionRow>().SingleOrDefaultAsync(x => x.SessionId == federationPreviousId &&
+                x.Origin == caller.Origin && x.Scheme == AuthenticationIdentity.Scheme, ct).ConfigureAwait(false);
         // All asynchronous authority work completes before the final time/policy decision.
         requirement = await RequirePendingAuthority(pending, user, account, caller, ct).ConfigureAwait(false);
         accessDecision = await AccessAsync(account, "SIGN_IN", clock.GetUtcNow(), ct).ConfigureAwait(false); now = clock.GetUtcNow();
@@ -104,15 +128,18 @@ internal sealed partial class AuthenticationApplication
         }
         if (caller.PreviousSessionId is { } oldId)
         {
-            var old = await database.Set<AuthenticationSessionRow>().SingleOrDefaultAsync(x => x.SessionId == oldId && x.Origin == caller.Origin, ct).ConfigureAwait(false); if (old is not null) Revoke(old, now);
+            var old = pending.PrimaryMethod == "federation" ? federationPrevious :
+                await database.Set<AuthenticationSessionRow>().SingleOrDefaultAsync(x => x.SessionId == oldId && x.Origin == caller.Origin, ct).ConfigureAwait(false);
+            if (old is not null) Revoke(old, now);
         }
         var result = CreateSession(caller, pending.RequestId, pending.RememberMe, user, pending.IdentifierDigest, pending.PrimaryMethod + "+totp", assurance, finalAuth, accessDecision, now,
-            pending.PasskeyCredentialReference, pending.PasskeyPolicyVersion, pending.PasskeyAssuranceKey, factor, finalPolicy.Version, pending.RequirementPolicyVersion);
+            pending.PasskeyCredentialReference, pending.PasskeyPolicyVersion, pending.PasskeyAssuranceKey, factor, finalPolicy.Version, pending.RequirementPolicyVersion, requirement.Federation);
         pending.State = "COMPLETED"; pending.ResultSessionId = AuthenticationIdentity.SessionId(result.Grant!.Ticket.Principal);
         pending.AcceptedAuthenticatorReference = factor.AuthenticatorReference; pending.AcceptedGeneration = factor.Generation; pending.Version++;
         return await FinishMfa(transaction, result, ct).ConfigureAwait(false);
     }
-    private sealed record PendingPrimaryAuthority(TotpMfaRequirementDecision Decision, PasskeyCredentialRow? Passkey);
+    private sealed record PendingPrimaryAuthority(TotpMfaRequirementDecision Decision, PasskeyCredentialRow? Passkey,
+        FederationAuthenticationSource? Federation = null, ExternalIdentityLinkRow? FederationLink = null);
     private async Task<PendingPrimaryAuthority?> RequirePendingAuthority(TotpPendingAuthenticationRow pending, IdentityUserAdapter user, AccountRow account, AuthenticationCaller caller, CancellationToken ct)
     {
         var now = clock.GetUtcNow(); var source = mfaRequirements?.SingleOrDefault() ?? throw new InvalidOperationException("MFA authority is unavailable.");
@@ -122,6 +149,15 @@ internal sealed partial class AuthenticationApplication
             now - pending.PrimaryVerifiedAt >= decision.PrimaryEvidenceLifetime || !user.EmailConfirmed ||
             !await database.VerifiedContacts.AnyAsync(x => x.AccountId == user.AccountId && x.State == ContactVerificationState.Verified && x.AnonymizedAtUtc == null && x.NormalizedEmail == user.NormalizedEmail, ct).ConfigureAwait(false)) return null;
         if (pending.PrimaryMethod == "pwd") return pending.PrimarySourceDigest == AuthenticationIdentity.Digest(user.PasswordHash ?? string.Empty) ? new(decision, null) : null;
+        if (pending.PrimaryMethod == "federation")
+        {
+            if (pending.FederationLinkId is not { } linkId) return null;
+            var link = await LockFederationLinkAsync(linkId, pending.AccountId, ct).ConfigureAwait(false);
+            var federation = link is null ? null : FederationAuthenticationSource.Read(pending, link);
+            return federation is not null && link is not null && pending.PrimarySourceDigest == federation.Digest &&
+                FederationCurrentAt(federation, link, pending.AccountId, caller.Origin, clock.GetUtcNow(), true)
+                ? new(decision, null, federation, link) : null;
+        }
         var credential = await database.Set<PasskeyCredentialRow>().SingleOrDefaultAsync(x => x.CredentialReference == pending.PasskeyCredentialReference && x.AccountId == pending.AccountId, ct).ConfigureAwait(false);
         if (credential is null) return null; await database.Entry(credential).ReloadAsync(ct).ConfigureAwait(false);
         var passkey = passkeyPolicies.SingleOrDefault()?.RequireEffective(clock.GetUtcNow());
@@ -135,6 +171,9 @@ internal sealed partial class AuthenticationApplication
         if (now < pending.PrimaryVerifiedAt || now - pending.PrimaryVerifiedAt >= authority.Decision.PrimaryEvidenceLifetime) return false;
         if (pending.PrimaryMethod == "pwd") return authority.Passkey is null && pending.PrimaryAssurance == auth.PasswordAssurance &&
             pending.PrimarySourceDigest == AuthenticationIdentity.Digest(user.PasswordHash ?? string.Empty);
+        if (pending.PrimaryMethod == "federation") return authority.Passkey is null && authority.Federation is { } federation &&
+            authority.FederationLink is { } link && pending.PrimarySourceDigest == federation.Digest &&
+            FederationCurrentAt(federation, link, pending.AccountId, caller.Origin, now, true);
         var credential = authority.Passkey; var current = passkeyPolicies.SingleOrDefault()?.RequireEffective(now);
         return pending.PrimaryMethod == "passkey" && credential is not null && credential.AccountId == pending.AccountId && credential.State == "ACTIVE" &&
             credential.CredentialReference == pending.PasskeyCredentialReference && credential.Version == pending.PasskeyCredentialVersion &&

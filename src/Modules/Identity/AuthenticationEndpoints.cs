@@ -1,6 +1,7 @@
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Antiforgery;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -24,6 +25,13 @@ public static class AuthenticationEndpoints
     internal sealed class CredentialAuthenticationMetadata;
     internal sealed record Surface(string Origin);
     internal sealed record Browser(string Nonce, Guid Key, DateTimeOffset ExpiresAt, string PolicyVersion, string PreviousCookieDigest, Guid? PreviousSessionId);
+    private sealed record AuthenticationBootstrapResponse(string? CsrfToken, Guid IdempotencyKey, int PasswordMaximumLength,
+        bool PasskeyAvailable, int? MaximumCredentialJsonBytes, object? PasskeyRecovery, string Locale,
+        IReadOnlyDictionary<string, RegistrationPublishedText> Content, Uri TermsUri, Uri PrivacyUri, Uri? SupportUri,
+        [property: JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] FederationBootstrap? Federation)
+    {
+        public override string ToString() => nameof(AuthenticationBootstrapResponse);
+    }
 
     public static IServiceCollection AddTunnerPasswordAuthentication(this IServiceCollection services, string browserOrigin)
     {
@@ -69,9 +77,13 @@ public static class AuthenticationEndpoints
                 var presentation = presentationSource.RequirePublished(policy);
                 var passkeys = context.RequestServices.GetService<PasskeyBrowserService>();
                 var signInRecovery = passkeys is null ? null : await passkeys.SignInRecoveryBootstrapAsync(context).ConfigureAwait(false);
+                var federation = context.RequestServices.GetService<FederationBrowserService>();
+                // This describes an exact original result under the observed principal. It does not
+                // generate a second antiforgery identity in this anonymous-credential bootstrap.
+                var federationBootstrap = federation is null ? null : await federation.BootstrapAsync(context).ConfigureAwait(false);
                 var protector = Protector(protection); var fingerprint = CookieDigest(context);
                 if (!TryBrowser(context, protector, now, out var browser) || browser!.PolicyVersion != policy.Version ||
-                    browser.PreviousCookieDigest != fingerprint && signInRecovery is null)
+                    browser.PreviousCookieDigest != fingerprint && signInRecovery is null && federationBootstrap?.PreserveOriginalBrowser != true)
                 {
                     browser = new Browser(Convert.ToHexString(RandomNumberGenerator.GetBytes(32)), Guid.NewGuid(), now + policy.BrowserContextLifetime,
                         policy.Version, fingerprint, AuthenticationIdentity.SessionId(context.User));
@@ -85,8 +97,9 @@ public static class AuthenticationEndpoints
                 var capability = passkeys?.Capability();
                 var terminalRecovery = passkeys is null ? null : await passkeys.RecoveryBootstrapAsync(context, terminalOnly: true).ConfigureAwait(false);
                 var passkeyRecovery = terminalRecovery ?? signInRecovery;
-                return Results.Json(new { csrfToken = csrf, idempotencyKey = browser!.Key, passwordMaximumLength = policy.PasswordMaximumLength,
-                    passkeyAvailable = capability?.Available == true, maximumCredentialJsonBytes = capability?.MaximumCredentialJsonBytes, passkeyRecovery, presentation.Locale, presentation.Content, presentation.TermsUri, presentation.PrivacyUri, presentation.SupportUri });
+                return Results.Json(new AuthenticationBootstrapResponse(csrf, browser!.Key, policy.PasswordMaximumLength,
+                    capability?.Available == true, capability?.MaximumCredentialJsonBytes, passkeyRecovery, presentation.Locale,
+                    presentation.Content, presentation.TermsUri, presentation.PrivacyUri, presentation.SupportUri, federationBootstrap));
             }
             catch (InvalidOperationException) { return Problem(503, "DEPENDENCY_UNAVAILABLE"); }
             catch (ArgumentException) { return Problem(503, "DEPENDENCY_UNAVAILABLE"); }

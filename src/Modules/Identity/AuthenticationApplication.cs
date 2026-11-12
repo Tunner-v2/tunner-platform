@@ -33,7 +33,8 @@ internal sealed class AuthenticationPasswordWork
 internal sealed partial class AuthenticationApplication(IdentityPersistenceDbContext database, IAuthenticationPolicySource policies,
     IAccountAuthenticationAccessSource access, AuthenticationPartitionKey partitions, IDataProtectionProvider protection,
     AuthenticationPasswordWork passwordWork, TimeProvider clock, IEnumerable<IPasskeyPolicySource> passkeyPolicies,
-    IEnumerable<ITotpPolicySource>? totpPolicies = null, IEnumerable<ITotpMfaRequirementSource>? mfaRequirements = null) : IAuthenticationSessionMaintenance
+    IEnumerable<ITotpPolicySource>? totpPolicies = null, IEnumerable<ITotpMfaRequirementSource>? mfaRequirements = null,
+    IEnumerable<IFederationProfileSource>? federationProfiles = null) : IAuthenticationSessionMaintenance
 {
     private readonly IDataProtector ticketProtection = protection.CreateProtector("Tunner.User.Session.Ticket.v1");
     private readonly IDataProtector keyProtection = protection.CreateProtector("Tunner.User.Session.RetryKey.v1");
@@ -111,7 +112,8 @@ internal sealed partial class AuthenticationApplication(IdentityPersistenceDbCon
     private AuthenticationAttempt CreateSession(AuthenticationCaller caller, Guid idempotencyKey, bool rememberMe, IdentityUserAdapter user,
         string identifier, string method, string assurance, AuthenticationPolicy policy, AccountAuthenticationAccessDecision decision, DateTimeOffset now,
         Guid? credentialReference = null, string? passkeyPolicyVersion = null, string? passkeyAssuranceKey = null,
-        TotpAuthenticatorRow? totp = null, string? totpPolicyVersion = null, string? requirementPolicyVersion = null)
+        TotpAuthenticatorRow? totp = null, string? totpPolicyVersion = null, string? requirementPolicyVersion = null,
+        FederationAuthenticationSource? federation = null)
     {
         var sessionId = Guid.NewGuid(); var key = Convert.ToHexString(RandomNumberGenerator.GetBytes(32));
         var absolute = rememberMe ? policy.RememberAbsoluteLifetime : policy.AbsoluteLifetime;
@@ -135,6 +137,7 @@ internal sealed partial class AuthenticationApplication(IdentityPersistenceDbCon
             AccessEvidenceReference = decision.EvidenceReference, ProcessingReference = policy.ProcessingReference, RetentionReference = policy.RetentionReference,
             OperationId = "OP-" + Guid.NewGuid().ToString("N"), CorrelationId = Guid.NewGuid().ToString("N"), Version = 1
         };
+        federation?.Store(row);
         database.Add(row); Event(row, "TunnerSessionAuthenticated", now);
         return new(null, new AuthenticationGrant(key, ticket));
     }
@@ -167,6 +170,7 @@ internal sealed partial class AuthenticationApplication(IdentityPersistenceDbCon
     internal async Task<bool> MethodIsCurrentAsync(AuthenticationSessionRow row, AuthenticationPolicy policy, DateTimeOffset now, CancellationToken ct)
     {
         if (row.TotpAuthenticatorReference is not null) return await TotpSessionCurrentAsync(row, policy, now, ct).ConfigureAwait(false);
+        if (row.AuthenticationMethods == "federation") return await FederationSessionCurrentAsync(row, ct).ConfigureAwait(false);
         if (row.AuthenticationMethods == "pwd") return row.PasskeyCredentialReference is null && row.Assurance == policy.PasswordAssurance;
         if (row.AuthenticationMethods != "passkey" || row.PasskeyCredentialReference is not { } credential || row.PasskeyAssuranceKey is null) return false;
         var source = passkeyPolicies.SingleOrDefault(); if (source is null) return false;
@@ -280,6 +284,7 @@ internal sealed partial class AuthenticationApplication(IdentityPersistenceDbCon
     internal bool MethodFactsCurrentAt(AuthenticationSessionRow row, AuthenticationPolicy policy, DateTimeOffset decisionAt)
     {
         if (row.TotpAuthenticatorReference is not null) return TotpSessionFactsCurrentAt(row, policy, decisionAt);
+        if (row.AuthenticationMethods == "federation") return FederationSessionFactsCurrentAt(row, decisionAt);
         if (row.AuthenticationMethods == "pwd") return row.PasskeyCredentialReference is null && row.Assurance == policy.PasswordAssurance;
         var current = passkeyPolicies.SingleOrDefault()?.RequireEffective(decisionAt);
         return row.AuthenticationMethods == "passkey" && current is not null && current.Origin == row.Origin && row.PasskeyAssuranceKey is not null && current.RequireAssurance(row.PasskeyAssuranceKey) == row.Assurance;
@@ -318,7 +323,8 @@ internal sealed partial class AuthenticationApplication(IdentityPersistenceDbCon
             row.TerminationCause = "PASSKEY_REVOKED"; row.TerminationPolicyVersion = credential.RevocationPolicyVersion; row.TerminationCredentialVersion = credential.Version;
             End(row, "REVOKED", "TunnerSessionRevoked", now, credential.RevocationOperationId, credential.RevocationCorrelationId);
         }
-        else Revoke(row, now);
+        // Unlink/source retirement has no implicit session effect. Deny use until its explicit owner policy is wired.
+        else if (!IsFederationMethod(row.AuthenticationMethods)) Revoke(row, now);
     }
     internal async Task<AuthenticationGrant?> RecoverPasskeyGrantAsync(PasskeyCeremonyRow ceremony, AuthenticationCaller caller, CancellationToken ct)
     {
@@ -431,6 +437,7 @@ internal sealed partial class AuthenticationApplication(IdentityPersistenceDbCon
         var policy = policies.RequireEffective(now); policy.Validate();
         if (Expired(row, policy, now))
         { End(row, "EXPIRED", "TunnerSessionExpired", now); return null; }
+        if (IsFederationMethod(row.AuthenticationMethods)) await LockFederationContinuityAsync(row, ct).ConfigureAwait(false);
         var account = await database.Accounts.SingleAsync(x => x.AccountId == row.AccountId, ct).ConfigureAwait(false);
         var user = await database.Users.SingleOrDefaultAsync(x => x.AccountId == row.AccountId, ct).ConfigureAwait(false);
         if (user is null || !user.EmailConfirmed || string.IsNullOrWhiteSpace(user.SecurityStamp) ||
@@ -440,6 +447,11 @@ internal sealed partial class AuthenticationApplication(IdentityPersistenceDbCon
         { await RevokeInvalidMethodAsync(row, now, ct).ConfigureAwait(false); return null; }
         var decision = await AccessAsync(account, "SESSION_USE", now, ct).ConfigureAwait(false);
         if (decision is null || !decision.Allowed) { Revoke(row, now); return null; }
+        if (IsFederationMethod(row.AuthenticationMethods))
+        {
+            now = clock.GetUtcNow(); var finalPolicy = policies.RequireEffective(now); finalPolicy.Validate();
+            if (!decision.EffectiveInterval.Contains(now) || Expired(row, finalPolicy, now) || !MethodFactsCurrentAt(row, finalPolicy, now)) return null;
+        }
         var ticket = TicketSerializer.Default.Deserialize(Convert.FromBase64String(ticketProtection.Unprotect(row.ProtectedTicket)));
         if (ticket is null || ticket.AuthenticationScheme != row.Scheme || AuthenticationIdentity.SessionId(ticket.Principal) != row.SessionId ||
             ticket.Principal.FindFirstValue(ClaimTypes.NameIdentifier) != row.AccountId || ticket.Principal.FindFirstValue(AuthenticationIdentity.OriginClaim) != row.Origin ||

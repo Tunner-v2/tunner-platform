@@ -24,10 +24,11 @@ internal sealed partial class AuthenticationApplication
     }
     private bool TotpSessionFactsCurrentAt(AuthenticationSessionRow row, AuthenticationPolicy auth, DateTimeOffset now)
     {
-        var current = CurrentTotpPolicy(now); var primary = row.AuthenticationMethods switch { "pwd+totp" => "pwd", "passkey+totp" => "passkey", _ => null };
+        var current = CurrentTotpPolicy(now); var primary = row.AuthenticationMethods switch { "pwd+totp" => "pwd", "passkey+totp" => "passkey", "federation+totp" => "federation", _ => null };
         if (current is null || primary is null || current.Origin != row.Origin || row.TotpPolicyVersion != current.Version ||
             row.MfaRequirementPolicyVersion is null || !current.MfaAssurances.TryGetValue(primary, out var mapped) || mapped != row.Assurance) return false;
         if (primary == "pwd") return row.PasskeyCredentialReference is null && !string.IsNullOrWhiteSpace(auth.PasswordAssurance);
+        if (primary == "federation") return row.PasskeyCredentialReference is null && FederationSessionFactsCurrentAt(row, now);
         var passkey = passkeyPolicies.SingleOrDefault()?.RequireEffective(now);
         return passkey is not null && passkey.Origin == row.Origin && row.PasskeyAssuranceKey is not null && row.PasskeyPolicyVersion == passkey.Version &&
             passkey.AssuranceMappings.ContainsKey(row.PasskeyAssuranceKey);
@@ -40,10 +41,12 @@ internal sealed partial class AuthenticationApplication
             factor.State == "DISABLED" && factor.Version == row.TotpAuthenticatorVersion + 1 && factor.DisableSessionEffect == nameof(TotpSessionEffect.PreserveExistingSessions));
     private async Task<bool> TotpSessionCurrentAsync(AuthenticationSessionRow row, AuthenticationPolicy auth, DateTimeOffset now, CancellationToken ct)
     {
+        if (row.AuthenticationMethods == "federation+totp" && !await FederationSessionCurrentAsync(row, ct).ConfigureAwait(false)) return false;
         if (!TotpSessionFactsCurrentAt(row, auth, now)) return false;
         var factor = await ReadTotpSessionFactorAsync(row, ct).ConfigureAwait(false);
         if (!TotpSessionFactorCurrentAt(row, factor)) return false;
         if (row.AuthenticationMethods == "pwd+totp") return true;
+        if (row.AuthenticationMethods == "federation+totp") return true;
         var credential = await database.Set<PasskeyCredentialRow>().AsNoTracking().SingleOrDefaultAsync(x => x.CredentialReference == row.PasskeyCredentialReference && x.AccountId == row.AccountId, ct).ConfigureAwait(false);
         return credential is not null && (credential.State == "ACTIVE" || credential.State == "REVOKED" && credential.RevocationSessionEffect == nameof(PasskeyRevocationSessionEffect.PreserveExistingSessions));
     }
@@ -86,8 +89,11 @@ internal sealed partial class AuthenticationApplication
         if (!user.EmailConfirmed || string.IsNullOrWhiteSpace(user.SecurityStamp) || AuthenticationIdentity.Digest(user.SecurityStamp) != row.SecurityStampDigest ||
             !await database.VerifiedContacts.AnyAsync(x => x.AccountId == caller.AccountId && x.State == Tunner.Accounts.ContactVerificationState.Verified && x.AnonymizedAtUtc == null && x.NormalizedEmail == user.NormalizedEmail, ct).ConfigureAwait(false)) return null;
         var account = await database.Accounts.SingleAsync(x => x.AccountId == caller.AccountId, ct).ConfigureAwait(false); await database.Entry(account).ReloadAsync(ct).ConfigureAwait(false);
+        var federationCurrent = !IsFederationMethod(row.AuthenticationMethods) || await FederationSessionCurrentAsync(row, ct).ConfigureAwait(false);
         var decision = await AccessAsync(account, operation.Scope.Operation, now, ct).ConfigureAwait(false);
-        return decision?.Allowed == true && decision.EffectiveInterval.Contains(clock.GetUtcNow()) && CurrentTotpPolicy(clock.GetUtcNow())?.Version == policy.Version
+        var decisionAt = clock.GetUtcNow();
+        return decision?.Allowed == true && decision.EffectiveInterval.Contains(decisionAt) && CurrentTotpPolicy(decisionAt)?.Version == policy.Version &&
+            federationCurrent && (!IsFederationMethod(row.AuthenticationMethods) || FederationSessionFactsCurrentAt(row, decisionAt))
             ? new(decision.EffectiveInterval) : null;
     }
     private bool TotpOutcomeCurrentAt(UserStepUpOperationApplyOutcome outcome, StepUpCaller caller, StepUpOperation operation, DateTimeOffset now)

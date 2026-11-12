@@ -12,6 +12,7 @@ public static class TunnerAuthenticatedUserBffHost
         var passkeys = false;
         var totp = false;
         var recoveryCodes = false;
+        FederationOidcRegistration[] federation = [];
         var application = TunnerUserBffHost.CreateApplication(args, builder =>
         {
             configure(builder);
@@ -31,12 +32,19 @@ public static class TunnerAuthenticatedUserBffHost
             }
             stepUp = builder.Services.Any(x => x.ServiceType == typeof(IUserStepUpOperationSource));
             if (stepUp) builder.Services.AddTunnerOperationStepUp();
+            federation = builder.Services.Where(value => value.ServiceType == typeof(FederationOidcRegistration))
+                .Select(value => value.ImplementationInstance as FederationOidcRegistration ??
+                    throw new InvalidOperationException("Federation requires explicit immutable transport registrations.")).ToArray();
+            if (federation.Any(value => value.Profile.Values.Origin != builder.Configuration["Bff:BrowserOrigin"]))
+                throw new InvalidOperationException("Federation transport must match the exact User browser origin.");
+            if (federation.Length != 0) builder.Services.AddTunnerFederation(federation.Select(value => value.Provider));
         });
         application.MapTunnerPasswordAuthentication();
         if (stepUp) application.MapTunnerOperationStepUp();
         if (passkeys) application.MapTunnerPasskeys();
         if (totp) application.MapTunnerTotp();
         if (recoveryCodes) application.MapTunnerRecoveryCodes();
+        if (federation.Length != 0) application.MapTunnerFederationOidc(federation);
         return application;
     }
 }

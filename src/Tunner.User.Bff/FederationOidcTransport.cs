@@ -33,9 +33,11 @@ internal sealed class FederationOidcFailure(FederationOidcFailureReason reason, 
 internal sealed class FederationOidcTransport
 {
     internal const string AttemptProperty = ".tunner.federation.attempt";
+    internal const string ProfileProperty = ".tunner.federation.profile-version";
     internal const string NoSignInScheme = "Tunner.Federation.Transport.NoSignIn";
     private readonly string scheme;
     private readonly string issuer;
+    private readonly HashSet<string> admittedIssuers;
     private readonly string metadataAddress;
     private readonly string clientId;
     private readonly Uri callback;
@@ -49,7 +51,7 @@ internal sealed class FederationOidcTransport
 
     internal FederationOidcTransport(string scheme, string issuer, string metadataAddress, string clientId, string callbackUri,
         IReadOnlyCollection<string> allowedContinuations, TimeSpan timeout, TimeSpan nonceLifetime, TimeSpan clockSkew,
-        int maximumTokenBytes, string correlationCookieName, string nonceCookieName)
+        int maximumTokenBytes, string correlationCookieName, string nonceCookieName, IReadOnlyCollection<string>? admittedIssuers = null)
     {
         RequireOpaque(scheme); RequireOpaque(clientId);
         if (scheme == NoSignInScheme) throw new ArgumentException("The terminal transport scheme must be distinct.");
@@ -64,6 +66,9 @@ internal sealed class FederationOidcTransport
         RequireCookieName(correlationCookieName); RequireCookieName(nonceCookieName);
         if (correlationCookieName == nonceCookieName) throw new ArgumentException("Protocol cookie identities must be distinct.");
         this.scheme = scheme; this.issuer = issuer; this.metadataAddress = metadataAddress; this.clientId = clientId;
+        this.admittedIssuers = new(admittedIssuers ?? [issuer], StringComparer.Ordinal);
+        if (!this.admittedIssuers.Contains(issuer) || this.admittedIssuers.Any(value => !Opaque(value)))
+            throw new ArgumentException("Explicit admitted issuers must include the primary issuer.");
         this.allowedContinuations = new(allowedContinuations, StringComparer.Ordinal);
         this.timeout = timeout; this.nonceLifetime = nonceLifetime; this.clockSkew = clockSkew; this.maximumTokenBytes = maximumTokenBytes;
         this.correlationCookieName = correlationCookieName; this.nonceCookieName = nonceCookieName;
@@ -72,9 +77,33 @@ internal sealed class FederationOidcTransport
     internal void Configure(OpenIdConnectOptions options, string clientSecret, TimeProvider clock,
         Func<FederationOidcIdentityFacts, CancellationToken, Task<string?>> completed,
         Func<FederationOidcFailure, CancellationToken, Task<string?>> failed)
+        => ConfigureCore(options, clientSecret, clock, completed, failed, null, null, null);
+
+    internal void Configure(OpenIdConnectOptions options, TimeProvider clock, string profileVersion,
+        Func<HttpContext, bool> current,
+        Func<HttpContext, CancellationToken, Task<string>> secret,
+        Func<HttpContext, FederationOidcIdentityFacts, CancellationToken, Task<string?>> completed,
+        Func<HttpContext, FederationOidcFailure, CancellationToken, Task<string?>> failed)
     {
-        ArgumentNullException.ThrowIfNull(options); RequireOpaque(clientSecret); ArgumentNullException.ThrowIfNull(clock);
+        RequireOpaque(profileVersion); ArgumentNullException.ThrowIfNull(current); ArgumentNullException.ThrowIfNull(secret);
+        ConfigureCore(options, null, clock, (_, _) => throw new InvalidOperationException(), (_, _) => throw new InvalidOperationException(),
+            profileVersion, current, secret, completed, failed);
+    }
+
+    private void ConfigureCore(OpenIdConnectOptions options, string? clientSecret, TimeProvider clock,
+        Func<FederationOidcIdentityFacts, CancellationToken, Task<string?>> completed,
+        Func<FederationOidcFailure, CancellationToken, Task<string?>> failed, string? profileVersion,
+        Func<HttpContext, bool>? current, Func<HttpContext, CancellationToken, Task<string>>? secret,
+        Func<HttpContext, FederationOidcIdentityFacts, CancellationToken, Task<string?>>? completedWithContext = null,
+        Func<HttpContext, FederationOidcFailure, CancellationToken, Task<string?>>? failedWithContext = null)
+    {
+        ArgumentNullException.ThrowIfNull(options); if (clientSecret is not null) RequireOpaque(clientSecret); ArgumentNullException.ThrowIfNull(clock);
         ArgumentNullException.ThrowIfNull(completed); ArgumentNullException.ThrowIfNull(failed);
+        bool Current(HttpContext http, AuthenticationProperties? properties, bool requireProtectedProfile) =>
+            current is null || current(http) && (!requireProtectedProfile || properties is not null &&
+                properties.Items.TryGetValue(ProfileProperty, out var version) && StringComparer.Ordinal.Equals(version, profileVersion));
+        Task Fail(HttpContext http, FederationOidcFailureReason reason, string? attempt) => Failure(http, reason, attempt,
+            (failure, ct) => failedWithContext is null ? failed(failure, ct) : failedWithContext(http, failure, ct));
         options.Authority = issuer; options.MetadataAddress = metadataAddress; options.RequireHttpsMetadata = true;
         options.ClientId = clientId; options.ClientSecret = clientSecret; options.CallbackPath = callback.AbsolutePath;
         options.RemoteSignOutPath = PathString.Empty; options.SignedOutCallbackPath = PathString.Empty;
@@ -93,7 +122,7 @@ internal sealed class FederationOidcTransport
         // Retain native validators, not a hand-written lifetime/JWT validator or a claimed injectable token clock.
         options.TokenValidationParameters = new()
         {
-            ValidateIssuer = true, ValidIssuer = issuer, ValidateAudience = true, ValidAudience = clientId,
+            ValidateIssuer = true, ValidIssuer = issuer, ValidIssuers = admittedIssuers.ToArray(), ValidateAudience = true, ValidAudience = clientId,
             RequireAudience = true, IgnoreTrailingSlashWhenValidatingAudience = false,
             ValidateLifetime = true, RequireExpirationTime = true, RequireSignedTokens = true, ValidateIssuerSigningKey = true,
             ClockSkew = clockSkew, ValidAlgorithms = [SecurityAlgorithms.RsaSha256], SaveSigninToken = false,
@@ -102,20 +131,42 @@ internal sealed class FederationOidcTransport
         options.TokenHandler.MaximumTokenSizeInBytes = maximumTokenBytes;
         options.Events = new()
         {
-            OnRedirectToIdentityProvider = context =>
+            OnRedirectToIdentityProvider = async context =>
             {
+                if (current is not null && (!Current(context.HttpContext, context.Properties, true) || Attempt(context.Properties) is null))
+                {
+                    context.HandleResponse(); await Fail(context.HttpContext, FederationOidcFailureReason.InvalidEvidence, null).ConfigureAwait(false); return;
+                }
                 context.ProtocolMessage.ResponseType = OpenIdConnectResponseType.Code;
                 context.ProtocolMessage.ResponseMode = OpenIdConnectResponseMode.FormPost;
                 context.ProtocolMessage.ClientId = clientId; context.ProtocolMessage.RedirectUri = callback.AbsoluteUri;
-                return Task.CompletedTask;
             },
             OnMessageReceived = async context =>
             {
                 var message = context.ProtocolMessage;
-                if (ExpectedCallback(context.HttpContext, context.Scheme.Name) && message is not null && !string.IsNullOrEmpty(message.Code) &&
+                if (Current(context.HttpContext, context.Properties, false) && ExpectedCallback(context.HttpContext, context.Scheme.Name) && message is not null && !string.IsNullOrEmpty(message.Code) &&
                     string.IsNullOrEmpty(message.IdToken) && string.IsNullOrEmpty(message.AccessToken) && string.IsNullOrEmpty(message.Error)) return;
                 context.HandleResponse();
-                await Failure(context.HttpContext, FederationOidcFailureReason.ProtocolRejected, null, failed).ConfigureAwait(false);
+                await Fail(context.HttpContext, FederationOidcFailureReason.ProtocolRejected, null).ConfigureAwait(false);
+            },
+            OnAuthorizationCodeReceived = async context =>
+            {
+                if (secret is null) return;
+                try
+                {
+                    if (!Current(context.HttpContext, context.Properties, true) || Attempt(context.Properties) is null || context.TokenEndpointRequest is null)
+                        throw new InvalidOperationException();
+                    using var bounded = CancellationTokenSource.CreateLinkedTokenSource(context.HttpContext.RequestAborted);
+                    bounded.CancelAfter(timeout);
+                    var value = await secret(context.HttpContext, bounded.Token).ConfigureAwait(false); RequireOpaque(value);
+                    if (!Current(context.HttpContext, context.Properties, true)) throw new InvalidOperationException();
+                    // This message belongs to this exchange. Never mutate shared named options per request.
+                    context.TokenEndpointRequest.ClientSecret = value;
+                }
+                catch (Exception)
+                {
+                    context.HandleResponse(); await Fail(context.HttpContext, FederationOidcFailureReason.OwnerUnavailable, Attempt(context.Properties)).ConfigureAwait(false);
+                }
             },
             OnTicketReceived = async context =>
             {
@@ -124,31 +175,34 @@ internal sealed class FederationOidcTransport
                 var attempt = Attempt(context.Properties);
                 var claims = context.Principal;
                 var subject = SingleClaim(claims, "sub"); var actualIssuer = SingleClaim(claims, "iss"); var audience = SingleClaim(claims, "aud");
-                if (!ExpectedCallback(context.HttpContext, context.Scheme.Name) || attempt is null || subject is null || actualIssuer != issuer || audience != clientId)
+                if (!Current(context.HttpContext, context.Properties, true) || !ExpectedCallback(context.HttpContext, context.Scheme.Name) ||
+                    attempt is null || subject is null || actualIssuer is null || !admittedIssuers.Contains(actualIssuer) || audience != clientId)
                 {
-                    await Failure(context.HttpContext, FederationOidcFailureReason.InvalidEvidence, attempt, failed).ConfigureAwait(false);
+                    await Fail(context.HttpContext, FederationOidcFailureReason.InvalidEvidence, attempt).ConfigureAwait(false);
                     return;
                 }
                 try
                 {
-                    var continuation = await completed(new(actualIssuer, subject, clientId, attempt), context.HttpContext.RequestAborted).ConfigureAwait(false);
+                    var facts = new FederationOidcIdentityFacts(actualIssuer, subject, clientId, attempt);
+                    var continuation = await (completedWithContext is null ? completed(facts, context.HttpContext.RequestAborted) :
+                        completedWithContext(context.HttpContext, facts, context.HttpContext.RequestAborted)).ConfigureAwait(false);
                     Finish(context.HttpContext, continuation);
                 }
                 catch (Exception)
                 {
                     // A failed/uncertain owner callback is not retried, signed in or serialized as a raw error.
-                    await Failure(context.HttpContext, FederationOidcFailureReason.OwnerUnavailable, attempt, failed).ConfigureAwait(false);
+                    await Fail(context.HttpContext, FederationOidcFailureReason.OwnerUnavailable, attempt).ConfigureAwait(false);
                 }
             },
             OnAuthenticationFailed = async context =>
             {
                 context.HandleResponse();
-                await Failure(context.HttpContext, FederationOidcFailureReason.ProtocolRejected, Attempt(context.Properties), failed).ConfigureAwait(false);
+                await Fail(context.HttpContext, FederationOidcFailureReason.ProtocolRejected, Attempt(context.Properties)).ConfigureAwait(false);
             },
             OnRemoteFailure = async context =>
             {
                 context.HandleResponse();
-                await Failure(context.HttpContext, FederationOidcFailureReason.ProtocolRejected, Attempt(context.Properties), failed).ConfigureAwait(false);
+                await Fail(context.HttpContext, FederationOidcFailureReason.ProtocolRejected, Attempt(context.Properties)).ConfigureAwait(false);
             }
         };
     }
@@ -170,7 +224,8 @@ internal sealed class FederationOidcTransport
     {
         context.Response.Headers.CacheControl = "no-store"; context.Response.Headers.Pragma = "no-cache";
         context.Response.Headers.Remove("Location"); context.Response.StatusCode = StatusCodes.Status400BadRequest;
-        if (continuation is not null && allowedContinuations.Contains(continuation)) context.Response.Redirect(continuation);
+        if (continuation is not null && allowedContinuations.Contains(continuation))
+        { context.Response.StatusCode = StatusCodes.Status303SeeOther; context.Response.Headers.Location = continuation; }
     }
 
     private static string? Attempt(AuthenticationProperties? properties) => properties is not null &&

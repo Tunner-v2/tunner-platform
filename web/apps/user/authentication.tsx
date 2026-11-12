@@ -11,7 +11,9 @@ import {TotpMfaScreen} from './totp.mfa';
 import {loadTotpMfaOptions,parseMfaRequired} from './totp.api';
 import { loginPasskeyKeys, PasskeySignIn } from './passkeys.sign-in';
 import { parseAuthenticationPasskeyRecovery, requirePublished } from './passkeys.api';
-interface Bootstrap {csrfToken:string;idempotencyKey:string;passwordMaximumLength:number;locale:string;content:Record<string,PublishedContent>;termsUri:string;privacyUri:string;supportUri:string|null;passkeyAvailable?:boolean;maximumCredentialJsonBytes?:number|null;passkeyRecovery?:unknown}
+import {FederationSignIn,federationSignInKeys} from './federation.sign-in';
+import {parseFederationBootstrap} from './federation.api';
+interface Bootstrap {csrfToken:string;idempotencyKey:string;passwordMaximumLength:number;locale:string;content:Record<string,PublishedContent>;termsUri:string;privacyUri:string;supportUri:string|null;passkeyAvailable?:boolean;maximumCredentialJsonBytes?:number|null;passkeyRecovery?:unknown;federation?:unknown}
 interface Session {authenticated:true;csrfToken:string}
 const errors:Readonly<Record<string,string>>={AUTHENTICATION_FAILED:'authentication.error.credentials',RATE_OR_ABUSE_LIMITED:'authentication.error.limited'};
 async function options(signal?:AbortSignal):Promise<Bootstrap>{const response=await fetch('/authentication/options',{credentials:'same-origin',cache:'no-store',redirect:'error',...(signal?{signal}:{})});if(!response.ok)throw new Error('Unavailable');return response.json() as Promise<Bootstrap>;}
@@ -30,13 +32,14 @@ function Screens({initial}:{initial:Bootstrap}){
   const [email,setEmail]=useState('');const [password,setPassword]=useState('');const [remember,setRemember]=useState(false);const [visible,setVisible]=useState(false);
   const [error,setError]=useState<string>();const [logoutBusy,setLogoutBusy]=useState(false);const logoutPending=useRef(false);const heading=useRef<HTMLHeadingElement>(null);
   const [passkeyBusy,setPasskeyBusy]=useState(false);const passkeyPending=useRef(false);
+  const [federationBusy,setFederationBusy]=useState(false);const federationPending=useRef(false);
   const form=useTunnerForm(passwordSignInSchema(boot.passwordMaximumLength),{email,password,remember});
   const show=boot.content[visible?'login.hide':'login.show']!;const unavailable=boot.content['login.unavailable']!;
   const signedIn=location.pathname===authenticationRoutes.signedIn.pathname;const guarded=guard||readyRevision!==location.revision;
   useEffect(()=>{
     const controller=new AbortController();let active=true;const finish=()=>{if(active){setReadyRevision(location.revision);setGuard(false);}};
     attemptRef.current=undefined;attemptController.current?.abort();attemptController.current=undefined;
-    setPassword('');setVisible(false);setError(undefined);setSession(undefined);setGuard(true);setEntryUnavailable(false);passkeyPending.current=false;setPasskeyBusy(false);form.reset();
+    setPassword('');setVisible(false);setError(undefined);setSession(undefined);setGuard(true);setEntryUnavailable(false);passkeyPending.current=false;setPasskeyBusy(false);federationPending.current=false;setFederationBusy(false);form.reset();
     const cleanup=()=>{active=false;controller.abort();};
     if(location.pathname!==authenticationRoutes.login.pathname&&location.pathname!==authenticationRoutes.signedIn.pathname){navigatePath(authenticationRoutes.login.pathname,true);return cleanup;}
     if(window.location.search||window.location.hash)navigatePath(location.pathname,true);
@@ -53,7 +56,7 @@ function Screens({initial}:{initial:Bootstrap}){
   },[location.revision]);
   useEffect(()=>{if(!guarded)heading.current?.focus();},[guarded,signedIn]);
   async function signIn(){
-    if(passkeyPending.current)return;
+    if(passkeyPending.current||federationPending.current)return;
     const attempt={idempotencyKey:boot.idempotencyKey,email,rememberMe:remember};const revision=location.revision;const token=Symbol();const controller=new AbortController();
     attemptRef.current=token;attemptController.current=controller;
     const current=()=>attemptRef.current===token&&routeRevision.current===revision&&!controller.signal.aborted;
@@ -93,7 +96,9 @@ function Screens({initial}:{initial:Bootstrap}){
     finally{logoutPending.current=false;setLogoutBusy(false);}
   }
   function changed(){setError(undefined);}
+  async function refreshFederation(signal:AbortSignal){const revision=location.revision;const value=await options(signal);if(!signal.aborted&&routeRevision.current===revision)setBoot(value);}
   if(entryUnavailable)return <ContentUnavailable/>;
+  let federation;try{federation=parseFederationBootstrap(boot.federation);if(!signedIn&&(federation?.googleAvailable||federation?.microsoftAvailable||federation?.pending))requirePublished(boot.content,boot.locale,federationSignInKeys);}catch{return <ContentUnavailable/>;}
   if(signedIn){try{requirePublished(boot.content,boot.locale,['signedIn.security']);}catch{return <ContentUnavailable/>;}}
   if(boot.passkeyAvailable===true||boot.passkeyRecovery){try{requirePublished(boot.content,boot.locale,loginPasskeyKeys);parseAuthenticationPasskeyRecovery(boot.passkeyRecovery);if(boot.passkeyAvailable===true&&(!Number.isInteger(boot.maximumCredentialJsonBytes)||boot.maximumCredentialJsonBytes!<1024||boot.maximumCredentialJsonBytes!>1048576))throw new Error('Explicit passkey bounds required.');}catch{return <ContentUnavailable/>;}}
   return <ContentProvider locale={boot.locale} audience="authentication" resolve={key=>boot.content[key]}><div className="authentication-page">
@@ -110,14 +115,14 @@ function Screens({initial}:{initial:Bootstrap}){
           <p className="authentication-caption"><ContentText contentKey="signedIn.caption"/></p>
         </>}</>:<>
           <div className="authentication-intro"><h1 ref={heading} tabIndex={-1}><ContentText contentKey="login.heading"/></h1><p><ContentText contentKey="login.description"/></p></div>
-          <div><div className="authentication-providers"><button type="button" disabled title={unavailable.text}><ContentText contentKey="login.google"/><img src="/registration/assets/login-google.svg" alt=""/></button><button type="button" disabled title={unavailable.text}><ContentText contentKey="login.microsoft"/></button></div><div className="authentication-separator"><ContentText contentKey="login.separator"/></div></div>
+          <div><FederationSignIn key={location.revision} configuration={federation} rememberMe={remember} disabled={form.submitPending||passkeyBusy} unavailableTitle={unavailable.text} canStart={()=>!passkeyPending.current&&!attemptController.current&&!logoutPending.current} isCurrent={()=>routeRevision.current===location.revision} onBusyChange={value=>{if(routeRevision.current!==location.revision)return;federationPending.current=value;setFederationBusy(value);if(value){setPassword('');setVisible(false);setError(undefined);form.reset();}}} onAuthenticated={()=>navigatePath(authenticationRoutes.signedIn.pathname)} onMfaRequired={()=>navigatePath(totpRoutes.mfa.pathname)} onReset={refreshFederation}/><div className="authentication-separator"><ContentText contentKey="login.separator"/></div></div>
           <form noValidate data-tunner-form="FORM-LOGIN" onSubmit={event=>void form.handleSubmit(event,signIn)}>
             <div className="authentication-fields">
-              <TextField labelKey="login.email.label" placeholderKey="login.email.placeholder" name="email" type="email" required autoComplete="username" value={email} disabled={form.submitPending||passkeyBusy} errorKey={form.errors.email} onBlur={event=>form.onBlur('email',event)} onChange={event=>{setEmail(event.target.value);changed();}}/>
-              <div className="authentication-password"><TextField labelKey="login.password.label" placeholderKey="login.password.placeholder" name="password" type={visible?'text':'password'} required autoComplete="current-password" value={password} disabled={form.submitPending||passkeyBusy} errorKey={form.errors.password} onBlur={event=>form.onBlur('password',event)} onChange={event=>{setPassword(event.target.value);changed();}}/><button className="authentication-reveal" type="button" aria-label={show.text} aria-pressed={visible} disabled={form.submitPending||passkeyBusy} onClick={()=>setVisible(value=>!value)}><img src="/registration/assets/login-eye-off.svg" alt=""/></button></div>
-              <div className="authentication-options"><label><input type="checkbox" checked={remember} disabled={form.submitPending||passkeyBusy} onChange={event=>setRemember(event.target.checked)}/><ContentText contentKey="login.remember"/></label><button type="button" disabled title={unavailable.text}><ContentText contentKey="login.forgot"/></button></div>
+              <TextField labelKey="login.email.label" placeholderKey="login.email.placeholder" name="email" type="email" required autoComplete="username" value={email} disabled={form.submitPending||passkeyBusy||federationBusy} errorKey={form.errors.email} onBlur={event=>form.onBlur('email',event)} onChange={event=>{setEmail(event.target.value);changed();}}/>
+              <div className="authentication-password"><TextField labelKey="login.password.label" placeholderKey="login.password.placeholder" name="password" type={visible?'text':'password'} required autoComplete="current-password" value={password} disabled={form.submitPending||passkeyBusy||federationBusy} errorKey={form.errors.password} onBlur={event=>form.onBlur('password',event)} onChange={event=>{setPassword(event.target.value);changed();}}/><button className="authentication-reveal" type="button" aria-label={show.text} aria-pressed={visible} disabled={form.submitPending||passkeyBusy||federationBusy} onClick={()=>setVisible(value=>!value)}><img src="/registration/assets/login-eye-off.svg" alt=""/></button></div>
+              <div className="authentication-options"><label><input type="checkbox" checked={remember} disabled={form.submitPending||passkeyBusy||federationBusy} onChange={event=>setRemember(event.target.checked)}/><ContentText contentKey="login.remember"/></label><button type="button" disabled title={unavailable.text}><ContentText contentKey="login.forgot"/></button></div>
             </div>
-            <div className="authentication-actions"><PrimaryButton type="submit" labelKey="login.submit" disabled={form.submitPending||passkeyBusy} aria-busy={form.submitPending}/><PasskeySignIn key={location.revision} available={boot.passkeyAvailable===true} maximumCredentialJsonBytes={boot.maximumCredentialJsonBytes??0} csrfToken={boot.csrfToken} rememberMe={remember} disabled={form.submitPending} {...(boot.passkeyRecovery?{recovery:boot.passkeyRecovery}:{})} onBusyChange={value=>{passkeyPending.current=value;setPasskeyBusy(value);if(value){setPassword('');setVisible(false);form.reset();}}} onAuthenticated={()=>navigatePath(authenticationRoutes.signedIn.pathname)} onMfaRequired={()=>navigatePath(totpRoutes.mfa.pathname)}/><p className="authentication-create"><ContentText contentKey="login.create.description"/> <a href="/registration"><ContentText contentKey="login.create"/></a></p></div>
+            <div className="authentication-actions"><PrimaryButton type="submit" labelKey="login.submit" disabled={form.submitPending||passkeyBusy||federationBusy} aria-busy={form.submitPending}/><PasskeySignIn key={location.revision} available={boot.passkeyAvailable===true} maximumCredentialJsonBytes={boot.maximumCredentialJsonBytes??0} csrfToken={boot.csrfToken} rememberMe={remember} disabled={form.submitPending||federationBusy} {...(boot.passkeyRecovery?{recovery:boot.passkeyRecovery}:{})} onBusyChange={value=>{passkeyPending.current=value;setPasskeyBusy(value);if(value){setPassword('');setVisible(false);form.reset();}}} onAuthenticated={()=>navigatePath(authenticationRoutes.signedIn.pathname)} onMfaRequired={()=>navigatePath(totpRoutes.mfa.pathname)}/><p className="authentication-create"><ContentText contentKey="login.create.description"/> <a href="/registration"><ContentText contentKey="login.create"/></a></p></div>
             {form.hasErrors&&<FormErrorSummary contentKey="authentication.error.highlighted"/>}
           </form>
         </>}

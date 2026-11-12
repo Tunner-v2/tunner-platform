@@ -656,6 +656,66 @@ namespace Tunner.Identity.Persistence.Migrations
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("expires_at");
 
+                    b.Property<string>("FederationAssuranceMappingEvidenceReference")
+                        .HasColumnType("text")
+                        .HasColumnName("federation_assurance_mapping_evidence_reference");
+
+                    b.Property<Guid?>("FederationAttemptId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("federation_attempt_id");
+
+                    b.Property<string>("FederationClientId")
+                        .HasColumnType("text")
+                        .HasColumnName("federation_client_id");
+
+                    b.Property<string>("FederationIssuer")
+                        .HasColumnType("text")
+                        .HasColumnName("federation_issuer");
+
+                    b.Property<string>("FederationIssuerMappingEvidenceReference")
+                        .HasColumnType("text")
+                        .HasColumnName("federation_issuer_mapping_evidence_reference");
+
+                    b.Property<Guid?>("FederationLinkId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("federation_link_id");
+
+                    b.Property<long?>("FederationLinkVersion")
+                        .HasColumnType("bigint")
+                        .HasColumnName("federation_link_version");
+
+                    b.Property<string>("FederationNamespace")
+                        .HasColumnType("text")
+                        .HasColumnName("federation_namespace");
+
+                    b.Property<string>("FederationPrimaryAssurance")
+                        .HasColumnType("text")
+                        .HasColumnName("federation_primary_assurance");
+
+                    b.Property<string>("FederationProfileVersion")
+                        .HasColumnType("text")
+                        .HasColumnName("federation_profile_version");
+
+                    b.Property<string>("FederationProvider")
+                        .HasColumnType("text")
+                        .HasColumnName("federation_provider");
+
+                    b.Property<string>("FederationQualificationEvidenceReference")
+                        .HasColumnType("text")
+                        .HasColumnName("federation_qualification_evidence_reference");
+
+                    b.Property<string>("FederationQualificationProfileVersion")
+                        .HasColumnType("text")
+                        .HasColumnName("federation_qualification_profile_version");
+
+                    b.Property<string>("FederationSessionUsePolicyVersion")
+                        .HasColumnType("text")
+                        .HasColumnName("federation_session_use_policy_version");
+
+                    b.Property<string>("FederationSignInAdmissionPolicyVersion")
+                        .HasColumnType("text")
+                        .HasColumnName("federation_sign_in_admission_policy_version");
+
                     b.Property<Guid>("IdempotencyKey")
                         .HasColumnType("uuid")
                         .HasColumnName("idempotency_key");
@@ -789,12 +849,16 @@ namespace Tunner.Identity.Persistence.Migrations
 
                     b.HasIndex("AccountId");
 
+                    b.HasIndex("FederationAttemptId");
+
                     b.HasIndex("KeyDigest")
                         .IsUnique();
 
                     b.HasIndex("PasskeyCredentialReference");
 
                     b.HasIndex("TotpAuthenticatorReference");
+
+                    b.HasIndex("AccountId", "FederationLinkId");
 
                     b.HasIndex("BrowserDigest", "IdempotencyKey")
                         .IsUnique();
@@ -803,9 +867,11 @@ namespace Tunner.Identity.Persistence.Migrations
                         {
                             t.HasCheckConstraint("ck_session_bounds", "expires_at > authenticated_at AND last_seen_at >= authenticated_at AND idle_ticks > 0 AND version >= 1");
 
+                            t.HasCheckConstraint("ck_session_federation", "((authentication_methods NOT IN ('federation','federation+totp') AND federation_attempt_id IS NULL AND federation_provider IS NULL AND federation_link_id IS NULL AND federation_link_version IS NULL AND federation_namespace IS NULL AND federation_client_id IS NULL AND federation_issuer IS NULL AND federation_profile_version IS NULL AND federation_issuer_mapping_evidence_reference IS NULL AND federation_qualification_profile_version IS NULL AND federation_qualification_evidence_reference IS NULL AND federation_sign_in_admission_policy_version IS NULL AND federation_assurance_mapping_evidence_reference IS NULL AND federation_session_use_policy_version IS NULL AND federation_primary_assurance IS NULL) OR (authentication_methods IN ('federation','federation+totp') AND federation_attempt_id IS NOT NULL AND federation_provider IS NOT NULL AND federation_link_id IS NOT NULL AND federation_link_version IS NOT NULL AND federation_namespace IS NOT NULL AND length(federation_namespace)>0 AND federation_client_id IS NOT NULL AND length(federation_client_id)>0 AND federation_issuer IS NOT NULL AND length(federation_issuer)>0 AND federation_profile_version IS NOT NULL AND length(federation_profile_version)>0 AND federation_issuer_mapping_evidence_reference IS NOT NULL AND length(federation_issuer_mapping_evidence_reference)>0 AND federation_qualification_profile_version IS NOT NULL AND length(federation_qualification_profile_version)>0 AND federation_qualification_evidence_reference IS NOT NULL AND length(federation_qualification_evidence_reference)>0 AND federation_sign_in_admission_policy_version IS NOT NULL AND length(federation_sign_in_admission_policy_version)>0 AND federation_assurance_mapping_evidence_reference IS NOT NULL AND length(federation_assurance_mapping_evidence_reference)>0 AND federation_session_use_policy_version IS NOT NULL AND length(federation_session_use_policy_version)>0 AND federation_link_version>=1 AND federation_provider IN ('Google','Microsoft') AND federation_primary_assurance IS NOT NULL AND length(federation_primary_assurance)>0))");
+
                             t.HasCheckConstraint("ck_session_key", "length(key_digest) = 64 AND length(browser_digest) = 64");
 
-                            t.HasCheckConstraint("ck_session_method", "((authentication_methods IN ('pwd','pwd+totp') AND passkey_credential_reference IS NULL AND passkey_policy_version IS NULL AND passkey_assurance_key IS NULL) OR (authentication_methods IN ('passkey','passkey+totp') AND passkey_credential_reference IS NOT NULL AND passkey_policy_version IS NOT NULL AND passkey_assurance_key IS NOT NULL)) AND ((authentication_methods IN ('pwd','passkey') AND totp_authenticator_reference IS NULL AND totp_generation IS NULL AND totp_authenticator_version IS NULL AND totp_policy_version IS NULL AND mfa_requirement_policy_version IS NULL) OR (authentication_methods IN ('pwd+totp','passkey+totp') AND totp_authenticator_reference IS NOT NULL AND totp_generation IS NOT NULL AND totp_authenticator_version>=2 AND totp_policy_version IS NOT NULL AND mfa_requirement_policy_version IS NOT NULL))");
+                            t.HasCheckConstraint("ck_session_method", "((authentication_methods IN ('pwd','pwd+totp','federation','federation+totp') AND passkey_credential_reference IS NULL AND passkey_policy_version IS NULL AND passkey_assurance_key IS NULL) OR (authentication_methods IN ('passkey','passkey+totp') AND passkey_credential_reference IS NOT NULL AND passkey_policy_version IS NOT NULL AND passkey_assurance_key IS NOT NULL)) AND ((authentication_methods IN ('pwd','passkey','federation') AND totp_authenticator_reference IS NULL AND totp_generation IS NULL AND totp_authenticator_version IS NULL AND totp_policy_version IS NULL AND mfa_requirement_policy_version IS NULL) OR (authentication_methods IN ('pwd+totp','passkey+totp','federation+totp') AND totp_authenticator_reference IS NOT NULL AND totp_generation IS NOT NULL AND totp_authenticator_version>=2 AND totp_policy_version IS NOT NULL AND mfa_requirement_policy_version IS NOT NULL))");
 
                             t.HasCheckConstraint("ck_session_state", "state IN ('ACTIVE','REVOKED','EXPIRED')");
 
@@ -829,10 +895,33 @@ namespace Tunner.Identity.Persistence.Migrations
                         .HasColumnType("text")
                         .HasColumnName("evidence_reference");
 
+                    b.Property<string>("IssuerMappingEvidenceReference")
+                        .HasColumnType("text")
+                        .HasColumnName("issuer_mapping_evidence_reference");
+
+                    b.Property<string>("LinkState")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("text")
+                        .HasDefaultValue("LEGACY_UNQUALIFIED")
+                        .HasColumnName("link_state");
+
                     b.Property<string>("Provider")
                         .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("provider");
+
+                    b.Property<string>("QualificationEvidenceReference")
+                        .HasColumnType("text")
+                        .HasColumnName("qualification_evidence_reference");
+
+                    b.Property<string>("QualificationProfileVersion")
+                        .HasColumnType("text")
+                        .HasColumnName("qualification_profile_version");
+
+                    b.Property<string>("QualifiedClientId")
+                        .HasColumnType("text")
+                        .HasColumnName("qualified_client_id");
 
                     b.Property<string>("Subject")
                         .IsRequired()
@@ -846,8 +935,6 @@ namespace Tunner.Identity.Persistence.Migrations
 
                     b.HasKey("LinkId");
 
-                    b.HasIndex("AccountId");
-
                     b.HasIndex("Provider", "Subject")
                         .IsUnique();
 
@@ -855,7 +942,207 @@ namespace Tunner.Identity.Persistence.Migrations
                         {
                             t.HasCheckConstraint("ck_external_identity_key", "length(provider) > 0 AND length(subject) > 0");
 
+                            t.HasCheckConstraint("ck_external_qualification", "(link_state='LEGACY_UNQUALIFIED' AND qualified_client_id IS NULL AND qualification_profile_version IS NULL\n  AND issuer_mapping_evidence_reference IS NULL AND qualification_evidence_reference IS NULL)\nOR (link_state IN ('ACTIVE','UNLINKED') AND qualified_client_id IS NOT NULL AND length(qualified_client_id)>0\n  AND qualification_profile_version IS NOT NULL AND length(qualification_profile_version)>0\n  AND issuer_mapping_evidence_reference IS NOT NULL AND length(issuer_mapping_evidence_reference)>0\n  AND qualification_evidence_reference IS NOT NULL AND length(qualification_evidence_reference)>0)");
+
                             t.HasCheckConstraint("ck_external_version", "version >= 1");
+                        });
+                });
+
+            modelBuilder.Entity("Tunner.Identity.Persistence.FederationAttemptRow", b =>
+                {
+                    b.Property<Guid>("AttemptId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("attempt_id");
+
+                    b.Property<string>("AuthenticationPolicyVersion")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("authentication_policy_version");
+
+                    b.Property<string>("BrowserDigest")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("browser_digest");
+
+                    b.Property<Guid>("BrowserKey")
+                        .HasColumnType("uuid")
+                        .HasColumnName("browser_key");
+
+                    b.Property<string>("ClientId")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("client_id");
+
+                    b.Property<string>("ContinuationPath")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("continuation_path");
+
+                    b.Property<string>("CorrelationId")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("correlation_id");
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("created_at");
+
+                    b.Property<DateTimeOffset?>("EndedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("ended_at");
+
+                    b.Property<string>("ErrorCode")
+                        .HasColumnType("text")
+                        .HasColumnName("error_code");
+
+                    b.Property<DateTimeOffset>("ExpiresAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("expires_at");
+
+                    b.Property<Guid?>("LinkId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("link_id");
+
+                    b.Property<string>("LinkQualificationEvidenceReference")
+                        .HasColumnType("text")
+                        .HasColumnName("link_qualification_evidence_reference");
+
+                    b.Property<string>("LinkQualificationProfileVersion")
+                        .HasColumnType("text")
+                        .HasColumnName("link_qualification_profile_version");
+
+                    b.Property<long?>("LinkVersion")
+                        .HasColumnType("bigint")
+                        .HasColumnName("link_version");
+
+                    b.Property<string>("MappingEvidenceReference")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("mapping_evidence_reference");
+
+                    b.Property<string>("Origin")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("origin");
+
+                    b.Property<Guid?>("PendingMfaId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("pending_mfa_id");
+
+                    b.Property<string>("PreviousCookieDigest")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("previous_cookie_digest");
+
+                    b.Property<Guid?>("PreviousSessionId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("previous_session_id");
+
+                    b.Property<string>("ProcessingReference")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("processing_reference");
+
+                    b.Property<string>("ProfileSnapshot")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("profile_snapshot");
+
+                    b.Property<string>("ProfileVersion")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("profile_version");
+
+                    b.Property<string>("Provider")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("provider");
+
+                    b.Property<string>("ProviderNamespace")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("provider_namespace");
+
+                    b.Property<string>("Purpose")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("purpose");
+
+                    b.Property<bool>("RememberMe")
+                        .HasColumnType("boolean")
+                        .HasColumnName("remember_me");
+
+                    b.Property<Guid>("RequestId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("request_id");
+
+                    b.Property<DateTimeOffset?>("ResultExpiresAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("result_expires_at");
+
+                    b.Property<long>("ResultRecoveryLifetimeTicks")
+                        .HasColumnType("bigint")
+                        .HasColumnName("result_recovery_lifetime_ticks");
+
+                    b.Property<Guid?>("ResultSessionId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("result_session_id");
+
+                    b.Property<string>("RetentionReference")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("retention_reference");
+
+                    b.Property<string>("State")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("state");
+
+                    b.Property<string>("ValidatedIssuer")
+                        .HasColumnType("text")
+                        .HasColumnName("validated_issuer");
+
+                    b.Property<DateTimeOffset?>("VerificationExpiresAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("verification_expires_at");
+
+                    b.Property<DateTimeOffset?>("VerifiedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("verified_at");
+
+                    b.Property<long>("Version")
+                        .IsConcurrencyToken()
+                        .HasColumnType("bigint")
+                        .HasColumnName("version");
+
+                    b.HasKey("AttemptId");
+
+                    b.HasIndex("ExpiresAt");
+
+                    b.HasIndex("LinkId");
+
+                    b.HasIndex("PendingMfaId");
+
+                    b.HasIndex("ResultSessionId");
+
+                    b.HasIndex("BrowserDigest", "RequestId")
+                        .IsUnique();
+
+                    b.ToTable("federation_attempts", "identity", t =>
+                        {
+                            t.HasCheckConstraint("ck_federation_bounds", "expires_at>created_at AND result_recovery_lifetime_ticks>0 AND length(browser_digest)=64 AND length(previous_cookie_digest)=64");
+
+                            t.HasCheckConstraint("ck_federation_error", "error_code IS NULL OR error_code IN ('AUTHENTICATION_FAILED','VERSION_CONFLICT','RATE_OR_ABUSE_LIMITED','STEP_UP_REQUIRED')");
+
+                            t.HasCheckConstraint("ck_federation_profile", "length(provider_namespace)>0 AND length(client_id)>0 AND length(profile_version)>0 AND length(mapping_evidence_reference)>0 AND length(correlation_id)>0 AND length(processing_reference)>0 AND length(retention_reference)>0 AND jsonb_typeof(profile_snapshot::jsonb)='object'");
+
+                            t.HasCheckConstraint("ck_federation_purpose", "provider IN ('Google','Microsoft') AND purpose IN ('SignIn','Registration','Link','OperationProof')");
+
+                            t.HasCheckConstraint("ck_federation_result", "(state IN ('PREPARED','CHALLENGE_ADMITTED','VERIFIED') AND ended_at IS NULL AND result_expires_at IS NULL AND result_session_id IS NULL AND pending_mfa_id IS NULL AND error_code IS NULL) OR (state IN ('COMPLETED','REJECTED','EXPIRED') AND ended_at IS NOT NULL AND result_expires_at IS NOT NULL AND ended_at>=created_at AND result_expires_at>ended_at AND ((state='COMPLETED' AND purpose='SignIn' AND verified_at IS NOT NULL AND error_code IS NULL AND ((result_session_id IS NOT NULL AND pending_mfa_id IS NULL) OR (result_session_id IS NULL AND pending_mfa_id IS NOT NULL))) OR (state IN ('REJECTED','EXPIRED') AND error_code IS NOT NULL AND result_session_id IS NULL AND pending_mfa_id IS NULL)))");
+
+                            t.HasCheckConstraint("ck_federation_state", "state IN ('PREPARED','CHALLENGE_ADMITTED','VERIFIED','COMPLETED','REJECTED','EXPIRED') AND version>=1");
+
+                            t.HasCheckConstraint("ck_federation_verified", "(state NOT IN ('VERIFIED','COMPLETED') AND verified_at IS NULL AND verification_expires_at IS NULL AND validated_issuer IS NULL AND link_id IS NULL AND link_version IS NULL AND link_qualification_evidence_reference IS NULL AND link_qualification_profile_version IS NULL) OR (verified_at IS NOT NULL AND verification_expires_at IS NOT NULL AND validated_issuer IS NOT NULL AND link_id IS NOT NULL AND link_version IS NOT NULL AND link_qualification_evidence_reference IS NOT NULL AND link_qualification_profile_version IS NOT NULL AND verified_at>=created_at AND verified_at<expires_at AND verification_expires_at>verified_at AND verification_expires_at<=expires_at AND length(validated_issuer)>0 AND link_version>=1 AND length(link_qualification_evidence_reference)>0 AND length(link_qualification_profile_version)>0)");
                         });
                 });
 
@@ -2289,6 +2576,62 @@ namespace Tunner.Identity.Persistence.Migrations
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("expires_at");
 
+                    b.Property<string>("FederationAssuranceMappingEvidenceReference")
+                        .HasColumnType("text")
+                        .HasColumnName("federation_assurance_mapping_evidence_reference");
+
+                    b.Property<Guid?>("FederationAttemptId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("federation_attempt_id");
+
+                    b.Property<string>("FederationClientId")
+                        .HasColumnType("text")
+                        .HasColumnName("federation_client_id");
+
+                    b.Property<string>("FederationIssuer")
+                        .HasColumnType("text")
+                        .HasColumnName("federation_issuer");
+
+                    b.Property<string>("FederationIssuerMappingEvidenceReference")
+                        .HasColumnType("text")
+                        .HasColumnName("federation_issuer_mapping_evidence_reference");
+
+                    b.Property<Guid?>("FederationLinkId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("federation_link_id");
+
+                    b.Property<long?>("FederationLinkVersion")
+                        .HasColumnType("bigint")
+                        .HasColumnName("federation_link_version");
+
+                    b.Property<string>("FederationNamespace")
+                        .HasColumnType("text")
+                        .HasColumnName("federation_namespace");
+
+                    b.Property<string>("FederationProfileVersion")
+                        .HasColumnType("text")
+                        .HasColumnName("federation_profile_version");
+
+                    b.Property<string>("FederationProvider")
+                        .HasColumnType("text")
+                        .HasColumnName("federation_provider");
+
+                    b.Property<string>("FederationQualificationEvidenceReference")
+                        .HasColumnType("text")
+                        .HasColumnName("federation_qualification_evidence_reference");
+
+                    b.Property<string>("FederationQualificationProfileVersion")
+                        .HasColumnType("text")
+                        .HasColumnName("federation_qualification_profile_version");
+
+                    b.Property<string>("FederationSessionUsePolicyVersion")
+                        .HasColumnType("text")
+                        .HasColumnName("federation_session_use_policy_version");
+
+                    b.Property<string>("FederationSignInAdmissionPolicyVersion")
+                        .HasColumnType("text")
+                        .HasColumnName("federation_sign_in_admission_policy_version");
+
                     b.Property<string>("IdentifierDigest")
                         .IsRequired()
                         .HasColumnType("text")
@@ -2386,14 +2729,18 @@ namespace Tunner.Identity.Persistence.Migrations
 
                     b.HasKey("PendingId");
 
-                    b.HasIndex("AccountId");
+                    b.HasIndex("FederationAttemptId");
+
+                    b.HasIndex("AccountId", "FederationLinkId");
 
                     b.HasIndex("BrowserDigest", "RequestId")
                         .IsUnique();
 
                     b.ToTable("totp_pending_authentication", "identity", t =>
                         {
-                            t.HasCheckConstraint("ck_totp_pending", "state IN ('PENDING','COMPLETED','EXPIRED') AND primary_method IN ('pwd','passkey') AND expires_at>primary_verified_at AND recovery_expires_at>expires_at AND version>=1");
+                            t.HasCheckConstraint("ck_totp_pending", "state IN ('PENDING','COMPLETED','EXPIRED') AND primary_method IN ('pwd','passkey','federation') AND expires_at>primary_verified_at AND recovery_expires_at>expires_at AND version>=1");
+
+                            t.HasCheckConstraint("ck_totp_pending_federation", "((primary_method<>'federation' AND federation_attempt_id IS NULL AND federation_provider IS NULL AND federation_link_id IS NULL AND federation_link_version IS NULL AND federation_namespace IS NULL AND federation_client_id IS NULL AND federation_issuer IS NULL AND federation_profile_version IS NULL AND federation_issuer_mapping_evidence_reference IS NULL AND federation_qualification_profile_version IS NULL AND federation_qualification_evidence_reference IS NULL AND federation_sign_in_admission_policy_version IS NULL AND federation_assurance_mapping_evidence_reference IS NULL AND federation_session_use_policy_version IS NULL) OR (primary_method='federation' AND federation_attempt_id IS NOT NULL AND federation_provider IS NOT NULL AND federation_link_id IS NOT NULL AND federation_link_version IS NOT NULL AND federation_namespace IS NOT NULL AND length(federation_namespace)>0 AND federation_client_id IS NOT NULL AND length(federation_client_id)>0 AND federation_issuer IS NOT NULL AND length(federation_issuer)>0 AND federation_profile_version IS NOT NULL AND length(federation_profile_version)>0 AND federation_issuer_mapping_evidence_reference IS NOT NULL AND length(federation_issuer_mapping_evidence_reference)>0 AND federation_qualification_profile_version IS NOT NULL AND length(federation_qualification_profile_version)>0 AND federation_qualification_evidence_reference IS NOT NULL AND length(federation_qualification_evidence_reference)>0 AND federation_sign_in_admission_policy_version IS NOT NULL AND length(federation_sign_in_admission_policy_version)>0 AND federation_assurance_mapping_evidence_reference IS NOT NULL AND length(federation_assurance_mapping_evidence_reference)>0 AND federation_session_use_policy_version IS NOT NULL AND length(federation_session_use_policy_version)>0 AND federation_link_version>=1 AND federation_provider IN ('Google','Microsoft') AND passkey_credential_reference IS NULL AND passkey_credential_version IS NULL AND passkey_policy_version IS NULL AND passkey_assurance_key IS NULL))");
 
                             t.HasCheckConstraint("ck_totp_pending_result", "(state='COMPLETED' AND result_session_id IS NOT NULL AND accepted_authenticator_reference IS NOT NULL AND accepted_generation IS NOT NULL) OR (state<>'COMPLETED' AND result_session_id IS NULL AND accepted_authenticator_reference IS NULL AND accepted_generation IS NULL)");
                         });
@@ -2678,6 +3025,11 @@ namespace Tunner.Identity.Persistence.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
+                    b.HasOne("Tunner.Identity.Persistence.FederationAttemptRow", null)
+                        .WithMany()
+                        .HasForeignKey("FederationAttemptId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
                     b.HasOne("Tunner.Identity.Persistence.PasskeyCredentialRow", null)
                         .WithMany()
                         .HasForeignKey("PasskeyCredentialReference")
@@ -2686,6 +3038,12 @@ namespace Tunner.Identity.Persistence.Migrations
                     b.HasOne("Tunner.Identity.Persistence.TotpAuthenticatorRow", null)
                         .WithMany()
                         .HasForeignKey("TotpAuthenticatorReference")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("Tunner.Identity.Persistence.ExternalIdentityLinkRow", null)
+                        .WithMany()
+                        .HasForeignKey("AccountId", "FederationLinkId")
+                        .HasPrincipalKey("AccountId", "LinkId")
                         .OnDelete(DeleteBehavior.Restrict);
                 });
 
@@ -2696,6 +3054,24 @@ namespace Tunner.Identity.Persistence.Migrations
                         .HasForeignKey("AccountId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Tunner.Identity.Persistence.FederationAttemptRow", b =>
+                {
+                    b.HasOne("Tunner.Identity.Persistence.ExternalIdentityLinkRow", null)
+                        .WithMany()
+                        .HasForeignKey("LinkId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("Tunner.Identity.Persistence.TotpPendingAuthenticationRow", null)
+                        .WithMany()
+                        .HasForeignKey("PendingMfaId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("Tunner.Identity.Persistence.AuthenticationSessionRow", null)
+                        .WithMany()
+                        .HasForeignKey("ResultSessionId")
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("Tunner.Identity.Persistence.IdentityUserAdapter", b =>
@@ -2829,6 +3205,17 @@ namespace Tunner.Identity.Persistence.Migrations
                         .HasForeignKey("AccountId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+
+                    b.HasOne("Tunner.Identity.Persistence.FederationAttemptRow", null)
+                        .WithMany()
+                        .HasForeignKey("FederationAttemptId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("Tunner.Identity.Persistence.ExternalIdentityLinkRow", null)
+                        .WithMany()
+                        .HasForeignKey("AccountId", "FederationLinkId")
+                        .HasPrincipalKey("AccountId", "LinkId")
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("Tunner.Identity.Persistence.TotpProofAttemptRow", b =>
