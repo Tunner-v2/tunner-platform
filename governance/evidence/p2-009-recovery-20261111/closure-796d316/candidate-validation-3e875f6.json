@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "scope_id": "TUN-P2-009",
+  "candidate_commit_sha": "3e875f6a0099c214cf68ce4b0f8178a86bbe9654",
+  "latest_actual_qualified_behavior_sha": "796d316bbc1be878f71d515e06be13d7a77b3c1d",
+  "result": "PASS_SCHEMA_AND_SOURCE_EQUIVALENT_COMMITTED_CARRIER",
+  "native_governance": {
+    "process_exit_code": 0,
+    "tool_chunk_id": "ca66ae",
+    "observed_native_result": {
+      "ExitCode": 0,
+      "Command": "validate",
+      "Payload": {
+        "IsValid": true,
+        "RecordCount": 1129,
+        "Diagnostics": []
+      }
+    }
+  },
+  "reused_ui_gate_receipt": "governance/evidence/p2-009-recovery-20261111/closure-796d316/native-acceptance-a095f5f.json",
+  "source_secret_receipt": "governance/evidence/p2-009-recovery-20261111/closure-796d316/secret-scan-final-source.json",
+  "metadata_secret_receipt": "governance/evidence/p2-009-recovery-20261111/closure-796d316/secret-scan-metadata-3e875f6.json",
+  "metadata_secret_receipt_sha256": "c289a956dc0dc8ee14210b97d0f6b32ed1a285b9b7b6f2bee2a38488c8d1a413",
+  "owned_behavior_paths": 92,
+  "rv_compatibility_paths": 31,
+  "qualification_boundaries": "All actual execution identities remain in the frozen index/witness. This metadata carrier is not a new functional test invocation.",
+  "remaining_acceptance_actions": [
+    "Bind official validation envelopes/git state to this committed candidate.",
+    "Run focused secret scan for subsequent binding-only metadata edits.",
+    "Execute native item and legal Revision lifecycle gates, refresh scoped handoff/context.",
+    "Preserve actual Product/human, protected-main, production and release gates."
+  ]
+}
