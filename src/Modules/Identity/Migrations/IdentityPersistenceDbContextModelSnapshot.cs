@@ -1851,6 +1851,174 @@ namespace Tunner.Identity.Persistence.Migrations
                         });
                 });
 
+            modelBuilder.Entity("Tunner.Identity.Persistence.RecoveryCaseRow", b =>
+                {
+                    b.Property<Guid>("CaseId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("case_id");
+
+                    b.Property<string>("AccountId")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("account_id");
+
+                    b.Property<string>("AccountState")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("account_state");
+
+                    b.Property<string>("ContextDigest")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("context_digest");
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("created_at");
+
+                    b.Property<DateTimeOffset?>("EndedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("ended_at");
+
+                    b.Property<long>("ExpectedAccountVersion")
+                        .HasColumnType("bigint")
+                        .HasColumnName("expected_account_version");
+
+                    b.Property<long>("ExpectedSessionVersion")
+                        .HasColumnType("bigint")
+                        .HasColumnName("expected_session_version");
+
+                    b.Property<long>("ExpectedSetLifecycleVersion")
+                        .HasColumnType("bigint")
+                        .HasColumnName("expected_set_lifecycle_version");
+
+                    b.Property<long?>("ExpectedUsageVersion")
+                        .HasColumnType("bigint")
+                        .HasColumnName("expected_usage_version");
+
+                    b.Property<DateTimeOffset>("ExpiresAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("expires_at");
+
+                    b.Property<string>("FactsDigest")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("facts_digest");
+
+                    b.Property<string>("Goal")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("goal");
+
+                    b.Property<string>("HierarchySnapshot")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("hierarchy_snapshot");
+
+                    b.Property<string>("NetworkDigest")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("network_digest");
+
+                    b.Property<string>("Origin")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("origin");
+
+                    b.Property<string>("OriginalBrowserDigest")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("original_browser_digest");
+
+                    b.Property<string>("PolicySnapshot")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("policy_snapshot");
+
+                    b.Property<string>("PolicyVersion")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("policy_version");
+
+                    b.Property<string>("ProcessingReference")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("processing_reference");
+
+                    b.Property<DateTimeOffset>("RecoveryExpiresAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("recovery_expires_at");
+
+                    b.Property<Guid>("RequestId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("request_id");
+
+                    b.Property<Guid?>("ResultId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("result_id");
+
+                    b.Property<string>("RetentionReference")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("retention_reference");
+
+                    b.Property<string>("SessionEffect")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("session_effect");
+
+                    b.Property<Guid>("SetReference")
+                        .HasColumnType("uuid")
+                        .HasColumnName("set_reference");
+
+                    b.Property<string>("State")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("state");
+
+                    b.Property<Guid>("TargetSessionId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("target_session_id");
+
+                    b.Property<string>("UnresolvedEffectsJson")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("unresolved_effects_json");
+
+                    b.Property<string>("UsageAdmission")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("usage_admission");
+
+                    b.Property<long>("Version")
+                        .IsConcurrencyToken()
+                        .HasColumnType("bigint")
+                        .HasColumnName("version");
+
+                    b.HasKey("CaseId");
+
+                    b.HasIndex("ExpiresAt");
+
+                    b.HasIndex("ResultId")
+                        .IsUnique();
+
+                    b.HasIndex("TargetSessionId");
+
+                    b.HasIndex("AccountId", "SetReference");
+
+                    b.HasIndex("AccountId", "OriginalBrowserDigest", "RequestId")
+                        .IsUnique();
+
+                    b.ToTable("recovery_cases", "identity", t =>
+                        {
+                            t.HasCheckConstraint("ck_recovery_case_binding", "length(original_browser_digest)=64 AND length(network_digest)=64 AND length(context_digest)=64 AND length(facts_digest)=64 AND goal='ContainSelectedTunnerSession' AND session_effect='RevokeExactSelectedSession' AND length(policy_version)>0 AND length(processing_reference)>0 AND length(retention_reference)>0 AND jsonb_typeof(policy_snapshot::jsonb)='object' AND jsonb_typeof(hierarchy_snapshot::jsonb)='object' AND jsonb_typeof(unresolved_effects_json::jsonb)='array' AND jsonb_array_length(unresolved_effects_json::jsonb)>0");
+
+                            t.HasCheckConstraint("ck_recovery_case_state", "expires_at>created_at AND recovery_expires_at>expires_at AND ((state='PENDING_CODE' AND version=1 AND result_id IS NULL AND ended_at IS NULL) OR (state='CONTAINED' AND version=2 AND result_id IS NOT NULL AND ended_at>=created_at AND ended_at<expires_at))");
+
+                            t.HasCheckConstraint("ck_recovery_case_versions", "expected_session_version>=1 AND expected_account_version>=1 AND expected_set_lifecycle_version>=1 AND ((usage_admission='ExactUsageSnapshot' AND expected_usage_version IS NOT NULL AND expected_usage_version>=0) OR (usage_admission='IndependentUnusedEntry' AND expected_usage_version IS NULL))");
+                        });
+                });
+
             modelBuilder.Entity("Tunner.Identity.Persistence.RecoveryCodeEntryRow", b =>
                 {
                     b.Property<Guid>("EntryReference")
@@ -2239,6 +2407,102 @@ namespace Tunner.Identity.Persistence.Migrations
                             t.HasCheckConstraint("ck_recovery_set_binding", "length(account_id)>0 AND length(policy_version)>0 AND length(crypto_profile_version)>0 AND length(processing_reference)>0 AND length(retention_reference)>0");
 
                             t.HasCheckConstraint("ck_recovery_set_retirement", "(state='ACTIVE' AND retired_at IS NULL AND retired_by_operation_id IS NULL) OR (state='REPLACED' AND retired_at IS NOT NULL AND retired_at>=created_at AND retired_by_operation_id IS NOT NULL)");
+                        });
+                });
+
+            modelBuilder.Entity("Tunner.Identity.Persistence.RecoveryResultRow", b =>
+                {
+                    b.Property<Guid>("ResultId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("result_id");
+
+                    b.Property<string>("AccountId")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("account_id");
+
+                    b.Property<Guid>("CaseId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("case_id");
+
+                    b.Property<string>("ContextDigest")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("context_digest");
+
+                    b.Property<long>("EndedSessionVersion")
+                        .HasColumnType("bigint")
+                        .HasColumnName("ended_session_version");
+
+                    b.Property<string>("HierarchySnapshot")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("hierarchy_snapshot");
+
+                    b.Property<string>("Outcome")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("outcome");
+
+                    b.Property<string>("PolicySnapshot")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("policy_snapshot");
+
+                    b.Property<string>("PolicyVersion")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("policy_version");
+
+                    b.Property<long>("PriorSessionVersion")
+                        .HasColumnType("bigint")
+                        .HasColumnName("prior_session_version");
+
+                    b.Property<string>("ProcessingReference")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("processing_reference");
+
+                    b.Property<DateTimeOffset>("RecordedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("recorded_at");
+
+                    b.Property<string>("RetentionReference")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("retention_reference");
+
+                    b.Property<Guid>("SessionOutboxEventId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("session_outbox_event_id");
+
+                    b.Property<long>("SetLifecycleVersion")
+                        .HasColumnType("bigint")
+                        .HasColumnName("set_lifecycle_version");
+
+                    b.Property<Guid>("SetReference")
+                        .HasColumnType("uuid")
+                        .HasColumnName("set_reference");
+
+                    b.Property<Guid>("TargetSessionId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("target_session_id");
+
+                    b.Property<string>("UnresolvedEffectsJson")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("unresolved_effects_json");
+
+                    b.HasKey("ResultId");
+
+                    b.HasIndex("CaseId")
+                        .IsUnique();
+
+                    b.HasIndex("TargetSessionId");
+
+                    b.ToTable("recovery_results", "identity", t =>
+                        {
+                            t.HasCheckConstraint("ck_recovery_result_shape", "outcome='CONTAINED_PENDING_RESTORATION' AND prior_session_version>=1 AND ended_session_version=prior_session_version+1 AND set_lifecycle_version>=1 AND length(context_digest)=64 AND length(policy_version)>0 AND length(processing_reference)>0 AND length(retention_reference)>0 AND jsonb_typeof(policy_snapshot::jsonb)='object' AND jsonb_typeof(hierarchy_snapshot::jsonb)='object' AND jsonb_typeof(unresolved_effects_json::jsonb)='array' AND jsonb_array_length(unresolved_effects_json::jsonb)>0");
                         });
                 });
 
@@ -3515,6 +3779,28 @@ namespace Tunner.Identity.Persistence.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("Tunner.Identity.Persistence.RecoveryCaseRow", b =>
+                {
+                    b.HasOne("Tunner.Identity.Persistence.AccountRow", null)
+                        .WithMany()
+                        .HasForeignKey("AccountId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Tunner.Identity.Persistence.AuthenticationSessionRow", null)
+                        .WithMany()
+                        .HasForeignKey("TargetSessionId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Tunner.Identity.Persistence.RecoveryCodeSetRow", null)
+                        .WithMany()
+                        .HasForeignKey("AccountId", "SetReference")
+                        .HasPrincipalKey("AccountId", "SetReference")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Tunner.Identity.Persistence.RecoveryCodeEntryRow", b =>
                 {
                     b.HasOne("Tunner.Identity.Persistence.RecoveryCodeSetRow", null)
@@ -3553,6 +3839,21 @@ namespace Tunner.Identity.Persistence.Migrations
                         .WithMany()
                         .HasForeignKey("AccountId", "IssuanceOperationId", "SetReference")
                         .HasPrincipalKey("AccountId", "OperationId", "SetReference")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Tunner.Identity.Persistence.RecoveryResultRow", b =>
+                {
+                    b.HasOne("Tunner.Identity.Persistence.RecoveryCaseRow", null)
+                        .WithMany()
+                        .HasForeignKey("CaseId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Tunner.Identity.Persistence.AuthenticationSessionRow", null)
+                        .WithMany()
+                        .HasForeignKey("TargetSessionId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });

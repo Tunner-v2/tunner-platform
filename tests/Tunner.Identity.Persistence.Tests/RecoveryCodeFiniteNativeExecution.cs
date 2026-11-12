@@ -22,6 +22,7 @@ public static class RecoveryCodeFiniteNativeExecution
         "FEDERATION_NAMESPACE_BINDING", "FEDERATION_SINGLE_OWNER", "FEDERATION_OWNER_ROLLBACK", "FEDERATION_IMMUTABLE_VERSION",
         "FEDERATION_QUALIFICATION_LIFECYCLE", "FEDERATION_ATTEMPT_INTEGRITY", "FEDERATION_SESSION_SOURCE", "FEDERATION_MIGRATION_GUARDS"];
     private static readonly string[] PrivateIds = [
+        "RECOVERY_CASE_ORIGINAL", "RECOVERY_CASE_ONE_CODE", "RECOVERY_CASE_SELECTED_SESSION", "RECOVERY_CASE_AUTHORITY", "RECOVERY_CASE_ROLLBACK",
         "FEDERATION_HTTPS_WIRE",
         "FEDERATION_REGISTRATION", "FEDERATION_REGISTRATION_REJECTION", "FEDERATION_REGISTRATION_FINALITY",
         "FEDERATION_UNLINK_EFFECTS_HISTORY", "FEDERATION_MANAGEMENT_FINAL_AUTHORITY",
@@ -363,6 +364,11 @@ public static class RecoveryCodeFiniteNativeExecution
             "FEDERATION_REGISTRATION" => new FederationPrivateIntegrationTests(fixture).QualifiedGoogleRegistrationRequiresNoticesThenSharesPersonalInformationAndOriginalRecoveryWithoutSession(),
             "FEDERATION_REGISTRATION_REJECTION" => new FederationPrivateIntegrationTests(fixture).UnqualifiedExpiredForeignOrCollidingFederationIntakeCannotAdoptAccountOrIssueSession(),
             "FEDERATION_REGISTRATION_FINALITY" => new FederationPrivateIntegrationTests(fixture).LateRegistrationProfileNoticeOrContactDriftRollsBackCanonicalIntakeAndRecoversOriginal(),
+            "RECOVERY_CASE_ORIGINAL" => new RecoveryCasePrivateIntegrationTests(fixture).OriginalCaseReplayRejectsSubstitutedContextAndRecoversOnlyExactContainedResult(),
+            "RECOVERY_CASE_ONE_CODE" => new RecoveryCasePrivateIntegrationTests(fixture).CompetingRecoveryCasesCannotConsumeOneCodeOrRevokeTwoSessions(),
+            "RECOVERY_CASE_SELECTED_SESSION" => new RecoveryCasePrivateIntegrationTests(fixture).ContainmentPreservesOtherSessionsCredentialsAndMinorAccountWithoutRestoration(),
+            "RECOVERY_CASE_AUTHORITY" => new RecoveryCasePrivateIntegrationTests(fixture).UnknownHigherTierOrLatePolicyAndHierarchyDriftCannotConsumeOrContain(),
+            "RECOVERY_CASE_ROLLBACK" => new RecoveryCasePrivateIntegrationTests(fixture).SavedOwnerFailureAndCancellationRollbackCodeSessionCaseResultAndOutbox(),
             "FEDERATION_HTTPS_WIRE" => new FederationBffPrivateIntegrationTests(fixture).ActualHttpsNativeRegistrationRequiresExactPairedContextAndNoticesBeforeSharedOnboarding(),
             "PARENT003_REGISTRATION_BOUNDARY" => new RegistrationBffTests(fixture).ActualHttpsBffKeepsRegistrationAnonymousAndRequiresOriginCsrfAndProtectedBrowserContext(),
             "PARENT003_REGISTRATION_FLOW" => new RegistrationBffTests(fixture).ActualHttpsFlowVerifiesContactBeforePersonalInformationAndActivatesUnder18WithoutSession(),

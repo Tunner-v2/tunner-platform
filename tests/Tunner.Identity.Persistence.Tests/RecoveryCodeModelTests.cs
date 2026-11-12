@@ -32,6 +32,5 @@ public sealed class RecoveryCodeModelTests
         Assert.True(consumed.Contains("consumed_by_operation_id IS NOT NULL", StringComparison.Ordinal) && consumed.Contains("consumption_correlation_id IS NOT NULL", StringComparison.Ordinal));
         Assert.True(set.GetCheckConstraints().Single(x => x.Name == "ck_recovery_set_retirement").Sql.Contains("retired_at IS NOT NULL", StringComparison.Ordinal));
         Assert.True(operation.GetCheckConstraints().Single(x => x.Name == "ck_recovery_first_response").Sql.Contains("first_response_committed_at IS NOT NULL", StringComparison.Ordinal));
-        Assert.True(model.GetEntityTypes().All(x => !x.Name.Contains("RecoveryCase", StringComparison.Ordinal)));
     }
 }

@@ -1,0 +1,27 @@
+.recovery-page .recovery-card.proof,.recovery-page .recovery-card.status{inline-size:500px;gap:28px}
+.recovery-card.proof .authentication-intro,.recovery-card.status .authentication-intro{text-align:start}
+.recovery-card.proof h1{font-weight:600}
+.recovery-context{border-radius:12px;background:var(--tn-primitive-registration-context);padding:14px 16px}
+.recovery-context strong{display:block;font-size:13px;font-weight:600;line-height:18px;margin-block-end:5px}
+.recovery-context .recovery-context-label{font-size:11px;line-height:16px;color:var(--tn-semantic-muted);margin-block-end:4px}
+.recovery-card .tn-form-error-summary{margin:0;color:var(--tn-semantic-error)}
+.recovery-goal-field{display:grid;gap:8px}.recovery-goal-label{font-size:13px;font-weight:600;line-height:17px}
+.recovery-goal-field [role=radiogroup]{display:grid;gap:12px}
+.recovery-goal-field .step-up-choice{min-block-size:76px}.recovery-goal-field .step-up-choice[aria-checked=true]{border-color:var(--tn-semantic-focus)}
+.recovery-goal-field .step-up-choice[aria-invalid=true]{border-color:var(--tn-semantic-error)}
+.recovery-card .step-up-choice strong{font-size:14px}.recovery-card .step-up-choice small{font-size:12px;line-height:17px}.recovery-card .step-up-choice>span{font-size:24px}
+.recovery-card .recovery-explanation{font-size:13px;line-height:20px}
+.recovery-text-link{display:block;border:0;background:none;padding:0;color:var(--tn-semantic-action-background);font-family:inherit;font-size:13px;line-height:20px;text-align:center;cursor:pointer}
+.recovery-text-link:disabled{color:var(--tn-primitive-admin-muted);cursor:default}
+.recovery-text-link:focus-visible,.recovery-code-reveal:focus-visible{outline:2px solid var(--tn-semantic-focus);outline-offset:3px}
+.recovery-actions{display:grid;gap:12px}.recovery-actions:empty{display:none}
+.recovery-notice{border:1px solid var(--tn-semantic-decorative-border);border-radius:12px;padding:16px;display:grid;gap:8px}
+.recovery-notice strong{font-size:14px;line-height:20px}.recovery-notice p{font-size:13px;line-height:20px}
+.recovery-notice.error{border-color:var(--tn-semantic-error)}.recovery-notice.error strong{color:var(--tn-semantic-error)}
+.recovery-effect-facts{margin:0}.recovery-effect-facts div{padding-block:12px;border-block-end:1px solid var(--tn-semantic-decorative-border);display:grid;grid-template-columns:minmax(0,1fr) auto;gap:16px;font-size:13px;line-height:19px}
+.recovery-effect-facts div:first-child{padding-block-start:0}.recovery-effect-facts dt{font-weight:600}.recovery-effect-facts dd{margin:0;color:var(--tn-semantic-muted);overflow-wrap:anywhere}
+.recovery-code-field{position:relative}.recovery-code-field .tn-input{padding-inline-end:44px}
+.recovery-code-reveal{position:absolute;inset-inline-end:1px;top:23px;inline-size:42px;block-size:44px;border:0;background:none;display:grid;place-items:center;border-radius:8px;cursor:pointer}
+.recovery-code-reveal img{inline-size:18px;block-size:18px}
+.recovery-sr-only{position:absolute;inline-size:1px;block-size:1px;padding:0;margin:-1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap;border:0}
+@media(max-width:600px){.recovery-page .recovery-card.proof,.recovery-page .recovery-card.status{gap:24px}.recovery-effect-facts div{grid-template-columns:1fr;gap:4px}.recovery-card h1{overflow-wrap:anywhere}}
