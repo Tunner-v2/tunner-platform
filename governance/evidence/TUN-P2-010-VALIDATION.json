@@ -1,0 +1,173 @@
+{
+  "schema_version": 1,
+  "scope_id": "TUN-P2-010",
+  "validation_kind": "COMMITTED",
+  "result": "PENDING",
+  "recorded_at": "2026-11-12T04:41:18Z",
+  "tested_commit_sha": "00ba7c4c7dc763736883149d7100921b3a80063a",
+  "validated_commit_sha": null,
+  "owned_behavior_paths": [
+    "src/Modules/Identity/FederationIdentityBinding.cs",
+    "tests/Tunner.Identity.Persistence.Tests/FederationIdentityBindingTests.cs",
+    "tests/Tunner.Identity.Persistence.Tests/FederationIdentityPersistenceTests.cs"
+  ],
+  "scope": "Disabled internal registration-namespace/explicit issuer mapping/exact subject/prepared-row groundwork only; not full federation or work-item validation.",
+  "source_witness": [
+    {
+      "sha256": "801b8cf5b02f3f869766dde8ca06096c6c7516aa416238fb531011afa214e30f",
+      "path": "src/Modules/Identity/FederationIdentityBinding.cs"
+    },
+    {
+      "sha256": "895b40eb849f48582f3654f856326df8a21b26711485560c2200aec7597a412d",
+      "path": "tests/Tunner.Identity.Persistence.Tests/FederationIdentityBindingTests.cs"
+    },
+    {
+      "sha256": "4861af7978aa0deeb58d6d1af079047267984f76ab90fde05e7d96c4eaf049de",
+      "path": "tests/Tunner.Identity.Persistence.Tests/FederationIdentityPersistenceTests.cs"
+    }
+  ],
+  "eligibility": {
+    "source_metadata_sha": "85fa5ae2227bbb593576723be6900258d050b04a",
+    "context_outcome": "CURRENT",
+    "included_inputs": 47,
+    "work_start": "ELIGIBLE",
+    "findings": [],
+    "boundary": "Observed before source edits. Later source/metadata requires a coordinated context refresh; no post-edit current claim."
+  },
+  "restore": {
+    "command": "dotnet restore tests/Tunner.Identity.Persistence.Tests/Tunner.Identity.Persistence.Tests.csproj --locked-mode --verbosity minimal",
+    "exit_code": 0,
+    "warnings_or_network_errors_reported": 0,
+    "checks_disabled": false,
+    "committed_lock_graph_exists": false,
+    "qualification": "Fresh worktree assets were absent. Existing centrally pinned dependency restore only; no packages/versions added. --locked-mode without a preexisting committed lock graph is not independently claimed as lock-graph proof. No independent live-feed/advisory freshness claim."
+  },
+  "build": {
+    "command": "dotnet build tests/Tunner.Identity.Persistence.Tests/Tunner.Identity.Persistence.Tests.csproj --no-restore --verbosity minimal",
+    "exit_code": 0,
+    "elapsed_seconds": 36.75,
+    "warnings": 0,
+    "errors": 0,
+    "source_sha": "00ba7c4c7dc763736883149d7100921b3a80063a"
+  },
+  "pure_unit_execution": {
+    "command": "dotnet test tests/Tunner.Identity.Persistence.Tests/Tunner.Identity.Persistence.Tests.csproj --no-build --no-restore --filter 'FullyQualifiedName~Tunner.Identity.Persistence.Tests.FederationIdentityBindingTests' --logger 'trx;LogFileName=federation-binding.trx' --results-directory artifacts/p2-010-federation-20261112/unit-00ba7c4 --verbosity minimal",
+    "exit_code": 0,
+    "passed": 13,
+    "failed": 0,
+    "skipped": 0,
+    "total": 13,
+    "test_duration_ms": 219,
+    "original_trx_ref": "artifacts/p2-010-federation-20261112/unit-00ba7c4/federation-binding.trx",
+    "original_trx_sha256": "30aa18a0b31b7fa94d182380624d216fbdd5c10d7eb3ec076aaf6c2b168ca0e4",
+    "test_results": [
+      {
+        "duration": "00:00:00.0000192",
+        "testName": "Tunner.Identity.Persistence.Tests.FederationIdentityBindingTests.UnmappedSpellingOrChangedClientRequiresQualifiedProfileOrMigration(issuer: \"https://issuer.example.test\", client: \"synthetic-client-b\")",
+        "outcome": "Passed"
+      },
+      {
+        "duration": "00:00:00.1653167",
+        "testName": "Tunner.Identity.Persistence.Tests.FederationIdentityBindingTests.SubjectRemainsAnExactOpaqueIdentity(first: \"é\", second: \"é\")",
+        "outcome": "Passed"
+      },
+      {
+        "duration": "00:00:00.0000206",
+        "testName": "Tunner.Identity.Persistence.Tests.FederationIdentityBindingTests.UnmappedSpellingOrChangedClientRequiresQualifiedProfileOrMigration(issuer: \"https://wrong.example.test\", client: \"synthetic-client-a\")",
+        "outcome": "Passed"
+      },
+      {
+        "duration": "00:00:00.0019030",
+        "testName": "Tunner.Identity.Persistence.Tests.FederationIdentityBindingTests.InvalidEncodingNulEmptyAndOversizedSubjectFailWithoutReturningInput",
+        "outcome": "Passed"
+      },
+      {
+        "duration": "00:00:00.0382655",
+        "testName": "Tunner.Identity.Persistence.Tests.FederationIdentityBindingTests.PreparedRowRetainsOwnedIdentityAndContainsNoEmailOrAuthenticationGrant",
+        "outcome": "Passed"
+      },
+      {
+        "duration": "00:00:00.0003121",
+        "testName": "Tunner.Identity.Persistence.Tests.FederationIdentityBindingTests.UnmappedSpellingOrChangedClientRequiresQualifiedProfileOrMigration(issuer: \"https://issuer.example.test/\", client: \"synthetic-client-a\")",
+        "outcome": "Passed"
+      },
+      {
+        "duration": "00:00:00.0000181",
+        "testName": "Tunner.Identity.Persistence.Tests.FederationIdentityBindingTests.SubjectRemainsAnExactOpaqueIdentity(first: \"Subject\", second: \"subject\")",
+        "outcome": "Passed"
+      },
+      {
+        "duration": "00:00:00.0002161",
+        "testName": "Tunner.Identity.Persistence.Tests.FederationIdentityBindingTests.UnmappedSpellingOrChangedClientRequiresQualifiedProfileOrMigration(issuer: \"https://ISSUER.example.test\", client: \"synthetic-client-a\")",
+        "outcome": "Passed"
+      },
+      {
+        "duration": "00:00:00.0002928",
+        "testName": "Tunner.Identity.Persistence.Tests.FederationIdentityBindingTests.SubjectRemainsAnExactOpaqueIdentity(first: \"subject\", second: \" subject \")",
+        "outcome": "Passed"
+      },
+      {
+        "duration": "00:00:00.0005808",
+        "testName": "Tunner.Identity.Persistence.Tests.FederationIdentityBindingTests.ExplicitlyAdmittedIssuerAliasCannotSplitStableIdentity",
+        "outcome": "Passed"
+      },
+      {
+        "duration": "00:00:00.0020751",
+        "testName": "Tunner.Identity.Persistence.Tests.FederationIdentityBindingTests.RegistrationRequiresExplicitSupportedShapeBoundsAndMappingProvenance",
+        "outcome": "Passed"
+      },
+      {
+        "duration": "00:00:00.0033603",
+        "testName": "Tunner.Identity.Persistence.Tests.FederationIdentityBindingTests.ExactGoogleLegacyClaimIssuerNeedsExplicitGoogleProfileAdmission",
+        "outcome": "Passed"
+      },
+      {
+        "duration": "00:00:00.0003255",
+        "testName": "Tunner.Identity.Persistence.Tests.FederationIdentityBindingTests.StableRegisteredNamespaceIsNotDerivedFromIssuerClientOrPolicyVersion",
+        "outcome": "Passed"
+      }
+    ]
+  },
+  "package_comparison": {
+    "mode": "Read-only package-type entries only: exact name/version and SHA512; project/reference/check-out metadata excluded.",
+    "approved_main_head": "26270f830bb214a5df8ba143b62ecc21be0a286a",
+    "projects": [
+      {
+        "project": "src/Modules/Identity/obj/project.assets.json",
+        "isolated_package_count": 40,
+        "approved_package_count": 40,
+        "exact_name_version_sha512_equal": true,
+        "mismatches": 0,
+        "missing_sha512": 0,
+        "isolated_assets_sha256": "ee088c386682d88c0084b067905920a2a3acb0d28cb2910965014ecf3d170826",
+        "approved_assets_sha256": "d6c45fefeffaa3cfecc7241de02f90d9e6c998947c414dca33c076eac4416e02"
+      },
+      {
+        "project": "tests/Tunner.Identity.Persistence.Tests/obj/project.assets.json",
+        "isolated_package_count": 53,
+        "approved_package_count": 53,
+        "exact_name_version_sha512_equal": true,
+        "mismatches": 0,
+        "missing_sha512": 0,
+        "isolated_assets_sha256": "459bd79c6ecc24cf41e2f3717aea789221c4cd671949f28970250a031dfbf837",
+        "approved_assets_sha256": "c3c8cf8f9a012b1e34d429c196f73992bedb3ba9714b7e354530ad833b632cb3"
+      }
+    ],
+    "package_drift": false,
+    "oidc_package_selected_or_installed": false
+  },
+  "unexecuted": {
+    "finite_sql_methods": 4,
+    "registration": "UNREGISTERED",
+    "sql": false,
+    "providers": false,
+    "docker": false,
+    "other_test_suites": false,
+    "context_refresh_after_source": false,
+    "final_role_reviews": false,
+    "full_work_item_acceptance": false
+  },
+  "next_action": "Review the smallest fixed PUBLIC_SQL extension of the existing exact-owner controller/registry for four authored methods, qualify its updated binding before actual SQL execution, then complete remaining federation scope and final reviews. Never use borrowed normal PostgreSQL25432 or generic connection fallback. Coordinate heavy execution/context refresh with root.",
+  "product_or_release_acceptance": false,
+  "note": "This metadata receipt is committed after the tested00ba source without relabelling test execution. Source is unchanged after its build/pure run; scoped13 PASS is not LOCAL_VALIDATED or full010 PASS."
+}
