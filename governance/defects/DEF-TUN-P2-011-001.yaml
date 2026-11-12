@@ -3,15 +3,17 @@ defect_id: DEF-TUN-P2-011-001
 work_item_id: TUN-P2-011
 classification: BUG
 severity: SEV-2
-status: OPEN
+status: CLOSED
 environment: first-slice recovery result SQL integrity before native qualification
-description: Source review found result INSERT/UPDATE guards but no reference protecting DELETE of an outcome referenced by a contained case. Added deferred NO ACTION foreign key from recovery_cases.result_id to recovery_results.result_id, preserving same-transaction EF ordering and coordinated future authorized cleanup. The same-case negative test requires deletion commit SQLSTATE23503 and preserved case/result; populated downgrade guard23514 remains. Source remedy is complete; close only after actual finite runtime proof.
+description: Source review found result INSERT/UPDATE guards but no reference protecting DELETE of an outcome referenced by a contained case. Added deferred NO ACTION foreign key from recovery_cases.result_id to recovery_results.result_id, preserving same-transaction EF ordering and coordinated future authorized cleanup. Actual committed e61b246 PRIVATE_RECOVERY81 passes all81, including RECOVERY_CASE_SELECTED_SESSION with deletion commit SQLSTATE23503, preserved case/result and populated downgrade guard23514. This closes the integrity defect only; whole011 and full restoration remain in progress.
 expected_behavior_ref: docs/authority/current/development/17_Account_Identity_and_Session_FRD.md; docs/development/P2_011_RECOVERY_REFINEMENT.md
 evidence:
   - src/Modules/Identity/RecoveryCaseMigrationSql.cs
   - tests/Tunner.Identity.Persistence.Tests/RecoveryCasePrivateIntegrationTests.cs
   - governance/evidence/TUN-P2-011-VALIDATION.json
+  - artifacts/p2-011-recovery-20261112/candidate-e61b246-native/private-recovery-receipt.json
+  - artifacts/p2-011-recovery-20261112/candidate-e61b246-native/private-recovery-summary.json
 affected_versions:
   - uncommitted-first-slice-before-result-reference-hardening
 created_at: 2026-11-12T22:40:06Z
-updated_at: 2026-11-12T22:40:06Z
+updated_at: 2026-11-12T23:41:21Z

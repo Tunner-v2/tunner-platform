@@ -1,6 +1,6 @@
 # P2-011 Account recovery refinement
 
-Status: startup reviews and technical scope activation complete; native implementation-context eligibility remains to be checked before code. No implementation, tests or Product/visual acceptance is claimed.
+Status: IN_PROGRESS. Native startup eligibility passed before implementation. First containment slice and approved presentation are committed at e61b246a9e5c73f9fbe640fe3eeac6278516120e; current-source native qualification is in progress. This is not whole-feature acceptance or restored access.
 
 ## Resolved authority
 
@@ -30,10 +30,12 @@ Live Platform UX Login page0:1 has no dedicated recovery/reset screen. U-AUTH-07
 
 Reuse the approved Login2:4 shell/theme/fields/footer; verification70:539/70:1257/46:150 styling; chooser98:27/28/35 presentation; result46:116/120 and98:44 patterns. Shared TextField/useTunnerForm/errors/ModalDialog/content/routes remain the foundation. Setup/code-display components and authenticated proof state are not recovery admission authority.
 
-Prepare one bounded pictured proposal for neutral entry, original-case proof and case status/result. Candidate /recovery,/recovery/verify,/recovery/result paths are PROPOSED only. Proof/error/expiry/cancel/UNKNOWN/pending-review states and authoritative explicit effects must be included. Password/factor repair presentation is added only when required by the refined owner workflow. No new production UX, copy or routing is approved by this document; obtain specific Product consent under AMD-0008 before UI implementation.
+The Product Owner approved the pictured neutral entry, original-case proof and case status/result scopes 011-V01–V03, including /recovery,/recovery/verify,/recovery/result, through the exact receipt governance/evidence/TUN-P2-011-VISUAL-CONSENT.json. Shared presentation is implemented and focused browser checks pass; production routing/backend integration and per-item visual acceptance remain pending. Password/factor repair presentation requires its own bounded review when the owner workflow needs it. Figma/Drive/FigJam remain read-only; the owner-held design backfill remains tracked.
 
 ## Gates and next action
 
 007/008 source-currentness is reconciled through their existing envelopes using actual734828a shared regressions and unchanged-core/retained UI evidence, preserving all old execution identities and VALIDATION histories. 010 is DONE with explicit scoped Product acceptance. Eleven activated role contracts, fresh targeted context, native work eligibility and source/revision ownership must precede implementation.
 
-Exact next action: build/verify current011 context, finish genuine scoped startup reviews, register any closed-owner revision before editing its paths, and implement the first domain slice only when native governance reports eligible. UI_REQUIRED and the owner approval TODO remain scoped to production presentation. No Figma/Drive/FigJam writes; no image remediation or repeated passing qualifications.
+Startup context110554c was CURRENT and work start was ELIGIBLE before implementation; all eleven startup role reviews passed. Five compatibility revisions remain ACTIVE throughout011. Preserve the passing presentation evidence and immutable native attempts. Current e61b246 protocol17 passes; resource admission checks the bounded two-worker capacity remedy without changing deadlines, migrations or storage limits. After admission passes, execute PRIVATE_RECOVERY81 with the five new case tests first. Do not close the SQL-integrity or capacity defects before actual runtime proof.
+
+Next functional slice: anonymous original-entry resolution and actual policy-selected credential repair, reusing protected browser/CSRF, native password validation/hashing and the existing code-consumption transaction. Keep Account/session/set selection server-owned; preserve the original case and stronger-proof precedence. Containment is a separate immutable outcome, not a RecoveryCompleted event or an access-restoration claim. Missing production policy remains unavailable; this implementation plan does not select it. Complete remaining strong/contact/risk/governed-review integration, HTTP/routes, per-item UI gates and acceptance before feature DONE.
