@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "work_item_id": "TUN-P2-009",
-  "status": "ACTUAL_SCOPED_ENGINEERING_PROOF_R04_LIFECYCLE_OPEN_FINAL_GATES_PENDING",
+  "status": "ACTUAL_SCOPED_ENGINEERING_PROOF_PRODUCT_ACCEPTED_R04_LIFECYCLE_OPEN",
   "execution_count": 134,
   "ids_are": "Local refinement case identifiers, not implemented endpoint/status/protocol enums",
   "execution_rules": [
@@ -1457,12 +1457,10 @@
           "uiPresentation",
           "publicController"
         ],
-        "pending_acceptance_evidence": [
-          "FINAL_UI_EVIDENCE_SCOPE_ROOT_OWNED"
-        ],
+        "pending_acceptance_evidence": [],
         "scope": "Approved scoped consent + actual shared component/route/form/focus/status public UI tests/rendered references. Historical UI52/mobile6/affected146 retain their own source identities; source-only/current public checks do not replace item-specific rendered UX acceptance. Only public inert capture is permitted.",
         "future_owner_boundary": null,
-        "case_acceptance": "ACTUAL_BFF_SECURITY_PREDICATES_PROVED_FINAL_UI_COMPLIANCE_ROOT_OWNED",
+        "case_acceptance": "SCOPED_UI_COMPLIANCE_AND_NATIVE_GATE_PASS",
         "browser37_executed_faults": [],
         "browser37_evidence": null,
         "browser6_executed_journeys": [
@@ -1473,11 +1471,13 @@
           "RECOVERY_GENERATE_TOTP_V1",
           "RECOVERY_REPLACE_TOTP_V1"
         ],
-        "browser6_evidence": "BROWSER6_SPLIT_ACTUAL"
+        "browser6_evidence": "BROWSER6_SPLIT_ACTUAL",
+        "final_ui_evidence_ref": "governance/evidence/TUN-P2-009-UI-COMPLIANCE.json",
+        "native_gate_evidence_ref": "governance/evidence/p2-009-recovery-20261111/closure-796d316/lifecycle-readiness-738ba5b.json"
       }
     }
   ],
-  "acceptance_requires": "Actual selected primitive assertions are mapped below at their true execution SHAs. Final metadata secret scan, item UI compliance, required roles, committed validation and native gates remain root-owned. REC-R04 physical lifecycle implementation/proof remains OPEN before applicable activation/conformance acceptance. This matrix is not P2-009 DONE, Product, production or release approval.",
+  "acceptance_requires": "The scoped009 foundation has actual Product acceptance and native engineering/UI/role/committed-state readiness. Original requirement texts and actual execution SHAs remain unchanged. R04 physical lifecycle remains OPEN before applicable activation/conformance; no blanket37 whole-case, whole-P2, production, protected-main or release acceptance is claimed.",
   "execution_count_definition": "Actual selected primary invocations:62native+5SQL+19public tests+37browser-public faults+5browser-resource canaries+6real BFF journeys=134. These are not37whole-rowPASS claims. Native17/resource6/protocol12 qualifications and historical UI/Node cohorts are separate; no failed six-journey wrapper is relabelled.",
   "observed_review_carrier": "796d316bbc1be878f71d515e06be13d7a77b3c1d",
   "source_reference_index": {
@@ -2123,7 +2123,7 @@
   },
   "scope_assessment": {
     "security_native_engineering": "SCOPED_PASS at true native62/SQL5/public19 execution SHAs and source-equivalence witness; seven ADMISSION currentness cases including UNCHANGED plus separate TRANSACTION_ADMISSION, not eight drift cases.",
-    "whole009_security_acceptance": "FINAL_METADATA_SECRET_UI_ROLES_COMMITTED_GATES_PENDING; R04 owner lifecycle remains OPEN before activation/conformance. No all37whole-casePASS claim.",
+    "whole009_security_acceptance": "Scoped009 engineering gates and required Product acceptance complete; R04 owner lifecycle remains OPEN before activation/conformance. This is not37 whole-case PASS or production/security/legal release clearance.",
     "post_native_delta": {
       "from": "ad744fde52aa03404f3944c47ebb79070185e9f2",
       "to": "796d316bbc1be878f71d515e06be13d7a77b3c1d",
@@ -2132,7 +2132,6 @@
       "scope": "src byte-equivalent. Later reviewed public budgets/checkpoints/helper binding/selectors/source-withdrawal assertions/TOTP fixture assurance and DTO assertion are test-scoped; actual old receipts retain their execution SHAs."
     },
     "remaining_mandatory": [
-      "Root final admitted metadata secret scan; item-specific URL/VAL/UX-FID and complete final role aggregation/committed validation/native gates.",
       "Identity implements017RECOVERY001 with019 approved inputs and017 actual conformance proof before activation; current validity/lineage and fixture teardown do not prove purge/hold/delete/restore."
     ],
     "future_boundaries": {
@@ -2142,8 +2141,7 @@
       "019": "Approved scoped production runtime/retention/assurance/processing inputs; finite synthetic profiles are not production defaults."
     },
     "not_claimed": [
-      "Product/human/production approval",
-      "P2-009DONE",
+      "Human security/compliance/legal signoff or production/release/whole-P2 authorization",
       "release certification",
       "Edge/WebKit acceptance",
       "global filesystem/memory absence",
@@ -2179,5 +2177,13 @@
       "sha256": "13dc5841b940bcbc032561f0e82d4f491d20b62377817e1909179261bb96595d"
     },
     "earlier_resource803": "Historical timeout/partial execution and inner-root UNKNOWN remain unchanged; no global cleanup assertion or historical acceptance rewrite."
-  }
+  },
+  "additional_focused_carrier_proof": {
+    "actual_commit_sha": "1e99d846e7aa9ea560d338ee1c98b925b458f6d8",
+    "passed": 10,
+    "failed": 0,
+    "receipt": "governance/evidence/p2-009-recovery-20261111/closure-796d316/carrier-1e99d84-focused10.json",
+    "separate_from_primary134_invocation_count": true
+  },
+  "product_acceptance_ref": "governance/evidence/TUN-P2-009-PRODUCT-ACCEPTANCE.json"
 }

@@ -1,0 +1,70 @@
+{
+  "schema_version": 1,
+  "scope_id": "TUN-P2-009",
+  "source_head_before_done": "a945c15d83faae07d0e26d8aad4f872eaa34dfce",
+  "result": "PRODUCT_ACCEPTED_NATIVE_DONE_TRANSITION_ALLOWED",
+  "product_acceptance_ref": "governance/evidence/TUN-P2-009-PRODUCT-ACCEPTANCE.json",
+  "events": [
+    {
+      "tool_chunk_id": "62f50b",
+      "process_exit_code": 0,
+      "native_result": {
+        "ExitCode": 0,
+        "Command": "transition check",
+        "Payload": {
+          "WorkItemId": "TUN-P2-009",
+          "From": "VALIDATION",
+          "Destination": "PRODUCT_ACCEPTANCE",
+          "Outcome": "ALLOWED",
+          "Reason": "The destination is the next declared normal lifecycle state."
+        }
+      }
+    },
+    {
+      "tool_chunk_id": "b08a7e",
+      "process_exit_code": 0,
+      "native_result": {
+        "ExitCode": 0,
+        "Command": "transition check",
+        "Payload": {
+          "WorkItemId": "TUN-P2-009",
+          "From": "PRODUCT_ACCEPTANCE",
+          "Destination": "DONE",
+          "Outcome": "ALLOWED",
+          "Reason": "The destination is the next declared normal lifecycle state."
+        }
+      }
+    }
+  ],
+  "shared_ui_revision_close_check": {
+    "tool_chunk_id": "d527ae",
+    "process_exit_code": 0,
+    "native_result": {
+      "ExitCode": 0,
+      "Command": "revision close-check",
+      "Payload": {
+        "RevisionId": "P1-018-RV007",
+        "Outcome": "PASS",
+        "Findings": [],
+        "Satisfied": []
+      }
+    }
+  },
+  "pre_acceptance_context": {
+    "tool_chunk_id": "24f764",
+    "process_exit_code": 0,
+    "native_result": {
+      "ExitCode": 0,
+      "Command": "context verify",
+      "Payload": {
+        "Outcome": "CURRENT",
+        "Output": "artifacts/p2-009-recovery-20261111/context-final",
+        "Findings": []
+      }
+    }
+  },
+  "post_acceptance_context": "Refresh after committing the genuine Product decision and DONE metadata.",
+  "provenance": "Normalized observed native results. Intermediate PRODUCT_ACCEPTANCE state was actually checked in the working tree before the legal DONE check; final metadata is committed together. No Product approval was inferred from engineering PASS.",
+  "remaining_p2_work_active": true,
+  "production_release_or_protected_main_approval": false
+}

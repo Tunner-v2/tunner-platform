@@ -1,6 +1,6 @@
 # P2-009 recovery-code issuance, replacement and consumption
 
-Status: VALIDATION; the native engineering gate is READY with zero failures. Shared-UI compatibility Revision P1-018-RV007 is CLOSED following its native legal checks. Product acceptance for the scoped feature remains pending; this is not whole-P2, production, protected-main or release acceptance.
+Status: DONE following actual authorized Product Owner acceptance and native engineering/lifecycle checks. Shared-UI compatibility Revision P1-018-RV007 is CLOSED. This closes the scoped009 foundation only; remaining P2, production, protected-main and release approvals remain separate.
 
 ## Authority and ownership
 
@@ -43,4 +43,4 @@ Commit all owned source before candidate validation, bind actual test SHAs and c
 
 Review the [official validation](../../governance/evidence/TUN-P2-009-VALIDATION.json), [per-item UI evidence](../../governance/evidence/TUN-P2-009-UI-COMPLIANCE.json), [actual execution index](../../governance/evidence/p2-009-recovery-20261111/closure-796d316/evidence-index.json), [focused carrier proof](../../governance/evidence/p2-009-recovery-20261111/closure-796d316/carrier-1e99d84-focused10.json), and [native readiness/lifecycle observations](../../governance/evidence/p2-009-recovery-20261111/closure-796d316/lifecycle-readiness-738ba5b.json).
 
-Exact next action: record any required Product acceptance of the three implemented009 criteria through the normal lifecycle, while continuing independent eligible P2-010 Google/Microsoft federation work. Protected-main and production/release approvals remain separate. Generate/verify scoped handoff context in a separate artifacts output to preserve the unrelated dirty default context files.
+Product Owner acceptance is recorded in [the scoped decision receipt](../../governance/evidence/TUN-P2-009-PRODUCT-ACCEPTANCE.json). Exact next action: continue the preserved P2-010 Google/Microsoft federation branch codex/p2-010-federation-20261112 at aa065e1720883b632aff9bbe25929f1a45285fd5, including its13 passing foundation tests; integrate that valid work before further implementation. Protected-main and production/release approvals remain separate. Refresh/verify the post-acceptance scoped context in a separate artifacts output, preserving the unrelated dirty default context files.

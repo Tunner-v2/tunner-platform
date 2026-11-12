@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "scope_id": "TUN-P2-009",
+  "result": "ACCEPTED_BY_AUTHORIZED_PRODUCT_OWNER",
+  "accepted_at_utc": "2026-11-12T11:21:32.133Z",
+  "actor": "Requesting user acting as authorized Product Owner",
+  "provenance": "User explicitly accepted the exact scoped Product acceptance question in this chat; authorized Product Owner role was already established earlier in this session.",
+  "source_question_call_id": "call_be6edfacf1f24192bca1691bd98fcca6",
+  "selected_answer": "Accept P2-009 scoped foundation (Recommended)",
+  "accepted_source_head_sha": "a945c15d83faae07d0e26d8aad4f872eaa34dfce",
+  "accepted_validation_candidate_sha": "1e99d846e7aa9ea560d338ee1c98b925b458f6d8",
+  "accepted_criteria": [
+    "Generate/display/download each recovery-code set once and store verifier-safe representations only.",
+    "Atomically consume individual codes and invalidate replaced sets according to approved policy.",
+    "Require fresh authorized step-up and preserve safe operation/audit lineage."
+  ],
+  "review_packet_ref": "docs/development/P2_009_RECOVERY_CODES_SCOPE.md",
+  "validation_ref": "governance/evidence/TUN-P2-009-VALIDATION.json",
+  "ui_evidence_ref": "governance/evidence/TUN-P2-009-UI-COMPLIANCE.json",
+  "runtime_evidence_ref": "governance/evidence/p2-009-recovery-20261111/closure-796d316/evidence-index.json",
+  "remaining_owner_obligations": [
+    "TODO-TUN-P2-009-DESIGN001 owner-held Figma backfill; source documentation/Figma remain read-only to AI.",
+    "TODO-TUN-P2-017-RECOVERY001 Identity lifecycle implementation,019 approved inputs and017 actual integration/proof before activation.",
+    "Existing017 dependency servicing,011 recovery workflow and016 notification-delivery duties remain with their owners."
+  ],
+  "not_authorized_by_this_acceptance": [
+    "Whole-P2 completion",
+    "Protected-main merge",
+    "Production activation or deployment",
+    "Release authorization",
+    "New production policy, retention duration or legal basis",
+    "Edits to Figma or Google Drive source documentation"
+  ]
+}
