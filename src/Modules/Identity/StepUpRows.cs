@@ -22,6 +22,7 @@ internal sealed class StepUpProofRow
     public string PolicyVersion { get; set; } = string.Empty;
     public string AuthenticationPolicyVersion { get; set; } = string.Empty;
     public string AuthenticationMethod { get; set; } = string.Empty;
+    public Guid? FederationAttemptId { get; set; }
     public Guid? PasskeyCredentialReference { get; set; }
     public string? PasskeyPolicyVersion { get; set; }
     public string? PasskeyAssuranceKey { get; set; }
@@ -40,6 +41,7 @@ internal sealed class StepUpProofRow
 }
 internal static class StepUpModelConfiguration
 {
+    private const string NativeMethodShape = "((authentication_method='pwd' AND passkey_credential_reference IS NULL AND passkey_policy_version IS NULL AND passkey_assurance_key IS NULL) OR (authentication_method LIKE 'passkey:%' AND passkey_credential_reference IS NOT NULL AND passkey_policy_version IS NOT NULL AND passkey_assurance_key IS NOT NULL)) AND totp_authenticator_reference IS NULL AND totp_generation IS NULL AND totp_authenticator_version IS NULL AND totp_policy_version IS NULL OR (authentication_method='totp' AND passkey_credential_reference IS NULL AND passkey_policy_version IS NULL AND passkey_assurance_key IS NULL AND totp_authenticator_reference IS NOT NULL AND totp_generation IS NOT NULL AND totp_authenticator_version>=2 AND totp_policy_version IS NOT NULL)";
     internal static void Configure(ModelBuilder model)
     {
         model.Entity<AuthenticationSessionRow>().HasAlternateKey(x => new { x.SessionId, x.AccountId });
@@ -47,7 +49,7 @@ internal static class StepUpModelConfiguration
         {
             b.ToTable("step_up_proofs", "identity", t =>
             {
-                t.HasCheckConstraint("ck_step_up_method", "((authentication_method='pwd' AND passkey_credential_reference IS NULL AND passkey_policy_version IS NULL AND passkey_assurance_key IS NULL) OR (authentication_method LIKE 'passkey:%' AND passkey_credential_reference IS NOT NULL AND passkey_policy_version IS NOT NULL AND passkey_assurance_key IS NOT NULL)) AND totp_authenticator_reference IS NULL AND totp_generation IS NULL AND totp_authenticator_version IS NULL AND totp_policy_version IS NULL OR (authentication_method='totp' AND passkey_credential_reference IS NULL AND passkey_policy_version IS NULL AND passkey_assurance_key IS NULL AND totp_authenticator_reference IS NOT NULL AND totp_generation IS NOT NULL AND totp_authenticator_version>=2 AND totp_policy_version IS NOT NULL)");
+                t.HasCheckConstraint("ck_step_up_method", "((" + NativeMethodShape + ") AND federation_attempt_id IS NULL) OR (authentication_method IN ('federation:Google','federation:Microsoft') AND federation_attempt_id IS NOT NULL AND passkey_credential_reference IS NULL AND passkey_policy_version IS NULL AND passkey_assurance_key IS NULL AND totp_authenticator_reference IS NULL AND totp_generation IS NULL AND totp_authenticator_version IS NULL AND totp_policy_version IS NULL)");
                 t.HasCheckConstraint("ck_step_up_state", "state IN ('ACTIVE','CONSUMED','EXPIRED')");
                 t.HasCheckConstraint("ck_step_up_bounds", "expires_at > authenticated_at AND expected_version >= 0 AND version >= 1");
                 t.HasCheckConstraint("ck_step_up_digests", "key_digest ~ '^[0-9A-F]{64}$' AND context_digest ~ '^[0-9A-F]{64}$'");
@@ -56,6 +58,7 @@ internal static class StepUpModelConfiguration
             });
             b.HasOne<PasskeyCredentialRow>().WithMany().HasForeignKey(x => x.PasskeyCredentialReference).OnDelete(DeleteBehavior.Restrict);
             b.HasOne<TotpAuthenticatorRow>().WithMany().HasForeignKey(x => x.TotpAuthenticatorReference).OnDelete(DeleteBehavior.Restrict);
+            b.HasOne<FederationAttemptRow>().WithMany().HasForeignKey(x => x.FederationAttemptId).OnDelete(DeleteBehavior.Restrict);
             b.HasKey(x => x.ProofId); b.Property(x => x.ProofId).ValueGeneratedNever();
             b.HasIndex(x => x.KeyDigest).IsUnique(); b.HasIndex(x => new { x.SessionId, x.OperationId }).IsUnique();
             b.Property(x => x.Version).IsConcurrencyToken();

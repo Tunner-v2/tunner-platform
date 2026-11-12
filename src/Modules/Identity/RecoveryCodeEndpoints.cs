@@ -63,6 +63,7 @@ internal sealed class RecoveryCodeStepUpOwner(RecoveryCodeApplication applicatio
     }
     internal static void Select(HttpContext http, RecoveryCodeOperationRow row, IDataProtectionProvider provider, DateTimeOffset at)
     {
+        FederationStepUpOwner.ClearFederationSelection(http);
         var selection = new RecoveryCodeSelection(row.OperationId, row.RequestId, row.AccountId, row.SessionId, row.Origin, IdentityPersistenceTime.Normalize(row.ResultRecoveryExpiresAt));
         var value = Protector(provider).Protect(JsonSerializer.Serialize(selection));
         if (row.State == "PENDING_PROOF")

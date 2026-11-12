@@ -143,10 +143,10 @@ internal sealed partial class AuthenticationApplication
         return sources is { Length: 1 } ? sources[0] : null;
     }
     private static bool QualifiedFederationLink(ExternalIdentityLinkRow link, FederationAuthenticationSource source,
-        FederationProfileVersion profile, string account, bool pending)
+        FederationProfileVersion profile, string account, bool pending, bool allowUnlinked = false)
     {
         var values = profile.Values;
-        if (link.LinkState != "ACTIVE" || link.AccountId != account || link.LinkId != source.LinkId || link.Version < source.LinkVersion ||
+        if (link.LinkState != "ACTIVE" && !(allowUnlinked && link.LinkState == "UNLINKED") || link.AccountId != account || link.LinkId != source.LinkId || link.Version < source.LinkVersion ||
             link.Provider != source.Namespace || values.Provider != source.Provider || values.StableNamespaceId != source.Namespace ||
             values.ClientId != source.ClientId || link.QualifiedClientId != source.ClientId ||
             values.IssuerMappingEvidenceReference != source.IssuerMappingEvidenceReference || link.IssuerMappingEvidenceReference != source.IssuerMappingEvidenceReference ||
@@ -164,11 +164,11 @@ internal sealed partial class AuthenticationApplication
         catch (ArgumentException) { return false; }
     }
     private bool FederationCurrentAt(FederationAuthenticationSource source, ExternalIdentityLinkRow link, string account,
-        string origin, DateTimeOffset at, bool pending)
+        string origin, DateTimeOffset at, bool pending, bool allowUnlinked = false)
     {
         var profile = CurrentFederation(source.Provider, origin, at);
         return source.AttemptId != Guid.Empty && source.LinkId != Guid.Empty && source.LinkVersion >= 1 &&
-            profile is not null && QualifiedFederationLink(link, source, profile, account, pending);
+            profile is not null && QualifiedFederationLink(link, source, profile, account, pending, allowUnlinked);
     }
     private async Task<ExternalIdentityLinkRow?> LockFederationLinkAsync(Guid id, string account, CancellationToken ct)
     {
@@ -348,14 +348,21 @@ internal sealed partial class AuthenticationApplication
             CurrentFederation(provider, row.Origin, clock.GetUtcNow()) is null) return false;
         var link = await LockFederationLinkAsync(id, row.AccountId, ct).ConfigureAwait(false);
         var source = link is null ? null : FederationAuthenticationSource.Read(row, link);
-        return link is not null && source is not null && FederationCurrentAt(source, link, row.AccountId, row.Origin, clock.GetUtcNow(), false);
+        if (link is null || source is null) return false;
+        await ReadFederationUnlinkAsync(row, link, ct).ConfigureAwait(false);
+        return FederationSessionFactsCurrentAt(row, clock.GetUtcNow());
     }
     private bool FederationSessionFactsCurrentAt(AuthenticationSessionRow row, DateTimeOffset at)
     {
         if (database.Database.CurrentTransaction is null) return false;
         var link = row.FederationLinkId is { } id ? TrackedFederationLink(id, row.AccountId) : null;
         var source = link is null ? null : FederationAuthenticationSource.Read(row, link);
-        return source is not null && link is not null && FederationCurrentAt(source, link, row.AccountId, row.Origin, at, false);
+        if (source is null || link is null) return false;
+        if (federationUnlinkReads.TryGetValue(row.SessionId, out var retirement) && retirement.Request is null &&
+            retirement.TransactionId == database.Database.CurrentTransaction.TransactionId &&
+            retirement.Operation.SessionEffect == nameof(FederationUnlinkSessionEffect.RevokeLinkedSessions)) return false;
+        if (link.LinkState == "ACTIVE") return FederationCurrentAt(source, link, row.AccountId, row.Origin, at, false);
+        return FederationUnlinkedSessionCurrentAt(row, source, link, at);
     }
     private ExternalIdentityLinkRow? TrackedFederationLink(Guid id, string account) => database.ChangeTracker.Entries<ExternalIdentityLinkRow>()
         .Where(x => x.State != EntityState.Deleted && x.State != EntityState.Detached).Select(x => x.Entity)

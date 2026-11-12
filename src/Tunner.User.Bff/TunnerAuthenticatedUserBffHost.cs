@@ -12,6 +12,7 @@ public static class TunnerAuthenticatedUserBffHost
         var passkeys = false;
         var totp = false;
         var recoveryCodes = false;
+        var federationManagement = false;
         FederationOidcRegistration[] federation = [];
         var application = TunnerUserBffHost.CreateApplication(args, builder =>
         {
@@ -30,14 +31,16 @@ public static class TunnerAuthenticatedUserBffHost
                     throw new InvalidOperationException("Recovery-code composition requires one explicit admitted crypto profile instance.");
                 builder.Services.AddTunnerRecoveryCodes(admitted);
             }
-            stepUp = builder.Services.Any(x => x.ServiceType == typeof(IUserStepUpOperationSource));
-            if (stepUp) builder.Services.AddTunnerOperationStepUp();
             federation = builder.Services.Where(value => value.ServiceType == typeof(FederationOidcRegistration))
                 .Select(value => value.ImplementationInstance as FederationOidcRegistration ??
                     throw new InvalidOperationException("Federation requires explicit immutable transport registrations.")).ToArray();
             if (federation.Any(value => value.Profile.Values.Origin != builder.Configuration["Bff:BrowserOrigin"]))
                 throw new InvalidOperationException("Federation transport must match the exact User browser origin.");
             if (federation.Length != 0) builder.Services.AddTunnerFederation(federation.Select(value => value.Provider));
+            federationManagement = builder.Services.Any(value => value.ServiceType == typeof(IFederationLinkPolicySource) || value.ServiceType == typeof(IFederationUnlinkPostureSource));
+            if (federationManagement) builder.Services.AddTunnerFederationManagement();
+            stepUp = builder.Services.Any(x => x.ServiceType == typeof(IUserStepUpOperationSource));
+            if (stepUp) builder.Services.AddTunnerOperationStepUp();
         });
         application.MapTunnerPasswordAuthentication();
         if (stepUp) application.MapTunnerOperationStepUp();
@@ -45,6 +48,7 @@ public static class TunnerAuthenticatedUserBffHost
         if (totp) application.MapTunnerTotp();
         if (recoveryCodes) application.MapTunnerRecoveryCodes();
         if (federation.Length != 0) application.MapTunnerFederationOidc(federation);
+        if (federationManagement) application.MapTunnerFederationManagement(federation);
         return application;
     }
 }

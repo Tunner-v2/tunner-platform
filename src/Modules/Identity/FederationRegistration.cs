@@ -28,7 +28,29 @@ public static class FederationRegistration
             provider.GetRequiredService<IFederationProfileSource>(), provider.GetRequiredService<IAuthenticationPolicySource>(),
             provider.GetRequiredService<AuthenticationPartitionKey>(), provider.GetRequiredService<IDataProtectionProvider>(),
             provider.GetRequiredService<IAntiforgery>(), provider.GetRequiredService<TimeProvider>(),
-            provider.GetRequiredService<AuthenticationEndpoints.Surface>().Origin, capabilities));
+            provider.GetRequiredService<AuthenticationEndpoints.Surface>().Origin, capabilities, provider.GetService<FederationLinkApplication>()));
         return services;
+    }
+
+    public static IServiceCollection AddTunnerFederationManagement(this IServiceCollection services)
+    {
+        ArgumentNullException.ThrowIfNull(services);
+        if (services.Count(value => value.ServiceType == typeof(IFederationLinkPolicySource)) != 1 ||
+            services.Count(value => value.ServiceType == typeof(IFederationUnlinkPostureSource)) != 1 ||
+            !services.Any(value => value.ServiceType == typeof(FederationBrowserService)) ||
+            !services.Any(value => value.ServiceType == typeof(IAssurancePolicySource)) ||
+            !services.Any(value => value.ServiceType == typeof(IStepUpPresentationSource)) ||
+            services.Any(value => value.ServiceType == typeof(FederationLinkApplication)))
+            throw new InvalidOperationException("Federation management requires exact explicit policy/posture and the shared proof authority.");
+        services.AddScoped<FederationLinkApplication>();
+        var fallback = services.LastOrDefault(value => value.ServiceType == typeof(IUserStepUpOperationSource));
+        if (fallback is not null)
+        {
+            services.Remove(fallback);
+            services.Add(new ServiceDescriptor(typeof(FederationFallbackOwner), provider => new FederationFallbackOwner(
+                fallback.ImplementationInstance as IUserStepUpOperationSource ?? fallback.ImplementationFactory?.Invoke(provider) as IUserStepUpOperationSource ??
+                (IUserStepUpOperationSource)ActivatorUtilities.GetServiceOrCreateInstance(provider, fallback.ImplementationType!)), fallback.Lifetime));
+        }
+        services.AddScoped<IUserStepUpOperationSource, FederationStepUpOwner>(); return services;
     }
 }

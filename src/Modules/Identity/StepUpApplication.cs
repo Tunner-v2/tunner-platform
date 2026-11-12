@@ -56,7 +56,7 @@ internal sealed class StepUpApplication(IdentityPersistenceDbContext database, A
     // Only Identity's verified authenticators call this; no browser can supply a method, credential, or proof bearer.
     internal async Task<StepUpIssueResult> IssueVerifiedProofAsync(StepUpCaller caller, AuthenticationSessionRow session, StepUpOperation operation,
         string expectedPolicyVersion, string method, PasskeyCredentialRow? credential, string? passkeyPolicyVersion, string? passkeyAssuranceKey, DateTimeOffset verifiedAt, CancellationToken ct,
-        TotpAuthenticatorRow? totp = null, string? totpPolicyVersion = null)
+        TotpAuthenticatorRow? totp = null, string? totpPolicyVersion = null, FederationOperationProofSource? federation = null)
     {
         if (database.Database.CurrentTransaction is null || session.State != "ACTIVE" || session.AccountId != caller.AccountId || session.SessionId != caller.SessionId || session.Origin != caller.Origin)
             throw new InvalidOperationException("A current locked Identity transaction is required.");
@@ -72,10 +72,18 @@ internal sealed class StepUpApplication(IdentityPersistenceDbContext database, A
             now = clock.GetUtcNow(); policy = assurancePolicies.RequireEffective(operation.Scope, now, expectedPolicyVersion);
             if (!Matches(prior, caller, operation) || !Valid(prior, session, policy, now) || prior.AuthenticationMethod != method ||
                 prior.PasskeyCredentialReference != credential?.CredentialReference || prior.TotpAuthenticatorReference != totp?.AuthenticatorReference ||
+                prior.FederationAttemptId != federation?.Attempt.AttemptId ||
                 !authentication.ProofMethodCurrentAt(prior, sourceCredential, operation, now, false)) return new("VERSION_CONFLICT", null);
             return new(null, new(retryProtection.Unprotect(prior.ProtectedKey), prior.ExpiresAt));
         }
         var expires = verifiedAt + policy.ProofLifetime;
+        if (federation is not null)
+        {
+            var native = federation.Attempt;
+            if (native.ProviderAuthenticatedAt != verifiedAt || native.VerificationExpiresAt is not { } verificationExpiry)
+                return new("STEP_UP_REQUIRED", null);
+            if (verificationExpiry < expires) expires = verificationExpiry;
+        }
         if (session.ExpiresAt < expires) expires = session.ExpiresAt;
         if (policy.Metadata.EffectiveInterval.Until is { } until && until < expires) expires = until;
         if (verifiedAt > now || expires <= now || AuthenticationApplication.Expired(session, authPolicy, now)) return new("STEP_UP_REQUIRED", null);
@@ -88,11 +96,12 @@ internal sealed class StepUpApplication(IdentityPersistenceDbContext database, A
             Operation = operation.Scope.Operation, Context = operation.Scope.Context, ResourceId = operation.ResourceId,
             ExpectedVersion = operation.ExpectedVersion, ContextDigest = operation.ContextDigest, PolicyVersion = policy.Metadata.VersionId,
             AuthenticationPolicyVersion = authPolicy.Version, AuthenticationMethod = method, Assurance = policy.RequiredAssurance,
+            FederationAttemptId = federation?.Attempt.AttemptId,
             PasskeyCredentialReference = credential?.CredentialReference, PasskeyPolicyVersion = passkeyPolicyVersion, PasskeyAssuranceKey = passkeyAssuranceKey,
             TotpAuthenticatorReference = totp?.AuthenticatorReference, TotpGeneration = totp?.Generation, TotpAuthenticatorVersion = totp?.Version, TotpPolicyVersion = totpPolicyVersion,
             ProcessingReference = authPolicy.ProcessingReference, RetentionReference = authPolicy.RetentionReference, AuthenticatedAt = verifiedAt, ExpiresAt = expires
         };
-        if (!authentication.ProofMethodCurrentAt(row, new AuthenticatorProofSource(credential, totp), operation, now, false)) return new("STEP_UP_REQUIRED", null);
+        if (!authentication.ProofMethodCurrentAt(row, new AuthenticatorProofSource(credential, totp, federation), operation, now, false)) return new("STEP_UP_REQUIRED", null);
         database.Add(row); Event(row, "StepUpProofIssued", now); return new(null, new(key, expires));
     }
     internal async Task<StepUpIssueResult> RecoverProofAsync(StepUpCaller caller, StepUpOperation operation, Guid proofId, string expectedVersion, CancellationToken ct)
@@ -162,8 +171,9 @@ internal sealed class StepUpApplication(IdentityPersistenceDbContext database, A
             var terminal = termination is not null && termination.AccessInterval.Contains(decisionAt);
             if (!Valid(row, session, policy, decisionAt) || AuthenticationApplication.Expired(session, currentAuthentication, decisionAt) ||
                 !authentication.MethodFactsCurrentAt(session, currentAuthentication, decisionAt) ||
-                !authentication.ProofMethodCurrentAt(row, proofCredential, operation, decisionAt, outcome.PasskeyValidity is not null || outcome.TotpValidity is not null) || !authentication.PasskeyOutcomeCurrentAt(outcome, caller, operation, decisionAt) ||
+                !authentication.ProofMethodCurrentAt(row, proofCredential, operation, decisionAt, outcome.PasskeyValidity is not null || outcome.TotpValidity is not null || outcome.FederationValidity is not null) || !authentication.PasskeyOutcomeCurrentAt(outcome, caller, operation, decisionAt) ||
                 outcome.RecoveryValidity is { } recovery && !recovery.CurrentAt(database, caller, operation, recoveryPolicies, currentAuthentication, decisionAt) ||
+                outcome.FederationValidity is { } federation && !federation.CurrentAt(database, caller, operation, decisionAt) ||
                 (outcome.Receipt is not null ? !terminal : session.State != "ACTIVE" || !methodCurrent || continuation is null ||
                     !continuation.SessionUseInterval.Contains(decisionAt) || !continuation.OperationInterval.Contains(decisionAt)))
             {

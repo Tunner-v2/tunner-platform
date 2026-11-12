@@ -57,11 +57,14 @@ internal sealed class FederationIdentityPersistenceTests(IdentityPostgresFixture
         var results = await Task.WhenAll(TryInsert(first), TryInsert(second));
         Assert.Single(results, value => value);
         await using var read = db.Context();
-        var winner = await read.ExternalIdentityLinks.SingleAsync();
+        var winner = await read.ExternalIdentityLinks.AsNoTracking().SingleAsync();
         var original = winner.AccountId;
-        winner.AccountId = original == a.AccountId ? b.AccountId : a.AccountId; winner.Version++;
-        var rejected = await Assert.ThrowsAsync<DbUpdateException>(() => read.SaveChangesAsync());
-        Assert.Equal("23514", Assert.IsType<PostgresException>(rejected.InnerException).SqlState);
+        var otherOwner = original == a.AccountId ? b.AccountId : a.AccountId;
+        // AccountId is also an EF alternate-key member. Bypass EF's earlier key-mutation rejection
+        // to prove that PostgreSQL itself preserves the immutable winner against a direct write.
+        var rejected = await Assert.ThrowsAsync<PostgresException>(() => read.Database.ExecuteSqlInterpolatedAsync(
+            $"UPDATE identity.external_identity_links SET account_id={otherOwner}, version=version+1 WHERE link_id={winner.LinkId}"));
+        Assert.Equal("23514", rejected.SqlState);
         await using var final = db.Context();
         Assert.Equal(original, (await final.ExternalIdentityLinks.SingleAsync()).AccountId);
     }

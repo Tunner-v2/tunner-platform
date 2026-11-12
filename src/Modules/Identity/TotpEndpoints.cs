@@ -77,6 +77,7 @@ internal sealed class TotpStepUpOwner(TotpApplication application, IdentityPersi
     }
     internal static void Select(HttpContext context, TotpOperationRow row, IDataProtectionProvider provider, DateTimeOffset now)
     {
+        FederationStepUpOwner.ClearFederationSelection(context);
         var selected = new TotpSelection(row.EnrollmentId, row.RequestId, row.AccountId, row.SessionId, row.Origin, IdentityPersistenceTime.Normalize(row.RecoveryExpiresAt));
         var value = Protector(provider).Protect(JsonSerializer.Serialize(selected));
         if (row.State == "PENDING_PROOF") context.Response.Cookies.Append(CookieName, value, TotpBrowserService.Cookie(row.RecoveryExpiresAt - now));

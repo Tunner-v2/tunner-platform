@@ -1,4 +1,5 @@
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using Tunner.Platform.Policies;
 
 namespace Tunner.Identity.Persistence;
@@ -12,6 +13,8 @@ public sealed record FederationProfile(string Version, FederationProviderKind Pr
     string PrimaryAssurance, string AssuranceMappingEvidenceReference, string SessionUsePolicyVersion,
     string ProcessingReference, string RetentionReference)
 {
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public FederationFreshAuthenticationProfile? FreshAuthentication { get; init; }
     public override string ToString() => nameof(FederationProfile);
 }
 
@@ -32,7 +35,8 @@ public sealed class FederationProfileVersion
             !Uri.TryCreate(values.Origin, UriKind.Absolute, out var origin) || origin.Scheme != "https" || origin.UserInfo.Length != 0 ||
             values.Origin != origin.GetLeftPart(UriPartial.Authority) || values.AttemptLifetime <= TimeSpan.Zero || values.VerifiedLifetime <= TimeSpan.Zero ||
             values.ResultRecoveryLifetime <= TimeSpan.Zero || values.MaximumPendingAttempts <= 0 || Values.AllowedContinuations.Count == 0 ||
-            Values.AllowedContinuations.Any(path => !CleanPath(path)) || !Values.AllowedContinuations.Contains(values.ContinuationPath, StringComparer.Ordinal))
+            Values.AllowedContinuations.Any(path => !CleanPath(path)) || !Values.AllowedContinuations.Contains(values.ContinuationPath, StringComparer.Ordinal) ||
+            values.FreshAuthentication is { } fresh && !Values.AllowedContinuations.Contains(fresh.ContinuationPath, StringComparer.Ordinal))
             throw new ArgumentException("A complete explicit qualified federation profile is required.");
         Metadata = metadata;
         Registration = new(values.Provider, values.StableNamespaceId, values.Issuer, values.ClientId, Values.AdmittedIssuerAliases,
@@ -76,7 +80,8 @@ public sealed class FederationProfileCatalog(IEnumerable<FederationProfileVersio
 
 /// <summary>Trusted terminal native-handler input ONLY. Never bind this type from an HTTP body or claims bag.</summary>
 public sealed class FederationProtocolEvidence(FederationProviderKind provider, string profileVersion, Guid attemptId,
-    string issuer, string subject, string clientId)
+    string issuer, string subject, string clientId, DateTimeOffset? authenticatedAt = null,
+    IReadOnlyCollection<string>? authenticationMethods = null)
 {
     internal FederationProviderKind Provider { get; } = provider;
     internal string ProfileVersion { get; } = profileVersion;
@@ -84,17 +89,21 @@ public sealed class FederationProtocolEvidence(FederationProviderKind provider, 
     internal string Issuer { get; } = issuer;
     internal string Subject { get; } = subject;
     internal string ClientId { get; } = clientId;
+    internal DateTimeOffset? AuthenticatedAt { get; } = authenticatedAt;
+    internal IReadOnlyCollection<string>? AuthenticationMethods { get; } = authenticationMethods is null
+        ? null : Array.AsReadOnly(authenticationMethods.ToArray());
     public override string ToString() => nameof(FederationProtocolEvidence);
 }
 
 public sealed class FederationChallengeAdmission
 {
-    internal FederationChallengeAdmission(FederationProviderKind provider, string profileVersion, string scheme, Guid attemptId)
-    { Provider = provider; ProfileVersion = profileVersion; Scheme = scheme; AttemptId = attemptId.ToString("N"); }
+    internal FederationChallengeAdmission(FederationProviderKind provider, string profileVersion, string scheme, Guid attemptId, FederationAttemptPurpose purpose)
+    { Provider = provider; ProfileVersion = profileVersion; Scheme = scheme; AttemptId = attemptId.ToString("N"); Purpose = purpose.ToString(); }
     public FederationProviderKind Provider { get; }
     public string ProfileVersion { get; }
     public string Scheme { get; }
     public string AttemptId { get; }
+    public string Purpose { get; }
     public override string ToString() => nameof(FederationChallengeAdmission);
 }
 

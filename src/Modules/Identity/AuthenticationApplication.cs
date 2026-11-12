@@ -34,7 +34,8 @@ internal sealed partial class AuthenticationApplication(IdentityPersistenceDbCon
     IAccountAuthenticationAccessSource access, AuthenticationPartitionKey partitions, IDataProtectionProvider protection,
     AuthenticationPasswordWork passwordWork, TimeProvider clock, IEnumerable<IPasskeyPolicySource> passkeyPolicies,
     IEnumerable<ITotpPolicySource>? totpPolicies = null, IEnumerable<ITotpMfaRequirementSource>? mfaRequirements = null,
-    IEnumerable<IFederationProfileSource>? federationProfiles = null) : IAuthenticationSessionMaintenance
+    IEnumerable<IFederationProfileSource>? federationProfiles = null,
+    IEnumerable<IFederationLinkPolicySource>? federationLinkPolicies = null) : IAuthenticationSessionMaintenance
 {
     private readonly IDataProtector ticketProtection = protection.CreateProtector("Tunner.User.Session.Ticket.v1");
     private readonly IDataProtector keyProtection = protection.CreateProtector("Tunner.User.Session.RetryKey.v1");
@@ -200,6 +201,8 @@ internal sealed partial class AuthenticationApplication(IdentityPersistenceDbCon
         long validatedSessionVersion, AuthenticationPolicy policy, DateTimeOffset now, CancellationToken ct)
     {
         if (receipt.AuthenticatorType == "TOTP") return await VerifyTotpTerminationAsync(caller, operation, receipt, validatedSessionVersion, policy, now, ct).ConfigureAwait(false);
+        if (receipt.AuthenticatorType == "FEDERATION") return await VerifyFederationTerminationAsync(caller, operation, receipt, validatedSessionVersion, policy, now, ct).ConfigureAwait(false);
+        if (receipt.AuthenticatorType != "PASSKEY") return null;
         var row = await database.Set<AuthenticationSessionRow>().AsNoTracking().SingleOrDefaultAsync(x => x.SessionId == caller.SessionId, ct).ConfigureAwait(false);
         if (operation.Scope != PasskeyApplication.RevocationScope || operation.ResourceId != receipt.CredentialReference.ToString("N") ||
             operation.ExpectedVersion + 1 != receipt.CredentialVersion || receipt.PriorSessionVersion != validatedSessionVersion ||
@@ -236,6 +239,12 @@ internal sealed partial class AuthenticationApplication(IdentityPersistenceDbCon
     }
     internal async Task<AuthenticatorProofSource?> ReadProofCredentialAsync(StepUpProofRow proof, CancellationToken ct, bool refresh = false)
     {
+        if (proof.FederationAttemptId is not null)
+        {
+            if (!proof.AuthenticationMethod.StartsWith("federation:", StringComparison.Ordinal)) return null;
+            var source = await ReadFederationProofSourceAsync(proof, refresh, ct).ConfigureAwait(false);
+            return source is null ? null : new(null, null, source);
+        }
         if (proof.TotpAuthenticatorReference is { } factorId)
         {
             var factor = await database.Set<TotpAuthenticatorRow>().SingleOrDefaultAsync(x => x.AuthenticatorReference == factorId && x.AccountId == proof.AccountId, ct).ConfigureAwait(false);
@@ -257,6 +266,9 @@ internal sealed partial class AuthenticationApplication(IdentityPersistenceDbCon
         ProofMethodCurrentAt(proof, credential is null ? null : new AuthenticatorProofSource(credential, null), operation, decisionAt, appliedOwnRevocation);
     internal bool ProofMethodCurrentAt(StepUpProofRow proof, AuthenticatorProofSource? source, StepUpOperation operation, DateTimeOffset decisionAt, bool appliedOwnRevocation)
     {
+        if (proof.AuthenticationMethod.StartsWith("federation:", StringComparison.Ordinal))
+            return FederationProofCurrentAt(proof, source?.Federation, operation, decisionAt, appliedOwnRevocation);
+        if (proof.FederationAttemptId is not null) return false;
         if (proof.AuthenticationMethod == "totp") return TotpProofCurrentAt(proof, source?.Totp, operation, decisionAt, appliedOwnRevocation);
         if (proof.TotpAuthenticatorReference is not null || proof.TotpGeneration is not null || proof.TotpAuthenticatorVersion is not null || proof.TotpPolicyVersion is not null) return false;
         if (proof.AuthenticationMethod == "pwd") return proof.PasskeyCredentialReference is null && proof.PasskeyPolicyVersion is null && proof.PasskeyAssuranceKey is null;
@@ -323,8 +335,8 @@ internal sealed partial class AuthenticationApplication(IdentityPersistenceDbCon
             row.TerminationCause = "PASSKEY_REVOKED"; row.TerminationPolicyVersion = credential.RevocationPolicyVersion; row.TerminationCredentialVersion = credential.Version;
             End(row, "REVOKED", "TunnerSessionRevoked", now, credential.RevocationOperationId, credential.RevocationCorrelationId);
         }
-        // Unlink/source retirement has no implicit session effect. Deny use until its explicit owner policy is wired.
-        else if (!IsFederationMethod(row.AuthenticationMethods)) Revoke(row, now);
+        else if (IsFederationMethod(row.AuthenticationMethods)) _ = await EndRetiredFederationSessionAsync(row, ct).ConfigureAwait(false);
+        else Revoke(row, now);
     }
     internal async Task<AuthenticationGrant?> RecoverPasskeyGrantAsync(PasskeyCeremonyRow ceremony, AuthenticationCaller caller, CancellationToken ct)
     {
@@ -398,7 +410,14 @@ internal sealed partial class AuthenticationApplication(IdentityPersistenceDbCon
             SELECT * FROM identity.tunner_sessions WHERE state='ACTIVE' AND (
               expires_at <= {now} OR last_seen_at + idle_ticks * interval '1 microsecond' / 10 <= {now} OR
               last_seen_at + CASE WHEN remember_me THEN {policy.RememberIdleLifetime} ELSE {policy.IdleLifetime} END <= {now} OR
-              authenticated_at + CASE WHEN remember_me THEN {policy.RememberAbsoluteLifetime} ELSE {policy.AbsoluteLifetime} END <= {now})
+              authenticated_at + CASE WHEN remember_me THEN {policy.RememberAbsoluteLifetime} ELSE {policy.AbsoluteLifetime} END <= {now} OR
+              (authentication_methods IN ('federation','federation+totp') AND EXISTS (
+                SELECT 1 FROM identity.external_identity_links l JOIN identity.federation_link_operations o
+                  ON o.result_link_id=l.link_id AND o.target_link_id=l.link_id AND o.account_id=l.account_id
+                WHERE l.link_id=tunner_sessions.federation_link_id AND l.account_id=tunner_sessions.account_id
+                  AND o.expected_link_version>=tunner_sessions.federation_link_version AND o.result_link_version<=l.version
+                  AND o.provider=tunner_sessions.federation_provider AND o.origin=tunner_sessions.origin
+                  AND o.kind='UNLINK' AND o.state='COMPLETED' AND o.session_effect='RevokeLinkedSessions')))
             ORDER BY authenticated_at, session_id LIMIT 100
             """).AsNoTracking().Select(x => x.SessionId).ToArrayAsync(cancellationToken).ConfigureAwait(false);
         var ended = 0;
@@ -413,6 +432,12 @@ internal sealed partial class AuthenticationApplication(IdentityPersistenceDbCon
             {
                 End(row, "EXPIRED", "TunnerSessionExpired", now); ended++;
                 await database.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
+            }
+            else if (row.State == "ACTIVE" && IsFederationMethod(row.AuthenticationMethods))
+            {
+                await LockFederationContinuityAsync(row, cancellationToken).ConfigureAwait(false);
+                if (await EndRetiredFederationSessionAsync(row, cancellationToken).ConfigureAwait(false))
+                { ended++; await database.SaveChangesAsync(cancellationToken).ConfigureAwait(false); }
             }
             await transaction.CommitAsync(cancellationToken).ConfigureAwait(false);
         }

@@ -37,7 +37,10 @@ public static class RecoveryCodeFiniteNativeExecution
         "BIND_DIGEST", "BIND_SESSION", "BIND_ACCOUNT", "BIND_ORIGIN",
         "BIND_KEY", "BFF_CSRF_ORIGIN_OWNER", "STABLE_GENERATE_DUPLICATE", "STABLE_REPLACE_DUPLICATE",
         "CONSUME_OWNER_THROW", "CONSUME_OWNER_CANCEL", "GENERATE_POST_COMMIT_OBSERVER", "REPLACE_POST_COMMIT_OBSERVER",
-        "CONSUME_POST_COMMIT_OBSERVER", "CORRUPT_VERIFIER_FAIL_CLOSED"];
+        "CONSUME_POST_COMMIT_OBSERVER", "CORRUPT_VERIFIER_FAIL_CLOSED",
+        "FEDERATION_ORIGINAL_SESSION", "FEDERATION_PRIMARY_MFA", "FEDERATION_FINAL_AUTHORITY", "FEDERATION_BROWSER_BINDING",
+        "FEDERATION_CONFIRMED_OWNERSHIP", "FEDERATION_REQUIRED_POSTURE", "FEDERATION_UNLINK_EFFECTS_HISTORY", "FEDERATION_MANAGEMENT_FINAL_AUTHORITY",
+        "FEDERATION_OPERATION_PROOF", "FEDERATION_OPERATION_PROOF_REJECTION"];
 
     internal static async Task<RecoveryCodeNativeReceipt> RunAsync(RecoveryCodeNativeCohort cohort, Uri qualifiedLocalEndpoint, DirectoryInfo repository, RecoveryCodeFixtureOwnershipChannel ownershipChannel)
     {
@@ -344,6 +347,16 @@ public static class RecoveryCodeFiniteNativeExecution
             "REPLACE_POST_COMMIT_OBSERVER" => tests.IssuancePostCommitObserverFailureReturnsNoPayloadAndOnlySafeOriginal(true),
             "CONSUME_POST_COMMIT_OBSERVER" => tests.ConsumePostCommitObserverFailureReconcilesOnlyOriginalSafeOutcome(),
             "CORRUPT_VERIFIER_FAIL_CLOSED" => tests.CorruptedPersistedVerifierFailsClosedBeforeAnyOwnerApplication(),
+            "FEDERATION_ORIGINAL_SESSION" => new FederationPrivateIntegrationTests(fixture).LinkedSignInCommitsOneOriginalSessionAndNeverReacceptsCallback(),
+            "FEDERATION_PRIMARY_MFA" => new FederationPrivateIntegrationTests(fixture).RequiredTotpDefersSessionAndRecoversOnlyOriginalCompositeResult(),
+            "FEDERATION_FINAL_AUTHORITY" => new FederationPrivateIntegrationTests(fixture).FinalFederationAuthorityDriftRollsBackStagedOwnerResultAndPreviousSessionEffect(),
+            "FEDERATION_BROWSER_BINDING" => new FederationPrivateIntegrationTests(fixture).ChangedBrowserCookieCannotCompleteOrBorrowOriginalFederatedResult(),
+            "FEDERATION_CONFIRMED_OWNERSHIP" => new FederationManagementPrivateIntegrationTests(fixture).ExplicitConfirmationAndExactExternalOwnershipHaveOneWinnerWithoutEmailLinking(),
+            "FEDERATION_REQUIRED_POSTURE" => new FederationManagementPrivateIntegrationTests(fixture).RequiredRemainingPostureDenialPreservesLinkAndUnconsumedProof(),
+            "FEDERATION_UNLINK_EFFECTS_HISTORY" => new FederationManagementPrivateIntegrationTests(fixture).ExplicitSessionEffectsAndFreshSameAccountRelinkPreserveExactHistory(),
+            "FEDERATION_MANAGEMENT_FINAL_AUTHORITY" => new FederationManagementPrivateIntegrationTests(fixture).FinalPureAuthorityDriftRollsBackLinkProofAndOutboxWithExactOriginalRecovery(),
+            "FEDERATION_OPERATION_PROOF" => new FederationManagementPrivateIntegrationTests(fixture).QualifiedFederationProofCompletesOneOriginalOwnerAndConsumesOneRealProof(),
+            "FEDERATION_OPERATION_PROOF_REJECTION" => new FederationManagementPrivateIntegrationTests(fixture).RejectedFederationProofEvidenceAndLateSourceDriftCannotIssueOrMutateOwner(),
             "PARENT003_REGISTRATION_BOUNDARY" => new RegistrationBffTests(fixture).ActualHttpsBffKeepsRegistrationAnonymousAndRequiresOriginCsrfAndProtectedBrowserContext(),
             "PARENT003_REGISTRATION_FLOW" => new RegistrationBffTests(fixture).ActualHttpsFlowVerifiesContactBeforePersonalInformationAndActivatesUnder18WithoutSession(),
             "PARENT003_REGISTRATION_PROGRESS" => new RegistrationBffTests(fixture).ProtectedProgressRecoversOnlyItsOwnServerStageAndRestartPreservesAccountEvidence(),

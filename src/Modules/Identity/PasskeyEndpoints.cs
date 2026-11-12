@@ -71,6 +71,7 @@ internal sealed class PasskeyStepUpOwner(PasskeyApplication application, Identit
     internal static IDataProtector Protector(IDataProtectionProvider protection) => protection.CreateProtector("Tunner.User.Passkey.Operation.v1");
     internal static void Select(HttpContext context, PasskeyCeremonyRow row, IDataProtectionProvider protection, DateTimeOffset now)
     {
+        FederationStepUpOwner.ClearFederationSelection(context);
         context.Response.Cookies.Delete(TotpStepUpOwner.CookieName, TotpBrowserService.Cookie());
         context.Response.Cookies.Delete(RecoveryCodeStepUpOwner.CookieName, RecoveryCodeStepUpOwner.Cookie());
         context.Response.Cookies.Append(CookieName,
@@ -156,8 +157,12 @@ internal sealed partial class PasskeyBrowserService(PasskeyApplication applicati
             try { _ = recoveryApplication.Current(surface.Origin); recoveryCodesAvailable = true; }
             catch (InvalidOperationException) { } catch (ArgumentException) { }
         }
-        return Results.Json(new { csrfToken = antiforgery.GetAndStoreTokens(http).RequestToken, requestId = Guid.NewGuid(),
-            policy.MaximumCredentialJsonBytes, revocationSessionEffect = policy.RevocationSessionEffect.ToString(), recovery, totpAvailable, recoveryCodesAvailable, presentation.Locale, presentation.Content });
+        var response = new Dictionary<string, object?> { ["csrfToken"] = antiforgery.GetAndStoreTokens(http).RequestToken, ["requestId"] = Guid.NewGuid(),
+            ["maximumCredentialJsonBytes"] = policy.MaximumCredentialJsonBytes, ["revocationSessionEffect"] = policy.RevocationSessionEffect.ToString(),
+            ["recovery"] = recovery, ["totpAvailable"] = totpAvailable, ["recoveryCodesAvailable"] = recoveryCodesAvailable,
+            ["locale"] = presentation.Locale, ["content"] = presentation.Content };
+        if (http.RequestServices.GetService<FederationBrowserService>()?.ManagementEnabled == true) response["federationAvailable"] = true;
+        return Results.Json(response);
     });
     internal PasskeyCapability Capability()
     {

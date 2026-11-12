@@ -41,6 +41,7 @@ internal static class FederationOidcEndpoints
                     var properties = new AuthenticationProperties();
                     properties.Items[FederationOidcTransport.AttemptProperty] = admitted.AttemptId;
                     properties.Items[FederationOidcTransport.ProfileProperty] = admitted.ProfileVersion;
+                    properties.Items[FederationOidcTransport.PurposeProperty] = admitted.Purpose;
                     await http.ChallengeAsync(registration.Scheme, properties).ConfigureAwait(false);
                     return Results.Empty;
                 }
@@ -55,11 +56,11 @@ internal static class FederationOidcEndpoints
             }).AllowAnonymous();
     }
 
-    private static bool Shape(JsonElement json, params string[] expected) => json.ValueKind == JsonValueKind.Object &&
+    internal static bool Shape(JsonElement json, params string[] expected) => json.ValueKind == JsonValueKind.Object &&
         json.EnumerateObject().Select(value => value.Name).Order(StringComparer.Ordinal).SequenceEqual(expected.Order(StringComparer.Ordinal), StringComparer.Ordinal);
 
     // One bounded command shape, independent of MVC model binding and tolerant JSON DTO defaults.
-    private static async Task<JsonDocument?> Command(HttpContext http, int maximumBytes)
+    internal static async Task<JsonDocument?> Command(HttpContext http, int maximumBytes)
     {
         if (http.Request.QueryString.HasValue || http.Request.ContentType?.Split(';')[0].Trim().Equals("application/json", StringComparison.OrdinalIgnoreCase) != true ||
             http.Request.ContentLength > maximumBytes) return null;

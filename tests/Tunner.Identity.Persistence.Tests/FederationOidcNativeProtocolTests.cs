@@ -19,6 +19,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.JsonWebTokens;
 using Microsoft.IdentityModel.Tokens;
 using Tunner.Platform.Bff;
+using Tunner.Identity.Persistence;
 using Tunner.User.Bff;
 using Xunit;
 
@@ -27,6 +28,34 @@ namespace Tunner.Identity.Persistence.Tests;
 /// <summary>Real native handler + bounded BFF callback, local TLS and in-process synthetic HTTP only. No Identity/SQL/session acceptance.</summary>
 public sealed class FederationOidcNativeProtocolTests
 {
+    [Theory]
+    [InlineData(FederationProviderKind.Google)]
+    [InlineData(FederationProviderKind.Microsoft)]
+    public async Task QualifiedFreshBranchRequestsEssentialClaimsAndProjectsOnlyActualNativeEvidence(FederationProviderKind provider)
+    {
+        await using var host = await ProtocolHost.Start(provider);
+        var challenge = await host.Challenge();
+        Assert.True(host.EssentialFreshClaimsRequested && host.PromptLoginRequested == (provider == FederationProviderKind.Microsoft));
+        using var response = await host.Callback(challenge);
+        Assert.True(response.StatusCode == HttpStatusCode.SeeOther && host.Successes == 1 && host.ExactFreshFactsObserved);
+        Assert.True(host.Provider.TokenRequests == 1 && host.Provider.PkceAndConfidentialClientObserved);
+    }
+
+    [Theory]
+    [InlineData("missing-auth-time")]
+    [InlineData("duplicate-auth-time")]
+    [InlineData("noninteger-auth-time")]
+    [InlineData("missing-methods")]
+    [InlineData("duplicate-methods")]
+    public async Task FreshBranchRejectsMissingOrAmbiguousClaimsWithoutIatOrReceiptFallback(string defect)
+    {
+        await using var host = await ProtocolHost.Start(FederationProviderKind.Google);
+        var challenge = await host.Challenge(); host.Provider.Defect = defect;
+        using var response = await host.Callback(challenge);
+        Assert.True(response.StatusCode == HttpStatusCode.SeeOther && host.Provider.TokenRequests == 1 && host.Successes == 0);
+        Assert.True(!host.ExactFreshFactsObserved && string.IsNullOrEmpty(await response.Content.ReadAsStringAsync()));
+    }
+
     [Theory]
     [InlineData("missing")]
     [InlineData("unsigned")]
@@ -160,6 +189,9 @@ public sealed class FederationOidcNativeProtocolTests
         internal bool Current = true;
         internal bool SecretUnavailable;
         internal bool ExactFactsObserved;
+        internal bool EssentialFreshClaimsRequested;
+        internal bool PromptLoginRequested;
+        internal bool ExactFreshFactsObserved;
         private int messages;
         private int tokenResponses;
         private int validatedTokens;
@@ -174,7 +206,7 @@ public sealed class FederationOidcNativeProtocolTests
         private ProtocolHost(WebApplication application, HttpClient client, X509Certificate2 certificate, SyntheticProvider provider)
         { this.application = application; this.client = client; this.certificate = certificate; Provider = provider; }
 
-        internal static async Task<ProtocolHost> Start()
+        internal static async Task<ProtocolHost> Start(FederationProviderKind? freshProvider = null)
         {
             using var rsa = RSA.Create(2048);
             var request = new CertificateRequest("CN=localhost", rsa, HashAlgorithmName.SHA256, RSASignaturePadding.Pkcs1);
@@ -183,7 +215,7 @@ public sealed class FederationOidcNativeProtocolTests
             X509Certificate2 certificate;
             try { certificate = X509CertificateLoader.LoadPkcs12(bytes, null, X509KeyStorageFlags.DefaultKeySet); }
             finally { CryptographicOperations.ZeroMemory(bytes); }
-            var provider = new SyntheticProvider();
+            var provider = new SyntheticProvider { FreshEvidence = freshProvider is not null };
             var builder = WebApplication.CreateBuilder(); builder.Logging.ClearProviders();
             builder.WebHost.ConfigureKestrel(server => server.Listen(IPAddress.Loopback, 0, endpoint => endpoint.UseHttps(certificate)));
             builder.Services.AddDataProtection().UseEphemeralDataProtectionProvider();
@@ -207,8 +239,10 @@ public sealed class FederationOidcNativeProtocolTests
                             host!.Successes++;
                             host.ExactFactsObserved = facts.AttemptId == Attempt && facts.Subject == "opaque-subject" &&
                                 facts.Issuer == SyntheticProvider.Issuer && facts.ClientId == SyntheticProvider.ClientId;
+                            host.ExactFreshFactsObserved = facts.AuthenticatedAt == provider.AuthenticatedAt &&
+                                facts.AuthenticationMethods is { Count: 2 } methods && methods.Contains("pwd", StringComparer.Ordinal) && methods.Contains("mfa", StringComparer.Ordinal);
                             return Task.FromResult<string?>("/login");
-                        }, (_, failure, _) => { host!.terminalFailure = failure.Reason; return Task.FromResult<string?>("/login"); });
+                        }, (_, failure, _) => { host!.terminalFailure = failure.Reason; return Task.FromResult<string?>("/login"); }, freshProvider);
                     var events = options.Events;
                     var message = events.OnMessageReceived; events.OnMessageReceived = context => { host!.messages++; return message(context); };
                     events.OnTokenResponseReceived = _ => { host!.tokenResponses++; return Task.CompletedTask; };
@@ -232,6 +266,7 @@ public sealed class FederationOidcNativeProtocolTests
             {
                 var properties = new AuthenticationProperties(); properties.Items[FederationOidcTransport.AttemptProperty] = Attempt;
                 properties.Items[FederationOidcTransport.ProfileProperty] = "synthetic-profile-v1";
+                if (freshProvider is not null) properties.Items[FederationOidcTransport.PurposeProperty] = "OperationProof";
                 await http.ChallengeAsync(Scheme, properties);
             }).AllowAnonymous();
             await application.StartAsync();
@@ -248,6 +283,13 @@ public sealed class FederationOidcNativeProtocolTests
             using var response = await client.GetAsync("/challenge");
             Assert.Equal(HttpStatusCode.Redirect, response.StatusCode); Assert.NotNull(response.Headers.Location);
             var query = QueryHelpers.ParseQuery(response.Headers.Location.Query);
+            PromptLoginRequested = query.TryGetValue("prompt", out var prompt) && prompt == "login";
+            if (query.TryGetValue("claims", out var requested))
+            {
+                using var json = JsonDocument.Parse(requested.ToString());
+                EssentialFreshClaimsRequested = json.RootElement.GetProperty("id_token").GetProperty("auth_time").GetProperty("essential").GetBoolean() &&
+                    json.RootElement.GetProperty("id_token").GetProperty("amr").GetProperty("essential").GetBoolean();
+            }
             Assert.True(query["response_type"] == "code" && query["response_mode"] == "form_post" && query["code_challenge_method"] == "S256");
             var code = Provider.Admit(query["nonce"].ToString(), query["code_challenge"].ToString());
             var cookies = string.Join("; ", response.Headers.GetValues("Set-Cookie").Select(value => value.Split(';')[0]));
@@ -288,6 +330,8 @@ public sealed class FederationOidcNativeProtocolTests
         private static readonly string[] SubjectTypes = ["public"];
         private static readonly string[] SigningAlgorithms = ["RS256"];
         private static readonly string[] AuthenticationMethods = ["client_secret_post"];
+        private static readonly string[] QualifiedFreshMethods = ["pwd", "mfa"];
+        private static readonly string[] DuplicateFreshMethods = ["pwd", "pwd"];
         internal const string Issuer = "https://issuer.example.test";
         internal const string ClientId = "synthetic-confidential-client";
         internal const string Secret = "synthetic-public-test-secret";
@@ -300,6 +344,8 @@ public sealed class FederationOidcNativeProtocolTests
         internal int TokenRequests;
         internal bool PkceAndConfidentialClientObserved;
         internal string? Defect;
+        internal bool FreshEvidence;
+        internal DateTimeOffset AuthenticatedAt { get; } = DateTimeOffset.FromUnixTimeSeconds(DateTimeOffset.UtcNow.AddSeconds(-30).ToUnixTimeSeconds());
 
         internal string Admit(string nonce, string challenge)
         {
@@ -333,6 +379,13 @@ public sealed class FederationOidcNativeProtocolTests
                 var now = DateTime.UtcNow;
                 var claims = new Dictionary<string, object> { ["sub"] = "opaque-subject" };
                 if (Defect != "missing-nonce") claims["nonce"] = Defect == "nonce" ? "wrong-nonce" : nonce!;
+                if (FreshEvidence)
+                {
+                    if (Defect != "missing-auth-time") claims["auth_time"] = Defect == "duplicate-auth-time"
+                        ? new[] { AuthenticatedAt.ToUnixTimeSeconds(), AuthenticatedAt.ToUnixTimeSeconds() }
+                        : Defect == "noninteger-auth-time" ? "not-an-integer" : AuthenticatedAt.ToUnixTimeSeconds();
+                    if (Defect != "missing-methods") claims["amr"] = Defect == "duplicate-methods" ? DuplicateFreshMethods : QualifiedFreshMethods;
+                }
                 var token = new JsonWebTokenHandler().CreateToken(new SecurityTokenDescriptor
                 {
                     Issuer = Defect == "issuer" ? "https://wrong-issuer.example.test" : Issuer,

@@ -115,10 +115,12 @@ public static class FederationOidcRegistrationExtensions
                 {
                     if (!Guid.TryParseExact(facts.AttemptId, "N", out var attempt)) return null;
                     var result = await http.RequestServices.GetRequiredService<FederationBrowserService>().RecordVerifiedAsync(
-                        new(registration.Provider, registration.Profile.Values.Version, attempt, facts.Issuer, facts.Subject, facts.ClientId), ct).ConfigureAwait(false);
+                        new(registration.Provider, registration.Profile.Values.Version, attempt, facts.Issuer, facts.Subject, facts.ClientId,
+                            facts.AuthenticatedAt, facts.AuthenticationMethods), ct).ConfigureAwait(false);
                     return result.Continuation;
                 },
-                (_, _, _) => Task.FromResult<string?>(registration.Profile.Values.ContinuationPath)));
+                (_, _, _) => Task.FromResult<string?>(registration.Profile.Values.ContinuationPath),
+                registration.Profile.Values.FreshAuthentication is null ? null : registration.Provider));
         services.AddSingleton(new BffProtocolCallback(registration.CallbackPath, registration.MaximumBodyBytes,
             registration.MaximumFields, registration.MaximumKeyLength, registration.MaximumValueLength, async http =>
             {

@@ -7,19 +7,24 @@ public sealed class UserStepUpOperationApplyOutcome : IDisposable
 {
     private RecoveryCodeFirstDelivery? recoveryDelivery;
     private UserStepUpOperationApplyOutcome(bool applied, AuthenticationSessionTerminationReceipt? receipt, PasskeyExecutionValidity? validity = null,
-        TotpExecutionValidity? totpValidity = null, RecoveryCodeExecutionValidity? recoveryValidity = null, RecoveryCodeFirstDelivery? recoveryDelivery = null)
-    { Applied = applied; Receipt = receipt; PasskeyValidity = validity; TotpValidity = totpValidity; RecoveryValidity = recoveryValidity; this.recoveryDelivery = recoveryDelivery; }
+        TotpExecutionValidity? totpValidity = null, RecoveryCodeExecutionValidity? recoveryValidity = null, RecoveryCodeFirstDelivery? recoveryDelivery = null,
+        FederationLinkMutationValidity? federationValidity = null)
+    { Applied = applied; Receipt = receipt; PasskeyValidity = validity; TotpValidity = totpValidity; RecoveryValidity = recoveryValidity; this.recoveryDelivery = recoveryDelivery; FederationValidity = federationValidity; }
     public bool Applied { get; }
     internal AuthenticationSessionTerminationReceipt? Receipt { get; }
     internal PasskeyExecutionValidity? PasskeyValidity { get; }
     internal TotpExecutionValidity? TotpValidity { get; }
     internal RecoveryCodeExecutionValidity? RecoveryValidity { get; }
-    internal UserStepUpOperationApplyOutcome ForPasskey(PasskeyExecutionValidity validity) => new(Applied, Receipt, validity, TotpValidity, RecoveryValidity, TakeRecoveryDelivery());
-    internal UserStepUpOperationApplyOutcome ForTotp(TotpExecutionValidity validity) => new(Applied, Receipt, PasskeyValidity, validity, RecoveryValidity, TakeRecoveryDelivery());
+    internal FederationLinkMutationValidity? FederationValidity { get; }
+    internal UserStepUpOperationApplyOutcome ForPasskey(PasskeyExecutionValidity validity) => new(Applied, Receipt, validity, TotpValidity, RecoveryValidity, TakeRecoveryDelivery(), FederationValidity);
+    internal UserStepUpOperationApplyOutcome ForTotp(TotpExecutionValidity validity) => new(Applied, Receipt, PasskeyValidity, validity, RecoveryValidity, TakeRecoveryDelivery(), FederationValidity);
+    internal UserStepUpOperationApplyOutcome ForFederation(FederationLinkMutationValidity validity) => new(Applied, Receipt, PasskeyValidity, TotpValidity, RecoveryValidity, TakeRecoveryDelivery(), validity);
     internal RecoveryCodeFirstDelivery? TakeRecoveryDelivery() => Interlocked.Exchange(ref recoveryDelivery, null);
     internal bool ClosedFor(StepUpOperation operation) => RecoveryCodeApplication.Owns(operation.Scope)
-        ? Applied && Receipt is null && PasskeyValidity is null && TotpValidity is null && RecoveryValidity is not null && recoveryDelivery is not null && RecoveryValidity.Matches(recoveryDelivery)
-        : RecoveryValidity is null && recoveryDelivery is null && !(PasskeyValidity is not null && TotpValidity is not null);
+        ? Applied && Receipt is null && PasskeyValidity is null && TotpValidity is null && FederationValidity is null && RecoveryValidity is not null && recoveryDelivery is not null && RecoveryValidity.Matches(recoveryDelivery)
+        : FederationLinkApplication.Owns(operation.Scope)
+            ? Applied && FederationValidity is not null && PasskeyValidity is null && TotpValidity is null && RecoveryValidity is null && recoveryDelivery is null
+            : FederationValidity is null && RecoveryValidity is null && recoveryDelivery is null && !(PasskeyValidity is not null && TotpValidity is not null);
     public static UserStepUpOperationApplyOutcome Conflict() => new(false, null);
     public static UserStepUpOperationApplyOutcome SessionContinues() => new(true, null);
     internal static UserStepUpOperationApplyOutcome SessionEnded(AuthenticationSessionTerminationReceipt receipt) => new(true, receipt);
@@ -44,6 +49,6 @@ internal sealed record AuthenticationTerminalVerification(EffectivePolicyInterva
 internal sealed record AuthenticationSessionTerminationReceipt(Guid SessionId, string AccountId, string Origin, string OperationId,
     string CorrelationId, string ContextDigest, Guid CredentialReference, long CredentialVersion, string PasskeyPolicyVersion,
     long PriorSessionVersion, long EndedSessionVersion, string AuthenticatorType = "PASSKEY", Guid? Generation = null);
-internal sealed record AuthenticatorProofSource(PasskeyCredentialRow? Passkey, TotpAuthenticatorRow? Totp);
+internal sealed record AuthenticatorProofSource(PasskeyCredentialRow? Passkey, TotpAuthenticatorRow? Totp, FederationOperationProofSource? Federation = null);
 internal sealed record TotpExecutionValidity(Guid EnrollmentId, string AccountId, Guid SessionId, string Origin, string PolicyVersion,
     string OperationId, string ContextDigest, DateTimeOffset ExpiresAt, string? EligibilityPolicyVersion, string? EligibilityEvidenceReference, EffectivePolicyInterval? EligibilityInterval);

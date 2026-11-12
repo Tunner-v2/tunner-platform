@@ -37,6 +37,10 @@ public static class StepUpBrowserEndpoints
         endpoints.MapPost("/authentication/step-up/password", (HttpContext context, StepUpBrowserService service) => service.PasswordAsync(context)).RequireAuthorization(authorization);
         endpoints.MapPost("/authentication/step-up/totp", (HttpContext context, StepUpBrowserService service) => service.TotpAsync(context)).RequireAuthorization(authorization);
         endpoints.MapPost("/authentication/step-up/totp/continue", (HttpContext context, StepUpBrowserService service) => service.TotpContinueAsync(context)).RequireAuthorization(authorization);
+        endpoints.MapPost("/authentication/step-up/federation/start", (HttpContext context, StepUpBrowserService service) => service.FederationStartAsync(context)).RequireAuthorization(authorization);
+        endpoints.MapPost("/authentication/step-up/federation/result", (HttpContext context, StepUpBrowserService service) => service.FederationResultAsync(context)).RequireAuthorization(authorization);
+        endpoints.MapPost("/authentication/step-up/federation/continue", (HttpContext context, StepUpBrowserService service) => service.FederationContinueAsync(context)).RequireAuthorization(authorization);
+        endpoints.MapPost("/authentication/step-up/federation/cancel", (HttpContext context, StepUpBrowserService service) => service.FederationCancelAsync(context)).RequireAuthorization(authorization);
         return endpoints;
     }
 }
@@ -45,7 +49,7 @@ internal sealed partial class StepUpBrowserService(IUserStepUpOperationSource ow
     IAuthenticationPolicySource authenticationPolicies, IStepUpPresentationSource presentations,
     AuthenticationPartitionKey partitions, AuthenticationEndpoints.Surface surface, IDataProtectionProvider protection,
     IAntiforgery antiforgery, StepUpApplication application, IdentityPersistenceDbContext database, TimeProvider clock, IEnumerable<PasskeyApplication> passkeyApplications,
-    IEnumerable<TotpApplication>? totpApplications = null)
+    IEnumerable<TotpApplication>? totpApplications = null, IEnumerable<FederationBrowserService>? federationApplications = null)
 {
     private readonly IDataProtector protector = protection.CreateProtector("Tunner.User.StepUp.Browser.v1");
     internal sealed record Browser(Guid RequestId, string BindingDigest, string AuthenticationPolicyVersion, DateTimeOffset ExpiresAt);
@@ -62,6 +66,10 @@ internal sealed partial class StepUpBrowserService(IUserStepUpOperationSource ow
                 ? completedView.RequestId : null;
             var completedTotp = requestId is not null && totpApplications?.SingleOrDefault() is { } completedNative
                 ? await ReadTotpRecoveryAsync(context, new(caller, actor, operation, completedView!), completedNative).ConfigureAwait(false) : null;
+            var completedFederation = requestId is not null
+                ? await ReadFederationOptionsAsync(context, new(caller, actor, operation, completedView!)).ConfigureAwait(false) : null;
+            if (completedFederation is not null) return Results.Json(new { status = "COMPLETED", requestId,
+                operationReference = operation.Binding.CorrelationId, csrfToken = csrf, totpRecovery = completedTotp, federation = completedFederation });
             return Results.Json(new { status = "COMPLETED", requestId, operationReference = operation.Binding.CorrelationId, csrfToken = csrf, totpRecovery = completedTotp });
         }
         var auth = authenticationPolicies.RequireEffective(now); auth.Validate();
@@ -86,6 +94,13 @@ internal sealed partial class StepUpBrowserService(IUserStepUpOperationSource ow
         if (totpAvailable) presentation.RequireTotpPublished();
         var totpAuthenticators = totpAvailable ? await totp!.ActiveFactorViewsAsync(caller.AccountId, context.RequestAborted).ConfigureAwait(false) : [];
         var totpRecovery = totp is null ? null : await ReadTotpRecoveryAsync(context, new(caller, actor, operation, browser!), totp).ConfigureAwait(false);
+        var federation = await ReadFederationOptionsAsync(context, new(caller, actor, operation, browser!), policy, presentation).ConfigureAwait(false);
+        if (federation is not null) return Results.Json(new { status = "PENDING", requestId = browser!.RequestId,
+            operationReference = operation.Binding.CorrelationId, csrfToken = csrf, passwordMaximumLength = auth.PasswordMaximumLength,
+            passkeyAvailable = capability.Available, maximumCredentialJsonBytes = capability.MaximumCredentialJsonBytes, passkeyRecovery,
+            totpAvailable, totpAuthenticators, totpRecovery,
+            passwordAvailable = hasPassword && policy.MethodAssurances.TryGetValue("pwd", out var federationMapped) && federationMapped == policy.RequiredAssurance,
+            presentation.Locale, presentation.Content, federation });
         return Results.Json(new { status = "PENDING", requestId = browser!.RequestId, operationReference = operation.Binding.CorrelationId, csrfToken = csrf, passwordMaximumLength = auth.PasswordMaximumLength,
             passkeyAvailable = capability.Available, maximumCredentialJsonBytes = capability.MaximumCredentialJsonBytes, passkeyRecovery,
             totpAvailable, totpAuthenticators, totpRecovery,

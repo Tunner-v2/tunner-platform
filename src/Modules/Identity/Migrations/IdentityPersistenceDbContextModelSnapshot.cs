@@ -875,7 +875,7 @@ namespace Tunner.Identity.Persistence.Migrations
 
                             t.HasCheckConstraint("ck_session_state", "state IN ('ACTIVE','REVOKED','EXPIRED')");
 
-                            t.HasCheckConstraint("ck_session_termination", "(termination_cause IS NULL AND termination_policy_version IS NULL AND termination_credential_version IS NULL) OR (state='REVOKED' AND termination_cause IN ('PASSKEY_REVOKED','TOTP_DISABLED') AND termination_policy_version IS NOT NULL AND termination_credential_version IS NOT NULL AND termination_credential_version >= 2)");
+                            t.HasCheckConstraint("ck_session_termination", "(termination_cause IS NULL AND termination_policy_version IS NULL AND termination_credential_version IS NULL) OR (state='REVOKED' AND termination_cause IN ('PASSKEY_REVOKED','TOTP_DISABLED','FEDERATION_UNLINKED') AND termination_policy_version IS NOT NULL AND termination_credential_version IS NOT NULL AND termination_credential_version >= 2)");
                         });
                 });
 
@@ -1025,6 +1025,42 @@ namespace Tunner.Identity.Persistence.Migrations
                         .HasColumnType("text")
                         .HasColumnName("origin");
 
+                    b.Property<string>("OwnerAccountId")
+                        .HasColumnType("text")
+                        .HasColumnName("owner_account_id");
+
+                    b.Property<long?>("OwnerAccountVersion")
+                        .HasColumnType("bigint")
+                        .HasColumnName("owner_account_version");
+
+                    b.Property<string>("OwnerAssurancePolicyVersion")
+                        .HasColumnType("text")
+                        .HasColumnName("owner_assurance_policy_version");
+
+                    b.Property<string>("OwnerContextDigest")
+                        .HasColumnType("text")
+                        .HasColumnName("owner_context_digest");
+
+                    b.Property<long?>("OwnerExpectedVersion")
+                        .HasColumnType("bigint")
+                        .HasColumnName("owner_expected_version");
+
+                    b.Property<string>("OwnerOperationId")
+                        .HasColumnType("text")
+                        .HasColumnName("owner_operation_id");
+
+                    b.Property<string>("OwnerSecurityStampDigest")
+                        .HasColumnType("text")
+                        .HasColumnName("owner_security_stamp_digest");
+
+                    b.Property<Guid?>("OwnerSessionId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("owner_session_id");
+
+                    b.Property<long?>("OwnerSessionVersion")
+                        .HasColumnType("bigint")
+                        .HasColumnName("owner_session_version");
+
                     b.Property<Guid?>("PendingMfaId")
                         .HasColumnType("uuid")
                         .HasColumnName("pending_mfa_id");
@@ -1053,10 +1089,22 @@ namespace Tunner.Identity.Persistence.Migrations
                         .HasColumnType("text")
                         .HasColumnName("profile_version");
 
+                    b.Property<string>("ProtectedLinkSubject")
+                        .HasColumnType("text")
+                        .HasColumnName("protected_link_subject");
+
                     b.Property<string>("Provider")
                         .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("provider");
+
+                    b.Property<DateTimeOffset?>("ProviderAuthenticatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("provider_authenticated_at");
+
+                    b.Property<string>("ProviderMethodsJson")
+                        .HasColumnType("text")
+                        .HasColumnName("provider_methods_json");
 
                     b.Property<string>("ProviderNamespace")
                         .IsRequired()
@@ -1080,6 +1128,10 @@ namespace Tunner.Identity.Persistence.Migrations
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("result_expires_at");
 
+                    b.Property<Guid?>("ResultProofId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("result_proof_id");
+
                     b.Property<long>("ResultRecoveryLifetimeTicks")
                         .HasColumnType("bigint")
                         .HasColumnName("result_recovery_lifetime_ticks");
@@ -1092,6 +1144,14 @@ namespace Tunner.Identity.Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("retention_reference");
+
+                    b.Property<Guid?>("SelectedProofLinkId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("selected_proof_link_id");
+
+                    b.Property<long?>("SelectedProofLinkVersion")
+                        .HasColumnType("bigint")
+                        .HasColumnName("selected_proof_link_version");
 
                     b.Property<string>("State")
                         .IsRequired()
@@ -1123,10 +1183,14 @@ namespace Tunner.Identity.Persistence.Migrations
 
                     b.HasIndex("PendingMfaId");
 
+                    b.HasIndex("ResultProofId");
+
                     b.HasIndex("ResultSessionId");
 
                     b.HasIndex("BrowserDigest", "RequestId")
                         .IsUnique();
+
+                    b.HasIndex("OwnerAccountId", "SelectedProofLinkId");
 
                     b.ToTable("federation_attempts", "identity", t =>
                         {
@@ -1134,15 +1198,246 @@ namespace Tunner.Identity.Persistence.Migrations
 
                             t.HasCheckConstraint("ck_federation_error", "error_code IS NULL OR error_code IN ('AUTHENTICATION_FAILED','VERSION_CONFLICT','RATE_OR_ABUSE_LIMITED','STEP_UP_REQUIRED')");
 
+                            t.HasCheckConstraint("ck_federation_fresh_evidence", "(purpose<>'OperationProof' AND provider_authenticated_at IS NULL AND provider_methods_json IS NULL AND result_proof_id IS NULL)\nOR (purpose='OperationProof' AND ((verified_at IS NULL AND provider_authenticated_at IS NULL AND provider_methods_json IS NULL)\n  OR (verified_at IS NOT NULL AND provider_authenticated_at IS NOT NULL AND provider_authenticated_at<=verified_at\n    AND link_id=selected_proof_link_id AND link_version=selected_proof_link_version\n    AND provider_methods_json IS NOT NULL AND jsonb_typeof(provider_methods_json::jsonb)='array' AND jsonb_array_length(provider_methods_json::jsonb)>0)))");
+
+                            t.HasCheckConstraint("ck_federation_owner", "(purpose NOT IN ('Link','OperationProof') AND owner_account_id IS NULL AND owner_session_id IS NULL AND owner_account_version IS NULL\n  AND owner_session_version IS NULL AND owner_security_stamp_digest IS NULL AND owner_operation_id IS NULL\n  AND owner_context_digest IS NULL AND owner_expected_version IS NULL AND protected_link_subject IS NULL AND owner_assurance_policy_version IS NULL\n  AND selected_proof_link_id IS NULL AND selected_proof_link_version IS NULL)\nOR (purpose IN ('Link','OperationProof') AND owner_account_id IS NOT NULL AND length(owner_account_id)>0 AND owner_session_id IS NOT NULL\n  AND owner_session_id=previous_session_id AND owner_account_version IS NOT NULL AND owner_account_version>=1\n  AND owner_session_version IS NOT NULL AND owner_session_version>=1 AND owner_security_stamp_digest IS NOT NULL\n  AND length(owner_security_stamp_digest)=64 AND owner_operation_id IS NOT NULL AND length(owner_operation_id)>0\n  AND owner_context_digest IS NOT NULL AND length(owner_context_digest)=64 AND owner_expected_version IS NOT NULL AND owner_expected_version>=0\n  AND ((purpose='Link' AND owner_assurance_policy_version IS NULL AND selected_proof_link_id IS NULL AND selected_proof_link_version IS NULL)\n    OR (purpose='OperationProof' AND owner_assurance_policy_version IS NOT NULL AND length(owner_assurance_policy_version)>0 AND protected_link_subject IS NULL\n      AND selected_proof_link_id IS NOT NULL AND selected_proof_link_version IS NOT NULL AND selected_proof_link_version>0)))");
+
                             t.HasCheckConstraint("ck_federation_profile", "length(provider_namespace)>0 AND length(client_id)>0 AND length(profile_version)>0 AND length(mapping_evidence_reference)>0 AND length(correlation_id)>0 AND length(processing_reference)>0 AND length(retention_reference)>0 AND jsonb_typeof(profile_snapshot::jsonb)='object'");
 
                             t.HasCheckConstraint("ck_federation_purpose", "provider IN ('Google','Microsoft') AND purpose IN ('SignIn','Registration','Link','OperationProof')");
 
-                            t.HasCheckConstraint("ck_federation_result", "(state IN ('PREPARED','CHALLENGE_ADMITTED','VERIFIED') AND ended_at IS NULL AND result_expires_at IS NULL AND result_session_id IS NULL AND pending_mfa_id IS NULL AND error_code IS NULL) OR (state IN ('COMPLETED','REJECTED','EXPIRED') AND ended_at IS NOT NULL AND result_expires_at IS NOT NULL AND ended_at>=created_at AND result_expires_at>ended_at AND ((state='COMPLETED' AND purpose='SignIn' AND verified_at IS NOT NULL AND error_code IS NULL AND ((result_session_id IS NOT NULL AND pending_mfa_id IS NULL) OR (result_session_id IS NULL AND pending_mfa_id IS NOT NULL))) OR (state IN ('REJECTED','EXPIRED') AND error_code IS NOT NULL AND result_session_id IS NULL AND pending_mfa_id IS NULL)))");
+                            t.HasCheckConstraint("ck_federation_result", "(state IN ('PREPARED','CHALLENGE_ADMITTED','VERIFIED') AND ended_at IS NULL AND result_expires_at IS NULL\n  AND result_session_id IS NULL AND pending_mfa_id IS NULL AND result_proof_id IS NULL AND error_code IS NULL)\nOR (state IN ('COMPLETED','REJECTED','EXPIRED') AND ended_at IS NOT NULL AND result_expires_at IS NOT NULL\n  AND ended_at>=created_at AND result_expires_at>ended_at AND ((state='COMPLETED' AND verified_at IS NOT NULL AND error_code IS NULL\n    AND ((purpose='SignIn' AND result_proof_id IS NULL AND ((result_session_id IS NOT NULL AND pending_mfa_id IS NULL) OR (result_session_id IS NULL AND pending_mfa_id IS NOT NULL)))\n      OR (purpose='Link' AND result_session_id IS NULL AND pending_mfa_id IS NULL AND result_proof_id IS NULL)\n      OR (purpose='OperationProof' AND result_session_id IS NULL AND pending_mfa_id IS NULL AND result_proof_id IS NOT NULL)))\n    OR (state IN ('REJECTED','EXPIRED') AND error_code IS NOT NULL AND result_session_id IS NULL AND pending_mfa_id IS NULL AND result_proof_id IS NULL)))");
 
                             t.HasCheckConstraint("ck_federation_state", "state IN ('PREPARED','CHALLENGE_ADMITTED','VERIFIED','COMPLETED','REJECTED','EXPIRED') AND version>=1");
 
-                            t.HasCheckConstraint("ck_federation_verified", "(state NOT IN ('VERIFIED','COMPLETED') AND verified_at IS NULL AND verification_expires_at IS NULL AND validated_issuer IS NULL AND link_id IS NULL AND link_version IS NULL AND link_qualification_evidence_reference IS NULL AND link_qualification_profile_version IS NULL) OR (verified_at IS NOT NULL AND verification_expires_at IS NOT NULL AND validated_issuer IS NOT NULL AND link_id IS NOT NULL AND link_version IS NOT NULL AND link_qualification_evidence_reference IS NOT NULL AND link_qualification_profile_version IS NOT NULL AND verified_at>=created_at AND verified_at<expires_at AND verification_expires_at>verified_at AND verification_expires_at<=expires_at AND length(validated_issuer)>0 AND link_version>=1 AND length(link_qualification_evidence_reference)>0 AND length(link_qualification_profile_version)>0)");
+                            t.HasCheckConstraint("ck_federation_verified", "(verified_at IS NULL AND verification_expires_at IS NULL AND validated_issuer IS NULL AND link_id IS NULL AND link_version IS NULL\n  AND link_qualification_evidence_reference IS NULL AND link_qualification_profile_version IS NULL AND protected_link_subject IS NULL\n  AND state NOT IN ('VERIFIED','COMPLETED'))\nOR (verified_at IS NOT NULL AND verification_expires_at IS NOT NULL AND validated_issuer IS NOT NULL\n  AND verified_at>=created_at AND verified_at<expires_at AND verification_expires_at>verified_at AND verification_expires_at<=expires_at\n  AND length(validated_issuer)>0 AND ((purpose IN ('SignIn','OperationProof') AND link_id IS NOT NULL AND link_version IS NOT NULL AND link_version>=1\n    AND link_qualification_evidence_reference IS NOT NULL AND length(link_qualification_evidence_reference)>0\n    AND link_qualification_profile_version IS NOT NULL AND length(link_qualification_profile_version)>0 AND protected_link_subject IS NULL)\n  OR (purpose='Link' AND protected_link_subject IS NOT NULL AND length(protected_link_subject)>0\n    AND link_id IS NULL AND link_version IS NULL AND link_qualification_evidence_reference IS NULL AND link_qualification_profile_version IS NULL)))");
+                        });
+                });
+
+            modelBuilder.Entity("Tunner.Identity.Persistence.FederationLinkOperationRow", b =>
+                {
+                    b.Property<Guid>("OperationId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("operation_id");
+
+                    b.Property<string>("AccountId")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("account_id");
+
+                    b.Property<string>("AssurancePolicyVersion")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("assurance_policy_version");
+
+                    b.Property<Guid?>("AttemptId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("attempt_id");
+
+                    b.Property<string>("AuthenticationPolicyVersion")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("authentication_policy_version");
+
+                    b.Property<DateTimeOffset?>("ConfirmedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("confirmed_at");
+
+                    b.Property<string>("ContextDigest")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("context_digest");
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("created_at");
+
+                    b.Property<DateTimeOffset?>("EndedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("ended_at");
+
+                    b.Property<string>("ErrorCode")
+                        .HasColumnType("text")
+                        .HasColumnName("error_code");
+
+                    b.Property<long>("ExpectedAccountVersion")
+                        .HasColumnType("bigint")
+                        .HasColumnName("expected_account_version");
+
+                    b.Property<long>("ExpectedLinkVersion")
+                        .HasColumnType("bigint")
+                        .HasColumnName("expected_link_version");
+
+                    b.Property<DateTimeOffset>("ExpiresAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("expires_at");
+
+                    b.Property<string>("Kind")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("kind");
+
+                    b.Property<string>("Origin")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("origin");
+
+                    b.Property<string>("OriginalCookieDigest")
+                        .HasColumnType("text")
+                        .HasColumnName("original_cookie_digest");
+
+                    b.Property<string>("PolicySnapshot")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("policy_snapshot");
+
+                    b.Property<string>("PolicyVersion")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("policy_version");
+
+                    b.Property<string>("PostureEvidenceReference")
+                        .HasColumnType("text")
+                        .HasColumnName("posture_evidence_reference");
+
+                    b.Property<string>("PostureFactsDigest")
+                        .HasColumnType("text")
+                        .HasColumnName("posture_facts_digest");
+
+                    b.Property<DateTimeOffset?>("PostureFrom")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("posture_from");
+
+                    b.Property<bool?>("PostureIncludesFrom")
+                        .HasColumnType("boolean")
+                        .HasColumnName("posture_includes_from");
+
+                    b.Property<bool?>("PostureIncludesUntil")
+                        .HasColumnType("boolean")
+                        .HasColumnName("posture_includes_until");
+
+                    b.Property<string>("PosturePolicyVersion")
+                        .HasColumnType("text")
+                        .HasColumnName("posture_policy_version");
+
+                    b.Property<DateTimeOffset?>("PostureUntil")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("posture_until");
+
+                    b.Property<string>("ProcessingReference")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("processing_reference");
+
+                    b.Property<string>("ProfileSnapshot")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("profile_snapshot");
+
+                    b.Property<string>("ProfileVersion")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("profile_version");
+
+                    b.Property<Guid?>("ProofReference")
+                        .HasColumnType("uuid")
+                        .HasColumnName("proof_reference");
+
+                    b.Property<string>("Provider")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("provider");
+
+                    b.Property<DateTimeOffset>("RecoveryExpiresAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("recovery_expires_at");
+
+                    b.Property<Guid>("RequestId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("request_id");
+
+                    b.Property<Guid?>("ResultLinkId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("result_link_id");
+
+                    b.Property<long?>("ResultLinkVersion")
+                        .HasColumnType("bigint")
+                        .HasColumnName("result_link_version");
+
+                    b.Property<string>("RetentionReference")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("retention_reference");
+
+                    b.Property<string>("SecurityStampDigest")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("security_stamp_digest");
+
+                    b.Property<string>("SessionEffect")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("session_effect");
+
+                    b.Property<string>("SessionEffectEvidenceReference")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("session_effect_evidence_reference");
+
+                    b.Property<Guid>("SessionId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("session_id");
+
+                    b.Property<string>("SessionUsePolicyVersion")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("session_use_policy_version");
+
+                    b.Property<string>("State")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("state");
+
+                    b.Property<Guid?>("TargetLinkId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("target_link_id");
+
+                    b.Property<long>("Version")
+                        .IsConcurrencyToken()
+                        .HasColumnType("bigint")
+                        .HasColumnName("version");
+
+                    b.HasKey("OperationId");
+
+                    b.HasIndex("AttemptId")
+                        .IsUnique();
+
+                    b.HasIndex("ExpiresAt");
+
+                    b.HasIndex("ProofReference");
+
+                    b.HasIndex("ResultLinkId");
+
+                    b.HasIndex("TargetLinkId");
+
+                    b.HasIndex("SessionId", "RequestId")
+                        .IsUnique();
+
+                    b.ToTable("federation_link_operations", "identity", t =>
+                        {
+                            t.HasCheckConstraint("ck_federation_management_binding", "length(context_digest)=64 AND length(security_stamp_digest)=64 AND length(policy_version)>0 AND length(profile_version)>0 AND length(assurance_policy_version)>0 AND length(authentication_policy_version)>0 AND jsonb_typeof(policy_snapshot::jsonb)='object' AND jsonb_typeof(profile_snapshot::jsonb)='object' AND length(processing_reference)>0 AND length(retention_reference)>0 AND session_effect IN ('PreserveExistingSessions','RevokeLinkedSessions') AND length(session_use_policy_version)>0 AND length(session_effect_evidence_reference)>0");
+
+                            t.HasCheckConstraint("ck_federation_management_confirmation", "state NOT IN ('PENDING_PROOF','COMPLETED') OR confirmed_at IS NOT NULL");
+
+                            t.HasCheckConstraint("ck_federation_management_cookie", "original_cookie_digest IS NULL OR length(original_cookie_digest)=64");
+
+                            t.HasCheckConstraint("ck_federation_management_kind", "kind IN ('LINK','UNLINK') AND provider IN ('Google','Microsoft') AND ((kind='LINK' AND attempt_id IS NOT NULL) OR (kind='UNLINK' AND attempt_id IS NULL AND target_link_id IS NOT NULL AND expected_link_version>=1))");
+
+                            t.HasCheckConstraint("ck_federation_management_posture", "(kind='UNLINK' AND state='COMPLETED' AND posture_facts_digest IS NOT NULL AND length(posture_facts_digest)=64 AND posture_policy_version IS NOT NULL AND length(posture_policy_version)>0 AND posture_evidence_reference IS NOT NULL AND length(posture_evidence_reference)>0 AND posture_from IS NOT NULL AND posture_includes_from IS NOT NULL AND posture_includes_until IS NOT NULL AND (posture_until IS NULL OR posture_until>=posture_from)) OR (NOT(kind='UNLINK' AND state='COMPLETED') AND posture_facts_digest IS NULL AND posture_policy_version IS NULL AND posture_evidence_reference IS NULL AND posture_from IS NULL AND posture_includes_from IS NULL AND posture_until IS NULL AND posture_includes_until IS NULL)");
+
+                            t.HasCheckConstraint("ck_federation_management_state", "state IN ('PENDING_PROVIDER','PENDING_CONFIRMATION','PENDING_PROOF','COMPLETED','REJECTED','EXPIRED') AND version>=1 AND expected_link_version>=0 AND expected_account_version>=1");
+
+                            t.HasCheckConstraint("ck_federation_management_time", "expires_at>created_at AND recovery_expires_at>expires_at AND (confirmed_at IS NULL OR (confirmed_at>=created_at AND confirmed_at<expires_at)) AND ((state IN ('PENDING_PROVIDER','PENDING_CONFIRMATION','PENDING_PROOF') AND ended_at IS NULL AND proof_reference IS NULL AND result_link_id IS NULL AND result_link_version IS NULL AND error_code IS NULL) OR (state='COMPLETED' AND confirmed_at IS NOT NULL AND ended_at>=confirmed_at AND proof_reference IS NOT NULL AND result_link_id IS NOT NULL AND result_link_version>=1 AND error_code IS NULL) OR (state IN ('REJECTED','EXPIRED') AND ended_at>=created_at AND error_code IN ('AUTHENTICATION_FAILED','VERSION_CONFLICT','RATE_OR_ABUSE_LIMITED','STEP_UP_REQUIRED') AND proof_reference IS NULL AND result_link_id IS NULL AND result_link_version IS NULL))");
                         });
                 });
 
@@ -2142,6 +2437,10 @@ namespace Tunner.Identity.Persistence.Migrations
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("expires_at");
 
+                    b.Property<Guid?>("FederationAttemptId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("federation_attempt_id");
+
                     b.Property<string>("KeyDigest")
                         .IsRequired()
                         .HasColumnType("text")
@@ -2241,6 +2540,8 @@ namespace Tunner.Identity.Persistence.Migrations
 
                     b.HasKey("ProofId");
 
+                    b.HasIndex("FederationAttemptId");
+
                     b.HasIndex("KeyDigest")
                         .IsUnique();
 
@@ -2263,7 +2564,7 @@ namespace Tunner.Identity.Persistence.Migrations
 
                             t.HasCheckConstraint("ck_step_up_end", "(state='ACTIVE' AND ended_at IS NULL AND length(protected_key)>0) OR (state<>'ACTIVE' AND ended_at IS NOT NULL AND ended_at >= authenticated_at AND protected_key='')");
 
-                            t.HasCheckConstraint("ck_step_up_method", "((authentication_method='pwd' AND passkey_credential_reference IS NULL AND passkey_policy_version IS NULL AND passkey_assurance_key IS NULL) OR (authentication_method LIKE 'passkey:%' AND passkey_credential_reference IS NOT NULL AND passkey_policy_version IS NOT NULL AND passkey_assurance_key IS NOT NULL)) AND totp_authenticator_reference IS NULL AND totp_generation IS NULL AND totp_authenticator_version IS NULL AND totp_policy_version IS NULL OR (authentication_method='totp' AND passkey_credential_reference IS NULL AND passkey_policy_version IS NULL AND passkey_assurance_key IS NULL AND totp_authenticator_reference IS NOT NULL AND totp_generation IS NOT NULL AND totp_authenticator_version>=2 AND totp_policy_version IS NOT NULL)");
+                            t.HasCheckConstraint("ck_step_up_method", "((((authentication_method='pwd' AND passkey_credential_reference IS NULL AND passkey_policy_version IS NULL AND passkey_assurance_key IS NULL) OR (authentication_method LIKE 'passkey:%' AND passkey_credential_reference IS NOT NULL AND passkey_policy_version IS NOT NULL AND passkey_assurance_key IS NOT NULL)) AND totp_authenticator_reference IS NULL AND totp_generation IS NULL AND totp_authenticator_version IS NULL AND totp_policy_version IS NULL OR (authentication_method='totp' AND passkey_credential_reference IS NULL AND passkey_policy_version IS NULL AND passkey_assurance_key IS NULL AND totp_authenticator_reference IS NOT NULL AND totp_generation IS NOT NULL AND totp_authenticator_version>=2 AND totp_policy_version IS NOT NULL)) AND federation_attempt_id IS NULL) OR (authentication_method IN ('federation:Google','federation:Microsoft') AND federation_attempt_id IS NOT NULL AND passkey_credential_reference IS NULL AND passkey_policy_version IS NULL AND passkey_assurance_key IS NULL AND totp_authenticator_reference IS NULL AND totp_generation IS NULL AND totp_authenticator_version IS NULL AND totp_policy_version IS NULL)");
 
                             t.HasCheckConstraint("ck_step_up_state", "state IN ('ACTIVE','CONSUMED','EXPIRED')");
                         });
@@ -3068,9 +3369,49 @@ namespace Tunner.Identity.Persistence.Migrations
                         .HasForeignKey("PendingMfaId")
                         .OnDelete(DeleteBehavior.Restrict);
 
+                    b.HasOne("Tunner.Identity.Persistence.StepUpProofRow", null)
+                        .WithMany()
+                        .HasForeignKey("ResultProofId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
                     b.HasOne("Tunner.Identity.Persistence.AuthenticationSessionRow", null)
                         .WithMany()
                         .HasForeignKey("ResultSessionId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("Tunner.Identity.Persistence.ExternalIdentityLinkRow", null)
+                        .WithMany()
+                        .HasForeignKey("OwnerAccountId", "SelectedProofLinkId")
+                        .HasPrincipalKey("AccountId", "LinkId")
+                        .OnDelete(DeleteBehavior.Restrict);
+                });
+
+            modelBuilder.Entity("Tunner.Identity.Persistence.FederationLinkOperationRow", b =>
+                {
+                    b.HasOne("Tunner.Identity.Persistence.FederationAttemptRow", null)
+                        .WithMany()
+                        .HasForeignKey("AttemptId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("Tunner.Identity.Persistence.StepUpProofRow", null)
+                        .WithMany()
+                        .HasForeignKey("ProofReference")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("Tunner.Identity.Persistence.ExternalIdentityLinkRow", null)
+                        .WithMany()
+                        .HasForeignKey("ResultLinkId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("Tunner.Identity.Persistence.AuthenticationSessionRow", null)
+                        .WithMany()
+                        .HasForeignKey("SessionId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Tunner.Identity.Persistence.ExternalIdentityLinkRow", null)
+                        .WithMany()
+                        .HasForeignKey("TargetLinkId")
                         .OnDelete(DeleteBehavior.Restrict);
                 });
 
@@ -3161,6 +3502,11 @@ namespace Tunner.Identity.Persistence.Migrations
 
             modelBuilder.Entity("Tunner.Identity.Persistence.StepUpProofRow", b =>
                 {
+                    b.HasOne("Tunner.Identity.Persistence.FederationAttemptRow", null)
+                        .WithMany()
+                        .HasForeignKey("FederationAttemptId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
                     b.HasOne("Tunner.Identity.Persistence.PasskeyCredentialRow", null)
                         .WithMany()
                         .HasForeignKey("PasskeyCredentialReference")

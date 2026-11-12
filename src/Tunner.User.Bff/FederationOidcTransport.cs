@@ -1,18 +1,24 @@
 using System.Security.Claims;
+using System.Globalization;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using Microsoft.IdentityModel.Tokens;
+using Tunner.Identity.Persistence;
 
 namespace Tunner.User.Bff;
 
 /// <summary>Terminal native protocol facts only; not current Identity authority, a session or fresh-authentication proof.</summary>
-internal sealed class FederationOidcIdentityFacts(string issuer, string subject, string clientId, string attemptId)
+internal sealed class FederationOidcIdentityFacts(string issuer, string subject, string clientId, string attemptId,
+    DateTimeOffset? authenticatedAt = null, IReadOnlyCollection<string>? authenticationMethods = null)
 {
     internal string Issuer { get; } = issuer;
     internal string Subject { get; } = subject;
     internal string ClientId { get; } = clientId;
     internal string AttemptId { get; } = attemptId;
+    internal DateTimeOffset? AuthenticatedAt { get; } = authenticatedAt;
+    internal IReadOnlyCollection<string>? AuthenticationMethods { get; } = authenticationMethods is null
+        ? null : Array.AsReadOnly(authenticationMethods.ToArray());
     public override string ToString() => nameof(FederationOidcIdentityFacts);
 }
 
@@ -34,6 +40,7 @@ internal sealed class FederationOidcTransport
 {
     internal const string AttemptProperty = ".tunner.federation.attempt";
     internal const string ProfileProperty = ".tunner.federation.profile-version";
+    internal const string PurposeProperty = ".tunner.federation.purpose";
     internal const string NoSignInScheme = "Tunner.Federation.Transport.NoSignIn";
     private readonly string scheme;
     private readonly string issuer;
@@ -83,11 +90,11 @@ internal sealed class FederationOidcTransport
         Func<HttpContext, bool> current,
         Func<HttpContext, CancellationToken, Task<string>> secret,
         Func<HttpContext, FederationOidcIdentityFacts, CancellationToken, Task<string?>> completed,
-        Func<HttpContext, FederationOidcFailure, CancellationToken, Task<string?>> failed)
+        Func<HttpContext, FederationOidcFailure, CancellationToken, Task<string?>> failed, FederationProviderKind? freshProvider = null)
     {
         RequireOpaque(profileVersion); ArgumentNullException.ThrowIfNull(current); ArgumentNullException.ThrowIfNull(secret);
         ConfigureCore(options, null, clock, (_, _) => throw new InvalidOperationException(), (_, _) => throw new InvalidOperationException(),
-            profileVersion, current, secret, completed, failed);
+            profileVersion, current, secret, completed, failed, freshProvider);
     }
 
     private void ConfigureCore(OpenIdConnectOptions options, string? clientSecret, TimeProvider clock,
@@ -95,7 +102,8 @@ internal sealed class FederationOidcTransport
         Func<FederationOidcFailure, CancellationToken, Task<string?>> failed, string? profileVersion,
         Func<HttpContext, bool>? current, Func<HttpContext, CancellationToken, Task<string>>? secret,
         Func<HttpContext, FederationOidcIdentityFacts, CancellationToken, Task<string?>>? completedWithContext = null,
-        Func<HttpContext, FederationOidcFailure, CancellationToken, Task<string?>>? failedWithContext = null)
+        Func<HttpContext, FederationOidcFailure, CancellationToken, Task<string?>>? failedWithContext = null,
+        FederationProviderKind? freshProvider = null)
     {
         ArgumentNullException.ThrowIfNull(options); if (clientSecret is not null) RequireOpaque(clientSecret); ArgumentNullException.ThrowIfNull(clock);
         ArgumentNullException.ThrowIfNull(completed); ArgumentNullException.ThrowIfNull(failed);
@@ -115,6 +123,7 @@ internal sealed class FederationOidcTransport
         // Native default deletion actions otherwise erase these validated JWT facts before TicketReceived.
         // Retain only the two required projection inputs; no native principal crosses the owner boundary.
         options.ClaimActions.Remove("iss"); options.ClaimActions.Remove("aud");
+        if (freshProvider is not null) { options.ClaimActions.Remove("auth_time"); options.ClaimActions.Remove("amr"); }
         options.GetClaimsFromUserInfoEndpoint = false; options.UseTokenLifetime = false; options.SkipUnrecognizedRequests = false;
         options.PushedAuthorizationBehavior = PushedAuthorizationBehavior.Disable; options.DisableTelemetry = true;
         options.Scope.Clear(); options.Scope.Add("openid"); options.TimeProvider = clock;
@@ -145,6 +154,13 @@ internal sealed class FederationOidcTransport
                 context.ProtocolMessage.ResponseType = OpenIdConnectResponseType.Code;
                 context.ProtocolMessage.ResponseMode = OpenIdConnectResponseMode.FormPost;
                 context.ProtocolMessage.ClientId = clientId; context.ProtocolMessage.RedirectUri = callback.AbsoluteUri;
+                if (freshProvider is not null && context.Properties.Items.TryGetValue(PurposeProperty, out var purpose) && purpose == "OperationProof")
+                {
+                    context.ProtocolMessage.SetParameter("claims", "{\"id_token\":{\"auth_time\":{\"essential\":true},\"amr\":{\"essential\":true}}}");
+                    // Google does not support forcing upstream reauthentication. Freshness is established
+                    // only from actual qualified claims; Microsoft's supported prompt is separately scoped.
+                    if (freshProvider == FederationProviderKind.Microsoft) context.ProtocolMessage.Prompt = "login";
+                }
             },
             OnMessageReceived = async context =>
             {
@@ -200,7 +216,19 @@ internal sealed class FederationOidcTransport
                 }
                 try
                 {
-                    var facts = new FederationOidcIdentityFacts(actualIssuer, subject, clientId, attempt);
+                    DateTimeOffset? authenticatedAt = null; IReadOnlyCollection<string>? methods = null;
+                    if (freshProvider is not null && context.Properties!.Items.TryGetValue(PurposeProperty, out var purpose) && purpose == "OperationProof")
+                    {
+                        var verifiedClaims = claims!;
+                        var times = verifiedClaims.FindAll("auth_time").Take(2).ToArray();
+                        var values = verifiedClaims.FindAll("amr").Select(value => value.Value).ToArray();
+                        if (times.Length != 1 || !long.TryParse(times[0].Value, NumberStyles.None, CultureInfo.InvariantCulture, out var seconds) ||
+                            seconds < 0 || seconds > 253402300799 || values.Length == 0 ||
+                            values.Any(value => !Opaque(value)) || values.Distinct(StringComparer.Ordinal).Count() != values.Length)
+                        { await Fail(context.HttpContext, FederationOidcFailureReason.InvalidEvidence, attempt).ConfigureAwait(false); return; }
+                        authenticatedAt = DateTimeOffset.FromUnixTimeSeconds(seconds); methods = Array.AsReadOnly(values);
+                    }
+                    var facts = new FederationOidcIdentityFacts(actualIssuer, subject, clientId, attempt, authenticatedAt, methods);
                     var continuation = await (completedWithContext is null ? completed(facts, context.HttpContext.RequestAborted) :
                         completedWithContext(context.HttpContext, facts, context.HttpContext.RequestAborted)).ConfigureAwait(false);
                     Finish(context.HttpContext, continuation);

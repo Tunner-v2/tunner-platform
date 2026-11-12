@@ -13,7 +13,7 @@ namespace Tunner.Identity.Persistence;
 /// User BFF HTTPS/host/Origin/CSRF boundary. Native RecordVerified accepts only terminal adapter-private facts.
 /// A cross-site callback never calls Current(), issues a Tunner cookie or fabricates a caller from the ledger.
 /// </summary>
-public sealed class FederationBrowserService
+public sealed partial class FederationBrowserService
 {
     private const string PendingCookie = "__Host-Tunner.Federation.Pending";
     private readonly FederationAttemptApplication application;
@@ -26,13 +26,15 @@ public sealed class FederationBrowserService
     private readonly string origin;
     private readonly IDataProtector pointerProtection;
     private readonly HashSet<FederationProviderKind> enabledTransports;
+    private readonly FederationLinkApplication? management;
 
     internal FederationBrowserService(FederationAttemptApplication application, IFederationProfileSource profiles,
         IAuthenticationPolicySource authenticationPolicies, AuthenticationPartitionKey partitions, IDataProtectionProvider protection,
-        IAntiforgery antiforgery, TimeProvider clock, string origin, IReadOnlyCollection<FederationProviderKind> enabledTransports)
+        IAntiforgery antiforgery, TimeProvider clock, string origin, IReadOnlyCollection<FederationProviderKind> enabledTransports, FederationLinkApplication? management = null)
     {
         this.application = application; this.profiles = profiles; this.authenticationPolicies = authenticationPolicies;
         this.partitions = partitions; this.protection = protection; this.antiforgery = antiforgery; this.clock = clock; this.origin = origin;
+        this.management = management;
         ArgumentNullException.ThrowIfNull(enabledTransports);
         if (enabledTransports.Count == 0 || enabledTransports.Any(kind => !Enum.IsDefined(kind))) throw new ArgumentException("Explicit enabled transports are required.");
         this.enabledTransports = new(enabledTransports);
@@ -66,7 +68,16 @@ public sealed class FederationBrowserService
     public Task<IResult> StartAsync(HttpContext http, Guid requestId, FederationProviderKind provider, bool rememberMe, CancellationToken ct = default) => Guard(http, async token =>
     {
         if (!enabledTransports.Contains(provider)) return Problem(404, "NOT_FOUND_OR_NOT_DISCLOSABLE");
-        await RequirePost(http).ConfigureAwait(false); var browser = Current(http); var prior = ReadPointer(http);
+        await RequirePost(http).ConfigureAwait(false);
+        var managementPointer = ReadManagementPointer(http);
+        if (managementPointer is not null && managementPointer.BrowserExpiresAt > clock.GetUtcNow() && AuthenticationIdentity.SessionId(http.User) == managementPointer.SessionId)
+        {
+            var currentManagement = ManagementCurrent(http, managementPointer);
+            var pending = await application.ReadManagementOriginalAsync(currentManagement.Browser, currentManagement.Caller, managementPointer.AttemptId, token).ConfigureAwait(false);
+            if (pending.Row is { State: "PREPARED" or "CHALLENGE_ADMITTED" or "VERIFIED" } active && active.ExpiresAt > clock.GetUtcNow())
+                return Problem(409, "VERSION_CONFLICT");
+        }
+        var browser = Current(http); var prior = ReadPointer(http);
         if (prior is not null && PointerMatches(prior, browser) && prior.RequestId != requestId)
         {
             var original = await application.ReadOriginalAsync(browser, prior.AttemptId, token).ConfigureAwait(false);
@@ -76,6 +87,7 @@ public sealed class FederationBrowserService
         var result = await application.StartAsync(browser, requestId, provider, FederationAttemptPurpose.SignIn, rememberMe, token).ConfigureAwait(false);
         if (result.Row is { } row && result.ErrorCode is null)
         {
+            ClearManagementPointer(http);
             var expires = row.ExpiresAt + TimeSpan.FromTicks(row.ResultRecoveryLifetimeTicks);
             var pointer = new Pointer(row.AttemptId, row.RequestId, row.BrowserKey, row.BrowserDigest, row.Origin, expires, provider);
             http.Response.Cookies.Append(PendingCookie, pointerProtection.Protect(JsonSerializer.Serialize(pointer)), Cookie(expires - clock.GetUtcNow()));
@@ -92,6 +104,17 @@ public sealed class FederationBrowserService
         // One fixed clean local GET. Original reference comes from the protected Strict pointer, never a URL.
         if (!HttpMethods.IsGet(http.Request.Method) || http.Request.QueryString.HasValue ||
             !StringComparer.Ordinal.Equals(http.Request.Headers["Sec-Fetch-Site"].ToString(), "same-origin")) return null;
+        var managementPointer = ReadManagementPointer(http);
+        if (managementPointer is not null)
+        {
+            if (!enabledTransports.Contains(managementPointer.Provider)) return null;
+            try
+            {
+                var actual = ManagementCurrent(http, managementPointer);
+                return await application.AdmitChallengeAsync(actual.Browser, managementPointer.AttemptId, linked.Token, actual.Caller).ConfigureAwait(false);
+            }
+            catch (ArgumentException) { return null; }
+        }
         var pointer = ReadPointer(http); if (pointer is null || !enabledTransports.Contains(pointer.Provider)) return null;
         var browser = Current(http); if (!PointerMatches(pointer, browser)) return null;
         return await application.AdmitChallengeAsync(browser, pointer.AttemptId, linked.Token).ConfigureAwait(false);

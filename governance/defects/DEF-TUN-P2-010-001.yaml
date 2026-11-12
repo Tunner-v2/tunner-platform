@@ -1,0 +1,19 @@
+schema_version: 1
+defect_id: DEF-TUN-P2-010-001
+work_item_id: TUN-P2-010
+classification: BUG
+severity: SEV-2
+status: OPEN
+environment: P2-010 uncommitted federation session-effect integration
+description: A session issued against an earlier linked source can regain use after unlink with RevokeLinkedSessions followed by legitimate same-Account relinking, if lazy revocation has not yet visited that session. The ACTIVE source fast path and maintenance previously considered only the current unlink generation. Preserve irreversible revocation for the affected original source generation while allowing newly issued sessions after relinking.
+expected_behavior_ref: docs/development/P2_010_FEDERATION_REFINEMENT.md; docs/authority/current/development/17_Account_Identity_and_Session_FRD.md
+evidence:
+  - src/Modules/Identity/FederationAuthentication.cs
+  - src/Modules/Identity/FederationSessionEffects.cs
+  - src/Modules/Identity/AuthenticationApplication.cs
+  - tests/Tunner.Identity.Persistence.Tests/FederationManagementPrivateIntegrationTests.cs
+  - governance/evidence/TUN-P2-010-VALIDATION.json
+affected_versions:
+  - P2-010 owned working integration based on 5fc094e3743ef9702b1dbcc0b2b11707233b8aab
+created_at: 2026-11-12T17:08:22Z
+updated_at: 2026-11-12T17:08:22Z
