@@ -1,4 +1,6 @@
 using System.Net;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
@@ -25,6 +27,53 @@ namespace Tunner.Identity.Persistence.Tests;
 /// <summary>Real native handler + bounded BFF callback, local TLS and in-process synthetic HTTP only. No Identity/SQL/session acceptance.</summary>
 public sealed class FederationOidcNativeProtocolTests
 {
+    [Theory]
+    [InlineData("missing")]
+    [InlineData("unsigned")]
+    [InlineData("empty-rs256")]
+    [InlineData("unsupported")]
+    public async Task NativeValidatedEventRejectsUnsupportedShapeWithoutProjectingIdentity(string shape)
+    {
+        var options = new OpenIdConnectOptions(); var successCalls = 0;
+        var transport = new FederationOidcTransport("synthetic-native", SyntheticProvider.Issuer,
+            SyntheticProvider.Issuer + "/.well-known/openid-configuration", SyntheticProvider.ClientId,
+            "https://user.example.test/authentication/federation/google/callback", ["/login"], TimeSpan.FromMinutes(2),
+            TimeSpan.FromMinutes(1), TimeSpan.Zero, 16384, "__Host-native.Correlation.", "__Host-native.Nonce.");
+        transport.Configure(options, SyntheticProvider.Secret, TimeProvider.System,
+            (_, _) => { successCalls++; return Task.FromResult<string?>("/login"); }, (_, _) => Task.FromResult<string?>("/login"));
+        var header = new JwtHeader { ["alg"] = shape == "unsigned" ? "none" : shape == "unsupported" ? "HS256" : "RS256" };
+        // Synthetic event shapes are rejection inputs only; real verification remains covered by native TLS flows.
+        var token = shape == "missing" ? null : new JwtSecurityToken(header, new JwtPayload(), "synthetic-header", "synthetic-payload",
+            shape == "unsupported" ? "synthetic-signature" : string.Empty);
+        var context = new TokenValidatedContext(new DefaultHttpContext(), new("synthetic-native", "synthetic-native", typeof(OpenIdConnectHandler)), options,
+            new(new ClaimsIdentity()), new()) { SecurityToken = token! };
+        await options.Events.TokenValidated(context);
+        var failure = Assert.IsAssignableFrom<Exception>(context.Result?.Failure); Assert.Equal(0, successCalls);
+        Assert.Equal("FEDERATION_PROTOCOL_REJECTED", failure.Message);
+    }
+
+    [Fact]
+    public void NativeValidatorStateOwnershipAndOnlyRequiredClaimProjectionArePreserved()
+    {
+        var options = new OpenIdConnectOptions(); var nativeValidator = options.ProtocolValidator;
+        var transport = new FederationOidcTransport("synthetic-native", SyntheticProvider.Issuer,
+            SyntheticProvider.Issuer + "/.well-known/openid-configuration", SyntheticProvider.ClientId,
+            "https://user.example.test/authentication/federation/google/callback", ["/login"], TimeSpan.FromMinutes(2),
+            TimeSpan.FromMinutes(1), TimeSpan.Zero, 16384, "__Host-native.Correlation.", "__Host-native.Nonce.");
+        transport.Configure(options, SyntheticProvider.Secret, TimeProvider.System,
+            (_, _) => Task.FromResult<string?>("/login"), (_, _) => Task.FromResult<string?>("/login"));
+        Assert.Same(nativeValidator, options.ProtocolValidator);
+        Assert.False(options.ProtocolValidator.RequireStateValidation); Assert.True(options.ProtocolValidator.RequireState);
+        Assert.True(options.ProtocolValidator.RequireNonce); Assert.True(options.ProtocolValidator.RequireTimeStampInNonce);
+        Assert.Equal(TimeSpan.FromMinutes(1), options.ProtocolValidator.NonceLifetime);
+        Assert.DoesNotContain(options.ClaimActions, action => action.ClaimType is "iss" or "aud");
+        Assert.Contains(options.ClaimActions, action => action.ClaimType == "nonce");
+        Assert.False(options.MapInboundClaims); Assert.False(options.SaveTokens);
+        Assert.True(options.TokenValidationParameters.ValidateIssuer); Assert.True(options.TokenValidationParameters.ValidateAudience);
+        Assert.True(options.TokenValidationParameters.ValidateIssuerSigningKey); Assert.True(options.TokenValidationParameters.ValidateLifetime);
+        Assert.Equal("__Host-native.Correlation.", options.CorrelationCookie.Name);
+    }
+
     [Fact]
     public async Task NativeCodePkceSignatureNonceAndProtectedPropertiesReachOnlyTerminalClosedFacts()
     {
@@ -47,6 +96,7 @@ public sealed class FederationOidcNativeProtocolTests
     [InlineData("issuer")]
     [InlineData("audience")]
     [InlineData("signature")]
+    [InlineData("unsigned")]
     [InlineData("expired")]
     [InlineData("provider-mixup")]
     [InlineData("withdrawn-profile")]
@@ -162,7 +212,8 @@ public sealed class FederationOidcNativeProtocolTests
                     var events = options.Events;
                     var message = events.OnMessageReceived; events.OnMessageReceived = context => { host!.messages++; return message(context); };
                     events.OnTokenResponseReceived = _ => { host!.tokenResponses++; return Task.CompletedTask; };
-                    events.OnTokenValidated = _ => { host!.validatedTokens++; return Task.CompletedTask; };
+                    var tokenValidated = events.OnTokenValidated;
+                    events.OnTokenValidated = context => { host!.validatedTokens++; return tokenValidated(context); };
                     var ticket = events.OnTicketReceived; events.OnTicketReceived = context => { host!.tickets++; return ticket(context); };
                     var authenticationFailed = events.OnAuthenticationFailed;
                     events.OnAuthenticationFailed = context => { host!.failureClass = Classify(context.Exception); return authenticationFailed(context); };
@@ -218,7 +269,7 @@ public sealed class FederationOidcNativeProtocolTests
         private static string Classify(Exception? error) => error switch
         {
             SecurityTokenInvalidIssuerException => "ISSUER", SecurityTokenInvalidAudienceException => "AUDIENCE",
-            SecurityTokenInvalidSignatureException => "SIGNATURE", SecurityTokenSignatureKeyNotFoundException => "SIGNING_KEY",
+            SecurityTokenSignatureKeyNotFoundException => "SIGNING_KEY", SecurityTokenInvalidSignatureException => "SIGNATURE",
             SecurityTokenExpiredException => "EXPIRY", SecurityTokenNotYetValidException => "NOT_YET_VALID",
             Microsoft.IdentityModel.Protocols.OpenIdConnect.OpenIdConnectProtocolInvalidNonceException => "NONCE",
             Microsoft.IdentityModel.Protocols.OpenIdConnect.OpenIdConnectProtocolException => "PROTOCOL",
@@ -287,7 +338,7 @@ public sealed class FederationOidcNativeProtocolTests
                     Issuer = Defect == "issuer" ? "https://wrong-issuer.example.test" : Issuer,
                     Audience = Defect == "audience" ? "wrong-audience" : ClientId, Claims = claims,
                     IssuedAt = now.AddMinutes(-2), NotBefore = now.AddMinutes(-2), Expires = Defect == "expired" ? now.AddMinutes(-1) : now.AddMinutes(5),
-                    SigningCredentials = new(new RsaSecurityKey(Defect == "signature" ? wrongRsa : rsa) { KeyId = "synthetic-key" }, SecurityAlgorithms.RsaSha256)
+                    SigningCredentials = Defect == "unsigned" ? null : new(new RsaSecurityKey(Defect == "signature" ? wrongRsa : rsa) { KeyId = "synthetic-key" }, SecurityAlgorithms.RsaSha256)
                 });
                 return Json(new { access_token = "synthetic-unused-access-token", token_type = "Bearer", expires_in = 300, id_token = token });
             }

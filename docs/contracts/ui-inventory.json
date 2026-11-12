@@ -435,11 +435,15 @@
         "P1-018-RV003",
         "TUN-P2-007",
         "TUN-P2-008",
-        "P1-018-RV006"
+        "P1-018-RV006",
+        "TUN-P2-010",
+        "P1-018-RV008"
       ],
       "authority_refs": [
         "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md",
-        "docs/authority/current/development/31_UI_UX_Screen_and_Control_Center_Requirements_Matrix.md"
+        "docs/authority/current/development/31_UI_UX_Screen_and_Control_Center_Requirements_Matrix.md",
+        "docs/authority/current/decisions/AMD-0008_Approved_Figma_Visual_Fidelity_and_Product_Owner_UX_Consent.md",
+        "docs/authority/current/decisions/AMD-0009_URL_Addressable_Routing_and_Governed_Form_Validation.md"
       ],
       "figma_refs": [
         {
@@ -465,7 +469,13 @@
         "web/apps/user/totp.content-keys.ts",
         "web/apps/user/totp.code.tsx",
         "web/apps/user/totp.css",
-        "src/Modules/Identity/TotpEndpoints.cs"
+        "src/Modules/Identity/TotpEndpoints.cs",
+        "web/apps/user/federation.sign-in.tsx",
+        "web/apps/user/federation.api.ts",
+        "web/apps/user/authentication.content.proposal.json",
+        "src/Modules/Identity/FederationBrowserService.cs",
+        "src/Modules/Identity/FederationContracts.cs",
+        "src/Tunner.User.Bff/FederationOidcEndpoints.cs"
       ],
       "planning_status": "PASSWORD_AND_PRIMARY_PASSKEY_SLICE_IMPLEMENTED_VALIDATION_PENDING",
       "design_status": "PRODUCT_OWNER_APPROVED_SCOPED_ADAPTATIONS",
@@ -483,10 +493,53 @@
       "additional_consent_refs": [
         "governance/evidence/TUN-P2-005-VISUAL-ACCEPTANCE-DEFERRAL-20261021.json",
         "governance/evidence/TUN-P2-008-VISUAL-CONSENT.json",
-        "governance/evidence/TUN-P2-008-FACTOR-PICKER-CONSENT.json"
+        "governance/evidence/TUN-P2-008-FACTOR-PICKER-CONSENT.json",
+        "governance/evidence/TUN-P2-010-VISUAL-CONSENT.json"
       ],
-      "current_revision_ref": "P1-018-RV006",
-      "revision_acceptance_boundary": "Actual008-V01-V05 and separate factor-picker consent are recorded. Current implementation requires committed source-bound URL, VAL, UX-FID, native and rendered evidence. No prototype, prior007 or other-route PASS is inherited. Runtime production policy/publication, Product/release and protected-main gates remain separate."
+      "current_revision_ref": "P1-018-RV008",
+      "revision_acceptance_boundary": "010-V01 linked-sign-in WIP only under ACTIVE P1-018-RV008 and actual scoped visual consent. The 27 controlled-BFF public cases and four VERIFIED-state renders are limited implementation evidence. Final per-item URL/VAL/UX-FID, baseline affected-consumer regression, source-bound native/live integration and native UI gate remain required. No collision intake, explicit linking/unlinking, federated operation proof, production policy/publication or whole-feature/Product/release acceptance is claimed.",
+      "contract_refs": [
+        "docs/contracts/authentication-session-contract.md",
+        "docs/development/P2_010_FEDERATION_REFINEMENT.md"
+      ],
+      "previous_revision_refs": [
+        "P1-018-RV006"
+      ],
+      "prior_revision_acceptance_boundaries": [
+        {
+          "revision_id": "P1-018-RV006",
+          "text": "Actual008-V01-V05 and separate factor-picker consent are recorded. Current implementation requires committed source-bound URL, VAL, UX-FID, native and rendered evidence. No prototype, prior007 or other-route PASS is inherited. Runtime production policy/publication, Product/release and protected-main gates remain separate."
+        }
+      ],
+      "compatibility_revision_refs": [
+        "P2-004-UI001-RV005",
+        "P2-004-UI002-RV005"
+      ],
+      "federation_v01_evidence": {
+        "implementation_commit_ref": "370a2c702c625bae462d330f7d88c11ce34d0a38",
+        "execution_identity_boundary": "Public run used the same frozen UI source bytes subsequently committed at this implementation reference; this is not a relabeled precommit invocation SHA.",
+        "public_ui_case_count": 27,
+        "public_ui_report_ref": "artifacts/p2-010-federation-20261112/sign-in-wip-ui/results.json",
+        "rendered_state": "VERIFIED original sign-in recovery",
+        "rendered_viewport_widths": [
+          1440,
+          768,
+          390,
+          320
+        ],
+        "render_refs": [
+          "artifacts/p2-010-federation-20261112/sign-in-wip-ui/screenshots/federation-recovery-1440.png",
+          "artifacts/p2-010-federation-20261112/sign-in-wip-ui/screenshots/federation-recovery-768.png",
+          "artifacts/p2-010-federation-20261112/sign-in-wip-ui/screenshots/federation-recovery-390.png",
+          "artifacts/p2-010-federation-20261112/sign-in-wip-ui/screenshots/federation-recovery-320.png"
+        ],
+        "acceptance_state": "WIP_PUBLIC_EVIDENCE_FINAL_UI_ACCEPTANCE_PENDING",
+        "baseline_password_passkey_totp_consumer_regression": "PENDING_SEPARATE_AFFECTED_SOURCE_VALIDATION"
+      },
+      "federation_v01_scope": "Existing Login shell with conditionally enabled Google/Microsoft slots and same-screen exact original sign-in recovery. New component has no independent pathname.",
+      "component_ids": [
+        "COMP-FEDERATION-SIGN-IN"
+      ]
     },
     {
       "id": "U-AUTH-04",
@@ -1846,11 +1899,15 @@
         "P1-018-RV003",
         "TUN-P2-007",
         "TUN-P2-008",
-        "P1-018-RV006"
+        "P1-018-RV006",
+        "TUN-P2-010",
+        "P1-018-RV008"
       ],
       "authority_refs": [
         "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md",
-        "docs/authority/current/development/31_UI_UX_Screen_and_Control_Center_Requirements_Matrix.md"
+        "docs/authority/current/development/31_UI_UX_Screen_and_Control_Center_Requirements_Matrix.md",
+        "docs/authority/current/decisions/AMD-0008_Approved_Figma_Visual_Fidelity_and_Product_Owner_UX_Consent.md",
+        "docs/authority/current/decisions/AMD-0009_URL_Addressable_Routing_and_Governed_Form_Validation.md"
       ],
       "figma_refs": [
         {
@@ -1870,7 +1927,10 @@
         "src/Modules/Identity/AuthenticationEndpoints.cs",
         "src/Modules/Identity/IdentityWebAssets.cs",
         "web/apps/user/totp.api.ts",
-        "web/apps/user/totp.routes.ts"
+        "web/apps/user/totp.routes.ts",
+        "web/apps/user/federation.sign-in.tsx",
+        "web/apps/user/federation.api.ts",
+        "web/apps/user/authentication.content.proposal.json"
       ],
       "observed_defects": [],
       "validation_state": "IMPLEMENTED_SOURCE_VALIDATION_PENDING",
@@ -1888,10 +1948,50 @@
       "additional_consent_refs": [
         "governance/evidence/TUN-P2-005-VISUAL-ACCEPTANCE-DEFERRAL-20261021.json",
         "governance/evidence/TUN-P2-008-VISUAL-CONSENT.json",
-        "governance/evidence/TUN-P2-008-FACTOR-PICKER-CONSENT.json"
+        "governance/evidence/TUN-P2-008-FACTOR-PICKER-CONSENT.json",
+        "governance/evidence/TUN-P2-010-VISUAL-CONSENT.json"
       ],
-      "current_revision_ref": "P1-018-RV006",
-      "revision_acceptance_boundary": "Actual008-V01-V05 and separate factor-picker consent are recorded. Current implementation requires committed source-bound URL, VAL, UX-FID, native and rendered evidence. No prototype, prior007 or other-route PASS is inherited. Runtime production policy/publication, Product/release and protected-main gates remain separate."
+      "current_revision_ref": "P1-018-RV008",
+      "revision_acceptance_boundary": "010-V01 linked-sign-in WIP only under ACTIVE P1-018-RV008 and actual scoped visual consent. The 27 controlled-BFF public cases and four VERIFIED-state renders are limited implementation evidence. Final per-item URL/VAL/UX-FID, baseline affected-consumer regression, source-bound native/live integration and native UI gate remain required. No collision intake, explicit linking/unlinking, federated operation proof, production policy/publication or whole-feature/Product/release acceptance is claimed.",
+      "contract_refs": [
+        "docs/contracts/authentication-session-contract.md",
+        "docs/development/P2_010_FEDERATION_REFINEMENT.md"
+      ],
+      "previous_revision_refs": [
+        "P1-018-RV006"
+      ],
+      "prior_revision_acceptance_boundaries": [
+        {
+          "revision_id": "P1-018-RV006",
+          "text": "Actual008-V01-V05 and separate factor-picker consent are recorded. Current implementation requires committed source-bound URL, VAL, UX-FID, native and rendered evidence. No prototype, prior007 or other-route PASS is inherited. Runtime production policy/publication, Product/release and protected-main gates remain separate."
+        }
+      ],
+      "compatibility_revision_refs": [
+        "P2-004-UI001-RV005",
+        "P2-004-UI002-RV005"
+      ],
+      "federation_v01_evidence": {
+        "implementation_commit_ref": "370a2c702c625bae462d330f7d88c11ce34d0a38",
+        "execution_identity_boundary": "Public run used the same frozen UI source bytes subsequently committed at this implementation reference; this is not a relabeled precommit invocation SHA.",
+        "public_ui_case_count": 27,
+        "public_ui_report_ref": "artifacts/p2-010-federation-20261112/sign-in-wip-ui/results.json",
+        "rendered_state": "VERIFIED original sign-in recovery",
+        "rendered_viewport_widths": [
+          1440,
+          768,
+          390,
+          320
+        ],
+        "render_refs": [
+          "artifacts/p2-010-federation-20261112/sign-in-wip-ui/screenshots/federation-recovery-1440.png",
+          "artifacts/p2-010-federation-20261112/sign-in-wip-ui/screenshots/federation-recovery-768.png",
+          "artifacts/p2-010-federation-20261112/sign-in-wip-ui/screenshots/federation-recovery-390.png",
+          "artifacts/p2-010-federation-20261112/sign-in-wip-ui/screenshots/federation-recovery-320.png"
+        ],
+        "acceptance_state": "WIP_PUBLIC_EVIDENCE_FINAL_UI_ACCEPTANCE_PENDING",
+        "baseline_password_passkey_totp_consumer_regression": "PENDING_SEPARATE_AFFECTED_SOURCE_VALIDATION"
+      },
+      "federation_v01_scope": "Provider entry and exact original linked-sign-in completion/recovery; credential form adds sibling busy/submit protection only. Existing password validation and semantics are retained."
     },
     {
       "module": "Identity.StepUp",
@@ -2246,6 +2346,115 @@
       ],
       "current_revision_ref": "P1-018-RV006",
       "revision_acceptance_boundary": "Actual008-V01-V05 and separate factor-picker consent are recorded. Current implementation requires committed source-bound URL, VAL, UX-FID, native and rendered evidence. No prototype, prior007 or other-route PASS is inherited. Runtime production policy/publication, Product/release and protected-main gates remain separate."
+    },
+    {
+      "id": "COMP-FEDERATION-SIGN-IN",
+      "kind": "COMPONENT",
+      "status": "IMPLEMENTED",
+      "app": "user",
+      "module": "Identity.Federation",
+      "title": "Google and Microsoft linked sign-in",
+      "pathname": null,
+      "runtime_pathname": null,
+      "owner_pathnames": [
+        "/login"
+      ],
+      "parent_screen_ids": [
+        "U-AUTH-01"
+      ],
+      "owner_scopes": [
+        "TUN-P2-010",
+        "P1-018-RV008"
+      ],
+      "authority_refs": [
+        "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md",
+        "docs/authority/current/development/31_UI_UX_Screen_and_Control_Center_Requirements_Matrix.md",
+        "docs/authority/current/decisions/AMD-0008_Approved_Figma_Visual_Fidelity_and_Product_Owner_UX_Consent.md",
+        "docs/authority/current/decisions/AMD-0009_URL_Addressable_Routing_and_Governed_Form_Validation.md"
+      ],
+      "contract_refs": [
+        "docs/contracts/authentication-session-contract.md",
+        "docs/development/P2_010_FEDERATION_REFINEMENT.md"
+      ],
+      "figma_refs": [
+        {
+          "file_key": "apNbwvAgdn1xIxYH1oiaSC",
+          "node_id": "2:4"
+        },
+        {
+          "file_key": "apNbwvAgdn1xIxYH1oiaSC",
+          "node_id": "70:1257"
+        }
+      ],
+      "source_paths": [
+        "web/apps/user/federation.sign-in.tsx",
+        "web/apps/user/federation.api.ts",
+        "web/apps/user/authentication.tsx",
+        "web/apps/user/authentication.css",
+        "web/apps/user/authentication.content.proposal.json",
+        "web/apps/user/passkeys.api.ts",
+        "web/apps/user/totp.api.ts",
+        "web/apps/user/totp.routes.ts",
+        "web/packages/ui/src/controls.tsx",
+        "web/packages/ui/src/content.tsx",
+        "src/Modules/Identity/AuthenticationEndpoints.cs",
+        "src/Modules/Identity/IdentityWebAssets.cs",
+        "src/Modules/Identity/FederationBrowserService.cs",
+        "src/Modules/Identity/FederationContracts.cs",
+        "src/Tunner.User.Bff/FederationOidcEndpoints.cs"
+      ],
+      "guard": "Only explicit server Google/Microsoft capability enables its fixed provider slot. Retain exact original request and attempt identities; only a matching successful fresh PREPARED Start admits the matching clean local challenge. Protected browser/pointer, current principal CSRF, profile/Account/session/currentness and final outcomes remain independently server-owned. Session existence and preserveOriginalBrowser are never sign-in outcome authority.",
+      "interaction": "Same Login shell and approved provider slots. Fresh explicit provider gesture needs no email/password; clean callback return restores safe original controls. VERIFIED without an error permits explicit completion; UNKNOWN and restored PREPARED/CHALLENGE_ADMITTED/COMPLETED permit exact result checks without challenge/retry. Same terminal original cancel acknowledgement refreshes Login. Exact authenticated completion or existing MFA_REQUIRED parser owns navigation; abort and route revision fence stale responses.",
+      "fields": [],
+      "backend_validation": "Strict fixed-provider Start and empty-JSON original result/complete/cancel; current same-origin CSRF and protected original browser pointer, original request/attempt and native Account/link/profile/session authorization are independent of client state. No tokens, subjects, identity claims, email or proof enter application URLs/storage.",
+      "consent_ref": "governance/evidence/TUN-P2-010-VISUAL-CONSENT.json",
+      "approved_visual_scope_ids": [
+        "010-V01"
+      ],
+      "design_status": "PRODUCT_OWNER_APPROVED_SCOPED_ADAPTATIONS",
+      "planning_status": "LINKED_SIGN_IN_V01_IMPLEMENTED_WIP_ONLY",
+      "visual_state": "IMPLEMENTATION_REQUIRES_FINAL_ITEM_SPECIFIC_REVIEW",
+      "validation_state": "PUBLIC_MOCK_CASES_EXECUTED_FINAL_ACCEPTANCE_PENDING",
+      "observed_defects": [],
+      "acceptance_boundary": "010-V01 linked-sign-in WIP only under ACTIVE P1-018-RV008 and actual scoped visual consent. The 27 controlled-BFF public cases and four VERIFIED-state renders are limited implementation evidence. Final per-item URL/VAL/UX-FID, baseline affected-consumer regression, source-bound native/live integration and native UI gate remain required. No collision intake, explicit linking/unlinking, federated operation proof, production policy/publication or whole-feature/Product/release acceptance is claimed.",
+      "current_revision_ref": "P1-018-RV008",
+      "revision_acceptance_boundary": "010-V01 linked-sign-in WIP only under ACTIVE P1-018-RV008 and actual scoped visual consent. The 27 controlled-BFF public cases and four VERIFIED-state renders are limited implementation evidence. Final per-item URL/VAL/UX-FID, baseline affected-consumer regression, source-bound native/live integration and native UI gate remain required. No collision intake, explicit linking/unlinking, federated operation proof, production policy/publication or whole-feature/Product/release acceptance is claimed.",
+      "compatibility_revision_refs": [
+        "P2-004-UI001-RV005",
+        "P2-004-UI002-RV005"
+      ],
+      "federation_v01_evidence": {
+        "implementation_commit_ref": "370a2c702c625bae462d330f7d88c11ce34d0a38",
+        "execution_identity_boundary": "Public run used the same frozen UI source bytes subsequently committed at this implementation reference; this is not a relabeled precommit invocation SHA.",
+        "public_ui_case_count": 27,
+        "public_ui_report_ref": "artifacts/p2-010-federation-20261112/sign-in-wip-ui/results.json",
+        "rendered_state": "VERIFIED original sign-in recovery",
+        "rendered_viewport_widths": [
+          1440,
+          768,
+          390,
+          320
+        ],
+        "render_refs": [
+          "artifacts/p2-010-federation-20261112/sign-in-wip-ui/screenshots/federation-recovery-1440.png",
+          "artifacts/p2-010-federation-20261112/sign-in-wip-ui/screenshots/federation-recovery-768.png",
+          "artifacts/p2-010-federation-20261112/sign-in-wip-ui/screenshots/federation-recovery-390.png",
+          "artifacts/p2-010-federation-20261112/sign-in-wip-ui/screenshots/federation-recovery-320.png"
+        ],
+        "acceptance_state": "WIP_PUBLIC_EVIDENCE_FINAL_UI_ACCEPTANCE_PENDING",
+        "baseline_password_passkey_totp_consumer_regression": "PENDING_SEPARATE_AFFECTED_SOURCE_VALIDATION"
+      },
+      "acceptance_check_scope": {
+        "required": "AMD-0009 component VAL-001..008 and AMD-0008 UX-FID-001..008; command-only field exclusions require explicit authority-backed reasons in final evidence.",
+        "route_owner": "U-AUTH-01 covers URL-001..006; same-screen behavior remains under /login. FORM-LOGIN separately retains field-validation and sibling-busy acceptance.",
+        "final_dispositions": "PENDING_NO_PER_CELL_ACCEPTANCE_RECORDED"
+      },
+      "excluded_unimplemented_scopes": [
+        "Unlinked identity registration and collision-to-link intake/confirmation",
+        "010-V02 linked-method management/link/unlink",
+        "010-V03 federated operation proof"
+      ],
+      "owner_manual_design_update_ref": "governance/todos/TODO-TUN-P2-010-DESIGN001.yaml"
     },
     {
       "id": "COMP-PASSKEY-REVOKE",
@@ -2863,5 +3072,5 @@
       "reason": "Hidden historical DOB-only screen, superseded prospectively by PDR-0011/AMD-0007; never implement as active UI."
     }
   ],
-  "updated_at": "2026-11-11T10:39:39.137Z"
+  "updated_at": "2026-11-12T15:04:20.540Z"
 }

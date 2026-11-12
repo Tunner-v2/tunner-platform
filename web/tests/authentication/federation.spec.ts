@@ -7,8 +7,8 @@ const requestId='12121212-3434-4567-8989-121212121212',attemptId='23232323-4545-
 const operation=(status:string,extra:Record<string,unknown>={})=>({attemptId,requestId,status,errorCode:null,...extra});
 async function setup(page:Page,pending:unknown=null,configuration:Record<string,unknown>|null={googleAvailable:true,microsoftAvailable:true},omitNewContent=false){
  const content=Object.fromEntries(Object.entries(proposal.content).filter(([key])=>!omitNewContent||!key.startsWith('federation.')).map(([key,text])=>[key,{key,text,state:'PUBLISHED',locale:'en',variantRef:'fixture-variant',versionRef:'fixture-version',publicationRef:'fixture-only-publication'}]));
- const state={authenticated:false,pending,options:0,sessionStatus:401,start:0,complete:0,result:0,cancel:0,challenges:0};
- await page.route('**/authentication/options',route=>{state.options++;return route.fulfill({json:{csrfToken:'fixture-anonymous-csrf',idempotencyKey:requestId,passwordMaximumLength:128,locale:'en',content,termsUri:'https://fixture.example.test/terms',privacyUri:'https://fixture.example.test/privacy',supportUri:null,...(configuration?{federation:{...configuration,pending:state.pending}}:{})}})});
+ const state={authenticated:false,pending,options:0,sessionStatus:401,start:0,complete:0,result:0,cancel:0,challenges:0,idempotencyKey:requestId};
+ await page.route('**/authentication/options',route=>{state.options++;return route.fulfill({json:{csrfToken:'fixture-anonymous-csrf',idempotencyKey:state.idempotencyKey,passwordMaximumLength:128,locale:'en',content,termsUri:'https://fixture.example.test/terms',privacyUri:'https://fixture.example.test/privacy',supportUri:null,...(configuration?{federation:{...configuration,pending:state.pending}}:{})}})});
  await page.route('**/authentication/session',route=>route.fulfill(state.authenticated?{json:{authenticated:true,csrfToken:'fixture-current-principal-csrf'}}:{status:state.sessionStatus,json:{error_code:'AUTHENTICATION_REQUIRED'}}));
  return state;
 }
@@ -104,4 +104,47 @@ for(const width of [1440,768,390,320])test('Published federation recovery preser
  expect(await page.locator('.authentication-glow,.authentication-providers img').evaluateAll(nodes=>nodes.every(node=>{const image=node as HTMLImageElement;return image.complete&&image.naturalWidth>0}))).toBe(true);
  expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);expect((await new AxeBuilder({page}).withTags(['wcag2a','wcag2aa','wcag21aa','wcag22aa']).analyze()).violations).toEqual([]);
  await page.getByRole('button',{name:'Complete sign-in',exact:true}).focus();await expect(page.getByRole('button',{name:'Complete sign-in',exact:true})).toBeFocused();await page.screenshot({path:'test-results/authentication/federation-recovery-'+width+'.png',fullPage:true});
+});
+
+test('V01 focused canonical reload and Back Forward restore only the original pending federation context',async({page})=>{
+ const state=await setup(page,operation('UNKNOWN'));state.authenticated=true;
+ const credentialPosts=await noCredentialPosts(page);
+ await page.route('**/authentication/federation/result',route=>{state.result++;expect(route.request().postDataJSON()).toEqual({});expect(route.request().headers()['x-tunner-csrf']).toBe('fixture-current-principal-csrf');return route.fulfill({json:{authenticated:false,operation:operation('UNKNOWN')}})});
+ await page.route('**/authentication/federation/start',route=>{state.start++;return route.fulfill({status:500})});
+ await page.route('**/authentication/federation/complete',route=>{state.complete++;return route.fulfill({status:500})});
+ await page.route(/\/authentication\/federation\/(google|microsoft)\/challenge$/,route=>{state.challenges++;return route.fulfill({status:500})});
+ await page.goto('/login');await expect(page.getByRole('button',{name:'Check status',exact:true})).toBeVisible();
+ const beforeReload=state.options;state.idempotencyKey='45454545-6767-4890-8989-454545454545';await page.reload();
+ await expect(page).toHaveURL('http://127.0.0.1:5189/login');await expect(page.getByRole('button',{name:'Check status',exact:true})).toBeVisible();await expect.poll(()=>state.options).toBeGreaterThan(beforeReload);
+ // This explicit destination is the unrelated current session, never the federation attempt's success.
+ await page.goto('/signed-in');await expect(page.getByRole('heading',{name:'You’re signed in',exact:true})).toBeVisible();
+ const beforeBack=state.options;await page.goBack();await expect(page).toHaveURL('http://127.0.0.1:5189/login');await expect(page.getByRole('button',{name:'Check status',exact:true})).toBeVisible();await expect.poll(()=>state.options).toBeGreaterThan(beforeBack);
+ await page.goForward();await expect(page).toHaveURL('http://127.0.0.1:5189/signed-in');await expect(page.getByRole('heading',{name:'You’re signed in',exact:true})).toBeVisible();
+ const beforeSecondBack=state.options;await page.goBack();await expect(page).toHaveURL('http://127.0.0.1:5189/login');await expect(page.getByRole('button',{name:'Check status',exact:true})).toBeVisible();await expect.poll(()=>state.options).toBeGreaterThan(beforeSecondBack);
+ expect(state.result).toBe(0);await expect(page.getByRole('button',{name:'Complete sign-in',exact:true})).toHaveCount(0);
+ await page.getByRole('button',{name:'Check status',exact:true}).click();await expect.poll(()=>state.result).toBe(1);await expect(page.getByRole('button',{name:'Check status',exact:true})).toBeEnabled();await expect(page).toHaveURL('http://127.0.0.1:5189/login');
+ expect(state.pending).toEqual(operation('UNKNOWN'));expect(state.start).toBe(0);expect(state.complete).toBe(0);expect(state.challenges).toBe(0);expect(credentialPosts()).toBe(0);
+ expect(await page.evaluate(()=>({search:location.search,hash:location.hash,local:localStorage.length,session:sessionStorage.length}))).toEqual({search:'',hash:'',local:0,session:0});
+});
+
+for(const status of ['UNKNOWN','REJECTED','EXPIRED'] as const)test('V01 focused '+status+' feedback and keyboard controls at desktop and narrow mobile',async({page},testInfo)=>{
+ const state=await setup(page,operation(status));const credentialPosts=await noCredentialPosts(page);
+ await page.route('**/authentication/federation/result',route=>{state.result++;expect(route.request().postDataJSON()).toEqual({});expect(route.request().headers()['x-tunner-csrf']).toBe('fixture-anonymous-csrf');return route.fulfill({json:{authenticated:false,operation:operation(status)}})});
+ await page.route('**/authentication/federation/cancel',route=>{state.cancel++;expect(route.request().postDataJSON()).toEqual({});state.pending=null;return route.fulfill({json:{authenticated:false,operation:operation(status)}})});
+ for(const width of [1440,320]){
+  state.pending=operation(status);await page.setViewportSize({width,height:1024});await page.goto('/login');
+  const first=page.getByRole('button',{name:status==='UNKNOWN'?'Check status':'Back to sign in',exact:true});await expect(first).toBeEnabled();
+  const description=status==='UNKNOWN'?'federation.signIn.unknownDescription':status==='EXPIRED'?'federation.signIn.expiredDescription':'federation.signIn.notCompletedDescription';
+  await expect(page.getByText(proposal.content[description],{exact:true})).toBeVisible();await expect(page.getByRole('button',{name:'Sign in',exact:true})).toBeDisabled();
+  await page.evaluate(()=>document.fonts.ready);expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
+  expect((await new AxeBuilder({page}).withTags(['wcag2a','wcag2aa','wcag21aa','wcag22aa']).analyze()).violations).toEqual([]);
+  await first.focus();await expect(first).toBeFocused();const picture=testInfo.outputPath('federation-'+status.toLowerCase()+'-'+width+'.png');await page.screenshot({path:picture,fullPage:true});await testInfo.attach('federation-'+status.toLowerCase()+'-'+width,{path:picture,contentType:'image/png'});
+  if(status==='UNKNOWN'){
+   await page.keyboard.press('Tab');await expect(page.getByRole('button',{name:'Cancel',exact:true})).toBeFocused();await page.keyboard.press('Shift+Tab');await expect(first).toBeFocused();
+   const before=state.result;await page.keyboard.press('Enter');await expect.poll(()=>state.result).toBe(before+1);await expect(first).toBeEnabled();await expect(page).toHaveURL('http://127.0.0.1:5189/login');expect(state.cancel).toBe(0);
+  }else{
+   const before=state.cancel;await page.keyboard.press('Enter');await expect.poll(()=>state.cancel).toBe(before+1);await expect(page.getByRole('button',{name:'Google',exact:true})).toBeEnabled();await expect(page.getByLabel('Password',{exact:true})).toBeEnabled();expect(state.pending).toBeNull();
+  }
+ }
+ expect(credentialPosts()).toBe(0);expect(state.start).toBe(0);expect(state.complete).toBe(0);
 });

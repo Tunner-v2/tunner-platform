@@ -138,7 +138,7 @@ public sealed class FederationOidcTransportTests
         await options.Events.MessageReceived(context); Assert.Null(context.Result);
         var early = new TokenValidatedContext(Http(), new(Scheme, Scheme, typeof(OpenIdConnectHandler)), options,
             new(new ClaimsIdentity([new("sub", "subject")], "synthetic")), new());
-        await options.Events.TokenValidated(early); Assert.Null(early.Result);
+        await options.Events.TokenValidated(early); Assert.NotNull(early.Result?.Failure);
     }
 
     [Fact]

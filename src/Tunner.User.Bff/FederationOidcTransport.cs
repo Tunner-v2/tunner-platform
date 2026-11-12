@@ -112,12 +112,17 @@ internal sealed class FederationOidcTransport
         options.SignInScheme = NoSignInScheme;
         options.ResponseType = OpenIdConnectResponseType.Code; options.ResponseMode = OpenIdConnectResponseMode.FormPost;
         options.UsePkce = true; options.MapInboundClaims = false; options.SaveTokens = false;
+        // Native default deletion actions otherwise erase these validated JWT facts before TicketReceived.
+        // Retain only the two required projection inputs; no native principal crosses the owner boundary.
+        options.ClaimActions.Remove("iss"); options.ClaimActions.Remove("aud");
         options.GetClaimsFromUserInfoEndpoint = false; options.UseTokenLifetime = false; options.SkipUnrecognizedRequests = false;
         options.PushedAuthorizationBehavior = PushedAuthorizationBehavior.Disable; options.DisableTelemetry = true;
         options.Scope.Clear(); options.Scope.Add("openid"); options.TimeProvider = clock;
         options.RemoteAuthenticationTimeout = timeout; options.BackchannelTimeout = timeout;
         options.CorrelationCookie = Cookie(correlationCookieName, timeout); options.NonceCookie = Cookie(nonceCookieName, nonceLifetime);
-        options.ProtocolValidator = new OpenIdConnectProtocolValidator { RequireNonce = true, NonceLifetime = nonceLifetime };
+        // Preserve ASP.NET's native validator: the handler validates protected state + correlation and clears
+        // protocol State before invoking it. A bare replacement wrongly re-enables a second incompatible state check.
+        options.ProtocolValidator.RequireNonce = true; options.ProtocolValidator.NonceLifetime = nonceLifetime;
         // IdentityModel8.19.2 token/nonce validation uses its native system UTC clock; its TimeProvider is internal.
         // Retain native validators, not a hand-written lifetime/JWT validator or a claimed injectable token clock.
         options.TokenValidationParameters = new()
@@ -167,6 +172,18 @@ internal sealed class FederationOidcTransport
                 {
                     context.HandleResponse(); await Fail(context.HttpContext, FederationOidcFailureReason.OwnerUnavailable, Attempt(context.Properties)).ConfigureAwait(false);
                 }
+            },
+            OnTokenValidated = context =>
+            {
+                // Native code-flow redemption allows unsigned tokens over TLS even when the configured
+                // RequireSignedTokens is true. Require our supported signed JWS shape after native validation.
+                // Nonempty signatures still undergo native verification. The framework's JwtSecurityToken
+                // conversion drops SigningKey, so its absence here is not evidence of a failed signature.
+                var token = context.SecurityToken;
+                if (token is null || token.InnerToken is not null || token.SignatureAlgorithm != SecurityAlgorithms.RsaSha256 ||
+                    string.IsNullOrEmpty(token.RawSignature)) context.Fail("FEDERATION_PROTOCOL_REJECTED");
+                // Rejection only: protocol/nonce checks still follow; facts are projected only in TicketReceived.
+                return Task.CompletedTask;
             },
             OnTicketReceived = async context =>
             {

@@ -19,7 +19,8 @@ public static class RecoveryCodeFiniteNativeExecution
     private static readonly string[] PublicIds = [.. CanaryIds, "OWNERSHIP_REJECT", "NO_LOG_REJECT", "SENSITIVE_REJECT"];
     private static readonly string[] CapacityIds = ["MIGRATION_CAPACITY"];
     private static readonly string[] SqlIds = ["ISSUANCE_BINDING", "RETIREMENT_BINDING", "ENTRY_ONE_WAY", "SET_ONE_WAY", "OPERATION_ONE_WAY",
-        "FEDERATION_NAMESPACE_BINDING", "FEDERATION_SINGLE_OWNER", "FEDERATION_OWNER_ROLLBACK", "FEDERATION_IMMUTABLE_VERSION"];
+        "FEDERATION_NAMESPACE_BINDING", "FEDERATION_SINGLE_OWNER", "FEDERATION_OWNER_ROLLBACK", "FEDERATION_IMMUTABLE_VERSION",
+        "FEDERATION_QUALIFICATION_LIFECYCLE", "FEDERATION_ATTEMPT_INTEGRITY", "FEDERATION_SESSION_SOURCE", "FEDERATION_MIGRATION_GUARDS"];
     private static readonly string[] PrivateIds = [
         "PARENT003_REGISTRATION_BOUNDARY", "PARENT003_REGISTRATION_FLOW", "PARENT003_REGISTRATION_PROGRESS", "PARENT005_AUTH_SESSION",
         "PARENT005_AUTH_DUPLICATE", "PARENT005_AUTH_CONTACT_CURRENT", "PARENT006_PROOF_SESSION", "PARENT006_PROOF_ROLLBACK",
@@ -281,6 +282,10 @@ public static class RecoveryCodeFiniteNativeExecution
                 "FEDERATION_SINGLE_OWNER" => new FederationIdentityPersistenceTests(fixture).ConcurrentExactIdentityHasOneOwnerAndCannotRewriteThatOwner(),
                 "FEDERATION_OWNER_ROLLBACK" => new FederationIdentityPersistenceTests(fixture).OwnerRollbackLeavesNoPartialIdentityReservation(),
                 "FEDERATION_IMMUTABLE_VERSION" => new FederationIdentityPersistenceTests(fixture).PersistedSubjectIsImmutableAndEvidenceUpdatesDetectStaleVersion(),
+                "FEDERATION_QUALIFICATION_LIFECYCLE" => new FederationSqlIntegrityTests(fixture).LegacyQualificationRequiresFreshEvidenceAndPreservesClientIdentity(),
+                "FEDERATION_ATTEMPT_INTEGRITY" => new FederationSqlIntegrityTests(fixture).AttemptsPreserveBindingVerifiedTupleAndOneUseTerminalResult(),
+                "FEDERATION_SESSION_SOURCE" => new FederationSqlIntegrityTests(fixture).FederatedSessionSourceIsImmutableAndPasswordGuardsRemainActive(),
+                "FEDERATION_MIGRATION_GUARDS" => new FederationSqlIntegrityTests(fixture).MigrationRoundTripInstallsGuardsAndRejectsPopulatedDown(),
                 _ => throw new InvalidOperationException("RECOVERY_NATIVE_CASE_INVALID")
             };
         }
