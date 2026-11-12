@@ -77,11 +77,12 @@ class RecoveryJourney {
  async proof(held,{denial=false,bodyLoss=false,publicationFault=false,hold=false}={}){
   const {page,op}=held,dialog=page.getByRole('dialog'),stats=this.mechanics.passkeyStats();
   const route='/authentication/step-up/'+this.method;
+  const totpStage=label=>{if(this.method==='totp')this.checkpoint?.(label);};
   if(this.method==='password'){await dialog.getByRole('button',{name:'Other method',exact:true}).click();await privateFill(dialog.getByLabel('Password',{exact:true}),this.account.password);}
-  if(this.method==='totp'){await dialog.getByRole('button',{name:'Authenticator Enter a 6-digit code',exact:true}).click();await privateFill(dialog.getByLabel('Verification code',{exact:true}),await this.mechanics.nextTotpCode(this.factor));}
-  if(denial)await this.fixture('DENY_OWNER_ONCE');
+  if(this.method==='totp'){totpStage('REC_TOTP_CHOOSER');await dialog.getByRole('button',{name:'Authenticator Enter a 6-digit code',exact:true}).click();const input=dialog.getByLabel('Verification code',{exact:true});totpStage('REC_TOTP_ORACLE');const code=await this.mechanics.nextTotpCode(this.factor);totpStage('REC_TOTP_FILL');await privateFill(input,code);}
+  if(denial){totpStage('REC_TOTP_DENY_ARM');await this.fixture('DENY_OWNER_ONCE');}
   if(bodyLoss)await this.fixture('DROP_FIRST_DELIVERY_ONCE');
-  if(publicationFault)await this.fixture('WITHDRAW_PUBLICATION_AFTER_APPLY');
+  if(publicationFault){totpStage('REC_TOTP_PUBLICATION_ARM');await this.fixture('WITHDRAW_PUBLICATION_AFTER_APPLY');}
   const submit=()=>dialog.getByRole('button',{name:this.method==='passkey'?'Passkey':'Confirm',exact:true}).click();
   if(bodyLoss){
    const request=this.mechanics.request(page,route);await submit();const sent=await request;requireTrue(object(sent)&&sent.requestId===held.proof.requestId);
@@ -90,30 +91,30 @@ class RecoveryJourney {
    this.prove('BODY_LOSS_NO_REDISCLOSURE',safe.status==='COMPLETED'&&safe.codesUnavailable===true&&await page.locator('.recovery-codes-grid code').count()===0&&await page.getByRole('button',{name:'Download',exact:true}).count()===0&&!await page.getByRole('dialog').getByText('These codes were already shown',{exact:true}).count());
    this.prove('ACTUAL_PROOF_METHOD',this.method==='password');return{safe,sent,bodyLost:true};
   }
-  const response=await this.response(page,route,submit);
-  this.prove('EXACT_OWNER_AND_STEP_UP_BINDING',response.sent.requestId===held.proof.requestId);
-  this.prove('ACTUAL_PROOF_METHOD',this.method==='password'?typeof response.sent.password==='string'&&response.sent.password===this.account.password:this.method==='passkey'?object(response.sent.credential)&&this.mechanics.passkeyStats().asserted===stats.asserted+1:response.sent.authenticatorReference===this.factor.reference&&/^\d{6}$/.test(response.sent.code));
+  totpStage('REC_TOTP_PROOF_POST');const response=await this.response(page,route,submit);
+  totpStage('REC_TOTP_REQUEST_BINDING');this.prove('EXACT_OWNER_AND_STEP_UP_BINDING',response.sent.requestId===held.proof.requestId);
+  this.prove('ACTUAL_PROOF_METHOD',this.method==='password'?typeof response.sent.password==='string'&&response.sent.password===this.account.password:this.method==='passkey'?object(response.sent.credential)&&this.mechanics.passkeyStats().asserted===stats.asserted+1:(totpStage('REC_TOTP_FACTOR_BINDING'),response.sent.authenticatorReference===this.factor.reference)&&(totpStage('REC_TOTP_CODE_SHAPE'),/^\d{6}$/.test(response.sent.code)));
   if(this.method==='passkey')this.prove('NATIVE_PASSKEY_PROOF',this.mechanics.passkeyStats().created===1&&this.mechanics.passkeyStats().asserted>stats.asserted);
-  if(this.method==='totp')this.prove('NATIVE_TOTP_PROOF',response.sent.authenticatorReference===this.factor.reference&&/^\d{6}$/.test(response.sent.code));
+  if(this.method==='totp')this.prove('NATIVE_TOTP_PROOF',(totpStage('REC_TOTP_NATIVE_FACTOR'),response.sent.authenticatorReference===this.factor.reference)&&(totpStage('REC_TOTP_NATIVE_CODE'),/^\d{6}$/.test(response.sent.code)));
   if(publicationFault){
-   requireTrue(!response.ok&&noDelivery(response.body));const safe=await this.result(op,page,held.boot),context=await this.mechanics.get(page,'/authentication/step-up/options');
-   this.prove('CURRENT_PUBLICATION',safe.status==='PENDING_PROOF'&&context.ok&&context.body.requestId===held.proof.requestId&&context.body.totpRecovery?.status==='PROOF_ACTIVE'&&await page.locator('.recovery-codes-grid code').count()===0);return{rejected:true,safe};
+   requireTrue((totpStage('REC_TOTP_PUBLICATION_HTTP'),!response.ok)&&(totpStage('REC_TOTP_PUBLICATION_NO_DELIVERY'),noDelivery(response.body)));totpStage('REC_TOTP_PUBLICATION_RESULT');const safe=await this.result(op,page,held.boot);totpStage('REC_TOTP_PUBLICATION_OPTIONS');const context=await this.mechanics.get(page,'/authentication/step-up/options');
+   this.prove('CURRENT_PUBLICATION',(totpStage('REC_TOTP_PUBLICATION_PENDING'),safe.status==='PENDING_PROOF')&&(totpStage('REC_TOTP_PUBLICATION_OPTIONS_OK'),context.ok)&&(totpStage('REC_TOTP_PUBLICATION_REQUEST'),context.body.requestId===held.proof.requestId)&&(totpStage('REC_TOTP_PUBLICATION_ACTIVE'),context.body.totpRecovery?.status==='PROOF_ACTIVE')&&(totpStage('REC_TOTP_PUBLICATION_EMPTY'),await page.locator('.recovery-codes-grid code').count()===0));return{rejected:true,safe};
   }
   if(denial){
    if(hold)this.checkpoint?.('RECOVERY_SOURCE_DENIAL_CHECK');
-   requireTrue(response.status===503&&noDelivery(response.body));
+   requireTrue((totpStage('REC_TOTP_DENIAL_STATUS'),response.status===503)&&(totpStage('REC_TOTP_DENIAL_NO_DELIVERY'),noDelivery(response.body)));
    if(hold)this.checkpoint?.('RECOVERY_SOURCE_HELD_OPTIONS');
-   const current=await this.mechanics.get(page,'/authentication/step-up/options'),native=this.method==='passkey'?current.body.passkeyRecovery:current.body.totpRecovery;
+   totpStage('REC_TOTP_DENIAL_OPTIONS');const current=await this.mechanics.get(page,'/authentication/step-up/options'),native=this.method==='passkey'?current.body.passkeyRecovery:current.body.totpRecovery;
    if(hold)this.checkpoint?.('RECOVERY_SOURCE_HELD_BINDING');
-   requireTrue(current.ok&&native?.requestId===held.proof.requestId&&native.attemptId===response.sent.attemptId&&native.operationReference===op.operationReference&&native.status===(this.method==='passkey'?'PROOF_ISSUED':'PROOF_ACTIVE'));
+   requireTrue((totpStage('REC_TOTP_DENIAL_OPTIONS_OK'),current.ok)&&(totpStage('REC_TOTP_DENIAL_REQUEST'),native?.requestId===held.proof.requestId)&&(totpStage('REC_TOTP_DENIAL_ATTEMPT'),native.attemptId===response.sent.attemptId)&&(totpStage('REC_TOTP_DENIAL_OPERATION'),native.operationReference===op.operationReference)&&(totpStage('REC_TOTP_DENIAL_PROOF_ACTIVE'),native.status===(this.method==='passkey'?'PROOF_ISSUED':'PROOF_ACTIVE')));
    if(hold){this.checkpoint?.('RECOVERY_SOURCE_HELD_RETURN');return{held,response,native};}
-   const before=await this.counts(),assertions=this.mechanics.passkeyStats().asserted;
-   const resumed=await this.response(page,route+'/continue',()=>dialog.getByRole('button',{name:'Continue this verification',exact:true}).click());
-   const after=await this.counts();
-   this.prove('OWNER_FAILURE_SAME_PROOF',resumed.ok&&resumed.sent.requestId===response.sent.requestId&&resumed.sent.attemptId===response.sent.attemptId&&!Object.hasOwn(resumed.sent,'code')&&!Object.hasOwn(resumed.sent,'credential')&&after.proofs===before.proofs&&after.codeAcceptances===before.codeAcceptances&&after.ownerCommits===before.ownerCommits+1&&after.consumedProofs===before.consumedProofs+1&&this.mechanics.passkeyStats().asserted===assertions);
-   return this.capture(held,resumed);
+   totpStage('REC_TOTP_COUNTS_BEFORE');const before=await this.counts(),assertions=this.mechanics.passkeyStats().asserted;
+   totpStage('REC_TOTP_RESUME_POST');const resumed=await this.response(page,route+'/continue',()=>dialog.getByRole('button',{name:'Continue this verification',exact:true}).click());
+   totpStage('REC_TOTP_COUNTS_AFTER');const after=await this.counts();
+   this.prove('OWNER_FAILURE_SAME_PROOF',(totpStage('REC_TOTP_RESUME_HTTP'),resumed.ok)&&(totpStage('REC_TOTP_RESUME_REQUEST'),resumed.sent.requestId===response.sent.requestId)&&(totpStage('REC_TOTP_RESUME_ATTEMPT'),resumed.sent.attemptId===response.sent.attemptId)&&(totpStage('REC_TOTP_RESUME_NO_CODE'),!Object.hasOwn(resumed.sent,'code'))&&(totpStage('REC_TOTP_RESUME_NO_CREDENTIAL'),!Object.hasOwn(resumed.sent,'credential'))&&(totpStage('REC_TOTP_RESUME_PROOFS'),after.proofs===before.proofs)&&(totpStage('REC_TOTP_RESUME_ACCEPTANCES'),after.codeAcceptances===before.codeAcceptances)&&(totpStage('REC_TOTP_RESUME_OWNER'),after.ownerCommits===before.ownerCommits+1)&&(totpStage('REC_TOTP_RESUME_CONSUMED'),after.consumedProofs===before.consumedProofs+1)&&(totpStage('REC_TOTP_RESUME_NATIVE_COUNT'),this.mechanics.passkeyStats().asserted===assertions));
+   totpStage('REC_TOTP_CAPTURE');return this.capture(held,resumed);
   }
-  return this.capture(held,response);
+  totpStage('REC_TOTP_CAPTURE');return this.capture(held,response);
  }
  async capture(held,response){
   const {op,proof,page}=held,d=response.body.recoveryCodeFirstDelivery;
@@ -208,9 +209,17 @@ class RecoveryJourney {
    this.checkpoint?.('RECOVERY_SOURCE_SECOND_LOGIN');await this.mechanics.passwordLogin(other,this.account,false);
    this.checkpoint?.('RECOVERY_SOURCE_REVOKE');await this.mechanics.revokePasskey(other,this.account.password,this.checkpoint);
    this.checkpoint?.('RECOVERY_SOURCE_COUNTS_BEFORE');const current=await this.counts();
-   this.checkpoint?.('RECOVERY_SOURCE_CONTINUE');const rejected=await this.response(this.page,'/authentication/step-up/passkey/continue',()=>this.page.getByRole('dialog').getByRole('button',{name:'Continue this verification',exact:true}).click());
+   this.checkpoint?.('RECOVERY_SOURCE_CONTINUE');
+   const dialog=this.page.getByRole('dialog'),resume=dialog.getByRole('button',{name:'Continue this verification',exact:true});
+   const refreshed=this.page.waitForResponse(response=>new URL(response.url()).origin===this.control.origin&&new URL(response.url()).pathname==='/authentication/step-up/options'&&response.request().method()==='GET',{timeout:budgets.action});refreshed.catch(()=>{});
+   await resume.click();const shared=await this.mechanics.read(await refreshed),expired=shared.body.passkeyRecovery;
+   requireTrue(shared.ok&&noDelivery(shared.body)&&shared.body.status==='PENDING'&&shared.body.requestId===retained.response.sent.requestId&&shared.body.operationReference===pending.op.operationReference&&expired?.requestId===retained.response.sent.requestId&&expired.attemptId===retained.response.sent.attemptId&&expired.ceremonyId===retained.native.ceremonyId&&expired.operationReference===pending.op.operationReference&&expired.status==='EXPIRED');
+   await resume.waitFor({state:'detached'});requireTrue(await this.page.locator('.recovery-codes-grid code').count()===0&&await this.page.getByRole('button',{name:'Download',exact:true}).count()===0);
+   // The UI fails closed before sending. This independent backend-bypass request uses the exact retained code-free command; APIRequestContext has no page request event.
+   const continuation={requestId:retained.response.sent.requestId,attemptId:retained.response.sent.attemptId,ceremonyId:retained.native.ceremonyId};
+   const rejected=await this.mechanics.post(this.page,'/authentication/step-up/passkey/continue',continuation,shared.body.csrfToken);
    this.checkpoint?.('RECOVERY_SOURCE_COUNTS_AFTER');const end=await this.counts();
-   this.checkpoint?.('RECOVERY_SOURCE_CHECK');this.prove('SOURCE_FRESHNESS',!rejected.ok&&['STEP_UP_REQUIRED','VERSION_CONFLICT'].includes(rejected.body.error_code)&&rejected.sent.requestId===retained.response.sent.requestId&&rejected.sent.attemptId===retained.response.sent.attemptId&&end.ownerCommits===current.ownerCommits&&end.sets===current.sets&&end.replacedSets===current.replacedSets&&end.entries===current.entries&&end.consumedProofs===current.consumedProofs&&noDelivery(rejected.body)&&await this.page.locator('.recovery-codes-grid code').count()===0);
+   this.checkpoint?.('RECOVERY_SOURCE_CHECK');this.prove('SOURCE_FRESHNESS',!rejected.ok&&['STEP_UP_REQUIRED','VERSION_CONFLICT'].includes(rejected.body.error_code)&&continuation.requestId===shared.body.requestId&&continuation.attemptId===expired.attemptId&&continuation.ceremonyId===expired.ceremonyId&&rejected.body.requestId===continuation.requestId&&rejected.body.attemptId===continuation.attemptId&&rejected.body.ceremonyId===continuation.ceremonyId&&rejected.body.operationReference===pending.op.operationReference&&end.ownerCommits===current.ownerCommits&&end.sets===current.sets&&end.replacedSets===current.replacedSets&&end.entries===current.entries&&end.consumedProofs===current.consumedProofs&&noDelivery(rejected.body)&&await this.page.locator('.recovery-codes-grid code').count()===0);
   }
   await this.privacy();this.prove('STRICT_OWNED_SURFACE',await this.inspectOwnedSurface());
  }
