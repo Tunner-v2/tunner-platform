@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "work_item_id": "TUN-P2-011",
+  "phase": "ACTIVE_TECHNICAL_SCOPES_NO_IMPLEMENTATION",
+  "refinement_ref": "docs/development/P2_011_RECOVERY_REFINEMENT.md",
+  "startup_reviews_ref": "governance/evidence/TUN-P2-011-ROLE-REVIEWS.json",
+  "revisions": [
+    "P1-018-RV009",
+    "P2-009-RV002",
+    "P2-010-RV001",
+    "P2-004-UI001-RV006",
+    "P2-004-UI002-RV006"
+  ],
+  "shared_paths": [
+    "src/Modules/Identity/IdentityPersistenceDbContext.cs",
+    "src/Modules/Identity/IdentityModelConfiguration.cs",
+    "src/Modules/Identity/Migrations/IdentityPersistenceDbContextModelSnapshot.cs",
+    "src/Modules/Identity/AuthenticationApplication.cs",
+    "tests/Tunner.Identity.Persistence.Tests/AuthenticationTestHost.cs",
+    "tests/Tunner.Identity.Persistence.Tests/RecoveryCodeFiniteNativeExecution.cs",
+    "tools/recovery-native-testing/cases.json"
+  ],
+  "scope": "Only necessary Identity model/snapshot, cohesive authentication/session effect and finite test composition changes. New011 owner/contracts/rows/migration/tests belong to011. Reuse RecoveryCodeConsumption unchanged; any necessary additional old path must be classified before edit. Prior original closures and source-specific evidence stay intact.",
+  "ui_scope": "Initial backend scope has no production UI edits. UI_REQUIRED and owner-consent TODO remain. Extend affected role/scope mapping before subsequent approved frontend/inventory changes; do not force a UI gate onto a revision owning no inventory row.",
+  "boundary": "All five revisions require native activation before shared edits, actual committed validation/reviews/close-check before closure. Technical revisions do not substitute for feature Product acceptance. Source authorities/designs remain read-only; no image remediation, new harness or unapproved production policy."
+}

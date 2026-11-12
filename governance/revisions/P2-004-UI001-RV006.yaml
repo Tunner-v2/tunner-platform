@@ -1,0 +1,45 @@
+{
+  "schema_version": 1,
+  "revision_id": "P2-004-UI001-RV006",
+  "revision_scope": "WORK_ITEM",
+  "original_scope_id": "TUN-P2-004-UI001",
+  "parent_revision_id": "P2-004-UI001-RV005",
+  "parent_milestone_revision_id": null,
+  "title": "Preserve registration UI persistence compatibility during recovery",
+  "revision_type": "COMPATIBILITY",
+  "status": "ACTIVE",
+  "reason": "P2-011 adds a real RecoveryCase owner and selected-session containment using existing Identity and consumption primitives. Preserve original closure; shared model, snapshot, authentication and test composition changes require bounded source-owned compatibility before editing. Current FRD17 and FigJam42 contracts remain in the P2-011 refinement.",
+  "authority_refs": [
+    "docs/authority/current/development/03_Governed_Development_Lifecycle_Scrum_Git.md"
+  ],
+  "decision_refs": [],
+  "defect_refs": [],
+  "change_refs": [
+    "docs/development/P2_011_RECOVERY_REFINEMENT.md"
+  ],
+  "impact_classification": "NON_BLOCKING",
+  "blocked_scope": [],
+  "acceptance_criteria": [
+    "Preserve existing registration, authentication, passkey, TOTP, recovery-code and federation behavior; validate only affected shared ownership using actual committed-source regressions. No proof bypass, nested owner transaction, invented production policy or UI approval."
+  ],
+  "prerequisites": [],
+  "work_items": [],
+  "required_gates": [],
+  "required_roles": [
+    "full-stack-engineer",
+    "tester-qa-engineer",
+    "solution-architect",
+    "cyber-security-engineer",
+    "auditor",
+    "compliance-specialist",
+    "governance-engineer"
+  ],
+  "evidence_refs": [
+    "docs/development/P2_011_RECOVERY_REFINEMENT.md",
+    "governance/evidence/P2-011-COMPATIBILITY-SCOPE.json",
+    "governance/evidence/TUN-P2-011-ROLE-REVIEWS.json"
+  ],
+  "created_at": "2026-11-12T21:50:47.9613261+00:00",
+  "closed_at": null,
+  "product_acceptance_required": false
+}

@@ -1,6 +1,6 @@
 # P2-011 Account recovery refinement
 
-Status: REFINEMENT ONLY. No implementation eligibility or Product/visual acceptance is claimed.
+Status: startup reviews and technical scope activation complete; native implementation-context eligibility remains to be checked before code. No implementation, tests or Product/visual acceptance is claimed.
 
 ## Resolved authority
 
