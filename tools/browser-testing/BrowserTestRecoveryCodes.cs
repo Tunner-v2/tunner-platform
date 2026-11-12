@@ -59,12 +59,13 @@ internal sealed class BrowserTestRecoveryCodes(string origin, string journeyId, 
     }
     internal IEnumerable<AssurancePolicyVersion> AssurancePolicies()
     {
+        var proofAssurance = NeedsTotp ? BrowserTestTotp.OperationAssurance : Assurance;
         foreach (var (version, operation) in new[] { (GenerateAssurance, "GENERATE_RECOVERY_CODES"), (ReplaceAssurance, "REPLACE_RECOVERY_CODES") })
             yield return new(new(version, "ACTIVE", new(operation, "USER_BFF"), Interval, null, ["SYNTHETIC-FINITE-TEST-ONLY"]),
-                Assurance, TimeSpan.FromMinutes(5), new Dictionary<string, string>
+                proofAssurance, TimeSpan.FromMinutes(5), new Dictionary<string, string>
                 {
-                    ["pwd"] = Assurance, ["totp"] = Assurance,
-                    [PasskeyPolicy.MethodKey(false, false)] = Assurance, [PasskeyPolicy.MethodKey(true, false)] = Assurance, [PasskeyPolicy.MethodKey(true, true)] = Assurance
+                    ["pwd"] = proofAssurance, ["totp"] = proofAssurance,
+                    [PasskeyPolicy.MethodKey(false, false)] = proofAssurance, [PasskeyPolicy.MethodKey(true, false)] = proofAssurance, [PasskeyPolicy.MethodKey(true, true)] = proofAssurance
                 });
     }
     public ValueTask<RecoveryCodeMutationAdmission> RequireAsync(RecoveryCodeMutationAdmissionRequest request, CancellationToken cancellationToken)
