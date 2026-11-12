@@ -5,6 +5,12 @@ namespace Tunner.Identity.Persistence;
 internal sealed class FederationAttemptRow
 {
     public Guid AttemptId { get; set; }
+    public string Resolution { get; set; } = "UNRESOLVED";
+    public string? RegistrationBrowserDigest { get; set; }
+    public Guid? RegistrationIdempotencyKey { get; set; }
+    public DateTimeOffset? RegistrationBrowserExpiresAt { get; set; }
+    public string? ProtectedRegistrationEvidence { get; set; }
+    public Guid? ResultRegistrationOperationId { get; set; }
     public Guid RequestId { get; set; }
     public string CorrelationId { get; set; } = string.Empty;
     public string Provider { get; set; } = string.Empty;
@@ -70,15 +76,18 @@ internal static class FederationAttemptModel
                 t.HasCheckConstraint("ck_federation_state", "state IN ('PREPARED','CHALLENGE_ADMITTED','VERIFIED','COMPLETED','REJECTED','EXPIRED') AND version>=1");
                 t.HasCheckConstraint("ck_federation_bounds", "expires_at>created_at AND result_recovery_lifetime_ticks>0 AND length(browser_digest)=64 AND length(previous_cookie_digest)=64");
                 t.HasCheckConstraint("ck_federation_profile", "length(provider_namespace)>0 AND length(client_id)>0 AND length(profile_version)>0 AND length(mapping_evidence_reference)>0 AND length(correlation_id)>0 AND length(processing_reference)>0 AND length(retention_reference)>0 AND jsonb_typeof(profile_snapshot::jsonb)='object'");
-                t.HasCheckConstraint("ck_federation_verified", FederationLinkManagementMigrationSql.AttemptVerifiedConstraint);
+                t.HasCheckConstraint("ck_federation_verified", RegistrationFederationMigrationSql.AttemptVerifiedConstraint);
+                t.HasCheckConstraint("ck_federation_registration", RegistrationFederationMigrationSql.AttemptRegistrationConstraint);
                 t.HasCheckConstraint("ck_federation_owner", FederationLinkManagementMigrationSql.AttemptOwnerConstraint);
                 t.HasCheckConstraint("ck_federation_fresh_evidence", FederationLinkManagementMigrationSql.AttemptFreshEvidenceConstraint);
                 t.HasCheckConstraint("ck_federation_error", "error_code IS NULL OR error_code IN ('AUTHENTICATION_FAILED','VERSION_CONFLICT','RATE_OR_ABUSE_LIMITED','STEP_UP_REQUIRED')");
-                t.HasCheckConstraint("ck_federation_result", FederationLinkManagementMigrationSql.AttemptResultConstraint);
+                t.HasCheckConstraint("ck_federation_result", RegistrationFederationMigrationSql.AttemptResultConstraint);
             });
             b.HasKey(x => x.AttemptId); b.Property(x => x.AttemptId).ValueGeneratedNever();
             b.HasIndex(x => new { x.BrowserDigest, x.RequestId }).IsUnique(); b.HasIndex(x => x.ExpiresAt);
             b.Property(x => x.Version).IsConcurrencyToken(); b.Property(x => x.ProfileSnapshot).HasColumnType("text");
+            b.Property(x => x.Resolution).HasDefaultValue("UNRESOLVED");
+            b.HasOne<RegistrationOperationRow>().WithMany().HasForeignKey(x => x.ResultRegistrationOperationId).OnDelete(DeleteBehavior.Restrict);
             b.HasOne<ExternalIdentityLinkRow>().WithMany().HasForeignKey(x => x.LinkId).OnDelete(DeleteBehavior.Restrict);
             b.HasOne<AuthenticationSessionRow>().WithMany().HasForeignKey(x => x.ResultSessionId).OnDelete(DeleteBehavior.Restrict);
             b.HasOne<TotpPendingAuthenticationRow>().WithMany().HasForeignKey(x => x.PendingMfaId).OnDelete(DeleteBehavior.Restrict);

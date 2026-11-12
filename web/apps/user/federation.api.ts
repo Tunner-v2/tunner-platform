@@ -3,7 +3,7 @@ import {PasskeyHttpError,requestJson} from './passkeys.api';
 
 export type FederationProvider='Google'|'Microsoft';
 const id=z.uuid().refine(value=>value!=='00000000-0000-0000-0000-000000000000');
-const pendingSchema=z.object({attemptId:id,requestId:id,status:z.enum(['PREPARED','CHALLENGE_ADMITTED','VERIFIED','COMPLETED','REJECTED','EXPIRED','UNKNOWN']),errorCode:z.string().max(128).nullable()});
+const pendingSchema=z.object({attemptId:id,requestId:id,status:z.enum(['PREPARED','CHALLENGE_ADMITTED','VERIFIED','COMPLETED','REJECTED','EXPIRED','UNKNOWN']),errorCode:z.string().max(128).nullable(),resolution:z.literal('REGISTRATION_INTAKE').optional()});
 export type FederationPending=z.infer<typeof pendingSchema>;
 const bootstrapSchema=z.object({googleAvailable:z.boolean(),microsoftAvailable:z.boolean(),pending:pendingSchema.nullable()});
 export type FederationBootstrap=z.infer<typeof bootstrapSchema>;

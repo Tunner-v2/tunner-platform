@@ -7,7 +7,7 @@ namespace Tunner.Identity.Persistence;
 
 /// <summary>Identity-local attempt/result owner. Provider network work is complete before RecordVerifiedAsync.</summary>
 internal sealed partial class FederationAttemptApplication(IdentityPersistenceDbContext database, IFederationProfileSource profiles,
-    IAuthenticationPolicySource authenticationPolicies, AuthenticationApplication authentication, TimeProvider clock, IDataProtectionProvider? protection = null)
+    IAuthenticationPolicySource authenticationPolicies, AuthenticationApplication authentication, TimeProvider clock, IDataProtectionProvider? protection = null, IRegistrationApplication? registrationApplication = null)
 {
     private readonly IDataProtector? linkEvidenceProtection = protection?.CreateProtector("Tunner.Identity.Federation.LinkSubject.v1");
 
@@ -75,7 +75,7 @@ internal sealed partial class FederationAttemptApplication(IdentityPersistenceDb
         return await Finish(tx, new(row, row.ErrorCode), ct).ConfigureAwait(false);
     }
     internal async Task<FederationAttemptResult> StartAsync(FederationCurrentBrowser browser, Guid requestId,
-        FederationProviderKind provider, FederationAttemptPurpose purpose, bool rememberMe, CancellationToken ct)
+        FederationProviderKind provider, FederationAttemptPurpose purpose, bool rememberMe, CancellationToken ct, FederationRegistrationBrowser? registrationBrowser = null)
     {
         Clean(); var now = clock.GetUtcNow();
         if (requestId == Guid.Empty || purpose != FederationAttemptPurpose.SignIn || !browser.OriginalFingerprint)
@@ -108,14 +108,21 @@ internal sealed partial class FederationAttemptApplication(IdentityPersistenceDb
             ProfileVersion = profile.Values.Version, MappingEvidenceReference = profile.Values.IssuerMappingEvidenceReference,
             ProfileSnapshot = profile.Snapshot, ContinuationPath = profile.Values.ContinuationPath, ProcessingReference = profile.Values.ProcessingReference,
             RetentionReference = profile.Values.RetentionReference, ResultRecoveryLifetimeTicks = profile.Values.ResultRecoveryLifetime.Ticks,
-            CreatedAt = now, ExpiresAt = profile.Clip(now + profile.Values.AttemptLifetime)
+            CreatedAt = now, ExpiresAt = profile.Clip(now + profile.Values.AttemptLifetime),
+            RegistrationBrowserDigest = registrationBrowser?.Caller.BrowserDigest,
+            RegistrationIdempotencyKey = registrationBrowser?.IdempotencyKey,
+            RegistrationBrowserExpiresAt = registrationBrowser is null ? null : IdentityPersistenceTime.Normalize(registrationBrowser.ExpiresAt)
         };
+        if (registrationBrowser is not null && (purpose != FederationAttemptPurpose.SignIn || provider != FederationProviderKind.Google ||
+            profile.Values.Registration is not { Complete: true } || registrationApplication is not RegistrationApplication ||
+            registrationBrowser.ExpiresAt <= now || registrationBrowser.IdempotencyKey == Guid.Empty)) return new(null,"VERSION_CONFLICT");
         if (row.ExpiresAt > browser.BrowserExpiresAt) row.ExpiresAt = browser.BrowserExpiresAt;
+        if (registrationBrowser is not null && row.ExpiresAt > registrationBrowser.ExpiresAt) row.ExpiresAt = registrationBrowser.ExpiresAt;
         if (row.ExpiresAt <= now) return await Finish(transaction, new(null, "VERSION_CONFLICT"), ct).ConfigureAwait(false);
         database.Add(row); return await Finish(transaction, new(row), ct).ConfigureAwait(false);
     }
 
-    internal async Task<FederationChallengeAdmission?> AdmitChallengeAsync(FederationCurrentBrowser browser, Guid attemptId, CancellationToken ct, StepUpCaller? owner = null)
+    internal async Task<FederationChallengeAdmission?> AdmitChallengeAsync(FederationCurrentBrowser browser, Guid attemptId, CancellationToken ct, StepUpCaller? owner = null, FederationRegistrationBrowser? registrationBrowser = null)
     {
         Clean(); await using var transaction = await database.Database.BeginTransactionAsync(ct).ConfigureAwait(false);
         var row = await Owned(browser, attemptId, ct).ConfigureAwait(false); var now = clock.GetUtcNow();
@@ -124,6 +131,7 @@ internal sealed partial class FederationAttemptApplication(IdentityPersistenceDb
         var profile = Current(ParseProvider(row), row.Origin, now);
         if (row.Purpose == nameof(FederationAttemptPurpose.OperationProof) ? !OperationProofPendingCurrent(row, browser, profile, now, owner) : !PendingCurrent(row, browser, profile, now, owner))
         { await Reject(transaction, row, now, "VERSION_CONFLICT", ct).ConfigureAwait(false); return null; }
+        if (row.RegistrationBrowserDigest is not null && !RegistrationBrowserMatches(row,registrationBrowser,now)) return null;
         row.State = "CHALLENGE_ADMITTED"; row.Version++;
         await Finish(transaction, new(row), ct).ConfigureAwait(false);
         return new(profile.Values.Provider, profile.Values.Version, profile.Values.TransportScheme, row.AttemptId,
@@ -162,24 +170,26 @@ internal sealed partial class FederationAttemptApplication(IdentityPersistenceDb
             return new(row.ContinuationPath, true);
         }
         var link = await database.ExternalIdentityLinks.SingleOrDefaultAsync(x => x.Provider == key.ProviderNamespace && x.Subject == key.Subject, ct).ConfigureAwait(false);
+        if (link is null && CanResolveRegistration(row,profile,evidence))
+            return await RecordRegistrationIntake(transaction,row,profile,evidence,ct).ConfigureAwait(false);
         if (link is null || !Qualified(link, profile))
         {
             await Reject(transaction, row, now, "AUTHENTICATION_FAILED", ct).ConfigureAwait(false);
-            return new(row.ContinuationPath, false); // Same safe continuation for absent, legacy, retired or unqualified links; no email lookup.
+            return new(row.ContinuationPath, false); // Unsupported/unqualified contact, legacy or retired ownership all fail closed.
         }
         now = clock.GetUtcNow(); profile = Current(evidence.Provider, row.Origin, now);
         if (now < row.CreatedAt || now >= row.ExpiresAt || !ExactProfile(row, profile))
         { await Reject(transaction, row, now, "VERSION_CONFLICT", ct).ConfigureAwait(false); return new(row.ContinuationPath, false); }
         row.State = "VERIFIED"; row.VerifiedAt = now; row.VerificationExpiresAt = profile.Clip(now + profile.Values.VerifiedLifetime);
         if (row.VerificationExpiresAt > row.ExpiresAt) row.VerificationExpiresAt = row.ExpiresAt;
-        row.ValidatedIssuer = evidence.Issuer; row.LinkId = link.LinkId; row.LinkVersion = link.Version;
+        row.Resolution = "LINKED_SIGN_IN"; row.ValidatedIssuer = evidence.Issuer; row.LinkId = link.LinkId; row.LinkVersion = link.Version;
         row.LinkQualificationEvidenceReference = link.QualificationEvidenceReference; row.Version++;
         row.LinkQualificationProfileVersion = link.QualificationProfileVersion;
         await Finish(transaction, new(row), ct).ConfigureAwait(false);
         return new(row.ContinuationPath, true);
     }
 
-    internal async Task<FederationAttemptResult> ReadOriginalAsync(FederationCurrentBrowser browser, Guid attemptId, CancellationToken ct)
+    internal async Task<FederationAttemptResult> ReadOriginalAsync(FederationCurrentBrowser browser, Guid attemptId, CancellationToken ct, FederationRegistrationBrowser? registrationBrowser = null)
     {
         Clean(); await using var transaction = await database.Database.BeginTransactionAsync(ct).ConfigureAwait(false);
         var row = await Owned(browser, attemptId, ct).ConfigureAwait(false); var now = clock.GetUtcNow();
@@ -187,20 +197,27 @@ internal sealed partial class FederationAttemptApplication(IdentityPersistenceDb
         if (row.State != "COMPLETED") return await Finish(transaction, new(row,
             !Original(row, browser) || !browser.OriginalFingerprint || row.ExpiresAt <= now ? "VERSION_CONFLICT" : row.ErrorCode,
             projectedState: row.ExpiresAt <= now && row.State is ("PREPARED" or "CHALLENGE_ADMITTED" or "VERIFIED") ? "EXPIRED" : null), ct).ConfigureAwait(false);
+        if (row.Resolution == "REGISTRATION_INTAKE")
+            return await ReadRegistrationCompleted(transaction,row,browser,registrationBrowser,ct).ConfigureAwait(false);
         return await ReadCompleted(transaction, row, browser, now, ct).ConfigureAwait(false);
     }
 
-    internal async Task<FederationAttemptResult> CompleteSignInAsync(FederationCurrentBrowser browser, Guid attemptId, CancellationToken ct)
+    internal async Task<FederationAttemptResult> CompleteSignInAsync(FederationCurrentBrowser browser, Guid attemptId, CancellationToken ct,
+        FederationRegistrationBrowser? registrationBrowser = null, FederationRegistrationAcknowledgement? acknowledgement = null)
     {
         Clean(); await using var transaction = await database.Database.BeginTransactionAsync(ct).ConfigureAwait(false);
         var row = await Owned(browser, attemptId, ct).ConfigureAwait(false); var now = clock.GetUtcNow();
         if (row is null || !SameBrowser(row, browser)) return await Finish(transaction, new(null, "NOT_FOUND_OR_NOT_DISCLOSABLE"), ct).ConfigureAwait(false);
-        if (row.State == "COMPLETED") return await ReadCompleted(transaction, row, browser, now, ct).ConfigureAwait(false);
+        if (row.State == "COMPLETED") return row.Resolution == "REGISTRATION_INTAKE"
+            ? await ReadRegistrationCompleted(transaction,row,browser,registrationBrowser,ct).ConfigureAwait(false)
+            : await ReadCompleted(transaction,row,browser,now,ct).ConfigureAwait(false);
         if (row.State != "VERIFIED" || row.Purpose != nameof(FederationAttemptPurpose.SignIn) || !Original(row, browser) || !browser.OriginalFingerprint)
             return await Finish(transaction, new(row, "VERSION_CONFLICT"), ct).ConfigureAwait(false);
         var profile = Current(ParseProvider(row), row.Origin, now);
         if (!PendingCurrent(row, browser, profile, now) || row.VerificationExpiresAt is not { } verifiedUntil || verifiedUntil <= now)
             return await Reject(transaction, row, now, "VERSION_CONFLICT", ct).ConfigureAwait(false);
+        if (row.Resolution == "REGISTRATION_INTAKE")
+            return await CompleteRegistrationIntake(transaction,row,browser,registrationBrowser,acknowledgement,profile,ct).ConfigureAwait(false);
         var link = await database.ExternalIdentityLinks.AsNoTracking().SingleOrDefaultAsync(x => x.LinkId == row.LinkId, ct).ConfigureAwait(false);
         if (link is null || !VerifiedLink(row, link, profile)) return await Reject(transaction, row, now, "AUTHENTICATION_FAILED", ct).ConfigureAwait(false);
         var auth = authenticationPolicies.RequireEffective(now); auth.Validate();
@@ -314,6 +331,7 @@ internal sealed partial class FederationAttemptApplication(IdentityPersistenceDb
         if (now < row.CreatedAt) return await Finish(transaction, new(row, "VERSION_CONFLICT"), ct).ConfigureAwait(false);
         row.State = now >= row.ExpiresAt ? "EXPIRED" : "REJECTED"; row.ErrorCode = error; row.EndedAt = now;
         row.ResultExpiresAt = now + TimeSpan.FromTicks(row.ResultRecoveryLifetimeTicks); row.Version++;
+        row.ProtectedRegistrationEvidence = null;
         return await Finish(transaction, new(row, error), ct).ConfigureAwait(false);
     }
     private async Task<FederationAttemptResult> Finish(IDbContextTransaction transaction, FederationAttemptResult result, CancellationToken ct)

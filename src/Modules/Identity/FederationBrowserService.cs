@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Http;
 using Tunner.Platform.Operations;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Tunner.Identity.Persistence;
 
@@ -27,14 +28,15 @@ public sealed partial class FederationBrowserService
     private readonly IDataProtector pointerProtection;
     private readonly HashSet<FederationProviderKind> enabledTransports;
     private readonly FederationLinkApplication? management;
+    private readonly IRegistrationApplication? registrations;
 
     internal FederationBrowserService(FederationAttemptApplication application, IFederationProfileSource profiles,
         IAuthenticationPolicySource authenticationPolicies, AuthenticationPartitionKey partitions, IDataProtectionProvider protection,
-        IAntiforgery antiforgery, TimeProvider clock, string origin, IReadOnlyCollection<FederationProviderKind> enabledTransports, FederationLinkApplication? management = null)
+        IAntiforgery antiforgery, TimeProvider clock, string origin, IReadOnlyCollection<FederationProviderKind> enabledTransports, FederationLinkApplication? management = null, IRegistrationApplication? registrations = null)
     {
         this.application = application; this.profiles = profiles; this.authenticationPolicies = authenticationPolicies;
         this.partitions = partitions; this.protection = protection; this.antiforgery = antiforgery; this.clock = clock; this.origin = origin;
-        this.management = management;
+        this.management = management; this.registrations = registrations;
         ArgumentNullException.ThrowIfNull(enabledTransports);
         if (enabledTransports.Count == 0 || enabledTransports.Any(kind => !Enum.IsDefined(kind))) throw new ArgumentException("Explicit enabled transports are required.");
         this.enabledTransports = new(enabledTransports);
@@ -48,21 +50,22 @@ public sealed partial class FederationBrowserService
     {
         using var linked = CancellationTokenSource.CreateLinkedTokenSource(ct, http.RequestAborted);
         var google = Available(FederationProviderKind.Google); var microsoft = Available(FederationProviderKind.Microsoft);
-        var pointer = ReadPointer(http); if (pointer is null) return new(google, microsoft, null);
+        var registration = RegistrationAvailability();
+        var pointer = ReadPointer(http); if (pointer is null) return new(google, microsoft, null, Registration: registration);
         try
         {
-            var browser = Current(http); if (!PointerMatches(pointer, browser)) return new(google, microsoft, null);
-            var result = await application.ReadOriginalAsync(browser, pointer.AttemptId, linked.Token).ConfigureAwait(false);
+            var browser = Current(http); if (!PointerMatches(pointer, browser)) return new(google, microsoft, null, Registration: registration);
+            var result = await application.ReadOriginalAsync(browser, pointer.AttemptId, linked.Token, RegistrationCurrent(http,false)).ConfigureAwait(false);
             // Bootstrap only describes the exact original operation. It never emits a cookie or treats session presence as completion.
             var originalResultSession = result.ErrorCode is null && result.Row?.State == "COMPLETED" && result.Authentication?.Grant is { } grant
                 ? AuthenticationIdentity.SessionId(grant.Ticket.Principal) : null;
             var preserve = originalResultSession is not null && originalResultSession == AuthenticationIdentity.SessionId(http.User);
-            return new(google, microsoft, View(result), preserve);
+            return new(google, microsoft, View(result), preserve, registration);
         }
-        catch (ArgumentException) { return new(google, microsoft, null); }
-        catch (InvalidOperationException) { return new(google, microsoft, new(pointer.AttemptId, pointer.RequestId, "UNKNOWN", "DEPENDENCY_UNAVAILABLE")); }
-        catch (CryptographicException) { return new(google, microsoft, null); }
-        catch (Exception) { return new(google, microsoft, new(pointer.AttemptId, pointer.RequestId, "UNKNOWN", "DEPENDENCY_UNAVAILABLE")); }
+        catch (ArgumentException) { return new(google, microsoft, null, Registration: registration); }
+        catch (InvalidOperationException) { return new(google, microsoft, new(pointer.AttemptId, pointer.RequestId, "UNKNOWN", "DEPENDENCY_UNAVAILABLE"), Registration: registration); }
+        catch (CryptographicException) { return new(google, microsoft, null, Registration: registration); }
+        catch (Exception) { return new(google, microsoft, new(pointer.AttemptId, pointer.RequestId, "UNKNOWN", "DEPENDENCY_UNAVAILABLE"), Registration: registration); }
     }
 
     public Task<IResult> StartAsync(HttpContext http, Guid requestId, FederationProviderKind provider, bool rememberMe, CancellationToken ct = default) => Guard(http, async token =>
@@ -84,7 +87,8 @@ public sealed partial class FederationBrowserService
             if (original.Row is { } active && active.State is ("PREPARED" or "CHALLENGE_ADMITTED" or "VERIFIED") && active.ExpiresAt > clock.GetUtcNow())
                 return Problem(409, "VERSION_CONFLICT");
         }
-        var result = await application.StartAsync(browser, requestId, provider, FederationAttemptPurpose.SignIn, rememberMe, token).ConfigureAwait(false);
+        var registrationBrowser = RegistrationAvailable(provider) ? RegistrationCurrent(http,true,requestId) : null;
+        var result = await application.StartAsync(browser, requestId, provider, FederationAttemptPurpose.SignIn, rememberMe, token, registrationBrowser).ConfigureAwait(false);
         if (result.Row is { } row && result.ErrorCode is null)
         {
             ClearManagementPointer(http);
@@ -117,7 +121,7 @@ public sealed partial class FederationBrowserService
         }
         var pointer = ReadPointer(http); if (pointer is null || !enabledTransports.Contains(pointer.Provider)) return null;
         var browser = Current(http); if (!PointerMatches(pointer, browser)) return null;
-        return await application.AdmitChallengeAsync(browser, pointer.AttemptId, linked.Token).ConfigureAwait(false);
+        return await application.AdmitChallengeAsync(browser, pointer.AttemptId, linked.Token, registrationBrowser: RegistrationCurrent(http,false)).ConfigureAwait(false);
     }
 
     public Task<FederationCallbackResult> RecordVerifiedAsync(FederationProtocolEvidence evidence, CancellationToken ct = default) =>
@@ -127,14 +131,16 @@ public sealed partial class FederationBrowserService
     {
         await RequirePost(http).ConfigureAwait(false); var browser = Current(http); var pointer = ReadPointer(http);
         if (pointer is null || !PointerMatches(pointer, browser)) return Problem(404, "NOT_FOUND_OR_NOT_DISCLOSABLE");
-        return await Render(http, await application.ReadOriginalAsync(browser, pointer.AttemptId, token).ConfigureAwait(false)).ConfigureAwait(false);
+        return await Render(http, await application.ReadOriginalAsync(browser, pointer.AttemptId, token, RegistrationCurrent(http,false)).ConfigureAwait(false)).ConfigureAwait(false);
     }, ct);
 
-    public Task<IResult> CompleteSignInAsync(HttpContext http, CancellationToken ct = default) => Guard(http, async token =>
+    public Task<IResult> CompleteSignInAsync(HttpContext http, CancellationToken ct = default) => CompleteSignInAsync(http, null, ct);
+
+    public Task<IResult> CompleteSignInAsync(HttpContext http, FederationRegistrationAcknowledgement? acknowledgement, CancellationToken ct) => Guard(http, async token =>
     {
         await RequirePost(http).ConfigureAwait(false); var browser = Current(http); var pointer = ReadPointer(http);
         if (pointer is null || !PointerMatches(pointer, browser)) return Problem(409, "VERSION_CONFLICT");
-        return await Render(http, await application.CompleteSignInAsync(browser, pointer.AttemptId, token).ConfigureAwait(false)).ConfigureAwait(false);
+        return await Render(http, await application.CompleteSignInAsync(browser, pointer.AttemptId, token, RegistrationCurrent(http,false), acknowledgement).ConfigureAwait(false)).ConfigureAwait(false);
     }, ct);
 
     public Task<IResult> CancelAsync(HttpContext http, CancellationToken ct = default) => Guard(http, async token =>
@@ -194,10 +200,43 @@ public sealed partial class FederationBrowserService
         catch (InvalidOperationException) { return false; }
         catch (ArgumentException) { return false; }
     }
+    public async Task<FederationRegistrationIntakeView?> ReadRegistrationIntakeAsync(HttpContext http, CancellationToken ct = default)
+    {
+        var pointer = ReadPointer(http); if (pointer is null || !RegistrationAvailable(pointer.Provider)) return null;
+        if (await application.OriginalPointerIsTerminalAsync(pointer.AttemptId,pointer.BrowserKey,pointer.BrowserDigest,pointer.Origin,ct).ConfigureAwait(false)) return null;
+        var registration = RegistrationCurrent(http,false); if (registration is null) return null;
+        var browser = Current(http); if (!PointerMatches(pointer,browser)) return null;
+        return await application.ReadRegistrationIntakeAsync(browser,registration,pointer.AttemptId,ct).ConfigureAwait(false);
+    }
+
+    private bool RegistrationAvailable(FederationProviderKind provider)
+    {
+        if (provider != FederationProviderKind.Google || registrations is not RegistrationApplication || !enabledTransports.Contains(provider)) return false;
+        try { var profile = profiles.RequireCurrent(provider,clock.GetUtcNow()); profile.Require(origin,clock.GetUtcNow()); return profile.Values.Registration is { Complete: true }; }
+        catch (InvalidOperationException) { return false; }
+    }
+    private FederationRegistrationAvailability? RegistrationAvailability()
+    {
+        if (registrations is not RegistrationApplication) return null;
+        var configured = enabledTransports.Any(provider => {
+            try { return profiles.RequireCurrent(provider,clock.GetUtcNow()).Values.Registration is not null; }
+            catch (InvalidOperationException) { return false; }
+        });
+        return configured ? new(RegistrationAvailable(FederationProviderKind.Google),false) : null;
+    }
+    private FederationRegistrationBrowser? RegistrationCurrent(HttpContext http, bool create, Guid? requestId = null) =>
+        registrations is RegistrationApplication ? RegistrationEndpoints.FederationBrowser(http,create,requestId) : null;
     private static FederationPendingView? View(FederationAttemptResult result) => result.Row is { } row
-        ? new(row.AttemptId, row.RequestId, result.ProjectedState ?? row.State, result.ErrorCode ?? row.ErrorCode) : null;
+        ? new(row.AttemptId, row.RequestId, result.ProjectedState ?? row.State, result.ErrorCode ?? row.ErrorCode, row.Resolution == "REGISTRATION_INTAKE" ? row.Resolution : null) : null;
     private async Task<IResult> Render(HttpContext http, FederationAttemptResult result)
     {
+        if (result.Registration is { } registration) return Results.Json(new { authenticated = false, operation = View(result), registration });
+        if (result.ErrorCode is null && result.Row is { State: "VERIFIED", Resolution: "REGISTRATION_INTAKE" })
+        {
+            var policy = http.RequestServices.GetRequiredService<IRegistrationPolicySource>().RequireEffective(clock.GetUtcNow()); policy.Validate();
+            return Results.Json(new { authenticated = false, operation = View(result), registrationRequired = true,
+                registrationPolicyVersion = policy.Version, policy.TermsVersion, policy.PrivacyVersion });
+        }
         if (result.Authentication is { ErrorCode: null } authentication)
         {
             if (authentication.PendingMfa is { } pending) return TotpBrowserService.PendingMfa(http, pending, protection, clock.GetUtcNow());

@@ -5,6 +5,16 @@ namespace Tunner.Identity.Persistence;
 internal sealed class RegistrationOperationRow
 {
     public Guid OperationId { get; set; }
+    public string Mode { get; set; } = "PASSWORD";
+    public Guid? FederationAttemptId { get; set; }
+    public Guid? FederationLinkId { get; set; }
+    public string? FederationProvider { get; set; }
+    public string? FederationOrigin { get; set; }
+    public string? FederationProfileSnapshot { get; set; }
+    public string? FederationContactMappingEvidenceReference { get; set; }
+    public string? FederationVerifiedContactDigest { get; set; }
+    public DateTimeOffset? FederationContactVerifiedAt { get; set; }
+    public long? FederationContactVersion { get; set; }
     public string BrowserDigest { get; set; } = string.Empty;
     public Guid IdempotencyKey { get; set; }
     public string CorrelationId { get; set; } = string.Empty;
@@ -59,6 +69,7 @@ internal static class RegistrationModelConfiguration
         {
             b.ToTable("registration_operations", "identity", t =>
             {
+                t.HasCheckConstraint("ck_registration_mode", RegistrationFederationMigrationSql.ModeConstraint);
                 t.HasCheckConstraint("ck_registration_version", "\"Version\" >= 1 AND \"Attempts\" >= 0 AND \"Resends\" >= 0");
                 t.HasCheckConstraint("ck_registration_stage", "\"Stage\" IN ('LEGACY','VERIFY_CONTACT','PERSONAL_INFORMATION','CONSENT_REQUIRED','COMPLETE')");
                 t.HasCheckConstraint("ck_registration_status", "\"Status\" IN ('REQUIRES_ACTION','SUCCEEDED','FAILED')");
@@ -66,6 +77,11 @@ internal static class RegistrationModelConfiguration
             b.HasKey(x => x.OperationId);
             b.HasIndex(x => new { x.BrowserDigest, x.IdempotencyKey }).IsUnique();
             b.HasIndex(x => x.PurgeAfter);
+            b.HasIndex(x => x.FederationAttemptId).IsUnique();
+            b.Property(x => x.Mode).HasDefaultValue("PASSWORD");
+            b.HasOne<FederationAttemptRow>().WithMany().HasForeignKey(x => x.FederationAttemptId).OnDelete(DeleteBehavior.Restrict);
+            b.HasOne<ExternalIdentityLinkRow>().WithMany().HasForeignKey(x => new { x.AccountId, x.FederationLinkId })
+                .HasPrincipalKey(x => new { x.AccountId, x.LinkId }).OnDelete(DeleteBehavior.Restrict);
             b.Property(x => x.Version).IsConcurrencyToken();
             b.HasOne<AccountRow>().WithMany().HasForeignKey(x => x.AccountId).OnDelete(DeleteBehavior.Restrict);
         });

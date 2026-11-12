@@ -40,7 +40,8 @@ public static class RecoveryCodeFiniteNativeExecution
         "CONSUME_POST_COMMIT_OBSERVER", "CORRUPT_VERIFIER_FAIL_CLOSED",
         "FEDERATION_ORIGINAL_SESSION", "FEDERATION_PRIMARY_MFA", "FEDERATION_FINAL_AUTHORITY", "FEDERATION_BROWSER_BINDING",
         "FEDERATION_CONFIRMED_OWNERSHIP", "FEDERATION_REQUIRED_POSTURE", "FEDERATION_UNLINK_EFFECTS_HISTORY", "FEDERATION_MANAGEMENT_FINAL_AUTHORITY",
-        "FEDERATION_OPERATION_PROOF", "FEDERATION_OPERATION_PROOF_REJECTION"];
+        "FEDERATION_OPERATION_PROOF", "FEDERATION_OPERATION_PROOF_REJECTION",
+        "FEDERATION_REGISTRATION", "FEDERATION_REGISTRATION_REJECTION", "FEDERATION_REGISTRATION_FINALITY"];
 
     internal static async Task<RecoveryCodeNativeReceipt> RunAsync(RecoveryCodeNativeCohort cohort, Uri qualifiedLocalEndpoint, DirectoryInfo repository, RecoveryCodeFixtureOwnershipChannel ownershipChannel)
     {
@@ -357,6 +358,9 @@ public static class RecoveryCodeFiniteNativeExecution
             "FEDERATION_MANAGEMENT_FINAL_AUTHORITY" => new FederationManagementPrivateIntegrationTests(fixture).FinalPureAuthorityDriftRollsBackLinkProofAndOutboxWithExactOriginalRecovery(),
             "FEDERATION_OPERATION_PROOF" => new FederationManagementPrivateIntegrationTests(fixture).QualifiedFederationProofCompletesOneOriginalOwnerAndConsumesOneRealProof(),
             "FEDERATION_OPERATION_PROOF_REJECTION" => new FederationManagementPrivateIntegrationTests(fixture).RejectedFederationProofEvidenceAndLateSourceDriftCannotIssueOrMutateOwner(),
+            "FEDERATION_REGISTRATION" => new FederationPrivateIntegrationTests(fixture).QualifiedGoogleRegistrationRequiresNoticesThenSharesPersonalInformationAndOriginalRecoveryWithoutSession(),
+            "FEDERATION_REGISTRATION_REJECTION" => new FederationPrivateIntegrationTests(fixture).UnqualifiedExpiredForeignOrCollidingFederationIntakeCannotAdoptAccountOrIssueSession(),
+            "FEDERATION_REGISTRATION_FINALITY" => new FederationPrivateIntegrationTests(fixture).LateRegistrationProfileNoticeOrContactDriftRollsBackCanonicalIntakeAndRecoversOriginal(),
             "PARENT003_REGISTRATION_BOUNDARY" => new RegistrationBffTests(fixture).ActualHttpsBffKeepsRegistrationAnonymousAndRequiresOriginCsrfAndProtectedBrowserContext(),
             "PARENT003_REGISTRATION_FLOW" => new RegistrationBffTests(fixture).ActualHttpsFlowVerifiesContactBeforePersonalInformationAndActivatesUnder18WithoutSession(),
             "PARENT003_REGISTRATION_PROGRESS" => new RegistrationBffTests(fixture).ProtectedProgressRecoversOnlyItsOwnServerStageAndRestartPreservesAccountEvidence(),

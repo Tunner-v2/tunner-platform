@@ -25,7 +25,20 @@ internal static class FederationOidcEndpoints
                 : Results.BadRequest();
         }).AllowAnonymous();
         MapEmpty("/authentication/federation/result", static (facade, http) => facade.ReadOriginalAsync(http, http.RequestAborted));
-        MapEmpty("/authentication/federation/complete", static (facade, http) => facade.CompleteSignInAsync(http, http.RequestAborted));
+        application.MapPost("/authentication/federation/complete", async (HttpContext http,FederationBrowserService facade) =>
+        {
+            using var command = await Command(http,bound).ConfigureAwait(false); if (command is null) return Results.BadRequest();
+            var json = command.RootElement; if (Shape(json)) return await facade.CompleteSignInAsync(http,http.RequestAborted).ConfigureAwait(false);
+            if (!Shape(json,"attemptId","federationRequestId","registrationKey","expectedVersion","termsVersion","privacyVersion","acknowledgedNotices") ||
+                json.GetProperty("attemptId").ValueKind != JsonValueKind.String || !json.GetProperty("attemptId").TryGetGuid(out var attempt) || attempt == Guid.Empty ||
+                json.GetProperty("federationRequestId").ValueKind != JsonValueKind.String || !json.GetProperty("federationRequestId").TryGetGuid(out var request) || request == Guid.Empty ||
+                json.GetProperty("registrationKey").ValueKind != JsonValueKind.String || !json.GetProperty("registrationKey").TryGetGuid(out var key) || key == Guid.Empty ||
+                json.GetProperty("expectedVersion").ValueKind != JsonValueKind.Number || !json.GetProperty("expectedVersion").TryGetInt64(out var version) || version < 1 ||
+                json.GetProperty("termsVersion").ValueKind != JsonValueKind.String || json.GetProperty("privacyVersion").ValueKind != JsonValueKind.String ||
+                json.GetProperty("acknowledgedNotices").ValueKind is not JsonValueKind.True and not JsonValueKind.False) return Results.BadRequest();
+            return await facade.CompleteSignInAsync(http,new(attempt,request,key,version,json.GetProperty("termsVersion").GetString()!,
+                json.GetProperty("privacyVersion").GetString()!,json.GetProperty("acknowledgedNotices").GetBoolean()),http.RequestAborted).ConfigureAwait(false);
+        }).AllowAnonymous();
         MapEmpty("/authentication/federation/cancel", static (facade, http) => facade.CancelAsync(http, http.RequestAborted));
         foreach (var registration in registrations)
         {

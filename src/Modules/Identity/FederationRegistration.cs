@@ -28,7 +28,7 @@ public static class FederationRegistration
             provider.GetRequiredService<IFederationProfileSource>(), provider.GetRequiredService<IAuthenticationPolicySource>(),
             provider.GetRequiredService<AuthenticationPartitionKey>(), provider.GetRequiredService<IDataProtectionProvider>(),
             provider.GetRequiredService<IAntiforgery>(), provider.GetRequiredService<TimeProvider>(),
-            provider.GetRequiredService<AuthenticationEndpoints.Surface>().Origin, capabilities, provider.GetService<FederationLinkApplication>()));
+            provider.GetRequiredService<AuthenticationEndpoints.Surface>().Origin, capabilities, provider.GetService<FederationLinkApplication>(), provider.GetService<IRegistrationApplication>()));
         return services;
     }
 

@@ -9,16 +9,18 @@ import { registrationRoutes, stageForAction } from './routes';
 import type { RegistrationStage } from './routes';
 import { registrationSchema, verificationSchema, personalInformationSchema } from './validation';
 import { requirePublished } from './passkeys.api';
+import {federationNoticeSchema,federationRegistrationKeys,federatedRegistrationCommand,parseFederationIntake,sameFederationIntake} from './registration.federation';
+import type {FederationIntake} from './registration.federation';
 
 interface Bootstrap {
-  csrfToken: string; registrationKey?: string; serverTime: string; policyVersion: string; termsVersion: string; privacyVersion: string;
+  csrfToken: string; registrationKey?: string; federationIntake?: FederationIntake|undefined; serverTime: string; policyVersion: string; termsVersion: string; privacyVersion: string;
   passwordMinimumLength: number; passwordMaximumLength: number; proofDigits: number;
   locale: string; content: Record<string,PublishedContent>; termsUri: string; privacyUri: string; supportUri: string | null;
 }
 interface Operation {
   operationId: string; correlationId: string; status: string; version: number; expiresAt: string | null; resendAfter: string | null;
   nextAction: 'VERIFY_CONTACT'|'PERSONAL_INFORMATION'|'CONSENT_REQUIRED'|'COMPLETE';
-  personalInformation?: {fullName: string|null;displayName: string|null;verifiedEmail: string;fullNameMaximumLength: number;displayNameMaximumLength: number}|null;
+  personalInformation?: {fullName: string|null;displayName: string|null;verifiedEmail: string;fullNameMaximumLength: number;displayNameMaximumLength: number}|null|undefined;
 }
 interface Problem { error_code?: string; current_version?: number; correlation_id?: string }
 const errorKeys: Readonly<Record<string,string>> = {
@@ -29,7 +31,7 @@ const errorKeys: Readonly<Record<string,string>> = {
 function App() {
   const [boot,setBoot]=useState<Bootstrap>();const [unavailable,setUnavailable]=useState(false);
   useEffect(()=>{void fetch('/registration/options',{credentials:'same-origin',cache:'no-store',redirect:'error'})
-    .then(async response=>{if(!response.ok)throw new Error('Unavailable');setBoot(await response.json() as Bootstrap);})
+    .then(async response=>{if(!response.ok)throw new Error('Unavailable');const value=await response.json() as Bootstrap;setBoot({...value,federationIntake:parseFederationIntake(value.federationIntake,value.registrationKey)});})
     .catch(()=>setUnavailable(true));},[]);
   if(unavailable)return <ContentUnavailable />;
   if(!boot)return <main aria-busy="true" />;
@@ -37,7 +39,9 @@ function App() {
   return <ThemeProvider surface="user" mode="light"><ContentProvider locale={options.locale} audience="registration" resolve={key=>options.content[key]}><Registration boot={options} /></ContentProvider></ThemeProvider>;
 }
 function Registration({boot}:{boot:Bootstrap}) {
-  const navigation=useRouteLocation();const pathname=navigation.pathname;
+  const navigation=useRouteLocation();const pathname=navigation.pathname;const intake=boot.federationIntake;
+  const routeRevision=useRef(navigation.revision);routeRevision.current=navigation.revision;
+  const federationController=useRef<AbortController|undefined>(undefined);
   const [stage,setStage]=useState<RegistrationStage>('register');
   const [guardBusy,setGuardBusy]=useState(true);const [guardFailed,setGuardFailed]=useState(false);
   const confirmedPath=useRef<string|undefined>(undefined);
@@ -51,8 +55,13 @@ function Registration({boot}:{boot:Bootstrap}) {
   useEffect(()=>{if(!guardBusy)heading.current?.focus();},[stage,guardBusy]);
   useEffect(()=>{const timer=window.setInterval(()=>setNow(serverClock.current.epoch+performance.now()-serverClock.current.started),1000);return ()=>window.clearInterval(timer);},[]);
   const registrationForm=useTunnerForm(registrationSchema(boot),{email,password,password_confirmation:confirmation,notices});
+  const federationForm=useTunnerForm(federationNoticeSchema,{notices});const noticeForm=intake?federationForm:registrationForm;
   const verificationForm=useTunnerForm(verificationSchema(boot.proofDigits),{verification_code:code});
   const personalForm=useTunnerForm(personalInformationSchema(operation?.personalInformation?.fullNameMaximumLength??0,operation?.personalInformation?.displayNameMaximumLength??0,new Date(now).toISOString().slice(0,10)),{full_name:fullName,display_name:displayName,date_of_birth:birth});
+  useEffect(()=>{if(!intake)return;federationController.current?.abort();inFlight.current=false;setBusy(false);
+    const leave=()=>{if(federationController.current){federationController.current.abort();setUncertain(true);setError('registration.error.uncertain');inFlight.current=false;setBusy(false);}};
+    window.addEventListener('pagehide',leave);return()=>{federationController.current?.abort();window.removeEventListener('pagehide',leave);};
+  },[navigation.revision]);
   function changed() {setError(undefined);}
   function move(next:RegistrationStage,replace=false) {
     const target=registrationRoutes[next].pathname;
@@ -64,12 +73,12 @@ function Registration({boot}:{boot:Bootstrap}) {
     const controller=new AbortController();let active=true;setGuardBusy(true);setGuardFailed(false);
     void fetch('/registration/progress',{credentials:'same-origin',redirect:'error',cache:'no-store',signal:controller.signal}).then(async response=>{
       if(response.ok){const result=await response.json() as Operation;if(!active)return;
-        if((pathname==='/registration'||pathname==='/registration/')&&result.nextAction==='COMPLETE'){
+        if((pathname==='/registration'||pathname==='/registration/')&&result.nextAction==='COMPLETE'&&!intake){
           await restart(true);
         }else accept(result,true);
       }else{const problem=await response.json() as Problem;if(!active)return;
         if(response.status===403||problem.error_code==='NOT_FOUND_OR_NOT_DISCLOSABLE'){
-          await restart(true);
+          if(intake){if(response.status===403){setGuardFailed(true);setGuardBusy(false);}else{setOperation(undefined);setUncertain(false);move('register',true);}}else await restart(true);
         }else{setGuardFailed(true);setGuardBusy(false);}
       }
     }).catch(()=>{if(active){setGuardFailed(true);setGuardBusy(false);}});
@@ -95,7 +104,24 @@ function Registration({boot}:{boot:Bootstrap}) {
     } catch {setUncertain(true);setError('registration.error.uncertain');}
     finally {setPassword('');setConfirmation('');setBirth('');setCode('');registrationForm.reset();personalForm.reset();verificationForm.reset();inFlight.current=false;setBusy(false);}
   }
+  async function federated(kind:'complete'|'result') {
+    if(!intake?.canContinue||inFlight.current)return;
+    const controller=new AbortController(),revision=navigation.revision;federationController.current=controller;inFlight.current=true;setBusy(true);setError(undefined);
+    const current=()=>!controller.signal.aborted&&routeRevision.current===revision&&federationController.current===controller;
+    try {
+      if(kind==='complete'){
+        const response=await fetch('/registration/options',{credentials:'same-origin',cache:'no-store',redirect:'error',signal:controller.signal});if(!response.ok)throw new Error('Unavailable');
+        const fresh=await response.json() as Bootstrap;if(!current())return;
+        if(!sameFederationIntake(intake,parseFederationIntake(fresh.federationIntake,fresh.registrationKey))||fresh.termsVersion!==boot.termsVersion||fresh.privacyVersion!==boot.privacyVersion||fresh.termsUri!==boot.termsUri||fresh.privacyUri!==boot.privacyUri){setNotices(false);setError('registration.error.changed');return;}
+        requirePublished(fresh.content,fresh.locale,[...federationRegistrationKeys,'registration.notices.ack','registration.terms','registration.privacy']);
+      }
+      const result=await federatedRegistrationCommand(kind,intake,boot,controller.signal);if(!current())return;
+      if(result)accept(result);else{setUncertain(true);setError('registration.error.uncertain');}
+    }catch{if(current()){setUncertain(true);setError('registration.error.uncertain');}}
+    finally{if(federationController.current===controller){federationController.current=undefined;inFlight.current=false;setBusy(false);federationForm.reset();}}
+  }
   function start(event:FormEvent<HTMLFormElement>) {
+    if(intake){void federationForm.handleSubmit(event,()=>federated('complete'));return;}
     void registrationForm.handleSubmit(event,()=>send('/registration/register',{idempotencyKey:registerKey.current,email,password,passwordConfirmation:confirmation,termsVersion:boot.termsVersion,privacyVersion:boot.privacyVersion,acknowledgedNotices:notices}));
   }
   function personal(event:FormEvent<HTMLFormElement>) {
@@ -110,6 +136,7 @@ function Registration({boot}:{boot:Bootstrap}) {
     }catch{setError('registration.error.unavailable');if(guardBusy){setGuardFailed(true);setGuardBusy(false);}}finally{inFlight.current=false;setBusy(false);}
   }
   async function recover() {
+    if(stage==='register'&&intake){await federated('result');return;}
     if(inFlight.current)return;inFlight.current=true;setBusy(true);
     try {const response=await fetch('/registration/status/'+encodeURIComponent(registerKey.current),{credentials:'same-origin',redirect:'error',cache:'no-store'});
       if(response.ok)accept(await response.json() as Operation);else {const problem=await response.json() as Problem;setError(errorKeys[problem.error_code??'']??'registration.error.uncertain');}}
@@ -119,24 +146,25 @@ function Registration({boot}:{boot:Bootstrap}) {
   const expiry=operation?.expiresAt?new Date(operation.expiresAt):undefined;
   const resendDisabled=busy||!operation||Boolean(operation.resendAfter&&now<Date.parse(operation.resendAfter));
   if(guardBusy||guardFailed)return <ContentUnavailable />;
+  if(stage==='register'&&intake){if(!intake.canContinue||!intake.verifiedEmail)return <ContentUnavailable/>;try{requirePublished(boot.content,boot.locale,[...federationRegistrationKeys]);}catch{return <ContentUnavailable/>;}}
   if(stage==='ready'){try{requirePublished(boot.content,boot.locale,['registration.ready.signIn']);}catch{return <ContentUnavailable/>;}}
   return <div className="registration-page">
     <img className="registration-glow indigo" src={'/registration/assets/'+scene+'-imgBgGlowIndigo.svg'} alt="" aria-hidden="true" />
     <img className="registration-glow violet" src={'/registration/assets/'+scene+'-imgBgGlowViolet.svg'} alt="" aria-hidden="true" />
     <header className="registration-header"><TunnerBrand contentKey="brand.tunner" /></header>
     <main className="registration-stage">
-      <section className={'registration-card '+stage} aria-busy={busy}>
+      <section className={'registration-card '+stage+(stage==='register'&&intake?' federated':'')} aria-busy={busy}>
         {stage==='register'?<>
           <h1 ref={heading} tabIndex={-1}><ContentText contentKey="registration.heading" /></h1>
-          <p className="subtitle"><ContentText contentKey="registration.description" /></p>
+          <p className="subtitle"><ContentText contentKey={intake?'registration.federation.description':'registration.description'} /></p>
           <aside className="account-context"><strong><ContentText contentKey="registration.context.heading" /></strong><p><ContentText contentKey="registration.context.description" /></p></aside>
           <form noValidate data-tunner-form="FORM-REGISTRATION" onSubmit={start}>
-            <TextField presentation="spacious" labelKey="registration.email.label" placeholderKey="registration.email.placeholder" name="email" errorKey={registrationForm.errors.email} onBlur={event=>registrationForm.onBlur('email',event)} type="email" value={email} required autoComplete="email" maxLength={256} disabled={busy||uncertain} onChange={e=>{setEmail(e.target.value);changed();}} />
+            {intake?<TextField presentation="spacious" labelKey="registration.email.label" helpKey="registration.federation.emailSource.Google" type="email" value={intake.verifiedEmail??''} readOnly autoComplete="email" />:<><TextField presentation="spacious" labelKey="registration.email.label" placeholderKey="registration.email.placeholder" name="email" errorKey={registrationForm.errors.email} onBlur={event=>registrationForm.onBlur('email',event)} type="email" value={email} required autoComplete="email" maxLength={256} disabled={busy||uncertain} onChange={e=>{setEmail(e.target.value);changed();}} />
             <TextField presentation="spacious" labelKey="registration.password.label" placeholderKey="registration.password.placeholder" helpKey={registrationForm.errors.password?undefined:'registration.password.help'} name="password" errorKey={registrationForm.errors.password} errorDetails={<> {boot.passwordMinimumLength}–{boot.passwordMaximumLength}</>} onBlur={event=>registrationForm.onBlur('password',event)} type="password" value={password} required autoComplete="new-password" maxLength={boot.passwordMaximumLength*2} disabled={busy||uncertain} onChange={e=>{setPassword(e.target.value);changed();}} />
-            <TextField presentation="spacious" labelKey="registration.confirmation.label" placeholderKey="registration.confirmation.placeholder" name="password_confirmation" errorKey={registrationForm.errors.password_confirmation} onBlur={event=>registrationForm.onBlur('password_confirmation',event)} type="password" value={confirmation} required autoComplete="new-password" maxLength={boot.passwordMaximumLength*2} disabled={busy||uncertain} onChange={e=>{setConfirmation(e.target.value);changed();}} />
-            <div className="notice-field"><label className="notice-ack"><input id="registration-notices" className="tn-checkbox" name="notices" type="checkbox" aria-invalid={registrationForm.errors.notices?true:undefined} aria-describedby={registrationForm.errors.notices?'registration-notices-error':undefined} onBlur={event=>registrationForm.onBlur('notices',event)} checked={notices} required disabled={busy||uncertain} onChange={e=>{setNotices(e.target.checked);changed();}} /><span className="notice-copy"><span className="notice-intro"><ContentText contentKey="registration.notices.ack" /></span><a className="notice-terms" href={boot.termsUri}><ContentText contentKey="registration.terms" /></a><span className="notice-and"><ContentText contentKey="registration.notices.and" /></span><a href={boot.privacyUri}><ContentText contentKey="registration.privacy" /></a></span></label>{registrationForm.errors.notices&&<FieldError id="registration-notices-error" contentKey={registrationForm.errors.notices} />}</div>
+            <TextField presentation="spacious" labelKey="registration.confirmation.label" placeholderKey="registration.confirmation.placeholder" name="password_confirmation" errorKey={registrationForm.errors.password_confirmation} onBlur={event=>registrationForm.onBlur('password_confirmation',event)} type="password" value={confirmation} required autoComplete="new-password" maxLength={boot.passwordMaximumLength*2} disabled={busy||uncertain} onChange={e=>{setConfirmation(e.target.value);changed();}} /></>}
+            <div className="notice-field"><label className="notice-ack"><input id="registration-notices" className="tn-checkbox" name="notices" type="checkbox" aria-invalid={noticeForm.errors.notices?true:undefined} aria-describedby={noticeForm.errors.notices?'registration-notices-error':undefined} onBlur={event=>noticeForm.onBlur('notices',event)} checked={notices} required disabled={busy||uncertain} onChange={e=>{setNotices(e.target.checked);changed();}} /><span className="notice-copy"><span className="notice-intro"><ContentText contentKey="registration.notices.ack" /></span><a className="notice-terms" href={boot.termsUri}><ContentText contentKey="registration.terms" /></a><span className="notice-and"><ContentText contentKey="registration.notices.and" /></span><a href={boot.privacyUri}><ContentText contentKey="registration.privacy" /></a></span></label>{noticeForm.errors.notices&&<FieldError id="registration-notices-error" contentKey={noticeForm.errors.notices} />}</div>
             <PrimaryButton presentation="spacious" type="submit" labelKey="registration.continue" disabled={busy||uncertain} aria-busy={busy} />
-            {registrationForm.hasErrors&&<FormErrorSummary contentKey="registration.error.highlighted" />}
+            {noticeForm.hasErrors&&<FormErrorSummary contentKey="registration.error.highlighted" />}
           </form>
         </>:stage==='personal'?<>
           <h1 ref={heading} tabIndex={-1}><ContentText contentKey="personal.heading" /></h1>

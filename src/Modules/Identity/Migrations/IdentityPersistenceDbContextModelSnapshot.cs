@@ -1093,6 +1093,10 @@ namespace Tunner.Identity.Persistence.Migrations
                         .HasColumnType("text")
                         .HasColumnName("protected_link_subject");
 
+                    b.Property<string>("ProtectedRegistrationEvidence")
+                        .HasColumnType("text")
+                        .HasColumnName("protected_registration_evidence");
+
                     b.Property<string>("Provider")
                         .IsRequired()
                         .HasColumnType("text")
@@ -1116,6 +1120,18 @@ namespace Tunner.Identity.Persistence.Migrations
                         .HasColumnType("text")
                         .HasColumnName("purpose");
 
+                    b.Property<string>("RegistrationBrowserDigest")
+                        .HasColumnType("text")
+                        .HasColumnName("registration_browser_digest");
+
+                    b.Property<DateTimeOffset?>("RegistrationBrowserExpiresAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("registration_browser_expires_at");
+
+                    b.Property<Guid?>("RegistrationIdempotencyKey")
+                        .HasColumnType("uuid")
+                        .HasColumnName("registration_idempotency_key");
+
                     b.Property<bool>("RememberMe")
                         .HasColumnType("boolean")
                         .HasColumnName("remember_me");
@@ -1123,6 +1139,13 @@ namespace Tunner.Identity.Persistence.Migrations
                     b.Property<Guid>("RequestId")
                         .HasColumnType("uuid")
                         .HasColumnName("request_id");
+
+                    b.Property<string>("Resolution")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("text")
+                        .HasDefaultValue("UNRESOLVED")
+                        .HasColumnName("resolution");
 
                     b.Property<DateTimeOffset?>("ResultExpiresAt")
                         .HasColumnType("timestamp with time zone")
@@ -1135,6 +1158,10 @@ namespace Tunner.Identity.Persistence.Migrations
                     b.Property<long>("ResultRecoveryLifetimeTicks")
                         .HasColumnType("bigint")
                         .HasColumnName("result_recovery_lifetime_ticks");
+
+                    b.Property<Guid?>("ResultRegistrationOperationId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("result_registration_operation_id");
 
                     b.Property<Guid?>("ResultSessionId")
                         .HasColumnType("uuid")
@@ -1185,6 +1212,8 @@ namespace Tunner.Identity.Persistence.Migrations
 
                     b.HasIndex("ResultProofId");
 
+                    b.HasIndex("ResultRegistrationOperationId");
+
                     b.HasIndex("ResultSessionId");
 
                     b.HasIndex("BrowserDigest", "RequestId")
@@ -1206,11 +1235,13 @@ namespace Tunner.Identity.Persistence.Migrations
 
                             t.HasCheckConstraint("ck_federation_purpose", "provider IN ('Google','Microsoft') AND purpose IN ('SignIn','Registration','Link','OperationProof')");
 
-                            t.HasCheckConstraint("ck_federation_result", "(state IN ('PREPARED','CHALLENGE_ADMITTED','VERIFIED') AND ended_at IS NULL AND result_expires_at IS NULL\n  AND result_session_id IS NULL AND pending_mfa_id IS NULL AND result_proof_id IS NULL AND error_code IS NULL)\nOR (state IN ('COMPLETED','REJECTED','EXPIRED') AND ended_at IS NOT NULL AND result_expires_at IS NOT NULL\n  AND ended_at>=created_at AND result_expires_at>ended_at AND ((state='COMPLETED' AND verified_at IS NOT NULL AND error_code IS NULL\n    AND ((purpose='SignIn' AND result_proof_id IS NULL AND ((result_session_id IS NOT NULL AND pending_mfa_id IS NULL) OR (result_session_id IS NULL AND pending_mfa_id IS NOT NULL)))\n      OR (purpose='Link' AND result_session_id IS NULL AND pending_mfa_id IS NULL AND result_proof_id IS NULL)\n      OR (purpose='OperationProof' AND result_session_id IS NULL AND pending_mfa_id IS NULL AND result_proof_id IS NOT NULL)))\n    OR (state IN ('REJECTED','EXPIRED') AND error_code IS NOT NULL AND result_session_id IS NULL AND pending_mfa_id IS NULL AND result_proof_id IS NULL)))");
+                            t.HasCheckConstraint("ck_federation_registration", "resolution IN ('UNRESOLVED','LINKED_SIGN_IN','REGISTRATION_INTAKE')\r\nAND (resolution<>'LINKED_SIGN_IN' OR purpose='SignIn')\r\nAND ((registration_browser_digest IS NULL AND registration_idempotency_key IS NULL AND registration_browser_expires_at IS NULL)\r\n  OR (purpose='SignIn' AND provider='Google' AND registration_browser_digest IS NOT NULL AND length(registration_browser_digest)=64\r\n    AND registration_idempotency_key IS NOT NULL AND registration_browser_expires_at IS NOT NULL AND registration_browser_expires_at>created_at))\r\nAND (resolution<>'REGISTRATION_INTAKE' OR (purpose='SignIn' AND provider='Google' AND registration_browser_digest IS NOT NULL\r\n  AND link_id IS NULL AND link_version IS NULL AND link_qualification_evidence_reference IS NULL AND link_qualification_profile_version IS NULL))\r\nAND ((protected_registration_evidence IS NULL AND NOT (resolution='REGISTRATION_INTAKE' AND state='VERIFIED'))\r\n  OR (protected_registration_evidence IS NOT NULL AND length(protected_registration_evidence)>0 AND resolution='REGISTRATION_INTAKE' AND state='VERIFIED'))\r\nAND ((result_registration_operation_id IS NULL AND NOT (resolution='REGISTRATION_INTAKE' AND state='COMPLETED'))\r\n  OR (result_registration_operation_id IS NOT NULL AND resolution='REGISTRATION_INTAKE' AND state='COMPLETED'))");
+
+                            t.HasCheckConstraint("ck_federation_result", "((state IN ('PREPARED','CHALLENGE_ADMITTED','VERIFIED') AND ended_at IS NULL AND result_expires_at IS NULL\n  AND result_session_id IS NULL AND pending_mfa_id IS NULL AND result_proof_id IS NULL AND error_code IS NULL)\nOR (state IN ('COMPLETED','REJECTED','EXPIRED') AND ended_at IS NOT NULL AND result_expires_at IS NOT NULL\n  AND ended_at>=created_at AND result_expires_at>ended_at AND ((state='COMPLETED' AND verified_at IS NOT NULL AND error_code IS NULL\n    AND ((purpose='SignIn' AND result_proof_id IS NULL AND ((result_session_id IS NOT NULL AND pending_mfa_id IS NULL) OR (result_session_id IS NULL AND pending_mfa_id IS NOT NULL)))\n      OR (purpose='Link' AND result_session_id IS NULL AND pending_mfa_id IS NULL AND result_proof_id IS NULL)\n      OR (purpose='OperationProof' AND result_session_id IS NULL AND pending_mfa_id IS NULL AND result_proof_id IS NOT NULL)))\n    OR (state IN ('REJECTED','EXPIRED') AND error_code IS NOT NULL AND result_session_id IS NULL AND pending_mfa_id IS NULL AND result_proof_id IS NULL)))) OR (purpose='SignIn' AND resolution='REGISTRATION_INTAKE' AND state='COMPLETED' AND verified_at IS NOT NULL AND error_code IS NULL\r\nAND result_registration_operation_id IS NOT NULL AND result_session_id IS NULL AND pending_mfa_id IS NULL AND result_proof_id IS NULL\r\nAND ended_at IS NOT NULL AND ended_at>=created_at AND result_expires_at IS NOT NULL AND result_expires_at>ended_at)");
 
                             t.HasCheckConstraint("ck_federation_state", "state IN ('PREPARED','CHALLENGE_ADMITTED','VERIFIED','COMPLETED','REJECTED','EXPIRED') AND version>=1");
 
-                            t.HasCheckConstraint("ck_federation_verified", "(verified_at IS NULL AND verification_expires_at IS NULL AND validated_issuer IS NULL AND link_id IS NULL AND link_version IS NULL\n  AND link_qualification_evidence_reference IS NULL AND link_qualification_profile_version IS NULL AND protected_link_subject IS NULL\n  AND state NOT IN ('VERIFIED','COMPLETED'))\nOR (verified_at IS NOT NULL AND verification_expires_at IS NOT NULL AND validated_issuer IS NOT NULL\n  AND verified_at>=created_at AND verified_at<expires_at AND verification_expires_at>verified_at AND verification_expires_at<=expires_at\n  AND length(validated_issuer)>0 AND ((purpose IN ('SignIn','OperationProof') AND link_id IS NOT NULL AND link_version IS NOT NULL AND link_version>=1\n    AND link_qualification_evidence_reference IS NOT NULL AND length(link_qualification_evidence_reference)>0\n    AND link_qualification_profile_version IS NOT NULL AND length(link_qualification_profile_version)>0 AND protected_link_subject IS NULL)\n  OR (purpose='Link' AND protected_link_subject IS NOT NULL AND length(protected_link_subject)>0\n    AND link_id IS NULL AND link_version IS NULL AND link_qualification_evidence_reference IS NULL AND link_qualification_profile_version IS NULL)))");
+                            t.HasCheckConstraint("ck_federation_verified", "((verified_at IS NULL AND verification_expires_at IS NULL AND validated_issuer IS NULL AND link_id IS NULL AND link_version IS NULL\n  AND link_qualification_evidence_reference IS NULL AND link_qualification_profile_version IS NULL AND protected_link_subject IS NULL\n  AND state NOT IN ('VERIFIED','COMPLETED'))\nOR (verified_at IS NOT NULL AND verification_expires_at IS NOT NULL AND validated_issuer IS NOT NULL\n  AND verified_at>=created_at AND verified_at<expires_at AND verification_expires_at>verified_at AND verification_expires_at<=expires_at\n  AND length(validated_issuer)>0 AND ((purpose IN ('SignIn','OperationProof') AND link_id IS NOT NULL AND link_version IS NOT NULL AND link_version>=1\n    AND link_qualification_evidence_reference IS NOT NULL AND length(link_qualification_evidence_reference)>0\n    AND link_qualification_profile_version IS NOT NULL AND length(link_qualification_profile_version)>0 AND protected_link_subject IS NULL)\n  OR (purpose='Link' AND protected_link_subject IS NOT NULL AND length(protected_link_subject)>0\n    AND link_id IS NULL AND link_version IS NULL AND link_qualification_evidence_reference IS NULL AND link_qualification_profile_version IS NULL)))) OR (purpose='SignIn' AND provider='Google' AND resolution='REGISTRATION_INTAKE' AND state IN ('VERIFIED','COMPLETED','REJECTED','EXPIRED')\r\nAND verified_at IS NOT NULL AND verification_expires_at IS NOT NULL AND validated_issuer IS NOT NULL AND length(validated_issuer)>0\r\nAND verified_at>=created_at AND verified_at<expires_at AND verification_expires_at>verified_at AND verification_expires_at<=expires_at\r\nAND link_id IS NULL AND link_version IS NULL AND link_qualification_evidence_reference IS NULL AND link_qualification_profile_version IS NULL\r\nAND protected_link_subject IS NULL)");
                         });
                 });
 
@@ -2297,8 +2328,41 @@ namespace Tunner.Identity.Persistence.Migrations
                     b.Property<DateTimeOffset>("ExpiresAt")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<Guid?>("FederationAttemptId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("FederationContactMappingEvidenceReference")
+                        .HasColumnType("text");
+
+                    b.Property<DateTimeOffset?>("FederationContactVerifiedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<long?>("FederationContactVersion")
+                        .HasColumnType("bigint");
+
+                    b.Property<Guid?>("FederationLinkId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("FederationOrigin")
+                        .HasColumnType("text");
+
+                    b.Property<string>("FederationProfileSnapshot")
+                        .HasColumnType("text");
+
+                    b.Property<string>("FederationProvider")
+                        .HasColumnType("text");
+
+                    b.Property<string>("FederationVerifiedContactDigest")
+                        .HasColumnType("text");
+
                     b.Property<Guid>("IdempotencyKey")
                         .HasColumnType("uuid");
+
+                    b.Property<string>("Mode")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("text")
+                        .HasDefaultValue("PASSWORD");
 
                     b.Property<string>("NormalizedEmail")
                         .IsRequired()
@@ -2363,15 +2427,20 @@ namespace Tunner.Identity.Persistence.Migrations
 
                     b.HasKey("OperationId");
 
-                    b.HasIndex("AccountId");
+                    b.HasIndex("FederationAttemptId")
+                        .IsUnique();
 
                     b.HasIndex("PurgeAfter");
+
+                    b.HasIndex("AccountId", "FederationLinkId");
 
                     b.HasIndex("BrowserDigest", "IdempotencyKey")
                         .IsUnique();
 
                     b.ToTable("registration_operations", "identity", t =>
                         {
+                            t.HasCheckConstraint("ck_registration_mode", "(\"Mode\"='PASSWORD' AND \"FederationAttemptId\" IS NULL AND \"FederationLinkId\" IS NULL AND \"FederationProvider\" IS NULL\r\n  AND \"FederationOrigin\" IS NULL AND \"FederationProfileSnapshot\" IS NULL AND \"FederationContactMappingEvidenceReference\" IS NULL\r\n  AND \"FederationVerifiedContactDigest\" IS NULL AND \"FederationContactVerifiedAt\" IS NULL AND \"FederationContactVersion\" IS NULL)\r\nOR (\"Mode\"='FEDERATED' AND \"FederationAttemptId\" IS NOT NULL AND \"FederationLinkId\" IS NOT NULL\r\n  AND \"AccountId\" IS NOT NULL AND \"ContactId\" IS NOT NULL AND \"ProtectedCredential\" IS NULL\r\n  AND \"FederationProvider\" IN ('Google','Microsoft') AND \"FederationOrigin\" IS NOT NULL\r\n  AND \"FederationProfileSnapshot\" IS NOT NULL AND jsonb_typeof(\"FederationProfileSnapshot\"::jsonb)='object'\r\n  AND \"FederationContactMappingEvidenceReference\" IS NOT NULL AND length(\"FederationContactMappingEvidenceReference\")>0\r\n  AND \"FederationVerifiedContactDigest\" IS NOT NULL AND length(\"FederationVerifiedContactDigest\")=64\r\n  AND \"FederationContactVerifiedAt\" IS NOT NULL AND \"FederationContactVerifiedAt\"<=\"CreatedAt\"\r\n  AND \"FederationContactVersion\" IS NOT NULL AND \"FederationContactVersion\">=1\r\n  AND \"Stage\" IN ('PERSONAL_INFORMATION','CONSENT_REQUIRED','COMPLETE'))");
+
                             t.HasCheckConstraint("ck_registration_stage", "\"Stage\" IN ('LEGACY','VERIFY_CONTACT','PERSONAL_INFORMATION','CONSENT_REQUIRED','COMPLETE')");
 
                             t.HasCheckConstraint("ck_registration_status", "\"Status\" IN ('REQUIRES_ACTION','SUCCEEDED','FAILED')");
@@ -3374,6 +3443,11 @@ namespace Tunner.Identity.Persistence.Migrations
                         .HasForeignKey("ResultProofId")
                         .OnDelete(DeleteBehavior.Restrict);
 
+                    b.HasOne("Tunner.Identity.Persistence.RegistrationOperationRow", null)
+                        .WithMany()
+                        .HasForeignKey("ResultRegistrationOperationId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
                     b.HasOne("Tunner.Identity.Persistence.AuthenticationSessionRow", null)
                         .WithMany()
                         .HasForeignKey("ResultSessionId")
@@ -3497,6 +3571,17 @@ namespace Tunner.Identity.Persistence.Migrations
                     b.HasOne("Tunner.Identity.Persistence.AccountRow", null)
                         .WithMany()
                         .HasForeignKey("AccountId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("Tunner.Identity.Persistence.FederationAttemptRow", null)
+                        .WithMany()
+                        .HasForeignKey("FederationAttemptId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("Tunner.Identity.Persistence.ExternalIdentityLinkRow", null)
+                        .WithMany()
+                        .HasForeignKey("AccountId", "FederationLinkId")
+                        .HasPrincipalKey("AccountId", "LinkId")
                         .OnDelete(DeleteBehavior.Restrict);
                 });
 

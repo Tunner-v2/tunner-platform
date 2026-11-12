@@ -40,7 +40,7 @@ public static class RegistrationEndpoints
     public static IEndpointRouteBuilder MapTunnerRegistration(this IEndpointRouteBuilder endpoints)
     {
         ArgumentNullException.ThrowIfNull(endpoints);
-        endpoints.MapGet("/registration/options", (HttpContext context, IRegistrationPolicySource source,
+        endpoints.MapGet("/registration/options", async (HttpContext context, IRegistrationPolicySource source,
             IRegistrationPresentationSource content, IAntiforgery antiforgery, IDataProtectionProvider protection, TimeProvider clock) =>
         {
             RegistrationPolicy policy;
@@ -61,10 +61,19 @@ public static class RegistrationEndpoints
             {
                 browser = browser with { RegistrationKey = Guid.NewGuid() }; WriteBrowser(context, protector, browser, now);
             }
+            FederationRegistrationIntakeView? intake;
+            try { intake = context.RequestServices.GetService<FederationBrowserService>() is { } federation
+                ? await federation.ReadRegistrationIntakeAsync(context,context.RequestAborted).ConfigureAwait(false) : null; }
+            catch (Exception exception) when (exception is ArgumentException or InvalidOperationException or CryptographicException)
+            { return Problem(503,"DEPENDENCY_UNAVAILABLE"); }
             var csrf = antiforgery.GetAndStoreTokens(context);
-            return Results.Json(new { csrfToken = csrf.RequestToken, registrationKey = browser.RegistrationKey, serverTime = clock.GetUtcNow(), policyVersion = policy.Version, policy.TermsVersion, policy.PrivacyVersion,
+            var options = new { csrfToken = csrf.RequestToken, registrationKey = browser.RegistrationKey, serverTime = clock.GetUtcNow(), policyVersion = policy.Version, policy.TermsVersion, policy.PrivacyVersion,
                 policy.PasswordMinimumLength, policy.PasswordMaximumLength, policy.ProofDigits,
-                presentation.Locale, presentation.Content, presentation.TermsUri, presentation.PrivacyUri, presentation.SupportUri });
+                presentation.Locale, presentation.Content, presentation.TermsUri, presentation.PrivacyUri, presentation.SupportUri };
+            if (intake is null) return Results.Json(options);
+            var values = JsonSerializer.SerializeToElement(options,WebJson).EnumerateObject().ToDictionary(value => value.Name,value => (object?)value.Value);
+            values["federationIntake"] = intake;
+            return Results.Json(values);
         }).AllowAnonymous();
         endpoints.MapGet("/registration/status/{key:guid}", async (HttpContext context, Guid key, IRegistrationApplication application,
             IDataProtectionProvider protection, RegistrationNetworkPartitionKey network, TimeProvider clock) =>
@@ -169,6 +178,28 @@ public static class RegistrationEndpoints
     private static void WriteBrowser(HttpContext context, IDataProtector protector, BrowserContext browser, DateTimeOffset now) =>
         context.Response.Cookies.Append(BrowserCookieName, protector.Protect(JsonSerializer.Serialize(browser)), new CookieOptions
         { HttpOnly = true, Secure = true, SameSite = SameSiteMode.Strict, Path = "/", MaxAge = browser.ExpiresAt - now, IsEssential = true });
+    internal static FederationRegistrationBrowser? FederationBrowser(HttpContext http, bool create, Guid? requestId = null)
+    {
+        var services = http.RequestServices; var now = services.GetRequiredService<TimeProvider>().GetUtcNow();
+        if (!http.Request.IsHttps || http.Request.QueryString.HasValue || http.Connection.RemoteIpAddress is null) return null;
+        var policy = services.GetRequiredService<IRegistrationPolicySource>().RequireEffective(now); policy.Validate();
+        var protector = services.GetRequiredService<IDataProtectionProvider>().CreateProtector("Tunner.User.Registration.Browser.v1");
+        if (!TryBrowser(http,protector,now,out var browser) || browser!.RegistrationKey == Guid.Empty)
+        {
+            if (!create) return null;
+            browser = new(Convert.ToHexString(RandomNumberGenerator.GetBytes(32)),now + policy.BrowserContextLifetime,Guid.NewGuid());
+            WriteBrowser(http,protector,browser,now);
+        }
+        if (create)
+        {
+            if (requestId is not { } key || key == Guid.Empty) return null;
+            if (browser!.RegistrationKey != key) { browser = browser with { RegistrationKey = key }; WriteBrowser(http,protector,browser,now); }
+        }
+        var caller = new RegistrationCaller(Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(browser!.Id))),
+            services.GetRequiredService<RegistrationNetworkPartitionKey>().Partition(http.Connection.RemoteIpAddress));
+        return new(caller,browser.RegistrationKey,browser.ExpiresAt);
+    }
+
     private static async Task<IResult> RestartAsync(HttpContext context, IDataProtectionProvider protection, TimeProvider clock)
     {
         if (!context.Request.HasJsonContentType()) return Problem(415, "VALIDATION_ERROR");

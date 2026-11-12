@@ -15,6 +15,8 @@ public sealed record FederationProfile(string Version, FederationProviderKind Pr
 {
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public FederationFreshAuthenticationProfile? FreshAuthentication { get; init; }
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public FederationRegistrationProfile? Registration { get; init; }
     public override string ToString() => nameof(FederationProfile);
 }
 
@@ -38,6 +40,7 @@ public sealed class FederationProfileVersion
             Values.AllowedContinuations.Any(path => !CleanPath(path)) || !Values.AllowedContinuations.Contains(values.ContinuationPath, StringComparer.Ordinal) ||
             values.FreshAuthentication is { } fresh && !Values.AllowedContinuations.Contains(fresh.ContinuationPath, StringComparer.Ordinal))
             throw new ArgumentException("A complete explicit qualified federation profile is required.");
+        if (values.Registration is { Complete: false }) throw new ArgumentException("Registration qualification must be complete.");
         Metadata = metadata;
         Registration = new(values.Provider, values.StableNamespaceId, values.Issuer, values.ClientId, Values.AdmittedIssuerAliases,
             values.Version, values.IssuerMappingEvidenceReference, values.MaximumNamespaceUtf8Bytes, values.MaximumSubjectUtf8Bytes);
@@ -81,7 +84,8 @@ public sealed class FederationProfileCatalog(IEnumerable<FederationProfileVersio
 /// <summary>Trusted terminal native-handler input ONLY. Never bind this type from an HTTP body or claims bag.</summary>
 public sealed class FederationProtocolEvidence(FederationProviderKind provider, string profileVersion, Guid attemptId,
     string issuer, string subject, string clientId, DateTimeOffset? authenticatedAt = null,
-    IReadOnlyCollection<string>? authenticationMethods = null)
+    IReadOnlyCollection<string>? authenticationMethods = null, string? providerVerifiedEmail = null,
+    string? providerEmailMappingEvidenceReference = null)
 {
     internal FederationProviderKind Provider { get; } = provider;
     internal string ProfileVersion { get; } = profileVersion;
@@ -92,6 +96,8 @@ public sealed class FederationProtocolEvidence(FederationProviderKind provider, 
     internal DateTimeOffset? AuthenticatedAt { get; } = authenticatedAt;
     internal IReadOnlyCollection<string>? AuthenticationMethods { get; } = authenticationMethods is null
         ? null : Array.AsReadOnly(authenticationMethods.ToArray());
+    internal string? ProviderVerifiedEmail { get; } = providerVerifiedEmail;
+    internal string? ProviderEmailMappingEvidenceReference { get; } = providerEmailMappingEvidenceReference;
     public override string ToString() => nameof(FederationProtocolEvidence);
 }
 
@@ -115,9 +121,12 @@ public sealed class FederationCallbackResult
     public override string ToString() => nameof(FederationCallbackResult);
 }
 
-public sealed record FederationPendingView(Guid AttemptId, Guid RequestId, string Status, string? ErrorCode)
+public sealed record FederationPendingView(Guid AttemptId, Guid RequestId, string Status, string? ErrorCode,
+    [property: JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] string? Resolution = null)
 { public override string ToString() => nameof(FederationPendingView); }
-public sealed record FederationBootstrap(bool GoogleAvailable, bool MicrosoftAvailable, FederationPendingView? Pending, bool PreserveOriginalBrowser = false)
+public sealed record FederationRegistrationAvailability(bool GoogleAvailable, bool MicrosoftAvailable);
+public sealed record FederationBootstrap(bool GoogleAvailable, bool MicrosoftAvailable, FederationPendingView? Pending, bool PreserveOriginalBrowser = false,
+    [property: JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] FederationRegistrationAvailability? Registration = null)
 { public override string ToString() => nameof(FederationBootstrap); }
 
 internal sealed class FederationCurrentBrowser(AuthenticationCaller caller, Guid browserKey, DateTimeOffset browserExpiresAt,
@@ -164,11 +173,12 @@ internal sealed class FederationLinkedSignInRequest(FederationAttemptRow attempt
     public override string ToString() => nameof(FederationLinkedSignInRequest);
 }
 
-internal sealed class FederationAttemptResult(FederationAttemptRow? row, string? errorCode = null, AuthenticationAttempt? authentication = null, string? projectedState = null)
+internal sealed class FederationAttemptResult(FederationAttemptRow? row, string? errorCode = null, AuthenticationAttempt? authentication = null, string? projectedState = null, RegistrationResult? registration = null)
 {
     internal FederationAttemptRow? Row { get; } = row;
     internal string? ErrorCode { get; } = errorCode;
     internal AuthenticationAttempt? Authentication { get; } = authentication;
     internal string? ProjectedState { get; } = projectedState;
+    internal RegistrationResult? Registration { get; } = registration;
     public override string ToString() => nameof(FederationAttemptResult);
 }

@@ -68,12 +68,15 @@ public sealed partial class RegistrationApplication
         if(row.AccountId is null||row.ContactId is null)return false;
         return await database.Accounts.AnyAsync(x=>x.AccountId==row.AccountId&&x.State==AccountState.VerificationPending,cancellationToken).ConfigureAwait(false)&&
             await database.VerifiedContacts.AnyAsync(x=>x.ContactId==row.ContactId&&x.AccountId==row.AccountId&&x.State==ContactVerificationState.Verified,cancellationToken).ConfigureAwait(false)&&
-            await database.Users.AnyAsync(x=>x.AccountId==row.AccountId&&x.EmailConfirmed,cancellationToken).ConfigureAwait(false);
+            await database.Users.AnyAsync(x=>x.AccountId==row.AccountId&&x.EmailConfirmed,cancellationToken).ConfigureAwait(false)&&
+            await FederatedActivationCurrentAsync(row,cancellationToken).ConfigureAwait(false);
     }
     private async Task ActivateAfterPolicyAsync(RegistrationOperationRow row,AccountCapabilityEvaluation evaluation,DateTimeOffset now,CancellationToken cancellationToken)
     {
         var account=await database.Accounts.SingleAsync(x=>x.AccountId==row.AccountId,cancellationToken).ConfigureAwait(false);
         if(account.State!=AccountState.VerificationPending)throw new InvalidOperationException("Account state changed before onboarding completion.");
+        if (!await FederatedActivationCurrentAsync(row,cancellationToken).ConfigureAwait(false))
+            throw new InvalidOperationException("Federated registration activation evidence is unavailable.");
         account.State=AccountState.Active;account.Version++;account.RecordedAtUtc=now;account.OperationId=OperationReference(row.OperationId);
         account.CorrelationId=row.CorrelationId;account.EvidenceReference=evaluation.EvidenceReference;
         row.Status="SUCCEEDED";row.Stage="COMPLETE";

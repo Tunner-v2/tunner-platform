@@ -28,6 +28,56 @@ namespace Tunner.Identity.Persistence.Tests;
 /// <summary>Real native handler + bounded BFF callback, local TLS and in-process synthetic HTTP only. No Identity/SQL/session acceptance.</summary>
 public sealed class FederationOidcNativeProtocolTests
 {
+    [Fact]
+    public async Task QualifiedGoogleSignInProjectsOnlyItsExactNativeVerifiedEmail()
+    {
+        await using var host = await ProtocolHost.Start(qualifiedGoogleRegistration: true, purpose: "SignIn", contactEvidence: true);
+        var challenge = await host.Challenge();
+        Assert.True(host.EmailScopeRequested && !host.EssentialFreshClaimsRequested && !host.PromptLoginRequested);
+        using var response = await host.Callback(challenge);
+        Assert.True(response.StatusCode == HttpStatusCode.SeeOther && host.Successes == 1 && host.ExactFactsObserved && host.ExactVerifiedEmailObserved);
+        Assert.True(!host.VerifiedEmailAbsent && host.Provider.TokenRequests == 1 && host.Provider.PkceAndConfidentialClientObserved);
+        Assert.True(string.IsNullOrEmpty(await response.Content.ReadAsStringAsync()));
+        Assert.True(!response.Headers.TryGetValues("Set-Cookie", out var cookies) ||
+            !cookies.Any(cookie => cookie.StartsWith("__Host-Tunner.User.Session", StringComparison.Ordinal)));
+    }
+
+    [Theory]
+    [InlineData("missing-email")]
+    [InlineData("missing-email-verified")]
+    [InlineData("unverified-email")]
+    [InlineData("string-email-verified")]
+    [InlineData("duplicate-email")]
+    [InlineData("duplicate-email-verified")]
+    public async Task QualifiedGoogleSignInOmitsIntakeEmailForMissingOrAmbiguousNativeClaims(string defect)
+    {
+        await using var host = await ProtocolHost.Start(qualifiedGoogleRegistration: true, purpose: "SignIn", contactEvidence: true);
+        var challenge = await host.Challenge(); host.Provider.Defect = defect;
+        using var response = await host.Callback(challenge);
+        // Valid linked-identity facts survive; no absent, string, false or ambiguous contact fact becomes intake authority.
+        Assert.True(host.EmailScopeRequested && response.StatusCode == HttpStatusCode.SeeOther && host.Successes == 1 && host.ExactFactsObserved);
+        Assert.True(host.VerifiedEmailAbsent && !host.ExactVerifiedEmailObserved && host.Provider.TokenRequests == 1);
+        Assert.True(string.IsNullOrEmpty(await response.Content.ReadAsStringAsync()));
+    }
+
+    [Theory]
+    [InlineData(null, false, null)]
+    [InlineData(null, true, null)]
+    [InlineData(FederationProviderKind.Google, false, "SignIn")]
+    [InlineData(FederationProviderKind.Microsoft, false, "SignIn")]
+    [InlineData(FederationProviderKind.Google, true, "Link")]
+    [InlineData(FederationProviderKind.Google, true, "OperationProof")]
+    public async Task OrdinaryUnqualifiedAndNonSignInBranchesDoNotRequestOrProjectContactEvidence(
+        FederationProviderKind? freshProvider, bool qualifiedGoogleRegistration, string? purpose)
+    {
+        await using var host = await ProtocolHost.Start(freshProvider, qualifiedGoogleRegistration, purpose, contactEvidence: true);
+        var challenge = await host.Challenge();
+        using var response = await host.Callback(challenge);
+        Assert.True(!host.EmailScopeRequested && response.StatusCode == HttpStatusCode.SeeOther && host.Successes == 1 && host.ExactFactsObserved);
+        Assert.True(host.VerifiedEmailAbsent && !host.ExactVerifiedEmailObserved && host.Provider.TokenRequests == 1);
+        Assert.True(purpose != "OperationProof" || host.EssentialFreshClaimsRequested && host.ExactFreshFactsObserved);
+    }
+
     [Theory]
     [InlineData(FederationProviderKind.Google)]
     [InlineData(FederationProviderKind.Microsoft)]
@@ -192,6 +242,9 @@ public sealed class FederationOidcNativeProtocolTests
         internal bool EssentialFreshClaimsRequested;
         internal bool PromptLoginRequested;
         internal bool ExactFreshFactsObserved;
+        internal bool EmailScopeRequested;
+        internal bool ExactVerifiedEmailObserved;
+        internal bool VerifiedEmailAbsent;
         private int messages;
         private int tokenResponses;
         private int validatedTokens;
@@ -206,7 +259,8 @@ public sealed class FederationOidcNativeProtocolTests
         private ProtocolHost(WebApplication application, HttpClient client, X509Certificate2 certificate, SyntheticProvider provider)
         { this.application = application; this.client = client; this.certificate = certificate; Provider = provider; }
 
-        internal static async Task<ProtocolHost> Start(FederationProviderKind? freshProvider = null)
+        internal static async Task<ProtocolHost> Start(FederationProviderKind? freshProvider = null,
+            bool qualifiedGoogleRegistration = false, string? purpose = null, bool contactEvidence = false)
         {
             using var rsa = RSA.Create(2048);
             var request = new CertificateRequest("CN=localhost", rsa, HashAlgorithmName.SHA256, RSASignaturePadding.Pkcs1);
@@ -215,7 +269,7 @@ public sealed class FederationOidcNativeProtocolTests
             X509Certificate2 certificate;
             try { certificate = X509CertificateLoader.LoadPkcs12(bytes, null, X509KeyStorageFlags.DefaultKeySet); }
             finally { CryptographicOperations.ZeroMemory(bytes); }
-            var provider = new SyntheticProvider { FreshEvidence = freshProvider is not null };
+            var provider = new SyntheticProvider { FreshEvidence = freshProvider is not null, ContactEvidence = contactEvidence };
             var builder = WebApplication.CreateBuilder(); builder.Logging.ClearProviders();
             builder.WebHost.ConfigureKestrel(server => server.Listen(IPAddress.Loopback, 0, endpoint => endpoint.UseHttps(certificate)));
             builder.Services.AddDataProtection().UseEphemeralDataProtectionProvider();
@@ -241,8 +295,10 @@ public sealed class FederationOidcNativeProtocolTests
                                 facts.Issuer == SyntheticProvider.Issuer && facts.ClientId == SyntheticProvider.ClientId;
                             host.ExactFreshFactsObserved = facts.AuthenticatedAt == provider.AuthenticatedAt &&
                                 facts.AuthenticationMethods is { Count: 2 } methods && methods.Contains("pwd", StringComparer.Ordinal) && methods.Contains("mfa", StringComparer.Ordinal);
+                            host.ExactVerifiedEmailObserved = facts.ProviderVerifiedEmail == SyntheticProvider.Email;
+                            host.VerifiedEmailAbsent = facts.ProviderVerifiedEmail is null;
                             return Task.FromResult<string?>("/login");
-                        }, (_, failure, _) => { host!.terminalFailure = failure.Reason; return Task.FromResult<string?>("/login"); }, freshProvider);
+                        }, (_, failure, _) => { host!.terminalFailure = failure.Reason; return Task.FromResult<string?>("/login"); }, freshProvider, qualifiedGoogleRegistration);
                     var events = options.Events;
                     var message = events.OnMessageReceived; events.OnMessageReceived = context => { host!.messages++; return message(context); };
                     events.OnTokenResponseReceived = _ => { host!.tokenResponses++; return Task.CompletedTask; };
@@ -266,7 +322,8 @@ public sealed class FederationOidcNativeProtocolTests
             {
                 var properties = new AuthenticationProperties(); properties.Items[FederationOidcTransport.AttemptProperty] = Attempt;
                 properties.Items[FederationOidcTransport.ProfileProperty] = "synthetic-profile-v1";
-                if (freshProvider is not null) properties.Items[FederationOidcTransport.PurposeProperty] = "OperationProof";
+                if (purpose is not null) properties.Items[FederationOidcTransport.PurposeProperty] = purpose;
+                else if (freshProvider is not null) properties.Items[FederationOidcTransport.PurposeProperty] = "OperationProof";
                 await http.ChallengeAsync(Scheme, properties);
             }).AllowAnonymous();
             await application.StartAsync();
@@ -283,6 +340,7 @@ public sealed class FederationOidcNativeProtocolTests
             using var response = await client.GetAsync("/challenge");
             Assert.Equal(HttpStatusCode.Redirect, response.StatusCode); Assert.NotNull(response.Headers.Location);
             var query = QueryHelpers.ParseQuery(response.Headers.Location.Query);
+            EmailScopeRequested = query.TryGetValue("scope", out var scope) && scope.ToString().Split(' ', StringSplitOptions.RemoveEmptyEntries).Contains("email", StringComparer.Ordinal);
             PromptLoginRequested = query.TryGetValue("prompt", out var prompt) && prompt == "login";
             if (query.TryGetValue("claims", out var requested))
             {
@@ -332,9 +390,12 @@ public sealed class FederationOidcNativeProtocolTests
         private static readonly string[] AuthenticationMethods = ["client_secret_post"];
         private static readonly string[] QualifiedFreshMethods = ["pwd", "mfa"];
         private static readonly string[] DuplicateFreshMethods = ["pwd", "pwd"];
+        private static readonly string[] DuplicateEmails = [Email, "other-provider@example.test"];
+        private static readonly bool[] DuplicateVerifiedFlags = [true, true];
         internal const string Issuer = "https://issuer.example.test";
         internal const string ClientId = "synthetic-confidential-client";
         internal const string Secret = "synthetic-public-test-secret";
+        internal const string Email = "provider@example.test";
         private readonly RSA rsa = RSA.Create(2048);
         private readonly RSA wrongRsa = RSA.Create(2048);
         private string? code;
@@ -345,6 +406,7 @@ public sealed class FederationOidcNativeProtocolTests
         internal bool PkceAndConfidentialClientObserved;
         internal string? Defect;
         internal bool FreshEvidence;
+        internal bool ContactEvidence;
         internal DateTimeOffset AuthenticatedAt { get; } = DateTimeOffset.FromUnixTimeSeconds(DateTimeOffset.UtcNow.AddSeconds(-30).ToUnixTimeSeconds());
 
         internal string Admit(string nonce, string challenge)
@@ -385,6 +447,17 @@ public sealed class FederationOidcNativeProtocolTests
                         ? new[] { AuthenticatedAt.ToUnixTimeSeconds(), AuthenticatedAt.ToUnixTimeSeconds() }
                         : Defect == "noninteger-auth-time" ? "not-an-integer" : AuthenticatedAt.ToUnixTimeSeconds();
                     if (Defect != "missing-methods") claims["amr"] = Defect == "duplicate-methods" ? DuplicateFreshMethods : QualifiedFreshMethods;
+                }
+                if (ContactEvidence)
+                {
+                    if (Defect != "missing-email") claims["email"] = Defect == "duplicate-email" ? DuplicateEmails : Email;
+                    if (Defect != "missing-email-verified") claims["email_verified"] = Defect switch
+                    {
+                        "unverified-email" => false,
+                        "string-email-verified" => "true",
+                        "duplicate-email-verified" => DuplicateVerifiedFlags,
+                        _ => true
+                    };
                 }
                 var token = new JsonWebTokenHandler().CreateToken(new SecurityTokenDescriptor
                 {

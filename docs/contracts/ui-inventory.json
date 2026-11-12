@@ -52,22 +52,40 @@
       "owner_scopes": [
         "TUN-P2-004",
         "TUN-P2-004-UI002",
-        "TUN-P2-004-UI001"
+        "TUN-P2-004-UI001",
+        "TUN-P2-010",
+        "P1-018-RV008"
       ],
       "authority_refs": [
         "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md",
-        "docs/authority/current/development/31_UI_UX_Screen_and_Control_Center_Requirements_Matrix.md"
+        "docs/authority/current/development/31_UI_UX_Screen_and_Control_Center_Requirements_Matrix.md",
+        "docs/authority/current/decisions/AMD-0008_Approved_Figma_Visual_Fidelity_and_Product_Owner_UX_Consent.md",
+        "docs/authority/current/decisions/AMD-0009_URL_Addressable_Routing_and_Governed_Form_Validation.md"
       ],
       "figma_refs": [
         {
           "file_key": "apNbwvAgdn1xIxYH1oiaSC",
           "node_id": "70:270"
+        },
+        {
+          "file_key": "apNbwvAgdn1xIxYH1oiaSC",
+          "node_id": "197:5"
+        },
+        {
+          "file_key": "apNbwvAgdn1xIxYH1oiaSC",
+          "node_id": "70:1257"
         }
       ],
       "source_paths": [
         "web/apps/user",
         "src/Modules/Identity/RegistrationEndpoints.cs",
-        "src/Modules/Identity/RegistrationApplication.cs"
+        "src/Modules/Identity/RegistrationApplication.cs",
+        "web/apps/user/main.tsx",
+        "web/apps/user/registration.federation.ts",
+        "web/apps/user/registration.css",
+        "web/apps/user/content.proposal.json",
+        "web/apps/user/federation.api.ts",
+        "web/apps/user/federation.sign-in.tsx"
       ],
       "form_ids": [
         "FORM-REGISTRATION"
@@ -75,7 +93,27 @@
       "observed_defects": [
         "UI_ROUTING_DEFECT"
       ],
-      "routing_state": "IMPLEMENTED"
+      "routing_state": "IMPLEMENTED",
+      "additional_consent_refs": [
+        "governance/evidence/TUN-P2-010-VISUAL-CONSENT.json"
+      ],
+      "approved_visual_scope_ids": [
+        "010-V04"
+      ],
+      "current_revision_ref": "P1-018-RV008",
+      "compatibility_revision_refs": [
+        "P2-004-UI001-RV005",
+        "P2-004-UI002-RV005"
+      ],
+      "federation_v04_scope": "Same canonical /registration, qualified server-owned FEDERATED mode only: omit Password/Confirmation, show provider-verified email read-only, retain explicit Tunner notices/shared validation/footer. Google qualification only; no Microsoft registration or Tunner verification substitute. Ordinary registration and later Personal Information/consent remain existing independent paths.",
+      "federation_v04_acceptance_boundary": "010-V04 pictured variant and exact Login handoff only. Public controlled-BFF16, separate ordinary-registration24 and V01 regression31 are limited implementation evidence; manual owned-Vite teardown is recorded. Native connected backend/live evidence, final committed-source binding, per-item URL/VAL/UX-FID and native UI gate remain PENDING. No production qualification/profile/default, publication, whole-feature/Product acceptance or release is selected.",
+      "federation_v04_evidence_owner_id": "FORM-REGISTRATION",
+      "federation_v04_evidence_ref": "artifacts/p2-010-federation-20261112/registration-wip-ui/results.json",
+      "federation_v04_acceptance_check_scope": {
+        "required": "URL-001..006 and UX-FID-001..008; FORM-REGISTRATION owns VAL-001..008.",
+        "final_dispositions": "PENDING_NO_PER_CELL_ACCEPTANCE_RECORDED"
+      },
+      "owner_manual_design_update_ref": "governance/todos/TODO-TUN-P2-010-DESIGN001.yaml"
     },
     {
       "id": "U-AUTH-03",
@@ -239,11 +277,15 @@
       "owner_scopes": [
         "TUN-P2-004",
         "TUN-P2-004-UI002",
-        "TUN-P2-004-UI001"
+        "TUN-P2-004-UI001",
+        "TUN-P2-010",
+        "P1-018-RV008"
       ],
       "authority_refs": [
         "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md",
-        "docs/authority/current/development/31_UI_UX_Screen_and_Control_Center_Requirements_Matrix.md"
+        "docs/authority/current/development/31_UI_UX_Screen_and_Control_Center_Requirements_Matrix.md",
+        "docs/authority/current/decisions/AMD-0008_Approved_Figma_Visual_Fidelity_and_Product_Owner_UX_Consent.md",
+        "docs/authority/current/decisions/AMD-0009_URL_Addressable_Routing_and_Governed_Form_Validation.md"
       ],
       "figma_refs": [
         {
@@ -254,13 +296,23 @@
           "file_key": "apNbwvAgdn1xIxYH1oiaSC",
           "node_id": "70:1257",
           "role": "Approved error presentation exemplar; current domain fields/copy remain authoritative"
+        },
+        {
+          "file_key": "apNbwvAgdn1xIxYH1oiaSC",
+          "node_id": "197:5"
         }
       ],
       "source_paths": [
         "web/apps/user",
         "src/Modules/Identity/RegistrationEndpoints.cs",
         "src/Modules/Identity/RegistrationApplication.cs",
-        "src/Modules/Identity/RegistrationPersonalInformation.cs"
+        "src/Modules/Identity/RegistrationPersonalInformation.cs",
+        "web/apps/user/main.tsx",
+        "web/apps/user/registration.federation.ts",
+        "web/apps/user/registration.css",
+        "web/apps/user/content.proposal.json",
+        "web/apps/user/federation.api.ts",
+        "web/apps/user/federation.sign-in.tsx"
       ],
       "fields": [
         "email",
@@ -272,7 +324,128 @@
       "observed_defects": [
         "UI_VALIDATION_DEFECT",
         "UI_FIDELITY_DEFECT"
-      ]
+      ],
+      "additional_consent_refs": [
+        "governance/evidence/TUN-P2-010-VISUAL-CONSENT.json"
+      ],
+      "approved_visual_scope_ids": [
+        "010-V04"
+      ],
+      "current_revision_ref": "P1-018-RV008",
+      "compatibility_revision_refs": [
+        "P2-004-UI001-RV005",
+        "P2-004-UI002-RV005"
+      ],
+      "federation_v04_scope": "Same canonical /registration, qualified server-owned FEDERATED mode only: omit Password/Confirmation, show provider-verified email read-only, retain explicit Tunner notices/shared validation/footer. Google qualification only; no Microsoft registration or Tunner verification substitute. Ordinary registration and later Personal Information/consent remain existing independent paths.",
+      "federation_v04_acceptance_boundary": "010-V04 pictured variant and exact Login handoff only. Public controlled-BFF16, separate ordinary-registration24 and V01 regression31 are limited implementation evidence; manual owned-Vite teardown is recorded. Native connected backend/live evidence, final committed-source binding, per-item URL/VAL/UX-FID and native UI gate remain PENDING. No production qualification/profile/default, publication, whole-feature/Product acceptance or release is selected.",
+      "federation_v04_evidence_owner_id": "FORM-REGISTRATION",
+      "federation_v04_evidence_ref": "artifacts/p2-010-federation-20261112/registration-wip-ui/results.json",
+      "federation_v04_acceptance_check_scope": {
+        "required": "Affected form/component VAL-001..008 and UX-FID-001..008; existing route owners retain URL-001..006.",
+        "final_dispositions": "PENDING_NO_PER_CELL_ACCEPTANCE_RECORDED"
+      },
+      "owner_manual_design_update_ref": "governance/todos/TODO-TUN-P2-010-DESIGN001.yaml",
+      "federation_v04_fields": {
+        "user_editable": [
+          "notices"
+        ],
+        "read_only_server_values": [
+          "verifiedEmail",
+          "provider"
+        ],
+        "submitted": [
+          "attemptId",
+          "federationRequestId",
+          "registrationKey",
+          "expectedVersion",
+          "termsVersion",
+          "privacyVersion",
+          "acknowledgedNotices"
+        ],
+        "excluded_inputs": [
+          "email",
+          "subject",
+          "provider",
+          "isVerified",
+          "password",
+          "passwordConfirmation",
+          "mode",
+          "policy"
+        ]
+      },
+      "federation_v04_backend_validation": "Paired protected original cookies, persisted qualified provider-email evidence, exact request/attempt/registration/version CAS and current native notice/profile/policy guards remain authoritative. Blocked/foreign intake fails closed without ordinary restart or fabricated password. Exact original completion/result returns existing RegistrationResult and Personal Information view.",
+      "federation_v04_evidence": {
+        "public_ui": {
+          "report_ref": "artifacts/p2-010-federation-20261112/registration-wip-ui/results.json",
+          "sha256": "60a64317967ae0c5bdb1957b79fa1cbd652e9c001ae836e0c07999a0257bc250",
+          "passed": 16,
+          "failed": 0,
+          "exit_code": 0,
+          "manual_teardown_ref": "artifacts/p2-010-federation-20261112/registration-wip-ui/manual-cleanup.txt"
+        },
+        "ordinary_registration_regression": {
+          "report_ref": "artifacts/p2-010-federation-20261112/registration-wip-ui/ordinary-regression/results.json",
+          "sha256": "ac2e11ce14815cbee0f576d10e4b4d36341db2782524b02e8177eef1d823f097",
+          "passed": 24,
+          "failed": 0,
+          "exit_code": 0,
+          "manual_teardown_ref": "artifacts/p2-010-federation-20261112/registration-wip-ui/ordinary-regression/manual-cleanup.txt"
+        },
+        "linked_sign_in_regression": {
+          "report_ref": "artifacts/p2-010-federation-20261112/registration-wip-ui/v01-regression/results.json",
+          "sha256": "fd62a7b7f75f5baec6b99db8e83a7c46d63d1d8d5e82ba7db1fa1275169b97e8",
+          "passed": 31,
+          "failed": 0,
+          "exit_code": 0,
+          "manual_teardown_ref": "artifacts/p2-010-federation-20261112/registration-wip-ui/v01-regression/manual-cleanup.txt"
+        },
+        "typecheck_exit_code_ref": "artifacts/p2-010-federation-20261112/registration-wip-ui/tsc.exit-code.txt",
+        "source_bindings": [
+          {
+            "path": "web/apps/user/main.tsx",
+            "sha256": "4299b574abbe5ee175551a609750c97d078da83e9078db6ae09c51ac718c666f"
+          },
+          {
+            "path": "web/apps/user/registration.federation.ts",
+            "sha256": "3cfad101471fd2173bce2a620145553918f0fb3af372a083a7c6620da6778385"
+          },
+          {
+            "path": "web/apps/user/registration.css",
+            "sha256": "07fbb5fe2f917937ba945b64e0619ed9b2ebf0374832581290c9dac929bc1bbc"
+          },
+          {
+            "path": "web/apps/user/content.proposal.json",
+            "sha256": "c13b93e2063e0919f40e4abf3052c7ea3bb62a59b9ce15913b69768976009d8a"
+          },
+          {
+            "path": "web/apps/user/federation.api.ts",
+            "sha256": "9ee3b75d1decf850df4269e463a9f09c6309d9be369cd1a743f7a0ea9606500e"
+          },
+          {
+            "path": "web/apps/user/federation.sign-in.tsx",
+            "sha256": "f0899254d0d0122d9f42786150bdeafe1096f9c26221998f6a787a841b0dbe99"
+          },
+          {
+            "path": "web/tests/registration/federation.spec.ts",
+            "sha256": "a48117d46adbe6d5f269ba2ba6be85b32e9f53584eb4d1d92abd1084fc37fd37"
+          }
+        ],
+        "source_identity_boundary": "Frozen raw frontend/test bytes used by these public controlled-BFF invocations; no final committed validation SHA or native/live result claimed.",
+        "rendered_viewport_widths": [
+          1440,
+          390,
+          320
+        ],
+        "render_refs": [
+          "artifacts/p2-010-federation-20261112/registration-wip-ui/runs/federation-Approved-passwo-e5cef-d-and-accessibility-at-1440/federation-intake-normal-1440.png",
+          "artifacts/p2-010-federation-20261112/registration-wip-ui/runs/federation-Approved-passwo-e5cef-d-and-accessibility-at-1440/federation-intake-error-1440.png",
+          "artifacts/p2-010-federation-20261112/registration-wip-ui/runs/federation-Approved-passwo-96131-rd-and-accessibility-at-390/federation-intake-normal-390.png",
+          "artifacts/p2-010-federation-20261112/registration-wip-ui/runs/federation-Approved-passwo-96131-rd-and-accessibility-at-390/federation-intake-error-390.png",
+          "artifacts/p2-010-federation-20261112/registration-wip-ui/runs/federation-Approved-passwo-11b05-rd-and-accessibility-at-320/federation-intake-normal-320.png",
+          "artifacts/p2-010-federation-20261112/registration-wip-ui/runs/federation-Approved-passwo-11b05-rd-and-accessibility-at-320/federation-intake-error-320.png"
+        ],
+        "acceptance_state": "PUBLIC_WIP_EVIDENCE_NATIVE_AND_FINAL_UI_ACCEPTANCE_PENDING"
+      }
     },
     {
       "id": "FORM-VERIFY-EMAIL",
@@ -539,7 +712,20 @@
       "federation_v01_scope": "Existing Login shell with conditionally enabled Google/Microsoft slots and same-screen exact original sign-in recovery. New component has no independent pathname.",
       "component_ids": [
         "COMP-FEDERATION-SIGN-IN"
-      ]
+      ],
+      "approved_visual_scope_ids": [
+        "010-V01",
+        "010-V04"
+      ],
+      "federation_v04_scope": "Only exact original REGISTRATION_INTAKE VERIFIED/COMPLETED without error hands off to clean /registration; UNKNOWN first checks exact read-only result. No Login intake/notice mutation, rechallenge or change to linked-sign-in empty completion.",
+      "federation_v04_acceptance_boundary": "010-V04 pictured variant and exact Login handoff only. Public controlled-BFF16, separate ordinary-registration24 and V01 regression31 are limited implementation evidence; manual owned-Vite teardown is recorded. Native connected backend/live evidence, final committed-source binding, per-item URL/VAL/UX-FID and native UI gate remain PENDING. No production qualification/profile/default, publication, whole-feature/Product acceptance or release is selected.",
+      "federation_v04_evidence_owner_id": "FORM-REGISTRATION",
+      "federation_v04_evidence_ref": "artifacts/p2-010-federation-20261112/registration-wip-ui/results.json",
+      "federation_v04_acceptance_check_scope": {
+        "required": "Affected form/component VAL-001..008 and UX-FID-001..008; existing route owners retain URL-001..006.",
+        "final_dispositions": "PENDING_NO_PER_CELL_ACCEPTANCE_RECORDED"
+      },
+      "owner_manual_design_update_ref": "governance/todos/TODO-TUN-P2-010-DESIGN001.yaml"
     },
     {
       "id": "U-AUTH-04",
@@ -2505,7 +2691,8 @@
       "backend_validation": "Strict fixed-provider Start and empty-JSON original result/complete/cancel; current same-origin CSRF and protected original browser pointer, original request/attempt and native Account/link/profile/session authorization are independent of client state. No tokens, subjects, identity claims, email or proof enter application URLs/storage.",
       "consent_ref": "governance/evidence/TUN-P2-010-VISUAL-CONSENT.json",
       "approved_visual_scope_ids": [
-        "010-V01"
+        "010-V01",
+        "010-V04"
       ],
       "design_status": "PRODUCT_OWNER_APPROVED_SCOPED_ADAPTATIONS",
       "planning_status": "LINKED_SIGN_IN_V01_IMPLEMENTED_WIP_ONLY",
@@ -2546,11 +2733,27 @@
         "final_dispositions": "PENDING_NO_PER_CELL_ACCEPTANCE_RECORDED"
       },
       "excluded_unimplemented_scopes": [
-        "Unlinked identity registration and collision-to-link intake/confirmation",
+        "Registration and collision-to-link intake/confirmation inside Login;010-V04 adds only a safe handoff to the existing registration owner.",
         "010-V02 linked-method management/link/unlink",
         "010-V03 federated operation proof"
       ],
-      "owner_manual_design_update_ref": "governance/todos/TODO-TUN-P2-010-DESIGN001.yaml"
+      "owner_manual_design_update_ref": "governance/todos/TODO-TUN-P2-010-DESIGN001.yaml",
+      "additional_consent_refs": [
+        "governance/evidence/TUN-P2-010-VISUAL-CONSENT.json"
+      ],
+      "federation_v04_scope": "Only exact original REGISTRATION_INTAKE VERIFIED/COMPLETED without error hands off to clean /registration; UNKNOWN first checks exact read-only result. No Login intake/notice mutation, rechallenge or change to linked-sign-in empty completion.",
+      "federation_v04_acceptance_boundary": "010-V04 pictured variant and exact Login handoff only. Public controlled-BFF16, separate ordinary-registration24 and V01 regression31 are limited implementation evidence; manual owned-Vite teardown is recorded. Native connected backend/live evidence, final committed-source binding, per-item URL/VAL/UX-FID and native UI gate remain PENDING. No production qualification/profile/default, publication, whole-feature/Product acceptance or release is selected.",
+      "federation_v04_evidence_owner_id": "FORM-REGISTRATION",
+      "federation_v04_evidence_ref": "artifacts/p2-010-federation-20261112/registration-wip-ui/results.json",
+      "federation_v04_acceptance_check_scope": {
+        "required": "Affected form/component VAL-001..008 and UX-FID-001..008; existing route owners retain URL-001..006.",
+        "final_dispositions": "PENDING_NO_PER_CELL_ACCEPTANCE_RECORDED"
+      },
+      "federation_v01_historical_exclusions": [
+        "Unlinked identity registration and collision-to-link intake/confirmation",
+        "010-V02 linked-method management/link/unlink",
+        "010-V03 federated operation proof"
+      ]
     },
     {
       "id": "COMP-PASSKEY-REVOKE",

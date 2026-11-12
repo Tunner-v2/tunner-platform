@@ -9,7 +9,7 @@ interface Props{
   configuration:FederationBootstrap|undefined;rememberMe:boolean;disabled:boolean;unavailableTitle:string;
   canStart:()=>boolean;isCurrent:()=>boolean;onBusyChange:(busy:boolean)=>void;onAuthenticated:()=>void;onMfaRequired:()=>void;onReset:(signal:AbortSignal)=>Promise<void>;
 }
-type Attempt=FederationOriginal;
+type Attempt=FederationOriginal&{resolution?:FederationPending['resolution']};
 type Phase='ready'|'working'|'verified'|'unknown'|'expired'|'notCompleted';
 function phaseFor(value:FederationPending):Phase{return value.status==='EXPIRED'?'expired':value.status==='REJECTED'?'notCompleted':value.status==='VERIFIED'&&value.errorCode===null?'verified':'unknown';}
 
@@ -18,7 +18,7 @@ export function FederationSignIn(props:Props){
   const latest=useRef(props);latest.current=props;
   const mounted=useRef(true),controller=useRef(new AbortController()),inFlight=useRef(false);
   const initial=props.configuration?.pending;
-  const original=useRef<Attempt|undefined>(initial?{requestId:initial.requestId,attemptId:initial.attemptId}:undefined);
+  const original=useRef<Attempt|undefined>(initial?{requestId:initial.requestId,attemptId:initial.attemptId,...(initial.resolution?{resolution:initial.resolution}:{})}:undefined);
   const [phase,setPhase]=useState<Phase>(initial?phaseFor(initial):'ready');
   const [working,setWorking]=useState(false),[error,setError]=useState<string>();
   const actions=useRef<HTMLDivElement>(null),restoreFocus=useRef(false);
@@ -27,12 +27,13 @@ export function FederationSignIn(props:Props){
   useEffect(()=>{
     const pending=props.configuration?.pending;
     if(!pending||inFlight.current||original.current||phase!=='ready')return;
-    original.current={requestId:pending.requestId,attemptId:pending.attemptId};setPhase(phaseFor(pending));latest.current.onBusyChange(true);
+    original.current={requestId:pending.requestId,attemptId:pending.attemptId,...(pending.resolution?{resolution:pending.resolution}:{})};setPhase(phaseFor(pending));latest.current.onBusyChange(true);
   },[props.configuration,phase]);
   useLayoutEffect(()=>{
     if(!restoreFocus.current||working||!mounted.current||!latest.current.isCurrent())return;
     restoreFocus.current=false;actions.current?.querySelector<HTMLButtonElement>('button:not(:disabled)')?.focus();
   },[phase,working]);
+  useEffect(()=>{const pending=props.configuration?.pending;if(pending?.resolution==='REGISTRATION_INTAKE'&&pending.status==='VERIFIED'&&pending.errorCode===null&&latest.current.isCurrent())window.location.assign('/registration');},[props.configuration]);
   const current=(attempt:Attempt)=>mounted.current&&!controller.current.signal.aborted&&latest.current.isCurrent()&&original.current===attempt;
   function pending(value:boolean){inFlight.current=value;setWorking(value);}
   function unknown(attempt:Attempt,reason?:unknown){
@@ -45,6 +46,10 @@ export function FederationSignIn(props:Props){
     const result=parseFederationResult(raw,attempt);
     if(!current(attempt))return;
     attempt.attemptId=result.operation.attemptId;
+    if(result.operation.resolution==='REGISTRATION_INTAKE'){
+      attempt.resolution='REGISTRATION_INTAKE';if(result.authenticated)throw new FederationHttpError(0,'OUTCOME_UNKNOWN');
+      if(result.operation.errorCode===null&&['VERIFIED','COMPLETED'].includes(result.operation.status)){window.location.assign('/registration');return;}
+    }
     if(result.authenticated){
       if(result.operation.status!=='COMPLETED'||result.operation.errorCode!==null)throw new FederationHttpError(0,'OUTCOME_UNKNOWN');
       original.current=undefined;latest.current.onBusyChange(false);latest.current.onAuthenticated();return;
@@ -73,6 +78,7 @@ export function FederationSignIn(props:Props){
   }
   async function action(kind:'result'|'complete'|'cancel'){
     const attempt=original.current;if(!attempt||inFlight.current||!current(attempt)||kind==='complete'&&phase!=='verified')return;
+    if(kind==='complete'&&attempt.resolution==='REGISTRATION_INTAKE'){window.location.assign('/registration');return;}
     restoreFocus.current=true;pending(true);setError(undefined);
     try{
       const csrf=await federationCsrf(controller.current.signal);if(!current(attempt))return;

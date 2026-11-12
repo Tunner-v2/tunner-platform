@@ -10,7 +10,7 @@ namespace Tunner.User.Bff;
 
 /// <summary>Terminal native protocol facts only; not current Identity authority, a session or fresh-authentication proof.</summary>
 internal sealed class FederationOidcIdentityFacts(string issuer, string subject, string clientId, string attemptId,
-    DateTimeOffset? authenticatedAt = null, IReadOnlyCollection<string>? authenticationMethods = null)
+    DateTimeOffset? authenticatedAt = null, IReadOnlyCollection<string>? authenticationMethods = null, string? providerVerifiedEmail = null)
 {
     internal string Issuer { get; } = issuer;
     internal string Subject { get; } = subject;
@@ -19,6 +19,7 @@ internal sealed class FederationOidcIdentityFacts(string issuer, string subject,
     internal DateTimeOffset? AuthenticatedAt { get; } = authenticatedAt;
     internal IReadOnlyCollection<string>? AuthenticationMethods { get; } = authenticationMethods is null
         ? null : Array.AsReadOnly(authenticationMethods.ToArray());
+    internal string? ProviderVerifiedEmail { get; } = providerVerifiedEmail;
     public override string ToString() => nameof(FederationOidcIdentityFacts);
 }
 
@@ -90,11 +91,11 @@ internal sealed class FederationOidcTransport
         Func<HttpContext, bool> current,
         Func<HttpContext, CancellationToken, Task<string>> secret,
         Func<HttpContext, FederationOidcIdentityFacts, CancellationToken, Task<string?>> completed,
-        Func<HttpContext, FederationOidcFailure, CancellationToken, Task<string?>> failed, FederationProviderKind? freshProvider = null)
+        Func<HttpContext, FederationOidcFailure, CancellationToken, Task<string?>> failed, FederationProviderKind? freshProvider = null, bool qualifiedGoogleRegistration = false)
     {
         RequireOpaque(profileVersion); ArgumentNullException.ThrowIfNull(current); ArgumentNullException.ThrowIfNull(secret);
         ConfigureCore(options, null, clock, (_, _) => throw new InvalidOperationException(), (_, _) => throw new InvalidOperationException(),
-            profileVersion, current, secret, completed, failed, freshProvider);
+            profileVersion, current, secret, completed, failed, freshProvider, qualifiedGoogleRegistration);
     }
 
     private void ConfigureCore(OpenIdConnectOptions options, string? clientSecret, TimeProvider clock,
@@ -103,7 +104,7 @@ internal sealed class FederationOidcTransport
         Func<HttpContext, bool>? current, Func<HttpContext, CancellationToken, Task<string>>? secret,
         Func<HttpContext, FederationOidcIdentityFacts, CancellationToken, Task<string?>>? completedWithContext = null,
         Func<HttpContext, FederationOidcFailure, CancellationToken, Task<string?>>? failedWithContext = null,
-        FederationProviderKind? freshProvider = null)
+        FederationProviderKind? freshProvider = null, bool qualifiedGoogleRegistration = false)
     {
         ArgumentNullException.ThrowIfNull(options); if (clientSecret is not null) RequireOpaque(clientSecret); ArgumentNullException.ThrowIfNull(clock);
         ArgumentNullException.ThrowIfNull(completed); ArgumentNullException.ThrowIfNull(failed);
@@ -124,9 +125,12 @@ internal sealed class FederationOidcTransport
         // Retain only the two required projection inputs; no native principal crosses the owner boundary.
         options.ClaimActions.Remove("iss"); options.ClaimActions.Remove("aud");
         if (freshProvider is not null) { options.ClaimActions.Remove("auth_time"); options.ClaimActions.Remove("amr"); }
+        if (qualifiedGoogleRegistration) { options.ClaimActions.Remove("email"); options.ClaimActions.Remove("email_verified"); }
         options.GetClaimsFromUserInfoEndpoint = false; options.UseTokenLifetime = false; options.SkipUnrecognizedRequests = false;
         options.PushedAuthorizationBehavior = PushedAuthorizationBehavior.Disable; options.DisableTelemetry = true;
-        options.Scope.Clear(); options.Scope.Add("openid"); options.TimeProvider = clock;
+        options.Scope.Clear(); options.Scope.Add("openid");
+        if (qualifiedGoogleRegistration) options.Scope.Add("email");
+        options.TimeProvider = clock;
         options.RemoteAuthenticationTimeout = timeout; options.BackchannelTimeout = timeout;
         options.CorrelationCookie = Cookie(correlationCookieName, timeout); options.NonceCookie = Cookie(nonceCookieName, nonceLifetime);
         // Preserve ASP.NET's native validator: the handler validates protected state + correlation and clears
@@ -154,6 +158,8 @@ internal sealed class FederationOidcTransport
                 context.ProtocolMessage.ResponseType = OpenIdConnectResponseType.Code;
                 context.ProtocolMessage.ResponseMode = OpenIdConnectResponseMode.FormPost;
                 context.ProtocolMessage.ClientId = clientId; context.ProtocolMessage.RedirectUri = callback.AbsoluteUri;
+                if (qualifiedGoogleRegistration && (!context.Properties.Items.TryGetValue(PurposeProperty,out var contactPurpose) || contactPurpose != "SignIn"))
+                    context.ProtocolMessage.Scope = "openid";
                 if (freshProvider is not null && context.Properties.Items.TryGetValue(PurposeProperty, out var purpose) && purpose == "OperationProof")
                 {
                     context.ProtocolMessage.SetParameter("claims", "{\"id_token\":{\"auth_time\":{\"essential\":true},\"amr\":{\"essential\":true}}}");
@@ -228,7 +234,14 @@ internal sealed class FederationOidcTransport
                         { await Fail(context.HttpContext, FederationOidcFailureReason.InvalidEvidence, attempt).ConfigureAwait(false); return; }
                         authenticatedAt = DateTimeOffset.FromUnixTimeSeconds(seconds); methods = Array.AsReadOnly(values);
                     }
-                    var facts = new FederationOidcIdentityFacts(actualIssuer, subject, clientId, attempt, authenticatedAt, methods);
+                    string? verifiedEmail = null;
+                    if (qualifiedGoogleRegistration && context.Properties!.Items.TryGetValue(PurposeProperty,out var contactPurpose) && contactPurpose == "SignIn")
+                    {
+                        var emails = claims!.FindAll("email").Take(2).ToArray(); var flags = claims.FindAll("email_verified").Take(2).ToArray();
+                        if (emails.Length == 1 && Opaque(emails[0].Value) && flags.Length == 1 &&
+                            flags[0].ValueType == ClaimValueTypes.Boolean && flags[0].Value == "true") verifiedEmail = emails[0].Value;
+                    }
+                    var facts = new FederationOidcIdentityFacts(actualIssuer, subject, clientId, attempt, authenticatedAt, methods, verifiedEmail);
                     var continuation = await (completedWithContext is null ? completed(facts, context.HttpContext.RequestAborted) :
                         completedWithContext(context.HttpContext, facts, context.HttpContext.RequestAborted)).ConfigureAwait(false);
                     Finish(context.HttpContext, continuation);
