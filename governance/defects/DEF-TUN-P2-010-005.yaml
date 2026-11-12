@@ -1,0 +1,19 @@
+schema_version: 1
+defect_id: DEF-TUN-P2-010-005
+work_item_id: TUN-P2-010
+classification: BUG
+severity: SEV-2
+status: OPEN
+environment: shared operation-proof completion for federation unlink with actor revocation
+description: The shared completion frontier calls PasskeyOutcomeCurrentAt for all outcomes. That method dispatches TOTP validity but otherwise rejects any receipt without Passkey validity, so an authorized federation RevokeLinkedSessions actor receipt is rejected despite its existing closed typed FederationValidity witness. Dispatch FederationValidity to its exact existing CurrentAt check before the Passkey fallback; preserve all owner, ClosedFor, receipt, source, session, history and proof checks. The current unlink-effects/history integration case is the real regression; no assertion or production policy is relaxed.
+expected_behavior_ref: docs/development/P2_010_FEDERATION_REFINEMENT.md; docs/authority/current/development/17_Account_Identity_and_Session_FRD.md
+evidence:
+  - artifacts/p2-010-federation-20261112/wire-6f50493-native/private-receipt.json
+  - src/Modules/Identity/AuthenticationApplication.cs
+  - src/Modules/Identity/StepUpApplication.cs
+  - src/Modules/Identity/StepUpOutcomes.cs
+  - tests/Tunner.Identity.Persistence.Tests/FederationManagementPrivateIntegrationTests.cs
+affected_versions:
+  - 6f50493360041c1e824cc523425429f51989140a
+created_at: 2026-11-12T19:08:00Z
+updated_at: 2026-11-12T19:08:00Z
