@@ -466,7 +466,8 @@ export async function runPublicJourneyCanary({page,context,browser,signal}) {
 export function createRecoveryAccountMechanics(input){
  const ids=['RECOVERY_GENERATE_PASSWORD_V1','RECOVERY_REPLACE_PASSWORD_V1','RECOVERY_GENERATE_PASSKEY_V1','RECOVERY_REPLACE_PASSKEY_V1','RECOVERY_GENERATE_TOTP_V1','RECOVERY_REPLACE_TOTP_V1'];
  requireTrue(object(input)&&ids.includes(input.journeyId)&&typeof input.runId==='string'&&/^[a-f0-9]{32}$/.test(input.runId)&&typeof input.remember==='function'&&typeof input.fixtureControl==='function'&&typeof input.nativeCode==='function'&&typeof input.onContext==='function');
- const run=new Journey({...input,reportStep:typeof input.reportStep==='function'?input.reportStep:()=>{},recoveryPreparation:true,onPreparedContext:input.onContext,identityMode:'FINITE_RECOVERY_BROWSER_TESTING',safeCountKeys:['ownerCommits','operations','sets','replacedSets','entries','proofs','consumedProofs','sessions','outbox','codeAcceptances'],privateRemember:input.remember,fixtureControl:async action=>{requireTrue(action==='READ_SAFE_COUNTS');return input.fixtureControl(action);}});
+ const mechanicsInput={...input}; delete mechanicsInput.control;
+ const run=new Journey({...mechanicsInput,reportStep:typeof input.reportStep==='function'?input.reportStep:()=>{},recoveryPreparation:true,onPreparedContext:input.onContext,identityMode:'FINITE_RECOVERY_BROWSER_TESTING',safeCountKeys:['ownerCommits','operations','sets','replacedSets','entries','proofs','consumedProofs','sessions','outbox','codeAcceptances'],privateRemember:input.remember,fixtureControl:async action=>{requireTrue(action==='READ_SAFE_COUNTS');return input.fixtureControl(action);}});
  const port={};for(const method of ['bootstrap','read','get','post','response','request','at','session','newPage','passwordLogin'])port[method]=run[method].bind(run);
  return Object.freeze({...port,setupPasskey:async(page,password,checkpoint=()=>{})=>{checkpoint('PASSKEY_ENROLL_START');await run.passkeyDevice(page);await run.enrollPasskey(page,password,checkpoint);},enrollTotp:run.enroll.bind(run),nextTotpCode:async factor=>{const code=await run.code(factor);factor.used.add(code);return code;},passkeyStats:()=>({created:run.created,asserted:run.asserted}),close:run.cleanup.bind(run),revokePasskey:async(page,password,checkpoint=()=>{})=>{
   checkpoint('RECOVERY_SOURCE_REVOKE_NAVIGATION');await page.goto(run.url('/account/security/sign-in-methods'));
@@ -474,7 +475,7 @@ export function createRecoveryAccountMechanics(input){
   checkpoint('RECOVERY_SOURCE_REVOKE_START');const started=await run.response(page,'/account/passkeys/revocation/start',()=>page.getByRole('dialog').getByRole('button',{name:'Remove passkey',exact:true}).click());
   checkpoint('RECOVERY_SOURCE_REVOKE_START_CHECK');requireTrue(started.ok&&started.body.status==='PENDING');
   checkpoint('RECOVERY_SOURCE_REVOKE_PASSWORD_VIEW');await page.getByRole('dialog').getByRole('button',{name:'Other method',exact:true}).click();
-  checkpoint('RECOVERY_SOURCE_REVOKE_PASSWORD_FILL');await fillPrivate(page.getByLabel('Password',{exact:true}),password);
+  checkpoint('RECOVERY_SOURCE_REVOKE_PASSWORD_FILL');await fillPrivate(page.getByRole('dialog').getByLabel('Password',{exact:true}),password);
   checkpoint('RECOVERY_SOURCE_REVOKE_PASSWORD_PROOF');const proof=await run.response(page,'/authentication/step-up/password',()=>page.getByRole('dialog').getByRole('button',{name:'Confirm',exact:true}).click());
   checkpoint('RECOVERY_SOURCE_REVOKE_PROOF_CHECK');requireTrue(proof.ok&&proof.body.operationReference===started.body.ceremonyId.replaceAll('-',''));
   checkpoint('RECOVERY_SOURCE_REVOKE_RESULT_WAIT');await page.getByRole('dialog').waitFor({state:'hidden'});
