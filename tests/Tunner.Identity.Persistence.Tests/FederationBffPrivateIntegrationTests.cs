@@ -138,7 +138,11 @@ internal sealed class FederationBffPrivateIntegrationTests(IdentityPostgresFixtu
             Assert.True(!restored.GetProperty("authenticated").GetBoolean() && restored.GetProperty("registration").GetProperty("operationId").GetGuid() == operation!.OperationId);
         }
         using (var progress = await host.Get("/registration/progress", cookies))
-        { Assert.True(progress.StatusCode == HttpStatusCode.OK && NoSessionCookie(progress)); }
+        {
+            Assert.True(progress.StatusCode == HttpStatusCode.Accepted && NoSessionCookie(progress));
+            var current = await progress.Content.ReadFromJsonAsync<RegistrationResult>();
+            Assert.True(current is { Status: "REQUIRES_ACTION", NextAction: "PERSONAL_INFORMATION" } && current.OperationId == operation!.OperationId);
+        }
         await using (var pending = db.Context())
         {
             Assert.True(await pending.Accounts.AllAsync(value => value.State == AccountState.VerificationPending) &&
