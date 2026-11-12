@@ -1,0 +1,42 @@
+{
+  "scope_id": "TUN-P2-010",
+  "recorded_at": "2026-11-12T12:50:33Z",
+  "result": "FOCUSED_FOUNDATION_PASS_FULL_FEATURE_PENDING",
+  "current_source_commit": "0b5ce39b6268593bdf8a08ddd497911cfb1ab569",
+  "unit_execution": {
+    "source_commit": "d5b262cd51369c555f3ea5427282874f341f1fb4",
+    "passed": 82,
+    "failed": 0,
+    "skipped": 0,
+    "classes": {"FederationIdentityBindingTests": 13, "FederationAttemptBindingTests": 47, "FederationOidcTransportTests": 22},
+    "trx": "artifacts/p2-010-federation-20261112/unit-d5b262c/federation-unit.trx",
+    "sha256": "d80585b92cf28e81a3452d64ea049653b1145dfc49a469b72279d74569f7a094"
+  },
+  "bff_execution": {
+    "source_commit": "d5b262cd51369c555f3ea5427282874f341f1fb4",
+    "passed": 62,
+    "failed": 1,
+    "existing_foundation_passed": 49,
+    "new_callback_passed": 13,
+    "trx": "artifacts/p2-010-federation-20261112/bff-d5b262c-network-permitted/bff-callback-foundation.trx",
+    "sha256": "518bdb087ef82f3fcc8bb8013be7a67be514e5673f211beeedaf82a0f333cd02",
+    "failure_disposition": "The encoded-URL test used ordinary Uri construction, whose PathAndQuery normalized %63 to c before transmission. The server received the canonical path. Only the test was corrected to preserve its intended raw target; its rejection assertion and product source were unchanged."
+  },
+  "focused_correction_execution": {
+    "source_commit": "0b5ce39b6268593bdf8a08ddd497911cfb1ab569",
+    "test": "BffProtocolCallbackTests.NativeHandlerCaseAliasAndEncodedAliasCannotEscapeTheBoundedBranch",
+    "passed": 1,
+    "failed": 0,
+    "skipped": 0,
+    "trx": "artifacts/p2-010-federation-20261112/bff-0b5ce39-focused/encoded-callback.trx",
+    "sha256": "d2cd59c3a3e1075b7edc7dc2a2f314210fc56fb33213c05f8b5b37c35e073ec1"
+  },
+  "reuse_boundary": "git diff d5b262c..0b5ce39 over src/tests/Directory.Packages.props changes only four lines inside the one encoded-URL test. All production source, Identity tests and other BFF tests are unchanged. The original 62/1 run remains failed; no whole-63 or whole-145 same-SHA run is claimed. The resolved distinct case total is 145.",
+  "builds": {"identity_d5b262c": {"exit": 0, "warnings": 0, "errors": 0}, "architecture_d5b262c": {"exit": 0, "warnings": 0, "errors": 0}, "architecture_0b5ce39": {"exit": 0, "warnings": 0, "errors": 0}},
+  "diagnostic_history": "Initial compile exposed one production nullable dereference, then two test-only nullable/analyzer errors; corrected in ed305c5/d5b262c. Initial sandboxed BFF run failed in the existing disposable Windows key-storage fixture before test bodies; permission-bound rerun executed the cases. Raw logs/TRX remain retained under the integration artifact directory.",
+  "dependency_execution": {"path": "artifacts/p2-010-federation-20261112/dependency-qualification/dependency-execution.json", "sha256": "d5e5249cfb351da2cfa231495d38d4c0674f7a05a5ea9c48943734654d2c5615", "restore": "PASS_AUDIT_ENABLED", "signature_packages_passed": 5, "existing_package_drift": 0},
+  "schema_check": {"source_commit": "0b5ce39b6268593bdf8a08ddd497911cfb1ab569", "valid": true, "records": 1145, "diagnostics": 0},
+  "review": "Focused security/architecture reviewer identified the health-overlap path; fixed before runtime tests and reviewer verified the exact correction. This is not final feature specialist acceptance.",
+  "remaining": ["Durable original-attempt consumption and safe replay/uncertain-result ledger", "Native state/nonce/PKCE/provider-mixup protocol roundtrips", "Registration/contact collision and explicit link/unlink owner transactions", "Current policy-bound federated session and fresh-proof integration", "Approved 010-V01-V03 production UI and applicable URL/VAL/UX-FID evidence", "Scoped committed compatibility revision closure and final required reviews"],
+  "boundary": "Default runtime remains unactivated. No live provider authentication, production policy, source-authority edit, image change, external publication, protected-main merge, release or whole-feature acceptance."
+}
