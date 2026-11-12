@@ -1,0 +1,19 @@
+schema_version: 1
+defect_id: DEF-TUN-P2-010-006
+work_item_id: TUN-P2-010
+classification: BUG
+severity: SEV-2
+status: OPEN
+environment: qualified federation registration contact installation
+description: Federation intake increments a new contact from version1 to2 before its first canonical save, so the authoritative contact insert guard correctly rejects it. Persist only pending Account, version1 contact and unconfirmed User first inside the same existing owner transaction; recheck current authority and throw on drift before adding the FEDERATED operation and running the unchanged version2 contact update. Keep all database, notice, age, source and atomicity guards; no migration relaxation or additional transaction.
+expected_behavior_ref: docs/development/P2_010_FEDERATION_REFINEMENT.md; docs/authority/current/development/17_Account_Identity_and_Session_FRD.md
+evidence:
+  - artifacts/p2-010-federation-20261112/frontier-a3d8e85-native/private-receipt.json
+  - src/Modules/Identity/RegistrationFederationIntake.cs
+  - src/Modules/Identity/IdentityMigrationSql.cs
+  - src/Modules/Identity/FederationAttemptRegistrationIntake.cs
+  - tests/Tunner.Identity.Persistence.Tests/FederationPrivateIntegrationTests.cs
+affected_versions:
+  - a3d8e856083ec085f76ce08f106169de7a582c94
+created_at: 2026-11-12T19:36:38Z
+updated_at: 2026-11-12T19:36:38Z

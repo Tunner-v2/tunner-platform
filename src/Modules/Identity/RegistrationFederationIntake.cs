@@ -92,7 +92,24 @@ public sealed partial class RegistrationApplication
             UserName = account.AccountId, NormalizedUserName = Normalizer.NormalizeName(account.AccountId), Email = email,
             NormalizedEmail = normalized, EmailConfirmed = false, SecurityStamp = Guid.NewGuid().ToString("N"), ConcurrencyStamp = Guid.NewGuid().ToString("N") };
         operation.AccountId = account.AccountId; operation.ContactId = contact.ContactId;
-        database.Add(operation); database.Add(account); database.Add(contact); database.Users.Add(user);
+        database.Add(account); database.Add(contact); database.Users.Add(user);
+        // Preserve the shared contact guard: INSERT version one, then install its accepted evidence as UPDATE version two.
+        // These pending rows remain inside the caller's transaction. Every later authority failure must roll them back.
+        await database.SaveChangesAsync(ct).ConfigureAwait(false);
+        now = timeProvider.GetUtcNow(); var completionProfile = CurrentRegistrationProfile(source.Provider,source.Origin,now);
+        var completionPolicy = policies.RequireEffective(now); completionPolicy.Validate();
+        if (completionProfile is null || completionProfile.Snapshot != profile.Snapshot || completionPolicy != policy ||
+            !acknowledgedNotices || termsVersion != completionPolicy.TermsVersion || privacyVersion != completionPolicy.PrivacyVersion ||
+            source.Purpose != nameof(FederationAttemptPurpose.SignIn) || source.Resolution != "REGISTRATION_INTAKE" || source.State != "VERIFIED" ||
+            source.LinkId is not null || source.ProfileSnapshot != completionProfile.Snapshot || !browser.OriginalFingerprint ||
+            source.BrowserKey != browser.BrowserKey || source.BrowserDigest != browser.Caller.BrowserDigest || source.Origin != browser.Caller.Origin ||
+            source.PreviousCookieDigest != browser.OriginalCookieDigest || source.PreviousSessionId != browser.OriginalPreviousSessionId ||
+            source.AuthenticationPolicyVersion != browser.AuthenticationPolicyVersion || source.RegistrationBrowserDigest != caller.BrowserDigest ||
+            source.RegistrationIdempotencyKey != idempotencyKey || source.RegistrationBrowserExpiresAt is not { } registrationUntil || registrationUntil <= now ||
+            browser.BrowserExpiresAt <= now || now < source.CreatedAt || source.ExpiresAt <= now || source.VerifiedAt is not { } verifiedAt || verifiedAt > now ||
+            source.VerificationExpiresAt is not { } verificationUntil || verificationUntil <= now)
+            throw new InvalidOperationException("Federated registration authority changed before contact completion.");
+        database.Add(operation);
         AddEvent(operation,"AccountRegistered",account.AccountId,account.Version,now);
         // The mode selects an actual independent evidence installer; a missing credential never selects federation.
         return CompleteRegistrationContact(operation,account,contact,user,profile,intake,now);
