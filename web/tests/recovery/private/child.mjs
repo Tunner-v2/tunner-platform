@@ -3,7 +3,7 @@ import {dirname, join, resolve} from 'node:path';
 import {lstat, readdir, writeFile} from 'node:fs/promises';
 import {createAdmission} from '../sensitive/contract.mjs';
 import {createNativeOracle, fixedOracleAssembly} from '../../totp/sensitive/oracle-bridge.mjs';
-import {version, budgets, publicMarker, publicBody, fixedError, failureOf, requireTrue, bounded, exactKeys, validInitialize, oracleFaults, childAccepted, childChecks, validFixtureRequest, validFixtureResult, publicFixtureResult, recordPublicDownloadChecks, publicCancelFaults, publicStageFaults, recordPublicStageCheck, publicExtraFaults, requireTwoDownloadRejection} from './contract.mjs';
+import {version, budgets, passkeySetupStages, publicMarker, publicBody, fixedError, failureOf, requireTrue, bounded, exactKeys, validInitialize, oracleFaults, childAccepted, childChecks, validFixtureRequest, validFixtureResult, publicFixtureResult, recordPublicDownloadChecks, publicCancelFaults, publicStageFaults, recordPublicStageCheck, publicExtraFaults, requireTwoDownloadRejection} from './contract.mjs';
 import {ownedSurface, privateMarkers, downloadIdentity, inspectSurface} from './surface.mjs';
 import {publicEntry, publicJourneyEntry, inspectRequestedDownload, runJourney} from './journeys.mjs';
 import {runControllerPublic} from './controller-public.mjs';
@@ -75,7 +75,7 @@ try {
   context = await browser.newContext({acceptDownloads: true, serviceWorkers: 'block'}); context.on('page', wire);
   page = await context.newPage(); page.setDefaultTimeout(budgets.action);
   if (control.mode === 'live') {
-    stage = 'JOURNEY'; await runJourney({control, page, context, browser, signal: abort.signal, markers, fixtureControl, nativeCode, onContext:ownedContext=>ownedContext.on('page',wire), requestOwnedDownload, inspectOwnedSurface:async()=> (await inspectSurface(root,{markers})).clean, check(id, flag) { if (!childChecks.includes(id) || Object.hasOwn(checks, id) || typeof flag !== 'boolean') throw fixedError('PREDICATE_FAILED'); checks[id] = flag; if (!flag) throw fixedError('PREDICATE_FAILED'); }});
+    stage = 'JOURNEY'; await runJourney({control, page, context, browser, checkpoint(value){requireTrue(passkeySetupStages.includes(value)||value==='JOURNEY','PROTOCOL_FAILED');stage=value;}, signal: abort.signal, markers, fixtureControl, nativeCode, onContext:ownedContext=>ownedContext.on('page',wire), requestOwnedDownload, inspectOwnedSurface:async()=> (await inspectSurface(root,{markers})).clean, check(id, flag) { if (!childChecks.includes(id) || Object.hasOwn(checks, id) || typeof flag !== 'boolean') throw fixedError('PREDICATE_FAILED'); checks[id] = flag; if (!flag) throw fixedError('PREDICATE_FAILED'); }});
   } else {
     stage = 'PUBLIC_ENTRY'; const fault = control.publicFault;
     const body = fault === 'wrong-bytes' ? 'PUBLIC WRONG NONFUNCTIONAL FIXTURE' : fault === 'oversize' ? publicBody.repeat(Math.ceil((budgets.maximumDownloadBytes + 1) / publicBody.length)) : publicBody;

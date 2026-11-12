@@ -5,7 +5,9 @@ export const version = 1;
 export const publicMarker = 'TUNNER_PUBLIC_NONFUNCTIONAL_RECOVERY_PRIVATE_009';
 export const publicBody = publicMarker + '\nNOT A RECOVERY CODE. PUBLIC FIXTURE ONLY.\n';
 export const budgets = Object.freeze({initialize: 10000, launch: 10000, action: 5000, relay: 4000, ipc: 1000, cancel: 2000, close: 3000, publicScenario: 25000, publicMatrix: 180000, journey: 180000, maximumFrame: 16384, maximumDownloadBytes: 65536});
-export const stages = Object.freeze(['START', 'ENVIRONMENT', 'LIBRARY', 'BROWSER', 'PUBLIC_ENTRY', 'ORACLE', 'JOURNEY', 'SURFACE', 'CLEANUP', 'COMPLETE']);
+// Fixed program-counter labels only; no request, credential, response or error value enters stage.
+export const passkeySetupStages = Object.freeze(['PASSKEY_ENROLL_START', 'PASSKEY_ENROLL_PASSWORD_PROOF', 'PASSKEY_ENROLL_NATIVE_CREATE', 'PASSKEY_ENROLL_COMPLETE', 'PASSKEY_ENROLL_CREDENTIAL_EVENT_CHECK', 'RECOVERY_BEGIN']);
+export const stages = Object.freeze(['START', 'ENVIRONMENT', 'LIBRARY', 'BROWSER', 'PUBLIC_ENTRY', 'ORACLE', 'JOURNEY', ...passkeySetupStages, 'SURFACE', 'CLEANUP', 'COMPLETE']);
 export const failures = Object.freeze(['NONE', 'INPUT_INVALID', 'SOURCE_INVALID', 'DEPENDENCY_NOT_READY', 'PROTOCOL_FAILED', 'BOUNDARY_ERROR', 'PREDICATE_FAILED', 'ADMISSION_REJECTED', 'PATH_REJECTED', 'SIZE_LIMIT', 'BYTES_MISMATCH', 'STREAM_FAILED', 'DELETE_FAILED', 'ACTION_FAILED', 'ORACLE_FAILED', 'SUPERVISOR_TIMEOUT', 'SURFACE_FAILED', 'CLEANUP_FAILED']);
 const errors = new WeakMap();
 export function fixedError(code = 'BOUNDARY_ERROR') { const error = new Error('RECOVERY_PRIVATE_BOUNDARY_FAILED'); errors.set(error, failures.includes(code) ? code : 'BOUNDARY_ERROR'); return error; }

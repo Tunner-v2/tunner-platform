@@ -29,12 +29,13 @@ class RecoveryJourney {
  async result(operation,page=this.page,retainedBoot){const boot=retainedBoot??await this.options(page),r=await this.mechanics.post(page,prefix+'/result',{ownerRequestId:operation.ownerRequestId,operationReference:operation.operationReference},boot.csrfToken);requireTrue(r.ok&&noDelivery(r.body)&&sameOperation(operation,r.body));return r.body;}
  async setup(){
   this.account=await this.mechanics.bootstrap();this.prove('BFF_IDENTITY',true);
-  if(this.method==='passkey')await this.mechanics.setupPasskey(this.page,this.account.password);
+  if(this.method==='passkey')await this.mechanics.setupPasskey(this.page,this.account.password,this.checkpoint);
   if(this.method==='totp')this.factor=await this.mechanics.enrollTotp(this.page,this.account.password);
   await this.page.goto(new URL(security,this.control.origin).href);await this.mechanics.at(this.page,security);
   await this.page.locator('[data-tunner-component="U-AUTH-06"]').first().waitFor();
  }
  async begin(kind=this.kind,page=this.page){
+  if(this.method==='passkey')this.checkpoint?.('RECOVERY_BEGIN');
   if(new URL(page.url()).pathname!==security)await page.goto(new URL(security,this.control.origin).href);
   await this.mechanics.at(page,security);const boot=await this.options(page);
   requireTrue(boot[kind==='GENERATE'?'canGenerate':'canReplace']===true);
@@ -53,6 +54,7 @@ class RecoveryJourney {
   const proof=await this.mechanics.get(page,'/authentication/step-up/options');
   this.prove('EXACT_OWNER_AND_STEP_UP_BINDING',proof.ok&&noDelivery(proof.body)&&proof.body.operationReference===op.operationReference&&proof.body.status==='PENDING');
   this.prove('NO_EARLY_DELIVERY',await page.locator('.recovery-codes-grid code').count()===0&&noDelivery(boot)&&noDelivery(start.body));
+  if(this.method==='passkey')this.checkpoint?.('JOURNEY');
   return{op,proof:proof.body,page,boot};
  }
  async proof(held,{denial=false,bodyLoss=false,publicationFault=false,hold=false}={}){

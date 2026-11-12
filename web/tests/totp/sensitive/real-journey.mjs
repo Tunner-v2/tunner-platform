@@ -261,13 +261,18 @@ class Journey {
     this.device = (await this.cdp.send('WebAuthn.addVirtualAuthenticator',{options:{protocol:'ctap2',ctap2Version:'ctap2_1',transport:'usb',hasResidentKey:true,hasUserVerification:true,isUserVerified:true,automaticPresenceSimulation:true,defaultBackupEligibility:false,defaultBackupState:false}})).authenticatorId;
     this.cdp.on('WebAuthn.credentialAdded',() => { this.created++; }); this.cdp.on('WebAuthn.credentialAsserted',() => { this.asserted++; });
   }
-  async enrollPasskey(page,password) {
+  async enrollPasskey(page,password,checkpoint=()=>{}) {
     await page.goto(this.url('/account/security/sign-in-methods')); await page.getByRole('button',{name:'Add passkey',exact:true}).click();
     const start = await this.response(page,'/account/passkeys/enrollment/start',() => page.getByRole('dialog').getByRole('button',{name:'Add passkey',exact:true}).click()); requireTrue(start.ok && start.body.status === 'PENDING');
+    checkpoint('PASSKEY_ENROLL_PASSWORD_PROOF');
     await page.getByRole('dialog').getByRole('button',{name:'Other method',exact:true}).click(); await page.getByRole('dialog').getByLabel('Password',{exact:true}).fill(password);
     const proof = await this.response(page,'/authentication/step-up/password',() => page.getByRole('dialog').getByRole('button',{name:'Confirm',exact:true}).click()); requireTrue(proof.ok && proof.body.operationReference === start.body.ceremonyId.replaceAll('-',''));
+    checkpoint('PASSKEY_ENROLL_NATIVE_CREATE');
     const created = this.created, completion = await this.response(page,'/account/passkeys/enrollment/complete',() => page.getByRole('dialog').getByRole('button',{name:'Continue setup',exact:true}).click());
-    requireTrue(completion.ok && this.created === created + 1 && completion.body.status === 'COMPLETED'); await page.getByRole('dialog').waitFor({state:'hidden'});
+    checkpoint('PASSKEY_ENROLL_COMPLETE');
+    requireTrue(completion.ok && completion.body.status === 'COMPLETED');
+    checkpoint('PASSKEY_ENROLL_CREDENTIAL_EVENT_CHECK');
+    requireTrue(this.created === created + 1); await page.getByRole('dialog').waitFor({state:'hidden'});
   }
   async passkeyLogin(page) {
     await page.goto(this.url('/login')); const before = this.asserted;
@@ -443,7 +448,7 @@ export function createRecoveryAccountMechanics(input){
  requireTrue(object(input)&&ids.includes(input.journeyId)&&typeof input.runId==='string'&&/^[a-f0-9]{32}$/.test(input.runId)&&typeof input.remember==='function'&&typeof input.fixtureControl==='function'&&typeof input.nativeCode==='function'&&typeof input.onContext==='function');
  const run=new Journey({...input,reportStep:()=>{},recoveryPreparation:true,onPreparedContext:input.onContext,identityMode:'FINITE_RECOVERY_BROWSER_TESTING',safeCountKeys:['ownerCommits','operations','sets','replacedSets','entries','proofs','consumedProofs','sessions','outbox','codeAcceptances'],privateRemember:input.remember,fixtureControl:async action=>{requireTrue(action==='READ_SAFE_COUNTS');return input.fixtureControl(action);}});
  const port={};for(const method of ['bootstrap','read','get','post','response','request','at','session','newPage','passwordLogin'])port[method]=run[method].bind(run);
- return Object.freeze({...port,setupPasskey:async(page,password)=>{await run.passkeyDevice(page);await run.enrollPasskey(page,password);},enrollTotp:run.enroll.bind(run),nextTotpCode:async factor=>{const code=await run.code(factor);factor.used.add(code);return code;},passkeyStats:()=>({created:run.created,asserted:run.asserted}),close:run.cleanup.bind(run),revokePasskey:async(page,password)=>{
+ return Object.freeze({...port,setupPasskey:async(page,password,checkpoint=()=>{})=>{checkpoint('PASSKEY_ENROLL_START');await run.passkeyDevice(page);await run.enrollPasskey(page,password,checkpoint);},enrollTotp:run.enroll.bind(run),nextTotpCode:async factor=>{const code=await run.code(factor);factor.used.add(code);return code;},passkeyStats:()=>({created:run.created,asserted:run.asserted}),close:run.cleanup.bind(run),revokePasskey:async(page,password)=>{
   await page.goto(run.url('/account/security/sign-in-methods'));await page.getByRole('button',{name:'Manage',exact:true}).click();
   const started=await run.response(page,'/account/passkeys/revocation/start',()=>page.getByRole('dialog').getByRole('button',{name:'Remove passkey',exact:true}).click());requireTrue(started.ok&&started.body.status==='PENDING');
   await page.getByRole('dialog').getByRole('button',{name:'Other method',exact:true}).click();await fillPrivate(page.getByLabel('Password',{exact:true}),password);
