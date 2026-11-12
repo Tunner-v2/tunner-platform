@@ -1,5 +1,5 @@
 import {createRecoveryAccountMechanics} from '../../totp/sensitive/real-journey.mjs';
-import {budgets, fixedError, requireTrue, bounded, observedMap, journeys, registeredJourney} from './contract.mjs';
+import {budgets, fixedError, requireTrue, bounded, observedMap, journeys, registeredJourney, totpEnrollmentStages} from './contract.mjs';
 
 // Imported only by the protected child. No process, artifact, reporter or file API.
 // Fixed delegation still requires coordinator-owned current qualifications before
@@ -18,7 +18,7 @@ class RecoveryJourney {
   Object.assign(this,input);this.observations=observedMap(journeys[input.control.journeyId]);this.values=new Set();this.controlCalls=0;this.pages=[input.page];this.headerFacts=[];
   this.method=input.control.journeyId.includes('_PASSWORD_')?'password':input.control.journeyId.includes('_PASSKEY_')?'passkey':'totp';
   this.kind=input.control.journeyId.startsWith('RECOVERY_REPLACE_')?'REPLACE':'GENERATE';
-  this.mechanics=createRecoveryAccountMechanics({...input,origin:input.control.origin,mailpitOrigin:input.control.mailpitOrigin,journeyId:input.control.journeyId,runId:input.control.runId,remember:(...values)=>this.remember(...values),fixtureControl:action=>this.fixture(action)});
+  this.mechanics=createRecoveryAccountMechanics({...input,reportStep:this.method==='totp'?stage=>{if(totpEnrollmentStages.includes(stage)||stage==='JOURNEY')this.checkpoint?.(stage);}:()=>{},origin:input.control.origin,mailpitOrigin:input.control.mailpitOrigin,journeyId:input.control.journeyId,runId:input.control.runId,remember:(...values)=>this.remember(...values),fixtureControl:action=>this.fixture(action)});
  }
  remember(...values){for(const value of values)if(typeof value==='string'&&value.length){this.values.add(value);this.markers.remember(value);}requireTrue(this.values.size<=256);}
  observe(id,value){this.observations.observe(id,value===true);}
@@ -48,26 +48,30 @@ class RecoveryJourney {
   await check.waitFor({state:'detached'});
  }
  async begin(kind=this.kind,page=this.page){
-  if(this.method==='passkey')this.checkpoint?.('RECOVERY_BEGIN');
+  this.checkpoint?.('RECOVERY_BEGIN');
   if(new URL(page.url()).pathname!==security)await page.goto(new URL(security,this.control.origin).href);
   await this.mechanics.at(page,security);const boot=await this.options(page);
   requireTrue(boot[kind==='GENERATE'?'canGenerate':'canReplace']===true);
   const start=await this.response(page,prefix+'/'+kind.toLowerCase()+'/start',()=>page.getByRole('button',{name:kind==='GENERATE'?'Generate codes':'Replace codes',exact:true}).click());
   const op=start.body;
+  this.checkpoint?.('RECOVERY_START_BINDING');
   this.prove('EXACT_OWNER_AND_STEP_UP_BINDING',start.ok&&op.status==='PENDING_PROOF'&&op.ownerRequestId===start.sent.ownerRequestId&&op.expectedVersion===start.sent.expectedVersion&&op.kind===kind&&op.codesPerSet===boot.codesPerSet&&op.maximumCodesPerSet===boot.maximumCodesPerSet&&op.impact.canContinue===false);
   if(kind==='REPLACE'){
    const dialog=page.getByRole('dialog'),fresh=await this.options(page),current=fresh.recovery;
    requireTrue(sameOperation(op,current)&&current.impact.canContinue===true);
    const published=fresh.content[current.impact.impactKey];
+   this.checkpoint?.('RECOVERY_REVIEW_BINDING');
+   if(object(published)&&published.state==='PUBLISHED'&&published.locale===fresh.locale&&typeof published.text==='string'&&published.text.length>0)await dialog.getByText(published.text,{exact:true}).waitFor({state:'visible'});
    const displayed=object(published)&&published.state==='PUBLISHED'&&published.locale===fresh.locale&&typeof published.text==='string'&&published.text.length>0&&await dialog.getByText(published.text,{exact:true}).isVisible();
    this.prove('EXACT_OWNER_AND_STEP_UP_BINDING',displayed);if(journeys[this.control.journeyId].includes('PUBLISHED_IMPACT_ORIGINAL_BINDING'))this.prove('PUBLISHED_IMPACT_ORIGINAL_BINDING',displayed);
    await dialog.getByRole('button',{name:'Continue',exact:true}).click();
   }
   await page.getByRole('dialog').getByRole('heading',{name:'Confirm it’s you',exact:true}).waitFor();
+  this.checkpoint?.('RECOVERY_PROOF_BINDING');
   const proof=await this.mechanics.get(page,'/authentication/step-up/options');
   this.prove('EXACT_OWNER_AND_STEP_UP_BINDING',proof.ok&&noDelivery(proof.body)&&proof.body.operationReference===op.operationReference&&proof.body.status==='PENDING');
   this.prove('NO_EARLY_DELIVERY',await page.locator('.recovery-codes-grid code').count()===0&&noDelivery(boot)&&noDelivery(start.body));
-  if(this.method==='passkey')this.checkpoint?.('JOURNEY');
+  this.checkpoint?.('JOURNEY');
   return{op,proof:proof.body,page,boot};
  }
  async proof(held,{denial=false,bodyLoss=false,publicationFault=false,hold=false}={}){

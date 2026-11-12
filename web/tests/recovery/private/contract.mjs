@@ -6,7 +6,8 @@ export const publicMarker = 'TUNNER_PUBLIC_NONFUNCTIONAL_RECOVERY_PRIVATE_009';
 export const publicBody = publicMarker + '\nNOT A RECOVERY CODE. PUBLIC FIXTURE ONLY.\n';
 export const budgets = Object.freeze({initialize: 10000, launch: 10000, action: 5000, relay: 4000, ipc: 1000, cancel: 2000, close: 3000, publicScenario: 25000, publicMatrix: 180000, journey: 180000, maximumFrame: 16384, maximumDownloadBytes: 65536});
 // Fixed program-counter labels only; no request, credential, response or error value enters stage.
-export const passkeySetupStages = Object.freeze(['PASSKEY_ENROLL_START', 'PASSKEY_ENROLL_PASSWORD_PROOF', 'PASSKEY_ENROLL_NATIVE_CREATE', 'PASSKEY_ENROLL_COMPLETE', 'PASSKEY_ENROLL_CREDENTIAL_EVENT_CHECK', 'RECOVERY_BEGIN']);
+export const totpEnrollmentStages = Object.freeze(['JOURNEY_ENROLL_BEGIN', 'JOURNEY_ENROLL_DISCLOSURE', 'JOURNEY_ENROLL_RESULT_BINDING', 'JOURNEY_ENROLL_DUPLICATE', 'JOURNEY_ENROLL_DONE']);
+export const passkeySetupStages = Object.freeze(['PASSKEY_ENROLL_START', 'PASSKEY_ENROLL_PASSWORD_PROOF', 'PASSKEY_ENROLL_NATIVE_CREATE', 'PASSKEY_ENROLL_COMPLETE', 'PASSKEY_ENROLL_CREDENTIAL_EVENT_CHECK', 'RECOVERY_BEGIN', 'RECOVERY_START_BINDING', 'RECOVERY_REVIEW_BINDING', 'RECOVERY_PROOF_BINDING', ...totpEnrollmentStages]);
 export const stages = Object.freeze(['START', 'ENVIRONMENT', 'LIBRARY', 'BROWSER', 'PUBLIC_ENTRY', 'ORACLE', 'JOURNEY', ...passkeySetupStages, 'SURFACE', 'CLEANUP', 'COMPLETE']);
 export const failures = Object.freeze(['NONE', 'INPUT_INVALID', 'SOURCE_INVALID', 'DEPENDENCY_NOT_READY', 'PROTOCOL_FAILED', 'BOUNDARY_ERROR', 'PREDICATE_FAILED', 'ADMISSION_REJECTED', 'PATH_REJECTED', 'SIZE_LIMIT', 'BYTES_MISMATCH', 'STREAM_FAILED', 'DELETE_FAILED', 'ACTION_FAILED', 'ORACLE_FAILED', 'SUPERVISOR_TIMEOUT', 'SURFACE_FAILED', 'CLEANUP_FAILED']);
 const errors = new WeakMap();
