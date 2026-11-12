@@ -185,11 +185,15 @@ public static class RecoveryCodeFiniteNativeExecution
         using var deadline = new CancellationTokenSource(PublicCapacityProvisioningBudget);
         try
         {
-            while (created < expected)
+            await Parallel.ForEachAsync(Enumerable.Range(0, expected), new ParallelOptions
             {
-                await using var database = await fixture.CreateFiniteDatabaseAsync(deadline.Token).ConfigureAwait(false);
-                connectionString = database.ConnectionString; created++;
-            }
+                MaxDegreeOfParallelism = 2, CancellationToken = deadline.Token
+            }, async (_, provisionCancellation) =>
+            {
+                await using var database = await fixture.CreateFiniteDatabaseAsync(provisionCancellation).ConfigureAwait(false);
+                Interlocked.CompareExchange(ref connectionString, database.ConnectionString, null);
+                Interlocked.Increment(ref created);
+            }).ConfigureAwait(false);
             failure = "CAPACITY_CONNECT_FAILED";
             await using var connection = new Npgsql.NpgsqlConnection(connectionString ?? throw new InvalidOperationException("RECOVERY_PUBLIC_CAPACITY_NOT_VERIFIED")); await connection.OpenAsync(deadline.Token).ConfigureAwait(false);
             failure = "CAPACITY_DATABASE_BYTES_FAILED";
