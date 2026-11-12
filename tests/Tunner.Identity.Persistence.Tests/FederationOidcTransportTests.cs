@@ -54,7 +54,7 @@ public sealed class FederationOidcTransportTests
         Assert.False(options.MapInboundClaims); Assert.False(options.SaveTokens); Assert.False(options.GetClaimsFromUserInfoEndpoint);
         Assert.False(options.UseTokenLifetime); Assert.False(options.SkipUnrecognizedRequests); Assert.True(options.RequireHttpsMetadata);
         Assert.Equal(FederationOidcTransport.NoSignInScheme, options.SignInScheme);
-        Assert.Equal(new[] { "openid" }, options.Scope); Assert.False(options.RemoteSignOutPath.HasValue); Assert.False(options.SignedOutCallbackPath.HasValue);
+        Assert.Equal("openid", Assert.Single(options.Scope)); Assert.False(options.RemoteSignOutPath.HasValue); Assert.False(options.SignedOutCallbackPath.HasValue);
         Assert.True(options.TokenValidationParameters.ValidateIssuer); Assert.True(options.TokenValidationParameters.ValidateAudience);
         Assert.True(options.TokenValidationParameters.ValidateLifetime); Assert.True(options.TokenValidationParameters.ValidateIssuerSigningKey);
         Assert.True(options.TokenValidationParameters.RequireSignedTokens); Assert.True(options.TokenValidationParameters.RequireExpirationTime);
@@ -80,7 +80,7 @@ public sealed class FederationOidcTransportTests
         Assert.True(context.Result!.Handled); Assert.NotNull(observed); Assert.Equal(" exact-subject ", observed.Subject);
         Assert.Equal(Issuer, observed.Issuer); Assert.Equal(Client, observed.ClientId); Assert.Equal("synthetic-attempt", observed.AttemptId);
         Assert.Equal("{}", JsonSerializer.Serialize(observed)); Assert.Equal(nameof(FederationOidcIdentityFacts), observed.ToString());
-        Assert.Null(context.ReturnUri); Assert.Null(context.Properties.RedirectUri);
+        Assert.Null(context.ReturnUri); Assert.NotNull(context.Properties); Assert.Null(context.Properties.RedirectUri);
         Assert.Equal("/synthetic/complete", context.Response.Headers.Location); Assert.Equal("no-store", context.Response.Headers.CacheControl);
     }
 
