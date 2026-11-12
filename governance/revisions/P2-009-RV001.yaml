@@ -14,7 +14,9 @@
     "docs/authority/current/development/03_Governed_Development_Lifecycle_Scrum_Git.md"
   ],
   "decision_refs": [],
-  "defect_refs": [],
+  "defect_refs": [
+    "DEF-TUN-P2-010-002"
+  ],
   "change_refs": [
     "docs/development/P2_010_FEDERATION_REFINEMENT.md"
   ],
@@ -23,7 +25,8 @@
   "acceptance_criteria": [
     "Keep federation disabled absent explicit admitted registration, preserve Password/Passkey/TOTP/Recovery composition and original owner/proof/cookie boundaries, and validate affected compatibility at true source identities.",
     "Preserve recovery verifier/model/proof/one-time-delivery and current-session invariants when adding federation persistence and owner support. Reuse unchanged original cohorts and run affected regression checks at actual source identities; no alternate proof engine, secret channel or source-authority change.",
-    "Reuse the existing finite exact-owner PUBLIC_SQL execution boundary and extend only its fixed literal case registry/dispatcher for federation integrity tests; preserve ownership, source binding, private channels, deadlines and cleanup controls."
+    "Reuse the existing finite exact-owner PUBLIC_SQL execution boundary and extend only its fixed literal case registry/dispatcher for federation integrity tests; preserve ownership, source binding, private channels, deadlines and cleanup controls.",
+    "Repair confirmed DEF-TUN-P2-010-002 by sizing only the exact-owned transient PostgreSQL tmpfs from 1 GiB to 2 GiB for the current complete migration workload. Preserve all original deadlines, complete fixed-case workload, measured database/WAL capacity admission, no-log containment, source binding and exact cleanup; no production or borrowed service changes."
   ],
   "prerequisites": [],
   "work_items": [],

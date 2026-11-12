@@ -1,0 +1,18 @@
+schema_version: 1
+defect_id: DEF-TUN-P2-010-002
+work_item_id: TUN-P2-010
+classification: TEST_INFRASTRUCTURE
+severity: SEV-3
+status: OPEN
+environment: exact-owner finite native PostgreSQL tmpfs fixture
+description: The unchanged 1 GiB transient fixture cannot provision the current 72 private invocation databases plus its foreign-transaction database with the complete current migrations. The source-bound resource run passed five cleanup/ownership cases but capacity hit its provisioning deadline; an isolated unchanged-source PUBLIC_CAPACITY reproduction returned CAPACITY_PROVISION_DISK_FULL. The proposed bounded compatibility fix raises only the exact-owned tmpfs limit to 2 GiB, preserving the 150-second capacity deadline, normal case deadlines, complete migration workload, measured database/WAL capacity assertion, source admission and cleanup controls.
+expected_behavior_ref: governance/revisions/P2-009-RV001.yaml; docs/development/P2_010_FEDERATION_REFINEMENT.md
+evidence:
+  - artifacts/p2-009-recovery-20261111/native-resource-qualification.json
+  - artifacts/p2-010-federation-20261112/management-350c8d4-native/capacity-focused-receipt.json
+  - tests/Shared/RecoveryCodeOwnedDockerFixture.cs
+  - tests/Tunner.Identity.Persistence.Tests/RecoveryCodeFiniteNativeExecution.cs
+affected_versions:
+  - 350c8d47cd9ff95351bd9c680685fe82a551c984
+created_at: 2026-11-12T17:37:15Z
+updated_at: 2026-11-12T17:37:15Z
