@@ -14,8 +14,12 @@
       "src/Tunner.Platform/Bff/TunnerBffFoundation.cs",
       "src/Tunner.User.Bff/Tunner.User.Bff.csproj"
     ],
-    "P1-023-RV001": ["Directory.Packages.props"],
-    "P2-009-RV001": ["src/Tunner.User.Bff/TunnerAuthenticatedUserBffHost.cs"]
+    "P1-023-RV001": [
+      "Directory.Packages.props"
+    ],
+    "P2-009-RV001": [
+      "src/Tunner.User.Bff/TunnerAuthenticatedUserBffHost.cs"
+    ]
   },
   "integration_boundary": "The native OIDC client belongs to the User BFF adapter; Identity retains attempts, immutable links, registration, policy, proof and session authority. No Identity project package change is proposed.",
   "required_callback_checks": [
@@ -27,5 +31,41 @@
   ],
   "dependency_boundary": "Only the exact qualified OIDC client and required transitives are proposed. Existing central pins remain. Metadata/advisory compatibility is not payload integrity, runtime execution or release clearance; host servicing remains separately tracked.",
   "historical_reference_limit": "The native revision reference catalog does not admit several current authority aliases. P2-009-RV001 cites the verified lifecycle authority and retains current business references through the work item/refinement. Existing TODO-TUN-P2-017-GOV003 tracks catalog parity; no authority bytes or validation semantics are changed.",
-  "acceptance_boundary": "This records startup scope and actual prior checks only. It is not a final specialist review, committed validation envelope, Product acceptance, production policy, protected-main approval or release approval. Each revision requires its own scoped committed validation before closure."
+  "acceptance_boundary": "This records startup scope and actual prior checks only. It is not a final specialist review, committed validation envelope, Product acceptance, production policy, protected-main approval or release approval. Each revision requires its own scoped committed validation before closure.",
+  "prerequisite_currentness_refresh": {
+    "phase": "PENDING_COMMITTED_CANDIDATE_BINDING",
+    "recorded_at": "2026-11-12T13:17:00.788Z",
+    "observed_work_start": "GOVERNANCE_REFUSED only003/004 current committed-source proofs",
+    "parents": [
+      {
+        "scope_id": "TUN-P2-003",
+        "source_envelope": "governance/evidence/TUN-P2-003-AUDIT-CORRECTION-SOURCE.json",
+        "prior_candidate": "ad744fde52aa03404f3944c47ebb79070185e9f2",
+        "current_behavior_commit": "f044cbc64d348fa3b169f137396282e232019135",
+        "ordered_paths": 24,
+        "ordered_paths_sha256": "7dadc07904f272a05f752ddc8940526a2c06a26676e80cc7771c62e6b0220f25",
+        "changed_paths": [
+          "Directory.Packages.props"
+        ],
+        "all_other_owned_blobs_unchanged": true,
+        "working_matches_committed": true
+      },
+      {
+        "scope_id": "TUN-P2-004",
+        "source_envelope": "governance/evidence/TUN-P2-004-AUDIT-CORRECTION-SOURCE.json",
+        "prior_candidate": "ad744fde52aa03404f3944c47ebb79070185e9f2",
+        "current_behavior_commit": "f044cbc64d348fa3b169f137396282e232019135",
+        "ordered_paths": 78,
+        "ordered_paths_sha256": "5c2d08ecc8a74123cffa96800aa8e5bb5fed106705ca176186e3e7841d336719",
+        "changed_paths": [
+          "src/Tunner.User.Bff/Tunner.User.Bff.csproj"
+        ],
+        "all_other_owned_blobs_unchanged": true,
+        "working_matches_committed": true
+      }
+    ],
+    "dependency_execution_ref": "artifacts/p2-010-federation-20261112/dependency-qualification/dependency-execution.json",
+    "unchanged_cohorts": "Existing domain/schema/native/SQL/browser/UI evidence retains actual SHAs; no other owned source delta. Candidate-scoped public checks will bind unchanged behavior; no private qualification rebuild.",
+    "unaffected_roles": "Unchanged domain/UI/business/content/compliance/SDK/financial roles retain original dates/findings. No new UX review/consent is fabricated."
+  }
 }
