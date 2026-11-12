@@ -3,7 +3,7 @@
   "scope_id": "TUN-P2-010",
   "validation_kind": "COMMITTED",
   "result": "PASS",
-  "recorded_at": "2026-11-12T20:33:44Z",
+  "recorded_at": "2026-11-12T21:03:41Z",
   "tested_commit_sha": "734828a78d9736eaa8da32c1b80ae0654a7f3641",
   "historical_groundwork_tested_commit_sha": "00ba7c4c7dc763736883149d7100921b3a80063a",
   "validated_commit_sha": "734828a78d9736eaa8da32c1b80ae0654a7f3641",
@@ -272,7 +272,7 @@
     "final_role_reviews": false,
     "full_work_item_acceptance": false
   },
-  "next_action": "Run the final native feature/committed-state gate and targeted context refresh, record the actual result, then obtain scoped Product feature acceptance and continue eligible P2 work through native next. UI gate and all four compatibility close-checks passed; preserve actual734828a full76/protocol17/resource6 and candidate5bd82bf focused11/source-equivalence evidence. Production, protected-main and release remain separate.",
+  "next_action": "Engineering gate READY with no failures. Obtain scoped Product feature acceptance, refresh targeted context and use native next to continue eligible P2 work without waiting for protected-main. Preserve actual734828a full76/protocol17/resource6 and candidate5bd82bf focused11/source-equivalence evidence. Production/provider-live/processing/lifecycle, protected-main and release remain separate.",
   "product_or_release_acceptance": false,
   "committed_management_checkpoint": {
     "source_commit_sha": "350c8d47cd9ff95351bd9c680685fe82a551c984",
@@ -503,7 +503,7 @@
     "limits": "Historical WIP checkpoint only. Superseded by final_native_734828a below; original source identities and failed/partial runs are retained."
   },
   "metadata_delta_scan": { "result": "PASS", "initial_owned_files": 126, "initial_result": "PASS", "final_changed_or_new_files": 16, "method": "Existing Invoke-TunnerSecretScan.ps1 on explicit task-owned metadata only; exclude unknown/pre-existing unrelated files. Final changed/new metadata checked before commit; subsequent result-only recording does not claim a self-hash or repository-wide scan." },
-  "engineering_gate_checkpoint": { "source_validation_sha": "734828a78d9736eaa8da32c1b80ae0654a7f3641", "compatibility_candidate_sha": "5bd82bfee7494513e9c9cd20deb7456f2cdda29d", "candidate_carrier_passed": 11, "ui_native_gate": "PASS_ALL10_ITEMS", "role_reviews": "12_PASS", "revision_native_close_checks": "4_PASS_NO_FINDINGS", "revision_transition_basis": "VALIDATION to CLOSED with product_acceptance_required:false under existing lifecycle policy after native close-check PASS; no human acceptance inferred.", "schema_validation": "1207_RECORDS_ZERO_DIAGNOSTICS", "feature_gate": "PENDING_FINAL_NATIVE_CHECK", "attribute_metadata_secret_scan": "4_PASS", "captured_git_objects": "52_RAW_BYTE_EXACT" },
+  "engineering_gate_checkpoint": { "source_validation_sha": "734828a78d9736eaa8da32c1b80ae0654a7f3641", "compatibility_candidate_sha": "5bd82bfee7494513e9c9cd20deb7456f2cdda29d", "candidate_carrier_passed": 11, "ui_native_gate": "PASS_ALL10_ITEMS", "role_reviews": "12_PASS", "revision_native_close_checks": "4_PASS_NO_FINDINGS", "revision_transition_basis": "VALIDATION to CLOSED with product_acceptance_required:false under existing lifecycle policy after native close-check PASS; no human acceptance inferred.", "schema_validation": "1207_RECORDS_ZERO_DIAGNOSTICS", "feature_gate": "READY_NO_FAILURES_AT_A50937C", "prior_feature_gate": "NOT_READY only for005/006 stale prerequisite source proofs; fixed at a50937c using actual current regressions, original history retained.", "attribute_metadata_secret_scan": "4_PASS", "captured_git_objects": "52_RAW_BYTE_EXACT", "handoff_ref": "docs/development/P2_010_FEDERATION_HANDOFF.md" },
   "final_security_ref": "governance/evidence/p2-010-federation-20261112/final-security-734828a.json",
   "final_security_state": "Scoped SAST81 PASS. Source-secret183 raw FAIL has one independently reviewed public synthetic test-fixture false positive; no scanner suppression or live credential finding. Original advisory failure/automatic approval rejection remain historical. User explicitly authorized a check below10minutes; the existing read-only advisory/SBOM/provenance utility actually passed in52.821seconds with119 packages, no reported vulnerable package and all9 provenance inputs matching734828a. Two portable outputs and exact hashes are in the security receipt. Final native closure and Product feature acceptance remain separate.",
   "data_governance_refs": [

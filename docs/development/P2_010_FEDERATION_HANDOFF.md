@@ -25,8 +25,10 @@ The authoritative results and limitations are in [validation](../../governance/e
 
 ## Acceptance and next action
 
-Final committed-state, UI and compatibility lifecycle gates must pass before engineering closure is recorded. Product feature acceptance has not been granted by visual consent alone. Production/provider-live qualification, privacy lifecycle conformance, protected-main integration and release approvals remain separate.
+The final native engineering gate is **READY with no failures**. The native UI gate passed, all12 mandatory role reviews pass, and all four technical compatibility revisions are committed CLOSED after native close-check PASS. Actual candidate`5bd82bf` adds11 focused checks against unchanged runtime source`734828a`; no qualification is relabelled. Earlier stale005/006 prerequisite bindings were repaired using actual current authentication/proof regressions, preserving their original history.
+
+The feature awaits **Product acceptance**; visual consent alone does not grant it. Production/provider-live qualification, privacy lifecycle conformance, protected-main integration and release approvals remain separate.
 
 The owner-held Figma backfill remains [TODO-TUN-P2-010-DESIGN001](../../governance/todos/TODO-TUN-P2-010-DESIGN001.yaml). Figma, Drive and FigJam remain read-only. Scoped data handling and activation obligations are recorded in the [inventory](../../governance/evidence/TUN-P2-010-DATA-INVENTORY.json) and [lifecycle assessment](../../governance/evidence/TUN-P2-010-DATA-LIFECYCLE-ASSESSMENT.json).
 
-Exact next action: complete the existing native acceptance gates, obtain scoped Product feature acceptance, and use `tunner governance next` to continue eligible P2 work. Preserve the thirteen unrelated dirty files and the uninspected pre-existing directory; use targeted context output instead of overwriting their canonical context/project files.
+Exact next action: obtain scoped Product feature acceptance and use `tunner governance next` to continue eligible P2 work, starting with the governed Account recovery scope when reported eligible. Preserve the thirteen unrelated dirty files and the uninspected pre-existing directory; use targeted context output instead of overwriting their canonical context/project files.
