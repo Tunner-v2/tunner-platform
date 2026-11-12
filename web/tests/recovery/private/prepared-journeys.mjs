@@ -100,10 +100,13 @@ class RecoveryJourney {
    this.prove('CURRENT_PUBLICATION',safe.status==='PENDING_PROOF'&&context.ok&&context.body.requestId===held.proof.requestId&&context.body.totpRecovery?.status==='PROOF_ACTIVE'&&await page.locator('.recovery-codes-grid code').count()===0);return{rejected:true,safe};
   }
   if(denial){
+   if(hold)this.checkpoint?.('RECOVERY_SOURCE_DENIAL_CHECK');
    requireTrue(response.status===503&&noDelivery(response.body));
+   if(hold)this.checkpoint?.('RECOVERY_SOURCE_HELD_OPTIONS');
    const current=await this.mechanics.get(page,'/authentication/step-up/options'),native=this.method==='passkey'?current.body.passkeyRecovery:current.body.totpRecovery;
+   if(hold)this.checkpoint?.('RECOVERY_SOURCE_HELD_BINDING');
    requireTrue(current.ok&&native?.requestId===held.proof.requestId&&native.attemptId===response.sent.attemptId&&native.operationReference===op.operationReference&&native.status===(this.method==='passkey'?'PROOF_ISSUED':'PROOF_ACTIVE'));
-   if(hold)return{held,response,native};
+   if(hold){this.checkpoint?.('RECOVERY_SOURCE_HELD_RETURN');return{held,response,native};}
    const before=await this.counts(),assertions=this.mechanics.passkeyStats().asserted;
    const resumed=await this.response(page,route+'/continue',()=>dialog.getByRole('button',{name:'Continue this verification',exact:true}).click());
    const after=await this.counts();
@@ -199,11 +202,15 @@ class RecoveryJourney {
    this.prove('CURRENT_PUBLICATION',rejected.rejected&&end.ownerCommits===current.ownerCommits&&end.sets===current.sets&&end.replacedSets===current.replacedSets&&end.entries===current.entries&&end.consumedProofs===current.consumedProofs&&await this.page.locator('.recovery-codes-grid code').count()===0);
   }
   if(this.control.journeyId==='RECOVERY_REPLACE_PASSKEY_V1'){
-   const pending=await this.begin(),retained=await this.proof(pending,{denial:true,hold:true});
-   const other=await this.mechanics.newPage();this.pages.push(other);await this.mechanics.passwordLogin(other,this.account,false);
-   await this.mechanics.revokePasskey(other,this.account.password);
-   const current=await this.counts(),rejected=await this.response(this.page,'/authentication/step-up/passkey/continue',()=>this.page.getByRole('dialog').getByRole('button',{name:'Continue this verification',exact:true}).click()),end=await this.counts();
-   this.prove('SOURCE_FRESHNESS',!rejected.ok&&['STEP_UP_REQUIRED','VERSION_CONFLICT'].includes(rejected.body.error_code)&&rejected.sent.requestId===retained.response.sent.requestId&&rejected.sent.attemptId===retained.response.sent.attemptId&&end.ownerCommits===current.ownerCommits&&end.sets===current.sets&&end.replacedSets===current.replacedSets&&end.entries===current.entries&&end.consumedProofs===current.consumedProofs&&noDelivery(rejected.body)&&await this.page.locator('.recovery-codes-grid code').count()===0);
+   const pending=await this.begin();this.checkpoint?.('RECOVERY_SOURCE_HOLD_REQUEST');
+   const retained=await this.proof(pending,{denial:true,hold:true});
+   this.checkpoint?.('RECOVERY_SOURCE_SECOND_CONTEXT');const other=await this.mechanics.newPage();this.pages.push(other);
+   this.checkpoint?.('RECOVERY_SOURCE_SECOND_LOGIN');await this.mechanics.passwordLogin(other,this.account,false);
+   this.checkpoint?.('RECOVERY_SOURCE_REVOKE');await this.mechanics.revokePasskey(other,this.account.password,this.checkpoint);
+   this.checkpoint?.('RECOVERY_SOURCE_COUNTS_BEFORE');const current=await this.counts();
+   this.checkpoint?.('RECOVERY_SOURCE_CONTINUE');const rejected=await this.response(this.page,'/authentication/step-up/passkey/continue',()=>this.page.getByRole('dialog').getByRole('button',{name:'Continue this verification',exact:true}).click());
+   this.checkpoint?.('RECOVERY_SOURCE_COUNTS_AFTER');const end=await this.counts();
+   this.checkpoint?.('RECOVERY_SOURCE_CHECK');this.prove('SOURCE_FRESHNESS',!rejected.ok&&['STEP_UP_REQUIRED','VERSION_CONFLICT'].includes(rejected.body.error_code)&&rejected.sent.requestId===retained.response.sent.requestId&&rejected.sent.attemptId===retained.response.sent.attemptId&&end.ownerCommits===current.ownerCommits&&end.sets===current.sets&&end.replacedSets===current.replacedSets&&end.entries===current.entries&&end.consumedProofs===current.consumedProofs&&noDelivery(rejected.body)&&await this.page.locator('.recovery-codes-grid code').count()===0);
   }
   await this.privacy();this.prove('STRICT_OWNED_SURFACE',await this.inspectOwnedSurface());
  }

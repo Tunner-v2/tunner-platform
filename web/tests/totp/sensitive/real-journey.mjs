@@ -177,9 +177,29 @@ class Journey {
     const boundOptions = await this.options(page), mismatched = await this.post(page,'/account/totp/result',{requestId:randomUUID(),enrollmentId:started.operation.enrollmentId},boundOptions.csrfToken);
     this.prove('REQUEST_BINDING',mismatched.status === 404 && mismatched.body.error_code === 'NOT_FOUND_OR_NOT_DISCLOSABLE');
     this.reportStep('JOURNEY_ENROLL_DUPLICATE');
-    const before = await this.control('READ_SAFE_COUNTS'), fresh = await this.options(page), duplicate = await this.post(page,'/account/totp/enrollment/activate',activation,fresh.csrfToken), after = await this.control('READ_SAFE_COUNTS');
-    this.prove('RESULT_RECOVERY',duplicate.ok && sameOperation(recovered.body,duplicate.body) && duplicate.body.status === 'COMPLETED' && duplicate.body.activationCompleted === true);
-    this.prove('DUPLICATE_COUNTS',sameCounts(before,after)); this.reportStep('JOURNEY_ENROLL_DONE'); await page.getByRole('button',{name:'Done',exact:true}).click(); await this.at(page,manage); this.reportStep('JOURNEY'); return factor;
+    const duplicateStage=label=>{if(this.recoveryPreparation)this.reportStep(label);};
+    duplicateStage('REC_TOTP_DUP_BEFORE_COUNTS');const before=await this.control('READ_SAFE_COUNTS');
+    duplicateStage('REC_TOTP_DUP_OPTIONS');const fresh=await this.options(page);
+    duplicateStage('REC_TOTP_DUP_ACTIVATE');const duplicate=await this.post(page,'/account/totp/enrollment/activate',activation,fresh.csrfToken);
+    duplicateStage('REC_TOTP_DUP_AFTER_COUNTS');const after=await this.control('READ_SAFE_COUNTS');
+    const resultRecovery=
+     (duplicateStage('REC_TOTP_DUP_HTTP'),duplicate.ok)&&
+     (duplicateStage('REC_TOTP_DUP_BINDING'),sameOperation(recovered.body,duplicate.body))&&
+     (duplicateStage('REC_TOTP_DUP_STATUS'),duplicate.body.status==='COMPLETED')&&
+     (duplicateStage('REC_TOTP_DUP_ACTIVE'),duplicate.body.activationCompleted===true);
+    this.prove('RESULT_RECOVERY',resultRecovery);
+    duplicateStage('REC_TOTP_DUP_COUNTS');const duplicateCounts=sameCounts(before,after);
+    if(this.recoveryPreparation&&!duplicateCounts){
+     if(Object.keys(before).length!==Object.keys(after).length)duplicateStage('REC_TOTP_DUP_COUNT_SHAPE');
+     else for(const[key,label]of[
+      ['ownerCommits','REC_TOTP_DUP_C_OWNER'],['operations','REC_TOTP_DUP_C_OPS'],
+      ['sets','REC_TOTP_DUP_C_SETS'],['replacedSets','REC_TOTP_DUP_C_REPLACED'],
+      ['entries','REC_TOTP_DUP_C_ENTRIES'],['proofs','REC_TOTP_DUP_C_PROOFS'],
+      ['consumedProofs','REC_TOTP_DUP_C_CONSUMED'],['sessions','REC_TOTP_DUP_C_SESSIONS'],
+      ['outbox','REC_TOTP_DUP_C_OUTBOX'],['codeAcceptances','REC_TOTP_DUP_C_ACCEPT']
+     ]){if(before[key]!==after[key]){duplicateStage(label);break;}}
+    }
+    this.prove('DUPLICATE_COUNTS',duplicateCounts); this.reportStep('JOURNEY_ENROLL_DONE'); await page.getByRole('button',{name:'Done',exact:true}).click(); await this.at(page,manage); this.reportStep('JOURNEY'); return factor;
   }
   async rejectMfa(page,pending,factor,code,expected='CODE_REPLAYED') {
     const boot = await this.mfaOptions(page); requireTrue(boot.requestId === pending.requestId);
@@ -448,11 +468,17 @@ export function createRecoveryAccountMechanics(input){
  requireTrue(object(input)&&ids.includes(input.journeyId)&&typeof input.runId==='string'&&/^[a-f0-9]{32}$/.test(input.runId)&&typeof input.remember==='function'&&typeof input.fixtureControl==='function'&&typeof input.nativeCode==='function'&&typeof input.onContext==='function');
  const run=new Journey({...input,reportStep:typeof input.reportStep==='function'?input.reportStep:()=>{},recoveryPreparation:true,onPreparedContext:input.onContext,identityMode:'FINITE_RECOVERY_BROWSER_TESTING',safeCountKeys:['ownerCommits','operations','sets','replacedSets','entries','proofs','consumedProofs','sessions','outbox','codeAcceptances'],privateRemember:input.remember,fixtureControl:async action=>{requireTrue(action==='READ_SAFE_COUNTS');return input.fixtureControl(action);}});
  const port={};for(const method of ['bootstrap','read','get','post','response','request','at','session','newPage','passwordLogin'])port[method]=run[method].bind(run);
- return Object.freeze({...port,setupPasskey:async(page,password,checkpoint=()=>{})=>{checkpoint('PASSKEY_ENROLL_START');await run.passkeyDevice(page);await run.enrollPasskey(page,password,checkpoint);},enrollTotp:run.enroll.bind(run),nextTotpCode:async factor=>{const code=await run.code(factor);factor.used.add(code);return code;},passkeyStats:()=>({created:run.created,asserted:run.asserted}),close:run.cleanup.bind(run),revokePasskey:async(page,password)=>{
-  await page.goto(run.url('/account/security/sign-in-methods'));await page.getByRole('button',{name:'Manage',exact:true}).click();
-  const started=await run.response(page,'/account/passkeys/revocation/start',()=>page.getByRole('dialog').getByRole('button',{name:'Remove passkey',exact:true}).click());requireTrue(started.ok&&started.body.status==='PENDING');
-  await page.getByRole('dialog').getByRole('button',{name:'Other method',exact:true}).click();await fillPrivate(page.getByLabel('Password',{exact:true}),password);
-  const proof=await run.response(page,'/authentication/step-up/password',()=>page.getByRole('dialog').getByRole('button',{name:'Confirm',exact:true}).click());requireTrue(proof.ok&&proof.body.operationReference===started.body.ceremonyId.replaceAll('-',''));
-  await page.getByRole('dialog').waitFor({state:'hidden'});const methods=await run.get(page,'/account/passkeys');requireTrue(methods.ok&&methods.body.credentials.some(value=>value.credentialReference===started.body.credentialReference&&value.state==='REVOKED'));
+ return Object.freeze({...port,setupPasskey:async(page,password,checkpoint=()=>{})=>{checkpoint('PASSKEY_ENROLL_START');await run.passkeyDevice(page);await run.enrollPasskey(page,password,checkpoint);},enrollTotp:run.enroll.bind(run),nextTotpCode:async factor=>{const code=await run.code(factor);factor.used.add(code);return code;},passkeyStats:()=>({created:run.created,asserted:run.asserted}),close:run.cleanup.bind(run),revokePasskey:async(page,password,checkpoint=()=>{})=>{
+  checkpoint('RECOVERY_SOURCE_REVOKE_NAVIGATION');await page.goto(run.url('/account/security/sign-in-methods'));
+  checkpoint('RECOVERY_SOURCE_REVOKE_MANAGE');await page.getByRole('button',{name:'Manage',exact:true}).click();
+  checkpoint('RECOVERY_SOURCE_REVOKE_START');const started=await run.response(page,'/account/passkeys/revocation/start',()=>page.getByRole('dialog').getByRole('button',{name:'Remove passkey',exact:true}).click());
+  checkpoint('RECOVERY_SOURCE_REVOKE_START_CHECK');requireTrue(started.ok&&started.body.status==='PENDING');
+  checkpoint('RECOVERY_SOURCE_REVOKE_PASSWORD_VIEW');await page.getByRole('dialog').getByRole('button',{name:'Other method',exact:true}).click();
+  checkpoint('RECOVERY_SOURCE_REVOKE_PASSWORD_FILL');await fillPrivate(page.getByLabel('Password',{exact:true}),password);
+  checkpoint('RECOVERY_SOURCE_REVOKE_PASSWORD_PROOF');const proof=await run.response(page,'/authentication/step-up/password',()=>page.getByRole('dialog').getByRole('button',{name:'Confirm',exact:true}).click());
+  checkpoint('RECOVERY_SOURCE_REVOKE_PROOF_CHECK');requireTrue(proof.ok&&proof.body.operationReference===started.body.ceremonyId.replaceAll('-',''));
+  checkpoint('RECOVERY_SOURCE_REVOKE_RESULT_WAIT');await page.getByRole('dialog').waitFor({state:'hidden'});
+  checkpoint('RECOVERY_SOURCE_REVOKE_METHODS_READ');const methods=await run.get(page,'/account/passkeys');
+  checkpoint('RECOVERY_SOURCE_REVOKE_STATE_CHECK');requireTrue(methods.ok&&methods.body.credentials.some(value=>value.credentialReference===started.body.credentialReference&&value.state==='REVOKED'));
  }});
 }
