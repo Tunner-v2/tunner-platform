@@ -1,0 +1,18 @@
+schema_version: 1
+defect_id: DEF-TUN-P2-010-003
+work_item_id: TUN-P2-010
+classification: TEST_INFRASTRUCTURE
+severity: SEV-3
+status: OPEN
+environment: finite management domain test host composition
+description: The management domain fixture advertises HTTP management policy services without configuring the required federation facade and also manually registers the domain owner. The production activation guard correctly rejects host startup before the first management ownership scenario. Inject the same policies explicitly into the existing domain owner and AuthenticationApplication optional enumerable dependency without falsely advertising an HTTP module. Preserve all assertions and production activation guards.
+expected_behavior_ref: governance/revisions/P2-009-RV001.yaml; docs/development/P2_010_FEDERATION_REFINEMENT.md
+evidence:
+  - artifacts/p2-010-federation-20261112/registration-0eacff8-native/private-receipt.json
+  - tests/Tunner.Identity.Persistence.Tests/FederationManagementPrivateIntegrationTests.cs
+  - src/Tunner.User.Bff/TunnerAuthenticatedUserBffHost.cs
+  - src/Modules/Identity/FederationRegistration.cs
+affected_versions:
+  - 0eacff82dc9780708b7272abb23aef53afadcc39
+created_at: 2026-11-12T18:32:54Z
+updated_at: 2026-11-12T18:32:54Z

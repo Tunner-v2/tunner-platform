@@ -381,7 +381,7 @@ public sealed class FederationOidcNativeProtocolTests
         }
     }
 
-    private sealed class SyntheticProvider : HttpMessageHandler
+    internal sealed class SyntheticProvider : HttpMessageHandler
     {
         private static readonly string[] ResponseTypes = ["code"];
         private static readonly string[] ResponseModes = ["form_post"];
@@ -396,6 +396,7 @@ public sealed class FederationOidcNativeProtocolTests
         internal const string ClientId = "synthetic-confidential-client";
         internal const string Secret = "synthetic-public-test-secret";
         internal const string Email = "provider@example.test";
+        private readonly string issuer;
         private readonly RSA rsa = RSA.Create(2048);
         private readonly RSA wrongRsa = RSA.Create(2048);
         private string? code;
@@ -409,26 +410,28 @@ public sealed class FederationOidcNativeProtocolTests
         internal bool ContactEvidence;
         internal DateTimeOffset AuthenticatedAt { get; } = DateTimeOffset.FromUnixTimeSeconds(DateTimeOffset.UtcNow.AddSeconds(-30).ToUnixTimeSeconds());
 
+        internal SyntheticProvider(string? issuer = null) { this.issuer = issuer ?? Issuer; }
+
         internal string Admit(string nonce, string challenge)
         {
-            this.nonce = nonce; this.challenge = challenge; code = Guid.NewGuid().ToString("N"); return code;
+            this.nonce = nonce; this.challenge = challenge; consumed = false; code = Guid.NewGuid().ToString("N"); return code;
         }
 
         protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
-            if (request.RequestUri?.AbsoluteUri == Issuer + "/.well-known/openid-configuration") return Json(new
+            if (request.RequestUri?.AbsoluteUri == issuer + "/.well-known/openid-configuration") return Json(new
             {
-                issuer = Issuer, authorization_endpoint = Issuer + "/authorize", token_endpoint = Issuer + "/token", jwks_uri = Issuer + "/keys",
+                issuer, authorization_endpoint = issuer + "/authorize", token_endpoint = issuer + "/token", jwks_uri = issuer + "/keys",
                 response_types_supported = ResponseTypes, response_modes_supported = ResponseModes, subject_types_supported = SubjectTypes,
                 id_token_signing_alg_values_supported = SigningAlgorithms, token_endpoint_auth_methods_supported = AuthenticationMethods
             });
-            if (request.RequestUri?.AbsoluteUri == Issuer + "/keys")
+            if (request.RequestUri?.AbsoluteUri == issuer + "/keys")
             {
                 var parameters = rsa.ExportParameters(false);
                 return Json(new { keys = new[] { new { kty = "RSA", use = "sig", kid = "synthetic-key", alg = "RS256",
                     n = Base64UrlEncoder.Encode(parameters.Modulus!), e = Base64UrlEncoder.Encode(parameters.Exponent!) } } });
             }
-            if (request.RequestUri?.AbsoluteUri == Issuer + "/token" && request.Method == HttpMethod.Post)
+            if (request.RequestUri?.AbsoluteUri == issuer + "/token" && request.Method == HttpMethod.Post)
             {
                 TokenRequests++;
                 var form = QueryHelpers.ParseQuery(await request.Content!.ReadAsStringAsync(cancellationToken));
@@ -461,7 +464,7 @@ public sealed class FederationOidcNativeProtocolTests
                 }
                 var token = new JsonWebTokenHandler().CreateToken(new SecurityTokenDescriptor
                 {
-                    Issuer = Defect == "issuer" ? "https://wrong-issuer.example.test" : Issuer,
+                    Issuer = Defect == "issuer" ? "https://wrong-issuer.example.test" : issuer,
                     Audience = Defect == "audience" ? "wrong-audience" : ClientId, Claims = claims,
                     IssuedAt = now.AddMinutes(-2), NotBefore = now.AddMinutes(-2), Expires = Defect == "expired" ? now.AddMinutes(-1) : now.AddMinutes(5),
                     SigningCredentials = Defect == "unsigned" ? null : new(new RsaSecurityKey(Defect == "signature" ? wrongRsa : rsa) { KeyId = "synthetic-key" }, SecurityAlgorithms.RsaSha256)

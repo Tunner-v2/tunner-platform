@@ -22,6 +22,10 @@ public static class RecoveryCodeFiniteNativeExecution
         "FEDERATION_NAMESPACE_BINDING", "FEDERATION_SINGLE_OWNER", "FEDERATION_OWNER_ROLLBACK", "FEDERATION_IMMUTABLE_VERSION",
         "FEDERATION_QUALIFICATION_LIFECYCLE", "FEDERATION_ATTEMPT_INTEGRITY", "FEDERATION_SESSION_SOURCE", "FEDERATION_MIGRATION_GUARDS"];
     private static readonly string[] PrivateIds = [
+        "FEDERATION_CONFIRMED_OWNERSHIP", "FEDERATION_REQUIRED_POSTURE", "FEDERATION_UNLINK_EFFECTS_HISTORY", "FEDERATION_MANAGEMENT_FINAL_AUTHORITY",
+        "FEDERATION_OPERATION_PROOF", "FEDERATION_OPERATION_PROOF_REJECTION",
+        "FEDERATION_REGISTRATION", "FEDERATION_REGISTRATION_REJECTION", "FEDERATION_REGISTRATION_FINALITY",
+        "FEDERATION_HTTPS_WIRE",
         "PARENT003_REGISTRATION_BOUNDARY", "PARENT003_REGISTRATION_FLOW", "PARENT003_REGISTRATION_PROGRESS", "PARENT005_AUTH_SESSION",
         "PARENT005_AUTH_DUPLICATE", "PARENT005_AUTH_CONTACT_CURRENT", "PARENT006_PROOF_SESSION", "PARENT006_PROOF_ROLLBACK",
         "PARENT006_BROWSER_ORIGINAL", "PARENT006_BROWSER_ABSENCE", "WINNER_SAFE_READ_REPLACE", "PUBLICATION_WITHDRAWAL",
@@ -38,10 +42,7 @@ public static class RecoveryCodeFiniteNativeExecution
         "BIND_KEY", "BFF_CSRF_ORIGIN_OWNER", "STABLE_GENERATE_DUPLICATE", "STABLE_REPLACE_DUPLICATE",
         "CONSUME_OWNER_THROW", "CONSUME_OWNER_CANCEL", "GENERATE_POST_COMMIT_OBSERVER", "REPLACE_POST_COMMIT_OBSERVER",
         "CONSUME_POST_COMMIT_OBSERVER", "CORRUPT_VERIFIER_FAIL_CLOSED",
-        "FEDERATION_ORIGINAL_SESSION", "FEDERATION_PRIMARY_MFA", "FEDERATION_FINAL_AUTHORITY", "FEDERATION_BROWSER_BINDING",
-        "FEDERATION_CONFIRMED_OWNERSHIP", "FEDERATION_REQUIRED_POSTURE", "FEDERATION_UNLINK_EFFECTS_HISTORY", "FEDERATION_MANAGEMENT_FINAL_AUTHORITY",
-        "FEDERATION_OPERATION_PROOF", "FEDERATION_OPERATION_PROOF_REJECTION",
-        "FEDERATION_REGISTRATION", "FEDERATION_REGISTRATION_REJECTION", "FEDERATION_REGISTRATION_FINALITY"];
+        "FEDERATION_ORIGINAL_SESSION", "FEDERATION_PRIMARY_MFA", "FEDERATION_FINAL_AUTHORITY", "FEDERATION_BROWSER_BINDING"];
 
     internal static async Task<RecoveryCodeNativeReceipt> RunAsync(RecoveryCodeNativeCohort cohort, Uri qualifiedLocalEndpoint, DirectoryInfo repository, RecoveryCodeFixtureOwnershipChannel ownershipChannel)
     {
@@ -361,6 +362,7 @@ public static class RecoveryCodeFiniteNativeExecution
             "FEDERATION_REGISTRATION" => new FederationPrivateIntegrationTests(fixture).QualifiedGoogleRegistrationRequiresNoticesThenSharesPersonalInformationAndOriginalRecoveryWithoutSession(),
             "FEDERATION_REGISTRATION_REJECTION" => new FederationPrivateIntegrationTests(fixture).UnqualifiedExpiredForeignOrCollidingFederationIntakeCannotAdoptAccountOrIssueSession(),
             "FEDERATION_REGISTRATION_FINALITY" => new FederationPrivateIntegrationTests(fixture).LateRegistrationProfileNoticeOrContactDriftRollsBackCanonicalIntakeAndRecoversOriginal(),
+            "FEDERATION_HTTPS_WIRE" => new FederationBffPrivateIntegrationTests(fixture).ActualHttpsNativeRegistrationRequiresExactPairedContextAndNoticesBeforeSharedOnboarding(),
             "PARENT003_REGISTRATION_BOUNDARY" => new RegistrationBffTests(fixture).ActualHttpsBffKeepsRegistrationAnonymousAndRequiresOriginCsrfAndProtectedBrowserContext(),
             "PARENT003_REGISTRATION_FLOW" => new RegistrationBffTests(fixture).ActualHttpsFlowVerifiesContactBeforePersonalInformationAndActivatesUnder18WithoutSession(),
             "PARENT003_REGISTRATION_PROGRESS" => new RegistrationBffTests(fixture).ProtectedProgressRecoversOnlyItsOwnServerStageAndRestartPreservesAccountEvidence(),

@@ -115,6 +115,17 @@ internal sealed class AuthenticationTestHost : IAsyncDisposable
     }
     internal async Task<HttpResponseMessage> Get(string path, string? cookies = null)
     { using var request = Request(HttpMethod.Get, path, cookies); return await client.SendAsync(request); }
+    internal async Task<HttpResponseMessage> GoogleFederationChallenge(string cookies)
+    {
+        using var request = Request(HttpMethod.Get, "/authentication/federation/google/challenge", cookies);
+        request.Headers.TryAddWithoutValidation("Sec-Fetch-Site", "same-origin"); return await client.SendAsync(request);
+    }
+    internal async Task<HttpResponseMessage> GoogleFederationCallback(string state, string code, string protocolCookies)
+    {
+        using var request = Request(HttpMethod.Post, "/authentication/federation/google/callback", protocolCookies);
+        request.Content = new FormUrlEncodedContent(new Dictionary<string, string> { ["state"] = state, ["code"] = code });
+        request.Headers.TryAddWithoutValidation("Origin", "https://accounts.google.com"); return await client.SendAsync(request);
+    }
     internal async Task<HttpResponseMessage> Post(string path, object body, string? cookies, string? csrf, string origin = Origin)
     {
         using var request = Request(HttpMethod.Post, path, cookies); request.Content = JsonContent.Create(body); request.Headers.TryAddWithoutValidation("Origin", origin);

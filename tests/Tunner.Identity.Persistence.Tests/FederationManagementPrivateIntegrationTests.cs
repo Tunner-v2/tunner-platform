@@ -66,8 +66,15 @@ internal sealed class FederationManagementPrivateIntegrationTests(IdentityPostgr
             { ["pwd"] = "fixture-mfa", ["passkey"] = "fixture-mfa", ["federation"] = "fixture-federation-mfa" } };
         return TotpTests.StartTotp(database, totp, services =>
         {
-            services.AddSingleton<IFederationProfileSource>(profile); services.AddSingleton<IFederationLinkPolicySource>(profile);
-            services.AddSingleton<IFederationUnlinkPostureSource>(profile); services.AddScoped<FederationAttemptApplication>(); services.AddScoped<FederationLinkApplication>();
+            services.AddSingleton<IFederationProfileSource>(profile);
+            // This fixture exercises domain owners, not HTTP management activation. Supply the existing Auth owner's
+            // optional policy collection explicitly; individual HTTP capability registrations require the full facade.
+            services.AddSingleton<IEnumerable<IFederationLinkPolicySource>>(Array.AsReadOnly<IFederationLinkPolicySource>([profile]));
+            services.AddScoped<FederationAttemptApplication>();
+            services.AddScoped(provider => new FederationLinkApplication(provider.GetRequiredService<IdentityPersistenceDbContext>(),
+                provider.GetRequiredService<AuthenticationApplication>(), provider.GetRequiredService<FederationAttemptApplication>(),
+                profile, profile, profile, provider.GetRequiredService<IAuthenticationPolicySource>(),
+                provider.GetRequiredService<IAssurancePolicySource>(), provider.GetRequiredService<TimeProvider>()));
             services.RemoveAll<IAssurancePolicySource>(); services.AddSingleton<IAssurancePolicySource>(profile);
         });
     }

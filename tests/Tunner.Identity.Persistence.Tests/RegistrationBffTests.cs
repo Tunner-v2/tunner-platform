@@ -220,7 +220,7 @@ public sealed class RegistrationBffTests(IdentityPostgresFixture fixture) : ICla
         {using var request=new HttpRequestMessage(HttpMethod.Post,path){Content=JsonContent.Create(body)};request.Headers.Host=new Uri(Origin).Host;request.Headers.TryAddWithoutValidation("Origin",origin);if(cookie is not null)request.Headers.TryAddWithoutValidation("Cookie",cookie);if(csrf is not null)request.Headers.TryAddWithoutValidation("X-Tunner-CSRF",csrf);return await client.SendAsync(request);}
         public async ValueTask DisposeAsync(){client.Dispose();await app.StopAsync();await app.DisposeAsync();certificate.Dispose();}
     }
-    private sealed class Presentation : IRegistrationPresentationSource
+    internal sealed class Presentation : IRegistrationPresentationSource
     {
         public RegistrationPresentation RequirePublished(RegistrationPolicy policy)
         {using var proposal=JsonDocument.Parse(File.ReadAllText(Path.Combine(AppContext.BaseDirectory,"registration-content.proposal.json")));var values=proposal.RootElement.GetProperty("content").EnumerateObject().Select(x=>new RegistrationPublishedText(x.Name,"fixture-variant","fixture-version","fixture-publication","en","PUBLISHED",x.Value.GetString()!)).ToArray();var uri=new Uri("https://fixture.example.test/legal");return new("en",values,uri,uri,null);}
