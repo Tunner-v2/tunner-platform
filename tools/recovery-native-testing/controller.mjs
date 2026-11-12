@@ -172,7 +172,7 @@ async function runOwned(control,{resourceCut=null,publicProxyOrigin=null,malform
     }
     for(;;){
       const remaining=deadline-Date.now();if(remaining<=0){timedOut=true;throw new Error('NATIVE_BOUNDARY_FAILED');}
-      const frame=await owned.reader.next(control.cohort==='PRIVATE_RECOVERY'?remaining:Math.min(remaining,120000));
+      const frame=await owned.reader.next(control.cohort==='PRIVATE_RECOVERY'?remaining:Math.min(remaining,control.cohort==='PUBLIC_CAPACITY'?210000:120000));
       if(validTerminal(frame,browser!==null)){terminal=frame;break;}
       if(frame?.type==='capacityMeasured'){
         requireTrue(control.cohort==='PUBLIC_CAPACITY'&&capacity===null&&exact(frame,['version','type','runId','databases','databaseBytes','walBytes'])&&frame.version===2&&frame.runId===runId&&
