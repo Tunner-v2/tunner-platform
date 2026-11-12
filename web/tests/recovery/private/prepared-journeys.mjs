@@ -106,7 +106,7 @@ class RecoveryJourney {
    if(hold)this.checkpoint?.('RECOVERY_SOURCE_HELD_OPTIONS');
    totpStage('REC_TOTP_DENIAL_OPTIONS');const current=await this.mechanics.get(page,'/authentication/step-up/options'),native=this.method==='passkey'?current.body.passkeyRecovery:current.body.totpRecovery;
    if(hold)this.checkpoint?.('RECOVERY_SOURCE_HELD_BINDING');
-   requireTrue((totpStage('REC_TOTP_DENIAL_OPTIONS_OK'),current.ok)&&(totpStage('REC_TOTP_DENIAL_REQUEST'),native?.requestId===held.proof.requestId)&&(totpStage('REC_TOTP_DENIAL_ATTEMPT'),native.attemptId===response.sent.attemptId)&&(totpStage('REC_TOTP_DENIAL_OPERATION'),native.operationReference===op.operationReference)&&(totpStage('REC_TOTP_DENIAL_PROOF_ACTIVE'),native.status===(this.method==='passkey'?'PROOF_ISSUED':'PROOF_ACTIVE')));
+   requireTrue((totpStage('REC_TOTP_DENIAL_OPTIONS_OK'),current.ok)&&(totpStage('REC_TOTP_DENIAL_REQUEST'),native?.requestId===held.proof.requestId)&&(totpStage('REC_TOTP_DENIAL_ATTEMPT'),native.attemptId===response.sent.attemptId)&&(totpStage('REC_TOTP_DENIAL_OPERATION'),(this.method==='passkey'?native.operationReference:current.body.operationReference)===op.operationReference)&&(totpStage('REC_TOTP_DENIAL_PROOF_ACTIVE'),native.status===(this.method==='passkey'?'PROOF_ISSUED':'PROOF_ACTIVE')));
    if(hold){this.checkpoint?.('RECOVERY_SOURCE_HELD_RETURN');return{held,response,native};}
    totpStage('REC_TOTP_COUNTS_BEFORE');const before=await this.counts(),assertions=this.mechanics.passkeyStats().asserted;
    totpStage('REC_TOTP_RESUME_POST');const resumed=await this.response(page,route+'/continue',()=>dialog.getByRole('button',{name:'Continue this verification',exact:true}).click());
