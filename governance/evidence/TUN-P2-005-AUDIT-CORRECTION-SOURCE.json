@@ -3,8 +3,8 @@
   "scope_id": "TUN-P2-005",
   "validation_kind": "COMMITTED",
   "result": "PASS",
-  "tested_commit_sha": "ad744fde52aa03404f3944c47ebb79070185e9f2",
-  "validated_commit_sha": "ad744fde52aa03404f3944c47ebb79070185e9f2",
+  "tested_commit_sha": "734828a78d9736eaa8da32c1b80ae0654a7f3641",
+  "validated_commit_sha": "734828a78d9736eaa8da32c1b80ae0654a7f3641",
   "owned_behavior_paths": [
     "docs/contracts/authentication-session-contract.md",
     "docs/contracts/ui-inventory.json",
@@ -57,7 +57,7 @@
   ],
   "historical_validation_ref": "governance/evidence/TUN-P2-005-VALIDATION.json",
   "note": "Exact ordered48-path ownership and VALIDATION history retained. Current bounded compatibility uses actualad744fde native62 including10 existing parent invocations; SQL5 retains actual5d543965 with explicit unchanged-source witness. UI146 stays actualc714, registration24/foundation16 stays actualeb1c/carrier6e. Old bulk260/237 and ordinary-host identities are not relabelled. No009 final/Product/release/wholeP2 acceptance.",
-  "source_binding_ref": "governance/evidence/TUN-P2-003-004-005-006-RECOVERY-COMPATIBILITY-20261111.json",
+  "source_binding_ref": "governance/evidence/P2-010-COMPATIBILITY-SCOPE.json",
   "prior_current_source_bindings": [
     {
       "tested_commit_sha": "745f9c2dc1b9060c4be0318b33b4019ae77e9e36",
@@ -76,7 +76,37 @@
       "validated_commit_sha": "eb9228cc3ed832980deb92407d80ab92e7b8a00e",
       "source_binding_ref": "governance/evidence/TUN-P2-004-005-006-FINITE-RUNTIME-COMPATIBILITY-20261110.json",
       "source_envelope_git_ref": "ad744fde52aa03404f3944c47ebb79070185e9f2:governance/evidence/TUN-P2-005-AUDIT-CORRECTION-SOURCE.json"
+    },
+    {
+      "tested_commit_sha": "ad744fde52aa03404f3944c47ebb79070185e9f2",
+      "validated_commit_sha": "ad744fde52aa03404f3944c47ebb79070185e9f2",
+      "source_binding_ref": "governance/evidence/TUN-P2-003-004-005-006-RECOVERY-COMPATIBILITY-20261111.json",
+      "source_envelope_git_ref": "02750b892e54ab8e7f6c22360f4f41246257aee7:governance/evidence/TUN-P2-005-AUDIT-CORRECTION-SOURCE.json"
     }
   ],
-  "historical_source_binding_ref": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/execution-index.json"
+  "historical_source_binding_ref": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/execution-index.json",
+  "final_federation_compatibility": {
+    "result": "PASS",
+    "actual_source_commit_sha": "734828a78d9736eaa8da32c1b80ae0654a7f3641",
+    "evidence_ref": "governance/evidence/TUN-P2-010-VALIDATION.json",
+    "runtime_ref": "governance/evidence/p2-010-federation-20261112/native-734828a/private76.json",
+    "ui_ref": "governance/evidence/TUN-P2-010-UI-COMPLIANCE.json",
+    "changed_owned_paths": [
+      "docs/contracts/ui-inventory.json",
+      "src/Modules/Identity/AuthenticationApplication.cs",
+      "src/Modules/Identity/AuthenticationEndpoints.cs",
+      "src/Modules/Identity/AuthenticationRows.cs",
+      "src/Modules/Identity/IdentityPersistenceDbContext.cs",
+      "src/Modules/Identity/Migrations/IdentityPersistenceDbContextModelSnapshot.cs",
+      "src/Modules/Identity/RegistrationApplication.cs",
+      "src/Modules/Identity/RegistrationEndpoints.cs",
+      "src/Tunner.User.Bff/TunnerAuthenticatedUserBffHost.cs",
+      "tests/Tunner.Identity.Persistence.Tests/AuthenticationTestHost.cs",
+      "web/apps/user/authentication.content.proposal.json",
+      "web/apps/user/authentication.css",
+      "web/apps/user/authentication.tsx"
+    ],
+    "scope": "Actual734 single76 includes all3 existing parent005 HTTPS authentication/session cases, federation sign-in/MFA/session finality and joined explicit sign-in. Applicable Login UI31 and other public/native/model cohorts retain original sources and byte-equivalence; no old execution relabelled.",
+    "currentness": "Original ordered source ownership and VALIDATION history preserved. New current source matches the actually tested734 commit; source-specific unaffected original cohorts remain evidence. This is bounded dependency compatibility, not Product acceptance, live provider or release."
+  }
 }

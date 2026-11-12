@@ -3,8 +3,8 @@
   "scope_id": "TUN-P2-006",
   "validation_kind": "COMMITTED",
   "result": "PASS",
-  "tested_commit_sha": "ad744fde52aa03404f3944c47ebb79070185e9f2",
-  "validated_commit_sha": "ad744fde52aa03404f3944c47ebb79070185e9f2",
+  "tested_commit_sha": "734828a78d9736eaa8da32c1b80ae0654a7f3641",
+  "validated_commit_sha": "734828a78d9736eaa8da32c1b80ae0654a7f3641",
   "owned_behavior_paths": [
     "docs/contracts/ui-inventory.json",
     "src/Modules/Identity/AssurancePolicy.cs",
@@ -58,7 +58,7 @@
     "governance/evidence/p2-recovery-20261109/visual-review.json",
     "governance/evidence/TUN-P2-006-AUDIT-CORRECTION-ROLE-REVIEWS.json"
   ],
-  "source_binding_ref": "governance/evidence/TUN-P2-003-004-005-006-RECOVERY-COMPATIBILITY-20261111.json",
+  "source_binding_ref": "governance/evidence/P2-010-COMPATIBILITY-SCOPE.json",
   "prior_current_source_bindings": [
     {
       "tested_commit_sha": "745f9c2dc1b9060c4be0318b33b4019ae77e9e36",
@@ -83,7 +83,40 @@
       "validated_commit_sha": "acd474e6d028b7abe5a48b2361a984f960384674",
       "source_binding_ref": "governance/evidence/TUN-P2-006-FINITE-STEP-UP-PUBLICATION-COMPATIBILITY-20261110.json",
       "source_envelope_git_ref": "ad744fde52aa03404f3944c47ebb79070185e9f2:governance/evidence/TUN-P2-006-AUDIT-CORRECTION-SOURCE.json"
+    },
+    {
+      "tested_commit_sha": "ad744fde52aa03404f3944c47ebb79070185e9f2",
+      "validated_commit_sha": "ad744fde52aa03404f3944c47ebb79070185e9f2",
+      "source_binding_ref": "governance/evidence/TUN-P2-003-004-005-006-RECOVERY-COMPATIBILITY-20261111.json",
+      "source_envelope_git_ref": "02750b892e54ab8e7f6c22360f4f41246257aee7:governance/evidence/TUN-P2-006-AUDIT-CORRECTION-SOURCE.json"
     }
   ],
-  "historical_source_binding_ref": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/execution-index.json"
+  "historical_source_binding_ref": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/execution-index.json",
+  "final_federation_compatibility": {
+    "result": "PASS",
+    "actual_source_commit_sha": "734828a78d9736eaa8da32c1b80ae0654a7f3641",
+    "evidence_ref": "governance/evidence/TUN-P2-010-VALIDATION.json",
+    "runtime_ref": "governance/evidence/p2-010-federation-20261112/native-734828a/private76.json",
+    "ui_ref": "governance/evidence/TUN-P2-010-UI-COMPLIANCE.json",
+    "changed_owned_paths": [
+      "docs/contracts/ui-inventory.json",
+      "src/Modules/Identity/AuthenticationApplication.cs",
+      "src/Modules/Identity/AuthenticationEndpoints.cs",
+      "src/Modules/Identity/AuthenticationRows.cs",
+      "src/Modules/Identity/IdentityPersistenceDbContext.cs",
+      "src/Modules/Identity/Migrations/IdentityPersistenceDbContextModelSnapshot.cs",
+      "src/Modules/Identity/StepUpApplication.cs",
+      "src/Modules/Identity/StepUpBrowserEndpoints.cs",
+      "src/Modules/Identity/StepUpRows.cs",
+      "src/Tunner.User.Bff/TunnerAuthenticatedUserBffHost.cs",
+      "tests/Tunner.Identity.Persistence.Tests/AuthenticationTestHost.cs",
+      "web/apps/user/authentication.tsx",
+      "web/apps/user/main.tsx",
+      "web/apps/user/step-up.content.proposal.json",
+      "web/apps/user/step-up.css",
+      "web/apps/user/step-up.tsx"
+    ],
+    "scope": "Actual734 single76 includes all4 existing parent006 proof cases, shared password/passkey/TOTP/recovery consumers and new federation proof/finality cases. Shared proof22 and approved V03 initial18+isolated1 public results retain actual distinct sources; no combined19-run claim.",
+    "currentness": "Original ordered source ownership and VALIDATION history preserved. New current source matches the actually tested734 commit; source-specific unaffected original cohorts remain evidence. This is bounded dependency compatibility, not Product acceptance, live provider or release."
+  }
 }
