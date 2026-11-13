@@ -98,10 +98,14 @@ internal sealed class RecoveryPasskeyRepairPrivateIntegrationTests(IdentityPostg
     }
     private sealed record Seed(string Account, Guid Reference, Guid Factor, string EnrollmentCookies, RecoveryEntryCaller Caller)
     { public override string ToString() => nameof(Seed); }
-    private static async Task<Seed> SeedAsync(IdentityTestDatabase db, AuthenticationTestHost host, Authority authority, PasskeyAuthenticator key, bool counter = false)
+    private static async Task<Seed> SeedAsync(IdentityTestDatabase db, AuthenticationTestHost host, Authority authority, PasskeyAuthenticator key, bool counter = false,
+        RecoveryCodeFirstCaseCheckpoint? checkpoint = null)
     {
-        var account = await host.SeedAsync(db, minor: true); var enrolled = await PasskeyTests.SeedRecoveryCredentialAsync(host, key); authority.Reference = enrolled.Reference;
+        checkpoint?.Mark(RecoveryCodeFirstCaseStage.SEED);
+        var account = await host.SeedAsync(db, minor: true); var enrolled = await PasskeyTests.SeedRecoveryCredentialAsync(host, key, checkpoint); authority.Reference = enrolled.Reference;
         if (counter) await PasskeyTests.SeedRecoveryCounterAsync(host, key);
+        if (checkpoint is not null) checkpoint.Phase = RecoveryCodeFirstCasePhase.SETUP;
+        checkpoint?.Mark(RecoveryCodeFirstCaseStage.ACTIVE_SET_STATES);
         var factor = Guid.NewGuid(); var now = host.Clock.GetUtcNow(); await using var context = db.Context();
         context.Add(new TotpAuthenticatorRow { AuthenticatorReference = factor, AccountId = account, Generation = Guid.NewGuid(), EnrollmentId = Guid.NewGuid(),
             SecretStoreReference = "fixture-unavailable-vault", SecretResourceReference = "fixture-factor-" + factor.ToString("N"), SecretVersion = 1,
@@ -129,53 +133,103 @@ internal sealed class RecoveryPasskeyRepairPrivateIntegrationTests(IdentityPostg
     }
     private sealed record Pending(Guid Request, Guid Ceremony, JsonElement Options)
     { public override string ToString() => nameof(Pending); }
-    private static async Task<Pending> Begin(AuthenticationTestHost host, Authority authority, RecoveryEntryCaller caller)
+    private static async Task<Pending> Begin(AuthenticationTestHost host, Authority authority, RecoveryEntryCaller caller, RecoveryCodeFirstCaseCheckpoint? checkpoint = null)
     {
+        if (checkpoint is not null) checkpoint.Phase = RecoveryCodeFirstCasePhase.REPLACE;
+        checkpoint?.Mark(RecoveryCodeFirstCaseStage.START_POST);
         await using var scope = host.Services.CreateAsyncScope(); var app = Application(scope.ServiceProvider); var request = Guid.NewGuid();
         var entry = await app.StartPasswordEntryAsync(caller, request, "person@example.test", authority.Policy.GoalReference);
+        checkpoint?.Mark(RecoveryCodeFirstCaseStage.START_STATUS);
         Assert.True(entry.ErrorCode is null && entry.Case is { ProofKind: "PASSKEY", State: "PENDING_PASSKEY", Version: 1, SetReference: null });
+        checkpoint?.Mark(RecoveryCodeFirstCaseStage.PROOF_OPTIONS_GET);
         var result = await app.StartPasswordPasskeyAsync(caller, request, Http(scope.ServiceProvider));
+        checkpoint?.Mark(RecoveryCodeFirstCaseStage.PROOF_OPTIONS_STATUS);
         Assert.True(result.ErrorCode is null && result.Ceremony is { Kind: "RECOVERY", State: "PENDING", SessionId: null, StepUpRequestId: null });
+        checkpoint?.Mark(RecoveryCodeFirstCaseStage.PROOF_OPTIONS_BODY);
         return new(request, result.Ceremony!.CeremonyId, JsonSerializer.Deserialize<JsonElement>(result.Ceremony.OptionsJson));
     }
     private static async Task<RecoveryEntryResult> Repair(AuthenticationTestHost host, RecoveryEntryCaller caller, Pending pending, JsonElement credential,
-        long version = 1, string? password = Replacement, string? confirmation = Replacement, CancellationToken ct = default)
+        long version = 1, string? password = Replacement, string? confirmation = Replacement, RecoveryCodeFirstCaseCheckpoint? checkpoint = null,
+        CancellationToken ct = default)
     {
+        if (checkpoint is not null) checkpoint.Phase = RecoveryCodeFirstCasePhase.REPLACE;
+        checkpoint?.Mark(RecoveryCodeFirstCaseStage.PASSWORD_PROOF_POST);
         await using var scope = host.Services.CreateAsyncScope();
         return await Application(scope.ServiceProvider).RepairPasswordWithPasskeyAsync(caller, pending.Request, version, pending.Ceremony, credential, password, confirmation, Http(scope.ServiceProvider), ct);
     }
 
     internal async Task NativeStrongProofRepairsPasswordWithoutCodeCompositionOrLogin()
     {
-        await using var db = await fixture.CreateFiniteDatabaseAsync(CancellationToken.None); var authority = new Authority(); await using var host = await Host(db, authority);
-        using var key = new PasskeyAuthenticator(); var seed = await SeedAsync(db, host, authority, key); var before = await Snapshot(db, host, seed, key);
+        var checkpoint = new RecoveryCodeFirstCaseCheckpoint();
+        try
+        {
+        checkpoint.Mark(RecoveryCodeFirstCaseStage.DATABASE);
+        await using var db = await fixture.CreateFiniteDatabaseAsync(CancellationToken.None); var authority = new Authority();
+        checkpoint.Mark(RecoveryCodeFirstCaseStage.HOST);
+        await using var host = await Host(db, authority);
+        using var key = new PasskeyAuthenticator(); var seed = await SeedAsync(db, host, authority, key, checkpoint: checkpoint);
+        checkpoint.Mark(RecoveryCodeFirstCaseStage.CHECK_CONTEXT);
+        var before = await Snapshot(db, host, seed, key);
+        checkpoint.Mark(RecoveryCodeFirstCaseStage.CONSUMED_PROOFS);
         Assert.True(host.Services.GetService<IRecoveryCodePolicySource>() is null && host.Services.GetService<RecoveryCodeNative>() is null);
         await using (var scope = host.Services.CreateAsyncScope()) Assert.True(scope.ServiceProvider.GetService<RecoveryCodeApplication>() is null);
-        var pending = await Begin(host, authority, seed.Caller); var repaired = await Repair(host, seed.Caller, pending, key.Assert(pending.Options, Origin));
+        var pending = await Begin(host, authority, seed.Caller, checkpoint);
+        checkpoint.Mark(RecoveryCodeFirstCaseStage.PROOF_BINDING);
+        var assertion = key.Assert(pending.Options, Origin);
+        var repaired = await Repair(host, seed.Caller, pending, assertion, checkpoint: checkpoint);
+        checkpoint.Mark(RecoveryCodeFirstCaseStage.PROOF_STATUS);
         Assert.True(repaired.ErrorCode is null && repaired.Entry is { State: "REPAIRED", Version: 2 } && repaired.Result is { ProofKind: "PASSKEY", Outcome: "PASSWORD_REPAIRED_NO_SESSION", SetReference: null });
+        checkpoint.Phase = RecoveryCodeFirstCasePhase.STATE;
+        checkpoint.Mark(RecoveryCodeFirstCaseStage.CHECK_CONTEXT);
         var after = await Snapshot(db, host, seed, key);
+        checkpoint.Mark(RecoveryCodeFirstCaseStage.ACTIVE_SET_STATES);
         Assert.True(after.Hash != before.Hash && after.Stamp != before.Stamp && after.Counter == 1 && after.Usage == before.Usage + 1 && after.Sessions == before.Sessions && after.Proofs == before.Proofs && after.Outbox == before.Outbox + 1);
         await using var check = db.Context(); var user = await check.Users.SingleAsync(x => x.AccountId == seed.Account); var hasher = AuthenticationPasswordWork.Hasher(host.Policies.Policy);
+        checkpoint.Mark(RecoveryCodeFirstCaseStage.CAUSAL_RETIREMENT);
         Assert.True(hasher.VerifyHashedPassword(user, user.PasswordHash!, Replacement) != PasswordVerificationResult.Failed && hasher.VerifyHashedPassword(user, user.PasswordHash!, Password) == PasswordVerificationResult.Failed);
+        checkpoint.Mark(RecoveryCodeFirstCaseStage.DELIVERY_BODY);
         Assert.True(await check.Accounts.AllAsync(x => x.State == AccountState.Active && x.Version == 1 && x.AgeEligibilityStatus == "INELIGIBLE" && x.AgePolicyVersion == "fixture-age"));
+        checkpoint.Mark(RecoveryCodeFirstCaseStage.DELIVERY_COUNT);
         Assert.True(await check.VerifiedContacts.AllAsync(x => x.State == ContactVerificationState.Verified && x.Version == 1));
+        checkpoint.Mark(RecoveryCodeFirstCaseStage.DELIVERY_BINDING);
         Assert.True(await check.Set<TotpAuthenticatorRow>().AnyAsync(x => x.AuthenticatorReference == seed.Factor && x.State == "ACTIVE" && x.Version == 1 && x.UsageVersion == 0));
+        checkpoint.Mark(RecoveryCodeFirstCaseStage.PROOF_BINDING);
         Assert.True(await check.Set<PasskeyCredentialRow>().AnyAsync(x => x.CredentialReference == seed.Reference && x.State == "ACTIVE" && x.Version == 1 && x.UsageVersion == 1));
+        checkpoint.Mark(RecoveryCodeFirstCaseStage.RETAIN_CODES);
         Assert.True(!await check.Set<RecoveryCodeSetRow>().AnyAsync() && !await check.Set<RecoveryCodeEntryRow>().AnyAsync());
         var result = repaired.Result!;
+        checkpoint.Mark(RecoveryCodeFirstCaseStage.RESULT_BODY);
         Assert.True(result.TargetSessionId is null && result.SessionOutboxEventId is null && result.PasskeyCredentialReference == seed.Reference && result.PasskeyCeremonyId == pending.Ceremony && result.PasskeyMethod == PasskeyPolicy.MethodKey(false, false) && result.PasskeyAssurance == "fixture-passkey-assurance" && result.NativeBeforeDigest != result.NativeAfterDigest && result.SessionEffect == nameof(RecoveryPasswordSessionEffect.InvalidateExistingTunnerSessions) && result.UnresolvedEffectsJson == JsonSerializer.Serialize(Unresolved));
+        checkpoint.Mark(RecoveryCodeFirstCaseStage.SAFE_RESULT);
         Assert.True(await check.Set<OutboxMessage>().CountAsync(x => x.EventId == result.RepairOutboxEventId && x.OperationId == RecoveryCaseApplication.OperationId(repaired.Case!) && x.CorrelationId == pending.Request.ToString("N")) == 1);
         Assert.True(!await check.Set<OutboxMessage>().AnyAsync(x => x.EventType == "RecoveryCompleted"));
+        checkpoint.Mark(RecoveryCodeFirstCaseStage.CONSUMED_PROOFS);
         Assert.True(await check.Set<AuthenticationSessionRow>().AllAsync(x => x.SecurityStampDigest == AuthenticationIdentity.Digest(before.Stamp)));
         var immutable = false;
+        checkpoint.Mark(RecoveryCodeFirstCaseStage.RESULT_POST);
         await using (var mutation = db.Context())
         {
             try { _ = await mutation.Database.ExecuteSqlInterpolatedAsync($"UPDATE identity.recovery_results SET native_after_digest={new string('F', 64)} WHERE result_id={result.ResultId}"); }
             catch (PostgresException error) when (error.SqlState == "23514") { immutable = true; }
         }
+        checkpoint.Mark(RecoveryCodeFirstCaseStage.RESULT_STATUS);
         Assert.True(immutable);
+        checkpoint.Phase = RecoveryCodeFirstCasePhase.LOGIN;
+        checkpoint.Mark(RecoveryCodeFirstCaseStage.CHECK_CONTEXT);
         using (var oldSession = await host.Get("/authentication/session", seed.EnrollmentCookies)) Assert.True(oldSession.StatusCode == HttpStatusCode.Unauthorized && NoLoginCookie(oldSession));
-        var browser = await host.Options(); using var anonymous = await host.Get("/authentication/session", browser.Cookies); Assert.True(anonymous.StatusCode == HttpStatusCode.Unauthorized);
+        checkpoint.Mark(RecoveryCodeFirstCaseStage.OPTIONS_GET);
+        var browser = await host.Options();
+        checkpoint.Mark(RecoveryCodeFirstCaseStage.RESULT_POST);
+        using var anonymous = await host.Get("/authentication/session", browser.Cookies);
+        checkpoint.Mark(RecoveryCodeFirstCaseStage.RESULT_STATUS);
+        Assert.True(anonymous.StatusCode == HttpStatusCode.Unauthorized);
+        checkpoint.Phase = RecoveryCodeFirstCasePhase.STATE;
+        checkpoint.Mark(RecoveryCodeFirstCaseStage.DISPOSAL);
+        }
+        catch (Exception error) when (error is not OutOfMemoryException)
+        {
+            throw new RecoveryCodeFirstCaseFailure(checkpoint.Phase, checkpoint.Stage);
+        }
     }
     internal async Task NativeStrongProofRejectsSignatureFlagsOriginChallengeAndUserHandle()
     {

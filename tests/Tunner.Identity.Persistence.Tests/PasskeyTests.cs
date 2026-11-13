@@ -15,8 +15,9 @@ public sealed partial class PasskeyTests(IdentityPostgresFixture fixture) : ICla
 {
     // Recovery's finite cohort reuses the existing real native browser enrollment/sign-in fixtures.
     internal static Task<AuthenticationTestHost> StartRecoveryFixtureAsync(IdentityTestDatabase db, Action<IServiceCollection> configure) => StartPasskeys(db, configure: configure);
-    internal static async Task<(Guid Reference, string Cookies)> SeedRecoveryCredentialAsync(AuthenticationTestHost host, PasskeyAuthenticator key)
-    { var enrolled = await Enroll(host, await Login(host), key); return (enrolled.Reference, enrolled.Pending.Cookies); }
+    internal static async Task<(Guid Reference, string Cookies)> SeedRecoveryCredentialAsync(AuthenticationTestHost host, PasskeyAuthenticator key,
+        RecoveryCodeFirstCaseCheckpoint? checkpoint = null)
+    { var enrolled = await Enroll(host, await Login(host, checkpoint), key, checkpoint); return (enrolled.Reference, enrolled.Pending.Cookies); }
     internal static Task<string> SeedRecoveryCounterAsync(AuthenticationTestHost host, PasskeyAuthenticator key) => SignInPasskey(host, key);
 
     private sealed class Policies : IPasskeyPolicySource
@@ -69,9 +70,14 @@ public sealed partial class PasskeyTests(IdentityPostgresFixture fixture) : ICla
             configure?.Invoke(services);
         });
     }
-    private static async Task<string> Login(AuthenticationTestHost host)
+    private static async Task<string> Login(AuthenticationTestHost host, RecoveryCodeFirstCaseCheckpoint? checkpoint = null)
     {
-        var boot = await host.Options(); using var response = await host.Post("/authentication/sign-in", Command(boot.Key), boot.Cookies, boot.Csrf);
+        if (checkpoint is not null) checkpoint.Phase = RecoveryCodeFirstCasePhase.LOGIN;
+        checkpoint?.Mark(RecoveryCodeFirstCaseStage.OPTIONS_GET);
+        var boot = await host.Options();
+        checkpoint?.Mark(RecoveryCodeFirstCaseStage.SIGN_IN_POST);
+        using var response = await host.Post("/authentication/sign-in", Command(boot.Key), boot.Cookies, boot.Csrf);
+        checkpoint?.Mark(RecoveryCodeFirstCaseStage.SIGN_IN_STATUS);
         response.EnsureSuccessStatusCode(); return Merge(boot.Cookies, response);
     }
     private sealed record Pending(Guid RequestId, Guid CeremonyId, string Cookies, string Csrf, string? ResultHandle = null, bool SignInRequired = false);
@@ -85,13 +91,23 @@ public sealed partial class PasskeyTests(IdentityPostgresFixture fixture) : ICla
         response.EnsureSuccessStatusCode(); var json = await response.Content.ReadFromJsonAsync<JsonElement>();
         return new(id, json.GetProperty("ceremonyId").GetGuid(), Merge(cookies, response), csrf, json.GetProperty("resultHandle").GetString());
     }
-    private static async Task<Pending> Authorize(AuthenticationTestHost host, Pending pending)
+    private static async Task<Pending> Authorize(AuthenticationTestHost host, Pending pending, RecoveryCodeFirstCaseCheckpoint? checkpoint = null)
     {
-        using var options = await host.Get("/authentication/step-up/options", pending.Cookies); options.EnsureSuccessStatusCode();
-        var json = await options.Content.ReadFromJsonAsync<JsonElement>(); Assert.Equal(pending.CeremonyId.ToString("N"), json.GetProperty("operationReference").GetString()); var cookies = Merge(pending.Cookies, options);
+        if (checkpoint is not null) checkpoint.Phase = RecoveryCodeFirstCasePhase.GENERATE;
+        checkpoint?.Mark(RecoveryCodeFirstCaseStage.PROOF_OPTIONS_GET);
+        using var options = await host.Get("/authentication/step-up/options", pending.Cookies);
+        checkpoint?.Mark(RecoveryCodeFirstCaseStage.PROOF_OPTIONS_STATUS);
+        options.EnsureSuccessStatusCode();
+        checkpoint?.Mark(RecoveryCodeFirstCaseStage.PROOF_OPTIONS_BODY);
+        var json = await options.Content.ReadFromJsonAsync<JsonElement>();
+        checkpoint?.Mark(RecoveryCodeFirstCaseStage.PROOF_BINDING);
+        Assert.Equal(pending.CeremonyId.ToString("N"), json.GetProperty("operationReference").GetString()); var cookies = Merge(pending.Cookies, options);
         var csrf = json.GetProperty("csrfToken").GetString()!;
+        checkpoint?.Mark(RecoveryCodeFirstCaseStage.PASSWORD_PROOF_POST);
         using var applied = await host.Post("/authentication/step-up/password", new { requestId = json.GetProperty("requestId").GetGuid(), password = Password }, cookies, csrf);
+        checkpoint?.Mark(RecoveryCodeFirstCaseStage.PROOF_STATUS);
         Assert.True(applied.IsSuccessStatusCode, await applied.Content.ReadAsStringAsync());
+        checkpoint?.Mark(RecoveryCodeFirstCaseStage.RESULT_COOKIE);
         return pending with { Cookies = Merge(cookies, applied), Csrf = csrf, SignInRequired = (await applied.Content.ReadFromJsonAsync<JsonElement>()).TryGetProperty("signInRequired", out var ended) && ended.GetBoolean() };
     }
     private static async Task<(Pending Pending, JsonElement Options)> EnrollmentOptions(AuthenticationTestHost host, Pending pending)
@@ -100,12 +116,23 @@ public sealed partial class PasskeyTests(IdentityPostgresFixture fixture) : ICla
         var json = await response.Content.ReadFromJsonAsync<JsonElement>(); Assert.Equal(pending.RequestId, json.GetProperty("requestId").GetGuid());
         Assert.Equal(pending.CeremonyId, json.GetProperty("ceremonyId").GetGuid()); return (pending, json.GetProperty("publicKey").Clone());
     }
-    private static async Task<(Pending Pending, Guid Reference)> Enroll(AuthenticationTestHost host, string cookies, PasskeyAuthenticator authenticator)
+    private static async Task<(Pending Pending, Guid Reference)> Enroll(AuthenticationTestHost host, string cookies, PasskeyAuthenticator authenticator,
+        RecoveryCodeFirstCaseCheckpoint? checkpoint = null)
     {
-        var pending = await Authorize(host, await Begin(host, cookies)); var ceremony = await EnrollmentOptions(host, pending);
+        if (checkpoint is not null) checkpoint.Phase = RecoveryCodeFirstCasePhase.GENERATE;
+        checkpoint?.Mark(RecoveryCodeFirstCaseStage.START_POST);
+        var started = await Begin(host, cookies);
+        var pending = await Authorize(host, started, checkpoint);
+        if (checkpoint is not null) checkpoint.Phase = RecoveryCodeFirstCasePhase.SAFE_READ;
+        checkpoint?.Mark(RecoveryCodeFirstCaseStage.PROOF_OPTIONS_GET);
+        var ceremony = await EnrollmentOptions(host, pending);
+        checkpoint?.Mark(RecoveryCodeFirstCaseStage.RESULT_POST);
         using var completed = await host.Post("/account/passkeys/enrollment/complete", new { requestId = pending.RequestId, ceremonyId = pending.CeremonyId,
             credential = authenticator.Attest(ceremony.Options, Origin) }, pending.Cookies, pending.Csrf);
-        Assert.True(completed.IsSuccessStatusCode, await completed.Content.ReadAsStringAsync()); var json = await completed.Content.ReadFromJsonAsync<JsonElement>();
+        checkpoint?.Mark(RecoveryCodeFirstCaseStage.RESULT_STATUS);
+        Assert.True(completed.IsSuccessStatusCode, await completed.Content.ReadAsStringAsync());
+        checkpoint?.Mark(RecoveryCodeFirstCaseStage.RESULT_BODY);
+        var json = await completed.Content.ReadFromJsonAsync<JsonElement>();
         return (pending with { Cookies = Merge(pending.Cookies, completed) }, json.GetProperty("credentialReference").GetGuid());
     }
     private static async Task<(Bootstrap Bootstrap, JsonElement Ceremony)> AssertionOptions(AuthenticationTestHost host)
