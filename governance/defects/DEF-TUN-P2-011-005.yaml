@@ -1,9 +1,9 @@
 schema_version: 1
 defect_id: DEF-TUN-P2-011-005
 work_item_id: TUN-P2-011
-classification: CORRECTNESS
+classification: BUG
 severity: SEV-2
-status: OPEN
+status: CLOSED
 environment: committed ce56d3b native passkey recovery first effect
 description: Actual first-case repair raises PostgreSQL23514. The legacy unconditional passkey_ceremony_guard permits PENDING to COMPLETED only for SIGN_IN, REVOKE and STEP_UP; the new RECOVERY owner completes that same transition under a dedicated stricter guard. Both triggers currently execute, so the legacy guard deterministically rejects valid recovery. Preserve both guard functions and historical migrations; add a forward migration dispatching the legacy trigger only when both old and new kinds are non-RECOVERY. Dedicated recovery guard retains both-direction cross-kind rejection. Close only after actual native positive, negative and existing-flow regressions pass.
 expected_behavior_ref: docs/development/P2_011_RECOVERY_REFINEMENT.md; docs/authority/current/development/17_Account_Identity_and_Session_FRD.md
@@ -13,7 +13,9 @@ evidence:
   - src/Modules/Identity/RecoveryPasswordPasskeyApplication.cs
   - artifacts/p2-011-recovery-20261112/candidate-ce56d3b-native/resumed-20261113/private-recovery-summary.json
   - governance/evidence/TUN-P2-011-VALIDATION.json
+  - src/Modules/Identity/Migrations/20261113102314_P2RecoveryPasskeyGuardDispatch.cs
+  - artifacts/p2-011-recovery-20261112/candidate-cb03d1d-native/resumed-20261113/private-recovery-summary.json
 affected_versions:
   - ce56d3b3acebad50ac47bcef94787a5ba1bcabae
 created_at: 2026-11-13T10:24:00Z
-updated_at: 2026-11-13T10:24:00Z
+updated_at: 2026-11-13T10:44:59Z
