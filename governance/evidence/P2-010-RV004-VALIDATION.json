@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "scope_id": "P2-010-RV004",
+  "validation_kind": "COMMITTED",
+  "tested_commit_sha": null,
+  "validated_commit_sha": null,
+  "result": "PENDING",
+  "owned_behavior_paths": ["src/Tunner.Platform/Bff/TunnerBffFoundation.cs"],
+  "proof_plan": "Predeclare the historical010-owned shared boundary before extending existing no-referrer HTML protection to BFF normal/problem responses. Preserve callback Origin/CSRF/exact transport, session, cookie and provider contracts. ActiveP1-018-RV009 additionally classifies existing BffFoundationTests.cs before adding header assertions to real User/Admin success and existing error/exception tests. Actual current qualified recovery privacy failure is retained separately; no assertion is removed.",
+  "engineering_resolution": "Verified Baseline1.6.0 Doc08 governs ASVS security engineering. The authority does not literally prescribe this HTTP header value: no-referrer is already used by Tunner IdentityWebAssets HTML. Extending that existing privacy protection centrally is an implementation correction, not a new Product/session/legal policy. OWASP recommends setting referrer policy explicitly (its generic example is strict-origin-when-cross-origin, not a mandate for no-referrer). MDN documents no-referrer suppression and default cors-mode fetch preserving its real Origin. Keep callback/Origin regressions and all existing assertions.",
+  "primary_references": ["https://cheatsheetseries.owasp.org/cheatsheets/HTTP_Headers_Cheat_Sheet.html#referrer-policy", "https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Referrer-Policy"],
+  "limits": "Technical compatibility only; no Product visual deviation, provider, token/session/permission selection, production policy or release acceptance. Original010 and prior closed revisions remain immutable."
+}

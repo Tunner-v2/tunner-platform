@@ -97,6 +97,7 @@ public static class TunnerBffFoundation
         {
             context.Response.Headers.CacheControl = "no-store";
             context.Response.Headers.XContentTypeOptions = "nosniff";
+            context.Response.Headers["Referrer-Policy"] = "no-referrer";
             if (!context.Request.IsHttps)
             {
                 await WriteProblem(context, StatusCodes.Status400BadRequest, "VALIDATION_ERROR").ConfigureAwait(false);
@@ -173,6 +174,7 @@ public static class TunnerBffFoundation
     {
         context.Response.Headers.CacheControl = "no-store";
         context.Response.Headers.XContentTypeOptions = "nosniff";
+        context.Response.Headers["Referrer-Policy"] = "no-referrer";
         var metadata = new TechnicalProblemMetadata(code, Guid.NewGuid().ToString("N"), "UNSPECIFIED");
         return TechnicalProblemDetails.HttpResult(status, "about:blank", "The request could not be completed.", metadata).ExecuteAsync(context);
     }
