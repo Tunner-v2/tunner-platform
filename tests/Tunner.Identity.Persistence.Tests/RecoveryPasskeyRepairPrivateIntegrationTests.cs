@@ -155,7 +155,44 @@ internal sealed class RecoveryPasskeyRepairPrivateIntegrationTests(IdentityPostg
         if (checkpoint is not null) checkpoint.Phase = RecoveryCodeFirstCasePhase.REPLACE;
         checkpoint?.Mark(RecoveryCodeFirstCaseStage.PASSWORD_PROOF_POST);
         await using var scope = host.Services.CreateAsyncScope();
-        return await Application(scope.ServiceProvider).RepairPasswordWithPasskeyAsync(caller, pending.Request, version, pending.Ceremony, credential, password, confirmation, Http(scope.ServiceProvider), ct);
+        try
+        {
+            return await Application(scope.ServiceProvider).RepairPasswordWithPasskeyAsync(caller, pending.Request, version, pending.Ceremony, credential, password, confirmation, Http(scope.ServiceProvider), ct);
+        }
+        catch (Exception error) when (checkpoint is not null && error is not OutOfMemoryException)
+        {
+            // First finite case only: closed categories, never exception payloads or recursive inner inspection.
+            var postgres = error as PostgresException ?? (error as DbUpdateException)?.InnerException as PostgresException;
+            var stage = postgres is not null ? postgres.SqlState switch
+            {
+                "42703" => RecoveryCodeFirstCaseStage.NATIVE_REPAIR_SQL_42703,
+                "42P01" => RecoveryCodeFirstCaseStage.NATIVE_REPAIR_SQL_42P01,
+                "23514" => RecoveryCodeFirstCaseStage.NATIVE_REPAIR_SQL_23514,
+                "23503" => RecoveryCodeFirstCaseStage.NATIVE_REPAIR_SQL_23503,
+                "23505" => RecoveryCodeFirstCaseStage.NATIVE_REPAIR_SQL_23505,
+                "22P02" => RecoveryCodeFirstCaseStage.NATIVE_REPAIR_SQL_22P02,
+                "42883" => RecoveryCodeFirstCaseStage.NATIVE_REPAIR_SQL_42883,
+                _ => RecoveryCodeFirstCaseStage.NATIVE_REPAIR_SQL_OTHER
+            } : error switch
+            {
+                InvalidOperationException { Message: "Native recovery preparation mutated persisted state." } => RecoveryCodeFirstCaseStage.NATIVE_REPAIR_PREPARATION_MUTATED,
+                InvalidOperationException { Message: "The exact current verified native recovery source is required." } => RecoveryCodeFirstCaseStage.NATIVE_REPAIR_SOURCE_REQUIRED,
+                InvalidOperationException { Message: "Native recovery counter update failed." } => RecoveryCodeFirstCaseStage.NATIVE_REPAIR_COUNTER_UPDATE,
+                InvalidOperationException { Message: "Native recovery credential disappeared." } => RecoveryCodeFirstCaseStage.NATIVE_REPAIR_CREDENTIAL_MISSING,
+                InvalidOperationException { Message: "An exact current recovery credential transition is required." } => RecoveryCodeFirstCaseStage.NATIVE_REPAIR_PASSWORD_TRANSITION,
+                InvalidOperationException { Message: "Strong recovery authority changed after native counter update." } => RecoveryCodeFirstCaseStage.NATIVE_REPAIR_AFTER_NATIVE_AUTHORITY,
+                InvalidOperationException { Message: "Recovery native/password/result effects lost their causal witnesses." } => RecoveryCodeFirstCaseStage.NATIVE_REPAIR_CAUSAL_WITNESS,
+                InvalidOperationException { Message: "Recovery authority changed before final commit." } => RecoveryCodeFirstCaseStage.NATIVE_REPAIR_FINAL_AUTHORITY,
+                InvalidOperationException => RecoveryCodeFirstCaseStage.NATIVE_REPAIR_INVALID_OPERATION,
+                FormatException => RecoveryCodeFirstCaseStage.NATIVE_REPAIR_FORMAT,
+                JsonException => RecoveryCodeFirstCaseStage.NATIVE_REPAIR_JSON,
+                System.Security.Cryptography.CryptographicException => RecoveryCodeFirstCaseStage.NATIVE_REPAIR_CRYPTO,
+                InvalidCastException => RecoveryCodeFirstCaseStage.NATIVE_REPAIR_INVALID_CAST,
+                _ => RecoveryCodeFirstCaseStage.NATIVE_REPAIR_OTHER
+            };
+            checkpoint.Mark(stage);
+            throw new RecoveryCodeFirstCaseFailure(RecoveryCodeFirstCasePhase.REPLACE, stage);
+        }
     }
 
     internal async Task NativeStrongProofRepairsPasswordWithoutCodeCompositionOrLogin()
