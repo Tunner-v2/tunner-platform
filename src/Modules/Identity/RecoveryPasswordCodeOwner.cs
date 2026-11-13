@@ -27,7 +27,7 @@ internal sealed class RecoveryPasswordCodeOwner(RecoveryCaseApplication applicat
         var actor = new RecoveryCaseCaller(snapshot.AccountId, caller.BrowserDigest, caller.Origin, caller.NetworkDigest);
         await application.LockOriginal(actor, requestId, ct).ConfigureAwait(false);
         Case = await application.Original(actor, requestId, ct).ConfigureAwait(false);
-        if (Case is null || Case.EntryId != entryId || Case.CaseId != caseId || Case.ContextDigest != request.ContextDigest ||
+        if (Case is null || Case.ProofKind != "CODE" || Case.EntryId != entryId || Case.CaseId != caseId || Case.ContextDigest != request.ContextDigest ||
             RecoveryCaseApplication.OperationId(Case) != request.OwnerOperationId || Case.Goal != nameof(RecoveryCaseGoal.RepairPassword)) return null;
         facts = await application.LoadAccountFacts(Case.AccountId, null, ct).ConfigureAwait(false);
         sets = await application.CodeSets(Case.AccountId, ct).ConfigureAwait(false);
@@ -42,8 +42,8 @@ internal sealed class RecoveryPasswordCodeOwner(RecoveryCaseApplication applicat
                 !originalOutbox || !RecoveryCaseApplication.PasswordResultCurrent(Entry, Case, Result, facts.User, at))) return null;
         originalConcurrencyStamp = facts.User.ConcurrencyStamp;
         var profile = application.PasswordCurrent(caller.Origin, at);
-        return new(db, db.Database.CurrentTransaction, request, facts.Account, Case.SetReference, Case.ExpectedSetLifecycleVersion,
-            Enum.Parse<RecoveryCodeUsageAdmission>(Case.UsageAdmission, false), Case.ExpectedUsageVersion, Case.PolicyVersion,
+        return new(db, db.Database.CurrentTransaction, request, facts.Account, Case.SetReference!.Value, Case.ExpectedSetLifecycleVersion!.Value,
+            Enum.Parse<RecoveryCodeUsageAdmission>(Case.UsageAdmission!, false), Case.ExpectedUsageVersion, Case.PolicyVersion,
             profile.Metadata.ApprovalEvidenceReferences[0], profile.Metadata.EffectiveInterval, Result?.ResultId.ToString("N"));
     }
     public Task<RecoveryCodeConsumptionOwnerOutcome> ApplyAsync(IdentityPersistenceDbContext db, RecoveryCodeConsumptionRequest request,

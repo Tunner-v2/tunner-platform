@@ -23,6 +23,11 @@ internal sealed class RecoveryEntryRow
     public string State { get; set; } = "OPEN";
     public long Version { get; set; } = 1;
     public DateTimeOffset? EndedAt { get; set; }
+    public Guid? PasskeyCeremonyId { get; set; }
+    public string? PasskeyOptionsJson { get; set; }
+    public string? PasskeyProfileVersion { get; set; }
+    public string? PasskeyPolicyVersion { get; set; }
+    public DateTimeOffset? PasskeyExpiresAt { get; set; }
     public override string ToString() => nameof(RecoveryEntryRow);
 }
 internal static class RecoveryEntryModelConfiguration
@@ -35,6 +40,7 @@ internal static class RecoveryEntryModelConfiguration
             {
                 t.HasCheckConstraint("ck_recovery_entry_binding", "length(browser_digest)=64 AND length(previous_cookie_digest)=64 AND length(network_digest)=64 AND length(identifier_digest)=64 AND length(goal_reference)>0 AND length(policy_version)>0 AND length(processing_reference)>0 AND length(retention_reference)>0 AND jsonb_typeof(policy_snapshot::jsonb)='object'");
                 t.HasCheckConstraint("ck_recovery_entry_state", "expires_at>created_at AND recovery_expires_at>expires_at AND ((state='OPEN' AND version=1 AND ended_at IS NULL) OR (state IN ('CANCELLED','REPAIRED') AND version=2 AND ended_at>=created_at AND ended_at<expires_at))");
+                t.HasCheckConstraint("ck_recovery_entry_passkey", RecoveryPasskeyMigrationSql.EntryPresentation);
             });
             b.HasKey(x => x.EntryId); b.Property(x => x.EntryId).ValueGeneratedNever();
             b.HasIndex(x => new { x.BrowserDigest, x.RequestId }).IsUnique(); b.HasIndex(x => x.ExpiresAt);

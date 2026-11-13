@@ -13,7 +13,11 @@
     "src/Modules/Identity/Migrations/20261112222758_P2AccountRecoveryCase.cs",
     "src/Modules/Identity/Migrations/20261113000411_P2RecoveryPasswordRepair.Designer.cs",
     "src/Modules/Identity/Migrations/20261113000411_P2RecoveryPasswordRepair.cs",
+    "src/Modules/Identity/Migrations/20261113084206_P2RecoveryPasskeyRepair.Designer.cs",
+    "src/Modules/Identity/Migrations/20261113084206_P2RecoveryPasskeyRepair.cs",
     "src/Modules/Identity/Migrations/IdentityPersistenceDbContextModelSnapshot.cs",
+    "src/Modules/Identity/PasskeyRecoveryApplication.cs",
+    "src/Modules/Identity/PasskeyRows.cs",
     "src/Modules/Identity/RecoveryBrowserService.cs",
     "src/Modules/Identity/RecoveryCaseApplication.cs",
     "src/Modules/Identity/RecoveryCaseCodeOwner.cs",
@@ -22,15 +26,20 @@
     "src/Modules/Identity/RecoveryCaseRows.cs",
     "src/Modules/Identity/RecoveryEndpoints.cs",
     "src/Modules/Identity/RecoveryEntryRows.cs",
+    "src/Modules/Identity/RecoveryPasskeyContracts.cs",
+    "src/Modules/Identity/RecoveryPasskeyMigrationSql.cs",
     "src/Modules/Identity/RecoveryPasswordApplication.cs",
     "src/Modules/Identity/RecoveryPasswordCodeOwner.cs",
     "src/Modules/Identity/RecoveryPasswordContracts.cs",
     "src/Modules/Identity/RecoveryPasswordMigrationSql.cs",
+    "src/Modules/Identity/RecoveryPasswordPasskeyApplication.cs",
     "src/Modules/Identity/RecoveryPasswordPresentation.cs",
     "src/Tunner.User.Bff/TunnerAuthenticatedUserBffHost.cs",
+    "tests/Tunner.Identity.Persistence.Tests/PasskeyTests.cs",
     "tests/Tunner.Identity.Persistence.Tests/RecoveryCasePrivateIntegrationTests.cs",
     "tests/Tunner.Identity.Persistence.Tests/RecoveryCodeFiniteNativeExecution.cs",
     "tests/Tunner.Identity.Persistence.Tests/RecoveryCodeModelTests.cs",
+    "tests/Tunner.Identity.Persistence.Tests/RecoveryPasskeyRepairPrivateIntegrationTests.cs",
     "tests/Tunner.Identity.Persistence.Tests/RecoveryPasswordRepairPrivateIntegrationTests.cs",
     "tools/recovery-native-testing/cases.json",
     "web/apps/user/authentication.css",
@@ -53,7 +62,7 @@
     "web/tests/recovery-case/presentation.spec.ts"
   ],
   "result": "PENDING",
-  "phase": "CODE_REPAIR_VERIFIED_REMAINING_TIERS_OPEN",
+  "phase": "STRONG_PROOF_IMPLEMENTED_RUNTIME_PENDING",
   "predecessor": "TUN-P2-010 DONE with explicit scoped Product acceptance; actual runtime734828a and all prior evidence retained.",
   "authority_scope": "Current FRD17 recovery proof hierarchy, explicit policy-selected RecoveryResult effects, idempotency and enumeration resistance; reuse existing Identity/BFF/proof/verifier/session owners. No business policy, external provider or UX decision invented.",
   "startup": "Native BACKLOG to REFINEMENT transition ALLOWED. Confirmed007/008 source-currentness reconciled at c5d6a6b using actual734 shared regressions, ordered82/112 ownership and retained original-source method/UI evidence. No original full suite relabelled. Build/verify targeted context and complete mandatory role/scope reviews before implementation eligibility.",
@@ -63,6 +72,15 @@
   "owner_visual_todo": "governance/todos/TODO-TUN-P2-011-DESIGN001.yaml",
   "tests_executed_for_this_feature": true,
   "working_source_checkpoint": {
+    "strong_increment_working": {
+      "scoped_static_checks": "PASS:26 exact candidate paths secret-scanned, no matches;22 eligible source files against existing four unchanged SAST rules, no matches;95 C#/JS registry ordered parity/uniqueness PASS. These are delta checks, not relabelling the earlier separately triaged37-file raw alert or a full feature/runtime acceptance.",
+      "state": "Working source only, not current committed/runtime qualification. Native assertion owner and protected-browser/CSRF HTTP bindings implemented; CODE-only behavior/default optional JSON preserved by design, not yet regressed on this increment.",
+      "behavior": "Real native MakeRequestOptions/PerformAssertion; exact case/user/credential/profile binding; final native counter/password/stamp/result/outbox transaction; no StepUp/session/code-set substitute. Strong-only composition accepts no code service or set. Qualified explicit method mapping only, no production policy or AAL3/attestation claim.",
+      "neutral_original": "Five nullable public-presentation fields on existing RecoveryEntry preserve real/neutral discoverable challenge, global expiry and profile after pointer loss, guarded immutable-once-set under entry lock. Neutral entries create no Account/RecoveryCase/native proof/effect. Current retention/processing inputs apply.",
+      "builds": "Initial Identity compilation found CA2219 throw-in-finally and CA1822 static-member issues; narrowed fixes preserved native mutation guard/cleanup. Identity PASS0warnings0errors15.86s. Official forward migration20261113084206 generated with Designer/snapshot, hardened Up and guard-first Down protecting neutral presentations too. Initial test build found only CA1861 fixture constant-array argument; staticreadonly correction, then test project PASS0warnings0errors8.25s. Official EF pending-model check PASS. No analyzer suppression.",
+      "tests": "Eight new actual-native passkey cases authored with existing real authenticator/enrollment/sign-in fixture via three test-only wrappers; original tests/assertions untouched. C#/JS fixed registry95 ordered parity/uniqueness PASS, expected capacity96DBs. New95 suite NOT_RUN; code-tier87 source62ed02f remains separately validated.",
+      "scope": "No UI changes, source-authority writes, new packages, fake verifier success, generic runner or image work. Repair UI011-V04 still awaits Product disposition; contact+risk/governed-review/notification handoff and full feature gates remain open."
+    },
     "strong_proposal_static_review": "One focused independent security/QA agent reviewed the unapplied strong-proof-next patch/preimages against actual62ed02f source and FRD17 section10: no actionable findings; all preimage hashes match. Native assertion/case/credential binding, replay/counter currentness, lock/transaction ownership, password/stamp/result/outbox guards, optional code-free composition and CODE digest/default-JSON compatibility assessed. Preliminary CodeSets concern explicitly withdrawn because Digest excludes it. This is static pre-apply review only, not runtime/final-gate PASS. Official EF migration/Designer/snapshot will be generated after model build; reviewed artifact DDL is intent only.",
     "code_repair_verified": {
       "tested_source_sha": "62ed02f6a436d40e5a3389dcaa54a1136da1aa93",
@@ -110,5 +128,5 @@
   "startup_review_ref": "governance/evidence/TUN-P2-011-ROLE-REVIEWS.json",
   "compatibility_ref": "governance/evidence/P2-011-COMPATIBILITY-SCOPE.json",
   "native_eligibility": "Native work start011 ELIGIBLE0findings; context110554c generated/verifiedCURRENT before source implementation. Five compatibility revisions ACTIVE. User approved011-V01–V03; exact visual grant recorded in TUN-P2-011-VISUAL-CONSENT.json, separate from feature acceptance.",
-  "next_action": "Commit scoped actual62ed02f proof/DEF-003 closure and updated handoff without unrelated dirty paths. Review unapplied strong-proof artifact patch through focused security/QA; resolve actionable findings and register PasskeyRows legacy scope before implementation. Apply only reviewed implementation/model changes, officially generate forward EF migration/Designer/snapshot and required hardening, then real strong-proof tests/HTTP wiring. Preserve valid code-tier87 evidence without relabelling it as strong-tier proof. Repair UI011-V04 remains pending Product disposition. Contact/risk/governed-review/notification handoff, actual per-item UI gates and feature acceptance remain before whole011 DONE. No image work, external publication or source-authority writes."
+  "next_action": "Finish scoped source/security checks, commit the strong/native owner+wire/model/test increment and scoped records, build/bind existing native host, then mandatory current-source protocol/resources/PRIVATE_RECOVERY95. Isolate any failure before equivalent retries; no new framework or relaxed native validation. Keep actual62ed02f code-tier87 proof and source-specific history intact. Repair UI011-V04 remains pending Product disposition. Contact/risk/governed-review/notification handoff, actual per-item UI gates and feature acceptance remain before whole011 DONE. No image work, external publication or source-authority writes."
 }

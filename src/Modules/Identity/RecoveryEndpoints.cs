@@ -9,20 +9,24 @@ namespace Tunner.Identity.Persistence;
 
 public static class RecoveryEndpoints
 {
-    private static readonly string[] Commands = ["start", "result", "cancel", "repair"];
+    private static readonly string[] Commands = ["start", "result", "cancel", "repair", "passkey/options", "passkey/repair"];
     public static IServiceCollection AddTunnerRecoveryPassword(this IServiceCollection services)
     {
         ArgumentNullException.ThrowIfNull(services);
-        Type[] required = [typeof(RecoveryCodeApplication), typeof(AuthenticationApplication), typeof(AuthenticationEndpoints.Surface),
+        Type[] required = [typeof(AuthenticationApplication), typeof(AuthenticationEndpoints.Surface),
             typeof(IRecoveryPasswordPolicySource), typeof(IRecoveryCaseHierarchySource), typeof(IRecoveryPasswordPresentationSource),
             typeof(IRegistrationPasswordBlocklist), typeof(IAuthenticationPolicySource), typeof(AuthenticationPartitionKey)];
         if (required.Any(type => services.Count(x => x.ServiceType == type) != 1) || services.Any(x => x.ServiceType == typeof(RecoveryBrowserService)))
             throw new InvalidOperationException("Recovery browser composition requires exact explicit approved owner/profile/publication capabilities.");
+        var codeOwners = services.Count(x => x.ServiceType == typeof(RecoveryCodeApplication));
+        var nativeOwners = services.Count(x => x.ServiceType == typeof(PasskeyApplication));
+        if (codeOwners > 1 || nativeOwners > 1 || codeOwners + nativeOwners == 0)
+            throw new InvalidOperationException("Recovery requires at least one exact explicitly composed native proof capability.");
         services.AddScoped(provider => new RecoveryCaseApplication(provider.GetRequiredService<IdentityPersistenceDbContext>(),
-            provider.GetRequiredService<RecoveryCodeApplication>(), provider.GetRequiredService<AuthenticationApplication>(), provider.GetRequiredService<TimeProvider>(),
+            provider.GetService<RecoveryCodeApplication>(), provider.GetRequiredService<AuthenticationApplication>(), provider.GetRequiredService<TimeProvider>(),
             provider.GetService<IRecoveryCasePolicySource>(), provider.GetRequiredService<IRecoveryCaseHierarchySource>(),
             provider.GetRequiredService<IRecoveryPasswordPolicySource>(), provider.GetRequiredService<IRegistrationPasswordBlocklist>(),
-            provider.GetRequiredService<IAuthenticationPolicySource>(), provider.GetRequiredService<AuthenticationPartitionKey>()));
+            provider.GetRequiredService<IAuthenticationPolicySource>(), provider.GetRequiredService<AuthenticationPartitionKey>(), provider.GetService<PasskeyApplication>()));
         services.AddScoped(provider => new RecoveryBrowserService(provider.GetRequiredService<RecoveryCaseApplication>(),
             provider.GetRequiredService<IRecoveryPasswordPolicySource>(), provider.GetRequiredService<IRecoveryPasswordPresentationSource>(),
             provider.GetRequiredService<IAuthenticationPolicySource>(), provider.GetRequiredService<IDataProtectionProvider>(),

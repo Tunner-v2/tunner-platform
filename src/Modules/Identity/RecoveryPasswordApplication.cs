@@ -126,25 +126,13 @@ internal sealed partial class RecoveryCaseApplication
         if (entry is null || !EntryActor(caller, entry)) return new("NOT_FOUND_OR_NOT_DISCLOSABLE");
         if (entry.State == "REPAIRED") return await ReadPasswordEntryAsync(caller, requestId, ct).ConfigureAwait(false);
         if (expectedVersion != entry.Version || entry.State != "OPEN" || !EntryCurrent(caller, entry, clock.GetUtcNow())) return new("RECOVERY_PROOF_REJECTED", entry);
-        // The explicit entry-work budget also bounds expensive anonymous repair preparation, for real and neutral entries alike.
-        // This separate short abuse transaction closes BEFORE the code executor starts its sole owner-effect transaction.
-        await using (var budget = await database.Database.BeginTransactionAsync(ct).ConfigureAwait(false))
-        {
-            var auth = authenticationPolicies!.RequireEffective(clock.GetUtcNow()); auth.Validate();
-            var allowed = await authentication.AllowAsync("recovery-entry:N:" + caller.NetworkDigest, profile.Values.EntryNetworkLimit, auth, clock.GetUtcNow(), ct).ConfigureAwait(false) &&
-                await authentication.AllowAsync("recovery-entry:I:" + entry.IdentifierDigest, profile.Values.EntryIdentifierLimit, auth, clock.GetUtcNow(), ct).ConfigureAwait(false);
-            await database.SaveChangesAsync(ct).ConfigureAwait(false); await budget.CommitAsync(ct).ConfigureAwait(false);
-            if (!allowed) return new("RATE_OR_ABUSE_LIMITED", entry);
-        }
-        if (password is null || password != confirmation || password.EnumerateRunes().Count() < profile.Values.PasswordMinimumLength ||
-            password.EnumerateRunes().Count() > profile.Values.PasswordMaximumLength || await passwordBlocklist!.IsBlockedAsync(password, ct).ConfigureAwait(false))
-            return new("VALIDATION_ERROR", entry);
-        var hasher = new PasswordHasher<IdentityUserAdapter>(Options.Create(new PasswordHasherOptions
-            { CompatibilityMode = PasswordHasherCompatibilityMode.IdentityV3, IterationCount = profile.Values.PasswordHashIterations }));
-        var preparedHash = hasher.HashPassword(new IdentityUserAdapter(), password);
+        var preparation = await PrepareRecoveryPasswordAsync(caller, entry, profile, password, confirmation, ct).ConfigureAwait(false);
+        if (preparation.Error is not null) return new(preparation.Error, entry);
+        var preparedHash = preparation.Hash!;
         var recovery = await database.Set<RecoveryCaseRow>().AsNoTracking().SingleOrDefaultAsync(x => x.EntryId == entry.EntryId, ct).ConfigureAwait(false);
-        if (recovery is null) return new("RECOVERY_PROOF_REJECTED", entry);
+        if (recovery is null || recovery.ProofKind != "CODE") return new("RECOVERY_PROOF_REJECTED", entry);
         var request = new RecoveryCodeConsumptionRequest(recovery.AccountId, OperationId(recovery), requestId.ToString("N"), recovery.ContextDigest, caller.Origin, caller.NetworkDigest);
+        if (codes is null) return new("RECOVERY_UNAVAILABLE", entry);
         var owner = new RecoveryPasswordCodeOwner(this, database, caller, entry.EntryId, recovery.CaseId, preparedHash, profile.Snapshot, clock);
         var consumed = await codes.ExecuteConsumptionOutcomeAsync(request, code, owner, ct).ConfigureAwait(false);
         return new(consumed.ErrorCode is null ? null : "RECOVERY_PROOF_REJECTED", owner.Entry ?? entry,
@@ -172,7 +160,9 @@ internal sealed partial class RecoveryCaseApplication
         try { decision = hierarchy!.RequireCurrent(new(row.CaseId, row.RequestId, PasswordSelectionContext(entry), row.PolicyVersion, RecoveryCaseGoal.RepairPassword, posture), at); }
         catch (InvalidOperationException) { return null; }
         catch (ArgumentException) { return null; }
-        if (!Admitted(decision, posture, at) || decision.CodeSelection is not { } choice || !sets.Any(x => x.SetReference == choice.SetReference &&
+        if (decision.PasskeySelection is not null)
+            return PreparePasskeyPasswordCase(row, caller, entry, facts, profile, posture, decision, at);
+        if (codes is null || !Admitted(decision, posture, at) || decision.CodeSelection is not { } choice || !sets.Any(x => x.SetReference == choice.SetReference &&
             x.State == "ACTIVE" && x.LifecycleVersion == choice.LifecycleVersion && (profile.Values.RequireExactCodeUsageVersion ? choice.UsageVersion == x.UsageVersion : choice.UsageVersion is null))) return null;
         row.SetReference = choice.SetReference; row.ExpectedSetLifecycleVersion = choice.LifecycleVersion; row.ExpectedUsageVersion = choice.UsageVersion;
         row.ContextDigest = Context(row); row.HierarchySnapshot = decision.Snapshot();
@@ -183,6 +173,8 @@ internal sealed partial class RecoveryCaseApplication
     internal bool PasswordAuthorityCurrent(RecoveryEntryCaller caller, RecoveryEntryRow entry, RecoveryCaseRow row, RecoveryCaseLockedFacts facts,
         IReadOnlyList<RecoveryCaseCodeSetFacts> sets, DateTimeOffset at, bool repaired, RecoveryCodeEntryRow? consumptionWitness = null)
     {
+        if (row.ProofKind == "PASSKEY") return PasskeyPasswordAuthorityCurrent(caller, entry, row, facts, at, repaired);
+        if (row.ProofKind != "CODE") return false;
         var profile = PasswordCurrent(caller.Origin, at);
         var posture = facts.Value() with { SecurityStampDigest = row.PriorSecurityStampDigest!, PasswordAvailable = true, CodeSets = sets };
         var decision = hierarchy!.RequireCurrent(new(row.CaseId, row.RequestId, PasswordSelectionContext(entry), row.PolicyVersion, RecoveryCaseGoal.RepairPassword, posture), at);
@@ -240,6 +232,7 @@ internal sealed partial class RecoveryCaseApplication
         var row = await database.Set<RecoveryCaseRow>().SingleOrDefaultAsync(x => x.EntryId == entry.EntryId, ct).ConfigureAwait(false);
         if (row is null) return await EntryFinish(tx, new("NOT_FOUND_OR_NOT_DISCLOSABLE"), ct).ConfigureAwait(false);
         var facts = await LoadAccountFacts(row.AccountId, null, ct).ConfigureAwait(false);
+        if (row.ProofKind == "PASSKEY") return await DescribePasskeyEntry(caller, entry, row, facts, tx, ct).ConfigureAwait(false);
         var sets = await CodeSets(row.AccountId, ct).ConfigureAwait(false);
         var result = await database.Set<RecoveryResultRow>().SingleOrDefaultAsync(x => x.CaseId == row.CaseId, ct).ConfigureAwait(false);
         var consumed = await database.Set<RecoveryCodeEntryRow>().AsNoTracking().SingleOrDefaultAsync(x => x.AccountId == row.AccountId && x.ConsumedByOperationId == OperationId(row), ct).ConfigureAwait(false);
@@ -257,7 +250,7 @@ internal sealed partial class RecoveryCaseApplication
         row.EndedAt == result.RecordedAt && entry.EndedAt == row.EndedAt && row.EndedAt >= row.CreatedAt && row.EndedAt < row.ExpiresAt && row.EndedAt <= at &&
         result.TargetSessionId is null && result.SessionOutboxEventId is null && result.RepairOutboxEventId is not null && result.PolicySnapshot == row.PolicySnapshot &&
         result.PolicyVersion == row.PolicyVersion && result.ContextDigest == row.ContextDigest && result.HierarchySnapshot == row.HierarchySnapshot &&
-        result.SetReference == row.SetReference && result.SetLifecycleVersion == row.ExpectedSetLifecycleVersion &&
+        result.ProofKind == row.ProofKind && result.SetReference == row.SetReference && result.SetLifecycleVersion == row.ExpectedSetLifecycleVersion &&
         result.PriorPasswordDigest == row.PriorPasswordDigest && result.PriorSecurityStampDigest == row.PriorSecurityStampDigest &&
         user.PasswordHash is not null && AuthenticationIdentity.Digest(user.PasswordHash) == result.RepairedPasswordDigest &&
         !string.IsNullOrWhiteSpace(user.SecurityStamp) && AuthenticationIdentity.Digest(user.SecurityStamp) == result.RepairedSecurityStampDigest &&

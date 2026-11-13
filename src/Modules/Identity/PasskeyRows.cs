@@ -90,7 +90,7 @@ internal static class PasskeyModelConfiguration
             b.ToTable("passkey_ceremonies", "identity", t =>
             {
                 t.HasCheckConstraint("ck_passkey_eligibility_evidence", "kind<>'REVOKE' OR state<>'COMPLETED' OR (eligibility_policy_version IS NOT NULL AND eligibility_evidence_reference IS NOT NULL AND eligibility_from IS NOT NULL AND eligibility_includes_from IS NOT NULL AND eligibility_includes_until IS NOT NULL)");
-                t.HasCheckConstraint("ck_passkey_ceremony_state", "state IN ('PENDING','AUTHORIZED','COMPLETED','REJECTED','EXPIRED') AND kind IN ('ENROLL','SIGN_IN','REVOKE','STEP_UP')");
+                t.HasCheckConstraint("ck_passkey_ceremony_state", "state IN ('PENDING','AUTHORIZED','COMPLETED','REJECTED','EXPIRED') AND kind IN ('ENROLL','SIGN_IN','REVOKE','STEP_UP','RECOVERY')");
                 t.HasCheckConstraint("ck_passkey_proof_binding", "kind<>'STEP_UP' OR (step_up_request_id IS NOT NULL AND account_id IS NOT NULL AND session_id IS NOT NULL AND bound_operation_id IS NOT NULL AND bound_correlation_id IS NOT NULL AND bound_operation IS NOT NULL AND bound_context IS NOT NULL AND bound_resource_id IS NOT NULL AND bound_expected_version IS NOT NULL AND bound_expected_version >= 0 AND bound_context_digest IS NOT NULL)");
                 t.HasCheckConstraint("ck_passkey_ceremony_bounds", "expires_at > created_at AND recovery_expires_at > created_at AND version >= 1 AND expected_version >= 0 AND length(browser_digest)=64");
                 t.HasCheckConstraint("ck_passkey_ceremony_end", "(state IN ('PENDING','AUTHORIZED') AND ended_at IS NULL) OR (state NOT IN ('PENDING','AUTHORIZED') AND ended_at IS NOT NULL AND ended_at >= created_at AND protected_state='')");

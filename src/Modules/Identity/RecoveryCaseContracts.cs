@@ -100,6 +100,8 @@ public sealed record RecoveryCaseHierarchyDecision(bool RecoveryCodeAllowed, boo
 {
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public RecoveryCaseCodeSelection? CodeSelection { get; init; }
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public RecoveryCasePasskeySelection? PasskeySelection { get; init; }
     internal string Snapshot() => JsonSerializer.Serialize(this);
     public override string ToString() => nameof(RecoveryCaseHierarchyDecision);
 }

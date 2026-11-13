@@ -18,7 +18,7 @@ internal sealed class RecoveryCaseCodeOwner(RecoveryCaseApplication application,
             request.Origin != caller.Origin || request.NetworkDigest != caller.NetworkDigest || request.CorrelationId != requestId.ToString("N")) return null;
         await application.LockOriginal(caller, requestId, ct).ConfigureAwait(false);
         Case = await application.Original(caller, requestId, ct).ConfigureAwait(false);
-        if (Case is null || Case.CaseId != caseId || !RecoveryCaseApplication.Actor(Case, caller) ||
+        if (Case is null || Case.ProofKind != "CODE" || Case.CaseId != caseId || !RecoveryCaseApplication.Actor(Case, caller) ||
             request.OwnerOperationId != RecoveryCaseApplication.OperationId(Case) || request.ContextDigest != Case.ContextDigest) return null;
         if (Case.Goal != nameof(RecoveryCaseGoal.ContainSelectedTunnerSession) || Case.TargetSessionId is not { } target) return null;
         facts = await application.LoadFacts(caller, target, ct).ConfigureAwait(false);
@@ -30,8 +30,8 @@ internal sealed class RecoveryCaseCodeOwner(RecoveryCaseApplication application,
             (Case.State == "PENDING_CODE" ? !application.PendingCurrent(caller, Case, facts, at) || Result is not null :
                 !originalOutboxObserved || !RecoveryCaseApplication.CompletedCurrent(Case, facts.Session, Result, at))) return null;
         var policy = application.Current(caller, at); var decision = application.Decision(Case, facts, at);
-        return new(db, db.Database.CurrentTransaction, request, facts.Account, Case.SetReference, Case.ExpectedSetLifecycleVersion,
-            Enum.Parse<RecoveryCodeUsageAdmission>(Case.UsageAdmission, false), Case.ExpectedUsageVersion, Case.PolicyVersion,
+        return new(db, db.Database.CurrentTransaction, request, facts.Account, Case.SetReference!.Value, Case.ExpectedSetLifecycleVersion!.Value,
+            Enum.Parse<RecoveryCodeUsageAdmission>(Case.UsageAdmission!, false), Case.ExpectedUsageVersion, Case.PolicyVersion,
             decision.EvidenceReference, policy.Metadata.EffectiveInterval, Result?.ResultId.ToString("N"));
     }
 

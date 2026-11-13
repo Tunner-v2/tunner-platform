@@ -17,10 +17,15 @@ internal sealed class RecoveryCaseRow
     public long? ExpectedSessionVersion { get; set; }
     public long ExpectedAccountVersion { get; set; }
     public string AccountState { get; set; } = string.Empty;
-    public Guid SetReference { get; set; }
-    public long ExpectedSetLifecycleVersion { get; set; }
+    public string ProofKind { get; set; } = "CODE";
+    public Guid? SetReference { get; set; }
+    public long? ExpectedSetLifecycleVersion { get; set; }
+    public Guid? PasskeyCredentialReference { get; set; }
+    public long? ExpectedPasskeyVersion { get; set; }
+    public long? ExpectedPasskeyUsageVersion { get; set; }
+    public Guid? PasskeyCeremonyId { get; set; }
     public long? ExpectedUsageVersion { get; set; }
-    public string UsageAdmission { get; set; } = string.Empty;
+    public string? UsageAdmission { get; set; }
     public string PolicyVersion { get; set; } = string.Empty;
     public string PolicySnapshot { get; set; } = string.Empty;
     public string HierarchySnapshot { get; set; } = string.Empty;
@@ -56,8 +61,17 @@ internal sealed class RecoveryResultRow
     public string PolicyVersion { get; set; } = string.Empty;
     public string PolicySnapshot { get; set; } = string.Empty;
     public string HierarchySnapshot { get; set; } = string.Empty;
-    public Guid SetReference { get; set; }
-    public long SetLifecycleVersion { get; set; }
+    public string ProofKind { get; set; } = "CODE";
+    public Guid? SetReference { get; set; }
+    public long? SetLifecycleVersion { get; set; }
+    public Guid? PasskeyCredentialReference { get; set; }
+    public long? PasskeyVersion { get; set; }
+    public long? PasskeyUsageVersion { get; set; }
+    public Guid? PasskeyCeremonyId { get; set; }
+    public string? PasskeyMethod { get; set; }
+    public string? PasskeyAssurance { get; set; }
+    public string? NativeBeforeDigest { get; set; }
+    public string? NativeAfterDigest { get; set; }
     public DateTimeOffset RecordedAt { get; set; }
     public string UnresolvedEffectsJson { get; set; } = string.Empty;
     public string ProcessingReference { get; set; } = string.Empty;
@@ -81,9 +95,11 @@ internal static class RecoveryCaseModelConfiguration
             b.ToTable("recovery_cases", "identity", t =>
             {
                 t.HasCheckConstraint("ck_recovery_case_binding", RecoveryPasswordMigrationSql.CaseBinding);
-                t.HasCheckConstraint("ck_recovery_case_versions", RecoveryPasswordMigrationSql.CaseVersions);
-                t.HasCheckConstraint("ck_recovery_case_state", RecoveryPasswordMigrationSql.CaseState);
+                t.HasCheckConstraint("ck_recovery_case_versions", RecoveryPasskeyMigrationSql.CaseVersions);
+                t.HasCheckConstraint("ck_recovery_case_state", RecoveryPasskeyMigrationSql.CaseState);
             });
+            b.Property(x => x.ProofKind).HasDefaultValue("CODE");
+            b.HasOne<PasskeyCredentialRow>().WithMany().HasForeignKey(x => x.PasskeyCredentialReference).HasConstraintName("fk_recovery_case_passkey").OnDelete(DeleteBehavior.Restrict);
             b.HasKey(x => x.CaseId); b.Property(x => x.CaseId).ValueGeneratedNever();
             b.HasIndex(x => new { x.AccountId, x.OriginalBrowserDigest, x.RequestId }).IsUnique();
             b.HasIndex(x => x.ExpiresAt); b.HasIndex(x => x.ResultId).IsUnique(); b.Property(x => x.Version).IsConcurrencyToken();
@@ -97,8 +113,10 @@ internal static class RecoveryCaseModelConfiguration
         {
             b.ToTable("recovery_results", "identity", t =>
             {
-                t.HasCheckConstraint("ck_recovery_result_shape", RecoveryPasswordMigrationSql.ResultShape);
+                t.HasCheckConstraint("ck_recovery_result_shape", RecoveryPasskeyMigrationSql.ResultShape);
             });
+            b.Property(x => x.ProofKind).HasDefaultValue("CODE");
+            b.HasOne<PasskeyCredentialRow>().WithMany().HasForeignKey(x => x.PasskeyCredentialReference).HasConstraintName("fk_recovery_result_passkey").OnDelete(DeleteBehavior.Restrict);
             b.HasKey(x => x.ResultId); b.Property(x => x.ResultId).ValueGeneratedNever(); b.HasIndex(x => x.CaseId).IsUnique();
             b.HasOne<RecoveryCaseRow>().WithMany().HasForeignKey(x => x.CaseId).OnDelete(DeleteBehavior.Restrict);
             b.HasOne<AuthenticationSessionRow>().WithMany().HasForeignKey(x => x.TargetSessionId).OnDelete(DeleteBehavior.Restrict);

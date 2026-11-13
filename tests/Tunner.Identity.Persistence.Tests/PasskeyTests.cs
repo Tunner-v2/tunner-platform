@@ -13,6 +13,12 @@ namespace Tunner.Identity.Persistence.Tests;
 
 public sealed partial class PasskeyTests(IdentityPostgresFixture fixture) : IClassFixture<IdentityPostgresFixture>
 {
+    // Recovery's finite cohort reuses the existing real native browser enrollment/sign-in fixtures.
+    internal static Task<AuthenticationTestHost> StartRecoveryFixtureAsync(IdentityTestDatabase db, Action<IServiceCollection> configure) => StartPasskeys(db, configure: configure);
+    internal static async Task<(Guid Reference, string Cookies)> SeedRecoveryCredentialAsync(AuthenticationTestHost host, PasskeyAuthenticator key)
+    { var enrolled = await Enroll(host, await Login(host), key); return (enrolled.Reference, enrolled.Pending.Cookies); }
+    internal static Task<string> SeedRecoveryCounterAsync(AuthenticationTestHost host, PasskeyAuthenticator key) => SignInPasskey(host, key);
+
     private sealed class Policies : IPasskeyPolicySource
     {
         internal string Version { get; set; } = "fixture-passkey-v1";

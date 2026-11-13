@@ -5,11 +5,11 @@ using Microsoft.EntityFrameworkCore.Storage;
 namespace Tunner.Identity.Persistence;
 
 /// <summary>Uncomposed private owner slice. No endpoint, session issuance, credential repair or policy defaults.</summary>
-internal sealed partial class RecoveryCaseApplication(IdentityPersistenceDbContext database, RecoveryCodeApplication codes,
+internal sealed partial class RecoveryCaseApplication(IdentityPersistenceDbContext database, RecoveryCodeApplication? codes,
     AuthenticationApplication authentication, TimeProvider clock, IRecoveryCasePolicySource? policies = null,
     IRecoveryCaseHierarchySource? hierarchy = null, IRecoveryPasswordPolicySource? passwordPolicies = null,
     IRegistrationPasswordBlocklist? passwordBlocklist = null, IAuthenticationPolicySource? authenticationPolicies = null,
-    AuthenticationPartitionKey? partitions = null)
+    AuthenticationPartitionKey? partitions = null, PasskeyApplication? passkeys = null)
 {
     internal static string OperationId(RecoveryCaseRow row) => "OP-RECOVERY-CASE-" + row.CaseId.ToString("N");
     internal async Task<RecoveryCaseResult> StartAsync(RecoveryCaseCaller caller, RecoveryCaseStartCommand command, CancellationToken ct = default)
@@ -18,7 +18,7 @@ internal sealed partial class RecoveryCaseApplication(IdentityPersistenceDbConte
         if (!caller.Valid || command.RequestId == Guid.Empty || command.TargetSessionId == Guid.Empty || command.SetReference == Guid.Empty ||
             command.ExpectedAccountVersion < 1 || command.ExpectedSessionVersion < 1 || command.ExpectedSetLifecycleVersion < 1 || command.ExpectedUsageVersion is < 0)
             return new("VALIDATION_ERROR");
-        if (policies is null || hierarchy is null) return new("RECOVERY_UNAVAILABLE");
+        if (codes is null || policies is null || hierarchy is null) return new("RECOVERY_UNAVAILABLE");
         var initial = Current(caller, clock.GetUtcNow());
         if (initial.Values.UsageAdmission == RecoveryCodeUsageAdmission.ExactUsageSnapshot ? command.ExpectedUsageVersion is null : command.ExpectedUsageVersion is not null)
             return new("VALIDATION_ERROR");
@@ -67,7 +67,7 @@ internal sealed partial class RecoveryCaseApplication(IdentityPersistenceDbConte
     internal async Task<RecoveryCaseResult> ReadOriginalAsync(RecoveryCaseCaller caller, Guid requestId, CancellationToken ct = default)
     {
         Clean(); if (!caller.Valid || requestId == Guid.Empty) return new("VALIDATION_ERROR");
-        if (policies is null || hierarchy is null) return new("RECOVERY_UNAVAILABLE");
+        if (codes is null || policies is null || hierarchy is null) return new("RECOVERY_UNAVAILABLE");
         await using var tx = await database.Database.BeginTransactionAsync(ct).ConfigureAwait(false);
         try
         {
@@ -81,7 +81,7 @@ internal sealed partial class RecoveryCaseApplication(IdentityPersistenceDbConte
     internal async Task<RecoveryCaseResult> ConsumeCodeAsync(RecoveryCaseCaller caller, Guid requestId, string? input, CancellationToken ct = default)
     {
         Clean(); if (!caller.Valid || requestId == Guid.Empty) return new("VALIDATION_ERROR");
-        if (policies is null || hierarchy is null) return new("RECOVERY_UNAVAILABLE");
+        if (codes is null || policies is null || hierarchy is null) return new("RECOVERY_UNAVAILABLE");
         var snapshot = await database.Set<RecoveryCaseRow>().AsNoTracking().SingleOrDefaultAsync(x => x.AccountId == caller.AccountId &&
             x.OriginalBrowserDigest == caller.OriginalBrowserDigest && x.RequestId == requestId, ct).ConfigureAwait(false);
         if (snapshot is null || !Actor(snapshot, caller)) return new("NOT_FOUND_OR_NOT_DISCLOSABLE");
@@ -110,7 +110,7 @@ internal sealed partial class RecoveryCaseApplication(IdentityPersistenceDbConte
     internal bool AuthorityCurrent(RecoveryCaseCaller caller, RecoveryCaseRow row, RecoveryCaseLockedFacts facts, DateTimeOffset at)
     {
         var policy = Current(caller, at); var decision = Decision(row, facts, at);
-        return Actor(row, caller) && Context(row) == row.ContextDigest && policy.Snapshot == row.PolicySnapshot &&
+        return row.ProofKind == "CODE" && Actor(row, caller) && Context(row) == row.ContextDigest && policy.Snapshot == row.PolicySnapshot &&
             facts.Account.AccountId == row.AccountId && facts.Account.Version == row.ExpectedAccountVersion && facts.Account.State.ToString() == row.AccountState &&
             facts.Unmutated(database) && facts.Value().Digest() == row.FactsDigest && decision.Snapshot() == row.HierarchySnapshot &&
             row.ExpiresAt == IdentityPersistenceTime.Normalize(Clip(row.CreatedAt + policy.Values.CaseLifetime, policy.Metadata.EffectiveInterval.Until,
@@ -195,8 +195,11 @@ internal sealed partial class RecoveryCaseApplication(IdentityPersistenceDbConte
         row.AccountId, row.OriginalBrowserDigest, row.Origin, row.NetworkDigest, row.Goal, row.SessionEffect, row.TargetSessionId,
         row.ExpectedSessionVersion, row.ExpectedAccountVersion, row.AccountState, row.SetReference, row.ExpectedSetLifecycleVersion,
         row.ExpectedUsageVersion, row.UsageAdmission, row.PolicyVersion, row.PolicySnapshot, row.FactsDigest, row.ProcessingReference, row.RetentionReference, row.UnresolvedEffectsJson }));
-        return row.EntryId is null ? original : AuthenticationIdentity.Digest(JsonSerializer.Serialize(new
+        var context = row.EntryId is null ? original : AuthenticationIdentity.Digest(JsonSerializer.Serialize(new
             { original, row.EntryId, row.PriorPasswordDigest, row.PriorSecurityStampDigest, row.UserSourceDigest }));
+        // Preserve the historical CODE/containment byte identity.
+        return row.ProofKind == "CODE" ? context : AuthenticationIdentity.Digest(JsonSerializer.Serialize(new
+            { context, row.ProofKind, row.PasskeyCredentialReference, row.ExpectedPasskeyVersion, row.ExpectedPasskeyUsageVersion, row.PasskeyCeremonyId }));
     }
     private static DateTimeOffset Clip(DateTimeOffset value, params DateTimeOffset?[] bounds)
     { foreach (var bound in bounds) if (bound is { } end && end < value) value = end; return value; }
@@ -223,6 +226,14 @@ internal sealed class RecoveryCaseLockedFacts(AccountRow account, Authentication
         return database.Entry(Account).State == EntityState.Unchanged && database.Entry(User).State == EntityState.Unchanged &&
             passkeys.All(x => database.Entry(x).State == EntityState.Unchanged) && factors.All(x => database.Entry(x).State == EntityState.Unchanged) &&
             links.All(x => database.Entry(x).State == EntityState.Unchanged);
+    }
+    internal PasskeyCredentialRow? Passkey(Guid? reference) => passkeys.SingleOrDefault(x => x.CredentialReference == reference);
+    internal bool SourcesExceptPasskeyUnmutated(IdentityPersistenceDbContext database, PasskeyCredentialRow own)
+    {
+        database.ChangeTracker.DetectChanges();
+        return passkeys.Contains(own) && database.Entry(Account).State == EntityState.Unchanged &&
+            passkeys.Where(x => !ReferenceEquals(x, own)).All(x => database.Entry(x).State == EntityState.Unchanged) &&
+            factors.All(x => database.Entry(x).State == EntityState.Unchanged) && links.All(x => database.Entry(x).State == EntityState.Unchanged);
     }
     internal RecoveryCaseHierarchyFacts Value() => new(Account.AccountId, Account.State.ToString(), Account.Version, User.PasswordHash is not null, User.EmailConfirmed,
         AuthenticationIdentity.Digest(User.SecurityStamp!), Array.AsReadOnly(passkeys.Select(x => new RecoveryCaseAuthenticationPath("PASSKEY", x.CredentialReference, x.State, x.Version, x.PolicyVersion, null))

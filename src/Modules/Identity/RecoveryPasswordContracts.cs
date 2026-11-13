@@ -19,6 +19,8 @@ public sealed record RecoveryPasswordPolicy(string Version, string Origin, strin
     TimeSpan EntryLifetime, TimeSpan CaseLifetime, TimeSpan ResultRecoveryLifetime, int MaximumPendingEntries, int EntryNetworkLimit,
     int EntryIdentifierLimit, IReadOnlyCollection<string> UnresolvedDownstreamEffects, string ProcessingReference, string RetentionReference)
 {
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public RecoveryPasswordPasskeyProfile? PasskeyRecoveryProfile { get; init; }
     public override string ToString() => nameof(RecoveryPasswordPolicy);
 }
 public sealed class RecoveryPasswordPolicyVersion
@@ -36,6 +38,11 @@ public sealed class RecoveryPasswordPolicyVersion
             Values.UnresolvedDownstreamEffects.Any(string.IsNullOrWhiteSpace) ||
             Values.UnresolvedDownstreamEffects.Distinct(StringComparer.Ordinal).Count() != Values.UnresolvedDownstreamEffects.Count)
             throw new ArgumentException("Complete explicit recovery password authority is required.");
+        values.PasskeyRecoveryProfile?.Validate();
+        if (values.PasskeyRecoveryProfile is { } passkey)
+            Values = Values with { PasskeyRecoveryProfile = passkey with
+                { MethodAssurances = new System.Collections.ObjectModel.ReadOnlyDictionary<string, string>(
+                    passkey.MethodAssurances.ToDictionary(x => x.Key, x => x.Value, StringComparer.Ordinal)) } };
         Metadata = metadata;
         Snapshot = JsonSerializer.Serialize(new { metadata.VersionId, metadata.Status, metadata.Scope, metadata.EffectiveInterval,
             ApprovalEvidence = metadata.ApprovalEvidenceReferences.Order(StringComparer.Ordinal), Values });

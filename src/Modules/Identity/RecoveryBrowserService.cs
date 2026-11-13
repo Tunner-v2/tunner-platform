@@ -57,7 +57,8 @@ public sealed class RecoveryBrowserService
             }
             return Results.Json(new OptionsView(true, policy.Values.Version, publication.Version, publication.Locale, publication.Content,
                 [new(policy.Values.GoalReference, publication.GoalLabelKey, publication.GoalDescriptionKey)],
-                new(true, policy.Values.PasswordMinimumLength, policy.Values.PasswordMaximumLength, policy.Values.SessionEffect.ToString(), publication.EffectLabelKey, publication.EffectValueKey), operation));
+                new(true, policy.Values.PasswordMinimumLength, policy.Values.PasswordMaximumLength, policy.Values.SessionEffect.ToString(), publication.EffectLabelKey, publication.EffectValueKey), operation,
+                policy.Values.PasskeyRecoveryProfile is null ? null : application.PasswordPasskeyCapability(origin, clock.GetUtcNow())));
         }
         catch (RecoveryBrowserContextException) { return Problem(403, "BROWSER_CONTEXT_REQUIRED"); }
         catch (InvalidOperationException) { return Problem(503, "RECOVERY_UNAVAILABLE"); }
@@ -75,6 +76,31 @@ public sealed class RecoveryBrowserService
                 var command = await IdentityJsonCommand.ReadAsync<RecoveryEntryStartCommand>(context, 4096).ConfigureAwait(false);
                 result = await application.StartPasswordEntryAsync(caller, command.RequestId, command.Email, command.GoalReference, context.RequestAborted).ConfigureAwait(false);
             }
+            else if (kind == "passkey/options")
+            {
+                var command = await IdentityJsonCommand.ReadAsync<RecoveryEntryCommand>(context, 4096).ConfigureAwait(false);
+                var selected = Selected(context, caller, policy.Values.Version);
+                if (selected?.RequestId != command.RequestId) return Problem(404, "NOT_FOUND_OR_NOT_DISCLOSABLE");
+                if (!application.PasswordPasskeyCapability(origin, clock.GetUtcNow()).Available) return Problem(503, "RECOVERY_UNAVAILABLE");
+                var options = await application.StartPasswordPasskeyAsync(caller, command.RequestId, context, context.RequestAborted).ConfigureAwait(false);
+                if (options.ErrorCode is { } error) return Failure(error);
+                if (options.Entry is not { } optionsEntry || options.Presentation is not { } presentation) return Problem(400, "RECOVERY_PROOF_REJECTED");
+                if (Current().Policy.Snapshot != policy.Snapshot) return Problem(503, "RECOVERY_UNAVAILABLE");
+                Select(context, caller, optionsEntry);
+                return Results.Json(new PasskeyOptionsView(optionsEntry.RequestId, presentation.CeremonyId,
+                    JsonSerializer.Deserialize<JsonElement>(presentation.OptionsJson), presentation.ExpiresAt));
+            }
+            else if (kind == "passkey/repair")
+            {
+                var capability = application.PasswordPasskeyCapability(origin, clock.GetUtcNow());
+                if (!capability.Available) return Problem(503, "RECOVERY_UNAVAILABLE");
+                var command = await IdentityJsonCommand.ReadAsync<RecoveryPasswordPasskeyRepairCommand>(context,
+                    checked((long)policy.Values.PasswordMaximumLength * 12 + capability.MaximumCredentialJsonBytes!.Value + 4096)).ConfigureAwait(false);
+                var selected = Selected(context, caller, policy.Values.Version);
+                if (selected?.RequestId != command.RequestId) return Problem(404, "NOT_FOUND_OR_NOT_DISCLOSABLE");
+                result = await application.RepairPasswordWithPasskeyAsync(caller, command.RequestId, command.ExpectedVersion, command.CeremonyId,
+                    command.Credential, command.Password, command.PasswordConfirmation, context, context.RequestAborted).ConfigureAwait(false);
+            }
             else if (kind == "repair")
             {
                 var command = await IdentityJsonCommand.ReadAsync<RecoveryPasswordRepairCommand>(context, checked((long)policy.Values.PasswordMaximumLength * 12 + 4096)).ConfigureAwait(false);
@@ -90,13 +116,9 @@ public sealed class RecoveryBrowserService
                 result = kind == "cancel" ? await application.CancelPasswordEntryAsync(caller, command.RequestId, context.RequestAborted).ConfigureAwait(false)
                     : await application.ReadPasswordEntryAsync(caller, command.RequestId, context.RequestAborted).ConfigureAwait(false);
             }
-            if (result.ErrorCode is { } error) return Problem(error switch { "NOT_FOUND_OR_NOT_DISCLOSABLE" => 404, "RATE_OR_ABUSE_LIMITED" => 429,
-                "VERSION_CONFLICT" => 409, "RECOVERY_UNAVAILABLE" => 503, _ => 400 }, error);
+            if (result.ErrorCode is { } failure) return Failure(failure);
             if (result.Entry is not { } entry) return Problem(404, "NOT_FOUND_OR_NOT_DISCLOSABLE");
-            var now = clock.GetUtcNow();
-            var pointer = new Pointer(entry.RequestId, caller.BrowserDigest, caller.PreviousCookieDigest, origin, entry.PolicyVersion, entry.RecoveryExpiresAt);
-            context.Response.Cookies.Append(PointerCookie, PointerProtector().Protect(JsonSerializer.Serialize(pointer)), new CookieOptions
-                { Path = "/", HttpOnly = true, Secure = true, SameSite = SameSiteMode.Strict, IsEssential = true, MaxAge = entry.RecoveryExpiresAt - now });
+            Select(context, caller, entry);
             return Results.Json(new { operation = View(result, publication) });
         }
         catch (RecoveryBrowserContextException) { return Problem(403, "BROWSER_CONTEXT_REQUIRED"); }
@@ -114,6 +136,13 @@ public sealed class RecoveryBrowserService
         catch (RecoveryBrowserContextException) { return false; } catch (InvalidOperationException) { return false; }
     }
     private IDataProtector PointerProtector() => protection.CreateProtector("Tunner.User.Recovery.Original.v1");
+    private void Select(HttpContext context, RecoveryEntryCaller caller, RecoveryEntryRow entry)
+    {
+        var now = clock.GetUtcNow();
+        var pointer = new Pointer(entry.RequestId, caller.BrowserDigest, caller.PreviousCookieDigest, origin, entry.PolicyVersion, entry.RecoveryExpiresAt);
+        context.Response.Cookies.Append(PointerCookie, PointerProtector().Protect(JsonSerializer.Serialize(pointer)), new CookieOptions
+            { Path = "/", HttpOnly = true, Secure = true, SameSite = SameSiteMode.Strict, IsEssential = true, MaxAge = entry.RecoveryExpiresAt - now });
+    }
     private Pointer? Selected(HttpContext context, RecoveryEntryCaller caller, string version)
     {
         if (!context.Request.Cookies.TryGetValue(PointerCookie, out var cookie)) return null;
@@ -133,6 +162,8 @@ public sealed class RecoveryBrowserService
         return new(entry.RequestId, state, entry.Version, entry.GoalReference, open, open, "ATOMIC_REPAIR_ONLY", false, completed);
     }
     private static IResult Problem(int status, string code) => Results.Problem(statusCode: status, extensions: new Dictionary<string, object?> { ["error_code"] = code });
+    private static IResult Failure(string error) => Problem(error switch { "NOT_FOUND_OR_NOT_DISCLOSABLE" => 404, "RATE_OR_ABUSE_LIMITED" => 429,
+        "VERSION_CONFLICT" => 409, "RECOVERY_UNAVAILABLE" => 503, _ => 400 }, error);
     private sealed class RecoveryBrowserContextException : Exception { }
     private sealed record GoalView(string Reference, string LabelKey, string DescriptionKey);
     private sealed record RepairView(bool Available, int PasswordMinimumLength, int PasswordMaximumLength, string SessionEffect, string EffectLabelKey, string EffectValueKey);
@@ -142,5 +173,7 @@ public sealed class RecoveryBrowserService
         string CodeSubmission, bool Authenticated, [property: JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] ResultView? Result);
     private sealed record OptionsView(bool Available, string ProfileVersion, string PublicationVersion, string Locale,
         IReadOnlyDictionary<string, RegistrationPublishedText> Content, IReadOnlyList<GoalView> Goals, RepairView Repair,
-        [property: JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] OperationView? Operation);
+        [property: JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] OperationView? Operation,
+        [property: JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] RecoveryPasskeyCapability? Passkey);
+    private sealed record PasskeyOptionsView(Guid RequestId, Guid CeremonyId, JsonElement PublicKey, DateTimeOffset ExpiresAt);
 }
