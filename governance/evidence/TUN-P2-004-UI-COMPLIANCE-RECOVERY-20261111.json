@@ -2,8 +2,8 @@
   "schema_version": 1,
   "scope_id": "TUN-P2-004",
   "result": "PASS",
-  "tested_commit_sha": "ad744fde52aa03404f3944c47ebb79070185e9f2",
-  "inventory_sha256": "83e3013f34780aa22ceb0ce9aaee408e75661cf35aded91afe935a294b262296",
+  "tested_commit_sha": "579c2742c5c4c59a5bcf7e92610d7de32078714a",
+  "inventory_sha256": "3f274776fa5b88f8aa58ef4018734fb12c30d53d7aaa2a5bd060095098a6386d",
   "owned_behavior_paths": [
     "docs/contracts/ui-inventory.json",
     "src/Modules/Identity/RegistrationApplication.cs",
@@ -76,7 +76,20 @@
     "web/apps/user/totp.ui.tsx",
     "web/apps/user/totp.validation.ts",
     "web/apps/user/validation.ts",
-    "web/apps/user/vite.config.ts"
+    "web/apps/user/vite.config.ts",
+    "web/apps/user/federation.api.ts",
+    "web/apps/user/federation.management.api.ts",
+    "web/apps/user/federation.management.tsx",
+    "web/apps/user/federation.sign-in.tsx",
+    "web/apps/user/recovery.api.ts",
+    "web/apps/user/recovery.app.tsx",
+    "web/apps/user/recovery.content.proposal.json",
+    "web/apps/user/recovery.css",
+    "web/apps/user/recovery.html",
+    "web/apps/user/recovery.routes.ts",
+    "web/apps/user/recovery.tsx",
+    "web/apps/user/registration.federation.ts",
+    "web/apps/user/step-up.federation.tsx"
   ],
   "historical_ui_compliance": {
     "path": "governance/evidence/TUN-P2-004-UI-COMPLIANCE-TOTP-20261110.json",
@@ -164,390 +177,364 @@
   "items": [
     {
       "id": "U-AUTH-02",
+      "kind": "SCREEN",
+      "pathname": "/registration",
+      "authority_refs": [
+        "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md",
+        "docs/authority/current/development/31_UI_UX_Screen_and_Control_Center_Requirements_Matrix.md",
+        "docs/authority/current/decisions/AMD-0008_Approved_Figma_Visual_Fidelity_and_Product_Owner_UX_Consent.md",
+        "docs/authority/current/decisions/AMD-0009_URL_Addressable_Routing_and_Governed_Form_Validation.md"
+      ],
       "figma_refs": [
         {
           "file_key": "apNbwvAgdn1xIxYH1oiaSC",
           "node_id": "70:270"
+        },
+        {
+          "file_key": "apNbwvAgdn1xIxYH1oiaSC",
+          "node_id": "197:5"
+        },
+        {
+          "file_key": "apNbwvAgdn1xIxYH1oiaSC",
+          "node_id": "70:1257"
         }
       ],
+      "source_paths": [
+        "web/apps/user",
+        "src/Modules/Identity/RegistrationEndpoints.cs",
+        "src/Modules/Identity/RegistrationApplication.cs",
+        "web/apps/user/main.tsx",
+        "web/apps/user/registration.federation.ts",
+        "web/apps/user/registration.css",
+        "web/apps/user/content.proposal.json",
+        "web/apps/user/federation.api.ts",
+        "web/apps/user/federation.sign-in.tsx"
+      ],
+      "result": "PASS",
+      "assessment_scope": "Final executing-AI specialist engineering review of this exact inventory item at734828a. Scoped Product visual consent is genuine; native UI gate/commit, whole-feature Product/release and production configuration remain separate.",
       "checks": [
         {
           "id": "URL-001",
           "result": "PASS",
-          "description": "Observed canonical full-screen pathname transitions in named route cases. Item-specific basis: Registration composition, card/field dimensions, local glows and plain Tunner brand match approved adaptation. Current fields remain email/password/confirmation/notice; no early DOB or Product/session assertion.",
+          "description": "Existing canonical path and stage transitions are exercised in the original public cohorts; this same-screen adaptation adds no independent route.",
           "evidence_refs": [
             {
-              "path": "governance/evidence/TUN-P2-004-UI-COMPLIANCE-TOTP-20261110.json",
-              "sha256": "8fbf361ce39cb6b134acbed1395392c37fece107bf20df5e573efd44ef1734b5"
+              "path": "governance/evidence/p2-010-federation-20261112/public/registration-wip-ui/results.json",
+              "sha256": "60a64317967ae0c5bdb1957b79fa1cbd652e9c001ae836e0c07999a0257bc250"
             },
             {
-              "path": "governance/evidence/p2-009-recovery-20261111/parent-readiness-ad744fd/parent-ui-compatibility-review-v2.json",
-              "sha256": "ab2da70c31aea3ecb42410b67c3cb5e6a2f4c8be3ca0b65bf124efef2c94e82a",
-              "original_artifact_ref": "artifacts/p2-009-recovery-20261111/parent-ui-compatibility-review-v2/review.json"
+              "path": "governance/evidence/p2-010-federation-20261112/public/registration-wip-ui/ordinary-regression/results.json",
+              "sha256": "ac2e11ce14815cbee0f576d10e4b4d36341db2782524b02e8177eef1d823f097"
             },
             {
-              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/execution-index.json",
-              "sha256": "b3c3823b8b394fcbdb8fdd3c0bf3a87b5e28990f1571485cd3cdd253527abc57"
+              "path": "governance/evidence/p2-010-federation-20261112/public/registration-wip-ui/v01-regression/results.json",
+              "sha256": "fd62a7b7f75f5baec6b99db8e83a7c46d63d1d8d5e82ba7db1fa1275169b97e8"
             }
-          ],
-          "current_compatibility_basis": {
-            "actual_ui_evidence": "Historicalactual24Registration/16Foundation plus dedicatedunchangedsource/functionwitness.146doesnotcoverthem.",
-            "manual_comparison_reuse": "Originalrowrendered/Figma/consent/manualrefs remain at originaltestedSHA; no freshcapture/pixelequality claim."
-          }
+          ]
         },
         {
           "id": "URL-002",
           "result": "PASS",
-          "description": "Query/fragment and forged history cannot replace a guarded owning pathname. Item-specific basis: Registration composition, card/field dimensions, local glows and plain Tunner brand match approved adaptation. Current fields remain email/password/confirmation/notice; no early DOB or Product/session assertion.",
+          "description": "Canonical path-driven guards and safe query/hash handling remain the route authority; no fragment grants a full screen.",
           "evidence_refs": [
             {
-              "path": "governance/evidence/TUN-P2-004-UI-COMPLIANCE-TOTP-20261110.json",
-              "sha256": "8fbf361ce39cb6b134acbed1395392c37fece107bf20df5e573efd44ef1734b5"
+              "path": "governance/evidence/p2-010-federation-20261112/public/registration-wip-ui/results.json",
+              "sha256": "60a64317967ae0c5bdb1957b79fa1cbd652e9c001ae836e0c07999a0257bc250"
             },
             {
-              "path": "governance/evidence/p2-009-recovery-20261111/parent-readiness-ad744fd/parent-ui-compatibility-review-v2.json",
-              "sha256": "ab2da70c31aea3ecb42410b67c3cb5e6a2f4c8be3ca0b65bf124efef2c94e82a",
-              "original_artifact_ref": "artifacts/p2-009-recovery-20261111/parent-ui-compatibility-review-v2/review.json"
+              "path": "governance/evidence/p2-010-federation-20261112/public/registration-wip-ui/ordinary-regression/results.json",
+              "sha256": "ac2e11ce14815cbee0f576d10e4b4d36341db2782524b02e8177eef1d823f097"
             },
             {
-              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/execution-index.json",
-              "sha256": "b3c3823b8b394fcbdb8fdd3c0bf3a87b5e28990f1571485cd3cdd253527abc57"
+              "path": "governance/evidence/p2-010-federation-20261112/public/registration-wip-ui/v01-regression/results.json",
+              "sha256": "fd62a7b7f75f5baec6b99db8e83a7c46d63d1d8d5e82ba7db1fa1275169b97e8"
             }
-          ],
-          "current_compatibility_basis": {
-            "actual_ui_evidence": "Historicalactual24Registration/16Foundation plus dedicatedunchangedsource/functionwitness.146doesnotcoverthem.",
-            "manual_comparison_reuse": "Originalrowrendered/Figma/consent/manualrefs remain at originaltestedSHA; no freshcapture/pixelequality claim."
-          }
+          ]
         },
         {
           "id": "URL-003",
           "result": "PASS",
-          "description": "Named direct-entry, reload and Back/Forward cases reconstruct the actual owning server-metadata view. Item-specific basis: Registration composition, card/field dimensions, local glows and plain Tunner brand match approved adaptation. Current fields remain email/password/confirmation/notice; no early DOB or Product/session assertion.",
+          "description": "Original reload, deep-entry and Back/Forward reconstruction checks are retained without automatic mutation replay.",
           "evidence_refs": [
             {
-              "path": "governance/evidence/TUN-P2-004-UI-COMPLIANCE-TOTP-20261110.json",
-              "sha256": "8fbf361ce39cb6b134acbed1395392c37fece107bf20df5e573efd44ef1734b5"
+              "path": "governance/evidence/p2-010-federation-20261112/public/registration-wip-ui/results.json",
+              "sha256": "60a64317967ae0c5bdb1957b79fa1cbd652e9c001ae836e0c07999a0257bc250"
             },
             {
-              "path": "governance/evidence/p2-009-recovery-20261111/parent-readiness-ad744fd/parent-ui-compatibility-review-v2.json",
-              "sha256": "ab2da70c31aea3ecb42410b67c3cb5e6a2f4c8be3ca0b65bf124efef2c94e82a",
-              "original_artifact_ref": "artifacts/p2-009-recovery-20261111/parent-ui-compatibility-review-v2/review.json"
+              "path": "governance/evidence/p2-010-federation-20261112/public/registration-wip-ui/ordinary-regression/results.json",
+              "sha256": "ac2e11ce14815cbee0f576d10e4b4d36341db2782524b02e8177eef1d823f097"
             },
             {
-              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/execution-index.json",
-              "sha256": "b3c3823b8b394fcbdb8fdd3c0bf3a87b5e28990f1571485cd3cdd253527abc57"
+              "path": "governance/evidence/p2-010-federation-20261112/public/registration-wip-ui/v01-regression/results.json",
+              "sha256": "fd62a7b7f75f5baec6b99db8e83a7c46d63d1d8d5e82ba7db1fa1275169b97e8"
             }
-          ],
-          "current_compatibility_basis": {
-            "actual_ui_evidence": "Historicalactual24Registration/16Foundation plus dedicatedunchangedsource/functionwitness.146doesnotcoverthem.",
-            "manual_comparison_reuse": "Originalrowrendered/Figma/consent/manualrefs remain at originaltestedSHA; no freshcapture/pixelequality claim."
-          }
+          ]
+        },
+        {
+          "id": "URL-004",
+          "result": "PASS",
+          "description": "Existing modal/local-state controls preserve the route and original owner; result/history does not issue another challenge or mutation.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-010-federation-20261112/public/registration-wip-ui/results.json",
+              "sha256": "60a64317967ae0c5bdb1957b79fa1cbd652e9c001ae836e0c07999a0257bc250"
+            },
+            {
+              "path": "governance/evidence/p2-010-federation-20261112/public/registration-wip-ui/ordinary-regression/results.json",
+              "sha256": "ac2e11ce14815cbee0f576d10e4b4d36341db2782524b02e8177eef1d823f097"
+            },
+            {
+              "path": "governance/evidence/p2-010-federation-20261112/public/registration-wip-ui/v01-regression/results.json",
+              "sha256": "fd62a7b7f75f5baec6b99db8e83a7c46d63d1d8d5e82ba7db1fa1275169b97e8"
+            }
+          ]
         },
         {
           "id": "URL-005",
           "result": "PASS",
-          "description": "Expired/unauthorized/missing-stage fixtures are blocked or safely redirected; backend authority is separately evidenced. Item-specific basis: Registration composition, card/field dimensions, local glows and plain Tunner brand match approved adaptation. Current fields remain email/password/confirmation/notice; no early DOB or Product/session assertion.",
+          "description": "Public unauthorized/expired/foreign-state guards and current734 original-browser/session/native owner cases reject unauthorized stages without mutation or unsafe continuation.",
           "evidence_refs": [
             {
-              "path": "governance/evidence/TUN-P2-004-UI-COMPLIANCE-TOTP-20261110.json",
-              "sha256": "8fbf361ce39cb6b134acbed1395392c37fece107bf20df5e573efd44ef1734b5"
+              "path": "governance/evidence/p2-010-federation-20261112/public/registration-wip-ui/results.json",
+              "sha256": "60a64317967ae0c5bdb1957b79fa1cbd652e9c001ae836e0c07999a0257bc250"
             },
             {
-              "path": "governance/evidence/p2-009-recovery-20261111/parent-readiness-ad744fd/parent-ui-compatibility-review-v2.json",
-              "sha256": "ab2da70c31aea3ecb42410b67c3cb5e6a2f4c8be3ca0b65bf124efef2c94e82a",
-              "original_artifact_ref": "artifacts/p2-009-recovery-20261111/parent-ui-compatibility-review-v2/review.json"
+              "path": "governance/evidence/p2-010-federation-20261112/public/registration-wip-ui/ordinary-regression/results.json",
+              "sha256": "ac2e11ce14815cbee0f576d10e4b4d36341db2782524b02e8177eef1d823f097"
             },
             {
-              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/execution-index.json",
-              "sha256": "b3c3823b8b394fcbdb8fdd3c0bf3a87b5e28990f1571485cd3cdd253527abc57"
+              "path": "governance/evidence/p2-010-federation-20261112/public/registration-wip-ui/v01-regression/results.json",
+              "sha256": "fd62a7b7f75f5baec6b99db8e83a7c46d63d1d8d5e82ba7db1fa1275169b97e8"
+            },
+            {
+              "path": "governance/evidence/p2-010-federation-20261112/native-734828a/private76.json",
+              "sha256": "1681a04d5c7038ed0311137804fb1c0d2c7edff53fe2b9f54758e5eaa4e32367"
+            },
+            {
+              "path": "governance/evidence/p2-010-federation-20261112/native-734828a/build-binding.json",
+              "sha256": "9ba2f980e0201af68872d07a77e535bcbbe3b1f391238d0bc5c6d814904f7497"
             }
           ],
-          "current_compatibility_basis": {
-            "actual_ui_evidence": "Historicalactual24Registration/16Foundation plus dedicatedunchangedsource/functionwitness.146doesnotcoverthem.",
-            "manual_comparison_reuse": "Originalrowrendered/Figma/consent/manualrefs remain at originaltestedSHA; no freshcapture/pixelequality claim."
-          }
-        },
-        {
-          "id": "URL-004",
-          "result": "NOT_APPLICABLE",
-          "reason": "No independent modal/tab/filter/anchor workflow on this screen; canonical routing/guard handling is covered separately.",
-          "authority_refs": [
-            "docs/authority/current/decisions/AMD-0008_Approved_Figma_Visual_Fidelity_and_Product_Owner_UX_Consent.md",
-            "docs/authority/current/decisions/AMD-0009_URL_Addressable_Routing_and_Governed_Form_Validation.md",
-            "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md",
-            "docs/authority/current/development/31_UI_UX_Screen_and_Control_Center_Requirements_Matrix.md"
-          ],
-          "assessment": "Rechecked current item: the exact stated modal/tab/anchor or new editable-field exclusion remains true. Owning route and editable-field cases are separately reviewed above."
+          "backend_case_evidence": [
+            "FEDERATION_HTTPS_WIRE",
+            "FEDERATION_REGISTRATION",
+            "FEDERATION_REGISTRATION_REJECTION",
+            "FEDERATION_REGISTRATION_FINALITY",
+            "PARENT003_REGISTRATION_BOUNDARY",
+            "PARENT003_REGISTRATION_FLOW",
+            "PARENT003_REGISTRATION_PROGRESS"
+          ]
         },
         {
           "id": "URL-006",
-          "result": "NOT_APPLICABLE",
-          "reason": "Product-origin OAuth/callback is not implemented in this feature slice (future P2-014). No future-flow PASS is claimed. Existing callback source was not changed; external query/fragment attempts do not authorize navigation.",
-          "authority_refs": [
-            "docs/authority/current/decisions/AMD-0008_Approved_Figma_Visual_Fidelity_and_Product_Owner_UX_Consent.md",
-            "docs/authority/current/decisions/AMD-0009_URL_Addressable_Routing_and_Governed_Form_Validation.md",
-            "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md",
-            "docs/authority/current/development/31_UI_UX_Screen_and_Control_Center_Requirements_Matrix.md"
+          "result": "PASS",
+          "description": "Public challenge/continuation allowlist tests, unchanged original-context custody and current734 HTTPS/browser/session cases preserve safe fixed local redirects and original owner binding; no Product OAuth authorization expansion is claimed.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-010-federation-20261112/public/registration-wip-ui/results.json",
+              "sha256": "60a64317967ae0c5bdb1957b79fa1cbd652e9c001ae836e0c07999a0257bc250"
+            },
+            {
+              "path": "governance/evidence/p2-010-federation-20261112/public/registration-wip-ui/ordinary-regression/results.json",
+              "sha256": "ac2e11ce14815cbee0f576d10e4b4d36341db2782524b02e8177eef1d823f097"
+            },
+            {
+              "path": "governance/evidence/p2-010-federation-20261112/public/registration-wip-ui/v01-regression/results.json",
+              "sha256": "fd62a7b7f75f5baec6b99db8e83a7c46d63d1d8d5e82ba7db1fa1275169b97e8"
+            },
+            {
+              "path": "governance/evidence/p2-010-federation-20261112/native-734828a/private76.json",
+              "sha256": "1681a04d5c7038ed0311137804fb1c0d2c7edff53fe2b9f54758e5eaa4e32367"
+            },
+            {
+              "path": "governance/evidence/p2-010-federation-20261112/native-734828a/build-binding.json",
+              "sha256": "9ba2f980e0201af68872d07a77e535bcbbe3b1f391238d0bc5c6d814904f7497"
+            }
           ],
-          "assessment": "Rechecked scope: no new Product-origin OAuth integration is implemented by this parent compatibility refresh; preserve its prior exact exclusion."
+          "backend_case_evidence": [
+            "FEDERATION_HTTPS_WIRE",
+            "FEDERATION_REGISTRATION",
+            "FEDERATION_REGISTRATION_REJECTION",
+            "FEDERATION_REGISTRATION_FINALITY",
+            "PARENT003_REGISTRATION_BOUNDARY",
+            "PARENT003_REGISTRATION_FLOW",
+            "PARENT003_REGISTRATION_PROGRESS"
+          ]
         },
         {
           "id": "UX-FID-001",
           "result": "PASS",
-          "description": "Manual current/reference comparison in item notes; scoped existing composition retained. Item-specific basis: Registration composition, card/field dimensions, local glows and plain Tunner brand match approved adaptation. Current fields remain email/password/confirmation/notice; no early DOB or Product/session assertion.",
+          "description": "Current implementation reuses the owning existing shell/rows/dialog and approved scoped adaptation.",
           "evidence_refs": [
             {
-              "path": "governance/evidence/TUN-P2-004-UI-COMPLIANCE-TOTP-20261110.json",
-              "sha256": "8fbf361ce39cb6b134acbed1395392c37fece107bf20df5e573efd44ef1734b5"
+              "path": "governance/evidence/TUN-P2-010-VISUAL-CONSENT.json",
+              "sha256": "f14f0d8bd6e11821fc252b6be4854a58f679c0a1e8dc3e505d66596c7f00e12c"
             },
             {
-              "path": "governance/evidence/p2-009-recovery-20261111/parent-readiness-ad744fd/parent-ui-compatibility-review-v2.json",
-              "sha256": "ab2da70c31aea3ecb42410b67c3cb5e6a2f4c8be3ca0b65bf124efef2c94e82a",
-              "original_artifact_ref": "artifacts/p2-009-recovery-20261111/parent-ui-compatibility-review-v2/review.json"
-            },
-            {
-              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/execution-index.json",
-              "sha256": "b3c3823b8b394fcbdb8fdd3c0bf3a87b5e28990f1571485cd3cdd253527abc57"
+              "path": "governance/evidence/p2-010-federation-20261112/public/registration-wip-ui/results.json",
+              "sha256": "60a64317967ae0c5bdb1957b79fa1cbd652e9c001ae836e0c07999a0257bc250"
             }
-          ],
-          "current_compatibility_basis": {
-            "actual_ui_evidence": "Historicalactual24Registration/16Foundation plus dedicatedunchangedsource/functionwitness.146doesnotcoverthem.",
-            "manual_comparison_reuse": "Originalrowrendered/Figma/consent/manualrefs remain at originaltestedSHA; no freshcapture/pixelequality claim."
-          }
+          ]
         },
         {
           "id": "UX-FID-002",
           "result": "PASS",
-          "description": "Local page/glow/assets are present in current captures and local-asset tests. Item-specific basis: Registration composition, card/field dimensions, local glows and plain Tunner brand match approved adaptation. Current fields remain email/password/confirmation/notice; no early DOB or Product/session assertion.",
+          "description": "Retained implementation captures include the existing background/glow/assets rather than a replacement visual shell.",
           "evidence_refs": [
             {
-              "path": "governance/evidence/TUN-P2-004-UI-COMPLIANCE-TOTP-20261110.json",
-              "sha256": "8fbf361ce39cb6b134acbed1395392c37fece107bf20df5e573efd44ef1734b5"
+              "path": "governance/evidence/TUN-P2-010-VISUAL-CONSENT.json",
+              "sha256": "f14f0d8bd6e11821fc252b6be4854a58f679c0a1e8dc3e505d66596c7f00e12c"
             },
             {
-              "path": "governance/evidence/p2-009-recovery-20261111/parent-readiness-ad744fd/parent-ui-compatibility-review-v2.json",
-              "sha256": "ab2da70c31aea3ecb42410b67c3cb5e6a2f4c8be3ca0b65bf124efef2c94e82a",
-              "original_artifact_ref": "artifacts/p2-009-recovery-20261111/parent-ui-compatibility-review-v2/review.json"
-            },
-            {
-              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/execution-index.json",
-              "sha256": "b3c3823b8b394fcbdb8fdd3c0bf3a87b5e28990f1571485cd3cdd253527abc57"
+              "path": "governance/evidence/p2-010-federation-20261112/public/registration-wip-ui/results.json",
+              "sha256": "60a64317967ae0c5bdb1957b79fa1cbd652e9c001ae836e0c07999a0257bc250"
             }
-          ],
-          "current_compatibility_basis": {
-            "actual_ui_evidence": "Historicalactual24Registration/16Foundation plus dedicatedunchangedsource/functionwitness.146doesnotcoverthem.",
-            "manual_comparison_reuse": "Originalrowrendered/Figma/consent/manualrefs remain at originaltestedSHA; no freshcapture/pixelequality claim."
-          }
+          ]
         },
         {
           "id": "UX-FID-003",
           "result": "PASS",
-          "description": "Shared typed fields/buttons/error geometry and token variants are reused. Item-specific basis: Registration composition, card/field dimensions, local glows and plain Tunner brand match approved adaptation. Current fields remain email/password/confirmation/notice; no early DOB or Product/session assertion.",
+          "description": "New conditional fields/controls reuse existing design tokens, shared controls, validation and published content.",
           "evidence_refs": [
             {
-              "path": "governance/evidence/TUN-P2-004-UI-COMPLIANCE-TOTP-20261110.json",
-              "sha256": "8fbf361ce39cb6b134acbed1395392c37fece107bf20df5e573efd44ef1734b5"
+              "path": "governance/evidence/TUN-P2-010-VISUAL-CONSENT.json",
+              "sha256": "f14f0d8bd6e11821fc252b6be4854a58f679c0a1e8dc3e505d66596c7f00e12c"
             },
             {
-              "path": "governance/evidence/p2-009-recovery-20261111/parent-readiness-ad744fd/parent-ui-compatibility-review-v2.json",
-              "sha256": "ab2da70c31aea3ecb42410b67c3cb5e6a2f4c8be3ca0b65bf124efef2c94e82a",
-              "original_artifact_ref": "artifacts/p2-009-recovery-20261111/parent-ui-compatibility-review-v2/review.json"
-            },
-            {
-              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/execution-index.json",
-              "sha256": "b3c3823b8b394fcbdb8fdd3c0bf3a87b5e28990f1571485cd3cdd253527abc57"
+              "path": "governance/evidence/p2-010-federation-20261112/public/registration-wip-ui/results.json",
+              "sha256": "60a64317967ae0c5bdb1957b79fa1cbd652e9c001ae836e0c07999a0257bc250"
             }
-          ],
-          "current_compatibility_basis": {
-            "actual_ui_evidence": "Historicalactual24Registration/16Foundation plus dedicatedunchangedsource/functionwitness.146doesnotcoverthem.",
-            "manual_comparison_reuse": "Originalrowrendered/Figma/consent/manualrefs remain at originaltestedSHA; no freshcapture/pixelequality claim."
-          }
+          ]
         },
         {
           "id": "UX-FID-004",
           "result": "PASS",
-          "description": "Only previously approved scoped deviations/consents apply; preserve their exact references. Item-specific basis: Registration composition, card/field dimensions, local glows and plain Tunner brand match approved adaptation. Current fields remain email/password/confirmation/notice; no early DOB or Product/session assertion.",
+          "description": "Material adaptations are limited to the four genuinely approved010 visual scopes in the hashed consent record.",
           "evidence_refs": [
             {
-              "path": "governance/evidence/TUN-P2-004-UI-COMPLIANCE-TOTP-20261110.json",
-              "sha256": "8fbf361ce39cb6b134acbed1395392c37fece107bf20df5e573efd44ef1734b5"
+              "path": "governance/evidence/TUN-P2-010-VISUAL-CONSENT.json",
+              "sha256": "f14f0d8bd6e11821fc252b6be4854a58f679c0a1e8dc3e505d66596c7f00e12c"
             },
             {
-              "path": "governance/evidence/p2-009-recovery-20261111/parent-readiness-ad744fd/parent-ui-compatibility-review-v2.json",
-              "sha256": "ab2da70c31aea3ecb42410b67c3cb5e6a2f4c8be3ca0b65bf124efef2c94e82a",
-              "original_artifact_ref": "artifacts/p2-009-recovery-20261111/parent-ui-compatibility-review-v2/review.json"
-            },
-            {
-              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/execution-index.json",
-              "sha256": "b3c3823b8b394fcbdb8fdd3c0bf3a87b5e28990f1571485cd3cdd253527abc57"
+              "path": "governance/evidence/p2-010-federation-20261112/public/registration-wip-ui/results.json",
+              "sha256": "60a64317967ae0c5bdb1957b79fa1cbd652e9c001ae836e0c07999a0257bc250"
             }
-          ],
-          "current_compatibility_basis": {
-            "actual_ui_evidence": "Historicalactual24Registration/16Foundation plus dedicatedunchangedsource/functionwitness.146doesnotcoverthem.",
-            "manual_comparison_reuse": "Originalrowrendered/Figma/consent/manualrefs remain at originaltestedSHA; no freshcapture/pixelequality claim."
-          }
+          ]
         },
         {
           "id": "UX-FID-005",
           "result": "PASS",
-          "description": "Previously resolved domain/Figma conflicts remain truthful; no new material conflict observed in this compatibility scope. Item-specific basis: Registration composition, card/field dimensions, local glows and plain Tunner brand match approved adaptation. Current fields remain email/password/confirmation/notice; no early DOB or Product/session assertion.",
+          "description": "Owning FRD17/refinement and server facts control behavior; scoped visual consent does not select production policy or qualification.",
           "evidence_refs": [
             {
-              "path": "governance/evidence/TUN-P2-004-UI-COMPLIANCE-TOTP-20261110.json",
-              "sha256": "8fbf361ce39cb6b134acbed1395392c37fece107bf20df5e573efd44ef1734b5"
+              "path": "governance/evidence/TUN-P2-010-VISUAL-CONSENT.json",
+              "sha256": "f14f0d8bd6e11821fc252b6be4854a58f679c0a1e8dc3e505d66596c7f00e12c"
             },
             {
-              "path": "governance/evidence/p2-009-recovery-20261111/parent-readiness-ad744fd/parent-ui-compatibility-review-v2.json",
-              "sha256": "ab2da70c31aea3ecb42410b67c3cb5e6a2f4c8be3ca0b65bf124efef2c94e82a",
-              "original_artifact_ref": "artifacts/p2-009-recovery-20261111/parent-ui-compatibility-review-v2/review.json"
-            },
-            {
-              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/execution-index.json",
-              "sha256": "b3c3823b8b394fcbdb8fdd3c0bf3a87b5e28990f1571485cd3cdd253527abc57"
+              "path": "governance/evidence/p2-010-federation-20261112/public/registration-wip-ui/results.json",
+              "sha256": "60a64317967ae0c5bdb1957b79fa1cbd652e9c001ae836e0c07999a0257bc250"
             }
-          ],
-          "current_compatibility_basis": {
-            "actual_ui_evidence": "Historicalactual24Registration/16Foundation plus dedicatedunchangedsource/functionwitness.146doesnotcoverthem.",
-            "manual_comparison_reuse": "Originalrowrendered/Figma/consent/manualrefs remain at originaltestedSHA; no freshcapture/pixelequality claim."
-          }
+          ]
         },
         {
           "id": "UX-FID-006",
           "result": "PASS",
-          "description": "Current source and screenshots retain approved screen-specific styling rather than library defaults. Item-specific basis: Registration composition, card/field dimensions, local glows and plain Tunner brand match approved adaptation. Current fields remain email/password/confirmation/notice; no early DOB or Product/session assertion.",
+          "description": "Existing approved controls/theme are retained; no framework default or new visual system overrides them.",
           "evidence_refs": [
             {
-              "path": "governance/evidence/TUN-P2-004-UI-COMPLIANCE-TOTP-20261110.json",
-              "sha256": "8fbf361ce39cb6b134acbed1395392c37fece107bf20df5e573efd44ef1734b5"
+              "path": "governance/evidence/TUN-P2-010-VISUAL-CONSENT.json",
+              "sha256": "f14f0d8bd6e11821fc252b6be4854a58f679c0a1e8dc3e505d66596c7f00e12c"
             },
             {
-              "path": "governance/evidence/p2-009-recovery-20261111/parent-readiness-ad744fd/parent-ui-compatibility-review-v2.json",
-              "sha256": "ab2da70c31aea3ecb42410b67c3cb5e6a2f4c8be3ca0b65bf124efef2c94e82a",
-              "original_artifact_ref": "artifacts/p2-009-recovery-20261111/parent-ui-compatibility-review-v2/review.json"
-            },
-            {
-              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/execution-index.json",
-              "sha256": "b3c3823b8b394fcbdb8fdd3c0bf3a87b5e28990f1571485cd3cdd253527abc57"
+              "path": "governance/evidence/p2-010-federation-20261112/public/registration-wip-ui/results.json",
+              "sha256": "60a64317967ae0c5bdb1957b79fa1cbd652e9c001ae836e0c07999a0257bc250"
             }
-          ],
-          "current_compatibility_basis": {
-            "actual_ui_evidence": "Historicalactual24Registration/16Foundation plus dedicatedunchangedsource/functionwitness.146doesnotcoverthem.",
-            "manual_comparison_reuse": "Originalrowrendered/Figma/consent/manualrefs remain at originaltestedSHA; no freshcapture/pixelequality claim."
-          }
+          ]
         },
         {
           "id": "UX-FID-007",
           "result": "PASS",
-          "description": "Named responsive/Axe/keyboard/focus cases are current; detailed new shared-module contrast report resolves all194current incomplete nodes. Item-specific basis: Registration composition, card/field dimensions, local glows and plain Tunner brand match approved adaptation. Current fields remain email/password/confirmation/notice; no early DOB or Product/session assertion.",
+          "description": "Actual retained viewport/keyboard/Axe observations support their precise public scopes; no unsupported native viewport claim is made.",
           "evidence_refs": [
             {
-              "path": "governance/evidence/TUN-P2-004-UI-COMPLIANCE-TOTP-20261110.json",
-              "sha256": "8fbf361ce39cb6b134acbed1395392c37fece107bf20df5e573efd44ef1734b5"
+              "path": "governance/evidence/TUN-P2-010-VISUAL-CONSENT.json",
+              "sha256": "f14f0d8bd6e11821fc252b6be4854a58f679c0a1e8dc3e505d66596c7f00e12c"
             },
             {
-              "path": "governance/evidence/p2-009-recovery-20261111/parent-readiness-ad744fd/parent-ui-compatibility-review-v2.json",
-              "sha256": "ab2da70c31aea3ecb42410b67c3cb5e6a2f4c8be3ca0b65bf124efef2c94e82a",
-              "original_artifact_ref": "artifacts/p2-009-recovery-20261111/parent-ui-compatibility-review-v2/review.json"
-            },
-            {
-              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/execution-index.json",
-              "sha256": "b3c3823b8b394fcbdb8fdd3c0bf3a87b5e28990f1571485cd3cdd253527abc57"
+              "path": "governance/evidence/p2-010-federation-20261112/public/registration-wip-ui/results.json",
+              "sha256": "60a64317967ae0c5bdb1957b79fa1cbd652e9c001ae836e0c07999a0257bc250"
             }
-          ],
-          "current_compatibility_basis": {
-            "actual_ui_evidence": "Historicalactual24Registration/16Foundation plus dedicatedunchangedsource/functionwitness.146doesnotcoverthem.",
-            "manual_comparison_reuse": "Originalrowrendered/Figma/consent/manualrefs remain at originaltestedSHA; no freshcapture/pixelequality claim."
-          }
+          ]
         },
         {
           "id": "UX-FID-008",
           "result": "PASS",
-          "description": "Current actual reports/screenshots, reference provenance, source identity and existing scoped consent are linked without redating historical evidence. Item-specific basis: Registration composition, card/field dimensions, local glows and plain Tunner brand match approved adaptation. Current fields remain email/password/confirmation/notice; no early DOB or Product/session assertion.",
+          "description": "Per-item record binds exact inventory/Figma/FRD, retained rendered/reference captures, approval and actual source/execution provenance.",
           "evidence_refs": [
             {
-              "path": "governance/evidence/TUN-P2-004-UI-COMPLIANCE-TOTP-20261110.json",
-              "sha256": "8fbf361ce39cb6b134acbed1395392c37fece107bf20df5e573efd44ef1734b5"
+              "path": "governance/evidence/TUN-P2-010-VISUAL-CONSENT.json",
+              "sha256": "f14f0d8bd6e11821fc252b6be4854a58f679c0a1e8dc3e505d66596c7f00e12c"
             },
             {
-              "path": "governance/evidence/p2-009-recovery-20261111/parent-readiness-ad744fd/parent-ui-compatibility-review-v2.json",
-              "sha256": "ab2da70c31aea3ecb42410b67c3cb5e6a2f4c8be3ca0b65bf124efef2c94e82a",
-              "original_artifact_ref": "artifacts/p2-009-recovery-20261111/parent-ui-compatibility-review-v2/review.json"
-            },
-            {
-              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/execution-index.json",
-              "sha256": "b3c3823b8b394fcbdb8fdd3c0bf3a87b5e28990f1571485cd3cdd253527abc57"
+              "path": "governance/evidence/p2-010-federation-20261112/public/registration-wip-ui/results.json",
+              "sha256": "60a64317967ae0c5bdb1957b79fa1cbd652e9c001ae836e0c07999a0257bc250"
             }
-          ],
-          "current_compatibility_basis": {
-            "actual_ui_evidence": "Historicalactual24Registration/16Foundation plus dedicatedunchangedsource/functionwitness.146doesnotcoverthem.",
-            "manual_comparison_reuse": "Originalrowrendered/Figma/consent/manualrefs remain at originaltestedSHA; no freshcapture/pixelequality claim."
-          }
+          ]
         }
       ],
       "screenshots": [
         {
-          "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/registration/global-register-1440.png",
-          "sha256": "7c51f87606d2f22f5e94914d488a381a640c3130bc6424c22758cc40da3af9bc",
-          "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/registration/global-register-1440.png",
-          "role": "CURRENT_SOURCE_RENDER",
-          "source_carrier_sha": "6e562db102ce75d5ed478a15e2970ff55ab98fef"
+          "path": "governance/evidence/p2-010-federation-20261112/public/registration-wip-ui/runs/federation-Approved-passwo-11b05-rd-and-accessibility-at-320/federation-intake-error-320.png",
+          "sha256": "0288d864da2e0f12c3280fae75ecd78ef1529dc9830b1a7052c011f82e7d5a46",
+          "role": "RENDERED_IMPLEMENTATION"
+        },
+        {
+          "path": "governance/evidence/p2-010-federation-20261112/public/registration-wip-ui/runs/federation-Approved-passwo-11b05-rd-and-accessibility-at-320/federation-intake-normal-320.png",
+          "sha256": "dc46a2fca01684ad972ce0e635ca20d0ba2256fc9ee183a0aeb0ac0233e6fae3",
+          "role": "RENDERED_IMPLEMENTATION"
+        },
+        {
+          "path": "governance/evidence/p2-010-federation-20261112/public/registration-wip-ui/runs/federation-Approved-passwo-96131-rd-and-accessibility-at-390/federation-intake-error-390.png",
+          "sha256": "b6ba77cd4225dde2eb31b340bbd24755114a1a8dcfeaf4dfa16d54a469a686e8",
+          "role": "RENDERED_IMPLEMENTATION"
+        },
+        {
+          "path": "governance/evidence/p2-010-federation-20261112/public/registration-wip-ui/runs/federation-Approved-passwo-96131-rd-and-accessibility-at-390/federation-intake-normal-390.png",
+          "sha256": "2aed60a118551d13a522af9b9845f84ef03874b7fa4abaca2b5e8e85e1db81ab",
+          "role": "RENDERED_IMPLEMENTATION"
+        },
+        {
+          "path": "governance/evidence/p2-010-federation-20261112/public/registration-wip-ui/runs/federation-Approved-passwo-e5cef-d-and-accessibility-at-1440/federation-intake-error-1440.png",
+          "sha256": "149502cc078de9c095ac32a49e3b86e8c3852ac3f0984144ede9d9650383c5e2",
+          "role": "RENDERED_IMPLEMENTATION"
+        },
+        {
+          "path": "governance/evidence/p2-010-federation-20261112/public/registration-wip-ui/runs/federation-Approved-passwo-e5cef-d-and-accessibility-at-1440/federation-intake-normal-1440.png",
+          "sha256": "edc1775e7b4e3b4129dc08ac08de8b7e9dfc84296ccc326b552085af2a0076e6",
+          "role": "RENDERED_IMPLEMENTATION"
         },
         {
           "path": "governance/evidence/ui/AMD0008/approved-reference-register.png",
           "sha256": "c0171eb9b4e3d90c34cbb746a6a93a70bd122b0c2d0372c31aa71e688b6a9870",
-          "role": "APPROVED_REFERENCE_OR_SCOPED_PROPOSAL"
+          "role": "EXISTING_COMMITTED_FIGMA_REFERENCE"
+        },
+        {
+          "path": "governance/evidence/ui/AMD0009/figma-registration-validation-errors.png",
+          "sha256": "0b1e8d0a4516747f85501f828cb62dd7adbb938ce9f1244e34e5a1eb5db0d5fa",
+          "role": "EXISTING_COMMITTED_VALIDATION_REFERENCE"
         }
       ],
       "deviations": [
         {
+          "scope_id": "010-V04",
           "status": "PRODUCT_OWNER_APPROVED",
           "approval_evidence": {
-            "path": "governance/evidence/ui/AMD0009/approved-four-scope-consent.json",
-            "sha256": "ef9942ec0c8989f4db7679021eeabea697710ed0abc9f3b8bea9f5a5763fcaf6"
+            "path": "governance/evidence/TUN-P2-010-VISUAL-CONSENT.json",
+            "sha256": "f14f0d8bd6e11821fc252b6be4854a58f679c0a1e8dc3e505d66596c7f00e12c"
           }
         }
       ],
-      "historical_item_ref": {
-        "path": "governance/evidence/TUN-P2-004-UI-COMPLIANCE-TOTP-20261110.json",
-        "sha256": "8fbf361ce39cb6b134acbed1395392c37fece107bf20df5e573efd44ef1734b5",
-        "item_id": "U-AUTH-02"
-      },
-      "current_compatibility_review": {
-        "review_ref": {
-          "path": "governance/evidence/p2-009-recovery-20261111/parent-readiness-ad744fd/parent-ui-compatibility-review-v2.json",
-          "sha256": "ab2da70c31aea3ecb42410b67c3cb5e6a2f4c8be3ca0b65bf124efef2c94e82a",
-          "original_artifact_ref": "artifacts/p2-009-recovery-20261111/parent-ui-compatibility-review-v2/review.json"
-        },
-        "required_check_ids": [
-          "URL-001",
-          "URL-002",
-          "URL-003",
-          "URL-005",
-          "URL-004",
-          "URL-006",
-          "UX-FID-001",
-          "UX-FID-002",
-          "UX-FID-003",
-          "UX-FID-004",
-          "UX-FID-005",
-          "UX-FID-006",
-          "UX-FID-007",
-          "UX-FID-008"
-        ],
-        "existing_NA": [
-          {
-            "id": "URL-004",
-            "result": "NOT_APPLICABLE",
-            "reason": "No independent modal/tab/filter/anchor workflow on this screen; canonical routing/guard handling is covered separately."
-          },
-          {
-            "id": "URL-006",
-            "result": "NOT_APPLICABLE",
-            "reason": "Product-origin OAuth/callback is not implemented in this feature slice (future P2-014). No future-flow PASS is claimed. Existing callback source was not changed; external query/fragment attempts do not authorize navigation."
-          }
-        ],
-        "boundary": "Original screenshot hashes, invocation/source carrier identities, manual comparisons and approved deviations are reused at their original scope; no fresh capture or Product consent is claimed."
-      }
+      "scope_boundary": "Qualified Google provider email is read-only; only explicit Tunner notice acknowledgment is editable. No Microsoft registration mapping, fallback verification, password fabrication, automatic activation or later PI change."
     },
     {
       "id": "U-AUTH-03",
@@ -2092,6 +2079,14 @@
     },
     {
       "id": "FORM-REGISTRATION",
+      "kind": "FORM",
+      "pathname": null,
+      "authority_refs": [
+        "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md",
+        "docs/authority/current/development/31_UI_UX_Screen_and_Control_Center_Requirements_Matrix.md",
+        "docs/authority/current/decisions/AMD-0008_Approved_Figma_Visual_Fidelity_and_Product_Owner_UX_Consent.md",
+        "docs/authority/current/decisions/AMD-0009_URL_Addressable_Routing_and_Governed_Form_Validation.md"
+      ],
       "figma_refs": [
         {
           "file_key": "apNbwvAgdn1xIxYH1oiaSC",
@@ -2101,459 +2096,408 @@
           "file_key": "apNbwvAgdn1xIxYH1oiaSC",
           "node_id": "70:1257",
           "role": "Approved error presentation exemplar; current domain fields/copy remain authoritative"
+        },
+        {
+          "file_key": "apNbwvAgdn1xIxYH1oiaSC",
+          "node_id": "197:5"
         }
       ],
+      "source_paths": [
+        "web/apps/user",
+        "src/Modules/Identity/RegistrationEndpoints.cs",
+        "src/Modules/Identity/RegistrationApplication.cs",
+        "src/Modules/Identity/RegistrationPersonalInformation.cs",
+        "web/apps/user/main.tsx",
+        "web/apps/user/registration.federation.ts",
+        "web/apps/user/registration.css",
+        "web/apps/user/content.proposal.json",
+        "web/apps/user/federation.api.ts",
+        "web/apps/user/federation.sign-in.tsx"
+      ],
+      "result": "PASS",
+      "assessment_scope": "Final executing-AI specialist engineering review of this exact inventory item at734828a. Scoped Product visual consent is genuine; native UI gate/commit, whole-feature Product/release and production configuration remain separate.",
       "checks": [
         {
           "id": "VAL-001",
           "result": "PASS",
-          "description": "Named empty/format/confirmation cases render approved shared field errors. Item-specific basis: Approved field/error and summary geometry reused with current domain field set; current fixture policy range is not replaced by old Figma password copy. First-invalid focus, confirmation and notice errors are visible without native bubbles.",
+          "description": "Editable form fields use existing typed validation and governed field/error appearance; command-only exclusions are explicit.",
           "evidence_refs": [
             {
-              "path": "governance/evidence/TUN-P2-004-UI-COMPLIANCE-TOTP-20261110.json",
-              "sha256": "8fbf361ce39cb6b134acbed1395392c37fece107bf20df5e573efd44ef1734b5"
+              "path": "governance/evidence/p2-010-federation-20261112/public/registration-wip-ui/results.json",
+              "sha256": "60a64317967ae0c5bdb1957b79fa1cbd652e9c001ae836e0c07999a0257bc250"
             },
             {
-              "path": "governance/evidence/p2-009-recovery-20261111/parent-readiness-ad744fd/parent-ui-compatibility-review-v2.json",
-              "sha256": "ab2da70c31aea3ecb42410b67c3cb5e6a2f4c8be3ca0b65bf124efef2c94e82a",
-              "original_artifact_ref": "artifacts/p2-009-recovery-20261111/parent-ui-compatibility-review-v2/review.json"
+              "path": "governance/evidence/p2-010-federation-20261112/public/registration-wip-ui/ordinary-regression/results.json",
+              "sha256": "ac2e11ce14815cbee0f576d10e4b4d36341db2782524b02e8177eef1d823f097"
             },
             {
-              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/execution-index.json",
-              "sha256": "b3c3823b8b394fcbdb8fdd3c0bf3a87b5e28990f1571485cd3cdd253527abc57"
+              "path": "governance/evidence/p2-010-federation-20261112/public/registration-wip-ui/v01-regression/results.json",
+              "sha256": "fd62a7b7f75f5baec6b99db8e83a7c46d63d1d8d5e82ba7db1fa1275169b97e8"
             }
-          ],
-          "current_compatibility_basis": {
-            "actual_ui_evidence": "Historicalactual24Registration/16Foundation plus dedicatedunchangedsource/functionwitness.146doesnotcoverthem.",
-            "manual_comparison_reuse": "Originalrowrendered/Figma/consent/manualrefs remain at originaltestedSHA; no freshcapture/pixelequality claim."
-          }
+          ]
         },
         {
           "id": "VAL-002",
           "result": "PASS",
-          "description": "Typed application errors and form noValidate are exercised; native bubbles are not sole feedback. Item-specific basis: Approved field/error and summary geometry reused with current domain field set; current fixture policy range is not replaced by old Figma password copy. First-invalid focus, confirmation and notice errors are visible without native bubbles.",
+          "description": "Shared noValidate/schema feedback, field errors and summary replace native-only constraint feedback.",
           "evidence_refs": [
             {
-              "path": "governance/evidence/TUN-P2-004-UI-COMPLIANCE-TOTP-20261110.json",
-              "sha256": "8fbf361ce39cb6b134acbed1395392c37fece107bf20df5e573efd44ef1734b5"
+              "path": "governance/evidence/p2-010-federation-20261112/public/registration-wip-ui/results.json",
+              "sha256": "60a64317967ae0c5bdb1957b79fa1cbd652e9c001ae836e0c07999a0257bc250"
             },
             {
-              "path": "governance/evidence/p2-009-recovery-20261111/parent-readiness-ad744fd/parent-ui-compatibility-review-v2.json",
-              "sha256": "ab2da70c31aea3ecb42410b67c3cb5e6a2f4c8be3ca0b65bf124efef2c94e82a",
-              "original_artifact_ref": "artifacts/p2-009-recovery-20261111/parent-ui-compatibility-review-v2/review.json"
+              "path": "governance/evidence/p2-010-federation-20261112/public/registration-wip-ui/ordinary-regression/results.json",
+              "sha256": "ac2e11ce14815cbee0f576d10e4b4d36341db2782524b02e8177eef1d823f097"
             },
             {
-              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/execution-index.json",
-              "sha256": "b3c3823b8b394fcbdb8fdd3c0bf3a87b5e28990f1571485cd3cdd253527abc57"
+              "path": "governance/evidence/p2-010-federation-20261112/public/registration-wip-ui/v01-regression/results.json",
+              "sha256": "fd62a7b7f75f5baec6b99db8e83a7c46d63d1d8d5e82ba7db1fa1275169b97e8"
             }
-          ],
-          "current_compatibility_basis": {
-            "actual_ui_evidence": "Historicalactual24Registration/16Foundation plus dedicatedunchangedsource/functionwitness.146doesnotcoverthem.",
-            "manual_comparison_reuse": "Originalrowrendered/Figma/consent/manualrefs remain at originaltestedSHA; no freshcapture/pixelequality claim."
-          }
+          ]
         },
         {
           "id": "VAL-003",
           "result": "PASS",
-          "description": "Independent native backend tests are actual PASS in the linked260 receipt; source carrier equality is bound by the parent compatibility receipt, not inferred from mocks. Item-specific basis: Approved field/error and summary geometry reused with current domain field set; current fixture policy range is not replaced by old Figma password copy. First-invalid focus, confirmation and notice errors are visible without native bubbles.",
+          "description": "Independent current native strict/bypass/currentness and original-binding rejection is supported by actual734 private76 cases named here; public mocks are supporting UI evidence only.",
           "evidence_refs": [
             {
-              "path": "governance/evidence/TUN-P2-004-UI-COMPLIANCE-TOTP-20261110.json",
-              "sha256": "8fbf361ce39cb6b134acbed1395392c37fece107bf20df5e573efd44ef1734b5"
+              "path": "governance/evidence/p2-010-federation-20261112/public/registration-wip-ui/results.json",
+              "sha256": "60a64317967ae0c5bdb1957b79fa1cbd652e9c001ae836e0c07999a0257bc250"
             },
             {
-              "path": "governance/evidence/p2-009-recovery-20261111/parent-readiness-ad744fd/parent-ui-compatibility-review-v2.json",
-              "sha256": "ab2da70c31aea3ecb42410b67c3cb5e6a2f4c8be3ca0b65bf124efef2c94e82a",
-              "original_artifact_ref": "artifacts/p2-009-recovery-20261111/parent-ui-compatibility-review-v2/review.json"
+              "path": "governance/evidence/p2-010-federation-20261112/public/registration-wip-ui/ordinary-regression/results.json",
+              "sha256": "ac2e11ce14815cbee0f576d10e4b4d36341db2782524b02e8177eef1d823f097"
             },
             {
-              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/execution-index.json",
-              "sha256": "b3c3823b8b394fcbdb8fdd3c0bf3a87b5e28990f1571485cd3cdd253527abc57"
+              "path": "governance/evidence/p2-010-federation-20261112/public/registration-wip-ui/v01-regression/results.json",
+              "sha256": "fd62a7b7f75f5baec6b99db8e83a7c46d63d1d8d5e82ba7db1fa1275169b97e8"
+            },
+            {
+              "path": "governance/evidence/p2-010-federation-20261112/native-734828a/private76.json",
+              "sha256": "1681a04d5c7038ed0311137804fb1c0d2c7edff53fe2b9f54758e5eaa4e32367"
+            },
+            {
+              "path": "governance/evidence/p2-010-federation-20261112/native-734828a/build-binding.json",
+              "sha256": "9ba2f980e0201af68872d07a77e535bcbbe3b1f391238d0bc5c6d814904f7497"
             }
           ],
-          "current_compatibility_basis": {
-            "actual_ui_evidence": "Historicalactual24Registration/16Foundation plus dedicatedunchangedsource/functionwitness.146doesnotcoverthem.",
-            "manual_comparison_reuse": "Originalrowrendered/Figma/consent/manualrefs remain at originaltestedSHA; no freshcapture/pixelequality claim."
-          }
+          "backend_case_evidence": [
+            "FEDERATION_HTTPS_WIRE",
+            "FEDERATION_REGISTRATION",
+            "FEDERATION_REGISTRATION_REJECTION",
+            "FEDERATION_REGISTRATION_FINALITY",
+            "PARENT003_REGISTRATION_BOUNDARY",
+            "PARENT003_REGISTRATION_FLOW",
+            "PARENT003_REGISTRATION_PROGRESS"
+          ]
         },
         {
           "id": "VAL-004",
           "result": "PASS",
-          "description": "Named server rejections map to governed field/form messages without invented account existence or finality. Item-specific basis: Approved field/error and summary geometry reused with current domain field set; current fixture policy range is not replaced by old Figma password copy. First-invalid focus, confirmation and notice errors are visible without native bubbles.",
+          "description": "Original public negative cases map safe bounded errors/UNKNOWN without raw server/provider detail or account enumeration.",
           "evidence_refs": [
             {
-              "path": "governance/evidence/TUN-P2-004-UI-COMPLIANCE-TOTP-20261110.json",
-              "sha256": "8fbf361ce39cb6b134acbed1395392c37fece107bf20df5e573efd44ef1734b5"
+              "path": "governance/evidence/p2-010-federation-20261112/public/registration-wip-ui/results.json",
+              "sha256": "60a64317967ae0c5bdb1957b79fa1cbd652e9c001ae836e0c07999a0257bc250"
             },
             {
-              "path": "governance/evidence/p2-009-recovery-20261111/parent-readiness-ad744fd/parent-ui-compatibility-review-v2.json",
-              "sha256": "ab2da70c31aea3ecb42410b67c3cb5e6a2f4c8be3ca0b65bf124efef2c94e82a",
-              "original_artifact_ref": "artifacts/p2-009-recovery-20261111/parent-ui-compatibility-review-v2/review.json"
+              "path": "governance/evidence/p2-010-federation-20261112/public/registration-wip-ui/ordinary-regression/results.json",
+              "sha256": "ac2e11ce14815cbee0f576d10e4b4d36341db2782524b02e8177eef1d823f097"
             },
             {
-              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/execution-index.json",
-              "sha256": "b3c3823b8b394fcbdb8fdd3c0bf3a87b5e28990f1571485cd3cdd253527abc57"
+              "path": "governance/evidence/p2-010-federation-20261112/public/registration-wip-ui/v01-regression/results.json",
+              "sha256": "fd62a7b7f75f5baec6b99db8e83a7c46d63d1d8d5e82ba7db1fa1275169b97e8"
             }
-          ],
-          "current_compatibility_basis": {
-            "actual_ui_evidence": "Historicalactual24Registration/16Foundation plus dedicatedunchangedsource/functionwitness.146doesnotcoverthem.",
-            "manual_comparison_reuse": "Originalrowrendered/Figma/consent/manualrefs remain at originaltestedSHA; no freshcapture/pixelequality claim."
-          }
+          ]
         },
         {
           "id": "VAL-005",
           "result": "PASS",
-          "description": "Named cases exercise blur/correction, first-invalid focus, descriptions, safe-value handling and pending duplicate protection. Item-specific basis: Approved field/error and summary geometry reused with current domain field set; current fixture policy range is not replaced by old Figma password copy. First-invalid focus, confirmation and notice errors are visible without native bubbles.",
+          "description": "Original keyboard/focus/error clearing/safe preservation and duplicate/mutual-exclusion checks are retained per actual owning form/component.",
           "evidence_refs": [
             {
-              "path": "governance/evidence/TUN-P2-004-UI-COMPLIANCE-TOTP-20261110.json",
-              "sha256": "8fbf361ce39cb6b134acbed1395392c37fece107bf20df5e573efd44ef1734b5"
+              "path": "governance/evidence/p2-010-federation-20261112/public/registration-wip-ui/results.json",
+              "sha256": "60a64317967ae0c5bdb1957b79fa1cbd652e9c001ae836e0c07999a0257bc250"
             },
             {
-              "path": "governance/evidence/p2-009-recovery-20261111/parent-readiness-ad744fd/parent-ui-compatibility-review-v2.json",
-              "sha256": "ab2da70c31aea3ecb42410b67c3cb5e6a2f4c8be3ca0b65bf124efef2c94e82a",
-              "original_artifact_ref": "artifacts/p2-009-recovery-20261111/parent-ui-compatibility-review-v2/review.json"
+              "path": "governance/evidence/p2-010-federation-20261112/public/registration-wip-ui/ordinary-regression/results.json",
+              "sha256": "ac2e11ce14815cbee0f576d10e4b4d36341db2782524b02e8177eef1d823f097"
             },
             {
-              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/execution-index.json",
-              "sha256": "b3c3823b8b394fcbdb8fdd3c0bf3a87b5e28990f1571485cd3cdd253527abc57"
+              "path": "governance/evidence/p2-010-federation-20261112/public/registration-wip-ui/v01-regression/results.json",
+              "sha256": "fd62a7b7f75f5baec6b99db8e83a7c46d63d1d8d5e82ba7db1fa1275169b97e8"
             }
-          ],
-          "current_compatibility_basis": {
-            "actual_ui_evidence": "Historicalactual24Registration/16Foundation plus dedicatedunchangedsource/functionwitness.146doesnotcoverthem.",
-            "manual_comparison_reuse": "Originalrowrendered/Figma/consent/manualrefs remain at originaltestedSHA; no freshcapture/pixelequality claim."
-          }
+          ]
         },
         {
           "id": "VAL-006",
           "result": "PASS",
-          "description": "Current actual error screenshots reviewed against approved70:1257 treatment and existing scoped adaptations. Item-specific basis: Approved field/error and summary geometry reused with current domain field set; current fixture policy range is not replaced by old Figma password copy. First-invalid focus, confirmation and notice errors are visible without native bubbles.",
+          "description": "Retained rendered error states and shared70:1257 primitives are reviewed against the scoped approved adaptation.",
           "evidence_refs": [
             {
-              "path": "governance/evidence/TUN-P2-004-UI-COMPLIANCE-TOTP-20261110.json",
-              "sha256": "8fbf361ce39cb6b134acbed1395392c37fece107bf20df5e573efd44ef1734b5"
+              "path": "governance/evidence/p2-010-federation-20261112/public/registration-wip-ui/results.json",
+              "sha256": "60a64317967ae0c5bdb1957b79fa1cbd652e9c001ae836e0c07999a0257bc250"
             },
             {
-              "path": "governance/evidence/p2-009-recovery-20261111/parent-readiness-ad744fd/parent-ui-compatibility-review-v2.json",
-              "sha256": "ab2da70c31aea3ecb42410b67c3cb5e6a2f4c8be3ca0b65bf124efef2c94e82a",
-              "original_artifact_ref": "artifacts/p2-009-recovery-20261111/parent-ui-compatibility-review-v2/review.json"
+              "path": "governance/evidence/p2-010-federation-20261112/public/registration-wip-ui/ordinary-regression/results.json",
+              "sha256": "ac2e11ce14815cbee0f576d10e4b4d36341db2782524b02e8177eef1d823f097"
             },
             {
-              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/execution-index.json",
-              "sha256": "b3c3823b8b394fcbdb8fdd3c0bf3a87b5e28990f1571485cd3cdd253527abc57"
+              "path": "governance/evidence/p2-010-federation-20261112/public/registration-wip-ui/v01-regression/results.json",
+              "sha256": "fd62a7b7f75f5baec6b99db8e83a7c46d63d1d8d5e82ba7db1fa1275169b97e8"
             }
-          ],
-          "current_compatibility_basis": {
-            "actual_ui_evidence": "Historicalactual24Registration/16Foundation plus dedicatedunchangedsource/functionwitness.146doesnotcoverthem.",
-            "manual_comparison_reuse": "Originalrowrendered/Figma/consent/manualrefs remain at originaltestedSHA; no freshcapture/pixelequality claim."
-          }
+          ]
         },
         {
           "id": "VAL-007",
           "result": "PASS",
-          "description": "Current domain/policy rules govern fields, code/password grammar and messages; historical Figma wording is not business authority. Item-specific basis: Approved field/error and summary geometry reused with current domain field set; current fixture policy range is not replaced by old Figma password copy. First-invalid focus, confirmation and notice errors are visible without native bubbles.",
+          "description": "Current734 native source/evidence/profile/notice/policy/currentness cases support independent server authority. Conditional published controls and public negative tests preserve that boundary; no Figma sample or client default selects policy.",
           "evidence_refs": [
             {
-              "path": "governance/evidence/TUN-P2-004-UI-COMPLIANCE-TOTP-20261110.json",
-              "sha256": "8fbf361ce39cb6b134acbed1395392c37fece107bf20df5e573efd44ef1734b5"
+              "path": "governance/evidence/p2-010-federation-20261112/public/registration-wip-ui/results.json",
+              "sha256": "60a64317967ae0c5bdb1957b79fa1cbd652e9c001ae836e0c07999a0257bc250"
             },
             {
-              "path": "governance/evidence/p2-009-recovery-20261111/parent-readiness-ad744fd/parent-ui-compatibility-review-v2.json",
-              "sha256": "ab2da70c31aea3ecb42410b67c3cb5e6a2f4c8be3ca0b65bf124efef2c94e82a",
-              "original_artifact_ref": "artifacts/p2-009-recovery-20261111/parent-ui-compatibility-review-v2/review.json"
+              "path": "governance/evidence/p2-010-federation-20261112/public/registration-wip-ui/ordinary-regression/results.json",
+              "sha256": "ac2e11ce14815cbee0f576d10e4b4d36341db2782524b02e8177eef1d823f097"
             },
             {
-              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/execution-index.json",
-              "sha256": "b3c3823b8b394fcbdb8fdd3c0bf3a87b5e28990f1571485cd3cdd253527abc57"
+              "path": "governance/evidence/p2-010-federation-20261112/public/registration-wip-ui/v01-regression/results.json",
+              "sha256": "fd62a7b7f75f5baec6b99db8e83a7c46d63d1d8d5e82ba7db1fa1275169b97e8"
+            },
+            {
+              "path": "governance/evidence/p2-010-federation-20261112/native-734828a/private76.json",
+              "sha256": "1681a04d5c7038ed0311137804fb1c0d2c7edff53fe2b9f54758e5eaa4e32367"
+            },
+            {
+              "path": "governance/evidence/p2-010-federation-20261112/native-734828a/build-binding.json",
+              "sha256": "9ba2f980e0201af68872d07a77e535bcbbe3b1f391238d0bc5c6d814904f7497"
             }
           ],
-          "current_compatibility_basis": {
-            "actual_ui_evidence": "Historicalactual24Registration/16Foundation plus dedicatedunchangedsource/functionwitness.146doesnotcoverthem.",
-            "manual_comparison_reuse": "Originalrowrendered/Figma/consent/manualrefs remain at originaltestedSHA; no freshcapture/pixelequality claim."
-          }
+          "backend_case_evidence": [
+            "FEDERATION_HTTPS_WIRE",
+            "FEDERATION_REGISTRATION",
+            "FEDERATION_REGISTRATION_REJECTION",
+            "FEDERATION_REGISTRATION_FINALITY",
+            "PARENT003_REGISTRATION_BOUNDARY",
+            "PARENT003_REGISTRATION_FLOW",
+            "PARENT003_REGISTRATION_PROGRESS"
+          ]
         },
         {
           "id": "VAL-008",
           "result": "PASS",
-          "description": "Existing parent cross-device route/form regressions actually pass with independent native receipt/source binding. This does not approve the separate008real browser OTP journey. Item-specific basis: Approved field/error and summary geometry reused with current domain field set; current fixture policy range is not replaced by old Figma password copy. First-invalid focus, confirmation and notice errors are visible without native bubbles.",
+          "description": "Actual public viewport/validation/keyboard/Axe cohorts combine with current source-bound734 native owner/HTTP cases. Split/original invocation identities remain separate; this is not all-viewport real-provider or real-BFF browser execution.",
           "evidence_refs": [
             {
-              "path": "governance/evidence/TUN-P2-004-UI-COMPLIANCE-TOTP-20261110.json",
-              "sha256": "8fbf361ce39cb6b134acbed1395392c37fece107bf20df5e573efd44ef1734b5"
+              "path": "governance/evidence/p2-010-federation-20261112/public/registration-wip-ui/results.json",
+              "sha256": "60a64317967ae0c5bdb1957b79fa1cbd652e9c001ae836e0c07999a0257bc250"
             },
             {
-              "path": "governance/evidence/p2-009-recovery-20261111/parent-readiness-ad744fd/parent-ui-compatibility-review-v2.json",
-              "sha256": "ab2da70c31aea3ecb42410b67c3cb5e6a2f4c8be3ca0b65bf124efef2c94e82a",
-              "original_artifact_ref": "artifacts/p2-009-recovery-20261111/parent-ui-compatibility-review-v2/review.json"
+              "path": "governance/evidence/p2-010-federation-20261112/public/registration-wip-ui/ordinary-regression/results.json",
+              "sha256": "ac2e11ce14815cbee0f576d10e4b4d36341db2782524b02e8177eef1d823f097"
             },
             {
-              "path": "governance/evidence/p2-009-recovery-20261111/parent-readiness-ad744fd/native-private62.json",
-              "sha256": "64a5907426512232686f4e09f99e7e476082ef3ee4b1f60a49c87bd0fbab50ed",
-              "original_artifact_ref": "artifacts/p2-009-recovery-20261111/fixed-next-runners-v4/results/native-private62-dfd65dbd81494e08aa92efa46f962a42/01.json"
+              "path": "governance/evidence/p2-010-federation-20261112/public/registration-wip-ui/v01-regression/results.json",
+              "sha256": "fd62a7b7f75f5baec6b99db8e83a7c46d63d1d8d5e82ba7db1fa1275169b97e8"
             },
             {
-              "path": "governance/evidence/TUN-P2-003-004-005-006-RECOVERY-COMPATIBILITY-20261111.json",
-              "sha256": "aa8ff4ac333d7df998486d475f9cb9aa998d11b77b180c5960643e67f697d250"
+              "path": "governance/evidence/p2-010-federation-20261112/native-734828a/private76.json",
+              "sha256": "1681a04d5c7038ed0311137804fb1c0d2c7edff53fe2b9f54758e5eaa4e32367"
+            },
+            {
+              "path": "governance/evidence/p2-010-federation-20261112/native-734828a/build-binding.json",
+              "sha256": "9ba2f980e0201af68872d07a77e535bcbbe3b1f391238d0bc5c6d814904f7497"
+            },
+            {
+              "path": "governance/evidence/p2-010-federation-20261112/native-734828a/resource-qualification.json",
+              "sha256": "c15aadecc3e9512b4758a49bb4ecfbc6f0309d715b301df12a8f1ba30eaf29af"
             }
           ],
-          "current_compatibility_basis": {
-            "actual_invocation_sha": "ad744fde52aa03404f3944c47ebb79070185e9f2",
-            "case_ids": [
-              "PARENT003_REGISTRATION_BOUNDARY",
-              "PARENT003_REGISTRATION_FLOW",
-              "PARENT003_REGISTRATION_PROGRESS"
-            ],
-            "scope": "Actual independent backend boundary/proof checks; no mocked UI substitution."
-          }
+          "backend_case_evidence": [
+            "FEDERATION_HTTPS_WIRE",
+            "FEDERATION_REGISTRATION",
+            "FEDERATION_REGISTRATION_REJECTION",
+            "FEDERATION_REGISTRATION_FINALITY",
+            "PARENT003_REGISTRATION_BOUNDARY",
+            "PARENT003_REGISTRATION_FLOW",
+            "PARENT003_REGISTRATION_PROGRESS"
+          ]
         },
         {
           "id": "UX-FID-001",
           "result": "PASS",
-          "description": "Manual current/reference comparison in item notes; scoped existing composition retained. Item-specific basis: Approved field/error and summary geometry reused with current domain field set; current fixture policy range is not replaced by old Figma password copy. First-invalid focus, confirmation and notice errors are visible without native bubbles.",
+          "description": "Current implementation reuses the owning existing shell/rows/dialog and approved scoped adaptation.",
           "evidence_refs": [
             {
-              "path": "governance/evidence/TUN-P2-004-UI-COMPLIANCE-TOTP-20261110.json",
-              "sha256": "8fbf361ce39cb6b134acbed1395392c37fece107bf20df5e573efd44ef1734b5"
+              "path": "governance/evidence/TUN-P2-010-VISUAL-CONSENT.json",
+              "sha256": "f14f0d8bd6e11821fc252b6be4854a58f679c0a1e8dc3e505d66596c7f00e12c"
             },
             {
-              "path": "governance/evidence/p2-009-recovery-20261111/parent-readiness-ad744fd/parent-ui-compatibility-review-v2.json",
-              "sha256": "ab2da70c31aea3ecb42410b67c3cb5e6a2f4c8be3ca0b65bf124efef2c94e82a",
-              "original_artifact_ref": "artifacts/p2-009-recovery-20261111/parent-ui-compatibility-review-v2/review.json"
-            },
-            {
-              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/execution-index.json",
-              "sha256": "b3c3823b8b394fcbdb8fdd3c0bf3a87b5e28990f1571485cd3cdd253527abc57"
+              "path": "governance/evidence/p2-010-federation-20261112/public/registration-wip-ui/results.json",
+              "sha256": "60a64317967ae0c5bdb1957b79fa1cbd652e9c001ae836e0c07999a0257bc250"
             }
-          ],
-          "current_compatibility_basis": {
-            "actual_ui_evidence": "Historicalactual24Registration/16Foundation plus dedicatedunchangedsource/functionwitness.146doesnotcoverthem.",
-            "manual_comparison_reuse": "Originalrowrendered/Figma/consent/manualrefs remain at originaltestedSHA; no freshcapture/pixelequality claim."
-          }
+          ]
         },
         {
           "id": "UX-FID-002",
           "result": "PASS",
-          "description": "Local page/glow/assets are present in current captures and local-asset tests. Item-specific basis: Approved field/error and summary geometry reused with current domain field set; current fixture policy range is not replaced by old Figma password copy. First-invalid focus, confirmation and notice errors are visible without native bubbles.",
+          "description": "Retained implementation captures include the existing background/glow/assets rather than a replacement visual shell.",
           "evidence_refs": [
             {
-              "path": "governance/evidence/TUN-P2-004-UI-COMPLIANCE-TOTP-20261110.json",
-              "sha256": "8fbf361ce39cb6b134acbed1395392c37fece107bf20df5e573efd44ef1734b5"
+              "path": "governance/evidence/TUN-P2-010-VISUAL-CONSENT.json",
+              "sha256": "f14f0d8bd6e11821fc252b6be4854a58f679c0a1e8dc3e505d66596c7f00e12c"
             },
             {
-              "path": "governance/evidence/p2-009-recovery-20261111/parent-readiness-ad744fd/parent-ui-compatibility-review-v2.json",
-              "sha256": "ab2da70c31aea3ecb42410b67c3cb5e6a2f4c8be3ca0b65bf124efef2c94e82a",
-              "original_artifact_ref": "artifacts/p2-009-recovery-20261111/parent-ui-compatibility-review-v2/review.json"
-            },
-            {
-              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/execution-index.json",
-              "sha256": "b3c3823b8b394fcbdb8fdd3c0bf3a87b5e28990f1571485cd3cdd253527abc57"
+              "path": "governance/evidence/p2-010-federation-20261112/public/registration-wip-ui/results.json",
+              "sha256": "60a64317967ae0c5bdb1957b79fa1cbd652e9c001ae836e0c07999a0257bc250"
             }
-          ],
-          "current_compatibility_basis": {
-            "actual_ui_evidence": "Historicalactual24Registration/16Foundation plus dedicatedunchangedsource/functionwitness.146doesnotcoverthem.",
-            "manual_comparison_reuse": "Originalrowrendered/Figma/consent/manualrefs remain at originaltestedSHA; no freshcapture/pixelequality claim."
-          }
+          ]
         },
         {
           "id": "UX-FID-003",
           "result": "PASS",
-          "description": "Shared typed fields/buttons/error geometry and token variants are reused. Item-specific basis: Approved field/error and summary geometry reused with current domain field set; current fixture policy range is not replaced by old Figma password copy. First-invalid focus, confirmation and notice errors are visible without native bubbles.",
+          "description": "New conditional fields/controls reuse existing design tokens, shared controls, validation and published content.",
           "evidence_refs": [
             {
-              "path": "governance/evidence/TUN-P2-004-UI-COMPLIANCE-TOTP-20261110.json",
-              "sha256": "8fbf361ce39cb6b134acbed1395392c37fece107bf20df5e573efd44ef1734b5"
+              "path": "governance/evidence/TUN-P2-010-VISUAL-CONSENT.json",
+              "sha256": "f14f0d8bd6e11821fc252b6be4854a58f679c0a1e8dc3e505d66596c7f00e12c"
             },
             {
-              "path": "governance/evidence/p2-009-recovery-20261111/parent-readiness-ad744fd/parent-ui-compatibility-review-v2.json",
-              "sha256": "ab2da70c31aea3ecb42410b67c3cb5e6a2f4c8be3ca0b65bf124efef2c94e82a",
-              "original_artifact_ref": "artifacts/p2-009-recovery-20261111/parent-ui-compatibility-review-v2/review.json"
-            },
-            {
-              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/execution-index.json",
-              "sha256": "b3c3823b8b394fcbdb8fdd3c0bf3a87b5e28990f1571485cd3cdd253527abc57"
+              "path": "governance/evidence/p2-010-federation-20261112/public/registration-wip-ui/results.json",
+              "sha256": "60a64317967ae0c5bdb1957b79fa1cbd652e9c001ae836e0c07999a0257bc250"
             }
-          ],
-          "current_compatibility_basis": {
-            "actual_ui_evidence": "Historicalactual24Registration/16Foundation plus dedicatedunchangedsource/functionwitness.146doesnotcoverthem.",
-            "manual_comparison_reuse": "Originalrowrendered/Figma/consent/manualrefs remain at originaltestedSHA; no freshcapture/pixelequality claim."
-          }
+          ]
         },
         {
           "id": "UX-FID-004",
           "result": "PASS",
-          "description": "Only previously approved scoped deviations/consents apply; preserve their exact references. Item-specific basis: Approved field/error and summary geometry reused with current domain field set; current fixture policy range is not replaced by old Figma password copy. First-invalid focus, confirmation and notice errors are visible without native bubbles.",
+          "description": "Material adaptations are limited to the four genuinely approved010 visual scopes in the hashed consent record.",
           "evidence_refs": [
             {
-              "path": "governance/evidence/TUN-P2-004-UI-COMPLIANCE-TOTP-20261110.json",
-              "sha256": "8fbf361ce39cb6b134acbed1395392c37fece107bf20df5e573efd44ef1734b5"
+              "path": "governance/evidence/TUN-P2-010-VISUAL-CONSENT.json",
+              "sha256": "f14f0d8bd6e11821fc252b6be4854a58f679c0a1e8dc3e505d66596c7f00e12c"
             },
             {
-              "path": "governance/evidence/p2-009-recovery-20261111/parent-readiness-ad744fd/parent-ui-compatibility-review-v2.json",
-              "sha256": "ab2da70c31aea3ecb42410b67c3cb5e6a2f4c8be3ca0b65bf124efef2c94e82a",
-              "original_artifact_ref": "artifacts/p2-009-recovery-20261111/parent-ui-compatibility-review-v2/review.json"
-            },
-            {
-              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/execution-index.json",
-              "sha256": "b3c3823b8b394fcbdb8fdd3c0bf3a87b5e28990f1571485cd3cdd253527abc57"
+              "path": "governance/evidence/p2-010-federation-20261112/public/registration-wip-ui/results.json",
+              "sha256": "60a64317967ae0c5bdb1957b79fa1cbd652e9c001ae836e0c07999a0257bc250"
             }
-          ],
-          "current_compatibility_basis": {
-            "actual_ui_evidence": "Historicalactual24Registration/16Foundation plus dedicatedunchangedsource/functionwitness.146doesnotcoverthem.",
-            "manual_comparison_reuse": "Originalrowrendered/Figma/consent/manualrefs remain at originaltestedSHA; no freshcapture/pixelequality claim."
-          }
+          ]
         },
         {
           "id": "UX-FID-005",
           "result": "PASS",
-          "description": "Previously resolved domain/Figma conflicts remain truthful; no new material conflict observed in this compatibility scope. Item-specific basis: Approved field/error and summary geometry reused with current domain field set; current fixture policy range is not replaced by old Figma password copy. First-invalid focus, confirmation and notice errors are visible without native bubbles.",
+          "description": "Owning FRD17/refinement and server facts control behavior; scoped visual consent does not select production policy or qualification.",
           "evidence_refs": [
             {
-              "path": "governance/evidence/TUN-P2-004-UI-COMPLIANCE-TOTP-20261110.json",
-              "sha256": "8fbf361ce39cb6b134acbed1395392c37fece107bf20df5e573efd44ef1734b5"
+              "path": "governance/evidence/TUN-P2-010-VISUAL-CONSENT.json",
+              "sha256": "f14f0d8bd6e11821fc252b6be4854a58f679c0a1e8dc3e505d66596c7f00e12c"
             },
             {
-              "path": "governance/evidence/p2-009-recovery-20261111/parent-readiness-ad744fd/parent-ui-compatibility-review-v2.json",
-              "sha256": "ab2da70c31aea3ecb42410b67c3cb5e6a2f4c8be3ca0b65bf124efef2c94e82a",
-              "original_artifact_ref": "artifacts/p2-009-recovery-20261111/parent-ui-compatibility-review-v2/review.json"
-            },
-            {
-              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/execution-index.json",
-              "sha256": "b3c3823b8b394fcbdb8fdd3c0bf3a87b5e28990f1571485cd3cdd253527abc57"
+              "path": "governance/evidence/p2-010-federation-20261112/public/registration-wip-ui/results.json",
+              "sha256": "60a64317967ae0c5bdb1957b79fa1cbd652e9c001ae836e0c07999a0257bc250"
             }
-          ],
-          "current_compatibility_basis": {
-            "actual_ui_evidence": "Historicalactual24Registration/16Foundation plus dedicatedunchangedsource/functionwitness.146doesnotcoverthem.",
-            "manual_comparison_reuse": "Originalrowrendered/Figma/consent/manualrefs remain at originaltestedSHA; no freshcapture/pixelequality claim."
-          }
+          ]
         },
         {
           "id": "UX-FID-006",
           "result": "PASS",
-          "description": "Current source and screenshots retain approved screen-specific styling rather than library defaults. Item-specific basis: Approved field/error and summary geometry reused with current domain field set; current fixture policy range is not replaced by old Figma password copy. First-invalid focus, confirmation and notice errors are visible without native bubbles.",
+          "description": "Existing approved controls/theme are retained; no framework default or new visual system overrides them.",
           "evidence_refs": [
             {
-              "path": "governance/evidence/TUN-P2-004-UI-COMPLIANCE-TOTP-20261110.json",
-              "sha256": "8fbf361ce39cb6b134acbed1395392c37fece107bf20df5e573efd44ef1734b5"
+              "path": "governance/evidence/TUN-P2-010-VISUAL-CONSENT.json",
+              "sha256": "f14f0d8bd6e11821fc252b6be4854a58f679c0a1e8dc3e505d66596c7f00e12c"
             },
             {
-              "path": "governance/evidence/p2-009-recovery-20261111/parent-readiness-ad744fd/parent-ui-compatibility-review-v2.json",
-              "sha256": "ab2da70c31aea3ecb42410b67c3cb5e6a2f4c8be3ca0b65bf124efef2c94e82a",
-              "original_artifact_ref": "artifacts/p2-009-recovery-20261111/parent-ui-compatibility-review-v2/review.json"
-            },
-            {
-              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/execution-index.json",
-              "sha256": "b3c3823b8b394fcbdb8fdd3c0bf3a87b5e28990f1571485cd3cdd253527abc57"
+              "path": "governance/evidence/p2-010-federation-20261112/public/registration-wip-ui/results.json",
+              "sha256": "60a64317967ae0c5bdb1957b79fa1cbd652e9c001ae836e0c07999a0257bc250"
             }
-          ],
-          "current_compatibility_basis": {
-            "actual_ui_evidence": "Historicalactual24Registration/16Foundation plus dedicatedunchangedsource/functionwitness.146doesnotcoverthem.",
-            "manual_comparison_reuse": "Originalrowrendered/Figma/consent/manualrefs remain at originaltestedSHA; no freshcapture/pixelequality claim."
-          }
+          ]
         },
         {
           "id": "UX-FID-007",
           "result": "PASS",
-          "description": "Named responsive/Axe/keyboard/focus cases are current; detailed new shared-module contrast report resolves all194current incomplete nodes. Item-specific basis: Approved field/error and summary geometry reused with current domain field set; current fixture policy range is not replaced by old Figma password copy. First-invalid focus, confirmation and notice errors are visible without native bubbles.",
+          "description": "Actual retained viewport/keyboard/Axe observations support their precise public scopes; no unsupported native viewport claim is made.",
           "evidence_refs": [
             {
-              "path": "governance/evidence/TUN-P2-004-UI-COMPLIANCE-TOTP-20261110.json",
-              "sha256": "8fbf361ce39cb6b134acbed1395392c37fece107bf20df5e573efd44ef1734b5"
+              "path": "governance/evidence/TUN-P2-010-VISUAL-CONSENT.json",
+              "sha256": "f14f0d8bd6e11821fc252b6be4854a58f679c0a1e8dc3e505d66596c7f00e12c"
             },
             {
-              "path": "governance/evidence/p2-009-recovery-20261111/parent-readiness-ad744fd/parent-ui-compatibility-review-v2.json",
-              "sha256": "ab2da70c31aea3ecb42410b67c3cb5e6a2f4c8be3ca0b65bf124efef2c94e82a",
-              "original_artifact_ref": "artifacts/p2-009-recovery-20261111/parent-ui-compatibility-review-v2/review.json"
-            },
-            {
-              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/execution-index.json",
-              "sha256": "b3c3823b8b394fcbdb8fdd3c0bf3a87b5e28990f1571485cd3cdd253527abc57"
+              "path": "governance/evidence/p2-010-federation-20261112/public/registration-wip-ui/results.json",
+              "sha256": "60a64317967ae0c5bdb1957b79fa1cbd652e9c001ae836e0c07999a0257bc250"
             }
-          ],
-          "current_compatibility_basis": {
-            "actual_ui_evidence": "Historicalactual24Registration/16Foundation plus dedicatedunchangedsource/functionwitness.146doesnotcoverthem.",
-            "manual_comparison_reuse": "Originalrowrendered/Figma/consent/manualrefs remain at originaltestedSHA; no freshcapture/pixelequality claim."
-          }
+          ]
         },
         {
           "id": "UX-FID-008",
           "result": "PASS",
-          "description": "Current actual reports/screenshots, reference provenance, source identity and existing scoped consent are linked without redating historical evidence. Item-specific basis: Approved field/error and summary geometry reused with current domain field set; current fixture policy range is not replaced by old Figma password copy. First-invalid focus, confirmation and notice errors are visible without native bubbles.",
+          "description": "Per-item record binds exact inventory/Figma/FRD, retained rendered/reference captures, approval and actual source/execution provenance.",
           "evidence_refs": [
             {
-              "path": "governance/evidence/TUN-P2-004-UI-COMPLIANCE-TOTP-20261110.json",
-              "sha256": "8fbf361ce39cb6b134acbed1395392c37fece107bf20df5e573efd44ef1734b5"
+              "path": "governance/evidence/TUN-P2-010-VISUAL-CONSENT.json",
+              "sha256": "f14f0d8bd6e11821fc252b6be4854a58f679c0a1e8dc3e505d66596c7f00e12c"
             },
             {
-              "path": "governance/evidence/p2-009-recovery-20261111/parent-readiness-ad744fd/parent-ui-compatibility-review-v2.json",
-              "sha256": "ab2da70c31aea3ecb42410b67c3cb5e6a2f4c8be3ca0b65bf124efef2c94e82a",
-              "original_artifact_ref": "artifacts/p2-009-recovery-20261111/parent-ui-compatibility-review-v2/review.json"
-            },
-            {
-              "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/execution-index.json",
-              "sha256": "b3c3823b8b394fcbdb8fdd3c0bf3a87b5e28990f1571485cd3cdd253527abc57"
+              "path": "governance/evidence/p2-010-federation-20261112/public/registration-wip-ui/results.json",
+              "sha256": "60a64317967ae0c5bdb1957b79fa1cbd652e9c001ae836e0c07999a0257bc250"
             }
-          ],
-          "current_compatibility_basis": {
-            "actual_ui_evidence": "Historicalactual24Registration/16Foundation plus dedicatedunchangedsource/functionwitness.146doesnotcoverthem.",
-            "manual_comparison_reuse": "Originalrowrendered/Figma/consent/manualrefs remain at originaltestedSHA; no freshcapture/pixelequality claim."
-          }
+          ]
         }
       ],
       "screenshots": [
         {
-          "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/registration/global-registration-errors-1440.png",
-          "sha256": "7ff5697dd008707ead3ae71b79ac284641ea589b15aaf0e5c0472bfee576d240",
-          "original_artifact_ref": "artifacts/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/registration/global-registration-errors-1440.png",
-          "role": "CURRENT_SOURCE_RENDER",
-          "source_carrier_sha": "6e562db102ce75d5ed478a15e2970ff55ab98fef"
+          "path": "governance/evidence/p2-010-federation-20261112/public/registration-wip-ui/runs/federation-Approved-passwo-11b05-rd-and-accessibility-at-320/federation-intake-error-320.png",
+          "sha256": "0288d864da2e0f12c3280fae75ecd78ef1529dc9830b1a7052c011f82e7d5a46",
+          "role": "RENDERED_IMPLEMENTATION"
+        },
+        {
+          "path": "governance/evidence/p2-010-federation-20261112/public/registration-wip-ui/runs/federation-Approved-passwo-11b05-rd-and-accessibility-at-320/federation-intake-normal-320.png",
+          "sha256": "dc46a2fca01684ad972ce0e635ca20d0ba2256fc9ee183a0aeb0ac0233e6fae3",
+          "role": "RENDERED_IMPLEMENTATION"
+        },
+        {
+          "path": "governance/evidence/p2-010-federation-20261112/public/registration-wip-ui/runs/federation-Approved-passwo-96131-rd-and-accessibility-at-390/federation-intake-error-390.png",
+          "sha256": "b6ba77cd4225dde2eb31b340bbd24755114a1a8dcfeaf4dfa16d54a469a686e8",
+          "role": "RENDERED_IMPLEMENTATION"
+        },
+        {
+          "path": "governance/evidence/p2-010-federation-20261112/public/registration-wip-ui/runs/federation-Approved-passwo-96131-rd-and-accessibility-at-390/federation-intake-normal-390.png",
+          "sha256": "2aed60a118551d13a522af9b9845f84ef03874b7fa4abaca2b5e8e85e1db81ab",
+          "role": "RENDERED_IMPLEMENTATION"
+        },
+        {
+          "path": "governance/evidence/p2-010-federation-20261112/public/registration-wip-ui/runs/federation-Approved-passwo-e5cef-d-and-accessibility-at-1440/federation-intake-error-1440.png",
+          "sha256": "149502cc078de9c095ac32a49e3b86e8c3852ac3f0984144ede9d9650383c5e2",
+          "role": "RENDERED_IMPLEMENTATION"
+        },
+        {
+          "path": "governance/evidence/p2-010-federation-20261112/public/registration-wip-ui/runs/federation-Approved-passwo-e5cef-d-and-accessibility-at-1440/federation-intake-normal-1440.png",
+          "sha256": "edc1775e7b4e3b4129dc08ac08de8b7e9dfc84296ccc326b552085af2a0076e6",
+          "role": "RENDERED_IMPLEMENTATION"
+        },
+        {
+          "path": "governance/evidence/ui/AMD0008/approved-reference-register.png",
+          "sha256": "c0171eb9b4e3d90c34cbb746a6a93a70bd122b0c2d0372c31aa71e688b6a9870",
+          "role": "EXISTING_COMMITTED_FIGMA_REFERENCE"
         },
         {
           "path": "governance/evidence/ui/AMD0009/figma-registration-validation-errors.png",
           "sha256": "0b1e8d0a4516747f85501f828cb62dd7adbb938ce9f1244e34e5a1eb5db0d5fa",
-          "role": "APPROVED_REFERENCE_OR_SCOPED_PROPOSAL"
+          "role": "EXISTING_COMMITTED_VALIDATION_REFERENCE"
         }
       ],
       "deviations": [
         {
+          "scope_id": "010-V04",
           "status": "PRODUCT_OWNER_APPROVED",
           "approval_evidence": {
-            "path": "governance/evidence/ui/AMD0009/approved-four-scope-consent.json",
-            "sha256": "ef9942ec0c8989f4db7679021eeabea697710ed0abc9f3b8bea9f5a5763fcaf6"
+            "path": "governance/evidence/TUN-P2-010-VISUAL-CONSENT.json",
+            "sha256": "f14f0d8bd6e11821fc252b6be4854a58f679c0a1e8dc3e505d66596c7f00e12c"
           }
         }
       ],
-      "historical_item_ref": {
-        "path": "governance/evidence/TUN-P2-004-UI-COMPLIANCE-TOTP-20261110.json",
-        "sha256": "8fbf361ce39cb6b134acbed1395392c37fece107bf20df5e573efd44ef1734b5",
-        "item_id": "FORM-REGISTRATION"
-      },
-      "current_compatibility_review": {
-        "review_ref": {
-          "path": "governance/evidence/p2-009-recovery-20261111/parent-readiness-ad744fd/parent-ui-compatibility-review-v2.json",
-          "sha256": "ab2da70c31aea3ecb42410b67c3cb5e6a2f4c8be3ca0b65bf124efef2c94e82a",
-          "original_artifact_ref": "artifacts/p2-009-recovery-20261111/parent-ui-compatibility-review-v2/review.json"
-        },
-        "required_check_ids": [
-          "VAL-001",
-          "VAL-002",
-          "VAL-003",
-          "VAL-004",
-          "VAL-005",
-          "VAL-006",
-          "VAL-007",
-          "VAL-008",
-          "UX-FID-001",
-          "UX-FID-002",
-          "UX-FID-003",
-          "UX-FID-004",
-          "UX-FID-005",
-          "UX-FID-006",
-          "UX-FID-007",
-          "UX-FID-008"
-        ],
-        "existing_NA": [],
-        "boundary": "Original screenshot hashes, invocation/source carrier identities, manual comparisons and approved deviations are reused at their original scope; no fresh capture or Product consent is claimed."
-      }
+      "scope_boundary": "Qualified Google provider email is read-only; only explicit Tunner notice acknowledgment is editable. No Microsoft registration mapping, fallback verification, password fabrication, automatic activation or later PI change."
     },
     {
       "id": "FORM-VERIFY-EMAIL",
@@ -3491,14 +3435,22 @@
   },
   "native_execution_index_ref": "governance/evidence/TUN-P2-003-004-005-006-RECOVERY-COMPATIBILITY-20261111.json",
   "source_binding": {
-    "current_carrier_sha": "ad744fde52aa03404f3944c47ebb79070185e9f2",
-    "actual_native_sha": "ad744fde52aa03404f3944c47ebb79070185e9f2",
+    "current_carrier_sha": "579c2742c5c4c59a5bcf7e92610d7de32078714a",
+    "actual_native_sha": "579c2742c5c4c59a5bcf7e92610d7de32078714a",
     "actual_ui146_sha": "c71495cbcb1e0e6f8e1dd89c3f42c59b1ed834a6",
     "actual_registration24_foundation16_sha": "eb1c16fd55a82470c7b2c756f017c51b8a00a30a",
     "source_witness": {
       "path": "governance/evidence/p2-009-recovery-20261111/parent-readiness-ad744fd/source-witness.json",
       "sha256": "c9222da89f5ef15c3880e1e3c61f99f602a98c3c21f9c682afcb62ec6ff75d14"
-    }
+    },
+    "carrier_kind": "SCOPED_SOURCE_EQUIVALENCE_METADATA_NOT_FRESH_UI_EXECUTION",
+    "actual_federation_native_sha": "734828a78d9736eaa8da32c1b80ae0654a7f3641",
+    "actual_federation_ui_source_anchor_sha": "0eacff82dc9780708b7272abb23aef53afadcc39",
+    "actual_federation_ui_invocation_sha": null,
+    "actual_recovery_ui_sha": "2cd195a25ac22cbab1f86022a83685c860090b19",
+    "retained_recovery_visual_sha": "51a80e5f4104292966eef5601747b86ed666c6d9",
+    "retained_ordinary_render_source": "6e562db102ce75d5ed478a15e2970ff55ab98fef",
+    "historical_source_witness_semantics": "Existing source_witness and ui146/registration24_foundation16 identities retain their historical meaning. Current19/11/1 source qualification is described in current_scope_assessment; earlier invocations are not redated."
   },
   "conditional_shared_visual_authority": {
     "prior_TOTP_authority": {
@@ -3568,5 +3520,482 @@
     ],
     "boundary": "Already-approved conditional shared imports only; no expansion of parent decisions or009 final UI/native/download acceptance."
   },
-  "note": "Additive current parent compatibility. All14 row decisions and17 item-specific NAs are preserved;6 VAL008 rows now have actualad backend companions. Old745/6e renders and40/146 actual invocations are never redated. Native UI gate remains to execute after commit."
+  "note": "Bounded current004 source assessment at579 using separate actual010/011/older004 evidence; no UI execution at579. U-AUTH-02 and FORM-REGISTRATION use exact same-item010 decisions/consent/captures, including scoped URL004/006 PASS instead of obsolete exclusions. Other six same-item004 rows and historical renders retain their identities; actual010 ordinary24 exercises unchanged registration behavior. Native UI gate awaits root execution after commit. No whole011/UI, V04, liveBFF browser, production or Product/release acceptance follows.",
+  "prior_ui_evidence": {
+    "envelope_git_ref": "7933653a6da586e2ddc3ecbc33b31e7c5c69f016:governance/evidence/TUN-P2-004-UI-COMPLIANCE-RECOVERY-20261111.json",
+    "git_bytes_sha256": "139e7a33729e89902d2651343f9be9f801ddd0a23ef9e76001297b7faf42da9b",
+    "tested_commit_sha": "ad744fde52aa03404f3944c47ebb79070185e9f2",
+    "inventory_sha256": "83e3013f34780aa22ceb0ce9aaee408e75661cf35aded91afe935a294b262296",
+    "owned_behavior_path_count": 72,
+    "source_binding": {
+      "current_carrier_sha": "ad744fde52aa03404f3944c47ebb79070185e9f2",
+      "actual_native_sha": "ad744fde52aa03404f3944c47ebb79070185e9f2",
+      "actual_ui146_sha": "c71495cbcb1e0e6f8e1dd89c3f42c59b1ed834a6",
+      "actual_registration24_foundation16_sha": "eb1c16fd55a82470c7b2c756f017c51b8a00a30a",
+      "source_witness": {
+        "path": "governance/evidence/p2-009-recovery-20261111/parent-readiness-ad744fd/source-witness.json",
+        "sha256": "c9222da89f5ef15c3880e1e3c61f99f602a98c3c21f9c682afcb62ec6ff75d14"
+      }
+    },
+    "preservation": "Immutable793 record retains complete old source/hash/ordered ownership/per-item checks/screenshots/deviations without copying or relabeling historical executions."
+  },
+  "current_scope_assessment": {
+    "result": "PASS_BOUNDED004_SOURCE_ASSESSMENT_NATIVE_UI_GATE_PENDING",
+    "recorded_at": "2026-11-13T20:37:41Z",
+    "executing_agent": "/root/p2_011_ui_evidence",
+    "assessor_kind": "One genuine executing AI applies three role contracts; not three independent reviewers, Product Owner approval or a fresh browser invocation.",
+    "scope": {
+      "owner": "TUN-P2-004",
+      "item_ids": [
+        "U-AUTH-02",
+        "U-AUTH-03",
+        "U-AUTH-03A",
+        "U-AUTH-CONSENT",
+        "U-AUTH-RESULT",
+        "FORM-REGISTRATION",
+        "FORM-VERIFY-EMAIL",
+        "FORM-PERSONAL-INFORMATION"
+      ],
+      "source_ownership_count": 85,
+      "prior_ordered72_preserved": true,
+      "added_registered_paths": [
+        "web/apps/user/federation.api.ts",
+        "web/apps/user/federation.management.api.ts",
+        "web/apps/user/federation.management.tsx",
+        "web/apps/user/federation.sign-in.tsx",
+        "web/apps/user/recovery.api.ts",
+        "web/apps/user/recovery.app.tsx",
+        "web/apps/user/recovery.content.proposal.json",
+        "web/apps/user/recovery.css",
+        "web/apps/user/recovery.html",
+        "web/apps/user/recovery.routes.ts",
+        "web/apps/user/recovery.tsx",
+        "web/apps/user/registration.federation.ts",
+        "web/apps/user/step-up.federation.tsx"
+      ]
+    },
+    "currentness": {
+      "source_assessment_sha": "579c2742c5c4c59a5bcf7e92610d7de32078714a",
+      "current_inventory_sha256": "3f274776fa5b88f8aa58ef4018734fb12c30d53d7aaa2a5bd060095098a6386d",
+      "working_owned_objects_match579": true,
+      "original_declared_paths_unchanged_from_ad744fd": 54,
+      "qualified010_paths": 19,
+      "later011_paths": 11,
+      "inventory_metadata_paths": 1,
+      "later_ten_ui_paths_unchanged_between2cd_and579": true,
+      "method": "Batched Git objects and exact010 source_currentness SHA256 checks. No full556-input UI equivalence."
+    },
+    "affected_path_map": [
+      {
+        "group": "19_SOURCE_EQUIVALENT_TO_QUALIFIED010",
+        "source_sha": "734828a78d9736eaa8da32c1b80ae0654a7f3641",
+        "proof": {
+          "path": "governance/evidence/TUN-P2-010-UI-COMPLIANCE.json",
+          "sha256": "70d397e5bafa2ffb517199cc3943f9adefe9230e328d476a77e74f2f9df6263b"
+        },
+        "bindings": [
+          {
+            "path": "src/Modules/Identity/RegistrationEndpoints.cs",
+            "sha256": "68c22f09729744d862c2b90cdba2302c26242ce4df5b449243fd04727601d004",
+            "git_blob": "d42b5ed0465445cf0cf7479209a991d07a04cf8d"
+          },
+          {
+            "path": "src/Modules/Identity/RegistrationPersonalInformation.cs",
+            "sha256": "4e998660fcfeb8d590782b5c09a8f29608f6c325294b449fb55923096f499aaa",
+            "git_blob": "48fea3428896d06b2cd0899292a0b6223f7caf4f"
+          },
+          {
+            "path": "web/apps/user/authentication.content.proposal.json",
+            "sha256": "76f3cd2481cd8e6616120be4f4112bbb342572eb5c341b4a2a98275eda89eace",
+            "git_blob": "c011f8939f3862e2a5d9800ea0837cb2c029ae66"
+          },
+          {
+            "path": "web/apps/user/content.proposal.json",
+            "sha256": "c13b93e2063e0919f40e4abf3052c7ea3bb62a59b9ce15913b69768976009d8a",
+            "git_blob": "b7a4a4bb8bbef6c2044c864b4ddc8ec6b74d4036"
+          },
+          {
+            "path": "web/apps/user/main.tsx",
+            "sha256": "4299b574abbe5ee175551a609750c97d078da83e9078db6ae09c51ac718c666f",
+            "git_blob": "5640b22385912d6ed6e769048770c4f714ff489b"
+          },
+          {
+            "path": "web/apps/user/passkeys.api.ts",
+            "sha256": "7d21b6fc9cc8917294a30451d5e552b65c731ac68139bee9018c60d7900372ad",
+            "git_blob": "835b283e271c438f8cc2525e47e295fb48bc057f"
+          },
+          {
+            "path": "web/apps/user/passkeys.content.proposal.json",
+            "sha256": "f1f68961f48d38a2ec787298db6d6b492c75d9e4822bd08ce27a34a3dbb50a51",
+            "git_blob": "8e95a1ea93e282fb3794a5023ec048e9abdabfc1"
+          },
+          {
+            "path": "web/apps/user/passkeys.css",
+            "sha256": "72876ac0e8aa88f68acb6010c438d99393261591e64451c243c70317b2e84ce5",
+            "git_blob": "51bb1a2d1f07e61d0fbb6e82ad3d8aee808b9055"
+          },
+          {
+            "path": "web/apps/user/passkeys.tsx",
+            "sha256": "9b0454b862eaf41e033d5683123be82b64a1e45ffa56c09975ea1d6c31c26d02",
+            "git_blob": "b735eeabe36b0f8ace7539acc2cf4746396c7c57"
+          },
+          {
+            "path": "web/apps/user/registration.css",
+            "sha256": "07fbb5fe2f917937ba945b64e0619ed9b2ebf0374832581290c9dac929bc1bbc",
+            "git_blob": "4328967a3a665a40be1f3f111b8485ee4ed1b89e"
+          },
+          {
+            "path": "web/apps/user/step-up.content.proposal.json",
+            "sha256": "f3638a44572dddba70188d47cca5b63fa359ffc9fcaece81f0b6423c37f4b499",
+            "git_blob": "d02386b3e8e95864e951f45a68d78c0611d673dc"
+          },
+          {
+            "path": "web/apps/user/step-up.css",
+            "sha256": "d2b834b36459cd1bc374545e5103fbccd235c15908e4f8a8c2c0acd1a58f72a7",
+            "git_blob": "1711d6dd2a21633aea2aa6009d4a006b217e9820"
+          },
+          {
+            "path": "web/apps/user/step-up.tsx",
+            "sha256": "68d47cb50b526a6d8c5a03c23d45dc4080b853231baa7b5206e49179a339800f",
+            "git_blob": "8499d6fc755c19072b912f970d02a8a11fd1715b"
+          },
+          {
+            "path": "web/apps/user/federation.api.ts",
+            "sha256": "9ee3b75d1decf850df4269e463a9f09c6309d9be369cd1a743f7a0ea9606500e",
+            "git_blob": "5ca3b35b0701a2cfdf7aee1ae078db63c4082f0d"
+          },
+          {
+            "path": "web/apps/user/federation.management.api.ts",
+            "sha256": "dda899f5827f97414c70ce979da57432250183b2380a6cde2e907a2cefb95970",
+            "git_blob": "d16b85e347ec67c50df2fbf266ca4e547aff17eb"
+          },
+          {
+            "path": "web/apps/user/federation.management.tsx",
+            "sha256": "b135c1d0684542205c16147f5568c6e63188126f810ca671b9000f0649f977e1",
+            "git_blob": "cfb63d95482be6bacaaf2efc89a299fc3e058434"
+          },
+          {
+            "path": "web/apps/user/federation.sign-in.tsx",
+            "sha256": "f0899254d0d0122d9f42786150bdeafe1096f9c26221998f6a787a841b0dbe99",
+            "git_blob": "2c515dec291f081c669338476819d98c1676e97e"
+          },
+          {
+            "path": "web/apps/user/registration.federation.ts",
+            "sha256": "3cfad101471fd2173bce2a620145553918f0fb3af372a083a7c6620da6778385",
+            "git_blob": "166dca8cbeba424e1ba75d1affbd56b6ebd08f01"
+          },
+          {
+            "path": "web/apps/user/step-up.federation.tsx",
+            "sha256": "821339815a8246369a96d4800f3beb882415ae6f23de406a718597d47a4e5c85",
+            "git_blob": "9b45cb2c082dde95e2ed2daa620f27978448536b"
+          }
+        ],
+        "coverage": "Thirteen changed prior-owned files and six added federation files match010 recorded SHA256 exactly. Same-item U-AUTH-02/FORM-REGISTRATION evidence, actual16intake/24ordinary/31sign-in and20management/60passkey/22stepup cohorts remain separate; broad shared imports are not new004 items."
+      },
+      {
+        "group": "11_LATER011_BOUNDED_EFFECTS",
+        "source_sha": "579c2742c5c4c59a5bcf7e92610d7de32078714a",
+        "bindings": [
+          {
+            "path": "src/Modules/Identity/RegistrationApplication.cs",
+            "sha256": "8ececbfe990a71be4f081823bc61b73dabdd63192157518a18240ee4d41ebd1d",
+            "git_blob": "efd45b903bf8fd6846e57a375099ed16d0dd0cea"
+          },
+          {
+            "path": "web/apps/user/authentication.css",
+            "sha256": "fd4a302ebea4b463bda9186f30297a8303a6b5d3d7b8f70cae54304b78fa4512",
+            "git_blob": "3273d1c1cc446cb12e076724a03c22c1f789685b"
+          },
+          {
+            "path": "web/apps/user/authentication.tsx",
+            "sha256": "5f572043aaa4a2a0d91892d2cbf1140b6a8cbaddef52f937112fe17b7e636716",
+            "git_blob": "edd765ec2447c31f9e482c8d3aa4dab7908df9af"
+          },
+          {
+            "path": "web/apps/user/vite.config.ts",
+            "sha256": "277ce1cb48c5cd056d47f6ab52a5f1837db130f360edf0557ceb2d667e94576f",
+            "git_blob": "6749da30d3fc37af69a3eb0593d0a965226d9f4a"
+          },
+          {
+            "path": "web/apps/user/recovery.api.ts",
+            "sha256": "31ca6d64a88c64293af1c101134146edc65fb5bc8530511cff2d863f29c400db",
+            "git_blob": "5bd99c91016da9f75ea56c312e9097667a1e0a42"
+          },
+          {
+            "path": "web/apps/user/recovery.app.tsx",
+            "sha256": "5200a78dd74a686b0fea988e36a20432a7c64e07fb91f72b63fade7446035bce",
+            "git_blob": "65b64e9e5990736ad4ed4aa9429274e1296fa491"
+          },
+          {
+            "path": "web/apps/user/recovery.content.proposal.json",
+            "sha256": "9f64a123491276558a79ef54348842197a65374e2361a9fc210dceb77806ffd1",
+            "git_blob": "dfb3ae265755bc51ef4f6e4dc6ad479e62d60548"
+          },
+          {
+            "path": "web/apps/user/recovery.css",
+            "sha256": "b2badc8bf6a41913dee5376d1bfbe5d8553b7bfb25e3b95c636532a1d1b17b33",
+            "git_blob": "3b65ba564d1625476caf58864d0785536194dd4f"
+          },
+          {
+            "path": "web/apps/user/recovery.html",
+            "sha256": "2250bd2827401116c787ab05b42379500e1b4f2192ee7f98b8823a756272edf3",
+            "git_blob": "2a4786c9a81509f26bb4e34d7dca34d4015854fd"
+          },
+          {
+            "path": "web/apps/user/recovery.routes.ts",
+            "sha256": "d1fbab4362eed19aa110f69ed2cb6964fa0bd92cdd4229d102c3c76e0a0e6c9c",
+            "git_blob": "c631945bb070cc5373fe9880b25d515aed219273"
+          },
+          {
+            "path": "web/apps/user/recovery.tsx",
+            "sha256": "7521508e04906512dfb2f3eee313004b442dc1c706a8bea14cb780e2ca7746b9",
+            "git_blob": "e24943ab9716e6dcb1f33fd52f3742ab52c7359a"
+          }
+        ],
+        "coverage": "RegistrationApplication challenge generation/digest extraction is covered by actual579 parent003 registration boundary/flow/progress and federation registration/finality in PRIVATE109. Other ten paths are conditional Login recovery, recovery-only Vite input/rewrite and seven recovery bundle files, all unchanged from actual2cd. Actual48 synthetic routes/32 supplied-component checks and retained51a nine visual pairs support those exact effects, without full011/public proof acceptance."
+      },
+      {
+        "group": "1_INVENTORY_METADATA",
+        "binding": {
+          "path": "docs/contracts/ui-inventory.json",
+          "sha256": "3f274776fa5b88f8aa58ef4018734fb12c30d53d7aaa2a5bd060095098a6386d",
+          "git_blob": "54fce7bdedb35bc1303b2863374d17e8f9dfcb24"
+        },
+        "coverage": "Current hash and registered web/apps/user ownership reconciled. Thirteen missing files reflect broad directory registration, not new004 screens/forms or behavior."
+      }
+    ],
+    "source_proof_refs": [
+      {
+        "path": "governance/evidence/TUN-P2-010-UI-COMPLIANCE.json",
+        "sha256": "70d397e5bafa2ffb517199cc3943f9adefe9230e328d476a77e74f2f9df6263b"
+      },
+      {
+        "path": "governance/evidence/TUN-P2-010-VISUAL-CONSENT.json",
+        "sha256": "f14f0d8bd6e11821fc252b6be4854a58f679c0a1e8dc3e505d66596c7f00e12c"
+      },
+      {
+        "path": "governance/evidence/p2-010-federation-20261112/native-734828a/private76.json",
+        "sha256": "1681a04d5c7038ed0311137804fb1c0d2c7edff53fe2b9f54758e5eaa4e32367"
+      },
+      {
+        "path": "governance/evidence/p2-011-recovery-20261112/native-579c274/private109.json",
+        "sha256": "4da1572a5c965a127bb9b8fd1369c61de2718845a458c3f79c696cdb55465dc6"
+      },
+      {
+        "path": "governance/evidence/p2-011-recovery-20261112/native-579c274/build-binding.json",
+        "sha256": "8d9f64e1a963add4806a99ef1168bda458192bd19bf77775543874ffc6f931b3"
+      },
+      {
+        "path": "governance/evidence/p2-011-recovery-20261112/native-579c274/sql13.json",
+        "sha256": "c6089e2040d674bd3e8273b4641f3fc7b1ad0ccdfa3e750435d3417ee58412a5"
+      },
+      {
+        "path": "governance/evidence/p2-011-recovery-20261112/ui-2cd195a/source-witness.json",
+        "sha256": "06ed916b4a5a2fe9a618319c3e24fe597b87caddc53697b96b158b3910a6a4a6"
+      },
+      {
+        "path": "governance/evidence/p2-011-recovery-20261112/ui-2cd195a/integration48.json",
+        "sha256": "984d98b030e2a05d47fed62e7299e8ff299b015f2f0e7c129e4d9785315e58c1"
+      },
+      {
+        "path": "governance/evidence/p2-011-recovery-20261112/ui-2cd195a/presentation32.json",
+        "sha256": "b137f8c0dd9d2a5903da16126b14b17ed6eaad92ebed63f223cfa979efa84c4b"
+      },
+      {
+        "path": "governance/evidence/p2-011-recovery-20261112/ui-51a80e5/visual/visual-review-manifest.json",
+        "sha256": "de426462368a936f6e35aa284572e25c20725f923a867907cf51d2e0cb5ddbc0"
+      },
+      {
+        "path": "governance/evidence/TUN-P2-011-VISUAL-CONSENT.json",
+        "sha256": "6a0a4ed15569c73645182f3457cd3f7934edbded68205bd77e818a29cd9bf75a"
+      }
+    ],
+    "actual_execution_cohorts": [
+      {
+        "group": "management-wip-ui",
+        "report": {
+          "path": "governance/evidence/p2-010-federation-20261112/public/management-wip-ui/results.json",
+          "sha256": "c5ffabd84b30525ba9ac3eb554c0f2ec2b96975837e1bdb94c44e748cfef6592"
+        },
+        "passed": 20,
+        "unexpected": 0,
+        "skipped": 0,
+        "flaky": 0,
+        "start_time": "2026-11-12T16:29:05.997Z",
+        "actual_invocation_commit_sha": null,
+        "execution_identity_boundary": "Retain this original recorded invocation/time and observed counts. No current-HEAD rerun or unrecorded invocation SHA is asserted."
+      },
+      {
+        "group": "registration-wip-ui",
+        "report": {
+          "path": "governance/evidence/p2-010-federation-20261112/public/registration-wip-ui/results.json",
+          "sha256": "60a64317967ae0c5bdb1957b79fa1cbd652e9c001ae836e0c07999a0257bc250"
+        },
+        "passed": 16,
+        "unexpected": 0,
+        "skipped": 0,
+        "flaky": 0,
+        "start_time": "2026-11-12T17:47:45.196Z",
+        "actual_invocation_commit_sha": null,
+        "execution_identity_boundary": "Retain this original recorded invocation/time and observed counts. No current-HEAD rerun or unrecorded invocation SHA is asserted."
+      },
+      {
+        "group": "registration-wip-ui/ordinary-regression",
+        "report": {
+          "path": "governance/evidence/p2-010-federation-20261112/public/registration-wip-ui/ordinary-regression/results.json",
+          "sha256": "ac2e11ce14815cbee0f576d10e4b4d36341db2782524b02e8177eef1d823f097"
+        },
+        "passed": 24,
+        "unexpected": 0,
+        "skipped": 0,
+        "flaky": 0,
+        "start_time": "2026-11-12T17:55:59.882Z",
+        "actual_invocation_commit_sha": null,
+        "execution_identity_boundary": "Retain this original recorded invocation/time and observed counts. No current-HEAD rerun or unrecorded invocation SHA is asserted."
+      },
+      {
+        "group": "registration-wip-ui/v01-regression",
+        "report": {
+          "path": "governance/evidence/p2-010-federation-20261112/public/registration-wip-ui/v01-regression/results.json",
+          "sha256": "fd62a7b7f75f5baec6b99db8e83a7c46d63d1d8d5e82ba7db1fa1275169b97e8"
+        },
+        "passed": 31,
+        "unexpected": 0,
+        "skipped": 0,
+        "flaky": 0,
+        "start_time": "2026-11-12T17:57:58.493Z",
+        "actual_invocation_commit_sha": null,
+        "execution_identity_boundary": "Retain this original recorded invocation/time and observed counts. No current-HEAD rerun or unrecorded invocation SHA is asserted."
+      },
+      {
+        "group": "management-shared-passkeys-regression",
+        "report": {
+          "path": "governance/evidence/p2-010-federation-20261112/public/management-shared-passkeys-regression/results.json",
+          "sha256": "4cdf58be7d9529a2ba7396209bd8b9f789a3bfce4d26e337c70f3020bf1a652c"
+        },
+        "passed": 60,
+        "unexpected": 0,
+        "skipped": 0,
+        "flaky": 0,
+        "start_time": "2026-11-12T17:11:14.439Z",
+        "actual_invocation_commit_sha": null,
+        "execution_identity_boundary": "Retain this original recorded invocation/time and observed counts. No current-HEAD rerun or unrecorded invocation SHA is asserted."
+      },
+      {
+        "group": "management-proof-shared-stepup-regression",
+        "report": {
+          "path": "governance/evidence/p2-010-federation-20261112/public/management-proof-shared-stepup-regression/results.json",
+          "sha256": "7e2fc06066e7529576df7071043eca12f7322495c926c561bfd24a0219c13bf2"
+        },
+        "passed": 22,
+        "unexpected": 0,
+        "skipped": 0,
+        "flaky": 0,
+        "start_time": "2026-11-12T17:09:26.871Z",
+        "actual_invocation_commit_sha": null,
+        "execution_identity_boundary": "Retain this original recorded invocation/time and observed counts. No current-HEAD rerun or unrecorded invocation SHA is asserted."
+      }
+    ],
+    "actual_native": {
+      "source_sha": "579c2742c5c4c59a5bcf7e92610d7de32078714a",
+      "private109": {
+        "path": "governance/evidence/p2-011-recovery-20261112/native-579c274/private109.json",
+        "sha256": "4da1572a5c965a127bb9b8fd1369c61de2718845a458c3f79c696cdb55465dc6"
+      },
+      "private_passed": 109,
+      "sql13": {
+        "path": "governance/evidence/p2-011-recovery-20261112/native-579c274/sql13.json",
+        "sha256": "c6089e2040d674bd3e8273b4641f3fc7b1ad0ccdfa3e750435d3417ee58412a5"
+      },
+      "sql_passed": 13,
+      "build_binding": {
+        "path": "governance/evidence/p2-011-recovery-20261112/native-579c274/build-binding.json",
+        "sha256": "8d9f64e1a963add4806a99ef1168bda458192bd19bf77775543874ffc6f931b3"
+      },
+      "parent_cases": [
+        "PARENT003_REGISTRATION_BOUNDARY",
+        "PARENT003_REGISTRATION_FLOW",
+        "PARENT003_REGISTRATION_PROGRESS",
+        "FEDERATION_REGISTRATION",
+        "FEDERATION_REGISTRATION_REJECTION",
+        "FEDERATION_REGISTRATION_FINALITY",
+        "FEDERATION_HTTPS_WIRE"
+      ]
+    },
+    "actual_recovery_ui": {
+      "source_sha": "2cd195a25ac22cbab1f86022a83685c860090b19",
+      "source_witness": {
+        "path": "governance/evidence/p2-011-recovery-20261112/ui-2cd195a/source-witness.json",
+        "sha256": "06ed916b4a5a2fe9a618319c3e24fe597b87caddc53697b96b158b3910a6a4a6"
+      },
+      "synthetic_routes": {
+        "path": "governance/evidence/p2-011-recovery-20261112/ui-2cd195a/integration48.json",
+        "sha256": "984d98b030e2a05d47fed62e7299e8ff299b015f2f0e7c129e4d9785315e58c1"
+      },
+      "routes_passed": 48,
+      "presentation": {
+        "path": "governance/evidence/p2-011-recovery-20261112/ui-2cd195a/presentation32.json",
+        "sha256": "b137f8c0dd9d2a5903da16126b14b17ed6eaad92ebed63f223cfa979efa84c4b"
+      },
+      "presentation_passed": 32,
+      "retained_visual_pairs": {
+        "path": "governance/evidence/p2-011-recovery-20261112/ui-51a80e5/visual/visual-review-manifest.json",
+        "sha256": "de426462368a936f6e35aa284572e25c20725f923a867907cf51d2e0cb5ddbc0"
+      },
+      "retained_pair_count": 9,
+      "limit": "Separate synthetic controller/component evidence only. This004 carrier does not accept011/V04/standalone proof or real native+BFF browser E2E."
+    },
+    "per_item_assessment": [
+      {
+        "ids": [
+          "U-AUTH-02",
+          "FORM-REGISTRATION"
+        ],
+        "decision": "Exact010 same-item checks/screenshots/deviations reused, with scoped010-V04 consent and six normal/error renders at1440/390/320. URL004/006 use010 PASS instead of obsolete004 exclusions."
+      },
+      {
+        "ids": [
+          "U-AUTH-03",
+          "U-AUTH-03A",
+          "U-AUTH-CONSENT",
+          "U-AUTH-RESULT",
+          "FORM-VERIFY-EMAIL",
+          "FORM-PERSONAL-INFORMATION"
+        ],
+        "decision": "Six existing rows retain exact decisions and historical6e rendered/reference pairs. Actual010 ordinary24 explicitly exercises all five canonical screens and three forms at1440/768/320: empty/format/correction/server errors, focus/accessibility, safe preservation/duplicates, reload/history/forgery, expired restart, under18/consent and UNKNOWN recovery. Current main/content/registrationCSS/routes/validation match qualified010; added registrationCSS selectors target only approved federated intake."
+      }
+    ],
+    "role_reviews": [
+      {
+        "role": "ui-ux-engineer",
+        "skill_version": "1.1.0",
+        "skill_sha256": "498ff7e4b46012b1e90773cd29ebac903d7ac83767d739cc327d9b69a3b4c5c2",
+        "result": "PASS_SCOPED_SOURCE_ASSESSMENT",
+        "findings": "Mapped eight004 items to FRD17/matrix31 and AMD0008/0009 with prior or010 same-item visual evidence. Ordinary compositions are unchanged; the new variation is approved010-V04. No unapproved004 pattern or actionable scoped gap found."
+      },
+      {
+        "role": "frontend-engineer",
+        "skill_version": "1.1.0",
+        "skill_sha256": "3472e745aa478457939b1aeeba319f72989bb9e97791e458f0b9979ec1b538d7",
+        "result": "PASS_SCOPED_SOURCE_ASSESSMENT",
+        "findings": "Verified19 exact010 hashes, ten later UI objects unchanged2cd/current and54 original unchanged paths. Typed fields/errors/content/canonical routes retain existing ownership; independent native owner tests support current helper/persistence. Broad imports do not approve unrelated items."
+      },
+      {
+        "role": "end-user-ux-reviewer",
+        "skill_version": "1.1.0",
+        "skill_sha256": "cfaa2eeffd945eef70a6ff1023b1af42fc0413add7b357b2fcd914473e976665",
+        "result": "PASS_SCOPED_SOURCE_ASSESSMENT",
+        "findings": "Reviewed ordinary24/intake16 assertions for goal clarity, progress/feedback, field correction, uncertain-result recovery, notices, accessibility and truthful completion. Under18/consent remain server-owned; no automatic session/Product grant or mutation replay. No new004 comprehension/recovery blocker found."
+      }
+    ],
+    "blocking_findings": [],
+    "tests_executed_by_this_assessment": false,
+    "native_ui_gate_executed_by_this_assessment": false,
+    "limits": [
+      "Technical004 source/evidence reconciliation only; native UI check follows commit.",
+      "WIP UI invocations keep timestamps/counts and null invocation SHA;0eac/734 are committed source witnesses, not invented invocation identities.",
+      "Older0046e renders,010 native734,011 UI2cd and retained51a visual comparisons stay separate.",
+      "No full011 UI, V04, native+BFF browser E2E, production/publication/policy, Product, merge or release approval."
+    ]
+  }
 }
