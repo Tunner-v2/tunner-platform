@@ -39,7 +39,9 @@ internal enum RecoveryCodeFirstCaseStage
     FEDERATION_MFA_DISPOSAL, FEDERATION_MFA_CLOCK_OUT_OF_BOUNDS, FEDERATION_MFA_CODE_REPLAYED,
     FEDERATION_MFA_VERIFICATION_BUDGET, FEDERATION_MFA_AUTHENTICATION_FAILED, FEDERATION_MFA_VERSION_CONFLICT,
     FEDERATION_MFA_DEPENDENCY_UNAVAILABLE, FEDERATION_MFA_RATE_LIMITED, FEDERATION_MFA_VALIDATION_ERROR, FEDERATION_MFA_OTHER_ERROR,
-    COHORT_SQL_DISK_FULL, COHORT_SQL_CONNECTION_LIMIT, COHORT_SQL_ADMIN_SHUTDOWN, COHORT_SQL_OTHER, COHORT_DATABASE_TRANSPORT
+    COHORT_SQL_DISK_FULL, COHORT_SQL_CONNECTION_LIMIT, COHORT_SQL_ADMIN_SHUTDOWN, COHORT_SQL_OTHER, COHORT_DATABASE_TRANSPORT,
+    COHORT_SQL_OBJECT_IN_USE, COHORT_POSTGRES_NOT_READY, COHORT_DATABASE_LEASE_INVALID,
+    COHORT_DATABASE_OWNER_UNVERIFIED, COHORT_DATABASE_RELEASE_UNVERIFIED
 }
 internal sealed class RecoveryCodeFirstCaseCheckpoint
 {
@@ -53,6 +55,25 @@ internal sealed class RecoveryCodeFirstCaseFailure(RecoveryCodeFirstCasePhase ph
 {
     internal string FailureCode { get; } = Enum.IsDefined(phase) && Enum.IsDefined(stage)
         ? "FIRST_CASE_" + Enum.GetName(phase) + "_" + Enum.GetName(stage) : "CASE_FAILED";
+    internal static RecoveryCodeFirstCaseFailure? DatabaseFailure(Exception error)
+    {
+        var databaseError = error is DbUpdateException { InnerException: { } inner } ? inner : error;
+        var diagnostic = databaseError switch
+        {
+            Npgsql.PostgresException { SqlState: Npgsql.PostgresErrorCodes.DiskFull } => RecoveryCodeFirstCaseStage.COHORT_SQL_DISK_FULL,
+            Npgsql.PostgresException { SqlState: Npgsql.PostgresErrorCodes.TooManyConnections } => RecoveryCodeFirstCaseStage.COHORT_SQL_CONNECTION_LIMIT,
+            Npgsql.PostgresException { SqlState: Npgsql.PostgresErrorCodes.AdminShutdown } => RecoveryCodeFirstCaseStage.COHORT_SQL_ADMIN_SHUTDOWN,
+            Npgsql.PostgresException { SqlState: Npgsql.PostgresErrorCodes.ObjectInUse } => RecoveryCodeFirstCaseStage.COHORT_SQL_OBJECT_IN_USE,
+            Npgsql.PostgresException => RecoveryCodeFirstCaseStage.COHORT_SQL_OTHER,
+            Npgsql.NpgsqlException => RecoveryCodeFirstCaseStage.COHORT_DATABASE_TRANSPORT,
+            InvalidOperationException { Message: "RECOVERY_POSTGRES_NOT_READY" } => RecoveryCodeFirstCaseStage.COHORT_POSTGRES_NOT_READY,
+            InvalidOperationException { Message: "RECOVERY_DATABASE_LEASE_INVALID" } => RecoveryCodeFirstCaseStage.COHORT_DATABASE_LEASE_INVALID,
+            InvalidOperationException { Message: "RECOVERY_DATABASE_OWNER_UNVERIFIED" } => RecoveryCodeFirstCaseStage.COHORT_DATABASE_OWNER_UNVERIFIED,
+            InvalidOperationException { Message: "RECOVERY_DATABASE_RELEASE_UNVERIFIED" } => RecoveryCodeFirstCaseStage.COHORT_DATABASE_RELEASE_UNVERIFIED,
+            _ => (RecoveryCodeFirstCaseStage?)null
+        };
+        return diagnostic is { } selected ? new(RecoveryCodeFirstCasePhase.STATE, selected) : null;
+    }
     public override string ToString() => nameof(RecoveryCodeFirstCaseFailure);
 }
 

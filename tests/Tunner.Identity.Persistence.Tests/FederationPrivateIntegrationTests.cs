@@ -326,7 +326,7 @@ internal sealed class FederationPrivateIntegrationTests(IdentityPostgresFixture 
         }
         catch (Exception error) when (error is not OutOfMemoryException)
         {
-            throw new RecoveryCodeFirstCaseFailure(checkpoint.Phase, checkpoint.Stage);
+            throw RecoveryCodeFirstCaseFailure.DatabaseFailure(error) ?? new RecoveryCodeFirstCaseFailure(checkpoint.Phase, checkpoint.Stage);
         }
     }
 
