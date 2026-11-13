@@ -44,6 +44,11 @@ internal sealed class RecoveryCaseRow
     public string? PriorPasswordDigest { get; set; }
     public string? PriorSecurityStampDigest { get; set; }
     public string? UserSourceDigest { get; set; }
+    public Guid? ContactReference { get; set; }
+    public long? ExpectedContactVersion { get; set; }
+    public string? ContactDestinationDigest { get; set; }
+    public Guid? ContactChallengeId { get; set; }
+    public string? InitialContactRiskSnapshot { get; set; }
     public override string ToString() => nameof(RecoveryCaseRow);
 }
 
@@ -83,6 +88,12 @@ internal sealed class RecoveryResultRow
     public string? PriorSecurityStampDigest { get; set; }
     public string? RepairedSecurityStampDigest { get; set; }
     public string? SessionEffect { get; set; }
+    public Guid? ContactReference { get; set; }
+    public long? ContactVersion { get; set; }
+    public Guid? ContactChallengeId { get; set; }
+    public string? ContactDestinationDigest { get; set; }
+    public string? ContactRiskSnapshot { get; set; }
+    public Guid? ContactNotificationDeliveryId { get; set; }
     public override string ToString() => nameof(RecoveryResultRow);
 }
 
@@ -95,11 +106,12 @@ internal static class RecoveryCaseModelConfiguration
             b.ToTable("recovery_cases", "identity", t =>
             {
                 t.HasCheckConstraint("ck_recovery_case_binding", RecoveryPasswordMigrationSql.CaseBinding);
-                t.HasCheckConstraint("ck_recovery_case_versions", RecoveryPasskeyMigrationSql.CaseVersions);
-                t.HasCheckConstraint("ck_recovery_case_state", RecoveryPasskeyMigrationSql.CaseState);
+                t.HasCheckConstraint("ck_recovery_case_versions", RecoveryContactMigrationSql.CaseVersions);
+                t.HasCheckConstraint("ck_recovery_case_state", RecoveryContactMigrationSql.CaseState);
             });
             b.Property(x => x.ProofKind).HasDefaultValue("CODE");
             b.HasOne<PasskeyCredentialRow>().WithMany().HasForeignKey(x => x.PasskeyCredentialReference).HasConstraintName("fk_recovery_case_passkey").OnDelete(DeleteBehavior.Restrict);
+            b.HasOne<VerifiedContactRow>().WithMany().HasForeignKey(x => x.ContactReference).HasConstraintName("fk_recovery_case_contact").OnDelete(DeleteBehavior.Restrict);
             b.HasKey(x => x.CaseId); b.Property(x => x.CaseId).ValueGeneratedNever();
             b.HasIndex(x => new { x.AccountId, x.OriginalBrowserDigest, x.RequestId }).IsUnique();
             b.HasIndex(x => x.ExpiresAt); b.HasIndex(x => x.ResultId).IsUnique(); b.Property(x => x.Version).IsConcurrencyToken();
@@ -113,10 +125,11 @@ internal static class RecoveryCaseModelConfiguration
         {
             b.ToTable("recovery_results", "identity", t =>
             {
-                t.HasCheckConstraint("ck_recovery_result_shape", RecoveryPasskeyMigrationSql.ResultShape);
+                t.HasCheckConstraint("ck_recovery_result_shape", RecoveryContactMigrationSql.ResultShape);
             });
             b.Property(x => x.ProofKind).HasDefaultValue("CODE");
             b.HasOne<PasskeyCredentialRow>().WithMany().HasForeignKey(x => x.PasskeyCredentialReference).HasConstraintName("fk_recovery_result_passkey").OnDelete(DeleteBehavior.Restrict);
+            b.HasOne<VerifiedContactRow>().WithMany().HasForeignKey(x => x.ContactReference).HasConstraintName("fk_recovery_result_contact").OnDelete(DeleteBehavior.Restrict);
             b.HasKey(x => x.ResultId); b.Property(x => x.ResultId).ValueGeneratedNever(); b.HasIndex(x => x.CaseId).IsUnique();
             b.HasOne<RecoveryCaseRow>().WithMany().HasForeignKey(x => x.CaseId).OnDelete(DeleteBehavior.Restrict);
             b.HasOne<AuthenticationSessionRow>().WithMany().HasForeignKey(x => x.TargetSessionId).OnDelete(DeleteBehavior.Restrict);

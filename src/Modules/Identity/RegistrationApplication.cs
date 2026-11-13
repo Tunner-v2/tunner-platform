@@ -253,17 +253,13 @@ public sealed partial class RegistrationApplication(
         { OperationId = id, Kind = kind, IdempotencyKey = key, ResultJson = JsonSerializer.Serialize(result with { PersonalInformation = null }) });
     private void SetChallenge(RegistrationOperationRow row, RegistrationPolicy policy, DateTimeOffset now)
     {
-        var bound = (int)Math.Pow(10, policy.ProofDigits);
         var previous = row.ProtectedCode is null ? null : challengeProtection.Unprotect(row.ProtectedCode);
-        string code;
-        do { code = RandomNumberGenerator.GetInt32(bound).ToString("D" + policy.ProofDigits.ToString(CultureInfo.InvariantCulture), CultureInfo.InvariantCulture); }
-        while (StringComparer.Ordinal.Equals(previous, code));
-        row.ProtectedCode = challengeProtection.Protect(code);
-        row.ProtectedDigest = Convert.ToBase64String(challengeProtection.Protect(Digest(row, code)));
+        var prepared = IdentityContactChallenge.Create(challengeProtection, row.OperationId.ToString("N") + ":" + row.PolicyVersion, policy.ProofDigits, previous);
+        row.ProtectedCode = prepared.Code; row.ProtectedDigest = prepared.Digest;
         row.TemplateVersion = policy.VerificationTemplateVersion; row.DeliveryId = Guid.NewGuid(); row.Attempts = 0;
         row.ExpiresAt = now + policy.ProofLifetime; row.ResendAfter = now + policy.ResendCooldown; row.PurgeAfter = now + policy.PendingMaterialRetention;
     }
-    private static byte[] Digest(RegistrationOperationRow row, string code) => SHA256.HashData(Encoding.UTF8.GetBytes(row.OperationId.ToString("N") + ":" + row.PolicyVersion + ":" + code));
+    private static byte[] Digest(RegistrationOperationRow row, string code) => IdentityContactChallenge.Digest(row.OperationId.ToString("N") + ":" + row.PolicyVersion, code);
     private static PasswordHasher<IdentityUserAdapter> Hasher(RegistrationPolicy policy) => new(Options.Create(new PasswordHasherOptions
         { CompatibilityMode = PasswordHasherCompatibilityMode.IdentityV3, IterationCount = policy.PasswordHashIterations }));
     private static bool ValidEmail(string? email) => IdentityEmail.IsValid(email);

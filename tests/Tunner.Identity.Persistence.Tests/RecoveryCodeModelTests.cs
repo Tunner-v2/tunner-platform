@@ -8,6 +8,23 @@ namespace Tunner.Identity.Persistence.Tests;
 public sealed class RecoveryCodeModelTests
 {
     [Fact]
+    public void ContactRecoveryStorageBindsProtectedProofToOneOriginalCaseContactAndResult()
+    {
+        using var db = new IdentityPersistenceDbContext(new DbContextOptionsBuilder<IdentityPersistenceDbContext>()
+            .UseNpgsql("Host=localhost;Database=not_opened;Username=synthetic").Options);
+        var model = db.GetService<IDesignTimeModel>().Model; var challenge = model.FindEntityType(typeof(RecoveryContactChallengeRow))!;
+        Assert.True(challenge.GetTableName() == "recovery_contact_challenges" && challenge.FindProperty("Version")!.IsConcurrencyToken);
+        Assert.True(challenge.GetProperties().All(x => x.Name is not ("Code" or "Address" or "Password")));
+        Assert.True(challenge.FindProperty("ProtectedCode") is not null && challenge.FindProperty("ProtectedDigest") is not null && challenge.FindProperty("ProtectedAddress") is not null);
+        Assert.Contains(challenge.GetForeignKeys(), x => x.Properties.Select(p => p.Name).SequenceEqual(["CaseId"]) && x.PrincipalEntityType.ClrType == typeof(RecoveryCaseRow));
+        Assert.Contains(challenge.GetForeignKeys(), x => x.Properties.Select(p => p.Name).SequenceEqual(["ContactReference"]) && x.PrincipalEntityType.ClrType == typeof(VerifiedContactRow));
+        Assert.Contains(challenge.GetForeignKeys(), x => x.Properties.Select(p => p.Name).SequenceEqual(["ResultId"]) && x.PrincipalEntityType.ClrType == typeof(RecoveryResultRow));
+        Assert.Contains(challenge.GetIndexes(), x => x.IsUnique && x.Properties.Select(p => p.Name).SequenceEqual(["CaseId"]));
+        Assert.Contains(challenge.GetIndexes(), x => x.IsUnique && x.Properties.Select(p => p.Name).SequenceEqual(["EntryId"]));
+        Assert.Contains(challenge.GetIndexes(), x => x.IsUnique && x.Properties.Select(p => p.Name).SequenceEqual(["DeliveryId"]));
+    }
+
+    [Fact]
     public void RecoveryStorageContainsVerifiersAndSafeLineageWithOwnerAndTransitionConstraints()
     {
         // Model construction only. This synthetic connection is never opened.

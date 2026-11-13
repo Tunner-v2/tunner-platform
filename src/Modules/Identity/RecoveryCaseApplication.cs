@@ -9,7 +9,10 @@ internal sealed partial class RecoveryCaseApplication(IdentityPersistenceDbConte
     AuthenticationApplication authentication, TimeProvider clock, IRecoveryCasePolicySource? policies = null,
     IRecoveryCaseHierarchySource? hierarchy = null, IRecoveryPasswordPolicySource? passwordPolicies = null,
     IRegistrationPasswordBlocklist? passwordBlocklist = null, IAuthenticationPolicySource? authenticationPolicies = null,
-    AuthenticationPartitionKey? partitions = null, PasskeyApplication? passkeys = null)
+    AuthenticationPartitionKey? partitions = null, PasskeyApplication? passkeys = null,
+    IRecoveryContactRiskSource? contactRisk = null, IRecoveryContactNotificationSource? contactNotifications = null,
+    Microsoft.AspNetCore.DataProtection.IDataProtectionProvider? recoveryProtection = null,
+    IRecoveryContactNotificationDispatcher? contactDispatcher = null)
 {
     internal static string OperationId(RecoveryCaseRow row) => "OP-RECOVERY-CASE-" + row.CaseId.ToString("N");
     internal async Task<RecoveryCaseResult> StartAsync(RecoveryCaseCaller caller, RecoveryCaseStartCommand command, CancellationToken ct = default)
@@ -197,6 +200,8 @@ internal sealed partial class RecoveryCaseApplication(IdentityPersistenceDbConte
         row.ExpectedUsageVersion, row.UsageAdmission, row.PolicyVersion, row.PolicySnapshot, row.FactsDigest, row.ProcessingReference, row.RetentionReference, row.UnresolvedEffectsJson }));
         var context = row.EntryId is null ? original : AuthenticationIdentity.Digest(JsonSerializer.Serialize(new
             { original, row.EntryId, row.PriorPasswordDigest, row.PriorSecurityStampDigest, row.UserSourceDigest }));
+        if (row.ProofKind == "CONTACT_RISK") return AuthenticationIdentity.Digest(JsonSerializer.Serialize(new
+            { context, row.ProofKind, row.ContactReference, row.ExpectedContactVersion, row.ContactDestinationDigest, row.ContactChallengeId }));
         // Preserve the historical CODE/containment byte identity.
         return row.ProofKind == "CODE" ? context : AuthenticationIdentity.Digest(JsonSerializer.Serialize(new
             { context, row.ProofKind, row.PasskeyCredentialReference, row.ExpectedPasskeyVersion, row.ExpectedPasskeyUsageVersion, row.PasskeyCeremonyId }));

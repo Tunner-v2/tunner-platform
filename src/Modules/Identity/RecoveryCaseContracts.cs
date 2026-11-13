@@ -91,6 +91,8 @@ public sealed record RecoveryCaseHierarchyFacts(string AccountId, string Account
 public sealed record RecoveryCaseHierarchyRequest(Guid CaseId, Guid RequestId, string ContextDigest, string PolicyVersion,
     RecoveryCaseGoal Goal, RecoveryCaseHierarchyFacts Facts)
 {
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public RecoveryVerifiedContactFacts? VerifiedContact { get; init; }
     public override string ToString() => nameof(RecoveryCaseHierarchyRequest);
 }
 /// <summary>The trusted hierarchy owner must qualify stronger-proof unavailability from the complete current facts.
@@ -102,6 +104,8 @@ public sealed record RecoveryCaseHierarchyDecision(bool RecoveryCodeAllowed, boo
     public RecoveryCaseCodeSelection? CodeSelection { get; init; }
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public RecoveryCasePasskeySelection? PasskeySelection { get; init; }
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public RecoveryCaseContactSelection? ContactSelection { get; init; }
     internal string Snapshot() => JsonSerializer.Serialize(this);
     public override string ToString() => nameof(RecoveryCaseHierarchyDecision);
 }

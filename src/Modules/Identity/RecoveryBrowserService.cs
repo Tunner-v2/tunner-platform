@@ -58,7 +58,8 @@ public sealed class RecoveryBrowserService
             return Results.Json(new OptionsView(true, policy.Values.Version, publication.Version, publication.Locale, publication.Content,
                 [new(policy.Values.GoalReference, publication.GoalLabelKey, publication.GoalDescriptionKey)],
                 new(true, policy.Values.PasswordMinimumLength, policy.Values.PasswordMaximumLength, policy.Values.SessionEffect.ToString(), publication.EffectLabelKey, publication.EffectValueKey), operation,
-                policy.Values.PasskeyRecoveryProfile is null ? null : application.PasswordPasskeyCapability(origin, clock.GetUtcNow())));
+                policy.Values.PasskeyRecoveryProfile is null ? null : application.PasswordPasskeyCapability(origin, clock.GetUtcNow()),
+                policy.Values.ContactRecoveryProfile is { } contact ? new ContactCapability(application.ContactAvailable(origin, clock.GetUtcNow()), contact.ProofDigits) : null));
         }
         catch (RecoveryBrowserContextException) { return Problem(403, "BROWSER_CONTEXT_REQUIRED"); }
         catch (InvalidOperationException) { return Problem(503, "RECOVERY_UNAVAILABLE"); }
@@ -75,6 +76,33 @@ public sealed class RecoveryBrowserService
             {
                 var command = await IdentityJsonCommand.ReadAsync<RecoveryEntryStartCommand>(context, 4096).ConfigureAwait(false);
                 result = await application.StartPasswordEntryAsync(caller, command.RequestId, command.Email, command.GoalReference, context.RequestAborted).ConfigureAwait(false);
+            }
+            else if (kind == "contact/options")
+            {
+                var command = await IdentityJsonCommand.ReadAsync<RecoveryEntryCommand>(context, 4096).ConfigureAwait(false);
+                if (Selected(context, caller, policy.Values.Version)?.RequestId != command.RequestId) return Problem(404, "NOT_FOUND_OR_NOT_DISCLOSABLE");
+                var options = await application.StartPasswordContactAsync(caller, command.RequestId, context.RequestAborted).ConfigureAwait(false);
+                if (options.ErrorCode is { } error) return Failure(error);
+                if (options.Entry is not { } contactEntry || options.Presentation is not { } presentation) return Problem(400, "RECOVERY_PROOF_REJECTED");
+                if (Current().Policy.Snapshot != policy.Snapshot) return Problem(503, "RECOVERY_UNAVAILABLE");
+                Select(context, caller, contactEntry);
+                return Results.Json(new { requestId = contactEntry.RequestId, challengeId = presentation.ChallengeId, expiresAt = presentation.ExpiresAt });
+            }
+            else if (kind == "contact/repair")
+            {
+                if (!application.ContactAvailable(origin, clock.GetUtcNow())) return Problem(503, "RECOVERY_UNAVAILABLE");
+                var command = await IdentityJsonCommand.ReadAsync<RecoveryPasswordContactRepairCommand>(context,
+                    checked((long)policy.Values.PasswordMaximumLength * 12 + 4096)).ConfigureAwait(false);
+                if (Selected(context, caller, policy.Values.Version)?.RequestId != command.RequestId) return Problem(404, "NOT_FOUND_OR_NOT_DISCLOSABLE");
+                try
+                {
+                    result = await application.RepairPasswordWithContactAsync(caller, command.RequestId, command.ExpectedVersion, command.ChallengeId,
+                        command.Code, command.Password, command.PasswordConfirmation, context.RequestAborted).ConfigureAwait(false);
+                }
+                catch (Exception error) when (error is InvalidOperationException or CryptographicException or FormatException)
+                {
+                    return Problem(400, "RECOVERY_PROOF_REJECTED");
+                }
             }
             else if (kind == "passkey/options")
             {
@@ -174,6 +202,8 @@ public sealed class RecoveryBrowserService
     private sealed record OptionsView(bool Available, string ProfileVersion, string PublicationVersion, string Locale,
         IReadOnlyDictionary<string, RegistrationPublishedText> Content, IReadOnlyList<GoalView> Goals, RepairView Repair,
         [property: JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] OperationView? Operation,
-        [property: JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] RecoveryPasskeyCapability? Passkey);
+        [property: JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] RecoveryPasskeyCapability? Passkey,
+        [property: JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] ContactCapability? Contact);
+    private sealed record ContactCapability(bool Available, int ProofDigits);
     private sealed record PasskeyOptionsView(Guid RequestId, Guid CeremonyId, JsonElement PublicKey, DateTimeOffset ExpiresAt);
 }

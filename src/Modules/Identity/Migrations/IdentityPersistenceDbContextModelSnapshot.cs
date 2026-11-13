@@ -1867,6 +1867,18 @@ namespace Tunner.Identity.Persistence.Migrations
                         .HasColumnType("text")
                         .HasColumnName("account_state");
 
+                    b.Property<Guid?>("ContactChallengeId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("contact_challenge_id");
+
+                    b.Property<string>("ContactDestinationDigest")
+                        .HasColumnType("text")
+                        .HasColumnName("contact_destination_digest");
+
+                    b.Property<Guid?>("ContactReference")
+                        .HasColumnType("uuid")
+                        .HasColumnName("contact_reference");
+
                     b.Property<string>("ContextDigest")
                         .IsRequired()
                         .HasColumnType("text")
@@ -1887,6 +1899,10 @@ namespace Tunner.Identity.Persistence.Migrations
                     b.Property<long>("ExpectedAccountVersion")
                         .HasColumnType("bigint")
                         .HasColumnName("expected_account_version");
+
+                    b.Property<long?>("ExpectedContactVersion")
+                        .HasColumnType("bigint")
+                        .HasColumnName("expected_contact_version");
 
                     b.Property<long?>("ExpectedPasskeyUsageVersion")
                         .HasColumnType("bigint")
@@ -1926,6 +1942,10 @@ namespace Tunner.Identity.Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("hierarchy_snapshot");
+
+                    b.Property<string>("InitialContactRiskSnapshot")
+                        .HasColumnType("text")
+                        .HasColumnName("initial_contact_risk_snapshot");
 
                     b.Property<string>("NetworkDigest")
                         .IsRequired()
@@ -2035,6 +2055,8 @@ namespace Tunner.Identity.Persistence.Migrations
 
                     b.HasKey("CaseId");
 
+                    b.HasIndex("ContactReference");
+
                     b.HasIndex("EntryId")
                         .IsUnique();
 
@@ -2056,9 +2078,9 @@ namespace Tunner.Identity.Persistence.Migrations
                         {
                             t.HasCheckConstraint("ck_recovery_case_binding", "length(original_browser_digest)=64 AND length(network_digest)=64 AND length(context_digest)=64 AND length(facts_digest)=64\nAND length(policy_version)>0 AND length(processing_reference)>0 AND length(retention_reference)>0\nAND jsonb_typeof(policy_snapshot::jsonb)='object' AND jsonb_typeof(hierarchy_snapshot::jsonb)='object'\nAND jsonb_typeof(unresolved_effects_json::jsonb)='array'\nAND ((goal='ContainSelectedTunnerSession' AND session_effect='RevokeExactSelectedSession'\n  AND target_session_id IS NOT NULL AND expected_session_version IS NOT NULL AND expected_session_version>=1\n  AND entry_id IS NULL AND prior_password_digest IS NULL AND prior_security_stamp_digest IS NULL AND user_source_digest IS NULL\n  AND jsonb_array_length(unresolved_effects_json::jsonb)>0)\n  OR (goal='RepairPassword' AND session_effect='InvalidateExistingTunnerSessions' AND target_session_id IS NULL AND expected_session_version IS NULL\n    AND entry_id IS NOT NULL AND prior_password_digest IS NOT NULL AND length(prior_password_digest)=64\n    AND prior_security_stamp_digest IS NOT NULL AND length(prior_security_stamp_digest)=64\n    AND user_source_digest IS NOT NULL AND length(user_source_digest)=64))");
 
-                            t.HasCheckConstraint("ck_recovery_case_state", "expires_at>created_at AND recovery_expires_at>expires_at AND (((state='PENDING_CODE' AND proof_kind='CODE')\r\n  OR (state='PENDING_PASSKEY' AND proof_kind='PASSKEY')) AND version=1 AND result_id IS NULL AND ended_at IS NULL\r\n  OR (version=2 AND result_id IS NOT NULL AND ended_at>=created_at AND ended_at<expires_at\r\n    AND ((state='CONTAINED' AND goal='ContainSelectedTunnerSession' AND proof_kind='CODE') OR (state='REPAIRED' AND goal='RepairPassword'))))");
+                            t.HasCheckConstraint("ck_recovery_case_state", "expires_at>created_at AND recovery_expires_at>expires_at AND (((state='PENDING_CODE' AND proof_kind='CODE')\r\n  OR (state='PENDING_PASSKEY' AND proof_kind='PASSKEY') OR (state='PENDING_CONTACT_RISK' AND proof_kind='CONTACT_RISK'))\r\n  AND version=1 AND result_id IS NULL AND ended_at IS NULL OR (version=2 AND result_id IS NOT NULL AND ended_at>=created_at AND ended_at<expires_at\r\n    AND ((state='CONTAINED' AND goal='ContainSelectedTunnerSession' AND proof_kind='CODE') OR (state='REPAIRED' AND goal='RepairPassword'))))");
 
-                            t.HasCheckConstraint("ck_recovery_case_versions", "expected_account_version>=1 AND ((proof_kind='CODE' AND set_reference IS NOT NULL AND expected_set_lifecycle_version IS NOT NULL\r\n  AND expected_set_lifecycle_version>=1 AND usage_admission IS NOT NULL AND passkey_credential_reference IS NULL AND expected_passkey_version IS NULL\r\n  AND expected_passkey_usage_version IS NULL AND passkey_ceremony_id IS NULL AND ((usage_admission='ExactUsageSnapshot'\r\n    AND expected_usage_version IS NOT NULL AND expected_usage_version>=0) OR (usage_admission='IndependentUnusedEntry' AND expected_usage_version IS NULL)))\r\n  OR (proof_kind='PASSKEY' AND goal='RepairPassword' AND set_reference IS NULL AND expected_set_lifecycle_version IS NULL\r\n    AND expected_usage_version IS NULL AND usage_admission IS NULL AND passkey_credential_reference IS NOT NULL\r\n    AND expected_passkey_version IS NOT NULL AND expected_passkey_version>=1 AND expected_passkey_usage_version IS NOT NULL\r\n    AND expected_passkey_usage_version>=0 AND passkey_ceremony_id IS NOT NULL))");
+                            t.HasCheckConstraint("ck_recovery_case_versions", "((expected_account_version>=1 AND ((proof_kind='CODE' AND set_reference IS NOT NULL AND expected_set_lifecycle_version IS NOT NULL\r\n  AND expected_set_lifecycle_version>=1 AND usage_admission IS NOT NULL AND passkey_credential_reference IS NULL AND expected_passkey_version IS NULL\r\n  AND expected_passkey_usage_version IS NULL AND passkey_ceremony_id IS NULL AND ((usage_admission='ExactUsageSnapshot'\r\n    AND expected_usage_version IS NOT NULL AND expected_usage_version>=0) OR (usage_admission='IndependentUnusedEntry' AND expected_usage_version IS NULL)))\r\n  OR (proof_kind='PASSKEY' AND goal='RepairPassword' AND set_reference IS NULL AND expected_set_lifecycle_version IS NULL\r\n    AND expected_usage_version IS NULL AND usage_admission IS NULL AND passkey_credential_reference IS NOT NULL\r\n    AND expected_passkey_version IS NOT NULL AND expected_passkey_version>=1 AND expected_passkey_usage_version IS NOT NULL\r\n    AND expected_passkey_usage_version>=0 AND passkey_ceremony_id IS NOT NULL))) AND contact_reference IS NULL AND expected_contact_version IS NULL AND contact_destination_digest IS NULL AND contact_challenge_id IS NULL AND initial_contact_risk_snapshot IS NULL) OR (proof_kind='CONTACT_RISK' AND goal='RepairPassword' AND expected_account_version>=1 AND set_reference IS NULL\r\nAND expected_set_lifecycle_version IS NULL AND expected_usage_version IS NULL AND usage_admission IS NULL\r\nAND passkey_credential_reference IS NULL AND expected_passkey_version IS NULL AND expected_passkey_usage_version IS NULL AND passkey_ceremony_id IS NULL\r\nAND contact_reference IS NOT NULL AND expected_contact_version IS NOT NULL AND expected_contact_version>=1\r\nAND contact_destination_digest IS NOT NULL AND length(contact_destination_digest)=64 AND contact_challenge_id IS NOT NULL\r\nAND initial_contact_risk_snapshot IS NOT NULL AND jsonb_typeof(initial_contact_risk_snapshot::jsonb)='object')");
                         });
                 });
 
@@ -2453,6 +2475,143 @@ namespace Tunner.Identity.Persistence.Migrations
                         });
                 });
 
+            modelBuilder.Entity("Tunner.Identity.Persistence.RecoveryContactChallengeRow", b =>
+                {
+                    b.Property<Guid>("ChallengeId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("challenge_id");
+
+                    b.Property<int>("Attempts")
+                        .HasColumnType("integer")
+                        .HasColumnName("attempts");
+
+                    b.Property<Guid>("CaseId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("case_id");
+
+                    b.Property<Guid>("ContactReference")
+                        .HasColumnType("uuid")
+                        .HasColumnName("contact_reference");
+
+                    b.Property<long>("ContactVersion")
+                        .HasColumnType("bigint")
+                        .HasColumnName("contact_version");
+
+                    b.Property<string>("ContextDigest")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("context_digest");
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("created_at");
+
+                    b.Property<Guid>("DeliveryId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("delivery_id");
+
+                    b.Property<string>("DestinationDigest")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("destination_digest");
+
+                    b.Property<DateTimeOffset?>("EndedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("ended_at");
+
+                    b.Property<Guid>("EntryId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("entry_id");
+
+                    b.Property<DateTimeOffset>("ExpiresAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("expires_at");
+
+                    b.Property<DateTimeOffset?>("MaterialPurgedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("material_purged_at");
+
+                    b.Property<int>("MaximumAttempts")
+                        .HasColumnType("integer")
+                        .HasColumnName("maximum_attempts");
+
+                    b.Property<Guid>("NotificationOutboxEventId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("notification_outbox_event_id");
+
+                    b.Property<string>("NotificationSnapshot")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("notification_snapshot");
+
+                    b.Property<string>("ProcessingReference")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("processing_reference");
+
+                    b.Property<string>("ProfileVersion")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("profile_version");
+
+                    b.Property<string>("ProtectedAddress")
+                        .HasColumnType("text")
+                        .HasColumnName("protected_address");
+
+                    b.Property<string>("ProtectedCode")
+                        .HasColumnType("text")
+                        .HasColumnName("protected_code");
+
+                    b.Property<string>("ProtectedDigest")
+                        .HasColumnType("text")
+                        .HasColumnName("protected_digest");
+
+                    b.Property<DateTimeOffset>("PurgeAfter")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("purge_after");
+
+                    b.Property<Guid?>("ResultId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("result_id");
+
+                    b.Property<string>("RetentionReference")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("retention_reference");
+
+                    b.Property<string>("State")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("state");
+
+                    b.Property<long>("Version")
+                        .IsConcurrencyToken()
+                        .HasColumnType("bigint")
+                        .HasColumnName("version");
+
+                    b.HasKey("ChallengeId");
+
+                    b.HasIndex("CaseId")
+                        .IsUnique();
+
+                    b.HasIndex("ContactReference");
+
+                    b.HasIndex("DeliveryId")
+                        .IsUnique();
+
+                    b.HasIndex("EntryId")
+                        .IsUnique();
+
+                    b.HasIndex("PurgeAfter");
+
+                    b.HasIndex("ResultId");
+
+                    b.ToTable("recovery_contact_challenges", "identity", t =>
+                        {
+                            t.HasCheckConstraint("ck_recovery_contact_challenge", "length(context_digest)=64 AND length(destination_digest)=64 AND length(profile_version)>0 AND contact_version>=1 AND maximum_attempts>0\r\nAND attempts>=0 AND attempts<=maximum_attempts AND version>=1 AND expires_at>created_at AND purge_after>=expires_at\r\nAND jsonb_typeof(notification_snapshot::jsonb)='object' AND length(processing_reference)>0 AND length(retention_reference)>0\r\nAND ((state='PENDING' AND version=attempts+1 AND attempts<maximum_attempts AND ended_at IS NULL AND result_id IS NULL\r\n  AND protected_code IS NOT NULL AND protected_digest IS NOT NULL AND protected_address IS NOT NULL AND material_purged_at IS NULL)\r\n  OR (state='REJECTED' AND attempts=maximum_attempts AND ended_at>=created_at AND ended_at<expires_at AND result_id IS NULL\r\n    AND protected_code IS NULL AND protected_digest IS NULL)\r\n  OR (state='CONSUMED' AND version>=attempts+2 AND result_id IS NOT NULL AND ended_at>=created_at AND ended_at<expires_at\r\n    AND protected_code IS NULL AND protected_digest IS NULL)\r\n  OR (state='EXPIRED' AND ended_at>=expires_at AND result_id IS NULL AND protected_code IS NULL AND protected_digest IS NULL))\r\nAND (material_purged_at IS NULL OR (material_purged_at>=purge_after AND protected_code IS NULL AND protected_digest IS NULL AND protected_address IS NULL))");
+                        });
+                });
+
             modelBuilder.Entity("Tunner.Identity.Persistence.RecoveryEntryRow", b =>
                 {
                     b.Property<Guid>("EntryId")
@@ -2463,6 +2622,18 @@ namespace Tunner.Identity.Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("browser_digest");
+
+                    b.Property<Guid?>("ContactChallengeId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("contact_challenge_id");
+
+                    b.Property<DateTimeOffset?>("ContactExpiresAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("contact_expires_at");
+
+                    b.Property<string>("ContactProfileVersion")
+                        .HasColumnType("text")
+                        .HasColumnName("contact_profile_version");
 
                     b.Property<DateTimeOffset>("CreatedAt")
                         .HasColumnType("timestamp with time zone")
@@ -2570,6 +2741,8 @@ namespace Tunner.Identity.Persistence.Migrations
                         {
                             t.HasCheckConstraint("ck_recovery_entry_binding", "length(browser_digest)=64 AND length(previous_cookie_digest)=64 AND length(network_digest)=64 AND length(identifier_digest)=64 AND length(goal_reference)>0 AND length(policy_version)>0 AND length(processing_reference)>0 AND length(retention_reference)>0 AND jsonb_typeof(policy_snapshot::jsonb)='object'");
 
+                            t.HasCheckConstraint("ck_recovery_entry_contact", "(contact_challenge_id IS NULL AND contact_profile_version IS NULL AND contact_expires_at IS NULL)\r\nOR (contact_challenge_id IS NOT NULL AND contact_profile_version IS NOT NULL AND length(contact_profile_version)>0\r\n  AND contact_expires_at IS NOT NULL AND contact_expires_at>created_at AND contact_expires_at<=expires_at)");
+
                             t.HasCheckConstraint("ck_recovery_entry_passkey", "(passkey_ceremony_id IS NULL AND passkey_options_json IS NULL AND passkey_profile_version IS NULL AND passkey_policy_version IS NULL AND passkey_expires_at IS NULL)\r\nOR (passkey_ceremony_id IS NOT NULL AND passkey_options_json IS NOT NULL AND jsonb_typeof(passkey_options_json::jsonb)='object'\r\n  AND passkey_profile_version IS NOT NULL AND length(passkey_profile_version)>0 AND passkey_policy_version IS NOT NULL AND length(passkey_policy_version)>0\r\n  AND passkey_expires_at IS NOT NULL AND passkey_expires_at>created_at AND passkey_expires_at<=expires_at)");
 
                             t.HasCheckConstraint("ck_recovery_entry_state", "expires_at>created_at AND recovery_expires_at>expires_at AND ((state='OPEN' AND version=1 AND ended_at IS NULL) OR (state IN ('CANCELLED','REPAIRED') AND version=2 AND ended_at>=created_at AND ended_at<expires_at))");
@@ -2590,6 +2763,30 @@ namespace Tunner.Identity.Persistence.Migrations
                     b.Property<Guid>("CaseId")
                         .HasColumnType("uuid")
                         .HasColumnName("case_id");
+
+                    b.Property<Guid?>("ContactChallengeId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("contact_challenge_id");
+
+                    b.Property<string>("ContactDestinationDigest")
+                        .HasColumnType("text")
+                        .HasColumnName("contact_destination_digest");
+
+                    b.Property<Guid?>("ContactNotificationDeliveryId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("contact_notification_delivery_id");
+
+                    b.Property<Guid?>("ContactReference")
+                        .HasColumnType("uuid")
+                        .HasColumnName("contact_reference");
+
+                    b.Property<string>("ContactRiskSnapshot")
+                        .HasColumnType("text")
+                        .HasColumnName("contact_risk_snapshot");
+
+                    b.Property<long?>("ContactVersion")
+                        .HasColumnType("bigint")
+                        .HasColumnName("contact_version");
 
                     b.Property<string>("ContextDigest")
                         .IsRequired()
@@ -2727,13 +2924,15 @@ namespace Tunner.Identity.Persistence.Migrations
                     b.HasIndex("CaseId")
                         .IsUnique();
 
+                    b.HasIndex("ContactReference");
+
                     b.HasIndex("PasskeyCredentialReference");
 
                     b.HasIndex("TargetSessionId");
 
                     b.ToTable("recovery_results", "identity", t =>
                         {
-                            t.HasCheckConstraint("ck_recovery_result_shape", "(proof_kind='CODE' AND set_reference IS NOT NULL AND set_lifecycle_version IS NOT NULL AND passkey_credential_reference IS NULL AND passkey_version IS NULL AND passkey_usage_version IS NULL AND passkey_ceremony_id IS NULL AND passkey_method IS NULL AND passkey_assurance IS NULL AND native_before_digest IS NULL AND native_after_digest IS NULL AND (set_lifecycle_version>=1 AND length(context_digest)=64 AND length(policy_version)>0 AND length(processing_reference)>0 AND length(retention_reference)>0\nAND jsonb_typeof(policy_snapshot::jsonb)='object' AND jsonb_typeof(hierarchy_snapshot::jsonb)='object' AND jsonb_typeof(unresolved_effects_json::jsonb)='array'\nAND ((outcome='CONTAINED_PENDING_RESTORATION' AND target_session_id IS NOT NULL AND prior_session_version IS NOT NULL AND prior_session_version>=1\n  AND ended_session_version IS NOT NULL AND ended_session_version=prior_session_version+1 AND session_outbox_event_id IS NOT NULL\n  AND repair_outbox_event_id IS NULL AND prior_password_digest IS NULL AND repaired_password_digest IS NULL\n  AND prior_security_stamp_digest IS NULL AND repaired_security_stamp_digest IS NULL AND session_effect IS NULL AND jsonb_array_length(unresolved_effects_json::jsonb)>0)\n  OR (outcome='PASSWORD_REPAIRED_NO_SESSION' AND target_session_id IS NULL AND prior_session_version IS NULL AND ended_session_version IS NULL\n    AND session_outbox_event_id IS NULL AND repair_outbox_event_id IS NOT NULL AND prior_password_digest IS NOT NULL AND length(prior_password_digest)=64\n    AND repaired_password_digest IS NOT NULL AND length(repaired_password_digest)=64 AND prior_security_stamp_digest IS NOT NULL AND length(prior_security_stamp_digest)=64\n    AND repaired_security_stamp_digest IS NOT NULL AND length(repaired_security_stamp_digest)=64 AND repaired_security_stamp_digest<>prior_security_stamp_digest\n    AND session_effect='InvalidateExistingTunnerSessions')))) OR (proof_kind='PASSKEY' AND set_reference IS NULL AND set_lifecycle_version IS NULL AND passkey_credential_reference IS NOT NULL\r\nAND passkey_version IS NOT NULL AND passkey_version>=1 AND passkey_usage_version IS NOT NULL AND passkey_usage_version>=1\r\nAND passkey_ceremony_id IS NOT NULL AND passkey_method IS NOT NULL AND length(passkey_method)>0\r\nAND passkey_assurance IS NOT NULL AND length(passkey_assurance)>0 AND lower(passkey_assurance)<>'aal3'\r\nAND native_before_digest IS NOT NULL AND length(native_before_digest)=64 AND native_after_digest IS NOT NULL AND length(native_after_digest)=64\r\nAND outcome='PASSWORD_REPAIRED_NO_SESSION' AND target_session_id IS NULL AND prior_session_version IS NULL AND ended_session_version IS NULL\r\nAND session_outbox_event_id IS NULL AND repair_outbox_event_id IS NOT NULL AND prior_password_digest IS NOT NULL AND length(prior_password_digest)=64\r\nAND repaired_password_digest IS NOT NULL AND length(repaired_password_digest)=64 AND prior_security_stamp_digest IS NOT NULL AND length(prior_security_stamp_digest)=64\r\nAND repaired_security_stamp_digest IS NOT NULL AND length(repaired_security_stamp_digest)=64 AND repaired_security_stamp_digest<>prior_security_stamp_digest\r\nAND session_effect IS NOT NULL AND session_effect='InvalidateExistingTunnerSessions' AND length(context_digest)=64 AND length(policy_version)>0\r\nAND length(processing_reference)>0 AND length(retention_reference)>0 AND jsonb_typeof(policy_snapshot::jsonb)='object'\r\nAND jsonb_typeof(hierarchy_snapshot::jsonb)='object' AND jsonb_typeof(unresolved_effects_json::jsonb)='array')");
+                            t.HasCheckConstraint("ck_recovery_result_shape", "(((proof_kind='CODE' AND set_reference IS NOT NULL AND set_lifecycle_version IS NOT NULL AND passkey_credential_reference IS NULL AND passkey_version IS NULL AND passkey_usage_version IS NULL AND passkey_ceremony_id IS NULL AND passkey_method IS NULL AND passkey_assurance IS NULL AND native_before_digest IS NULL AND native_after_digest IS NULL AND (set_lifecycle_version>=1 AND length(context_digest)=64 AND length(policy_version)>0 AND length(processing_reference)>0 AND length(retention_reference)>0\nAND jsonb_typeof(policy_snapshot::jsonb)='object' AND jsonb_typeof(hierarchy_snapshot::jsonb)='object' AND jsonb_typeof(unresolved_effects_json::jsonb)='array'\nAND ((outcome='CONTAINED_PENDING_RESTORATION' AND target_session_id IS NOT NULL AND prior_session_version IS NOT NULL AND prior_session_version>=1\n  AND ended_session_version IS NOT NULL AND ended_session_version=prior_session_version+1 AND session_outbox_event_id IS NOT NULL\n  AND repair_outbox_event_id IS NULL AND prior_password_digest IS NULL AND repaired_password_digest IS NULL\n  AND prior_security_stamp_digest IS NULL AND repaired_security_stamp_digest IS NULL AND session_effect IS NULL AND jsonb_array_length(unresolved_effects_json::jsonb)>0)\n  OR (outcome='PASSWORD_REPAIRED_NO_SESSION' AND target_session_id IS NULL AND prior_session_version IS NULL AND ended_session_version IS NULL\n    AND session_outbox_event_id IS NULL AND repair_outbox_event_id IS NOT NULL AND prior_password_digest IS NOT NULL AND length(prior_password_digest)=64\n    AND repaired_password_digest IS NOT NULL AND length(repaired_password_digest)=64 AND prior_security_stamp_digest IS NOT NULL AND length(prior_security_stamp_digest)=64\n    AND repaired_security_stamp_digest IS NOT NULL AND length(repaired_security_stamp_digest)=64 AND repaired_security_stamp_digest<>prior_security_stamp_digest\n    AND session_effect='InvalidateExistingTunnerSessions')))) OR (proof_kind='PASSKEY' AND set_reference IS NULL AND set_lifecycle_version IS NULL AND passkey_credential_reference IS NOT NULL\r\nAND passkey_version IS NOT NULL AND passkey_version>=1 AND passkey_usage_version IS NOT NULL AND passkey_usage_version>=1\r\nAND passkey_ceremony_id IS NOT NULL AND passkey_method IS NOT NULL AND length(passkey_method)>0\r\nAND passkey_assurance IS NOT NULL AND length(passkey_assurance)>0 AND lower(passkey_assurance)<>'aal3'\r\nAND native_before_digest IS NOT NULL AND length(native_before_digest)=64 AND native_after_digest IS NOT NULL AND length(native_after_digest)=64\r\nAND outcome='PASSWORD_REPAIRED_NO_SESSION' AND target_session_id IS NULL AND prior_session_version IS NULL AND ended_session_version IS NULL\r\nAND session_outbox_event_id IS NULL AND repair_outbox_event_id IS NOT NULL AND prior_password_digest IS NOT NULL AND length(prior_password_digest)=64\r\nAND repaired_password_digest IS NOT NULL AND length(repaired_password_digest)=64 AND prior_security_stamp_digest IS NOT NULL AND length(prior_security_stamp_digest)=64\r\nAND repaired_security_stamp_digest IS NOT NULL AND length(repaired_security_stamp_digest)=64 AND repaired_security_stamp_digest<>prior_security_stamp_digest\r\nAND session_effect IS NOT NULL AND session_effect='InvalidateExistingTunnerSessions' AND length(context_digest)=64 AND length(policy_version)>0\r\nAND length(processing_reference)>0 AND length(retention_reference)>0 AND jsonb_typeof(policy_snapshot::jsonb)='object'\r\nAND jsonb_typeof(hierarchy_snapshot::jsonb)='object' AND jsonb_typeof(unresolved_effects_json::jsonb)='array')) AND contact_reference IS NULL AND contact_version IS NULL AND contact_challenge_id IS NULL AND contact_destination_digest IS NULL AND contact_risk_snapshot IS NULL AND contact_notification_delivery_id IS NULL) OR (proof_kind='CONTACT_RISK' AND outcome='PASSWORD_REPAIRED_NO_SESSION' AND set_reference IS NULL AND set_lifecycle_version IS NULL\r\nAND target_session_id IS NULL AND prior_session_version IS NULL AND ended_session_version IS NULL AND session_outbox_event_id IS NULL\r\nAND passkey_credential_reference IS NULL AND passkey_version IS NULL AND passkey_usage_version IS NULL AND passkey_ceremony_id IS NULL\r\nAND passkey_method IS NULL AND passkey_assurance IS NULL AND native_before_digest IS NULL AND native_after_digest IS NULL\r\nAND contact_reference IS NOT NULL AND contact_version IS NOT NULL AND contact_version>=1 AND contact_challenge_id IS NOT NULL\r\nAND contact_destination_digest IS NOT NULL AND length(contact_destination_digest)=64 AND contact_risk_snapshot IS NOT NULL AND jsonb_typeof(contact_risk_snapshot::jsonb)='object'\r\nAND contact_notification_delivery_id IS NOT NULL AND repair_outbox_event_id IS NOT NULL\r\nAND prior_password_digest IS NOT NULL AND length(prior_password_digest)=64 AND repaired_password_digest IS NOT NULL AND length(repaired_password_digest)=64\r\nAND prior_security_stamp_digest IS NOT NULL AND length(prior_security_stamp_digest)=64 AND repaired_security_stamp_digest IS NOT NULL AND length(repaired_security_stamp_digest)=64\r\nAND repaired_security_stamp_digest<>prior_security_stamp_digest AND session_effect IS NOT NULL AND session_effect='InvalidateExistingTunnerSessions'\r\nAND length(context_digest)=64 AND length(policy_version)>0 AND length(processing_reference)>0 AND length(retention_reference)>0\r\nAND jsonb_typeof(policy_snapshot::jsonb)='object' AND jsonb_typeof(hierarchy_snapshot::jsonb)='object' AND jsonb_typeof(unresolved_effects_json::jsonb)='array')");
                         });
                 });
 
@@ -4018,6 +4217,12 @@ namespace Tunner.Identity.Persistence.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
+                    b.HasOne("Tunner.Identity.Persistence.VerifiedContactRow", null)
+                        .WithMany()
+                        .HasForeignKey("ContactReference")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .HasConstraintName("fk_recovery_case_contact");
+
                     b.HasOne("Tunner.Identity.Persistence.RecoveryEntryRow", null)
                         .WithMany()
                         .HasForeignKey("EntryId")
@@ -4083,6 +4288,32 @@ namespace Tunner.Identity.Persistence.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("Tunner.Identity.Persistence.RecoveryContactChallengeRow", b =>
+                {
+                    b.HasOne("Tunner.Identity.Persistence.RecoveryCaseRow", null)
+                        .WithMany()
+                        .HasForeignKey("CaseId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Tunner.Identity.Persistence.VerifiedContactRow", null)
+                        .WithMany()
+                        .HasForeignKey("ContactReference")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Tunner.Identity.Persistence.RecoveryEntryRow", null)
+                        .WithMany()
+                        .HasForeignKey("EntryId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Tunner.Identity.Persistence.RecoveryResultRow", null)
+                        .WithMany()
+                        .HasForeignKey("ResultId")
+                        .OnDelete(DeleteBehavior.Restrict);
+                });
+
             modelBuilder.Entity("Tunner.Identity.Persistence.RecoveryResultRow", b =>
                 {
                     b.HasOne("Tunner.Identity.Persistence.RecoveryCaseRow", null)
@@ -4090,6 +4321,12 @@ namespace Tunner.Identity.Persistence.Migrations
                         .HasForeignKey("CaseId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+
+                    b.HasOne("Tunner.Identity.Persistence.VerifiedContactRow", null)
+                        .WithMany()
+                        .HasForeignKey("ContactReference")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .HasConstraintName("fk_recovery_result_contact");
 
                     b.HasOne("Tunner.Identity.Persistence.PasskeyCredentialRow", null)
                         .WithMany()

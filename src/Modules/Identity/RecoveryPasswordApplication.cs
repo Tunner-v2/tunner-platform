@@ -69,12 +69,12 @@ internal sealed partial class RecoveryCaseApplication
                 var facts = await LoadAccountFacts(accountId, null, ct).ConfigureAwait(false);
                 var sets = await CodeSets(accountId, ct).ConfigureAwait(false);
                 now = clock.GetUtcNow(); profile = PasswordCurrent(caller.Origin, now);
-                var currentContact = await database.VerifiedContacts.AnyAsync(x => x.AccountId == accountId && x.NormalizedEmail == normalized &&
+                var currentContact = await database.VerifiedContacts.SingleOrDefaultAsync(x => x.AccountId == accountId && x.NormalizedEmail == normalized &&
                     x.State == Tunner.Accounts.ContactVerificationState.Verified && x.AnonymizedAtUtc == null, ct).ConfigureAwait(false);
                 now = clock.GetUtcNow(); profile = PasswordCurrent(caller.Origin, now);
-                if (facts?.User.PasswordHash is not null && facts.User.NormalizedEmail == normalized && facts.User.EmailConfirmed && currentContact)
+                if (facts?.User.PasswordHash is not null && facts.User.NormalizedEmail == normalized && facts.User.EmailConfirmed && currentContact is not null)
                 {
-                    recovery = PreparePasswordCase(caller, entry, facts, sets, profile, now);
+                    recovery = PreparePasswordCase(caller, entry, facts, sets, profile, now, currentContact);
                     if (recovery is not null) { preparedFacts = facts; preparedSets = sets; database.Add(recovery); }
                 }
             }
@@ -140,7 +140,7 @@ internal sealed partial class RecoveryCaseApplication
     }
 
     private RecoveryCaseRow? PreparePasswordCase(RecoveryEntryCaller caller, RecoveryEntryRow entry, RecoveryCaseLockedFacts facts,
-        IReadOnlyList<RecoveryCaseCodeSetFacts> sets, RecoveryPasswordPolicyVersion profile, DateTimeOffset at)
+        IReadOnlyList<RecoveryCaseCodeSetFacts> sets, RecoveryPasswordPolicyVersion profile, DateTimeOffset at, VerifiedContactRow? verifiedContact = null)
     {
         var posture = facts.Value() with { CodeSets = sets };
         var row = new RecoveryCaseRow
@@ -157,9 +157,12 @@ internal sealed partial class RecoveryCaseApplication
         };
         // Selection is qualified by the same actual hierarchy owner; never infer a latest or single active set.
         RecoveryCaseHierarchyDecision decision;
-        try { decision = hierarchy!.RequireCurrent(new(row.CaseId, row.RequestId, PasswordSelectionContext(entry), row.PolicyVersion, RecoveryCaseGoal.RepairPassword, posture), at); }
+        try { decision = hierarchy!.RequireCurrent(new(row.CaseId, row.RequestId, PasswordSelectionContext(entry), row.PolicyVersion, RecoveryCaseGoal.RepairPassword, posture)
+            { VerifiedContact = profile.Values.ContactRecoveryProfile is not null && verifiedContact is not null ? ContactFacts(verifiedContact) : null }, at); }
         catch (InvalidOperationException) { return null; }
         catch (ArgumentException) { return null; }
+        if (decision.ContactSelection is not null)
+            return PrepareContactPasswordCase(row, caller, entry, facts, sets, profile, posture, verifiedContact, decision, at);
         if (decision.PasskeySelection is not null)
             return PreparePasskeyPasswordCase(row, caller, entry, facts, profile, posture, decision, at);
         if (codes is null || !Admitted(decision, posture, at) || decision.CodeSelection is not { } choice || !sets.Any(x => x.SetReference == choice.SetReference &&
@@ -173,6 +176,7 @@ internal sealed partial class RecoveryCaseApplication
     internal bool PasswordAuthorityCurrent(RecoveryEntryCaller caller, RecoveryEntryRow entry, RecoveryCaseRow row, RecoveryCaseLockedFacts facts,
         IReadOnlyList<RecoveryCaseCodeSetFacts> sets, DateTimeOffset at, bool repaired, RecoveryCodeEntryRow? consumptionWitness = null)
     {
+        if (row.ProofKind == "CONTACT_RISK") return ContactPasswordAuthorityCurrent(caller, entry, row, facts, sets, at, repaired, out _);
         if (row.ProofKind == "PASSKEY") return PasskeyPasswordAuthorityCurrent(caller, entry, row, facts, at, repaired);
         if (row.ProofKind != "CODE") return false;
         var profile = PasswordCurrent(caller.Origin, at);
@@ -232,6 +236,7 @@ internal sealed partial class RecoveryCaseApplication
         var row = await database.Set<RecoveryCaseRow>().SingleOrDefaultAsync(x => x.EntryId == entry.EntryId, ct).ConfigureAwait(false);
         if (row is null) return await EntryFinish(tx, new("NOT_FOUND_OR_NOT_DISCLOSABLE"), ct).ConfigureAwait(false);
         var facts = await LoadAccountFacts(row.AccountId, null, ct).ConfigureAwait(false);
+        if (row.ProofKind == "CONTACT_RISK") return await DescribeContactEntry(caller, entry, row, facts, tx, ct).ConfigureAwait(false);
         if (row.ProofKind == "PASSKEY") return await DescribePasskeyEntry(caller, entry, row, facts, tx, ct).ConfigureAwait(false);
         var sets = await CodeSets(row.AccountId, ct).ConfigureAwait(false);
         var result = await database.Set<RecoveryResultRow>().SingleOrDefaultAsync(x => x.CaseId == row.CaseId, ct).ConfigureAwait(false);

@@ -22,6 +22,8 @@ public static class RecoveryCodeFiniteNativeExecution
         "FEDERATION_NAMESPACE_BINDING", "FEDERATION_SINGLE_OWNER", "FEDERATION_OWNER_ROLLBACK", "FEDERATION_IMMUTABLE_VERSION",
         "FEDERATION_QUALIFICATION_LIFECYCLE", "FEDERATION_ATTEMPT_INTEGRITY", "FEDERATION_SESSION_SOURCE", "FEDERATION_MIGRATION_GUARDS"];
     private static readonly string[] PrivateIds = [
+        "RECOVERY_CONTACT_EFFECT", "RECOVERY_CONTACT_VALIDITY", "RECOVERY_CONTACT_AUTHORITY",
+        "RECOVERY_CONTACT_ORIGINAL", "RECOVERY_CONTACT_ROLLBACK", "RECOVERY_CONTACT_HTTPS",
         "RECOVERY_PASSKEY_EFFECT", "RECOVERY_PASSKEY_ASSERTION", "RECOVERY_PASSKEY_BINDING", "RECOVERY_PASSKEY_CURRENTNESS",
         "RECOVERY_PASSKEY_ORIGINAL", "RECOVERY_PASSKEY_CONCURRENCY", "RECOVERY_PASSKEY_ROLLBACK", "RECOVERY_PASSKEY_HTTPS",
         "RECOVERY_PASSWORD_HTTPS_WIRE",
@@ -372,6 +374,12 @@ public static class RecoveryCodeFiniteNativeExecution
             "FEDERATION_REGISTRATION" => new FederationPrivateIntegrationTests(fixture).QualifiedGoogleRegistrationRequiresNoticesThenSharesPersonalInformationAndOriginalRecoveryWithoutSession(),
             "FEDERATION_REGISTRATION_REJECTION" => new FederationPrivateIntegrationTests(fixture).UnqualifiedExpiredForeignOrCollidingFederationIntakeCannotAdoptAccountOrIssueSession(),
             "FEDERATION_REGISTRATION_FINALITY" => new FederationPrivateIntegrationTests(fixture).LateRegistrationProfileNoticeOrContactDriftRollsBackCanonicalIntakeAndRecoversOriginal(),
+            "RECOVERY_CONTACT_EFFECT" => new RecoveryContactRepairPrivateIntegrationTests(fixture).ContactProofRepairsPasswordAndQueuesCommittedDeduplicatedNotice(),
+            "RECOVERY_CONTACT_VALIDITY" => new RecoveryContactRepairPrivateIntegrationTests(fixture).ContactProofValidationAttemptsExpiryAndPurgeRemainOneUse(),
+            "RECOVERY_CONTACT_AUTHORITY" => new RecoveryContactRepairPrivateIntegrationTests(fixture).ContactRiskHierarchyPolicyAndVerifiedContactDriftFailClosed(),
+            "RECOVERY_CONTACT_ORIGINAL" => new RecoveryContactRepairPrivateIntegrationTests(fixture).ContactOriginalAndConcurrentRepairsApplyOnePasswordEffect(),
+            "RECOVERY_CONTACT_ROLLBACK" => new RecoveryContactRepairPrivateIntegrationTests(fixture).ContactPostSaveFaultAndCancellationPreserveProofAndPassword(),
+            "RECOVERY_CONTACT_HTTPS" => new RecoveryContactRepairPrivateIntegrationTests(fixture).ActualHttpsContactRecoveryIsNeutralBoundedAndBrowserBound(),
             "RECOVERY_PASSKEY_EFFECT" => new RecoveryPasskeyRepairPrivateIntegrationTests(fixture).NativeStrongProofRepairsPasswordWithoutCodeCompositionOrLogin(),
             "RECOVERY_PASSKEY_ASSERTION" => new RecoveryPasskeyRepairPrivateIntegrationTests(fixture).NativeStrongProofRejectsSignatureFlagsOriginChallengeAndUserHandle(),
             "RECOVERY_PASSKEY_BINDING" => new RecoveryPasskeyRepairPrivateIntegrationTests(fixture).OriginalCaseAndCredentialBindingsRejectCrossContextReplay(),
