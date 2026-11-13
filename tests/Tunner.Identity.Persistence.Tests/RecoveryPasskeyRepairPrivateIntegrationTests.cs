@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Npgsql;
 using Tunner.Accounts;
 using Tunner.Database.Outbox;
@@ -83,7 +84,9 @@ internal sealed class RecoveryPasskeyRepairPrivateIntegrationTests(IdentityPostg
     private static Task<AuthenticationTestHost> Host(IdentityTestDatabase db, Authority authority, SaveChangesInterceptor? observer = null) =>
         PasskeyTests.StartRecoveryFixtureAsync(db, services =>
         {
+            services.RemoveAll<IPasskeyPolicySource>();
             services.AddSingleton<IPasskeyPolicySource>(authority); services.AddSingleton<IRecoveryPasswordPolicySource>(authority);
+            Assert.True(services.Count(x => x.ServiceType == typeof(IPasskeyPolicySource)) == 1);
             services.AddSingleton<IRecoveryCaseHierarchySource>(authority); services.AddSingleton<IRegistrationPasswordBlocklist>(authority);
             services.AddSingleton<IRecoveryPasswordPresentationSource, Presentation>();
             if (observer is not null) services.AddDbContext<IdentityPersistenceDbContext>(options => options.AddInterceptors(observer));
