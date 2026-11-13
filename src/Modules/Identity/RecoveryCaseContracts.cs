@@ -93,6 +93,8 @@ public sealed record RecoveryCaseHierarchyRequest(Guid CaseId, Guid RequestId, s
 {
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public RecoveryVerifiedContactFacts? VerifiedContact { get; init; }
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public IReadOnlyList<RecoveryGovernedContactFacts>? GovernedContacts { get; init; }
     public override string ToString() => nameof(RecoveryCaseHierarchyRequest);
 }
 /// <summary>The trusted hierarchy owner must qualify stronger-proof unavailability from the complete current facts.
@@ -106,6 +108,8 @@ public sealed record RecoveryCaseHierarchyDecision(bool RecoveryCodeAllowed, boo
     public RecoveryCasePasskeySelection? PasskeySelection { get; init; }
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public RecoveryCaseContactSelection? ContactSelection { get; init; }
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public RecoveryGovernedSelection? GovernedSelection { get; init; }
     internal string Snapshot() => JsonSerializer.Serialize(this);
     public override string ToString() => nameof(RecoveryCaseHierarchyDecision);
 }

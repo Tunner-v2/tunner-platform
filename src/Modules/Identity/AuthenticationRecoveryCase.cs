@@ -8,7 +8,7 @@ internal sealed partial class AuthenticationApplication
     internal void ApplyRecoveryPassword(RecoveryCaseRow recovery, IdentityUserAdapter user, string preparedNativeHash)
     {
         if (database.Database.CurrentTransaction is null || database.Entry(user).State != EntityState.Unchanged ||
-            recovery.Goal != nameof(RecoveryCaseGoal.RepairPassword) || recovery.State is not ("PENDING_CODE" or "PENDING_PASSKEY" or "PENDING_CONTACT_RISK") ||
+            recovery.Goal != nameof(RecoveryCaseGoal.RepairPassword) || recovery.State is not ("PENDING_CODE" or "PENDING_PASSKEY" or "PENDING_CONTACT_RISK" or "PENDING_GOVERNED_REVIEW") ||
             recovery.SessionEffect != nameof(RecoveryPasswordSessionEffect.InvalidateExistingTunnerSessions) ||
             user.AccountId != recovery.AccountId || user.PasswordHash is null || string.IsNullOrWhiteSpace(user.SecurityStamp) ||
             string.IsNullOrWhiteSpace(preparedNativeHash) || AuthenticationIdentity.Digest(user.PasswordHash) != recovery.PriorPasswordDigest ||

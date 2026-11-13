@@ -59,7 +59,8 @@ public sealed class RecoveryBrowserService
                 [new(policy.Values.GoalReference, publication.GoalLabelKey, publication.GoalDescriptionKey)],
                 new(true, policy.Values.PasswordMinimumLength, policy.Values.PasswordMaximumLength, policy.Values.SessionEffect.ToString(), publication.EffectLabelKey, publication.EffectValueKey), operation,
                 policy.Values.PasskeyRecoveryProfile is null ? null : application.PasswordPasskeyCapability(origin, clock.GetUtcNow()),
-                policy.Values.ContactRecoveryProfile is { } contact ? new ContactCapability(application.ContactAvailable(origin, clock.GetUtcNow()), contact.ProofDigits) : null));
+                policy.Values.ContactRecoveryProfile is { } contact ? new ContactCapability(application.ContactAvailable(origin, clock.GetUtcNow()), contact.ProofDigits) : null,
+                policy.Values.GovernedRecoveryProfile is null ? null : new GovernedCapability(application.GovernedAvailable(origin, clock.GetUtcNow()))));
         }
         catch (RecoveryBrowserContextException) { return Problem(403, "BROWSER_CONTEXT_REQUIRED"); }
         catch (InvalidOperationException) { return Problem(503, "RECOVERY_UNAVAILABLE"); }
@@ -76,6 +77,16 @@ public sealed class RecoveryBrowserService
             {
                 var command = await IdentityJsonCommand.ReadAsync<RecoveryEntryStartCommand>(context, 4096).ConfigureAwait(false);
                 result = await application.StartPasswordEntryAsync(caller, command.RequestId, command.Email, command.GoalReference, context.RequestAborted).ConfigureAwait(false);
+            }
+            else if (kind == "review/repair")
+            {
+                if (!application.GovernedAvailable(origin, clock.GetUtcNow())) return Problem(503, "RECOVERY_UNAVAILABLE");
+                var command = await IdentityJsonCommand.ReadAsync<RecoveryPasswordGovernedCommand>(context,
+                    checked((long)policy.Values.PasswordMaximumLength * 12 + 4096)).ConfigureAwait(false);
+                if (Selected(context, caller, policy.Values.Version)?.RequestId != command.RequestId) return Problem(404, "NOT_FOUND_OR_NOT_DISCLOSABLE");
+                try { result = await application.RepairPasswordWithGovernedDispositionAsync(caller, command.RequestId, command.ExpectedVersion,
+                    command.Password, command.PasswordConfirmation, context.RequestAborted).ConfigureAwait(false); }
+                catch (InvalidOperationException) { return Problem(400, "RECOVERY_PROOF_REJECTED"); }
             }
             else if (kind == "contact/options")
             {
@@ -203,7 +214,9 @@ public sealed class RecoveryBrowserService
         IReadOnlyDictionary<string, RegistrationPublishedText> Content, IReadOnlyList<GoalView> Goals, RepairView Repair,
         [property: JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] OperationView? Operation,
         [property: JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] RecoveryPasskeyCapability? Passkey,
-        [property: JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] ContactCapability? Contact);
+        [property: JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] ContactCapability? Contact,
+        [property: JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] GovernedCapability? GovernedReview);
+    private sealed record GovernedCapability(bool Available);
     private sealed record ContactCapability(bool Available, int ProofDigits);
     private sealed record PasskeyOptionsView(Guid RequestId, Guid CeremonyId, JsonElement PublicKey, DateTimeOffset ExpiresAt);
 }

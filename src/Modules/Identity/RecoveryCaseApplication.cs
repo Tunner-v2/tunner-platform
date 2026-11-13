@@ -12,7 +12,7 @@ internal sealed partial class RecoveryCaseApplication(IdentityPersistenceDbConte
     AuthenticationPartitionKey? partitions = null, PasskeyApplication? passkeys = null,
     IRecoveryContactRiskSource? contactRisk = null, IRecoveryContactNotificationSource? contactNotifications = null,
     Microsoft.AspNetCore.DataProtection.IDataProtectionProvider? recoveryProtection = null,
-    IRecoveryContactNotificationDispatcher? contactDispatcher = null)
+    IRecoveryContactNotificationDispatcher? contactDispatcher = null, IRecoveryGovernedDispositionSource? governedDispositions = null)
 {
     internal static string OperationId(RecoveryCaseRow row) => "OP-RECOVERY-CASE-" + row.CaseId.ToString("N");
     internal async Task<RecoveryCaseResult> StartAsync(RecoveryCaseCaller caller, RecoveryCaseStartCommand command, CancellationToken ct = default)
@@ -200,6 +200,8 @@ internal sealed partial class RecoveryCaseApplication(IdentityPersistenceDbConte
         row.ExpectedUsageVersion, row.UsageAdmission, row.PolicyVersion, row.PolicySnapshot, row.FactsDigest, row.ProcessingReference, row.RetentionReference, row.UnresolvedEffectsJson }));
         var context = row.EntryId is null ? original : AuthenticationIdentity.Digest(JsonSerializer.Serialize(new
             { original, row.EntryId, row.PriorPasswordDigest, row.PriorSecurityStampDigest, row.UserSourceDigest }));
+        if (row.ProofKind == "GOVERNED_REVIEW") return AuthenticationIdentity.Digest(JsonSerializer.Serialize(new
+            { context, row.ProofKind, row.GovernedContactsDigest }));
         if (row.ProofKind == "CONTACT_RISK") return AuthenticationIdentity.Digest(JsonSerializer.Serialize(new
             { context, row.ProofKind, row.ContactReference, row.ExpectedContactVersion, row.ContactDestinationDigest, row.ContactChallengeId }));
         // Preserve the historical CODE/containment byte identity.

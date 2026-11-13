@@ -23,6 +23,8 @@ public sealed record RecoveryPasswordPolicy(string Version, string Origin, strin
     public RecoveryPasswordPasskeyProfile? PasskeyRecoveryProfile { get; init; }
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public RecoveryContactProfile? ContactRecoveryProfile { get; init; }
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public RecoveryGovernedProfile? GovernedRecoveryProfile { get; init; }
     public override string ToString() => nameof(RecoveryPasswordPolicy);
 }
 public sealed class RecoveryPasswordPolicyVersion
@@ -40,6 +42,7 @@ public sealed class RecoveryPasswordPolicyVersion
             Values.UnresolvedDownstreamEffects.Any(string.IsNullOrWhiteSpace) ||
             Values.UnresolvedDownstreamEffects.Distinct(StringComparer.Ordinal).Count() != Values.UnresolvedDownstreamEffects.Count)
             throw new ArgumentException("Complete explicit recovery password authority is required.");
+        values.GovernedRecoveryProfile?.Validate();
         values.ContactRecoveryProfile?.Validate();
         values.PasskeyRecoveryProfile?.Validate();
         if (values.PasskeyRecoveryProfile is { } passkey)

@@ -20,6 +20,8 @@
     "src/Modules/Identity/Migrations/20261113102314_P2RecoveryPasskeyGuardDispatch.cs",
     "src/Modules/Identity/Migrations/20261113110617_P2RecoveryContactRiskRepair.Designer.cs",
     "src/Modules/Identity/Migrations/20261113110617_P2RecoveryContactRiskRepair.cs",
+    "src/Modules/Identity/Migrations/20261113145013_P2RecoveryGovernedReviewRepair.Designer.cs",
+    "src/Modules/Identity/Migrations/20261113145013_P2RecoveryGovernedReviewRepair.cs",
     "src/Modules/Identity/Migrations/IdentityPersistenceDbContextModelSnapshot.cs",
     "src/Modules/Identity/PasskeyRecoveryApplication.cs",
     "src/Modules/Identity/PasskeyRows.cs",
@@ -35,6 +37,9 @@
     "src/Modules/Identity/RecoveryContactMigrationSql.cs",
     "src/Modules/Identity/RecoveryContactRows.cs",
     "src/Modules/Identity/RecoveryEndpoints.cs",
+    "src/Modules/Identity/RecoveryGovernedApplication.cs",
+    "src/Modules/Identity/RecoveryGovernedContracts.cs",
+    "src/Modules/Identity/RecoveryGovernedMigrationSql.cs",
     "src/Modules/Identity/RecoveryEntryRows.cs",
     "src/Modules/Identity/RecoveryPasskeyContracts.cs",
     "src/Modules/Identity/RecoveryPasskeyMigrationSql.cs",
@@ -51,6 +56,7 @@
     "tests/Tunner.Identity.Persistence.Tests/RecoveryCodeFiniteNativeExecution.cs",
     "tests/Tunner.Identity.Persistence.Tests/RecoveryCodePrivateIntegrationTests.cs",
     "tests/Tunner.Identity.Persistence.Tests/RecoveryContactRepairPrivateIntegrationTests.cs",
+    "tests/Tunner.Identity.Persistence.Tests/RecoveryGovernedRepairPrivateIntegrationTests.cs",
     "tests/Tunner.Identity.Persistence.Tests/RecoveryCodeModelTests.cs",
     "tests/Tunner.Identity.Persistence.Tests/RecoveryPasskeyRepairPrivateIntegrationTests.cs",
     "tests/Tunner.Identity.Persistence.Tests/RecoveryPasswordRepairPrivateIntegrationTests.cs",
@@ -75,7 +81,17 @@
     "web/tests/recovery-case/presentation.spec.ts"
   ],
   "result": "PENDING",
-  "phase": "VERIFIED_INCREMENT_TECHNICAL_REVISIONS_CLOSED_ELIGIBILITY_REFRESH",
+  "phase": "ELIGIBLE_GOVERNED_CONSUMER_INCREMENT_IN_PROGRESS",
+  "renewed_eligibility": "After committed technical closure at d14a751, native work context CONTEXT_READY and custom context verify CURRENT with zero findings on2026-11-13. P2-009-RV003/P2-010-RV002 are ACTIVE after native ALLOWED transition checks; pre-edit bounded shared scope committed a5ca378. Remaining implementation/runtime acceptance is pending; prior passing execution identities remain unchanged.",
+  "governed_consumer_working": {
+    "status": "APPLIED_BUILD_VERIFIED_NOT_RUNTIME_ACCEPTED",
+    "patch": "Exact reviewed eleven-file consumer patch applied after renewed admission/pre-edit scope. Sole patch deviation is private concrete collection return type for CA1859. Generated migration index array uses existing static-field convention for CA1861; values/order unchanged.",
+    "migration": "Official EF20261113145013_P2RecoveryGovernedReviewRepair with Designer/snapshot; Up appends Harden, Down begins BlockPopulatedDowngrade then RemoveGuards.",
+    "checks": "Final Identity build PASS0warnings0errors6.64s; EF pending-model --no-build PASS; focused test-project build PASS0warnings0errors15.91s; source whitespace check PASS. Root secret scan22exact changed paths PASS; existing four SAST policy rules across16changed CSharp paths PASS0findings (root tool output, not a repository-wide scanner invocation).",
+    "authored_tests": "Eight governed cases registered first through existing finite literal dispatcher:109unique private cases, prior101 preserved in relative order,110capacity databases with unchanged2GiB/per-command budgets. Independent backend review of QA paths finds no actionable issue: actual deferred SQL guards, rollback/full-row preservation, exact effects/interval bindings and owner regressions are asserted. Committed-source runtime proof remains pending; authored/compiled tests are not passing executions. Test build is agent tool-transcript evidence, not a persistent raw log.",
+    "logs": "artifacts/p2-011-recovery-20261112/governed-review-next",
+    "limits": "Consumer on an already-resolved case only; authoritative producer, safe no-contact subject resolution, production policy, V04 and whole-feature acceptance remain open."
+  },
   "predecessor": "TUN-P2-010 DONE with explicit scoped Product acceptance; actual runtime734828a and all prior evidence retained.",
   "authority_scope": "Current FRD17 recovery proof hierarchy, explicit policy-selected RecoveryResult effects, idempotency and enumeration resistance; reuse existing Identity/BFF/proof/verifier/session owners. No business policy, external provider or UX decision invented.",
   "startup": "Native BACKLOG to REFINEMENT transition ALLOWED. Confirmed007/008 source-currentness reconciled at c5d6a6b using actual734 shared regressions, ordered82/112 ownership and retained original-source method/UI evidence. No original full suite relabelled. Build/verify targeted context and complete mandatory role/scope reviews before implementation eligibility.",
@@ -196,5 +212,5 @@
   "startup_review_ref": "governance/evidence/TUN-P2-011-ROLE-REVIEWS.json",
   "compatibility_ref": "governance/evidence/P2-011-COMPATIBILITY-SCOPE.json",
   "native_eligibility": "Native work start011 ELIGIBLE0findings; context110554c generated/verifiedCURRENT before source implementation. Five compatibility revisions ACTIVE. User approved011-V01–V03; exact visual grant recorded in TUN-P2-011-VISUAL-CONSENT.json, separate from feature acceptance.",
-  "next_action": "Commit actual technical closures, refresh targeted context to a custom artifact path preserving13unrelated dirty context/project files, and rerun native011 eligibility. Apply no governed-overlay feature change until eligibility permits it and any necessary later shared scope is registered. Preserve actualnative095/currentUI51a proof identities and original closure histories. V04, governed producer/no-current-contact resolution, whole011 and production/release acceptance remain open."
+  "next_action": "Finish focused governed consumer tests and official migration checks, review and commit the bounded candidate, then run required current-source native qualifications and affected regressions through the existing setup. Preserve actualnative095/currentUI51a historical proof identities. V04, governed producer/no-current-contact resolution, whole011 and production/release acceptance remain open."
 }

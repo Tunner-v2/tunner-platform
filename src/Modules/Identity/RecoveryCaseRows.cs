@@ -49,6 +49,7 @@ internal sealed class RecoveryCaseRow
     public string? ContactDestinationDigest { get; set; }
     public Guid? ContactChallengeId { get; set; }
     public string? InitialContactRiskSnapshot { get; set; }
+    public string? GovernedContactsDigest { get; set; }
     public override string ToString() => nameof(RecoveryCaseRow);
 }
 
@@ -94,6 +95,9 @@ internal sealed class RecoveryResultRow
     public string? ContactDestinationDigest { get; set; }
     public string? ContactRiskSnapshot { get; set; }
     public Guid? ContactNotificationDeliveryId { get; set; }
+    public string? GovernedDispositionReference { get; set; }
+    public long? GovernedDispositionVersion { get; set; }
+    public string? GovernedDispositionSnapshot { get; set; }
     public override string ToString() => nameof(RecoveryResultRow);
 }
 
@@ -106,8 +110,8 @@ internal static class RecoveryCaseModelConfiguration
             b.ToTable("recovery_cases", "identity", t =>
             {
                 t.HasCheckConstraint("ck_recovery_case_binding", RecoveryPasswordMigrationSql.CaseBinding);
-                t.HasCheckConstraint("ck_recovery_case_versions", RecoveryContactMigrationSql.CaseVersions);
-                t.HasCheckConstraint("ck_recovery_case_state", RecoveryContactMigrationSql.CaseState);
+                t.HasCheckConstraint("ck_recovery_case_versions", RecoveryGovernedMigrationSql.CaseVersions);
+                t.HasCheckConstraint("ck_recovery_case_state", RecoveryGovernedMigrationSql.CaseState);
             });
             b.Property(x => x.ProofKind).HasDefaultValue("CODE");
             b.HasOne<PasskeyCredentialRow>().WithMany().HasForeignKey(x => x.PasskeyCredentialReference).HasConstraintName("fk_recovery_case_passkey").OnDelete(DeleteBehavior.Restrict);
@@ -125,11 +129,13 @@ internal static class RecoveryCaseModelConfiguration
         {
             b.ToTable("recovery_results", "identity", t =>
             {
-                t.HasCheckConstraint("ck_recovery_result_shape", RecoveryContactMigrationSql.ResultShape);
+                t.HasCheckConstraint("ck_recovery_result_shape", RecoveryGovernedMigrationSql.ResultShape);
             });
             b.Property(x => x.ProofKind).HasDefaultValue("CODE");
             b.HasOne<PasskeyCredentialRow>().WithMany().HasForeignKey(x => x.PasskeyCredentialReference).HasConstraintName("fk_recovery_result_passkey").OnDelete(DeleteBehavior.Restrict);
             b.HasOne<VerifiedContactRow>().WithMany().HasForeignKey(x => x.ContactReference).HasConstraintName("fk_recovery_result_contact").OnDelete(DeleteBehavior.Restrict);
+            b.HasIndex(x => new { x.GovernedDispositionReference, x.GovernedDispositionVersion }).IsUnique()
+                .HasFilter("proof_kind='GOVERNED_REVIEW'");
             b.HasKey(x => x.ResultId); b.Property(x => x.ResultId).ValueGeneratedNever(); b.HasIndex(x => x.CaseId).IsUnique();
             b.HasOne<RecoveryCaseRow>().WithMany().HasForeignKey(x => x.CaseId).OnDelete(DeleteBehavior.Restrict);
             b.HasOne<AuthenticationSessionRow>().WithMany().HasForeignKey(x => x.TargetSessionId).OnDelete(DeleteBehavior.Restrict);

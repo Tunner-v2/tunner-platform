@@ -74,7 +74,9 @@ internal sealed partial class RecoveryCaseApplication
                 now = clock.GetUtcNow(); profile = PasswordCurrent(caller.Origin, now);
                 if (facts?.User.PasswordHash is not null && facts.User.NormalizedEmail == normalized && facts.User.EmailConfirmed && currentContact is not null)
                 {
-                    recovery = PreparePasswordCase(caller, entry, facts, sets, profile, now, currentContact);
+                    var governedContacts = profile.Values.GovernedRecoveryProfile is null ? null : await GovernedContacts(accountId, ct).ConfigureAwait(false);
+                    now = clock.GetUtcNow(); profile = PasswordCurrent(caller.Origin, now);
+                    recovery = PreparePasswordCase(caller, entry, facts, sets, profile, now, currentContact, governedContacts);
                     if (recovery is not null) { preparedFacts = facts; preparedSets = sets; database.Add(recovery); }
                 }
             }
@@ -140,7 +142,7 @@ internal sealed partial class RecoveryCaseApplication
     }
 
     private RecoveryCaseRow? PreparePasswordCase(RecoveryEntryCaller caller, RecoveryEntryRow entry, RecoveryCaseLockedFacts facts,
-        IReadOnlyList<RecoveryCaseCodeSetFacts> sets, RecoveryPasswordPolicyVersion profile, DateTimeOffset at, VerifiedContactRow? verifiedContact = null)
+        IReadOnlyList<RecoveryCaseCodeSetFacts> sets, RecoveryPasswordPolicyVersion profile, DateTimeOffset at, VerifiedContactRow? verifiedContact = null, IReadOnlyList<RecoveryGovernedContactFacts>? governedContacts = null)
     {
         var posture = facts.Value() with { CodeSets = sets };
         var row = new RecoveryCaseRow
@@ -158,9 +160,11 @@ internal sealed partial class RecoveryCaseApplication
         // Selection is qualified by the same actual hierarchy owner; never infer a latest or single active set.
         RecoveryCaseHierarchyDecision decision;
         try { decision = hierarchy!.RequireCurrent(new(row.CaseId, row.RequestId, PasswordSelectionContext(entry), row.PolicyVersion, RecoveryCaseGoal.RepairPassword, posture)
-            { VerifiedContact = profile.Values.ContactRecoveryProfile is not null && verifiedContact is not null ? ContactFacts(verifiedContact) : null }, at); }
+            { VerifiedContact = profile.Values.ContactRecoveryProfile is not null && verifiedContact is not null ? ContactFacts(verifiedContact) : null, GovernedContacts = governedContacts }, at); }
         catch (InvalidOperationException) { return null; }
         catch (ArgumentException) { return null; }
+        if (decision.GovernedSelection is not null)
+            return PrepareGovernedPasswordCase(row, caller, entry, facts, sets, profile, posture, governedContacts, decision, at);
         if (decision.ContactSelection is not null)
             return PrepareContactPasswordCase(row, caller, entry, facts, sets, profile, posture, verifiedContact, decision, at);
         if (decision.PasskeySelection is not null)
@@ -176,6 +180,7 @@ internal sealed partial class RecoveryCaseApplication
     internal bool PasswordAuthorityCurrent(RecoveryEntryCaller caller, RecoveryEntryRow entry, RecoveryCaseRow row, RecoveryCaseLockedFacts facts,
         IReadOnlyList<RecoveryCaseCodeSetFacts> sets, DateTimeOffset at, bool repaired, RecoveryCodeEntryRow? consumptionWitness = null)
     {
+        if (row.ProofKind == "GOVERNED_REVIEW") return GovernedAuthorityCurrent(caller, entry, row, facts, sets, at, repaired);
         if (row.ProofKind == "CONTACT_RISK") return ContactPasswordAuthorityCurrent(caller, entry, row, facts, sets, at, repaired, out _);
         if (row.ProofKind == "PASSKEY") return PasskeyPasswordAuthorityCurrent(caller, entry, row, facts, at, repaired);
         if (row.ProofKind != "CODE") return false;
@@ -236,6 +241,7 @@ internal sealed partial class RecoveryCaseApplication
         var row = await database.Set<RecoveryCaseRow>().SingleOrDefaultAsync(x => x.EntryId == entry.EntryId, ct).ConfigureAwait(false);
         if (row is null) return await EntryFinish(tx, new("NOT_FOUND_OR_NOT_DISCLOSABLE"), ct).ConfigureAwait(false);
         var facts = await LoadAccountFacts(row.AccountId, null, ct).ConfigureAwait(false);
+        if (row.ProofKind == "GOVERNED_REVIEW") return await DescribeGovernedEntry(caller, entry, row, facts, tx, ct).ConfigureAwait(false);
         if (row.ProofKind == "CONTACT_RISK") return await DescribeContactEntry(caller, entry, row, facts, tx, ct).ConfigureAwait(false);
         if (row.ProofKind == "PASSKEY") return await DescribePasskeyEntry(caller, entry, row, facts, tx, ct).ConfigureAwait(false);
         var sets = await CodeSets(row.AccountId, ct).ConfigureAwait(false);

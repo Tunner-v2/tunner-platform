@@ -22,6 +22,8 @@ public static class RecoveryCodeFiniteNativeExecution
         "FEDERATION_NAMESPACE_BINDING", "FEDERATION_SINGLE_OWNER", "FEDERATION_OWNER_ROLLBACK", "FEDERATION_IMMUTABLE_VERSION",
         "FEDERATION_QUALIFICATION_LIFECYCLE", "FEDERATION_ATTEMPT_INTEGRITY", "FEDERATION_SESSION_SOURCE", "FEDERATION_MIGRATION_GUARDS"];
     private static readonly string[] PrivateIds = [
+        "RECOVERY_GOVERNED_EFFECT", "RECOVERY_GOVERNED_BINDING", "RECOVERY_GOVERNED_CURRENTNESS", "RECOVERY_GOVERNED_ORIGINAL",
+        "RECOVERY_GOVERNED_ROLLBACK", "RECOVERY_GOVERNED_HTTPS", "RECOVERY_GOVERNED_SQL_BINDING", "RECOVERY_GOVERNED_SQL_INTERVAL",
         "RECOVERY_CONTACT_EFFECT", "RECOVERY_CONTACT_VALIDITY", "RECOVERY_CONTACT_AUTHORITY",
         "RECOVERY_CONTACT_ORIGINAL", "RECOVERY_CONTACT_ROLLBACK", "RECOVERY_CONTACT_HTTPS",
         "RECOVERY_PASSKEY_EFFECT", "RECOVERY_PASSKEY_ASSERTION", "RECOVERY_PASSKEY_BINDING", "RECOVERY_PASSKEY_CURRENTNESS",
@@ -374,6 +376,14 @@ public static class RecoveryCodeFiniteNativeExecution
             "FEDERATION_REGISTRATION" => new FederationPrivateIntegrationTests(fixture).QualifiedGoogleRegistrationRequiresNoticesThenSharesPersonalInformationAndOriginalRecoveryWithoutSession(),
             "FEDERATION_REGISTRATION_REJECTION" => new FederationPrivateIntegrationTests(fixture).UnqualifiedExpiredForeignOrCollidingFederationIntakeCannotAdoptAccountOrIssueSession(),
             "FEDERATION_REGISTRATION_FINALITY" => new FederationPrivateIntegrationTests(fixture).LateRegistrationProfileNoticeOrContactDriftRollsBackCanonicalIntakeAndRecoversOriginal(),
+            "RECOVERY_GOVERNED_EFFECT" => new RecoveryGovernedRepairPrivateIntegrationTests(fixture).ExactTrustedDispositionRepairsOnlyPasswordAndRecordsExplicitEffects(),
+            "RECOVERY_GOVERNED_BINDING" => new RecoveryGovernedRepairPrivateIntegrationTests(fixture).ForeignUnqualifiedOrUncontrolledDispositionCannotAuthorizeAnyEffect(),
+            "RECOVERY_GOVERNED_CURRENTNESS" => new RecoveryGovernedRepairPrivateIntegrationTests(fixture).HigherProofTiersAndLateAuthorityOrContactDriftRemainAuthoritative(),
+            "RECOVERY_GOVERNED_ORIGINAL" => new RecoveryGovernedRepairPrivateIntegrationTests(fixture).OriginalAndCompetingDispositionExecutionsHaveOnlyOneCommittedEffect(),
+            "RECOVERY_GOVERNED_ROLLBACK" => new RecoveryGovernedRepairPrivateIntegrationTests(fixture).PostSaveFailureAndCancellationRollbackDispositionPasswordAndOutbox(),
+            "RECOVERY_GOVERNED_HTTPS" => new RecoveryGovernedRepairPrivateIntegrationTests(fixture).ActualHttpsGovernedConsumerIsNeutralStrictAndOriginalBrowserBound(),
+            "RECOVERY_GOVERNED_SQL_BINDING" => new RecoveryGovernedRepairPrivateIntegrationTests(fixture).SqlGuardRequiresExactFullDispositionBindingsAndImmutableResults(),
+            "RECOVERY_GOVERNED_SQL_INTERVAL" => new RecoveryGovernedRepairPrivateIntegrationTests(fixture).SqlIntervalPreservesHundredNanosecondsOffsetsInclusiveEdgesAndInvalidDates(),
             "RECOVERY_CONTACT_EFFECT" => new RecoveryContactRepairPrivateIntegrationTests(fixture).ContactProofRepairsPasswordAndQueuesCommittedDeduplicatedNotice(),
             "RECOVERY_CONTACT_VALIDITY" => new RecoveryContactRepairPrivateIntegrationTests(fixture).ContactProofValidationAttemptsExpiryAndPurgeRemainOneUse(),
             "RECOVERY_CONTACT_AUTHORITY" => new RecoveryContactRepairPrivateIntegrationTests(fixture).ContactRiskHierarchyPolicyAndVerifiedContactDriftFailClosed(),
