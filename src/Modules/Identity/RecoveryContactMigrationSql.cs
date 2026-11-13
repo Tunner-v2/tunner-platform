@@ -87,7 +87,7 @@ internal static class RecoveryContactMigrationSql
               NOT EXISTS(SELECT 1 FROM accounts.verified_contacts v JOIN identity."AspNetUsers" u ON u."AccountId"=v.account_id
                 WHERE v.contact_id=NEW.contact_reference AND v.account_id=NEW.account_id AND v.version=NEW.expected_contact_version AND v.state='VERIFIED'
                 AND v.anonymized_at_utc IS NULL AND v.normalized_email=u."NormalizedEmail" AND u."EmailConfirmed"
-                AND NEW.contact_destination_digest=upper(encode(sha256(convert_to(v.normalized_email,'UTF8')),'hex')))) THEN
+                AND NEW.contact_destination_digest=upper(encode(sha256(convert_to(v.normalized_email,'UTF8')),'hex'))) THEN
               RAISE EXCEPTION 'Contact recovery requires its exact current verified owner' USING ERRCODE='23514'; END IF;
           ELSIF (to_jsonb(NEW)-ARRAY['state','version','result_id','ended_at']) IS DISTINCT FROM (to_jsonb(OLD)-ARRAY['state','version','result_id','ended_at'])
             OR OLD.state<>'PENDING_CONTACT_RISK' OR NEW.state<>'REPAIRED' OR NEW.version<>OLD.version+1 THEN
