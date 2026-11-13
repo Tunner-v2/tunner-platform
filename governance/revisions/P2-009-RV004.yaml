@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "revision_id": "P2-009-RV004",
+  "revision_scope": "WORK_ITEM",
+  "original_scope_id": "TUN-P2-009",
+  "parent_revision_id": "P2-009-RV003",
+  "parent_milestone_revision_id": null,
+  "title": "Qualify approved recovery screens on the existing finite BFF host",
+  "revision_type": "COMPATIBILITY",
+  "status": "ACTIVE",
+  "reason": "P2-011 native eligibility and custom context verify CURRENT at ba70811. Add one bounded live-BFF V01-V03 journey using existing finite host and protocol, preserving all six closed009 journeys and their assertions. Four historical009-owned host/coordinator/contract/prepared-journey paths need a new revision; no production, V04 or framework replacement.",
+  "authority_refs": [
+    "docs/authority/current/development/09_Testing_Acceptance_Evidence_and_Quality_Gates.md"
+  ],
+  "decision_refs": [],
+  "defect_refs": [],
+  "change_refs": [],
+  "impact_classification": "NON_BLOCKING",
+  "blocked_scope": [],
+  "acceptance_criteria": [
+    "Actual committed browser qualification and one live anonymous recovery-case journey exercise all four existing viewports, original-case/cancel/guard/no-session checks, preserving prior009 behavior and exact execution identities."
+  ],
+  "prerequisites": [],
+  "work_items": [],
+  "required_gates": [],
+  "required_roles": ["full-stack-engineer", "solution-architect", "tester-qa-engineer", "cyber-security-engineer", "auditor", "compliance-specialist", "governance-engineer"],
+  "evidence_refs": ["governance/evidence/P2-009-RV004-VALIDATION.json"],
+  "product_acceptance_required": false,
+  "created_at": "2026-11-13T20:53:35.4086380\u002B00:00",
+  "closed_at": null
+}
