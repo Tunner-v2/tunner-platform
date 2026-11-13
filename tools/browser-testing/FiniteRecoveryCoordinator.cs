@@ -16,6 +16,8 @@ using Tunner.Testing.Recovery;
 /// <summary>One finite Development-only recovery browser composition; no owner consumption workflow.</summary>
 internal static class FiniteRecoveryCoordinator
 {
+    private static readonly string[] JourneyIds = [.. BrowserTestRecoveryCodes.JourneyIds, BrowserTestRecoveryCase.JourneyId];
+    private static readonly string[] RecoveryCaseBrowserIds = ["BROWSER_ENGINE", "SURFACE_CHECKED", "BFF_IDENTITY", "NEUTRAL_ENTRY", "SHARED_FORM_VALIDATION", "PENDING_NO_STANDALONE_PROOF", "ORIGINAL_RELOAD_HISTORY", "ORIGINAL_POINTER_RESTORE", "FOREIGN_BROWSER_DENIED", "LIVE_CSRF_ORIGIN_GUARDS", "CANCEL_ORIGINAL_RESULT", "NO_AUTHENTICATED_SESSION", "NO_SECRET_URL_OR_STORAGE", "COOKIE_FLAGS", "STRICT_OWNED_SURFACE", "ALL_FOUR_VIEWPORTS"];
     private static readonly string[] PublicFaults = ["happy", "unarmed", "duplicate", "wrong-page", "wrong-bytes", "oversize", "outside-identity", "stream-error", "delete-error", "unexpected-output", "invalid-result", "action-timeout", "child-timeout", "unexpected-artifact", "fatal-rejection", "journey-entry", "missing-predicate", "cross-component", "cleanup", "oracle-roundtrip", "oracle-input", "oracle-exit", "oracle-timeout", "oracle-stderr", "production-controller", "relay-roundtrip", "relay-malformed", "relay-timeout", "popup-extra", "iframe-extra", "simultaneous-extra", "cancel-initiation", "stalled-partial-read", "cancel-stream-read", "stalled-delete", "cancel-delete", "secondary-context-extra"];
     private static readonly string[] PublicCancelFaults = ["child-timeout", "cancel-initiation", "cancel-stream-read", "cancel-delete"];
     private static readonly string[] PublicStageFaults = ["cancel-initiation", "stalled-partial-read", "cancel-stream-read", "stalled-delete", "cancel-delete"];
@@ -28,7 +30,7 @@ internal static class FiniteRecoveryCoordinator
     private static readonly string[] ClosedLiveFacts = ["contextClosed", "browserClosed", "serverExited", "oracleExited", "oracleGraceful", "surfaceClean", "surfaceRemoved", "cleanupCompleted"];
     private static readonly string[] ClosedPublicFacts = ["contextClosed", "browserClosed", "serverExited", "oracleExited", "surfaceRemoved"];
     private static readonly string[] ClosedPublicSupervisorFacts = ["SOURCE_CURRENT", "CHILD_CLOSED", "ORACLE_CLOSED", "CHILD_SURFACES_CLOSED", "SURFACE_REMOVED"];
-    private static readonly string[] Stages = ["START", "ENVIRONMENT", "LIBRARY", "BROWSER", "PUBLIC_ENTRY", "ORACLE", "JOURNEY", "PASSKEY_ENROLL_START", "PASSKEY_ENROLL_PASSWORD_PROOF", "PASSKEY_ENROLL_NATIVE_CREATE", "PASSKEY_ENROLL_COMPLETE", "PASSKEY_ENROLL_CREDENTIAL_EVENT_CHECK", "RECOVERY_BEGIN", "RECOVERY_START_BINDING", "RECOVERY_REVIEW_BINDING", "RECOVERY_PROOF_BINDING", "JOURNEY_ENROLL_BEGIN", "JOURNEY_ENROLL_DISCLOSURE", "JOURNEY_ENROLL_RESULT_BINDING", "JOURNEY_ENROLL_DUPLICATE", "JOURNEY_ENROLL_DONE", "RECOVERY_SOURCE_HOLD_REQUEST", "RECOVERY_SOURCE_DENIAL_CHECK", "RECOVERY_SOURCE_HELD_OPTIONS", "RECOVERY_SOURCE_HELD_BINDING", "RECOVERY_SOURCE_HELD_RETURN", "RECOVERY_SOURCE_SECOND_CONTEXT", "RECOVERY_SOURCE_SECOND_LOGIN", "RECOVERY_SOURCE_REVOKE", "RECOVERY_SOURCE_REVOKE_NAVIGATION", "RECOVERY_SOURCE_REVOKE_MANAGE", "RECOVERY_SOURCE_REVOKE_START", "RECOVERY_SOURCE_REVOKE_START_CHECK", "RECOVERY_SOURCE_REVOKE_PASSWORD_VIEW", "RECOVERY_SOURCE_REVOKE_PASSWORD_FILL", "RECOVERY_SOURCE_REVOKE_PASSWORD_PROOF", "RECOVERY_SOURCE_REVOKE_PROOF_CHECK", "RECOVERY_SOURCE_REVOKE_RESULT_WAIT", "RECOVERY_SOURCE_REVOKE_METHODS_READ", "RECOVERY_SOURCE_REVOKE_STATE_CHECK", "RECOVERY_SOURCE_COUNTS_BEFORE", "RECOVERY_SOURCE_CONTINUE", "RECOVERY_SOURCE_COUNTS_AFTER", "RECOVERY_SOURCE_CHECK", "REC_TOTP_DUP_BEFORE_COUNTS", "REC_TOTP_DUP_OPTIONS", "REC_TOTP_DUP_ACTIVATE", "REC_TOTP_DUP_AFTER_COUNTS", "REC_TOTP_DUP_HTTP", "REC_TOTP_DUP_BINDING", "REC_TOTP_DUP_STATUS", "REC_TOTP_DUP_ACTIVE", "REC_TOTP_DUP_COUNTS", "REC_TOTP_DUP_COUNT_SHAPE", "REC_TOTP_DUP_C_OWNER", "REC_TOTP_DUP_C_OPS", "REC_TOTP_DUP_C_SETS", "REC_TOTP_DUP_C_REPLACED", "REC_TOTP_DUP_C_ENTRIES", "REC_TOTP_DUP_C_PROOFS", "REC_TOTP_DUP_C_CONSUMED", "REC_TOTP_DUP_C_SESSIONS", "REC_TOTP_DUP_C_OUTBOX", "REC_TOTP_DUP_C_ACCEPT", "REC_TOTP_CHOOSER", "REC_TOTP_ORACLE", "REC_TOTP_FILL", "REC_TOTP_DENY_ARM", "REC_TOTP_PUBLICATION_ARM", "REC_TOTP_PROOF_POST", "REC_TOTP_REQUEST_BINDING", "REC_TOTP_FACTOR_BINDING", "REC_TOTP_CODE_SHAPE", "REC_TOTP_NATIVE_FACTOR", "REC_TOTP_NATIVE_CODE", "REC_TOTP_PUBLICATION_HTTP", "REC_TOTP_PUBLICATION_NO_DELIVERY", "REC_TOTP_PUBLICATION_RESULT", "REC_TOTP_PUBLICATION_OPTIONS", "REC_TOTP_PUBLICATION_PENDING", "REC_TOTP_PUBLICATION_OPTIONS_OK", "REC_TOTP_PUBLICATION_REQUEST", "REC_TOTP_PUBLICATION_ACTIVE", "REC_TOTP_PUBLICATION_EMPTY", "REC_TOTP_DENIAL_STATUS", "REC_TOTP_DENIAL_NO_DELIVERY", "REC_TOTP_DENIAL_OPTIONS", "REC_TOTP_DENIAL_OPTIONS_OK", "REC_TOTP_DENIAL_REQUEST", "REC_TOTP_DENIAL_ATTEMPT", "REC_TOTP_DENIAL_OPERATION", "REC_TOTP_DENIAL_PROOF_ACTIVE", "REC_TOTP_COUNTS_BEFORE", "REC_TOTP_RESUME_POST", "REC_TOTP_COUNTS_AFTER", "REC_TOTP_RESUME_HTTP", "REC_TOTP_RESUME_REQUEST", "REC_TOTP_RESUME_ATTEMPT", "REC_TOTP_RESUME_NO_CODE", "REC_TOTP_RESUME_NO_CREDENTIAL", "REC_TOTP_RESUME_PROOFS", "REC_TOTP_RESUME_ACCEPTANCES", "REC_TOTP_RESUME_OWNER", "REC_TOTP_RESUME_CONSUMED", "REC_TOTP_RESUME_NATIVE_COUNT", "REC_TOTP_CAPTURE", "SURFACE", "CLEANUP", "COMPLETE"];
+    private static readonly string[] Stages = ["START", "ENVIRONMENT", "LIBRARY", "BROWSER", "PUBLIC_ENTRY", "ORACLE", "JOURNEY", "PASSKEY_ENROLL_START", "PASSKEY_ENROLL_PASSWORD_PROOF", "PASSKEY_ENROLL_NATIVE_CREATE", "PASSKEY_ENROLL_COMPLETE", "PASSKEY_ENROLL_CREDENTIAL_EVENT_CHECK", "RECOVERY_BEGIN", "RECOVERY_START_BINDING", "RECOVERY_REVIEW_BINDING", "RECOVERY_PROOF_BINDING", "JOURNEY_ENROLL_BEGIN", "JOURNEY_ENROLL_DISCLOSURE", "JOURNEY_ENROLL_RESULT_BINDING", "JOURNEY_ENROLL_DUPLICATE", "JOURNEY_ENROLL_DONE", "RECOVERY_SOURCE_HOLD_REQUEST", "RECOVERY_SOURCE_DENIAL_CHECK", "RECOVERY_SOURCE_HELD_OPTIONS", "RECOVERY_SOURCE_HELD_BINDING", "RECOVERY_SOURCE_HELD_RETURN", "RECOVERY_SOURCE_SECOND_CONTEXT", "RECOVERY_SOURCE_SECOND_LOGIN", "RECOVERY_SOURCE_REVOKE", "RECOVERY_SOURCE_REVOKE_NAVIGATION", "RECOVERY_SOURCE_REVOKE_MANAGE", "RECOVERY_SOURCE_REVOKE_START", "RECOVERY_SOURCE_REVOKE_START_CHECK", "RECOVERY_SOURCE_REVOKE_PASSWORD_VIEW", "RECOVERY_SOURCE_REVOKE_PASSWORD_FILL", "RECOVERY_SOURCE_REVOKE_PASSWORD_PROOF", "RECOVERY_SOURCE_REVOKE_PROOF_CHECK", "RECOVERY_SOURCE_REVOKE_RESULT_WAIT", "RECOVERY_SOURCE_REVOKE_METHODS_READ", "RECOVERY_SOURCE_REVOKE_STATE_CHECK", "RECOVERY_SOURCE_COUNTS_BEFORE", "RECOVERY_SOURCE_CONTINUE", "RECOVERY_SOURCE_COUNTS_AFTER", "RECOVERY_SOURCE_CHECK", "REC_TOTP_DUP_BEFORE_COUNTS", "REC_TOTP_DUP_OPTIONS", "REC_TOTP_DUP_ACTIVATE", "REC_TOTP_DUP_AFTER_COUNTS", "REC_TOTP_DUP_HTTP", "REC_TOTP_DUP_BINDING", "REC_TOTP_DUP_STATUS", "REC_TOTP_DUP_ACTIVE", "REC_TOTP_DUP_COUNTS", "REC_TOTP_DUP_COUNT_SHAPE", "REC_TOTP_DUP_C_OWNER", "REC_TOTP_DUP_C_OPS", "REC_TOTP_DUP_C_SETS", "REC_TOTP_DUP_C_REPLACED", "REC_TOTP_DUP_C_ENTRIES", "REC_TOTP_DUP_C_PROOFS", "REC_TOTP_DUP_C_CONSUMED", "REC_TOTP_DUP_C_SESSIONS", "REC_TOTP_DUP_C_OUTBOX", "REC_TOTP_DUP_C_ACCEPT", "REC_TOTP_CHOOSER", "REC_TOTP_ORACLE", "REC_TOTP_FILL", "REC_TOTP_DENY_ARM", "REC_TOTP_PUBLICATION_ARM", "REC_TOTP_PROOF_POST", "REC_TOTP_REQUEST_BINDING", "REC_TOTP_FACTOR_BINDING", "REC_TOTP_CODE_SHAPE", "REC_TOTP_NATIVE_FACTOR", "REC_TOTP_NATIVE_CODE", "REC_TOTP_PUBLICATION_HTTP", "REC_TOTP_PUBLICATION_NO_DELIVERY", "REC_TOTP_PUBLICATION_RESULT", "REC_TOTP_PUBLICATION_OPTIONS", "REC_TOTP_PUBLICATION_PENDING", "REC_TOTP_PUBLICATION_OPTIONS_OK", "REC_TOTP_PUBLICATION_REQUEST", "REC_TOTP_PUBLICATION_ACTIVE", "REC_TOTP_PUBLICATION_EMPTY", "REC_TOTP_DENIAL_STATUS", "REC_TOTP_DENIAL_NO_DELIVERY", "REC_TOTP_DENIAL_OPTIONS", "REC_TOTP_DENIAL_OPTIONS_OK", "REC_TOTP_DENIAL_REQUEST", "REC_TOTP_DENIAL_ATTEMPT", "REC_TOTP_DENIAL_OPERATION", "REC_TOTP_DENIAL_PROOF_ACTIVE", "REC_TOTP_COUNTS_BEFORE", "REC_TOTP_RESUME_POST", "REC_TOTP_COUNTS_AFTER", "REC_TOTP_RESUME_HTTP", "REC_TOTP_RESUME_REQUEST", "REC_TOTP_RESUME_ATTEMPT", "REC_TOTP_RESUME_NO_CODE", "REC_TOTP_RESUME_NO_CREDENTIAL", "REC_TOTP_RESUME_PROOFS", "REC_TOTP_RESUME_ACCEPTANCES", "REC_TOTP_RESUME_OWNER", "REC_TOTP_RESUME_CONSUMED", "REC_TOTP_RESUME_NATIVE_COUNT", "REC_TOTP_CAPTURE", "CASE_ENTRY", "CASE_VALIDATION", "CASE_PENDING", "CASE_ORIGINAL", "CASE_CANCEL", "CASE_GUARDS", "CASE_VIEWPORTS", "SURFACE", "CLEANUP", "COMPLETE"];
     private static readonly string[] FailureCodes = ["NONE", "INPUT_INVALID", "SOURCE_INVALID", "DEPENDENCY_NOT_READY", "PROTOCOL_FAILED", "BOUNDARY_ERROR", "PREDICATE_FAILED", "ADMISSION_REJECTED", "PATH_REJECTED", "SIZE_LIMIT", "BYTES_MISMATCH", "STREAM_FAILED", "DELETE_FAILED", "ACTION_FAILED", "ORACLE_FAILED", "SUPERVISOR_TIMEOUT", "SURFACE_FAILED", "CLEANUP_FAILED"];
 
     private const string PublicProtocolSource = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
@@ -165,7 +167,7 @@ internal static class FiniteRecoveryCoordinator
         try
         {
             var journey = value["journeyId"]?.GetValue<string>();
-            return ProtocolAdmitted(JsonSerializer.SerializeToElement(value), BrowserTestRecoveryCodes.JourneyIds.Contains(journey, StringComparer.Ordinal) ? journey! : BrowserTestRecoveryCodes.JourneyIds[0], value["mode"]?.GetValue<string>() == "public");
+            return ProtocolAdmitted(JsonSerializer.SerializeToElement(value), JourneyIds.Contains(journey, StringComparer.Ordinal) ? journey! : BrowserTestRecoveryCodes.JourneyIds[0], value["mode"]?.GetValue<string>() == "public");
         }
         catch (Exception error) when (error is not OutOfMemoryException) { return false; }
     }
@@ -177,13 +179,13 @@ internal static class FiniteRecoveryCoordinator
     private static bool ProtocolQualifies(JsonObject value, string fault) => ProtocolAdmitted(value) && PublicContained(JsonSerializer.SerializeToElement(value), fault);
     private static bool ProtocolWinningMaps()
     {
-        foreach (var journey in BrowserTestRecoveryCodes.JourneyIds)
+        foreach (var journey in JourneyIds)
             if (!ProtocolAdmitted(ProtocolReceipt(journey)) || !Accepted(0, true, "NONE", true, CoordinatorIdsFor(journey).ToDictionary(id => id, _ => true, StringComparer.Ordinal), journey)) return false;
         return true;
     }
     private static bool ProtocolMissingFalse()
     {
-        foreach (var journey in BrowserTestRecoveryCodes.JourneyIds)
+        foreach (var journey in JourneyIds)
         {
             foreach (var component in PublicProtocolComponents)
                 foreach (var id in component == "checks" ? BrowserIds(journey) : SupervisorIds)
@@ -202,7 +204,7 @@ internal static class FiniteRecoveryCoordinator
     }
     private static bool ProtocolExtraChecks()
     {
-        foreach (var journey in BrowserTestRecoveryCodes.JourneyIds)
+        foreach (var journey in JourneyIds)
             foreach (var extra in PublicProtocolExtraChecks)
             {
                 var value = ProtocolReceipt(journey); value["checks"]![extra] = true; if (ProtocolAdmitted(value)) return false;
@@ -212,7 +214,7 @@ internal static class FiniteRecoveryCoordinator
     }
     private static bool ProtocolConditionalChecks()
     {
-        foreach (var journey in BrowserTestRecoveryCodes.JourneyIds)
+        foreach (var journey in JourneyIds)
         {
             var map = CoordinatorIdsFor(journey).ToDictionary(id => id, _ => true, StringComparer.Ordinal);
             var subset = journey == "RECOVERY_REPLACE_PASSWORD_V1"; var publication = journey == "RECOVERY_REPLACE_TOTP_V1";
@@ -373,7 +375,7 @@ internal static class FiniteRecoveryCoordinator
                     processStartUtc = process.StartTime.ToUniversalTime().ToString("O", System.Globalization.CultureInfo.InvariantCulture) }, ready.Token).ConfigureAwait(false);
             }
             if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") != "Development" || !new[] { "browser", "public-fault", "resource-canary" }.Contains(mode, StringComparer.Ordinal) ||
-                !(publicMode ? PublicFaults.Contains(selection, StringComparer.Ordinal) : resourceMode ? ResourceFaults.Contains(selection, StringComparer.Ordinal) : BrowserTestRecoveryCodes.JourneyIds.Contains(selection, StringComparer.Ordinal))) throw new InvalidOperationException();
+                !(publicMode ? PublicFaults.Contains(selection, StringComparer.Ordinal) : resourceMode ? ResourceFaults.Contains(selection, StringComparer.Ordinal) : JourneyIds.Contains(selection, StringComparer.Ordinal))) throw new InvalidOperationException();
             journey = publicMode || resourceMode ? "RECOVERY_GENERATE_TOTP_V1" : selection;
             foreach (var id in CoordinatorIdsFor(journey)) checks.TryAdd(id, false);
             // This dedicated finite process has no outbound proxy authority. Never read the prior proxy value.
@@ -435,8 +437,10 @@ internal static class FiniteRecoveryCoordinator
                 }
                 var listener = new TcpListener(IPAddress.Loopback, 0); listener.Start(); var port = ((IPEndPoint)listener.LocalEndpoint).Port; listener.Stop(); origin = "https://localhost:" + port;
                 BrowserTestTotp? totp = seeds is null ? null : new(origin, BrowserTestTotp.JourneyIds[0], databaseConnection, seeds);
-                profile = new(origin, journey, databaseConnection, TimeProvider.System);
-                var options = new BrowserTestHostOptions(origin, port, databaseConnection, certificate, mailpit.SmtpPort, null, "FINITE_RECOVERY_BROWSER_TESTING", runId, totp, profile);
+                BrowserTestRecoveryCase? recoveryCase = null;
+                if (journey == BrowserTestRecoveryCase.JourneyId) recoveryCase = new(origin, TimeProvider.System);
+                else profile = new(origin, journey, databaseConnection, TimeProvider.System);
+                var options = new BrowserTestHostOptions(origin, port, databaseConnection, certificate, mailpit.SmtpPort, null, "FINITE_RECOVERY_BROWSER_TESTING", runId, totp, profile, recoveryCase);
                 cleanup["app"] = false; app = BrowserTestHost.Create(options); await BrowserTestHost.MigrateAndMapAsync(app, options, deadline.Token).ConfigureAwait(false);
                 checks["CURRENT_MIGRATIONS"] = checks["EPHEMERAL_DP"] = true; await app.StartAsync(deadline.Token).ConfigureAwait(false); Interrupt("after-app-start"); Interrupt("cleanup-reject");
             }
@@ -446,6 +450,8 @@ internal static class FiniteRecoveryCoordinator
             (browser, browserExited, browserExit, raw) = await RunBrowserAsync(root, control, journey, source, publicMode, profile, deadline.Token).ConfigureAwait(false);
             if (FiniteTotpBuildBinding.Verify(root, recovery: true) != binding || FiniteTotpBuildBinding.VerifyRecoveryNative(root) != nativeBinding || FiniteTotpCoordinator.Git(root, "rev-parse", "HEAD") != source) { checks["SOURCE_BUILD_CURRENT"] = false; throw new InvalidOperationException(); }
             if (!publicMode && databaseConnection is not null && postgres is not null) (checks["SAFE_PERSISTENCE"], checks["SAFE_OUTBOX"]) = await InspectPersistenceAsync(databaseConnection, postgres.OwnershipVerified, deadline.Token).ConfigureAwait(false);
+            if (!publicMode && journey == BrowserTestRecoveryCase.JourneyId && databaseConnection is not null)
+                checks["RECOVERY_CASE_OWNERSHIP"] = await InspectRecoveryCaseOutcomeAsync(databaseConnection, deadline.Token).ConfigureAwait(false);
             if (!publicMode && databaseConnection is not null && profile is not null)
             {
                 if (journey == "RECOVERY_REPLACE_PASSWORD_V1") checks["EXACT_SUBSET_REPLACEMENT"] = await InspectOwnerOutcomeAsync(databaseConnection, profile, completed: true, deadline.Token).ConfigureAwait(false);
@@ -488,7 +494,7 @@ internal static class FiniteRecoveryCoordinator
         var cleanupRejection = false;
         if (resourceContained && selection == "cleanup-reject") { var synthetic = CoordinatorIdsFor(journey).ToDictionary(x => x, _ => true, StringComparer.Ordinal); var positive = Accepted(0, true, "NONE", true, synthetic, journey); synthetic["HOST_STOPPED"] = false; cleanupRejection = positive && !Accepted(0, true, "NONE", true, synthetic, journey); resourceContained &= cleanupRejection; }
         if (!publicMode && failure == "NONE" && !accepted) failure = "PREDICATE_OR_CLEANUP_FAILED";
-        var selected = PublicFaults.Contains(selection, StringComparer.Ordinal) || ResourceFaults.Contains(selection, StringComparer.Ordinal) || BrowserTestRecoveryCodes.JourneyIds.Contains(selection, StringComparer.Ordinal) ? selection : null;
+        var selected = PublicFaults.Contains(selection, StringComparer.Ordinal) || ResourceFaults.Contains(selection, StringComparer.Ordinal) || JourneyIds.Contains(selection, StringComparer.Ordinal) ? selection : null;
         var result = new { version = 1, sourceCommit = source.Length == 40 ? source : null, runId, journeyId = journey, mode = new[] { "browser", "public-fault", "resource-canary" }.Contains(mode, StringComparer.Ordinal) ? mode : "INVALID", selection = selected,
             accepted, failureCode = failure, managedOutputRejected = managed.Count != 0, publicBoundaryContained = publicContained, publicResourceContained = resourceContained, publicCleanupReducerRejected = cleanupRejection,
             buildBinding = binding, browserReceipt = browser, coordinatorChecks = checks, cleanup, fixtureObservations = profile is null ? null : new { profile.OwnerFailureObserved, profile.PublicationFinalFaultObserved, profile.BodyDropObserved },
@@ -591,14 +597,14 @@ internal static class FiniteRecoveryCoordinator
         else if (value.GetProperty("publicFault").ValueKind != JsonValueKind.Null || value.GetProperty("publicOwnership").ValueKind != JsonValueKind.Null) throw new InvalidOperationException();
         if (True(value, "accepted") && (publicMode || value.GetProperty("status").GetString() != "JOURNEY_OK" || value.GetProperty("stage").GetString() != "COMPLETE" || value.GetProperty("failureCode").GetString() != "NONE" || !True(value, "childResultAccepted") || True(value, "protocolRejected") || value.GetProperty("browserVersion").ValueKind == JsonValueKind.Null || value.GetProperty("exitCode").ValueKind != JsonValueKind.Number || !value.GetProperty("exitCode").TryGetInt32(out var acceptedChildExit) || acceptedChildExit != 0 || checkRows.Length != BrowserIds(journey).Length || BrowserIds(journey).Any(id => !True(value.GetProperty("checks"), id)) || checkRows.Any(x => x.Value.ValueKind != JsonValueKind.True) || SupervisorIds.Any(x => !True(value.GetProperty("supervisor"), x)) || !True(value, "sourceCommitted") || True(value, "publicFaultObserved") || True(value, "rawOutputRejected") || True(value, "timedOut") || True(value, "cleanupForced") || ClosedLiveFacts.Any(x => !True(value, x)))) throw new InvalidOperationException();
     }
-    private static string[] BrowserIds(string journey) => [.. CommonBrowserIds, .. (journey switch
+    private static string[] BrowserIds(string journey) => journey == BrowserTestRecoveryCase.JourneyId ? RecoveryCaseBrowserIds : [.. CommonBrowserIds, .. (journey switch
     {
         "RECOVERY_GENERATE_PASSWORD_V1" => new[] { "ONE_REQUESTED_DOWNLOAD", "CLOSE_NO_REVEAL" }, "RECOVERY_REPLACE_PASSWORD_V1" => ["PUBLISHED_IMPACT_ORIGINAL_BINDING", "BODY_LOSS_NO_REDISCLOSURE"],
         "RECOVERY_GENERATE_PASSKEY_V1" => ["NATIVE_PASSKEY_PROOF", "OWNER_FAILURE_SAME_PROOF"], "RECOVERY_REPLACE_PASSKEY_V1" => ["NATIVE_PASSKEY_PROOF", "SOURCE_FRESHNESS", "NO_SESSION_MUTATION"],
         "RECOVERY_GENERATE_TOTP_V1" => ["NATIVE_TOTP_PROOF", "OWNER_FAILURE_SAME_PROOF", "PAGEHIDE_NO_REVEAL"], "RECOVERY_REPLACE_TOTP_V1" => ["NATIVE_TOTP_PROOF", "CURRENT_PUBLICATION", "NO_SESSION_MUTATION"], _ => []
     })];
     private static bool True(JsonElement value, string key) => value.ValueKind == JsonValueKind.Object && value.TryGetProperty(key, out var property) && property.ValueKind == JsonValueKind.True;
-    private static string[] CoordinatorIdsFor(string journey) => [.. CoordinatorIds, .. (journey switch { "RECOVERY_REPLACE_PASSWORD_V1" => new[] { "EXACT_SUBSET_REPLACEMENT" }, "RECOVERY_REPLACE_TOTP_V1" => ["PUBLICATION_DRIFT_ROLLED_BACK"], _ => [] })];
+    private static string[] CoordinatorIdsFor(string journey) => [.. CoordinatorIds, .. (journey switch { "RECOVERY_REPLACE_PASSWORD_V1" => new[] { "EXACT_SUBSET_REPLACEMENT" }, "RECOVERY_REPLACE_TOTP_V1" => ["PUBLICATION_DRIFT_ROLLED_BACK"], BrowserTestRecoveryCase.JourneyId => ["RECOVERY_CASE_OWNERSHIP"], _ => [] })];
     private static bool Accepted(long managedOutput, bool real, string failure, bool browser, Dictionary<string, bool> checks, string journey) => managedOutput == 0 && real && failure == "NONE" && browser && checks.Count == CoordinatorIdsFor(journey).Length && CoordinatorIdsFor(journey).All(id => checks.TryGetValue(id, out var observed) && observed);
     private static bool PublicContained(JsonElement value, string fault)
     {
@@ -632,6 +638,27 @@ internal static class FiniteRecoveryCoordinator
         if (fault == "relay-roundtrip") return childExit == 0 && value.GetProperty("status").GetString() == "PUBLIC_BOUNDARY_OK" && value.GetProperty("failureCode").GetString() == "NONE" && True(value, "publicFaultObserved") && True(checks, "FIXTURE_RELAY_PUBLIC");
         var expected = fault switch { "unarmed" or "duplicate" or "wrong-page" or "popup-extra" or "iframe-extra" or "simultaneous-extra" or "secondary-context-extra" => "ADMISSION_REJECTED", "wrong-bytes" => "BYTES_MISMATCH", "oversize" => "SIZE_LIMIT", "outside-identity" => "PATH_REJECTED", "stream-error" or "stalled-partial-read" => "STREAM_FAILED", "delete-error" or "stalled-delete" => "DELETE_FAILED", "action-timeout" => "ACTION_FAILED", "fatal-rejection" => "SUPERVISOR_TIMEOUT", _ => "INVALID" };
         return childExit == 1 && value.GetProperty("status").GetString() == "BOUNDARY_FAILED" && value.GetProperty("failureCode").GetString() == expected && True(value, "publicFaultObserved");
+    }
+    private static async Task<bool> InspectRecoveryCaseOutcomeAsync(string connectionString, CancellationToken token)
+    {
+        await using var connection = new NpgsqlConnection(connectionString); await connection.OpenAsync(token).ConfigureAwait(false);
+        await using var command = new NpgsqlCommand("""
+            SELECT (SELECT count(*) FROM identity.recovery_entries)=8
+              AND NOT EXISTS(SELECT 1 FROM identity.recovery_entries WHERE state<>'CANCELLED' OR version<>2 OR ended_at IS NULL
+                OR policy_version<>'SYNTHETIC_FINITE_RECOVERY_011_POLICY_V1' OR goal_reference<>@goal)
+              AND NOT EXISTS(SELECT 1 FROM identity.recovery_cases)
+              AND NOT EXISTS(SELECT 1 FROM identity.recovery_results)
+              AND NOT EXISTS(SELECT 1 FROM identity.recovery_contact_challenges)
+              AND NOT EXISTS(SELECT 1 FROM identity.recovery_code_operations)
+              AND NOT EXISTS(SELECT 1 FROM identity.recovery_code_entries)
+              AND NOT EXISTS(SELECT 1 FROM identity.step_up_proofs)
+              AND (SELECT count(*) FROM accounts.accounts)=1 AND (SELECT count(*) FROM identity."AspNetUsers")=1
+              AND (SELECT count(*) FROM identity.tunner_sessions)=1
+              AND NOT EXISTS(SELECT 1 FROM identity.tunner_sessions WHERE state<>'REVOKED')
+              AND NOT EXISTS(SELECT 1 FROM platform.outbox_messages WHERE operation_id LIKE 'OP-RECOVERY-CASE-%')
+            """, connection);
+        _ = command.Parameters.AddWithValue("goal", BrowserTestRecoveryCase.GoalReference);
+        return await command.ExecuteScalarAsync(token).ConfigureAwait(false) is true;
     }
     private static async Task<bool> InspectOwnerOutcomeAsync(string connectionString, BrowserTestRecoveryCodes profile, bool completed, CancellationToken token)
     {

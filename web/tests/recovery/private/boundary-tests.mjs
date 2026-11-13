@@ -107,7 +107,7 @@ test('private marker overlap detects public sentinel across an owned profile chu
   });
 });
 test('guarded registered dispatcher rejects each missing dependency before work or observations', async () => {
-  const ids=Object.keys(journeys);assert.equal(ids.length,6);
+  const ids=Object.keys(journeys);assert.equal(ids.length,7);
   for(const id of ids)for(const missing of ['browser','onContext','fixtureControl','nativeCode','requestOwnedDownload','inspectOwnedSurface']){
     let work=0;const seen=[],attempted=()=>{work++;throw fixedError('PREDICATE_FAILED');};
     const input={control:{...liveControl(),journeyId:id},check(key,value){seen.push([key,value]);},browser:{contexts:attempted},onContext:attempted,fixtureControl:attempted,nativeCode:attempted,requestOwnedDownload:attempted,inspectOwnedSurface:attempted};

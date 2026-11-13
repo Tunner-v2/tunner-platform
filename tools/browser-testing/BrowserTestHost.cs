@@ -17,7 +17,7 @@ using Tunner.Platform.Policies;
 using Tunner.User.Bff;
 
 internal sealed record BrowserTestHostOptions(string Origin, int Port, string ConnectionString, X509Certificate2 Certificate,
-    int SmtpPort, string? PersistentDirectory, string Mode, string RunId, BrowserTestTotp? Totp = null, BrowserTestRecoveryCodes? Recovery = null);
+    int SmtpPort, string? PersistentDirectory, string Mode, string RunId, BrowserTestTotp? Totp = null, BrowserTestRecoveryCodes? Recovery = null, BrowserTestRecoveryCase? RecoveryCase = null);
 
 /// <summary>The existing test executable's single BFF composition, with explicit persistent or finite ownership.</summary>
 internal static class BrowserTestHost
@@ -35,7 +35,7 @@ internal static class BrowserTestHost
         var age = new BrowserTestAgePolicies();
         var app = TunnerAuthenticatedUserBffHost.CreateApplication([], builder =>
         {
-            if (options.Recovery is not null) builder.Logging.ClearProviders();
+            if (options.Recovery is not null || options.RecoveryCase is not null) builder.Logging.ClearProviders();
             builder.Configuration.AddInMemoryCollection(new Dictionary<string, string?> { ["Bff:BrowserOrigin"] = options.Origin });
             builder.WebHost.ConfigureKestrel(server => server.Listen(IPAddress.Loopback, options.Port, endpoint => endpoint.UseHttps(options.Certificate)));
             var protection = builder.Services.AddDataProtection().SetApplicationName("Tunner.IsolatedBrowserTesting");
@@ -90,6 +90,7 @@ internal static class BrowserTestHost
             });
             options.Totp?.Configure(builder.Services);
             options.Recovery?.Configure(builder.Services);
+            options.RecoveryCase?.Configure(builder.Services);
         });
         options.Totp?.MapResponseFaults(app);
         options.Recovery?.MapResponseFaults(app);
@@ -111,6 +112,8 @@ internal static class BrowserTestHost
         BrowserTestStepUpAssets.Map(app);
         if (options.Recovery is { } recovery)
             app.MapGet("/browser-testing/status", () => new { mode = options.Mode, journeyId = recovery.JourneyId, runId = options.RunId, ready = true }).AllowAnonymous();
+        else if (options.RecoveryCase is not null)
+            app.MapGet("/browser-testing/status", () => new { mode = options.Mode, journeyId = BrowserTestRecoveryCase.JourneyId, runId = options.RunId, ready = true }).AllowAnonymous();
         else if (options.Totp is { } profile)
             app.MapGet("/browser-testing/status", () => new { mode = options.Mode, journeyId = profile.JourneyId, runId = options.RunId, ready = true }).AllowAnonymous();
         else app.MapGet("/browser-testing/status", () => new { mode = options.Mode, instanceId = options.RunId, ready = true }).AllowAnonymous();

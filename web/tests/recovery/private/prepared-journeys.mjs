@@ -228,10 +228,110 @@ class RecoveryJourney {
 
 export async function runPreparedJourney(input){
  requireTrue(registeredJourney(input.control?.journeyId)&&typeof input.browser?.contexts==='function'&&typeof input.onContext==='function'&&typeof input.fixtureControl==='function'&&typeof input.nativeCode==='function'&&typeof input.requestOwnedDownload==='function'&&typeof input.inspectOwnedSurface==='function','INPUT_INVALID');
+ if(input.control.journeyId==='RECOVERY_CASE_V01_V03_V1')return runRecoveryCaseJourney(input);
  const run=new RecoveryJourney(input);let failed=false;
  try{await run.execute();}catch{failed=true;}
  try{run.observations.finish(input.check);}catch{failed=true;}
  try{await run.close();}catch{throw fixedError('CLEANUP_FAILED');}
+ if(failed)throw fixedError('PREDICATE_FAILED');
+}
+
+// One literal real-BFF journey. Registration uses the existing owned account mechanics;
+// all recovery requests reach the actual server and no proof/repair UI is invented.
+async function runRecoveryCaseJourney(input){
+ const {page,context,browser,control,markers}=input,observations=observedMap(journeys[control.journeyId]);
+ const values=new Set(),pages=[page],pointer='__Host-Tunner.Recovery.Original',sessionCookie='__Host-Tunner.User.Session';
+ const origin=control.origin,goal='SYNTHETIC_FINITE_RECOVERY_011_GOAL_V1';let starts=0,completedViewports=0,failed=false;
+ const remember=(...items)=>{for(const value of items)if(typeof value==='string'&&value.length){values.add(value);markers.remember(value);}requireTrue(values.size<=256);};
+ const prove=(id,value)=>{observations.observe(id,value===true);requireTrue(value===true);};
+ const stage=value=>input.checkpoint?.(value);
+ const mechanics=createRecoveryAccountMechanics({...input,origin,mailpitOrigin:control.mailpitOrigin,journeyId:control.journeyId,runId:control.runId,remember,fixtureControl:input.fixtureControl});
+ const countStart=request=>{if(new URL(request.url()).origin===origin&&new URL(request.url()).pathname==='/recovery/start'&&request.method()==='POST')starts++;};
+ const headers=[];
+ const read=async response=>{const h=response.headers();headers.push(/(?:^|,)\s*no-store\s*(?:,|$)/i.test(h['cache-control']??'')&&h['referrer-policy']==='no-referrer');return mechanics.read(response);};
+ const post=async(owner,path,body,csrf,extra={})=>read(await owner.request.post(new URL(path,origin).href,{headers:{Origin:origin,...(csrf?{'X-Tunner-CSRF':csrf}:{}),...extra},data:body,timeout:budgets.action,failOnStatusCode:false}));
+ const boot=async owner=>{const result=await mechanics.get(owner,'/authentication/options');requireTrue(result.ok&&result.body.recoveryAvailable===true&&typeof result.body.csrfToken==='string');return result.body;};
+ const options=async owner=>{const result=await mechanics.get(owner,'/recovery/options');requireTrue(result.ok&&result.body.available===true);return result.body;};
+ const pending=async requestId=>{const current=await options(page);return current.operation?.requestId===requestId&&current.operation.status==='AWAITING_PROOF'&&current.operation.version===1&&current.operation.authenticated===false&&current.operation.codeSubmission==='ATOMIC_REPAIR_ONLY'&&!Object.hasOwn(current.operation,'result');};
+ const at=path=>mechanics.at(page,path);
+ page.on('request',countStart);
+ try{
+  const account=await mechanics.bootstrap();remember(account.email,account.password);
+  const signed=await mechanics.session(page);requireTrue(signed.ok&&typeof signed.body.csrfToken==='string');
+  const ended=await mechanics.post(page,'/authentication/sign-out',{},signed.body.csrfToken);requireTrue(ended.ok&&ended.body.authenticated===false);
+  const foreign=await mechanics.newPage();pages.push(foreign);
+  for(const width of [1440,768,390,320]){
+   stage('CASE_VIEWPORTS');await page.setViewportSize({width,height:1024});await foreign.setViewportSize({width,height:1024});
+   const identity=await mechanics.get(page,'/browser-testing/status');
+   prove('BFF_IDENTITY',identity.ok&&identity.body.mode==='FINITE_RECOVERY_BROWSER_TESTING'&&identity.body.journeyId===control.journeyId&&identity.body.runId===control.runId&&identity.body.ready===true);
+   const shapes=[];
+   for(const email of [account.email.replace('@','-absent@'),account.email]){
+    remember(email);stage('CASE_ENTRY');await context.clearCookies({name:pointer});
+    await page.goto(new URL('/login',origin).href);await page.getByRole('button',{name:'Forgot password?',exact:true}).click();await at('/recovery');
+    await page.getByRole('heading',{name:'Recover your account',exact:true}).waitFor();
+    const current=await options(page),field=page.getByLabel('Email address',{exact:true}),radio=page.getByRole('radio',{name:/^Recover account access/}),before=starts;
+    requireTrue(!current.operation&&current.goals.length===1&&current.goals[0].reference===goal);
+    stage('CASE_VALIDATION');await page.getByRole('button',{name:'Continue',exact:true}).click();
+    await page.getByText('Enter a valid email address.',{exact:true}).waitFor();
+    await page.waitForFunction(()=>document.activeElement?.getAttribute('name')==='email',null,{timeout:budgets.action});
+    await field.fill('invalid');await radio.focus();await page.getByText('Enter a valid email address.',{exact:true}).waitFor();
+    await field.fill(email);await radio.focus();await page.getByText('Enter a valid email address.',{exact:true}).waitFor({state:'hidden'});
+    await page.getByRole('button',{name:'Continue',exact:true}).click();
+    await page.waitForFunction(()=>document.activeElement?.getAttribute('role')==='radio',null,{timeout:budgets.action});
+    prove('SHARED_FORM_VALIDATION',starts===before&&await radio.getAttribute('aria-checked')==='false');
+    await radio.click();
+    const started=await mechanics.response(page,'/recovery/start',()=>page.getByRole('button',{name:'Continue',exact:true}).click());
+    requireTrue(started.ok&&Object.keys(started.sent).sort().join('|')==='email|goalReference|requestId'&&started.sent.email===email&&started.sent.goalReference===goal);
+    const requestId=started.sent.requestId;remember(requestId);requireTrue(started.body.operation?.requestId===requestId);
+    shapes.push(JSON.stringify({...started.body.operation,requestId:null}));
+    prove('NEUTRAL_ENTRY',starts===before+1&&await pending(requestId));
+    stage('CASE_PENDING');await at('/recovery/verify');await page.getByRole('heading',{name:'Verify this recovery request',exact:true}).waitFor();
+    await page.getByText('Recovery options are not available for this request.',{exact:true}).waitFor();
+    prove('PENDING_NO_STANDALONE_PROOF',await page.getByLabel('Recovery code',{exact:true}).count()===0&&await page.getByRole('button',{name:'Verify recovery code',exact:true}).count()===0);
+    stage('CASE_ORIGINAL');await page.reload();await at('/recovery/verify');await page.getByRole('button',{name:'Cancel request',exact:true}).waitFor();
+    await page.goBack();await at('/recovery/verify');await page.goForward();await at('/recovery/verify');
+    prove('ORIGINAL_RELOAD_HISTORY',await pending(requestId)&&starts===before+1);
+    const originalCookies=await context.cookies(),originalPointer=originalCookies.find(cookie=>cookie.name===pointer);requireTrue(!!originalPointer);
+    const csrf=(await boot(page)).csrfToken;
+    await context.clearCookies({name:pointer});requireTrue(!(await options(page)).operation);
+    const restored=await post(page,'/recovery/result',{requestId},csrf);await page.goto(new URL('/recovery/verify',origin).href);await at('/recovery/verify');
+    prove('ORIGINAL_POINTER_RESTORE',restored.ok&&restored.body.operation?.requestId===requestId&&await pending(requestId));
+    stage('CASE_GUARDS');const foreignBoot=await boot(foreign);
+    await foreign.context().clearCookies({name:pointer});await foreign.context().addCookies([originalPointer]);
+    const foreignResult=await post(foreign,'/recovery/result',{requestId},foreignBoot.csrfToken);
+    await foreign.goto(new URL('/recovery/verify',origin).href);await mechanics.at(foreign,'/login');
+    prove('FOREIGN_BROWSER_DENIED',foreignResult.status===404&&!(await options(foreign)).operation&&await pending(requestId));
+    const missing=await post(page,'/recovery/cancel',{requestId},null);
+    const invalid=await post(page,'/recovery/cancel',{requestId},'synthetic-invalid-csrf');
+    const cross=await post(page,'/recovery/cancel',{requestId},csrf,{Origin:'https://foreign.example.test'});
+    const query=await post(page,'/recovery/result?unexpected=true',{requestId},csrf);
+    const selector=await post(page,'/recovery/result',{requestId,accountId:'synthetic-untrusted-selector'},csrf);
+    prove('LIVE_CSRF_ORIGIN_GUARDS',missing.status===400&&invalid.status===400&&cross.status===403&&query.status===400&&selector.status===400&&await pending(requestId));
+    stage('CASE_CANCEL');const cancelled=await mechanics.response(page,'/recovery/cancel',()=>page.getByRole('button',{name:'Cancel request',exact:true}).click());
+    await at('/recovery/result');await page.getByRole('heading',{name:'Recovery request cancelled',exact:true}).waitFor();
+    await page.reload();await at('/recovery/result');await page.getByRole('heading',{name:'Recovery request cancelled',exact:true}).waitFor();
+    const duplicate=await post(page,'/recovery/cancel',{requestId},(await boot(page)).csrfToken),final=await options(page);
+    prove('CANCEL_ORIGINAL_RESULT',cancelled.ok&&cancelled.sent.requestId===requestId&&cancelled.body.operation?.status==='CANCELLED'&&final.operation?.requestId===requestId&&final.operation.status==='CANCELLED'&&final.operation.version===2&&duplicate.ok&&duplicate.body.operation?.requestId===requestId&&duplicate.body.operation.status==='CANCELLED'&&!Object.hasOwn(final.operation,'result'));
+    prove('NO_AUTHENTICATED_SESSION',(await mechanics.session(page)).status===401&&!(await context.cookies()).some(cookie=>cookie.name===sessionCookie));
+    let safe=true,cookieFlags=true,hadProtected=false;
+    for(const owner of pages){
+     const state=await bounded(owner.evaluate(async()=>({url:location.href,referrer:document.referrer,name:window.name,history:JSON.stringify(history.state),local:Object.entries(localStorage),session:Object.entries(sessionStorage),worker:!!navigator.serviceWorker?.controller,registrations:'serviceWorker'in navigator?(await navigator.serviceWorker.getRegistrations()).length:0,caches:'caches'in window?(await caches.keys()).length:0})),budgets.action);
+     const cookies=await owner.context().cookies(),protectedCookies=cookies.filter(cookie=>cookie.name.startsWith('__Host-'));hadProtected ||= protectedCookies.length>0;
+     cookieFlags &&= protectedCookies.every(cookie=>cookie.httpOnly&&cookie.secure&&cookie.path==='/'&&['Strict','Lax'].includes(cookie.sameSite));
+     const carrier=JSON.stringify(state),url=new URL(state.url);
+     safe &&= url.origin===origin&&!url.search&&!url.hash&&state.local.length===0&&state.session.length===0&&!state.worker&&state.registrations===0&&state.caches===0&&[...values,...cookies.map(cookie=>cookie.value)].every(value=>!value||!carrier.includes(value));
+    }
+    prove('COOKIE_FLAGS',cookieFlags&&hadProtected);
+    prove('NO_SECRET_URL_OR_STORAGE',safe&&headers.length>0&&headers.every(Boolean));
+    requireExpectedRecoveryPages(browser,pages);prove('STRICT_OWNED_SURFACE',await input.inspectOwnedSurface());
+   }
+   prove('NEUTRAL_ENTRY',shapes.length===2&&shapes[0]===shapes[1]);
+   const size=page.viewportSize();prove('ALL_FOUR_VIEWPORTS',size?.width===width&&size.height===1024);completedViewports++;
+  }
+  requireTrue(completedViewports===4&&starts===8);
+ }catch{failed=true;}
+ try{observations.finish(input.check);}catch{failed=true;}
+ finally{page.off('request',countStart);try{await mechanics.close();}catch{failed=true;}values.clear();}
  if(failed)throw fixedError('PREDICATE_FAILED');
 }
 
