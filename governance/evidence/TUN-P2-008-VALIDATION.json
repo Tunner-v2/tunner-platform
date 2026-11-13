@@ -3,8 +3,8 @@
   "scope_id": "TUN-P2-008",
   "validation_kind": "COMMITTED",
   "result": "PASS",
-  "tested_commit_sha": "734828a78d9736eaa8da32c1b80ae0654a7f3641",
-  "validated_commit_sha": "734828a78d9736eaa8da32c1b80ae0654a7f3641",
+  "tested_commit_sha": "51a80e5f4104292966eef5601747b86ed666c6d9",
+  "validated_commit_sha": "51a80e5f4104292966eef5601747b86ed666c6d9",
   "owned_behavior_paths": [
     "docs/contracts/ui-inventory.json",
     "docs/development/P2_008_TOTP_SCOPE.md",
@@ -378,5 +378,50 @@
   "source_binding_ref": "governance/evidence/p2-008-totp-20261110/final-carrier/337b196/execution-index.json",
   "role_reviews_ref": "governance/evidence/TUN-P2-008-ROLE-REVIEWS.json",
   "ui_evidence_ref": "governance/evidence/TUN-P2-008-UI-COMPLIANCE.json",
-  "base_full_validation_ref": "governance/evidence/p2-008-totp-20261110/final-integration/947f8b0/execution-index.json"
+  "base_full_validation_ref": "governance/evidence/p2-008-totp-20261110/final-integration/947f8b0/execution-index.json",
+  "recovery_current_source_compatibility": {
+    "result": "PASS_BOUNDED_CURRENT_SOURCE_COMPATIBILITY",
+    "recorded_at": "2026-11-13T14:08:09.1831415Z",
+    "metadata_carrier_commit_sha": "51a80e5f4104292966eef5601747b86ed666c6d9",
+    "actual_native_execution_commit_sha": "095eb59e322ed25d28ebc7c0f069185d64ec874a",
+    "prior_current_binding": {
+      "tested_commit_sha": "734828a78d9736eaa8da32c1b80ae0654a7f3641",
+      "validated_commit_sha": "734828a78d9736eaa8da32c1b80ae0654a7f3641",
+      "envelope_git_ref": "51a80e5f4104292966eef5601747b86ed666c6d9:governance/evidence/TUN-P2-008-VALIDATION.json"
+    },
+    "carrier_semantics": "Top-level binding is the current scoped compatibility carrier. Actual native execution remains095; actual route integration/render capture is51a. Retained presentation21 is root-observed095 and not self-SHA-bound. No native execution at51a, full original-suite rerun or full550-input equivalence is claimed.",
+    "ordered_ownership": {
+      "count": 112,
+      "unchanged_from_candidate_envelope": true,
+      "all_owned_objects_match_native_candidate_and_working": true,
+      "working_drift": 0,
+      "native_manifest_covered": 105,
+      "outside_native_manifest": 7,
+      "changed_since734": 7
+    },
+    "current_actual_evidence": {
+      "native_private_ref": "governance/evidence/p2-011-recovery-20261112/native-095eb59/private101.json",
+      "native_private_passed": 101,
+      "sql_ref": "governance/evidence/p2-011-recovery-20261112/native-095eb59/sql13.json",
+      "sql_passed": 13,
+      "protocol_ref": "governance/evidence/p2-011-recovery-20261112/native-095eb59/protocol-qualification.json",
+      "protocol_passed": 17,
+      "resources_ref": "governance/evidence/p2-011-recovery-20261112/native-095eb59/resource-qualification.json",
+      "resources_passed": 6,
+      "ui_integration_ref": "governance/evidence/p2-011-recovery-20261112/ui-51a80e5/integration30.json",
+      "ui_integration_passed": 30,
+      "ui_capture_ref": "governance/evidence/p2-011-recovery-20261112/ui-51a80e5/visual/visual-review-manifest.json",
+      "ui_capture_count": 9,
+      "retained_presentation_ref": "governance/evidence/p2-011-recovery-20261112/ui-51a80e5/presentation21.json",
+      "retained_presentation_passed": 21
+    },
+    "source_verification": "Independent executing-agent bounded Git object comparisons at734/095/51a verify all ordered owned objects match095/51a/current; covered current files also match actual095 manifest SHA256. Outside-manifest docs/contracts/installer/dev assets are object-currentness only, not new runtime coverage. Root reviewed the prepared ten-path reconciliation; original arrays and historical fields are preserved.",
+    "affected_owner_coverage": "Method-specific TOTP/vault core remains unchanged from734. PRIVATE101 retains shared proof/session/MFA/federation consumers; changed BFF/model/anonymous capability/Login routing is additive. No new full TOTP vault/first-code/browser matrix execution is claimed.",
+    "tests_executed_by_this_metadata_update": false,
+    "new_full_parent_execution_claimed": false,
+    "limitations": [
+      "Original status remains VALIDATION, historical cohorts/approvals/source identities remain intact.",
+      "No DONE/Product/production/merge/release, governed-consumer or V04 acceptance follows."
+    ]
+  }
 }
