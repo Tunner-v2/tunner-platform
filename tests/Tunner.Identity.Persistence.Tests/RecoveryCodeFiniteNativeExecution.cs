@@ -100,7 +100,7 @@ public static class RecoveryCodeFiniteNativeExecution
                     {
                         if (cohort == RecoveryCodeNativeCohort.PrivateRecovery)
                         {
-                            foreach (var unleased in new[] { owner.Connection("identity_00000000000000000000000000000000"), owner.Connection("postgres") })
+                            foreach (var unleased in new[] { new Npgsql.NpgsqlConnectionStringBuilder(owner.Connection("identity_00000000000000000000000000000000")).ConnectionString, owner.Connection("postgres") })
                             {
                                 var rejected = false;
                                 try { await owner.ReleaseIdentityDatabaseAsync(unleased).ConfigureAwait(false); }

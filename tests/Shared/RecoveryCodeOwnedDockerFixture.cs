@@ -477,7 +477,7 @@ internal sealed class RecoveryCodeOwnedPostgres(RecoveryCodeLocalDockerEndpoint 
         RequireReady();
         var selected = new NpgsqlConnectionStringBuilder(connectionString); var name = selected.Database;
         if (name is not { Length: 41 } || !name.StartsWith("identity_", StringComparison.Ordinal) ||
-            name[9..].Any(c => !char.IsAsciiHexDigitLower(c)) || connectionString != Connection(name))
+            name[9..].Any(c => !char.IsAsciiHexDigitLower(c)) || connectionString != new NpgsqlConnectionStringBuilder(Connection(name)).ConnectionString)
             throw new InvalidOperationException("RECOVERY_DATABASE_LEASE_INVALID");
         lock (identityDatabaseLeases)
         {
