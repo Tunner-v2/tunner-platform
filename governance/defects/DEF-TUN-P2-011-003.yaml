@@ -3,15 +3,17 @@ defect_id: DEF-TUN-P2-011-003
 work_item_id: TUN-P2-011
 classification: BUG
 severity: SEV-2
-status: OPEN
+status: CLOSED
 environment: uncommitted password-repair original-result integration
-description: Source review found repaired-result reconciliation normalizing any nonnull current hierarchy CodeSelection to the stored original selection, masking a changed set/lifecycle on reads outside the consumption executor. Source correction now requires the actual ACTIVE original set/lifecycle/current choice plus exact original claim witness before normalizing only policy-permitted own usage. Root and QA confirmed the original condition; code compiles and new exact-original/selection-drift regressions are authored. Keep OPEN until actual integrated runtime proof, preserving unrelated drift rejection.
+description: Source review found repaired-result reconciliation normalizing any nonnull current hierarchy CodeSelection to the stored original selection, masking a changed set/lifecycle on reads outside the consumption executor. Correction requires the actual ACTIVE original set/lifecycle/current choice plus exact original claim witness before normalizing only policy-permitted own usage. Actual committed62ed02f PRIVATE_RECOVERY87 passes all87, including exact-original reads, rejected foreign/lifecycle selections and legitimate own-usage reconciliation, plus real HTTPS original recovery after password/session invalidation. This closes the confirmed defect only; remaining recovery tiers/UI and feature acceptance stay open.
 expected_behavior_ref: docs/authority/current/development/17_Account_Identity_and_Session_FRD.md; docs/development/P2_011_RECOVERY_REFINEMENT.md
 evidence:
   - src/Modules/Identity/RecoveryPasswordApplication.cs
   - tests/Tunner.Identity.Persistence.Tests/RecoveryPasswordRepairPrivateIntegrationTests.cs
   - governance/evidence/TUN-P2-011-VALIDATION.json
+  - artifacts/p2-011-recovery-20261112/candidate-62ed02f-native/resumed-20261113/private-recovery-receipt.json
+  - artifacts/p2-011-recovery-20261112/candidate-62ed02f-native/resumed-20261113/private-recovery-summary.json
 affected_versions:
   - uncommitted password-repair source based on 6b9ebe6
 created_at: 2026-11-12T23:58:52Z
-updated_at: 2026-11-12T23:58:52Z
+updated_at: 2026-11-13T08:14:18Z
