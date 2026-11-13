@@ -416,12 +416,12 @@ internal sealed class RecoveryPasswordRepairPrivateIntegrationTests(IdentityPost
 
     private sealed class Presentation : IRecoveryPasswordPresentationSource
     {
+        private static readonly string[] BaseKeys = ["fixture.goal", "fixture.description", "fixture.effect", "fixture.effect-value"];
         public RecoveryPasswordPresentation RequirePublished(RecoveryPasswordPolicy policy, DateTimeOffset at)
         {
             var followUps = policy.UnresolvedDownstreamEffects.Select((reference, index) =>
                 new RecoveryPasswordFollowUp(reference, "fixture.follow-label-" + index, "fixture.follow-value-" + index)).ToArray();
-            var keys = new[] { "fixture.goal", "fixture.description", "fixture.effect", "fixture.effect-value" }
-                .Concat(followUps.SelectMany(x => new[] { x.LabelKey, x.ValueKey }));
+            var keys = BaseKeys.Concat(followUps.SelectMany(x => new[] { x.LabelKey, x.ValueKey }));
             return new("en", keys.Select(key => new RegistrationPublishedText(key, "fixture-variant", "fixture-text-v1", Public,
                 "en", "PUBLISHED", "Synthetic test only")), "fixture-publication-v1", RecoveryCodePrivateIntegrationTests.Profile.Interval,
                 "fixture.goal", "fixture.description", "fixture.effect", "fixture.effect-value", followUps);
