@@ -122,7 +122,21 @@ public static class RecoveryCodeFiniteNativeExecution
                                 break;
                             }
                             catch (RecoveryCodeFirstCaseFailure error) { failure = error.FailureCode; break; }
-                            catch (Exception error) when (error is not OutOfMemoryException) { failure = "CASE_FAILED"; break; }
+                            catch (Exception error) when (error is not OutOfMemoryException)
+                            {
+                                var databaseError = error is Microsoft.EntityFrameworkCore.DbUpdateException { InnerException: { } inner } ? inner : error;
+                                var diagnostic = databaseError switch
+                                {
+                                    Npgsql.PostgresException { SqlState: Npgsql.PostgresErrorCodes.DiskFull } => RecoveryCodeFirstCaseStage.COHORT_SQL_DISK_FULL,
+                                    Npgsql.PostgresException { SqlState: Npgsql.PostgresErrorCodes.TooManyConnections } => RecoveryCodeFirstCaseStage.COHORT_SQL_CONNECTION_LIMIT,
+                                    Npgsql.PostgresException { SqlState: Npgsql.PostgresErrorCodes.AdminShutdown } => RecoveryCodeFirstCaseStage.COHORT_SQL_ADMIN_SHUTDOWN,
+                                    Npgsql.PostgresException => RecoveryCodeFirstCaseStage.COHORT_SQL_OTHER,
+                                    Npgsql.NpgsqlException => RecoveryCodeFirstCaseStage.COHORT_DATABASE_TRANSPORT,
+                                    _ => (RecoveryCodeFirstCaseStage?)null
+                                };
+                                failure = diagnostic is { } stage ? new RecoveryCodeFirstCaseFailure(RecoveryCodeFirstCasePhase.STATE, stage).FailureCode : "CASE_FAILED";
+                                break;
+                            }
                         }
                     }
                     finally { await fixture.DisposeAsync().ConfigureAwait(false); }
