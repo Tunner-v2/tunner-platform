@@ -231,18 +231,36 @@ internal sealed class FederationPrivateIntegrationTests(IdentityPostgresFixture 
 
     public async Task RequiredTotpDefersSessionAndRecoversOnlyOriginalCompositeResult()
     {
+        var checkpoint = new RecoveryCodeFirstCaseCheckpoint { Phase = RecoveryCodeFirstCasePhase.FEDERATION_MFA };
+        try
+        {
+        checkpoint.Mark(RecoveryCodeFirstCaseStage.FEDERATION_MFA_DATABASE);
         await using var db = await fixture.CreateFiniteDatabaseAsync(CancellationToken.None); var profile = new Profile(); var totp = TotpProfile();
-        await using var host = await Host(db, profile, totp); var account = await host.SeedAsync(db); await SeedLink(db, account, profile);
-        var factor = await TotpTests.Enroll(host, totp, await TotpTests.Login(host)); totp.RequireMfa = true;
+        checkpoint.Mark(RecoveryCodeFirstCaseStage.FEDERATION_MFA_HOST);
+        await using var host = await Host(db, profile, totp);
+        checkpoint.Mark(RecoveryCodeFirstCaseStage.FEDERATION_MFA_SEED);
+        var account = await host.SeedAsync(db);
+        checkpoint.Mark(RecoveryCodeFirstCaseStage.FEDERATION_MFA_LINK);
+        await SeedLink(db, account, profile);
+        checkpoint.Mark(RecoveryCodeFirstCaseStage.FEDERATION_MFA_LOGIN);
+        var cookies = await TotpTests.Login(host);
+        checkpoint.Mark(RecoveryCodeFirstCaseStage.FEDERATION_MFA_ENROLL);
+        var factor = await TotpTests.Enroll(host, totp, cookies); totp.RequireMfa = true;
+        checkpoint.Mark(RecoveryCodeFirstCaseStage.FEDERATION_MFA_BASELINE);
         int priorSessions; int priorCodes;
         await using (var baseline = db.Context())
         { priorSessions = await baseline.Set<AuthenticationSessionRow>().CountAsync(); priorCodes = await baseline.Set<TotpUsedCodeRow>().CountAsync(); }
+        checkpoint.Mark(RecoveryCodeFirstCaseStage.FEDERATION_MFA_VERIFIED);
         var browser = Browser(host); var pending = await Verified(host, profile, browser);
         // The first completion response is deliberately ignored; recover through the actual original-result owner.
+        checkpoint.Mark(RecoveryCodeFirstCaseStage.FEDERATION_MFA_PRIMARY_COMPLETE);
         _ = await Complete(host, browser, pending);
+        checkpoint.Mark(RecoveryCodeFirstCaseStage.FEDERATION_MFA_PENDING_ORIGINAL);
         var recovered = await Original(host, browser, pending);
+        checkpoint.Mark(RecoveryCodeFirstCaseStage.FEDERATION_MFA_PENDING_RESULT);
         Assert.True(recovered.ErrorCode is null && recovered.Authentication is { ErrorCode: null, Grant: null, PendingMfa: not null });
         var mfaId = recovered.Authentication!.PendingMfa!.PendingId;
+        checkpoint.Mark(RecoveryCodeFirstCaseStage.FEDERATION_MFA_PENDING_ROWS);
         await using (var read = db.Context())
         {
             var attempt = await read.Set<FederationAttemptRow>().SingleAsync(); var row = await read.Set<TotpPendingAuthenticationRow>().SingleAsync();
@@ -258,28 +276,58 @@ internal sealed class FederationPrivateIntegrationTests(IdentityPostgresFixture 
                 row.FederationAssuranceMappingEvidenceReference == profile.Values.AssuranceMappingEvidenceReference &&
                 row.FederationSessionUsePolicyVersion == profile.Values.SessionUsePolicyVersion && row.PrimaryAssurance == profile.Values.PrimaryAssurance);
         }
+        checkpoint.Mark(RecoveryCodeFirstCaseStage.FEDERATION_MFA_CODE);
         var command = new TotpCodeCommand { RequestId = pending.RequestId, AuthenticatorReference = factor.Reference,
             Code = TotpTests.NativeCode(totp.Seed(factor.Reference), 1) };
         await using (var scope = host.Services.CreateAsyncScope())
         {
+            checkpoint.Mark(RecoveryCodeFirstCaseStage.FEDERATION_MFA_COMPLETE);
             var completed = await scope.ServiceProvider.GetRequiredService<AuthenticationApplication>().CompleteTotpMfaAsync(browser.Caller, mfaId,
                 command, totp, scope.ServiceProvider.GetRequiredService<TotpNativeVerifier>(), CancellationToken.None);
+            checkpoint.Mark(completed.ErrorCode switch
+            {
+                null => RecoveryCodeFirstCaseStage.FEDERATION_MFA_COMPLETE_RESULT,
+                "CLOCK_OUT_OF_BOUNDS" => RecoveryCodeFirstCaseStage.FEDERATION_MFA_CLOCK_OUT_OF_BOUNDS,
+                "CODE_REPLAYED" => RecoveryCodeFirstCaseStage.FEDERATION_MFA_CODE_REPLAYED,
+                "VERIFICATION_BUDGET_EXHAUSTED" => RecoveryCodeFirstCaseStage.FEDERATION_MFA_VERIFICATION_BUDGET,
+                "AUTHENTICATION_FAILED" => RecoveryCodeFirstCaseStage.FEDERATION_MFA_AUTHENTICATION_FAILED,
+                "VERSION_CONFLICT" => RecoveryCodeFirstCaseStage.FEDERATION_MFA_VERSION_CONFLICT,
+                "DEPENDENCY_UNAVAILABLE" => RecoveryCodeFirstCaseStage.FEDERATION_MFA_DEPENDENCY_UNAVAILABLE,
+                "RATE_OR_ABUSE_LIMITED" => RecoveryCodeFirstCaseStage.FEDERATION_MFA_RATE_LIMITED,
+                "VALIDATION_ERROR" => RecoveryCodeFirstCaseStage.FEDERATION_MFA_VALIDATION_ERROR,
+                _ => RecoveryCodeFirstCaseStage.FEDERATION_MFA_OTHER_ERROR
+            });
             Assert.True(completed.ErrorCode is null && completed.Grant is not null && completed.PendingMfa is null);
         }
-        var original = await Original(host, browser, pending); var session = SessionId(original);
+        checkpoint.Mark(RecoveryCodeFirstCaseStage.FEDERATION_MFA_ORIGINAL);
+        var original = await Original(host, browser, pending);
+        checkpoint.Mark(RecoveryCodeFirstCaseStage.FEDERATION_MFA_ORIGINAL_RESULT);
+        var session = SessionId(original);
         await using (var retry = host.Services.CreateAsyncScope())
         {
+            checkpoint.Mark(RecoveryCodeFirstCaseStage.FEDERATION_MFA_RETRY);
             var repeated = await retry.ServiceProvider.GetRequiredService<AuthenticationApplication>().CompleteTotpMfaAsync(browser.Caller, mfaId,
                 command, totp, retry.ServiceProvider.GetRequiredService<TotpNativeVerifier>(), CancellationToken.None);
+            checkpoint.Mark(RecoveryCodeFirstCaseStage.FEDERATION_MFA_RETRY_RESULT);
             Assert.True(repeated.ErrorCode is null && repeated.Grant is not null && AuthenticationIdentity.SessionId(repeated.Grant.Ticket.Principal) == session);
         }
+        checkpoint.Mark(RecoveryCodeFirstCaseStage.FEDERATION_MFA_FINAL_ROWS);
         await using var final = db.Context(); var saved = await final.Set<AuthenticationSessionRow>().SingleAsync(x => x.SessionId == session);
         var finalMfa = await final.Set<TotpPendingAuthenticationRow>().SingleAsync();
+        checkpoint.Mark(RecoveryCodeFirstCaseStage.FEDERATION_MFA_FINAL_COUNTS);
         Assert.True(await final.Set<AuthenticationSessionRow>().CountAsync() == priorSessions + 1 && await final.Set<TotpUsedCodeRow>().CountAsync() == priorCodes + 1);
+        checkpoint.Mark(RecoveryCodeFirstCaseStage.FEDERATION_MFA_FINAL_PENDING);
         Assert.True(finalMfa.State == "COMPLETED" && finalMfa.ResultSessionId == session && finalMfa.AcceptedAuthenticatorReference == factor.Reference);
+        checkpoint.Mark(RecoveryCodeFirstCaseStage.FEDERATION_MFA_FINAL_SESSION);
         Assert.True(saved.AuthenticationMethods == "federation+totp" && saved.Assurance == "fixture-federation-mfa" &&
             saved.FederationPrimaryAssurance == profile.Values.PrimaryAssurance && saved.FederationAttemptId == pending.AttemptId &&
             saved.TotpAuthenticatorReference == factor.Reference && saved.TotpGeneration == finalMfa.AcceptedGeneration);
+        checkpoint.Mark(RecoveryCodeFirstCaseStage.FEDERATION_MFA_DISPOSAL);
+        }
+        catch (Exception error) when (error is not OutOfMemoryException)
+        {
+            throw new RecoveryCodeFirstCaseFailure(checkpoint.Phase, checkpoint.Stage);
+        }
     }
 
     public async Task FinalFederationAuthorityDriftRollsBackStagedOwnerResultAndPreviousSessionEffect()

@@ -20,6 +20,13 @@ test('Empty entry focuses real email input, shares field/summary errors and clea
 test('Valid email without a goal focuses the actual first offered radio and never invents selection',async({page})=>{
  await setup(page,entry);await page.getByLabel('Email address',{exact:true}).fill('person@example.test');await page.getByRole('button',{name:'Continue',exact:true}).click();await expect(page.getByRole('radio',{name:/Fixture offered goal A/})).toBeFocused();await expect(page.getByRole('radio',{checked:true})).toHaveCount(0);await expect(page.getByText('Select the help you need.',{exact:true})).toBeVisible();expect((await snapshot(page)).calls.start).toBe(0);
 });
+test('Presented code form focuses its empty field and clears required errors on correction without claiming public proof',async({page})=>{
+ await setup(page,code);const input=page.getByLabel('Recovery code',{exact:true});await expect(page.locator('form')).toHaveAttribute('novalidate','');
+ await page.getByRole('button',{name:'Verify recovery code',exact:true}).click();await expect(input).toBeFocused();await expect(input).toHaveAttribute('aria-invalid','true');await expect(page.getByText('Enter a recovery code.',{exact:true})).toBeVisible();await expect(page.getByRole('alert')).toHaveText('Check the highlighted details');expect((await snapshot(page)).calls.code).toBe(0);
+ expect(await input.evaluate(field=>(field.getAttribute('aria-describedby')??'').split(/\s+/).some(id=>document.getElementById(id)?.textContent==='Enter a recovery code.'))).toBe(true);
+ await input.fill('public-required-field-value');await expect(input).not.toHaveAttribute('aria-invalid','true');await expect(page.getByText('Enter a recovery code.',{exact:true})).toHaveCount(0);await expect(page.getByRole('alert')).toHaveCount(0);
+ await page.getByRole('button',{name:'Verify recovery code',exact:true}).click();await expect.poll(async()=>(await snapshot(page)).calls.code).toBe(1);await expect(input).toHaveValue('');expect((await snapshot(page)).codeDomEmptyAtCallback).toBe(true);await noRestorationClaim(page);
+});
 test('Code DOM is empty inside async callback and duplicate submits/status/cancel stay held',async({page})=>{
  await setup(page,code,{holdCode:true});await page.getByLabel('Recovery code',{exact:true}).fill('public-nonfunctional-value');
  await page.locator('form').evaluate((form:HTMLFormElement)=>{form.requestSubmit();form.requestSubmit();});await expect.poll(async()=>(await snapshot(page)).calls.code).toBe(1);

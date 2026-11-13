@@ -11,7 +11,7 @@ function original(id=requestId,status='AWAITING_PROOF'){
 async function fixture(page:Page,initial:ReturnType<typeof original>|undefined=undefined){
  const copy={...authentication.content,...recovery.content,'fixture.goal.label':'Fixture offered recovery goal','fixture.goal.description':'Fixture admitted request','fixture.effect.label':'Fixture effect','fixture.effect.value':'Fixture confirmed effect'};
  const content:Record<string,unknown>=Object.fromEntries(Object.entries(copy).map(([key,text])=>[key,{key,text,locale:'en',state:'PUBLISHED',variantRef:'fixture-variant',versionRef:'fixture-version',publicationRef:'fixture-publication'}]));
- const state={operation:initial,available:true,missingPublication:false,showPointer:true,starts:0,results:0,cancels:0,repairs:0,options:0,csrf:0,resultFailure:false,resultMismatch:false,startLost:false,holdCancel:undefined as Promise<void>|undefined,holdStart:undefined as Promise<void>|undefined};
+ const state={operation:initial,available:true,missingPublication:false,showPointer:true,starts:0,results:0,cancels:0,repairs:0,options:0,csrf:0,resultFailure:false,resultRejected:false,resultMismatch:false,startLost:false,holdCancel:undefined as Promise<void>|undefined,holdStart:undefined as Promise<void>|undefined};
  await page.route('**/authentication/options',route=>{state.csrf++;return route.fulfill({json:{csrfToken:'fixture-csrf-'+state.csrf,idempotencyKey:requestId,passwordMaximumLength:128,locale:'en',content,termsUri:'#fixture-terms',privacyUri:'#fixture-privacy',supportUri:null,...(state.available?{recoveryAvailable:true}:{})}})});
  await page.route('**/recovery/*',async route=>{
   if(route.request().isNavigationRequest())return route.continue();
@@ -31,6 +31,7 @@ async function fixture(page:Page,initial:ReturnType<typeof original>|undefined=u
   if(path==='/recovery/result'){
    state.results++;expect(body).toEqual({requestId:state.operation?.requestId});
    if(state.resultFailure)return route.abort('connectionreset');
+   if(state.resultRejected)return route.fulfill({status:400,json:{error_code:'RECOVERY_PROOF_REJECTED',detail:'synthetic-private-rejection-detail',account_exists:true}});
    return route.fulfill({json:{operation:state.resultMismatch?{...state.operation,requestId:otherId}:state.operation}});
   }
   if(path==='/recovery/cancel'){
@@ -53,6 +54,21 @@ test('Advertised Login opens clean entry; shared validation precedes exact neutr
  await page.getByRole('button',{name:'Continue',exact:true}).click();await expect(page.getByLabel('Email address',{exact:true})).toBeFocused();expect(state.starts).toBe(0);
  await page.getByLabel('Email address',{exact:true}).fill('person@example.test');await page.getByRole('button',{name:'Continue',exact:true}).click();await expect(page.getByRole('radio')).toBeFocused();await expect(page.getByRole('radio')).toHaveAttribute('aria-checked','false');
  await page.getByRole('radio').click();await page.getByRole('button',{name:'Continue',exact:true}).click();await assertUnavailableProof(page);expect(state.starts).toBe(1);expect(state.repairs).toBe(0);await expect(page.getByRole('button',{name:'Cancel request',exact:true})).toBeEnabled();expect(new URL(page.url()).search).toBe('');
+});
+test('Entry format errors appear on blur, focus the invalid email on submit and clear on correction',async({page})=>{
+ const state=await fixture(page);await page.goto('/recovery');const email=page.getByLabel('Email address',{exact:true});
+ await expect(page.locator('form')).toHaveAttribute('novalidate','');await email.fill('person');await email.press('Tab');
+ await expect(email).toHaveAttribute('aria-invalid','true');await expect(page.getByText(recovery.content['recovery.error.email'],{exact:true})).toBeVisible();
+ const describedBy=await email.getAttribute('aria-describedby');expect(describedBy).toBeTruthy();expect(await email.evaluate(input=>(input.getAttribute('aria-describedby')??'').split(/\s+/).some(id=>document.getElementById(id)?.textContent==='Enter a valid email address.'))).toBe(true);
+ await page.getByRole('radio').click();await page.getByRole('button',{name:'Continue',exact:true}).click();await expect(email).toBeFocused();await expect(page.getByRole('alert')).toHaveText(recovery.content['recovery.error.highlighted']);expect(state.starts).toBe(0);
+ await email.fill('person@example.test');await expect(email).not.toHaveAttribute('aria-invalid','true');await expect(page.getByText(recovery.content['recovery.error.email'],{exact:true})).toHaveCount(0);await expect(page.getByRole('alert')).toHaveCount(0);await expect(page.getByRole('radio')).toHaveAttribute('aria-checked','true');
+ await page.getByRole('button',{name:'Continue',exact:true}).click();await assertUnavailableProof(page);expect(state.starts).toBe(1);expect(state.repairs).toBe(0);
+});
+test('Synthetic HTTP400 maps to the governed generic error without exposing problem details or replaying a mutation',async({page})=>{
+ const state=await fixture(page,original());await page.goto('/recovery/verify');await assertUnavailableProof(page);state.showPointer=false;state.resultRejected=true;
+ await page.getByRole('button',{name:'Check recovery status',exact:true}).click();await expect(page).toHaveURL(/\/recovery\/result$/);await expect(page.getByRole('heading',{name:recovery.content['recovery.unknown.heading'],exact:true})).toBeVisible();await expect(page.getByRole('alert')).toHaveText(recovery.content['recovery.error.unavailable']);
+ await expect(page.locator('body')).not.toContainText('synthetic-private-rejection-detail');await expect(page.locator('body')).not.toContainText('RECOVERY_PROOF_REJECTED');await expect(page.locator('body')).not.toContainText('account_exists');await expect(page.getByText('Fixture confirmed effect',{exact:true})).toHaveCount(0);expect(state.starts+state.cancels+state.repairs).toBe(0);
+ state.resultRejected=false;await page.getByRole('button',{name:'Check recovery status',exact:true}).click();await assertUnavailableProof(page);await expect(page.getByRole('alert')).toHaveCount(0);expect(state.operation!.requestId).toBe(requestId);expect(state.starts+state.cancels+state.repairs).toBe(0);
 });
 test('Guarded direct proof/result entry without an exact original returns neutral entry without a mutation',async({page})=>{
  const state=await fixture(page);for(const pathname of ['/recovery/verify','/recovery/result']){await page.goto(pathname);await expect(page).toHaveURL(/\/recovery$/);await expect(page.getByRole('heading',{name:'Recover your account',exact:true})).toBeVisible();}expect(state.starts+state.results+state.cancels+state.repairs).toBe(0);
