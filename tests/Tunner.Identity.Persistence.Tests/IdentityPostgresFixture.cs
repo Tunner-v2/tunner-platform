@@ -12,9 +12,10 @@ public sealed class IdentityPostgresFixture : IAsyncLifetime
 {
     private IContainer? container;
     private readonly RecoveryCodeOwnedPostgres? finiteOwner;
+    private readonly bool releasePrivateDatabases;
     public IdentityPostgresFixture() { }
-    internal IdentityPostgresFixture(RecoveryCodeOwnedPostgres finiteOwner)
-    { finiteOwner.RequireReady(); this.finiteOwner = finiteOwner; }
+    internal IdentityPostgresFixture(RecoveryCodeOwnedPostgres finiteOwner, bool releasePrivateDatabases = false)
+    { finiteOwner.RequireReady(); this.finiteOwner = finiteOwner; this.releasePrivateDatabases = releasePrivateDatabases; }
 
     public async Task InitializeAsync()
     {
@@ -40,8 +41,10 @@ public sealed class IdentityPostgresFixture : IAsyncLifetime
             {
                 Host = container!.Hostname, Port = container!.GetMappedPublicPort(5432), Database = "postgres", Username = "tunner"
             };
-        var connectionString = await RecoveryCodeIdentityDatabaseProvisioning.CreateAsync(adminConnection, targetMigration, ct);
-        return new IdentityTestDatabase(connectionString, finiteOwner);
+        var connectionString = releasePrivateDatabases
+            ? await finiteOwner!.CreateIdentityDatabaseAsync(ct, targetMigration)
+            : await RecoveryCodeIdentityDatabaseProvisioning.CreateAsync(adminConnection, targetMigration, ct);
+        return new IdentityTestDatabase(connectionString, finiteOwner, releasePrivateDatabases);
     }
 
     public async Task DisposeAsync()
@@ -52,10 +55,14 @@ public sealed class IdentityPostgresFixture : IAsyncLifetime
 
 public sealed class IdentityTestDatabase : IAsyncDisposable
 {
+    private readonly bool releasePrivateDatabase;
+    private int disposed;
     public IdentityTestDatabase(string connectionString) : this(connectionString, null) { }
-    internal IdentityTestDatabase(string connectionString, RecoveryCodeOwnedPostgres? finiteOwner)
+    internal IdentityTestDatabase(string connectionString, RecoveryCodeOwnedPostgres? finiteOwner, bool releasePrivateDatabase = false)
     {
         finiteOwner?.RequireReady(); FiniteOwner = finiteOwner;
+        if (releasePrivateDatabase && finiteOwner is null) throw new InvalidOperationException("RECOVERY_DATABASE_OWNER_REQUIRED");
+        this.releasePrivateDatabase = releasePrivateDatabase;
         ConnectionString = connectionString;
         Services = new ServiceCollection().AddTunnerIdentityPersistence(connectionString).BuildServiceProvider();
     }
@@ -68,5 +75,10 @@ public sealed class IdentityTestDatabase : IAsyncDisposable
         return RecoveryCodeIdentityDatabaseProvisioning.Context(Services, ConnectionString);
     }
 
-    public ValueTask DisposeAsync() => Services.DisposeAsync();
+    public async ValueTask DisposeAsync()
+    {
+        if (Interlocked.Exchange(ref disposed, 1) != 0) return;
+        await Services.DisposeAsync();
+        if (releasePrivateDatabase) await FiniteOwner!.ReleaseIdentityDatabaseAsync(ConnectionString);
+    }
 }

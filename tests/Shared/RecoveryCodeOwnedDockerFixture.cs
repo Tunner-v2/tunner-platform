@@ -450,6 +450,7 @@ internal sealed class RecoveryCodeOwnedPostgres(RecoveryCodeLocalDockerEndpoint 
     internal string Host { get; } = "127.0.0.1";
     internal int Port => Published(5432);
     private bool ready;
+    private readonly HashSet<string> identityDatabaseLeases = new(StringComparer.Ordinal);
     protected override IList<string> EnvironmentValues => ["POSTGRES_DB=tunner_outbox_test", "POSTGRES_USER=tunner", "POSTGRES_HOST_AUTH_METHOD=trust", "PGDATA=/var/lib/postgresql/p2_009"];
     internal void RequireReady() { if (!ready || !Available) throw new InvalidOperationException("RECOVERY_POSTGRES_NOT_READY"); }
     internal string Connection(string database) => new NpgsqlConnectionStringBuilder
@@ -457,10 +458,45 @@ internal sealed class RecoveryCodeOwnedPostgres(RecoveryCodeLocalDockerEndpoint 
         Host = Host, Port = Port, Database = database, Username = "tunner", Password = string.Empty, Passfile = string.Empty,
         Pooling = false, Timeout = 5, CommandTimeout = 15, IncludeErrorDetail = false, ApplicationName = "Tunner.RecoveryFiniteNative"
     }.ConnectionString;
-    internal Task<string> CreateIdentityDatabaseAsync(CancellationToken ct)
+    internal async Task<string> CreateIdentityDatabaseAsync(CancellationToken ct, string? targetMigration = null)
     {
         RequireReady();
-        return RecoveryCodeIdentityDatabaseProvisioning.CreateAsync(new NpgsqlConnectionStringBuilder(Connection("postgres")), null, ct);
+        var connectionString = await RecoveryCodeIdentityDatabaseProvisioning.CreateAsync(new NpgsqlConnectionStringBuilder(Connection("postgres")), targetMigration, ct).ConfigureAwait(false);
+        lock (identityDatabaseLeases)
+        {
+            if (!identityDatabaseLeases.Add(connectionString)) throw new InvalidOperationException("RECOVERY_DATABASE_LEASE_INVALID");
+        }
+        return connectionString;
+    }
+    internal bool IdentityDatabasesReleased
+    {
+        get { lock (identityDatabaseLeases) return identityDatabaseLeases.Count == 0; }
+    }
+    internal async Task ReleaseIdentityDatabaseAsync(string connectionString)
+    {
+        RequireReady();
+        var selected = new NpgsqlConnectionStringBuilder(connectionString); var name = selected.Database;
+        if (name is not { Length: 41 } || !name.StartsWith("identity_", StringComparison.Ordinal) ||
+            name[9..].Any(c => !char.IsAsciiHexDigitLower(c)) || connectionString != Connection(name))
+            throw new InvalidOperationException("RECOVERY_DATABASE_LEASE_INVALID");
+        lock (identityDatabaseLeases)
+        {
+            if (!identityDatabaseLeases.Contains(connectionString)) throw new InvalidOperationException("RECOVERY_DATABASE_LEASE_INVALID");
+        }
+        if (!await VerifyCreatedIdentityAsync(CancellationToken.None, expectedRunning: true).ConfigureAwait(false))
+            throw new InvalidOperationException("RECOVERY_DATABASE_OWNER_UNVERIFIED");
+        await using var connection = new NpgsqlConnection(Connection("postgres")); await connection.OpenAsync().ConfigureAwait(false);
+        using var quoting = new NpgsqlCommandBuilder();
+        await using (var drop = new NpgsqlCommand("DROP DATABASE " + quoting.QuoteIdentifier(name), connection))
+            _ = await drop.ExecuteNonQueryAsync().ConfigureAwait(false);
+        await using var absence = new NpgsqlCommand("SELECT NOT EXISTS(SELECT 1 FROM pg_database WHERE datname=@name)", connection);
+        _ = absence.Parameters.AddWithValue("name", name);
+        if (await absence.ExecuteScalarAsync().ConfigureAwait(false) is not true)
+            throw new InvalidOperationException("RECOVERY_DATABASE_RELEASE_UNVERIFIED");
+        lock (identityDatabaseLeases)
+        {
+            if (!identityDatabaseLeases.Remove(connectionString)) throw new InvalidOperationException("RECOVERY_DATABASE_LEASE_INVALID");
+        }
     }
     protected override async Task ReadyAsync(CancellationToken ct)
     {

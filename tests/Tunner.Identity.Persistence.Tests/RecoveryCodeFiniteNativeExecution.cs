@@ -95,9 +95,19 @@ public static class RecoveryCodeFiniteNativeExecution
                     using var deadline = new CancellationTokenSource(TimeSpan.FromSeconds(90));
                     await owner.StartAsync(deadline.Token).ConfigureAwait(false);
                     ownership = owner.OwnershipVerified; noLogs = owner.NoLogPersistenceVerified;
-                    var fixture = new IdentityPostgresFixture(owner);
+                    var fixture = new IdentityPostgresFixture(owner, releasePrivateDatabases: cohort == RecoveryCodeNativeCohort.PrivateRecovery);
                     try
                     {
+                        if (cohort == RecoveryCodeNativeCohort.PrivateRecovery)
+                        {
+                            foreach (var unleased in new[] { owner.Connection("identity_00000000000000000000000000000000"), owner.Connection("postgres") })
+                            {
+                                var rejected = false;
+                                try { await owner.ReleaseIdentityDatabaseAsync(unleased).ConfigureAwait(false); }
+                                catch (InvalidOperationException error) when (error.Message == "RECOVERY_DATABASE_LEASE_INVALID") { rejected = true; }
+                                if (!rejected) throw new InvalidOperationException("RECOVERY_DATABASE_FOREIGN_LEASE_ACCEPTED");
+                            }
+                        }
                         foreach (var id in cases.Keys.ToArray())
                         {
                             // Literal calls to existing authored methods; no reflection, discovery, dynamic names or xUnit execution.
@@ -111,6 +121,8 @@ public static class RecoveryCodeFiniteNativeExecution
                                     var capacityFailure = await capacityExecution.ConfigureAwait(false);
                                     if (capacityFailure != "NONE") { failure = capacityFailure; break; }
                                 }
+                                if (cohort == RecoveryCodeNativeCohort.PrivateRecovery && !owner.IdentityDatabasesReleased)
+                                    throw new InvalidOperationException("RECOVERY_DATABASE_RELEASE_UNVERIFIED");
                                 cases[id] = true;
                             }
                             catch (TimeoutException)
