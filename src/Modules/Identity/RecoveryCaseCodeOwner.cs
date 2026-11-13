@@ -20,7 +20,8 @@ internal sealed class RecoveryCaseCodeOwner(RecoveryCaseApplication application,
         Case = await application.Original(caller, requestId, ct).ConfigureAwait(false);
         if (Case is null || Case.CaseId != caseId || !RecoveryCaseApplication.Actor(Case, caller) ||
             request.OwnerOperationId != RecoveryCaseApplication.OperationId(Case) || request.ContextDigest != Case.ContextDigest) return null;
-        facts = await application.LoadFacts(caller, Case.TargetSessionId, ct).ConfigureAwait(false);
+        if (Case.Goal != nameof(RecoveryCaseGoal.ContainSelectedTunnerSession) || Case.TargetSessionId is not { } target) return null;
+        facts = await application.LoadFacts(caller, target, ct).ConfigureAwait(false);
         Result = await db.Set<RecoveryResultRow>().SingleOrDefaultAsync(x => x.CaseId == caseId, ct).ConfigureAwait(false);
         originalOutboxObserved = Result is not null && await db.Set<OutboxMessage>().AnyAsync(x => x.EventId == Result.SessionOutboxEventId &&
             x.EventType == "TunnerSessionRevoked" && x.OperationId == request.OwnerOperationId && x.CorrelationId == request.CorrelationId, ct).ConfigureAwait(false);

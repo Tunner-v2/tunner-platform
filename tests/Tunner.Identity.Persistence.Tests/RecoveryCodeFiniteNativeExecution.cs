@@ -22,6 +22,8 @@ public static class RecoveryCodeFiniteNativeExecution
         "FEDERATION_NAMESPACE_BINDING", "FEDERATION_SINGLE_OWNER", "FEDERATION_OWNER_ROLLBACK", "FEDERATION_IMMUTABLE_VERSION",
         "FEDERATION_QUALIFICATION_LIFECYCLE", "FEDERATION_ATTEMPT_INTEGRITY", "FEDERATION_SESSION_SOURCE", "FEDERATION_MIGRATION_GUARDS"];
     private static readonly string[] PrivateIds = [
+        "RECOVERY_PASSWORD_HTTPS_WIRE",
+        "RECOVERY_PASSWORD_ENTRY", "RECOVERY_PASSWORD_EFFECT", "RECOVERY_PASSWORD_VALIDITY", "RECOVERY_PASSWORD_ONE_CODE", "RECOVERY_PASSWORD_ROLLBACK",
         "RECOVERY_CASE_ORIGINAL", "RECOVERY_CASE_ONE_CODE", "RECOVERY_CASE_SELECTED_SESSION", "RECOVERY_CASE_AUTHORITY", "RECOVERY_CASE_ROLLBACK",
         "FEDERATION_HTTPS_WIRE",
         "FEDERATION_REGISTRATION", "FEDERATION_REGISTRATION_REJECTION", "FEDERATION_REGISTRATION_FINALITY",
@@ -368,6 +370,12 @@ public static class RecoveryCodeFiniteNativeExecution
             "FEDERATION_REGISTRATION" => new FederationPrivateIntegrationTests(fixture).QualifiedGoogleRegistrationRequiresNoticesThenSharesPersonalInformationAndOriginalRecoveryWithoutSession(),
             "FEDERATION_REGISTRATION_REJECTION" => new FederationPrivateIntegrationTests(fixture).UnqualifiedExpiredForeignOrCollidingFederationIntakeCannotAdoptAccountOrIssueSession(),
             "FEDERATION_REGISTRATION_FINALITY" => new FederationPrivateIntegrationTests(fixture).LateRegistrationProfileNoticeOrContactDriftRollsBackCanonicalIntakeAndRecoversOriginal(),
+            "RECOVERY_PASSWORD_HTTPS_WIRE" => new RecoveryPasswordRepairPrivateIntegrationTests(fixture).ActualHttpsRecoveryRequiresOriginalBrowserCsrfAndBoundedPublicCommandsWithoutLogin(),
+            "RECOVERY_PASSWORD_ENTRY" => new RecoveryPasswordRepairPrivateIntegrationTests(fixture).NeutralEntryOriginalAndCancellationNeverSelectPublicAccountOrConsumeCode(),
+            "RECOVERY_PASSWORD_EFFECT" => new RecoveryPasswordRepairPrivateIntegrationTests(fixture).ExactCodeRepairsNativePasswordWithoutLoginOrUnrelatedStateMutation(),
+            "RECOVERY_PASSWORD_VALIDITY" => new RecoveryPasswordRepairPrivateIntegrationTests(fixture).ValidationAndAuthorityDriftLeaveOriginalCodeAndCredentialUnchanged(),
+            "RECOVERY_PASSWORD_ONE_CODE" => new RecoveryPasswordRepairPrivateIntegrationTests(fixture).CompetingPasswordRepairsConsumeOneCodeAndRecoverOnlyOriginalResult(),
+            "RECOVERY_PASSWORD_ROLLBACK" => new RecoveryPasswordRepairPrivateIntegrationTests(fixture).PostSaveFaultAndCancellationRollbackPasswordEntryCaseCodeResultAndOutbox(),
             "RECOVERY_CASE_ORIGINAL" => new RecoveryCasePrivateIntegrationTests(fixture).OriginalCaseReplayRejectsSubstitutedContextAndRecoversOnlyExactContainedResult(),
             "RECOVERY_CASE_ONE_CODE" => new RecoveryCasePrivateIntegrationTests(fixture).CompetingRecoveryCasesCannotConsumeOneCodeOrRevokeTwoSessions(),
             "RECOVERY_CASE_SELECTED_SESSION" => new RecoveryCasePrivateIntegrationTests(fixture).ContainmentPreservesOtherSessionsCredentialsAndMinorAccountWithoutRestoration(),

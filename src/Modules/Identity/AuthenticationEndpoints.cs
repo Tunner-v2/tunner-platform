@@ -28,7 +28,8 @@ public static class AuthenticationEndpoints
     private sealed record AuthenticationBootstrapResponse(string? CsrfToken, Guid IdempotencyKey, int PasswordMaximumLength,
         bool PasskeyAvailable, int? MaximumCredentialJsonBytes, object? PasskeyRecovery, string Locale,
         IReadOnlyDictionary<string, RegistrationPublishedText> Content, Uri TermsUri, Uri PrivacyUri, Uri? SupportUri,
-        [property: JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] FederationBootstrap? Federation)
+        [property: JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] FederationBootstrap? Federation,
+        [property: JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] bool? RecoveryAvailable)
     {
         public override string ToString() => nameof(AuthenticationBootstrapResponse);
     }
@@ -99,7 +100,8 @@ public static class AuthenticationEndpoints
                 var passkeyRecovery = terminalRecovery ?? signInRecovery;
                 return Results.Json(new AuthenticationBootstrapResponse(csrf, browser!.Key, policy.PasswordMaximumLength,
                     capability?.Available == true, capability?.MaximumCredentialJsonBytes, passkeyRecovery, presentation.Locale,
-                    presentation.Content, presentation.TermsUri, presentation.PrivacyUri, presentation.SupportUri, federationBootstrap));
+                    presentation.Content, presentation.TermsUri, presentation.PrivacyUri, presentation.SupportUri, federationBootstrap,
+                    context.RequestServices.GetService<RecoveryBrowserService>()?.Available == true ? true : null));
             }
             catch (InvalidOperationException) { return Problem(503, "DEPENDENCY_UNAVAILABLE"); }
             catch (ArgumentException) { return Problem(503, "DEPENDENCY_UNAVAILABLE"); }

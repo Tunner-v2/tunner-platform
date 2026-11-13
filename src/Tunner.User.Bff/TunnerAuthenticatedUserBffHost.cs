@@ -12,6 +12,7 @@ public static class TunnerAuthenticatedUserBffHost
         var passkeys = false;
         var totp = false;
         var recoveryCodes = false;
+        var accountRecovery = false;
         var federationManagement = false;
         FederationOidcRegistration[] federation = [];
         var application = TunnerUserBffHost.CreateApplication(args, builder =>
@@ -31,6 +32,8 @@ public static class TunnerAuthenticatedUserBffHost
                     throw new InvalidOperationException("Recovery-code composition requires one explicit admitted crypto profile instance.");
                 builder.Services.AddTunnerRecoveryCodes(admitted);
             }
+            accountRecovery = builder.Services.Any(x => x.ServiceType == typeof(IRecoveryPasswordPolicySource));
+            if (accountRecovery) builder.Services.AddTunnerRecoveryPassword();
             federation = builder.Services.Where(value => value.ServiceType == typeof(FederationOidcRegistration))
                 .Select(value => value.ImplementationInstance as FederationOidcRegistration ??
                     throw new InvalidOperationException("Federation requires explicit immutable transport registrations.")).ToArray();
@@ -47,6 +50,7 @@ public static class TunnerAuthenticatedUserBffHost
         if (passkeys) application.MapTunnerPasskeys();
         if (totp) application.MapTunnerTotp();
         if (recoveryCodes) application.MapTunnerRecoveryCodes();
+        if (accountRecovery) application.MapTunnerRecoveryPassword();
         if (federation.Length != 0) application.MapTunnerFederationOidc(federation);
         if (federationManagement) application.MapTunnerFederationManagement(federation);
         return application;

@@ -1,0 +1,17 @@
+schema_version: 1
+defect_id: DEF-TUN-P2-011-003
+work_item_id: TUN-P2-011
+classification: BUG
+severity: SEV-2
+status: OPEN
+environment: uncommitted password-repair original-result integration
+description: Source review found repaired-result reconciliation normalizing any nonnull current hierarchy CodeSelection to the stored original selection, masking a changed set/lifecycle on reads outside the consumption executor. Source correction now requires the actual ACTIVE original set/lifecycle/current choice plus exact original claim witness before normalizing only policy-permitted own usage. Root and QA confirmed the original condition; code compiles and new exact-original/selection-drift regressions are authored. Keep OPEN until actual integrated runtime proof, preserving unrelated drift rejection.
+expected_behavior_ref: docs/authority/current/development/17_Account_Identity_and_Session_FRD.md; docs/development/P2_011_RECOVERY_REFINEMENT.md
+evidence:
+  - src/Modules/Identity/RecoveryPasswordApplication.cs
+  - tests/Tunner.Identity.Persistence.Tests/RecoveryPasswordRepairPrivateIntegrationTests.cs
+  - governance/evidence/TUN-P2-011-VALIDATION.json
+affected_versions:
+  - uncommitted password-repair source based on 6b9ebe6
+created_at: 2026-11-12T23:58:52Z
+updated_at: 2026-11-12T23:58:52Z

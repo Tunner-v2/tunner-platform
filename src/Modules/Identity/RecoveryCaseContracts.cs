@@ -1,9 +1,10 @@
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using Tunner.Platform.Policies;
 
 namespace Tunner.Identity.Persistence;
 
-internal enum RecoveryCaseGoal { ContainSelectedTunnerSession = 1 }
+public enum RecoveryCaseGoal { ContainSelectedTunnerSession = 1, RepairPassword = 2 }
 internal enum RecoveryCaseSessionEffect { RevokeExactSelectedSession = 1 }
 
 /// <summary>Trusted resolved owner/browser facts, never an HTTP Account selection or authenticated StepUp caller.</summary>
@@ -73,31 +74,36 @@ internal sealed class RecoveryCasePolicyCatalog(IEnumerable<RecoveryCasePolicyVe
     }
 }
 
-internal sealed record RecoveryCaseAuthenticationPath(string Kind, Guid Reference, string State, long Version, string PolicyVersion,
+public sealed record RecoveryCaseAuthenticationPath(string Kind, Guid Reference, string State, long Version, string PolicyVersion,
     string? QualificationEvidenceReference)
 {
     public override string ToString() => nameof(RecoveryCaseAuthenticationPath);
 }
-internal sealed record RecoveryCaseHierarchyFacts(string AccountId, string AccountState, long AccountVersion, bool PasswordAvailable, bool EmailConfirmed,
+public sealed record RecoveryCaseHierarchyFacts(string AccountId, string AccountState, long AccountVersion, bool PasswordAvailable, bool EmailConfirmed,
     string SecurityStampDigest, IReadOnlyList<RecoveryCaseAuthenticationPath> Paths)
 {
-    internal string Digest() => AuthenticationIdentity.Digest(JsonSerializer.Serialize(this));
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public IReadOnlyList<RecoveryCaseCodeSetFacts>? CodeSets { get; init; }
+    // Code usage is independently claimed by009; consuming this case's own code must not change authenticator posture identity.
+    public string Digest() => AuthenticationIdentity.Digest(JsonSerializer.Serialize(this with { CodeSets = null }));
     public override string ToString() => nameof(RecoveryCaseHierarchyFacts);
 }
-internal sealed record RecoveryCaseHierarchyRequest(Guid CaseId, Guid RequestId, string ContextDigest, string PolicyVersion,
+public sealed record RecoveryCaseHierarchyRequest(Guid CaseId, Guid RequestId, string ContextDigest, string PolicyVersion,
     RecoveryCaseGoal Goal, RecoveryCaseHierarchyFacts Facts)
 {
     public override string ToString() => nameof(RecoveryCaseHierarchyRequest);
 }
 /// <summary>The trusted hierarchy owner must qualify stronger-proof unavailability from the complete current facts.
 /// A browser assertion, password reset, row count or Support override cannot supply this decision.</summary>
-internal sealed record RecoveryCaseHierarchyDecision(bool RecoveryCodeAllowed, bool StrongAuthenticatorUnavailable, string PolicyVersion,
+public sealed record RecoveryCaseHierarchyDecision(bool RecoveryCodeAllowed, bool StrongAuthenticatorUnavailable, string PolicyVersion,
     string EvidenceReference, string FactsDigest, EffectivePolicyInterval EffectiveInterval)
 {
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public RecoveryCaseCodeSelection? CodeSelection { get; init; }
     internal string Snapshot() => JsonSerializer.Serialize(this);
     public override string ToString() => nameof(RecoveryCaseHierarchyDecision);
 }
-internal interface IRecoveryCaseHierarchySource
+public interface IRecoveryCaseHierarchySource
 {
     // Pure local current authority. No network/provider I/O, captured decision fallback or mutation.
     RecoveryCaseHierarchyDecision RequireCurrent(RecoveryCaseHierarchyRequest request, DateTimeOffset at);

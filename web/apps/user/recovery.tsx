@@ -46,7 +46,7 @@ export function recoveryPresentationKeys(model:RecoveryViewModel):string[]{
  }else{
   keys.push(...caseKeys,...(model.goal?optionKeys(model.goal):[]));
   if(model.kind==='proof-choice'){
-   keys.push('recovery.proof.heading','recovery.proof.description','recovery.proof.permitted');
+   keys.push('recovery.proof.heading','recovery.proof.description','recovery.proof.permitted',...(model.choices.length===0?['recovery.entry.optionsUnavailable']:[]));
    for(const choice of model.choices)keys.push(...optionKeys(choice));
   }else if(model.kind==='recovery-code')keys.push(...['heading','description','label','verify','show','hide'].map(key=>'recovery.code.'+key),'recovery.error.code','recovery.error.highlighted');
   else if(model.kind==='expired')keys.push(...['heading','description','noticeHeading','noticeDescription'].map(key=>'recovery.expired.'+key),'recovery.action.continue');
@@ -102,7 +102,7 @@ function RecoveryBody(props:RecoveryPresentationProps){
    <div className="authentication-intro"><h1 tabIndex={-1} ref={heading}><ContentText contentKey={'recovery.'+stateKey+'.heading'}/></h1><p><ContentText contentKey={model.kind==='result'&&!details?'recovery.result.unavailableDescription':'recovery.'+stateKey+'.description'}/></p></div>
    {model.kind!=='entry'&&<GoalContext goal={model.goal}/>}
    {model.kind==='entry'?<EntryForm model={model} disabled={disabled} fieldErrors={props.fieldErrors} onEdit={edited} onSubmit={entry=>action.run(()=>callbacks.onStart(entry))}/>:
-    model.kind==='proof-choice'?<><div className="step-up-choices">{model.choices.map(choice=><button className="step-up-choice" key={choice.reference} type="button" disabled={disabled||!model.goal||choice.canSelect!==true} onClick={()=>void action.run(()=>callbacks.onChooseProof(choice.reference))}><strong><ContentText contentKey={choice.labelKey}/></strong>{choice.descriptionKey&&<small><ContentText contentKey={choice.descriptionKey}/></small>}<span aria-hidden="true">›</span></button>)}</div><p className="recovery-explanation"><ContentText contentKey="recovery.proof.permitted"/></p></>:
+    model.kind==='proof-choice'?<><div className="step-up-choices">{model.choices.map(choice=><button className="step-up-choice" key={choice.reference} type="button" disabled={disabled||!model.goal||choice.canSelect!==true} onClick={()=>void action.run(()=>callbacks.onChooseProof(choice.reference))}><strong><ContentText contentKey={choice.labelKey}/></strong>{choice.descriptionKey&&<small><ContentText contentKey={choice.descriptionKey}/></small>}<span aria-hidden="true">›</span></button>)}</div><p className="recovery-explanation"><ContentText contentKey={model.choices.length===0?'recovery.entry.optionsUnavailable':'recovery.proof.permitted'}/></p></>:
     model.kind==='recovery-code'?<CodeForm key={model.goal?.reference??'unavailable'} disabled={disabled||model.canVerify!==true||!model.goal} fieldErrors={props.fieldErrors} onEdit={edited} onSubmit={code=>action.run(()=>callbacks.onSubmitCode(code))}/>:
     model.kind==='expired'?<Notice state="expired" error/>:
     model.kind==='result'?<RecoveryResult model={model} detailsAvailable={details}/>:<><Notice state={statusKeys[model.kind]}/>{model.kind==='pending-review'&&<p className="recovery-explanation"><ContentText contentKey="recovery.pendingReview.boundary"/></p>}</>}

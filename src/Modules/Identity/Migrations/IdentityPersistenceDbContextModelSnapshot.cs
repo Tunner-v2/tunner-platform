@@ -1880,11 +1880,15 @@ namespace Tunner.Identity.Persistence.Migrations
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("ended_at");
 
+                    b.Property<Guid?>("EntryId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("entry_id");
+
                     b.Property<long>("ExpectedAccountVersion")
                         .HasColumnType("bigint")
                         .HasColumnName("expected_account_version");
 
-                    b.Property<long>("ExpectedSessionVersion")
+                    b.Property<long?>("ExpectedSessionVersion")
                         .HasColumnType("bigint")
                         .HasColumnName("expected_session_version");
 
@@ -1940,6 +1944,14 @@ namespace Tunner.Identity.Persistence.Migrations
                         .HasColumnType("text")
                         .HasColumnName("policy_version");
 
+                    b.Property<string>("PriorPasswordDigest")
+                        .HasColumnType("text")
+                        .HasColumnName("prior_password_digest");
+
+                    b.Property<string>("PriorSecurityStampDigest")
+                        .HasColumnType("text")
+                        .HasColumnName("prior_security_stamp_digest");
+
                     b.Property<string>("ProcessingReference")
                         .IsRequired()
                         .HasColumnType("text")
@@ -1976,7 +1988,7 @@ namespace Tunner.Identity.Persistence.Migrations
                         .HasColumnType("text")
                         .HasColumnName("state");
 
-                    b.Property<Guid>("TargetSessionId")
+                    b.Property<Guid?>("TargetSessionId")
                         .HasColumnType("uuid")
                         .HasColumnName("target_session_id");
 
@@ -1990,12 +2002,19 @@ namespace Tunner.Identity.Persistence.Migrations
                         .HasColumnType("text")
                         .HasColumnName("usage_admission");
 
+                    b.Property<string>("UserSourceDigest")
+                        .HasColumnType("text")
+                        .HasColumnName("user_source_digest");
+
                     b.Property<long>("Version")
                         .IsConcurrencyToken()
                         .HasColumnType("bigint")
                         .HasColumnName("version");
 
                     b.HasKey("CaseId");
+
+                    b.HasIndex("EntryId")
+                        .IsUnique();
 
                     b.HasIndex("ExpiresAt");
 
@@ -2011,11 +2030,11 @@ namespace Tunner.Identity.Persistence.Migrations
 
                     b.ToTable("recovery_cases", "identity", t =>
                         {
-                            t.HasCheckConstraint("ck_recovery_case_binding", "length(original_browser_digest)=64 AND length(network_digest)=64 AND length(context_digest)=64 AND length(facts_digest)=64 AND goal='ContainSelectedTunnerSession' AND session_effect='RevokeExactSelectedSession' AND length(policy_version)>0 AND length(processing_reference)>0 AND length(retention_reference)>0 AND jsonb_typeof(policy_snapshot::jsonb)='object' AND jsonb_typeof(hierarchy_snapshot::jsonb)='object' AND jsonb_typeof(unresolved_effects_json::jsonb)='array' AND jsonb_array_length(unresolved_effects_json::jsonb)>0");
+                            t.HasCheckConstraint("ck_recovery_case_binding", "length(original_browser_digest)=64 AND length(network_digest)=64 AND length(context_digest)=64 AND length(facts_digest)=64\nAND length(policy_version)>0 AND length(processing_reference)>0 AND length(retention_reference)>0\nAND jsonb_typeof(policy_snapshot::jsonb)='object' AND jsonb_typeof(hierarchy_snapshot::jsonb)='object'\nAND jsonb_typeof(unresolved_effects_json::jsonb)='array'\nAND ((goal='ContainSelectedTunnerSession' AND session_effect='RevokeExactSelectedSession'\n  AND target_session_id IS NOT NULL AND expected_session_version IS NOT NULL AND expected_session_version>=1\n  AND entry_id IS NULL AND prior_password_digest IS NULL AND prior_security_stamp_digest IS NULL AND user_source_digest IS NULL\n  AND jsonb_array_length(unresolved_effects_json::jsonb)>0)\n  OR (goal='RepairPassword' AND session_effect='InvalidateExistingTunnerSessions' AND target_session_id IS NULL AND expected_session_version IS NULL\n    AND entry_id IS NOT NULL AND prior_password_digest IS NOT NULL AND length(prior_password_digest)=64\n    AND prior_security_stamp_digest IS NOT NULL AND length(prior_security_stamp_digest)=64\n    AND user_source_digest IS NOT NULL AND length(user_source_digest)=64))");
 
-                            t.HasCheckConstraint("ck_recovery_case_state", "expires_at>created_at AND recovery_expires_at>expires_at AND ((state='PENDING_CODE' AND version=1 AND result_id IS NULL AND ended_at IS NULL) OR (state='CONTAINED' AND version=2 AND result_id IS NOT NULL AND ended_at>=created_at AND ended_at<expires_at))");
+                            t.HasCheckConstraint("ck_recovery_case_state", "expires_at>created_at AND recovery_expires_at>expires_at AND ((state='PENDING_CODE' AND version=1 AND result_id IS NULL AND ended_at IS NULL)\n  OR (version=2 AND result_id IS NOT NULL AND ended_at>=created_at AND ended_at<expires_at\n    AND ((state='CONTAINED' AND goal='ContainSelectedTunnerSession') OR (state='REPAIRED' AND goal='RepairPassword'))))");
 
-                            t.HasCheckConstraint("ck_recovery_case_versions", "expected_session_version>=1 AND expected_account_version>=1 AND expected_set_lifecycle_version>=1 AND ((usage_admission='ExactUsageSnapshot' AND expected_usage_version IS NOT NULL AND expected_usage_version>=0) OR (usage_admission='IndependentUnusedEntry' AND expected_usage_version IS NULL))");
+                            t.HasCheckConstraint("ck_recovery_case_versions", "expected_account_version>=1 AND expected_set_lifecycle_version>=1 AND ((usage_admission='ExactUsageSnapshot'\n  AND expected_usage_version IS NOT NULL AND expected_usage_version>=0) OR (usage_admission='IndependentUnusedEntry' AND expected_usage_version IS NULL))");
                         });
                 });
 
@@ -2410,6 +2429,107 @@ namespace Tunner.Identity.Persistence.Migrations
                         });
                 });
 
+            modelBuilder.Entity("Tunner.Identity.Persistence.RecoveryEntryRow", b =>
+                {
+                    b.Property<Guid>("EntryId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("entry_id");
+
+                    b.Property<string>("BrowserDigest")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("browser_digest");
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("created_at");
+
+                    b.Property<DateTimeOffset?>("EndedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("ended_at");
+
+                    b.Property<DateTimeOffset>("ExpiresAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("expires_at");
+
+                    b.Property<string>("GoalReference")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("goal_reference");
+
+                    b.Property<string>("IdentifierDigest")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("identifier_digest");
+
+                    b.Property<string>("NetworkDigest")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("network_digest");
+
+                    b.Property<string>("Origin")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("origin");
+
+                    b.Property<string>("PolicySnapshot")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("policy_snapshot");
+
+                    b.Property<string>("PolicyVersion")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("policy_version");
+
+                    b.Property<string>("PreviousCookieDigest")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("previous_cookie_digest");
+
+                    b.Property<string>("ProcessingReference")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("processing_reference");
+
+                    b.Property<DateTimeOffset>("RecoveryExpiresAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("recovery_expires_at");
+
+                    b.Property<Guid>("RequestId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("request_id");
+
+                    b.Property<string>("RetentionReference")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("retention_reference");
+
+                    b.Property<string>("State")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("state");
+
+                    b.Property<long>("Version")
+                        .IsConcurrencyToken()
+                        .HasColumnType("bigint")
+                        .HasColumnName("version");
+
+                    b.HasKey("EntryId");
+
+                    b.HasIndex("ExpiresAt");
+
+                    b.HasIndex("BrowserDigest", "RequestId")
+                        .IsUnique();
+
+                    b.ToTable("recovery_entries", "identity", t =>
+                        {
+                            t.HasCheckConstraint("ck_recovery_entry_binding", "length(browser_digest)=64 AND length(previous_cookie_digest)=64 AND length(network_digest)=64 AND length(identifier_digest)=64 AND length(goal_reference)>0 AND length(policy_version)>0 AND length(processing_reference)>0 AND length(retention_reference)>0 AND jsonb_typeof(policy_snapshot::jsonb)='object'");
+
+                            t.HasCheckConstraint("ck_recovery_entry_state", "expires_at>created_at AND recovery_expires_at>expires_at AND ((state='OPEN' AND version=1 AND ended_at IS NULL) OR (state IN ('CANCELLED','REPAIRED') AND version=2 AND ended_at>=created_at AND ended_at<expires_at))");
+                        });
+                });
+
             modelBuilder.Entity("Tunner.Identity.Persistence.RecoveryResultRow", b =>
                 {
                     b.Property<Guid>("ResultId")
@@ -2430,7 +2550,7 @@ namespace Tunner.Identity.Persistence.Migrations
                         .HasColumnType("text")
                         .HasColumnName("context_digest");
 
-                    b.Property<long>("EndedSessionVersion")
+                    b.Property<long?>("EndedSessionVersion")
                         .HasColumnType("bigint")
                         .HasColumnName("ended_session_version");
 
@@ -2454,7 +2574,15 @@ namespace Tunner.Identity.Persistence.Migrations
                         .HasColumnType("text")
                         .HasColumnName("policy_version");
 
-                    b.Property<long>("PriorSessionVersion")
+                    b.Property<string>("PriorPasswordDigest")
+                        .HasColumnType("text")
+                        .HasColumnName("prior_password_digest");
+
+                    b.Property<string>("PriorSecurityStampDigest")
+                        .HasColumnType("text")
+                        .HasColumnName("prior_security_stamp_digest");
+
+                    b.Property<long?>("PriorSessionVersion")
                         .HasColumnType("bigint")
                         .HasColumnName("prior_session_version");
 
@@ -2467,12 +2595,28 @@ namespace Tunner.Identity.Persistence.Migrations
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("recorded_at");
 
+                    b.Property<Guid?>("RepairOutboxEventId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("repair_outbox_event_id");
+
+                    b.Property<string>("RepairedPasswordDigest")
+                        .HasColumnType("text")
+                        .HasColumnName("repaired_password_digest");
+
+                    b.Property<string>("RepairedSecurityStampDigest")
+                        .HasColumnType("text")
+                        .HasColumnName("repaired_security_stamp_digest");
+
                     b.Property<string>("RetentionReference")
                         .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("retention_reference");
 
-                    b.Property<Guid>("SessionOutboxEventId")
+                    b.Property<string>("SessionEffect")
+                        .HasColumnType("text")
+                        .HasColumnName("session_effect");
+
+                    b.Property<Guid?>("SessionOutboxEventId")
                         .HasColumnType("uuid")
                         .HasColumnName("session_outbox_event_id");
 
@@ -2484,7 +2628,7 @@ namespace Tunner.Identity.Persistence.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("set_reference");
 
-                    b.Property<Guid>("TargetSessionId")
+                    b.Property<Guid?>("TargetSessionId")
                         .HasColumnType("uuid")
                         .HasColumnName("target_session_id");
 
@@ -2502,7 +2646,7 @@ namespace Tunner.Identity.Persistence.Migrations
 
                     b.ToTable("recovery_results", "identity", t =>
                         {
-                            t.HasCheckConstraint("ck_recovery_result_shape", "outcome='CONTAINED_PENDING_RESTORATION' AND prior_session_version>=1 AND ended_session_version=prior_session_version+1 AND set_lifecycle_version>=1 AND length(context_digest)=64 AND length(policy_version)>0 AND length(processing_reference)>0 AND length(retention_reference)>0 AND jsonb_typeof(policy_snapshot::jsonb)='object' AND jsonb_typeof(hierarchy_snapshot::jsonb)='object' AND jsonb_typeof(unresolved_effects_json::jsonb)='array' AND jsonb_array_length(unresolved_effects_json::jsonb)>0");
+                            t.HasCheckConstraint("ck_recovery_result_shape", "set_lifecycle_version>=1 AND length(context_digest)=64 AND length(policy_version)>0 AND length(processing_reference)>0 AND length(retention_reference)>0\nAND jsonb_typeof(policy_snapshot::jsonb)='object' AND jsonb_typeof(hierarchy_snapshot::jsonb)='object' AND jsonb_typeof(unresolved_effects_json::jsonb)='array'\nAND ((outcome='CONTAINED_PENDING_RESTORATION' AND target_session_id IS NOT NULL AND prior_session_version IS NOT NULL AND prior_session_version>=1\n  AND ended_session_version IS NOT NULL AND ended_session_version=prior_session_version+1 AND session_outbox_event_id IS NOT NULL\n  AND repair_outbox_event_id IS NULL AND prior_password_digest IS NULL AND repaired_password_digest IS NULL\n  AND prior_security_stamp_digest IS NULL AND repaired_security_stamp_digest IS NULL AND session_effect IS NULL AND jsonb_array_length(unresolved_effects_json::jsonb)>0)\n  OR (outcome='PASSWORD_REPAIRED_NO_SESSION' AND target_session_id IS NULL AND prior_session_version IS NULL AND ended_session_version IS NULL\n    AND session_outbox_event_id IS NULL AND repair_outbox_event_id IS NOT NULL AND prior_password_digest IS NOT NULL AND length(prior_password_digest)=64\n    AND repaired_password_digest IS NOT NULL AND length(repaired_password_digest)=64 AND prior_security_stamp_digest IS NOT NULL AND length(prior_security_stamp_digest)=64\n    AND repaired_security_stamp_digest IS NOT NULL AND length(repaired_security_stamp_digest)=64 AND repaired_security_stamp_digest<>prior_security_stamp_digest\n    AND session_effect='InvalidateExistingTunnerSessions'))");
                         });
                 });
 
@@ -3787,11 +3931,15 @@ namespace Tunner.Identity.Persistence.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
+                    b.HasOne("Tunner.Identity.Persistence.RecoveryEntryRow", null)
+                        .WithMany()
+                        .HasForeignKey("EntryId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
                     b.HasOne("Tunner.Identity.Persistence.AuthenticationSessionRow", null)
                         .WithMany()
                         .HasForeignKey("TargetSessionId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("Tunner.Identity.Persistence.RecoveryCodeSetRow", null)
                         .WithMany()
@@ -3854,8 +4002,7 @@ namespace Tunner.Identity.Persistence.Migrations
                     b.HasOne("Tunner.Identity.Persistence.AuthenticationSessionRow", null)
                         .WithMany()
                         .HasForeignKey("TargetSessionId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("Tunner.Identity.Persistence.RegistrationMutationRow", b =>

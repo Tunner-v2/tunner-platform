@@ -26,6 +26,7 @@ public sealed class IdentityPersistenceDbContext(DbContextOptions<IdentityPersis
         TotpModelConfiguration.Configure(builder);
         RecoveryCodeModelConfiguration.Configure(builder);
         RecoveryCaseModelConfiguration.Configure(builder);
+        RecoveryEntryModelConfiguration.Configure(builder);
         FederationAttemptModel.Configure(builder);
         FederationLinkOperationModel.Configure(builder);
     }
