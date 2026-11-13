@@ -2,6 +2,16 @@ namespace Tunner.Identity.Persistence;
 
 internal static class RecoveryPasskeyMigrationSql
 {
+    internal const string DispatchLegacyCeremonyGuard = """
+        DROP TRIGGER passkey_ceremony_guard ON identity.passkey_ceremonies;
+        CREATE TRIGGER passkey_ceremony_guard BEFORE UPDATE ON identity.passkey_ceremonies FOR EACH ROW
+          WHEN(OLD.kind<>'RECOVERY' AND NEW.kind<>'RECOVERY') EXECUTE FUNCTION identity.guard_passkey_ceremony();
+        """;
+    internal const string RestoreLegacyCeremonyGuard = """
+        DROP TRIGGER passkey_ceremony_guard ON identity.passkey_ceremonies;
+        CREATE TRIGGER passkey_ceremony_guard BEFORE UPDATE ON identity.passkey_ceremonies FOR EACH ROW
+          EXECUTE FUNCTION identity.guard_passkey_ceremony();
+        """;
     internal const string BlockPopulatedDowngrade = """
         DO $$ BEGIN
           IF EXISTS(SELECT 1 FROM identity.recovery_entries WHERE passkey_ceremony_id IS NOT NULL)

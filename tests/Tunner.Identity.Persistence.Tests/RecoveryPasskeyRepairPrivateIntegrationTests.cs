@@ -251,6 +251,31 @@ internal sealed class RecoveryPasskeyRepairPrivateIntegrationTests(IdentityPostg
         }
         checkpoint.Mark(RecoveryCodeFirstCaseStage.RESULT_STATUS);
         Assert.True(immutable);
+        checkpoint.Mark(RecoveryCodeFirstCaseStage.RESULT_BODY);
+        var recoveryCeremony = await check.Set<PasskeyCeremonyRow>().AsNoTracking().SingleAsync(x => x.CeremonyId == pending.Ceremony);
+        var enrollmentCeremony = await check.Set<PasskeyCeremonyRow>().AsNoTracking().SingleAsync(x => x.AccountId == seed.Account && x.Kind == "ENROLL");
+        Assert.True(recoveryCeremony is { Kind: "RECOVERY", State: "COMPLETED" } && enrollmentCeremony.State == "COMPLETED");
+        var originalRecovery = JsonSerializer.Serialize(recoveryCeremony); var originalEnrollment = JsonSerializer.Serialize(enrollmentCeremony);
+        var recoveryKindRejected = false; var enrollmentKindRejected = false;
+        checkpoint.Mark(RecoveryCodeFirstCaseStage.RESULT_POST);
+        await using (var mutation = db.Context())
+        {
+            try { _ = await mutation.Database.ExecuteSqlInterpolatedAsync($"UPDATE identity.passkey_ceremonies SET kind='ENROLL' WHERE ceremony_id={pending.Ceremony}"); }
+            catch (PostgresException error) when (error.SqlState == "23514") { recoveryKindRejected = true; }
+        }
+        await using (var mutation = db.Context())
+        {
+            try { _ = await mutation.Database.ExecuteSqlInterpolatedAsync($"UPDATE identity.passkey_ceremonies SET kind='RECOVERY' WHERE ceremony_id={enrollmentCeremony.CeremonyId}"); }
+            catch (PostgresException error) when (error.SqlState == "23514") { enrollmentKindRejected = true; }
+        }
+        checkpoint.Mark(RecoveryCodeFirstCaseStage.RESULT_STATUS);
+        Assert.True(recoveryKindRejected && enrollmentKindRejected);
+        await using (var preserved = db.Context())
+        {
+            var recovery = await preserved.Set<PasskeyCeremonyRow>().AsNoTracking().SingleAsync(x => x.CeremonyId == pending.Ceremony);
+            var enrollment = await preserved.Set<PasskeyCeremonyRow>().AsNoTracking().SingleAsync(x => x.CeremonyId == enrollmentCeremony.CeremonyId);
+            Assert.True(JsonSerializer.Serialize(recovery) == originalRecovery && JsonSerializer.Serialize(enrollment) == originalEnrollment);
+        }
         checkpoint.Phase = RecoveryCodeFirstCasePhase.LOGIN;
         checkpoint.Mark(RecoveryCodeFirstCaseStage.CHECK_CONTEXT);
         using (var oldSession = await host.Get("/authentication/session", seed.EnrollmentCookies)) Assert.True(oldSession.StatusCode == HttpStatusCode.Unauthorized && NoLoginCookie(oldSession));
