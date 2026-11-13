@@ -326,8 +326,12 @@ internal sealed class RecoveryGovernedRepairPrivateIntegrationTests(IdentityPost
         using (var result = await host.Post("/recovery/result", new { requestId = request }, WithoutCookie(cookies, Pointer), csrf)) Assert.True(result.StatusCode == HttpStatusCode.OK && NoLoginCookie(result));
         using (var session = await host.Get("/authentication/session", cookies)) Assert.True(session.StatusCode == HttpStatusCode.Unauthorized);
         var blocked = false; await using (var downgrade = db.Context()) { try { _ = await downgrade.Database.ExecuteSqlRawAsync(RecoveryGovernedMigrationSql.BlockPopulatedDowngrade); } catch (PostgresException error) when (error.SqlState == "55000") { blocked = true; } } Assert.True(blocked);
-        await using var absent = await Host(db, authority, source: false); var absentBoot = await absent.Options();
-        using var unavailable = await absent.Post("/recovery/review/repair", command, absentBoot.Cookies, absentBoot.Csrf); Assert.True(unavailable.StatusCode == HttpStatusCode.ServiceUnavailable);
+        var compositionRejected = false;
+        try { await using var absent = await Host(db, authority, source: false); }
+        catch (InvalidOperationException error) when (error.Message == "Recovery requires at least one exact explicitly composed native proof capability.") { compositionRejected = true; }
+        Assert.True(compositionRejected);
+        authority.Policy = authority.Policy with { GovernedRecoveryProfile = null };
+        using var unavailable = await host.Post("/recovery/review/repair", command, cookies, csrf); Assert.True(unavailable.StatusCode == HttpStatusCode.ServiceUnavailable);
     }
     private static Task<string> ResultJson(IdentityPersistenceDbContext context, Guid id) => context.Database.SqlQuery<string>($"SELECT to_jsonb(r)::text AS \"Value\" FROM identity.recovery_results r WHERE result_id={id}").SingleAsync();
     // Replay the exact committed row inside a rolled-back transaction, preserving every FK and real owner effect.

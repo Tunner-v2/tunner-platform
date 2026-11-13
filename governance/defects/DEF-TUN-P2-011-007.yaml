@@ -1,0 +1,17 @@
+schema_version: 1
+defect_id: DEF-TUN-P2-011-007
+work_item_id: TUN-P2-011
+classification: BUG
+severity: SEV-3
+status: OPEN
+environment: committed5a3034c private native governed HTTPS test fixture
+description: The governed HTTPS case ends by creating a host with recovery policy/hierarchy but no code, native, contact or governed proof owner. Existing AddTunnerRecoveryPassword correctly rejects this zero-owner composition before a request can be sent, making the test's expected HTTP503 unreachable. Correct only the fixture expectations by asserting the exact composition rejection and retaining a real unavailable-state HTTP503 check on a valid host with the optional governed profile withdrawn. Preserve production guards and all other wire assertions. The actual receipt proves first5 governed cases PASS, HTTPS FAIL and103 later cases NOT_RUN; no migration/environment failure is inferred.
+expected_behavior_ref: src/Modules/Identity/RecoveryEndpoints.cs; docs/authority/current/development/09_Testing_Acceptance_Evidence_and_Quality_Gates.md
+evidence:
+  - tests/Tunner.Identity.Persistence.Tests/RecoveryGovernedRepairPrivateIntegrationTests.cs
+  - artifacts/p2-011-recovery-20261112/candidate-5a3034c-native/resumed-20261113/private-recovery-summary.json
+  - governance/evidence/TUN-P2-011-VALIDATION.json
+affected_versions:
+  - 5a3034c60ffafaba6272f48acd49bfb2a9ed123a
+created_at: 2026-11-13T15:11:47Z
+updated_at: 2026-11-13T15:11:47Z
