@@ -3,7 +3,7 @@ defect_id: DEF-TUN-P2-011-006
 work_item_id: TUN-P2-011
 classification: BUG
 severity: SEV-2
-status: OPEN
+status: CLOSED
 environment: committed d3add1b public migration canary before private contact tests
 description: The contact-case INSERT guard contains one extra closing parenthesis in the verified-destination digest predicate. Official migration20261113110617 executes that invalid PLpgSQL definition, so public canary reaches AFTER_START but cannot reach AFTER_MIGRATION; capacity provisioning also fails. Exact one-character correction preserves every guard condition. Existing public migration canaries provide the regression; no new parser/test framework or exception payload logging is required. Close only after actual corrected migration and required contact/native validation.
 expected_behavior_ref: docs/development/P2_011_RECOVERY_REFINEMENT.md; docs/authority/current/development/09_Testing_Acceptance_Evidence_and_Quality_Gates.md
@@ -13,7 +13,10 @@ evidence:
   - artifacts/p2-011-recovery-20261112/candidate-d3add1b-native/resumed-20261113/resources-launch.json
   - artifacts/p2-009-recovery-20261111/native-resource-qualification/2f1cce1d0cdf4e5484427474cb5278c8/details.json
   - governance/evidence/TUN-P2-011-VALIDATION.json
+  - governance/evidence/p2-011-recovery-20261112/native-095eb59/private101.json
+  - governance/evidence/p2-011-recovery-20261112/native-095eb59/focused-public9.json
+  - governance/evidence/p2-011-recovery-20261112/native-095eb59/sql13.json
 affected_versions:
   - d3add1bde709dad3e71a01df13eec3bbba55f2ac
 created_at: 2026-11-13T11:24:00Z
-updated_at: 2026-11-13T11:24:00Z
+updated_at: 2026-11-13T11:57:00Z

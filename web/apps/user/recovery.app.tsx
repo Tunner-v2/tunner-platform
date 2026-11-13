@@ -15,7 +15,7 @@ function view(options:RecoveryOptions,operation:RecoveryOperation|undefined,held
  const goal=options.goals.find(goal=>goal.reference===(operation?.goalReference??held?.goalReference))??null;
  const common={goal,canCheck:true,canCancel:!unknown&&operation?.canCancel===true};
  if(unknown)return {...common,kind:'unknown',canBackToSignIn:true};
- if(!operation)throw new RecoveryHttpError('unavailable');
+ if(!operation)return {kind:'entry',goals:options.goals,canStart:false,canBackToSignIn:true};
  if(operation.status==='AWAITING_PROOF')return {...common,kind:'proof-choice',choices:[]};
  if(operation.status==='CANCELLED')return {...common,kind:'cancelled',canBackToSignIn:true};
  if(operation.status==='EXPIRED')return {...common,kind:'expired'};
@@ -87,6 +87,7 @@ function RecoveryApp(){
  if(unavailable)return <ContentUnavailable/>;
  if(!options||ready!==route.revision)return <main aria-busy="true"/>;
  const model=view(options,operation,held.current,unknown);
- return <RecoveryPresentation viewKey={[route.revision,options.profileVersion,options.publicationVersion,held.current?.requestId??'entry',operation?.version??0,unknown?'unknown':model.kind].join(':')} model={model} locale={options.locale} content={options.content} links={{privacyUri:options.privacyUri,termsUri:options.termsUri}} busy={busy} errorKey={error} callbacks={{onStart:start,onChooseProof:()=>{throw new RecoveryHttpError('unavailable');},onSubmitCode:()=>{throw new RecoveryHttpError('unavailable');},onCheck:()=>command('result'),onCancel:()=>command('cancel'),onFinish:()=>{throw new RecoveryHttpError('unavailable');},onBackToSignIn:()=>window.location.assign('/login'),onEdit:()=>setError(undefined)}}/>;
+ const originalViewKey=operation||unknown?held.current?.requestId??'entry':'entry';
+ return <RecoveryPresentation viewKey={[route.revision,options.profileVersion,options.publicationVersion,originalViewKey,operation?.version??0,unknown?'unknown':model.kind].join(':')} model={model} locale={options.locale} content={options.content} links={{privacyUri:options.privacyUri,termsUri:options.termsUri}} busy={busy} errorKey={error} callbacks={{onStart:start,onChooseProof:()=>{throw new RecoveryHttpError('unavailable');},onSubmitCode:()=>{throw new RecoveryHttpError('unavailable');},onCheck:()=>command('result'),onCancel:()=>command('cancel'),onFinish:()=>{throw new RecoveryHttpError('unavailable');},onBackToSignIn:()=>window.location.assign('/login'),onEdit:()=>setError(undefined)}}/>;
 }
 createRoot(document.getElementById('root')!).render(<RecoveryApp/>);
