@@ -1,0 +1,592 @@
+{
+  "schema_version": 1,
+  "scope_id": "TUN-P2-013",
+  "result": "PASS",
+  "assessment_scope": "Only the two implemented Sessions listing/detail screens in their current read-only feature increment. No whole-feature, future revocation/device/trust/bulk, live-BFF E2E, Product, production or release acceptance.",
+  "tested_commit_sha": "dd9029e8fc479693de954b4d1c4ffdf8cf7fb179",
+  "inventory_sha256": "6abfa1de1fd9e97573f704133923322d6541201f8fa7787ddbe10a293d5290df",
+  "owned_behavior_paths": [
+    "docs/contracts/ui-inventory.json",
+    "web/apps/user/sessions.tsx",
+    "web/apps/user/sessions.ui.tsx",
+    "web/apps/user/sessions.api.ts",
+    "web/apps/user/sessions.routes.ts",
+    "web/apps/user/sessions.css",
+    "src/Modules/Identity/SessionListingEndpoints.cs",
+    "src/Modules/Identity/SessionListingPresentation.cs",
+    "web/apps/user/sessions.html",
+    "web/apps/user/sessions.content-keys.ts",
+    "web/apps/user/sessions.content.proposal.json",
+    "web/apps/user/vite.config.ts",
+    "web/tests/sessions.api.test.tsx",
+    "web/tests/sessions/sessions.spec.ts",
+    "web/playwright.sessions.config.ts"
+  ],
+  "validation_applicability": "No user-editable forms/fields in these screens; VAL-001..008 form contracts are not applicable to absent forms. Independent strict API/backend JSON validation and generic shared error handling are exercised in the retained actual results. No other form inherits PASS.",
+  "actual_executions": {
+    "full_backend_and_ui28_sha": "41501e3b006041ef2efaa2766a0a1fe1e73534af",
+    "keyboard_identity_sha": "dd9029e8fc479693de954b4d1c4ffdf8cf7fb179",
+    "currentness": "Qualification binding verifies unchanged app/backend inputs after full execution; only inventory metadata and focused assertions changed."
+  },
+  "items": [
+    {
+      "id": "U-ACCT-04",
+      "kind": "SCREEN",
+      "pathname": "/account/sessions",
+      "result": "PASS",
+      "authority_refs": [
+        "docs/authority/current/development/31_UI_UX_Screen_and_Control_Center_Requirements_Matrix.md"
+      ],
+      "figma_refs": [
+        {
+          "file_key": "apNbwvAgdn1xIxYH1oiaSC",
+          "node_id": "16:2"
+        },
+        {
+          "file_key": "apNbwvAgdn1xIxYH1oiaSC",
+          "node_id": "47:243"
+        }
+      ],
+      "checks": [
+        {
+          "id": "URL-001",
+          "result": "PASS",
+          "description": "Canonical list/details path transitions are exercised by controlled browser and focused keyboard/identity cases.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/ui-dd9029e/ui28-results.json",
+              "sha256": "8b1d1f69e0d798affcba8be8337933595be842ee097f25df44b77e8402ea96b7"
+            },
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/ui-dd9029e/keyboard1-results.json",
+              "sha256": "f488b4c624097224e4a51aeb2309f4fca2d3f04e36f03a2cbbb13d8308d80463"
+            }
+          ]
+        },
+        {
+          "id": "URL-002",
+          "result": "PASS",
+          "description": "Full-screen navigation uses pathname routing; direct detail without transient selection safely returns to canonical list. Query/hash selectors are stripped rather than treated as routes.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/ui-dd9029e/ui28-results.json",
+              "sha256": "8b1d1f69e0d798affcba8be8337933595be842ee097f25df44b77e8402ea96b7"
+            },
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/ui-dd9029e/keyboard1-results.json",
+              "sha256": "f488b4c624097224e4a51aeb2309f4fca2d3f04e36f03a2cbbb13d8308d80463"
+            }
+          ]
+        },
+        {
+          "id": "URL-003",
+          "result": "PASS",
+          "description": "Direct entry, reload, Back/Forward and current authorization reconstruct safe views; no retained row is disclosed after actor change.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/ui-dd9029e/ui28-results.json",
+              "sha256": "8b1d1f69e0d798affcba8be8337933595be842ee097f25df44b77e8402ea96b7"
+            },
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/ui-dd9029e/keyboard1-results.json",
+              "sha256": "f488b4c624097224e4a51aeb2309f4fca2d3f04e36f03a2cbbb13d8308d80463"
+            }
+          ]
+        },
+        {
+          "id": "URL-004",
+          "result": "PASS",
+          "description": "Account disclosure stays local to the same screen; screenshots and ordinary sign-out tests exercise its safe state without URL selectors.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/ui-dd9029e/ui28-results.json",
+              "sha256": "8b1d1f69e0d798affcba8be8337933595be842ee097f25df44b77e8402ea96b7"
+            },
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/ui-dd9029e/keyboard1-results.json",
+              "sha256": "f488b4c624097224e4a51aeb2309f4fca2d3f04e36f03a2cbbb13d8308d80463"
+            }
+          ]
+        },
+        {
+          "id": "URL-005",
+          "result": "PASS",
+          "description": "Real packaged-page tests require actual built HTML, redirect anonymous/ended callers, and preserve independent list permission. UI guards block data before ready.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/ui-dd9029e/backend26.trx",
+              "sha256": "4a578a4cdd5f5ea49666e482bf0e77a729bde479377e2180126732453f750f18"
+            },
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/ui-dd9029e/ui28-results.json",
+              "sha256": "8b1d1f69e0d798affcba8be8337933595be842ee097f25df44b77e8402ea96b7"
+            }
+          ]
+        },
+        {
+          "id": "URL-006",
+          "result": "NOT_APPLICABLE",
+          "reason": "This private Account listing increment adds no OAuth callback, Product redirect or provider initiation route. Existing provider handlers/contracts are unchanged; exact actor-origin enforcement is independently exercised in backend tests. No provider-live qualification is claimed.",
+          "authority_refs": [
+            "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md",
+            "docs/authority/current/decisions/AMD-0009_URL_Addressable_Routing_and_Governed_Form_Validation.md"
+          ]
+        },
+        {
+          "id": "UX-FID-001",
+          "result": "PASS",
+          "description": "Approved Figma composition and four scoped Product adaptations are compared against actual current render evidence; restored omissions verified.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/ui-dd9029e/visual-review.json",
+              "sha256": "9b7ad2c666ea51b53f84a4d63deb82aa0ef02eb8421ff8abf7e3ea9c1af9a995"
+            },
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/ui-dd9029e/ui28-results.json",
+              "sha256": "8b1d1f69e0d798affcba8be8337933595be842ee097f25df44b77e8402ea96b7"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-002",
+          "result": "PASS",
+          "description": "The approved Account Center flat background, cards and indigo decoration are retained; this frame does not require authentication-screen glow layers.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/ui-dd9029e/visual-review.json",
+              "sha256": "9b7ad2c666ea51b53f84a4d63deb82aa0ef02eb8421ff8abf7e3ea9c1af9a995"
+            },
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/ui-dd9029e/ui28-results.json",
+              "sha256": "8b1d1f69e0d798affcba8be8337933595be842ee097f25df44b77e8402ea96b7"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-003",
+          "result": "PASS",
+          "description": "Existing Tunner controls/content/error presentation/tokens are reused. No new user-editable form or copied registration domain rule.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/ui-dd9029e/visual-review.json",
+              "sha256": "9b7ad2c666ea51b53f84a4d63deb82aa0ef02eb8421ff8abf7e3ea9c1af9a995"
+            },
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/ui-dd9029e/ui28-results.json",
+              "sha256": "8b1d1f69e0d798affcba8be8337933595be842ee097f25df44b77e8402ea96b7"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-004",
+          "result": "PASS",
+          "description": "Material adaptations have explicit bounded Product Owner consent; pending revocation layouts are not implemented or represented as complete.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/ui-dd9029e/visual-review.json",
+              "sha256": "9b7ad2c666ea51b53f84a4d63deb82aa0ef02eb8421ff8abf7e3ea9c1af9a995"
+            },
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/ui-dd9029e/ui28-results.json",
+              "sha256": "8b1d1f69e0d798affcba8be8337933595be842ee097f25df44b77e8402ea96b7"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-005",
+          "result": "PASS",
+          "description": "Unsupported device/trust/location and Product termination assertions are not fabricated; the consented truthful projection preserves FRD17.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/ui-dd9029e/visual-review.json",
+              "sha256": "9b7ad2c666ea51b53f84a4d63deb82aa0ef02eb8421ff8abf7e3ea9c1af9a995"
+            },
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/ui-dd9029e/ui28-results.json",
+              "sha256": "8b1d1f69e0d798affcba8be8337933595be842ee097f25df44b77e8402ea96b7"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-006",
+          "result": "PASS",
+          "description": "Existing Tunner styling and shared foundation are retained; no TailAdmin defaults replace approved presentation.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/ui-dd9029e/visual-review.json",
+              "sha256": "9b7ad2c666ea51b53f84a4d63deb82aa0ef02eb8421ff8abf7e3ea9c1af9a995"
+            },
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/ui-dd9029e/ui28-results.json",
+              "sha256": "8b1d1f69e0d798affcba8be8337933595be842ee097f25df44b77e8402ea96b7"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-007",
+          "result": "PASS",
+          "description": "Six widths have listing/details axe and overflow checks; desktop/narrow-mobile keyboard Tab/Enter and focus restoration execute in the separate focused case.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/ui-dd9029e/visual-review.json",
+              "sha256": "9b7ad2c666ea51b53f84a4d63deb82aa0ef02eb8421ff8abf7e3ea9c1af9a995"
+            },
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/ui-dd9029e/ui28-results.json",
+              "sha256": "8b1d1f69e0d798affcba8be8337933595be842ee097f25df44b77e8402ea96b7"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-008",
+          "result": "PASS",
+          "description": "Exact source/currentness binding, Figma references, hashed screenshots, consent and raw results retain their actual invocation identities.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/ui-dd9029e/visual-review.json",
+              "sha256": "9b7ad2c666ea51b53f84a4d63deb82aa0ef02eb8421ff8abf7e3ea9c1af9a995"
+            },
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/ui-dd9029e/ui28-results.json",
+              "sha256": "8b1d1f69e0d798affcba8be8337933595be842ee097f25df44b77e8402ea96b7"
+            }
+          ]
+        }
+      ],
+      "screenshots": [
+        {
+          "path": "governance/evidence/p2-013-sessions-20261114/ui-dd9029e/list-1440.png",
+          "sha256": "f53c9396a514e4cc7d36040bbf6d9889c001a04f974f0ecec1579990d947bfb0",
+          "role": "RENDERED_IMPLEMENTATION"
+        },
+        {
+          "path": "governance/evidence/p2-013-sessions-20261114/ui-dd9029e/list-1366.png",
+          "sha256": "1062f1f56a6002dd33f3a6d89a2f2a9779116ba018bfca2fa7bc32bcdacc33da",
+          "role": "RENDERED_IMPLEMENTATION"
+        },
+        {
+          "path": "governance/evidence/p2-013-sessions-20261114/ui-dd9029e/list-1024.png",
+          "sha256": "f686d48b747dd2efd1a8b006bb4ea02f146f1fafaf989cf04e738d34e42b6fdb",
+          "role": "RENDERED_IMPLEMENTATION"
+        },
+        {
+          "path": "governance/evidence/p2-013-sessions-20261114/ui-dd9029e/list-768.png",
+          "sha256": "b9642680224ee846460931407ef14857ef9078f1a2be3ab56c9320fdc0d864b9",
+          "role": "RENDERED_IMPLEMENTATION"
+        },
+        {
+          "path": "governance/evidence/p2-013-sessions-20261114/ui-dd9029e/list-390.png",
+          "sha256": "3672ca046a27c092b479b201f656cd1b2881b4534022557c7b091c00cf5b2f78",
+          "role": "RENDERED_IMPLEMENTATION"
+        },
+        {
+          "path": "governance/evidence/p2-013-sessions-20261114/ui-dd9029e/list-320.png",
+          "sha256": "eebf67aecf38dee2bfe7bb8b38469c6034e445cceff470c44c718d0780f30e9e",
+          "role": "RENDERED_IMPLEMENTATION"
+        },
+        {
+          "path": "governance/evidence/p2-013-sessions-20261114/ui-dd9029e/approved-list.png",
+          "sha256": "f8e0546efe7e698e6929c962f3670046a3f6fceaca036c7e7602259ddf9e14d6",
+          "role": "APPROVED_FIGMA_REFERENCE"
+        },
+        {
+          "path": "governance/evidence/p2-013-sessions-20261114/ui-dd9029e/proposal-desktop-list.png",
+          "sha256": "02502e5ab3a001c641f7f8ea0adda1456cfd7e29431f3962347aad680a250e78",
+          "role": "PRODUCT_OWNER_APPROVED_ADAPTATION"
+        }
+      ],
+      "deviations": [
+        {
+          "scope_id": "013-V01/V02/V04_CURRENT_LISTING_DETAIL_SUBSET",
+          "status": "PRODUCT_OWNER_APPROVED",
+          "approval_evidence": {
+            "path": "governance/evidence/TUN-P2-013-VISUAL-CONSENT.json",
+            "sha256": "01547dce89e7a404e024d1a9e64272ba9c5e1c1d8b39ee4b6a446888313e7378"
+          }
+        }
+      ]
+    },
+    {
+      "id": "U-ACCT-SESSION-DETAILS",
+      "kind": "SCREEN",
+      "pathname": "/account/sessions/details",
+      "result": "PASS",
+      "authority_refs": [
+        "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md",
+        "docs/authority/current/decisions/AMD-0009_URL_Addressable_Routing_and_Governed_Form_Validation.md"
+      ],
+      "figma_refs": [
+        {
+          "file_key": "apNbwvAgdn1xIxYH1oiaSC",
+          "node_id": "36:159"
+        },
+        {
+          "file_key": "apNbwvAgdn1xIxYH1oiaSC",
+          "node_id": "46:35"
+        }
+      ],
+      "checks": [
+        {
+          "id": "URL-001",
+          "result": "PASS",
+          "description": "Canonical list/details path transitions are exercised by controlled browser and focused keyboard/identity cases.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/ui-dd9029e/ui28-results.json",
+              "sha256": "8b1d1f69e0d798affcba8be8337933595be842ee097f25df44b77e8402ea96b7"
+            },
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/ui-dd9029e/keyboard1-results.json",
+              "sha256": "f488b4c624097224e4a51aeb2309f4fca2d3f04e36f03a2cbbb13d8308d80463"
+            }
+          ]
+        },
+        {
+          "id": "URL-002",
+          "result": "PASS",
+          "description": "Full-screen navigation uses pathname routing; direct detail without transient selection safely returns to canonical list. Query/hash selectors are stripped rather than treated as routes.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/ui-dd9029e/ui28-results.json",
+              "sha256": "8b1d1f69e0d798affcba8be8337933595be842ee097f25df44b77e8402ea96b7"
+            },
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/ui-dd9029e/keyboard1-results.json",
+              "sha256": "f488b4c624097224e4a51aeb2309f4fca2d3f04e36f03a2cbbb13d8308d80463"
+            }
+          ]
+        },
+        {
+          "id": "URL-003",
+          "result": "PASS",
+          "description": "Direct entry, reload, Back/Forward and current authorization reconstruct safe views; no retained row is disclosed after actor change.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/ui-dd9029e/ui28-results.json",
+              "sha256": "8b1d1f69e0d798affcba8be8337933595be842ee097f25df44b77e8402ea96b7"
+            },
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/ui-dd9029e/keyboard1-results.json",
+              "sha256": "f488b4c624097224e4a51aeb2309f4fca2d3f04e36f03a2cbbb13d8308d80463"
+            }
+          ]
+        },
+        {
+          "id": "URL-004",
+          "result": "PASS",
+          "description": "Account disclosure stays local to the same screen; screenshots and ordinary sign-out tests exercise its safe state without URL selectors.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/ui-dd9029e/ui28-results.json",
+              "sha256": "8b1d1f69e0d798affcba8be8337933595be842ee097f25df44b77e8402ea96b7"
+            },
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/ui-dd9029e/keyboard1-results.json",
+              "sha256": "f488b4c624097224e4a51aeb2309f4fca2d3f04e36f03a2cbbb13d8308d80463"
+            }
+          ]
+        },
+        {
+          "id": "URL-005",
+          "result": "PASS",
+          "description": "Real packaged-page tests require actual built HTML, redirect anonymous/ended callers, and preserve independent list permission. UI guards block data before ready.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/ui-dd9029e/backend26.trx",
+              "sha256": "4a578a4cdd5f5ea49666e482bf0e77a729bde479377e2180126732453f750f18"
+            },
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/ui-dd9029e/ui28-results.json",
+              "sha256": "8b1d1f69e0d798affcba8be8337933595be842ee097f25df44b77e8402ea96b7"
+            }
+          ]
+        },
+        {
+          "id": "URL-006",
+          "result": "NOT_APPLICABLE",
+          "reason": "This private Account listing increment adds no OAuth callback, Product redirect or provider initiation route. Existing provider handlers/contracts are unchanged; exact actor-origin enforcement is independently exercised in backend tests. No provider-live qualification is claimed.",
+          "authority_refs": [
+            "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md",
+            "docs/authority/current/decisions/AMD-0009_URL_Addressable_Routing_and_Governed_Form_Validation.md"
+          ]
+        },
+        {
+          "id": "UX-FID-001",
+          "result": "PASS",
+          "description": "Approved Figma composition and four scoped Product adaptations are compared against actual current render evidence; restored omissions verified.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/ui-dd9029e/visual-review.json",
+              "sha256": "9b7ad2c666ea51b53f84a4d63deb82aa0ef02eb8421ff8abf7e3ea9c1af9a995"
+            },
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/ui-dd9029e/ui28-results.json",
+              "sha256": "8b1d1f69e0d798affcba8be8337933595be842ee097f25df44b77e8402ea96b7"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-002",
+          "result": "PASS",
+          "description": "The approved Account Center flat background, cards and indigo decoration are retained; this frame does not require authentication-screen glow layers.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/ui-dd9029e/visual-review.json",
+              "sha256": "9b7ad2c666ea51b53f84a4d63deb82aa0ef02eb8421ff8abf7e3ea9c1af9a995"
+            },
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/ui-dd9029e/ui28-results.json",
+              "sha256": "8b1d1f69e0d798affcba8be8337933595be842ee097f25df44b77e8402ea96b7"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-003",
+          "result": "PASS",
+          "description": "Existing Tunner controls/content/error presentation/tokens are reused. No new user-editable form or copied registration domain rule.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/ui-dd9029e/visual-review.json",
+              "sha256": "9b7ad2c666ea51b53f84a4d63deb82aa0ef02eb8421ff8abf7e3ea9c1af9a995"
+            },
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/ui-dd9029e/ui28-results.json",
+              "sha256": "8b1d1f69e0d798affcba8be8337933595be842ee097f25df44b77e8402ea96b7"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-004",
+          "result": "PASS",
+          "description": "Material adaptations have explicit bounded Product Owner consent; pending revocation layouts are not implemented or represented as complete.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/ui-dd9029e/visual-review.json",
+              "sha256": "9b7ad2c666ea51b53f84a4d63deb82aa0ef02eb8421ff8abf7e3ea9c1af9a995"
+            },
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/ui-dd9029e/ui28-results.json",
+              "sha256": "8b1d1f69e0d798affcba8be8337933595be842ee097f25df44b77e8402ea96b7"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-005",
+          "result": "PASS",
+          "description": "Unsupported device/trust/location and Product termination assertions are not fabricated; the consented truthful projection preserves FRD17.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/ui-dd9029e/visual-review.json",
+              "sha256": "9b7ad2c666ea51b53f84a4d63deb82aa0ef02eb8421ff8abf7e3ea9c1af9a995"
+            },
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/ui-dd9029e/ui28-results.json",
+              "sha256": "8b1d1f69e0d798affcba8be8337933595be842ee097f25df44b77e8402ea96b7"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-006",
+          "result": "PASS",
+          "description": "Existing Tunner styling and shared foundation are retained; no TailAdmin defaults replace approved presentation.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/ui-dd9029e/visual-review.json",
+              "sha256": "9b7ad2c666ea51b53f84a4d63deb82aa0ef02eb8421ff8abf7e3ea9c1af9a995"
+            },
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/ui-dd9029e/ui28-results.json",
+              "sha256": "8b1d1f69e0d798affcba8be8337933595be842ee097f25df44b77e8402ea96b7"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-007",
+          "result": "PASS",
+          "description": "Six widths have listing/details axe and overflow checks; desktop/narrow-mobile keyboard Tab/Enter and focus restoration execute in the separate focused case.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/ui-dd9029e/visual-review.json",
+              "sha256": "9b7ad2c666ea51b53f84a4d63deb82aa0ef02eb8421ff8abf7e3ea9c1af9a995"
+            },
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/ui-dd9029e/ui28-results.json",
+              "sha256": "8b1d1f69e0d798affcba8be8337933595be842ee097f25df44b77e8402ea96b7"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-008",
+          "result": "PASS",
+          "description": "Exact source/currentness binding, Figma references, hashed screenshots, consent and raw results retain their actual invocation identities.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/ui-dd9029e/visual-review.json",
+              "sha256": "9b7ad2c666ea51b53f84a4d63deb82aa0ef02eb8421ff8abf7e3ea9c1af9a995"
+            },
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/ui-dd9029e/ui28-results.json",
+              "sha256": "8b1d1f69e0d798affcba8be8337933595be842ee097f25df44b77e8402ea96b7"
+            }
+          ]
+        }
+      ],
+      "screenshots": [
+        {
+          "path": "governance/evidence/p2-013-sessions-20261114/ui-dd9029e/details-1440.png",
+          "sha256": "66c05ed30966ebce1a9213c0bb766ede342ca76e2761f7e6559d9c9637c85c70",
+          "role": "RENDERED_IMPLEMENTATION"
+        },
+        {
+          "path": "governance/evidence/p2-013-sessions-20261114/ui-dd9029e/details-1366.png",
+          "sha256": "c078c1f4ab0280d4f3ce8aa2a687bcb4a1a83abf126d0538f6d3854f4cff3d0d",
+          "role": "RENDERED_IMPLEMENTATION"
+        },
+        {
+          "path": "governance/evidence/p2-013-sessions-20261114/ui-dd9029e/details-1024.png",
+          "sha256": "cc05898d0a2e8f2a75c2a6fbb37ab6715ae1772fd483fcd29d5f5035e4452af7",
+          "role": "RENDERED_IMPLEMENTATION"
+        },
+        {
+          "path": "governance/evidence/p2-013-sessions-20261114/ui-dd9029e/details-768.png",
+          "sha256": "3d8c3871c707ee737884fde9787ccdd6331d6ef20704a8c4199a45fed5d25a10",
+          "role": "RENDERED_IMPLEMENTATION"
+        },
+        {
+          "path": "governance/evidence/p2-013-sessions-20261114/ui-dd9029e/details-390.png",
+          "sha256": "6f4553b3519b740f6b727702095e600ed762d51bed3ff670f19a6eddb194be64",
+          "role": "RENDERED_IMPLEMENTATION"
+        },
+        {
+          "path": "governance/evidence/p2-013-sessions-20261114/ui-dd9029e/details-320.png",
+          "sha256": "dd395f1e4382a90dbf64c3cdc36cf8de3a0f7d4a3dd3453eec7cd6cbc4b5c0ae",
+          "role": "RENDERED_IMPLEMENTATION"
+        },
+        {
+          "path": "governance/evidence/p2-013-sessions-20261114/ui-dd9029e/approved-details.png",
+          "sha256": "3e1ed30b12bc4646f5b25592c94554fdfd6deedfa0946d5622cf268448287501",
+          "role": "APPROVED_FIGMA_REFERENCE"
+        },
+        {
+          "path": "governance/evidence/p2-013-sessions-20261114/ui-dd9029e/proposal-desktop-details.png",
+          "sha256": "5af698ef3ce00daee35312784f7bdc341812507d9b641c9bd6af9ea458046085",
+          "role": "PRODUCT_OWNER_APPROVED_ADAPTATION"
+        }
+      ],
+      "deviations": [
+        {
+          "scope_id": "013-V01/V02/V04_CURRENT_LISTING_DETAIL_SUBSET",
+          "status": "PRODUCT_OWNER_APPROVED",
+          "approval_evidence": {
+            "path": "governance/evidence/TUN-P2-013-VISUAL-CONSENT.json",
+            "sha256": "01547dce89e7a404e024d1a9e64272ba9c5e1c1d8b39ee4b6a446888313e7378"
+          }
+        }
+      ]
+    }
+  ],
+  "visual_review": {
+    "path": "governance/evidence/p2-013-sessions-20261114/ui-dd9029e/visual-review.json",
+    "sha256": "9b7ad2c666ea51b53f84a4d63deb82aa0ef02eb8421ff8abf7e3ea9c1af9a995"
+  }
+}
