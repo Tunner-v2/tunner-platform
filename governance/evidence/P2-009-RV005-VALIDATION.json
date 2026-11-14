@@ -1,0 +1,10 @@
+{
+  "schema_version": 1,
+  "scope_id": "P2-009-RV005",
+  "validation_kind": "COMMITTED",
+  "tested_commit_sha": null,
+  "validated_commit_sha": null,
+  "result": "PENDING",
+  "owned_behavior_paths": ["tests/Tunner.Identity.Persistence.Tests/AuthenticationTestHost.cs"],
+  "proof_plan": "Predeclare only the historical009/009RV001-owned HTTPS helper before adding optional mediaType to RawPost, retaining application/json default and the exact existing pinned client/certificate/headers. This is necessary for actual415 coverage; no alternative client/TLS host, reflection or security bypass. Existing JSON/default auth regression and newHTTP/415 tests plus genuine scoped reviews/native closure must pass before technical closure. No product/source policy or original closure change."
+}
