@@ -1,6 +1,21 @@
 {
   "schema_version": 1,
   "scope_id": "TUN-P2-007",
+  "selected_session_currentness_20261114": {
+    "qualification_ref": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/qualification-binding.json",
+    "current_source_carrier": "4f09edb8b6033c7ca1edcf8d7d227c26bfb8c15b",
+    "execution_identity": "Original cohorts/approvals remain at their original SHAs. New affected compatibility:18app075485b,20HTTPS7a6a69b,42API/controlled8b65583+4responsive7a6a69b, fresh6/2affectedCSS and1strictlive4f09edb. No original complete cohort is claimed rerun.",
+    "review_ref": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/technical-review.json",
+    "visual_review_ref": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/visual-review.json",
+    "limit": "Engineering currentness only. Original VALIDATION and Product acceptance boundaries remain unchanged; whole013 remains pending.",
+    "new_registered_caller_sources": [
+      "src/Modules/Identity/SessionRevocationBrowser.cs",
+      "web/apps/user/sessions.revocation.tsx"
+    ],
+    "prior_carrier": "dd9029e8fc479693de954b4d1c4ffdf8cf7fb179",
+    "prior_inventory_sha256": "6abfa1de1fd9e97573f704133923322d6541201f8fa7787ddbe10a293d5290df",
+    "presentation_boundary": "All pre-existing item check identities, reference/render evidence and approvals preserved. Shared proof source change qualified by current owner regression; new Sessions-specific UI evidence is separately scoped to013. Existing forms do not inherit another form's PASS."
+  },
   "sessions_packaging_currentness_20261114": {
     "receipt_ref": "governance/evidence/TUN-P2-013-PACKAGING-CURRENTNESS.json",
     "source_equivalence_only": true,
@@ -14,8 +29,8 @@
   },
   "result": "PASS",
   "recorded_at": "2026-11-11T05:30:06.510107+00:00",
-  "tested_commit_sha": "dd9029e8fc479693de954b4d1c4ffdf8cf7fb179",
-  "inventory_sha256": "6abfa1de1fd9e97573f704133923322d6541201f8fa7787ddbe10a293d5290df",
+  "tested_commit_sha": "4f09edb8b6033c7ca1edcf8d7d227c26bfb8c15b",
+  "inventory_sha256": "1654f225d14fde2bf8ecd7284023bb1917c8e5de1731dc30effac369296b63c2",
   "owned_behavior_paths": [
     "docs/contracts/ui-inventory.json",
     "src/Modules/Identity/AuthenticationEndpoints.cs",
@@ -79,7 +94,9 @@
     "web/apps/user/step-up.federation.tsx",
     "web/apps/user/step-up.passkey.ts",
     "web/packages/ui/src/content.tsx",
-    "web/packages/ui/src/controls.tsx"
+    "web/packages/ui/src/controls.tsx",
+    "src/Modules/Identity/SessionRevocationBrowser.cs",
+    "web/apps/user/sessions.revocation.tsx"
   ],
   "items": [
     {

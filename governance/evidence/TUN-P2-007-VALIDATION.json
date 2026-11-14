@@ -1,6 +1,26 @@
 {
   "schema_version": 1,
   "scope_id": "TUN-P2-007",
+  "selected_session_currentness_20261114": {
+    "qualification_ref": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/qualification-binding.json",
+    "current_source_carrier": "4f09edb8b6033c7ca1edcf8d7d227c26bfb8c15b",
+    "execution_identity": "Original cohorts/approvals remain at their original SHAs. New affected compatibility:18app075485b,20HTTPS7a6a69b,42API/controlled8b65583+4responsive7a6a69b, fresh6/2affectedCSS and1strictlive4f09edb. No original complete cohort is claimed rerun.",
+    "review_ref": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/technical-review.json",
+    "visual_review_ref": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/visual-review.json",
+    "limit": "Engineering currentness only. Original VALIDATION and Product acceptance boundaries remain unchanged; whole013 remains pending.",
+    "changed_owned_paths": [
+      "docs/contracts/ui-inventory.json",
+      "src/Modules/Identity/AuthenticationApplication.cs",
+      "src/Modules/Identity/StepUpApplication.cs",
+      "src/Modules/Identity/StepUpBrowserEndpoints.cs",
+      "tools/browser-testing/BrowserTestStepUp.cs",
+      "tools/browser-testing/Tunner.BrowserTesting.csproj",
+      "web/apps/user/passkeys.tsx"
+    ],
+    "all_changed_owned_paths_in_qualification": true,
+    "prior_tested_commit_sha": "dd9029e8fc479693de954b4d1c4ffdf8cf7fb179",
+    "prior_validated_commit_sha": "dd9029e8fc479693de954b4d1c4ffdf8cf7fb179"
+  },
   "sessions_packaging_currentness_20261114": {
     "receipt_ref": "governance/evidence/TUN-P2-013-PACKAGING-CURRENTNESS.json",
     "assessed_source_carrier": "dd9029e8fc479693de954b4d1c4ffdf8cf7fb179",
@@ -25,8 +45,8 @@
   },
   "validation_kind": "COMMITTED",
   "result": "PASS",
-  "tested_commit_sha": "dd9029e8fc479693de954b4d1c4ffdf8cf7fb179",
-  "validated_commit_sha": "dd9029e8fc479693de954b4d1c4ffdf8cf7fb179",
+  "tested_commit_sha": "4f09edb8b6033c7ca1edcf8d7d227c26bfb8c15b",
+  "validated_commit_sha": "4f09edb8b6033c7ca1edcf8d7d227c26bfb8c15b",
   "owned_behavior_paths": [
     "src/Modules/Identity/AuthenticationApplication.cs",
     "src/Modules/Identity/AuthenticationContracts.cs",

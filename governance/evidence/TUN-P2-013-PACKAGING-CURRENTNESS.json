@@ -1,5 +1,67 @@
 {
   "schema_version": 1,
+  "selected_session_followup": {
+    "qualification_ref": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/qualification-binding.json",
+    "current_source_carrier": "4f09edb8b6033c7ca1edcf8d7d227c26bfb8c15b",
+    "execution_identity": "Original cohorts/approvals remain at their original SHAs. New affected compatibility:18app075485b,20HTTPS7a6a69b,42API/controlled8b65583+4responsive7a6a69b, fresh6/2affectedCSS and1strictlive4f09edb. No original complete cohort is claimed rerun.",
+    "review_ref": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/technical-review.json",
+    "visual_review_ref": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/visual-review.json",
+    "limit": "Engineering currentness only. Original VALIDATION and Product acceptance boundaries remain unchanged; whole013 remains pending.",
+    "changed_owned_path_bindings": [
+      {
+        "scope": "TUN-P2-004",
+        "paths": [
+          "docs/contracts/ui-inventory.json",
+          "tools/browser-testing/Tunner.BrowserTesting.csproj"
+        ]
+      },
+      {
+        "scope": "TUN-P2-005",
+        "paths": [
+          "docs/contracts/ui-inventory.json",
+          "src/Modules/Identity/AuthenticationApplication.cs",
+          "tools/browser-testing/Tunner.BrowserTesting.csproj"
+        ]
+      },
+      {
+        "scope": "TUN-P2-006",
+        "paths": [
+          "docs/contracts/ui-inventory.json",
+          "src/Modules/Identity/AuthenticationApplication.cs",
+          "src/Modules/Identity/StepUpApplication.cs",
+          "src/Modules/Identity/StepUpBrowserEndpoints.cs",
+          "tools/browser-testing/BrowserTestStepUp.cs",
+          "tools/browser-testing/Tunner.BrowserTesting.csproj"
+        ]
+      },
+      {
+        "scope": "TUN-P2-007",
+        "paths": [
+          "docs/contracts/ui-inventory.json",
+          "src/Modules/Identity/AuthenticationApplication.cs",
+          "src/Modules/Identity/StepUpApplication.cs",
+          "src/Modules/Identity/StepUpBrowserEndpoints.cs",
+          "tools/browser-testing/BrowserTestStepUp.cs",
+          "tools/browser-testing/Tunner.BrowserTesting.csproj",
+          "web/apps/user/passkeys.tsx"
+        ]
+      },
+      {
+        "scope": "TUN-P2-008",
+        "paths": [
+          "docs/contracts/ui-inventory.json",
+          "src/Modules/Identity/AuthenticationApplication.cs",
+          "src/Modules/Identity/StepUpApplication.cs",
+          "src/Modules/Identity/StepUpBrowserEndpoints.cs",
+          "tools/browser-testing/BrowserTestHost.cs",
+          "tools/browser-testing/BrowserTestStepUp.cs",
+          "tools/browser-testing/Tunner.BrowserTesting.csproj",
+          "web/apps/user/passkeys.tsx"
+        ]
+      }
+    ],
+    "pre_edit_eligibility_check": "Current005 gate observed prerequisite004 stale committed proof and changed inventory/AuthenticationApplication/browser csproj. This metadata reconciliation binds already qualified source and does not bypass the dependency gate."
+  },
   "scope_id": "TUN-P2-013",
   "result": "PASS_SOURCE_EQUIVALENCE_ONLY",
   "assessed_committed_source_sha": "dd9029e8fc479693de954b4d1c4ffdf8cf7fb179",
