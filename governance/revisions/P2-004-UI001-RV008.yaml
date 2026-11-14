@@ -7,14 +7,16 @@
   "parent_milestone_revision_id": null,
   "title": "Track protected Sessions reload and exact revocation UI binding",
   "revision_type": "COMPATIBILITY",
-  "status": "ACTIVE",
+  "status": "VALIDATION",
   "reason": "Approved P2-013 visual scopes and verified app075485b now integrate protected server selection plus exact revocation through existing shared proof UI. Preallocate only Sessions detail inventory guard/source bindings for same canonical routes; preserve original closure, closedRV007 and separate activeRecoveryRV006. No Figma source edit policy redesign or production activation.",
   "authority_refs": [
     "docs/authority/baselines/1.6.0/17_Account_Identity_and_Session_FRD.md"
   ],
   "decision_refs": [],
   "defect_refs": [],
-  "change_refs": ["docs/development/P2_013_SESSION_SCOPE.md"],
+  "change_refs": [
+    "docs/development/P2_013_SESSION_SCOPE.md"
+  ],
   "impact_classification": "NON_BLOCKING",
   "blocked_scope": [],
   "acceptance_criteria": [
@@ -23,8 +25,49 @@
   "prerequisites": [],
   "work_items": [],
   "required_gates": [],
-  "required_roles": ["frontend-engineer", "ui-ux-engineer", "end-user-ux-reviewer", "tester-qa-engineer", "solution-architect", "cyber-security-engineer", "auditor", "governance-engineer"],
-  "evidence_refs": ["governance/evidence/P2-004-UI001-RV008-VALIDATION.json"],
-  "created_at": "2026-11-14T12:40:37.4167055\u002B00:00",
-  "closed_at": null
+  "required_roles": [
+    "frontend-engineer",
+    "ui-ux-engineer",
+    "end-user-ux-reviewer",
+    "tester-qa-engineer",
+    "solution-architect",
+    "cyber-security-engineer",
+    "auditor",
+    "governance-engineer"
+  ],
+  "evidence_refs": [
+    "governance/evidence/P2-004-UI001-RV008-VALIDATION.json"
+  ],
+  "created_at": "2026-11-14T07:40:37.4167055-05:00",
+  "closed_at": null,
+  "product_acceptance_required": false,
+  "git_state": {
+    "repository_changed": true,
+    "validated_commit_sha": "4f09edb8b6033c7ca1edcf8d7d227c26bfb8c15b",
+    "tested_commit_sha": "4f09edb8b6033c7ca1edcf8d7d227c26bfb8c15b",
+    "work_item_commit_shas": [
+      "075485ba3c03073855f5b16ae1961f3e4110636e",
+      "7a6a69b4e806309eeb98396b8e5ccf9ca3de29d3",
+      "4f09edb8b6033c7ca1edcf8d7d227c26bfb8c15b"
+    ],
+    "closure_commit_sha": null,
+    "remaining_uncommitted_paths": [
+      "docs/context/current/HANDOFF.md",
+      "docs/context/current/adaptive-selection.json",
+      "docs/context/current/authority.md",
+      "docs/context/current/contracts.md",
+      "docs/context/current/git-changes.md",
+      "docs/context/current/manifest.json",
+      "docs/context/current/relevant-flows.md",
+      "docs/context/current/summary.md",
+      "docs/context/current/tests.md",
+      "docs/project/CURRENT_STATE.md",
+      "docs/project/HANDOFF.md",
+      "docs/project/PROJECT_CONTEXT.md",
+      ".vscode/settings.json",
+      "%SystemDrive%/",
+      "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/"
+    ],
+    "remaining_uncommitted_classification": "PREEXISTING_UNRELATED"
+  }
 }

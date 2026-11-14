@@ -2,16 +2,32 @@
   "schema_version": 1,
   "scope_id": "P2-010-RV007",
   "validation_kind": "COMMITTED",
-  "result": "PENDING",
+  "result": "PASS",
   "application_checkpoint_ref": "governance/evidence/p2-013-sessions-20261114/revocation-075485b/qualification.json",
   "application_review_ref": "governance/evidence/p2-013-sessions-20261114/revocation-075485b/review.json",
-  "tested_commit_sha": null,
-  "validated_commit_sha": null,
-  "owned_behavior_paths": ["src/Modules/Identity/AuthenticationApplication.cs", "src/Modules/Identity/FederationAuthentication.cs", "src/Modules/Identity/StepUpApplication.cs", "src/Modules/Identity/StepUpBrowserEndpoints.cs", "docs/contracts/ui-inventory.json", "web/apps/user/passkeys.tsx"],
+  "tested_commit_sha": "4f09edb8b6033c7ca1edcf8d7d227c26bfb8c15b",
+  "validated_commit_sha": "4f09edb8b6033c7ca1edcf8d7d227c26bfb8c15b",
+  "owned_behavior_paths": [
+    "src/Modules/Identity/AuthenticationApplication.cs",
+    "src/Modules/Identity/FederationAuthentication.cs",
+    "src/Modules/Identity/StepUpApplication.cs",
+    "src/Modules/Identity/StepUpBrowserEndpoints.cs",
+    "docs/contracts/ui-inventory.json",
+    "web/apps/user/passkeys.tsx"
+  ],
   "navigation_extension": "Only link the existing approved Sessions sidebar item to its canonical route, retaining its approved label/style and provider/security behavior.",
   "inventory_extension": "Only Sessions protected detail reload mapping and feature-local confirmation component under existing013consent; all unrelated rows/closures preserved.",
   "browser_pre_edit_extension": "Exact typed SessionRevocation dispatch before generic browser proof transaction, protected original-context owner resolution including full-page federation return/reload, preserving fallback owners/native outcomes. Existing P1-018 lineage separately allocated; no provider semantics or lifecycle redesign.",
   "pre_edit_allocation": "Narrowly discover prior/previous sign-in session IDs and acquire one canonical distinct session lock order before Account locks; retain original reload/currentness/idempotency checks. Federation retry uses the same helper. Typed SESSION_REVOKE owner prelocks actor/target before existing proof algorithm. No schema, provider policy, proof lifecycle or production change. Original010 DONE and all closed predecessors remain immutable.",
   "required_validation": "Focused real PostgreSQL opposing revocation and password/federation retry races with bounded completion and persisted effects; appropriate default sign-in/federation/proof regressions; committed-source security review and native revision gates.",
-  "review": "Independent AI p2_013_startup_refinement inspected concrete paths and proposed this minimal compatibility allocation. No code/test execution or acceptance is asserted by this preallocation."
+  "review": "Independent AI p2_013_startup_refinement inspected concrete paths and proposed this minimal compatibility allocation. No code/test execution or acceptance is asserted by this preallocation.",
+  "actual_validation": {
+    "result": "PASS_SCOPED_TECHNICAL_COMPATIBILITY",
+    "qualification_ref": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/qualification-binding.json",
+    "technical_review_ref": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/technical-review.json",
+    "ui_review_ref": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/visual-review.json",
+    "ui_evidence_ref": "governance/evidence/TUN-P2-013-UI-COMPLIANCE.json",
+    "actual_execution_identity": "Each invocation retains actual SHA/count in qualification-binding.json. Current4f09edb source carrier does not fabricate reruns of18/20/42/4 qualifications. Fresh affected6/2 and live1 passed4f09edb.",
+    "limits": "Whole013, separate recovery lineage, Product/production/release remain separate."
+  }
 }
