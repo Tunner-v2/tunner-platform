@@ -83,7 +83,7 @@
     "limitations": "No HTTP route/protected cursor/browser UI/revocation/device trust/production policy activation/CI transport qualification or whole013 acceptance. Explicit local SQL profile skips when dedicated run metadata is absent; actual qualification above executes all11 with0skips. Next source changes require appropriate new scoped validation."
   },
   "authority_resolution": "Existing FRD17 session/List-Revoke ownership and local semantics, catalog32 trusted binding, ADR0006 foundation and PrivacyFRD29 resolve the bounded direction. docs/development/P2_013_SESSION_SCOPE.md retains the focused AMD0005 pass, shared lock-order design constraint and actual explicit runtime policy boundaries. No new Product decision, source authority edit or optional-technology blocker is invented.",
-  "next_action": "Obtain the two pending human decisions separately: Product acceptance of P2-002/P2-003, and exact P2-004..008 currentness authorization. On acceptance, validate/complete002 then003; on currentness authorization, apply only the reviewed metadata patch and validate004→005→006→007/008. Refresh custom P2-013 context once after final metadata changes, then admit the allocated revocation/StepUp slice. All current app/backend qualifications remain retained with actual execution SHAs.",
+  "next_action": "P2-002 andP2-003 are Product-accepted andDONE. Await only the separate P2-004..008 currentness authorization for the reviewed metadata patch; then run004→005→006→007/008 readiness and refresh P2-013 context before admitting the revocation/StepUp slice. Existing application qualifications remain unchanged; whole013 remainsPENDING.",
   "http_listing_checkpoint": {
     "result": "PASS_SCOPED_HTTP_CHECKPOINT",
     "tested_commit_sha": "ea731ea0a62d5fbc673d84f17864c3c283b582e7",
@@ -183,13 +183,15 @@
       "TUN-P2-002",
       "TUN-P2-003"
     ],
-    "state": "PRODUCT_ACCEPTANCE",
+    "state": "DONE",
     "readiness_observed_at_source": "98534c1a8aa1ae35ff4e611dc54bf520c85a5d29",
     "native_readiness": "Both READY0 before legal Product-review transitions; valid prior technical evidence reused.",
     "receipts": "governance/evidence/p2-002-003-product-review-20261114",
     "product_review_packet": "artifacts/p2-002-003-product-review-20261114/review.md",
-    "product_acceptance_granted": false,
+    "product_acceptance_granted": true,
     "notification_refinement": "artifacts/p2-013-sessions-20261114/p2-016-readonly-refinement.md",
-    "scope": "Independent engineering/workflow progress only; no new source implementation, acceptance or production activation."
+    "scope": "Independent engineering/workflow progress only; no new source implementation, acceptance or production activation.",
+    "acceptance_source_question": "call_f21c7d412fc74f758e5e1df49309ade7",
+    "completion_ref": "governance/evidence/p2-002-003-product-review-20261114/completion.json"
   }
 }

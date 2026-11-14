@@ -1,0 +1,52 @@
+{
+  "schema_version": 1,
+  "scope_ids": [
+    "TUN-P2-002",
+    "TUN-P2-003"
+  ],
+  "result": "PRODUCT_ACCEPTED_AND_NATIVE_COMPLETED",
+  "recorded_at": "2026-11-14T09:24:49Z",
+  "source_question_call_id": "call_f21c7d412fc74f758e5e1df49309ade7",
+  "acceptance_record_commit": "2d3ba33",
+  "closure_commits": {
+    "TUN-P2-002": "a73452b8fe6bc8530030b3ca828a42e91e18dbad",
+    "TUN-P2-003": "247a74768bcf02d006c3fa7eead98102f59de406"
+  },
+  "validation_sources": {
+    "TUN-P2-002": {
+      "tested_commit_sha": "80ea799cbfc0f9f9ad721723d1944fefae7e97bd",
+      "validated_commit_sha": "80ea799cbfc0f9f9ad721723d1944fefae7e97bd",
+      "owned_paths": 8,
+      "behavior_delta": []
+    },
+    "TUN-P2-003": {
+      "tested_commit_sha": "579c2742c5c4c59a5bcf7e92610d7de32078714a",
+      "validated_commit_sha": "579c2742c5c4c59a5bcf7e92610d7de32078714a",
+      "owned_paths": 24,
+      "behavior_delta": []
+    }
+  },
+  "sequence": "Recorded genuine acceptance, checked002READY/DONEALLOWED and committed002DONE; then checked003READY/DONEALLOWED and committed003DONE.",
+  "criteria_evidence": {
+    "TUN-P2-002": [
+      "AgeEligibilityEvaluator.cs/AgeEligibilityEvaluatorTests.cs retain historical calendar/evidence behavior.",
+      "AccountAgeCapabilities.cs/AccountAgeCapabilityTests.cs cover current amended classification and safe derived evidence.",
+      "Current unchanged-input binding retains actual executed accounts evidence without a new suite claim."
+    ],
+    "TUN-P2-003": [
+      "Stable owned resources/model/framework registration and dependency boundaries remain unchanged in24 declared inputs.",
+      "IdentityFoundationTests.cs and retained persistence qualification cover migrations, concurrency, uniqueness and immutable identifiers/history.",
+      "Forward amended migration and protected Personal Information ownership preserve current approved authority."
+    ]
+  },
+  "application_tests_rerun": false,
+  "native_receipts": [
+    "TUN-P2-002-accepted-gate.json",
+    "TUN-P2-002-accepted-done.json",
+    "TUN-P2-003-accepted-gate.json",
+    "TUN-P2-003-accepted-done.json"
+  ],
+  "context_output_ref": "artifacts/p2-002-003-product-review-20261114/accepted-context",
+  "context_freshness": "Read the actual generated native verification result at the context output; not asserted by this pre-generation record.",
+  "remaining_boundary": "P2-004..008 currentness authorization is still pending and unapplied. WholeP2, production, protected-main and release approvals remain separate."
+}
