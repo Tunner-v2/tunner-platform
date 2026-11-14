@@ -102,6 +102,6 @@ test('real Sessions proof survives reload and lost response, ends only its targe
   await page.getByRole('dialog').getByRole('button',{name:'Other method',exact:true}).click();
   await page.getByRole('dialog').getByLabel('Password',{exact:true}).fill(credentials.password);
   await page.getByRole('dialog').getByRole('button',{name:'Confirm',exact:true}).click();
-  await expect(page.getByRole('status')).toHaveText('Verification completed');expect(prepares).toBe(1);expect(proofWrites).toBe(3);
+  await expect(page.locator('.step-up-fixture > [role="status"]')).toHaveText('Verification completed');expect(prepares).toBe(1);expect(proofWrites).toBe(3);
  }finally{await otherContext.close();}
 });
