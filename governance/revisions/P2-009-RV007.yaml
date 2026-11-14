@@ -8,7 +8,7 @@
   "title": "Preserve authentication proof locking for exact Sessions revocation",
   "revision_type": "COMPATIBILITY",
   "status": "ACTIVE",
-  "reason": "P2-013 exact other-session revocation requires deterministic session locks before Account locking. Preallocate only historically owned StepUpApplication.cs; preserve original DONE and closed RV006. No proof policy, schema, public workflow or production change.",
+  "reason": "P2-013 exact other-session revocation requires deterministic session locks before Account locking. Application allocation owns StepUpApplication.cs; preserve original DONE and closed RV006. No proof policy, schema, public workflow or production change. After qualified075485b, extend this ACTIVE revision to historically owned StepUpBrowserEndpoints.cs for exact typed dispatch before proof execution, preserving existing native/fallback owners.",
   "authority_refs": [
     "docs/authority/baselines/1.6.0/17_Account_Identity_and_Session_FRD.md"
   ],

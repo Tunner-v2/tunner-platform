@@ -7,7 +7,8 @@
   "application_review_ref": "governance/evidence/p2-013-sessions-20261114/revocation-075485b/review.json",
   "tested_commit_sha": null,
   "validated_commit_sha": null,
-  "owned_behavior_paths": ["src/Modules/Identity/StepUpApplication.cs"],
+  "owned_behavior_paths": ["src/Modules/Identity/StepUpApplication.cs", "src/Modules/Identity/StepUpBrowserEndpoints.cs"],
+  "browser_pre_edit_extension": "Exact typed SessionRevocation dispatch before generic browser proof transaction, protected original-context owner resolution and existing fallback/native continuation regression. Existing P1-018 lineage separately allocated; no existing owner lifecycle redesign.",
   "pre_edit_allocation": "Only the typed SESSION_REVOKE/USER_BFF owner seam acquires canonical actor/target session locks before existing LockForOperationAsync. Preserve current proof lifecycle, policy resolution, Account locking and final checks. New Authentication-owned helper and owner operation belong toP2-013. Original009 DONE and all closed predecessors remain immutable.",
   "required_validation": "Focused real PostgreSQL duplicate/opposing revocation, sign-in retry, credential invalidation and rollback tests; existing password/passkey/TOTP/federation proof regressions appropriate to this shared seam; committed-source security review and native revision gates.",
   "review": "Independent AI p2_013_startup_refinement inspected actual lock paths; identified password Account-before-result and federation unordered previous/result compatibility constraints. No code/test execution or acceptance is asserted by this preallocation."

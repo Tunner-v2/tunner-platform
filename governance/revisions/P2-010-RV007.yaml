@@ -8,7 +8,7 @@
   "title": "Preserve sign-in and proof lock order for exact Sessions revocation",
   "revision_type": "COMPATIBILITY",
   "status": "ACTIVE",
-  "reason": "P2-013 exact other-session revocation requires one canonical actor-target lock order. Preallocate historically owned AuthenticationApplication.cs FederationAuthentication.cs and StepUpApplication.cs for narrow prelock compatibility; preserve original DONE and closed RV006. No policy schema external authority or production change.",
+  "reason": "P2-013 exact other-session revocation requires one canonical actor-target lock order. Application allocation owns AuthenticationApplication.cs FederationAuthentication.cs and StepUpApplication.cs for narrow prelock compatibility; preserve original DONE and closed RV006. No policy schema external authority or production change. After qualified075485b, extend this ACTIVE revision to historically owned StepUpBrowserEndpoints.cs for exact typed dispatch before proof execution, preserving existing native/fallback owners and provider-return behavior.",
   "authority_refs": [
     "docs/authority/baselines/1.6.0/17_Account_Identity_and_Session_FRD.md"
   ],
