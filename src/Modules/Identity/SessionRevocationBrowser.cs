@@ -204,6 +204,24 @@ internal sealed class SessionRevocationBrowserService(IdentityPersistenceDbConte
         {
             return other; // Retain the original capability for explicit result-only recovery.
         }
+        if (other is not null)
+        {
+            var now = clock.GetUtcNow();
+            // Generic options resume the independent owner after the exact session effect.
+            // Original session-bound proof/native POSTs still resolve that completed effect;
+            // only an exact protected fallback view selects the fallback on later requests.
+            if (HttpMethods.IsGet(http.Request.Method) && http.Request.Path == "/authentication/step-up/options" ||
+                StepUpBrowserService.BrowserBoundTo(http, protection, now, other, authenticationPolicies.RequireEffective(now).Version))
+            {
+                var request = Request(original);
+                var completed = new AuthenticationApplication.SessionRevocationExecution(database, authentication, caller, request,
+                    SessionRevocationBinding.Operation(caller, request));
+                if (await completed.ReadReceiptAsync(null, ct).ConfigureAwait(false) is not null) return other;
+                // Generic execution resolves its owner again inside its already authorized
+                // transaction. An uncompleted session intent cannot start a nested read there.
+                if (database.Database.CurrentTransaction is not null) return null;
+            }
+        }
         var current = await CurrentAsync(http, caller, ct).ConfigureAwait(false);
         if (current is null || current.Status == "CHANGED") return null;
         var binding = SessionRevocationBinding.Operation(caller, current.Request);

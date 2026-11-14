@@ -1201,24 +1201,49 @@
         "docs/authority/current/development/31_UI_UX_Screen_and_Control_Center_Requirements_Matrix.md"
       ],
       "figma_refs": [{"file_key":"apNbwvAgdn1xIxYH1oiaSC","node_id":"16:2"},{"file_key":"apNbwvAgdn1xIxYH1oiaSC","node_id":"47:243"}],
-      "source_paths": ["web/apps/user/sessions.tsx","web/apps/user/sessions.ui.tsx","web/apps/user/sessions.api.ts","web/apps/user/sessions.routes.ts","web/apps/user/sessions.css","src/Modules/Identity/SessionListingEndpoints.cs","src/Modules/Identity/SessionListingPresentation.cs"],
+      "source_paths": ["web/apps/user/sessions.tsx","web/apps/user/sessions.ui.tsx","web/apps/user/sessions.api.ts","web/apps/user/sessions.routes.ts","web/apps/user/sessions.css","src/Modules/Identity/SessionListingEndpoints.cs","src/Modules/Identity/SessionListingPresentation.cs","web/apps/user/sessions.revocation.tsx","src/Modules/Identity/SessionRevocationBrowser.cs","web/apps/user/passkeys.tsx"],
+      "component_ids": ["COMP-SESSION-REVOKE","COMP-STEP-UP"],
       "planning_status": "SCOPED_LISTING_IMPLEMENTED_REMAINING_FEATURE_INCREMENT_PENDING",
       "design_status": "SCOPED_PRODUCT_OWNER_ADAPTATIONS_IMPLEMENTED_CURRENT_GATE_PENDING",
       "consent_ref": "governance/evidence/TUN-P2-013-VISUAL-CONSENT.json",
       "approved_visual_scope_ids": ["013-V01","013-V02","013-V03","013-V04"],
-      "acceptance_boundary": "PENDING. Approved first listing increment only; no browser/visual PASS inherited. Device/trust/bulk and exact other-session revocation remain required later increments. No invented device/location facts or Product termination claim."
+      "acceptance_boundary": "PENDING integrated acceptance. Listing/details and exact other-session revocation are implemented under existing scoped consent; current native UI/rendered/live-browser gates remain required. No device/trust inference, Product-local termination or whole-feature acceptance is inherited."
     },
     {
       "id": "U-ACCT-SESSION-DETAILS", "kind": "SCREEN", "status": "IMPLEMENTED", "app": "user", "module": "U-ACCT",
-      "title": "Session details", "requirements": "Truthful selected-session facts; ordinary current-session Account-menu Sign out; guarded detail selection",
+      "title": "Session details", "requirements": "Truthful selected-session facts; ordinary current-session Account-menu Sign out; guarded selection and exact other-session revocation through fresh proof",
       "pathname": "/account/sessions/details", "runtime_pathname": "/account/sessions/details",
-      "guard": "Same independently authorized listing context; selection retained in memory only. Missing selection on direct entry/reload returns to canonical listing. No session reference/version/cursor in URL or persistent storage.",
+      "guard": "Current authenticated User and independently authorized listing; in-memory selection or exact protected HttpOnly original revocation context recovered before the detail guard. Missing selection returns to canonical listing. Revoke preparation/result independently require SESSION_REVOKE and exact actor/origin/target/version; proof is operation-bound. No references/versions/cursors in URLs or Web Storage.",
       "owner_scopes": ["TUN-P2-013"],
       "authority_refs": ["docs/authority/current/development/17_Account_Identity_and_Session_FRD.md","docs/authority/current/decisions/AMD-0009_URL_Addressable_Routing_and_Governed_Form_Validation.md"],
       "figma_refs": [{"file_key":"apNbwvAgdn1xIxYH1oiaSC","node_id":"36:159"},{"file_key":"apNbwvAgdn1xIxYH1oiaSC","node_id":"46:35"}],
-      "source_paths": ["web/apps/user/sessions.tsx","web/apps/user/sessions.ui.tsx","web/apps/user/sessions.routes.ts"],
+      "source_paths": ["web/apps/user/sessions.tsx","web/apps/user/sessions.ui.tsx","web/apps/user/sessions.routes.ts","web/apps/user/sessions.revocation.tsx","web/apps/user/sessions.api.ts","src/Modules/Identity/SessionRevocationBrowser.cs"],
+      "component_ids": ["COMP-SESSION-REVOKE","COMP-STEP-UP"],
       "consent_ref": "governance/evidence/TUN-P2-013-VISUAL-CONSENT.json", "approved_visual_scope_ids": ["013-V01","013-V02","013-V03","013-V04"],
-      "acceptance_boundary": "PENDING. Listing/detail implementation and current rendered evidence required. Consent does not make unimplemented revocation feedback authoritative or complete whole P2-013."
+      "acceptance_boundary": "PENDING current integrated UI/native/live-browser evidence. Existing consent covers selected-target confirmation, exact success/unknown/changed feedback and shared responsive patterns; it does not establish Product or whole-P2-013 acceptance."
+    },
+    {
+      "id": "COMP-SESSION-REVOKE",
+      "kind": "COMPONENT",
+      "status": "IMPLEMENTED",
+      "app": "user",
+      "module": "Identity.Sessions",
+      "title": "Exact other-session sign-out confirmation and result",
+      "pathname": null,
+      "runtime_pathname": null,
+      "owner_pathnames": ["/account/sessions","/account/sessions/details"],
+      "owner_scopes": ["TUN-P2-013"],
+      "authority_refs": ["docs/authority/current/development/17_Account_Identity_and_Session_FRD.md","docs/authority/current/decisions/AMD-0008_Approved_Figma_Visual_Fidelity_and_Product_Owner_UX_Consent.md","docs/authority/current/decisions/AMD-0009_URL_Addressable_Routing_and_Governed_Form_Validation.md"],
+      "figma_refs": [{"file_key":"apNbwvAgdn1xIxYH1oiaSC","node_id":"46:35"},{"file_key":"apNbwvAgdn1xIxYH1oiaSC","node_id":"46:116"}],
+      "source_paths": ["web/apps/user/sessions.revocation.tsx","web/apps/user/sessions.css","web/apps/user/sessions.api.ts","src/Modules/Identity/SessionRevocationBrowser.cs"],
+      "component_ids": ["COMP-STEP-UP"],
+      "form_ids": ["FORM-STEP-UP"],
+      "guard": "Selected exact other-session reference/version, independently authorized server preparation, protected original context and fresh operation-bound proof. Completion requires exact durable owner receipt; unknown is check-only. No second mutation or URL/Web Storage authority.",
+      "interaction": "Same-screen shared modal and proof dialog; canonical owner pathname remains unchanged.",
+      "consent_ref": "governance/evidence/TUN-P2-013-VISUAL-CONSENT.json",
+      "approved_visual_scope_ids": ["013-V03","013-V04"],
+      "design_status": "PRODUCT_OWNER_APPROVED_SCOPED_ADAPTATIONS",
+      "acceptance_boundary": "PENDING current native UI, keyboard/axe/responsive and rendered/reference evidence; no whole-feature or production acceptance."
     },
     {
       "id": "U-ACCT-05",
@@ -2323,7 +2348,8 @@
         "TUN-P2-009",
         "P1-018-RV007",
         "TUN-P2-010",
-        "P1-018-RV008"
+        "P1-018-RV008",
+        "TUN-P2-013"
       ],
       "authority_refs": [
         "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md",
@@ -2367,7 +2393,9 @@
         "web/packages/ui/src/content.tsx",
         "src/Modules/Identity/StepUpFederationBrowserEndpoints.cs",
         "src/Modules/Identity/FederationOperationProofBrowserService.cs",
-        "src/Modules/Identity/FederationStepUpOwner.cs"
+        "src/Modules/Identity/FederationStepUpOwner.cs",
+        "web/apps/user/sessions.revocation.tsx",
+        "src/Modules/Identity/SessionRevocationBrowser.cs"
       ],
       "guard": "Current User server session and trusted owner action; protected view binding, exact policy and operation checks; no browser-selected authority or general session upgrade.",
       "observed_defects": [],
@@ -2393,7 +2421,8 @@
         "governance/evidence/TUN-P2-008-FACTOR-PICKER-CONSENT.json",
         "governance/evidence/TUN-P2-009-VISUAL-CONSENT.json",
         "governance/evidence/TUN-P2-009-VISUAL-CONSENT-L04.json",
-        "governance/evidence/TUN-P2-010-VISUAL-CONSENT.json"
+        "governance/evidence/TUN-P2-010-VISUAL-CONSENT.json",
+        "governance/evidence/TUN-P2-013-VISUAL-CONSENT.json"
       ],
       "current_revision_ref": "P1-018-RV008",
       "revision_acceptance_boundary": "010-V03 conditional shared-dialog proof WIP only under ACTIVE P1-018-RV008 and scoped Product visual consent. Initial public18 passing cases and the corrected isolated1 passing case are separate source/invocation observations, not one19-case passing run or a final committed-source qualification. Per-item URL/VAL/UX-FID, affected-consumer regression, native/live integration and native UI gate remain PENDING; no production policy/publication or whole-feature/Product/release acceptance is inherited.",
@@ -2413,7 +2442,9 @@
         }
       ],
       "owner_pathnames": [
-        "/account/security"
+        "/account/security",
+        "/account/sessions",
+        "/account/sessions/details"
       ],
       "contract_refs": [
         "docs/contracts/authentication-session-contract.md",
@@ -2428,7 +2459,16 @@
         "artifacts/p2-010-federation-20261112/operation-proof-wip-ui/results.json",
         "artifacts/p2-010-federation-20261112/operation-proof-focused-locator/results.json",
         "artifacts/p2-010-federation-20261112/operation-proof-focused-completion/results.json"
-      ]
+      ],
+      "session_revocation_integration": {
+        "owner_scope": "TUN-P2-013",
+        "revision_refs": [
+          "P1-018-RV011",
+          "P2-009-RV007",
+          "P2-010-RV007"
+        ],
+        "boundary": "Additional Sessions caller only, under existing shared proof designs and scoped consent. Prior owners, original closure and their acceptance history remain unchanged."
+      }
     },
     {
       "module": "Identity.StepUp",
@@ -2498,7 +2538,8 @@
         "TUN-P2-008",
         "P1-018-RV006",
         "TUN-P2-009",
-        "P1-018-RV007"
+        "P1-018-RV007",
+        "TUN-P2-013"
       ],
       "authority_refs": [
         "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md",
@@ -2524,7 +2565,9 @@
         "src/Modules/Identity/StepUpApplication.cs",
         "web/apps/user/recovery-codes.api.ts",
         "web/apps/user/step-up.completion.ts",
-        "src/Modules/Identity/RecoveryCodeProofCompletedResult.cs"
+        "src/Modules/Identity/RecoveryCodeProofCompletedResult.cs",
+        "web/apps/user/sessions.revocation.tsx",
+        "src/Modules/Identity/SessionRevocationBrowser.cs"
       ],
       "guard": "Current User server session and trusted owner action; protected view binding, exact policy and operation checks; no browser-selected authority or general session upgrade.",
       "observed_defects": [],
@@ -2549,7 +2592,8 @@
         "governance/evidence/TUN-P2-008-VISUAL-CONSENT.json",
         "governance/evidence/TUN-P2-008-FACTOR-PICKER-CONSENT.json",
         "governance/evidence/TUN-P2-009-VISUAL-CONSENT.json",
-        "governance/evidence/TUN-P2-009-VISUAL-CONSENT-L04.json"
+        "governance/evidence/TUN-P2-009-VISUAL-CONSENT-L04.json",
+        "governance/evidence/TUN-P2-013-VISUAL-CONSENT.json"
       ],
       "current_revision_ref": "P1-018-RV007",
       "revision_acceptance_boundary": "P2-009 same-screen recovery owner integration under ACTIVE RV007 and actual L01–L04/shared-integration grants. All current committed-source per-item URL/VAL/UX-FID, all-method first-delivery, native owner/currentness and qualified download evidence remains PENDING. Prior30 presentation/other-owner proof is historical scoped input only; no integrated PASS, production policy/publication, human-saved or Product/release acceptance is inherited.",
@@ -2564,8 +2608,19 @@
         }
       ],
       "owner_pathnames": [
-        "/account/security"
-      ]
+        "/account/security",
+        "/account/sessions",
+        "/account/sessions/details"
+      ],
+      "session_revocation_integration": {
+        "owner_scope": "TUN-P2-013",
+        "revision_refs": [
+          "P1-018-RV011",
+          "P2-009-RV007",
+          "P2-010-RV007"
+        ],
+        "boundary": "Additional Sessions caller only, under existing shared proof designs and scoped consent. Prior owners, original closure and their acceptance history remain unchanged."
+      }
     },
     {
       "id": "U-ACCT-SECURITY",
@@ -3723,5 +3778,5 @@
       "reason": "Hidden historical DOB-only screen, superseded prospectively by PDR-0011/AMD-0007; never implement as active UI."
     }
   ],
-  "updated_at": "2026-11-12T15:04:20.540Z"
+  "updated_at": "2026-11-14T13:36:14Z"
 }

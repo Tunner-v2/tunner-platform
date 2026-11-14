@@ -163,6 +163,49 @@ public sealed class SessionRevocationHttpTests(SessionListingPostgresFixture fix
     }
 
     [Fact]
+    public async Task CompletedSessionHandsBackUnchangedOrdinaryOwnerAndRetainsExactResult()
+    {
+        await using var test = await Create();
+        using var earlierOptions = await test.Host.Get("/authentication/step-up/options", test.Actor.Cookies);
+        Assert.Equal(HttpStatusCode.OK, earlierOptions.StatusCode);
+        var earlier = await earlierOptions.Content.ReadFromJsonAsync<JsonElement>();
+        var earlierCookies = Merge(test.Actor.Cookies, earlierOptions);
+        test.Host.Clock.Advance(TimeSpan.FromSeconds(90));
+        var selected = await Complete(test, await Prepare(test));
+        using var ordinaryOptions = await test.Host.Get("/authentication/step-up/options", selected.Cookies);
+        Assert.Equal(HttpStatusCode.OK, ordinaryOptions.StatusCode);
+        var ordinary = await ordinaryOptions.Content.ReadFromJsonAsync<JsonElement>();
+        Assert.Equal("PENDING", ordinary.GetProperty("status").GetString());
+        Assert.Equal("fixture-correlation", ordinary.GetProperty("operationReference").GetString());
+        var requestId = ordinary.GetProperty("requestId").GetGuid(); var csrf = ordinary.GetProperty("csrfToken").GetString()!;
+        var cookies = Merge(selected.Cookies, ordinaryOptions);
+        using (var wrongView = await test.Host.Post("/authentication/step-up/password", new { requestId, password = Password }, selected.Cookies, csrf))
+            Assert.Equal(HttpStatusCode.Conflict, wrongView.StatusCode);
+        var tampered = ReplaceCookie(cookies, StepUpBrowserEndpoints.CookieName, StepUpBrowserEndpoints.CookieName + "=tampered");
+        using (var invalid = await test.Host.Post("/authentication/step-up/password", new { requestId, password = Password }, tampered, csrf))
+            Assert.Equal(HttpStatusCode.Forbidden, invalid.StatusCode);
+        // The earlier server-issued view is now beyond its two-minute authentication
+        // context lifetime; the later original Sessions and ordinary views remain valid.
+        test.Host.Clock.Advance(TimeSpan.FromSeconds(31));
+        var expiredCookies = ReplaceCookie(cookies, StepUpBrowserEndpoints.CookieName, CookieOnly(earlierCookies, StepUpBrowserEndpoints.CookieName));
+        using (var expired = await test.Host.Post("/authentication/step-up/password", new
+        { requestId = earlier.GetProperty("requestId").GetGuid(), password = Password }, expiredCookies, earlier.GetProperty("csrfToken").GetString()))
+            Assert.Equal(HttpStatusCode.Forbidden, expired.StatusCode);
+        using var applied = await test.Host.Post("/authentication/step-up/password", new { requestId, password = Password }, cookies, csrf);
+        Assert.Equal(HttpStatusCode.OK, applied.StatusCode);
+        Assert.Equal("fixture-correlation", (await applied.Content.ReadFromJsonAsync<JsonElement>()).GetProperty("operationReference").GetString());
+        using var original = await test.Host.Post(Root + "/result", new { requestId = selected.RequestId }, Merge(cookies, applied), csrf);
+        Assert.Equal(HttpStatusCode.OK, original.StatusCode);
+        var receipt = await original.Content.ReadFromJsonAsync<JsonElement>();
+        Assert.Equal(selected.OperationReference, receipt.GetProperty("operationReference").GetString());
+        Assert.Equal("REVOKED", receipt.GetProperty("status").GetString());
+        await using var check = test.Database.Context();
+        Assert.Equal(1, await check.Database.SqlQueryRaw<int>("SELECT value AS \"Value\" FROM identity.step_up_browser_target WHERE id=1").SingleAsync());
+        Assert.Equal(1, await check.Set<OutboxMessage>().CountAsync(x => x.EventType == "TunnerSessionRevoked" && x.Subject == test.Target.SessionId.ToString("N")));
+        Assert.Equal(1, await check.Set<StepUpProofRow>().CountAsync(x => x.Operation == "SESSION_REVOKE" && x.State == "CONSUMED"));
+    }
+
+    [Fact]
     public async Task NewIndependentOwnerSupersedesSharedProofWithoutDeletingOriginalResultContext()
     {
         await using var test = await Create(); var selected = await Prepare(test); test.Fallback.Resource = "fixture-new-resource";

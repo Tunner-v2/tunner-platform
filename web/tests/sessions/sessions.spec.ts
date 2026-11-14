@@ -151,7 +151,7 @@ async function revocationSetup(page:Page){
 }
 async function reviewOther(page:Page){await page.goto(list);await page.locator('[data-session-reference="'+target+'"]').getByRole('button',{name:'Session information'}).click();await page.getByRole('button',{name:'Sign out this session',exact:true}).click();await expect(page.getByRole('heading',{name:'Sign out this session?',exact:true})).toBeFocused();}
 async function finishPassword(page:Page){await page.getByRole('button',{name:'Other method',exact:true}).click();await page.getByLabel('Password',{exact:true}).fill('synthetic current password');await page.getByRole('button',{name:'Confirm',exact:true}).click();}
-for(const width of [1440,320]){
+for(const width of [1440,1366,1024,768,390,320]){
  test('Selected-other-session confirmation and exact result reuse approved modal at '+width,async({page})=>{
   await page.setViewportSize({width,height:1100});const {state}=await revocationSetup(page);await reviewOther(page);
   const dialog=page.getByRole('dialog');await expect(dialog).toContainText(proposal.content['account.sessions.productBoundary']);await expect(dialog).toContainText('Session …22222222');await expect(page.getByText('9007199254740993')).toHaveCount(0);

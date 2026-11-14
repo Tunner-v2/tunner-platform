@@ -54,7 +54,8 @@ internal sealed partial class StepUpBrowserService(IUserStepUpOperationSource re
 {
     private readonly SessionRevocationBrowserService? sessionRevocation = sessionRevocations?.SingleOrDefault();
     private readonly IUserStepUpOperationSource owner = SessionRevocationOwnerRouter.Wrap(registeredOwner, sessionRevocations?.SingleOrDefault());
-    private readonly IDataProtector protector = protection.CreateProtector("Tunner.User.StepUp.Browser.v1");
+    private const string BrowserPurpose = "Tunner.User.StepUp.Browser.v1";
+    private readonly IDataProtector protector = protection.CreateProtector(BrowserPurpose);
     internal sealed record Browser(Guid RequestId, string BindingDigest, string AuthenticationPolicyVersion, DateTimeOffset ExpiresAt);
     internal Task<IResult> OptionsAsync(HttpContext context) => GuardAsync(context, async () =>
     {
@@ -195,6 +196,14 @@ internal sealed partial class StepUpBrowserService(IUserStepUpOperationSource re
         return StepUpCaller.FromPrincipal(context.User, surface.Origin, partitions.Network(context.Connection.RemoteIpAddress));
     }
     private bool TryBrowser(HttpContext context, DateTimeOffset now, out Browser? browser)
+        => TryBrowser(context, protector, now, out browser);
+
+    internal static bool BrowserBoundTo(HttpContext context, IDataProtectionProvider protection, DateTimeOffset now,
+        UserStepUpOperationContext operation, string authenticationPolicyVersion)
+        => TryBrowser(context, protection.CreateProtector(BrowserPurpose), now, out var browser) &&
+            browser!.BindingDigest == Digest(operation) && browser.AuthenticationPolicyVersion == authenticationPolicyVersion;
+
+    private static bool TryBrowser(HttpContext context, IDataProtector protector, DateTimeOffset now, out Browser? browser)
     {
         browser = null;
         if (!context.Request.Cookies.TryGetValue(StepUpBrowserEndpoints.CookieName, out var value)) return false;
