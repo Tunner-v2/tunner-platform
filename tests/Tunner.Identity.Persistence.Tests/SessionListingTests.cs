@@ -31,6 +31,7 @@ public sealed class SessionListingPostgresFixture : IAsyncLifetime
     {
         if (!TestHarnessProfiles.IsContainerExecutionEnabled()) return;
         var run = Environment.GetEnvironmentVariable("TUNNER_SESSION_LISTING_RUN_ID");
+        if (run is null) return; // This dedicated local profile must not fail unrelated integration runs.
         var engine = Environment.GetEnvironmentVariable("TUNNER_SESSION_LISTING_ENGINE_ID");
         var endpoint = Environment.GetEnvironmentVariable("DOCKER_HOST");
         if (run is not { Length: 32 } || run.Any(c => !char.IsAsciiHexDigitLower(c)) || string.IsNullOrWhiteSpace(engine) ||
@@ -77,7 +78,12 @@ public sealed class SessionListingPostgresFixture : IAsyncLifetime
         {
             if (container is not null)
             {
-                var id = container.Id; await container.DisposeAsync();
+                var id = container.Id;
+                // In Testcontainers 4.15 a reaper-disabled (empty-session) resource is only stopped by Dispose.
+                // Reuse its own Docker SDK removal operation for this retained ID and its anonymous volumes.
+                await container.DisposeAsync();
+                try { await docker!.Containers.RemoveContainerAsync(id, new ContainerRemoveParameters { Force = true, RemoveVolumes = true }); }
+                catch (DockerApiException error) when (error.StatusCode == System.Net.HttpStatusCode.NotFound) { }
                 var absent = false;
                 try { await docker!.Containers.InspectContainerAsync(id); }
                 catch (DockerApiException error) when (error.StatusCode == System.Net.HttpStatusCode.NotFound) { absent = true; }
