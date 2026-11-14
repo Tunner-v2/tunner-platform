@@ -1,5 +1,16 @@
 # P2-013 — owned Tunner sessions
 
+## Latest verified listing/details checkpoint — 2026-11-14
+
+Branch: codex/p2-013-sessions-20261114. Qualified current source: dd9029e8fc479693de954b4d1c4ffdf8cf7fb179. Actual 26/26 backend and 28/28 API/controlled-BFF browser executions retain source41501e3b006041ef2efaa2766a0a1fe1e73534af; the additional keyboard/inventory/rendered-identity case passed atdd9029e. Application/backend inputs are identical between those sources; only inventory metadata and focused assertions changed. No single combined29-case invocation or live-BFF browser E2E is claimed. Canonical raw evidence/source binding: governance/evidence/p2-013-sessions-20261114/ui-dd9029e.
+
+Current list/details UI uses approved Tunner composition, 74 independently published labels, authenticated-session CSRF, strict safe DTOs, body-only pagination, guarded canonical paths and safe uncertain Sign out. Six widths1440/1366/1024/768/390/320 have listing/detail axe and overflow observations. Native UI check PASS covers exactly U-ACCT-04 and U-ACCT-SESSION-DETAILS. DEF-TUN-P2-013-UI-001 is resolved by faithful restoration and current rendered evidence; earlier failures/before-images remain preserved. Prototype disposal remains unknown and is not application evidence.
+
+User explicitly authorized recording one independent AI's eleven actual technical role assessments for each of five existing packaging/inventory revisions in call_00f47a0bb0454b50a3c95b003cbdc5fa. This does not establish eleven human reviewers or Product acceptance. P1-018-RV010, P2-004-UI001-RV007, P2-004-UI002-RV007, P2-009-RV006 and P2-010-RV006 remain ACTIVE until their native validation/closure gates pass. Prior active recovery allocations and original closures remain separate.
+
+Exact next action: complete these native technical gates and bounded prerequisite currentness reconciliation, then refresh the custom P2-013 context once. Continue the already-refined exact other-session revocation slice using the deterministic pre-actor session-lock seam, existing proof owner and standard fixture; allocate its historical StepUp owner paths before edits. Other-session confirmation/results, prior Account navigation integration, device/trust/bulk, effective production content/configuration and live-BFF browser E2E remain pending. Whole P2-013 stays IN_PROGRESS/PENDING with null whole-feature test/validation SHAs. Figma/Drive/FigJam remain read-only; no protected-main, deployment or release approval.
+
+
 Status: IN_PROGRESS; application-only listing checkpoint verified at8bd5230. Whole-feature acceptance remainsPENDING. Native startup/lifecycle/context checks admitted the bounded scope before implementation; all first-increment source changes are committed and actually tested. HTTP/UI/revocation/production and CI transport remain separate work.
 
 ## Existing authority
