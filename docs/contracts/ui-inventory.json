@@ -1193,18 +1193,32 @@
       "module": "U-ACCT",
       "title": "Sessions & Devices",
       "requirements": "current/other sessions, device trust, revoke actions; Product-session boundary copy",
-      "pathname": null,
-      "runtime_pathname": null,
-      "guard": "Resolve from owning FRD and current authorization before implementation",
-      "owner_scopes": [],
+      "pathname": "/account/sessions",
+      "runtime_pathname": "/account/sessions",
+      "guard": "Authenticated User session plus independent LIST_SESSIONS authorization on every page; effective published content and explicit runtime read budget. Abort and ignore stale route reads. No IDs or cursors in URLs/storage.",
+      "owner_scopes": ["TUN-P2-013"],
       "authority_refs": [
         "docs/authority/current/development/31_UI_UX_Screen_and_Control_Center_Requirements_Matrix.md"
       ],
-      "figma_refs": [],
-      "source_paths": [],
-      "planning_status": "OWNER_AND_ROUTE_REFINEMENT_REQUIRED",
-      "design_status": "UI_REQUIRED_BEFORE_IMPLEMENTATION",
-      "acceptance_boundary": "Unimplemented: no PASS inherited from registration and no feature implementation authorized by this inventory."
+      "figma_refs": [{"file_key":"apNbwvAgdn1xIxYH1oiaSC","node_id":"16:2"},{"file_key":"apNbwvAgdn1xIxYH1oiaSC","node_id":"47:243"}],
+      "source_paths": ["web/apps/user/sessions.tsx","web/apps/user/sessions.ui.tsx","web/apps/user/sessions.api.ts","web/apps/user/sessions.routes.ts","web/apps/user/sessions.css","src/Modules/Identity/SessionListingEndpoints.cs","src/Modules/Identity/SessionListingPresentation.cs"],
+      "planning_status": "APPROVED_LISTING_INCREMENT_IN_PROGRESS",
+      "design_status": "SCOPED_PRODUCT_OWNER_ADAPTATIONS_APPROVED_IMPLEMENTATION_PENDING",
+      "consent_ref": "governance/evidence/TUN-P2-013-VISUAL-CONSENT.json",
+      "approved_visual_scope_ids": ["013-V01","013-V02","013-V03","013-V04"],
+      "acceptance_boundary": "PENDING. Approved first listing increment only; no browser/visual PASS inherited. Device/trust/bulk and exact other-session revocation remain required later increments. No invented device/location facts or Product termination claim."
+    },
+    {
+      "id": "U-ACCT-04-DETAILS", "kind": "SCREEN", "status": "PLANNED", "app": "user", "module": "U-ACCT",
+      "title": "Session details", "requirements": "Truthful selected-session facts; ordinary current-session Account-menu Sign out; guarded detail selection",
+      "pathname": "/account/sessions/details", "runtime_pathname": "/account/sessions/details",
+      "guard": "Same independently authorized listing context; selection retained in memory only. Missing selection on direct entry/reload returns to canonical listing. No session reference/version/cursor in URL or persistent storage.",
+      "owner_scopes": ["TUN-P2-013"],
+      "authority_refs": ["docs/authority/current/development/17_Account_Identity_and_Session_FRD.md","docs/authority/current/decisions/AMD-0009_URL_Addressable_Routing_and_Governed_Form_Validation.md"],
+      "figma_refs": [{"file_key":"apNbwvAgdn1xIxYH1oiaSC","node_id":"36:159"},{"file_key":"apNbwvAgdn1xIxYH1oiaSC","node_id":"46:35"}],
+      "source_paths": ["web/apps/user/sessions.tsx","web/apps/user/sessions.ui.tsx","web/apps/user/sessions.routes.ts"],
+      "consent_ref": "governance/evidence/TUN-P2-013-VISUAL-CONSENT.json", "approved_visual_scope_ids": ["013-V01","013-V02","013-V03","013-V04"],
+      "acceptance_boundary": "PENDING. Listing/detail implementation and current rendered evidence required. Consent does not make unimplemented revocation feedback authoritative or complete whole P2-013."
     },
     {
       "id": "U-ACCT-05",
