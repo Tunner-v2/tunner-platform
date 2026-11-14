@@ -1,0 +1,166 @@
+{
+  "schema_version": 1,
+  "scope_id": "TUN-P2-013",
+  "result": "PASS_APPLICATION_ONLY",
+  "tested_commit_sha": "075485ba3c03073855f5b16ae1961f3e4110636e",
+  "validated_commit_sha": "075485ba3c03073855f5b16ae1961f3e4110636e",
+  "sources": [
+    {
+      "path": "src/Modules/Identity/AuthenticationApplication.cs",
+      "git_blob": "1af423219093497d683c8656bfc5bfe5be967aa9",
+      "working_sha256": "1b9e1f133f7d6247947d88d5aa44b63d0a5c836deda296872a9f6cc4cbb68a03"
+    },
+    {
+      "path": "src/Modules/Identity/FederationAuthentication.cs",
+      "git_blob": "94fb00d1453af2aaa52f087764da8299da8f118b",
+      "working_sha256": "963bb22b7dbbdd1cfba43a59870c92e681e2765230ec24814ae1bbacb9039451"
+    },
+    {
+      "path": "src/Modules/Identity/StepUpApplication.cs",
+      "git_blob": "3649e5fc5409be50473e36891cb447715058d842",
+      "working_sha256": "2b1c6288676a919a6153c816cfcdd89259c9b5401710e004853aa625fe5200a8"
+    },
+    {
+      "path": "src/Modules/Identity/AuthenticationSessionLocking.cs",
+      "git_blob": "ebae855be0a823862593ff5946cc6b1affc405b3",
+      "working_sha256": "77d9352a3c0dcf77c20b491f6c74d64f52a33c7377eda38e9d22b93d15738e0f"
+    },
+    {
+      "path": "src/Modules/Identity/AuthenticationSessionRevocation.cs",
+      "git_blob": "834c8367cb5f8f2168ce1445a7c1efd1c9301175",
+      "working_sha256": "56852c13b4ef19417f274f5fa38644da8cecdd2a6a995742dc520ab6c8e8c00e"
+    },
+    {
+      "path": "src/Modules/Identity/SessionRevocationApplication.cs",
+      "git_blob": "89ae19e2036f83d119a1a0f115f3651af38b2012",
+      "working_sha256": "0b6acc67268d80ec01489622700c52c906350859dd605be3b03f28a3c93e546f"
+    },
+    {
+      "path": "src/Modules/Identity/SessionRevocationContracts.cs",
+      "git_blob": "9208fa4a05d10e48f32cb76b0d60d1dcb860548c",
+      "working_sha256": "c79d234e45d6ef7ac5f7c28ca59129cfe3e3d582d31e01f9cae2fafb1f58f2c3"
+    },
+    {
+      "path": "tests/Tunner.Identity.Persistence.Tests/SessionRevocationTests.cs",
+      "git_blob": "983930b6379685f99d81ec807ddb09ec510cc39f",
+      "working_sha256": "40b324262c61c8b243697fa33fd57e92095d5883d27ade7414307fa4026007bc"
+    },
+    {
+      "path": "docs/contracts/session-revocation-contract.md",
+      "git_blob": "c8de6e958eff4cfe7faf4fe14954b7815a152ea2",
+      "working_sha256": "1f2aac191f3a51574e44cb72803a19077bb7fb30ec49f3916f4bb10984da46b9"
+    }
+  ],
+  "assemblies": [
+    {
+      "path": "tests/Tunner.Identity.Persistence.Tests/bin/Debug/net10.0/Tunner.Identity.Persistence.Tests.dll",
+      "sha256": "5eef4b1f31a33dea8d077f4dc64e89442f4a77af0536bb9867f3b67109a3e318"
+    },
+    {
+      "path": "tests/Tunner.Identity.Persistence.Tests/bin/Debug/net10.0/Tunner.Identity.Persistence.dll",
+      "sha256": "fe3b528142f3174cad2119bf57f0b0cb67982707a13fd6fc9d885703e47d33c6"
+    }
+  ],
+  "cohort_run_id": "e6d5eede1fe344d2a6de481d42222684",
+  "probe_run_id": "81df9faacb904292aece1804c9aed511",
+  "executed": 18,
+  "passed": 18,
+  "failed": 0,
+  "skipped": 0,
+  "trx_started": "2026-11-14T06:53:05.2177706-05:00",
+  "trx_finished": "2026-11-14T06:54:16.9195009-05:00",
+  "trx_duration_seconds": 71.7017303,
+  "cases": [
+    {
+      "name": "Tunner.Identity.Persistence.Tests.SessionRevocationTests.ExactOtherSessionRevocationReconcilesWithoutRepeatingEffectOrProofConsumption",
+      "outcome": "Passed",
+      "duration": "00:00:03.1201643"
+    },
+    {
+      "name": "Tunner.Identity.Persistence.Tests.SessionRevocationTests.ForeignOrStaleTargetsCannotBePreparedOrChanged(kind: \"foreign\")",
+      "outcome": "Passed",
+      "duration": "00:00:02.6087306"
+    },
+    {
+      "name": "Tunner.Identity.Persistence.Tests.SessionRevocationTests.DuplicateConcurrentRequestsReturnOneCausalEffect",
+      "outcome": "Passed",
+      "duration": "00:00:02.8730240"
+    },
+    {
+      "name": "Tunner.Identity.Persistence.Tests.SessionRevocationTests.FactorRevocationActorEffectSerializesWithExactSessionRevoker(kind: \"DISABLE\")",
+      "outcome": "Passed",
+      "duration": "00:00:04.3194776"
+    },
+    {
+      "name": "Tunner.Identity.Persistence.Tests.SessionRevocationTests.OpposingRevocationsAcquireBothSessionsBeforeAccountWithoutDeadlock",
+      "outcome": "Passed",
+      "duration": "00:00:03.0877365"
+    },
+    {
+      "name": "Tunner.Identity.Persistence.Tests.SessionRevocationTests.ForeignOrStaleTargetsCannotBePreparedOrChanged(kind: \"origin\")",
+      "outcome": "Passed",
+      "duration": "00:00:02.7459201"
+    },
+    {
+      "name": "Tunner.Identity.Persistence.Tests.SessionRevocationTests.PasswordRetryPrelocksPriorAndPreviousBeforeAccountWhileRevokerContends",
+      "outcome": "Passed",
+      "duration": "00:00:02.8441945"
+    },
+    {
+      "name": "Tunner.Identity.Persistence.Tests.SessionRevocationContractTests.SelfTargetAndInvalidVersionsCannotBecomeOwnerBindings",
+      "outcome": "Passed",
+      "duration": "00:00:00.0128956"
+    },
+    {
+      "name": "Tunner.Identity.Persistence.Tests.SessionRevocationTests.FactorRevocationActorEffectSerializesWithExactSessionRevoker(kind: \"RESET\")",
+      "outcome": "Passed",
+      "duration": "00:00:04.4790665"
+    },
+    {
+      "name": "Tunner.Identity.Persistence.Tests.SessionRevocationTests.FederationRetryPrelocksPreviousAndResultCanonicallyBeforeAccount",
+      "outcome": "Passed",
+      "duration": "00:00:09.1613648"
+    },
+    {
+      "name": "Tunner.Identity.Persistence.Tests.SessionRevocationTests.DifferentActorsCompetingForOneTargetApplyOnlyOneExactOperation",
+      "outcome": "Passed",
+      "duration": "00:00:02.7642281"
+    },
+    {
+      "name": "Tunner.Identity.Persistence.Tests.SessionRevocationTests.ForeignOrStaleTargetsCannotBePreparedOrChanged(kind: \"version\")",
+      "outcome": "Passed",
+      "duration": "00:00:02.9050259"
+    },
+    {
+      "name": "Tunner.Identity.Persistence.Tests.SessionRevocationTests.ExpiredOrStampInvalidTargetDoesNotConsumeProofOrRecordRevocation",
+      "outcome": "Passed",
+      "duration": "00:00:03.3176075"
+    },
+    {
+      "name": "Tunner.Identity.Persistence.Tests.SessionRevocationTests.ConsumedProofWithoutExactTargetEffectIsNeverAnOwnerReceipt",
+      "outcome": "Passed",
+      "duration": "00:00:02.6209954"
+    },
+    {
+      "name": "Tunner.Identity.Persistence.Tests.SessionRevocationTests.PrepareAndResultReadRequireCurrentActorAndExactOperationAccess",
+      "outcome": "Passed",
+      "duration": "00:00:03.4780049"
+    },
+    {
+      "name": "Tunner.Identity.Persistence.Tests.SessionRevocationTests.ChangedFinalPolicyRollsBackTargetAndProofAtomically",
+      "outcome": "Passed",
+      "duration": "00:00:03.3964697"
+    },
+    {
+      "name": "Tunner.Identity.Persistence.Tests.SessionRevocationTests.OrdinaryOwnerStillConsumesItsProofThroughTheExistingCore",
+      "outcome": "Passed",
+      "duration": "00:00:02.6629297"
+    },
+    {
+      "name": "Tunner.Identity.Persistence.Tests.SessionRevocationTests.CredentialRevocationActorEffectSerializesWithExactSessionRevoker",
+      "outcome": "Passed",
+      "duration": "00:00:05.1360125"
+    }
+  ],
+  "limits": "Application-only; synthetic federation invalid-link lock/fail-closed coverage is not provider qualification. No HTTP/UI, device/trust/bulk, production or whole-feature acceptance."
+}
