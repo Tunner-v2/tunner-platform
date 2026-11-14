@@ -75,7 +75,7 @@ export function SessionRevocation({options,csrfToken,revision,initial,selection,
   try{const found=await readSessionRevocationResult(csrfToken,value,signal);if(signal.aborted||!current(scope))return null;receipt.current=found;return {status:'COMPLETED',signInRequired:false,operationReference:value.operationReference};}
   catch(error){if(!signal.aborted&&current(scope))authenticate(error);return null;}
  }
- function clear(){if(original.current)onAcknowledged(original.current.requestId);candidate.current=undefined;original.current=undefined;receipt.current=undefined;setOpen(false);setProof(undefined);setTarget(undefined);setPhase('review');}
+ function clear(){if(original.current)onAcknowledged(original.current.requestId);candidate.current=undefined;original.current=undefined;receipt.current=undefined;onBlockedChange(false);setOpen(false);setProof(undefined);setTarget(undefined);setPhase('review');}
  function close(){if(busy)return;if(phase==='review'){clear();return;}setOpen(false);if(phase==='success'){clear();onRefresh();}}
  function refresh(){if(busy)return;clear();onRefresh();}
  const feedback=phase==='success'?'success':phase==='changed'?'changed':phase==='review'||phase==='preparing'?'confirm':'unknown';

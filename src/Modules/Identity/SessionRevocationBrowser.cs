@@ -100,8 +100,12 @@ internal sealed class SessionRevocationBrowserService(IdentityPersistenceDbConte
         : throw new ArgumentException("A current authenticated peer is required.");
     private SessionRevocationPresentation Publication()
     {
-        var auth = authenticationPolicies.RequireEffective(clock.GetUtcNow()); auth.Validate();
-        return presentations.RequirePublished(auth) ?? throw new InvalidOperationException("Session revocation publication is unavailable.");
+        try
+        {
+            var auth = authenticationPolicies.RequireEffective(clock.GetUtcNow()); auth.Validate();
+            return presentations.RequirePublished(auth) ?? throw new InvalidOperationException("Session revocation publication is unavailable.");
+        }
+        catch (ArgumentException) { throw new InvalidOperationException("Session revocation publication is unavailable."); }
     }
     internal Task<IResult> OptionsAsync(HttpContext http) => Guard(http, () =>
     {
