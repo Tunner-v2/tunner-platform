@@ -1,7 +1,7 @@
 import {test,expect} from '@playwright/test';
 import type {Page} from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
-import proposal from '../../apps/user/sessions.content.proposal.json';
+import proposal from '../../apps/user/sessions.content.proposal.json' with {type:'json'};
 import type {SessionItem} from '../../apps/user/sessions.api';
 
 const actor='11111111-1111-4111-8111-111111111111',target='22222222-2222-4222-8222-222222222222',expired='33333333-3333-4333-8333-333333333333';

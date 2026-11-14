@@ -1,5 +1,5 @@
 import {test,expect} from '@playwright/test';
-import proposal from '../apps/user/sessions.content.proposal.json';
+import proposal from '../apps/user/sessions.content.proposal.json' with {type:'json'};
 import {sessionContentKeys} from '../apps/user/sessions.content-keys';
 import {checkCurrentSession,loadSessionContext,parseSessionOptions,parseSessionPage,readSessionPage,SessionHttpError,signOutCurrentSession} from '../apps/user/sessions.api';
 
