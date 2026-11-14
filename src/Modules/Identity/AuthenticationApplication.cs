@@ -60,12 +60,12 @@ internal sealed partial class AuthenticationApplication(IdentityPersistenceDbCon
         }
         await LockAsync("auth-browser:" + caller.BrowserDigest, ct).ConfigureAwait(false);
         var prior = await database.Set<AuthenticationSessionRow>().SingleOrDefaultAsync(x => x.BrowserDigest == caller.BrowserDigest && x.IdempotencyKey == command.IdempotencyKey, ct).ConfigureAwait(false);
+        await LockSessionsCanonicalAsync(new[] { caller.PreviousSessionId, prior?.SessionId }.OfType<Guid>(), ct).ConfigureAwait(false);
         var user = await (from contact in database.VerifiedContacts join candidate in database.Users on contact.AccountId equals candidate.AccountId
             where contact.NormalizedEmail == normalized && contact.AnonymizedAtUtc == null && contact.State == ContactVerificationState.Verified &&
                 candidate.EmailConfirmed && candidate.NormalizedEmail == normalized select candidate).SingleOrDefaultAsync(ct).ConfigureAwait(false);
         if (user is not null && CurrentTotpPolicy(clock.GetUtcNow()) is not null)
         {
-            if (caller.PreviousSessionId is { } previousSession) await LockSessionAsync(previousSession, ct).ConfigureAwait(false);
             _ = await database.Accounts.FromSqlInterpolated($"SELECT * FROM accounts.accounts WHERE account_id={user.AccountId} FOR NO KEY UPDATE").SingleAsync(ct).ConfigureAwait(false);
             _ = await database.Users.FromSqlInterpolated($"SELECT * FROM identity.\"AspNetUsers\" WHERE \"AccountId\"={user.AccountId} FOR NO KEY UPDATE").SingleAsync(ct).ConfigureAwait(false);
             await database.Entry(user).ReloadAsync(ct).ConfigureAwait(false);

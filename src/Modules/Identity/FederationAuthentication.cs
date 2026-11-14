@@ -179,15 +179,14 @@ internal sealed partial class AuthenticationApplication
     }
     private async Task<FederationOwner?> LockFederationOwnerAsync(FederationLinkedSignInRequest request, Guid? resultSessionId, CancellationToken ct)
     {
+        await LockSessionsCanonicalAsync(new[] { request.OriginalPreviousSessionId, resultSessionId }.OfType<Guid>(), ct).ConfigureAwait(false);
         AuthenticationSessionRow? previous = null;
         if (request.OriginalPreviousSessionId is { } previousId)
         {
-            await LockSessionAsync(previousId, ct).ConfigureAwait(false);
             previous = await database.Set<AuthenticationSessionRow>().SingleOrDefaultAsync(x => x.SessionId == previousId &&
                 x.Scheme == AuthenticationIdentity.Scheme && x.Origin == request.Caller.Origin, ct).ConfigureAwait(false);
             if (previous is not null) await database.Entry(previous).ReloadAsync(ct).ConfigureAwait(false);
         }
-        if (resultSessionId is { } result && result != request.OriginalPreviousSessionId) await LockSessionAsync(result, ct).ConfigureAwait(false);
         var account = await database.Accounts.FromSqlInterpolated(
             $"SELECT * FROM accounts.accounts WHERE account_id={request.AccountId} FOR NO KEY UPDATE").SingleOrDefaultAsync(ct).ConfigureAwait(false);
         if (account is null) return null;

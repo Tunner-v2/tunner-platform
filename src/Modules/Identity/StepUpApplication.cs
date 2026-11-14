@@ -122,10 +122,29 @@ internal sealed class StepUpApplication(IdentityPersistenceDbContext database, A
         RecoveryCodeApplication.Owns(operation.Scope) ? throw new InvalidOperationException("Recovery issuance requires its typed winning outcome path.") :
         ExecuteOutcomeAsync(caller, operation, key, async token => await applyCurrentOperation(token).ConfigureAwait(false)
             ? UserStepUpOperationApplyOutcome.SessionContinues() : UserStepUpOperationApplyOutcome.Conflict(), ct);
-    internal async Task<StepUpExecutionResult> ExecuteOutcomeAsync(StepUpCaller caller, StepUpOperation operation, string key,
+    internal Task<StepUpExecutionResult> ExecuteOutcomeAsync(StepUpCaller caller, StepUpOperation operation, string key,
         Func<CancellationToken, Task<UserStepUpOperationApplyOutcome>> applyCurrentOperation, CancellationToken ct = default)
+        => SessionRevocationApplication.Owns(operation.Scope)
+            ? throw new InvalidOperationException("Session revocation requires its typed owner execution path.")
+            : ExecuteOutcomeCoreAsync(caller, operation, key, applyCurrentOperation, null, null, ct);
+
+    internal Task<StepUpExecutionResult> ExecuteSessionRevocationAsync(StepUpCaller caller, StepUpOperation operation,
+        SessionRevocationRequest request, string key, CancellationToken ct = default)
     {
-        ArgumentNullException.ThrowIfNull(caller); ArgumentNullException.ThrowIfNull(operation); ArgumentNullException.ThrowIfNull(applyCurrentOperation);
+        var bound = SessionRevocationBinding.Operation(caller, request);
+        if (operation.OperationId != bound.OperationId || operation.CorrelationId != bound.CorrelationId || operation.Scope != bound.Scope ||
+            operation.ResourceId != bound.ResourceId || operation.ExpectedVersion != bound.ExpectedVersion || operation.ContextDigest != bound.ContextDigest)
+            throw new ArgumentException("The exact session owner binding is required.", nameof(operation));
+        var owner = new AuthenticationApplication.SessionRevocationExecution(database, authentication, caller, request, operation);
+        return ExecuteOutcomeCoreAsync(caller, operation, key, null, owner, request.TargetSessionId, ct);
+    }
+
+    private async Task<StepUpExecutionResult> ExecuteOutcomeCoreAsync(StepUpCaller caller, StepUpOperation operation, string key,
+        Func<CancellationToken, Task<UserStepUpOperationApplyOutcome>>? applyCurrentOperation,
+        AuthenticationApplication.SessionRevocationExecution? sessionRevocation, Guid? targetSessionId, CancellationToken ct)
+    {
+        ArgumentNullException.ThrowIfNull(caller); ArgumentNullException.ThrowIfNull(operation);
+        if (sessionRevocation is null) ArgumentNullException.ThrowIfNull(applyCurrentOperation);
         RequireCleanBoundary();
         if (key is not { Length: 64 } || !key.All(Uri.IsHexDigit)) return new(false, "STEP_UP_REQUIRED");
         var now = clock.GetUtcNow();
@@ -135,10 +154,22 @@ internal sealed class StepUpApplication(IdentityPersistenceDbContext database, A
           bool committedTerminal;
           await using (var transaction = await database.Database.BeginTransactionAsync(ct).ConfigureAwait(false))
           {
+            if (targetSessionId is { } target)
+                await authentication.LockSessionsCanonicalAsync([caller.SessionId, target], ct).ConfigureAwait(false);
             var session = await authentication.LockForOperationAsync(caller, operation.Scope.Operation, ct).ConfigureAwait(false);
             if (session is null) return await FinishAsync(transaction, new StepUpExecutionResult(false, "AUTHENTICATION_FAILED"), ct).ConfigureAwait(false);
             now = clock.GetUtcNow();
             var digest = AuthenticationIdentity.Digest(key);
+            if (sessionRevocation is not null && await sessionRevocation.ReadReceiptAsync(digest, ct).ConfigureAwait(false) is not null)
+            {
+                var current = await authentication.VerifyContinuedOperationAsync(caller, operation, session, ct).ConfigureAwait(false);
+                var at = clock.GetUtcNow(); var activePolicy = authenticationPolicies.RequireEffective(at); activePolicy.Validate();
+                if (current is null || !current.SessionUseInterval.Contains(at) || !current.OperationInterval.Contains(at) ||
+                    session.State != "ACTIVE" || AuthenticationApplication.Expired(session, activePolicy, at) ||
+                    !authentication.MethodFactsCurrentAt(session, activePolicy, at))
+                    return await FinishAsync(transaction, new StepUpExecutionResult(false, "AUTHENTICATION_FAILED"), ct).ConfigureAwait(false);
+                return await FinishAsync(transaction, new StepUpExecutionResult(true, null), ct).ConfigureAwait(false);
+            }
             var row = await database.Set<StepUpProofRow>().SingleOrDefaultAsync(x => x.KeyDigest == digest, ct).ConfigureAwait(false);
             if (row is null) return await FinishAsync(transaction, new StepUpExecutionResult(false, "STEP_UP_REQUIRED"), ct).ConfigureAwait(false);
             await database.Entry(row).ReloadAsync(ct).ConfigureAwait(false);
@@ -148,7 +179,8 @@ internal sealed class StepUpApplication(IdentityPersistenceDbContext database, A
             now = clock.GetUtcNow(); policy = assurancePolicies.RequireEffective(operation.Scope, now, row.PolicyVersion);
             if (!Valid(row, session, policy, now) || !authentication.ProofMethodCurrentAt(row, proofCredential, operation, now, false)) return await FinishAsync(transaction, new StepUpExecutionResult(false, "STEP_UP_REQUIRED"), ct).ConfigureAwait(false);
             var validatedSessionVersion = session.Version;
-            using var outcome = await applyCurrentOperation(ct).ConfigureAwait(false);
+            using var outcome = sessionRevocation is not null ? await sessionRevocation.ApplyAsync(session, ct).ConfigureAwait(false)
+                : await applyCurrentOperation!(ct).ConfigureAwait(false);
             if (!outcome.Applied)
             {
                 await transaction.RollbackAsync(ct).ConfigureAwait(false); database.ChangeTracker.Clear();
@@ -170,6 +202,7 @@ internal sealed class StepUpApplication(IdentityPersistenceDbContext database, A
             var currentAuthentication = authenticationPolicies.RequireEffective(decisionAt); currentAuthentication.Validate();
             var terminal = termination is not null && termination.AccessInterval.Contains(decisionAt);
             if (!Valid(row, session, policy, decisionAt) || AuthenticationApplication.Expired(session, currentAuthentication, decisionAt) ||
+                sessionRevocation is not null && !sessionRevocation.TargetFactsCurrentAt(currentAuthentication, decisionAt) ||
                 !authentication.MethodFactsCurrentAt(session, currentAuthentication, decisionAt) ||
                 !authentication.ProofMethodCurrentAt(row, proofCredential, operation, decisionAt, outcome.PasskeyValidity is not null || outcome.TotpValidity is not null || outcome.FederationValidity is not null) || !authentication.PasskeyOutcomeCurrentAt(outcome, caller, operation, decisionAt) ||
                 outcome.RecoveryValidity is { } recovery && !recovery.CurrentAt(database, caller, operation, recoveryPolicies, currentAuthentication, decisionAt) ||
