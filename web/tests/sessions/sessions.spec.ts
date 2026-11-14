@@ -27,14 +27,14 @@ async function setup(page:Page,change:Partial<Fixture>={}){
  return state;
 }
 async function noStorageOrSelectors(page:Page){expect(await page.evaluate(()=>({local:localStorage.length,session:sessionStorage.length,search:location.search,hash:location.hash}))).toEqual({local:0,session:0,search:'',hash:''});expect(page.url()).not.toContain(target);}
-for(const width of [1440,390]){
+for(const width of [1440,1366,1024,768,390,320]){
  test('Approved listing/detail pattern, truthful state and responsive layout at '+width,async({page})=>{
   await page.setViewportSize({width,height:1100});const state=await setup(page);await page.goto(list);await expect(page.getByRole('heading',{name:'Sessions & devices',exact:true})).toBeFocused();
   await expect(page.getByRole('heading',{name:'Session …11111111'})).toBeVisible();await expect(page.getByText('Device names, location and device trust are unavailable here.',{exact:false})).toBeVisible();
   await expect(page.locator('.sessions-current').getByText('YOU ARE USING THIS SESSION',{exact:true})).toBeVisible();await expect(page.locator('.sessions-current').getByText(/^Checked /)).toHaveCount(0);
-  if(width===390)await page.getByRole('button',{name:'Account menu',exact:true}).click();
+  if(width<=700)await page.getByRole('button',{name:'Account menu',exact:true}).click();
   const support=page.getByRole('button',{name:'Contact support',exact:true});await expect(support).toBeVisible();await expect(support).toBeDisabled();await expect(support).toHaveAttribute('data-appearance','outline');
-  if(width===390)await page.getByRole('button',{name:'Account menu',exact:true}).click();
+  if(width<=700)await page.getByRole('button',{name:'Account menu',exact:true}).click();
   const openSecurity=page.getByRole('button',{name:'Open security',exact:true});await expect(openSecurity).toBeVisible();await expect(openSecurity).toHaveAttribute('data-appearance','outline');await expect(openSecurity).toHaveCSS('border-top-width','1px');
   const listScope=page.locator('.sessions-product-note');await expect(listScope).toHaveText(proposal.content['account.sessions.productBoundary']);await expect(listScope).toHaveCSS('border-top-style','none');
   await expect(page.getByText(/Chrome|Windows|Karachi|unfamiliar|12 SESSIONS|8 DEVICES/)).toHaveCount(0);await expect(page.getByRole('button',{name:'Sign out this session'})).toHaveCount(0);
