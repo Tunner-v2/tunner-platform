@@ -7,7 +7,7 @@
   "parent_milestone_revision_id": null,
   "title": "Preserve sign-in and proof lock order for exact Sessions revocation",
   "revision_type": "COMPATIBILITY",
-  "status": "VALIDATION",
+  "status": "CLOSED",
   "reason": "P2-013 exact other-session revocation requires one canonical actor-target lock order. Application allocation owns AuthenticationApplication.cs FederationAuthentication.cs and StepUpApplication.cs for narrow prelock compatibility; preserve original DONE and closed RV006. No policy schema external authority or production change. After qualified075485b, extend this ACTIVE revision to historically owned StepUpBrowserEndpoints.cs for exact typed dispatch before proof execution, preserving existing native/fallback owners and provider-return behavior.",
   "authority_refs": [
     "docs/authority/baselines/1.6.0/17_Account_Identity_and_Session_FRD.md"
@@ -41,7 +41,7 @@
     "governance/evidence/P2-010-RV007-VALIDATION.json"
   ],
   "created_at": "2026-11-14T06:06:53.2726076-05:00",
-  "closed_at": null,
+  "closed_at": "2026-11-14T14:42:55.5424221+00:00",
   "product_acceptance_required": false,
   "git_state": {
     "repository_changed": true,
