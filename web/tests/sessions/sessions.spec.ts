@@ -31,11 +31,21 @@ for(const width of [1440,390]){
  test('Approved listing/detail pattern, truthful state and responsive layout at '+width,async({page})=>{
   await page.setViewportSize({width,height:1100});const state=await setup(page);await page.goto(list);await expect(page.getByRole('heading',{name:'Sessions & devices',exact:true})).toBeFocused();
   await expect(page.getByRole('heading',{name:'Session …11111111'})).toBeVisible();await expect(page.getByText('Device names, location and device trust are unavailable here.',{exact:false})).toBeVisible();
+  await expect(page.locator('.sessions-current').getByText('YOU ARE USING THIS SESSION',{exact:true})).toBeVisible();await expect(page.locator('.sessions-current').getByText(/^Checked /)).toHaveCount(0);
+  if(width===390)await page.getByRole('button',{name:'Account menu',exact:true}).click();
+  const support=page.getByRole('button',{name:'Contact support',exact:true});await expect(support).toBeVisible();await expect(support).toBeDisabled();await expect(support).toHaveAttribute('data-appearance','outline');
+  if(width===390)await page.getByRole('button',{name:'Account menu',exact:true}).click();
+  const openSecurity=page.getByRole('button',{name:'Open security',exact:true});await expect(openSecurity).toBeVisible();await expect(openSecurity).toHaveAttribute('data-appearance','outline');await expect(openSecurity).toHaveCSS('border-top-width','1px');
+  const listScope=page.locator('.sessions-product-note');await expect(listScope).toHaveText(proposal.content['account.sessions.productBoundary']);await expect(listScope).toHaveCSS('border-top-style','none');
   await expect(page.getByText(/Chrome|Windows|Karachi|unfamiliar|12 SESSIONS|8 DEVICES/)).toHaveCount(0);await expect(page.getByRole('button',{name:'Sign out this session'})).toHaveCount(0);
   await page.evaluate(()=>document.fonts.ready);expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
   expect((await new AxeBuilder({page}).withTags(['wcag2a','wcag2aa','wcag21aa','wcag22aa']).analyze()).violations).toEqual([]);
   await page.screenshot({path:'test-results/sessions/list-'+width+'.png',fullPage:true});
   await page.locator('[data-session-reference="'+target+'"]').getByRole('button',{name:'Session information'}).click();await expect(page).toHaveURL(new RegExp(details+'$'));await expect(page.getByRole('heading',{name:'Session details'})).toBeFocused();await expect(page.getByText(target,{exact:true})).toBeVisible();await expect(page.getByText('9007199254740993')).toHaveCount(0);await expect(page.getByRole('button',{name:/Sign out this session/})).toHaveCount(0);
+  const deviceFacts=page.locator('.sessions-facts > div').filter({has:page.getByText('Device, location & trust',{exact:true})});await expect(deviceFacts.locator('dd')).toHaveText('Unavailable');
+  const reviewSecurity=page.getByRole('button',{name:'Review security',exact:true});await expect(reviewSecurity).toBeVisible();await expect(reviewSecurity).toHaveAttribute('data-appearance','outline');await expect(reviewSecurity).toHaveCSS('border-top-width','1px');
+  await expect(page.locator('.sessions-back-arrow')).toHaveText('←');await expect(page.locator('.sessions-back-arrow')).toHaveAttribute('aria-hidden','true');await expect(page.getByRole('button',{name:'Back to sessions',exact:true})).toBeVisible();
+  await expect(page.locator('.sessions-facts').getByText(/^Checked /)).toBeVisible();await expect(page.locator('.passkeys-helpbox').filter({hasText:proposal.content['account.sessions.productBoundary']})).toHaveCSS('border-top-width','1px');
   expect(state.reads).toEqual([null,null]);expect((await new AxeBuilder({page}).withTags(['wcag2a','wcag2aa','wcag21aa','wcag22aa']).analyze()).violations).toEqual([]);expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);await page.screenshot({path:'test-results/sessions/details-'+width+'.png',fullPage:true});await noStorageOrSelectors(page);
  });
 }
