@@ -1,0 +1,44 @@
+{
+  "source_commit_sha": "8bd5230e85f3c36ca91a8fbe428cda6c340bccb8",
+  "scope": "Four new application/test/private-contract files only; broader feature and historical recovery execution are separate",
+  "inputs": [
+    {
+      "path": "src/Modules/Identity/AuthenticationSessionListing.cs",
+      "git_blob": "91523dc9dfb4c6ff2113bb8a27d93bef19aa2e05",
+      "sha256": "7068fce953c48e3a1615354ad1bd3fd0a041ed639579ccb4696daebccbbe2f15"
+    },
+    {
+      "path": "src/Modules/Identity/SessionListingContracts.cs",
+      "git_blob": "62b2100e90c78045c9a9f90c09c76024d0865f1e",
+      "sha256": "04810c252465c27be57d0c3948e67553e1951a0a63c63ee597942c6ddc72235d"
+    },
+    {
+      "path": "tests/Tunner.Identity.Persistence.Tests/SessionListingTests.cs",
+      "git_blob": "01d70a4714a4a8e8386bbc8f6b9679cbdf95a5d8",
+      "sha256": "d0c183cd5e5bdc7ac08497a2d4d48ccbdad744f3f4c5d3078d1095167351420b"
+    },
+    {
+      "path": "docs/contracts/session-listing-contract.md",
+      "git_blob": "e1dbc9a7d27de7d9a7e358f562021005e18ac2c1",
+      "sha256": "4fdb839f45baab0013e7be00b7ac2b0ee1eeee8794f5be259ce8f4bf17821239"
+    }
+  ],
+  "build_outputs": [
+    {
+      "path": "src/Modules/Identity/bin/Debug/net10.0/Tunner.Identity.Persistence.dll",
+      "sha256": "ebdf0909052c1796d5392b2b15313f98c64db379efb1ad793c341e45e47e443f"
+    },
+    {
+      "path": "tests/Tunner.Identity.Persistence.Tests/bin/Debug/net10.0/Tunner.Identity.Persistence.Tests.dll",
+      "sha256": "e20d7be349b800fdaccf236cca46185b948c098dbea42635ef3706f4a2516418"
+    }
+  ],
+  "build": {
+    "result": "PASS",
+    "command": "dotnet build tests/Tunner.Identity.Persistence.Tests/Tunner.Identity.Persistence.Tests.csproj --no-restore --verbosity quiet",
+    "warnings": 0,
+    "errors": 0,
+    "elapsed_seconds": 12.55,
+    "provenance": "Actual root tool execution at committed8bd5230, followed by unchanged-source real test execution; not a finite-recovery build manifest"
+  }
+}

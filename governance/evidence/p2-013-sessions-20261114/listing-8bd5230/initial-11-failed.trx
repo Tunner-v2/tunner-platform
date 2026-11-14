@@ -1,0 +1,232 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="a5434034-d268-4f74-974e-495db675f3a0" name="@FARHANWAZIR 2026-11-13 22:57:18" runUser="FARHANWAZIR\Chacha Tech" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2026-11-13T22:57:18.8336450-05:00" queuing="2026-11-13T22:57:18.8336455-05:00" start="2026-11-13T22:57:14.4525373-05:00" finish="2026-11-13T22:57:57.8389762-05:00" />
+  <TestSettings name="default" id="362ce3d7-ae51-445e-8d72-6eb800c88893">
+    <Deployment runDeploymentRoot="_FARHANWAZIR_2026-11-13_22_57_18" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="a6fe76f1-192e-46cf-a6c7-72ffd2e25433" testId="8da1a184-5620-f01e-f250-9ec9f1e35ac1" testName="Tunner.Identity.Persistence.Tests.SessionListingTests.SessionUseDoesNotGrantListPermission" computerName="FARHANWAZIR" duration="00:00:03.2092507" startTime="2026-11-13T22:57:32.0076341-05:00" endTime="2026-11-13T22:57:35.2087224-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="a6fe76f1-192e-46cf-a6c7-72ffd2e25433" />
+    <UnitTestResult executionId="ff674b7d-7359-4c95-a2ac-08c1565ac2db" testId="2856c265-eed1-3cfd-98f3-f249c9dbd281" testName="Tunner.Identity.Persistence.Tests.SessionListingContractTests.ProjectionContainsOnlyDeclaredSafeEvidence" computerName="FARHANWAZIR" duration="00:00:00.3237554" startTime="2026-11-13T22:57:17.3044405-05:00" endTime="2026-11-13T22:57:17.6085938-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="ff674b7d-7359-4c95-a2ac-08c1565ac2db" />
+    <UnitTestResult executionId="a435d59f-e323-4285-9ed9-d633f1b8577c" testId="ebdddb7e-7f49-37a2-f509-b5f088e05f10" testName="Tunner.Identity.Persistence.Tests.SessionListingTests.TargetExpiryAndStampDenialAreTruthfulWithoutTargetMutationOrEvents" computerName="FARHANWAZIR" duration="00:00:02.7361255" startTime="2026-11-13T22:57:38.1774017-05:00" endTime="2026-11-13T22:57:40.9153279-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="a435d59f-e323-4285-9ed9-d633f1b8577c">
+      <Output>
+        <ErrorInfo>
+          <Message>Microsoft.EntityFrameworkCore.DbUpdateException : An error occurred while saving the entity changes. See the inner exception for details.&#xD;
+---- Npgsql.PostgresException : 23514: Session identity and expiry are immutable; ended sessions cannot resume</Message>
+          <StackTrace>   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)&#xD;
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)&#xD;
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)&#xD;
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)&#xD;
+   at Microsoft.EntityFrameworkCore.Storage.RelationalDatabase.SaveChangesAsync(IList`1 entries, CancellationToken cancellationToken)&#xD;
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(IList`1 entriesToSave, CancellationToken cancellationToken)&#xD;
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(StateManager stateManager, Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)&#xD;
+   at Npgsql.EntityFrameworkCore.PostgreSQL.Storage.Internal.NpgsqlExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)&#xD;
+   at Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync(Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)&#xD;
+   at Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync(Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)&#xD;
+   at Tunner.Identity.Persistence.Tests.SessionListingTests.TargetExpiryAndStampDenialAreTruthfulWithoutTargetMutationOrEvents() in C:\Workspace\AI MCP\Enterprise Solution\TunnerPlatform.V2.0\tests\Tunner.Identity.Persistence.Tests\SessionListingTests.cs:line 182&#xD;
+   at Tunner.Identity.Persistence.Tests.SessionListingTests.TargetExpiryAndStampDenialAreTruthfulWithoutTargetMutationOrEvents() in C:\Workspace\AI MCP\Enterprise Solution\TunnerPlatform.V2.0\tests\Tunner.Identity.Persistence.Tests\SessionListingTests.cs:line 183&#xD;
+   at Tunner.Identity.Persistence.Tests.SessionListingTests.TargetExpiryAndStampDenialAreTruthfulWithoutTargetMutationOrEvents() in C:\Workspace\AI MCP\Enterprise Solution\TunnerPlatform.V2.0\tests\Tunner.Identity.Persistence.Tests\SessionListingTests.cs:line 197&#xD;
+   at Tunner.Identity.Persistence.Tests.SessionListingTests.TargetExpiryAndStampDenialAreTruthfulWithoutTargetMutationOrEvents() in C:\Workspace\AI MCP\Enterprise Solution\TunnerPlatform.V2.0\tests\Tunner.Identity.Persistence.Tests\SessionListingTests.cs:line 197&#xD;
+--- End of stack trace from previous location ---&#xD;
+----- Inner Stack Trace -----&#xD;
+   at Npgsql.Internal.NpgsqlConnector.ReadMessageLong(Boolean async, DataRowLoadingMode dataRowLoadingMode, Boolean readingNotifications, Boolean isReadingPrependedMessage)&#xD;
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource&lt;TResult&gt;.GetResult(Int16 token)&#xD;
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)&#xD;
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)&#xD;
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)&#xD;
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)&#xD;
+   at Npgsql.NpgsqlCommand.ExecuteDbDataReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)&#xD;
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)&#xD;
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)&#xD;
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="c06a3e06-25b5-4436-90b9-092d77787c2d" testId="342fafb3-4836-13eb-a97e-44a1f48528bb" testName="Tunner.Identity.Persistence.Tests.SessionListingContractTests.ReadBudgetRequiresAnExplicitSafePositiveValue" computerName="FARHANWAZIR" duration="00:00:00.0034128" startTime="2026-11-13T22:57:17.6304004-05:00" endTime="2026-11-13T22:57:17.6307593-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="c06a3e06-25b5-4436-90b9-092d77787c2d" />
+    <UnitTestResult executionId="b5e89d94-00a3-49e3-85fb-3a0b8b067dcb" testId="4d83f821-9d28-191d-4c7f-fdcec643ac88" testName="Tunner.Identity.Persistence.Tests.SessionListingTests.ReResolvesPolicyAtTheFinalDecisionBoundary" computerName="FARHANWAZIR" duration="00:00:02.9073119" startTime="2026-11-13T22:57:48.9104034-05:00" endTime="2026-11-13T22:57:51.8181205-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="b5e89d94-00a3-49e3-85fb-3a0b8b067dcb" />
+    <UnitTestResult executionId="af4e1130-2d77-480a-8112-1165c39980eb" testId="c173640a-1613-e797-b658-a3a7fb05a83c" testName="Tunner.Identity.Persistence.Tests.SessionListingTests.RevokedOrExpiredActorCannotList(expired: False)" computerName="FARHANWAZIR" duration="00:00:02.6624540" startTime="2026-11-13T22:57:43.4219660-05:00" endTime="2026-11-13T22:57:46.0847260-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="af4e1130-2d77-480a-8112-1165c39980eb" />
+    <UnitTestResult executionId="206b7ec3-82e7-4cc2-ba97-cb6a5a5a0180" testId="b6326d1c-05fe-031c-0fd0-1c5f7f40cb18" testName="Tunner.Identity.Persistence.Tests.SessionListingTests.AccessExpiringDuringReadCannotReturnAListing" computerName="FARHANWAZIR" duration="00:00:02.3955940" startTime="2026-11-13T22:57:51.8197326-05:00" endTime="2026-11-13T22:57:54.2145601-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="206b7ec3-82e7-4cc2-ba97-cb6a5a5a0180" />
+    <UnitTestResult executionId="07e8bf23-33c6-4b92-90b7-c1f24c0abbc0" testId="119510cb-86ed-9216-fa49-92f8886932cc" testName="Tunner.Identity.Persistence.Tests.SessionListingTests.RevokedOrExpiredActorCannotList(expired: True)" computerName="FARHANWAZIR" duration="00:00:02.5054021" startTime="2026-11-13T22:57:40.9183731-05:00" endTime="2026-11-13T22:57:43.4214661-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="07e8bf23-33c6-4b92-90b7-c1f24c0abbc0" />
+    <UnitTestResult executionId="1168a9aa-b5ef-4d93-9a0c-8c2abb8192d5" testId="10cdb4b2-9e73-3b45-5312-b1664c40d846" testName="Tunner.Identity.Persistence.Tests.SessionListingTests.MissingPolicyAndStaleAccessFailClosed" computerName="FARHANWAZIR" duration="00:00:02.9672648" startTime="2026-11-13T22:57:35.2092731-05:00" endTime="2026-11-13T22:57:38.1767825-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="1168a9aa-b5ef-4d93-9a0c-8c2abb8192d5" />
+    <UnitTestResult executionId="86c294b6-4256-4d88-ae41-5bfa305b9fe0" testId="fba71197-ea4c-cfff-3306-897c8fd8165c" testName="Tunner.Identity.Persistence.Tests.SessionListingTests.ListsOnlyOwnedUserOriginAndSafeProjection" computerName="FARHANWAZIR" duration="00:00:08.9349925" startTime="2026-11-13T22:57:23.0371377-05:00" endTime="2026-11-13T22:57:31.9975805-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="86c294b6-4256-4d88-ae41-5bfa305b9fe0">
+      <Output>
+        <ErrorInfo>
+          <Message>Microsoft.EntityFrameworkCore.DbUpdateException : An error occurred while saving the entity changes. See the inner exception for details.&#xD;
+---- Npgsql.PostgresException : 23514: Session identity and expiry are immutable; ended sessions cannot resume</Message>
+          <StackTrace>   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)&#xD;
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)&#xD;
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)&#xD;
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)&#xD;
+   at Microsoft.EntityFrameworkCore.Storage.RelationalDatabase.SaveChangesAsync(IList`1 entries, CancellationToken cancellationToken)&#xD;
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(IList`1 entriesToSave, CancellationToken cancellationToken)&#xD;
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(StateManager stateManager, Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)&#xD;
+   at Npgsql.EntityFrameworkCore.PostgreSQL.Storage.Internal.NpgsqlExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)&#xD;
+   at Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync(Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)&#xD;
+   at Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync(Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)&#xD;
+   at Tunner.Identity.Persistence.Tests.SessionListingTests.ListsOnlyOwnedUserOriginAndSafeProjection() in C:\Workspace\AI MCP\Enterprise Solution\TunnerPlatform.V2.0\tests\Tunner.Identity.Persistence.Tests\SessionListingTests.cs:line 122&#xD;
+   at Tunner.Identity.Persistence.Tests.SessionListingTests.ListsOnlyOwnedUserOriginAndSafeProjection() in C:\Workspace\AI MCP\Enterprise Solution\TunnerPlatform.V2.0\tests\Tunner.Identity.Persistence.Tests\SessionListingTests.cs:line 123&#xD;
+   at Tunner.Identity.Persistence.Tests.SessionListingTests.ListsOnlyOwnedUserOriginAndSafeProjection() in C:\Workspace\AI MCP\Enterprise Solution\TunnerPlatform.V2.0\tests\Tunner.Identity.Persistence.Tests\SessionListingTests.cs:line 129&#xD;
+   at Tunner.Identity.Persistence.Tests.SessionListingTests.ListsOnlyOwnedUserOriginAndSafeProjection() in C:\Workspace\AI MCP\Enterprise Solution\TunnerPlatform.V2.0\tests\Tunner.Identity.Persistence.Tests\SessionListingTests.cs:line 129&#xD;
+--- End of stack trace from previous location ---&#xD;
+----- Inner Stack Trace -----&#xD;
+   at Npgsql.Internal.NpgsqlConnector.ReadMessageLong(Boolean async, DataRowLoadingMode dataRowLoadingMode, Boolean readingNotifications, Boolean isReadingPrependedMessage)&#xD;
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource&lt;TResult&gt;.GetResult(Int16 token)&#xD;
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)&#xD;
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)&#xD;
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)&#xD;
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)&#xD;
+   at Npgsql.NpgsqlCommand.ExecuteDbDataReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)&#xD;
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)&#xD;
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)&#xD;
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="9d993c3f-9fcc-4cd5-a744-1d0aae5478b8" testId="ada029e0-1378-8a5a-7629-23508d141029" testName="Tunner.Identity.Persistence.Tests.SessionListingTests.BoundedKeysetEnumeratesTiesOnceAndRejectsForeignActorContinuation" computerName="FARHANWAZIR" duration="00:00:02.8243345" startTime="2026-11-13T22:57:46.0857414-05:00" endTime="2026-11-13T22:57:48.9099482-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="9d993c3f-9fcc-4cd5-a744-1d0aae5478b8" />
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="Tunner.Identity.Persistence.Tests.SessionListingContractTests.ProjectionContainsOnlyDeclaredSafeEvidence" storage="c:\workspace\ai mcp\enterprise solution\tunnerplatform.v2.0\tests\tunner.identity.persistence.tests\bin\debug\net10.0\tunner.identity.persistence.tests.dll" id="2856c265-eed1-3cfd-98f3-f249c9dbd281">
+      <Execution id="ff674b7d-7359-4c95-a2ac-08c1565ac2db" />
+      <TestMethod codeBase="C:\Workspace\AI MCP\Enterprise Solution\TunnerPlatform.V2.0\tests\Tunner.Identity.Persistence.Tests\bin\Debug\net10.0\Tunner.Identity.Persistence.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Tunner.Identity.Persistence.Tests.SessionListingContractTests" name="ProjectionContainsOnlyDeclaredSafeEvidence" />
+    </UnitTest>
+    <UnitTest name="Tunner.Identity.Persistence.Tests.SessionListingTests.TargetExpiryAndStampDenialAreTruthfulWithoutTargetMutationOrEvents" storage="c:\workspace\ai mcp\enterprise solution\tunnerplatform.v2.0\tests\tunner.identity.persistence.tests\bin\debug\net10.0\tunner.identity.persistence.tests.dll" id="ebdddb7e-7f49-37a2-f509-b5f088e05f10">
+      <Execution id="a435d59f-e323-4285-9ed9-d633f1b8577c" />
+      <TestMethod codeBase="C:\Workspace\AI MCP\Enterprise Solution\TunnerPlatform.V2.0\tests\Tunner.Identity.Persistence.Tests\bin\Debug\net10.0\Tunner.Identity.Persistence.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Tunner.Identity.Persistence.Tests.SessionListingTests" name="TargetExpiryAndStampDenialAreTruthfulWithoutTargetMutationOrEvents" />
+    </UnitTest>
+    <UnitTest name="Tunner.Identity.Persistence.Tests.SessionListingTests.BoundedKeysetEnumeratesTiesOnceAndRejectsForeignActorContinuation" storage="c:\workspace\ai mcp\enterprise solution\tunnerplatform.v2.0\tests\tunner.identity.persistence.tests\bin\debug\net10.0\tunner.identity.persistence.tests.dll" id="ada029e0-1378-8a5a-7629-23508d141029">
+      <Execution id="9d993c3f-9fcc-4cd5-a744-1d0aae5478b8" />
+      <TestMethod codeBase="C:\Workspace\AI MCP\Enterprise Solution\TunnerPlatform.V2.0\tests\Tunner.Identity.Persistence.Tests\bin\Debug\net10.0\Tunner.Identity.Persistence.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Tunner.Identity.Persistence.Tests.SessionListingTests" name="BoundedKeysetEnumeratesTiesOnceAndRejectsForeignActorContinuation" />
+    </UnitTest>
+    <UnitTest name="Tunner.Identity.Persistence.Tests.SessionListingTests.RevokedOrExpiredActorCannotList(expired: True)" storage="c:\workspace\ai mcp\enterprise solution\tunnerplatform.v2.0\tests\tunner.identity.persistence.tests\bin\debug\net10.0\tunner.identity.persistence.tests.dll" id="119510cb-86ed-9216-fa49-92f8886932cc">
+      <Execution id="07e8bf23-33c6-4b92-90b7-c1f24c0abbc0" />
+      <TestMethod codeBase="C:\Workspace\AI MCP\Enterprise Solution\TunnerPlatform.V2.0\tests\Tunner.Identity.Persistence.Tests\bin\Debug\net10.0\Tunner.Identity.Persistence.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Tunner.Identity.Persistence.Tests.SessionListingTests" name="RevokedOrExpiredActorCannotList" />
+    </UnitTest>
+    <UnitTest name="Tunner.Identity.Persistence.Tests.SessionListingTests.ReResolvesPolicyAtTheFinalDecisionBoundary" storage="c:\workspace\ai mcp\enterprise solution\tunnerplatform.v2.0\tests\tunner.identity.persistence.tests\bin\debug\net10.0\tunner.identity.persistence.tests.dll" id="4d83f821-9d28-191d-4c7f-fdcec643ac88">
+      <Execution id="b5e89d94-00a3-49e3-85fb-3a0b8b067dcb" />
+      <TestMethod codeBase="C:\Workspace\AI MCP\Enterprise Solution\TunnerPlatform.V2.0\tests\Tunner.Identity.Persistence.Tests\bin\Debug\net10.0\Tunner.Identity.Persistence.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Tunner.Identity.Persistence.Tests.SessionListingTests" name="ReResolvesPolicyAtTheFinalDecisionBoundary" />
+    </UnitTest>
+    <UnitTest name="Tunner.Identity.Persistence.Tests.SessionListingTests.SessionUseDoesNotGrantListPermission" storage="c:\workspace\ai mcp\enterprise solution\tunnerplatform.v2.0\tests\tunner.identity.persistence.tests\bin\debug\net10.0\tunner.identity.persistence.tests.dll" id="8da1a184-5620-f01e-f250-9ec9f1e35ac1">
+      <Execution id="a6fe76f1-192e-46cf-a6c7-72ffd2e25433" />
+      <TestMethod codeBase="C:\Workspace\AI MCP\Enterprise Solution\TunnerPlatform.V2.0\tests\Tunner.Identity.Persistence.Tests\bin\Debug\net10.0\Tunner.Identity.Persistence.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Tunner.Identity.Persistence.Tests.SessionListingTests" name="SessionUseDoesNotGrantListPermission" />
+    </UnitTest>
+    <UnitTest name="Tunner.Identity.Persistence.Tests.SessionListingTests.ListsOnlyOwnedUserOriginAndSafeProjection" storage="c:\workspace\ai mcp\enterprise solution\tunnerplatform.v2.0\tests\tunner.identity.persistence.tests\bin\debug\net10.0\tunner.identity.persistence.tests.dll" id="fba71197-ea4c-cfff-3306-897c8fd8165c">
+      <Execution id="86c294b6-4256-4d88-ae41-5bfa305b9fe0" />
+      <TestMethod codeBase="C:\Workspace\AI MCP\Enterprise Solution\TunnerPlatform.V2.0\tests\Tunner.Identity.Persistence.Tests\bin\Debug\net10.0\Tunner.Identity.Persistence.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Tunner.Identity.Persistence.Tests.SessionListingTests" name="ListsOnlyOwnedUserOriginAndSafeProjection" />
+    </UnitTest>
+    <UnitTest name="Tunner.Identity.Persistence.Tests.SessionListingTests.RevokedOrExpiredActorCannotList(expired: False)" storage="c:\workspace\ai mcp\enterprise solution\tunnerplatform.v2.0\tests\tunner.identity.persistence.tests\bin\debug\net10.0\tunner.identity.persistence.tests.dll" id="c173640a-1613-e797-b658-a3a7fb05a83c">
+      <Execution id="af4e1130-2d77-480a-8112-1165c39980eb" />
+      <TestMethod codeBase="C:\Workspace\AI MCP\Enterprise Solution\TunnerPlatform.V2.0\tests\Tunner.Identity.Persistence.Tests\bin\Debug\net10.0\Tunner.Identity.Persistence.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Tunner.Identity.Persistence.Tests.SessionListingTests" name="RevokedOrExpiredActorCannotList" />
+    </UnitTest>
+    <UnitTest name="Tunner.Identity.Persistence.Tests.SessionListingTests.AccessExpiringDuringReadCannotReturnAListing" storage="c:\workspace\ai mcp\enterprise solution\tunnerplatform.v2.0\tests\tunner.identity.persistence.tests\bin\debug\net10.0\tunner.identity.persistence.tests.dll" id="b6326d1c-05fe-031c-0fd0-1c5f7f40cb18">
+      <Execution id="206b7ec3-82e7-4cc2-ba97-cb6a5a5a0180" />
+      <TestMethod codeBase="C:\Workspace\AI MCP\Enterprise Solution\TunnerPlatform.V2.0\tests\Tunner.Identity.Persistence.Tests\bin\Debug\net10.0\Tunner.Identity.Persistence.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Tunner.Identity.Persistence.Tests.SessionListingTests" name="AccessExpiringDuringReadCannotReturnAListing" />
+    </UnitTest>
+    <UnitTest name="Tunner.Identity.Persistence.Tests.SessionListingContractTests.ReadBudgetRequiresAnExplicitSafePositiveValue" storage="c:\workspace\ai mcp\enterprise solution\tunnerplatform.v2.0\tests\tunner.identity.persistence.tests\bin\debug\net10.0\tunner.identity.persistence.tests.dll" id="342fafb3-4836-13eb-a97e-44a1f48528bb">
+      <Execution id="c06a3e06-25b5-4436-90b9-092d77787c2d" />
+      <TestMethod codeBase="C:\Workspace\AI MCP\Enterprise Solution\TunnerPlatform.V2.0\tests\Tunner.Identity.Persistence.Tests\bin\Debug\net10.0\Tunner.Identity.Persistence.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Tunner.Identity.Persistence.Tests.SessionListingContractTests" name="ReadBudgetRequiresAnExplicitSafePositiveValue" />
+    </UnitTest>
+    <UnitTest name="Tunner.Identity.Persistence.Tests.SessionListingTests.MissingPolicyAndStaleAccessFailClosed" storage="c:\workspace\ai mcp\enterprise solution\tunnerplatform.v2.0\tests\tunner.identity.persistence.tests\bin\debug\net10.0\tunner.identity.persistence.tests.dll" id="10cdb4b2-9e73-3b45-5312-b1664c40d846">
+      <Execution id="1168a9aa-b5ef-4d93-9a0c-8c2abb8192d5" />
+      <TestMethod codeBase="C:\Workspace\AI MCP\Enterprise Solution\TunnerPlatform.V2.0\tests\Tunner.Identity.Persistence.Tests\bin\Debug\net10.0\Tunner.Identity.Persistence.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Tunner.Identity.Persistence.Tests.SessionListingTests" name="MissingPolicyAndStaleAccessFailClosed" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="8da1a184-5620-f01e-f250-9ec9f1e35ac1" executionId="a6fe76f1-192e-46cf-a6c7-72ffd2e25433" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="2856c265-eed1-3cfd-98f3-f249c9dbd281" executionId="ff674b7d-7359-4c95-a2ac-08c1565ac2db" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="ebdddb7e-7f49-37a2-f509-b5f088e05f10" executionId="a435d59f-e323-4285-9ed9-d633f1b8577c" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="342fafb3-4836-13eb-a97e-44a1f48528bb" executionId="c06a3e06-25b5-4436-90b9-092d77787c2d" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="4d83f821-9d28-191d-4c7f-fdcec643ac88" executionId="b5e89d94-00a3-49e3-85fb-3a0b8b067dcb" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="c173640a-1613-e797-b658-a3a7fb05a83c" executionId="af4e1130-2d77-480a-8112-1165c39980eb" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="b6326d1c-05fe-031c-0fd0-1c5f7f40cb18" executionId="206b7ec3-82e7-4cc2-ba97-cb6a5a5a0180" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="119510cb-86ed-9216-fa49-92f8886932cc" executionId="07e8bf23-33c6-4b92-90b7-c1f24c0abbc0" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="10cdb4b2-9e73-3b45-5312-b1664c40d846" executionId="1168a9aa-b5ef-4d93-9a0c-8c2abb8192d5" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="fba71197-ea4c-cfff-3306-897c8fd8165c" executionId="86c294b6-4256-4d88-ae41-5bfa305b9fe0" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="ada029e0-1378-8a5a-7629-23508d141029" executionId="9d993c3f-9fcc-4cd5-a744-1d0aae5478b8" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Failed">
+    <Counters total="11" executed="11" passed="9" failed="2" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Output>
+      <StdOut>[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v3.1.4+50e68bbb8b (64-bit .NET 10.0.13)&#xD;
+[xUnit.net 00:00:01.51]   Discovering: Tunner.Identity.Persistence.Tests&#xD;
+[xUnit.net 00:00:01.71]   Discovered:  Tunner.Identity.Persistence.Tests&#xD;
+[xUnit.net 00:00:01.75]   Starting:    Tunner.Identity.Persistence.Tests&#xD;
+[xUnit.net 00:00:16.51]       Microsoft.EntityFrameworkCore.DbUpdateException : An error occurred while saving the entity changes. See the inner exception for details.&#xD;
+[xUnit.net 00:00:16.51]       ---- Npgsql.PostgresException : 23514: Session identity and expiry are immutable; ended sessions cannot resume&#xD;
+[xUnit.net 00:00:16.51]       Stack Trace:&#xD;
+[xUnit.net 00:00:16.51]            at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)&#xD;
+[xUnit.net 00:00:16.51]            at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)&#xD;
+[xUnit.net 00:00:16.51]            at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)&#xD;
+[xUnit.net 00:00:16.51]            at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)&#xD;
+[xUnit.net 00:00:16.51]            at Microsoft.EntityFrameworkCore.Storage.RelationalDatabase.SaveChangesAsync(IList`1 entries, CancellationToken cancellationToken)&#xD;
+[xUnit.net 00:00:16.51]            at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(IList`1 entriesToSave, CancellationToken cancellationToken)&#xD;
+[xUnit.net 00:00:16.51]            at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(StateManager stateManager, Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)&#xD;
+[xUnit.net 00:00:16.51]            at Npgsql.EntityFrameworkCore.PostgreSQL.Storage.Internal.NpgsqlExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)&#xD;
+[xUnit.net 00:00:16.51]            at Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync(Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)&#xD;
+[xUnit.net 00:00:16.51]            at Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync(Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)&#xD;
+[xUnit.net 00:00:16.51]         C:\Workspace\AI MCP\Enterprise Solution\TunnerPlatform.V2.0\tests\Tunner.Identity.Persistence.Tests\SessionListingTests.cs(122,0): at Tunner.Identity.Persistence.Tests.SessionListingTests.ListsOnlyOwnedUserOriginAndSafeProjection()&#xD;
+[xUnit.net 00:00:16.51]         C:\Workspace\AI MCP\Enterprise Solution\TunnerPlatform.V2.0\tests\Tunner.Identity.Persistence.Tests\SessionListingTests.cs(123,0): at Tunner.Identity.Persistence.Tests.SessionListingTests.ListsOnlyOwnedUserOriginAndSafeProjection()&#xD;
+[xUnit.net 00:00:16.51]         C:\Workspace\AI MCP\Enterprise Solution\TunnerPlatform.V2.0\tests\Tunner.Identity.Persistence.Tests\SessionListingTests.cs(129,0): at Tunner.Identity.Persistence.Tests.SessionListingTests.ListsOnlyOwnedUserOriginAndSafeProjection()&#xD;
+[xUnit.net 00:00:16.51]         C:\Workspace\AI MCP\Enterprise Solution\TunnerPlatform.V2.0\tests\Tunner.Identity.Persistence.Tests\SessionListingTests.cs(129,0): at Tunner.Identity.Persistence.Tests.SessionListingTests.ListsOnlyOwnedUserOriginAndSafeProjection()&#xD;
+[xUnit.net 00:00:16.51]         --- End of stack trace from previous location ---&#xD;
+[xUnit.net 00:00:16.51]         ----- Inner Stack Trace -----&#xD;
+[xUnit.net 00:00:16.51]            at Npgsql.Internal.NpgsqlConnector.ReadMessageLong(Boolean async, DataRowLoadingMode dataRowLoadingMode, Boolean readingNotifications, Boolean isReadingPrependedMessage)&#xD;
+[xUnit.net 00:00:16.51]            at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource&lt;TResult&gt;.GetResult(Int16 token)&#xD;
+[xUnit.net 00:00:16.51]            at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)&#xD;
+[xUnit.net 00:00:16.51]            at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)&#xD;
+[xUnit.net 00:00:16.51]            at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)&#xD;
+[xUnit.net 00:00:16.51]            at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)&#xD;
+[xUnit.net 00:00:16.51]            at Npgsql.NpgsqlCommand.ExecuteDbDataReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)&#xD;
+[xUnit.net 00:00:16.51]            at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)&#xD;
+[xUnit.net 00:00:16.51]            at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)&#xD;
+[xUnit.net 00:00:16.51]            at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)&#xD;
+[xUnit.net 00:00:25.42]       Microsoft.EntityFrameworkCore.DbUpdateException : An error occurred while saving the entity changes. See the inner exception for details.&#xD;
+[xUnit.net 00:00:25.42]       ---- Npgsql.PostgresException : 23514: Session identity and expiry are immutable; ended sessions cannot resume&#xD;
+[xUnit.net 00:00:25.43]       Stack Trace:&#xD;
+[xUnit.net 00:00:25.43]            at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)&#xD;
+[xUnit.net 00:00:25.43]            at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)&#xD;
+[xUnit.net 00:00:25.43]            at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)&#xD;
+[xUnit.net 00:00:25.43]            at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)&#xD;
+[xUnit.net 00:00:25.43]            at Microsoft.EntityFrameworkCore.Storage.RelationalDatabase.SaveChangesAsync(IList`1 entries, CancellationToken cancellationToken)&#xD;
+[xUnit.net 00:00:25.43]            at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(IList`1 entriesToSave, CancellationToken cancellationToken)&#xD;
+[xUnit.net 00:00:25.43]            at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(StateManager stateManager, Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)&#xD;
+[xUnit.net 00:00:25.43]            at Npgsql.EntityFrameworkCore.PostgreSQL.Storage.Internal.NpgsqlExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)&#xD;
+[xUnit.net 00:00:25.43]            at Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync(Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)&#xD;
+[xUnit.net 00:00:25.43]            at Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync(Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)&#xD;
+[xUnit.net 00:00:25.43]         C:\Workspace\AI MCP\Enterprise Solution\TunnerPlatform.V2.0\tests\Tunner.Identity.Persistence.Tests\SessionListingTests.cs(182,0): at Tunner.Identity.Persistence.Tests.SessionListingTests.TargetExpiryAndStampDenialAreTruthfulWithoutTargetMutationOrEvents()&#xD;
+[xUnit.net 00:00:25.43]         C:\Workspace\AI MCP\Enterprise Solution\TunnerPlatform.V2.0\tests\Tunner.Identity.Persistence.Tests\SessionListingTests.cs(183,0): at Tunner.Identity.Persistence.Tests.SessionListingTests.TargetExpiryAndStampDenialAreTruthfulWithoutTargetMutationOrEvents()&#xD;
+[xUnit.net 00:00:25.43]         C:\Workspace\AI MCP\Enterprise Solution\TunnerPlatform.V2.0\tests\Tunner.Identity.Persistence.Tests\SessionListingTests.cs(197,0): at Tunner.Identity.Persistence.Tests.SessionListingTests.TargetExpiryAndStampDenialAreTruthfulWithoutTargetMutationOrEvents()&#xD;
+[xUnit.net 00:00:25.43]         C:\Workspace\AI MCP\Enterprise Solution\TunnerPlatform.V2.0\tests\Tunner.Identity.Persistence.Tests\SessionListingTests.cs(197,0): at Tunner.Identity.Persistence.Tests.SessionListingTests.TargetExpiryAndStampDenialAreTruthfulWithoutTargetMutationOrEvents()&#xD;
+[xUnit.net 00:00:25.43]         --- End of stack trace from previous location ---&#xD;
+[xUnit.net 00:00:25.43]         ----- Inner Stack Trace -----&#xD;
+[xUnit.net 00:00:25.43]            at Npgsql.Internal.NpgsqlConnector.ReadMessageLong(Boolean async, DataRowLoadingMode dataRowLoadingMode, Boolean readingNotifications, Boolean isReadingPrependedMessage)&#xD;
+[xUnit.net 00:00:25.43]            at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource&lt;TResult&gt;.GetResult(Int16 token)&#xD;
+[xUnit.net 00:00:25.43]            at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)&#xD;
+[xUnit.net 00:00:25.43]            at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)&#xD;
+[xUnit.net 00:00:25.43]            at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)&#xD;
+[xUnit.net 00:00:25.43]            at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)&#xD;
+[xUnit.net 00:00:25.43]            at Npgsql.NpgsqlCommand.ExecuteDbDataReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)&#xD;
+[xUnit.net 00:00:25.43]            at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)&#xD;
+[xUnit.net 00:00:25.43]            at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)&#xD;
+[xUnit.net 00:00:25.43]            at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)&#xD;
+[xUnit.net 00:00:42.25]       System.InvalidOperationException : The owned session-listing container was not removed.&#xD;
+[xUnit.net 00:00:42.25]       Stack Trace:&#xD;
+[xUnit.net 00:00:42.25]         C:\Workspace\AI MCP\Enterprise Solution\TunnerPlatform.V2.0\tests\Tunner.Identity.Persistence.Tests\SessionListingTests.cs(80,0): at Tunner.Identity.Persistence.Tests.SessionListingPostgresFixture.DisposeAsync()&#xD;
+[xUnit.net 00:00:42.26]   Finished:    Tunner.Identity.Persistence.Tests&#xD;
+</StdOut>
+    </Output>
+    <RunInfos>
+      <RunInfo computerName="FARHANWAZIR" outcome="Error" timestamp="2026-11-13T22:57:32.0015780-05:00">
+        <Text>[xUnit.net 00:00:16.51]     Tunner.Identity.Persistence.Tests.SessionListingTests.ListsOnlyOwnedUserOriginAndSafeProjection [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="FARHANWAZIR" outcome="Error" timestamp="2026-11-13T22:57:40.9159030-05:00">
+        <Text>[xUnit.net 00:00:25.42]     Tunner.Identity.Persistence.Tests.SessionListingTests.TargetExpiryAndStampDenialAreTruthfulWithoutTargetMutationOrEvents [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="FARHANWAZIR" outcome="Error" timestamp="2026-11-13T22:57:57.7398344-05:00">
+        <Text>[xUnit.net 00:00:42.25]     [Test Class Cleanup Failure (Tunner.Identity.Persistence.Tests.SessionListingTests)] System.InvalidOperationException</Text>
+      </RunInfo>
+    </RunInfos>
+  </ResultSummary>
+</TestRun>
