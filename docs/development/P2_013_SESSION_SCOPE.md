@@ -1,0 +1,27 @@
+# P2-013 — owned Tunner sessions
+
+Status: IN_PROGRESS, startup admitted; implementation not started. No P2-013 feature test execution or acceptance is claimed. Native lifecycle checks allow each sequential state; updated work context generates/verifies CURRENT and native work start returns ELIGIBLE with zero findings. Refresh context after the preceding technical closure and starter commit before source edits.
+
+## Existing authority
+
+AMD-0005 resolution by `/root/p2_013_startup_refinement` inspected current FRD17 session/assurance contracts, Documents08/16/29/32/34, ADR-0006, authentication/operation-step-up contracts, governed decisions/policies and actual Identity source. Exact operation-name searches found no existing SESSION_REVOKE declaration. FRD17:227–247/267–272/381–382 already authorizes List/Revoke Sessions, Identity ownership, immediate idempotent local revocation, optional device/trust references and conditional Product propagation. Catalog32:113–129/335–351 and the operation-step-up contract delegate immutable operation/resource/version/context binding to a trusted owner. A consistent private SESSION_REVOKE/USER_BFF declaration is technical contract work, not a new Product decision.
+
+Concrete assurance/method mapping, proof lifetime, operation-specific Account permission and approval/effective metadata remain explicit approved runtime inputs. SESSION_USE permission alone cannot authorize revocation. Missing required policy fails closed. Optional unactivated trust or Product integration is not a missing-contract blocker. No policy values, Support privilege, device identity or Product guarantee are selected here. Root binds this local review to the verified authority/context receipts; the specialist did not independently refresh Drive/FigJam.
+
+## First vertical slice
+
+Private authenticated User-BFF listing of owned Tunner sessions, then exact other-session revocation. Return only safe timestamps/state and current-session distinction. Omit bearer material, protected tickets, internal hashes, email, IP, inferred location and invented device labels. Device/trust evidence may truthfully be unavailable. Keep current-session sign-out on the existing path initially. Never claim Product-local termination or global sign-out without the relevant contract and acknowledgement.
+
+Reuse AuthenticationApplication ValidateAsync, LockSessionAsync, LockForOperationAsync, End/revocation and transactional outbox. Stable owner state binds request/operation/correlation, Account/actor session/origin, exact target/version, context digest, approved policy version and exact local effect. Reconcile uncertain responses through that original owner result; consumed proof or session existence is not completion evidence.
+
+Existing StepUpApplication owns proof transaction/currentness. Callback-only sorting of target locks is too late: it already locks actor session then Account. An Account-first owner wrapper also conflicts with existing actor-first callers. The bounded technical recommendation is an internal exact cross-session lock plan at the existing execution entry: acquire the trusted actor/target session advisory locks in deterministic order before LockForOperationAsync, then retain the existing proof/policy/Account algorithm and owner callback. No arbitrary lock callback, second proof lifecycle or broad transaction redesign. Pre-lock identifiers grant no authority; recheck owner/Account/scheme/origin/state/expected version after locking. Forbid actor==target in this first slice. Independently review this seam before implementation and classify any changed historical owners through existing revision lineage.
+
+## Required validation and UI boundary
+
+Focused tests cover foreign Account/scheme/origin, revoked/expired caller and target, actor-target equality, CSRF/Origin, stale target version from normal activity, duplicate/different operation content, competing and opposite-session revocations, revocation versus target step-up/retrieval/sign-out, policy/Account/source changes across awaits, rollback, lost-response reconciliation and exactly one local event. ValidateAsync increments session version; stale-list conflicts require refresh, not a bypass.
+
+U-ACCT-04 remains PLANNED with no canonical pathname, Figma or source binding. UI implementation requires a concrete scoped proposal and Product visual consent under AMD-0008/0009; no route or rendered state is approved by this plan. Reuse shared routing, content, validation/error and visual patterns after consent. Final UX evidence and feature acceptance remain separate.
+
+## Handoff
+
+Eleven actual current role contracts were assessed by one executing AI specialist; `governance/reviews/REV-TUN-P2-013-<role>.yaml` records startup suitability only. No builds/tests/Docker or external writes were performed by that review. Both custom startup and in-progress contexts verified CURRENT at their respective generation points; native work start returned ELIGIBLE0. Default P1-020 context is stale and is not used. Prior recovery validation now completes seven real journeys/BFF63/current qualifications and both technical RV004 scopes close at preceding checkpoint903caf8. Exact next action: commit starter records, refresh custom context after metadata changes, predeclare exact first-slice paths/old-owner lineage, then implement and test safe owned-session listing before adding revocation. No future test/implementation is inferred from startup admission.
