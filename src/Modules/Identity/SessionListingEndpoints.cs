@@ -57,8 +57,35 @@ internal static class SessionListingEndpoints
     private const string Purpose = "Tunner.User.SessionListing.Continuation.v1";
     internal static void MapIfConfigured(IEndpointRouteBuilder endpoints)
     {
-        if (endpoints.ServiceProvider.GetRequiredService<IServiceProviderIsService>().IsService(typeof(ISessionListingHttpBudgetSource)))
-            endpoints.MapPost(Path, ReadAsync).RequireAuthorization(new AuthorizeAttribute { AuthenticationSchemes = AuthenticationIdentity.Scheme });
+        var services = endpoints.ServiceProvider.GetRequiredService<IServiceProviderIsService>();
+        if (!services.IsService(typeof(ISessionListingHttpBudgetSource))) return;
+        var user = new AuthorizeAttribute { AuthenticationSchemes = AuthenticationIdentity.Scheme };
+        endpoints.MapPost(Path, ReadAsync).RequireAuthorization(user);
+        if (!services.IsService(typeof(ISessionListingPresentationSource))) return;
+        endpoints.MapGet("/account/sessions/options", Options).RequireAuthorization(user);
+        var assets = endpoints.ServiceProvider.GetRequiredService<IdentityWebAssets>();
+        var surface = endpoints.ServiceProvider.GetRequiredService<AuthenticationEndpoints.Surface>();
+        assets.MapScreens(endpoints, "sessions.html", ["/account/sessions", "/account/sessions/details"], context =>
+            context.User.Identity is { IsAuthenticated: true, AuthenticationType: AuthenticationIdentity.Scheme } &&
+            AuthenticationIdentity.SessionId(context.User) is not null && context.User.FindFirst(AuthenticationIdentity.OriginClaim)?.Value == surface.Origin);
+    }
+    private static IResult Options(HttpContext http, ISessionListingPresentationSource source, ISessionListingHttpBudgetSource budgets,
+        IAuthenticationPolicySource authenticationPolicies, TimeProvider clock)
+    {
+        if (http.Request.QueryString.HasValue) return Problem(400, "VALIDATION_ERROR");
+        try
+        {
+            var now = clock.GetUtcNow(); var budget = Current(budgets, now);
+            var auth = authenticationPolicies.RequireEffective(now); auth.Validate();
+            var presentation = source.RequirePublished(auth) ?? throw new InvalidOperationException("Sessions publication is unavailable.");
+            now = clock.GetUtcNow(); var currentAuth = authenticationPolicies.RequireEffective(now); currentAuth.Validate();
+            if (auth != currentAuth || !SameBudget(budget, Current(budgets, now)))
+                return Problem(503, "DEPENDENCY_UNAVAILABLE");
+            return Results.Json(new { presentation.Locale, presentation.Content });
+        }
+        catch (ArgumentException) { return Problem(503, "DEPENDENCY_UNAVAILABLE"); }
+        catch (InvalidOperationException) { return Problem(503, "DEPENDENCY_UNAVAILABLE"); }
+        catch (CryptographicException) { return Problem(503, "DEPENDENCY_UNAVAILABLE"); }
     }
     [JsonUnmappedMemberHandling(JsonUnmappedMemberHandling.Disallow)]
     private sealed class Command

@@ -27,6 +27,20 @@ public sealed class SessionListingHttpTests(SessionListingPostgresFixture fixtur
                 ["SYNTHETIC-LOCAL-TEST-NOT-PRODUCTION-APPROVAL"]), 1, 4096)]).RequireEffective(at)
             : throw new InvalidOperationException("Fixture listing capacity unavailable.");
     }
+    private sealed class PresentationSource : ISessionListingPresentationSource
+    {
+        internal string? Invalid { get; set; }
+        internal string? AuthenticationVersion { get; private set; }
+        public SessionListingPresentation RequirePublished(AuthenticationPolicy policy)
+        {
+            AuthenticationVersion = policy.Version;
+            if (Invalid == "unavailable") throw new InvalidOperationException("Fixture publication unavailable.");
+            var content = SessionListingPresentation.RequiredKeys.Select(key => new RegistrationPublishedText(key, "fixture-variant", "fixture-version",
+                Invalid == "provenance" ? "" : "SYNTHETIC-LOCAL-TEST-PUBLICATION", Invalid == "locale" ? "fr" : "en",
+                Invalid == "draft" ? "DRAFT" : "PUBLISHED", key == "brand.tunner" ? "Tunner" : "Fixture " + key));
+            return new("en", Invalid == "missing" ? content.Skip(1) : content);
+        }
+    }
     private sealed class Scenario(IdentityTestDatabase database, AuthenticationTestHost host, Budgets budgets, string cookies, string csrf) : IAsyncDisposable
     {
         internal IdentityTestDatabase Database { get; } = database;
@@ -36,12 +50,13 @@ public sealed class SessionListingHttpTests(SessionListingPostgresFixture fixtur
         internal string Csrf { get; } = csrf;
         public async ValueTask DisposeAsync() { await Host.DisposeAsync(); await Database.DisposeAsync(); }
     }
-    private async Task<Scenario> Create(bool configured = true)
+    private async Task<Scenario> Create(bool configured = true, ISessionListingPresentationSource? presentation = null)
     {
         var database = await fixture.CreateDatabaseAsync(); var budgets = new Budgets();
         var host = await Start(database, services =>
         {
             if (configured) services.AddScoped<ISessionListingHttpBudgetSource>(_ => { budgets.Instances++; return new BudgetSource(budgets); });
+            if (presentation is not null) services.AddScoped<ISessionListingPresentationSource>(_ => presentation);
         });
         try
         {
@@ -69,6 +84,93 @@ public sealed class SessionListingHttpTests(SessionListingPostgresFixture fixtur
     {
         Assert.True(response.Headers.CacheControl?.NoStore == true && response.Headers.GetValues("X-Content-Type-Options").Single() == "nosniff" &&
             response.Headers.GetValues("Referrer-Policy").Single() == "no-referrer");
+    }
+
+    [Fact]
+    public async Task OptionsPublishesOnlyApprovedLocaleAndContentWhileCsrfRemainsOnCurrentSession()
+    {
+        var source = new PresentationSource(); await using var test = await Create(presentation: source);
+        using var response = await test.Host.Get("/account/sessions/options", test.Cookies);
+        Assert.True(response.StatusCode == HttpStatusCode.OK); Headers(response);
+        var body = await response.Content.ReadFromJsonAsync<JsonElement>();
+        Assert.True(body.EnumerateObject().Select(x => x.Name).ToHashSet(StringComparer.Ordinal).SetEquals(["locale", "content"]) &&
+            body.GetProperty("locale").GetString() == "en" && source.AuthenticationVersion == test.Host.Policies.Policy.Version);
+        var content = body.GetProperty("content");
+        Assert.True(content.EnumerateObject().Select(x => x.Name).ToHashSet(StringComparer.Ordinal).SetEquals(SessionListingPresentation.RequiredKeys));
+        foreach (var text in content.EnumerateObject())
+            Assert.True(text.Value.GetProperty("state").GetString() == "PUBLISHED" && text.Value.GetProperty("locale").GetString() == "en" &&
+                text.Value.GetProperty("publicationRef").GetString() == "SYNTHETIC-LOCAL-TEST-PUBLICATION");
+        using var session = await test.Host.Get("/authentication/session", test.Cookies);
+        Assert.True(session.StatusCode == HttpStatusCode.OK && !string.IsNullOrWhiteSpace((await session.Content.ReadFromJsonAsync<JsonElement>()).GetProperty("csrfToken").GetString()));
+        test.Host.Access.DeniedOperation = AuthenticationApplication.ListSessionsOperation;
+        using var denied = await test.Host.Post(SessionListingEndpoints.Path, new { }, test.Cookies, test.Csrf);
+        Assert.True(denied.StatusCode == HttpStatusCode.Unauthorized); Headers(denied);
+    }
+
+    [Fact]
+    public async Task OptionsRequiresCurrentUserAndRejectsQuerySelection()
+    {
+        await using var test = await Create(presentation: new PresentationSource());
+        using (var anonymous = await test.Host.Get("/account/sessions/options"))
+        { Assert.True(anonymous.StatusCode == HttpStatusCode.Unauthorized); Headers(anonymous); }
+        using (var query = await test.Host.Get("/account/sessions/options?account=untrusted", test.Cookies))
+        { Assert.True(query.StatusCode == HttpStatusCode.BadRequest); Headers(query); }
+        test.Host.Clock.Advance(test.Host.Policies.Policy.AbsoluteLifetime);
+        using var expired = await test.Host.Get("/account/sessions/options", test.Cookies);
+        Assert.True(expired.StatusCode == HttpStatusCode.Unauthorized); Headers(expired);
+    }
+
+    [Fact]
+    public async Task InvalidOrUnavailablePublicationsAndCapacityFailClosed()
+    {
+        var source = new PresentationSource(); await using var test = await Create(presentation: source);
+        foreach (var invalid in new[] { "missing", "draft", "locale", "provenance", "unavailable" })
+        {
+            source.Invalid = invalid;
+            using var response = await test.Host.Get("/account/sessions/options", test.Cookies);
+            Assert.True(response.StatusCode == HttpStatusCode.ServiceUnavailable); Headers(response);
+        }
+        source.Invalid = null; test.Budgets.Available = false;
+        using var capacity = await test.Host.Get("/account/sessions/options", test.Cookies);
+        Assert.True(capacity.StatusCode == HttpStatusCode.ServiceUnavailable); Headers(capacity);
+    }
+
+    [Fact]
+    public async Task OptionsActivationRequiresBothExplicitSourcesWithoutChangingBudgetOnlyListing()
+    {
+        await using (var budgetOnly = await Create())
+        {
+            using var options = await budgetOnly.Host.Get("/account/sessions/options", budgetOnly.Cookies);
+            Assert.True(options.StatusCode == HttpStatusCode.NotFound); Headers(options);
+            using var screen = await budgetOnly.Host.Get("/account/sessions", budgetOnly.Cookies);
+            Assert.True(screen.StatusCode == HttpStatusCode.NotFound); Headers(screen);
+            await Read(budgetOnly);
+        }
+        await using var presentationOnly = await Create(false, new PresentationSource());
+        using var absent = await presentationOnly.Host.Get("/account/sessions/options", presentationOnly.Cookies);
+        Assert.True(absent.StatusCode == HttpStatusCode.NotFound); Headers(absent);
+        using var list = await presentationOnly.Host.Post(SessionListingEndpoints.Path, new { }, presentationOnly.Cookies, presentationOnly.Csrf);
+        Assert.True(list.StatusCode == HttpStatusCode.NotFound); Headers(list);
+    }
+
+    [Fact]
+    public async Task PackagedScreenRoutesRequireCurrentUserAndRejectEndedSessions()
+    {
+        await using var test = await Create(presentation: new PresentationSource());
+        Assert.True(File.Exists(System.IO.Path.Combine(AppContext.BaseDirectory, "wwwroot", "registration", "sessions.html")));
+        foreach (var path in new[] { "/account/sessions", "/account/sessions/details" })
+        {
+            using var anonymous = await test.Host.Get(path);
+            Assert.True(anonymous.StatusCode == HttpStatusCode.Redirect); Headers(anonymous);
+            Assert.True(anonymous.Headers.Location?.OriginalString == "/login");
+            using var current = await test.Host.Get(path, test.Cookies);
+            Assert.True(current.StatusCode == HttpStatusCode.OK); Headers(current);
+            Assert.True(current.Content.Headers.ContentType?.MediaType == "text/html");
+        }
+        using var ended = await test.Host.Post("/authentication/sign-out", new { }, test.Cookies, test.Csrf);
+        Assert.True(ended.StatusCode == HttpStatusCode.OK);
+        using var old = await test.Host.Get("/account/sessions", test.Cookies);
+        Assert.True(old.StatusCode == HttpStatusCode.Redirect && old.Headers.Location?.OriginalString == "/login"); Headers(old);
     }
 
     [Fact]
