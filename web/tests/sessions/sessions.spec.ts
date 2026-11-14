@@ -2,6 +2,8 @@ import {test,expect} from '@playwright/test';
 import type {Page} from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
 import proposal from '../../apps/user/sessions.content.proposal.json' with {type:'json'};
+import inventory from '../../../docs/contracts/ui-inventory.json' with {type:'json'};
+import {sessionRoutes} from '../../apps/user/sessions.routes';
 import type {SessionItem} from '../../apps/user/sessions.api';
 
 const actor='11111111-1111-4111-8111-111111111111',target='22222222-2222-4222-8222-222222222222',expired='33333333-3333-4333-8333-333333333333';
@@ -50,8 +52,11 @@ for(const width of [1440,1366,1024,768,390,320]){
  });
 }
 test('Keyboard navigation reaches both guarded screens on desktop and narrow mobile',async({page})=>{
+ expect(inventory.items.find(item=>item.id===sessionRoutes.list.id)?.pathname).toBe(list);expect(inventory.items.find(item=>item.id===sessionRoutes.details.id)?.pathname).toBe(details);
  await setup(page);await page.goto(list);await expect(page.getByRole('heading',{name:'Sessions & devices',exact:true})).toBeFocused();
+ await expect(page.locator('main')).toHaveAttribute('data-tunner-screen',sessionRoutes.list.id);
  await page.keyboard.press('Tab');await expect(page.getByRole('button',{name:'View current session'})).toBeFocused();await page.keyboard.press('Enter');await expect(page).toHaveURL(new RegExp(details+'$'));await expect(page.getByRole('heading',{name:'Session details'})).toBeFocused();
+ await expect(page.locator('main')).toHaveAttribute('data-tunner-screen',sessionRoutes.details.id);
  await page.setViewportSize({width:320,height:1100});await page.keyboard.press('Tab');await expect(page.getByRole('button',{name:'Back to sessions',exact:true})).toBeFocused();await page.keyboard.press('Enter');await expect(page).toHaveURL(new RegExp(list+'$'));await expect(page.getByRole('heading',{name:'Sessions & devices',exact:true})).toBeFocused();await noStorageOrSelectors(page);
 });
 test('Load more uses one retained body cursor; double clicks do not issue duplicate requests',async({page})=>{
