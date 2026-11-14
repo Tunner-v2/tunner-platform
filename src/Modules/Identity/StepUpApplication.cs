@@ -124,9 +124,9 @@ internal sealed class StepUpApplication(IdentityPersistenceDbContext database, A
             ? UserStepUpOperationApplyOutcome.SessionContinues() : UserStepUpOperationApplyOutcome.Conflict(), ct);
     internal Task<StepUpExecutionResult> ExecuteOutcomeAsync(StepUpCaller caller, StepUpOperation operation, string key,
         Func<CancellationToken, Task<UserStepUpOperationApplyOutcome>> applyCurrentOperation, CancellationToken ct = default)
-        => SessionRevocationApplication.Owns(operation.Scope)
+        => SessionRevocationApplication.Owns(operation.Scope) || SessionBulkRevocationApplication.Owns(operation.Scope)
             ? throw new InvalidOperationException("Session revocation requires its typed owner execution path.")
-            : ExecuteOutcomeCoreAsync(caller, operation, key, applyCurrentOperation, null, null, ct);
+            : ExecuteOutcomeCoreAsync(caller, operation, key, applyCurrentOperation, null, ct);
 
     internal Task<StepUpExecutionResult> ExecuteSessionRevocationAsync(StepUpCaller caller, StepUpOperation operation,
         SessionRevocationRequest request, string key, CancellationToken ct = default)
@@ -135,13 +135,21 @@ internal sealed class StepUpApplication(IdentityPersistenceDbContext database, A
         if (operation.OperationId != bound.OperationId || operation.CorrelationId != bound.CorrelationId || operation.Scope != bound.Scope ||
             operation.ResourceId != bound.ResourceId || operation.ExpectedVersion != bound.ExpectedVersion || operation.ContextDigest != bound.ContextDigest)
             throw new ArgumentException("The exact session owner binding is required.", nameof(operation));
-        var owner = new AuthenticationApplication.SessionRevocationExecution(database, authentication, caller, request, operation);
-        return ExecuteOutcomeCoreAsync(caller, operation, key, null, owner, request.TargetSessionId, ct);
+        var owner = AuthenticationApplication.SessionRevocationExecutionSet.Single(database, authentication, caller, request, operation);
+        return ExecuteOutcomeCoreAsync(caller, operation, key, null, owner, ct);
+    }
+
+    internal Task<StepUpExecutionResult> ExecuteSessionBulkRevocationAsync(StepUpCaller caller, SessionBulkRevocationManifest manifest,
+        ISessionBulkRevocationDiscoverySource discovery, string key, CancellationToken ct = default)
+    {
+        var operation = manifest.Operation(caller);
+        var owner = AuthenticationApplication.SessionRevocationExecutionSet.Bulk(database, authentication, caller, manifest, discovery, assurancePolicies);
+        return ExecuteOutcomeCoreAsync(caller, operation, key, null, owner, ct);
     }
 
     private async Task<StepUpExecutionResult> ExecuteOutcomeCoreAsync(StepUpCaller caller, StepUpOperation operation, string key,
         Func<CancellationToken, Task<UserStepUpOperationApplyOutcome>>? applyCurrentOperation,
-        AuthenticationApplication.SessionRevocationExecution? sessionRevocation, Guid? targetSessionId, CancellationToken ct)
+        AuthenticationApplication.SessionRevocationExecutionSet? sessionRevocation, CancellationToken ct)
     {
         ArgumentNullException.ThrowIfNull(caller); ArgumentNullException.ThrowIfNull(operation);
         if (sessionRevocation is null) ArgumentNullException.ThrowIfNull(applyCurrentOperation);
@@ -154,8 +162,8 @@ internal sealed class StepUpApplication(IdentityPersistenceDbContext database, A
           bool committedTerminal;
           await using (var transaction = await database.Database.BeginTransactionAsync(ct).ConfigureAwait(false))
           {
-            if (targetSessionId is { } target)
-                await authentication.LockSessionsCanonicalAsync([caller.SessionId, target], ct).ConfigureAwait(false);
+            if (sessionRevocation is not null)
+                await authentication.LockSessionsCanonicalAsync(sessionRevocation.TargetSessionIds.Append(caller.SessionId), ct).ConfigureAwait(false);
             var session = await authentication.LockForOperationAsync(caller, operation.Scope.Operation, ct).ConfigureAwait(false);
             if (session is null) return await FinishAsync(transaction, new StepUpExecutionResult(false, "AUTHENTICATION_FAILED"), ct).ConfigureAwait(false);
             now = clock.GetUtcNow();
