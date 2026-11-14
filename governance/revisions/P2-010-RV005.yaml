@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "revision_id": "P2-010-RV005",
+  "revision_scope": "WORK_ITEM",
+  "original_scope_id": "TUN-P2-010",
+  "parent_revision_id": "P2-010-RV004",
+  "parent_milestone_revision_id": null,
+  "title": "Preserve optional authentication mapping during session-listing HTTP integration",
+  "revision_type": "COMPATIBILITY",
+  "status": "ACTIVE",
+  "reason": "P2-013 application listing is committed and verified. Add one optional mapping call to AuthenticationEndpoints only when an explicit session-listing runtime source is registered, preserving original010 and priorCLOSED revisions. New endpoint/test files remain owned by013; no default activation, production values, UI or shared-host changes.",
+  "authority_refs": [
+    "docs/authority/baselines/1.6.0/17_Account_Identity_and_Session_FRD.md"
+  ],
+  "decision_refs": [],
+  "defect_refs": [],
+  "change_refs": [],
+  "impact_classification": "NON_BLOCKING",
+  "blocked_scope": [],
+  "acceptance_criteria": [
+    "Current committed realHTTP listing guards/protected pagination pass with source-absent authentication routes unchanged, required scoped reviews and native closure; original010 acceptance remains immutable."
+  ],
+  "prerequisites": [],
+  "work_items": [],
+  "required_gates": [],
+  "required_roles": ["full-stack-engineer", "solution-architect", "tester-qa-engineer", "cyber-security-engineer", "auditor", "compliance-specialist", "governance-engineer"],
+  "evidence_refs": ["governance/evidence/P2-010-RV005-VALIDATION.json"],
+  "product_acceptance_required": false,
+  "created_at": "2026-11-14T04:45:12.5475308\u002B00:00",
+  "closed_at": null
+}
