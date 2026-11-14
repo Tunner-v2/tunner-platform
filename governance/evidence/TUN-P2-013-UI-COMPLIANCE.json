@@ -2,38 +2,78 @@
   "schema_version": 1,
   "scope_id": "TUN-P2-013",
   "result": "PASS",
-  "assessment_scope": "Only the two implemented Sessions listing/detail screens in their current read-only feature increment. No whole-feature, future revocation/device/trust/bulk, live-BFF E2E, Product, production or release acceptance.",
-  "tested_commit_sha": "dd9029e8fc479693de954b4d1c4ffdf8cf7fb179",
-  "inventory_sha256": "6abfa1de1fd9e97573f704133923322d6541201f8fa7787ddbe10a293d5290df",
+  "assessment_scope": "Only current listing/details, selected-other-session confirmation/result and this caller's shared password proof integration. No whole013/device/trust/bulk/Product/production/release acceptance.",
+  "tested_commit_sha": "4f09edb8b6033c7ca1edcf8d7d227c26bfb8c15b",
+  "inventory_sha256": "1654f225d14fde2bf8ecd7284023bb1917c8e5de1731dc30effac369296b63c2",
   "owned_behavior_paths": [
+    "docs/contracts/session-listing-contract.md",
+    "docs/contracts/session-revocation-contract.md",
     "docs/contracts/ui-inventory.json",
-    "web/apps/user/sessions.tsx",
-    "web/apps/user/sessions.ui.tsx",
-    "web/apps/user/sessions.api.ts",
-    "web/apps/user/sessions.routes.ts",
-    "web/apps/user/sessions.css",
+    "src/Modules/Identity/AuthenticationApplication.cs",
+    "src/Modules/Identity/AuthenticationEndpoints.cs",
+    "src/Modules/Identity/AuthenticationSessionListing.cs",
+    "src/Modules/Identity/AuthenticationSessionLocking.cs",
+    "src/Modules/Identity/AuthenticationSessionRevocation.cs",
+    "src/Modules/Identity/FederationAuthentication.cs",
+    "src/Modules/Identity/FederationOperationProofBrowserService.cs",
+    "src/Modules/Identity/FederationStepUpOwner.cs",
+    "src/Modules/Identity/RecoveryCodeProofCompletedResult.cs",
+    "src/Modules/Identity/SessionListingContracts.cs",
     "src/Modules/Identity/SessionListingEndpoints.cs",
     "src/Modules/Identity/SessionListingPresentation.cs",
-    "web/apps/user/sessions.html",
+    "src/Modules/Identity/SessionRevocationApplication.cs",
+    "src/Modules/Identity/SessionRevocationBrowser.cs",
+    "src/Modules/Identity/SessionRevocationContracts.cs",
+    "src/Modules/Identity/StepUpApplication.cs",
+    "src/Modules/Identity/StepUpBrowserEndpoints.cs",
+    "src/Modules/Identity/StepUpFederationBrowserEndpoints.cs",
+    "src/Modules/Identity/StepUpTotpBrowserEndpoints.cs",
+    "web/apps/user/federation.api.ts",
+    "web/apps/user/passkeys.api.ts",
+    "web/apps/user/passkeys.tsx",
+    "web/apps/user/recovery-codes.api.ts",
+    "web/apps/user/sessions.api.ts",
     "web/apps/user/sessions.content-keys.ts",
     "web/apps/user/sessions.content.proposal.json",
+    "web/apps/user/sessions.css",
+    "web/apps/user/sessions.html",
+    "web/apps/user/sessions.revocation.tsx",
+    "web/apps/user/sessions.routes.ts",
+    "web/apps/user/sessions.tsx",
+    "web/apps/user/sessions.ui.tsx",
+    "web/apps/user/step-up.completion.ts",
+    "web/apps/user/step-up.content.proposal.json",
+    "web/apps/user/step-up.css",
+    "web/apps/user/step-up.federation.tsx",
+    "web/apps/user/step-up.passkey.ts",
+    "web/apps/user/step-up.totp.tsx",
+    "web/apps/user/step-up.tsx",
+    "web/apps/user/totp.api.ts",
+    "web/apps/user/totp.code.tsx",
+    "web/apps/user/totp.content-keys.ts",
+    "web/apps/user/totp.css",
+    "web/apps/user/totp.picker.tsx",
+    "web/apps/user/totp.validation.ts",
     "web/apps/user/vite.config.ts",
+    "web/packages/ui/src/content.tsx",
+    "web/packages/ui/src/controls.tsx",
+    "web/packages/ui/src/dialog.tsx",
+    "web/packages/ui/src/forms.tsx",
+    "web/playwright.sessions.config.ts",
+    "web/tests/browser-testing/sessions-flow.spec.ts",
     "web/tests/sessions.api.test.tsx",
-    "web/tests/sessions/sessions.spec.ts",
-    "web/playwright.sessions.config.ts"
+    "web/tests/sessions/sessions.spec.ts"
   ],
-  "validation_applicability": "No user-editable forms/fields in these screens; VAL-001..008 form contracts are not applicable to absent forms. Independent strict API/backend JSON validation and generic shared error handling are exercised in the retained actual results. No other form inherits PASS.",
-  "actual_executions": {
-    "full_backend_and_ui28_sha": "41501e3b006041ef2efaa2766a0a1fe1e73534af",
-    "keyboard_identity_sha": "dd9029e8fc479693de954b4d1c4ffdf8cf7fb179",
-    "currentness": "Qualification binding verifies unchanged app/backend inputs after full execution; only inventory metadata and focused assertions changed."
+  "actual_execution_binding": {
+    "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/qualification-binding.json",
+    "sha256": "a293ecf8a0434a353d806b00382f9b003748b6808db9221642fda5852f369a77"
   },
+  "validation_applicability": "Shared existing validation evidence retains original invocations; current caller is qualified by actual wrong-password correction, independent HTTPS guards, causal-result reconciliation and ordinary-owner handoff. Optional unactivated factor/provider paths do not become new live qualification.",
   "items": [
     {
       "id": "U-ACCT-04",
       "kind": "SCREEN",
       "pathname": "/account/sessions",
-      "result": "PASS",
       "authority_refs": [
         "docs/authority/current/development/31_UI_UX_Screen_and_Control_Center_Requirements_Matrix.md"
       ],
@@ -47,242 +87,308 @@
           "node_id": "47:243"
         }
       ],
+      "result": "PASS",
       "checks": [
         {
           "id": "URL-001",
           "result": "PASS",
-          "description": "Canonical list/details path transitions are exercised by controlled browser and focused keyboard/identity cases.",
+          "description": "Canonical list/details navigation and the existing Security sidebar Sessions anchor are exercised by controlled history and the real browser journey.",
           "evidence_refs": [
             {
-              "path": "governance/evidence/p2-013-sessions-20261114/ui-dd9029e/ui28-results.json",
-              "sha256": "8b1d1f69e0d798affcba8be8337933595be842ee097f25df44b77e8402ea96b7"
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/qualification-binding.json",
+              "sha256": "a293ecf8a0434a353d806b00382f9b003748b6808db9221642fda5852f369a77"
             },
             {
-              "path": "governance/evidence/p2-013-sessions-20261114/ui-dd9029e/keyboard1-results.json",
-              "sha256": "f488b4c624097224e4a51aeb2309f4fca2d3f04e36f03a2cbbb13d8308d80463"
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/http20-7a6a69b/session-revocation-http.trx",
+              "sha256": "5755f72a53612854f8a99c43398834fb64bfd8a811154261a1dc9e97a554275b"
+            },
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/ui42-8b65583/results.json",
+              "sha256": "1606652b925ba3623182a695395bfe42301bd82f2d69ac37f340fdaf8608846b"
+            },
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/live1-4f09edb/results.json",
+              "sha256": "54b7489d61a33e457b3e50abfb93fba1b13893dd0f7f5368b4d3f811bd4dea39"
             }
           ]
         },
         {
           "id": "URL-002",
           "result": "PASS",
-          "description": "Full-screen navigation uses pathname routing; direct detail without transient selection safely returns to canonical list. Query/hash selectors are stripped rather than treated as routes.",
+          "description": "Independent full screens retain pathname routes; the confirmation and proof remain same-screen dialogs. No primary screen is replaced with query/hash state.",
           "evidence_refs": [
             {
-              "path": "governance/evidence/p2-013-sessions-20261114/ui-dd9029e/ui28-results.json",
-              "sha256": "8b1d1f69e0d798affcba8be8337933595be842ee097f25df44b77e8402ea96b7"
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/qualification-binding.json",
+              "sha256": "a293ecf8a0434a353d806b00382f9b003748b6808db9221642fda5852f369a77"
             },
             {
-              "path": "governance/evidence/p2-013-sessions-20261114/ui-dd9029e/keyboard1-results.json",
-              "sha256": "f488b4c624097224e4a51aeb2309f4fca2d3f04e36f03a2cbbb13d8308d80463"
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/http20-7a6a69b/session-revocation-http.trx",
+              "sha256": "5755f72a53612854f8a99c43398834fb64bfd8a811154261a1dc9e97a554275b"
+            },
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/ui42-8b65583/results.json",
+              "sha256": "1606652b925ba3623182a695395bfe42301bd82f2d69ac37f340fdaf8608846b"
+            },
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/live1-4f09edb/results.json",
+              "sha256": "54b7489d61a33e457b3e50abfb93fba1b13893dd0f7f5368b4d3f811bd4dea39"
             }
           ]
         },
         {
           "id": "URL-003",
           "result": "PASS",
-          "description": "Direct entry, reload, Back/Forward and current authorization reconstruct safe views; no retained row is disclosed after actor change.",
+          "description": "Controlled direct entry/refresh/Back/Forward plus real protected-original reload reconstruct only currently authorized owner state.",
           "evidence_refs": [
             {
-              "path": "governance/evidence/p2-013-sessions-20261114/ui-dd9029e/ui28-results.json",
-              "sha256": "8b1d1f69e0d798affcba8be8337933595be842ee097f25df44b77e8402ea96b7"
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/qualification-binding.json",
+              "sha256": "a293ecf8a0434a353d806b00382f9b003748b6808db9221642fda5852f369a77"
             },
             {
-              "path": "governance/evidence/p2-013-sessions-20261114/ui-dd9029e/keyboard1-results.json",
-              "sha256": "f488b4c624097224e4a51aeb2309f4fca2d3f04e36f03a2cbbb13d8308d80463"
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/http20-7a6a69b/session-revocation-http.trx",
+              "sha256": "5755f72a53612854f8a99c43398834fb64bfd8a811154261a1dc9e97a554275b"
+            },
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/ui42-8b65583/results.json",
+              "sha256": "1606652b925ba3623182a695395bfe42301bd82f2d69ac37f340fdaf8608846b"
+            },
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/live1-4f09edb/results.json",
+              "sha256": "54b7489d61a33e457b3e50abfb93fba1b13893dd0f7f5368b4d3f811bd4dea39"
             }
           ]
         },
         {
           "id": "URL-004",
           "result": "PASS",
-          "description": "Account disclosure stays local to the same screen; screenshots and ordinary sign-out tests exercise its safe state without URL selectors.",
+          "description": "Dialogs, Account menu and pagination use appropriate same-screen state; no mutation authority is placed in the URL.",
           "evidence_refs": [
             {
-              "path": "governance/evidence/p2-013-sessions-20261114/ui-dd9029e/ui28-results.json",
-              "sha256": "8b1d1f69e0d798affcba8be8337933595be842ee097f25df44b77e8402ea96b7"
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/qualification-binding.json",
+              "sha256": "a293ecf8a0434a353d806b00382f9b003748b6808db9221642fda5852f369a77"
             },
             {
-              "path": "governance/evidence/p2-013-sessions-20261114/ui-dd9029e/keyboard1-results.json",
-              "sha256": "f488b4c624097224e4a51aeb2309f4fca2d3f04e36f03a2cbbb13d8308d80463"
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/http20-7a6a69b/session-revocation-http.trx",
+              "sha256": "5755f72a53612854f8a99c43398834fb64bfd8a811154261a1dc9e97a554275b"
+            },
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/ui42-8b65583/results.json",
+              "sha256": "1606652b925ba3623182a695395bfe42301bd82f2d69ac37f340fdaf8608846b"
+            },
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/live1-4f09edb/results.json",
+              "sha256": "54b7489d61a33e457b3e50abfb93fba1b13893dd0f7f5368b4d3f811bd4dea39"
             }
           ]
         },
         {
           "id": "URL-005",
           "result": "PASS",
-          "description": "Real packaged-page tests require actual built HTML, redirect anonymous/ended callers, and preserve independent list permission. UI guards block data before ready.",
+          "description": "Real HTTPS and browser guards reject anonymous/ended callers, invalid Origin/CSRF and foreign/tampered/expired owner context; packaged screen authorization is retained.",
           "evidence_refs": [
             {
-              "path": "governance/evidence/p2-013-sessions-20261114/ui-dd9029e/backend26.trx",
-              "sha256": "4a578a4cdd5f5ea49666e482bf0e77a729bde479377e2180126732453f750f18"
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/qualification-binding.json",
+              "sha256": "a293ecf8a0434a353d806b00382f9b003748b6808db9221642fda5852f369a77"
             },
             {
-              "path": "governance/evidence/p2-013-sessions-20261114/ui-dd9029e/ui28-results.json",
-              "sha256": "8b1d1f69e0d798affcba8be8337933595be842ee097f25df44b77e8402ea96b7"
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/http20-7a6a69b/session-revocation-http.trx",
+              "sha256": "5755f72a53612854f8a99c43398834fb64bfd8a811154261a1dc9e97a554275b"
+            },
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/ui42-8b65583/results.json",
+              "sha256": "1606652b925ba3623182a695395bfe42301bd82f2d69ac37f340fdaf8608846b"
+            },
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/live1-4f09edb/results.json",
+              "sha256": "54b7489d61a33e457b3e50abfb93fba1b13893dd0f7f5368b4d3f811bd4dea39"
             }
           ]
         },
         {
           "id": "URL-006",
           "result": "NOT_APPLICABLE",
-          "reason": "This private Account listing increment adds no OAuth callback, Product redirect or provider initiation route. Existing provider handlers/contracts are unchanged; exact actor-origin enforcement is independently exercised in backend tests. No provider-live qualification is claimed.",
+          "reason": "This selected-session increment adds no OAuth callback/Product-origin redirect or provider initiation route. No provider-live or Product propagation qualification is claimed; existing provider code is unchanged in this UI correction.",
           "authority_refs": [
-            "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md",
-            "docs/authority/current/decisions/AMD-0009_URL_Addressable_Routing_and_Governed_Form_Validation.md"
+            "docs/authority/current/development/31_UI_UX_Screen_and_Control_Center_Requirements_Matrix.md"
           ]
         },
         {
           "id": "UX-FID-001",
           "result": "PASS",
-          "description": "Approved Figma composition and four scoped Product adaptations are compared against actual current render evidence; restored omissions verified.",
+          "description": "Approved Figma composition plus genuinely consented013-V01..V04 adaptations are compared with actual matching renders; UI002 card mismatch corrected.",
           "evidence_refs": [
             {
-              "path": "governance/evidence/p2-013-sessions-20261114/ui-dd9029e/visual-review.json",
-              "sha256": "9b7ad2c666ea51b53f84a4d63deb82aa0ef02eb8421ff8abf7e3ea9c1af9a995"
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/visual-review.json",
+              "sha256": "3feb13359f4193db4857d77b2a6198b70e1c171a8c8283b19169ad4e26022a72"
             },
             {
-              "path": "governance/evidence/p2-013-sessions-20261114/ui-dd9029e/ui28-results.json",
-              "sha256": "8b1d1f69e0d798affcba8be8337933595be842ee097f25df44b77e8402ea96b7"
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/fidelity6-4f09edb/results.json",
+              "sha256": "04061bf0c4b49669e85ed3eea0adf7a28e3131f242a115f827a5d34708234374"
+            },
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/feedback2-4f09edb/results.json",
+              "sha256": "16909bacdca290fe67abd8b039aad91762d9f5b038e0ac3db94f36eaa05ce1ab"
             }
           ]
         },
         {
           "id": "UX-FID-002",
           "result": "PASS",
-          "description": "The approved Account Center flat background, cards and indigo decoration are retained; this frame does not require authentication-screen glow layers.",
+          "description": "Approved Account Center flat surface, panels, backdrop and modal layers are retained; authentication-page glow artwork is not invented for this composition.",
           "evidence_refs": [
             {
-              "path": "governance/evidence/p2-013-sessions-20261114/ui-dd9029e/visual-review.json",
-              "sha256": "9b7ad2c666ea51b53f84a4d63deb82aa0ef02eb8421ff8abf7e3ea9c1af9a995"
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/visual-review.json",
+              "sha256": "3feb13359f4193db4857d77b2a6198b70e1c171a8c8283b19169ad4e26022a72"
             },
             {
-              "path": "governance/evidence/p2-013-sessions-20261114/ui-dd9029e/ui28-results.json",
-              "sha256": "8b1d1f69e0d798affcba8be8337933595be842ee097f25df44b77e8402ea96b7"
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/fidelity6-4f09edb/results.json",
+              "sha256": "04061bf0c4b49669e85ed3eea0adf7a28e3131f242a115f827a5d34708234374"
+            },
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/feedback2-4f09edb/results.json",
+              "sha256": "16909bacdca290fe67abd8b039aad91762d9f5b038e0ac3db94f36eaa05ce1ab"
             }
           ]
         },
         {
           "id": "UX-FID-003",
           "result": "PASS",
-          "description": "Existing Tunner controls/content/error presentation/tokens are reused. No new user-editable form or copied registration domain rule.",
+          "description": "Existing Tunner shared controls, typography, spacing and focused field/form error variants are reused; selected-session facts match the approved plain layout.",
           "evidence_refs": [
             {
-              "path": "governance/evidence/p2-013-sessions-20261114/ui-dd9029e/visual-review.json",
-              "sha256": "9b7ad2c666ea51b53f84a4d63deb82aa0ef02eb8421ff8abf7e3ea9c1af9a995"
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/visual-review.json",
+              "sha256": "3feb13359f4193db4857d77b2a6198b70e1c171a8c8283b19169ad4e26022a72"
             },
             {
-              "path": "governance/evidence/p2-013-sessions-20261114/ui-dd9029e/ui28-results.json",
-              "sha256": "8b1d1f69e0d798affcba8be8337933595be842ee097f25df44b77e8402ea96b7"
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/fidelity6-4f09edb/results.json",
+              "sha256": "04061bf0c4b49669e85ed3eea0adf7a28e3131f242a115f827a5d34708234374"
+            },
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/feedback2-4f09edb/results.json",
+              "sha256": "16909bacdca290fe67abd8b039aad91762d9f5b038e0ac3db94f36eaa05ce1ab"
             }
           ]
         },
         {
           "id": "UX-FID-004",
           "result": "PASS",
-          "description": "Material adaptations have explicit bounded Product Owner consent; pending revocation layouts are not implemented or represented as complete.",
+          "description": "Only the four scoped Product Owner visual adaptations are accepted. No new visual system, unsupported device state or invented Product decision.",
           "evidence_refs": [
             {
-              "path": "governance/evidence/p2-013-sessions-20261114/ui-dd9029e/visual-review.json",
-              "sha256": "9b7ad2c666ea51b53f84a4d63deb82aa0ef02eb8421ff8abf7e3ea9c1af9a995"
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/visual-review.json",
+              "sha256": "3feb13359f4193db4857d77b2a6198b70e1c171a8c8283b19169ad4e26022a72"
             },
             {
-              "path": "governance/evidence/p2-013-sessions-20261114/ui-dd9029e/ui28-results.json",
-              "sha256": "8b1d1f69e0d798affcba8be8337933595be842ee097f25df44b77e8402ea96b7"
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/fidelity6-4f09edb/results.json",
+              "sha256": "04061bf0c4b49669e85ed3eea0adf7a28e3131f242a115f827a5d34708234374"
+            },
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/feedback2-4f09edb/results.json",
+              "sha256": "16909bacdca290fe67abd8b039aad91762d9f5b038e0ac3db94f36eaa05ce1ab"
             }
           ]
         },
         {
           "id": "UX-FID-005",
           "result": "PASS",
-          "description": "Unsupported device/trust/location and Product termination assertions are not fabricated; the consented truthful projection preserves FRD17.",
+          "description": "FRD17 governs authorization/local effects and safe server-backed facts; Figma governs presentation. The consented truthful projection avoids unsupported device/trust/global-signout assertions.",
           "evidence_refs": [
             {
-              "path": "governance/evidence/p2-013-sessions-20261114/ui-dd9029e/visual-review.json",
-              "sha256": "9b7ad2c666ea51b53f84a4d63deb82aa0ef02eb8421ff8abf7e3ea9c1af9a995"
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/visual-review.json",
+              "sha256": "3feb13359f4193db4857d77b2a6198b70e1c171a8c8283b19169ad4e26022a72"
             },
             {
-              "path": "governance/evidence/p2-013-sessions-20261114/ui-dd9029e/ui28-results.json",
-              "sha256": "8b1d1f69e0d798affcba8be8337933595be842ee097f25df44b77e8402ea96b7"
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/fidelity6-4f09edb/results.json",
+              "sha256": "04061bf0c4b49669e85ed3eea0adf7a28e3131f242a115f827a5d34708234374"
+            },
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/feedback2-4f09edb/results.json",
+              "sha256": "16909bacdca290fe67abd8b039aad91762d9f5b038e0ac3db94f36eaa05ce1ab"
             }
           ]
         },
         {
           "id": "UX-FID-006",
           "result": "PASS",
-          "description": "Existing Tunner styling and shared foundation are retained; no TailAdmin defaults replace approved presentation.",
+          "description": "No TailAdmin default styling substitutes for Tunner's approved theme or shared component variants.",
           "evidence_refs": [
             {
-              "path": "governance/evidence/p2-013-sessions-20261114/ui-dd9029e/visual-review.json",
-              "sha256": "9b7ad2c666ea51b53f84a4d63deb82aa0ef02eb8421ff8abf7e3ea9c1af9a995"
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/visual-review.json",
+              "sha256": "3feb13359f4193db4857d77b2a6198b70e1c171a8c8283b19169ad4e26022a72"
             },
             {
-              "path": "governance/evidence/p2-013-sessions-20261114/ui-dd9029e/ui28-results.json",
-              "sha256": "8b1d1f69e0d798affcba8be8337933595be842ee097f25df44b77e8402ea96b7"
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/fidelity6-4f09edb/results.json",
+              "sha256": "04061bf0c4b49669e85ed3eea0adf7a28e3131f242a115f827a5d34708234374"
+            },
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/feedback2-4f09edb/results.json",
+              "sha256": "16909bacdca290fe67abd8b039aad91762d9f5b038e0ac3db94f36eaa05ce1ab"
             }
           ]
         },
         {
           "id": "UX-FID-007",
           "result": "PASS",
-          "description": "Six widths have listing/details axe and overflow checks; desktop/narrow-mobile keyboard Tab/Enter and focus restoration execute in the separate focused case.",
+          "description": "Six viewport confirmation/result renders and fresh uncertainty/changed cases pass; keyboard/axe checks and protected reload retain usable controls. Existing unchanged shared proof mobile evidence is reused, not represented as a new execution.",
           "evidence_refs": [
             {
-              "path": "governance/evidence/p2-013-sessions-20261114/ui-dd9029e/visual-review.json",
-              "sha256": "9b7ad2c666ea51b53f84a4d63deb82aa0ef02eb8421ff8abf7e3ea9c1af9a995"
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/visual-review.json",
+              "sha256": "3feb13359f4193db4857d77b2a6198b70e1c171a8c8283b19169ad4e26022a72"
             },
             {
-              "path": "governance/evidence/p2-013-sessions-20261114/ui-dd9029e/ui28-results.json",
-              "sha256": "8b1d1f69e0d798affcba8be8337933595be842ee097f25df44b77e8402ea96b7"
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/fidelity6-4f09edb/results.json",
+              "sha256": "04061bf0c4b49669e85ed3eea0adf7a28e3131f242a115f827a5d34708234374"
+            },
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/feedback2-4f09edb/results.json",
+              "sha256": "16909bacdca290fe67abd8b039aad91762d9f5b038e0ac3db94f36eaa05ce1ab"
             }
           ]
         },
         {
           "id": "UX-FID-008",
           "result": "PASS",
-          "description": "Exact source/currentness binding, Figma references, hashed screenshots, consent and raw results retain their actual invocation identities.",
+          "description": "Raw results, screenshots, reference hashes, original invocation SHAs and current source equivalence are retained. This PASS covers only the implemented listing/details and selected-other-session integration.",
           "evidence_refs": [
             {
-              "path": "governance/evidence/p2-013-sessions-20261114/ui-dd9029e/visual-review.json",
-              "sha256": "9b7ad2c666ea51b53f84a4d63deb82aa0ef02eb8421ff8abf7e3ea9c1af9a995"
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/visual-review.json",
+              "sha256": "3feb13359f4193db4857d77b2a6198b70e1c171a8c8283b19169ad4e26022a72"
             },
             {
-              "path": "governance/evidence/p2-013-sessions-20261114/ui-dd9029e/ui28-results.json",
-              "sha256": "8b1d1f69e0d798affcba8be8337933595be842ee097f25df44b77e8402ea96b7"
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/fidelity6-4f09edb/results.json",
+              "sha256": "04061bf0c4b49669e85ed3eea0adf7a28e3131f242a115f827a5d34708234374"
+            },
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/feedback2-4f09edb/results.json",
+              "sha256": "16909bacdca290fe67abd8b039aad91762d9f5b038e0ac3db94f36eaa05ce1ab"
             }
           ]
         }
       ],
       "screenshots": [
         {
-          "path": "governance/evidence/p2-013-sessions-20261114/ui-dd9029e/list-1440.png",
-          "sha256": "f53c9396a514e4cc7d36040bbf6d9889c001a04f974f0ecec1579990d947bfb0",
-          "role": "RENDERED_IMPLEMENTATION"
+          "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/screenshots/list-1440.png",
+          "sha256": "f53c9396a514e4cc7d36040bbf6d9889c001a04f974f0ecec1579990d947bfb0"
         },
         {
-          "path": "governance/evidence/p2-013-sessions-20261114/ui-dd9029e/list-1366.png",
-          "sha256": "1062f1f56a6002dd33f3a6d89a2f2a9779116ba018bfca2fa7bc32bcdacc33da",
-          "role": "RENDERED_IMPLEMENTATION"
+          "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/screenshots/list-1366.png",
+          "sha256": "1062f1f56a6002dd33f3a6d89a2f2a9779116ba018bfca2fa7bc32bcdacc33da"
         },
         {
-          "path": "governance/evidence/p2-013-sessions-20261114/ui-dd9029e/list-1024.png",
-          "sha256": "f686d48b747dd2efd1a8b006bb4ea02f146f1fafaf989cf04e738d34e42b6fdb",
-          "role": "RENDERED_IMPLEMENTATION"
+          "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/screenshots/list-1024.png",
+          "sha256": "f686d48b747dd2efd1a8b006bb4ea02f146f1fafaf989cf04e738d34e42b6fdb"
         },
         {
-          "path": "governance/evidence/p2-013-sessions-20261114/ui-dd9029e/list-768.png",
-          "sha256": "b9642680224ee846460931407ef14857ef9078f1a2be3ab56c9320fdc0d864b9",
-          "role": "RENDERED_IMPLEMENTATION"
+          "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/screenshots/list-768.png",
+          "sha256": "b9642680224ee846460931407ef14857ef9078f1a2be3ab56c9320fdc0d864b9"
         },
         {
-          "path": "governance/evidence/p2-013-sessions-20261114/ui-dd9029e/list-390.png",
-          "sha256": "3672ca046a27c092b479b201f656cd1b2881b4534022557c7b091c00cf5b2f78",
-          "role": "RENDERED_IMPLEMENTATION"
+          "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/screenshots/list-390.png",
+          "sha256": "3672ca046a27c092b479b201f656cd1b2881b4534022557c7b091c00cf5b2f78"
         },
         {
-          "path": "governance/evidence/p2-013-sessions-20261114/ui-dd9029e/list-320.png",
-          "sha256": "eebf67aecf38dee2bfe7bb8b38469c6034e445cceff470c44c718d0780f30e9e",
-          "role": "RENDERED_IMPLEMENTATION"
+          "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/screenshots/list-320.png",
+          "sha256": "eebf67aecf38dee2bfe7bb8b38469c6034e445cceff470c44c718d0780f30e9e"
         },
         {
           "path": "governance/evidence/p2-013-sessions-20261114/ui-dd9029e/approved-list.png",
@@ -297,7 +403,7 @@
       ],
       "deviations": [
         {
-          "scope_id": "013-V01/V02/V04_CURRENT_LISTING_DETAIL_SUBSET",
+          "scope_id": "013-V01..V04_IMPLEMENTED_LISTING_DETAILS_AND_SELECTED_OTHER_SESSION_ONLY",
           "status": "PRODUCT_OWNER_APPROVED",
           "approval_evidence": {
             "path": "governance/evidence/TUN-P2-013-VISUAL-CONSENT.json",
@@ -310,7 +416,6 @@
       "id": "U-ACCT-SESSION-DETAILS",
       "kind": "SCREEN",
       "pathname": "/account/sessions/details",
-      "result": "PASS",
       "authority_refs": [
         "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md",
         "docs/authority/current/decisions/AMD-0009_URL_Addressable_Routing_and_Governed_Form_Validation.md"
@@ -325,86 +430,127 @@
           "node_id": "46:35"
         }
       ],
+      "result": "PASS",
       "checks": [
         {
           "id": "URL-001",
           "result": "PASS",
-          "description": "Canonical list/details path transitions are exercised by controlled browser and focused keyboard/identity cases.",
+          "description": "Canonical list/details navigation and the existing Security sidebar Sessions anchor are exercised by controlled history and the real browser journey.",
           "evidence_refs": [
             {
-              "path": "governance/evidence/p2-013-sessions-20261114/ui-dd9029e/ui28-results.json",
-              "sha256": "8b1d1f69e0d798affcba8be8337933595be842ee097f25df44b77e8402ea96b7"
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/qualification-binding.json",
+              "sha256": "a293ecf8a0434a353d806b00382f9b003748b6808db9221642fda5852f369a77"
             },
             {
-              "path": "governance/evidence/p2-013-sessions-20261114/ui-dd9029e/keyboard1-results.json",
-              "sha256": "f488b4c624097224e4a51aeb2309f4fca2d3f04e36f03a2cbbb13d8308d80463"
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/http20-7a6a69b/session-revocation-http.trx",
+              "sha256": "5755f72a53612854f8a99c43398834fb64bfd8a811154261a1dc9e97a554275b"
+            },
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/ui42-8b65583/results.json",
+              "sha256": "1606652b925ba3623182a695395bfe42301bd82f2d69ac37f340fdaf8608846b"
+            },
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/live1-4f09edb/results.json",
+              "sha256": "54b7489d61a33e457b3e50abfb93fba1b13893dd0f7f5368b4d3f811bd4dea39"
             }
           ]
         },
         {
           "id": "URL-002",
           "result": "PASS",
-          "description": "Full-screen navigation uses pathname routing; direct detail without transient selection safely returns to canonical list. Query/hash selectors are stripped rather than treated as routes.",
+          "description": "Independent full screens retain pathname routes; the confirmation and proof remain same-screen dialogs. No primary screen is replaced with query/hash state.",
           "evidence_refs": [
             {
-              "path": "governance/evidence/p2-013-sessions-20261114/ui-dd9029e/ui28-results.json",
-              "sha256": "8b1d1f69e0d798affcba8be8337933595be842ee097f25df44b77e8402ea96b7"
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/qualification-binding.json",
+              "sha256": "a293ecf8a0434a353d806b00382f9b003748b6808db9221642fda5852f369a77"
             },
             {
-              "path": "governance/evidence/p2-013-sessions-20261114/ui-dd9029e/keyboard1-results.json",
-              "sha256": "f488b4c624097224e4a51aeb2309f4fca2d3f04e36f03a2cbbb13d8308d80463"
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/http20-7a6a69b/session-revocation-http.trx",
+              "sha256": "5755f72a53612854f8a99c43398834fb64bfd8a811154261a1dc9e97a554275b"
+            },
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/ui42-8b65583/results.json",
+              "sha256": "1606652b925ba3623182a695395bfe42301bd82f2d69ac37f340fdaf8608846b"
+            },
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/live1-4f09edb/results.json",
+              "sha256": "54b7489d61a33e457b3e50abfb93fba1b13893dd0f7f5368b4d3f811bd4dea39"
             }
           ]
         },
         {
           "id": "URL-003",
           "result": "PASS",
-          "description": "Direct entry, reload, Back/Forward and current authorization reconstruct safe views; no retained row is disclosed after actor change.",
+          "description": "Controlled direct entry/refresh/Back/Forward plus real protected-original reload reconstruct only currently authorized owner state.",
           "evidence_refs": [
             {
-              "path": "governance/evidence/p2-013-sessions-20261114/ui-dd9029e/ui28-results.json",
-              "sha256": "8b1d1f69e0d798affcba8be8337933595be842ee097f25df44b77e8402ea96b7"
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/qualification-binding.json",
+              "sha256": "a293ecf8a0434a353d806b00382f9b003748b6808db9221642fda5852f369a77"
             },
             {
-              "path": "governance/evidence/p2-013-sessions-20261114/ui-dd9029e/keyboard1-results.json",
-              "sha256": "f488b4c624097224e4a51aeb2309f4fca2d3f04e36f03a2cbbb13d8308d80463"
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/http20-7a6a69b/session-revocation-http.trx",
+              "sha256": "5755f72a53612854f8a99c43398834fb64bfd8a811154261a1dc9e97a554275b"
+            },
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/ui42-8b65583/results.json",
+              "sha256": "1606652b925ba3623182a695395bfe42301bd82f2d69ac37f340fdaf8608846b"
+            },
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/live1-4f09edb/results.json",
+              "sha256": "54b7489d61a33e457b3e50abfb93fba1b13893dd0f7f5368b4d3f811bd4dea39"
             }
           ]
         },
         {
           "id": "URL-004",
           "result": "PASS",
-          "description": "Account disclosure stays local to the same screen; screenshots and ordinary sign-out tests exercise its safe state without URL selectors.",
+          "description": "Dialogs, Account menu and pagination use appropriate same-screen state; no mutation authority is placed in the URL.",
           "evidence_refs": [
             {
-              "path": "governance/evidence/p2-013-sessions-20261114/ui-dd9029e/ui28-results.json",
-              "sha256": "8b1d1f69e0d798affcba8be8337933595be842ee097f25df44b77e8402ea96b7"
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/qualification-binding.json",
+              "sha256": "a293ecf8a0434a353d806b00382f9b003748b6808db9221642fda5852f369a77"
             },
             {
-              "path": "governance/evidence/p2-013-sessions-20261114/ui-dd9029e/keyboard1-results.json",
-              "sha256": "f488b4c624097224e4a51aeb2309f4fca2d3f04e36f03a2cbbb13d8308d80463"
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/http20-7a6a69b/session-revocation-http.trx",
+              "sha256": "5755f72a53612854f8a99c43398834fb64bfd8a811154261a1dc9e97a554275b"
+            },
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/ui42-8b65583/results.json",
+              "sha256": "1606652b925ba3623182a695395bfe42301bd82f2d69ac37f340fdaf8608846b"
+            },
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/live1-4f09edb/results.json",
+              "sha256": "54b7489d61a33e457b3e50abfb93fba1b13893dd0f7f5368b4d3f811bd4dea39"
             }
           ]
         },
         {
           "id": "URL-005",
           "result": "PASS",
-          "description": "Real packaged-page tests require actual built HTML, redirect anonymous/ended callers, and preserve independent list permission. UI guards block data before ready.",
+          "description": "Real HTTPS and browser guards reject anonymous/ended callers, invalid Origin/CSRF and foreign/tampered/expired owner context; packaged screen authorization is retained.",
           "evidence_refs": [
             {
-              "path": "governance/evidence/p2-013-sessions-20261114/ui-dd9029e/backend26.trx",
-              "sha256": "4a578a4cdd5f5ea49666e482bf0e77a729bde479377e2180126732453f750f18"
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/qualification-binding.json",
+              "sha256": "a293ecf8a0434a353d806b00382f9b003748b6808db9221642fda5852f369a77"
             },
             {
-              "path": "governance/evidence/p2-013-sessions-20261114/ui-dd9029e/ui28-results.json",
-              "sha256": "8b1d1f69e0d798affcba8be8337933595be842ee097f25df44b77e8402ea96b7"
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/http20-7a6a69b/session-revocation-http.trx",
+              "sha256": "5755f72a53612854f8a99c43398834fb64bfd8a811154261a1dc9e97a554275b"
+            },
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/ui42-8b65583/results.json",
+              "sha256": "1606652b925ba3623182a695395bfe42301bd82f2d69ac37f340fdaf8608846b"
+            },
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/live1-4f09edb/results.json",
+              "sha256": "54b7489d61a33e457b3e50abfb93fba1b13893dd0f7f5368b4d3f811bd4dea39"
             }
           ]
         },
         {
           "id": "URL-006",
           "result": "NOT_APPLICABLE",
-          "reason": "This private Account listing increment adds no OAuth callback, Product redirect or provider initiation route. Existing provider handlers/contracts are unchanged; exact actor-origin enforcement is independently exercised in backend tests. No provider-live qualification is claimed.",
+          "reason": "This selected-session increment adds no OAuth callback/Product-origin redirect or provider initiation route. No provider-live or Product propagation qualification is claimed; existing provider code is unchanged in this UI correction.",
           "authority_refs": [
             "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md",
             "docs/authority/current/decisions/AMD-0009_URL_Addressable_Routing_and_Governed_Form_Validation.md"
@@ -413,154 +559,180 @@
         {
           "id": "UX-FID-001",
           "result": "PASS",
-          "description": "Approved Figma composition and four scoped Product adaptations are compared against actual current render evidence; restored omissions verified.",
+          "description": "Approved Figma composition plus genuinely consented013-V01..V04 adaptations are compared with actual matching renders; UI002 card mismatch corrected.",
           "evidence_refs": [
             {
-              "path": "governance/evidence/p2-013-sessions-20261114/ui-dd9029e/visual-review.json",
-              "sha256": "9b7ad2c666ea51b53f84a4d63deb82aa0ef02eb8421ff8abf7e3ea9c1af9a995"
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/visual-review.json",
+              "sha256": "3feb13359f4193db4857d77b2a6198b70e1c171a8c8283b19169ad4e26022a72"
             },
             {
-              "path": "governance/evidence/p2-013-sessions-20261114/ui-dd9029e/ui28-results.json",
-              "sha256": "8b1d1f69e0d798affcba8be8337933595be842ee097f25df44b77e8402ea96b7"
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/fidelity6-4f09edb/results.json",
+              "sha256": "04061bf0c4b49669e85ed3eea0adf7a28e3131f242a115f827a5d34708234374"
+            },
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/feedback2-4f09edb/results.json",
+              "sha256": "16909bacdca290fe67abd8b039aad91762d9f5b038e0ac3db94f36eaa05ce1ab"
             }
           ]
         },
         {
           "id": "UX-FID-002",
           "result": "PASS",
-          "description": "The approved Account Center flat background, cards and indigo decoration are retained; this frame does not require authentication-screen glow layers.",
+          "description": "Approved Account Center flat surface, panels, backdrop and modal layers are retained; authentication-page glow artwork is not invented for this composition.",
           "evidence_refs": [
             {
-              "path": "governance/evidence/p2-013-sessions-20261114/ui-dd9029e/visual-review.json",
-              "sha256": "9b7ad2c666ea51b53f84a4d63deb82aa0ef02eb8421ff8abf7e3ea9c1af9a995"
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/visual-review.json",
+              "sha256": "3feb13359f4193db4857d77b2a6198b70e1c171a8c8283b19169ad4e26022a72"
             },
             {
-              "path": "governance/evidence/p2-013-sessions-20261114/ui-dd9029e/ui28-results.json",
-              "sha256": "8b1d1f69e0d798affcba8be8337933595be842ee097f25df44b77e8402ea96b7"
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/fidelity6-4f09edb/results.json",
+              "sha256": "04061bf0c4b49669e85ed3eea0adf7a28e3131f242a115f827a5d34708234374"
+            },
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/feedback2-4f09edb/results.json",
+              "sha256": "16909bacdca290fe67abd8b039aad91762d9f5b038e0ac3db94f36eaa05ce1ab"
             }
           ]
         },
         {
           "id": "UX-FID-003",
           "result": "PASS",
-          "description": "Existing Tunner controls/content/error presentation/tokens are reused. No new user-editable form or copied registration domain rule.",
+          "description": "Existing Tunner shared controls, typography, spacing and focused field/form error variants are reused; selected-session facts match the approved plain layout.",
           "evidence_refs": [
             {
-              "path": "governance/evidence/p2-013-sessions-20261114/ui-dd9029e/visual-review.json",
-              "sha256": "9b7ad2c666ea51b53f84a4d63deb82aa0ef02eb8421ff8abf7e3ea9c1af9a995"
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/visual-review.json",
+              "sha256": "3feb13359f4193db4857d77b2a6198b70e1c171a8c8283b19169ad4e26022a72"
             },
             {
-              "path": "governance/evidence/p2-013-sessions-20261114/ui-dd9029e/ui28-results.json",
-              "sha256": "8b1d1f69e0d798affcba8be8337933595be842ee097f25df44b77e8402ea96b7"
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/fidelity6-4f09edb/results.json",
+              "sha256": "04061bf0c4b49669e85ed3eea0adf7a28e3131f242a115f827a5d34708234374"
+            },
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/feedback2-4f09edb/results.json",
+              "sha256": "16909bacdca290fe67abd8b039aad91762d9f5b038e0ac3db94f36eaa05ce1ab"
             }
           ]
         },
         {
           "id": "UX-FID-004",
           "result": "PASS",
-          "description": "Material adaptations have explicit bounded Product Owner consent; pending revocation layouts are not implemented or represented as complete.",
+          "description": "Only the four scoped Product Owner visual adaptations are accepted. No new visual system, unsupported device state or invented Product decision.",
           "evidence_refs": [
             {
-              "path": "governance/evidence/p2-013-sessions-20261114/ui-dd9029e/visual-review.json",
-              "sha256": "9b7ad2c666ea51b53f84a4d63deb82aa0ef02eb8421ff8abf7e3ea9c1af9a995"
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/visual-review.json",
+              "sha256": "3feb13359f4193db4857d77b2a6198b70e1c171a8c8283b19169ad4e26022a72"
             },
             {
-              "path": "governance/evidence/p2-013-sessions-20261114/ui-dd9029e/ui28-results.json",
-              "sha256": "8b1d1f69e0d798affcba8be8337933595be842ee097f25df44b77e8402ea96b7"
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/fidelity6-4f09edb/results.json",
+              "sha256": "04061bf0c4b49669e85ed3eea0adf7a28e3131f242a115f827a5d34708234374"
+            },
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/feedback2-4f09edb/results.json",
+              "sha256": "16909bacdca290fe67abd8b039aad91762d9f5b038e0ac3db94f36eaa05ce1ab"
             }
           ]
         },
         {
           "id": "UX-FID-005",
           "result": "PASS",
-          "description": "Unsupported device/trust/location and Product termination assertions are not fabricated; the consented truthful projection preserves FRD17.",
+          "description": "FRD17 governs authorization/local effects and safe server-backed facts; Figma governs presentation. The consented truthful projection avoids unsupported device/trust/global-signout assertions.",
           "evidence_refs": [
             {
-              "path": "governance/evidence/p2-013-sessions-20261114/ui-dd9029e/visual-review.json",
-              "sha256": "9b7ad2c666ea51b53f84a4d63deb82aa0ef02eb8421ff8abf7e3ea9c1af9a995"
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/visual-review.json",
+              "sha256": "3feb13359f4193db4857d77b2a6198b70e1c171a8c8283b19169ad4e26022a72"
             },
             {
-              "path": "governance/evidence/p2-013-sessions-20261114/ui-dd9029e/ui28-results.json",
-              "sha256": "8b1d1f69e0d798affcba8be8337933595be842ee097f25df44b77e8402ea96b7"
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/fidelity6-4f09edb/results.json",
+              "sha256": "04061bf0c4b49669e85ed3eea0adf7a28e3131f242a115f827a5d34708234374"
+            },
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/feedback2-4f09edb/results.json",
+              "sha256": "16909bacdca290fe67abd8b039aad91762d9f5b038e0ac3db94f36eaa05ce1ab"
             }
           ]
         },
         {
           "id": "UX-FID-006",
           "result": "PASS",
-          "description": "Existing Tunner styling and shared foundation are retained; no TailAdmin defaults replace approved presentation.",
+          "description": "No TailAdmin default styling substitutes for Tunner's approved theme or shared component variants.",
           "evidence_refs": [
             {
-              "path": "governance/evidence/p2-013-sessions-20261114/ui-dd9029e/visual-review.json",
-              "sha256": "9b7ad2c666ea51b53f84a4d63deb82aa0ef02eb8421ff8abf7e3ea9c1af9a995"
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/visual-review.json",
+              "sha256": "3feb13359f4193db4857d77b2a6198b70e1c171a8c8283b19169ad4e26022a72"
             },
             {
-              "path": "governance/evidence/p2-013-sessions-20261114/ui-dd9029e/ui28-results.json",
-              "sha256": "8b1d1f69e0d798affcba8be8337933595be842ee097f25df44b77e8402ea96b7"
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/fidelity6-4f09edb/results.json",
+              "sha256": "04061bf0c4b49669e85ed3eea0adf7a28e3131f242a115f827a5d34708234374"
+            },
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/feedback2-4f09edb/results.json",
+              "sha256": "16909bacdca290fe67abd8b039aad91762d9f5b038e0ac3db94f36eaa05ce1ab"
             }
           ]
         },
         {
           "id": "UX-FID-007",
           "result": "PASS",
-          "description": "Six widths have listing/details axe and overflow checks; desktop/narrow-mobile keyboard Tab/Enter and focus restoration execute in the separate focused case.",
+          "description": "Six viewport confirmation/result renders and fresh uncertainty/changed cases pass; keyboard/axe checks and protected reload retain usable controls. Existing unchanged shared proof mobile evidence is reused, not represented as a new execution.",
           "evidence_refs": [
             {
-              "path": "governance/evidence/p2-013-sessions-20261114/ui-dd9029e/visual-review.json",
-              "sha256": "9b7ad2c666ea51b53f84a4d63deb82aa0ef02eb8421ff8abf7e3ea9c1af9a995"
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/visual-review.json",
+              "sha256": "3feb13359f4193db4857d77b2a6198b70e1c171a8c8283b19169ad4e26022a72"
             },
             {
-              "path": "governance/evidence/p2-013-sessions-20261114/ui-dd9029e/ui28-results.json",
-              "sha256": "8b1d1f69e0d798affcba8be8337933595be842ee097f25df44b77e8402ea96b7"
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/fidelity6-4f09edb/results.json",
+              "sha256": "04061bf0c4b49669e85ed3eea0adf7a28e3131f242a115f827a5d34708234374"
+            },
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/feedback2-4f09edb/results.json",
+              "sha256": "16909bacdca290fe67abd8b039aad91762d9f5b038e0ac3db94f36eaa05ce1ab"
             }
           ]
         },
         {
           "id": "UX-FID-008",
           "result": "PASS",
-          "description": "Exact source/currentness binding, Figma references, hashed screenshots, consent and raw results retain their actual invocation identities.",
+          "description": "Raw results, screenshots, reference hashes, original invocation SHAs and current source equivalence are retained. This PASS covers only the implemented listing/details and selected-other-session integration.",
           "evidence_refs": [
             {
-              "path": "governance/evidence/p2-013-sessions-20261114/ui-dd9029e/visual-review.json",
-              "sha256": "9b7ad2c666ea51b53f84a4d63deb82aa0ef02eb8421ff8abf7e3ea9c1af9a995"
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/visual-review.json",
+              "sha256": "3feb13359f4193db4857d77b2a6198b70e1c171a8c8283b19169ad4e26022a72"
             },
             {
-              "path": "governance/evidence/p2-013-sessions-20261114/ui-dd9029e/ui28-results.json",
-              "sha256": "8b1d1f69e0d798affcba8be8337933595be842ee097f25df44b77e8402ea96b7"
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/fidelity6-4f09edb/results.json",
+              "sha256": "04061bf0c4b49669e85ed3eea0adf7a28e3131f242a115f827a5d34708234374"
+            },
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/feedback2-4f09edb/results.json",
+              "sha256": "16909bacdca290fe67abd8b039aad91762d9f5b038e0ac3db94f36eaa05ce1ab"
             }
           ]
         }
       ],
       "screenshots": [
         {
-          "path": "governance/evidence/p2-013-sessions-20261114/ui-dd9029e/details-1440.png",
-          "sha256": "66c05ed30966ebce1a9213c0bb766ede342ca76e2761f7e6559d9c9637c85c70",
-          "role": "RENDERED_IMPLEMENTATION"
+          "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/screenshots/details-1440.png",
+          "sha256": "66c05ed30966ebce1a9213c0bb766ede342ca76e2761f7e6559d9c9637c85c70"
         },
         {
-          "path": "governance/evidence/p2-013-sessions-20261114/ui-dd9029e/details-1366.png",
-          "sha256": "c078c1f4ab0280d4f3ce8aa2a687bcb4a1a83abf126d0538f6d3854f4cff3d0d",
-          "role": "RENDERED_IMPLEMENTATION"
+          "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/screenshots/details-1366.png",
+          "sha256": "c078c1f4ab0280d4f3ce8aa2a687bcb4a1a83abf126d0538f6d3854f4cff3d0d"
         },
         {
-          "path": "governance/evidence/p2-013-sessions-20261114/ui-dd9029e/details-1024.png",
-          "sha256": "cc05898d0a2e8f2a75c2a6fbb37ab6715ae1772fd483fcd29d5f5035e4452af7",
-          "role": "RENDERED_IMPLEMENTATION"
+          "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/screenshots/details-1024.png",
+          "sha256": "cc05898d0a2e8f2a75c2a6fbb37ab6715ae1772fd483fcd29d5f5035e4452af7"
         },
         {
-          "path": "governance/evidence/p2-013-sessions-20261114/ui-dd9029e/details-768.png",
-          "sha256": "3d8c3871c707ee737884fde9787ccdd6331d6ef20704a8c4199a45fed5d25a10",
-          "role": "RENDERED_IMPLEMENTATION"
+          "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/screenshots/details-768.png",
+          "sha256": "3d8c3871c707ee737884fde9787ccdd6331d6ef20704a8c4199a45fed5d25a10"
         },
         {
-          "path": "governance/evidence/p2-013-sessions-20261114/ui-dd9029e/details-390.png",
-          "sha256": "6f4553b3519b740f6b727702095e600ed762d51bed3ff670f19a6eddb194be64",
-          "role": "RENDERED_IMPLEMENTATION"
+          "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/screenshots/details-390.png",
+          "sha256": "6f4553b3519b740f6b727702095e600ed762d51bed3ff670f19a6eddb194be64"
         },
         {
-          "path": "governance/evidence/p2-013-sessions-20261114/ui-dd9029e/details-320.png",
-          "sha256": "dd395f1e4382a90dbf64c3cdc36cf8de3a0f7d4a3dd3453eec7cd6cbc4b5c0ae",
-          "role": "RENDERED_IMPLEMENTATION"
+          "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/screenshots/details-320.png",
+          "sha256": "dd395f1e4382a90dbf64c3cdc36cf8de3a0f7d4a3dd3453eec7cd6cbc4b5c0ae"
         },
         {
           "path": "governance/evidence/p2-013-sessions-20261114/ui-dd9029e/approved-details.png",
@@ -575,7 +747,1484 @@
       ],
       "deviations": [
         {
-          "scope_id": "013-V01/V02/V04_CURRENT_LISTING_DETAIL_SUBSET",
+          "scope_id": "013-V01..V04_IMPLEMENTED_LISTING_DETAILS_AND_SELECTED_OTHER_SESSION_ONLY",
+          "status": "PRODUCT_OWNER_APPROVED",
+          "approval_evidence": {
+            "path": "governance/evidence/TUN-P2-013-VISUAL-CONSENT.json",
+            "sha256": "01547dce89e7a404e024d1a9e64272ba9c5e1c1d8b39ee4b6a446888313e7378"
+          }
+        }
+      ]
+    },
+    {
+      "id": "COMP-SESSION-REVOKE",
+      "kind": "COMPONENT",
+      "pathname": null,
+      "authority_refs": [
+        "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md",
+        "docs/authority/current/decisions/AMD-0008_Approved_Figma_Visual_Fidelity_and_Product_Owner_UX_Consent.md",
+        "docs/authority/current/decisions/AMD-0009_URL_Addressable_Routing_and_Governed_Form_Validation.md"
+      ],
+      "figma_refs": [
+        {
+          "file_key": "apNbwvAgdn1xIxYH1oiaSC",
+          "node_id": "46:35"
+        },
+        {
+          "file_key": "apNbwvAgdn1xIxYH1oiaSC",
+          "node_id": "46:116"
+        }
+      ],
+      "result": "PASS",
+      "checks": [
+        {
+          "id": "VAL-001",
+          "result": "NOT_APPLICABLE",
+          "reason": "The confirmation/result component contains no editable form fields. It freezes an already authorized selection; typed transport/server guards are independently tested. All actual password form validation belongs to the separately covered FORM-STEP-UP, not to this dialog.",
+          "authority_refs": [
+            "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md",
+            "docs/authority/current/decisions/AMD-0008_Approved_Figma_Visual_Fidelity_and_Product_Owner_UX_Consent.md",
+            "docs/authority/current/decisions/AMD-0009_URL_Addressable_Routing_and_Governed_Form_Validation.md"
+          ]
+        },
+        {
+          "id": "VAL-002",
+          "result": "NOT_APPLICABLE",
+          "reason": "The confirmation/result component contains no editable form fields. It freezes an already authorized selection; typed transport/server guards are independently tested. All actual password form validation belongs to the separately covered FORM-STEP-UP, not to this dialog.",
+          "authority_refs": [
+            "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md",
+            "docs/authority/current/decisions/AMD-0008_Approved_Figma_Visual_Fidelity_and_Product_Owner_UX_Consent.md",
+            "docs/authority/current/decisions/AMD-0009_URL_Addressable_Routing_and_Governed_Form_Validation.md"
+          ]
+        },
+        {
+          "id": "VAL-003",
+          "result": "NOT_APPLICABLE",
+          "reason": "The confirmation/result component contains no editable form fields. It freezes an already authorized selection; typed transport/server guards are independently tested. All actual password form validation belongs to the separately covered FORM-STEP-UP, not to this dialog.",
+          "authority_refs": [
+            "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md",
+            "docs/authority/current/decisions/AMD-0008_Approved_Figma_Visual_Fidelity_and_Product_Owner_UX_Consent.md",
+            "docs/authority/current/decisions/AMD-0009_URL_Addressable_Routing_and_Governed_Form_Validation.md"
+          ]
+        },
+        {
+          "id": "VAL-004",
+          "result": "NOT_APPLICABLE",
+          "reason": "The confirmation/result component contains no editable form fields. It freezes an already authorized selection; typed transport/server guards are independently tested. All actual password form validation belongs to the separately covered FORM-STEP-UP, not to this dialog.",
+          "authority_refs": [
+            "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md",
+            "docs/authority/current/decisions/AMD-0008_Approved_Figma_Visual_Fidelity_and_Product_Owner_UX_Consent.md",
+            "docs/authority/current/decisions/AMD-0009_URL_Addressable_Routing_and_Governed_Form_Validation.md"
+          ]
+        },
+        {
+          "id": "VAL-005",
+          "result": "NOT_APPLICABLE",
+          "reason": "The confirmation/result component contains no editable form fields. It freezes an already authorized selection; typed transport/server guards are independently tested. All actual password form validation belongs to the separately covered FORM-STEP-UP, not to this dialog.",
+          "authority_refs": [
+            "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md",
+            "docs/authority/current/decisions/AMD-0008_Approved_Figma_Visual_Fidelity_and_Product_Owner_UX_Consent.md",
+            "docs/authority/current/decisions/AMD-0009_URL_Addressable_Routing_and_Governed_Form_Validation.md"
+          ]
+        },
+        {
+          "id": "VAL-006",
+          "result": "NOT_APPLICABLE",
+          "reason": "The confirmation/result component contains no editable form fields. It freezes an already authorized selection; typed transport/server guards are independently tested. All actual password form validation belongs to the separately covered FORM-STEP-UP, not to this dialog.",
+          "authority_refs": [
+            "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md",
+            "docs/authority/current/decisions/AMD-0008_Approved_Figma_Visual_Fidelity_and_Product_Owner_UX_Consent.md",
+            "docs/authority/current/decisions/AMD-0009_URL_Addressable_Routing_and_Governed_Form_Validation.md"
+          ]
+        },
+        {
+          "id": "VAL-007",
+          "result": "NOT_APPLICABLE",
+          "reason": "The confirmation/result component contains no editable form fields. It freezes an already authorized selection; typed transport/server guards are independently tested. All actual password form validation belongs to the separately covered FORM-STEP-UP, not to this dialog.",
+          "authority_refs": [
+            "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md",
+            "docs/authority/current/decisions/AMD-0008_Approved_Figma_Visual_Fidelity_and_Product_Owner_UX_Consent.md",
+            "docs/authority/current/decisions/AMD-0009_URL_Addressable_Routing_and_Governed_Form_Validation.md"
+          ]
+        },
+        {
+          "id": "VAL-008",
+          "result": "NOT_APPLICABLE",
+          "reason": "The confirmation/result component contains no editable form fields. It freezes an already authorized selection; typed transport/server guards are independently tested. All actual password form validation belongs to the separately covered FORM-STEP-UP, not to this dialog.",
+          "authority_refs": [
+            "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md",
+            "docs/authority/current/decisions/AMD-0008_Approved_Figma_Visual_Fidelity_and_Product_Owner_UX_Consent.md",
+            "docs/authority/current/decisions/AMD-0009_URL_Addressable_Routing_and_Governed_Form_Validation.md"
+          ]
+        },
+        {
+          "id": "UX-FID-001",
+          "result": "PASS",
+          "description": "Approved Figma composition plus genuinely consented013-V01..V04 adaptations are compared with actual matching renders; UI002 card mismatch corrected.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/visual-review.json",
+              "sha256": "3feb13359f4193db4857d77b2a6198b70e1c171a8c8283b19169ad4e26022a72"
+            },
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/fidelity6-4f09edb/results.json",
+              "sha256": "04061bf0c4b49669e85ed3eea0adf7a28e3131f242a115f827a5d34708234374"
+            },
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/feedback2-4f09edb/results.json",
+              "sha256": "16909bacdca290fe67abd8b039aad91762d9f5b038e0ac3db94f36eaa05ce1ab"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-002",
+          "result": "PASS",
+          "description": "Approved Account Center flat surface, panels, backdrop and modal layers are retained; authentication-page glow artwork is not invented for this composition.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/visual-review.json",
+              "sha256": "3feb13359f4193db4857d77b2a6198b70e1c171a8c8283b19169ad4e26022a72"
+            },
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/fidelity6-4f09edb/results.json",
+              "sha256": "04061bf0c4b49669e85ed3eea0adf7a28e3131f242a115f827a5d34708234374"
+            },
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/feedback2-4f09edb/results.json",
+              "sha256": "16909bacdca290fe67abd8b039aad91762d9f5b038e0ac3db94f36eaa05ce1ab"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-003",
+          "result": "PASS",
+          "description": "Existing Tunner shared controls, typography, spacing and focused field/form error variants are reused; selected-session facts match the approved plain layout.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/visual-review.json",
+              "sha256": "3feb13359f4193db4857d77b2a6198b70e1c171a8c8283b19169ad4e26022a72"
+            },
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/fidelity6-4f09edb/results.json",
+              "sha256": "04061bf0c4b49669e85ed3eea0adf7a28e3131f242a115f827a5d34708234374"
+            },
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/feedback2-4f09edb/results.json",
+              "sha256": "16909bacdca290fe67abd8b039aad91762d9f5b038e0ac3db94f36eaa05ce1ab"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-004",
+          "result": "PASS",
+          "description": "Only the four scoped Product Owner visual adaptations are accepted. No new visual system, unsupported device state or invented Product decision.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/visual-review.json",
+              "sha256": "3feb13359f4193db4857d77b2a6198b70e1c171a8c8283b19169ad4e26022a72"
+            },
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/fidelity6-4f09edb/results.json",
+              "sha256": "04061bf0c4b49669e85ed3eea0adf7a28e3131f242a115f827a5d34708234374"
+            },
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/feedback2-4f09edb/results.json",
+              "sha256": "16909bacdca290fe67abd8b039aad91762d9f5b038e0ac3db94f36eaa05ce1ab"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-005",
+          "result": "PASS",
+          "description": "FRD17 governs authorization/local effects and safe server-backed facts; Figma governs presentation. The consented truthful projection avoids unsupported device/trust/global-signout assertions.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/visual-review.json",
+              "sha256": "3feb13359f4193db4857d77b2a6198b70e1c171a8c8283b19169ad4e26022a72"
+            },
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/fidelity6-4f09edb/results.json",
+              "sha256": "04061bf0c4b49669e85ed3eea0adf7a28e3131f242a115f827a5d34708234374"
+            },
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/feedback2-4f09edb/results.json",
+              "sha256": "16909bacdca290fe67abd8b039aad91762d9f5b038e0ac3db94f36eaa05ce1ab"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-006",
+          "result": "PASS",
+          "description": "No TailAdmin default styling substitutes for Tunner's approved theme or shared component variants.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/visual-review.json",
+              "sha256": "3feb13359f4193db4857d77b2a6198b70e1c171a8c8283b19169ad4e26022a72"
+            },
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/fidelity6-4f09edb/results.json",
+              "sha256": "04061bf0c4b49669e85ed3eea0adf7a28e3131f242a115f827a5d34708234374"
+            },
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/feedback2-4f09edb/results.json",
+              "sha256": "16909bacdca290fe67abd8b039aad91762d9f5b038e0ac3db94f36eaa05ce1ab"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-007",
+          "result": "PASS",
+          "description": "Six viewport confirmation/result renders and fresh uncertainty/changed cases pass; keyboard/axe checks and protected reload retain usable controls. Existing unchanged shared proof mobile evidence is reused, not represented as a new execution.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/visual-review.json",
+              "sha256": "3feb13359f4193db4857d77b2a6198b70e1c171a8c8283b19169ad4e26022a72"
+            },
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/fidelity6-4f09edb/results.json",
+              "sha256": "04061bf0c4b49669e85ed3eea0adf7a28e3131f242a115f827a5d34708234374"
+            },
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/feedback2-4f09edb/results.json",
+              "sha256": "16909bacdca290fe67abd8b039aad91762d9f5b038e0ac3db94f36eaa05ce1ab"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-008",
+          "result": "PASS",
+          "description": "Raw results, screenshots, reference hashes, original invocation SHAs and current source equivalence are retained. This PASS covers only the implemented listing/details and selected-other-session integration.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/visual-review.json",
+              "sha256": "3feb13359f4193db4857d77b2a6198b70e1c171a8c8283b19169ad4e26022a72"
+            },
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/fidelity6-4f09edb/results.json",
+              "sha256": "04061bf0c4b49669e85ed3eea0adf7a28e3131f242a115f827a5d34708234374"
+            },
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/feedback2-4f09edb/results.json",
+              "sha256": "16909bacdca290fe67abd8b039aad91762d9f5b038e0ac3db94f36eaa05ce1ab"
+            }
+          ]
+        }
+      ],
+      "screenshots": [
+        {
+          "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/screenshots/revocation-confirm-1440.png",
+          "sha256": "25ca3fff0dc5d8bc5080c4cb6cdb23a429520002b5d3e0cec1d691bbf364fb57"
+        },
+        {
+          "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/screenshots/revocation-result-1440.png",
+          "sha256": "b79447bf24d34d16f2625cd0df08844cb03a9eefa4fa3667963b7da03315b2e0"
+        },
+        {
+          "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/screenshots/revocation-confirm-1366.png",
+          "sha256": "216c321fe4a2f90a18b1cdcd865ba6d05a14bc9739bb8d05d60071270c2a8947"
+        },
+        {
+          "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/screenshots/revocation-result-1366.png",
+          "sha256": "35b492bfb11835a2447dba067e2c2342da5788266be44baa8abac2b0b7485a23"
+        },
+        {
+          "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/screenshots/revocation-confirm-1024.png",
+          "sha256": "d95dc9df3593a3d9b617d7d07bde5b77d46e3cc98882a653ace73618298fecbe"
+        },
+        {
+          "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/screenshots/revocation-result-1024.png",
+          "sha256": "65f0acba9eca1919c66c8aca2f68403100137582aca892cfd7e9ac7d799d4a3f"
+        },
+        {
+          "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/screenshots/revocation-confirm-768.png",
+          "sha256": "6abab9220617c0226a64ac12dce18415cce00ecba39ade80ee90885166c372c3"
+        },
+        {
+          "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/screenshots/revocation-result-768.png",
+          "sha256": "b70e8df16f4c5ec1b68ff237cdf1b88f5d414de2e3b21761db88d444a60d7b3e"
+        },
+        {
+          "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/screenshots/revocation-confirm-390.png",
+          "sha256": "ca81a06330a58247ba5e070c5ffdce6b18f14f5bfdc4de372b1f01575d2023bb"
+        },
+        {
+          "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/screenshots/revocation-result-390.png",
+          "sha256": "d663b2f0dfffcc5aaea19fd9c52efefe9e1511dd2c17ef8c1e26641b197a7a44"
+        },
+        {
+          "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/screenshots/revocation-confirm-320.png",
+          "sha256": "5a2e3c021550902fe03e9cbec668f722f75a5061e97c3f6cbe18388e2145867a"
+        },
+        {
+          "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/screenshots/revocation-result-320.png",
+          "sha256": "b8fab0a3d83fd1abf056d93385fed77b6882eaca22ffb554326db959764ff735"
+        },
+        {
+          "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/screenshots/revocation-unknown.png",
+          "sha256": "789add90ea6c2f2e279c75f3ad26cc65ba385e08ac3eeadcc6f65456627ae506"
+        },
+        {
+          "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/screenshots/revocation-changed.png",
+          "sha256": "973187b94bdf9f70d7253f907757beeced456f8f5eef9c77719f356a444526fe"
+        },
+        {
+          "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/references/approved-confirm.png",
+          "sha256": "a5ea183080234f8337eded139f90bf52ecafc0643e50b903eaa8be8098dbef2e"
+        },
+        {
+          "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/references/proposal-desktop-confirm.png",
+          "sha256": "2e962ab2cc1f2865767ad9266ac67be62e98dd13b8fdcaa511a654c9f5144c70"
+        },
+        {
+          "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/references/proposal-mobile-confirm.png",
+          "sha256": "227e5e4a0c6f5e1b76d0332797b1292b57600cad45c0df4953254ca6cb532a33"
+        }
+      ],
+      "deviations": [
+        {
+          "scope_id": "013-V01..V04_IMPLEMENTED_LISTING_DETAILS_AND_SELECTED_OTHER_SESSION_ONLY",
+          "status": "PRODUCT_OWNER_APPROVED",
+          "approval_evidence": {
+            "path": "governance/evidence/TUN-P2-013-VISUAL-CONSENT.json",
+            "sha256": "01547dce89e7a404e024d1a9e64272ba9c5e1c1d8b39ee4b6a446888313e7378"
+          }
+        }
+      ]
+    },
+    {
+      "id": "COMP-STEP-UP",
+      "kind": "COMPONENT",
+      "pathname": null,
+      "authority_refs": [
+        "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md",
+        "docs/authority/current/decisions/AMD-0008_Approved_Figma_Visual_Fidelity_and_Product_Owner_UX_Consent.md",
+        "docs/authority/current/decisions/AMD-0009_URL_Addressable_Routing_and_Governed_Form_Validation.md"
+      ],
+      "figma_refs": [
+        {
+          "file_key": "apNbwvAgdn1xIxYH1oiaSC",
+          "node_id": "98:27"
+        },
+        {
+          "file_key": "apNbwvAgdn1xIxYH1oiaSC",
+          "node_id": "70:1257"
+        }
+      ],
+      "result": "PASS",
+      "checks": [
+        {
+          "id": "VAL-001",
+          "result": "PASS",
+          "description": "Existing typed shared password schema handles required/format/domain constraints; current server rejection and correction follow the unchanged approved form capability.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/TUN-P2-006-UI-COMPLIANCE.json",
+              "sha256": "25c2fd7e001d81ee637e68a8edc418d5a9702cb91db9ba3e4a34d1698d34bc3a"
+            },
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/qualification-binding.json",
+              "sha256": "a293ecf8a0434a353d806b00382f9b003748b6808db9221642fda5852f369a77"
+            },
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/http20-7a6a69b/session-revocation-http.trx",
+              "sha256": "5755f72a53612854f8a99c43398834fb64bfd8a811154261a1dc9e97a554275b"
+            },
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/ui42-8b65583/results.json",
+              "sha256": "1606652b925ba3623182a695395bfe42301bd82f2d69ac37f340fdaf8608846b"
+            },
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/live1-4f09edb/results.json",
+              "sha256": "54b7489d61a33e457b3e50abfb93fba1b13893dd0f7f5368b4d3f811bd4dea39"
+            }
+          ]
+        },
+        {
+          "id": "VAL-002",
+          "result": "PASS",
+          "description": "Shared field/form feedback is primary; native constraint bubbles do not replace it. Real wrong-password correction exercises cleared value and field-associated invalid state.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/TUN-P2-006-UI-COMPLIANCE.json",
+              "sha256": "25c2fd7e001d81ee637e68a8edc418d5a9702cb91db9ba3e4a34d1698d34bc3a"
+            },
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/qualification-binding.json",
+              "sha256": "a293ecf8a0434a353d806b00382f9b003748b6808db9221642fda5852f369a77"
+            },
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/http20-7a6a69b/session-revocation-http.trx",
+              "sha256": "5755f72a53612854f8a99c43398834fb64bfd8a811154261a1dc9e97a554275b"
+            },
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/ui42-8b65583/results.json",
+              "sha256": "1606652b925ba3623182a695395bfe42301bd82f2d69ac37f340fdaf8608846b"
+            },
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/live1-4f09edb/results.json",
+              "sha256": "54b7489d61a33e457b3e50abfb93fba1b13893dd0f7f5368b4d3f811bd4dea39"
+            }
+          ]
+        },
+        {
+          "id": "VAL-003",
+          "result": "PASS",
+          "description": "Independent authoritative server validation rejects malformed bodies, wrong actor/Origin/CSRF, stale versions and unauthorized or unrelated original operations.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/TUN-P2-006-UI-COMPLIANCE.json",
+              "sha256": "25c2fd7e001d81ee637e68a8edc418d5a9702cb91db9ba3e4a34d1698d34bc3a"
+            },
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/qualification-binding.json",
+              "sha256": "a293ecf8a0434a353d806b00382f9b003748b6808db9221642fda5852f369a77"
+            },
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/http20-7a6a69b/session-revocation-http.trx",
+              "sha256": "5755f72a53612854f8a99c43398834fb64bfd8a811154261a1dc9e97a554275b"
+            },
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/ui42-8b65583/results.json",
+              "sha256": "1606652b925ba3623182a695395bfe42301bd82f2d69ac37f340fdaf8608846b"
+            },
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/live1-4f09edb/results.json",
+              "sha256": "54b7489d61a33e457b3e50abfb93fba1b13893dd0f7f5368b4d3f811bd4dea39"
+            }
+          ]
+        },
+        {
+          "id": "VAL-004",
+          "result": "PASS",
+          "description": "Backend errors map to safe field/form feedback; transport/private causal details are excluded. Lost success reads the exact original result rather than resubmitting.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/TUN-P2-006-UI-COMPLIANCE.json",
+              "sha256": "25c2fd7e001d81ee637e68a8edc418d5a9702cb91db9ba3e4a34d1698d34bc3a"
+            },
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/qualification-binding.json",
+              "sha256": "a293ecf8a0434a353d806b00382f9b003748b6808db9221642fda5852f369a77"
+            },
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/http20-7a6a69b/session-revocation-http.trx",
+              "sha256": "5755f72a53612854f8a99c43398834fb64bfd8a811154261a1dc9e97a554275b"
+            },
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/ui42-8b65583/results.json",
+              "sha256": "1606652b925ba3623182a695395bfe42301bd82f2d69ac37f340fdaf8608846b"
+            },
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/live1-4f09edb/results.json",
+              "sha256": "54b7489d61a33e457b3e50abfb93fba1b13893dd0f7f5368b4d3f811bd4dea39"
+            }
+          ]
+        },
+        {
+          "id": "VAL-005",
+          "result": "PASS",
+          "description": "Shared blur/correction/submit behavior and invalid focus are retained through unchanged form primitives. Current wrong-password correction, modal focus and duplicate-operation guards are exercised.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/TUN-P2-006-UI-COMPLIANCE.json",
+              "sha256": "25c2fd7e001d81ee637e68a8edc418d5a9702cb91db9ba3e4a34d1698d34bc3a"
+            },
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/qualification-binding.json",
+              "sha256": "a293ecf8a0434a353d806b00382f9b003748b6808db9221642fda5852f369a77"
+            },
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/http20-7a6a69b/session-revocation-http.trx",
+              "sha256": "5755f72a53612854f8a99c43398834fb64bfd8a811154261a1dc9e97a554275b"
+            },
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/ui42-8b65583/results.json",
+              "sha256": "1606652b925ba3623182a695395bfe42301bd82f2d69ac37f340fdaf8608846b"
+            },
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/live1-4f09edb/results.json",
+              "sha256": "54b7489d61a33e457b3e50abfb93fba1b13893dd0f7f5368b4d3f811bd4dea39"
+            }
+          ]
+        },
+        {
+          "id": "VAL-006",
+          "result": "PASS",
+          "description": "Approved shared password/error variants and current desktop invalid-state render are compared; existing unchanged mobile variants remain qualified by their original evidence.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/TUN-P2-006-UI-COMPLIANCE.json",
+              "sha256": "25c2fd7e001d81ee637e68a8edc418d5a9702cb91db9ba3e4a34d1698d34bc3a"
+            },
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/qualification-binding.json",
+              "sha256": "a293ecf8a0434a353d806b00382f9b003748b6808db9221642fda5852f369a77"
+            },
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/http20-7a6a69b/session-revocation-http.trx",
+              "sha256": "5755f72a53612854f8a99c43398834fb64bfd8a811154261a1dc9e97a554275b"
+            },
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/ui42-8b65583/results.json",
+              "sha256": "1606652b925ba3623182a695395bfe42301bd82f2d69ac37f340fdaf8608846b"
+            },
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/live1-4f09edb/results.json",
+              "sha256": "54b7489d61a33e457b3e50abfb93fba1b13893dd0f7f5368b4d3f811bd4dea39"
+            }
+          ]
+        },
+        {
+          "id": "VAL-007",
+          "result": "PASS",
+          "description": "Password business rules and authoritative runtime assurance remain domain-owned. No registration-specific rules, client-selected policy or unsupported factor capability is copied.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/TUN-P2-006-UI-COMPLIANCE.json",
+              "sha256": "25c2fd7e001d81ee637e68a8edc418d5a9702cb91db9ba3e4a34d1698d34bc3a"
+            },
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/qualification-binding.json",
+              "sha256": "a293ecf8a0434a353d806b00382f9b003748b6808db9221642fda5852f369a77"
+            },
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/http20-7a6a69b/session-revocation-http.trx",
+              "sha256": "5755f72a53612854f8a99c43398834fb64bfd8a811154261a1dc9e97a554275b"
+            },
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/ui42-8b65583/results.json",
+              "sha256": "1606652b925ba3623182a695395bfe42301bd82f2d69ac37f340fdaf8608846b"
+            },
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/live1-4f09edb/results.json",
+              "sha256": "54b7489d61a33e457b3e50abfb93fba1b13893dd0f7f5368b4d3f811bd4dea39"
+            }
+          ]
+        },
+        {
+          "id": "VAL-008",
+          "result": "PASS",
+          "description": "Original shared validation/native regressions retain their execution identities; current owner HTTPS, API/controlled browser and actual two-session BFF journey supply caller-specific integration evidence.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/TUN-P2-006-UI-COMPLIANCE.json",
+              "sha256": "25c2fd7e001d81ee637e68a8edc418d5a9702cb91db9ba3e4a34d1698d34bc3a"
+            },
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/qualification-binding.json",
+              "sha256": "a293ecf8a0434a353d806b00382f9b003748b6808db9221642fda5852f369a77"
+            },
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/http20-7a6a69b/session-revocation-http.trx",
+              "sha256": "5755f72a53612854f8a99c43398834fb64bfd8a811154261a1dc9e97a554275b"
+            },
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/ui42-8b65583/results.json",
+              "sha256": "1606652b925ba3623182a695395bfe42301bd82f2d69ac37f340fdaf8608846b"
+            },
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/live1-4f09edb/results.json",
+              "sha256": "54b7489d61a33e457b3e50abfb93fba1b13893dd0f7f5368b4d3f811bd4dea39"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-001",
+          "result": "PASS",
+          "description": "Approved Figma composition plus genuinely consented013-V01..V04 adaptations are compared with actual matching renders; UI002 card mismatch corrected.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/visual-review.json",
+              "sha256": "3feb13359f4193db4857d77b2a6198b70e1c171a8c8283b19169ad4e26022a72"
+            },
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/fidelity6-4f09edb/results.json",
+              "sha256": "04061bf0c4b49669e85ed3eea0adf7a28e3131f242a115f827a5d34708234374"
+            },
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/feedback2-4f09edb/results.json",
+              "sha256": "16909bacdca290fe67abd8b039aad91762d9f5b038e0ac3db94f36eaa05ce1ab"
+            },
+            {
+              "path": "governance/evidence/TUN-P2-006-UI-COMPLIANCE.json",
+              "sha256": "25c2fd7e001d81ee637e68a8edc418d5a9702cb91db9ba3e4a34d1698d34bc3a"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-002",
+          "result": "PASS",
+          "description": "Approved Account Center flat surface, panels, backdrop and modal layers are retained; authentication-page glow artwork is not invented for this composition.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/visual-review.json",
+              "sha256": "3feb13359f4193db4857d77b2a6198b70e1c171a8c8283b19169ad4e26022a72"
+            },
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/fidelity6-4f09edb/results.json",
+              "sha256": "04061bf0c4b49669e85ed3eea0adf7a28e3131f242a115f827a5d34708234374"
+            },
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/feedback2-4f09edb/results.json",
+              "sha256": "16909bacdca290fe67abd8b039aad91762d9f5b038e0ac3db94f36eaa05ce1ab"
+            },
+            {
+              "path": "governance/evidence/TUN-P2-006-UI-COMPLIANCE.json",
+              "sha256": "25c2fd7e001d81ee637e68a8edc418d5a9702cb91db9ba3e4a34d1698d34bc3a"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-003",
+          "result": "PASS",
+          "description": "Existing Tunner shared controls, typography, spacing and focused field/form error variants are reused; selected-session facts match the approved plain layout.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/visual-review.json",
+              "sha256": "3feb13359f4193db4857d77b2a6198b70e1c171a8c8283b19169ad4e26022a72"
+            },
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/fidelity6-4f09edb/results.json",
+              "sha256": "04061bf0c4b49669e85ed3eea0adf7a28e3131f242a115f827a5d34708234374"
+            },
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/feedback2-4f09edb/results.json",
+              "sha256": "16909bacdca290fe67abd8b039aad91762d9f5b038e0ac3db94f36eaa05ce1ab"
+            },
+            {
+              "path": "governance/evidence/TUN-P2-006-UI-COMPLIANCE.json",
+              "sha256": "25c2fd7e001d81ee637e68a8edc418d5a9702cb91db9ba3e4a34d1698d34bc3a"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-004",
+          "result": "PASS",
+          "description": "Only the four scoped Product Owner visual adaptations are accepted. No new visual system, unsupported device state or invented Product decision.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/visual-review.json",
+              "sha256": "3feb13359f4193db4857d77b2a6198b70e1c171a8c8283b19169ad4e26022a72"
+            },
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/fidelity6-4f09edb/results.json",
+              "sha256": "04061bf0c4b49669e85ed3eea0adf7a28e3131f242a115f827a5d34708234374"
+            },
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/feedback2-4f09edb/results.json",
+              "sha256": "16909bacdca290fe67abd8b039aad91762d9f5b038e0ac3db94f36eaa05ce1ab"
+            },
+            {
+              "path": "governance/evidence/TUN-P2-006-UI-COMPLIANCE.json",
+              "sha256": "25c2fd7e001d81ee637e68a8edc418d5a9702cb91db9ba3e4a34d1698d34bc3a"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-005",
+          "result": "PASS",
+          "description": "FRD17 governs authorization/local effects and safe server-backed facts; Figma governs presentation. The consented truthful projection avoids unsupported device/trust/global-signout assertions.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/visual-review.json",
+              "sha256": "3feb13359f4193db4857d77b2a6198b70e1c171a8c8283b19169ad4e26022a72"
+            },
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/fidelity6-4f09edb/results.json",
+              "sha256": "04061bf0c4b49669e85ed3eea0adf7a28e3131f242a115f827a5d34708234374"
+            },
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/feedback2-4f09edb/results.json",
+              "sha256": "16909bacdca290fe67abd8b039aad91762d9f5b038e0ac3db94f36eaa05ce1ab"
+            },
+            {
+              "path": "governance/evidence/TUN-P2-006-UI-COMPLIANCE.json",
+              "sha256": "25c2fd7e001d81ee637e68a8edc418d5a9702cb91db9ba3e4a34d1698d34bc3a"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-006",
+          "result": "PASS",
+          "description": "No TailAdmin default styling substitutes for Tunner's approved theme or shared component variants.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/visual-review.json",
+              "sha256": "3feb13359f4193db4857d77b2a6198b70e1c171a8c8283b19169ad4e26022a72"
+            },
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/fidelity6-4f09edb/results.json",
+              "sha256": "04061bf0c4b49669e85ed3eea0adf7a28e3131f242a115f827a5d34708234374"
+            },
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/feedback2-4f09edb/results.json",
+              "sha256": "16909bacdca290fe67abd8b039aad91762d9f5b038e0ac3db94f36eaa05ce1ab"
+            },
+            {
+              "path": "governance/evidence/TUN-P2-006-UI-COMPLIANCE.json",
+              "sha256": "25c2fd7e001d81ee637e68a8edc418d5a9702cb91db9ba3e4a34d1698d34bc3a"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-007",
+          "result": "PASS",
+          "description": "Six viewport confirmation/result renders and fresh uncertainty/changed cases pass; keyboard/axe checks and protected reload retain usable controls. Existing unchanged shared proof mobile evidence is reused, not represented as a new execution.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/visual-review.json",
+              "sha256": "3feb13359f4193db4857d77b2a6198b70e1c171a8c8283b19169ad4e26022a72"
+            },
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/fidelity6-4f09edb/results.json",
+              "sha256": "04061bf0c4b49669e85ed3eea0adf7a28e3131f242a115f827a5d34708234374"
+            },
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/feedback2-4f09edb/results.json",
+              "sha256": "16909bacdca290fe67abd8b039aad91762d9f5b038e0ac3db94f36eaa05ce1ab"
+            },
+            {
+              "path": "governance/evidence/TUN-P2-006-UI-COMPLIANCE.json",
+              "sha256": "25c2fd7e001d81ee637e68a8edc418d5a9702cb91db9ba3e4a34d1698d34bc3a"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-008",
+          "result": "PASS",
+          "description": "Raw results, screenshots, reference hashes, original invocation SHAs and current source equivalence are retained. This PASS covers only the implemented listing/details and selected-other-session integration.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/visual-review.json",
+              "sha256": "3feb13359f4193db4857d77b2a6198b70e1c171a8c8283b19169ad4e26022a72"
+            },
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/fidelity6-4f09edb/results.json",
+              "sha256": "04061bf0c4b49669e85ed3eea0adf7a28e3131f242a115f827a5d34708234374"
+            },
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/feedback2-4f09edb/results.json",
+              "sha256": "16909bacdca290fe67abd8b039aad91762d9f5b038e0ac3db94f36eaa05ce1ab"
+            },
+            {
+              "path": "governance/evidence/TUN-P2-006-UI-COMPLIANCE.json",
+              "sha256": "25c2fd7e001d81ee637e68a8edc418d5a9702cb91db9ba3e4a34d1698d34bc3a"
+            }
+          ]
+        }
+      ],
+      "screenshots": [
+        {
+          "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-step-up/changed-AUTHENTICATION_REQUIRED.png",
+          "sha256": "5b444a0a8fb2125fe40730caf9d4aa285917585055004bfe359d900c38c03269",
+          "role": "CURRENT_SOURCE_RENDER",
+          "original_execution_ref": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-final-80a32ab-step-up/changed-AUTHENTICATION_REQUIRED.png"
+        },
+        {
+          "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-step-up/changed-FORBIDDEN_SCOPE.png",
+          "sha256": "5b444a0a8fb2125fe40730caf9d4aa285917585055004bfe359d900c38c03269",
+          "role": "CURRENT_SOURCE_RENDER",
+          "original_execution_ref": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-final-80a32ab-step-up/changed-FORBIDDEN_SCOPE.png"
+        },
+        {
+          "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-step-up/changed-VERSION_CONFLICT.png",
+          "sha256": "5b444a0a8fb2125fe40730caf9d4aa285917585055004bfe359d900c38c03269",
+          "role": "CURRENT_SOURCE_RENDER",
+          "original_execution_ref": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-final-80a32ab-step-up/changed-VERSION_CONFLICT.png"
+        },
+        {
+          "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-step-up/chooser-1024.png",
+          "sha256": "596ec0d7d40dfd99d427f9a29849b1c555489c1ead76a4ab28280f0c5c2c0d39",
+          "role": "CURRENT_SOURCE_RENDER",
+          "original_execution_ref": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-final-80a32ab-step-up/chooser-1024.png"
+        },
+        {
+          "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-step-up/chooser-1440.png",
+          "sha256": "f4047c3995cb3f51ed02d6d08c37d850ec498d6164e484251759f70b3c4d0c13",
+          "role": "CURRENT_SOURCE_RENDER",
+          "original_execution_ref": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-final-80a32ab-step-up/chooser-1440.png"
+        },
+        {
+          "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-step-up/chooser-320.png",
+          "sha256": "eb24bb1b7abe58e9ca26ad0a4a1dfa5facab41da4ad68e89212faae29ca05f35",
+          "role": "CURRENT_SOURCE_RENDER",
+          "original_execution_ref": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-final-80a32ab-step-up/chooser-320.png"
+        },
+        {
+          "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-step-up/chooser-390.png",
+          "sha256": "7b57720ca989a9db69dd31c6dee6d96419849607e4f5c80aaffb53363ff53f20",
+          "role": "CURRENT_SOURCE_RENDER",
+          "original_execution_ref": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-final-80a32ab-step-up/chooser-390.png"
+        },
+        {
+          "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-step-up/chooser-768.png",
+          "sha256": "ae989a1a7b284f26c9c46ff8db1679f6c7c7d1c2dbabbfd90010798da466366b",
+          "role": "CURRENT_SOURCE_RENDER",
+          "original_execution_ref": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-final-80a32ab-step-up/chooser-768.png"
+        },
+        {
+          "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-step-up/password-1024.png",
+          "sha256": "d3d3437fc0fd03f2c8c458eb2e5cfde5b0c6e27afa5e2a25023f8db315a3f962",
+          "role": "CURRENT_SOURCE_RENDER",
+          "original_execution_ref": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-final-80a32ab-step-up/password-1024.png"
+        },
+        {
+          "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-step-up/password-1440.png",
+          "sha256": "b70fd2a16d78a16ff8ebee758cd64fccffc53e88cf419d344b6c094ab65ffa09",
+          "role": "CURRENT_SOURCE_RENDER",
+          "original_execution_ref": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-final-80a32ab-step-up/password-1440.png"
+        },
+        {
+          "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-step-up/password-320.png",
+          "sha256": "eca274980aa6294a02d29217e281629ae72445d7cdbbb5c9a6cf5c62834cdd8f",
+          "role": "CURRENT_SOURCE_RENDER",
+          "original_execution_ref": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-final-80a32ab-step-up/password-320.png"
+        },
+        {
+          "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-step-up/password-390.png",
+          "sha256": "9615a5c8a9eb0beeee54957fa7e5b97e4b5f0937de92539aa2a6b6f94ec52db0",
+          "role": "CURRENT_SOURCE_RENDER",
+          "original_execution_ref": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-final-80a32ab-step-up/password-390.png"
+        },
+        {
+          "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-step-up/password-768.png",
+          "sha256": "9193fcd72b4892f9a9cd890957d3c28c32ae5c2d444d3e87930a49e5715f23a8",
+          "role": "CURRENT_SOURCE_RENDER",
+          "original_execution_ref": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-final-80a32ab-step-up/password-768.png"
+        },
+        {
+          "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-step-up/server-error-1024.png",
+          "sha256": "10304b52d6eae205198b9f51dfa396fa82be32a23788b2e19e8b61b148ae3f9a",
+          "role": "CURRENT_SOURCE_RENDER",
+          "original_execution_ref": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-final-80a32ab-step-up/server-error-1024.png"
+        },
+        {
+          "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-step-up/server-error-1440.png",
+          "sha256": "29f5e41d44a69ad1c6075bce15155b13afd7207cc37c4ee876da26b48457aff9",
+          "role": "CURRENT_SOURCE_RENDER",
+          "original_execution_ref": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-final-80a32ab-step-up/server-error-1440.png"
+        },
+        {
+          "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-step-up/server-error-320.png",
+          "sha256": "81dcbc85cadfdb73b0640ae50ad4df69bbc70df277290df133f178e96ed9473e",
+          "role": "CURRENT_SOURCE_RENDER",
+          "original_execution_ref": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-final-80a32ab-step-up/server-error-320.png"
+        },
+        {
+          "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-step-up/server-error-390.png",
+          "sha256": "f96cbb908b9b1afaf4f3ecf39714fef629eb8341be1303b60d1d5c0f831487a9",
+          "role": "CURRENT_SOURCE_RENDER",
+          "original_execution_ref": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-final-80a32ab-step-up/server-error-390.png"
+        },
+        {
+          "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-step-up/server-error-768.png",
+          "sha256": "cc1546e5e9bfbf11db552cbf4f56bb34bdb9d897972c0af40ad2f95953e1a761",
+          "role": "CURRENT_SOURCE_RENDER",
+          "original_execution_ref": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-final-80a32ab-step-up/server-error-768.png"
+        },
+        {
+          "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-step-up/short-viewport.png",
+          "sha256": "170d820c7c7e65433188df8da4843853379a3825d954afd5b833d7f17d7d8e79",
+          "role": "CURRENT_SOURCE_RENDER",
+          "original_execution_ref": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-final-80a32ab-step-up/short-viewport.png"
+        },
+        {
+          "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/passkeys/run-details/step-up-passkey-Shared-nat-26fc7-e-approved-overlay-at-320px/native-proof-320.png",
+          "sha256": "20097eaa6eaf6dfd8b87854667a5c7e3331f0597f4819dfda72c4c2953c37245",
+          "role": "CURRENT_SOURCE_RENDER",
+          "original_execution_ref": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-final-80a32ab-passkeys/run-details/step-up-passkey-Shared-nat-26fc7-e-approved-overlay-at-320px/native-proof-320.png"
+        },
+        {
+          "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/passkeys/run-details/step-up-passkey-Shared-nat-381e3--approved-overlay-at-1440px/native-proof-1440.png",
+          "sha256": "5180e83af255ff55678a9ff510cb980dc1380de884a81369a1814b0ae68773f8",
+          "role": "CURRENT_SOURCE_RENDER",
+          "original_execution_ref": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-final-80a32ab-passkeys/run-details/step-up-passkey-Shared-nat-381e3--approved-overlay-at-1440px/native-proof-1440.png"
+        },
+        {
+          "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/passkeys/run-details/step-up-passkey-Shared-nat-3e7d6-e-approved-overlay-at-390px/native-proof-390.png",
+          "sha256": "2f65bb19532e7c29814c649737722791d8ed12251c52a46653983cfab674c5f9",
+          "role": "CURRENT_SOURCE_RENDER",
+          "original_execution_ref": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-final-80a32ab-passkeys/run-details/step-up-passkey-Shared-nat-3e7d6-e-approved-overlay-at-390px/native-proof-390.png"
+        },
+        {
+          "path": "governance/evidence/ui/step-up-20261109/reference/figma-98-27.png",
+          "sha256": "fd7e613982e3f8f2ca2e9abe1fe725a86f86b177f3cbef0be3c9ffa50db03616",
+          "role": "APPROVED_REFERENCE_OR_SCOPED_PROPOSAL",
+          "original_execution_ref": "governance/evidence/ui/step-up-20261109/reference/figma-98-27.png"
+        },
+        {
+          "path": "governance/evidence/ui/step-up-20261109/reference/password-1440.png",
+          "sha256": "dd270a71a32a0dee4420b0109ef58ecbf35bd196f97892c2d4e73c4d09ac61e8",
+          "role": "APPROVED_REFERENCE_OR_SCOPED_PROPOSAL",
+          "original_execution_ref": "governance/evidence/ui/step-up-20261109/reference/password-1440.png"
+        },
+        {
+          "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/reference/figma/figma-98-28.png",
+          "sha256": "3fcb345a9475b6776cfc62bf77388ab8512bff8f9362453e9dbd330f7f75a643",
+          "role": "APPROVED_REFERENCE_OR_SCOPED_PROPOSAL",
+          "original_execution_ref": "artifacts/p2-007-passkeys-20261109/ui-review/reference/figma-98-28.png"
+        },
+        {
+          "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/screenshots/live-proof-validation.png",
+          "sha256": "5ac0283762a48eefc3c5190626bc3795bc70df2a5921e005bbf41c75077b5140"
+        },
+        {
+          "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/screenshots/live-confirmation-1440.png",
+          "sha256": "2af3b72b0f5259138207fd6e86acc58943d69ef6b2a144e00c75267d90b12ffb"
+        }
+      ],
+      "deviations": [
+        {
+          "status": "PRODUCT_OWNER_APPROVED",
+          "approval_evidence": {
+            "path": "governance/evidence/TUN-P2-006-VISUAL-CONSENT-20261108.json",
+            "sha256": "881ffda9f2b7431c9077922789aa585780022651d5a2c8a628365a85de5fc3b2"
+          }
+        },
+        {
+          "status": "PRODUCT_OWNER_APPROVED",
+          "approval_evidence": {
+            "path": "governance/evidence/TUN-P2-007-VISUAL-CONSENT-20261109.json",
+            "sha256": "c9415304746bb882a0c49a3b42e16c0e312882f6b48401b1d51666a18d775dfd"
+          }
+        },
+        {
+          "scope_id": "013-V01..V04_IMPLEMENTED_LISTING_DETAILS_AND_SELECTED_OTHER_SESSION_ONLY",
+          "status": "PRODUCT_OWNER_APPROVED",
+          "approval_evidence": {
+            "path": "governance/evidence/TUN-P2-013-VISUAL-CONSENT.json",
+            "sha256": "01547dce89e7a404e024d1a9e64272ba9c5e1c1d8b39ee4b6a446888313e7378"
+          }
+        }
+      ]
+    },
+    {
+      "id": "FORM-STEP-UP",
+      "kind": "FORM",
+      "pathname": null,
+      "authority_refs": [
+        "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md",
+        "docs/authority/current/decisions/AMD-0008_Approved_Figma_Visual_Fidelity_and_Product_Owner_UX_Consent.md",
+        "docs/authority/current/decisions/AMD-0009_URL_Addressable_Routing_and_Governed_Form_Validation.md"
+      ],
+      "figma_refs": [
+        {
+          "file_key": "apNbwvAgdn1xIxYH1oiaSC",
+          "node_id": "98:27"
+        },
+        {
+          "file_key": "apNbwvAgdn1xIxYH1oiaSC",
+          "node_id": "70:1257"
+        }
+      ],
+      "result": "PASS",
+      "checks": [
+        {
+          "id": "VAL-001",
+          "result": "PASS",
+          "description": "Existing typed shared password schema handles required/format/domain constraints; current server rejection and correction follow the unchanged approved form capability.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/TUN-P2-006-UI-COMPLIANCE.json",
+              "sha256": "25c2fd7e001d81ee637e68a8edc418d5a9702cb91db9ba3e4a34d1698d34bc3a"
+            },
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/qualification-binding.json",
+              "sha256": "a293ecf8a0434a353d806b00382f9b003748b6808db9221642fda5852f369a77"
+            },
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/http20-7a6a69b/session-revocation-http.trx",
+              "sha256": "5755f72a53612854f8a99c43398834fb64bfd8a811154261a1dc9e97a554275b"
+            },
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/ui42-8b65583/results.json",
+              "sha256": "1606652b925ba3623182a695395bfe42301bd82f2d69ac37f340fdaf8608846b"
+            },
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/live1-4f09edb/results.json",
+              "sha256": "54b7489d61a33e457b3e50abfb93fba1b13893dd0f7f5368b4d3f811bd4dea39"
+            }
+          ]
+        },
+        {
+          "id": "VAL-002",
+          "result": "PASS",
+          "description": "Shared field/form feedback is primary; native constraint bubbles do not replace it. Real wrong-password correction exercises cleared value and field-associated invalid state.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/TUN-P2-006-UI-COMPLIANCE.json",
+              "sha256": "25c2fd7e001d81ee637e68a8edc418d5a9702cb91db9ba3e4a34d1698d34bc3a"
+            },
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/qualification-binding.json",
+              "sha256": "a293ecf8a0434a353d806b00382f9b003748b6808db9221642fda5852f369a77"
+            },
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/http20-7a6a69b/session-revocation-http.trx",
+              "sha256": "5755f72a53612854f8a99c43398834fb64bfd8a811154261a1dc9e97a554275b"
+            },
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/ui42-8b65583/results.json",
+              "sha256": "1606652b925ba3623182a695395bfe42301bd82f2d69ac37f340fdaf8608846b"
+            },
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/live1-4f09edb/results.json",
+              "sha256": "54b7489d61a33e457b3e50abfb93fba1b13893dd0f7f5368b4d3f811bd4dea39"
+            }
+          ]
+        },
+        {
+          "id": "VAL-003",
+          "result": "PASS",
+          "description": "Independent authoritative server validation rejects malformed bodies, wrong actor/Origin/CSRF, stale versions and unauthorized or unrelated original operations.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/TUN-P2-006-UI-COMPLIANCE.json",
+              "sha256": "25c2fd7e001d81ee637e68a8edc418d5a9702cb91db9ba3e4a34d1698d34bc3a"
+            },
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/qualification-binding.json",
+              "sha256": "a293ecf8a0434a353d806b00382f9b003748b6808db9221642fda5852f369a77"
+            },
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/http20-7a6a69b/session-revocation-http.trx",
+              "sha256": "5755f72a53612854f8a99c43398834fb64bfd8a811154261a1dc9e97a554275b"
+            },
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/ui42-8b65583/results.json",
+              "sha256": "1606652b925ba3623182a695395bfe42301bd82f2d69ac37f340fdaf8608846b"
+            },
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/live1-4f09edb/results.json",
+              "sha256": "54b7489d61a33e457b3e50abfb93fba1b13893dd0f7f5368b4d3f811bd4dea39"
+            }
+          ]
+        },
+        {
+          "id": "VAL-004",
+          "result": "PASS",
+          "description": "Backend errors map to safe field/form feedback; transport/private causal details are excluded. Lost success reads the exact original result rather than resubmitting.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/TUN-P2-006-UI-COMPLIANCE.json",
+              "sha256": "25c2fd7e001d81ee637e68a8edc418d5a9702cb91db9ba3e4a34d1698d34bc3a"
+            },
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/qualification-binding.json",
+              "sha256": "a293ecf8a0434a353d806b00382f9b003748b6808db9221642fda5852f369a77"
+            },
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/http20-7a6a69b/session-revocation-http.trx",
+              "sha256": "5755f72a53612854f8a99c43398834fb64bfd8a811154261a1dc9e97a554275b"
+            },
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/ui42-8b65583/results.json",
+              "sha256": "1606652b925ba3623182a695395bfe42301bd82f2d69ac37f340fdaf8608846b"
+            },
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/live1-4f09edb/results.json",
+              "sha256": "54b7489d61a33e457b3e50abfb93fba1b13893dd0f7f5368b4d3f811bd4dea39"
+            }
+          ]
+        },
+        {
+          "id": "VAL-005",
+          "result": "PASS",
+          "description": "Shared blur/correction/submit behavior and invalid focus are retained through unchanged form primitives. Current wrong-password correction, modal focus and duplicate-operation guards are exercised.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/TUN-P2-006-UI-COMPLIANCE.json",
+              "sha256": "25c2fd7e001d81ee637e68a8edc418d5a9702cb91db9ba3e4a34d1698d34bc3a"
+            },
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/qualification-binding.json",
+              "sha256": "a293ecf8a0434a353d806b00382f9b003748b6808db9221642fda5852f369a77"
+            },
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/http20-7a6a69b/session-revocation-http.trx",
+              "sha256": "5755f72a53612854f8a99c43398834fb64bfd8a811154261a1dc9e97a554275b"
+            },
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/ui42-8b65583/results.json",
+              "sha256": "1606652b925ba3623182a695395bfe42301bd82f2d69ac37f340fdaf8608846b"
+            },
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/live1-4f09edb/results.json",
+              "sha256": "54b7489d61a33e457b3e50abfb93fba1b13893dd0f7f5368b4d3f811bd4dea39"
+            }
+          ]
+        },
+        {
+          "id": "VAL-006",
+          "result": "PASS",
+          "description": "Approved shared password/error variants and current desktop invalid-state render are compared; existing unchanged mobile variants remain qualified by their original evidence.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/TUN-P2-006-UI-COMPLIANCE.json",
+              "sha256": "25c2fd7e001d81ee637e68a8edc418d5a9702cb91db9ba3e4a34d1698d34bc3a"
+            },
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/qualification-binding.json",
+              "sha256": "a293ecf8a0434a353d806b00382f9b003748b6808db9221642fda5852f369a77"
+            },
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/http20-7a6a69b/session-revocation-http.trx",
+              "sha256": "5755f72a53612854f8a99c43398834fb64bfd8a811154261a1dc9e97a554275b"
+            },
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/ui42-8b65583/results.json",
+              "sha256": "1606652b925ba3623182a695395bfe42301bd82f2d69ac37f340fdaf8608846b"
+            },
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/live1-4f09edb/results.json",
+              "sha256": "54b7489d61a33e457b3e50abfb93fba1b13893dd0f7f5368b4d3f811bd4dea39"
+            }
+          ]
+        },
+        {
+          "id": "VAL-007",
+          "result": "PASS",
+          "description": "Password business rules and authoritative runtime assurance remain domain-owned. No registration-specific rules, client-selected policy or unsupported factor capability is copied.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/TUN-P2-006-UI-COMPLIANCE.json",
+              "sha256": "25c2fd7e001d81ee637e68a8edc418d5a9702cb91db9ba3e4a34d1698d34bc3a"
+            },
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/qualification-binding.json",
+              "sha256": "a293ecf8a0434a353d806b00382f9b003748b6808db9221642fda5852f369a77"
+            },
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/http20-7a6a69b/session-revocation-http.trx",
+              "sha256": "5755f72a53612854f8a99c43398834fb64bfd8a811154261a1dc9e97a554275b"
+            },
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/ui42-8b65583/results.json",
+              "sha256": "1606652b925ba3623182a695395bfe42301bd82f2d69ac37f340fdaf8608846b"
+            },
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/live1-4f09edb/results.json",
+              "sha256": "54b7489d61a33e457b3e50abfb93fba1b13893dd0f7f5368b4d3f811bd4dea39"
+            }
+          ]
+        },
+        {
+          "id": "VAL-008",
+          "result": "PASS",
+          "description": "Original shared validation/native regressions retain their execution identities; current owner HTTPS, API/controlled browser and actual two-session BFF journey supply caller-specific integration evidence.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/TUN-P2-006-UI-COMPLIANCE.json",
+              "sha256": "25c2fd7e001d81ee637e68a8edc418d5a9702cb91db9ba3e4a34d1698d34bc3a"
+            },
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/qualification-binding.json",
+              "sha256": "a293ecf8a0434a353d806b00382f9b003748b6808db9221642fda5852f369a77"
+            },
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/http20-7a6a69b/session-revocation-http.trx",
+              "sha256": "5755f72a53612854f8a99c43398834fb64bfd8a811154261a1dc9e97a554275b"
+            },
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/ui42-8b65583/results.json",
+              "sha256": "1606652b925ba3623182a695395bfe42301bd82f2d69ac37f340fdaf8608846b"
+            },
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/live1-4f09edb/results.json",
+              "sha256": "54b7489d61a33e457b3e50abfb93fba1b13893dd0f7f5368b4d3f811bd4dea39"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-001",
+          "result": "PASS",
+          "description": "Approved Figma composition plus genuinely consented013-V01..V04 adaptations are compared with actual matching renders; UI002 card mismatch corrected.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/visual-review.json",
+              "sha256": "3feb13359f4193db4857d77b2a6198b70e1c171a8c8283b19169ad4e26022a72"
+            },
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/fidelity6-4f09edb/results.json",
+              "sha256": "04061bf0c4b49669e85ed3eea0adf7a28e3131f242a115f827a5d34708234374"
+            },
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/feedback2-4f09edb/results.json",
+              "sha256": "16909bacdca290fe67abd8b039aad91762d9f5b038e0ac3db94f36eaa05ce1ab"
+            },
+            {
+              "path": "governance/evidence/TUN-P2-006-UI-COMPLIANCE.json",
+              "sha256": "25c2fd7e001d81ee637e68a8edc418d5a9702cb91db9ba3e4a34d1698d34bc3a"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-002",
+          "result": "PASS",
+          "description": "Approved Account Center flat surface, panels, backdrop and modal layers are retained; authentication-page glow artwork is not invented for this composition.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/visual-review.json",
+              "sha256": "3feb13359f4193db4857d77b2a6198b70e1c171a8c8283b19169ad4e26022a72"
+            },
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/fidelity6-4f09edb/results.json",
+              "sha256": "04061bf0c4b49669e85ed3eea0adf7a28e3131f242a115f827a5d34708234374"
+            },
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/feedback2-4f09edb/results.json",
+              "sha256": "16909bacdca290fe67abd8b039aad91762d9f5b038e0ac3db94f36eaa05ce1ab"
+            },
+            {
+              "path": "governance/evidence/TUN-P2-006-UI-COMPLIANCE.json",
+              "sha256": "25c2fd7e001d81ee637e68a8edc418d5a9702cb91db9ba3e4a34d1698d34bc3a"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-003",
+          "result": "PASS",
+          "description": "Existing Tunner shared controls, typography, spacing and focused field/form error variants are reused; selected-session facts match the approved plain layout.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/visual-review.json",
+              "sha256": "3feb13359f4193db4857d77b2a6198b70e1c171a8c8283b19169ad4e26022a72"
+            },
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/fidelity6-4f09edb/results.json",
+              "sha256": "04061bf0c4b49669e85ed3eea0adf7a28e3131f242a115f827a5d34708234374"
+            },
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/feedback2-4f09edb/results.json",
+              "sha256": "16909bacdca290fe67abd8b039aad91762d9f5b038e0ac3db94f36eaa05ce1ab"
+            },
+            {
+              "path": "governance/evidence/TUN-P2-006-UI-COMPLIANCE.json",
+              "sha256": "25c2fd7e001d81ee637e68a8edc418d5a9702cb91db9ba3e4a34d1698d34bc3a"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-004",
+          "result": "PASS",
+          "description": "Only the four scoped Product Owner visual adaptations are accepted. No new visual system, unsupported device state or invented Product decision.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/visual-review.json",
+              "sha256": "3feb13359f4193db4857d77b2a6198b70e1c171a8c8283b19169ad4e26022a72"
+            },
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/fidelity6-4f09edb/results.json",
+              "sha256": "04061bf0c4b49669e85ed3eea0adf7a28e3131f242a115f827a5d34708234374"
+            },
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/feedback2-4f09edb/results.json",
+              "sha256": "16909bacdca290fe67abd8b039aad91762d9f5b038e0ac3db94f36eaa05ce1ab"
+            },
+            {
+              "path": "governance/evidence/TUN-P2-006-UI-COMPLIANCE.json",
+              "sha256": "25c2fd7e001d81ee637e68a8edc418d5a9702cb91db9ba3e4a34d1698d34bc3a"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-005",
+          "result": "PASS",
+          "description": "FRD17 governs authorization/local effects and safe server-backed facts; Figma governs presentation. The consented truthful projection avoids unsupported device/trust/global-signout assertions.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/visual-review.json",
+              "sha256": "3feb13359f4193db4857d77b2a6198b70e1c171a8c8283b19169ad4e26022a72"
+            },
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/fidelity6-4f09edb/results.json",
+              "sha256": "04061bf0c4b49669e85ed3eea0adf7a28e3131f242a115f827a5d34708234374"
+            },
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/feedback2-4f09edb/results.json",
+              "sha256": "16909bacdca290fe67abd8b039aad91762d9f5b038e0ac3db94f36eaa05ce1ab"
+            },
+            {
+              "path": "governance/evidence/TUN-P2-006-UI-COMPLIANCE.json",
+              "sha256": "25c2fd7e001d81ee637e68a8edc418d5a9702cb91db9ba3e4a34d1698d34bc3a"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-006",
+          "result": "PASS",
+          "description": "No TailAdmin default styling substitutes for Tunner's approved theme or shared component variants.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/visual-review.json",
+              "sha256": "3feb13359f4193db4857d77b2a6198b70e1c171a8c8283b19169ad4e26022a72"
+            },
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/fidelity6-4f09edb/results.json",
+              "sha256": "04061bf0c4b49669e85ed3eea0adf7a28e3131f242a115f827a5d34708234374"
+            },
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/feedback2-4f09edb/results.json",
+              "sha256": "16909bacdca290fe67abd8b039aad91762d9f5b038e0ac3db94f36eaa05ce1ab"
+            },
+            {
+              "path": "governance/evidence/TUN-P2-006-UI-COMPLIANCE.json",
+              "sha256": "25c2fd7e001d81ee637e68a8edc418d5a9702cb91db9ba3e4a34d1698d34bc3a"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-007",
+          "result": "PASS",
+          "description": "Six viewport confirmation/result renders and fresh uncertainty/changed cases pass; keyboard/axe checks and protected reload retain usable controls. Existing unchanged shared proof mobile evidence is reused, not represented as a new execution.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/visual-review.json",
+              "sha256": "3feb13359f4193db4857d77b2a6198b70e1c171a8c8283b19169ad4e26022a72"
+            },
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/fidelity6-4f09edb/results.json",
+              "sha256": "04061bf0c4b49669e85ed3eea0adf7a28e3131f242a115f827a5d34708234374"
+            },
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/feedback2-4f09edb/results.json",
+              "sha256": "16909bacdca290fe67abd8b039aad91762d9f5b038e0ac3db94f36eaa05ce1ab"
+            },
+            {
+              "path": "governance/evidence/TUN-P2-006-UI-COMPLIANCE.json",
+              "sha256": "25c2fd7e001d81ee637e68a8edc418d5a9702cb91db9ba3e4a34d1698d34bc3a"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-008",
+          "result": "PASS",
+          "description": "Raw results, screenshots, reference hashes, original invocation SHAs and current source equivalence are retained. This PASS covers only the implemented listing/details and selected-other-session integration.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/visual-review.json",
+              "sha256": "3feb13359f4193db4857d77b2a6198b70e1c171a8c8283b19169ad4e26022a72"
+            },
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/fidelity6-4f09edb/results.json",
+              "sha256": "04061bf0c4b49669e85ed3eea0adf7a28e3131f242a115f827a5d34708234374"
+            },
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/feedback2-4f09edb/results.json",
+              "sha256": "16909bacdca290fe67abd8b039aad91762d9f5b038e0ac3db94f36eaa05ce1ab"
+            },
+            {
+              "path": "governance/evidence/TUN-P2-006-UI-COMPLIANCE.json",
+              "sha256": "25c2fd7e001d81ee637e68a8edc418d5a9702cb91db9ba3e4a34d1698d34bc3a"
+            }
+          ]
+        }
+      ],
+      "screenshots": [
+        {
+          "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-step-up/password-1024.png",
+          "sha256": "d3d3437fc0fd03f2c8c458eb2e5cfde5b0c6e27afa5e2a25023f8db315a3f962",
+          "role": "CURRENT_SOURCE_RENDER",
+          "original_execution_ref": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-final-80a32ab-step-up/password-1024.png"
+        },
+        {
+          "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-step-up/password-1440.png",
+          "sha256": "b70fd2a16d78a16ff8ebee758cd64fccffc53e88cf419d344b6c094ab65ffa09",
+          "role": "CURRENT_SOURCE_RENDER",
+          "original_execution_ref": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-final-80a32ab-step-up/password-1440.png"
+        },
+        {
+          "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-step-up/password-320.png",
+          "sha256": "eca274980aa6294a02d29217e281629ae72445d7cdbbb5c9a6cf5c62834cdd8f",
+          "role": "CURRENT_SOURCE_RENDER",
+          "original_execution_ref": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-final-80a32ab-step-up/password-320.png"
+        },
+        {
+          "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-step-up/password-390.png",
+          "sha256": "9615a5c8a9eb0beeee54957fa7e5b97e4b5f0937de92539aa2a6b6f94ec52db0",
+          "role": "CURRENT_SOURCE_RENDER",
+          "original_execution_ref": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-final-80a32ab-step-up/password-390.png"
+        },
+        {
+          "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-step-up/password-768.png",
+          "sha256": "9193fcd72b4892f9a9cd890957d3c28c32ae5c2d444d3e87930a49e5715f23a8",
+          "role": "CURRENT_SOURCE_RENDER",
+          "original_execution_ref": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-final-80a32ab-step-up/password-768.png"
+        },
+        {
+          "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-step-up/server-error-1024.png",
+          "sha256": "10304b52d6eae205198b9f51dfa396fa82be32a23788b2e19e8b61b148ae3f9a",
+          "role": "CURRENT_SOURCE_RENDER",
+          "original_execution_ref": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-final-80a32ab-step-up/server-error-1024.png"
+        },
+        {
+          "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-step-up/server-error-1440.png",
+          "sha256": "29f5e41d44a69ad1c6075bce15155b13afd7207cc37c4ee876da26b48457aff9",
+          "role": "CURRENT_SOURCE_RENDER",
+          "original_execution_ref": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-final-80a32ab-step-up/server-error-1440.png"
+        },
+        {
+          "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-step-up/server-error-320.png",
+          "sha256": "81dcbc85cadfdb73b0640ae50ad4df69bbc70df277290df133f178e96ed9473e",
+          "role": "CURRENT_SOURCE_RENDER",
+          "original_execution_ref": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-final-80a32ab-step-up/server-error-320.png"
+        },
+        {
+          "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-step-up/server-error-390.png",
+          "sha256": "f96cbb908b9b1afaf4f3ecf39714fef629eb8341be1303b60d1d5c0f831487a9",
+          "role": "CURRENT_SOURCE_RENDER",
+          "original_execution_ref": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-final-80a32ab-step-up/server-error-390.png"
+        },
+        {
+          "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-step-up/server-error-768.png",
+          "sha256": "cc1546e5e9bfbf11db552cbf4f56bb34bdb9d897972c0af40ad2f95953e1a761",
+          "role": "CURRENT_SOURCE_RENDER",
+          "original_execution_ref": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-final-80a32ab-step-up/server-error-768.png"
+        },
+        {
+          "path": "governance/evidence/ui/step-up-20261109/reference/figma-98-27.png",
+          "sha256": "fd7e613982e3f8f2ca2e9abe1fe725a86f86b177f3cbef0be3c9ffa50db03616",
+          "role": "APPROVED_REFERENCE_OR_SCOPED_PROPOSAL",
+          "original_execution_ref": "governance/evidence/ui/step-up-20261109/reference/figma-98-27.png"
+        },
+        {
+          "path": "governance/evidence/ui/step-up-20261109/reference/password-1440.png",
+          "sha256": "dd270a71a32a0dee4420b0109ef58ecbf35bd196f97892c2d4e73c4d09ac61e8",
+          "role": "APPROVED_REFERENCE_OR_SCOPED_PROPOSAL",
+          "original_execution_ref": "governance/evidence/ui/step-up-20261109/reference/password-1440.png"
+        },
+        {
+          "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/reference/figma/figma-70-1257.png",
+          "sha256": "0b1e8d0a4516747f85501f828cb62dd7adbb938ce9f1244e34e5a1eb5db0d5fa",
+          "role": "APPROVED_REFERENCE_OR_SCOPED_PROPOSAL",
+          "original_execution_ref": "artifacts/p2-007-passkeys-20261109/ui-review/reference/figma-70-1257.png"
+        },
+        {
+          "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/screenshots/live-proof-validation.png",
+          "sha256": "5ac0283762a48eefc3c5190626bc3795bc70df2a5921e005bbf41c75077b5140"
+        },
+        {
+          "path": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/screenshots/live-confirmation-1440.png",
+          "sha256": "2af3b72b0f5259138207fd6e86acc58943d69ef6b2a144e00c75267d90b12ffb"
+        }
+      ],
+      "deviations": [
+        {
+          "status": "PRODUCT_OWNER_APPROVED",
+          "approval_evidence": {
+            "path": "governance/evidence/TUN-P2-006-VISUAL-CONSENT-20261108.json",
+            "sha256": "881ffda9f2b7431c9077922789aa585780022651d5a2c8a628365a85de5fc3b2"
+          }
+        },
+        {
+          "status": "PRODUCT_OWNER_APPROVED",
+          "approval_evidence": {
+            "path": "governance/evidence/TUN-P2-007-VISUAL-CONSENT-20261109.json",
+            "sha256": "c9415304746bb882a0c49a3b42e16c0e312882f6b48401b1d51666a18d775dfd"
+          }
+        },
+        {
+          "scope_id": "013-V01..V04_IMPLEMENTED_LISTING_DETAILS_AND_SELECTED_OTHER_SESSION_ONLY",
           "status": "PRODUCT_OWNER_APPROVED",
           "approval_evidence": {
             "path": "governance/evidence/TUN-P2-013-VISUAL-CONSENT.json",
@@ -584,9 +2233,5 @@
         }
       ]
     }
-  ],
-  "visual_review": {
-    "path": "governance/evidence/p2-013-sessions-20261114/ui-dd9029e/visual-review.json",
-    "sha256": "9b7ad2c666ea51b53f84a4d63deb82aa0ef02eb8421ff8abf7e3ea9c1af9a995"
-  }
+  ]
 }

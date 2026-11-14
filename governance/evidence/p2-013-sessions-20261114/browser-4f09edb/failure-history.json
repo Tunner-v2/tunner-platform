@@ -1,0 +1,12 @@
+{
+  "scope_id": "TUN-P2-013_SELECTED_OTHER_SESSION_INCREMENT",
+  "result": "RETAINED_DIAGNOSTIC_HISTORY",
+  "entries": [
+    {"source": "fe1f4a0", "kind": "PRODUCT_AND_TEST_RUN", "result": "FAILED_INCOMPLETE", "detail": "Initial modal cancel focus and invalid publication classification defects corrected; initial browser run later stopped after no progress. Stall root cause unconfirmed. Owned process/port cleanup recorded; later focused and complete runs pass.", "artifacts": "artifacts/p2-013-sessions-20261114/browser-integration/ui-fe1f4a0"},
+    {"source": "7a6a69b", "kind": "LIVE_REQUEST_CLIENT_TRUST", "result": "FAILED", "detail": "Node route.fetch did not consult the existing Windows trusted certificate. Child-only NODE_OPTIONS=--use-system-ca corrected request-client trust without weakening browser TLS or changing trust stores.", "artifacts": "artifacts/p2-013-sessions-20261114/browser-integration/live-7a6a69b"},
+    {"source": "7a6a69b", "kind": "TEST_SELECTOR", "result": "FAILED_FINAL_ASSERTION", "detail": "All Sessions stages reached the final ordinary verification assertion. Unscoped status locator matched both fixture Ready and dialog status. One-line fixture-status selector correction committed370c309.", "artifacts": "artifacts/p2-013-sessions-20261114/browser-integration/live-systemca-7a6a69b"},
+    {"source": "370c309", "kind": "SANDBOX_CERTIFICATE_VISIBILITY", "result": "FAILED_BEFORE_PRODUCT_FLOW", "detail": "Sandbox could not see CurrentUser certificate store; same strict-TLS test using normal authorized user access passed. No certificate-store mutation.", "artifacts": "artifacts/p2-013-sessions-20261114/browser-integration/live-370c309"},
+    {"source": "4f09edb", "kind": "BUILD_ENVIRONMENT", "result": "FAILED_THEN_CORRECTED", "detail": "Running local app held build DLLs. Verified only that app's PID/start time/assembly/config before stopping it; rebuilt0warnings/errors and restarted app-only. No Docker services, data or certificate changes.", "artifacts": "artifacts/p2-013-sessions-20261114/browser-integration/host-build-4f09edb.log"}
+  ],
+  "final_results": "Canonical qualification-binding.json retains each passing invocation at its actual source. Earlier failures are not relabelled PASS."
+}

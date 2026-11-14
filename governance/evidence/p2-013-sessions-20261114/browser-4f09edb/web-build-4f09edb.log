@@ -1,0 +1,55 @@
+(!) Your Vite config uses features that are unsupported by `configLoader: 'native'`, which is planned to become the default in a future major version of Vite:
+  - import "./totp.routes" without a file extension (apps/user/vite.config.ts:3:26). Add the file extension
+  - import "./recovery.routes" without a file extension (apps/user/vite.config.ts:4:31). Add the file extension
+  - import "./sessions.routes" without a file extension (apps/user/vite.config.ts:5:30). Add the file extension
+Set `VITE_CONFIG_NATIVE_IGNORE_WARNING=true` to suppress this warning.
+vite v8.2.4 building client environment for production...
+transforming...
+
+/registration/assets/fonts/GeistMono-wght.ttf referenced in /registration/assets/fonts/GeistMono-wght.ttf didn't resolve at build time, it will remain unchanged to be resolved at runtime
+✓ 177 modules transformed.
+rendering chunks...
+computing gzip size...
+apps/user/dist/index.html                                              0.80 kB │ gzip:  0.36 kB
+apps/user/dist/recovery.html                                           0.98 kB │ gzip:  0.39 kB
+apps/user/dist/totp.html                                               1.24 kB │ gzip:  0.42 kB
+apps/user/dist/sessions.html                                           1.24 kB │ gzip:  0.42 kB
+apps/user/dist/authentication.html                                     1.27 kB │ gzip:  0.44 kB
+apps/user/dist/passkeys.html                                           1.34 kB │ gzip:  0.43 kB
+apps/user/dist/assets/geist-cyrillic-ext-wght-normal-DjL33-gN.woff2    7.42 kB
+apps/user/dist/assets/geist-vietnamese-wght-normal-6IgcOCM7.woff2      8.00 kB
+apps/user/dist/assets/inter-vietnamese-wght-normal-CBcvBZtf.woff2     10.25 kB
+apps/user/dist/assets/inter-greek-ext-wght-normal-DlzME5K_.woff2      11.23 kB
+apps/user/dist/assets/geist-cyrillic-wght-normal-BEAKL7Jp.woff2       15.08 kB
+apps/user/dist/assets/geist-latin-ext-wght-normal-DC-KSUi6.woff2      16.51 kB
+apps/user/dist/assets/inter-cyrillic-wght-normal-DqGufNeO.woff2       18.74 kB
+apps/user/dist/assets/inter-greek-wght-normal-CkhJZR-_.woff2          18.99 kB
+apps/user/dist/assets/inter-cyrillic-ext-wght-normal-BOeWTOD4.woff2   25.96 kB
+apps/user/dist/assets/geist-latin-wght-normal-BgDaEnEv.woff2          29.40 kB
+apps/user/dist/assets/inter-latin-wght-normal-Dx4kXJAl.woff2          48.25 kB
+apps/user/dist/assets/inter-latin-ext-wght-normal-DO1Apj_S.woff2      85.06 kB
+apps/user/dist/assets/passkeys-Bo0uGRPK.css                            1.62 kB │ gzip:  0.62 kB
+apps/user/dist/assets/recovery-UbvY-vrS.css                            3.29 kB │ gzip:  0.98 kB
+apps/user/dist/assets/step-up-DQziR376.css                             4.52 kB │ gzip:  1.19 kB
+apps/user/dist/assets/authentication-Bzg6lNhs.css                      6.38 kB │ gzip:  1.59 kB
+apps/user/dist/assets/sessions-CW0sVBWg.css                            7.61 kB │ gzip:  1.80 kB
+apps/user/dist/assets/registration-CTGgoNuS.css                        8.26 kB │ gzip:  1.97 kB
+apps/user/dist/assets/passkeys-BamGzYQI.css                           10.58 kB │ gzip:  2.47 kB
+apps/user/dist/assets/step-up-xTrPB78B.css                            11.91 kB │ gzip:  2.63 kB
+apps/user/dist/assets/passkeys-DMez9Jr9.css                           18.43 kB │ gzip:  2.86 kB
+apps/user/dist/assets/sessions.routes-Dd8uSE2J.js                      0.21 kB │ gzip:  0.17 kB
+apps/user/dist/assets/recovery.routes-gQivvnkQ.js                      0.26 kB │ gzip:  0.18 kB
+apps/user/dist/assets/totp.routes-BVq-_mjw.js                          0.39 kB │ gzip:  0.21 kB
+apps/user/dist/assets/validation-XhNhgc_2.js                           1.28 kB │ gzip:  0.62 kB
+apps/user/dist/assets/federation.api-DAV11Ptg.js                       1.81 kB │ gzip:  0.87 kB
+apps/user/dist/assets/passkeys.native-BJoaD_Zb.js                     12.63 kB │ gzip:  4.15 kB
+apps/user/dist/assets/registration-Cr_uEmJH.js                        20.58 kB │ gzip:  5.38 kB
+apps/user/dist/assets/recovery-WY5HLm3B.js                            20.90 kB │ gzip:  6.09 kB
+apps/user/dist/assets/sessions-BTXWniJ3.js                            31.46 kB │ gzip:  7.42 kB
+apps/user/dist/assets/authentication-CiDVUaTH.js                      32.63 kB │ gzip:  7.98 kB
+apps/user/dist/assets/totp-C9lDucoX.js                                37.47 kB │ gzip: 10.62 kB
+apps/user/dist/assets/step-up-DODV-VmE.js                             38.91 kB │ gzip: 10.10 kB
+apps/user/dist/assets/passkeys-aU5Is1hi.js                            56.20 kB │ gzip: 13.13 kB
+apps/user/dist/assets/passkeys.api-b7k4NDzE.js                       290.15 kB │ gzip: 88.64 kB
+
+✓ built in 781ms
