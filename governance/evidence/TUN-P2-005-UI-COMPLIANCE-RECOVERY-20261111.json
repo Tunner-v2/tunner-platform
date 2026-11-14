@@ -1,9 +1,20 @@
 {
   "schema_version": 1,
   "scope_id": "TUN-P2-005",
+  "sessions_packaging_currentness_20261114": {
+    "receipt_ref": "governance/evidence/TUN-P2-013-PACKAGING-CURRENTNESS.json",
+    "source_equivalence_only": true,
+    "assessed_source_carrier": "dd9029e8fc479693de954b4d1c4ffdf8cf7fb179",
+    "prior_envelope_ref": "4021ec1f214a6beb3d456689d64975ed95204a08:governance/evidence/TUN-P2-005-UI-COMPLIANCE-RECOVERY-20261111.json",
+    "prior_actual_tested_commit_sha": "ad744fde52aa03404f3944c47ebb79070185e9f2",
+    "legacy_tests_rerun": false,
+    "raw_invocation_identities_unchanged": true,
+    "old_item_rows_screenshots_and_consent_unchanged": true,
+    "new_screens_acceptance_scope": "TUN-P2-013 only; independent WIP entries are not accepted by this bridge"
+  },
   "result": "PASS",
-  "tested_commit_sha": "ad744fde52aa03404f3944c47ebb79070185e9f2",
-  "inventory_sha256": "83e3013f34780aa22ceb0ce9aaee408e75661cf35aded91afe935a294b262296",
+  "tested_commit_sha": "dd9029e8fc479693de954b4d1c4ffdf8cf7fb179",
+  "inventory_sha256": "6abfa1de1fd9e97573f704133923322d6541201f8fa7787ddbe10a293d5290df",
   "owned_behavior_paths": [
     "docs/contracts/ui-inventory.json",
     "src/Modules/Identity/AuthenticationEndpoints.cs",
@@ -23,7 +34,14 @@
     "web/apps/user/totp.mfa.tsx",
     "web/apps/user/totp.picker.tsx",
     "web/apps/user/totp.routes.ts",
-    "web/apps/user/totp.validation.ts"
+    "web/apps/user/totp.validation.ts",
+    "src/Modules/Identity/FederationBrowserService.cs",
+    "src/Modules/Identity/FederationContracts.cs",
+    "src/Tunner.User.Bff/FederationOidcEndpoints.cs",
+    "web/apps/user/authentication.content.proposal.json",
+    "web/apps/user/federation.api.ts",
+    "web/apps/user/federation.sign-in.tsx",
+    "web/apps/user/recovery.routes.ts"
   ],
   "historical_ui_compliance": {
     "path": "governance/evidence/TUN-P2-005-UI-COMPLIANCE-TOTP-20261110.json",

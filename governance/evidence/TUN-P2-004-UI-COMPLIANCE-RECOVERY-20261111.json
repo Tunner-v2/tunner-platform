@@ -1,9 +1,20 @@
 {
   "schema_version": 1,
   "scope_id": "TUN-P2-004",
+  "sessions_packaging_currentness_20261114": {
+    "receipt_ref": "governance/evidence/TUN-P2-013-PACKAGING-CURRENTNESS.json",
+    "source_equivalence_only": true,
+    "assessed_source_carrier": "dd9029e8fc479693de954b4d1c4ffdf8cf7fb179",
+    "prior_envelope_ref": "4021ec1f214a6beb3d456689d64975ed95204a08:governance/evidence/TUN-P2-004-UI-COMPLIANCE-RECOVERY-20261111.json",
+    "prior_actual_tested_commit_sha": "579c2742c5c4c59a5bcf7e92610d7de32078714a",
+    "legacy_tests_rerun": false,
+    "raw_invocation_identities_unchanged": true,
+    "old_item_rows_screenshots_and_consent_unchanged": true,
+    "new_screens_acceptance_scope": "TUN-P2-013 only; independent WIP entries are not accepted by this bridge"
+  },
   "result": "PASS",
-  "tested_commit_sha": "579c2742c5c4c59a5bcf7e92610d7de32078714a",
-  "inventory_sha256": "3f274776fa5b88f8aa58ef4018734fb12c30d53d7aaa2a5bd060095098a6386d",
+  "tested_commit_sha": "dd9029e8fc479693de954b4d1c4ffdf8cf7fb179",
+  "inventory_sha256": "6abfa1de1fd9e97573f704133923322d6541201f8fa7787ddbe10a293d5290df",
   "owned_behavior_paths": [
     "docs/contracts/ui-inventory.json",
     "src/Modules/Identity/RegistrationApplication.cs",
@@ -89,7 +100,15 @@
     "web/apps/user/recovery.routes.ts",
     "web/apps/user/recovery.tsx",
     "web/apps/user/registration.federation.ts",
-    "web/apps/user/step-up.federation.tsx"
+    "web/apps/user/step-up.federation.tsx",
+    "web/apps/user/sessions.api.ts",
+    "web/apps/user/sessions.content-keys.ts",
+    "web/apps/user/sessions.content.proposal.json",
+    "web/apps/user/sessions.css",
+    "web/apps/user/sessions.html",
+    "web/apps/user/sessions.routes.ts",
+    "web/apps/user/sessions.tsx",
+    "web/apps/user/sessions.ui.tsx"
   ],
   "historical_ui_compliance": {
     "path": "governance/evidence/TUN-P2-004-UI-COMPLIANCE-TOTP-20261110.json",
