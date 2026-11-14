@@ -29,7 +29,16 @@
     "src/Modules/Identity/SessionListingPresentation.cs",
     "web/tests/sessions.api.test.tsx",
     "web/tests/sessions/sessions.spec.ts",
-    "web/playwright.sessions.config.ts"
+    "web/playwright.sessions.config.ts",
+    "src/Modules/Identity/AuthenticationSessionLocking.cs",
+    "src/Modules/Identity/AuthenticationSessionRevocation.cs",
+    "src/Modules/Identity/SessionRevocationApplication.cs",
+    "src/Modules/Identity/SessionRevocationContracts.cs",
+    "tests/Tunner.Identity.Persistence.Tests/SessionRevocationTests.cs",
+    "docs/contracts/session-revocation-contract.md",
+    "src/Modules/Identity/AuthenticationApplication.cs",
+    "src/Modules/Identity/FederationAuthentication.cs",
+    "src/Modules/Identity/StepUpApplication.cs"
   ],
   "pre_edit_415_test_capability": "Existing host is real pinned KestrelHTTPS and its RawPost forcesJSON; public TestServer client is inapplicable. Predeclare only optional mediaType/application-json default on existing helper, under native009RV005 and expanded010RV005, to execute actual415 without new transport/TLS plumbing. No production values or schema/guard change. Current09 gate diagnostic alsoREADY0; earlierNext prerequisite snapshot does not establish a new closed009 implementation defect.",
   "http_pre_edit_allocation": {
@@ -83,7 +92,7 @@
     "limitations": "No HTTP route/protected cursor/browser UI/revocation/device trust/production policy activation/CI transport qualification or whole013 acceptance. Explicit local SQL profile skips when dedicated run metadata is absent; actual qualification above executes all11 with0skips. Next source changes require appropriate new scoped validation."
   },
   "authority_resolution": "Existing FRD17 session/List-Revoke ownership and local semantics, catalog32 trusted binding, ADR0006 foundation and PrivacyFRD29 resolve the bounded direction. docs/development/P2_013_SESSION_SCOPE.md retains the focused AMD0005 pass, shared lock-order design constraint and actual explicit runtime policy boundaries. No new Product decision, source authority edit or optional-technology blocker is invented.",
-  "next_action": "P2-002 andP2-003 are Product-accepted andDONE. Await only the separate P2-004..008 currentness authorization for the reviewed metadata patch; then run004→005→006→007/008 readiness and refresh P2-013 context before admitting the revocation/StepUp slice. Existing application qualifications remain unchanged; whole013 remainsPENDING.",
+  "next_action": "P2-002 andP2-003 are Product-accepted andDONE. The exact P2-004..008 currentness patch is authorized, committed439b6c7, and all five native readiness checks areREADY with zero failures. Allocate narrow009/010RV007 compatibility, refresh custom P2-013 admission/context once, then implement application-only exact other-session revocation with canonical session locks before Account and focused concurrency tests. Whole013 remainsPENDING.",
   "http_listing_checkpoint": {
     "result": "PASS_SCOPED_HTTP_CHECKPOINT",
     "tested_commit_sha": "ea731ea0a62d5fbc673d84f17864c3c283b582e7",
@@ -172,11 +181,13 @@
     }
   },
   "currentness_reconciliation": {
-    "result": "AWAITING_EXPLICIT_AUTHORIZATION",
-    "source": "Automatic approval review rejected broader P2-004..008 currentness/lineage changes beyond five-RV authorization; no proposed old-scope metadata patch applied.",
+    "result": "AUTHORIZED_APPLIED_NATIVE_READY",
+    "source": "Explicit user grant call_e33f6fbe92dc41e7ab9c5f7d31f41a37 authorized the exact16-file patch. Applied and committed439b6c79c71550e6a725d5823b044a092fde38d6, preserving old test identities, UI rows, ownership prefixes and lifecycle history. Five native readiness checks004..008 returnREADY with zero failures; no application qualification was rerun or relabelled.",
+    "approval_ref": "governance/evidence/TUN-P2-013-CURRENTNESS-APPROVAL.json",
+    "native_receipts_ref": "governance/evidence/p2-013-sessions-20261114/currentness-439b6c7",
     "proposal_ref": "artifacts/p2-013-sessions-20261114/currentness-reconciliation-proposal.md",
-    "exact_unapplied_patch_ref": "artifacts/p2-013-sessions-20261114/currentness-reconciliation-proposed.patch",
-    "required_next": "On explicit reply to the currentness question, apply only the reviewed metadata patch, verify old item/consent/raw results and ownership prefix unchanged, commit and run readiness004→005→006→007/008. Refresh custom context after those final metadata changes; no repeat application qualifications absent a new behavior change."
+    "applied_patch_ref": "artifacts/p2-013-sessions-20261114/currentness-reconciliation-proposed.patch",
+    "required_next": "Refresh custom context/admission after final revision preallocation metadata, then implement the narrowly declared revocation slice. No further currentness authorization is pending;004..008 are not markedDONE by this metadata-only grant."
   },
   "independent_progress_20261114": {
     "scope_ids": [
