@@ -3,8 +3,19 @@
   "scope_id": "TUN-P2-008",
   "validation_kind": "COMMITTED",
   "result": "PASS",
-  "tested_commit_sha": "579c2742c5c4c59a5bcf7e92610d7de32078714a",
-  "validated_commit_sha": "579c2742c5c4c59a5bcf7e92610d7de32078714a",
+  "tested_commit_sha": "aba6daf62fd0afef46878741062aad98a4e4fe6f",
+  "validated_commit_sha": "aba6daf62fd0afef46878741062aad98a4e4fe6f",
+  "recovery_fixture_currentness_20261114": {
+    "result": "PASS_BOUNDED_CURRENT_SOURCE_COMPATIBILITY",
+    "prior_envelope_git_ref": "aba6daf62fd0afef46878741062aad98a4e4fe6f:governance/evidence/TUN-P2-008-VALIDATION.json",
+    "prior_tested_validated_sha": "579c2742c5c4c59a5bcf7e92610d7de32078714a",
+    "actual_current_execution_sha": "aba6daf62fd0afef46878741062aad98a4e4fe6f",
+    "changed_owned_paths_since_prior": ["tools/browser-testing/BrowserTestHost.cs", "web/tests/totp/sensitive/real-journey.mjs"],
+    "source_resolution": "Ordered112 ownership preserved. Only two owned test-fixture paths change: optional null-default RecoveryCase host composition and one literal preparation-helper ID. TOTP dispatcher/defaults, native oracle, vault/seed, method-specific production and original journey body remain unchanged. The existing six recovery regressions, including both actual TOTP journeys, execute current host/helper source atE; new case also uses actual registration/Mailpit mechanics. No full original TOTP matrix rerun is claimed.",
+    "actual_evidence_root": "governance/evidence/p2-011-recovery-20261112/browser-aba6daf",
+    "actual_results": "Protocol17/resources6/public37plus12/newrealjourney1/oldrealjourneys6 allPASS; current source/build/process/physical/borrowed flags true. The independent reviewer inspected all seven raw browser receipts, not summaries alone.",
+    "historical_evidence": "All previous envelopes, original337/947 cohorts, actual579native109/SQL13 and actual2cdUI80 retain their true invocation/source identities through immutable prior envelope. This is a current scoped compatibility carrier, not a new full-parent execution or Product/production/merge/release acceptance; status remains VALIDATION."
+  },
   "owned_behavior_paths": [
     "docs/contracts/ui-inventory.json",
     "docs/development/P2_008_TOTP_SCOPE.md",
