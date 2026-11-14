@@ -3,6 +3,10 @@ using Docker.DotNet.Models;
 using DotNet.Testcontainers.Builders;
 using DotNet.Testcontainers.Configurations;
 using DotNet.Testcontainers.Containers;
+using System.Security.Claims;
+using System.Security.Cryptography;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.DataProtection;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging.Abstractions;
@@ -40,7 +44,7 @@ public sealed class SessionListingPostgresFixture : IAsyncLifetime
             (await docker.System.GetSystemInfoAsync()).ID != engine || (await docker.Images.InspectImageAsync(Image)).ID != Image)
             throw new InvalidOperationException("The admitted local session-listing engine/image is unavailable.");
         container = new ContainerBuilder(Image).WithDockerEndpoint(address).WithImagePullPolicy(static _ => false)
-            .WithLogger(NullLogger.Instance).WithCleanUp(false)
+            .WithLogger(NullLogger.Instance).WithCleanUp(true)
             .WithLabel("tunner.p2-013.run", run).WithLabel("tunner.p2-013.scope", "owned-session-listing")
             .WithEnvironment("POSTGRES_USER", "tunner").WithEnvironment("POSTGRES_HOST_AUTH_METHOD", "trust")
             .WithPortBinding(5432, true)
@@ -94,13 +98,34 @@ public sealed class SessionListingPostgresFixture : IAsyncLifetime
 public sealed class SessionListingTests(SessionListingPostgresFixture fixture) : IClassFixture<SessionListingPostgresFixture>
 {
     private static readonly string Network = new('B', 64);
-    private static async Task<StepUpCaller> SignIn(AuthenticationTestHost host, string email = "person@example.test")
+    private static async Task<StepUpCaller> SignIn(AuthenticationTestHost host, string email = "person@example.test", string origin = Origin)
     {
         await using var scope = host.Services.CreateAsyncScope();
         var attempt = await scope.ServiceProvider.GetRequiredService<AuthenticationApplication>().SignInAsync(
-            new(AuthenticationIdentity.Digest(Guid.NewGuid().ToString()), Network, Origin, null), Command(Guid.NewGuid(), email: email), CancellationToken.None);
+            new(AuthenticationIdentity.Digest(Guid.NewGuid().ToString()), Network, origin, null), Command(Guid.NewGuid(), email: email), CancellationToken.None);
         Assert.True(attempt.ErrorCode is null && attempt.Grant is not null);
-        return StepUpCaller.FromPrincipal(attempt.Grant!.Ticket.Principal, Origin, Network);
+        return StepUpCaller.FromPrincipal(attempt.Grant!.Ticket.Principal, origin, Network);
+    }
+    // Insert a separate synthetic non-User record; never rewrite immutable issued session identity.
+    private static async Task InsertForeignSchemeSession(AuthenticationTestHost host, IdentityTestDatabase db, Guid sourceId)
+    {
+        await using var scope = host.Services.CreateAsyncScope();
+        var protection = scope.ServiceProvider.GetRequiredService<IDataProtectionProvider>();
+        await using var context = db.Context();
+        var source = await context.Set<AuthenticationSessionRow>().SingleAsync(x => x.SessionId == sourceId);
+        var row = (AuthenticationSessionRow)context.Entry(source).CurrentValues.ToObject();
+        row.SessionId = Guid.NewGuid(); row.Scheme = "Admin"; row.IdempotencyKey = Guid.NewGuid();
+        row.BrowserDigest = AuthenticationIdentity.Digest(Guid.NewGuid().ToString("N"));
+        var key = Convert.ToHexString(RandomNumberGenerator.GetBytes(32));
+        row.KeyDigest = AuthenticationIdentity.Digest(key);
+        row.ProtectedKey = protection.CreateProtector("Tunner.User.Session.RetryKey.v1").Protect(key);
+        var principal = new ClaimsPrincipal(new ClaimsIdentity([new(ClaimTypes.NameIdentifier, row.AccountId),
+            new(AuthenticationIdentity.SessionClaim, row.SessionId.ToString("N")), new(AuthenticationIdentity.OriginClaim, row.Origin),
+            new("amr", row.AuthenticationMethods), new("acr", row.Assurance)], row.Scheme));
+        var ticket = new AuthenticationTicket(principal, new AuthenticationProperties
+        { IssuedUtc = row.AuthenticatedAt, ExpiresUtc = row.ExpiresAt, IsPersistent = row.RememberMe, AllowRefresh = false }, row.Scheme);
+        row.ProtectedTicket = protection.CreateProtector("Tunner.User.Session.Ticket.v1").Protect(Convert.ToBase64String(TicketSerializer.Default.Serialize(ticket)));
+        context.Add(row); await context.SaveChangesAsync();
     }
     private static async Task<SessionListingPage?> List(AuthenticationTestHost host, StepUpCaller caller, int maximum = 10, SessionListingContinuation? after = null)
     {
@@ -114,13 +139,8 @@ public sealed class SessionListingTests(SessionListingPostgresFixture fixture) :
         await using var db = await fixture.CreateDatabaseAsync(); await using var host = await Start(db);
         await host.SeedAsync(db); await host.SeedAsync(db, foreignEmail: true);
         var other = await SignIn(host); var actor = await SignIn(host); var foreign = await SignIn(host, "foreign@example.test");
-        var wrongOrigin = await SignIn(host); var wrongScheme = await SignIn(host);
-        await using (var update = db.Context())
-        {
-            (await update.Set<AuthenticationSessionRow>().SingleAsync(x => x.SessionId == wrongOrigin.SessionId)).Origin = "https://other.example.test";
-            (await update.Set<AuthenticationSessionRow>().SingleAsync(x => x.SessionId == wrongScheme.SessionId)).Scheme = "Admin";
-            await update.SaveChangesAsync();
-        }
+        await SignIn(host, origin: "https://other.example.test");
+        await InsertForeignSchemeSession(host, db, other.SessionId);
         var page = await List(host, actor); Assert.NotNull(page);
         Assert.True(page.Items.Count == 2 && page.Items.Count(x => x.IsCurrent) == 1 && !page.HasMore && page.Next is null);
         Assert.True(page.Items.Any(x => x.SessionReference == other.SessionId) && page.Items.All(x => x.SessionReference != foreign.SessionId));
@@ -174,14 +194,17 @@ public sealed class SessionListingTests(SessionListingPostgresFixture fixture) :
     public async Task TargetExpiryAndStampDenialAreTruthfulWithoutTargetMutationOrEvents()
     {
         await using var db = await fixture.CreateDatabaseAsync(); await using var host = await Start(db); await host.SeedAsync(db);
-        var expired = await SignIn(host); var denied = await SignIn(host); var actor = await SignIn(host);
+        var expired = await SignIn(host);
+        host.Clock.Advance(host.Policies.Policy.AbsoluteLifetime + TimeSpan.FromSeconds(1));
+        var denied = await SignIn(host);
         await using (var update = db.Context())
         {
-            (await update.Set<AuthenticationSessionRow>().SingleAsync(x => x.SessionId == expired.SessionId)).ExpiresAt = host.Clock.GetUtcNow().AddSeconds(1);
-            (await update.Set<AuthenticationSessionRow>().SingleAsync(x => x.SessionId == denied.SessionId)).SecurityStampDigest = new('C', 64);
+            var user = await update.Users.SingleAsync();
+            user.SecurityStamp = Guid.NewGuid().ToString("N");
+            user.ConcurrencyStamp = Guid.NewGuid().ToString("N");
             await update.SaveChangesAsync();
         }
-        host.Clock.Advance(TimeSpan.FromSeconds(2));
+        var actor = await SignIn(host);
         await using var before = db.Context();
         var targets = await before.Set<AuthenticationSessionRow>().AsNoTracking().Where(x => x.SessionId != actor.SessionId).ToArrayAsync();
         var events = await before.Set<OutboxMessage>().CountAsync();
