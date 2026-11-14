@@ -49,6 +49,11 @@ for(const width of [1440,1366,1024,768,390,320]){
   expect(state.reads).toEqual([null,null]);expect((await new AxeBuilder({page}).withTags(['wcag2a','wcag2aa','wcag21aa','wcag22aa']).analyze()).violations).toEqual([]);expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);await page.screenshot({path:'test-results/sessions/details-'+width+'.png',fullPage:true});await noStorageOrSelectors(page);
  });
 }
+test('Keyboard navigation reaches both guarded screens on desktop and narrow mobile',async({page})=>{
+ await setup(page);await page.goto(list);await expect(page.getByRole('heading',{name:'Sessions & devices',exact:true})).toBeFocused();
+ await page.keyboard.press('Tab');await expect(page.getByRole('button',{name:'View current session'})).toBeFocused();await page.keyboard.press('Enter');await expect(page).toHaveURL(new RegExp(details+'$'));await expect(page.getByRole('heading',{name:'Session details'})).toBeFocused();
+ await page.setViewportSize({width:320,height:1100});await page.keyboard.press('Tab');await expect(page.getByRole('button',{name:'Back to sessions',exact:true})).toBeFocused();await page.keyboard.press('Enter');await expect(page).toHaveURL(new RegExp(list+'$'));await expect(page.getByRole('heading',{name:'Sessions & devices',exact:true})).toBeFocused();await noStorageOrSelectors(page);
+});
 test('Load more uses one retained body cursor; double clicks do not issue duplicate requests',async({page})=>{
  const state=await setup(page);await page.goto(list);await expect(page.getByRole('button',{name:'Load more'})).toBeVisible();state.hold=true;
  await page.getByRole('button',{name:'Load more'}).dblclick({delay:5});await expect.poll(()=>state.reads.length).toBe(2);expect(state.bodies).toEqual([{continuation:null},{continuation:'opaque-body-only-cursor'}]);state.hold=false;state.release?.();
