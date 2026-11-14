@@ -104,7 +104,7 @@ public sealed class SessionListingPostgresFixture : IAsyncLifetime
 public sealed class SessionListingTests(SessionListingPostgresFixture fixture) : IClassFixture<SessionListingPostgresFixture>
 {
     private static readonly string Network = new('B', 64);
-    private static async Task<StepUpCaller> SignIn(AuthenticationTestHost host, string email = "person@example.test", string origin = Origin)
+    internal static async Task<StepUpCaller> SignIn(AuthenticationTestHost host, string email = "person@example.test", string origin = Origin)
     {
         await using var scope = host.Services.CreateAsyncScope();
         var attempt = await scope.ServiceProvider.GetRequiredService<AuthenticationApplication>().SignInAsync(

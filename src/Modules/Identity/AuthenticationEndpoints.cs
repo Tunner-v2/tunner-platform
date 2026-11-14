@@ -118,6 +118,7 @@ public static class AuthenticationEndpoints
             context.Response.Cookies.Delete(BrowserCookieName, new CookieOptions { Path = "/", HttpOnly = true, Secure = true, SameSite = SameSiteMode.Strict });
             return Results.Json(new { authenticated = false });
         }).RequireAuthorization();
+        SessionListingEndpoints.MapIfConfigured(endpoints);
         MapScreens(endpoints);
         return endpoints;
     }

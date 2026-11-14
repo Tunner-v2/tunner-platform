@@ -131,9 +131,9 @@ internal sealed class AuthenticationTestHost : IAsyncDisposable
         using var request = Request(HttpMethod.Post, path, cookies); request.Content = JsonContent.Create(body); request.Headers.TryAddWithoutValidation("Origin", origin);
         if (csrf is not null) request.Headers.TryAddWithoutValidation("X-Tunner-CSRF", csrf); return await client.SendAsync(request);
     }
-    internal async Task<HttpResponseMessage> RawPost(string path, string body, string cookies, string csrf)
+    internal async Task<HttpResponseMessage> RawPost(string path, string body, string cookies, string csrf, string mediaType = "application/json")
     {
-        using var request = Request(HttpMethod.Post, path, cookies); request.Content = new StringContent(body, System.Text.Encoding.UTF8, "application/json");
+        using var request = Request(HttpMethod.Post, path, cookies); request.Content = new StringContent(body, System.Text.Encoding.UTF8, mediaType);
         request.Headers.TryAddWithoutValidation("Origin", Origin); request.Headers.TryAddWithoutValidation("X-Tunner-CSRF", csrf); return await client.SendAsync(request);
     }
     private static HttpRequestMessage Request(HttpMethod method, string path, string? cookies)
