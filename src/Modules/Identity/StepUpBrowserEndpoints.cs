@@ -45,12 +45,15 @@ public static class StepUpBrowserEndpoints
     }
 }
 
-internal sealed partial class StepUpBrowserService(IUserStepUpOperationSource owner, IAssurancePolicySource assurancePolicies,
+internal sealed partial class StepUpBrowserService(IUserStepUpOperationSource registeredOwner, IAssurancePolicySource assurancePolicies,
     IAuthenticationPolicySource authenticationPolicies, IStepUpPresentationSource presentations,
     AuthenticationPartitionKey partitions, AuthenticationEndpoints.Surface surface, IDataProtectionProvider protection,
     IAntiforgery antiforgery, StepUpApplication application, IdentityPersistenceDbContext database, TimeProvider clock, IEnumerable<PasskeyApplication> passkeyApplications,
-    IEnumerable<TotpApplication>? totpApplications = null, IEnumerable<FederationBrowserService>? federationApplications = null)
+    IEnumerable<TotpApplication>? totpApplications = null, IEnumerable<FederationBrowserService>? federationApplications = null,
+    IEnumerable<SessionRevocationBrowserService>? sessionRevocations = null)
 {
+    private readonly SessionRevocationBrowserService? sessionRevocation = sessionRevocations?.SingleOrDefault();
+    private readonly IUserStepUpOperationSource owner = SessionRevocationOwnerRouter.Wrap(registeredOwner, sessionRevocations?.SingleOrDefault());
     private readonly IDataProtector protector = protection.CreateProtector("Tunner.User.StepUp.Browser.v1");
     internal sealed record Browser(Guid RequestId, string BindingDigest, string AuthenticationPolicyVersion, DateTimeOffset ExpiresAt);
     internal Task<IResult> OptionsAsync(HttpContext context) => GuardAsync(context, async () =>
@@ -149,7 +152,10 @@ internal sealed partial class StepUpBrowserService(IUserStepUpOperationSource ow
     private async Task<IResult> ExecuteProofAsync(HttpContext context, StepUpBrowserOperation frame, string proofKey, NativeProofCompletion? nativeCompletion = null)
     {
         var caller = frame.Caller; var actor = frame.Actor; var operation = frame.Operation; var browser = frame.Browser;
-        using var execution = await application.ExecuteOutcomeAsync(caller, operation.Binding, proofKey, async ct =>
+        using var execution = SessionRevocationApplication.Owns(operation.Binding.Scope)
+            ? await (sessionRevocation ?? throw new InvalidOperationException("The session owner is unavailable."))
+                .ExecuteAsync(caller, operation, proofKey, context.RequestAborted).ConfigureAwait(false)
+            : await application.ExecuteOutcomeAsync(caller, operation.Binding, proofKey, async ct =>
         {
             var current = await owner.ResolveAsync(actor, ct).ConfigureAwait(false);
             if (!MatchesActor(current, actor) || current!.Completed || Digest(current) != browser.BindingDigest) return UserStepUpOperationApplyOutcome.Conflict();
@@ -199,7 +205,7 @@ internal sealed partial class StepUpBrowserService(IUserStepUpOperationSource ow
     }
     private static bool MatchesActor(UserStepUpOperationContext? operation, UserStepUpActor actor) =>
         operation is not null && operation.Actor.AccountId == actor.AccountId && operation.Actor.SessionId == actor.SessionId && operation.Actor.Origin == actor.Origin;
-    private static string Digest(UserStepUpOperationContext operation)
+    internal static string Digest(UserStepUpOperationContext operation)
     {
         var b = operation.Binding;
         return AuthenticationIdentity.Digest(JsonSerializer.Serialize(new[] { operation.Actor.AccountId, operation.Actor.SessionId.ToString("N"), operation.Actor.Origin,

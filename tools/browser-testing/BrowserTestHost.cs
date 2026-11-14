@@ -24,6 +24,7 @@ internal static class BrowserTestHost
 {
     internal static WebApplication Create(BrowserTestHostOptions options)
     {
+        var sessions = options.Mode == "ISOLATED_LOCAL_BROWSER_TESTING" && options.PersistentDirectory is not null;
         var registration = new RegistrationPolicy("browser-test-registration-v2", "PDR-0011", "test-only-processing", "test-only-retention",
             "test-only-terms", "test-only-privacy", "test-only-proof", "test-only-existing", "PASSWORD_AND_VERIFIED_EMAIL",
             15, 128, 10000, 6, TimeSpan.FromMinutes(5), 2, TimeSpan.FromSeconds(30), 2, TimeSpan.FromMinutes(1),
@@ -65,8 +66,10 @@ internal static class BrowserTestHost
             }
             if (options.Totp is not null) proofPolicies.AddRange(BrowserTestTotp.AssurancePolicies());
             if (options.Recovery is not null) proofPolicies.AddRange(options.Recovery.AssurancePolicies());
+            if (sessions) proofPolicies.Add(BrowserTestSessions.AssurancePolicy());
             builder.Services.AddSingleton<IAssurancePolicySource>(new AssurancePolicyCatalog(proofPolicies));
             BrowserTestPasskeys.Configure(builder.Services, options.Origin);
+            if (sessions) BrowserTestSessions.Configure(builder.Services);
             builder.Services.AddSingleton(new AuthenticationPartitionKey(RandomNumberGenerator.GetBytes(32)));
             builder.Services.AddSingleton<IRegistrationPolicySource>(new RegistrationPolicyCatalog([new(registrationMetadata, registration)]));
             builder.Services.AddSingleton<IAccountAgePolicySource>(age);

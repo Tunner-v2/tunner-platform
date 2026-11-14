@@ -41,3 +41,31 @@ public interface ISessionListingPresentationSource
 {
     SessionListingPresentation RequirePublished(AuthenticationPolicy policy);
 }
+
+/// <summary>Separate optional publication; existing listing-only publications remain valid.</summary>
+public sealed class SessionRevocationPresentation
+{
+    internal static readonly ReadOnlyCollection<string> RequiredKeys = Array.AsReadOnly<string>([
+        "account.sessions.revoke.action", "account.sessions.revoke.actionHelp", "account.sessions.revoke.confirm.title",
+        "account.sessions.revoke.confirm.description", "account.sessions.revoke.cancel", "account.sessions.revoke.confirm.action",
+        "account.sessions.revoke.preparing", "account.sessions.revoke.checking", "account.sessions.revoke.success.title",
+        "account.sessions.revoke.success.description", "account.sessions.revoke.unknown.title", "account.sessions.revoke.unknown.description",
+        "account.sessions.revoke.unknown.help", "account.sessions.revoke.check", "account.sessions.revoke.changed.title",
+        "account.sessions.revoke.changed.description", "account.sessions.revoke.refresh", "account.sessions.revoke.inactiveHelp"
+    ]);
+    public SessionRevocationPresentation(string locale, IEnumerable<RegistrationPublishedText> content)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(locale); ArgumentNullException.ThrowIfNull(content);
+        var values = content.ToDictionary(x => x.Key, StringComparer.Ordinal);
+        if (RequiredKeys.Any(key => !values.ContainsKey(key)) || values.Values.Any(x => x.State != "PUBLISHED" || x.Locale != locale ||
+            new[] { x.Key, x.VariantRef, x.VersionRef, x.PublicationRef, x.Text }.Any(string.IsNullOrWhiteSpace)))
+            throw new ArgumentException("Session revocation requires complete published content with provenance.", nameof(content));
+        Locale = locale; Content = new ReadOnlyDictionary<string, RegistrationPublishedText>(values);
+    }
+    public string Locale { get; }
+    public IReadOnlyDictionary<string, RegistrationPublishedText> Content { get; }
+}
+public interface ISessionRevocationPresentationSource
+{
+    SessionRevocationPresentation RequirePublished(AuthenticationPolicy policy);
+}

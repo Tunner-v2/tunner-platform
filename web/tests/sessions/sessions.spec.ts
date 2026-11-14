@@ -5,6 +5,7 @@ import proposal from '../../apps/user/sessions.content.proposal.json' with {type
 import inventory from '../../../docs/contracts/ui-inventory.json' with {type:'json'};
 import {sessionRoutes} from '../../apps/user/sessions.routes';
 import type {SessionItem} from '../../apps/user/sessions.api';
+import stepUpProposal from '../../apps/user/step-up.content.proposal.json' with {type:'json'};
 
 const actor='11111111-1111-4111-8111-111111111111',target='22222222-2222-4222-8222-222222222222',expired='33333333-3333-4333-8333-333333333333';
 const list='/account/sessions',details='/account/sessions/details';
@@ -15,6 +16,7 @@ async function setup(page:Page,change:Partial<Fixture>={}){
  const state:Fixture={reads:[],bodies:[],sessionReads:0,signOuts:0,authenticated:true,status:200,lostSignOut:false,first:[item(actor,true),item(target)],next:[{...item(expired),effectiveState:'EXPIRED'}],release:undefined,hold:false,...change};
  await page.route('**/authentication/session',async route=>{state.sessionReads++;return route.fulfill({status:state.authenticated?200:401,json:state.authenticated?{authenticated:true,csrfToken:'fixture-current-user-csrf'}:{error_code:'AUTHENTICATION_FAILED'}});});
  await page.route('**/account/sessions/options',route=>route.fulfill({json:publication}));
+ await page.route('**/account/sessions/revocation/options',route=>route.fulfill({status:404,json:{error_code:'NOT_FOUND'}}));
  await page.route('**/account/sessions/list',async route=>{
   const body=route.request().postDataJSON() as {continuation:string|null};state.bodies.push(body);state.reads.push(body.continuation);
   expect(route.request().headers()['x-tunner-csrf']).toBe('fixture-current-user-csrf');
@@ -118,4 +120,67 @@ test('Expired detail continuation discards selection and refresh returns to a fr
  const state=await setup(page);await page.goto(list);await page.getByRole('button',{name:'Load more'}).click();await expect(page.locator('[data-session-reference="'+expired+'"]')).toBeVisible();state.status=409;
  await page.locator('[data-session-reference="'+expired+'"]').getByRole('button',{name:'Session information'}).click();await expect(page).toHaveURL(new RegExp(list+'$'));await expect(page.getByRole('alert')).toContainText('This session list has changed');expect(state.reads.slice(-2)).toEqual(['opaque-body-only-cursor',null]);
  state.status=200;await page.getByRole('button',{name:'Refresh sessions'}).click();await expect(page.locator('[data-session-reference="'+target+'"]')).toBeVisible();expect(state.reads.at(-1)).toBeNull();
+});
+
+/** Controlled BFF responses exercise real Sessions/StepUp components, not live proof/provider qualification. */
+async function revocationSetup(page:Page){
+ const base=await setup(page),proofId='55555555-5555-4555-8555-555555555555';
+ const state={intent:undefined as {requestId:string;operationReference:string;status:'PENDING'|'COMPLETED'|'CHANGED';target:{reference:string;version:string;lastSeenAt:string};expiresAt:string}|undefined,prepares:[] as {requestId:string;targetReference:string;expectedVersion:string}[],proofPosts:0,proofReads:0,resultReads:0,resultAvailable:true,proofCompleted:false,proofMismatch:false,lostProof:false};
+ const content=Object.fromEntries(Object.entries(stepUpProposal.content).map(([key,text])=>[key,{key,text,state:'PUBLISHED',locale:'en',variantRef:'synthetic-sessions-proof',versionRef:'synthetic-version',publicationRef:'SYNTHETIC-CONTROLLED-BFF-ONLY'}]));
+ await page.route('**/account/sessions/revocation/options',route=>route.fulfill({json:publication}));
+ await page.route('**/account/sessions/revocation/context',route=>route.fulfill(state.intent?{json:{...state.intent,status:state.proofCompleted&&state.resultAvailable?'COMPLETED':state.intent.status}}:{status:404,json:{error_code:'NOT_FOUND'}}));
+ await page.route('**/account/sessions/revocation/prepare',route=>{
+  const request=route.request().postDataJSON() as {requestId:string;targetReference:string;expectedVersion:string};state.prepares.push(request);expect(Object.keys(request).sort()).toEqual(['expectedVersion','requestId','targetReference']);expect(route.request().headers()['x-tunner-csrf']).toBe('fixture-current-user-csrf');
+  state.intent={requestId:request.requestId,operationReference:'fixture-session-owner-'+request.requestId,status:'PENDING',target:{reference:request.targetReference,version:request.expectedVersion,lastSeenAt:item(target).lastSeenAt},expiresAt:'2026-11-15T04:05:00Z'};return route.fulfill({json:state.intent});
+ });
+ await page.route('**/authentication/step-up/options',route=>{
+  state.proofReads++;expect(state.intent).toBeDefined();const operationReference=state.proofMismatch?'unrelated-owner':state.intent!.operationReference;
+  return route.fulfill({json:state.proofCompleted?{status:'COMPLETED',requestId:proofId,operationReference}:{status:'PENDING',requestId:proofId,operationReference,csrfToken:'fixture-shared-proof-csrf',passwordMaximumLength:128,passwordAvailable:true,locale:'en',content}});
+ });
+ await page.route('**/authentication/step-up/password',route=>{
+  state.proofPosts++;expect(route.request().postDataJSON()).toEqual({requestId:proofId,password:'synthetic current password'});expect(route.request().headers()['x-tunner-csrf']).toBe('fixture-shared-proof-csrf');state.proofCompleted=true;
+  if(state.resultAvailable)base.first=base.first.map(value=>value.reference===target?{...value,version:'9007199254740994',recordedState:'REVOKED',effectiveState:'REVOKED'}:value);
+  return state.lostProof?route.abort('connectionreset'):route.fulfill({json:{status:'COMPLETED',signInRequired:false,operationReference:state.intent!.operationReference}});
+ });
+ await page.route('**/account/sessions/revocation/result',route=>{
+  state.resultReads++;expect(route.request().postDataJSON()).toEqual({requestId:state.intent!.requestId});expect(route.request().headers()['x-tunner-csrf']).toBe('fixture-current-user-csrf');
+  if(!state.proofCompleted||!state.resultAvailable)return route.fulfill({status:409,json:{error_code:'NOT_APPLIED_OR_NOT_DISCLOSABLE',privateDetail:'never-render-causal-internals'}});
+  return route.fulfill({json:{requestId:state.intent!.requestId,operationReference:state.intent!.operationReference,status:'REVOKED',target:{...state.intent!.target,version:(BigInt(state.intent!.target.version)+1n).toString()},revokedAt:'2026-11-14T04:02:00Z'}});
+ });
+ return {base,state};
+}
+async function reviewOther(page:Page){await page.goto(list);await page.locator('[data-session-reference="'+target+'"]').getByRole('button',{name:'Session information'}).click();await page.getByRole('button',{name:'Sign out this session',exact:true}).click();await expect(page.getByRole('heading',{name:'Sign out this session?',exact:true})).toBeFocused();}
+async function finishPassword(page:Page){await page.getByRole('button',{name:'Other method',exact:true}).click();await page.getByLabel('Password',{exact:true}).fill('synthetic current password');await page.getByRole('button',{name:'Confirm',exact:true}).click();}
+for(const width of [1440,320]){
+ test('Selected-other-session confirmation and exact result reuse approved modal at '+width,async({page})=>{
+  await page.setViewportSize({width,height:1100});const {state}=await revocationSetup(page);await reviewOther(page);
+  const dialog=page.getByRole('dialog');await expect(dialog).toContainText(proposal.content['account.sessions.productBoundary']);await expect(dialog).toContainText('Session …22222222');await expect(page.getByText('9007199254740993')).toHaveCount(0);
+  await page.keyboard.press('Tab');await expect(dialog.getByRole('button',{name:'Keep signed in'})).toBeFocused();await page.keyboard.press('Shift+Tab');await expect(dialog.getByRole('button',{name:'Sign out',exact:true})).toBeFocused();await page.keyboard.press('Escape');await expect(dialog).toHaveCount(0);expect(state.prepares).toHaveLength(0);await expect(page.getByRole('button',{name:'Sign out this session',exact:true})).toBeFocused();
+  await page.getByRole('button',{name:'Sign out this session',exact:true}).click();await expect(dialog).toBeVisible();expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);const box=await dialog.boundingBox();expect(box!.width).toBeLessThanOrEqual(width-32);expect(box!.x).toBeGreaterThanOrEqual(16);expect((await new AxeBuilder({page}).withTags(['wcag2a','wcag2aa','wcag21aa','wcag22aa']).analyze()).violations).toEqual([]);await page.screenshot({path:'test-results/sessions/revocation-confirm-'+width+'.png',fullPage:true});
+  await dialog.getByRole('button',{name:'Sign out',exact:true}).evaluate(element=>{(element as HTMLButtonElement).click();(element as HTMLButtonElement).click();});await expect(page.getByRole('heading',{name:stepUpProposal.content['stepUp.heading'],exact:true})).toBeVisible();expect(state.prepares).toHaveLength(1);expect(state.prepares[0]!.expectedVersion).toBe('9007199254740993');await finishPassword(page);
+  await expect(page.getByRole('heading',{name:'Session signed out',exact:true})).toBeFocused();expect(state.proofPosts).toBe(1);expect(state.resultReads).toBe(1);await expect(page.getByRole('dialog')).toContainText('Access inside connected Products is managed separately.');expect((await new AxeBuilder({page}).withTags(['wcag2a','wcag2aa','wcag21aa','wcag22aa']).analyze()).violations).toEqual([]);await page.screenshot({path:'test-results/sessions/revocation-result-'+width+'.png',fullPage:true});
+  await page.getByRole('dialog').getByRole('button',{name:'Back to sessions',exact:true}).click();await expect(page).toHaveURL(new RegExp(list+'$'));await expect(page.getByRole('dialog')).toHaveCount(0);expect(state.prepares).toHaveLength(1);expect(state.proofPosts).toBe(1);await noStorageOrSelectors(page);
+ });
+}
+test('Result409 remains UNKNOWN and checks the same original without preparing or proving again',async({page})=>{
+ const {state}=await revocationSetup(page);state.resultAvailable=false;await reviewOther(page);await page.getByRole('dialog').getByRole('button',{name:'Sign out',exact:true}).click();await finishPassword(page);
+ await expect(page.getByRole('heading',{name:'Sign-out is not confirmed',exact:true})).toBeVisible();await expect(page.getByText('never-render-causal-internals')).toHaveCount(0);const original=state.intent;
+ await page.getByRole('button',{name:'Check sign-out status',exact:true}).click();await expect(page.getByRole('heading',{name:'Sign-out is not confirmed',exact:true})).toBeVisible();expect(state.resultReads).toBe(2);expect(state.prepares).toHaveLength(1);expect(state.proofPosts).toBe(1);expect(state.intent).toEqual(original);
+ await page.screenshot({path:'test-results/sessions/revocation-unknown.png',fullPage:true});state.resultAvailable=true;await page.getByRole('button',{name:'Check sign-out status',exact:true}).click();await expect(page.getByRole('heading',{name:'Session signed out',exact:true})).toBeVisible();expect(state.resultReads).toBe(3);expect(state.prepares).toHaveLength(1);expect(state.proofPosts).toBe(1);
+});
+test('Lost shared proof response reconciles exact owner result once without a second mutation',async({page})=>{
+ const {state}=await revocationSetup(page);state.lostProof=true;await reviewOther(page);await page.getByRole('dialog').getByRole('button',{name:'Sign out',exact:true}).click();await finishPassword(page);await expect(page.getByRole('heading',{name:'Session signed out',exact:true})).toBeVisible();expect(state.prepares).toHaveLength(1);expect(state.proofPosts).toBe(1);expect(state.resultReads).toBe(1);
+});
+test('Unrelated shared proof context cannot authorize the selected target or claim success',async({page})=>{
+ const {state}=await revocationSetup(page);state.proofMismatch=true;await reviewOther(page);await page.getByRole('dialog').getByRole('button',{name:'Sign out',exact:true}).click();await expect(page.getByRole('heading',{name:'Sign-out is not confirmed',exact:true})).toBeVisible();expect(state.proofPosts).toBe(0);expect(state.prepares).toHaveLength(1);await expect(page.getByLabel('Password',{exact:true})).toHaveCount(0);await page.getByRole('button',{name:'Check sign-out status',exact:true}).click();await expect(page.getByRole('heading',{name:'Sign-out is not confirmed',exact:true})).toBeVisible();expect(state.proofPosts).toBe(0);expect(state.prepares).toHaveLength(1);
+});
+test('Direct detail reload recovers protected completed intent before the selection guard and reads its result',async({page})=>{
+ const {state,base}=await revocationSetup(page);state.intent={requestId:'66666666-6666-4666-8666-666666666666',operationReference:'fixture-retained-original',status:'COMPLETED',target:{reference:target,version:item(target).version,lastSeenAt:item(target).lastSeenAt},expiresAt:'2026-11-15T04:05:00Z'};state.proofCompleted=true;base.first=[item(actor,true)];await page.goto(details);await expect(page).toHaveURL(new RegExp(list+'$'));await expect(page.getByRole('heading',{name:'Session signed out',exact:true})).toBeVisible();expect(state.resultReads).toBe(1);expect(state.prepares).toHaveLength(0);expect(state.proofPosts).toBe(0);expect(state.proofReads).toBe(0);await expect(page.getByText(target,{exact:true})).toHaveCount(0);await noStorageOrSelectors(page);
+});
+test('Authoritative CHANGED original requires explicit refresh and never replaces the expected version',async({page})=>{
+ const {state,base}=await revocationSetup(page);state.intent={requestId:'77777777-7777-4777-8777-777777777777',operationReference:'fixture-changed-original',status:'CHANGED',target:{reference:target,version:item(target).version,lastSeenAt:item(target).lastSeenAt},expiresAt:'2026-11-15T04:05:00Z'};await page.goto(list);await expect(page.getByRole('heading',{name:'This session has changed',exact:true})).toBeVisible();expect(state.prepares).toHaveLength(0);expect(state.proofReads).toBe(0);await page.screenshot({path:'test-results/sessions/revocation-changed.png',fullPage:true});base.first=base.first.map(value=>value.reference===target?{...value,version:'9007199254740994'}:value);
+ await page.getByRole('button',{name:'Refresh details',exact:true}).click();await expect(page.getByRole('dialog')).toHaveCount(0);await expect(page.locator('[data-session-reference="'+target+'"]').getByRole('button',{name:'Session information'})).toBeVisible();expect(state.prepares).toHaveLength(0);expect(state.proofPosts).toBe(0);
+});
+test('Rejected stale preparation allows explicit refresh without claiming a submitted revocation',async({page})=>{
+ const {state}=await revocationSetup(page);let rejected=0;await page.route('**/account/sessions/revocation/prepare',route=>{rejected++;return route.fulfill({status:409,json:{error_code:'VERSION_CONFLICT'}});});await reviewOther(page);await page.getByRole('dialog').getByRole('button',{name:'Sign out',exact:true}).click();await expect(page.getByRole('heading',{name:'This session has changed',exact:true})).toBeVisible();expect(rejected).toBe(1);expect(state.proofReads).toBe(0);expect(state.resultReads).toBe(0);await page.getByRole('button',{name:'Refresh details',exact:true}).click();await expect(page).toHaveURL(new RegExp(list+'$'));await expect(page.getByRole('dialog')).toHaveCount(0);expect(rejected).toBe(1);
 });
