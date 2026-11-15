@@ -29,6 +29,7 @@ public sealed class ProductAuthorizationProtocolTests(SessionListingPostgresFixt
     private const string TokenPath = "/protocol/product/token";
     private const string IntrospectionPath = "/protocol/product/introspect";
     private const string RevocationPath = "/protocol/product/revoke";
+    private const string ResumePath = "/product-authorization/continuation/resume";
     private const string Product = "PRD-SYNTHETIC-PROTOCOL-ONLY";
     private const string EnvironmentName = "SANDBOX";
     private const string Redirect = "https://product.protocol.example.test/callback";
@@ -38,7 +39,8 @@ public sealed class ProductAuthorizationProtocolTests(SessionListingPostgresFixt
     private static readonly ImmutableArray<string> Resources = [Resource];
 
     private sealed class Owners(IdentityTestDatabase database) : IProductAuthorizationPolicySource,
-        IProductAuthorizationRegistrySource, IProductAuthorizationRelationshipSource, IProductAuthorizationLifecycleSource
+        IProductAuthorizationRegistrySource, IProductAuthorizationRelationshipSource, IProductAuthorizationLifecycleSource,
+        IProductAuthorizationContinuationPolicySource
     {
         internal string ClientId { get; } = "synthetic-product-client-" + Guid.NewGuid().ToString("N");
         internal string ClientCredential { get; } = Base64UrlEncoder.Encode(RandomNumberGenerator.GetBytes(32));
@@ -49,6 +51,8 @@ public sealed class ProductAuthorizationProtocolTests(SessionListingPostgresFixt
         internal bool RegistryAvailable { get; set; } = true;
         internal bool RelationshipAvailable { get; set; } = true;
         internal bool LifecycleEnabled { get; init; }
+        internal bool ContinuationPolicyAvailable { get; set; } = true;
+        internal string ContinuationPolicyVersion { get; set; } = "fixture-continuation-policy-v1";
         internal ImmutableArray<string> GrantedScopes => LifecycleEnabled ? ["offline_access", "openid", "product.read"] : Scopes;
         internal DateTimeOffset? IssuancePolicyExpiresAt { get; set; }
         internal ProductAuthorizationArtifactEffect RevocationEffect { get; set; } = ProductAuthorizationArtifactEffect.PresentedToken;
@@ -79,6 +83,10 @@ public sealed class ProductAuthorizationProtocolTests(SessionListingPostgresFixt
         }
         private readonly EffectivePolicyInterval interval = new(DateTimeOffset.UtcNow.AddDays(-1), true, DateTimeOffset.UtcNow.AddHours(4), false);
         private const string Evidence = "SYNTHETIC-LOCAL-PROTOCOL-TEST-ONLY";
+        ProductAuthorizationContinuationPolicy IProductAuthorizationContinuationPolicySource.RequireCurrent(string origin, DateTimeOffset at) =>
+            !ContinuationPolicyAvailable ? throw new InvalidOperationException("Synthetic continuation owner unavailable.") : new(
+                new(ContinuationPolicyVersion, "ACTIVE", Origin, interval, null, [Evidence]), Origin, Evidence,
+                "fixture-continuation-processing", "fixture-continuation-retention", "RESTRICTED_SECURITY", TimeSpan.FromMinutes(2), 16384, 4096);
         public ProductAuthorizationPolicy RequireCurrent(string origin, DateTimeOffset at) => !PolicyAvailable
             ? throw new InvalidOperationException("Synthetic Product policy owner unavailable.") : new(
             new(PolicyVersion, "ACTIVE", Origin, IssuancePolicyExpiresAt is { } expires
@@ -181,13 +189,14 @@ public sealed class ProductAuthorizationProtocolTests(SessionListingPostgresFixt
         internal AuthenticationTestHost Host { get; } = host;
         internal Owners Owners { get; } = owners;
         internal string AccountId { get; } = accountId;
-        internal string Cookies { get; } = cookies;
+        internal string Cookies { get; set; } = cookies;
         internal RsaSecurityKey SigningKey { get; } = signingKey;
         internal RsaSecurityKey EncryptionKey { get; } = encryptionKey;
         public async ValueTask DisposeAsync() { await Host.DisposeAsync(); signing.Dispose(); encryption.Dispose(); await Database.DisposeAsync(); }
         public override string ToString() => nameof(Scenario);
     }
-    private async Task<Scenario> Create(bool nativeResourcePermission = true, bool broaderNativeQualification = false, bool lifecycle = false)
+    private async Task<Scenario> Create(bool nativeResourcePermission = true, bool broaderNativeQualification = false, bool lifecycle = false,
+        bool continuation = false, bool anonymous = false)
     {
         var database = await fixture.CreateDatabaseAsync();
         await using (var setup = database.Context())
@@ -207,10 +216,12 @@ public sealed class ProductAuthorizationProtocolTests(SessionListingPostgresFixt
             services.AddSingleton<IProductAuthorizationRegistrySource>(owners);
             services.AddSingleton<IProductAuthorizationRelationshipSource>(owners);
             if (lifecycle) services.AddSingleton<IProductAuthorizationLifecycleSource>(owners);
+            if (continuation) services.AddSingleton<IProductAuthorizationContinuationPolicySource>(owners);
             var nativeScopes = broaderNativeQualification ? ImmutableArray.Create("openid", "product.other", "product.read") : owners.GrantedScopes;
             var nativeResources = broaderNativeQualification ? ImmutableArray.Create(OtherResource, Resource).Sort(StringComparer.Ordinal) : Resources;
             services.AddTunnerProductAuthorization(new(Origin, AuthorizationPath, TokenPath, signingKey, encryptionKey, nativeScopes, nativeResources, 32768, 16, 64, 16384,
-                lifecycle ? new(IntrospectionPath, RevocationPath, RotateRefreshTokens: true, SlidingRefreshExpiration: false, RefreshReuseLeeway: TimeSpan.Zero) : null));
+                lifecycle ? new(IntrospectionPath, RevocationPath, RotateRefreshTokens: true, SlidingRefreshExpiration: false, RefreshReuseLeeway: TimeSpan.Zero) : null,
+                enableContinuation: continuation));
             services.AddOpenIddict().AddServer(options =>
             {
                 options.AddEventHandler<OpenIddictServerEvents.ProcessRequestContext>(builder => builder
@@ -265,7 +276,9 @@ public sealed class ProductAuthorizationProtocolTests(SessionListingPostgresFixt
             var application = await manager.CreateAsync(descriptor);
             owners.NativeApplicationId = await manager.GetIdAsync(application) ?? throw new InvalidOperationException("The synthetic native client identity is required.");
         }
-        var account = await host.SeedAsync(database); var bootstrap = await host.Options();
+        var account = await host.SeedAsync(database);
+        if (anonymous) return new(database, host, owners, signing, encryption, signingKey, encryptionKey, account, string.Empty);
+        var bootstrap = await host.Options();
         using var signed = await host.Post("/authentication/sign-in", Command(bootstrap.Key), bootstrap.Cookies, bootstrap.Csrf);
         Assert.Equal(HttpStatusCode.OK, signed.StatusCode); var cookies = Merge(bootstrap.Cookies, signed);
         using var current = await host.Get("/authentication/session", cookies); Assert.Equal(HttpStatusCode.OK, current.StatusCode);
@@ -375,6 +388,254 @@ public sealed class ProductAuthorizationProtocolTests(SessionListingPostgresFixt
         catch (Exception error) when (error is JsonException or IOException or HttpRequestException or InvalidOperationException)
         { return prefix + "OAuth metadata unavailable"; }
         finally { CryptographicOperations.ZeroMemory(bytes); }
+    }
+
+    private sealed record PendingRequest(string Verifier, string State, string Nonce, string TokenId, string OperationId, string CorrelationId)
+    { public override string ToString() => nameof(PendingRequest); }
+
+    private static async Task<PendingRequest> BeginContinuation(Scenario test)
+    {
+        var verifier = Base64UrlEncoder.Encode(RandomNumberGenerator.GetBytes(32));
+        var state = Guid.NewGuid().ToString("N"); var nonce = Guid.NewGuid().ToString("N");
+        using var response = await RequestAuthorization(test, verifier, state, nonce);
+        Assert.Equal(HttpStatusCode.Found, response.StatusCode);
+        Assert.Equal("/login", response.Headers.Location?.OriginalString);
+        Assert.True(response.Headers.CacheControl?.NoStore == true);
+        Assert.Equal("no-referrer", Assert.Single(response.Headers.GetValues("Referrer-Policy")));
+        var cookie = Assert.Single(response.Headers.GetValues("Set-Cookie"), value => value.StartsWith(ProductAuthorizationContinuation.CookieName + "=", StringComparison.Ordinal));
+        Assert.True(cookie.Length <= 4096 && cookie.Contains("; path=/", StringComparison.OrdinalIgnoreCase) &&
+            cookie.Contains("; secure", StringComparison.OrdinalIgnoreCase) && cookie.Contains("; httponly", StringComparison.OrdinalIgnoreCase) &&
+            cookie.Contains("; samesite=strict", StringComparison.OrdinalIgnoreCase), "Continuation transport must use its bounded private host cookie.");
+        Assert.True(!cookie.Contains(state, StringComparison.Ordinal) && !cookie.Contains(nonce, StringComparison.Ordinal) &&
+            !cookie.Contains(verifier, StringComparison.Ordinal), "The original request must remain protected.");
+        test.Cookies = Merge(test.Cookies, response);
+        await using var scope = test.Host.Services.CreateAsyncScope();
+        var manager = scope.ServiceProvider.GetRequiredService<IOpenIddictTokenManager>();
+        var pending = new List<PendingRequest>();
+        await foreach (var token in manager.FindByApplicationIdAsync(test.Owners.NativeApplicationId))
+        {
+            if (await manager.GetTypeAsync(token) != OpenIddictConstants.TokenTypeIdentifiers.Private.RequestToken) continue;
+            Assert.Equal(OpenIddictConstants.Statuses.Valid, await manager.GetStatusAsync(token));
+            var properties = await manager.GetPropertiesAsync(token);
+            var metadata = properties["tunner.product.continuation.v1"];
+            var payload = await manager.GetPayloadAsync(token);
+            Assert.True(!string.IsNullOrEmpty(payload) && !payload.Contains(state, StringComparison.Ordinal) &&
+                !payload.Contains(nonce, StringComparison.Ordinal) && !payload.Contains(verifier, StringComparison.Ordinal),
+                "The native pending row must protect original protocol material.");
+            pending.Add(new(verifier, state, nonce, (await manager.GetIdAsync(token))!,
+                metadata.GetProperty("OperationId").GetString()!, metadata.GetProperty("CorrelationId").GetString()!));
+        }
+        await AssertEffects(test, 0, verifier, state, nonce);
+        await using var read = test.Database.Context();
+        Assert.Empty(await read.Set<AuthenticationSessionRow>().ToArrayAsync());
+        return Assert.Single(pending);
+    }
+
+    private static async Task<string> SignInContinuationBrowser(Scenario test, bool pending = true)
+    {
+        var originalPointer = CookieValue(test.Cookies, ProductAuthorizationContinuation.CookieName);
+        var bootstrap = await test.Host.Options(test.Cookies);
+        using var signed = await test.Host.Post("/authentication/sign-in", Command(bootstrap.Key), bootstrap.Cookies, bootstrap.Csrf);
+        Assert.Equal(HttpStatusCode.OK, signed.StatusCode); test.Cookies = Merge(bootstrap.Cookies, signed);
+        Assert.True(CookieValue(test.Cookies, ProductAuthorizationContinuation.CookieName) == originalPointer,
+            "The independent continuation must survive actual authentication-cookie rotation.");
+        return await SessionContinuation(test, pending);
+    }
+
+    private static async Task<string> SessionContinuation(Scenario test, bool pending)
+    {
+        using var current = await test.Host.Get("/authentication/session", test.Cookies);
+        Assert.Equal(HttpStatusCode.OK, current.StatusCode);
+        var json = await current.Content.ReadFromJsonAsync<JsonElement>();
+        Assert.True(json.GetProperty("authenticated").GetBoolean());
+        if (pending) Assert.True(json.GetProperty("productAuthorizationPending").GetBoolean());
+        else Assert.False(json.TryGetProperty("productAuthorizationPending", out _));
+        test.Cookies = Merge(test.Cookies, current);
+        return json.GetProperty("csrfToken").GetString()!;
+    }
+
+    private static async Task PrepareContinuation(Scenario test, string csrf)
+    {
+        using var response = await test.Host.Post(ResumePath, new { }, test.Cookies, csrf);
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        var json = await response.Content.ReadFromJsonAsync<JsonElement>();
+        Assert.Equal("resumePath", Assert.Single(json.EnumerateObject().Select(property => property.Name)));
+        Assert.Equal(AuthorizationPath, json.GetProperty("resumePath").GetString());
+        test.Cookies = Merge(test.Cookies, response);
+    }
+
+    private static string? CookieValue(string cookies, string name) => cookies.Split(';', StringSplitOptions.RemoveEmptyEntries)
+        .Select(part => part.Trim().Split('=', 2)).Where(pair => pair[0] == name).Select(pair => pair[1]).SingleOrDefault();
+
+    private static async Task AssertPendingStatus(Scenario test, PendingRequest pending, string status)
+    {
+        await using var scope = test.Host.Services.CreateAsyncScope(); var manager = scope.ServiceProvider.GetRequiredService<IOpenIddictTokenManager>();
+        var token = await manager.FindByIdAsync(pending.TokenId); Assert.NotNull(token);
+        Assert.Equal(status, await manager.GetStatusAsync(token!));
+    }
+
+    [Fact]
+    public async Task AnonymousRequestSurvivesActualPasswordSignInAndRedeemsItsExactOriginalBindings()
+    {
+        await using var test = await Create(continuation: true, anonymous: true);
+        var pending = await BeginContinuation(test); var csrf = await SignInContinuationBrowser(test);
+        await PrepareContinuation(test, csrf);
+        using var authorized = await test.Host.Get(AuthorizationPath, test.Cookies);
+        Assert.Equal(HttpStatusCode.OK, authorized.StatusCode);
+        var form = ReadNativeForm(await authorized.Content.ReadAsStringAsync()); Assert.Equal(Redirect, form.Action);
+        Assert.True(form.Values.GetValueOrDefault("state") == pending.State, "The exact original protocol state must survive sign-in.");
+        Assert.True(form.Values.TryGetValue("code", out var code) && !string.IsNullOrWhiteSpace(code));
+        Assert.False(form.Values.ContainsKey("access_token") || form.Values.ContainsKey("id_token") || form.Values.ContainsKey("refresh_token"));
+        test.Cookies = Merge(test.Cookies, authorized);
+        Assert.Null(CookieValue(test.Cookies, ProductAuthorizationContinuation.CookieName));
+        await AssertPendingStatus(test, pending, OpenIddictConstants.Statuses.Redeemed);
+        _ = await SessionContinuation(test, pending: false);
+        await using (var read = test.Database.Context())
+        {
+            var issuance = await read.Set<OutboxMessage>().SingleAsync(message => message.EventType == "ProductAuthorizationGranted");
+            Assert.Equal(pending.OperationId, issuance.OperationId); Assert.Equal(pending.CorrelationId, issuance.CorrelationId);
+            await using var scope = test.Host.Services.CreateAsyncScope();
+            var manager = scope.ServiceProvider.GetRequiredService<IOpenIddictAuthorizationManager>();
+            var authorization = await manager.FindByIdAsync(issuance.Subject); Assert.NotNull(authorization);
+            var properties = await manager.GetPropertiesAsync(authorization!);
+            var lineage = ProductAuthorizationApplication.ReadLineage(properties[ProductAuthorizationApplication.LineageProperty]); Assert.NotNull(lineage);
+            var expected = new ProductAuthorizationRequest(Product, EnvironmentName, test.Owners.ClientId, Redirect, Scopes, Resources,
+                Base64UrlEncoder.Encode(SHA256.HashData(Encoding.ASCII.GetBytes(pending.Verifier))), "S256", "code", "form_post", pending.State, pending.Nonce);
+            Assert.True(lineage!.Request.Digest == expected.Digest, "Restoration must preserve every original native authorization binding.");
+            Assert.Equal(pending.OperationId, lineage.OperationId); Assert.Equal(pending.CorrelationId, lineage.CorrelationId);
+            Assert.Equal(test.AccountId, lineage.AccountId);
+            Assert.Equal((await read.Set<AuthenticationSessionRow>().SingleAsync()).SessionId, lineage.SessionId);
+        }
+        using var redeemed = await Redeem(test, new(code!, pending.Verifier, pending.Nonce));
+        Assert.Equal(HttpStatusCode.OK, redeemed.StatusCode);
+        var tokens = await redeemed.Content.ReadFromJsonAsync<JsonElement>();
+        var identity = tokens.GetProperty("id_token").GetString(); var access = tokens.GetProperty("access_token").GetString();
+        Assert.True(!string.IsNullOrWhiteSpace(identity) && !string.IsNullOrWhiteSpace(access));
+        var validated = await new JsonWebTokenHandler { MapInboundClaims = false }.ValidateTokenAsync(identity!, new TokenValidationParameters
+        {
+            ValidIssuer = new Uri(Origin).AbsoluteUri, ValidAudience = test.Owners.ClientId, IssuerSigningKey = test.SigningKey,
+            TokenDecryptionKey = test.EncryptionKey, ValidateLifetime = true, ClockSkew = TimeSpan.Zero
+        });
+        Assert.True(validated.IsValid, validated.Exception?.GetType().Name ?? "Native artifact validation failed.");
+        Assert.True(validated.ClaimsIdentity.FindFirst("nonce")?.Value == pending.Nonce, "The ID token must bind the original nonce.");
+        await using var evidence = test.Database.Context();
+        foreach (var effect in await evidence.Set<OutboxMessage>().Where(message => message.EventType.StartsWith("ProductAuthorization")).ToListAsync())
+            Assert.True(new[] { code!, identity!, access!, pending.Verifier, pending.State, pending.Nonce, test.Owners.ClientCredential }
+                .All(secret => !effect.Payload.Contains(secret, StringComparison.Ordinal)), "Continuation and protocol artifacts must remain outside durable effect payloads.");
+    }
+
+    [Fact]
+    public async Task ConsumedContinuationCannotReplayWithItsOriginalReadyPointer()
+    {
+        await using var test = await Create(continuation: true, anonymous: true); var pending = await BeginContinuation(test);
+        await PrepareContinuation(test, await SignInContinuationBrowser(test)); var readyCookies = test.Cookies;
+        using (var first = await test.Host.Get(AuthorizationPath, readyCookies)) Assert.Equal(HttpStatusCode.OK, first.StatusCode);
+        using (var replay = await test.Host.Get(AuthorizationPath, readyCookies)) await AssertRejected(replay, "invalid_request", HttpStatusCode.BadRequest);
+        await AssertPendingStatus(test, pending, OpenIddictConstants.Statuses.Redeemed);
+        _ = await SessionContinuation(test, pending: false); await AssertEffects(test, 1, pending.Verifier, pending.State, pending.Nonce);
+    }
+
+    [Fact]
+    public async Task RestoredRequestRerunsCurrentNativeClientPermissions()
+    {
+        await using var test = await Create(continuation: true, anonymous: true); var pending = await BeginContinuation(test);
+        await PrepareContinuation(test, await SignInContinuationBrowser(test));
+        await using (var scope = test.Host.Services.CreateAsyncScope())
+        {
+            var manager = scope.ServiceProvider.GetRequiredService<IOpenIddictApplicationManager>();
+            var application = await manager.FindByClientIdAsync(test.Owners.ClientId); Assert.NotNull(application);
+            var descriptor = new OpenIddictApplicationDescriptor(); await manager.PopulateAsync(descriptor, application!);
+            Assert.True(descriptor.Permissions.Remove(OpenIddictConstants.Permissions.Prefixes.Resource + Resource));
+            await manager.UpdateAsync(application!, descriptor);
+        }
+        using var response = await test.Host.Get(AuthorizationPath, test.Cookies);
+        await AssertRejected(response, "invalid_request", HttpStatusCode.BadRequest, "ID2192");
+        await AssertPendingStatus(test, pending, OpenIddictConstants.Statuses.Valid); await AssertEffects(test, 0);
+    }
+
+    [Theory]
+    [InlineData("Policy")]
+    [InlineData("Expiry")]
+    [InlineData("TamperedPointer")]
+    public async Task ChangedExpiredOrTamperedContinuationCannotRestoreOriginalRequest(string change)
+    {
+        await using var test = await Create(continuation: true, anonymous: true); var pending = await BeginContinuation(test);
+        await PrepareContinuation(test, await SignInContinuationBrowser(test));
+        if (change == "Policy") test.Owners.ContinuationPolicyVersion = "fixture-continuation-policy-v2";
+        else if (change == "Expiry") test.Host.Clock.Advance(TimeSpan.FromMinutes(3));
+        else
+        {
+            var pointer = CookieValue(test.Cookies, ProductAuthorizationContinuation.CookieName)!;
+            var replacement = (pointer[0] == 'A' ? "B" : "A") + pointer[1..];
+            test.Cookies = test.Cookies.Replace(ProductAuthorizationContinuation.CookieName + "=" + pointer,
+                ProductAuthorizationContinuation.CookieName + "=" + replacement, StringComparison.Ordinal);
+        }
+        using var response = await test.Host.Get(AuthorizationPath, test.Cookies);
+        await AssertRejected(response, "invalid_request", HttpStatusCode.BadRequest);
+        _ = await SessionContinuation(test, pending: false);
+        await AssertPendingStatus(test, pending, OpenIddictConstants.Statuses.Valid); await AssertEffects(test, 0);
+    }
+
+    [Fact]
+    public async Task AnonymousPromptNoneReturnsLoginRequiredWithoutCreatingContinuation()
+    {
+        await using var test = await Create(continuation: true, anonymous: true);
+        using var response = await RequestAuthorization(test, overrides: new Dictionary<string, string> { ["prompt"] = "none" });
+        await AssertRejected(response, "login_required", HttpStatusCode.OK);
+        Assert.Null(response.Headers.Location); Assert.Null(CookieValue(Merge(test.Cookies, response), ProductAuthorizationContinuation.CookieName));
+        await AssertNoRequestTokens(test); await AssertEffects(test, 0);
+    }
+
+    [Theory]
+    [InlineData("Unauthenticated", HttpStatusCode.Unauthorized)]
+    [InlineData("WrongCsrf", HttpStatusCode.BadRequest)]
+    [InlineData("UnknownBody", HttpStatusCode.BadRequest)]
+    [InlineData("ForeignOrigin", HttpStatusCode.Forbidden)]
+    public async Task ResumeRequiresActualCurrentUserCsrfSameOriginAndExactBody(string rejection, HttpStatusCode status)
+    {
+        await using var test = await Create(continuation: true, anonymous: true); var pending = await BeginContinuation(test);
+        var csrf = rejection == "Unauthenticated" ? string.Empty : await SignInContinuationBrowser(test);
+        using var response = await test.Host.Post(ResumePath, rejection == "UnknownBody" ? new { returnUrl = "/account" } : (object)new { },
+            test.Cookies, rejection == "WrongCsrf" ? "synthetic-invalid-csrf" : csrf,
+            rejection == "ForeignOrigin" ? "https://foreign.example.test" : Origin);
+        Assert.Equal(status, response.StatusCode); Assert.Null(response.Headers.Location);
+        await AssertPendingStatus(test, pending, OpenIddictConstants.Statuses.Valid); await AssertEffects(test, 0);
+        if (rejection != "Unauthenticated")
+        {
+            // Rejected preparation must leave the private pointer unready, even with a valid authenticated cookie.
+            using var unprepared = await test.Host.Get(AuthorizationPath, test.Cookies);
+            await AssertRejected(unprepared, "invalid_request", HttpStatusCode.BadRequest);
+        }
+    }
+
+    [Fact]
+    public async Task InvalidAnonymousProductCannotCreateLoginRedirectOrPendingRequest()
+    {
+        await using var test = await Create(continuation: true, anonymous: true);
+        using var response = await RequestAuthorization(test, overrides: new Dictionary<string, string> { ["product_id"] = "PRD-UNQUALIFIED-SYNTHETIC" });
+        await AssertRejected(response, "access_denied", HttpStatusCode.OK); Assert.Null(response.Headers.Location);
+        Assert.Null(CookieValue(Merge(test.Cookies, response), ProductAuthorizationContinuation.CookieName));
+        await AssertNoRequestTokens(test); await AssertEffects(test, 0);
+    }
+
+    [Fact]
+    public async Task UnavailableContinuationPolicyDeniesContinuationAndPreservesOrdinarySignInWithoutPointer()
+    {
+        await using var test = await Create(continuation: true, anonymous: true); test.Owners.ContinuationPolicyAvailable = false;
+        using (var rejected = await RequestAuthorization(test))
+        {
+            Assert.Equal(HttpStatusCode.InternalServerError, rejected.StatusCode); Assert.Null(rejected.Headers.Location);
+            Assert.Null(CookieValue(Merge(test.Cookies, rejected), ProductAuthorizationContinuation.CookieName));
+        }
+        _ = await SignInContinuationBrowser(test, pending: false);
+        await AssertNoRequestTokens(test); await AssertEffects(test, 0);
+    }
+
+    private static async Task AssertNoRequestTokens(Scenario test)
+    {
+        await using var scope = test.Host.Services.CreateAsyncScope(); var manager = scope.ServiceProvider.GetRequiredService<IOpenIddictTokenManager>();
+        await foreach (var token in manager.FindByApplicationIdAsync(test.Owners.NativeApplicationId))
+            Assert.False(await manager.GetTypeAsync(token) == OpenIddictConstants.TokenTypeIdentifiers.Private.RequestToken);
     }
 
     [Fact]

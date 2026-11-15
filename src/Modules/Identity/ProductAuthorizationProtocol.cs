@@ -15,7 +15,7 @@ namespace Tunner.Identity.Persistence;
 internal sealed partial class ProductAuthorizationProtocol(IdentityPersistenceDbContext database, ProductAuthorizationApplication application,
     ProductAuthorizationServerProfile profile, IOpenIddictApplicationManager clients, IOpenIddictAuthorizationManager authorizations,
     IOpenIddictTokenManager tokens, IHttpContextAccessor accessor, AuthenticationPartitionKey partitions, TimeProvider clock,
-    ProductAuthorizationLifecycleApplication? lifecycleApplication = null) :
+    ProductAuthorizationLifecycleApplication? lifecycleApplication = null, ProductAuthorizationContinuation? continuation = null) :
     IOpenIddictServerHandler<OpenIddictServerEvents.ProcessRequestContext>,
     IOpenIddictServerHandler<OpenIddictServerEvents.HandleAuthorizationRequestContext>,
     IOpenIddictServerHandler<OpenIddictServerEvents.HandleTokenRequestContext>,
@@ -57,9 +57,6 @@ internal sealed partial class ProductAuthorizationProtocol(IdentityPersistenceDb
             context.Request.GetParameter("claims") is not null ||
             context.Request.GetPromptValues().Any(value => value != PromptValues.None))
         { context.Reject(Errors.InteractionRequired); return; }
-        var authenticated = await Http.AuthenticateAsync(AuthenticationIdentity.Scheme).ConfigureAwait(false);
-        if (!authenticated.Succeeded || authenticated.Principal is null)
-        { context.Reject(Errors.LoginRequired); return; }
         if (Http.Connection.RemoteIpAddress is null) { context.Reject(Errors.InvalidRequest); return; }
         ProductAuthorizationRequest request;
         try
@@ -71,8 +68,27 @@ internal sealed partial class ProductAuthorizationProtocol(IdentityPersistenceDb
                 context.Request.CodeChallenge ?? string.Empty, context.Request.CodeChallengeMethod ?? string.Empty,
                 context.Request.ResponseType ?? string.Empty, context.Request.ResponseMode ?? string.Empty,
                 context.Request.State, context.Request.Nonce);
+            var authenticated = await Http.AuthenticateAsync(AuthenticationIdentity.Scheme).ConfigureAwait(false);
+            if (!authenticated.Succeeded || authenticated.Principal is null)
+            {
+                if (continuation is null || context.Request.GetPromptValues().Contains(PromptValues.None, StringComparer.Ordinal) || restoredContinuation is not null)
+                { context.Reject(Errors.LoginRequired); return; }
+                var registration = await application.RequireRegistrationAsync(request, profile.Origin, ct).ConfigureAwait(false);
+                if (registration is null) { context.Reject(Errors.AccessDenied); return; }
+                var registeredClient = await clients.FindByClientIdAsync(request.ClientId, ct).ConfigureAwait(false);
+                if (registeredClient is null || await clients.GetIdAsync(registeredClient, ct).ConfigureAwait(false) != registration.NativeApplicationId ||
+                    await clients.GetClientTypeAsync(registeredClient, ct).ConfigureAwait(false) != registration.ClientType)
+                { context.Reject(Errors.InvalidClient); return; }
+                _ = await continuation.BeginAsync(Http, request, registration.NativeApplicationId, ct).ConfigureAwait(false);
+                await CommitTransactionAsync(ct).ConfigureAwait(false);
+                Http.Response.Headers.CacheControl = "no-store"; Http.Response.Headers["Referrer-Policy"] = "no-referrer";
+                Http.Response.Redirect("/login"); context.HandleRequest(); return;
+            }
+            if (restoredContinuation is not null && restoredContinuation.Request.Digest != request.Digest)
+            { context.Reject(Errors.InvalidRequest); return; }
             var caller = StepUpCaller.FromPrincipal(authenticated.Principal, profile.Origin, partitions.Network(Http.Connection.RemoteIpAddress));
-            grant = await application.AuthorizeAsync(caller, request, "OP-" + Guid.NewGuid().ToString("N"), Guid.NewGuid().ToString("N"), ct).ConfigureAwait(false);
+            grant = await application.AuthorizeAsync(caller, request, restoredContinuation?.OperationId ?? "OP-" + Guid.NewGuid().ToString("N"),
+                restoredContinuation?.CorrelationId ?? Guid.NewGuid().ToString("N"), ct).ConfigureAwait(false);
         }
         catch (ArgumentException) { context.Reject(Errors.InvalidRequest); return; }
         if (grant is null) { context.Reject(Errors.AccessDenied); return; }
@@ -80,6 +96,12 @@ internal sealed partial class ProductAuthorizationProtocol(IdentityPersistenceDb
         if (client is null || await clients.GetIdAsync(client, ct).ConfigureAwait(false) != grant.Lineage.Registration.NativeApplicationId ||
             await clients.GetClientTypeAsync(client, ct).ConfigureAwait(false) != grant.Lineage.Registration.ClientType)
         { grant = null; context.Reject(Errors.InvalidClient); return; }
+        if (restoredContinuation is not null)
+        {
+            if (continuation is null || !await continuation.ConsumeAsync(restoredContinuation, grant.Lineage.Registration.NativeApplicationId, ct).ConfigureAwait(false))
+            { grant = null; context.Reject(Errors.InvalidRequest); return; }
+            consumedContinuation = true;
+        }
         var descriptor = new OpenIddictAuthorizationDescriptor
         {
             ApplicationId = grant.Lineage.Registration.NativeApplicationId, Subject = grant.Subject,
@@ -145,8 +167,16 @@ internal sealed partial class ProductAuthorizationProtocol(IdentityPersistenceDb
         }
         // Native rejection/replay may revoke artifacts, and Identity denial may end a session.
         // Preserve those security transitions; never roll back every protocol error indiscriminately.
+        await CommitTransactionAsync(ct).ConfigureAwait(false);
+        if (consumedContinuation && restoredContinuation is not null && continuation is not null)
+            await continuation.ClearAsync(Http, restoredContinuation, ct).ConfigureAwait(false);
+    }
+
+    private async Task CommitTransactionAsync(CancellationToken ct)
+    {
+        RequireTransaction();
         await database.SaveChangesAsync(ct).ConfigureAwait(false);
-        await transaction.CommitAsync(ct).ConfigureAwait(false);
+        await transaction!.CommitAsync(ct).ConfigureAwait(false);
         await transaction.DisposeAsync().ConfigureAwait(false); transaction = null;
     }
 

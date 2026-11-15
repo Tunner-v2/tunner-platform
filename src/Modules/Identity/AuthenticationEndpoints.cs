@@ -25,6 +25,8 @@ public static class AuthenticationEndpoints
     internal sealed class CredentialAuthenticationMetadata;
     internal sealed record Surface(string Origin);
     internal sealed record Browser(string Nonce, Guid Key, DateTimeOffset ExpiresAt, string PolicyVersion, string PreviousCookieDigest, Guid? PreviousSessionId);
+    private sealed record AuthenticationSessionResponse(bool Authenticated, string? CsrfToken,
+        [property: JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] bool? ProductAuthorizationPending);
     private sealed record AuthenticationBootstrapResponse(string? CsrfToken, Guid IdempotencyKey, int PasswordMaximumLength,
         bool PasskeyAvailable, int? MaximumCredentialJsonBytes, object? PasskeyRecovery, string Locale,
         IReadOnlyDictionary<string, RegistrationPublishedText> Content, Uri TermsUri, Uri PrivacyUri, Uri? SupportUri,
@@ -109,8 +111,12 @@ public static class AuthenticationEndpoints
         }).AllowAnonymous();
         endpoints.MapPost(SignInPath, SignInAsync).AllowAnonymous().WithMetadata(new CredentialAuthenticationMetadata());
         endpoints.MapPost("/authentication/result", PasswordResultAsync).RequireAuthorization();
-        endpoints.MapGet("/authentication/session", (HttpContext context, IAntiforgery antiforgery) =>
-            Results.Json(new { authenticated = true, csrfToken = antiforgery.GetAndStoreTokens(context).RequestToken })).RequireAuthorization();
+        endpoints.MapGet("/authentication/session", async (HttpContext context, IAntiforgery antiforgery) =>
+        {
+            var continuation = context.RequestServices.GetService<ProductAuthorizationContinuation>();
+            var pending = continuation is not null && await continuation.PendingAsync(context, context.RequestAborted).ConfigureAwait(false);
+            return Results.Json(new AuthenticationSessionResponse(true, antiforgery.GetAndStoreTokens(context).RequestToken, pending ? true : null));
+        }).RequireAuthorization();
         endpoints.MapPost("/authentication/sign-out", async (HttpContext context) =>
         {
             await context.SignOutAsync(AuthenticationIdentity.Scheme).ConfigureAwait(false);
@@ -119,6 +125,7 @@ public static class AuthenticationEndpoints
             return Results.Json(new { authenticated = false });
         }).RequireAuthorization();
         SessionListingEndpoints.MapIfConfigured(endpoints);
+        ProductAuthorizationContinuationEndpoints.MapIfConfigured(endpoints);
         MapScreens(endpoints);
         return endpoints;
     }

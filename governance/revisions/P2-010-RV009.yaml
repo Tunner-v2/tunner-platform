@@ -8,7 +8,7 @@
   "title": "Preserve federation dependency compatibility for Product authorization",
   "revision_type": "COMPATIBILITY",
   "status": "ACTIVE",
-  "reason": "Authorized P2-014 preallocates only Directory.Packages.props for the native server at the existing OpenIddict version. Current P2-014 contract and FRD remain governing; byte-verified baseline references establish the selected framework. Federation packages, host and workflows stay unchanged. Source edits require P2-014 admission and this Revision ACTIVE; preserve original DONE and closed RV008.",
+  "reason": "Authorized P2-014 preserves the existing OpenIddict package line and federation compatibility. Active scope now also preallocates optional guarded Product-continuation metadata in AuthenticationEndpoints.cs and the central signed-in controller in authentication.tsx. Provider callbacks, exact-original federation results, MFA and ordinary sign-in must remain compatible; production policy remains unselected. Preserve original DONE and closed RV008; no closed evidence or source qualification is rewritten.",
   "authority_refs": [
     "docs/authority/baselines/1.6.0/decisions/ADR-0006_Identity_ASPNET_Identity_OpenIddict.md",
     "docs/authority/baselines/1.6.0/17_Account_Identity_and_Session_FRD.md"

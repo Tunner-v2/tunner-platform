@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "revision_id": "P2-013-RV001",
+  "revision_scope": "WORK_ITEM",
+  "original_scope_id": "TUN-P2-013",
+  "parent_revision_id": null,
+  "parent_milestone_revision_id": null,
+  "title": "Preserve Session and Device endpoints during Product continuation",
+  "revision_type": "COMPATIBILITY",
+  "status": "ACTIVE",
+  "reason": "Authorized P2-014 adds optional guarded session continuation metadata and endpoint composition in AuthenticationEndpoints.cs. Preserve completed P2-013 session/device mapping, ordinary sign-out and original validated closure; no Session/Device domain policy change.",
+  "authority_refs": [
+    "docs/authority/baselines/1.6.0/17_Account_Identity_and_Session_FRD.md"
+  ],
+  "decision_refs": [],
+  "defect_refs": [],
+  "change_refs": [],
+  "impact_classification": "NON_BLOCKING",
+  "blocked_scope": [],
+  "acceptance_criteria": [
+    "Optional Product continuation remains separately configured and preserves Session/Device listing, trust removal, selected and bulk sign-out and ordinary login behavior; focused shared authentication and Session/Device regression pass before closure."
+  ],
+  "prerequisites": [],
+  "work_items": [],
+  "required_gates": [],
+  "required_roles": ["full-stack-engineer", "tester-qa-engineer", "solution-architect", "cyber-security-engineer", "auditor"],
+  "evidence_refs": ["governance/evidence/P2-013-RV001-VALIDATION.json"],
+  "created_at": "2026-11-15T16:06:54.2249747\u002B00:00",
+  "closed_at": null,
+  "product_acceptance_required": false
+}

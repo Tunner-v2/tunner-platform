@@ -14,8 +14,9 @@ import { parseAuthenticationPasskeyRecovery, requirePublished } from './passkeys
 import {FederationSignIn,federationSignInKeys} from './federation.sign-in';
 import {parseFederationBootstrap} from './federation.api';
 import {recoveryRoutes} from './recovery.routes';
+import {resumeProductAuthorization} from './product-authorization.continuation';
 interface Bootstrap {csrfToken:string;idempotencyKey:string;passwordMaximumLength:number;locale:string;content:Record<string,PublishedContent>;termsUri:string;privacyUri:string;supportUri:string|null;passkeyAvailable?:boolean;maximumCredentialJsonBytes?:number|null;passkeyRecovery?:unknown;federation?:unknown;recoveryAvailable?:boolean}
-interface Session {authenticated:true;csrfToken:string}
+interface Session {authenticated:true;csrfToken:string;productAuthorizationPending?:boolean}
 const errors:Readonly<Record<string,string>>={AUTHENTICATION_FAILED:'authentication.error.credentials',RATE_OR_ABUSE_LIMITED:'authentication.error.limited'};
 async function options(signal?:AbortSignal):Promise<Bootstrap>{const response=await fetch('/authentication/options',{credentials:'same-origin',cache:'no-store',redirect:'error',...(signal?{signal}:{})});if(!response.ok)throw new Error('Unavailable');return response.json() as Promise<Bootstrap>;}
 function App(){const location=useRouteLocation();return location.pathname===totpRoutes.mfa.pathname?<ThemeProvider surface="user" mode="light"><TotpMfaScreen key={location.revision}/></ThemeProvider>:<AuthenticationApp/>;}
@@ -51,7 +52,9 @@ function Screens({initial}:{initial:Bootstrap}){
     void fetch('/authentication/session',{credentials:'same-origin',cache:'no-store',redirect:'error',signal:controller.signal}).then(async response=>{
       if(response.status===401){if(active)navigatePath(authenticationRoutes.login.pathname,true);return;}
       if(!response.ok)throw new Error('Unavailable');const result=await response.json() as Session;
-      if(!result.authenticated||!result.csrfToken)throw new Error('Unavailable');if(active){setSession(result);finish();}
+      if(!result.authenticated||!result.csrfToken||result.productAuthorizationPending!==undefined&&typeof result.productAuthorizationPending!=='boolean')throw new Error('Unavailable');
+      if(active&&result.productAuthorizationPending===true){await resumeProductAuthorization(result.csrfToken,controller.signal);return;}
+      if(active){setSession(result);finish();}
     }).catch(()=>{if(active){setError('authentication.error.unavailable');finish();}});
     return cleanup;
   },[location.revision]);

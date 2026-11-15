@@ -16,6 +16,14 @@ internal sealed class ProductAuthorizationApplication(IdentityPersistenceDbConte
     internal const string RedeemOperation = "REDEEM_PRODUCT_AUTHORIZATION";
     private static readonly JsonSerializerOptions LineageJson = new() { UnmappedMemberHandling = JsonUnmappedMemberHandling.Disallow };
 
+    internal async Task<ProductAuthorizationRegistration?> RequireRegistrationAsync(ProductAuthorizationRequest request, string origin, CancellationToken ct)
+    {
+        RequireTransaction(); ArgumentNullException.ThrowIfNull(request);
+        var policy = Policy(origin); request.Require(policy);
+        var registration = await registry.RequireCurrentAsync(request, clock.GetUtcNow(), ct).ConfigureAwait(false);
+        return Registered(request, registration, clock.GetUtcNow()) ? registration : null;
+    }
+
     internal async Task<ProductAuthorizationGrant?> AuthorizeAsync(StepUpCaller caller, ProductAuthorizationRequest request,
         string operationId, string correlationId, CancellationToken ct)
     {

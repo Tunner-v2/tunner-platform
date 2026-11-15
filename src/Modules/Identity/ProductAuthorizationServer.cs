@@ -19,7 +19,7 @@ public sealed class ProductAuthorizationServerProfile
     public ProductAuthorizationServerProfile(string origin, string authorizationPath, string tokenPath,
         SecurityKey signingKey, SecurityKey encryptionKey, ImmutableArray<string> supportedScopes, ImmutableArray<string> supportedResources,
         int maximumBodyBytes, int maximumFields, int maximumKeyLength, int maximumValueLength,
-        ProductAuthorizationLifecycleServerProfile? lifecycle = null)
+        ProductAuthorizationLifecycleServerProfile? lifecycle = null, bool enableContinuation = false)
     {
         if (!Uri.TryCreate(origin, UriKind.Absolute, out var uri) || uri.Scheme != "https" ||
             origin != uri.GetLeftPart(UriPartial.Authority) || uri.UserInfo.Length != 0)
@@ -54,6 +54,7 @@ public sealed class ProductAuthorizationServerProfile
         MaximumBodyBytes = maximumBodyBytes; MaximumFields = maximumFields;
         MaximumKeyLength = maximumKeyLength; MaximumValueLength = maximumValueLength;
         Lifecycle = lifecycle;
+        EnableContinuation = enableContinuation;
     }
     public string Origin { get; }
     public string AuthorizationPath { get; }
@@ -63,6 +64,7 @@ public sealed class ProductAuthorizationServerProfile
     public ImmutableArray<string> SupportedScopes { get; }
     public ImmutableArray<string> SupportedResources { get; }
     public ProductAuthorizationLifecycleServerProfile? Lifecycle { get; }
+    public bool EnableContinuation { get; }
     internal int MaximumBodyBytes { get; }
     internal int MaximumFields { get; }
     internal int MaximumKeyLength { get; }
@@ -81,10 +83,13 @@ public static class ProductAuthorizationServer
             throw new InvalidOperationException("Product authorization requires explicit persistence and qualified owner providers.");
         if (profile.Lifecycle is not null && !services.Any(item => item.ServiceType == typeof(IProductAuthorizationLifecycleSource)))
             throw new InvalidOperationException("Product lifecycle endpoints require an explicit qualified lifecycle provider.");
+        if (profile.EnableContinuation && !services.Any(item => item.ServiceType == typeof(IProductAuthorizationContinuationPolicySource)))
+            throw new InvalidOperationException("Product continuation requires an explicit qualified policy provider.");
         if (services.Any(item => item.ServiceType == typeof(ProductAuthorizationServerProfile)))
             throw new InvalidOperationException("Product authorization may be composed only once.");
         services.AddSingleton(profile); services.AddHttpContextAccessor();
         services.AddScoped<ProductAuthorizationApplication>();
+        if (profile.EnableContinuation) services.AddScoped<ProductAuthorizationContinuation>();
         if (profile.Lifecycle is not null) services.AddScoped<ProductAuthorizationLifecycleApplication>();
         string[] callbackPaths = profile.Lifecycle is { } lifecycle
             ? [profile.TokenPath, lifecycle.IntrospectionPath, lifecycle.RevocationPath] : [profile.TokenPath];
@@ -132,6 +137,10 @@ public static class ProductAuthorizationServer
                 value.ResponseModes.Clear(); value.ResponseModes.Add(OpenIddictConstants.ResponseModes.FormPost);
             });
             options.UseAspNetCore(); // No passthrough and no transport/permission/storage bypass.
+            if (profile.EnableContinuation)
+                options.AddEventHandler<OpenIddictServerEvents.ExtractAuthorizationRequestContext>(builder => builder
+                    .UseScopedHandler<ProductAuthorizationProtocol>().SetOrder(OpenIddict.Server.AspNetCore.OpenIddictServerAspNetCoreHandlers
+                        .ExtractGetOrPostRequest<OpenIddictServerEvents.ExtractAuthorizationRequestContext>.Descriptor.Order + 500));
             options.AddEventHandler<OpenIddictServerEvents.ProcessRequestContext>(builder =>
                 builder.UseScopedHandler<ProductAuthorizationProtocol>().SetOrder(int.MinValue + 100_000));
             options.AddEventHandler<OpenIddictServerEvents.HandleAuthorizationRequestContext>(builder =>
