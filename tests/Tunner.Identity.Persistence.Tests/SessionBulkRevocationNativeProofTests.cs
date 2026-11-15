@@ -19,6 +19,7 @@ namespace Tunner.Identity.Persistence.Tests;
 // Uses the same SessionListingPostgresFixture, HTTPS host and bulk preparation as the existing 37 cases.
 public sealed partial class SessionBulkRevocationHttpTests
 {
+    private static readonly string[] NativeFederationMethods = ["mfa", "pwd"];
     private static readonly EffectivePolicyInterval NativeInterval = new(new(2020, 1, 1, 0, 0, 0, TimeSpan.Zero), true,
         new DateTimeOffset(2040, 1, 1, 0, 0, 0, TimeSpan.Zero), false);
     private sealed class NativePublication(TotpTests.Profile? totp = null) : IStepUpPresentationSource
@@ -178,7 +179,7 @@ public sealed partial class SessionBulkRevocationHttpTests
         var attempt = await database.Set<FederationAttemptRow>().SingleAsync(x => x.AttemptId == frame.AttemptId);
         Assert.Equal(provider.AuthenticatedAt, attempt.ProviderAuthenticatedAt);
         Assert.Equal(provider.AuthenticatedAt, proof.AuthenticatedAt); Assert.NotEqual(attempt.VerifiedAt, proof.AuthenticatedAt);
-        Assert.Equal(new[] { "mfa", "pwd" }, JsonSerializer.Deserialize<string[]>(attempt.ProviderMethodsJson!)!.Order(StringComparer.Ordinal));
+        Assert.Equal(NativeFederationMethods, JsonSerializer.Deserialize<string[]>(attempt.ProviderMethodsJson!)!.Order(StringComparer.Ordinal));
         Assert.True(proof.ExpiresAt <= attempt.VerificationExpiresAt);
         Assert.Equal(frame.SourceReference, attempt.SelectedProofLinkId); Assert.Equal(frame.AttemptId, proof.FederationAttemptId);
     }
