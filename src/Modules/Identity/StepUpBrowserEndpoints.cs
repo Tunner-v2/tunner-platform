@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Tunner.Platform.Operations;
 
 namespace Tunner.Identity.Persistence;
@@ -24,7 +25,7 @@ public static class StepUpBrowserEndpoints
         if (required.Any(type => !services.Any(x => x.ServiceType == type)))
             throw new InvalidOperationException("Step-up requires explicit User authentication, operation-owner, assurance and presentation providers.");
         if (services.Any(x => x.ServiceType == typeof(StepUpBrowserService))) throw new InvalidOperationException("Step-up may be activated only once.");
-        services.AddScoped<StepUpApplication>(); services.AddScoped<StepUpBrowserService>(); return services;
+        services.TryAddScoped<StepUpApplication>(); services.AddScoped<StepUpBrowserService>(); return services;
     }
     public static IEndpointRouteBuilder MapTunnerOperationStepUp(this IEndpointRouteBuilder endpoints)
     {
@@ -51,11 +52,15 @@ internal sealed partial class StepUpBrowserService(IUserStepUpOperationSource re
     IAntiforgery antiforgery, StepUpApplication application, IdentityPersistenceDbContext database, TimeProvider clock, IEnumerable<PasskeyApplication> passkeyApplications,
     IEnumerable<TotpApplication>? totpApplications = null, IEnumerable<FederationBrowserService>? federationApplications = null,
     IEnumerable<SessionRevocationBrowserService>? sessionRevocations = null,
-    IEnumerable<SessionBulkRevocationBrowserService>? bulkRevocations = null)
+    IEnumerable<SessionBulkRevocationBrowserService>? bulkRevocations = null,
+    IEnumerable<ProductAuthorizationStepUp>? productAuthorizations = null)
 {
     private readonly SessionRevocationBrowserService? sessionRevocation = sessionRevocations?.SingleOrDefault();
     private readonly SessionBulkRevocationBrowserService? bulkRevocation = bulkRevocations?.SingleOrDefault();
-    private readonly IUserStepUpOperationSource owner = SessionRevocationOwnerRouter.Wrap(registeredOwner, sessionRevocations?.SingleOrDefault(), bulkRevocations?.SingleOrDefault());
+    private readonly ProductAuthorizationStepUp? productAuthorization = productAuthorizations?.SingleOrDefault();
+    private readonly IUserStepUpOperationSource owner = ProductAuthorizationStepUpOwnerRouter.Wrap(
+        SessionRevocationOwnerRouter.Wrap(registeredOwner, sessionRevocations?.SingleOrDefault(), bulkRevocations?.SingleOrDefault()),
+        productAuthorizations?.SingleOrDefault());
     private const string BrowserPurpose = "Tunner.User.StepUp.Browser.v1";
     private readonly IDataProtector protector = protection.CreateProtector(BrowserPurpose);
     internal sealed record Browser(Guid RequestId, string BindingDigest, string AuthenticationPolicyVersion, DateTimeOffset ExpiresAt);
@@ -63,6 +68,9 @@ internal sealed partial class StepUpBrowserService(IUserStepUpOperationSource re
     {
         var caller = Caller(context); var actor = new UserStepUpActor(caller); var operation = await owner.ResolveAsync(actor, context.RequestAborted).ConfigureAwait(false);
         if (!MatchesActor(operation, actor)) return Problem(404, "NOT_FOUND_OR_NOT_DISCLOSABLE");
+        if (operation!.Binding.Scope.Operation == ProductAuthorizationApplication.AuthorizeOperation && productAuthorization is not null &&
+            await productAuthorization.RecoverReadyAsync(context, operation, context.RequestAborted).ConfigureAwait(false) is { } proofReady)
+            return proofReady;
         var csrf = antiforgery.GetAndStoreTokens(context).RequestToken;
         var now = clock.GetUtcNow();
         if (operation!.Completed)
@@ -155,6 +163,14 @@ internal sealed partial class StepUpBrowserService(IUserStepUpOperationSource re
     private async Task<IResult> ExecuteProofAsync(HttpContext context, StepUpBrowserOperation frame, string proofKey, NativeProofCompletion? nativeCompletion = null)
     {
         var caller = frame.Caller; var actor = frame.Actor; var operation = frame.Operation; var browser = frame.Browser;
+        // Product authorization verifies through the same authenticators, then defers one-time
+        // consumption to its native caller transaction. Other owners retain the existing path.
+        if (operation.Binding.Scope.Operation == ProductAuthorizationApplication.AuthorizeOperation)
+        {
+            if (productAuthorization is null)
+                return Failure("STEP_UP_REQUIRED");
+            return await productAuthorization.StageForNativeAsync(context, operation, proofKey, nativeCompletion, context.RequestAborted).ConfigureAwait(false);
+        }
         using var execution = SessionRevocationApplication.Owns(operation.Binding.Scope)
             ? await (sessionRevocation ?? throw new InvalidOperationException("The session owner is unavailable."))
                 .ExecuteAsync(caller, operation, proofKey, context.RequestAborted).ConfigureAwait(false)

@@ -25,8 +25,10 @@ internal sealed class ProductAuthorizationContinuation(IdentityPersistenceDbCont
     private const string MetadataKey = "tunner.product.continuation.v1";
     private const string ConsumedKey = "tunner.product.continuation.consumed.v1";
     private const string ReviewKey = "tunner.product.continuation.review.v1";
+    private const string ProofKey = "tunner.product.continuation.proof.v1";
     private readonly IDataProtector cookieProtection = protection.CreateProtector("Tunner.User.ProductAuthorization.Continuation.Cookie.v1");
     private readonly IDataProtector materialProtection = protection.CreateProtector("Tunner.Identity.ProductAuthorization.Continuation.Material.v1");
+    private readonly IDataProtector proofProtection = protection.CreateProtector("Tunner.Identity.ProductAuthorization.NativeProof.v1");
     private static readonly JsonSerializerOptions Json = new() { UnmappedMemberHandling = JsonUnmappedMemberHandling.Disallow };
     private sealed record Pointer(string TokenId, string Origin, string Secret, DateTimeOffset CreatedAt, DateTimeOffset ExpiresAt,
         string PolicySnapshot, bool Ready, string? AccountId, Guid? SessionId)
@@ -47,7 +49,8 @@ internal sealed class ProductAuthorizationContinuation(IdentityPersistenceDbCont
     { public override string ToString() => nameof(Consumed); }
     private sealed record ReviewState(int Generation, string? AccountId, Guid? SessionId, string? ApprovalDigest, bool Denied)
     { public string? DenialDigest { get; init; } }
-    private sealed record Read(Pointer Pointer, Material Material, object Token, ReviewState? Review);
+    private sealed record ProofState(int Generation, ProductAuthorizationPreparedProof Proof, ProductAuthorizationProofBinding Binding);
+    private sealed record Read(Pointer Pointer, Material Material, object Token, ReviewState? Review, ProofState? Proof);
 
     internal async Task<ProductAuthorizationRestoredContinuation> BeginAsync(HttpContext http, ProductAuthorizationRequest request,
         string qualifiedNativeApplicationId, CancellationToken ct, ProductAuthorizationInteractionContext? interaction = null,
@@ -118,7 +121,7 @@ internal sealed class ProductAuthorizationContinuation(IdentityPersistenceDbCont
         if (read is null || !read.Pointer.Ready) return null;
         var actual = await http.AuthenticateAsync(AuthenticationIdentity.Scheme).ConfigureAwait(false);
         return actual.Succeeded && actual.Principal is not null && Actor(actual.Principal, out var account, out var session) &&
-            read.Pointer.AccountId == account && read.Pointer.SessionId == session ? Saved(http, read.Pointer, read.Material, read.Review) : null;
+            read.Pointer.AccountId == account && read.Pointer.SessionId == session ? Saved(http, read.Pointer, read.Material, read.Review, read.Proof) : null;
     }
 
     internal async Task<ProductAuthorizationRestoredContinuation?> ReadForReviewAsync(HttpContext http, CancellationToken ct)
@@ -141,7 +144,7 @@ internal sealed class ProductAuthorizationContinuation(IdentityPersistenceDbCont
             ?? throw new InvalidOperationException("The original Product sign-in request is unavailable.");
         if (read.Review?.ApprovalDigest is not null || read.Review?.Denied == true)
             throw new InvalidOperationException("The original Product request already has a terminal decision.");
-        return Saved(http, read.Pointer, read.Material, read.Review);
+        return Saved(http, read.Pointer, read.Material, read.Review, read.Proof);
     }
 
     internal Task<bool> ApproveReviewAsync(ProductAuthorizationRestoredContinuation saved, string digest, CancellationToken ct)
@@ -174,9 +177,36 @@ internal sealed class ProductAuthorizationContinuation(IdentityPersistenceDbCont
         var descriptor = new OpenIddictTokenDescriptor();
         await tokens.PopulateAsync(descriptor, read.Token, ct).ConfigureAwait(false);
         descriptor.Properties[ReviewKey] = JsonSerializer.SerializeToElement(state, Json);
+        if (switching) descriptor.Properties.Remove(ProofKey);
         await tokens.UpdateAsync(read.Token, descriptor, ct).ConfigureAwait(false);
         if (switching) Write(saved.Http, read.Pointer with
         { Ready = false, AccountId = null, SessionId = null, ReviewGeneration = generation }, Policy(clock.GetUtcNow()));
+        return true;
+    }
+
+    internal async Task<bool> StageStepUpProofAsync(ProductAuthorizationRestoredContinuation saved,
+        ProductAuthorizationPreparedProof prepared, ProductAuthorizationProofBinding binding, CancellationToken ct)
+    {
+        RequireTransaction();
+        var read = await ReadLockedAsync(saved.Http, saved.TokenId, ct).ConfigureAwait(false);
+        var at = clock.GetUtcNow();
+        if (read is null || !read.Pointer.Ready || !SameSaved(saved, read) || read.Review?.ApprovalDigest is not null ||
+            read.Review?.Denied == true || prepared.ProofId == Guid.Empty || prepared.BindingDigest != binding.Digest ||
+            prepared.ProofAuthenticatedAt < saved.CreatedAt || prepared.ProofAuthenticatedAt > at || prepared.ExpiresAt <= at ||
+            binding.NativeRequestTokenId != saved.TokenId || binding.RequestDigest != saved.Request.Digest ||
+            binding.OperationId != saved.OperationId || binding.CorrelationId != saved.CorrelationId ||
+            binding.AccountId != saved.AccountId || binding.SessionId != saved.SessionId || binding.Origin != saved.Origin) return false;
+        var actual = await saved.Http.AuthenticateAsync(AuthenticationIdentity.Scheme).ConfigureAwait(false);
+        if (!actual.Succeeded || actual.Principal is null || !Actor(actual.Principal, out var account, out var session) ||
+            account != saved.AccountId || session != saved.SessionId) return false;
+        var state = new ProofState(saved.ReviewGeneration, prepared, binding);
+        var serialized = JsonSerializer.Serialize(state, Json);
+        if (Encoding.UTF8.GetByteCount(serialized) > Policy(at).MaximumRequestBytes) return false;
+        if (read.Proof is not null) return JsonSerializer.Serialize(read.Proof, Json) == serialized;
+        var descriptor = new OpenIddictTokenDescriptor();
+        await tokens.PopulateAsync(descriptor, read.Token, ct).ConfigureAwait(false);
+        descriptor.Properties[ProofKey] = JsonSerializer.SerializeToElement(proofProtection.Protect(serialized));
+        await tokens.UpdateAsync(read.Token, descriptor, ct).ConfigureAwait(false);
         return true;
     }
 
@@ -196,6 +226,8 @@ internal sealed class ProductAuthorizationContinuation(IdentityPersistenceDbCont
     internal async Task<bool> ReturnToSignInAsync(ProductAuthorizationRestoredContinuation saved, CancellationToken ct)
     {
         RequireTransaction();
+        if (profile.RequireAuthorizationReview)
+            return await SwitchReviewAccountAsync(saved, ct).ConfigureAwait(false);
         var read = await ReadAsync(saved.Http, ct).ConfigureAwait(false);
         if (read is null || !SameSaved(saved, read) || read.Review?.ApprovalDigest is not null || read.Review?.Denied == true) return false;
         var actual = await saved.Http.AuthenticateAsync(AuthenticationIdentity.Scheme).ConfigureAwait(false);
@@ -289,6 +321,21 @@ internal sealed class ProductAuthorizationContinuation(IdentityPersistenceDbCont
                 material.PolicySnapshot != pointer.PolicySnapshot ||
                 await tokens.GetApplicationIdAsync(token, ct).ConfigureAwait(false) != material.NativeApplicationId) return null;
             var at = clock.GetUtcNow(); var current = Policy(at);
+            ProofState? proof = null;
+            if (properties.TryGetValue(ProofKey, out var proofRaw))
+            {
+                if (!profile.RequireAuthorizationReview || proofRaw.ValueKind != JsonValueKind.String ||
+                    proofRaw.GetString() is not { Length: > 0 } protectedProof) return null;
+                var proofJson = proofProtection.Unprotect(protectedProof);
+                if (Encoding.UTF8.GetByteCount(proofJson) > policy.MaximumRequestBytes) return null;
+                proof = JsonSerializer.Deserialize<ProofState>(proofJson, Json);
+                if (proof is null || !pointer.Ready || proof.Generation != pointer.ReviewGeneration ||
+                    proof.Binding.NativeRequestTokenId != pointer.TokenId || proof.Binding.RequestDigest != material.Request.Digest ||
+                    proof.Binding.OperationId != material.OperationId || proof.Binding.CorrelationId != material.CorrelationId ||
+                    proof.Binding.AccountId != pointer.AccountId || proof.Binding.SessionId != pointer.SessionId ||
+                    proof.Binding.Origin != pointer.Origin || proof.Proof.BindingDigest != proof.Binding.Digest ||
+                    proof.Proof.ProofId == Guid.Empty) return null;
+            }
             ReviewState? review = null;
             if (properties.TryGetValue(ReviewKey, out var reviewRaw))
             {
@@ -303,7 +350,7 @@ internal sealed class ProductAuthorizationContinuation(IdentityPersistenceDbCont
             }
             else if (pointer.ReviewGeneration != 0) return null;
             return current.Snapshot == pointer.PolicySnapshot && at >= pointer.CreatedAt && at < pointer.ExpiresAt
-                ? new(pointer, material, token, review) : null;
+                ? new(pointer, material, token, review, proof) : null;
         }
         catch (CryptographicException) { return null; }
         catch (JsonException) { return null; }
@@ -349,12 +396,13 @@ internal sealed class ProductAuthorizationContinuation(IdentityPersistenceDbCont
             !string.IsNullOrWhiteSpace(account) && session is { } id && id != Guid.Empty &&
             principal.FindFirstValue(AuthenticationIdentity.OriginClaim) == profile.Origin;
     }
-    private static ProductAuthorizationRestoredContinuation Saved(HttpContext http, Pointer pointer, Material material, ReviewState? review = null) =>
+    private static ProductAuthorizationRestoredContinuation Saved(HttpContext http, Pointer pointer, Material material,
+        ReviewState? review = null, ProofState? proof = null) =>
         new(http, pointer.TokenId, material.Request, material.NativeApplicationId, material.OperationId, material.CorrelationId,
             material.Origin, material.CreatedAt, material.ExpiresAt, material.PolicySnapshot, material.BindingDigest, pointer.AccountId, pointer.SessionId)
         { Interaction = material.Interaction, ReviewGeneration = pointer.ReviewGeneration,
             ReviewApprovalDigest = review?.ApprovalDigest, ReviewDenied = review?.Denied == true,
-            ReviewDenialDigest = review?.DenialDigest };
+            ReviewDenialDigest = review?.DenialDigest, PreparedStepUpProof = proof?.Proof, PreparedStepUpBinding = proof?.Binding };
     private static bool SameSaved(ProductAuthorizationRestoredContinuation saved, Read read) =>
         saved.Request.Digest == read.Material.Request.Digest && saved.NativeApplicationId == read.Material.NativeApplicationId &&
         saved.OperationId == read.Material.OperationId && saved.CorrelationId == read.Material.CorrelationId && saved.Origin == read.Material.Origin &&

@@ -41,6 +41,16 @@ internal sealed class StepUpCaller
         new AuthenticationCaller(networkDigest, networkDigest, origin, session).Validate();
         return new(account, session, origin, networkDigest);
     }
+    internal static StepUpCaller FromProductAuthorizationActor(ProductAuthorizationActor actor, string origin, string networkDigest)
+    {
+        ArgumentNullException.ThrowIfNull(actor);
+        var session = actor.Session;
+        if (session.State != "ACTIVE" || session.Scheme != AuthenticationIdentity.Scheme || session.Origin != origin ||
+            string.IsNullOrWhiteSpace(session.AccountId) || session.SessionId == Guid.Empty || actor.AccountVersion <= 0)
+            throw new ArgumentException("An actual current server-owned Product authorization actor is required.", nameof(actor));
+        new AuthenticationCaller(networkDigest, networkDigest, origin, session.SessionId).Validate();
+        return new(session.AccountId, session.SessionId, origin, networkDigest);
+    }
     public override string ToString() => nameof(StepUpCaller);
 }
 

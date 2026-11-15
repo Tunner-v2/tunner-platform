@@ -39,5 +39,7 @@ internal sealed record ProductAuthorizationRestoredContinuation(HttpContext Http
     internal string? ReviewDenialDigest { get; init; }
     internal bool ReviewDenied { get; init; }
     internal int ReviewGeneration { get; init; }
+    internal ProductAuthorizationPreparedProof? PreparedStepUpProof { get; init; }
+    internal ProductAuthorizationProofBinding? PreparedStepUpBinding { get; init; }
     public override string ToString() => nameof(ProductAuthorizationRestoredContinuation);
 }

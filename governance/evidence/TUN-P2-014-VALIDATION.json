@@ -5,7 +5,13 @@
   "result": "PENDING",
   "tested_commit_sha": null,
   "validated_commit_sha": null,
-  "phase": "PRODUCT_REVIEW_INCREMENT_PASSED_SHARED_STEPUP_AUTHORIZATION_PENDING",
+  "phase": "SHARED_STEPUP_IMPLEMENTED_FOCUSED_VALIDATION_IN_PROGRESS",
+  "pre_stepup_integrated_regression": {
+    "source_commit_sha":"dd35eace69b99bfe443a296f876d466aace84856",
+    "run_id":"659739ebf2b747d5a67365a53a9e582e","executed":67,"passed":67,"failed":0,"not_executed":0,"exit_code":0,"timed_out":false,"owned_containers_remaining":0,"borrowed_preserved":true,
+    "diagnostic":"The prior51-case runfba7b66e9b0c4b7ea68fd7d080fe77fc at e9443b3 executed51/passed50/failed1 during database provisioning with PostgreSQL53300 too many clients; the isolated case passed1/1 in run3ede52ea3edb47cfabe6694eb3d023bf. Disposing EF providers retained per-scenario implicit pools. dd35eac clears only each owned scenario connection-string pool after disposal, preserving shared fixtures/images and assertions. This full67-case run qualifies that correction; subsequent Shared StepUp changes require separate execution."
+  },
+  "stepup_authorization_ref":"governance/evidence/TUN-P2-014-STEPUP-INTEGRATION-AUTHORIZATION.json",
   "product_review_increment": {
     "result": "PASS_FOCUSED_INCREMENT_ONLY",
     "source_commit_sha": "8ee80f542245e31e56d003bf34d02e136219d74d",
@@ -130,6 +136,19 @@
     "web/apps/user/product-authorization.continuation.ts",
     "src/Modules/Identity/ProductAuthorizationReviewContracts.cs",
     "src/Modules/Identity/ProductAuthorizationReview.cs",
+    "src/Modules/Identity/ProductAuthorizationStepUp.cs",
+    "src/Modules/Identity/ProductAuthorizationStepUpContracts.cs",
+    "src/Modules/Identity/ProductAuthorizationStepUpOwnerRouter.cs",
+    "src/Modules/Identity/StepUpProductAuthorization.cs",
+    "src/Modules/Identity/StepUpApplication.cs",
+    "src/Modules/Identity/StepUpBrowserEndpoints.cs",
+    "src/Modules/Identity/StepUpContracts.cs",
+    "web/apps/user/step-up.tsx",
+    "web/apps/user/step-up.completion.ts",
+    "web/apps/user/step-up.passkey.ts",
+    "web/apps/user/step-up.totp.tsx",
+    "web/apps/user/step-up.federation.tsx",
+    "web/tests/authentication/product-authorization-proof.spec.ts",
     "web/apps/user/product-authorization.api.ts",
     "web/apps/user/product-authorization.tsx",
     "web/apps/user/product-authorization.login.tsx",
@@ -157,7 +176,7 @@
   },
   "compatibility_revisions": [
     "P2-003-RV002",
-    "P2-010-RV009", "P2-013-RV001", "P2-004-UI001-RV010", "P2-004-UI002-RV010"
+    "P2-010-RV009", "P2-013-RV001", "P2-004-UI001-RV010", "P2-004-UI002-RV010", "P1-018-RV013"
   ],
   "rd_ref": "governance/evidence/TUN-P2-014-RD-SOURCES.json",
   "contract_ref": "docs/contracts/product-authorization-contract.md",
@@ -165,5 +184,5 @@
   "boundary": "Explicit qualified issuer/keys/client/registry/Relationship/policy inputs; missing providers deny activation. No production default or Product membership/entitlement/local-session authority. Existing Figma/Drive/FigJam remain read-only.",
   "actual_feature_tests": ["first_increment", "focused_code_cohort", "integrated_protocol_cohort", "continuation_increment", "interaction_increment"],
   "product_acceptance": "NOT_REQUESTED_OR_GRANTED",
-  "exact_next_action": "Await the separately requested Shared StepUp security grant; apply only the reviewed corrected support proposal and necessary native/owner/shared-dialog integration if authorized, then focused proof/regression tests. Existing16 native review,31 browser and3 affected-viewport results are retained. Complete required enabled propagation, broad regression, UI/native/compatibility and Product gates before closing014."
+  "exact_next_action": "Shared StepUp implementation is explicitly authorized. Compile the integrated source and isolate the actual password-to-proof-ready-to-explicit-Allow native roundtrip and same-transaction proof-reuse/rollback tests first. Repair confirmed new browser TOTP/cancel failures, run focused remaining proof/security and affected-consumer regression, then required enabled propagation and UI/native/compatibility/Product gates. Preserve qualified pre-StepUp67 and prior browser results at their original sources; no full014 acceptance."
 }

@@ -9,7 +9,7 @@ const publications=z.record(z.string(),published);
 const https=text.refine(value=>{try{const uri=new URL(value);return uri.protocol==='https:'&&!uri.username&&!uri.password;}catch{return false;}});
 const registeredOrigin=https.refine(value=>new URL(value).origin===value);
 export const productAuthorizationKeys=['brand.tunner','authorization.heading','authorization.description','authorization.product','authorization.account','authorization.permissions','authorization.assurance','authorization.callback','authorization.allow','authorization.deny','authorization.switchAccount','authorization.working','authorization.changed','authorization.unavailable','authorization.proofRequired','authorization.loginRequired','authorization.boundary','authorization.footer.privacy','authorization.footer.terms','authorization.footer.support'] as const;
-const reviewSchema=z.object({reference:text,csrfToken:text,canAllow:z.boolean(),interactionStatus:z.enum(['Satisfied','RequiresSignIn','RequiresFreshProof','Denied']),locale:text,content:publications,productName:fact,accountLabel:fact,registeredReturnOrigin:registeredOrigin,requestedAssuranceLabel:fact.nullable(),issuedClaimNames:z.array(fact),scopeDescriptions:publications,termsUri:https,privacyUri:https,supportUri:https.nullable()});
+const reviewSchema=z.object({reference:text,csrfToken:text,canAllow:z.boolean(),interactionStatus:z.enum(['Satisfied','RequiresSignIn','RequiresFreshProof','Denied']),stepUpAvailable:z.boolean().optional(),operationReference:text.nullable().optional(),locale:text,content:publications,productName:fact,accountLabel:fact,registeredReturnOrigin:registeredOrigin,requestedAssuranceLabel:fact.nullable(),issuedClaimNames:z.array(fact),scopeDescriptions:publications,termsUri:https,privacyUri:https,supportUri:https.nullable()});
 export type ProductAuthorizationOptions=z.infer<typeof reviewSchema>;
 export type ProductAuthorizationDecision='ALLOW'|'DENY'|'SWITCH_ACCOUNT';
 
@@ -20,6 +20,10 @@ export function parseProductAuthorizationOptions(raw:unknown):ProductAuthorizati
   const options=reviewSchema.parse(raw);
   if(options.canAllow!==(options.interactionStatus==='Satisfied'))throw new Error('Inconsistent Product authorization interaction.');
   requireProductAuthorizationPublished(options.content,options.locale,productAuthorizationKeys);
+  if(options.stepUpAvailable===true){
+    if(options.interactionStatus!=='RequiresFreshProof'||!options.operationReference)throw new Error('The exact Product proof operation is required.');
+    requireProductAuthorizationPublished(options.content,options.locale,['authorization.verify']);
+  }
   requireProductAuthorizationPublished(options.scopeDescriptions,options.locale,Object.keys(options.scopeDescriptions));
   for(const key of ['authorization.heading','authorization.permissions','authorization.boundary'])productAuthorizationContentValues(options.content,key,options.productName);
   return options;

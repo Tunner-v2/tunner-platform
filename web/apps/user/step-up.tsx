@@ -7,11 +7,11 @@ import {stepUpPasskeyKeys,stepUpPasskeyRecoverySchema,useStepUpPasskey} from './
 import {StepUpTotpDialog,stepUpTotpRecoverySchema} from './step-up.totp';
 import {totpChoiceSchema} from './totp.api';
 import {stepUpTotpKeys,totpSelectionKeys} from './totp.content-keys';
-import {parseStepUpCompletion,rejectStepUpRecoveryDelivery} from './step-up.completion';
-import type {StepUpCompletion} from './step-up.completion';
+import {parseStepUpOutcome,parseStepUpProofReady,rejectStepUpRecoveryDelivery} from './step-up.completion';
+import type {StepUpCompletion,StepUpOutcome,StepUpProofReady} from './step-up.completion';
 import type {RecoveryCodeDeliveryReceiver} from './recovery-codes.api';
 import {StepUpFederationChoices,stepUpFederationKeys,stepUpFederationSchema,useStepUpFederation} from './step-up.federation';
-export type {StepUpCompletion} from './step-up.completion';
+export type {StepUpCompletion,StepUpOutcome,StepUpProofReady} from './step-up.completion';
 
 const keys=['heading','description','passkey','passkey.description','authenticator','authenticator.description','other','unavailable','password.description',
   'password.label','password.placeholder','back','cancel','confirm','working','error.password','error.highlighted','error.credentials','error.limited','error.unavailable','error.changed'] as const;
@@ -20,10 +20,15 @@ const pending=z.object({status:z.literal('PENDING'),requestId:z.uuid(),csrfToken
   passwordAvailable:z.boolean(),operationReference:z.string().min(1).optional(),passkeyAvailable:z.boolean().optional(),maximumCredentialJsonBytes:z.number().int().min(1024).max(1048576).nullable().optional(),passkeyRecovery:stepUpPasskeyRecoverySchema.nullable().optional(),totpAvailable:z.boolean().optional(),totpAuthenticators:z.array(totpChoiceSchema).optional(),totpRecovery:stepUpTotpRecoverySchema.nullable().optional(),federation:stepUpFederationSchema.optional(),locale:z.string().min(1),content:z.record(z.string(),z.object({key:z.string(),variantRef:z.string().min(1),versionRef:z.string().min(1),publicationRef:z.string().min(1),locale:z.string().min(1),state:z.literal('PUBLISHED'),text:z.string().min(1)}))});
 export function stepUpPasswordSchema(maximum:number){return z.object({password:z.string().refine(value=>Array.from(value).length>0&&Array.from(value).length<=maximum,'stepUp.error.password')});}
 const completed=z.object({status:z.literal('COMPLETED'),requestId:z.uuid().nullable(),operationReference:z.string().min(1).optional(),totpRecovery:stepUpTotpRecoverySchema.nullable().optional()});
-export async function loadStepUpOptions(signal?:AbortSignal):Promise<StepUpBootstrap|{status:'COMPLETED';requestId:string|null;operationReference?:string|undefined;totpRecovery?:z.infer<typeof stepUpTotpRecoverySchema>|null|undefined}>{
+type StepUpOptions=StepUpBootstrap|{status:'COMPLETED';requestId:string|null;operationReference?:string|undefined;totpRecovery?:z.infer<typeof stepUpTotpRecoverySchema>|null|undefined};
+export function loadStepUpOptions(signal?:AbortSignal):Promise<StepUpOptions>;
+export function loadStepUpOptions(signal:AbortSignal|undefined,expectedProofOperation:string):Promise<StepUpOptions|StepUpProofReady>;
+export async function loadStepUpOptions(signal?:AbortSignal,expectedProofOperation?:string):Promise<StepUpOptions|StepUpProofReady>{
   const response=await fetch('/authentication/step-up/options',{credentials:'same-origin',cache:'no-store',redirect:'error',...(signal?{signal}:{})});
   if(!response.ok)throw new Error('Step-up unavailable');
-  const raw:unknown=await response.json();rejectStepUpRecoveryDelivery(raw);const done=completed.safeParse(raw);if(done.success)return done.data;
+  const raw:unknown=await response.json();rejectStepUpRecoveryDelivery(raw);
+  if(raw!==null&&typeof raw==='object'&&'status' in raw&&raw.status==='PROOF_READY')return parseStepUpProofReady(raw,expectedProofOperation,expectedProofOperation!==undefined);
+  const done=completed.safeParse(raw);if(done.success)return done.data;
   const result=pending.parse(raw);
   const native=result.passkeyAvailable===true||!!result.passkeyRecovery;
   if(native&&(!result.operationReference||result.passkeyAvailable===true&&!result.maximumCredentialJsonBytes))throw new Error('Explicit native proof context is required.');
@@ -36,24 +41,27 @@ export async function loadStepUpOptions(signal?:AbortSignal):Promise<StepUpBoots
   return result;
 }
 export interface StepUpDismissal{unresolved:boolean}
-export interface StepUpDialogProps{bootstrap:StepUpBootstrap;onComplete:(outcome:StepUpCompletion)=>void;onCancel:(outcome?:StepUpDismissal)=>void;returnFocusTo?:HTMLElement|null;reconcile?:(signal:AbortSignal)=>Promise<StepUpCompletion|null>;recoveryCodeDelivery?:RecoveryCodeDeliveryReceiver}
-export function StepUpDialog({bootstrap,onComplete,onCancel,returnFocusTo,reconcile,recoveryCodeDelivery}:StepUpDialogProps){
-  return <ContentProvider locale={bootstrap.locale} audience="step-up" resolve={key=>bootstrap.content[key]}><Dialog bootstrap={bootstrap} onComplete={onComplete} onCancel={onCancel} {...(returnFocusTo?{returnFocusTo}:{})} {...(reconcile?{reconcile}:{})} {...(recoveryCodeDelivery?{recoveryCodeDelivery}:{})}/></ContentProvider>;
+export interface StepUpDialogProps{bootstrap:StepUpBootstrap;onComplete:(outcome:StepUpCompletion)=>void;onProofReady?:(outcome:StepUpProofReady)=>void;onCancel:(outcome?:StepUpDismissal)=>void;returnFocusTo?:HTMLElement|null;reconcile?:(signal:AbortSignal)=>Promise<StepUpOutcome|null>;recoveryCodeDelivery?:RecoveryCodeDeliveryReceiver}
+export function StepUpDialog({bootstrap,onComplete,onProofReady,onCancel,returnFocusTo,reconcile,recoveryCodeDelivery}:StepUpDialogProps){
+  return <ContentProvider locale={bootstrap.locale} audience="step-up" resolve={key=>bootstrap.content[key]}><Dialog bootstrap={bootstrap} onComplete={onComplete} onCancel={onCancel} {...(onProofReady?{onProofReady}:{})} {...(returnFocusTo?{returnFocusTo}:{})} {...(reconcile?{reconcile}:{})} {...(recoveryCodeDelivery?{recoveryCodeDelivery}:{})}/></ContentProvider>;
 }
-function Dialog({bootstrap,onComplete,onCancel,returnFocusTo,reconcile,recoveryCodeDelivery}:StepUpDialogProps){
+function Dialog({bootstrap,onComplete,onProofReady,onCancel,returnFocusTo,reconcile,recoveryCodeDelivery}:StepUpDialogProps){
   const [view,setView]=useState<'chooser'|'password'|'changed'|'totp'>(bootstrap.totpRecovery?'totp':'chooser');const [password,setPassword]=useState('');
   const [error,setError]=useState<string>();const [serverField,setServerField]=useState<string>();
   const form=useTunnerForm(stepUpPasswordSchema(bootstrap.passwordMaximumLength),{password});
   const id=useId();const controller=useRef(new AbortController());const closed=useRef(false);
   const federationSelected=useRef(!!bootstrap.federation?.recovery);
   useEffect(()=>{closed.current=false;controller.current=new AbortController();return()=>{closed.current=true;controller.current.abort();};},[]);
-  const native=useStepUpPasskey({bootstrap,load:loadStepUpOptions,complete,reconcile,recoveryCodeDelivery});
-  const federation=useStepUpFederation({bootstrap,blocked:()=>closed.current||native.active||native.busy||form.submitPending||view!=='chooser',complete,reconcile,recoveryCodeDelivery,dismiss:()=>{if(closed.current)return;closed.current=true;setPassword('');onCancel({unresolved:true});}});
+  const load=(signal:AbortSignal)=>onProofReady?loadStepUpOptions(signal,bootstrap.operationReference??''):loadStepUpOptions(signal);
+  const native=useStepUpPasskey({bootstrap,load,complete,reconcile,recoveryCodeDelivery,...(onProofReady?{proofReady}:{})});
+  const federation=useStepUpFederation({bootstrap,blocked:()=>closed.current||native.active||native.busy||form.submitPending||view!=='chooser',complete,reconcile,recoveryCodeDelivery,...(onProofReady?{proofReady}:{}),dismiss:()=>{if(closed.current)return;closed.current=true;setPassword('');onCancel({unresolved:true});}});
   useEffect(()=>{document.getElementById(!native.active&&!federation.active&&view==='password'?id+'-password':id+'-heading')?.focus();},[view,id,native.mode,native.active,federation.mode,federation.active]);
   useEffect(()=>{if(serverField&&!form.submitPending)document.getElementById(id+'-password')?.focus();},[serverField,id,form.submitPending]);
   function cancel(){if(form.submitPending||native.busy||federation.busy)return;if(federation.active){void federation.cancel();return;}closed.current=true;setPassword('');onCancel(native.unresolved?{unresolved:true}:undefined);}
   function complete(outcome:StepUpCompletion={status:'COMPLETED',signInRequired:false}){if(closed.current)return;closed.current=true;setPassword('');onComplete(outcome);}
-  async function reconcileOwner(){if(!reconcile)return false;const outcome=await reconcile(controller.current.signal);if(closed.current)return false;rejectStepUpRecoveryDelivery(outcome);if(outcome?.status==='COMPLETED'){complete(outcome);return true;}return false;}
+  function proofReady(outcome:StepUpProofReady){if(closed.current)return;const ready=parseStepUpProofReady(outcome,bootstrap.operationReference,!!onProofReady);closed.current=true;setPassword('');onProofReady!(ready);}
+  function accept(outcome:StepUpOutcome){if(outcome.status==='PROOF_READY')proofReady(outcome);else complete(outcome);}
+  async function reconcileOwner(){if(!reconcile)return false;const outcome=await reconcile(controller.current.signal);if(closed.current)return false;rejectStepUpRecoveryDelivery(outcome);if(outcome){accept(parseStepUpOutcome(outcome,bootstrap.requestId,bootstrap.operationReference,undefined,!!onProofReady));return true;}return false;}
   function changed(){setPassword('');setError(undefined);setServerField(undefined);setView('changed');}
   async function submit(){
     if(federationSelected.current)return;
@@ -62,7 +70,7 @@ function Dialog({bootstrap,onComplete,onCancel,returnFocusTo,reconcile,recoveryC
       const response=await fetch('/authentication/step-up/password',{method:'POST',credentials:'same-origin',cache:'no-store',redirect:'error',signal:controller.current.signal,
         headers:{'Content-Type':'application/json','X-Tunner-CSRF':bootstrap.csrfToken},body:JSON.stringify({requestId:bootstrap.requestId,password})});
       if(closed.current)return;
-      if(response.ok){const raw:unknown=await response.json();if(closed.current)return;const result=parseStepUpCompletion(raw,bootstrap.requestId,bootstrap.operationReference,recoveryCodeDelivery);complete(result);return;}
+      if(response.ok){const raw:unknown=await response.json();if(closed.current)return;accept(parseStepUpOutcome(raw,bootstrap.requestId,bootstrap.operationReference,recoveryCodeDelivery,!!onProofReady));return;}
       const problem=await response.json() as {error_code?:string};
       if(response.status===401&&problem.error_code==='AUTHENTICATION_FAILED'){
         const session=await fetch('/authentication/session',{credentials:'same-origin',cache:'no-store',redirect:'error',signal:controller.current.signal});
@@ -75,15 +83,16 @@ function Dialog({bootstrap,onComplete,onCancel,returnFocusTo,reconcile,recoveryC
       if(closed.current)return;
       try{
         if(await reconcileOwner())return;
-        const current=await loadStepUpOptions(controller.current.signal);
+        const current=await load(controller.current.signal);
         if(closed.current)return;
+        if(current.status==='PROOF_READY'){proofReady(current);return;}
         if(current.requestId!==bootstrap.requestId||bootstrap.operationReference!==undefined&&current.operationReference!==bootstrap.operationReference){changed();return;}
         if(current.status==='COMPLETED'){complete({status:'COMPLETED',signInRequired:false,...(current.operationReference?{operationReference:current.operationReference}:{})});return;}
       }catch{/* Keep the original owner/view binding and allow only an explicit safe retry. */}
       if(!closed.current)setError('stepUp.error.unavailable');
     }finally{if(!closed.current){setPassword('');form.reset();}}
   }
-  if(view==='totp')return <StepUpTotpDialog bootstrap={bootstrap} load={loadStepUpOptions} onComplete={complete} onBack={()=>setView('chooser')} onCancel={outcome=>{closed.current=true;setPassword('');onCancel(outcome);}} {...(returnFocusTo?{returnFocusTo}:{})} {...(reconcile?{reconcile}:{})} {...(recoveryCodeDelivery?{recoveryCodeDelivery}:{})}/>;
+  if(view==='totp')return <StepUpTotpDialog bootstrap={bootstrap} load={load} onComplete={complete} {...(onProofReady?{onProofReady:proofReady}:{})} onBack={()=>setView('chooser')} onCancel={outcome=>{closed.current=true;setPassword('');onCancel(outcome);}} {...(returnFocusTo?{returnFocusTo}:{})} {...(reconcile?{reconcile}:{})} {...(recoveryCodeDelivery?{recoveryCodeDelivery}:{})}/>;
   return <ModalDialog labelledBy={id+'-heading'} describedBy={id+'-description'} busy={form.submitPending||native.busy||federation.busy} {...(returnFocusTo?{returnFocusTo}:{})} onRequestClose={cancel} className="step-up-dialog">
     <div data-tunner-component="COMP-STEP-UP" className={'step-up-card '+view+(bootstrap.federation&&(bootstrap.federation.choices.length||bootstrap.federation.recovery)?' has-federation':'')}>
       <h1 id={id+'-heading'} tabIndex={-1}><ContentText contentKey="stepUp.heading"/></h1>

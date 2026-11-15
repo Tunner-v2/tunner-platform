@@ -2,6 +2,7 @@ using System.Collections.Immutable;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.IdentityModel.Tokens;
 using OpenIddict.Abstractions;
 using OpenIddict.Server;
@@ -20,7 +21,7 @@ public sealed class ProductAuthorizationServerProfile
         SecurityKey signingKey, SecurityKey encryptionKey, ImmutableArray<string> supportedScopes, ImmutableArray<string> supportedResources,
         int maximumBodyBytes, int maximumFields, int maximumKeyLength, int maximumValueLength,
         ProductAuthorizationLifecycleServerProfile? lifecycle = null, bool enableContinuation = false,
-        bool requireAuthorizationReview = false)
+        bool requireAuthorizationReview = false, bool enableOperationStepUp = false)
     {
         if (!Uri.TryCreate(origin, UriKind.Absolute, out var uri) || uri.Scheme != "https" ||
             origin != uri.GetLeftPart(UriPartial.Authority) || uri.UserInfo.Length != 0)
@@ -59,6 +60,9 @@ public sealed class ProductAuthorizationServerProfile
         if (requireAuthorizationReview && !enableContinuation)
             throw new ArgumentException("Explicit Product review requires protected native continuation.", nameof(requireAuthorizationReview));
         RequireAuthorizationReview = requireAuthorizationReview;
+        if (enableOperationStepUp && !requireAuthorizationReview)
+            throw new ArgumentException("Product operation proof requires explicit authorization review.", nameof(enableOperationStepUp));
+        EnableOperationStepUp = enableOperationStepUp;
     }
     public string Origin { get; }
     public string AuthorizationPath { get; }
@@ -70,6 +74,7 @@ public sealed class ProductAuthorizationServerProfile
     public ProductAuthorizationLifecycleServerProfile? Lifecycle { get; }
     public bool EnableContinuation { get; }
     public bool RequireAuthorizationReview { get; }
+    public bool EnableOperationStepUp { get; }
     internal int MaximumBodyBytes { get; }
     internal int MaximumFields { get; }
     internal int MaximumKeyLength { get; }
@@ -98,6 +103,14 @@ public static class ProductAuthorizationServer
         services.AddScoped<ProductAuthorizationApplication>();
         if (profile.EnableContinuation) services.AddScoped<ProductAuthorizationContinuation>();
         if (profile.RequireAuthorizationReview) services.AddScoped<ProductAuthorizationReview>();
+        if (profile.EnableOperationStepUp)
+        {
+            Type[] proofProviders = [typeof(IAssurancePolicySource), typeof(IUserStepUpOperationSource), typeof(IStepUpPresentationSource)];
+            if (proofProviders.Any(type => !services.Any(item => item.ServiceType == type)))
+                throw new InvalidOperationException("Product operation proof requires explicit qualified shared StepUp providers.");
+            services.TryAddScoped<StepUpApplication>();
+            services.AddScoped<ProductAuthorizationStepUp>();
+        }
         if (profile.Lifecycle is not null) services.AddScoped<ProductAuthorizationLifecycleApplication>();
         string[] callbackPaths = profile.Lifecycle is { } lifecycle
             ? [profile.TokenPath, lifecycle.IntrospectionPath, lifecycle.RevocationPath] : [profile.TokenPath];

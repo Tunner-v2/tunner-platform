@@ -16,7 +16,7 @@ internal sealed partial class ProductAuthorizationProtocol(IdentityPersistenceDb
     ProductAuthorizationServerProfile profile, IOpenIddictApplicationManager clients, IOpenIddictAuthorizationManager authorizations,
     IOpenIddictTokenManager tokens, IHttpContextAccessor accessor, AuthenticationPartitionKey partitions, TimeProvider clock,
     ProductAuthorizationLifecycleApplication? lifecycleApplication = null, ProductAuthorizationContinuation? continuation = null,
-    ProductAuthorizationReview? review = null) :
+    ProductAuthorizationReview? review = null, ProductAuthorizationStepUp? productStepUp = null) :
     IOpenIddictServerHandler<OpenIddictServerEvents.ProcessRequestContext>,
     IOpenIddictServerHandler<OpenIddictServerEvents.HandleAuthorizationRequestContext>,
     IOpenIddictServerHandler<OpenIddictServerEvents.HandleTokenRequestContext>,
@@ -58,6 +58,7 @@ internal sealed partial class ProductAuthorizationProtocol(IdentityPersistenceDb
         { context.Reject(Errors.InteractionRequired); return; }
         if (Http.Connection.RemoteIpAddress is null) { context.Reject(Errors.InvalidRequest); return; }
         ProductAuthorizationRequest request;
+        ProductAuthorizationNativeStepUp? nativeStepUp = null;
         try
         {
             request = new((string?)context.Request.GetParameter("product_id") ?? string.Empty,
@@ -80,7 +81,8 @@ internal sealed partial class ProductAuthorizationProtocol(IdentityPersistenceDb
                 ? caller is null ? ProductAuthorizationInteractionStatus.RequiresSignIn : ProductAuthorizationInteractionStatus.Satisfied
                 : (await application.EvaluateInteractionAsync(caller, request, profile.Origin, interaction, ct).ConfigureAwait(false)).Status;
             if (status == ProductAuthorizationInteractionStatus.Denied) { context.Reject(Errors.AccessDenied); return; }
-            if (status == ProductAuthorizationInteractionStatus.RequiresFreshProof && !profile.RequireAuthorizationReview)
+            if (status == ProductAuthorizationInteractionStatus.RequiresFreshProof &&
+                (!profile.RequireAuthorizationReview || context.Request.GetPromptValues().Contains(PromptValues.None, StringComparer.Ordinal)))
             { context.Reject(Errors.InteractionRequired); return; }
             if (status == ProductAuthorizationInteractionStatus.RequiresSignIn)
             {
@@ -140,9 +142,15 @@ internal sealed partial class ProductAuthorizationProtocol(IdentityPersistenceDb
                     Http.Response.Headers.CacheControl = "no-store"; Http.Response.Headers["Referrer-Policy"] = "no-referrer";
                     Http.Response.Redirect(ProductAuthorizationReviewEndpoints.ScreenPath); context.HandleRequest(); return;
                 }
+                if (status == ProductAuthorizationInteractionStatus.RequiresFreshProof)
+                {
+                    if (productStepUp is null ||
+                        (nativeStepUp = await productStepUp.ConsumeAsync(restoredContinuation, ct).ConfigureAwait(false)) is null)
+                    { context.Reject(Errors.InteractionRequired); return; }
+                }
             }
             grant = await application.AuthorizeAsync(caller, request, restoredContinuation?.OperationId ?? "OP-" + Guid.NewGuid().ToString("N"),
-                restoredContinuation?.CorrelationId ?? Guid.NewGuid().ToString("N"), ct, interaction).ConfigureAwait(false);
+                restoredContinuation?.CorrelationId ?? Guid.NewGuid().ToString("N"), ct, interaction, nativeStepUp).ConfigureAwait(false);
         }
         catch (ArgumentException) { context.Reject(Errors.InvalidRequest); return; }
         if (grant is null) { context.Reject(Errors.AccessDenied); return; }
@@ -190,7 +198,8 @@ internal sealed partial class ProductAuthorizationProtocol(IdentityPersistenceDb
             await authorizations.GetApplicationIdAsync(authorization, ct).ConfigureAwait(false) != lineage.Registration.NativeApplicationId ||
             await authorizations.GetSubjectAsync(authorization, ct).ConfigureAwait(false) != lineage.Relationship.Subject)
         { context.Reject(Errors.InvalidGrant); return; }
-        grant = await application.RedeemAsync(lineage, ct).ConfigureAwait(false);
+        grant = await application.RedeemAsync(lineage, ct, Http.Connection.RemoteIpAddress is { } remote
+            ? partitions.Network(remote) : null).ConfigureAwait(false);
         if (grant is null) { context.Reject(Errors.InvalidGrant); return; }
         authorizationId = id; context.Principal = Principal(grant, id);
     }
@@ -239,7 +248,8 @@ internal sealed partial class ProductAuthorizationProtocol(IdentityPersistenceDb
     {
         if (redemption || !profile.RequireAuthorizationReview) return true;
         if (!consumedContinuation || restoredContinuation is null || review is null) return false;
-        try { return await review.ValidateApprovalAsync(restoredContinuation, ct, consumed: true).ConfigureAwait(false); }
+        try { return await review.ValidateApprovalAsync(restoredContinuation, ct, consumed: true,
+            nativeStepUp: grant?.Lineage.NativeStepUp).ConfigureAwait(false); }
         catch (InvalidOperationException) { return false; }
         catch (System.Net.Http.HttpRequestException) { return false; }
         catch (TimeoutException) { return false; }

@@ -9,7 +9,8 @@ namespace Tunner.Identity.Persistence;
 /// <summary>Private Identity owner. Native server processing owns protocol validation, redemption and the outer transaction.</summary>
 internal sealed partial class ProductAuthorizationApplication(IdentityPersistenceDbContext database, AuthenticationApplication authentication,
     IProductAuthorizationPolicySource policies, IProductAuthorizationRegistrySource registry,
-    IProductAuthorizationRelationshipSource relationships, TimeProvider clock)
+    IProductAuthorizationRelationshipSource relationships, TimeProvider clock,
+    StepUpApplication? proofApplication = null, IProductAuthorizationPresentationSource? proofPresentations = null)
 {
     internal const string LineageProperty = "tunner.product.authorization.v1";
     internal const string AuthorizeOperation = "AUTHORIZE_PRODUCT";
@@ -25,7 +26,8 @@ internal sealed partial class ProductAuthorizationApplication(IdentityPersistenc
     }
 
     internal async Task<ProductAuthorizationGrant?> AuthorizeAsync(StepUpCaller caller, ProductAuthorizationRequest request,
-        string operationId, string correlationId, CancellationToken ct, ProductAuthorizationInteractionContext? interaction = null)
+        string operationId, string correlationId, CancellationToken ct, ProductAuthorizationInteractionContext? interaction = null,
+        ProductAuthorizationNativeStepUp? nativeStepUp = null)
     {
         RequireTransaction(); ArgumentNullException.ThrowIfNull(caller); ArgumentNullException.ThrowIfNull(request);
         ArgumentException.ThrowIfNullOrWhiteSpace(operationId); ArgumentException.ThrowIfNullOrWhiteSpace(correlationId);
@@ -34,7 +36,8 @@ internal sealed partial class ProductAuthorizationApplication(IdentityPersistenc
         if (!Registered(request, registration, clock.GetUtcNow())) return null;
         var actor = await authentication.LockProductAuthorizationAsync(caller, AuthorizeOperation, ct).ConfigureAwait(false);
         if (actor is null || !await authentication.ProductAuthorizationCurrentAsync(actor, AuthorizeOperation, ct).ConfigureAwait(false)) return null;
-        var evaluation = EvaluateActorInteraction(actor, request, caller.Origin, policy, interaction, clock.GetUtcNow());
+        var evaluation = await EvaluateNativeInteractionAsync(actor, request, caller.Origin, policy, interaction, nativeStepUp,
+            caller, registration, operationId, correlationId, ct).ConfigureAwait(false);
         if (evaluation.Status != ProductAuthorizationInteractionStatus.Satisfied) return null;
         var relationshipRequest = new ProductRelationshipRequest(caller.AccountId, actor.AccountVersion, caller.SessionId,
             request.ProductId, registration.ProductVersion, request.Environment, registration.EnvironmentVersion,
@@ -45,27 +48,35 @@ internal sealed partial class ProductAuthorizationApplication(IdentityPersistenc
         var at = clock.GetUtcNow();
         var expires = Earliest(at + policy.AuthorizationCodeLifetime, actor.Session.ExpiresAt,
             actor.Session.AuthenticatedAt + policy.MaximumAuthenticationAge, policy.Metadata.EffectiveInterval.Until,
-            registration.EffectiveInterval.Until, relationship.EffectiveInterval.Until);
+            registration.EffectiveInterval.Until, relationship.EffectiveInterval.Until, nativeStepUp?.Receipt.ExpiresAt);
         if (expires <= at) return null;
         var lineage = new ProductAuthorizationLineage(1, request, caller.AccountId, actor.AccountVersion, caller.SessionId,
             caller.Origin, actor.Session.AuthenticatedAt, actor.Session.AuthenticationMethods, actor.Session.Assurance,
             actor.AuthenticationPolicy.Version, actor.Session.SecurityStampDigest, JsonSerializer.Serialize(actor.SessionUse),
             JsonSerializer.Serialize(actor.ProductAuthorization), policy.Snapshot, registration,
             relationshipRequest, relationship, operationId, correlationId, at, expires)
-        { Interaction = interaction, AuthenticationClaims = evaluation.AuthenticationClaims };
-        var grant = new ProductAuthorizationGrant(lineage, policy, actor);
+        { Interaction = interaction, AuthenticationClaims = evaluation.AuthenticationClaims, NativeStepUp = nativeStepUp };
+        var grant = new ProductAuthorizationGrant(lineage, policy, actor) { ProofCaller = nativeStepUp is null ? null : caller };
         return await VerifyCurrentAsync(grant, ct).ConfigureAwait(false) ? grant : null;
     }
 
-    internal async Task<ProductAuthorizationGrant?> RedeemAsync(ProductAuthorizationLineage original, CancellationToken ct)
+    internal async Task<ProductAuthorizationGrant?> RedeemAsync(ProductAuthorizationLineage original, CancellationToken ct,
+        string? currentNetworkDigest = null)
     {
         RequireTransaction(); ArgumentNullException.ThrowIfNull(original);
         if (!Shape(original)) return null;
         var policy = Policy(original.Origin); original.Request.Require(policy);
         if (policy.Snapshot != original.PolicySnapshot || clock.GetUtcNow() >= original.CodeExpiresAt) return null;
         var actor = await authentication.LockProductAuthorizationAsync(original, RedeemOperation, ct).ConfigureAwait(false);
-        if (actor is null || !OriginalActor(original, actor) || !InteractionCurrent(original, actor, policy, clock.GetUtcNow())) return null;
-        var grant = new ProductAuthorizationGrant(original, policy, actor) { IsRedemption = true };
+        if (actor is null || !OriginalActor(original, actor)) return null;
+        StepUpCaller? caller = null;
+        if (original.NativeStepUp is not null)
+        {
+            if (string.IsNullOrWhiteSpace(currentNetworkDigest)) return null;
+            caller = StepUpCaller.FromProductAuthorizationActor(actor, original.Origin, currentNetworkDigest);
+        }
+        if (!await InteractionCurrentAsync(original, actor, policy, caller, ct).ConfigureAwait(false)) return null;
+        var grant = new ProductAuthorizationGrant(original, policy, actor) { IsRedemption = true, ProofCaller = caller };
         return await VerifyCurrentAsync(grant, ct).ConfigureAwait(false) ? grant : null;
     }
 
@@ -85,9 +96,10 @@ internal sealed partial class ProductAuthorizationApplication(IdentityPersistenc
         // This rechecks current Account restrictions, verified contact/security stamp and current authenticator facts.
         if (!await authentication.ProductAuthorizationCurrentAsync(grant.Actor,
                 grant.IsRedemption ? RedeemOperation : AuthorizeOperation, ct).ConfigureAwait(false)) return false;
+        if (!await InteractionCurrentAsync(original, grant.Actor, policy, grant.ProofCaller, ct).ConfigureAwait(false)) return false;
         var at = clock.GetUtcNow(); var finalPolicy = Policy(original.Origin);
         return finalPolicy.Snapshot == original.PolicySnapshot && at >= original.AuthorizedAt && at < original.CodeExpiresAt &&
-            InteractionCurrent(original, grant.Actor, finalPolicy, at) && registration.EffectiveInterval.Contains(at) &&
+            InteractionCurrentAt(original, grant.Actor, finalPolicy, at) && registration.EffectiveInterval.Contains(at) &&
             relationship.EffectiveInterval.Contains(at) && OriginalActor(original, grant.Actor);
     }
 
@@ -117,6 +129,7 @@ internal sealed partial class ProductAuthorizationApplication(IdentityPersistenc
         }
         catch (JsonException) { return null; }
         catch (ArgumentException) { return null; }
+        catch (InvalidOperationException) { return null; }
     }
 
     private ProductAuthorizationPolicy Policy(string origin)
@@ -171,7 +184,13 @@ internal sealed partial class ProductAuthorizationApplication(IdentityPersistenc
         original.RelationshipRequest.ClientVersion == original.Registration.ClientVersion &&
         original.RelationshipRequest.RequestDigest == original.Request.Digest &&
         original.RelationshipRequest.OperationId == original.OperationId && original.RelationshipRequest.CorrelationId == original.CorrelationId &&
-        original.Relationship.RequestDigest == original.RelationshipRequest.Digest;
+        original.Relationship.RequestDigest == original.RelationshipRequest.Digest &&
+        (original.NativeStepUp is null || NativeProofBound(original.NativeStepUp, original.Request, original.AccountId,
+            original.AccountVersion, original.SessionId, original.Origin, original.AuthenticatedAt, original.Registration,
+            original.OperationId, original.CorrelationId, original.Interaction) &&
+            original.NativeStepUp.Receipt.ConsumedAt <= original.AuthorizedAt &&
+            original.CodeExpiresAt <= original.NativeStepUp.Receipt.ExpiresAt &&
+            original.AuthenticationClaims?.Snapshot == original.NativeStepUp.Claims.Snapshot);
 
     private static bool OriginalActor(ProductAuthorizationLineage original, ProductAuthorizationActor actor) =>
         actor.Session.AccountId == original.AccountId && actor.AccountVersion == original.AccountVersion &&

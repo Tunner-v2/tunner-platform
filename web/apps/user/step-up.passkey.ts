@@ -3,7 +3,8 @@ import {z} from '@tunner/ui';
 import {getPasskey,passkeysSupported} from './passkeys.native';
 import {PasskeyHttpError,requestJson} from './passkeys.api';
 import type {StepUpBootstrap,StepUpCompletion} from './step-up';
-import {parseStepUpCompletion,rejectStepUpRecoveryDelivery} from './step-up.completion';
+import {parseStepUpOutcome,parseStepUpProofReady,rejectStepUpRecoveryDelivery} from './step-up.completion';
+import type {StepUpOutcome,StepUpProofReady} from './step-up.completion';
 import type {RecoveryCodeDeliveryReceiver} from './recovery-codes.api';
 
 export const stepUpPasskeyKeys=['pending','notCompleted','unknown','check','resume','unsupported','close'].map(key=>'stepUp.passkey.'+key);
@@ -12,9 +13,10 @@ export const stepUpPasskeyRecoverySchema=z.object({requestId:z.uuid(),attemptId:
 type Recovery=z.infer<typeof stepUpPasskeyRecoverySchema>;
 type Attempt={readonly requestId:string;readonly attemptId:string;readonly operationReference:string;ceremonyId?:string;status:Recovery['status'];publicKey?:unknown;credential?:unknown};
 type Mode='idle'|'pending'|'unknown'|'issued'|'not-completed'|'changed';
-type Context=StepUpBootstrap|{status:'COMPLETED';requestId:string|null;operationReference?:string|undefined};
-interface Driver{bootstrap:StepUpBootstrap;load:(signal:AbortSignal)=>Promise<Context>;complete:(outcome:StepUpCompletion)=>void;reconcile?:((signal:AbortSignal)=>Promise<StepUpCompletion|null>)|undefined;recoveryCodeDelivery?:RecoveryCodeDeliveryReceiver|undefined}
+type Context=StepUpBootstrap|StepUpProofReady|{status:'COMPLETED';requestId:string|null;operationReference?:string|undefined};
+interface Driver{bootstrap:StepUpBootstrap;load:(signal:AbortSignal)=>Promise<Context>;complete:(outcome:StepUpCompletion)=>void;proofReady?:((outcome:StepUpProofReady)=>void)|undefined;reconcile?:((signal:AbortSignal)=>Promise<StepUpOutcome|null>)|undefined;recoveryCodeDelivery?:RecoveryCodeDeliveryReceiver|undefined}
 const completionSchema=z.object({status:z.literal('COMPLETED'),requestId:z.uuid(),attemptId:z.uuid(),ceremonyId:z.uuid(),operationReference:z.string().min(1),signInRequired:z.boolean()});
+const proofReadySchema=completionSchema.omit({status:true,signInRequired:true}).extend({status:z.literal('PROOF_READY')});
 const problemSchema=z.object({ceremony_status:statuses,requestId:z.uuid(),attemptId:z.uuid(),ceremonyId:z.uuid(),operationReference:z.string().min(1)});
 function matches(attempt:Attempt,value:{requestId:string;attemptId:string;ceremonyId:string;operationReference:string}){return attempt.requestId===value.requestId&&attempt.attemptId===value.attemptId&&attempt.operationReference===value.operationReference&&(attempt.ceremonyId===undefined||attempt.ceremonyId===value.ceremonyId);}
 function restored(bootstrap:StepUpBootstrap):Attempt|undefined{const recovery=bootstrap.passkeyRecovery;if(!recovery)return undefined;if(recovery.requestId!==bootstrap.requestId||recovery.operationReference!==bootstrap.operationReference)throw new Error('The original proof context changed.');return {...recovery,publicKey:undefined};}
@@ -25,20 +27,24 @@ export function useStepUpPasskey(driver:Driver){
   useEffect(()=>{alive.current=true;controller.current=new AbortController();return()=>{alive.current=false;controller.current.abort();if(original.current)original.current.credential=undefined;};},[]);
   const current=(attempt:Attempt)=>alive.current&&!controller.current.signal.aborted&&original.current===attempt;
   function working(value:boolean){flight.current=value;setBusy(value);}
-  function finish(attempt:Attempt,outcome:StepUpCompletion){if(!current(attempt))return;attempt.credential=undefined;original.current=undefined;latest.current.complete(outcome);}
+  function finish(attempt:Attempt,outcome:StepUpOutcome){if(!current(attempt))return;
+    if(outcome.status==='PROOF_READY'){const ready=parseStepUpProofReady(outcome,attempt.operationReference,!!latest.current.proofReady);attempt.credential=undefined;original.current=undefined;latest.current.proofReady!(ready);}
+    else{attempt.credential=undefined;original.current=undefined;latest.current.complete(outcome);}
+  }
   function adopt(attempt:Attempt,value:Pick<Recovery,'requestId'|'attemptId'|'ceremonyId'|'operationReference'|'status'|'publicKey'>){if(!matches(attempt,value))throw new Error('The original native proof changed.');attempt.ceremonyId=value.ceremonyId;attempt.status=value.status;attempt.publicKey=value.publicKey;if(current(attempt)){setMode(recoveryMode(attempt));if(value.status==='REJECTED'||value.status==='EXPIRED')setError('stepUp.error.changed');}}
-  function final(attempt:Attempt,value:unknown){if(!current(attempt))return;const result=completionSchema.parse(value);if(!matches(attempt,result))throw new Error('The original completion changed.');finish(attempt,parseStepUpCompletion(value,attempt.requestId,attempt.operationReference,latest.current.recoveryCodeDelivery));}
+  function final(attempt:Attempt,value:unknown){if(!current(attempt))return;const result=z.union([completionSchema,proofReadySchema]).parse(value);if(!matches(attempt,result))throw new Error('The original completion changed.');finish(attempt,parseStepUpOutcome(value,attempt.requestId,attempt.operationReference,latest.current.recoveryCodeDelivery,!!latest.current.proofReady));}
   async function reconcile(attempt:Attempt){
     const owner=latest.current.reconcile?await latest.current.reconcile(controller.current.signal):null;if(!current(attempt))return true;
-    rejectStepUpRecoveryDelivery(owner);if(owner?.status==='COMPLETED'){if(owner.operationReference!==attempt.operationReference)throw new Error('The owner result changed.');finish(attempt,owner);return true;}
+    rejectStepUpRecoveryDelivery(owner);if(owner){if(owner.operationReference!==attempt.operationReference)throw new Error('The owner result changed.');finish(attempt,parseStepUpOutcome(owner,attempt.requestId,attempt.operationReference,undefined,!!latest.current.proofReady));return true;}
     const context=await latest.current.load(controller.current.signal);if(!current(attempt))return true;
+    if(context.status==='PROOF_READY'){finish(attempt,parseStepUpProofReady(context,attempt.operationReference,!!latest.current.proofReady));return true;}
     if(context.requestId!==attempt.requestId||context.operationReference!==attempt.operationReference)throw new Error('The original proof view changed.');
     if(context.status==='COMPLETED'){finish(attempt,{status:'COMPLETED',signInRequired:false,operationReference:attempt.operationReference});return true;}
     csrf.current=context.csrfToken;maximum.current=context.maximumCredentialJsonBytes;availability.current=context.passkeyAvailable===true;setAvailable(availability.current);if(context.passkeyRecovery)adopt(attempt,context.passkeyRecovery);else setMode('unknown');return false;
   }
   function knownProblem(attempt:Attempt,reason:unknown){if(!(reason instanceof PasskeyHttpError))return false;const result=problemSchema.safeParse(reason.details);if(!result.success||!matches(attempt,result.data))return false;adopt(attempt,{...result.data,status:result.data.ceremony_status,publicKey:null});return result.data.ceremony_status==='REJECTED'||result.data.ceremony_status==='EXPIRED';}
   async function uncertain(attempt:Attempt,reason:unknown){if(!current(attempt))return;if(knownProblem(attempt,reason))return;try{if(await reconcile(attempt))return;}catch{/* A transport/status error cannot replace the original binding or prove completion. */}if(current(attempt)){if(attempt.status==='PROOF_ISSUED')setMode('issued');else if(attempt.status==='REJECTED'||attempt.status==='EXPIRED')setMode('changed');else setMode('unknown');setError(reason instanceof PasskeyHttpError&&reason.status===429?'stepUp.error.limited':'stepUp.error.unavailable');}}
-  async function options(attempt:Attempt){const raw=await requestJson('/authentication/step-up/passkey/options',{csrfToken:csrf.current,body:{requestId:attempt.requestId,attemptId:attempt.attemptId},signal:controller.current.signal});rejectStepUpRecoveryDelivery(raw);const value=stepUpPasskeyRecoverySchema.parse(raw);if(!current(attempt))return;adopt(attempt,value);}
+  async function options(attempt:Attempt){const raw=await requestJson('/authentication/step-up/passkey/options',{csrfToken:csrf.current,body:{requestId:attempt.requestId,attemptId:attempt.attemptId},signal:controller.current.signal});rejectStepUpRecoveryDelivery(raw);if(!current(attempt))return;if(raw!==null&&typeof raw==='object'&&'status' in raw&&raw.status==='PROOF_READY'){finish(attempt,parseStepUpProofReady(raw,attempt.operationReference,!!latest.current.proofReady));return;}const value=stepUpPasskeyRecoverySchema.parse(raw);adopt(attempt,value);}
   async function execute(attempt:Attempt){
     if(!attempt.ceremonyId)throw new Error('The original native ceremony is required.');
     if(attempt.status==='PROOF_ISSUED'){final(attempt,await requestJson('/authentication/step-up/passkey/continue',{csrfToken:csrf.current,body:{requestId:attempt.requestId,attemptId:attempt.attemptId,ceremonyId:attempt.ceremonyId},signal:controller.current.signal}));return;}

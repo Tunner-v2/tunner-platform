@@ -10,7 +10,7 @@ using Tunner.Database.Outbox;
 namespace Tunner.Identity.Persistence;
 
 /// <summary>Private Identity transaction boundary. No HTTP route or implicit runtime policy activation.</summary>
-internal sealed class StepUpApplication(IdentityPersistenceDbContext database, AuthenticationApplication authentication,
+internal sealed partial class StepUpApplication(IdentityPersistenceDbContext database, AuthenticationApplication authentication,
     IAuthenticationPolicySource authenticationPolicies, IAssurancePolicySource assurancePolicies,
     AuthenticationPasswordWork passwordWork, IDataProtectionProvider protection, TimeProvider clock, IRecoveryCodePolicySource? recoveryPolicies = null)
 {
@@ -261,8 +261,11 @@ internal sealed class StepUpApplication(IdentityPersistenceDbContext database, A
         row.AccountId == caller.AccountId && row.SessionId == caller.SessionId && row.Origin == caller.Origin && row.Scheme == AuthenticationIdentity.Scheme &&
         row.OperationId == operation.OperationId && row.CorrelationId == operation.CorrelationId && row.Operation == operation.Scope.Operation && row.Context == operation.Scope.Context &&
         row.ResourceId == operation.ResourceId && row.ExpectedVersion == operation.ExpectedVersion && row.ContextDigest == operation.ContextDigest;
-    private static bool Valid(StepUpProofRow row, AuthenticationSessionRow session, AssurancePolicyVersion policy, DateTimeOffset now) =>
-        row.State == "ACTIVE" && row.ProtectedKey.Length != 0 && row.SecurityStampDigest == session.SecurityStampDigest &&
+    private static bool Valid(StepUpProofRow row, AuthenticationSessionRow session, AssurancePolicyVersion policy, DateTimeOffset now,
+        bool consumedForProductAuthorization = false) =>
+        (consumedForProductAuthorization
+            ? row.State == "CONSUMED" && row.ProtectedKey.Length == 0 && row.EndedAt is { } ended && ended <= now
+            : row.State == "ACTIVE" && row.ProtectedKey.Length != 0) && row.SecurityStampDigest == session.SecurityStampDigest &&
         now >= row.AuthenticatedAt && now < row.ExpiresAt && now - row.AuthenticatedAt < policy.ProofLifetime &&
         row.PolicyVersion == policy.Metadata.VersionId && row.Assurance == policy.RequiredAssurance && policy.RequireMethodAssurance(row.AuthenticationMethod) == row.Assurance;
     private static void End(StepUpProofRow row, string state, DateTimeOffset now)

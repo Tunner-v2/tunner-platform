@@ -6,6 +6,8 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
 using Microsoft.AspNetCore;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.EntityFrameworkCore;
@@ -43,10 +45,12 @@ public sealed class ProductAuthorizationProtocolTests(SessionListingPostgresFixt
     private const string StrongAcr = "urn:fixture:product:acr:strong";
     private static readonly ImmutableArray<string> Scopes = ["openid", "product.read"];
     private static readonly ImmutableArray<string> Resources = [Resource];
+    private static readonly AssurancePolicyScope ProductProofScope = new("AUTHORIZE_PRODUCT", "fixture-product-authorization-proof");
 
     private sealed class Owners(IdentityTestDatabase database) : IProductAuthorizationPolicySource,
         IProductAuthorizationRegistrySource, IProductAuthorizationRelationshipSource, IProductAuthorizationLifecycleSource,
-        IProductAuthorizationContinuationPolicySource, IAccountAuthenticationAccessSource, IProductAuthorizationPresentationSource
+        IProductAuthorizationContinuationPolicySource, IAccountAuthenticationAccessSource, IProductAuthorizationPresentationSource,
+        IAssurancePolicySource, IUserStepUpOperationSource
     {
         internal string ClientId { get; } = "synthetic-product-client-" + Guid.NewGuid().ToString("N");
         internal string ClientCredential { get; } = Base64UrlEncoder.Encode(RandomNumberGenerator.GetBytes(32));
@@ -63,6 +67,8 @@ public sealed class ProductAuthorizationProtocolTests(SessionListingPostgresFixt
         internal IAccountAuthenticationAccessSource? AuthenticationAccess { get; set; }
         internal string PresentationVersion { get; set; } = "fixture-product-presentation-v1";
         internal bool PresentationAvailable { get; set; } = true;
+        internal string AssuranceVersion { get; set; } = "fixture-product-proof-policy-v1";
+        internal ProductAuthorizationStepUpQualification? StepUpQualification { get; set; }
         internal ImmutableArray<string> GrantedScopes => LifecycleEnabled ? ["offline_access", "openid", "product.read"] : Scopes;
         internal DateTimeOffset? IssuancePolicyExpiresAt { get; set; }
         internal ProductAuthorizationArtifactEffect RevocationEffect { get; set; } = ProductAuthorizationArtifactEffect.PresentedToken;
@@ -94,6 +100,12 @@ public sealed class ProductAuthorizationProtocolTests(SessionListingPostgresFixt
         }
         private readonly EffectivePolicyInterval interval = new(DateTimeOffset.UtcNow.AddDays(-1), true, DateTimeOffset.UtcNow.AddHours(4), false);
         private const string Evidence = "SYNTHETIC-LOCAL-PROTOCOL-TEST-ONLY";
+        public AssurancePolicyVersion RequireEffective(AssurancePolicyScope scope, DateTimeOffset executedAt, string? expectedVersion = null) =>
+            new AssurancePolicyCatalog([new(new(AssuranceVersion, "ACTIVE", ProductProofScope, interval, null, [Evidence]),
+                "fixture-product-proof-assurance", TimeSpan.FromMinutes(1), new Dictionary<string, string> { ["pwd"] = "fixture-product-proof-assurance" })])
+                .RequireEffective(scope, executedAt, expectedVersion);
+        Task<UserStepUpOperationContext?> IUserStepUpOperationSource.ResolveAsync(UserStepUpActor actor, CancellationToken ct) => Task.FromResult<UserStepUpOperationContext?>(null);
+        Task<bool> IUserStepUpOperationSource.ApplyAsync(UserStepUpActor actor, UserStepUpOperationContext operation, IdentityPersistenceDbContext context, CancellationToken ct) => Task.FromResult(false);
         public ValueTask<ProductAuthorizationPresentation> RequirePublishedAsync(ProductAuthorizationPresentationFacts facts, DateTimeOffset at, CancellationToken ct)
         {
             ct.ThrowIfCancellationRequested();
@@ -131,7 +143,7 @@ public sealed class ProductAuthorizationProtocolTests(SessionListingPostgresFixt
             "fixture-product-processing", "fixture-product-retention", "RESTRICTED_SECURITY", ["pwd"],
             ["fixture-password-assurance"], TimeSpan.FromMinutes(30), TimeSpan.FromMinutes(2), TimeSpan.FromMinutes(5),
             TimeSpan.FromMinutes(5), LifecycleEnabled, LifecycleEnabled ? TimeSpan.FromHours(1) : null, 256)
-            { InteractionQualification = InteractionQualification };
+            { InteractionQualification = InteractionQualification, StepUpQualification = StepUpQualification };
         public ValueTask<ProductAuthorizationRegistration> RequireCurrentAsync(ProductAuthorizationRequest request, DateTimeOffset at, CancellationToken ct)
         {
             if (!RegistryAvailable) throw new InvalidOperationException("Synthetic Registry owner unavailable.");
@@ -251,8 +263,9 @@ public sealed class ProductAuthorizationProtocolTests(SessionListingPostgresFixt
         public override string ToString() => nameof(Scenario);
     }
     private async Task<Scenario> Create(bool nativeResourcePermission = true, bool broaderNativeQualification = false, bool lifecycle = false,
-        bool continuation = false, bool anonymous = false, bool interaction = false, bool review = false)
+        bool continuation = false, bool anonymous = false, bool interaction = false, bool review = false, bool stepUp = false)
     {
+        review |= stepUp; interaction |= stepUp;
         var database = await fixture.CreateDatabaseAsync();
         await using (var setup = database.Context())
             await setup.Database.ExecuteSqlRawAsync("""
@@ -263,6 +276,8 @@ public sealed class ProductAuthorizationProtocolTests(SessionListingPostgresFixt
         var owners = new Owners(database) { LifecycleEnabled = lifecycle, InteractionQualification = interaction ? new(true,
             [new(PasswordAcr, "fixture-password-assurance", "pwd", PasswordAcr, ["pwd"]),
              new(StrongAcr, "fixture-strong-assurance", "hwk", StrongAcr, ["hwk"])]) : null };
+        if (stepUp) owners.StepUpQualification = new([new(StrongAcr, "pwd", "fixture-password-assurance", "pwd",
+            "fixture-product-proof-assurance", ProductProofScope, owners.AssuranceVersion, StrongAcr, ["pwd"])]);
         var signing = RSA.Create(2048); var encryption = RSA.Create(2048);
         var signingKey = new RsaSecurityKey(signing) { KeyId = "fixture-distinct-signing" };
         var encryptionKey = new RsaSecurityKey(encryption) { KeyId = "fixture-distinct-encryption" };
@@ -283,11 +298,17 @@ public sealed class ProductAuthorizationProtocolTests(SessionListingPostgresFixt
             if (lifecycle) services.AddSingleton<IProductAuthorizationLifecycleSource>(owners);
             if (continuation || review) services.AddSingleton<IProductAuthorizationContinuationPolicySource>(owners);
             if (review) services.AddSingleton<IProductAuthorizationPresentationSource>(owners);
+            if (stepUp)
+            {
+                services.AddSingleton<IAssurancePolicySource>(owners);
+                services.AddSingleton<IUserStepUpOperationSource>(owners);
+                services.AddSingleton<IStepUpPresentationSource, StepUpBrowserTests.Presentation>();
+            }
             var nativeScopes = broaderNativeQualification ? ImmutableArray.Create("openid", "product.other", "product.read") : owners.GrantedScopes;
             var nativeResources = broaderNativeQualification ? ImmutableArray.Create(OtherResource, Resource).Sort(StringComparer.Ordinal) : Resources;
             services.AddTunnerProductAuthorization(new(Origin, AuthorizationPath, TokenPath, signingKey, encryptionKey, nativeScopes, nativeResources, 32768, 16, 64, 16384,
                 lifecycle ? new(IntrospectionPath, RevocationPath, RotateRefreshTokens: true, SlidingRefreshExpiration: false, RefreshReuseLeeway: TimeSpan.Zero) : null,
-                enableContinuation: continuation || review, requireAuthorizationReview: review));
+                enableContinuation: continuation || review, requireAuthorizationReview: review, enableOperationStepUp: stepUp));
             services.AddOpenIddict().AddServer(options =>
             {
                 options.AddEventHandler<OpenIddictServerEvents.ProcessRequestContext>(builder => builder
@@ -595,6 +616,216 @@ public sealed class ProductAuthorizationProtocolTests(SessionListingPostgresFixt
         Assert.Equal("resumePath", Assert.Single(json.EnumerateObject().Select(property => property.Name)));
         Assert.Equal(decision == "SWITCH_ACCOUNT" ? "/login" : AuthorizationPath, json.GetProperty("resumePath").GetString());
         test.Cookies = Merge(test.Cookies, response);
+    }
+
+    private sealed record ProofSelection(int Generation, ProductAuthorizationPreparedProof Proof, ProductAuthorizationProofBinding Binding)
+    { public override string ToString() => nameof(ProofSelection); }
+
+    private static async Task<PendingRequest> PreparePasswordProductProof(Scenario test)
+    {
+        var original = await ReadSourceSession(test);
+        var pending = await BeginContinuation(test, new Dictionary<string, string> { ["acr_values"] = StrongAcr }, existingSession: true, expectedRedirect: ReviewPath);
+        using (var review = await test.Host.Get(ReviewOptionsPath, test.Cookies))
+        {
+            Assert.Equal(HttpStatusCode.OK, review.StatusCode); var json = await review.Content.ReadFromJsonAsync<JsonElement>();
+            Assert.False(json.GetProperty("canAllow").GetBoolean()); Assert.Equal("RequiresFreshProof", json.GetProperty("interactionStatus").GetString());
+            Assert.True(json.GetProperty("stepUpAvailable").GetBoolean()); test.Cookies = Merge(test.Cookies, review);
+        }
+        Guid request; string csrf;
+        using (var options = await test.Host.Get("/authentication/step-up/options", test.Cookies))
+        {
+            Assert.Equal(HttpStatusCode.OK, options.StatusCode); var json = await options.Content.ReadFromJsonAsync<JsonElement>();
+            Assert.Equal("PENDING", json.GetProperty("status").GetString()); Assert.True(json.GetProperty("passwordAvailable").GetBoolean());
+            request = json.GetProperty("requestId").GetGuid(); csrf = json.GetProperty("csrfToken").GetString()!;
+            test.Cookies = Merge(test.Cookies, options);
+        }
+        using (var verified = await test.Host.Post("/authentication/step-up/password", new { requestId = request, password = Password }, test.Cookies, csrf))
+        {
+            Assert.Equal(HttpStatusCode.OK, verified.StatusCode); var content = await verified.Content.ReadAsStringAsync();
+            using var document = JsonDocument.Parse(content); var json = document.RootElement;
+            Assert.Equal("PROOF_READY", json.GetProperty("status").GetString()); Assert.False(json.TryGetProperty("signInRequired", out _));
+            Assert.False(json.TryGetProperty("proofKey", out _) || json.TryGetProperty("proofId", out _) || json.TryGetProperty("access_token", out _) || json.TryGetProperty("refresh_token", out _));
+            test.Cookies = Merge(test.Cookies, verified);
+        }
+        await AssertNoInteractionRelationship(test);
+        await using var read = test.Database.Context(); var proof = await read.Set<StepUpProofRow>().SingleAsync();
+        Assert.Equal("ACTIVE", proof.State); Assert.Null(proof.EndedAt);
+        Assert.Equal(0, await read.Set<OutboxMessage>().CountAsync(message => message.EventType == "StepUpProofConsumed"));
+        var current = await ReadSourceSession(test);
+        Assert.Equal(original.SessionId, current.SessionId); Assert.Equal(original.AuthenticatedAt, current.AuthenticatedAt);
+        Assert.Equal(original.Assurance, current.Assurance); Assert.Equal(original.AuthenticationMethods, current.AuthenticationMethods);
+        return pending;
+    }
+
+    private static async Task<ProofSelection> ReadPrivatePreparedProof(Scenario test, PendingRequest pending)
+    {
+        await using var scope = test.Host.Services.CreateAsyncScope(); var manager = scope.ServiceProvider.GetRequiredService<IOpenIddictTokenManager>();
+        var token = await manager.FindByIdAsync(pending.TokenId); Assert.NotNull(token);
+        var properties = await manager.GetPropertiesAsync(token!);
+        var protector = scope.ServiceProvider.GetRequiredService<IDataProtectionProvider>().CreateProtector("Tunner.Identity.ProductAuthorization.NativeProof.v1");
+        var selected = JsonSerializer.Deserialize<ProofSelection>(protector.Unprotect(properties["tunner.product.continuation.proof.v1"].GetString()!));
+        Assert.NotNull(selected); return selected!;
+    }
+
+    private static StepUpCaller PersistedProofCaller(IServiceProvider services, AuthenticationSessionRow session)
+    {
+        var protector = services.GetRequiredService<IDataProtectionProvider>().CreateProtector("Tunner.User.Session.Ticket.v1");
+        var ticket = TicketSerializer.Default.Deserialize(Convert.FromBase64String(protector.Unprotect(session.ProtectedTicket)));
+        Assert.NotNull(ticket); return StepUpCaller.FromPrincipal(ticket!.Principal, Origin, new string('A', 64));
+    }
+
+    [Fact]
+    public async Task StepUpPasswordProofReadinessSurvivesResponseLossAndRequiresExplicitAllowBeforeNativeConsumption()
+    {
+        await using var test = await Create(stepUp: true); var original = await ReadSourceSession(test);
+        var pending = await PreparePasswordProductProof(test);
+        // A fresh read reconciles the same durable proof after a lost password-verification response.
+        using (var recovered = await test.Host.Get("/authentication/step-up/options", test.Cookies))
+        {
+            Assert.Equal(HttpStatusCode.OK, recovered.StatusCode);
+            Assert.Equal("PROOF_READY", (await recovered.Content.ReadFromJsonAsync<JsonElement>()).GetProperty("status").GetString());
+            test.Cookies = Merge(test.Cookies, recovered);
+        }
+        var frame = await ReviewOptions(test, pending); await AssertNoInteractionRelationship(test);
+        await using (var before = test.Database.Context())
+        { Assert.Equal("ACTIVE", (await before.Set<StepUpProofRow>().SingleAsync()).State); Assert.Equal(0, await before.Set<OutboxMessage>().CountAsync(message => message.EventType == "StepUpProofConsumed")); }
+        await ReviewApply(test, frame, "ALLOW");
+        using var authorized = await test.Host.Get(AuthorizationPath, test.Cookies); Assert.Equal(HttpStatusCode.OK, authorized.StatusCode);
+        var form = ReadNativeForm(await authorized.Content.ReadAsStringAsync()); Assert.True(form.Values.GetValueOrDefault("state") == pending.State);
+        Assert.True(form.Values.TryGetValue("code", out var code) && !string.IsNullOrWhiteSpace(code));
+        await using (var after = test.Database.Context())
+        {
+            var proof = await after.Set<StepUpProofRow>().SingleAsync(); Assert.Equal("CONSUMED", proof.State); Assert.Empty(proof.ProtectedKey);
+            Assert.Equal(1, await after.Set<OutboxMessage>().CountAsync(message => message.EventType == "StepUpProofConsumed"));
+        }
+        using var redeemed = await Redeem(test, new(code!, pending.Verifier, pending.Nonce)); Assert.Equal(HttpStatusCode.OK, redeemed.StatusCode);
+        var tokens = await redeemed.Content.ReadFromJsonAsync<JsonElement>();
+        await AssertInteractionClaims(test, tokens.GetProperty("id_token").GetString()!, original.AuthenticatedAt, StrongAcr);
+        var current = await ReadSourceSession(test); Assert.Equal(original.AuthenticatedAt, current.AuthenticatedAt); Assert.Equal(original.Assurance, current.Assurance);
+    }
+
+    [Fact]
+    public async Task StepUpSameTransactionRejectsSecondConsumptionAndPreparationAndRollbackRestoresProof()
+    {
+        await using var test = await Create(stepUp: true); var pending = await PreparePasswordProductProof(test);
+        var selected = await ReadPrivatePreparedProof(test, pending); var session = await ReadSourceSession(test);
+        await using (var scope = test.Host.Services.CreateAsyncScope())
+        {
+            var database = scope.ServiceProvider.GetRequiredService<IdentityPersistenceDbContext>();
+            var application = scope.ServiceProvider.GetRequiredService<StepUpApplication>(); var caller = PersistedProofCaller(scope.ServiceProvider, session);
+            var policy = test.Owners.RequireCurrent(Origin, test.Host.Clock.GetUtcNow());
+            var row = await database.Set<StepUpProofRow>().SingleAsync();
+            var key = scope.ServiceProvider.GetRequiredService<IDataProtectionProvider>().CreateProtector("Tunner.User.StepUp.Proof.RetryKey.v1").Unprotect(row.ProtectedKey);
+            await using var transaction = await database.Database.BeginTransactionAsync();
+            var first = await application.ConsumeProductAuthorizationProofAsync(caller, selected.Binding, policy, selected.Proof.ProofId, default); Assert.NotNull(first);
+            Assert.Null(await application.ConsumeProductAuthorizationProofAsync(caller, selected.Binding, policy, selected.Proof.ProofId, default));
+            Assert.Null(await application.PrepareProductAuthorizationProofAsync(caller, selected.Binding, policy, key, default));
+            Assert.Null(await application.ReadPreparedProductAuthorizationProofAsync(caller, selected.Binding, policy, selected.Proof.ProofId, default));
+            Assert.True(await application.ProductAuthorizationProofCurrentAsync(caller, selected.Binding, policy, first!, default));
+            Assert.Single(database.ChangeTracker.Entries<OutboxMessage>(), entry => entry.Entity.EventType == "StepUpProofConsumed");
+            await transaction.RollbackAsync(); database.ChangeTracker.Clear();
+        }
+        await using var read = test.Database.Context(); var restored = await read.Set<StepUpProofRow>().SingleAsync();
+        Assert.Equal("ACTIVE", restored.State); Assert.Null(restored.EndedAt); Assert.True(restored.ProtectedKey.Length > 0);
+        Assert.Equal(0, await read.Set<OutboxMessage>().CountAsync(message => message.EventType == "StepUpProofConsumed"));
+        await AssertNoInteractionRelationship(test); await AssertPendingStatus(test, pending, OpenIddictConstants.Statuses.Valid);
+    }
+
+    [Theory]
+    [InlineData("Request")]
+    [InlineData("Generation")]
+    [InlineData("Session")]
+    [InlineData("ProductPolicy")]
+    [InlineData("Factor")]
+    [InlineData("AssurancePolicy")]
+    public async Task StepUpWrongBindingOrChangedCurrentAuthorityCannotConsumePreparedProof(string mutation)
+    {
+        await using var test = await Create(stepUp: true); var pending = await PreparePasswordProductProof(test);
+        var selected = await ReadPrivatePreparedProof(test, pending); var originalSession = await ReadSourceSession(test);
+        if (mutation == "Generation")
+        {
+            var oldReview = await ReviewOptions(test, pending); await ReviewApply(test, oldReview, "SWITCH_ACCOUNT");
+            var csrf = await SessionContinuation(test, pending: true);
+            using (var rebound = await test.Host.Post(ResumePath, new { }, test.Cookies, csrf))
+            { Assert.Equal(HttpStatusCode.OK, rebound.StatusCode); test.Cookies = Merge(test.Cookies, rebound); }
+            using (var changed = await test.Host.Get(ReviewOptionsPath, test.Cookies))
+            {
+                Assert.Equal(HttpStatusCode.OK, changed.StatusCode);
+                Assert.False((await changed.Content.ReadFromJsonAsync<JsonElement>()).GetProperty("canAllow").GetBoolean());
+            }
+            using var rejected = await ReviewPost(test, oldReview, "ALLOW", csrf: csrf); Assert.Equal(HttpStatusCode.Conflict, rejected.StatusCode);
+        }
+        else
+        {
+            if (mutation == "ProductPolicy") test.Owners.PolicyVersion = "fixture-product-policy-v2";
+            if (mutation == "AssurancePolicy") test.Owners.AssuranceVersion = "fixture-product-proof-policy-v2";
+            if (mutation == "Factor")
+            {
+                await using var write = test.Database.Context(); var user = await write.Users.SingleAsync(user => user.AccountId == test.AccountId);
+                user.SecurityStamp = Guid.NewGuid().ToString("N"); await write.SaveChangesAsync();
+            }
+            var binding = mutation == "Request" ? selected.Binding with { RequestDigest = new string('B', 64) }
+                : mutation == "Session" ? selected.Binding with { SessionId = Guid.NewGuid() } : selected.Binding;
+            await using var scope = test.Host.Services.CreateAsyncScope();
+            var database = scope.ServiceProvider.GetRequiredService<IdentityPersistenceDbContext>();
+            var application = scope.ServiceProvider.GetRequiredService<StepUpApplication>(); var caller = PersistedProofCaller(scope.ServiceProvider, originalSession);
+            await using var transaction = await database.Database.BeginTransactionAsync();
+            var policy = test.Owners.RequireCurrent(Origin, test.Host.Clock.GetUtcNow());
+            if (mutation is "Session" or "ProductPolicy")
+                await Assert.ThrowsAsync<InvalidOperationException>(() => application.ConsumeProductAuthorizationProofAsync(caller, binding, policy, selected.Proof.ProofId, default));
+            else if (mutation == "AssurancePolicy")
+                await Assert.ThrowsAsync<AssurancePolicyVersionConflictException>(() => application.ConsumeProductAuthorizationProofAsync(caller, binding, policy, selected.Proof.ProofId, default));
+            else Assert.Null(await application.ConsumeProductAuthorizationProofAsync(caller, binding, policy, selected.Proof.ProofId, default));
+            await transaction.RollbackAsync(); database.ChangeTracker.Clear();
+        }
+        await using var read = test.Database.Context(); Assert.Equal("ACTIVE", (await read.Set<StepUpProofRow>().SingleAsync()).State);
+        Assert.Equal(0, await read.Set<OutboxMessage>().CountAsync(message => message.EventType == "StepUpProofConsumed"));
+        await AssertNoInteractionRelationship(test);
+    }
+
+    [Fact]
+    public async Task StepUpAssuranceDriftAfterProofConsumptionPreventsNativePublication()
+    {
+        await using var test = await Create(stepUp: true); var pending = await PreparePasswordProductProof(test);
+        var frame = await ReviewOptions(test, pending); await ReviewApply(test, frame, "ALLOW");
+        var boundaryReached = false;
+        test.Owners.BeforeRelationshipEnsure = ct =>
+        {
+            ct.ThrowIfCancellationRequested(); boundaryReached = true; test.Owners.AssuranceVersion = "fixture-product-proof-policy-v2";
+            return Task.CompletedTask;
+        };
+        using var response = await test.Host.Get(AuthorizationPath, test.Cookies);
+        Assert.True(boundaryReached, "The assurance mutation must follow proof consumption and precede native output.");
+        await AssertRejected(response, "access_denied", HttpStatusCode.OK); await AssertEffects(test, 0);
+    }
+
+    [Fact]
+    public async Task StepUpPromptNoneCannotOpenReviewOrProofUi()
+    {
+        await using var test = await Create(stepUp: true);
+        using var response = await RequestAuthorization(test, overrides: new Dictionary<string, string> { ["prompt"] = "none", ["acr_values"] = StrongAcr });
+        await AssertRejected(response, "interaction_required", HttpStatusCode.OK);
+        Assert.Null(response.Headers.Location); Assert.Null(CookieValue(Merge(test.Cookies, response), ProductAuthorizationContinuation.CookieName));
+        await AssertNoRequestTokens(test); await AssertNoInteractionRelationship(test);
+        await using var read = test.Database.Context(); Assert.Empty(await read.Set<StepUpProofRow>().ToArrayAsync());
+    }
+
+    [Fact]
+    public async Task StepUpProofReadyThenDenyNeverConsumesProofOrCreatesGrant()
+    {
+        await using var test = await Create(stepUp: true); var pending = await PreparePasswordProductProof(test);
+        var frame = await ReviewOptions(test, pending); await ReviewApply(test, frame, "DENY");
+        using var response = await test.Host.Get(AuthorizationPath, test.Cookies); await AssertRejected(response, "access_denied", HttpStatusCode.OK);
+        await AssertNoInteractionRelationship(test);
+        await using var read = test.Database.Context(); var proof = await read.Set<StepUpProofRow>().SingleAsync();
+        Assert.Equal("ACTIVE", proof.State); Assert.Null(proof.EndedAt);
+        Assert.Equal(0, await read.Set<OutboxMessage>().CountAsync(message => message.EventType == "StepUpProofConsumed"));
+        var decline = await read.Set<OutboxMessage>().SingleAsync(message => message.EventType == "ProductAuthorizationDeclined");
+        using var payload = JsonDocument.Parse(decline.Payload);
+        Assert.Equal(test.Owners.PresentationVersion, payload.RootElement.GetProperty("presentationVersion").GetString());
+        Assert.Equal(pending.OperationId, decline.OperationId); Assert.Equal(pending.CorrelationId, decline.CorrelationId);
+        Assert.True(new[] { frame.Reference, frame.Csrf, pending.State, pending.Nonce, pending.Verifier, test.Owners.ClientCredential }
+            .All(secret => !decline.Payload.Contains(secret, StringComparison.Ordinal)), "Proof-ready denial evidence must exclude browser and protocol secrets.");
     }
 
     [Theory]

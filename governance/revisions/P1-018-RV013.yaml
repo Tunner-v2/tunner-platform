@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "revision_id": "P1-018-RV013",
+  "revision_scope": "WORK_ITEM",
+  "original_scope_id": "TUN-P1-018",
+  "parent_revision_id": "P1-018-RV012",
+  "parent_milestone_revision_id": null,
+  "title": "Preserve shared proof owners during native Product authorization handoff",
+  "revision_type": "COMPATIBILITY",
+  "status": "ACTIVE",
+  "reason": "Explicit scoped Shared StepUp integration approved on2026-11-15; add Product-only deferred native proof handoff at existing verification join while preserving all ordinary owner, authenticator recovery, browser security and closed history.",
+  "authority_refs": [
+    "docs/authority/baselines/1.6.0/17_Account_Identity_and_Session_FRD.md"
+  ],
+  "decision_refs": [],
+  "defect_refs": [],
+  "change_refs": [],
+  "impact_classification": "NON_BLOCKING",
+  "blocked_scope": [],
+  "acceptance_criteria": [
+    "Actual existing-owner and factor regressions pass; Product proof remains exact-bound, private and single-use in native caller transaction; no cookie upgrade or production defaults."
+  ],
+  "prerequisites": [],
+  "work_items": [],
+  "required_gates": [],
+  "required_roles": ["full-stack-engineer", "tester-qa-engineer", "solution-architect", "cyber-security-engineer", "auditor", "compliance-specialist", "governance-engineer"],
+  "evidence_refs": ["governance/evidence/P1-018-RV013-VALIDATION.json"],
+  "created_at": "2026-11-15T20:12:10.7635422\u002B00:00",
+  "closed_at": null,
+  "product_acceptance_required": false
+}

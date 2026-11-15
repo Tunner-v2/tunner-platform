@@ -46,6 +46,8 @@ public sealed record ProductAuthorizationPolicy(PolicyVersionCandidate<string> M
 {
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public ProductAuthorizationInteractionQualification? InteractionQualification { get; init; }
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public ProductAuthorizationStepUpQualification? StepUpQualification { get; init; }
     internal string Snapshot => JsonSerializer.Serialize(this);
     internal void Require(string origin, DateTimeOffset at)
     {
@@ -62,6 +64,7 @@ public sealed record ProductAuthorizationPolicy(PolicyVersionCandidate<string> M
             MaximumCorrelationLength <= 0 || (AllowRefreshTokens ? RefreshTokenLifetime is null || RefreshTokenLifetime <= TimeSpan.Zero : RefreshTokenLifetime is not null))
             throw new InvalidOperationException("Current explicit Product authorization qualification is unavailable.");
         InteractionQualification?.Require();
+        StepUpQualification?.Require();
     }
     public override string ToString() => nameof(ProductAuthorizationPolicy);
 }
@@ -121,6 +124,8 @@ internal sealed record ProductAuthorizationLineage(int SchemaVersion, ProductAut
     public ProductAuthorizationInteractionContext? Interaction { get; init; }
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public ProductAuthorizationAuthenticationClaims? AuthenticationClaims { get; init; }
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public ProductAuthorizationNativeStepUp? NativeStepUp { get; init; }
     public override string ToString() => nameof(ProductAuthorizationLineage);
 }
 
@@ -129,6 +134,7 @@ internal sealed record ProductAuthorizationGrant(ProductAuthorizationLineage Lin
 {
     internal string Subject => Lineage.Relationship.Subject;
     internal bool IsRedemption { get; init; }
+    internal StepUpCaller? ProofCaller { get; init; }
     public override string ToString() => nameof(ProductAuthorizationGrant);
 }
 

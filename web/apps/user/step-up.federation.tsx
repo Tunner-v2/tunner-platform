@@ -2,7 +2,8 @@ import {useEffect,useRef,useState} from 'react';
 import {ContentText,z} from '@tunner/ui';
 import {PasskeyHttpError,requestJson} from './passkeys.api';
 import {federationChallengePath,federationCsrf} from './federation.api';
-import {parseStepUpCompletion,rejectStepUpRecoveryDelivery} from './step-up.completion';
+import {parseStepUpOutcome,parseStepUpProofReady,rejectStepUpRecoveryDelivery} from './step-up.completion';
+import type {StepUpOutcome,StepUpProofReady} from './step-up.completion';
 import type {StepUpBootstrap,StepUpCompletion} from './step-up';
 import type {RecoveryCodeDeliveryReceiver} from './recovery-codes.api';
 
@@ -17,10 +18,10 @@ type Choice=z.infer<typeof choiceSchema>;
 type Recovery=z.infer<typeof recoverySchema>;
 type Attempt=Choice&{requestId:string;operationReference:string;attemptId?:string;status:Recovery['status'];errorCode:string|null};
 const envelopeSchema=z.object({requestId:uuid,operationReference:z.string().min(1),federation:recoverySchema,challengePath:z.enum(['/authentication/federation/google/challenge','/authentication/federation/microsoft/challenge']).nullable().optional()});
-const ownerReceiptSchema=z.object({status:z.literal('COMPLETED'),operationReference:z.string().min(1)});
+const ownerReceiptSchema=z.object({status:z.enum(['COMPLETED','PROOF_READY']),operationReference:z.string().min(1)});
 const cancelSchema=z.object({status:z.enum(['REJECTED','EXPIRED']),requestId:uuid,operationReference:z.string().min(1)});
 type Mode='idle'|'pending'|'unknown'|'issued'|'changed';
-interface Driver{bootstrap:StepUpBootstrap;blocked:()=>boolean;complete:(outcome:StepUpCompletion)=>void;dismiss:()=>void;reconcile?:((signal:AbortSignal)=>Promise<StepUpCompletion|null>)|undefined;recoveryCodeDelivery?:RecoveryCodeDeliveryReceiver|undefined}
+interface Driver{bootstrap:StepUpBootstrap;blocked:()=>boolean;complete:(outcome:StepUpCompletion)=>void;proofReady?:((outcome:StepUpProofReady)=>void)|undefined;dismiss:()=>void;reconcile?:((signal:AbortSignal)=>Promise<StepUpOutcome|null>)|undefined;recoveryCodeDelivery?:RecoveryCodeDeliveryReceiver|undefined}
 class FederationProofError extends Error{constructor(readonly kind:'changed'|'limited'|'unavailable'='unavailable'){super('Verification unavailable');}}
 function parse<T>(schema:z.ZodType<T>,value:unknown):T{const result=schema.safeParse(value);if(!result.success)throw new FederationProofError();return result.data;}
 export function stepUpFederationKeys(options:Options|undefined){
@@ -46,7 +47,7 @@ export function useStepUpFederation(driver:Driver){
  },[]);
  const current=(attempt:Attempt,signal:AbortSignal)=>alive.current&&!departed.current&&!signal.aborted&&control.current.signal===signal&&original.current===attempt;
  function running(value:boolean){flight.current=value;setBusy(value);}
- function finish(attempt:Attempt,signal:AbortSignal,outcome:StepUpCompletion){if(!current(attempt,signal))return;if(outcome.operationReference!==attempt.operationReference)throw new FederationProofError('changed');original.current=undefined;latest.current.complete(outcome);}
+ function finish(attempt:Attempt,signal:AbortSignal,outcome:StepUpOutcome){if(!current(attempt,signal))return;if(outcome.operationReference!==attempt.operationReference)throw new FederationProofError('changed');if(outcome.status==='PROOF_READY'){const ready=parseStepUpProofReady(outcome,attempt.operationReference,!!latest.current.proofReady);original.current=undefined;latest.current.proofReady!(ready);}else{original.current=undefined;latest.current.complete(outcome);}}
  async function post(action:'start'|'result'|'continue'|'cancel',attempt:Attempt,signal:AbortSignal,body:Record<string,unknown>):Promise<unknown>{
   try{const csrfToken=await federationCsrf(signal);if(!current(attempt,signal))throw new FederationProofError('changed');return await requestJson('/authentication/step-up/federation/'+action,{csrfToken,body,signal});}
   catch(reason){if(reason instanceof FederationProofError)throw reason;throw new FederationProofError(reason instanceof PasskeyHttpError?reason.status===429?'limited':[400,401,403,404,409].includes(reason.status)?'changed':'unavailable':'unavailable');}
@@ -54,7 +55,7 @@ export function useStepUpFederation(driver:Driver){
  function ownerReceipt(attempt:Attempt,signal:AbortSignal,raw:unknown){
   rejectStepUpRecoveryDelivery(raw);const receipt=ownerReceiptSchema.safeParse(raw);if(!receipt.success)return false;
   if(receipt.data.operationReference!==attempt.operationReference)throw new FederationProofError('changed');
-  finish(attempt,signal,parseStepUpCompletion(raw,attempt.requestId,attempt.operationReference));return true;
+  finish(attempt,signal,parseStepUpOutcome(raw,attempt.requestId,attempt.operationReference,undefined,!!latest.current.proofReady));return true;
  }
  function adopt(attempt:Attempt,signal:AbortSignal,raw:unknown){
   rejectStepUpRecoveryDelivery(raw);const response=parse(envelopeSchema,raw),value=response.federation;
@@ -64,7 +65,7 @@ export function useStepUpFederation(driver:Driver){
  }
  function failed(attempt:Attempt,signal:AbortSignal,reason:unknown){if(!current(attempt,signal))return;setMode('unknown');setError(reason instanceof FederationProofError&&reason.kind==='limited'?'stepUp.error.limited':reason instanceof FederationProofError&&reason.kind==='changed'?'stepUp.error.changed':'stepUp.error.unavailable');}
  async function owner(attempt:Attempt,signal:AbortSignal){
-  if(!latest.current.reconcile)return false;const result=await latest.current.reconcile(signal);if(!current(attempt,signal))return false;rejectStepUpRecoveryDelivery(result);if(result?.status==='COMPLETED'){finish(attempt,signal,result);return true;}return false;
+  if(!latest.current.reconcile)return false;const result=await latest.current.reconcile(signal);if(!current(attempt,signal))return false;rejectStepUpRecoveryDelivery(result);if(result){finish(attempt,signal,parseStepUpOutcome(result,attempt.requestId,attempt.operationReference,undefined,!!latest.current.proofReady));return true;}return false;
  }
  async function inspect(attempt:Attempt,signal:AbortSignal){
   const raw=await post('result',attempt,signal,{requestId:attempt.requestId});if(!current(attempt,signal))return true;
@@ -87,7 +88,7 @@ export function useStepUpFederation(driver:Driver){
    if(!attempt.attemptId||attempt.errorCode!==null||!['VERIFIED','PROOF_ISSUED'].includes(attempt.status))throw new FederationProofError('changed');
    const raw=await post('continue',attempt,signal,{requestId:attempt.requestId});if(!current(attempt,signal))return;
    // The existing synchronous parser owns first-delivery capture and signInRequired. This driver never reads its payload.
-   finish(attempt,signal,parseStepUpCompletion(raw,attempt.requestId,attempt.operationReference,latest.current.recoveryCodeDelivery));
+   finish(attempt,signal,parseStepUpOutcome(raw,attempt.requestId,attempt.operationReference,latest.current.recoveryCodeDelivery,!!latest.current.proofReady));
   }catch(reason){failed(attempt,signal,reason);}finally{if(current(attempt,signal))running(false);}
  }
  async function cancel(){

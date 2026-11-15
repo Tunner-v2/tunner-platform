@@ -21,7 +21,8 @@ namespace Tunner.Identity.Persistence;
 internal sealed class ProductAuthorizationReview(IdentityPersistenceDbContext database, AuthenticationApplication authentication,
     ProductAuthorizationApplication application, ProductAuthorizationContinuation continuation, ProductAuthorizationServerProfile profile,
     IProductAuthorizationPolicySource policies, IProductAuthorizationPresentationSource presentations, IOpenIddictApplicationManager clients,
-    AuthenticationPartitionKey partitions, IDataProtectionProvider protection, IAntiforgery antiforgery, TimeProvider clock)
+    AuthenticationPartitionKey partitions, IDataProtectionProvider protection, IAntiforgery antiforgery, TimeProvider clock,
+    ProductAuthorizationStepUp? productStepUp = null)
 {
     private readonly IDataProtector references = protection.CreateProtector("Tunner.User.ProductAuthorization.Review.v1");
     private static readonly JsonSerializerOptions Json = new() { UnmappedMemberHandling = JsonUnmappedMemberHandling.Disallow };
@@ -44,7 +45,10 @@ internal sealed class ProductAuthorizationReview(IdentityPersistenceDbContext da
         ProductAuthorizationRegistration Registration, ProductAuthorizationPolicy Policy,
         ProductAuthorizationPresentation Presentation, ProductAuthorizationPresentationFacts Facts,
         ProductAuthorizationInteractionEvaluation Interaction, Selection Selection)
-    { public override string ToString() => nameof(Observation); }
+    {
+        internal bool StepUpAvailable { get; init; }
+        public override string ToString() => nameof(Observation);
+    }
 
     internal Task<IResult> OptionsAsync(HttpContext http) => ExecuteAsync(http, false);
     internal Task<IResult> DecideAsync(HttpContext http) => ExecuteAsync(http, true);
@@ -86,7 +90,7 @@ internal sealed class ProductAuthorizationReview(IdentityPersistenceDbContext da
             ?? throw new InvalidOperationException("The pending original Product login context is unavailable.");
         var registration = await application.RequireRegistrationAsync(saved.Request, profile.Origin, ct).ConfigureAwait(false);
         if (registration is null || saved.Origin != profile.Origin || registration.NativeApplicationId != saved.NativeApplicationId ||
-            !await NativeClientCurrentAsync(saved.Request, registration, ct).ConfigureAwait(false))
+            !await NativeClientCurrentAsync(clients, saved.Request, registration, ct).ConfigureAwait(false))
             throw new InvalidOperationException("Current exact Product login registry qualification is unavailable.");
         var policy = Policy();
         var interaction = await application.EvaluateInteractionAsync(null, saved.Request, profile.Origin, saved.Interaction, ct).ConfigureAwait(false);
@@ -105,11 +109,11 @@ internal sealed class ProductAuthorizationReview(IdentityPersistenceDbContext da
 
     /// <summary>Native authorization must call this before any grant or Relationship side effect.</summary>
     internal async Task<bool> ValidateApprovalAsync(ProductAuthorizationRestoredContinuation saved, CancellationToken ct,
-        bool consumed = false)
+        bool consumed = false, ProductAuthorizationNativeStepUp? nativeStepUp = null)
     {
         RequireTransaction(); ct.ThrowIfCancellationRequested();
         if (saved.ReviewDenied || string.IsNullOrWhiteSpace(saved.ReviewApprovalDigest)) return false;
-        var current = await ObserveAsync(saved.Http, consumed ? saved : null).ConfigureAwait(false);
+        var current = await ObserveAsync(saved.Http, consumed ? saved : null, nativeStepUp).ConfigureAwait(false);
         return current is not null && current.Interaction.Status == ProductAuthorizationInteractionStatus.Satisfied &&
             ContinuationDigest(saved) == current.Selection.ContinuationDigest && !current.Saved.ReviewDenied &&
             current.Saved.ReviewApprovalDigest == saved.ReviewApprovalDigest &&
@@ -198,6 +202,7 @@ internal sealed class ProductAuthorizationReview(IdentityPersistenceDbContext da
         {
             reference = encoded, csrfToken = antiforgery.GetAndStoreTokens(http).RequestToken,
             canAllow = final.Interaction.Status == ProductAuthorizationInteractionStatus.Satisfied,
+            stepUpAvailable = final.StepUpAvailable, operationReference = final.Saved.CorrelationId,
             interactionStatus = final.Interaction.Status.ToString(), presentation.Locale,
             content = presentation.Content.ToDictionary(text => text.Key, StringComparer.Ordinal),
             presentation.ProductName, presentation.AccountLabel, presentation.RegisteredReturnOrigin,
@@ -238,13 +243,15 @@ internal sealed class ProductAuthorizationReview(IdentityPersistenceDbContext da
         return Results.Json(new { resumePath = command.Decision == "SWITCH_ACCOUNT" ? "/login" : profile.AuthorizationPath });
     }
 
-    private async Task<Observation?> ObserveAsync(HttpContext http, ProductAuthorizationRestoredContinuation? consumedDenial = null)
+    private async Task<Observation?> ObserveAsync(HttpContext http, ProductAuthorizationRestoredContinuation? consumedDenial = null,
+        ProductAuthorizationNativeStepUp? nativeStepUp = null)
     {
-        try { return await ObserveCoreAsync(http, consumedDenial).ConfigureAwait(false); }
+        try { return await ObserveCoreAsync(http, consumedDenial, nativeStepUp).ConfigureAwait(false); }
         catch (ArgumentException error) { throw new InvalidOperationException("Current exact Product review qualification is unavailable.", error); }
     }
 
-    private async Task<Observation?> ObserveCoreAsync(HttpContext http, ProductAuthorizationRestoredContinuation? consumedDenial)
+    private async Task<Observation?> ObserveCoreAsync(HttpContext http, ProductAuthorizationRestoredContinuation? consumedDenial,
+        ProductAuthorizationNativeStepUp? nativeStepUp)
     {
         var ct = http.RequestAborted;
         var saved = consumedDenial ?? await continuation.ReadForReviewAsync(http, ct).ConfigureAwait(false);
@@ -253,11 +260,28 @@ internal sealed class ProductAuthorizationReview(IdentityPersistenceDbContext da
         if (saved.AccountId != caller.AccountId || saved.SessionId != caller.SessionId || saved.Origin != caller.Origin) return null;
         var registration = await application.RequireRegistrationAsync(saved.Request, profile.Origin, ct).ConfigureAwait(false);
         if (registration is null || registration.NativeApplicationId != saved.NativeApplicationId ||
-            !await NativeClientCurrentAsync(saved.Request, registration, ct).ConfigureAwait(false)) return null;
+            !await NativeClientCurrentAsync(clients, saved.Request, registration, ct).ConfigureAwait(false)) return null;
         var actor = await authentication.LockProductAuthorizationAsync(caller, ProductAuthorizationApplication.AuthorizeOperation, ct).ConfigureAwait(false);
         if (actor is null) return null;
         var policy = Policy();
         var interaction = await application.EvaluateInteractionAsync(caller, saved.Request, profile.Origin, saved.Interaction, ct).ConfigureAwait(false);
+        var stepUpAvailable = false;
+        if (interaction.Status == ProductAuthorizationInteractionStatus.RequiresFreshProof && productStepUp is not null)
+        {
+            if (nativeStepUp is not null)
+            {
+                if (nativeStepUp.Binding.NativeRequestTokenId != saved.TokenId || nativeStepUp.Binding.RequestDigest != saved.Request.Digest ||
+                    nativeStepUp.Binding.OperationId != saved.OperationId || nativeStepUp.Binding.CorrelationId != saved.CorrelationId ||
+                    !await productStepUp.CurrentAsync(caller, policy, nativeStepUp, ct).ConfigureAwait(false)) return null;
+                interaction = nativeStepUp.Evaluation;
+            }
+            else
+            {
+                var prepared = await productStepUp.PreparedAsync(saved, ct, forDenial: saved.ReviewDenied).ConfigureAwait(false);
+                if (prepared is not null) interaction = prepared.Evaluation;
+                else stepUpAvailable = await productStepUp.ResolveForSavedAsync(saved, ct).ConfigureAwait(false) is not null;
+            }
+        }
         var facts = new ProductAuthorizationPresentationFacts(saved.Request.Digest, saved.Request.ProductId, registration.ProductVersion,
             saved.Request.Environment, registration.EnvironmentVersion, saved.Request.ClientId, registration.ClientVersion,
             caller.AccountId, actor.AccountVersion, caller.SessionId, caller.Origin,
@@ -267,6 +291,8 @@ internal sealed class ProductAuthorizationReview(IdentityPersistenceDbContext da
         var publication = await presentations.RequirePublishedAsync(facts, clock.GetUtcNow(), ct).ConfigureAwait(false)
             ?? throw new InvalidOperationException("A current Product authorization publication is required.");
         publication.Require(facts, clock.GetUtcNow());
+        if (stepUpAvailable && !publication.Content.Any(text => text.Key == "authorization.verify"))
+            throw new InvalidOperationException("The approved operation-proof entry requires its published label.");
         if (!await authentication.ProductAuthorizationCurrentAsync(actor, ProductAuthorizationApplication.AuthorizeOperation, ct).ConfigureAwait(false) ||
             Policy().Snapshot != policy.Snapshot) return null;
         var at = clock.GetUtcNow();
@@ -279,10 +305,11 @@ internal sealed class ProductAuthorizationReview(IdentityPersistenceDbContext da
             actor.AuthenticationPolicy, actor.SessionUse, actor.ProductAuthorization, actor.AuthenticationPerformedAt });
         var selection = new Selection(ContinuationDigest(saved), caller.AccountId, actor.AccountVersion, caller.SessionId, caller.Origin,
             actorDigest, Digest(registration), Digest(policy.Snapshot), Digest(publication.Snapshot), interaction.Status, at, expires);
-        return new(saved, actor, registration, policy, publication, facts, interaction, selection);
+        return new(saved, actor, registration, policy, publication, facts, interaction, selection) { StepUpAvailable = stepUpAvailable };
     }
 
-    private async Task<bool> NativeClientCurrentAsync(ProductAuthorizationRequest request, ProductAuthorizationRegistration registration, CancellationToken ct)
+    internal static async Task<bool> NativeClientCurrentAsync(IOpenIddictApplicationManager clients,
+        ProductAuthorizationRequest request, ProductAuthorizationRegistration registration, CancellationToken ct)
     {
         var client = await clients.FindByClientIdAsync(request.ClientId, ct).ConfigureAwait(false);
         if (client is null || await clients.GetIdAsync(client, ct).ConfigureAwait(false) != registration.NativeApplicationId ||
@@ -321,7 +348,8 @@ internal sealed class ProductAuthorizationReview(IdentityPersistenceDbContext da
     {
         saved.TokenId, requestDigest = saved.Request.Digest, saved.NativeApplicationId, saved.OperationId, saved.CorrelationId,
         saved.Origin, saved.CreatedAt, saved.ExpiresAt, saved.PolicySnapshot, saved.BindingDigest, saved.AccountId, saved.SessionId,
-        saved.Interaction, saved.ReviewGeneration
+        saved.Interaction, saved.ReviewGeneration, preparedProof = saved.PreparedStepUpProof?.ProofId,
+        preparedBinding = saved.PreparedStepUpBinding?.Digest
     });
     private static string ApprovalDigest(Selection selection) => Digest(new
     {
