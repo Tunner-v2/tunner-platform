@@ -100,7 +100,9 @@ public sealed partial class SessionBulkRevocationHttpTests
             else if (method == "totp")
             {
                 profile.AssuranceVersion = totp.AssuranceVersion;
-                profile.Methods.Add("totp", "fixture-password"); profile.NativePresentation = new NativePublication(totp);
+                profile.RequiredAssurance = totp.Policy.OperationProofAssurance;
+                profile.Methods["pwd"] = profile.RequiredAssurance;
+                profile.Methods.Add("totp", profile.RequiredAssurance); profile.NativePresentation = new NativePublication(totp);
             }
             else ConfigureNativeFederation(services, profile, federation, backchannel);
         });
@@ -140,7 +142,8 @@ public sealed partial class SessionBulkRevocationHttpTests
         {
             Assert.Contains(view.GetProperty("federation").GetProperty("choices").EnumerateArray(), x => x.GetProperty("linkReference").GetGuid() == source);
             using var start = await test.Host.Post("/authentication/step-up/federation/start", new { requestId = request, provider = "Google", linkReference = source }, cookies, csrf);
-            Assert.Equal(HttpStatusCode.OK, start.StatusCode); var started = await start.Content.ReadFromJsonAsync<JsonElement>();
+            Assert.True(start.StatusCode == HttpStatusCode.OK, await start.Content.ReadAsStringAsync());
+            var started = await start.Content.ReadFromJsonAsync<JsonElement>();
             Assert.Equal(original.OperationReference, started.GetProperty("operationReference").GetString());
             return new(request, started.GetProperty("federation").GetProperty("attemptId").GetGuid(), Guid.Empty, source, Merge(cookies, start), csrf, default, original);
         }
@@ -175,6 +178,56 @@ public sealed partial class SessionBulkRevocationHttpTests
             "totp" => new { requestId = request ?? frame.RequestId, attemptId = wrongAttempt ? Guid.NewGuid() : frame.AttemptId, authenticatorReference = frame.SourceReference },
             _ => new { requestId = request ?? frame.RequestId }
         }, frame.Cookies, frame.Csrf);
+    [Fact]
+    public async Task SingleFederationNativeProofUsesExactProtectedSelectionInsideNativeTransactionAndRetainsCausalReceipt()
+    {
+        const string singleRoot = "/account/sessions/revocation";
+        var federation = NativeFederationProfile(); var totp = new TotpTests.Profile();
+        using var provider = new FederationOidcNativeProtocolTests.SyntheticProvider(federation.Values.Issuer) { FreshEvidence = true };
+        using var backchannel = new HttpClient(provider, disposeHandler: false); using var key = new PasskeyAuthenticator();
+        await using var test = await CreateNative("federation", totp, federation, backchannel);
+        var source = await EnrollNativeSource(test, "federation", key, totp, federation);
+        long version;
+        await using (var read = test.Database.Context()) version = await read.Set<AuthenticationSessionRow>()
+            .Where(x => x.SessionId == test.Targets[0].SessionId).Select(x => x.Version).SingleAsync();
+        var id = Guid.NewGuid();
+        using var prepare = await test.Host.Post(singleRoot + "/prepare", new { requestId = id, targetReference = test.Targets[0].SessionId,
+            expectedVersion = version.ToString(System.Globalization.CultureInfo.InvariantCulture) }, test.Actor.Cookies, test.Actor.Csrf);
+        Assert.Equal(HttpStatusCode.OK, prepare.StatusCode); var originalView = await prepare.Content.ReadFromJsonAsync<JsonElement>();
+        var original = new Original(id, originalView.GetProperty("operationReference").GetString()!, Merge(test.Actor.Cookies, prepare), test.Actor.Csrf, originalView);
+        using var options = await test.Host.Get("/authentication/step-up/options", original.Cookies);
+        Assert.Equal(HttpStatusCode.OK, options.StatusCode); var view = await options.Content.ReadFromJsonAsync<JsonElement>();
+        Assert.Equal(original.OperationReference, view.GetProperty("operationReference").GetString());
+        var request = view.GetProperty("requestId").GetGuid(); var cookies = Merge(original.Cookies, options); var csrf = view.GetProperty("csrfToken").GetString()!;
+        using var started = await test.Host.Post("/authentication/step-up/federation/start", new { requestId = request, provider = "Google", linkReference = source }, cookies, csrf);
+        Assert.True(started.StatusCode == HttpStatusCode.OK, await started.Content.ReadAsStringAsync());
+        var native = await started.Content.ReadFromJsonAsync<JsonElement>();
+        var frame = new NativeFrame(request, native.GetProperty("federation").GetProperty("attemptId").GetGuid(), Guid.Empty,
+            source, Merge(cookies, started), csrf, default, original);
+        await NativeFederationRoundTrip(test, frame, provider);
+        for (var i = 0; i < 2; i++)
+        {
+            using var completed = await ContinueNative(test, "federation", frame);
+            Assert.True(completed.StatusCode == HttpStatusCode.OK, await completed.Content.ReadAsStringAsync());
+            Assert.Equal(original.OperationReference, (await completed.Content.ReadFromJsonAsync<JsonElement>()).GetProperty("operationReference").GetString());
+            using var result = await test.Host.Post(singleRoot + "/result", new { requestId = id }, frame.Cookies, frame.Csrf);
+            Assert.Equal(HttpStatusCode.OK, result.StatusCode); var receipt = await result.Content.ReadFromJsonAsync<JsonElement>();
+            Assert.Equal("REVOKED", receipt.GetProperty("status").GetString()); Assert.Equal(original.OperationReference, receipt.GetProperty("operationReference").GetString());
+            Assert.Equal(test.Targets[0].SessionId, receipt.GetProperty("target").GetProperty("reference").GetGuid());
+            Assert.Equal((version + 1).ToString(System.Globalization.CultureInfo.InvariantCulture), receipt.GetProperty("target").GetProperty("version").GetString());
+        }
+        using var independent = await test.Host.Get("/authentication/step-up/options", frame.Cookies);
+        var ordinary = await independent.Content.ReadFromJsonAsync<JsonElement>(); Assert.Equal("fixture-correlation", ordinary.GetProperty("operationReference").GetString());
+        using var applied = await test.Host.Post("/authentication/step-up/password", new { requestId = ordinary.GetProperty("requestId").GetGuid(), password = Password },
+            Merge(frame.Cookies, independent), ordinary.GetProperty("csrfToken").GetString()); Assert.Equal(HttpStatusCode.OK, applied.StatusCode);
+        await using var check = test.Database.Context();
+        var proof = await check.Set<StepUpProofRow>().SingleAsync(x => x.Operation == SessionRevocationBinding.Scope.Operation);
+        Assert.Equal("CONSUMED", proof.State); Assert.Equal("federation:Google", proof.AuthenticationMethod); Assert.Equal(frame.AttemptId, proof.FederationAttemptId);
+        Assert.Equal(1, await check.Set<OutboxMessage>().CountAsync(x => x.EventType == "TunnerSessionRevoked"));
+        Assert.Equal("ACTIVE", (await check.Set<AuthenticationSessionRow>().SingleAsync(x => x.SessionId == test.Targets[1].SessionId)).State);
+        Assert.Equal("ACTIVE", (await check.Set<AuthenticationSessionRow>().SingleAsync(x => x.SessionId == test.Actor.SessionId)).State);
+        Assert.Equal(1, provider.TokenRequests);
+    }
     [Theory]
     [InlineData("passkey", false)]
     [InlineData("totp", false)]

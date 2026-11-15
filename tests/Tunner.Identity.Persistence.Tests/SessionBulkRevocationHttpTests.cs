@@ -24,6 +24,7 @@ public sealed partial class SessionBulkRevocationHttpTests(SessionListingPostgre
         internal string DiscoveryVersion { get; set; } = "fixture-discovery-v1";
         internal string TransportVersion { get; set; } = "fixture-transport-v1";
         internal string AssuranceVersion { get; set; } = "fixture-step-v1";
+        internal string RequiredAssurance { get; set; } = "fixture-password";
         internal bool Published { get; set; } = true;
         internal EffectivePolicyInterval Interval { get; set; } = SessionBulkRevocationTests.Discovery.Interval;
         internal Dictionary<string, string> Methods { get; } = new() { ["pwd"] = "fixture-password" };
@@ -33,7 +34,7 @@ public sealed partial class SessionBulkRevocationHttpTests(SessionListingPostgre
             Interval, null, ["SYNTHETIC-TEST-ONLY"]);
         public AssurancePolicyVersion RequireEffective(AssurancePolicyScope scope, DateTimeOffset at, string? expectedVersion = null) =>
             new AssurancePolicyCatalog([new(new(ScopeVersions.GetValueOrDefault(scope, AssuranceVersion), "ACTIVE", scope, Interval,
-                null, ["SYNTHETIC-TEST-ONLY"]), "fixture-password", TimeSpan.FromSeconds(30), Methods)])
+                null, ["SYNTHETIC-TEST-ONLY"]), RequiredAssurance, TimeSpan.FromSeconds(30), Methods)])
                 .RequireEffective(scope, at, expectedVersion);
         public StepUpPresentation RequirePublished(AssurancePolicyVersion policy) => NativePresentation?.RequirePublished(policy)
             ?? new StepUpBrowserTests.Presentation().RequirePublished(policy);

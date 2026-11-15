@@ -246,6 +246,14 @@ internal sealed class SessionRevocationBrowserService(IdentityPersistenceDbConte
                 if (database.Database.CurrentTransaction is not null) return null;
             }
         }
+        if (database.Database.CurrentTransaction is not null)
+        {
+            // Native proof preparation re-resolves this exact protected selection inside its
+            // own actor-authorized transaction; typed execution owns target locks/currentness.
+            var at = clock.GetUtcNow(); var operation = Operation(caller, original);
+            return IsSelected(actor) && StepUpBrowserService.BrowserBoundTo(http, protection, at, operation,
+                authenticationPolicies.RequireEffective(at).Version) ? operation : null;
+        }
         var current = await CurrentAsync(http, caller, ct).ConfigureAwait(false);
         if (current is null || current.Status == "CHANGED") return null;
         var binding = SessionRevocationBinding.Operation(caller, current.Request);

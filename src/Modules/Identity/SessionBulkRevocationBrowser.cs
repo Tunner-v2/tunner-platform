@@ -319,6 +319,15 @@ internal sealed class SessionBulkRevocationBrowserService(IdentityPersistenceDbC
             if (await set.ReadReceiptAsync(null, ct).ConfigureAwait(false) is not null) return other;
             if (database.Database.CurrentTransaction is not null) return null;
         }
+        if (database.Database.CurrentTransaction is not null)
+        {
+            // Native proof owners re-resolve their already selected binding inside their own
+            // actor-authorized transaction. Do not nest a read transaction or lock targets
+            // after that actor; typed execution will lock and validate the complete set.
+            var at = clock.GetUtcNow(); var operation = Operation(caller, original, manifest);
+            return TransportCurrent(original, at) && StepUpBrowserService.BrowserBoundTo(http, protection, at, operation,
+                authenticationPolicies.RequireEffective(at).Version) ? operation : null;
+        }
         var current = await CurrentAsync(caller, original, ct).ConfigureAwait(false);
         return current is null || current.Status is "CHANGED" or "DRAFT" ? null : Operation(caller, original, manifest, current.Status == "COMPLETED");
     }
