@@ -1,4 +1,5 @@
 using System.Collections.Immutable;
+using System.Globalization;
 using System.Net;
 using System.Net.Http.Json;
 using System.Security.Cryptography;
@@ -26,6 +27,8 @@ public sealed class ProductAuthorizationProtocolTests(SessionListingPostgresFixt
 {
     private const string AuthorizationPath = "/protocol/product/authorize";
     private const string TokenPath = "/protocol/product/token";
+    private const string IntrospectionPath = "/protocol/product/introspect";
+    private const string RevocationPath = "/protocol/product/revoke";
     private const string Product = "PRD-SYNTHETIC-PROTOCOL-ONLY";
     private const string EnvironmentName = "SANDBOX";
     private const string Redirect = "https://product.protocol.example.test/callback";
@@ -35,7 +38,7 @@ public sealed class ProductAuthorizationProtocolTests(SessionListingPostgresFixt
     private static readonly ImmutableArray<string> Resources = [Resource];
 
     private sealed class Owners(IdentityTestDatabase database) : IProductAuthorizationPolicySource,
-        IProductAuthorizationRegistrySource, IProductAuthorizationRelationshipSource
+        IProductAuthorizationRegistrySource, IProductAuthorizationRelationshipSource, IProductAuthorizationLifecycleSource
     {
         internal string ClientId { get; } = "synthetic-product-client-" + Guid.NewGuid().ToString("N");
         internal string ClientCredential { get; } = Base64UrlEncoder.Encode(RandomNumberGenerator.GetBytes(32));
@@ -45,6 +48,12 @@ public sealed class ProductAuthorizationProtocolTests(SessionListingPostgresFixt
         internal bool PolicyAvailable { get; set; } = true;
         internal bool RegistryAvailable { get; set; } = true;
         internal bool RelationshipAvailable { get; set; } = true;
+        internal bool LifecycleEnabled { get; init; }
+        internal ImmutableArray<string> GrantedScopes => LifecycleEnabled ? ["offline_access", "openid", "product.read"] : Scopes;
+        internal DateTimeOffset? IssuancePolicyExpiresAt { get; set; }
+        internal ProductAuthorizationArtifactEffect RevocationEffect { get; set; } = ProductAuthorizationArtifactEffect.PresentedToken;
+        internal bool DenyLifecycleArtifact { get; set; }
+        internal int LifecycleDecisions { get; private set; }
         internal Func<CancellationToken, Task>? BeforeTokenOutput { get; set; }
         internal bool NativeArtifactsPrepared { get; private set; }
         internal void ObservePreparedArtifacts(OpenIddictResponse response) => NativeArtifactsPrepared =
@@ -72,10 +81,11 @@ public sealed class ProductAuthorizationProtocolTests(SessionListingPostgresFixt
         private const string Evidence = "SYNTHETIC-LOCAL-PROTOCOL-TEST-ONLY";
         public ProductAuthorizationPolicy RequireCurrent(string origin, DateTimeOffset at) => !PolicyAvailable
             ? throw new InvalidOperationException("Synthetic Product policy owner unavailable.") : new(
-            new(PolicyVersion, "ACTIVE", Origin, interval, null, [Evidence]), Origin, Evidence,
+            new(PolicyVersion, "ACTIVE", Origin, IssuancePolicyExpiresAt is { } expires
+                ? new EffectivePolicyInterval(interval.From, true, expires, false) : interval, null, [Evidence]), Origin, Evidence,
             "fixture-product-processing", "fixture-product-retention", "RESTRICTED_SECURITY", ["pwd"],
             ["fixture-password-assurance"], TimeSpan.FromMinutes(30), TimeSpan.FromMinutes(2), TimeSpan.FromMinutes(5),
-            TimeSpan.FromMinutes(5), false, null, 256);
+            TimeSpan.FromMinutes(5), LifecycleEnabled, LifecycleEnabled ? TimeSpan.FromHours(1) : null, 256);
         public ValueTask<ProductAuthorizationRegistration> RequireCurrentAsync(ProductAuthorizationRequest request, DateTimeOffset at, CancellationToken ct)
         {
             if (!RegistryAvailable) throw new InvalidOperationException("Synthetic Registry owner unavailable.");
@@ -83,7 +93,43 @@ public sealed class ProductAuthorizationProtocolTests(SessionListingPostgresFixt
             // Only the digest binds caller input. Every authorized owner fact is the fixed fixture snapshot.
             return ValueTask.FromResult(new ProductAuthorizationRegistration(request.Digest, Product, RegistryVersion, "ACTIVE", EnvironmentName,
                 1, "ACTIVE", ClientId, 1, "ACTIVE", NativeApplicationId, OpenIddictConstants.ClientTypes.Confidential, Redirect,
-                Scopes, Resources, "fixture-product-registry-v1", Evidence, true, interval));
+                GrantedScopes, Resources, "fixture-product-registry-v1", Evidence, true, interval));
+        }
+        public ValueTask<ProductAuthorizationLifecycleDecision> RequireCurrentAsync(ProductAuthorizationLifecycleFacts facts, DateTimeOffset at, CancellationToken ct)
+        {
+            LifecycleDecisions++;
+            var exactOwner = LifecycleEnabled && facts.ProductId == Product && facts.Environment == EnvironmentName &&
+                facts.Origin == Origin && facts.OriginalClientId == ClientId && facts.RequestingClientId == ClientId &&
+                facts.RequestingNativeApplicationId == NativeApplicationId && facts.InitialNativeState.NativeApplicationId == NativeApplicationId &&
+                facts.OriginalRegistration.NativeApplicationId == NativeApplicationId && facts.OriginalRegistration.ProductVersion == 1 &&
+                facts.OriginalRegistration.EnvironmentVersion == 1 && facts.OriginalRegistration.ClientVersion == 1 &&
+                facts.InitialNativeState.Subject == facts.OriginalRelationship.Subject && facts.OriginalRelationship.Version == 1 &&
+                facts.OriginalScopes.SequenceEqual(GrantedScopes, StringComparer.Ordinal) && facts.OriginalResources.SequenceEqual(Resources, StringComparer.Ordinal) &&
+                facts.RequestedScopes.All(scope => GrantedScopes.Contains(scope, StringComparer.Ordinal)) &&
+                facts.RequestedResources.SequenceEqual(Resources, StringComparer.Ordinal);
+            var external = facts.External;
+            var currentOwner = external.Registration.ProductId == Product && external.Registration.ProductVersion == 1 &&
+                external.Registration.Environment == EnvironmentName && external.Registration.EnvironmentVersion == 1 &&
+                external.Registration.ClientId == ClientId && external.Registration.ClientVersion == 1 &&
+                external.Registration.NativeApplicationId == NativeApplicationId && external.Registration.ProductState == "ACTIVE" &&
+                external.Registration.EnvironmentState == "ACTIVE" && external.Registration.ClientState == "ACTIVE" &&
+                external.Relationship.Active && external.Relationship.IndependentlyCommitted && external.Relationship.Version == 1 &&
+                external.Relationship.Subject == Subject(facts.AccountId);
+            var browserCurrent = external.Account.Exists && external.Account.State == "Active" && external.Account.Version == facts.OriginalAccountVersion &&
+                external.Account.OperationAccess is { Allowed: true } && external.SourceSession is
+                { State: "ACTIVE", BindingMatches: true, Expired: false, SecurityStampCurrent: true, VerifiedContactCurrent: true, MethodCurrent: true } session &&
+                session.SessionId == facts.SourceSessionId && session.AccountId == facts.AccountId && session.Origin == Origin;
+            var revocation = facts.Operation == ProductAuthorizationLifecycleOperation.Revocation;
+            var allowed = exactOwner && currentOwner && (revocation || browserCurrent);
+            var active = allowed && !revocation && !DenyLifecycleArtifact && facts.InitialNativeState.AuthorizationStatus == OpenIddictConstants.Statuses.Valid &&
+                facts.InitialNativeState.TokenStatus == OpenIddictConstants.Statuses.Valid && facts.InitialNativeState.ExpiresAt > at;
+            var refresh = facts.Operation == ProductAuthorizationLifecycleOperation.Refresh && active;
+            return ValueTask.FromResult(new ProductAuthorizationLifecycleDecision(facts.Digest, "fixture-lifecycle-policy-v1", Evidence,
+                "fixture-lifecycle-processing", "fixture-lifecycle-retention", "RESTRICTED_SECURITY", interval, allowed, active,
+                refresh, refresh ? facts.ObservedAt.AddMinutes(5) : null,
+                refresh && facts.RequestedScopes.Contains("openid", StringComparer.Ordinal) ? facts.ObservedAt.AddMinutes(5) : null,
+                refresh ? facts.InitialNativeState.ExpiresAt : null, facts.Operation == ProductAuthorizationLifecycleOperation.Introspection && active ? ["sub"] : [],
+                (revocation || DenyLifecycleArtifact) && allowed ? RevocationEffect : ProductAuthorizationArtifactEffect.None));
         }
         internal static string Subject(string accountId) => "fixture-product-subject-" + AuthenticationIdentity.Digest(accountId + "|" + Product)[..24];
         public async ValueTask<ProductRelationshipDecision> EnsureActiveAsync(ProductRelationshipRequest request, DateTimeOffset at, CancellationToken ct)
@@ -141,7 +187,7 @@ public sealed class ProductAuthorizationProtocolTests(SessionListingPostgresFixt
         public async ValueTask DisposeAsync() { await Host.DisposeAsync(); signing.Dispose(); encryption.Dispose(); await Database.DisposeAsync(); }
         public override string ToString() => nameof(Scenario);
     }
-    private async Task<Scenario> Create(bool nativeResourcePermission = true, bool broaderNativeQualification = false)
+    private async Task<Scenario> Create(bool nativeResourcePermission = true, bool broaderNativeQualification = false, bool lifecycle = false)
     {
         var database = await fixture.CreateDatabaseAsync();
         await using (var setup = database.Context())
@@ -150,7 +196,7 @@ public sealed class ProductAuthorizationProtocolTests(SessionListingPostgresFixt
                     request_digest text PRIMARY KEY, relationship_id text NOT NULL, subject text NOT NULL,
                     version bigint NOT NULL CHECK(version>0), committed_at timestamp with time zone NOT NULL)
                 """);
-        var owners = new Owners(database); var signing = RSA.Create(2048); var encryption = RSA.Create(2048);
+        var owners = new Owners(database) { LifecycleEnabled = lifecycle }; var signing = RSA.Create(2048); var encryption = RSA.Create(2048);
         var signingKey = new RsaSecurityKey(signing) { KeyId = "fixture-distinct-signing" };
         var encryptionKey = new RsaSecurityKey(encryption) { KeyId = "fixture-distinct-encryption" };
         var host = await Start(database, services =>
@@ -160,9 +206,11 @@ public sealed class ProductAuthorizationProtocolTests(SessionListingPostgresFixt
             services.AddSingleton<IProductAuthorizationPolicySource>(owners);
             services.AddSingleton<IProductAuthorizationRegistrySource>(owners);
             services.AddSingleton<IProductAuthorizationRelationshipSource>(owners);
-            var nativeScopes = broaderNativeQualification ? ImmutableArray.Create("openid", "product.other", "product.read") : Scopes;
+            if (lifecycle) services.AddSingleton<IProductAuthorizationLifecycleSource>(owners);
+            var nativeScopes = broaderNativeQualification ? ImmutableArray.Create("openid", "product.other", "product.read") : owners.GrantedScopes;
             var nativeResources = broaderNativeQualification ? ImmutableArray.Create(OtherResource, Resource).Sort(StringComparer.Ordinal) : Resources;
-            services.AddTunnerProductAuthorization(new(Origin, AuthorizationPath, TokenPath, signingKey, encryptionKey, nativeScopes, nativeResources, 32768, 16, 64, 16384));
+            services.AddTunnerProductAuthorization(new(Origin, AuthorizationPath, TokenPath, signingKey, encryptionKey, nativeScopes, nativeResources, 32768, 16, 64, 16384,
+                lifecycle ? new(IntrospectionPath, RevocationPath, RotateRefreshTokens: true, SlidingRefreshExpiration: false, RefreshReuseLeeway: TimeSpan.Zero) : null));
             services.AddOpenIddict().AddServer(options =>
             {
                 options.AddEventHandler<OpenIddictServerEvents.ProcessRequestContext>(builder => builder
@@ -206,6 +254,8 @@ public sealed class ProductAuthorizationProtocolTests(SessionListingPostgresFixt
                 OpenIddictConstants.Permissions.GrantTypes.AuthorizationCode, OpenIddictConstants.Permissions.ResponseTypes.Code,
                 OpenIddictConstants.Permissions.Prefixes.Scope + "product.read"]);
             if (nativeResourcePermission) descriptor.Permissions.Add(OpenIddictConstants.Permissions.Prefixes.Resource + Resource);
+            if (lifecycle) descriptor.Permissions.UnionWith([OpenIddictConstants.Permissions.GrantTypes.RefreshToken,
+                OpenIddictConstants.Permissions.Endpoints.Introspection, OpenIddictConstants.Permissions.Endpoints.Revocation]);
             if (broaderNativeQualification)
             {
                 descriptor.Permissions.Add(OpenIddictConstants.Permissions.Prefixes.Scope + "product.other");
@@ -243,7 +293,7 @@ public sealed class ProductAuthorizationProtocolTests(SessionListingPostgresFixt
         var values = new Dictionary<string, string>
         {
             ["client_id"] = test.Owners.ClientId, ["redirect_uri"] = Redirect, ["response_type"] = "code", ["response_mode"] = "form_post",
-            ["scope"] = string.Join(' ', Scopes), ["resource"] = Resource, ["product_id"] = Product, ["environment"] = EnvironmentName,
+            ["scope"] = string.Join(' ', test.Owners.GrantedScopes), ["resource"] = Resource, ["product_id"] = Product, ["environment"] = EnvironmentName,
             ["code_challenge"] = challenge, ["code_challenge_method"] = "S256", ["state"] = state ?? Guid.NewGuid().ToString("N"),
             ["nonce"] = nonce ?? Guid.NewGuid().ToString("N")
         };
@@ -499,6 +549,291 @@ public sealed class ProductAuthorizationProtocolTests(SessionListingPostgresFixt
             }
             await AssertEffects(test, grants: 1, original.Value, test.Owners.ClientCredential);
         }
+    }
+
+    [Fact]
+    public async Task LifecycleRefreshOutlivesCodeDeadlineRotatesAndRejectsReplayWithoutBrowserActivity()
+    {
+        await using var test = await Create(lifecycle: true); var original = await IssueLifecycleTokens(test);
+        var before = await ReadSourceSession(test); var originalRefreshEnd = await RefreshExpiration(test, original.AuthorizationId);
+        test.Host.Clock.Advance(TimeSpan.FromMinutes(3));
+        Assert.True(test.Host.Clock.GetUtcNow() > original.CodeExpiresAt, "Refresh must exercise an expired original authorization-code deadline.");
+        using var response = await Refresh(test, original.Refresh);
+        var refreshed = await ReadLifecycleTokens(response, original.AuthorizationId, original.OriginalCode, original.CodeExpiresAt);
+        Assert.True(refreshed.Refresh != original.Refresh, "Qualified rotation must replace the presented refresh token.");
+        var validated = await new JsonWebTokenHandler { MapInboundClaims = false }.ValidateTokenAsync(refreshed.Access, new TokenValidationParameters
+        {
+            ValidIssuer = new Uri(Origin).AbsoluteUri, ValidAudience = Resource, IssuerSigningKey = test.SigningKey,
+            TokenDecryptionKey = test.EncryptionKey, ValidateLifetime = true, ClockSkew = TimeSpan.Zero
+        });
+        Assert.True(validated.IsValid, validated.Exception?.GetType().Name ?? "Refreshed native access validation failed.");
+        Assert.True(validated.ClaimsIdentity.FindFirst("sub")?.Value == Owners.Subject(test.AccountId), "Refresh must preserve the independently mapped subject.");
+        Assert.True(validated.ClaimsIdentity.FindFirst("exp")?.Value == test.Host.Clock.GetUtcNow().AddMinutes(5).ToUnixTimeSeconds().ToString(CultureInfo.InvariantCulture),
+            "Native generation must preserve the exact qualified access-token expiry.");
+        Assert.True(await RefreshExpiration(test, original.AuthorizationId) == originalRefreshEnd, "Non-sliding rotation must preserve the original refresh expiry.");
+        await AssertRefreshStatuses(test, original.AuthorizationId, valid: 1, redeemed: 1);
+        await AssertLifecycleEffects(test, "ProductAuthorizationRefreshed", 1, original, refreshed);
+        using var replay = await Refresh(test, original.Refresh);
+        await AssertRejected(replay, "invalid_grant", HttpStatusCode.BadRequest);
+        await AssertLifecycleEffects(test, "ProductAuthorizationRefreshed", 1, original, refreshed);
+        await AssertSourceSessionUnchanged(test, before);
+    }
+
+    [Fact]
+    public async Task LifecycleRefreshCanNarrowScopesWithoutIssuingAnUnrequestedIdentityToken()
+    {
+        await using var test = await Create(lifecycle: true); var original = await IssueLifecycleTokens(test);
+        var before = await ReadSourceSession(test); var originalRefreshEnd = await RefreshExpiration(test, original.AuthorizationId);
+        using var response = await Refresh(test, original.Refresh, new Dictionary<string, string> { ["scope"] = "offline_access product.read" });
+        var narrowed = await ReadLifecycleTokens(response, original.AuthorizationId, original.OriginalCode, original.CodeExpiresAt, expectIdentity: false);
+        var validated = await new JsonWebTokenHandler { MapInboundClaims = false }.ValidateTokenAsync(narrowed.Access, new TokenValidationParameters
+        {
+            ValidIssuer = new Uri(Origin).AbsoluteUri, ValidAudience = Resource, IssuerSigningKey = test.SigningKey,
+            TokenDecryptionKey = test.EncryptionKey, ValidateLifetime = true, ClockSkew = TimeSpan.Zero
+        });
+        Assert.True(validated.IsValid, validated.Exception?.GetType().Name ?? "Narrowed native access validation failed.");
+        var scopes = validated.ClaimsIdentity.FindAll("scope").SelectMany(claim => claim.Value.Split(' ', StringSplitOptions.RemoveEmptyEntries)).Order(StringComparer.Ordinal);
+        Assert.True(scopes.SequenceEqual(["offline_access", "product.read"], StringComparer.Ordinal), "Native access scope must remain narrowed to the qualified request.");
+        Assert.True(await RefreshExpiration(test, original.AuthorizationId) == originalRefreshEnd, "Narrowing must preserve the original non-sliding refresh bound.");
+        await AssertLifecycleEffects(test, "ProductAuthorizationRefreshed", 1, original, narrowed);
+        await AssertSourceSessionUnchanged(test, before);
+    }
+
+    [Theory]
+    [InlineData("scope", "openid product.other", "invalid_scope")]
+    [InlineData("client_id", "synthetic-unrecognized-binding", "invalid_client")]
+    public async Task LifecycleRefreshRejectsScopeEscalationAndWrongNativeClient(string parameter, string value, string error)
+    {
+        await using var test = await Create(lifecycle: true); var original = await IssueLifecycleTokens(test);
+        var before = await ReadSourceSession(test);
+        using var response = await Refresh(test, original.Refresh, new Dictionary<string, string> { [parameter] = value });
+        await AssertRejected(response, error, error == "invalid_client" ? HttpStatusCode.Unauthorized : HttpStatusCode.BadRequest);
+        await AssertLifecycleEffects(test, "ProductAuthorizationRefreshed", 0, original);
+        await AssertSourceSessionUnchanged(test, before);
+    }
+
+    [Fact]
+    public async Task LifecycleIntrospectionDisclosesOnlyQualifiedClaimsAndBecomesInactiveAfterOwnerChange()
+    {
+        await using var test = await Create(lifecycle: true); var original = await IssueLifecycleTokens(test);
+        var before = await ReadSourceSession(test);
+        using (var response = await Inspect(test, original.Access, "access_token"))
+        {
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            var content = await response.Content.ReadFromJsonAsync<JsonElement>(); Assert.True(content.GetProperty("active").GetBoolean());
+            Assert.True(content.GetProperty("sub").GetString() == Owners.Subject(test.AccountId), "Active introspection must retain only the qualified native subject.");
+            Assert.All(content.EnumerateObject().Select(property => property.Name), name => Assert.True(name is "active" or "sub", "Introspection must not disclose unqualified fields."));
+        }
+        test.Owners.RegistryVersion++;
+        using (var response = await Inspect(test, original.Access, "access_token")) await AssertInactive(response);
+        Assert.True(test.Owners.LifecycleDecisions >= 3, "Both active revalidation and changed-owner denial must reach the qualified lifecycle source.");
+        await AssertLifecycleEffects(test, "ProductAuthorizationIntrospected", 1, original);
+        await AssertSourceSessionUnchanged(test, before);
+    }
+
+    [Theory]
+    [InlineData(ProductAuthorizationArtifactEffect.PresentedToken)]
+    [InlineData(ProductAuthorizationArtifactEffect.AuthorizationChain)]
+    public async Task LifecycleRevocationHonorsPresentedTokenAndAuthorizationChainEffects(ProductAuthorizationArtifactEffect effect)
+    {
+        await using var test = await Create(lifecycle: true); var original = await IssueLifecycleTokens(test);
+        var before = await ReadSourceSession(test); test.Owners.RevocationEffect = effect;
+        using (var response = await Revoke(test, original.Access, "access_token")) await AssertRevocationSuccess(response);
+        using (var response = await Inspect(test, original.Access, "access_token")) await AssertInactive(response);
+        using (var response = await Inspect(test, original.Refresh, "refresh_token"))
+        {
+            if (effect == ProductAuthorizationArtifactEffect.AuthorizationChain) await AssertInactive(response);
+            else
+            {
+                Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+                var content = await response.Content.ReadFromJsonAsync<JsonElement>();
+                Assert.True(content.GetProperty("active").GetBoolean(), "Presented-token revocation must preserve the qualified sibling refresh token.");
+            }
+        }
+        await using var scope = test.Host.Services.CreateAsyncScope();
+        var manager = scope.ServiceProvider.GetRequiredService<IOpenIddictAuthorizationManager>();
+        var authorization = await manager.FindByIdAsync(original.AuthorizationId); Assert.NotNull(authorization);
+        Assert.Equal(effect == ProductAuthorizationArtifactEffect.AuthorizationChain ? OpenIddictConstants.Statuses.Revoked : OpenIddictConstants.Statuses.Valid,
+            await manager.GetStatusAsync(authorization!));
+        await using (var read = test.Database.Context())
+        {
+            var audit = await read.Set<OutboxMessage>().SingleAsync(message => message.EventType == "ProductAuthorizationRevoked");
+            using var payload = JsonDocument.Parse(audit.Payload);
+            Assert.Equal(effect.ToString(), payload.RootElement.GetProperty("effect").GetString());
+        }
+        await AssertLifecycleEffects(test, "ProductAuthorizationRevoked", 1, original);
+        await AssertSourceSessionUnchanged(test, before);
+    }
+
+    [Fact]
+    public async Task LifecycleRevocationOfUnknownNativeTokenSucceedsWithoutOwnerDecisionOrSuccessAudit()
+    {
+        await using var test = await Create(lifecycle: true); var before = await ReadSourceSession(test);
+        var unrecognized = Base64UrlEncoder.Encode(RandomNumberGenerator.GetBytes(64));
+        using var response = await Revoke(test, unrecognized, "access_token"); await AssertRevocationSuccess(response);
+        Assert.Equal(0, test.Owners.LifecycleDecisions);
+        await using var read = test.Database.Context();
+        Assert.Equal(0, await read.Set<OutboxMessage>().CountAsync(message => message.EventType.StartsWith("ProductAuthorization")));
+        await AssertSourceSessionUnchanged(test, before);
+    }
+
+    [Fact]
+    public async Task LifecycleRevocationSurvivesEndedSourceSessionAndExpiredIssuancePolicy()
+    {
+        await using var test = await Create(lifecycle: true);
+        test.Owners.IssuancePolicyExpiresAt = test.Host.Clock.GetUtcNow().AddMinutes(1);
+        var original = await IssueLifecycleTokens(test);
+        test.Host.Clock.Advance(TimeSpan.FromMinutes(2));
+        Assert.True(test.Host.Clock.GetUtcNow() > test.Owners.IssuancePolicyExpiresAt, "The original issuance policy must have expired before revocation.");
+        await using (var write = test.Database.Context())
+        {
+            var session = await write.Set<AuthenticationSessionRow>().SingleAsync(row => row.AccountId == test.AccountId);
+            session.State = "REVOKED"; session.RevokedAt = test.Host.Clock.GetUtcNow(); session.Version++;
+            session.ProtectedKey = ""; session.ProtectedTicket = ""; await write.SaveChangesAsync();
+        }
+        var before = await ReadSourceSession(test);
+        test.Owners.PolicyAvailable = false; test.Host.Policies.Available = false; test.Host.Access.Allowed = false;
+        test.Owners.RevocationEffect = ProductAuthorizationArtifactEffect.AuthorizationChain;
+        using (var response = await Revoke(test, original.Refresh, "refresh_token")) await AssertRevocationSuccess(response);
+        Assert.True(test.Owners.LifecycleDecisions >= 2, "A current explicit revocation qualification must govern despite ended browser eligibility.");
+        await AssertLifecycleEffects(test, "ProductAuthorizationRevoked", 1, original);
+        await AssertSourceSessionUnchanged(test, before);
+        await using var scope = test.Host.Services.CreateAsyncScope();
+        var manager = scope.ServiceProvider.GetRequiredService<IOpenIddictAuthorizationManager>();
+        var authorization = await manager.FindByIdAsync(original.AuthorizationId); Assert.NotNull(authorization);
+        Assert.Equal(OpenIddictConstants.Statuses.Revoked, await manager.GetStatusAsync(authorization!));
+    }
+
+    [Theory]
+    [InlineData(ProductAuthorizationLifecycleOperation.Refresh)]
+    [InlineData(ProductAuthorizationLifecycleOperation.Introspection)]
+    public async Task LifecycleQualifiedArtifactDenialCommitsExplicitChainRevocation(ProductAuthorizationLifecycleOperation operation)
+    {
+        await using var test = await Create(lifecycle: true); var original = await IssueLifecycleTokens(test);
+        var before = await ReadSourceSession(test);
+        test.Owners.DenyLifecycleArtifact = true; test.Owners.RevocationEffect = ProductAuthorizationArtifactEffect.AuthorizationChain;
+        if (operation == ProductAuthorizationLifecycleOperation.Refresh)
+        {
+            using var response = await Refresh(test, original.Refresh);
+            await AssertRejected(response, "invalid_grant", HttpStatusCode.BadRequest);
+        }
+        else
+        {
+            using var response = await Inspect(test, original.Access, "access_token"); await AssertInactive(response);
+        }
+        await using var scope = test.Host.Services.CreateAsyncScope();
+        var manager = scope.ServiceProvider.GetRequiredService<IOpenIddictAuthorizationManager>();
+        var authorization = await manager.FindByIdAsync(original.AuthorizationId); Assert.NotNull(authorization);
+        Assert.Equal(OpenIddictConstants.Statuses.Revoked, await manager.GetStatusAsync(authorization!));
+        await AssertLifecycleEffects(test, "ProductAuthorizationRevoked", 1, original);
+        await AssertLifecycleEffects(test, "ProductAuthorizationRefreshed", 0, original);
+        await AssertSourceSessionUnchanged(test, before);
+    }
+
+    private sealed record LifecycleTokens(string Access, string Identity, string Refresh, string AuthorizationId, NativeCode OriginalCode, DateTimeOffset CodeExpiresAt)
+    { public override string ToString() => nameof(LifecycleTokens); }
+
+    private static async Task<LifecycleTokens> IssueLifecycleTokens(Scenario test)
+    {
+        var code = await Authorize(test);
+        await using var read = test.Database.Context();
+        var granted = await read.Set<OutboxMessage>().SingleAsync(message => message.EventType == "ProductAuthorizationGranted");
+        await using var scope = test.Host.Services.CreateAsyncScope();
+        var manager = scope.ServiceProvider.GetRequiredService<IOpenIddictAuthorizationManager>();
+        var authorization = await manager.FindByIdAsync(granted.Subject); Assert.NotNull(authorization);
+        var properties = await manager.GetPropertiesAsync(authorization!);
+        var original = ProductAuthorizationApplication.ReadLineage(properties[ProductAuthorizationApplication.LineageProperty]); Assert.NotNull(original);
+        using var response = await Redeem(test, code);
+        return await ReadLifecycleTokens(response, granted.Subject, code, original!.CodeExpiresAt);
+    }
+
+    private static async Task<LifecycleTokens> ReadLifecycleTokens(HttpResponseMessage response, string authorizationId, NativeCode code, DateTimeOffset codeExpiresAt, bool expectIdentity = true)
+    {
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        var content = await response.Content.ReadFromJsonAsync<JsonElement>();
+        Assert.Equal("Bearer", content.GetProperty("token_type").GetString());
+        var access = content.GetProperty("access_token").GetString();
+        var identityPresent = content.TryGetProperty("id_token", out var identityValue);
+        var identity = identityPresent ? identityValue.GetString() : null;
+        var refresh = content.GetProperty("refresh_token").GetString();
+        Assert.True(!string.IsNullOrWhiteSpace(access) && !string.IsNullOrWhiteSpace(refresh), "The qualified lifecycle must publish native access and refresh artifacts.");
+        if (expectIdentity) Assert.True(identityPresent && !string.IsNullOrWhiteSpace(identity), "The qualified OpenID lifecycle must publish its native identity artifact.");
+        else Assert.False(identityPresent, "A scope-narrowed refresh must not publish an unrequested identity artifact.");
+        return new(access!, identity ?? string.Empty, refresh!, authorizationId, code, codeExpiresAt);
+    }
+
+    private static Task<HttpResponseMessage> Refresh(Scenario test, string token, IReadOnlyDictionary<string, string>? overrides = null) =>
+        PostNativeForm(test, TokenPath, new Dictionary<string, string> { ["grant_type"] = "refresh_token", ["refresh_token"] = token }, overrides);
+    private static Task<HttpResponseMessage> Inspect(Scenario test, string token, string hint) =>
+        PostNativeForm(test, IntrospectionPath, new Dictionary<string, string> { ["token"] = token, ["token_type_hint"] = hint });
+    private static Task<HttpResponseMessage> Revoke(Scenario test, string token, string hint) =>
+        PostNativeForm(test, RevocationPath, new Dictionary<string, string> { ["token"] = token, ["token_type_hint"] = hint });
+    private static async Task<HttpResponseMessage> PostNativeForm(Scenario test, string path, Dictionary<string, string> values, IReadOnlyDictionary<string, string>? overrides = null)
+    {
+        values["client_id"] = test.Owners.ClientId; values["client_secret"] = test.Owners.ClientCredential;
+        if (overrides is not null) foreach (var pair in overrides) values[pair.Key] = pair.Value;
+        using var form = new FormUrlEncodedContent(values);
+        return await test.Host.RawPost(path, await form.ReadAsStringAsync(), string.Empty, string.Empty, "application/x-www-form-urlencoded");
+    }
+
+    private static async Task AssertInactive(HttpResponseMessage response)
+    {
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode); var content = await response.Content.ReadFromJsonAsync<JsonElement>();
+        Assert.False(content.GetProperty("active").GetBoolean());
+        Assert.Equal("active", Assert.Single(content.EnumerateObject().Select(property => property.Name)));
+    }
+    private static async Task AssertRevocationSuccess(HttpResponseMessage response)
+    {
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode); await response.Content.LoadIntoBufferAsync(65536);
+        var content = await response.Content.ReadAsStringAsync();
+        if (content.Length == 0) return;
+        using var document = JsonDocument.Parse(content);
+        Assert.Equal(JsonValueKind.Object, document.RootElement.ValueKind);
+        Assert.Empty(document.RootElement.EnumerateObject().Select(property => property.Name));
+    }
+
+    private static async Task<AuthenticationSessionRow> ReadSourceSession(Scenario test)
+    {
+        await using var read = test.Database.Context();
+        return await read.Set<AuthenticationSessionRow>().AsNoTracking().SingleAsync(row => row.AccountId == test.AccountId);
+    }
+    private static async Task AssertSourceSessionUnchanged(Scenario test, AuthenticationSessionRow before)
+    {
+        var after = await ReadSourceSession(test);
+        Assert.True(after.Version == before.Version && after.LastSeenAt == before.LastSeenAt && after.State == before.State &&
+            after.ExpiresAt == before.ExpiresAt && after.RevokedAt == before.RevokedAt, "Native token traffic must not renew, end or revive the browser session.");
+    }
+    private static async Task<DateTimeOffset> RefreshExpiration(Scenario test, string authorizationId)
+    {
+        await using var scope = test.Host.Services.CreateAsyncScope(); var manager = scope.ServiceProvider.GetRequiredService<IOpenIddictTokenManager>();
+        DateTimeOffset? expires = null;
+        await foreach (var token in manager.FindByAuthorizationIdAsync(authorizationId))
+            if (await manager.GetTypeAsync(token) == OpenIddictConstants.TokenTypeHints.RefreshToken && await manager.GetStatusAsync(token) == OpenIddictConstants.Statuses.Valid)
+            {
+                Assert.Null(expires); expires = await manager.GetExpirationDateAsync(token);
+            }
+        Assert.NotNull(expires); return expires ?? throw new InvalidOperationException("The valid native refresh expiry is required.");
+    }
+    private static async Task AssertRefreshStatuses(Scenario test, string authorizationId, int valid, int redeemed)
+    {
+        await using var scope = test.Host.Services.CreateAsyncScope(); var manager = scope.ServiceProvider.GetRequiredService<IOpenIddictTokenManager>();
+        var statuses = new List<string?>();
+        await foreach (var token in manager.FindByAuthorizationIdAsync(authorizationId))
+            if (await manager.GetTypeAsync(token) == OpenIddictConstants.TokenTypeHints.RefreshToken) statuses.Add(await manager.GetStatusAsync(token));
+        Assert.Equal(valid, statuses.Count(status => status == OpenIddictConstants.Statuses.Valid));
+        Assert.Equal(redeemed, statuses.Count(status => status == OpenIddictConstants.Statuses.Redeemed));
+        Assert.Equal(valid + redeemed, statuses.Count);
+    }
+    private static async Task AssertLifecycleEffects(Scenario test, string type, int count, params LifecycleTokens[] artifacts)
+    {
+        await using var read = test.Database.Context();
+        var effects = await read.Set<OutboxMessage>().Where(message => message.EventType.StartsWith("ProductAuthorization")).ToListAsync();
+        Assert.Equal(count, effects.Count(message => message.EventType == type));
+        foreach (var effect in effects)
+            foreach (var issued in artifacts)
+                Assert.True(!effect.Payload.Contains(issued.Access, StringComparison.Ordinal) && (issued.Identity.Length == 0 || !effect.Payload.Contains(issued.Identity, StringComparison.Ordinal)) &&
+                    !effect.Payload.Contains(issued.Refresh, StringComparison.Ordinal) && !effect.Payload.Contains(issued.OriginalCode.Value, StringComparison.Ordinal) &&
+                    !effect.Payload.Contains(test.Owners.ClientCredential, StringComparison.Ordinal), "Native lifecycle artifacts and credentials must not enter outbox payloads.");
     }
 
     private static async Task ChangeOwner(Owners owners, string owner, bool unavailable, CancellationToken ct = default)

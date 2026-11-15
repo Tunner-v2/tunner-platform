@@ -12,9 +12,10 @@ using static OpenIddict.Abstractions.OpenIddictConstants;
 namespace Tunner.Identity.Persistence;
 
 /// <summary>One scoped native request coordinator; commit precedes native response publication.</summary>
-internal sealed class ProductAuthorizationProtocol(IdentityPersistenceDbContext database, ProductAuthorizationApplication application,
+internal sealed partial class ProductAuthorizationProtocol(IdentityPersistenceDbContext database, ProductAuthorizationApplication application,
     ProductAuthorizationServerProfile profile, IOpenIddictApplicationManager clients, IOpenIddictAuthorizationManager authorizations,
-    IOpenIddictTokenManager tokens, IHttpContextAccessor accessor, AuthenticationPartitionKey partitions, TimeProvider clock) :
+    IOpenIddictTokenManager tokens, IHttpContextAccessor accessor, AuthenticationPartitionKey partitions, TimeProvider clock,
+    ProductAuthorizationLifecycleApplication? lifecycleApplication = null) :
     IOpenIddictServerHandler<OpenIddictServerEvents.ProcessRequestContext>,
     IOpenIddictServerHandler<OpenIddictServerEvents.HandleAuthorizationRequestContext>,
     IOpenIddictServerHandler<OpenIddictServerEvents.HandleTokenRequestContext>,
@@ -29,12 +30,15 @@ internal sealed class ProductAuthorizationProtocol(IdentityPersistenceDbContext 
     public async ValueTask HandleAsync(OpenIddictServerEvents.ProcessRequestContext context)
     {
         var request = Http.Request;
-        if (request.Path != profile.AuthorizationPath && request.Path != profile.TokenPath) return;
-        var expectedPath = request.Path == profile.AuthorizationPath ? profile.AuthorizationPath : profile.TokenPath;
+        var isAuthorization = request.Path == profile.AuthorizationPath;
+        if (!isAuthorization && request.Path != profile.TokenPath &&
+            (profile.Lifecycle is null || request.Path != profile.Lifecycle.IntrospectionPath && request.Path != profile.Lifecycle.RevocationPath)) return;
+        var expectedPath = isAuthorization ? profile.AuthorizationPath : request.Path == profile.TokenPath ? profile.TokenPath :
+            request.Path == profile.Lifecycle?.IntrospectionPath ? profile.Lifecycle!.IntrospectionPath : profile.Lifecycle!.RevocationPath;
         var rawPath = Http.Features.Get<IHttpRequestFeature>()?.RawTarget?.Split('?', 2)[0];
         if (!string.Equals(rawPath, expectedPath, StringComparison.Ordinal) || request.PathBase.HasValue ||
-            request.Path == profile.AuthorizationPath && !HttpMethods.IsGet(request.Method) ||
-            request.Path == profile.TokenPath && !HttpMethods.IsPost(request.Method))
+            isAuthorization && !HttpMethods.IsGet(request.Method) ||
+            !isAuthorization && !HttpMethods.IsPost(request.Method))
         { context.Reject(Errors.InvalidRequest); return; }
         if (database.Database.CurrentTransaction is not null)
             throw new InvalidOperationException("A native request must own its Identity transaction.");
@@ -92,6 +96,8 @@ internal sealed class ProductAuthorizationProtocol(IdentityPersistenceDbContext 
     public async ValueTask HandleAsync(OpenIddictServerEvents.HandleTokenRequestContext context)
     {
         RequireTransaction(); var ct = Http.RequestAborted;
+        if (context.Request.IsRefreshTokenGrantType())
+        { await RefreshAsync(context).ConfigureAwait(false); return; }
         if (!context.Request.IsAuthorizationCodeGrantType() || context.AuthorizationCodePrincipal is not { } principal ||
             principal.GetAuthorizationId() is not { Length: > 0 } id)
         { context.Reject(Errors.InvalidGrant); return; }
@@ -119,6 +125,8 @@ internal sealed class ProductAuthorizationProtocol(IdentityPersistenceDbContext 
     private async ValueTask FinalizeAsync(OpenIddictResponse response, bool redemption)
     {
         if (transaction is null) return;
+        if (lifecycleEvaluation is not null)
+        { await FinalizeLifecycleAsync(response).ConfigureAwait(false); return; }
         var ct = Http.RequestAborted;
         if (grant is not null && authorizationId is not null)
         {
@@ -151,19 +159,11 @@ internal sealed class ProductAuthorizationProtocol(IdentityPersistenceDbContext 
         identity.SetDestinations(claim => claim.Type == Claims.Subject ? [Destinations.AccessToken, Destinations.IdentityToken] : []);
         var principal = new ClaimsPrincipal(identity);
         principal.SetAuthorizationId(id).SetScopes(value.Lineage.Request.Scopes).SetResources(value.Lineage.Request.Resources);
-        principal.SetAuthorizationCodeLifetime(remainingCode).SetAccessTokenLifetime(BoundedLifetime(value.Policy.AccessTokenLifetime))
-            .SetIdentityTokenLifetime(BoundedLifetime(value.Policy.IdentityTokenLifetime));
+        principal.SetAuthorizationCodeLifetime(remainingCode).SetAccessTokenLifetime(value.Policy.AccessTokenLifetime)
+            .SetIdentityTokenLifetime(value.Policy.IdentityTokenLifetime);
+        if (value.Policy.AllowRefreshTokens && profile.Lifecycle is not null)
+            principal.SetRefreshTokenLifetime(value.Policy.RefreshTokenLifetime);
         return principal;
-
-        TimeSpan BoundedLifetime(TimeSpan configured)
-        {
-            DateTimeOffset?[] limits = [value.Actor.Session.ExpiresAt, value.Actor.Session.AuthenticatedAt + value.Policy.MaximumAuthenticationAge,
-                value.Policy.Metadata.EffectiveInterval.Until, value.Lineage.Registration.EffectiveInterval.Until,
-                value.Lineage.Relationship.EffectiveInterval.Until];
-            var end = limits.Where(limit => limit is not null).Select(limit => limit!.Value).Append(now + configured).Min();
-            if (end <= now) throw new InvalidOperationException("Current authorization lifetime is unavailable.");
-            return end - now;
-        }
     }
     private static ImmutableArray<string> Canonical(IEnumerable<string> values) => values.Distinct(StringComparer.Ordinal).Order(StringComparer.Ordinal).ToImmutableArray();
     private void RequireTransaction()

@@ -9,20 +9,25 @@ using Tunner.Platform.Bff;
 
 namespace Tunner.Identity.Persistence;
 
+/// <summary>Explicit issuer-wide native refresh behavior; owner decisions must agree with this qualification.</summary>
+public sealed record ProductAuthorizationLifecycleServerProfile(string IntrospectionPath, string RevocationPath,
+    bool RotateRefreshTokens, bool SlidingRefreshExpiration, TimeSpan RefreshReuseLeeway);
+
 /// <summary>Explicit native transport/key configuration. This does not select Product or token policy.</summary>
 public sealed class ProductAuthorizationServerProfile
 {
     public ProductAuthorizationServerProfile(string origin, string authorizationPath, string tokenPath,
         SecurityKey signingKey, SecurityKey encryptionKey, ImmutableArray<string> supportedScopes, ImmutableArray<string> supportedResources,
-        int maximumBodyBytes, int maximumFields, int maximumKeyLength, int maximumValueLength)
+        int maximumBodyBytes, int maximumFields, int maximumKeyLength, int maximumValueLength,
+        ProductAuthorizationLifecycleServerProfile? lifecycle = null)
     {
         if (!Uri.TryCreate(origin, UriKind.Absolute, out var uri) || uri.Scheme != "https" ||
             origin != uri.GetLeftPart(UriPartial.Authority) || uri.UserInfo.Length != 0)
             throw new ArgumentException("An exact HTTPS User origin is required.", nameof(origin));
         ArgumentNullException.ThrowIfNull(signingKey); ArgumentNullException.ThrowIfNull(encryptionKey);
         if (!ProductAuthorizationRequest.Canonical(supportedScopes) || supportedScopes.Length == 0 ||
-            supportedScopes.Contains(OpenIddictConstants.Scopes.OfflineAccess, StringComparer.Ordinal))
-            throw new ArgumentException("Explicit scopes for the admitted code-only profile are required.", nameof(supportedScopes));
+            lifecycle is null && supportedScopes.Contains(OpenIddictConstants.Scopes.OfflineAccess, StringComparer.Ordinal))
+            throw new ArgumentException("Explicit scopes and qualified lifecycle support for offline access are required.", nameof(supportedScopes));
         if (!ProductAuthorizationRequest.Canonical(supportedResources) || supportedResources.Length == 0 ||
             supportedResources.Any(resource => !Uri.TryCreate(resource, UriKind.Absolute, out var resourceUri) ||
                 resourceUri.AbsoluteUri != resource || resourceUri.Fragment.Length != 0 || resourceUri.UserInfo.Length != 0))
@@ -36,10 +41,19 @@ public sealed class ProductAuthorizationServerProfile
         _ = new BffProtocolCallback(tokenPath, maximumBodyBytes, maximumFields, maximumKeyLength, maximumValueLength, _ => Task.CompletedTask);
         if (string.Equals(authorizationPath, tokenPath, StringComparison.OrdinalIgnoreCase))
             throw new ArgumentException("Distinct native authorization and token paths are required.");
+        if (lifecycle is not null)
+        {
+            _ = new BffProtocolCallback(lifecycle.IntrospectionPath, maximumBodyBytes, maximumFields, maximumKeyLength, maximumValueLength, _ => Task.CompletedTask);
+            _ = new BffProtocolCallback(lifecycle.RevocationPath, maximumBodyBytes, maximumFields, maximumKeyLength, maximumValueLength, _ => Task.CompletedTask);
+            string[] paths = [authorizationPath, tokenPath, lifecycle.IntrospectionPath, lifecycle.RevocationPath];
+            if (paths.Distinct(StringComparer.OrdinalIgnoreCase).Count() != paths.Length || lifecycle.RefreshReuseLeeway < TimeSpan.Zero)
+                throw new ArgumentException("Distinct lifecycle paths and explicit nonnegative refresh reuse leeway are required.", nameof(lifecycle));
+        }
         Origin = origin; AuthorizationPath = authorizationPath; TokenPath = tokenPath;
         SigningKey = signingKey; EncryptionKey = encryptionKey; SupportedScopes = supportedScopes; SupportedResources = supportedResources;
         MaximumBodyBytes = maximumBodyBytes; MaximumFields = maximumFields;
         MaximumKeyLength = maximumKeyLength; MaximumValueLength = maximumValueLength;
+        Lifecycle = lifecycle;
     }
     public string Origin { get; }
     public string AuthorizationPath { get; }
@@ -48,6 +62,7 @@ public sealed class ProductAuthorizationServerProfile
     internal SecurityKey EncryptionKey { get; }
     public ImmutableArray<string> SupportedScopes { get; }
     public ImmutableArray<string> SupportedResources { get; }
+    public ProductAuthorizationLifecycleServerProfile? Lifecycle { get; }
     internal int MaximumBodyBytes { get; }
     internal int MaximumFields { get; }
     internal int MaximumKeyLength { get; }
@@ -64,23 +79,49 @@ public static class ProductAuthorizationServer
             typeof(IProductAuthorizationRegistrySource), typeof(IProductAuthorizationRelationshipSource), typeof(AuthenticationPartitionKey)];
         if (required.Any(type => !services.Any(item => item.ServiceType == type)))
             throw new InvalidOperationException("Product authorization requires explicit persistence and qualified owner providers.");
+        if (profile.Lifecycle is not null && !services.Any(item => item.ServiceType == typeof(IProductAuthorizationLifecycleSource)))
+            throw new InvalidOperationException("Product lifecycle endpoints require an explicit qualified lifecycle provider.");
         if (services.Any(item => item.ServiceType == typeof(ProductAuthorizationServerProfile)))
             throw new InvalidOperationException("Product authorization may be composed only once.");
         services.AddSingleton(profile); services.AddHttpContextAccessor();
         services.AddScoped<ProductAuthorizationApplication>();
-        services.AddSingleton(new BffProtocolCallback(profile.TokenPath, profile.MaximumBodyBytes, profile.MaximumFields,
+        if (profile.Lifecycle is not null) services.AddScoped<ProductAuthorizationLifecycleApplication>();
+        string[] callbackPaths = profile.Lifecycle is { } lifecycle
+            ? [profile.TokenPath, lifecycle.IntrospectionPath, lifecycle.RevocationPath] : [profile.TokenPath];
+        foreach (var path in callbackPaths) services.AddSingleton(new BffProtocolCallback(path, profile.MaximumBodyBytes, profile.MaximumFields,
             profile.MaximumKeyLength, profile.MaximumValueLength, async context =>
             {
                 var handler = await context.RequestServices.GetRequiredService<IAuthenticationHandlerProvider>()
                     .GetHandlerAsync(context, OpenIddict.Server.AspNetCore.OpenIddictServerAspNetCoreDefaults.AuthenticationScheme).ConfigureAwait(false);
                 if (handler is not IAuthenticationRequestHandler requestHandler || !await requestHandler.HandleRequestAsync().ConfigureAwait(false))
-                    throw new InvalidOperationException("The exact native token callback must be handled terminally.");
+                    throw new InvalidOperationException("The exact native protocol callback must be handled terminally.");
             }));
         services.AddOpenIddict().AddCore(options => options.DisableEntityCaching()).AddServer(options =>
         {
             options.SetIssuer(new Uri(profile.Origin));
             options.SetAuthorizationEndpointUris(profile.AuthorizationPath).SetTokenEndpointUris(profile.TokenPath);
             options.AllowAuthorizationCodeFlow().RequireProofKeyForCodeExchange();
+            if (profile.Lifecycle is { } lifecycleOptions)
+            {
+                options.AllowRefreshTokenFlow().SetIntrospectionEndpointUris(lifecycleOptions.IntrospectionPath)
+                    .SetRevocationEndpointUris(lifecycleOptions.RevocationPath);
+                options.Configure(value =>
+                {
+                    value.DisableRollingRefreshTokens = !lifecycleOptions.RotateRefreshTokens;
+                    value.DisableSlidingRefreshTokenExpiration = !lifecycleOptions.SlidingRefreshExpiration;
+                    value.RefreshTokenReuseLeeway = lifecycleOptions.RefreshReuseLeeway;
+                });
+                options.AddEventHandler<OpenIddictServerEvents.HandleIntrospectionRequestContext>(builder =>
+                    builder.UseScopedHandler<ProductAuthorizationProtocol>().SetOrder(OpenIddictServerHandlers.Introspection.AttachApplicationClaims.Descriptor.Order + 1_000));
+                options.AddEventHandler<OpenIddictServerEvents.HandleRevocationRequestContext>(builder =>
+                    builder.UseScopedHandler<ProductAuthorizationProtocol>().SetOrder(OpenIddictServerHandlers.Revocation.AttachPrincipal.Descriptor.Order + 500));
+                options.AddEventHandler<OpenIddictServerEvents.ProcessSignInContext>(builder =>
+                    builder.UseScopedHandler<ProductAuthorizationProtocol>().SetOrder(OpenIddictServerHandlers.PrepareIdentityTokenPrincipal.Descriptor.Order + 500));
+                options.AddEventHandler<OpenIddictServerEvents.ApplyIntrospectionResponseContext>(builder =>
+                    builder.UseScopedHandler<ProductAuthorizationProtocol>().SetOrder(int.MinValue + 50_000));
+                options.AddEventHandler<OpenIddictServerEvents.ApplyRevocationResponseContext>(builder =>
+                    builder.UseScopedHandler<ProductAuthorizationProtocol>().SetOrder(int.MinValue + 50_000));
+            }
             options.RegisterScopes(profile.SupportedScopes.ToArray());
             options.AddSigningKey(profile.SigningKey).AddEncryptionKey(profile.EncryptionKey);
             options.Configure(value =>

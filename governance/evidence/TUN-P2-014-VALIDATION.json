@@ -5,7 +5,16 @@
   "result": "PENDING",
   "tested_commit_sha": null,
   "validated_commit_sha": null,
-  "phase": "FIRST_NATIVE_EXCHANGE_PASSED_INTEGRATION_CONTINUES",
+  "phase": "NATIVE_CODE_COHORT_PASSED_LIFECYCLE_INTEGRATION_CONTINUES",
+  "focused_code_cohort": {
+    "result": "PASS_FOCUSED_CODE_COHORT_ONLY",
+    "source_commit_sha": "44c861c75c08068542290e651006178569b10445",
+    "run_id": "cb3a6767efce470a83623edc6a22f506",
+    "execution": { "executed": 14, "passed": 14, "failed": 0, "not_executed": 0, "exit_code": 0, "timed_out": false, "owned_containers_remaining": 0, "borrowed_preserved": true },
+    "summary_ref": "artifacts/p2-014-authorization-20261115/native-runtime-cb3a6767efce470a83623edc6a22f506/summary.json",
+    "coverage": "Real HTTPS code exchange, nonce, replay, PKCE/client/redirect/permission rejection, Product/environment/scope/resource qualification, expiry/session denial, changed/unavailable owners and denial after artifact generation without token disclosure.",
+    "limits": "Focused committed-source receipt, not full-feature acceptance. Later behavior changes require focused revalidation; continuation, lifecycle, propagation and compatibility gates remain outstanding."
+  },
   "first_increment": {
     "result": "PASS_FIRST_NATIVE_EXCHANGE_ONLY",
     "source_commit_sha": "b78719dd661bbc6a1419dae7532ef33b8f26fa19",
@@ -40,6 +49,10 @@
     "src/Modules/Identity/AuthenticationProductAuthorization.cs",
     "src/Modules/Identity/ProductAuthorizationServer.cs",
     "src/Modules/Identity/ProductAuthorizationProtocol.cs",
+    "src/Modules/Identity/ProductAuthorizationLifecycleContracts.cs",
+    "src/Modules/Identity/ProductAuthorizationLifecycleApplication.cs",
+    "src/Modules/Identity/AuthenticationProductLifecycle.cs",
+    "src/Modules/Identity/ProductAuthorizationLifecycleProtocol.cs",
     "tests/Tunner.Identity.Persistence.Tests/ProductAuthorizationProtocolTests.cs"
   ],
   "admission": {
@@ -62,7 +75,7 @@
   "contract_ref": "docs/contracts/product-authorization-contract.md",
   "scope": "Complete Product authorization and revocation contract integration. First vertical increment is real active-session native authorization-code/PKCE issuance/redemption. Login/registration continuation, assurance, refresh/introspection/revocation, current owner checks and enabled propagation remain required; first happy path cannot close the feature.",
   "boundary": "Explicit qualified issuer/keys/client/registry/Relationship/policy inputs; missing providers deny activation. No production default or Product membership/entitlement/local-session authority. Existing Figma/Drive/FigJam remain read-only.",
-  "actual_feature_tests": ["first_increment"],
+  "actual_feature_tests": ["first_increment", "focused_code_cohort"],
   "product_acceptance": "NOT_REQUESTED_OR_GRANTED",
-  "exact_next_action": "Qualify the focused negative/currentness cohort without weakening native checks. Then complete qualified continuation/requested-assurance, refresh/introspection/revocation and enabled propagation before shared compatibility and final acceptance gates."
+  "exact_next_action": "Complete policy-qualified refresh/introspection/revocation and continuation/requested-assurance integration, then enabled propagation, shared compatibility and final acceptance gates."
 }

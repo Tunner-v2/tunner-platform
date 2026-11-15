@@ -25,6 +25,8 @@ Keep access/refresh tokens outside Tunner browser JavaScript and browser storage
 
 Refresh, introspection and revocation must enforce the current registered client and applicable ownership, session/grant status and qualified lifecycle policy. Cryptographic validity alone does not prove an artifact remains active. A revoked Tunner session cannot continue Tunner authorization.
 
+Lifecycle qualification binds the original grant, authenticated requesting client, native artifact and current owner facts to an explicit versioned decision. Token traffic does not renew browser activity. The original code deadline does not limit later refresh validity; browser-session termination and issuance-policy expiry are facts for qualified artifact policy, not an implicit universal token lifetime or cascade. Client-authorized cleanup remains possible after browser eligibility ends. Refresh rotation, reuse leeway, expiry bounds, introspection disclosure and presented-token versus authorization-chain effects require explicit qualification; final owner checks and durable effects precede response publication.
+
 Apply grant/token effects according to explicit active policy, with durable causal evidence. Propagate signed/versioned security/revocation events only for enabled Product contracts. Track delivery and Product acknowledgement separately. Product-local sessions remain Product-owned; neither local grant revocation nor event dispatch proves global Product sign-out.
 
 ## Required qualification
