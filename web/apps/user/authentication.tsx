@@ -53,7 +53,7 @@ function Screens({initial}:{initial:Bootstrap}){
       if(response.status===401){if(active)navigatePath(authenticationRoutes.login.pathname,true);return;}
       if(!response.ok)throw new Error('Unavailable');const result=await response.json() as Session;
       if(!result.authenticated||!result.csrfToken||result.productAuthorizationPending!==undefined&&typeof result.productAuthorizationPending!=='boolean')throw new Error('Unavailable');
-      if(active&&result.productAuthorizationPending===true){await resumeProductAuthorization(result.csrfToken,controller.signal);return;}
+      if(active&&result.productAuthorizationPending===true){setSession(result);await resumeProductAuthorization(result.csrfToken,controller.signal);return;}
       if(active){setSession(result);finish();}
     }).catch(()=>{if(active){setError('authentication.error.unavailable');finish();}});
     return cleanup;
