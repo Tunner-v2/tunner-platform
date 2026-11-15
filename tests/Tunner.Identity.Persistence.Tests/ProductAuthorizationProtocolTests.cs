@@ -1122,13 +1122,8 @@ public sealed class ProductAuthorizationProtocolTests(SessionListingPostgresFixt
             test.Cookies = Merge(test.Cookies, options);
         }
         var csrf = await SignInContinuationBrowser(test);
-        for (var refresh = 0; refresh < 2; refresh++)
-        {
-            using var screen = await test.Host.Get(ReviewPath, test.Cookies);
-            Assert.Equal(HttpStatusCode.OK, screen.StatusCode);
-            Assert.Equal("text/html", screen.Content.Headers.ContentType?.MediaType);
-            Assert.Contains("product-authorization", await screen.Content.ReadAsStringAsync(), StringComparison.Ordinal);
-        }
+        using (var premature = await test.Host.Get(ReviewPath, test.Cookies))
+        { Assert.Equal(HttpStatusCode.Found, premature.StatusCode); Assert.Equal("/login", premature.Headers.Location?.OriginalString); }
         using (var query = await test.Host.Get(ReviewPath + "?untrusted=synthetic", test.Cookies))
         { Assert.Equal(HttpStatusCode.Found, query.StatusCode); Assert.Equal("/login", query.Headers.Location?.OriginalString); }
         using (var resume = await test.Host.Post(ResumePath, new { }, test.Cookies, csrf))
@@ -1136,6 +1131,13 @@ public sealed class ProductAuthorizationProtocolTests(SessionListingPostgresFixt
             Assert.Equal(HttpStatusCode.OK, resume.StatusCode);
             Assert.Equal(ReviewPath, (await resume.Content.ReadFromJsonAsync<JsonElement>()).GetProperty("resumePath").GetString());
             test.Cookies = Merge(test.Cookies, resume);
+        }
+        for (var refresh = 0; refresh < 2; refresh++)
+        {
+            using var screen = await test.Host.Get(ReviewPath, test.Cookies);
+            Assert.Equal(HttpStatusCode.OK, screen.StatusCode);
+            Assert.Equal("text/html", screen.Content.Headers.ContentType?.MediaType);
+            Assert.Contains("product-authorization", await screen.Content.ReadAsStringAsync(), StringComparison.Ordinal);
         }
         using (var bypass = await test.Host.Get(AuthorizationPath, test.Cookies))
         { Assert.Equal(HttpStatusCode.Found, bypass.StatusCode); Assert.Equal(ReviewPath, bypass.Headers.Location?.OriginalString); }
