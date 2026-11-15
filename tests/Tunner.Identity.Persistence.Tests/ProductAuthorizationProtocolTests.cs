@@ -69,6 +69,7 @@ public sealed class ProductAuthorizationProtocolTests(SessionListingPostgresFixt
         internal bool DenyLifecycleArtifact { get; set; }
         internal int LifecycleDecisions { get; private set; }
         internal Func<CancellationToken, Task>? BeforeTokenOutput { get; set; }
+        internal Func<CancellationToken, Task>? BeforeRelationshipEnsure { get; set; }
         internal bool NativeArtifactsPrepared { get; private set; }
         internal void ObservePreparedArtifacts(OpenIddictResponse response) => NativeArtifactsPrepared =
             !string.IsNullOrWhiteSpace(response.AccessToken) && !string.IsNullOrWhiteSpace(response.IdToken);
@@ -180,6 +181,7 @@ public sealed class ProductAuthorizationProtocolTests(SessionListingPostgresFixt
         public async ValueTask<ProductRelationshipDecision> EnsureActiveAsync(ProductRelationshipRequest request, DateTimeOffset at, CancellationToken ct)
         {
             RequireFixedOwner(request);
+            if (BeforeRelationshipEnsure is { } beforeEnsure) await beforeEnsure(ct);
             // Separate connection, no ambient/native Identity transaction and no Account foreign-key lock.
             // This is a durable synthetic owner acknowledgement, not a claimed rollback/enlistment.
             await using var owner = database.Context();
@@ -577,6 +579,66 @@ public sealed class ProductAuthorizationProtocolTests(SessionListingPostgresFixt
         Assert.Equal("resumePath", Assert.Single(json.EnumerateObject().Select(property => property.Name)));
         Assert.Equal(decision == "SWITCH_ACCOUNT" ? "/login" : AuthorizationPath, json.GetProperty("resumePath").GetString());
         test.Cookies = Merge(test.Cookies, response);
+    }
+
+    [Theory]
+    [InlineData("Changed")]
+    [InlineData("Unavailable")]
+    public async Task ReviewPublicationDriftDuringRelationshipActivationPreventsNativeCodePublication(string drift)
+    {
+        await using var test = await Create(review: true);
+        var pending = await BeginContinuation(test, existingSession: true, expectedRedirect: ReviewPath);
+        var frame = await ReviewOptions(test, pending); await ReviewApply(test, frame, "ALLOW");
+        var relationshipBoundaryReached = false;
+        test.Owners.BeforeRelationshipEnsure = ct =>
+        {
+            ct.ThrowIfCancellationRequested(); relationshipBoundaryReached = true;
+            if (drift == "Changed") test.Owners.PresentationVersion = "fixture-product-presentation-v2";
+            else test.Owners.PresentationAvailable = false;
+            return Task.CompletedTask;
+        };
+        using var response = await test.Host.Get(AuthorizationPath, test.Cookies);
+        Assert.True(relationshipBoundaryReached, "The publication mutation must occur after approval validation inside Relationship activation.");
+        await AssertRejected(response, "access_denied", HttpStatusCode.OK);
+        await AssertEffects(test, 0, pending.State, pending.Nonce, pending.Verifier, frame.Reference, frame.Csrf);
+        await using var read = test.Database.Context();
+        Assert.Equal(1, await read.Database.SqlQuery<int>($"SELECT count(*)::integer AS \"Value\" FROM public.product_authorization_relationship_fixture").SingleAsync());
+        Assert.Equal(0, await read.Set<OutboxMessage>().CountAsync(message => message.EventType == "ProductAuthorizationDeclined"));
+    }
+
+    [Fact]
+    public async Task ReviewDenialPublicationDriftCannotAttributeDeclineToUnreviewedVersion()
+    {
+        await using var test = await Create(review: true);
+        var pending = await BeginContinuation(test, existingSession: true, expectedRedirect: ReviewPath);
+        var frame = await ReviewOptions(test, pending); await ReviewApply(test, frame, "DENY");
+        test.Owners.PresentationVersion = "fixture-product-presentation-v2";
+        using var response = await test.Host.Get(AuthorizationPath, test.Cookies);
+        await AssertRejected(response, "access_denied", HttpStatusCode.OK);
+        await AssertNoInteractionRelationship(test);
+        await using var read = test.Database.Context();
+        Assert.Equal(0, await read.Set<OutboxMessage>().CountAsync(message => message.EventType == "ProductAuthorizationDeclined"));
+        await AssertPendingStatus(test, pending, OpenIddictConstants.Statuses.Valid);
+    }
+
+    [Fact]
+    public async Task ReviewSwitchRejectsOldReferenceWithNewGenerationPointerReboundToSameSession()
+    {
+        await using var test = await Create(review: true);
+        var pending = await BeginContinuation(test, existingSession: true, expectedRedirect: ReviewPath);
+        var oldReview = await ReviewOptions(test, pending);
+        await ReviewApply(test, oldReview, "SWITCH_ACCOUNT");
+        var currentCsrf = await SessionContinuation(test, pending: true);
+        using (var rebound = await test.Host.Post(ResumePath, new { }, test.Cookies, currentCsrf))
+        {
+            Assert.Equal(HttpStatusCode.OK, rebound.StatusCode);
+            Assert.Equal(ReviewPath, (await rebound.Content.ReadFromJsonAsync<JsonElement>()).GetProperty("resumePath").GetString());
+            test.Cookies = Merge(test.Cookies, rebound);
+        }
+        using var staleDecision = await ReviewPost(test, oldReview, "ALLOW", csrf: currentCsrf);
+        Assert.Equal(HttpStatusCode.Conflict, staleDecision.StatusCode);
+        await AssertNoInteractionRelationship(test);
+        await AssertPendingStatus(test, pending, OpenIddictConstants.Statuses.Valid);
     }
 
     [Fact]
