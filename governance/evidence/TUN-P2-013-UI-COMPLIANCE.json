@@ -2,10 +2,29 @@
   "schema_version": 1,
   "scope_id": "TUN-P2-013",
   "result": "PASS",
-  "assessment_scope": "Only current listing/details, selected-other-session confirmation/result and this caller's shared password proof integration. No whole013/device/trust/bulk/Product/production/release acceptance.",
-  "tested_commit_sha": "4f09edb8b6033c7ca1edcf8d7d227c26bfb8c15b",
-  "inventory_sha256": "1654f225d14fde2bf8ecd7284023bb1917c8e5de1731dc30effac369296b63c2",
+  "assessment_scope": "Current selected-session and approved D01-D03 Device screens/components with their shared proof caller. Historical test identities remain intact; current qualification proves shared-source compatibility. No bulk UI, whole013/P2 Product, production or release acceptance.",
+  "current_scope_qualification": {"path":"governance/evidence/p2-013-sessions-20261114/device-659172f/qualification-binding.json","sha256":"0ba1d95fb8f5391f94506709999a652a5def3859d14ce6eab579202bcf214c70"},
+  "tested_commit_sha": "659172ff87be7e65764d71cd62a3a24a0f5b36a8",
+  "inventory_sha256": "5768b17be0221622c1b33298fb6322e7695bddcbf15aa4c76e11a1cfb1bb8c37",
   "owned_behavior_paths": [
+    "src/Modules/Identity/AuthenticationDevices.cs",
+    "src/Modules/Identity/DeviceApplication.cs",
+    "src/Modules/Identity/DeviceContracts.cs",
+    "src/Modules/Identity/DeviceOperationApplication.cs",
+    "src/Modules/Identity/DeviceBrowserEndpoints.cs",
+    "src/Modules/Identity/DeviceStepUpOwner.cs",
+    "src/Tunner.User.Bff/TunnerAuthenticatedUserBffHost.cs",
+    "web/apps/user/account-format.ts",
+    "web/apps/user/account-shell.tsx",
+    "web/apps/user/devices.api.ts",
+    "web/apps/user/devices.css",
+    "web/apps/user/devices.html",
+    "web/apps/user/devices.routes.ts",
+    "web/apps/user/devices.tsx",
+    "web/apps/user/devices.ui.tsx",
+    "web/playwright.devices.config.ts",
+    "web/tests/devices.api.test.tsx",
+    "web/tests/devices/devices.spec.ts",
     "docs/contracts/session-listing-contract.md",
     "docs/contracts/session-revocation-contract.md",
     "docs/contracts/ui-inventory.json",
@@ -70,6 +89,604 @@
   },
   "validation_applicability": "Shared existing validation evidence retains original invocations; current caller is qualified by actual wrong-password correction, independent HTTPS guards, causal-result reconciliation and ordinary-owner handoff. Optional unactivated factor/provider paths do not become new live qualification.",
   "items": [
+    {
+      "id": "U-ACCT-DEVICES",
+      "checks": [
+        {
+          "id": "URL-001",
+          "result": "PASS",
+          "description": "Canonical list/details navigation is tested in controlled and actual guarded BrowserHost journeys.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/device-659172f/qualification-binding.json",
+              "sha256": "0ba1d95fb8f5391f94506709999a652a5def3859d14ce6eab579202bcf214c70"
+            }
+          ]
+        },
+        {
+          "id": "URL-002",
+          "result": "PASS",
+          "description": "Malformed primary paths and query/fragment selectors cannot replace canonical screen routing or select a Device operation.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/device-659172f/qualification-binding.json",
+              "sha256": "0ba1d95fb8f5391f94506709999a652a5def3859d14ce6eab579202bcf214c70"
+            }
+          ]
+        },
+        {
+          "id": "URL-003",
+          "result": "PASS",
+          "description": "Direct entry, reload and browser history reconstruct independently authorized Device views.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/device-659172f/qualification-binding.json",
+              "sha256": "0ba1d95fb8f5391f94506709999a652a5def3859d14ce6eab579202bcf214c70"
+            }
+          ]
+        },
+        {
+          "id": "URL-004",
+          "result": "PASS",
+          "description": "Same-screen confirmation/proof/result retain canonical pathname; original/result authority remains protected and no sensitive state enters URLs/storage.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/device-659172f/qualification-binding.json",
+              "sha256": "0ba1d95fb8f5391f94506709999a652a5def3859d14ce6eab579202bcf214c70"
+            }
+          ]
+        },
+        {
+          "id": "URL-005",
+          "result": "PASS",
+          "description": "Real packaged routes redirect anonymous/revoked sessions; controller and backend independently deny unauthorized or foreign records.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/device-659172f/qualification-binding.json",
+              "sha256": "0ba1d95fb8f5391f94506709999a652a5def3859d14ce6eab579202bcf214c70"
+            }
+          ]
+        },
+        {
+          "id": "URL-006",
+          "result": "NOT_APPLICABLE",
+          "reason": "Device screens introduce no OAuth callback or Product-origin redirect contract. Existing shared native Google proof is regression-tested with the exact Device original; production/provider-live qualification is not inferred.",
+          "authority_refs": [
+            "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md",
+            "docs/authority/current/decisions/AMD-0008_Approved_Figma_Visual_Fidelity_and_Product_Owner_UX_Consent.md",
+            "docs/authority/current/decisions/AMD-0009_URL_Addressable_Routing_and_Governed_Form_Validation.md"
+          ]
+        },
+        {
+          "id": "UX-FID-001",
+          "result": "PASS",
+          "description": "Approved Device compositions and shared Account shell match D01-D03 consent/reference and rendered desktop/mobile screenshots.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/device-659172f/qualification-binding.json",
+              "sha256": "0ba1d95fb8f5391f94506709999a652a5def3859d14ce6eab579202bcf214c70"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-002",
+          "result": "PASS",
+          "description": "Applicable approved light Account backgrounds, cards, header/sidebar and decorative Device details hero are retained.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/device-659172f/qualification-binding.json",
+              "sha256": "0ba1d95fb8f5391f94506709999a652a5def3859d14ce6eab579202bcf214c70"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-003",
+          "result": "PASS",
+          "description": "Shared Account tokens, controls, focus and dialog variants are reused without new form fields or domain rules.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/device-659172f/qualification-binding.json",
+              "sha256": "0ba1d95fb8f5391f94506709999a652a5def3859d14ce6eab579202bcf214c70"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-004",
+          "result": "PASS",
+          "description": "All material Device adaptations are covered by genuine D01-D03 Product Owner consent; no AI approval is substituted.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/device-659172f/qualification-binding.json",
+              "sha256": "0ba1d95fb8f5391f94506709999a652a5def3859d14ce6eab579202bcf214c70"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-005",
+          "result": "PASS",
+          "description": "Device facts and trust/session effects follow FRD17/Flow40/41 and approved safe-display scopes; no unsupported physical identity/location assertions.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/device-659172f/qualification-binding.json",
+              "sha256": "0ba1d95fb8f5391f94506709999a652a5def3859d14ce6eab579202bcf214c70"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-006",
+          "result": "PASS",
+          "description": "Existing Tunner Figma-derived shell and control variants are retained; TailAdmin defaults do not replace approved presentation.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/device-659172f/qualification-binding.json",
+              "sha256": "0ba1d95fb8f5391f94506709999a652a5def3859d14ce6eab579202bcf214c70"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-007",
+          "result": "PASS",
+          "description": "Keyboard focus/trap/return, axe, pending/error/result,1440/390 renders and1366/1024/768/320 overflow checks pass.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/device-659172f/qualification-binding.json",
+              "sha256": "0ba1d95fb8f5391f94506709999a652a5def3859d14ce6eab579202bcf214c70"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-008",
+          "result": "PASS",
+          "description": "Committed source, consent hashes, approved reference captures and current rendered screenshots are linked in this qualification.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/device-659172f/qualification-binding.json",
+              "sha256": "0ba1d95fb8f5391f94506709999a652a5def3859d14ce6eab579202bcf214c70"
+            }
+          ]
+        }
+      ],
+      "screenshots": [
+        {
+          "path": "governance/evidence/p2-013-sessions-20261114/device-659172f/controlled/list-1440.png",
+          "sha256": "220a06e1077713df8a6c0cccf783eb51ad5f878541352a9225c6ab309e5c0483"
+        },
+        {
+          "path": "governance/evidence/p2-013-sessions-20261114/device-659172f/controlled/list-390.png",
+          "sha256": "0a586633335efabd15f47cf0ada770faa2e07696a6e96d8751204af703911be2"
+        },
+        {
+          "path": "governance/evidence/p2-013-sessions-20261114/device-659172f/live/devices-list-1440.png",
+          "sha256": "8d51f0a797c91c2cd299aa85c86483da9c4709a1da2cfc93031e35017a399d59"
+        },
+        {
+          "path": "governance/evidence/p2-013-sessions-20261114/device-659172f/approved/desktop-devices.png",
+          "sha256": "e1b2b052f879b70dcef263a304a673abb1ced96a13cf95530753d0e2b7c06d76"
+        },
+        {
+          "path": "governance/evidence/p2-013-sessions-20261114/device-659172f/approved/mobile-devices.png",
+          "sha256": "f90296d8fe726eb485f99f95cea327e9a58759c5ccf21b0f4ce389ae102f8b95"
+        }
+      ],
+      "deviations": [
+        {
+          "scope_id": "D01_D02_D03_ONLY",
+          "status": "PRODUCT_OWNER_APPROVED",
+          "approval_evidence": {
+            "path": "governance/evidence/TUN-P2-013-DEVICE-VISUAL-CONSENT.json",
+            "sha256": "2eed375cdbefc7ec8f011f4343ba8be49d5f99b3dc04d2bb9ecd8e02cfa937bf"
+          }
+        }
+      ]
+    },
+    {
+      "id": "U-ACCT-DEVICE-DETAILS",
+      "checks": [
+        {
+          "id": "URL-001",
+          "result": "PASS",
+          "description": "Canonical list/details navigation is tested in controlled and actual guarded BrowserHost journeys.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/device-659172f/qualification-binding.json",
+              "sha256": "0ba1d95fb8f5391f94506709999a652a5def3859d14ce6eab579202bcf214c70"
+            }
+          ]
+        },
+        {
+          "id": "URL-002",
+          "result": "PASS",
+          "description": "Malformed primary paths and query/fragment selectors cannot replace canonical screen routing or select a Device operation.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/device-659172f/qualification-binding.json",
+              "sha256": "0ba1d95fb8f5391f94506709999a652a5def3859d14ce6eab579202bcf214c70"
+            }
+          ]
+        },
+        {
+          "id": "URL-003",
+          "result": "PASS",
+          "description": "Direct entry, reload and browser history reconstruct independently authorized Device views.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/device-659172f/qualification-binding.json",
+              "sha256": "0ba1d95fb8f5391f94506709999a652a5def3859d14ce6eab579202bcf214c70"
+            }
+          ]
+        },
+        {
+          "id": "URL-004",
+          "result": "PASS",
+          "description": "Same-screen confirmation/proof/result retain canonical pathname; original/result authority remains protected and no sensitive state enters URLs/storage.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/device-659172f/qualification-binding.json",
+              "sha256": "0ba1d95fb8f5391f94506709999a652a5def3859d14ce6eab579202bcf214c70"
+            }
+          ]
+        },
+        {
+          "id": "URL-005",
+          "result": "PASS",
+          "description": "Real packaged routes redirect anonymous/revoked sessions; controller and backend independently deny unauthorized or foreign records.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/device-659172f/qualification-binding.json",
+              "sha256": "0ba1d95fb8f5391f94506709999a652a5def3859d14ce6eab579202bcf214c70"
+            }
+          ]
+        },
+        {
+          "id": "URL-006",
+          "result": "NOT_APPLICABLE",
+          "reason": "Device screens introduce no OAuth callback or Product-origin redirect contract. Existing shared native Google proof is regression-tested with the exact Device original; production/provider-live qualification is not inferred.",
+          "authority_refs": [
+            "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md",
+            "docs/authority/current/decisions/AMD-0008_Approved_Figma_Visual_Fidelity_and_Product_Owner_UX_Consent.md",
+            "docs/authority/current/decisions/AMD-0009_URL_Addressable_Routing_and_Governed_Form_Validation.md"
+          ]
+        },
+        {
+          "id": "UX-FID-001",
+          "result": "PASS",
+          "description": "Approved Device compositions and shared Account shell match D01-D03 consent/reference and rendered desktop/mobile screenshots.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/device-659172f/qualification-binding.json",
+              "sha256": "0ba1d95fb8f5391f94506709999a652a5def3859d14ce6eab579202bcf214c70"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-002",
+          "result": "PASS",
+          "description": "Applicable approved light Account backgrounds, cards, header/sidebar and decorative Device details hero are retained.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/device-659172f/qualification-binding.json",
+              "sha256": "0ba1d95fb8f5391f94506709999a652a5def3859d14ce6eab579202bcf214c70"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-003",
+          "result": "PASS",
+          "description": "Shared Account tokens, controls, focus and dialog variants are reused without new form fields or domain rules.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/device-659172f/qualification-binding.json",
+              "sha256": "0ba1d95fb8f5391f94506709999a652a5def3859d14ce6eab579202bcf214c70"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-004",
+          "result": "PASS",
+          "description": "All material Device adaptations are covered by genuine D01-D03 Product Owner consent; no AI approval is substituted.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/device-659172f/qualification-binding.json",
+              "sha256": "0ba1d95fb8f5391f94506709999a652a5def3859d14ce6eab579202bcf214c70"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-005",
+          "result": "PASS",
+          "description": "Device facts and trust/session effects follow FRD17/Flow40/41 and approved safe-display scopes; no unsupported physical identity/location assertions.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/device-659172f/qualification-binding.json",
+              "sha256": "0ba1d95fb8f5391f94506709999a652a5def3859d14ce6eab579202bcf214c70"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-006",
+          "result": "PASS",
+          "description": "Existing Tunner Figma-derived shell and control variants are retained; TailAdmin defaults do not replace approved presentation.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/device-659172f/qualification-binding.json",
+              "sha256": "0ba1d95fb8f5391f94506709999a652a5def3859d14ce6eab579202bcf214c70"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-007",
+          "result": "PASS",
+          "description": "Keyboard focus/trap/return, axe, pending/error/result,1440/390 renders and1366/1024/768/320 overflow checks pass.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/device-659172f/qualification-binding.json",
+              "sha256": "0ba1d95fb8f5391f94506709999a652a5def3859d14ce6eab579202bcf214c70"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-008",
+          "result": "PASS",
+          "description": "Committed source, consent hashes, approved reference captures and current rendered screenshots are linked in this qualification.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/device-659172f/qualification-binding.json",
+              "sha256": "0ba1d95fb8f5391f94506709999a652a5def3859d14ce6eab579202bcf214c70"
+            }
+          ]
+        }
+      ],
+      "screenshots": [
+        {
+          "path": "governance/evidence/p2-013-sessions-20261114/device-659172f/controlled/details-1440.png",
+          "sha256": "746a3f4406799cb4933ccc9c0b4be26e757d76a24cdf771b1b3bff07388d9bc2"
+        },
+        {
+          "path": "governance/evidence/p2-013-sessions-20261114/device-659172f/controlled/details-390.png",
+          "sha256": "7b582722d4bfaaafea4fd2e8d305d13a24c341f636bcbefa03dac8f489359f3b"
+        },
+        {
+          "path": "governance/evidence/p2-013-sessions-20261114/device-659172f/approved/approved-device-details.png",
+          "sha256": "b624c0e46ee9f41b4254e6aaea437c608195b4039088d2586c32d0eb99c82e09"
+        }
+      ],
+      "deviations": [
+        {
+          "scope_id": "D01_D02_D03_ONLY",
+          "status": "PRODUCT_OWNER_APPROVED",
+          "approval_evidence": {
+            "path": "governance/evidence/TUN-P2-013-DEVICE-VISUAL-CONSENT.json",
+            "sha256": "2eed375cdbefc7ec8f011f4343ba8be49d5f99b3dc04d2bb9ecd8e02cfa937bf"
+          }
+        }
+      ]
+    },
+    {
+      "id": "COMP-DEVICE-TRUST-REMOVE",
+      "checks": [
+        {
+          "id": "VAL-001",
+          "result": "NOT_APPLICABLE",
+          "reason": "This confirmation/result component has no editable fields. The actual password form remains separately covered by FORM-STEP-UP, including the new Device caller's real invalid/corrected-password journey.",
+          "authority_refs": [
+            "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md",
+            "docs/authority/current/decisions/AMD-0008_Approved_Figma_Visual_Fidelity_and_Product_Owner_UX_Consent.md",
+            "docs/authority/current/decisions/AMD-0009_URL_Addressable_Routing_and_Governed_Form_Validation.md"
+          ]
+        },
+        {
+          "id": "VAL-002",
+          "result": "NOT_APPLICABLE",
+          "reason": "No editable input or native constraint validation exists in this confirmation/result component. Shared FORM-STEP-UP supplies typed password validation.",
+          "authority_refs": [
+            "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md",
+            "docs/authority/current/decisions/AMD-0008_Approved_Figma_Visual_Fidelity_and_Product_Owner_UX_Consent.md",
+            "docs/authority/current/decisions/AMD-0009_URL_Addressable_Routing_and_Governed_Form_Validation.md"
+          ]
+        },
+        {
+          "id": "VAL-003",
+          "result": "PASS",
+          "description": "Strict typed commands and authoritative backend bounds, CSRF/origin/authentication, target/version and final qualification rejection are independently executed.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/device-659172f/qualification-binding.json",
+              "sha256": "0ba1d95fb8f5391f94506709999a652a5def3859d14ce6eab579202bcf214c70"
+            }
+          ]
+        },
+        {
+          "id": "VAL-004",
+          "result": "PASS",
+          "description": "Changed, denied, unavailable and unconfirmed outcomes use shared safe presentation; only the exact causal Device receipt displays success.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/device-659172f/qualification-binding.json",
+              "sha256": "0ba1d95fb8f5391f94506709999a652a5def3859d14ce6eab579202bcf214c70"
+            }
+          ]
+        },
+        {
+          "id": "VAL-005",
+          "result": "PASS",
+          "description": "Confirmation focus/return, disabled/pending duplicate prevention and explicit correction/retry states are tested; editable-field associations and first-invalid focus are tested in shared FORM-STEP-UP.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/device-659172f/qualification-binding.json",
+              "sha256": "0ba1d95fb8f5391f94506709999a652a5def3859d14ce6eab579202bcf214c70"
+            }
+          ]
+        },
+        {
+          "id": "VAL-006",
+          "result": "NOT_APPLICABLE",
+          "reason": "No editable field/error variant is introduced by this component. Shared FORM-STEP-UP retains its approved validation styling and actual Device password rejection/correction checks.",
+          "authority_refs": [
+            "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md",
+            "docs/authority/current/decisions/AMD-0008_Approved_Figma_Visual_Fidelity_and_Product_Owner_UX_Consent.md",
+            "docs/authority/current/decisions/AMD-0009_URL_Addressable_Routing_and_Governed_Form_Validation.md"
+          ]
+        },
+        {
+          "id": "VAL-007",
+          "result": "PASS",
+          "description": "Published Device content and server-selected supported effects remain authoritative; unrelated password/provider semantics are not copied into Device controls.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/device-659172f/qualification-binding.json",
+              "sha256": "0ba1d95fb8f5391f94506709999a652a5def3859d14ce6eab579202bcf214c70"
+            }
+          ]
+        },
+        {
+          "id": "VAL-008",
+          "result": "PASS",
+          "description": "Controlled typed-client/browser and strict-TLS actual onboarding/Device/password/lost-response/result journey cover this caller at desktop/mobile.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/device-659172f/qualification-binding.json",
+              "sha256": "0ba1d95fb8f5391f94506709999a652a5def3859d14ce6eab579202bcf214c70"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-001",
+          "result": "PASS",
+          "description": "Approved Device compositions and shared Account shell match D01-D03 consent/reference and rendered desktop/mobile screenshots.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/device-659172f/qualification-binding.json",
+              "sha256": "0ba1d95fb8f5391f94506709999a652a5def3859d14ce6eab579202bcf214c70"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-002",
+          "result": "PASS",
+          "description": "Applicable approved light Account backgrounds, cards, header/sidebar and decorative Device details hero are retained.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/device-659172f/qualification-binding.json",
+              "sha256": "0ba1d95fb8f5391f94506709999a652a5def3859d14ce6eab579202bcf214c70"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-003",
+          "result": "PASS",
+          "description": "Shared Account tokens, controls, focus and dialog variants are reused without new form fields or domain rules.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/device-659172f/qualification-binding.json",
+              "sha256": "0ba1d95fb8f5391f94506709999a652a5def3859d14ce6eab579202bcf214c70"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-004",
+          "result": "PASS",
+          "description": "All material Device adaptations are covered by genuine D01-D03 Product Owner consent; no AI approval is substituted.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/device-659172f/qualification-binding.json",
+              "sha256": "0ba1d95fb8f5391f94506709999a652a5def3859d14ce6eab579202bcf214c70"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-005",
+          "result": "PASS",
+          "description": "Device facts and trust/session effects follow FRD17/Flow40/41 and approved safe-display scopes; no unsupported physical identity/location assertions.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/device-659172f/qualification-binding.json",
+              "sha256": "0ba1d95fb8f5391f94506709999a652a5def3859d14ce6eab579202bcf214c70"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-006",
+          "result": "PASS",
+          "description": "Existing Tunner Figma-derived shell and control variants are retained; TailAdmin defaults do not replace approved presentation.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/device-659172f/qualification-binding.json",
+              "sha256": "0ba1d95fb8f5391f94506709999a652a5def3859d14ce6eab579202bcf214c70"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-007",
+          "result": "PASS",
+          "description": "Keyboard focus/trap/return, axe, pending/error/result,1440/390 renders and1366/1024/768/320 overflow checks pass.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/device-659172f/qualification-binding.json",
+              "sha256": "0ba1d95fb8f5391f94506709999a652a5def3859d14ce6eab579202bcf214c70"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-008",
+          "result": "PASS",
+          "description": "Committed source, consent hashes, approved reference captures and current rendered screenshots are linked in this qualification.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/device-659172f/qualification-binding.json",
+              "sha256": "0ba1d95fb8f5391f94506709999a652a5def3859d14ce6eab579202bcf214c70"
+            }
+          ]
+        }
+      ],
+      "screenshots": [
+        {
+          "path": "governance/evidence/p2-013-sessions-20261114/device-659172f/controlled/confirm-1440.png",
+          "sha256": "107394c4509b5fdaae1657ec65dc12d36fde24a347a1c895003f5abbff8c1198"
+        },
+        {
+          "path": "governance/evidence/p2-013-sessions-20261114/device-659172f/controlled/confirm-390.png",
+          "sha256": "6d29aff790141d197605cdc93a4490724fa8ba0ff6699ab7db688e968a5b087b"
+        },
+        {
+          "path": "governance/evidence/p2-013-sessions-20261114/device-659172f/controlled/exact-result.png",
+          "sha256": "99d73dacfdab2377aeb3832548055e0815106f74fa202f5cb981ed7571494cb2"
+        },
+        {
+          "path": "governance/evidence/p2-013-sessions-20261114/device-659172f/controlled/unconfirmed-result.png",
+          "sha256": "1ac40dee9d5504cd7e4db601e78acc70ca4fb59eb7a408e08e3db5cb4f5afde2"
+        },
+        {
+          "path": "governance/evidence/p2-013-sessions-20261114/device-659172f/live/devices-confirm-390.png",
+          "sha256": "71b5d5d31f97f3f389dfefd90866ffb4ab1a54e18798574db61598f834a8ab46"
+        },
+        {
+          "path": "governance/evidence/p2-013-sessions-20261114/device-659172f/live/devices-unknown-1440.png",
+          "sha256": "9881017a7734a6174770b478de4c7608caa17176904e7b8c7e67fb1727eed1b7"
+        },
+        {
+          "path": "governance/evidence/p2-013-sessions-20261114/device-659172f/live/devices-result-390.png",
+          "sha256": "7a75015a0db14dfe4ea094d0b76c9d3a3cd234f64583c23ba06dafac207a4145"
+        },
+        {
+          "path": "governance/evidence/p2-013-sessions-20261114/device-659172f/approved/desktop-remove-trust.png",
+          "sha256": "b261b1337e9fa49127daa4a83151fa31b571d9a958a00b310c16b267f5ebfa84"
+        },
+        {
+          "path": "governance/evidence/p2-013-sessions-20261114/device-659172f/approved/mobile-remove-trust.png",
+          "sha256": "4791b459028ca7cf60448c2b0b11c74ac4a9141ee18ab9f97b93294a6ce6d428"
+        }
+      ],
+      "deviations": [
+        {
+          "scope_id": "D02_D03_ONLY",
+          "status": "PRODUCT_OWNER_APPROVED",
+          "approval_evidence": {
+            "path": "governance/evidence/TUN-P2-013-DEVICE-VISUAL-CONSENT.json",
+            "sha256": "2eed375cdbefc7ec8f011f4343ba8be49d5f99b3dc04d2bb9ecd8e02cfa937bf"
+          }
+        }
+      ]
+    },
     {
       "id": "U-ACCT-04",
       "kind": "SCREEN",
