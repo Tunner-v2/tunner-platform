@@ -599,7 +599,7 @@ public sealed class ProductAuthorizationProtocolTests(SessionListingPostgresFixt
     private sealed record ReviewFrame(string Reference, string Csrf)
     { public override string ToString() => nameof(ReviewFrame); }
 
-    private static async Task<ReviewFrame> ReviewOptions(Scenario test, PendingRequest pending)
+    private static async Task<ReviewFrame> ReviewOptions(Scenario test, PendingRequest pending, ImmutableArray<string>? expectedScopes = null)
     {
         using var response = await test.Host.Get(ReviewOptionsPath, test.Cookies); Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         Assert.True(response.Headers.CacheControl?.NoStore == true);
@@ -608,7 +608,7 @@ public sealed class ProductAuthorizationProtocolTests(SessionListingPostgresFixt
         Assert.Equal("Synthetic Product", json.GetProperty("productName").GetString());
         Assert.Equal("Synthetic current Account", json.GetProperty("accountLabel").GetString());
         Assert.Equal(new Uri(Redirect).GetLeftPart(UriPartial.Authority), json.GetProperty("registeredReturnOrigin").GetString());
-        Assert.True(Scopes.SequenceEqual(json.GetProperty("scopeDescriptions").EnumerateObject().Select(property => property.Name).Order(StringComparer.Ordinal)));
+        Assert.True((expectedScopes ?? Scopes).SequenceEqual(json.GetProperty("scopeDescriptions").EnumerateObject().Select(property => property.Name).Order(StringComparer.Ordinal)));
         Assert.True(new[] { pending.Verifier, pending.State, pending.Nonce, test.Owners.ClientCredential }
             .All(secret => !content.Contains(secret, StringComparison.Ordinal)), "Review options must not expose original private protocol material.");
         test.Cookies = Merge(test.Cookies, response);
@@ -686,6 +686,55 @@ public sealed class ProductAuthorizationProtocolTests(SessionListingPostgresFixt
         var protector = services.GetRequiredService<IDataProtectionProvider>().CreateProtector("Tunner.User.Session.Ticket.v1");
         var ticket = TicketSerializer.Default.Deserialize(Convert.FromBase64String(protector.Unprotect(session.ProtectedTicket)));
         Assert.NotNull(ticket); return StepUpCaller.FromPrincipal(ticket!.Principal, Origin, new string('A', 64));
+    }
+
+    [Fact]
+    public async Task StepUpProofExpiryClipsCodeButExplicitLifecycleRefreshPreservesOriginalAuthenticationClaims()
+    {
+        await using var test = await Create(stepUp: true, lifecycle: true);
+        var originalSession = await ReadSourceSession(test);
+        var pending = await PreparePasswordProductProof(test);
+        var review = await ReviewOptions(test, pending, test.Owners.GrantedScopes); await ReviewApply(test, review, "ALLOW");
+        using var authorized = await test.Host.Get(AuthorizationPath, test.Cookies); Assert.Equal(HttpStatusCode.OK, authorized.StatusCode);
+        var form = ReadNativeForm(await authorized.Content.ReadAsStringAsync()); Assert.Equal(Redirect, form.Action);
+        Assert.True(form.Values.GetValueOrDefault("state") == pending.State);
+        Assert.True(form.Values.TryGetValue("code", out var code) && !string.IsNullOrWhiteSpace(code));
+        ProductAuthorizationLineage lineage; string authorizationId;
+        await using (var read = test.Database.Context())
+        {
+            authorizationId = (await read.Set<OutboxMessage>().SingleAsync(message => message.EventType == "ProductAuthorizationGranted")).Subject;
+            var proof = await read.Set<StepUpProofRow>().SingleAsync(); Assert.Equal("CONSUMED", proof.State);
+            await using var scope = test.Host.Services.CreateAsyncScope(); var manager = scope.ServiceProvider.GetRequiredService<IOpenIddictAuthorizationManager>();
+            var authorization = await manager.FindByIdAsync(authorizationId); Assert.NotNull(authorization);
+            var stored = ProductAuthorizationApplication.ReadLineage((await manager.GetPropertiesAsync(authorization!))[ProductAuthorizationApplication.LineageProperty]);
+            Assert.NotNull(stored); lineage = stored!;
+            Assert.NotNull(lineage.NativeStepUp);
+            Assert.Equal(proof.ExpiresAt, lineage.NativeStepUp!.Receipt.ExpiresAt);
+            Assert.Equal(proof.ExpiresAt, lineage.CodeExpiresAt);
+            Assert.True(lineage.CodeExpiresAt < lineage.AuthorizedAt + test.Owners.RequireCurrent(Origin, test.Host.Clock.GetUtcNow()).AuthorizationCodeLifetime,
+                "The actual operation-proof deadline must shorten the ordinary authorization-code deadline.");
+        }
+        var originalCode = new NativeCode(code!, pending.Verifier, pending.Nonce);
+        LifecycleTokens original;
+        using (var redeemed = await Redeem(test, originalCode))
+        {
+            original = await ReadLifecycleTokens(redeemed, authorizationId, originalCode, lineage.CodeExpiresAt);
+            await AssertInteractionClaims(test, original.Identity, originalSession.AuthenticatedAt, StrongAcr);
+        }
+        var beforeRefresh = await ReadSourceSession(test);
+        var beyondOriginalProof = lineage.NativeStepUp!.Receipt.ExpiresAt + TimeSpan.FromSeconds(1);
+        test.Host.Clock.Advance(beyondOriginalProof - test.Host.Clock.GetUtcNow());
+        Assert.True(test.Host.Clock.GetUtcNow() > lineage.CodeExpiresAt && test.Host.Clock.GetUtcNow() > lineage.NativeStepUp.Receipt.ExpiresAt);
+        Assert.True(test.Host.Clock.GetUtcNow() < beforeRefresh.ExpiresAt && beforeRefresh.State == "ACTIVE",
+            "The original browser session must remain independently eligible after operation-proof expiry.");
+        using var refreshed = await Refresh(test, original.Refresh);
+        var current = await ReadLifecycleTokens(refreshed, authorizationId, originalCode, lineage.CodeExpiresAt);
+        await AssertInteractionClaims(test, current.Identity, originalSession.AuthenticatedAt, StrongAcr);
+        await AssertSourceSessionUnchanged(test, beforeRefresh);
+        await AssertLifecycleEffects(test, "ProductAuthorizationRefreshed", 1, original, current);
+        await using var evidence = test.Database.Context();
+        Assert.Equal(1, await evidence.Set<OutboxMessage>().CountAsync(message => message.EventType == "StepUpProofConsumed"));
+        Assert.Equal("CONSUMED", (await evidence.Set<StepUpProofRow>().SingleAsync()).State);
     }
 
     [Fact]

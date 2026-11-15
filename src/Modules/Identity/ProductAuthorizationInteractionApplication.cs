@@ -96,12 +96,16 @@ internal sealed partial class ProductAuthorizationApplication
         var ordinary = EvaluateActorInteraction(actor, request, origin, policy, interaction, clock.GetUtcNow());
         if (native is null) return ordinary;
         // Operation proof supplements only an unmet operation assurance. It cannot repair denial or fresh-login requirements.
-        if (ordinary.Status != ProductAuthorizationInteractionStatus.RequiresFreshProof || caller is null ||
-            proofApplication is null || proofPresentations is null ||
-            !NativeProofBound(native, request, actor.Session.AccountId, actor.AccountVersion, actor.Session.SessionId, origin,
-                actor.Session.AuthenticatedAt, registration, operationId, correlationId, interaction) ||
-            !await ProductAuthorizationStepUp.ValidateNativeAsync(proofApplication, proofPresentations, policies, clock,
-                caller, policy, native, ct).ConfigureAwait(false)) return DeniedInteraction;
+        try
+        {
+            if (ordinary.Status != ProductAuthorizationInteractionStatus.RequiresFreshProof || caller is null ||
+                proofApplication is null || proofPresentations is null ||
+                !NativeProofBound(native, request, actor.Session.AccountId, actor.AccountVersion, actor.Session.SessionId, origin,
+                    actor.Session.AuthenticatedAt, registration, operationId, correlationId, interaction) ||
+                !await ProductAuthorizationStepUp.ValidateNativeAsync(proofApplication, proofPresentations, policies, clock,
+                    caller, policy, native, ct).ConfigureAwait(false)) return DeniedInteraction;
+        }
+        catch (AssurancePolicyVersionConflictException) { return DeniedInteraction; }
         return native.Evaluation;
     }
 
