@@ -27,6 +27,21 @@ test('Bulk publication is a separate complete12 capability with matching publica
  expect(()=>parseSessionBulkRevocationOptions({...published(),csrfToken:'private'},'en')).toThrow(SessionHttpError);
 });
 
+test('Supported bulk content cannot override independently published session and brand copy',()=>{
+ const supported=['description','keepCurrent','originalOnly','completed.description','unknown.description','unknown.help','back'].map(suffix=>'account.sessions.bulk.'+suffix);
+ const independent=Object.fromEntries(['account.sessions.productBoundary','account.sessions.label','brand.tunner'].map(key=>[key,{...published().content[sessionBulkRevocationContentKeys[0]]!,key,text:'Independently qualified '+key}]));
+ const mixed=published();
+ for(const key of supported)Object.assign(mixed.content,{[key]:{...mixed.content[sessionBulkRevocationContentKeys[0]]!,key,text:'Supported optional bulk copy'}});
+ for(const key of [...Object.keys(independent),'account.sessions.bulk.unsupported'])Object.assign(mixed.content,{[key]:{...mixed.content[sessionBulkRevocationContentKeys[0]]!,key,text:'Hostile published replacement'}});
+ const parsed=parseSessionBulkRevocationOptions(mixed,'en');
+ expect(Object.keys(parsed.content).sort()).toEqual([...sessionBulkRevocationContentKeys,...supported].sort());
+ for(const key of supported)expect(parsed.content[key]?.text).toBe('Supported optional bulk copy');
+ expect({...independent,...parsed.content}['account.sessions.productBoundary']).toEqual(independent['account.sessions.productBoundary']);
+ expect({...independent,...parsed.content}['account.sessions.label']).toEqual(independent['account.sessions.label']);
+ expect({...independent,...parsed.content}['brand.tunner']).toEqual(independent['brand.tunner']);
+ expect(Object.keys(parseSessionBulkRevocationOptions(published(),'en').content)).toEqual([...sessionBulkRevocationContentKeys]);
+});
+
 test('Original projections retain canonical Int64 strings and reject private, partial or inconsistent sets',()=>{
  expect(parseSessionBulkRevocationContext(original()).targets[0]?.version).toBe('9007199254740993');
  for(const value of [null,{...original(),targets:[]},{...original(),targets:[original().targets[0],original().targets[0]]},{...original(),proofKey:'private'},{...original(),status:'REVOKED'},{...original(),status:'DRAFT',activated:true},{...original(),status:'PENDING',activated:false},{...original(),expiresAt:'tomorrow'},{...original(),requestId:'00000000-0000-0000-0000-000000000000'}])expect(()=>parseSessionBulkRevocationContext(value)).toThrow(SessionHttpError);

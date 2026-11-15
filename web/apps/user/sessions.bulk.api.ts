@@ -9,6 +9,11 @@ export const sessionBulkRevocationContentKeys=[
  'account.sessions.bulk.loading','account.sessions.bulk.empty','account.sessions.bulk.changed',
  'account.sessions.bulk.completed','account.sessions.bulk.unknown','account.sessions.bulk.check',
 ] as const;
+/** This capability may publish only its transport keys and the seven supported optional UI keys. */
+const sessionBulkContentAllowlist=[...sessionBulkRevocationContentKeys,
+ 'account.sessions.bulk.description','account.sessions.bulk.keepCurrent','account.sessions.bulk.originalOnly',
+ 'account.sessions.bulk.completed.description','account.sessions.bulk.unknown.description','account.sessions.bulk.unknown.help','account.sessions.bulk.back',
+] as const;
 const root='/account/sessions/bulk-revocation';
 const reference=z.uuid().refine(value=>value!=='00000000-0000-0000-0000-000000000000');
 const version=z.string().regex(/^[1-9][0-9]*$/).refine(value=>BigInt(value)<=9223372036854775807n);
@@ -36,7 +41,7 @@ function safeError(error:unknown):SessionHttpError{
  return new SessionHttpError('unavailable');
 }
 export function parseSessionBulkRevocationOptions(value:unknown,locale:string):SessionBulkRevocationOptions{
- try{const parsed=options.parse(value);if(parsed.locale!==locale)throw new Error('Publication locale changed');new Intl.DateTimeFormat(parsed.locale);requirePublished(parsed.content,parsed.locale,sessionBulkRevocationContentKeys);return parsed;}
+ try{const parsed=options.parse(value);if(parsed.locale!==locale)throw new Error('Publication locale changed');new Intl.DateTimeFormat(parsed.locale);requirePublished(parsed.content,parsed.locale,sessionBulkRevocationContentKeys);return {...parsed,content:Object.fromEntries(sessionBulkContentAllowlist.filter(key=>parsed.content[key]!==undefined).map(key=>[key,parsed.content[key]!]))};}
  catch{throw new SessionHttpError('unavailable');}
 }
 /** Capability absence is optional. Authentication and cancellation still stop the caller. */
