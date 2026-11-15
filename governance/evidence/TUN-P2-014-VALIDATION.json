@@ -6,6 +6,13 @@
   "tested_commit_sha": null,
   "validated_commit_sha": null,
   "phase": "CONTINUATION_INCREMENT_PASSED_OIDC_AND_APPROVED_PRODUCT_UI_IN_PROGRESS",
+  "interaction_initial_diagnostic": {
+    "source_commit_sha": "c53b8880fe1f64c9c115122cdaf1a1c92e9b6cc5",
+    "run_id": "d6844a4fcf4a4bb697140b2f11e6ed69",
+    "executed": 12, "passed": 9, "failed": 3, "not_executed": 0, "timed_out": false,
+    "owned_containers_remaining": 0, "borrowed_preserved": true,
+    "diagnosis": "Two forced-fresh cases compared microsecond request receipt against framework IssuedUtc rounded to seconds. A precise local authentication instant is now retained in the existing protected ticket; public cookie timestamps stay unchanged and pure federation verification is not promoted to fresh upstream authentication. The code/refresh case exposed TestAccess generating a different effective interval on every clock change; the interaction-only fixture now forwards actual decisions but uses its explicit stable interval. Guards/assertions are preserved. Focused re-execution remains required."
+  },
   "continuation_increment": {
     "source_commit_sha": "25d060b06559b3c7e305bb664fc8043fa5c02382",
     "result": "PASS_13_DISTINCT_CONTINUATION_CASES_OVER_TWO_RUNS",
@@ -92,6 +99,7 @@
     "src/Modules/Identity/ProductAuthorizationInteractionContracts.cs",
     "src/Modules/Identity/ProductAuthorizationInteractionApplication.cs",
     "src/Modules/Identity/AuthenticationEndpoints.cs",
+    "src/Modules/Identity/AuthenticationApplication.cs",
     "web/apps/user/authentication.tsx",
     "web/apps/user/product-authorization.continuation.ts",
     "tests/Tunner.Identity.Persistence.Tests/ProductAuthorizationProtocolTests.cs"

@@ -61,7 +61,8 @@ internal sealed partial class ProductAuthorizationApplication
         if (at < session.AuthenticatedAt) return DeniedInteraction;
         // Cookie touch/renewal or operation-bound proof cannot satisfy a forced fresh native sign-in.
         if ((controls.Prompt == "login" || controls.MaxAgeSeconds == 0) &&
-            (interaction is null || session.SessionId == interaction.OriginalSessionId || session.AuthenticatedAt < interaction.ReceivedAt))
+            (interaction is null || session.SessionId == interaction.OriginalSessionId ||
+             actor.AuthenticationPerformedAt is not { } performedAt || performedAt < interaction.ReceivedAt || performedAt > at))
             return new(ProductAuthorizationInteractionStatus.RequiresSignIn);
         if ((controls.MaxAgeSeconds is > 0 && (at - session.AuthenticatedAt).TotalSeconds > controls.MaxAgeSeconds.Value) ||
             at - session.AuthenticatedAt >= policy.MaximumAuthenticationAge)

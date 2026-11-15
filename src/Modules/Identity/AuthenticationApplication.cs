@@ -125,6 +125,11 @@ internal sealed partial class AuthenticationApplication(IdentityPersistenceDbCon
         ], AuthenticationIdentity.Scheme));
         var ticket = new AuthenticationTicket(principal, new AuthenticationProperties { IssuedUtc = now, ExpiresUtc = now + absolute,
             IsPersistent = rememberMe, AllowRefresh = false }, AuthenticationIdentity.Scheme);
+        // Framework IssuedUtc uses whole seconds. Preserve the actual owner instant inside
+        // the existing protected ticket for request-bound fresh-authentication decisions.
+        if (method is "pwd" or "passkey" or "pwd+totp" or "passkey+totp" or "federation+totp")
+            ticket.Properties.SetString(AuthenticationInstantProperty,
+                IdentityPersistenceTime.Normalize(now).ToString("O", System.Globalization.CultureInfo.InvariantCulture));
         var row = new AuthenticationSessionRow
         {
             SessionId = sessionId, KeyDigest = AuthenticationIdentity.Digest(key), ProtectedKey = keyProtection.Protect(key),
@@ -479,13 +484,20 @@ internal sealed partial class AuthenticationApplication(IdentityPersistenceDbCon
             now = clock.GetUtcNow(); var finalPolicy = policies.RequireEffective(now); finalPolicy.Validate();
             if (!decision.EffectiveInterval.Contains(now) || Expired(row, finalPolicy, now) || !MethodFactsCurrentAt(row, finalPolicy, now)) return null;
         }
-        var ticket = TicketSerializer.Default.Deserialize(Convert.FromBase64String(ticketProtection.Unprotect(row.ProtectedTicket)));
-        if (ticket is null || ticket.AuthenticationScheme != row.Scheme || AuthenticationIdentity.SessionId(ticket.Principal) != row.SessionId ||
-            ticket.Principal.FindFirstValue(ClaimTypes.NameIdentifier) != row.AccountId || ticket.Principal.FindFirstValue(AuthenticationIdentity.OriginClaim) != row.Origin ||
-            ticket.Properties.IssuedUtc != row.AuthenticatedAt || ticket.Properties.ExpiresUtc != row.ExpiresAt)
+        var ticket = ReadSessionTicket(row);
+        if (ticket is null)
         { Revoke(row, now); return null; }
         row.LastSeenAt = now; row.AccessPolicyVersion = decision.PolicyVersion; row.AccessEvidenceReference = decision.EvidenceReference; row.Version++;
         return ticket;
+    }
+
+    private const string AuthenticationInstantProperty = ".tunner.authentication_instant";
+    private AuthenticationTicket? ReadSessionTicket(AuthenticationSessionRow row)
+    {
+        var ticket = TicketSerializer.Default.Deserialize(Convert.FromBase64String(ticketProtection.Unprotect(row.ProtectedTicket)));
+        return ticket is not null && ticket.AuthenticationScheme == row.Scheme && AuthenticationIdentity.SessionId(ticket.Principal) == row.SessionId &&
+            ticket.Principal.FindFirstValue(ClaimTypes.NameIdentifier) == row.AccountId && ticket.Principal.FindFirstValue(AuthenticationIdentity.OriginClaim) == row.Origin &&
+            ticket.Properties.IssuedUtc == row.AuthenticatedAt && ticket.Properties.ExpiresUtc == row.ExpiresAt ? ticket : null;
     }
 
     // Caller owns the transaction. Session lock matches retrieval/revocation; Account lock freezes restriction state.

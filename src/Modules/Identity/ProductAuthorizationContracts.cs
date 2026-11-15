@@ -136,5 +136,6 @@ internal sealed record ProductAuthorizationActor(AuthenticationSessionRow Sessio
     AuthenticationPolicy AuthenticationPolicy, AccountAuthenticationAccessDecision SessionUse,
     AccountAuthenticationAccessDecision ProductAuthorization)
 {
+    internal DateTimeOffset? AuthenticationPerformedAt { get; init; }
     public override string ToString() => nameof(ProductAuthorizationActor);
 }

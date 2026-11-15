@@ -8,7 +8,7 @@
   "title": "Preserve Session and Device endpoints during Product continuation",
   "revision_type": "COMPATIBILITY",
   "status": "ACTIVE",
-  "reason": "Authorized P2-014 adds optional guarded session continuation metadata and endpoint composition in AuthenticationEndpoints.cs. Preserve completed P2-013 session/device mapping, ordinary sign-out and original validated closure; no Session/Device domain policy change.",
+  "reason": "Authorized P2-014 adds optional guarded session continuation metadata and endpoint composition. The explicitly approved OIDC integration also retains a precise server-only authentication instant in the existing protected ticket; framework cookie timestamps and session limits remain unchanged. Preserve Session/Device mapping, ordinary sign-out and original validated closure; no Session/Device domain policy change.",
   "authority_refs": [
     "docs/authority/baselines/1.6.0/17_Account_Identity_and_Session_FRD.md"
   ],

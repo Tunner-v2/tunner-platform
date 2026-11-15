@@ -42,7 +42,7 @@ public sealed class ProductAuthorizationProtocolTests(SessionListingPostgresFixt
 
     private sealed class Owners(IdentityTestDatabase database) : IProductAuthorizationPolicySource,
         IProductAuthorizationRegistrySource, IProductAuthorizationRelationshipSource, IProductAuthorizationLifecycleSource,
-        IProductAuthorizationContinuationPolicySource
+        IProductAuthorizationContinuationPolicySource, IAccountAuthenticationAccessSource
     {
         internal string ClientId { get; } = "synthetic-product-client-" + Guid.NewGuid().ToString("N");
         internal string ClientCredential { get; } = Base64UrlEncoder.Encode(RandomNumberGenerator.GetBytes(32));
@@ -56,6 +56,7 @@ public sealed class ProductAuthorizationProtocolTests(SessionListingPostgresFixt
         internal bool ContinuationPolicyAvailable { get; set; } = true;
         internal string ContinuationPolicyVersion { get; set; } = "fixture-continuation-policy-v1";
         internal ProductAuthorizationInteractionQualification? InteractionQualification { get; set; }
+        internal IAccountAuthenticationAccessSource? AuthenticationAccess { get; set; }
         internal ImmutableArray<string> GrantedScopes => LifecycleEnabled ? ["offline_access", "openid", "product.read"] : Scopes;
         internal DateTimeOffset? IssuancePolicyExpiresAt { get; set; }
         internal ProductAuthorizationArtifactEffect RevocationEffect { get; set; } = ProductAuthorizationArtifactEffect.PresentedToken;
@@ -86,6 +87,14 @@ public sealed class ProductAuthorizationProtocolTests(SessionListingPostgresFixt
         }
         private readonly EffectivePolicyInterval interval = new(DateTimeOffset.UtcNow.AddDays(-1), true, DateTimeOffset.UtcNow.AddHours(4), false);
         private const string Evidence = "SYNTHETIC-LOCAL-PROTOCOL-TEST-ONLY";
+        async ValueTask<AccountAuthenticationAccessDecision> IAccountAuthenticationAccessSource.RequireAsync(AccountAuthenticationAccessRequest request, CancellationToken ct)
+        {
+            var source = AuthenticationAccess ?? throw new InvalidOperationException("The existing qualified authentication access fixture is required.");
+            var decision = await source.RequireAsync(request, ct);
+            // Keep actual TestAccess denial/staleness/action behavior; this owner qualifies one stable
+            // policy interval instead of manufacturing a new authority snapshot on every clock sample.
+            return decision with { EffectiveInterval = interval };
+        }
         ProductAuthorizationContinuationPolicy IProductAuthorizationContinuationPolicySource.RequireCurrent(string origin, DateTimeOffset at) =>
             !ContinuationPolicyAvailable ? throw new InvalidOperationException("Synthetic continuation owner unavailable.") : new(
                 new(ContinuationPolicyVersion, "ACTIVE", Origin, interval, null, [Evidence]), Origin, Evidence,
@@ -219,6 +228,13 @@ public sealed class ProductAuthorizationProtocolTests(SessionListingPostgresFixt
         {
             // Keep native artifacts out of incidental framework request/response logs.
             services.AddLogging(logging => logging.ClearProviders());
+            if (interaction)
+            {
+                owners.AuthenticationAccess = services.Last(service => service.ServiceType == typeof(IAccountAuthenticationAccessSource))
+                    .ImplementationInstance as IAccountAuthenticationAccessSource
+                    ?? throw new InvalidOperationException("The existing authentication access singleton must be qualified before decoration.");
+                services.AddSingleton<IAccountAuthenticationAccessSource>(owners);
+            }
             services.AddSingleton<IProductAuthorizationPolicySource>(owners);
             services.AddSingleton<IProductAuthorizationRegistrySource>(owners);
             services.AddSingleton<IProductAuthorizationRelationshipSource>(owners);
@@ -598,6 +614,52 @@ public sealed class ProductAuthorizationProtocolTests(SessionListingPostgresFixt
         await AssertPendingStatus(test, pending, OpenIddictConstants.Statuses.Redeemed);
         using var redeemed = await Redeem(test, new(code!, pending.Verifier, pending.Nonce)); Assert.Equal(HttpStatusCode.OK, redeemed.StatusCode);
         await AssertInteractionClaims(test, (await redeemed.Content.ReadFromJsonAsync<JsonElement>()).GetProperty("id_token").GetString()!, current.AuthenticatedAt);
+    }
+
+    [Fact]
+    public async Task InteractionDifferentSessionAuthenticatedOneMicrosecondBeforeRequestCannotSatisfyForcedLogin()
+    {
+        await using var test = await Create(continuation: true, interaction: true);
+        var alpha = await ReadSourceSession(test);
+        // Choose an instant inside one whole second so the one-microsecond difference cannot
+        // be reconstructed from the public, second-precision authentication properties.
+        var initial = test.Host.Clock.GetUtcNow();
+        test.Host.Clock.Advance(TimeSpan.FromTicks(TimeSpan.TicksPerSecond - initial.Ticks % TimeSpan.TicksPerSecond)
+            + TimeSpan.FromMilliseconds(100));
+        var betaAuthenticatedAt = test.Host.Clock.GetUtcNow();
+        // An independent anonymous browser has no previous session to replace: Alpha remains live.
+        var betaBootstrap = await test.Host.Options();
+        string betaCookies;
+        using (var betaSignIn = await test.Host.Post("/authentication/sign-in", Command(betaBootstrap.Key), betaBootstrap.Cookies, betaBootstrap.Csrf))
+        {
+            Assert.Equal(HttpStatusCode.OK, betaSignIn.StatusCode); betaCookies = Merge(betaBootstrap.Cookies, betaSignIn);
+        }
+        await using (var read = test.Database.Context())
+        {
+            var beta = await read.Set<AuthenticationSessionRow>().SingleAsync(session => session.SessionId != alpha.SessionId);
+            Assert.NotEqual(alpha.SessionId, beta.SessionId);
+            Assert.Equal(2, await read.Set<AuthenticationSessionRow>().CountAsync(session => session.State == "ACTIVE"));
+            Assert.Equal(betaAuthenticatedAt.ToUnixTimeSeconds(), beta.AuthenticatedAt.ToUnixTimeSeconds());
+        }
+        test.Host.Clock.Advance(TimeSpan.FromMicroseconds(1));
+        var originalReceivedAt = test.Host.Clock.GetUtcNow();
+        Assert.Equal(TimeSpan.FromMicroseconds(1), originalReceivedAt - betaAuthenticatedAt);
+        Assert.Equal(betaAuthenticatedAt.ToUnixTimeSeconds(), originalReceivedAt.ToUnixTimeSeconds());
+        using (var original = await RequestAuthorization(test, overrides: new Dictionary<string, string> { ["prompt"] = "login" }))
+        {
+            Assert.Equal(HttpStatusCode.Found, original.StatusCode); Assert.Equal("/login", original.Headers.Location?.OriginalString);
+            test.Cookies = Merge(betaCookies, original);
+        }
+        await PrepareContinuation(test, await SessionContinuation(test, pending: true));
+        using var replay = await test.Host.Get(AuthorizationPath, test.Cookies);
+        Assert.Equal(HttpStatusCode.Found, replay.StatusCode); Assert.Equal("/login", replay.Headers.Location?.OriginalString);
+        await AssertNoInteractionRelationship(test);
+        await using var scope = test.Host.Services.CreateAsyncScope(); var manager = scope.ServiceProvider.GetRequiredService<IOpenIddictTokenManager>();
+        var pending = 0;
+        await foreach (var token in manager.FindByApplicationIdAsync(test.Owners.NativeApplicationId))
+            if (await manager.GetTypeAsync(token) == OpenIddictConstants.TokenTypeIdentifiers.Private.RequestToken)
+            { pending++; Assert.Equal(OpenIddictConstants.Statuses.Valid, await manager.GetStatusAsync(token)); }
+        Assert.Equal(1, pending);
     }
 
     [Fact]

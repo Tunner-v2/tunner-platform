@@ -43,7 +43,13 @@ internal sealed partial class AuthenticationApplication
         var policy = policies.RequireEffective(clock.GetUtcNow()); policy.Validate();
         var use = await AccessAsync(account, "SESSION_USE", clock.GetUtcNow(), ct).ConfigureAwait(false);
         var authorization = await AccessAsync(account, ProductAuthorizationApplication.AuthorizeOperation, clock.GetUtcNow(), ct).ConfigureAwait(false);
-        return use?.Allowed == true && authorization?.Allowed == true ? new(session, account.Version, policy, use, authorization) : null;
+        var value = ReadSessionTicket(session)?.Properties.GetString(AuthenticationInstantProperty);
+        DateTimeOffset? performedAt = DateTimeOffset.TryParseExact(value, "O", System.Globalization.CultureInfo.InvariantCulture,
+            System.Globalization.DateTimeStyles.RoundtripKind, out var instant) && instant.Offset == TimeSpan.Zero &&
+            instant == IdentityPersistenceTime.Normalize(instant) && instant.ToUnixTimeSeconds() == session.AuthenticatedAt.ToUnixTimeSeconds()
+            ? instant : null;
+        return use?.Allowed == true && authorization?.Allowed == true
+            ? new ProductAuthorizationActor(session, account.Version, policy, use, authorization) { AuthenticationPerformedAt = performedAt } : null;
     }
 
     internal async Task<bool> ProductAuthorizationCurrentAsync(ProductAuthorizationActor actor, string operation, CancellationToken ct)
