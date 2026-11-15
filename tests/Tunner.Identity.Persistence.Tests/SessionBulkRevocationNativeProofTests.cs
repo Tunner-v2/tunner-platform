@@ -68,11 +68,11 @@ public sealed partial class SessionBulkRevocationHttpTests
             [prefix + "SecretReferences:google:StoreReference"] = "synthetic",
             [prefix + "SecretReferences:google:ResourceReference"] = "synthetic/google"
         }).Build();
-        var secret = EngineeringEnvironmentConfiguration.Load(configuration).SecretReferences["google"];
+        var secretReference = EngineeringEnvironmentConfiguration.Load(configuration).SecretReferences["google"];
         services.AddSingleton<IFederationProfileSource>(new FederationProfileCatalog([federation]));
         services.AddSingleton<ITotpMfaRequirementSource>(new TotpTests.Profile());
         services.AddSingleton<ISecretStore>(new NativeSecrets());
-        services.AddTunnerFederationOidc(new(federation, new(federation.Values.Issuer + "/.well-known/openid-configuration"), secret,
+        services.AddTunnerFederationOidc(new(federation, new(federation.Values.Issuer + "/.well-known/openid-configuration"), secretReference,
             "secret", TimeSpan.FromMinutes(2), TimeSpan.FromMinutes(2), TimeSpan.Zero, 16384, 32768, 8, 128, 24576, 16384,
             "__Host-fixture.Bulk.Google.Correlation.", "__Host-fixture.Bulk.Google.Nonce."));
         services.Configure<OpenIdConnectOptions>(federation.Values.TransportScheme, options => options.Backchannel = backchannel);
@@ -157,7 +157,8 @@ public sealed partial class SessionBulkRevocationHttpTests
         using var challenge = await test.Host.GoogleFederationChallenge(frame.Cookies);
         Assert.Equal(HttpStatusCode.Redirect, challenge.StatusCode); Assert.Equal("accounts.google.com", challenge.Headers.Location!.Host);
         var query = QueryHelpers.ParseQuery(challenge.Headers.Location.Query);
-        Assert.Equal("login", query["prompt"].ToString()); Assert.Equal("S256", query["code_challenge_method"].ToString());
+        // The qualified Google adapter requests actual freshness claims; only Microsoft supports its scoped login prompt.
+        Assert.False(query.ContainsKey("prompt")); Assert.Equal("S256", query["code_challenge_method"].ToString());
         using (var claims = JsonDocument.Parse(query["claims"].ToString()))
         {
             Assert.True(claims.RootElement.GetProperty("id_token").GetProperty("auth_time").GetProperty("essential").GetBoolean());
@@ -170,6 +171,16 @@ public sealed partial class SessionBulkRevocationHttpTests
         Assert.True(provider.PkceAndConfidentialClientObserved); Assert.Equal(1, provider.TokenRequests);
         Assert.DoesNotContain(callback.Headers.TryGetValues("Set-Cookie", out var headers) ? headers : [],
             x => x.StartsWith(AuthenticationIdentity.CookieName + "=", StringComparison.Ordinal));
+    }
+    private static async Task AssertNativeFederationFacts(IdentityPersistenceDbContext database, StepUpProofRow proof,
+        NativeFrame frame, FederationOidcNativeProtocolTests.SyntheticProvider provider)
+    {
+        var attempt = await database.Set<FederationAttemptRow>().SingleAsync(x => x.AttemptId == frame.AttemptId);
+        Assert.Equal(provider.AuthenticatedAt, attempt.ProviderAuthenticatedAt);
+        Assert.Equal(provider.AuthenticatedAt, proof.AuthenticatedAt); Assert.NotEqual(attempt.VerifiedAt, proof.AuthenticatedAt);
+        Assert.Equal(new[] { "mfa", "pwd" }, JsonSerializer.Deserialize<string[]>(attempt.ProviderMethodsJson!)!.Order(StringComparer.Ordinal));
+        Assert.True(proof.ExpiresAt <= attempt.VerificationExpiresAt);
+        Assert.Equal(frame.SourceReference, attempt.SelectedProofLinkId); Assert.Equal(frame.AttemptId, proof.FederationAttemptId);
     }
     private static Task<HttpResponseMessage> ContinueNative(Scenario test, string method, NativeFrame frame, Guid? request = null, bool wrongAttempt = false)
         => test.Host.Post("/authentication/step-up/" + method + "/continue", method switch
@@ -223,6 +234,7 @@ public sealed partial class SessionBulkRevocationHttpTests
         await using var check = test.Database.Context();
         var proof = await check.Set<StepUpProofRow>().SingleAsync(x => x.Operation == SessionRevocationBinding.Scope.Operation);
         Assert.Equal("CONSUMED", proof.State); Assert.Equal("federation:Google", proof.AuthenticationMethod); Assert.Equal(frame.AttemptId, proof.FederationAttemptId);
+        await AssertNativeFederationFacts(check, proof, frame, provider);
         Assert.Equal(1, await check.Set<OutboxMessage>().CountAsync(x => x.EventType == "TunnerSessionRevoked"));
         Assert.Equal("ACTIVE", (await check.Set<AuthenticationSessionRow>().SingleAsync(x => x.SessionId == test.Targets[1].SessionId)).State);
         Assert.Equal("ACTIVE", (await check.Set<AuthenticationSessionRow>().SingleAsync(x => x.SessionId == test.Actor.SessionId)).State);
@@ -278,6 +290,7 @@ public sealed partial class SessionBulkRevocationHttpTests
             Assert.Equal("ACTIVE", proof.State); Assert.Equal(method == "passkey" ? PasskeyPolicy.MethodKey(false, false) : method == "federation" ? "federation:Google" : "totp", proof.AuthenticationMethod);
             Assert.Equal(frame.Original.OperationReference, proof.CorrelationId);
             Assert.Equal(0, await active.Set<OutboxMessage>().CountAsync(x => x.EventType == "TunnerSessionRevoked"));
+            if (method == "federation") await AssertNativeFederationFacts(active, proof, frame, provider);
         }
         using (var recovery = await test.Host.Get("/authentication/step-up/options", frame.Cookies))
         {
