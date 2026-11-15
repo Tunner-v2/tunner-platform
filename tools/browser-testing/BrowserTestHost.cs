@@ -70,10 +70,15 @@ internal static class BrowserTestHost
             {
                 proofPolicies.Add(BrowserTestSessions.AssurancePolicy());
                 proofPolicies.Add(BrowserTestSessions.BulkAssurancePolicy());
+                proofPolicies.Add(BrowserTestDevices.AssurancePolicy());
             }
             builder.Services.AddSingleton<IAssurancePolicySource>(new AssurancePolicyCatalog(proofPolicies));
             BrowserTestPasskeys.Configure(builder.Services, options.Origin);
-            if (sessions) BrowserTestSessions.Configure(builder.Services);
+            if (sessions)
+            {
+                BrowserTestSessions.Configure(builder.Services);
+                BrowserTestDevices.Configure(builder.Services, options.Origin);
+            }
             builder.Services.AddSingleton(new AuthenticationPartitionKey(RandomNumberGenerator.GetBytes(32)));
             builder.Services.AddSingleton<IRegistrationPolicySource>(new RegistrationPolicyCatalog([new(registrationMetadata, registration)]));
             builder.Services.AddSingleton<IAccountAgePolicySource>(age);

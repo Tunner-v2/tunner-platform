@@ -57,6 +57,7 @@ internal static class SessionListingEndpoints
     private const string Purpose = "Tunner.User.SessionListing.Continuation.v1";
     internal static void MapIfConfigured(IEndpointRouteBuilder endpoints)
     {
+        DeviceBrowserEndpoints.MapIfConfigured(endpoints);
         var services = endpoints.ServiceProvider.GetRequiredService<IServiceProviderIsService>();
         if (!services.IsService(typeof(ISessionListingHttpBudgetSource))) return;
         var user = new AuthorizeAttribute { AuthenticationSchemes = AuthenticationIdentity.Scheme };

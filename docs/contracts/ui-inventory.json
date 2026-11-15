@@ -1201,13 +1201,14 @@
         "docs/authority/current/development/31_UI_UX_Screen_and_Control_Center_Requirements_Matrix.md"
       ],
       "figma_refs": [{"file_key":"apNbwvAgdn1xIxYH1oiaSC","node_id":"16:2"},{"file_key":"apNbwvAgdn1xIxYH1oiaSC","node_id":"47:243"}],
-      "source_paths": ["web/apps/user/sessions.tsx","web/apps/user/sessions.ui.tsx","web/apps/user/sessions.api.ts","web/apps/user/sessions.routes.ts","web/apps/user/sessions.css","src/Modules/Identity/SessionListingEndpoints.cs","src/Modules/Identity/SessionListingPresentation.cs","web/apps/user/sessions.revocation.tsx","src/Modules/Identity/SessionRevocationBrowser.cs","web/apps/user/passkeys.tsx"],
+      "source_paths": ["web/apps/user/sessions.tsx","web/apps/user/sessions.ui.tsx","web/apps/user/sessions.api.ts","web/apps/user/sessions.routes.ts","web/apps/user/sessions.css","src/Modules/Identity/SessionListingEndpoints.cs","src/Modules/Identity/SessionListingPresentation.cs","web/apps/user/sessions.revocation.tsx","src/Modules/Identity/SessionRevocationBrowser.cs","web/apps/user/passkeys.tsx","web/apps/user/account-shell.tsx","web/apps/user/account-format.ts","web/apps/user/devices.ui.tsx","web/apps/user/devices.api.ts"],
       "component_ids": ["COMP-SESSION-REVOKE","COMP-STEP-UP"],
       "planning_status": "SCOPED_LISTING_IMPLEMENTED_REMAINING_FEATURE_INCREMENT_PENDING",
       "design_status": "SCOPED_PRODUCT_OWNER_ADAPTATIONS_IMPLEMENTED_CURRENT_GATE_PENDING",
       "consent_ref": "governance/evidence/TUN-P2-013-VISUAL-CONSENT.json",
       "approved_visual_scope_ids": ["013-V01","013-V02","013-V03","013-V04"],
-      "acceptance_boundary": "PENDING integrated acceptance. Listing/details and exact other-session revocation are implemented under existing scoped consent; current native UI/rendered/live-browser gates remain required. No device/trust inference, Product-local termination or whole-feature acceptance is inherited."
+      "acceptance_boundary": "PENDING integrated acceptance. Listing/details and exact other-session revocation retain existing consent and 74-key listing requirement. Optional independently published Device navigation restores the approved Device card under D01; it does not infer Device facts from sessions. Current native UI/rendered/live-browser gates remain required. No Product-local termination or whole-feature acceptance is inherited.",
+      "device_navigation_consent_ref": "governance/evidence/TUN-P2-013-DEVICE-VISUAL-CONSENT.json"
     },
     {
       "id": "U-ACCT-SESSION-DETAILS", "kind": "SCREEN", "status": "IMPLEMENTED", "app": "user", "module": "U-ACCT",
@@ -1244,6 +1245,42 @@
       "approved_visual_scope_ids": ["013-V03","013-V04"],
       "design_status": "PRODUCT_OWNER_APPROVED_SCOPED_ADAPTATIONS",
       "acceptance_boundary": "PENDING current native UI, keyboard/axe/responsive and rendered/reference evidence; no whole-feature or production acceptance."
+    },
+    {
+      "id": "U-ACCT-DEVICES", "kind": "SCREEN", "status": "IMPLEMENTED", "app": "user", "module": "U-ACCT",
+      "title": "Observed devices", "requirements": "Permission-safe observed browser-installation facts and recorded/effective trust; ordinary navigation from Sessions and Devices; trust is separate from authentication and session access.",
+      "pathname": "/account/devices", "runtime_pathname": "/account/devices",
+      "guard": "Current authenticated User session, independently authorized Device listing and effective independent Device publication/qualified collection. Every continuation is an opaque POST body value. Abort and ignore stale route reads. No tokens, personal information or cursors in URLs/storage.",
+      "owner_scopes": ["TUN-P2-013"],
+      "authority_refs": ["docs/authority/current/development/17_Account_Identity_and_Session_FRD.md","docs/authority/current/development/32_Domain_API_Event_Data_and_Policy_Contract_Catalog.md","docs/authority/current/decisions/AMD-0008_Approved_Figma_Visual_Fidelity_and_Product_Owner_UX_Consent.md","docs/authority/current/decisions/AMD-0009_URL_Addressable_Routing_and_Governed_Form_Validation.md"],
+      "figma_refs": [{"file_key":"apNbwvAgdn1xIxYH1oiaSC","node_id":"16:125"},{"file_key":"apNbwvAgdn1xIxYH1oiaSC","node_id":"16:128"},{"file_key":"apNbwvAgdn1xIxYH1oiaSC","node_id":"16:134"},{"file_key":"apNbwvAgdn1xIxYH1oiaSC","node_id":"16:158"}],
+      "source_paths": ["web/apps/user/devices.tsx","web/apps/user/devices.ui.tsx","web/apps/user/devices.api.ts","web/apps/user/devices.routes.ts","web/apps/user/devices.css","web/apps/user/account-shell.tsx","web/apps/user/account-format.ts","src/Modules/Identity/DeviceBrowserEndpoints.cs","src/Modules/Identity/DeviceContracts.cs"],
+      "component_ids": ["COMP-DEVICE-TRUST-REMOVE","COMP-STEP-UP"], "consent_ref": "governance/evidence/TUN-P2-013-DEVICE-VISUAL-CONSENT.json", "approved_visual_scope_ids": ["D01","D02","D03"],
+      "design_status": "PRODUCT_OWNER_APPROVED_SCOPED_ADAPTATIONS", "acceptance_boundary": "PENDING native UI, controlled-BFF/rendered and real BrowserHost qualification. No production collection/eligibility/assurance/retention policy or whole-feature/release acceptance is inferred. Bulk session UI consent remains separate."
+    },
+    {
+      "id": "U-ACCT-DEVICE-DETAILS", "kind": "SCREEN", "status": "IMPLEMENTED", "app": "user", "module": "U-ACCT",
+      "title": "Device details", "requirements": "Safe observed facts, opaque reference, first/last observed, qualified BrowserFamily, current-session observation and recorded/effective trust. Remove trust is distinct from Sign out.",
+      "pathname": "/account/devices/:reference", "runtime_pathname": "/account/devices/:reference",
+      "guard": "Direct entry, reload and history reauthenticate and independently authorize exact Device details. Only a canonical nonempty opaque UUID reference is allowed in the pathname. Query/fragment selectors are discarded. Protected owner context is reauthorized; pending/uncertain originals remain check-only without automatic reprepare or replacement.",
+      "owner_scopes": ["TUN-P2-013"],
+      "authority_refs": ["docs/authority/current/development/17_Account_Identity_and_Session_FRD.md","docs/authority/current/decisions/AMD-0008_Approved_Figma_Visual_Fidelity_and_Product_Owner_UX_Consent.md","docs/authority/current/decisions/AMD-0009_URL_Addressable_Routing_and_Governed_Form_Validation.md"],
+      "figma_refs": [{"file_key":"apNbwvAgdn1xIxYH1oiaSC","node_id":"36:296"},{"file_key":"apNbwvAgdn1xIxYH1oiaSC","node_id":"36:402"},{"file_key":"apNbwvAgdn1xIxYH1oiaSC","node_id":"36:409"},{"file_key":"apNbwvAgdn1xIxYH1oiaSC","node_id":"36:421"},{"file_key":"apNbwvAgdn1xIxYH1oiaSC","node_id":"36:427"}],
+      "source_paths": ["web/apps/user/devices.tsx","web/apps/user/devices.ui.tsx","web/apps/user/devices.api.ts","web/apps/user/devices.routes.ts","web/apps/user/devices.css","web/apps/user/account-shell.tsx","src/Modules/Identity/DeviceBrowserEndpoints.cs"],
+      "component_ids": ["COMP-DEVICE-TRUST-REMOVE","COMP-STEP-UP"], "consent_ref": "governance/evidence/TUN-P2-013-DEVICE-VISUAL-CONSENT.json", "approved_visual_scope_ids": ["D01","D02","D03"],
+      "design_status": "PRODUCT_OWNER_APPROVED_SCOPED_ADAPTATIONS", "acceptance_boundary": "PENDING current native UI, controlled/rendered and real BrowserHost qualification. No physical/hardware identity, IP/location/OS claim or acceptance is inferred."
+    },
+    {
+      "id": "COMP-DEVICE-TRUST-REMOVE", "kind": "COMPONENT", "status": "IMPLEMENTED", "app": "user", "module": "Identity.Devices", "title": "Exact Device trust removal confirmation and result",
+      "pathname": null, "runtime_pathname": null, "owner_pathnames": ["/account/devices","/account/devices/:reference"], "owner_scopes": ["TUN-P2-013"],
+      "authority_refs": ["docs/authority/current/development/17_Account_Identity_and_Session_FRD.md","docs/authority/current/decisions/AMD-0008_Approved_Figma_Visual_Fidelity_and_Product_Owner_UX_Consent.md","docs/authority/current/decisions/AMD-0009_URL_Addressable_Routing_and_Governed_Form_Validation.md"],
+      "figma_refs": [{"file_key":"apNbwvAgdn1xIxYH1oiaSC","node_id":"46:44"},{"file_key":"apNbwvAgdn1xIxYH1oiaSC","node_id":"52:314"}],
+      "source_paths": ["web/apps/user/devices.tsx","web/apps/user/devices.ui.tsx","web/apps/user/devices.api.ts","web/apps/user/devices.css","src/Modules/Identity/DeviceBrowserEndpoints.cs"],
+      "component_ids": ["COMP-STEP-UP"], "form_ids": ["FORM-STEP-UP"],
+      "guard": "Explicit review precedes server-issued draft request and exact reference/device/trust-version confirmed prepare. Keep trusted before prepare sends no mutation. Shared proof is bound to this original operationReference; only the independently authorized exact causal Device/result receipt establishes success. Pending/unknown originals are check-only. The selected supported effect preserves existing sessions. No cancel endpoint or blind resnapshot is invented.",
+      "interaction": "Same-screen shared modal and operation-bound proof; canonical owner pathname remains unchanged.",
+      "consent_ref": "governance/evidence/TUN-P2-013-DEVICE-VISUAL-CONSENT.json", "approved_visual_scope_ids": ["D02","D03"], "design_status": "PRODUCT_OWNER_APPROVED_SCOPED_ADAPTATIONS",
+      "acceptance_boundary": "PENDING current native UI, typed/shared validation, keyboard/axe/responsive, rendered/reference and real-browser evidence. Engineering results do not imply Product or whole-feature acceptance."
     },
     {
       "id": "U-ACCT-05",

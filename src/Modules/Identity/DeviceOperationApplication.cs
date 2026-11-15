@@ -175,15 +175,25 @@ internal sealed partial class DeviceApplication
             trust.OutboxEventId == row.OutboxEventId && trust.RecordedAt == row.CompletedAt;
     }
 
-    internal async Task<DeviceTrustRemovalResult> ReadRemovalResultAsync(StepUpCaller caller, DeviceTrustRemovalRequest request, string? keyDigest, CancellationToken ct)
+    internal Task<DeviceTrustRemovalResult> ReadRemovalResultAsync(StepUpCaller caller, DeviceTrustRemovalRequest request, string? keyDigest, CancellationToken ct)
+        => ReadRemovalResultCoreAsync(caller, request, keyDigest, false, ct);
+    private async Task<DeviceTrustRemovalResult> ReadRemovalResultCoreAsync(StepUpCaller caller, DeviceTrustRemovalRequest request, string? keyDigest,
+        bool joinTransaction, CancellationToken ct)
     {
-        request.Validate(); Clean(); var policy = Policy(caller.Origin, clock.GetUtcNow());
+        request.Validate();
+        if (joinTransaction)
+        { if (database.Database.CurrentTransaction is null) throw new InvalidOperationException("An existing Identity owner transaction is required."); }
+        else Clean();
+        var policy = Policy(caller.Origin, clock.GetUtcNow());
         try
         {
-            await using var tx = await database.Database.BeginTransactionAsync(ct).ConfigureAwait(false);
+            await using var tx = joinTransaction ? null : await database.Database.BeginTransactionAsync(ct).ConfigureAwait(false);
             var session = await authentication.LockForOperationAsync(caller, RevokeScope.Operation, ct).ConfigureAwait(false);
             if (session is null)
-            { await database.SaveChangesAsync(ct).ConfigureAwait(false); await tx.CommitAsync(ct).ConfigureAwait(false); return new("AUTHENTICATION_FAILED"); }
+            {
+                if (tx is not null) { await database.SaveChangesAsync(ct).ConfigureAwait(false); await tx.CommitAsync(ct).ConfigureAwait(false); }
+                return new("AUTHENTICATION_FAILED");
+            }
             var row = await database.Set<DeviceOperationRow>().AsNoTracking().SingleOrDefaultAsync(x => x.SessionId == caller.SessionId && x.RequestId == request.RequestId, ct).ConfigureAwait(false);
             DeviceTrustRemovalReceipt? receipt = null;
             if (row is not null && Actor(row, caller) && Request(row, request) && row.State == "COMPLETED" && row.Version == 2 &&
@@ -216,9 +226,53 @@ internal sealed partial class DeviceApplication
                 }
                 if (!await CurrentActor(caller, session, operation, policy, ct).ConfigureAwait(false) || clock.GetUtcNow() >= row.RecoveryExpiresAt) receipt = null;
             }
-            await database.SaveChangesAsync(ct).ConfigureAwait(false); await tx.CommitAsync(ct).ConfigureAwait(false);
+            if (tx is not null) { await database.SaveChangesAsync(ct).ConfigureAwait(false); await tx.CommitAsync(ct).ConfigureAwait(false); }
             return receipt is null ? new("NOT_APPLIED_OR_NOT_DISCLOSABLE") : new(null, receipt);
         }
-        catch { database.ChangeTracker.Clear(); throw; }
+        catch { if (!joinTransaction) database.ChangeTracker.Clear(); throw; }
+    }
+
+    /// <summary>Resolves the same immutable browser original both outside and inside the shared/native proof transaction.</summary>
+    internal async Task<(UserStepUpOperationContext? Context, DeviceOperationRow? Original)> ResolveBrowserRemovalAsync(
+        StepUpCaller caller, DeviceTrustRemovalRequest request, CancellationToken ct)
+    {
+        request.Validate(); var owns = database.Database.CurrentTransaction is null;
+        if (owns) Clean();
+        try
+        {
+            await using var tx = owns ? await database.Database.BeginTransactionAsync(ct).ConfigureAwait(false) : null;
+            var actor = await authentication.LockForOperationAsync(caller, RevokeScope.Operation, ct).ConfigureAwait(false);
+            if (actor is null)
+            {
+                if (tx is not null) { await database.SaveChangesAsync(ct).ConfigureAwait(false); await tx.CommitAsync(ct).ConfigureAwait(false); }
+                return (null, null);
+            }
+            var row = await database.Set<DeviceOperationRow>().AsNoTracking().SingleOrDefaultAsync(x => x.SessionId == caller.SessionId && x.RequestId == request.RequestId, ct).ConfigureAwait(false);
+            if (row is null || !Actor(row, caller) || !Request(row, request) || row.ContextDigest != Context(row))
+            {
+                if (tx is not null) { await database.SaveChangesAsync(ct).ConfigureAwait(false); await tx.CommitAsync(ct).ConfigureAwait(false); }
+                return (null, null);
+            }
+            var at = clock.GetUtcNow(); var policy = Policy(caller.Origin, at);
+            var current = row.State == "COMPLETED"
+                ? (await ReadRemovalResultCoreAsync(caller, request, null, true, ct).ConfigureAwait(false)).Applied
+                : row.State == "PENDING" && row.CreatedAt <= at && at < row.ExpiresAt && row.PolicySnapshot == policy.Snapshot &&
+                    row.SecurityStampDigest == actor.SecurityStampDigest && row.AssurancePolicyVersion == policy.RevokeAssurancePolicyVersion;
+            if (current && row.State == "PENDING")
+            {
+                await LockDevice(row.DeviceId, ct).ConfigureAwait(false);
+                var target = await database.Set<DeviceRecordRow>().AsNoTracking().SingleOrDefaultAsync(x => x.DeviceId == row.DeviceId, ct).ConfigureAwait(false);
+                var trust = await LatestTrust(row.DeviceId, ct).ConfigureAwait(false);
+                var account = await database.Accounts.SingleAsync(x => x.AccountId == caller.AccountId, ct).ConfigureAwait(false);
+                current = target is not null && target.AccountId == caller.AccountId && target.Origin == caller.Origin &&
+                    target.Version == row.ExpectedDeviceVersion && trust?.Version == row.ExpectedTrustVersion && trust.State != "REVOKED" &&
+                    account.Version == row.ExpectedAccountVersion;
+            }
+            current = current && await CurrentActor(caller, actor, Operation(row), policy, ct).ConfigureAwait(false) &&
+                clock.GetUtcNow() < (row.State == "COMPLETED" ? row.RecoveryExpiresAt : row.ExpiresAt);
+            if (tx is not null) { await database.SaveChangesAsync(ct).ConfigureAwait(false); await tx.CommitAsync(ct).ConfigureAwait(false); }
+            return (current ? OperationContext(row, caller) : null, row);
+        }
+        catch { if (owns) database.ChangeTracker.Clear(); throw; }
     }
 }

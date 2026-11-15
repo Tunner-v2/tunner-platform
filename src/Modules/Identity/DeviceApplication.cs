@@ -44,8 +44,12 @@ internal sealed partial class DeviceApplication(IdentityPersistenceDbContext dat
             "tunner/identity", subject.ToString("N"), classification, JsonSerializer.Serialize(new { reference = subject.ToString("N") }),
             version.ToString(CultureInfo.InvariantCulture), operation, correlation));
 
-    internal async Task<DeviceListingPage?> ListAsync(StepUpCaller caller, int maximumRows,
-        DeviceListingContinuation? after = null, CancellationToken ct = default)
+    internal Task<DeviceListingPage?> ListAsync(StepUpCaller caller, int maximumRows,
+        DeviceListingContinuation? after = null, CancellationToken ct = default) => ListCoreAsync(caller, maximumRows, after, null, ct);
+    internal Task<DeviceListingPage?> ReadDeviceAsync(StepUpCaller caller, Guid reference, CancellationToken ct)
+        => ListCoreAsync(caller, 1, null, reference, ct);
+    private async Task<DeviceListingPage?> ListCoreAsync(StepUpCaller caller, int maximumRows,
+        DeviceListingContinuation? after, Guid? exactReference, CancellationToken ct)
     {
         ArgumentOutOfRangeException.ThrowIfNegativeOrZero(maximumRows); Clean();
         if (after is not null && (after.AccountId != caller.AccountId || after.ActorSessionId != caller.SessionId ||
@@ -59,6 +63,7 @@ internal sealed partial class DeviceApplication(IdentityPersistenceDbContext dat
             if (session is null)
             { await database.SaveChangesAsync(ct).ConfigureAwait(false); await tx.CommitAsync(ct).ConfigureAwait(false); return null; }
             var query = database.Set<DeviceRecordRow>().AsNoTracking().Where(x => x.AccountId == caller.AccountId && x.Origin == caller.Origin);
+            if (exactReference is { } reference) query = query.Where(x => x.DeviceId == reference);
             if (after is not null) query = query.Where(x => x.CreatedAt > after.CreatedAt || x.CreatedAt == after.CreatedAt && x.DeviceId.CompareTo(after.DeviceId) > 0);
             var records = await query.OrderBy(x => x.CreatedAt).ThenBy(x => x.DeviceId).Take(maximumRows + 1).ToArrayAsync(ct).ConfigureAwait(false);
             var currentDevice = await database.Set<DeviceSessionEvidenceRow>().AsNoTracking().Where(x => x.SessionId == caller.SessionId)

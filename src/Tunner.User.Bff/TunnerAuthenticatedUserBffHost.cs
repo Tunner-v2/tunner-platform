@@ -42,6 +42,7 @@ public static class TunnerAuthenticatedUserBffHost
             if (federation.Length != 0) builder.Services.AddTunnerFederation(federation.Select(value => value.Provider));
             federationManagement = builder.Services.Any(value => value.ServiceType == typeof(IFederationLinkPolicySource) || value.ServiceType == typeof(IFederationUnlinkPostureSource));
             if (federationManagement) builder.Services.AddTunnerFederationManagement();
+            builder.Services.CompleteTunnerDevicesComposition();
             stepUp = builder.Services.Any(x => x.ServiceType == typeof(IUserStepUpOperationSource));
             if (stepUp) builder.Services.AddTunnerOperationStepUp();
         });

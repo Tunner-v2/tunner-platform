@@ -4,6 +4,9 @@ import {ContentUnavailable,ThemeProvider,navigatePath,useRouteLocation} from '@t
 import '@tunner/ui/styles.css';
 import './passkeys.css';
 import './sessions.css';
+import './devices.css';
+import {loadDeviceOptions} from './devices.api';
+import type {DeviceOptions} from './devices.api';
 import {checkCurrentSession,loadSessionContext,loadSessionRevocationOptions,readSessionRevocationContext,readSessionPage,SessionHttpError,signOutCurrentSession} from './sessions.api';
 import type {SessionContext,SessionItem,SessionOptions,SessionRevocationContext} from './sessions.api';
 import {SessionRevocation} from './sessions.revocation';
@@ -20,6 +23,7 @@ function SessionsApp(){
  const acknowledgedRevocations=useRef(new Set<string>());
  const [context,setContext]=useState<SessionContext>(),[phase,setPhase]=useState<SessionViewPhase>('loading'),[items,setItems]=useState<SessionItem[]>([]),[selected,setSelected]=useState<SessionItem>();
  const [revocationOptions,setRevocationOptions]=useState<SessionOptions>(),[original,setOriginal]=useState<SessionRevocationContext>(),[review,setReview]=useState<SessionItem>(),[revocationBlocked,setRevocationBlocked]=useState(false);
+ const [deviceOptions,setDeviceOptions]=useState<DeviceOptions>();
  const [hasMore,setHasMore]=useState(false),[moreBusy,setMoreBusy]=useState(false),[signOutPhase,setSignOutPhase]=useState<SessionSignOutPhase>('idle'),[unavailable,setUnavailable]=useState(false),[refresh,setRefresh]=useState(0),[readyRevision,setReadyRevision]=useState(-1);
  const current=(work:Work)=>!work.signal.aborted&&work.signal===controller.current.signal&&work.revision===revision.current;
  function reject(error:unknown,work:Work){
@@ -31,7 +35,7 @@ function SessionsApp(){
  }
  useEffect(()=>{
   controller.current.abort();controller.current=new AbortController();const work={revision:route.revision,signal:controller.current.signal};
-  setSignOutPhase(value=>value==='busy'?'unknown':value);setReview(undefined);setRevocationBlocked(false);
+  setSignOutPhase(value=>value==='busy'?'unknown':value);setReview(undefined);setRevocationBlocked(false);setDeviceOptions(undefined);
   flight.current=true;setPhase('loading');setReadyRevision(-1);setMoreBusy(false);setUnavailable(false);setItems([]);setSelected(undefined);setHasMore(false);next.current=null;cursors.current.clear();
   if(!isSessionRoute(route.pathname)){window.location.replace('/login');return()=>work.signal.aborted?undefined:controller.current.abort();}
   if(window.location.search||window.location.hash){navigatePath(route.pathname,true);return()=>controller.current.abort();}
@@ -41,6 +45,7 @@ function SessionsApp(){
    try{
     const fresh=await loadSessionContext(work.signal);if(!current(work))return;csrf.current=fresh.csrfToken;setContext(fresh);publishedReady=true;
     const optional=await loadSessionRevocationOptions(fresh.options.locale,work.signal);if(!current(work))return;
+    const devices=await loadDeviceOptions(work.signal).catch(error=>{if(error instanceof SessionHttpError&&error.kind==='authentication')throw error;return undefined;});if(!current(work))return;setDeviceOptions(devices);
     const recovered=optional?await readSessionRevocationContext(work.signal):undefined;if(!current(work))return;
     setRevocationOptions(optional);setOriginal(recovered&&!acknowledgedRevocations.current.has(recovered.requestId)?recovered:undefined);
     // Recover the protected owner context before enforcing the ordinary in-memory detail guard.
@@ -87,7 +92,7 @@ function SessionsApp(){
  if(unavailable)return <ContentUnavailable/>;
  if(!context)return <main className="sessions-initial" aria-busy="true"/>;
  const displayOptions=revocationOptions?{...context.options,content:{...context.options.content,...revocationOptions.content}}:context.options;
- return <SessionsView key={route.revision} options={displayOptions} phase={readyRevision===route.revision?phase:'loading'} detail={route.pathname===sessionRoutes.details.pathname} revision={route.revision} items={items} selected={selected} hasMore={hasMore} moreBusy={moreBusy} signOutPhase={signOutPhase} revocationAvailable={!!revocationOptions} revocationBlocked={revocationBlocked} onRevoke={item=>{if(!flight.current&&!revocationBlocked&&signOutPhase==='idle')setReview(item);}} onRefresh={reload} onLoadMore={()=>void more()} onSelect={select} onSignOut={()=>void signOut()} onCheckSignIn={()=>void checkSignIn()}>
+ return <SessionsView key={route.revision} options={displayOptions} deviceOptions={deviceOptions} phase={readyRevision===route.revision?phase:'loading'} detail={route.pathname===sessionRoutes.details.pathname} revision={route.revision} items={items} selected={selected} hasMore={hasMore} moreBusy={moreBusy} signOutPhase={signOutPhase} revocationAvailable={!!revocationOptions} revocationBlocked={revocationBlocked} onRevoke={item=>{if(!flight.current&&!revocationBlocked&&signOutPhase==='idle')setReview(item);}} onRefresh={reload} onLoadMore={()=>void more()} onSelect={select} onSignOut={()=>void signOut()} onCheckSignIn={()=>void checkSignIn()}>
   {revocationOptions&&readyRevision===route.revision&&phase==='ready'&&signOutPhase==='idle'&&<SessionRevocation options={displayOptions} csrfToken={csrf.current} revision={route.revision} initial={original} selection={review} onSelectionHandled={()=>setReview(undefined)} onBlockedChange={setRevocationBlocked} onAcknowledged={requestId=>acknowledgedRevocations.current.add(requestId)} onRefresh={()=>{held.current=undefined;setOriginal(undefined);setRevocationBlocked(false);if(route.pathname===sessionRoutes.details.pathname)navigatePath(sessionRoutes.list.pathname,true);else setRefresh(value=>value+1);}}/>}
  </SessionsView>;
 }

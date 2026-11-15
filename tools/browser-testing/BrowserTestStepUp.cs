@@ -40,7 +40,7 @@ internal sealed class BrowserTestStepUpOperations(IServiceScopeFactory scopes, I
     private static string Operation(UserStepUpActor actor) => "OP-LOCAL-STEP-UP-" + actor.SessionId.ToString("N");
 }
 internal sealed class BrowserTestStepUpPresentation(IEnumerable<BrowserTestTotp> finiteProfiles, IEnumerable<BrowserTestRecoveryCodes> recoveryProfiles,
-    IEnumerable<BrowserTestSessions> sessionProfiles) : IStepUpPresentationSource
+    IEnumerable<BrowserTestSessions> sessionProfiles, IEnumerable<BrowserTestDevices> deviceProfiles) : IStepUpPresentationSource
 {
     public StepUpPresentation RequirePublished(AssurancePolicyVersion policy)
     {
@@ -49,7 +49,8 @@ internal sealed class BrowserTestStepUpPresentation(IEnumerable<BrowserTestTotp>
         if (policy.Metadata.VersionId is not (BrowserTestStepUpOperations.PolicyVersion or BrowserTestPasskeys.EnrollmentPolicyVersion or BrowserTestPasskeys.RevocationPolicyVersion) &&
             !(finite && policy.Metadata.VersionId is BrowserTestTotp.EnrollmentPolicyVersion or BrowserTestTotp.DisablePolicyVersion or BrowserTestTotp.ResetPolicyVersion) &&
             !(recovery && policy.Metadata.VersionId is BrowserTestRecoveryCodes.GenerateAssurance or BrowserTestRecoveryCodes.ReplaceAssurance) &&
-            !(sessionProfiles.SingleOrDefault() is not null && policy.Metadata.VersionId is BrowserTestSessions.AssuranceVersion or BrowserTestSessions.BulkAssuranceVersion))
+            !(sessionProfiles.SingleOrDefault() is not null && policy.Metadata.VersionId is BrowserTestSessions.AssuranceVersion or BrowserTestSessions.BulkAssuranceVersion) &&
+            !(deviceProfiles.SingleOrDefault() is not null && policy.Metadata.VersionId == BrowserTestDevices.AssuranceVersion))
             throw new InvalidOperationException("Isolated test presentation only.");
         using var source = JsonDocument.Parse(File.ReadAllText(Path.Combine(AppContext.BaseDirectory, "browser-test-step-up-content.json")));
         var values = source.RootElement.GetProperty("content").EnumerateObject().Select(p =>

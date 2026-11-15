@@ -45,7 +45,8 @@ public sealed class DeviceTrustModelTests
         var names = typeof(DeviceListingItem).GetProperties().Select(x => x.Name).ToHashSet(StringComparer.Ordinal);
         Assert.True(names.SetEquals(["DeviceReference", "Version", "TrustVersion", "ObservedForCurrentSession", "FirstObservedAt", "LastObservedAt",
             "Characteristics", "RecordedTrustState", "EffectiveTrustState", "EvaluatedAt"]));
-        Assert.True(typeof(DeviceEvidencePolicy).IsNotPublic && typeof(DeviceTrustRemovalRequest).IsNotPublic);
+        Assert.True(typeof(DeviceEvidencePolicy).IsPublic && typeof(IDeviceEvidencePolicySource).IsPublic);
+        Assert.True(typeof(DeviceApplication).IsNotPublic && typeof(DeviceTrustRemovalRequest).IsNotPublic);
         Assert.True(typeof(DeviceListingItem).IsNotPublic && typeof(DeviceExecutionValidity).IsNotPublic);
     }
 }

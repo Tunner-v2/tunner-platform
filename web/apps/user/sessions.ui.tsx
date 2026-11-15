@@ -1,8 +1,12 @@
-import {useEffect,useRef,useState} from 'react';
+import {useEffect,useRef} from 'react';
 import type {ReactNode} from 'react';
-import {ContentProvider,ContentText,FormErrorSummary,PrimaryButton,TunnerBrand,navigatePath} from '@tunner/ui';
+import {ContentProvider,ContentText,FormErrorSummary,PrimaryButton,navigatePath} from '@tunner/ui';
 import type {SessionItem,SessionOptions} from './sessions.api';
 import {sessionRoutes} from './sessions.routes';
+import {AccountShell} from './account-shell';
+import {formatAccountTime} from './account-format';
+import type {DeviceOptions} from './devices.api';
+import {DeviceNavigationCard} from './devices.ui';
 
 export type SessionViewPhase='loading'|'ready'|'error'|'changed';
 export type SessionSignOutPhase='idle'|'busy'|'unknown';
@@ -10,11 +14,12 @@ export interface SessionsViewProps{
  options:SessionOptions;phase:SessionViewPhase;detail:boolean;revision:number;items:readonly SessionItem[];selected:SessionItem|undefined;
  hasMore:boolean;moreBusy:boolean;signOutPhase:SessionSignOutPhase;
  revocationAvailable:boolean;revocationBlocked:boolean;onRevoke:(item:SessionItem)=>void;children?:ReactNode;
+ deviceOptions?:DeviceOptions|undefined;
  onRefresh:()=>void;onLoadMore:()=>void;onSelect:(item:SessionItem)=>void;onSignOut:()=>void;onCheckSignIn:()=>void;
 }
 const key=(suffix:string)=>'account.sessions.'+suffix;
 const stateKey=(state:SessionItem['effectiveState'])=>key('state.'+({ACTIVE:'active',REVOKED:'revoked',EXPIRED:'expired'} as const)[state]);
-export function formatSessionTime(value:string,locale:string){return new Intl.DateTimeFormat(locale,{year:'numeric',month:'short',day:'2-digit',hour:'2-digit',minute:'2-digit',timeZone:'UTC',timeZoneName:'short',hourCycle:'h23'}).format(new Date(value));}
+export const formatSessionTime=formatAccountTime;
 function SessionTime({value,locale}:{value:string;locale:string}){return <time dateTime={value}>{formatSessionTime(value,locale)}</time>;}
 function SessionLabel({item}:{item:SessionItem}){return <ContentText contentKey={key('label')} values={{reference:item.reference.slice(-8)}}/>;}
 function Checked({item,locale}:{item:SessionItem;locale:string}){return <ContentText contentKey={key('checkedAt')} values={{time:formatSessionTime(item.evaluatedAt,locale)}}/>;}
@@ -54,19 +59,14 @@ function SessionList({items,locale,hasMore,moreBusy,onSelect,onLoadMore,onRefres
 }
 export function SessionsView(props:SessionsViewProps){
  const {options,phase,detail,revision,selected,signOutPhase}=props;
- const [menu,setMenu]=useState(false),[accountMenu,setAccountMenu]=useState(false);
  const heading=useRef<HTMLHeadingElement>(null);
  useEffect(()=>{if(phase!=='loading')heading.current?.focus();},[phase,detail,revision]);
  const blocked=phase==='loading'||props.moreBusy||props.revocationBlocked||signOutPhase!=='idle';
- return <ContentProvider locale={options.locale} audience="account-sessions" resolve={name=>options.content[name]}><div className="passkeys-page sessions-page">
-  <header className="passkeys-header"><TunnerBrand contentKey="brand.tunner"/><span className="passkeys-header-label"><ContentText contentKey={key('header.accountCenter')}/></span><div className="passkeys-search" aria-hidden="true"><ContentText contentKey={key('header.search')}/></div><span className="passkeys-notifications" role="img" aria-label={options.content[key('header.notifications')]!.text}>•</span><button type="button" className="passkeys-owner" aria-expanded={accountMenu} aria-controls="sessions-account-actions" onClick={()=>setAccountMenu(value=>!value)}><ContentText contentKey={key('header.account')}/><span aria-hidden="true">⌄</span></button><button type="button" className="passkeys-menu" aria-label={options.content[key('header.menu')]!.text} aria-expanded={menu} aria-controls="sessions-navigation" onClick={()=>setMenu(value=>!value)}><ContentText contentKey={key('header.menu')}/></button>
-   {accountMenu&&<div className="sessions-account-menu" id="sessions-account-actions"><PrimaryButton appearance="outline" labelKey={key('signOut')} disabled={blocked} onClick={props.onSignOut}/></div>}
-  </header>
-  <div className="passkeys-shell"><nav className={'passkeys-sidebar'+(menu?' open':'')} id="sessions-navigation" aria-label={options.content[key('header.menu')]!.text}><p className="passkeys-nav-label"><ContentText contentKey={key('navigation.account')}/></p>{(['overview','profile','security','sessions','billing','notifications','products','activity'] as const).map(name=>name==='sessions'?<a key={name} className="passkeys-nav-item active" aria-current="page" href={sessionRoutes.list.pathname} onClick={event=>{event.preventDefault();navigatePath(sessionRoutes.list.pathname);}}><ContentText contentKey={key('navigation.'+name)}/></a>:name==='security'?<a key={name} className="passkeys-nav-item" href="/account/security"><ContentText contentKey={key('navigation.security')}/></a>:<span key={name} className="passkeys-nav-item"><ContentText contentKey={key('navigation.'+name)}/></span>)}<div className="passkeys-nav-help"><p className="passkeys-nav-label"><ContentText contentKey={key('navigation.help')}/></p><p><ContentText contentKey={key('navigation.helpDescription')}/></p><PrimaryButton appearance="outline" labelKey={key('navigation.contactSupport')} disabled/></div><div className="sessions-mobile-signout"><PrimaryButton appearance="outline" labelKey={key('signOut')} disabled={blocked} onClick={props.onSignOut}/></div></nav>
+ return <ContentProvider locale={options.locale} audience="account-sessions" resolve={name=>options.content[name]}><AccountShell contentPrefix="account.sessions." content={options.content} navigationId="sessions-navigation" accountActionsId="sessions-account-actions" blocked={blocked} onSignOut={props.onSignOut} onSessionsNavigate={()=>navigatePath(sessionRoutes.list.pathname)}>
    <main className="passkeys-main" data-tunner-screen={detail?sessionRoutes.details.id:sessionRoutes.list.id} aria-busy={phase==='loading'||props.moreBusy||signOutPhase==='busy'}><p className="passkeys-eyebrow"><ContentText contentKey={key('eyebrow')}/></p><h1 ref={heading} tabIndex={-1}><ContentText contentKey={key(detail?'details':'title')}/></h1><p className="passkeys-subtitle"><ContentText contentKey={key('description')}/></p>
     {signOutPhase==='busy'&&<p className="sessions-notice" role="status"><ContentText contentKey={key('signOutPending')}/></p>}
     {signOutPhase==='unknown'?<section className="passkeys-card sessions-state-panel"><FormErrorSummary contentKey={key('signOutUnknown')}/><PrimaryButton labelKey={key('checkSignIn')} disabled={props.moreBusy} onClick={props.onCheckSignIn}/></section>:phase==='loading'?<section className="passkeys-card sessions-state-panel" role="status"><h2><ContentText contentKey={key('loading')}/></h2><div className="sessions-skeleton" aria-hidden="true"/><div className="sessions-skeleton" aria-hidden="true"/></section>:phase==='error'||phase==='changed'?<section className="passkeys-card sessions-state-panel"><FormErrorSummary contentKey={key(phase==='changed'?'changed':'error')}/><PrimaryButton appearance="outline" labelKey={key('refresh')} onClick={props.onRefresh}/></section>:detail&&selected?<SessionDetails item={selected} locale={options.locale} canRevoke={props.revocationAvailable} blocked={blocked} onRevoke={props.onRevoke}/>:<SessionList items={props.items} locale={options.locale} hasMore={props.hasMore} moreBusy={blocked} onSelect={props.onSelect} onLoadMore={props.onLoadMore} onRefresh={props.onRefresh}/>}
-    {props.children}
-   </main></div>
- </div></ContentProvider>;
+    {!detail&&phase==='ready'&&props.deviceOptions&&<DeviceNavigationCard options={props.deviceOptions}/>}{props.children}
+   </main>
+ </AccountShell></ContentProvider>;
 }
