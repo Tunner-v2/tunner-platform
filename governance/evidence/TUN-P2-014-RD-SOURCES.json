@@ -1,0 +1,70 @@
+{
+  "schema_version": 1,
+  "scope_type": "WORK_ITEM",
+  "scope_id": "TUN-P2-014",
+  "reviewed_at": "2026-11-15T12:53:16Z",
+  "sources": [
+    {
+      "url": "https://github.com/openiddict/openiddict-core/releases/tag/7.7.2",
+      "finding": "The repository pins 7.7.2. Its published release changes Quartz registration on .NET10; no package upgrade is selected by this review. Latest website samples can differ from this pin."
+    },
+    {
+      "url": "https://raw.githubusercontent.com/openiddict/openiddict-core/7.7.2/src/OpenIddict.Server/OpenIddictServerBuilder.cs",
+      "finding": "Pinned server builder exposes authorization-code flow, endpoint configuration, PKCE requirement, issuer and signing/encryption credentials. Reuse framework protocol validation and token handling rather than custom cryptography."
+    },
+    {
+      "url": "https://raw.githubusercontent.com/openiddict/openiddict-core/7.7.2/src/OpenIddict.Server.AspNetCore/OpenIddictServerAspNetCoreBuilder.cs",
+      "finding": "Authorization/token passthrough occurs after framework processing. Keep HTTPS requirement; application must still apply Tunner session, Account and Product authority."
+    },
+    {
+      "url": "https://documentation.openiddict.com/configuration/application-permissions.html",
+      "finding": "Framework separates endpoint, grant-type, response-type and scope permissions. Keep these checks enabled; validate Tunner Product/environment/Relationship independently."
+    },
+    {
+      "url": "https://documentation.openiddict.com/configuration/token-storage.html",
+      "finding": "Keep token storage enabled. Revocable artifacts do not alone establish immediate resource-server revocation; token-entry validation or introspection is required for current status."
+    },
+    {
+      "url": "https://www.rfc-editor.org/rfc/rfc9700.html",
+      "finding": "Published IETF BCP240, January2025. Use authorization-code protection, exact registered redirects, PKCE and least privilege; do not introduce implicit or password grants."
+    },
+    {
+      "url": "https://www.rfc-editor.org/rfc/rfc7009.html",
+      "finding": "Published standards-track revocation protocol; enforce authenticated client/token ownership and approved grant effects, without asserting Product-local session termination."
+    },
+    {
+      "url": "https://www.rfc-editor.org/rfc/rfc7662.html",
+      "finding": "Published standards-track introspection protocol; active status and disclosed metadata require current authorization, not mere successful token decryption."
+    }
+  ],
+  "authority_resolution": {
+    "refs": [
+      "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md",
+      "docs/authority/baselines/1.6.0/19_Connected_Product_and_SDK_Lifecycle_FRD.md",
+      "docs/authority/baselines/1.6.0/decisions/ADR-0005_Browser_BFF_and_Token_Security.md",
+      "docs/authority/baselines/1.6.0/decisions/ADR-0006_Identity_ASPNET_Identity_OpenIddict.md"
+    ],
+    "figjam_file": "bdJwXt1U7n3iyluSD21OYK",
+    "figjam_sections": [
+      "88:6723",
+      "88:6729"
+    ],
+    "figjam_read_session": "9039c221-67b7-4272-9a1d-47e75411efd5",
+    "findings": [
+      "Flow39 supplies Product/client/environment/redirect/PKCE/scopes/requested-assurance validation; Product-origin request is explicit ProductRelationship activation intent, distinct from membership and entitlements.",
+      "Flow41 separates immediate Tunner denial, policy-controlled grant revocation, signed/versioned propagation, Product acknowledgements and Product-local sessions.",
+      "Existing Product registry/Relationship implementation was not found in scoped modules. Use explicit current owner contracts and fail closed when providers are absent; synthetic tests do not qualify production owners."
+    ]
+  },
+  "initial_increment": "Real authorization-code plus PKCE authorization/redeem roundtrip using existing OpenIddict stores, Tunner session authority and transaction/outbox. Then refresh, introspection, revocation and compromised-session cases under explicit qualified lifecycle policy; no substitute custom OAuth implementation.",
+  "production_inputs_not_selected": [
+    "issuer and registered endpoint origins",
+    "signing/encryption keys and rotation",
+    "client authentication/capabilities",
+    "allowed scopes, audiences and claims",
+    "token/code/refresh lifetimes and renewal/revocation effects",
+    "Product registry/environment/Relationship authority and enabled propagation contracts"
+  ],
+  "support_boundary": "Pinned API source was verified. This review does not assert a vendor support/EOL date or new dependency advisory qualification. Normal dependency/SBOM/security gates precede qualification; no packages installed yet.",
+  "external_activity": "Read-only official documentation and FigJam; no provider authentication, discovery/JWKS fetch, code redemption, publication or source-document edit."
+}
