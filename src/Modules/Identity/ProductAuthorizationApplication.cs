@@ -87,7 +87,7 @@ internal sealed class ProductAuthorizationApplication(IdentityPersistenceDbConte
         if (redeemed != grant.IsRedemption || !Shape(grant.Lineage))
             throw new InvalidOperationException("An exact native Product authorization effect is required.");
         var original = grant.Lineage;
-        database.Add(new OutboxMessage(Guid.NewGuid(), "1.0", redeemed ? "ProductAuthorizationRedeemed" : "ProductAuthorizationIssued",
+        database.Add(new OutboxMessage(Guid.NewGuid(), "1.0", redeemed ? "ProductAuthorizationRedeemed" : "ProductAuthorizationGranted",
             "1", clock.GetUtcNow(), "tunner/identity", authorizationId, grant.Policy.Classification,
             JsonSerializer.Serialize(new { reference = authorizationId, product = original.Request.ProductId,
                 environment = original.Request.Environment, relationship = original.Relationship.RelationshipId,

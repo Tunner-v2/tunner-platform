@@ -2,6 +2,7 @@ using System.Collections.Immutable;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Features;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using OpenIddict.Abstractions;
@@ -29,7 +30,9 @@ internal sealed class ProductAuthorizationProtocol(IdentityPersistenceDbContext 
     {
         var request = Http.Request;
         if (request.Path != profile.AuthorizationPath && request.Path != profile.TokenPath) return;
-        if (request.PathBase.HasValue ||
+        var expectedPath = request.Path == profile.AuthorizationPath ? profile.AuthorizationPath : profile.TokenPath;
+        var rawPath = Http.Features.Get<IHttpRequestFeature>()?.RawTarget?.Split('?', 2)[0];
+        if (!string.Equals(rawPath, expectedPath, StringComparison.Ordinal) || request.PathBase.HasValue ||
             request.Path == profile.AuthorizationPath && !HttpMethods.IsGet(request.Method) ||
             request.Path == profile.TokenPath && !HttpMethods.IsPost(request.Method))
         { context.Reject(Errors.InvalidRequest); return; }
@@ -43,6 +46,13 @@ internal sealed class ProductAuthorizationProtocol(IdentityPersistenceDbContext 
         RequireTransaction(); var ct = Http.RequestAborted;
         if (!HttpMethods.IsGet(Http.Request.Method) || context.Request.ResponseMode != ResponseModes.FormPost)
         { context.Reject(Errors.InvalidRequest); return; }
+        // This first admitted transport profile must never silently ignore stronger requested
+        // assurance, freshness or essential-claim/interaction controls. Their qualified continuation
+        // handling remains part of P2-014 before feature acceptance.
+        if (context.Request.GetParameter("acr_values") is not null || context.Request.MaxAge is not null ||
+            context.Request.GetParameter("claims") is not null ||
+            context.Request.GetPromptValues().Any(value => value != PromptValues.None))
+        { context.Reject(Errors.InteractionRequired); return; }
         var authenticated = await Http.AuthenticateAsync(AuthenticationIdentity.Scheme).ConfigureAwait(false);
         if (!authenticated.Succeeded || authenticated.Principal is null)
         { context.Reject(Errors.LoginRequired); return; }

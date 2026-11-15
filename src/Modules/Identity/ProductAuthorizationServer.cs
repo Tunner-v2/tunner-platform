@@ -80,6 +80,7 @@ public static class ProductAuthorizationServer
             options.AddSigningKey(profile.SigningKey).AddEncryptionKey(profile.EncryptionKey);
             options.Configure(value =>
             {
+                value.Scopes.Clear(); value.Scopes.UnionWith(profile.SupportedScopes);
                 value.CodeChallengeMethods.Clear(); value.CodeChallengeMethods.Add(OpenIddictConstants.CodeChallengeMethods.Sha256);
                 value.ResponseModes.Clear(); value.ResponseModes.Add(OpenIddictConstants.ResponseModes.FormPost);
             });
