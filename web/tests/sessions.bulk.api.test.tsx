@@ -18,6 +18,7 @@ test('Bulk publication is a separate complete12 capability with matching publica
  const legacy={locale:'en',content:Object.fromEntries(Object.entries(proposal.content).filter(([key])=>sessionContentKeys.includes(key as typeof sessionContentKeys[number])).map(([key,text])=>[key,{...published().content[sessionBulkRevocationContentKeys[0]]!,key,text}]))};
  expect(parseSessionOptions(legacy).locale).toBe('en');expect(()=>parseSessionBulkRevocationOptions(legacy,'en')).toThrow(SessionHttpError);
  expect(Object.keys(parseSessionBulkRevocationOptions(published(),'en').content)).toEqual([...sessionBulkRevocationContentKeys]);
+ const additional=published();Object.assign(additional.content,{'account.sessions.bulk.description':{...additional.content[sessionBulkRevocationContentKeys[0]]!,key:'account.sessions.bulk.description',text:'Synthetic optional UI copy'}});expect(parseSessionBulkRevocationOptions(additional,'en').content['account.sessions.bulk.description']?.text).toBe('Synthetic optional UI copy');
  for(const key of sessionBulkRevocationContentKeys){const incomplete=published();delete (incomplete.content as Record<string,unknown>)[key];expect(()=>parseSessionBulkRevocationOptions(incomplete,'en')).toThrow(SessionHttpError);}
  for(const patch of [{key:'different'},{locale:'fr'},{state:'DRAFT'},{publicationRef:' '},{variantRef:''},{versionRef:''},{text:' '},{proofKey:'private'}]){
   const invalid=published();Object.assign(invalid.content[sessionBulkRevocationContentKeys[0]]!,patch);expect(()=>parseSessionBulkRevocationOptions(invalid,'en')).toThrow(SessionHttpError);
@@ -31,12 +32,14 @@ test('Original projections retain canonical Int64 strings and reject private, pa
  for(const value of [null,{...original(),targets:[]},{...original(),targets:[original().targets[0],original().targets[0]]},{...original(),proofKey:'private'},{...original(),status:'REVOKED'},{...original(),status:'DRAFT',activated:true},{...original(),status:'PENDING',activated:false},{...original(),expiresAt:'tomorrow'},{...original(),requestId:'00000000-0000-0000-0000-000000000000'}])expect(()=>parseSessionBulkRevocationContext(value)).toThrow(SessionHttpError);
  for(const version of [9007199254740992,'0','01','+1','1e2','9223372036854775807','9223372036854775808'])expect(()=>parseSessionBulkRevocationContext({...original(),targets:[{reference:first,version}]})).toThrow(SessionHttpError);
  expect(()=>parseSessionBulkRevocationContext({...original(),targets:[{...original().targets[0],accountId:'private'}]})).toThrow(SessionHttpError);
+ expect(parseSessionBulkRevocationContext({...original(),preparedAt:'2026-11-15T04:00:00Z'}).preparedAt).toBe('2026-11-15T04:00:00Z');expect(()=>parseSessionBulkRevocationContext({...original(),preparedAt:'invalid'})).toThrow(SessionHttpError);
 });
 
 test('Activation response cannot replace the preview request, correlation, expiry or manifest',()=>{
  const expected=parseSessionBulkRevocationContext(original());
  expect(parseSessionBulkRevocationContext({...original(),status:'PENDING',activated:true,targets:[...original().targets].reverse()},expected).activated).toBe(true);
  for(const patch of [{requestId:otherRequest},{operationReference:'replacement'},{expiresAt:'2026-11-15T05:05:00Z'},{targets:[original().targets[0]]},{targets:[{reference:first,version:'9007199254740994'},original().targets[1]]}])expect(()=>parseSessionBulkRevocationContext({...original(),...patch},expected)).toThrow(SessionHttpError);
+ const timed=parseSessionBulkRevocationContext({...original(),preparedAt:'2026-11-15T04:00:00Z'});expect(()=>parseSessionBulkRevocationContext({...timed,preparedAt:'2026-11-15T04:01:00Z'},timed)).toThrow(SessionHttpError);
 });
 
 test('A result requires every exact original target with next version and a revocation time',()=>{

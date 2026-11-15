@@ -18,7 +18,7 @@ const publication=z.strictObject({key:text,variantRef:text,versionRef:text,publi
 const options=z.strictObject({locale:text,content:z.record(z.string(),publication)});
 const command=z.strictObject({requestId:reference});
 const target=z.strictObject({reference,version:version.refine(value=>BigInt(value)<9223372036854775807n)});
-const context=z.strictObject({requestId:reference,operationReference:text,status:z.enum(['DRAFT','PENDING','CHANGED','COMPLETED']),activated:z.boolean(),targets:z.array(target).min(1),expiresAt:timestamp});
+const context=z.strictObject({requestId:reference,operationReference:text,status:z.enum(['DRAFT','PENDING','CHANGED','COMPLETED']),activated:z.boolean(),targets:z.array(target).min(1),expiresAt:timestamp,preparedAt:timestamp.optional()});
 const cancellation=z.strictObject({requestId:reference,status:z.literal('CANCELLED')});
 const result=z.strictObject({requestId:reference,operationReference:text,status:z.literal('REVOKED'),targets:z.array(z.strictObject({reference,version,revokedAt:timestamp})).min(1)});
 export type SessionBulkRevocationOptions=z.infer<typeof options>;
@@ -36,7 +36,7 @@ function safeError(error:unknown):SessionHttpError{
  return new SessionHttpError('unavailable');
 }
 export function parseSessionBulkRevocationOptions(value:unknown,locale:string):SessionBulkRevocationOptions{
- try{const parsed=options.parse(value);if(parsed.locale!==locale)throw new Error('Publication locale changed');new Intl.DateTimeFormat(parsed.locale);requirePublished(parsed.content,parsed.locale,sessionBulkRevocationContentKeys);return {...parsed,content:Object.fromEntries(sessionBulkRevocationContentKeys.map(key=>[key,parsed.content[key]!]))};}
+ try{const parsed=options.parse(value);if(parsed.locale!==locale)throw new Error('Publication locale changed');new Intl.DateTimeFormat(parsed.locale);requirePublished(parsed.content,parsed.locale,sessionBulkRevocationContentKeys);return parsed;}
  catch{throw new SessionHttpError('unavailable');}
 }
 /** Capability absence is optional. Authentication and cancellation still stop the caller. */
@@ -52,7 +52,7 @@ export function parseSessionBulkRevocationContext(value:unknown,expected?:Sessio
    if(parsed.requestId!==expected.requestId)throw new Error('Original request changed');
    if('targets' in expected){
     const original=context.parse(expected),versions=new Map(original.targets.map(item=>[item.reference,item.version]));
-    if(parsed.operationReference!==original.operationReference||parsed.expiresAt!==original.expiresAt||parsed.targets.length!==original.targets.length||parsed.targets.some(item=>versions.get(item.reference)!==item.version))throw new Error('Original manifest changed');
+    if(parsed.operationReference!==original.operationReference||parsed.expiresAt!==original.expiresAt||parsed.preparedAt&&original.preparedAt&&parsed.preparedAt!==original.preparedAt||parsed.targets.length!==original.targets.length||parsed.targets.some(item=>versions.get(item.reference)!==item.version))throw new Error('Original manifest changed');
    }
   }
   return parsed;

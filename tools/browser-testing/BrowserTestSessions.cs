@@ -52,10 +52,25 @@ internal sealed class BrowserTestSessions : ISessionListingHttpBudgetSource,
     SessionBulkRevocationPresentation ISessionBulkRevocationPresentationSource.RequirePublished(AuthenticationPolicy policy)
     {
         RequireLocal(policy);
-        // Backend-only synthetic publication; no production Sessions action or approved visual is implied.
-        string[] keys = ["action", "review.title", "review.description", "review.originalSet", "confirm", "cancel", "loading", "empty", "changed", "completed", "unknown", "check"];
-        return new("en", keys.Select(key => new RegistrationPublishedText("account.sessions.bulk." + key, "synthetic-local-test",
-            "synthetic-local-test", Provenance, "en", "PUBLISHED", "Local test " + key)));
+        // Scoped approved UI copy, qualified only for this existing isolated synthetic profile.
+        var values = new Dictionary<string, string>(StringComparer.Ordinal)
+        {
+            ["action"] = "Sign out other sessions", ["review.title"] = "Sign out these other sessions?",
+            ["review.description"] = "End access to Tunner for the {count} sessions listed below.",
+            ["review.originalSet"] = "{count} sessions in this request · Prepared", ["confirm"] = "Sign out other sessions",
+            ["cancel"] = "Keep signed in", ["loading"] = "Please wait while we check this original request.",
+            ["empty"] = "An original session set could not be prepared for review.",
+            ["changed"] = "This original session request has changed. Sign-out is not confirmed. Check its status before starting another request.",
+            ["completed"] = "Other sessions signed out", ["unknown"] = "Sign-out is not confirmed", ["check"] = "Check sign-out status",
+            ["description"] = "Review the other Tunner sessions included in this request.",
+            ["keepCurrent"] = "This action keeps your current session signed in.",
+            ["originalOnly"] = "Only these sessions are included. Sessions started later are not part of this request.",
+            ["completed.description"] = "Access to Tunner ended for the {count} sessions in this request.",
+            ["unknown.description"] = "We could not confirm the result for this request. Check its status before starting another sign-out request.",
+            ["unknown.help"] = "Checking this request does not send a new sign-out request.", ["back"] = "Back to sessions"
+        };
+        return new("en", values.Select(value => new RegistrationPublishedText("account.sessions.bulk." + value.Key, "synthetic-local-test",
+            "synthetic-local-test", Provenance, "en", "PUBLISHED", value.Value)));
     }
 
     public SessionListingHttpBudget RequireEffective(DateTimeOffset at) => budgets.RequireEffective(at);

@@ -1202,7 +1202,9 @@
       ],
       "figma_refs": [{"file_key":"apNbwvAgdn1xIxYH1oiaSC","node_id":"16:2"},{"file_key":"apNbwvAgdn1xIxYH1oiaSC","node_id":"47:243"}],
       "source_paths": ["web/apps/user/sessions.tsx","web/apps/user/sessions.ui.tsx","web/apps/user/sessions.api.ts","web/apps/user/sessions.routes.ts","web/apps/user/sessions.css","src/Modules/Identity/SessionListingEndpoints.cs","src/Modules/Identity/SessionListingPresentation.cs","web/apps/user/sessions.revocation.tsx","src/Modules/Identity/SessionRevocationBrowser.cs","web/apps/user/passkeys.tsx","web/apps/user/account-shell.tsx","web/apps/user/account-format.ts","web/apps/user/devices.ui.tsx","web/apps/user/devices.api.ts"],
-      "component_ids": ["COMP-SESSION-REVOKE","COMP-STEP-UP"],
+      "component_ids": ["COMP-SESSION-REVOKE","COMP-SESSION-BULK-REVOKE","COMP-STEP-UP"],
+      "bulk_source_paths": ["web/apps/user/sessions.bulk.tsx","web/apps/user/sessions.bulk.css","web/apps/user/sessions.bulk.api.ts"],
+      "bulk_consent_ref": "governance/evidence/TUN-P2-013-BULK-VISUAL-CONSENT.json",
       "planning_status": "SCOPED_LISTING_IMPLEMENTED_REMAINING_FEATURE_INCREMENT_PENDING",
       "design_status": "SCOPED_PRODUCT_OWNER_ADAPTATIONS_IMPLEMENTED_CURRENT_GATE_PENDING",
       "consent_ref": "governance/evidence/TUN-P2-013-VISUAL-CONSENT.json",
@@ -1219,7 +1221,9 @@
       "authority_refs": ["docs/authority/current/development/17_Account_Identity_and_Session_FRD.md","docs/authority/current/decisions/AMD-0009_URL_Addressable_Routing_and_Governed_Form_Validation.md"],
       "figma_refs": [{"file_key":"apNbwvAgdn1xIxYH1oiaSC","node_id":"36:159"},{"file_key":"apNbwvAgdn1xIxYH1oiaSC","node_id":"46:35"}],
       "source_paths": ["web/apps/user/sessions.tsx","web/apps/user/sessions.ui.tsx","web/apps/user/sessions.routes.ts","web/apps/user/sessions.revocation.tsx","web/apps/user/sessions.api.ts","src/Modules/Identity/SessionRevocationBrowser.cs"],
-      "component_ids": ["COMP-SESSION-REVOKE","COMP-STEP-UP"],
+      "component_ids": ["COMP-SESSION-REVOKE","COMP-SESSION-BULK-REVOKE","COMP-STEP-UP"],
+      "bulk_source_paths": ["web/apps/user/sessions.bulk.tsx","web/apps/user/sessions.bulk.css","web/apps/user/sessions.bulk.api.ts"],
+      "bulk_consent_ref": "governance/evidence/TUN-P2-013-BULK-VISUAL-CONSENT.json",
       "consent_ref": "governance/evidence/TUN-P2-013-VISUAL-CONSENT.json", "approved_visual_scope_ids": ["013-V01","013-V02","013-V03","013-V04"],
       "acceptance_boundary": "PENDING current integrated UI/native/live-browser evidence. Existing consent covers selected-target confirmation, exact success/unknown/changed feedback and shared responsive patterns; it does not establish Product or whole-P2-013 acceptance."
     },
@@ -1245,6 +1249,19 @@
       "approved_visual_scope_ids": ["013-V03","013-V04"],
       "design_status": "PRODUCT_OWNER_APPROVED_SCOPED_ADAPTATIONS",
       "acceptance_boundary": "PENDING current native UI, keyboard/axe/responsive and rendered/reference evidence; no whole-feature or production acceptance."
+    },
+    {
+      "id": "COMP-SESSION-BULK-REVOKE", "kind": "COMPONENT", "status": "IMPLEMENTED", "app": "user", "module": "Identity.Sessions",
+      "title": "Complete original-set session sign-out review and result", "pathname": null, "runtime_pathname": null,
+      "owner_pathnames": ["/account/sessions","/account/sessions/details"], "owner_scopes": ["TUN-P2-013"],
+      "authority_refs": ["docs/authority/current/development/17_Account_Identity_and_Session_FRD.md","docs/authority/current/decisions/AMD-0008_Approved_Figma_Visual_Fidelity_and_Product_Owner_UX_Consent.md","docs/authority/current/decisions/AMD-0009_URL_Addressable_Routing_and_Governed_Form_Validation.md"],
+      "figma_refs": [{"file_key":"apNbwvAgdn1xIxYH1oiaSC","node_id":"16:151"},{"file_key":"apNbwvAgdn1xIxYH1oiaSC","node_id":"46:35"}],
+      "source_paths": ["web/apps/user/sessions.bulk.tsx","web/apps/user/sessions.bulk.css","web/apps/user/sessions.bulk.api.ts","web/apps/user/sessions.tsx","src/Modules/Identity/SessionBulkRevocationBrowser.cs"],
+      "component_ids": ["COMP-STEP-UP"], "form_ids": ["FORM-STEP-UP"],
+      "guard": "Separate optional published bulk capability: twelve-key transport remains compatible and seven extra UI publications qualify the visual. Explicit preview obtains the complete frozen server-owned original, never paginated browser rows. Keep signed in posts exact-original cancel before activation/proof. Confirmation activates the exact request and binds shared proof by operationReference. Only the independently authorized whole-set causal receipt establishes success. Reload/uncertainty remain result-check-only; no automatic preview, replacement, activation or proof replay.",
+      "interaction": "Same-screen shared review/proof/result with unchanged canonical pathname. Immutable preparedAt comes from original server discovery; frozen last-activity facts unavailable in this DTO are labelled Unavailable rather than borrowed from loaded rows. Current-session preservation is this action's supported effect; no Product-local termination or immunity from unrelated restrictions is claimed.",
+      "consent_ref": "governance/evidence/TUN-P2-013-BULK-VISUAL-CONSENT.json", "approved_visual_scope_ids": ["APPROVED_BOUNDED_BULK_SESSION_UI"],
+      "design_status": "PRODUCT_OWNER_APPROVED_SCOPED_ADAPTATIONS", "acceptance_boundary": "PENDING current native UI, rendered/reference, keyboard/accessibility, controlled-BFF and real BrowserHost qualification. No production permission, target capacity, policy, provider capability, whole-feature or release acceptance is inferred. Device D01-D03 consent remains separate."
     },
     {
       "id": "U-ACCT-DEVICES", "kind": "SCREEN", "status": "IMPLEMENTED", "app": "user", "module": "U-ACCT",

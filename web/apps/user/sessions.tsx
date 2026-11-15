@@ -10,6 +10,9 @@ import type {DeviceOptions} from './devices.api';
 import {checkCurrentSession,loadSessionContext,loadSessionRevocationOptions,readSessionRevocationContext,readSessionPage,SessionHttpError,signOutCurrentSession} from './sessions.api';
 import type {SessionContext,SessionItem,SessionOptions,SessionRevocationContext} from './sessions.api';
 import {SessionRevocation} from './sessions.revocation';
+import {SessionBulkRevocation,qualifySessionBulkUi} from './sessions.bulk';
+import {loadSessionBulkRevocationOptions,readSessionBulkRevocationContext} from './sessions.bulk.api';
+import type {SessionBulkRevocationContext,SessionBulkRevocationOptions} from './sessions.bulk.api';
 import {SessionsView} from './sessions.ui';
 import type {SessionSignOutPhase,SessionViewPhase} from './sessions.ui';
 import {isSessionRoute,sessionRoutes} from './sessions.routes';
@@ -21,9 +24,11 @@ function SessionsApp(){
  const controller=useRef(new AbortController()),flight=useRef(false),held=useRef<HeldSelection|undefined>(undefined);
  const cursors=useRef(new Map<string,string|null>()),next=useRef<string|null>(null),csrf=useRef('');
  const acknowledgedRevocations=useRef(new Set<string>());
+ const acknowledgedBulk=useRef(new Set<string>());
  const [context,setContext]=useState<SessionContext>(),[phase,setPhase]=useState<SessionViewPhase>('loading'),[items,setItems]=useState<SessionItem[]>([]),[selected,setSelected]=useState<SessionItem>();
  const [revocationOptions,setRevocationOptions]=useState<SessionOptions>(),[original,setOriginal]=useState<SessionRevocationContext>(),[review,setReview]=useState<SessionItem>(),[revocationBlocked,setRevocationBlocked]=useState(false);
  const [deviceOptions,setDeviceOptions]=useState<DeviceOptions>();
+ const [bulkOptions,setBulkOptions]=useState<SessionBulkRevocationOptions>(),[bulkOriginal,setBulkOriginal]=useState<SessionBulkRevocationContext>(),[bulkBlocked,setBulkBlocked]=useState(false),[bulkRecoveryUnavailable,setBulkRecoveryUnavailable]=useState(false);
  const [hasMore,setHasMore]=useState(false),[moreBusy,setMoreBusy]=useState(false),[signOutPhase,setSignOutPhase]=useState<SessionSignOutPhase>('idle'),[unavailable,setUnavailable]=useState(false),[refresh,setRefresh]=useState(0),[readyRevision,setReadyRevision]=useState(-1);
  const current=(work:Work)=>!work.signal.aborted&&work.signal===controller.current.signal&&work.revision===revision.current;
  function reject(error:unknown,work:Work){
@@ -46,6 +51,10 @@ function SessionsApp(){
     const fresh=await loadSessionContext(work.signal);if(!current(work))return;csrf.current=fresh.csrfToken;setContext(fresh);publishedReady=true;
     const optional=await loadSessionRevocationOptions(fresh.options.locale,work.signal);if(!current(work))return;
     const devices=await loadDeviceOptions(work.signal).catch(error=>{if(error instanceof SessionHttpError&&error.kind==='authentication')throw error;return undefined;});if(!current(work))return;setDeviceOptions(devices);
+    const bulk=qualifySessionBulkUi(await loadSessionBulkRevocationOptions(fresh.options.locale,work.signal));if(!current(work))return;
+    let bulkContext:SessionBulkRevocationContext|undefined,bulkUnavailable=false;
+    if(bulk){try{bulkContext=await readSessionBulkRevocationContext(work.signal);}catch(error){if(error instanceof SessionHttpError&&error.kind==='authentication')throw error;bulkUnavailable=true;}}
+    if(!current(work))return;setBulkOptions(bulk);setBulkOriginal(bulkContext&&!acknowledgedBulk.current.has(bulkContext.requestId)?bulkContext:undefined);setBulkRecoveryUnavailable(bulkUnavailable);if(!bulk)setBulkBlocked(false);
     const recovered=optional?await readSessionRevocationContext(work.signal):undefined;if(!current(work))return;
     setRevocationOptions(optional);setOriginal(recovered&&!acknowledgedRevocations.current.has(recovered.requestId)?recovered:undefined);
     // Recover the protected owner context before enforcing the ordinary in-memory detail guard.
@@ -66,10 +75,10 @@ function SessionsApp(){
   window.addEventListener('pagehide',leave);window.addEventListener('pageshow',returnToPage);
   return()=>{window.removeEventListener('pagehide',leave);window.removeEventListener('pageshow',returnToPage);};
  },[]);
- function reload(){if(flight.current||revocationBlocked)return;held.current=route.pathname===sessionRoutes.details.pathname?held.current:undefined;setRefresh(value=>value+1);}
- function select(item:SessionItem){if(flight.current||revocationBlocked||phase!=='ready'||signOutPhase!=='idle')return;const pageCursor=cursors.current.get(item.reference);if(pageCursor===undefined)return;held.current={reference:item.reference,pageCursor};navigatePath(sessionRoutes.details.pathname);}
+ function reload(){if(flight.current||revocationBlocked||bulkBlocked)return;held.current=route.pathname===sessionRoutes.details.pathname?held.current:undefined;setRefresh(value=>value+1);}
+ function select(item:SessionItem){if(flight.current||revocationBlocked||bulkBlocked||phase!=='ready'||signOutPhase!=='idle')return;const pageCursor=cursors.current.get(item.reference);if(pageCursor===undefined)return;held.current={reference:item.reference,pageCursor};navigatePath(sessionRoutes.details.pathname);}
  async function more(){
-  if(flight.current||revocationBlocked||!next.current||phase!=='ready'||signOutPhase!=='idle')return;
+  if(flight.current||revocationBlocked||bulkBlocked||!next.current||phase!=='ready'||signOutPhase!=='idle')return;
   const work={revision:route.revision,signal:controller.current.signal},boundary=next.current;flight.current=true;setMoreBusy(true);
   try{const page=await readSessionPage(csrf.current,boundary,work.signal);if(!current(work))return;
    for(const item of page.sessions)cursors.current.set(item.reference,boundary);
@@ -77,7 +86,7 @@ function SessionsApp(){
   }catch(error){reject(error,work);}finally{if(current(work)){flight.current=false;setMoreBusy(false);}}
  }
  async function signOut(){
-  if(flight.current||revocationBlocked||signOutPhase!=='idle'||!csrf.current)return;
+  if(flight.current||revocationBlocked||bulkBlocked||signOutPhase!=='idle'||!csrf.current)return;
   const work={revision:route.revision,signal:controller.current.signal};flight.current=true;setSignOutPhase('busy');
   try{await signOutCurrentSession(csrf.current,work.signal);if(current(work))window.location.replace('/login');}
   catch(error){if(!current(work))return;if(error instanceof SessionHttpError&&error.kind==='authentication'){window.location.replace('/login');return;}setSignOutPhase('unknown');}
@@ -91,9 +100,10 @@ function SessionsApp(){
  }
  if(unavailable)return <ContentUnavailable/>;
  if(!context)return <main className="sessions-initial" aria-busy="true"/>;
- const displayOptions=revocationOptions?{...context.options,content:{...context.options.content,...revocationOptions.content}}:context.options;
- return <SessionsView key={route.revision} options={displayOptions} deviceOptions={deviceOptions} phase={readyRevision===route.revision?phase:'loading'} detail={route.pathname===sessionRoutes.details.pathname} revision={route.revision} items={items} selected={selected} hasMore={hasMore} moreBusy={moreBusy} signOutPhase={signOutPhase} revocationAvailable={!!revocationOptions} revocationBlocked={revocationBlocked} onRevoke={item=>{if(!flight.current&&!revocationBlocked&&signOutPhase==='idle')setReview(item);}} onRefresh={reload} onLoadMore={()=>void more()} onSelect={select} onSignOut={()=>void signOut()} onCheckSignIn={()=>void checkSignIn()}>
-  {revocationOptions&&readyRevision===route.revision&&phase==='ready'&&signOutPhase==='idle'&&<SessionRevocation options={displayOptions} csrfToken={csrf.current} revision={route.revision} initial={original} selection={review} onSelectionHandled={()=>setReview(undefined)} onBlockedChange={setRevocationBlocked} onAcknowledged={requestId=>acknowledgedRevocations.current.add(requestId)} onRefresh={()=>{held.current=undefined;setOriginal(undefined);setRevocationBlocked(false);if(route.pathname===sessionRoutes.details.pathname)navigatePath(sessionRoutes.list.pathname,true);else setRefresh(value=>value+1);}}/>}
+ const displayOptions={...context.options,content:{...context.options.content,...revocationOptions?.content,...bulkOptions?.content}};
+ return <SessionsView options={displayOptions} deviceOptions={deviceOptions} phase={readyRevision===route.revision?phase:'loading'} detail={route.pathname===sessionRoutes.details.pathname} revision={route.revision} items={items} selected={selected} hasMore={hasMore} moreBusy={moreBusy} signOutPhase={signOutPhase} revocationAvailable={!!revocationOptions} revocationBlocked={revocationBlocked||bulkBlocked} onRevoke={item=>{if(!flight.current&&!revocationBlocked&&!bulkBlocked&&signOutPhase==='idle')setReview(item);}} onRefresh={reload} onLoadMore={()=>void more()} onSelect={select} onSignOut={()=>void signOut()} onCheckSignIn={()=>void checkSignIn()}>
+  {revocationOptions&&!bulkOriginal&&!bulkBlocked&&!bulkRecoveryUnavailable&&readyRevision===route.revision&&phase==='ready'&&signOutPhase==='idle'&&<SessionRevocation options={displayOptions} csrfToken={csrf.current} revision={route.revision} initial={original} selection={review} onSelectionHandled={()=>setReview(undefined)} onBlockedChange={setRevocationBlocked} onAcknowledged={requestId=>acknowledgedRevocations.current.add(requestId)} onRefresh={()=>{held.current=undefined;setOriginal(undefined);setRevocationBlocked(false);if(route.pathname===sessionRoutes.details.pathname)navigatePath(sessionRoutes.list.pathname,true);else setRefresh(value=>value+1);}}/>}
+  {bulkOptions&&<SessionBulkRevocation options={displayOptions} csrfToken={csrf.current} revision={route.revision} active={readyRevision===route.revision&&phase==='ready'&&signOutPhase==='idle'} renderAction={route.pathname===sessionRoutes.list.pathname} blocked={revocationBlocked||moreBusy} initial={bulkOriginal} recoveryUnavailable={bulkRecoveryUnavailable} onBlockedChange={setBulkBlocked} onAcknowledged={requestId=>{acknowledgedBulk.current.add(requestId);setBulkOriginal(undefined);}} onRefresh={()=>{held.current=undefined;setBulkOriginal(undefined);setBulkBlocked(false);if(route.pathname===sessionRoutes.details.pathname)navigatePath(sessionRoutes.list.pathname,true);else setRefresh(value=>value+1);}}/>}
  </SessionsView>;
 }
 createRoot(document.getElementById('root')!).render(<ThemeProvider surface="user" mode="light"><SessionsApp/></ThemeProvider>);
