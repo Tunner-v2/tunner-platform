@@ -1087,14 +1087,27 @@
         "web/apps/user/step-up.completion.ts",
         "web/apps/user/step-up.passkey.ts",
         "web/apps/user/step-up.totp.tsx",
-        "web/apps/user/step-up.federation.tsx"
+        "web/apps/user/step-up.federation.tsx",
+        "web/apps/user/product-authorization.html",
+        "web/apps/user/public/assets/product-origin-indigo.svg",
+        "web/apps/user/public/assets/product-origin-violet.svg",
+        "web/apps/user/public/assets/product-origin-footer-dot.svg"
       ],
-      "planning_status": "IMPLEMENTED_VALIDATION_PENDING",
+      "planning_status": "IMPLEMENTED_QUALIFIED_ACCEPTANCE_PENDING",
       "design_status": "PRODUCT_OWNER_APPROVED_SCOPED_ADAPTATIONS",
-      "acceptance_boundary": "IMPLEMENTED_VALIDATION_PENDING: approved014-V01–V03 only; no shared proof, whole-feature, production or release acceptance.",
+      "acceptance_boundary": "Source-bound Product review and shared proof qualification are recorded under approved 014-V01–V03 and the separate Shared StepUp integration grant. PROOF_READY does not authorize a Product or upgrade the session; explicit Allow and final native consumption remain required. Per-item acceptance requires committed current inventory/evidence and the native UI gate. Whole-feature, Product, production and release acceptance remain separate.",
       "product_authorization_consent_ref": "governance/evidence/TUN-P2-014-VISUAL-CONSENT.json",
-      "product_authorization_acceptance": "IMPLEMENTED_VALIDATION_PENDING: approved014-V01–V03 only; no shared proof, whole-feature, production or release acceptance.",
-      "consent_ref": "governance/evidence/TUN-P2-014-VISUAL-CONSENT.json"
+      "product_authorization_acceptance": "Source-bound Product review and shared proof qualification are recorded under approved 014-V01–V03 and the separate Shared StepUp integration grant. PROOF_READY does not authorize a Product or upgrade the session; explicit Allow and final native consumption remain required. Per-item acceptance requires committed current inventory/evidence and the native UI gate. Whole-feature, Product, production and release acceptance remain separate.",
+      "consent_ref": "governance/evidence/TUN-P2-014-VISUAL-CONSENT.json",
+      "component_ids": [
+        "COMP-STEP-UP",
+        "COMP-STEP-UP-TOTP",
+        "COMP-STEP-UP-FEDERATION"
+      ],
+      "form_ids": [
+        "FORM-STEP-UP",
+        "FORM-STEP-UP-TOTP"
+      ]
     },
     {
       "id": "U-ACCT-01",
@@ -2481,7 +2494,8 @@
         "P1-018-RV007",
         "TUN-P2-010",
         "P1-018-RV008",
-        "TUN-P2-013"
+        "TUN-P2-013",
+        "TUN-P2-014"
       ],
       "authority_refs": [
         "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md",
@@ -2554,7 +2568,8 @@
         "governance/evidence/TUN-P2-009-VISUAL-CONSENT.json",
         "governance/evidence/TUN-P2-009-VISUAL-CONSENT-L04.json",
         "governance/evidence/TUN-P2-010-VISUAL-CONSENT.json",
-        "governance/evidence/TUN-P2-013-VISUAL-CONSENT.json"
+        "governance/evidence/TUN-P2-013-VISUAL-CONSENT.json",
+        "governance/evidence/TUN-P2-014-VISUAL-CONSENT.json"
       ],
       "current_revision_ref": "P1-018-RV008",
       "revision_acceptance_boundary": "010-V03 conditional shared-dialog proof WIP only under ACTIVE P1-018-RV008 and scoped Product visual consent. Initial public18 passing cases and the corrected isolated1 passing case are separate source/invocation observations, not one19-case passing run or a final committed-source qualification. Per-item URL/VAL/UX-FID, affected-consumer regression, native/live integration and native UI gate remain PENDING; no production policy/publication or whole-feature/Product/release acceptance is inherited.",
@@ -2576,7 +2591,8 @@
       "owner_pathnames": [
         "/account/security",
         "/account/sessions",
-        "/account/sessions/details"
+        "/account/sessions/details",
+        "/product-authorization"
       ],
       "contract_refs": [
         "docs/contracts/authentication-session-contract.md",
@@ -2600,6 +2616,12 @@
           "P2-010-RV007"
         ],
         "boundary": "Additional Sessions caller only, under existing shared proof designs and scoped consent. Prior owners, original closure and their acceptance history remain unchanged."
+      },
+      "product_authorization_integration": {
+        "owner_scope": "TUN-P2-014",
+        "authorization_ref": "governance/evidence/TUN-P2-014-STEPUP-INTEGRATION-AUTHORIZATION.json",
+        "ui_evidence_ref": "governance/evidence/TUN-P2-014-UI-COMPLIANCE.json",
+        "boundary": "Additional exact Product-origin owner only. Explicit opt-in PROOF_READY preserves unconsumed proof and original authentication time; Product options are reread and explicit Allow is still required. Ordinary COMPLETED owners and recovery-code first-delivery remain separate. Existing visual controls are reused; historical closure and other owners' acceptance are unchanged."
       }
     },
     {
@@ -2671,7 +2693,8 @@
         "P1-018-RV006",
         "TUN-P2-009",
         "P1-018-RV007",
-        "TUN-P2-013"
+        "TUN-P2-013",
+        "TUN-P2-014"
       ],
       "authority_refs": [
         "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md",
@@ -2725,7 +2748,8 @@
         "governance/evidence/TUN-P2-008-FACTOR-PICKER-CONSENT.json",
         "governance/evidence/TUN-P2-009-VISUAL-CONSENT.json",
         "governance/evidence/TUN-P2-009-VISUAL-CONSENT-L04.json",
-        "governance/evidence/TUN-P2-013-VISUAL-CONSENT.json"
+        "governance/evidence/TUN-P2-013-VISUAL-CONSENT.json",
+        "governance/evidence/TUN-P2-014-VISUAL-CONSENT.json"
       ],
       "current_revision_ref": "P1-018-RV007",
       "revision_acceptance_boundary": "P2-009 same-screen recovery owner integration under ACTIVE RV007 and actual L01–L04/shared-integration grants. All current committed-source per-item URL/VAL/UX-FID, all-method first-delivery, native owner/currentness and qualified download evidence remains PENDING. Prior30 presentation/other-owner proof is historical scoped input only; no integrated PASS, production policy/publication, human-saved or Product/release acceptance is inherited.",
@@ -2742,7 +2766,8 @@
       "owner_pathnames": [
         "/account/security",
         "/account/sessions",
-        "/account/sessions/details"
+        "/account/sessions/details",
+        "/product-authorization"
       ],
       "session_revocation_integration": {
         "owner_scope": "TUN-P2-013",
@@ -2752,6 +2777,12 @@
           "P2-010-RV007"
         ],
         "boundary": "Additional Sessions caller only, under existing shared proof designs and scoped consent. Prior owners, original closure and their acceptance history remain unchanged."
+      },
+      "product_authorization_integration": {
+        "owner_scope": "TUN-P2-014",
+        "authorization_ref": "governance/evidence/TUN-P2-014-STEPUP-INTEGRATION-AUTHORIZATION.json",
+        "ui_evidence_ref": "governance/evidence/TUN-P2-014-UI-COMPLIANCE.json",
+        "boundary": "Additional exact Product-origin owner only. Explicit opt-in PROOF_READY preserves unconsumed proof and original authentication time; Product options are reread and explicit Allow is still required. Ordinary COMPLETED owners and recovery-code first-delivery remain separate. Existing visual controls are reused; historical closure and other owners' acceptance are unchanged."
       }
     },
     {
@@ -3378,7 +3409,8 @@
         "TUN-P2-008",
         "P1-018-RV006",
         "TUN-P2-009",
-        "P1-018-RV007"
+        "P1-018-RV007",
+        "TUN-P2-014"
       ],
       "authority_refs": [
         "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md",
@@ -3423,7 +3455,8 @@
       "additional_consent_refs": [
         "governance/evidence/TUN-P2-008-FACTOR-PICKER-CONSENT.json",
         "governance/evidence/TUN-P2-009-VISUAL-CONSENT.json",
-        "governance/evidence/TUN-P2-009-VISUAL-CONSENT-L04.json"
+        "governance/evidence/TUN-P2-009-VISUAL-CONSENT-L04.json",
+        "governance/evidence/TUN-P2-014-VISUAL-CONSENT.json"
       ],
       "design_status": "PRODUCT_OWNER_APPROVED_SCOPED_ADAPTATIONS",
       "visual_state": "IMPLEMENTATION_REQUIRES_CURRENT_RENDERED_EVIDENCE",
@@ -3438,13 +3471,20 @@
       "owner_pathnames": [
         "/account/security/authenticator",
         "/account/security",
-        "/account/security/sign-in-methods"
+        "/account/security/sign-in-methods",
+        "/product-authorization"
       ],
       "guard": "Shared same-screen dialog under current caller URL; exact protected owner/request/attempt/source/policy. Isolated carrier is not Product-screen acceptance.",
       "backend_validation": "Native verification/replay claim/proof issuance commit together; exact proof/owner transaction rechecks current source. Code-free continuation executes only that original active proof, with no new OTP acceptance or session assurance upgrade.",
       "integration_authorization_ref": "governance/evidence/TUN-P2-009-SHARED-INTEGRATION-AUTHORIZATION.json",
       "current_revision_ref": "P1-018-RV007",
-      "revision_acceptance_boundary": "P2-009 same-screen recovery owner integration under ACTIVE RV007 and actual L01–L04/shared-integration grants. All current committed-source per-item URL/VAL/UX-FID, all-method first-delivery, native owner/currentness and qualified download evidence remains PENDING. Prior30 presentation/other-owner proof is historical scoped input only; no integrated PASS, production policy/publication, human-saved or Product/release acceptance is inherited."
+      "revision_acceptance_boundary": "P2-009 same-screen recovery owner integration under ACTIVE RV007 and actual L01–L04/shared-integration grants. All current committed-source per-item URL/VAL/UX-FID, all-method first-delivery, native owner/currentness and qualified download evidence remains PENDING. Prior30 presentation/other-owner proof is historical scoped input only; no integrated PASS, production policy/publication, human-saved or Product/release acceptance is inherited.",
+      "product_authorization_integration": {
+        "owner_scope": "TUN-P2-014",
+        "authorization_ref": "governance/evidence/TUN-P2-014-STEPUP-INTEGRATION-AUTHORIZATION.json",
+        "ui_evidence_ref": "governance/evidence/TUN-P2-014-UI-COMPLIANCE.json",
+        "boundary": "Additional exact Product-origin owner only. Explicit opt-in PROOF_READY preserves unconsumed proof and original authentication time; Product options are reread and explicit Allow is still required. Ordinary COMPLETED owners and recovery-code first-delivery remain separate. Existing visual controls are reused; historical closure and other owners' acceptance are unchanged."
+      }
     },
     {
       "id": "COMP-STEP-UP-TOTP",
@@ -3457,7 +3497,8 @@
         "TUN-P2-008",
         "P1-018-RV006",
         "TUN-P2-009",
-        "P1-018-RV007"
+        "P1-018-RV007",
+        "TUN-P2-014"
       ],
       "authority_refs": [
         "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md",
@@ -3498,7 +3539,8 @@
       "additional_consent_refs": [
         "governance/evidence/TUN-P2-008-FACTOR-PICKER-CONSENT.json",
         "governance/evidence/TUN-P2-009-VISUAL-CONSENT.json",
-        "governance/evidence/TUN-P2-009-VISUAL-CONSENT-L04.json"
+        "governance/evidence/TUN-P2-009-VISUAL-CONSENT-L04.json",
+        "governance/evidence/TUN-P2-014-VISUAL-CONSENT.json"
       ],
       "design_status": "PRODUCT_OWNER_APPROVED_SCOPED_ADAPTATIONS",
       "visual_state": "IMPLEMENTATION_REQUIRES_CURRENT_RENDERED_EVIDENCE",
@@ -3520,8 +3562,15 @@
       "current_revision_ref": "P1-018-RV007",
       "revision_acceptance_boundary": "P2-009 same-screen recovery owner integration under ACTIVE RV007 and actual L01–L04/shared-integration grants. All current committed-source per-item URL/VAL/UX-FID, all-method first-delivery, native owner/currentness and qualified download evidence remains PENDING. Prior30 presentation/other-owner proof is historical scoped input only; no integrated PASS, production policy/publication, human-saved or Product/release acceptance is inherited.",
       "owner_pathnames": [
-        "/account/security"
-      ]
+        "/account/security",
+        "/product-authorization"
+      ],
+      "product_authorization_integration": {
+        "owner_scope": "TUN-P2-014",
+        "authorization_ref": "governance/evidence/TUN-P2-014-STEPUP-INTEGRATION-AUTHORIZATION.json",
+        "ui_evidence_ref": "governance/evidence/TUN-P2-014-UI-COMPLIANCE.json",
+        "boundary": "Additional exact Product-origin owner only. Explicit opt-in PROOF_READY preserves unconsumed proof and original authentication time; Product options are reread and explicit Allow is still required. Ordinary COMPLETED owners and recovery-code first-delivery remain separate. Existing visual controls are reused; historical closure and other owners' acceptance are unchanged."
+      }
     },
     {
       "id": "COMP-TOTP-FACTOR-PICKER",
@@ -3784,7 +3833,8 @@
       "runtime_pathname": null,
       "owner_pathnames": [
         "/account/security",
-        "/account/security/sign-in-methods"
+        "/account/security/sign-in-methods",
+        "/product-authorization"
       ],
       "parent_screen_ids": [
         "U-ACCT-SECURITY",
@@ -3792,7 +3842,8 @@
       ],
       "owner_scopes": [
         "TUN-P2-010",
-        "P1-018-RV008"
+        "P1-018-RV008",
+        "TUN-P2-014"
       ],
       "authority_refs": [
         "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md",
@@ -3900,6 +3951,15 @@
         ],
         "acceptance_state": "SPLIT_WIP_PUBLIC_EVIDENCE_FINAL_UI_ACCEPTANCE_PENDING",
         "baseline_affected_consumer_regression": "PENDING_SEPARATE_AFFECTED_SOURCE_VALIDATION"
+      },
+      "additional_consent_refs": [
+        "governance/evidence/TUN-P2-014-VISUAL-CONSENT.json"
+      ],
+      "product_authorization_integration": {
+        "owner_scope": "TUN-P2-014",
+        "authorization_ref": "governance/evidence/TUN-P2-014-STEPUP-INTEGRATION-AUTHORIZATION.json",
+        "ui_evidence_ref": "governance/evidence/TUN-P2-014-UI-COMPLIANCE.json",
+        "boundary": "Additional exact Product-origin owner only. Explicit opt-in PROOF_READY preserves unconsumed proof and original authentication time; Product options are reread and explicit Allow is still required. Ordinary COMPLETED owners and recovery-code first-delivery remain separate. Existing visual controls are reused; historical closure and other owners' acceptance are unchanged."
       }
     }
   ],
