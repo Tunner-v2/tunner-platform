@@ -104,15 +104,25 @@ internal sealed class ProductAuthorizationReview(IdentityPersistenceDbContext da
     }
 
     /// <summary>Native authorization must call this before any grant or Relationship side effect.</summary>
-    internal async Task<bool> ValidateApprovalAsync(ProductAuthorizationRestoredContinuation saved, CancellationToken ct)
+    internal async Task<bool> ValidateApprovalAsync(ProductAuthorizationRestoredContinuation saved, CancellationToken ct,
+        bool consumed = false)
     {
         RequireTransaction(); ct.ThrowIfCancellationRequested();
         if (saved.ReviewDenied || string.IsNullOrWhiteSpace(saved.ReviewApprovalDigest)) return false;
-        var current = await ObserveAsync(saved.Http).ConfigureAwait(false);
+        var current = await ObserveAsync(saved.Http, consumed ? saved : null).ConfigureAwait(false);
         return current is not null && current.Interaction.Status == ProductAuthorizationInteractionStatus.Satisfied &&
             ContinuationDigest(saved) == current.Selection.ContinuationDigest && !current.Saved.ReviewDenied &&
             current.Saved.ReviewApprovalDigest == saved.ReviewApprovalDigest &&
             ApprovalDigest(current.Selection) == saved.ReviewApprovalDigest;
+    }
+
+    internal async Task<bool> ValidateDenialAsync(ProductAuthorizationRestoredContinuation saved, CancellationToken ct)
+    {
+        RequireTransaction(); ct.ThrowIfCancellationRequested();
+        if (!saved.ReviewDenied || string.IsNullOrWhiteSpace(saved.ReviewDenialDigest)) return false;
+        var current = await ObserveAsync(saved.Http).ConfigureAwait(false);
+        return current is not null && ContinuationDigest(saved) == current.Selection.ContinuationDigest &&
+            ApprovalDigest(current.Selection) == saved.ReviewDenialDigest;
     }
 
     /// <summary>Stage once after native denial consumption. Save/commit remain with the native transaction owner.</summary>
@@ -124,7 +134,8 @@ internal sealed class ProductAuthorizationReview(IdentityPersistenceDbContext da
         // The native request token may already have been redeemed by the caller. Reuse the
         // authenticated original snapshot rather than attempting to restore a consumed pointer.
         var current = await ObserveAsync(saved.Http, saved).ConfigureAwait(false);
-        if (current is null || ContinuationDigest(saved) != current.Selection.ContinuationDigest)
+        if (current is null || ContinuationDigest(saved) != current.Selection.ContinuationDigest ||
+            ApprovalDigest(current.Selection) != saved.ReviewDenialDigest)
             throw new InvalidOperationException("Current exact Product denial publication is unavailable.");
         database.Add(new OutboxMessage(Guid.NewGuid(), "1.0", "ProductAuthorizationDeclined", "1", clock.GetUtcNow(),
             "tunner/identity", saved.TokenId, current.Presentation.Classification,
@@ -217,7 +228,7 @@ internal sealed class ProductAuthorizationReview(IdentityPersistenceDbContext da
                 applied = await continuation.ApproveReviewAsync(final.Saved, ApprovalDigest(selected), http.RequestAborted).ConfigureAwait(false);
                 break;
             case "DENY":
-                applied = await continuation.DenyReviewAsync(final.Saved, http.RequestAborted).ConfigureAwait(false);
+                applied = await continuation.DenyReviewAsync(final.Saved, ApprovalDigest(selected), http.RequestAborted).ConfigureAwait(false);
                 break;
             default:
                 applied = await continuation.SwitchReviewAccountAsync(final.Saved, http.RequestAborted).ConfigureAwait(false);
@@ -309,7 +320,8 @@ internal sealed class ProductAuthorizationReview(IdentityPersistenceDbContext da
     private static string ContinuationDigest(ProductAuthorizationRestoredContinuation saved) => Digest(new
     {
         saved.TokenId, requestDigest = saved.Request.Digest, saved.NativeApplicationId, saved.OperationId, saved.CorrelationId,
-        saved.Origin, saved.CreatedAt, saved.ExpiresAt, saved.PolicySnapshot, saved.BindingDigest, saved.AccountId, saved.SessionId, saved.Interaction
+        saved.Origin, saved.CreatedAt, saved.ExpiresAt, saved.PolicySnapshot, saved.BindingDigest, saved.AccountId, saved.SessionId,
+        saved.Interaction, saved.ReviewGeneration
     });
     private static string ApprovalDigest(Selection selection) => Digest(new
     {

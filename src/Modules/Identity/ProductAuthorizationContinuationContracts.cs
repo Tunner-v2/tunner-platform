@@ -36,6 +36,7 @@ internal sealed record ProductAuthorizationRestoredContinuation(HttpContext Http
 {
     internal ProductAuthorizationInteractionContext? Interaction { get; init; }
     internal string? ReviewApprovalDigest { get; init; }
+    internal string? ReviewDenialDigest { get; init; }
     internal bool ReviewDenied { get; init; }
     internal int ReviewGeneration { get; init; }
     public override string ToString() => nameof(ProductAuthorizationRestoredContinuation);

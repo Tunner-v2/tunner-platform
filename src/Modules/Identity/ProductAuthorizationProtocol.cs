@@ -125,6 +125,8 @@ internal sealed partial class ProductAuthorizationProtocol(IdentityPersistenceDb
                 }
                 if (restoredContinuation.ReviewDenied)
                 {
+                    if (!await review.ValidateDenialAsync(restoredContinuation, ct).ConfigureAwait(false))
+                    { context.Reject(Errors.AccessDenied); return; }
                     if (!await continuation.ConsumeAsync(restoredContinuation, restoredContinuation.NativeApplicationId, ct, denied: true).ConfigureAwait(false))
                     { context.Reject(Errors.InvalidRequest); return; }
                     await review.StageDeclined(restoredContinuation, ct).ConfigureAwait(false);
@@ -204,7 +206,8 @@ internal sealed partial class ProductAuthorizationProtocol(IdentityPersistenceDb
         var ct = Http.RequestAborted;
         if (grant is not null && authorizationId is not null)
         {
-            if (response.Error is null && await application.VerifyCurrentAsync(grant, ct).ConfigureAwait(false))
+            if (response.Error is null && await application.VerifyCurrentAsync(grant, ct).ConfigureAwait(false) &&
+                await ReviewCurrentBeforeOutputAsync(redemption, ct).ConfigureAwait(false))
                 application.StageNativeEffect(grant, authorizationId, redemption);
             else
             {
@@ -230,6 +233,16 @@ internal sealed partial class ProductAuthorizationProtocol(IdentityPersistenceDb
         await database.SaveChangesAsync(ct).ConfigureAwait(false);
         await transaction!.CommitAsync(ct).ConfigureAwait(false);
         await transaction.DisposeAsync().ConfigureAwait(false); transaction = null;
+    }
+
+    private async Task<bool> ReviewCurrentBeforeOutputAsync(bool redemption, CancellationToken ct)
+    {
+        if (redemption || !profile.RequireAuthorizationReview) return true;
+        if (!consumedContinuation || restoredContinuation is null || review is null) return false;
+        try { return await review.ValidateApprovalAsync(restoredContinuation, ct, consumed: true).ConfigureAwait(false); }
+        catch (InvalidOperationException) { return false; }
+        catch (System.Net.Http.HttpRequestException) { return false; }
+        catch (TimeoutException) { return false; }
     }
 
     private ClaimsPrincipal Principal(ProductAuthorizationGrant value, string id)

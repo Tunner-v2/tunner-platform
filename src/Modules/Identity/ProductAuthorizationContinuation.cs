@@ -45,7 +45,8 @@ internal sealed class ProductAuthorizationContinuation(IdentityPersistenceDbCont
     { public override string ToString() => nameof(Metadata); }
     private sealed record Consumed(string AccountId, Guid SessionId, string OperationId, string RequestDigest)
     { public override string ToString() => nameof(Consumed); }
-    private sealed record ReviewState(int Generation, string? AccountId, Guid? SessionId, string? ApprovalDigest, bool Denied);
+    private sealed record ReviewState(int Generation, string? AccountId, Guid? SessionId, string? ApprovalDigest, bool Denied)
+    { public string? DenialDigest { get; init; } }
     private sealed record Read(Pointer Pointer, Material Material, object Token, ReviewState? Review);
 
     internal async Task<ProductAuthorizationRestoredContinuation> BeginAsync(HttpContext http, ProductAuthorizationRequest request,
@@ -148,13 +149,16 @@ internal sealed class ProductAuthorizationContinuation(IdentityPersistenceDbCont
         ArgumentException.ThrowIfNullOrWhiteSpace(digest);
         return RecordReviewAsync(saved, digest, false, false, ct);
     }
-    internal Task<bool> DenyReviewAsync(ProductAuthorizationRestoredContinuation saved, CancellationToken ct) =>
-        RecordReviewAsync(saved, null, true, false, ct);
+    internal Task<bool> DenyReviewAsync(ProductAuthorizationRestoredContinuation saved, string digest, CancellationToken ct)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(digest);
+        return RecordReviewAsync(saved, null, true, false, ct, digest);
+    }
     internal Task<bool> SwitchReviewAccountAsync(ProductAuthorizationRestoredContinuation saved, CancellationToken ct) =>
         RecordReviewAsync(saved, null, false, true, ct);
 
     private async Task<bool> RecordReviewAsync(ProductAuthorizationRestoredContinuation saved, string? digest,
-        bool denied, bool switching, CancellationToken ct)
+        bool denied, bool switching, CancellationToken ct, string? denialDigest = null)
     {
         RequireTransaction();
         var read = await ReadLockedAsync(saved.Http, saved.TokenId, ct).ConfigureAwait(false);
@@ -163,9 +167,10 @@ internal sealed class ProductAuthorizationContinuation(IdentityPersistenceDbCont
         if (!actual.Succeeded || actual.Principal is null || !Actor(actual.Principal, out var account, out var session) ||
             account != saved.AccountId || session != saved.SessionId) return false;
         if (read.Review is { } prior && (prior.ApprovalDigest is not null || prior.Denied))
-            return !switching && prior.ApprovalDigest == digest && prior.Denied == denied;
+            return !switching && prior.ApprovalDigest == digest && prior.Denied == denied && prior.DenialDigest == denialDigest;
         var generation = switching ? checked(read.Pointer.ReviewGeneration + 1) : read.Pointer.ReviewGeneration;
-        var state = new ReviewState(generation, switching ? null : account, switching ? null : session, digest, denied);
+        var state = new ReviewState(generation, switching ? null : account, switching ? null : session, digest, denied)
+        { DenialDigest = denialDigest };
         var descriptor = new OpenIddictTokenDescriptor();
         await tokens.PopulateAsync(descriptor, read.Token, ct).ConfigureAwait(false);
         descriptor.Properties[ReviewKey] = JsonSerializer.SerializeToElement(state, Json);
@@ -212,7 +217,8 @@ internal sealed class ProductAuthorizationContinuation(IdentityPersistenceDbCont
         if (read is null || !read.Pointer.Ready || read.Pointer.TokenId != saved.TokenId ||
             read.Material.NativeApplicationId != actualNativeApplicationId || !SameSaved(saved, read)) return false;
         if (profile.RequireAuthorizationReview && (denied
-            ? read.Review?.Denied != true || read.Review.ApprovalDigest is not null || !saved.ReviewDenied
+            ? read.Review?.Denied != true || read.Review.ApprovalDigest is not null || !saved.ReviewDenied ||
+                string.IsNullOrWhiteSpace(saved.ReviewDenialDigest) || read.Review.DenialDigest != saved.ReviewDenialDigest
             : read.Review?.Denied == true || string.IsNullOrWhiteSpace(saved.ReviewApprovalDigest) ||
                 read.Review?.ApprovalDigest != saved.ReviewApprovalDigest)) return false;
         var actual = await saved.Http.AuthenticateAsync(AuthenticationIdentity.Scheme).ConfigureAwait(false);
@@ -288,7 +294,9 @@ internal sealed class ProductAuthorizationContinuation(IdentityPersistenceDbCont
             {
                 review = reviewRaw.Deserialize<ReviewState>(Json);
                 if (!profile.RequireAuthorizationReview || review is null || review.Generation != pointer.ReviewGeneration ||
-                    review.Generation < 0 || review.Denied && review.ApprovalDigest is not null ||
+                    review.Generation < 0 || (review.Denied
+                        ? review.ApprovalDigest is not null || string.IsNullOrWhiteSpace(review.DenialDigest)
+                        : review.DenialDigest is not null) ||
                     ((review.ApprovalDigest is not null || review.Denied)
                         ? !pointer.Ready || review.AccountId != pointer.AccountId || review.SessionId != pointer.SessionId
                         : review.AccountId is not null || review.SessionId is not null)) return null;
@@ -345,7 +353,8 @@ internal sealed class ProductAuthorizationContinuation(IdentityPersistenceDbCont
         new(http, pointer.TokenId, material.Request, material.NativeApplicationId, material.OperationId, material.CorrelationId,
             material.Origin, material.CreatedAt, material.ExpiresAt, material.PolicySnapshot, material.BindingDigest, pointer.AccountId, pointer.SessionId)
         { Interaction = material.Interaction, ReviewGeneration = pointer.ReviewGeneration,
-            ReviewApprovalDigest = review?.ApprovalDigest, ReviewDenied = review?.Denied == true };
+            ReviewApprovalDigest = review?.ApprovalDigest, ReviewDenied = review?.Denied == true,
+            ReviewDenialDigest = review?.DenialDigest };
     private static bool SameSaved(ProductAuthorizationRestoredContinuation saved, Read read) =>
         saved.Request.Digest == read.Material.Request.Digest && saved.NativeApplicationId == read.Material.NativeApplicationId &&
         saved.OperationId == read.Material.OperationId && saved.CorrelationId == read.Material.CorrelationId && saved.Origin == read.Material.Origin &&
