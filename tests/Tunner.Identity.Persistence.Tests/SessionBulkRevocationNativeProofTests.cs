@@ -61,6 +61,10 @@ public sealed partial class SessionBulkRevocationHttpTests
     private static void ConfigureNativeFederation(IServiceCollection services, Profile profile,
         FederationProfileVersion federation, HttpClient backchannel)
     {
+        // The existing provider deliberately authenticates 30 seconds before callback. Keep
+        // that original time; use a qualified test window that is still live at continuation.
+        // The proof must additionally remain clipped by the provider verification expiry.
+        profile.ProofLifetime = TimeSpan.FromMinutes(2);
         const string prefix = EngineeringEnvironmentConfiguration.SectionName + ":";
         var configuration = new ConfigurationBuilder().AddInMemoryCollection(new Dictionary<string, string?>
         {
