@@ -4,12 +4,16 @@ using System.Net.Http.Json;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
+using Microsoft.AspNetCore;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Features;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.JsonWebTokens;
 using Microsoft.IdentityModel.Tokens;
 using OpenIddict.Abstractions;
+using OpenIddict.Server;
 using Tunner.Database.Outbox;
 using Tunner.Platform.Policies;
 using Xunit;
@@ -35,6 +39,25 @@ public sealed class ProductAuthorizationProtocolTests(SessionListingPostgresFixt
         internal string ClientId { get; } = "synthetic-product-client-" + Guid.NewGuid().ToString("N");
         internal string ClientCredential { get; } = Base64UrlEncoder.Encode(RandomNumberGenerator.GetBytes(32));
         internal string NativeApplicationId { get; set; } = string.Empty;
+        internal bool ObserveAuthorization { get; set; }
+        internal bool NativeSeen { get; private set; }
+        internal bool RawAuthorizationPath { get; private set; }
+        internal bool AuthorizationPathMatched { get; private set; }
+        internal bool EmptyPathBase { get; private set; }
+        internal bool GetMethod { get; private set; }
+        internal string NativeError { get; set; } = "unavailable";
+        internal string NativeErrorIdentifier { get; set; } = "unavailable";
+        internal void ObserveRequest(HttpRequest? request)
+        {
+            if (!ObserveAuthorization) return;
+            NativeSeen = true;
+            var raw = request?.HttpContext.Features.Get<IHttpRequestFeature>()?.RawTarget;
+            var queryStart = raw?.IndexOf('?') ?? -1;
+            RawAuthorizationPath = raw is not null && raw.AsSpan(0, queryStart < 0 ? raw.Length : queryStart).SequenceEqual(AuthorizationPath);
+            AuthorizationPathMatched = request?.Path == AuthorizationPath;
+            EmptyPathBase = request is not null && !request.PathBase.HasValue;
+            GetMethod = request is not null && HttpMethods.IsGet(request.Method);
+        }
         private readonly EffectivePolicyInterval interval = new(DateTimeOffset.UtcNow.AddDays(-1), true, DateTimeOffset.UtcNow.AddHours(4), false);
         private const string Evidence = "SYNTHETIC-LOCAL-PROTOCOL-TEST-ONLY";
         public ProductAuthorizationPolicy RequireCurrent(string origin, DateTimeOffset at) => new(
@@ -115,6 +138,25 @@ public sealed class ProductAuthorizationProtocolTests(SessionListingPostgresFixt
             services.AddSingleton<IProductAuthorizationRegistrySource>(owners);
             services.AddSingleton<IProductAuthorizationRelationshipSource>(owners);
             services.AddTunnerProductAuthorization(new(Origin, AuthorizationPath, TokenPath, signingKey, encryptionKey, Scopes, Resources, 32768, 16, 64, 16384));
+            services.AddOpenIddict().AddServer(options =>
+            {
+                options.AddEventHandler<OpenIddictServerEvents.ProcessRequestContext>(builder => builder
+                    .UseInlineHandler(context =>
+                    {
+                        owners.ObserveRequest(context.Transaction.GetHttpRequest());
+                        return ValueTask.CompletedTask;
+                    }).SetOrder(int.MinValue + 50_000));
+                options.AddEventHandler<OpenIddictServerEvents.ProcessErrorContext>(builder => builder
+                    .UseInlineHandler(context =>
+                    {
+                        if (owners.ObserveAuthorization)
+                        {
+                            owners.NativeError = SafeOAuthError(context.Error);
+                            owners.NativeErrorIdentifier = SafeOpenIddictIdentifier(context.ErrorUri);
+                        }
+                        return ValueTask.CompletedTask;
+                    }).SetOrder(int.MinValue + 50_000));
+            });
         });
         host.Clock.SynchronizeToSystem();
         await using (var scope = host.Services.CreateAsyncScope())
@@ -151,8 +193,12 @@ public sealed class ProductAuthorizationProtocolTests(SessionListingPostgresFixt
             ["scope"] = string.Join(' ', Scopes), ["resource"] = Resource, ["product_id"] = Product, ["environment"] = EnvironmentName,
             ["code_challenge"] = challenge, ["code_challenge_method"] = "S256", ["state"] = state, ["nonce"] = Guid.NewGuid().ToString("N")
         });
-        using var response = await test.Host.Get(AuthorizationPath + "?" + await query.ReadAsStringAsync(), test.Cookies);
-        if (response.StatusCode != HttpStatusCode.OK) Assert.Fail(await NativeErrorDiagnostic(response));
+        HttpResponseMessage received;
+        test.Owners.ObserveAuthorization = true;
+        try { received = await test.Host.Get(AuthorizationPath + "?" + await query.ReadAsStringAsync(), test.Cookies); }
+        finally { test.Owners.ObserveAuthorization = false; }
+        using var response = received;
+        if (response.StatusCode != HttpStatusCode.OK) Assert.Fail(await NativeErrorDiagnostic(response, test.Owners));
         Assert.Equal(HttpStatusCode.OK, response.StatusCode); Assert.Equal("text/html", response.Content.Headers.ContentType?.MediaType);
         var form = ReadNativeForm(await response.Content.ReadAsStringAsync()); Assert.Equal(Redirect, form.Action);
         Assert.False(form.Values.ContainsKey("access_token") || form.Values.ContainsKey("id_token") || form.Values.ContainsKey("refresh_token"));
@@ -169,34 +215,60 @@ public sealed class ProductAuthorizationProtocolTests(SessionListingPostgresFixt
         return await test.Host.RawPost(TokenPath, await form.ReadAsStringAsync(), string.Empty, string.Empty, "application/x-www-form-urlencoded");
     }
 
-    private static async Task<string> NativeErrorDiagnostic(HttpResponseMessage response)
+    private static string SafeOAuthError(string? error) => error is
+        "invalid_request" or "invalid_client" or "invalid_grant" or "unauthorized_client" or "unsupported_grant_type" or
+        "invalid_scope" or "invalid_target" or "unsupported_response_type" or "access_denied" or "server_error" or "temporarily_unavailable" or
+        "login_required" or "consent_required" or "interaction_required" ? error : "unrecognized";
+
+    private static string SafeOpenIddictIdentifier(string? uriText)
     {
-        var prefix = "Native authorization HTTP " + (int)response.StatusCode + "; "; var bytes = new byte[8193];
+        if (uriText is not { Length: <= 512 } || !Uri.TryCreate(uriText, UriKind.Absolute, out var uri) || uri.Scheme != "https" ||
+            !uri.Host.Equals("documentation.openiddict.com", StringComparison.OrdinalIgnoreCase) ||
+            !uri.AbsolutePath.StartsWith("/errors/", StringComparison.Ordinal)) return "unavailable";
+        var last = uri.AbsolutePath[(uri.AbsolutePath.LastIndexOf('/') + 1)..];
+        return last.Length == 6 && last.StartsWith("ID", StringComparison.Ordinal) && last.AsSpan(2).IndexOfAnyExceptInRange('0', '9') < 0
+            ? last : "unavailable";
+    }
+
+    private static async Task<string> NativeErrorDiagnostic(HttpResponseMessage response, Owners owners)
+    {
+        var mediaType = response.Content.Headers.ContentType?.MediaType;
+        var safeMediaType = mediaType is "application/json" or "application/problem+json" or "text/plain" or "text/html" ? mediaType : "unrecognized";
+        var prefix = "Native authorization HTTP " + (int)response.StatusCode + "; ContentType=" + safeMediaType +
+            "; NativeSeen=" + owners.NativeSeen + "; RawAuthorizationPath=" + owners.RawAuthorizationPath +
+            "; AuthorizationPathMatched=" + owners.AuthorizationPathMatched + "; EmptyPathBase=" + owners.EmptyPathBase +
+            "; GET=" + owners.GetMethod + "; NativeOAuth=" + owners.NativeError + "; NativeOpenIddict=" + owners.NativeErrorIdentifier + "; ";
+        var bytes = new byte[8193];
         try
         {
             await using var stream = await response.Content.ReadAsStreamAsync(); var count = 0;
             while (count < bytes.Length)
             { var read = await stream.ReadAsync(bytes.AsMemory(count)); if (read == 0) break; count += read; }
             if (count > 8192) return prefix + "bounded OAuth metadata unavailable";
-            using var document = JsonDocument.Parse(bytes.AsMemory(0, count)); var root = document.RootElement;
-            if (root.ValueKind != JsonValueKind.Object) return prefix + "OAuth metadata unavailable";
-            string[] standard = ["invalid_request", "invalid_client", "invalid_grant", "unauthorized_client", "unsupported_grant_type",
-                "invalid_scope", "invalid_target", "unsupported_response_type", "access_denied", "server_error", "temporarily_unavailable",
-                "login_required", "consent_required", "interaction_required"];
-            var error = root.TryGetProperty("error", out var rawError) && rawError.ValueKind == JsonValueKind.String ? rawError.GetString() : null;
-            var safeError = error is not null && standard.Contains(error, StringComparer.Ordinal) ? error : "unrecognized";
-            var identifier = "unavailable";
-            if (root.TryGetProperty("error_uri", out var rawUri) && rawUri.ValueKind == JsonValueKind.String && rawUri.GetString() is { Length: <= 512 } uriText &&
-                Uri.TryCreate(uriText, UriKind.Absolute, out var uri) && uri.Scheme == "https" &&
-                uri.Host.Equals("documentation.openiddict.com", StringComparison.OrdinalIgnoreCase) && uri.AbsolutePath.StartsWith("/errors/", StringComparison.Ordinal))
+            var fields = new Dictionary<string, string>(StringComparer.Ordinal);
+            if (mediaType == "text/plain")
             {
-                var last = uri.AbsolutePath[(uri.AbsolutePath.LastIndexOf('/') + 1)..];
-                if (last.Length == 6 && last.StartsWith("ID", StringComparison.Ordinal) && last.AsSpan(2).IndexOfAnyExceptInRange('0', '9') < 0) identifier = last;
+                foreach (var line in Encoding.UTF8.GetString(bytes, 0, count).Split('\n'))
+                {
+                    var colon = line.IndexOf(':'); if (colon < 0) continue;
+                    var key = line[..colon].Trim();
+                    if (key is "error" or "error_description" or "error_uri")
+                        if (!fields.TryAdd(key, line[(colon + 1)..].Trim())) return prefix + "ambiguous OAuth metadata unavailable";
+                }
             }
-            var description = root.TryGetProperty("error_description", out var rawDescription) && rawDescription.ValueKind == JsonValueKind.String ? rawDescription.GetString() : null;
+            else
+            {
+                using var document = JsonDocument.Parse(bytes.AsMemory(0, count)); var root = document.RootElement;
+                if (root.ValueKind != JsonValueKind.Object) return prefix + "OAuth metadata unavailable";
+                foreach (var property in root.EnumerateObject())
+                    if (property.Name is "error" or "error_description" or "error_uri" && property.Value.ValueKind == JsonValueKind.String)
+                        if (!fields.TryAdd(property.Name, property.Value.GetString()!)) return prefix + "ambiguous OAuth metadata unavailable";
+            }
+            var description = fields.GetValueOrDefault("error_description");
             string[] labels = ["client_id", "redirect_uri", "response_type", "response_mode", "code_challenge", "code_challenge_method", "scope", "resource", "product_id", "environment", "nonce", "state"];
             var hints = labels.Select(label => label + "=" + (description?.Contains("'" + label + "'", StringComparison.Ordinal) == true));
-            return prefix + "OAuth=" + safeError + "; OpenIddict=" + identifier + "; parameter labels: " + string.Join(", ", hints);
+            return prefix + "OAuth=" + SafeOAuthError(fields.GetValueOrDefault("error")) + "; OpenIddict=" +
+                SafeOpenIddictIdentifier(fields.GetValueOrDefault("error_uri")) + "; parameter labels: " + string.Join(", ", hints);
         }
         catch (Exception error) when (error is JsonException or IOException or HttpRequestException or InvalidOperationException)
         { return prefix + "OAuth metadata unavailable"; }
