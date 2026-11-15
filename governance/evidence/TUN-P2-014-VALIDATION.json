@@ -5,7 +5,29 @@
   "result": "PENDING",
   "tested_commit_sha": null,
   "validated_commit_sha": null,
-  "phase": "NATIVE_CODE_COHORT_PASSED_LIFECYCLE_INTEGRATION_CONTINUES",
+  "phase": "NATIVE_CODE_AND_LIFECYCLE_COHORT_PASSED_CONTINUATION_INTEGRATION_REMAINS",
+  "integrated_protocol_cohort": {
+    "result": "PASS_CODE_AND_LIFECYCLE_INCREMENT_ONLY",
+    "source_commit_sha": "d4adb167b10337d460225f4d50d75242b3b1f9c3",
+    "run_id": "46225b2e1ba84c9f9c418f8b747218d6",
+    "execution": { "executed": 25, "passed": 25, "failed": 0, "not_executed": 0, "exit_code": 0, "timed_out": false, "owned_containers_remaining": 0, "borrowed_preserved": true },
+    "summary_ref": "artifacts/p2-014-authorization-20261115/native-runtime-46225b2e1ba84c9f9c418f8b747218d6/summary.json",
+    "raw_trx_ref": "artifacts/p2-014-authorization-20261115/native-runtime-46225b2e1ba84c9f9c418f8b747218d6/product-authorization.trx",
+    "launch_ref": "artifacts/p2-014-authorization-20261115/native-runtime-46225b2e1ba84c9f9c418f8b747218d6/launch.json",
+    "coverage": "Original 14 code cases plus 11 lifecycle cases: refresh beyond code expiry, exact expiry and non-sliding rotation, replay, scope narrowing without ID token, client/scope denial, minimal introspection/current-owner denial, presented-token versus chain revocation, unknown-token RFC response, cleanup after ended browser eligibility/expired issuance policy, explicit denial-and-revocation effects and unchanged browser activity.",
+    "diagnostic_history": "First lifecycle run 75654ed8aeb74610950e6179d1414b91 at c374c8b executed11/passed3/failed8, with no timeout or remaining owned containers. Native URN token types were incorrectly compared with protocol hint names in production and two helpers. Two-file fix d4adb16; isolated refresh run 5242647ca55443e1b9f64bfdb0fec6de passed1/1 before this integrated25/25 run. No assertion weakening or disabled native check.",
+    "limits": "Actual committed-source runtime receipt. Full continuation/requested assurance, propagation, broader conformance/regression, compatibility closure and Product acceptance remain outstanding; no full-feature, production or release acceptance."
+  },
+  "dependency_advisory": {
+    "result": "PASS",
+    "source_commit_sha": "d4adb167b10337d460225f4d50d75242b3b1f9c3",
+    "elapsed_seconds": 84.1269545,
+    "unique_resolved_packages": 121,
+    "vulnerable_packages_reported": 0,
+    "sbom_ref": "artifacts/p2-014-authorization-20261115/supply-chain-d4adb16/tunner.spdx.json",
+    "provenance_ref": "artifacts/p2-014-authorization-20261115/supply-chain-d4adb16/tunner.provenance.json",
+    "boundary": "Existing utility; configured advisory services; nine-minute cutoff; no restore, dependency changes or publication. Nine input hashes retained. Preexisting unrelated dirty tree preserved and truthfully reported; unsigned local receipt, not release attestation."
+  },
   "focused_code_cohort": {
     "result": "PASS_FOCUSED_CODE_COHORT_ONLY",
     "source_commit_sha": "44c861c75c08068542290e651006178569b10445",
@@ -75,7 +97,7 @@
   "contract_ref": "docs/contracts/product-authorization-contract.md",
   "scope": "Complete Product authorization and revocation contract integration. First vertical increment is real active-session native authorization-code/PKCE issuance/redemption. Login/registration continuation, assurance, refresh/introspection/revocation, current owner checks and enabled propagation remain required; first happy path cannot close the feature.",
   "boundary": "Explicit qualified issuer/keys/client/registry/Relationship/policy inputs; missing providers deny activation. No production default or Product membership/entitlement/local-session authority. Existing Figma/Drive/FigJam remain read-only.",
-  "actual_feature_tests": ["first_increment", "focused_code_cohort"],
+  "actual_feature_tests": ["first_increment", "focused_code_cohort", "integrated_protocol_cohort"],
   "product_acceptance": "NOT_REQUESTED_OR_GRANTED",
   "exact_next_action": "Complete policy-qualified refresh/introspection/revocation and continuation/requested-assurance integration, then enabled propagation, shared compatibility and final acceptance gates."
 }
