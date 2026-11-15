@@ -231,7 +231,23 @@ public sealed class ProductAuthorizationProtocolTests(SessionListingPostgresFixt
         internal string Cookies { get; set; } = cookies;
         internal RsaSecurityKey SigningKey { get; } = signingKey;
         internal RsaSecurityKey EncryptionKey { get; } = encryptionKey;
-        public async ValueTask DisposeAsync() { await Host.DisposeAsync(); signing.Dispose(); encryption.Dispose(); await Database.DisposeAsync(); }
+        public async ValueTask DisposeAsync()
+        {
+            try { await Host.DisposeAsync(); }
+            finally
+            {
+                signing.Dispose(); encryption.Dispose();
+                try { await Database.DisposeAsync(); }
+                finally
+                {
+                    // Every scenario has its own database/connection string. Disposing EF
+                    // providers leaves the driver's implicit pool alive across scenarios.
+                    // Clear only this owned pool, never pools belonging to other tests/apps.
+                    using var connection = new Npgsql.NpgsqlConnection(Database.ConnectionString);
+                    Npgsql.NpgsqlConnection.ClearPool(connection);
+                }
+            }
+        }
         public override string ToString() => nameof(Scenario);
     }
     private async Task<Scenario> Create(bool nativeResourcePermission = true, bool broaderNativeQualification = false, bool lifecycle = false,
