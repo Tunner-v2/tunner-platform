@@ -1,0 +1,205 @@
+{
+  "schema_version": 1,
+  "scope_id": "TUN-P2-013_BULK_BROWSER_INCREMENT",
+  "result": "PASS_HTTPS_AND_TYPED_CLIENT_ONLY",
+  "tested_commit_sha": "3ba60450ca30109043a0d6a4a10d22a68255d19c",
+  "sources": [
+    {
+      "path": "docs/contracts/session-bulk-revocation-contract.md",
+      "git_blob": "1c8961bed54d7443d134f656ef9573dce4f42f37"
+    },
+    {
+      "path": "src/Modules/Identity/AuthenticationSessionBulkRevocation.cs",
+      "git_blob": "726f820b1fc24e0c836c57c9b8243ee51374b6a3"
+    },
+    {
+      "path": "src/Modules/Identity/SessionBulkRevocationApplication.cs",
+      "git_blob": "161b845ad3dcd2e2714d069c0d6131ffd99134ae"
+    },
+    {
+      "path": "src/Modules/Identity/SessionBulkRevocationBrowser.cs",
+      "git_blob": "943db4a3e884e610a4a55c91f0d90cecd3e9dc23"
+    },
+    {
+      "path": "src/Modules/Identity/SessionBulkRevocationContracts.cs",
+      "git_blob": "abbd96b5c65ae107f45362d4c96e43bc34bd2d34"
+    },
+    {
+      "path": "src/Modules/Identity/SessionListingEndpoints.cs",
+      "git_blob": "b3c6c043e5403d2c36080dddbf492da7a9af73b6"
+    },
+    {
+      "path": "src/Modules/Identity/SessionRevocationBrowser.cs",
+      "git_blob": "c5a16d2443ffbf12aa42473ff0bd1b3a5299c261"
+    },
+    {
+      "path": "src/Modules/Identity/SessionRevocationOriginalSelection.cs",
+      "git_blob": "8cbf753fcd7c6a8710ec4619d08e2b03a55092cc"
+    },
+    {
+      "path": "src/Modules/Identity/StepUpBrowserEndpoints.cs",
+      "git_blob": "70de0df3d081e90c87b220e124980f880692c21e"
+    },
+    {
+      "path": "tests/Tunner.Identity.Persistence.Tests/SessionBulkRevocationHttpTests.cs",
+      "git_blob": "06bead38800cb09d170727e5302ef289d86d47e3"
+    },
+    {
+      "path": "tools/browser-testing/BrowserTestHost.cs",
+      "git_blob": "73d63f14d1c53f8b724f4312bc33ae8a132e31b1"
+    },
+    {
+      "path": "tools/browser-testing/BrowserTestSessions.cs",
+      "git_blob": "3f3e23820ac6660b538e0d43defa7e4f94c9d132"
+    },
+    {
+      "path": "tools/browser-testing/BrowserTestStepUp.cs",
+      "git_blob": "ff9fb34f9a2e2207022ceb040f20c35a7f0e6927"
+    },
+    {
+      "path": "web/apps/user/sessions.bulk.api.ts",
+      "git_blob": "41ac5aeac825b3985acd188f3649536934d83e17"
+    },
+    {
+      "path": "web/tests/sessions.bulk.api.test.tsx",
+      "git_blob": "1238626c0770a8f999aa2ac12237b047d6e18622"
+    }
+  ],
+  "assemblies": [
+    {
+      "path": "tests/Tunner.Identity.Persistence.Tests/bin/Debug/net10.0/Tunner.Identity.Persistence.Tests.dll",
+      "sha256": "ef9430f48b6f3c8071519ff9f608ce793481611ae86f4fed171477cf1e333c48"
+    },
+    {
+      "path": "tests/Tunner.Identity.Persistence.Tests/bin/Debug/net10.0/Tunner.Identity.Persistence.dll",
+      "sha256": "fca0eac86b22feaf5cb8a1732cf176ed40130bfbaf611dc5eb18bceac37b3bcc"
+    }
+  ],
+  "executions": [
+    {
+      "label": "focused",
+      "summary": {
+        "not_executed": 0,
+        "borrowed_preserved": true,
+        "run_id": "d04cabace0264e24aeafcedbd1b8441c",
+        "passed": 1,
+        "failed": 0,
+        "timed_out": false,
+        "accepted": true,
+        "source": "3ba60450ca30109043a0d6a4a10d22a68255d19c",
+        "executed": 1,
+        "exit_code": 0,
+        "owned_containers_remaining": 0
+      },
+      "raw_trx": "governance/evidence/p2-013-sessions-20261114/bulk-browser-3ba6045/focused.trx.gz",
+      "raw_trx_sha256": "c742b42cbf53a60586c6b98499d55267b454ea85ccb6bf57831823bdb2e80e0b",
+      "raw_compression": "lossless gzip of original bytes"
+    },
+    {
+      "label": "https",
+      "summary": {
+        "run_id": "23d23643c1d4452bb7390c664866f9f0",
+        "exit_code": 0,
+        "timed_out": false,
+        "executed": 57,
+        "passed": 57,
+        "borrowed_preserved": true,
+        "not_executed": 0,
+        "owned_containers_remaining": 0,
+        "source": "3ba60450ca30109043a0d6a4a10d22a68255d19c",
+        "failed": 0,
+        "accepted": true
+      },
+      "raw_trx": "governance/evidence/p2-013-sessions-20261114/bulk-browser-3ba6045/https.trx.gz",
+      "raw_trx_sha256": "f3c570ec6b451024ed45adf254be05c0ed7e5a7f1b16bead48eceb2a9b85e5f8",
+      "raw_compression": "lossless gzip of original bytes"
+    },
+    {
+      "label": "launch-uri-failure",
+      "summary": {
+        "executed": 1,
+        "accepted": false,
+        "source": "3ba60450ca30109043a0d6a4a10d22a68255d19c",
+        "borrowed_preserved": true,
+        "exit_code": 1,
+        "run_id": "e4fa175659b34ac999135ca91a830b2a",
+        "timed_out": false,
+        "passed": 0,
+        "owned_containers_remaining": 0,
+        "not_executed": 0,
+        "failed": 1
+      },
+      "raw_trx": "governance/evidence/p2-013-sessions-20261114/bulk-browser-3ba6045/launch-uri-failure.trx.gz",
+      "raw_trx_sha256": "389df7e5a6baccf7cca6d007bc24f8941b6bf08174914f32281320f96a5b2f78",
+      "raw_compression": "lossless gzip of original bytes"
+    }
+  ],
+  "execution_scope": {
+    "bulk_https_cases": 37,
+    "unchanged_single_https_cases": 20,
+    "focused_happy_case_repeated_within_cohort": true,
+    "dependencies_changed": false,
+    "borrowed_container_state": "STOPPED before and after; disposable fixture does not borrow it",
+    "launch_failure": "Initial noncanonical DOCKER_HOST URI failed fixture admission before product execution. Corrected only child environment to npipe://./pipe/docker_engine; retained failed raw TRX."
+  },
+  "builds": {
+    "test_project": {
+      "result": "PASS",
+      "warnings": 0,
+      "errors": 0,
+      "seconds": 7.8,
+      "provenance": "Backend author final frozen-source no-restore build; source unchanged at commit"
+    },
+    "isolated_browser_host": {
+      "result": "PASS",
+      "warnings": 0,
+      "errors": 0,
+      "seconds": 15.27,
+      "raw_log": "governance/evidence/p2-013-sessions-20261114/bulk-browser-3ba6045/host-build.log.gz"
+    }
+  },
+  "client": {
+    "result": "PASS",
+    "cases": 9,
+    "typecheck": "PASS no diagnostics",
+    "provenance": "Independent frontend implementer executed existing Playwright CLI and TypeScript compiler on frozen source; no backend/browser-render claim"
+  },
+  "security": {
+    "secret_scan": {
+      "files": 15,
+      "findings": 0,
+      "result": "PASS_SCOPED"
+    },
+    "sast": {
+      "csharp_files": 12,
+      "unchanged_policy_rules": 4,
+      "findings": 0,
+      "result": "PASS_SCOPED",
+      "policy_sha256": "3c7e71681b62b44efcc56a486a845dea8f3b48276c91a245e9abd41ec72ee80c"
+    }
+  },
+  "review": {
+    "reviewer": "AI p2_013_bulk_review independent of backend author",
+    "contracts": [
+      "full-stack-engineer",
+      "solution-architect",
+      "cyber-security-engineer",
+      "tester-qa-engineer"
+    ],
+    "scope": "Frozen 13 backend paths, relevant shared StepUp lifecycle and narrow corrected four-file delta; static only",
+    "finding": "Missing original could resnapshot same request. Resolved before committed runtime: fresh server-issued identity, exact capability-backed replay, invalid/surviving bulk evidence denies replacement.",
+    "remaining_actionable_findings": 0,
+    "not_claimed": "No independent native continuation audit, all-role acceptance, human Product approval or production qualification."
+  },
+  "integration": {
+    "origin_main": "bcf8f8da10131a10060e04587259779048bbe8d0",
+    "verification": "Fresh git fetch origin --no-tags succeeded this turn; local working tree not merged/pushed",
+    "ci": "GitHub diagnostics connection unavailable; gh CLI unavailable; no CI pass claim"
+  },
+  "remaining": [
+    "Bulk visual consent and actual rendered UI integration/evidence",
+    "Full P2-013 device/trust functionality and activation inputs",
+    "Required shared native continuation regression/acceptance and native revision gates; P1-018-RV012/P2-009-RV008/P2-010-RV008 remain ACTIVE",
+    "Production configuration, merge and release gates"
+  ]
+}
