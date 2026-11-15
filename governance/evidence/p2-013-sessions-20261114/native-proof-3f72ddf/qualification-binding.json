@@ -1,0 +1,163 @@
+{
+  "schema_version": 1,
+  "scope_id": "TUN-P2-013_NATIVE_SESSION_CONTINUATION",
+  "result": "PASS_FOCUSED_SPLIT_RUNS_FINAL_INTEGRATED_PENDING",
+  "latest_fixture_commit_sha": "3f72ddf6549448130f0fe277698d1b0506c407b1",
+  "production_fix_commit_sha": "7d37d04c111c5d0e7ef722b37881448884ce10be",
+  "latest_sources": [
+    {
+      "path": "src/Modules/Identity/SessionBulkRevocationBrowser.cs",
+      "git_blob": "bd81271fb6e72cf8f228ffbf523c6d4f9f03e694"
+    },
+    {
+      "path": "src/Modules/Identity/SessionRevocationBrowser.cs",
+      "git_blob": "a327031ed3e5b3cf654c98630c443706fd3eb511"
+    },
+    {
+      "path": "tests/Tunner.Identity.Persistence.Tests/SessionBulkRevocationHttpTests.cs",
+      "git_blob": "51d0ffb36e3cece923a3cc82538cab091111dd73"
+    },
+    {
+      "path": "tests/Tunner.Identity.Persistence.Tests/SessionBulkRevocationNativeProofTests.cs",
+      "git_blob": "8c7bef702f69f551787c023a8e8deac4fbf61e85"
+    }
+  ],
+  "distinct_passed_cases": {
+    "Tunner.Identity.Persistence.Tests.SessionBulkRevocationHttpTests.NativeBulkProofContinuationsKeepExactManifestAndCannotBorrowIndependentOwner(method: \"passkey\", switchOwner: True)": {
+      "source": "d1b6d3815798169ca31081492739838c3697b8b5",
+      "run": "d1d63ac56bfc4963a75cd99376a5ab96"
+    },
+    "Tunner.Identity.Persistence.Tests.SessionBulkRevocationHttpTests.NativeBulkProofContinuationsKeepExactManifestAndCannotBorrowIndependentOwner(method: \"passkey\", switchOwner: False)": {
+      "source": "d1b6d3815798169ca31081492739838c3697b8b5",
+      "run": "d1d63ac56bfc4963a75cd99376a5ab96"
+    },
+    "Tunner.Identity.Persistence.Tests.SessionBulkRevocationHttpTests.NativeBulkProofContinuationsKeepExactManifestAndCannotBorrowIndependentOwner(method: \"totp\", switchOwner: True)": {
+      "source": "7d37d04c111c5d0e7ef722b37881448884ce10be",
+      "run": "6b814e2403dd4b35979fc887bd6f06f0"
+    },
+    "Tunner.Identity.Persistence.Tests.SessionBulkRevocationHttpTests.NativeBulkProofContinuationsKeepExactManifestAndCannotBorrowIndependentOwner(method: \"totp\", switchOwner: False)": {
+      "source": "7d37d04c111c5d0e7ef722b37881448884ce10be",
+      "run": "6b814e2403dd4b35979fc887bd6f06f0"
+    },
+    "Tunner.Identity.Persistence.Tests.SessionBulkRevocationHttpTests.NativeBulkProofContinuationsKeepExactManifestAndCannotBorrowIndependentOwner(method: \"federation\", switchOwner: True)": {
+      "source": "3f72ddf6549448130f0fe277698d1b0506c407b1",
+      "run": "e7fd22292cec4fa6a1b06577e8f8a041"
+    },
+    "Tunner.Identity.Persistence.Tests.SessionBulkRevocationHttpTests.NativeBulkProofContinuationsKeepExactManifestAndCannotBorrowIndependentOwner(method: \"federation\", switchOwner: False)": {
+      "source": "3f72ddf6549448130f0fe277698d1b0506c407b1",
+      "run": "e7fd22292cec4fa6a1b06577e8f8a041"
+    },
+    "Tunner.Identity.Persistence.Tests.SessionBulkRevocationHttpTests.SingleFederationNativeProofUsesExactProtectedSelectionInsideNativeTransactionAndRetainsCausalReceipt": {
+      "source": "3f72ddf6549448130f0fe277698d1b0506c407b1",
+      "run": "e7fd22292cec4fa6a1b06577e8f8a041"
+    }
+  },
+  "executions": [
+    {
+      "label": "initial-six",
+      "summary": {
+        "accepted": false,
+        "failed": 4,
+        "exit_code": 1,
+        "timed_out": false,
+        "source": "d1b6d3815798169ca31081492739838c3697b8b5",
+        "passed": 2,
+        "owned_containers_remaining": 0,
+        "not_executed": 0,
+        "borrowed_preserved": true,
+        "run_id": "d1d63ac56bfc4963a75cd99376a5ab96",
+        "executed": 6
+      },
+      "raw_trx": "governance/evidence/p2-013-sessions-20261114/native-proof-3f72ddf/initial-six.trx.gz",
+      "raw_sha256": "7565b24c372a1ebf4121125383b7915ac32fd22e75bc1bf7d0ea6a2181c797fa"
+    },
+    {
+      "label": "focused-five",
+      "summary": {
+        "source": "7d37d04c111c5d0e7ef722b37881448884ce10be",
+        "not_executed": 0,
+        "timed_out": false,
+        "failed": 3,
+        "run_id": "6b814e2403dd4b35979fc887bd6f06f0",
+        "executed": 5,
+        "exit_code": 1,
+        "borrowed_preserved": true,
+        "accepted": false,
+        "passed": 2,
+        "owned_containers_remaining": 0
+      },
+      "raw_trx": "governance/evidence/p2-013-sessions-20261114/native-proof-3f72ddf/focused-five.trx.gz",
+      "raw_sha256": "6a1ebd981caa2da6b78e345456245c8ce35228e339143036dd519d5c5eedb3ba"
+    },
+    {
+      "label": "google-fixture-failure",
+      "summary": {
+        "exit_code": 1,
+        "accepted": false,
+        "executed": 3,
+        "owned_containers_remaining": 0,
+        "passed": 0,
+        "run_id": "a897f3976648497aa0b00f8867705af7",
+        "not_executed": 0,
+        "timed_out": false,
+        "failed": 3,
+        "borrowed_preserved": true,
+        "source": "df112638dc2d5ec8ff52568624462963e8d3ef26"
+      },
+      "raw_trx": "governance/evidence/p2-013-sessions-20261114/native-proof-3f72ddf/google-fixture-failure.trx.gz",
+      "raw_sha256": "f979aa86de16360d93d2dfe95a15b5b3053b22f7fb1807e531928782ac043dff"
+    },
+    {
+      "label": "federation-three",
+      "summary": {
+        "passed": 3,
+        "not_executed": 0,
+        "executed": 3,
+        "borrowed_preserved": true,
+        "run_id": "e7fd22292cec4fa6a1b06577e8f8a041",
+        "failed": 0,
+        "timed_out": false,
+        "exit_code": 0,
+        "owned_containers_remaining": 0,
+        "accepted": true,
+        "source": "3f72ddf6549448130f0fe277698d1b0506c407b1"
+      },
+      "raw_trx": "governance/evidence/p2-013-sessions-20261114/native-proof-3f72ddf/federation-three.trx.gz",
+      "raw_sha256": "51cc2d1840f69e139f681da47e5d08d1faaa04fb8bf0ccb0e671ddb3080ae55c"
+    }
+  ],
+  "assembly_binding": {
+    "production_module_sha256": "6fa70a5834bd848603bf5aeca645be840f9fb97eb6135355da1f385d9c3ada3b",
+    "latest_federation_test_assembly_sha256": "1875ef50e6da6fcc63dd5232896cf440799a250ce4e60ac68ea2e0349a08ceae",
+    "provenance": "Latest three-case run used test-only no-dependencies build against unchanged committed 7d37d04 production module. Device source drafts were deliberately not compiled; assembly hashes observed immediately afterward before releasing device build hold."
+  },
+  "findings_and_corrections": [
+    "Product: exact bulk/single session owner re-resolution inside native federation transaction started a nested read and failed503. 7d37d04 returns only exact live protected selected binding in existing actor-authorized transaction; no nested/late target locks; typed final execution retains canonical locks and currentness.",
+    "Fixture: TOTP native policy required fixture-proof, while shared test profile required fixture-password. Corrected only opt-in native fixture mapping; original37 defaults/assertions retained.",
+    "Fixture: Google native transport requests essential auth_time/amr and PKCE; scoped prompt=login belongs to Microsoft. Corrected Google expectation against existing native adapter/protocol tests, preserving signed actual auth time/method/link/expiry assertions.",
+    "Fixture: provider intentionally authenticates30seconds earlier; default30second proof was already expired. Only federation fixture selects2minutes, still clipped to provider freshness expiry. Actual authentication time is never replaced by callback time.",
+    "Scanner: metadata EngineeringSecretReference variable renamed secretReference; no rule suppression. CA1861 fixed by static expected methods array; no assertion removed."
+  ],
+  "validation": {
+    "latest_test_only_build": {
+      "result": "PASS",
+      "warnings": 0,
+      "errors": 0,
+      "seconds": 6.67,
+      "no_restore": true,
+      "no_dependencies": true
+    },
+    "secret_scan": {
+      "result": "PASS_SCOPED",
+      "files": 4,
+      "findings": 0,
+      "scope": "After metadata variable rename, before federation-only lifetime property; final integrated source scan remains required."
+    },
+    "independent_review": {
+      "reviewer": "AI p2_013_bulk_review",
+      "result": "PASS_STATIC_NO_ACTIONABLE_FINDINGS",
+      "scope": "Two committed7d37d04 production diffs and relevant native federation authorization/currentness plus typed execution locking; no runtime or device draft acceptance claim."
+    }
+  },
+  "remaining": "Final64-case integrated session HTTP/native regression after device model/migration freezes; device functional/runtime/SQL/UX and bulk visual acceptance remain pending. Seven distinct passing cases are split invocations with their actual source identities, not a single final-source cohort."
+}
