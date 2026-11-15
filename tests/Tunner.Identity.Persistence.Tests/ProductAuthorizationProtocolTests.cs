@@ -30,6 +30,7 @@ public sealed class ProductAuthorizationProtocolTests(SessionListingPostgresFixt
     private const string EnvironmentName = "SANDBOX";
     private const string Redirect = "https://product.protocol.example.test/callback";
     private const string Resource = "https://product.protocol.example.test/api";
+    private const string OtherResource = "https://other.protocol.example.test/api";
     private static readonly ImmutableArray<string> Scopes = ["openid", "product.read"];
     private static readonly ImmutableArray<string> Resources = [Resource];
 
@@ -39,6 +40,15 @@ public sealed class ProductAuthorizationProtocolTests(SessionListingPostgresFixt
         internal string ClientId { get; } = "synthetic-product-client-" + Guid.NewGuid().ToString("N");
         internal string ClientCredential { get; } = Base64UrlEncoder.Encode(RandomNumberGenerator.GetBytes(32));
         internal string NativeApplicationId { get; set; } = string.Empty;
+        internal string PolicyVersion { get; set; } = "fixture-product-policy-v1";
+        internal long RegistryVersion { get; set; } = 1;
+        internal bool PolicyAvailable { get; set; } = true;
+        internal bool RegistryAvailable { get; set; } = true;
+        internal bool RelationshipAvailable { get; set; } = true;
+        internal Func<CancellationToken, Task>? BeforeTokenOutput { get; set; }
+        internal bool NativeArtifactsPrepared { get; private set; }
+        internal void ObservePreparedArtifacts(OpenIddictResponse response) => NativeArtifactsPrepared =
+            !string.IsNullOrWhiteSpace(response.AccessToken) && !string.IsNullOrWhiteSpace(response.IdToken);
         internal bool ObserveAuthorization { get; set; }
         internal bool NativeSeen { get; private set; }
         internal bool RawAuthorizationPath { get; private set; }
@@ -60,16 +70,18 @@ public sealed class ProductAuthorizationProtocolTests(SessionListingPostgresFixt
         }
         private readonly EffectivePolicyInterval interval = new(DateTimeOffset.UtcNow.AddDays(-1), true, DateTimeOffset.UtcNow.AddHours(4), false);
         private const string Evidence = "SYNTHETIC-LOCAL-PROTOCOL-TEST-ONLY";
-        public ProductAuthorizationPolicy RequireCurrent(string origin, DateTimeOffset at) => new(
-            new("fixture-product-policy-v1", "ACTIVE", Origin, interval, null, [Evidence]), Origin, Evidence,
+        public ProductAuthorizationPolicy RequireCurrent(string origin, DateTimeOffset at) => !PolicyAvailable
+            ? throw new InvalidOperationException("Synthetic Product policy owner unavailable.") : new(
+            new(PolicyVersion, "ACTIVE", Origin, interval, null, [Evidence]), Origin, Evidence,
             "fixture-product-processing", "fixture-product-retention", "RESTRICTED_SECURITY", ["pwd"],
             ["fixture-password-assurance"], TimeSpan.FromMinutes(30), TimeSpan.FromMinutes(2), TimeSpan.FromMinutes(5),
             TimeSpan.FromMinutes(5), false, null, 256);
         public ValueTask<ProductAuthorizationRegistration> RequireCurrentAsync(ProductAuthorizationRequest request, DateTimeOffset at, CancellationToken ct)
         {
+            if (!RegistryAvailable) throw new InvalidOperationException("Synthetic Registry owner unavailable.");
             if (NativeApplicationId.Length == 0) throw new InvalidOperationException("The exact synthetic native application must be seeded first.");
             // Only the digest binds caller input. Every authorized owner fact is the fixed fixture snapshot.
-            return ValueTask.FromResult(new ProductAuthorizationRegistration(request.Digest, Product, 1, "ACTIVE", EnvironmentName,
+            return ValueTask.FromResult(new ProductAuthorizationRegistration(request.Digest, Product, RegistryVersion, "ACTIVE", EnvironmentName,
                 1, "ACTIVE", ClientId, 1, "ACTIVE", NativeApplicationId, OpenIddictConstants.ClientTypes.Confidential, Redirect,
                 Scopes, Resources, "fixture-product-registry-v1", Evidence, true, interval));
         }
@@ -90,13 +102,24 @@ public sealed class ProductAuthorizationProtocolTests(SessionListingPostgresFixt
         }
         public async ValueTask<ProductRelationshipDecision> RequireCurrentAsync(ProductRelationshipRequest request, DateTimeOffset at, CancellationToken ct)
         {
+            if (!RelationshipAvailable) throw new InvalidOperationException("Synthetic Relationship owner unavailable.");
             RequireFixedOwner(request); await using var owner = database.Context();
             var subject = await owner.Database.SqlQuery<string>($"""
-                SELECT subject AS "Value" FROM public.product_authorization_relationship_fixture WHERE request_digest={request.Digest} AND version=1
+                SELECT subject AS "Value" FROM public.product_authorization_relationship_fixture WHERE request_digest={request.Digest}
                 """).SingleOrDefaultAsync(ct);
             if (subject is null || subject != Subject(request.AccountId)) throw new InvalidOperationException("An independently committed qualified Relationship is required.");
-            return new(request.Digest, "fixture-relationship-" + AuthenticationIdentity.Digest(request.AccountId + "|" + Product)[..24], 1,
+            var version = await owner.Database.SqlQuery<long>($"""
+                SELECT version AS "Value" FROM public.product_authorization_relationship_fixture WHERE request_digest={request.Digest}
+                """).SingleAsync(ct);
+            return new(request.Digest, "fixture-relationship-" + AuthenticationIdentity.Digest(request.AccountId + "|" + Product)[..24], version,
                 true, true, "fixture-relationship-policy-v1", Evidence, subject, "fixture-subject-mapping-v1", "fixture-subject-mapping-evidence", interval);
+        }
+        internal async Task ChangeRelationshipAsync(CancellationToken ct = default)
+        {
+            await using var owner = database.Context();
+            Assert.Null(owner.Database.CurrentTransaction);
+            Assert.Equal(1, await owner.Database.ExecuteSqlRawAsync(
+                "UPDATE public.product_authorization_relationship_fixture SET version=version+1", ct));
         }
         private void RequireFixedOwner(ProductRelationshipRequest request)
         {
@@ -118,14 +141,14 @@ public sealed class ProductAuthorizationProtocolTests(SessionListingPostgresFixt
         public async ValueTask DisposeAsync() { await Host.DisposeAsync(); signing.Dispose(); encryption.Dispose(); await Database.DisposeAsync(); }
         public override string ToString() => nameof(Scenario);
     }
-    private async Task<Scenario> Create()
+    private async Task<Scenario> Create(bool nativeResourcePermission = true, bool broaderNativeQualification = false)
     {
         var database = await fixture.CreateDatabaseAsync();
         await using (var setup = database.Context())
             await setup.Database.ExecuteSqlRawAsync("""
                 CREATE TABLE public.product_authorization_relationship_fixture (
                     request_digest text PRIMARY KEY, relationship_id text NOT NULL, subject text NOT NULL,
-                    version bigint NOT NULL CHECK(version=1), committed_at timestamp with time zone NOT NULL)
+                    version bigint NOT NULL CHECK(version>0), committed_at timestamp with time zone NOT NULL)
                 """);
         var owners = new Owners(database); var signing = RSA.Create(2048); var encryption = RSA.Create(2048);
         var signingKey = new RsaSecurityKey(signing) { KeyId = "fixture-distinct-signing" };
@@ -137,7 +160,9 @@ public sealed class ProductAuthorizationProtocolTests(SessionListingPostgresFixt
             services.AddSingleton<IProductAuthorizationPolicySource>(owners);
             services.AddSingleton<IProductAuthorizationRegistrySource>(owners);
             services.AddSingleton<IProductAuthorizationRelationshipSource>(owners);
-            services.AddTunnerProductAuthorization(new(Origin, AuthorizationPath, TokenPath, signingKey, encryptionKey, Scopes, Resources, 32768, 16, 64, 16384));
+            var nativeScopes = broaderNativeQualification ? ImmutableArray.Create("openid", "product.other", "product.read") : Scopes;
+            var nativeResources = broaderNativeQualification ? ImmutableArray.Create(OtherResource, Resource).Sort(StringComparer.Ordinal) : Resources;
+            services.AddTunnerProductAuthorization(new(Origin, AuthorizationPath, TokenPath, signingKey, encryptionKey, nativeScopes, nativeResources, 32768, 16, 64, 16384));
             services.AddOpenIddict().AddServer(options =>
             {
                 options.AddEventHandler<OpenIddictServerEvents.ProcessRequestContext>(builder => builder
@@ -156,6 +181,15 @@ public sealed class ProductAuthorizationProtocolTests(SessionListingPostgresFixt
                         }
                         return ValueTask.CompletedTask;
                     }).SetOrder(int.MinValue + 50_000));
+                options.AddEventHandler<OpenIddictServerEvents.ApplyTokenResponseContext>(builder => builder
+                    .UseInlineHandler(async context =>
+                    {
+                        if (owners.BeforeTokenOutput is { } beforeOutput)
+                        {
+                            owners.ObservePreparedArtifacts(context.Response);
+                            await beforeOutput(context.CancellationToken);
+                        }
+                    }).SetOrder(int.MinValue + 99_999));
             });
         });
         host.Clock.SynchronizeToSystem();
@@ -170,8 +204,13 @@ public sealed class ProductAuthorizationProtocolTests(SessionListingPostgresFixt
             descriptor.RedirectUris.Add(new Uri(Redirect));
             descriptor.Permissions.UnionWith([OpenIddictConstants.Permissions.Endpoints.Authorization, OpenIddictConstants.Permissions.Endpoints.Token,
                 OpenIddictConstants.Permissions.GrantTypes.AuthorizationCode, OpenIddictConstants.Permissions.ResponseTypes.Code,
-                OpenIddictConstants.Permissions.Prefixes.Scope + "product.read",
-                OpenIddictConstants.Permissions.Prefixes.Resource + Resource]);
+                OpenIddictConstants.Permissions.Prefixes.Scope + "product.read"]);
+            if (nativeResourcePermission) descriptor.Permissions.Add(OpenIddictConstants.Permissions.Prefixes.Resource + Resource);
+            if (broaderNativeQualification)
+            {
+                descriptor.Permissions.Add(OpenIddictConstants.Permissions.Prefixes.Scope + "product.other");
+                descriptor.Permissions.Add(OpenIddictConstants.Permissions.Prefixes.Resource + OtherResource);
+            }
             descriptor.Requirements.Add(OpenIddictConstants.Requirements.Features.ProofKeyForCodeExchange);
             var application = await manager.CreateAsync(descriptor);
             owners.NativeApplicationId = await manager.GetIdAsync(application) ?? throw new InvalidOperationException("The synthetic native client identity is required.");
@@ -182,37 +221,49 @@ public sealed class ProductAuthorizationProtocolTests(SessionListingPostgresFixt
         using var current = await host.Get("/authentication/session", cookies); Assert.Equal(HttpStatusCode.OK, current.StatusCode);
         return new(database, host, owners, signing, encryption, signingKey, encryptionKey, account, cookies);
     }
-    private sealed record NativeCode(string Value, string Verifier)
+    private sealed record NativeCode(string Value, string Verifier, string Nonce)
     { public override string ToString() => nameof(NativeCode); }
     private static async Task<NativeCode> Authorize(Scenario test)
     {
         var verifier = Base64UrlEncoder.Encode(RandomNumberGenerator.GetBytes(32));
-        var challenge = Base64UrlEncoder.Encode(SHA256.HashData(Encoding.ASCII.GetBytes(verifier))); var state = Guid.NewGuid().ToString("N");
-        using var query = new FormUrlEncodedContent(new Dictionary<string, string>
-        {
-            ["client_id"] = test.Owners.ClientId, ["redirect_uri"] = Redirect, ["response_type"] = "code", ["response_mode"] = "form_post",
-            ["scope"] = string.Join(' ', Scopes), ["resource"] = Resource, ["product_id"] = Product, ["environment"] = EnvironmentName,
-            ["code_challenge"] = challenge, ["code_challenge_method"] = "S256", ["state"] = state, ["nonce"] = Guid.NewGuid().ToString("N")
-        });
-        HttpResponseMessage received;
-        test.Owners.ObserveAuthorization = true;
-        try { received = await test.Host.Get(AuthorizationPath + "?" + await query.ReadAsStringAsync(), test.Cookies); }
-        finally { test.Owners.ObserveAuthorization = false; }
-        using var response = received;
+        var state = Guid.NewGuid().ToString("N"); var nonce = Guid.NewGuid().ToString("N");
+        using var response = await RequestAuthorization(test, verifier, state, nonce);
         if (response.StatusCode != HttpStatusCode.OK) Assert.Fail(await NativeErrorDiagnostic(response, test.Owners));
         Assert.Equal(HttpStatusCode.OK, response.StatusCode); Assert.Equal("text/html", response.Content.Headers.ContentType?.MediaType);
         var form = ReadNativeForm(await response.Content.ReadAsStringAsync()); Assert.Equal(Redirect, form.Action);
         Assert.False(form.Values.ContainsKey("access_token") || form.Values.ContainsKey("id_token") || form.Values.ContainsKey("refresh_token"));
         Assert.True(form.Values.TryGetValue("code", out var code) && !string.IsNullOrWhiteSpace(code), "The native form_post response must contain an authorization code.");
-        Assert.Equal(state, form.Values.GetValueOrDefault("state")); return new(code!, verifier);
+        Assert.Equal(state, form.Values.GetValueOrDefault("state")); return new(code!, verifier, nonce);
     }
-    private static async Task<HttpResponseMessage> Redeem(Scenario test, NativeCode original)
+    private static async Task<HttpResponseMessage> RequestAuthorization(Scenario test, string? verifier = null,
+        string? state = null, string? nonce = null, IReadOnlyDictionary<string, string>? overrides = null)
     {
-        using var form = new FormUrlEncodedContent(new Dictionary<string, string>
+        verifier ??= Base64UrlEncoder.Encode(RandomNumberGenerator.GetBytes(32));
+        var challenge = Base64UrlEncoder.Encode(SHA256.HashData(Encoding.ASCII.GetBytes(verifier)));
+        var values = new Dictionary<string, string>
+        {
+            ["client_id"] = test.Owners.ClientId, ["redirect_uri"] = Redirect, ["response_type"] = "code", ["response_mode"] = "form_post",
+            ["scope"] = string.Join(' ', Scopes), ["resource"] = Resource, ["product_id"] = Product, ["environment"] = EnvironmentName,
+            ["code_challenge"] = challenge, ["code_challenge_method"] = "S256", ["state"] = state ?? Guid.NewGuid().ToString("N"),
+            ["nonce"] = nonce ?? Guid.NewGuid().ToString("N")
+        };
+        if (overrides is not null) foreach (var pair in overrides) values[pair.Key] = pair.Value;
+        using var query = new FormUrlEncodedContent(values);
+        HttpResponseMessage received;
+        test.Owners.ObserveAuthorization = true;
+        try { received = await test.Host.Get(AuthorizationPath + "?" + await query.ReadAsStringAsync(), test.Cookies); }
+        finally { test.Owners.ObserveAuthorization = false; }
+        return received;
+    }
+    private static async Task<HttpResponseMessage> Redeem(Scenario test, NativeCode original, IReadOnlyDictionary<string, string>? overrides = null)
+    {
+        var values = new Dictionary<string, string>
         {
             ["grant_type"] = "authorization_code", ["code"] = original.Value, ["code_verifier"] = original.Verifier,
             ["client_id"] = test.Owners.ClientId, ["client_secret"] = test.Owners.ClientCredential, ["redirect_uri"] = Redirect
-        });
+        };
+        if (overrides is not null) foreach (var pair in overrides) values[pair.Key] = pair.Value;
+        using var form = new FormUrlEncodedContent(values);
         return await test.Host.RawPost(TokenPath, await form.ReadAsStringAsync(), string.Empty, string.Empty, "application/x-www-form-urlencoded");
     }
 
@@ -301,6 +352,8 @@ public sealed class ProductAuthorizationProtocolTests(SessionListingPostgresFixt
             });
             Assert.True(validated.IsValid, validated.Exception?.GetType().Name ?? "Native artifact validation failed.");
             Assert.True(validated.ClaimsIdentity.FindFirst("sub")?.Value == Owners.Subject(test.AccountId), "The independently qualified subject mapping must be preserved.");
+            if (artifact.Audience == test.Owners.ClientId)
+                Assert.True(validated.ClaimsIdentity.FindFirst("nonce")?.Value == code.Nonce, "The ID token must preserve the original protected nonce.");
             Assert.DoesNotContain(validated.ClaimsIdentity.Claims.Select(claim => claim.Type), type => type is "email" or "name" or "role" or "roles" or "account_id");
         }
         using var replay = await Redeem(test, code); Assert.Equal(HttpStatusCode.BadRequest, replay.StatusCode);
@@ -323,6 +376,216 @@ public sealed class ProductAuthorizationProtocolTests(SessionListingPostgresFixt
         var manager = scope.ServiceProvider.GetRequiredService<IOpenIddictAuthorizationManager>();
         var authorization = await manager.FindByIdAsync(issuance.Subject); Assert.NotNull(authorization);
         var properties = await manager.GetPropertiesAsync(authorization!); Assert.True(properties.ContainsKey(ProductAuthorizationApplication.LineageProperty));
+    }
+
+    [Fact]
+    public async Task MissingNativeResourcePermissionRejectsBeforeIdentityIssuance()
+    {
+        await using var test = await Create(nativeResourcePermission: false);
+        using var response = await RequestAuthorization(test);
+        await AssertRejected(response, "invalid_request", HttpStatusCode.BadRequest, "ID2192");
+        await AssertEffects(test, grants: 0);
+        await using var read = test.Database.Context();
+        Assert.Equal(0, await read.Database.SqlQuery<int>($"SELECT count(*)::integer AS \"Value\" FROM public.product_authorization_relationship_fixture").SingleAsync());
+    }
+
+    [Theory]
+    [InlineData("code_verifier", "invalid_grant")]
+    [InlineData("client_id", "invalid_client")]
+    [InlineData("client_secret", "invalid_client")]
+    [InlineData("redirect_uri", "invalid_grant")]
+    public async Task TokenRedemptionRequiresExactNativeBindings(string parameter, string error)
+    {
+        await using var test = await Create(); var original = await Authorize(test);
+        var wrong = parameter switch
+        {
+            "code_verifier" => Base64UrlEncoder.Encode(RandomNumberGenerator.GetBytes(32)),
+            "redirect_uri" => "https://product.protocol.example.test/other-callback",
+            _ => "synthetic-unrecognized-binding"
+        };
+        using var response = await Redeem(test, original, new Dictionary<string, string> { [parameter] = wrong });
+        await AssertRejected(response, error, error == "invalid_client" ? HttpStatusCode.Unauthorized : HttpStatusCode.BadRequest);
+        await AssertEffects(test, grants: 1, original.Value, test.Owners.ClientCredential);
+    }
+
+    [Theory]
+    [InlineData("product_id", "PRD-UNQUALIFIED-SYNTHETIC")]
+    [InlineData("environment", "PRODUCTION")]
+    public async Task NativeClientCannotSelectAnUnqualifiedProductOrEnvironment(string parameter, string value)
+    {
+        await using var test = await Create();
+        using var response = await RequestAuthorization(test, overrides: new Dictionary<string, string> { [parameter] = value });
+        await AssertRejected(response, "access_denied", HttpStatusCode.OK);
+        await AssertEffects(test, grants: 0);
+    }
+
+    [Fact]
+    public async Task NativeScopeAndResourcePermissionsDoNotReplaceExactRegistryQualification()
+    {
+        await using var test = await Create(broaderNativeQualification: true);
+        using (var scope = await RequestAuthorization(test, overrides: new Dictionary<string, string> { ["scope"] = "openid product.other" }))
+            await AssertRejected(scope, "access_denied", HttpStatusCode.OK);
+        using (var resource = await RequestAuthorization(test, overrides: new Dictionary<string, string> { ["resource"] = OtherResource }))
+            await AssertRejected(resource, "access_denied", HttpStatusCode.OK);
+        await AssertEffects(test, grants: 0);
+    }
+
+    [Fact]
+    public async Task ExpiredOriginalCodeCannotRedeemEvenWhileNativeEnvelopeIsUnexpired()
+    {
+        await using var test = await Create(); var original = await Authorize(test);
+        // The owner clock advances beyond the original two-minute deadline without sleeping
+        // or changing the native token validator's system clock.
+        test.Host.Clock.Advance(TimeSpan.FromMinutes(3));
+        using var response = await Redeem(test, original);
+        await AssertRejected(response, "invalid_grant", HttpStatusCode.BadRequest);
+        await AssertEffects(test, grants: 1, original.Value);
+    }
+
+    [Fact]
+    public async Task RevokedTunnerSessionCannotRedeemItsPreviouslyIssuedNativeCode()
+    {
+        await using var test = await Create(); var original = await Authorize(test);
+        await using (var write = test.Database.Context())
+        {
+            var session = await write.Set<AuthenticationSessionRow>().SingleAsync(x => x.AccountId == test.AccountId);
+            session.State = "REVOKED"; session.RevokedAt = test.Host.Clock.GetUtcNow(); session.Version++;
+            session.ProtectedKey = ""; session.ProtectedTicket = ""; await write.SaveChangesAsync();
+        }
+        using var response = await Redeem(test, original);
+        await AssertRejected(response, "invalid_grant", HttpStatusCode.BadRequest);
+        await AssertEffects(test, grants: 1, original.Value);
+    }
+
+    [Theory]
+    [InlineData("Policy")]
+    [InlineData("Registry")]
+    [InlineData("Relationship")]
+    public async Task OwnerChangeUnavailabilityAndFinalRecheckPreventNativeTokenPublication(string owner)
+    {
+        // Fresh originals isolate denial stages; a failed original is never retried or replaced.
+        foreach (var stage in new[] { "Changed", "Unavailable", "FinalOutput" })
+        {
+            await using var test = await Create(); var original = await Authorize(test); var finalBoundaryReached = false;
+            if (stage == "FinalOutput")
+                test.Owners.BeforeTokenOutput = async ct =>
+                {
+                    finalBoundaryReached = true;
+                    await ChangeOwner(test.Owners, owner, unavailable: false, ct);
+                };
+            else await ChangeOwner(test.Owners, owner, stage == "Unavailable");
+            using var response = await Redeem(test, original);
+            if (stage == "Unavailable")
+            {
+                Assert.Equal(HttpStatusCode.InternalServerError, response.StatusCode);
+                await response.Content.LoadIntoBufferAsync(65536);
+                var body = await response.Content.ReadAsStringAsync();
+                Assert.True(!body.Contains(original.Value, StringComparison.Ordinal) &&
+                    !body.Contains(test.Owners.ClientCredential, StringComparison.Ordinal), "Unavailable owners must not expose native credentials or codes.");
+                Assert.True(!body.Contains("access_token", StringComparison.Ordinal) && !body.Contains("id_token", StringComparison.Ordinal) &&
+                    !body.Contains("refresh_token", StringComparison.Ordinal), "Unavailable owners must not publish protocol artifacts.");
+            }
+            else await AssertRejected(response, "invalid_grant", HttpStatusCode.BadRequest);
+            if (stage == "FinalOutput")
+            {
+                Assert.True(finalBoundaryReached, "The owner mutation must run at the native pre-output boundary.");
+                Assert.True(test.Owners.NativeArtifactsPrepared, "Native artifacts must have been generated before the final authority denial removes them.");
+                await using var read = test.Database.Context();
+                var issuance = await read.Set<OutboxMessage>().SingleAsync(x => x.EventType == "ProductAuthorizationGranted");
+                await using var scope = test.Host.Services.CreateAsyncScope();
+                var manager = scope.ServiceProvider.GetRequiredService<IOpenIddictAuthorizationManager>();
+                var authorization = await manager.FindByIdAsync(issuance.Subject); Assert.NotNull(authorization);
+                Assert.Equal(OpenIddictConstants.Statuses.Revoked, await manager.GetStatusAsync(authorization!));
+            }
+            await AssertEffects(test, grants: 1, original.Value, test.Owners.ClientCredential);
+        }
+    }
+
+    private static async Task ChangeOwner(Owners owners, string owner, bool unavailable, CancellationToken ct = default)
+    {
+        switch (owner)
+        {
+            case "Policy":
+                if (unavailable) owners.PolicyAvailable = false; else owners.PolicyVersion = "fixture-product-policy-v2";
+                break;
+            case "Registry":
+                if (unavailable) owners.RegistryAvailable = false; else owners.RegistryVersion++;
+                break;
+            case "Relationship":
+                if (unavailable) owners.RelationshipAvailable = false; else await owners.ChangeRelationshipAsync(ct);
+                break;
+            default: throw new InvalidOperationException("An explicit synthetic owner is required.");
+        }
+    }
+
+    private static async Task AssertEffects(Scenario test, int grants, params string[] excludedArtifacts)
+    {
+        await using var read = test.Database.Context();
+        var effects = await read.Set<OutboxMessage>().Where(x => x.EventType == "ProductAuthorizationGranted" || x.EventType == "ProductAuthorizationRedeemed").ToListAsync();
+        Assert.Equal(grants, effects.Count);
+        Assert.DoesNotContain(effects.Select(x => x.EventType), type => type == "ProductAuthorizationRedeemed");
+        foreach (var effect in effects)
+        {
+            Assert.Equal("ProductAuthorizationGranted", effect.EventType);
+            foreach (var artifact in excludedArtifacts)
+                Assert.False(effect.Payload.Contains(artifact, StringComparison.Ordinal), "Rejected native artifacts must not enter success outbox payloads.");
+        }
+    }
+
+    private static async Task AssertRejected(HttpResponseMessage response, string expectedError, HttpStatusCode expectedStatus, string? expectedIdentifier = null)
+    {
+        Assert.Equal(expectedStatus, response.StatusCode);
+        await response.Content.LoadIntoBufferAsync(65536);
+        var body = await response.Content.ReadAsStringAsync(); var mediaType = response.Content.Headers.ContentType?.MediaType;
+        Dictionary<string, string> fields;
+        if (expectedError == "invalid_client")
+        {
+            Assert.Single(response.Headers.WwwAuthenticate.Select(header => header.Scheme), scheme => scheme == "Basic");
+            var challenge = response.Headers.WwwAuthenticate.First(header => header.Scheme == "Basic");
+            var safeHeaderError = "unrecognized";
+            if (challenge.Parameter is { Length: <= 4096 } parameters)
+                foreach (var parameter in parameters.Split(','))
+                {
+                    var separator = parameter.IndexOf('=');
+                    if (separator >= 0 && parameter[..separator].Trim() == "error")
+                        safeHeaderError = SafeOAuthError(parameter[(separator + 1)..].Trim().Trim('"'));
+                }
+            Assert.Equal(expectedError, safeHeaderError);
+            if (body.Length == 0) return; // Native challenge responses can publish the error solely in WWW-Authenticate.
+        }
+        if (mediaType == "text/html")
+        {
+            var form = ReadNativeForm(body); Assert.Equal(Redirect, form.Action); fields = form.Values;
+        }
+        else if (mediaType == "text/plain")
+        {
+            fields = new(StringComparer.Ordinal);
+            foreach (var line in body.Split('\n'))
+            {
+                var colon = line.IndexOf(':'); if (colon < 0) continue;
+                var key = line[..colon].Trim();
+                if (key is "error" or "error_uri" or "code" or "access_token" or "id_token" or "refresh_token")
+                    Assert.True(fields.TryAdd(key, line[(colon + 1)..].Trim()), "Native error fields must be unique.");
+            }
+        }
+        else
+        {
+            Assert.True(mediaType is "application/json" or "application/problem+json", "A native protocol error representation is required.");
+            using var document = JsonDocument.Parse(body); fields = new(StringComparer.Ordinal);
+            foreach (var property in document.RootElement.EnumerateObject())
+            {
+                if (property.Name is "code" or "access_token" or "id_token" or "refresh_token")
+                    Assert.True(property.Value.ValueKind == JsonValueKind.Null ||
+                        property.Value.ValueKind == JsonValueKind.String && string.IsNullOrEmpty(property.Value.GetString()),
+                        "A protocol rejection must not publish a native artifact.");
+                if (property.Value.ValueKind == JsonValueKind.String)
+                    Assert.True(fields.TryAdd(property.Name, property.Value.GetString()!), "Native error fields must be unique.");
+            }
+        }
+        Assert.Equal(expectedError, SafeOAuthError(fields.GetValueOrDefault("error")));
+        foreach (var output in new[] { "code", "access_token", "id_token", "refresh_token" })
+            Assert.True(string.IsNullOrEmpty(fields.GetValueOrDefault(output)), "A protocol rejection must not publish a native artifact.");
+        if (expectedIdentifier is not null) Assert.Equal(expectedIdentifier, SafeOpenIddictIdentifier(fields.GetValueOrDefault("error_uri")));
     }
 
     private sealed record NativeForm(string Action, Dictionary<string, string> Values)

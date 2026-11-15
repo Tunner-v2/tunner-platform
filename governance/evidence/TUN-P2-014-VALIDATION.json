@@ -5,7 +5,32 @@
   "result": "PENDING",
   "tested_commit_sha": null,
   "validated_commit_sha": null,
-  "phase": "IMPLEMENTATION_ADMITTED",
+  "phase": "FIRST_NATIVE_EXCHANGE_PASSED_INTEGRATION_CONTINUES",
+  "first_increment": {
+    "result": "PASS_FIRST_NATIVE_EXCHANGE_ONLY",
+    "source_commit_sha": "b78719dd661bbc6a1419dae7532ef33b8f26fa19",
+    "run_id": "e6e1e883e89c47b9bb3218d4abdf76b2",
+    "execution": {
+      "executed": 1,
+      "passed": 1,
+      "failed": 0,
+      "not_executed": 0,
+      "exit_code": 0,
+      "timed_out": false,
+      "owned_containers_remaining": 0,
+      "borrowed_preserved": true
+    },
+    "summary_ref": "artifacts/p2-014-authorization-20261115/native-runtime-e6e1e883e89c47b9bb3218d4abdf76b2/summary.json",
+    "raw_trx_ref": "artifacts/p2-014-authorization-20261115/native-runtime-e6e1e883e89c47b9bb3218d4abdf76b2/product-authorization.trx",
+    "launch_ref": "artifacts/p2-014-authorization-20261115/native-runtime-e6e1e883e89c47b9bb3218d4abdf76b2/launch.json",
+    "coverage": [
+      "Actual User-cookie authenticated native form_post/S256 authorization and real HTTPS code redemption.",
+      "Native encrypted/signed access and identity artifacts validated for issuer, audience, signature and lifetime; private claims excluded.",
+      "Independently committed synthetic Relationship acknowledgement and canonical granted/private redeemed causal outbox evidence.",
+      "Code reuse rejected; test-owned Docker resources removed and borrowed browser database unchanged."
+    ],
+    "limits": "One actual integration fact only. No nonce-specific assertion yet, broad negative/concurrency/output-failure qualification, full continuation/assurance/refresh/introspection/revocation/propagation, shared compatibility closure, production qualification or Product acceptance. Artifacts remain implementation receipts until final committed evidence packaging."
+  },
   "owned_behavior_paths": [
     "Directory.Packages.props",
     "src/Modules/Identity/Tunner.Identity.Persistence.csproj",
@@ -37,7 +62,7 @@
   "contract_ref": "docs/contracts/product-authorization-contract.md",
   "scope": "Complete Product authorization and revocation contract integration. First vertical increment is real active-session native authorization-code/PKCE issuance/redemption. Login/registration continuation, assurance, refresh/introspection/revocation, current owner checks and enabled propagation remain required; first happy path cannot close the feature.",
   "boundary": "Explicit qualified issuer/keys/client/registry/Relationship/policy inputs; missing providers deny activation. No production default or Product membership/entitlement/local-session authority. Existing Figma/Drive/FigJam remain read-only.",
-  "actual_feature_tests": [],
+  "actual_feature_tests": ["first_increment"],
   "product_acceptance": "NOT_REQUESTED_OR_GRANTED",
-  "exact_next_action": "Implement opt-in native server and typed current-authority owners; build, then run focused real HTTPS/code replay and negative tests before broader integrated qualification."
+  "exact_next_action": "Qualify the focused negative/currentness cohort without weakening native checks. Then complete qualified continuation/requested-assurance, refresh/introspection/revocation and enabled propagation before shared compatibility and final acceptance gates."
 }
