@@ -114,7 +114,7 @@ public sealed class ProductAuthorizationProtocolTests(SessionListingPostgresFixt
             services.AddSingleton<IProductAuthorizationPolicySource>(owners);
             services.AddSingleton<IProductAuthorizationRegistrySource>(owners);
             services.AddSingleton<IProductAuthorizationRelationshipSource>(owners);
-            services.AddTunnerProductAuthorization(new(Origin, AuthorizationPath, TokenPath, signingKey, encryptionKey, Scopes, 32768, 16, 64, 16384));
+            services.AddTunnerProductAuthorization(new(Origin, AuthorizationPath, TokenPath, signingKey, encryptionKey, Scopes, Resources, 32768, 16, 64, 16384));
         });
         host.Clock.SynchronizeToSystem();
         await using (var scope = host.Services.CreateAsyncScope())
@@ -152,6 +152,7 @@ public sealed class ProductAuthorizationProtocolTests(SessionListingPostgresFixt
             ["code_challenge"] = challenge, ["code_challenge_method"] = "S256", ["state"] = state, ["nonce"] = Guid.NewGuid().ToString("N")
         });
         using var response = await test.Host.Get(AuthorizationPath + "?" + await query.ReadAsStringAsync(), test.Cookies);
+        if (response.StatusCode != HttpStatusCode.OK) Assert.Fail(await NativeErrorDiagnostic(response));
         Assert.Equal(HttpStatusCode.OK, response.StatusCode); Assert.Equal("text/html", response.Content.Headers.ContentType?.MediaType);
         var form = ReadNativeForm(await response.Content.ReadAsStringAsync()); Assert.Equal(Redirect, form.Action);
         Assert.False(form.Values.ContainsKey("access_token") || form.Values.ContainsKey("id_token") || form.Values.ContainsKey("refresh_token"));
@@ -166,6 +167,40 @@ public sealed class ProductAuthorizationProtocolTests(SessionListingPostgresFixt
             ["client_id"] = test.Owners.ClientId, ["client_secret"] = test.Owners.ClientCredential, ["redirect_uri"] = Redirect
         });
         return await test.Host.RawPost(TokenPath, await form.ReadAsStringAsync(), string.Empty, string.Empty, "application/x-www-form-urlencoded");
+    }
+
+    private static async Task<string> NativeErrorDiagnostic(HttpResponseMessage response)
+    {
+        var prefix = "Native authorization HTTP " + (int)response.StatusCode + "; "; var bytes = new byte[8193];
+        try
+        {
+            await using var stream = await response.Content.ReadAsStreamAsync(); var count = 0;
+            while (count < bytes.Length)
+            { var read = await stream.ReadAsync(bytes.AsMemory(count)); if (read == 0) break; count += read; }
+            if (count > 8192) return prefix + "bounded OAuth metadata unavailable";
+            using var document = JsonDocument.Parse(bytes.AsMemory(0, count)); var root = document.RootElement;
+            if (root.ValueKind != JsonValueKind.Object) return prefix + "OAuth metadata unavailable";
+            string[] standard = ["invalid_request", "invalid_client", "invalid_grant", "unauthorized_client", "unsupported_grant_type",
+                "invalid_scope", "invalid_target", "unsupported_response_type", "access_denied", "server_error", "temporarily_unavailable",
+                "login_required", "consent_required", "interaction_required"];
+            var error = root.TryGetProperty("error", out var rawError) && rawError.ValueKind == JsonValueKind.String ? rawError.GetString() : null;
+            var safeError = error is not null && standard.Contains(error, StringComparer.Ordinal) ? error : "unrecognized";
+            var identifier = "unavailable";
+            if (root.TryGetProperty("error_uri", out var rawUri) && rawUri.ValueKind == JsonValueKind.String && rawUri.GetString() is { Length: <= 512 } uriText &&
+                Uri.TryCreate(uriText, UriKind.Absolute, out var uri) && uri.Scheme == "https" &&
+                uri.Host.Equals("documentation.openiddict.com", StringComparison.OrdinalIgnoreCase) && uri.AbsolutePath.StartsWith("/errors/", StringComparison.Ordinal))
+            {
+                var last = uri.AbsolutePath[(uri.AbsolutePath.LastIndexOf('/') + 1)..];
+                if (last.Length == 6 && last.StartsWith("ID", StringComparison.Ordinal) && last.AsSpan(2).IndexOfAnyExceptInRange('0', '9') < 0) identifier = last;
+            }
+            var description = root.TryGetProperty("error_description", out var rawDescription) && rawDescription.ValueKind == JsonValueKind.String ? rawDescription.GetString() : null;
+            string[] labels = ["client_id", "redirect_uri", "response_type", "response_mode", "code_challenge", "code_challenge_method", "scope", "resource", "product_id", "environment", "nonce", "state"];
+            var hints = labels.Select(label => label + "=" + (description?.Contains("'" + label + "'", StringComparison.Ordinal) == true));
+            return prefix + "OAuth=" + safeError + "; OpenIddict=" + identifier + "; parameter labels: " + string.Join(", ", hints);
+        }
+        catch (Exception error) when (error is JsonException or IOException or HttpRequestException or InvalidOperationException)
+        { return prefix + "OAuth metadata unavailable"; }
+        finally { CryptographicOperations.ZeroMemory(bytes); }
     }
 
     [Fact]

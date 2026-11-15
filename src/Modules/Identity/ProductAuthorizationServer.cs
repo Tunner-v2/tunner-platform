@@ -13,7 +13,7 @@ namespace Tunner.Identity.Persistence;
 public sealed class ProductAuthorizationServerProfile
 {
     public ProductAuthorizationServerProfile(string origin, string authorizationPath, string tokenPath,
-        SecurityKey signingKey, SecurityKey encryptionKey, ImmutableArray<string> supportedScopes,
+        SecurityKey signingKey, SecurityKey encryptionKey, ImmutableArray<string> supportedScopes, ImmutableArray<string> supportedResources,
         int maximumBodyBytes, int maximumFields, int maximumKeyLength, int maximumValueLength)
     {
         if (!Uri.TryCreate(origin, UriKind.Absolute, out var uri) || uri.Scheme != "https" ||
@@ -23,6 +23,10 @@ public sealed class ProductAuthorizationServerProfile
         if (!ProductAuthorizationRequest.Canonical(supportedScopes) || supportedScopes.Length == 0 ||
             supportedScopes.Contains(OpenIddictConstants.Scopes.OfflineAccess, StringComparer.Ordinal))
             throw new ArgumentException("Explicit scopes for the admitted code-only profile are required.", nameof(supportedScopes));
+        if (!ProductAuthorizationRequest.Canonical(supportedResources) || supportedResources.Length == 0 ||
+            supportedResources.Any(resource => !Uri.TryCreate(resource, UriKind.Absolute, out var resourceUri) ||
+                resourceUri.AbsoluteUri != resource || resourceUri.Fragment.Length != 0 || resourceUri.UserInfo.Length != 0))
+            throw new ArgumentException("Explicit canonical resource URIs are required.", nameof(supportedResources));
         ArgumentOutOfRangeException.ThrowIfNegativeOrZero(maximumBodyBytes);
         ArgumentOutOfRangeException.ThrowIfNegativeOrZero(maximumFields);
         ArgumentOutOfRangeException.ThrowIfNegativeOrZero(maximumKeyLength);
@@ -33,7 +37,7 @@ public sealed class ProductAuthorizationServerProfile
         if (string.Equals(authorizationPath, tokenPath, StringComparison.OrdinalIgnoreCase))
             throw new ArgumentException("Distinct native authorization and token paths are required.");
         Origin = origin; AuthorizationPath = authorizationPath; TokenPath = tokenPath;
-        SigningKey = signingKey; EncryptionKey = encryptionKey; SupportedScopes = supportedScopes;
+        SigningKey = signingKey; EncryptionKey = encryptionKey; SupportedScopes = supportedScopes; SupportedResources = supportedResources;
         MaximumBodyBytes = maximumBodyBytes; MaximumFields = maximumFields;
         MaximumKeyLength = maximumKeyLength; MaximumValueLength = maximumValueLength;
     }
@@ -43,6 +47,7 @@ public sealed class ProductAuthorizationServerProfile
     internal SecurityKey SigningKey { get; }
     internal SecurityKey EncryptionKey { get; }
     public ImmutableArray<string> SupportedScopes { get; }
+    public ImmutableArray<string> SupportedResources { get; }
     internal int MaximumBodyBytes { get; }
     internal int MaximumFields { get; }
     internal int MaximumKeyLength { get; }
@@ -81,6 +86,7 @@ public static class ProductAuthorizationServer
             options.Configure(value =>
             {
                 value.Scopes.Clear(); value.Scopes.UnionWith(profile.SupportedScopes);
+                value.Resources.Clear(); value.Resources.UnionWith(profile.SupportedResources.Select(resource => new Uri(resource)));
                 value.CodeChallengeMethods.Clear(); value.CodeChallengeMethods.Add(OpenIddictConstants.CodeChallengeMethods.Sha256);
                 value.ResponseModes.Clear(); value.ResponseModes.Add(OpenIddictConstants.ResponseModes.FormPost);
             });
