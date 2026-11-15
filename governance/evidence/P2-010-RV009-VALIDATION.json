@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "scope_id": "P2-010-RV009",
+  "validation_kind": "COMMITTED",
+  "result": "PENDING",
+  "tested_commit_sha": null,
+  "validated_commit_sha": null,
+  "owned_behavior_paths": [
+    "Directory.Packages.props"
+  ],
+  "owner_work_item": "TUN-P2-014",
+  "scope": "Pre-edit compatibility allocation only. Native source edits require ACTIVE revision and P2-014 implementation admission. No executed tests, completed qualification or production approval claimed.",
+  "contract_ref": "docs/contracts/product-authorization-contract.md",
+  "rd_ref": "governance/evidence/TUN-P2-014-RD-SOURCES.json",
+  "required_qualification": [
+    "Pinned native-server dependency and unchanged existing versions",
+    "Core-only persistence does not activate server",
+    "Native authorization-code/PKCE, replay, transaction and exact-owner isolation tests",
+    "Applicable shared authentication/federation and dependency/security regression gates"
+  ]
+}

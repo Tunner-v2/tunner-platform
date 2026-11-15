@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "revision_id": "P2-003-RV002",
+  "revision_scope": "WORK_ITEM",
+  "original_scope_id": "TUN-P2-003",
+  "parent_revision_id": "P2-003-RV001",
+  "parent_milestone_revision_id": null,
+  "title": "Compose selected OpenIddict server for Product authorization",
+  "revision_type": "COMPATIBILITY",
+  "status": "ACTIVE",
+  "reason": "Authorized P2-014 preallocates only Directory.Packages.props and src/Modules/Identity/Tunner.Identity.Persistence.csproj for the selected native server at the existing approved OpenIddict version. Current P2-014 contract and FRD remain governing; byte-verified baseline references establish the selected framework. Preserve core-only registration, original DONE and closed RV001; source edits require P2-014 admission and this Revision ACTIVE.",
+  "authority_refs": [
+    "docs/authority/baselines/1.6.0/decisions/ADR-0006_Identity_ASPNET_Identity_OpenIddict.md",
+    "docs/authority/baselines/1.6.0/17_Account_Identity_and_Session_FRD.md"
+  ],
+  "decision_refs": [],
+  "defect_refs": [],
+  "change_refs": ["docs/contracts/product-authorization-contract.md"],
+  "impact_classification": "NON_BLOCKING",
+  "blocked_scope": [],
+  "acceptance_criteria": [
+    "Additive explicit native server dependency preserves core-only opt-in registration. Real code PKCE exchange, replay/isolation, dependency and existing foundation regressions qualify before closure. No model migration or production policy defaults."
+  ],
+  "prerequisites": [],
+  "work_items": [],
+  "required_gates": [],
+  "required_roles": ["full-stack-engineer","tester-qa-engineer","solution-architect","cyber-security-engineer","auditor","sdk-engineer","rd-engineer"],
+  "evidence_refs": ["governance/evidence/P2-003-RV002-VALIDATION.json"],
+  "created_at": "2026-11-15T13:14:25.4690960\u002B00:00",
+  "closed_at": null,
+  "product_acceptance_required": false
+}
