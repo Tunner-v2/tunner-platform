@@ -46,6 +46,7 @@ public sealed class ProductAuthorizationProtocolTests(SessionListingPostgresFixt
     private static readonly ImmutableArray<string> Scopes = ["openid", "product.read"];
     private static readonly ImmutableArray<string> Resources = [Resource];
     private static readonly AssurancePolicyScope ProductProofScope = new("AUTHORIZE_PRODUCT", "fixture-product-authorization-proof");
+    private const string OtherAssuranceVersion = "fixture-unrelated-proof-policy-v1";
     private static readonly AssurancePolicyScope OtherProofScope = new("fixture.unrelated-operation", "fixture-unrelated-owner");
 
     private sealed class Owners(IdentityTestDatabase database) : IProductAuthorizationPolicySource,
@@ -108,13 +109,13 @@ public sealed class ProductAuthorizationProtocolTests(SessionListingPostgresFixt
             BeforeAssuranceRead?.Invoke(scope);
             return new AssurancePolicyCatalog([new(new(AssuranceVersion, "ACTIVE", ProductProofScope, interval, null, [Evidence]),
                 "fixture-product-proof-assurance", TimeSpan.FromMinutes(1), new Dictionary<string, string> { ["pwd"] = "fixture-product-proof-assurance" }),
-                new(new(AssuranceVersion, "ACTIVE", OtherProofScope, interval, null, [Evidence]),
+                new(new(OtherAssuranceVersion, "ACTIVE", OtherProofScope, interval, null, [Evidence]),
                 "fixture-product-proof-assurance", TimeSpan.FromMinutes(1), new Dictionary<string, string> { ["pwd"] = "fixture-product-proof-assurance" })])
                 .RequireEffective(scope, executedAt, expectedVersion);
         }
         Task<UserStepUpOperationContext?> IUserStepUpOperationSource.ResolveAsync(UserStepUpActor actor, CancellationToken ct) =>
             Task.FromResult<UserStepUpOperationContext?>(FallbackSelected ? new(actor, "OP-fixture-unrelated-operation", "fixture-unrelated-correlation",
-                OtherProofScope, "fixture-unrelated-resource", 1, new string('D', 64), AssuranceVersion) : null);
+                OtherProofScope, "fixture-unrelated-resource", 1, new string('D', 64), OtherAssuranceVersion) : null);
         Task<bool> IUserStepUpOperationSource.ApplyAsync(UserStepUpActor actor, UserStepUpOperationContext operation, IdentityPersistenceDbContext context, CancellationToken ct) => Task.FromResult(false);
         public ValueTask<ProductAuthorizationPresentation> RequirePublishedAsync(ProductAuthorizationPresentationFacts facts, DateTimeOffset at, CancellationToken ct)
         {
