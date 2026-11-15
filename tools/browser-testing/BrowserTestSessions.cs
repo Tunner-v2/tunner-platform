@@ -5,9 +5,11 @@ using Tunner.Platform.Policies;
 
 /// <summary>Explicit persistent local-test inputs only; never composed into a production BFF.</summary>
 internal sealed class BrowserTestSessions : ISessionListingHttpBudgetSource,
-    ISessionListingPresentationSource, ISessionRevocationPresentationSource
+    ISessionListingPresentationSource, ISessionRevocationPresentationSource, ISessionBulkRevocationDiscoverySource,
+    ISessionBulkRevocationHttpBudgetSource, ISessionBulkRevocationPresentationSource
 {
     internal const string AssuranceVersion = "browser-test-sessions-revoke-v1";
+    internal const string BulkAssuranceVersion = "browser-test-sessions-revoke-others-v1";
     private const string Provenance = "SYNTHETIC-LOCAL-TEST-ONLY";
     private readonly SessionListingHttpBudgetCatalog budgets = new([
         new(new("browser-test-sessions-budget-v1", "ACTIVE", SessionListingHttpBudget.Scope,
@@ -20,7 +22,11 @@ internal sealed class BrowserTestSessions : ISessionListingHttpBudgetSource,
         services.AddSingleton<ISessionListingHttpBudgetSource>(fixture);
         services.AddSingleton<ISessionListingPresentationSource>(fixture);
         services.AddSingleton<ISessionRevocationPresentationSource>(fixture);
+        services.AddSingleton<ISessionBulkRevocationDiscoverySource>(fixture);
+        services.AddSingleton<ISessionBulkRevocationHttpBudgetSource>(fixture);
+        services.AddSingleton<ISessionBulkRevocationPresentationSource>(fixture);
         services.AddTunnerSessionRevocation();
+        services.AddTunnerSessionBulkRevocation();
     }
 
     internal static AssurancePolicyVersion AssurancePolicy()
@@ -30,6 +36,26 @@ internal sealed class BrowserTestSessions : ISessionListingHttpBudgetSource,
         return new(new(AssuranceVersion, "ACTIVE", new AssurancePolicyScope("SESSION_REVOKE", "USER_BFF"),
             Interval(), null, [Provenance]), existing.RequiredAssurance, existing.ProofLifetime,
             existing.MethodAssurances.ToDictionary(pair => pair.Key, pair => pair.Value, StringComparer.Ordinal));
+    }
+    internal static AssurancePolicyVersion BulkAssurancePolicy()
+    {
+        var existing = AssurancePolicy();
+        return new(new(BulkAssuranceVersion, "ACTIVE", new AssurancePolicyScope("SESSION_REVOKE_OTHERS", "USER_BFF"),
+            Interval(), null, [Provenance]), existing.RequiredAssurance, existing.ProofLifetime,
+            existing.MethodAssurances.ToDictionary(pair => pair.Key, pair => pair.Value, StringComparer.Ordinal));
+    }
+
+    SessionBulkRevocationDiscoveryBudget ISessionBulkRevocationDiscoverySource.RequireEffective(DateTimeOffset at) => new(
+        new("browser-test-sessions-bulk-discovery-v1", "ACTIVE", SessionBulkRevocationDiscoveryBudget.Scope, Interval(), null, [Provenance]), 20);
+    SessionBulkRevocationHttpBudget ISessionBulkRevocationHttpBudgetSource.RequireEffective(DateTimeOffset at) => new(
+        new("browser-test-sessions-bulk-transport-v1", "ACTIVE", SessionBulkRevocationHttpBudget.Scope, Interval(), null, [Provenance]), 4096, 4096);
+    SessionBulkRevocationPresentation ISessionBulkRevocationPresentationSource.RequirePublished(AuthenticationPolicy policy)
+    {
+        RequireLocal(policy);
+        // Backend-only synthetic publication; no production Sessions action or approved visual is implied.
+        string[] keys = ["action", "review.title", "review.description", "review.originalSet", "confirm", "cancel", "loading", "empty", "changed", "completed", "unknown", "check"];
+        return new("en", keys.Select(key => new RegistrationPublishedText("account.sessions.bulk." + key, "synthetic-local-test",
+            "synthetic-local-test", Provenance, "en", "PUBLISHED", "Local test " + key)));
     }
 
     public SessionListingHttpBudget RequireEffective(DateTimeOffset at) => budgets.RequireEffective(at);

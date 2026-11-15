@@ -70,6 +70,12 @@ internal sealed partial class AuthenticationApplication
             throw new InvalidOperationException("Bulk sessions require a clean Identity transaction boundary.");
     }
     internal async Task<SessionBulkRevocationResult> ReadSessionBulkRevocationAsync(StepUpCaller caller, SessionBulkRevocationManifest manifest, CancellationToken ct)
+        => await ReadSessionBulkRevocationCoreAsync(caller, manifest, null, null, ct).ConfigureAwait(false);
+    internal Task<SessionBulkRevocationResult> ReadSessionBulkRevocationOriginalAsync(StepUpCaller caller, SessionBulkRevocationManifest manifest,
+        ISessionBulkRevocationDiscoverySource discovery, IAssurancePolicySource assurance, CancellationToken ct)
+        => ReadSessionBulkRevocationCoreAsync(caller, manifest, discovery, assurance, ct);
+    private async Task<SessionBulkRevocationResult> ReadSessionBulkRevocationCoreAsync(StepUpCaller caller, SessionBulkRevocationManifest manifest,
+        ISessionBulkRevocationDiscoverySource? discovery, IAssurancePolicySource? assurance, CancellationToken ct)
     {
         var operation = manifest.Operation(caller); RequireBulkBoundary();
         try
@@ -79,14 +85,16 @@ internal sealed partial class AuthenticationApplication
             var actor = await LockForOperationAsync(caller, operation.Scope.Operation, ct).ConfigureAwait(false);
             if (actor is null)
             { await database.SaveChangesAsync(ct).ConfigureAwait(false); await tx.CommitAsync(ct).ConfigureAwait(false); return new("AUTHENTICATION_FAILED"); }
-            var set = SessionRevocationExecutionSet.Bulk(database, this, caller, manifest, null, null);
+            var set = SessionRevocationExecutionSet.Bulk(database, this, caller, manifest, discovery, assurance);
             var receipts = await set.ReadReceiptAsync(null, ct).ConfigureAwait(false);
+            var pending = receipts is null && discovery is not null && await set.TargetCurrentAsync(actor, ct).ConfigureAwait(false);
             var policy = policies.RequireEffective(clock.GetUtcNow()); policy.Validate();
             var method = await MethodIsCurrentAsync(actor, policy, clock.GetUtcNow(), ct).ConfigureAwait(false);
             var access = await VerifyContinuedOperationAsync(caller, operation, actor, ct).ConfigureAwait(false);
             var at = clock.GetUtcNow(); var current = policies.RequireEffective(at); current.Validate();
-            if (receipts is null || policy != current || !method || actor.State != "ACTIVE" || Expired(actor, current, at) ||
-                !MethodFactsCurrentAt(actor, current, at) || access is null || !access.SessionUseInterval.Contains(at) || !access.OperationInterval.Contains(at))
+            if (receipts is null && !pending || policy != current || !method || actor.State != "ACTIVE" || Expired(actor, current, at) ||
+                !MethodFactsCurrentAt(actor, current, at) || access is null || !access.SessionUseInterval.Contains(at) || !access.OperationInterval.Contains(at) ||
+                receipts is null && !set.TargetFactsCurrentAt(current, at))
             { await tx.RollbackAsync(ct).ConfigureAwait(false); database.ChangeTracker.Clear(); return new("RESULT_UNCONFIRMED"); }
             await database.SaveChangesAsync(ct).ConfigureAwait(false); await tx.CommitAsync(ct).ConfigureAwait(false); return new(null, receipts);
         }
@@ -126,6 +134,11 @@ internal sealed partial class AuthenticationApplication
             foreach (var target in targets)
             { using var outcome = await target.ApplyAsync(actor, ct).ConfigureAwait(false); if (!outcome.Applied) return UserStepUpOperationApplyOutcome.Conflict(); }
             return UserStepUpOperationApplyOutcome.SessionContinues();
+        }
+        internal async Task<bool> TargetCurrentAsync(AuthenticationSessionRow actor, CancellationToken ct)
+        {
+            foreach (var target in targets) if (!await target.TargetCurrentAsync(actor, ct).ConfigureAwait(false)) return false;
+            return true;
         }
         internal bool TargetFactsCurrentAt(AuthenticationPolicy policy, DateTimeOffset at)
         {

@@ -49,25 +49,31 @@ internal sealed class SessionRevocationEmptyOwner : IUserStepUpOperationSource
 }
 
 /// <summary>Per-request routing adapter, preserving the registered/decorated owner's exact behavior.</summary>
-internal sealed class SessionRevocationOwnerRouter(IUserStepUpOperationSource fallback, SessionRevocationBrowserService sessions)
+internal sealed class SessionRevocationOwnerRouter(IUserStepUpOperationSource fallback, SessionRevocationBrowserService? sessions,
+    SessionBulkRevocationBrowserService? bulk = null)
     : IUserStepUpOperationOutcomeSource, IUserStepUpBrowserCompletionSource
 {
     internal static IUserStepUpOperationSource Wrap(IUserStepUpOperationSource fallback, SessionRevocationBrowserService? sessions)
         => sessions is null ? fallback : new SessionRevocationOwnerRouter(fallback, sessions);
+    internal static IUserStepUpOperationSource Wrap(IUserStepUpOperationSource fallback, SessionRevocationBrowserService? sessions,
+        SessionBulkRevocationBrowserService? bulk) => sessions is null && bulk is null ? fallback : new SessionRevocationOwnerRouter(fallback, sessions, bulk);
     public Task<UserStepUpOperationContext?> ResolveAsync(UserStepUpActor actor, CancellationToken cancellationToken)
-        => sessions.ResolveAsync(actor, fallback, cancellationToken);
+        => bulk?.IsSelected(actor) == true ? bulk.ResolveAsync(actor, fallback, cancellationToken)
+            : sessions?.IsSelected(actor) == true ? sessions.ResolveAsync(actor, fallback, cancellationToken)
+            : fallback.ResolveAsync(actor, cancellationToken);
     public async Task<bool> ApplyAsync(UserStepUpActor actor, UserStepUpOperationContext operation, IdentityPersistenceDbContext database, CancellationToken cancellationToken)
     { using var result = await ApplyWithOutcomeAsync(actor, operation, database, cancellationToken).ConfigureAwait(false); return result.Applied; }
     public Task<UserStepUpOperationApplyOutcome> ApplyWithOutcomeAsync(UserStepUpActor actor, UserStepUpOperationContext operation, IdentityPersistenceDbContext database, CancellationToken cancellationToken)
     {
-        if (SessionRevocationApplication.Owns(operation.Binding.Scope)) throw new InvalidOperationException("Session revocation requires typed pre-transaction dispatch.");
+        if (SessionRevocationApplication.Owns(operation.Binding.Scope) || SessionBulkRevocationApplication.Owns(operation.Binding.Scope))
+            throw new InvalidOperationException("Session revocation requires typed pre-transaction dispatch.");
         return fallback is IUserStepUpOperationOutcomeSource typed ? typed.ApplyWithOutcomeAsync(actor, operation, database, cancellationToken)
             : ApplyFallbackAsync(actor, operation, database, cancellationToken);
     }
     private async Task<UserStepUpOperationApplyOutcome> ApplyFallbackAsync(UserStepUpActor actor, UserStepUpOperationContext operation, IdentityPersistenceDbContext database, CancellationToken ct)
         => await fallback.ApplyAsync(actor, operation, database, ct).ConfigureAwait(false) ? UserStepUpOperationApplyOutcome.SessionContinues() : UserStepUpOperationApplyOutcome.Conflict();
     public Task CompleteBrowserAsync(UserStepUpOperationContext operation, bool signInRequired, CancellationToken cancellationToken)
-        => !SessionRevocationApplication.Owns(operation.Binding.Scope) && fallback is IUserStepUpBrowserCompletionSource hook
+        => !SessionRevocationApplication.Owns(operation.Binding.Scope) && !SessionBulkRevocationApplication.Owns(operation.Binding.Scope) && fallback is IUserStepUpBrowserCompletionSource hook
             ? hook.CompleteBrowserAsync(operation, signInRequired, cancellationToken) : Task.CompletedTask;
 }
 
@@ -146,7 +152,12 @@ internal sealed class SessionRevocationBrowserService(IdentityPersistenceDbConte
         if (finalAt >= expires || authenticationPolicies.RequireEffective(finalAt) != auth ||
             assurancePolicies.RequireEffective(SessionRevocationBinding.Scope, finalAt, assurance.Metadata.VersionId).Metadata.VersionId != assurance.Metadata.VersionId)
             return Problem(409, "VERSION_CONFLICT");
+        var selection = SessionRevocationOriginalSelection.Create("SINGLE", original.RequestId, Operation(caller, original), auth.Version, now, expires);
+        var selectedCookie = SessionRevocationOriginalSelection.Protect(protection, selection);
+        if (!SessionRevocationOriginalSelection.Fits(SessionRevocationOriginalSelection.CookieName, selectedCookie, Cookie(expires - finalAt), 4096))
+            return Problem(503, "DEPENDENCY_UNAVAILABLE");
         http.Response.Cookies.Append(SessionRevocationBrowserEndpoints.CookieName, protector.Protect(JsonSerializer.Serialize(original)), Cookie(expires - finalAt));
+        http.Response.Cookies.Append(SessionRevocationOriginalSelection.CookieName, selectedCookie, Cookie(expires - finalAt));
         http.Response.Cookies.Delete(StepUpBrowserEndpoints.CookieName, Cookie(TimeSpan.Zero));
         return View(new(original, caller, request, "PENDING"));
     });
@@ -180,6 +191,19 @@ internal sealed class SessionRevocationBrowserService(IdentityPersistenceDbConte
         return original;
     }
     private static SessionRevocationRequest Request(Original original) => new(original.RequestId, original.TargetReference, original.ExpectedVersion, original.CorrelationId);
+    private static UserStepUpOperationContext Operation(StepUpCaller caller, Original original, bool completed = false)
+    {
+        var binding = SessionRevocationBinding.Operation(caller, Request(original));
+        return new(new(caller), binding.OperationId, binding.CorrelationId, binding.Scope, binding.ResourceId,
+            binding.ExpectedVersion, binding.ContextDigest, original.AssuranceVersion, completed);
+    }
+    internal bool IsSelected(UserStepUpActor actor)
+    {
+        var http = accessor.HttpContext ?? throw new InvalidOperationException("A current request is required.");
+        var caller = Caller(http); var original = ReadOriginal(http, caller, true);
+        return original is not null && SessionRevocationOriginalSelection.Matches(http, protection, actor,
+            authenticationPolicies.RequireEffective(clock.GetUtcNow()).Version, clock.GetUtcNow(), "SINGLE", original.RequestId, Operation(caller, original));
+    }
     private async Task<State?> CurrentAsync(HttpContext http, StepUpCaller caller, CancellationToken ct)
     {
         var original = ReadOriginal(http, caller, true); if (original is null) return null;

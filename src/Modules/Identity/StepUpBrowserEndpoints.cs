@@ -50,10 +50,12 @@ internal sealed partial class StepUpBrowserService(IUserStepUpOperationSource re
     AuthenticationPartitionKey partitions, AuthenticationEndpoints.Surface surface, IDataProtectionProvider protection,
     IAntiforgery antiforgery, StepUpApplication application, IdentityPersistenceDbContext database, TimeProvider clock, IEnumerable<PasskeyApplication> passkeyApplications,
     IEnumerable<TotpApplication>? totpApplications = null, IEnumerable<FederationBrowserService>? federationApplications = null,
-    IEnumerable<SessionRevocationBrowserService>? sessionRevocations = null)
+    IEnumerable<SessionRevocationBrowserService>? sessionRevocations = null,
+    IEnumerable<SessionBulkRevocationBrowserService>? bulkRevocations = null)
 {
     private readonly SessionRevocationBrowserService? sessionRevocation = sessionRevocations?.SingleOrDefault();
-    private readonly IUserStepUpOperationSource owner = SessionRevocationOwnerRouter.Wrap(registeredOwner, sessionRevocations?.SingleOrDefault());
+    private readonly SessionBulkRevocationBrowserService? bulkRevocation = bulkRevocations?.SingleOrDefault();
+    private readonly IUserStepUpOperationSource owner = SessionRevocationOwnerRouter.Wrap(registeredOwner, sessionRevocations?.SingleOrDefault(), bulkRevocations?.SingleOrDefault());
     private const string BrowserPurpose = "Tunner.User.StepUp.Browser.v1";
     private readonly IDataProtector protector = protection.CreateProtector(BrowserPurpose);
     internal sealed record Browser(Guid RequestId, string BindingDigest, string AuthenticationPolicyVersion, DateTimeOffset ExpiresAt);
@@ -156,6 +158,9 @@ internal sealed partial class StepUpBrowserService(IUserStepUpOperationSource re
         using var execution = SessionRevocationApplication.Owns(operation.Binding.Scope)
             ? await (sessionRevocation ?? throw new InvalidOperationException("The session owner is unavailable."))
                 .ExecuteAsync(caller, operation, proofKey, context.RequestAborted).ConfigureAwait(false)
+            : SessionBulkRevocationApplication.Owns(operation.Binding.Scope)
+                ? await (bulkRevocation ?? throw new InvalidOperationException("The bulk session owner is unavailable."))
+                    .ExecuteAsync(caller, operation, proofKey, context.RequestAborted).ConfigureAwait(false)
             : await application.ExecuteOutcomeAsync(caller, operation.Binding, proofKey, async ct =>
         {
             var current = await owner.ResolveAsync(actor, ct).ConfigureAwait(false);

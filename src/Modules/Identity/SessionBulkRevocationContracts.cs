@@ -6,11 +6,11 @@ using Tunner.Platform.Policies;
 namespace Tunner.Identity.Persistence;
 
 /// <summary>Explicit trusted discovery capacity; never a page size, browser claim or production default.</summary>
-internal sealed class SessionBulkRevocationDiscoveryBudget(PolicyVersionCandidate<string> metadata, int maximumCandidates)
+public sealed class SessionBulkRevocationDiscoveryBudget(PolicyVersionCandidate<string> metadata, int maximumCandidates)
 {
-    internal const string Scope = "USER_BFF_SESSION_BULK_DISCOVERY";
-    internal PolicyVersionCandidate<string> Metadata { get; } = metadata ?? throw new ArgumentNullException(nameof(metadata));
-    internal int MaximumCandidates { get; } = maximumCandidates > 0 && maximumCandidates < int.MaxValue
+    public const string Scope = "USER_BFF_SESSION_BULK_DISCOVERY";
+    public PolicyVersionCandidate<string> Metadata { get; } = metadata ?? throw new ArgumentNullException(nameof(metadata));
+    public int MaximumCandidates { get; } = maximumCandidates > 0 && maximumCandidates < int.MaxValue
         ? maximumCandidates : throw new ArgumentOutOfRangeException(nameof(maximumCandidates));
     internal static SessionBulkRevocationDiscoveryBudget Current(ISessionBulkRevocationDiscoverySource source, DateTimeOffset at)
     {
@@ -22,7 +22,7 @@ internal sealed class SessionBulkRevocationDiscoveryBudget(PolicyVersionCandidat
     }
     public override string ToString() => nameof(SessionBulkRevocationDiscoveryBudget);
 }
-internal interface ISessionBulkRevocationDiscoverySource
+public interface ISessionBulkRevocationDiscoverySource
 {
     SessionBulkRevocationDiscoveryBudget RequireEffective(DateTimeOffset at);
 }
@@ -33,23 +33,31 @@ internal sealed record SessionBulkRevocationTarget(Guid SessionReference, long E
 internal sealed class SessionBulkRevocationManifest
 {
     private SessionBulkRevocationManifest(StepUpCaller caller, Guid requestId, string correlationId, IEnumerable<SessionBulkRevocationTarget> targets,
-        DateTimeOffset discoveredAt, string authenticationVersion, string assuranceVersion, SessionBulkRevocationDiscoveryBudget budget)
+        DateTimeOffset discoveredAt, string authenticationVersion, string assuranceVersion, string discoveryVersion, int maximumCandidates)
     {
         if (requestId == Guid.Empty) throw new ArgumentException("An exact original request is required.", nameof(requestId));
         ArgumentException.ThrowIfNullOrWhiteSpace(correlationId);
         var copy = targets.OrderBy(x => x.SessionReference.ToString("N"), StringComparer.Ordinal).ToArray();
-        if (copy.Length == 0 || copy.Length > budget.MaximumCandidates || copy.Any(x => x.SessionReference == Guid.Empty ||
+        ArgumentException.ThrowIfNullOrWhiteSpace(authenticationVersion); ArgumentException.ThrowIfNullOrWhiteSpace(assuranceVersion);
+        ArgumentException.ThrowIfNullOrWhiteSpace(discoveryVersion);
+        if (maximumCandidates < 1 || maximumCandidates == int.MaxValue || copy.Length == 0 || copy.Length > maximumCandidates || copy.Any(x => x.SessionReference == Guid.Empty ||
             x.SessionReference == caller.SessionId || x.ExpectedVersion < 1 || x.ExpectedVersion == long.MaxValue) ||
             copy.Select(x => x.SessionReference).Distinct().Count() != copy.Length)
             throw new ArgumentException("A complete nonempty original target set is required.", nameof(targets));
         AccountId = caller.AccountId; ActorSessionId = caller.SessionId; Origin = caller.Origin;
         RequestId = requestId; CorrelationId = correlationId; Targets = Array.AsReadOnly(copy); DiscoveredAt = discoveredAt;
         AuthenticationVersion = authenticationVersion; AssuranceVersion = assuranceVersion;
-        DiscoveryVersion = budget.Metadata.VersionId; MaximumCandidates = budget.MaximumCandidates;
+        DiscoveryVersion = discoveryVersion; MaximumCandidates = maximumCandidates;
     }
     internal static SessionBulkRevocationManifest FromDiscovery(StepUpCaller caller, Guid requestId, string correlationId,
         IEnumerable<SessionBulkRevocationTarget> targets, DateTimeOffset at, string authenticationVersion, string assuranceVersion,
-        SessionBulkRevocationDiscoveryBudget budget) => new(caller, requestId, correlationId, targets, at, authenticationVersion, assuranceVersion, budget);
+        SessionBulkRevocationDiscoveryBudget budget) => new(caller, requestId, correlationId, targets, at, authenticationVersion, assuranceVersion,
+            budget.Metadata.VersionId, budget.MaximumCandidates);
+    // Called only after authenticating the purpose-protected complete original envelope.
+    internal static SessionBulkRevocationManifest RestoreTrustedOriginal(StepUpCaller caller, Guid requestId, string correlationId,
+        IEnumerable<SessionBulkRevocationTarget> targets, DateTimeOffset at, string authenticationVersion, string assuranceVersion,
+        string discoveryVersion, int maximumCandidates) => new(caller, requestId, correlationId, targets, at, authenticationVersion,
+            assuranceVersion, discoveryVersion, maximumCandidates);
     internal string AccountId { get; }
     internal Guid ActorSessionId { get; }
     internal string Origin { get; }

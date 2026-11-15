@@ -66,7 +66,11 @@ internal static class BrowserTestHost
             }
             if (options.Totp is not null) proofPolicies.AddRange(BrowserTestTotp.AssurancePolicies());
             if (options.Recovery is not null) proofPolicies.AddRange(options.Recovery.AssurancePolicies());
-            if (sessions) proofPolicies.Add(BrowserTestSessions.AssurancePolicy());
+            if (sessions)
+            {
+                proofPolicies.Add(BrowserTestSessions.AssurancePolicy());
+                proofPolicies.Add(BrowserTestSessions.BulkAssurancePolicy());
+            }
             builder.Services.AddSingleton<IAssurancePolicySource>(new AssurancePolicyCatalog(proofPolicies));
             BrowserTestPasskeys.Configure(builder.Services, options.Origin);
             if (sessions) BrowserTestSessions.Configure(builder.Services);

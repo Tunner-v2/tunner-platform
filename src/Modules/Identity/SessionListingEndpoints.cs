@@ -62,6 +62,7 @@ internal static class SessionListingEndpoints
         var user = new AuthorizeAttribute { AuthenticationSchemes = AuthenticationIdentity.Scheme };
         endpoints.MapPost(Path, ReadAsync).RequireAuthorization(user);
         SessionRevocationBrowserEndpoints.MapIfConfigured(endpoints);
+        SessionBulkRevocationBrowserEndpoints.MapIfConfigured(endpoints);
         if (!services.IsService(typeof(ISessionListingPresentationSource))) return;
         endpoints.MapGet("/account/sessions/options", Options).RequireAuthorization(user);
         var assets = endpoints.ServiceProvider.GetRequiredService<IdentityWebAssets>();

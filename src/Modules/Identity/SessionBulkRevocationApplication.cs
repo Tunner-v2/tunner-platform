@@ -10,6 +10,8 @@ internal sealed class SessionBulkRevocationApplication(AuthenticationApplication
         => authentication.PrepareSessionBulkRevocationAsync(caller, requestId, correlationId, discovery, assurance, ct);
     internal Task<SessionBulkRevocationResult> ReadResultAsync(StepUpCaller caller, SessionBulkRevocationManifest manifest, CancellationToken ct = default)
         => authentication.ReadSessionBulkRevocationAsync(caller, manifest, ct);
+    internal Task<SessionBulkRevocationResult> ReadOriginalAsync(StepUpCaller caller, SessionBulkRevocationManifest manifest, CancellationToken ct = default)
+        => authentication.ReadSessionBulkRevocationOriginalAsync(caller, manifest, discovery, assurance, ct);
     internal async Task<SessionBulkRevocationResult> RevokeAsync(StepUpCaller caller, SessionBulkRevocationManifest manifest, string proofKey, CancellationToken ct = default)
     {
         manifest.RequireActor(caller);

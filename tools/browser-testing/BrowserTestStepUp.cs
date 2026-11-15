@@ -49,7 +49,7 @@ internal sealed class BrowserTestStepUpPresentation(IEnumerable<BrowserTestTotp>
         if (policy.Metadata.VersionId is not (BrowserTestStepUpOperations.PolicyVersion or BrowserTestPasskeys.EnrollmentPolicyVersion or BrowserTestPasskeys.RevocationPolicyVersion) &&
             !(finite && policy.Metadata.VersionId is BrowserTestTotp.EnrollmentPolicyVersion or BrowserTestTotp.DisablePolicyVersion or BrowserTestTotp.ResetPolicyVersion) &&
             !(recovery && policy.Metadata.VersionId is BrowserTestRecoveryCodes.GenerateAssurance or BrowserTestRecoveryCodes.ReplaceAssurance) &&
-            !(sessionProfiles.SingleOrDefault() is not null && policy.Metadata.VersionId == BrowserTestSessions.AssuranceVersion))
+            !(sessionProfiles.SingleOrDefault() is not null && policy.Metadata.VersionId is BrowserTestSessions.AssuranceVersion or BrowserTestSessions.BulkAssuranceVersion))
             throw new InvalidOperationException("Isolated test presentation only.");
         using var source = JsonDocument.Parse(File.ReadAllText(Path.Combine(AppContext.BaseDirectory, "browser-test-step-up-content.json")));
         var values = source.RootElement.GetProperty("content").EnumerateObject().Select(p =>
