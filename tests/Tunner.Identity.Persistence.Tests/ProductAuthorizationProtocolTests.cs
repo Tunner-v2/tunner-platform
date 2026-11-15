@@ -808,7 +808,7 @@ public sealed class ProductAuthorizationProtocolTests(SessionListingPostgresFixt
         await using var scope = test.Host.Services.CreateAsyncScope(); var manager = scope.ServiceProvider.GetRequiredService<IOpenIddictTokenManager>();
         DateTimeOffset? expires = null;
         await foreach (var token in manager.FindByAuthorizationIdAsync(authorizationId))
-            if (await manager.GetTypeAsync(token) == OpenIddictConstants.TokenTypeHints.RefreshToken && await manager.GetStatusAsync(token) == OpenIddictConstants.Statuses.Valid)
+            if (await manager.GetTypeAsync(token) == OpenIddictConstants.TokenTypeIdentifiers.RefreshToken && await manager.GetStatusAsync(token) == OpenIddictConstants.Statuses.Valid)
             {
                 Assert.Null(expires); expires = await manager.GetExpirationDateAsync(token);
             }
@@ -819,7 +819,7 @@ public sealed class ProductAuthorizationProtocolTests(SessionListingPostgresFixt
         await using var scope = test.Host.Services.CreateAsyncScope(); var manager = scope.ServiceProvider.GetRequiredService<IOpenIddictTokenManager>();
         var statuses = new List<string?>();
         await foreach (var token in manager.FindByAuthorizationIdAsync(authorizationId))
-            if (await manager.GetTypeAsync(token) == OpenIddictConstants.TokenTypeHints.RefreshToken) statuses.Add(await manager.GetStatusAsync(token));
+            if (await manager.GetTypeAsync(token) == OpenIddictConstants.TokenTypeIdentifiers.RefreshToken) statuses.Add(await manager.GetStatusAsync(token));
         Assert.Equal(valid, statuses.Count(status => status == OpenIddictConstants.Statuses.Valid));
         Assert.Equal(redeemed, statuses.Count(status => status == OpenIddictConstants.Statuses.Redeemed));
         Assert.Equal(valid + redeemed, statuses.Count);

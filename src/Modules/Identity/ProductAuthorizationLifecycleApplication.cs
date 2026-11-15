@@ -1,6 +1,7 @@
 using System.Collections.Immutable;
 using System.Text.Json;
 using Microsoft.EntityFrameworkCore;
+using OpenIddict.Abstractions;
 using Tunner.Database.Outbox;
 
 namespace Tunner.Identity.Persistence;
@@ -118,9 +119,9 @@ internal sealed class ProductAuthorizationLifecycleApplication(IdentityPersisten
             original.AccountVersion <= 0 || original.SessionId == Guid.Empty || request.NativeState is not { } state ||
             new[] { state.AuthorizationId, state.TokenId }.Any(string.IsNullOrWhiteSpace) || state.AuthorizationStatus != "valid" ||
             state.NativeApplicationId != original.Registration.NativeApplicationId || state.Subject != original.Relationship.Subject ||
-            state.TokenType is not ("access_token" or "refresh_token") || state.ExpiresAt <= state.CreatedAt ||
+            state.TokenType is not (OpenIddictConstants.TokenTypeIdentifiers.AccessToken or OpenIddictConstants.TokenTypeIdentifiers.RefreshToken) || state.ExpiresAt <= state.CreatedAt ||
             (state.TokenStatus != "valid" && !(request.Operation == ProductAuthorizationLifecycleOperation.Refresh && state.TokenStatus == "redeemed")) ||
-            request.Operation == ProductAuthorizationLifecycleOperation.Refresh && state.TokenType != "refresh_token" ||
+            request.Operation == ProductAuthorizationLifecycleOperation.Refresh && state.TokenType != OpenIddictConstants.TokenTypeIdentifiers.RefreshToken ||
             !ProductAuthorizationRequest.Canonical(state.Scopes) || !ProductAuthorizationRequest.Canonical(state.Resources) ||
             !ProductAuthorizationRequest.Canonical(request.RequestedScopes) || !ProductAuthorizationRequest.Canonical(request.RequestedResources) ||
             !Subset(state.Scopes, original.Request.Scopes) || !Subset(state.Resources, original.Request.Resources) ||
@@ -142,7 +143,7 @@ internal sealed class ProductAuthorizationLifecycleApplication(IdentityPersisten
             throw new InvalidOperationException("Current exact qualified Product artifact lifecycle policy is unavailable.");
         if (facts.Operation == ProductAuthorizationLifecycleOperation.Refresh && decision.Allowed && decision.ArtifactActive)
         {
-            if (facts.InitialNativeState.TokenType != "refresh_token" || facts.InitialNativeState.ExpiresAt <= at ||
+            if (facts.InitialNativeState.TokenType != OpenIddictConstants.TokenTypeIdentifiers.RefreshToken || facts.InitialNativeState.ExpiresAt <= at ||
                 !facts.OriginalScopes.Contains("offline_access", StringComparer.Ordinal) || facts.RequestedResources.Length == 0 ||
                 decision.AccessTokenExpiresAt is null || decision.RefreshTokenExpiresAt is null ||
                 facts.RequestedScopes.Contains("openid", StringComparer.Ordinal) != (decision.IdentityTokenExpiresAt is not null) ||
