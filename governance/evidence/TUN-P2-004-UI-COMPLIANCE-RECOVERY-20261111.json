@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "scope_id": "TUN-P2-004",
-  "final_source_compatibility_ref": "governance/evidence/TUN-P2-013-PACKAGING-CURRENTNESS.json",
+  "final_source_compatibility_ref": "governance/evidence/TUN-P2-014-VALIDATION.json",
   "selected_session_currentness_20261114": {
     "qualification_ref": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/qualification-binding.json",
     "current_source_carrier": "4f09edb8b6033c7ca1edcf8d7d227c26bfb8c15b",
@@ -28,8 +28,8 @@
     "new_screens_acceptance_scope": "TUN-P2-013 only; independent WIP entries are not accepted by this bridge"
   },
   "result": "PASS",
-  "tested_commit_sha": "1e8cc76bd5b22aceb169b44d446c0df049410b73",
-  "inventory_sha256": "962af751f07f81b9c9125eaf279a64ad5acadb38ee9ce20e6050412614165709",
+  "tested_commit_sha": "e45e31f6ab8a6462aceef9dfe7bf3e2be36cf15c",
+  "inventory_sha256": "c45b886b94591f8facaf4ca3f7d3d8b2490d3edb69c27cc3467c204664698bad",
   "owned_behavior_paths": [
     "web/apps/user/account-format.ts",
     "web/apps/user/account-shell.tsx",
@@ -135,7 +135,16 @@
     "web/apps/user/sessions.routes.ts",
     "web/apps/user/sessions.tsx",
     "web/apps/user/sessions.ui.tsx",
-    "web/apps/user/sessions.revocation.tsx"
+    "web/apps/user/sessions.revocation.tsx",
+    "web/apps/user/product-authorization.api.ts",
+    "web/apps/user/product-authorization.continuation.ts",
+    "web/apps/user/product-authorization.css",
+    "web/apps/user/product-authorization.html",
+    "web/apps/user/product-authorization.login.tsx",
+    "web/apps/user/product-authorization.tsx",
+    "web/apps/user/public/assets/product-origin-footer-dot.svg",
+    "web/apps/user/public/assets/product-origin-indigo.svg",
+    "web/apps/user/public/assets/product-origin-violet.svg"
   ],
   "historical_ui_compliance": {
     "path": "governance/evidence/TUN-P2-004-UI-COMPLIANCE-TOTP-20261110.json",
@@ -4043,5 +4052,31 @@
       "Older0046e renders,010 native734,011 UI2cd and retained51a visual comparisons stay separate.",
       "No full011 UI, V04, native+BFF browser E2E, production/publication/policy, Product, merge or release approval."
     ]
+  },
+  "product_authorization_currentness_20261115": {
+    "prior_envelope_git_ref": "c9de7399f16cdc779ec3d3f6da21bf4294afb25d:governance/evidence/TUN-P2-004-UI-COMPLIANCE-RECOVERY-20261111.json",
+    "prior_tested_commit_sha": "1e8cc76bd5b22aceb169b44d446c0df049410b73",
+    "prior_inventory_sha256": "962af751f07f81b9c9125eaf279a64ad5acadb38ee9ce20e6050412614165709",
+    "prior_final_source_compatibility_ref": "governance/evidence/TUN-P2-013-PACKAGING-CURRENTNESS.json",
+    "current_source_carrier": "e45e31f6ab8a6462aceef9dfe7bf3e2be36cf15c",
+    "affected_item_ids": [],
+    "appended_registered_source_paths": [
+      "web/apps/user/product-authorization.api.ts",
+      "web/apps/user/product-authorization.continuation.ts",
+      "web/apps/user/product-authorization.css",
+      "web/apps/user/product-authorization.html",
+      "web/apps/user/product-authorization.login.tsx",
+      "web/apps/user/product-authorization.tsx",
+      "web/apps/user/public/assets/product-origin-footer-dot.svg",
+      "web/apps/user/public/assets/product-origin-indigo.svg",
+      "web/apps/user/public/assets/product-origin-violet.svg"
+    ],
+    "qualification_ref": {
+      "path": "governance/evidence/p2-014-authorization-20261115/ui/qualification-binding.json",
+      "sha256": "20e31bc9a2683e9708dcc7a35746a9b361ba7960cf636ba1c32f9387969e3ae2"
+    },
+    "source_receipt_ref": "governance/evidence/TUN-P2-014-VALIDATION.json",
+    "boundary": "Bounded shared-source currentness only. Existing per-item checks, screenshots, approvals and DEV history are retained unchanged; affected IDs link to actual P2-014 compatibility executions, not a new full parent run. Directory source inclusion is technical source binding only and grants no Product UI approval.",
+    "affected_item_qualifications": {}
   }
 }

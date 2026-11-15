@@ -28,8 +28,8 @@
   },
   "validation_kind": "COMMITTED",
   "result": "PASS",
-  "tested_commit_sha": "1e8cc76bd5b22aceb169b44d446c0df049410b73",
-  "validated_commit_sha": "1e8cc76bd5b22aceb169b44d446c0df049410b73",
+  "tested_commit_sha": "e45e31f6ab8a6462aceef9dfe7bf3e2be36cf15c",
+  "validated_commit_sha": "e45e31f6ab8a6462aceef9dfe7bf3e2be36cf15c",
   "owned_behavior_paths": [
     "docs/contracts/.gitattributes",
     "docs/contracts/registration-onboarding.openapi.json",
@@ -116,7 +116,7 @@
     "governance/evidence/p2-recovery-20261109/visual-review.json",
     "governance/evidence/TUN-P2-004-AUDIT-CORRECTION-ROLE-REVIEWS.json"
   ],
-  "source_binding_ref": "governance/evidence/P2-010-COMPATIBILITY-SCOPE.json",
+  "source_binding_ref": "governance/evidence/TUN-P2-014-VALIDATION.json",
   "prior_current_source_bindings": [
     {
       "tested_commit_sha": "745f9c2dc1b9060c4be0318b33b4019ae77e9e36",
@@ -211,5 +211,23 @@
       "No per-item UI/nativeUI gate, original full registration/browser-suite rerun, DONE/Product/production/merge/release, production governed-producer or V04 acceptance follows."
     ],
     "native_build_binding_sha256": "8d9f64e1a963add4806a99ef1168bda458192bd19bf77775543874ffc6f931b3"
+  },
+  "product_authorization_currentness_20261115": {
+    "prior_envelope_git_ref": "c9de7399f16cdc779ec3d3f6da21bf4294afb25d:governance/evidence/TUN-P2-004-AUDIT-CORRECTION-SOURCE.json",
+    "prior_tested_commit_sha": "1e8cc76bd5b22aceb169b44d446c0df049410b73",
+    "prior_validated_commit_sha": "1e8cc76bd5b22aceb169b44d446c0df049410b73",
+    "prior_source_binding_ref": "governance/evidence/P2-010-COMPATIBILITY-SCOPE.json",
+    "current_source_carrier": "e45e31f6ab8a6462aceef9dfe7bf3e2be36cf15c",
+    "changed_owned_paths": [
+      "docs/contracts/ui-inventory.json",
+      "src/Modules/Identity/Tunner.Identity.Persistence.csproj",
+      "web/apps/user/vite.config.ts"
+    ],
+    "source_receipt_ref": "governance/evidence/TUN-P2-014-VALIDATION.json",
+    "ui_qualification_ref": {
+      "path": "governance/evidence/p2-014-authorization-20261115/ui/qualification-binding.json",
+      "sha256": "20e31bc9a2683e9708dcc7a35746a9b361ba7960cf636ba1c32f9387969e3ae2"
+    },
+    "execution_identity": "Bounded P2-014 shared-source compatibility only. Native Product81 is67+12+2 at a4bd89f; ordinary59 are the passing subset of a failed60-case invocation at4557422, with corrected HTML1 separate at ac80a710. UI127 is54+41+21+11 at their recorded sources. Original parent executions, counts, approvals and VALIDATION/Product acceptance boundaries remain unchanged; no full legacy rerun."
   }
 }
