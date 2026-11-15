@@ -14,7 +14,6 @@ internal sealed partial class StepUpApplication
         var digest = AuthenticationIdentity.Digest(verifiedProofKey);
         var id = await database.Set<StepUpProofRow>().Where(row => row.KeyDigest == digest)
             .Select(row => (Guid?)row.ProofId).SingleOrDefaultAsync(ct).ConfigureAwait(false);
-        if (id is null) Console.Error.WriteLine("TUNNER_P214_DIAG:KERNEL_KEY_LOOKUP");
         return id is { } proofId
             ? await ReadPreparedProductAuthorizationProofAsync(caller, binding, currentProductPolicy, proofId, ct).ConfigureAwait(false) : null;
     }
@@ -31,7 +30,7 @@ internal sealed partial class StepUpApplication
     {
         var checkedProof = await ReadProductProofAsync(caller, binding, currentProductPolicy, proofId, false, ct).ConfigureAwait(false);
         if (checkedProof is null) return null;
-        var row = checkedProof.Row; var at = checkedProof.At;
+        var row = checkedProof.Row; var at = IdentityPersistenceTime.Normalize(checkedProof.At);
         End(row, "CONSUMED", at); Event(row, "StepUpProofConsumed", at);
         return new(row.ProofId, binding.Digest, row.Version, at, row.AuthenticatedAt, row.ExpiresAt, checkedProof.Mapping);
     }
@@ -59,24 +58,26 @@ internal sealed partial class StepUpApplication
         var session = await authentication.LockForOperationAsync(caller, operation.Scope.Operation, ct).ConfigureAwait(false);
         if (session is null || session.AuthenticatedAt != binding.SessionAuthenticatedAt ||
             session.AuthenticationMethods != binding.Mappings[0].SessionAuthenticationMethods || session.Assurance != binding.Mappings[0].SessionAssurance)
-        { Console.Error.WriteLine("TUNNER_P214_DIAG:KERNEL_SESSION"); return null; }
+            return null;
         var account = await database.Accounts.SingleAsync(value => value.AccountId == caller.AccountId, ct).ConfigureAwait(false);
-        if (account.Version != binding.AccountVersion) { Console.Error.WriteLine("TUNNER_P214_DIAG:KERNEL_ACCOUNT"); return null; }
+        if (account.Version != binding.AccountVersion) return null;
         var row = await database.Set<StepUpProofRow>().SingleOrDefaultAsync(value => value.ProofId == proofId, ct).ConfigureAwait(false);
-        if (row is null) { Console.Error.WriteLine("TUNNER_P214_DIAG:KERNEL_ROW"); return null; }
+        if (row is null) return null;
         // Preserve this transaction's unflushed consumption for both active and consumed reads.
         if (database.Entry(row).State != EntityState.Modified)
             await database.Entry(row).ReloadAsync(ct).ConfigureAwait(false);
-        if (!Matches(row, caller, operation)) { Console.Error.WriteLine("TUNNER_P214_DIAG:KERNEL_OPERATION"); return null; }
+        if (!Matches(row, caller, operation)) return null;
         // The exact verified method chooses its pre-bound mapping; no method or assurance is preferred by this owner.
         var mapping = binding.Mappings.SingleOrDefault(value => value.ProofAuthenticationMethod == row.AuthenticationMethod);
-        if (mapping is null || row.Assurance != mapping.ProofAssurance) { Console.Error.WriteLine("TUNNER_P214_DIAG:KERNEL_MAPPING"); return null; }
+        if (mapping is null || row.Assurance != mapping.ProofAssurance) return null;
         var source = await authentication.ReadProofCredentialAsync(row, ct, refresh: true).ConfigureAwait(false);
         var observedAt = clock.GetUtcNow();
         var auth = authenticationPolicies.RequireEffective(observedAt); auth.Validate();
         var methodCurrent = await authentication.MethodIsCurrentAsync(session, auth, observedAt, ct).ConfigureAwait(false);
         var continuation = await authentication.VerifyContinuedOperationAsync(caller, operation, session, ct).ConfigureAwait(false);
-        var at = IdentityPersistenceTime.Normalize(clock.GetUtcNow());
+        // A rounded-down decision can precede a session just touched at full clock precision.
+        // Normalize only persisted consumption facts, not the authoritative decision instant.
+        var at = clock.GetUtcNow();
         var policy = assurancePolicies.RequireEffective(operation.Scope, at, mapping.AssurancePolicyVersion);
         var currentAuth = authenticationPolicies.RequireEffective(at); currentAuth.Validate();
         currentProductPolicy.Require(caller.Origin, at);
@@ -86,17 +87,7 @@ internal sealed partial class StepUpApplication
             session.State != "ACTIVE" || AuthenticationApplication.Expired(session, currentAuth, at) ||
             !authentication.MethodFactsCurrentAt(session, currentAuth, at) ||
             !authentication.ProofMethodCurrentAt(row, source, operation, at, false) || continuation is null ||
-            !continuation.SessionUseInterval.Contains(at) || !continuation.OperationInterval.Contains(at))
-        {
-            if (auth != currentAuth || row.AuthenticationPolicyVersion != currentAuth.Version) Console.Error.WriteLine("TUNNER_P214_DIAG:KERNEL_AUTH_POLICY");
-            if (!methodCurrent || !authentication.MethodFactsCurrentAt(session, currentAuth, at)) Console.Error.WriteLine("TUNNER_P214_DIAG:KERNEL_METHOD");
-            if (ProductAuthorizationAssuranceDigest(policy) != binding.AssurancePolicyDigest) Console.Error.WriteLine("TUNNER_P214_DIAG:KERNEL_ASSURANCE_POLICY");
-            if (policy.RequiredAssurance != mapping.ProofAssurance || !Valid(row, session, policy, at, consumed)) Console.Error.WriteLine("TUNNER_P214_DIAG:KERNEL_VALIDITY");
-            if (session.State != "ACTIVE" || AuthenticationApplication.Expired(session, currentAuth, at)) Console.Error.WriteLine("TUNNER_P214_DIAG:KERNEL_SESSION_STATE");
-            if (!authentication.ProofMethodCurrentAt(row, source, operation, at, false)) Console.Error.WriteLine("TUNNER_P214_DIAG:KERNEL_PROOF_FACTOR");
-            if (continuation is null || !continuation.SessionUseInterval.Contains(at) || !continuation.OperationInterval.Contains(at)) Console.Error.WriteLine("TUNNER_P214_DIAG:KERNEL_ACCESS");
-            return null;
-        }
+            !continuation.SessionUseInterval.Contains(at) || !continuation.OperationInterval.Contains(at)) return null;
         return new(row, mapping, at);
     }
 

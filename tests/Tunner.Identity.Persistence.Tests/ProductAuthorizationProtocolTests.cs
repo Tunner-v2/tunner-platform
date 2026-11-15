@@ -634,6 +634,9 @@ public sealed class ProductAuthorizationProtocolTests(SessionListingPostgresFixt
 
     private static async Task<PendingRequest> PreparePasswordProductProof(Scenario test)
     {
+        // Persistence precision must not round a decision behind a freshly touched session.
+        if (test.Host.Clock.GetUtcNow().UtcTicks % TimeSpan.TicksPerMicrosecond == 0)
+            test.Host.Clock.Advance(TimeSpan.FromTicks(1));
         var original = await ReadSourceSession(test);
         var pending = await BeginContinuation(test, new Dictionary<string, string> { ["acr_values"] = StrongAcr }, existingSession: true, expectedRedirect: ReviewPath);
         using (var review = await test.Host.Get(ReviewOptionsPath, test.Cookies))
