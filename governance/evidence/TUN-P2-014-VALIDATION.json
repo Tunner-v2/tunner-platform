@@ -2,10 +2,10 @@
   "schema_version": 1,
   "scope_id": "TUN-P2-014",
   "validation_kind": "COMMITTED",
-  "result": "PENDING",
-  "tested_commit_sha": null,
-  "validated_commit_sha": null,
-  "phase": "FUNCTIONAL_QUALIFICATION_PASS_UI_AND_NATIVE_READINESS_GATES_PENDING",
+  "result": "PASS",
+  "tested_commit_sha": "e45e31f6ab8a6462aceef9dfe7bf3e2be36cf15c",
+  "validated_commit_sha": "e45e31f6ab8a6462aceef9dfe7bf3e2be36cf15c",
+  "phase": "ENGINEERING_VALIDATED_NATIVE_READINESS_PENDING",
   "shared_stepup_qualification": {
     "source_commit_sha": "a4bd89fd46588c20eed7bfc25d13c0aa536859a4",
     "result": "PASS_81_DISTINCT_NATIVE_CASES_OVER_THREE_RUNS",
@@ -216,5 +216,7 @@
   "boundary": "Explicit qualified issuer/keys/client/registry/Relationship/policy inputs; missing providers deny activation. No production default or Product membership/entitlement/local-session authority. Existing Figma/Drive/FigJam remain read-only.",
   "actual_feature_tests": ["first_increment", "focused_code_cohort", "integrated_protocol_cohort", "continuation_increment", "interaction_increment", "product_review_increment", "shared_stepup_qualification"],
   "product_acceptance": "NOT_REQUESTED_OR_GRANTED",
-  "exact_next_action": "Run the per-item UI gate using retained native81 plus59 ordinary backend cases, corrected HTMLguard1 and browser54+41+21+11 results. Record genuine technical assessments and current compatibility/native readiness; request Product acceptance only after engineering gates pass. Continue eligible development while human acceptance is pending. Preserve historical closures; no whole-P2, production, protected-main merge or release."
+  "exact_next_action": "Run the per-item UI gate using retained native81 plus59 ordinary backend cases, corrected HTMLguard1 and browser54+41+21+11 results. Record genuine technical assessments and current compatibility/native readiness; request Product acceptance only after engineering gates pass. Continue eligible development while human acceptance is pending. Preserve historical closures; no whole-P2, production, protected-main merge or release.",
+  "technical_binding": {"candidate_commit_sha": "e45e31f6ab8a6462aceef9dfe7bf3e2be36cf15c", "qualification": "Qualified application and owned behavior at committed candidate; actual execution SHAs remain distinct in main validation. No behavior changes after the candidate. Metadata-only engineering validation; native readiness/closure and genuine Product acceptance remain separate.", "evidence_ref": "governance/evidence/TUN-P2-014-VALIDATION.json", "ui_gate_ref": "governance/evidence/p2-014-authorization-20261115/ui/native-ui-e45e31f.json"},
+  "native_ui_gate": {"result": "PASS", "covered_items": 10, "failure_count": 0, "exit_code": 0, "actual_source_sha": "e45e31f6ab8a6462aceef9dfe7bf3e2be36cf15c", "evidence_ref": "governance/evidence/p2-014-authorization-20261115/ui/native-ui-e45e31f.json"}
 }

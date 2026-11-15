@@ -2,11 +2,12 @@
   "schema_version": 1,
   "scope_id": "P2-013-RV001",
   "validation_kind": "COMMITTED",
-  "result": "PENDING",
-  "tested_commit_sha": null,
-  "validated_commit_sha": null,
+  "result": "PASS",
+  "tested_commit_sha": "e45e31f6ab8a6462aceef9dfe7bf3e2be36cf15c",
+  "validated_commit_sha": "e45e31f6ab8a6462aceef9dfe7bf3e2be36cf15c",
   "owner_work_item": "TUN-P2-014",
   "owned_behavior_paths": ["src/Modules/Identity/AuthenticationEndpoints.cs", "src/Modules/Identity/AuthenticationApplication.cs"],
   "scope": "Optional guarded Product-continuation metadata and separately configured endpoint mapping only. Preserve completed Session/Device functionality and historical acceptance; no current PASS or closure claimed.",
-  "required_qualification": ["Unconfigured session response remains compatible", "Actual guarded continuation and all-factor sign-in handoff", "Shared authentication and Session/Device regression"]
+  "required_qualification": ["Unconfigured session response remains compatible", "Actual guarded continuation and all-factor sign-in handoff", "Shared authentication and Session/Device regression"],
+  "technical_binding": {"candidate_commit_sha": "e45e31f6ab8a6462aceef9dfe7bf3e2be36cf15c", "qualification": "Qualified application and owned behavior at committed candidate; actual execution SHAs remain distinct in main validation. No behavior changes after the candidate. Metadata-only engineering validation; native readiness/closure and genuine Product acceptance remain separate.", "evidence_ref": "governance/evidence/TUN-P2-014-VALIDATION.json", "ui_gate_ref": "governance/evidence/p2-014-authorization-20261115/ui/native-ui-e45e31f.json"}
 }
