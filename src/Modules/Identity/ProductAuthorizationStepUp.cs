@@ -69,12 +69,16 @@ internal sealed class ProductAuthorizationStepUp(IdentityPersistenceDbContext da
         NativeProofCompletion? nativeCompletion, CancellationToken ct) => InOwnerTransactionAsync<IResult>(async () =>
     {
         var saved = await continuation.ReadForReviewAsync(http, ct).ConfigureAwait(false);
-        if (saved is null || saved.ReviewDenied || saved.ReviewApprovalDigest is not null) return Conflict();
+        if (saved is null || saved.ReviewDenied || saved.ReviewApprovalDigest is not null)
+        { Console.Error.WriteLine("TUNNER_P214_DIAG:HANDOFF_POINTER"); return Conflict(); }
         var candidate = await CandidateAsync(saved, ct).ConfigureAwait(false);
-        if (candidate is null || !SameOperation(operation, candidate.Context)) return Conflict();
+        if (candidate is null || !SameOperation(operation, candidate.Context))
+        { Console.Error.WriteLine("TUNNER_P214_DIAG:HANDOFF_OPERATION"); return Conflict(); }
         var proof = await stepUp.PrepareProductAuthorizationProofAsync(candidate.Caller, candidate.Binding, candidate.Policy,
             verifiedProofKey, ct).ConfigureAwait(false);
-        if (proof is null || !await continuation.StageStepUpProofAsync(saved, proof, candidate.Binding, ct).ConfigureAwait(false)) return Conflict();
+        if (proof is null) { Console.Error.WriteLine("TUNNER_P214_DIAG:HANDOFF_PROOF_VALIDATION"); return Conflict(); }
+        if (!await continuation.StageStepUpProofAsync(saved, proof, candidate.Binding, ct).ConfigureAwait(false))
+        { Console.Error.WriteLine("TUNNER_P214_DIAG:HANDOFF_PROOF_STORAGE"); return Conflict(); }
         return Ready(candidate.Context, nativeCompletion);
     }, ct);
 

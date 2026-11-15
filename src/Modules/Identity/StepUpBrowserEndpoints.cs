@@ -149,11 +149,12 @@ internal sealed partial class StepUpBrowserService(IUserStepUpOperationSource re
         if (command.RequestId == Guid.Empty || command.RequestId != browser!.RequestId) return Problem(409, TechnicalProblemCodes.VersionConflict);
         var operation = await owner.ResolveAsync(actor, context.RequestAborted).ConfigureAwait(false);
         if (!MatchesActor(operation, actor) || Digest(operation!) != browser.BindingDigest || browser.AuthenticationPolicyVersion != auth.Version)
-            return Problem(409, TechnicalProblemCodes.VersionConflict);
+        { Console.Error.WriteLine("TUNNER_P214_DIAG:PASSWORD_OWNER_BINDING"); return Problem(409, TechnicalProblemCodes.VersionConflict); }
         if (operation!.Completed) return Results.Json(new { status = "COMPLETED", operationReference = operation.Binding.CorrelationId }); // Reconcile, never execute again.
         var issued = await application.IssuePasswordAsync(caller, operation.Binding, operation.ExpectedPolicyVersion, command.Password, context.RequestAborted).ConfigureAwait(false);
         if (issued.ErrorCode is { } issue)
         {
+            Console.Error.WriteLine("TUNNER_P214_DIAG:PASSWORD_ISSUANCE");
             if (await CompletedAsync(actor, browser.BindingDigest, context.RequestAborted).ConfigureAwait(false)) return Results.Json(new { status = "COMPLETED", operationReference = operation.Binding.CorrelationId });
             return Failure(issue);
         }
@@ -171,7 +172,7 @@ internal sealed partial class StepUpBrowserService(IUserStepUpOperationSource re
                 return Failure("STEP_UP_REQUIRED");
             var selected = await owner.ResolveAsync(actor, context.RequestAborted).ConfigureAwait(false);
             if (!MatchesActor(selected, actor) || selected!.Completed || Digest(selected) != browser.BindingDigest)
-                return Failure("VERSION_CONFLICT");
+            { Console.Error.WriteLine("TUNNER_P214_DIAG:HANDOFF_OWNER_BINDING"); return Failure("VERSION_CONFLICT"); }
             return await productAuthorization.StageForNativeAsync(context, operation, proofKey, nativeCompletion, context.RequestAborted).ConfigureAwait(false);
         }
         using var execution = SessionRevocationApplication.Owns(operation.Binding.Scope)
