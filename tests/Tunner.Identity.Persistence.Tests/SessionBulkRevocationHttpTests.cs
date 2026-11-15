@@ -12,7 +12,7 @@ using static Tunner.Identity.Persistence.Tests.AuthenticationTestHost;
 
 namespace Tunner.Identity.Persistence.Tests;
 
-public sealed class SessionBulkRevocationHttpTests(SessionListingPostgresFixture fixture) : IClassFixture<SessionListingPostgresFixture>
+public sealed partial class SessionBulkRevocationHttpTests(SessionListingPostgresFixture fixture) : IClassFixture<SessionListingPostgresFixture>
 {
     private const string Root = "/account/sessions/bulk-revocation";
     private sealed class Profile : IAssurancePolicySource, IStepUpPresentationSource, ISessionRevocationPresentationSource,
@@ -25,13 +25,18 @@ public sealed class SessionBulkRevocationHttpTests(SessionListingPostgresFixture
         internal string TransportVersion { get; set; } = "fixture-transport-v1";
         internal string AssuranceVersion { get; set; } = "fixture-step-v1";
         internal bool Published { get; set; } = true;
-        private static PolicyVersionCandidate<string> Metadata(string version, string scope) => new(version, "ACTIVE", scope,
-            SessionBulkRevocationTests.Discovery.Interval, null, ["SYNTHETIC-TEST-ONLY"]);
+        internal EffectivePolicyInterval Interval { get; set; } = SessionBulkRevocationTests.Discovery.Interval;
+        internal Dictionary<string, string> Methods { get; } = new() { ["pwd"] = "fixture-password" };
+        internal Dictionary<AssurancePolicyScope, string> ScopeVersions { get; } = new();
+        internal NativePublication? NativePresentation { get; set; }
+        private PolicyVersionCandidate<string> Metadata(string version, string scope) => new(version, "ACTIVE", scope,
+            Interval, null, ["SYNTHETIC-TEST-ONLY"]);
         public AssurancePolicyVersion RequireEffective(AssurancePolicyScope scope, DateTimeOffset at, string? expectedVersion = null) =>
-            new AssurancePolicyCatalog([new(new(AssuranceVersion, "ACTIVE", scope, SessionBulkRevocationTests.Discovery.Interval,
-                null, ["SYNTHETIC-TEST-ONLY"]), "fixture-password", TimeSpan.FromSeconds(30), new Dictionary<string, string> { ["pwd"] = "fixture-password" })])
+            new AssurancePolicyCatalog([new(new(ScopeVersions.GetValueOrDefault(scope, AssuranceVersion), "ACTIVE", scope, Interval,
+                null, ["SYNTHETIC-TEST-ONLY"]), "fixture-password", TimeSpan.FromSeconds(30), Methods)])
                 .RequireEffective(scope, at, expectedVersion);
-        public StepUpPresentation RequirePublished(AssurancePolicyVersion policy) => new StepUpBrowserTests.Presentation().RequirePublished(policy);
+        public StepUpPresentation RequirePublished(AssurancePolicyVersion policy) => NativePresentation?.RequirePublished(policy)
+            ?? new StepUpBrowserTests.Presentation().RequirePublished(policy);
         SessionBulkRevocationDiscoveryBudget ISessionBulkRevocationDiscoverySource.RequireEffective(DateTimeOffset at)
             => new(Metadata(DiscoveryVersion, SessionBulkRevocationDiscoveryBudget.Scope), MaximumCandidates);
         SessionBulkRevocationHttpBudget ISessionBulkRevocationHttpBudgetSource.RequireEffective(DateTimeOffset at)
@@ -70,12 +75,14 @@ public sealed class SessionBulkRevocationHttpTests(SessionListingPostgresFixture
         internal Browser[] Targets { get; } = targets;
         public async ValueTask DisposeAsync() { await Host.DisposeAsync(); await Database.DisposeAsync(); }
     }
-    private async Task<Scenario> Create(bool enabled = true, int targetCount = 2, int maximumCookie = 4096)
+    private async Task<Scenario> Create(bool enabled = true, int targetCount = 2, int maximumCookie = 4096,
+        Func<IdentityTestDatabase, Action<IServiceCollection>, Task<AuthenticationTestHost>>? start = null,
+        Action<IServiceCollection, Profile>? configure = null, bool synchronizeClock = false)
     {
         var database = await fixture.CreateDatabaseAsync(); var profile = new Profile { MaximumCookie = maximumCookie };
         var fallback = new StepUpBrowserTests.Owner(database);
         await using (var setup = database.Context()) await setup.Database.ExecuteSqlRawAsync("CREATE TABLE identity.step_up_browser_target (id integer PRIMARY KEY, version bigint NOT NULL, value integer NOT NULL, session_id uuid NULL, operation_id text NULL); INSERT INTO identity.step_up_browser_target VALUES(1,1,0,NULL,NULL);");
-        var host = await Start(database, services =>
+        var host = await (start ?? ((db, setup) => Start(db, setup)))(database, services =>
         {
             services.AddSingleton<IAssurancePolicySource>(profile); services.AddSingleton<IStepUpPresentationSource>(profile);
             services.AddSingleton<ISessionListingHttpBudgetSource>(profile); services.AddSingleton<ISessionListingPresentationSource>(profile);
@@ -87,9 +94,12 @@ public sealed class SessionBulkRevocationHttpTests(SessionListingPostgresFixture
                 services.AddSingleton<ISessionBulkRevocationHttpBudgetSource>(profile);
                 services.AddSingleton<ISessionBulkRevocationPresentationSource>(profile); services.AddTunnerSessionBulkRevocation();
             }
+            configure?.Invoke(services, profile);
         });
         try
         {
+            if (synchronizeClock) host.Clock.SynchronizeToSystem();
+            fallback.ExpectedPolicy = profile.AssuranceVersion;
             await host.SeedAsync(database); var targets = new List<Browser>();
             for (var i = 0; i < targetCount; i++) targets.Add(await Login(host, database));
             return new(database, host, profile, fallback, await Login(host, database), targets.ToArray());
