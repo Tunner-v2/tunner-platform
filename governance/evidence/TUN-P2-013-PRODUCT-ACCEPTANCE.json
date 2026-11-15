@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "scope_id": "TUN-P2-013",
+  "result": "ACCEPTED_BY_AUTHORIZED_PRODUCT_OWNER",
+  "recorded_at_utc": "2026-11-15T12:42:16Z",
+  "actor": "Requesting user acting as authorized Product Owner",
+  "provenance": "Explicit scoped Product acceptance in this chat; no AI-inferred acceptance.",
+  "source_question_call_id": "call_2f7668f7c0a54a91b929c742b0d82faf",
+  "selected_answer": "Accept P2-013 scoped foundation (Recommended)",
+  "accepted_source_head_sha": "17672aafef7c85bf1700e3b67c795a08b8f769d3",
+  "accepted_validation_candidate_sha": "1e8cc76bd5b22aceb169b44d446c0df049410b73",
+  "accepted_criteria": [
+    "Guarded owner-scoped session and observed-device listing; device trust remains separate from authentication.",
+    "Trust removal preserving sessions; selected-session and exact server-selected bulk sign-out with fresh authorized proof.",
+    "Safe lost-response recovery and truthful results; all nine scoped UI items pass."
+  ],
+  "review_packet_ref": "docs/development/P2_013_SESSION_SCOPE.md",
+  "validation_ref": "governance/evidence/TUN-P2-013-VALIDATION.json",
+  "native_ready_ref": "governance/evidence/p2-013-sessions-20261114/bulk-17672aa/native-ready.json",
+  "ui_evidence_ref": "governance/evidence/TUN-P2-013-UI-COMPLIANCE.json",
+  "remaining_owner_obligations": [
+    "TODO-TUN-P2-017-DEVICE001 production lifecycle/retention obligations remain separate.",
+    "Product propagation and acknowledgement require relevant Product contracts; no global Product-session termination claim."
+  ],
+  "not_authorized_by_this_acceptance": [
+    "Whole-P2 completion",
+    "Production-policy activation or deployment",
+    "Protected-main merge",
+    "Release authorization",
+    "Edits to Figma, FigJam or Google Drive source documentation"
+  ],
+  "lifecycle_check": {
+    "command": "tunner governance transition check TUN-P2-013 DONE",
+    "exit_code": 0,
+    "outcome": "ALLOWED",
+    "reason": "The destination is the next declared normal lifecycle state."
+  }
+}
