@@ -5,7 +5,24 @@
   "result": "PENDING",
   "tested_commit_sha": null,
   "validated_commit_sha": null,
-  "phase": "CONTINUATION_INCREMENT_PASSED_OIDC_AND_APPROVED_PRODUCT_UI_IN_PROGRESS",
+  "phase": "PRODUCT_REVIEW_INCREMENT_PASSED_SHARED_STEPUP_AUTHORIZATION_PENDING",
+  "product_review_increment": {
+    "result": "PASS_FOCUSED_INCREMENT_ONLY",
+    "source_commit_sha": "8ee80f542245e31e56d003bf34d02e136219d74d",
+    "native": {"run_id":"a70a881b290f45f9aeaecfbdd5b9b9f5","executed":16,"passed":16,"failed":0,"not_executed":0,"exit_code":0,"timed_out":false,"owned_containers_remaining":0,"borrowed_preserved":true},
+    "coverage": "Explicit Allow before grant/code redemption; Deny with original protocol state/private effect; switching without implicit sign-out; old pointer and old reference/new-generation replay rejection; exact current session/client/policy/publication/expiry; CSRF/tamper rejection; anonymous Product context and actual sign-in; concurrent identical Allow/opposite-decision/replay; changed/unavailable publication at final native output; exact denial publication attribution.",
+    "confirmed_defect_reproduction": {"source_commit_sha":"010764e3e4928e7b012e773a5f91a18dd2c8da11","run_id":"3fdf8126849149838c0ab5e2c5153b49","executed":4,"passed":0,"failed":4,"not_executed":0,"timed_out":false,"owned_containers_remaining":0,"borrowed_preserved":true,"fix":"8ee80f5 adds generation to decision binding, persists/validates exact denial digest and rechecks consumed approval before native output. Original assertions preserved."},
+    "initial_native_runs": [{"source_commit_sha":"ac5f4d078db33c9ebd517caf99b34df194501dc7","run_id":"08fa457af9424b7fb637567d7cd770f6","passed":2},{"source_commit_sha":"ac5f4d078db33c9ebd517caf99b34df194501dc7","run_id":"2503474fdd5a44f7bc14fadd6583e1b2","passed":10}],
+    "filter_diagnostic": {"run_id":"2a38d88144cb4be6ae172d48956c77ce","executed":0,"accepted":false,"reason":"Incorrect initial method-name filter selected no cases; count guard rejected it. Not a passing test run."},
+    "browser": {"source_commit_sha":"25412c084e0c386934610ad88f7be93b5f29b152","executed":31,"passed":31,"failed":0,"skipped":0,"flaky":0,"duration_milliseconds":37171.243,"raw_ref":"artifacts/p2-014-authorization-20261115/review-browser-25412c0-integrated-results.json","boundary":"Actual Edge production UI with controlled BFF responses:23 review cases plus8 continuation regressions. Native HTTPS/PostgreSQL evidence is separate."},
+    "affected_login_viewports": {"source_commit_sha":"010764e3e4928e7b012e773a5f91a18dd2c8da11","executed":3,"passed":3,"duration_milliseconds":11999.004,"raw_ref":"artifacts/p2-014-authorization-20261115/review-browser-010764e-login-results.json","reason":"Only affected Login1440/390/320 viewport cases rerun after matching approved stage padding; application UI source unchanged at8ee80f5."},
+    "browser_diagnostics": "First23-case attempt printed21 PASS/2 FAIL, then hung in restricted Vite teardown and was interrupted; no complete JSON receipt claimed. Fixed initial query-cleanup effect and an incorrect visible-box expectation for the existing empty aria-busy landmark; test gates now release in finally. Focused2 passed with verified owned-Vite manual teardown, then normal-privilege integrated31 exited cleanly. No test-runner redesign or security assertion removal.",
+    "rendered_evidence_directory": "artifacts/p2-014-authorization-20261115/ui-evidence",
+    "visual_comparison": "Actual authorization1440/390 and Product Login1440/390 inspected against consented014-V01–V03 pictures at matching viewports;320 uses approved shared responsive patterns. Removed extra Product detail row and matched stage padding. Existing approved provider variants and truthful availability states retained. Six production renders, keyboard order, no overflow/overlap, loaded assets and WCAG2.2 AA axe checks pass in browser cases. Final per-item native UI acceptance remains pending.",
+    "builds": "Identity module/test project compile with0 warnings/errors; installed TypeScript check and User Vite production build pass. Existing Vite native-config migration and optional GeistMono asset warnings retained, not suppressed.",
+    "independent_review": "Disclosed QA agent independently identified the three defects; reviewed010764e..8ee80f5 and confirmed their bounded remedies with no further confirmed defect. This is not final all-role or full-feature acceptance.",
+    "limits": "Shared operation-bound proof is excluded by current OIDC grant and separately requested. Broader integrated regression/conformance, propagation, per-item UI/native/compatibility acceptance and Product acceptance remain pending. No production configuration, protected-main merge or release."
+  },
   "interaction_increment": {
     "source_commit_sha": "dc8d0897807eae49f9dd65d37f94c8d3a43d74ae",
     "result": "PASS_13_DISTINCT_INTERACTION_CASES_OVER_TWO_FOCUSED_RUNS",
@@ -148,5 +165,5 @@
   "boundary": "Explicit qualified issuer/keys/client/registry/Relationship/policy inputs; missing providers deny activation. No production default or Product membership/entitlement/local-session authority. Existing Figma/Drive/FigJam remain read-only.",
   "actual_feature_tests": ["first_increment", "focused_code_cohort", "integrated_protocol_cohort", "continuation_increment", "interaction_increment"],
   "product_acceptance": "NOT_REQUESTED_OR_GRANTED",
-  "exact_next_action": "Run the12 new native Product review cases and23 actual browser cases, fix confirmed failures and compare rendered UI against approved014-V01–V03. Shared operation-bound proof remains outside the scoped OIDC grant; enabled propagation, full regression and native acceptance gates remain required."
+  "exact_next_action": "Await the separately requested Shared StepUp security grant; apply only the reviewed corrected support proposal and necessary native/owner/shared-dialog integration if authorized, then focused proof/regression tests. Existing16 native review,31 browser and3 affected-viewport results are retained. Complete required enabled propagation, broad regression, UI/native/compatibility and Product gates before closing014."
 }
