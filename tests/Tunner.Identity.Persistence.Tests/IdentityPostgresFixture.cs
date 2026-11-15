@@ -11,6 +11,7 @@ namespace Tunner.Identity.Persistence.Tests;
 public sealed class IdentityPostgresFixture : IAsyncLifetime
 {
     private IContainer? container;
+    private SessionListingPostgresFixture? qualifiedLocal;
     private readonly RecoveryCodeOwnedPostgres? finiteOwner;
     private readonly bool releasePrivateDatabases;
     public IdentityPostgresFixture() { }
@@ -21,6 +22,12 @@ public sealed class IdentityPostgresFixture : IAsyncLifetime
     {
         if (finiteOwner is not null) { finiteOwner.RequireReady(); return; }
         if (!TestHarnessProfiles.IsContainerExecutionEnabled()) return;
+        if (Environment.GetEnvironmentVariable("TUNNER_SESSION_LISTING_RUN_ID") is not null)
+        {
+            qualifiedLocal = new();
+            await qualifiedLocal.InitializeAsync();
+            return;
+        }
         container = TestcontainersBaseline.CreatePostgresContainer();
         await container.StartAsync();
     }
@@ -33,6 +40,11 @@ public sealed class IdentityPostgresFixture : IAsyncLifetime
     }
     private async Task<IdentityTestDatabase> CreateDatabaseCoreAsync(string? targetMigration, CancellationToken ct)
     {
+        if (qualifiedLocal is not null)
+        {
+            if (targetMigration is not null) throw new InvalidOperationException("The qualified local profile supports the current migration only.");
+            return await qualifiedLocal.CreateDatabaseAsync();
+        }
         if (container is null && finiteOwner is null) throw SkipException.ForSkip("Set TUNNER_RUN_CONTAINER_TESTS=1 for disposable PostgreSQL Identity tests.");
         finiteOwner?.RequireReady();
         var adminConnection = finiteOwner is not null
@@ -49,6 +61,7 @@ public sealed class IdentityPostgresFixture : IAsyncLifetime
 
     public async Task DisposeAsync()
     {
+        if (qualifiedLocal is not null) await qualifiedLocal.DisposeAsync();
         if (container is not null) await container.DisposeAsync();
     }
 }
