@@ -170,7 +170,8 @@ public sealed class ProductAuthorizationProtocolTests(SessionListingPostgresFixt
             descriptor.RedirectUris.Add(new Uri(Redirect));
             descriptor.Permissions.UnionWith([OpenIddictConstants.Permissions.Endpoints.Authorization, OpenIddictConstants.Permissions.Endpoints.Token,
                 OpenIddictConstants.Permissions.GrantTypes.AuthorizationCode, OpenIddictConstants.Permissions.ResponseTypes.Code,
-                OpenIddictConstants.Permissions.Prefixes.Scope + "product.read"]);
+                OpenIddictConstants.Permissions.Prefixes.Scope + "product.read",
+                OpenIddictConstants.Permissions.Prefixes.Resource + Resource]);
             descriptor.Requirements.Add(OpenIddictConstants.Requirements.Features.ProofKeyForCodeExchange);
             var application = await manager.CreateAsync(descriptor);
             owners.NativeApplicationId = await manager.GetIdAsync(application) ?? throw new InvalidOperationException("The synthetic native client identity is required.");
