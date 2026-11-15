@@ -246,7 +246,7 @@ public sealed class DeviceTrustTests(SessionListingPostgresFixture fixture) : IC
         _ = await Login(host, db); await using var context = db.Context();
         var exception = await Assert.ThrowsAsync<PostgresException>(() => context.Database.ExecuteSqlRawAsync("UPDATE identity.device_trust_versions SET state='UNTRUSTED'"));
         Assert.Equal(PostgresErrorCodes.CheckViolation, exception.SqlState);
-        exception = await Assert.ThrowsAsync<PostgresException>(() => context.Database.ExecuteSqlRawAsync("UPDATE identity.device_session_evidence SET characteristics_json='{}'"));
+        exception = await Assert.ThrowsAsync<PostgresException>(() => context.Database.ExecuteSqlRawAsync("UPDATE identity.device_session_evidence SET characteristics_json={0}", "{}"));
         Assert.Equal(PostgresErrorCodes.CheckViolation, exception.SqlState);
         exception = await Assert.ThrowsAsync<PostgresException>(() => context.Database.ExecuteSqlRawAsync("UPDATE identity.device_records SET version=version+2"));
         Assert.Equal(PostgresErrorCodes.CheckViolation, exception.SqlState);
@@ -366,7 +366,7 @@ public sealed class DeviceTrustTests(SessionListingPostgresFixture fixture) : IC
         Assert.Equal(PostgresErrorCodes.CheckViolation, exception.SqlState);
         exception = await Assert.ThrowsAsync<PostgresException>(() => context.Database.ExecuteSqlRawAsync("UPDATE identity.device_records SET version=version+2"));
         Assert.Equal(PostgresErrorCodes.CheckViolation, exception.SqlState);
-        exception = await Assert.ThrowsAsync<PostgresException>(() => context.Database.ExecuteSqlRawAsync("UPDATE identity.device_session_evidence SET characteristics_json='{}'"));
+        exception = await Assert.ThrowsAsync<PostgresException>(() => context.Database.ExecuteSqlRawAsync("UPDATE identity.device_session_evidence SET characteristics_json={0}", "{}"));
         Assert.Equal(PostgresErrorCodes.CheckViolation, exception.SqlState);
         exception = await Assert.ThrowsAsync<PostgresException>(() => context.Database.ExecuteSqlRawAsync("UPDATE identity.device_operations SET correlation_id='rewritten'"));
         Assert.Equal(PostgresErrorCodes.CheckViolation, exception.SqlState);
