@@ -1,0 +1,438 @@
+{
+  "schema_version": 1,
+  "scope_id": "TUN-P2-013_BULK_INTEGRATION",
+  "result": "PASS_SCOPED",
+  "tested_commit_sha": "17672aafef7c85bf1700e3b67c795a08b8f769d3",
+  "backend_commit_sha": "d20d62215eec52fd3d7ab2422ec40ba5dc6b8456",
+  "shared_regression_commit_sha": "3cf6ca036dedb4d75dec8340277e896bebc13eca",
+  "qualification": {
+    "backend_bulk_http_native": 44,
+    "prepared_timestamp_probe": 1,
+    "full_sessions_ui_api": 68,
+    "publication_isolation_focused": 12,
+    "publication_isolation_new_case": 1,
+    "real_browser": 2,
+    "real_bulk_seconds": 15.808,
+    "real_single_seconds": 15.34,
+    "strict_tls": true,
+    "source_reuse": "68PASS at3cf6ca0; two-file publication isolation correction at17672aa then12focusedPASS including the added regression and two legacy/qualified UI cases. Do not relabel68 as a single69-test invocation. Actual Single and Bulk journeys both PASS at17672aa.",
+    "prior_device_and_single": "120 distinct backend successes are preserved in device-659172f, with actual116PASS/4fixtureFAIL plus6focusedPASS. Twenty-four Device/Single CSharp source paths are unchanged from659172f through17672aa; latest changed bulk response has44current cases plus timestamp probe.",
+    "typecheck": "PASS author final frozen source",
+    "user_build": "PASS author773ms after content-isolation fix",
+    "browser_host_build": "PASS root0warnings0errors; hosted module matches bulk44 qualified assembly",
+    "actual_outcome": "Same original request/correlation/two target refs; each version+1; target sessions401/401, current and later excluded session200/200. Exactly2previews,1cancel,1activate,1proof write; lost real response delivery reconciles through exact owner result."
+  },
+  "executions": [
+    {
+      "summary": {
+        "accepted": true,
+        "run_id": "68bb5b99e5d447a1b7082c82e56929c8",
+        "borrowed_preserved": true,
+        "failed": 0,
+        "source": "d20d62215eec52fd3d7ab2422ec40ba5dc6b8456",
+        "executed": 1,
+        "passed": 1,
+        "owned_containers_remaining": 0,
+        "not_executed": 0,
+        "timed_out": false,
+        "exit_code": 0
+      },
+      "assemblies": [
+        {
+          "sha256": "e69742b02a6934aa1d27ec337d801063c97275cd0dd6af1e69484d2184ddf3de",
+          "path": "tests/Tunner.Identity.Persistence.Tests/bin/Debug/net10.0/Tunner.Identity.Persistence.dll"
+        },
+        {
+          "sha256": "10061559779115a0c0a3827327a9222a187e364ff8359daf4db8115fb96ddc5c",
+          "path": "tests/Tunner.Identity.Persistence.Tests/bin/Debug/net10.0/Tunner.Identity.Persistence.Tests.dll"
+        }
+      ]
+    },
+    {
+      "summary": {
+        "run_id": "a3855c041f3242a3b5a216c9c6bd91c6",
+        "failed": 0,
+        "exit_code": 0,
+        "timed_out": false,
+        "source": "d20d62215eec52fd3d7ab2422ec40ba5dc6b8456",
+        "executed": 44,
+        "not_executed": 0,
+        "accepted": true,
+        "passed": 44,
+        "borrowed_preserved": true,
+        "owned_containers_remaining": 0
+      },
+      "assemblies": [
+        {
+          "path": "tests/Tunner.Identity.Persistence.Tests/bin/Debug/net10.0/Tunner.Identity.Persistence.dll",
+          "sha256": "e69742b02a6934aa1d27ec337d801063c97275cd0dd6af1e69484d2184ddf3de"
+        },
+        {
+          "path": "tests/Tunner.Identity.Persistence.Tests/bin/Debug/net10.0/Tunner.Identity.Persistence.Tests.dll",
+          "sha256": "10061559779115a0c0a3827327a9222a187e364ff8359daf4db8115fb96ddc5c"
+        }
+      ]
+    }
+  ],
+  "host": {
+    "port": 24443,
+    "process_id": 31464,
+    "started_utc_ticks": 639303368750318700,
+    "assemblies": [
+      {
+        "path": "tools/browser-testing/bin/Debug/net10.0/Tunner.Identity.Persistence.dll",
+        "sha256": "e69742b02a6934aa1d27ec337d801063c97275cd0dd6af1e69484d2184ddf3de"
+      },
+      {
+        "path": "tools/browser-testing/bin/Debug/net10.0/Tunner.BrowserTesting.dll",
+        "sha256": "04371709157d7a60cc902fe87c694276c3c7e7486ccce8ba987c59983e028376"
+      }
+    ],
+    "source": "17672aafef7c85bf1700e3b67c795a08b8f769d3",
+    "mode": "ISOLATED_LOCAL_BROWSER_TESTING"
+  },
+  "files": [
+    {
+      "original_sha256": "f9fb84ac77765f079d43437df8e7ac5264e11288f310dc0ca49b6b8018a5e6fb",
+      "sha256": "3c1334ceab07a2b39cd4fda5f2574458655b893641768fee6fbc1b73b80206e7",
+      "kind": "HTTP_RAW",
+      "path": "governance/evidence/p2-013-sessions-20261114/bulk-17672aa/http-68bb5b99e5d447a1b7082c82e56929c8.trx.gz",
+      "compression": "lossless gzip"
+    },
+    {
+      "original_sha256": "cb8351e049adcc09aa2852e75c8ae7da0875fa89f8e2f66256cd3056adb61d88",
+      "sha256": "fed127988473cfec26a02b1f2a2647ca86f1bdc22b716f15b1c90a86c8ee070a",
+      "kind": "HTTP_RAW",
+      "path": "governance/evidence/p2-013-sessions-20261114/bulk-17672aa/http-a3855c041f3242a3b5a216c9c6bd91c6.trx.gz",
+      "compression": "lossless gzip"
+    },
+    {
+      "original_sha256": "4c062db241e8da1072d237ddcea4012804af5871b41895cbea4cac33fef29b4f",
+      "sha256": "ed00a06a0fb436c3ce4fa4ba13bd7a67ed62518a38955623eb1395c120b01932",
+      "kind": "UI_REGRESSION_RAW",
+      "path": "governance/evidence/p2-013-sessions-20261114/bulk-17672aa/integrated68.json.gz",
+      "compression": "lossless gzip"
+    },
+    {
+      "original_sha256": "033a14d12583fa99b8c57afe58948484e570c8e531e9dbf1cf6e7ef5bb30bcc3",
+      "sha256": "d393ca19de0e546b78006f76bf2468be98c7a08e219ac39046d852a33b9b8014",
+      "kind": "ISOLATION_REGRESSION_RAW",
+      "path": "governance/evidence/p2-013-sessions-20261114/bulk-17672aa/isolation12.json.gz",
+      "compression": "lossless gzip"
+    },
+    {
+      "original_sha256": "ae94d84ea1445e075967ca5e80487132677ca1312e9b8a8a526a786743dd33e9",
+      "sha256": "7755bb8ffd5d881cecd2e778f4eda0b38bc3b3cf4812a24099196bd9dcf0bba6",
+      "kind": "LIVE_BROWSER_RAW",
+      "path": "governance/evidence/p2-013-sessions-20261114/bulk-17672aa/live2.json.gz",
+      "compression": "lossless gzip"
+    },
+    {
+      "original_sha256": "2f5a46f0717ada334acd7735f00c0d13c8eacc3f882c51f9eac6f7bcefd975ab",
+      "sha256": "2f5a46f0717ada334acd7735f00c0d13c8eacc3f882c51f9eac6f7bcefd975ab",
+      "kind": "RENDERED_CONTROLLED",
+      "path": "governance/evidence/p2-013-sessions-20261114/bulk-17672aa/controlled/bulk-confirm-390.png",
+      "compression": "none"
+    },
+    {
+      "original_sha256": "4f4a782fe1fe571b53441f000335b6225bf09b863720fee0dffde19139cf711c",
+      "sha256": "4f4a782fe1fe571b53441f000335b6225bf09b863720fee0dffde19139cf711c",
+      "kind": "RENDERED_CONTROLLED",
+      "path": "governance/evidence/p2-013-sessions-20261114/bulk-17672aa/controlled/bulk-confirm-1440.png",
+      "compression": "none"
+    },
+    {
+      "original_sha256": "257fca4198d434770b60e4b41e181936d7ce6594a1bf6df41457c7ced16a2649",
+      "sha256": "257fca4198d434770b60e4b41e181936d7ce6594a1bf6df41457c7ced16a2649",
+      "kind": "RENDERED_CONTROLLED",
+      "path": "governance/evidence/p2-013-sessions-20261114/bulk-17672aa/controlled/bulk-result-1440.png",
+      "compression": "none"
+    },
+    {
+      "original_sha256": "c3bfdfa8c65dab7bfb6b904778fe7a194e649b70f950b3ecee4fc1ecc79eefd9",
+      "sha256": "c3bfdfa8c65dab7bfb6b904778fe7a194e649b70f950b3ecee4fc1ecc79eefd9",
+      "kind": "RENDERED_CONTROLLED",
+      "path": "governance/evidence/p2-013-sessions-20261114/bulk-17672aa/controlled/bulk-result-390.png",
+      "compression": "none"
+    },
+    {
+      "original_sha256": "2c0c319d27ee2f861ee945419b62661112726dfdcb3c32c9a0e50028188e4488",
+      "sha256": "2c0c319d27ee2f861ee945419b62661112726dfdcb3c32c9a0e50028188e4488",
+      "kind": "RENDERED_CONTROLLED",
+      "path": "governance/evidence/p2-013-sessions-20261114/bulk-17672aa/controlled/bulk-unknown-1440.png",
+      "compression": "none"
+    },
+    {
+      "original_sha256": "aa471b88e87e5353d09cd5b00aaa4881c844a83c08af3195cb41195434839b71",
+      "sha256": "aa471b88e87e5353d09cd5b00aaa4881c844a83c08af3195cb41195434839b71",
+      "kind": "RENDERED_CONTROLLED",
+      "path": "governance/evidence/p2-013-sessions-20261114/bulk-17672aa/controlled/bulk-unknown-390.png",
+      "compression": "none"
+    },
+    {
+      "original_sha256": "46fe57afd7c18eb953f17b7ba1fbca998cf9d5c972273775c13a9cc809abdd52",
+      "sha256": "46fe57afd7c18eb953f17b7ba1fbca998cf9d5c972273775c13a9cc809abdd52",
+      "kind": "RENDERED_LIVE",
+      "path": "governance/evidence/p2-013-sessions-20261114/bulk-17672aa/live/bulk-result-delivery-unknown.png",
+      "compression": "none"
+    },
+    {
+      "original_sha256": "54c6ea2b6cfbdbb2210bf211a659decc03a7b3f20e11de68c23b0938c917343f",
+      "sha256": "54c6ea2b6cfbdbb2210bf211a659decc03a7b3f20e11de68c23b0938c917343f",
+      "kind": "RENDERED_LIVE",
+      "path": "governance/evidence/p2-013-sessions-20261114/bulk-17672aa/live/bulk-review-two-original-targets.png",
+      "compression": "none"
+    },
+    {
+      "original_sha256": "4e5c93febe7d4ed1c9fa58c205844fc423b3a8d89052f2b190e020555fb7ffcd",
+      "sha256": "4e5c93febe7d4ed1c9fa58c205844fc423b3a8d89052f2b190e020555fb7ffcd",
+      "kind": "RENDERED_LIVE",
+      "path": "governance/evidence/p2-013-sessions-20261114/bulk-17672aa/live/bulk-two-revoked-actor-and-later-preserved.png",
+      "compression": "none"
+    },
+    {
+      "original_sha256": "d73e2172cc312c4c816250e5544a3fbb7e495daddb32cf99dd81569d7fb830e1",
+      "sha256": "d73e2172cc312c4c816250e5544a3fbb7e495daddb32cf99dd81569d7fb830e1",
+      "kind": "RENDERED_LIVE",
+      "path": "governance/evidence/p2-013-sessions-20261114/bulk-17672aa/live/confirmation-1440.png",
+      "compression": "none"
+    },
+    {
+      "original_sha256": "f64de6840df4db37aadbe6a6937b0061dcb3cebf4fe5db4bcefa9e47dfb7bdeb",
+      "sha256": "f64de6840df4db37aadbe6a6937b0061dcb3cebf4fe5db4bcefa9e47dfb7bdeb",
+      "kind": "RENDERED_LIVE",
+      "path": "governance/evidence/p2-013-sessions-20261114/bulk-17672aa/live/confirmation-320.png",
+      "compression": "none"
+    },
+    {
+      "original_sha256": "c2eaeba32b6859e9bd11bdf6fa7614dcff1471ab1f8a3d599af4f14378d1e168",
+      "sha256": "c2eaeba32b6859e9bd11bdf6fa7614dcff1471ab1f8a3d599af4f14378d1e168",
+      "kind": "RENDERED_LIVE",
+      "path": "governance/evidence/p2-013-sessions-20261114/bulk-17672aa/live/proof-validation.png",
+      "compression": "none"
+    },
+    {
+      "original_sha256": "0f88bed4aa8f3880f0e628ea8394eed31b7fd65d7662c5568abb7a13196102e7",
+      "sha256": "0f88bed4aa8f3880f0e628ea8394eed31b7fd65d7662c5568abb7a13196102e7",
+      "kind": "RENDERED_LIVE",
+      "path": "governance/evidence/p2-013-sessions-20261114/bulk-17672aa/live/result-1440.png",
+      "compression": "none"
+    },
+    {
+      "original_sha256": "e0467c512f13ec3cd30ebf56d1546c980e905b1f41cc98ea027333c8371aaf04",
+      "sha256": "e0467c512f13ec3cd30ebf56d1546c980e905b1f41cc98ea027333c8371aaf04",
+      "kind": "RENDERED_LIVE",
+      "path": "governance/evidence/p2-013-sessions-20261114/bulk-17672aa/live/result-320.png",
+      "compression": "none"
+    },
+    {
+      "original_sha256": "96d0bc4124cdbaf8b22e2f8fbb8ea4c58f43d7ce3583f20c4233c420110b919b",
+      "sha256": "96d0bc4124cdbaf8b22e2f8fbb8ea4c58f43d7ce3583f20c4233c420110b919b",
+      "kind": "APPROVED_REFERENCE",
+      "path": "governance/evidence/p2-013-sessions-20261114/bulk-17672aa/approved/review.html",
+      "compression": "none"
+    },
+    {
+      "original_sha256": "bb7556db66c057df53a90540452586ea07f66512fb6c4d681741ede15bf1f179",
+      "sha256": "bb7556db66c057df53a90540452586ea07f66512fb6c4d681741ede15bf1f179",
+      "kind": "APPROVED_REFERENCE",
+      "path": "governance/evidence/p2-013-sessions-20261114/bulk-17672aa/approved/exactscopes.md",
+      "compression": "none"
+    },
+    {
+      "original_sha256": "0783a6427267f4afc86578c48bc11de7fc05e4092274b879f06e4437f58d2b31",
+      "sha256": "0783a6427267f4afc86578c48bc11de7fc05e4092274b879f06e4437f58d2b31",
+      "kind": "APPROVED_REFERENCE",
+      "path": "governance/evidence/p2-013-sessions-20261114/bulk-17672aa/approved/bulk.js",
+      "compression": "none"
+    },
+    {
+      "original_sha256": "c2d2b259bbc5058d2e9a0013d6b5a4b0837c1fa3dc5f938d1ce6599d23cf1f69",
+      "sha256": "c2d2b259bbc5058d2e9a0013d6b5a4b0837c1fa3dc5f938d1ce6599d23cf1f69",
+      "kind": "APPROVED_REFERENCE",
+      "path": "governance/evidence/p2-013-sessions-20261114/bulk-17672aa/approved/bulk.css",
+      "compression": "none"
+    },
+    {
+      "original_sha256": "e45dc0cabbaa0901e4e591f32020a6cf0163c08dc3baca726554cf722b2622a8",
+      "sha256": "e45dc0cabbaa0901e4e591f32020a6cf0163c08dc3baca726554cf722b2622a8",
+      "kind": "APPROVED_REFERENCE",
+      "path": "governance/evidence/p2-013-sessions-20261114/bulk-17672aa/approved/approved-bulk-controls.png",
+      "compression": "none"
+    },
+    {
+      "original_sha256": "154840977b431ca92a4f4f44c9ba300fb191f822238e5c327e6d9f4226d41374",
+      "sha256": "154840977b431ca92a4f4f44c9ba300fb191f822238e5c327e6d9f4226d41374",
+      "kind": "APPROVED_REFERENCE",
+      "path": "governance/evidence/p2-013-sessions-20261114/bulk-17672aa/approved/desktop-confirm.png",
+      "compression": "none"
+    },
+    {
+      "original_sha256": "dfb89c85fcc79c508ec55a060da89855f4c1fee4b84175de72d0fb83a45b57ae",
+      "sha256": "dfb89c85fcc79c508ec55a060da89855f4c1fee4b84175de72d0fb83a45b57ae",
+      "kind": "APPROVED_REFERENCE",
+      "path": "governance/evidence/p2-013-sessions-20261114/bulk-17672aa/approved/mobile-confirm.png",
+      "compression": "none"
+    },
+    {
+      "original_sha256": "7b15649a41598d91af56a712fc47613d0ffb8e2d1195ac8f7d8615b470215850",
+      "sha256": "7b15649a41598d91af56a712fc47613d0ffb8e2d1195ac8f7d8615b470215850",
+      "kind": "APPROVED_REFERENCE",
+      "path": "governance/evidence/p2-013-sessions-20261114/bulk-17672aa/approved/desktop-result.png",
+      "compression": "none"
+    },
+    {
+      "original_sha256": "0d8e200f491cc891c6b257cae9116ff1d67fb47f89bb983384ff9b1c94218e80",
+      "sha256": "0d8e200f491cc891c6b257cae9116ff1d67fb47f89bb983384ff9b1c94218e80",
+      "kind": "APPROVED_REFERENCE",
+      "path": "governance/evidence/p2-013-sessions-20261114/bulk-17672aa/approved/mobile-result.png",
+      "compression": "none"
+    },
+    {
+      "original_sha256": "2a9d120aeaf4ede75203c8af7bf25106746d357830cbfe15c7478eacc14c09a6",
+      "sha256": "2a9d120aeaf4ede75203c8af7bf25106746d357830cbfe15c7478eacc14c09a6",
+      "kind": "APPROVED_REFERENCE",
+      "path": "governance/evidence/p2-013-sessions-20261114/bulk-17672aa/approved/desktop-unknown.png",
+      "compression": "none"
+    },
+    {
+      "original_sha256": "2b87ceab30b67fb384f556cc986816e18a6ada03c7960e0837b67ed6e0c80ab3",
+      "sha256": "2b87ceab30b67fb384f556cc986816e18a6ada03c7960e0837b67ed6e0c80ab3",
+      "kind": "APPROVED_REFERENCE",
+      "path": "governance/evidence/p2-013-sessions-20261114/bulk-17672aa/approved/mobile-unknown.png",
+      "compression": "none"
+    }
+  ],
+  "source_reuse": {
+    "sast_changed_files": 2,
+    "unchanged_sast_rules": 4,
+    "findings": 0,
+    "delta_paths": [],
+    "unchanged_device_single_source_count": 24
+  },
+  "review": {
+    "reviewer": "AI /root/p2_013_bulk_review, one disclosed reviewer applying12 active .agent technical contracts; not twelve people or human Product acceptance.",
+    "result": "No remaining actionable finding. Publication ownership bug corrected and independently re-reviewed. All11 approved packet hashes match; six controlled and actual rendered captures inspected.",
+    "active_contracts": [
+      {
+        "role": "full-stack-engineer",
+        "sha256": "59adbe2133cf4ce88cbc9ca4eafce1d5a9d83b9562b6580c1571e6fc148d46b5",
+        "path": ".agent/skills/full-stack-engineer/SKILL.md",
+        "version": "1.0.0"
+      },
+      {
+        "role": "tester-qa-engineer",
+        "sha256": "52aee18f251a614e339adba9f7c886a5da1ef4ab0482ae6b77044184128415c6",
+        "path": ".agent/skills/tester-qa-engineer/SKILL.md",
+        "version": "1.1.0"
+      },
+      {
+        "role": "solution-architect",
+        "sha256": "664ffba70d0f97e75951c3548b7f8391854781e4cf90cc50fc8829543783a35b",
+        "path": ".agent/skills/solution-architect/SKILL.md",
+        "version": "1.0.0"
+      },
+      {
+        "role": "cyber-security-engineer",
+        "sha256": "2d32ff3d7fb503f29cf930e9852ed4a757bb48a08e3fa4e3f6d5a23139a47f97",
+        "path": ".agent/skills/cyber-security-engineer/SKILL.md",
+        "version": "1.0.0"
+      },
+      {
+        "role": "auditor",
+        "sha256": "191c796fc5df0332ff2c3c464ca611d2c6d3ffc5ba7e2807986a71ad2e40d921",
+        "path": ".agent/skills/auditor/SKILL.md",
+        "version": "1.0.0"
+      },
+      {
+        "role": "compliance-specialist",
+        "sha256": "38f8de27e31b3ae5cec070320d9b408d6f75682b024322f5e37585c76921303e",
+        "path": ".agent/skills/compliance-specialist/SKILL.md",
+        "version": "1.0.0"
+      },
+      {
+        "role": "ui-ux-engineer",
+        "sha256": "498ff7e4b46012b1e90773cd29ebac903d7ac83767d739cc327d9b69a3b4c5c2",
+        "path": ".agent/skills/ui-ux-engineer/SKILL.md",
+        "version": "1.1.0"
+      },
+      {
+        "role": "frontend-engineer",
+        "sha256": "3472e745aa478457939b1aeeba319f72989bb9e97791e458f0b9979ec1b538d7",
+        "path": ".agent/skills/frontend-engineer/SKILL.md",
+        "version": "1.1.0"
+      },
+      {
+        "role": "end-user-ux-reviewer",
+        "sha256": "cfaa2eeffd945eef70a6ff1023b1af42fc0413add7b357b2fcd914473e976665",
+        "path": ".agent/skills/end-user-ux-reviewer/SKILL.md",
+        "version": "1.1.0"
+      },
+      {
+        "role": "content-writer",
+        "sha256": "9683a7f4aa8e50e2922fb7bbc74238d2d7bdb8ce2a81f922030c45ce9258e130",
+        "path": ".agent/skills/content-writer/SKILL.md",
+        "version": "1.0.0"
+      },
+      {
+        "role": "governance-engineer",
+        "sha256": "3c948ff290690b012d3736b561021989681c2b6fcac3f115b96ca1083672536f",
+        "path": ".agent/skills/governance-engineer/SKILL.md",
+        "version": "1.0.0"
+      },
+      {
+        "role": "sdk-engineer",
+        "sha256": "c64a66b2e19bccdbf69f13c9db62e9e2cbb0403f384591a93b5b787dc33b07ae",
+        "path": ".agent/skills/sdk-engineer/SKILL.md",
+        "version": "1.0.0"
+      }
+    ],
+    "assessment": {
+      "full_stack": "Exact original, proof and causal-result boundaries preserved.",
+      "qa": "Actual raw2livePASS and decoded original/receipt/status attachment verified; no execution claimed by reviewer.",
+      "architecture": "Private BFF ownership and shared capabilities remain separated.",
+      "security": "No new authorization/replay/selection/secret-handling defect; explicit12+7publication allowlist protects unrelated copy.",
+      "audit": "Active role hashes, consent and source/result lineage verified.",
+      "compliance": "017Device privacy/lifecycle obligations remain before production.",
+      "ui_ux": "Active AMD0008/0009 per-item requirements, approved references and responsive rendered states assessed.",
+      "frontend": "Shared component/validation reuse and content isolation verified.",
+      "end_user": "Explicit cancellation, exact-set scope and uncertain recovery remain clear.",
+      "content": "Qualified publications preserve domain ownership; unavailable last-activity is truthful.",
+      "governance": "Final native committed gates remain required; no wholeP2/Product/release approval inferred.",
+      "sdk": "PrivateBFF compatibility/retry semantics; no publicSDK/Product/provider contract change."
+    }
+  },
+  "consent_ref": "governance/evidence/TUN-P2-013-BULK-VISUAL-CONSENT.json",
+  "parent_device_proof": "governance/evidence/p2-013-sessions-20261114/device-659172f/qualification-binding.json",
+  "security": {
+    "secret_scan": "PASS11ownedbulkfiles plus2correctedcontentfiles",
+    "sast": "PASS2changedCSharpfiles with4unchangedrules; priorDevice13CSharp qualification retained",
+    "sast_policy_sha256": "3c7e71681b62b44efcc56a486a845dea8f3b48276c91a245e9abd41ec72ee80c",
+    "storage": "No secrets/query/fragment or nativewebstorage; protected cookies HttpOnly/Secure/Strict. No source documentation/Figma/Drive writes or other-project Docker changes."
+  },
+  "ui_coverage": {
+    "inventory_sha256": "962af751f07f81b9c9125eaf279a64ad5acadb38ee9ce20e6050412614165709",
+    "item": "COMP-SESSION-BULK-REVOKE",
+    "shared": [
+      "U-ACCT-04",
+      "U-ACCT-SESSION-DETAILS",
+      "COMP-SESSION-REVOKE",
+      "COMP-STEP-UP",
+      "FORM-STEP-UP"
+    ],
+    "checks": "Read-only bulk confirmation adds no fields; typed independent server/client commands, exact state/result errors and shared password validation are actually executed. All68 existing/new UI cases pass before isolated projection hardening; post-fix12 verify changed content boundary.",
+    "viewports": "1440/390 approved bulk references; existing6Sessionbreakpoints1440/1366/1024/768/390/320; long-set scroll and keyboard checks. Real bulk profile20does not force an unloaded target; existingSQL complete-set and controlled pagination tests supply complementary coverage."
+  },
+  "remaining": [
+    "Final committed per-item native UI gate and native technical/lifecycle gates.",
+    "Genuine Product acceptance for completed013feature; protected-main integration and release remain separate.",
+    "017owner privacy/lifecycle and production provider/policy activation remain governed downstream work."
+  ],
+  "local_browser": {
+    "mode": "ISOLATED_LOCAL_BROWSER_TESTING",
+    "url": "https://localhost:24443",
+    "postgres": "127.0.0.1:25432 -> existingcontainer5432; database tunner_browser_testing",
+    "mailpit": "http://127.0.0.1:28025",
+    "persistent_data_and_existing_certificate_preserved": true
+  }
+}

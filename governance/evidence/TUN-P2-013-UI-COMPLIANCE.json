@@ -2,11 +2,19 @@
   "schema_version": 1,
   "scope_id": "TUN-P2-013",
   "result": "PASS",
-  "assessment_scope": "Current selected-session and approved D01-D03 Device screens/components with their shared proof caller. Historical test identities remain intact; current qualification proves shared-source compatibility. No bulk UI, whole013/P2 Product, production or release acceptance.",
-  "current_scope_qualification": {"path":"governance/evidence/p2-013-sessions-20261114/device-659172f/qualification-binding.json","sha256":"0ba1d95fb8f5391f94506709999a652a5def3859d14ce6eab579202bcf214c70"},
-  "tested_commit_sha": "659172ff87be7e65764d71cd62a3a24a0f5b36a8",
-  "inventory_sha256": "5768b17be0221622c1b33298fb6322e7695bddcbf15aa4c76e11a1cfb1bb8c37",
+  "assessment_scope": "All nine current013 items: selected-session, approved Device and approved bulk components with shared proof. Historical invocation identities remain intact; linked qualification binds current changes and verified unchanged sources. No wholeP2 Product, production or release acceptance.",
+  "current_scope_qualification": {"path":"governance/evidence/p2-013-sessions-20261114/bulk-17672aa/qualification-binding.json","sha256":"93a1e60d13490247f1b3f5909a4ee41d24cfd4ffe94ff62b0187664678002d53"},
+  "tested_commit_sha": "17672aafef7c85bf1700e3b67c795a08b8f769d3",
+  "inventory_sha256": "962af751f07f81b9c9125eaf279a64ad5acadb38ee9ce20e6050412614165709",
   "owned_behavior_paths": [
+    "web/apps/user/sessions.bulk.tsx",
+    "web/apps/user/sessions.bulk.css",
+    "web/tests/sessions/bulk.spec.ts",
+    "web/apps/user/sessions.bulk.api.ts",
+    "web/tests/sessions.bulk.api.test.tsx",
+    "web/tests/browser-testing/sessions-bulk-flow.spec.ts",
+    "src/Modules/Identity/SessionBulkRevocationBrowser.cs",
+    "docs/contracts/session-bulk-revocation-contract.md",
     "src/Modules/Identity/AuthenticationDevices.cs",
     "src/Modules/Identity/DeviceApplication.cs",
     "src/Modules/Identity/DeviceContracts.cs",
@@ -89,6 +97,244 @@
   },
   "validation_applicability": "Shared existing validation evidence retains original invocations; current caller is qualified by actual wrong-password correction, independent HTTPS guards, causal-result reconciliation and ordinary-owner handoff. Optional unactivated factor/provider paths do not become new live qualification.",
   "items": [
+    {
+      "id": "COMP-SESSION-BULK-REVOKE",
+      "checks": [
+        {
+          "id": "VAL-001",
+          "result": "NOT_APPLICABLE",
+          "reason": "Read-only frozen-set confirmation/result introduces no editable fields. Actual password validation remains in separately covered FORM-STEP-UP; current real Single proof rejection/correction and shared Bulk proof callers are qualified.",
+          "authority_refs": [
+            "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md",
+            "docs/authority/current/decisions/AMD-0008_Approved_Figma_Visual_Fidelity_and_Product_Owner_UX_Consent.md",
+            "docs/authority/current/decisions/AMD-0009_URL_Addressable_Routing_and_Governed_Form_Validation.md"
+          ]
+        },
+        {
+          "id": "VAL-002",
+          "result": "NOT_APPLICABLE",
+          "reason": "Read-only frozen-set confirmation/result introduces no editable fields. Actual password validation remains in separately covered FORM-STEP-UP; current real Single proof rejection/correction and shared Bulk proof callers are qualified.",
+          "authority_refs": [
+            "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md",
+            "docs/authority/current/decisions/AMD-0008_Approved_Figma_Visual_Fidelity_and_Product_Owner_UX_Consent.md",
+            "docs/authority/current/decisions/AMD-0009_URL_Addressable_Routing_and_Governed_Form_Validation.md"
+          ]
+        },
+        {
+          "id": "VAL-003",
+          "result": "PASS",
+          "description": "Client strict schemas and44current server cases reject malformed/foreign/stale/overflowed commands independently; only the original server manifest can execute.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/bulk-17672aa/qualification-binding.json",
+              "sha256": "93a1e60d13490247f1b3f5909a4ee41d24cfd4ffe94ff62b0187664678002d53"
+            }
+          ]
+        },
+        {
+          "id": "VAL-004",
+          "result": "PASS",
+          "description": "Shared safe changed/unknown feedback and exact whole-set receipt prevent false success; hostile extra published keys cannot replace independently owned content.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/bulk-17672aa/qualification-binding.json",
+              "sha256": "93a1e60d13490247f1b3f5909a4ee41d24cfd4ffe94ff62b0187664678002d53"
+            }
+          ]
+        },
+        {
+          "id": "VAL-005",
+          "result": "PASS",
+          "description": "Keyboard focus/trap/return, pending duplicate prevention, explicit correction/check-only and shared FORM-STEP-UP field error associations remain verified.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/bulk-17672aa/qualification-binding.json",
+              "sha256": "93a1e60d13490247f1b3f5909a4ee41d24cfd4ffe94ff62b0187664678002d53"
+            }
+          ]
+        },
+        {
+          "id": "VAL-006",
+          "result": "NOT_APPLICABLE",
+          "reason": "Read-only frozen-set confirmation/result introduces no editable fields. Actual password validation remains in separately covered FORM-STEP-UP; current real Single proof rejection/correction and shared Bulk proof callers are qualified.",
+          "authority_refs": [
+            "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md",
+            "docs/authority/current/decisions/AMD-0008_Approved_Figma_Visual_Fidelity_and_Product_Owner_UX_Consent.md",
+            "docs/authority/current/decisions/AMD-0009_URL_Addressable_Routing_and_Governed_Form_Validation.md"
+          ]
+        },
+        {
+          "id": "VAL-007",
+          "result": "PASS",
+          "description": "Qualified12transport+7visual publications preserve domain-owned semantics; no password/provider rules or production policy is invented.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/bulk-17672aa/qualification-binding.json",
+              "sha256": "93a1e60d13490247f1b3f5909a4ee41d24cfd4ffe94ff62b0187664678002d53"
+            }
+          ]
+        },
+        {
+          "id": "VAL-008",
+          "result": "PASS",
+          "description": "Current controlled/full regression and real strictTLS cancellation/late-session/lost-result journey qualify this caller.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/bulk-17672aa/qualification-binding.json",
+              "sha256": "93a1e60d13490247f1b3f5909a4ee41d24cfd4ffe94ff62b0187664678002d53"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-001",
+          "result": "PASS",
+          "description": "Approved bulk card/modal/result compositions match genuine bounded visual consent and linked1440/390reference captures.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/bulk-17672aa/qualification-binding.json",
+              "sha256": "93a1e60d13490247f1b3f5909a4ee41d24cfd4ffe94ff62b0187664678002d53"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-002",
+          "result": "PASS",
+          "description": "Applicable Account backgrounds/cards/overlays and approved decorative layers are retained.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/bulk-17672aa/qualification-binding.json",
+              "sha256": "93a1e60d13490247f1b3f5909a4ee41d24cfd4ffe94ff62b0187664678002d53"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-003",
+          "result": "PASS",
+          "description": "Existing shared Account styles, modal, controls and time formatter render read-only original metadata.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/bulk-17672aa/qualification-binding.json",
+              "sha256": "93a1e60d13490247f1b3f5909a4ee41d24cfd4ffe94ff62b0187664678002d53"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-004",
+          "result": "PASS",
+          "description": "Genuine Product Owner bulk adaptation consent is recorded; no AI approval is substituted.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/bulk-17672aa/qualification-binding.json",
+              "sha256": "93a1e60d13490247f1b3f5909a4ee41d24cfd4ffe94ff62b0187664678002d53"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-005",
+          "result": "PASS",
+          "description": "Original server preparedAt is immutable; unavailable frozen activity uses the approved truthful fallback. No scope or Product-local termination conflict is hidden.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/bulk-17672aa/qualification-binding.json",
+              "sha256": "93a1e60d13490247f1b3f5909a4ee41d24cfd4ffe94ff62b0187664678002d53"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-006",
+          "result": "PASS",
+          "description": "Tunner styles remain authoritative over implementation foundation defaults.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/bulk-17672aa/qualification-binding.json",
+              "sha256": "93a1e60d13490247f1b3f5909a4ee41d24cfd4ffe94ff62b0187664678002d53"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-007",
+          "result": "PASS",
+          "description": "Current desktop/mobile, long-set scroll, keyboard/focus, accessibility and existing6Sessionbreakpoints are qualified.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/bulk-17672aa/qualification-binding.json",
+              "sha256": "93a1e60d13490247f1b3f5909a4ee41d24cfd4ffe94ff62b0187664678002d53"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-008",
+          "result": "PASS",
+          "description": "Committed source, active role contracts, Figma refs, consent and actual reference/rendered screenshots are linked.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-013-sessions-20261114/bulk-17672aa/qualification-binding.json",
+              "sha256": "93a1e60d13490247f1b3f5909a4ee41d24cfd4ffe94ff62b0187664678002d53"
+            }
+          ]
+        }
+      ],
+      "screenshots": [
+        {
+          "path": "governance/evidence/p2-013-sessions-20261114/bulk-17672aa/controlled/bulk-confirm-1440.png",
+          "sha256": "4f4a782fe1fe571b53441f000335b6225bf09b863720fee0dffde19139cf711c"
+        },
+        {
+          "path": "governance/evidence/p2-013-sessions-20261114/bulk-17672aa/controlled/bulk-confirm-390.png",
+          "sha256": "2f5a46f0717ada334acd7735f00c0d13c8eacc3f882c51f9eac6f7bcefd975ab"
+        },
+        {
+          "path": "governance/evidence/p2-013-sessions-20261114/bulk-17672aa/controlled/bulk-result-1440.png",
+          "sha256": "257fca4198d434770b60e4b41e181936d7ce6594a1bf6df41457c7ced16a2649"
+        },
+        {
+          "path": "governance/evidence/p2-013-sessions-20261114/bulk-17672aa/controlled/bulk-result-390.png",
+          "sha256": "c3bfdfa8c65dab7bfb6b904778fe7a194e649b70f950b3ecee4fc1ecc79eefd9"
+        },
+        {
+          "path": "governance/evidence/p2-013-sessions-20261114/bulk-17672aa/controlled/bulk-unknown-1440.png",
+          "sha256": "2c0c319d27ee2f861ee945419b62661112726dfdcb3c32c9a0e50028188e4488"
+        },
+        {
+          "path": "governance/evidence/p2-013-sessions-20261114/bulk-17672aa/controlled/bulk-unknown-390.png",
+          "sha256": "aa471b88e87e5353d09cd5b00aaa4881c844a83c08af3195cb41195434839b71"
+        },
+        {
+          "path": "governance/evidence/p2-013-sessions-20261114/bulk-17672aa/live/bulk-review-two-original-targets.png",
+          "sha256": "54c6ea2b6cfbdbb2210bf211a659decc03a7b3f20e11de68c23b0938c917343f"
+        },
+        {
+          "path": "governance/evidence/p2-013-sessions-20261114/bulk-17672aa/live/bulk-result-delivery-unknown.png",
+          "sha256": "46fe57afd7c18eb953f17b7ba1fbca998cf9d5c972273775c13a9cc809abdd52"
+        },
+        {
+          "path": "governance/evidence/p2-013-sessions-20261114/bulk-17672aa/live/bulk-two-revoked-actor-and-later-preserved.png",
+          "sha256": "4e5c93febe7d4ed1c9fa58c205844fc423b3a8d89052f2b190e020555fb7ffcd"
+        },
+        {
+          "path": "governance/evidence/p2-013-sessions-20261114/bulk-17672aa/approved/desktop-confirm.png",
+          "sha256": "154840977b431ca92a4f4f44c9ba300fb191f822238e5c327e6d9f4226d41374"
+        },
+        {
+          "path": "governance/evidence/p2-013-sessions-20261114/bulk-17672aa/approved/mobile-confirm.png",
+          "sha256": "dfb89c85fcc79c508ec55a060da89855f4c1fee4b84175de72d0fb83a45b57ae"
+        },
+        {
+          "path": "governance/evidence/p2-013-sessions-20261114/bulk-17672aa/approved/approved-bulk-controls.png",
+          "sha256": "e45dc0cabbaa0901e4e591f32020a6cf0163c08dc3baca726554cf722b2622a8"
+        }
+      ],
+      "deviations": [
+        {
+          "scope_id": "APPROVED_BOUNDED_BULK_SESSION_UI",
+          "status": "PRODUCT_OWNER_APPROVED",
+          "approval_evidence": {
+            "path": "governance/evidence/TUN-P2-013-BULK-VISUAL-CONSENT.json",
+            "sha256": "b19534b67aa290c3022be38c6441629633648e5f2137486bdd07f53f52c26caf"
+          }
+        }
+      ]
+    },
     {
       "id": "U-ACCT-DEVICES",
       "checks": [
