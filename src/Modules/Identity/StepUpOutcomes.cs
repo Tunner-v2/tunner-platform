@@ -8,23 +8,28 @@ public sealed class UserStepUpOperationApplyOutcome : IDisposable
     private RecoveryCodeFirstDelivery? recoveryDelivery;
     private UserStepUpOperationApplyOutcome(bool applied, AuthenticationSessionTerminationReceipt? receipt, PasskeyExecutionValidity? validity = null,
         TotpExecutionValidity? totpValidity = null, RecoveryCodeExecutionValidity? recoveryValidity = null, RecoveryCodeFirstDelivery? recoveryDelivery = null,
-        FederationLinkMutationValidity? federationValidity = null)
-    { Applied = applied; Receipt = receipt; PasskeyValidity = validity; TotpValidity = totpValidity; RecoveryValidity = recoveryValidity; this.recoveryDelivery = recoveryDelivery; FederationValidity = federationValidity; }
+        FederationLinkMutationValidity? federationValidity = null, DeviceExecutionValidity? deviceValidity = null)
+    { Applied = applied; Receipt = receipt; PasskeyValidity = validity; TotpValidity = totpValidity; RecoveryValidity = recoveryValidity; this.recoveryDelivery = recoveryDelivery; FederationValidity = federationValidity; DeviceValidity = deviceValidity; }
     public bool Applied { get; }
     internal AuthenticationSessionTerminationReceipt? Receipt { get; }
     internal PasskeyExecutionValidity? PasskeyValidity { get; }
     internal TotpExecutionValidity? TotpValidity { get; }
     internal RecoveryCodeExecutionValidity? RecoveryValidity { get; }
     internal FederationLinkMutationValidity? FederationValidity { get; }
-    internal UserStepUpOperationApplyOutcome ForPasskey(PasskeyExecutionValidity validity) => new(Applied, Receipt, validity, TotpValidity, RecoveryValidity, TakeRecoveryDelivery(), FederationValidity);
-    internal UserStepUpOperationApplyOutcome ForTotp(TotpExecutionValidity validity) => new(Applied, Receipt, PasskeyValidity, validity, RecoveryValidity, TakeRecoveryDelivery(), FederationValidity);
-    internal UserStepUpOperationApplyOutcome ForFederation(FederationLinkMutationValidity validity) => new(Applied, Receipt, PasskeyValidity, TotpValidity, RecoveryValidity, TakeRecoveryDelivery(), validity);
+    internal DeviceExecutionValidity? DeviceValidity { get; }
+    internal UserStepUpOperationApplyOutcome ForPasskey(PasskeyExecutionValidity validity) => new(Applied, Receipt, validity, TotpValidity, RecoveryValidity, TakeRecoveryDelivery(), FederationValidity, DeviceValidity);
+    internal UserStepUpOperationApplyOutcome ForTotp(TotpExecutionValidity validity) => new(Applied, Receipt, PasskeyValidity, validity, RecoveryValidity, TakeRecoveryDelivery(), FederationValidity, DeviceValidity);
+    internal UserStepUpOperationApplyOutcome ForFederation(FederationLinkMutationValidity validity) => new(Applied, Receipt, PasskeyValidity, TotpValidity, RecoveryValidity, TakeRecoveryDelivery(), validity, DeviceValidity);
+    internal UserStepUpOperationApplyOutcome ForDevice(DeviceExecutionValidity validity) => new(Applied, Receipt, PasskeyValidity, TotpValidity, RecoveryValidity, TakeRecoveryDelivery(), FederationValidity, validity);
     internal RecoveryCodeFirstDelivery? TakeRecoveryDelivery() => Interlocked.Exchange(ref recoveryDelivery, null);
-    internal bool ClosedFor(StepUpOperation operation) => RecoveryCodeApplication.Owns(operation.Scope)
+    internal bool ClosedFor(StepUpOperation operation) => operation.Scope == DeviceApplication.RevokeScope
+        ? Applied && Receipt is null && DeviceValidity is not null && PasskeyValidity is null && TotpValidity is null &&
+            FederationValidity is null && RecoveryValidity is null && recoveryDelivery is null
+        : DeviceValidity is null && (RecoveryCodeApplication.Owns(operation.Scope)
         ? Applied && Receipt is null && PasskeyValidity is null && TotpValidity is null && FederationValidity is null && RecoveryValidity is not null && recoveryDelivery is not null && RecoveryValidity.Matches(recoveryDelivery)
         : FederationLinkApplication.Owns(operation.Scope)
             ? Applied && FederationValidity is not null && PasskeyValidity is null && TotpValidity is null && RecoveryValidity is null && recoveryDelivery is null
-            : FederationValidity is null && RecoveryValidity is null && recoveryDelivery is null && !(PasskeyValidity is not null && TotpValidity is not null);
+            : FederationValidity is null && RecoveryValidity is null && recoveryDelivery is null && !(PasskeyValidity is not null && TotpValidity is not null));
     public static UserStepUpOperationApplyOutcome Conflict() => new(false, null);
     public static UserStepUpOperationApplyOutcome SessionContinues() => new(true, null);
     internal static UserStepUpOperationApplyOutcome SessionEnded(AuthenticationSessionTerminationReceipt receipt) => new(true, receipt);

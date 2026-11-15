@@ -879,6 +879,363 @@ namespace Tunner.Identity.Persistence.Migrations
                         });
                 });
 
+            modelBuilder.Entity("Tunner.Identity.Persistence.DeviceOperationRow", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<string>("AccountId")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("account_id");
+
+                    b.Property<string>("AssurancePolicyVersion")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("assurance_policy_version");
+
+                    b.Property<DateTimeOffset?>("CompletedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("completed_at");
+
+                    b.Property<string>("ContextDigest")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("context_digest");
+
+                    b.Property<string>("CorrelationId")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("correlation_id");
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("created_at");
+
+                    b.Property<Guid>("DeviceId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("device_id");
+
+                    b.Property<long>("ExpectedAccountVersion")
+                        .HasColumnType("bigint")
+                        .HasColumnName("expected_account_version");
+
+                    b.Property<long>("ExpectedDeviceVersion")
+                        .HasColumnType("bigint")
+                        .HasColumnName("expected_device_version");
+
+                    b.Property<long>("ExpectedTrustVersion")
+                        .HasColumnType("bigint")
+                        .HasColumnName("expected_trust_version");
+
+                    b.Property<DateTimeOffset>("ExpiresAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("expires_at");
+
+                    b.Property<string>("Origin")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("origin");
+
+                    b.Property<Guid?>("OutboxEventId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("outbox_event_id");
+
+                    b.Property<string>("PolicySnapshot")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("policy_snapshot");
+
+                    b.Property<string>("PolicyVersion")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("policy_version");
+
+                    b.Property<Guid?>("ProofId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("proof_id");
+
+                    b.Property<DateTimeOffset>("RecoveryExpiresAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("recovery_expires_at");
+
+                    b.Property<Guid>("RequestId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("request_id");
+
+                    b.Property<long?>("ResultTrustVersion")
+                        .HasColumnType("bigint")
+                        .HasColumnName("result_trust_version");
+
+                    b.Property<string>("SecurityStampDigest")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("security_stamp_digest");
+
+                    b.Property<Guid>("SessionId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("session_id");
+
+                    b.Property<string>("State")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("state");
+
+                    b.Property<long>("Version")
+                        .IsConcurrencyToken()
+                        .HasColumnType("bigint")
+                        .HasColumnName("version");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OutboxEventId");
+
+                    b.HasIndex("ProofId");
+
+                    b.HasIndex("SessionId", "RequestId")
+                        .IsUnique();
+
+                    b.HasIndex("AccountId", "Origin", "DeviceId");
+
+                    b.ToTable("device_operations", "identity", t =>
+                        {
+                            t.HasCheckConstraint("ck_device_operation", "expected_device_version>=1 AND expected_trust_version>=1 AND expected_account_version>=1 AND expires_at>created_at AND recovery_expires_at>expires_at AND length(context_digest)=64 AND length(security_stamp_digest)=64 AND length(policy_version)>0 AND length(assurance_policy_version)>0 AND jsonb_typeof(policy_snapshot::jsonb)='object' AND ((state='PENDING' AND version=1 AND proof_id IS NULL AND result_trust_version IS NULL AND completed_at IS NULL AND outbox_event_id IS NULL) OR (state='COMPLETED' AND version=2 AND proof_id IS NOT NULL AND result_trust_version=expected_trust_version+1 AND completed_at>=created_at AND completed_at<expires_at AND outbox_event_id IS NOT NULL))");
+                        });
+                });
+
+            modelBuilder.Entity("Tunner.Identity.Persistence.DeviceRecordRow", b =>
+                {
+                    b.Property<Guid>("DeviceId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("device_id");
+
+                    b.Property<string>("AccountId")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("account_id");
+
+                    b.Property<string>("CharacteristicsJson")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("characteristics_json");
+
+                    b.Property<string>("Classification")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("classification");
+
+                    b.Property<string>("CollectionReference")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("collection_reference");
+
+                    b.Property<string>("CorrelationDigest")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("correlation_digest");
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("created_at");
+
+                    b.Property<string>("InventoryReference")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("inventory_reference");
+
+                    b.Property<DateTimeOffset>("LastObservedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("last_observed_at");
+
+                    b.Property<string>("Origin")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("origin");
+
+                    b.Property<string>("PolicySnapshot")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("policy_snapshot");
+
+                    b.Property<string>("PolicyVersion")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("policy_version");
+
+                    b.Property<string>("ProcessingReference")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("processing_reference");
+
+                    b.Property<string>("RetentionReference")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("retention_reference");
+
+                    b.Property<long>("Version")
+                        .IsConcurrencyToken()
+                        .HasColumnType("bigint")
+                        .HasColumnName("version");
+
+                    b.HasKey("DeviceId");
+
+                    b.HasIndex("AccountId", "Origin", "CorrelationDigest")
+                        .IsUnique();
+
+                    b.ToTable("device_records", "identity", t =>
+                        {
+                            t.HasCheckConstraint("ck_device_record", "version>=1 AND last_observed_at>=created_at AND length(correlation_digest)=64 AND length(origin)>0 AND length(policy_version)>0 AND length(collection_reference)>0 AND length(inventory_reference)>0 AND length(processing_reference)>0 AND length(retention_reference)>0 AND length(classification)>0 AND jsonb_typeof(characteristics_json::jsonb)='object' AND jsonb_typeof(policy_snapshot::jsonb)='object'");
+                        });
+                });
+
+            modelBuilder.Entity("Tunner.Identity.Persistence.DeviceSessionEvidenceRow", b =>
+                {
+                    b.Property<Guid>("SessionId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("session_id");
+
+                    b.Property<string>("AccountId")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("account_id");
+
+                    b.Property<string>("CharacteristicsJson")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("characteristics_json");
+
+                    b.Property<Guid>("DeviceId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("device_id");
+
+                    b.Property<long>("DeviceVersion")
+                        .HasColumnType("bigint")
+                        .HasColumnName("device_version");
+
+                    b.Property<DateTimeOffset>("ObservedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("observed_at");
+
+                    b.Property<string>("Origin")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("origin");
+
+                    b.Property<Guid>("OutboxEventId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("outbox_event_id");
+
+                    b.Property<string>("PolicySnapshot")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("policy_snapshot");
+
+                    b.Property<long>("TrustVersion")
+                        .HasColumnType("bigint")
+                        .HasColumnName("trust_version");
+
+                    b.HasKey("SessionId");
+
+                    b.HasIndex("OutboxEventId");
+
+                    b.HasIndex("AccountId", "Origin", "DeviceId", "TrustVersion");
+
+                    b.ToTable("device_session_evidence", "identity", t =>
+                        {
+                            t.HasCheckConstraint("ck_device_session_evidence", "device_version>=1 AND trust_version>=1 AND jsonb_typeof(policy_snapshot::jsonb)='object' AND jsonb_typeof(characteristics_json::jsonb)='object'");
+                        });
+                });
+
+            modelBuilder.Entity("Tunner.Identity.Persistence.DeviceTrustRow", b =>
+                {
+                    b.Property<Guid>("DeviceId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("device_id");
+
+                    b.Property<long>("Version")
+                        .HasColumnType("bigint")
+                        .HasColumnName("version");
+
+                    b.Property<string>("AccountId")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("account_id");
+
+                    b.Property<string>("CorrelationId")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("correlation_id");
+
+                    b.Property<long>("DeviceVersion")
+                        .HasColumnType("bigint")
+                        .HasColumnName("device_version");
+
+                    b.Property<string>("EligibilityDecisionJson")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("eligibility_decision_json");
+
+                    b.Property<string>("EligibilityFactsJson")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("eligibility_facts_json");
+
+                    b.Property<string>("OperationId")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("operation_id");
+
+                    b.Property<string>("Origin")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("origin");
+
+                    b.Property<Guid>("OutboxEventId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("outbox_event_id");
+
+                    b.Property<string>("PolicySnapshot")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("policy_snapshot");
+
+                    b.Property<string>("PolicyVersion")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("policy_version");
+
+                    b.Property<DateTimeOffset>("RecordedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("recorded_at");
+
+                    b.Property<Guid?>("RemovalOperationId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("removal_operation_id");
+
+                    b.Property<Guid>("SourceSessionId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("source_session_id");
+
+                    b.Property<string>("State")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("state");
+
+                    b.HasKey("DeviceId", "Version");
+
+                    b.HasIndex("OutboxEventId");
+
+                    b.HasIndex("RemovalOperationId");
+
+                    b.HasIndex("SourceSessionId");
+
+                    b.ToTable("device_trust_versions", "identity", t =>
+                        {
+                            t.HasCheckConstraint("ck_device_trust", "version>=1 AND device_version>=1 AND length(policy_version)>0 AND length(operation_id)>0 AND length(correlation_id)>0 AND jsonb_typeof(policy_snapshot::jsonb)='object' AND ((state IN ('TRUSTED','UNTRUSTED') AND removal_operation_id IS NULL AND jsonb_typeof(eligibility_facts_json::jsonb)='object' AND jsonb_typeof(eligibility_decision_json::jsonb)='object') OR (state='REVOKED' AND removal_operation_id IS NOT NULL AND version>=2 AND eligibility_facts_json='' AND eligibility_decision_json=''))");
+                        });
+                });
+
             modelBuilder.Entity("Tunner.Identity.Persistence.ExternalIdentityLinkRow", b =>
                 {
                     b.Property<Guid>("LinkId")
@@ -4129,6 +4486,90 @@ namespace Tunner.Identity.Persistence.Migrations
                         .HasForeignKey("AccountId", "FederationLinkId")
                         .HasPrincipalKey("AccountId", "LinkId")
                         .OnDelete(DeleteBehavior.Restrict);
+                });
+
+            modelBuilder.Entity("Tunner.Identity.Persistence.DeviceOperationRow", b =>
+                {
+                    b.HasOne("Tunner.Database.Outbox.OutboxMessage", null)
+                        .WithMany()
+                        .HasForeignKey("OutboxEventId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("Tunner.Identity.Persistence.StepUpProofRow", null)
+                        .WithMany()
+                        .HasForeignKey("ProofId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("Tunner.Identity.Persistence.AuthenticationSessionRow", null)
+                        .WithMany()
+                        .HasForeignKey("SessionId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Tunner.Identity.Persistence.DeviceRecordRow", null)
+                        .WithMany()
+                        .HasForeignKey("AccountId", "Origin", "DeviceId")
+                        .HasPrincipalKey("AccountId", "Origin", "DeviceId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Tunner.Identity.Persistence.DeviceRecordRow", b =>
+                {
+                    b.HasOne("Tunner.Identity.Persistence.AccountRow", null)
+                        .WithMany()
+                        .HasForeignKey("AccountId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Tunner.Identity.Persistence.DeviceSessionEvidenceRow", b =>
+                {
+                    b.HasOne("Tunner.Database.Outbox.OutboxMessage", null)
+                        .WithMany()
+                        .HasForeignKey("OutboxEventId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Tunner.Identity.Persistence.AuthenticationSessionRow", null)
+                        .WithMany()
+                        .HasForeignKey("SessionId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Tunner.Identity.Persistence.DeviceTrustRow", null)
+                        .WithMany()
+                        .HasForeignKey("AccountId", "Origin", "DeviceId", "TrustVersion")
+                        .HasPrincipalKey("AccountId", "Origin", "DeviceId", "Version")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Tunner.Identity.Persistence.DeviceTrustRow", b =>
+                {
+                    b.HasOne("Tunner.Database.Outbox.OutboxMessage", null)
+                        .WithMany()
+                        .HasForeignKey("OutboxEventId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Tunner.Identity.Persistence.DeviceOperationRow", null)
+                        .WithMany()
+                        .HasForeignKey("RemovalOperationId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("Tunner.Identity.Persistence.AuthenticationSessionRow", null)
+                        .WithMany()
+                        .HasForeignKey("SourceSessionId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Tunner.Identity.Persistence.DeviceRecordRow", null)
+                        .WithMany()
+                        .HasForeignKey("AccountId", "Origin", "DeviceId")
+                        .HasPrincipalKey("AccountId", "Origin", "DeviceId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Tunner.Identity.Persistence.ExternalIdentityLinkRow", b =>

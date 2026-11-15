@@ -30,6 +30,7 @@ public sealed class IdentityPersistenceDbContext(DbContextOptions<IdentityPersis
         RecoveryContactModelConfiguration.Configure(builder);
         FederationAttemptModel.Configure(builder);
         FederationLinkOperationModel.Configure(builder);
+        DeviceModelConfiguration.Configure(builder);
     }
 
     public async Task<AccountSnapshot?> ReadAccountAsync(string accountId, CancellationToken cancellationToken = default)

@@ -216,6 +216,8 @@ internal sealed class AuthenticationTicketStore(IServiceScopeFactory scopes, IHt
         await using var scope = scopes.CreateAsyncScope();
         if (await scope.ServiceProvider.GetRequiredService<AuthenticationApplication>().RetrieveAsync(grant.Key, surface.Origin, cancellationToken).ConfigureAwait(false) is null)
             throw new InvalidOperationException("The issued session is no longer active.");
+        if (scope.ServiceProvider.GetService<DeviceBrowserService>() is { } devices)
+            await devices.ObserveAsync(context, grant, cancellationToken).ConfigureAwait(false);
         return grant.Key;
     }
     public Task RenewAsync(string key, AuthenticationTicket ticket) => throw new InvalidOperationException("Authentication must rotate the session lookup key; implicit renewal is disabled.");

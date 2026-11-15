@@ -303,6 +303,7 @@ internal sealed partial class AuthenticationApplication(IdentityPersistenceDbCon
     }
     internal bool PasskeyOutcomeCurrentAt(UserStepUpOperationApplyOutcome outcome, StepUpCaller caller, StepUpOperation operation, DateTimeOffset decisionAt)
     {
+        if (outcome.DeviceValidity is { } device) return device.CurrentAt(database, caller, operation, decisionAt);
         if (outcome.TotpValidity is not null) return TotpOutcomeCurrentAt(outcome, caller, operation, decisionAt);
         if (outcome.FederationValidity is { } federation) return federation.CurrentAt(database, caller, operation, decisionAt);
         if (outcome.PasskeyValidity is not { } validity) return outcome.Receipt is null;
