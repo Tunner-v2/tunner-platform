@@ -1,0 +1,43 @@
+{
+  "schema_version": 1,
+  "scope_id": "TUN-P2-014",
+  "validation_kind": "COMMITTED",
+  "result": "PENDING",
+  "tested_commit_sha": null,
+  "validated_commit_sha": null,
+  "phase": "IMPLEMENTATION_ADMITTED",
+  "owned_behavior_paths": [
+    "Directory.Packages.props",
+    "src/Modules/Identity/Tunner.Identity.Persistence.csproj",
+    "docs/contracts/product-authorization-contract.md",
+    "src/Modules/Identity/ProductAuthorizationContracts.cs",
+    "src/Modules/Identity/ProductAuthorizationApplication.cs",
+    "src/Modules/Identity/AuthenticationProductAuthorization.cs",
+    "src/Modules/Identity/ProductAuthorizationServer.cs",
+    "src/Modules/Identity/ProductAuthorizationProtocol.cs",
+    "tests/Tunner.Identity.Persistence.Tests/ProductAuthorizationProtocolTests.cs"
+  ],
+  "admission": {
+    "command": "tunner work context TUN-P2-014 --output artifacts/p2-014-authorization-20261115/context-in-progress",
+    "exit_code": 0,
+    "outcome": "CONTEXT_READY",
+    "context_verify": {
+      "exit_code": 0,
+      "outcome": "CURRENT",
+      "observed_at_utc": "2026-11-15T13:35:37Z"
+    },
+    "source_commit": "c0927e4",
+    "context_ref": "artifacts/p2-014-authorization-20261115/context-in-progress/manifest.json"
+  },
+  "compatibility_revisions": [
+    "P2-003-RV002",
+    "P2-010-RV009"
+  ],
+  "rd_ref": "governance/evidence/TUN-P2-014-RD-SOURCES.json",
+  "contract_ref": "docs/contracts/product-authorization-contract.md",
+  "scope": "Complete Product authorization and revocation contract integration. First vertical increment is real active-session native authorization-code/PKCE issuance/redemption. Login/registration continuation, assurance, refresh/introspection/revocation, current owner checks and enabled propagation remain required; first happy path cannot close the feature.",
+  "boundary": "Explicit qualified issuer/keys/client/registry/Relationship/policy inputs; missing providers deny activation. No production default or Product membership/entitlement/local-session authority. Existing Figma/Drive/FigJam remain read-only.",
+  "actual_feature_tests": [],
+  "product_acceptance": "NOT_REQUESTED_OR_GRANTED",
+  "exact_next_action": "Implement opt-in native server and typed current-authority owners; build, then run focused real HTTPS/code replay and negative tests before broader integrated qualification."
+}
