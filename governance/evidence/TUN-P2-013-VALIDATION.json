@@ -3,6 +3,8 @@
   "scope_id": "TUN-P2-013",
   "validation_kind": "COMMITTED",
   "result": "PENDING",
+  "bulk_application_checkpoint": {"source":"a738e48269272c94c8276c729abfb7564797d1c1","result":"PASS_APPLICATION_KERNEL_ONLY","actual_cases":37,"new_bulk":19,"unchanged_single":18,"qualification_ref":"governance/evidence/p2-013-sessions-20261114/bulk-app-a738e48/qualification-binding.json","next":"Implement browser transport/selection and isolated runtime integration; production UI consent remains pending."},
+  "bulk_browser_allocation": {"new":"SessionBulkRevocationBrowser.cs; SessionRevocationOriginalSelection.cs; SessionBulkRevocationHttpTests.cs","existing_013":"SessionRevocationBrowser.cs; SessionListingEndpoints.cs; bulk Application/Contracts/Authentication partial and private contract","historical":"StepUpBrowserEndpoints.cs only after P1-018-RV012 ACTIVE and009/010-RV008 extension","boundary":"Exact protected original/draft activation/selection, complete-cookie size admission and independent causal reads; no new schema, production policy values or frontend implementation."},
   "tested_commit_sha": null,
   "validated_commit_sha": null,
   "phase": "APPLICATION_REVOCATION_VERIFIED_BROWSER_INTEGRATION_PENDING",
@@ -53,7 +55,10 @@
     "src/Modules/Identity/SessionBulkRevocationApplication.cs",
     "src/Modules/Identity/AuthenticationSessionBulkRevocation.cs",
     "tests/Tunner.Identity.Persistence.Tests/SessionBulkRevocationTests.cs",
-    "docs/contracts/session-bulk-revocation-contract.md"
+    "docs/contracts/session-bulk-revocation-contract.md",
+    "src/Modules/Identity/SessionBulkRevocationBrowser.cs",
+    "src/Modules/Identity/SessionRevocationOriginalSelection.cs",
+    "tests/Tunner.Identity.Persistence.Tests/SessionBulkRevocationHttpTests.cs"
   ],
   "bulk_pre_edit_allocation": {"result":"DECLARED_NOT_IMPLEMENTED","private_scope":"SESSION_REVOKE_OTHERS / USER_BFF, explicitly authorized by its own effective runtime mapping; no production defaults","owner":"Complete server-derived original owned eligible User/origin session set; explicit trusted discovery bound, overflow rejection, immutable sorted target/version manifest, one manifest-bound proof and atomic all-target effect/outbox/receipt. No paginated client selection or nested single-proof loop.","historical_paths":"Only StepUpApplication.cs under009/010-RV008. Existing013 single-target helper may be factored cohesively; prior assertions preserved.","eligibility_reuse":"Same ongoing013 admission/context currentness-439b6c7 remains; qualified-session TASK snapshot verified CURRENT atdbec7b0 and measured metadata delta retained. All five foundation gates freshly READY at4891640. Native successor activation precedes any shared edit; avoid redundant global startup recomputation.","ui_boundary":"Artifact-only bulk review pending scoped AMD-0008 consent; no bulk production UI implementation."},
   "pre_edit_415_test_capability": "Existing host is real pinned KestrelHTTPS and its RawPost forcesJSON; public TestServer client is inapplicable. Predeclare only optional mediaType/application-json default on existing helper, under native009RV005 and expanded010RV005, to execute actual415 without new transport/TLS plumbing. No production values or schema/guard change. Current09 gate diagnostic alsoREADY0; earlierNext prerequisite snapshot does not establish a new closed009 implementation defect.",
