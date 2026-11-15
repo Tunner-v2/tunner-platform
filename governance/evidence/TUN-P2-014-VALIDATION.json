@@ -5,7 +5,18 @@
   "result": "PASS",
   "tested_commit_sha": "e45e31f6ab8a6462aceef9dfe7bf3e2be36cf15c",
   "validated_commit_sha": "e45e31f6ab8a6462aceef9dfe7bf3e2be36cf15c",
-  "phase": "ENGINEERING_VALIDATED_NATIVE_READINESS_PENDING",
+  "phase": "ENGINEERING_READY_PRODUCT_ACCEPTANCE_PENDING",
+  "engineering_readiness": {
+    "outcome": "READY",
+    "actual_gate_source_sha": "697378bc9dcb015b5d7fe403cc64f5230cda077e",
+    "exit_code": 0,
+    "failures": [],
+    "evidence_ref": "governance/evidence/p2-014-authorization-20261115/native-gates/TUN-P2-014-ready-final.json",
+    "evidence_sha256": "2706abc664432a4b1de559963a410a415ffd0dedfa4c0d9bee5bf375c2480052",
+    "role_review_index_ref": "governance/evidence/TUN-P2-014-ROLE-REVIEWS.json",
+    "current_ui_gates": "004:8 items;005:3;006:3;007:9;008:17;014:10. Each actual scoped gate PASS with no failures; overlapping item counts are not distinct screens.",
+    "scope_boundary": "Engineering readiness only. Original failed invocation/initial readiness receipts remain preserved. Current source is qualified by the separately attributed actual runs; no new full legacy rerun, Product acceptance, protected-main merge or release is inferred."
+  },
   "shared_stepup_qualification": {
     "source_commit_sha": "a4bd89fd46588c20eed7bfc25d13c0aa536859a4",
     "result": "PASS_81_DISTINCT_NATIVE_CASES_OVER_THREE_RUNS",
@@ -215,8 +226,8 @@
   "scope": "Complete Product authorization and revocation contract integration. First vertical increment is real active-session native authorization-code/PKCE issuance/redemption. Login/registration continuation, assurance, refresh/introspection/revocation, current owner checks and enabled propagation remain required; first happy path cannot close the feature.",
   "boundary": "Explicit qualified issuer/keys/client/registry/Relationship/policy inputs; missing providers deny activation. No production default or Product membership/entitlement/local-session authority. Existing Figma/Drive/FigJam remain read-only.",
   "actual_feature_tests": ["first_increment", "focused_code_cohort", "integrated_protocol_cohort", "continuation_increment", "interaction_increment", "product_review_increment", "shared_stepup_qualification"],
-  "product_acceptance": "NOT_REQUESTED_OR_GRANTED",
-  "exact_next_action": "Run the per-item UI gate using retained native81 plus59 ordinary backend cases, corrected HTMLguard1 and browser54+41+21+11 results. Record genuine technical assessments and current compatibility/native readiness; request Product acceptance only after engineering gates pass. Continue eligible development while human acceptance is pending. Preserve historical closures; no whole-P2, production, protected-main merge or release.",
+  "product_acceptance": "PENDING_PRODUCT_OWNER_ACCEPTANCE",
+  "exact_next_action": "Obtain genuine scoped Product acceptance for014, then run the normal lifecycle closure checks and refresh scoped context. Continue016 startup, native eligibility and notification/audit implementation while acceptance is pending. All eight compatibility revisions are CLOSED through actual allowed native checks; all six current UI gates and the final014 engineering gate pass. Preserve historical closures; whole-P2, production, protected-main merge and release remain separate.",
   "technical_binding": {"candidate_commit_sha": "e45e31f6ab8a6462aceef9dfe7bf3e2be36cf15c", "qualification": "Qualified application and owned behavior at committed candidate; actual execution SHAs remain distinct in main validation. No behavior changes after the candidate. Metadata-only engineering validation; native readiness/closure and genuine Product acceptance remain separate.", "evidence_ref": "governance/evidence/TUN-P2-014-VALIDATION.json", "ui_gate_ref": "governance/evidence/p2-014-authorization-20261115/ui/native-ui-e45e31f.json"},
   "native_ui_gate": {"result": "PASS", "covered_items": 10, "failure_count": 0, "exit_code": 0, "actual_source_sha": "e45e31f6ab8a6462aceef9dfe7bf3e2be36cf15c", "evidence_ref": "governance/evidence/p2-014-authorization-20261115/ui/native-ui-e45e31f.json"}
 }
