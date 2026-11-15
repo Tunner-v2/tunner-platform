@@ -5,7 +5,27 @@
   "result": "PENDING",
   "tested_commit_sha": null,
   "validated_commit_sha": null,
-  "phase": "SHARED_STEPUP_IMPLEMENTED_FOCUSED_VALIDATION_IN_PROGRESS",
+  "phase": "NATIVE_AND_BROWSER_PASS_AFFECTED_CONSUMER_AND_ACCEPTANCE_GATES_PENDING",
+  "shared_stepup_qualification": {
+    "source_commit_sha": "a4bd89fd46588c20eed7bfc25d13c0aa536859a4",
+    "result": "PASS_81_DISTINCT_NATIVE_CASES_OVER_THREE_RUNS",
+    "runs": [
+      {"run_id":"ea41289b281a414ba89135be867149fe","executed":67,"passed":67,"failed":0,"not_executed":0,"exit_code":0,"timed_out":false,"owned_containers_remaining":0,"borrowed_preserved":true},
+      {"run_id":"df91c48ea6094af487e952678626cbc1","executed":12,"passed":12,"failed":0,"not_executed":0,"exit_code":0,"timed_out":false,"owned_containers_remaining":0,"borrowed_preserved":true},
+      {"run_id":"f6839713138a4a45846a3483f789898b","executed":2,"passed":2,"failed":0,"not_executed":0,"exit_code":0,"timed_out":false,"owned_containers_remaining":0,"borrowed_preserved":true}
+    ],
+    "verification": "Actual raw TRX union:81 results,81 distinct test names,81 Passed,0 other outcomes. Each run retains launch.json, summary.json and product-authorization.trx in artifacts/p2-014-authorization-20261115/native-runtime-<run_id>. Not a single81-case invocation. Borrowed browser PostgreSQL state preserved; no image changes.",
+    "coverage": "All prior67 Product cases plus14 operation-proof cases: real password readiness, lost response, explicit Allow, native redemption, same-transaction single consumption and rollback, exact binding and current-factor/authority rejection, conflicting owner, denial after proof, passive requests, late assurance drift, proof-bounded code and separately qualified refresh preserving authentication claims.",
+    "browser_source_commit_sha": "ba6acb91f04eff925b58417f89b742e201744d2b",
+    "browser": [
+      {"executed":54,"passed":54,"failed":0,"skipped":0,"flaky":0,"raw_ref":"artifacts/p2-014-authorization-20261115/proof-browser-ba6acb9-integrated-results.json"},
+      {"executed":41,"passed":41,"failed":0,"skipped":0,"flaky":0,"raw_ref":"artifacts/p2-014-authorization-20261115/proof-ordinary-browser-ba6acb9-results.json"}
+    ],
+    "browser_boundary": "Actual Edge production UI with controlled BFF responses; native HTTPS/PostgreSQL runs are separate. Browser-owned application/test source unchanged since ba6acb9, verified against a4bd89f. Includes approved shared proof methods, exact-owner readiness, cancellation/focus, response loss, keyboard/axe and1440/390/320 layouts; ordinary COMPLETED/recovery delivery contracts remain covered.",
+    "confirmed_corrections": "ed844c7 validates against the actual decision clock while normalizing persisted consumption time only, fixing tracked LastSeenAt submicrosecond rejection; same-transaction proof tests remain intact. a4bd89f converts the specific stale assurance-policy version exception into controlled denial instead of500. Synthetic fixture fixes publish the required verification key and use globally unique unrelated-owner policy versions. All temporary diagnostics removed. Original failed receipts retained.",
+    "builds": "Current81-case C# assembly compiles with0 warnings/errors; installed TypeScript check and User Vite production build PASS. Existing Vite native-config and optional font warnings retained. No dependency changes; qualified advisory inputs reused.",
+    "limits": "Affected shared backend regressions, per-item UI/source-binding gates, compatibility readiness and Product acceptance remain pending. No production policy, protected-main merge or release. Signed Product delivery is conditional on an enabled integration contract; none is enabled in this scope, and no delivery/acknowledgement claim is made."
+  },
   "pre_stepup_integrated_regression": {
     "source_commit_sha":"dd35eace69b99bfe443a296f876d466aace84856",
     "run_id":"659739ebf2b747d5a67365a53a9e582e","executed":67,"passed":67,"failed":0,"not_executed":0,"exit_code":0,"timed_out":false,"owned_containers_remaining":0,"borrowed_preserved":true,
@@ -184,5 +204,5 @@
   "boundary": "Explicit qualified issuer/keys/client/registry/Relationship/policy inputs; missing providers deny activation. No production default or Product membership/entitlement/local-session authority. Existing Figma/Drive/FigJam remain read-only.",
   "actual_feature_tests": ["first_increment", "focused_code_cohort", "integrated_protocol_cohort", "continuation_increment", "interaction_increment"],
   "product_acceptance": "NOT_REQUESTED_OR_GRANTED",
-  "exact_next_action": "Shared StepUp implementation is explicitly authorized. Compile the integrated source and isolate the actual password-to-proof-ready-to-explicit-Allow native roundtrip and same-transaction proof-reuse/rollback tests first. Repair confirmed new browser TOTP/cancel failures, run focused remaining proof/security and affected-consumer regression, then required enabled propagation and UI/native/compatibility/Product gates. Preserve qualified pre-StepUp67 and prior browser results at their original sources; no full014 acceptance."
+  "exact_next_action": "Complete the smallest affected shared backend regression cohort and per-item UI gate using retained native81/browser95 results. Record genuine technical assessments, source-bound compatibility and native readiness; request Product acceptance only after required engineering gates pass. Preserve original receipts and historical closures; no whole-P2, production, protected-main merge or release."
 }

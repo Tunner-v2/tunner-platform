@@ -10,7 +10,7 @@ using static Tunner.Identity.Persistence.Tests.AuthenticationTestHost;
 
 namespace Tunner.Identity.Persistence.Tests;
 
-public sealed class StepUpBrowserTests(IdentityPostgresFixture fixture) : IClassFixture<IdentityPostgresFixture>
+public sealed class StepUpBrowserTests(SessionListingPostgresFixture fixture) : IClassFixture<SessionListingPostgresFixture>
 {
     internal static readonly AssurancePolicyScope Scope = new("fixture.change-value", "fixture.user-bff");
     internal sealed class Owner(IdentityTestDatabase database) : IUserStepUpOperationSource

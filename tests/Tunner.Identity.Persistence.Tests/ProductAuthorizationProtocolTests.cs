@@ -1109,6 +1109,8 @@ public sealed class ProductAuthorizationProtocolTests(SessionListingPostgresFixt
     public async Task ReviewAnonymousProductLoginPublishesSafeContextAndActualSignInStillRequiresReview()
     {
         await using var test = await Create(review: true, anonymous: true); var pending = await BeginContinuation(test);
+        using (var direct = await test.Host.Get(ReviewPath, test.Cookies))
+        { Assert.Equal(HttpStatusCode.Found, direct.StatusCode); Assert.Equal("/login", direct.Headers.Location?.OriginalString); }
         using (var options = await test.Host.Get("/authentication/options", test.Cookies))
         {
             Assert.Equal(HttpStatusCode.OK, options.StatusCode); var content = await options.Content.ReadAsStringAsync();
@@ -1120,6 +1122,15 @@ public sealed class ProductAuthorizationProtocolTests(SessionListingPostgresFixt
             test.Cookies = Merge(test.Cookies, options);
         }
         var csrf = await SignInContinuationBrowser(test);
+        for (var refresh = 0; refresh < 2; refresh++)
+        {
+            using var screen = await test.Host.Get(ReviewPath, test.Cookies);
+            Assert.Equal(HttpStatusCode.OK, screen.StatusCode);
+            Assert.Equal("text/html", screen.Content.Headers.ContentType?.MediaType);
+            Assert.Contains("product-authorization", await screen.Content.ReadAsStringAsync(), StringComparison.Ordinal);
+        }
+        using (var query = await test.Host.Get(ReviewPath + "?untrusted=synthetic", test.Cookies))
+        { Assert.Equal(HttpStatusCode.Found, query.StatusCode); Assert.Equal("/login", query.Headers.Location?.OriginalString); }
         using (var resume = await test.Host.Post(ResumePath, new { }, test.Cookies, csrf))
         {
             Assert.Equal(HttpStatusCode.OK, resume.StatusCode);

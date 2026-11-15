@@ -1,6 +1,6 @@
 # Product authorization and revocation contract
 
-Status: P2-014 implementation contract; runtime and acceptance qualification pending.
+Status: P2-014 implementation contract; native Product and browser qualifications recorded; final affected-consumer, UI and acceptance gates pending.
 Authority: current FRD17 §9, baseline FRD19 §§2–4, ADR-0005/0006, contract catalog32 and read-only FigJam39 (`88:6723`) /41 (`88:6729`). This contract selects no production policy values or provider activation.
 
 ## Admission and ownership
@@ -11,7 +11,9 @@ Validate the registered Product, environment and client; exact redirect; client 
 
 Flow39 makes a qualified explicit Product-origin request Relationship activation intent. Create/activate that Relationship only through its owner; never create Product membership, roles or entitlements. Each later Product is authorized independently. A Tunner session cookie is never shared with a Product.
 
-The explicit review profile requires qualified published Product context on Login and account-bound review at `/product-authorization`. Anonymous presentation contains no Account/session facts. Allow, Deny and Use another account bind the saved native request, actual actor, registry, policy and publication. Native processing revalidates Allow before issuance; Deny returns the original native error with private decline evidence and no grant. Unmet assurance never enables Allow; shared operation-bound proof remains a separate integration.
+The explicit review profile requires qualified published Product context on Login and account-bound review at `/product-authorization`. Anonymous presentation contains no Account/session facts. Allow, Deny and Use another account bind the saved native request, actual actor, registry, policy and publication. Native processing revalidates Allow before issuance; Deny returns the original native error with private decline evidence and no grant. Unmet assurance never enables Allow.
+
+The separately enabled operation-StepUp profile reuses the existing password, passkey, TOTP and federation proof paths. Bind qualified proof to the exact native request, continuation generation, actor, registry, owner facts, policy and publication. The browser receives only `PROOF_READY` with its exact operation reference: it neither grants Product authorization nor upgrades the Tunner session. Re-read current proof and authority, require explicit Allow, and consume the proof once in the native authorization transaction. Reject owner conflicts, stale factors, changed authority, replay and expired proof; rollback restores uncommitted consumption. Missing or unqualified mappings deny activation.
 
 Persist review decisions in the existing native request-token row, serialized against competing decisions and consumption. Replaying a browser pointer cannot replace a terminal decision. Switching accounts increments its durable generation, invalidating prior pointers/references while retaining original request/freshness context; it does not itself sign out Tunner. Commit before publishing decisions and keep references outside URLs/storage.
 
@@ -30,6 +32,8 @@ Keep access/refresh tokens outside Tunner browser JavaScript and browser storage
 Refresh, introspection and revocation must enforce the current registered client and applicable ownership, session/grant status and qualified lifecycle policy. Cryptographic validity alone does not prove an artifact remains active. A revoked Tunner session cannot continue Tunner authorization.
 
 Lifecycle qualification binds the original grant, authenticated requesting client, native artifact and current owner facts to an explicit versioned decision. Token traffic does not renew browser activity. The original code deadline does not limit later refresh validity; browser-session termination and issuance-policy expiry are facts for qualified artifact policy, not an implicit universal token lifetime or cascade. Client-authorized cleanup remains possible after browser eligibility ends. Refresh rotation, reuse leeway, expiry bounds, introspection disclosure and presented-token versus authorization-chain effects require explicit qualification; final owner checks and durable effects precede response publication.
+
+An operation proof clips code issuance/redemption to its expiry. Later refresh follows separately qualified lifecycle policy and preserves the original authentication claims; it neither reconsumes the operation proof nor renews browser activity. Proof expiry is not an implicit refresh lifetime.
 
 Apply grant/token effects according to explicit active policy, with durable causal evidence. Propagate signed/versioned security/revocation events only for enabled Product contracts. Track delivery and Product acknowledgement separately. Product-local sessions remain Product-owned; neither local grant revocation nor event dispatch proves global Product sign-out.
 

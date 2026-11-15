@@ -13,7 +13,7 @@ using static Tunner.Identity.Persistence.Tests.AuthenticationTestHost;
 
 namespace Tunner.Identity.Persistence.Tests;
 
-public sealed class StepUpTests(IdentityPostgresFixture fixture) : IClassFixture<IdentityPostgresFixture>
+public sealed class StepUpTests(SessionListingPostgresFixture fixture) : IClassFixture<SessionListingPostgresFixture>
 {
     // All operations, values, lifetimes and approvals below are synthetic test-only authority.
     private static readonly AssurancePolicyScope PolicyScope = new("fixture.change-value", "fixture.user-bff");
