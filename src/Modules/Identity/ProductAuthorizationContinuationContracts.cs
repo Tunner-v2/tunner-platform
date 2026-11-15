@@ -35,5 +35,8 @@ internal sealed record ProductAuthorizationRestoredContinuation(HttpContext Http
     DateTimeOffset ExpiresAt, string PolicySnapshot, string BindingDigest, string? AccountId, Guid? SessionId)
 {
     internal ProductAuthorizationInteractionContext? Interaction { get; init; }
+    internal string? ReviewApprovalDigest { get; init; }
+    internal bool ReviewDenied { get; init; }
+    internal int ReviewGeneration { get; init; }
     public override string ToString() => nameof(ProductAuthorizationRestoredContinuation);
 }

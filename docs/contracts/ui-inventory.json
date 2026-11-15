@@ -601,7 +601,10 @@
       "title": "Login",
       "recovery_v01_scope": "Existing Forgot password control is enabled only by current server recoveryAvailable===true, mutually excluded with password/passkey/federation work, and navigates to clean /recovery. Default/absent capability remains disabled.",
       "recovery_revision_ref": "P1-018-RV009",
-      "recovery_compatibility_revision_refs": ["P2-004-UI001-RV006","P2-004-UI002-RV006"],
+      "recovery_compatibility_revision_refs": [
+        "P2-004-UI001-RV006",
+        "P2-004-UI002-RV006"
+      ],
       "recovery_consent_ref": "governance/evidence/TUN-P2-011-VISUAL-CONSENT.json",
       "recovery_acceptance_boundary": "PENDING. Approved011-V01 entry handoff only; partial public workflow has no standalone proof or password repair. Existing historical Login/federation evidence retains its original source/execution identity. New integration/browser, affected-consumer and per-item UI acceptance remain required; no production policy/default or whole-feature acceptance.",
       "requirements": "Email/password, passkey where supported, Google, Microsoft; safe errors; Product-origin OAuth context preserved",
@@ -617,7 +620,10 @@
         "TUN-P2-010",
         "P1-018-RV008",
         "TUN-P2-011",
-        "P1-018-RV009"
+        "P1-018-RV009",
+        "TUN-P2-014",
+        "P2-004-UI001-RV010",
+        "P2-004-UI002-RV010"
       ],
       "authority_refs": [
         "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md",
@@ -656,7 +662,10 @@
         "web/apps/user/authentication.content.proposal.json",
         "src/Modules/Identity/FederationBrowserService.cs",
         "src/Modules/Identity/FederationContracts.cs",
-        "src/Tunner.User.Bff/FederationOidcEndpoints.cs"
+        "src/Tunner.User.Bff/FederationOidcEndpoints.cs",
+        "web/apps/user/product-authorization.continuation.ts",
+        "web/apps/user/product-authorization.login.tsx",
+        "web/apps/user/product-authorization.css"
       ],
       "planning_status": "PASSWORD_AND_PRIMARY_PASSKEY_SLICE_IMPLEMENTED_VALIDATION_PENDING",
       "design_status": "PRODUCT_OWNER_APPROVED_SCOPED_ADAPTATIONS",
@@ -733,7 +742,9 @@
         "required": "Affected form/component VAL-001..008 and UX-FID-001..008; existing route owners retain URL-001..006.",
         "final_dispositions": "PENDING_NO_PER_CELL_ACCEPTANCE_RECORDED"
       },
-      "owner_manual_design_update_ref": "governance/todos/TODO-TUN-P2-010-DESIGN001.yaml"
+      "owner_manual_design_update_ref": "governance/todos/TODO-TUN-P2-010-DESIGN001.yaml",
+      "product_authorization_consent_ref": "governance/evidence/TUN-P2-014-VISUAL-CONSENT.json",
+      "product_authorization_acceptance": "IMPLEMENTED_VALIDATION_PENDING: approved014-V01–V03 only; no shared proof, whole-feature, production or release acceptance."
     },
     {
       "id": "U-AUTH-04",
@@ -1033,23 +1044,48 @@
     {
       "id": "U-AUTH-08",
       "kind": "SCREEN",
-      "status": "PLANNED",
+      "status": "IMPLEMENTED",
       "app": "user",
       "module": "U-AUTH",
       "title": "Product Authorization",
       "requirements": "requested Product/scopes/assurance and registered callback; authorize/deny",
-      "pathname": null,
-      "runtime_pathname": null,
-      "guard": "Resolve from owning FRD and current authorization before implementation",
-      "owner_scopes": [],
-      "authority_refs": [
-        "docs/authority/current/development/31_UI_UX_Screen_and_Control_Center_Requirements_Matrix.md"
+      "pathname": "/product-authorization",
+      "runtime_pathname": "/product-authorization",
+      "guard": "Actual current User session, protected original request, exact registry/policy/publication; explicit decision before grant",
+      "owner_scopes": [
+        "TUN-P2-014",
+        "P2-004-UI001-RV010",
+        "P2-004-UI002-RV010"
       ],
-      "figma_refs": [],
-      "source_paths": [],
-      "planning_status": "OWNER_AND_ROUTE_REFINEMENT_REQUIRED",
-      "design_status": "UI_REQUIRED_BEFORE_IMPLEMENTATION",
-      "acceptance_boundary": "Unimplemented: no PASS inherited from registration and no feature implementation authorized by this inventory."
+      "authority_refs": [
+        "docs/authority/current/development/31_UI_UX_Screen_and_Control_Center_Requirements_Matrix.md",
+        "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md",
+        "docs/authority/current/decisions/AMD-0008_Approved_Figma_Visual_Fidelity_and_Product_Owner_UX_Consent.md",
+        "docs/authority/current/decisions/AMD-0009_URL_Addressable_Routing_and_Governed_Form_Validation.md"
+      ],
+      "figma_refs": [
+        {
+          "file_key": "apNbwvAgdn1xIxYH1oiaSC",
+          "node_id": "99:411"
+        }
+      ],
+      "source_paths": [
+        "web/apps/user/product-authorization.tsx",
+        "web/apps/user/product-authorization.api.ts",
+        "web/apps/user/product-authorization.css",
+        "web/apps/user/product-authorization.continuation.ts",
+        "web/apps/user/vite.config.ts",
+        "src/Modules/Identity/ProductAuthorizationReview.cs",
+        "src/Modules/Identity/ProductAuthorizationReviewContracts.cs",
+        "src/Modules/Identity/ProductAuthorizationContinuation.cs",
+        "src/Modules/Identity/ProductAuthorizationProtocol.cs"
+      ],
+      "planning_status": "IMPLEMENTED_VALIDATION_PENDING",
+      "design_status": "PRODUCT_OWNER_APPROVED_SCOPED_ADAPTATIONS",
+      "acceptance_boundary": "IMPLEMENTED_VALIDATION_PENDING: approved014-V01–V03 only; no shared proof, whole-feature, production or release acceptance.",
+      "product_authorization_consent_ref": "governance/evidence/TUN-P2-014-VISUAL-CONSENT.json",
+      "product_authorization_acceptance": "IMPLEMENTED_VALIDATION_PENDING: approved014-V01–V03 only; no shared proof, whole-feature, production or release acceptance.",
+      "consent_ref": "governance/evidence/TUN-P2-014-VISUAL-CONSENT.json"
     },
     {
       "id": "U-ACCT-01",
@@ -2208,15 +2244,22 @@
       "id": "U-AUTH-PRODUCT-ORIGIN",
       "title": "Product-origin sign-in variant",
       "kind": "COMPONENT",
-      "status": "PLANNED",
+      "status": "IMPLEMENTED",
       "app": "user",
       "module": "Identity.Authentication",
       "pathname": null,
-      "runtime_pathname": null,
-      "guard": "Owning FRD/session/flow refinement before implementation",
-      "owner_scopes": [],
+      "runtime_pathname": "/login",
+      "guard": "Optional qualified published Product context from protected original request; actual credential authentication required",
+      "owner_scopes": [
+        "TUN-P2-014",
+        "P2-004-UI001-RV010",
+        "P2-004-UI002-RV010"
+      ],
       "authority_refs": [
-        "docs/authority/current/development/31_UI_UX_Screen_and_Control_Center_Requirements_Matrix.md"
+        "docs/authority/current/development/31_UI_UX_Screen_and_Control_Center_Requirements_Matrix.md",
+        "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md",
+        "docs/authority/current/decisions/AMD-0008_Approved_Figma_Visual_Fidelity_and_Product_Owner_UX_Consent.md",
+        "docs/authority/current/decisions/AMD-0009_URL_Addressable_Routing_and_Governed_Form_Validation.md"
       ],
       "figma_refs": [
         {
@@ -2224,10 +2267,19 @@
           "node_id": "99:411"
         }
       ],
-      "source_paths": [],
-      "planning_status": "OWNER_AND_ROUTE_REFINEMENT_REQUIRED",
-      "design_status": "EXISTING_DESIGN",
-      "acceptance_boundary": "Existing same-screen design variant; no independent pathname is inferred."
+      "source_paths": [
+        "web/apps/user/authentication.tsx",
+        "web/apps/user/product-authorization.continuation.ts",
+        "src/Modules/Identity/AuthenticationEndpoints.cs",
+        "web/apps/user/product-authorization.login.tsx",
+        "web/apps/user/product-authorization.css"
+      ],
+      "planning_status": "IMPLEMENTED_VALIDATION_PENDING",
+      "design_status": "PRODUCT_OWNER_APPROVED_SCOPED_ADAPTATIONS",
+      "acceptance_boundary": "IMPLEMENTED_VALIDATION_PENDING: approved014-V01–V03 only; no shared proof, whole-feature, production or release acceptance.",
+      "product_authorization_consent_ref": "governance/evidence/TUN-P2-014-VISUAL-CONSENT.json",
+      "product_authorization_acceptance": "IMPLEMENTED_VALIDATION_PENDING: approved014-V01–V03 only; no shared proof, whole-feature, production or release acceptance.",
+      "consent_ref": "governance/evidence/TUN-P2-014-VISUAL-CONSENT.json"
     },
     {
       "id": "U-AUTH-SIGNED-IN",
@@ -2242,7 +2294,10 @@
       "guard": "Authoritative current User session; anonymous/expired/revoked direct entry redirects to /login; client rechecks on every history revision",
       "owner_scopes": [
         "TUN-P2-005",
-        "P1-018-RV003"
+        "P1-018-RV003",
+        "TUN-P2-014",
+        "P2-004-UI001-RV010",
+        "P2-004-UI002-RV010"
       ],
       "authority_refs": [
         "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md",
@@ -2261,7 +2316,8 @@
         "web/apps/user/authentication.routes.ts",
         "web/apps/user/authentication.validation.ts",
         "src/Modules/Identity/AuthenticationEndpoints.cs",
-        "src/Modules/Identity/IdentityWebAssets.cs"
+        "src/Modules/Identity/IdentityWebAssets.cs",
+        "web/apps/user/product-authorization.continuation.ts"
       ],
       "form_ids": [],
       "observed_defects": [
@@ -2271,7 +2327,9 @@
       "visual_state": "PRODUCT_OWNER_APPROVED_CURRENT_IMPLEMENTATION",
       "consent_ref": "governance/evidence/TUN-P2-005-VISUAL-ACCEPTANCE-DEFERRAL-20261021.json",
       "design_status": "PRODUCT_OWNER_APPROVED_SNAPSHOT_FIGMA_BACKFILL_DEFERRED",
-      "acceptance_boundary": "Current implemented P2-005 visuals explicitly approved by the Product Owner. Figma backfill is a nonblocking owner TODO under the scoped exception; no Figma update or new frame ID is claimed. Future features/screens retain their own authority and approval."
+      "acceptance_boundary": "Current implemented P2-005 visuals explicitly approved by the Product Owner. Figma backfill is a nonblocking owner TODO under the scoped exception; no Figma update or new frame ID is claimed. Future features/screens retain their own authority and approval.",
+      "product_authorization_consent_ref": "governance/evidence/TUN-P2-014-VISUAL-CONSENT.json",
+      "product_authorization_acceptance": "IMPLEMENTED_VALIDATION_PENDING: approved014-V01–V03 only; no shared proof, whole-feature, production or release acceptance."
     },
     {
       "id": "FORM-LOGIN",
@@ -2282,7 +2340,10 @@
       "title": "Password sign-in",
       "recovery_v01_scope": "Only the existing same-form navigation control gains conditional current published recovery availability and sibling-busy exclusion; password validation/credential flow is unchanged.",
       "recovery_revision_ref": "P1-018-RV009",
-      "recovery_compatibility_revision_refs": ["P2-004-UI001-RV006","P2-004-UI002-RV006"],
+      "recovery_compatibility_revision_refs": [
+        "P2-004-UI001-RV006",
+        "P2-004-UI002-RV006"
+      ],
       "recovery_consent_ref": "governance/evidence/TUN-P2-011-VISUAL-CONSENT.json",
       "recovery_acceptance_boundary": "PENDING. New conditional handoff requires its own public integration/affected-consumer and per-item evidence. Historical Login/form closure and all010 evidence retain their identities; no new password-repair UI, proof result or whole-feature acceptance.",
       "pathname": "/login",
@@ -2298,7 +2359,10 @@
         "TUN-P2-010",
         "P1-018-RV008",
         "TUN-P2-011",
-        "P1-018-RV009"
+        "P1-018-RV009",
+        "TUN-P2-014",
+        "P2-004-UI001-RV010",
+        "P2-004-UI002-RV010"
       ],
       "authority_refs": [
         "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md",
@@ -2328,7 +2392,10 @@
         "web/apps/user/totp.routes.ts",
         "web/apps/user/federation.sign-in.tsx",
         "web/apps/user/federation.api.ts",
-        "web/apps/user/authentication.content.proposal.json"
+        "web/apps/user/authentication.content.proposal.json",
+        "web/apps/user/product-authorization.continuation.ts",
+        "web/apps/user/product-authorization.login.tsx",
+        "web/apps/user/product-authorization.css"
       ],
       "observed_defects": [],
       "validation_state": "IMPLEMENTED_SOURCE_VALIDATION_PENDING",
@@ -2389,7 +2456,9 @@
         "acceptance_state": "WIP_PUBLIC_EVIDENCE_FINAL_UI_ACCEPTANCE_PENDING",
         "baseline_password_passkey_totp_consumer_regression": "PENDING_SEPARATE_AFFECTED_SOURCE_VALIDATION"
       },
-      "federation_v01_scope": "Provider entry and exact original linked-sign-in completion/recovery; credential form adds sibling busy/submit protection only. Existing password validation and semantics are retained."
+      "federation_v01_scope": "Provider entry and exact original linked-sign-in completion/recovery; credential form adds sibling busy/submit protection only. Existing password validation and semantics are retained.",
+      "product_authorization_consent_ref": "governance/evidence/TUN-P2-014-VISUAL-CONSENT.json",
+      "product_authorization_acceptance": "IMPLEMENTED_VALIDATION_PENDING: approved014-V01–V03 only; no shared proof, whole-feature, production or release acceptance."
     },
     {
       "module": "Identity.StepUp",

@@ -15,7 +15,8 @@ import {FederationSignIn,federationSignInKeys} from './federation.sign-in';
 import {parseFederationBootstrap} from './federation.api';
 import {recoveryRoutes} from './recovery.routes';
 import {resumeProductAuthorization} from './product-authorization.continuation';
-interface Bootstrap {csrfToken:string;idempotencyKey:string;passwordMaximumLength:number;locale:string;content:Record<string,PublishedContent>;termsUri:string;privacyUri:string;supportUri:string|null;passkeyAvailable?:boolean;maximumCredentialJsonBytes?:number|null;passkeyRecovery?:unknown;federation?:unknown;recoveryAvailable?:boolean}
+import {parseProductAuthorizationLoginContext,ProductAuthorizationLoginIntro,ProductAuthorizationLoginBoundary} from './product-authorization.login';
+interface Bootstrap {csrfToken:string;idempotencyKey:string;passwordMaximumLength:number;locale:string;content:Record<string,PublishedContent>;termsUri:string;privacyUri:string;supportUri:string|null;passkeyAvailable?:boolean;maximumCredentialJsonBytes?:number|null;passkeyRecovery?:unknown;federation?:unknown;recoveryAvailable?:boolean;productAuthorization?:unknown}
 interface Session {authenticated:true;csrfToken:string;productAuthorizationPending?:boolean}
 const errors:Readonly<Record<string,string>>={AUTHENTICATION_FAILED:'authentication.error.credentials',RATE_OR_ABUSE_LIMITED:'authentication.error.limited'};
 async function options(signal?:AbortSignal):Promise<Bootstrap>{const response=await fetch('/authentication/options',{credentials:'same-origin',cache:'no-store',redirect:'error',...(signal?{signal}:{})});if(!response.ok)throw new Error('Unavailable');return response.json() as Promise<Bootstrap>;}
@@ -103,14 +104,15 @@ function Screens({initial}:{initial:Bootstrap}){
   function recover(){if(boot.recoveryAvailable!==true||form.submitPending||passkeyPending.current||federationPending.current)return;setPassword('');setVisible(false);form.reset();window.location.assign(recoveryRoutes.entry.pathname);}
   async function refreshFederation(signal:AbortSignal){const revision=location.revision;const value=await options(signal);if(!signal.aborted&&routeRevision.current===revision)setBoot(value);}
   if(entryUnavailable)return <ContentUnavailable/>;
+  let productContext;try{productContext=signedIn?undefined:parseProductAuthorizationLoginContext(boot.productAuthorization);}catch{return <ContentUnavailable/>;}
   let federation;try{federation=parseFederationBootstrap(boot.federation);if(!signedIn&&(federation?.googleAvailable||federation?.microsoftAvailable||federation?.pending))requirePublished(boot.content,boot.locale,federationSignInKeys);}catch{return <ContentUnavailable/>;}
   if(signedIn){try{requirePublished(boot.content,boot.locale,['signedIn.security']);}catch{return <ContentUnavailable/>;}}
   if(boot.passkeyAvailable===true||boot.passkeyRecovery){try{requirePublished(boot.content,boot.locale,loginPasskeyKeys);parseAuthenticationPasskeyRecovery(boot.passkeyRecovery);if(boot.passkeyAvailable===true&&(!Number.isInteger(boot.maximumCredentialJsonBytes)||boot.maximumCredentialJsonBytes!<1024||boot.maximumCredentialJsonBytes!>1048576))throw new Error('Explicit passkey bounds required.');}catch{return <ContentUnavailable/>;}}
   return <ContentProvider locale={boot.locale} audience="authentication" resolve={key=>boot.content[key]}><div className="authentication-page">
-    <img className="authentication-glow indigo" src="/registration/assets/login-bg-indigo.svg" alt=""/><img className="authentication-glow violet" src="/registration/assets/login-bg-violet.svg" alt=""/>
+    <img className="authentication-glow indigo" src={productContext?'/registration/assets/product-origin-indigo.svg':'/registration/assets/login-bg-indigo.svg'} alt=""/><img className="authentication-glow violet" src={productContext?'/registration/assets/product-origin-violet.svg':'/registration/assets/login-bg-violet.svg'} alt=""/>
     <header className="authentication-header"><TunnerBrand contentKey="brand.tunner"/></header>
     <main className="authentication-stage" aria-busy={guarded}>
-      {!guarded&&<section className={'authentication-card'+(signedIn?' signed-in':'')} data-tunner-screen={signedIn?authenticationRoutes.signedIn.id:authenticationRoutes.login.id}>
+      {!guarded&&<section className={'authentication-card'+(signedIn?' signed-in':productContext?' product-origin':'')} data-tunner-screen={signedIn?authenticationRoutes.signedIn.id:authenticationRoutes.login.id}>
         {signedIn?<>{session&&<>
           <div className="authentication-check" aria-hidden="true"><img src="/registration/assets/ready-imgEllipse1.svg" alt=""/><img className="approved-check" src="/registration/assets/ready-approved-check.svg" alt=""/></div>
           <div className="authentication-intro"><h1 ref={heading} tabIndex={-1}><ContentText contentKey="signedIn.heading"/></h1><p><ContentText contentKey="signedIn.description"/></p></div>
@@ -119,7 +121,7 @@ function Screens({initial}:{initial:Bootstrap}){
           <a className="tn-primary-button authentication-security" data-presentation="standard" data-appearance="outline" href="/account/security"><ContentText contentKey="signedIn.security"/></a>
           <p className="authentication-caption"><ContentText contentKey="signedIn.caption"/></p>
         </>}</>:<>
-          <div className="authentication-intro"><h1 ref={heading} tabIndex={-1}><ContentText contentKey="login.heading"/></h1><p><ContentText contentKey="login.description"/></p></div>
+          {productContext?<ProductAuthorizationLoginIntro context={productContext} headingRef={heading}/>:<div className="authentication-intro"><h1 ref={heading} tabIndex={-1}><ContentText contentKey="login.heading"/></h1><p><ContentText contentKey="login.description"/></p></div>}
           <div><FederationSignIn key={location.revision} configuration={federation} rememberMe={remember} disabled={form.submitPending||passkeyBusy} unavailableTitle={unavailable.text} canStart={()=>!passkeyPending.current&&!attemptController.current&&!logoutPending.current} isCurrent={()=>routeRevision.current===location.revision} onBusyChange={value=>{if(routeRevision.current!==location.revision)return;federationPending.current=value;setFederationBusy(value);if(value){setPassword('');setVisible(false);setError(undefined);form.reset();}}} onAuthenticated={()=>navigatePath(authenticationRoutes.signedIn.pathname)} onMfaRequired={()=>navigatePath(totpRoutes.mfa.pathname)} onReset={refreshFederation}/><div className="authentication-separator"><ContentText contentKey="login.separator"/></div></div>
           <form noValidate data-tunner-form="FORM-LOGIN" onSubmit={event=>void form.handleSubmit(event,signIn)}>
             <div className="authentication-fields">
@@ -130,6 +132,7 @@ function Screens({initial}:{initial:Bootstrap}){
             <div className="authentication-actions"><PrimaryButton type="submit" labelKey="login.submit" disabled={form.submitPending||passkeyBusy||federationBusy} aria-busy={form.submitPending}/><PasskeySignIn key={location.revision} available={boot.passkeyAvailable===true} maximumCredentialJsonBytes={boot.maximumCredentialJsonBytes??0} csrfToken={boot.csrfToken} rememberMe={remember} disabled={form.submitPending||federationBusy} {...(boot.passkeyRecovery?{recovery:boot.passkeyRecovery}:{})} onBusyChange={value=>{passkeyPending.current=value;setPasskeyBusy(value);if(value){setPassword('');setVisible(false);form.reset();}}} onAuthenticated={()=>navigatePath(authenticationRoutes.signedIn.pathname)} onMfaRequired={()=>navigatePath(totpRoutes.mfa.pathname)}/><p className="authentication-create"><ContentText contentKey="login.create.description"/> <a href="/registration"><ContentText contentKey="login.create"/></a></p></div>
             {form.hasErrors&&<FormErrorSummary contentKey="authentication.error.highlighted"/>}
           </form>
+          {productContext&&<ProductAuthorizationLoginBoundary context={productContext}/>}
         </>}
         {error&&<FormErrorSummary contentKey={error}/>}
         {(form.submitPending||logoutBusy)&&<p role="status"><ContentText contentKey="authentication.working"/></p>}

@@ -15,7 +15,8 @@ namespace Tunner.Identity.Persistence;
 internal sealed partial class ProductAuthorizationProtocol(IdentityPersistenceDbContext database, ProductAuthorizationApplication application,
     ProductAuthorizationServerProfile profile, IOpenIddictApplicationManager clients, IOpenIddictAuthorizationManager authorizations,
     IOpenIddictTokenManager tokens, IHttpContextAccessor accessor, AuthenticationPartitionKey partitions, TimeProvider clock,
-    ProductAuthorizationLifecycleApplication? lifecycleApplication = null, ProductAuthorizationContinuation? continuation = null) :
+    ProductAuthorizationLifecycleApplication? lifecycleApplication = null, ProductAuthorizationContinuation? continuation = null,
+    ProductAuthorizationReview? review = null) :
     IOpenIddictServerHandler<OpenIddictServerEvents.ProcessRequestContext>,
     IOpenIddictServerHandler<OpenIddictServerEvents.HandleAuthorizationRequestContext>,
     IOpenIddictServerHandler<OpenIddictServerEvents.HandleTokenRequestContext>,
@@ -70,6 +71,7 @@ internal sealed partial class ProductAuthorizationProtocol(IdentityPersistenceDb
             var authenticated = await Http.AuthenticateAsync(AuthenticationIdentity.Scheme).ConfigureAwait(false);
             var caller = authenticated.Succeeded && authenticated.Principal is not null
                 ? StepUpCaller.FromPrincipal(authenticated.Principal, profile.Origin, partitions.Network(Http.Connection.RemoteIpAddress)) : null;
+            if (caller is not null) Http.User = authenticated.Principal!;
             var interaction = restoredContinuation?.Interaction;
             if (request.AuthenticationContext is not null && restoredContinuation is null)
                 interaction = await application.CaptureInteractionAsync(request, profile.Origin,
@@ -78,7 +80,8 @@ internal sealed partial class ProductAuthorizationProtocol(IdentityPersistenceDb
                 ? caller is null ? ProductAuthorizationInteractionStatus.RequiresSignIn : ProductAuthorizationInteractionStatus.Satisfied
                 : (await application.EvaluateInteractionAsync(caller, request, profile.Origin, interaction, ct).ConfigureAwait(false)).Status;
             if (status == ProductAuthorizationInteractionStatus.Denied) { context.Reject(Errors.AccessDenied); return; }
-            if (status == ProductAuthorizationInteractionStatus.RequiresFreshProof) { context.Reject(Errors.InteractionRequired); return; }
+            if (status == ProductAuthorizationInteractionStatus.RequiresFreshProof && !profile.RequireAuthorizationReview)
+            { context.Reject(Errors.InteractionRequired); return; }
             if (status == ProductAuthorizationInteractionStatus.RequiresSignIn)
             {
                 if (continuation is null || context.Request.GetPromptValues().Contains(PromptValues.None, StringComparer.Ordinal))
@@ -100,6 +103,42 @@ internal sealed partial class ProductAuthorizationProtocol(IdentityPersistenceDb
             if (restoredContinuation is not null && restoredContinuation.Request.Digest != request.Digest)
             { context.Reject(Errors.InvalidRequest); return; }
             if (caller is null) { context.Reject(Errors.LoginRequired); return; }
+            if (profile.RequireAuthorizationReview)
+            {
+                if (continuation is null || review is null)
+                    throw new InvalidOperationException("Explicit Product review is not composed.");
+                if (restoredContinuation is null)
+                {
+                    if (context.Request.GetPromptValues().Contains(PromptValues.None, StringComparer.Ordinal))
+                    { context.Reject(Errors.ConsentRequired); return; }
+                    var registration = await application.RequireRegistrationAsync(request, profile.Origin, ct).ConfigureAwait(false);
+                    if (registration is null) { context.Reject(Errors.AccessDenied); return; }
+                    var registered = await clients.FindByClientIdAsync(request.ClientId, ct).ConfigureAwait(false);
+                    if (registered is null || await clients.GetIdAsync(registered, ct).ConfigureAwait(false) != registration.NativeApplicationId ||
+                        await clients.GetClientTypeAsync(registered, ct).ConfigureAwait(false) != registration.ClientType)
+                    { context.Reject(Errors.InvalidClient); return; }
+                    _ = await continuation.BeginAsync(Http, request, registration.NativeApplicationId, ct, interaction,
+                        bindAuthenticatedActor: true).ConfigureAwait(false);
+                    await CommitTransactionAsync(ct).ConfigureAwait(false);
+                    Http.Response.Headers.CacheControl = "no-store"; Http.Response.Headers["Referrer-Policy"] = "no-referrer";
+                    Http.Response.Redirect(ProductAuthorizationReviewEndpoints.ScreenPath); context.HandleRequest(); return;
+                }
+                if (restoredContinuation.ReviewDenied)
+                {
+                    if (!await continuation.ConsumeAsync(restoredContinuation, restoredContinuation.NativeApplicationId, ct, denied: true).ConfigureAwait(false))
+                    { context.Reject(Errors.InvalidRequest); return; }
+                    await review.StageDeclined(restoredContinuation, ct).ConfigureAwait(false);
+                    consumedContinuation = true; context.Reject(Errors.AccessDenied); return;
+                }
+                if (!await review.ValidateApprovalAsync(restoredContinuation, ct).ConfigureAwait(false))
+                {
+                    if (restoredContinuation.ReviewApprovalDigest is not null)
+                    { context.Reject(Errors.AccessDenied); return; }
+                    await CommitTransactionAsync(ct).ConfigureAwait(false);
+                    Http.Response.Headers.CacheControl = "no-store"; Http.Response.Headers["Referrer-Policy"] = "no-referrer";
+                    Http.Response.Redirect(ProductAuthorizationReviewEndpoints.ScreenPath); context.HandleRequest(); return;
+                }
+            }
             grant = await application.AuthorizeAsync(caller, request, restoredContinuation?.OperationId ?? "OP-" + Guid.NewGuid().ToString("N"),
                 restoredContinuation?.CorrelationId ?? Guid.NewGuid().ToString("N"), ct, interaction).ConfigureAwait(false);
         }

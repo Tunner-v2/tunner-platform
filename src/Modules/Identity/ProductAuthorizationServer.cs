@@ -19,7 +19,8 @@ public sealed class ProductAuthorizationServerProfile
     public ProductAuthorizationServerProfile(string origin, string authorizationPath, string tokenPath,
         SecurityKey signingKey, SecurityKey encryptionKey, ImmutableArray<string> supportedScopes, ImmutableArray<string> supportedResources,
         int maximumBodyBytes, int maximumFields, int maximumKeyLength, int maximumValueLength,
-        ProductAuthorizationLifecycleServerProfile? lifecycle = null, bool enableContinuation = false)
+        ProductAuthorizationLifecycleServerProfile? lifecycle = null, bool enableContinuation = false,
+        bool requireAuthorizationReview = false)
     {
         if (!Uri.TryCreate(origin, UriKind.Absolute, out var uri) || uri.Scheme != "https" ||
             origin != uri.GetLeftPart(UriPartial.Authority) || uri.UserInfo.Length != 0)
@@ -55,6 +56,9 @@ public sealed class ProductAuthorizationServerProfile
         MaximumKeyLength = maximumKeyLength; MaximumValueLength = maximumValueLength;
         Lifecycle = lifecycle;
         EnableContinuation = enableContinuation;
+        if (requireAuthorizationReview && !enableContinuation)
+            throw new ArgumentException("Explicit Product review requires protected native continuation.", nameof(requireAuthorizationReview));
+        RequireAuthorizationReview = requireAuthorizationReview;
     }
     public string Origin { get; }
     public string AuthorizationPath { get; }
@@ -65,6 +69,7 @@ public sealed class ProductAuthorizationServerProfile
     public ImmutableArray<string> SupportedResources { get; }
     public ProductAuthorizationLifecycleServerProfile? Lifecycle { get; }
     public bool EnableContinuation { get; }
+    public bool RequireAuthorizationReview { get; }
     internal int MaximumBodyBytes { get; }
     internal int MaximumFields { get; }
     internal int MaximumKeyLength { get; }
@@ -85,11 +90,14 @@ public static class ProductAuthorizationServer
             throw new InvalidOperationException("Product lifecycle endpoints require an explicit qualified lifecycle provider.");
         if (profile.EnableContinuation && !services.Any(item => item.ServiceType == typeof(IProductAuthorizationContinuationPolicySource)))
             throw new InvalidOperationException("Product continuation requires an explicit qualified policy provider.");
+        if (profile.RequireAuthorizationReview && !services.Any(item => item.ServiceType == typeof(IProductAuthorizationPresentationSource)))
+            throw new InvalidOperationException("Product review requires an explicit qualified presentation provider.");
         if (services.Any(item => item.ServiceType == typeof(ProductAuthorizationServerProfile)))
             throw new InvalidOperationException("Product authorization may be composed only once.");
         services.AddSingleton(profile); services.AddHttpContextAccessor();
         services.AddScoped<ProductAuthorizationApplication>();
         if (profile.EnableContinuation) services.AddScoped<ProductAuthorizationContinuation>();
+        if (profile.RequireAuthorizationReview) services.AddScoped<ProductAuthorizationReview>();
         if (profile.Lifecycle is not null) services.AddScoped<ProductAuthorizationLifecycleApplication>();
         string[] callbackPaths = profile.Lifecycle is { } lifecycle
             ? [profile.TokenPath, lifecycle.IntrospectionPath, lifecycle.RevocationPath] : [profile.TokenPath];
