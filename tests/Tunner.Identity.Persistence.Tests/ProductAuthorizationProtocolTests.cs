@@ -46,6 +46,7 @@ public sealed class ProductAuthorizationProtocolTests(SessionListingPostgresFixt
     private static readonly ImmutableArray<string> Scopes = ["openid", "product.read"];
     private static readonly ImmutableArray<string> Resources = [Resource];
     private static readonly AssurancePolicyScope ProductProofScope = new("AUTHORIZE_PRODUCT", "fixture-product-authorization-proof");
+    private static readonly AssurancePolicyScope OtherProofScope = new("fixture.unrelated-operation", "fixture-unrelated-owner");
 
     private sealed class Owners(IdentityTestDatabase database) : IProductAuthorizationPolicySource,
         IProductAuthorizationRegistrySource, IProductAuthorizationRelationshipSource, IProductAuthorizationLifecycleSource,
@@ -69,6 +70,8 @@ public sealed class ProductAuthorizationProtocolTests(SessionListingPostgresFixt
         internal bool PresentationAvailable { get; set; } = true;
         internal string AssuranceVersion { get; set; } = "fixture-product-proof-policy-v1";
         internal ProductAuthorizationStepUpQualification? StepUpQualification { get; set; }
+        internal bool FallbackSelected { get; set; }
+        internal Action<AssurancePolicyScope>? BeforeAssuranceRead { get; set; }
         internal ImmutableArray<string> GrantedScopes => LifecycleEnabled ? ["offline_access", "openid", "product.read"] : Scopes;
         internal DateTimeOffset? IssuancePolicyExpiresAt { get; set; }
         internal ProductAuthorizationArtifactEffect RevocationEffect { get; set; } = ProductAuthorizationArtifactEffect.PresentedToken;
@@ -100,11 +103,18 @@ public sealed class ProductAuthorizationProtocolTests(SessionListingPostgresFixt
         }
         private readonly EffectivePolicyInterval interval = new(DateTimeOffset.UtcNow.AddDays(-1), true, DateTimeOffset.UtcNow.AddHours(4), false);
         private const string Evidence = "SYNTHETIC-LOCAL-PROTOCOL-TEST-ONLY";
-        public AssurancePolicyVersion RequireEffective(AssurancePolicyScope scope, DateTimeOffset executedAt, string? expectedVersion = null) =>
-            new AssurancePolicyCatalog([new(new(AssuranceVersion, "ACTIVE", ProductProofScope, interval, null, [Evidence]),
+        public AssurancePolicyVersion RequireEffective(AssurancePolicyScope scope, DateTimeOffset executedAt, string? expectedVersion = null)
+        {
+            BeforeAssuranceRead?.Invoke(scope);
+            return new AssurancePolicyCatalog([new(new(AssuranceVersion, "ACTIVE", ProductProofScope, interval, null, [Evidence]),
+                "fixture-product-proof-assurance", TimeSpan.FromMinutes(1), new Dictionary<string, string> { ["pwd"] = "fixture-product-proof-assurance" }),
+                new(new(AssuranceVersion, "ACTIVE", OtherProofScope, interval, null, [Evidence]),
                 "fixture-product-proof-assurance", TimeSpan.FromMinutes(1), new Dictionary<string, string> { ["pwd"] = "fixture-product-proof-assurance" })])
                 .RequireEffective(scope, executedAt, expectedVersion);
-        Task<UserStepUpOperationContext?> IUserStepUpOperationSource.ResolveAsync(UserStepUpActor actor, CancellationToken ct) => Task.FromResult<UserStepUpOperationContext?>(null);
+        }
+        Task<UserStepUpOperationContext?> IUserStepUpOperationSource.ResolveAsync(UserStepUpActor actor, CancellationToken ct) =>
+            Task.FromResult<UserStepUpOperationContext?>(FallbackSelected ? new(actor, "OP-fixture-unrelated-operation", "fixture-unrelated-correlation",
+                OtherProofScope, "fixture-unrelated-resource", 1, new string('D', 64), AssuranceVersion) : null);
         Task<bool> IUserStepUpOperationSource.ApplyAsync(UserStepUpActor actor, UserStepUpOperationContext operation, IdentityPersistenceDbContext context, CancellationToken ct) => Task.FromResult(false);
         public ValueTask<ProductAuthorizationPresentation> RequirePublishedAsync(ProductAuthorizationPresentationFacts facts, DateTimeOffset at, CancellationToken ct)
         {
@@ -114,7 +124,7 @@ public sealed class ProductAuthorizationProtocolTests(SessionListingPostgresFixt
                 "authorization.permissions", "authorization.assurance", "authorization.callback", "authorization.allow", "authorization.deny",
                 "authorization.switchAccount", "authorization.working", "authorization.changed", "authorization.unavailable", "authorization.proofRequired",
                 "authorization.loginRequired", "authorization.boundary", "authorization.footer.privacy", "authorization.footer.terms", "authorization.footer.support",
-                "authorization.loginDescription", "authorization.loginPermissions", "authorization.loginSummary"];
+                "authorization.loginDescription", "authorization.loginPermissions", "authorization.loginSummary", "authorization.verify"];
             RegistrationPublishedText Published(string key) => new(key, "fixture-review-variant", PresentationVersion,
                 "fixture-review-publication", "en", "PUBLISHED", "Synthetic review text: " + key);
             var legal = new Uri("https://fixture.example.test/legal");
@@ -672,6 +682,58 @@ public sealed class ProductAuthorizationProtocolTests(SessionListingPostgresFixt
         var protector = services.GetRequiredService<IDataProtectionProvider>().CreateProtector("Tunner.User.Session.Ticket.v1");
         var ticket = TicketSerializer.Default.Deserialize(Convert.FromBase64String(protector.Unprotect(session.ProtectedTicket)));
         Assert.NotNull(ticket); return StepUpCaller.FromPrincipal(ticket!.Principal, Origin, new string('A', 64));
+    }
+
+    [Fact]
+    public async Task StepUpUnrelatedOwnerRemainsAvailableWithoutProductCookieDuringContinuationPolicyOutage()
+    {
+        await using var test = await Create(stepUp: true);
+        Assert.Null(CookieValue(test.Cookies, ProductAuthorizationContinuation.CookieName));
+        test.Owners.FallbackSelected = true; test.Owners.ContinuationPolicyAvailable = false;
+        using var response = await test.Host.Get("/authentication/step-up/options", test.Cookies);
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode); var json = await response.Content.ReadFromJsonAsync<JsonElement>();
+        Assert.Equal("PENDING", json.GetProperty("status").GetString());
+        Assert.Equal("fixture-unrelated-correlation", json.GetProperty("operationReference").GetString());
+        Assert.True(json.GetProperty("passwordAvailable").GetBoolean());
+        await AssertNoRequestTokens(test); await AssertNoInteractionRelationship(test);
+    }
+
+    [Fact]
+    public async Task StepUpOwnerConflictCreatedByVerifiedProofIssuancePreventsProductHandoff()
+    {
+        await using var test = await Create(stepUp: true);
+        var pending = await BeginContinuation(test, new Dictionary<string, string> { ["acr_values"] = StrongAcr }, existingSession: true, expectedRedirect: ReviewPath);
+        Guid request; string csrf;
+        using (var options = await test.Host.Get("/authentication/step-up/options", test.Cookies))
+        {
+            Assert.Equal(HttpStatusCode.OK, options.StatusCode); var json = await options.Content.ReadFromJsonAsync<JsonElement>();
+            Assert.Equal("PENDING", json.GetProperty("status").GetString()); request = json.GetProperty("requestId").GetGuid();
+            csrf = json.GetProperty("csrfToken").GetString()!; test.Cookies = Merge(test.Cookies, options);
+        }
+        var hookAttached = false; var proofCreated = false;
+        test.Owners.BeforeAssuranceRead = scope =>
+        {
+            if (scope != ProductProofScope || hookAttached) return;
+            var http = test.Host.Services.GetRequiredService<IHttpContextAccessor>().HttpContext;
+            Assert.NotNull(http);
+            var database = http!.RequestServices.GetRequiredService<IdentityPersistenceDbContext>();
+            database.ChangeTracker.Tracked += (_, tracked) =>
+            {
+                if (tracked.Entry.State != EntityState.Added || tracked.Entry.Entity is not StepUpProofRow
+                    { State: "ACTIVE", AuthenticationMethod: "pwd" }) return;
+                proofCreated = true; test.Owners.FallbackSelected = true;
+            };
+            hookAttached = true;
+        };
+        using var response = await test.Host.Post("/authentication/step-up/password", new { requestId = request, password = Password }, test.Cookies, csrf);
+        Assert.True(proofCreated, "The fallback selection must appear only after actual password verification creates its proof.");
+        Assert.Equal(HttpStatusCode.Conflict, response.StatusCode);
+        await using var read = test.Database.Context(); Assert.Equal("ACTIVE", (await read.Set<StepUpProofRow>().SingleAsync()).State);
+        Assert.Equal(0, await read.Set<OutboxMessage>().CountAsync(message => message.EventType == "StepUpProofConsumed"));
+        await using var nativeScope = test.Host.Services.CreateAsyncScope(); var manager = nativeScope.ServiceProvider.GetRequiredService<IOpenIddictTokenManager>();
+        var token = await manager.FindByIdAsync(pending.TokenId); Assert.NotNull(token);
+        Assert.False((await manager.GetPropertiesAsync(token!)).ContainsKey("tunner.product.continuation.proof.v1"));
+        await AssertNoInteractionRelationship(test);
     }
 
     [Fact]

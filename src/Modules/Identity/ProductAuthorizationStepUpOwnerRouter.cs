@@ -11,7 +11,11 @@ internal sealed class ProductAuthorizationStepUpOwnerRouter(IUserStepUpOperation
     {
         var original = await fallback.ResolveAsync(actor, ct).ConfigureAwait(false);
         var candidate = await product.ResolveAsync(actor, ct).ConfigureAwait(false);
-        return original is not null && candidate is not null ? null : candidate ?? original;
+        if (candidate is null) return original;
+        // Product qualification may await. Another selected owner must still be absent
+        // at the last read frontier before publishing this Product context.
+        return original is not null || await fallback.ResolveAsync(actor, ct).ConfigureAwait(false) is not null
+            ? null : candidate;
     }
     public async Task<bool> ApplyAsync(UserStepUpActor actor, UserStepUpOperationContext operation,
         IdentityPersistenceDbContext database, CancellationToken ct)

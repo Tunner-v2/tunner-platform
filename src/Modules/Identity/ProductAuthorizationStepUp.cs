@@ -41,7 +41,9 @@ internal sealed class ProductAuthorizationStepUp(IdentityPersistenceDbContext da
     }
 
     public Task<UserStepUpOperationContext?> ResolveAsync(UserStepUpActor actor, CancellationToken ct) =>
-        InOwnerTransactionAsync<UserStepUpOperationContext?>(async () =>
+        !Http.Request.Cookies.ContainsKey(ProductAuthorizationContinuation.CookieName)
+        ? Task.FromResult<UserStepUpOperationContext?>(null)
+        : InOwnerTransactionAsync<UserStepUpOperationContext?>(async () =>
         {
             var saved = await continuation.ReadForReviewAsync(Http, ct).ConfigureAwait(false);
             if (saved is null || saved.ReviewDenied || saved.ReviewApprovalDigest is not null) return null;

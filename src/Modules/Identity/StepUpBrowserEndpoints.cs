@@ -169,6 +169,9 @@ internal sealed partial class StepUpBrowserService(IUserStepUpOperationSource re
         {
             if (productAuthorization is null)
                 return Failure("STEP_UP_REQUIRED");
+            var selected = await owner.ResolveAsync(actor, context.RequestAborted).ConfigureAwait(false);
+            if (!MatchesActor(selected, actor) || selected!.Completed || Digest(selected) != browser.BindingDigest)
+                return Failure("VERSION_CONFLICT");
             return await productAuthorization.StageForNativeAsync(context, operation, proofKey, nativeCompletion, context.RequestAborted).ConfigureAwait(false);
         }
         using var execution = SessionRevocationApplication.Owns(operation.Binding.Scope)
