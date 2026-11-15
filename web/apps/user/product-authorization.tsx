@@ -18,7 +18,7 @@ function Review({pathname,isCurrent}:{pathname:string;isCurrent:()=>boolean}){
   const lifecycle=useRef<AbortController|undefined>(undefined);const inFlight=useRef(false);const heading=useRef<HTMLHeadingElement>(null);const errorSummary=useRef<HTMLDivElement>(null);
   useEffect(()=>{const controller=new AbortController();lifecycle.current=controller;
     if(pathname!==productAuthorizationRoute.pathname){setUnavailable(true);return()=>controller.abort();}
-    if(window.location.search||window.location.hash){navigatePath(productAuthorizationRoute.pathname,true);return()=>controller.abort();}
+    if(window.location.search||window.location.hash)navigatePath(productAuthorizationRoute.pathname,true);
     void loadProductAuthorizationOptions(controller.signal).then(value=>{if(!controller.signal.aborted&&isCurrent())setOptions(value);}).catch(()=>{if(!controller.signal.aborted&&isCurrent())setUnavailable(true);});
     return()=>{controller.abort();lifecycle.current=undefined;inFlight.current=false;};
   },[pathname]);
@@ -42,7 +42,7 @@ function Review({pathname,isCurrent}:{pathname:string;isCurrent:()=>boolean}){
       <div className="product-authorization-intro"><h1 id="product-authorization-heading" ref={heading} tabIndex={-1}>{variableText('authorization.heading')}</h1><p><ContentText contentKey="authorization.description"/></p></div>
       <div className="product-authorization-account"><span className="product-authorization-avatar" aria-hidden="true">{Array.from(options.accountLabel)[0]}</span><div><strong>{options.accountLabel}</strong><p><ContentText contentKey="authorization.account"/></p></div></div>
       <aside className="product-authorization-sharing"><strong>{variableText('authorization.permissions')}</strong><ContentProvider locale={options.locale} audience="product-authorization-scopes" resolve={key=>options.scopeDescriptions[key]}><ul>{Object.keys(options.scopeDescriptions).map(key=><li key={key}><ContentText contentKey={key}/></li>)}</ul></ContentProvider></aside>
-      <dl className="product-authorization-details"><div><dt><ContentText contentKey="authorization.product"/></dt><dd>{options.productName}</dd></div><div><dt><ContentText contentKey="authorization.callback"/></dt><dd>{options.registeredReturnOrigin}</dd></div>{options.requestedAssuranceLabel&&<div><dt><ContentText contentKey="authorization.assurance"/></dt><dd>{options.requestedAssuranceLabel}</dd></div>}</dl>
+      <dl className="product-authorization-details"><div><dt><ContentText contentKey="authorization.callback"/></dt><dd>{options.registeredReturnOrigin}</dd></div>{options.requestedAssuranceLabel&&<div><dt><ContentText contentKey="authorization.assurance"/></dt><dd>{options.requestedAssuranceLabel}</dd></div>}</dl>
       {interactionKey&&<p className="product-authorization-status" role="status"><ContentText contentKey={interactionKey}/></p>}
       <div className="product-authorization-decisions"><PrimaryButton labelKey="authorization.deny" appearance="outline" disabled={busy||blocked} onClick={()=>void decide('DENY')}/><PrimaryButton labelKey="authorization.allow" disabled={busy||blocked||!options.canAllow} aria-busy={busy} onClick={()=>void decide('ALLOW')}/></div>
       <button type="button" className="product-authorization-switch" disabled={busy||blocked} onClick={()=>void decide('SWITCH_ACCOUNT')}><ContentText contentKey="authorization.switchAccount"/></button>

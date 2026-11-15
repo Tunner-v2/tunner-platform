@@ -11,6 +11,10 @@ Validate the registered Product, environment and client; exact redirect; client 
 
 Flow39 makes a qualified explicit Product-origin request Relationship activation intent. Create/activate that Relationship only through its owner; never create Product membership, roles or entitlements. Each later Product is authorized independently. A Tunner session cookie is never shared with a Product.
 
+The explicit review profile requires qualified published Product context on Login and account-bound review at `/product-authorization`. Anonymous presentation contains no Account/session facts. Allow, Deny and Use another account bind the saved native request, actual actor, registry, policy and publication. Native processing revalidates Allow before issuance; Deny returns the original native error with private decline evidence and no grant. Unmet assurance never enables Allow; shared operation-bound proof remains a separate integration.
+
+Persist review decisions in the existing native request-token row, serialized against competing decisions and consumption. Replaying a browser pointer cannot replace a terminal decision. Switching accounts increments its durable generation, invalidating prior pointers/references while retaining original request/freshness context; it does not itself sign out Tunner. Commit before publishing decisions and keep references outside URLs/storage.
+
 ## Issuance and redemption
 
 Reuse pinned OpenIddict protocol processing, application/authorization/token stores, permissions and PKCE protection. Do not implement a parallel OAuth protocol or custom token cryptography. Keep HTTPS and token storage enabled.

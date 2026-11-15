@@ -111,7 +111,7 @@ function Screens({initial}:{initial:Bootstrap}){
   return <ContentProvider locale={boot.locale} audience="authentication" resolve={key=>boot.content[key]}><div className="authentication-page">
     <img className="authentication-glow indigo" src={productContext?'/registration/assets/product-origin-indigo.svg':'/registration/assets/login-bg-indigo.svg'} alt=""/><img className="authentication-glow violet" src={productContext?'/registration/assets/product-origin-violet.svg':'/registration/assets/login-bg-violet.svg'} alt=""/>
     <header className="authentication-header"><TunnerBrand contentKey="brand.tunner"/></header>
-    <main className="authentication-stage" aria-busy={guarded}>
+    <main className={'authentication-stage'+(productContext?' product-origin-stage':'')} aria-busy={guarded}>
       {!guarded&&<section className={'authentication-card'+(signedIn?' signed-in':productContext?' product-origin':'')} data-tunner-screen={signedIn?authenticationRoutes.signedIn.id:authenticationRoutes.login.id}>
         {signedIn?<>{session&&<>
           <div className="authentication-check" aria-hidden="true"><img src="/registration/assets/ready-imgEllipse1.svg" alt=""/><img className="approved-check" src="/registration/assets/ready-approved-check.svg" alt=""/></div>

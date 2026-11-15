@@ -71,7 +71,7 @@ for(const viewport of [{width:1440,height:1024},{width:390,height:844},{width:32
   await expect(page.getByRole('heading',{name:'Continue to Product A'})).toBeFocused();await expect(page.getByText('Alex Example',{exact:true})).toBeVisible();await expect(page.getByText('Your Tunner identity',{exact:true})).toBeVisible();
   await expect(page.getByText('https://product-a.example',{exact:true})).toBeVisible();await expect(page.getByText('Verified email',{exact:true})).toHaveCount(0);await expect(page.getByText('System Status:')).toHaveCount(0);
   await page.keyboard.press('Tab');await expect(page.getByRole('button',{name:'Deny',exact:true})).toBeFocused();await page.keyboard.press('Tab');await expect(page.getByRole('button',{name:'Allow',exact:true})).toBeFocused();await page.keyboard.press('Tab');await expect(page.getByRole('button',{name:'Use another account',exact:true})).toBeFocused();
-  await noBrowserLeak(page);await capture(page,'authorization-production-'+viewport.width);
+  await noBrowserLeak(page);await page.getByRole('heading',{name:'Continue to Product A'}).focus();await capture(page,'authorization-production-'+viewport.width);
  });
  test('Product-aware Login retains actual credentials and ordinary Login at '+viewport.width,async({page})=>{
   await page.setViewportSize(viewport);await setupLogin(page,true);let credentialPosts=0;
@@ -85,12 +85,15 @@ for(const viewport of [{width:1440,height:1024},{width:390,height:844},{width:32
 
 test('Product review holds loading state and blocks duplicate decision submissions',async({page})=>{
  const state=await setupReview(page);let releaseOptions!:()=>void;const optionsGate=new Promise<void>(resolve=>{releaseOptions=resolve;});
+ let releaseDecision:(()=>void)|undefined;
+ try{
  await page.route('**/product-authorization/options',async route=>{state.reads++;await optionsGate;await route.fulfill({json:options()});});
- await page.goto('/product-authorization');await expect(page.locator('main[aria-busy="true"]')).toBeVisible();await expect(page.getByRole('button',{name:'Allow',exact:true})).toHaveCount(0);expect(state.posts).toHaveLength(0);releaseOptions();await expect(page.getByRole('button',{name:'Allow',exact:true})).toBeEnabled();
- let releaseDecision!:()=>void;const decisionGate=new Promise<void>(resolve=>{releaseDecision=resolve;});
+ await page.goto('/product-authorization');await expect(page.locator('main[aria-busy="true"]')).toBeAttached();await expect(page.getByRole('button',{name:'Allow',exact:true})).toHaveCount(0);expect(state.posts).toHaveLength(0);releaseOptions();await expect(page.getByRole('button',{name:'Allow',exact:true})).toBeEnabled();
+ const decisionGate=new Promise<void>(resolve=>{releaseDecision=resolve;});
  await page.route('**/product-authorization/decision',async route=>{state.posts.push(route.request().postDataJSON());await decisionGate;await route.fulfill({status:503,json:{error_code:'DEPENDENCY_UNAVAILABLE'}});});
  await page.getByRole('button',{name:'Allow',exact:true}).evaluate(button=>{(button as HTMLButtonElement).click();(button as HTMLButtonElement).click();});
- await expect(page.getByRole('status')).toHaveText('Please wait…');await expect(page.getByRole('button',{name:'Deny',exact:true})).toBeDisabled();await expect(page.getByRole('button',{name:'Use another account',exact:true})).toBeDisabled();await expect.poll(()=>state.posts.length).toBe(1);releaseDecision();await expect(page.getByRole('alert')).toHaveText(reviewCopy['authorization.unavailable']);expect(state.posts).toHaveLength(1);expect(state.nativeEntries).toBe(0);
+ await expect(page.getByRole('status')).toHaveText('Please wait…');await expect(page.getByRole('button',{name:'Deny',exact:true})).toBeDisabled();await expect(page.getByRole('button',{name:'Use another account',exact:true})).toBeDisabled();await expect.poll(()=>state.posts.length).toBe(1);releaseDecision!();await expect(page.getByRole('alert')).toHaveText(reviewCopy['authorization.unavailable']);expect(state.posts).toHaveLength(1);expect(state.nativeEntries).toBe(0);
+ }finally{releaseOptions();releaseDecision?.();}
 });
 
 for(const status of ['RequiresFreshProof','RequiresSignIn','Denied'] as const){test('Product review '+status+' never enables Allow or invents a session upgrade',async({page})=>{
