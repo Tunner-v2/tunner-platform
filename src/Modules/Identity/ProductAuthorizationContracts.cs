@@ -10,6 +10,9 @@ public sealed record ProductAuthorizationRequest(string ProductId, string Enviro
     ImmutableArray<string> Scopes, ImmutableArray<string> Resources, string CodeChallenge, string CodeChallengeMethod,
     string ResponseType, string ResponseMode, string? State, string? Nonce)
 {
+    // Omit absent controls so uncontrolled request digests retain their exact original serialization.
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public ProductAuthorizationAuthenticationContext? AuthenticationContext { get; init; }
     [JsonIgnore] public string Digest => AuthenticationIdentity.Digest(JsonSerializer.Serialize(this));
     internal void Require(ProductAuthorizationPolicy policy)
     {
@@ -23,6 +26,10 @@ public sealed record ProductAuthorizationRequest(string ProductId, string Enviro
             !Canonical(Scopes) || !Canonical(Resources) || Resources.Length == 0 ||
             (!policy.AllowRefreshTokens && Scopes.Contains("offline_access", StringComparer.Ordinal)))
             throw new ArgumentException("A supported canonical Product authorization request is required.");
+        AuthenticationContext?.Require(policy);
+        if (AuthenticationContext is { } controls && (controls.MaxAgeSeconds is not null || controls.RequestedAcrValues.Length > 0) &&
+            !Scopes.Contains("openid", StringComparer.Ordinal))
+            throw new ArgumentException("OIDC authentication-time and ACR controls require the openid scope.");
     }
     internal static bool Canonical(ImmutableArray<string> values) => !values.IsDefault &&
         values.All(x => !string.IsNullOrWhiteSpace(x) && !x.Any(char.IsWhiteSpace)) &&
@@ -37,6 +44,8 @@ public sealed record ProductAuthorizationPolicy(PolicyVersionCandidate<string> M
     TimeSpan MaximumAuthenticationAge, TimeSpan AuthorizationCodeLifetime, TimeSpan AccessTokenLifetime, TimeSpan IdentityTokenLifetime,
     bool AllowRefreshTokens, TimeSpan? RefreshTokenLifetime, int MaximumCorrelationLength)
 {
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public ProductAuthorizationInteractionQualification? InteractionQualification { get; init; }
     internal string Snapshot => JsonSerializer.Serialize(this);
     internal void Require(string origin, DateTimeOffset at)
     {
@@ -52,6 +61,7 @@ public sealed record ProductAuthorizationPolicy(PolicyVersionCandidate<string> M
             IdentityTokenLifetime <= TimeSpan.Zero ||
             MaximumCorrelationLength <= 0 || (AllowRefreshTokens ? RefreshTokenLifetime is null || RefreshTokenLifetime <= TimeSpan.Zero : RefreshTokenLifetime is not null))
             throw new InvalidOperationException("Current explicit Product authorization qualification is unavailable.");
+        InteractionQualification?.Require();
     }
     public override string ToString() => nameof(ProductAuthorizationPolicy);
 }
@@ -107,6 +117,10 @@ internal sealed record ProductAuthorizationLineage(int SchemaVersion, ProductAut
     ProductRelationshipDecision Relationship, string OperationId, string CorrelationId, DateTimeOffset AuthorizedAt,
     DateTimeOffset CodeExpiresAt)
 {
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public ProductAuthorizationInteractionContext? Interaction { get; init; }
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public ProductAuthorizationAuthenticationClaims? AuthenticationClaims { get; init; }
     public override string ToString() => nameof(ProductAuthorizationLineage);
 }
 

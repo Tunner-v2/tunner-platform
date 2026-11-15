@@ -50,12 +50,10 @@ internal sealed partial class ProductAuthorizationProtocol(IdentityPersistenceDb
         RequireTransaction(); var ct = Http.RequestAborted;
         if (!HttpMethods.IsGet(Http.Request.Method) || context.Request.ResponseMode != ResponseModes.FormPost)
         { context.Reject(Errors.InvalidRequest); return; }
-        // This first admitted transport profile must never silently ignore stronger requested
-        // assurance, freshness or essential-claim/interaction controls. Their qualified continuation
-        // handling remains part of P2-014 before feature acceptance.
-        if (context.Request.GetParameter("acr_values") is not null || context.Request.MaxAge is not null ||
-            context.Request.GetParameter("claims") is not null ||
-            context.Request.GetPromptValues().Any(value => value != PromptValues.None))
+        // Essential claims and review/account-selection prompts need their separately
+        // qualified paths. Never silently accept an unsupported interaction request.
+        if (context.Request.GetParameter("claims") is not null ||
+            context.Request.GetPromptValues().Any(value => value is not (PromptValues.None or PromptValues.Login)))
         { context.Reject(Errors.InteractionRequired); return; }
         if (Http.Connection.RemoteIpAddress is null) { context.Reject(Errors.InvalidRequest); return; }
         ProductAuthorizationRequest request;
@@ -67,11 +65,23 @@ internal sealed partial class ProductAuthorizationProtocol(IdentityPersistenceDb
                 Canonical(context.Request.GetScopes()), Canonical(context.Request.GetResources()),
                 context.Request.CodeChallenge ?? string.Empty, context.Request.CodeChallengeMethod ?? string.Empty,
                 context.Request.ResponseType ?? string.Empty, context.Request.ResponseMode ?? string.Empty,
-                context.Request.State, context.Request.Nonce);
+                context.Request.State, context.Request.Nonce)
+            { AuthenticationContext = ReadAuthenticationContext(context.Request) };
             var authenticated = await Http.AuthenticateAsync(AuthenticationIdentity.Scheme).ConfigureAwait(false);
-            if (!authenticated.Succeeded || authenticated.Principal is null)
+            var caller = authenticated.Succeeded && authenticated.Principal is not null
+                ? StepUpCaller.FromPrincipal(authenticated.Principal, profile.Origin, partitions.Network(Http.Connection.RemoteIpAddress)) : null;
+            var interaction = restoredContinuation?.Interaction;
+            if (request.AuthenticationContext is not null && restoredContinuation is null)
+                interaction = await application.CaptureInteractionAsync(request, profile.Origin,
+                    caller?.SessionId, ct).ConfigureAwait(false);
+            var status = request.AuthenticationContext is null
+                ? caller is null ? ProductAuthorizationInteractionStatus.RequiresSignIn : ProductAuthorizationInteractionStatus.Satisfied
+                : (await application.EvaluateInteractionAsync(caller, request, profile.Origin, interaction, ct).ConfigureAwait(false)).Status;
+            if (status == ProductAuthorizationInteractionStatus.Denied) { context.Reject(Errors.AccessDenied); return; }
+            if (status == ProductAuthorizationInteractionStatus.RequiresFreshProof) { context.Reject(Errors.InteractionRequired); return; }
+            if (status == ProductAuthorizationInteractionStatus.RequiresSignIn)
             {
-                if (continuation is null || context.Request.GetPromptValues().Contains(PromptValues.None, StringComparer.Ordinal) || restoredContinuation is not null)
+                if (continuation is null || context.Request.GetPromptValues().Contains(PromptValues.None, StringComparer.Ordinal))
                 { context.Reject(Errors.LoginRequired); return; }
                 var registration = await application.RequireRegistrationAsync(request, profile.Origin, ct).ConfigureAwait(false);
                 if (registration is null) { context.Reject(Errors.AccessDenied); return; }
@@ -79,16 +89,19 @@ internal sealed partial class ProductAuthorizationProtocol(IdentityPersistenceDb
                 if (registeredClient is null || await clients.GetIdAsync(registeredClient, ct).ConfigureAwait(false) != registration.NativeApplicationId ||
                     await clients.GetClientTypeAsync(registeredClient, ct).ConfigureAwait(false) != registration.ClientType)
                 { context.Reject(Errors.InvalidClient); return; }
-                _ = await continuation.BeginAsync(Http, request, registration.NativeApplicationId, ct).ConfigureAwait(false);
+                if (restoredContinuation is null)
+                    _ = await continuation.BeginAsync(Http, request, registration.NativeApplicationId, ct, interaction).ConfigureAwait(false);
+                else if (!await continuation.ReturnToSignInAsync(restoredContinuation, ct).ConfigureAwait(false))
+                { context.Reject(Errors.LoginRequired); return; }
                 await CommitTransactionAsync(ct).ConfigureAwait(false);
                 Http.Response.Headers.CacheControl = "no-store"; Http.Response.Headers["Referrer-Policy"] = "no-referrer";
                 Http.Response.Redirect("/login"); context.HandleRequest(); return;
             }
             if (restoredContinuation is not null && restoredContinuation.Request.Digest != request.Digest)
             { context.Reject(Errors.InvalidRequest); return; }
-            var caller = StepUpCaller.FromPrincipal(authenticated.Principal, profile.Origin, partitions.Network(Http.Connection.RemoteIpAddress));
+            if (caller is null) { context.Reject(Errors.LoginRequired); return; }
             grant = await application.AuthorizeAsync(caller, request, restoredContinuation?.OperationId ?? "OP-" + Guid.NewGuid().ToString("N"),
-                restoredContinuation?.CorrelationId ?? Guid.NewGuid().ToString("N"), ct).ConfigureAwait(false);
+                restoredContinuation?.CorrelationId ?? Guid.NewGuid().ToString("N"), ct, interaction).ConfigureAwait(false);
         }
         catch (ArgumentException) { context.Reject(Errors.InvalidRequest); return; }
         if (grant is null) { context.Reject(Errors.AccessDenied); return; }
@@ -186,7 +199,7 @@ internal sealed partial class ProductAuthorizationProtocol(IdentityPersistenceDb
         if (remainingCode <= TimeSpan.Zero) throw new InvalidOperationException("Original authorization has expired.");
         var identity = new ClaimsIdentity("Tunner.ProductAuthorization");
         identity.SetClaim(Claims.Subject, value.Subject);
-        identity.SetDestinations(claim => claim.Type == Claims.Subject ? [Destinations.AccessToken, Destinations.IdentityToken] : []);
+        ApplyAuthenticationClaims(identity, value.Lineage.AuthenticationClaims);
         var principal = new ClaimsPrincipal(identity);
         principal.SetAuthorizationId(id).SetScopes(value.Lineage.Request.Scopes).SetResources(value.Lineage.Request.Resources);
         principal.SetAuthorizationCodeLifetime(remainingCode).SetAccessTokenLifetime(value.Policy.AccessTokenLifetime)
@@ -196,6 +209,25 @@ internal sealed partial class ProductAuthorizationProtocol(IdentityPersistenceDb
         return principal;
     }
     private static ImmutableArray<string> Canonical(IEnumerable<string> values) => values.Distinct(StringComparer.Ordinal).Order(StringComparer.Ordinal).ToImmutableArray();
+    private static ProductAuthorizationAuthenticationContext? ReadAuthenticationContext(OpenIddictRequest request)
+    {
+        var prompt = (string?)request.GetParameter("prompt");
+        var acr = (string?)request.GetParameter("acr_values");
+        return prompt is null && acr is null && request.MaxAge is null ? null :
+            new(prompt, request.MaxAge, acr?.Split(' ', StringSplitOptions.RemoveEmptyEntries).ToImmutableArray() ?? []);
+    }
+    private static void ApplyAuthenticationClaims(ClaimsIdentity identity, ProductAuthorizationAuthenticationClaims? claims)
+    {
+        if (claims?.AuthenticationTime is { } at) identity.SetClaim("auth_time", at.ToUnixTimeSeconds());
+        if (claims?.Acr is { Length: > 0 } acr) identity.SetClaim("acr", acr);
+        if (claims is { Amr.Length: > 0 }) identity.SetClaims("amr", claims.Amr);
+        identity.SetDestinations(claim => claim.Type switch
+        {
+            Claims.Subject => [Destinations.AccessToken, Destinations.IdentityToken],
+            "auth_time" or "acr" or "amr" => [Destinations.IdentityToken],
+            _ => []
+        });
+    }
     private void RequireTransaction()
     {
         if (transaction is null || database.Database.CurrentTransaction is null)

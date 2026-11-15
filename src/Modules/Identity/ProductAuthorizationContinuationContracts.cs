@@ -34,5 +34,6 @@ internal sealed record ProductAuthorizationRestoredContinuation(HttpContext Http
     string NativeApplicationId, string OperationId, string CorrelationId, string Origin, DateTimeOffset CreatedAt,
     DateTimeOffset ExpiresAt, string PolicySnapshot, string BindingDigest, string? AccountId, Guid? SessionId)
 {
+    internal ProductAuthorizationInteractionContext? Interaction { get; init; }
     public override string ToString() => nameof(ProductAuthorizationRestoredContinuation);
 }

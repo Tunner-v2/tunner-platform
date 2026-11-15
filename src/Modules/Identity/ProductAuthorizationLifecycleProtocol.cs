@@ -50,7 +50,7 @@ internal sealed partial class ProductAuthorizationProtocol :
         { context.Reject(Errors.InvalidGrant); return; }
         var identity = new ClaimsIdentity("Tunner.ProductAuthorization");
         identity.SetClaim(Claims.Subject, evaluation.Subject);
-        identity.SetDestinations(claim => claim.Type == Claims.Subject ? [Destinations.AccessToken, Destinations.IdentityToken] : []);
+        ApplyAuthenticationClaims(identity, evaluation.Original.AuthenticationClaims);
         context.Principal = new ClaimsPrincipal(identity).SetAuthorizationId(evaluation.Request.NativeState.AuthorizationId)
             .SetScopes(evaluation.Request.RequestedScopes).SetResources(evaluation.Request.RequestedResources)
             .SetAccessTokenLifetime(access - now).SetRefreshTokenLifetime(refresh - now);

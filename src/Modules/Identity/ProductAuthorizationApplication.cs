@@ -7,7 +7,7 @@ using Tunner.Platform.Policies;
 namespace Tunner.Identity.Persistence;
 
 /// <summary>Private Identity owner. Native server processing owns protocol validation, redemption and the outer transaction.</summary>
-internal sealed class ProductAuthorizationApplication(IdentityPersistenceDbContext database, AuthenticationApplication authentication,
+internal sealed partial class ProductAuthorizationApplication(IdentityPersistenceDbContext database, AuthenticationApplication authentication,
     IProductAuthorizationPolicySource policies, IProductAuthorizationRegistrySource registry,
     IProductAuthorizationRelationshipSource relationships, TimeProvider clock)
 {
@@ -25,7 +25,7 @@ internal sealed class ProductAuthorizationApplication(IdentityPersistenceDbConte
     }
 
     internal async Task<ProductAuthorizationGrant?> AuthorizeAsync(StepUpCaller caller, ProductAuthorizationRequest request,
-        string operationId, string correlationId, CancellationToken ct)
+        string operationId, string correlationId, CancellationToken ct, ProductAuthorizationInteractionContext? interaction = null)
     {
         RequireTransaction(); ArgumentNullException.ThrowIfNull(caller); ArgumentNullException.ThrowIfNull(request);
         ArgumentException.ThrowIfNullOrWhiteSpace(operationId); ArgumentException.ThrowIfNullOrWhiteSpace(correlationId);
@@ -33,7 +33,9 @@ internal sealed class ProductAuthorizationApplication(IdentityPersistenceDbConte
         var registration = await registry.RequireCurrentAsync(request, clock.GetUtcNow(), ct).ConfigureAwait(false);
         if (!Registered(request, registration, clock.GetUtcNow())) return null;
         var actor = await authentication.LockProductAuthorizationAsync(caller, AuthorizeOperation, ct).ConfigureAwait(false);
-        if (actor is null || !Assurance(actor, policy, clock.GetUtcNow())) return null;
+        if (actor is null || !await authentication.ProductAuthorizationCurrentAsync(actor, AuthorizeOperation, ct).ConfigureAwait(false)) return null;
+        var evaluation = EvaluateActorInteraction(actor, request, caller.Origin, policy, interaction, clock.GetUtcNow());
+        if (evaluation.Status != ProductAuthorizationInteractionStatus.Satisfied) return null;
         var relationshipRequest = new ProductRelationshipRequest(caller.AccountId, actor.AccountVersion, caller.SessionId,
             request.ProductId, registration.ProductVersion, request.Environment, registration.EnvironmentVersion,
             request.ClientId, registration.ClientVersion, request.Digest, operationId, correlationId);
@@ -49,7 +51,8 @@ internal sealed class ProductAuthorizationApplication(IdentityPersistenceDbConte
             caller.Origin, actor.Session.AuthenticatedAt, actor.Session.AuthenticationMethods, actor.Session.Assurance,
             actor.AuthenticationPolicy.Version, actor.Session.SecurityStampDigest, JsonSerializer.Serialize(actor.SessionUse),
             JsonSerializer.Serialize(actor.ProductAuthorization), policy.Snapshot, registration,
-            relationshipRequest, relationship, operationId, correlationId, at, expires);
+            relationshipRequest, relationship, operationId, correlationId, at, expires)
+        { Interaction = interaction, AuthenticationClaims = evaluation.AuthenticationClaims };
         var grant = new ProductAuthorizationGrant(lineage, policy, actor);
         return await VerifyCurrentAsync(grant, ct).ConfigureAwait(false) ? grant : null;
     }
@@ -61,7 +64,7 @@ internal sealed class ProductAuthorizationApplication(IdentityPersistenceDbConte
         var policy = Policy(original.Origin); original.Request.Require(policy);
         if (policy.Snapshot != original.PolicySnapshot || clock.GetUtcNow() >= original.CodeExpiresAt) return null;
         var actor = await authentication.LockProductAuthorizationAsync(original, RedeemOperation, ct).ConfigureAwait(false);
-        if (actor is null || !OriginalActor(original, actor) || !Assurance(actor, policy, clock.GetUtcNow())) return null;
+        if (actor is null || !OriginalActor(original, actor) || !InteractionCurrent(original, actor, policy, clock.GetUtcNow())) return null;
         var grant = new ProductAuthorizationGrant(original, policy, actor) { IsRedemption = true };
         return await VerifyCurrentAsync(grant, ct).ConfigureAwait(false) ? grant : null;
     }
@@ -84,7 +87,7 @@ internal sealed class ProductAuthorizationApplication(IdentityPersistenceDbConte
                 grant.IsRedemption ? RedeemOperation : AuthorizeOperation, ct).ConfigureAwait(false)) return false;
         var at = clock.GetUtcNow(); var finalPolicy = Policy(original.Origin);
         return finalPolicy.Snapshot == original.PolicySnapshot && at >= original.AuthorizedAt && at < original.CodeExpiresAt &&
-            Assurance(grant.Actor, finalPolicy, at) && registration.EffectiveInterval.Contains(at) &&
+            InteractionCurrent(original, grant.Actor, finalPolicy, at) && registration.EffectiveInterval.Contains(at) &&
             relationship.EffectiveInterval.Contains(at) && OriginalActor(original, grant.Actor);
     }
 

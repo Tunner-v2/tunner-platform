@@ -135,6 +135,9 @@ public static class ProductAuthorizationServer
                 value.Resources.Clear(); value.Resources.UnionWith(profile.SupportedResources.Select(resource => new Uri(resource)));
                 value.CodeChallengeMethods.Clear(); value.CodeChallengeMethods.Add(OpenIddictConstants.CodeChallengeMethods.Sha256);
                 value.ResponseModes.Clear(); value.ResponseModes.Add(OpenIddictConstants.ResponseModes.FormPost);
+                value.PromptValues.Clear();
+                value.PromptValues.Add(OpenIddictConstants.PromptValues.None);
+                value.PromptValues.Add(OpenIddictConstants.PromptValues.Login);
             });
             options.UseAspNetCore(); // No passthrough and no transport/permission/storage bypass.
             if (profile.EnableContinuation)

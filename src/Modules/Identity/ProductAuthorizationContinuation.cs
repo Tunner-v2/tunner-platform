@@ -32,7 +32,11 @@ internal sealed class ProductAuthorizationContinuation(IdentityPersistenceDbCont
     { public override string ToString() => nameof(Pointer); }
     private sealed record Material(ProductAuthorizationRequest Request, string NativeApplicationId, string OperationId,
         string CorrelationId, string Origin, DateTimeOffset CreatedAt, DateTimeOffset ExpiresAt, string PolicySnapshot, string BindingDigest)
-    { public override string ToString() => nameof(Material); }
+    {
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public ProductAuthorizationInteractionContext? Interaction { get; init; }
+        public override string ToString() => nameof(Material);
+    }
     private sealed record Metadata(string Origin, string MaterialDigest, string BindingDigest, string OperationId, string CorrelationId)
     { public override string ToString() => nameof(Metadata); }
     private sealed record Consumed(string AccountId, Guid SessionId, string OperationId, string RequestDigest)
@@ -40,7 +44,7 @@ internal sealed class ProductAuthorizationContinuation(IdentityPersistenceDbCont
     private sealed record Read(Pointer Pointer, Material Material, object Token);
 
     internal async Task<ProductAuthorizationRestoredContinuation> BeginAsync(HttpContext http, ProductAuthorizationRequest request,
-        string qualifiedNativeApplicationId, CancellationToken ct)
+        string qualifiedNativeApplicationId, CancellationToken ct, ProductAuthorizationInteractionContext? interaction = null)
     {
         RequireTransaction(); RequireOrigin(http); ArgumentNullException.ThrowIfNull(request);
         ArgumentException.ThrowIfNullOrWhiteSpace(qualifiedNativeApplicationId);
@@ -50,8 +54,11 @@ internal sealed class ProductAuthorizationContinuation(IdentityPersistenceDbCont
         expires = IdentityPersistenceTime.Normalize(expires);
         if (expires <= at) throw new InvalidOperationException("A current continuation lifetime is required.");
         var secret = Convert.ToHexString(RandomNumberGenerator.GetBytes(32));
+        if (interaction is not null && (interaction.RequestDigest != request.Digest || interaction.Origin != profile.Origin))
+            throw new ArgumentException("The original authentication context must bind this exact Product request.");
         var material = new Material(request, qualifiedNativeApplicationId, "OP-" + Guid.NewGuid().ToString("N"),
-            Guid.NewGuid().ToString("N"), profile.Origin, at, expires, policy.Snapshot, AuthenticationIdentity.Digest(secret));
+            Guid.NewGuid().ToString("N"), profile.Origin, at, expires, policy.Snapshot, AuthenticationIdentity.Digest(secret))
+        { Interaction = interaction };
         var serialized = JsonSerializer.Serialize(material, Json);
         if (Encoding.UTF8.GetByteCount(serialized) > policy.MaximumRequestBytes)
             throw new ArgumentException("The original Product authorization request exceeds its qualified budget.");
@@ -97,6 +104,20 @@ internal sealed class ProductAuthorizationContinuation(IdentityPersistenceDbCont
         var actual = await http.AuthenticateAsync(AuthenticationIdentity.Scheme).ConfigureAwait(false);
         return actual.Succeeded && actual.Principal is not null && Actor(actual.Principal, out var account, out var session) &&
             read.Pointer.AccountId == account && read.Pointer.SessionId == session ? Saved(http, read.Pointer, read.Material) : null;
+    }
+
+    internal async Task<bool> ReturnToSignInAsync(ProductAuthorizationRestoredContinuation saved, CancellationToken ct)
+    {
+        RequireTransaction();
+        var read = await ReadAsync(saved.Http, ct).ConfigureAwait(false);
+        if (read is null || !SameSaved(saved, read)) return false;
+        var actual = await saved.Http.AuthenticateAsync(AuthenticationIdentity.Scheme).ConfigureAwait(false);
+        if (!actual.Succeeded || actual.Principal is null || !Actor(actual.Principal, out var account, out var session) ||
+            account != saved.AccountId || session != saved.SessionId) return false;
+        // Reset only the completed-login binding, preserving the immutable original request
+        // and freshness baseline across the required new sign-in.
+        Write(saved.Http, read.Pointer with { Ready = false, AccountId = null, SessionId = null }, Policy(clock.GetUtcNow()));
+        return true;
     }
 
     internal async Task<bool> ConsumeAsync(ProductAuthorizationRestoredContinuation saved, string actualNativeApplicationId, CancellationToken ct)
@@ -221,12 +242,14 @@ internal sealed class ProductAuthorizationContinuation(IdentityPersistenceDbCont
     }
     private static ProductAuthorizationRestoredContinuation Saved(HttpContext http, Pointer pointer, Material material) =>
         new(http, pointer.TokenId, material.Request, material.NativeApplicationId, material.OperationId, material.CorrelationId,
-            material.Origin, material.CreatedAt, material.ExpiresAt, material.PolicySnapshot, material.BindingDigest, pointer.AccountId, pointer.SessionId);
+            material.Origin, material.CreatedAt, material.ExpiresAt, material.PolicySnapshot, material.BindingDigest, pointer.AccountId, pointer.SessionId)
+        { Interaction = material.Interaction };
     private static bool SameSaved(ProductAuthorizationRestoredContinuation saved, Read read) =>
         saved.Request.Digest == read.Material.Request.Digest && saved.NativeApplicationId == read.Material.NativeApplicationId &&
         saved.OperationId == read.Material.OperationId && saved.CorrelationId == read.Material.CorrelationId && saved.Origin == read.Material.Origin &&
         saved.CreatedAt == read.Material.CreatedAt && saved.ExpiresAt == read.Material.ExpiresAt && saved.PolicySnapshot == read.Material.PolicySnapshot &&
-        saved.BindingDigest == read.Material.BindingDigest && saved.AccountId == read.Pointer.AccountId && saved.SessionId == read.Pointer.SessionId;
+        saved.BindingDigest == read.Material.BindingDigest && saved.AccountId == read.Pointer.AccountId && saved.SessionId == read.Pointer.SessionId &&
+        JsonSerializer.Serialize(saved.Interaction, Json) == JsonSerializer.Serialize(read.Material.Interaction, Json);
     private static CookieOptions Cookie(TimeSpan remaining) => new() { Path = "/", HttpOnly = true, Secure = true, SameSite = SameSiteMode.Strict, MaxAge = remaining };
     private void RequireTransaction()
     {

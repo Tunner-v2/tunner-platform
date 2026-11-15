@@ -5,7 +5,18 @@
   "result": "PENDING",
   "tested_commit_sha": null,
   "validated_commit_sha": null,
-  "phase": "CONTINUATION_IMPLEMENTED_RUNTIME_QUALIFICATION_PENDING",
+  "phase": "CONTINUATION_INCREMENT_PASSED_OIDC_AND_APPROVED_PRODUCT_UI_IN_PROGRESS",
+  "continuation_increment": {
+    "source_commit_sha": "25d060b06559b3c7e305bb664fc8043fa5c02382",
+    "result": "PASS_13_DISTINCT_CONTINUATION_CASES_OVER_TWO_RUNS",
+    "runs": [
+      {"run_id":"a2dd8098538f472796e7e503e3ffb23b","executed":12,"passed":12,"failed":0,"not_executed":0,"test_exit_code":0,"wrapper_accepted":false,"reason":"Filter unintentionally excluded RestoredRequestRerunsCurrentNativeClientPermissions; expected13 count guard correctly failed. Retained unchanged, not claimed as a13-case successful invocation."},
+      {"run_id":"61d3b9299bdd4e8bbf56ebc5c4fc7d23","executed":1,"passed":1,"failed":0,"not_executed":0,"test_exit_code":0,"wrapper_accepted":true,"reason":"Only the missing native-client revalidation case executed."}
+    ],
+    "verification": "Actual raw TRX union inspected:13 distinct names,13 Passed, no duplicates/skips/failures. Both runs no timeout, owned containers0 and borrowed browser DB preserved. Initial real roundtrip also passed1/1 at23432fc in run0d46b6bc9364445a90fc3e2f241360a5; it is not added to the distinct count.",
+    "browser": {"source_commit_sha":"25d060b06559b3c7e305bb664fc8043fa5c02382","result":"PASS","executed":8,"passed":8,"failed":0,"skipped":0,"flaky":0,"duration_milliseconds":14355.293,"raw_ref":"web/test-results/authentication/results.json","boundary":"Real Edge browser with mocked BFF responses; native HTTPS/PG journey is separate evidence, not one combined live browser-to-native claim."},
+    "limits": "Functional continuation increment only. Requested-control changes applied later require their own execution; explicit Product authorization UI and all-factor/common-proof integration remain incomplete."
+  },
   "integrated_protocol_cohort": {
     "result": "PASS_CODE_AND_LIFECYCLE_INCREMENT_ONLY",
     "source_commit_sha": "d4adb167b10337d460225f4d50d75242b3b1f9c3",
@@ -78,6 +89,8 @@
     "src/Modules/Identity/ProductAuthorizationContinuation.cs",
     "src/Modules/Identity/ProductAuthorizationContinuationContracts.cs",
     "src/Modules/Identity/ProductAuthorizationContinuationProtocol.cs",
+    "src/Modules/Identity/ProductAuthorizationInteractionContracts.cs",
+    "src/Modules/Identity/ProductAuthorizationInteractionApplication.cs",
     "src/Modules/Identity/AuthenticationEndpoints.cs",
     "web/apps/user/authentication.tsx",
     "web/apps/user/product-authorization.continuation.ts",
@@ -103,7 +116,7 @@
   "contract_ref": "docs/contracts/product-authorization-contract.md",
   "scope": "Complete Product authorization and revocation contract integration. First vertical increment is real active-session native authorization-code/PKCE issuance/redemption. Login/registration continuation, assurance, refresh/introspection/revocation, current owner checks and enabled propagation remain required; first happy path cannot close the feature.",
   "boundary": "Explicit qualified issuer/keys/client/registry/Relationship/policy inputs; missing providers deny activation. No production default or Product membership/entitlement/local-session authority. Existing Figma/Drive/FigJam remain read-only.",
-  "actual_feature_tests": ["first_increment", "focused_code_cohort", "integrated_protocol_cohort"],
+  "actual_feature_tests": ["first_increment", "focused_code_cohort", "integrated_protocol_cohort", "continuation_increment"],
   "product_acceptance": "NOT_REQUESTED_OR_GRANTED",
   "exact_next_action": "Complete policy-qualified refresh/introspection/revocation and continuation/requested-assurance integration, then enabled propagation, shared compatibility and final acceptance gates."
 }

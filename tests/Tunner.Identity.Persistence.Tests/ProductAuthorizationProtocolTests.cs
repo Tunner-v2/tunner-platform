@@ -35,6 +35,8 @@ public sealed class ProductAuthorizationProtocolTests(SessionListingPostgresFixt
     private const string Redirect = "https://product.protocol.example.test/callback";
     private const string Resource = "https://product.protocol.example.test/api";
     private const string OtherResource = "https://other.protocol.example.test/api";
+    private const string PasswordAcr = "urn:fixture:product:acr:password";
+    private const string StrongAcr = "urn:fixture:product:acr:strong";
     private static readonly ImmutableArray<string> Scopes = ["openid", "product.read"];
     private static readonly ImmutableArray<string> Resources = [Resource];
 
@@ -53,6 +55,7 @@ public sealed class ProductAuthorizationProtocolTests(SessionListingPostgresFixt
         internal bool LifecycleEnabled { get; init; }
         internal bool ContinuationPolicyAvailable { get; set; } = true;
         internal string ContinuationPolicyVersion { get; set; } = "fixture-continuation-policy-v1";
+        internal ProductAuthorizationInteractionQualification? InteractionQualification { get; set; }
         internal ImmutableArray<string> GrantedScopes => LifecycleEnabled ? ["offline_access", "openid", "product.read"] : Scopes;
         internal DateTimeOffset? IssuancePolicyExpiresAt { get; set; }
         internal ProductAuthorizationArtifactEffect RevocationEffect { get; set; } = ProductAuthorizationArtifactEffect.PresentedToken;
@@ -93,7 +96,8 @@ public sealed class ProductAuthorizationProtocolTests(SessionListingPostgresFixt
                 ? new EffectivePolicyInterval(interval.From, true, expires, false) : interval, null, [Evidence]), Origin, Evidence,
             "fixture-product-processing", "fixture-product-retention", "RESTRICTED_SECURITY", ["pwd"],
             ["fixture-password-assurance"], TimeSpan.FromMinutes(30), TimeSpan.FromMinutes(2), TimeSpan.FromMinutes(5),
-            TimeSpan.FromMinutes(5), LifecycleEnabled, LifecycleEnabled ? TimeSpan.FromHours(1) : null, 256);
+            TimeSpan.FromMinutes(5), LifecycleEnabled, LifecycleEnabled ? TimeSpan.FromHours(1) : null, 256)
+            { InteractionQualification = InteractionQualification };
         public ValueTask<ProductAuthorizationRegistration> RequireCurrentAsync(ProductAuthorizationRequest request, DateTimeOffset at, CancellationToken ct)
         {
             if (!RegistryAvailable) throw new InvalidOperationException("Synthetic Registry owner unavailable.");
@@ -196,7 +200,7 @@ public sealed class ProductAuthorizationProtocolTests(SessionListingPostgresFixt
         public override string ToString() => nameof(Scenario);
     }
     private async Task<Scenario> Create(bool nativeResourcePermission = true, bool broaderNativeQualification = false, bool lifecycle = false,
-        bool continuation = false, bool anonymous = false)
+        bool continuation = false, bool anonymous = false, bool interaction = false)
     {
         var database = await fixture.CreateDatabaseAsync();
         await using (var setup = database.Context())
@@ -205,7 +209,10 @@ public sealed class ProductAuthorizationProtocolTests(SessionListingPostgresFixt
                     request_digest text PRIMARY KEY, relationship_id text NOT NULL, subject text NOT NULL,
                     version bigint NOT NULL CHECK(version>0), committed_at timestamp with time zone NOT NULL)
                 """);
-        var owners = new Owners(database) { LifecycleEnabled = lifecycle }; var signing = RSA.Create(2048); var encryption = RSA.Create(2048);
+        var owners = new Owners(database) { LifecycleEnabled = lifecycle, InteractionQualification = interaction ? new(true,
+            [new(PasswordAcr, "fixture-password-assurance", "pwd", PasswordAcr, ["pwd"]),
+             new(StrongAcr, "fixture-strong-assurance", "hwk", StrongAcr, ["hwk"])]) : null };
+        var signing = RSA.Create(2048); var encryption = RSA.Create(2048);
         var signingKey = new RsaSecurityKey(signing) { KeyId = "fixture-distinct-signing" };
         var encryptionKey = new RsaSecurityKey(encryption) { KeyId = "fixture-distinct-encryption" };
         var host = await Start(database, services =>
@@ -286,11 +293,11 @@ public sealed class ProductAuthorizationProtocolTests(SessionListingPostgresFixt
     }
     private sealed record NativeCode(string Value, string Verifier, string Nonce)
     { public override string ToString() => nameof(NativeCode); }
-    private static async Task<NativeCode> Authorize(Scenario test)
+    private static async Task<NativeCode> Authorize(Scenario test, IReadOnlyDictionary<string, string>? controls = null)
     {
         var verifier = Base64UrlEncoder.Encode(RandomNumberGenerator.GetBytes(32));
         var state = Guid.NewGuid().ToString("N"); var nonce = Guid.NewGuid().ToString("N");
-        using var response = await RequestAuthorization(test, verifier, state, nonce);
+        using var response = await RequestAuthorization(test, verifier, state, nonce, controls);
         if (response.StatusCode != HttpStatusCode.OK) Assert.Fail(await NativeErrorDiagnostic(response, test.Owners));
         Assert.Equal(HttpStatusCode.OK, response.StatusCode); Assert.Equal("text/html", response.Content.Headers.ContentType?.MediaType);
         var form = ReadNativeForm(await response.Content.ReadAsStringAsync()); Assert.Equal(Redirect, form.Action);
@@ -393,11 +400,12 @@ public sealed class ProductAuthorizationProtocolTests(SessionListingPostgresFixt
     private sealed record PendingRequest(string Verifier, string State, string Nonce, string TokenId, string OperationId, string CorrelationId)
     { public override string ToString() => nameof(PendingRequest); }
 
-    private static async Task<PendingRequest> BeginContinuation(Scenario test)
+    private static async Task<PendingRequest> BeginContinuation(Scenario test, IReadOnlyDictionary<string, string>? controls = null,
+        bool existingSession = false)
     {
         var verifier = Base64UrlEncoder.Encode(RandomNumberGenerator.GetBytes(32));
         var state = Guid.NewGuid().ToString("N"); var nonce = Guid.NewGuid().ToString("N");
-        using var response = await RequestAuthorization(test, verifier, state, nonce);
+        using var response = await RequestAuthorization(test, verifier, state, nonce, controls);
         Assert.Equal(HttpStatusCode.Found, response.StatusCode);
         Assert.Equal("/login", response.Headers.Location?.OriginalString);
         Assert.True(response.Headers.CacheControl?.NoStore == true);
@@ -427,7 +435,8 @@ public sealed class ProductAuthorizationProtocolTests(SessionListingPostgresFixt
         }
         await AssertEffects(test, 0, verifier, state, nonce);
         await using var read = test.Database.Context();
-        Assert.Empty(await read.Set<AuthenticationSessionRow>().ToArrayAsync());
+        if (existingSession) Assert.Single(await read.Set<AuthenticationSessionRow>().ToArrayAsync());
+        else Assert.Empty(await read.Set<AuthenticationSessionRow>().ToArrayAsync());
         return Assert.Single(pending);
     }
 
@@ -472,6 +481,192 @@ public sealed class ProductAuthorizationProtocolTests(SessionListingPostgresFixt
         await using var scope = test.Host.Services.CreateAsyncScope(); var manager = scope.ServiceProvider.GetRequiredService<IOpenIddictTokenManager>();
         var token = await manager.FindByIdAsync(pending.TokenId); Assert.NotNull(token);
         Assert.Equal(status, await manager.GetStatusAsync(token!));
+    }
+
+    private static async Task AssertInteractionClaims(Scenario test, string identity, DateTimeOffset authenticatedAt, string? acr = PasswordAcr)
+    {
+        var validated = await new JsonWebTokenHandler { MapInboundClaims = false }.ValidateTokenAsync(identity, new TokenValidationParameters
+        {
+            ValidIssuer = new Uri(Origin).AbsoluteUri, ValidAudience = test.Owners.ClientId, IssuerSigningKey = test.SigningKey,
+            TokenDecryptionKey = test.EncryptionKey, ValidateLifetime = true, ClockSkew = TimeSpan.Zero
+        });
+        Assert.True(validated.IsValid, validated.Exception?.GetType().Name ?? "Native artifact validation failed.");
+        Assert.True(validated.ClaimsIdentity.FindFirst("auth_time")?.Value == authenticatedAt.ToUnixTimeSeconds().ToString(CultureInfo.InvariantCulture),
+            "Authentication time must remain the actual original authentication instant.");
+        Assert.True(validated.ClaimsIdentity.FindFirst("acr")?.Value == acr, "Only the exact qualified actual-session ACR may be disclosed.");
+        Assert.True(validated.ClaimsIdentity.Claims.Where(claim => claim.Type == "amr").Select(claim => claim.Value).SequenceEqual(["pwd"]),
+            "Issued methods must use the exact explicit actual-session mapping.");
+    }
+
+    private static async Task AssertNoInteractionRelationship(Scenario test)
+    {
+        await AssertEffects(test, 0);
+        await using var read = test.Database.Context();
+        Assert.Equal(0, await read.Database.SqlQuery<int>($"SELECT count(*)::integer AS \"Value\" FROM public.product_authorization_relationship_fixture").SingleAsync());
+    }
+
+    [Fact]
+    public async Task InteractionMappedActualPasswordSessionDisclosesOnlyQualifiedIdentityClaims()
+    {
+        await using var test = await Create(interaction: true);
+        var session = await ReadSourceSession(test); test.Host.Clock.Advance(TimeSpan.FromSeconds(10));
+        var code = await Authorize(test, new Dictionary<string, string> { ["acr_values"] = PasswordAcr });
+        using var response = await Redeem(test, code); Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        var json = await response.Content.ReadFromJsonAsync<JsonElement>();
+        await AssertInteractionClaims(test, json.GetProperty("id_token").GetString()!, session.AuthenticatedAt);
+        await using var read = test.Database.Context();
+        var issued = await read.Set<OutboxMessage>().SingleAsync(message => message.EventType == "ProductAuthorizationGranted");
+        await using var scope = test.Host.Services.CreateAsyncScope(); var manager = scope.ServiceProvider.GetRequiredService<IOpenIddictAuthorizationManager>();
+        var authorization = await manager.FindByIdAsync(issued.Subject); Assert.NotNull(authorization);
+        var lineage = ProductAuthorizationApplication.ReadLineage((await manager.GetPropertiesAsync(authorization!))[ProductAuthorizationApplication.LineageProperty]);
+        Assert.NotNull(lineage); Assert.Equal(session.AuthenticatedAt, lineage!.AuthenticationClaims!.AuthenticationTime);
+        Assert.Equal(session.SessionId, lineage.Interaction!.OriginalSessionId);
+        Assert.True(lineage.Request.AuthenticationContext!.RequestedAcrValues.SequenceEqual([PasswordAcr]));
+    }
+
+    [Theory]
+    [InlineData("urn:fixture:product:acr:unsupported", "access_denied")]
+    [InlineData(StrongAcr, "interaction_required")]
+    public async Task InteractionUnsupportedOrUnmetAcrNeverActivatesRelationship(string requestedAcr, string error)
+    {
+        await using var test = await Create(continuation: true, interaction: true);
+        using var response = await RequestAuthorization(test, overrides: new Dictionary<string, string> { ["acr_values"] = requestedAcr });
+        await AssertRejected(response, error, HttpStatusCode.OK);
+        Assert.Null(response.Headers.Location); await AssertNoRequestTokens(test); await AssertNoInteractionRelationship(test);
+    }
+
+    [Fact]
+    public async Task InteractionMaxAgeRequiresExplicitAuthenticationTimeDisclosureQualification()
+    {
+        await using var test = await Create(continuation: true, interaction: true);
+        test.Owners.InteractionQualification = test.Owners.InteractionQualification! with { EmitAuthenticationTime = false };
+        using var response = await RequestAuthorization(test, overrides: new Dictionary<string, string> { ["max_age"] = "60" });
+        await AssertRejected(response, "access_denied", HttpStatusCode.OK);
+        await AssertNoRequestTokens(test); await AssertNoInteractionRelationship(test);
+    }
+
+    [Theory]
+    [InlineData("StaleMaxAge")]
+    [InlineData("PromptLogin")]
+    [InlineData("ZeroMaxAge")]
+    public async Task InteractionForcedFreshRequestRequiresNewActualSessionAndPreservesOriginalContext(string control)
+    {
+        await using var test = await Create(continuation: true, interaction: true);
+        var original = await ReadSourceSession(test);
+        var controls = new Dictionary<string, string> { ["acr_values"] = PasswordAcr };
+        if (control == "PromptLogin") controls["prompt"] = "login";
+        else controls["max_age"] = control == "ZeroMaxAge" ? "0" : "1";
+        if (control == "StaleMaxAge") test.Host.Clock.Advance(TimeSpan.FromSeconds(2));
+        var receivedAt = test.Host.Clock.GetUtcNow();
+        var pending = await BeginContinuation(test, controls, existingSession: true);
+        await PrepareContinuation(test, await SessionContinuation(test, pending: true));
+        using (var oldSession = await test.Host.Get(AuthorizationPath, test.Cookies))
+        {
+            Assert.Equal(HttpStatusCode.Found, oldSession.StatusCode); Assert.Equal("/login", oldSession.Headers.Location?.OriginalString);
+            test.Cookies = Merge(test.Cookies, oldSession);
+        }
+        await AssertPendingStatus(test, pending, OpenIddictConstants.Statuses.Valid); await AssertNoInteractionRelationship(test);
+        // The owner clock remains unchanged: a new actual session ID is required even at the same instant.
+        await PrepareContinuation(test, await SignInContinuationBrowser(test));
+        using var response = await test.Host.Get(AuthorizationPath, test.Cookies);
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        var form = ReadNativeForm(await response.Content.ReadAsStringAsync()); Assert.Equal(Redirect, form.Action);
+        Assert.True(form.Values.GetValueOrDefault("state") == pending.State);
+        Assert.True(form.Values.TryGetValue("code", out var code) && !string.IsNullOrWhiteSpace(code));
+        await using var read = test.Database.Context();
+        var current = await read.Set<AuthenticationSessionRow>().SingleAsync(session => session.State == "ACTIVE");
+        Assert.NotEqual(original.SessionId, current.SessionId); Assert.Equal(receivedAt.ToUnixTimeSeconds(), current.AuthenticatedAt.ToUnixTimeSeconds());
+        var issued = await read.Set<OutboxMessage>().SingleAsync(message => message.EventType == "ProductAuthorizationGranted");
+        Assert.Equal(pending.OperationId, issued.OperationId); Assert.Equal(pending.CorrelationId, issued.CorrelationId);
+        await using (var scope = test.Host.Services.CreateAsyncScope())
+        {
+            var manager = scope.ServiceProvider.GetRequiredService<IOpenIddictAuthorizationManager>();
+            var authorization = await manager.FindByIdAsync(issued.Subject); Assert.NotNull(authorization);
+            var lineage = ProductAuthorizationApplication.ReadLineage((await manager.GetPropertiesAsync(authorization!))[ProductAuthorizationApplication.LineageProperty]);
+            Assert.NotNull(lineage); Assert.Equal(original.SessionId, lineage!.Interaction!.OriginalSessionId);
+            Assert.Equal(receivedAt.ToUnixTimeSeconds(), lineage.Interaction.ReceivedAt.ToUnixTimeSeconds());
+            Assert.Equal(current.SessionId, lineage.SessionId);
+            Assert.True(lineage.Request.AuthenticationContext!.RequestedAcrValues.SequenceEqual([PasswordAcr]));
+            Assert.True(lineage.Request.AuthenticationContext.Prompt == controls.GetValueOrDefault("prompt"));
+            Assert.True(lineage.Request.AuthenticationContext.MaxAgeSeconds == (controls.TryGetValue("max_age", out var age) ? (long?)long.Parse(age, CultureInfo.InvariantCulture) : null));
+            var tokenManager = scope.ServiceProvider.GetRequiredService<IOpenIddictTokenManager>(); var requests = 0;
+            await foreach (var token in tokenManager.FindByApplicationIdAsync(test.Owners.NativeApplicationId))
+                if (await tokenManager.GetTypeAsync(token) == OpenIddictConstants.TokenTypeIdentifiers.Private.RequestToken)
+                { requests++; Assert.True(await tokenManager.GetIdAsync(token) == pending.TokenId); }
+            Assert.Equal(1, requests);
+        }
+        await AssertPendingStatus(test, pending, OpenIddictConstants.Statuses.Redeemed);
+        using var redeemed = await Redeem(test, new(code!, pending.Verifier, pending.Nonce)); Assert.Equal(HttpStatusCode.OK, redeemed.StatusCode);
+        await AssertInteractionClaims(test, (await redeemed.Content.ReadFromJsonAsync<JsonElement>()).GetProperty("id_token").GetString()!, current.AuthenticatedAt);
+    }
+
+    [Fact]
+    public async Task InteractionPromptNoneUnmetFreshnessOrAssuranceNeverCreatesUiContinuation()
+    {
+        await using var test = await Create(continuation: true, interaction: true);
+        foreach (var assurance in new[] { false, true })
+        {
+            var controls = new Dictionary<string, string> { ["prompt"] = "none" };
+            if (assurance) controls["acr_values"] = StrongAcr; else controls["max_age"] = "0";
+            using var response = await RequestAuthorization(test, overrides: controls);
+            await AssertRejected(response, assurance ? "interaction_required" : "login_required", HttpStatusCode.OK);
+            Assert.Null(response.Headers.Location);
+            Assert.Null(CookieValue(Merge(test.Cookies, response), ProductAuthorizationContinuation.CookieName));
+        }
+        await AssertNoRequestTokens(test); await AssertNoInteractionRelationship(test);
+    }
+
+    [Theory]
+    [InlineData("Policy")]
+    [InlineData("Factor")]
+    public async Task InteractionPolicyOrCurrentFactorDriftDeniesBeforeGrant(string drift)
+    {
+        await using var test = await Create(continuation: true, anonymous: true, interaction: true);
+        var pending = await BeginContinuation(test, new Dictionary<string, string> { ["acr_values"] = PasswordAcr });
+        await PrepareContinuation(test, await SignInContinuationBrowser(test));
+        if (drift == "Policy") test.Owners.PolicyVersion = "fixture-product-policy-v2";
+        else
+        {
+            await using var write = test.Database.Context(); var user = await write.Users.SingleAsync(user => user.AccountId == test.AccountId);
+            user.SecurityStamp = Guid.NewGuid().ToString("N"); await write.SaveChangesAsync();
+        }
+        using var response = await test.Host.Get(AuthorizationPath, test.Cookies);
+        await AssertRejected(response, drift == "Policy" ? "access_denied" : "invalid_request",
+            drift == "Policy" ? HttpStatusCode.OK : HttpStatusCode.BadRequest);
+        await AssertPendingStatus(test, pending, OpenIddictConstants.Statuses.Valid); await AssertNoInteractionRelationship(test);
+    }
+
+    [Fact]
+    public async Task InteractionAuthenticationTimeRemainsActualThroughCodeAndRefresh()
+    {
+        await using var test = await Create(lifecycle: true, interaction: true); var original = await ReadSourceSession(test);
+        test.Host.Clock.Advance(TimeSpan.FromSeconds(10));
+        var code = await Authorize(test, new Dictionary<string, string> { ["max_age"] = "120", ["acr_values"] = PasswordAcr });
+        test.Host.Clock.Advance(TimeSpan.FromSeconds(10));
+        string refresh;
+        using (var redeemed = await Redeem(test, code))
+        {
+            Assert.Equal(HttpStatusCode.OK, redeemed.StatusCode); var json = await redeemed.Content.ReadFromJsonAsync<JsonElement>();
+            await AssertInteractionClaims(test, json.GetProperty("id_token").GetString()!, original.AuthenticatedAt);
+            refresh = json.GetProperty("refresh_token").GetString()!;
+        }
+        var beforeRefresh = await ReadSourceSession(test);
+        Assert.Equal(original.AuthenticatedAt, beforeRefresh.AuthenticatedAt);
+        test.Host.Clock.Advance(TimeSpan.FromSeconds(10));
+        using var response = await Refresh(test, refresh); Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        var refreshed = await response.Content.ReadFromJsonAsync<JsonElement>();
+        await AssertInteractionClaims(test, refreshed.GetProperty("id_token").GetString()!, original.AuthenticatedAt);
+        await AssertSourceSessionUnchanged(test, beforeRefresh);
+    }
+
+    [Fact]
+    public async Task InteractionUnsupportedEssentialClaimsAreExplicitlyRejectedBeforeRelationship()
+    {
+        await using var test = await Create(continuation: true, interaction: true);
+        using var response = await RequestAuthorization(test, overrides: new Dictionary<string, string>
+            { ["claims"] = "{\"id_token\":{\"acr\":{\"essential\":true,\"values\":[\"urn:fixture:product:acr:strong\"]}}}" });
+        await AssertRejected(response, "interaction_required", HttpStatusCode.OK);
+        await AssertNoRequestTokens(test); await AssertNoInteractionRelationship(test);
     }
 
     [Fact]

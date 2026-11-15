@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "scope_id": "TUN-P2-014",
+  "recorded_at": "2026-11-15T18:42:06Z",
+  "purpose": "AMD-0005 bounded authority resolution before the Product authorization visual adaptation request; reuse verified authority rather than invent business scope.",
+  "verified_authority_reused": "Native P2-014 context CURRENT on 2026-11-15T13:35:37Z; current relevant mirrors and actual inventory reread for this increment. No evidence of authority change; no external authority edits.",
+  "sources": [
+    "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md sections7-9",
+    "docs/authority/current/development/31_UI_UX_Screen_and_Control_Center_Requirements_Matrix.md U-AUTH-01/U-AUTH-08",
+    "docs/authority/current/development/32_Domain_API_Event_Data_and_Policy_Contract_Catalog.md governed content",
+    "docs/authority/baselines/1.6.0/decisions/ADR-0005_Browser_BFF_and_Token_Security.md",
+    "docs/authority/baselines/1.6.0/decisions/ADR-0006_Identity_ASPNET_Identity_OpenIddict.md",
+    "docs/contracts/product-authorization-contract.md",
+    "docs/contracts/ui-inventory.json",
+    "governance/evidence/TUN-P2-005-VISUAL-CONSENT-20261021.json"
+  ],
+  "flows": "Reused verified FigJam39 node88:6723 Product-origin qualification and41 node88:6729 ownership/revocation; documentation already requires requested assurance and qualified authorization. No new business decision.",
+  "design_read": "Read-only Figma session bcaf5ac3-2526-4c85-9932-6ee3dd660ec6: full node99:411 context and screenshot; bounded Product/Authorization/OAuth/consent frame-name search plus account-center-product-access98:722 inspection. No directly matching full request-specific Allow/Deny review found in that bounded search; no universal absence claim.",
+  "design_evidence_ref": "artifacts/p2-014-authorization-20261115/product-ui-review/figma-frame-discovery.json",
+  "history_resolution": "Existing consent/approval search found no prior U-AUTH-08/Product review approval. P2-005 permits unavailable-status hiding and shared accessible Login patterns; it does not supply this missing full authorization composition.",
+  "conclusion": "FRD/Doc31 already require the functionality. Existing99:411 supplies reusable Product-origin composition; real credential intake and full review need bounded material adaptations under AMD-0008. Owner approved014-V01–V03; actual UI implementation/acceptance remains pending."
+}

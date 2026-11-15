@@ -29,5 +29,12 @@ internal sealed partial class ProductAuthorizationProtocol : IOpenIddictServerHa
             [Parameters.Resource] = new OpenIddictParameter(saved.Resources.Select(value => (string?)value).ToImmutableArray()),
             ["product_id"] = saved.ProductId, ["environment"] = saved.Environment
         };
+        if (saved.AuthenticationContext is { } controls)
+        {
+            context.Transaction.Request.Prompt = controls.Prompt;
+            context.Transaction.Request.MaxAge = controls.MaxAgeSeconds;
+            if (controls.RequestedAcrValues.Length > 0)
+                context.Transaction.Request.AcrValues = string.Join(' ', controls.RequestedAcrValues);
+        }
     }
 }
