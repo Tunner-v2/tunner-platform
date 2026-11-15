@@ -207,7 +207,10 @@ public sealed class DeviceHttpTests(SessionListingPostgresFixture fixture) : ICl
         await using var test = await Create(); var draft = await Options(test); var device = await Device(test);
         using var result = await test.Host.Post(Root + "/prepare", Confirm(draft, device), kind == "anonymous" ? null : draft.Cookies,
             kind == "csrf" ? null : draft.Csrf, kind == "origin" ? "https://other.example.test" : Origin);
-        Assert.True(result.StatusCode is HttpStatusCode.Forbidden or HttpStatusCode.Unauthorized); await NoRemoval(test, 0);
+        // The shared BFF rejects missing CSRF headers before the Device endpoint with its established 400 contract.
+        Assert.Equal(kind == "csrf" ? HttpStatusCode.BadRequest : kind == "anonymous" ? HttpStatusCode.Unauthorized : HttpStatusCode.Forbidden, result.StatusCode);
+        if (kind == "csrf") Assert.Equal("VALIDATION_ERROR", (await result.Content.ReadFromJsonAsync<JsonElement>()).GetProperty("error_code").GetString());
+        await NoRemoval(test, 0);
     }
 
     [Theory]
@@ -281,13 +284,17 @@ public sealed class DeviceHttpTests(SessionListingPostgresFixture fixture) : ICl
     {
         await using var test = await Create(); var original = await Prepare(test); var proof = await ProofOptions(test, original);
         var accessor = test.Host.Services.GetRequiredService<IHttpContextAccessor>();
+        var changedAtFinalDecision = false;
         test.Host.Access.BeforeDecision = _ =>
         {
             if (accessor.HttpContext?.RequestServices.GetRequiredService<IdentityPersistenceDbContext>().ChangeTracker.Entries<DeviceOperationRow>().Any(x => x.Entity.State == "COMPLETED") == true)
-            { if (kind == "transport") test.Profile.BudgetVersion = "synthetic-changed"; else test.Profile.PublicationVersion = "synthetic-changed"; }
+            { changedAtFinalDecision = true; if (kind == "transport") test.Profile.BudgetVersion = "synthetic-changed"; else test.Profile.PublicationVersion = "synthetic-changed"; }
         };
         using var response = await test.Host.Post("/authentication/step-up/password", new { requestId = proof.RequestId, password = Password }, proof.Cookies, proof.Csrf);
-        Assert.Equal(HttpStatusCode.Conflict, response.StatusCode); test.Host.Access.BeforeDecision = null;
+        Assert.True(changedAtFinalDecision);
+        Assert.Equal(HttpStatusCode.Forbidden, response.StatusCode);
+        Assert.Equal("STEP_UP_REQUIRED", (await response.Content.ReadFromJsonAsync<JsonElement>()).GetProperty("error_code").GetString());
+        test.Host.Access.BeforeDecision = null;
         await NoRemoval(test, 1); await using var db = test.Database.Context(); Assert.Equal("PENDING", (await db.Set<DeviceOperationRow>().SingleAsync()).State);
         Assert.Equal("ACTIVE", (await db.Set<StepUpProofRow>().SingleAsync()).State);
     }
@@ -398,7 +405,8 @@ public sealed class DeviceHttpTests(SessionListingPostgresFixture fixture) : ICl
             var existing = new StepUpBrowserTests.Presentation().RequirePublished(policy);
             string[] suffixes = ["description", "source", "pending", "unknown", "check", "continue", "cancel", "Google"];
             return new("en", existing.Content.Values.Concat(suffixes.Select(key => new RegistrationPublishedText("stepUp.federation." + key,
-                "synthetic-device", "synthetic-device-v1", "SYNTHETIC-ONLY", "en", "PUBLISHED", "Fixture " + key))));
+                "synthetic-device", "synthetic-device-v1", "SYNTHETIC-ONLY", "en", "PUBLISHED", "Fixture " + key)))
+                .GroupBy(value => value.Key, StringComparer.Ordinal).Select(group => group.Last()));
         }
     }
     private sealed class FederationSecrets : ISecretStore
