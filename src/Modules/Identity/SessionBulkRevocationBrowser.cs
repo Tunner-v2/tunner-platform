@@ -355,7 +355,7 @@ internal sealed class SessionBulkRevocationBrowserService(IdentityPersistenceDbC
         }
     }
     private static IResult View(State state) => Results.Json(new { state.Original.RequestId, operationReference = state.Original.CorrelationId,
-        state.Status, activated = state.Original.Activated, targets = state.Manifest.Targets.Select(x => new
+        state.Status, activated = state.Original.Activated, preparedAt = state.Manifest.DiscoveredAt, targets = state.Manifest.Targets.Select(x => new
             { reference = x.SessionReference, version = x.ExpectedVersion.ToString(CultureInfo.InvariantCulture) }), state.Original.ExpiresAt });
     private static CookieOptions Cookie(TimeSpan remaining) => SessionRevocationOriginalSelection.Cookie(remaining);
     private static IResult Failure(string code) => Problem(code == "AUTHENTICATION_FAILED" ? 401 : 409, code);

@@ -137,6 +137,7 @@ public sealed partial class SessionBulkRevocationHttpTests(SessionListingPostgre
         Assert.Equal("PENDING", json.GetProperty("status").GetString()); Assert.True(json.GetProperty("activated").GetBoolean());
         Assert.Equal(original.View.GetProperty("targets").GetRawText(), json.GetProperty("targets").GetRawText());
         Assert.Equal(original.View.GetProperty("expiresAt").GetString(), json.GetProperty("expiresAt").GetString());
+        Assert.Equal(original.View.GetProperty("preparedAt").GetString(), json.GetProperty("preparedAt").GetString());
         foreach (var header in response.Headers.GetValues("Set-Cookie").Where(x => !x.StartsWith(StepUpBrowserEndpoints.CookieName + "=", StringComparison.Ordinal)))
             Assert.True(Encoding.UTF8.GetByteCount(header) <= test.Profile.MaximumCookie);
         return original with { Cookies = Merge(original.Cookies, response), View = json };
@@ -196,7 +197,9 @@ public sealed partial class SessionBulkRevocationHttpTests(SessionListingPostgre
     [Fact]
     public async Task RepeatedPreviewAndActivationKeepOriginalDataExpiryAndDoNotReissueSelection()
     {
-        await using var test = await Create(); var draft = await Preview(test); test.Host.Clock.Advance(TimeSpan.FromSeconds(2));
+        await using var test = await Create(); var draft = await Preview(test);
+        Assert.Equal(test.Host.Clock.GetUtcNow(), draft.View.GetProperty("preparedAt").GetDateTimeOffset());
+        test.Host.Clock.Advance(TimeSpan.FromSeconds(2));
         using (var replay = await test.Host.Post(Root + "/preview", new { requestId = draft.RequestId }, draft.Cookies, draft.Csrf))
         { Assert.Equal(draft.View.GetRawText(), (await replay.Content.ReadFromJsonAsync<JsonElement>()).GetRawText()); Assert.False(replay.Headers.Contains("Set-Cookie")); }
         var active = await Activate(test, draft);
