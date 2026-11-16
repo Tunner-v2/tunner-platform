@@ -44,7 +44,10 @@ public sealed partial class PasskeyTests
             services.AddSingleton<ITotpMfaRequirementSource>(totp); services.AddSingleton<ITotpPresentationSource>(totp); services.AddSingleton<IStepUpPresentationSource>(totp);
             services.AddSingleton<IAssurancePolicySource>(new TotpAndPasskeyAssurance(totp));
         });
-        host.Clock.SynchronizeToSystem(); var account = await host.SeedAsync(db); using var key = new PasskeyAuthenticator();
+        // The plain fixture's qualified assurance catalog is anchored to TestClock's fixed instant.
+        // TOTP alone uses the existing execution-time assurance adapter and requires the native system clock.
+        if (totp is not null) host.Clock.SynchronizeToSystem();
+        var account = await host.SeedAsync(db); using var key = new PasskeyAuthenticator();
         var cookies = await Login(host); string eventType; Guid ceremonyId = Guid.Empty;
         if (scenario == "step-up")
         {
