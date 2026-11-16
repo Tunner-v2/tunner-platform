@@ -189,6 +189,36 @@ public sealed class RegistrationTests(IdentityPostgresFixture fixture) : IClassF
         Assert.False(await app.DispatchNotificationAsync(row.DeliveryId.Value));
     }
     [Fact]
+    public async Task DeferredVerificationCannotDispatchAfterProofMaterialIsInvalidated()
+    {
+        await using var h=await Harness.CreateAsync(fixture); var caller=Caller();
+        h.Notices.Unavailable=true; var pending=await h.Register(caller,Command());
+        var version=pending.Version;
+        for(var attempt=0;attempt<h.Policy.ProofAttempts;attempt++)
+            version=(await h.VerifyContact(caller,new(pending.OperationId,Guid.NewGuid(),version,"not-a-code"))).Version;
+        await using var db=h.Database.Context();
+        var row=await db.Set<RegistrationOperationRow>().AsNoTracking().SingleAsync();
+        Assert.Null(row.ProtectedCode); Assert.Null(row.ProtectedDigest);
+        Assert.True(row.ExpiresAt>h.Clock.GetUtcNow());
+        h.Notices.Unavailable=false;
+        Assert.False(await h.Application(db).DispatchNotificationAsync(row.DeliveryId!.Value));
+        Assert.Empty(h.Notices.Messages);
+    }
+    [Fact]
+    public async Task DeferredExistingAccountNoticeCanDispatchWithoutVerificationMaterial()
+    {
+        await using var h=await Harness.CreateAsync(fixture); var caller=Caller();
+        var pending=await h.Register(caller,Command());
+        await h.Verify(caller,new(pending.OperationId,Guid.NewGuid(),pending.Version,await h.CodeFor(pending.OperationId)));
+        h.Notices.Unavailable=true; var notice=await h.Register(Caller(),Command());
+        await using var db=h.Database.Context();
+        var row=await db.Set<RegistrationOperationRow>().AsNoTracking().SingleAsync(item=>item.OperationId==notice.OperationId);
+        Assert.Equal(h.Policy.ExistingAccountTemplateVersion,row.TemplateVersion); Assert.Null(row.ProtectedCode);
+        h.Notices.Unavailable=false;
+        Assert.True(await h.Application(db).DispatchNotificationAsync(row.DeliveryId!.Value));
+        Assert.Equal(h.Policy.ExistingAccountTemplateVersion,h.Notices.Messages[row.DeliveryId.Value].TemplateVersion);
+    }
+    [Fact]
     public async Task PasswordPolicyCountsUnicodeCodePointsAndNoticeVersionsMustBeCurrent()
     {
         await using var h=await Harness.CreateAsync(fixture); var caller=Caller();
