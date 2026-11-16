@@ -1,5 +1,6 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using RabbitMQ.Client;
 using Tunner.Platform;
 
@@ -28,6 +29,7 @@ public sealed class RabbitMqOutboxReceiveModule : ITunnerModule
         ArgumentNullException.ThrowIfNull(services);
         if (services.Any(service => service.ServiceType == typeof(RabbitMqOutboxReceiver)))
             throw new InvalidOperationException("An outbox receiver is already configured.");
+        services.AddLogging();
         services.AddSingleton(options);
         services.AddSingleton(provider => new RabbitMqOutboxReceiver(options, factory,
             provider.GetRequiredService<IServiceScopeFactory>(), process, qualify));
@@ -35,8 +37,15 @@ public sealed class RabbitMqOutboxReceiveModule : ITunnerModule
     }
 }
 
-public sealed class RabbitMqOutboxReceiveHostedService(RabbitMqOutboxReceiver receiver, RabbitMqOutboxReceiveOptions options) : BackgroundService
+public sealed class RabbitMqOutboxReceiveHostedService(RabbitMqOutboxReceiver receiver, RabbitMqOutboxReceiveOptions options,
+    ILogger<RabbitMqOutboxReceiveHostedService> logger) : BackgroundService
 {
+    private static readonly Action<ILogger, int, int, int, int, Exception?> BatchObserved = LoggerMessage.Define<int, int, int, int>(
+        LogLevel.Information, new EventId(1601, "OutboxReceiveBatch"),
+        "Outbox receive batch: Received={Received}, Completed={Completed}, Requeued={Requeued}, Rejected={Rejected}.");
+    private static readonly Action<ILogger, Exception?> TransportUnavailable = LoggerMessage.Define(
+        LogLevel.Warning, new EventId(1602, "OutboxReceiveUnavailable"), "Outbox receive unavailable; retry scheduled.");
+
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
         while (!stoppingToken.IsCancellationRequested)
@@ -45,10 +54,11 @@ public sealed class RabbitMqOutboxReceiveHostedService(RabbitMqOutboxReceiver re
             try
             {
                 var batch = await receiver.ReceiveBatchAsync(stoppingToken).ConfigureAwait(false);
+                if (batch.Received > 0) BatchObserved(logger, batch.Received, batch.Completed, batch.Requeued, batch.Rejected, null);
                 if (batch.Requeued > 0) delay = options.RetryDelay;
             }
             catch (OperationCanceledException) when (stoppingToken.IsCancellationRequested) { return; }
-            catch (OutboxReceiveUnavailableException) { delay = options.RetryDelay; }
+            catch (OutboxReceiveUnavailableException) { TransportUnavailable(logger, null); delay = options.RetryDelay; }
             try { await Task.Delay(delay, stoppingToken).ConfigureAwait(false); }
             catch (OperationCanceledException) when (stoppingToken.IsCancellationRequested) { return; }
         }

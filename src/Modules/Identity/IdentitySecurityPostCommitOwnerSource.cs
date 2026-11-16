@@ -94,12 +94,15 @@ public sealed class IdentitySecurityPostCommitOwnerSource(IDbContextFactory<Iden
         }
         if (e.EventType == "IdentitySecurityNotificationRequested")
         {
-            var challenge = await db.Set<RecoveryContactChallengeRow>().AsNoTracking().SingleOrDefaultAsync(x => x.DeliveryId == reference && x.NotificationOutboxEventId == e.EventId, ct).ConfigureAwait(false);
-            if (challenge is null || e.Subject != reference.ToString("N") || version != 1 || e.OperationId != "OP-RECOVERY-CASE-" + challenge.CaseId.ToString("N")) return null;
-            var recovery = await db.Set<RecoveryCaseRow>().AsNoTracking().SingleAsync(x => x.CaseId == challenge.CaseId, ct).ConfigureAwait(false);
-            if (e.CorrelationId != recovery.RequestId.ToString("N")) return null;
+            var evidence = await RecoveryContactPostCommitEvidence.ReadAsync(db, e, ct).ConfigureAwait(false);
+            if (evidence is null) return null;
+            var challenge = evidence.Challenge; var recovery = evidence.Case; var decision = evidence.Decision;
             return TargetOnly(Facts("RECOVERY_CONTACT", reference.ToString("N"), recovery.AccountId, null, recovery.PolicyVersion,
-                challenge.ProcessingReference, challenge.RetentionReference, ("deliveryReference", reference.ToString("N")), ("challengeReference", challenge.ChallengeId.ToString("N"))));
+                challenge.ProcessingReference, challenge.RetentionReference, ("deliveryReference", reference.ToString("N")), ("challengeReference", challenge.ChallengeId.ToString("N")),
+                ("contactReference", decision.ContactReference.ToString("N")), ("notificationContractReference", decision.ContractReference),
+                ("notificationClass", decision.NotificationClass), ("templateVersion", decision.TemplateVersion), ("locale", decision.Locale),
+                ("recipientEvidenceReference", decision.RecipientEvidenceReference), ("routeResolutionReference", decision.RouteResolutionReference),
+                ("notificationEvidenceReference", decision.EvidenceReference)));
         }
         return null;
     }

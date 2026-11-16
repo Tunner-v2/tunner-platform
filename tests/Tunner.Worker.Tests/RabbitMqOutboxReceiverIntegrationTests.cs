@@ -1,4 +1,7 @@
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+using System.Collections.Concurrent;
 using RabbitMQ.Client;
 using Tunner.Database.Outbox;
 using Tunner.Worker.Messaging;
@@ -131,6 +134,52 @@ public sealed class RabbitMqOutboxReceiverIntegrationTests(OutboxReceiveBrokerFi
         Assert.Null(await channel.BasicGetAsync(options.QueueName, autoAck: true));
     }
 
+    [Fact]
+    public async Task RealHostedReceiverLogsRetryCountsAndUnavailableEventWithoutRawCallbackOrTransportMaterial()
+    {
+        var options = RabbitMqOutboxReceiverTests.Options(1);
+        await using var connection = await fixture.ConnectionFactory.CreateConnectionAsync();
+        await using var channel = await connection.CreateChannelAsync();
+        await OutboxReceiveBrokerFixture.QualifyQueueAsync(channel, options, CancellationToken.None);
+        var original = RabbitMqOutboxEnvelopeTests.Message() with
+        { Payload = "{\"secret\":\"SYNTHETIC_PRIVATE_PAYLOAD\"}", Subject = "SYNTHETIC_PRIVATE_HEADER" };
+        _ = await PublishAsync(channel, options, original);
+        using var logs = new CapturedReceiveLogs(); var calls = 0;
+        var services = new ServiceCollection(); services.AddLogging(builder => builder.AddProvider(logs));
+        new RabbitMqOutboxReceiveModule(options, fixture.ConnectionFactory,
+            static (_, _, _) => throw new InvalidOperationException("SYNTHETIC_PRIVATE_CALLBACK"),
+            async (active, configured, cancellationToken) =>
+            {
+                calls++;
+                if (calls > 1) throw new InvalidOperationException("amqp://fixture:SYNTHETIC_PRIVATE_CREDENTIAL@private.invalid");
+                await OutboxReceiveBrokerFixture.QualifyQueueAsync(active, configured, cancellationToken);
+            }).Register(services);
+        await using var provider = services.BuildServiceProvider(new ServiceProviderOptions { ValidateScopes = true });
+        var hosted = Assert.Single(provider.GetServices<IHostedService>());
+        await hosted.StartAsync(CancellationToken.None);
+        try { await logs.Unavailable.Task.WaitAsync(TimeSpan.FromSeconds(5)); }
+        finally
+        {
+            using var shutdown = new CancellationTokenSource(TimeSpan.FromSeconds(5));
+            await hosted.StopAsync(shutdown.Token);
+        }
+        var batch = Assert.Single(logs.Entries, entry => entry.EventId.Id == 1601);
+        Assert.Equal("OutboxReceiveBatch", batch.EventId.Name);
+        Assert.Equal(1, batch.State["Received"]); Assert.Equal(0, batch.State["Completed"]);
+        Assert.Equal(1, batch.State["Requeued"]); Assert.Equal(0, batch.State["Rejected"]);
+        Assert.Contains(logs.Entries, entry => entry.EventId.Id == 1602 && entry.EventId.Name == "OutboxReceiveUnavailable");
+        Assert.All(logs.Entries, entry =>
+        {
+            Assert.Null(entry.Exception);
+            Assert.DoesNotContain("SYNTHETIC_PRIVATE", entry.Text, StringComparison.Ordinal);
+            Assert.DoesNotContain(options.QueueName, entry.Text, StringComparison.Ordinal);
+            Assert.DoesNotContain("amqp://", entry.Text, StringComparison.Ordinal);
+            Assert.All(entry.State.Values, value => Assert.DoesNotContain("SYNTHETIC_PRIVATE", value?.ToString() ?? "", StringComparison.Ordinal));
+        });
+        var returned = await ReadEventuallyAsync(channel, options.QueueName);
+        Assert.Equal(original.EventId.ToString("D"), returned.BasicProperties.MessageId);
+    }
+
     private async Task<string> PublishAsync(IChannel channel, RabbitMqOutboxReceiveOptions options, params PendingOutboxMessage[] messages)
     {
         var exchange = "fixture.receive.exchange." + Guid.NewGuid().ToString("N");
@@ -154,6 +203,24 @@ public sealed class RabbitMqOutboxReceiverIntegrationTests(OutboxReceiveBrokerFi
     }
 
     private sealed class ScopeTracker { public int Created; public int Disposed; }
+    private sealed record ReceiveLog(EventId EventId, string Text, IReadOnlyDictionary<string, object?> State, Exception? Exception);
+    private sealed class CapturedReceiveLogs : ILoggerProvider, ILogger
+    {
+        public ConcurrentQueue<ReceiveLog> Entries { get; } = new();
+        public TaskCompletionSource Unavailable { get; } = new(TaskCreationOptions.RunContinuationsAsynchronously);
+        public ILogger CreateLogger(string categoryName) => this;
+        public IDisposable? BeginScope<TState>(TState state) where TState : notnull => null;
+        public bool IsEnabled(LogLevel logLevel) => true;
+        public void Log<TState>(LogLevel logLevel, EventId eventId, TState state, Exception? exception, Func<TState, Exception?, string> formatter)
+        {
+            var values = state is IEnumerable<KeyValuePair<string, object?>> structured
+                ? structured.ToDictionary(pair => pair.Key, pair => pair.Value, StringComparer.Ordinal)
+                : new Dictionary<string, object?>();
+            Entries.Enqueue(new(eventId, formatter(state, exception), values, exception));
+            if (eventId.Id == 1602) Unavailable.TrySetResult();
+        }
+        public void Dispose() { }
+    }
     private sealed class ScopedProbe : IAsyncDisposable
     {
         private readonly ScopeTracker tracker;

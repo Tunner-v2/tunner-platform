@@ -15,7 +15,7 @@ using static Tunner.Identity.Persistence.Tests.AuthenticationTestHost;
 namespace Tunner.Identity.Persistence.Tests;
 
 // Existing finite literal dispatch only. All codes, destinations, rows and credentials stay in this private process.
-internal sealed class RecoveryContactRepairPrivateIntegrationTests(IdentityPostgresFixture fixture)
+internal sealed partial class RecoveryContactRepairPrivateIntegrationTests(IdentityPostgresFixture fixture)
 {
     private const string Public = "SYNTHETIC-TEST-ONLY";
     private const string Replacement = "a synthetic verified contact recovery replacement passphrase";
