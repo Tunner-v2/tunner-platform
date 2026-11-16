@@ -146,10 +146,20 @@ public sealed class IdentityRuntimeRecoveryCodeConfigurationTests(SessionListing
     public async Task InvalidHttpPolicyValuesAre400WithNoOwnerEffects(string failure)
     {
         await using var db = await fixture.CreateDatabaseAsync(); await using var admin = await Host.Start(db, additionalScopes: [new(IdentityConfigurationFamily.RecoveryCodes)]); var actor = await admin.Browser("fixture-security-author");
+        await using var before = admin.Environment.Platform();
+        var outboxBefore = JsonSerializer.Serialize(await before.OutboxMessages.AsNoTracking().OrderBy(x => x.EventId).ToArrayAsync());
+        var auditBefore = JsonSerializer.Serialize(await before.AuditEvents.AsNoTracking().OrderBy(x => x.EventId).ToArrayAsync());
         var body = JsonSerializer.SerializeToNode(new { idempotencyKey = Guid.NewGuid(), candidate = Candidate(admin.Environment, "fixture-invalid") }, WebJson)!;
         if (failure == "format") body["candidate"]!["values"]!["formatProfileVersion"] = "unsupported";
         else body["candidate"]!["values"]!["crypto"]![failure == "native" ? "nativeIdentityVersion" : "maximumHashWork"] = failure == "native" ? "unsupported" : "9223372036854775808";
-        using var response = await admin.Post("/recovery-codes/draft", body, actor); Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode); await AssertNoEffects(admin.Environment);
+        using var response = await admin.Post("/recovery-codes/draft", body, actor); Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        await using var after = admin.Environment.Platform(); var messages = await after.OutboxMessages.AsNoTracking().OrderBy(x => x.EventId).ToArrayAsync();
+        Assert.Equal(outboxBefore, JsonSerializer.Serialize(messages));
+        Assert.Equal(auditBefore, JsonSerializer.Serialize(await after.AuditEvents.AsNoTracking().OrderBy(x => x.EventId).ToArrayAsync()));
+        // Configuration command receipts live in the existing atomic outbox payload, not a separate receipt table.
+        foreach (var message in messages) { using var payload = JsonDocument.Parse(message.Payload); Assert.False(payload.RootElement.TryGetProperty("commandReceipt", out _)); }
+        await using var configuration = db.Context(); Assert.Empty(await configuration.Set<IdentityConfigurationProposalRow>().ToArrayAsync());
+        Assert.Empty(await configuration.Set<IdentityConfigurationVersionRow>().ToArrayAsync()); Assert.Empty(await configuration.Set<IdentityConfigurationPublicationRow>().ToArrayAsync());
     }
 
     [Fact]
