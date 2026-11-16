@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "scope_id": "TUN-P2-016",
-  "result": "PENDING",
-  "phase": "ENGINEERING_QUALIFIED_OWNERSHIP_CARRIER_AND_NATIVE_GATES_PENDING",
+  "result": "PASS",
+  "phase": "ENGINEERING_QUALIFIED_CURRENT_NATIVE_READINESS_PENDING",
   "admission": {
     "scope": "TUN-P2-016",
     "context_ref": "artifacts/p2-016-notifications-20261115/context-in-progress/manifest.json",
@@ -54,8 +54,9 @@
   ],
   "acceptance_boundary": "Actual execution receipts retain their exact original SHAs. No Product acceptance for P2-016, whole-P2 completion, production activation, protected-main merge or release is inferred.",
   "validation_kind": "COMMITTED",
-  "tested_commit_sha": "98807ebe4bb7cb4e74b1aecf938a9edb8c243475",
-  "validated_commit_sha": "98807ebe4bb7cb4e74b1aecf938a9edb8c243475",
+  "tested_commit_sha": "804123a8667b0601feb4a6a63a2b9ade82bc3acd",
+  "validated_commit_sha": "804123a8667b0601feb4a6a63a2b9ade82bc3acd",
+  "carrier_source_binding": {"carrier_commit_sha": "804123a8667b0601feb4a6a63a2b9ade82bc3acd", "actual_smoke_run_id": "94c2e9403fda4dde8643cf73e8e525ea", "actual_smoke_source_sha": "804123a8667b0601feb4a6a63a2b9ade82bc3acd", "executed": 1, "passed": 1, "failed": 0, "ref": "governance/evidence/p2-016-notifications-20261115/native/94c2e9403fda4dde8643cf73e8e525ea/summary.json", "full_integrated_run_source_sha": "98807ebe4bb7cb4e74b1aecf938a9edb8c243475", "owned_behavior_byte_equivalence": true, "provenance": "Carrier contains the ownership declaration and actual evidence; one real hosted smoke passed at the carrier. Git comparison verifies unchanged behavior sources from the full78 run. No full78 rerun at the carrier is claimed."},
   "owned_behavior_paths": [
     "docs/contracts/product-authorization-contract.md",
     "src/Modules/Identity/AuthenticationRejectionPostCommitOwnerSource.cs",
