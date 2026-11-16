@@ -79,6 +79,14 @@ public static class AdminIdentityConfigurationEndpoints
                 ? app.UpdateTotpDraftAsync(id, c.ExpectedRevision!.Value, candidate, op.Id, op.Correlation, h.RequestAborted)
                 : app.CreateTotpDraftAsync(candidate, op.Id, op.Correlation, h.RequestAborted)).ConfigureAwait(false);
         }));
+        routes.MapPost("/passkey/draft", (HttpContext h, IdentityRuntimeConfigurationApplication app) => Guard(h, async (profile, session) =>
+        {
+            var c = await Read<AdminIdentityConfigurationDraft<AdminPasskeyConfigurationCandidate>>(h, profile).ConfigureAwait(false); c.RequireTarget(); var candidate = c.Candidate.Value();
+            _ = Scope(profile, new AdminIdentityConfigurationScope { Family = IdentityConfigurationFamily.Passkey });
+            return await Write(h, app, session, c.IdempotencyKey, c, op => c.ProposalReference is { } id
+                ? app.UpdatePasskeyDraftAsync(id, c.ExpectedRevision!.Value, candidate, op.Id, op.Correlation, h.RequestAborted)
+                : app.CreatePasskeyDraftAsync(candidate, op.Id, op.Correlation, h.RequestAborted)).ConfigureAwait(false);
+        }));
         routes.MapPost("/content-binding/draft", (HttpContext h, IdentityRuntimeConfigurationApplication app) => Guard(h, async (profile, session) =>
         {
             var c = await Read<AdminIdentityConfigurationDraft<AdminAuthenticationContentBindingCandidate>>(h, profile).ConfigureAwait(false); c.RequireTarget(); var candidate = c.Candidate.Value();

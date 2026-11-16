@@ -40,21 +40,13 @@ public sealed class PublishedAuthenticationPresentationSource(
             binding.EffectiveInterval is null || !binding.EffectiveInterval.Contains(now))
             throw new InvalidOperationException("Qualified authentication content configuration is unavailable.");
 
-        var result = resolver.Resolve(new ContentResolutionRequest(binding.ContentScope, binding.VariantReference, now));
-        if (result is null || result.Scope != binding.ContentScope ||
-            result.RequestedVariantReference != binding.VariantReference ||
-            string.IsNullOrWhiteSpace(result.EffectiveVariantReference) || string.IsNullOrWhiteSpace(result.Locale) ||
-            result.Content is null || result.Content.Any(item =>
-                item.Value is null || item.Key != item.Value.Key ||
-                item.Value.VariantReference != result.EffectiveVariantReference || item.Value.Locale != result.Locale))
-            throw new InvalidOperationException("Published authentication content provenance is unavailable.");
+        var result = PublishedPresentationProjection.Require(resolver, binding.ContentScope, binding.VariantReference, now,
+            "Published authentication content provenance is unavailable.");
 
         try
         {
             // The existing constructor owns the required Login keys and HTTPS-link contract.
-            return new AuthenticationPresentation(result.Locale, result.Content.Values.Select(item =>
-                new RegistrationPublishedText(item.Key, item.VariantReference, item.VersionReference,
-                    item.PublicationReference, item.Locale, "PUBLISHED", item.Text)),
+            return new AuthenticationPresentation(result.Locale, result.Content,
                 binding.TermsUri, binding.PrivacyUri, binding.SupportUri);
         }
         catch (ArgumentException exception)

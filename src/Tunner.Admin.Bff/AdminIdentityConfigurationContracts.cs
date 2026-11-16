@@ -44,7 +44,7 @@ public sealed class AdminIdentityConfigurationScope
     internal IdentityConfigurationScope Value() => Family switch
     {
         IdentityConfigurationFamily.Authentication when AssuranceScope is null && AuthenticationPolicyVersion is null && RegistrationPolicyVersion is null => new(Family),
-        IdentityConfigurationFamily.Registration or IdentityConfigurationFamily.Totp when AssuranceScope is null && AuthenticationPolicyVersion is null && RegistrationPolicyVersion is null => new(Family),
+        IdentityConfigurationFamily.Registration or IdentityConfigurationFamily.Totp or IdentityConfigurationFamily.Passkey when AssuranceScope is null && AuthenticationPolicyVersion is null && RegistrationPolicyVersion is null => new(Family),
         IdentityConfigurationFamily.Assurance when AssuranceScope is not null && AuthenticationPolicyVersion is null && RegistrationPolicyVersion is null => new(Family, AssuranceScope.Value()),
         IdentityConfigurationFamily.AuthenticationContent when AssuranceScope is null && !string.IsNullOrWhiteSpace(AuthenticationPolicyVersion) && RegistrationPolicyVersion is null => new(Family, AuthenticationPolicyVersion: AuthenticationPolicyVersion),
         IdentityConfigurationFamily.RegistrationContent when AssuranceScope is null && AuthenticationPolicyVersion is null && !string.IsNullOrWhiteSpace(RegistrationPolicyVersion) => new(Family, RegistrationPolicyVersion: RegistrationPolicyVersion),
@@ -99,6 +99,17 @@ public sealed class AdminRegistrationConfigurationCandidate
         var values = Values ?? throw new ArgumentException("Values are required.");
         try { values.Validate(); }
         catch (InvalidOperationException error) { throw new ArgumentException("Unsupported registration candidate values.", nameof(Values), error); }
+        return new((Metadata ?? throw new ArgumentException("Metadata is required.")).Value(static x => x), values);
+    }
+}
+[JsonUnmappedMemberHandling(JsonUnmappedMemberHandling.Disallow)]
+public sealed class AdminPasskeyConfigurationCandidate
+{
+    public required AdminIdentityPolicyMetadata<string> Metadata { get; init; }
+    public required PasskeyConfigurationValues Values { get; init; }
+    internal PasskeyConfigurationVersion Value()
+    {
+        var values = Values ?? throw new ArgumentException("Values are required."); _ = values.ToPolicy();
         return new((Metadata ?? throw new ArgumentException("Metadata is required.")).Value(static x => x), values);
     }
 }

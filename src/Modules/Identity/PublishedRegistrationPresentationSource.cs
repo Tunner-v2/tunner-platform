@@ -31,18 +31,13 @@ public sealed class PublishedRegistrationPresentationSource(IPresentationContent
                 !uri.IsAbsoluteUri || uri.Scheme != Uri.UriSchemeHttps || uri.UserInfo.Length != 0))
             throw new InvalidOperationException("Qualified registration presentation configuration is unavailable.");
 
-        var result = resolver.Resolve(new(binding.ContentScope, binding.VariantReference, now));
-        if (result is null || result.Scope != binding.ContentScope || result.RequestedVariantReference != binding.VariantReference ||
-            string.IsNullOrWhiteSpace(result.EffectiveVariantReference) || string.IsNullOrWhiteSpace(result.Locale) || result.Content is null ||
-            result.Content.Any(item => item.Value is null || item.Key != item.Value.Key ||
-                item.Value.VariantReference != result.EffectiveVariantReference || item.Value.Locale != result.Locale))
-            throw new InvalidOperationException("Published registration content provenance is unavailable.");
+        var result = PublishedPresentationProjection.Require(resolver, binding.ContentScope, binding.VariantReference, now,
+            "Published registration content provenance is unavailable.");
         try
         {
             // The existing constructor owns every mandatory Registration, verification, personal-information and consent key.
             // Text selection supplies no age capability or consent evidence; those remain existing Account-owned decisions.
-            return new(result.Locale, result.Content.Values.Select(item => new RegistrationPublishedText(item.Key, item.VariantReference,
-                item.VersionReference, item.PublicationReference, item.Locale, "PUBLISHED", item.Text)), binding.TermsUri, binding.PrivacyUri, binding.SupportUri);
+            return new(result.Locale, result.Content, binding.TermsUri, binding.PrivacyUri, binding.SupportUri);
         }
         catch (ArgumentException exception)
         { throw new InvalidOperationException("Published registration content is unavailable.", exception); }

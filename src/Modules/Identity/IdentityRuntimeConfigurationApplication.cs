@@ -26,6 +26,8 @@ public sealed partial class IdentityRuntimeConfigurationApplication(IdentityPers
         => DraftAsync(new(RegistrationContent: candidate), null, null, operationId, correlationId, cancellationToken);
     public Task<IdentityConfigurationProposal> CreateTotpDraftAsync(TotpPolicyVersion candidate, string operationId, string correlationId, CancellationToken cancellationToken = default)
         => DraftAsync(new(Totp: SnapshotTotpCandidate(candidate)), null, null, operationId, correlationId, cancellationToken);
+    public Task<IdentityConfigurationProposal> CreatePasskeyDraftAsync(PasskeyConfigurationVersion candidate, string operationId, string correlationId, CancellationToken cancellationToken = default)
+        => DraftAsync(new(Passkey: SnapshotPasskeyCandidate(candidate)), null, null, operationId, correlationId, cancellationToken);
     public Task<IdentityConfigurationProposal> UpdateAuthenticationDraftAsync(Guid proposalReference, long expectedRevision, AuthenticationPolicyVersion candidate,
         string operationId, string correlationId, CancellationToken cancellationToken = default)
         => DraftAsync(new(Authentication: candidate), proposalReference, expectedRevision, operationId, correlationId, cancellationToken);
@@ -44,6 +46,15 @@ public sealed partial class IdentityRuntimeConfigurationApplication(IdentityPers
     public Task<IdentityConfigurationProposal> UpdateTotpDraftAsync(Guid proposalReference, long expectedRevision, TotpPolicyVersion candidate,
         string operationId, string correlationId, CancellationToken cancellationToken = default)
         => DraftAsync(new(Totp: SnapshotTotpCandidate(candidate)), proposalReference, expectedRevision, operationId, correlationId, cancellationToken);
+    public Task<IdentityConfigurationProposal> UpdatePasskeyDraftAsync(Guid proposalReference, long expectedRevision, PasskeyConfigurationVersion candidate,
+        string operationId, string correlationId, CancellationToken cancellationToken = default)
+        => DraftAsync(new(Passkey: SnapshotPasskeyCandidate(candidate)), proposalReference, expectedRevision, operationId, correlationId, cancellationToken);
+
+    private static PasskeyConfigurationVersion SnapshotPasskeyCandidate(PasskeyConfigurationVersion candidate)
+    {
+        if (candidate is null || candidate.Values is null) throw new IdentityConfigurationUnavailableException();
+        return candidate with { Values = candidate.Values.Snapshot() };
+    }
 
     private static TotpPolicyVersion SnapshotTotpCandidate(TotpPolicyVersion candidate)
     {
@@ -113,7 +124,7 @@ public sealed partial class IdentityRuntimeConfigurationApplication(IdentityPers
         var request = Request(IdentityConfigurationOperation.Preview, value.Scope, authority, row.Id.ToString("N"), row.Revision, row.Digest, command.OperationId, command.CorrelationId);
         var actor = await AuthorizeAsync(request, ct).ConfigureAwait(false);
         await FinishAsync(tx, authority, request, actor, row.Id, row.Revision, row.Digest, null, null, null, ct).ConfigureAwait(false);
-        return new(View(row), value.Authentication, value.Assurance, value.ContentBinding) { Registration = value.Registration, Totp = value.Totp, RegistrationContent = value.RegistrationContent };
+        return new(View(row), value.Authentication, value.Assurance, value.ContentBinding) { Registration = value.Registration, Totp = value.Totp, RegistrationContent = value.RegistrationContent, Passkey = value.Passkey };
     }
 
     public async Task<IdentityConfigurationHistory> PublishAsync(PublishIdentityConfiguration command, CancellationToken cancellationToken = default)

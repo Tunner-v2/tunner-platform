@@ -10,7 +10,7 @@ namespace Tunner.Identity.Persistence;
 /// <summary>Only current effective publications with immutable Identity validation/approval/effect receipts are runtime authority.
 /// Reading a policy never requires an Admin browser session and never changes historical actor/session state.</summary>
 public sealed class PersistedIdentityRuntimeConfigurationSource(IServiceScopeFactory scopes) : IAuthenticationPolicySource, IAssurancePolicySource, IAuthenticationContentBindingSource,
-    IRegistrationPolicySource, ITotpPolicySource, IRegistrationContentBindingSource
+    IRegistrationPolicySource, ITotpPolicySource, IRegistrationContentBindingSource, IPasskeyPolicySource
 {
     RegistrationPolicy IRegistrationPolicySource.RequireEffective(DateTimeOffset effectiveAt)
     {
@@ -21,6 +21,11 @@ public sealed class PersistedIdentityRuntimeConfigurationSource(IServiceScopeFac
     {
         var value = Read(new(IdentityConfigurationFamily.Totp), effectiveAt).Document.Totp ?? throw new IdentityConfigurationUnavailableException();
         return new TotpPolicyCatalog([value]).RequireEffective(effectiveAt);
+    }
+    PasskeyPolicy IPasskeyPolicySource.RequireEffective(DateTimeOffset effectiveAt)
+    {
+        var value = Read(new(IdentityConfigurationFamily.Passkey), effectiveAt).Document.Passkey ?? throw new IdentityConfigurationUnavailableException();
+        return new PasskeyPolicyCatalog([new(value.Metadata, value.Values.ToPolicy())]).RequireEffective(effectiveAt);
     }
     public AuthenticationPolicy RequireEffective(DateTimeOffset effectiveAt)
     {
@@ -94,6 +99,14 @@ public sealed class PersistedIdentityRuntimeConfigurationSource(IServiceScopeFac
 
 public static class IdentityRuntimeConfigurationRegistration
 {
+    /// <summary>Separate opt-in: composing User hosts may activate Passkeys when this policy port is intentionally registered.</summary>
+    public static IServiceCollection AddTunnerPersistedPasskeyConfiguration(this IServiceCollection services)
+    {
+        ArgumentNullException.ThrowIfNull(services);
+        if (services.Any(x => x.ServiceType == typeof(IPasskeyPolicySource))) throw new InvalidOperationException("Passkey configuration source selection must be explicit and unique.");
+        services.TryAddSingleton<PersistedIdentityRuntimeConfigurationSource>();
+        services.AddSingleton<IPasskeyPolicySource>(provider => provider.GetRequiredService<PersistedIdentityRuntimeConfigurationSource>()); return services;
+    }
     /// <summary>Binding-only opt-in. This does not register Registration policy, presentation or workflow providers.</summary>
     public static IServiceCollection AddTunnerPersistedRegistrationContentBinding(this IServiceCollection services)
     {

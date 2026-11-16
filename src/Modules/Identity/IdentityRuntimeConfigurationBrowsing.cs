@@ -26,6 +26,7 @@ public sealed record IdentityConfigurationHistoricalPreview(IdentityConfiguratio
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] public RegistrationPolicyVersion? Registration { get; init; }
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] public TotpPolicyVersion? Totp { get; init; }
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] public RegistrationContentBinding? RegistrationContent { get; init; }
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] public PasskeyConfigurationVersion? Passkey { get; init; }
 }
 public enum IdentityConfigurationCapabilityTarget { Workspace, Proposal, History }
 public sealed record IdentityConfigurationCapabilityQuery(IdentityConfigurationScope Scope, IdentityConfigurationCapabilityTarget Target,
@@ -49,7 +50,7 @@ public sealed partial class IdentityRuntimeConfigurationApplication
             IdentityConfigurationDigest.Of(new { publicationReference = publication.Id, versionReference = version.Id, version.Digest }), operationId, correlationId);
         var actor = await AuthorizeAsync(request, ct).ConfigureAwait(false);
         await FinishAsync(tx, authority, request, actor, Guid.Empty, 0, request.CandidateDigest, null, null, null, ct).ConfigureAwait(false);
-        return new(History(publication, version, scope), value.Authentication, value.Assurance, value.ContentBinding) { Registration = value.Registration, Totp = value.Totp, RegistrationContent = value.RegistrationContent };
+        return new(History(publication, version, scope), value.Authentication, value.Assurance, value.ContentBinding) { Registration = value.Registration, Totp = value.Totp, RegistrationContent = value.RegistrationContent, Passkey = value.Passkey };
     }
     public async Task<IdentityConfigurationWorkspace> WorkspaceAsync(IdentityConfigurationScope scope, IIdentityConfigurationBrowseBudgetSource budgets,
         string operationId, string correlationId, CancellationToken cancellationToken = default)
