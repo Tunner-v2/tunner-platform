@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "scope_id": "TUN-P2-016",
+  "result": "PENDING",
+  "phase": "IMPLEMENTATION_AND_FOCUSED_INTEGRATION",
+  "admission": {"scope": "TUN-P2-016", "context_ref": "artifacts/p2-016-notifications-20261115/context-in-progress/manifest.json", "context_generated_at": "2026-11-16T00:08:18.0733144+00:00", "verified_outcome": "CURRENT", "native_exit_code": 0, "status": "IN_PROGRESS"},
+  "actual_runs": [
+    {"run_id": "69d504306eb14aa5a73b41b8e72fec5e", "source_sha": "88926ee96e804a628138030bb5a34e117d366298", "executed": 2, "passed": 1, "failed": 1, "purpose": "Confirmed registration retry defect and passing existing-account countercase"},
+    {"run_id": "cb814e88635c40049c0db58ef329267d", "source_sha": "8cb3a4cc4c0b4be2622ff4633b7ad4447b1c6cfb", "executed": 2, "passed": 2, "failed": 0, "purpose": "Same focused regressions after retry guard"},
+    {"run_id": "ac224a80f92b488693918fbc81d4b88a", "source_sha": "8cb3a4cc4c0b4be2622ff4633b7ad4447b1c6cfb", "executed": 22, "passed": 22, "failed": 0, "purpose": "Committed producer envelope, idempotent audit and inbox, duplicate acknowledgement, real passkey/TOTP, qualification failures, audit failure, lease theft/expiry and stable handoff identity"},
+    {"run_id": "90df608a59884bd191df0c310720e3a3", "source_sha": "cdf99275363b59fb839a60c6ec78b303dae911dd", "executed": 6, "passed": 6, "failed": 0, "purpose": "Registration processor+real dispatcher: pending, invalidated, superseded, existing-account; actual session/proof maintenance actor attribution"}
+  ],
+  "raw_evidence": "governance/evidence/p2-016-notifications-20261115/native/<run_id>/{launch.json,summary.json,product-authorization.trx}",
+  "environment": "Existing qualified native runner reused without duplication. Actual PostgreSQL, exact cached fixture image, owned resources removed and borrowed browser resources preserved on every recorded run. No image changes, production configuration or provider delivery claim.",
+  "remaining": ["Qualify concrete Product/device owner adapters and remaining producer scope", "Integrate and qualify the real hosted RabbitMQ consumer with explicit topology/error contracts", "Required integrated regression/security, final reviews, committed validation binding and native acceptance gates"],
+  "acceptance_boundary": "Focused runs are actual executed results at their own SHAs. Entire P2-016, whole P2, protected-main integration, production and release are not complete. No completed prior qualification is replaced."
+}

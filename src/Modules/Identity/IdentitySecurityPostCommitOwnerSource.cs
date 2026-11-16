@@ -50,6 +50,28 @@ public sealed class IdentitySecurityPostCommitOwnerSource(IDbContextFactory<Iden
             var row = await db.Set<DeviceTrustRow>().AsNoTracking().SingleOrDefaultAsync(x => x.OutboxEventId == e.EventId, ct).ConfigureAwait(false);
             if (row is null || row.DeviceId != reference || e.Subject != reference.ToString("N") || row.Version != version || row.OperationId != e.OperationId ||
                 row.CorrelationId != e.CorrelationId || row.RecordedAt != e.OccurredAtUtc || (e.EventType == "DeviceTrustRevoked") != (row.State == "REVOKED")) return null;
+            if (e.EventType == "DeviceTrustRevoked")
+            {
+                // SourceSessionId witnesses the original device observation, not the later authenticated remover.
+                var removal = await db.Set<DeviceOperationRow>().AsNoTracking().SingleOrDefaultAsync(x => x.Id == row.RemovalOperationId, ct).ConfigureAwait(false);
+                if (removal is null || removal.State != "COMPLETED" || removal.Version != 2 || removal.AccountId != row.AccountId ||
+                    removal.Origin != row.Origin || removal.DeviceId != row.DeviceId || removal.ExpectedDeviceVersion != row.DeviceVersion ||
+                    removal.ResultTrustVersion != row.Version || removal.ExpectedTrustVersion != row.Version - 1 ||
+                    removal.OutboxEventId != e.EventId || removal.CompletedAt != row.RecordedAt ||
+                    removal.PolicyVersion != row.PolicyVersion || removal.PolicySnapshot != row.PolicySnapshot ||
+                    e.OperationId != "OP-DEVICE-TRUST-REVOKE-" + removal.Id.ToString("N") || removal.CorrelationId != e.CorrelationId ||
+                    removal.ProofId is not { } proofId) return null;
+                var proof = await db.Set<StepUpProofRow>().AsNoTracking().SingleOrDefaultAsync(x => x.ProofId == proofId, ct).ConfigureAwait(false);
+                if (proof is null || proof.State != "CONSUMED" || proof.Version != 2 || proof.AccountId != removal.AccountId ||
+                    proof.SessionId != removal.SessionId || proof.Origin != removal.Origin || proof.Scheme != AuthenticationIdentity.Scheme ||
+                    proof.OperationId != e.OperationId || proof.CorrelationId != e.CorrelationId || proof.Operation != DeviceApplication.RevokeScope.Operation ||
+                    proof.Context != DeviceApplication.RevokeScope.Context || proof.ResourceId != e.Subject || proof.ExpectedVersion != removal.ExpectedTrustVersion ||
+                    proof.ContextDigest != removal.ContextDigest || proof.PolicyVersion != removal.AssurancePolicyVersion || proof.ProtectedKey.Length != 0 ||
+                    row.RecordedAt < proof.AuthenticatedAt || proof.EndedAt is not { } consumed || consumed < row.RecordedAt || consumed >= proof.ExpiresAt) return null;
+                var facts = DeviceFacts(e, "DEVICE_TRUST", removal.AccountId, removal.SessionId, row.PolicySnapshot, row.PolicyVersion);
+                return facts is null ? null : facts with { References = new Dictionary<string, string>(StringComparer.Ordinal) {
+                    ["sourceSessionReference"] = row.SourceSessionId.ToString("N"), ["removalOperationReference"] = removal.Id.ToString("N") } };
+            }
             return DeviceFacts(e, "DEVICE_TRUST", row.AccountId, row.SourceSessionId, row.PolicySnapshot, row.PolicyVersion);
         }
         if (e.EventType == "DeviceEvidenceObserved")
