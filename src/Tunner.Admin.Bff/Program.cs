@@ -18,10 +18,24 @@ public static class TunnerAdminBffHost
         builder.Services.AddTunnerBffFoundation(BffSurface.Admin, builder.Configuration["Bff:BrowserOrigin"]);
         var contentEnabled = builder.Services.Any(x => x.ServiceType == typeof(IAdminContentHttpProfileSource));
         if (contentEnabled) builder.Services.AddTunnerAdminContent();
+        var identityConfigurationEnabled = builder.Services.Any(x => x.ServiceType == typeof(IAdminIdentityConfigurationHttpProfileSource));
+        if (identityConfigurationEnabled) builder.Services.AddTunnerAdminIdentityConfiguration();
         var application = builder.Build();
         application.UseTunnerBffFoundation();
         application.MapTunnerBffHealth();
-        if (contentEnabled) application.MapTunnerAdminContent();
+        var adminAssets = new BffWebAssets("admin", "/admin-assets/");
+        if (contentEnabled || identityConfigurationEnabled) adminAssets.MapAssets(application, allowAnonymous: false);
+        if (contentEnabled)
+        {
+            application.MapTunnerAdminContent();
+            AdminAuthenticationContentPreviewRegistration.Map(application);
+            AdminContentScreens.Map(application, adminAssets);
+        }
+        if (identityConfigurationEnabled)
+        {
+            application.MapTunnerAdminIdentityConfiguration();
+            AdminIdentityConfigurationScreens.Map(application, adminAssets);
+        }
         return application;
     }
 }

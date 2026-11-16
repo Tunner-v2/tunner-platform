@@ -5,7 +5,7 @@ using Tunner.Platform.Policies;
 namespace Tunner.Identity.Persistence;
 
 public enum IdentityConfigurationFamily { Authentication, Assurance, AuthenticationContent }
-public enum IdentityConfigurationOperation { CreateDraft, UpdateDraft, Validate, Preview, Approve, Publish, History, Rollback }
+public enum IdentityConfigurationOperation { CreateDraft, UpdateDraft, Validate, Preview, Approve, Publish, History, Rollback, Browse }
 public enum IdentityConfigurationActorKind { Human, Service, Model }
 public sealed record IdentityConfigurationScope(IdentityConfigurationFamily Family, AssurancePolicyScope? AssuranceScope = null, string? AuthenticationPolicyVersion = null)
 {
@@ -37,7 +37,7 @@ public sealed record IdentityConfigurationGovernance(PolicyVersionCandidate<Iden
             if (!Enum.IsDefined(operation) || effect is null || new[] { effect.AuditAction, effect.AuditResult, effect.Source, effect.EnvelopeVersion }.Any(string.IsNullOrWhiteSpace) ||
                 (effect.EventType is null) != (effect.EventSchemaVersion is null) ||
                 (effect.EventType is not null && (string.IsNullOrWhiteSpace(effect.EventType) || string.IsNullOrWhiteSpace(effect.EventSchemaVersion))) ||
-                operation is not (IdentityConfigurationOperation.History or IdentityConfigurationOperation.Preview) && effect.EventType is null)
+                operation is not (IdentityConfigurationOperation.History or IdentityConfigurationOperation.Preview or IdentityConfigurationOperation.Browse) && effect.EventType is null)
                 throw new IdentityConfigurationUnavailableException();
     }
 }
@@ -45,7 +45,7 @@ public interface IIdentityConfigurationGovernanceSource
 { IdentityConfigurationGovernance RequireEffective(IdentityConfigurationScope scope, DateTimeOffset effectiveAt); }
 public sealed record IdentityConfigurationAuthorizationRequest(IdentityConfigurationOperation Operation, IdentityConfigurationScope Scope,
     string TargetReference, long ExpectedRevision, string CandidateDigest, string GovernanceVersion, string GovernanceDigest, string OperationId, string CorrelationId)
-{ [JsonIgnore] public string Digest => IdentityConfigurationDigest.Of(this); }
+{ public bool IsCapabilityProbe { get; init; } [JsonIgnore] public string Digest => IdentityConfigurationDigest.Of(this); }
 public sealed record IdentityConfigurationAuthorizationDecision(string RequestDigest, bool Allowed, string ActorReference, IdentityConfigurationActorKind ActorKind,
     string AuditActorType, string AuthorizationPolicyVersion, string EvidenceReference, EffectivePolicyInterval EffectiveInterval);
 public interface IIdentityConfigurationAuthorizationSource

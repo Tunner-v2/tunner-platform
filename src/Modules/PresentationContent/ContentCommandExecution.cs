@@ -1,10 +1,10 @@
 using System.Data;
-using System.Data.Common;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 using Microsoft.EntityFrameworkCore;
 using Npgsql;
 using Tunner.Database.Outbox;
+using Tunner.Database.Transactions;
 
 namespace Tunner.PresentationContent;
 
@@ -38,13 +38,13 @@ public sealed partial class PresentationContentApplication
         if (requestDigest is not { Length: 64 } || !requestDigest.All(Uri.IsHexDigit)) throw new ArgumentException("An exact command digest is required.");
         if (typeof(T) != typeof(ContentProposalView) && typeof(T) != typeof(ContentHistoryEntry)) throw new ArgumentException("Unsupported content command result.");
         if (activeCommand is not null || database.Database.CurrentTransaction is not null || database.ChangeTracker.HasChanges()) throw new ContentConflictException();
-        database.ChangeTracker.Clear(); var ct = cancellationToken; var connection = database.Database.GetDbConnection();
-        if (connection.State != ConnectionState.Closed) throw new ContentConflictException();
-        var acquired = false; Exception? originalFailure = null;
+        database.ChangeTracker.Clear(); var ct = cancellationToken;
+        if (database.Database.GetDbConnection().State != ConnectionState.Closed) throw new ContentConflictException();
+        PostgresCommandLease? lease = null; Exception? originalFailure = null;
         try
         {
-            await database.Database.OpenConnectionAsync(ct).ConfigureAwait(false);
-            _ = await AdvisoryAsync(connection, operationId, true, ct).ConfigureAwait(false); acquired = true;
+            lease = await PostgresCommandLease.AcquireAsync(database.Database, "presentation-content-command:" + operationId,
+                static connection => { if (connection is NpgsqlConnection npgsql) NpgsqlConnection.ClearPool(npgsql); }, ct).ConfigureAwait(false);
             // Never filter by CURRENT profile: an applied action must remain an applied action after governance changes.
             var prior = await database.Set<OutboxMessage>().AsNoTracking().Where(x => x.OperationId == operationId).Take(2).ToArrayAsync(ct).ConfigureAwait(false);
             if (prior.Length != 0)
@@ -66,38 +66,8 @@ public sealed partial class PresentationContentApplication
         finally
         {
             activeCommand = null;
-            await ReleaseCommandConnectionAsync(connection, operationId, acquired, originalFailure).ConfigureAwait(false);
+            if (lease is not null) await lease.ReleaseAsync(originalFailure).ConfigureAwait(false);
         }
-    }
-
-    private async Task ReleaseCommandConnectionAsync(DbConnection connection, string operationId, bool acquired, Exception? originalFailure)
-    {
-        try
-        {
-            // Acquisition can succeed on the server just before client cancellation: release even that uncertain case.
-            if (connection.State == ConnectionState.Open)
-            {
-                var released = await AdvisoryAsync(connection, operationId, false, CancellationToken.None).ConfigureAwait(false);
-                if (acquired && !Equals(released, true)) throw new ContentUnavailableException();
-            }
-        }
-        catch when (originalFailure is not null)
-        { if (connection is NpgsqlConnection npgsql) NpgsqlConnection.ClearPool(npgsql); }
-        catch
-        { if (connection is NpgsqlConnection npgsql) NpgsqlConnection.ClearPool(npgsql); throw; }
-        finally
-        {
-            try { await database.Database.CloseConnectionAsync().ConfigureAwait(false); }
-            catch when (originalFailure is not null) { if (connection is NpgsqlConnection npgsql) NpgsqlConnection.ClearPool(npgsql); }
-        }
-    }
-
-    private static async Task<object?> AdvisoryAsync(DbConnection connection, string operationId, bool acquire, CancellationToken ct)
-    {
-        await using var sql = connection.CreateCommand();
-        sql.CommandText = acquire ? "SELECT pg_advisory_lock(hashtextextended(@reference,0))" : "SELECT pg_advisory_unlock(hashtextextended(@reference,0))";
-        var value = sql.CreateParameter(); value.ParameterName = "reference"; value.Value = "presentation-content-command:" + operationId; sql.Parameters.Add(value);
-        return await sql.ExecuteScalarAsync(ct).ConfigureAwait(false);
     }
 
     private ContentCommandReceipt? CommandReceipt(ContentAuthorizationRequest request, ContentAuthorizationDecision actor, Guid reference)

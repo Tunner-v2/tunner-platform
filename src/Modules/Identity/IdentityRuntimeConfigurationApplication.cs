@@ -10,7 +10,7 @@ using Tunner.Platform.Policies;
 namespace Tunner.Identity.Persistence;
 
 /// <summary>Identity-owned security configuration. Typed candidates are proposals, not publication or approval authority.</summary>
-public sealed class IdentityRuntimeConfigurationApplication(IdentityPersistenceDbContext database, IIdentityConfigurationGovernanceSource governance,
+public sealed partial class IdentityRuntimeConfigurationApplication(IdentityPersistenceDbContext database, IIdentityConfigurationGovernanceSource governance,
     IIdentityConfigurationAuthorizationSource authorization, TimeProvider clock)
 {
     public Task<IdentityConfigurationProposal> CreateAuthenticationDraftAsync(AuthenticationPolicyVersion candidate, string operationId, string correlationId, CancellationToken cancellationToken = default)
@@ -248,11 +248,11 @@ public sealed class IdentityRuntimeConfigurationApplication(IdentityPersistenceD
             evidenceReferences: authority.Metadata.ApprovalEvidenceReferences.Concat([authority.EvidenceReference, actor.EvidenceReference]));
         EfAuditAppender.StageAppend(database, audit);
         if (effect.EventType is not null) database.Set<OutboxMessage>().Add(new(eventId, effect.EnvelopeVersion, effect.EventType, effect.EventSchemaVersion!, at, effect.Source,
-            reference, authority.Classification, JsonSerializer.Serialize(new { reference, scopeKey = request.Scope.Key, governanceVersion = authority.Metadata.VersionId,
+            reference, authority.Classification, CommandPayload(new { reference, scopeKey = request.Scope.Key, governanceVersion = authority.Metadata.VersionId,
                 revision, candidateDigest = digest, versionReference = versionReference?.ToString("N"), authorizationEvidenceReference = actor.EvidenceReference,
                 authorizationRequestDigest = request.Digest, effectiveFrom = publication?.EffectiveFrom, includesFrom = publication?.IncludesFrom,
                 effectiveUntil = publication?.EffectiveUntil, includesUntil = publication?.IncludesUntil,
-                supersedesPublicationReference = publication?.SupersedesPublicationReference?.ToString("N") }), revision.ToString(CultureInfo.InvariantCulture), request.OperationId, request.CorrelationId));
+                supersedesPublicationReference = publication?.SupersedesPublicationReference?.ToString("N") }, CommandReceipt(request, actor, proposal, publication)), revision.ToString(CultureInfo.InvariantCulture), request.OperationId, request.CorrelationId));
         await database.SaveChangesAsync(ct).ConfigureAwait(false);
         await FrontierAsync(authority, request, actor, publication, value, ct).ConfigureAwait(false);
         await tx.CommitAsync(ct).ConfigureAwait(false);

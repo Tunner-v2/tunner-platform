@@ -1,42 +1,25 @@
-using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
-using Microsoft.AspNetCore.StaticFiles;
+using Tunner.Platform.Bff;
 
 namespace Tunner.Identity.Persistence;
 
 /// <summary>Shared Identity UI packaging. Each owner declares only its canonical screens and workflow guards.</summary>
 internal sealed class IdentityWebAssets
 {
-    private readonly string root = Path.Combine(AppContext.BaseDirectory, "wwwroot", "registration");
-    private int mapped;
+    private readonly BffWebAssets assets = new("registration", "/registration/");
     internal void MapAssets(IEndpointRouteBuilder endpoints)
     {
-        if (Interlocked.Exchange(ref mapped, 1) != 0 || !Directory.Exists(root)) return;
-        var types = new FileExtensionContentTypeProvider();
-        foreach (var file in Directory.EnumerateFiles(root, "*", SearchOption.AllDirectories))
-        {
-            if (file.EndsWith(".html", StringComparison.OrdinalIgnoreCase) || !types.TryGetContentType(file, out var contentType)) continue;
-            var route = "/registration/" + Path.GetRelativePath(root, file).Replace('\\', '/');
-            endpoints.MapGet(route, (HttpContext context) => Render(context, file, contentType)).AllowAnonymous();
-        }
+        assets.MapAssets(endpoints, allowAnonymous: true);
     }
     internal void MapScreens(IEndpointRouteBuilder endpoints, string entryName, IEnumerable<string> paths, Func<HttpContext, bool> allowed)
     {
-        var entry = Path.Combine(root, entryName);
-        if (!File.Exists(entry)) return;
-        foreach (var path in paths) endpoints.MapGet(path, (HttpContext context) => allowed(context) ? Render(context, entry, "text/html") : Results.LocalRedirect("/login")).AllowAnonymous();
+        assets.MapScreens(endpoints, entryName, paths, context => Task.FromResult(allowed(context)),
+            allowAnonymous: true, static _ => Results.LocalRedirect("/login"));
     }
     internal void MapScreensAsync(IEndpointRouteBuilder endpoints, string entryName, IEnumerable<string> paths, Func<HttpContext, Task<bool>> allowed, Func<HttpContext, string>? rejected = null)
     {
-        var entry = Path.Combine(root, entryName); if (!File.Exists(entry)) return;
-        foreach (var path in paths) endpoints.MapGet(path, async (HttpContext context) => await allowed(context).ConfigureAwait(false)
-            ? Render(context, entry, "text/html") : Results.LocalRedirect(rejected?.Invoke(context) ?? "/login")).AllowAnonymous();
-    }
-    private static IResult Render(HttpContext context, string path, string contentType)
-    {
-        context.Response.Headers.ContentSecurityPolicy = "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self'; font-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'none'; frame-ancestors 'none'; form-action 'self'";
-        context.Response.Headers["Referrer-Policy"] = "no-referrer";
-        return Results.File(path, contentType);
+        assets.MapScreens(endpoints, entryName, paths, allowed, allowAnonymous: true,
+            context => Results.LocalRedirect(rejected?.Invoke(context) ?? "/login"));
     }
 }

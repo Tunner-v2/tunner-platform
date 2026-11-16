@@ -33,6 +33,52 @@ public sealed class AdminContentHttpTests(SessionListingPostgresFixture fixture)
     private static readonly JsonSerializerOptions Json = new(JsonSerializerDefaults.Web);
 
     [Fact]
+    public async Task ContextualPreviewSeparatesTheExactDraftFromPublishedRuntimeContent()
+    {
+        await using var database = await fixture.CreateDatabaseAsync(); await using var host = await TestHost.Start(database, contextualPreview: true);
+        var browser = await host.Browser("fixture-author"); var draft = await Draft(host, browser, "Fixture unpublished preview heading");
+        using var response = await host.Post("/content/proposals/context-preview", new { proposalReference = draft.GetProperty("proposalReference").GetGuid(),
+            expectedRevision = draft.GetProperty("revision").GetInt64() }, browser);
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode); var result = await Body(response);
+        Assert.Equal("LOGIN", result.GetProperty("screen").GetString());
+        Assert.Equal("Fixture unpublished preview heading", result.GetProperty("draft").GetProperty("text").GetString());
+        var published = result.GetProperty("published").GetProperty("content").GetProperty("login.heading");
+        Assert.Equal("PUBLISHED", published.GetProperty("state").GetString());
+        Assert.NotEqual("Fixture unpublished preview heading", published.GetProperty("text").GetString());
+        Assert.False(string.IsNullOrWhiteSpace(published.GetProperty("publicationRef").GetString()));
+        await using var scope = host.Environment.Open();
+        Assert.NotEqual("Fixture unpublished preview heading", scope.Application.Resolve(new(host.Environment.Scope, host.Environment.Variant,
+            host.Clock.GetUtcNow())).Content["login.heading"].Text);
+    }
+
+    [Fact]
+    public async Task CanonicalScreensRefreshThroughTheQualifiedAdminBoundaryAndProtectAssets()
+    {
+        await using var database = await fixture.CreateDatabaseAsync(); await using var host = await TestHost.Start(database);
+        var browser = await host.Browser("fixture-author");
+        string? script = null;
+        foreach (var path in new[] { "/admin/content", "/admin/content/review", "/admin/content/history" })
+        {
+            using var response = await host.Get(path, browser.Cookies);
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            Assert.Equal("text/html", response.Content.Headers.ContentType?.MediaType);
+            Assert.Contains("script-src 'self'", Assert.Single(response.Headers.GetValues("Content-Security-Policy")), StringComparison.Ordinal);
+            Assert.Contains("no-store", response.Headers.CacheControl!.ToString(), StringComparison.Ordinal);
+            var html = await response.Content.ReadAsStringAsync(); Assert.Contains("/admin-assets/", html, StringComparison.Ordinal);
+            script ??= System.Text.RegularExpressions.Regex.Match(html, "src=\"(?<asset>/admin-assets/[^\"]+\\.js)\"").Groups["asset"].Value;
+        }
+        Assert.NotNull(script); Assert.False(string.IsNullOrWhiteSpace(script));
+        using (var asset = await host.Get(script, browser.Cookies)) Assert.Equal(HttpStatusCode.OK, asset.StatusCode);
+        using (var anonymousAsset = await host.Get(script, "")) Assert.Equal(HttpStatusCode.Unauthorized, anonymousAsset.StatusCode);
+        using (var anonymous = await host.Get("/admin/content", "")) Assert.Equal(HttpStatusCode.Unauthorized, anonymous.StatusCode);
+        using (var foreign = await host.Get("/admin/content", browser.Cookies.Replace("__Host-Tunner.Admin.Session", "__Host-Tunner.User.Session", StringComparison.Ordinal)))
+            Assert.Equal(HttpStatusCode.Unauthorized, foreign.StatusCode);
+        using (var query = await host.Get("/admin/content?unexpected=value", browser.Cookies)) Assert.Equal(HttpStatusCode.Forbidden, query.StatusCode);
+        host.Owners.Denied = ContentOperation.Browse;
+        using var revoked = await host.Get("/admin/content", browser.Cookies); Assert.Equal(HttpStatusCode.Forbidden, revoked.StatusCode);
+    }
+
+    [Fact]
     public async Task CapabilitiesBindExactResourcesAndCurrentActorStateAndSeparationWithoutAuthorizingCommands()
     {
         await using var db = await fixture.CreateDatabaseAsync(); await using var h = await TestHost.Start(db);
@@ -346,9 +392,14 @@ public sealed class AdminContentHttpTests(SessionListingPostgresFixture fixture)
         private TestHost(Microsoft.AspNetCore.Builder.WebApplication application, X509Certificate2 certificate, HttpClient client, Tickets tickets,
             PresentationContentTestEnvironment environment, TestClock clock, Owners owners)
         { this.application = application; this.certificate = certificate; this.client = client; this.tickets = tickets; Environment = environment; Clock = clock; Owners = owners; }
-        internal static async Task<TestHost> Start(IdentityTestDatabase database)
+        internal static async Task<TestHost> Start(IdentityTestDatabase database, bool contextualPreview = false)
         {
-            var clock = new TestClock(); var environment = new PresentationContentTestEnvironment(database, clock); await environment.InitializeAsync();
+            var clock = new TestClock();
+            var original = contextualPreview ? new TestPresentation().RequirePublished(new TestPolicies().Policy) : null;
+            var environment = new PresentationContentTestEnvironment(database, clock,
+                original?.Content.ToDictionary(x => x.Key, x => x.Value.Text, StringComparer.Ordinal)); await environment.InitializeAsync();
+            if (original is not null)
+                foreach (var (contentKey, item) in original.Content) await environment.PublishTextAsync(contentKey, item.Text);
             var owners = new Owners(environment); var tickets = new Tickets();
             using var key = RSA.Create(2048); var request = new CertificateRequest("CN=localhost", key, HashAlgorithmName.SHA256, RSASignaturePadding.Pkcs1);
             using var generated = request.CreateSelfSigned(DateTimeOffset.UtcNow.AddMinutes(-1), DateTimeOffset.UtcNow.AddHours(1));
@@ -367,6 +418,12 @@ public sealed class AdminContentHttpTests(SessionListingPostgresFixture fixture)
                     builder.Services.AddTunnerPresentationContent(database.ConnectionString);
                     builder.Services.AddSingleton<IAdminContentSessionSource>(owners); builder.Services.AddSingleton<IAdminContentAuthorizationSource>(owners);
                     builder.Services.AddSingleton<IAdminContentHttpProfileSource>(owners); builder.Services.AddSingleton<IContentBrowseBudgetSource>(owners);
+                    if (original is not null)
+                    {
+                        builder.Services.AddSingleton<IAuthenticationPolicySource>(new TestPolicies());
+                        builder.Services.AddSingleton<IAuthenticationContentBindingSource>(new PreviewBindings(environment, original));
+                        builder.Services.AddTunnerAdminAuthenticationContentPreview();
+                    }
                 });
                 await app.StartAsync();
                 var address = app.Services.GetRequiredService<IServer>().Features.Get<IServerAddressesFeature>()!.Addresses.Single();
@@ -406,5 +463,12 @@ public sealed class AdminContentHttpTests(SessionListingPostgresFixture fixture)
             return await client.SendAsync(request);
         }
         public async ValueTask DisposeAsync() { client.Dispose(); await application.StopAsync(); await application.DisposeAsync(); certificate.Dispose(); }
+    }
+
+    private sealed class PreviewBindings(PresentationContentTestEnvironment environment, AuthenticationPresentation original) : IAuthenticationContentBindingSource
+    {
+        public AuthenticationContentBinding RequireQualified(AuthenticationPolicy policy, DateTimeOffset effectiveAt) => new(policy.Version,
+            "fixture-admin-preview-configuration", "fixture-admin-preview-approval", environment.Scope, environment.Variant,
+            environment.Interval, original.TermsUri, original.PrivacyUri, original.SupportUri);
     }
 }

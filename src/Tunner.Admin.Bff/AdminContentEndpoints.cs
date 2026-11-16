@@ -91,13 +91,7 @@ public static class AdminContentEndpoints
     {
         if (profile.Presentation is not { } binding) return null;
         var clock = h.RequestServices.GetRequiredService<TimeProvider>();
-        var resolver = h.RequestServices.GetService<IPresentationContentResolver>() ?? throw new ContentUnavailableException();
-        var result = await resolver.ResolveAsync(new(binding.Scope, binding.VariantReference, clock.GetUtcNow()), h.RequestAborted).ConfigureAwait(false);
-        if (result is null || result.Scope != binding.Scope || result.RequestedVariantReference != binding.VariantReference ||
-            string.IsNullOrWhiteSpace(result.EffectiveVariantReference) || string.IsNullOrWhiteSpace(result.Locale) || result.Content is null || result.Content.Count == 0 ||
-            result.Content.Any(x => x.Value is null || x.Key != x.Value.Key || x.Value.VariantReference != result.EffectiveVariantReference ||
-                x.Value.Locale != result.Locale || string.IsNullOrWhiteSpace(x.Value.VersionReference) || string.IsNullOrWhiteSpace(x.Value.PublicationReference)))
-            throw new ContentUnavailableException();
+        var result = await AdminPublishedPresentation.ResolveAsync(h, binding.Scope, binding.VariantReference, binding.EffectiveInterval).ConfigureAwait(false);
         var current = h.RequestServices.GetRequiredService<IAdminContentHttpProfileSource>().RequireEffective(clock.GetUtcNow()); current.Require(clock.GetUtcNow());
         if (JsonSerializer.Serialize(current, Json) != JsonSerializer.Serialize(profile, Json)) throw new ContentUnavailableException();
         return result;
@@ -123,7 +117,7 @@ public static class AdminContentEndpoints
     private static void Required(string? value) { if (string.IsNullOrWhiteSpace(value)) throw new ArgumentException("A contextual content reference is required."); }
     private static void Scope(AdminContentHttpProfile profile, string scope)
     { Required(scope); if (!profile.Scopes.Contains(scope, StringComparer.Ordinal)) throw new ContentForbiddenException(); }
-    private static async Task<T> Read<T>(HttpContext h, AdminContentHttpProfile profile)
+    internal static async Task<T> Read<T>(HttpContext h, AdminContentHttpProfile profile)
     {
         if (!h.Request.HasJsonContentType()) throw new BadHttpRequestException("JSON is required.", StatusCodes.Status415UnsupportedMediaType);
         if (h.Request.ContentLength > profile.MaximumRequestBytes) throw new BadHttpRequestException("The request exceeds the qualified limit.", 413);
@@ -147,7 +141,7 @@ public static class AdminContentEndpoints
         }
         else if (element.ValueKind == JsonValueKind.Array) foreach (var item in element.EnumerateArray()) NoDuplicates(item);
     }
-    private static async Task<IResult> Guard(HttpContext h, Func<AdminContentHttpProfile, AdminContentSession, Task<IResult>> run)
+    internal static async Task<IResult> Guard(HttpContext h, Func<AdminContentHttpProfile, AdminContentSession, Task<IResult>> run)
     {
         try
         {
