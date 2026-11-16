@@ -22,6 +22,7 @@
     "src/Modules/Identity/Migrations/IdentityPersistenceDbContextModelSnapshot.cs",
     "src/Modules/Identity/PersistedIdentityRuntimeConfigurationSource.cs",
     "src/Modules/Identity/PasskeyConfigurationValues.cs",
+    "src/Modules/Identity/RecoveryCodeConfigurationValues.cs",
     "src/Modules/Identity/PublishedPresentationProjection.cs",
     "src/Modules/Identity/PublishedTotpPresentationSource.cs",
     "src/Modules/Identity/PublishedPasskeyPresentationSource.cs",
@@ -69,6 +70,7 @@
     "tests/Tunner.Identity.Persistence.Tests/IdentityRuntimePasskeyConfigurationTests.cs",
     "tests/Tunner.Identity.Persistence.Tests/IdentityRuntimeFactorContentBindingTests.cs",
     "tests/Tunner.Identity.Persistence.Tests/IdentityRuntimeStepUpContentBindingTests.cs",
+    "tests/Tunner.Identity.Persistence.Tests/IdentityRuntimeRecoveryCodeConfigurationTests.cs",
     "tests/Tunner.Identity.Persistence.Tests/PresentationContentLifecycleTests.cs",
     "tests/Tunner.Identity.Persistence.Tests/PublishedAuthenticationPresentationIntegrationTests.cs",
     "tests/Tunner.Identity.Persistence.Tests/PublishedAuthenticationPresentationTests.cs",
@@ -337,6 +339,13 @@
     "scope": "Twenty Passkey owner/HTTP/compatibility cases; five real published TOTP HTTPS cases; four existing Login and five Registration HTTPS regressions; one real Admin-binding-to-Registration bridge. Presentation-only adapters preserve enrollment, seed and proof owners. Fifty-one pure cases cover all three consumer boundaries.",
     "harness_correction": "The first filter used an incorrect bridge method name: all34 selected cases passed, but the declared35 count correctly rejected that invocation. The omitted actual bridge identity passed separately at the same frozen source/assemblies. These are35 distinct passing native cases across two invocations; the original rejected receipt is retained unchanged. No successful cases were rerun.",
     "boundaries": "Independent frozen-source review found no actionable production findings. Passkey UI is separately approved019-V10 and qualified by the36-item native UI PASS at91fe8696, including all seven settings guards. Additional published Passkey and shared400-repair receipts are indexed in the current checkpoint. This is not whole-feature validation, Product acceptance or production activation."
+  },
+  "delegated_ui_ux_authority_ref": "governance/work-items/TUN-P2-019.yaml",
+  "recovery_code_presentation_authority_resolution": {
+    "result": "EXISTING_AUTHORITY_CLEAR_LOCAL_CURRENT_PUBLICATION_IMPLEMENTATION_REQUIRED",
+    "checked_refs": ["docs/authority/current/development/02_Repository_Solution_and_Module_Architecture.md:274-278", "docs/authority/current/development/14_Glossary_and_Canonical_Terms.md:235-241", "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md:181-211", "docs/authority/current/development/32_Domain_API_Event_Data_and_Policy_Contract_Catalog.md:770-780", "docs/authority/baselines/1.6.0/decisions/ADR-0004_Communication_Protocol_Boundaries.md:14", "docs/authority/baselines/1.6.0/decisions/ADR-0002_Redis_Cache_and_SignalR_Backplane.md:7-10", "src/Modules/Identity/RecoveryCodePolicy.cs:96-100", "src/Modules/Identity/RecoveryCodeExecution.cs:133-143"],
+    "finding": "Content owns governed effective publication; caches are non-authoritative. The production Content resolver performs PostgreSQL I/O. Recovery Code presentation requires synchronous local current authority with no network I/O and is rechecked inside the active native Identity transaction. Existing cache/command leases and captured bundles do not establish withdrawal/supersession/ambiguity currentness; no reusable selected production source was found in the bounded authority/capability/history pass.",
+    "execution_boundary": "Continue the independent typed policy slice. Do not silently change the pure presentation contract, make a cache authoritative, invent impact policy, or install the live DB resolver at the native frontier. Prepare a bounded technical integration proposal before changing that boundary; no missing business semantics or new Product decision blocker is declared here."
   },
   "ui_qualification": {
     "result": "PASS_CURRENT_48_ITEMS_56_DISTINCT_CASES_NATIVE_GATE_PASS",

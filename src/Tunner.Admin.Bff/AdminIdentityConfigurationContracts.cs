@@ -53,7 +53,7 @@ public sealed class AdminIdentityConfigurationScope
         return Family switch
     {
         IdentityConfigurationFamily.Authentication when AssuranceScope is null && AuthenticationPolicyVersion is null && RegistrationPolicyVersion is null => new(Family),
-        IdentityConfigurationFamily.Registration or IdentityConfigurationFamily.Totp or IdentityConfigurationFamily.Passkey when AssuranceScope is null && AuthenticationPolicyVersion is null && RegistrationPolicyVersion is null => new(Family),
+        IdentityConfigurationFamily.Registration or IdentityConfigurationFamily.Totp or IdentityConfigurationFamily.Passkey or IdentityConfigurationFamily.RecoveryCodes when AssuranceScope is null && AuthenticationPolicyVersion is null && RegistrationPolicyVersion is null => new(Family),
         IdentityConfigurationFamily.Assurance when AssuranceScope is not null && AuthenticationPolicyVersion is null && RegistrationPolicyVersion is null => new(Family, AssuranceScope.Value()),
         IdentityConfigurationFamily.AuthenticationContent when AssuranceScope is null && !string.IsNullOrWhiteSpace(AuthenticationPolicyVersion) && RegistrationPolicyVersion is null => new(Family, AuthenticationPolicyVersion: AuthenticationPolicyVersion),
         IdentityConfigurationFamily.RegistrationContent when AssuranceScope is null && AuthenticationPolicyVersion is null && !string.IsNullOrWhiteSpace(RegistrationPolicyVersion) => new(Family, RegistrationPolicyVersion: RegistrationPolicyVersion),
@@ -238,6 +238,19 @@ public sealed class AdminStepUpContentBindingCandidate
         return new((AssuranceScope ?? throw new ArgumentException("An exact assurance scope is required.")).Value(), AssurancePolicyVersion,
             ConfigurationVersionReference, QualificationReference, ContentScope, VariantReference,
             (EffectiveInterval ?? throw new ArgumentException("An interval is required.")).Value());
+    }
+}
+[JsonUnmappedMemberHandling(JsonUnmappedMemberHandling.Disallow)]
+public sealed class AdminRecoveryCodeConfigurationCandidate
+{
+    public required AdminIdentityPolicyMetadata<string> Metadata { get; init; }
+    public required RecoveryCodeConfigurationValues Values { get; init; }
+    internal RecoveryCodeConfigurationVersion Value()
+    {
+        var values = Values ?? throw new ArgumentException("Values are required.");
+        try { _ = values.ToPolicy(); }
+        catch (InvalidOperationException error) { throw new ArgumentException("Unsupported recovery-code candidate values.", nameof(Values), error); }
+        return new((Metadata ?? throw new ArgumentException("Metadata is required.")).Value(static x => x), values);
     }
 }
 [JsonUnmappedMemberHandling(JsonUnmappedMemberHandling.Disallow)]

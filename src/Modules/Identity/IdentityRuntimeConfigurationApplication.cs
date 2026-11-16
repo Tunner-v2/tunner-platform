@@ -34,6 +34,8 @@ public sealed partial class IdentityRuntimeConfigurationApplication(IdentityPers
         => DraftAsync(new(Totp: SnapshotTotpCandidate(candidate)), null, null, operationId, correlationId, cancellationToken);
     public Task<IdentityConfigurationProposal> CreatePasskeyDraftAsync(PasskeyConfigurationVersion candidate, string operationId, string correlationId, CancellationToken cancellationToken = default)
         => DraftAsync(new(Passkey: SnapshotPasskeyCandidate(candidate)), null, null, operationId, correlationId, cancellationToken);
+    public Task<IdentityConfigurationProposal> CreateRecoveryCodeDraftAsync(RecoveryCodeConfigurationVersion candidate, string operationId, string correlationId, CancellationToken cancellationToken = default)
+        => DraftAsync(new(RecoveryCodes: candidate), null, null, operationId, correlationId, cancellationToken);
     public Task<IdentityConfigurationProposal> UpdateAuthenticationDraftAsync(Guid proposalReference, long expectedRevision, AuthenticationPolicyVersion candidate,
         string operationId, string correlationId, CancellationToken cancellationToken = default)
         => DraftAsync(new(Authentication: candidate), proposalReference, expectedRevision, operationId, correlationId, cancellationToken);
@@ -64,6 +66,9 @@ public sealed partial class IdentityRuntimeConfigurationApplication(IdentityPers
     public Task<IdentityConfigurationProposal> UpdatePasskeyDraftAsync(Guid proposalReference, long expectedRevision, PasskeyConfigurationVersion candidate,
         string operationId, string correlationId, CancellationToken cancellationToken = default)
         => DraftAsync(new(Passkey: SnapshotPasskeyCandidate(candidate)), proposalReference, expectedRevision, operationId, correlationId, cancellationToken);
+    public Task<IdentityConfigurationProposal> UpdateRecoveryCodeDraftAsync(Guid proposalReference, long expectedRevision, RecoveryCodeConfigurationVersion candidate,
+        string operationId, string correlationId, CancellationToken cancellationToken = default)
+        => DraftAsync(new(RecoveryCodes: candidate), proposalReference, expectedRevision, operationId, correlationId, cancellationToken);
 
     private static PasskeyConfigurationVersion SnapshotPasskeyCandidate(PasskeyConfigurationVersion candidate)
     {
@@ -139,7 +144,7 @@ public sealed partial class IdentityRuntimeConfigurationApplication(IdentityPers
         var request = Request(IdentityConfigurationOperation.Preview, value.Scope, authority, row.Id.ToString("N"), row.Revision, row.Digest, command.OperationId, command.CorrelationId);
         var actor = await AuthorizeAsync(request, ct).ConfigureAwait(false);
         await FinishAsync(tx, authority, request, actor, row.Id, row.Revision, row.Digest, null, null, null, ct).ConfigureAwait(false);
-        return new(View(row), value.Authentication, value.Assurance, value.ContentBinding) { Registration = value.Registration, Totp = value.Totp, RegistrationContent = value.RegistrationContent, Passkey = value.Passkey, TotpContent = value.TotpContent, PasskeyContent = value.PasskeyContent, StepUpContent = value.StepUpContent };
+        return new(View(row), value.Authentication, value.Assurance, value.ContentBinding) { Registration = value.Registration, Totp = value.Totp, RegistrationContent = value.RegistrationContent, Passkey = value.Passkey, TotpContent = value.TotpContent, PasskeyContent = value.PasskeyContent, StepUpContent = value.StepUpContent, RecoveryCodes = value.RecoveryCodes };
     }
 
     public async Task<IdentityConfigurationHistory> PublishAsync(PublishIdentityConfiguration command, CancellationToken cancellationToken = default)

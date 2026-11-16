@@ -10,7 +10,7 @@ namespace Tunner.Identity.Persistence;
 /// <summary>Only current effective publications with immutable Identity validation/approval/effect receipts are runtime authority.
 /// Reading a policy never requires an Admin browser session and never changes historical actor/session state.</summary>
 public sealed class PersistedIdentityRuntimeConfigurationSource(IServiceScopeFactory scopes) : IAuthenticationPolicySource, IAssurancePolicySource, IAuthenticationContentBindingSource,
-    IRegistrationPolicySource, ITotpPolicySource, IRegistrationContentBindingSource, IPasskeyPolicySource, ITotpContentBindingSource, IPasskeyContentBindingSource, IStepUpContentBindingSource
+    IRegistrationPolicySource, ITotpPolicySource, IRegistrationContentBindingSource, IPasskeyPolicySource, ITotpContentBindingSource, IPasskeyContentBindingSource, IStepUpContentBindingSource, IRecoveryCodePolicySource
 {
     RegistrationPolicy IRegistrationPolicySource.RequireEffective(DateTimeOffset effectiveAt)
     {
@@ -88,6 +88,12 @@ public sealed class PersistedIdentityRuntimeConfigurationSource(IServiceScopeFac
         return value with { QualificationReference = selected.Publication.ApprovalEventReference.ToString("N") };
     }
 
+    RecoveryCodePolicyVersion IRecoveryCodePolicySource.RequireEffective(DateTimeOffset effectiveAt)
+    {
+        var value = Read(new(IdentityConfigurationFamily.RecoveryCodes), effectiveAt).Document.RecoveryCodes ?? throw new IdentityConfigurationUnavailableException();
+        return new RecoveryCodePolicyCatalog([new(value.Metadata, value.Values.ToPolicy())]).RequireEffective(effectiveAt);
+    }
+
     private sealed record Selection(IdentityConfigurationDocument Document, IdentityConfigurationPublicationRow Publication);
     private Selection Read(IdentityConfigurationScope requested, DateTimeOffset at)
     {
@@ -125,6 +131,14 @@ public sealed class PersistedIdentityRuntimeConfigurationSource(IServiceScopeFac
 
 public static class IdentityRuntimeConfigurationRegistration
 {
+    /// <summary>Separate policy opt-in; the composing host still requires an explicitly admitted native crypto profile and all other owners.</summary>
+    public static IServiceCollection AddTunnerPersistedRecoveryCodeConfiguration(this IServiceCollection services)
+    {
+        ArgumentNullException.ThrowIfNull(services);
+        if (services.Any(x => x.ServiceType == typeof(IRecoveryCodePolicySource))) throw new InvalidOperationException("Recovery-code configuration source selection must be explicit and unique.");
+        services.TryAddSingleton<PersistedIdentityRuntimeConfigurationSource>();
+        services.AddSingleton<IRecoveryCodePolicySource>(provider => provider.GetRequiredService<PersistedIdentityRuntimeConfigurationSource>()); return services;
+    }
     /// <summary>Binding-only opt-in; no assurance, presentation, proof or operation owner is registered.</summary>
     public static IServiceCollection AddTunnerPersistedStepUpContentBinding(this IServiceCollection services)
     {
