@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "defect_id": "DEF-TUN-P2-016-002",
+  "work_item_id": "TUN-P2-016",
+  "classification": "BUG",
+  "severity": "SEV-3",
+  "status": "OPEN",
+  "environment": "Independent source review of committed f3613d18f027f1ab771f88be5b774aa1a9094385; focused regression pending",
+  "description": "Registration retry discarded the current policy version and could queue an original verification code after a rollover, although VerifyAsync rejects that operation's old policy. Preserve the separately qualified existing-account notice path. Confirmed by cross-author source review; no pre-fix runtime failure is claimed.",
+  "expected_behavior_ref": "docs/authority/baselines/1.6.0/17_Account_Identity_and_Session_FRD.md",
+  "evidence": ["src/Modules/Identity/RegistrationApplication.cs", "tests/Tunner.Identity.Persistence.Tests/RegistrationTests.cs"],
+  "affected_versions": ["f3613d18f027f1ab771f88be5b774aa1a9094385"],
+  "created_at": "2026-11-16T01:51:50Z",
+  "updated_at": "2026-11-16T01:51:50Z"
+}

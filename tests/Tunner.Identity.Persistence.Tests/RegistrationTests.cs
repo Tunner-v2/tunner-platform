@@ -223,6 +223,34 @@ public sealed class RegistrationTests(IdentityPostgresFixture fixture) : IClassF
         Assert.True(await h.Application(db).DispatchNotificationAsync(row.DeliveryId!.Value));
         Assert.Equal(h.Policy.ExistingAccountTemplateVersion,h.Notices.Messages[row.DeliveryId.Value].TemplateVersion);
     }
+    [Theory]
+    [InlineData(false)]
+    [InlineData(true)]
+    public async Task DeferredVerificationRespectsCurrentPolicyWhileExistingAccountNoticesRemainSeparate(bool existingAccount)
+    {
+        await using var h=await Harness.CreateAsync(fixture); var caller=Caller();
+        if(existingAccount)
+        {
+            var initial=await h.Register(caller,Command());
+            await h.Verify(caller,new(initial.OperationId,Guid.NewGuid(),initial.Version,await h.CodeFor(initial.OperationId)));
+            h.Notices.Messages.Clear(); caller=Caller();
+        }
+        h.Notices.Unavailable=true; var pending=await h.Register(caller,Command());
+        var next=h.Policy with {Version="fixture-registration-next"};
+        var version=new RegistrationPolicyVersion(new(next.Version,"ACTIVE","REGISTRATION",
+            new EffectivePolicyInterval(h.Clock.GetUtcNow().AddMinutes(-1),true,null,false),null,["fixture-only-rollover-approval"]),next);
+        await using var db=h.Database.Context(); var app=h.Application(db,new RegistrationPolicyCatalog([version]));
+        var row=await db.Set<RegistrationOperationRow>().AsNoTracking().SingleAsync(x=>x.OperationId==pending.OperationId);
+        if(!existingAccount)
+        {
+            Assert.NotNull(row.ProtectedCode); Assert.NotNull(row.ProtectedDigest);
+            Assert.Equal("NOT_FOUND_OR_NOT_DISCLOSABLE",(await app.VerifyAsync(caller,
+                new(pending.OperationId,Guid.NewGuid(),pending.Version,await h.CodeFor(pending.OperationId)))).ErrorCode);
+        }
+        h.Notices.Unavailable=false;
+        Assert.Equal(existingAccount,await app.DispatchNotificationAsync(row.DeliveryId!.Value));
+        Assert.Equal(existingAccount?1:0,h.Notices.Messages.Count);
+    }
 
     [Theory]
     [InlineData("pending", true)]

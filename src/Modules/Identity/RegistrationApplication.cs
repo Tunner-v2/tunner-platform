@@ -224,13 +224,13 @@ public sealed partial class RegistrationApplication(
     /// <summary>Trusted notification consumer retry entry; not an HTTP endpoint. Adapter deduplicates DeliveryId.</summary>
     public async Task<bool> DispatchNotificationAsync(Guid deliveryId, CancellationToken cancellationToken = default)
     {
-        var now = timeProvider.GetUtcNow(); policies.RequireEffective(now).Validate();
+        var now = timeProvider.GetUtcNow(); var policy = policies.RequireEffective(now); policy.Validate();
         var row = await database.Set<RegistrationOperationRow>().AsNoTracking().SingleOrDefaultAsync(x => x.DeliveryId == deliveryId, cancellationToken).ConfigureAwait(false);
         if (row is null || row.Status != "REQUIRES_ACTION" || row.ExpiresAt <= now || row.PurgeAfter <= now || row.ProtectedAddress is null) return false;
-        // A verification whose proof was invalidated must not become a code-less notice on retry.
+        // Verification retries retain VerifyAsync's policy-version and proof-material prerequisites.
         // Existing-account notices intentionally have neither a proposed credential nor an Account binding.
         if ((row.AccountId is not null || row.ProtectedCredential is not null) &&
-            (row.ProtectedCode is null || row.ProtectedDigest is null)) return false;
+            (row.PolicyVersion != policy.Version || row.ProtectedCode is null || row.ProtectedDigest is null)) return false;
         await notifications.QueueAsync(new RegistrationNotification(deliveryId, addressProtection.Unprotect(row.ProtectedAddress),
             row.ProtectedCode is null ? null : challengeProtection.Unprotect(row.ProtectedCode), row.TemplateVersion), cancellationToken).ConfigureAwait(false);
         return true;
