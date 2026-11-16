@@ -5108,6 +5108,175 @@
       "pathname": null,
       "runtime_pathname": null,
       "validation": "Shared typed schema, fields, error summary/focus and independent existing SessionListingHttpBudget constructor validation. MaximumRows and MaximumRequestBytes are explicit owner inputs; no default limits or runtime activation."
+    },
+    {
+      "app": "admin",
+      "module": "Identity.Configuration",
+      "status": "IMPLEMENTED",
+      "owner_scopes": [
+        "TUN-P2-019"
+      ],
+      "authority_refs": [
+        "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md",
+        "AMD-0008",
+        "AMD-0009"
+      ],
+      "figma_refs": [
+        {
+          "approved_adaptation_ref": "artifacts/p2-019-content-20261116/config-ui-review/review.html",
+          "visual_scope": "Reuse019-V05–V06 shared content-binding configuration lifecycle under P2-019 delegated UI/UX authority"
+        }
+      ],
+      "source_paths": [
+        "web/apps/admin/configuration.tsx",
+        "web/apps/admin/configuration.api.ts",
+        "web/apps/admin/configuration.validation.ts",
+        "web/apps/admin/configuration.routes.ts",
+        "web/apps/admin/configuration.css",
+        "src/Tunner.Admin.Bff/AdminIdentityConfigurationScreens.cs",
+        "src/Tunner.Admin.Bff/AdminIdentityConfigurationEndpoints.cs"
+      ],
+      "additional_consent_refs": [
+        "governance/work-items/TUN-P2-019.yaml"
+      ],
+      "acceptance_state": "ENGINEERING_UI_QUALIFICATION_TRACKED_IN_WORK_ITEM_EVIDENCE",
+      "id": "A-ID-SETTINGS-SessionListingContent-edit",
+      "kind": "SCREEN",
+      "title": "Session Listing content edit",
+      "pathname": "/identity/settings/session-listing-content",
+      "runtime_pathname": "/identity/settings/session-listing-content",
+      "parameter_schema": {},
+      "guard": "Actual Admin session and independent exact Identity authorization; server-qualified SessionListingContent scope bound to exact Authentication policy version, saved candidate/publication and current capabilities. No private URL/browser storage context or User-session permission changes.",
+      "form_ids": [
+        "FORM-ADMIN-IDENTITY-SESSION-LISTING-CONTENT-BINDING",
+        "FORM-ADMIN-IDENTITY-SEARCH"
+      ],
+      "routing_state": "IMPLEMENTED"
+    },
+    {
+      "app": "admin",
+      "module": "Identity.Configuration",
+      "status": "IMPLEMENTED",
+      "owner_scopes": [
+        "TUN-P2-019"
+      ],
+      "authority_refs": [
+        "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md",
+        "AMD-0008",
+        "AMD-0009"
+      ],
+      "figma_refs": [
+        {
+          "approved_adaptation_ref": "artifacts/p2-019-content-20261116/config-ui-review/review.html",
+          "visual_scope": "Reuse019-V05–V06 shared content-binding configuration lifecycle under P2-019 delegated UI/UX authority"
+        }
+      ],
+      "source_paths": [
+        "web/apps/admin/configuration.tsx",
+        "web/apps/admin/configuration.api.ts",
+        "web/apps/admin/configuration.validation.ts",
+        "web/apps/admin/configuration.routes.ts",
+        "web/apps/admin/configuration.css",
+        "src/Tunner.Admin.Bff/AdminIdentityConfigurationScreens.cs",
+        "src/Tunner.Admin.Bff/AdminIdentityConfigurationEndpoints.cs"
+      ],
+      "additional_consent_refs": [
+        "governance/work-items/TUN-P2-019.yaml"
+      ],
+      "acceptance_state": "ENGINEERING_UI_QUALIFICATION_TRACKED_IN_WORK_ITEM_EVIDENCE",
+      "id": "A-ID-SETTINGS-SessionListingContent-review",
+      "kind": "SCREEN",
+      "title": "Session Listing content review",
+      "pathname": "/identity/settings/session-listing-content/review",
+      "runtime_pathname": "/identity/settings/session-listing-content/review",
+      "parameter_schema": {},
+      "guard": "Actual Admin session and independent exact Identity authorization; server-qualified SessionListingContent scope bound to exact Authentication policy version, saved candidate/publication and current capabilities. No private URL/browser storage context or User-session permission changes.",
+      "form_ids": [
+        "FORM-ADMIN-IDENTITY-PUBLICATION"
+      ],
+      "routing_state": "IMPLEMENTED"
+    },
+    {
+      "app": "admin",
+      "module": "Identity.Configuration",
+      "status": "IMPLEMENTED",
+      "owner_scopes": [
+        "TUN-P2-019"
+      ],
+      "authority_refs": [
+        "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md",
+        "AMD-0008",
+        "AMD-0009"
+      ],
+      "figma_refs": [
+        {
+          "approved_adaptation_ref": "artifacts/p2-019-content-20261116/config-ui-review/review.html",
+          "visual_scope": "Reuse019-V05–V06 shared content-binding configuration lifecycle under P2-019 delegated UI/UX authority"
+        }
+      ],
+      "source_paths": [
+        "web/apps/admin/configuration.tsx",
+        "web/apps/admin/configuration.api.ts",
+        "web/apps/admin/configuration.validation.ts",
+        "web/apps/admin/configuration.routes.ts",
+        "web/apps/admin/configuration.css",
+        "src/Tunner.Admin.Bff/AdminIdentityConfigurationScreens.cs",
+        "src/Tunner.Admin.Bff/AdminIdentityConfigurationEndpoints.cs"
+      ],
+      "additional_consent_refs": [
+        "governance/work-items/TUN-P2-019.yaml"
+      ],
+      "acceptance_state": "ENGINEERING_UI_QUALIFICATION_TRACKED_IN_WORK_ITEM_EVIDENCE",
+      "id": "A-ID-SETTINGS-SessionListingContent-history",
+      "kind": "SCREEN",
+      "title": "Session Listing content history",
+      "pathname": "/identity/settings/session-listing-content/history",
+      "runtime_pathname": "/identity/settings/session-listing-content/history",
+      "parameter_schema": {},
+      "guard": "Actual Admin session and independent exact Identity authorization; server-qualified SessionListingContent scope bound to exact Authentication policy version, saved candidate/publication and current capabilities. No private URL/browser storage context or User-session permission changes.",
+      "form_ids": [
+        "FORM-ADMIN-IDENTITY-PUBLICATION"
+      ],
+      "routing_state": "IMPLEMENTED"
+    },
+    {
+      "app": "admin",
+      "module": "Identity.Configuration",
+      "status": "IMPLEMENTED",
+      "owner_scopes": [
+        "TUN-P2-019"
+      ],
+      "authority_refs": [
+        "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md",
+        "AMD-0008",
+        "AMD-0009"
+      ],
+      "figma_refs": [
+        {
+          "approved_adaptation_ref": "artifacts/p2-019-content-20261116/config-ui-review/review.html",
+          "visual_scope": "Reuse019-V05–V06 shared content-binding configuration lifecycle under P2-019 delegated UI/UX authority"
+        }
+      ],
+      "source_paths": [
+        "web/apps/admin/configuration.tsx",
+        "web/apps/admin/configuration.api.ts",
+        "web/apps/admin/configuration.validation.ts",
+        "web/apps/admin/configuration.routes.ts",
+        "web/apps/admin/configuration.css",
+        "src/Tunner.Admin.Bff/AdminIdentityConfigurationScreens.cs",
+        "src/Tunner.Admin.Bff/AdminIdentityConfigurationEndpoints.cs"
+      ],
+      "additional_consent_refs": [
+        "governance/work-items/TUN-P2-019.yaml"
+      ],
+      "acceptance_state": "ENGINEERING_UI_QUALIFICATION_TRACKED_IN_WORK_ITEM_EVIDENCE",
+      "id": "FORM-ADMIN-IDENTITY-SESSION-LISTING-CONTENT-BINDING",
+      "kind": "FORM",
+      "title": "Session Listing content binding",
+      "screen_id": "A-ID-SETTINGS-SessionListingContent-edit",
+      "pathname": null,
+      "runtime_pathname": null,
+      "validation": "Shared typed schema, fields, error summary/focus and independent six-property binding validation. Selected Authentication policy version is read-only; publication qualification uses actual stored approval evidence. No User layout, listing budget, policy values or session permissions are changed."
     }
   ],
   "excluded_historical_designs": [
@@ -5117,5 +5286,5 @@
       "reason": "Hidden historical DOB-only screen, superseded prospectively by PDR-0011/AMD-0007; never implement as active UI."
     }
   ],
-  "updated_at": "2026-11-14T13:36:14Z"
+  "updated_at": "2026-11-16T23:01:56Z"
 }

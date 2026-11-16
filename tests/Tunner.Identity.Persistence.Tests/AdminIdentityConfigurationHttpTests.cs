@@ -47,6 +47,7 @@ public sealed class AdminIdentityConfigurationHttpTests(SessionListingPostgresFi
     [InlineData("step-up-content")]
     [InlineData("recovery-codes")]
     [InlineData("session-listing")]
+    [InlineData("session-listing-content")]
     public async Task CanonicalSettingsRoutesEnforceCurrentIdentityAdmission(string family)
     {
         var additional = family switch
@@ -60,6 +61,7 @@ public sealed class AdminIdentityConfigurationHttpTests(SessionListingPostgresFi
             "step-up-content" => new[] { new IdentityConfigurationScope(IdentityConfigurationFamily.StepUpContent, AssuranceScope: new("fixture-step-up-route", "fixture-user-context"), AssurancePolicyVersion: "fixture-assurance-route-v1") },
             "recovery-codes" => new[] { new IdentityConfigurationScope(IdentityConfigurationFamily.RecoveryCodes) },
             "session-listing" => new[] { new IdentityConfigurationScope(IdentityConfigurationFamily.SessionListing) },
+            "session-listing-content" => new[] { new IdentityConfigurationScope(IdentityConfigurationFamily.SessionListingContent, AuthenticationPolicyVersion: "fixture-session-listing-route-v1") },
             _ => Array.Empty<IdentityConfigurationScope>()
         };
         await using var database = await fixture.CreateDatabaseAsync(); await using var host = await Host.Start(database, additionalScopes: additional);

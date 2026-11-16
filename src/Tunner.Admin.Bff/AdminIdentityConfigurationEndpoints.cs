@@ -71,6 +71,14 @@ public static class AdminIdentityConfigurationEndpoints
                 ? app.UpdateRegistrationContentDraftAsync(id, c.ExpectedRevision!.Value, candidate, op.Id, op.Correlation, h.RequestAborted)
                 : app.CreateRegistrationContentDraftAsync(candidate, op.Id, op.Correlation, h.RequestAborted)).ConfigureAwait(false);
         }));
+        routes.MapPost("/session-listing-content/draft", (HttpContext h, IdentityRuntimeConfigurationApplication app) => Guard(h, async (profile, session) =>
+        {
+            var c = await Read<AdminIdentityConfigurationDraft<AdminSessionListingContentBindingCandidate>>(h, profile).ConfigureAwait(false); c.RequireTarget(); var candidate = c.Candidate.Value();
+            _ = Scope(profile, new AdminIdentityConfigurationScope { Family = IdentityConfigurationFamily.SessionListingContent, AuthenticationPolicyVersion = candidate.AuthenticationPolicyVersion });
+            return await Write(h, app, session, c.IdempotencyKey, c, op => c.ProposalReference is { } id
+                ? app.UpdateSessionListingContentDraftAsync(id, c.ExpectedRevision!.Value, candidate, op.Id, op.Correlation, h.RequestAborted)
+                : app.CreateSessionListingContentDraftAsync(candidate, op.Id, op.Correlation, h.RequestAborted)).ConfigureAwait(false);
+        }));
         routes.MapPost("/session-listing/draft", (HttpContext h, IdentityRuntimeConfigurationApplication app) => Guard(h, async (profile, session) =>
         {
             var c = await Read<AdminIdentityConfigurationDraft<AdminSessionListingConfigurationCandidate>>(h, profile).ConfigureAwait(false); c.RequireTarget(); var candidate = c.Candidate.Value();

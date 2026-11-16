@@ -10,7 +10,7 @@ namespace Tunner.Identity.Persistence;
 /// <summary>Only current effective publications with immutable Identity validation/approval/effect receipts are runtime authority.
 /// Reading a policy never requires an Admin browser session and never changes historical actor/session state.</summary>
 public sealed class PersistedIdentityRuntimeConfigurationSource(IServiceScopeFactory scopes) : IAuthenticationPolicySource, IAssurancePolicySource, IAuthenticationContentBindingSource,
-    IRegistrationPolicySource, ITotpPolicySource, IRegistrationContentBindingSource, IPasskeyPolicySource, ITotpContentBindingSource, IPasskeyContentBindingSource, IStepUpContentBindingSource, IRecoveryCodePolicySource, ISessionListingHttpBudgetSource
+    IRegistrationPolicySource, ITotpPolicySource, IRegistrationContentBindingSource, IPasskeyPolicySource, ITotpContentBindingSource, IPasskeyContentBindingSource, IStepUpContentBindingSource, IRecoveryCodePolicySource, ISessionListingHttpBudgetSource, ISessionListingContentBindingSource
 {
     RegistrationPolicy IRegistrationPolicySource.RequireEffective(DateTimeOffset effectiveAt)
     {
@@ -100,7 +100,36 @@ public sealed class PersistedIdentityRuntimeConfigurationSource(IServiceScopeFac
         return new SessionListingHttpBudgetCatalog([value]).RequireEffective(at);
     }
 
-    private sealed record Selection(IdentityConfigurationDocument Document, IdentityConfigurationPublicationRow Publication);
+    SessionListingContentBinding ISessionListingContentBindingSource.RequireQualified(AuthenticationPolicy policy, DateTimeOffset effectiveAt)
+    {
+        ArgumentNullException.ThrowIfNull(policy); policy.Validate();
+        var selected = Read(new(IdentityConfigurationFamily.SessionListingContent, AuthenticationPolicyVersion: policy.Version), effectiveAt);
+        var value = selected.Document.SessionListingContent ?? throw new IdentityConfigurationUnavailableException();
+        if (value.AuthenticationPolicyVersion != policy.Version || selected.SessionListingAvailability is null) throw new IdentityConfigurationUnavailableException();
+        return value with { QualificationReference = selected.Publication.ApprovalEventReference.ToString("N"), EffectiveInterval = selected.SessionListingAvailability };
+    }
+
+    // This read-only consumer carries the selected publication's actual validity, not only its broader proposal interval.
+    private static EffectivePolicyInterval SessionListingAvailability(EffectivePolicyInterval candidate, IdentityConfigurationPublicationRow publication,
+        IdentityConfigurationPublicationRow? next)
+    {
+        var from = candidate.From > publication.EffectiveFrom ? candidate.From : publication.EffectiveFrom;
+        var includesFrom = (from != candidate.From || candidate.IncludesFrom) && (from != publication.EffectiveFrom || publication.IncludesFrom);
+        var until = candidate.Until; var includesUntil = candidate.IncludesUntil;
+        void Clip(DateTimeOffset? end, bool included)
+        {
+            if (end is null) return;
+            if (until is null || end < until) { until = end; includesUntil = included; }
+            else if (end == until) includesUntil &= included;
+        }
+        Clip(publication.EffectiveUntil, publication.IncludesUntil);
+        // A successor included at its start ends the old selection exclusively; an excluded start leaves the old selection valid at that instant.
+        if (next is not null) Clip(next.EffectiveFrom, !next.IncludesFrom);
+        return new(from, includesFrom, until, includesUntil);
+    }
+
+    private sealed record Selection(IdentityConfigurationDocument Document, IdentityConfigurationPublicationRow Publication)
+    { internal EffectivePolicyInterval? SessionListingAvailability { get; init; } }
     private Selection Read(IdentityConfigurationScope requested, DateTimeOffset at)
     {
         try
@@ -128,7 +157,17 @@ public sealed class PersistedIdentityRuntimeConfigurationSource(IServiceScopeFac
             var document = IdentityConfigurationDocument.Read(version.Payload);
             if (version.ScopeKey != key || document.Scope != requested || document.Digest != version.Digest || document.Version != version.PolicyVersionReference ||
                 !document.Interval.Contains(at)) throw new IdentityConfigurationUnavailableException();
-            return new(document, publication);
+            EffectivePolicyInterval? listingAvailability = null;
+            if (requested.Family == IdentityConfigurationFamily.SessionListingContent)
+            {
+                // Bound only this new consumer by the earliest already-committed same-scope selection frontier observed by this read.
+                var next = database.Set<IdentityConfigurationPublicationRow>().AsNoTracking().Where(x => x.ScopeKey == key &&
+                    (x.EffectiveFrom > at || x.EffectiveFrom == at && !x.IncludesFrom))
+                    .OrderBy(x => x.EffectiveFrom).ThenByDescending(x => x.IncludesFrom).FirstOrDefault();
+                listingAvailability = SessionListingAvailability(document.Interval, publication, next);
+                if (!listingAvailability.Contains(at)) throw new IdentityConfigurationUnavailableException();
+            }
+            return new(document, publication) { SessionListingAvailability = listingAvailability };
         }
         catch (Exception error) when (error is DbException or TimeoutException or JsonException or ArgumentException or InvalidOperationException)
         { throw new IdentityConfigurationUnavailableException(); }
@@ -137,6 +176,14 @@ public sealed class PersistedIdentityRuntimeConfigurationSource(IServiceScopeFac
 
 public static class IdentityRuntimeConfigurationRegistration
 {
+    /// <summary>Binding-only opt-in; listing budget, presentation and optional routes remain separate selections.</summary>
+    public static IServiceCollection AddTunnerPersistedSessionListingContentBinding(this IServiceCollection services)
+    {
+        ArgumentNullException.ThrowIfNull(services);
+        if (services.Any(x => x.ServiceType == typeof(ISessionListingContentBindingSource))) throw new InvalidOperationException("Session listing content binding source selection must be explicit and unique.");
+        services.TryAddSingleton<PersistedIdentityRuntimeConfigurationSource>();
+        services.AddSingleton<ISessionListingContentBindingSource>(provider => provider.GetRequiredService<PersistedIdentityRuntimeConfigurationSource>()); return services;
+    }
     /// <summary>Explicit listing budget selection; base helpers do not activate optional session routes.</summary>
     public static IServiceCollection AddTunnerPersistedSessionListingConfiguration(this IServiceCollection services)
     {
