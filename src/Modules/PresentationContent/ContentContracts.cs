@@ -17,7 +17,8 @@ public sealed class ContentUnavailableException() : InvalidOperationException("Q
 public sealed class ContentConflictException() : InvalidOperationException("The content reference or expected revision changed.");
 public sealed class ContentForbiddenException() : InvalidOperationException("The content operation is not authorized.");
 public sealed record ContentDefinition(string Key, string ContentClass, bool Mandatory, bool AllowFallback, bool RequiresApproval,
-    IReadOnlyList<string> Variables, IReadOnlyList<string> RequiredVariables);
+    IReadOnlyList<string> Variables, IReadOnlyList<string> RequiredVariables)
+{ public required string Purpose { get; init; } }
 public sealed record ContentVariant(string Reference, string Locale, IReadOnlyDictionary<string, string> SafeDimensions);
 public sealed record ContentFallback(string RequestedVariantReference, IReadOnlyList<string> OrderedVariantReferences);
 public sealed record ContentEffectContract(string AuditAction, string AuditResult, string Source, string EnvelopeVersion, string? EventType, string? EventSchemaVersion);
@@ -40,7 +41,7 @@ public sealed record ContentGovernanceProfile(PolicyVersionCandidate<string> Met
             Variants.Select(x => x.Reference).Distinct(StringComparer.Ordinal).Count() != Variants.Count ||
             Fallbacks.Select(x => x.RequestedVariantReference).Distinct(StringComparer.Ordinal).Count() != Fallbacks.Count) throw new ContentUnavailableException();
         foreach (var d in Definitions)
-            if (string.IsNullOrWhiteSpace(d.Key) || string.IsNullOrWhiteSpace(d.ContentClass) || d.Variables is null || d.RequiredVariables is null ||
+            if (string.IsNullOrWhiteSpace(d.Key) || string.IsNullOrWhiteSpace(d.Purpose) || string.IsNullOrWhiteSpace(d.ContentClass) || d.Variables is null || d.RequiredVariables is null ||
                 d.Variables.Any(string.IsNullOrWhiteSpace) || d.Variables.Distinct(StringComparer.Ordinal).Count() != d.Variables.Count ||
                 d.RequiredVariables.Any(x => !d.Variables.Contains(x, StringComparer.Ordinal))) throw new ContentUnavailableException();
         foreach (var v in Variants)
@@ -55,16 +56,17 @@ public sealed record ContentGovernanceProfile(PolicyVersionCandidate<string> Met
             if (!Enum.IsDefined(operation) || new[] { effect.AuditAction, effect.AuditResult, effect.Source, effect.EnvelopeVersion }.Any(string.IsNullOrWhiteSpace) ||
                 ((effect.EventType is null) != (effect.EventSchemaVersion is null)) ||
                 (effect.EventType is not null && (string.IsNullOrWhiteSpace(effect.EventType) || string.IsNullOrWhiteSpace(effect.EventSchemaVersion))) ||
-                (operation is not (ContentOperation.Preview or ContentOperation.History) && effect.EventType is null)) throw new ContentUnavailableException();
+                (operation is not (ContentOperation.Preview or ContentOperation.History or ContentOperation.Browse) && effect.EventType is null)) throw new ContentUnavailableException();
     }
 }
 public interface IPresentationContentProfileSource { ContentGovernanceProfile RequireEffective(string scope, DateTimeOffset effectiveAt); }
-public enum ContentOperation { CreateDraft, UpdateDraft, Validate, Preview, Approve, Publish, History, Rollback }
+public enum ContentOperation { CreateDraft, UpdateDraft, Validate, Preview, Approve, Publish, History, Rollback, Browse }
 public enum ContentActorKind { Human, Service, Model }
 /// <summary>The trusted server adapter evaluates its actual caller; client identity/permission assertions are not inputs.</summary>
 public sealed record ContentAuthorizationRequest(ContentOperation Operation, string Scope, string TargetReference, long ExpectedRevision,
     string CandidateDigest, string ProfileVersion, string OperationId, string CorrelationId)
 {
+    public bool IsCapabilityProbe { get; init; }
     public string ProfileDigest { get; init; } = "";
     [JsonIgnore] public string Digest => ContentDigest.Of(this);
 }
@@ -72,8 +74,10 @@ public sealed record ContentAuthorizationDecision(string RequestDigest, bool All
     string AuthorizationPolicyVersion, string EvidenceReference, EffectivePolicyInterval EffectiveInterval);
 public interface IPresentationContentAuthorizationSource
 { ValueTask<ContentAuthorizationDecision> AuthorizeAsync(ContentAuthorizationRequest request, CancellationToken cancellationToken); }
-public sealed record CreateContentDraft(string Scope, string Key, string VariantReference, string Text, string OperationId, string CorrelationId);
-public sealed record ChangeContentDraft(Guid ProposalReference, long ExpectedRevision, string Text, string OperationId, string CorrelationId);
+public sealed record CreateContentDraft(string Scope, string Key, string VariantReference, string Text, string OperationId, string CorrelationId)
+{ public string? ChangeReason { get; init; } }
+public sealed record ChangeContentDraft(Guid ProposalReference, long ExpectedRevision, string Text, string OperationId, string CorrelationId)
+{ public string? ChangeReason { get; init; } }
 public sealed record ContentProposalCommand(Guid ProposalReference, long ExpectedRevision, string OperationId, string CorrelationId);
 public sealed record PublishContent(Guid ProposalReference, long ExpectedRevision, EffectivePolicyInterval EffectiveInterval,
     Guid? SupersedesPublicationReference, string OperationId, string CorrelationId);
@@ -82,11 +86,12 @@ public sealed record RollbackContent(Guid ApprovedVersionReference, Guid Superse
 public sealed record ContentProposalView(Guid ProposalReference, long Revision, string State, string Scope, string Key, string VariantReference,
     Guid? VersionReference, string TextDigest)
 { public bool ModelOrigin { get; init; } }
-public sealed record ContentPreview(ContentProposalView Proposal, string Text, string ContentClass, IReadOnlyList<string> Variables);
+public sealed record ContentPreview(ContentProposalView Proposal, string Text, string ContentClass, IReadOnlyList<string> Variables)
+{ public string? ChangeReason { get; init; } }
 public sealed record ContentHistoryEntry(Guid PublicationReference, Guid VersionReference, string Key, string VariantReference, string Locale,
     string Text, string TextDigest, EffectivePolicyInterval EffectiveInterval, Guid? SupersedesPublicationReference, string PublisherReference,
     string? ApproverReference, string ProfileVersion)
-{ public bool ModelOrigin { get; init; } }
+{ public bool ModelOrigin { get; init; } public string? ChangeReason { get; init; } }
 internal static class ContentDigest
 {
     internal static string Of<T>(T value) => Convert.ToHexStringLower(System.Security.Cryptography.SHA256.HashData(

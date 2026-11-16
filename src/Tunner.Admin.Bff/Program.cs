@@ -16,9 +16,12 @@ public static class TunnerAdminBffHost
         builder.Services.AddTunnerObservability();
         builder.Services.AddTunnerModules();
         builder.Services.AddTunnerBffFoundation(BffSurface.Admin, builder.Configuration["Bff:BrowserOrigin"]);
+        var contentEnabled = builder.Services.Any(x => x.ServiceType == typeof(IAdminContentHttpProfileSource));
+        if (contentEnabled) builder.Services.AddTunnerAdminContent();
         var application = builder.Build();
         application.UseTunnerBffFoundation();
         application.MapTunnerBffHealth();
+        if (contentEnabled) application.MapTunnerAdminContent();
         return application;
     }
 }

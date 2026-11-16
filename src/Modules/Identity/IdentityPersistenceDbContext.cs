@@ -31,6 +31,7 @@ public sealed class IdentityPersistenceDbContext(DbContextOptions<IdentityPersis
         FederationAttemptModel.Configure(builder);
         FederationLinkOperationModel.Configure(builder);
         DeviceModelConfiguration.Configure(builder);
+        IdentityRuntimeConfigurationModel.Configure(builder);
     }
 
     public async Task<AccountSnapshot?> ReadAccountAsync(string accountId, CancellationToken cancellationToken = default)

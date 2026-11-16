@@ -318,6 +318,70 @@ namespace Tunner.Identity.Persistence.Migrations
                     b.ToTable("OpenIddictTokens", "identity");
                 });
 
+            modelBuilder.Entity("Tunner.Database.Audit.AuditEventRecord", b =>
+                {
+                    b.Property<Guid>("EventId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("event_id");
+
+                    b.Property<string>("CorrelationId")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("correlation_id");
+
+                    b.Property<string>("DataClassification")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("data_classification");
+
+                    b.Property<string>("Envelope")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("envelope");
+
+                    b.Property<string>("EnvelopeSha256")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("character varying(64)")
+                        .HasColumnName("envelope_sha256");
+
+                    b.Property<string>("IntegrityFormat")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("integrity_format");
+
+                    b.Property<DateTimeOffset>("OccurredAtUtc")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("occurred_at_utc");
+
+                    b.Property<string>("OperationId")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("operation_id");
+
+                    b.Property<string>("RetentionClassReference")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("retention_class_ref");
+
+                    b.HasKey("EventId");
+
+                    b.HasIndex("CorrelationId")
+                        .HasDatabaseName("IX_audit_events_correlation");
+
+                    b.HasIndex("OperationId")
+                        .HasDatabaseName("IX_audit_events_operation");
+
+                    b.ToTable("events", "audit", t =>
+                        {
+                            t.ExcludeFromMigrations();
+
+                            t.HasCheckConstraint("ck_audit_events_digest", "envelope_sha256 ~ '^[0-9a-f]{64}$'");
+
+                            t.HasCheckConstraint("ck_audit_events_integrity_format", "integrity_format = 'sha256-envelope-v1'");
+                        });
+                });
+
             modelBuilder.Entity("Tunner.Database.Outbox.OutboxMessage", b =>
                 {
                     b.Property<Guid>("EventId")
@@ -1827,6 +1891,266 @@ namespace Tunner.Identity.Persistence.Migrations
 
                             t.HasCheckConstraint("ck_federation_management_time", "expires_at>created_at AND recovery_expires_at>expires_at AND (confirmed_at IS NULL OR (confirmed_at>=created_at AND confirmed_at<expires_at)) AND ((state IN ('PENDING_PROVIDER','PENDING_CONFIRMATION','PENDING_PROOF') AND ended_at IS NULL AND proof_reference IS NULL AND result_link_id IS NULL AND result_link_version IS NULL AND error_code IS NULL) OR (state='COMPLETED' AND confirmed_at IS NOT NULL AND ended_at>=confirmed_at AND proof_reference IS NOT NULL AND result_link_id IS NOT NULL AND result_link_version>=1 AND error_code IS NULL) OR (state IN ('REJECTED','EXPIRED') AND ended_at>=created_at AND error_code IN ('AUTHENTICATION_FAILED','VERSION_CONFLICT','RATE_OR_ABUSE_LIMITED','STEP_UP_REQUIRED') AND proof_reference IS NULL AND result_link_id IS NULL AND result_link_version IS NULL))");
                         });
+                });
+
+            modelBuilder.Entity("Tunner.Identity.Persistence.IdentityConfigurationGovernanceRow", b =>
+                {
+                    b.Property<string>("ScopeKey")
+                        .HasColumnType("text")
+                        .HasColumnName("scope_key");
+
+                    b.Property<string>("Version")
+                        .HasColumnType("text")
+                        .HasColumnName("version");
+
+                    b.Property<string>("Snapshot")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("snapshot");
+
+                    b.HasKey("ScopeKey", "Version");
+
+                    b.ToTable("runtime_configuration_governance", "identity");
+                });
+
+            modelBuilder.Entity("Tunner.Identity.Persistence.IdentityConfigurationProposalRow", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<Guid?>("ApprovalEventReference")
+                        .HasColumnType("uuid")
+                        .HasColumnName("approval_event_reference");
+
+                    b.Property<string>("ApprovalEvidenceReference")
+                        .HasColumnType("text")
+                        .HasColumnName("approval_evidence_reference");
+
+                    b.Property<string>("ApproverReference")
+                        .HasColumnType("text")
+                        .HasColumnName("approver_reference");
+
+                    b.Property<string>("ContributorsJson")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("contributors_json");
+
+                    b.Property<string>("Digest")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("digest");
+
+                    b.Property<string>("GovernanceVersion")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("governance_version");
+
+                    b.Property<string>("LastActorReference")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("last_actor_reference");
+
+                    b.Property<Guid>("LastEventReference")
+                        .HasColumnType("uuid")
+                        .HasColumnName("last_event_reference");
+
+                    b.Property<string>("LastOperation")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("last_operation");
+
+                    b.Property<Guid>("LastTargetReference")
+                        .HasColumnType("uuid")
+                        .HasColumnName("last_target_reference");
+
+                    b.Property<bool>("ModelOrigin")
+                        .HasColumnType("boolean")
+                        .HasColumnName("model_origin");
+
+                    b.Property<string>("Payload")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("payload");
+
+                    b.Property<string>("PolicyVersionReference")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("policy_version_reference");
+
+                    b.Property<long>("Revision")
+                        .IsConcurrencyToken()
+                        .HasColumnType("bigint")
+                        .HasColumnName("revision");
+
+                    b.Property<string>("ScopeKey")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("scope_key");
+
+                    b.Property<string>("State")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("state");
+
+                    b.Property<Guid?>("VersionReference")
+                        .HasColumnType("uuid")
+                        .HasColumnName("version_reference");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ScopeKey", "GovernanceVersion");
+
+                    b.ToTable("runtime_configuration_proposals", "identity", t =>
+                        {
+                            t.HasCheckConstraint("ck_identity_configuration_proposal", "revision>=1 AND state IN ('DRAFT','VALIDATED','APPROVED','PUBLISHED')");
+                        });
+                });
+
+            modelBuilder.Entity("Tunner.Identity.Persistence.IdentityConfigurationPublicationRow", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<Guid>("ApprovalEventReference")
+                        .HasColumnType("uuid")
+                        .HasColumnName("approval_event_reference");
+
+                    b.Property<string>("ApprovalEvidenceReference")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("approval_evidence_reference");
+
+                    b.Property<string>("ApproverReference")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("approver_reference");
+
+                    b.Property<DateTimeOffset>("EffectiveFrom")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("effective_from");
+
+                    b.Property<DateTimeOffset?>("EffectiveUntil")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("effective_until");
+
+                    b.Property<bool>("IncludesFrom")
+                        .HasColumnType("boolean")
+                        .HasColumnName("includes_from");
+
+                    b.Property<bool>("IncludesUntil")
+                        .HasColumnType("boolean")
+                        .HasColumnName("includes_until");
+
+                    b.Property<string>("Operation")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("operation");
+
+                    b.Property<Guid>("PublicationEventReference")
+                        .HasColumnType("uuid")
+                        .HasColumnName("publication_event_reference");
+
+                    b.Property<string>("PublisherAuthorizationVersion")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("publisher_authorization_version");
+
+                    b.Property<string>("PublisherEvidenceReference")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("publisher_evidence_reference");
+
+                    b.Property<string>("PublisherReference")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("publisher_reference");
+
+                    b.Property<string>("ScopeKey")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("scope_key");
+
+                    b.Property<Guid?>("SupersedesPublicationReference")
+                        .HasColumnType("uuid")
+                        .HasColumnName("supersedes_publication_reference");
+
+                    b.Property<Guid>("VersionReference")
+                        .HasColumnType("uuid")
+                        .HasColumnName("version_reference");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ScopeKey");
+
+                    b.HasIndex("SupersedesPublicationReference")
+                        .IsUnique();
+
+                    b.HasIndex("VersionReference");
+
+                    b.ToTable("runtime_configuration_publications", "identity", t =>
+                        {
+                            t.HasCheckConstraint("ck_identity_configuration_interval", "effective_until IS NULL OR effective_until>effective_from OR (effective_until=effective_from AND includes_from AND includes_until)");
+                        });
+                });
+
+            modelBuilder.Entity("Tunner.Identity.Persistence.IdentityConfigurationVersionRow", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<string>("ContributorsJson")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("contributors_json");
+
+                    b.Property<string>("Digest")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("digest");
+
+                    b.Property<string>("GovernanceVersion")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("governance_version");
+
+                    b.Property<bool>("ModelOrigin")
+                        .HasColumnType("boolean")
+                        .HasColumnName("model_origin");
+
+                    b.Property<string>("Payload")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("payload");
+
+                    b.Property<string>("PolicyVersionReference")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("policy_version_reference");
+
+                    b.Property<Guid>("ProposalReference")
+                        .HasColumnType("uuid")
+                        .HasColumnName("proposal_reference");
+
+                    b.Property<string>("ScopeKey")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("scope_key");
+
+                    b.Property<Guid>("ValidationEventReference")
+                        .HasColumnType("uuid")
+                        .HasColumnName("validation_event_reference");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProposalReference");
+
+                    b.HasIndex("ScopeKey", "PolicyVersionReference")
+                        .IsUnique();
+
+                    b.ToTable("runtime_configuration_versions", "identity");
                 });
 
             modelBuilder.Entity("Tunner.Identity.Persistence.IdentityUserAdapter", b =>
@@ -4642,6 +4966,38 @@ namespace Tunner.Identity.Persistence.Migrations
                         .WithMany()
                         .HasForeignKey("TargetLinkId")
                         .OnDelete(DeleteBehavior.Restrict);
+                });
+
+            modelBuilder.Entity("Tunner.Identity.Persistence.IdentityConfigurationProposalRow", b =>
+                {
+                    b.HasOne("Tunner.Identity.Persistence.IdentityConfigurationGovernanceRow", null)
+                        .WithMany()
+                        .HasForeignKey("ScopeKey", "GovernanceVersion")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Tunner.Identity.Persistence.IdentityConfigurationPublicationRow", b =>
+                {
+                    b.HasOne("Tunner.Identity.Persistence.IdentityConfigurationPublicationRow", null)
+                        .WithMany()
+                        .HasForeignKey("SupersedesPublicationReference")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("Tunner.Identity.Persistence.IdentityConfigurationVersionRow", null)
+                        .WithMany()
+                        .HasForeignKey("VersionReference")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Tunner.Identity.Persistence.IdentityConfigurationVersionRow", b =>
+                {
+                    b.HasOne("Tunner.Identity.Persistence.IdentityConfigurationProposalRow", null)
+                        .WithMany()
+                        .HasForeignKey("ProposalReference")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Tunner.Identity.Persistence.IdentityUserAdapter", b =>

@@ -19,12 +19,13 @@ public sealed partial class PresentationContentApplication(PresentationContentDb
         ArgumentNullException.ThrowIfNull(command); var ct = cancellationToken;
         await using var tx = await BeginAsync(ct).ConfigureAwait(false); var profile = Profile(command.Scope);
         _ = Definition(profile, command.Key); _ = Variant(profile, command.VariantReference); BoundText(command.Text, profile);
+        if (command.ChangeReason is not null) BoundText(command.ChangeReason, profile);
         var id = Guid.NewGuid(); var request = Request(ContentOperation.CreateDraft, profile, command.Key + ":" + command.VariantReference, 0, ContentDigest.Of(command), command.OperationId, command.CorrelationId);
         var actor = await AuthorizeAsync(request, ct).ConfigureAwait(false);
         await EnsureProfileAsync(profile, ct).ConfigureAwait(false);
         var row = new ContentProposalRow { Id = id, Scope = command.Scope, ProfileVersion = profile.Metadata.VersionId, Key = command.Key,
             VariantReference = command.VariantReference, Text = command.Text, Revision = 1, ContributorsJson = JsonSerializer.Serialize(new[] { actor.ActorReference }),
-            SourceEvidenceReference = actor.EvidenceReference, ModelOrigin = actor.ActorKind == ContentActorKind.Model };
+            SourceEvidenceReference = actor.EvidenceReference, ModelOrigin = actor.ActorKind == ContentActorKind.Model, ChangeReason = command.ChangeReason };
         database.Proposals.Add(row);
         await FinishAsync(tx, profile, request, actor, id, row.Revision, ContentDigest.Of(row.Text), ct).ConfigureAwait(false); return View(row);
     }
@@ -35,10 +36,12 @@ public sealed partial class PresentationContentApplication(PresentationContentDb
         await using var tx = await BeginAsync(ct).ConfigureAwait(false); var row = await ProposalAsync(command.ProposalReference, command.ExpectedRevision, ct).ConfigureAwait(false);
         var profile = await ProposalProfileAsync(row, ct).ConfigureAwait(false);
         if (row.State == "PUBLISHED") throw new ContentConflictException(); BoundText(command.Text, profile);
+        if (command.ChangeReason is not null) BoundText(command.ChangeReason, profile);
         var request = Request(ContentOperation.UpdateDraft, profile, row.Id.ToString("N"), row.Revision, ContentDigest.Of(command), command.OperationId, command.CorrelationId);
         var actor = await AuthorizeAsync(request, ct).ConfigureAwait(false);
         row.ContributorsJson = JsonSerializer.Serialize(Contributors(row.ContributorsJson).Append(actor.ActorReference).Distinct(StringComparer.Ordinal).Order(StringComparer.Ordinal));
         row.ModelOrigin |= actor.ActorKind == ContentActorKind.Model; row.Text = command.Text; row.State = "DRAFT"; row.Revision++;
+        row.ChangeReason = command.ChangeReason;
         row.VersionReference = null; row.ApproverReference = null; row.ApprovalEvidenceReference = null; row.ApprovalEventReference = null;
         await FinishAsync(tx, profile, request, actor, row.Id, row.Revision, ContentDigest.Of(row.Text), ct).ConfigureAwait(false); return View(row);
     }
@@ -52,7 +55,7 @@ public sealed partial class PresentationContentApplication(PresentationContentDb
         var actor = await AuthorizeAsync(request, ct).ConfigureAwait(false); ValidateText(row.Text, profile, Definition(profile, row.Key));
         var version = new ContentVersionRow { Id = Guid.NewGuid(), ProposalReference = row.Id, Scope = row.Scope, ProfileVersion = row.ProfileVersion,
             Key = row.Key, VariantReference = row.VariantReference, Locale = Variant(profile, row.VariantReference).Locale, Text = row.Text,
-            TextDigest = ContentDigest.Of(row.Text), ContributorsJson = row.ContributorsJson, SourceEvidenceReference = row.SourceEvidenceReference, ModelOrigin = row.ModelOrigin };
+            TextDigest = ContentDigest.Of(row.Text), ContributorsJson = row.ContributorsJson, SourceEvidenceReference = row.SourceEvidenceReference, ModelOrigin = row.ModelOrigin, ChangeReason = row.ChangeReason };
         database.Versions.Add(version); row.VersionReference = version.Id; row.State = "VALIDATED"; row.Revision++;
         await FinishAsync(tx, profile, request, actor, version.Id, row.Revision, version.TextDigest, ct, version.Id).ConfigureAwait(false); return View(row);
     }
@@ -65,7 +68,7 @@ public sealed partial class PresentationContentApplication(PresentationContentDb
         var request = Request(ContentOperation.Preview, profile, row.Id.ToString("N"), row.Revision, ContentDigest.Of(command), command.OperationId, command.CorrelationId);
         var actor = await AuthorizeAsync(request, ct).ConfigureAwait(false); ValidateText(row.Text, profile, definition);
         await FinishAsync(tx, profile, request, actor, row.Id, row.Revision, ContentDigest.Of(row.Text), ct, row.VersionReference).ConfigureAwait(false);
-        return new(View(row), row.Text, definition.ContentClass, definition.Variables.ToArray());
+        return new(View(row), row.Text, definition.ContentClass, definition.Variables.ToArray()) { ChangeReason = row.ChangeReason };
     }
 
     public async Task<ContentProposalView> ApproveAsync(ContentProposalCommand command, CancellationToken cancellationToken = default)
@@ -184,7 +187,7 @@ public sealed partial class PresentationContentApplication(PresentationContentDb
     { ModelOrigin = row.ModelOrigin };
     private static ContentHistoryEntry History(ContentPublicationRow row, ContentVersionRow version) => new(row.Id, version.Id, version.Key, version.VariantReference,
         version.Locale, version.Text, version.TextDigest, new(row.From, row.IncludesFrom, row.Until, row.IncludesUntil), row.SupersedesPublicationReference, row.PublisherReference, row.ApproverReference, row.ProfileVersion)
-    { ModelOrigin = version.ModelOrigin };
+    { ModelOrigin = version.ModelOrigin, ChangeReason = version.ChangeReason };
     private static void BoundText(string text, ContentGovernanceProfile profile)
     { if (text is null || text.EnumerateRunes().Count() > profile.MaximumTextLength || text.Contains('\0')) throw new ArgumentException("Content exceeds its declared plain-text bounds.", nameof(text)); }
     private static void ValidateText(string text, ContentGovernanceProfile profile, ContentDefinition definition)
@@ -242,6 +245,7 @@ public sealed partial class PresentationContentApplication(PresentationContentDb
         }
         foreach (var entry in database.ChangeTracker.Entries<ContentVersionRow>().Where(x => x.State == EntityState.Added)) entry.Entity.ValidationEventReference = eventId;
         foreach (var row in scheduled) { row.PublicationEventReference = eventId; row.Operation = request.Operation.ToString(); }
+        var commandReceipt = CommandReceipt(request, actor, reference);
         var audit = new AuditEvent(eventId, at, new(actor.ActorReference, actor.AuditActorType, [actor.EvidenceReference]), contract.AuditAction,
             request.OperationId, request.CorrelationId, [new(target, revision.ToString(CultureInfo.InvariantCulture))], contract.AuditResult, profile.Classification,
             profile.AuditRetentionClassReference, policyVersionReferences: [profile.Metadata.VersionId, actor.AuthorizationPolicyVersion],
@@ -249,9 +253,9 @@ public sealed partial class PresentationContentApplication(PresentationContentDb
         EfAuditAppender.StageAppend(database, audit);
         if (contract.EventType is not null)
             database.Set<OutboxMessage>().Add(new(eventId, contract.EnvelopeVersion, contract.EventType, contract.EventSchemaVersion!, at, contract.Source,
-                target, profile.Classification, JsonSerializer.Serialize(new { reference = target, scope = profile.Metadata.Scope, profileVersion = profile.Metadata.VersionId,
+                target, profile.Classification, CommandPayload(new { reference = target, scope = profile.Metadata.Scope, profileVersion = profile.Metadata.VersionId,
                     revision, contentDigest = digest, authorizationEvidenceReference = actor.EvidenceReference,
-                    versionReference = versionReference?.ToString("N") }), revision.ToString(CultureInfo.InvariantCulture), request.OperationId, request.CorrelationId));
+                    versionReference = versionReference?.ToString("N") }, commandReceipt), revision.ToString(CultureInfo.InvariantCulture), request.OperationId, request.CorrelationId));
         await database.SaveChangesAsync(ct).ConfigureAwait(false);
         // Saving/SavedChanges hooks and the storage await may outlive the approval or scheduled effective frontier.
         // Re-read actual authority after the final write; any failure rolls back rows, audit and outbox together.

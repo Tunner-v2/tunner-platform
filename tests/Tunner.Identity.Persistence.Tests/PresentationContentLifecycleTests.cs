@@ -156,7 +156,7 @@ public sealed class PresentationContentLifecycleTests(SessionListingPostgresFixt
         Assert.Equal(env.Variant, result.EffectiveVariantReference); Assert.Equal("en", result.Locale);
         Assert.All(result.Content.Values, text => Assert.Equal("en", text.Locale));
         env.Profile = env.Profile with { Metadata = new("fixture-strict-profile-v2", "ACTIVE", env.Scope, env.Interval, null, ["fixture-approval"]),
-            Definitions = [new("login.heading", "fixture-sensitive", true, false, true, [], [])] };
+            Definitions = [new("login.heading", "fixture-sensitive", true, false, true, [], []) { Purpose = "Synthetic Login heading purpose" }] };
         await env.PublishTextAsync("login.heading", "fixture strict English");
         Assert.Throws<ContentUnavailableException>(() => s.Application.Resolve(new(env.Scope, "fixture-login-fr", env.Clock.GetUtcNow())));
     }
@@ -308,7 +308,7 @@ internal sealed class PresentationContentTestEnvironment : IPresentationContentP
         var keys = content?.Keys.ToArray() ?? ["login.heading"];
         Profile = new(new("fixture-content-profile-v1", "ACTIVE", Scope, Interval, null, ["fixture-profile-approval"]), "fixture-login", "fixture-content-evidence",
             "fixture-processing", "fixture-retention", "fixture-audit-retention", "RESTRICTED_SECURITY", 4096, true, true, true,
-            keys.Select(key => new ContentDefinition(key, "fixture-sensitive", true, true, true, [], [])).ToArray(),
+            keys.Select(key => new ContentDefinition(key, "fixture-sensitive", true, true, true, [], []) { Purpose = "Synthetic purpose for " + key }).ToArray(),
             [new(Variant, "en", new Dictionary<string, string> { ["page"] = "login" }), new("fixture-login-fr", "fr", new Dictionary<string, string> { ["page"] = "login" })],
             [new(Variant, [Variant]), new("fixture-login-fr", ["fixture-login-fr", Variant])],
             Enum.GetValues<ContentOperation>().ToDictionary(operation => operation, operation => new ContentEffectContract("fixture-content-" + operation,

@@ -69,6 +69,7 @@ internal sealed class ContentProposalRow
     public string LastActorReference { get; set; } = "";
     public string LastDigest { get; set; } = "";
     public Guid? ApprovalEventReference { get; set; }
+    public string? ChangeReason { get; set; }
 }
 internal sealed class ContentVersionRow
 {
@@ -77,6 +78,7 @@ internal sealed class ContentVersionRow
     public string TextDigest { get; set; } = ""; public string ContributorsJson { get; set; } = "[]"; public string SourceEvidenceReference { get; set; } = "";
     public bool ModelOrigin { get; set; }
     public Guid ValidationEventReference { get; set; }
+    public string? ChangeReason { get; set; }
 }
 internal sealed class ContentPublicationRow
 {

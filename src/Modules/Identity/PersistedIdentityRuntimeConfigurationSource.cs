@@ -1,0 +1,86 @@
+using System.Data.Common;
+using System.Text.Json;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using Tunner.Platform.Policies;
+
+namespace Tunner.Identity.Persistence;
+
+/// <summary>Only current effective publications with immutable Identity validation/approval/effect receipts are runtime authority.
+/// Reading a policy never requires an Admin browser session and never changes historical actor/session state.</summary>
+public sealed class PersistedIdentityRuntimeConfigurationSource(IServiceScopeFactory scopes) : IAuthenticationPolicySource, IAssurancePolicySource, IAuthenticationContentBindingSource
+{
+    public AuthenticationPolicy RequireEffective(DateTimeOffset effectiveAt)
+    {
+        var selected = Read(new(IdentityConfigurationFamily.Authentication), effectiveAt);
+        var value = selected.Document.Authentication ?? throw new IdentityConfigurationUnavailableException();
+        value.Values.Validate(); return value.Values;
+    }
+    public AssurancePolicyVersion RequireEffective(AssurancePolicyScope scope, DateTimeOffset executedAt, string? expectedVersion = null)
+    {
+        ArgumentNullException.ThrowIfNull(scope); if (expectedVersion is not null) ArgumentException.ThrowIfNullOrWhiteSpace(expectedVersion);
+        var selected = Read(new(IdentityConfigurationFamily.Assurance, scope), executedAt);
+        var value = selected.Document.Assurance ?? throw new IdentityConfigurationUnavailableException();
+        if (expectedVersion is not null && expectedVersion != value.Metadata.VersionId) throw new AssurancePolicyVersionConflictException();
+        // Proposed evidence strings are data. Actual server-approved receipt references replace them at the runtime boundary.
+        var metadata = new PolicyVersionCandidate<AssurancePolicyScope>(value.Metadata.VersionId, "ACTIVE", scope, value.Metadata.EffectiveInterval,
+            value.Metadata.SupersedesVersionId, [selected.Publication.ApprovalEventReference.ToString("N"), selected.Publication.ApprovalEvidenceReference]);
+        return new(metadata, value.RequiredAssurance, value.ProofLifetime, value.MethodAssurances);
+    }
+    public AuthenticationContentBinding RequireQualified(AuthenticationPolicy policy, DateTimeOffset effectiveAt)
+    {
+        ArgumentNullException.ThrowIfNull(policy); policy.Validate();
+        var selected = Read(new(IdentityConfigurationFamily.AuthenticationContent, AuthenticationPolicyVersion: policy.Version), effectiveAt);
+        var value = selected.Document.ContentBinding ?? throw new IdentityConfigurationUnavailableException();
+        if (value.AuthenticationPolicyVersion != policy.Version) throw new IdentityConfigurationUnavailableException();
+        return value with { QualificationReference = selected.Publication.ApprovalEventReference.ToString("N") };
+    }
+
+    private sealed record Selection(IdentityConfigurationDocument Document, IdentityConfigurationPublicationRow Publication);
+    private Selection Read(IdentityConfigurationScope requested, DateTimeOffset at)
+    {
+        try
+        {
+            requested.Require(); var key = requested.Key;
+            using var scope = scopes.CreateScope(); var database = scope.ServiceProvider.GetRequiredService<IdentityPersistenceDbContext>();
+            if (database.Database.CurrentTransaction is not null || database.ChangeTracker.HasChanges()) throw new IdentityConfigurationUnavailableException();
+            var publications = database.Set<IdentityConfigurationPublicationRow>().AsNoTracking().Where(x => x.ScopeKey == key).ToArray();
+            if (database.Database.SqlQuery<int>($"SELECT count(*)::integer AS \"Value\" FROM identity.runtime_configuration_publications WHERE scope_key={key} AND NOT identity.runtime_configuration_valid_publication(id)").Single() != 0)
+                throw new IdentityConfigurationUnavailableException();
+            var eligible = publications.Where(x => !publications.Any(y => y.SupersedesPublicationReference == x.Id &&
+                (at > y.EffectiveFrom || at == y.EffectiveFrom && y.IncludesFrom))).ToArray();
+            var candidates = eligible.Select(x => new PolicyVersionCandidate<string>(x.Id.ToString("N"), "PUBLISHED", key,
+                new(x.EffectiveFrom, x.IncludesFrom, x.EffectiveUntil, x.IncludesUntil), x.SupersedesPublicationReference?.ToString("N"),
+                [x.ApprovalEventReference.ToString("N"), x.ApprovalEvidenceReference]));
+            var resolved = EffectivePolicyVersionResolver.Resolve(at, key, candidates, static (a, b) => a == b, static candidate => candidate.Status == "PUBLISHED");
+            if (resolved.SelectedVersion is null) throw new IdentityConfigurationUnavailableException();
+            var publication = eligible.Single(x => x.Id.ToString("N") == resolved.SelectedVersion.VersionId);
+            var version = database.Set<IdentityConfigurationVersionRow>().AsNoTracking().SingleOrDefault(x => x.Id == publication.VersionReference)
+                ?? throw new IdentityConfigurationUnavailableException();
+            var document = IdentityConfigurationDocument.Read(version.Payload);
+            if (version.ScopeKey != key || document.Scope != requested || document.Digest != version.Digest || document.Version != version.PolicyVersionReference ||
+                !document.Interval.Contains(at)) throw new IdentityConfigurationUnavailableException();
+            return new(document, publication);
+        }
+        catch (Exception error) when (error is DbException or TimeoutException or JsonException or ArgumentException or InvalidOperationException)
+        { throw new IdentityConfigurationUnavailableException(); }
+    }
+}
+
+public static class IdentityRuntimeConfigurationRegistration
+{
+    /// <summary>Explicit source selection. Existing providers must be removed intentionally; there is no test or production fallback.</summary>
+    public static IServiceCollection AddTunnerPersistedIdentityRuntimeConfiguration(this IServiceCollection services)
+    {
+        ArgumentNullException.ThrowIfNull(services);
+        Type[] sources = [typeof(IAuthenticationPolicySource), typeof(IAssurancePolicySource), typeof(IAuthenticationContentBindingSource)];
+        if (sources.Any(type => services.Any(item => item.ServiceType == type)))
+            throw new InvalidOperationException("Identity runtime configuration source selection must be explicit and unique.");
+        services.AddScoped<IdentityRuntimeConfigurationApplication>();
+        services.AddSingleton<PersistedIdentityRuntimeConfigurationSource>();
+        services.AddSingleton<IAuthenticationPolicySource>(provider => provider.GetRequiredService<PersistedIdentityRuntimeConfigurationSource>());
+        services.AddSingleton<IAssurancePolicySource>(provider => provider.GetRequiredService<PersistedIdentityRuntimeConfigurationSource>());
+        services.AddSingleton<IAuthenticationContentBindingSource>(provider => provider.GetRequiredService<PersistedIdentityRuntimeConfigurationSource>());
+        return services;
+    }
+}

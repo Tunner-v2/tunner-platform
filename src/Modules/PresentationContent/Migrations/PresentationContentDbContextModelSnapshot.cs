@@ -220,6 +220,9 @@ namespace Tunner.PresentationContent.Migrations
                     b.Property<string>("ApproverReference")
                         .HasColumnType("text");
 
+                    b.Property<string>("ChangeReason")
+                        .HasColumnType("text");
+
                     b.Property<string>("ContributorsJson")
                         .IsRequired()
                         .HasColumnType("text");
@@ -398,6 +401,9 @@ namespace Tunner.PresentationContent.Migrations
                 {
                     b.Property<Guid>("Id")
                         .HasColumnType("uuid");
+
+                    b.Property<string>("ChangeReason")
+                        .HasColumnType("text");
 
                     b.Property<string>("ContributorsJson")
                         .IsRequired()
