@@ -35,6 +35,28 @@ public sealed class AdminIdentityConfigurationHttpTests(SessionListingPostgresFi
     { Converters = { new JsonStringEnumConverter<IdentityConfigurationFamily>(), new JsonStringEnumConverter<IdentityConfigurationCapabilityTarget>() } };
 
     [Theory]
+    [InlineData("authentication")]
+    [InlineData("assurance")]
+    [InlineData("authentication-content")]
+    public async Task CanonicalSettingsRoutesEnforceCurrentIdentityAdmission(string family)
+    {
+        await using var database = await fixture.CreateDatabaseAsync(); await using var host = await Host.Start(database);
+        var actor = await host.Browser("fixture-security-author"); var path = "/identity/settings/" + family;
+        foreach (var suffix in new[] { "", "/review", "/history" })
+        {
+            using var response = await host.Screen(path + suffix, actor.Cookies); Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            Assert.Equal("text/html", response.Content.Headers.ContentType?.MediaType);
+            Assert.Contains("script-src 'self'", Assert.Single(response.Headers.GetValues("Content-Security-Policy")), StringComparison.Ordinal);
+            Assert.Contains("/admin-assets/", await response.Content.ReadAsStringAsync(), StringComparison.Ordinal);
+        }
+        using (var anonymous = await host.Screen(path, "")) Assert.Equal(HttpStatusCode.Unauthorized, anonymous.StatusCode);
+        using (var foreign = await host.Screen(path, actor.Cookies.Replace("__Host-Tunner.Admin.Session", "__Host-Tunner.User.Session", StringComparison.Ordinal)))
+            Assert.Equal(HttpStatusCode.Unauthorized, foreign.StatusCode);
+        host.Owners.Denied = IdentityConfigurationOperation.Browse;
+        using var denied = await host.Screen(path, actor.Cookies); Assert.Equal(HttpStatusCode.Forbidden, denied.StatusCode);
+    }
+
+    [Theory]
     [InlineData(IdentityConfigurationFamily.Authentication)]
     [InlineData(IdentityConfigurationFamily.Assurance)]
     [InlineData(IdentityConfigurationFamily.AuthenticationContent)]
@@ -346,11 +368,12 @@ public sealed class AdminIdentityConfigurationHttpTests(SessionListingPostgresFi
             return new(cookies + "; " + string.Join("; ", csrfCookie), (await Body(response)).GetProperty("csrfToken").GetString()!);
         }
         internal Task<HttpResponseMessage> Get(string path, string cookies) => Send(HttpMethod.Get, path, cookies, null, null, null);
+        internal Task<HttpResponseMessage> Screen(string path, string cookies) => Send(HttpMethod.Get, path, cookies, null, null, null, root: true);
         internal Task<HttpResponseMessage> Post(string path, object body, Browser actor) => Raw(path, JsonSerializer.Serialize(body, Json), actor, actor.Csrf, Origin);
         internal Task<HttpResponseMessage> Raw(string path, string json, Browser actor, string? csrf, string origin) => Send(HttpMethod.Post, path, actor.Cookies, json, csrf, origin);
-        private async Task<HttpResponseMessage> Send(HttpMethod method, string path, string cookies, string? json, string? csrf, string? origin)
+        private async Task<HttpResponseMessage> Send(HttpMethod method, string path, string cookies, string? json, string? csrf, string? origin, bool root = false)
         {
-            using var request = new HttpRequestMessage(method, Base + path); request.Headers.Host = new Uri(Origin).Authority;
+            using var request = new HttpRequestMessage(method, root ? path : Base + path); request.Headers.Host = new Uri(Origin).Authority;
             if (cookies.Length != 0) request.Headers.TryAddWithoutValidation("Cookie", cookies);
             if (origin is not null) request.Headers.TryAddWithoutValidation("Origin", origin);
             if (csrf is not null) request.Headers.TryAddWithoutValidation(TunnerBffFoundation.AntiforgeryHeader, csrf);

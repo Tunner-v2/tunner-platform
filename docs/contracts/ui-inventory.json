@@ -18,8 +18,8 @@
     },
     {
       "id": "admin",
-      "status": "PLANNED",
-      "source_root": null
+      "status": "IMPLEMENTED",
+      "source_root": "web/apps/admin"
     },
     {
       "id": "billing-finance",
@@ -38,6 +38,127 @@
     }
   ],
   "items": [
+    {
+      "id":"A-ID-SETTINGS-Authentication-edit", "kind":"SCREEN", "status":"IMPLEMENTED", "app":"admin", "module":"Identity.Configuration",
+      "title":"Password and session policy", "pathname":"/identity/settings/authentication", "runtime_pathname":"/identity/settings/authentication", "parameter_schema":{},
+      "guard":"Actual Admin cookie, current owner session and separate Identity configuration authorization. Exact server-provided scope/capabilities; published Admin chrome required. Content rights confer no Identity capability.",
+      "owner_scopes":["TUN-P2-019"], "authority_refs":["docs/authority/current/development/17_Account_Identity_and_Session_FRD.md","AMD-0008","AMD-0009"],
+      "figma_refs":[{"approved_adaptation_ref":"artifacts/p2-019-content-20261116/config-ui-review/review.html","visual_scope":"019-V04–V06"}],
+      "source_paths":["web/apps/admin/configuration.tsx","web/apps/admin/configuration.api.ts","web/apps/admin/configuration.validation.ts","web/apps/admin/configuration.routes.ts","web/apps/admin/configuration.css","web/apps/admin/configuration.main.tsx","web/apps/admin/configuration.html","src/Tunner.Admin.Bff/AdminIdentityConfigurationEndpoints.cs"],
+      "form_ids":["FORM-ADMIN-IDENTITY-AUTHENTICATION","FORM-ADMIN-IDENTITY-SEARCH"], "routing_state":"IMPLEMENTED", "additional_consent_refs":["governance/evidence/TUN-P2-019-VALIDATION.json"], "acceptance_state":"PENDING_PER_ITEM_URL_VAL_UX_FID_AND_NATIVE_UI_GATE"
+    },
+    {
+      "id":"A-ID-SETTINGS-Assurance-edit", "kind":"SCREEN", "status":"IMPLEMENTED", "app":"admin", "module":"Identity.Configuration",
+      "title":"Operation assurance", "pathname":"/identity/settings/assurance", "runtime_pathname":"/identity/settings/assurance", "parameter_schema":{},
+      "guard":"Actual current Admin session and independent Identity authorization; exact owner operation/context. No inferred method/assurance ordering or numeric defaults.",
+      "owner_scopes":["TUN-P2-019"], "authority_refs":["docs/authority/current/development/17_Account_Identity_and_Session_FRD.md","AMD-0008","AMD-0009"],
+      "figma_refs":[{"approved_adaptation_ref":"artifacts/p2-019-content-20261116/config-ui-review/review.html","visual_scope":"019-V04–V06"}],
+      "source_paths":["web/apps/admin/configuration.tsx","web/apps/admin/configuration.api.ts","web/apps/admin/configuration.validation.ts"], "form_ids":["FORM-ADMIN-IDENTITY-ASSURANCE","FORM-ADMIN-IDENTITY-SEARCH"], "routing_state":"IMPLEMENTED", "additional_consent_refs":["governance/evidence/TUN-P2-019-VALIDATION.json"], "acceptance_state":"PENDING_PER_ITEM_URL_VAL_UX_FID_AND_NATIVE_UI_GATE"
+    },
+    {
+      "id":"A-ID-SETTINGS-AuthenticationContent-edit", "kind":"SCREEN", "status":"IMPLEMENTED", "app":"admin", "module":"Identity.Configuration",
+      "title":"Sign-in content binding", "pathname":"/identity/settings/authentication-content", "runtime_pathname":"/identity/settings/authentication-content", "parameter_schema":{},
+      "guard":"Actual current Admin session and Identity authorization for exact Authentication policy version. Candidate qualification references never substitute for actual approval.",
+      "owner_scopes":["TUN-P2-019"], "authority_refs":["docs/authority/current/development/17_Account_Identity_and_Session_FRD.md","AMD-0008","AMD-0009"],
+      "figma_refs":[{"approved_adaptation_ref":"artifacts/p2-019-content-20261116/config-ui-review/review.html","visual_scope":"019-V04–V06"}],
+      "source_paths":["web/apps/admin/configuration.tsx","web/apps/admin/configuration.api.ts","web/apps/admin/configuration.validation.ts"], "form_ids":["FORM-ADMIN-IDENTITY-CONTENT-BINDING","FORM-ADMIN-IDENTITY-SEARCH"], "routing_state":"IMPLEMENTED", "additional_consent_refs":["governance/evidence/TUN-P2-019-VALIDATION.json"], "acceptance_state":"PENDING_PER_ITEM_URL_VAL_UX_FID_AND_NATIVE_UI_GATE"
+    },
+    {
+      "id":"A-ID-SETTINGS-Authentication-review", "kind":"SCREEN", "status":"IMPLEMENTED", "app":"admin", "module":"Identity.Configuration", "title":"Review Authentication configuration", "pathname":"/identity/settings/authentication/review", "runtime_pathname":"/identity/settings/authentication/review", "parameter_schema":{},
+      "guard":"Admin workspace rechecked on entry/history/reload. Exact saved candidate, current Identity capabilities and explicit immutable publication baseline; private selection stays out of URLs/storage.",
+      "owner_scopes":["TUN-P2-019"], "authority_refs":["AMD-0008","AMD-0009"], "figma_refs":[{"approved_adaptation_ref":"artifacts/p2-019-content-20261116/config-ui-review/review.html","visual_scope":"019-V05–V06"}], "source_paths":["web/apps/admin/configuration.tsx","web/apps/admin/configuration.api.ts","web/apps/admin/configuration.validation.ts"], "form_ids":["FORM-ADMIN-IDENTITY-PUBLICATION"], "routing_state":"IMPLEMENTED", "additional_consent_refs":["governance/evidence/TUN-P2-019-VALIDATION.json"], "acceptance_state":"PENDING_PER_ITEM_URL_VAL_UX_FID_AND_NATIVE_UI_GATE"
+    },
+    {
+      "id":"A-ID-SETTINGS-Assurance-review", "kind":"SCREEN", "status":"IMPLEMENTED", "app":"admin", "module":"Identity.Configuration", "title":"Review Assurance configuration", "pathname":"/identity/settings/assurance/review", "runtime_pathname":"/identity/settings/assurance/review", "parameter_schema":{},
+      "guard":"Actual Admin session and exact Identity scope/candidate/capabilities. Full opaque method map and metadata diff; approval never promotes session assurance.",
+      "owner_scopes":["TUN-P2-019"], "authority_refs":["AMD-0008","AMD-0009"], "figma_refs":[{"approved_adaptation_ref":"artifacts/p2-019-content-20261116/config-ui-review/review.html","visual_scope":"019-V05–V06"}], "source_paths":["web/apps/admin/configuration.tsx","web/apps/admin/configuration.api.ts","web/apps/admin/configuration.validation.ts"], "form_ids":["FORM-ADMIN-IDENTITY-PUBLICATION"], "routing_state":"IMPLEMENTED", "additional_consent_refs":["governance/evidence/TUN-P2-019-VALIDATION.json"], "acceptance_state":"PENDING_PER_ITEM_URL_VAL_UX_FID_AND_NATIVE_UI_GATE"
+    },
+    {
+      "id":"A-ID-SETTINGS-AuthenticationContent-review", "kind":"SCREEN", "status":"IMPLEMENTED", "app":"admin", "module":"Identity.Configuration", "title":"Review Authentication content binding", "pathname":"/identity/settings/authentication-content/review", "runtime_pathname":"/identity/settings/authentication-content/review", "parameter_schema":{},
+      "guard":"Actual Admin session and exact Identity binding/candidate/capabilities. Typed complete references/interval/links diff; no legal destination or copy approval inferred.",
+      "owner_scopes":["TUN-P2-019"], "authority_refs":["AMD-0008","AMD-0009"], "figma_refs":[{"approved_adaptation_ref":"artifacts/p2-019-content-20261116/config-ui-review/review.html","visual_scope":"019-V05–V06"}], "source_paths":["web/apps/admin/configuration.tsx","web/apps/admin/configuration.api.ts","web/apps/admin/configuration.validation.ts"], "form_ids":["FORM-ADMIN-IDENTITY-PUBLICATION"], "routing_state":"IMPLEMENTED", "additional_consent_refs":["governance/evidence/TUN-P2-019-VALIDATION.json"], "acceptance_state":"PENDING_PER_ITEM_URL_VAL_UX_FID_AND_NATIVE_UI_GATE"
+    },
+    {
+      "id":"A-ID-SETTINGS-Authentication-history", "kind":"SCREEN", "status":"IMPLEMENTED", "app":"admin", "module":"Identity.Configuration", "title":"Authentication publication history", "pathname":"/identity/settings/authentication/history", "runtime_pathname":"/identity/settings/authentication/history", "parameter_schema":{},
+      "guard":"Admin owner session and qualified bounded Identity history. Exact immutable source reauthorized before separate prospective rollback confirmation.",
+      "owner_scopes":["TUN-P2-019"], "authority_refs":["AMD-0008","AMD-0009"], "figma_refs":[{"approved_adaptation_ref":"artifacts/p2-019-content-20261116/config-ui-review/review.html","visual_scope":"019-V05–V06"}], "source_paths":["web/apps/admin/configuration.tsx","web/apps/admin/configuration.api.ts"], "form_ids":["FORM-ADMIN-IDENTITY-PUBLICATION"], "routing_state":"IMPLEMENTED", "additional_consent_refs":["governance/evidence/TUN-P2-019-VALIDATION.json"], "acceptance_state":"PENDING_PER_ITEM_URL_VAL_UX_FID_AND_NATIVE_UI_GATE"
+    },
+    {
+      "id":"A-ID-SETTINGS-Assurance-history", "kind":"SCREEN", "status":"IMPLEMENTED", "app":"admin", "module":"Identity.Configuration", "title":"Assurance publication history", "pathname":"/identity/settings/assurance/history", "runtime_pathname":"/identity/settings/assurance/history", "parameter_schema":{},
+      "guard":"Admin owner session and qualified bounded Identity history. Exact prior approved version and publication frontier reauthorized; no history deletion.",
+      "owner_scopes":["TUN-P2-019"], "authority_refs":["AMD-0008","AMD-0009"], "figma_refs":[{"approved_adaptation_ref":"artifacts/p2-019-content-20261116/config-ui-review/review.html","visual_scope":"019-V05–V06"}], "source_paths":["web/apps/admin/configuration.tsx","web/apps/admin/configuration.api.ts"], "form_ids":["FORM-ADMIN-IDENTITY-PUBLICATION"], "routing_state":"IMPLEMENTED", "additional_consent_refs":["governance/evidence/TUN-P2-019-VALIDATION.json"], "acceptance_state":"PENDING_PER_ITEM_URL_VAL_UX_FID_AND_NATIVE_UI_GATE"
+    },
+    {
+      "id":"A-ID-SETTINGS-AuthenticationContent-history", "kind":"SCREEN", "status":"IMPLEMENTED", "app":"admin", "module":"Identity.Configuration", "title":"Authentication content-binding history", "pathname":"/identity/settings/authentication-content/history", "runtime_pathname":"/identity/settings/authentication-content/history", "parameter_schema":{},
+      "guard":"Admin owner session and exact Authentication policy binding history. Rollback independently authorizes exact source and future interval.",
+      "owner_scopes":["TUN-P2-019"], "authority_refs":["AMD-0008","AMD-0009"], "figma_refs":[{"approved_adaptation_ref":"artifacts/p2-019-content-20261116/config-ui-review/review.html","visual_scope":"019-V05–V06"}], "source_paths":["web/apps/admin/configuration.tsx","web/apps/admin/configuration.api.ts"], "form_ids":["FORM-ADMIN-IDENTITY-PUBLICATION"], "routing_state":"IMPLEMENTED", "additional_consent_refs":["governance/evidence/TUN-P2-019-VALIDATION.json"], "acceptance_state":"PENDING_PER_ITEM_URL_VAL_UX_FID_AND_NATIVE_UI_GATE"
+    },
+    {
+      "id":"FORM-ADMIN-IDENTITY-AUTHENTICATION", "kind":"FORM", "status":"IMPLEMENTED", "app":"admin", "module":"Identity.Configuration", "screen_id":"A-ID-SETTINGS-Authentication-edit", "pathname":null, "runtime_pathname":null,
+      "owner_scopes":["TUN-P2-019"], "authority_refs":["AMD-0008","AMD-0009"], "figma_refs":[{"approved_adaptation_ref":"artifacts/p2-019-content-20261116/config-ui-review/review.html","visual_scope":"019-V04–V06"}], "source_paths":["web/apps/admin/configuration.tsx","web/apps/admin/configuration.validation.ts"], "acceptance_state":"PENDING_PER_ITEM_VAL_UX_FID_AND_NATIVE_UI_GATE"
+    },
+    {
+      "id":"FORM-ADMIN-IDENTITY-ASSURANCE", "kind":"FORM", "status":"IMPLEMENTED", "app":"admin", "module":"Identity.Configuration", "screen_id":"A-ID-SETTINGS-Assurance-edit", "pathname":null, "runtime_pathname":null,
+      "owner_scopes":["TUN-P2-019"], "authority_refs":["AMD-0008","AMD-0009"], "figma_refs":[{"approved_adaptation_ref":"artifacts/p2-019-content-20261116/config-ui-review/review.html","visual_scope":"019-V04–V06"}], "source_paths":["web/apps/admin/configuration.tsx","web/apps/admin/configuration.validation.ts"], "acceptance_state":"PENDING_PER_ITEM_VAL_UX_FID_AND_NATIVE_UI_GATE"
+    },
+    {
+      "id":"FORM-ADMIN-IDENTITY-CONTENT-BINDING", "kind":"FORM", "status":"IMPLEMENTED", "app":"admin", "module":"Identity.Configuration", "screen_id":"A-ID-SETTINGS-AuthenticationContent-edit", "pathname":null, "runtime_pathname":null,
+      "owner_scopes":["TUN-P2-019"], "authority_refs":["AMD-0008","AMD-0009"], "figma_refs":[{"approved_adaptation_ref":"artifacts/p2-019-content-20261116/config-ui-review/review.html","visual_scope":"019-V04–V06"}], "source_paths":["web/apps/admin/configuration.tsx","web/apps/admin/configuration.validation.ts"], "acceptance_state":"PENDING_PER_ITEM_VAL_UX_FID_AND_NATIVE_UI_GATE"
+    },
+    {
+      "id":"FORM-ADMIN-IDENTITY-SEARCH", "kind":"FORM", "status":"IMPLEMENTED", "app":"admin", "module":"Identity.Configuration", "screen_id":"A-ID-SETTINGS-Authentication-edit", "pathname":null, "runtime_pathname":null,
+      "owner_scopes":["TUN-P2-019"], "authority_refs":["AMD-0008","AMD-0009"], "figma_refs":[{"approved_adaptation_ref":"artifacts/p2-019-content-20261116/config-ui-review/review.html","visual_scope":"019-V04–V06"}], "source_paths":["web/apps/admin/configuration.tsx"], "acceptance_state":"PENDING_PER_ITEM_VAL_UX_FID_AND_NATIVE_UI_GATE"
+    },
+    {
+      "id":"FORM-ADMIN-IDENTITY-PUBLICATION", "kind":"FORM", "status":"IMPLEMENTED", "app":"admin", "module":"Identity.Configuration", "screen_id":"A-ID-SETTINGS-Authentication-review", "pathname":null, "runtime_pathname":null,
+      "owner_scopes":["TUN-P2-019"], "authority_refs":["AMD-0008","AMD-0009"], "figma_refs":[{"approved_adaptation_ref":"artifacts/p2-019-content-20261116/config-ui-review/review.html","visual_scope":"019-V05–V06"}], "source_paths":["web/apps/admin/configuration.tsx","web/apps/admin/configuration.validation.ts"], "acceptance_state":"PENDING_PER_ITEM_VAL_UX_FID_AND_NATIVE_UI_GATE"
+    },
+    {
+      "id": "A-CNT-01", "kind": "SCREEN", "status": "IMPLEMENTED", "app": "admin", "module": "PresentationContent",
+      "title": "Content workspace", "pathname": "/admin/content", "runtime_pathname": "/admin/content", "parameter_schema": {}, "figma_refs": [{"approved_adaptation_ref":"artifacts/p2-019-content-20261116/ui-review/workspace.html","visual_scope":"019-V01"}],
+      "guard": "Actual Admin cookie and qualified server session/authorization providers; each BFF request reauthorizes exact context. User cookies confer no access.",
+      "owner_scopes": ["TUN-P2-019"], "authority_refs": ["AMD-0008", "AMD-0009"],
+      "source_paths": ["web/apps/admin", "src/Tunner.Admin.Bff/AdminContentEndpoints.cs"],
+      "form_ids": ["FORM-ADMIN-CONTENT-SEARCH", "FORM-ADMIN-CONTENT-DRAFT"], "routing_state": "IMPLEMENTED",
+      "approved_visual_scope_ids": ["019-V01"], "additional_consent_refs": ["governance/evidence/TUN-P2-019-VALIDATION.json"],
+      "acceptance_state": "PENDING_PER_ITEM_URL_VAL_UX_FID_AND_NATIVE_UI_GATE",
+      "boundary": "Published Admin chrome mandatory. Approved User contextual preview adapter still pending. No workforce granting or live Admin sign-in qualification."
+    },
+    {
+      "id": "A-CNT-01-REVIEW", "kind": "SCREEN", "status": "IMPLEMENTED", "app": "admin", "module": "PresentationContent",
+      "title": "Review and publish", "pathname": "/admin/content/review", "runtime_pathname": "/admin/content/review", "parameter_schema": {}, "figma_refs": [{"approved_adaptation_ref":"artifacts/p2-019-content-20261116/ui-review/lifecycle.html","visual_scope":"019-V02"}],
+      "guard": "Actual Admin session rechecked on route entry and exact server capability context; reload requires explicit selection without private references in URLs/storage.",
+      "owner_scopes": ["TUN-P2-019"], "authority_refs": ["AMD-0008", "AMD-0009"],
+      "source_paths": ["web/apps/admin/content.tsx", "web/apps/admin/content.api.ts"],
+      "form_ids": ["FORM-ADMIN-CONTENT-PUBLICATION"], "routing_state": "IMPLEMENTED",
+      "approved_visual_scope_ids": ["019-V02"], "additional_consent_refs": ["governance/evidence/TUN-P2-019-VALIDATION.json"],
+      "acceptance_state": "PENDING_PER_ITEM_URL_VAL_UX_FID_AND_NATIVE_UI_GATE"
+    },
+    {
+      "id": "A-CNT-01-HISTORY", "kind": "SCREEN", "status": "IMPLEMENTED", "app": "admin", "module": "PresentationContent",
+      "title": "Version history", "pathname": "/admin/content/history", "runtime_pathname": "/admin/content/history", "parameter_schema": {}, "figma_refs": [{"approved_adaptation_ref":"artifacts/p2-019-content-20261116/ui-review/lifecycle.html","visual_scope":"019-V03"}],
+      "guard": "Actual Admin session and qualified bounded history query; rollback requires exact immutable source capability and confirmed prospective interval.",
+      "owner_scopes": ["TUN-P2-019"], "authority_refs": ["AMD-0008", "AMD-0009"],
+      "source_paths": ["web/apps/admin/content.tsx", "web/apps/admin/content.api.ts"],
+      "form_ids": ["FORM-ADMIN-CONTENT-PUBLICATION"], "routing_state": "IMPLEMENTED",
+      "approved_visual_scope_ids": ["019-V03"], "additional_consent_refs": ["governance/evidence/TUN-P2-019-VALIDATION.json"],
+      "acceptance_state": "PENDING_PER_ITEM_URL_VAL_UX_FID_AND_NATIVE_UI_GATE"
+    },
+    {
+      "id":"FORM-ADMIN-CONTENT-SEARCH", "kind":"FORM", "status":"IMPLEMENTED", "app":"admin", "module":"PresentationContent", "screen_id":"A-CNT-01", "pathname":null, "runtime_pathname":null,
+      "owner_scopes":["TUN-P2-019"], "authority_refs":["AMD-0008","AMD-0009"], "figma_refs":[{"approved_adaptation_ref":"artifacts/p2-019-content-20261116/ui-review/workspace.html","visual_scope":"019-V01"}],
+      "source_paths":["web/apps/admin/content.tsx","web/apps/admin/content.validation.ts"], "acceptance_state":"PENDING_PER_ITEM_VAL_UX_FID_AND_NATIVE_UI_GATE"
+    },
+    {
+      "id":"FORM-ADMIN-CONTENT-DRAFT", "kind":"FORM", "status":"IMPLEMENTED", "app":"admin", "module":"PresentationContent", "screen_id":"A-CNT-01", "pathname":null, "runtime_pathname":null,
+      "owner_scopes":["TUN-P2-019"], "authority_refs":["AMD-0008","AMD-0009"], "figma_refs":[{"approved_adaptation_ref":"artifacts/p2-019-content-20261116/ui-review/workspace.html","visual_scope":"019-V01"}],
+      "source_paths":["web/apps/admin/content.tsx","web/apps/admin/content.validation.ts"], "acceptance_state":"PENDING_PER_ITEM_VAL_UX_FID_AND_NATIVE_UI_GATE"
+    },
+    {
+      "id":"FORM-ADMIN-CONTENT-PUBLICATION", "kind":"FORM", "status":"IMPLEMENTED", "app":"admin", "module":"PresentationContent", "screen_id":"A-CNT-01-REVIEW", "pathname":null, "runtime_pathname":null,
+      "owner_scopes":["TUN-P2-019"], "authority_refs":["AMD-0008","AMD-0009"], "figma_refs":[{"approved_adaptation_ref":"artifacts/p2-019-content-20261116/ui-review/lifecycle.html","visual_scope":"019-V02–V03"}],
+      "source_paths":["web/apps/admin/content.tsx","web/apps/admin/content.validation.ts"], "acceptance_state":"PENDING_PER_ITEM_VAL_UX_FID_AND_NATIVE_UI_GATE"
+    },
     {
       "id": "U-AUTH-02",
       "kind": "SCREEN",
