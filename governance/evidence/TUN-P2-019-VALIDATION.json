@@ -3,7 +3,7 @@
   "scope_id": "TUN-P2-019",
   "validation_kind": "COMMITTED",
   "result": "PENDING",
-  "phase": "CONTENT_LOGIN_INCREMENT_IMPLEMENTED_EXECUTION_PENDING",
+  "phase": "CONTENT_LOGIN_INCREMENT_QUALIFIED_REMAINING_ADMIN_CONFIGURATION_PENDING",
   "tested_commit_sha": null,
   "validated_commit_sha": null,
   "owned_behavior_paths": [
@@ -41,14 +41,21 @@
     "Owner migration with guarded downgrade, exclusive owner locks before emptiness checks and empty-schema round trip support"
   ],
   "qualification": {
-    "module_compile": "PASS0warnings0errors before final event-binding fix and generated migration; not final candidate compilation",
+    "module_compile": "PASS0warnings0errors at f4f3edf301e6dcbf100ac539811da576c0aa5cb4, including generated migration and all focused tests",
+    "qualified_increment_source_sha": "f4f3edf301e6dcbf100ac539811da576c0aa5cb4",
+    "actual_runs": [
+      {"run_id":"7670f6630cf1491fa4455c3fb1ef3528","scope":"Login adapter provenance/configuration/composition","executed":9,"passed":9,"failed":0,"not_executed":0,"timed_out":false,"owned_containers_remaining":0,"borrowed_preserved":true,"receipt_ref":"governance/evidence/p2-019-content-20261116/native/7670f6630cf1491fa4455c3fb1ef3528/summary.json"},
+      {"run_id":"e6951c802e62476692cd6fc10a86e797","scope":"31 owner cases plus6 HTTPS/migration cases; real admitted PostgreSQL","executed":37,"passed":37,"failed":0,"not_executed":0,"timed_out":false,"owned_containers_remaining":0,"borrowed_preserved":true,"receipt_ref":"governance/evidence/p2-019-content-20261116/native/e6951c802e62476692cd6fc10a86e797/summary.json"}
+    ],
     "authored_cases": {
       "owner": 31,
       "login_adapter": 9,
       "https_and_migration": 6
     },
-    "executed_tests": 0,
-    "result": "NOT_EXECUTED"
+    "executed_tests": 46,
+    "result": "PASS_FIRST_INCREMENT_ONLY",
+    "runtime_tooling": "Reused existing isolated Identity qualification launcher and cached PostgreSQL fixture. Launch receipts bind Identity, test, Worker and new PresentationContent assembly hashes before/after execution; existing registry and fixtures are unchanged. Existing launcher remains a temporary local artifact, not committed application code.",
+    "migration_tooling": "Existing pinned EF tool10.0.12 generated the runtime10.0.13 owner migration successfully; its patch-version notice was retained at execution. Actual migration, empty downgrade/reapply and locked nonempty downgrade tests pass; no tool/package version was changed."
   },
   "review_repairs": [
     "SQL insert/approval/causal evidence bypass guarded",
@@ -58,10 +65,11 @@
     "Migration downgrade acquires owner locks before checking emptiness"
   ],
   "remaining_scope": [
-    "Execute and qualify this increment against committed source; resolve any failures",
+    "Complete remaining work-item functionality; the first Content/Login increment has46 distinct passing cases at its recorded source",
     "Guided authorized Admin HTTP/frontend workflows and all applicable route/form/visual/accessibility/security/performance acceptance",
     "Remaining Identity surfaces and domain-owned persisted typed runtime configuration administration",
-    "Approved production policy/content/privacy/retention/authorization inputs; no synthetic production defaults"
+    "Approved production policy/content/privacy/retention/authorization inputs; no synthetic production defaults",
+    "Reconcile confirmed shared-file source bindings once at the final integration gate via TODO-TUN-P2-019-INTEGRATION001; preserve historical closure and actual original test identities"
   ],
   "visual_proposal_ref": "artifacts/p2-019-content-20261116/ui-review/review.html",
   "visual_approval": "REQUESTED_019_V01_V03_PENDING",
