@@ -10,7 +10,7 @@ namespace Tunner.Identity.Persistence;
 /// <summary>Only current effective publications with immutable Identity validation/approval/effect receipts are runtime authority.
 /// Reading a policy never requires an Admin browser session and never changes historical actor/session state.</summary>
 public sealed class PersistedIdentityRuntimeConfigurationSource(IServiceScopeFactory scopes) : IAuthenticationPolicySource, IAssurancePolicySource, IAuthenticationContentBindingSource,
-    IRegistrationPolicySource, ITotpPolicySource, IRegistrationContentBindingSource, IPasskeyPolicySource
+    IRegistrationPolicySource, ITotpPolicySource, IRegistrationContentBindingSource, IPasskeyPolicySource, ITotpContentBindingSource, IPasskeyContentBindingSource
 {
     RegistrationPolicy IRegistrationPolicySource.RequireEffective(DateTimeOffset effectiveAt)
     {
@@ -62,6 +62,23 @@ public sealed class PersistedIdentityRuntimeConfigurationSource(IServiceScopeFac
         return value with { QualificationReference = selected.Publication.ApprovalEventReference.ToString("N") };
     }
 
+    public TotpContentBinding RequireQualified(TotpPolicy policy, DateTimeOffset effectiveAt)
+    {
+        ArgumentNullException.ThrowIfNull(policy); policy.Validate();
+        var selected = Read(new(IdentityConfigurationFamily.TotpContent, TotpPolicyVersion: policy.Version), effectiveAt);
+        var value = selected.Document.TotpContent ?? throw new IdentityConfigurationUnavailableException();
+        if (value.TotpPolicyVersion != policy.Version) throw new IdentityConfigurationUnavailableException();
+        return value with { QualificationReference = selected.Publication.ApprovalEventReference.ToString("N") };
+    }
+    public PasskeyContentBinding RequireQualified(PasskeyPolicy policy, DateTimeOffset effectiveAt)
+    {
+        ArgumentNullException.ThrowIfNull(policy);
+        var selected = Read(new(IdentityConfigurationFamily.PasskeyContent, PasskeyPolicyVersion: policy.Version), effectiveAt);
+        var value = selected.Document.PasskeyContent ?? throw new IdentityConfigurationUnavailableException();
+        if (value.PasskeyPolicyVersion != policy.Version) throw new IdentityConfigurationUnavailableException();
+        return value with { QualificationReference = selected.Publication.ApprovalEventReference.ToString("N") };
+    }
+
     private sealed record Selection(IdentityConfigurationDocument Document, IdentityConfigurationPublicationRow Publication);
     private Selection Read(IdentityConfigurationScope requested, DateTimeOffset at)
     {
@@ -99,6 +116,22 @@ public sealed class PersistedIdentityRuntimeConfigurationSource(IServiceScopeFac
 
 public static class IdentityRuntimeConfigurationRegistration
 {
+    /// <summary>Binding-only opt-in; no TOTP policy, presentation or workflow is registered.</summary>
+    public static IServiceCollection AddTunnerPersistedTotpContentBinding(this IServiceCollection services)
+    {
+        ArgumentNullException.ThrowIfNull(services);
+        if (services.Any(x => x.ServiceType == typeof(ITotpContentBindingSource))) throw new InvalidOperationException("TOTP content binding source selection must be explicit and unique.");
+        services.TryAddSingleton<PersistedIdentityRuntimeConfigurationSource>();
+        services.AddSingleton<ITotpContentBindingSource>(provider => provider.GetRequiredService<PersistedIdentityRuntimeConfigurationSource>()); return services;
+    }
+    /// <summary>Binding-only opt-in; no Passkey policy, presentation or workflow is registered.</summary>
+    public static IServiceCollection AddTunnerPersistedPasskeyContentBinding(this IServiceCollection services)
+    {
+        ArgumentNullException.ThrowIfNull(services);
+        if (services.Any(x => x.ServiceType == typeof(IPasskeyContentBindingSource))) throw new InvalidOperationException("Passkey content binding source selection must be explicit and unique.");
+        services.TryAddSingleton<PersistedIdentityRuntimeConfigurationSource>();
+        services.AddSingleton<IPasskeyContentBindingSource>(provider => provider.GetRequiredService<PersistedIdentityRuntimeConfigurationSource>()); return services;
+    }
     /// <summary>Separate opt-in: composing User hosts may activate Passkeys when this policy port is intentionally registered.</summary>
     public static IServiceCollection AddTunnerPersistedPasskeyConfiguration(this IServiceCollection services)
     {

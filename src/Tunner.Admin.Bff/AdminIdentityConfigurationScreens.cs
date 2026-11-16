@@ -14,7 +14,9 @@ internal static class AdminIdentityConfigurationScreens
          "/identity/settings/registration", "/identity/settings/registration/review", "/identity/settings/registration/history",
          "/identity/settings/totp", "/identity/settings/totp/review", "/identity/settings/totp/history",
          "/identity/settings/registration-content", "/identity/settings/registration-content/review", "/identity/settings/registration-content/history",
-         "/identity/settings/passkey", "/identity/settings/passkey/review", "/identity/settings/passkey/history"],
+         "/identity/settings/passkey", "/identity/settings/passkey/review", "/identity/settings/passkey/history",
+         "/identity/settings/totp-content", "/identity/settings/totp-content/review", "/identity/settings/totp-content/history",
+         "/identity/settings/passkey-content", "/identity/settings/passkey-content/review", "/identity/settings/passkey-content/history"],
         Allowed, allowAnonymous: false, static context => Results.StatusCode(
             context.Items.TryGetValue(FailureStatus, out var status) && status is int code ? code : StatusCodes.Status403Forbidden));
 
@@ -38,6 +40,8 @@ internal static class AdminIdentityConfigurationScreens
                 "totp" => IdentityConfigurationFamily.Totp,
                 "registration-content" => IdentityConfigurationFamily.RegistrationContent,
                 "passkey" => IdentityConfigurationFamily.Passkey,
+                "totp-content" => IdentityConfigurationFamily.TotpContent,
+                "passkey-content" => IdentityConfigurationFamily.PasskeyContent,
                 _ => throw new IdentityConfigurationForbiddenException()
             };
             var scopes = profile.Scopes.Where(x => x.Family == family).ToArray(); if (scopes.Length == 0) return false;

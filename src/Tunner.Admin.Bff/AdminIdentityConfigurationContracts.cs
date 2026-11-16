@@ -41,18 +41,29 @@ public sealed class AdminIdentityConfigurationScope
     public AdminIdentityAssuranceScope? AssuranceScope { get; init; }
     public string? AuthenticationPolicyVersion { get; init; }
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] public string? RegistrationPolicyVersion { get; init; }
-    internal IdentityConfigurationScope Value() => Family switch
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] public string? TotpPolicyVersion { get; init; }
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] public string? PasskeyPolicyVersion { get; init; }
+    internal IdentityConfigurationScope Value()
+    {
+        if (Family != IdentityConfigurationFamily.TotpContent && TotpPolicyVersion is not null ||
+            Family != IdentityConfigurationFamily.PasskeyContent && PasskeyPolicyVersion is not null)
+            throw new ArgumentException("An exact typed Identity configuration scope is required.");
+        return Family switch
     {
         IdentityConfigurationFamily.Authentication when AssuranceScope is null && AuthenticationPolicyVersion is null && RegistrationPolicyVersion is null => new(Family),
         IdentityConfigurationFamily.Registration or IdentityConfigurationFamily.Totp or IdentityConfigurationFamily.Passkey when AssuranceScope is null && AuthenticationPolicyVersion is null && RegistrationPolicyVersion is null => new(Family),
         IdentityConfigurationFamily.Assurance when AssuranceScope is not null && AuthenticationPolicyVersion is null && RegistrationPolicyVersion is null => new(Family, AssuranceScope.Value()),
         IdentityConfigurationFamily.AuthenticationContent when AssuranceScope is null && !string.IsNullOrWhiteSpace(AuthenticationPolicyVersion) && RegistrationPolicyVersion is null => new(Family, AuthenticationPolicyVersion: AuthenticationPolicyVersion),
         IdentityConfigurationFamily.RegistrationContent when AssuranceScope is null && AuthenticationPolicyVersion is null && !string.IsNullOrWhiteSpace(RegistrationPolicyVersion) => new(Family, RegistrationPolicyVersion: RegistrationPolicyVersion),
+        IdentityConfigurationFamily.TotpContent when AssuranceScope is null && AuthenticationPolicyVersion is null && RegistrationPolicyVersion is null && !string.IsNullOrWhiteSpace(TotpPolicyVersion) => new(Family, TotpPolicyVersion: TotpPolicyVersion),
+        IdentityConfigurationFamily.PasskeyContent when AssuranceScope is null && AuthenticationPolicyVersion is null && RegistrationPolicyVersion is null && !string.IsNullOrWhiteSpace(PasskeyPolicyVersion) => new(Family, PasskeyPolicyVersion: PasskeyPolicyVersion),
         _ => throw new ArgumentException("An exact typed Identity configuration scope is required.")
-    };
+        };
+    }
     internal static AdminIdentityConfigurationScope From(IdentityConfigurationScope scope) => new()
     { Family = scope.Family, AssuranceScope = scope.AssuranceScope is { } assurance ? new() { Operation = assurance.Operation, Context = assurance.Context } : null,
-        AuthenticationPolicyVersion = scope.AuthenticationPolicyVersion, RegistrationPolicyVersion = scope.RegistrationPolicyVersion };
+        AuthenticationPolicyVersion = scope.AuthenticationPolicyVersion, RegistrationPolicyVersion = scope.RegistrationPolicyVersion,
+        TotpPolicyVersion = scope.TotpPolicyVersion, PasskeyPolicyVersion = scope.PasskeyPolicyVersion };
 }
 [JsonUnmappedMemberHandling(JsonUnmappedMemberHandling.Disallow)]
 public sealed class AdminIdentityAssuranceScope
@@ -171,6 +182,40 @@ public sealed class AdminRegistrationContentBindingCandidate
             throw new ArgumentException("Complete qualified Registration content references and HTTPS links are required.");
         return new(RegistrationPolicyVersion, TermsVersion, PrivacyVersion, ConfigurationVersionReference, QualificationReference, ContentScope, VariantReference,
             (EffectiveInterval ?? throw new ArgumentException("An interval is required.")).Value(), TermsUri, PrivacyUri, SupportUri);
+    }
+}
+[JsonUnmappedMemberHandling(JsonUnmappedMemberHandling.Disallow)]
+public sealed class AdminTotpContentBindingCandidate
+{
+    public required string TotpPolicyVersion { get; init; }
+    public required string ConfigurationVersionReference { get; init; }
+    public required string QualificationReference { get; init; }
+    public required string ContentScope { get; init; }
+    public required string VariantReference { get; init; }
+    public required AdminIdentityConfigurationInterval EffectiveInterval { get; init; }
+    internal TotpContentBinding Value()
+    {
+        if (new[] { TotpPolicyVersion, ConfigurationVersionReference, QualificationReference, ContentScope, VariantReference }.Any(string.IsNullOrWhiteSpace))
+            throw new ArgumentException("Complete qualified TOTP content references are required.");
+        return new(TotpPolicyVersion, ConfigurationVersionReference, QualificationReference, ContentScope, VariantReference,
+            (EffectiveInterval ?? throw new ArgumentException("An interval is required.")).Value());
+    }
+}
+[JsonUnmappedMemberHandling(JsonUnmappedMemberHandling.Disallow)]
+public sealed class AdminPasskeyContentBindingCandidate
+{
+    public required string PasskeyPolicyVersion { get; init; }
+    public required string ConfigurationVersionReference { get; init; }
+    public required string QualificationReference { get; init; }
+    public required string ContentScope { get; init; }
+    public required string VariantReference { get; init; }
+    public required AdminIdentityConfigurationInterval EffectiveInterval { get; init; }
+    internal PasskeyContentBinding Value()
+    {
+        if (new[] { PasskeyPolicyVersion, ConfigurationVersionReference, QualificationReference, ContentScope, VariantReference }.Any(string.IsNullOrWhiteSpace))
+            throw new ArgumentException("Complete qualified Passkey content references are required.");
+        return new(PasskeyPolicyVersion, ConfigurationVersionReference, QualificationReference, ContentScope, VariantReference,
+            (EffectiveInterval ?? throw new ArgumentException("An interval is required.")).Value());
     }
 }
 [JsonUnmappedMemberHandling(JsonUnmappedMemberHandling.Disallow)]

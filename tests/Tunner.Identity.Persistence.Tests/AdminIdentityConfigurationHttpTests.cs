@@ -42,6 +42,8 @@ public sealed class AdminIdentityConfigurationHttpTests(SessionListingPostgresFi
     [InlineData("totp")]
     [InlineData("registration-content")]
     [InlineData("passkey")]
+    [InlineData("totp-content")]
+    [InlineData("passkey-content")]
     public async Task CanonicalSettingsRoutesEnforceCurrentIdentityAdmission(string family)
     {
         var additional = family switch
@@ -50,6 +52,8 @@ public sealed class AdminIdentityConfigurationHttpTests(SessionListingPostgresFi
             "totp" => new[] { new IdentityConfigurationScope(IdentityConfigurationFamily.Totp) },
             "registration-content" => new[] { new IdentityConfigurationScope(IdentityConfigurationFamily.RegistrationContent, RegistrationPolicyVersion: "fixture-registration-route-v1") },
             "passkey" => new[] { new IdentityConfigurationScope(IdentityConfigurationFamily.Passkey) },
+            "totp-content" => new[] { new IdentityConfigurationScope(IdentityConfigurationFamily.TotpContent, TotpPolicyVersion: "fixture-totp-route-v1") },
+            "passkey-content" => new[] { new IdentityConfigurationScope(IdentityConfigurationFamily.PasskeyContent, PasskeyPolicyVersion: "fixture-passkey-route-v1") },
             _ => Array.Empty<IdentityConfigurationScope>()
         };
         await using var database = await fixture.CreateDatabaseAsync(); await using var host = await Host.Start(database, additionalScopes: additional);

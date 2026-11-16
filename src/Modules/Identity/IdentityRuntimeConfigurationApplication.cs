@@ -24,6 +24,10 @@ public sealed partial class IdentityRuntimeConfigurationApplication(IdentityPers
         => DraftAsync(new(Registration: candidate), null, null, operationId, correlationId, cancellationToken);
     public Task<IdentityConfigurationProposal> CreateRegistrationContentDraftAsync(RegistrationContentBinding candidate, string operationId, string correlationId, CancellationToken cancellationToken = default)
         => DraftAsync(new(RegistrationContent: candidate), null, null, operationId, correlationId, cancellationToken);
+    public Task<IdentityConfigurationProposal> CreateTotpContentDraftAsync(TotpContentBinding candidate, string operationId, string correlationId, CancellationToken cancellationToken = default)
+        => DraftAsync(new(TotpContent: candidate), null, null, operationId, correlationId, cancellationToken);
+    public Task<IdentityConfigurationProposal> CreatePasskeyContentDraftAsync(PasskeyContentBinding candidate, string operationId, string correlationId, CancellationToken cancellationToken = default)
+        => DraftAsync(new(PasskeyContent: candidate), null, null, operationId, correlationId, cancellationToken);
     public Task<IdentityConfigurationProposal> CreateTotpDraftAsync(TotpPolicyVersion candidate, string operationId, string correlationId, CancellationToken cancellationToken = default)
         => DraftAsync(new(Totp: SnapshotTotpCandidate(candidate)), null, null, operationId, correlationId, cancellationToken);
     public Task<IdentityConfigurationProposal> CreatePasskeyDraftAsync(PasskeyConfigurationVersion candidate, string operationId, string correlationId, CancellationToken cancellationToken = default)
@@ -43,6 +47,12 @@ public sealed partial class IdentityRuntimeConfigurationApplication(IdentityPers
     public Task<IdentityConfigurationProposal> UpdateRegistrationContentDraftAsync(Guid proposalReference, long expectedRevision, RegistrationContentBinding candidate,
         string operationId, string correlationId, CancellationToken cancellationToken = default)
         => DraftAsync(new(RegistrationContent: candidate), proposalReference, expectedRevision, operationId, correlationId, cancellationToken);
+    public Task<IdentityConfigurationProposal> UpdateTotpContentDraftAsync(Guid proposalReference, long expectedRevision, TotpContentBinding candidate,
+        string operationId, string correlationId, CancellationToken cancellationToken = default)
+        => DraftAsync(new(TotpContent: candidate), proposalReference, expectedRevision, operationId, correlationId, cancellationToken);
+    public Task<IdentityConfigurationProposal> UpdatePasskeyContentDraftAsync(Guid proposalReference, long expectedRevision, PasskeyContentBinding candidate,
+        string operationId, string correlationId, CancellationToken cancellationToken = default)
+        => DraftAsync(new(PasskeyContent: candidate), proposalReference, expectedRevision, operationId, correlationId, cancellationToken);
     public Task<IdentityConfigurationProposal> UpdateTotpDraftAsync(Guid proposalReference, long expectedRevision, TotpPolicyVersion candidate,
         string operationId, string correlationId, CancellationToken cancellationToken = default)
         => DraftAsync(new(Totp: SnapshotTotpCandidate(candidate)), proposalReference, expectedRevision, operationId, correlationId, cancellationToken);
@@ -124,7 +134,7 @@ public sealed partial class IdentityRuntimeConfigurationApplication(IdentityPers
         var request = Request(IdentityConfigurationOperation.Preview, value.Scope, authority, row.Id.ToString("N"), row.Revision, row.Digest, command.OperationId, command.CorrelationId);
         var actor = await AuthorizeAsync(request, ct).ConfigureAwait(false);
         await FinishAsync(tx, authority, request, actor, row.Id, row.Revision, row.Digest, null, null, null, ct).ConfigureAwait(false);
-        return new(View(row), value.Authentication, value.Assurance, value.ContentBinding) { Registration = value.Registration, Totp = value.Totp, RegistrationContent = value.RegistrationContent, Passkey = value.Passkey };
+        return new(View(row), value.Authentication, value.Assurance, value.ContentBinding) { Registration = value.Registration, Totp = value.Totp, RegistrationContent = value.RegistrationContent, Passkey = value.Passkey, TotpContent = value.TotpContent, PasskeyContent = value.PasskeyContent };
     }
 
     public async Task<IdentityConfigurationHistory> PublishAsync(PublishIdentityConfiguration command, CancellationToken cancellationToken = default)
