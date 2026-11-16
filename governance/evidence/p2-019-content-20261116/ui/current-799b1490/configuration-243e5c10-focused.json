@@ -1,0 +1,412 @@
+{
+  "config": {
+    "argv": [
+      "C:\\Program Files\\nodejs\\node.exe",
+      "C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\web\\node_modules\\@playwright\\test\\cli.js",
+      "test",
+      "--config",
+      "playwright.configuration-admin.config.ts",
+      "--grep",
+      "(Registration typed|Totp typed|additional family tablet|all fifteen configuration routes|original three-family publication)",
+      "--output",
+      "test-results/runs/configuration-admin-243e5c10-focused",
+      "--reporter",
+      "line,json"
+    ],
+    "configFile": "C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\web\\playwright.configuration-admin.config.ts",
+    "rootDir": "C:/Workspace/AI MCP/Enterprise Solution/TunnerPlatform.V2.0/web/tests/configuration-admin",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "C:/Workspace/AI MCP/Enterprise Solution/TunnerPlatform.V2.0/web/test-results/runs/configuration-admin-243e5c10-focused",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "C:/Workspace/AI MCP/Enterprise Solution/TunnerPlatform.V2.0/web/tests/configuration-admin",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "line"
+      ],
+      [
+        "json"
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.62.1",
+    "workers": 1,
+    "webServer": {
+      "command": "node node_modules/vite/bin/vite.js --config apps/admin/vite.config.ts --port 5298",
+      "url": "http://127.0.0.1:5298/identity/settings/authentication",
+      "reuseExistingServer": false,
+      "timeout": 30000
+    }
+  },
+  "suites": [
+    {
+      "title": "configuration.spec.ts",
+      "file": "configuration.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "all fifteen configuration routes independently guard direct entry, reload and browser history",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 54582,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "steps": [
+                    {
+                      "title": "Authentication / edit",
+                      "duration": 4074
+                    },
+                    {
+                      "title": "Authentication / review",
+                      "duration": 4999
+                    },
+                    {
+                      "title": "Authentication / history",
+                      "duration": 3066
+                    },
+                    {
+                      "title": "Assurance / edit",
+                      "duration": 2403
+                    },
+                    {
+                      "title": "Assurance / review",
+                      "duration": 4010
+                    },
+                    {
+                      "title": "Assurance / history",
+                      "duration": 2915
+                    },
+                    {
+                      "title": "AuthenticationContent / edit",
+                      "duration": 2555
+                    },
+                    {
+                      "title": "AuthenticationContent / review",
+                      "duration": 3814
+                    },
+                    {
+                      "title": "AuthenticationContent / history",
+                      "duration": 3122
+                    },
+                    {
+                      "title": "Registration / edit",
+                      "duration": 2995
+                    },
+                    {
+                      "title": "Registration / review",
+                      "duration": 5264
+                    },
+                    {
+                      "title": "Registration / history",
+                      "duration": 3341
+                    },
+                    {
+                      "title": "Totp / edit",
+                      "duration": 3217
+                    },
+                    {
+                      "title": "Totp / review",
+                      "duration": 5481
+                    },
+                    {
+                      "title": "Totp / history",
+                      "duration": 2837
+                    }
+                  ],
+                  "startTime": "2026-11-16T13:47:00.614Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c9271d8ec6470e516d84-63646a54fe67579507f5",
+          "file": "configuration.spec.ts",
+          "line": 81,
+          "column": 1
+        },
+        {
+          "title": "Registration typed policy validates, preserves retry intent and reviews every immutable field at 1440",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 9112,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-16T13:47:55.830Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c9271d8ec6470e516d84-664e5af8389092acaf09",
+          "file": "configuration.spec.ts",
+          "line": 157,
+          "column": 84
+        },
+        {
+          "title": "Registration typed policy validates, preserves retry intent and reviews every immutable field at 390",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 9053,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-16T13:48:04.965Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c9271d8ec6470e516d84-e4074d034a76e2e7abe2",
+          "file": "configuration.spec.ts",
+          "line": 157,
+          "column": 84
+        },
+        {
+          "title": "Totp typed policy validates, preserves retry intent and reviews every immutable field at 1440",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 10508,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-16T13:48:14.034Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c9271d8ec6470e516d84-7d422a9b58e5eb00c68c",
+          "file": "configuration.spec.ts",
+          "line": 157,
+          "column": 84
+        },
+        {
+          "title": "Totp typed policy validates, preserves retry intent and reviews every immutable field at 390",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 10186,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-16T13:48:24.560Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c9271d8ec6470e516d84-bc721ead62c393c88af1",
+          "file": "configuration.spec.ts",
+          "line": 157,
+          "column": 84
+        },
+        {
+          "title": "additional family tablet and narrow reflow preserves Registration and Totp typed forms",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 11639,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "steps": [
+                    {
+                      "title": "768 / Registration",
+                      "duration": 3177
+                    },
+                    {
+                      "title": "768 / Totp",
+                      "duration": 2925
+                    },
+                    {
+                      "title": "320 / Registration",
+                      "duration": 2535
+                    },
+                    {
+                      "title": "320 / Totp",
+                      "duration": 2729
+                    }
+                  ],
+                  "startTime": "2026-11-16T13:48:34.770Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c9271d8ec6470e516d84-863cbf4e221f802227b7",
+          "file": "configuration.spec.ts",
+          "line": 188,
+          "column": 1
+        },
+        {
+          "title": "original three-family publication remains sufficient and unqualified additional routes fail closed",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3318,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-16T13:48:46.426Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c9271d8ec6470e516d84-dfc2acf9cfdd10dddca9",
+          "file": "configuration.spec.ts",
+          "line": 195,
+          "column": 1
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-11-16T13:46:55.920Z",
+    "duration": 114537.65800000001,
+    "expected": 7,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}
