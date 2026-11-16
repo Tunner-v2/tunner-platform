@@ -3,26 +3,50 @@
   "scope_id": "TUN-P2-019",
   "validation_kind": "COMMITTED",
   "result": "PENDING",
-  "phase": "CONTENT_LOGIN_INCREMENT_QUALIFIED_REMAINING_ADMIN_CONFIGURATION_PENDING",
+  "phase": "ADMIN_AND_TYPED_CONFIGURATION_IMPLEMENTATION",
   "tested_commit_sha": null,
   "validated_commit_sha": null,
   "owned_behavior_paths": [
     "Tunner.Platform.slnx",
+    "src/Modules/Identity/IdentityPersistenceDbContext.cs",
+    "src/Modules/Identity/IdentityRuntimeConfigurationApplication.cs",
+    "src/Modules/Identity/IdentityRuntimeConfigurationContracts.cs",
+    "src/Modules/Identity/IdentityRuntimeConfigurationIntegritySql.cs",
+    "src/Modules/Identity/IdentityRuntimeConfigurationModel.cs",
+    "src/Modules/Identity/Migrations/20261116075022_P2IdentityRuntimeConfiguration.Designer.cs",
+    "src/Modules/Identity/Migrations/20261116075022_P2IdentityRuntimeConfiguration.cs",
+    "src/Modules/Identity/Migrations/IdentityPersistenceDbContextModelSnapshot.cs",
+    "src/Modules/Identity/PersistedIdentityRuntimeConfigurationSource.cs",
     "src/Modules/Identity/PublishedAuthenticationPresentationSource.cs",
     "src/Modules/Identity/Tunner.Identity.Persistence.csproj",
+    "src/Modules/PresentationContent/ContentBrowsing.cs",
+    "src/Modules/PresentationContent/ContentCapabilities.cs",
+    "src/Modules/PresentationContent/ContentCommandExecution.cs",
     "src/Modules/PresentationContent/ContentContracts.cs",
     "src/Modules/PresentationContent/ContentIntegritySql.cs",
     "src/Modules/PresentationContent/ContentResolution.cs",
     "src/Modules/PresentationContent/Migrations/20261116061227_P2PresentationContentFoundation.Designer.cs",
     "src/Modules/PresentationContent/Migrations/20261116061227_P2PresentationContentFoundation.cs",
+    "src/Modules/PresentationContent/Migrations/20261116075423_P2ContentChangeReason.Designer.cs",
+    "src/Modules/PresentationContent/Migrations/20261116075423_P2ContentChangeReason.cs",
     "src/Modules/PresentationContent/Migrations/PresentationContentDbContextModelSnapshot.cs",
     "src/Modules/PresentationContent/PresentationContentApplication.cs",
     "src/Modules/PresentationContent/PresentationContentDbContext.cs",
     "src/Modules/PresentationContent/PresentationContentRegistration.cs",
     "src/Modules/PresentationContent/Tunner.PresentationContent.csproj",
+    "src/Tunner.Admin.Bff/AdminContentAuthorization.cs",
+    "src/Tunner.Admin.Bff/AdminContentContracts.cs",
+    "src/Tunner.Admin.Bff/AdminContentEndpoints.cs",
+    "src/Tunner.Admin.Bff/Program.cs",
+    "src/Tunner.Admin.Bff/Tunner.Admin.Bff.csproj",
+    "tests/Tunner.Identity.Persistence.Tests/AdminContentHttpTests.cs",
+    "tests/Tunner.Identity.Persistence.Tests/ContentChangeReasonTests.cs",
+    "tests/Tunner.Identity.Persistence.Tests/IdentityRuntimeConfigurationMigrationTests.cs",
+    "tests/Tunner.Identity.Persistence.Tests/IdentityRuntimeConfigurationTests.cs",
     "tests/Tunner.Identity.Persistence.Tests/PresentationContentLifecycleTests.cs",
     "tests/Tunner.Identity.Persistence.Tests/PublishedAuthenticationPresentationIntegrationTests.cs",
-    "tests/Tunner.Identity.Persistence.Tests/PublishedAuthenticationPresentationTests.cs"
+    "tests/Tunner.Identity.Persistence.Tests/PublishedAuthenticationPresentationTests.cs",
+    "tests/Tunner.Identity.Persistence.Tests/Tunner.Identity.Persistence.Tests.csproj"
   ],
   "admission": {
     "source_sha": "da151053ad961a174841c4077328983946d926cd",
@@ -44,8 +68,30 @@
     "module_compile": "PASS0warnings0errors at f4f3edf301e6dcbf100ac539811da576c0aa5cb4, including generated migration and all focused tests",
     "qualified_increment_source_sha": "f4f3edf301e6dcbf100ac539811da576c0aa5cb4",
     "actual_runs": [
-      {"run_id":"7670f6630cf1491fa4455c3fb1ef3528","scope":"Login adapter provenance/configuration/composition","executed":9,"passed":9,"failed":0,"not_executed":0,"timed_out":false,"owned_containers_remaining":0,"borrowed_preserved":true,"receipt_ref":"governance/evidence/p2-019-content-20261116/native/7670f6630cf1491fa4455c3fb1ef3528/summary.json"},
-      {"run_id":"e6951c802e62476692cd6fc10a86e797","scope":"31 owner cases plus6 HTTPS/migration cases; real admitted PostgreSQL","executed":37,"passed":37,"failed":0,"not_executed":0,"timed_out":false,"owned_containers_remaining":0,"borrowed_preserved":true,"receipt_ref":"governance/evidence/p2-019-content-20261116/native/e6951c802e62476692cd6fc10a86e797/summary.json"}
+      {
+        "run_id": "7670f6630cf1491fa4455c3fb1ef3528",
+        "scope": "Login adapter provenance/configuration/composition",
+        "executed": 9,
+        "passed": 9,
+        "failed": 0,
+        "not_executed": 0,
+        "timed_out": false,
+        "owned_containers_remaining": 0,
+        "borrowed_preserved": true,
+        "receipt_ref": "governance/evidence/p2-019-content-20261116/native/7670f6630cf1491fa4455c3fb1ef3528/summary.json"
+      },
+      {
+        "run_id": "e6951c802e62476692cd6fc10a86e797",
+        "scope": "31 owner cases plus6 HTTPS/migration cases; real admitted PostgreSQL",
+        "executed": 37,
+        "passed": 37,
+        "failed": 0,
+        "not_executed": 0,
+        "timed_out": false,
+        "owned_containers_remaining": 0,
+        "borrowed_preserved": true,
+        "receipt_ref": "governance/evidence/p2-019-content-20261116/native/e6951c802e62476692cd6fc10a86e797/summary.json"
+      }
     ],
     "authored_cases": {
       "owner": 31,
@@ -72,6 +118,10 @@
     "Reconcile confirmed shared-file source bindings once at the final integration gate via TODO-TUN-P2-019-INTEGRATION001; preserve historical closure and actual original test identities"
   ],
   "visual_proposal_ref": "artifacts/p2-019-content-20261116/ui-review/review.html",
-  "visual_approval": "REQUESTED_019_V01_V03_PENDING",
-  "boundaries": "This is an incomplete P2-019 increment. No full-work-item READY/DONE, final technical review, Product acceptance, production activation, merge or release is asserted. Existing synthetic local fixtures remain isolated; Figma/Drive/FigJam remain read-only."
+  "visual_approval": "PRODUCT_OWNER_APPROVED_019_V01_V03_call_339c384055784fa6b78b0cfb6899439b; exact pictured Content scopes only; embedded User previews must preserve approved components/theme; no production policy or release approval",
+  "boundaries": "This is an incomplete P2-019 increment. No full-work-item READY/DONE, final technical review, Product acceptance, production activation, merge or release is asserted. Existing synthetic local fixtures remain isolated; Figma/Drive/FigJam remain read-only.",
+  "pending_increment": {
+    "scope": "Admin Content HTTP, bounded browse/capabilities/idempotency; persisted typed Authentication/Assurance/content-binding runtime configuration; immutable content change reasons",
+    "validation": "Authored cases await candidate compile and execution. No new PASS or acceptance asserted."
+  }
 }

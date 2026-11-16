@@ -5,10 +5,10 @@
   "original_scope_id": "TUN-P2-003",
   "parent_revision_id": "P2-003-RV005",
   "parent_milestone_revision_id": null,
-  "title": "Integrate governed PresentationContent with existing Identity adapters and tests",
+  "title": "Integrate governed presentation and typed Identity runtime configuration",
   "revision_type": "COMPATIBILITY",
   "status": "ACTIVE",
-  "reason": "Active P2-019 adds the approved logical PresentationContent owner. Add only the module reference needed by the existing Identity source interface; existing native tests consume it transitively. Preserve closed persistence qualification and package versions.",
+  "reason": "Active P2-019 adds the approved PresentationContent reference and Identity-owned typed runtime configuration persistence. Preserve closed Account/Identity semantics, existing migrations, package versions and production defaults. New configuration versions require typed owner validation, qualified authorization/approval and actual affected migration/integration qualification before closure.",
   "authority_refs": [
     "docs/authority/baselines/1.6.0/02_Repository_Solution_and_Module_Architecture.md",
     "docs/authority/baselines/1.6.0/09_Testing_Acceptance_Evidence_and_Quality_Gates.md"
@@ -19,12 +19,13 @@
   "impact_classification": "NON_BLOCKING",
   "blocked_scope": [],
   "acceptance_criteria": [
+    "Identity runtime configuration tables are additive and owner-controlled; exact typed policy/content bindings, immutable approval/publication lineage, migration guards and independent negative/concurrency tests precede technical closure. No runtime policy values or production activation are selected.",
     "Identity module reference preserves dependency direction and production package versions; actual Content/Login and affected native cases pass at a preclassified committed candidate."
   ],
   "prerequisites": [],
   "work_items": [],
   "required_gates": [],
-  "required_roles": ["solution-architect","tester-qa-engineer"],
+  "required_roles": ["solution-architect","tester-qa-engineer","cyber-security-engineer","auditor"],
   "evidence_refs": ["governance/evidence/P2-003-RV006-VALIDATION.json"],
   "product_acceptance_required": false,
   "created_at": "2026-11-16T05:22:31.2260146\u002B00:00",
