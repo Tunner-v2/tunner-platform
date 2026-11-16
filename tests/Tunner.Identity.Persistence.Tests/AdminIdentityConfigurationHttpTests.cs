@@ -40,12 +40,14 @@ public sealed class AdminIdentityConfigurationHttpTests(SessionListingPostgresFi
     [InlineData("authentication-content")]
     [InlineData("registration")]
     [InlineData("totp")]
+    [InlineData("registration-content")]
     public async Task CanonicalSettingsRoutesEnforceCurrentIdentityAdmission(string family)
     {
         var additional = family switch
         {
             "registration" => new[] { new IdentityConfigurationScope(IdentityConfigurationFamily.Registration) },
             "totp" => new[] { new IdentityConfigurationScope(IdentityConfigurationFamily.Totp) },
+            "registration-content" => new[] { new IdentityConfigurationScope(IdentityConfigurationFamily.RegistrationContent, RegistrationPolicyVersion: "fixture-registration-route-v1") },
             _ => Array.Empty<IdentityConfigurationScope>()
         };
         await using var database = await fixture.CreateDatabaseAsync(); await using var host = await Host.Start(database, additionalScopes: additional);

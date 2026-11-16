@@ -4,15 +4,18 @@ using Tunner.Platform.Policies;
 
 namespace Tunner.Identity.Persistence;
 
-public enum IdentityConfigurationFamily { Authentication, Assurance, AuthenticationContent, Registration, Totp }
+public enum IdentityConfigurationFamily { Authentication, Assurance, AuthenticationContent, Registration, Totp, RegistrationContent }
 public enum IdentityConfigurationOperation { CreateDraft, UpdateDraft, Validate, Preview, Approve, Publish, History, Rollback, Browse }
 public enum IdentityConfigurationActorKind { Human, Service, Model }
-public sealed record IdentityConfigurationScope(IdentityConfigurationFamily Family, AssurancePolicyScope? AssuranceScope = null, string? AuthenticationPolicyVersion = null)
+public sealed record IdentityConfigurationScope(IdentityConfigurationFamily Family, AssurancePolicyScope? AssuranceScope = null, string? AuthenticationPolicyVersion = null,
+    [property: JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] string? RegistrationPolicyVersion = null)
 {
     internal string Key => JsonSerializer.Serialize(this);
     internal void Require()
     {
-        if (!Enum.IsDefined(Family) || (Family is IdentityConfigurationFamily.Authentication or IdentityConfigurationFamily.Registration or IdentityConfigurationFamily.Totp) && (AssuranceScope is not null || AuthenticationPolicyVersion is not null) ||
+        if (!Enum.IsDefined(Family) || Family != IdentityConfigurationFamily.RegistrationContent && RegistrationPolicyVersion is not null ||
+            Family == IdentityConfigurationFamily.RegistrationContent && (AssuranceScope is not null || AuthenticationPolicyVersion is not null || string.IsNullOrWhiteSpace(RegistrationPolicyVersion)) ||
+            (Family is IdentityConfigurationFamily.Authentication or IdentityConfigurationFamily.Registration or IdentityConfigurationFamily.Totp) && (AssuranceScope is not null || AuthenticationPolicyVersion is not null) ||
             Family == IdentityConfigurationFamily.Assurance && (AssuranceScope is null || AuthenticationPolicyVersion is not null) ||
             Family == IdentityConfigurationFamily.AuthenticationContent && (AssuranceScope is not null || string.IsNullOrWhiteSpace(AuthenticationPolicyVersion)))
             throw new IdentityConfigurationUnavailableException();
@@ -68,6 +71,7 @@ public sealed record IdentityConfigurationPreview(IdentityConfigurationProposal 
 {
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] public RegistrationPolicyVersion? Registration { get; init; }
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] public TotpPolicyVersion? Totp { get; init; }
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] public RegistrationContentBinding? RegistrationContent { get; init; }
 }
 public sealed record IdentityConfigurationHistory(Guid PublicationReference, Guid VersionReference, IdentityConfigurationScope Scope, string PolicyVersionReference,
     string CandidateDigest, EffectivePolicyInterval EffectiveInterval, Guid? SupersedesPublicationReference, string ApproverReference,
@@ -81,7 +85,8 @@ internal static class IdentityConfigurationDigest
 internal sealed record IdentityConfigurationDocument(AuthenticationPolicyVersion? Authentication = null, AssurancePolicyVersion? Assurance = null,
     AuthenticationContentBinding? ContentBinding = null,
     [property: JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] RegistrationPolicyVersion? Registration = null,
-    [property: JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] TotpPolicyVersion? Totp = null)
+    [property: JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] TotpPolicyVersion? Totp = null,
+    [property: JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] RegistrationContentBinding? RegistrationContent = null)
 {
     private static readonly JsonSerializerOptions Json = new()
     {
@@ -108,12 +113,13 @@ internal sealed record IdentityConfigurationDocument(AuthenticationPolicyVersion
     internal string Digest => IdentityConfigurationDigest.Of(this);
     internal IdentityConfigurationScope Scope => Authentication is not null ? new(IdentityConfigurationFamily.Authentication) : Assurance is not null
         ? new(IdentityConfigurationFamily.Assurance, Assurance.Metadata.Scope) : Registration is not null ? new(IdentityConfigurationFamily.Registration)
-        : Totp is not null ? new(IdentityConfigurationFamily.Totp) : new(IdentityConfigurationFamily.AuthenticationContent, AuthenticationPolicyVersion: ContentBinding!.AuthenticationPolicyVersion);
-    internal string Version => Authentication?.Values.Version ?? Assurance?.Metadata.VersionId ?? Registration?.Values.Version ?? Totp?.Values.Version ?? ContentBinding!.ConfigurationVersionReference;
-    internal EffectivePolicyInterval Interval => Authentication?.Metadata.EffectiveInterval ?? Assurance?.Metadata.EffectiveInterval ?? Registration?.Metadata.EffectiveInterval ?? Totp?.Metadata.EffectiveInterval ?? ContentBinding!.EffectiveInterval;
+        : Totp is not null ? new(IdentityConfigurationFamily.Totp) : RegistrationContent is not null ? new(IdentityConfigurationFamily.RegistrationContent, RegistrationPolicyVersion: RegistrationContent.RegistrationPolicyVersion)
+        : new(IdentityConfigurationFamily.AuthenticationContent, AuthenticationPolicyVersion: ContentBinding!.AuthenticationPolicyVersion);
+    internal string Version => Authentication?.Values.Version ?? Assurance?.Metadata.VersionId ?? Registration?.Values.Version ?? Totp?.Values.Version ?? RegistrationContent?.ConfigurationVersionReference ?? ContentBinding!.ConfigurationVersionReference;
+    internal EffectivePolicyInterval Interval => Authentication?.Metadata.EffectiveInterval ?? Assurance?.Metadata.EffectiveInterval ?? Registration?.Metadata.EffectiveInterval ?? Totp?.Metadata.EffectiveInterval ?? RegistrationContent?.EffectiveInterval ?? ContentBinding!.EffectiveInterval;
     internal void Require()
     {
-        if ((Authentication is null ? 0 : 1) + (Assurance is null ? 0 : 1) + (ContentBinding is null ? 0 : 1) + (Registration is null ? 0 : 1) + (Totp is null ? 0 : 1) != 1) throw new IdentityConfigurationUnavailableException();
+        if ((Authentication is null ? 0 : 1) + (Assurance is null ? 0 : 1) + (ContentBinding is null ? 0 : 1) + (Registration is null ? 0 : 1) + (Totp is null ? 0 : 1) + (RegistrationContent is null ? 0 : 1) != 1) throw new IdentityConfigurationUnavailableException();
         if (Authentication is { } authentication)
         {
             if (authentication.Metadata is null || authentication.Values is null) throw new IdentityConfigurationUnavailableException();
@@ -144,6 +150,14 @@ internal sealed record IdentityConfigurationDocument(AuthenticationPolicyVersion
             if (totp.Metadata is null || totp.Values is null) throw new IdentityConfigurationUnavailableException();
             totp.Values.Validate(); _ = new TotpPolicyCatalog([totp]);
             if (totp.Metadata.VersionId != totp.Values.Version || totp.Metadata.Scope != "TOTP" || totp.Metadata.Status != "ACTIVE") throw new IdentityConfigurationUnavailableException();
+        }
+        if (RegistrationContent is { } registrationContent)
+        {
+            if (new[] { registrationContent.RegistrationPolicyVersion, registrationContent.TermsVersion, registrationContent.PrivacyVersion,
+                registrationContent.ConfigurationVersionReference, registrationContent.QualificationReference, registrationContent.ContentScope, registrationContent.VariantReference }.Any(string.IsNullOrWhiteSpace) ||
+                registrationContent.EffectiveInterval is null || registrationContent.TermsUri is null || registrationContent.PrivacyUri is null ||
+                new[] { registrationContent.TermsUri, registrationContent.PrivacyUri, registrationContent.SupportUri }.OfType<Uri>().Any(uri =>
+                    !uri.IsAbsoluteUri || uri.Scheme != Uri.UriSchemeHttps || uri.UserInfo.Length != 0)) throw new IdentityConfigurationUnavailableException();
         }
         Scope.Require();
     }

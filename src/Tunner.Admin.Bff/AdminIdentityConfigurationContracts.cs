@@ -40,16 +40,19 @@ public sealed class AdminIdentityConfigurationScope
     public required IdentityConfigurationFamily Family { get; init; }
     public AdminIdentityAssuranceScope? AssuranceScope { get; init; }
     public string? AuthenticationPolicyVersion { get; init; }
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] public string? RegistrationPolicyVersion { get; init; }
     internal IdentityConfigurationScope Value() => Family switch
     {
-        IdentityConfigurationFamily.Authentication when AssuranceScope is null && AuthenticationPolicyVersion is null => new(Family),
-        IdentityConfigurationFamily.Registration or IdentityConfigurationFamily.Totp when AssuranceScope is null && AuthenticationPolicyVersion is null => new(Family),
-        IdentityConfigurationFamily.Assurance when AssuranceScope is not null && AuthenticationPolicyVersion is null => new(Family, AssuranceScope.Value()),
-        IdentityConfigurationFamily.AuthenticationContent when AssuranceScope is null && !string.IsNullOrWhiteSpace(AuthenticationPolicyVersion) => new(Family, AuthenticationPolicyVersion: AuthenticationPolicyVersion),
+        IdentityConfigurationFamily.Authentication when AssuranceScope is null && AuthenticationPolicyVersion is null && RegistrationPolicyVersion is null => new(Family),
+        IdentityConfigurationFamily.Registration or IdentityConfigurationFamily.Totp when AssuranceScope is null && AuthenticationPolicyVersion is null && RegistrationPolicyVersion is null => new(Family),
+        IdentityConfigurationFamily.Assurance when AssuranceScope is not null && AuthenticationPolicyVersion is null && RegistrationPolicyVersion is null => new(Family, AssuranceScope.Value()),
+        IdentityConfigurationFamily.AuthenticationContent when AssuranceScope is null && !string.IsNullOrWhiteSpace(AuthenticationPolicyVersion) && RegistrationPolicyVersion is null => new(Family, AuthenticationPolicyVersion: AuthenticationPolicyVersion),
+        IdentityConfigurationFamily.RegistrationContent when AssuranceScope is null && AuthenticationPolicyVersion is null && !string.IsNullOrWhiteSpace(RegistrationPolicyVersion) => new(Family, RegistrationPolicyVersion: RegistrationPolicyVersion),
         _ => throw new ArgumentException("An exact typed Identity configuration scope is required.")
     };
     internal static AdminIdentityConfigurationScope From(IdentityConfigurationScope scope) => new()
-    { Family = scope.Family, AssuranceScope = scope.AssuranceScope is { } assurance ? new() { Operation = assurance.Operation, Context = assurance.Context } : null, AuthenticationPolicyVersion = scope.AuthenticationPolicyVersion };
+    { Family = scope.Family, AssuranceScope = scope.AssuranceScope is { } assurance ? new() { Operation = assurance.Operation, Context = assurance.Context } : null,
+        AuthenticationPolicyVersion = scope.AuthenticationPolicyVersion, RegistrationPolicyVersion = scope.RegistrationPolicyVersion };
 }
 [JsonUnmappedMemberHandling(JsonUnmappedMemberHandling.Disallow)]
 public sealed class AdminIdentityAssuranceScope
@@ -135,6 +138,29 @@ public sealed class AdminAuthenticationContentBindingCandidate
     public Uri? SupportUri { get; init; }
     internal AuthenticationContentBinding Value() => new(AuthenticationPolicyVersion, ConfigurationVersionReference, QualificationReference, ContentScope,
         VariantReference, (EffectiveInterval ?? throw new ArgumentException("An interval is required.")).Value(), TermsUri, PrivacyUri, SupportUri);
+}
+[JsonUnmappedMemberHandling(JsonUnmappedMemberHandling.Disallow)]
+public sealed class AdminRegistrationContentBindingCandidate
+{
+    public required string RegistrationPolicyVersion { get; init; }
+    public required string TermsVersion { get; init; }
+    public required string PrivacyVersion { get; init; }
+    public required string ConfigurationVersionReference { get; init; }
+    public required string QualificationReference { get; init; }
+    public required string ContentScope { get; init; }
+    public required string VariantReference { get; init; }
+    public required AdminIdentityConfigurationInterval EffectiveInterval { get; init; }
+    public required Uri TermsUri { get; init; }
+    public required Uri PrivacyUri { get; init; }
+    public Uri? SupportUri { get; init; }
+    internal RegistrationContentBinding Value()
+    {
+        if (new[] { RegistrationPolicyVersion, TermsVersion, PrivacyVersion, ConfigurationVersionReference, QualificationReference, ContentScope, VariantReference }.Any(string.IsNullOrWhiteSpace) ||
+            TermsUri is null || PrivacyUri is null || new[] { TermsUri, PrivacyUri, SupportUri }.OfType<Uri>().Any(uri => !uri.IsAbsoluteUri || uri.Scheme != Uri.UriSchemeHttps || uri.UserInfo.Length != 0))
+            throw new ArgumentException("Complete qualified Registration content references and HTTPS links are required.");
+        return new(RegistrationPolicyVersion, TermsVersion, PrivacyVersion, ConfigurationVersionReference, QualificationReference, ContentScope, VariantReference,
+            (EffectiveInterval ?? throw new ArgumentException("An interval is required.")).Value(), TermsUri, PrivacyUri, SupportUri);
+    }
 }
 [JsonUnmappedMemberHandling(JsonUnmappedMemberHandling.Disallow)]
 public sealed class AdminIdentityConfigurationDraft<T>

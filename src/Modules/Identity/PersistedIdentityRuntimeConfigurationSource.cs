@@ -10,7 +10,7 @@ namespace Tunner.Identity.Persistence;
 /// <summary>Only current effective publications with immutable Identity validation/approval/effect receipts are runtime authority.
 /// Reading a policy never requires an Admin browser session and never changes historical actor/session state.</summary>
 public sealed class PersistedIdentityRuntimeConfigurationSource(IServiceScopeFactory scopes) : IAuthenticationPolicySource, IAssurancePolicySource, IAuthenticationContentBindingSource,
-    IRegistrationPolicySource, ITotpPolicySource
+    IRegistrationPolicySource, ITotpPolicySource, IRegistrationContentBindingSource
 {
     RegistrationPolicy IRegistrationPolicySource.RequireEffective(DateTimeOffset effectiveAt)
     {
@@ -45,6 +45,15 @@ public sealed class PersistedIdentityRuntimeConfigurationSource(IServiceScopeFac
         var selected = Read(new(IdentityConfigurationFamily.AuthenticationContent, AuthenticationPolicyVersion: policy.Version), effectiveAt);
         var value = selected.Document.ContentBinding ?? throw new IdentityConfigurationUnavailableException();
         if (value.AuthenticationPolicyVersion != policy.Version) throw new IdentityConfigurationUnavailableException();
+        return value with { QualificationReference = selected.Publication.ApprovalEventReference.ToString("N") };
+    }
+    public RegistrationContentBinding RequireQualified(RegistrationPolicy policy, DateTimeOffset effectiveAt)
+    {
+        ArgumentNullException.ThrowIfNull(policy); policy.Validate();
+        var selected = Read(new(IdentityConfigurationFamily.RegistrationContent, RegistrationPolicyVersion: policy.Version), effectiveAt);
+        var value = selected.Document.RegistrationContent ?? throw new IdentityConfigurationUnavailableException();
+        if (value.RegistrationPolicyVersion != policy.Version || value.TermsVersion != policy.TermsVersion || value.PrivacyVersion != policy.PrivacyVersion)
+            throw new IdentityConfigurationUnavailableException();
         return value with { QualificationReference = selected.Publication.ApprovalEventReference.ToString("N") };
     }
 
@@ -85,6 +94,14 @@ public sealed class PersistedIdentityRuntimeConfigurationSource(IServiceScopeFac
 
 public static class IdentityRuntimeConfigurationRegistration
 {
+    /// <summary>Binding-only opt-in. This does not register Registration policy, presentation or workflow providers.</summary>
+    public static IServiceCollection AddTunnerPersistedRegistrationContentBinding(this IServiceCollection services)
+    {
+        ArgumentNullException.ThrowIfNull(services);
+        if (services.Any(x => x.ServiceType == typeof(IRegistrationContentBindingSource))) throw new InvalidOperationException("Registration content binding source selection must be explicit and unique.");
+        services.TryAddSingleton<PersistedIdentityRuntimeConfigurationSource>();
+        services.AddSingleton<IRegistrationContentBindingSource>(provider => provider.GetRequiredService<PersistedIdentityRuntimeConfigurationSource>()); return services;
+    }
     /// <summary>Separate opt-in: registering this port can activate Registration in a composing User host.</summary>
     public static IServiceCollection AddTunnerPersistedRegistrationConfiguration(this IServiceCollection services)
     {

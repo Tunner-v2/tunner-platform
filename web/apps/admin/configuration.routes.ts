@@ -1,6 +1,6 @@
-export const configurationFamilies=['Authentication','Assurance','AuthenticationContent','Registration','Totp'] as const;
+export const configurationFamilies=['Authentication','Assurance','AuthenticationContent','Registration','Totp','RegistrationContent'] as const;
 export type ConfigurationFamily=typeof configurationFamilies[number];
-const segments:Record<ConfigurationFamily,string>={Authentication:'authentication',Assurance:'assurance',AuthenticationContent:'authentication-content',Registration:'registration',Totp:'totp'};
+const segments:Record<ConfigurationFamily,string>={Authentication:'authentication',Assurance:'assurance',AuthenticationContent:'authentication-content',Registration:'registration',Totp:'totp',RegistrationContent:'registration-content'};
 export type ConfigurationView='edit'|'review'|'history';
 export function configurationPath(family:ConfigurationFamily,view:ConfigurationView='edit'){return '/identity/settings/'+segments[family]+(view==='edit'?'':'/'+view);}
 export function configurationRoute(path:string):{family:ConfigurationFamily;view:ConfigurationView}|undefined{
