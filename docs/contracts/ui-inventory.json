@@ -4601,6 +4601,175 @@
       "pathname": null,
       "runtime_pathname": null,
       "validation": "Shared typed schema, fields, error summary and focus with independent backend validation. Exact selected Passkey policy is read-only; four owner references and UTC interval remain separate from actual server approval qualification. Owner values are not defaulted."
+    },
+    {
+      "app": "admin",
+      "module": "Identity.Configuration",
+      "status": "IMPLEMENTED",
+      "owner_scopes": [
+        "TUN-P2-019"
+      ],
+      "authority_refs": [
+        "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md",
+        "AMD-0008",
+        "AMD-0009"
+      ],
+      "figma_refs": [
+        {
+          "approved_adaptation_ref": "artifacts/p2-019-content-20261116/step-up-binding-ui-review/review.html",
+          "visual_scope": "019-V13; reuse019-V05–V06/V11–V12"
+        }
+      ],
+      "source_paths": [
+        "web/apps/admin/configuration.tsx",
+        "web/apps/admin/configuration.api.ts",
+        "web/apps/admin/configuration.validation.ts",
+        "web/apps/admin/configuration.routes.ts",
+        "web/apps/admin/configuration.css",
+        "src/Tunner.Admin.Bff/AdminIdentityConfigurationScreens.cs",
+        "src/Tunner.Admin.Bff/AdminIdentityConfigurationEndpoints.cs"
+      ],
+      "additional_consent_refs": [
+        "governance/evidence/TUN-P2-019-STEP-UP-BINDING-VISUAL-CONSENT.json"
+      ],
+      "acceptance_state": "ENGINEERING_UI_QUALIFICATION_TRACKED_IN_WORK_ITEM_EVIDENCE",
+      "id": "A-ID-SETTINGS-StepUpContent-edit",
+      "kind": "SCREEN",
+      "title": "StepUp content binding edit",
+      "pathname": "/identity/settings/step-up-content",
+      "runtime_pathname": "/identity/settings/step-up-content",
+      "parameter_schema": {},
+      "guard": "Actual Admin session and independent exact Identity authorization; exact server-qualified Assurance operation/context/version, saved candidate/publication and current capabilities; no private URL or browser-storage context.",
+      "form_ids": [
+        "FORM-ADMIN-IDENTITY-STEP-UP-CONTENT-BINDING",
+        "FORM-ADMIN-IDENTITY-SEARCH"
+      ],
+      "routing_state": "IMPLEMENTED"
+    },
+    {
+      "app": "admin",
+      "module": "Identity.Configuration",
+      "status": "IMPLEMENTED",
+      "owner_scopes": [
+        "TUN-P2-019"
+      ],
+      "authority_refs": [
+        "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md",
+        "AMD-0008",
+        "AMD-0009"
+      ],
+      "figma_refs": [
+        {
+          "approved_adaptation_ref": "artifacts/p2-019-content-20261116/step-up-binding-ui-review/review.html",
+          "visual_scope": "019-V13; reuse019-V05–V06/V11–V12"
+        }
+      ],
+      "source_paths": [
+        "web/apps/admin/configuration.tsx",
+        "web/apps/admin/configuration.api.ts",
+        "web/apps/admin/configuration.validation.ts",
+        "web/apps/admin/configuration.routes.ts",
+        "web/apps/admin/configuration.css",
+        "src/Tunner.Admin.Bff/AdminIdentityConfigurationScreens.cs",
+        "src/Tunner.Admin.Bff/AdminIdentityConfigurationEndpoints.cs"
+      ],
+      "additional_consent_refs": [
+        "governance/evidence/TUN-P2-019-STEP-UP-BINDING-VISUAL-CONSENT.json"
+      ],
+      "acceptance_state": "ENGINEERING_UI_QUALIFICATION_TRACKED_IN_WORK_ITEM_EVIDENCE",
+      "id": "A-ID-SETTINGS-StepUpContent-review",
+      "kind": "SCREEN",
+      "title": "StepUp content binding review",
+      "pathname": "/identity/settings/step-up-content/review",
+      "runtime_pathname": "/identity/settings/step-up-content/review",
+      "parameter_schema": {},
+      "guard": "Actual Admin session and independent exact Identity authorization; exact server-qualified Assurance operation/context/version, saved candidate/publication and current capabilities; no private URL or browser-storage context.",
+      "form_ids": [
+        "FORM-ADMIN-IDENTITY-PUBLICATION"
+      ],
+      "routing_state": "IMPLEMENTED"
+    },
+    {
+      "app": "admin",
+      "module": "Identity.Configuration",
+      "status": "IMPLEMENTED",
+      "owner_scopes": [
+        "TUN-P2-019"
+      ],
+      "authority_refs": [
+        "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md",
+        "AMD-0008",
+        "AMD-0009"
+      ],
+      "figma_refs": [
+        {
+          "approved_adaptation_ref": "artifacts/p2-019-content-20261116/step-up-binding-ui-review/review.html",
+          "visual_scope": "019-V13; reuse019-V05–V06/V11–V12"
+        }
+      ],
+      "source_paths": [
+        "web/apps/admin/configuration.tsx",
+        "web/apps/admin/configuration.api.ts",
+        "web/apps/admin/configuration.validation.ts",
+        "web/apps/admin/configuration.routes.ts",
+        "web/apps/admin/configuration.css",
+        "src/Tunner.Admin.Bff/AdminIdentityConfigurationScreens.cs",
+        "src/Tunner.Admin.Bff/AdminIdentityConfigurationEndpoints.cs"
+      ],
+      "additional_consent_refs": [
+        "governance/evidence/TUN-P2-019-STEP-UP-BINDING-VISUAL-CONSENT.json"
+      ],
+      "acceptance_state": "ENGINEERING_UI_QUALIFICATION_TRACKED_IN_WORK_ITEM_EVIDENCE",
+      "id": "A-ID-SETTINGS-StepUpContent-history",
+      "kind": "SCREEN",
+      "title": "StepUp content binding history",
+      "pathname": "/identity/settings/step-up-content/history",
+      "runtime_pathname": "/identity/settings/step-up-content/history",
+      "parameter_schema": {},
+      "guard": "Actual Admin session and independent exact Identity authorization; exact server-qualified Assurance operation/context/version, saved candidate/publication and current capabilities; no private URL or browser-storage context.",
+      "form_ids": [
+        "FORM-ADMIN-IDENTITY-PUBLICATION"
+      ],
+      "routing_state": "IMPLEMENTED"
+    },
+    {
+      "app": "admin",
+      "module": "Identity.Configuration",
+      "status": "IMPLEMENTED",
+      "owner_scopes": [
+        "TUN-P2-019"
+      ],
+      "authority_refs": [
+        "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md",
+        "AMD-0008",
+        "AMD-0009"
+      ],
+      "figma_refs": [
+        {
+          "approved_adaptation_ref": "artifacts/p2-019-content-20261116/step-up-binding-ui-review/review.html",
+          "visual_scope": "019-V13; reuse019-V05–V06/V11–V12"
+        }
+      ],
+      "source_paths": [
+        "web/apps/admin/configuration.tsx",
+        "web/apps/admin/configuration.api.ts",
+        "web/apps/admin/configuration.validation.ts",
+        "web/apps/admin/configuration.routes.ts",
+        "web/apps/admin/configuration.css",
+        "src/Tunner.Admin.Bff/AdminIdentityConfigurationScreens.cs",
+        "src/Tunner.Admin.Bff/AdminIdentityConfigurationEndpoints.cs"
+      ],
+      "additional_consent_refs": [
+        "governance/evidence/TUN-P2-019-STEP-UP-BINDING-VISUAL-CONSENT.json"
+      ],
+      "acceptance_state": "ENGINEERING_UI_QUALIFICATION_TRACKED_IN_WORK_ITEM_EVIDENCE",
+      "id": "FORM-ADMIN-IDENTITY-STEP-UP-CONTENT-BINDING",
+      "kind": "FORM",
+      "title": "Typed StepUp content binding",
+      "screen_id": "A-ID-SETTINGS-StepUpContent-edit",
+      "pathname": null,
+      "runtime_pathname": null,
+      "validation": "Shared typed schema, fields, form summary and focus with independent seven-property backend validation; exact Assurance operation/context/version are read-only. Four owner references and UTC interval remain distinct from actual server approval qualification. Owner values are not defaulted."
     }
   ],
   "excluded_historical_designs": [

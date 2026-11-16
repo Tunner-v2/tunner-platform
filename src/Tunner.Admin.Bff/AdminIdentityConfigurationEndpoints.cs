@@ -71,6 +71,15 @@ public static class AdminIdentityConfigurationEndpoints
                 ? app.UpdateRegistrationContentDraftAsync(id, c.ExpectedRevision!.Value, candidate, op.Id, op.Correlation, h.RequestAborted)
                 : app.CreateRegistrationContentDraftAsync(candidate, op.Id, op.Correlation, h.RequestAborted)).ConfigureAwait(false);
         }));
+        routes.MapPost("/step-up-content/draft", (HttpContext h, IdentityRuntimeConfigurationApplication app) => Guard(h, async (profile, session) =>
+        {
+            var c = await Read<AdminIdentityConfigurationDraft<AdminStepUpContentBindingCandidate>>(h, profile).ConfigureAwait(false); c.RequireTarget(); var candidate = c.Candidate.Value();
+            _ = Scope(profile, new AdminIdentityConfigurationScope { Family = IdentityConfigurationFamily.StepUpContent,
+                AssuranceScope = c.Candidate.AssuranceScope, AssurancePolicyVersion = candidate.AssurancePolicyVersion });
+            return await Write(h, app, session, c.IdempotencyKey, c, op => c.ProposalReference is { } id
+                ? app.UpdateStepUpContentDraftAsync(id, c.ExpectedRevision!.Value, candidate, op.Id, op.Correlation, h.RequestAborted)
+                : app.CreateStepUpContentDraftAsync(candidate, op.Id, op.Correlation, h.RequestAborted)).ConfigureAwait(false);
+        }));
         routes.MapPost("/totp-content/draft", (HttpContext h, IdentityRuntimeConfigurationApplication app) => Guard(h, async (profile, session) =>
         {
             var c = await Read<AdminIdentityConfigurationDraft<AdminTotpContentBindingCandidate>>(h, profile).ConfigureAwait(false); c.RequireTarget(); var candidate = c.Candidate.Value();

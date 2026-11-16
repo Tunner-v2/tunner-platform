@@ -16,7 +16,8 @@ internal static class AdminIdentityConfigurationScreens
          "/identity/settings/registration-content", "/identity/settings/registration-content/review", "/identity/settings/registration-content/history",
          "/identity/settings/passkey", "/identity/settings/passkey/review", "/identity/settings/passkey/history",
          "/identity/settings/totp-content", "/identity/settings/totp-content/review", "/identity/settings/totp-content/history",
-         "/identity/settings/passkey-content", "/identity/settings/passkey-content/review", "/identity/settings/passkey-content/history"],
+         "/identity/settings/passkey-content", "/identity/settings/passkey-content/review", "/identity/settings/passkey-content/history",
+         "/identity/settings/step-up-content", "/identity/settings/step-up-content/review", "/identity/settings/step-up-content/history"],
         Allowed, allowAnonymous: false, static context => Results.StatusCode(
             context.Items.TryGetValue(FailureStatus, out var status) && status is int code ? code : StatusCodes.Status403Forbidden));
 
@@ -42,6 +43,7 @@ internal static class AdminIdentityConfigurationScreens
                 "passkey" => IdentityConfigurationFamily.Passkey,
                 "totp-content" => IdentityConfigurationFamily.TotpContent,
                 "passkey-content" => IdentityConfigurationFamily.PasskeyContent,
+                "step-up-content" => IdentityConfigurationFamily.StepUpContent,
                 _ => throw new IdentityConfigurationForbiddenException()
             };
             var scopes = profile.Scopes.Where(x => x.Family == family).ToArray(); if (scopes.Length == 0) return false;

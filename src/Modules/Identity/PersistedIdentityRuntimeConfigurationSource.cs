@@ -10,7 +10,7 @@ namespace Tunner.Identity.Persistence;
 /// <summary>Only current effective publications with immutable Identity validation/approval/effect receipts are runtime authority.
 /// Reading a policy never requires an Admin browser session and never changes historical actor/session state.</summary>
 public sealed class PersistedIdentityRuntimeConfigurationSource(IServiceScopeFactory scopes) : IAuthenticationPolicySource, IAssurancePolicySource, IAuthenticationContentBindingSource,
-    IRegistrationPolicySource, ITotpPolicySource, IRegistrationContentBindingSource, IPasskeyPolicySource, ITotpContentBindingSource, IPasskeyContentBindingSource
+    IRegistrationPolicySource, ITotpPolicySource, IRegistrationContentBindingSource, IPasskeyPolicySource, ITotpContentBindingSource, IPasskeyContentBindingSource, IStepUpContentBindingSource
 {
     RegistrationPolicy IRegistrationPolicySource.RequireEffective(DateTimeOffset effectiveAt)
     {
@@ -79,6 +79,15 @@ public sealed class PersistedIdentityRuntimeConfigurationSource(IServiceScopeFac
         return value with { QualificationReference = selected.Publication.ApprovalEventReference.ToString("N") };
     }
 
+    public StepUpContentBinding RequireQualified(AssurancePolicyVersion policy, DateTimeOffset effectiveAt)
+    {
+        ArgumentNullException.ThrowIfNull(policy);
+        _ = new AssurancePolicyCatalog([policy]).RequireEffective(policy.Metadata.Scope, effectiveAt, policy.Metadata.VersionId);
+        var selected = Read(new(IdentityConfigurationFamily.StepUpContent, policy.Metadata.Scope, AssurancePolicyVersion: policy.Metadata.VersionId), effectiveAt);
+        var value = selected.Document.StepUpContent ?? throw new IdentityConfigurationUnavailableException(); value.RequireCurrent(policy, effectiveAt);
+        return value with { QualificationReference = selected.Publication.ApprovalEventReference.ToString("N") };
+    }
+
     private sealed record Selection(IdentityConfigurationDocument Document, IdentityConfigurationPublicationRow Publication);
     private Selection Read(IdentityConfigurationScope requested, DateTimeOffset at)
     {
@@ -116,6 +125,14 @@ public sealed class PersistedIdentityRuntimeConfigurationSource(IServiceScopeFac
 
 public static class IdentityRuntimeConfigurationRegistration
 {
+    /// <summary>Binding-only opt-in; no assurance, presentation, proof or operation owner is registered.</summary>
+    public static IServiceCollection AddTunnerPersistedStepUpContentBinding(this IServiceCollection services)
+    {
+        ArgumentNullException.ThrowIfNull(services);
+        if (services.Any(x => x.ServiceType == typeof(IStepUpContentBindingSource))) throw new InvalidOperationException("Operation proof content binding source selection must be explicit and unique.");
+        services.TryAddSingleton<PersistedIdentityRuntimeConfigurationSource>();
+        services.AddSingleton<IStepUpContentBindingSource>(provider => provider.GetRequiredService<PersistedIdentityRuntimeConfigurationSource>()); return services;
+    }
     /// <summary>Binding-only opt-in; no TOTP policy, presentation or workflow is registered.</summary>
     public static IServiceCollection AddTunnerPersistedTotpContentBinding(this IServiceCollection services)
     {

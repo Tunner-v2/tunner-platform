@@ -43,10 +43,12 @@ public sealed class AdminIdentityConfigurationScope
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] public string? RegistrationPolicyVersion { get; init; }
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] public string? TotpPolicyVersion { get; init; }
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] public string? PasskeyPolicyVersion { get; init; }
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] public string? AssurancePolicyVersion { get; init; }
     internal IdentityConfigurationScope Value()
     {
         if (Family != IdentityConfigurationFamily.TotpContent && TotpPolicyVersion is not null ||
-            Family != IdentityConfigurationFamily.PasskeyContent && PasskeyPolicyVersion is not null)
+            Family != IdentityConfigurationFamily.PasskeyContent && PasskeyPolicyVersion is not null ||
+            Family != IdentityConfigurationFamily.StepUpContent && AssurancePolicyVersion is not null)
             throw new ArgumentException("An exact typed Identity configuration scope is required.");
         return Family switch
     {
@@ -57,13 +59,14 @@ public sealed class AdminIdentityConfigurationScope
         IdentityConfigurationFamily.RegistrationContent when AssuranceScope is null && AuthenticationPolicyVersion is null && !string.IsNullOrWhiteSpace(RegistrationPolicyVersion) => new(Family, RegistrationPolicyVersion: RegistrationPolicyVersion),
         IdentityConfigurationFamily.TotpContent when AssuranceScope is null && AuthenticationPolicyVersion is null && RegistrationPolicyVersion is null && !string.IsNullOrWhiteSpace(TotpPolicyVersion) => new(Family, TotpPolicyVersion: TotpPolicyVersion),
         IdentityConfigurationFamily.PasskeyContent when AssuranceScope is null && AuthenticationPolicyVersion is null && RegistrationPolicyVersion is null && !string.IsNullOrWhiteSpace(PasskeyPolicyVersion) => new(Family, PasskeyPolicyVersion: PasskeyPolicyVersion),
+        IdentityConfigurationFamily.StepUpContent when AssuranceScope is not null && AuthenticationPolicyVersion is null && RegistrationPolicyVersion is null && !string.IsNullOrWhiteSpace(AssurancePolicyVersion) => new(Family, AssuranceScope.Value(), AssurancePolicyVersion: AssurancePolicyVersion),
         _ => throw new ArgumentException("An exact typed Identity configuration scope is required.")
         };
     }
     internal static AdminIdentityConfigurationScope From(IdentityConfigurationScope scope) => new()
     { Family = scope.Family, AssuranceScope = scope.AssuranceScope is { } assurance ? new() { Operation = assurance.Operation, Context = assurance.Context } : null,
         AuthenticationPolicyVersion = scope.AuthenticationPolicyVersion, RegistrationPolicyVersion = scope.RegistrationPolicyVersion,
-        TotpPolicyVersion = scope.TotpPolicyVersion, PasskeyPolicyVersion = scope.PasskeyPolicyVersion };
+        TotpPolicyVersion = scope.TotpPolicyVersion, PasskeyPolicyVersion = scope.PasskeyPolicyVersion, AssurancePolicyVersion = scope.AssurancePolicyVersion };
 }
 [JsonUnmappedMemberHandling(JsonUnmappedMemberHandling.Disallow)]
 public sealed class AdminIdentityAssuranceScope
@@ -215,6 +218,25 @@ public sealed class AdminPasskeyContentBindingCandidate
         if (new[] { PasskeyPolicyVersion, ConfigurationVersionReference, QualificationReference, ContentScope, VariantReference }.Any(string.IsNullOrWhiteSpace))
             throw new ArgumentException("Complete qualified Passkey content references are required.");
         return new(PasskeyPolicyVersion, ConfigurationVersionReference, QualificationReference, ContentScope, VariantReference,
+            (EffectiveInterval ?? throw new ArgumentException("An interval is required.")).Value());
+    }
+}
+[JsonUnmappedMemberHandling(JsonUnmappedMemberHandling.Disallow)]
+public sealed class AdminStepUpContentBindingCandidate
+{
+    public required AdminIdentityAssuranceScope AssuranceScope { get; init; }
+    public required string AssurancePolicyVersion { get; init; }
+    public required string ConfigurationVersionReference { get; init; }
+    public required string QualificationReference { get; init; }
+    public required string ContentScope { get; init; }
+    public required string VariantReference { get; init; }
+    public required AdminIdentityConfigurationInterval EffectiveInterval { get; init; }
+    internal StepUpContentBinding Value()
+    {
+        if (new[] { AssurancePolicyVersion, ConfigurationVersionReference, QualificationReference, ContentScope, VariantReference }.Any(string.IsNullOrWhiteSpace))
+            throw new ArgumentException("Complete qualified operation proof content references are required.");
+        return new((AssuranceScope ?? throw new ArgumentException("An exact assurance scope is required.")).Value(), AssurancePolicyVersion,
+            ConfigurationVersionReference, QualificationReference, ContentScope, VariantReference,
             (EffectiveInterval ?? throw new ArgumentException("An interval is required.")).Value());
     }
 }
