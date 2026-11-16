@@ -122,4 +122,22 @@ test('current route and exact preview qualification gate keyboard writes while r
   releasePreview();await expect(save).toBeEnabled();await save.focus();await expect(save).toBeFocused();await page.keyboard.press('Enter');await expect.poll(()=>server.writes.length).toBe(1);expect(server.writes[0]).toMatchObject({path:'/content-binding/draft',body:{proposalReference:proposalId,expectedRevision:1,candidate:{contentScope:'fixture-preserved-draft'}}});
  }finally{releaseWorkspace();releasePreview();}
 });
+test('representative tablet and narrow reflow preserves all three typed forms and keyboard validation',async({page},info)=>{
+ test.setTimeout(120_000);const server=await fixture(page);
+ for(const viewport of [{width:1024,height:768},{width:768,height:1024},{width:320,height:800}])for(const family of ['Authentication','Assurance','AuthenticationContent'] as const){
+  await test.step(viewport.width+' × '+viewport.height+' / '+family,async()=>{
+   try{
+    await page.setViewportSize(viewport);await select(page,family);const field=page.getByLabel(family==='AuthenticationContent'?'Configuration version reference':'Policy version reference',{exact:true}),original=await field.inputValue();
+    expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
+    expect(await page.locator('input:visible,select:visible,textarea:visible,button:visible').evaluateAll(elements=>elements.every(element=>{const bounds=element.getBoundingClientRect();return bounds.width>0&&bounds.left>=-0.5&&bounds.right<=innerWidth+0.5;}))).toBe(true);
+    await expect(page.locator('[data-content-key="admin.identity.configuration.title"]').first()).toHaveAttribute('data-content-publication','fixture-chrome-p1');
+    await field.fill('');await field.press('Tab');await expect(field).toHaveAttribute('aria-invalid','true');const save=page.getByRole('button',{name:'Save draft',exact:true});await expect(save).toBeEnabled();await save.focus();await expect(save).toBeFocused();await page.keyboard.press('Enter');await expect(field).toBeFocused();await expect(page.getByRole('alert')).toContainText(labels.validationSummary);expect(server.writes).toHaveLength(0);
+    await field.fill(original);await field.press('Tab');await expect(field).not.toHaveAttribute('aria-invalid','true');await expect(page.getByRole('alert')).toHaveCount(0);expect((await new AxeBuilder({page}).analyze()).violations).toEqual([]);
+    expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
+    if(viewport.width===768)await page.screenshot({path:info.outputPath(`${family.toLowerCase()}-tablet-768.png`),fullPage:true});
+   }catch(error){if(viewport.width!==768)await page.screenshot({path:info.outputPath(`${family.toLowerCase()}-reflow-failure-${viewport.width}.png`),fullPage:true});throw error;}
+  });
+ }
+ expect(server.writes).toHaveLength(0);expect(await page.evaluate(()=>[localStorage.length,sessionStorage.length])).toEqual([0,0]);
+});
 test('duration conversion preserves every supported tick and rejects overflow',()=>{for(const raw of ['0.0000001','120.0000001','86400','922337203685.4775807'])expect(durationToSeconds(secondsToDuration(raw))).toBe(raw);for(const raw of ['0','-1','1e3','0.00000001','922337203685.4775808'])expect(()=>secondsToDuration(raw)).toThrow();});

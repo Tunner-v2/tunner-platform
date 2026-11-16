@@ -100,3 +100,51 @@ for(const viewport of [{width:1440,height:1024},{width:390,height:844}])test(`re
  expect(requests.filter(path=>/^\/(authentication|registration|federation|passkeys|totp|step-up)(?:\/|$)/.test(path))).toEqual([]);
  expect(await page.evaluate(()=>[localStorage.length,sessionStorage.length])).toEqual([0,0]);
 });
+
+test('responsive Content workspace and dialog support tablet laptop and narrow reflow without writes',async({page},info)=>{
+ for(const viewport of [{width:1024,height:768},{width:768,height:1024},{width:320,height:800}]){
+  await test.step(`${viewport.width}x${viewport.height}`,async()=>{
+   try{
+    await page.goto('about:blank');await page.unroute('**/content/**');await page.setViewportSize(viewport);
+    const server=await fixture(page,{contextualPreview:true});await select(page);
+    const preview=page.locator('.content-user-preview');await expect(preview).toBeVisible();
+    await expect(preview.getByRole('heading',{level:1})).toHaveText('Welcome to Tunner');
+    await expect.poll(()=>preview.locator('img').evaluateAll(images=>images.every(image=>image instanceof HTMLImageElement&&image.complete&&image.naturalWidth>0))).toBe(true);
+    expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
+    const containment=await preview.locator('.authentication-card').evaluate(card=>{
+     const bounds=card.getBoundingClientRect();return [...card.querySelectorAll('input,button,a')].map(control=>{
+      const box=control.getBoundingClientRect();return {tag:control.tagName,className:control.className,left:box.left,right:box.right,cardLeft:bounds.left,cardRight:bounds.right};
+     }).filter(box=>box.left<box.cardLeft-1||box.right>box.cardRight+1);
+    });
+    expect(containment).toEqual([]);
+    await expect(preview.locator('button:not(:disabled),input:not(:disabled),a[href]')).toHaveCount(0);
+    const wording=page.getByLabel('Wording',{exact:true});await wording.fill('');
+    await page.getByRole('button',{name:'Save draft',exact:true}).focus();await page.keyboard.press('Enter');
+    await expect(wording).toBeFocused();await expect(wording).toHaveAttribute('aria-invalid','true');
+    await wording.fill('Welcome to Tunner');await wording.press('Tab');await expect(wording).not.toHaveAttribute('aria-invalid','true');
+    expect(server.writes).toHaveLength(0);
+    // Restore the exact saved candidate; correcting a local draft never authorizes publication.
+    await select(page);await expect(page.locator('.content-user-preview')).toBeVisible();
+    if(viewport.width===768)await page.screenshot({path:info.outputPath('tablet-workspace-768.png'),fullPage:true});
+    expect((await new AxeBuilder({page}).analyze()).violations).toEqual([]);
+    await review(page);const publish=page.getByRole('button',{name:'Publish',exact:true});await publish.focus();await page.keyboard.press('Enter');
+    const dialog=page.getByRole('dialog');await expect(dialog).toBeVisible();
+    await dialog.getByRole('button',{name:'Confirm',exact:true}).focus();await page.keyboard.press('Enter');
+    const from=dialog.getByLabel('Effective from',{exact:true});await expect(from).toBeFocused();await expect(from).toHaveAttribute('aria-invalid','true');
+    await from.fill('2099-01-01T00:00');await from.press('Tab');await dialog.getByLabel('Start boundary').selectOption('inclusive');await dialog.getByLabel('End condition').selectOption('none');
+    await expect(dialog.locator('[aria-invalid="true"]')).toHaveCount(0);await expect(page.locator(':invalid')).toHaveCount(0);
+    const bounds=await dialog.boundingBox();expect(bounds).not.toBeNull();
+    expect(bounds!.x).toBeGreaterThanOrEqual(0);expect(bounds!.y).toBeGreaterThanOrEqual(0);
+    expect(bounds!.x+bounds!.width).toBeLessThanOrEqual(viewport.width+1);expect(bounds!.y+bounds!.height).toBeLessThanOrEqual(viewport.height+1);
+    expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
+    if(viewport.width===768)await page.screenshot({path:info.outputPath('tablet-dialog-768.png'),fullPage:true});
+    expect((await new AxeBuilder({page}).analyze()).violations).toEqual([]);
+    await dialog.getByRole('button',{name:'Cancel',exact:true}).focus();await page.keyboard.press('Enter');
+    await expect(dialog).not.toBeVisible();await expect(publish).toBeFocused();expect(server.writes).toHaveLength(0);
+   }catch(error){
+    if(viewport.width!==768)await page.screenshot({path:info.outputPath(`responsive-failure-${viewport.width}.png`),fullPage:true});
+    throw error;
+   }
+  });
+ }
+});
