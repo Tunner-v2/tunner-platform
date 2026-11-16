@@ -46,6 +46,7 @@ function ContentWorkspace(){
  function error(error:unknown){
   if(error instanceof api.ContentHttpError&&[401,403].includes(error.status)){setBlocked(true);cleanSelection();setLibrary([]);setNotice('noAccess');return;}
   if(error instanceof api.ContentHttpError&&error.status===409){setProposalCaps(undefined);setNotice('conflict');return;}
+  if(error instanceof api.ContentHttpError&&error.status===400&&error.code==='VALIDATION_ERROR'){setNotice('validationSummary');return;}
   setNotice('unavailable');
  }
  useEffect(()=>{
@@ -137,7 +138,7 @@ function ContentWorkspace(){
     <nav className="content-actions" aria-label={presentation.content[k('content')]!.text}>{Object.values(contentRoutes).map(value=><a key={value.id} href={value.pathname} aria-current={location.pathname===value.pathname?'page':undefined} onClick={event=>{event.preventDefault();if(!busy)navigatePath(value.pathname);}}><Text name={value===contentRoutes.workspace?'workspace':value===contentRoutes.review?'review':'history'}/></a>)}</nav>
    </div>
    {!ready&&<p role="status"><Text name="loading"/></p>}
-   {notice&&<div className={'content-notice content-notice-'+notice} role={notice==='success'||notice==='replayed'?'status':'alert'}><Text name={notice}/>{unknown&&intent.current?<PrimaryButton labelKey={k('retry')} disabled={!ready||busy} onClick={()=>void perform(intent.current!.path,intent.current!.body,true)}/>:!busy&&<PrimaryButton labelKey={k('refresh')} appearance="outline" onClick={()=>{setNotice(undefined);setReload(current=>current+1);}}/>}</div>}
+   {notice==='validationSummary'?<FormErrorSummary contentKey={k('validationSummary')}/>:notice&&<div className={'content-notice content-notice-'+notice} role={notice==='success'||notice==='replayed'?'status':'alert'}><Text name={notice}/>{unknown&&intent.current?<PrimaryButton labelKey={k('retry')} disabled={!ready||busy} onClick={()=>void perform(intent.current!.path,intent.current!.body,true)}/>:!busy&&<PrimaryButton labelKey={k('refresh')} appearance="outline" onClick={()=>{setNotice(undefined);setReload(current=>current+1);}}/>}</div>}
    {ready&&!blocked&&!historyScreen&&!review&&<div className="content-workspace">
     <section className="content-panel content-library" aria-labelledby="content-library-heading"><div className="content-library-top"><h2 id="content-library-heading"><Text name="definition"/></h2>
      <Select id="content-scope" label="scope" value={scope} disabled={!ready||busy||unknown} onChange={selectScope}><Option value="" name="selectScope"/>{boot?.workspaces.map(item=><option key={item.scope} value={item.scope}>{item.surface}</option>)}</Select>
