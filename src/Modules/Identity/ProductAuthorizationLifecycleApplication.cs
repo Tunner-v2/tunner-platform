@@ -73,7 +73,7 @@ internal sealed class ProductAuthorizationLifecycleApplication(IdentityPersisten
             ProductAuthorizationLifecycleOperation.Introspection => "ProductAuthorizationIntrospected",
             _ => throw new InvalidOperationException("Known-artifact revocation requires a qualified native effect.")
         };
-        database.Add(new OutboxMessage(Guid.NewGuid(), "1.0", type, "1", clock.GetUtcNow(), "tunner/identity",
+        database.Add(new OutboxMessage(Guid.NewGuid(), "1.0", type, "2", clock.GetUtcNow(), "tunner/identity",
             afterNative.AuthorizationId, decision.Classification,
             JsonSerializer.Serialize(new { reference = afterNative.AuthorizationId, tokenReference = afterNative.TokenId,
                 product = evaluation.Facts.ProductId, environment = evaluation.Facts.Environment,
@@ -81,7 +81,12 @@ internal sealed class ProductAuthorizationLifecycleApplication(IdentityPersisten
                 policyVersion = decision.PolicyVersion, evidenceReference = decision.EvidenceReference,
                 processingReference = decision.ProcessingReference, retentionReference = decision.RetentionReference,
                 operation = evaluation.Request.Operation.ToString(), active = decision.ArtifactActive,
-                effect = decision.Effect.ToString(), originalOperation = evaluation.Original.OperationId }),
+                effect = decision.Effect.ToString(), originalOperation = evaluation.Original.OperationId,
+                requestingClientId = evaluation.Request.RequestingClientId,
+                requestingNativeApplicationId = evaluation.Request.RequestingNativeApplicationId,
+                originalLineageDigest = evaluation.Facts.OriginalLineageDigest,
+                authorizationStatus = afterNative.AuthorizationStatus, tokenStatus = afterNative.TokenStatus,
+                tokenType = afterNative.TokenType }),
             "1", operationId, correlationId));
     }
 

@@ -95,6 +95,65 @@ public sealed class ProductAuthorizationPostCommitOwnerTests(SessionListingPostg
         await using var platform = h.Platform.CreateDbContext(); Assert.Empty(await platform.AuditEvents.ToListAsync());
     }
 
+    [Theory]
+    [InlineData("ProductAuthorizationRefreshed", "None", true)]
+    [InlineData("ProductAuthorizationRefreshDenied", "None", false)]
+    [InlineData("ProductAuthorizationIntrospected", "None", true)]
+    [InlineData("ProductAuthorizationRevoked", "PresentedToken", false)]
+    [InlineData("ProductAuthorizationRevoked", "AuthorizationChain", false)]
+    public async Task SchemaTwoLifecycleJoinsNativeArtifactsAndAuditsRecordedClientSeparatelyFromTarget(string eventType, string effect, bool active)
+    {
+        await using var h = await Harness.Start(fixture); var message = await h.LifecycleEvent(eventType, effect, active);
+        Assert.Equal(IdentityPostCommitOutcome.Completed, await h.Processor.ProcessAsync(message));
+        var facts = h.Contracts.LastFacts!.Owner; Assert.Null(facts.ActorAccountId); Assert.Null(facts.SessionReference);
+        Assert.Equal(h.Account, facts.References["targetAccountReference"]);
+        Assert.Equal("fixture-distinct-lifecycle-client", facts.References["actorClientReference"]);
+        await using var platform = h.Platform.CreateDbContext(); var audit = await platform.AuditEvents.SingleAsync(); audit.RequireIntegrity();
+        using var json = JsonDocument.Parse(audit.Envelope);
+        Assert.Equal("fixture-distinct-lifecycle-client", json.RootElement.GetProperty("actor").GetProperty("principal_id").GetString());
+    }
+
+    [Theory]
+    [InlineData("missing-client")]
+    [InlineData("missing-native-client")]
+    [InlineData("different-token")]
+    [InlineData("different-lineage")]
+    [InlineData("different-operation")]
+    [InlineData("different-result")]
+    public async Task SchemaTwoLifecycleRequiresRecordedActorOriginalLineageAndExactTokenResult(string mismatch)
+    {
+        await using var h = await Harness.Start(fixture); var message = await h.LifecycleEvent("ProductAuthorizationRefreshed", "None", true, mismatch);
+        Assert.Equal(IdentityPostCommitOutcome.Rejected, await h.Processor.ProcessAsync(message));
+        await using var platform = h.Platform.CreateDbContext(); Assert.Empty(await platform.AuditEvents.ToListAsync());
+    }
+
+    [Fact]
+    public async Task RecordedLifecycleResultSurvivesLaterNativeStatusChanges()
+    {
+        await using var h = await Harness.Start(fixture); var message = await h.LifecycleEvent("ProductAuthorizationIntrospected", "None", true);
+        using var payload = JsonDocument.Parse(message.Payload); var tokenId = payload.RootElement.GetProperty("tokenReference").GetString()!;
+        await using (var scope = h.Host.Services.CreateAsyncScope())
+        {
+            var authorizations = scope.ServiceProvider.GetRequiredService<IOpenIddictAuthorizationManager>();
+            Assert.True(await authorizations.TryRevokeAsync((await authorizations.FindByIdAsync(message.Subject))!));
+            var tokens = scope.ServiceProvider.GetRequiredService<IOpenIddictTokenManager>();
+            Assert.True(await tokens.TryRevokeAsync((await tokens.FindByIdAsync(tokenId))!));
+        }
+        Assert.Equal(IdentityPostCommitOutcome.Completed, await h.Processor.ProcessAsync(message));
+        Assert.Equal("valid", h.Contracts.LastFacts!.Owner.References["tokenStatus"]);
+    }
+
+    [Theory]
+    [InlineData("ProductAuthorizationGranted")]
+    [InlineData("TunnerSessionAuthenticated")]
+    public async Task SchemaTwoIsNotEnabledForUnrelatedEventContracts(string eventType)
+    {
+        await using var h = await Harness.Start(fixture);
+        var message = await h.SaveEvent(eventType, "fixture-unrelated", "{}", "fixture-operation", "fixture-correlation", "2");
+        Assert.Equal(IdentityPostCommitOutcome.Rejected, await h.Processor.ProcessAsync(message));
+        await using var platform = h.Platform.CreateDbContext(); Assert.Empty(await platform.AuditEvents.ToListAsync());
+    }
+
     private sealed class Factory<T>(Func<T> create) : IDbContextFactory<T> where T : DbContext
     {
         public T CreateDbContext() => create();
@@ -204,9 +263,47 @@ public sealed class ProductAuthorizationPostCommitOwnerTests(SessionListingPostg
                 ProcessingReference = "fixture-processing", RetentionReference = "fixture-retention" }), Lineage.OperationId, Lineage.CorrelationId);
         }
 
-        internal async Task<PendingOutboxMessage> SaveEvent(string type, string subject, string payload, string operation, string correlation)
+        internal async Task<PendingOutboxMessage> LifecycleEvent(string type, string effect, bool active, string? mismatch = null)
         {
-            await using var db = Database.Context(); var e = new OutboxMessage(Guid.NewGuid(), "1.0", type, "1", Host.Clock.GetUtcNow(), "tunner/identity",
+            var grant = await AuthorizationEvent("ProductAuthorizationGranted");
+            await using var scope = Host.Services.CreateAsyncScope();
+            var applications = scope.ServiceProvider.GetRequiredService<IOpenIddictApplicationManager>();
+            var requester = await applications.CreateAsync(new OpenIddictApplicationDescriptor
+            { ClientId = "fixture-distinct-lifecycle-client", ClientType = OpenIddictConstants.ClientTypes.Public });
+            var requesterId = (await applications.GetIdAsync(requester))!;
+            var operation = type is "ProductAuthorizationRefreshed" or "ProductAuthorizationRefreshDenied" ? "Refresh" :
+                type == "ProductAuthorizationIntrospected" ? "Introspection" : "Revocation";
+            var tokenType = operation == "Refresh" ? OpenIddictConstants.TokenTypeIdentifiers.RefreshToken : OpenIddictConstants.TokenTypeIdentifiers.AccessToken;
+            var tokens = scope.ServiceProvider.GetRequiredService<IOpenIddictTokenManager>();
+            var token = await tokens.CreateAsync(new OpenIddictTokenDescriptor { ApplicationId = ApplicationId, AuthorizationId = grant.Subject,
+                Subject = Lineage.Relationship.Subject, Type = tokenType, Status = OpenIddictConstants.Statuses.Valid,
+                CreationDate = Host.Clock.GetUtcNow(), ExpirationDate = Host.Clock.GetUtcNow().AddHours(1) });
+            var tokenId = (await tokens.GetIdAsync(token))!;
+            var authorizationStatus = effect == "AuthorizationChain" ? "revoked" : "valid";
+            var tokenStatus = effect != "None" ? "revoked" : operation == "Refresh" && active ? "redeemed" : "valid";
+            if (tokenStatus == "redeemed") Assert.True(await tokens.TryRedeemAsync(token));
+            if (tokenStatus == "revoked") Assert.True(await tokens.TryRevokeAsync(token));
+            if (authorizationStatus == "revoked")
+            {
+                var authorizations = scope.ServiceProvider.GetRequiredService<IOpenIddictAuthorizationManager>();
+                Assert.True(await authorizations.TryRevokeAsync((await authorizations.FindByIdAsync(grant.Subject))!));
+            }
+            var payload = JsonSerializer.Serialize(new { reference = grant.Subject,
+                tokenReference = mismatch == "different-token" ? Guid.NewGuid().ToString("N") : tokenId,
+                product = Request.ProductId, environment = Request.Environment, originalRequestDigest = Request.Digest,
+                factsDigest = new string('A', 64), policyVersion = "fixture-lifecycle-policy-v1", evidenceReference = "fixture-lifecycle-evidence",
+                processingReference = "fixture-lifecycle-processing", retentionReference = "fixture-lifecycle-retention",
+                operation = mismatch == "different-operation" ? "Revocation" : operation, active, effect, originalOperation = Lineage.OperationId,
+                requestingClientId = mismatch == "missing-client" ? "" : "fixture-distinct-lifecycle-client",
+                requestingNativeApplicationId = mismatch == "missing-native-client" ? "" : requesterId,
+                originalLineageDigest = mismatch == "different-lineage" ? new string('B', 64) : AuthenticationIdentity.Digest(JsonSerializer.Serialize(Lineage)),
+                authorizationStatus, tokenStatus = mismatch == "different-result" ? "revoked" : tokenStatus, tokenType });
+            return await SaveEvent(type, grant.Subject, payload, "OP-" + Guid.NewGuid().ToString("N"), Guid.NewGuid().ToString("N"), "2");
+        }
+
+        internal async Task<PendingOutboxMessage> SaveEvent(string type, string subject, string payload, string operation, string correlation, string schema = "1")
+        {
+            await using var db = Database.Context(); var e = new OutboxMessage(Guid.NewGuid(), "1.0", type, schema, Host.Clock.GetUtcNow(), "tunner/identity",
                 subject, "RESTRICTED_SECURITY", payload, "1", operation, correlation); db.Add(e); await db.SaveChangesAsync();
             await db.Entry(e).ReloadAsync(); return IdentityPostCommitProcessor.Project(e);
         }

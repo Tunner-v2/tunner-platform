@@ -77,6 +77,7 @@ public sealed class ProductAuthorizationProtocolTests(SessionListingPostgresFixt
         internal DateTimeOffset? IssuancePolicyExpiresAt { get; set; }
         internal ProductAuthorizationArtifactEffect RevocationEffect { get; set; } = ProductAuthorizationArtifactEffect.PresentedToken;
         internal bool DenyLifecycleArtifact { get; set; }
+        internal bool ChangeLifecycleEvidenceAfterInitialDecision { get; set; }
         internal int LifecycleDecisions { get; private set; }
         internal Func<CancellationToken, Task>? BeforeTokenOutput { get; set; }
         internal Func<CancellationToken, Task>? BeforeRelationshipEnsure { get; set; }
@@ -193,7 +194,8 @@ public sealed class ProductAuthorizationProtocolTests(SessionListingPostgresFixt
             var active = allowed && !revocation && !DenyLifecycleArtifact && facts.InitialNativeState.AuthorizationStatus == OpenIddictConstants.Statuses.Valid &&
                 facts.InitialNativeState.TokenStatus == OpenIddictConstants.Statuses.Valid && facts.InitialNativeState.ExpiresAt > at;
             var refresh = facts.Operation == ProductAuthorizationLifecycleOperation.Refresh && active;
-            return ValueTask.FromResult(new ProductAuthorizationLifecycleDecision(facts.Digest, "fixture-lifecycle-policy-v1", Evidence,
+            var lifecycleEvidence = ChangeLifecycleEvidenceAfterInitialDecision && LifecycleDecisions > 1 ? Evidence + "-changed" : Evidence;
+            return ValueTask.FromResult(new ProductAuthorizationLifecycleDecision(facts.Digest, "fixture-lifecycle-policy-v1", lifecycleEvidence,
                 "fixture-lifecycle-processing", "fixture-lifecycle-retention", "RESTRICTED_SECURITY", interval, allowed, active,
                 refresh, refresh ? facts.ObservedAt.AddMinutes(5) : null,
                 refresh && facts.RequestedScopes.Contains("openid", StringComparer.Ordinal) ? facts.ObservedAt.AddMinutes(5) : null,
@@ -1858,6 +1860,34 @@ public sealed class ProductAuthorizationProtocolTests(SessionListingPostgresFixt
     }
 
     [Fact]
+    public async Task LifecycleFinalQualifiedEvidenceChangeRollsBackNativeChainRevocationAndEvent()
+    {
+        await using var test = await Create(lifecycle: true); var original = await IssueLifecycleTokens(test);
+        test.Owners.RevocationEffect = ProductAuthorizationArtifactEffect.AuthorizationChain;
+        test.Owners.ChangeLifecycleEvidenceAfterInitialDecision = true;
+        using (var response = await Revoke(test, original.Access, "access_token"))
+            await AssertRejected(response, "unauthorized_client", HttpStatusCode.BadRequest);
+        // The second decision runs only after ExpectedNativeState observed the real native revocation writes.
+        Assert.Equal(2, test.Owners.LifecycleDecisions);
+        await using (var scope = test.Host.Services.CreateAsyncScope())
+        {
+            var authorizations = scope.ServiceProvider.GetRequiredService<IOpenIddictAuthorizationManager>();
+            var authorization = await authorizations.FindByIdAsync(original.AuthorizationId); Assert.NotNull(authorization);
+            Assert.Equal(OpenIddictConstants.Statuses.Valid, await authorizations.GetStatusAsync(authorization!));
+            var tokens = scope.ServiceProvider.GetRequiredService<IOpenIddictTokenManager>(); var checkedTokens = 0;
+            await foreach (var token in tokens.FindByAuthorizationIdAsync(original.AuthorizationId))
+                if (await tokens.GetTypeAsync(token) is OpenIddictConstants.TokenTypeIdentifiers.AccessToken or OpenIddictConstants.TokenTypeIdentifiers.RefreshToken)
+                { Assert.Equal(OpenIddictConstants.Statuses.Valid, await tokens.GetStatusAsync(token)); checkedTokens++; }
+            Assert.True(checkedTokens >= 2);
+        }
+        await using (var read = test.Database.Context())
+            Assert.False(await read.Set<OutboxMessage>().AnyAsync(x => x.EventType == "ProductAuthorizationRevoked"));
+        test.Owners.ChangeLifecycleEvidenceAfterInitialDecision = false;
+        using (var retry = await Revoke(test, original.Access, "access_token")) await AssertRevocationSuccess(retry);
+        await AssertLifecycleEffects(test, "ProductAuthorizationRevoked", 1, original);
+    }
+
+    [Fact]
     public async Task LifecycleRevocationSurvivesEndedSourceSessionAndExpiredIssuancePolicy()
     {
         await using var test = await Create(lifecycle: true);
@@ -2009,6 +2039,21 @@ public sealed class ProductAuthorizationProtocolTests(SessionListingPostgresFixt
         await using var read = test.Database.Context();
         var effects = await read.Set<OutboxMessage>().Where(message => message.EventType.StartsWith("ProductAuthorization")).ToListAsync();
         Assert.Equal(count, effects.Count(message => message.EventType == type));
+        var owner = new ProductAuthorizationPostCommitOwnerSource(test.Host.Services.GetRequiredService<IServiceScopeFactory>(),
+            test.Host.Services.GetRequiredService<IDataProtectionProvider>());
+        foreach (var effect in effects.Where(x => x.EventType is "ProductAuthorizationRevoked" or "ProductAuthorizationRefreshed" or "ProductAuthorizationRefreshDenied" or "ProductAuthorizationIntrospected"))
+        {
+            Assert.Equal("2", effect.EventSchemaVersion);
+            using var document = JsonDocument.Parse(effect.Payload); var payload = document.RootElement;
+            Assert.Equal(test.Owners.ClientId, payload.GetProperty("requestingClientId").GetString());
+            Assert.Equal(test.Owners.NativeApplicationId, payload.GetProperty("requestingNativeApplicationId").GetString());
+            var facts = await owner.ReadCommittedAsync(IdentityPostCommitProcessor.Project(effect), CancellationToken.None); Assert.NotNull(facts);
+            Assert.Null(facts!.ActorAccountId); Assert.Null(facts.SessionReference);
+            Assert.Equal(test.AccountId, facts.References["targetAccountReference"]);
+            Assert.Equal(test.Owners.ClientId, facts.References["actorClientReference"]);
+            Assert.Equal(payload.GetProperty("authorizationStatus").GetString(), facts.References["authorizationStatus"]);
+            Assert.Equal(payload.GetProperty("tokenStatus").GetString(), facts.References["tokenStatus"]);
+        }
         foreach (var effect in effects)
             foreach (var issued in artifacts)
                 Assert.True(!effect.Payload.Contains(issued.Access, StringComparison.Ordinal) && (issued.Identity.Length == 0 || !effect.Payload.Contains(issued.Identity, StringComparison.Ordinal)) &&

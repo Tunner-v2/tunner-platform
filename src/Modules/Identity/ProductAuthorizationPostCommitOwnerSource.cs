@@ -9,18 +9,19 @@ using Tunner.Database.Outbox;
 namespace Tunner.Identity.Persistence;
 
 /// <summary>Historical native Product grant/redemption and explicit denial receipts. No current cookie, account eligibility,
-/// notification default or Product delivery is inferred. Lifecycle digests currently do not retain their actual requesting actor.</summary>
+/// notification default or Product delivery is inferred. Lifecycle schema 2 retains the actual client actor and observed native result.</summary>
 public sealed class ProductAuthorizationPostCommitOwnerSource(IServiceScopeFactory services, IDataProtectionProvider protection) : IIdentityPostCommitOwnerSource
 {
     private readonly IDataProtector materialProtection = protection.CreateProtector("Tunner.Identity.ProductAuthorization.Continuation.Material.v1");
 
     public bool Owns(PendingOutboxMessage message) => message.EventType is
-        "ProductAuthorizationGranted" or "ProductAuthorizationRedeemed" or "ProductAuthorizationDeclined";
+        "ProductAuthorizationGranted" or "ProductAuthorizationRedeemed" or "ProductAuthorizationDeclined" ||
+        message.EventSchemaVersion == "2" && LifecycleType(message.EventType);
 
     public async ValueTask<IdentityPostCommitOwnerFacts?> ReadCommittedAsync(PendingOutboxMessage message, CancellationToken cancellationToken)
     {
         if (!Owns(message) || message.Source != "tunner/identity" || message.EnvelopeVersion != "1.0" ||
-            message.EventSchemaVersion != "1" || message.ResourceVersion != "1" ||
+            message.EventSchemaVersion != (LifecycleType(message.EventType) ? "2" : "1") || message.ResourceVersion != "1" ||
             string.IsNullOrWhiteSpace(message.OperationId) || string.IsNullOrWhiteSpace(message.CorrelationId)) return null;
         await using var scope = services.CreateAsyncScope();
         var database = scope.ServiceProvider.GetRequiredService<IdentityPersistenceDbContext>();
@@ -37,7 +38,58 @@ public sealed class ProductAuthorizationPostCommitOwnerSource(IServiceScopeFacto
             ProductAuthorizationApplication.ReadLineage(original) is not { } lineage ||
             await authorizations.GetApplicationIdAsync(authorization, cancellationToken).ConfigureAwait(false) != lineage.Registration.NativeApplicationId ||
             await authorizations.GetSubjectAsync(authorization, cancellationToken).ConfigureAwait(false) != lineage.Relationship.Subject) return null;
-        return GrantFacts(message, payload.RootElement, lineage);
+        return LifecycleType(message.EventType)
+            ? await LifecycleFactsAsync(scope.ServiceProvider.GetRequiredService<IOpenIddictTokenManager>(), message, payload.RootElement, lineage, cancellationToken).ConfigureAwait(false)
+            : GrantFacts(message, payload.RootElement, lineage);
+    }
+
+    private static bool LifecycleType(string type) => type is "ProductAuthorizationRevoked" or "ProductAuthorizationRefreshed" or
+        "ProductAuthorizationRefreshDenied" or "ProductAuthorizationIntrospected";
+
+    private static async Task<IdentityPostCommitOwnerFacts?> LifecycleFactsAsync(IOpenIddictTokenManager tokens, PendingOutboxMessage e,
+        JsonElement p, ProductAuthorizationLineage original, CancellationToken ct)
+    {
+        if (!Properties(p, "reference", "tokenReference", "product", "environment", "originalRequestDigest", "factsDigest", "policyVersion", "evidenceReference",
+            "processingReference", "retentionReference", "operation", "active", "effect", "originalOperation", "requestingClientId", "requestingNativeApplicationId",
+            "originalLineageDigest", "authorizationStatus", "tokenStatus", "tokenType") ||
+            Text(p, "reference") != e.Subject || Text(p, "product") != original.Request.ProductId || Text(p, "environment") != original.Request.Environment ||
+            Text(p, "originalRequestDigest") != original.Request.Digest || Text(p, "originalOperation") != original.OperationId ||
+            Text(p, "originalLineageDigest") != AuthenticationIdentity.Digest(JsonSerializer.Serialize(original))) return null;
+        var actor = Text(p, "requestingClientId"); var actorApplication = Text(p, "requestingNativeApplicationId");
+        var tokenReference = Text(p, "tokenReference"); var policy = Text(p, "policyVersion"); var evidence = Text(p, "evidenceReference");
+        var processing = Text(p, "processingReference"); var retention = Text(p, "retentionReference"); var factsDigest = Text(p, "factsDigest");
+        if (new[] { actor, actorApplication, tokenReference, policy, evidence, processing, retention }.Any(string.IsNullOrWhiteSpace) ||
+            factsDigest is not { Length: 64 } || !factsDigest.All(Uri.IsHexDigit) ||
+            !Enum.TryParse<ProductAuthorizationLifecycleOperation>(Text(p, "operation"), out var operation) || !Enum.IsDefined(operation) ||
+            !Enum.TryParse<ProductAuthorizationArtifactEffect>(Text(p, "effect"), out var effect) || !Enum.IsDefined(effect) ||
+            p.GetProperty("active").ValueKind is not (JsonValueKind.True or JsonValueKind.False)) return null;
+        var active = p.GetProperty("active").GetBoolean(); var authorizationStatus = Text(p, "authorizationStatus"); var tokenStatus = Text(p, "tokenStatus");
+        var expectedType = effect != ProductAuthorizationArtifactEffect.None ? "ProductAuthorizationRevoked" : operation switch
+        {
+            ProductAuthorizationLifecycleOperation.Refresh => active ? "ProductAuthorizationRefreshed" : "ProductAuthorizationRefreshDenied",
+            ProductAuthorizationLifecycleOperation.Introspection => "ProductAuthorizationIntrospected",
+            _ => null
+        };
+        if (expectedType != e.EventType || (effect != ProductAuthorizationArtifactEffect.None && active) ||
+            authorizationStatus != (effect == ProductAuthorizationArtifactEffect.AuthorizationChain ? OpenIddictConstants.Statuses.Revoked : OpenIddictConstants.Statuses.Valid) ||
+            (effect != ProductAuthorizationArtifactEffect.None ? tokenStatus != OpenIddictConstants.Statuses.Revoked :
+                operation == ProductAuthorizationLifecycleOperation.Refresh ? tokenStatus is not ("valid" or "redeemed") : tokenStatus != OpenIddictConstants.Statuses.Valid)) return null;
+        var token = await tokens.FindByIdAsync(tokenReference!, ct).ConfigureAwait(false);
+        if (token is null || await tokens.GetAuthorizationIdAsync(token, ct).ConfigureAwait(false) != e.Subject ||
+            await tokens.GetApplicationIdAsync(token, ct).ConfigureAwait(false) != original.Registration.NativeApplicationId ||
+            await tokens.GetSubjectAsync(token, ct).ConfigureAwait(false) != original.Relationship.Subject ||
+            await tokens.GetTypeAsync(token, ct).ConfigureAwait(false) != Text(p, "tokenType") ||
+            Text(p, "tokenType") is not (OpenIddictConstants.TokenTypeIdentifiers.AccessToken or OpenIddictConstants.TokenTypeIdentifiers.RefreshToken) ||
+            operation == ProductAuthorizationLifecycleOperation.Refresh && Text(p, "tokenType") != OpenIddictConstants.TokenTypeIdentifiers.RefreshToken) return null;
+        // Current statuses may have changed after this committed result. The recorded observation remains historical authority.
+        return new("PRODUCT_AUTHORIZATION_LIFECYCLE", e.Subject, null, null, policy!, processing!, retention!,
+            new Dictionary<string, string>(StringComparer.Ordinal) { ["authorizationReference"] = e.Subject, ["tokenReference"] = tokenReference!,
+                ["productReference"] = original.Request.ProductId, ["environment"] = original.Request.Environment,
+                ["originalRequestDigest"] = original.Request.Digest, ["originalLineageDigest"] = Text(p, "originalLineageDigest")!,
+                ["targetAccountReference"] = original.AccountId, ["originalSessionReference"] = original.SessionId.ToString("N"),
+                ["actorClientReference"] = actor!, ["actorNativeApplicationReference"] = actorApplication!, ["factsDigest"] = factsDigest,
+                ["policyEvidenceReference"] = evidence!, ["operation"] = operation.ToString(), ["effect"] = effect.ToString(),
+                ["authorizationStatus"] = authorizationStatus!, ["tokenStatus"] = tokenStatus!, ["tokenType"] = Text(p, "tokenType")! });
     }
 
     private static IdentityPostCommitOwnerFacts? GrantFacts(PendingOutboxMessage e, JsonElement p, ProductAuthorizationLineage original)

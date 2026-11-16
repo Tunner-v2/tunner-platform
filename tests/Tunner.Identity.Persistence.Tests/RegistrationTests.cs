@@ -22,6 +22,7 @@ namespace Tunner.Identity.Persistence.Tests;
 
 public sealed class RegistrationTests(IdentityPostgresFixture fixture) : IClassFixture<IdentityPostgresFixture>
 {
+    private static readonly string[] CommittedRegistrationEventTypes = ["AccountActivated", "AccountAgeEvaluated", "AccountRegistered", "RegistrationNotificationRequested", "VerifiedContactChanged"];
     private const string Password = "a very long unique test passphrase";
     private const string OtherPassword = "a different long unique test passphrase";
 
@@ -280,6 +281,40 @@ public sealed class RegistrationTests(IdentityPostgresFixture fixture) : IClassF
         public Task<T> CreateDbContextAsync(CancellationToken cancellationToken=default)
         {cancellationToken.ThrowIfCancellationRequested();return Task.FromResult(create());}
     }
+    [Fact]
+    public async Task CompletedRegistrationAuditsEveryCommittedOwnerEventWithoutLeakingPersonalInformation()
+    {
+        await using var h=await Harness.CreateAsync(fixture); var caller=Caller();
+        var pending=await h.Register(caller,Command());
+        await h.Verify(caller,new(pending.OperationId,Guid.NewGuid(),pending.Version,await h.CodeFor(pending.OperationId)));
+        var identity=new RegistrationFactory<IdentityPersistenceDbContext>(h.Database.Context);
+        var platform=new RegistrationFactory<TunnerMigrationsDbContext>(()=>new(new DbContextOptionsBuilder<TunnerMigrationsDbContext>().UseNpgsql(h.Database.ConnectionString).Options));
+        await using var services=new ServiceCollection().AddScoped(_=>h.Database.Context())
+            .AddScoped(sp=>h.Application(sp.GetRequiredService<IdentityPersistenceDbContext>())).BuildServiceProvider();
+        var owner=new RegistrationPostCommitOwnerSource(identity);
+        var processor=new IdentityPostCommitProcessor(identity,platform,new EfConsumerInboxStore(platform),[owner],new RegistrationPostCommitFixtureContract(h.Clock),
+            new("fixture-registration-all-events","fixture-generation",TimeSpan.FromMinutes(1)),h.Clock,
+            new RegistrationPostCommitNotificationDispatcher(identity,services.GetRequiredService<IServiceScopeFactory>()));
+        await using var source=h.Database.Context();
+        var rows=await source.Set<OutboxMessage>().AsNoTracking().OrderBy(x=>x.OccurredAtUtc).ToArrayAsync();
+        Assert.Equal(CommittedRegistrationEventTypes,rows.Select(x=>x.EventType).Order(StringComparer.Ordinal));
+        foreach(var row in rows)
+        {
+            var message=IdentityPostCommitProcessor.Project(row);
+            Assert.True(owner.Owns(message));
+            Assert.False(new IdentitySecurityPostCommitOwnerSource(identity).Owns(message));
+            Assert.Equal(IdentityPostCommitOutcome.Completed,await processor.ProcessAsync(message));
+        }
+        await using var check=platform.CreateDbContext(); var audits=await check.AuditEvents.ToArrayAsync();
+        Assert.Equal(5,audits.Length); Assert.Equal(5,await check.ConsumerInboxEntries.CountAsync(x=>x.CompletedAtUtc!=null));
+        foreach(var audit in audits)
+        {
+            audit.RequireIntegrity();
+            foreach(var secret in new[]{"applicant@example.test",Password,"1990-01-01","DateOfBirth","ProtectedCode"})
+                Assert.DoesNotContain(secret,audit.Envelope,StringComparison.OrdinalIgnoreCase);
+        }
+        Assert.Single(h.Notices.Messages); // The earlier synchronous queue handoff is never repeated after registration completes.
+    }
     private sealed class RegistrationPostCommitFixtureContract(TimeProvider clock):IIdentityPostCommitContractSource
     {
         public ValueTask<IdentityPostCommitQualification?> RequireCurrentAsync(IdentityPostCommitFacts facts,DateTimeOffset at,CancellationToken cancellationToken)
@@ -287,12 +322,12 @@ public sealed class RegistrationTests(IdentityPostgresFixture fixture) : IClassF
             cancellationToken.ThrowIfCancellationRequested(); var e=facts.Event; var owner=facts.Owner;
             const string version="fixture-post-commit-contract",evidence="fixture-explicit-notification-qualification";
             var audit=new AuditEvent(e.EventId,e.OccurredAtUtc,new AuditActor("fixture-registration-initiator","fixture-anonymous",[]),
-                "fixture-registration-notification-requested",e.OperationId!,e.CorrelationId!,[new(e.Subject,e.ResourceVersion)],
+                "fixture-"+e.EventType,e.OperationId!,e.CorrelationId!,[new(e.Subject,e.ResourceVersion)],
                 "fixture-committed",e.DataClassification,owner.RetentionReference,e.EventId.ToString("N"),
                 policyVersionReferences:[version],evidenceReferences:[evidence]);
-            var notice=new IdentitySecurityNotification(Guid.ParseExact(e.Subject,"N"),e.EventId,facts.Digest,version,
+            var notice=e.EventType=="RegistrationNotificationRequested"?new IdentitySecurityNotification(Guid.ParseExact(e.Subject,"N"),e.EventId,facts.Digest,version,
                 "fixture-account-notification",owner.References["templateVersion"],"fixture-content-version","en",owner.OwnerReference,
-                "fixture-registration-contact-safety","fixture-local-route",owner.ProcessingReference,owner.RetentionReference,evidence);
+                "fixture-registration-contact-safety","fixture-local-route",owner.ProcessingReference,owner.RetentionReference,evidence):null;
             return ValueTask.FromResult<IdentityPostCommitQualification?>(new(e.EventId,facts.Digest,version,evidence,
                 new EffectivePolicyInterval(clock.GetUtcNow().AddDays(-1),true,null,false),audit,notice));
         }

@@ -9,10 +9,11 @@ namespace Tunner.Identity.Persistence;
 /// establish historical facts; later authenticator/session eligibility does not erase an already committed mutation.</summary>
 public sealed class IdentitySecurityPostCommitOwnerSource(IDbContextFactory<IdentityPersistenceDbContext> contexts) : IIdentityPostCommitOwnerSource
 {
-    public bool Owns(PendingOutboxMessage message) => message.EventType is "IdentitySecurityActivityRequested" or "IdentitySecurityNotificationRequested" or
+    public bool Owns(PendingOutboxMessage message) => (message.EventType is "IdentitySecurityActivityRequested" or "IdentitySecurityNotificationRequested" or
         "AuthenticatorAdded" or "AuthenticatorRevoked" or "ExternalIdentityLinked" or "ExternalIdentityUnlinked" or
         "RecoveryCodeSetGenerated" or "RecoveryCodeSetReplaced" or "TunnerSessionAuthenticated" or "TunnerSessionRevoked" or "TunnerSessionExpired" or
-        "StepUpProofIssued" or "StepUpProofConsumed" or "StepUpProofExpired" or "DeviceTrustEvaluated" or "DeviceEvidenceObserved" or "DeviceTrustRevoked";
+        "StepUpProofIssued" or "StepUpProofConsumed" or "StepUpProofExpired" or "DeviceTrustEvaluated" or "DeviceEvidenceObserved" or "DeviceTrustRevoked") &&
+        !(message.EventType == "ExternalIdentityLinked" && message.Payload == JsonSerializer.Serialize(new { reference = message.Subject }));
 
     public async ValueTask<IdentityPostCommitOwnerFacts?> ReadCommittedAsync(PendingOutboxMessage message, CancellationToken cancellationToken)
     {

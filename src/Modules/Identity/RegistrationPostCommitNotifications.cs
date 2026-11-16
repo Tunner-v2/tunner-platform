@@ -10,7 +10,9 @@ namespace Tunner.Identity.Persistence;
 /// Superseded deliveries still have historical owner facts; the dispatch entry rejects their current delivery identity.</summary>
 public sealed class RegistrationPostCommitOwnerSource(IDbContextFactory<IdentityPersistenceDbContext> contexts) : IIdentityPostCommitOwnerSource
 {
-    public bool Owns(PendingOutboxMessage message) => message.EventType == "RegistrationNotificationRequested";
+    public bool Owns(PendingOutboxMessage message) => message.EventType is "RegistrationNotificationRequested" or
+        "AccountRegistered" or "VerifiedContactChanged" or "AccountAgeEvaluated" or "AccountActivated" ||
+        message.EventType == "ExternalIdentityLinked" && message.Payload == JsonSerializer.Serialize(new { reference = message.Subject });
 
     public async ValueTask<IdentityPostCommitOwnerFacts?> ReadCommittedAsync(PendingOutboxMessage message, CancellationToken cancellationToken)
     {
@@ -18,7 +20,6 @@ public sealed class RegistrationPostCommitOwnerSource(IDbContextFactory<Identity
         if (!Owns(message) || message.DataClassification != "RESTRICTED_SECURITY" ||
             message.OperationId is not { } operation || !operation.StartsWith("OP-", StringComparison.Ordinal) ||
             !Guid.TryParseExact(operation.AsSpan(3), "N", out var operationId) ||
-            !Guid.TryParseExact(message.Subject, "N", out var deliveryId) || deliveryId == Guid.Empty ||
             !long.TryParse(message.ResourceVersion, NumberStyles.None, CultureInfo.InvariantCulture, out var version) || version < 1) return null;
         using var json = JsonDocument.Parse(message.Payload);
         var payload = json.RootElement;
@@ -26,15 +27,41 @@ public sealed class RegistrationPostCommitOwnerSource(IDbContextFactory<Identity
             !payload.TryGetProperty("reference", out var reference) || reference.ValueKind != JsonValueKind.String || reference.GetString() != message.Subject) return null;
         await using var db = await contexts.CreateDbContextAsync(ct).ConfigureAwait(false);
         var row = await db.Set<RegistrationOperationRow>().AsNoTracking().SingleOrDefaultAsync(x => x.OperationId == operationId, ct).ConfigureAwait(false);
-        if (row is null || row.CorrelationId != message.CorrelationId || row.Version < version || row.CreatedAt > message.OccurredAtUtc) return null;
+        if (row is null || row.CorrelationId != message.CorrelationId || row.CreatedAt > message.OccurredAtUtc) return null;
+        var references = new Dictionary<string, string>(StringComparer.Ordinal) { ["registrationReference"] = operationId.ToString("N") };
+        if (row.AccountId is { } account) references.Add("targetAccountReference", account);
+        switch (message.EventType)
+        {
+            case "RegistrationNotificationRequested":
+                if (!Guid.TryParseExact(message.Subject, "N", out var deliveryId) || deliveryId == Guid.Empty || row.Version < version) return null;
+                references.Add("deliveryReference", deliveryId.ToString("N"));
+                references.Add("templateVersion", row.TemplateVersion);
+                break;
+            case "AccountRegistered":
+                if (message.Subject != row.AccountId || version != 1 || message.OccurredAtUtc != row.CreatedAt) return null;
+                break;
+            case "VerifiedContactChanged":
+                if (row.ContactId is not { } contactId || message.Subject != contactId.ToString("N") ||
+                    !await db.VerifiedContacts.AsNoTracking().AnyAsync(x => x.ContactId == contactId && x.AccountId == row.AccountId && x.Version >= version, ct).ConfigureAwait(false)) return null;
+                references.Add("contactReference", contactId.ToString("N"));
+                break;
+            case "AccountAgeEvaluated":
+                if (version != 1 || message.Subject != row.AgeEvidenceReference || row.AgePolicyVersion is not { } agePolicy) return null;
+                references.Add("agePolicyReference", agePolicy);
+                references.Add("ageEvidenceReference", message.Subject);
+                break;
+            case "AccountActivated":
+                if (row.Status != "SUCCEEDED" || row.Stage != "COMPLETE" || message.Subject != row.AccountId) return null;
+                break;
+            case "ExternalIdentityLinked":
+                if (row.Mode != "FEDERATED" || row.FederationLinkId is not { } link || message.Subject != link.ToString("N")) return null;
+                references.Add("linkReference", link.ToString("N"));
+                break;
+            default: return null;
+        }
         // Initiating registration is anonymous; a pending Account binding is not an authenticated actor.
-        return new("REGISTRATION_NOTIFICATION", operationId.ToString("N"), null, null, row.PolicyVersion,
-            row.ProcessingReference, row.RetentionReference, new Dictionary<string, string>(StringComparer.Ordinal)
-            {
-                ["deliveryReference"] = deliveryId.ToString("N"),
-                ["registrationReference"] = operationId.ToString("N"),
-                ["templateVersion"] = row.TemplateVersion
-            });
+        return new(message.EventType == "RegistrationNotificationRequested" ? "REGISTRATION_NOTIFICATION" : "REGISTRATION_EVENT",
+            operationId.ToString("N"), null, null, row.PolicyVersion, row.ProcessingReference, row.RetentionReference, references);
     }
 }
 

@@ -28,7 +28,7 @@ public sealed class IdentityPostCommitProcessor(IDbContextFactory<IdentityPersis
                 throw new InvalidOperationException("An independent clean Identity read context is required.");
             var original = await identity.Set<OutboxMessage>().AsNoTracking().SingleOrDefaultAsync(x => x.EventId == message.EventId, ct).ConfigureAwait(false);
             if (original is null || Project(original) != message || message.Source != "tunner/identity" ||
-                message.EnvelopeVersion != "1.0" || message.EventSchemaVersion != "1" ||
+                message.EnvelopeVersion != "1.0" || !SupportedSchema(message) ||
                 string.IsNullOrWhiteSpace(message.OperationId) || string.IsNullOrWhiteSpace(message.CorrelationId))
                 return IdentityPostCommitOutcome.Rejected;
         }
@@ -81,6 +81,10 @@ public sealed class IdentityPostCommitProcessor(IDbContextFactory<IdentityPersis
             await inbox.TryReleaseAsync(key, message.EventId, token, clock.GetUtcNow(), CancellationToken.None).ConfigureAwait(false);
         }
     }
+
+    private static bool SupportedSchema(PendingOutboxMessage message) => message.EventSchemaVersion == "1" ||
+        message.EventSchemaVersion == "2" && message.EventType is ("ProductAuthorizationRevoked" or
+            "ProductAuthorizationRefreshed" or "ProductAuthorizationRefreshDenied" or "ProductAuthorizationIntrospected");
 
     private async Task<ConsumerInboxEntry?> ReadReceiptAsync(string key, Guid eventId, CancellationToken ct)
     {
