@@ -227,6 +227,10 @@ public sealed partial class RegistrationApplication(
         var now = timeProvider.GetUtcNow(); policies.RequireEffective(now).Validate();
         var row = await database.Set<RegistrationOperationRow>().AsNoTracking().SingleOrDefaultAsync(x => x.DeliveryId == deliveryId, cancellationToken).ConfigureAwait(false);
         if (row is null || row.Status != "REQUIRES_ACTION" || row.ExpiresAt <= now || row.PurgeAfter <= now || row.ProtectedAddress is null) return false;
+        // A verification whose proof was invalidated must not become a code-less notice on retry.
+        // Existing-account notices intentionally have neither a proposed credential nor an Account binding.
+        if ((row.AccountId is not null || row.ProtectedCredential is not null) &&
+            (row.ProtectedCode is null || row.ProtectedDigest is null)) return false;
         await notifications.QueueAsync(new RegistrationNotification(deliveryId, addressProtection.Unprotect(row.ProtectedAddress),
             row.ProtectedCode is null ? null : challengeProtection.Unprotect(row.ProtectedCode), row.TemplateVersion), cancellationToken).ConfigureAwait(false);
         return true;

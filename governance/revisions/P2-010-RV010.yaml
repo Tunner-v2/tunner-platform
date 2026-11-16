@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "revision_id": "P2-010-RV010",
+  "revision_scope": "WORK_ITEM",
+  "original_scope_id": "TUN-P2-010",
+  "parent_revision_id": "P2-010-RV009",
+  "parent_milestone_revision_id": null,
+  "title": "Preserve registration notification semantics during post-commit retry integration",
+  "revision_type": "COMPATIBILITY",
+  "status": "ACTIVE",
+  "reason": "P2-016 focused tests reproduce notification dispatch after proof material is invalidated; the existing-account notice countercase passes. Restrict the exact retry path while preserving federation and registration semantics and original010 DONE. Required integration may expose safe source notification context without secrets; no production notification policy or new auth flow.",
+  "authority_refs": [
+    "docs/authority/baselines/1.6.0/17_Account_Identity_and_Session_FRD.md",
+    "docs/authority/baselines/1.6.0/27_Notifications_Communications_and_Preferences_FRD.md"
+  ],
+  "decision_refs": [],
+  "defect_refs": ["DEF-TUN-P2-016-001"],
+  "change_refs": [],
+  "impact_classification": "NON_BLOCKING",
+  "blocked_scope": [],
+  "acceptance_criteria": [
+    "Invalidated verification material cannot dispatch, existing-account notices still work, provider retries retain stableDeliveryId and safe template/version provenance; original federation and registration behavior remain qualified."
+  ],
+  "prerequisites": [],
+  "work_items": [],
+  "required_gates": [],
+  "required_roles": ["full-stack-engineer", "tester-qa-engineer", "cyber-security-engineer"],
+  "evidence_refs": ["governance/evidence/P2-010-RV010-VALIDATION.json"],
+  "product_acceptance_required": false,
+  "created_at": "2026-11-16T00:36:42.3691713\u002B00:00",
+  "closed_at": null
+}

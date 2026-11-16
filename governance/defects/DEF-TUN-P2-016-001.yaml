@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "defect_id": "DEF-TUN-P2-016-001",
+  "work_item_id": "TUN-P2-016",
+  "classification": "BUG",
+  "severity": "SEV-3",
+  "status": "OPEN",
+  "environment": "Qualified isolated PostgreSQL fixture, committed source 88926ee96e804a628138030bb5a34e117d366298",
+  "description": "Deferred registration notification dispatch returns true after the proof-attempt limit invalidates the code/digest. The real existing-account notice countercase passes; it must remain dispatchable without verification material.",
+  "expected_behavior_ref": "docs/authority/baselines/1.6.0/17_Account_Identity_and_Session_FRD.md",
+  "evidence": ["artifacts/p2-014-authorization-20261115/native-runtime-69d504306eb14aa5a73b41b8e72fec5e/summary.json", "tests/Tunner.Identity.Persistence.Tests/RegistrationTests.cs"],
+  "affected_versions": ["88926ee96e804a628138030bb5a34e117d366298"],
+  "created_at": "2026-11-16T00:36:42Z",
+  "updated_at": "2026-11-16T00:36:42Z"
+}
