@@ -5,6 +5,7 @@
   "classification": "UI_VALIDATION_DEFECT",
   "severity": "SEV-3",
   "status": "CLOSED",
+  "environment": "Controlled local Admin Content/Identity configuration browser tests with fixture HTTP400 responses; desktop and mobile.",
   "description": "Both Admin clients incorrectly presented authoritative HTTP400 VALIDATION_ERROR as dependency unavailability. Repair12f1e9d6 uses the existing shared FormErrorSummary without inferred field errors; safe entered values and authentication/conflict/unknown-result behavior remain intact. Both targeted desktop/mobile journeys pass, six error frames pass independent rendered review, and the rebuilt asset guard passes. This closes the confirmed feedback defect, not whole-feature or production acceptance.",
   "expected_behavior_ref": "docs/authority/current/decisions/AMD-0009_URL_Addressable_Routing_and_Governed_Form_Validation.md",
   "evidence": ["governance/evidence/p2-019-content-20261116/ui/v10-validation-fec02918-working-tree/results.json", "governance/evidence/p2-019-content-20261116/ui/validation-12f1e9d6-configuration/results.json", "governance/evidence/p2-019-content-20261116/ui/validation-12f1e9d6-content/results.json", "governance/evidence/TUN-P2-019-UI-COMPLIANCE.json"],

@@ -5,10 +5,10 @@
   "classification": "UI_FIDELITY_DEFECT",
   "severity": "SEV-3",
   "status": "CLOSED",
+  "environment": "Controlled Admin browser qualification; synthetic Registration/TOTP configuration at243e5c10 and corrected503edd02.",
   "description": "Rendered Registration/TOTP forms at243e5c10 omit the approved gray bordered read-only constraints panel before the version input, rendering ordinary fact rows after it instead. Reproduce the approved panel composition and responsive two-column fact variant; preserve existing three-family styling and functionality. Engineering correction is verified by the committed per-item UI assessment and the28-item native PASS at3e5f0725; current UI source is503edd02 with inventory-only carrier37d06662. This closes the confirmed defect, not the full feature or production/release acceptance.",
   "expected_behavior_ref": "artifacts/p2-019-content-20261116/additional-settings-ui-review/review.html",
-  "approval_ref": "governance/evidence/TUN-P2-019-REGISTRATION-TOTP-VISUAL-CONSENT.json",
-  "evidence": ["governance/evidence/TUN-P2-019-VALIDATION.json"],
+  "evidence": ["governance/evidence/TUN-P2-019-VALIDATION.json", "governance/evidence/TUN-P2-019-REGISTRATION-TOTP-VISUAL-CONSENT.json"],
   "affected_versions": ["243e5c10ce7da1f9adc3fdac54cb7a8f77cb7c0f"],
   "created_at": "2026-11-16T13:50:01Z",
   "updated_at": "2026-11-16T19:09:11Z"
