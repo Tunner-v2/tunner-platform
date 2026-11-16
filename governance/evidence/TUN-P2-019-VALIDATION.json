@@ -58,6 +58,7 @@
     "tests/Tunner.Identity.Persistence.Tests/ContentChangeReasonTests.cs",
     "tests/Tunner.Identity.Persistence.Tests/IdentityRuntimeConfigurationMigrationTests.cs",
     "tests/Tunner.Identity.Persistence.Tests/IdentityRuntimeConfigurationTests.cs",
+    "tests/Tunner.Identity.Persistence.Tests/IdentityRuntimeAdditionalConfigurationTests.cs",
     "tests/Tunner.Identity.Persistence.Tests/PresentationContentLifecycleTests.cs",
     "tests/Tunner.Identity.Persistence.Tests/PublishedAuthenticationPresentationIntegrationTests.cs",
     "tests/Tunner.Identity.Persistence.Tests/PublishedAuthenticationPresentationTests.cs",
@@ -353,11 +354,12 @@
   },
   "pending_backend_authorization": {
     "scope": "Registration/TOTP eight-path backend integration",
-    "result": "AWAITING_EXPLICIT_USER_AUTHORIZATION_AFTER_AUTOMATIC_REVIEW_REJECTION",
+    "result": "USER_AUTHORIZED_SCOPED_IMPLEMENTATION_AND_TESTING_call_c0ab259f8f1145b4b37bc6a00de9dcdf",
     "review_packet": "artifacts/p2-019-content-20261116/registration-totp-authorization/REVIEW.md",
     "patch_ref": "artifacts/p2-019-content-20261116/registration-totp-authorization/implementation.patch",
     "patch_sha256": "11e472caf72501d746f3f2666faebf21c41efd36e69e271853dcb19719a88da7",
     "patch_applicability": "git apply --check PASS only; no source edits applied",
-    "boundaries": "Do not retry or indirectly apply denied edits without the required authorization. Continue the approved UI repair."
+    "authorization_ref": "governance/evidence/TUN-P2-019-REGISTRATION-TOTP-AUTHORIZATION.json",
+    "boundaries": "Explicit user grant resolves the scope rejection. Implement only the reviewed eight-path backend slice; frontend/production values and activation, merge and release remain separate."
   }
 }

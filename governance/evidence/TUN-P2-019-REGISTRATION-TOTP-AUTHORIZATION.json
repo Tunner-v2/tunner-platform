@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "scope_id": "TUN-P2-019",
+  "authorization_id": "TUN-P2-019-REGISTRATION-TOTP-AUTHORIZATION",
+  "recorded_at": "2026-11-16T13:15:51Z",
+  "source": "Explicit user reply in this continuing chat",
+  "question_call_id": "call_c0ab259f8f1145b4b37bc6a00de9dcdf",
+  "explicit_user_answer": "Authorize this scoped backend integration (Recommended)",
+  "status": "AUTHORIZED",
+  "review_packet": "artifacts/p2-019-content-20261116/registration-totp-authorization/REVIEW.md",
+  "reviewed_patch": "artifacts/p2-019-content-20261116/registration-totp-authorization/implementation.patch",
+  "patch_sha256": "11e472caf72501d746f3f2666faebf21c41efd36e69e271853dcb19719a88da7",
+  "authorized_paths": [
+    "src/Modules/Identity/IdentityRuntimeConfigurationContracts.cs",
+    "src/Modules/Identity/IdentityRuntimeConfigurationApplication.cs",
+    "src/Modules/Identity/IdentityRuntimeConfigurationBrowsing.cs",
+    "src/Modules/Identity/PersistedIdentityRuntimeConfigurationSource.cs",
+    "src/Tunner.Admin.Bff/AdminIdentityConfigurationContracts.cs",
+    "src/Tunner.Admin.Bff/AdminIdentityConfigurationEndpoints.cs",
+    "tests/Tunner.Identity.Persistence.Tests/IdentityRuntimeAdditionalConfigurationTests.cs",
+    "tests/Tunner.Identity.Persistence.Tests/AdminIdentityConfigurationHttpTests.cs"
+  ],
+  "scope": "Implement and test the exact reviewed Registration/TOTP typed persistence, source adapters and protected HTTP slice using existing validators/lifecycle, immutable approval/audit/replay and separately opted-in runtime sources. Preserve existing three-family scope encoding/payload bytes; qualify reconstructed old-format compatibility without misrepresenting it as a captured old runtime payload.",
+  "boundaries": "Frontend designs/forms for these two families, production values/activation, protected-main merge and release remain separate. This specific user grant resolves the recorded automatic-review scope rejection; it changes no FRD/PDR or business policy."
+}
