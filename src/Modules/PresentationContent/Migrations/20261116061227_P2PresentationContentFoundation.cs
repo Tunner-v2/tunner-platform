@@ -8,6 +8,11 @@ namespace Tunner.PresentationContent.Migrations
     /// <inheritdoc />
     public partial class P2PresentationContentFoundation : Migration
     {
+        private static readonly string[] ProfileIdentityColumns = ["Scope", "Version"];
+        private static readonly string[] DefinitionIdentityColumns = ["Scope", "ProfileVersion", "Key"];
+        private static readonly string[] VariantIdentityColumns = ["Scope", "ProfileVersion", "Reference"];
+        private static readonly string[] ProposalVariantLookupColumns = ["Scope", "ProfileVersion", "VariantReference"];
+        private static readonly string[] ContentVariantLookupColumns = ["Scope", "ProfileVersion", "Key", "VariantReference"];
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -46,7 +51,7 @@ namespace Tunner.PresentationContent.Migrations
                         columns: x => new { x.Scope, x.ProfileVersion },
                         principalSchema: "presentation_content",
                         principalTable: "profiles",
-                        principalColumns: new[] { "Scope", "Version" },
+                        principalColumns: ProfileIdentityColumns,
                         onDelete: ReferentialAction.Restrict);
                 });
 
@@ -68,7 +73,7 @@ namespace Tunner.PresentationContent.Migrations
                         columns: x => new { x.Scope, x.ProfileVersion },
                         principalSchema: "presentation_content",
                         principalTable: "profiles",
-                        principalColumns: new[] { "Scope", "Version" },
+                        principalColumns: ProfileIdentityColumns,
                         onDelete: ReferentialAction.Restrict);
                 });
 
@@ -107,14 +112,14 @@ namespace Tunner.PresentationContent.Migrations
                         columns: x => new { x.Scope, x.ProfileVersion, x.Key },
                         principalSchema: "presentation_content",
                         principalTable: "definitions",
-                        principalColumns: new[] { "Scope", "ProfileVersion", "Key" },
+                        principalColumns: DefinitionIdentityColumns,
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_proposals_variants_Scope_ProfileVersion_VariantReference",
                         columns: x => new { x.Scope, x.ProfileVersion, x.VariantReference },
                         principalSchema: "presentation_content",
                         principalTable: "variants",
-                        principalColumns: new[] { "Scope", "ProfileVersion", "Reference" },
+                        principalColumns: VariantIdentityColumns,
                         onDelete: ReferentialAction.Restrict);
                 });
 
@@ -198,19 +203,19 @@ namespace Tunner.PresentationContent.Migrations
                 name: "IX_proposals_Scope_ProfileVersion_Key",
                 schema: "presentation_content",
                 table: "proposals",
-                columns: new[] { "Scope", "ProfileVersion", "Key" });
+                columns: DefinitionIdentityColumns);
 
             migrationBuilder.CreateIndex(
                 name: "IX_proposals_Scope_ProfileVersion_VariantReference",
                 schema: "presentation_content",
                 table: "proposals",
-                columns: new[] { "Scope", "ProfileVersion", "VariantReference" });
+                columns: ProposalVariantLookupColumns);
 
             migrationBuilder.CreateIndex(
                 name: "IX_publications_Scope_ProfileVersion_Key_VariantReference",
                 schema: "presentation_content",
                 table: "publications",
-                columns: new[] { "Scope", "ProfileVersion", "Key", "VariantReference" });
+                columns: ContentVariantLookupColumns);
 
             migrationBuilder.CreateIndex(
                 name: "IX_publications_SupersedesPublicationReference",
@@ -235,7 +240,7 @@ namespace Tunner.PresentationContent.Migrations
                 name: "IX_versions_Scope_ProfileVersion_Key_VariantReference",
                 schema: "presentation_content",
                 table: "versions",
-                columns: new[] { "Scope", "ProfileVersion", "Key", "VariantReference" });
+                columns: ContentVariantLookupColumns);
             migrationBuilder.Sql(ContentIntegritySql.Install);
         }
 
