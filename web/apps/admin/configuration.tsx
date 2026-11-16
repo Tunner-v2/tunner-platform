@@ -85,7 +85,7 @@ function ConfigurationWorkspace(){
  function chooseCandidate(value:string){reads.current?.abort();clearCandidate();setSelectedId(value);setNotice(undefined);}
  function changeForm(value:FormState){setForm(value);setDirty(true);}
  function navigate(view:ConfigurationView){if(!busy)navigatePath(configurationPath(family,view));}
- const searchForm=useTunnerForm(z.object({search:z.string().max(workspace?.maximumSearchLength??0,k('invalidNumber'))}),{search});
+ const searchForm=useTunnerForm(z.object({search:z.string().max(workspace?.maximumSearchLength??0,k('validationSummary'))}),{search});
  if(fatal||ready&&!presentation||ready&&(family==='Registration'||family==='Totp')&&!boot?.workspaces.some(item=>item.scope.family===family))return <ContentUnavailable/>;if(!presentation)return <main aria-busy="true"/>;
  return <ContentProvider locale={presentation.locale} audience="admin-identity-configuration" resolve={key=>presentation.content[key]}><Labels.Provider value={presentation}>
   <ConfigurationShell family={family} disabled={!ready||busy||unknown||dirty}>
