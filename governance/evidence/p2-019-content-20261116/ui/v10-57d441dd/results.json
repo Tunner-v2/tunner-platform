@@ -1,0 +1,324 @@
+{
+  "config": {
+    "argv": [
+      "C:\\Program Files\\nodejs\\node.exe",
+      "C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\web\\node_modules\\@playwright\\test\\cli.js",
+      "test",
+      "--config",
+      "playwright.configuration-admin.config.ts",
+      "--grep",
+      "Passkey"
+    ],
+    "configFile": "C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\web\\playwright.configuration-admin.config.ts",
+    "rootDir": "C:/Workspace/AI MCP/Enterprise Solution/TunnerPlatform.V2.0/web/tests/configuration-admin",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "C:/Workspace/AI MCP/Enterprise Solution/TunnerPlatform.V2.0/web/test-results/runs/configuration-admin",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "C:/Workspace/AI MCP/Enterprise Solution/TunnerPlatform.V2.0/web/tests/configuration-admin",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "test-results/configuration-admin/results.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.62.1",
+    "workers": 1,
+    "webServer": {
+      "command": "node node_modules/vite/bin/vite.js --config apps/admin/vite.config.ts --port 5298",
+      "url": "http://127.0.0.1:5298/identity/settings/authentication",
+      "reuseExistingServer": false,
+      "timeout": 30000
+    }
+  },
+  "suites": [
+    {
+      "title": "configuration.spec.ts",
+      "file": "configuration.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "Passkey typed policy validates ordered inputs, retries exact intent and reviews immutable history at 1440",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 11400,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveCount\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('[data-field=\"values.revocationSessionEffect\"]').locator('td').nth(1).locator('[data-content-publication=\"fixture-chrome-p1\"]')\nExpected: \u001b[32m1\u001b[39m\nReceived: \u001b[31m2\u001b[39m\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveCount\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('[data-field=\"values.revocationSessionEffect\"]').locator('td').nth(1).locator('[data-content-publication=\"fixture-chrome-p1\"]')\u001b[22m\n\u001b[2m    14 × locator resolved to 2 elements\u001b[22m\n\u001b[2m       - unexpected value \"2\"\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveCount\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('[data-field=\"values.revocationSessionEffect\"]').locator('td').nth(1).locator('[data-content-publication=\"fixture-chrome-p1\"]')\nExpected: \u001b[32m1\u001b[39m\nReceived: \u001b[31m2\u001b[39m\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveCount\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('[data-field=\"values.revocationSessionEffect\"]').locator('td').nth(1).locator('[data-content-publication=\"fixture-chrome-p1\"]')\u001b[22m\n\u001b[2m    14 × locator resolved to 2 elements\u001b[22m\n\u001b[2m       - unexpected value \"2\"\u001b[22m\n\n    at assertPasskeyDiff (C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\web\\tests\\configuration-admin\\configuration.spec.ts:241:345)\n    at C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\web\\tests\\configuration-admin\\configuration.spec.ts:253:386",
+                    "location": {
+                      "file": "C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\web\\tests\\configuration-admin\\configuration.spec.ts",
+                      "column": 345,
+                      "line": 241
+                    },
+                    "snippet": "  239 |  const fields=passkeyFields(value),keys=[...new Set([...Object.keys(fields),...Object.keys(other?passkeyFields(other):{})])].sort();expect((await page.locator('.configuration-diff [data-field]').evaluateAll(rows=>rows.map(row=>row.getAttribute('data-field')))).sort()).toEqual(keys);\n  240 |  for(const [key,item] of Object.entries(fields))await expect(page.locator('[data-field=\"'+key+'\"]').locator('td').nth(column==='current'?0:1)).toContainText(item);\n> 241 |  const effect=page.locator('[data-field=\"values.revocationSessionEffect\"]').locator('td').nth(column==='current'?0:1);await expect(effect).toContainText(value.value.values.revocationSessionEffect===1?labels.preserveExistingSessions:labels.revokeCredentialSessions);await expect(effect.locator('[data-content-publication=\"fixture-chrome-p1\"]')).toHaveCount(1);\n      |                                                                                                                                                                                                                                                                                                                                                         ^\n  242 |  // Historical as well as current/proposed previews must disclose the three constructor invariants.\n  243 |  for(const [key,item] of Object.entries({residentKeyRequirement:'required',userVerificationRequirement:'required',attestationConveyancePreference:'none'}))await expect(page.locator('[data-field=\"values.'+key+'\"]').locator('td').nth(column==='current'?0:1)).toContainText(item);\n  244 | }"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\web\\tests\\configuration-admin\\configuration.spec.ts",
+                        "column": 345,
+                        "line": 241
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveCount\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('[data-field=\"values.revocationSessionEffect\"]').locator('td').nth(1).locator('[data-content-publication=\"fixture-chrome-p1\"]')\nExpected: \u001b[32m1\u001b[39m\nReceived: \u001b[31m2\u001b[39m\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveCount\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('[data-field=\"values.revocationSessionEffect\"]').locator('td').nth(1).locator('[data-content-publication=\"fixture-chrome-p1\"]')\u001b[22m\n\u001b[2m    14 × locator resolved to 2 elements\u001b[22m\n\u001b[2m       - unexpected value \"2\"\u001b[22m\n\n\n  239 |  const fields=passkeyFields(value),keys=[...new Set([...Object.keys(fields),...Object.keys(other?passkeyFields(other):{})])].sort();expect((await page.locator('.configuration-diff [data-field]').evaluateAll(rows=>rows.map(row=>row.getAttribute('data-field')))).sort()).toEqual(keys);\n  240 |  for(const [key,item] of Object.entries(fields))await expect(page.locator('[data-field=\"'+key+'\"]').locator('td').nth(column==='current'?0:1)).toContainText(item);\n> 241 |  const effect=page.locator('[data-field=\"values.revocationSessionEffect\"]').locator('td').nth(column==='current'?0:1);await expect(effect).toContainText(value.value.values.revocationSessionEffect===1?labels.preserveExistingSessions:labels.revokeCredentialSessions);await expect(effect.locator('[data-content-publication=\"fixture-chrome-p1\"]')).toHaveCount(1);\n      |                                                                                                                                                                                                                                                                                                                                                         ^\n  242 |  // Historical as well as current/proposed previews must disclose the three constructor invariants.\n  243 |  for(const [key,item] of Object.entries({residentKeyRequirement:'required',userVerificationRequirement:'required',attestationConveyancePreference:'none'}))await expect(page.locator('[data-field=\"values.'+key+'\"]').locator('td').nth(column==='current'?0:1)).toContainText(item);\n  244 | }\n    at assertPasskeyDiff (C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\web\\tests\\configuration-admin\\configuration.spec.ts:241:345)\n    at C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\web\\tests\\configuration-admin\\configuration.spec.ts:253:386"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-16T20:24:13.539Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\web\\test-results\\runs\\configuration-admin\\configuration-Passkey-type-b58a4-s-immutable-history-at-1440\\error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\web\\tests\\configuration-admin\\configuration.spec.ts",
+                    "column": 345,
+                    "line": 241
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "c9271d8ec6470e516d84-78c3353e9264b3d118da",
+          "file": "configuration.spec.ts",
+          "line": 245,
+          "column": 31
+        },
+        {
+          "title": "Passkey typed policy validates ordered inputs, retries exact intent and reviews immutable history at 390",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 11139,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveCount\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('[data-field=\"values.revocationSessionEffect\"]').locator('td').nth(1).locator('[data-content-publication=\"fixture-chrome-p1\"]')\nExpected: \u001b[32m1\u001b[39m\nReceived: \u001b[31m2\u001b[39m\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveCount\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('[data-field=\"values.revocationSessionEffect\"]').locator('td').nth(1).locator('[data-content-publication=\"fixture-chrome-p1\"]')\u001b[22m\n\u001b[2m    14 × locator resolved to 2 elements\u001b[22m\n\u001b[2m       - unexpected value \"2\"\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveCount\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('[data-field=\"values.revocationSessionEffect\"]').locator('td').nth(1).locator('[data-content-publication=\"fixture-chrome-p1\"]')\nExpected: \u001b[32m1\u001b[39m\nReceived: \u001b[31m2\u001b[39m\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveCount\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('[data-field=\"values.revocationSessionEffect\"]').locator('td').nth(1).locator('[data-content-publication=\"fixture-chrome-p1\"]')\u001b[22m\n\u001b[2m    14 × locator resolved to 2 elements\u001b[22m\n\u001b[2m       - unexpected value \"2\"\u001b[22m\n\n    at assertPasskeyDiff (C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\web\\tests\\configuration-admin\\configuration.spec.ts:241:345)\n    at C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\web\\tests\\configuration-admin\\configuration.spec.ts:253:386",
+                    "location": {
+                      "file": "C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\web\\tests\\configuration-admin\\configuration.spec.ts",
+                      "column": 345,
+                      "line": 241
+                    },
+                    "snippet": "  239 |  const fields=passkeyFields(value),keys=[...new Set([...Object.keys(fields),...Object.keys(other?passkeyFields(other):{})])].sort();expect((await page.locator('.configuration-diff [data-field]').evaluateAll(rows=>rows.map(row=>row.getAttribute('data-field')))).sort()).toEqual(keys);\n  240 |  for(const [key,item] of Object.entries(fields))await expect(page.locator('[data-field=\"'+key+'\"]').locator('td').nth(column==='current'?0:1)).toContainText(item);\n> 241 |  const effect=page.locator('[data-field=\"values.revocationSessionEffect\"]').locator('td').nth(column==='current'?0:1);await expect(effect).toContainText(value.value.values.revocationSessionEffect===1?labels.preserveExistingSessions:labels.revokeCredentialSessions);await expect(effect.locator('[data-content-publication=\"fixture-chrome-p1\"]')).toHaveCount(1);\n      |                                                                                                                                                                                                                                                                                                                                                         ^\n  242 |  // Historical as well as current/proposed previews must disclose the three constructor invariants.\n  243 |  for(const [key,item] of Object.entries({residentKeyRequirement:'required',userVerificationRequirement:'required',attestationConveyancePreference:'none'}))await expect(page.locator('[data-field=\"values.'+key+'\"]').locator('td').nth(column==='current'?0:1)).toContainText(item);\n  244 | }"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\web\\tests\\configuration-admin\\configuration.spec.ts",
+                        "column": 345,
+                        "line": 241
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveCount\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('[data-field=\"values.revocationSessionEffect\"]').locator('td').nth(1).locator('[data-content-publication=\"fixture-chrome-p1\"]')\nExpected: \u001b[32m1\u001b[39m\nReceived: \u001b[31m2\u001b[39m\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveCount\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('[data-field=\"values.revocationSessionEffect\"]').locator('td').nth(1).locator('[data-content-publication=\"fixture-chrome-p1\"]')\u001b[22m\n\u001b[2m    14 × locator resolved to 2 elements\u001b[22m\n\u001b[2m       - unexpected value \"2\"\u001b[22m\n\n\n  239 |  const fields=passkeyFields(value),keys=[...new Set([...Object.keys(fields),...Object.keys(other?passkeyFields(other):{})])].sort();expect((await page.locator('.configuration-diff [data-field]').evaluateAll(rows=>rows.map(row=>row.getAttribute('data-field')))).sort()).toEqual(keys);\n  240 |  for(const [key,item] of Object.entries(fields))await expect(page.locator('[data-field=\"'+key+'\"]').locator('td').nth(column==='current'?0:1)).toContainText(item);\n> 241 |  const effect=page.locator('[data-field=\"values.revocationSessionEffect\"]').locator('td').nth(column==='current'?0:1);await expect(effect).toContainText(value.value.values.revocationSessionEffect===1?labels.preserveExistingSessions:labels.revokeCredentialSessions);await expect(effect.locator('[data-content-publication=\"fixture-chrome-p1\"]')).toHaveCount(1);\n      |                                                                                                                                                                                                                                                                                                                                                         ^\n  242 |  // Historical as well as current/proposed previews must disclose the three constructor invariants.\n  243 |  for(const [key,item] of Object.entries({residentKeyRequirement:'required',userVerificationRequirement:'required',attestationConveyancePreference:'none'}))await expect(page.locator('[data-field=\"values.'+key+'\"]').locator('td').nth(column==='current'?0:1)).toContainText(item);\n  244 | }\n    at assertPasskeyDiff (C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\web\\tests\\configuration-admin\\configuration.spec.ts:241:345)\n    at C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\web\\tests\\configuration-admin\\configuration.spec.ts:253:386"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-16T20:24:27.104Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\web\\test-results\\runs\\configuration-admin\\configuration-Passkey-type-eeb75-ws-immutable-history-at-390\\error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\web\\tests\\configuration-admin\\configuration.spec.ts",
+                    "column": 345,
+                    "line": 241
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "c9271d8ec6470e516d84-30ccb9ddd7741f500085",
+          "file": "configuration.spec.ts",
+          "line": 245,
+          "column": 31
+        },
+        {
+          "title": "Passkey canonical routes guard direct entry refresh history and server capabilities",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 4485,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-16T20:24:40.170Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c9271d8ec6470e516d84-8063cf64279be4c1098e",
+          "file": "configuration.spec.ts",
+          "line": 258,
+          "column": 1
+        },
+        {
+          "title": "Passkey laptop tablet and narrow form reflows with shared keyboard error correction",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 8175,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-16T20:24:45.180Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c9271d8ec6470e516d84-f3b020fed084267fc31d",
+          "file": "configuration.spec.ts",
+          "line": 261,
+          "column": 1
+        },
+        {
+          "title": "Passkey conditional publication preserves all six earlier families without new chrome",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 6111,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-16T20:24:53.376Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c9271d8ec6470e516d84-202d1461b8743225aecc",
+          "file": "configuration.spec.ts",
+          "line": 264,
+          "column": 1
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-11-16T20:24:10.289Z",
+    "duration": 49831.479999999996,
+    "expected": 3,
+    "skipped": 0,
+    "unexpected": 2,
+    "flaky": 0
+  }
+}
