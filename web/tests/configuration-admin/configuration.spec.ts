@@ -53,7 +53,7 @@ for(const width of [1440,390])test(`Authentication exact typed review and public
 for(const width of [1440,390])test(`Assurance method mapping is explicit, fully diffed and preserved without hierarchy at ${width}`,async({page},info)=>{
  await page.setViewportSize({width,height:width===1440?1024:844});const server=await fixture(page);await select(page,'Assurance');const lifetime=page.getByLabel('Proof lifetime',{exact:true});
  await expect(lifetime).toHaveValue('120.0000001');await expect(page.getByLabel('Method',{exact:true})).toHaveCount(2);
- if(width===390)await page.screenshot({path:info.outputPath('assurance-390.png'),fullPage:true});
+ await page.screenshot({path:info.outputPath(`assurance-${width}.png`),fullPage:true});
  expect((await new AxeBuilder({page}).analyze()).violations).toEqual([]);expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
  await lifetime.fill('0');await lifetime.press('Tab');await expect(lifetime).toHaveAttribute('aria-invalid','true');
  await page.getByRole('button',{name:'Save draft',exact:true}).focus();await page.keyboard.press('Enter');await expect(lifetime).toBeFocused();expect(server.writes).toHaveLength(0);
@@ -68,7 +68,7 @@ for(const width of [1440,390])test(`Assurance method mapping is explicit, fully 
 });
 for(const width of [1440,390])test(`Authentication content binding validates links and rolls back the exact immutable source at ${width}`,async({page},info)=>{
  await page.setViewportSize({width,height:width===1440?1024:844});const server=await fixture(page);await select(page,'AuthenticationContent');
- if(width===390)await page.screenshot({path:info.outputPath('binding-390.png'),fullPage:true});
+ await page.screenshot({path:info.outputPath(`binding-${width}.png`),fullPage:true});
  expect((await new AxeBuilder({page}).analyze()).violations).toEqual([]);expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
  const terms=page.getByLabel('Terms link',{exact:true});await terms.fill('https://user:secret@terms.example.test/');await terms.press('Tab');await expect(terms).toHaveAttribute('aria-invalid','true');await page.getByRole('button',{name:'Save draft',exact:true}).focus();await page.keyboard.press('Enter');await expect(terms).toBeFocused();expect(server.writes).toHaveLength(0);expect((await new AxeBuilder({page}).analyze()).violations).toEqual([]);
  await terms.fill('https://terms.example.test/');await terms.press('Tab');await expect(terms).not.toHaveAttribute('aria-invalid','true');await expect(page.getByLabel('Privacy link',{exact:true})).toHaveValue('https://privacy.example.test/');await expect(page.getByLabel('Content scope',{exact:true})).toHaveValue('fixture-login-copy');
