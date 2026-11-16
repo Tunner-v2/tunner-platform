@@ -48,6 +48,19 @@ test('deep links re-guard without URL or storage disclosure and history restores
 });
 test('published proposal state never fabricates a missing server capability',async({page})=>{const server=await fixture(page,{publishAllowed:false});await select(page);await page.getByRole('button',{name:'Preview & compare',exact:true}).click();await expect(page.getByRole('button',{name:'Publish',exact:true})).toBeDisabled();expect(server.writes).toHaveLength(0);});
 test('missing whole published chrome fails closed without User cookie APIs',async({page})=>{const requests:string[]=[];page.on('request',request=>requests.push(new URL(request.url()).pathname));await fixture(page,{missingPresentation:true});await page.goto('/admin/content');await expect(page.getByRole('alert')).toContainText('The request could not be completed.');await expect(page.getByRole('heading')).toHaveCount(0);expect(requests.filter(path=>path.startsWith('/authentication'))).toEqual([]);});
+test('current route and exact preview qualification gate keyboard writes while reads are delayed',async({page})=>{
+ const server=await fixture(page);await select(page);await page.getByLabel('Wording',{exact:true}).fill('Preserved wording during qualification');await page.getByRole('link',{name:'Version history',exact:true}).click();await expect(page.locator('main[aria-busy="false"] tbody tr')).toHaveCount(1);
+ let releaseWorkspace!:()=>void,releasePreview!:()=>void,sawWorkspace!:()=>void,sawPreview!:()=>void;
+ const workspaceGate=new Promise<void>(resolve=>{releaseWorkspace=resolve;}),previewGate=new Promise<void>(resolve=>{releasePreview=resolve;}),workspaceRequested=new Promise<void>(resolve=>{sawWorkspace=resolve;}),previewRequested=new Promise<void>(resolve=>{sawPreview=resolve;});
+ await page.route('**/content/workspace',async route=>{sawWorkspace();await workspaceGate;await route.fallback();});
+ await page.route('**/content/proposals/preview',async route=>{sawPreview();await previewGate;await route.fallback();});
+ try{
+  await page.getByRole('link',{name:'Content workspace',exact:true}).click();await workspaceRequested;await expect(page.locator('main')).toHaveAttribute('aria-busy','true');await expect(page.getByRole('button',{name:'Save draft',exact:true})).toHaveCount(0);expect(server.writes).toHaveLength(0);
+  releaseWorkspace();await previewRequested;const save=page.getByRole('button',{name:'Save draft',exact:true});await expect(save).toBeDisabled();await expect(page.getByLabel('Wording',{exact:true})).toHaveValue('Preserved wording during qualification');await expect(page.locator('main')).toHaveAttribute('aria-busy','true');
+  await save.evaluate(button=>(button as HTMLButtonElement).form!.dispatchEvent(new Event('submit',{bubbles:true,cancelable:true})));expect(server.writes).toHaveLength(0);
+  releasePreview();await expect(save).toBeEnabled();await save.focus();await expect(save).toBeFocused();await page.keyboard.press('Enter');await expect.poll(()=>server.writes.length).toBe(1);expect(server.writes[0]).toMatchObject({path:'/content/proposals/update',body:{proposalReference:proposalId,expectedRevision:1,text:'Preserved wording during qualification'}});
+ }finally{releaseWorkspace();releasePreview();}
+});
 
 for(const viewport of [{width:1440,height:1024},{width:390,height:844}])test(`readonly User context preview preserves draft and published provenance at ${viewport.width}`,async({page},info)=>{
  await page.setViewportSize(viewport);

@@ -1,0 +1,360 @@
+{
+  "config": {
+    "argv": [
+      "C:\\Program Files\\nodejs\\node.exe",
+      "C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\web\\node_modules\\@playwright\\test\\cli.js",
+      "test",
+      "--config",
+      "playwright.configuration-admin.config.ts",
+      "--grep",
+      "(Assurance method mapping|Authentication content binding|all nine configuration routes)",
+      "--reporter=list,json",
+      "--output=test-results/runs/configuration-admin-coverage"
+    ],
+    "configFile": "C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\web\\playwright.configuration-admin.config.ts",
+    "rootDir": "C:/Workspace/AI MCP/Enterprise Solution/TunnerPlatform.V2.0/web/tests/configuration-admin",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "C:/Workspace/AI MCP/Enterprise Solution/TunnerPlatform.V2.0/web/test-results/runs/configuration-admin-coverage",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "C:/Workspace/AI MCP/Enterprise Solution/TunnerPlatform.V2.0/web/tests/configuration-admin",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list"
+      ],
+      [
+        "json"
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.62.1",
+    "workers": 1,
+    "webServer": {
+      "command": "node node_modules/vite/bin/vite.js --config apps/admin/vite.config.ts --port 5298",
+      "url": "http://127.0.0.1:5298/identity/settings/authentication",
+      "reuseExistingServer": false,
+      "timeout": 30000
+    }
+  },
+  "suites": [
+    {
+      "title": "configuration.spec.ts",
+      "file": "configuration.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "Assurance method mapping is explicit, fully diffed and preserved without hierarchy at 1440",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 6364,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-16T09:09:06.000Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c9271d8ec6470e516d84-f50eb45a62a6ef73fb4a",
+          "file": "configuration.spec.ts",
+          "line": 50,
+          "column": 31
+        },
+        {
+          "title": "Assurance method mapping is explicit, fully diffed and preserved without hierarchy at 390",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 5706,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-16T09:09:12.829Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c9271d8ec6470e516d84-7821a2788ff927bf3a1d",
+          "file": "configuration.spec.ts",
+          "line": 50,
+          "column": 31
+        },
+        {
+          "title": "Authentication content binding validates links and rolls back the exact immutable source at 1440",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 8424,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m1\u001b[39m\nReceived: \u001b[31m0\u001b[39m\n\nCall Log:\n- Timeout 5000ms exceeded while waiting on the predicate",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m1\u001b[39m\nReceived: \u001b[31m0\u001b[39m\n\nCall Log:\n- Timeout 5000ms exceeded while waiting on the predicate\n    at C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\web\\tests\\configuration-admin\\configuration.spec.ts:73:151",
+                    "location": {
+                      "file": "C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\web\\tests\\configuration-admin\\configuration.spec.ts",
+                      "column": 151,
+                      "line": 73
+                    },
+                    "snippet": "  71 |  await terms.fill('https://terms.example.test/');await terms.press('Tab');await expect(terms).not.toHaveAttribute('aria-invalid','true');await expect(page.getByLabel('Privacy link',{exact:true})).toHaveValue('https://privacy.example.test/');await expect(page.getByLabel('Content scope',{exact:true})).toHaveValue('fixture-login-copy');\n  72 |  await page.getByRole('link',{name:'Publication history',exact:true}).click();await expect(page.getByRole('button',{name:'Republish approved version'})).toBeDisabled();await expect(page.getByRole('dialog')).toHaveCount(0);await page.getByRole('link',{name:'Edit draft',exact:true}).click();\n> 73 |  await page.getByRole('button',{name:'Save draft',exact:true}).focus();await page.keyboard.press('Enter');await expect.poll(()=>server.writes.length).toBe(1);await page.getByRole('link',{name:'Publication history',exact:true}).click();const restore=page.getByRole('button',{name:'Republish approved version'});await expect(restore).toBeEnabled();await restore.focus();await page.keyboard.press('Enter');const dialog=page.getByRole('dialog');await expect(dialog).toBeVisible();\n     |                                                                                                                                                       ^\n  74 |  await dialog.getByRole('button',{name:'Confirm publication'}).focus();await page.keyboard.press('Enter');await expect(dialog.getByLabel('Available from · UTC',{exact:true})).toBeFocused();await fillPublication(page);expect((await new AxeBuilder({page}).analyze()).violations).toEqual([]);expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);\n  75 |  await page.keyboard.press('Escape');await expect(dialog).toHaveCount(0);await expect(restore).toBeFocused();expect(server.writes).toHaveLength(1);await page.keyboard.press('Enter');await expect(page.getByRole('dialog')).toBeVisible();await fillPublication(page);await page.getByRole('dialog').getByRole('button',{name:'Confirm publication'}).focus();await page.keyboard.press('Enter');\n  76 |  await expect.poll(()=>server.writes.length).toBe(2);expect(server.writes[1]).toMatchObject({path:'/rollback',body:{approvedVersionReference:versionId,supersedesPublicationReference:publicationId}});"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\web\\tests\\configuration-admin\\configuration.spec.ts",
+                        "column": 151,
+                        "line": 73
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m1\u001b[39m\nReceived: \u001b[31m0\u001b[39m\n\nCall Log:\n- Timeout 5000ms exceeded while waiting on the predicate\n\n  71 |  await terms.fill('https://terms.example.test/');await terms.press('Tab');await expect(terms).not.toHaveAttribute('aria-invalid','true');await expect(page.getByLabel('Privacy link',{exact:true})).toHaveValue('https://privacy.example.test/');await expect(page.getByLabel('Content scope',{exact:true})).toHaveValue('fixture-login-copy');\n  72 |  await page.getByRole('link',{name:'Publication history',exact:true}).click();await expect(page.getByRole('button',{name:'Republish approved version'})).toBeDisabled();await expect(page.getByRole('dialog')).toHaveCount(0);await page.getByRole('link',{name:'Edit draft',exact:true}).click();\n> 73 |  await page.getByRole('button',{name:'Save draft',exact:true}).focus();await page.keyboard.press('Enter');await expect.poll(()=>server.writes.length).toBe(1);await page.getByRole('link',{name:'Publication history',exact:true}).click();const restore=page.getByRole('button',{name:'Republish approved version'});await expect(restore).toBeEnabled();await restore.focus();await page.keyboard.press('Enter');const dialog=page.getByRole('dialog');await expect(dialog).toBeVisible();\n     |                                                                                                                                                       ^\n  74 |  await dialog.getByRole('button',{name:'Confirm publication'}).focus();await page.keyboard.press('Enter');await expect(dialog.getByLabel('Available from · UTC',{exact:true})).toBeFocused();await fillPublication(page);expect((await new AxeBuilder({page}).analyze()).violations).toEqual([]);expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);\n  75 |  await page.keyboard.press('Escape');await expect(dialog).toHaveCount(0);await expect(restore).toBeFocused();expect(server.writes).toHaveLength(1);await page.keyboard.press('Enter');await expect(page.getByRole('dialog')).toBeVisible();await fillPublication(page);await page.getByRole('dialog').getByRole('button',{name:'Confirm publication'}).focus();await page.keyboard.press('Enter');\n  76 |  await expect.poll(()=>server.writes.length).toBe(2);expect(server.writes[1]).toMatchObject({path:'/rollback',body:{approvedVersionReference:versionId,supersedesPublicationReference:publicationId}});\n    at C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\web\\tests\\configuration-admin\\configuration.spec.ts:73:151"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-16T09:09:18.560Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\web\\test-results\\runs\\configuration-admin-coverage\\configuration-Authenticati-11408-ct-immutable-source-at-1440\\error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\web\\tests\\configuration-admin\\configuration.spec.ts",
+                    "column": 151,
+                    "line": 73
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "c9271d8ec6470e516d84-3beb7159d8b3ceeedcf8",
+          "file": "configuration.spec.ts",
+          "line": 66,
+          "column": 31
+        },
+        {
+          "title": "Authentication content binding validates links and rolls back the exact immutable source at 390",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 9073,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m1\u001b[39m\nReceived: \u001b[31m0\u001b[39m\n\nCall Log:\n- Timeout 5000ms exceeded while waiting on the predicate",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m1\u001b[39m\nReceived: \u001b[31m0\u001b[39m\n\nCall Log:\n- Timeout 5000ms exceeded while waiting on the predicate\n    at C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\web\\tests\\configuration-admin\\configuration.spec.ts:73:151",
+                    "location": {
+                      "file": "C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\web\\tests\\configuration-admin\\configuration.spec.ts",
+                      "column": 151,
+                      "line": 73
+                    },
+                    "snippet": "  71 |  await terms.fill('https://terms.example.test/');await terms.press('Tab');await expect(terms).not.toHaveAttribute('aria-invalid','true');await expect(page.getByLabel('Privacy link',{exact:true})).toHaveValue('https://privacy.example.test/');await expect(page.getByLabel('Content scope',{exact:true})).toHaveValue('fixture-login-copy');\n  72 |  await page.getByRole('link',{name:'Publication history',exact:true}).click();await expect(page.getByRole('button',{name:'Republish approved version'})).toBeDisabled();await expect(page.getByRole('dialog')).toHaveCount(0);await page.getByRole('link',{name:'Edit draft',exact:true}).click();\n> 73 |  await page.getByRole('button',{name:'Save draft',exact:true}).focus();await page.keyboard.press('Enter');await expect.poll(()=>server.writes.length).toBe(1);await page.getByRole('link',{name:'Publication history',exact:true}).click();const restore=page.getByRole('button',{name:'Republish approved version'});await expect(restore).toBeEnabled();await restore.focus();await page.keyboard.press('Enter');const dialog=page.getByRole('dialog');await expect(dialog).toBeVisible();\n     |                                                                                                                                                       ^\n  74 |  await dialog.getByRole('button',{name:'Confirm publication'}).focus();await page.keyboard.press('Enter');await expect(dialog.getByLabel('Available from · UTC',{exact:true})).toBeFocused();await fillPublication(page);expect((await new AxeBuilder({page}).analyze()).violations).toEqual([]);expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);\n  75 |  await page.keyboard.press('Escape');await expect(dialog).toHaveCount(0);await expect(restore).toBeFocused();expect(server.writes).toHaveLength(1);await page.keyboard.press('Enter');await expect(page.getByRole('dialog')).toBeVisible();await fillPublication(page);await page.getByRole('dialog').getByRole('button',{name:'Confirm publication'}).focus();await page.keyboard.press('Enter');\n  76 |  await expect.poll(()=>server.writes.length).toBe(2);expect(server.writes[1]).toMatchObject({path:'/rollback',body:{approvedVersionReference:versionId,supersedesPublicationReference:publicationId}});"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\web\\tests\\configuration-admin\\configuration.spec.ts",
+                        "column": 151,
+                        "line": 73
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m1\u001b[39m\nReceived: \u001b[31m0\u001b[39m\n\nCall Log:\n- Timeout 5000ms exceeded while waiting on the predicate\n\n  71 |  await terms.fill('https://terms.example.test/');await terms.press('Tab');await expect(terms).not.toHaveAttribute('aria-invalid','true');await expect(page.getByLabel('Privacy link',{exact:true})).toHaveValue('https://privacy.example.test/');await expect(page.getByLabel('Content scope',{exact:true})).toHaveValue('fixture-login-copy');\n  72 |  await page.getByRole('link',{name:'Publication history',exact:true}).click();await expect(page.getByRole('button',{name:'Republish approved version'})).toBeDisabled();await expect(page.getByRole('dialog')).toHaveCount(0);await page.getByRole('link',{name:'Edit draft',exact:true}).click();\n> 73 |  await page.getByRole('button',{name:'Save draft',exact:true}).focus();await page.keyboard.press('Enter');await expect.poll(()=>server.writes.length).toBe(1);await page.getByRole('link',{name:'Publication history',exact:true}).click();const restore=page.getByRole('button',{name:'Republish approved version'});await expect(restore).toBeEnabled();await restore.focus();await page.keyboard.press('Enter');const dialog=page.getByRole('dialog');await expect(dialog).toBeVisible();\n     |                                                                                                                                                       ^\n  74 |  await dialog.getByRole('button',{name:'Confirm publication'}).focus();await page.keyboard.press('Enter');await expect(dialog.getByLabel('Available from · UTC',{exact:true})).toBeFocused();await fillPublication(page);expect((await new AxeBuilder({page}).analyze()).violations).toEqual([]);expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);\n  75 |  await page.keyboard.press('Escape');await expect(dialog).toHaveCount(0);await expect(restore).toBeFocused();expect(server.writes).toHaveLength(1);await page.keyboard.press('Enter');await expect(page.getByRole('dialog')).toBeVisible();await fillPublication(page);await page.getByRole('dialog').getByRole('button',{name:'Confirm publication'}).focus();await page.keyboard.press('Enter');\n  76 |  await expect.poll(()=>server.writes.length).toBe(2);expect(server.writes[1]).toMatchObject({path:'/rollback',body:{approvedVersionReference:versionId,supersedesPublicationReference:publicationId}});\n    at C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\web\\tests\\configuration-admin\\configuration.spec.ts:73:151"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-16T09:09:28.312Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\web\\test-results\\runs\\configuration-admin-coverage\\configuration-Authenticati-95329-act-immutable-source-at-390\\error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\web\\tests\\configuration-admin\\configuration.spec.ts",
+                    "column": 151,
+                    "line": 73
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "c9271d8ec6470e516d84-db8d1d7ce8b565795841",
+          "file": "configuration.spec.ts",
+          "line": 66,
+          "column": 31
+        },
+        {
+          "title": "all nine configuration routes independently guard direct entry, reload and browser history",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 28165,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "steps": [
+                    {
+                      "title": "Authentication / edit",
+                      "duration": 3260
+                    },
+                    {
+                      "title": "Authentication / review",
+                      "duration": 4128
+                    },
+                    {
+                      "title": "Authentication / history",
+                      "duration": 2932
+                    },
+                    {
+                      "title": "Assurance / edit",
+                      "duration": 2481
+                    },
+                    {
+                      "title": "Assurance / review",
+                      "duration": 3682
+                    },
+                    {
+                      "title": "Assurance / history",
+                      "duration": 2717
+                    },
+                    {
+                      "title": "AuthenticationContent / edit",
+                      "duration": 2185
+                    },
+                    {
+                      "title": "AuthenticationContent / review",
+                      "duration": 3770
+                    },
+                    {
+                      "title": "AuthenticationContent / history",
+                      "duration": 2649
+                    }
+                  ],
+                  "startTime": "2026-11-16T09:09:39.054Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c9271d8ec6470e516d84-a9513d70a871927afdfa",
+          "file": "configuration.spec.ts",
+          "line": 78,
+          "column": 1
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-11-16T09:09:03.481Z",
+    "duration": 64849.745,
+    "expected": 3,
+    "skipped": 0,
+    "unexpected": 2,
+    "flaky": 0
+  }
+}

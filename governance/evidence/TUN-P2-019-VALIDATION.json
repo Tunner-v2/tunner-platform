@@ -3,7 +3,7 @@
   "scope_id": "TUN-P2-019",
   "validation_kind": "COMMITTED",
   "result": "PENDING",
-  "phase": "CONTENT_ADMIN_AND_THREE_CONFIGURATION_FAMILIES_BACKEND_QUALIFIED_UI_AND_API_INTEGRATION_CONTINUES",
+  "phase": "ADMIN_FOUNDATION_QUALIFIED_ROUTE_READINESS_REPAIR_IN_PROGRESS",
   "tested_commit_sha": null,
   "validated_commit_sha": null,
   "owned_behavior_paths": [
@@ -258,5 +258,106 @@
       "Additive Content migration guards all committed owner data before dropping new columns, preserving schema when an earlier downgrade guard rejects"
     ],
     "independent_review": "One disclosed independent AI reviewer identified serializer, concurrent-validation and runtime lookup defects; root corrected them. Configuration native cases pass. This is a focused technical review, not all final role approvals."
+  },
+  "integrated_backend_qualification": {
+    "result": "PASS_SCOPED_BACKEND_INCREMENT_ONLY",
+    "distinct_passing_cases": 132,
+    "qualification_method": "Deduplicated actual passing TRX case names across retained13e4fdd1/de5f650c/33211355/477cfe4 runs. Not a132/132 single-source run claim.",
+    "actual_runs": [
+      {
+        "run_id": "896eef365b9f4cb4997f9bf1dc943bab",
+        "source_sha": "33211355491774791ceafd6f8ad8818339eac593",
+        "executed": 9,
+        "passed": 9,
+        "failed": 0,
+        "scope": "three typed HTTPS lifecycles, context binding negatives, exact contextual publication separation and guarded Content HTML/assets",
+        "not_executed": 0,
+        "timed_out": false,
+        "owned_containers_remaining": 0,
+        "borrowed_preserved": true,
+        "receipt_ref": "governance/evidence/p2-019-content-20261116/native/896eef365b9f4cb4997f9bf1dc943bab/summary.json"
+      },
+      {
+        "run_id": "937e3c6a05114e198e817512acf3dcb3",
+        "source_sha": "33211355491774791ceafd6f8ad8818339eac593",
+        "executed": 52,
+        "passed": 52,
+        "failed": 0,
+        "scope": "23 typed configuration HTTP cases,26 owner regressions,3 Content replay/lease regressions",
+        "not_executed": 0,
+        "timed_out": false,
+        "owned_containers_remaining": 0,
+        "borrowed_preserved": true,
+        "receipt_ref": "governance/evidence/p2-019-content-20261116/native/937e3c6a05114e198e817512acf3dcb3/summary.json"
+      },
+      {
+        "run_id": "8ff53f583b324160862e4ff414384106",
+        "source_sha": "477cfe405ab088b1ba3de4e8a10f1eed166debf7",
+        "executed": 9,
+        "passed": 9,
+        "failed": 0,
+        "scope": "all12 canonical Admin routes via real HTTPS admission plus contextual preview boundaries",
+        "not_executed": 0,
+        "timed_out": false,
+        "owned_containers_remaining": 0,
+        "borrowed_preserved": true,
+        "receipt_ref": "governance/evidence/p2-019-content-20261116/native/8ff53f583b324160862e4ff414384106/summary.json"
+      }
+    ],
+    "boundaries": "No live workforce sign-in, production values/activation, whole-work-item acceptance, merge or release. Native test launch receipts now also bind Database/Platform assemblies and exact generated Admin asset hashes before/after execution."
+  },
+  "ui_qualification": {
+    "result": "BLOCKED_PENDING_CONFIRMED_ROUTE_READINESS_REPAIR_AND_FINAL_PER_ITEM_GATE",
+    "candidate_source_sha": "477cfe405ab088b1ba3de4e8a10f1eed166debf7",
+    "actual_browser_runs": [
+      {
+        "scope": "Content workspace/review/history and isolated User preview",
+        "source_sha": "477cfe405ab088b1ba3de4e8a10f1eed166debf7",
+        "executed": 9,
+        "passed": 9,
+        "failed": 0,
+        "exit_code": 0,
+        "raw_receipt_ref": "governance/evidence/p2-019-content-20261116/ui/content-477cfe4/results.json"
+      },
+      {
+        "scope": "three typed configuration families and shared forms",
+        "source_sha": "477cfe405ab088b1ba3de4e8a10f1eed166debf7",
+        "executed": 11,
+        "passed": 11,
+        "failed": 0,
+        "exit_code": 0,
+        "raw_receipt_ref": "governance/evidence/p2-019-content-20261116/ui/configuration-477cfe4.json"
+      },
+      {
+        "scope": "missing mobile/history coverage",
+        "source_sha": "618b6ab39d17b7fab537cd05aacc8a5a3822e153",
+        "executed": 5,
+        "passed": 3,
+        "failed": 2,
+        "exit_code": 1,
+        "raw_receipt_ref": "governance/evidence/p2-019-content-20261116/ui/configuration-618b6ab3-coverage.json"
+      },
+      {
+        "scope": "targeted binding keyboard correction",
+        "source_sha": "e889de7ac1301355927529b9d74d74e4f107deda",
+        "executed": 2,
+        "passed": 0,
+        "failed": 2,
+        "exit_code": 1,
+        "raw_receipt_ref": "governance/evidence/p2-019-content-20261116/ui/configuration-e889de7a-binding-failure.json"
+      }
+    ],
+    "confirmed_defect": "DEF-TUN-P2-019-ROUTING-001",
+    "diagnostic_reassessment": "After two focused actionability waits failed, source review confirmed both screens reuse old readiness/capabilities during route qualification. Earlier harness-only diagnosis is withdrawn. Backend authorization remains intact. Bind current route and exact resource readiness; preserve failing assertions.",
+    "remaining": "Complete confirmed product repair, run affected regression and final20-item native per-route/form UI gate. Passing earlier cases do not imply acceptance after the confirmed defect."
+  },
+  "pending_backend_authorization": {
+    "scope": "Registration/TOTP eight-path backend integration",
+    "result": "AWAITING_EXPLICIT_USER_AUTHORIZATION_AFTER_AUTOMATIC_REVIEW_REJECTION",
+    "review_packet": "artifacts/p2-019-content-20261116/registration-totp-authorization/REVIEW.md",
+    "patch_ref": "artifacts/p2-019-content-20261116/registration-totp-authorization/implementation.patch",
+    "patch_sha256": "11e472caf72501d746f3f2666faebf21c41efd36e69e271853dcb19719a88da7",
+    "patch_applicability": "git apply --check PASS only; no source edits applied",
+    "boundaries": "Do not retry or indirectly apply denied edits without the required authorization. Continue the approved UI repair."
   }
 }
