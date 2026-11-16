@@ -31,6 +31,7 @@ public sealed record IdentityConfigurationHistoricalPreview(IdentityConfiguratio
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] public PasskeyContentBinding? PasskeyContent { get; init; }
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] public StepUpContentBinding? StepUpContent { get; init; }
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] public RecoveryCodeConfigurationVersion? RecoveryCodes { get; init; }
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] public SessionListingHttpBudget? SessionListing { get; init; }
 }
 public enum IdentityConfigurationCapabilityTarget { Workspace, Proposal, History }
 public sealed record IdentityConfigurationCapabilityQuery(IdentityConfigurationScope Scope, IdentityConfigurationCapabilityTarget Target,
@@ -54,7 +55,7 @@ public sealed partial class IdentityRuntimeConfigurationApplication
             IdentityConfigurationDigest.Of(new { publicationReference = publication.Id, versionReference = version.Id, version.Digest }), operationId, correlationId);
         var actor = await AuthorizeAsync(request, ct).ConfigureAwait(false);
         await FinishAsync(tx, authority, request, actor, Guid.Empty, 0, request.CandidateDigest, null, null, null, ct).ConfigureAwait(false);
-        return new(History(publication, version, scope), value.Authentication, value.Assurance, value.ContentBinding) { Registration = value.Registration, Totp = value.Totp, RegistrationContent = value.RegistrationContent, Passkey = value.Passkey, TotpContent = value.TotpContent, PasskeyContent = value.PasskeyContent, StepUpContent = value.StepUpContent, RecoveryCodes = value.RecoveryCodes };
+        return new(History(publication, version, scope), value.Authentication, value.Assurance, value.ContentBinding) { Registration = value.Registration, Totp = value.Totp, RegistrationContent = value.RegistrationContent, Passkey = value.Passkey, TotpContent = value.TotpContent, PasskeyContent = value.PasskeyContent, StepUpContent = value.StepUpContent, RecoveryCodes = value.RecoveryCodes, SessionListing = value.SessionListing };
     }
     public async Task<IdentityConfigurationWorkspace> WorkspaceAsync(IdentityConfigurationScope scope, IIdentityConfigurationBrowseBudgetSource budgets,
         string operationId, string correlationId, CancellationToken cancellationToken = default)

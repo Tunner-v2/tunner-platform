@@ -53,7 +53,7 @@ public sealed class AdminIdentityConfigurationScope
         return Family switch
     {
         IdentityConfigurationFamily.Authentication when AssuranceScope is null && AuthenticationPolicyVersion is null && RegistrationPolicyVersion is null => new(Family),
-        IdentityConfigurationFamily.Registration or IdentityConfigurationFamily.Totp or IdentityConfigurationFamily.Passkey or IdentityConfigurationFamily.RecoveryCodes when AssuranceScope is null && AuthenticationPolicyVersion is null && RegistrationPolicyVersion is null => new(Family),
+        IdentityConfigurationFamily.Registration or IdentityConfigurationFamily.Totp or IdentityConfigurationFamily.Passkey or IdentityConfigurationFamily.RecoveryCodes or IdentityConfigurationFamily.SessionListing when AssuranceScope is null && AuthenticationPolicyVersion is null && RegistrationPolicyVersion is null => new(Family),
         IdentityConfigurationFamily.Assurance when AssuranceScope is not null && AuthenticationPolicyVersion is null && RegistrationPolicyVersion is null => new(Family, AssuranceScope.Value()),
         IdentityConfigurationFamily.AuthenticationContent when AssuranceScope is null && !string.IsNullOrWhiteSpace(AuthenticationPolicyVersion) && RegistrationPolicyVersion is null => new(Family, AuthenticationPolicyVersion: AuthenticationPolicyVersion),
         IdentityConfigurationFamily.RegistrationContent when AssuranceScope is null && AuthenticationPolicyVersion is null && !string.IsNullOrWhiteSpace(RegistrationPolicyVersion) => new(Family, RegistrationPolicyVersion: RegistrationPolicyVersion),
@@ -239,6 +239,14 @@ public sealed class AdminStepUpContentBindingCandidate
             ConfigurationVersionReference, QualificationReference, ContentScope, VariantReference,
             (EffectiveInterval ?? throw new ArgumentException("An interval is required.")).Value());
     }
+}
+[JsonUnmappedMemberHandling(JsonUnmappedMemberHandling.Disallow)]
+public sealed class AdminSessionListingConfigurationCandidate
+{
+    public required AdminIdentityPolicyMetadata<string> Metadata { get; init; }
+    public required int MaximumRows { get; init; }
+    public required int MaximumRequestBytes { get; init; }
+    internal SessionListingHttpBudget Value() => new((Metadata ?? throw new ArgumentException("Metadata is required.")).Value(static x => x), MaximumRows, MaximumRequestBytes);
 }
 [JsonUnmappedMemberHandling(JsonUnmappedMemberHandling.Disallow)]
 public sealed class AdminRecoveryCodeConfigurationCandidate

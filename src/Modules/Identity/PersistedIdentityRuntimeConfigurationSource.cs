@@ -10,7 +10,7 @@ namespace Tunner.Identity.Persistence;
 /// <summary>Only current effective publications with immutable Identity validation/approval/effect receipts are runtime authority.
 /// Reading a policy never requires an Admin browser session and never changes historical actor/session state.</summary>
 public sealed class PersistedIdentityRuntimeConfigurationSource(IServiceScopeFactory scopes) : IAuthenticationPolicySource, IAssurancePolicySource, IAuthenticationContentBindingSource,
-    IRegistrationPolicySource, ITotpPolicySource, IRegistrationContentBindingSource, IPasskeyPolicySource, ITotpContentBindingSource, IPasskeyContentBindingSource, IStepUpContentBindingSource, IRecoveryCodePolicySource
+    IRegistrationPolicySource, ITotpPolicySource, IRegistrationContentBindingSource, IPasskeyPolicySource, ITotpContentBindingSource, IPasskeyContentBindingSource, IStepUpContentBindingSource, IRecoveryCodePolicySource, ISessionListingHttpBudgetSource
 {
     RegistrationPolicy IRegistrationPolicySource.RequireEffective(DateTimeOffset effectiveAt)
     {
@@ -94,6 +94,12 @@ public sealed class PersistedIdentityRuntimeConfigurationSource(IServiceScopeFac
         return new RecoveryCodePolicyCatalog([new(value.Metadata, value.Values.ToPolicy())]).RequireEffective(effectiveAt);
     }
 
+    SessionListingHttpBudget ISessionListingHttpBudgetSource.RequireEffective(DateTimeOffset at)
+    {
+        var value = Read(new(IdentityConfigurationFamily.SessionListing), at).Document.SessionListing ?? throw new IdentityConfigurationUnavailableException();
+        return new SessionListingHttpBudgetCatalog([value]).RequireEffective(at);
+    }
+
     private sealed record Selection(IdentityConfigurationDocument Document, IdentityConfigurationPublicationRow Publication);
     private Selection Read(IdentityConfigurationScope requested, DateTimeOffset at)
     {
@@ -131,6 +137,14 @@ public sealed class PersistedIdentityRuntimeConfigurationSource(IServiceScopeFac
 
 public static class IdentityRuntimeConfigurationRegistration
 {
+    /// <summary>Explicit listing budget selection; base helpers do not activate optional session routes.</summary>
+    public static IServiceCollection AddTunnerPersistedSessionListingConfiguration(this IServiceCollection services)
+    {
+        ArgumentNullException.ThrowIfNull(services);
+        if (services.Any(x => x.ServiceType == typeof(ISessionListingHttpBudgetSource))) throw new InvalidOperationException("Session listing budget source selection must be explicit and unique.");
+        services.TryAddSingleton<PersistedIdentityRuntimeConfigurationSource>();
+        services.AddSingleton<ISessionListingHttpBudgetSource>(provider => provider.GetRequiredService<PersistedIdentityRuntimeConfigurationSource>()); return services;
+    }
     /// <summary>Separate policy opt-in; the composing host still requires an explicitly admitted native crypto profile and all other owners.</summary>
     public static IServiceCollection AddTunnerPersistedRecoveryCodeConfiguration(this IServiceCollection services)
     {

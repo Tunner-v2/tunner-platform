@@ -4,7 +4,7 @@ using Tunner.Platform.Policies;
 
 namespace Tunner.Identity.Persistence;
 
-public enum IdentityConfigurationFamily { Authentication, Assurance, AuthenticationContent, Registration, Totp, RegistrationContent, Passkey, TotpContent, PasskeyContent, StepUpContent, RecoveryCodes }
+public enum IdentityConfigurationFamily { Authentication, Assurance, AuthenticationContent, Registration, Totp, RegistrationContent, Passkey, TotpContent, PasskeyContent, StepUpContent, RecoveryCodes, SessionListing }
 public enum IdentityConfigurationOperation { CreateDraft, UpdateDraft, Validate, Preview, Approve, Publish, History, Rollback, Browse }
 public enum IdentityConfigurationActorKind { Human, Service, Model }
 public sealed record IdentityConfigurationScope(IdentityConfigurationFamily Family, AssurancePolicyScope? AssuranceScope = null, string? AuthenticationPolicyVersion = null,
@@ -24,7 +24,7 @@ public sealed record IdentityConfigurationScope(IdentityConfigurationFamily Fami
             Family == IdentityConfigurationFamily.TotpContent && (AssuranceScope is not null || AuthenticationPolicyVersion is not null || string.IsNullOrWhiteSpace(TotpPolicyVersion)) ||
             Family == IdentityConfigurationFamily.PasskeyContent && (AssuranceScope is not null || AuthenticationPolicyVersion is not null || string.IsNullOrWhiteSpace(PasskeyPolicyVersion)) ||
             Family == IdentityConfigurationFamily.RegistrationContent && (AssuranceScope is not null || AuthenticationPolicyVersion is not null || string.IsNullOrWhiteSpace(RegistrationPolicyVersion)) ||
-            (Family is IdentityConfigurationFamily.Authentication or IdentityConfigurationFamily.Registration or IdentityConfigurationFamily.Totp or IdentityConfigurationFamily.Passkey or IdentityConfigurationFamily.RecoveryCodes) && (AssuranceScope is not null || AuthenticationPolicyVersion is not null) ||
+            (Family is IdentityConfigurationFamily.Authentication or IdentityConfigurationFamily.Registration or IdentityConfigurationFamily.Totp or IdentityConfigurationFamily.Passkey or IdentityConfigurationFamily.RecoveryCodes or IdentityConfigurationFamily.SessionListing) && (AssuranceScope is not null || AuthenticationPolicyVersion is not null) ||
             Family == IdentityConfigurationFamily.Assurance && (AssuranceScope is null || AuthenticationPolicyVersion is not null) ||
             Family == IdentityConfigurationFamily.AuthenticationContent && (AssuranceScope is not null || string.IsNullOrWhiteSpace(AuthenticationPolicyVersion)))
             throw new IdentityConfigurationUnavailableException();
@@ -86,6 +86,7 @@ public sealed record IdentityConfigurationPreview(IdentityConfigurationProposal 
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] public PasskeyContentBinding? PasskeyContent { get; init; }
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] public StepUpContentBinding? StepUpContent { get; init; }
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] public RecoveryCodeConfigurationVersion? RecoveryCodes { get; init; }
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] public SessionListingHttpBudget? SessionListing { get; init; }
 }
 public sealed record IdentityConfigurationHistory(Guid PublicationReference, Guid VersionReference, IdentityConfigurationScope Scope, string PolicyVersionReference,
     string CandidateDigest, EffectivePolicyInterval EffectiveInterval, Guid? SupersedesPublicationReference, string ApproverReference,
@@ -105,7 +106,8 @@ internal sealed record IdentityConfigurationDocument(AuthenticationPolicyVersion
     [property: JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] TotpContentBinding? TotpContent = null,
     [property: JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] PasskeyContentBinding? PasskeyContent = null,
     [property: JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] StepUpContentBinding? StepUpContent = null,
-    [property: JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] RecoveryCodeConfigurationVersion? RecoveryCodes = null)
+    [property: JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] RecoveryCodeConfigurationVersion? RecoveryCodes = null,
+    [property: JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] SessionListingHttpBudget? SessionListing = null)
 {
     private static readonly JsonSerializerOptions Json = new()
     {
@@ -137,12 +139,13 @@ internal sealed record IdentityConfigurationDocument(AuthenticationPolicyVersion
         : PasskeyContent is not null ? new(IdentityConfigurationFamily.PasskeyContent, PasskeyPolicyVersion: PasskeyContent.PasskeyPolicyVersion)
         : StepUpContent is not null ? new(IdentityConfigurationFamily.StepUpContent, StepUpContent.AssuranceScope, AssurancePolicyVersion: StepUpContent.AssurancePolicyVersion)
         : RecoveryCodes is not null ? new(IdentityConfigurationFamily.RecoveryCodes)
+        : SessionListing is not null ? new(IdentityConfigurationFamily.SessionListing)
         : new(IdentityConfigurationFamily.AuthenticationContent, AuthenticationPolicyVersion: ContentBinding!.AuthenticationPolicyVersion);
-    internal string Version => Authentication?.Values.Version ?? Assurance?.Metadata.VersionId ?? Registration?.Values.Version ?? Totp?.Values.Version ?? Passkey?.Values.Version ?? RegistrationContent?.ConfigurationVersionReference ?? TotpContent?.ConfigurationVersionReference ?? PasskeyContent?.ConfigurationVersionReference ?? StepUpContent?.ConfigurationVersionReference ?? RecoveryCodes?.Values.Version ?? ContentBinding!.ConfigurationVersionReference;
-    internal EffectivePolicyInterval Interval => Authentication?.Metadata.EffectiveInterval ?? Assurance?.Metadata.EffectiveInterval ?? Registration?.Metadata.EffectiveInterval ?? Totp?.Metadata.EffectiveInterval ?? Passkey?.Metadata.EffectiveInterval ?? RegistrationContent?.EffectiveInterval ?? TotpContent?.EffectiveInterval ?? PasskeyContent?.EffectiveInterval ?? StepUpContent?.EffectiveInterval ?? RecoveryCodes?.Metadata.EffectiveInterval ?? ContentBinding!.EffectiveInterval;
+    internal string Version => Authentication?.Values.Version ?? Assurance?.Metadata.VersionId ?? Registration?.Values.Version ?? Totp?.Values.Version ?? Passkey?.Values.Version ?? RegistrationContent?.ConfigurationVersionReference ?? TotpContent?.ConfigurationVersionReference ?? PasskeyContent?.ConfigurationVersionReference ?? StepUpContent?.ConfigurationVersionReference ?? RecoveryCodes?.Values.Version ?? SessionListing?.Metadata.VersionId ?? ContentBinding!.ConfigurationVersionReference;
+    internal EffectivePolicyInterval Interval => Authentication?.Metadata.EffectiveInterval ?? Assurance?.Metadata.EffectiveInterval ?? Registration?.Metadata.EffectiveInterval ?? Totp?.Metadata.EffectiveInterval ?? Passkey?.Metadata.EffectiveInterval ?? RegistrationContent?.EffectiveInterval ?? TotpContent?.EffectiveInterval ?? PasskeyContent?.EffectiveInterval ?? StepUpContent?.EffectiveInterval ?? RecoveryCodes?.Metadata.EffectiveInterval ?? SessionListing?.Metadata.EffectiveInterval ?? ContentBinding!.EffectiveInterval;
     internal void Require()
     {
-        if ((Authentication is null ? 0 : 1) + (Assurance is null ? 0 : 1) + (ContentBinding is null ? 0 : 1) + (Registration is null ? 0 : 1) + (Totp is null ? 0 : 1) + (RegistrationContent is null ? 0 : 1) + (Passkey is null ? 0 : 1) + (TotpContent is null ? 0 : 1) + (PasskeyContent is null ? 0 : 1) + (StepUpContent is null ? 0 : 1) + (RecoveryCodes is null ? 0 : 1) != 1) throw new IdentityConfigurationUnavailableException();
+        if ((Authentication is null ? 0 : 1) + (Assurance is null ? 0 : 1) + (ContentBinding is null ? 0 : 1) + (Registration is null ? 0 : 1) + (Totp is null ? 0 : 1) + (RegistrationContent is null ? 0 : 1) + (Passkey is null ? 0 : 1) + (TotpContent is null ? 0 : 1) + (PasskeyContent is null ? 0 : 1) + (StepUpContent is null ? 0 : 1) + (RecoveryCodes is null ? 0 : 1) + (SessionListing is null ? 0 : 1) != 1) throw new IdentityConfigurationUnavailableException();
         if (Authentication is { } authentication)
         {
             if (authentication.Metadata is null || authentication.Values is null) throw new IdentityConfigurationUnavailableException();
@@ -198,6 +201,11 @@ internal sealed record IdentityConfigurationDocument(AuthenticationPolicyVersion
                 throw new IdentityConfigurationUnavailableException();
             var policy = recoveryCodes.Values.ToPolicy();
             if (recoveryCodes.Metadata.VersionId != policy.Version) throw new IdentityConfigurationUnavailableException();
+        }
+        if (SessionListing is { } listing)
+        {
+            _ = new SessionListingHttpBudget(listing.Metadata, listing.MaximumRows, listing.MaximumRequestBytes);
+            if (listing.Metadata.Scope != SessionListingHttpBudget.Scope || listing.Metadata.Status != "ACTIVE") throw new IdentityConfigurationUnavailableException();
         }
         Scope.Require();
     }
