@@ -91,14 +91,26 @@ public sealed class AdminRegistrationConfigurationCandidate
 {
     public required AdminIdentityPolicyMetadata<string> Metadata { get; init; }
     public required RegistrationPolicy Values { get; init; }
-    internal RegistrationPolicyVersion Value() => new((Metadata ?? throw new ArgumentException("Metadata is required.")).Value(static x => x), Values ?? throw new ArgumentException("Values are required."));
+    internal RegistrationPolicyVersion Value()
+    {
+        var values = Values ?? throw new ArgumentException("Values are required.");
+        try { values.Validate(); }
+        catch (InvalidOperationException error) { throw new ArgumentException("Unsupported registration candidate values.", nameof(Values), error); }
+        return new((Metadata ?? throw new ArgumentException("Metadata is required.")).Value(static x => x), values);
+    }
 }
 [JsonUnmappedMemberHandling(JsonUnmappedMemberHandling.Disallow)]
 public sealed class AdminTotpConfigurationCandidate
 {
     public required AdminIdentityPolicyMetadata<string> Metadata { get; init; }
     public required TotpPolicy Values { get; init; }
-    internal TotpPolicyVersion Value() => new((Metadata ?? throw new ArgumentException("Metadata is required.")).Value(static x => x), Values ?? throw new ArgumentException("Values are required."));
+    internal TotpPolicyVersion Value()
+    {
+        var values = Values ?? throw new ArgumentException("Values are required.");
+        try { values.Validate(); }
+        catch (InvalidOperationException error) { throw new ArgumentException("Unsupported TOTP candidate values.", nameof(Values), error); }
+        return new((Metadata ?? throw new ArgumentException("Metadata is required.")).Value(static x => x), values);
+    }
 }
 [JsonUnmappedMemberHandling(JsonUnmappedMemberHandling.Disallow)]
 public sealed class AdminAssuranceConfigurationCandidate

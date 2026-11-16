@@ -16,6 +16,7 @@ namespace Tunner.Identity.Persistence.Tests;
 
 public sealed class IdentityRuntimeAdditionalConfigurationTests(SessionListingPostgresFixture fixture) : IClassFixture<SessionListingPostgresFixture>
 {
+    private static readonly JsonSerializerOptions WebJson = new(JsonSerializerDefaults.Web);
     [Fact]
     public async Task TotpCreateAndUpdateDetachCallerMapBeforeAwaitedAuthorizationAndPublishOnlyAuthorizedSnapshot()
     {
@@ -100,6 +101,14 @@ public sealed class IdentityRuntimeAdditionalConfigurationTests(SessionListingPo
         await using var db = await fixture.CreateDatabaseAsync(); await using var h = await Host.Start(db, additionalScopes: [new(family)]);
         var author = await h.Browser("fixture-security-author"); var approver = await h.Browser("fixture-security-approver"); var publisher = await h.Browser("fixture-security-publisher");
         var key = Guid.NewGuid(); var original = h.DraftBody(family, "fixture-proposal", key); JsonElement proposal;
+        var invalid = JsonSerializer.SerializeToNode(original, WebJson)!;
+        invalid["candidate"]!["values"]![family == IdentityConfigurationFamily.Registration ? "passwordMinimumLength" : "digits"] = 1;
+        using (var rejected = await h.Post(Host.DraftPath(family), invalid, author))
+        {
+            Assert.Equal(HttpStatusCode.BadRequest, rejected.StatusCode);
+            Assert.Contains("VALIDATION_ERROR", await rejected.Content.ReadAsStringAsync(), StringComparison.Ordinal);
+        }
+        await using (var unchanged = h.Environment.Context()) Assert.Empty(await unchanged.Set<IdentityConfigurationProposalRow>().ToArrayAsync());
         using (var response = await h.Post(Host.DraftPath(family), original, author))
         { Assert.Equal(HttpStatusCode.OK, response.StatusCode); proposal = (await Body(response)).GetProperty("result").Clone(); }
         using (var replay = await h.Post(Host.DraftPath(family), original, author))
