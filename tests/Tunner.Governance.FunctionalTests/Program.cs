@@ -834,7 +834,7 @@ static void RunRevisionChecks(DirectoryInfo repositoryRoot, ICollection<string> 
         Check(RevisionApplication.CloseCheck(fixture, "P0-004-RV001").ExitCode != 0, "closure refuses incomplete children, validation, and committed evidence");
         var proofPath = Path.Combine(fixture.FullName, "governance", "evidence", "revision-proof.json");
         string[] ownedBehaviorPaths = ["docs/authority/current-authority.json"];
-        File.WriteAllText(proofPath, JsonSerializer.Serialize(new { scope_id = "P0-999-RV999", result = "PENDING", owned_behavior_paths = ownedBehaviorPaths }));
+        File.WriteAllText(proofPath, JsonSerializer.Serialize(new { scope_id = "P0-999-RV999", validation_kind = "COMMITTED", result = "PENDING", owned_behavior_paths = ownedBehaviorPaths }));
         EditRevision(importedPath, "status", "VALIDATION");
         EditRevision(importedPath, "product_acceptance_required", false);
         EditRevision(importedPath, "evidence_refs", proofRefs);
@@ -1062,6 +1062,29 @@ static void RunValidationSourceReadinessChecks(DirectoryInfo repositoryRoot, ICo
         RunGit(fixture, "commit", "--quiet", "-m", "Current validated source proof");
         Check(DownstreamReady(), "matching current committed candidate must permit local consumption");
         Check(AuditCommittedFixture(fixture), "matching current proof must pass audit");
+
+        // Correct mutable PASS metadata cannot repair the classification recorded in an older Git candidate.
+        foreach (var mismatch in new[] { "missing-kind", "unsupported-kind", "wrong-scope" })
+        {
+            var snapshot = JsonSerializer.SerializeToNode(new { scope_id = mismatch == "wrong-scope" ? "TUN-OTHER" : id,
+                result = "PENDING", owned_behavior_paths = new[] { behavior } })!;
+            if (mismatch != "missing-kind") snapshot["validation_kind"] = mismatch == "unsupported-kind" ? "HISTORICAL" : "COMMITTED";
+            File.WriteAllText(proofPath, snapshot.ToJsonString());
+            RunGit(fixture, "add", "--", "governance/evidence/TUN-001-proof.json");
+            RunGit(fixture, "commit", "--quiet", "-m", "Candidate classification regression " + mismatch);
+            var invalidCandidate = RunGitOutput(fixture, "rev-parse", "HEAD");
+            State(invalidCandidate, []); Proof(invalidCandidate);
+            Reject("correct mutable PASS over " + mismatch + " committed candidate");
+            Check(OwnFailures().Any(x => x.Contains("validation candidate evidence", StringComparison.Ordinal)),
+                mismatch + " must be rejected by exact committed-candidate classification");
+        }
+        File.WriteAllText(proofPath, JsonSerializer.Serialize(new { scope_id = id, validation_kind = "COMMITTED",
+            result = "PENDING", owned_behavior_paths = new[] { behavior } }));
+        RunGit(fixture, "add", "--", "governance/evidence/TUN-001-proof.json");
+        RunGit(fixture, "commit", "--quiet", "-m", "New correctly scoped committed validation candidate");
+        candidate = RunGitOutput(fixture, "rev-parse", "HEAD");
+        State(candidate, []); Proof(candidate);
+        Check(DownstreamReady() && AuditCommittedFixture(fixture), "only a new correctly classified committed candidate restores source readiness");
         Check(!OwnFailures().Any(x => x.Contains("committed", StringComparison.Ordinal) || x.Contains("owned behavior", StringComparison.Ordinal)), "matching source proof must satisfy own source gate");
 
         // A second prerequisite cannot borrow another record's result merely because it names the same SHA/proof file.

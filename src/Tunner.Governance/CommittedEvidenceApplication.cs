@@ -73,6 +73,12 @@ internal static class CommittedEvidenceApplication
                 catch (JsonException) { candidate = null; }
                 using (candidate)
                 {
+                    if (candidate is null || !candidate.RootElement.TryGetProperty("scope_id", out var candidateScope) ||
+                        candidateScope.ValueKind != JsonValueKind.String || candidateScope.GetString() != record.Identifier)
+                        yield return "validation candidate evidence must bind the governed scope";
+                    if (candidate is null || !candidate.RootElement.TryGetProperty("validation_kind", out var candidateKind) ||
+                        candidateKind.ValueKind != JsonValueKind.String || candidateKind.GetString() is not ("COMMITTED" or "RETROSPECTIVE_COMMITTED"))
+                        yield return "validation candidate evidence must declare COMMITTED or RETROSPECTIVE_COMMITTED";
                     if (candidate is null || !candidate.RootElement.TryGetProperty("owned_behavior_paths", out var committedPaths) ||
                         committedPaths.ValueKind != JsonValueKind.Array || !committedPaths.EnumerateArray().Select(x => x.ToString()).SequenceEqual(paths.EnumerateArray().Select(x => x.ToString()), StringComparer.Ordinal))
                         yield return "owned behavior classification must match the validation candidate evidence";

@@ -1,9 +1,11 @@
 {
   "schema_version": 1,
   "scope_id": "P1-022-RV003",
+  "validation_kind": "COMMITTED",
   "result": "PENDING",
   "scope": "Selected-task admission/context performance compatibility; preserve full global validation and prerequisite universe, current lifecycle/role/security/integration checks, and public global next behavior.",
   "owned_behavior_paths": [
+    "src/Tunner.Governance/CommittedEvidenceApplication.cs",
     "src/Tunner.Governance/GovernanceApplication.cs",
     "src/Tunner.Governance/OrchestratorApplication.cs",
     "src/Tunner.Governance/ContextApplication.cs",
@@ -12,6 +14,7 @@
   "qualification_ref": "governance/evidence/P0-004-RV005-VALIDATION.json",
   "prepared_patch_sha256": "20a85f0637853a911b8c8dfec7f408fde3d7f5a4d4d48e0defc9eefb99d81e47",
   "required_qualification": [
+    "Reject candidate Git snapshots with absent/unsupported validation kind or wrong scope even when mutable PASS metadata is correct; require a new valid committed candidate",
     "Scoped/global projection and global diagnostic equivalence",
     "Authority/dependency/role/integration denial controls",
     "Existing functional regression and current selected-task context timing"

@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "scope_id": "P1-002-RV002",
+  "owner_work_item": "TUN-P2-016",
+  "validation_kind": "COMMITTED",
+  "result": "PENDING",
+  "tested_commit_sha": null,
+  "validated_commit_sha": null,
+  "scope": "Correct only the committed-evidence classification for TUN-P1-002 and P1-002-RV001. The complete original scope-matching required-evidence ownership union plus preceding revision ownership is declared before candidate validation. No behavior, policy, UI or Product acceptance is changed.",
+  "owned_behavior_paths": [
+    "Tunner.Governance.sln",
+    "Tunner.Platform.slnx",
+    "docs/development/LOCAL_PLATFORM_HOST_COMPOSITION.md",
+    "src/Tunner.Api/Program.cs",
+    "src/Tunner.Platform/TunnerModuleRegistration.cs",
+    "src/Tunner.Worker/Program.cs",
+    "tests/Tunner.Platform.ArchitectureTests/HostCompositionTests.cs",
+    "tools/validation/Validate-TunnerPlatformHostSource.ps1"
+  ],
+  "ownership_source_refs": [
+    "governance/evidence/TUN-P1-002-COMMITTED-RECONCILIATION.json",
+    "governance/evidence/P1-002-RV001-VALIDATION.json"
+  ],
+  "reused_evidence_refs": [
+    "governance/evidence/TUN-P2-016-VALIDATION.json",
+    "governance/evidence/TUN-P2-016-ROLE-REVIEWS.json",
+    "governance/evidence/p2-016-notifications-20261115/native/16fd07b9314e459aa34d3eae560d2d6f/summary.json",
+    "governance/evidence/p2-016-notifications-20261115/native/d00239e732a54d8e9507e6faa21a31b1/summary.json",
+    "governance/evidence/p2-016-notifications-20261115/native/03e2747b0b394162a15dcf2d3a7455f1/summary.json",
+    "governance/reviews/REV-P1-002-RV001-full-stack-engineer.yaml",
+    "governance/reviews/REV-P1-002-RV001-solution-architect.yaml",
+    "governance/reviews/REV-P1-002-RV001-tester-qa-engineer.yaml",
+    "governance/reviews/REV-P1-002-RV001-cyber-security-engineer.yaml"
+  ],
+  "qualification_boundary": "The referenced P2-016 integrated 78-case, Worker 20-case and native Product 8-case receipts and prior technical reviews are retained evidence at their recorded sources, not newly executed validation of this corrective revision. Candidate commit binding, owned-source equivalence, carrier smoke, current committed-proof guards and new QA/auditor assessments remain pending. No previous review PASS is promoted to this revision, and original closed records remain unchanged.",
+  "retained_integrated_source_sha": "98807ebe4bb7cb4e74b1aecf938a9edb8c243475"
+}
