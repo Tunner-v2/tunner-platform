@@ -16,6 +16,55 @@ namespace Tunner.Identity.Persistence.Tests;
 
 public sealed class IdentityRuntimeAdditionalConfigurationTests(SessionListingPostgresFixture fixture) : IClassFixture<SessionListingPostgresFixture>
 {
+    [Fact]
+    public async Task TotpCreateAndUpdateDetachCallerMapBeforeAwaitedAuthorizationAndPublishOnlyAuthorizedSnapshot()
+    {
+        await using var db = await fixture.CreateDatabaseAsync(); var env = new RuntimeConfigurationTestEnvironment(db);
+        await using var context = env.Context(); var authorization = new PausingAuthorization(env.Authorization);
+        var app = new IdentityRuntimeConfigurationApplication(context, env, authorization, env.Clock);
+        IdentityConfigurationProposal? proposal = null;
+        for (var revision = 0; revision < 2; revision++)
+        {
+            var original = "fixture-original-" + revision;
+            var callerMap = new Dictionary<string, string> { ["pwd"] = original };
+            var candidate = Totp(env, "fixture-snapshot-" + revision); candidate = candidate with { Values = candidate.Values with { MfaAssurances = callerMap } };
+            var expected = new IdentityConfigurationDocument(Totp: candidate with { Values = candidate.Values with { MfaAssurances = new Dictionary<string, string>(callerMap) } });
+            var expectedPayload = expected.Snapshot; var expectedDigest = expected.Digest; var pause = authorization.PauseNext();
+            var write = proposal is null ? app.CreateTotpDraftAsync(candidate, "OP-snapshot-create", "fixture-correlation")
+                : app.UpdateTotpDraftAsync(proposal.ProposalReference, proposal.Revision, candidate, "OP-snapshot-update", "fixture-correlation");
+            var request = await pause.Entered.Task.WaitAsync(TimeSpan.FromSeconds(30));
+            callerMap["pwd"] = "fixture-caller-mutated"; callerMap["federation"] = "fixture-added-after-authorization";
+            pause.Continue.TrySetResult(true); proposal = await write;
+            Assert.Equal(expectedDigest, request.CandidateDigest); Assert.Equal(expectedDigest, proposal.CandidateDigest);
+            await using var read = env.Context(); var stored = await read.Set<IdentityConfigurationProposalRow>().SingleAsync();
+            Assert.Equal(expectedPayload, stored.Payload); Assert.Equal(request.CandidateDigest, stored.Digest);
+            var persisted = IdentityConfigurationDocument.Read(stored.Payload).Totp!.Values.MfaAssurances;
+            Assert.Single(persisted); Assert.Equal(original, persisted["pwd"]);
+        }
+        proposal = await app.ValidateAsync(env.Command(proposal!)); env.Authorization.Actor = "fixture-security-approver";
+        proposal = await app.ApproveAsync(env.Command(proposal)); env.Authorization.Actor = "fixture-security-publisher";
+        _ = await app.PublishAsync(env.Publication(proposal));
+        var runtime = ((ITotpPolicySource)env.Source).RequireEffective(env.Clock.GetUtcNow()).MfaAssurances;
+        Assert.Single(runtime); Assert.Equal("fixture-original-1", runtime["pwd"]);
+    }
+
+    private sealed class PausingAuthorization(IIdentityConfigurationAuthorizationSource inner) : IIdentityConfigurationAuthorizationSource
+    {
+        internal sealed class Pause
+        {
+            internal TaskCompletionSource<IdentityConfigurationAuthorizationRequest> Entered { get; } = new(TaskCreationOptions.RunContinuationsAsynchronously);
+            internal TaskCompletionSource<bool> Continue { get; } = new(TaskCreationOptions.RunContinuationsAsynchronously);
+        }
+        private Pause? next;
+        internal Pause PauseNext() { next = new(); return next; }
+        public async ValueTask<IdentityConfigurationAuthorizationDecision> AuthorizeAsync(IdentityConfigurationAuthorizationRequest request, CancellationToken cancellationToken)
+        {
+            var pause = next; next = null;
+            if (pause is not null) { pause.Entered.TrySetResult(request); await pause.Continue.Task.WaitAsync(cancellationToken); }
+            return await inner.AuthorizeAsync(request, cancellationToken);
+        }
+    }
+
     [Theory]
     [InlineData(IdentityConfigurationFamily.Registration)]
     [InlineData(IdentityConfigurationFamily.Totp)]

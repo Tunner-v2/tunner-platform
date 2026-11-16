@@ -10,7 +10,9 @@ internal static class AdminIdentityConfigurationScreens
     internal static void Map(IEndpointRouteBuilder endpoints, BffWebAssets assets) => assets.MapScreens(endpoints, "configuration.html",
         ["/identity/settings/authentication", "/identity/settings/authentication/review", "/identity/settings/authentication/history",
          "/identity/settings/assurance", "/identity/settings/assurance/review", "/identity/settings/assurance/history",
-         "/identity/settings/authentication-content", "/identity/settings/authentication-content/review", "/identity/settings/authentication-content/history"],
+         "/identity/settings/authentication-content", "/identity/settings/authentication-content/review", "/identity/settings/authentication-content/history",
+         "/identity/settings/registration", "/identity/settings/registration/review", "/identity/settings/registration/history",
+         "/identity/settings/totp", "/identity/settings/totp/review", "/identity/settings/totp/history"],
         Allowed, allowAnonymous: false, static context => Results.StatusCode(
             context.Items.TryGetValue(FailureStatus, out var status) && status is int code ? code : StatusCodes.Status403Forbidden));
 
@@ -30,6 +32,8 @@ internal static class AdminIdentityConfigurationScreens
                 "authentication" => IdentityConfigurationFamily.Authentication,
                 "assurance" => IdentityConfigurationFamily.Assurance,
                 "authentication-content" => IdentityConfigurationFamily.AuthenticationContent,
+                "registration" => IdentityConfigurationFamily.Registration,
+                "totp" => IdentityConfigurationFamily.Totp,
                 _ => throw new IdentityConfigurationForbiddenException()
             };
             var scopes = profile.Scopes.Where(x => x.Family == family).ToArray(); if (scopes.Length == 0) return false;

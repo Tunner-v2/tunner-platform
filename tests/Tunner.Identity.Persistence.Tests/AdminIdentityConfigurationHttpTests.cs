@@ -38,9 +38,17 @@ public sealed class AdminIdentityConfigurationHttpTests(SessionListingPostgresFi
     [InlineData("authentication")]
     [InlineData("assurance")]
     [InlineData("authentication-content")]
+    [InlineData("registration")]
+    [InlineData("totp")]
     public async Task CanonicalSettingsRoutesEnforceCurrentIdentityAdmission(string family)
     {
-        await using var database = await fixture.CreateDatabaseAsync(); await using var host = await Host.Start(database);
+        var additional = family switch
+        {
+            "registration" => new[] { new IdentityConfigurationScope(IdentityConfigurationFamily.Registration) },
+            "totp" => new[] { new IdentityConfigurationScope(IdentityConfigurationFamily.Totp) },
+            _ => Array.Empty<IdentityConfigurationScope>()
+        };
+        await using var database = await fixture.CreateDatabaseAsync(); await using var host = await Host.Start(database, additionalScopes: additional);
         var actor = await host.Browser("fixture-security-author"); var path = "/identity/settings/" + family;
         foreach (var suffix in new[] { "", "/review", "/history" })
         {

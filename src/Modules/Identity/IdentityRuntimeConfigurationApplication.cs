@@ -1,3 +1,4 @@
+using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Text;
 using System.Text.Json;
@@ -22,7 +23,7 @@ public sealed partial class IdentityRuntimeConfigurationApplication(IdentityPers
     public Task<IdentityConfigurationProposal> CreateRegistrationDraftAsync(RegistrationPolicyVersion candidate, string operationId, string correlationId, CancellationToken cancellationToken = default)
         => DraftAsync(new(Registration: candidate), null, null, operationId, correlationId, cancellationToken);
     public Task<IdentityConfigurationProposal> CreateTotpDraftAsync(TotpPolicyVersion candidate, string operationId, string correlationId, CancellationToken cancellationToken = default)
-        => DraftAsync(new(Totp: candidate), null, null, operationId, correlationId, cancellationToken);
+        => DraftAsync(new(Totp: SnapshotTotpCandidate(candidate)), null, null, operationId, correlationId, cancellationToken);
     public Task<IdentityConfigurationProposal> UpdateAuthenticationDraftAsync(Guid proposalReference, long expectedRevision, AuthenticationPolicyVersion candidate,
         string operationId, string correlationId, CancellationToken cancellationToken = default)
         => DraftAsync(new(Authentication: candidate), proposalReference, expectedRevision, operationId, correlationId, cancellationToken);
@@ -37,7 +38,15 @@ public sealed partial class IdentityRuntimeConfigurationApplication(IdentityPers
         => DraftAsync(new(Registration: candidate), proposalReference, expectedRevision, operationId, correlationId, cancellationToken);
     public Task<IdentityConfigurationProposal> UpdateTotpDraftAsync(Guid proposalReference, long expectedRevision, TotpPolicyVersion candidate,
         string operationId, string correlationId, CancellationToken cancellationToken = default)
-        => DraftAsync(new(Totp: candidate), proposalReference, expectedRevision, operationId, correlationId, cancellationToken);
+        => DraftAsync(new(Totp: SnapshotTotpCandidate(candidate)), proposalReference, expectedRevision, operationId, correlationId, cancellationToken);
+
+    private static TotpPolicyVersion SnapshotTotpCandidate(TotpPolicyVersion candidate)
+    {
+        if (candidate is null || candidate.Values is null || candidate.Values.MfaAssurances is null) throw new IdentityConfigurationUnavailableException();
+        // IReadOnlyDictionary is not ownership: the caller may retain and mutate its underlying dictionary during authorization.
+        var mappings = new ReadOnlyDictionary<string, string>(candidate.Values.MfaAssurances.ToDictionary(x => x.Key, x => x.Value, StringComparer.Ordinal));
+        return candidate with { Values = candidate.Values with { MfaAssurances = mappings } };
+    }
 
     private async Task<IdentityConfigurationProposal> DraftAsync(IdentityConfigurationDocument document, Guid? id, long? revision, string operationId, string correlationId, CancellationToken ct)
     {
