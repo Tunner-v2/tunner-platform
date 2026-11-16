@@ -303,7 +303,9 @@ public sealed class RegistrationTests(IdentityPostgresFixture fixture) : IClassF
             var message=IdentityPostCommitProcessor.Project(row);
             Assert.True(owner.Owns(message));
             Assert.False(new IdentitySecurityPostCommitOwnerSource(identity).Owns(message));
-            Assert.Equal(IdentityPostCommitOutcome.Completed,await processor.ProcessAsync(message));
+            Assert.True(await owner.ReadCommittedAsync(message,default) is not null,"Missing committed owner: "+row.EventType);
+            var outcome=await processor.ProcessAsync(message);
+            Assert.True(outcome==IdentityPostCommitOutcome.Completed,row.EventType+": "+outcome);
         }
         await using var check=platform.CreateDbContext(); var audits=await check.AuditEvents.ToArrayAsync();
         Assert.Equal(5,audits.Length); Assert.Equal(5,await check.ConsumerInboxEntries.CountAsync(x=>x.CompletedAtUtc!=null));

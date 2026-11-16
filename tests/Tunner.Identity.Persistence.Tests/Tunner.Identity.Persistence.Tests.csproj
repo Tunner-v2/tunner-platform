@@ -13,9 +13,11 @@
     <ProjectReference Include="../../src/Tunner.Testing/Tunner.Testing.csproj" />
     <ProjectReference Include="../../src/Tunner.Installer/Tunner.Installer.csproj" />
     <ProjectReference Include="../../src/Tunner.User.Bff/Tunner.User.Bff.csproj" />
+    <ProjectReference Include="../../src/Tunner.Worker/Tunner.Worker.csproj" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="../Shared/NativeTotpCodeFixture.cs" Link="Shared/NativeTotpCodeFixture.cs" />
+    <Compile Include="../Tunner.Worker.Tests/OutboxReceiveBrokerFixture.cs" Link="Shared/OutboxReceiveBrokerFixture.cs" />
     <Compile Include="../Shared/RecoveryCodeOwnedDockerFixture.cs" Link="Shared/RecoveryCodeOwnedDockerFixture.cs" />
     <Compile Include="../Shared/RecoveryCodeFixtureOwnershipChannel.cs" Link="Shared/RecoveryCodeFixtureOwnershipChannel.cs" />
     <Compile Include="../../tools/browser-testing/FiniteTotpBuildBinding.cs" Link="Shared/FiniteTotpBuildBinding.cs" />

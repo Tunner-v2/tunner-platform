@@ -12,7 +12,7 @@ using static Tunner.Identity.Persistence.Tests.AuthenticationTestHost;
 
 namespace Tunner.Identity.Persistence.Tests;
 
-public sealed class IdentityPostCommitTests(SessionListingPostgresFixture fixture) : IClassFixture<SessionListingPostgresFixture>
+public sealed partial class IdentityPostCommitTests(SessionListingPostgresFixture fixture) : IClassFixture<SessionListingPostgresFixture>
 {
     [Theory]
     [InlineData("session")]

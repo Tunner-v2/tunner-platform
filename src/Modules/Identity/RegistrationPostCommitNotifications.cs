@@ -3,6 +3,7 @@ using System.Text.Json;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Tunner.Database.Outbox;
+using Tunner.Accounts;
 
 namespace Tunner.Identity.Persistence;
 
@@ -46,8 +47,13 @@ public sealed class RegistrationPostCommitOwnerSource(IDbContextFactory<Identity
                 references.Add("contactReference", contactId.ToString("N"));
                 break;
             case "AccountAgeEvaluated":
-                if (version != 1 || message.Subject != row.AgeEvidenceReference || row.AgePolicyVersion is not { } agePolicy) return null;
-                references.Add("agePolicyReference", agePolicy);
+                // PDR-0011 stores the original evaluation in the Accounts version ledger, not legacy registration age columns.
+                var original = await db.Set<AccountPersonalInformationVersionRow>().AsNoTracking().SingleOrDefaultAsync(
+                    x => x.OnboardingOperationId == operationId && x.AccountId == row.AccountId && x.Version == 1, ct).ConfigureAwait(false);
+                var evaluation = original is null ? null : JsonSerializer.Deserialize<AccountCapabilityEvaluation>(original.EvaluationJson);
+                if (version != 1 || evaluation is null || evaluation.AccountId != row.AccountId ||
+                    evaluation.EvidenceReference != message.Subject || evaluation.EvaluatedAt != message.OccurredAtUtc || original!.RecordedAt != message.OccurredAtUtc) return null;
+                references.Add("agePolicyReference", evaluation.PolicyVersion);
                 references.Add("ageEvidenceReference", message.Subject);
                 break;
             case "AccountActivated":
