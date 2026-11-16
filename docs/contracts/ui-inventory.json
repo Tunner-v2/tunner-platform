@@ -4094,6 +4094,175 @@
         "ui_evidence_ref": "governance/evidence/TUN-P2-014-UI-COMPLIANCE.json",
         "boundary": "Additional exact Product-origin owner only. Explicit opt-in PROOF_READY preserves unconsumed proof and original authentication time; Product options are reread and explicit Allow is still required. Ordinary COMPLETED owners and recovery-code first-delivery remain separate. Existing visual controls are reused; historical closure and other owners' acceptance are unchanged."
       }
+    },
+    {
+      "app": "admin",
+      "module": "Identity.Configuration",
+      "status": "IMPLEMENTED",
+      "owner_scopes": [
+        "TUN-P2-019"
+      ],
+      "authority_refs": [
+        "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md",
+        "AMD-0008",
+        "AMD-0009"
+      ],
+      "figma_refs": [
+        {
+          "approved_adaptation_ref": "artifacts/p2-019-content-20261116/passkey-settings-ui-review/review.html",
+          "visual_scope": "019-V10; reuse019-V05–V06"
+        }
+      ],
+      "source_paths": [
+        "web/apps/admin/configuration.tsx",
+        "web/apps/admin/configuration.api.ts",
+        "web/apps/admin/configuration.validation.ts",
+        "web/apps/admin/configuration.routes.ts",
+        "web/apps/admin/configuration.css",
+        "src/Tunner.Admin.Bff/AdminIdentityConfigurationScreens.cs",
+        "src/Tunner.Admin.Bff/AdminIdentityConfigurationEndpoints.cs"
+      ],
+      "additional_consent_refs": [
+        "governance/evidence/TUN-P2-019-PASSKEY-VISUAL-CONSENT.json"
+      ],
+      "acceptance_state": "ENGINEERING_UI_QUALIFICATION_TRACKED_IN_WORK_ITEM_EVIDENCE",
+      "id": "A-ID-SETTINGS-Passkey-edit",
+      "kind": "SCREEN",
+      "title": "Passkey policy edit",
+      "pathname": "/identity/settings/passkey",
+      "runtime_pathname": "/identity/settings/passkey",
+      "parameter_schema": {},
+      "guard": "Actual Admin session and independent exact Identity authorization; server-qualified Passkey scope, saved candidate/publication and current capabilities; no private URL or browser-storage context.",
+      "form_ids": [
+        "FORM-ADMIN-IDENTITY-PASSKEY",
+        "FORM-ADMIN-IDENTITY-SEARCH"
+      ],
+      "routing_state": "IMPLEMENTED"
+    },
+    {
+      "app": "admin",
+      "module": "Identity.Configuration",
+      "status": "IMPLEMENTED",
+      "owner_scopes": [
+        "TUN-P2-019"
+      ],
+      "authority_refs": [
+        "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md",
+        "AMD-0008",
+        "AMD-0009"
+      ],
+      "figma_refs": [
+        {
+          "approved_adaptation_ref": "artifacts/p2-019-content-20261116/passkey-settings-ui-review/review.html",
+          "visual_scope": "019-V10; reuse019-V05–V06"
+        }
+      ],
+      "source_paths": [
+        "web/apps/admin/configuration.tsx",
+        "web/apps/admin/configuration.api.ts",
+        "web/apps/admin/configuration.validation.ts",
+        "web/apps/admin/configuration.routes.ts",
+        "web/apps/admin/configuration.css",
+        "src/Tunner.Admin.Bff/AdminIdentityConfigurationScreens.cs",
+        "src/Tunner.Admin.Bff/AdminIdentityConfigurationEndpoints.cs"
+      ],
+      "additional_consent_refs": [
+        "governance/evidence/TUN-P2-019-PASSKEY-VISUAL-CONSENT.json"
+      ],
+      "acceptance_state": "ENGINEERING_UI_QUALIFICATION_TRACKED_IN_WORK_ITEM_EVIDENCE",
+      "id": "A-ID-SETTINGS-Passkey-review",
+      "kind": "SCREEN",
+      "title": "Passkey policy review",
+      "pathname": "/identity/settings/passkey/review",
+      "runtime_pathname": "/identity/settings/passkey/review",
+      "parameter_schema": {},
+      "guard": "Actual Admin session and independent exact Identity authorization; server-qualified Passkey scope, saved candidate/publication and current capabilities; no private URL or browser-storage context.",
+      "form_ids": [
+        "FORM-ADMIN-IDENTITY-PUBLICATION"
+      ],
+      "routing_state": "IMPLEMENTED"
+    },
+    {
+      "app": "admin",
+      "module": "Identity.Configuration",
+      "status": "IMPLEMENTED",
+      "owner_scopes": [
+        "TUN-P2-019"
+      ],
+      "authority_refs": [
+        "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md",
+        "AMD-0008",
+        "AMD-0009"
+      ],
+      "figma_refs": [
+        {
+          "approved_adaptation_ref": "artifacts/p2-019-content-20261116/passkey-settings-ui-review/review.html",
+          "visual_scope": "019-V10; reuse019-V05–V06"
+        }
+      ],
+      "source_paths": [
+        "web/apps/admin/configuration.tsx",
+        "web/apps/admin/configuration.api.ts",
+        "web/apps/admin/configuration.validation.ts",
+        "web/apps/admin/configuration.routes.ts",
+        "web/apps/admin/configuration.css",
+        "src/Tunner.Admin.Bff/AdminIdentityConfigurationScreens.cs",
+        "src/Tunner.Admin.Bff/AdminIdentityConfigurationEndpoints.cs"
+      ],
+      "additional_consent_refs": [
+        "governance/evidence/TUN-P2-019-PASSKEY-VISUAL-CONSENT.json"
+      ],
+      "acceptance_state": "ENGINEERING_UI_QUALIFICATION_TRACKED_IN_WORK_ITEM_EVIDENCE",
+      "id": "A-ID-SETTINGS-Passkey-history",
+      "kind": "SCREEN",
+      "title": "Passkey policy history",
+      "pathname": "/identity/settings/passkey/history",
+      "runtime_pathname": "/identity/settings/passkey/history",
+      "parameter_schema": {},
+      "guard": "Actual Admin session and independent exact Identity authorization; server-qualified Passkey scope, saved candidate/publication and current capabilities; no private URL or browser-storage context.",
+      "form_ids": [
+        "FORM-ADMIN-IDENTITY-PUBLICATION"
+      ],
+      "routing_state": "IMPLEMENTED"
+    },
+    {
+      "app": "admin",
+      "module": "Identity.Configuration",
+      "status": "IMPLEMENTED",
+      "owner_scopes": [
+        "TUN-P2-019"
+      ],
+      "authority_refs": [
+        "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md",
+        "AMD-0008",
+        "AMD-0009"
+      ],
+      "figma_refs": [
+        {
+          "approved_adaptation_ref": "artifacts/p2-019-content-20261116/passkey-settings-ui-review/review.html",
+          "visual_scope": "019-V10; reuse019-V05–V06"
+        }
+      ],
+      "source_paths": [
+        "web/apps/admin/configuration.tsx",
+        "web/apps/admin/configuration.api.ts",
+        "web/apps/admin/configuration.validation.ts",
+        "web/apps/admin/configuration.routes.ts",
+        "web/apps/admin/configuration.css",
+        "src/Tunner.Admin.Bff/AdminIdentityConfigurationScreens.cs",
+        "src/Tunner.Admin.Bff/AdminIdentityConfigurationEndpoints.cs"
+      ],
+      "additional_consent_refs": [
+        "governance/evidence/TUN-P2-019-PASSKEY-VISUAL-CONSENT.json"
+      ],
+      "acceptance_state": "ENGINEERING_UI_QUALIFICATION_TRACKED_IN_WORK_ITEM_EVIDENCE",
+      "id": "FORM-ADMIN-IDENTITY-PASSKEY",
+      "kind": "FORM",
+      "title": "Typed Passkey policy",
+      "screen_id": "A-ID-SETTINGS-Passkey-edit",
+      "pathname": null,
+      "runtime_pathname": null,
+      "validation": "Shared typed schema, fields, error summary and focus; independent backend validation of all20 existing owner inputs, fixed constructor constraints, signed algorithm identifiers and verified-fact assurance mappings. Owner values are not defaulted."
     }
   ],
   "excluded_historical_designs": [
