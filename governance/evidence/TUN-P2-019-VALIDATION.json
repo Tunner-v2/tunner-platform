@@ -3,7 +3,7 @@
   "scope_id": "TUN-P2-019",
   "validation_kind": "COMMITTED",
   "result": "PENDING",
-  "phase": "ADMIN_AND_TYPED_CONFIGURATION_IMPLEMENTATION",
+  "phase": "CONTENT_ADMIN_AND_THREE_CONFIGURATION_FAMILIES_BACKEND_QUALIFIED_UI_AND_API_INTEGRATION_CONTINUES",
   "tested_commit_sha": null,
   "validated_commit_sha": null,
   "owned_behavior_paths": [
@@ -122,7 +122,101 @@
   "configuration_visual_approval": "PRODUCT_OWNER_APPROVED_019_V04_V06_call_2bcd253e761446fa919b65d493b85635; typed Authentication/Assurance/content-binding forms, review/approval/publication/history/rollback and pictured responsive/feedback scopes only; no production values, permissions or release approval",
   "boundaries": "This is an incomplete P2-019 increment. No full-work-item READY/DONE, final technical review, Product acceptance, production activation, merge or release is asserted. Existing synthetic local fixtures remain isolated; Figma/Drive/FigJam remain read-only.",
   "pending_increment": {
-    "scope": "Admin Content HTTP, bounded browse/capabilities/idempotency; persisted typed Authentication/Assurance/content-binding runtime configuration; immutable content change reasons",
-    "validation": "Authored cases await candidate compile and execution. No new PASS or acceptance asserted."
+    "scope": "Approved Content frontend; typed configuration Admin HTTP/UI; shared command lease reuse; remaining P2 policy families and presentation surfaces",
+    "validation": "Application implementation continues. No full P2-019 READY/DONE or final technical acceptance is asserted."
+  },
+  "later_backend_increment": {
+    "result": "PASS_BOUNDED_INCREMENT_ONLY_NOT_FULL_WORK_ITEM",
+    "source_shas": [
+      "13e4fdd12fa9aa0c418b5326377216cdb870a461",
+      "de5f650cece0a541520aa4e18df5d676a21be9fb"
+    ],
+    "distinct_passing_cases": 100,
+    "qualification_method": "Union of76 passing cases from100-case run at13e4fdd1 and31 affected cases atde5f650c, with7 overlapping passing names. TRX names verified100 distinct. Not a claim of a100/100 run at either source. Unaffected actual results are retained.",
+    "authored_cases": {
+      "content_owner": 31,
+      "login_adapter": 9,
+      "login_https_migration": 6,
+      "admin_http": 24,
+      "typed_configuration_owner": 26,
+      "configuration_migration": 2,
+      "change_reason": 2
+    },
+    "actual_runs": [
+      {
+        "run_id": "7bcef9a3dd69461187ae7becc08186d6",
+        "source_sha": "3211769c77b2d79e5ff7a5deaeba33e9949a4aaf",
+        "executed": 3,
+        "passed": 1,
+        "failed": 2,
+        "result": "FAILED_INITIAL_SERIALIZER_DIAGNOSTIC",
+        "not_executed": 0,
+        "timed_out": false,
+        "owned_containers_remaining": 0,
+        "borrowed_preserved": true,
+        "receipt_ref": "governance/evidence/p2-019-content-20261116/native/7bcef9a3dd69461187ae7becc08186d6/summary.json"
+      },
+      {
+        "run_id": "99ca9b00a5424bc69b4ce0523305eb87",
+        "source_sha": "e707a516f0681baaf91de65b6c367f37720d57a9",
+        "executed": 3,
+        "passed": 3,
+        "failed": 0,
+        "result": "PASS_SERIALIZER_REPAIR",
+        "not_executed": 0,
+        "timed_out": false,
+        "owned_containers_remaining": 0,
+        "borrowed_preserved": true,
+        "receipt_ref": "governance/evidence/p2-019-content-20261116/native/99ca9b00a5424bc69b4ce0523305eb87/summary.json"
+      },
+      {
+        "run_id": "9d7b9df9e7054126b2dd0f340b37f327",
+        "source_sha": "13e4fdd12fa9aa0c418b5326377216cdb870a461",
+        "executed": 100,
+        "passed": 76,
+        "failed": 24,
+        "result": "PARTIAL_FAIL_REPAIRED_AFFECTED_CASES_BELOW",
+        "not_executed": 0,
+        "timed_out": false,
+        "owned_containers_remaining": 0,
+        "borrowed_preserved": true,
+        "receipt_ref": "governance/evidence/p2-019-content-20261116/native/9d7b9df9e7054126b2dd0f340b37f327/summary.json"
+      },
+      {
+        "run_id": "cbe7098b18db41d9a2d30e17d673f3ae",
+        "source_sha": "de5f650cece0a541520aa4e18df5d676a21be9fb",
+        "executed": 5,
+        "passed": 5,
+        "failed": 0,
+        "result": "PASS_TARGETED_REPAIRS",
+        "not_executed": 0,
+        "timed_out": false,
+        "owned_containers_remaining": 0,
+        "borrowed_preserved": true,
+        "receipt_ref": "governance/evidence/p2-019-content-20261116/native/cbe7098b18db41d9a2d30e17d673f3ae/summary.json"
+      },
+      {
+        "run_id": "3bf29b35ca644014aa6d054560198221",
+        "source_sha": "de5f650cece0a541520aa4e18df5d676a21be9fb",
+        "executed": 31,
+        "passed": 31,
+        "failed": 0,
+        "result": "PASS_ALL_AFFECTED_ADMIN_AND_MIGRATION_CASES",
+        "not_executed": 0,
+        "timed_out": false,
+        "owned_containers_remaining": 0,
+        "borrowed_preserved": true,
+        "receipt_ref": "governance/evidence/p2-019-content-20261116/native/3bf29b35ca644014aa6d054560198221/summary.json"
+      }
+    ],
+    "repairs": [
+      "Local persistence converter for immutable shared policy metadata; no shared contract change",
+      "Version-key validation serialization prevents duplicate immutable-version race errors",
+      "Indexed current-publication selection replaces unbounded in-memory history scanning",
+      "Admin cookie fixture uses the actual framework option clock; no production authentication changes",
+      "SQL immutability fixture literal reaches PostgreSQL instead of EF format parsing",
+      "Additive Content migration guards all committed owner data before dropping new columns, preserving schema when an earlier downgrade guard rejects"
+    ],
+    "independent_review": "One disclosed independent AI reviewer identified serializer, concurrent-validation and runtime lookup defects; root corrected them. Configuration native cases pass. This is a focused technical review, not all final role approvals."
   }
 }
