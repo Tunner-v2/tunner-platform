@@ -4,12 +4,12 @@
   "work_item_id": "TUN-P2-019",
   "classification": "UI_ROUTING_DEFECT",
   "severity": "SEV-3",
-  "status": "OPEN",
+  "status": "CLOSED",
   "environment": "Controlled Admin BFF browser qualification at477cfe4,618b6ab3 ande889de7a",
-  "description": "Content and Identity configuration screens retain a prior route's ready/capability state during the first render after navigation and briefly after new workspace admission but before exact context reads finish. This can enable an action before current route/context qualification and causes competing heading focus. Independent backend authorization remains intact. Bind readiness synchronously to location revision and exact resource-read identity; keep actions locked until current capabilities/preview are qualified. Preserve entered values and original uncertain-result retry semantics.",
+  "description": "Content and Identity configuration screens retain a prior route's ready/capability state during the first render after navigation and briefly after new workspace admission but before exact context reads finish. This can enable an action before current route/context qualification and causes competing heading focus. Independent backend authorization remains intact. Bind readiness synchronously to location revision and exact resource-read identity; keep actions locked until current capabilities/preview are qualified. Preserve entered values and original uncertain-result retry semantics. Engineering correction is verified by the committed per-item UI assessment and the28-item native PASS at3e5f0725; current UI source is503edd02 with inventory-only carrier37d06662. This closes the confirmed defect, not the full feature or production/release acceptance.",
   "expected_behavior_ref": "docs/authority/current/decisions/AMD-0009_URL_Addressable_Routing_and_Governed_Form_Validation.md",
   "evidence": ["governance/evidence/TUN-P2-019-VALIDATION.json"],
   "affected_versions": ["477cfe405ab088b1ba3de4e8a10f1eed166debf7","618b6ab39d17b7fab537cd05aacc8a5a3822e153","e889de7ac1301355927529b9d74d74e4f107deda"],
   "created_at": "2026-11-16T09:19:25Z",
-  "updated_at": "2026-11-16T09:19:25Z"
+  "updated_at": "2026-11-16T19:09:11Z"
 }
