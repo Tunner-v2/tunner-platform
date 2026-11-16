@@ -153,6 +153,12 @@ function additionalFieldValues(value:Extract<Candidate,{family:'Registration'|'T
 async function assertAdditionalDiff(page:Page,value:Extract<Candidate,{family:'Registration'|'Totp'}>,column:'current'|'proposed'){
  const fields=additionalFieldValues(value),rows=page.locator('.configuration-diff [data-field]');expect((await rows.evaluateAll(elements=>elements.map(element=>element.getAttribute('data-field')))).sort()).toEqual(Object.keys(fields).sort());
  for(const [key,text] of Object.entries(fields))await expect(page.locator('[data-field="'+key+'"]').locator('td').nth(column==='current'?0:1)).toContainText(text);
+ if(value.family==='Totp'){
+  const sessionChoices={1:labels.preserveExistingSessions,2:labels.revokeFactorSessions},replacementChoices={1:labels.independentEnrollment,2:labels.disableBeforeEnrollment},values=value.value.values;
+  const choices={disableSessionEffect:sessionChoices[values.disableSessionEffect],resetSessionEffect:sessionChoices[values.resetSessionEffect],replacementOrdering:replacementChoices[values.replacementOrdering],resetBehavior:labels.retireAffectedFactorThenSeparateEnrollment};
+  // The raw-number assertions above remain required beside the qualified human meaning.
+  for(const [field,choice] of Object.entries(choices))await expect(page.locator('[data-field="values.'+field+'"]').locator('td').nth(column==='current'?0:1)).toContainText(choice);
+ }
 }
 for(const family of ['Registration','Totp'] as const)for(const width of [1440,390])test(`${family} typed policy validates, preserves retry intent and reviews every immutable field at ${width}`,async({page},info)=>{
  test.setTimeout(60_000);await page.setViewportSize({width,height:width===1440?1024:844});const server=await fixture(page,{unknownOnce:true});await select(page,family);const save=page.getByRole('button',{name:'Save draft',exact:true});

@@ -77,9 +77,10 @@ export function candidateSchema(scope:Scope,form:FormState,maximumBytes:number){
  }
  if(ctx.issues.length===0){try{const candidate=candidateFromForm({...form,fields:values as Record<FieldName,string>,evidence:form.evidence.map((_,index)=>values['evidence.'+index]!),methods:form.methods.map((_,index)=>({method:values['method.'+index]!,assurance:values['assurance.'+index]!}))},scope);if(new TextEncoder().encode(JSON.stringify(candidate.value)).length>maximumBytes)add(scope.family==='AuthenticationContent'?'configurationVersionReference':'version','payloadExceeded');}catch{add('from','invalidInterval');}}
  });}
-export interface DiffField{key:string;label:ConfigurationLabel;detail?:string;value:string}
+export interface DiffField{key:string;label:ConfigurationLabel;detail?:string;value:string;displayLabel?:ConfigurationLabel}
+const totpEnumLabels:Partial<Record<ConfigurationLabel,Readonly<Record<string,ConfigurationLabel>>>>={disableSessionEffect:{'1':'preserveExistingSessions','2':'revokeFactorSessions'},resetSessionEffect:{'1':'preserveExistingSessions','2':'revokeFactorSessions'},replacementOrdering:{'1':'independentEnrollment','2':'disableBeforeEnrollment'},resetBehavior:{'1':'retireAffectedFactorThenSeparateEnrollment'}};
 export function candidateFields(candidate:Candidate):DiffField[]{
- const rows:DiffField[]=[];const add=(key:string,name:ConfigurationLabel,value:unknown,detail?:string)=>rows.push({key,label:name,value:value===null?'—':String(value),...(detail?{detail}:{})});
+ const rows:DiffField[]=[];const add=(key:string,name:ConfigurationLabel,value:unknown,detail?:string)=>{const displayLabel=candidate.family==='Totp'?totpEnumLabels[name]?.[String(value)]:undefined;rows.push({key,label:name,value:value===null?'—':String(value),...(detail?{detail}:{}),...(displayLabel?{displayLabel}:{})});};
  const intervalRows=(v:Interval)=>{add('interval.from','from',v.from);add('interval.includesFrom','startBoundary',v.includesFrom);add('interval.until','until',v.until);add('interval.includesUntil','endBoundary',v.includesUntil);};
  if(candidate.family==='AuthenticationContent'){const value=candidate.value;for(const field of ['authenticationPolicyVersion','configurationVersionReference','qualificationReference','contentScope','variantReference','termsUri','privacyUri','supportUri'] as const)add(field,field,value[field]);intervalRows(value.effectiveInterval);}
  else{

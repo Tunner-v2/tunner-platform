@@ -6,7 +6,7 @@ import type {Action,Bootstrap,Capabilities,Candidate,ConfigurationLabel,Historic
 import {configurationFamilies,configurationPath,configurationRoute} from './configuration.routes';
 import type {ConfigurationFamily,ConfigurationView} from './configuration.routes';
 import {blankForm,candidateFields,candidateFromForm,candidateSchema,flattenForm,formFromCandidate,publicationSchema} from './configuration.validation';
-import type {FieldName,FormState} from './configuration.validation';
+import type {DiffField,FieldName,FormState} from './configuration.validation';
 const k=api.label;
 function Text({name}:{name:ConfigurationLabel}){return <ContentText contentKey={k(name)}/>;}
 const Labels=createContext<api.Presentation|undefined>(undefined);
@@ -159,7 +159,8 @@ function IntervalFields({values,disabled,errors,onBlur,onChange}:{values:Record<
 }
 function TypedDiff({candidate,baseline}:{candidate:Candidate;baseline:Candidate|undefined}){
  const current=baseline&&candidate.family===baseline.family?candidateFields(baseline):[],proposed=candidateFields(candidate),rows=new Map([...current,...proposed].map(row=>[row.key,row]));
- return <>{!baseline&&<p className="content-small"><Text name="noBaseline"/></p>}<table className="configuration-diff"><thead><tr><th><Text name="setting"/></th><th><Text name="current"/></th><th><Text name="proposed"/></th></tr></thead><tbody>{[...rows].map(([key,row])=>{const before=current.find(item=>item.key===key)?.value,after=proposed.find(item=>item.key===key)?.value;return <tr key={key} data-field={key} data-changed={before!==after}><th scope="row"><Text name={row.label}/>{row.detail&&<span className="configuration-opaque">{row.detail}</span>}</th><td><span className="configuration-mobile-label"><Text name="current"/> · </span>{before??'—'}</td><td><span className="configuration-mobile-label"><Text name="proposed"/> · </span>{after??'—'}</td></tr>;})}</tbody></table></>;
+ const display=(field:DiffField|undefined)=>field?.displayLabel?<><Text name={field.displayLabel}/> ({field.value})</>:field?.value??'—';
+ return <>{!baseline&&<p className="content-small"><Text name="noBaseline"/></p>}<table className="configuration-diff"><thead><tr><th><Text name="setting"/></th><th><Text name="current"/></th><th><Text name="proposed"/></th></tr></thead><tbody>{[...rows].map(([key,row])=>{const before=current.find(item=>item.key===key),after=proposed.find(item=>item.key===key);return <tr key={key} data-field={key} data-changed={before?.value!==after?.value}><th scope="row"><Text name={row.label}/>{row.detail&&<span className="configuration-opaque">{row.detail}</span>}</th><td><span className="configuration-mobile-label"><Text name="current"/> · </span>{display(before)}</td><td><span className="configuration-mobile-label"><Text name="proposed"/> · </span>{display(after)}</td></tr>;})}</tbody></table></>;
 }
 function PublicationDialog({confirmation,candidate,publicationHead,proposal,busy,onClose,onConfirm}:{confirmation:Confirmation;candidate:Candidate|undefined;publicationHead:Publication|undefined;proposal:Proposal|undefined;busy:boolean;onClose:()=>void;onConfirm:(value:Interval)=>Promise<void>}){
  const [values,setValues]=useState<Record<string,string>>({from:'',until:'',startBoundary:'',endMode:'',endBoundary:''}),validation=useTunnerForm(publicationSchema,values),title=useRef<HTMLHeadingElement>(null);useEffect(()=>title.current?.focus(),[]);
