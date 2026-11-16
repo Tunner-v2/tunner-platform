@@ -1,0 +1,178 @@
+{
+  "config": {
+    "argv": [
+      "C:\\Program Files\\nodejs\\node.exe",
+      "C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\web\\node_modules\\@playwright\\test\\cli.js",
+      "test",
+      "--config",
+      "playwright.content-admin.config.ts",
+      "--grep",
+      "responsive Content workspace and dialog support tablet laptop and narrow reflow without writes"
+    ],
+    "configFile": "C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\web\\playwright.content-admin.config.ts",
+    "rootDir": "C:/Workspace/AI MCP/Enterprise Solution/TunnerPlatform.V2.0/web/tests/content-admin",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "C:/Workspace/AI MCP/Enterprise Solution/TunnerPlatform.V2.0/web/test-results/runs/content-admin",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "C:/Workspace/AI MCP/Enterprise Solution/TunnerPlatform.V2.0/web/tests/content-admin",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "test-results/content-admin/results.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.62.1",
+    "workers": 1,
+    "webServer": {
+      "command": "node node_modules/vite/bin/vite.js --config apps/admin/vite.config.ts",
+      "url": "http://127.0.0.1:5297/admin/content",
+      "reuseExistingServer": false,
+      "timeout": 30000
+    }
+  },
+  "suites": [
+    {
+      "title": "content.spec.ts",
+      "file": "content.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "responsive Content workspace and dialog support tablet laptop and narrow reflow without writes",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 6587,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoEqual\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // deep equality\u001b[22m\n\n\u001b[32m- Expected  -  1\u001b[39m\n\u001b[31m+ Received  + 42\u001b[39m\n\n\u001b[32m- Array []\u001b[39m\n\u001b[31m+ Array [\u001b[39m\n\u001b[31m+   Object {\u001b[39m\n\u001b[31m+     \"cardLeft\": 543,\u001b[39m\n\u001b[31m+     \"cardRight\": 703,\u001b[39m\n\u001b[31m+     \"className\": \"\",\u001b[39m\n\u001b[31m+     \"left\": 678.28125,\u001b[39m\n\u001b[31m+     \"right\": 748.5625,\u001b[39m\n\u001b[31m+     \"tag\": \"BUTTON\",\u001b[39m\n\u001b[31m+   },\u001b[39m\n\u001b[31m+   Object {\u001b[39m\n\u001b[31m+     \"cardLeft\": 543,\u001b[39m\n\u001b[31m+     \"cardRight\": 703,\u001b[39m\n\u001b[31m+     \"className\": \"tn-input\",\u001b[39m\n\u001b[31m+     \"left\": 584,\u001b[39m\n\u001b[31m+     \"right\": 746.015625,\u001b[39m\n\u001b[31m+     \"tag\": \"INPUT\",\u001b[39m\n\u001b[31m+   },\u001b[39m\n\u001b[31m+   Object {\u001b[39m\n\u001b[31m+     \"cardLeft\": 543,\u001b[39m\n\u001b[31m+     \"cardRight\": 703,\u001b[39m\n\u001b[31m+     \"className\": \"tn-input\",\u001b[39m\n\u001b[31m+     \"left\": 584,\u001b[39m\n\u001b[31m+     \"right\": 746.015625,\u001b[39m\n\u001b[31m+     \"tag\": \"INPUT\",\u001b[39m\n\u001b[31m+   },\u001b[39m\n\u001b[31m+   Object {\u001b[39m\n\u001b[31m+     \"cardLeft\": 543,\u001b[39m\n\u001b[31m+     \"cardRight\": 703,\u001b[39m\n\u001b[31m+     \"className\": \"authentication-reveal\",\u001b[39m\n\u001b[31m+     \"left\": 703.015625,\u001b[39m\n\u001b[31m+     \"right\": 745.015625,\u001b[39m\n\u001b[31m+     \"tag\": \"BUTTON\",\u001b[39m\n\u001b[31m+   },\u001b[39m\n\u001b[31m+   Object {\u001b[39m\n\u001b[31m+     \"cardLeft\": 543,\u001b[39m\n\u001b[31m+     \"cardRight\": 703,\u001b[39m\n\u001b[31m+     \"className\": \"\",\u001b[39m\n\u001b[31m+     \"left\": 681.171875,\u001b[39m\n\u001b[31m+     \"right\": 746.015625,\u001b[39m\n\u001b[31m+     \"tag\": \"BUTTON\",\u001b[39m\n\u001b[31m+   },\u001b[39m\n\u001b[31m+ ]\u001b[39m",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoEqual\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // deep equality\u001b[22m\n\n\u001b[32m- Expected  -  1\u001b[39m\n\u001b[31m+ Received  + 42\u001b[39m\n\n\u001b[32m- Array []\u001b[39m\n\u001b[31m+ Array [\u001b[39m\n\u001b[31m+   Object {\u001b[39m\n\u001b[31m+     \"cardLeft\": 543,\u001b[39m\n\u001b[31m+     \"cardRight\": 703,\u001b[39m\n\u001b[31m+     \"className\": \"\",\u001b[39m\n\u001b[31m+     \"left\": 678.28125,\u001b[39m\n\u001b[31m+     \"right\": 748.5625,\u001b[39m\n\u001b[31m+     \"tag\": \"BUTTON\",\u001b[39m\n\u001b[31m+   },\u001b[39m\n\u001b[31m+   Object {\u001b[39m\n\u001b[31m+     \"cardLeft\": 543,\u001b[39m\n\u001b[31m+     \"cardRight\": 703,\u001b[39m\n\u001b[31m+     \"className\": \"tn-input\",\u001b[39m\n\u001b[31m+     \"left\": 584,\u001b[39m\n\u001b[31m+     \"right\": 746.015625,\u001b[39m\n\u001b[31m+     \"tag\": \"INPUT\",\u001b[39m\n\u001b[31m+   },\u001b[39m\n\u001b[31m+   Object {\u001b[39m\n\u001b[31m+     \"cardLeft\": 543,\u001b[39m\n\u001b[31m+     \"cardRight\": 703,\u001b[39m\n\u001b[31m+     \"className\": \"tn-input\",\u001b[39m\n\u001b[31m+     \"left\": 584,\u001b[39m\n\u001b[31m+     \"right\": 746.015625,\u001b[39m\n\u001b[31m+     \"tag\": \"INPUT\",\u001b[39m\n\u001b[31m+   },\u001b[39m\n\u001b[31m+   Object {\u001b[39m\n\u001b[31m+     \"cardLeft\": 543,\u001b[39m\n\u001b[31m+     \"cardRight\": 703,\u001b[39m\n\u001b[31m+     \"className\": \"authentication-reveal\",\u001b[39m\n\u001b[31m+     \"left\": 703.015625,\u001b[39m\n\u001b[31m+     \"right\": 745.015625,\u001b[39m\n\u001b[31m+     \"tag\": \"BUTTON\",\u001b[39m\n\u001b[31m+   },\u001b[39m\n\u001b[31m+   Object {\u001b[39m\n\u001b[31m+     \"cardLeft\": 543,\u001b[39m\n\u001b[31m+     \"cardRight\": 703,\u001b[39m\n\u001b[31m+     \"className\": \"\",\u001b[39m\n\u001b[31m+     \"left\": 681.171875,\u001b[39m\n\u001b[31m+     \"right\": 746.015625,\u001b[39m\n\u001b[31m+     \"tag\": \"BUTTON\",\u001b[39m\n\u001b[31m+   },\u001b[39m\n\u001b[31m+ ]\u001b[39m\n    at C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\web\\tests\\content-admin\\content.spec.ts:119:25\n    at C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\web\\tests\\content-admin\\content.spec.ts:106:3",
+                    "location": {
+                      "file": "C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\web\\tests\\content-admin\\content.spec.ts",
+                      "column": 25,
+                      "line": 119
+                    },
+                    "snippet": "  117 |      }).filter(box=>box.left<box.cardLeft-1||box.right>box.cardRight+1);\n  118 |     });\n> 119 |     expect(containment).toEqual([]);\n      |                         ^\n  120 |     await expect(preview.locator('button:not(:disabled),input:not(:disabled),a[href]')).toHaveCount(0);\n  121 |     const wording=page.getByLabel('Wording',{exact:true});await wording.fill('');\n  122 |     await page.getByRole('button',{name:'Save draft',exact:true}).focus();await page.keyboard.press('Enter');"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\web\\tests\\content-admin\\content.spec.ts",
+                        "column": 25,
+                        "line": 119
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoEqual\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // deep equality\u001b[22m\n\n\u001b[32m- Expected  -  1\u001b[39m\n\u001b[31m+ Received  + 42\u001b[39m\n\n\u001b[32m- Array []\u001b[39m\n\u001b[31m+ Array [\u001b[39m\n\u001b[31m+   Object {\u001b[39m\n\u001b[31m+     \"cardLeft\": 543,\u001b[39m\n\u001b[31m+     \"cardRight\": 703,\u001b[39m\n\u001b[31m+     \"className\": \"\",\u001b[39m\n\u001b[31m+     \"left\": 678.28125,\u001b[39m\n\u001b[31m+     \"right\": 748.5625,\u001b[39m\n\u001b[31m+     \"tag\": \"BUTTON\",\u001b[39m\n\u001b[31m+   },\u001b[39m\n\u001b[31m+   Object {\u001b[39m\n\u001b[31m+     \"cardLeft\": 543,\u001b[39m\n\u001b[31m+     \"cardRight\": 703,\u001b[39m\n\u001b[31m+     \"className\": \"tn-input\",\u001b[39m\n\u001b[31m+     \"left\": 584,\u001b[39m\n\u001b[31m+     \"right\": 746.015625,\u001b[39m\n\u001b[31m+     \"tag\": \"INPUT\",\u001b[39m\n\u001b[31m+   },\u001b[39m\n\u001b[31m+   Object {\u001b[39m\n\u001b[31m+     \"cardLeft\": 543,\u001b[39m\n\u001b[31m+     \"cardRight\": 703,\u001b[39m\n\u001b[31m+     \"className\": \"tn-input\",\u001b[39m\n\u001b[31m+     \"left\": 584,\u001b[39m\n\u001b[31m+     \"right\": 746.015625,\u001b[39m\n\u001b[31m+     \"tag\": \"INPUT\",\u001b[39m\n\u001b[31m+   },\u001b[39m\n\u001b[31m+   Object {\u001b[39m\n\u001b[31m+     \"cardLeft\": 543,\u001b[39m\n\u001b[31m+     \"cardRight\": 703,\u001b[39m\n\u001b[31m+     \"className\": \"authentication-reveal\",\u001b[39m\n\u001b[31m+     \"left\": 703.015625,\u001b[39m\n\u001b[31m+     \"right\": 745.015625,\u001b[39m\n\u001b[31m+     \"tag\": \"BUTTON\",\u001b[39m\n\u001b[31m+   },\u001b[39m\n\u001b[31m+   Object {\u001b[39m\n\u001b[31m+     \"cardLeft\": 543,\u001b[39m\n\u001b[31m+     \"cardRight\": 703,\u001b[39m\n\u001b[31m+     \"className\": \"\",\u001b[39m\n\u001b[31m+     \"left\": 681.171875,\u001b[39m\n\u001b[31m+     \"right\": 746.015625,\u001b[39m\n\u001b[31m+     \"tag\": \"BUTTON\",\u001b[39m\n\u001b[31m+   },\u001b[39m\n\u001b[31m+ ]\u001b[39m\n\n  117 |      }).filter(box=>box.left<box.cardLeft-1||box.right>box.cardRight+1);\n  118 |     });\n> 119 |     expect(containment).toEqual([]);\n      |                         ^\n  120 |     await expect(preview.locator('button:not(:disabled),input:not(:disabled),a[href]')).toHaveCount(0);\n  121 |     const wording=page.getByLabel('Wording',{exact:true});await wording.fill('');\n  122 |     await page.getByRole('button',{name:'Save draft',exact:true}).focus();await page.keyboard.press('Enter');\n    at C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\web\\tests\\content-admin\\content.spec.ts:119:25\n    at C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\web\\tests\\content-admin\\content.spec.ts:106:3"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "steps": [
+                    {
+                      "title": "1024x768",
+                      "duration": 5143
+                    },
+                    {
+                      "title": "768x1024",
+                      "duration": 991,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoEqual\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // deep equality\u001b[22m\n\n\u001b[32m- Expected  -  1\u001b[39m\n\u001b[31m+ Received  + 42\u001b[39m\n\n\u001b[32m- Array []\u001b[39m\n\u001b[31m+ Array [\u001b[39m\n\u001b[31m+   Object {\u001b[39m\n\u001b[31m+     \"cardLeft\": 543,\u001b[39m\n\u001b[31m+     \"cardRight\": 703,\u001b[39m\n\u001b[31m+     \"className\": \"\",\u001b[39m\n\u001b[31m+     \"left\": 678.28125,\u001b[39m\n\u001b[31m+     \"right\": 748.5625,\u001b[39m\n\u001b[31m+     \"tag\": \"BUTTON\",\u001b[39m\n\u001b[31m+   },\u001b[39m\n\u001b[31m+   Object {\u001b[39m\n\u001b[31m+     \"cardLeft\": 543,\u001b[39m\n\u001b[31m+     \"cardRight\": 703,\u001b[39m\n\u001b[31m+     \"className\": \"tn-input\",\u001b[39m\n\u001b[31m+     \"left\": 584,\u001b[39m\n\u001b[31m+     \"right\": 746.015625,\u001b[39m\n\u001b[31m+     \"tag\": \"INPUT\",\u001b[39m\n\u001b[31m+   },\u001b[39m\n\u001b[31m+   Object {\u001b[39m\n\u001b[31m+     \"cardLeft\": 543,\u001b[39m\n\u001b[31m+     \"cardRight\": 703,\u001b[39m\n\u001b[31m+     \"className\": \"tn-input\",\u001b[39m\n\u001b[31m+     \"left\": 584,\u001b[39m\n\u001b[31m+     \"right\": 746.015625,\u001b[39m\n\u001b[31m+     \"tag\": \"INPUT\",\u001b[39m\n\u001b[31m+   },\u001b[39m\n\u001b[31m+   Object {\u001b[39m\n\u001b[31m+     \"cardLeft\": 543,\u001b[39m\n\u001b[31m+     \"cardRight\": 703,\u001b[39m\n\u001b[31m+     \"className\": \"authentication-reveal\",\u001b[39m\n\u001b[31m+     \"left\": 703.015625,\u001b[39m\n\u001b[31m+     \"right\": 745.015625,\u001b[39m\n\u001b[31m+     \"tag\": \"BUTTON\",\u001b[39m\n\u001b[31m+   },\u001b[39m\n\u001b[31m+   Object {\u001b[39m\n\u001b[31m+     \"cardLeft\": 543,\u001b[39m\n\u001b[31m+     \"cardRight\": 703,\u001b[39m\n\u001b[31m+     \"className\": \"\",\u001b[39m\n\u001b[31m+     \"left\": 681.171875,\u001b[39m\n\u001b[31m+     \"right\": 746.015625,\u001b[39m\n\u001b[31m+     \"tag\": \"BUTTON\",\u001b[39m\n\u001b[31m+   },\u001b[39m\n\u001b[31m+ ]\u001b[39m",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoEqual\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // deep equality\u001b[22m\n\n\u001b[32m- Expected  -  1\u001b[39m\n\u001b[31m+ Received  + 42\u001b[39m\n\n\u001b[32m- Array []\u001b[39m\n\u001b[31m+ Array [\u001b[39m\n\u001b[31m+   Object {\u001b[39m\n\u001b[31m+     \"cardLeft\": 543,\u001b[39m\n\u001b[31m+     \"cardRight\": 703,\u001b[39m\n\u001b[31m+     \"className\": \"\",\u001b[39m\n\u001b[31m+     \"left\": 678.28125,\u001b[39m\n\u001b[31m+     \"right\": 748.5625,\u001b[39m\n\u001b[31m+     \"tag\": \"BUTTON\",\u001b[39m\n\u001b[31m+   },\u001b[39m\n\u001b[31m+   Object {\u001b[39m\n\u001b[31m+     \"cardLeft\": 543,\u001b[39m\n\u001b[31m+     \"cardRight\": 703,\u001b[39m\n\u001b[31m+     \"className\": \"tn-input\",\u001b[39m\n\u001b[31m+     \"left\": 584,\u001b[39m\n\u001b[31m+     \"right\": 746.015625,\u001b[39m\n\u001b[31m+     \"tag\": \"INPUT\",\u001b[39m\n\u001b[31m+   },\u001b[39m\n\u001b[31m+   Object {\u001b[39m\n\u001b[31m+     \"cardLeft\": 543,\u001b[39m\n\u001b[31m+     \"cardRight\": 703,\u001b[39m\n\u001b[31m+     \"className\": \"tn-input\",\u001b[39m\n\u001b[31m+     \"left\": 584,\u001b[39m\n\u001b[31m+     \"right\": 746.015625,\u001b[39m\n\u001b[31m+     \"tag\": \"INPUT\",\u001b[39m\n\u001b[31m+   },\u001b[39m\n\u001b[31m+   Object {\u001b[39m\n\u001b[31m+     \"cardLeft\": 543,\u001b[39m\n\u001b[31m+     \"cardRight\": 703,\u001b[39m\n\u001b[31m+     \"className\": \"authentication-reveal\",\u001b[39m\n\u001b[31m+     \"left\": 703.015625,\u001b[39m\n\u001b[31m+     \"right\": 745.015625,\u001b[39m\n\u001b[31m+     \"tag\": \"BUTTON\",\u001b[39m\n\u001b[31m+   },\u001b[39m\n\u001b[31m+   Object {\u001b[39m\n\u001b[31m+     \"cardLeft\": 543,\u001b[39m\n\u001b[31m+     \"cardRight\": 703,\u001b[39m\n\u001b[31m+     \"className\": \"\",\u001b[39m\n\u001b[31m+     \"left\": 681.171875,\u001b[39m\n\u001b[31m+     \"right\": 746.015625,\u001b[39m\n\u001b[31m+     \"tag\": \"BUTTON\",\u001b[39m\n\u001b[31m+   },\u001b[39m\n\u001b[31m+ ]\u001b[39m\n    at C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\web\\tests\\content-admin\\content.spec.ts:119:25\n    at C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\web\\tests\\content-admin\\content.spec.ts:106:3",
+                        "location": {
+                          "file": "C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\web\\tests\\content-admin\\content.spec.ts",
+                          "column": 25,
+                          "line": 119
+                        },
+                        "snippet": "  117 |      }).filter(box=>box.left<box.cardLeft-1||box.right>box.cardRight+1);\n  118 |     });\n> 119 |     expect(containment).toEqual([]);\n      |                         ^\n  120 |     await expect(preview.locator('button:not(:disabled),input:not(:disabled),a[href]')).toHaveCount(0);\n  121 |     const wording=page.getByLabel('Wording',{exact:true});await wording.fill('');\n  122 |     await page.getByRole('button',{name:'Save draft',exact:true}).focus();await page.keyboard.press('Enter');"
+                      }
+                    }
+                  ],
+                  "startTime": "2026-11-16T09:45:16.407Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\web\\test-results\\runs\\content-admin\\content-responsive-Content-e5616-arrow-reflow-without-writes\\error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\web\\tests\\content-admin\\content.spec.ts",
+                    "column": 25,
+                    "line": 119
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "d74cd27346db6aa64657-47b4324fb4aed28655a8",
+          "file": "content.spec.ts",
+          "line": 104,
+          "column": 1
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-11-16T09:45:12.869Z",
+    "duration": 11272.244,
+    "expected": 0,
+    "skipped": 0,
+    "unexpected": 1,
+    "flaky": 0
+  }
+}
