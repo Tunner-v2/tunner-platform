@@ -11,7 +11,8 @@ public sealed class IdentitySecurityPostCommitOwnerSource(IDbContextFactory<Iden
 {
     public bool Owns(PendingOutboxMessage message) => (message.EventType is "IdentitySecurityActivityRequested" or "IdentitySecurityNotificationRequested" or
         "AuthenticatorAdded" or "AuthenticatorRevoked" or "ExternalIdentityLinked" or "ExternalIdentityUnlinked" or
-        "RecoveryCodeSetGenerated" or "RecoveryCodeSetReplaced" or "TunnerSessionAuthenticated" or "TunnerSessionRevoked" or "TunnerSessionExpired" or
+        "RecoveryCodeSetGenerated" or "RecoveryCodeSetReplaced" or "PasskeyAuthenticated" or "PasskeyCeremonyRejected" or
+        "TunnerSessionAuthenticated" or "TunnerSessionRevoked" or "TunnerSessionExpired" or
         "StepUpProofIssued" or "StepUpProofConsumed" or "StepUpProofExpired" or "DeviceTrustEvaluated" or "DeviceEvidenceObserved" or "DeviceTrustRevoked") &&
         !(message.EventType == "ExternalIdentityLinked" && message.Payload == JsonSerializer.Serialize(new { reference = message.Subject }));
 
@@ -113,6 +114,8 @@ public sealed class IdentitySecurityPostCommitOwnerSource(IDbContextFactory<Iden
         var intent = p.Deserialize<PasskeySecurityIntent>();
         if (intent is null || intent.SchemaVersion != "1" || intent.AuthenticatorType != "PASSKEY" || intent.EventType != e.EventType) return null;
         var row = await db.Set<PasskeyCeremonyRow>().AsNoTracking().SingleOrDefaultAsync(x => x.CeremonyId == intent.OperationReference, ct).ConfigureAwait(false);
+        if (e.EventType is "PasskeyAuthenticated" or "PasskeyCeremonyRejected")
+            return await PasskeyAuthenticationPostCommitFacts.ReadAsync(db, e, intent, row, version, ct).ConfigureAwait(false);
         if (row is null || row.AccountId is null || row.CredentialReference is null || row.State != "COMPLETED" || row.Version != version || row.Kind is not ("ENROLL" or "REVOKE") ||
             e.EventType is not ("IdentitySecurityActivityRequested" or "IdentitySecurityNotificationRequested") && e.EventType != (row.Kind == "ENROLL" ? "AuthenticatorAdded" : "AuthenticatorRevoked") ||
             intent.AuthenticatorReference != row.CredentialReference || intent.Operation != (row.Kind == "ENROLL" ? "REGISTER_PASSKEY" : "REVOKE_PASSKEY") ||
