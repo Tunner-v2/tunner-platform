@@ -4,4 +4,8 @@
 .admin-content .content-user-preview .authentication-card .tn-text-field{margin-top:0}
 .content-user-preview .authentication-card .tn-form-error-summary{color:var(--tn-semantic-error)}
 .admin-content .content-user-preview .authentication-create a{color:var(--tn-semantic-action-background);font-weight:600}
+.content-user-preview,.content-user-preview .authentication-stage,.content-user-preview .authentication-card,.content-user-preview .authentication-card form,.content-user-preview .authentication-fields,.content-user-preview .authentication-password,.content-user-preview .tn-text-field,.content-user-preview .authentication-actions{min-inline-size:0}
+.content-user-preview .authentication-fields{grid-template-columns:minmax(0,1fr)}
+.content-user-preview .tn-input,.content-user-preview .authentication-providers button{min-inline-size:0;max-inline-size:100%}
 @media(max-width:600px){.admin-content .content-user-preview .authentication-card h1{font-size:27px}}
+@media(max-width:380px){.content-user-preview .authentication-providers,.content-user-preview .authentication-options,.content-user-preview .authentication-footer{flex-wrap:wrap}.content-user-preview .authentication-providers button{flex:1 1 100%}.content-user-preview .authentication-options label{min-inline-size:0;flex-wrap:wrap}}

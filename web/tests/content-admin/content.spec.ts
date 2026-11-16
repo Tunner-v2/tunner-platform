@@ -110,6 +110,7 @@ test('responsive Content workspace and dialog support tablet laptop and narrow r
     const preview=page.locator('.content-user-preview');await expect(preview).toBeVisible();
     await expect(preview.getByRole('heading',{level:1})).toHaveText('Welcome to Tunner');
     await expect.poll(()=>preview.locator('img').evaluateAll(images=>images.every(image=>image instanceof HTMLImageElement&&image.complete&&image.naturalWidth>0))).toBe(true);
+    if(viewport.width===768)await page.screenshot({path:info.outputPath('tablet-workspace-768.png'),fullPage:true});
     expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
     const containment=await preview.locator('.authentication-card').evaluate(card=>{
      const bounds=card.getBoundingClientRect();return [...card.querySelectorAll('input,button,a')].map(control=>{
@@ -125,7 +126,6 @@ test('responsive Content workspace and dialog support tablet laptop and narrow r
     expect(server.writes).toHaveLength(0);
     // Restore the exact saved candidate; correcting a local draft never authorizes publication.
     await select(page);await expect(page.locator('.content-user-preview')).toBeVisible();
-    if(viewport.width===768)await page.screenshot({path:info.outputPath('tablet-workspace-768.png'),fullPage:true});
     expect((await new AxeBuilder({page}).analyze()).violations).toEqual([]);
     await review(page);const publish=page.getByRole('button',{name:'Publish',exact:true});await publish.focus();await page.keyboard.press('Enter');
     const dialog=page.getByRole('dialog');await expect(dialog).toBeVisible();
