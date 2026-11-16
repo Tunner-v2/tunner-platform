@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "revision_id": "P0-003-RV002",
+  "revision_scope": "WORK_ITEM",
+  "original_scope_id": "TUN-P0-003",
+  "parent_revision_id": "P0-003-RV001",
+  "parent_milestone_revision_id": null,
+  "title": "Preserve governed checks in selected-task admission",
+  "revision_type": "COMPATIBILITY",
+  "status": "ACTIVE",
+  "reason": "Support the already reviewed P0-004-RV005 performance correction for the observed hour-long selected-task context/admission path. Retain full authority/schema diagnostics, dependency universe, blocker/role/integration checks and public global next behavior; reuse the identical existing readiness logic for the selected work item. Preserve original closed source and acceptance history. No Product rule, lifecycle policy or P0 enablement change.",
+  "authority_refs": [
+    "docs/authority/baselines/1.6.0/04_Governance_and_Context_Tooling_Specification.md",
+    "docs/authority/baselines/1.6.0/12_AI_Development_Protocol_Context_and_Project_Memory.md"
+  ],
+  "decision_refs": [],
+  "defect_refs": [],
+  "change_refs": [],
+  "impact_classification": "NON_BLOCKING",
+  "blocked_scope": [],
+  "acceptance_criteria": [
+    "The selected result matches global next on qualified, blocked, malformed, tampered and dependency/integration cases; public global behavior and exact context action remain qualified. Actual tests and current scoped context timing precede technical closure."
+  ],
+  "prerequisites": [],
+  "work_items": [],
+  "required_gates": [],
+  "required_roles": ["governance-engineer", "tester-qa-engineer", "cyber-security-engineer", "auditor"],
+  "evidence_refs": ["governance/evidence/P0-003-RV002-VALIDATION.json"],
+  "product_acceptance_required": false,
+  "created_at": "2026-11-16T02:19:12.8886545\u002B00:00",
+  "closed_at": null
+}

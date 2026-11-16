@@ -100,11 +100,23 @@ public static class GovernanceApplication
         return new CommandResult(validation.ExitCode, "status", new StatusPayload(milestones, workItems, validation.Payload, RevisionApplication.Status(records), RevisionApplication.HistoricalScopes(repository, records)));
     }
 
-    public static CommandResult Next(DirectoryInfo repository)
+    public static CommandResult Next(DirectoryInfo repository) => NextCore(repository, null);
+
+    /// <summary>Assess one declared scope using the same global validation and complete prerequisite universe.</summary>
+    public static CommandResult Next(DirectoryInfo repository, string scopeId)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(scopeId);
+        return NextCore(repository, scopeId);
+    }
+
+    private static CommandResult NextCore(DirectoryInfo repository, string? scopeId)
     {
         var diagnostics = new List<Diagnostic>();
         var records = LoadRecords(repository, diagnostics);
         var workItems = WorkItems(records);
+        if (scopeId is not null && !workItems.ContainsKey(scopeId) &&
+            !records.Any(item => item.Type.DefinitionName == "revision" && StringComparer.Ordinal.Equals(item.Identifier, scopeId)))
+            diagnostics.Add(Diagnostic.Error("governance", null, "GOV_SCOPE_NOT_FOUND", "selected scope does not exist: " + scopeId));
         var dependencies = DependencyRecords(records);
         var integrationPolicy = IntegrationPolicy.Load(repository, diagnostics);
         var allowValidatedP0Prerequisites = HasApprovedP0LocalIntegration(records);
@@ -124,14 +136,14 @@ public static class GovernanceApplication
                 diagnostics.Add(Diagnostic.Error("docs/authority", null, "GOV_AUTHORITY_INVALID", finding));
             }
 
-            foreach (var record in workItems.Values.Where(item => !TerminalStates.Contains(item.Scalar("status") ?? "UNKNOWN", StringComparer.Ordinal)).OrderBy(item => item.Identifier, StringComparer.Ordinal))
+            foreach (var record in workItems.Values.Where(item => scopeId is null || StringComparer.Ordinal.Equals(item.Identifier, scopeId)).Where(item => !TerminalStates.Contains(item.Scalar("status") ?? "UNKNOWN", StringComparer.Ordinal)).OrderBy(item => item.Identifier, StringComparer.Ordinal))
             {
                 next.Add(new NextItem(record.Identifier, record.Scalar("status") ?? "UNKNOWN", false, "authority verification failed"));
             }
 
             return new CommandResult(1, "next", new NextPayload(next, [], diagnostics));
         }
-        foreach (var record in workItems.Values.OrderBy(item => item.Identifier, StringComparer.Ordinal))
+        foreach (var record in workItems.Values.Where(item => scopeId is null || StringComparer.Ordinal.Equals(item.Identifier, scopeId)).OrderBy(item => item.Identifier, StringComparer.Ordinal))
         {
             var state = record.Scalar("status") ?? "UNKNOWN";
             if (TerminalStates.Contains(state, StringComparer.Ordinal))
@@ -150,7 +162,9 @@ public static class GovernanceApplication
             next.Add(new NextItem(record.Identifier, state, validation.IsValid && reasons.Count == 0, reason));
         }
 
-        next.AddRange(RevisionApplication.Next(repository, records, validation.IsValid));
+        if (scopeId is null || records.Any(item => item.Type.DefinitionName == "revision" && StringComparer.Ordinal.Equals(item.Identifier, scopeId)))
+            next.AddRange(RevisionApplication.Next(repository, records, validation.IsValid)
+                .Where(item => scopeId is null || StringComparer.Ordinal.Equals(item.WorkItemId, scopeId)));
 
         var actions = integrationActions
             .DistinctBy(item => (item.WorkItemId, item.PrerequisiteWorkItemId, item.RequiredReadiness))

@@ -7,7 +7,7 @@
   "parent_milestone_revision_id": null,
   "title": "Bound work-item admission to the requested governed scope",
   "revision_type": "PERFORMANCE",
-  "status": "PROPOSED",
+  "status": "ACTIVE",
   "reason": "Observed one-item P2-016 admission exceeding40minutes and about4GB while full Next evaluates unrelated work and revision queues. Reuse the identical authority, schema, dependency, blocker, role and integration checks for the selected work item; preserve global next output and all lifecycle/security rules. No Product semantics or P0 gate change.",
   "authority_refs": [
     "docs/authority/baselines/1.6.0/04_Governance_and_Context_Tooling_Specification.md",
@@ -24,8 +24,9 @@
   "prerequisites": [],
   "work_items": [],
   "required_gates": [],
-  "required_roles": [],
-  "evidence_refs": [],
+  "required_roles": ["governance-engineer", "tester-qa-engineer", "cyber-security-engineer", "auditor"],
+  "evidence_refs": ["governance/evidence/P0-004-RV005-VALIDATION.json"],
+  "product_acceptance_required": false,
   "created_at": "2026-11-15T23:55:51.1391238\u002B00:00",
   "closed_at": null
 }

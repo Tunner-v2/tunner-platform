@@ -105,6 +105,7 @@ try
         var next = GovernanceApplication.Next(fixtureRoot);
         Expect(next.ExitCode == 0, "Next must be available for a valid fixture.", failures);
         var nextPayload = (NextPayload)next.Payload;
+        ExpectScopedNextMatches(fixtureRoot, next, failures);
         Expect(nextPayload.Items.Single(item => item.WorkItemId == "TUN-LOCAL").Actionable, "LOCAL_VALIDATED dependency must permit local work.", failures);
         Expect(!nextPayload.Items.Single(item => item.WorkItemId == "TUN-MERGED").Actionable, "MERGED_TO_MAIN dependency must block the dependent work.", failures);
         Expect(!nextPayload.Items.Single(item => item.WorkItemId == "TUN-CHAIN").Actionable, "Configured local unmerged-chain limit must block further dependent chaining.", failures);
@@ -298,6 +299,20 @@ try
         Expect(roleBlocked.ExitCode == 1 && ((GatePayload)roleBlocked.Payload).Failures.Any(item => item.Contains("mandatory role review did not pass: auditor", StringComparison.Ordinal)), "A blocking specialist review must block only its affected work-item gate.", failures);
 
         WriteOrchestratorWorkItem(fixtureRoot);
+        var globalOrchestratorNext = GovernanceApplication.Next(fixtureRoot);
+        ExpectScopedNextMatches(fixtureRoot, globalOrchestratorNext, failures);
+        var expectedOrchestratorNext = ((NextPayload)globalOrchestratorNext.Payload).Items.Single(item => item.WorkItemId == "TUN-ORCH");
+        var scopedContextOutput = new DirectoryInfo(Path.Combine(fixtureRoot.FullName, "artifacts", "scoped-orchestrator-context"));
+        var scopedContext = ContextApplication.Build(fixtureRoot, "TUN-ORCH", scopedContextOutput);
+        Expect(scopedContext.ExitCode == 0 && File.ReadAllText(Path.Combine(scopedContextOutput.FullName, "project", "CURRENT_STATE.md"))
+            .Contains("Exact next governed action: TUN-ORCH: " + expectedOrchestratorNext.Reason, StringComparison.Ordinal),
+            "Bounded context must retain the exact governed recommendation for an eligible selected scope.", failures);
+        var unknownScoped = GovernanceApplication.Next(fixtureRoot, "TUN-NOT-PRESENT");
+        Expect(unknownScoped.ExitCode != 0 && ((NextPayload)unknownScoped.Payload).Items.Count == 0, "Unknown scopes must not broaden to global selection.", failures);
+        var blankScopedRefused = false;
+        try { _ = GovernanceApplication.Next(fixtureRoot, " "); }
+        catch (ArgumentException) { blankScopedRefused = true; }
+        Expect(blankScopedRefused, "Blank scoped admission must be refused rather than selecting global work.", failures);
         var orchestratorStart = OrchestratorApplication.Start(fixtureRoot, "TUN-ORCH");
         Expect(orchestratorStart.ExitCode == 0 && ((OrchestratorPayload)orchestratorStart.Payload).Outcome == "ELIGIBLE", "Orchestrator must accept an eligible in-progress work item without mutating it.", failures);
         var orchestratorRun = OrchestratorApplication.Run(fixtureRoot, "TUN-ORCH");
@@ -309,12 +324,14 @@ try
         var orchestratorRefused = OrchestratorApplication.Start(fixtureRoot, "TUN-TRANSITION");
         Expect(orchestratorRefused.ExitCode == 1 && ((OrchestratorPayload)orchestratorRefused.Payload).Outcome == "LIFECYCLE_REFUSED", "Orchestrator must refuse a non-ready lifecycle state.", failures);
         var authorityMirrorPath = Path.Combine(fixtureRoot.FullName, "docs", "authority", "mirror.txt");
+        var scopedAuthorityOriginal = File.ReadAllBytes(authorityMirrorPath);
         File.AppendAllText(authorityMirrorPath, "tampered");
         var authorityTampered = AuthorityApplication.Verify(fixtureRoot);
         Expect(authorityTampered.ExitCode == 1, "Authority verify must reject changed authority bytes.", failures);
         var validationBlocked = GovernanceApplication.Validate(fixtureRoot);
         Expect(validationBlocked.ExitCode == 1, "Governance validation must block when authority verification fails.", failures);
         var nextBlocked = GovernanceApplication.Next(fixtureRoot);
+        ExpectScopedNextMatches(fixtureRoot, nextBlocked, failures);
         Expect(nextBlocked.ExitCode == 1 && ((NextPayload)nextBlocked.Payload).Items.All(item => !item.Actionable), "Governance next must block execution when authority verification fails.", failures);
         var gateBlocked = GovernanceApplication.CheckGate(fixtureRoot, "TUN-001");
         Expect(gateBlocked.ExitCode == 1, "Governance gates must block when authority verification fails.", failures);
@@ -323,6 +340,11 @@ try
         File.WriteAllText(Path.Combine(fixtureRoot.FullName, "governance", "work-items", "malformed.yaml"), "schema_version: [");
         var malformed = GovernanceApplication.Validate(fixtureRoot);
         Expect(malformed.ExitCode == 1, "Validation must reject malformed YAML.", failures);
+        File.WriteAllBytes(authorityMirrorPath, scopedAuthorityOriginal);
+        var scopedMalformed = GovernanceApplication.Next(fixtureRoot, "TUN-ORCH");
+        Expect(AuthorityApplication.Verify(fixtureRoot).ExitCode == 0 && scopedMalformed.ExitCode != 0 &&
+            !((NextPayload)scopedMalformed.Payload).Items.Single(item => item.WorkItemId == "TUN-ORCH").Actionable,
+            "Unrelated malformed governance must block scoped admission even when authority is valid.", failures);
     }
 }
 catch (Exception error) when (error is not OutOfMemoryException)
@@ -358,6 +380,22 @@ static void CleanupHarnessFixture(DirectoryInfo? fixture, bool testFailure)
 {
     if (fixture is not null) DeleteFixture(fixture);
     if (testFailure) throw new IOException("Controlled harness cleanup reporting check");
+}
+
+static void ExpectScopedNextMatches(DirectoryInfo repository, CommandResult globalResult, ICollection<string> failures)
+{
+    var global = (NextPayload)globalResult.Payload;
+    foreach (var expected in global.Items)
+    {
+        var actualResult = GovernanceApplication.Next(repository, expected.WorkItemId);
+        var actual = (NextPayload)actualResult.Payload;
+        Expect(actualResult.ExitCode == globalResult.ExitCode && actual.Items.Count == 1 && Equals(actual.Items[0], expected),
+            "Scoped eligibility must equal the global projection for " + expected.WorkItemId, failures);
+        Expect(JsonSerializer.Serialize(actual.Diagnostics) == JsonSerializer.Serialize(global.Diagnostics),
+            "Scoped eligibility must preserve all global diagnostics for " + expected.WorkItemId, failures);
+        Expect(JsonSerializer.Serialize(actual.HumanIntegrationActions) == JsonSerializer.Serialize(global.HumanIntegrationActions.Where(item => item.WorkItemId == expected.WorkItemId).ToArray()),
+            "Scoped eligibility must preserve selected integration gates for " + expected.WorkItemId, failures);
+    }
 }
 
 static void Expect(bool condition, string message, ICollection<string> failures)
