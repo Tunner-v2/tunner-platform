@@ -30,9 +30,9 @@ public sealed class OutboxReceiveBrokerFixture : IAsyncLifetime
     public static async Task QualifyQueueAsync(IChannel channel, RabbitMqOutboxReceiveOptions options, CancellationToken cancellationToken)
     {
         // Test-only explicit topology: RabbitMQ checks these exact queue arguments on every redeclaration.
-        await channel.QueueDeclareAsync(options.DeadLetterQueueName, durable: false, exclusive: false, autoDelete: false,
+        await channel.QueueDeclareAsync(options.DeadLetterQueueName, durable: true, exclusive: false, autoDelete: false,
             arguments: null, cancellationToken: cancellationToken);
-        await channel.QueueDeclareAsync(options.QueueName, durable: false, exclusive: false, autoDelete: false,
+        await channel.QueueDeclareAsync(options.QueueName, durable: true, exclusive: false, autoDelete: false,
             arguments: new Dictionary<string, object?>
             { ["x-dead-letter-exchange"] = "", ["x-dead-letter-routing-key"] = options.DeadLetterQueueName }, cancellationToken: cancellationToken);
     }
