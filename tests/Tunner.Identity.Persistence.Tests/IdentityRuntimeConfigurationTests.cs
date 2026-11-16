@@ -168,7 +168,7 @@ public sealed class IdentityRuntimeConfigurationTests(SessionListingPostgresFixt
     }
 
     [Theory]
-    [InlineData("UPDATE identity.runtime_configuration_versions SET payload='{}'")]
+    [InlineData("UPDATE identity.runtime_configuration_versions SET payload='forged-payload'")]
     [InlineData("DELETE FROM identity.runtime_configuration_publications")]
     [InlineData("TRUNCATE identity.runtime_configuration_governance CASCADE")]
     public async Task IdentityHistoryRejectsDirectMutation(string sql)

@@ -47,11 +47,17 @@ namespace Tunner.PresentationContent.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.Sql("""
-                LOCK TABLE presentation_content.proposals, presentation_content.versions IN ACCESS EXCLUSIVE MODE;
+                LOCK TABLE presentation_content.profiles, presentation_content.definitions,
+                  presentation_content.variants, presentation_content.proposals,
+                  presentation_content.versions, presentation_content.publications IN ACCESS EXCLUSIVE MODE;
                 DO $guard$
                 BEGIN
-                  IF EXISTS (SELECT 1 FROM presentation_content.proposals WHERE "ChangeReason" IS NOT NULL)
-                    OR EXISTS (SELECT 1 FROM presentation_content.versions WHERE "ChangeReason" IS NOT NULL)
+                  IF EXISTS (SELECT 1 FROM presentation_content.profiles)
+                    OR EXISTS (SELECT 1 FROM presentation_content.definitions)
+                    OR EXISTS (SELECT 1 FROM presentation_content.variants)
+                    OR EXISTS (SELECT 1 FROM presentation_content.proposals)
+                    OR EXISTS (SELECT 1 FROM presentation_content.versions)
+                    OR EXISTS (SELECT 1 FROM presentation_content.publications)
                   THEN RAISE EXCEPTION 'Committed content reasons require a governed forward migration' USING ERRCODE='23514'; END IF;
                 END $guard$;
                 DROP TRIGGER content_change_reason_transition ON presentation_content.proposals;

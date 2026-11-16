@@ -380,11 +380,12 @@ public sealed class AdminContentHttpTests(SessionListingPostgresFixture fixture)
         {
             var id = Guid.NewGuid().ToString("N"); Owners.Sessions[id] = new(actor, id, ContentActorKind.Human, "fixture-owner-session-approval",
                 new(Clock.GetUtcNow().AddMinutes(-1), true, Clock.GetUtcNow().AddHours(1), false));
-            var properties = new AuthenticationProperties { IssuedUtc = DateTimeOffset.UtcNow.AddMinutes(-1), ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(10), AllowRefresh = false };
+            var options = application.Services.GetRequiredService<IOptionsMonitor<CookieAuthenticationOptions>>().Get(Scheme);
+            var cookieNow = (options.TimeProvider ?? TimeProvider.System).GetUtcNow();
+            var properties = new AuthenticationProperties { IssuedUtc = cookieNow.AddMinutes(-1), ExpiresUtc = cookieNow.AddMinutes(10), AllowRefresh = false };
             var ticket = new AuthenticationTicket(new ClaimsPrincipal(new ClaimsIdentity([new(ClaimTypes.NameIdentifier, actor), new("fixture-admin-session", id)], Scheme)), properties, Scheme);
             var stored = await tickets.StoreAsync(ticket);
             var reference = new AuthenticationTicket(new ClaimsPrincipal(new ClaimsIdentity([new("Microsoft.AspNetCore.Authentication.Cookies-SessionId", stored)], Scheme)), new AuthenticationProperties(), Scheme);
-            var options = application.Services.GetRequiredService<IOptionsMonitor<CookieAuthenticationOptions>>().Get(Scheme);
             return options.Cookie.Name + "=" + options.TicketDataFormat.Protect(reference);
         }
         internal async Task<Browser> Browser(string actor)
