@@ -43,6 +43,7 @@ public sealed class AdminIdentityConfigurationScope
     internal IdentityConfigurationScope Value() => Family switch
     {
         IdentityConfigurationFamily.Authentication when AssuranceScope is null && AuthenticationPolicyVersion is null => new(Family),
+        IdentityConfigurationFamily.Registration or IdentityConfigurationFamily.Totp when AssuranceScope is null && AuthenticationPolicyVersion is null => new(Family),
         IdentityConfigurationFamily.Assurance when AssuranceScope is not null && AuthenticationPolicyVersion is null => new(Family, AssuranceScope.Value()),
         IdentityConfigurationFamily.AuthenticationContent when AssuranceScope is null && !string.IsNullOrWhiteSpace(AuthenticationPolicyVersion) => new(Family, AuthenticationPolicyVersion: AuthenticationPolicyVersion),
         _ => throw new ArgumentException("An exact typed Identity configuration scope is required.")
@@ -84,6 +85,20 @@ public sealed class AdminAuthenticationConfigurationCandidate
     public required AdminIdentityPolicyMetadata<string> Metadata { get; init; }
     public required AuthenticationPolicy Values { get; init; }
     internal AuthenticationPolicyVersion Value() => new((Metadata ?? throw new ArgumentException("Metadata is required.")).Value(static x => x), Values ?? throw new ArgumentException("Values are required."));
+}
+[JsonUnmappedMemberHandling(JsonUnmappedMemberHandling.Disallow)]
+public sealed class AdminRegistrationConfigurationCandidate
+{
+    public required AdminIdentityPolicyMetadata<string> Metadata { get; init; }
+    public required RegistrationPolicy Values { get; init; }
+    internal RegistrationPolicyVersion Value() => new((Metadata ?? throw new ArgumentException("Metadata is required.")).Value(static x => x), Values ?? throw new ArgumentException("Values are required."));
+}
+[JsonUnmappedMemberHandling(JsonUnmappedMemberHandling.Disallow)]
+public sealed class AdminTotpConfigurationCandidate
+{
+    public required AdminIdentityPolicyMetadata<string> Metadata { get; init; }
+    public required TotpPolicy Values { get; init; }
+    internal TotpPolicyVersion Value() => new((Metadata ?? throw new ArgumentException("Metadata is required.")).Value(static x => x), Values ?? throw new ArgumentException("Values are required."));
 }
 [JsonUnmappedMemberHandling(JsonUnmappedMemberHandling.Disallow)]
 public sealed class AdminAssuranceConfigurationCandidate

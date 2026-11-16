@@ -55,6 +55,22 @@ public static class AdminIdentityConfigurationEndpoints
                 ? app.UpdateAssuranceDraftAsync(id, c.ExpectedRevision!.Value, candidate, op.Id, op.Correlation, h.RequestAborted)
                 : app.CreateAssuranceDraftAsync(candidate, op.Id, op.Correlation, h.RequestAborted)).ConfigureAwait(false);
         }));
+        routes.MapPost("/registration/draft", (HttpContext h, IdentityRuntimeConfigurationApplication app) => Guard(h, async (profile, session) =>
+        {
+            var c = await Read<AdminIdentityConfigurationDraft<AdminRegistrationConfigurationCandidate>>(h, profile).ConfigureAwait(false); c.RequireTarget(); var candidate = c.Candidate.Value();
+            _ = Scope(profile, new AdminIdentityConfigurationScope { Family = IdentityConfigurationFamily.Registration });
+            return await Write(h, app, session, c.IdempotencyKey, c, op => c.ProposalReference is { } id
+                ? app.UpdateRegistrationDraftAsync(id, c.ExpectedRevision!.Value, candidate, op.Id, op.Correlation, h.RequestAborted)
+                : app.CreateRegistrationDraftAsync(candidate, op.Id, op.Correlation, h.RequestAborted)).ConfigureAwait(false);
+        }));
+        routes.MapPost("/totp/draft", (HttpContext h, IdentityRuntimeConfigurationApplication app) => Guard(h, async (profile, session) =>
+        {
+            var c = await Read<AdminIdentityConfigurationDraft<AdminTotpConfigurationCandidate>>(h, profile).ConfigureAwait(false); c.RequireTarget(); var candidate = c.Candidate.Value();
+            _ = Scope(profile, new AdminIdentityConfigurationScope { Family = IdentityConfigurationFamily.Totp });
+            return await Write(h, app, session, c.IdempotencyKey, c, op => c.ProposalReference is { } id
+                ? app.UpdateTotpDraftAsync(id, c.ExpectedRevision!.Value, candidate, op.Id, op.Correlation, h.RequestAborted)
+                : app.CreateTotpDraftAsync(candidate, op.Id, op.Correlation, h.RequestAborted)).ConfigureAwait(false);
+        }));
         routes.MapPost("/content-binding/draft", (HttpContext h, IdentityRuntimeConfigurationApplication app) => Guard(h, async (profile, session) =>
         {
             var c = await Read<AdminIdentityConfigurationDraft<AdminAuthenticationContentBindingCandidate>>(h, profile).ConfigureAwait(false); c.RequireTarget(); var candidate = c.Candidate.Value();

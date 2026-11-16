@@ -4,7 +4,7 @@ using Tunner.Platform.Policies;
 
 namespace Tunner.Identity.Persistence;
 
-public enum IdentityConfigurationFamily { Authentication, Assurance, AuthenticationContent }
+public enum IdentityConfigurationFamily { Authentication, Assurance, AuthenticationContent, Registration, Totp }
 public enum IdentityConfigurationOperation { CreateDraft, UpdateDraft, Validate, Preview, Approve, Publish, History, Rollback, Browse }
 public enum IdentityConfigurationActorKind { Human, Service, Model }
 public sealed record IdentityConfigurationScope(IdentityConfigurationFamily Family, AssurancePolicyScope? AssuranceScope = null, string? AuthenticationPolicyVersion = null)
@@ -12,7 +12,7 @@ public sealed record IdentityConfigurationScope(IdentityConfigurationFamily Fami
     internal string Key => JsonSerializer.Serialize(this);
     internal void Require()
     {
-        if (!Enum.IsDefined(Family) || Family == IdentityConfigurationFamily.Authentication && (AssuranceScope is not null || AuthenticationPolicyVersion is not null) ||
+        if (!Enum.IsDefined(Family) || (Family is IdentityConfigurationFamily.Authentication or IdentityConfigurationFamily.Registration or IdentityConfigurationFamily.Totp) && (AssuranceScope is not null || AuthenticationPolicyVersion is not null) ||
             Family == IdentityConfigurationFamily.Assurance && (AssuranceScope is null || AuthenticationPolicyVersion is not null) ||
             Family == IdentityConfigurationFamily.AuthenticationContent && (AssuranceScope is not null || string.IsNullOrWhiteSpace(AuthenticationPolicyVersion)))
             throw new IdentityConfigurationUnavailableException();
@@ -64,7 +64,11 @@ public sealed record RollbackIdentityConfiguration(Guid ApprovedVersionReference
 public sealed record IdentityConfigurationProposal(Guid ProposalReference, long Revision, string State, IdentityConfigurationScope Scope,
     string PolicyVersionReference, Guid? VersionReference, string CandidateDigest, bool ModelOrigin);
 public sealed record IdentityConfigurationPreview(IdentityConfigurationProposal Proposal, AuthenticationPolicyVersion? Authentication,
-    AssurancePolicyVersion? Assurance, AuthenticationContentBinding? ContentBinding);
+    AssurancePolicyVersion? Assurance, AuthenticationContentBinding? ContentBinding)
+{
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] public RegistrationPolicyVersion? Registration { get; init; }
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] public TotpPolicyVersion? Totp { get; init; }
+}
 public sealed record IdentityConfigurationHistory(Guid PublicationReference, Guid VersionReference, IdentityConfigurationScope Scope, string PolicyVersionReference,
     string CandidateDigest, EffectivePolicyInterval EffectiveInterval, Guid? SupersedesPublicationReference, string ApproverReference,
     string ApprovalEvidenceReference, string PublisherReference, string GovernanceVersion);
@@ -75,7 +79,9 @@ internal static class IdentityConfigurationDigest
 
 /// <summary>Internal discriminated persistence format, never a raw-JSON administration API. The supported shapes contain no credential/key/seed fields.</summary>
 internal sealed record IdentityConfigurationDocument(AuthenticationPolicyVersion? Authentication = null, AssurancePolicyVersion? Assurance = null,
-    AuthenticationContentBinding? ContentBinding = null)
+    AuthenticationContentBinding? ContentBinding = null,
+    [property: JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] RegistrationPolicyVersion? Registration = null,
+    [property: JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] TotpPolicyVersion? Totp = null)
 {
     private static readonly JsonSerializerOptions Json = new()
     {
@@ -101,12 +107,13 @@ internal sealed record IdentityConfigurationDocument(AuthenticationPolicyVersion
     internal string Snapshot => JsonSerializer.Serialize(this);
     internal string Digest => IdentityConfigurationDigest.Of(this);
     internal IdentityConfigurationScope Scope => Authentication is not null ? new(IdentityConfigurationFamily.Authentication) : Assurance is not null
-        ? new(IdentityConfigurationFamily.Assurance, Assurance.Metadata.Scope) : new(IdentityConfigurationFamily.AuthenticationContent, AuthenticationPolicyVersion: ContentBinding!.AuthenticationPolicyVersion);
-    internal string Version => Authentication?.Values.Version ?? Assurance?.Metadata.VersionId ?? ContentBinding!.ConfigurationVersionReference;
-    internal EffectivePolicyInterval Interval => Authentication?.Metadata.EffectiveInterval ?? Assurance?.Metadata.EffectiveInterval ?? ContentBinding!.EffectiveInterval;
+        ? new(IdentityConfigurationFamily.Assurance, Assurance.Metadata.Scope) : Registration is not null ? new(IdentityConfigurationFamily.Registration)
+        : Totp is not null ? new(IdentityConfigurationFamily.Totp) : new(IdentityConfigurationFamily.AuthenticationContent, AuthenticationPolicyVersion: ContentBinding!.AuthenticationPolicyVersion);
+    internal string Version => Authentication?.Values.Version ?? Assurance?.Metadata.VersionId ?? Registration?.Values.Version ?? Totp?.Values.Version ?? ContentBinding!.ConfigurationVersionReference;
+    internal EffectivePolicyInterval Interval => Authentication?.Metadata.EffectiveInterval ?? Assurance?.Metadata.EffectiveInterval ?? Registration?.Metadata.EffectiveInterval ?? Totp?.Metadata.EffectiveInterval ?? ContentBinding!.EffectiveInterval;
     internal void Require()
     {
-        if ((Authentication is null ? 0 : 1) + (Assurance is null ? 0 : 1) + (ContentBinding is null ? 0 : 1) != 1) throw new IdentityConfigurationUnavailableException();
+        if ((Authentication is null ? 0 : 1) + (Assurance is null ? 0 : 1) + (ContentBinding is null ? 0 : 1) + (Registration is null ? 0 : 1) + (Totp is null ? 0 : 1) != 1) throw new IdentityConfigurationUnavailableException();
         if (Authentication is { } authentication)
         {
             if (authentication.Metadata is null || authentication.Values is null) throw new IdentityConfigurationUnavailableException();
@@ -125,6 +132,18 @@ internal sealed record IdentityConfigurationDocument(AuthenticationPolicyVersion
                 binding.EffectiveInterval is null || binding.TermsUri is null || binding.PrivacyUri is null) throw new IdentityConfigurationUnavailableException();
             foreach (var uri in new[] { binding.TermsUri, binding.PrivacyUri, binding.SupportUri }.OfType<Uri>())
                 if (!uri.IsAbsoluteUri || uri.Scheme != Uri.UriSchemeHttps || uri.UserInfo.Length != 0) throw new IdentityConfigurationUnavailableException();
+        }
+        if (Registration is { } registration)
+        {
+            if (registration.Metadata is null || registration.Values is null) throw new IdentityConfigurationUnavailableException();
+            _ = new RegistrationPolicyCatalog([registration]);
+            if (registration.Metadata.Scope != "REGISTRATION" || registration.Metadata.Status != "ACTIVE") throw new IdentityConfigurationUnavailableException();
+        }
+        if (Totp is { } totp)
+        {
+            if (totp.Metadata is null || totp.Values is null) throw new IdentityConfigurationUnavailableException();
+            totp.Values.Validate(); _ = new TotpPolicyCatalog([totp]);
+            if (totp.Metadata.VersionId != totp.Values.Version || totp.Metadata.Scope != "TOTP" || totp.Metadata.Status != "ACTIVE") throw new IdentityConfigurationUnavailableException();
         }
         Scope.Require();
     }

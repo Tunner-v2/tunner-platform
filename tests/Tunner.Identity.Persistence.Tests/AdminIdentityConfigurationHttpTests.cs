@@ -255,8 +255,8 @@ public sealed class AdminIdentityConfigurationHttpTests(SessionListingPostgresFi
         using var response = await h.Post("/capabilities", new { scope, target = "Proposal", proposalReference = proposal.GetProperty("proposalReference").GetGuid(), expectedRevision = proposal.GetProperty("revision").GetInt64() }, actor);
         Assert.Equal(HttpStatusCode.OK, response.StatusCode); return (await Body(response)).GetProperty("availableActions").EnumerateArray().Select(x => x.GetString()!).ToArray();
     }
-    private sealed record Browser(string Cookies, string Csrf);
-    private sealed class Owners(RuntimeConfigurationTestEnvironment env) : IAdminIdentityConfigurationSessionSource,
+    internal sealed record Browser(string Cookies, string Csrf);
+    internal sealed class Owners(RuntimeConfigurationTestEnvironment env, IReadOnlyList<IdentityConfigurationScope>? additionalScopes = null) : IAdminIdentityConfigurationSessionSource,
         IAdminIdentityConfigurationAuthorizationSource, IAdminIdentityConfigurationHttpProfileSource, IIdentityConfigurationBrowseBudgetSource, IIdentityConfigurationGovernanceSource
     {
         internal readonly ConcurrentDictionary<string, AdminIdentityConfigurationSession> Sessions = new();
@@ -264,7 +264,7 @@ public sealed class AdminIdentityConfigurationHttpTests(SessionListingPostgresFi
         internal IdentityConfigurationOperation? Denied;
         internal string GovernanceVersion = "fixture-identity-governance-v1";
         internal AdminIdentityConfigurationPresentationBinding? Presentation;
-        internal IdentityConfigurationScope[] Scopes => [new(IdentityConfigurationFamily.Authentication), new(IdentityConfigurationFamily.Assurance, env.AssuranceScope), new(IdentityConfigurationFamily.AuthenticationContent, AuthenticationPolicyVersion: env.Authentication().Values.Version)];
+        internal IdentityConfigurationScope[] Scopes => [new(IdentityConfigurationFamily.Authentication), new(IdentityConfigurationFamily.Assurance, env.AssuranceScope), new(IdentityConfigurationFamily.AuthenticationContent, AuthenticationPolicyVersion: env.Authentication().Values.Version), .. (additionalScopes ?? [])];
         public ValueTask<AdminIdentityConfigurationSession?> RequireCurrentAsync(ClaimsPrincipal principal, DateTimeOffset at, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested(); var id = principal.FindFirstValue("fixture-identity-admin-session");
@@ -289,7 +289,7 @@ public sealed class AdminIdentityConfigurationHttpTests(SessionListingPostgresFi
         public Task<AuthenticationTicket?> RetrieveAsync(string key) => Task.FromResult(tickets.TryGetValue(key, out var ticket) ? TicketSerializer.Default.Deserialize(ticket) : null);
         public Task RemoveAsync(string key) { tickets.TryRemove(key, out _); return Task.CompletedTask; }
     }
-    private sealed class Host : IAsyncDisposable
+    internal sealed class Host : IAsyncDisposable
     {
         internal const string Origin = "https://admin-identity-configuration.example.test";
         private const string Scheme = "Tunner.Admin.Bff.Session";
@@ -301,9 +301,9 @@ public sealed class AdminIdentityConfigurationHttpTests(SessionListingPostgresFi
         internal Owners Owners { get; }
         private Host(Microsoft.AspNetCore.Builder.WebApplication application, X509Certificate2 certificate, HttpClient client, Tickets tickets, RuntimeConfigurationTestEnvironment environment, Owners owners)
         { this.application = application; this.certificate = certificate; this.client = client; this.tickets = tickets; Environment = environment; Owners = owners; }
-        internal static async Task<Host> Start(IdentityTestDatabase database, bool publishChrome = false)
+        internal static async Task<Host> Start(IdentityTestDatabase database, bool publishChrome = false, IReadOnlyList<IdentityConfigurationScope>? additionalScopes = null)
         {
-            var env = new RuntimeConfigurationTestEnvironment(database); var owners = new Owners(env); var tickets = new Tickets();
+            var env = new RuntimeConfigurationTestEnvironment(database); var owners = new Owners(env, additionalScopes); var tickets = new Tickets();
             PresentationContentTestEnvironment? chrome = null;
             if (publishChrome)
             {
@@ -341,15 +341,18 @@ public sealed class AdminIdentityConfigurationHttpTests(SessionListingPostgresFi
         internal object Scope(IdentityConfigurationFamily family) => family switch
         {
             IdentityConfigurationFamily.Authentication => new { family = family.ToString() },
+            IdentityConfigurationFamily.Registration or IdentityConfigurationFamily.Totp => new { family = family.ToString() },
             IdentityConfigurationFamily.Assurance => new { family = family.ToString(), assuranceScope = Environment.AssuranceScope },
             _ => new { family = family.ToString(), authenticationPolicyVersion = Environment.Authentication().Values.Version }
         };
         internal static string DraftPath(IdentityConfigurationFamily family) => family switch
-        { IdentityConfigurationFamily.Authentication => "/authentication/draft", IdentityConfigurationFamily.Assurance => "/assurance/draft", _ => "/content-binding/draft" };
+        { IdentityConfigurationFamily.Authentication => "/authentication/draft", IdentityConfigurationFamily.Assurance => "/assurance/draft", IdentityConfigurationFamily.Registration => "/registration/draft", IdentityConfigurationFamily.Totp => "/totp/draft", _ => "/content-binding/draft" };
         internal object DraftBody(IdentityConfigurationFamily family, string version, Guid key)
         {
             object candidate = family switch
-            { IdentityConfigurationFamily.Authentication => Environment.Authentication(version), IdentityConfigurationFamily.Assurance => Environment.Assurance(version), _ => Environment.Binding(version) };
+            { IdentityConfigurationFamily.Authentication => Environment.Authentication(version), IdentityConfigurationFamily.Assurance => Environment.Assurance(version),
+                IdentityConfigurationFamily.Registration => IdentityRuntimeAdditionalConfigurationTests.Registration(Environment, version),
+                IdentityConfigurationFamily.Totp => IdentityRuntimeAdditionalConfigurationTests.Totp(Environment, version), _ => Environment.Binding(version) };
             return new { idempotencyKey = key, candidate };
         }
         internal async Task<string> Cookie(string actor)

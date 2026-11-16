@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using System.Text.Json.Serialization;
 using Tunner.Platform.Policies;
 
 namespace Tunner.Identity.Persistence;
@@ -20,7 +21,11 @@ public sealed record IdentityConfigurationWorkspace(IdentityConfigurationScope S
 public sealed record SearchIdentityConfiguration(IdentityConfigurationScope Scope, string? Search, int PageSize, int Offset, string OperationId, string CorrelationId);
 public sealed record BrowseIdentityConfigurationHistory(IdentityConfigurationScope Scope, int PageSize, int Offset, string OperationId, string CorrelationId);
 public sealed record IdentityConfigurationHistoricalPreview(IdentityConfigurationHistory Publication, AuthenticationPolicyVersion? Authentication,
-    AssurancePolicyVersion? Assurance, AuthenticationContentBinding? ContentBinding);
+    AssurancePolicyVersion? Assurance, AuthenticationContentBinding? ContentBinding)
+{
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] public RegistrationPolicyVersion? Registration { get; init; }
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] public TotpPolicyVersion? Totp { get; init; }
+}
 public enum IdentityConfigurationCapabilityTarget { Workspace, Proposal, History }
 public sealed record IdentityConfigurationCapabilityQuery(IdentityConfigurationScope Scope, IdentityConfigurationCapabilityTarget Target,
     Guid? ProposalReference, long? ExpectedRevision, Guid? PublicationReference, string OperationId, string CorrelationId);
@@ -43,7 +48,7 @@ public sealed partial class IdentityRuntimeConfigurationApplication
             IdentityConfigurationDigest.Of(new { publicationReference = publication.Id, versionReference = version.Id, version.Digest }), operationId, correlationId);
         var actor = await AuthorizeAsync(request, ct).ConfigureAwait(false);
         await FinishAsync(tx, authority, request, actor, Guid.Empty, 0, request.CandidateDigest, null, null, null, ct).ConfigureAwait(false);
-        return new(History(publication, version, scope), value.Authentication, value.Assurance, value.ContentBinding);
+        return new(History(publication, version, scope), value.Authentication, value.Assurance, value.ContentBinding) { Registration = value.Registration, Totp = value.Totp };
     }
     public async Task<IdentityConfigurationWorkspace> WorkspaceAsync(IdentityConfigurationScope scope, IIdentityConfigurationBrowseBudgetSource budgets,
         string operationId, string correlationId, CancellationToken cancellationToken = default)

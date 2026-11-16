@@ -2,14 +2,26 @@ using System.Data.Common;
 using System.Text.Json;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Tunner.Platform.Policies;
 
 namespace Tunner.Identity.Persistence;
 
 /// <summary>Only current effective publications with immutable Identity validation/approval/effect receipts are runtime authority.
 /// Reading a policy never requires an Admin browser session and never changes historical actor/session state.</summary>
-public sealed class PersistedIdentityRuntimeConfigurationSource(IServiceScopeFactory scopes) : IAuthenticationPolicySource, IAssurancePolicySource, IAuthenticationContentBindingSource
+public sealed class PersistedIdentityRuntimeConfigurationSource(IServiceScopeFactory scopes) : IAuthenticationPolicySource, IAssurancePolicySource, IAuthenticationContentBindingSource,
+    IRegistrationPolicySource, ITotpPolicySource
 {
+    RegistrationPolicy IRegistrationPolicySource.RequireEffective(DateTimeOffset effectiveAt)
+    {
+        var value = Read(new(IdentityConfigurationFamily.Registration), effectiveAt).Document.Registration ?? throw new IdentityConfigurationUnavailableException();
+        return new RegistrationPolicyCatalog([value]).RequireEffective(effectiveAt);
+    }
+    TotpPolicy ITotpPolicySource.RequireEffective(DateTimeOffset effectiveAt)
+    {
+        var value = Read(new(IdentityConfigurationFamily.Totp), effectiveAt).Document.Totp ?? throw new IdentityConfigurationUnavailableException();
+        return new TotpPolicyCatalog([value]).RequireEffective(effectiveAt);
+    }
     public AuthenticationPolicy RequireEffective(DateTimeOffset effectiveAt)
     {
         var selected = Read(new(IdentityConfigurationFamily.Authentication), effectiveAt);
@@ -73,6 +85,22 @@ public sealed class PersistedIdentityRuntimeConfigurationSource(IServiceScopeFac
 
 public static class IdentityRuntimeConfigurationRegistration
 {
+    /// <summary>Separate opt-in: registering this port can activate Registration in a composing User host.</summary>
+    public static IServiceCollection AddTunnerPersistedRegistrationConfiguration(this IServiceCollection services)
+    {
+        ArgumentNullException.ThrowIfNull(services);
+        if (services.Any(x => x.ServiceType == typeof(IRegistrationPolicySource))) throw new InvalidOperationException("Registration configuration source selection must be explicit and unique.");
+        services.TryAddSingleton<PersistedIdentityRuntimeConfigurationSource>();
+        services.AddSingleton<IRegistrationPolicySource>(provider => provider.GetRequiredService<PersistedIdentityRuntimeConfigurationSource>()); return services;
+    }
+    /// <summary>Separate opt-in: registering this port can activate TOTP in a composing User host.</summary>
+    public static IServiceCollection AddTunnerPersistedTotpConfiguration(this IServiceCollection services)
+    {
+        ArgumentNullException.ThrowIfNull(services);
+        if (services.Any(x => x.ServiceType == typeof(ITotpPolicySource))) throw new InvalidOperationException("TOTP configuration source selection must be explicit and unique.");
+        services.TryAddSingleton<PersistedIdentityRuntimeConfigurationSource>();
+        services.AddSingleton<ITotpPolicySource>(provider => provider.GetRequiredService<PersistedIdentityRuntimeConfigurationSource>()); return services;
+    }
     /// <summary>Explicit source selection. Existing providers must be removed intentionally; there is no test or production fallback.</summary>
     public static IServiceCollection AddTunnerPersistedIdentityRuntimeConfiguration(this IServiceCollection services)
     {
