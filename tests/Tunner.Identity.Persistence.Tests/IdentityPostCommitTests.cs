@@ -1,5 +1,7 @@
 using System.Text.Json;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.DataProtection;
+using Microsoft.Extensions.DependencyInjection;
 using Tunner.Database;
 using Tunner.Database.Audit;
 using Tunner.Database.DurableWork;
@@ -12,6 +14,49 @@ namespace Tunner.Identity.Persistence.Tests;
 
 public sealed class IdentityPostCommitTests(SessionListingPostgresFixture fixture) : IClassFixture<SessionListingPostgresFixture>
 {
+    [Theory]
+    [InlineData("session")]
+    [InlineData("step-up")]
+    public async Task MaintenanceExpiryRecordsTheAffectedAccountWithoutAttributingAUserAction(string family)
+    {
+        await using var h = await Harness.Start(fixture);
+        await using var scope = h.Host.Services.CreateAsyncScope();
+        var services = scope.ServiceProvider;
+        string eventType;
+        if (family == "session")
+        {
+            h.Host.Clock.Advance(TimeSpan.FromMinutes(5));
+            Assert.Equal(1, await services.GetRequiredService<IAuthenticationSessionMaintenance>().ExpireSessionsAsync());
+            eventType = "TunnerSessionExpired";
+        }
+        else
+        {
+            var caller = await SessionListingTests.SignIn(h.Host);
+            var policyScope = new AssurancePolicyScope("fixture.post-commit", "fixture.owner");
+            var policy = new AssurancePolicyVersion(new("fixture-maintenance-proof", "ACTIVE", policyScope,
+                new EffectivePolicyInterval(h.Host.Clock.GetUtcNow().AddHours(-1), true, null, false), null, ["fixture-only"]),
+                "fixture-password", TimeSpan.FromSeconds(30), new Dictionary<string,string> { ["pwd"] = "fixture-password" });
+            var app = new StepUpApplication(services.GetRequiredService<IdentityPersistenceDbContext>(), services.GetRequiredService<AuthenticationApplication>(),
+                h.Host.Policies, new AssurancePolicyCatalog([policy]), services.GetRequiredService<AuthenticationPasswordWork>(),
+                services.GetRequiredService<IDataProtectionProvider>(), h.Host.Clock);
+            var operation = new StepUpOperation("OP-" + Guid.NewGuid().ToString("N"), "fixture-maintenance-correlation", policyScope, "fixture-resource", 1, new string('A',64));
+            Assert.Null((await app.IssuePasswordAsync(caller, operation, policy.Metadata.VersionId, Password)).ErrorCode);
+            h.Host.Clock.Advance(TimeSpan.FromSeconds(31));
+            Assert.Equal(1, await app.ExpireAsync());
+            eventType = "StepUpProofExpired";
+        }
+        await using var identity = h.Identity.CreateDbContext();
+        var message = IdentityPostCommitProcessor.Project(await identity.Set<OutboxMessage>().AsNoTracking().SingleAsync(x => x.EventType == eventType));
+        var facts = Assert.IsType<IdentityPostCommitOwnerFacts>(await new IdentitySecurityPostCommitOwnerSource(h.Identity).ReadCommittedAsync(message, default));
+        Assert.Null(facts.ActorAccountId); Assert.Equal(h.Account, facts.References["targetAccountReference"]);
+        h.Contracts.AuditOnly = true;
+        Assert.Equal(IdentityPostCommitOutcome.Completed, await h.Processor.ProcessAsync(message));
+        await using var platform = h.Platform.CreateDbContext();
+        var audit = Assert.Single(await platform.AuditEvents.ToListAsync()); audit.RequireIntegrity();
+        using var json = JsonDocument.Parse(audit.Envelope);
+        Assert.Equal("fixture-maintenance", json.RootElement.GetProperty("actor").GetProperty("principal_id").GetString());
+        Assert.Empty(h.Dispatcher.Intents);
+    }
     [Fact]
     public async Task CommittedPasswordEventProducesOneBoundAuditAndSafeIntentBeforeInboxCompletion()
     {
@@ -230,7 +275,7 @@ public sealed class IdentityPostCommitTests(SessionListingPostgresFixture fixtur
 
     private sealed class Contracts(TestClock clock) : IIdentityPostCommitContractSource
     {
-        internal bool WrongActor, Unavailable;
+        internal bool WrongActor, Unavailable, AuditOnly;
         internal string TemplateVersion = "fixture-template-v1";
         public ValueTask<IdentityPostCommitQualification?> RequireCurrentAsync(IdentityPostCommitFacts facts, DateTimeOffset at, CancellationToken cancellationToken)
         {
@@ -238,14 +283,14 @@ public sealed class IdentityPostCommitTests(SessionListingPostgresFixture fixtur
             ct.ThrowIfCancellationRequested(); if (Unavailable) return ValueTask.FromResult<IdentityPostCommitQualification?>(null);
             const string version = "fixture-contract-v1", evidence = "fixture-contract-approval";
             var e = f.Event;
-            var audit = new AuditEvent(e.EventId, e.OccurredAtUtc, new AuditActor(WrongActor ? "ACC-forged" : f.Owner.ActorAccountId!, "fixture-account-actor", [f.Owner.SessionReference!]),
+            var audit = new AuditEvent(e.EventId, e.OccurredAtUtc, new AuditActor(WrongActor ? "ACC-forged" : f.Owner.ActorAccountId ?? "fixture-maintenance", "fixture-account-actor", [f.Owner.SessionReference!]),
                 "fixture-authentication-recorded", e.OperationId!, e.CorrelationId!, [new(e.Subject, e.ResourceVersion)], "fixture-committed",
                 e.DataClassification, "fixture-audit-retention", e.EventId.ToString("N"), policyVersionReferences: [version], evidenceReferences: [evidence]);
             var notice = new IdentitySecurityNotification(e.EventId, e.EventId, f.Digest, version, "fixture-security-class", TemplateVersion,
                 "fixture-published-content-v1", "en", "fixture-verified-contact-reference", "fixture-recipient-safety-evidence", "fixture-route-resolution",
                 "fixture-processing", "fixture-retention", evidence);
             return ValueTask.FromResult<IdentityPostCommitQualification?>(new(e.EventId, f.Digest, version, evidence,
-                new EffectivePolicyInterval(clock.GetUtcNow().AddDays(-1), true, clock.GetUtcNow().AddDays(1), false), audit, notice));
+                new EffectivePolicyInterval(clock.GetUtcNow().AddDays(-1), true, clock.GetUtcNow().AddDays(1), false), audit, AuditOnly ? null : notice));
         }
     }
 

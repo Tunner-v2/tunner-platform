@@ -33,14 +33,17 @@ public sealed class IdentitySecurityPostCommitOwnerSource(IDbContextFactory<Iden
             if (row is null || e.Subject != reference.ToString("N") || version > row.Version ||
                 e.EventType != "TunnerSessionAuthenticated" && (row.Version != version || row.OperationId != e.OperationId || row.CorrelationId != e.CorrelationId || row.RevokedAt != e.OccurredAtUtc) ||
                 e.EventType == "TunnerSessionAuthenticated" && version != 1) return null;
-            return Facts("SESSION", e.Subject, row.AccountId, row.SessionId, row.PolicyVersion, row.ProcessingReference, row.RetentionReference);
+            var facts = Facts("SESSION", e.Subject, row.AccountId, row.SessionId, row.PolicyVersion, row.ProcessingReference, row.RetentionReference);
+            // End can also be invoked by maintenance or credential retirement; its target is not an acting user witness.
+            return e.EventType == "TunnerSessionAuthenticated" ? facts : TargetOnly(facts);
         }
         if (e.EventType is "StepUpProofIssued" or "StepUpProofConsumed" or "StepUpProofExpired")
         {
             var row = await db.Set<StepUpProofRow>().AsNoTracking().SingleOrDefaultAsync(x => x.ProofId == reference, ct).ConfigureAwait(false);
             if (row is null || e.Subject != reference.ToString("N") || row.Version < version || row.OperationId != e.OperationId || row.CorrelationId != e.CorrelationId ||
                 (e.EventType == "StepUpProofIssued" ? version != 1 : row.Version != version || row.EndedAt != e.OccurredAtUtc)) return null;
-            return Facts("STEP_UP", e.Subject, row.AccountId, row.SessionId, row.PolicyVersion, row.ProcessingReference, row.RetentionReference);
+            var facts = Facts("STEP_UP", e.Subject, row.AccountId, row.SessionId, row.PolicyVersion, row.ProcessingReference, row.RetentionReference);
+            return e.EventType == "StepUpProofExpired" ? TargetOnly(facts) : facts;
         }
         if (e.EventType is "DeviceTrustEvaluated" or "DeviceTrustRevoked")
         {
@@ -63,8 +66,8 @@ public sealed class IdentitySecurityPostCommitOwnerSource(IDbContextFactory<Iden
             if (result is null || e.Subject != result.CaseId.ToString("N") || e.OperationId != "OP-RECOVERY-CASE-" + result.CaseId.ToString("N") || result.RecordedAt != e.OccurredAtUtc) return null;
             var recovery = await db.Set<RecoveryCaseRow>().AsNoTracking().SingleAsync(x => x.CaseId == result.CaseId, ct).ConfigureAwait(false);
             if (e.CorrelationId != recovery.RequestId.ToString("N") || version != recovery.Version) return null;
-            return Facts("RECOVERY_RESULT", reference.ToString("N"), result.AccountId, result.TargetSessionId,
-                result.PolicyVersion, result.ProcessingReference, result.RetentionReference, ("outcome", result.Outcome));
+            return TargetOnly(Facts("RECOVERY_RESULT", reference.ToString("N"), result.AccountId, result.TargetSessionId,
+                result.PolicyVersion, result.ProcessingReference, result.RetentionReference, ("outcome", result.Outcome)));
         }
         if (e.EventType == "IdentitySecurityNotificationRequested")
         {
@@ -72,8 +75,8 @@ public sealed class IdentitySecurityPostCommitOwnerSource(IDbContextFactory<Iden
             if (challenge is null || e.Subject != reference.ToString("N") || version != 1 || e.OperationId != "OP-RECOVERY-CASE-" + challenge.CaseId.ToString("N")) return null;
             var recovery = await db.Set<RecoveryCaseRow>().AsNoTracking().SingleAsync(x => x.CaseId == challenge.CaseId, ct).ConfigureAwait(false);
             if (e.CorrelationId != recovery.RequestId.ToString("N")) return null;
-            return Facts("RECOVERY_CONTACT", reference.ToString("N"), recovery.AccountId, null, recovery.PolicyVersion,
-                challenge.ProcessingReference, challenge.RetentionReference, ("deliveryReference", reference.ToString("N")), ("challengeReference", challenge.ChallengeId.ToString("N")));
+            return TargetOnly(Facts("RECOVERY_CONTACT", reference.ToString("N"), recovery.AccountId, null, recovery.PolicyVersion,
+                challenge.ProcessingReference, challenge.RetentionReference, ("deliveryReference", reference.ToString("N")), ("challengeReference", challenge.ChallengeId.ToString("N"))));
         }
         return null;
     }
@@ -147,4 +150,11 @@ public sealed class IdentitySecurityPostCommitOwnerSource(IDbContextFactory<Iden
     private static IdentityPostCommitOwnerFacts Facts(string kind, string reference, string account, Guid? session,
         string policy, string processing, string retention, params (string Key, string Value)[] references) =>
         new(kind, reference, account, session?.ToString("N"), policy, processing, retention, references.ToDictionary(x => x.Key, x => x.Value, StringComparer.Ordinal));
+
+    private static IdentityPostCommitOwnerFacts TargetOnly(IdentityPostCommitOwnerFacts facts)
+    {
+        var references = facts.References.ToDictionary(x => x.Key, x => x.Value, StringComparer.Ordinal);
+        references.Add("targetAccountReference", facts.ActorAccountId!);
+        return facts with { ActorAccountId = null, References = references };
+    }
 }
