@@ -56,6 +56,7 @@ public sealed class IdentityRuntimeConfigurationApplication(IdentityPersistenceD
         ArgumentNullException.ThrowIfNull(command); var ct = cancellationToken; await using var tx = await BeginAsync(ct).ConfigureAwait(false);
         var row = await ProposalAsync(command.ProposalReference, command.ExpectedRevision, ct).ConfigureAwait(false); var document = IdentityConfigurationDocument.Read(row.Payload);
         var authority = await ProposalGovernanceAsync(row, document, ct).ConfigureAwait(false);
+        await LockAsync("version:" + row.ScopeKey + ":" + row.PolicyVersionReference, ct).ConfigureAwait(false);
         if (row.State != "DRAFT" || await database.Set<IdentityConfigurationVersionRow>().AnyAsync(x => x.ScopeKey == row.ScopeKey && x.PolicyVersionReference == row.PolicyVersionReference, ct).ConfigureAwait(false))
             throw new IdentityConfigurationConflictException();
         var request = Request(IdentityConfigurationOperation.Validate, document.Scope, authority, row.Id.ToString("N"), row.Revision, row.Digest, command.OperationId, command.CorrelationId);

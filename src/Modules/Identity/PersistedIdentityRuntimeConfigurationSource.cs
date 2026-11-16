@@ -44,17 +44,21 @@ public sealed class PersistedIdentityRuntimeConfigurationSource(IServiceScopeFac
             requested.Require(); var key = requested.Key;
             using var scope = scopes.CreateScope(); var database = scope.ServiceProvider.GetRequiredService<IdentityPersistenceDbContext>();
             if (database.Database.CurrentTransaction is not null || database.ChangeTracker.HasChanges()) throw new IdentityConfigurationUnavailableException();
-            var publications = database.Set<IdentityConfigurationPublicationRow>().AsNoTracking().Where(x => x.ScopeKey == key).ToArray();
-            if (database.Database.SqlQuery<int>($"SELECT count(*)::integer AS \"Value\" FROM identity.runtime_configuration_publications WHERE scope_key={key} AND NOT identity.runtime_configuration_valid_publication(id)").Single() != 0)
-                throw new IdentityConfigurationUnavailableException();
-            var eligible = publications.Where(x => !publications.Any(y => y.SupersedesPublicationReference == x.Id &&
-                (at > y.EffectiveFrom || at == y.EffectiveFrom && y.IncludesFrom))).ToArray();
+            // Ask the indexed owner store for only current leaves. Historical successors still permanently
+            // supersede their predecessors, including after expiry; none are materialized in the request path.
+            var eligible = database.Set<IdentityConfigurationPublicationRow>().AsNoTracking().Where(x => x.ScopeKey == key &&
+                (x.EffectiveFrom < at || x.EffectiveFrom == at && x.IncludesFrom) &&
+                (x.EffectiveUntil == null || x.EffectiveUntil > at || x.EffectiveUntil == at && x.IncludesUntil) &&
+                !database.Set<IdentityConfigurationPublicationRow>().Any(y => y.SupersedesPublicationReference == x.Id &&
+                    (y.EffectiveFrom < at || y.EffectiveFrom == at && y.IncludesFrom))).Take(2).ToArray();
             var candidates = eligible.Select(x => new PolicyVersionCandidate<string>(x.Id.ToString("N"), "PUBLISHED", key,
                 new(x.EffectiveFrom, x.IncludesFrom, x.EffectiveUntil, x.IncludesUntil), x.SupersedesPublicationReference?.ToString("N"),
                 [x.ApprovalEventReference.ToString("N"), x.ApprovalEvidenceReference]));
             var resolved = EffectivePolicyVersionResolver.Resolve(at, key, candidates, static (a, b) => a == b, static candidate => candidate.Status == "PUBLISHED");
             if (resolved.SelectedVersion is null) throw new IdentityConfigurationUnavailableException();
             var publication = eligible.Single(x => x.Id.ToString("N") == resolved.SelectedVersion.VersionId);
+            if (!database.Database.SqlQuery<bool>($"SELECT identity.runtime_configuration_valid_publication({publication.Id}) AS \"Value\"").Single())
+                throw new IdentityConfigurationUnavailableException();
             var version = database.Set<IdentityConfigurationVersionRow>().AsNoTracking().SingleOrDefault(x => x.Id == publication.VersionReference)
                 ?? throw new IdentityConfigurationUnavailableException();
             var document = IdentityConfigurationDocument.Read(version.Payload);

@@ -220,6 +220,26 @@ public sealed class IdentityRuntimeConfigurationTests(SessionListingPostgresFixt
         Assert.Equal("fixture-legitimate", env.Source.RequireEffective(env.Clock.GetUtcNow()).Version);
     }
 
+    [Fact]
+    public async Task ConcurrentProposalsCannotValidateTheSameImmutablePolicyVersion()
+    {
+        await using var db = await fixture.CreateDatabaseAsync(); var env = new RuntimeConfigurationTestEnvironment(db);
+        IdentityConfigurationProposal first; IdentityConfigurationProposal second;
+        await using (var scope = env.Open())
+        {
+            first = await env.CreateAsync(scope.Application, IdentityConfigurationFamily.Authentication, "fixture-racing-version");
+            second = await env.CreateAsync(scope.Application, IdentityConfigurationFamily.Authentication, "fixture-racing-version");
+        }
+        async Task<bool> Validate(IdentityConfigurationProposal proposal)
+        {
+            await using var scope = env.Open();
+            try { await scope.Application.ValidateAsync(env.Command(proposal)); return true; }
+            catch (IdentityConfigurationConflictException) { return false; }
+        }
+        var results = await Task.WhenAll(Validate(first), Validate(second));
+        Assert.Single(results, x => x); Assert.Single(results, x => !x);
+    }
+
     private sealed class AdvanceClock(bool saved, Action advance) : SaveChangesInterceptor
     {
         public override ValueTask<InterceptionResult<int>> SavingChangesAsync(DbContextEventData eventData, InterceptionResult<int> result, CancellationToken cancellationToken = default)
