@@ -2,8 +2,26 @@
   "schema_version": 1,
   "scope_id": "P2-010-RV010",
   "owner_work_item": "TUN-P2-016",
-  "result": "PENDING",
-  "owned_behavior_paths": ["src/Modules/Identity/RegistrationApplication.cs"],
+  "result": "PASS",
+  "owned_behavior_paths": [
+    "src/Modules/Identity/RegistrationApplication.cs"
+  ],
   "qualification": "Confirmed invalidated-proof notification retry defect; preserve existing-account notices and all original federation behavior. No Product policy change.",
-  "reproduction": {"source": "88926ee96e804a628138030bb5a34e117d366298", "run_id": "69d504306eb14aa5a73b41b8e72fec5e", "executed": 2, "passed": 1, "failed": 1, "ref": "artifacts/p2-014-authorization-20261115/native-runtime-69d504306eb14aa5a73b41b8e72fec5e/summary.json"}
+  "reproduction": {
+    "source": "88926ee96e804a628138030bb5a34e117d366298",
+    "run_id": "69d504306eb14aa5a73b41b8e72fec5e",
+    "executed": 2,
+    "passed": 1,
+    "failed": 1,
+    "ref": "artifacts/p2-014-authorization-20261115/native-runtime-69d504306eb14aa5a73b41b8e72fec5e/summary.json"
+  },
+  "validation_kind": "COMMITTED",
+  "tested_commit_sha": "98807ebe4bb7cb4e74b1aecf938a9edb8c243475",
+  "validated_commit_sha": "98807ebe4bb7cb4e74b1aecf938a9edb8c243475",
+  "technical_binding": {
+    "actual_integrated_source_sha": "98807ebe4bb7cb4e74b1aecf938a9edb8c243475",
+    "qualification_ref": "governance/evidence/TUN-P2-016-VALIDATION.json",
+    "raw_ref": "governance/evidence/p2-016-notifications-20261115/native/16fd07b9314e459aa34d3eae560d2d6f/summary.json",
+    "scope": "Qualified exact owned shared-source compatibility using actual78-case integration, source-scoped reviews and applicable retained Worker20/nativeProduct8/host251 receipts. Original parent closure and Product/release authority remain unchanged."
+  }
 }

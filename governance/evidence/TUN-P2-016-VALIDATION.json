@@ -2,16 +2,182 @@
   "schema_version": 1,
   "scope_id": "TUN-P2-016",
   "result": "PENDING",
-  "phase": "IMPLEMENTATION_AND_FOCUSED_INTEGRATION",
-  "admission": {"scope": "TUN-P2-016", "context_ref": "artifacts/p2-016-notifications-20261115/context-in-progress/manifest.json", "context_generated_at": "2026-11-16T00:08:18.0733144+00:00", "verified_outcome": "CURRENT", "native_exit_code": 0, "status": "IN_PROGRESS"},
+  "phase": "ENGINEERING_QUALIFIED_OWNERSHIP_CARRIER_AND_NATIVE_GATES_PENDING",
+  "admission": {
+    "scope": "TUN-P2-016",
+    "context_ref": "artifacts/p2-016-notifications-20261115/context-in-progress/manifest.json",
+    "context_generated_at": "2026-11-16T00:08:18.0733144+00:00",
+    "verified_outcome": "CURRENT",
+    "native_exit_code": 0,
+    "status": "IN_PROGRESS"
+  },
   "actual_runs": [
-    {"run_id": "69d504306eb14aa5a73b41b8e72fec5e", "source_sha": "88926ee96e804a628138030bb5a34e117d366298", "executed": 2, "passed": 1, "failed": 1, "purpose": "Confirmed registration retry defect and passing existing-account countercase"},
-    {"run_id": "cb814e88635c40049c0db58ef329267d", "source_sha": "8cb3a4cc4c0b4be2622ff4633b7ad4447b1c6cfb", "executed": 2, "passed": 2, "failed": 0, "purpose": "Same focused regressions after retry guard"},
-    {"run_id": "ac224a80f92b488693918fbc81d4b88a", "source_sha": "8cb3a4cc4c0b4be2622ff4633b7ad4447b1c6cfb", "executed": 22, "passed": 22, "failed": 0, "purpose": "Committed producer envelope, idempotent audit and inbox, duplicate acknowledgement, real passkey/TOTP, qualification failures, audit failure, lease theft/expiry and stable handoff identity"},
-    {"run_id": "90df608a59884bd191df0c310720e3a3", "source_sha": "cdf99275363b59fb839a60c6ec78b303dae911dd", "executed": 6, "passed": 6, "failed": 0, "purpose": "Registration processor+real dispatcher: pending, invalidated, superseded, existing-account; actual session/proof maintenance actor attribution"}
+    {
+      "run_id": "69d504306eb14aa5a73b41b8e72fec5e",
+      "source_sha": "88926ee96e804a628138030bb5a34e117d366298",
+      "executed": 2,
+      "passed": 1,
+      "failed": 1,
+      "purpose": "Confirmed registration retry defect and passing existing-account countercase"
+    },
+    {
+      "run_id": "cb814e88635c40049c0db58ef329267d",
+      "source_sha": "8cb3a4cc4c0b4be2622ff4633b7ad4447b1c6cfb",
+      "executed": 2,
+      "passed": 2,
+      "failed": 0,
+      "purpose": "Same focused regressions after retry guard"
+    },
+    {
+      "run_id": "ac224a80f92b488693918fbc81d4b88a",
+      "source_sha": "8cb3a4cc4c0b4be2622ff4633b7ad4447b1c6cfb",
+      "executed": 22,
+      "passed": 22,
+      "failed": 0,
+      "purpose": "Committed producer envelope, idempotent audit and inbox, duplicate acknowledgement, real passkey/TOTP, qualification failures, audit failure, lease theft/expiry and stable handoff identity"
+    },
+    {
+      "run_id": "90df608a59884bd191df0c310720e3a3",
+      "source_sha": "cdf99275363b59fb839a60c6ec78b303dae911dd",
+      "executed": 6,
+      "passed": 6,
+      "failed": 0,
+      "purpose": "Registration processor+real dispatcher: pending, invalidated, superseded, existing-account; actual session/proof maintenance actor attribution"
+    }
   ],
   "raw_evidence": "governance/evidence/p2-016-notifications-20261115/native/<run_id>/{launch.json,summary.json,product-authorization.trx}",
   "environment": "Existing qualified native runner reused without duplication. Actual PostgreSQL, exact cached fixture image, owned resources removed and borrowed browser resources preserved on every recorded run. No image changes, production configuration or provider delivery claim.",
-  "remaining": ["Qualify concrete Product/device owner adapters and remaining producer scope", "Integrate and qualify the real hosted RabbitMQ consumer with explicit topology/error contracts", "Required integrated regression/security, final reviews, committed validation binding and native acceptance gates"],
-  "acceptance_boundary": "Focused runs are actual executed results at their own SHAs. Entire P2-016, whole P2, protected-main integration, production and release are not complete. No completed prior qualification is replaced."
+  "remaining": [
+    "Commit ownership declaration carrier and bind source-equivalent engineering qualification truthfully",
+    "Close qualified compatibility revisions and refresh affected open prerequisite bindings",
+    "Pass current native readiness/context/lifecycle gates and obtain scoped Product acceptance before DONE"
+  ],
+  "acceptance_boundary": "Actual execution receipts retain their exact original SHAs. No Product acceptance for P2-016, whole-P2 completion, production activation, protected-main merge or release is inferred.",
+  "validation_kind": "COMMITTED",
+  "tested_commit_sha": "98807ebe4bb7cb4e74b1aecf938a9edb8c243475",
+  "validated_commit_sha": "98807ebe4bb7cb4e74b1aecf938a9edb8c243475",
+  "owned_behavior_paths": [
+    "docs/contracts/product-authorization-contract.md",
+    "src/Modules/Identity/AuthenticationRejectionPostCommitOwnerSource.cs",
+    "src/Modules/Identity/IdentityPostCommitContracts.cs",
+    "src/Modules/Identity/IdentityPostCommitProcessor.cs",
+    "src/Modules/Identity/IdentitySecurityPostCommitOwnerSource.cs",
+    "src/Modules/Identity/PasskeyAuthenticationPostCommitFacts.cs",
+    "src/Modules/Identity/ProductAuthorizationLifecycleApplication.cs",
+    "src/Modules/Identity/ProductAuthorizationPostCommitOwnerSource.cs",
+    "src/Modules/Identity/RecoveryContactPostCommitNotificationDispatcher.cs",
+    "src/Modules/Identity/RegistrationApplication.cs",
+    "src/Modules/Identity/RegistrationPostCommitNotifications.cs",
+    "src/Tunner.Worker/Messaging/RabbitMqOutboxEnvelope.cs",
+    "src/Tunner.Worker/Messaging/RabbitMqOutboxReceiveContracts.cs",
+    "src/Tunner.Worker/Messaging/RabbitMqOutboxReceiveModule.cs",
+    "src/Tunner.Worker/Messaging/RabbitMqOutboxReceiver.cs",
+    "src/Tunner.Worker/Program.cs",
+    "tests/Tunner.Identity.Persistence.Tests/AuthenticationAuditCompletionTests.cs",
+    "tests/Tunner.Identity.Persistence.Tests/AuthenticationRejectionPostCommitTests.cs",
+    "tests/Tunner.Identity.Persistence.Tests/IdentityPostCommitBrokerTests.cs",
+    "tests/Tunner.Identity.Persistence.Tests/IdentityPostCommitDeviceTests.cs",
+    "tests/Tunner.Identity.Persistence.Tests/IdentityPostCommitTests.cs",
+    "tests/Tunner.Identity.Persistence.Tests/ProductAuthorizationPostCommitOwnerTests.cs",
+    "tests/Tunner.Identity.Persistence.Tests/ProductAuthorizationProtocolTests.cs",
+    "tests/Tunner.Identity.Persistence.Tests/RecoveryContactPostCommitTests.cs",
+    "tests/Tunner.Identity.Persistence.Tests/RecoveryContactRepairPrivateIntegrationTests.cs",
+    "tests/Tunner.Identity.Persistence.Tests/RegistrationTests.cs",
+    "tests/Tunner.Identity.Persistence.Tests/Tunner.Identity.Persistence.Tests.csproj",
+    "tests/Tunner.Worker.Tests/OutboxReceiveBrokerFixture.cs",
+    "tests/Tunner.Worker.Tests/RabbitMqOutboxEnvelopeTests.cs",
+    "tests/Tunner.Worker.Tests/RabbitMqOutboxReceiverIntegrationTests.cs",
+    "tests/Tunner.Worker.Tests/RabbitMqOutboxReceiverTests.cs"
+  ],
+  "checked_at": "2026-11-16T03:18:26Z",
+  "integrated_qualification": {
+    "result": "PASS",
+    "source_sha": "98807ebe4bb7cb4e74b1aecf938a9edb8c243475",
+    "run_id": "16fd07b9314e459aa34d3eae560d2d6f",
+    "executed": 78,
+    "distinct_test_names": 78,
+    "passed": 78,
+    "failed": 0,
+    "not_executed": 0,
+    "timed_out": false,
+    "owned_containers_remaining": 0,
+    "borrowed_preserved": true,
+    "evidence_ref": "governance/evidence/p2-016-notifications-20261115/native/16fd07b9314e459aa34d3eae560d2d6f/summary.json"
+  },
+  "supporting_qualification": [
+    {
+      "scope": "Worker envelope/receiver/hosting, safe telemetry, real RabbitMQ",
+      "source_sha": "f3613d18f027f1ab771f88be5b774aa1a9094385",
+      "run_id": "d00239e732a54d8e9507e6faa21a31b1",
+      "passed": 20,
+      "failed": 0,
+      "not_executed": 0,
+      "source_reuse": "Worker behavior files unchanged from this actual run through 98807eb."
+    },
+    {
+      "scope": "Existing native HTTPS Product lifecycle, schema-2 metadata and atomic final-recheck rollback",
+      "source_sha": "7925bd14d2c09fa45ff610de2b0a108db9bfc8f7",
+      "run_id": "03e2747b0b394162a15dcf2d3a7455f1",
+      "passed": 8,
+      "failed": 0,
+      "not_executed": 0,
+      "source_reuse": "Affected Product lifecycle source unchanged through 98807eb. Original 81-case Product qualification remains separately retained; no full rerun is claimed."
+    }
+  ],
+  "host_regression": {
+    "result": "PASS_COMBINED_ACTUAL_RUNS",
+    "distinct_cases": 251,
+    "initial": {
+      "passed": 185,
+      "failed": 66,
+      "not_executed": 0,
+      "ref": "governance/evidence/p2-016-notifications-20261115/host-gates/host-architecture.trx"
+    },
+    "isolated_setup_case": {
+      "passed": 1,
+      "ref": "governance/evidence/p2-016-notifications-20261115/host-gates/host-crypto-isolation.trx"
+    },
+    "failed_subset_recheck": {
+      "passed": 66,
+      "failed": 0,
+      "not_executed": 0,
+      "ref": "governance/evidence/p2-016-notifications-20261115/host-gates/host-crypto-recheck.trx"
+    },
+    "provenance": "The original 251-case invocation failed on Windows temporary certificate-key access. One isolated case and then exactly the 66 failed cases passed outside the restricted sandbox. No certificate trust, guard or application change. Raw TRX lacks embedded Git SHA; relevant host/BFF/architecture sources are unchanged from 504d0b8 through 98807eb. This is not one 251-case passing invocation."
+  },
+  "diagnostic_attempts": [
+    {
+      "run_id": "57531926a112451f9ee4de58e55083e1",
+      "passed": 34,
+      "failed": 1,
+      "cause": "Registration age audit joined unused legacy columns; corrected to immutable Accounts evaluation ledger; focused case and final78 pass."
+    },
+    {
+      "run_id": "40e0e8374dd24a1b82c640db88d9183b",
+      "passed": 0,
+      "failed": 1,
+      "cause": "Test-only transient nonexclusive queues rejected by cached RabbitMQ; two fixture declarations corrected to supported durable queues; final real-host journey passes."
+    },
+    {
+      "run_id": "d42af6d16b684af6992d450444df1e12",
+      "passed": 1,
+      "failed": 4,
+      "cause": "New plain fixtures advanced a fixed policy clock beyond its interval; conditional test-only MFA synchronization restores existing qualification; all5 and final78 pass."
+    }
+  ],
+  "dependency_security": {
+    "result": "UNCHANGED_PRODUCTION_DEPENDENCY_DECLARATIONS",
+    "comparison": "e45e31f6ab8a6462aceef9dfe7bf3e2be36cf15c..98807ebe4bb7cb4e74b1aecf938a9edb8c243475",
+    "paths": [
+      "Directory.Packages.props",
+      "src/**/*.csproj"
+    ],
+    "qualification": "Existing pinned production dependencies and P2-014 dependency qualification reused. Test-only Worker reference restored successfully with normal NuGet advisory checks, no dependency upgrades or disabled audit."
+  },
+  "review_ref": "governance/evidence/TUN-P2-016-ROLE-REVIEWS.json",
+  "scope_boundary": "Mandatory current authentication/account/factor/recovery/session/device/Product audit joins and qualified notification handoffs are implemented. Fifteen emitted ceremony/control-stage types have no separately selected per-stage audit or automatic notification contract; they are not silently promoted to audited/delivered outcomes. Future Account closure and final recovery lifecycle producers remain in their own work items.",
+  "runtime_boundary": "Opt-in neutral Worker module, explicit subscription/topology/retry and audit/notification/content/privacy inputs. Queue handoff, provider acceptance and delivery remain separate. Local RetryDelay is loop backoff after immediate requeue, not broker-wide scheduled delivery. Production values and durable downstream Intent dedup remain separately qualified domain responsibilities.",
+  "followup_refs": [
+    "TODO-TUN-P2-017-POSTCOMMIT001"
+  ]
 }
