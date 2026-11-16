@@ -77,7 +77,27 @@ internal static class IdentityConfigurationDigest
 internal sealed record IdentityConfigurationDocument(AuthenticationPolicyVersion? Authentication = null, AssurancePolicyVersion? Assurance = null,
     AuthenticationContentBinding? ContentBinding = null)
 {
-    private static readonly JsonSerializerOptions Json = new() { UnmappedMemberHandling = JsonUnmappedMemberHandling.Disallow };
+    private static readonly JsonSerializerOptions Json = new()
+    {
+        UnmappedMemberHandling = JsonUnmappedMemberHandling.Disallow,
+        Converters = { new PolicyMetadataConverter<string>(), new PolicyMetadataConverter<AssurancePolicyScope>() }
+    };
+    // The shared immutable contract intentionally accepts IEnumerable while exposing IReadOnlyList.
+    // Keep persistence constructor binding local rather than changing that public policy contract.
+    private sealed record PolicyMetadata<TScope>(string VersionId, string Status, TScope Scope,
+        EffectivePolicyInterval EffectiveInterval, string? SupersedesVersionId, IReadOnlyList<string> ApprovalEvidenceReferences) where TScope : notnull;
+    private sealed class PolicyMetadataConverter<TScope> : JsonConverter<PolicyVersionCandidate<TScope>> where TScope : notnull
+    {
+        public override PolicyVersionCandidate<TScope> Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+        {
+            var metadata = JsonSerializer.Deserialize<PolicyMetadata<TScope>>(ref reader, options) ?? throw new JsonException();
+            return new(metadata.VersionId, metadata.Status, metadata.Scope, metadata.EffectiveInterval,
+                metadata.SupersedesVersionId, metadata.ApprovalEvidenceReferences);
+        }
+        public override void Write(Utf8JsonWriter writer, PolicyVersionCandidate<TScope> value, JsonSerializerOptions options) =>
+            JsonSerializer.Serialize(writer, new PolicyMetadata<TScope>(value.VersionId, value.Status, value.Scope, value.EffectiveInterval,
+                value.SupersedesVersionId, value.ApprovalEvidenceReferences), options);
+    }
     internal string Snapshot => JsonSerializer.Serialize(this);
     internal string Digest => IdentityConfigurationDigest.Of(this);
     internal IdentityConfigurationScope Scope => Authentication is not null ? new(IdentityConfigurationFamily.Authentication) : Assurance is not null
