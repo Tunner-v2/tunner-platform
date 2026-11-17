@@ -16,7 +16,16 @@ public sealed class AuthenticationTests(IdentityPostgresFixture fixture) : IClas
     public async Task CanonicalScreensGuardDirectEntryAndDoNotExposeAnAlternateHtmlRoute()
     {
         await using var db = await fixture.CreateDatabaseAsync(); await using var host = await Start(db); await host.SeedAsync(db);
-        using (var login = await host.Get("/login")) { Assert.Equal(HttpStatusCode.OK, login.StatusCode); Assert.Equal("text/html", login.Content.Headers.ContentType?.MediaType); }
+        using (var login = await host.Get("/login"))
+        {
+            Assert.Equal(HttpStatusCode.OK, login.StatusCode); Assert.Equal("text/html", login.Content.Headers.ContentType?.MediaType);
+            var script = System.Text.RegularExpressions.Regex.Match(await login.Content.ReadAsStringAsync(), "<script[^>]*src=\"([^\"]+)\"");
+            Assert.True(script.Success); Assert.StartsWith("/registration/", script.Groups[1].Value, StringComparison.Ordinal);
+            using var asset = await host.Get(script.Groups[1].Value); Assert.Equal(HttpStatusCode.OK, asset.StatusCode);
+            Assert.True(asset.Content.Headers.ContentType?.MediaType is "text/javascript" or "application/javascript");
+            Assert.Contains("script-src 'self'", asset.Headers.GetValues("Content-Security-Policy").Single(), StringComparison.Ordinal);
+            Assert.Equal("no-referrer", asset.Headers.GetValues("Referrer-Policy").Single());
+        }
         using (var guarded = await host.Get("/signed-in")) { Assert.Equal(HttpStatusCode.Redirect, guarded.StatusCode); Assert.Equal("/login", guarded.Headers.Location?.OriginalString); }
         using (var alias = await host.Get("/registration/authentication.html")) Assert.Equal(HttpStatusCode.Unauthorized, alias.StatusCode);
         var boot = await host.Options(); using var signed = await host.Post("/authentication/sign-in", Command(boot.Key), boot.Cookies, boot.Csrf); Assert.Equal(HttpStatusCode.OK, signed.StatusCode);
