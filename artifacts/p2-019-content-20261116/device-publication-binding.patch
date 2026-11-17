@@ -1,0 +1,96 @@
+diff --git a/src/Modules/Identity/DeviceContracts.cs b/src/Modules/Identity/DeviceContracts.cs
+--- a/src/Modules/Identity/DeviceContracts.cs
++++ b/src/Modules/Identity/DeviceContracts.cs
+@@ -193,6 +193,8 @@
+     }
+     public string Locale { get; }
+     public IReadOnlyDictionary<string, RegistrationPublishedText> Content { get; }
++    [System.Text.Json.Serialization.JsonIgnore]
++    internal string? BindingQualificationDigest { get; init; }
+ }
+ public interface IDevicePresentationSource
+ {
+diff --git a/src/Modules/Identity/DeviceBrowserEndpoints.cs b/src/Modules/Identity/DeviceBrowserEndpoints.cs
+--- a/src/Modules/Identity/DeviceBrowserEndpoints.cs
++++ b/src/Modules/Identity/DeviceBrowserEndpoints.cs
+@@ -79,8 +79,16 @@
+         }
+         catch (CryptographicException) { return null; } catch (JsonException) { return null; } catch (ArgumentException) { return null; }
+     }
++    internal static string PublicationDigest(DevicePresentation value)
++    {
++        if (value.BindingQualificationDigest is { } qualificationDigest)
++            return AuthenticationIdentity.Digest(JsonSerializer.Serialize(new {
++                value.Locale, Content = value.Content.OrderBy(x => x.Key, StringComparer.Ordinal).Select(x => x.Value).ToArray(),
++                BindingQualificationDigest = qualificationDigest }));
++        // Preserve the exact original digest bytes for ordinary local publication providers.
++        return AuthenticationIdentity.Digest(JsonSerializer.Serialize(new {
++            value.Locale, Content = value.Content.OrderBy(x => x.Key, StringComparer.Ordinal).Select(x => x.Value).ToArray() }));
++    }
+-    internal static string PublicationDigest(DevicePresentation value) => AuthenticationIdentity.Digest(JsonSerializer.Serialize(new {
+-        value.Locale, Content = value.Content.OrderBy(x => x.Key, StringComparer.Ordinal).Select(x => x.Value).ToArray() }));
+     internal static DevicePresentation Publication(IDevicePresentationSource source, AuthenticationPolicy authenticationPolicy, string devicePolicyVersion)
+     {
+         try { return source.RequirePublished(authenticationPolicy, devicePolicyVersion) ?? throw new InvalidOperationException("Device publication is unavailable."); }
+diff --git a/src/Modules/Identity/PublishedDevicePresentationSource.cs b/src/Modules/Identity/PublishedDevicePresentationSource.cs
+--- a/src/Modules/Identity/PublishedDevicePresentationSource.cs
++++ b/src/Modules/Identity/PublishedDevicePresentationSource.cs
+@@ -120,7 +120,7 @@
+             resolution.Content.Any(x => x.Key != x.Value.Key || x.Value.Locale != resolution.Locale || x.Value.VariantReference != resolution.EffectiveVariantReference))
+             throw new InvalidOperationException("Published Device content provenance is unavailable.");
+         var presentation = Project(resolution.Locale, resolution.Content.Values.Select(x => new RegistrationPublishedText(x.Key, x.VariantReference,
++            x.VersionReference, x.PublicationReference, x.Locale, "PUBLISHED", x.Text)), AuthenticationIdentity.Digest(JsonSerializer.Serialize(binding)));
+-            x.VersionReference, x.PublicationReference, x.Locale, "PUBLISHED", x.Text)));
+         var current = Require(authenticationPolicy, devicePolicyVersion, clock.GetUtcNow());
+         if (JsonSerializer.Serialize(current) != JsonSerializer.Serialize(binding) ||
+             !ReferenceEquals(database.Database.CurrentTransaction?.GetDbTransaction(), transaction))
+@@ -142,9 +142,9 @@
+             throw new InvalidOperationException("Exact qualified Device content configuration is unavailable.");
+         return binding;
+     }
++    private static DevicePresentation Project(string locale, IEnumerable<RegistrationPublishedText> texts, string bindingQualificationDigest)
+-    private static DevicePresentation Project(string locale, IEnumerable<RegistrationPublishedText> texts)
+     {
++        try { return new(locale, texts) { BindingQualificationDigest = bindingQualificationDigest }; }
+-        try { return new(locale, texts); }
+         catch (ArgumentException) { throw new InvalidOperationException("Complete published Device content is unavailable."); }
+     }
+ }
+diff --git a/tests/Tunner.Identity.Persistence.Tests/PublishedDevicePresentationIntegrationTests.cs b/tests/Tunner.Identity.Persistence.Tests/PublishedDevicePresentationIntegrationTests.cs
+--- a/tests/Tunner.Identity.Persistence.Tests/PublishedDevicePresentationIntegrationTests.cs
++++ b/tests/Tunner.Identity.Persistence.Tests/PublishedDevicePresentationIntegrationTests.cs
+@@ -146,8 +146,9 @@
+     {
+         var observer = new DevicePublicationSqlGuard(); var configured = await PublishedDeviceScenario(observer,
+             publicationLifetime: change == "publication-expiry" ? TimeSpan.FromSeconds(1) : null);
++        await using var test = configured.Scenario;
+-        await using var test = configured.Scenario; var original = await Prepare(test); var proof = await ProofOptions(test, original);
+         if (change == "expiry") configured.Authority.Until = test.Host.Clock.GetUtcNow().AddSeconds(1);
++        var original = await Prepare(test); var proof = await ProofOptions(test, original);
+         observer.AfterDeviceSave = () =>
+         {
+             if (change is "expiry" or "publication-expiry") test.Host.Clock.Advance(TimeSpan.FromSeconds(1));
+@@ -317,6 +318,23 @@
+     }
+ 
+     [Fact]
++    public void PublishedDeviceQualificationCarrierBindsOriginalWithoutChangingLegacyDigestOrSerializedPresentation()
++    {
++        var texts = DevicePresentation.RequiredKeys.Select(key => new RegistrationPublishedText(key, "fixture-device-variant",
++            "fixture-device-version", "fixture-device-publication", "en", "PUBLISHED", "Synthetic Device copy: " + key)).ToArray();
++        var ordinary = new DevicePresentation("en", texts);
++        var qualified = new DevicePresentation("en", texts) { BindingQualificationDigest = AuthenticationIdentity.Digest("fixture-device-binding-a") };
++        var changed = new DevicePresentation("en", texts) { BindingQualificationDigest = AuthenticationIdentity.Digest("fixture-device-binding-b") };
++        var legacyDigest = AuthenticationIdentity.Digest(JsonSerializer.Serialize(new {
++            ordinary.Locale, Content = ordinary.Content.OrderBy(x => x.Key, StringComparer.Ordinal).Select(x => x.Value).ToArray() }));
++        Assert.Equal(legacyDigest, DeviceBrowserEndpoints.PublicationDigest(ordinary));
++        Assert.NotEqual(legacyDigest, DeviceBrowserEndpoints.PublicationDigest(qualified));
++        Assert.NotEqual(DeviceBrowserEndpoints.PublicationDigest(qualified), DeviceBrowserEndpoints.PublicationDigest(changed));
++        Assert.Equal(JsonSerializer.Serialize(ordinary), JsonSerializer.Serialize(qualified));
++        Assert.Equal(JsonSerializer.Serialize(ordinary), JsonSerializer.Serialize(changed));
++    }
++
++    [Fact]
+     public void PublishedDeviceSelectionRequiresExplicitDependenciesAndDoesNotActivateDevices()
+     {
+         var services = new ServiceCollection();

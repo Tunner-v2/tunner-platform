@@ -79,8 +79,16 @@ public static class DeviceBrowserEndpoints
         }
         catch (CryptographicException) { return null; } catch (JsonException) { return null; } catch (ArgumentException) { return null; }
     }
-    internal static string PublicationDigest(DevicePresentation value) => AuthenticationIdentity.Digest(JsonSerializer.Serialize(new {
-        value.Locale, Content = value.Content.OrderBy(x => x.Key, StringComparer.Ordinal).Select(x => x.Value).ToArray() }));
+    internal static string PublicationDigest(DevicePresentation value)
+    {
+        if (value.BindingQualificationDigest is { } qualificationDigest)
+            return AuthenticationIdentity.Digest(JsonSerializer.Serialize(new {
+                value.Locale, Content = value.Content.OrderBy(x => x.Key, StringComparer.Ordinal).Select(x => x.Value).ToArray(),
+                BindingQualificationDigest = qualificationDigest }));
+        // Preserve the exact original digest bytes for ordinary local publication providers.
+        return AuthenticationIdentity.Digest(JsonSerializer.Serialize(new {
+            value.Locale, Content = value.Content.OrderBy(x => x.Key, StringComparer.Ordinal).Select(x => x.Value).ToArray() }));
+    }
     internal static DevicePresentation Publication(IDevicePresentationSource source, AuthenticationPolicy authenticationPolicy, string devicePolicyVersion)
     {
         try { return source.RequirePublished(authenticationPolicy, devicePolicyVersion) ?? throw new InvalidOperationException("Device publication is unavailable."); }

@@ -120,7 +120,7 @@ public sealed class PublishedDevicePresentationSource(IdentityPersistenceDbConte
             resolution.Content.Any(x => x.Key != x.Value.Key || x.Value.Locale != resolution.Locale || x.Value.VariantReference != resolution.EffectiveVariantReference))
             throw new InvalidOperationException("Published Device content provenance is unavailable.");
         var presentation = Project(resolution.Locale, resolution.Content.Values.Select(x => new RegistrationPublishedText(x.Key, x.VariantReference,
-            x.VersionReference, x.PublicationReference, x.Locale, "PUBLISHED", x.Text)));
+            x.VersionReference, x.PublicationReference, x.Locale, "PUBLISHED", x.Text)), AuthenticationIdentity.Digest(JsonSerializer.Serialize(binding)));
         var current = Require(authenticationPolicy, devicePolicyVersion, clock.GetUtcNow());
         if (JsonSerializer.Serialize(current) != JsonSerializer.Serialize(binding) ||
             !ReferenceEquals(database.Database.CurrentTransaction?.GetDbTransaction(), transaction))
@@ -142,9 +142,9 @@ public sealed class PublishedDevicePresentationSource(IdentityPersistenceDbConte
             throw new InvalidOperationException("Exact qualified Device content configuration is unavailable.");
         return binding;
     }
-    private static DevicePresentation Project(string locale, IEnumerable<RegistrationPublishedText> texts)
+    private static DevicePresentation Project(string locale, IEnumerable<RegistrationPublishedText> texts, string bindingQualificationDigest)
     {
-        try { return new(locale, texts); }
+        try { return new(locale, texts) { BindingQualificationDigest = bindingQualificationDigest }; }
         catch (ArgumentException) { throw new InvalidOperationException("Complete published Device content is unavailable."); }
     }
 }

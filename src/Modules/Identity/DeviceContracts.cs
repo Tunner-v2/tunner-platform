@@ -193,6 +193,8 @@ public sealed class DevicePresentation
     }
     public string Locale { get; }
     public IReadOnlyDictionary<string, RegistrationPublishedText> Content { get; }
+    [System.Text.Json.Serialization.JsonIgnore]
+    internal string? BindingQualificationDigest { get; init; }
 }
 public interface IDevicePresentationSource
 {

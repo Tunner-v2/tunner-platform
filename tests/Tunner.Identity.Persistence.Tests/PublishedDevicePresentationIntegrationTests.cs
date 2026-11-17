@@ -146,8 +146,9 @@ public sealed partial class DeviceHttpTests
     {
         var observer = new DevicePublicationSqlGuard(); var configured = await PublishedDeviceScenario(observer,
             publicationLifetime: change == "publication-expiry" ? TimeSpan.FromSeconds(1) : null);
-        await using var test = configured.Scenario; var original = await Prepare(test); var proof = await ProofOptions(test, original);
+        await using var test = configured.Scenario;
         if (change == "expiry") configured.Authority.Until = test.Host.Clock.GetUtcNow().AddSeconds(1);
+        var original = await Prepare(test); var proof = await ProofOptions(test, original);
         observer.AfterDeviceSave = () =>
         {
             if (change is "expiry" or "publication-expiry") test.Host.Clock.Advance(TimeSpan.FromSeconds(1));
@@ -314,6 +315,23 @@ public sealed partial class DeviceHttpTests
             await writer.RollbackAsync();
         }
         await NoRemoval(test, 0);
+    }
+
+    [Fact]
+    public void PublishedDeviceQualificationCarrierBindsOriginalWithoutChangingLegacyDigestOrSerializedPresentation()
+    {
+        var texts = DevicePresentation.RequiredKeys.Select(key => new RegistrationPublishedText(key, "fixture-device-variant",
+            "fixture-device-version", "fixture-device-publication", "en", "PUBLISHED", "Synthetic Device copy: " + key)).ToArray();
+        var ordinary = new DevicePresentation("en", texts);
+        var qualified = new DevicePresentation("en", texts) { BindingQualificationDigest = AuthenticationIdentity.Digest("fixture-device-binding-a") };
+        var changed = new DevicePresentation("en", texts) { BindingQualificationDigest = AuthenticationIdentity.Digest("fixture-device-binding-b") };
+        var legacyDigest = AuthenticationIdentity.Digest(JsonSerializer.Serialize(new {
+            ordinary.Locale, Content = ordinary.Content.OrderBy(x => x.Key, StringComparer.Ordinal).Select(x => x.Value).ToArray() }));
+        Assert.Equal(legacyDigest, DeviceBrowserEndpoints.PublicationDigest(ordinary));
+        Assert.NotEqual(legacyDigest, DeviceBrowserEndpoints.PublicationDigest(qualified));
+        Assert.NotEqual(DeviceBrowserEndpoints.PublicationDigest(qualified), DeviceBrowserEndpoints.PublicationDigest(changed));
+        Assert.Equal(JsonSerializer.Serialize(ordinary), JsonSerializer.Serialize(qualified));
+        Assert.Equal(JsonSerializer.Serialize(ordinary), JsonSerializer.Serialize(changed));
     }
 
     [Fact]
