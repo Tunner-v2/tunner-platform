@@ -1,8 +1,16 @@
 {
   "schema_version": 1,
   "scope_id": "TUN-P2-016",
-  "result": "PENDING",
-  "phase": "QUALIFIED_FUNCTIONALITY_CURRENT_NATIVE_GATE_PENDING",
+  "result": "PASS",
+  "phase": "ENGINEERING_QUALIFICATION_PASS_NATIVE_RECHECK_PENDING",
+  "engineering_qualification": {
+    "basis": "Qualified integrated78, hosted-smoke1 and affected shared Product-content2 passing cases retain their actual execution SHAs. All31 owned paths equal the reviewed06b20de2 carrier. The current gate accepts source, prerequisites and all six required technical reviews; its sole failure is the prior PENDING result. This promotion records technical qualification only, before a fresh native readiness check.",
+    "last_gate_source_sha": "9521d3bc9696eee60a67922888e8ac5f7cbeb1a0",
+    "last_gate_outcome": "NOT_READY",
+    "last_gate_failures": ["committed validation evidence must pass"],
+    "last_gate_ref": "governance/evidence/p2-016-notifications-20261115/native-gates/ready-9521d3bc.json",
+    "boundary": "No tests rerun at the carrier are claimed. Product acceptance, final lifecycle closure, fresh context, protected-main integration, production activation and release remain separate."
+  },
   "current_admission": {
     "source_sha": "4e39914ed73d59ba728a3f3cbd6dd92d7079ed39",
     "outcome": "ELIGIBLE",

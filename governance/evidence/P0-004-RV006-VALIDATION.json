@@ -4,12 +4,17 @@
   "validation_kind": "COMMITTED",
   "result": "PENDING",
   "utf8_git_read_increment": {
-    "phase": "APPLIED_SOURCE_REVIEW_PASS_RUNTIME_PENDING",
+    "phase": "REGRESSION_PASS_P016_ADMISSION_ELIGIBLE",
     "cause": "Both actual closed-record comparison hash pairs are reproduced exactly by decoding their UTF-8 Git bytes as CP437. The HEAD blobs and worktree records are structurally identical; the literal U+2013 reason character was misdecoded, not edited. No historical record repair is justified.",
     "patch_sha256": "c95b328e297ef8d7af341561b27ebfe4b2e30e7fa34f91d03be09e2461c1ab21",
     "change": "Set explicit UTF-8 stdout decoding on the two existing Revision and committed-evidence Git readers. Preserve all equality, immutability, failure and acceptance rules. Add three assertions to the existing closed-proof fixture; restore console encoding and exact fixture bytes in finally.",
     "review": "Independent AI p214_continuation_qa applied governance, QA and security contracts: PASS_SOURCE, no actionable findings. This is one disclosed reviewer, not separate human approvals.",
-    "build": "PASS, zero warnings/errors, 10.80 seconds. Focused regression and actual integration admission remain pending; overall RV006 performance qualification is not inferred."
+    "build": "PASS, zero warnings/errors, 10.80 seconds.",
+    "source_sha": "4e39914ed73d59ba728a3f3cbd6dd92d7079ed39",
+    "focused": {"exit_code": 0, "checks": 34, "elapsed_ms": 90935, "receipt_ref": "governance/evidence/admission-performance-20261117/git-utf8-4e39914e/focused-execution.json"},
+    "functional": {"exit_code": 0, "elapsed_ms": 271189, "scope": "Full existing functional suite, including63 Revision,34 closed-proof and41 validation-source checks", "receipt_ref": "governance/evidence/admission-performance-20261117/git-utf8-4e39914e/functional-execution.json"},
+    "actual_admission": {"outcome": "ELIGIBLE", "exit_code": 0, "elapsed_ms": 138325, "receipt_ref": "governance/evidence/p2-016-notifications-20261115/native-gates/admission-4e39914e-execution.json"},
+    "boundary": "Encoding defect repaired and regression qualified; no closed records or immutability rules changed. Actual application test evidence retains its original execution SHAs. Overall RV006 context-performance qualification remains PENDING."
   },
   "admission_diagnostics_increment": {
     "phase": "DIAGNOSTIC_REGRESSION_PASS_INTEGRATION_CAUSE_IDENTIFIED",
@@ -17,7 +22,7 @@
     "failure_local_comparison": "Reviewed c29a2419de3e87f4fc7149eabc621624ceaf47ab63ab69cf601a1f53441684a8 adds bounded comparison hashes, semantic diagnostic and approved top-level path/kinds only at the actual rejection. One independent AI governance/QA/security assessment PASS_SOURCE. Serialized equality and original refusal remain unchanged. Full existing functional suite PASS at70207771b1b35219bc08a21cf0eb681ad0c62a3f, exit0/247865ms, including63 Revision,31 closed-ownership and41 validation-source checks. No values or extra Git/I/O emitted.",
     "focused_receipt_ref": "governance/evidence/admission-performance-20261117/diagnostics-70207771/focused-execution.json",
     "functional_receipt_ref": "governance/evidence/admission-performance-20261117/diagnostics-70207771/functional-execution.json",
-    "attribution": "Actual P016 admission remains refused. One bounded read-only hash attribution identifies P2-004-UI001-RV010 and P2-004-UI002-RV010 as the two closed records with reason comparison differences. P003 RV005/RV006 are propagation prefixes, not the actual differing records. Exact cause remains under focused investigation; no immutable record or acceptance rule changed. Overall performance qualification remains PENDING.",
+    "attribution": "At70207771, actual P016 admission was refused. One bounded read-only hash attribution identified P2-004-UI001-RV010 and P2-004-UI002-RV010 as the two closed records with reason comparison differences. P003 RV005/RV006 were propagation prefixes, not the actual differing records. The subsequent UTF-8 increment records the confirmed CP437 decoding cause and successful correction; no immutable record or acceptance rule changed. Overall performance qualification remains PENDING.",
     "patch_sha256": "8ded01bc5bebd0b4f6f4152db6b41aeb494c3cd0e2e80e1e7dd97bdcdaf06574",
     "compile_refinement": "Initial build identified CA1859 on the private optional collector. Use its actual List<string> type; no analyzer suppression or behavior change.",
     "purpose": "Expose the existing nested committed-proof failure for the reproducible P016/P003 admission contradiction, before any further retry or speculative repair.",
