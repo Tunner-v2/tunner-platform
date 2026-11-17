@@ -1,0 +1,194 @@
+{
+  "config": {
+    "argv": [
+      "C:\\Program Files\\nodejs\\node.exe",
+      "C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\web\\node_modules\\@playwright\\test\\cli.js",
+      "test",
+      "--config",
+      "playwright.browser-testing.config.ts",
+      "--grep",
+      "Synthetic Admin (cookie|distinct)",
+      "--reporter=list,json",
+      "--output",
+      "../artifacts/p2-019-content-20261116/admin-browser-switch-repair/screenshots"
+    ],
+    "configFile": "C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\web\\playwright.browser-testing.config.ts",
+    "rootDir": "C:/Workspace/AI MCP/Enterprise Solution/TunnerPlatform.V2.0/web/tests/browser-testing",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "C:/Workspace/AI MCP/Enterprise Solution/TunnerPlatform.V2.0/artifacts/p2-019-content-20261116/admin-browser-switch-repair/screenshots",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "C:/Workspace/AI MCP/Enterprise Solution/TunnerPlatform.V2.0/web/tests/browser-testing",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list"
+      ],
+      [
+        "json"
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.62.1",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "admin-security.spec.ts",
+      "file": "admin-security.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "Synthetic Admin cookie remains surface-bound and actor switching invalidates the previous server session",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 2107,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m400\u001b[39m\nReceived: \u001b[31m500\u001b[39m",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m400\u001b[39m\nReceived: \u001b[31m500\u001b[39m\n    at C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\web\\tests\\browser-testing\\admin-security.spec.ts:111:83",
+                    "location": {
+                      "file": "C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\web\\tests\\browser-testing\\admin-security.spec.ts",
+                      "column": 83,
+                      "line": 111
+                    },
+                    "snippet": "  109 |   expect((await local(adminOrigin+'/content/workspace',{headers:{Cookie:jar.header()}})).status).toBe(200);\n  110 |   expect(await wrongHostStatus()).toBe(403);\n> 111 |   expect((await local(adminOrigin+'/browser-testing/admin?unexpected=1')).status).toBe(400);\n      |                                                                                   ^\n  112 |   for(const path of ['/browser-testing/admin/theme/fixture.js','/browser-testing/admin/theme/fixture.css.map','/browser-testing/admin/theme/../Program.cs']){\n  113 |     const response=await local(adminOrigin+path);expect(response.status>=400,'arbitrary fixture assets must not be served').toBe(true);\n  114 |   }"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\web\\tests\\browser-testing\\admin-security.spec.ts",
+                        "column": 83,
+                        "line": 111
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m400\u001b[39m\nReceived: \u001b[31m500\u001b[39m\n\n  109 |   expect((await local(adminOrigin+'/content/workspace',{headers:{Cookie:jar.header()}})).status).toBe(200);\n  110 |   expect(await wrongHostStatus()).toBe(403);\n> 111 |   expect((await local(adminOrigin+'/browser-testing/admin?unexpected=1')).status).toBe(400);\n      |                                                                                   ^\n  112 |   for(const path of ['/browser-testing/admin/theme/fixture.js','/browser-testing/admin/theme/fixture.css.map','/browser-testing/admin/theme/../Program.cs']){\n  113 |     const response=await local(adminOrigin+path);expect(response.status>=400,'arbitrary fixture assets must not be served').toBe(true);\n  114 |   }\n    at C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\web\\tests\\browser-testing\\admin-security.spec.ts:111:83"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-17T16:42:35.516Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\artifacts\\p2-019-content-20261116\\admin-browser-switch-repair\\screenshots\\admin-security-Synthetic-A-04780-the-previous-server-session\\error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\web\\tests\\browser-testing\\admin-security.spec.ts",
+                    "column": 83,
+                    "line": 111
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "720098cec6eac07e561e-0bd7ca5680ce84bc7ffe",
+          "file": "admin-security.spec.ts",
+          "line": 97,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "governed-content-flow.spec.ts",
+      "file": "governed-content-flow.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "Synthetic Admin distinct actors publish governed Login wording and prospectively restore its original version",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 59641,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-17T16:42:38.786Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "9c3febb29f7c3d743877-885b3bdf9aff2aac047d",
+          "file": "governed-content-flow.spec.ts",
+          "line": 69,
+          "column": 1
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-11-17T16:42:34.069Z",
+    "duration": 66073.97499999999,
+    "expected": 1,
+    "skipped": 0,
+    "unexpected": 1,
+    "flaky": 0
+  }
+}

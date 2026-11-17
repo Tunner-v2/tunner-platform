@@ -1,0 +1,292 @@
+{
+  "config": {
+    "argv": [
+      "C:\\Program Files\\nodejs\\node.exe",
+      "C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\web\\node_modules\\@playwright\\test\\cli.js",
+      "test",
+      "--config",
+      "playwright.browser-testing.config.ts",
+      "--grep",
+      "Synthetic Admin",
+      "--reporter=list,json",
+      "--output",
+      "../artifacts/p2-019-content-20261116/admin-browser-68b634e0/screenshots"
+    ],
+    "configFile": "C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\web\\playwright.browser-testing.config.ts",
+    "rootDir": "C:/Workspace/AI MCP/Enterprise Solution/TunnerPlatform.V2.0/web/tests/browser-testing",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "C:/Workspace/AI MCP/Enterprise Solution/TunnerPlatform.V2.0/artifacts/p2-019-content-20261116/admin-browser-68b634e0/screenshots",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "C:/Workspace/AI MCP/Enterprise Solution/TunnerPlatform.V2.0/web/tests/browser-testing",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list"
+      ],
+      [
+        "json"
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.62.1",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "admin-security.spec.ts",
+      "file": "admin-security.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "Synthetic Admin bootstrap and actor admission reject unsafe Origin, CSRF and bounded JSON without issuing authority",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2106,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-17T16:32:30.361Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "720098cec6eac07e561e-29519ca02d465565a2b9",
+          "file": "admin-security.spec.ts",
+          "line": 59,
+          "column": 1
+        },
+        {
+          "title": "Synthetic Admin cookie remains surface-bound and actor switching invalidates the previous server session",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 69,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m204\u001b[39m\nReceived: \u001b[31m500\u001b[39m",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m204\u001b[39m\nReceived: \u001b[31m500\u001b[39m\n    at C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\web\\tests\\browser-testing\\admin-security.spec.ts:103:117",
+                    "location": {
+                      "file": "C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\web\\tests\\browser-testing\\admin-security.spec.ts",
+                      "column": 117,
+                      "line": 103
+                    },
+                    "snippet": "  101 |   expect((await local(userOrigin+'/authentication/session',{headers:{Cookie:previous}})).status).toBe(401);\n  102 |   expect((await local(userOrigin+'/authentication/session',{headers:{Cookie:jar.renamed(adminCookie,userCookie)}})).status).toBe(401);\n> 103 |   token=await bootstrap(jar);const switched=await session(jar,token,'{\"actor\":\"approver\"}');expect(switched.status).toBe(204);jar.accept(switched.headers);\n      |                                                                                                                     ^\n  104 |   expect((await local(adminOrigin+'/content/workspace',{headers:{Cookie:previous}})).status).toBe(401);\n  105 |   expect((await local(adminOrigin+'/content/workspace',{headers:{Cookie:jar.header()}})).status).toBe(200);\n  106 |   expect(await wrongHostStatus()).toBe(403);"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\web\\tests\\browser-testing\\admin-security.spec.ts",
+                        "column": 117,
+                        "line": 103
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m204\u001b[39m\nReceived: \u001b[31m500\u001b[39m\n\n  101 |   expect((await local(userOrigin+'/authentication/session',{headers:{Cookie:previous}})).status).toBe(401);\n  102 |   expect((await local(userOrigin+'/authentication/session',{headers:{Cookie:jar.renamed(adminCookie,userCookie)}})).status).toBe(401);\n> 103 |   token=await bootstrap(jar);const switched=await session(jar,token,'{\"actor\":\"approver\"}');expect(switched.status).toBe(204);jar.accept(switched.headers);\n      |                                                                                                                     ^\n  104 |   expect((await local(adminOrigin+'/content/workspace',{headers:{Cookie:previous}})).status).toBe(401);\n  105 |   expect((await local(adminOrigin+'/content/workspace',{headers:{Cookie:jar.header()}})).status).toBe(200);\n  106 |   expect(await wrongHostStatus()).toBe(403);\n    at C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\web\\tests\\browser-testing\\admin-security.spec.ts:103:117"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-17T16:32:32.518Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\artifacts\\p2-019-content-20261116\\admin-browser-68b634e0\\screenshots\\admin-security-Synthetic-A-04780-the-previous-server-session\\error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\web\\tests\\browser-testing\\admin-security.spec.ts",
+                    "column": 117,
+                    "line": 103
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "720098cec6eac07e561e-0bd7ca5680ce84bc7ffe",
+          "file": "admin-security.spec.ts",
+          "line": 97,
+          "column": 1
+        },
+        {
+          "title": "Synthetic Admin Production is refused before config IO and legacy governed mode does not activate a saved Admin port",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 150000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 8241,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-17T16:32:33.639Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "720098cec6eac07e561e-57a312166d8ea8a8cfe8",
+          "file": "admin-security.spec.ts",
+          "line": 140,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "governed-content-flow.spec.ts",
+      "file": "governed-content-flow.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "Synthetic Admin distinct actors publish governed Login wording and prospectively restore its original version",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 40481,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveAttribute\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('.authentication-intro h1 [data-content-key=\"login.heading\"]')\nExpected: \u001b[32m\"PUBLISHED\"\u001b[39m\nReceived: \u001b[31m\"\"\u001b[39m\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveAttribute\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('.authentication-intro h1 [data-content-key=\"login.heading\"]')\u001b[22m\n\u001b[2m    14 × locator resolved to <span lang=\"en\" data-content-key=\"login.heading\" data-content-variant=\"synthetic-local-en\" data-content-version=\"9804e20418d44adc8c0faea4b229baa5\" data-content-publication=\"c8866f8bff3549899e1614d40fa19933\">Synthetic governed Login 9d1fdfc3-0818-4cfd-9555-…</span>\u001b[22m\n\u001b[2m       - unexpected value \"null\"\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveAttribute\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('.authentication-intro h1 [data-content-key=\"login.heading\"]')\nExpected: \u001b[32m\"PUBLISHED\"\u001b[39m\nReceived: \u001b[31m\"\"\u001b[39m\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveAttribute\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('.authentication-intro h1 [data-content-key=\"login.heading\"]')\u001b[22m\n\u001b[2m    14 × locator resolved to <span lang=\"en\" data-content-key=\"login.heading\" data-content-variant=\"synthetic-local-en\" data-content-version=\"9804e20418d44adc8c0faea4b229baa5\" data-content-publication=\"c8866f8bff3549899e1614d40fa19933\">Synthetic governed Login 9d1fdfc3-0818-4cfd-9555-…</span>\u001b[22m\n\u001b[2m       - unexpected value \"null\"\u001b[22m\n\n    at userPublication (C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\web\\tests\\browser-testing\\governed-content-flow.spec.ts:63:50)\n    at C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\web\\tests\\browser-testing\\governed-content-flow.spec.ts:102:3",
+                    "location": {
+                      "file": "C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\web\\tests\\browser-testing\\governed-content-flow.spec.ts",
+                      "column": 50,
+                      "line": 63
+                    },
+                    "snippet": "  61 | async function userPublication(page:Page,text:string,publication:Publication){\n  62 |  await expect.poll(async()=>{await page.goto(userOrigin+'/login');return heading(page).textContent();},{timeout:20_000}).toBe(text);\n> 63 |  const actual=heading(page);await expect(actual).toHaveAttribute('data-content-state','PUBLISHED');\n     |                                                  ^\n  64 |  expect(reference((await actual.getAttribute('data-content-publication'))!)).toBe(reference(publication.publicationReference));\n  65 |  expect(reference((await actual.getAttribute('data-content-version'))!)).toBe(reference(publication.versionReference));\n  66 |  expect(await page.evaluate(()=>({query:location.search,hash:location.hash,local:localStorage.length,session:sessionStorage.length}))).toEqual({query:'',hash:'',local:0,session:0});"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\web\\tests\\browser-testing\\governed-content-flow.spec.ts",
+                        "column": 50,
+                        "line": 63
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveAttribute\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('.authentication-intro h1 [data-content-key=\"login.heading\"]')\nExpected: \u001b[32m\"PUBLISHED\"\u001b[39m\nReceived: \u001b[31m\"\"\u001b[39m\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveAttribute\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('.authentication-intro h1 [data-content-key=\"login.heading\"]')\u001b[22m\n\u001b[2m    14 × locator resolved to <span lang=\"en\" data-content-key=\"login.heading\" data-content-variant=\"synthetic-local-en\" data-content-version=\"9804e20418d44adc8c0faea4b229baa5\" data-content-publication=\"c8866f8bff3549899e1614d40fa19933\">Synthetic governed Login 9d1fdfc3-0818-4cfd-9555-…</span>\u001b[22m\n\u001b[2m       - unexpected value \"null\"\u001b[22m\n\n\n  61 | async function userPublication(page:Page,text:string,publication:Publication){\n  62 |  await expect.poll(async()=>{await page.goto(userOrigin+'/login');return heading(page).textContent();},{timeout:20_000}).toBe(text);\n> 63 |  const actual=heading(page);await expect(actual).toHaveAttribute('data-content-state','PUBLISHED');\n     |                                                  ^\n  64 |  expect(reference((await actual.getAttribute('data-content-publication'))!)).toBe(reference(publication.publicationReference));\n  65 |  expect(reference((await actual.getAttribute('data-content-version'))!)).toBe(reference(publication.versionReference));\n  66 |  expect(await page.evaluate(()=>({query:location.search,hash:location.hash,local:localStorage.length,session:sessionStorage.length}))).toEqual({query:'',hash:'',local:0,session:0});\n    at userPublication (C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\web\\tests\\browser-testing\\governed-content-flow.spec.ts:63:50)\n    at C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\web\\tests\\browser-testing\\governed-content-flow.spec.ts:102:3"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-17T16:32:42.038Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\artifacts\\p2-019-content-20261116\\admin-browser-68b634e0\\screenshots\\governed-content-flow-Synt-fca93-estore-its-original-version\\error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\web\\tests\\browser-testing\\governed-content-flow.spec.ts",
+                    "column": 50,
+                    "line": 63
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "9c3febb29f7c3d743877-885b3bdf9aff2aac047d",
+          "file": "governed-content-flow.spec.ts",
+          "line": 69,
+          "column": 1
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-11-17T16:32:29.414Z",
+    "duration": 72346.218,
+    "expected": 2,
+    "skipped": 0,
+    "unexpected": 2,
+    "flaky": 0
+  }
+}
