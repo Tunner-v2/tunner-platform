@@ -49,6 +49,7 @@ public sealed class AdminIdentityConfigurationHttpTests(SessionListingPostgresFi
     [InlineData("session-listing")]
     [InlineData("session-listing-content")]
     [InlineData("session-revocation-content")]
+    [InlineData("session-bulk-revocation-content")]
     public async Task CanonicalSettingsRoutesEnforceCurrentIdentityAdmission(string family)
     {
         var additional = family switch
@@ -64,6 +65,7 @@ public sealed class AdminIdentityConfigurationHttpTests(SessionListingPostgresFi
             "session-listing" => new[] { new IdentityConfigurationScope(IdentityConfigurationFamily.SessionListing) },
             "session-listing-content" => new[] { new IdentityConfigurationScope(IdentityConfigurationFamily.SessionListingContent, AuthenticationPolicyVersion: "fixture-session-listing-route-v1") },
             "session-revocation-content" => new[] { new IdentityConfigurationScope(IdentityConfigurationFamily.SessionRevocationContent, AuthenticationPolicyVersion: "fixture-session-revocation-route-v1") },
+            "session-bulk-revocation-content" => new[] { new IdentityConfigurationScope(IdentityConfigurationFamily.SessionBulkRevocationContent, AuthenticationPolicyVersion: "fixture-session-bulk-revocation-route-v1") },
             _ => Array.Empty<IdentityConfigurationScope>()
         };
         await using var database = await fixture.CreateDatabaseAsync(); await using var host = await Host.Start(database, additionalScopes: additional);

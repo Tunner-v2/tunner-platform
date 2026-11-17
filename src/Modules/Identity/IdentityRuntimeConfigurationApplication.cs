@@ -34,6 +34,8 @@ public sealed partial class IdentityRuntimeConfigurationApplication(IdentityPers
         => DraftAsync(new(Totp: SnapshotTotpCandidate(candidate)), null, null, operationId, correlationId, cancellationToken);
     public Task<IdentityConfigurationProposal> CreatePasskeyDraftAsync(PasskeyConfigurationVersion candidate, string operationId, string correlationId, CancellationToken cancellationToken = default)
         => DraftAsync(new(Passkey: SnapshotPasskeyCandidate(candidate)), null, null, operationId, correlationId, cancellationToken);
+    public Task<IdentityConfigurationProposal> CreateSessionBulkRevocationContentDraftAsync(SessionActionContentBinding candidate, string operationId, string correlationId, CancellationToken cancellationToken = default)
+        => DraftAsync(new(SessionBulkRevocationContent: candidate), null, null, operationId, correlationId, cancellationToken);
     public Task<IdentityConfigurationProposal> CreateSessionRevocationContentDraftAsync(SessionActionContentBinding candidate, string operationId, string correlationId, CancellationToken cancellationToken = default)
         => DraftAsync(new(SessionRevocationContent: candidate), null, null, operationId, correlationId, cancellationToken);
     public Task<IdentityConfigurationProposal> CreateSessionListingContentDraftAsync(SessionListingContentBinding candidate, string operationId, string correlationId, CancellationToken cancellationToken = default)
@@ -72,6 +74,9 @@ public sealed partial class IdentityRuntimeConfigurationApplication(IdentityPers
     public Task<IdentityConfigurationProposal> UpdatePasskeyDraftAsync(Guid proposalReference, long expectedRevision, PasskeyConfigurationVersion candidate,
         string operationId, string correlationId, CancellationToken cancellationToken = default)
         => DraftAsync(new(Passkey: SnapshotPasskeyCandidate(candidate)), proposalReference, expectedRevision, operationId, correlationId, cancellationToken);
+    public Task<IdentityConfigurationProposal> UpdateSessionBulkRevocationContentDraftAsync(Guid proposalReference, long expectedRevision, SessionActionContentBinding candidate,
+        string operationId, string correlationId, CancellationToken cancellationToken = default)
+        => DraftAsync(new(SessionBulkRevocationContent: candidate), proposalReference, expectedRevision, operationId, correlationId, cancellationToken);
     public Task<IdentityConfigurationProposal> UpdateSessionRevocationContentDraftAsync(Guid proposalReference, long expectedRevision, SessionActionContentBinding candidate,
         string operationId, string correlationId, CancellationToken cancellationToken = default)
         => DraftAsync(new(SessionRevocationContent: candidate), proposalReference, expectedRevision, operationId, correlationId, cancellationToken);
@@ -159,7 +164,7 @@ public sealed partial class IdentityRuntimeConfigurationApplication(IdentityPers
         var request = Request(IdentityConfigurationOperation.Preview, value.Scope, authority, row.Id.ToString("N"), row.Revision, row.Digest, command.OperationId, command.CorrelationId);
         var actor = await AuthorizeAsync(request, ct).ConfigureAwait(false);
         await FinishAsync(tx, authority, request, actor, row.Id, row.Revision, row.Digest, null, null, null, ct).ConfigureAwait(false);
-        return new(View(row), value.Authentication, value.Assurance, value.ContentBinding) { Registration = value.Registration, Totp = value.Totp, RegistrationContent = value.RegistrationContent, Passkey = value.Passkey, TotpContent = value.TotpContent, PasskeyContent = value.PasskeyContent, StepUpContent = value.StepUpContent, RecoveryCodes = value.RecoveryCodes, SessionListing = value.SessionListing, SessionListingContent = value.SessionListingContent, SessionRevocationContent = value.SessionRevocationContent };
+        return new(View(row), value.Authentication, value.Assurance, value.ContentBinding) { Registration = value.Registration, Totp = value.Totp, RegistrationContent = value.RegistrationContent, Passkey = value.Passkey, TotpContent = value.TotpContent, PasskeyContent = value.PasskeyContent, StepUpContent = value.StepUpContent, RecoveryCodes = value.RecoveryCodes, SessionListing = value.SessionListing, SessionListingContent = value.SessionListingContent, SessionRevocationContent = value.SessionRevocationContent, SessionBulkRevocationContent = value.SessionBulkRevocationContent };
     }
 
     public async Task<IdentityConfigurationHistory> PublishAsync(PublishIdentityConfiguration command, CancellationToken cancellationToken = default)

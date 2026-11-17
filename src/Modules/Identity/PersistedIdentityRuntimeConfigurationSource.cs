@@ -10,7 +10,7 @@ namespace Tunner.Identity.Persistence;
 /// <summary>Only current effective publications with immutable Identity validation/approval/effect receipts are runtime authority.
 /// Reading a policy never requires an Admin browser session and never changes historical actor/session state.</summary>
 public sealed class PersistedIdentityRuntimeConfigurationSource(IServiceScopeFactory scopes) : IAuthenticationPolicySource, IAssurancePolicySource, IAuthenticationContentBindingSource,
-    IRegistrationPolicySource, ITotpPolicySource, IRegistrationContentBindingSource, IPasskeyPolicySource, ITotpContentBindingSource, IPasskeyContentBindingSource, IStepUpContentBindingSource, IRecoveryCodePolicySource, ISessionListingHttpBudgetSource, ISessionListingContentBindingSource, ISessionRevocationContentBindingSource
+    IRegistrationPolicySource, ITotpPolicySource, IRegistrationContentBindingSource, IPasskeyPolicySource, ITotpContentBindingSource, IPasskeyContentBindingSource, IStepUpContentBindingSource, IRecoveryCodePolicySource, ISessionListingHttpBudgetSource, ISessionListingContentBindingSource, ISessionRevocationContentBindingSource, ISessionBulkRevocationContentBindingSource
 {
     RegistrationPolicy IRegistrationPolicySource.RequireEffective(DateTimeOffset effectiveAt)
     {
@@ -105,6 +105,17 @@ public sealed class PersistedIdentityRuntimeConfigurationSource(IServiceScopeFac
         ArgumentNullException.ThrowIfNull(policy); policy.Validate();
         var selected = Read(new(IdentityConfigurationFamily.SessionListingContent, AuthenticationPolicyVersion: policy.Version), effectiveAt);
         var value = selected.Document.SessionListingContent ?? throw new IdentityConfigurationUnavailableException();
+        if (value.AuthenticationPolicyVersion != policy.Version || selected.BindingAvailability is null) throw new IdentityConfigurationUnavailableException();
+        return value with { QualificationReference = selected.Publication.ApprovalEventReference.ToString("N"), EffectiveInterval = selected.BindingAvailability };
+    }
+
+    async ValueTask<SessionActionContentBinding> ISessionBulkRevocationContentBindingSource.RequireQualifiedAsync(AuthenticationPolicy policy,
+        DateTimeOffset effectiveAt, CancellationToken cancellationToken)
+    {
+        ArgumentNullException.ThrowIfNull(policy); policy.Validate(); cancellationToken.ThrowIfCancellationRequested();
+        var selected = await ReadAsync(new(IdentityConfigurationFamily.SessionBulkRevocationContent, AuthenticationPolicyVersion: policy.Version),
+            effectiveAt, cancellationToken).ConfigureAwait(false);
+        var value = selected.Document.SessionBulkRevocationContent ?? throw new IdentityConfigurationUnavailableException();
         if (value.AuthenticationPolicyVersion != policy.Version || selected.BindingAvailability is null) throw new IdentityConfigurationUnavailableException();
         return value with { QualificationReference = selected.Publication.ApprovalEventReference.ToString("N"), EffectiveInterval = selected.BindingAvailability };
     }
@@ -226,6 +237,15 @@ public sealed class PersistedIdentityRuntimeConfigurationSource(IServiceScopeFac
 
 public static class IdentityRuntimeConfigurationRegistration
 {
+    /// <summary>Binding-only opt-in; single sign-out, policies, budgets, presentation and optional routes remain separate.</summary>
+    public static IServiceCollection AddTunnerPersistedSessionBulkRevocationContentBinding(this IServiceCollection services)
+    {
+        ArgumentNullException.ThrowIfNull(services);
+        if (services.Any(x => x.ServiceType == typeof(ISessionBulkRevocationContentBindingSource))) throw new InvalidOperationException("Bulk session revocation content binding source selection must be explicit and unique.");
+        services.TryAddSingleton<PersistedIdentityRuntimeConfigurationSource>();
+        services.AddSingleton<ISessionBulkRevocationContentBindingSource>(provider => provider.GetRequiredService<PersistedIdentityRuntimeConfigurationSource>()); return services;
+    }
+
     /// <summary>Binding-only opt-in; bulk sign-out, policies, budgets, presentation and optional routes remain separate.</summary>
     public static IServiceCollection AddTunnerPersistedSessionRevocationContentBinding(this IServiceCollection services)
     {

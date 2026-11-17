@@ -21,7 +21,8 @@ internal static class AdminIdentityConfigurationScreens
          "/identity/settings/recovery-codes", "/identity/settings/recovery-codes/review", "/identity/settings/recovery-codes/history",
          "/identity/settings/session-listing", "/identity/settings/session-listing/review", "/identity/settings/session-listing/history",
          "/identity/settings/session-listing-content", "/identity/settings/session-listing-content/review", "/identity/settings/session-listing-content/history",
-         "/identity/settings/session-revocation-content", "/identity/settings/session-revocation-content/review", "/identity/settings/session-revocation-content/history"],
+         "/identity/settings/session-revocation-content", "/identity/settings/session-revocation-content/review", "/identity/settings/session-revocation-content/history",
+         "/identity/settings/session-bulk-revocation-content", "/identity/settings/session-bulk-revocation-content/review", "/identity/settings/session-bulk-revocation-content/history"],
         Allowed, allowAnonymous: false, static context => Results.StatusCode(
             context.Items.TryGetValue(FailureStatus, out var status) && status is int code ? code : StatusCodes.Status403Forbidden));
 
@@ -52,6 +53,7 @@ internal static class AdminIdentityConfigurationScreens
                 "session-listing" => IdentityConfigurationFamily.SessionListing,
                 "session-listing-content" => IdentityConfigurationFamily.SessionListingContent,
                 "session-revocation-content" => IdentityConfigurationFamily.SessionRevocationContent,
+                "session-bulk-revocation-content" => IdentityConfigurationFamily.SessionBulkRevocationContent,
                 _ => throw new IdentityConfigurationForbiddenException()
             };
             var scopes = profile.Scopes.Where(x => x.Family == family).ToArray(); if (scopes.Length == 0) return false;
