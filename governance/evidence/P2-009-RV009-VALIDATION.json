@@ -3,9 +3,9 @@
   "scope_id": "P2-009-RV009",
   "owner_work_item": "TUN-P2-019",
   "validation_kind": "COMMITTED",
-  "result": "PENDING",
-  "tested_commit_sha": null,
-  "validated_commit_sha": null,
+  "result": "PASS",
+  "tested_commit_sha": "2ec18d92a3b0a42628e1f27584a621f4ad7d7ddf",
+  "validated_commit_sha": "2ec18d92a3b0a42628e1f27584a621f4ad7d7ddf",
   "owned_behavior_paths": [
     "src/Modules/Identity/RecoveryCodePolicy.cs",
     "src/Modules/Identity/RecoveryCodeApplication.cs",
@@ -24,5 +24,7 @@
     "tools/recovery-native-testing/controller.mjs"
   ],
   "scope": "Explicitly authorized optional asynchronous same-Identity-transaction Recovery publication integration. Existing synchronous providers, exact facts/proof/currentness, atomic rollback and private-code ownership remain authoritative; core edits require exact independent review and eligible compatibility lineage. Production settings, grants, activation, merge and release are separate.",
-  "current_increment": "Reader11 PG casesPASS at13de5264. Protocol17PASS at57b0625e. Resource5/6 sole CAPACITY_PROVISION_DEADLINE after4GiB correction; earlier2GiB disk-full and premature prerequisite rejection retained. Independent review accepts public-only300s provisioning/330s case/360s frame under600s total; actual qualification/private121 pending."
+  "current_increment": "Technical engineering results recorded from actual source2ec18d92:17/17 protocol,6/6resources including122 migratedDBs,121/121private including12newPASS; containment/no-log/cleanup/borrowed preservationPASS. Seven technical reviewsPASS. Formal native closure is PENDING; original009/wholeWork19/Product/production/release acceptance unchanged.",
+  "native_qualification": {"source_sha":"2ec18d92a3b0a42628e1f27584a621f4ad7d7ddf","build_binding_sha256":"c510b326d8e4c56626d613969b5e065fdc8e6cda9ecc3a5b406baad064fd4285","protocol":{"executed":17,"passed":17},"resources":{"executed":6,"passed":6,"capacity":{"databases":122,"databaseBytes":1396203110,"walBytes":1023410176}},"private":{"executed":121,"passed":121,"new_cases":12,"unchanged_cases":109,"accepted":true,"source_current":true,"timed_out":false,"containment":true,"no_log":true,"cleanup":true,"borrowed_preserved":true},"evidence_refs":["governance/evidence/p2-019-content-20261116/native-recovery-2ec18d92/private-receipt.json","governance/evidence/p2-019-content-20261116/native-recovery-2ec18d92/build-binding.json","governance/evidence/p2-019-content-20261116/native-recovery-2ec18d92/protocol-qualification.json","governance/evidence/p2-019-content-20261116/native-recovery-2ec18d92/resource-qualification.json","governance/evidence/p2-019-content-20261116/native-recovery-2ec18d92/resource-details.json"],"reviewer":"One disclosed independent AI reviewer p214_continuation_qa applied seven current contracts and verified actual results; root records technical assessments only.","formal_gate_status":"PENDING_NATIVE_CLOSURE_CHECK"},
+  "validation_phase": "ENGINEERING_RESULTS_PASS_NATIVE_CLOSURE_GATES_PENDING"
 }

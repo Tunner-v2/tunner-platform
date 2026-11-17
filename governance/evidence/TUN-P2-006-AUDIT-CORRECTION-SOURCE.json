@@ -1,6 +1,7 @@
 {
   "schema_version": 1,
   "scope_id": "TUN-P2-006",
+  "recovery_publication_currentness_20261117": {"candidate_commit_sha":"2ec18d92a3b0a42628e1f27584a621f4ad7d7ddf","prior_qualified_binding_sha":"e1c1208664327563ed4d3f25fe8d7c3633d0e325","changed_owned_paths":["src/Modules/Identity/StepUpApplication.cs"],"qualification_ref":"governance/evidence/P2-009-RV009-VALIDATION.json","actual_execution_ref":"governance/evidence/p2-019-content-20261116/native-recovery-2ec18d92/private-receipt.json","actual_cases":121,"passed_cases":121,"parent006_cases":["PARENT006_PROOF_SESSION","PARENT006_PROOF_ROLLBACK","PARENT006_BROWSER_ORIGINAL","PARENT006_BROWSER_ABSENCE"],"boundary":"Only Recovery async branch changed. Other44 owned Git blobs and originalordered45 ownership unchanged; four PARENT006 and proof regressions actually PASS. Preserve VALIDATION, original executions/UI/history. No whole original006 rerun, Product or release inference."},
   "presentation_configuration_currentness_20261116": {"candidate_commit_sha":"e1c1208664327563ed4d3f25fe8d7c3633d0e325","prior_qualified_binding_sha":"98807ebe4bb7cb4e74b1aecf938a9edb8c243475","qualification_refs":["governance/evidence/P2-003-RV006-VALIDATION.json","governance/evidence/TUN-P2-019-VALIDATION.json","governance/evidence/p2-019-content-20261116/native/13e2ee804aee4647a02a1f347ee4aefd/summary.json","governance/evidence/p2-019-content-20261116/native/2ee219b49b734e88b5c49367637e3528/summary.json"],"changed_owned_paths":["docs/contracts/ui-inventory.json","src/Modules/Identity/IdentityPersistenceDbContext.cs","src/Modules/Identity/Migrations/IdentityPersistenceDbContextModelSnapshot.cs","tests/Tunner.Identity.Persistence.Tests/Tunner.Identity.Persistence.Tests.csproj","web/package.json"],"scope":"Shared Identity configuration bridge, unchanged User asset semantics, separate Admin build/inventory additions and a test-only positive User asset assertion; current carrier e1c1208664327563ed4d3f25fe8d7c3633d0e325","execution_boundary":"RV006 retains migration/lifecycle/configuration and seven-path equivalence proof. Original Work19 51-case run remains at196d522b. Two focused User route/fallback/script MIME/CSP/referrer cases pass at e1c12086, with zero skips/timeouts/owned leftovers and borrowed resources preserved. All application objects unchanged from196d522b; only the canonical test gained assertions. Preserve original cohorts, statuses, ownership and Product/release boundaries.","actual_application_qualification_sha":"196d522b52830bae0e57c908883cba3431fd5a81"},
   "post_commit_currentness_20261116": {"prior_carrier":"e45e31f6ab8a6462aceef9dfe7bf3e2be36cf15c","current_carrier":"98807ebe4bb7cb4e74b1aecf938a9edb8c243475","changed_owned_paths":["tests/Tunner.Identity.Persistence.Tests/Tunner.Identity.Persistence.Tests.csproj"],"qualification_ref":"governance/evidence/TUN-P2-016-VALIDATION.json","actual_qualification":"Existing test project gains only the test-only Worker reference and shared broker fixture link. The real 78-case integration at 98807eb passes with the same project. Application, browser, UI and other owned paths are byte-identical to the prior carrier; all original executions and acceptance boundaries are retained. No original full cohort rerun is claimed."},
   "final_source_compatibility_20261115": {"carrier":"1e8cc76bd5b22aceb169b44d446c0df049410b73","prior_carrier":"4f09edb8b6033c7ca1edcf8d7d227c26bfb8c15b","changed_owned_paths":["docs/contracts/ui-inventory.json","src/Modules/Identity/AuthenticationApplication.cs","src/Modules/Identity/AuthenticationEndpoints.cs","src/Modules/Identity/IdentityPersistenceDbContext.cs","src/Modules/Identity/Migrations/IdentityPersistenceDbContextModelSnapshot.cs","src/Modules/Identity/StepUpApplication.cs","src/Modules/Identity/StepUpBrowserEndpoints.cs","src/Tunner.User.Bff/TunnerAuthenticatedUserBffHost.cs","tools/browser-testing/BrowserTestStepUp.cs"],"unqualified_changed_paths":[],"receipt_ref":"governance/evidence/TUN-P2-013-PACKAGING-CURRENTNESS.json","execution_identity":"Qualified shared-source compatibility; original executions remain at their actual SHAs/counts. No legacy full rerun or Product acceptance is asserted."},
@@ -47,8 +48,8 @@
   },
   "validation_kind": "COMMITTED",
   "result": "PASS",
-  "tested_commit_sha": "e1c1208664327563ed4d3f25fe8d7c3633d0e325",
-  "validated_commit_sha": "e1c1208664327563ed4d3f25fe8d7c3633d0e325",
+  "tested_commit_sha": "2ec18d92a3b0a42628e1f27584a621f4ad7d7ddf",
+  "validated_commit_sha": "2ec18d92a3b0a42628e1f27584a621f4ad7d7ddf",
   "owned_behavior_paths": [
     "docs/contracts/ui-inventory.json",
     "src/Modules/Identity/AssurancePolicy.cs",
@@ -102,8 +103,9 @@
     "governance/evidence/p2-recovery-20261109/visual-review.json",
     "governance/evidence/TUN-P2-006-AUDIT-CORRECTION-ROLE-REVIEWS.json"
   ],
-  "source_binding_ref": "governance/evidence/TUN-P2-014-VALIDATION.json",
+  "source_binding_ref": "governance/evidence/P2-009-RV009-VALIDATION.json",
   "prior_current_source_bindings": [
+    {"tested_commit_sha":"e1c1208664327563ed4d3f25fe8d7c3633d0e325","validated_commit_sha":"e1c1208664327563ed4d3f25fe8d7c3633d0e325","source_binding_ref":"governance/evidence/TUN-P2-014-VALIDATION.json","source_envelope_git_ref":"2ec18d92a3b0a42628e1f27584a621f4ad7d7ddf:governance/evidence/TUN-P2-006-AUDIT-CORRECTION-SOURCE.json"},
     {
       "tested_commit_sha": "745f9c2dc1b9060c4be0318b33b4019ae77e9e36",
       "validated_commit_sha": "745f9c2dc1b9060c4be0318b33b4019ae77e9e36",
