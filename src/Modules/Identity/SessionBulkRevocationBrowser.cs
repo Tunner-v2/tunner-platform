@@ -128,21 +128,28 @@ internal sealed class SessionBulkRevocationBrowserService(IdentityPersistenceDbC
     private StepUpCaller Caller(HttpContext http) => http.Connection.RemoteIpAddress is { } peer
         ? StepUpCaller.FromPrincipal(http.User, surface.Origin, partitions.Network(peer))
         : throw new ArgumentException("A current authenticated peer is required.");
-    private SessionBulkRevocationPresentation Publication()
+    private async ValueTask<SessionBulkRevocationPresentation> PublicationAsync(CancellationToken cancellationToken)
     {
         try
         {
             var auth = authenticationPolicies.RequireEffective(clock.GetUtcNow()); auth.Validate();
+            if (presentations is ISessionBulkRevocationAsyncPresentationSource asynchronous)
+            {
+                var result = await asynchronous.RequirePublishedAsync(auth, cancellationToken).ConfigureAwait(false);
+                var current = authenticationPolicies.RequireEffective(clock.GetUtcNow()); current.Validate();
+                if (current != auth) throw new InvalidOperationException("Bulk authentication policy changed during publication resolution.");
+                return result ?? throw new InvalidOperationException("Bulk publication is unavailable.");
+            }
             return presentations.RequirePublished(auth) ?? throw new InvalidOperationException("Bulk publication is unavailable.");
         }
         catch (ArgumentException) { throw new InvalidOperationException("Bulk publication is unavailable."); }
     }
-    internal Task<IResult> OptionsAsync(HttpContext http) => Guard(http, () =>
+    internal Task<IResult> OptionsAsync(HttpContext http) => Guard(http, async () =>
     {
         _ = Caller(http); var at = clock.GetUtcNow(); var auth = authenticationPolicies.RequireEffective(at); auth.Validate();
-        _ = SessionBulkRevocationHttpBudget.Current(transport, at); var published = Publication();
-        return Task.FromResult(auth == authenticationPolicies.RequireEffective(clock.GetUtcNow())
-            ? Results.Json(new { published.Locale, published.Content }) : Problem(503, "DEPENDENCY_UNAVAILABLE"));
+        _ = SessionBulkRevocationHttpBudget.Current(transport, at); var published = await PublicationAsync(http.RequestAborted).ConfigureAwait(false);
+        return auth == authenticationPolicies.RequireEffective(clock.GetUtcNow())
+            ? Results.Json(new { published.Locale, published.Content }) : Problem(503, "DEPENDENCY_UNAVAILABLE");
     });
     private async Task<Command> ReadCommand(HttpContext http)
     {
@@ -156,7 +163,7 @@ internal sealed class SessionBulkRevocationBrowserService(IdentityPersistenceDbC
         if (!http.Request.HasJsonContentType()) return Problem(415, "VALIDATION_ERROR");
         var capacity = SessionBulkRevocationHttpBudget.Current(transport, clock.GetUtcNow());
         var command = await IdentityJsonCommand.ReadAsync<PreviewCommand>(http, capacity.MaximumRequestBytes).ConfigureAwait(false);
-        var caller = Caller(http); _ = Publication();
+        var caller = Caller(http); _ = await PublicationAsync(http.RequestAborted).ConfigureAwait(false);
         var existing = ReadOriginal(http, caller);
         if (command.Replay is { } replay && (existing is null || existing.RequestId != replay))
             return Problem(404, "NOT_FOUND_OR_NOT_DISCLOSABLE");
@@ -203,7 +210,7 @@ internal sealed class SessionBulkRevocationBrowserService(IdentityPersistenceDbC
     internal Task<IResult> ActivateAsync(HttpContext http) => Guard(http, async () =>
     {
         if (!http.Request.HasJsonContentType()) return Problem(415, "VALIDATION_ERROR");
-        var command = await ReadCommand(http).ConfigureAwait(false); var caller = Caller(http); _ = Publication();
+        var command = await ReadCommand(http).ConfigureAwait(false); var caller = Caller(http); _ = await PublicationAsync(http.RequestAborted).ConfigureAwait(false);
         var original = ReadOriginal(http, caller);
         if (original is null || original.RequestId != command.RequestId) return Problem(404, "NOT_FOUND_OR_NOT_DISCLOSABLE");
         var current = await CurrentAsync(caller, original, http.RequestAborted).ConfigureAwait(false);

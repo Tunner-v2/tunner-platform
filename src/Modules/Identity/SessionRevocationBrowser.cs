@@ -104,22 +104,29 @@ internal sealed class SessionRevocationBrowserService(IdentityPersistenceDbConte
     private StepUpCaller Caller(HttpContext http) => http.Connection.RemoteIpAddress is { } peer
         ? StepUpCaller.FromPrincipal(http.User, surface.Origin, partitions.Network(peer))
         : throw new ArgumentException("A current authenticated peer is required.");
-    private SessionRevocationPresentation Publication()
+    private async ValueTask<SessionRevocationPresentation> PublicationAsync(CancellationToken cancellationToken)
     {
         try
         {
             var auth = authenticationPolicies.RequireEffective(clock.GetUtcNow()); auth.Validate();
+            if (presentations is ISessionRevocationAsyncPresentationSource asynchronous)
+            {
+                var result = await asynchronous.RequirePublishedAsync(auth, cancellationToken).ConfigureAwait(false);
+                var current = authenticationPolicies.RequireEffective(clock.GetUtcNow()); current.Validate();
+                if (current != auth) throw new InvalidOperationException("Session revocation authentication policy changed during publication resolution.");
+                return result ?? throw new InvalidOperationException("Session revocation publication is unavailable.");
+            }
             return presentations.RequirePublished(auth) ?? throw new InvalidOperationException("Session revocation publication is unavailable.");
         }
         catch (ArgumentException) { throw new InvalidOperationException("Session revocation publication is unavailable."); }
     }
-    internal Task<IResult> OptionsAsync(HttpContext http) => Guard(http, () =>
+    internal Task<IResult> OptionsAsync(HttpContext http) => Guard(http, async () =>
     {
         _ = Caller(http); var auth = authenticationPolicies.RequireEffective(clock.GetUtcNow()); auth.Validate();
         // Published copy is capability discovery, not a grant to revoke any target.
-        var published = Publication();
-        return Task.FromResult(auth == authenticationPolicies.RequireEffective(clock.GetUtcNow())
-            ? Results.Json(new { published.Locale, published.Content }) : Problem(503, "DEPENDENCY_UNAVAILABLE"));
+        var published = await PublicationAsync(http.RequestAborted).ConfigureAwait(false);
+        return auth == authenticationPolicies.RequireEffective(clock.GetUtcNow())
+            ? Results.Json(new { published.Locale, published.Content }) : Problem(503, "DEPENDENCY_UNAVAILABLE");
     });
     internal Task<IResult> PrepareAsync(HttpContext http) => Guard(http, async () =>
     {
@@ -127,7 +134,7 @@ internal sealed class SessionRevocationBrowserService(IdentityPersistenceDbConte
         var command = await IdentityJsonCommand.ReadAsync<PrepareCommand>(http, 4096).ConfigureAwait(false);
         if (!long.TryParse(command.ExpectedVersion, NumberStyles.None, CultureInfo.InvariantCulture, out var version) || version < 1 ||
             version.ToString(CultureInfo.InvariantCulture) != command.ExpectedVersion) return Problem(400, "VALIDATION_ERROR");
-        var caller = Caller(http); _ = Publication(); var now = clock.GetUtcNow();
+        var caller = Caller(http); _ = await PublicationAsync(http.RequestAborted).ConfigureAwait(false); var now = clock.GetUtcNow();
         var existing = ReadOriginal(http, caller, false);
         if (existing is not null && existing.RequestId == command.RequestId)
         {
