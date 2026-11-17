@@ -78,23 +78,7 @@ public sealed partial class PresentationContentApplication
             if (await reader.Database.SqlQuery<int>($"SELECT count(*)::integer AS \"Value\" FROM presentation_content.publications WHERE \"Scope\"={request.Scope} AND \"ProfileVersion\"={profile.Metadata.VersionId} AND NOT presentation_content.valid_publication(\"Id\")").SingleAsync(ct).ConfigureAwait(false) != 0)
                 throw new ContentUnavailableException();
             var bundle = ResolveBundle(request, profile, publications, versions);
-            var selected = bundle.Content.Values.Select(text => publications.Single(x => x.Id.ToString("N") == text.PublicationReference)).ToArray();
-            var intervals = selected.Select(x => new EffectivePolicyInterval(x.From, x.IncludesFrom, x.Until, x.IncludesUntil))
-                .Append(profile.Metadata.EffectiveInterval).Append(qualification.Metadata.EffectiveInterval).ToArray();
-            var from = intervals.Max(x => x.From); var includesFrom = intervals.Where(x => x.From == from).All(x => x.IncludesFrom);
-            DateTimeOffset? until = null; var includesUntil = false;
-            void Clip(DateTimeOffset? end, bool included)
-            {
-                if (end is null) return;
-                if (until is null || end < until) { until = end; includesUntil = included; }
-                else if (end == until) includesUntil &= included;
-            }
-            foreach (var interval in intervals) Clip(interval.Until, interval.IncludesUntil);
-            var variants = chain.ToHashSet(StringComparer.Ordinal); var keys = profile.Definitions.Select(x => x.Key).ToHashSet(StringComparer.Ordinal);
-            var next = publications.Where(x => variants.Contains(x.VariantReference) && keys.Contains(x.Key) &&
-                (x.From > request.EffectiveAt || x.From == request.EffectiveAt && !x.IncludesFrom)).OrderBy(x => x.From).ThenByDescending(x => x.IncludesFrom).FirstOrDefault();
-            if (next is not null) Clip(next.From, !next.IncludesFrom);
-            var availability = new EffectivePolicyInterval(from, includesFrom, until, includesUntil);
+            var availability = SelectionAvailability(request, profile, publications, bundle.Content.Values, qualification.Metadata.EffectiveInterval);
             var finalAt = clock.GetUtcNow(); qualification.Require(request.Scope, finalAt);
             var currentProfile = profiles.RequireEffective(request.Scope, finalAt); currentProfile.Require(request.Scope, finalAt);
             if (currentProfile.Snapshot != profileSnapshot || !availability.Contains(clock.GetUtcNow()) || !ReferenceEquals(transaction.Connection, connection))

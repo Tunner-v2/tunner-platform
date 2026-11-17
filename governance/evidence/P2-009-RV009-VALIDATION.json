@@ -3,9 +3,9 @@
   "scope_id": "P2-009-RV009",
   "owner_work_item": "TUN-P2-019",
   "validation_kind": "COMMITTED",
-  "result": "PASS",
-  "tested_commit_sha": "2ec18d92a3b0a42628e1f27584a621f4ad7d7ddf",
-  "validated_commit_sha": "2ec18d92a3b0a42628e1f27584a621f4ad7d7ddf",
+  "result": "PENDING",
+  "tested_commit_sha": null,
+  "validated_commit_sha": null,
   "owned_behavior_paths": [
     "src/Modules/Identity/RecoveryCodePolicy.cs",
     "src/Modules/Identity/RecoveryCodeApplication.cs",
@@ -21,10 +21,12 @@
     "tests/Tunner.Identity.Persistence.Tests/RecoveryCodeFiniteNativeExecution.cs",
     "tools/recovery-native-testing/cases.json",
     "tests/Shared/RecoveryCodeOwnedDockerFixture.cs",
-    "tools/recovery-native-testing/controller.mjs"
+    "tools/recovery-native-testing/controller.mjs",
+    "src/Modules/PresentationContent/ContentContracts.cs",
+    "src/Modules/PresentationContent/ContentResolution.cs"
   ],
   "scope": "Explicitly authorized optional asynchronous same-Identity-transaction Recovery publication integration. Existing synchronous providers, exact facts/proof/currentness, atomic rollback and private-code ownership remain authoritative; core edits require exact independent review and eligible compatibility lineage. Production settings, grants, activation, merge and release are separate.",
-  "current_increment": "Technical engineering results recorded from actual source2ec18d92:17/17 protocol,6/6resources including122 migratedDBs,121/121private including12newPASS; containment/no-log/cleanup/borrowed preservationPASS. Seven technical reviewsPASS. Formal native closure is PENDING; original009/wholeWork19/Product/production/release acceptance unchanged.",
+  "current_increment": "Original121/121 private,17protocol/6resources remain qualified at2ec18d92 with actual receipts/independent reviews and native closure checkALLOWED at5657451b. Approved P2-019 Product increment extracts the same Content selection calculation for both readers; current source qualification awaits focused borrowed-reader/endpoint-inclusion regressions and shared Content tests. No historical evidence reset or121 rerun claim.",
   "native_qualification": {"source_sha":"2ec18d92a3b0a42628e1f27584a621f4ad7d7ddf","build_binding_sha256":"c510b326d8e4c56626d613969b5e065fdc8e6cda9ecc3a5b406baad064fd4285","protocol":{"executed":17,"passed":17},"resources":{"executed":6,"passed":6,"capacity":{"databases":122,"databaseBytes":1396203110,"walBytes":1023410176}},"private":{"executed":121,"passed":121,"new_cases":12,"unchanged_cases":109,"accepted":true,"source_current":true,"timed_out":false,"containment":true,"no_log":true,"cleanup":true,"borrowed_preserved":true},"evidence_refs":["governance/evidence/p2-019-content-20261116/native-recovery-2ec18d92/private-receipt.json","governance/evidence/p2-019-content-20261116/native-recovery-2ec18d92/build-binding.json","governance/evidence/p2-019-content-20261116/native-recovery-2ec18d92/protocol-qualification.json","governance/evidence/p2-019-content-20261116/native-recovery-2ec18d92/resource-qualification.json","governance/evidence/p2-019-content-20261116/native-recovery-2ec18d92/resource-details.json"],"reviewer":"One disclosed independent AI reviewer p214_continuation_qa applied seven current contracts and verified actual results; root records technical assessments only.","formal_gate_status":"PENDING_NATIVE_CLOSURE_CHECK"},
-  "validation_phase": "ENGINEERING_RESULTS_PASS_NATIVE_CLOSURE_GATES_PENDING"
+  "validation_phase": "QUALIFIED_NATIVE_BASELINE_RETAINED_SHARED_HELPER_EXTRACTION_TESTS_PENDING"
 }

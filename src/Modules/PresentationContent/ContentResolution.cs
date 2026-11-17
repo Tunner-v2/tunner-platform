@@ -46,6 +46,30 @@ public sealed partial class PresentationContentApplication
         var profile = profiles.RequireEffective(request.Scope, request.EffectiveAt); profile.Require(request.Scope, request.EffectiveAt);
         _ = Variant(profile, request.VariantReference); return profile;
     }
+    private static EffectivePolicyInterval SelectionAvailability(ContentResolutionRequest request, ContentGovernanceProfile profile,
+        ContentPublicationRow[] publications, IEnumerable<PublishedContent> content, EffectivePolicyInterval? readQualificationInterval = null)
+    {
+        var selected = content.Select(text => publications.Single(row => row.Id.ToString("N") == text.PublicationReference));
+        var intervals = selected.Select(row => new EffectivePolicyInterval(row.From, row.IncludesFrom, row.Until, row.IncludesUntil))
+            .Append(profile.Metadata.EffectiveInterval).ToList();
+        if (readQualificationInterval is not null) intervals.Add(readQualificationInterval);
+        var from = intervals.Max(interval => interval.From); var includesFrom = intervals.Where(interval => interval.From == from).All(interval => interval.IncludesFrom);
+        DateTimeOffset? until = null; var includesUntil = false;
+        void Clip(DateTimeOffset? end, bool included)
+        {
+            if (end is null) return;
+            if (until is null || end < until) { until = end; includesUntil = included; }
+            else if (end == until) includesUntil &= included;
+        }
+        foreach (var interval in intervals) Clip(interval.Until, interval.IncludesUntil);
+        var variants = profile.Fallbacks.Single(fallback => fallback.RequestedVariantReference == request.VariantReference).OrderedVariantReferences.ToHashSet(StringComparer.Ordinal);
+        var keys = profile.Definitions.Select(definition => definition.Key).ToHashSet(StringComparer.Ordinal);
+        var next = publications.Where(row => variants.Contains(row.VariantReference) && keys.Contains(row.Key) &&
+            (row.From > request.EffectiveAt || row.From == request.EffectiveAt && !row.IncludesFrom)).OrderBy(row => row.From).ThenByDescending(row => row.IncludesFrom).FirstOrDefault();
+        if (next is not null) Clip(next.From, !next.IncludesFrom);
+        return new(from, includesFrom, until, includesUntil);
+    }
+
     private static ContentResolution ResolveBundle(ContentResolutionRequest request, ContentGovernanceProfile profile,
         ContentPublicationRow[] publications, ContentVersionRow[] versions)
     {
@@ -79,7 +103,8 @@ public sealed partial class PresentationContentApplication
                 values.Add(definition.Key, new(definition.Key, variant.Reference, version.Id.ToString("N"), publication.Id.ToString("N"), variant.Locale, version.Text));
             }
             if (!missing) return new(request.Scope, request.VariantReference, variant.Reference, variant.Locale,
-                new ReadOnlyDictionary<string, PublishedContent>(values));
+                new ReadOnlyDictionary<string, PublishedContent>(values))
+            { EffectiveInterval = SelectionAvailability(request, profile, publications, values.Values) };
         }
         throw new ContentUnavailableException();
     }

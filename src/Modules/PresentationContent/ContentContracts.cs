@@ -7,7 +7,11 @@ namespace Tunner.PresentationContent;
 public sealed record PublishedContent(string Key, string VariantReference, string VersionReference, string PublicationReference, string Locale, string Text);
 public sealed record ContentResolutionRequest(string Scope, string VariantReference, DateTimeOffset EffectiveAt);
 public sealed record ContentResolution(string Scope, string RequestedVariantReference, string EffectiveVariantReference, string Locale,
-    IReadOnlyDictionary<string, PublishedContent> Content);
+    IReadOnlyDictionary<string, PublishedContent> Content)
+{
+    /// <summary>Owner-observed current selection bounds; omitted from existing transport representations.</summary>
+    [JsonIgnore] public EffectivePolicyInterval? EffectiveInterval { get; init; }
+}
 public interface IPresentationContentResolver
 {
     ContentResolution Resolve(ContentResolutionRequest request);

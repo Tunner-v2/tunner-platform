@@ -19,6 +19,7 @@ using OpenIddict.Abstractions;
 using OpenIddict.Server;
 using Tunner.Database.Outbox;
 using Tunner.Platform.Policies;
+using Tunner.PresentationContent;
 using Xunit;
 using static Tunner.Identity.Persistence.Tests.AuthenticationTestHost;
 
@@ -276,7 +277,8 @@ public sealed class ProductAuthorizationProtocolTests(SessionListingPostgresFixt
         public override string ToString() => nameof(Scenario);
     }
     private async Task<Scenario> Create(bool nativeResourcePermission = true, bool broaderNativeQualification = false, bool lifecycle = false,
-        bool continuation = false, bool anonymous = false, bool interaction = false, bool review = false, bool stepUp = false)
+        bool continuation = false, bool anonymous = false, bool interaction = false, bool review = false, bool stepUp = false,
+        Action<IServiceCollection, Owners, IdentityTestDatabase>? configureReviewPresentation = null)
     {
         review |= stepUp; interaction |= stepUp;
         var database = await fixture.CreateDatabaseAsync();
@@ -310,7 +312,11 @@ public sealed class ProductAuthorizationProtocolTests(SessionListingPostgresFixt
             services.AddSingleton<IProductAuthorizationRelationshipSource>(owners);
             if (lifecycle) services.AddSingleton<IProductAuthorizationLifecycleSource>(owners);
             if (continuation || review) services.AddSingleton<IProductAuthorizationContinuationPolicySource>(owners);
-            if (review) services.AddSingleton<IProductAuthorizationPresentationSource>(owners);
+            if (review)
+            {
+                if (configureReviewPresentation is null) services.AddSingleton<IProductAuthorizationPresentationSource>(owners);
+                else configureReviewPresentation(services, owners, database);
+            }
             if (stepUp)
             {
                 services.AddSingleton<IAssurancePolicySource>(owners);
@@ -2210,4 +2216,110 @@ public sealed class ProductAuthorizationProtocolTests(SessionListingPostgresFixt
         }
         return values;
     }
+
+    [Fact]
+    public async Task PublishedContentReviewExposesOwnerSemanticsAndActualProvenanceThenAllowsNativeCodeRedemption()
+    {
+        var configured = await CreatePublishedProductReview(); await using var test = configured.Scenario; var content = configured.Content;
+        var publications = await PublishProductReviewBundle(content);
+        var pending = await BeginContinuation(test, existingSession: true, expectedRedirect: ReviewPath);
+        var frame = await ReviewOptions(test, pending); await AssertNoInteractionRelationship(test);
+        using (var response = await test.Host.Get(ReviewOptionsPath, test.Cookies))
+        {
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode); using var body = await response.Content.ReadFromJsonAsync<JsonDocument>(); var options = body!.RootElement;
+            var heading = options.GetProperty("content").GetProperty("authorization.heading");
+            Assert.Equal("Synthetic Content-owned Product heading", heading.GetProperty("text").GetString());
+            Assert.Equal(publications["authorization.heading"].PublicationReference.ToString("N"), heading.GetProperty("publicationRef").GetString());
+            Assert.Equal(publications["authorization.heading"].VersionReference.ToString("N"), heading.GetProperty("versionRef").GetString());
+            Assert.Equal(content.Variant, heading.GetProperty("variantRef").GetString()); Assert.Equal("PUBLISHED", heading.GetProperty("state").GetString());
+            foreach (var scope in test.Owners.GrantedScopes)
+            {
+                var permission = options.GetProperty("scopeDescriptions").GetProperty(scope);
+                Assert.Equal(scope, permission.GetProperty("key").GetString());
+                Assert.Equal(publications[scope].PublicationReference.ToString("N"), permission.GetProperty("publicationRef").GetString());
+            }
+            Assert.Equal("Synthetic Product", options.GetProperty("productName").GetString());
+            Assert.Equal("Synthetic current Account", options.GetProperty("accountLabel").GetString());
+            test.Cookies = Merge(test.Cookies, response);
+        }
+        await ReviewApply(test, frame, "ALLOW"); await AssertNoInteractionRelationship(test);
+        using var authorized = await test.Host.Get(AuthorizationPath, test.Cookies); Assert.Equal(HttpStatusCode.OK, authorized.StatusCode);
+        var form = ReadNativeForm(await authorized.Content.ReadAsStringAsync()); Assert.Equal(Redirect, form.Action);
+        Assert.True(form.Values.GetValueOrDefault("state") == pending.State);
+        Assert.True(form.Values.TryGetValue("code", out var code) && !string.IsNullOrWhiteSpace(code));
+        Assert.False(form.Values.ContainsKey("access_token") || form.Values.ContainsKey("id_token") || form.Values.ContainsKey("refresh_token"));
+        await AssertEffects(test, 1); await AssertPendingStatus(test, pending, OpenIddictConstants.Statuses.Redeemed);
+        using var redeemed = await Redeem(test, new(code!, pending.Verifier, pending.Nonce)); Assert.Equal(HttpStatusCode.OK, redeemed.StatusCode);
+        var tokens = await redeemed.Content.ReadFromJsonAsync<JsonElement>(); Assert.True(tokens.TryGetProperty("access_token", out _) && tokens.TryGetProperty("id_token", out _));
+    }
+
+    [Fact]
+    public async Task PublishedContentExpiryDuringRelationshipActivationPreventsNativeCodeIssuance()
+    {
+        var configured = await CreatePublishedProductReview(); await using var test = configured.Scenario; var content = configured.Content;
+        _ = await PublishProductReviewBundle(content, TimeSpan.FromSeconds(1));
+        var pending = await BeginContinuation(test, existingSession: true, expectedRedirect: ReviewPath);
+        var frame = await ReviewOptions(test, pending); await ReviewApply(test, frame, "ALLOW"); await AssertNoInteractionRelationship(test);
+        var relationshipReached = false;
+        test.Owners.BeforeRelationshipEnsure = cancellationToken =>
+        { cancellationToken.ThrowIfCancellationRequested(); relationshipReached = true; test.Host.Clock.Advance(TimeSpan.FromSeconds(2)); return Task.CompletedTask; };
+        using var response = await test.Host.Get(AuthorizationPath, test.Cookies);
+        Assert.True(relationshipReached); await AssertRejected(response, "access_denied", HttpStatusCode.OK);
+        await AssertEffects(test, 0, pending.State, pending.Nonce, pending.Verifier, frame.Reference, frame.Csrf);
+        await using var read = test.Database.Context();
+        // Existing synthetic Relationship acknowledgement commits independently. Only native issuance is denied.
+        Assert.Equal(1, await read.Database.SqlQuery<int>($"SELECT count(*)::integer AS \"Value\" FROM public.product_authorization_relationship_fixture").SingleAsync());
+        var session = await read.Set<AuthenticationSessionRow>().SingleAsync();
+        Assert.False(AuthenticationApplication.Expired(session, test.Host.Policies.Policy, test.Host.Clock.GetUtcNow()));
+        Assert.True(test.Owners.RequireCurrent(Origin, test.Host.Clock.GetUtcNow()).Metadata.EffectiveInterval.Contains(test.Host.Clock.GetUtcNow()));
+        await using var publication = content.Open();
+        await Assert.ThrowsAsync<ContentUnavailableException>(() => publication.Application.ResolveAsync(new(content.Scope, content.Variant, test.Host.Clock.GetUtcNow())));
+    }
+
+    private async Task<(Scenario Scenario, PresentationContentTestEnvironment Content)> CreatePublishedProductReview()
+    {
+        PresentationContentTestEnvironment? content = null;
+        var scenario = await Create(review: true, configureReviewPresentation: (services, owners, database) =>
+        {
+            var clock = Assert.IsType<TestClock>(services.Last(service => service.ServiceType == typeof(TimeProvider)).ImplementationInstance);
+            var template = new PublishedProductAuthorizationPresentationTests.Fixture();
+            content = new(database, clock, template.Resolver.Result.Content.ToDictionary(pair => pair.Key, pair => pair.Value.Text, StringComparer.Ordinal));
+            services.AddSingleton<IPresentationContentProfileSource>(content); services.AddSingleton<IPresentationContentAuthorizationSource>(content.Authorization);
+            services.AddTunnerPresentationContent(database.ConnectionString);
+            services.AddSingleton<IProductAuthorizationPresentationContentBindingSource>(new PublishedProductReviewBinding(owners, content));
+            services.AddTunnerPublishedProductAuthorizationPresentation();
+        });
+        try
+        {
+            Assert.NotNull(content); Assert.Same(scenario.Host.Clock, content.Clock); await content.InitializeAsync(); return (scenario, content);
+        }
+        catch { await scenario.DisposeAsync(); throw; }
+    }
+    private static async Task<Dictionary<string, ContentHistoryEntry>> PublishProductReviewBundle(PresentationContentTestEnvironment content, TimeSpan? headingLifetime = null)
+    {
+        var result = new Dictionary<string, ContentHistoryEntry>(StringComparer.Ordinal);
+        foreach (var definition in content.Profile.Definitions)
+        {
+            var text = definition.Key == "authorization.heading" ? "Synthetic Content-owned Product heading" : "Synthetic Content-owned review text: " + definition.Key;
+            if (definition.Key == "authorization.heading" && headingLifetime is { } lifetime)
+            {
+                await using var writer = content.Open(); content.Authorization.Actor = "fixture-author"; var p = await writer.Application.CreateDraftAsync(content.Draft(text, definition.Key));
+                p = await writer.Application.ValidateAsync(content.Command(p)); content.Authorization.Actor = "fixture-approver"; p = await writer.Application.ApproveAsync(content.Command(p));
+                content.Authorization.Actor = "fixture-publisher";
+                result.Add(definition.Key, await writer.Application.PublishAsync(content.Publish(p) with { EffectiveInterval = new(content.Clock.GetUtcNow(), true, content.Clock.GetUtcNow() + lifetime, false) }));
+            }
+            else result.Add(definition.Key, await content.PublishTextAsync(definition.Key, text));
+        }
+        return result;
+    }
+    private sealed class PublishedProductReviewBinding(Owners owners, PresentationContentTestEnvironment content) : IProductAuthorizationPresentationContentBindingSource
+    {
+        public async ValueTask<ProductAuthorizationPresentationContentBinding> RequireQualifiedAsync(ProductAuthorizationPresentationFacts facts,
+            DateTimeOffset effectiveAt, CancellationToken cancellationToken)
+        {
+            var semantic = await owners.RequirePublishedAsync(facts, effectiveAt, cancellationToken);
+            return new(semantic, content.Scope, content.Variant, "SYNTHETIC-LOCAL-PRODUCT-CONTENT-QUALIFICATION");
+        }
+    }
+
 }
