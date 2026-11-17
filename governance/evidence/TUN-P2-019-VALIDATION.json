@@ -3,7 +3,18 @@
   "scope_id": "TUN-P2-019",
   "validation_kind": "COMMITTED",
   "result": "PASS",
-  "phase": "ENGINEERING_QUALIFIED_NATIVE_READINESS_PENDING",
+  "phase": "ENGINEERING_READY_PRODUCT_ACCEPTANCE_PENDING",
+  "native_readiness": {
+    "checked_commit_sha": "09a3f78fc437fb7d37da755a86a88eaf8167bd4f",
+    "validated_behavior_carrier": "96685959ef4e87b319e214e615407517c1c3a64b",
+    "command": "governance gate check TUN-P2-019",
+    "outcome": "READY",
+    "exit_code": 0,
+    "failures": [],
+    "satisfied_checks": 18,
+    "receipt_ref": "governance/evidence/p2-019-content-20261116/final-qualification-96685959/native-ready-09a3f78f.json",
+    "boundary": "Actual P019 engineering readiness only. Product acceptance, required lifecycle completion/context refresh, protected-main integration, production values/activation and release remain separate. The unrelated private runner defect remains explicitly unresolved."
+  },
   "committed_diagnostic_helper_qualification": {
     "source_sha": "96685959ef4e87b319e214e615407517c1c3a64b",
     "scope": "Two pure tests qualify the separately tracked fixed host-failure classifier only; no Docker, HTTPS or private cohort is represented by this result.",
