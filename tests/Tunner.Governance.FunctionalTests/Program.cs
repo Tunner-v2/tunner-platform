@@ -1015,8 +1015,8 @@ static void RunRevisionCommittedProofChecks(DirectoryInfo repositoryRoot, IColle
         Close(second, true);
         Check(AuditCommittedFixture(fixture), "later path owner and unchanged prior-owner paths compose");
         Check(RevisionApplication.CloseCheck(fixture, first).ExitCode == 0, "prior revision proof resolves strictly later ownership without recursion to itself");
-        var firstRevisionPath = Path.Combine(fixture.FullName, "governance/revisions/" + first + ".yaml");
-        var secondRevisionPath = Path.Combine(fixture.FullName, "governance/revisions/" + second + ".yaml");
+        var firstRevisionPath = Path.Combine(fixture.FullName, "governance", "revisions", first + ".yaml");
+        var secondRevisionPath = Path.Combine(fixture.FullName, "governance", "revisions", second + ".yaml");
         var secondRevisionBytes = File.ReadAllBytes(secondRevisionPath);
         var schemaPath = Path.Combine(fixture.FullName, "governance/schemas/v1/governance-record.schema.json");
         var schemaBytes = File.ReadAllBytes(schemaPath);
