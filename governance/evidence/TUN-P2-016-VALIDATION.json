@@ -2,7 +2,17 @@
   "schema_version": 1,
   "scope_id": "TUN-P2-016",
   "result": "PENDING",
-  "phase": "QUALIFIED_FUNCTIONALITY_SOURCE_RECONCILIATION_REQUIRED",
+  "phase": "QUALIFIED_FUNCTIONALITY_CURRENT_NATIVE_GATE_PENDING",
+  "current_admission": {
+    "source_sha": "4e39914ed73d59ba728a3f3cbd6dd92d7079ed39",
+    "outcome": "ELIGIBLE",
+    "findings": [],
+    "exit_code": 0,
+    "elapsed_ms": 138325,
+    "evidence_ref": "governance/evidence/p2-016-notifications-20261115/native-gates/admission-4e39914e.json",
+    "execution_ref": "governance/evidence/p2-016-notifications-20261115/native-gates/admission-4e39914e-execution.json",
+    "boundary": "Correct UTF-8 decoding removes the false closed-history mismatch. Existing application evidence and exact source-carrier binding are reused; no fresh context, readiness or Product acceptance is implied. Earlier admission below retains its original timestamp and provenance."
+  },
   "current_ready_gate": {"source_sha":"9ccf3749418403e6cb1377fcb5e9c09e51f6e9aa","result":"NOT_READY","command":"governance gate check TUN-P2-016","exit_code":1,"failures":["prerequisite 'TUN-P2-004' lacks valid committed-state readiness evidence","prerequisite 'TUN-P2-005' lacks valid committed-state readiness evidence","owned behavior changed after validated SHA: tests/Tunner.Identity.Persistence.Tests/ProductAuthorizationProtocolTests.cs","owned behavior changed after validated SHA: tests/Tunner.Identity.Persistence.Tests/Tunner.Identity.Persistence.Tests.csproj"],"next":"Preserve passing actual runs and unchanged application sources. Reconcile the two shared test/project paths and open prerequisite bindings with the existing final shared-source integration batch; no feature reimplementation, historical closure overwrite or Product acceptance inferred."},
   "previous_ready_gate": {"source_sha":"ed5bd53e6c7103a80a8b9336823c27c6710ba2d9","result":"READY","failures":[],"evidence_ref":"governance/evidence/p2-016-notifications-20261115/native-gates/ready-ed5bd53.json","lifecycle":"Native IN_PROGRESS to CODE_REVIEW and CODE_REVIEW to VALIDATION transitions allowed. Product acceptance requested separately; no DONE or production/release acceptance is inferred."},
   "admission": {
@@ -56,8 +66,44 @@
   ],
   "acceptance_boundary": "Actual execution receipts retain their exact original SHAs. No Product acceptance for P2-016, whole-P2 completion, production activation, protected-main merge or release is inferred.",
   "validation_kind": "COMMITTED",
-  "tested_commit_sha": "804123a8667b0601feb4a6a63a2b9ade82bc3acd",
-  "validated_commit_sha": "804123a8667b0601feb4a6a63a2b9ade82bc3acd",
+  "tested_commit_sha": "06b20de2b2b0303a1213259c877b990169b9e380",
+  "validated_commit_sha": "06b20de2b2b0303a1213259c877b990169b9e380",
+  "source_currentness_reconciliation": {
+    "carrier_commit_sha": "06b20de2b2b0303a1213259c877b990169b9e380",
+    "previous_carrier_commit_sha": "804123a8667b0601feb4a6a63a2b9ade82bc3acd",
+    "result": "SOURCE_RECONCILED_NATIVE_CHECKS_PENDING",
+    "qualification_boundary": "Current validated/tested SHA identifies the reviewed source carrier, not a rerun of the historical cohorts. Overall result remains PENDING until actual current native checks; no READY, DONE or Product acceptance is inferred.",
+    "unchanged_owned_paths": 29,
+    "changed_owned_paths": [
+      {
+        "path": "tests/Tunner.Identity.Persistence.Tests/ProductAuthorizationProtocolTests.cs",
+        "change": "Two published Content Product review/expiry journeys and their fixture helpers; existing P2-016 application and test assertions remain.",
+        "qualified_source_sha": "5f7fecff0ca5d8b39863048c9666401667d52161",
+        "executed": 2,
+        "passed": 2,
+        "failed": 0,
+        "evidence_ref": "governance/evidence/p2-019-content-20261116/native/2e035c503cdf49518cdb4b857c6a532b/summary.json"
+      },
+      {
+        "path": "tests/Tunner.Identity.Persistence.Tests/Tunner.Identity.Persistence.Tests.csproj",
+        "change": "Adds only the existing Tunner.Admin.Bff project reference; exercised by qualified P2-019 Admin HTTPS journeys and the current native build."
+      }
+    ],
+    "current_build": {
+      "source_sha": "0448f9ed7b3b0aaeeb5cc12710d2c5b08d0a97bd",
+      "exit_code": 0,
+      "warnings": 0,
+      "errors": 0,
+      "evidence_ref": "artifacts/p2-019-content-20261116/native-final-63fb7514/build-execution.json",
+      "log_ref": "artifacts/p2-019-content-20261116/native-final-63fb7514/build.log",
+      "source_equivalence": "No src, native-runner, shared test, Identity test/project or build-input changes between this actual build source and the carrier; no build executed at the carrier is claimed."
+    },
+    "retained_qualification_refs": [
+      "governance/evidence/p2-016-notifications-20261115/native/16fd07b9314e459aa34d3eae560d2d6f/summary.json",
+      "governance/evidence/p2-016-notifications-20261115/native/94c2e9403fda4dde8643cf73e8e525ea/summary.json"
+    ],
+    "remaining": "Capture current native readiness/context/lifecycle checks and applicable Product acceptance separately. Historical actual runs, statuses, source ownership and role assessments are retained."
+  },
   "carrier_source_binding": {"carrier_commit_sha": "804123a8667b0601feb4a6a63a2b9ade82bc3acd", "actual_smoke_run_id": "94c2e9403fda4dde8643cf73e8e525ea", "actual_smoke_source_sha": "804123a8667b0601feb4a6a63a2b9ade82bc3acd", "executed": 1, "passed": 1, "failed": 0, "ref": "governance/evidence/p2-016-notifications-20261115/native/94c2e9403fda4dde8643cf73e8e525ea/summary.json", "full_integrated_run_source_sha": "98807ebe4bb7cb4e74b1aecf938a9edb8c243475", "owned_behavior_byte_equivalence": true, "provenance": "Carrier contains the ownership declaration and actual evidence; one real hosted smoke passed at the carrier. Git comparison verifies unchanged behavior sources from the full78 run. No full78 rerun at the carrier is claimed."},
   "owned_behavior_paths": [
     "docs/contracts/product-authorization-contract.md",
