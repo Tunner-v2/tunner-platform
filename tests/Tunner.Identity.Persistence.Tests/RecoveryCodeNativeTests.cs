@@ -7,6 +7,42 @@ namespace Tunner.Identity.Persistence.Tests;
 
 public sealed class RecoveryCodeNativeTests
 {
+    [Fact]
+    public void HostStartupClassificationDoesNotRetainForeignPayloads()
+    {
+        var marker = "PUBLIC_NONFUNCTIONAL_DIAGNOSTIC_" + Guid.NewGuid().ToString("N");
+        Exception[] errors = [new CryptographicException(marker), new InvalidOperationException(marker),
+            new FileNotFoundException(marker, marker), new IOException(marker),
+            new System.Net.Sockets.SocketException((int)System.Net.Sockets.SocketError.AddressAlreadyInUse), new NotSupportedException(marker)];
+        foreach (var error in errors)
+        {
+            var failure = RecoveryCodeFirstCaseFailure.HostFailure(error);
+            const string prefix = "FIRST_CASE_FEDERATION_MFA_";
+            Assert.StartsWith(prefix, failure.FailureCode, StringComparison.Ordinal);
+            Assert.True(Enum.TryParse<RecoveryCodeFirstCaseStage>(failure.FailureCode[prefix.Length..], out var stage) &&
+                Enum.IsDefined(stage) && stage.ToString().StartsWith("FEDERATION_MFA_HOST_", StringComparison.Ordinal));
+            Assert.DoesNotContain(marker, failure.FailureCode, StringComparison.Ordinal);
+            Assert.DoesNotContain(marker, failure.Message, StringComparison.Ordinal);
+            Assert.DoesNotContain(marker, failure.ToString(), StringComparison.Ordinal);
+            Assert.True(failure.InnerException is null && failure.Data.Count == 0);
+        }
+    }
+
+    [Fact]
+    public void HostStartupClassificationBoundsWrappersAndRecognizesOnlyTheFixedTlsSentinel()
+    {
+        var marker = "PUBLIC_NONFUNCTIONAL_WRAPPER";
+        var inner = new InvalidOperationException(marker);
+        Exception wrapped = new AggregateException(new System.Reflection.TargetInvocationException(new TypeInitializationException(marker, inner)));
+        Assert.Equal("FIRST_CASE_FEDERATION_MFA_FEDERATION_MFA_HOST_INVALID_OPERATION", RecoveryCodeFirstCaseFailure.HostFailure(wrapped).FailureCode);
+        wrapped = new System.Reflection.TargetInvocationException(wrapped);
+        Assert.Equal("FIRST_CASE_FEDERATION_MFA_FEDERATION_MFA_HOST_OTHER", RecoveryCodeFirstCaseFailure.HostFailure(wrapped).FailureCode);
+        Assert.Equal("FIRST_CASE_FEDERATION_MFA_FEDERATION_MFA_HOST_OTHER",
+            RecoveryCodeFirstCaseFailure.HostFailure(new AggregateException(inner, new NotSupportedException(marker))).FailureCode);
+        Assert.Equal("FIRST_CASE_FEDERATION_MFA_FEDERATION_MFA_HOST_TLS_LOOKUP",
+            RecoveryCodeFirstCaseFailure.HostFailure(new InvalidOperationException("RECOVERY_FINITE_TLS_CERTIFICATE_UNAVAILABLE")).FailureCode);
+    }
+
     // Explicit finite synthetic work profile; never a production policy selection.
     internal static RecoveryCodeCryptoProfile Profile() => new("fixture-recovery-crypto-v1", "10.0.13", 2, 2,
         10_000, 20_000, 8, 1, TimeSpan.FromSeconds(10));

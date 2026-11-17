@@ -42,7 +42,9 @@ internal enum RecoveryCodeFirstCaseStage
     FEDERATION_MFA_DEPENDENCY_UNAVAILABLE, FEDERATION_MFA_RATE_LIMITED, FEDERATION_MFA_VALIDATION_ERROR, FEDERATION_MFA_OTHER_ERROR,
     COHORT_SQL_DISK_FULL, COHORT_SQL_CONNECTION_LIMIT, COHORT_SQL_ADMIN_SHUTDOWN, COHORT_SQL_OTHER, COHORT_DATABASE_TRANSPORT,
     COHORT_SQL_OBJECT_IN_USE, COHORT_POSTGRES_NOT_READY, COHORT_DATABASE_LEASE_INVALID,
-    COHORT_DATABASE_OWNER_UNVERIFIED, COHORT_DATABASE_RELEASE_UNVERIFIED
+    COHORT_DATABASE_OWNER_UNVERIFIED, COHORT_DATABASE_RELEASE_UNVERIFIED,
+    FEDERATION_MFA_HOST_TLS_LOOKUP, FEDERATION_MFA_HOST_CRYPTO, FEDERATION_MFA_HOST_MISSING_FILE,
+    FEDERATION_MFA_HOST_INVALID_OPERATION, FEDERATION_MFA_HOST_IO, FEDERATION_MFA_HOST_SOCKET, FEDERATION_MFA_HOST_OTHER
 }
 internal sealed class RecoveryCodeFirstCaseCheckpoint
 {
@@ -56,6 +58,33 @@ internal sealed class RecoveryCodeFirstCaseFailure(RecoveryCodeFirstCasePhase ph
 {
     internal string FailureCode { get; } = Enum.IsDefined(phase) && Enum.IsDefined(stage)
         ? "FIRST_CASE_" + Enum.GetName(phase) + "_" + Enum.GetName(stage) : "CASE_FAILED";
+    // Fixed categories only: never retain or emit exception payloads from private host startup.
+    internal static RecoveryCodeFirstCaseFailure HostFailure(Exception error)
+    {
+        var candidate = error;
+        for (var depth = 0; depth < 3; depth++)
+        {
+            var inner = candidate switch
+            {
+                AggregateException { InnerExceptions.Count: 1 } aggregate => aggregate.InnerExceptions[0],
+                System.Reflection.TargetInvocationException or TypeInitializationException => candidate.InnerException,
+                _ => null
+            };
+            if (inner is null) break;
+            candidate = inner;
+        }
+        var stage = candidate switch
+        {
+            InvalidOperationException { Message: "RECOVERY_FINITE_TLS_CERTIFICATE_UNAVAILABLE" } => RecoveryCodeFirstCaseStage.FEDERATION_MFA_HOST_TLS_LOOKUP,
+            System.Security.Cryptography.CryptographicException => RecoveryCodeFirstCaseStage.FEDERATION_MFA_HOST_CRYPTO,
+            FileNotFoundException or DirectoryNotFoundException => RecoveryCodeFirstCaseStage.FEDERATION_MFA_HOST_MISSING_FILE,
+            InvalidOperationException => RecoveryCodeFirstCaseStage.FEDERATION_MFA_HOST_INVALID_OPERATION,
+            System.Net.Sockets.SocketException => RecoveryCodeFirstCaseStage.FEDERATION_MFA_HOST_SOCKET,
+            IOException => RecoveryCodeFirstCaseStage.FEDERATION_MFA_HOST_IO,
+            _ => RecoveryCodeFirstCaseStage.FEDERATION_MFA_HOST_OTHER
+        };
+        return new(RecoveryCodeFirstCasePhase.FEDERATION_MFA, stage);
+    }
     internal static RecoveryCodeFirstCaseFailure? DatabaseFailure(Exception error)
     {
         var databaseError = error is DbUpdateException { InnerException: { } inner } ? inner : error;
