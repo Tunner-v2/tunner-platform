@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.DataProtection;
+using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
 using System.Net;
 using System.Net.Http.Json;
@@ -65,7 +66,11 @@ public sealed class PublishedRecoveryPasswordPresentationIntegrationTests(Sessio
             Assert.False(response.TryGetProperty("recoveryAvailable", out _)); Assert.True(response.GetProperty("content").EnumerateObject().Any());
             Assert.False(string.IsNullOrWhiteSpace(response.GetProperty("csrfToken").GetString())); Assert.Equal(1, dependency.Reads);
         }
-        using (var absent = await host.Get("/recovery/options")) Assert.Equal(HttpStatusCode.NotFound, absent.StatusCode);
+        // The shared BFF fallback challenges unknown anonymous paths before a 404 response.
+        using (var absent = await host.Get("/recovery/options")) Assert.Equal(HttpStatusCode.Unauthorized, absent.StatusCode);
+        var routes = host.Services.GetRequiredService<EndpointDataSource>().Endpoints.OfType<RouteEndpoint>().Select(endpoint => endpoint.RoutePattern.RawText).ToArray();
+        Assert.Contains("/authentication/options", routes);
+        Assert.DoesNotContain(routes, route => route is not null && route.StartsWith("/recovery", StringComparison.Ordinal));
         await using (var scope = host.Services.CreateAsyncScope())
         {
             using var caller = new CancellationTokenSource(); caller.Cancel();
