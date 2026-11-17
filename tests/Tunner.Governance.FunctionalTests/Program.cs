@@ -877,7 +877,16 @@ static void RunRevisionChecks(DirectoryInfo repositoryRoot, ICollection<string> 
         Check(RevisionApplication.CheckTransition(fixture, "P0-999-RV999", "ACTIVE").ExitCode != 0, "closed Revision cannot be reopened");
         var closed = File.ReadAllText(importedPath);
         EditRevision(importedPath, "reason", "rewritten history");
-        Check(GovernanceApplication.Validate(fixture).ExitCode != 0, "closed Revision evidence/history cannot be silently edited");
+        var changedHistory = GovernanceApplication.Validate(fixture);
+        var changedDiagnostics = ((ValidationPayload)changedHistory.Payload).Diagnostics;
+        Check(changedHistory.ExitCode != 0, "closed Revision evidence/history cannot be silently edited");
+        Check(changedDiagnostics.Any(x => x.Message == "closed Revision history is immutable; later work requires a new Revision"),
+            "comparison diagnostics preserve the original immutable-history refusal");
+        Check(changedDiagnostics.Any(x => System.Text.RegularExpressions.Regex.IsMatch(x.Message,
+                @"^closed Revision comparison diagnostic: committed_sha256=[a-f0-9]{64}; current_sha256=[a-f0-9]{64}; comparison=semantic-difference; path=\$\.reason; kinds=String/String$", System.Text.RegularExpressions.RegexOptions.CultureInvariant)),
+            "closed history mismatch identifies only the reason property kinds and comparison hashes");
+        Check(changedDiagnostics.All(x => !x.Message.Contains("rewritten history", StringComparison.Ordinal)),
+            "closed history comparison diagnostics never emit the changed marker value");
         File.WriteAllText(importedPath, closed);
         File.Delete(importedPath);
         Check(GovernanceApplication.Validate(fixture).ExitCode != 0, "committed Revision deletion is rejected");

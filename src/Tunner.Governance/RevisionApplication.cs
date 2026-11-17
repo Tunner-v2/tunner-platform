@@ -1,6 +1,7 @@
 using System.Diagnostics;
 using System.Globalization;
 using System.Numerics;
+using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
 using System.Text.RegularExpressions;
@@ -361,10 +362,59 @@ public static class RevisionApplication
             var fields = GovernanceApplication.Fields(old);
             foreach (var field in IdentityFields)
                 if (NullValue(GovernanceApplication.Scalar(fields, field)) != NullValue(revision.Scalar(field))) failures.Add($"committed Revision identity field is immutable: {field}");
-            if (GovernanceApplication.Scalar(fields, "status") == "CLOSED" && JsonSerializer.Serialize(ToJson(old)) != JsonSerializer.Serialize(ToJson(revision.Root)))
-                failures.Add("closed Revision history is immutable; later work requires a new Revision");
+            if (GovernanceApplication.Scalar(fields, "status") == "CLOSED")
+            {
+                var committedJson = JsonSerializer.Serialize(ToJson(old));
+                var currentJson = JsonSerializer.Serialize(ToJson(revision.Root));
+                if (committedJson != currentJson)
+                {
+                    failures.Add("closed Revision history is immutable; later work requires a new Revision");
+                    failures.Add(ClosedComparisonDiagnostic(committedJson, currentJson));
+                }
+            }
         }
         return failures;
+    }
+
+    private static string ClosedComparisonDiagnostic(string committedJson, string currentJson)
+    {
+        const string unavailable = "closed Revision comparison diagnostic: unavailable";
+        // Bound diagnostic work only. This limit never changes the preceding immutable-history refusal.
+        if (committedJson.Length > 131072 || currentJson.Length > 131072) return unavailable;
+        try
+        {
+            using var committed = JsonDocument.Parse(committedJson);
+            using var current = JsonDocument.Parse(currentJson);
+            var left = committed.RootElement;
+            var right = current.RootElement;
+            var equal = JsonElement.DeepEquals(left, right);
+            var path = "$";
+            var kinds = left.ValueKind + "/" + right.ValueKind;
+            if (!equal && left.ValueKind == JsonValueKind.Object && right.ValueKind == JsonValueKind.Object)
+            {
+                string[] approvedFields = ["schema_version", "revision_id", "revision_scope", "original_scope_id",
+                    "parent_revision_id", "parent_milestone_revision_id", "title", "revision_type", "status", "reason",
+                    "authority_refs", "decision_refs", "defect_refs", "change_refs", "impact_classification", "blocked_scope",
+                    "acceptance_criteria", "prerequisites", "work_items", "required_gates", "required_roles", "evidence_refs",
+                    "created_at", "closed_at", "git_state", "product_acceptance_required", "ui_evidence_ref"];
+                foreach (var name in left.EnumerateObject().Select(x => x.Name).Concat(right.EnumerateObject().Select(x => x.Name)).Distinct(StringComparer.Ordinal))
+                {
+                    var hasLeft = left.TryGetProperty(name, out var leftValue);
+                    var hasRight = right.TryGetProperty(name, out var rightValue);
+                    if (hasLeft && hasRight && JsonElement.DeepEquals(leftValue, rightValue)) continue;
+                    path = approvedFields.Contains(name, StringComparer.Ordinal) ? "$." + name : "$.[unrecognized-property]";
+                    kinds = leftValue.ValueKind + "/" + rightValue.ValueKind;
+                    break;
+                }
+            }
+            var committedHash = Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(committedJson))).ToLowerInvariant();
+            var currentHash = Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(currentJson))).ToLowerInvariant();
+            return $"closed Revision comparison diagnostic: committed_sha256={committedHash}; current_sha256={currentHash}; comparison={(equal ? "semantic-equal-serialization-difference" : "semantic-difference")}; path={path}; kinds={kinds}";
+        }
+        catch (Exception exception) when (exception is JsonException or InvalidOperationException or ArgumentException or CryptographicException)
+        {
+            return unavailable;
+        }
     }
 
     private static IEnumerable<string> SchemaFailures(DirectoryInfo repository, GovernanceRecord record)
