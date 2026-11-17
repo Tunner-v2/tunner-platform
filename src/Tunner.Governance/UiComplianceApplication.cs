@@ -9,6 +9,7 @@ namespace Tunner.Governance;
 public static class UiComplianceApplication
 {
     public const string InventoryPath = "docs/contracts/ui-inventory.json";
+    private const string BrowserFixtureSource = "tools/browser-testing/BrowserTestGovernedContent.cs";
     public static readonly IReadOnlyList<string> UrlChecks = Enumerable.Range(1, 6).Select(i => $"URL-{i:D3}").ToArray();
     public static readonly IReadOnlyList<string> ValidationChecks = Enumerable.Range(1, 8).Select(i => $"VAL-{i:D3}").ToArray();
     public static readonly IReadOnlyList<string> FidelityChecks = Enumerable.Range(1, 8).Select(i => $"UX-FID-{i:D3}").ToArray();
@@ -129,6 +130,8 @@ public static class UiComplianceApplication
     {
         var owned = proof.GetProperty("owned_behavior_paths").EnumerateArray().Select(p => p.GetString() ?? "").ToArray();
         if (owned.Length == 0 || owned.Any(p => !SafeSource(p))) { failures.Add("UI evidence requires safe nonempty source ownership"); return; }
+        if (owned.Contains(BrowserFixtureSource, StringComparer.Ordinal) && !RegularBrowserFixtureSource(repository))
+        { failures.Add("UI fixture source requires a regular non-reparse file and parents"); return; }
         var required = new HashSet<string>(StringComparer.Ordinal) { InventoryPath };
         foreach (var item in live.Where(i => scopeId == "GLOBAL_UI" || i.GetProperty("owner_scopes").EnumerateArray().Any(o => o.GetString() == scopeId)))
             foreach (var source in item.GetProperty("source_paths").EnumerateArray())
@@ -136,6 +139,13 @@ public static class UiComplianceApplication
                 var logical = source.GetString() ?? "";
                 if (!SafeSource(logical)) { failures.Add("UI source path is invalid"); continue; }
                 var full = Path.Combine(repository.FullName, logical);
+                if (logical == BrowserFixtureSource)
+                {
+                    if (item.GetProperty("status").GetString() != "TEST_FIXTURE")
+                    { failures.Add("Tool UI source requires TEST_FIXTURE status"); continue; }
+                    if (!RegularBrowserFixtureSource(repository))
+                    { failures.Add("UI fixture source requires a regular non-reparse file and parents"); continue; }
+                }
                 if (Directory.Exists(full))
                     foreach (var file in Directory.EnumerateFiles(full, "*", SearchOption.AllDirectories).Where(p =>
                         !Path.GetRelativePath(full, p).Split(Path.DirectorySeparatorChar).Any(part => part is "node_modules" or "dist" or "test-results" or "obj" or "bin")))
@@ -157,7 +167,21 @@ public static class UiComplianceApplication
     }
     private static bool SafeSource(string path) => !Path.IsPathRooted(path) && !path.Contains('\\') && !path.Contains(':') &&
         !path.Split('/').Any(p => p is "" or "." or "..") && (path.StartsWith("web/", StringComparison.Ordinal) ||
-        path.StartsWith("src/", StringComparison.Ordinal) || path.StartsWith("docs/contracts/", StringComparison.Ordinal));
+        path.StartsWith("src/", StringComparison.Ordinal) || path.StartsWith("docs/contracts/", StringComparison.Ordinal) || path == BrowserFixtureSource);
+
+    private static bool RegularBrowserFixtureSource(DirectoryInfo repository)
+    {
+        try
+        {
+            var tools = File.GetAttributes(Path.Combine(repository.FullName, "tools"));
+            if ((tools & FileAttributes.ReparsePoint) != 0 || (tools & FileAttributes.Directory) == 0) return false;
+            var browser = File.GetAttributes(Path.Combine(repository.FullName, "tools/browser-testing"));
+            if ((browser & FileAttributes.ReparsePoint) != 0 || (browser & FileAttributes.Directory) == 0) return false;
+            var source = File.GetAttributes(Path.Combine(repository.FullName, BrowserFixtureSource));
+            return (source & (FileAttributes.ReparsePoint | FileAttributes.Directory | FileAttributes.Device)) == 0;
+        }
+        catch (Exception error) when (error is IOException or UnauthorizedAccessException) { return false; }
+    }
 
     private static void CheckReference(DirectoryInfo repository, JsonElement reference, List<string> failures)
     {

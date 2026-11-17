@@ -24,6 +24,10 @@ try
     {
         RunRevisionCommittedProofChecks(repositoryRoot, failures);
     }
+    else if (args.Contains("--ui-evidence-only", StringComparer.Ordinal))
+    {
+        RunGlobalUiEvidenceChecks(repositoryRoot, failures);
+    }
     else if (!args.Contains("--self-test-cleanup-failure", StringComparer.Ordinal))
     {
         RunHarnessFailureReportingCheck(failures);
@@ -1428,6 +1432,7 @@ static void RunGlobalUiEvidenceChecks(DirectoryInfo repositoryRoot, ICollection<
 {
     var fixture = Directory.CreateTempSubdirectory("tunner-governance-ui-evidence-fixture-");
     var checks = 0;
+    var retainFixture = false;
     void Check(bool value, string message) { checks++; Expect(value, "Global UI evidence: " + message, failures); }
     try
     {
@@ -1578,9 +1583,103 @@ static void RunGlobalUiEvidenceChecks(DirectoryInfo repositoryRoot, ICollection<
         ResolutionCheck(Transition().Outcome == "REJECTED", "open design defects still block acceptance");
         defect["status"] = "CLOSED"; File.WriteAllText(defectPath, defect.ToJsonString());
         ResolutionCheck(Transition().Outcome == "ALLOWED", "closed tracked defects restore the original guarded positive path");
+        // The isolated browser tool is an exact TEST_FIXTURE source, never a general tools/ source root.
+        const string toolSource = "tools/browser-testing/BrowserTestGovernedContent.cs";
+        var toolFile = Path.Combine(fixture.FullName, toolSource);
+        Directory.CreateDirectory(Path.GetDirectoryName(toolFile)!); File.WriteAllText(toolFile, "// Synthetic tool UI source\n");
+        var toolInventory = inventory.DeepClone();
+        var toolItem = JsonSerializer.SerializeToNode(Item("SCREEN-TOOL", "SCREEN", "/browser-testing/admin", "TEST_FIXTURE"))!;
+        toolItem["source_paths"] = new JsonArray(toolSource); toolInventory["items"]!.AsArray().Add(toolItem);
+        var savedInventory = File.ReadAllBytes(inventoryPath); var savedProof = File.ReadAllBytes(proofPath);
+        try
+        {
+            File.WriteAllText(inventoryPath, toolInventory.ToJsonString());
+            RunGit(fixture, "add", "--", toolSource, UiComplianceApplication.InventoryPath);
+            RunGit(fixture, "commit", "--quiet", "-m", "Synthetic exact tool UI source registration");
+            var toolProof = proof.DeepClone(); toolProof["tested_commit_sha"] = RunGitOutput(fixture, "rev-parse", "HEAD");
+            toolProof["inventory_sha256"] = HashFile(inventoryPath);
+            toolProof["owned_behavior_paths"]!.AsArray().Add(toolSource); toolProof["items"]!.AsArray().Add(JsonSerializer.SerializeToNode(Row("SCREEN-TOOL", false)));
+            WriteProof(toolProof); RunGit(fixture, "add", "--", "governance/evidence/GLOBAL-UI-COMPLIANCE.json");
+            RunGit(fixture, "commit", "--quiet", "-m", "Synthetic committed tool UI evidence");
+            var admitted = Run();
+            Check(admitted.Outcome == "PASS" && admitted.CoveredItems.Contains("SCREEN-TOOL", StringComparer.Ordinal), "exact regular tool file is accepted with committed TEST_FIXTURE evidence");
+            var badInventory = toolInventory.DeepClone(); badInventory["items"]!.AsArray().Last()!["status"] = "IMPLEMENTED";
+            File.WriteAllText(inventoryPath, badInventory.ToJsonString());
+            Check(Has("requires TEST_FIXTURE"), "tool source cannot be claimed as an implemented production surface");
+            string[] forbiddenToolSources = ["tools/browser-testing/Sibling.cs", "tools/browser-testing", "tools/other.cs"];
+            foreach (var forbidden in forbiddenToolSources)
+            {
+                badInventory = toolInventory.DeepClone(); badInventory["items"]!.AsArray().Last()!["source_paths"] = new JsonArray(forbidden);
+                File.WriteAllText(inventoryPath, badInventory.ToJsonString());
+                Check(Has("UI source path is invalid"), "tool siblings, directories and unrelated tools are not allowlisted: " + forbidden);
+            }
+            File.WriteAllText(inventoryPath, toolInventory.ToJsonString());
+            var unowned = toolProof.DeepClone(); var ownership = unowned["owned_behavior_paths"]!.AsArray();
+            ownership.Remove(ownership.Single(node => node!.GetValue<string>() == toolSource)); WriteProof(unowned);
+            Check(Has("omits an applicable registered file"), "exact tool source must be included in tested source ownership"); WriteProof(toolProof);
+            var toolBytes = File.ReadAllBytes(toolFile);
+            File.Delete(toolFile);
+            try { Check(Has("regular non-reparse file"), "missing exact tool source is rejected"); }
+            finally { File.WriteAllBytes(toolFile, toolBytes); }
+            File.Delete(toolFile); Directory.CreateDirectory(toolFile);
+            try { Check(Has("regular non-reparse file"), "a directory masquerading as the exact tool filename is rejected"); }
+            finally { Directory.Delete(toolFile, false); File.WriteAllBytes(toolFile, toolBytes); }
+            File.AppendAllText(toolFile, "// Changed after tested SHA\n");
+            try { Check(Has("behavior changed after"), "exact tool changes after tested SHA invalidate acceptance"); }
+            finally { File.WriteAllBytes(toolFile, toolBytes); }
+            // Junction targets stay in the same owned fixture; creation never requires a system privilege change.
+            string[] linkedParents = ["tools/browser-testing", "tools"];
+            foreach (var parent in linkedParents)
+            {
+                var link = Path.Combine(fixture.FullName, parent); var target = Path.Combine(fixture.FullName, "owned-ui-junction-target");
+                var boundary = Path.GetFullPath(fixture.FullName).TrimEnd(Path.DirectorySeparatorChar) + Path.DirectorySeparatorChar;
+                if (!Path.GetFullPath(link).StartsWith(boundary, StringComparison.OrdinalIgnoreCase) || !Path.GetFullPath(target).StartsWith(boundary, StringComparison.OrdinalIgnoreCase)) throw new InvalidOperationException("UI junction targets must remain in the owned fixture.");
+                Directory.Move(link, target);
+                try
+                {
+                    if (OperatingSystem.IsWindows())
+                    {
+                        var start = new ProcessStartInfo("powershell.exe") { UseShellExecute = false, CreateNoWindow = true, WindowStyle = ProcessWindowStyle.Hidden };
+                        foreach (var argument in new[] { "-NoProfile", "-NonInteractive", "-Command", "New-Item -ItemType Junction -Path '" + link.Replace("'", "''", StringComparison.Ordinal) + "' -Target '" + target.Replace("'", "''", StringComparison.Ordinal) + "' -ErrorAction Stop | Out-Null" }) start.ArgumentList.Add(argument);
+                        using var process = Process.Start(start) ?? throw new InvalidOperationException("Cannot create owned UI fixture junction.");
+                        var terminal = false;
+                        try
+                        {
+                            if (!(terminal = process.WaitForExit(10000)))
+                            {
+                                process.Kill(true);
+                                terminal = process.WaitForExit(10000);
+                                throw new InvalidOperationException(terminal ? "Owned UI fixture junction creation timed out." : "Owned UI fixture junction process exit is unconfirmed.");
+                            }
+                            if (process.ExitCode != 0) throw new InvalidOperationException("Owned UI fixture junction creation failed; reparse check was not executed.");
+                        }
+                        finally
+                        {
+                            if (!terminal)
+                            {
+                                retainFixture = true;
+                                Console.Error.WriteLine($"UI junction process {process.Id} is not confirmed terminal; owned fixture retained without cleanup: {fixture.FullName}");
+                            }
+                        }
+                    }
+                    else Directory.CreateSymbolicLink(link, target);
+                    Check(Has("regular non-reparse file"), "reparse parent below the repository cannot redirect the allowed tool file: " + parent);
+                }
+                finally
+                {
+                    if (!retainFixture)
+                    {
+                        if (Directory.Exists(link)) Directory.Delete(link, false);
+                        Directory.Move(target, link);
+                    }
+                }
+            }
+            Check(Run().Outcome == "PASS", "restored regular tool source retains its complete committed fixture evidence");
+        }
+        finally { if (!retainFixture) { File.WriteAllBytes(inventoryPath, savedInventory); File.WriteAllBytes(proofPath, savedProof); } }
         Console.WriteLine($"Resolved UI_REQUIRED lifecycle checks: {resolutionChecks}");
     }
-    finally { DeleteFixture(fixture); }
+    finally { if (!retainFixture) DeleteFixture(fixture); }
     Console.WriteLine($"Global UI evidence gate checks: {checks}");
 }
 
