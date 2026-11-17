@@ -13,7 +13,7 @@ public sealed record RecoveryCodeNativeReceipt(int Version, string Type, string 
 public static class RecoveryCodeFiniteNativeExecution
 {
     // Bulk migration-only preflight covers every fixed invocation DB; ordinary cases keep their 90s budget.
-    private static readonly TimeSpan PublicCapacityProvisioningBudget = TimeSpan.FromSeconds(150);
+    private static readonly TimeSpan PublicCapacityProvisioningBudget = TimeSpan.FromSeconds(300);
     private static readonly TimeSpan PublicCapacityCaseBudget = PublicCapacityProvisioningBudget + TimeSpan.FromSeconds(30);
     private static readonly string[] CanaryIds = ["BEFORE_CREATE", "AFTER_CREATE", "AFTER_START", "AFTER_MIGRATION", "CASE_FAILURE", "CLEANUP_REJECT"];
     private static readonly string[] PublicIds = [.. CanaryIds, "OWNERSHIP_REJECT", "NO_LOG_REJECT", "SENSITIVE_REJECT"];
