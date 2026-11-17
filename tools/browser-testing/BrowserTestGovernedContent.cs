@@ -203,8 +203,10 @@ internal sealed class BrowserTestGovernedContent : IContentTransactionLocalProfi
         app.MapGet("/browser-testing/status", (HttpContext http) =>
         { RequireLocalRequest(http); return new { mode = options.Mode, instanceId = options.RunId, ready = initialized, governedContent = true, syntheticAdmin = true }; }).AllowAnonymous();
         var themeLinks = MapFixtureTheme(app);
-        app.MapGet("/browser-testing/admin", (HttpContext http, IAntiforgery antiforgery) =>
+        app.MapGet("/browser-testing/admin", IResult (HttpContext http, IAntiforgery antiforgery) =>
         {
+            // A rejected fixture query is a client error, not an unhandled Development exception.
+            if (http.Request.QueryString.HasValue) return Results.BadRequest();
             RequireLocalRequest(http); NoStore(http);
             // Same CSP as BffWebAssets.Render; the isolated custom HTML must retain frame and self-only protections.
             http.Response.Headers.ContentSecurityPolicy = "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self'; font-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'none'; frame-ancestors 'none'; form-action 'self'";
