@@ -2,13 +2,28 @@
   "schema_version": 1,
   "scope_id": "TUN-P2-016",
   "result": "PASS",
-  "phase": "ENGINEERING_QUALIFICATION_PASS_NATIVE_RECHECK_PENDING",
+  "phase": "ENGINEERING_READY_PRODUCT_ACCEPTANCE_PENDING",
+  "lifecycle_progress": {
+    "current_state": "PRODUCT_ACCEPTANCE",
+    "product_acceptance": "PENDING_USER_REPLY",
+    "basis": "Actual readiness at cce334fe is READY with no failures and all six required technical reviews accepted. Native VALIDATION to PRODUCT_ACCEPTANCE check is ALLOWED. This records no Product consent or DONE.",
+    "transition_ref": "governance/evidence/p2-016-notifications-20261115/native-gates/product-acceptance-transition-cce334fe.json"
+  },
+  "native_readiness": {
+    "source_sha": "cce334fe5c55c8087343024775ab543368be3ea9",
+    "outcome": "READY",
+    "failures": [],
+    "exit_code": 0,
+    "elapsed_ms": 123637,
+    "evidence_ref": "governance/evidence/p2-016-notifications-20261115/native-gates/ready-cce334fe.json",
+    "execution_ref": "governance/evidence/p2-016-notifications-20261115/native-gates/ready-cce334fe-execution.json"
+  },
   "engineering_qualification": {
     "basis": "Qualified integrated78, hosted-smoke1 and affected shared Product-content2 passing cases retain their actual execution SHAs. All31 owned paths equal the reviewed06b20de2 carrier. The current gate accepts source, prerequisites and all six required technical reviews; its sole failure is the prior PENDING result. This promotion records technical qualification only, before a fresh native readiness check.",
-    "last_gate_source_sha": "9521d3bc9696eee60a67922888e8ac5f7cbeb1a0",
-    "last_gate_outcome": "NOT_READY",
-    "last_gate_failures": ["committed validation evidence must pass"],
-    "last_gate_ref": "governance/evidence/p2-016-notifications-20261115/native-gates/ready-9521d3bc.json",
+    "pre_promotion_gate_source_sha": "9521d3bc9696eee60a67922888e8ac5f7cbeb1a0",
+    "pre_promotion_gate_outcome": "NOT_READY",
+    "pre_promotion_gate_failures": ["committed validation evidence must pass"],
+    "pre_promotion_gate_ref": "governance/evidence/p2-016-notifications-20261115/native-gates/ready-9521d3bc.json",
     "boundary": "No tests rerun at the carrier are claimed. Product acceptance, final lifecycle closure, fresh context, protected-main integration, production activation and release remain separate."
   },
   "current_admission": {
@@ -21,7 +36,7 @@
     "execution_ref": "governance/evidence/p2-016-notifications-20261115/native-gates/admission-4e39914e-execution.json",
     "boundary": "Correct UTF-8 decoding removes the false closed-history mismatch. Existing application evidence and exact source-carrier binding are reused; no fresh context, readiness or Product acceptance is implied. Earlier admission below retains its original timestamp and provenance."
   },
-  "current_ready_gate": {"source_sha":"9ccf3749418403e6cb1377fcb5e9c09e51f6e9aa","result":"NOT_READY","command":"governance gate check TUN-P2-016","exit_code":1,"failures":["prerequisite 'TUN-P2-004' lacks valid committed-state readiness evidence","prerequisite 'TUN-P2-005' lacks valid committed-state readiness evidence","owned behavior changed after validated SHA: tests/Tunner.Identity.Persistence.Tests/ProductAuthorizationProtocolTests.cs","owned behavior changed after validated SHA: tests/Tunner.Identity.Persistence.Tests/Tunner.Identity.Persistence.Tests.csproj"],"next":"Preserve passing actual runs and unchanged application sources. Reconcile the two shared test/project paths and open prerequisite bindings with the existing final shared-source integration batch; no feature reimplementation, historical closure overwrite or Product acceptance inferred."},
+  "historical_pre_reconciliation_ready_gate": {"source_sha":"9ccf3749418403e6cb1377fcb5e9c09e51f6e9aa","result":"NOT_READY","command":"governance gate check TUN-P2-016","exit_code":1,"failures":["prerequisite 'TUN-P2-004' lacks valid committed-state readiness evidence","prerequisite 'TUN-P2-005' lacks valid committed-state readiness evidence","owned behavior changed after validated SHA: tests/Tunner.Identity.Persistence.Tests/ProductAuthorizationProtocolTests.cs","owned behavior changed after validated SHA: tests/Tunner.Identity.Persistence.Tests/Tunner.Identity.Persistence.Tests.csproj"],"next":"Preserve passing actual runs and unchanged application sources. Reconcile the two shared test/project paths and open prerequisite bindings with the existing final shared-source integration batch; no feature reimplementation, historical closure overwrite or Product acceptance inferred."},
   "previous_ready_gate": {"source_sha":"ed5bd53e6c7103a80a8b9336823c27c6710ba2d9","result":"READY","failures":[],"evidence_ref":"governance/evidence/p2-016-notifications-20261115/native-gates/ready-ed5bd53.json","lifecycle":"Native IN_PROGRESS to CODE_REVIEW and CODE_REVIEW to VALIDATION transitions allowed. Product acceptance requested separately; no DONE or production/release acceptance is inferred."},
   "admission": {
     "scope": "TUN-P2-016",
@@ -68,6 +83,11 @@
   "raw_evidence": "governance/evidence/p2-016-notifications-20261115/native/<run_id>/{launch.json,summary.json,product-authorization.trx}",
   "environment": "Existing qualified native runner reused without duplication. Actual PostgreSQL, exact cached fixture image, owned resources removed and borrowed browser resources preserved on every recorded run. No image changes, production configuration or provider delivery claim.",
   "remaining": [
+    "Obtain scoped Product acceptance before DONE",
+    "Refresh final bounded context and pass native closure check after acceptance",
+    "Integrate through protected-main review; production activation and release remain separately authorized"
+  ],
+  "historical_remaining_pre_reconciliation": [
     "Commit ownership declaration carrier and bind source-equivalent engineering qualification truthfully",
     "Close qualified compatibility revisions and refresh affected open prerequisite bindings",
     "Pass current native readiness/context/lifecycle gates and obtain scoped Product acceptance before DONE"
@@ -79,8 +99,8 @@
   "source_currentness_reconciliation": {
     "carrier_commit_sha": "06b20de2b2b0303a1213259c877b990169b9e380",
     "previous_carrier_commit_sha": "804123a8667b0601feb4a6a63a2b9ade82bc3acd",
-    "result": "SOURCE_RECONCILED_NATIVE_CHECKS_PENDING",
-    "qualification_boundary": "Current validated/tested SHA identifies the reviewed source carrier, not a rerun of the historical cohorts. Overall result remains PENDING until actual current native checks; no READY, DONE or Product acceptance is inferred.",
+    "result": "SOURCE_RECONCILED_NATIVE_READY",
+    "qualification_boundary": "Current validated/tested SHA identifies the reviewed source carrier, not a rerun of historical cohorts. Actual current native readiness is READY at cce334fe; root engineering result is PASS. Product acceptance and DONE remain pending.",
     "unchanged_owned_paths": 29,
     "changed_owned_paths": [
       {
@@ -110,7 +130,7 @@
       "governance/evidence/p2-016-notifications-20261115/native/16fd07b9314e459aa34d3eae560d2d6f/summary.json",
       "governance/evidence/p2-016-notifications-20261115/native/94c2e9403fda4dde8643cf73e8e525ea/summary.json"
     ],
-    "remaining": "Capture current native readiness/context/lifecycle checks and applicable Product acceptance separately. Historical actual runs, statuses, source ownership and role assessments are retained."
+    "remaining": "Product acceptance, final context refresh and closure, protected-main integration and production/release gates remain separate. Actual current admission, readiness and Product-state transition passed. Historical actual runs, statuses, source ownership and role assessments are retained."
   },
   "carrier_source_binding": {"carrier_commit_sha": "804123a8667b0601feb4a6a63a2b9ade82bc3acd", "actual_smoke_run_id": "94c2e9403fda4dde8643cf73e8e525ea", "actual_smoke_source_sha": "804123a8667b0601feb4a6a63a2b9ade82bc3acd", "executed": 1, "passed": 1, "failed": 0, "ref": "governance/evidence/p2-016-notifications-20261115/native/94c2e9403fda4dde8643cf73e8e525ea/summary.json", "full_integrated_run_source_sha": "98807ebe4bb7cb4e74b1aecf938a9edb8c243475", "owned_behavior_byte_equivalence": true, "provenance": "Carrier contains the ownership declaration and actual evidence; one real hosted smoke passed at the carrier. Git comparison verifies unchanged behavior sources from the full78 run. No full78 rerun at the carrier is claimed."},
   "owned_behavior_paths": [
