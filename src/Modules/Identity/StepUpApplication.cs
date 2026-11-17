@@ -237,6 +237,25 @@ internal sealed partial class StepUpApplication(IdentityPersistenceDbContext dat
                 }
                 ct.ThrowIfCancellationRequested(); await transaction.CommitAsync(ct).ConfigureAwait(false);
             }
+            else if (outcome.DeviceValidity is { Browser: { UsesPreparedPublication: true } } devicePublication)
+            {
+                var deviceProofAuthenticatedAt = row.AuthenticatedAt; var deviceProofExpiresAt = row.ExpiresAt;
+                var deviceProofLifetime = policy.ProofLifetime; var deviceAssuranceInterval = policy.Metadata.EffectiveInterval;
+                var deviceSessionUseInterval = continuation!.SessionUseInterval; var deviceOperationInterval = continuation.OperationInterval;
+                await database.SaveChangesAsync(ct).ConfigureAwait(false);
+                var deviceDecisionAt = clock.GetUtcNow();
+                // Recheck immutable time bounds and local witnesses; ACTIVE/pre-save proof state no longer applies after SaveChanges.
+                if (deviceDecisionAt < deviceProofAuthenticatedAt || deviceDecisionAt >= deviceProofExpiresAt ||
+                    deviceDecisionAt - deviceProofAuthenticatedAt >= deviceProofLifetime || !deviceAssuranceInterval.Contains(deviceDecisionAt) ||
+                    !deviceSessionUseInterval.Contains(deviceDecisionAt) || !deviceOperationInterval.Contains(deviceDecisionAt) ||
+                    session.State != "ACTIVE" || AuthenticationApplication.Expired(session, currentAuthentication, deviceDecisionAt) ||
+                    !devicePublication.CurrentAt(database, caller, operation, deviceDecisionAt))
+                {
+                    await transaction.RollbackAsync(ct).ConfigureAwait(false); database.ChangeTracker.Clear();
+                    return new(false, "STEP_UP_REQUIRED");
+                }
+                ct.ThrowIfCancellationRequested(); await transaction.CommitAsync(ct).ConfigureAwait(false);
+            }
             else await FinishAsync(transaction, true, ct).ConfigureAwait(false);
             pending = outcome.TakeRecoveryDelivery(); committedTerminal = terminal;
           }

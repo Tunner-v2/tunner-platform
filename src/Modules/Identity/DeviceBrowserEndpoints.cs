@@ -86,6 +86,19 @@ public static class DeviceBrowserEndpoints
         try { return source.RequirePublished(authenticationPolicy, devicePolicyVersion) ?? throw new InvalidOperationException("Device publication is unavailable."); }
         catch (ArgumentException e) { throw new InvalidOperationException("Device publication is unavailable.", e); }
     }
+    internal static async ValueTask<DevicePreparedPresentation?> PreparePublicationAsync(IDevicePresentationSource source,
+        AuthenticationPolicy authenticationPolicy, string devicePolicyVersion, CancellationToken ct)
+    {
+        if (source is not IDeviceAsyncPresentationSource asyncSource) return null;
+        return await asyncSource.PreparePublishedAsync(authenticationPolicy, devicePolicyVersion, ct).ConfigureAwait(false)
+            ?? throw new InvalidOperationException("Prepared Device publication is unavailable.");
+    }
+    internal static async Task<DevicePresentation> PublicationAsync(IDevicePresentationSource source, AuthenticationPolicy authenticationPolicy,
+        string devicePolicyVersion, CancellationToken ct)
+    {
+        var prepared = await PreparePublicationAsync(source, authenticationPolicy, devicePolicyVersion, ct).ConfigureAwait(false);
+        return prepared?.Presentation ?? Publication(source, authenticationPolicy, devicePolicyVersion);
+    }
     internal static bool Fits(string name, string value, CookieOptions cookie, int maximum) => SessionRevocationOriginalSelection.Fits(name, value, cookie, maximum);
     internal static IResult Problem(int status, string code) => TechnicalProblemDetails.HttpResult(status, "about:blank", "The request could not be completed.",
         new TechnicalProblemMetadata(code, Guid.NewGuid().ToString("N"), "UNSPECIFIED"));
@@ -134,7 +147,8 @@ internal sealed class DeviceManagementBrowserService(DeviceApplication devices, 
     private StepUpCaller Caller(HttpContext http) => StepUpCaller.FromPrincipal(http.User, surface.Origin,
         partitions.Network(http.Connection.RemoteIpAddress ?? throw new ArgumentException("A current peer is required.")));
     private DeviceEvidencePolicy Policy(DateTimeOffset at) { var value = policies.RequireCurrent(surface.Origin, at); value.Require(surface.Origin, at); return value; }
-    private DevicePresentation Publication(DeviceEvidencePolicy policy) => DeviceBrowserEndpoints.Publication(publications, authenticationPolicies.RequireEffective(clock.GetUtcNow()), policy.Metadata.VersionId);
+    private Task<DevicePresentation> PublicationAsync(DeviceEvidencePolicy policy, CancellationToken ct) =>
+        DeviceBrowserEndpoints.PublicationAsync(publications, authenticationPolicies.RequireEffective(clock.GetUtcNow()), policy.Metadata.VersionId, ct);
     private static string Digest(DeviceHttpBudget value) => AuthenticationIdentity.Digest(value.Snapshot);
     private static string Digest(DeviceEvidencePolicy value) => AuthenticationIdentity.Digest(value.Snapshot);
     private static bool Version(string? text, out long value) => long.TryParse(text, NumberStyles.None, CultureInfo.InvariantCulture, out value) &&
@@ -159,7 +173,7 @@ internal sealed class DeviceManagementBrowserService(DeviceApplication devices, 
     internal Task<IResult> OptionsAsync(HttpContext http) => DeviceBrowserEndpoints.Guard(http, async () =>
     {
         var caller = Caller(http); var at = clock.GetUtcNow(); var budget = DeviceHttpBudget.Current(budgets, at); var policy = Policy(at);
-        var auth = authenticationPolicies.RequireEffective(at); auth.Validate(); var publication = Publication(policy);
+        var auth = authenticationPolicies.RequireEffective(at); auth.Validate(); var publication = await PublicationAsync(policy, http.RequestAborted).ConfigureAwait(false);
         var draft = ReadDraft(http, caller, budget, policy, auth);
         if (draft is not null && await database.Set<DeviceOperationRow>().AsNoTracking().AnyAsync(x => x.SessionId == caller.SessionId && x.RequestId == draft.RequestId && x.State == "COMPLETED", http.RequestAborted).ConfigureAwait(false)) draft = null;
         draft ??= new(Guid.NewGuid(), caller.AccountId, caller.SessionId, caller.Origin, auth.Version, Digest(budget), Digest(policy), at,
@@ -167,9 +181,10 @@ internal sealed class DeviceManagementBrowserService(DeviceApplication devices, 
         var encoded = protection.CreateProtector("Tunner.User.Device.Draft.v1").Protect(JsonSerializer.Serialize(draft));
         if (!DeviceBrowserEndpoints.Fits(DeviceBrowserEndpoints.DraftCookie, encoded, DeviceBrowserEndpoints.Cookie(draft.ExpiresAt - at), budget.MaximumSetCookieBytes))
             return DeviceBrowserEndpoints.Problem(503, "TRANSPORT_CAPACITY_EXCEEDED");
+        var currentPublication = await PublicationAsync(policy, http.RequestAborted).ConfigureAwait(false);
         var finalAt = clock.GetUtcNow();
         if (finalAt >= draft.ExpiresAt || auth != authenticationPolicies.RequireEffective(finalAt) || Digest(budget) != Digest(DeviceHttpBudget.Current(budgets, finalAt)) || Digest(policy) != Digest(Policy(finalAt)) ||
-            DeviceBrowserEndpoints.PublicationDigest(publication) != DeviceBrowserEndpoints.PublicationDigest(Publication(policy))) return DeviceBrowserEndpoints.Problem(409, "VERSION_CONFLICT");
+            DeviceBrowserEndpoints.PublicationDigest(publication) != DeviceBrowserEndpoints.PublicationDigest(currentPublication)) return DeviceBrowserEndpoints.Problem(409, "VERSION_CONFLICT");
         http.Response.Cookies.Append(DeviceBrowserEndpoints.DraftCookie, encoded, DeviceBrowserEndpoints.Cookie(draft.ExpiresAt - finalAt));
         return Results.Json(new { draft.RequestId, publication.Locale, publication.Content });
     });
@@ -214,7 +229,7 @@ internal sealed class DeviceManagementBrowserService(DeviceApplication devices, 
     {
         if (!http.Request.HasJsonContentType()) return DeviceBrowserEndpoints.Problem(415, "VALIDATION_ERROR");
         var caller = Caller(http); var at = clock.GetUtcNow(); var budget = DeviceHttpBudget.Current(budgets, at); var policy = Policy(at);
-        var auth = authenticationPolicies.RequireEffective(at); auth.Validate(); var publication = Publication(policy);
+        var auth = authenticationPolicies.RequireEffective(at); auth.Validate(); var publication = await PublicationAsync(policy, http.RequestAborted).ConfigureAwait(false);
         var command = await IdentityJsonCommand.ReadAsync<PrepareCommand>(http, budget.MaximumRequestBytes).ConfigureAwait(false);
         if (!command.Confirmed || command.RequestId == Guid.Empty || command.Reference == Guid.Empty || !Version(command.ExpectedVersion, out var version) ||
             !Version(command.ExpectedTrustVersion, out var trustVersion) || trustVersion == long.MaxValue) return DeviceBrowserEndpoints.Problem(400, "VALIDATION_ERROR");
@@ -242,13 +257,14 @@ internal sealed class DeviceManagementBrowserService(DeviceApplication devices, 
         var resolved = await devices.ResolveBrowserRemovalAsync(caller, request, http.RequestAborted).ConfigureAwait(false);
         if (resolved.Original is not { } row || resolved.Context is null) return DeviceBrowserEndpoints.Problem(409, "VERSION_CONFLICT");
         var other = fallback.SingleOrDefault() is { } f ? await f.Owner.ResolveAsync(new(caller), http.RequestAborted).ConfigureAwait(false) : null;
+        var currentPublication = await PublicationAsync(policy, http.RequestAborted).ConfigureAwait(false);
         at = clock.GetUtcNow(); var expires = Clip(row.ExpiresAt, row.CreatedAt + budget.IntentLifetime, row.CreatedAt + auth.BrowserContextLifetime, budget.Metadata.EffectiveInterval.Until, policy.Metadata.EffectiveInterval.Until);
         var recovery = Clip(row.RecoveryExpiresAt, expires + budget.ResultLifetime);
         var original = new DeviceBrowserEndpoints.Original(caller.AccountId, caller.SessionId, caller.Origin, request, StepUpBrowserService.Digest(prepared), auth.Version,
             Digest(budget), DeviceBrowserEndpoints.PublicationDigest(publication), SessionRevocationOriginalSelection.Fingerprint(http), row.CreatedAt, expires, recovery, other is null ? null : StepUpBrowserService.Digest(other));
         var encoded = protection.CreateProtector(DeviceBrowserEndpoints.OriginalPurpose).Protect(JsonSerializer.Serialize(original));
         if (at >= expires || expires >= recovery || Digest(budget) != Digest(DeviceHttpBudget.Current(budgets, at)) || Digest(policy) != Digest(Policy(at)) || auth != authenticationPolicies.RequireEffective(at) ||
-            DeviceBrowserEndpoints.PublicationDigest(publication) != DeviceBrowserEndpoints.PublicationDigest(Publication(policy))) return DeviceBrowserEndpoints.Problem(409, "VERSION_CONFLICT");
+            DeviceBrowserEndpoints.PublicationDigest(publication) != DeviceBrowserEndpoints.PublicationDigest(currentPublication)) return DeviceBrowserEndpoints.Problem(409, "VERSION_CONFLICT");
         if (!DeviceBrowserEndpoints.Fits(DeviceBrowserEndpoints.OriginalCookie, encoded, DeviceBrowserEndpoints.Cookie(recovery - at), budget.MaximumSetCookieBytes)) return DeviceBrowserEndpoints.Problem(503, "TRANSPORT_CAPACITY_EXCEEDED");
         http.Response.Cookies.Append(DeviceBrowserEndpoints.OriginalCookie, encoded, DeviceBrowserEndpoints.Cookie(recovery - at));
         // Existing owner selections remain truthful independent originals. Only the old proof dialog is superseded.
@@ -267,7 +283,10 @@ internal sealed class DeviceManagementBrowserService(DeviceApplication devices, 
         if (context.Completed) return context;
         var other = fallback.SingleOrDefault() is { } f ? await f.Owner.ResolveAsync(new(caller), http.RequestAborted).ConfigureAwait(false) : null;
         if (other is not null && StepUpBrowserService.Digest(other) != original.FallbackDigest) return null;
-        var witness = new DeviceBrowserExecutionValidity(http, protection, budgets, publications, policies, authenticationPolicies, original, context);
+        var auth = authenticationPolicies.RequireEffective(clock.GetUtcNow()); auth.Validate();
+        var policy = Policy(clock.GetUtcNow());
+        var prepared = await DeviceBrowserEndpoints.PreparePublicationAsync(publications, auth, policy.Metadata.VersionId, http.RequestAborted).ConfigureAwait(false);
+        var witness = new DeviceBrowserExecutionValidity(http, protection, budgets, publications, policies, authenticationPolicies, original, context, prepared, database);
         return witness.SelectionCurrentAt(caller, context.Binding, clock.GetUtcNow()) ? context : null;
     }
     internal Task<IResult> ContextAsync(HttpContext http) => DeviceBrowserEndpoints.Guard(http, async () =>

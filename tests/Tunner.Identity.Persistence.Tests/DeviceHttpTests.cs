@@ -17,7 +17,7 @@ using static Tunner.Identity.Persistence.Tests.AuthenticationTestHost;
 
 namespace Tunner.Identity.Persistence.Tests;
 
-public sealed class DeviceHttpTests(SessionListingPostgresFixture fixture) : IClassFixture<SessionListingPostgresFixture>
+public sealed partial class DeviceHttpTests(SessionListingPostgresFixture fixture) : IClassFixture<SessionListingPostgresFixture>
 {
     private const string Root = "/account/devices";
     private static readonly string[] FederationMethods = ["mfa", "pwd"];
