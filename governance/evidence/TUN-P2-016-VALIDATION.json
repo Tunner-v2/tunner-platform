@@ -1,9 +1,10 @@
 {
   "schema_version": 1,
   "scope_id": "TUN-P2-016",
-  "result": "PASS",
-  "phase": "ENGINEERING_READY_PRODUCT_ACCEPTANCE_PENDING",
-  "current_ready_gate": {"source_sha":"ed5bd53e6c7103a80a8b9336823c27c6710ba2d9","result":"READY","failures":[],"evidence_ref":"governance/evidence/p2-016-notifications-20261115/native-gates/ready-ed5bd53.json","lifecycle":"Native IN_PROGRESS to CODE_REVIEW and CODE_REVIEW to VALIDATION transitions allowed. Product acceptance requested separately; no DONE or production/release acceptance is inferred."},
+  "result": "PENDING",
+  "phase": "QUALIFIED_FUNCTIONALITY_SOURCE_RECONCILIATION_REQUIRED",
+  "current_ready_gate": {"source_sha":"9ccf3749418403e6cb1377fcb5e9c09e51f6e9aa","result":"NOT_READY","command":"governance gate check TUN-P2-016","exit_code":1,"failures":["prerequisite 'TUN-P2-004' lacks valid committed-state readiness evidence","prerequisite 'TUN-P2-005' lacks valid committed-state readiness evidence","owned behavior changed after validated SHA: tests/Tunner.Identity.Persistence.Tests/ProductAuthorizationProtocolTests.cs","owned behavior changed after validated SHA: tests/Tunner.Identity.Persistence.Tests/Tunner.Identity.Persistence.Tests.csproj"],"next":"Preserve passing actual runs and unchanged application sources. Reconcile the two shared test/project paths and open prerequisite bindings with the existing final shared-source integration batch; no feature reimplementation, historical closure overwrite or Product acceptance inferred."},
+  "previous_ready_gate": {"source_sha":"ed5bd53e6c7103a80a8b9336823c27c6710ba2d9","result":"READY","failures":[],"evidence_ref":"governance/evidence/p2-016-notifications-20261115/native-gates/ready-ed5bd53.json","lifecycle":"Native IN_PROGRESS to CODE_REVIEW and CODE_REVIEW to VALIDATION transitions allowed. Product acceptance requested separately; no DONE or production/release acceptance is inferred."},
   "admission": {
     "scope": "TUN-P2-016",
     "context_ref": "artifacts/p2-016-notifications-20261115/context-in-progress/manifest.json",
