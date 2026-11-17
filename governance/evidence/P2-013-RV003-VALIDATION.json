@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "scope_id": "P2-013-RV003",
+  "owner_work_item": "TUN-P2-019",
+  "validation_kind": "COMMITTED",
+  "result": "PENDING",
+  "tested_commit_sha": null,
+  "validated_commit_sha": null,
+  "owned_behavior_paths": [
+    "src/Modules/Identity/PublishedPresentationProjection.cs",
+    "src/Modules/Identity/SessionRevocationBrowser.cs",
+    "src/Modules/Identity/SessionBulkRevocationBrowser.cs",
+    "src/Modules/Identity/PublishedSessionRevocationPresentationSource.cs",
+    "tests/Tunner.Identity.Persistence.Tests/PublishedSessionRevocationPresentationTests.cs",
+    "tests/Tunner.Identity.Persistence.Tests/PublishedSessionRevocationPresentationIntegrationTests.cs",
+    "docs/contracts/ui-inventory.json",
+    "src/Modules/Identity/IdentityPersistenceDbContext.cs",
+    "src/Modules/Identity/Migrations/IdentityPersistenceDbContextModelSnapshot.cs",
+    "src/Modules/Identity/StepUpApplication.cs"
+  ],
+  "scope": "Optional governed single-session and bulk browser publication, preserving original Session/Device closure, synchronous providers, listing keys, native guards/transactions and activation defaults. Reconcile only four confirmed newer shared paths using retained UI, persistence and Recovery qualification; unchanged closedRV001/RV002 source carriers remain valid.",
+  "candidate": {
+    "state": "UNAPPLIED_INDEPENDENT_SOURCE_REVIEW_PASS_RUNTIME_PENDING",
+    "patch_ref": "artifacts/p2-019-content-20261116/session-revocation-presentation.patch",
+    "sha256": "b3ea4a41c67b244658a6b1f81145ed1591b6d1703e9dd886f2a36662583d72ac",
+    "authored_cases": 21,
+    "scope": "11pure+10actualPG/HTTPS, including fresh original password-proof native single/exact-set effects and preserved actor/other/later sessions. Async browser preparation only; no new native I/O."
+  },
+  "retained_qualification_refs": [
+    "governance/evidence/P2-003-RV006-VALIDATION.json",
+    "governance/evidence/P2-009-RV009-VALIDATION.json",
+    "governance/evidence/P2-014-RV001-VALIDATION.json",
+    "governance/evidence/TUN-P2-019-UI-COMPLIANCE.json"
+  ],
+  "boundaries": "No production policy, budgets, discovery, assurance, route or provider activation. WholeWork19/Product/production/merge/release approvals remain separate."
+}
