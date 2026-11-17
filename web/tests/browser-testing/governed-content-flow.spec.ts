@@ -14,7 +14,7 @@ const heading=(page:Page)=>page.locator('.authentication-intro h1 [data-content-
 
 async function actor(page:Page,name:'author'|'approver'|'publisher'){
  await page.goto(adminOrigin+'/browser-testing/admin');
- const signed=page.waitForResponse(response=>new URL(response.url()).pathname==='/browser-testing/admin/session'&&response.request().method()==='POST');
+ const signed=page.waitForResponse(response=>new URL(response.url()).pathname==='/browser-testing/admin/session'&&response.request().method()==='POST'&&response.status()===204);
  await page.getByRole('button',{name:'Use synthetic '+name,exact:true}).click();
  expect((await signed).status()).toBe(204);
  await expect(page).toHaveURL(adminOrigin+'/admin/content');
@@ -60,7 +60,7 @@ async function interval(page:Page){
 }
 async function userPublication(page:Page,text:string,publication:Publication){
  await expect.poll(async()=>{await page.goto(userOrigin+'/login');return heading(page).textContent();},{timeout:20_000}).toBe(text);
- const actual=heading(page);await expect(actual).toHaveAttribute('data-content-state','PUBLISHED');
+ const actual=heading(page);await expect(actual).toHaveAttribute('data-content-key',key);await expect(actual).toHaveAttribute('data-content-variant',variant);
  expect(reference((await actual.getAttribute('data-content-publication'))!)).toBe(reference(publication.publicationReference));
  expect(reference((await actual.getAttribute('data-content-version'))!)).toBe(reference(publication.versionReference));
  expect(await page.evaluate(()=>({query:location.search,hash:location.hash,local:localStorage.length,session:sessionStorage.length}))).toEqual({query:'',hash:'',local:0,session:0});
@@ -108,6 +108,8 @@ test('Synthetic Admin distinct actors publish governed Login wording and prospec
   await publisher.reload();await select(publisher,approved.proposalReference);await publisher.getByRole('link',{name:'Version history',exact:true}).click();await expect(publisher.locator('main[aria-busy="false"]')).toBeVisible();const after=await history(publisher);
   for(const publication of [original,published,restored]){expect(after.some(item=>item.publicationReference===publication.publicationReference&&item.versionReference===publication.versionReference&&item.text===publication.text)).toBe(true);await expect(publisher.locator('.content-history tbody tr').filter({hasText:publication.publicationReference})).toHaveCount(1);}
   expect((await new AxeBuilder({page:publisher}).analyze()).violations).toEqual([]);await publisher.screenshot({path:info.outputPath('governed-login-retained-history.png'),fullPage:true});
+  const ended=author.waitForResponse(response=>new URL(response.url()).pathname==='/browser-testing/admin/session'&&response.status()===202);
+  await actor(author,'publisher');expect((await ended).status()).toBe(202);
   for(const page of [author,approver,publisher,user])expect(await page.evaluate(()=>({query:location.search,hash:location.hash,local:localStorage.length,session:sessionStorage.length}))).toEqual({query:'',hash:'',local:0,session:0});
  }finally{await Promise.all(contexts.map(context=>context.close()));}
 });

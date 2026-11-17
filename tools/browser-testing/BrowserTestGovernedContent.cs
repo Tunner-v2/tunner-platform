@@ -231,8 +231,14 @@ internal sealed class BrowserTestGovernedContent : IContentTransactionLocalProfi
                 var actor = fields[0].Value.GetString() switch { "author" => Author, "approver" => Approver, "publisher" => Publisher, _ => null };
                 if (actor is null) return Results.BadRequest();
                 var previous = http.User.FindFirstValue(SessionClaim);
-                await http.SignOutAsync(Scheme).ConfigureAwait(false);
-                if (previous is not null) lock (sessionGate) sessions.Remove(previous);
+                if (previous is not null)
+                {
+                    // Complete sign-out in its own request: the cookie handler retains its store key
+                    // within a request, so signing in here would renew the old actor's ticket.
+                    await http.SignOutAsync(Scheme).ConfigureAwait(false);
+                    lock (sessionGate) sessions.Remove(previous);
+                    return Results.Json(new { status = "BOOTSTRAP_REQUIRED" }, statusCode: 202);
+                }
                 var now = DateTimeOffset.UtcNow; var id = Guid.NewGuid().ToString("N"); var until = now.AddMinutes(10);
                 lock (sessionGate)
                 {
@@ -411,9 +417,17 @@ internal sealed class BrowserTestGovernedContent : IContentTransactionLocalProfi
 for (const button of document.querySelectorAll('[data-actor]')) button.addEventListener('click', async () => {
   const buttons = [...document.querySelectorAll('[data-actor]')]; buttons.forEach(item => item.disabled = true);
   try {
-    const csrf = document.querySelector('meta[name="tunner-csrf"]').content;
-    const response = await fetch('/browser-testing/admin/session', {method:'POST',credentials:'same-origin',headers:{'Content-Type':'application/json','X-Tunner-CSRF':csrf},body:JSON.stringify({actor:button.dataset.actor})});
-    if (!response.ok) throw new Error('unavailable');
+    let csrf = document.querySelector('meta[name="tunner-csrf"]').content;
+    const signIn = () => fetch('/browser-testing/admin/session', {method:'POST',credentials:'same-origin',headers:{'Content-Type':'application/json','X-Tunner-CSRF':csrf},body:JSON.stringify({actor:button.dataset.actor})});
+    let response = await signIn();
+    if (response.status === 202) {
+      const bootstrap = await fetch('/browser-testing/admin', {credentials:'same-origin',cache:'no-store'});
+      if (!bootstrap.ok) throw new Error('unavailable');
+      csrf = new DOMParser().parseFromString(await bootstrap.text(), 'text/html').querySelector('meta[name="tunner-csrf"]')?.content;
+      if (!csrf) throw new Error('unavailable');
+      response = await signIn();
+    }
+    if (response.status !== 204) throw new Error('unavailable');
     window.location.assign('/admin/content');
   } catch { document.getElementById('message').textContent = 'The isolated session could not start. Reload this page and try again.'; buttons.forEach(item => item.disabled = false); }
 });

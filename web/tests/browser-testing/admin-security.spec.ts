@@ -100,6 +100,8 @@ test('Synthetic Admin cookie remains surface-bound and actor switching invalidat
   const previous=jar.pair(adminCookie);expect(Boolean(previous)).toBe(true);
   expect((await local(userOrigin+'/authentication/session',{headers:{Cookie:previous}})).status).toBe(401);
   expect((await local(userOrigin+'/authentication/session',{headers:{Cookie:jar.renamed(adminCookie,userCookie)}})).status).toBe(401);
+  token=await bootstrap(jar);const ended=await session(jar,token,'{"actor":"approver"}');expect(ended.status).toBe(202);jar.accept(ended.headers);
+  expect((await local(adminOrigin+'/content/workspace',{headers:{Cookie:previous}})).status).toBe(401);
   token=await bootstrap(jar);const switched=await session(jar,token,'{"actor":"approver"}');expect(switched.status).toBe(204);jar.accept(switched.headers);
   expect((await local(adminOrigin+'/content/workspace',{headers:{Cookie:previous}})).status).toBe(401);
   expect((await local(adminOrigin+'/content/workspace',{headers:{Cookie:jar.header()}})).status).toBe(200);
