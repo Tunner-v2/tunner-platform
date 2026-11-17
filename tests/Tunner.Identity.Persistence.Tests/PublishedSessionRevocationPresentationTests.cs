@@ -1,3 +1,4 @@
+using System.Collections.ObjectModel;
 using Microsoft.Extensions.DependencyInjection;
 using Tunner.Platform.Policies;
 using Tunner.PresentationContent;
@@ -138,7 +139,7 @@ public sealed class PublishedSessionRevocationPresentationTests
     {
         internal readonly bool Bulk; internal readonly AuthenticationTestHost.TestClock Clock = new();
         internal readonly AuthenticationPolicy Policy = new AuthenticationTestHost.TestPolicies().Policy;
-        internal readonly IReadOnlyList<string> Keys; internal readonly Resolver Resolver;
+        internal readonly ReadOnlyCollection<string> Keys; internal readonly Resolver Resolver;
         internal SessionActionContentBinding Binding; internal int Reads; internal AuthenticationPolicy? LastPolicy; internal Action? AfterFinalRead;
         internal Fixture(bool bulk)
         {
