@@ -1,0 +1,212 @@
+ Container tunner-browser-6ab1259406-mailpit-1 Stopping 
+ Container tunner-browser-6ab1259406-postgres-1 Stopping 
+ Container tunner-browser-6ab1259406-postgres-1 Stopped 
+ Container tunner-browser-6ab1259406-mailpit-1 Stopped 
+
+Only this checkout browser-test host and its PostgreSQL/Mailpit services were stopped. Database volumes and keys were preserved.
+Docker Compose version v5.4.0
+
+PRESENT: tunner-security/postgres:18.6-r1 matches the reviewed recipe; CI vulnerability/compatibility gates remain separate.
+PRESENT: tunner-security/mailpit:1.33.1-r1 matches the reviewed recipe; CI vulnerability/compatibility gates remain separate.
+Preparing the pinned frontend and local browser host...
+Scope: all 5 workspace projects
+Already up to date
+Done in 660ms using pnpm v11.19.0
+
+Theme outputs CURRENT
+vite v8.2.4 building client environment for production...
+transforming...
+✓ 104 modules transformed.
+rendering chunks...
+computing gzip size...
+packages/ui/dist/tunner-ui.js  490.31 kB │ gzip: 101.23 kB
+
+✓ built in 166ms
+vite v8.2.4 building client environment for production...
+transforming...
+✓ 118 modules transformed.
+rendering chunks...
+computing gzip size...
+fixtures/ui/dist/index.html                                              0.37 kB │ gzip:  0.27 kB
+fixtures/ui/dist/assets/geist-cyrillic-ext-wght-normal-DjL33-gN.woff2    7.42 kB
+fixtures/ui/dist/assets/geist-vietnamese-wght-normal-6IgcOCM7.woff2      8.00 kB
+fixtures/ui/dist/assets/inter-vietnamese-wght-normal-CBcvBZtf.woff2     10.25 kB
+fixtures/ui/dist/assets/inter-greek-ext-wght-normal-DlzME5K_.woff2      11.23 kB
+fixtures/ui/dist/assets/geist-cyrillic-wght-normal-BEAKL7Jp.woff2       15.08 kB
+fixtures/ui/dist/assets/geist-latin-ext-wght-normal-DC-KSUi6.woff2      16.51 kB
+fixtures/ui/dist/assets/inter-cyrillic-wght-normal-DqGufNeO.woff2       18.74 kB
+fixtures/ui/dist/assets/inter-greek-wght-normal-CkhJZR-_.woff2          18.99 kB
+fixtures/ui/dist/assets/inter-cyrillic-ext-wght-normal-BOeWTOD4.woff2   25.96 kB
+fixtures/ui/dist/assets/geist-latin-wght-normal-BgDaEnEv.woff2          29.40 kB
+fixtures/ui/dist/assets/inter-latin-wght-normal-Dx4kXJAl.woff2          48.25 kB
+fixtures/ui/dist/assets/inter-latin-ext-wght-normal-DO1Apj_S.woff2      85.06 kB
+fixtures/ui/dist/assets/index-CR0H2j57.css                              23.76 kB │ gzip:  4.45 kB
+fixtures/ui/dist/assets/index-BHE3XunS.js                              277.28 kB │ gzip: 85.07 kB
+
+✓ built in 513ms
+vite v8.2.4 building client environment for production...
+transforming...
+✓ 194 modules transformed.
+rendering chunks...
+computing gzip size...
+apps/user/dist/index.html                                              0.80 kB │ gzip:  0.35 kB
+apps/user/dist/recovery.html                                           0.98 kB │ gzip:  0.39 kB
+apps/user/dist/product-authorization.html                              1.19 kB │ gzip:  0.42 kB
+apps/user/dist/devices.html                                            1.24 kB │ gzip:  0.42 kB
+apps/user/dist/totp.html                                               1.24 kB │ gzip:  0.42 kB
+apps/user/dist/passkeys.html                                           1.34 kB │ gzip:  0.43 kB
+apps/user/dist/sessions.html                                           1.42 kB │ gzip:  0.45 kB
+apps/user/dist/authentication.html                                     1.47 kB │ gzip:  0.47 kB
+apps/user/dist/assets/geist-cyrillic-ext-wght-normal-DjL33-gN.woff2    7.42 kB
+apps/user/dist/assets/geist-vietnamese-wght-normal-6IgcOCM7.woff2      8.00 kB
+apps/user/dist/assets/inter-vietnamese-wght-normal-CBcvBZtf.woff2     10.25 kB
+apps/user/dist/assets/inter-greek-ext-wght-normal-DlzME5K_.woff2      11.23 kB
+apps/user/dist/assets/geist-cyrillic-wght-normal-BEAKL7Jp.woff2       15.08 kB
+apps/user/dist/assets/geist-latin-ext-wght-normal-DC-KSUi6.woff2      16.51 kB
+apps/user/dist/assets/inter-cyrillic-wght-normal-DqGufNeO.woff2       18.74 kB
+apps/user/dist/assets/inter-greek-wght-normal-CkhJZR-_.woff2          18.99 kB
+apps/user/dist/assets/inter-cyrillic-ext-wght-normal-BOeWTOD4.woff2   25.96 kB
+apps/user/dist/assets/geist-latin-wght-normal-BgDaEnEv.woff2          29.40 kB
+apps/user/dist/assets/inter-latin-wght-normal-Dx4kXJAl.woff2          48.25 kB
+apps/user/dist/assets/inter-latin-ext-wght-normal-DO1Apj_S.woff2      85.06 kB
+apps/user/dist/assets/passkeys-Bo0uGRPK.css                            1.62 kB │ gzip:  0.62 kB
+apps/user/dist/assets/sessions-CuG08mxr.css                            2.17 kB │ gzip:  0.67 kB
+apps/user/dist/assets/recovery-UbvY-vrS.css                            3.29 kB │ gzip:  0.98 kB
+apps/user/dist/assets/step-up-DQziR376.css                             4.52 kB │ gzip:  1.19 kB
+apps/user/dist/assets/product-authorization-CcI1oC7r.css               5.34 kB │ gzip:  1.36 kB
+apps/user/dist/assets/authentication-Bzg6lNhs.css                      6.38 kB │ gzip:  1.59 kB
+apps/user/dist/assets/registration-CTGgoNuS.css                        8.26 kB │ gzip:  1.97 kB
+apps/user/dist/assets/passkeys-BamGzYQI.css                           10.58 kB │ gzip:  2.47 kB
+apps/user/dist/assets/devices-BDfTz8Yr.css                            10.94 kB │ gzip:  2.34 kB
+apps/user/dist/assets/passkeys-xTrPB78B.css                           11.91 kB │ gzip:  2.63 kB
+apps/user/dist/assets/passkeys-DMez9Jr9.css                           18.43 kB │ gzip:  2.86 kB
+apps/user/dist/assets/sessions.routes-Dd8uSE2J.js                      0.21 kB │ gzip:  0.17 kB
+apps/user/dist/assets/recovery.routes-gQivvnkQ.js                      0.26 kB │ gzip:  0.18 kB
+apps/user/dist/assets/totp.routes-BVq-_mjw.js                          0.39 kB │ gzip:  0.21 kB
+apps/user/dist/assets/validation-DnauRUBF.js                           1.28 kB │ gzip:  0.62 kB
+apps/user/dist/assets/federation.api-CP9VxCqh.js                       1.81 kB │ gzip:  0.87 kB
+apps/user/dist/assets/product-authorization-Y7d3UrIr.js                4.46 kB │ gzip:  1.84 kB
+apps/user/dist/assets/devices-DUTm1QHj.js                              7.80 kB │ gzip:  2.70 kB
+apps/user/dist/assets/productAuthorization-Bd5BMdvH.js                 8.55 kB │ gzip:  2.56 kB
+apps/user/dist/assets/passkeys.native-BZJd6awn.js                     12.63 kB │ gzip:  4.15 kB
+apps/user/dist/assets/registration-Ceqgxr8L.js                        20.58 kB │ gzip:  5.37 kB
+apps/user/dist/assets/recovery-RwkICX21.js                            20.90 kB │ gzip:  6.09 kB
+apps/user/dist/assets/devices.ui-Dz75G-jI.js                          29.56 kB │ gzip:  6.45 kB
+apps/user/dist/assets/authentication-DsVWheNH.js                      35.23 kB │ gzip:  8.64 kB
+apps/user/dist/assets/sessions-BO8Q4D4A.js                            35.27 kB │ gzip:  8.15 kB
+apps/user/dist/assets/totp-beWC9mVP.js                                37.50 kB │ gzip: 10.62 kB
+apps/user/dist/assets/step-up-D77kCKwX.js                             40.93 kB │ gzip: 10.53 kB
+apps/user/dist/assets/passkeys-C6PMP4fx.js                            56.23 kB │ gzip: 13.15 kB
+apps/user/dist/assets/passkeys.api-BcapYoKO.js                       290.16 kB │ gzip: 88.64 kB
+
+✓ built in 506ms
+vite v8.2.4 building client environment for production...
+transforming...
+✓ 133 modules transformed.
+rendering chunks...
+computing gzip size...
+apps/admin/dist/assets/ready-imgEllipse1-CjmO-izz.svg                   0.23 kB │ gzip:  0.19 kB
+apps/admin/dist/content.html                                            0.55 kB │ gzip:  0.29 kB
+apps/admin/dist/configuration.html                                      0.56 kB │ gzip:  0.31 kB
+apps/admin/dist/assets/login-bg-indigo-C3k4s7b0.svg                     0.69 kB │ gzip:  0.43 kB
+apps/admin/dist/assets/login-bg-violet-CWshihwQ.svg                     0.69 kB │ gzip:  0.43 kB
+apps/admin/dist/assets/login-eye-off-CdzWGE-U.svg                       1.15 kB │ gzip:  0.68 kB
+apps/admin/dist/assets/login-google-DAQlBZ0M.svg                        1.36 kB │ gzip:  0.73 kB
+apps/admin/dist/assets/ready-approved-check-Cc5aQvwj.svg                2.86 kB │ gzip:  1.30 kB
+apps/admin/dist/assets/geist-cyrillic-ext-wght-normal-DjL33-gN.woff2    7.42 kB
+apps/admin/dist/assets/geist-vietnamese-wght-normal-6IgcOCM7.woff2      8.00 kB
+apps/admin/dist/assets/inter-vietnamese-wght-normal-CBcvBZtf.woff2     10.25 kB
+apps/admin/dist/assets/inter-greek-ext-wght-normal-DlzME5K_.woff2      11.23 kB
+apps/admin/dist/assets/geist-cyrillic-wght-normal-BEAKL7Jp.woff2       15.08 kB
+apps/admin/dist/assets/geist-latin-ext-wght-normal-DC-KSUi6.woff2      16.51 kB
+apps/admin/dist/assets/inter-cyrillic-wght-normal-DqGufNeO.woff2       18.74 kB
+apps/admin/dist/assets/inter-greek-wght-normal-CkhJZR-_.woff2          18.99 kB
+apps/admin/dist/assets/inter-cyrillic-ext-wght-normal-BOeWTOD4.woff2   25.96 kB
+apps/admin/dist/assets/geist-latin-wght-normal-BgDaEnEv.woff2          29.40 kB
+apps/admin/dist/assets/inter-latin-wght-normal-Dx4kXJAl.woff2          48.25 kB
+apps/admin/dist/assets/inter-latin-ext-wght-normal-DO1Apj_S.woff2      85.06 kB
+apps/admin/dist/assets/configuration-Ca4_2YzZ.css                       5.21 kB │ gzip:  1.25 kB
+apps/admin/dist/assets/content-npEfJJU-.css                             7.87 kB │ gzip:  1.78 kB
+apps/admin/dist/assets/content-CMObqUam.css                            27.13 kB │ gzip:  4.70 kB
+apps/admin/dist/assets/content-B4_t5xWq.js                             44.02 kB │ gzip: 11.50 kB
+apps/admin/dist/assets/configuration-DG7p9fiF.js                       89.38 kB │ gzip: 20.34 kB
+apps/admin/dist/assets/content-D9izDDTJ.js                            280.54 kB │ gzip: 85.95 kB
+
+✓ built in 475ms
+vite v8.2.4 building client environment for production...
+transforming...
+✓ 135 modules transformed.
+rendering chunks...
+computing gzip size...
+fixtures/step-up/dist/index.html                                              0.43 kB │ gzip:  0.29 kB
+fixtures/step-up/dist/assets/geist-cyrillic-ext-wght-normal-DjL33-gN.woff2    7.42 kB
+fixtures/step-up/dist/assets/geist-vietnamese-wght-normal-6IgcOCM7.woff2      8.00 kB
+fixtures/step-up/dist/assets/inter-vietnamese-wght-normal-CBcvBZtf.woff2     10.25 kB
+fixtures/step-up/dist/assets/inter-greek-ext-wght-normal-DlzME5K_.woff2      11.23 kB
+fixtures/step-up/dist/assets/geist-cyrillic-wght-normal-BEAKL7Jp.woff2       15.08 kB
+fixtures/step-up/dist/assets/geist-latin-ext-wght-normal-DC-KSUi6.woff2      16.51 kB
+fixtures/step-up/dist/assets/inter-cyrillic-wght-normal-DqGufNeO.woff2       18.74 kB
+fixtures/step-up/dist/assets/inter-greek-wght-normal-CkhJZR-_.woff2          18.99 kB
+fixtures/step-up/dist/assets/inter-cyrillic-ext-wght-normal-BOeWTOD4.woff2   25.96 kB
+fixtures/step-up/dist/assets/geist-latin-wght-normal-BgDaEnEv.woff2          29.40 kB
+fixtures/step-up/dist/assets/inter-latin-wght-normal-Dx4kXJAl.woff2          48.25 kB
+fixtures/step-up/dist/assets/inter-latin-ext-wght-normal-DO1Apj_S.woff2      85.06 kB
+fixtures/step-up/dist/assets/index-CUI2XRMj.css                              34.07 kB │ gzip:  5.86 kB
+fixtures/step-up/dist/assets/index-Cqwuaz_4.js                              336.16 kB │ gzip: 99.25 kB
+
+✓ built in 399ms
+
+$ pnpm theme:check && pnpm typecheck && vite build --config packages/ui/vite.config.ts && vite build --config fixtures/ui/vite.config.ts && vite build --config apps/user/vite.config.ts && vite build --config apps/admin/vite.config.ts && vite build --config fixtures/step-up/vite.config.ts
+$ node packages/ui/tools/build-theme.mjs --check
+$ tsc --noEmit
+(!) Your Vite config uses features that are unsupported by `configLoader: 'native'`, which is planned to become the default in a future major version of Vite:
+  - import "./totp.routes" without a file extension (apps/user/vite.config.ts:3:26). Add the file extension
+  - import "./recovery.routes" without a file extension (apps/user/vite.config.ts:4:31). Add the file extension
+  - import "./sessions.routes" without a file extension (apps/user/vite.config.ts:5:30). Add the file extension
+  - import "./devices.routes" without a file extension (apps/user/vite.config.ts:6:42). Add the file extension
+Set `VITE_CONFIG_NATIVE_IGNORE_WARNING=true` to suppress this warning.
+
+/registration/assets/fonts/GeistMono-wght.ttf referenced in /registration/assets/fonts/GeistMono-wght.ttf didn't resolve at build time, it will remain unchanged to be resolved at runtime
+(!) Your Vite config uses features that are unsupported by `configLoader: 'native'`, which is planned to become the default in a future major version of Vite:
+  - import "./content.routes" without a file extension (apps/admin/vite.config.ts:4:30). Add the file extension
+  - import "./configuration.routes" without a file extension (apps/admin/vite.config.ts:5:34). Add the file extension
+Set `VITE_CONFIG_NATIVE_IGNORE_WARNING=true` to suppress this warning.
+
+  Determining projects to restore...
+  All projects are up-to-date for restore.
+
+  Tunner.Database -> C:\Workspace\AI MCP\Enterprise Solution\TunnerPlatform.V2.0\src\Tunner.Database\bin\Debug\net10.0\Tunner.Database.dll
+  Tunner.Accounts -> C:\Workspace\AI MCP\Enterprise Solution\TunnerPlatform.V2.0\src\Modules\Accounts\bin\Debug\net10.0\Tunner.Accounts.dll
+  Tunner.Observability -> C:\Workspace\AI MCP\Enterprise Solution\TunnerPlatform.V2.0\src\Tunner.Observability\bin\Debug\net10.0\Tunner.Observability.dll
+  Tunner.Platform -> C:\Workspace\AI MCP\Enterprise Solution\TunnerPlatform.V2.0\src\Tunner.Platform\bin\Debug\net10.0\Tunner.Platform.dll
+  Tunner.Database.Migrations -> C:\Workspace\AI MCP\Enterprise Solution\TunnerPlatform.V2.0\src\Tunner.Database.Migrations\bin\Debug\net10.0\Tunner.Database.Migrations.dll
+  Tunner.PresentationContent -> C:\Workspace\AI MCP\Enterprise Solution\TunnerPlatform.V2.0\src\Modules\PresentationContent\bin\Debug\net10.0\Tunner.PresentationContent.dll
+  Tunner.Installer -> C:\Workspace\AI MCP\Enterprise Solution\TunnerPlatform.V2.0\src\Tunner.Installer\bin\Debug\net10.0\Tunner.Installer.dll
+  Tunner.Identity.Persistence -> C:\Workspace\AI MCP\Enterprise Solution\TunnerPlatform.V2.0\src\Modules\Identity\bin\Debug\net10.0\Tunner.Identity.Persistence.dll
+  Tunner.User.Bff -> C:\Workspace\AI MCP\Enterprise Solution\TunnerPlatform.V2.0\src\Tunner.User.Bff\bin\Debug\net10.0\Tunner.User.Bff.dll
+  Tunner.BrowserTesting -> C:\Workspace\AI MCP\Enterprise Solution\TunnerPlatform.V2.0\tools\browser-testing\bin\Debug\net10.0\Tunner.BrowserTesting.dll
+
+Build succeeded.
+    0 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:05.94
+
+Starting isolated PostgreSQL and Mailpit; waiting for readiness...
+ Container tunner-browser-6ab1259406-mailpit-1 Starting 
+ Container tunner-browser-6ab1259406-postgres-1 Starting 
+ Container tunner-browser-6ab1259406-postgres-1 Started 
+ Container tunner-browser-6ab1259406-mailpit-1 Started 
+ Container tunner-browser-6ab1259406-mailpit-1 Waiting 
+ Container tunner-browser-6ab1259406-postgres-1 Waiting 
+ Container tunner-browser-6ab1259406-mailpit-1 Healthy 
+ Container tunner-browser-6ab1259406-postgres-1 Healthy 
+
+Ready: database migrations, HTTPS, registration/authentication APIs, packaged UI and local verification delivery.
+Application: https://localhost:24443/registration
+Sign-in test: https://localhost:24443/login
+Login uses persisted synthetic Content publications. Existing publications and history are preserved on restart.
+Identity verification test (sign in first): https://localhost:24443/browser-testing/step-up
+Verification inbox: http://127.0.0.1:28025
+PostgreSQL: 127.0.0.1:25432 -> container 5432; database tunner_browser_testing
+ISOLATED LOCAL TEST DATA ONLY. Registration, verification, Personal Information and password sign-in/sign-out are available for isolated engineering testing. Production visual acceptance and later P2 features remain pending.
