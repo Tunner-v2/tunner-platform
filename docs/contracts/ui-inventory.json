@@ -5784,6 +5784,53 @@
       "pathname": null,
       "runtime_pathname": null,
       "validation": "Shared typed schema, fields, error summary/focus and independent eleven-property Recovery password content mapping validation. Selected policy and actual owner follow-up references are read-only; explicit empty references are valid. Editable semantic keys do not change owner goal or effects. Historical mapping data never grants current mutation authority."
+    },
+    {
+      "id": "DEV-ADMIN-CONTENT-BOOTSTRAP",
+      "kind": "SCREEN",
+      "status": "TEST_FIXTURE",
+      "app": "admin",
+      "module": "BrowserTesting.Content",
+      "title": "Isolated Admin fixture",
+      "pathname": "/browser-testing/admin",
+      "runtime_pathname": "/browser-testing/admin",
+      "parameter_schema": {},
+      "guard": "Explicit persistent ISOLATED_LOCAL_BROWSER_TESTING plus Development and SyntheticAdmin admission, exact loopback HTTPS/Host, no query string, separate Admin Origin/CSRF and fixed server-owned synthetic actor allowlist. Bootstrap is intentionally anonymous; Content access requires the separate current synthetic Admin session. Production/default-off/legacy admission remains denied.",
+      "owner_scopes": [
+        "TUN-P2-019"
+      ],
+      "authority_refs": [
+        "docs/authority/current/development/10_UI_UX_Components_Widgets_and_Plugins_Development_Rules.md",
+        "docs/authority/current/development/31_UI_UX_Screen_and_Control_Center_Requirements_Matrix.md",
+        "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md",
+        "AMD-0008",
+        "AMD-0009"
+      ],
+      "figma_refs": [
+        {
+          "file_key": "3F9tAviUejTYpYvRJt8gM1",
+          "node_id": "49:3",
+          "visual_scope": "Existing Admin layout, Inter typography, neutral card/background and spacing reference; fixture composition is a delegated adaptation, not a claimed exact Figma screen."
+        },
+        {
+          "approved_adaptation_ref": "artifacts/p2-019-content-20261116/ui-review/workspace.html",
+          "visual_scope": "Existing approved shared Admin card/typography/command styling, reused within P2-019 delegated UI authority."
+        }
+      ],
+      "source_paths": [
+        "tools/browser-testing/BrowserTestGovernedContent.cs",
+        "web/apps/admin/content.css",
+        "web/packages/ui/styles/index.css",
+        "web/packages/ui/styles/components.css",
+        "web/packages/ui/styles/tokens.generated.css",
+        "web/packages/ui/styles/tailwind.generated.css"
+      ],
+      "form_ids": [],
+      "routing_state": "IMPLEMENTED",
+      "additional_consent_refs": [
+        "governance/evidence/TUN-P2-019-SYNTHETIC-ADMIN-AUTHORIZATION.json"
+      ],
+      "scope_boundary": "Isolated synthetic local Content actor fixture only. Three fixed server-owned command choices; no editable form or credential collection. Explicit Development, persistent isolated mode, SyntheticAdmin, exact loopback HTTPS/Host and separate Admin Origin/CSRF/session authority remain mandatory. No workforce authentication, Identity settings, production policy/activation, merge or release authority. Existing Admin shared visual patterns are reused under P2-019 delegated UI authority."
     }
   ],
   "excluded_historical_designs": [
