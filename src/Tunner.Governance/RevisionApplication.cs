@@ -552,7 +552,7 @@ public static class RevisionApplication
     {
         try
         {
-            var start = new ProcessStartInfo("git") { WorkingDirectory = repository.FullName, RedirectStandardOutput = true, RedirectStandardError = true, UseShellExecute = false, CreateNoWindow = true };
+            var start = new ProcessStartInfo("git") { WorkingDirectory = repository.FullName, RedirectStandardOutput = true, StandardOutputEncoding = Encoding.UTF8, RedirectStandardError = true, UseShellExecute = false, CreateNoWindow = true };
             foreach (var arg in args) start.ArgumentList.Add(arg);
             using var process = Process.Start(start);
             if (process is null) return "";

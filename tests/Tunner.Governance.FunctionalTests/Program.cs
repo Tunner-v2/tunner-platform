@@ -1003,8 +1003,36 @@ static void RunRevisionCommittedProofChecks(DirectoryInfo repositoryRoot, IColle
         Close(first, false);
         Check(!AuditCommittedFixture(fixture), "uncommitted CLOSED status cannot waive original proof");
         Check(RevisionApplication.CloseCheck(fixture, first).ExitCode == 0, "fixture revision has complete native closure proof");
+        const string utf8Reason = "Later validated behavior – UTF-8 proof";
+        var utf8RevisionRelativePath = "governance/revisions/" + first + ".yaml";
+        var utf8RevisionPath = Path.Combine(fixture.FullName, utf8RevisionRelativePath);
+        EditRevision(utf8RevisionPath, "reason", utf8Reason);
+        // Keep the fixture's actual tracked UTF-8 byte sequence, rather than an ASCII Unicode escape.
+        File.WriteAllText(utf8RevisionPath, File.ReadAllText(utf8RevisionPath).Replace("\\u2013", "\u2013", StringComparison.Ordinal));
         Close(first, true);
         Check(AuditCommittedFixture(fixture), "committed closed revision supplies current owned-path proof");
+        var utf8RevisionBytes = File.ReadAllBytes(utf8RevisionPath);
+        var originalOutputEncoding = Console.OutputEncoding;
+        try
+        {
+            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+            Console.OutputEncoding = Encoding.GetEncoding(437);
+            Check(File.ReadAllText(utf8RevisionPath).Contains('\u2013') &&
+                ReadYamlScalar(CommittedEvidenceApplication.Git(fixture, "show", "HEAD:" + utf8RevisionRelativePath), "reason") == utf8Reason,
+                "committed Git reads preserve literal UTF-8 metadata under a CP437 console");
+            Check(RevisionApplication.CloseCheck(fixture, first).ExitCode == 0 && AuditCommittedFixture(fixture),
+                "byte-identical closed UTF-8 history remains valid under a CP437 console");
+            EditRevision(utf8RevisionPath, "reason", "Changed closed UTF-8 proof");
+            var changedUtf8 = RevisionApplication.CloseCheck(fixture, first);
+            Check(changedUtf8.ExitCode != 0 && ((RevisionOperationPayload)changedUtf8.Payload).Findings.Any(x =>
+                    x == "closed Revision history is immutable; later work requires a new Revision"),
+                "UTF-8 decoding still refuses a genuine closed-history change under a CP437 console");
+        }
+        finally
+        {
+            try { Console.OutputEncoding = originalOutputEncoding; }
+            finally { File.WriteAllBytes(utf8RevisionPath, utf8RevisionBytes); }
+        }
         var firstProofPath = Path.Combine(fixture.FullName, "governance/evidence/" + first + "-proof.json");
         var firstProofBytes = File.ReadAllBytes(firstProofPath);
         File.WriteAllText(firstProofPath, File.ReadAllText(firstProofPath).Replace("\"PASS\"", "\"FAIL\"", StringComparison.Ordinal));

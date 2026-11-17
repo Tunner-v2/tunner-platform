@@ -3,6 +3,14 @@
   "scope_id": "P0-004-RV006",
   "validation_kind": "COMMITTED",
   "result": "PENDING",
+  "utf8_git_read_increment": {
+    "phase": "APPLIED_SOURCE_REVIEW_PASS_RUNTIME_PENDING",
+    "cause": "Both actual closed-record comparison hash pairs are reproduced exactly by decoding their UTF-8 Git bytes as CP437. The HEAD blobs and worktree records are structurally identical; the literal U+2013 reason character was misdecoded, not edited. No historical record repair is justified.",
+    "patch_sha256": "c95b328e297ef8d7af341561b27ebfe4b2e30e7fa34f91d03be09e2461c1ab21",
+    "change": "Set explicit UTF-8 stdout decoding on the two existing Revision and committed-evidence Git readers. Preserve all equality, immutability, failure and acceptance rules. Add three assertions to the existing closed-proof fixture; restore console encoding and exact fixture bytes in finally.",
+    "review": "Independent AI p214_continuation_qa applied governance, QA and security contracts: PASS_SOURCE, no actionable findings. This is one disclosed reviewer, not separate human approvals.",
+    "build": "PASS, zero warnings/errors, 10.80 seconds. Focused regression and actual integration admission remain pending; overall RV006 performance qualification is not inferred."
+  },
   "admission_diagnostics_increment": {
     "phase": "DIAGNOSTIC_REGRESSION_PASS_INTEGRATION_CAUSE_IDENTIFIED",
     "nested_reason_qualification": "Existing validation-source selector passed41 checks atf4415d6146e5af58c459feb109290ae7b5dcea83, exit0/35632ms. Actual subsequent P016 refusal identifies closed RV005/RV006 immutability comparison failure; files and an independent parse comparison match HEAD, so no history rewrite or rule relaxation is justified.",

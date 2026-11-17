@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
+using System.Text;
 using System.Text.Json;
 using System.Text.RegularExpressions;
 
@@ -14,7 +15,7 @@ internal static class CommittedEvidenceApplication
 
     internal static string Git(DirectoryInfo repository, params string[] arguments)
     {
-        var start = new ProcessStartInfo("git") { WorkingDirectory = repository.FullName, RedirectStandardOutput = true, RedirectStandardError = true, UseShellExecute = false, CreateNoWindow = true };
+        var start = new ProcessStartInfo("git") { WorkingDirectory = repository.FullName, RedirectStandardOutput = true, StandardOutputEncoding = Encoding.UTF8, RedirectStandardError = true, UseShellExecute = false, CreateNoWindow = true };
         foreach (var argument in arguments) start.ArgumentList.Add(argument);
         using var process = Process.Start(start);
         if (process is null) return "";
