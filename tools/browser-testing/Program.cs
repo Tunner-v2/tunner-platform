@@ -35,24 +35,42 @@ if (args.Length != 2 || args[0] != "--local-browser-testing" ||
     return 2;
 }
 var directory = Path.GetDirectoryName(Path.GetFullPath(args[1]))!;
+var startupStage = "READING_CONFIGURATION";
+async Task MarkStartupStageAsync(string stage)
+{
+    startupStage = stage;
+    try
+    {
+        await File.WriteAllTextAsync(Path.Combine(directory, "host-startup-stage.json"),
+            JsonSerializer.Serialize(new { stage, at = DateTimeOffset.UtcNow })).ConfigureAwait(false);
+    }
+    catch (IOException) { } // Optional local diagnostics must not determine application readiness.
+    catch (UnauthorizedAccessException) { }
+}
 try
 {
+    await MarkStartupStageAsync("READING_CONFIGURATION");
     var config = JsonSerializer.Deserialize<BrowserTestConfiguration>(await File.ReadAllTextAsync(args[1]))
         ?? throw new InvalidOperationException("Missing test configuration.");
     config.Validate();
+    await MarkStartupStageAsync("OPENING_CERTIFICATE_STORE");
     using var certificates = new X509Store(StoreName.My, StoreLocation.CurrentUser);
     certificates.Open(OpenFlags.ReadOnly);
+    await MarkStartupStageAsync("SELECTING_CERTIFICATE");
     using var certificate = certificates.Certificates.Find(X509FindType.FindByThumbprint, config.CertificateThumbprint, false)
         .OfType<X509Certificate2>().Single(c => c.HasPrivateKey && c.NotAfter > DateTime.Now);
     var origin = "https://localhost:" + config.ApplicationPort;
     var connectionString = "Host=127.0.0.1;Port=" + config.PostgresPort + ";Database=tunner_browser_testing;Username=tunner;Include Error Detail=false";
     var options = new BrowserTestHostOptions(origin, config.ApplicationPort, connectionString, certificate,
         config.SmtpPort, directory, config.Mode, config.InstanceId);
+    await MarkStartupStageAsync("COMPOSING_HOST");
     if (config.GovernedContent) options = options with { GovernedContent = new BrowserTestGovernedContent(options) };
     var app = BrowserTestHost.Create(options);
     await using (app)
     {
+        await MarkStartupStageAsync("MIGRATING_DATABASE");
         await BrowserTestHost.MigrateAndMapAsync(app, options);
+        await MarkStartupStageAsync("STARTING_HTTPS");
         await app.RunAsync();
     }
     return 0;
@@ -60,7 +78,7 @@ try
 catch (Exception error)
 {
     // Do not log raw connection strings, addresses, passwords, verification codes or DOB.
-    await File.WriteAllTextAsync(Path.Combine(directory, "host-error.log"), "Browser test host could not start: " + error.GetType().Name + ". Check prerequisites, local ports, migrations and certificate readiness.");
+    await File.WriteAllTextAsync(Path.Combine(directory, "host-error.log"), "Browser test host could not start at " + startupStage + ": " + error.GetType().Name + ". Check prerequisites, local ports, migrations and certificate readiness.");
     return 1;
 }
 
