@@ -3,9 +3,26 @@
   "scope_id": "TUN-P2-014",
   "result": "PASS",
   "assessment_scope": "Ten affected current Product Login/review/continuation and shared proof screen/form/components. PASS is per-item engineering UI qualification only; native UI gate requires this evidence committed and unchanged. No whole-P2/feature, Product, production or release acceptance.",
-  "tested_commit_sha": "d2783c34a65b28964256dc6f106252773feaf324",
-  "tested_commit_semantics": "Inventory-only qualification candidate; actual runtime invocations occurred at named prior committed sources in current_scope_qualification. All applicable web source is unchanged; native proof and ordinary/current guarded-HTML receipts retain their own actual execution SHAs and invocation results.",
-  "inventory_sha256": "c45b886b94591f8facaf4ca3f7d3d8b2490d3edb69c27cc3467c204664698bad",
+  "tested_commit_sha": "3284224cca161891decb0ed093538a89aab0f6a8",
+  "tested_commit_semantics": "Currentness carrier, not a new browser execution. The ten Product inventory objects and 52 owned web/source/test/config files are unchanged from d2783c34; original executions retain their actual SHAs in current_scope_qualification. Changed shared backend/asset sources are qualified by the closed compatibility revisions in currentness_reconciliation_20261117.",
+  "inventory_sha256": "c2b23703ae6af1362f866650bd11be2feea7debec32f2318779de0518dab442a",
+  "currentness_reconciliation_20261117": {
+    "prior_envelope": "3284224cca161891decb0ed093538a89aab0f6a8:governance/evidence/TUN-P2-014-UI-COMPLIANCE.json",
+    "prior_tested_commit_sha": "d2783c34a65b28964256dc6f106252773feaf324",
+    "prior_inventory_sha256": "c45b886b94591f8facaf4ca3f7d3d8b2490d3edb69c27cc3467c204664698bad",
+    "prior_tested_commit_semantics": "Inventory-only qualification candidate; actual runtime invocations occurred at named prior committed sources in current_scope_qualification. All applicable web source is unchanged; native proof and ordinary/current guarded-HTML receipts retain their own actual execution SHAs and invocation results.",
+    "prior_gate_status": "PENDING_COMMIT_UNCHANGED_EVIDENCE_AND_NATIVE_UI_CHECK",
+    "prior_exact_next_action": "Root commits this unchanged evidence and runs the actual native governance ui check for TUN-P2-014 against inventory candidate d2783c3. Actual browser/native invocation SHAs remain separately attributed. No lifecycle, whole-feature, Product or release acceptance is implied.",
+    "comparison": "Ten scoped inventory objects structurally unchanged; 52 owned web/source/test/config files have zero Git diff from the original carrier; all 50 distinct referenced evidence hashes still match. Item/check/screenshot/deviation objects and current_scope_qualification are preserved unchanged.",
+    "qualified_shared_source_carriers": [
+      "governance/revisions/P2-014-RV001.yaml",
+      "governance/revisions/P2-014-RV002.yaml",
+      "governance/revisions/P2-013-RV003.yaml",
+      "governance/revisions/P1-019-RV002.yaml"
+    ],
+    "ownership_addition": "src/Tunner.Platform/Bff/BffWebAssets.cs",
+    "boundary": "Bounded evidence reconciliation under active P2-019; no source behavior, original lifecycle, Product acceptance, execution result or release decision changes. Native UI check remains pending commitment of this reconciliation."
+  },
   "current_scope_qualification": {
     "path": "governance/evidence/p2-014-authorization-20261115/ui/qualification-binding.json",
     "sha256": "20e31bc9a2683e9708dcc7a35746a9b361ba7960cf636ba1c32f9387969e3ae2"
@@ -34,6 +51,7 @@
     "src/Modules/Identity/StepUpProductAuthorization.cs",
     "src/Modules/Identity/StepUpTotpBrowserEndpoints.cs",
     "src/Modules/Identity/TotpEndpoints.cs",
+    "src/Tunner.Platform/Bff/BffWebAssets.cs",
     "src/Tunner.User.Bff/FederationOidcEndpoints.cs",
     "web/apps/user/authentication.content.proposal.json",
     "web/apps/user/authentication.css",
@@ -4106,5 +4124,5 @@
     }
   ],
   "product_acceptance": "NOT_REQUESTED_OR_GRANTED",
-  "exact_next_action": "Root commits this unchanged evidence and runs the actual native governance ui check for TUN-P2-014 against inventory candidate d2783c3. Actual browser/native invocation SHAs remain separately attributed. No lifecycle, whole-feature, Product or release acceptance is implied."
+  "exact_next_action": "Commit this bounded currentness reconciliation, then execute the native TUN-P2-014 UI check. Original executions and acceptance remain unchanged; no new runtime, whole-P2, production or release acceptance is implied."
 }
