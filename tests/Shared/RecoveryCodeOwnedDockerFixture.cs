@@ -188,7 +188,7 @@ internal sealed class RecoveryCodeLocalDockerEndpoint : IDisposable
 
 internal static class RecoveryCodeOwnedDockerFixture
 {
-    internal const long NativePostgresCapacityBytes = 2L * 1024 * 1024 * 1024;
+    internal const long NativePostgresCapacityBytes = 4L * 1024 * 1024 * 1024;
     internal const string NativePostgresImage = "sha256:77f585114c32fbca283dc835b0596f4e52b51b4c6662d7810b2f4084f60a1873";
     internal const string MailpitImage = "sha256:0306debe903ec7a44a4d49266ac54c54667183efc5de1586d75093d9b60b823b";
     internal const string OpenBaoImage = "sha256:71156a1c6623a5fa3f5e61b0c6a8ead0faf0df29a778339188443551995d1315";
