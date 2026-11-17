@@ -10,7 +10,7 @@ namespace Tunner.Identity.Persistence;
 /// <summary>Only current effective publications with immutable Identity validation/approval/effect receipts are runtime authority.
 /// Reading a policy never requires an Admin browser session and never changes historical actor/session state.</summary>
 public sealed class PersistedIdentityRuntimeConfigurationSource(IServiceScopeFactory scopes) : IAuthenticationPolicySource, IAssurancePolicySource, IAuthenticationContentBindingSource,
-    IRegistrationPolicySource, ITotpPolicySource, IRegistrationContentBindingSource, IPasskeyPolicySource, ITotpContentBindingSource, IPasskeyContentBindingSource, IStepUpContentBindingSource, IRecoveryCodePolicySource, ISessionListingHttpBudgetSource, ISessionListingContentBindingSource
+    IRegistrationPolicySource, ITotpPolicySource, IRegistrationContentBindingSource, IPasskeyPolicySource, ITotpContentBindingSource, IPasskeyContentBindingSource, IStepUpContentBindingSource, IRecoveryCodePolicySource, ISessionListingHttpBudgetSource, ISessionListingContentBindingSource, ISessionRevocationContentBindingSource
 {
     RegistrationPolicy IRegistrationPolicySource.RequireEffective(DateTimeOffset effectiveAt)
     {
@@ -105,12 +105,23 @@ public sealed class PersistedIdentityRuntimeConfigurationSource(IServiceScopeFac
         ArgumentNullException.ThrowIfNull(policy); policy.Validate();
         var selected = Read(new(IdentityConfigurationFamily.SessionListingContent, AuthenticationPolicyVersion: policy.Version), effectiveAt);
         var value = selected.Document.SessionListingContent ?? throw new IdentityConfigurationUnavailableException();
-        if (value.AuthenticationPolicyVersion != policy.Version || selected.SessionListingAvailability is null) throw new IdentityConfigurationUnavailableException();
-        return value with { QualificationReference = selected.Publication.ApprovalEventReference.ToString("N"), EffectiveInterval = selected.SessionListingAvailability };
+        if (value.AuthenticationPolicyVersion != policy.Version || selected.BindingAvailability is null) throw new IdentityConfigurationUnavailableException();
+        return value with { QualificationReference = selected.Publication.ApprovalEventReference.ToString("N"), EffectiveInterval = selected.BindingAvailability };
+    }
+
+    async ValueTask<SessionActionContentBinding> ISessionRevocationContentBindingSource.RequireQualifiedAsync(AuthenticationPolicy policy,
+        DateTimeOffset effectiveAt, CancellationToken cancellationToken)
+    {
+        ArgumentNullException.ThrowIfNull(policy); policy.Validate(); cancellationToken.ThrowIfCancellationRequested();
+        var selected = await ReadAsync(new(IdentityConfigurationFamily.SessionRevocationContent, AuthenticationPolicyVersion: policy.Version),
+            effectiveAt, cancellationToken).ConfigureAwait(false);
+        var value = selected.Document.SessionRevocationContent ?? throw new IdentityConfigurationUnavailableException();
+        if (value.AuthenticationPolicyVersion != policy.Version || selected.BindingAvailability is null) throw new IdentityConfigurationUnavailableException();
+        return value with { QualificationReference = selected.Publication.ApprovalEventReference.ToString("N"), EffectiveInterval = selected.BindingAvailability };
     }
 
     // This read-only consumer carries the selected publication's actual validity, not only its broader proposal interval.
-    private static EffectivePolicyInterval SessionListingAvailability(EffectivePolicyInterval candidate, IdentityConfigurationPublicationRow publication,
+    private static EffectivePolicyInterval BindingAvailability(EffectivePolicyInterval candidate, IdentityConfigurationPublicationRow publication,
         IdentityConfigurationPublicationRow? next)
     {
         var from = candidate.From > publication.EffectiveFrom ? candidate.From : publication.EffectiveFrom;
@@ -129,53 +140,101 @@ public sealed class PersistedIdentityRuntimeConfigurationSource(IServiceScopeFac
     }
 
     private sealed record Selection(IdentityConfigurationDocument Document, IdentityConfigurationPublicationRow Publication)
-    { internal EffectivePolicyInterval? SessionListingAvailability { get; init; } }
+    { internal EffectivePolicyInterval? BindingAvailability { get; init; } }
+
+    private static IQueryable<IdentityConfigurationPublicationRow> Eligible(IdentityPersistenceDbContext database, string key, DateTimeOffset at)
+        => database.Set<IdentityConfigurationPublicationRow>().AsNoTracking().Where(x => x.ScopeKey == key &&
+            (x.EffectiveFrom < at || x.EffectiveFrom == at && x.IncludesFrom) &&
+            (x.EffectiveUntil == null || x.EffectiveUntil > at || x.EffectiveUntil == at && x.IncludesUntil) &&
+            !database.Set<IdentityConfigurationPublicationRow>().Any(y => y.SupersedesPublicationReference == x.Id &&
+                (y.EffectiveFrom < at || y.EffectiveFrom == at && y.IncludesFrom))).Take(2);
+
+    private static IQueryable<IdentityConfigurationPublicationRow> Future(IdentityPersistenceDbContext database, string key, DateTimeOffset at)
+        => database.Set<IdentityConfigurationPublicationRow>().AsNoTracking().Where(x => x.ScopeKey == key &&
+            (x.EffectiveFrom > at || x.EffectiveFrom == at && !x.IncludesFrom))
+            .OrderBy(x => x.EffectiveFrom).ThenByDescending(x => x.IncludesFrom);
+
+    private static IdentityConfigurationPublicationRow SelectPublication(IdentityConfigurationPublicationRow[] eligible, string key, DateTimeOffset at)
+    {
+        var candidates = eligible.Select(x => new PolicyVersionCandidate<string>(x.Id.ToString("N"), "PUBLISHED", key,
+            new(x.EffectiveFrom, x.IncludesFrom, x.EffectiveUntil, x.IncludesUntil), x.SupersedesPublicationReference?.ToString("N"),
+            [x.ApprovalEventReference.ToString("N"), x.ApprovalEvidenceReference]));
+        var resolved = EffectivePolicyVersionResolver.Resolve(at, key, candidates, static (a, b) => a == b, static candidate => candidate.Status == "PUBLISHED");
+        if (resolved.SelectedVersion is null) throw new IdentityConfigurationUnavailableException();
+        return eligible.Single(x => x.Id.ToString("N") == resolved.SelectedVersion.VersionId);
+    }
+
+    private static IdentityConfigurationDocument ReadDocument(IdentityConfigurationVersionRow? version, IdentityConfigurationScope requested, DateTimeOffset at)
+    {
+        if (version is null) throw new IdentityConfigurationUnavailableException();
+        var document = IdentityConfigurationDocument.Read(version.Payload);
+        if (version.ScopeKey != requested.Key || document.Scope != requested || document.Digest != version.Digest ||
+            document.Version != version.PolicyVersionReference || !document.Interval.Contains(at)) throw new IdentityConfigurationUnavailableException();
+        return document;
+    }
+
+    private static void RequireClean(IdentityPersistenceDbContext database)
+    {
+        if (database.Database.CurrentTransaction is not null || database.ChangeTracker.HasChanges()) throw new IdentityConfigurationUnavailableException();
+    }
+
     private Selection Read(IdentityConfigurationScope requested, DateTimeOffset at)
     {
         try
         {
             requested.Require(); var key = requested.Key;
-            using var scope = scopes.CreateScope(); var database = scope.ServiceProvider.GetRequiredService<IdentityPersistenceDbContext>();
-            if (database.Database.CurrentTransaction is not null || database.ChangeTracker.HasChanges()) throw new IdentityConfigurationUnavailableException();
-            // Ask the indexed owner store for only current leaves. Historical successors still permanently
-            // supersede their predecessors, including after expiry; none are materialized in the request path.
-            var eligible = database.Set<IdentityConfigurationPublicationRow>().AsNoTracking().Where(x => x.ScopeKey == key &&
-                (x.EffectiveFrom < at || x.EffectiveFrom == at && x.IncludesFrom) &&
-                (x.EffectiveUntil == null || x.EffectiveUntil > at || x.EffectiveUntil == at && x.IncludesUntil) &&
-                !database.Set<IdentityConfigurationPublicationRow>().Any(y => y.SupersedesPublicationReference == x.Id &&
-                    (y.EffectiveFrom < at || y.EffectiveFrom == at && y.IncludesFrom))).Take(2).ToArray();
-            var candidates = eligible.Select(x => new PolicyVersionCandidate<string>(x.Id.ToString("N"), "PUBLISHED", key,
-                new(x.EffectiveFrom, x.IncludesFrom, x.EffectiveUntil, x.IncludesUntil), x.SupersedesPublicationReference?.ToString("N"),
-                [x.ApprovalEventReference.ToString("N"), x.ApprovalEvidenceReference]));
-            var resolved = EffectivePolicyVersionResolver.Resolve(at, key, candidates, static (a, b) => a == b, static candidate => candidate.Status == "PUBLISHED");
-            if (resolved.SelectedVersion is null) throw new IdentityConfigurationUnavailableException();
-            var publication = eligible.Single(x => x.Id.ToString("N") == resolved.SelectedVersion.VersionId);
+            using var scope = scopes.CreateScope(); var database = scope.ServiceProvider.GetRequiredService<IdentityPersistenceDbContext>(); RequireClean(database);
+            var publication = SelectPublication(Eligible(database, key, at).ToArray(), key, at);
             if (!database.Database.SqlQuery<bool>($"SELECT identity.runtime_configuration_valid_publication({publication.Id}) AS \"Value\"").Single())
                 throw new IdentityConfigurationUnavailableException();
-            var version = database.Set<IdentityConfigurationVersionRow>().AsNoTracking().SingleOrDefault(x => x.Id == publication.VersionReference)
-                ?? throw new IdentityConfigurationUnavailableException();
-            var document = IdentityConfigurationDocument.Read(version.Payload);
-            if (version.ScopeKey != key || document.Scope != requested || document.Digest != version.Digest || document.Version != version.PolicyVersionReference ||
-                !document.Interval.Contains(at)) throw new IdentityConfigurationUnavailableException();
-            EffectivePolicyInterval? listingAvailability = null;
+            var document = ReadDocument(database.Set<IdentityConfigurationVersionRow>().AsNoTracking().SingleOrDefault(x => x.Id == publication.VersionReference), requested, at);
+            EffectivePolicyInterval? availability = null;
             if (requested.Family == IdentityConfigurationFamily.SessionListingContent)
             {
-                // Bound only this new consumer by the earliest already-committed same-scope selection frontier observed by this read.
-                var next = database.Set<IdentityConfigurationPublicationRow>().AsNoTracking().Where(x => x.ScopeKey == key &&
-                    (x.EffectiveFrom > at || x.EffectiveFrom == at && !x.IncludesFrom))
-                    .OrderBy(x => x.EffectiveFrom).ThenByDescending(x => x.IncludesFrom).FirstOrDefault();
-                listingAvailability = SessionListingAvailability(document.Interval, publication, next);
-                if (!listingAvailability.Contains(at)) throw new IdentityConfigurationUnavailableException();
+                availability = BindingAvailability(document.Interval, publication, Future(database, key, at).FirstOrDefault());
+                if (!availability.Contains(at)) throw new IdentityConfigurationUnavailableException();
             }
-            return new(document, publication) { SessionListingAvailability = listingAvailability };
+            return new(document, publication) { BindingAvailability = availability };
         }
         catch (Exception error) when (error is DbException or TimeoutException or JsonException or ArgumentException or InvalidOperationException)
         { throw new IdentityConfigurationUnavailableException(); }
     }
+
+    // The new asynchronous browser binding reads its own fresh owner scope; no blocking wrapper around Read.
+    private async Task<Selection> ReadAsync(IdentityConfigurationScope requested, DateTimeOffset at, CancellationToken cancellationToken)
+    {
+        try
+        {
+            requested.Require(); var key = requested.Key;
+            await using var scope = scopes.CreateAsyncScope(); var database = scope.ServiceProvider.GetRequiredService<IdentityPersistenceDbContext>(); RequireClean(database);
+            var publication = SelectPublication(await Eligible(database, key, at).ToArrayAsync(cancellationToken).ConfigureAwait(false), key, at);
+            if (!await database.Database.SqlQuery<bool>($"SELECT identity.runtime_configuration_valid_publication({publication.Id}) AS \"Value\"")
+                .SingleAsync(cancellationToken).ConfigureAwait(false)) throw new IdentityConfigurationUnavailableException();
+            var version = await database.Set<IdentityConfigurationVersionRow>().AsNoTracking().SingleOrDefaultAsync(x => x.Id == publication.VersionReference, cancellationToken).ConfigureAwait(false);
+            var document = ReadDocument(version, requested, at);
+            var next = await Future(database, key, at).FirstOrDefaultAsync(cancellationToken).ConfigureAwait(false);
+            var availability = BindingAvailability(document.Interval, publication, next);
+            if (!availability.Contains(at)) throw new IdentityConfigurationUnavailableException();
+            return new(document, publication) { BindingAvailability = availability };
+        }
+        catch (OperationCanceledException) when (!cancellationToken.IsCancellationRequested) { throw new IdentityConfigurationUnavailableException(); }
+        catch (Exception error) when (error is DbException or TimeoutException or JsonException or ArgumentException or InvalidOperationException)
+        { throw new IdentityConfigurationUnavailableException(); }
+    }
+
 }
 
 public static class IdentityRuntimeConfigurationRegistration
 {
+    /// <summary>Binding-only opt-in; bulk sign-out, policies, budgets, presentation and optional routes remain separate.</summary>
+    public static IServiceCollection AddTunnerPersistedSessionRevocationContentBinding(this IServiceCollection services)
+    {
+        ArgumentNullException.ThrowIfNull(services);
+        if (services.Any(x => x.ServiceType == typeof(ISessionRevocationContentBindingSource))) throw new InvalidOperationException("Session revocation content binding source selection must be explicit and unique.");
+        services.TryAddSingleton<PersistedIdentityRuntimeConfigurationSource>();
+        services.AddSingleton<ISessionRevocationContentBindingSource>(provider => provider.GetRequiredService<PersistedIdentityRuntimeConfigurationSource>()); return services;
+    }
+
     /// <summary>Binding-only opt-in; listing budget, presentation and optional routes remain separate selections.</summary>
     public static IServiceCollection AddTunnerPersistedSessionListingContentBinding(this IServiceCollection services)
     {
