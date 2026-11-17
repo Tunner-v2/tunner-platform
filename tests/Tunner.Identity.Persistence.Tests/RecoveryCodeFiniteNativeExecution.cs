@@ -53,7 +53,11 @@ public static class RecoveryCodeFiniteNativeExecution
         "BIND_KEY", "BFF_CSRF_ORIGIN_OWNER", "STABLE_GENERATE_DUPLICATE", "STABLE_REPLACE_DUPLICATE",
         "CONSUME_OWNER_THROW", "CONSUME_OWNER_CANCEL", "GENERATE_POST_COMMIT_OBSERVER", "REPLACE_POST_COMMIT_OBSERVER",
         "CONSUME_POST_COMMIT_OBSERVER", "CORRUPT_VERIFIER_FAIL_CLOSED",
-        "FEDERATION_ORIGINAL_SESSION", "FEDERATION_FINAL_AUTHORITY", "FEDERATION_BROWSER_BINDING"];
+        "FEDERATION_ORIGINAL_SESSION", "FEDERATION_FINAL_AUTHORITY", "FEDERATION_BROWSER_BINDING",
+        "PUBLISHED_WINNER", "PUBLISHED_SAVED_SESSION", "PUBLISHED_SAVED_OPERATION",
+        "PUBLISHED_SAVED_CONTENT", "PUBLISHED_PROFILE_WITHDRAW", "PUBLISHED_BINDING_DRIFT",
+        "PUBLISHED_WRONG_FACTS", "PUBLISHED_MISSING_IMPACT", "PUBLISHED_LOCK_RELEASE",
+        "PUBLISHED_LOCK_CANCEL", "PUBLISHED_LOCK_DEADLINE", "PUBLISHED_COMMIT_OBSERVER"];
 
     internal static async Task<RecoveryCodeNativeReceipt> RunAsync(RecoveryCodeNativeCohort cohort, Uri qualifiedLocalEndpoint, DirectoryInfo repository, RecoveryCodeFixtureOwnershipChannel ownershipChannel)
     {
@@ -328,6 +332,18 @@ public static class RecoveryCodeFiniteNativeExecution
         var tests = new RecoveryCodePrivateIntegrationTests(fixture);
         return id switch
         {
+            "PUBLISHED_WINNER" => tests.PublishedContentGeneratesAndReplacesWithOnlyOnePrivateFirstDelivery(),
+            "PUBLISHED_SAVED_SESSION" => tests.PublishedRecoveryRejectsSessionUseExpiryDuringSavedChanges(),
+            "PUBLISHED_SAVED_OPERATION" => tests.PublishedRecoveryRejectsOperationAccessExpiryDuringSavedChanges(),
+            "PUBLISHED_SAVED_CONTENT" => tests.PublishedRecoveryRejectsPublicationExpiryDuringSavedChanges(),
+            "PUBLISHED_PROFILE_WITHDRAW" => tests.PublishedRecoveryRejectsProfileWithdrawalDuringFinalBindingLookup(),
+            "PUBLISHED_BINDING_DRIFT" => tests.PublishedRecoveryRejectsLocalBindingChangeAfterFinalAsyncLookup(),
+            "PUBLISHED_WRONG_FACTS" => tests.PublishedRecoveryRejectsDifferentQualifiedImpactFacts(),
+            "PUBLISHED_MISSING_IMPACT" => tests.PublishedRecoveryRejectsMissingQualifiedImpactKey(),
+            "PUBLISHED_LOCK_RELEASE" => tests.PublishedRecoveryWaitsForExistingPublicationWriterLock(),
+            "PUBLISHED_LOCK_CANCEL" => tests.PublishedRecoveryCancellationWhileWaitingOnPublicationLockPreservesOwnerTransaction(),
+            "PUBLISHED_LOCK_DEADLINE" => tests.PublishedRecoveryDeadlineWhileWaitingOnPublicationLockFailsClosed(),
+            "PUBLISHED_COMMIT_OBSERVER" => tests.PublishedRecoveryPostCommitObserverFailureReturnsNoPayloadAndRetryReadsOnlySafeOriginal(),
             "WINNER_SAFE_READ_REPLACE" => tests.WinningDeliveryIsAbsentFromEverySafeOriginalReadAndReplacementRetiresExactPriorSet(),
             "PUBLICATION_WITHDRAWAL" => tests.PublicationChangeAfterOwnerWorkBeforeFinalDecisionRollsBackCodeSetProofConsumeAndOutbox("withdrawal"),
             "PUBLICATION_VERSION" => tests.PublicationChangeAfterOwnerWorkBeforeFinalDecisionRollsBackCodeSetProofConsumeAndOutbox("version"),

@@ -206,6 +206,8 @@ internal sealed partial class StepUpApplication(IdentityPersistenceDbContext dat
             var methodCurrent = outcome.Receipt is not null || await authentication.MethodIsCurrentAsync(session, verificationPolicy, verificationAt, ct).ConfigureAwait(false);
             var continuation = outcome.Receipt is null ? await authentication.VerifyContinuedOperationAsync(caller, operation, session, ct).ConfigureAwait(false) : null;
             proofCredential = await authentication.ReadProofCredentialAsync(row, ct).ConfigureAwait(false);
+            var recoveryPublication = outcome.RecoveryValidity is { } publicationOwner
+                ? await publicationOwner.PreparePublicationAsync(recoveryPolicies, clock.GetUtcNow(), ct).ConfigureAwait(false) : null;
             var decisionAt = clock.GetUtcNow(); policy = assurancePolicies.RequireEffective(operation.Scope, decisionAt, row.PolicyVersion);
             var currentAuthentication = authenticationPolicies.RequireEffective(decisionAt); currentAuthentication.Validate();
             var terminal = termination is not null && termination.AccessInterval.Contains(decisionAt);
@@ -213,7 +215,7 @@ internal sealed partial class StepUpApplication(IdentityPersistenceDbContext dat
                 sessionRevocation is not null && !sessionRevocation.TargetFactsCurrentAt(currentAuthentication, decisionAt) ||
                 !authentication.MethodFactsCurrentAt(session, currentAuthentication, decisionAt) ||
                 !authentication.ProofMethodCurrentAt(row, proofCredential, operation, decisionAt, outcome.PasskeyValidity is not null || outcome.TotpValidity is not null || outcome.FederationValidity is not null) || !authentication.PasskeyOutcomeCurrentAt(outcome, caller, operation, decisionAt) ||
-                outcome.RecoveryValidity is { } recovery && !recovery.CurrentAt(database, caller, operation, recoveryPolicies, currentAuthentication, decisionAt) ||
+                outcome.RecoveryValidity is { } recovery && !recovery.CurrentAt(database, caller, operation, recoveryPolicies, currentAuthentication, decisionAt, recoveryPublication) ||
                 outcome.FederationValidity is { } federation && !federation.CurrentAt(database, caller, operation, decisionAt) ||
                 (outcome.Receipt is not null ? !terminal : session.State != "ACTIVE" || !methodCurrent || continuation is null ||
                     !continuation.SessionUseInterval.Contains(decisionAt) || !continuation.OperationInterval.Contains(decisionAt)))
@@ -223,7 +225,19 @@ internal sealed partial class StepUpApplication(IdentityPersistenceDbContext dat
             }
             now = decisionAt;
             End(row, "CONSUMED", now); Event(row, "StepUpProofConsumed", now);
-            await FinishAsync(transaction, true, ct).ConfigureAwait(false);
+            if (recoveryPublication is not null)
+            {
+                var recoverySessionUseInterval = continuation!.SessionUseInterval;
+                var recoveryOperationInterval = continuation.OperationInterval;
+                await database.SaveChangesAsync(ct).ConfigureAwait(false);
+                if (!outcome.RecoveryValidity!.CommittedBoundsCurrentAt(recoveryPublication, currentAuthentication, policy, recoverySessionUseInterval, recoveryOperationInterval, clock.GetUtcNow()))
+                {
+                    await transaction.RollbackAsync(ct).ConfigureAwait(false); database.ChangeTracker.Clear();
+                    return new(false, "STEP_UP_REQUIRED");
+                }
+                ct.ThrowIfCancellationRequested(); await transaction.CommitAsync(ct).ConfigureAwait(false);
+            }
+            else await FinishAsync(transaction, true, ct).ConfigureAwait(false);
             pending = outcome.TakeRecoveryDelivery(); committedTerminal = terminal;
           }
           // The payload remains in the outer guard until successful COMMIT and transaction disposal.

@@ -100,6 +100,8 @@ internal sealed class RecoveryCodeExecutionValidity
     private readonly string contextDigest;
     private readonly RecoveryCodeOperationRow operation;
     private readonly string policyDigest;
+    private readonly RecoveryCodePolicy originalPolicy;
+    private readonly EffectivePolicyInterval originalPolicyInterval;
     private readonly AuthenticationSessionRow session;
     private readonly long sessionVersion;
     private readonly AccountRow account;
@@ -123,6 +125,7 @@ internal sealed class RecoveryCodeExecutionValidity
     {
         this.database = database; this.transaction = transaction; accountId = actor.AccountId; sessionId = actor.SessionId; origin = actor.Origin;
         operationId = binding.OperationId; contextDigest = binding.ContextDigest; this.operation = operation; policyDigest = policy.Digest();
+        originalPolicy = policy.Values; originalPolicyInterval = policy.Metadata.EffectiveInterval;
         this.session = session; sessionVersion = session.Version; this.account = account; accountState = account.State; this.proof = proof;
         this.priorFacts = priorFacts.ToArray(); this.priorSets = priorSets.ToArray(); this.issued = issued; this.entries = entries.ToArray();
         expectedEntries = entries.Select(x => (x.EntryReference, x.Verifier, x.CryptoProfileVersion)).ToArray();
@@ -130,14 +133,34 @@ internal sealed class RecoveryCodeExecutionValidity
         this.publications = publications; this.impact = impact;
     }
     internal bool Matches(RecoveryCodeFirstDelivery delivery) => delivery.Matches(operation);
+    internal async ValueTask<RecoveryCodePreparedPresentation?> PreparePublicationAsync(IRecoveryCodePolicySource? policies, DateTimeOffset at, CancellationToken ct)
+    {
+        if (publications is not IRecoveryCodeAsyncPresentationSource asynchronous) return null;
+        if (policies is null) throw new InvalidOperationException("Current recovery policy is required.");
+        var current = policies.RequireEffective(at); current.Require(origin, at);
+        return await asynchronous.PreparePublishedAsync(current.Values, impact, at, ct).ConfigureAwait(false);
+    }
+    // After SaveChanges only local immutable bounds and the exact transaction are checked; pre-save tracking states no longer apply.
+    internal bool CommittedBoundsCurrentAt(RecoveryCodePreparedPresentation prepared, AuthenticationPolicy authenticationPolicy,
+        AssurancePolicyVersion assurancePolicy, EffectivePolicyInterval sessionUseInterval, EffectivePolicyInterval operationInterval, DateTimeOffset at) =>
+        sessionUseInterval.Contains(at) && operationInterval.Contains(at) && prepared.CurrentAt(database, originalPolicy, impact, at) && originalPolicyInterval.Contains(at) && originalAdmission.EffectiveInterval.Contains(at) &&
+        assurancePolicy.Metadata.EffectiveInterval.Contains(at) && at >= operation.CreatedAt && at < operation.ExpiresAt && at < proof.ExpiresAt &&
+        !AuthenticationApplication.Expired(session, authenticationPolicy, at) && operation.State == "COMPLETED" && proof.State == "CONSUMED";
+
     internal bool CurrentAt(IdentityPersistenceDbContext db, StepUpCaller actor, StepUpOperation binding, IRecoveryCodePolicySource? policies,
-        AuthenticationPolicy authenticationPolicy, DateTimeOffset at)
+        AuthenticationPolicy authenticationPolicy, DateTimeOffset at, RecoveryCodePreparedPresentation? prepared = null)
     {
         if (policies is null || !ReferenceEquals(db, database) || !ReferenceEquals(db.Database.CurrentTransaction, transaction) ||
             actor.AccountId != accountId || actor.SessionId != sessionId || actor.Origin != origin || binding.OperationId != operationId || binding.ContextDigest != contextDigest ||
             !RecoveryCodeApplication.Owns(binding.Scope)) return false;
         var current = policies.RequireEffective(at); current.Require(origin, at);
-        var published = publications.RequirePublished(current.Values, impact, at);
+        RecoveryCodePresentation published;
+        if (publications is IRecoveryCodeAsyncPresentationSource)
+        {
+            if (prepared is null || !prepared.CurrentAt(db, current.Values, impact, at)) return false;
+            published = prepared.Presentation;
+        }
+        else published = publications.RequirePublished(current.Values, impact, at);
         if (!published.EffectiveInterval.Contains(at) || published.Version != operation.PublicationVersion || published.ImpactFactsDigest != impact.FactsDigest ||
             published.ImpactKey != operation.PublishedImpactKey || RecoveryCodeApplication.PublicationDigest(published) != operation.PublicationDigest) return false;
         // Resolve again only from the immutable request observed before this owner mutated its tracked rows.

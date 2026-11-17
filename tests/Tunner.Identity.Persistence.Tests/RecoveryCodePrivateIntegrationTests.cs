@@ -9,6 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Tunner.Accounts;
 using Tunner.Database.Outbox;
 using Tunner.Platform.Policies;
+using Tunner.PresentationContent;
 using Xunit;
 using static Tunner.Identity.Persistence.Tests.AuthenticationTestHost;
 
@@ -1008,4 +1009,231 @@ public sealed class RecoveryCodePrivateIntegrationTests(IdentityPostgresFixture 
         Assert.True(await check.Set<RecoveryCodeOperationRow>().AllAsync(operation => operation.State == "PENDING_PROOF" && operation.Version == 1 && operation.ProofReference == null));
         // Failure-counter policy is not inferred from a corrupted dependency row.
     }
+
+    // Private native cohort only: these methods deliberately have no xUnit attributes or payload logging.
+    public async Task PublishedContentGeneratesAndReplacesWithOnlyOnePrivateFirstDelivery()
+    {
+        await using var db = await fixture.CreateFiniteDatabaseAsync(CancellationToken.None); var profile = new Profile();
+        var env = await PublishedRecoveryEnvironment(db, null); var binding = await BorrowedRecoveryBinding.CreateAsync(db, env);
+        await using var host = await PublishedRecoveryHost(db, profile, env, binding); await host.SeedAsync(db);
+        using var first = await Generate(host, await Login(host));
+        using var second = await Generate(host, first.Pending.Cookies, "REPLACE");
+        await using var check = db.Context();
+        Assert.True(await check.Set<RecoveryCodeSetRow>().CountAsync(x => x.State == "ACTIVE") == 1 && await check.Set<RecoveryCodeSetRow>().CountAsync(x => x.State == "REPLACED") == 1);
+        Assert.True(await check.Set<RecoveryCodeSetRow>().AnyAsync(x => x.SetReference == first.Pending.Set && x.RetiredByOperationId == second.Pending.Operation));
+        Assert.True(await check.Set<StepUpProofRow>().CountAsync(x => x.State == "CONSUMED") == 2);
+        using var safe = await host.Post("/account/recovery-codes/result", new { ownerRequestId = second.Pending.Request, operationReference = second.Pending.Operation.ToString("N") }, second.Pending.Cookies, second.Pending.Csrf);
+        Assert.True(safe.StatusCode == HttpStatusCode.OK); using var body = await safe.Content.ReadFromJsonAsync<JsonDocument>();
+        Assert.True(body!.RootElement.GetProperty("codesUnavailable").GetBoolean() && !body.RootElement.TryGetProperty("recoveryCodeFirstDelivery", out _));
+        Assert.True(binding.Reads >= 8);
+    }
+
+    public Task PublishedRecoveryRejectsSessionUseExpiryDuringSavedChanges() => PublishedRecoverySavedChangesExpiry("SESSION_USE");
+    public Task PublishedRecoveryRejectsOperationAccessExpiryDuringSavedChanges() => PublishedRecoverySavedChangesExpiry("GENERATE_RECOVERY_CODES");
+    public Task PublishedRecoveryRejectsPublicationExpiryDuringSavedChanges() => PublishedRecoverySavedChangesExpiry("PUBLICATION");
+
+    private async Task PublishedRecoverySavedChangesExpiry(string boundary)
+    {
+        await using var db = await fixture.CreateFiniteDatabaseAsync(CancellationToken.None); var profile = new Profile();
+        var env = await PublishedRecoveryEnvironment(db, boundary == "PUBLICATION" ? TimeSpan.FromSeconds(1) : null);
+        var binding = await BorrowedRecoveryBinding.CreateAsync(db, env); var observer = new RecoverySavedChangesAdvance();
+        await using var host = await PublishedRecoveryHost(db, profile, env, binding, observer); await host.SeedAsync(db);
+        var pending = await Begin(host, await Login(host));
+        host.Access.BeforeDecision = request => host.Access.DecisionLifetime = request.Operation == boundary ? TimeSpan.FromSeconds(1) : TimeSpan.FromHours(1);
+        observer.Advance = () => host.Clock.Advance(TimeSpan.FromSeconds(2)); observer.Armed = true;
+        using var response = await Prove(host, pending); using var body = await response.Content.ReadFromJsonAsync<JsonDocument>();
+        Assert.True(observer.Fired && response.StatusCode != HttpStatusCode.OK && !body!.RootElement.TryGetProperty("recoveryCodeFirstDelivery", out _));
+        await using var check = db.Context();
+        Assert.True(!await check.Set<RecoveryCodeSetRow>().AnyAsync() && !await check.Set<RecoveryCodeEntryRow>().AnyAsync());
+        Assert.True(await check.Set<RecoveryCodeOperationRow>().AllAsync(x => x.State == "PENDING_PROOF" && x.Version == 1 && x.ProofReference == null && x.FirstResponseCommittedAt == null));
+        Assert.True(await check.Set<StepUpProofRow>().AnyAsync(x => x.State == "ACTIVE") && !await check.Set<StepUpProofRow>().AnyAsync(x => x.State == "CONSUMED"));
+        Assert.True(!await check.Set<OutboxMessage>().AnyAsync(x => x.EventType == "RecoveryCodeSetGenerated" || x.EventType == "RecoveryCodeSetReplaced" || x.EventType == "StepUpProofConsumed"));
+        var now = host.Clock.GetUtcNow(); var session = await check.Set<AuthenticationSessionRow>().SingleAsync();
+        Assert.True(!AuthenticationApplication.Expired(session, host.Policies.Policy, now));
+        Assert.True(await check.Set<RecoveryCodeOperationRow>().AllAsync(x => x.ExpiresAt > now) && await check.Set<StepUpProofRow>().AllAsync(x => x.ExpiresAt > now));
+        Assert.True(Profile.Interval.Contains(now) && binding.Interval.Contains(now));
+        Assert.True(binding.Reads >= 6);
+    }
+
+    private sealed class RecoverySavedChangesAdvance : SaveChangesInterceptor
+    {
+        internal bool Armed; internal bool Fired; internal Action? Advance;
+        public override ValueTask<int> SavedChangesAsync(SaveChangesCompletedEventData eventData, int result, CancellationToken cancellationToken = default)
+        {
+            if (Armed && !Fired && eventData.Context is IdentityPersistenceDbContext db &&
+                db.ChangeTracker.Entries<RecoveryCodeOperationRow>().Any(x => x.Entity.State == "COMPLETED") &&
+                db.ChangeTracker.Entries<StepUpProofRow>().Any(x => x.Entity.State == "CONSUMED"))
+            { Fired = true; Advance!(); }
+            return ValueTask.FromResult(result);
+        }
+    }
+
+    private static async Task<PresentationContentTestEnvironment> PublishedRecoveryEnvironment(IdentityTestDatabase db, TimeSpan? publicationLifetime)
+    {
+        var clock = new TestClock();
+        var keys = RecoveryCodePresentation.RequiredKeys.Concat(["fixture.recovery.generateImpact", "fixture.recovery.replaceImpact"]);
+        var env = new PresentationContentTestEnvironment(db, clock, keys.ToDictionary(x => x, _ => "Synthetic recovery publication only", StringComparer.Ordinal));
+        await env.InitializeAsync();
+        foreach (var key in keys)
+        {
+            await using var writer = env.Open(); env.Authorization.Actor = "fixture-author";
+            var proposal = await writer.Application.CreateDraftAsync(env.Draft("Synthetic recovery publication only", key));
+            proposal = await writer.Application.ValidateAsync(env.Command(proposal)); env.Authorization.Actor = "fixture-approver";
+            proposal = await writer.Application.ApproveAsync(env.Command(proposal)); env.Authorization.Actor = "fixture-publisher";
+            var interval = new EffectivePolicyInterval(clock.GetUtcNow(), true, publicationLifetime is { } lifetime ? clock.GetUtcNow() + lifetime : null, false);
+            _ = await writer.Application.PublishAsync(env.Publish(proposal) with { EffectiveInterval = interval });
+        }
+        return env;
+    }
+    private static Task<AuthenticationTestHost> PublishedRecoveryHost(IdentityTestDatabase db, Profile profile, PresentationContentTestEnvironment env,
+        BorrowedRecoveryBinding binding, RecoverySavedChangesAdvance? observer = null, DbTransactionInterceptor? commitObserver = null) => Start(db, services =>
+    {
+        services.AddSingleton(profile.Crypto); services.AddSingleton<IRecoveryCodePolicySource>(profile); services.AddSingleton<IRecoveryCodeMutationAdmissionSource>(profile);
+        services.AddSingleton<IAssurancePolicySource>(profile); services.AddSingleton<IStepUpPresentationSource>(profile);
+        services.AddSingleton<IRecoveryCodeContentBindingSource>(binding);
+        services.AddScoped(_ => env.Context());
+        services.AddScoped(provider => new PresentationContentApplication(provider.GetRequiredService<PresentationContentDbContext>(), binding.Profiles, env.Authorization, provider.GetRequiredService<TimeProvider>()));
+        services.AddTunnerPublishedRecoveryCodePresentation();
+        if (observer is not null) services.AddDbContext<IdentityPersistenceDbContext>(options => options.AddInterceptors(observer));
+        if (commitObserver is not null) services.AddDbContext<IdentityPersistenceDbContext>(options => options.AddInterceptors(commitObserver));
+    });
+    private sealed class BorrowedRecoveryBinding(PresentationContentTestEnvironment env, string databaseName, string role) : IRecoveryCodeLocalContentBindingSource
+    {
+        internal BorrowedLocalProfiles Profiles { get; } = new(env);
+        internal string LocalVersion = "fixture-recovery-publication-v1";
+        internal bool WrongFacts; internal bool MissingImpactKey;
+        internal TimeSpan ReadDuration = TimeSpan.FromSeconds(10);
+        internal Action? AfterFinalBindingRead;
+        internal int Reads;
+        internal EffectivePolicyInterval Interval => env.Interval;
+        internal static async Task<BorrowedRecoveryBinding> CreateAsync(IdentityTestDatabase db, PresentationContentTestEnvironment env)
+        {
+            await using var identity = db.Context(); var role = await identity.Database.SqlQueryRaw<string>("SELECT current_user::text AS \"Value\"").SingleAsync();
+            return new(env, identity.Database.GetDbConnection().Database, role);
+        }
+        public ValueTask<RecoveryCodeContentBinding> RequireQualifiedAsync(RecoveryCodePolicy policy, RecoveryCodeImpactFacts facts, DateTimeOffset effectiveAt, CancellationToken cancellationToken)
+        {
+            cancellationToken.ThrowIfCancellationRequested(); Reads++;
+            var selected = RequireCurrentLocal(policy, facts, effectiveAt);
+            if (Reads % 2 == 0 && AfterFinalBindingRead is { } after) { AfterFinalBindingRead = null; after(); }
+            return ValueTask.FromResult(selected);
+        }
+        public RecoveryCodeContentBinding RequireCurrentLocal(RecoveryCodePolicy policy, RecoveryCodeImpactFacts facts, DateTimeOffset effectiveAt)
+        {
+            var admission = new ContentTransactionReadQualification(new("fixture-recovery-content-read-v1", "ACTIVE", env.Scope, Interval, null, ["SYNTHETIC-ONLY"]),
+                "fixture-recovery-content-read-evidence", databaseName, role, 256, 128, 10, ReadDuration);
+            var impact = facts.Kind == "GENERATE" ? "fixture.recovery.generateImpact" : "fixture.recovery.replaceImpact";
+            return new RecoveryCodeContentBinding(policy.Version, WrongFacts ? facts with { RemainingCodeCount = facts.RemainingCodeCount + 1 } : facts, LocalVersion, "fixture-recovery-content-qualification",
+                env.Scope, env.Variant, MissingImpactKey ? "fixture.missing.impact" : impact, Interval, admission);
+        }
+    }
+
+
+    private sealed class BorrowedLocalProfiles(PresentationContentTestEnvironment env) : IContentTransactionLocalProfileSource
+    {
+        internal bool Available = true;
+        public ContentGovernanceProfile RequireEffective(string scope, DateTimeOffset effectiveAt) => RequireCurrentLocal(scope, effectiveAt);
+        public ContentGovernanceProfile RequireCurrentLocal(string scope, DateTimeOffset effectiveAt) => Available ? env.RequireEffective(scope, effectiveAt) : throw new ContentUnavailableException();
+    }
+
+    public Task PublishedRecoveryRejectsProfileWithdrawalDuringFinalBindingLookup() => PublishedRecoveryFinalBindingDrift(true);
+    public Task PublishedRecoveryRejectsLocalBindingChangeAfterFinalAsyncLookup() => PublishedRecoveryFinalBindingDrift(false);
+    private async Task PublishedRecoveryFinalBindingDrift(bool profileWithdrawal)
+    {
+        await using var db = await fixture.CreateFiniteDatabaseAsync(CancellationToken.None); var profile = new Profile();
+        var env = await PublishedRecoveryEnvironment(db, null); var binding = await BorrowedRecoveryBinding.CreateAsync(db, env);
+        await using var host = await PublishedRecoveryHost(db, profile, env, binding); await host.SeedAsync(db);
+        var pending = await Begin(host, await Login(host)); var changed = false;
+        binding.AfterFinalBindingRead = () => { changed = true; if (profileWithdrawal) binding.Profiles.Available = false; else binding.LocalVersion = "fixture-recovery-publication-v2"; };
+        using var response = await Prove(host, pending); using var body = await response.Content.ReadFromJsonAsync<JsonDocument>();
+        Assert.True(changed && response.StatusCode != HttpStatusCode.OK && !body!.RootElement.TryGetProperty("recoveryCodeFirstDelivery", out _));
+        await using var check = db.Context();
+        Assert.True(!await check.Set<RecoveryCodeSetRow>().AnyAsync() && !await check.Set<RecoveryCodeEntryRow>().AnyAsync());
+        Assert.True(await check.Set<RecoveryCodeOperationRow>().AllAsync(x => x.State == "PENDING_PROOF" && x.ProofReference == null));
+        Assert.True(!await check.Set<StepUpProofRow>().AnyAsync(x => x.State == "CONSUMED"));
+        Assert.True(!await check.Set<OutboxMessage>().AnyAsync(x => x.EventType == "RecoveryCodeSetGenerated" || x.EventType == "StepUpProofConsumed"));
+    }
+
+    public Task PublishedRecoveryRejectsDifferentQualifiedImpactFacts() => PublishedRecoveryWrongImpact(false);
+    public Task PublishedRecoveryRejectsMissingQualifiedImpactKey() => PublishedRecoveryWrongImpact(true);
+    private async Task PublishedRecoveryWrongImpact(bool missingKey)
+    {
+        await using var db = await fixture.CreateFiniteDatabaseAsync(CancellationToken.None); var profile = new Profile();
+        var env = await PublishedRecoveryEnvironment(db, null); var binding = await BorrowedRecoveryBinding.CreateAsync(db, env);
+        binding.WrongFacts = !missingKey; binding.MissingImpactKey = missingKey;
+        await using var host = await PublishedRecoveryHost(db, profile, env, binding); await host.SeedAsync(db);
+        using var response = await host.Get("/account/recovery-codes/options", await Login(host));
+        Assert.True(response.StatusCode == HttpStatusCode.ServiceUnavailable);
+        await using var check = db.Context();
+        Assert.True(!await check.Set<RecoveryCodeOperationRow>().AnyAsync() && !await check.Set<RecoveryCodeSetRow>().AnyAsync() && !await check.Set<RecoveryCodeEntryRow>().AnyAsync());
+    }
+
+    public Task PublishedRecoveryWaitsForExistingPublicationWriterLock() => PublishedRecoveryLockBoundary("release");
+    public Task PublishedRecoveryCancellationWhileWaitingOnPublicationLockPreservesOwnerTransaction() => PublishedRecoveryLockBoundary("cancel");
+    public Task PublishedRecoveryDeadlineWhileWaitingOnPublicationLockFailsClosed() => PublishedRecoveryLockBoundary("deadline");
+    private async Task PublishedRecoveryLockBoundary(string outcome)
+    {
+        await using var db = await fixture.CreateFiniteDatabaseAsync(CancellationToken.None); var profile = new Profile();
+        var env = await PublishedRecoveryEnvironment(db, null); var binding = await BorrowedRecoveryBinding.CreateAsync(db, env);
+        if (outcome == "deadline") binding.ReadDuration = TimeSpan.FromSeconds(1);
+        await using var host = await PublishedRecoveryHost(db, profile, env, binding);
+        await using var blocker = db.Context(); await using var writer = await blocker.Database.BeginTransactionAsync();
+        var key = "presentation-content:publication:" + Convert.ToHexStringLower(System.Security.Cryptography.SHA256.HashData(System.Text.Encoding.UTF8.GetBytes(
+            JsonSerializer.Serialize(new { env.Scope, Key = RecoveryCodePresentation.RequiredKeys[0], VariantReference = env.Variant }))));
+        await blocker.Database.ExecuteSqlInterpolatedAsync($"SELECT pg_advisory_xact_lock(hashtextextended({key},0))");
+        await using var scope = host.Services.CreateAsyncScope(); var identity = scope.ServiceProvider.GetRequiredService<IdentityPersistenceDbContext>();
+        await using var transaction = await identity.Database.BeginTransactionAsync(); using var cancellation = new CancellationTokenSource();
+        var source = Assert.IsType<PublishedRecoveryCodePresentationSource>(scope.ServiceProvider.GetRequiredService<IRecoveryCodePresentationSource>());
+        var facts = new RecoveryCodeImpactFacts("GENERATE", 0, 0, new string('a', 64), profile.Policy.ReplacementMechanism, profile.Policy.SessionEffect);
+        var read = source.PreparePublishedAsync(profile.Policy, facts, host.Clock.GetUtcNow(), cancellation.Token).AsTask();
+        try
+        {
+            await WaitForActualDatabaseLockWait(db);
+            Assert.True(!read.IsCompleted);
+            if (outcome == "release") { await writer.RollbackAsync(); var prepared = await read; Assert.True(prepared.CurrentAt(identity, profile.Policy, facts, host.Clock.GetUtcNow())); }
+            else if (outcome == "cancel") { cancellation.Cancel(); await Assert.ThrowsAnyAsync<OperationCanceledException>(async () => await read); }
+            else await Assert.ThrowsAsync<ContentUnavailableException>(async () => await read);
+            Assert.Same(transaction, identity.Database.CurrentTransaction); Assert.Equal(System.Data.ConnectionState.Open, identity.Database.GetDbConnection().State);
+        }
+        finally { cancellation.Cancel(); try { await read; } catch (Exception error) when (error is OperationCanceledException or InvalidOperationException) { } await transaction.RollbackAsync(); }
+        await using var check = db.Context();
+        Assert.True(!await check.Set<RecoveryCodeOperationRow>().AnyAsync() && !await check.Set<RecoveryCodeSetRow>().AnyAsync() && !await check.Set<RecoveryCodeEntryRow>().AnyAsync());
+    }
+
+
+    public async Task PublishedRecoveryPostCommitObserverFailureReturnsNoPayloadAndRetryReadsOnlySafeOriginal()
+    {
+        await using var db = await fixture.CreateFiniteDatabaseAsync(CancellationToken.None); var profile = new Profile();
+        var env = await PublishedRecoveryEnvironment(db, null); var binding = await BorrowedRecoveryBinding.CreateAsync(db, env);
+        var fault = new PostCommitObserverFailure(true);
+        await using var host = await PublishedRecoveryHost(db, profile, env, binding, commitObserver: fault); await host.SeedAsync(db);
+        var caller = await TrustedSignIn(host); var context = await StartTrustedRecovery(host, caller);
+        var proof = await IssueTrustedRecoveryProof(host, caller, context); Assert.True(proof.ErrorCode is null && proof.Grant is not null);
+        fault.Armed = true; var caught = false; StepUpExecutionResult? returned = null;
+        await using (var scope = host.Services.CreateAsyncScope())
+        {
+            var recovery = scope.ServiceProvider.GetRequiredService<RecoveryCodeApplication>();
+            try { returned = await scope.ServiceProvider.GetRequiredService<StepUpApplication>().ExecuteOutcomeAsync(caller, context.Binding, proof.Grant!.Key, ct => recovery.ApplyAsync(caller, context, ct)); }
+            catch (PrivateCommitObservationFault) { caught = true; }
+            finally { returned?.Dispose(); }
+        }
+        Assert.True(fault.Fired && caught && returned is null);
+        var operationId = Guid.ParseExact(context.Binding.CorrelationId, "N"); Guid request;
+        await using (var check = db.Context())
+        {
+            var operation = await check.Set<RecoveryCodeOperationRow>().SingleAsync(x => x.OperationId == operationId); request = operation.RequestId;
+            Assert.True(operation.State == "COMPLETED" && operation.FirstResponseCommittedAt != null);
+            Assert.True(await check.Set<RecoveryCodeSetRow>().CountAsync(x => x.IssuanceOperationId == operationId) == 1);
+            Assert.True(await check.Set<StepUpProofRow>().CountAsync(x => x.OperationId == context.Binding.OperationId && x.State == "CONSUMED") == 1);
+            Assert.True(await check.Set<OutboxMessage>().CountAsync(x => x.OperationId == context.Binding.OperationId && x.EventType == "RecoveryCodeSetGenerated") == 1);
+        }
+        await using var retry = host.Services.CreateAsyncScope(); var application = retry.ServiceProvider.GetRequiredService<RecoveryCodeApplication>();
+        var safe = await application.ReadAsync(caller, operationId, request, CancellationToken.None);
+        Assert.True(safe is { State: "COMPLETED", FirstResponseCommittedAt: not null });
+        var callback = false;
+        using var repeated = await retry.ServiceProvider.GetRequiredService<StepUpApplication>().ExecuteOutcomeAsync(caller, context.Binding, proof.Grant!.Key, ct => { callback = true; return application.ApplyAsync(caller, context, ct); });
+        Assert.True(!repeated.Applied && !repeated.HasRecoveryDelivery && !callback);
+        Assert.True(binding.Reads >= 6);
+    }
+
 }

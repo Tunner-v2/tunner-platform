@@ -1,6 +1,10 @@
 using System.Collections.ObjectModel;
+using System.Data.Common;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 using System.Text.Json;
 using Tunner.Platform.Policies;
+using Tunner.PresentationContent;
 
 namespace Tunner.Identity.Persistence;
 
@@ -93,6 +97,40 @@ public sealed class RecoveryCodePresentation
         "recoveryCodes.unavailable.heading", "recoveryCodes.unavailable.description", "recoveryCodes.presented.heading", "recoveryCodes.presented.description", "recoveryCodes.unknown.heading", "recoveryCodes.unknown.description",
         "recoveryCodes.card.pending", "recoveryCodes.error.unavailable", "recoveryCodes.download.unavailable"]);
 }
+/// <summary>Optional same-Identity-transaction asynchronous publication preparation. Ordinary synchronous sources retain their existing contract.</summary>
+public interface IRecoveryCodeAsyncPresentationSource : IRecoveryCodePresentationSource
+{
+    ValueTask<RecoveryCodePreparedPresentation> PreparePublishedAsync(RecoveryCodePolicy policy, RecoveryCodeImpactFacts facts,
+        DateTimeOffset effectiveAt, CancellationToken cancellationToken);
+}
+
+/// <summary>Owner-created immutable publication witness. No credential material or general cookie authority.</summary>
+public sealed class RecoveryCodePreparedPresentation
+{
+    private readonly IdentityPersistenceDbContext owner;
+    private readonly DbTransaction transaction;
+    private readonly string policySnapshot;
+    private readonly RecoveryCodeImpactFacts facts;
+    private readonly ContentTransactionProfileWitness profile;
+    private readonly IRecoveryCodeLocalContentBindingSource bindings;
+    private readonly string bindingSnapshot;
+    internal RecoveryCodePreparedPresentation(IdentityPersistenceDbContext owner, DbTransaction transaction,
+        RecoveryCodePolicy policy, RecoveryCodeImpactFacts facts, RecoveryCodePresentation presentation, ContentTransactionProfileWitness profile,
+        IRecoveryCodeLocalContentBindingSource bindings, RecoveryCodeContentBinding binding)
+    { this.profile = profile; this.bindings = bindings; bindingSnapshot = JsonSerializer.Serialize(binding); this.owner = owner; this.transaction = transaction; policySnapshot = JsonSerializer.Serialize(policy); this.facts = facts; Presentation = presentation; }
+    public RecoveryCodePresentation Presentation { get; }
+    internal bool CurrentAt(IdentityPersistenceDbContext database, RecoveryCodePolicy policy, RecoveryCodeImpactFacts impact, DateTimeOffset at) =>
+        ReferenceEquals(owner, database) && ReferenceEquals(database.Database.CurrentTransaction?.GetDbTransaction(), transaction) &&
+        ReferenceEquals(transaction.Connection, database.Database.GetDbConnection()) && policySnapshot == JsonSerializer.Serialize(policy) && facts == impact &&
+        Presentation.ImpactFactsDigest == impact.FactsDigest && Presentation.EffectiveInterval.Contains(at) && profile.CurrentAt(at) && BindingCurrentAt(policy, impact, at);
+    private bool BindingCurrentAt(RecoveryCodePolicy policy, RecoveryCodeImpactFacts impact, DateTimeOffset at)
+    {
+        var current = bindings.RequireCurrentLocal(policy, impact, at);
+        return current is not null && current.EffectiveInterval.Contains(at) && bindingSnapshot == JsonSerializer.Serialize(current);
+    }
+    public override string ToString() => nameof(RecoveryCodePreparedPresentation);
+}
+
 public interface IRecoveryCodePresentationSource
 {
     /// <summary>Resolve the complete current publication at this exact instant. Version/content/interval are immutable;

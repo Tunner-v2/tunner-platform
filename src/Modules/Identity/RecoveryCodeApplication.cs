@@ -47,7 +47,7 @@ internal sealed partial class RecoveryCodeApplication(IdentityPersistenceDbConte
         var decision = await AdmissionAsync(caller.AccountId, account.Version, kind, current, snapshot, ct).ConfigureAwait(false);
         if (!decision.Allowed) return await Finish(tx, new RecoveryCodeOperationResult("RECOVERY_CODES_UNAVAILABLE"), ct).ConfigureAwait(false);
         var impact = Impact(kind, snapshot, decision.RetirementTargets, policy);
-        var publication = Published(policy, impact); var auth = authenticationPolicies.RequireEffective(clock.GetUtcNow()); auth.Validate();
+        var publication = await PublishedAsync(policy, impact, ct).ConfigureAwait(false); var auth = authenticationPolicies.RequireEffective(clock.GetUtcNow()); auth.Validate();
         now = clock.GetUtcNow(); current.Require(caller.Origin, now);
         if (!decision.EffectiveInterval.Contains(now)) return await Finish(tx, new RecoveryCodeOperationResult("VERSION_CONFLICT"), ct).ConfigureAwait(false);
         var expires = Min(now + policy.OperationLifetime, session.ExpiresAt);
@@ -105,7 +105,7 @@ internal sealed partial class RecoveryCodeApplication(IdentityPersistenceDbConte
         var plan = PlanJson(decision.RetirementTargets);
         if (!decision.Allowed || snapshot.Digest != row.ImpactFactsDigest || plan != row.RetirementPlanJson || AuthenticationIdentity.Digest(plan) != row.PriorSetPlanDigest ||
             decision.PolicyVersion != row.AdmissionPolicyVersion || decision.EvidenceReference != row.AdmissionEvidenceReference || !SameInterval(row, decision.EffectiveInterval)) return UserStepUpOperationApplyOutcome.Conflict();
-        var publication = Published(policy, Impact(row.Kind, snapshot, decision.RetirementTargets, policy));
+        var publication = await PublishedAsync(policy, Impact(row.Kind, snapshot, decision.RetirementTargets, policy), ct).ConfigureAwait(false);
         if (publication.ImpactKey != row.PublishedImpactKey || PublicationDigest(publication) != row.PublicationDigest) return UserStepUpOperationApplyOutcome.Conflict();
         var proof = await database.Set<StepUpProofRow>().SingleOrDefaultAsync(x => x.SessionId == caller.SessionId && x.OperationId == context.Binding.OperationId, ct).ConfigureAwait(false);
         if (proof is null || proof.State != "ACTIVE" || proof.ContextDigest != row.ContextDigest || proof.AccountId != row.AccountId || proof.Origin != row.Origin) return UserStepUpOperationApplyOutcome.Conflict();
@@ -187,11 +187,19 @@ internal sealed partial class RecoveryCodeApplication(IdentityPersistenceDbConte
     }
     internal static RecoveryCodeImpactFacts Impact(string kind, Snapshot snapshot, IReadOnlyCollection<RecoveryCodeRetirementTarget> targets, RecoveryCodePolicy policy) =>
         new(kind, targets.Count, snapshot.Facts.Where(x => targets.Any(t => t.SetReference == x.SetReference)).Sum(x => x.RemainingCodeCount), snapshot.Digest, policy.ReplacementMechanism, policy.SessionEffect);
-    internal RecoveryCodePresentation Published(RecoveryCodePolicy policy, RecoveryCodeImpactFacts impact)
+    internal async ValueTask<RecoveryCodePresentation> PublishedAsync(RecoveryCodePolicy policy, RecoveryCodeImpactFacts impact, CancellationToken ct)
     {
-        var at = clock.GetUtcNow(); var published = presentations.RequirePublished(policy, impact, at);
-        if (published.ImpactFactsDigest != impact.FactsDigest || !published.EffectiveInterval.Contains(at)) throw new InvalidOperationException("Recovery-code impact publication does not match current effective facts.");
-        return published;
+        var at = clock.GetUtcNow(); RecoveryCodePresentation published;
+        if (presentations is IRecoveryCodeAsyncPresentationSource asynchronous)
+        {
+            var prepared = await asynchronous.PreparePublishedAsync(policy, impact, at, ct).ConfigureAwait(false);
+            if (prepared is null || !prepared.CurrentAt(database, policy, impact, clock.GetUtcNow()))
+                throw new InvalidOperationException("Current transaction-bound recovery publication is unavailable.");
+            published = prepared.Presentation;
+        }
+        else published = presentations.RequirePublished(policy, impact, at);
+        if (published.ImpactFactsDigest != impact.FactsDigest || !published.EffectiveInterval.Contains(clock.GetUtcNow())) throw new InvalidOperationException("Recovery-code impact publication does not match current effective facts.");
+        ct.ThrowIfCancellationRequested(); return published;
     }
     internal static string PublicationDigest(RecoveryCodePresentation value) => AuthenticationIdentity.Digest(JsonSerializer.Serialize(new { value.Locale, value.ImpactKey, value.ImpactFactsDigest, value.Version, value.EffectiveInterval,
         Content = value.Content.Values.OrderBy(x => x.Key, StringComparer.Ordinal).ToArray() }));

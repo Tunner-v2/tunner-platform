@@ -21,7 +21,7 @@ internal sealed partial class RecoveryCodeApplication
         var selected = selectedId is { } id && selectedRequest is { } request ? await ReadAsync(caller, id, request, ct).ConfigureAwait(false) : null;
         var decision = selected?.Kind == "REPLACE" ? replace : selected?.Kind == "GENERATE" ? generate : replace.Allowed ? replace : generate;
         var kind = selected?.Kind ?? (replace.Allowed ? "REPLACE" : "GENERATE");
-        var publication = Published(current.Values, Impact(kind, snapshot, decision.RetirementTargets, current.Values));
+        var publication = await PublishedAsync(current.Values, Impact(kind, snapshot, decision.RetirementTargets, current.Values), ct).ConfigureAwait(false);
         var canContinue = selected is not null && selected.State == "PENDING_PROOF" && decision.Allowed && selected.ExpectedVersion == account.Version &&
             CurrentBinding(selected, current, clock.GetUtcNow()) && selected.AuthenticationPolicyVersion == authenticationPolicies.RequireEffective(clock.GetUtcNow()).Version &&
             selected.ImpactFactsDigest == snapshot.Digest && selected.RetirementPlanJson == PlanJson(decision.RetirementTargets) &&
