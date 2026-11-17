@@ -1,0 +1,622 @@
+diff --git a/tools/browser-testing/Program.cs b/tools/browser-testing/Program.cs
+--- a/tools/browser-testing/Program.cs
++++ b/tools/browser-testing/Program.cs
+@@ -48,11 +48,20 @@
+     var connectionString = "Host=127.0.0.1;Port=" + config.PostgresPort + ";Database=tunner_browser_testing;Username=tunner;Include Error Detail=false";
+     var options = new BrowserTestHostOptions(origin, config.ApplicationPort, connectionString, certificate,
+         config.SmtpPort, directory, config.Mode, config.InstanceId);
++    if (config.GovernedContent)
++        options = options with { GovernedContent = new BrowserTestGovernedContent(options, config.AdminPort!.Value) };
+     var app = BrowserTestHost.Create(options);
+     await using (app)
+     {
+         await BrowserTestHost.MigrateAndMapAsync(app, options);
++        if (options.GovernedContent is { } governed)
++        {
++            await using var admin = governed.CreateAdmin(app.Services.GetRequiredService<IAuthenticationPolicySource>());
++            await admin.StartAsync();
++            try { await app.RunAsync(); }
++            finally { await admin.StopAsync(); }
++        }
++        else await app.RunAsync();
+-        await app.RunAsync();
+     }
+     return 0;
+ }
+@@ -63,7 +72,8 @@
+     return 1;
+ }
+ 
++internal sealed record BrowserTestConfiguration(string Mode, string InstanceId, int ApplicationPort, int PostgresPort, int SmtpPort, string CertificateThumbprint,
++    bool GovernedContent = false, int? AdminPort = null)
+-internal sealed record BrowserTestConfiguration(string Mode, string InstanceId, int ApplicationPort, int PostgresPort, int SmtpPort, string CertificateThumbprint)
+ {
+     public void Validate()
+     {
+@@ -72,6 +82,12 @@
+             new[] { ApplicationPort, PostgresPort, SmtpPort }.Distinct().Count() != 3 ||
+             CertificateThumbprint.Length != 40 || !CertificateThumbprint.All(Uri.IsHexDigit))
+             throw new InvalidOperationException("Invalid isolated browser test configuration.");
++        if (GovernedContent)
++        {
++            if (AdminPort is not { } port || port is < 1024 or > 65535 || new[] { ApplicationPort, PostgresPort, SmtpPort }.Contains(port))
++                throw new InvalidOperationException("Explicit distinct isolated Admin port required.");
++        }
++        else if (AdminPort is not (null or 0)) throw new InvalidOperationException("Admin port requires the explicit governed-content fixture.");
+     }
+ }
+ internal sealed class BrowserTestAgePolicies : IAccountAgePolicySource, IAccountConsentEvidenceSource, IAccountJurisdictionSource
+diff --git a/tools/browser-testing/BrowserTestHost.cs b/tools/browser-testing/BrowserTestHost.cs
+--- a/tools/browser-testing/BrowserTestHost.cs
++++ b/tools/browser-testing/BrowserTestHost.cs
+@@ -17,7 +17,7 @@
+ using Tunner.User.Bff;
+ 
+ internal sealed record BrowserTestHostOptions(string Origin, int Port, string ConnectionString, X509Certificate2 Certificate,
++    int SmtpPort, string? PersistentDirectory, string Mode, string RunId, BrowserTestTotp? Totp = null, BrowserTestRecoveryCodes? Recovery = null, BrowserTestRecoveryCase? RecoveryCase = null, BrowserTestGovernedContent? GovernedContent = null);
+-    int SmtpPort, string? PersistentDirectory, string Mode, string RunId, BrowserTestTotp? Totp = null, BrowserTestRecoveryCodes? Recovery = null, BrowserTestRecoveryCase? RecoveryCase = null);
+ 
+ /// <summary>The existing test executable's single BFF composition, with explicit persistent or finite ownership.</summary>
+ internal static class BrowserTestHost
+@@ -25,6 +25,8 @@
+     internal static WebApplication Create(BrowserTestHostOptions options)
+     {
+         var sessions = options.Mode == "ISOLATED_LOCAL_BROWSER_TESTING" && options.PersistentDirectory is not null;
++        if (options.GovernedContent is not null && (!sessions || options.Totp is not null || options.Recovery is not null || options.RecoveryCase is not null))
++            throw new InvalidOperationException("Governed browser Content cannot be composed into finite fixture modes.");
+         var registration = new RegistrationPolicy("browser-test-registration-v2", "PDR-0011", "test-only-processing", "test-only-retention",
+             "test-only-terms", "test-only-privacy", "test-only-proof", "test-only-existing", "PASSWORD_AND_VERIFIED_EMAIL",
+             15, 128, 10000, 6, TimeSpan.FromMinutes(5), 2, TimeSpan.FromSeconds(30), 2, TimeSpan.FromMinutes(1),
+@@ -49,7 +51,8 @@
+             builder.Services.AddTunnerIdentityPersistence(options.ConnectionString);
+             builder.Services.AddSingleton<IAuthenticationPolicySource>(new AuthenticationPolicyCatalog([new(authenticationMetadata, authentication)]));
+             builder.Services.AddSingleton<IAccountAuthenticationAccessSource, BrowserTestAuthenticationAccess>();
++            if (options.GovernedContent is { } governed) governed.ConfigureUser(builder.Services, authentication);
++            else builder.Services.AddSingleton<IAuthenticationPresentationSource>(new BrowserTestAuthenticationPresentation(options.Origin));
+-            builder.Services.AddSingleton<IAuthenticationPresentationSource>(new BrowserTestAuthenticationPresentation(options.Origin));
+             builder.Services.AddScoped<IUserStepUpOperationSource, BrowserTestStepUpOperations>();
+             builder.Services.AddSingleton<IStepUpPresentationSource, BrowserTestStepUpPresentation>();
+             var required = options.Totp is null ? "test-only-password-assurance" : BrowserTestTotp.OperationAssurance;
+@@ -121,6 +124,7 @@
+             if (database.Database.HasPendingModelChanges()) throw new InvalidOperationException("FINITE_MIGRATIONS_INCOMPLETE");
+             await database.Database.ExecuteSqlRawAsync(BrowserTestStepUpOperations.Schema, cancellationToken).ConfigureAwait(false);
+         }
++        if (options.GovernedContent is { } governed) await governed.InitializeAsync(cancellationToken).ConfigureAwait(false);
+         BrowserTestStepUpAssets.Map(app);
+         if (options.Recovery is { } recovery)
+             app.MapGet("/browser-testing/status", () => new { mode = options.Mode, journeyId = recovery.JourneyId, runId = options.RunId, ready = true }).AllowAnonymous();
+diff --git a/tools/browser-testing/Tunner.BrowserTesting.csproj b/tools/browser-testing/Tunner.BrowserTesting.csproj
+--- a/tools/browser-testing/Tunner.BrowserTesting.csproj
++++ b/tools/browser-testing/Tunner.BrowserTesting.csproj
+@@ -4,6 +4,7 @@
+   <ItemGroup>
+     <PackageReference Include="Testcontainers" />
+     <ProjectReference Include="../../src/Tunner.User.Bff/Tunner.User.Bff.csproj" />
++    <ProjectReference Include="../../src/Tunner.Admin.Bff/Tunner.Admin.Bff.csproj" />
+     <ProjectReference Include="../../src/Tunner.Database.Migrations/Tunner.Database.Migrations.csproj" />
+     <ProjectReference Include="../../src/Tunner.Installer/Tunner.Installer.csproj" />
+   </ItemGroup>
+@@ -22,5 +23,6 @@
+     <Content Include="../../web/apps/user/authentication.content.proposal.json" Link="browser-test-authentication-content.json" CopyToOutputDirectory="PreserveNewest" />
+     <Content Include="../../web/apps/user/content.proposal.json" Link="browser-test-content.json" CopyToOutputDirectory="PreserveNewest" />
+     <Content Include="../../web/apps/user/dist/**/*" Link="wwwroot/registration/%(RecursiveDir)%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" />
++    <Content Include="../../web/apps/admin/dist/**/*" Link="wwwroot/admin/%(RecursiveDir)%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" />
+   </ItemGroup>
+ </Project>
+diff --git a/tools/dev/tunner-browser.ps1 b/tools/dev/tunner-browser.ps1
+--- a/tools/dev/tunner-browser.ps1
++++ b/tools/dev/tunner-browser.ps1
+@@ -3,7 +3,8 @@
+     [ValidateSet('start','stop','restart','status','logs')][string]$Command = 'start',
+     [string]$RepositoryRoot,
+     [switch]$NoBrowser,
++    [switch]$SkipCertificateTrust,
++    [switch]$GovernedContent
+-    [switch]$SkipCertificateTrust
+ )
+ Set-StrictMode -Version Latest
+ $ErrorActionPreference = 'Stop'
+@@ -96,6 +97,13 @@
+     foreach ($port in @($value.ApplicationPort,$value.PostgresPort,$value.SmtpPort,$value.MailpitPort)) {
+         if ($port -lt 1024 -or $port -gt 65535) { throw 'Invalid saved local port.' }
+     }
++    # Older isolated state remains valid and keeps its original local fixture mode.
++    if ($null -eq $value.PSObject.Properties['GovernedContent']) { $value | Add-Member -NotePropertyName GovernedContent -NotePropertyValue $false }
++    if ($null -eq $value.PSObject.Properties['AdminPort']) { $value | Add-Member -NotePropertyName AdminPort -NotePropertyValue 0 }
++    if ($value.GovernedContent -isnot [bool] -or ($value.GovernedContent -and
++        ($value.AdminPort -lt 1024 -or $value.AdminPort -gt 65535 -or @($value.ApplicationPort,$value.PostgresPort,$value.SmtpPort,$value.MailpitPort) -contains $value.AdminPort))) {
++        throw 'Invalid isolated Admin profile state.'
++    }
+     return $value
+ }
+ function Write-BrowserState {
+@@ -107,7 +115,12 @@
+     if ($null -eq $State) { return $false }
+     try {
+         $status = [TunnerBrowserLocalHttps]::Get(('https://localhost:' + $State.ApplicationPort + '/browser-testing/status'),$State.CertificateSha256) | ConvertFrom-Json
++        if (-not ($status.ready -and $status.mode -eq $State.Mode -and $status.instanceId -eq $State.InstanceId)) { return $false }
++        if ($State.GovernedContent) {
++            $admin = [TunnerBrowserLocalHttps]::Get(('https://localhost:' + $State.AdminPort + '/browser-testing/status'),$State.CertificateSha256) | ConvertFrom-Json
++            return $admin.ready -and $admin.governedContent -and $admin.mode -eq $State.Mode -and $admin.instanceId -eq $State.InstanceId
++        }
++        return $true
+-        return $status.ready -and $status.mode -eq $State.Mode -and $status.instanceId -eq $State.InstanceId
+     } catch { return $false }
+ }
+ function Show-BrowserAddresses {
+@@ -115,6 +128,10 @@
+     Write-Host ('Application: https://localhost:' + $State.ApplicationPort + '/registration')
+     Write-Host ('Sign-in test: https://localhost:' + $State.ApplicationPort + '/login')
+     Write-Host ('Identity verification test (sign in first): https://localhost:' + $State.ApplicationPort + '/browser-testing/step-up')
++    if ($State.GovernedContent) {
++        Write-Host ('Synthetic Admin actors: https://localhost:' + $State.AdminPort + '/browser-testing/admin')
++        Write-Host 'Governed Content fixture: author edits/validates, approver approves, publisher publishes. Reload Login after the selected effective time. This is not workforce sign-in or production approval.'
++    }
+     Write-Host ('Verification inbox: http://127.0.0.1:' + $State.MailpitPort)
+     Write-Host ('PostgreSQL: 127.0.0.1:' + $State.PostgresPort + ' -> container 5432; database tunner_browser_testing')
+     Write-Host 'ISOLATED LOCAL TEST DATA ONLY. Registration, verification, Personal Information and password sign-in/sign-out are available for isolated engineering testing. Production visual acceptance and later P2 features remain pending.'
+@@ -124,6 +141,7 @@
+     if (-not $NoBrowser) {
+         Start-Process ('https://localhost:' + $State.ApplicationPort + '/registration')
+         Start-Process ('http://127.0.0.1:' + $State.MailpitPort)
++        if ($State.GovernedContent) { Start-Process ('https://localhost:' + $State.AdminPort + '/browser-testing/admin') }
+     }
+ }
+ function Stop-BrowserHost {
+@@ -145,8 +163,9 @@
+     Write-BrowserState $State
+ }
+ function Select-LocalPort {
++    param([int]$Preferred, [int[]]$ExcludedPorts = @())
++    for ($candidate = $Preferred; $candidate -lt $Preferred + 50 -and $candidate -le 65535; $candidate++) {
++        if ($ExcludedPorts -contains $candidate) { continue }
+-    param([int]$Preferred)
+-    for ($candidate = $Preferred; $candidate -lt $Preferred + 50; $candidate++) {
+         $listener = [Net.Sockets.TcpListener]::new([Net.IPAddress]::Loopback,$candidate)
+         try { $listener.Start(); return $candidate } catch [Net.Sockets.SocketException] { } finally { $listener.Stop() }
+     }
+@@ -199,6 +218,9 @@
+         if ($Command -eq 'stop') { return }
+     }
+     Assert-BrowserPrerequisites
++    if ($GovernedContent -and $null -ne $state -and -not $state.GovernedContent -and (Get-BrowserStatus $state)) {
++        throw 'The existing instance uses static fixtures. Use restart -GovernedContent for the explicit isolated profile.'
++    }
+     if (Get-BrowserStatus $state) { Write-Host 'Already running. Use the restart command to rebuild after code changes.'; Show-BrowserAddresses $state; Open-BrowserAddresses $state; return }
+     Stop-BrowserHost $state
+     New-Item -ItemType Directory -Path $dataRoot -Force | Out-Null
+@@ -209,6 +231,12 @@
+     if ($null -eq $state) {
+         $state = [pscustomobject]@{ Mode='ISOLATED_LOCAL_BROWSER_TESTING'; ProjectName=$projectName; InstanceId=[guid]::NewGuid().ToString(); ApplicationPort=(Select-LocalPort 24443); PostgresPort=(Select-LocalPort 25432); SmtpPort=(Select-LocalPort 21025); MailpitPort=(Select-LocalPort 28025); CertificateThumbprint=$certificate.Thumbprint; CertificateSha256=$certificateSha256; ProcessId=0; ProcessStartedTicks=0 }
+     }
++    if ($null -eq $state.PSObject.Properties['GovernedContent']) { $state | Add-Member -NotePropertyName GovernedContent -NotePropertyValue $false }
++    if ($null -eq $state.PSObject.Properties['AdminPort']) { $state | Add-Member -NotePropertyName AdminPort -NotePropertyValue 0 }
++    if ($GovernedContent) { $state.GovernedContent = $true }
++    if ($state.GovernedContent -and $state.AdminPort -eq 0) {
++        $state.AdminPort = Select-LocalPort -Preferred 24444 -ExcludedPorts @($state.ApplicationPort,$state.PostgresPort,$state.SmtpPort,$state.MailpitPort)
++    }
+     $state.InstanceId = [guid]::NewGuid().ToString()
+     $state.CertificateThumbprint = $certificate.Thumbprint
+     $state.CertificateSha256 = $certificateSha256
+diff --git a/tools/browser-testing/BrowserTestGovernedContent.cs b/tools/browser-testing/BrowserTestGovernedContent.cs
+new file mode 100644
+--- /dev/null
++++ b/tools/browser-testing/BrowserTestGovernedContent.cs
+@@ -0,0 +1,417 @@
++using System.Net;
++using System.Security.Claims;
++using System.Text.Json;
++using Microsoft.AspNetCore.Antiforgery;
++using Microsoft.AspNetCore.Authentication;
++using Microsoft.AspNetCore.Authentication.Cookies;
++using Microsoft.AspNetCore.Builder;
++using Microsoft.AspNetCore.DataProtection;
++using Microsoft.AspNetCore.Hosting;
++using Microsoft.AspNetCore.Http;
++using Microsoft.AspNetCore.Http.Features;
++using Microsoft.EntityFrameworkCore;
++using Microsoft.Extensions.Configuration;
++using Microsoft.Extensions.DependencyInjection;
++using Microsoft.Extensions.Hosting;
++using Tunner.Admin.Bff;
++using Tunner.Identity.Persistence;
++using Tunner.Platform.Bff;
++using Tunner.Platform.Policies;
++using Tunner.PresentationContent;
++
++// Isolated engineering fixture only. This does not implement workforce authentication or approve production policy/content.
++// Each synthetic actor is a separate session/authorization receipt. All publications still pass the actual Content owner.
++internal sealed class BrowserTestGovernedContent : IContentTransactionLocalProfileSource, IAuthenticationContentBindingSource,
++    IAdminContentSessionSource, IAdminContentAuthorizationSource, IAdminContentHttpProfileSource, IContentBrowseBudgetSource
++{
++    private const string Scheme = "Tunner.Admin.Bff.Session", SessionClaim = "synthetic-local-admin-session";
++    private const string LoginScope = "synthetic.local.identity.login", ChromeScope = "synthetic.local.admin.content", Variant = "synthetic-local-en";
++    private const string Author = "synthetic-local-author", Approver = "synthetic-local-approver", Publisher = "synthetic-local-publisher";
++    private const string Evidence = "SYNTHETIC-LOCAL-TEST-ONLY";
++    private static readonly EffectivePolicyInterval Interval = new(new(2026, 1, 1, 0, 0, 0, TimeSpan.Zero), true, null, false);
++    private readonly BrowserTestHostOptions options;
++    private readonly int adminPort;
++    private readonly Dictionary<string, ContentGovernanceProfile> profiles;
++    private readonly Dictionary<string, IReadOnlyDictionary<string, string>> seeds;
++    private readonly Dictionary<string, AdminContentSession> sessions = new(StringComparer.Ordinal);
++    private readonly object sessionGate = new();
++    private string? authenticationVersion;
++    private bool initialized;
++    internal BrowserTestGovernedContent(BrowserTestHostOptions options, int adminPort)
++    {
++        this.options = options; this.adminPort = adminPort; RequireIsolated();
++        if (adminPort is < 1024 or > 65535 || adminPort == options.Port)
++            throw new InvalidOperationException("Distinct isolated Admin HTTPS port required.");
++        using var proposal = JsonDocument.Parse(File.ReadAllText(Path.Combine(AppContext.BaseDirectory, "browser-test-authentication-content.json")));
++        var login = proposal.RootElement.GetProperty("content").EnumerateObject().ToDictionary(x => x.Name,
++            x => x.Value.GetString() ?? throw new InvalidOperationException("Synthetic Login wording is incomplete."), StringComparer.Ordinal);
++        seeds = new(StringComparer.Ordinal) { [LoginScope] = login, [ChromeScope] = Chrome };
++        profiles = seeds.ToDictionary(x => x.Key, x => Profile(x.Key, x.Value), StringComparer.Ordinal);
++    }
++    private string AdminOrigin => "https://localhost:" + adminPort;
++    private void RequireIsolated()
++    {
++        if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") != "Development" || options.Mode != "ISOLATED_LOCAL_BROWSER_TESTING" ||
++            options.PersistentDirectory is null || options.Totp is not null || options.Recovery is not null || options.RecoveryCase is not null ||
++            options.Origin != "https://localhost:" + options.Port)
++            throw new InvalidOperationException("Governed Content fixture is restricted to the explicit persistent isolated browser mode.");
++    }
++    internal void ConfigureUser(IServiceCollection services, AuthenticationPolicy policy)
++    {
++        RequireIsolated(); policy.Validate(); authenticationVersion = policy.Version;
++        services.AddSingleton<TimeProvider>(TimeProvider.System);
++        services.AddSingleton<IPresentationContentProfileSource>(this); services.AddTunnerPresentationContent(options.ConnectionString);
++        services.AddSingleton<IPresentationContentAuthorizationSource>(_ => new ReadOnlyUserAuthorization());
++        services.AddSingleton<IAuthenticationContentBindingSource>(this); services.AddTunnerPublishedAuthenticationPresentation();
++    }
++    public ContentGovernanceProfile RequireEffective(string scope, DateTimeOffset at) => RequireCurrentLocal(scope, at);
++    public ContentGovernanceProfile RequireCurrentLocal(string scope, DateTimeOffset at)
++    {
++        RequireIsolated();
++        return Interval.Contains(at) && profiles.TryGetValue(scope, out var value) ? value : throw new ContentUnavailableException();
++    }
++    public AuthenticationContentBinding RequireQualified(AuthenticationPolicy policy, DateTimeOffset at)
++    {
++        RequireIsolated();
++        if (authenticationVersion is null || policy.Version != authenticationVersion || !Interval.Contains(at)) throw new ContentUnavailableException();
++        return new(policy.Version, "synthetic-local-login-binding-v1", Evidence, LoginScope, Variant, Interval,
++            new(options.Origin + "/browser-testing/terms"), new(options.Origin + "/browser-testing/privacy"), new(options.Origin + "/browser-testing/support"));
++    }
++    private static ContentGovernanceProfile Profile(string scope, IReadOnlyDictionary<string, string> values) => new(
++        new("synthetic-local-content-v1", "ACTIVE", scope, Interval, null, [Evidence]), "Synthetic local " + scope, Evidence,
++        "synthetic-local-processing", "synthetic-local-retention", "synthetic-local-audit-retention", "RESTRICTED_SECURITY",
++        4096, true, true, true,
++        values.Select(x => new ContentDefinition(x.Key, "synthetic-sensitive", true, true, true, [], []) { Purpose = "Synthetic local wording: " + x.Key }).ToArray(),
++        [new(Variant, "en", new Dictionary<string, string> { ["page"] = scope == LoginScope ? "login" : "admin-content" })], [new(Variant, [Variant])],
++        Enum.GetValues<ContentOperation>().ToDictionary(operation => operation, operation => new ContentEffectContract(
++            "synthetic-local-content-" + operation, "fixture-completed", "fixture/presentation-content", "1.0",
++            operation is ContentOperation.Browse or ContentOperation.Preview or ContentOperation.History ? null : "fixture.local.content." + operation,
++            operation is ContentOperation.Browse or ContentOperation.Preview or ContentOperation.History ? null : "1")));
++
++    internal async Task InitializeAsync(CancellationToken cancellationToken)
++    {
++        RequireIsolated();
++        var contextOptions = new DbContextOptionsBuilder<PresentationContentDbContext>().UseNpgsql(options.ConnectionString,
++            postgres => postgres.MigrationsHistoryTable("__EFMigrationsHistory", "presentation_content")).Options;
++        await using var context = new PresentationContentDbContext(contextOptions);
++        await context.Database.MigrateAsync(cancellationToken).ConfigureAwait(false);
++        var application = new PresentationContentApplication(context, this, new SyntheticSeedAuthorization(this), TimeProvider.System);
++        DateTimeOffset? lastStart = null;
++        foreach (var (scope, values) in seeds)
++        {
++            var profileVersion = profiles[scope].Metadata.VersionId;
++            // Bounded bootstrap-only read, never a cross-module write or alternate publication path.
++            var stored = await context.Database.SqlQuery<bool>($"SELECT EXISTS(SELECT 1 FROM presentation_content.profiles WHERE \"Scope\"={scope} AND \"Version\"={profileVersion}) AS \"Value\"")
++                .SingleAsync(cancellationToken).ConfigureAwait(false);
++            foreach (var (key, text) in values)
++            {
++                if (stored && (await application.HistoryAsync(scope, key, Variant, "fixture-content-history", "fixture-content-seed", cancellationToken).ConfigureAwait(false)).Count != 0)
++                    continue; // Preserve operator-edited fixture publications, history and effective schedules on restart.
++                var proposal = await application.CreateDraftAsync(new(scope, key, Variant, text, "fixture-content-draft", "fixture-content-seed"), cancellationToken).ConfigureAwait(false);
++                stored = true;
++                proposal = await application.ValidateAsync(new(proposal.ProposalReference, proposal.Revision, "fixture-content-validate", "fixture-content-seed"), cancellationToken).ConfigureAwait(false);
++                proposal = await application.ApproveAsync(new(proposal.ProposalReference, proposal.Revision, "fixture-content-approve", "fixture-content-seed"), cancellationToken).ConfigureAwait(false);
++                // Explicit synthetic bootstrap scheduling allowance, never a production policy/default.
++                var planned = DateTimeOffset.UtcNow.AddSeconds(5); var ticks = planned.UtcTicks;
++                var from = new DateTimeOffset(ticks + (10 - ticks % 10) % 10, TimeSpan.Zero);
++                _ = await application.PublishAsync(new(proposal.ProposalReference, proposal.Revision, new(from, true, null, false), null,
++                    "fixture-content-publish", "fixture-content-seed"), cancellationToken).ConfigureAwait(false);
++                if (lastStart is null || from > lastStart) lastStart = from;
++            }
++        }
++        if (lastStart is { } start)
++        {
++            var delay = start - DateTimeOffset.UtcNow;
++            if (delay > TimeSpan.Zero) await Task.Delay(delay, cancellationToken).ConfigureAwait(false);
++        }
++        foreach (var scope in seeds.Keys)
++            _ = await application.ResolveAsync(new(scope, Variant, DateTimeOffset.UtcNow), cancellationToken).ConfigureAwait(false);
++        initialized = true;
++    }
++
++    internal WebApplication CreateAdmin(IAuthenticationPolicySource authenticationPolicies)
++    {
++        RequireIsolated(); if (!initialized) throw new InvalidOperationException("Synthetic publications must be ready first.");
++        var app = TunnerAdminBffHost.CreateApplication([], builder =>
++        {
++            if (!builder.Environment.IsDevelopment()) throw new InvalidOperationException("Isolated Admin fixture requires Development.");
++            builder.Configuration.AddInMemoryCollection(new Dictionary<string, string?> { ["Bff:BrowserOrigin"] = AdminOrigin });
++            builder.WebHost.ConfigureKestrel(server => server.Listen(IPAddress.Loopback, adminPort, endpoint => endpoint.UseHttps(options.Certificate)));
++            var protection = builder.Services.AddDataProtection().PersistKeysToFileSystem(new DirectoryInfo(Path.Combine(options.PersistentDirectory!, "admin-keys")));
++            if (OperatingSystem.IsWindows()) protection.ProtectKeysWithDpapi();
++            // The existing Admin BFF foundation supplies its own application-name purpose, cookie and CSRF scheme.
++            builder.Services.AddSingleton<ITicketStore>(_ => new SyntheticTickets());
++            // Named fixture scheme only: preserve every other foundation event/flag and the User cookie owner.
++            builder.Services.PostConfigure<CookieAuthenticationOptions>(Scheme, cookie =>
++                cookie.Events.OnSigningIn = ValidateSyntheticSignInAsync);
++            builder.Services.AddSingleton<TimeProvider>(TimeProvider.System);
++            builder.Services.AddSingleton<IPresentationContentProfileSource>(this); builder.Services.AddTunnerPresentationContent(options.ConnectionString);
++            builder.Services.AddSingleton<IAdminContentSessionSource>(this); builder.Services.AddSingleton<IAdminContentAuthorizationSource>(this);
++            builder.Services.AddSingleton<IAdminContentHttpProfileSource>(this); builder.Services.AddSingleton<IContentBrowseBudgetSource>(this);
++            builder.Services.AddSingleton<IAuthenticationPolicySource>(authenticationPolicies); builder.Services.AddSingleton<IAuthenticationContentBindingSource>(this);
++            builder.Services.AddTunnerAdminAuthenticationContentPreview();
++        });
++        app.MapGet("/browser-testing/status", (HttpContext http) =>
++        { RequireLocalRequest(http); return new { mode = options.Mode, instanceId = options.RunId, ready = initialized, governedContent = true }; }).AllowAnonymous();
++        app.MapGet("/browser-testing/admin", (HttpContext http, IAntiforgery antiforgery) =>
++        {
++            RequireLocalRequest(http); NoStore(http);
++            var token = antiforgery.GetAndStoreTokens(http).RequestToken ?? throw new InvalidOperationException("Synthetic Admin CSRF unavailable.");
++            return Results.Content(BootstrapPage.Replace("CSRF_TOKEN", WebUtility.HtmlEncode(token), StringComparison.Ordinal), "text/html; charset=utf-8");
++        }).AllowAnonymous();
++        app.MapGet("/browser-testing/admin/bootstrap.js", (HttpContext http) =>
++        { RequireLocalRequest(http); NoStore(http); return Results.Text(BootstrapScript, "text/javascript; charset=utf-8"); }).AllowAnonymous();
++        // No GET creates a session. Unsafe requests still pass the unchanged BFF exact-Origin/header-CSRF middleware.
++        app.MapPost("/browser-testing/admin/session", async Task<IResult> (HttpContext http) =>
++        {
++            RequireLocalRequest(http); NoStore(http);
++            if (!http.Request.HasJsonContentType()) return Results.StatusCode(415);
++            var limit = http.Features.Get<IHttpMaxRequestBodySizeFeature>();
++            if (limit is null || limit.IsReadOnly) return Results.StatusCode(503);
++            limit.MaxRequestBodySize = 4096; // Existing synthetic HTTP fixture budget, not a production admission.
++            try
++            {
++                using var body = await JsonDocument.ParseAsync(http.Request.Body, new JsonDocumentOptions { MaxDepth = 4 }, http.RequestAborted).ConfigureAwait(false);
++                if (body.RootElement.ValueKind != JsonValueKind.Object) return Results.BadRequest();
++                var fields = body.RootElement.EnumerateObject().ToArray();
++                if (fields.Length != 1 || fields[0].Name != "actor" || fields[0].Value.ValueKind != JsonValueKind.String) return Results.BadRequest();
++                var actor = fields[0].Value.GetString() switch { "author" => Author, "approver" => Approver, "publisher" => Publisher, _ => null };
++                if (actor is null) return Results.BadRequest();
++                var previous = http.User.FindFirstValue(SessionClaim);
++                await http.SignOutAsync(Scheme).ConfigureAwait(false);
++                if (previous is not null) lock (sessionGate) sessions.Remove(previous);
++                var now = DateTimeOffset.UtcNow; var id = Guid.NewGuid().ToString("N"); var until = now.AddMinutes(10);
++                lock (sessionGate)
++                {
++                    foreach (var expired in sessions.Where(x => !x.Value.EffectiveInterval.Contains(now)).Select(x => x.Key).ToArray()) sessions.Remove(expired);
++                    if (sessions.Count >= 32) return Results.StatusCode(503);
++                    sessions.Add(id, new(actor, id, ContentActorKind.Human, Evidence, new(now, true, until, false)));
++                }
++                var principal = new ClaimsPrincipal(new ClaimsIdentity([new(ClaimTypes.NameIdentifier, actor), new(SessionClaim, id)], Scheme));
++                try { await http.SignInAsync(Scheme, principal, new AuthenticationProperties { IssuedUtc = now, ExpiresUtc = until, AllowRefresh = false }).ConfigureAwait(false); }
++                catch { lock (sessionGate) sessions.Remove(id); throw; }
++                return Results.NoContent();
++            }
++            catch (JsonException) { return Results.BadRequest(); }
++            catch (BadHttpRequestException error) { return Results.StatusCode(error.StatusCode == 413 ? 413 : 400); }
++        }).AllowAnonymous();
++        return app;
++    }
++
++    private async Task ValidateSyntheticSignInAsync(CookieSigningInContext context)
++    {
++        var http = context.HttpContext; RequireLocalRequest(http);
++        var origins = http.Request.Headers.Origin;
++        if (context.Scheme.Name != Scheme || !HttpMethods.IsPost(http.Request.Method) || http.Request.Path != "/browser-testing/admin/session" ||
++            origins.Count != 1 || !StringComparer.Ordinal.Equals(origins[0], AdminOrigin) || !http.Request.HasJsonContentType() ||
++            context.Principal is null || context.Principal.Identities.Count(x => x.IsAuthenticated) != 1 ||
++            context.Principal.Identities.Any(x => x.IsAuthenticated && x.AuthenticationType != Scheme) ||
++            context.Principal.Claims.Count() != 2 || context.Principal.FindAll(ClaimTypes.NameIdentifier).Count() != 1 ||
++            context.Principal.FindAll(SessionClaim).Count() != 1)
++            throw new InvalidOperationException("Only the fixed isolated Admin bootstrap may issue this cookie.");
++        var now = (context.Options.TimeProvider ?? TimeProvider.System).GetUtcNow();
++        var session = await RequireCurrentAsync(context.Principal, now, http.RequestAborted).ConfigureAwait(false);
++        if (session is null || session.ActorReference is not (Author or Approver or Publisher) || session.ActorKind != ContentActorKind.Human ||
++            session.QualificationReference != Evidence || session.SessionReference != context.Principal.FindFirstValue(SessionClaim) ||
++            context.Properties.IssuedUtc is not { } issued || context.Properties.ExpiresUtc is not { } expires ||
++            issued > now || expires <= now || expires <= issued || session.EffectiveInterval.Until is not { } until ||
++            // AuthenticationProperties encodes issue/expiry instants at whole-second precision.
++            issued != DateTimeOffset.FromUnixTimeSeconds(session.EffectiveInterval.From.ToUnixTimeSeconds()) ||
++            expires != DateTimeOffset.FromUnixTimeSeconds(until.ToUnixTimeSeconds()) ||
++            context.Properties.IsPersistent || context.Properties.AllowRefresh != false)
++            throw new InvalidOperationException("A current exact synthetic server session is required.");
++    }
++
++    private void RequireLocalRequest(HttpContext http)
++    {
++        RequireIsolated();
++        if (!http.Request.IsHttps || http.Request.Host.Value != "localhost:" + adminPort || http.Request.QueryString.HasValue ||
++            http.Connection.RemoteIpAddress is not { } address || !IPAddress.IsLoopback(address)) throw new BadHttpRequestException("Isolated local fixture only.", 400);
++    }
++    private static void NoStore(HttpContext http)
++    { http.Response.Headers.CacheControl = "no-store"; http.Response.Headers["Referrer-Policy"] = "no-referrer"; }
++    public ValueTask<AdminContentSession?> RequireCurrentAsync(ClaimsPrincipal principal, DateTimeOffset at, CancellationToken cancellationToken)
++    {
++        RequireIsolated(); cancellationToken.ThrowIfCancellationRequested(); var id = principal.FindFirstValue(SessionClaim);
++        lock (sessionGate)
++            return ValueTask.FromResult<AdminContentSession?>(id is not null && sessions.TryGetValue(id, out var session) &&
++                session.EffectiveInterval.Contains(at) && principal.Identities.Any(x => x.IsAuthenticated) && principal.FindFirstValue(ClaimTypes.NameIdentifier) == session.ActorReference &&
++                principal.Identities.Where(x => x.IsAuthenticated).All(x => x.AuthenticationType == Scheme) ? session : null);
++    }
++    public ValueTask<ContentAuthorizationDecision> AuthorizeAsync(AdminContentSession session, ContentAuthorizationRequest request, CancellationToken cancellationToken)
++    {
++        RequireIsolated(); cancellationToken.ThrowIfCancellationRequested();
++        var common = request.Operation is ContentOperation.Browse or ContentOperation.Preview or ContentOperation.History;
++        var allowed = (session.ActorReference is Author or Approver or Publisher) && request.Scope == LoginScope && (common || (session.ActorReference switch
++        {
++            Author => request.Operation is ContentOperation.CreateDraft or ContentOperation.UpdateDraft or ContentOperation.Validate,
++            Approver => request.Operation == ContentOperation.Approve,
++            Publisher => request.Operation is ContentOperation.Publish or ContentOperation.Rollback,
++            _ => false
++        }));
++        return ValueTask.FromResult(Decision(request, session.ActorReference, allowed));
++    }
++    public AdminContentHttpProfile RequireEffective(DateTimeOffset at)
++    {
++        RequireIsolated(); if (!Interval.Contains(at)) throw new ContentUnavailableException();
++        return new(new("synthetic-local-admin-http-v1", "ACTIVE", AdminContentHttpProfile.Scope, Interval, null, [Evidence]), [LoginScope], 16384)
++        { Presentation = new(ChromeScope, Variant, Interval) };
++    }
++    ContentBrowseBudget IContentBrowseBudgetSource.RequireEffective(string scope, DateTimeOffset at)
++    {
++        RequireIsolated(); if (scope != LoginScope || !Interval.Contains(at)) throw new ContentUnavailableException();
++        return new(new("synthetic-local-content-browse-v1", "ACTIVE", scope, Interval, null, [Evidence]), 5, 20, 64);
++    }
++    private static ContentAuthorizationDecision Decision(ContentAuthorizationRequest request, string actor, bool allowed) =>
++        new(request.Digest, allowed, actor, ContentActorKind.Human, "synthetic-local-fixture", "synthetic-local-content-authorization-v1", Evidence, Interval);
++    private sealed class SyntheticSeedAuthorization(BrowserTestGovernedContent owner) : IPresentationContentAuthorizationSource
++    {
++        public ValueTask<ContentAuthorizationDecision> AuthorizeAsync(ContentAuthorizationRequest request, CancellationToken cancellationToken)
++        {
++            owner.RequireIsolated(); cancellationToken.ThrowIfCancellationRequested();
++            var actor = request.Operation switch { ContentOperation.Approve => Approver, ContentOperation.Publish or ContentOperation.Rollback => Publisher, _ => Author };
++            return ValueTask.FromResult(Decision(request, actor, owner.profiles.ContainsKey(request.Scope)));
++        }
++    }
++    private sealed class ReadOnlyUserAuthorization : IPresentationContentAuthorizationSource
++    {
++        public ValueTask<ContentAuthorizationDecision> AuthorizeAsync(ContentAuthorizationRequest request, CancellationToken cancellationToken)
++        { cancellationToken.ThrowIfCancellationRequested(); return ValueTask.FromResult(Decision(request, "synthetic-local-read-only-user", false)); }
++    }
++    // Native test ticket pattern, scoped to this separate Admin host. Expired tickets are removed; no credentials are accepted.
++    private sealed class SyntheticTickets : ITicketStore
++    {
++        private readonly Dictionary<string, (byte[] Value, DateTimeOffset Until)> tickets = new(StringComparer.Ordinal);
++        private readonly object gate = new();
++        public Task<string> StoreAsync(AuthenticationTicket ticket)
++        {
++            lock (gate)
++            {
++                var now = DateTimeOffset.UtcNow;
++                foreach (var expired in tickets.Where(x => x.Value.Until <= now).Select(x => x.Key).ToArray()) tickets.Remove(expired);
++                if (tickets.Count >= 32 || ticket.Properties.ExpiresUtc is not { } until || until <= now) throw new InvalidOperationException("Synthetic Admin ticket capacity unavailable.");
++                var id = Guid.NewGuid().ToString("N"); tickets.Add(id, (TicketSerializer.Default.Serialize(ticket), until)); return Task.FromResult(id);
++            }
++        }
++        public Task RenewAsync(string key, AuthenticationTicket ticket) => throw new InvalidOperationException("Synthetic Admin tickets never slide.");
++        public Task<AuthenticationTicket?> RetrieveAsync(string key)
++        {
++            lock (gate)
++            {
++                if (tickets.TryGetValue(key, out var entry) && entry.Until > DateTimeOffset.UtcNow) return Task.FromResult<AuthenticationTicket?>(TicketSerializer.Default.Deserialize(entry.Value));
++                tickets.Remove(key); return Task.FromResult<AuthenticationTicket?>(null);
++            }
++        }
++        public Task RemoveAsync(string key) { lock (gate) tickets.Remove(key); return Task.CompletedTask; }
++    }
++
++    // Diagnostic fixture controls only, outside the production Admin screens. No URL credential, arbitrary claim or return target.
++    private const string BootstrapPage = """
++<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Isolated Admin fixture</title><meta name="tunner-csrf" content="CSRF_TOKEN"><script src="/browser-testing/admin/bootstrap.js" defer></script></head>
++<body><main><h1>Isolated Admin fixture</h1><p>Synthetic local test data only. This is not workforce authentication or a production approval.</p><p>Select a fixed synthetic actor. Author edits and validates; approver approves; publisher publishes. The Content owner enforces separate actors.</p>
++<button type="button" data-actor="author">Use synthetic author</button> <button type="button" data-actor="approver">Use synthetic approver</button> <button type="button" data-actor="publisher">Use synthetic publisher</button><p id="message" role="status" aria-live="polite"></p></main></body></html>
++""";
++    private const string BootstrapScript = """
++'use strict';
++for (const button of document.querySelectorAll('[data-actor]')) button.addEventListener('click', async () => {
++  const buttons = [...document.querySelectorAll('[data-actor]')]; buttons.forEach(item => item.disabled = true);
++  try {
++    const csrf = document.querySelector('meta[name="tunner-csrf"]').content;
++    const response = await fetch('/browser-testing/admin/session', {method:'POST',credentials:'same-origin',headers:{'Content-Type':'application/json','X-Tunner-CSRF':csrf},body:JSON.stringify({actor:button.dataset.actor})});
++    if (!response.ok) throw new Error('unavailable');
++    window.location.assign('/admin/content');
++  } catch { document.getElementById('message').textContent = 'The isolated session could not start. Reload this page and try again.'; buttons.forEach(item => item.disabled = false); }
++});
++""";
++    // Exact existing synthetic Admin Content fixture labels; real publication receipts are produced during isolated seeding.
++    private static readonly IReadOnlyDictionary<string, string> Chrome = new Dictionary<string, string>(StringComparer.Ordinal)
++    {
++        ["admin.content.brand"] = "Tunner",
++        ["admin.content.operations"] = "Operations workspace",
++        ["admin.content.title"] = "Content management",
++        ["admin.content.subtitle"] = "Review and publish approved wording for each context.",
++        ["admin.content.content"] = "Content",
++        ["admin.content.workspace"] = "Content workspace",
++        ["admin.content.review"] = "Review & publish",
++        ["admin.content.history"] = "Version history",
++        ["admin.content.menu"] = "Menu",
++        ["admin.content.skip"] = "Skip to content",
++        ["admin.content.boundary"] = "Admin workspace · User sign-in remains separate",
++        ["admin.content.scope"] = "Surface",
++        ["admin.content.selectScope"] = "Choose a surface",
++        ["admin.content.selectVariant"] = "Choose a context",
++        ["admin.content.search"] = "Search",
++        ["admin.content.searchHelp"] = "Find a purpose or semantic key.",
++        ["admin.content.noMatches"] = "No matching definitions.",
++        ["admin.content.noSelection"] = "Choose a content definition to begin.",
++        ["admin.content.wording"] = "Wording",
++        ["admin.content.reason"] = "Change reason",
++        ["admin.content.wordingHelp"] = "Keep required variables intact. Changes remain drafts until published.",
++        ["admin.content.reasonHelp"] = "Explain why this wording needs to change.",
++        ["admin.content.save"] = "Save draft",
++        ["admin.content.compare"] = "Preview & compare",
++        ["admin.content.validate"] = "Validate",
++        ["admin.content.approve"] = "Approve",
++        ["admin.content.publish"] = "Publish",
++        ["admin.content.restore"] = "Restore this version",
++        ["admin.content.cancel"] = "Cancel",
++        ["admin.content.confirm"] = "Confirm",
++        ["admin.content.loading"] = "Loading…",
++        ["admin.content.unavailable"] = "This content is unavailable. Try again.",
++        ["admin.content.noAccess"] = "This action is unavailable for the current Admin session.",
++        ["admin.content.conflict"] = "This proposal has changed. Review the current version before continuing.",
++        ["admin.content.unknown"] = "The response was interrupted. Check the result by retrying the same request.",
++        ["admin.content.retry"] = "Retry same request",
++        ["admin.content.refresh"] = "Refresh",
++        ["admin.content.empty"] = "No published version.",
++        ["admin.content.current"] = "Published wording",
++        ["admin.content.candidate"] = "Candidate",
++        ["admin.content.approval"] = "Approval",
++        ["admin.content.pending"] = "Pending",
++        ["admin.content.preview"] = "User context preview",
++        ["admin.content.previewUnavailable"] = "The approved User preview is not available in this workspace.",
++        ["admin.content.historyHelp"] = "Published wording is immutable. Restore creates a new prospective publication.",
++        ["admin.content.version"] = "Version",
++        ["admin.content.publication"] = "Publication reference",
++        ["admin.content.effective"] = "Effective (UTC)",
++        ["admin.content.needsApproval"] = "Approval required",
++        ["admin.content.sod"] = "Configured separation of duties applies. Each action is checked by the server.",
++        ["admin.content.scheduledFrom"] = "Effective from",
++        ["admin.content.scheduledUntil"] = "Effective until",
++        ["admin.content.validationSummary"] = "Check the highlighted fields.",
++        ["admin.content.required"] = "Enter a value.",
++        ["admin.content.maxLength"] = "The value exceeds the allowed length.",
++        ["admin.content.invalidTime"] = "Choose an end after the start.",
++        ["admin.content.prospectiveOnly"] = "Choose a future effective time. Published history is preserved.",
++        ["admin.content.saved"] = "Draft saved.",
++        ["admin.content.replayed"] = "The earlier request was already applied. Current state has been reloaded.",
++        ["admin.content.success"] = "The request was applied. Current state has been reloaded.",
++        ["admin.content.needsContext"] = "Choose a definition, context and saved candidate in the workspace first.",
++        ["admin.content.more"] = "Next page",
++        ["admin.content.definition"] = "Content library",
++        ["admin.content.semanticKey"] = "Semantic key",
++        ["admin.content.slots"] = "Variables",
++        ["admin.content.context"] = "Context",
++        ["admin.content.edit"] = "Edit",
++        ["admin.content.startBoundary"] = "Start boundary",
++        ["admin.content.endBoundary"] = "End boundary",
++        ["admin.content.inclusive"] = "Inclusive",
++        ["admin.content.exclusive"] = "Exclusive",
++        ["admin.content.choose"] = "Choose",
++        ["admin.content.endMode"] = "End condition",
++        ["admin.content.endNone"] = "No scheduled end",
++        ["admin.content.endAt"] = "At a specified time",
++        ["admin.content.utc"] = "Enter UTC time.",
++        ["admin.content.changed"] = "Changed",
++        ["admin.content.unchanged"] = "Unchanged",
++        ["admin.content.newDraft"] = "New draft",
++        ["admin.content.selectCandidate"] = "Choose a saved candidate",
++        ["admin.content.draftState"] = "Draft",
++        ["admin.content.validatedState"] = "Validated",
++        ["admin.content.approvedState"] = "Approved",
++        ["admin.content.publishedState"] = "Published",
++        ["admin.content.baseline"] = "Compare with published version",
++        ["admin.content.unsaved"] = "Unsaved wording",
++        ["admin.content.useReviewedVersion"] = "Continue with reviewed version",
++    };
++}
