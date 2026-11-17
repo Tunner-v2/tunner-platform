@@ -4,7 +4,8 @@ param(
     [string]$RepositoryRoot,
     [switch]$NoBrowser,
     [switch]$SkipCertificateTrust,
-    [switch]$GovernedContent
+    [switch]$GovernedContent,
+    [switch]$SyntheticAdmin
 )
 Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
@@ -99,6 +100,12 @@ function Read-BrowserState {
     }
     if ($null -eq $value.PSObject.Properties['GovernedContent']) { $value | Add-Member -NotePropertyName GovernedContent -NotePropertyValue $false }
     if ($value.GovernedContent -isnot [bool]) { throw 'Invalid saved Content fixture mode.' }
+    if ($null -eq $value.PSObject.Properties['SyntheticAdmin']) { $value | Add-Member -NotePropertyName SyntheticAdmin -NotePropertyValue $false }
+    if ($null -eq $value.PSObject.Properties['AdminPort']) { $value | Add-Member -NotePropertyName AdminPort -NotePropertyValue 0 }
+    if ($value.SyntheticAdmin -isnot [bool] -or ($value.SyntheticAdmin -and -not $value.GovernedContent) -or
+        ($value.AdminPort -ne 0 -and ($value.AdminPort -lt 1024 -or $value.AdminPort -gt 65535 -or @($value.ApplicationPort,$value.PostgresPort,$value.SmtpPort,$value.MailpitPort) -contains $value.AdminPort))) {
+        throw 'Invalid isolated synthetic Admin fixture state.'
+    }
     return $value
 }
 function Write-BrowserState {
@@ -111,7 +118,13 @@ function Get-BrowserStatus {
     try {
         $status = [TunnerBrowserLocalHttps]::Get(('https://localhost:' + $State.ApplicationPort + '/browser-testing/status'),$State.CertificateSha256) | ConvertFrom-Json
         $contentReady = -not $State.GovernedContent -or ($null -ne $status.PSObject.Properties['governedContent'] -and $status.governedContent -eq $true)
-        return $status.ready -and $status.mode -eq $State.Mode -and $status.instanceId -eq $State.InstanceId -and $contentReady
+        if (-not ($status.ready -and $status.mode -eq $State.Mode -and $status.instanceId -eq $State.InstanceId -and $contentReady)) { return $false }
+        if ($State.SyntheticAdmin) {
+            if ($State.AdminPort -eq 0) { return $false }
+            $admin = [TunnerBrowserLocalHttps]::Get(('https://localhost:' + $State.AdminPort + '/browser-testing/status'),$State.CertificateSha256) | ConvertFrom-Json
+            return $admin.ready -and $admin.syntheticAdmin -and $admin.mode -eq $State.Mode -and $admin.instanceId -eq $State.InstanceId
+        }
+        return $true
     } catch { return $false }
 }
 function Show-BrowserAddresses {
@@ -119,6 +132,10 @@ function Show-BrowserAddresses {
     Write-Host ('Application: https://localhost:' + $State.ApplicationPort + '/registration')
     Write-Host ('Sign-in test: https://localhost:' + $State.ApplicationPort + '/login')
     if ($State.GovernedContent) { Write-Host 'Login uses persisted synthetic Content publications. Existing publications and history are preserved on restart.' }
+    if ($State.SyntheticAdmin) {
+        Write-Host ('Synthetic Admin actors: https://localhost:' + $State.AdminPort + '/browser-testing/admin')
+        Write-Host 'Explicit local fixture only: author edits/validates, approver approves, publisher publishes. This is not workforce sign-in or production approval.'
+    }
     Write-Host ('Identity verification test (sign in first): https://localhost:' + $State.ApplicationPort + '/browser-testing/step-up')
     Write-Host ('Verification inbox: http://127.0.0.1:' + $State.MailpitPort)
     Write-Host ('PostgreSQL: 127.0.0.1:' + $State.PostgresPort + ' -> container 5432; database tunner_browser_testing')
@@ -129,6 +146,7 @@ function Open-BrowserAddresses {
     if (-not $NoBrowser) {
         Start-Process ('https://localhost:' + $State.ApplicationPort + '/registration')
         Start-Process ('http://127.0.0.1:' + $State.MailpitPort)
+        if ($State.SyntheticAdmin) { Start-Process ('https://localhost:' + $State.AdminPort + '/browser-testing/admin') }
     }
 }
 function Stop-BrowserHost {
@@ -150,8 +168,9 @@ function Stop-BrowserHost {
     Write-BrowserState $State
 }
 function Select-LocalPort {
-    param([int]$Preferred)
-    for ($candidate = $Preferred; $candidate -lt $Preferred + 50; $candidate++) {
+    param([int]$Preferred, [int[]]$ExcludedPorts = @())
+    for ($candidate = $Preferred; $candidate -lt $Preferred + 50 -and $candidate -le 65535; $candidate++) {
+        if ($ExcludedPorts -contains $candidate) { continue }
         $listener = [Net.Sockets.TcpListener]::new([Net.IPAddress]::Loopback,$candidate)
         try { $listener.Start(); return $candidate } catch [Net.Sockets.SocketException] { } finally { $listener.Stop() }
     }
@@ -186,6 +205,11 @@ function Assert-BrowserPrerequisites {
 }
 try {
     $state = Read-BrowserState
+    if ($Command -in @('start','restart')) {
+        $requestedContent = if ($PSBoundParameters.ContainsKey('GovernedContent')) { [bool]$GovernedContent } elseif ($null -ne $state) { $state.GovernedContent } else { $false }
+        $requestedAdmin = if ($PSBoundParameters.ContainsKey('SyntheticAdmin')) { [bool]$SyntheticAdmin } elseif (-not $requestedContent) { $false } elseif ($null -ne $state) { $state.SyntheticAdmin } else { $false }
+        if ($requestedAdmin -and -not $requestedContent) { throw 'Synthetic Admin requires the explicitly selected governed Content fixture.' }
+    }
     if ($Command -eq 'status') {
         if (Get-BrowserStatus $state) { Show-BrowserAddresses $state; return }
         Write-Host 'The browser application is not running. Start it with start-browser.cmd.'
@@ -208,6 +232,7 @@ try {
         if ($PSBoundParameters.ContainsKey('GovernedContent') -and $state.GovernedContent -ne [bool]$GovernedContent) {
             throw 'Use restart with the requested -GovernedContent value to change the isolated fixture mode.'
         }
+        if ($state.SyntheticAdmin -ne $requestedAdmin) { throw 'Use restart with the requested -SyntheticAdmin value to change the isolated fixture mode.' }
         Write-Host 'Already running. Use the restart command to rebuild after code changes.'; Show-BrowserAddresses $state; Open-BrowserAddresses $state; return
     }
     Stop-BrowserHost $state
@@ -220,6 +245,12 @@ try {
         $state = [pscustomobject]@{ Mode='ISOLATED_LOCAL_BROWSER_TESTING'; ProjectName=$projectName; InstanceId=[guid]::NewGuid().ToString(); ApplicationPort=(Select-LocalPort 24443); PostgresPort=(Select-LocalPort 25432); SmtpPort=(Select-LocalPort 21025); MailpitPort=(Select-LocalPort 28025); CertificateThumbprint=$certificate.Thumbprint; CertificateSha256=$certificateSha256; ProcessId=0; ProcessStartedTicks=0; GovernedContent=[bool]$GovernedContent }
     }
     if ($PSBoundParameters.ContainsKey('GovernedContent')) { $state.GovernedContent = [bool]$GovernedContent }
+    if ($null -eq $state.PSObject.Properties['SyntheticAdmin']) { $state | Add-Member -NotePropertyName SyntheticAdmin -NotePropertyValue $false }
+    if ($null -eq $state.PSObject.Properties['AdminPort']) { $state | Add-Member -NotePropertyName AdminPort -NotePropertyValue 0 }
+    $state.SyntheticAdmin = $requestedAdmin
+    if ($state.SyntheticAdmin -and $state.AdminPort -eq 0) {
+        $state.AdminPort = Select-LocalPort -Preferred 24444 -ExcludedPorts @($state.ApplicationPort,$state.PostgresPort,$state.SmtpPort,$state.MailpitPort)
+    }
     $state.InstanceId = [guid]::NewGuid().ToString()
     $state.CertificateThumbprint = $certificate.Thumbprint
     $state.CertificateSha256 = $certificateSha256

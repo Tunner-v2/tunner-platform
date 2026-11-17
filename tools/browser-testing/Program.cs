@@ -64,14 +64,29 @@ try
     var options = new BrowserTestHostOptions(origin, config.ApplicationPort, connectionString, certificate,
         config.SmtpPort, directory, config.Mode, config.InstanceId);
     await MarkStartupStageAsync("COMPOSING_HOST");
-    if (config.GovernedContent) options = options with { GovernedContent = new BrowserTestGovernedContent(options) };
+    if (config.GovernedContent) options = options with { GovernedContent = new BrowserTestGovernedContent(options, config.SyntheticAdmin ? config.AdminPort : null) };
     var app = BrowserTestHost.Create(options);
     await using (app)
     {
         await MarkStartupStageAsync("MIGRATING_DATABASE");
         await BrowserTestHost.MigrateAndMapAsync(app, options);
-        await MarkStartupStageAsync("STARTING_HTTPS");
-        await app.RunAsync();
+        if (config.SyntheticAdmin)
+        {
+            await MarkStartupStageAsync("STARTING_SYNTHETIC_ADMIN_HTTPS");
+            await using var admin = options.GovernedContent!.CreateAdmin(app.Services.GetRequiredService<IAuthenticationPolicySource>());
+            await admin.StartAsync();
+            try
+            {
+                await MarkStartupStageAsync("STARTING_HTTPS");
+                await app.RunAsync();
+            }
+            finally { await admin.StopAsync(); }
+        }
+        else
+        {
+            await MarkStartupStageAsync("STARTING_HTTPS");
+            await app.RunAsync();
+        }
     }
     return 0;
 }
@@ -83,7 +98,7 @@ catch (Exception error)
 }
 
 internal sealed record BrowserTestConfiguration(string Mode, string InstanceId, int ApplicationPort, int PostgresPort, int SmtpPort, string CertificateThumbprint,
-    bool GovernedContent = false)
+    bool GovernedContent = false, bool SyntheticAdmin = false, int? AdminPort = null)
 {
     public void Validate()
     {
@@ -92,6 +107,11 @@ internal sealed record BrowserTestConfiguration(string Mode, string InstanceId, 
             new[] { ApplicationPort, PostgresPort, SmtpPort }.Distinct().Count() != 3 ||
             CertificateThumbprint.Length != 40 || !CertificateThumbprint.All(Uri.IsHexDigit))
             throw new InvalidOperationException("Invalid isolated browser test configuration.");
+        if (SyntheticAdmin && (!GovernedContent || AdminPort is not { } port || port is < 1024 or > 65535 ||
+            new[] { ApplicationPort, PostgresPort, SmtpPort }.Contains(port)))
+            throw new InvalidOperationException("Synthetic Admin requires explicit governed Content and a distinct allocated local HTTPS port.");
+        if (AdminPort is { } saved && saved != 0 && (saved is < 1024 or > 65535 || new[] { ApplicationPort, PostgresPort, SmtpPort }.Contains(saved)))
+            throw new InvalidOperationException("Invalid saved isolated Admin port.");
     }
 }
 internal sealed class BrowserTestAgePolicies : IAccountAgePolicySource, IAccountConsentEvidenceSource, IAccountJurisdictionSource
