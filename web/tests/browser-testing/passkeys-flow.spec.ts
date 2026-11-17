@@ -114,7 +114,7 @@ test('real native passkeys complete approved onboarding, sign-in, proof, enrollm
   await page.screenshot({path:testInfo.outputPath('real-native-passkeys-removed.png'),fullPage:true});
   expect(await page.evaluate(()=>({local:localStorage.length,session:sessionStorage.length,search:location.search,hash:location.hash})))
     .toEqual({local:0,session:0,search:'',hash:''});
-  await page.goto('/signed-in');await page.getByRole('button',{name:'Sign out',exact:true}).click();
+  await page.goto('/signed-in');await page.getByRole('button',{name:'Sign out',exact:true}).click();await expect(page).toHaveURL(/\/login$/);
   await page.goto('/account/security/sign-in-methods');await expect(page).toHaveURL(/\/login$/);
   await cdp.send('WebAuthn.disable');await cdp.detach();
 });
