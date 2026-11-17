@@ -48,6 +48,7 @@ try
     var connectionString = "Host=127.0.0.1;Port=" + config.PostgresPort + ";Database=tunner_browser_testing;Username=tunner;Include Error Detail=false";
     var options = new BrowserTestHostOptions(origin, config.ApplicationPort, connectionString, certificate,
         config.SmtpPort, directory, config.Mode, config.InstanceId);
+    if (config.GovernedContent) options = options with { GovernedContent = new BrowserTestGovernedContent(options) };
     var app = BrowserTestHost.Create(options);
     await using (app)
     {
@@ -63,7 +64,8 @@ catch (Exception error)
     return 1;
 }
 
-internal sealed record BrowserTestConfiguration(string Mode, string InstanceId, int ApplicationPort, int PostgresPort, int SmtpPort, string CertificateThumbprint)
+internal sealed record BrowserTestConfiguration(string Mode, string InstanceId, int ApplicationPort, int PostgresPort, int SmtpPort, string CertificateThumbprint,
+    bool GovernedContent = false)
 {
     public void Validate()
     {

@@ -3,7 +3,8 @@ param(
     [ValidateSet('start','stop','restart','status','logs')][string]$Command = 'start',
     [string]$RepositoryRoot,
     [switch]$NoBrowser,
-    [switch]$SkipCertificateTrust
+    [switch]$SkipCertificateTrust,
+    [switch]$GovernedContent
 )
 Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
@@ -96,6 +97,8 @@ function Read-BrowserState {
     foreach ($port in @($value.ApplicationPort,$value.PostgresPort,$value.SmtpPort,$value.MailpitPort)) {
         if ($port -lt 1024 -or $port -gt 65535) { throw 'Invalid saved local port.' }
     }
+    if ($null -eq $value.PSObject.Properties['GovernedContent']) { $value | Add-Member -NotePropertyName GovernedContent -NotePropertyValue $false }
+    if ($value.GovernedContent -isnot [bool]) { throw 'Invalid saved Content fixture mode.' }
     return $value
 }
 function Write-BrowserState {
@@ -107,13 +110,15 @@ function Get-BrowserStatus {
     if ($null -eq $State) { return $false }
     try {
         $status = [TunnerBrowserLocalHttps]::Get(('https://localhost:' + $State.ApplicationPort + '/browser-testing/status'),$State.CertificateSha256) | ConvertFrom-Json
-        return $status.ready -and $status.mode -eq $State.Mode -and $status.instanceId -eq $State.InstanceId
+        $contentReady = -not $State.GovernedContent -or ($null -ne $status.PSObject.Properties['governedContent'] -and $status.governedContent -eq $true)
+        return $status.ready -and $status.mode -eq $State.Mode -and $status.instanceId -eq $State.InstanceId -and $contentReady
     } catch { return $false }
 }
 function Show-BrowserAddresses {
     param($State)
     Write-Host ('Application: https://localhost:' + $State.ApplicationPort + '/registration')
     Write-Host ('Sign-in test: https://localhost:' + $State.ApplicationPort + '/login')
+    if ($State.GovernedContent) { Write-Host 'Login uses persisted synthetic Content publications. Existing publications and history are preserved on restart.' }
     Write-Host ('Identity verification test (sign in first): https://localhost:' + $State.ApplicationPort + '/browser-testing/step-up')
     Write-Host ('Verification inbox: http://127.0.0.1:' + $State.MailpitPort)
     Write-Host ('PostgreSQL: 127.0.0.1:' + $State.PostgresPort + ' -> container 5432; database tunner_browser_testing')
@@ -199,7 +204,12 @@ try {
         if ($Command -eq 'stop') { return }
     }
     Assert-BrowserPrerequisites
-    if (Get-BrowserStatus $state) { Write-Host 'Already running. Use the restart command to rebuild after code changes.'; Show-BrowserAddresses $state; Open-BrowserAddresses $state; return }
+    if (Get-BrowserStatus $state) {
+        if ($PSBoundParameters.ContainsKey('GovernedContent') -and $state.GovernedContent -ne [bool]$GovernedContent) {
+            throw 'Use restart with the requested -GovernedContent value to change the isolated fixture mode.'
+        }
+        Write-Host 'Already running. Use the restart command to rebuild after code changes.'; Show-BrowserAddresses $state; Open-BrowserAddresses $state; return
+    }
     Stop-BrowserHost $state
     New-Item -ItemType Directory -Path $dataRoot -Force | Out-Null
     $certificate = Get-ChildItem Cert:\CurrentUser\My | Where-Object { $_.HasPrivateKey -and $_.NotAfter -gt (Get-Date) -and @($_.Extensions | Where-Object { $_.Oid.Value -eq '1.3.6.1.4.1.311.84.1.1' }).Count -gt 0 } | Sort-Object NotAfter -Descending | Select-Object -First 1
@@ -207,8 +217,9 @@ try {
     $certificateHash = [Security.Cryptography.SHA256]::Create()
     try { $certificateSha256 = [BitConverter]::ToString($certificateHash.ComputeHash($certificate.RawData)).Replace('-','') } finally { $certificateHash.Dispose() }
     if ($null -eq $state) {
-        $state = [pscustomobject]@{ Mode='ISOLATED_LOCAL_BROWSER_TESTING'; ProjectName=$projectName; InstanceId=[guid]::NewGuid().ToString(); ApplicationPort=(Select-LocalPort 24443); PostgresPort=(Select-LocalPort 25432); SmtpPort=(Select-LocalPort 21025); MailpitPort=(Select-LocalPort 28025); CertificateThumbprint=$certificate.Thumbprint; CertificateSha256=$certificateSha256; ProcessId=0; ProcessStartedTicks=0 }
+        $state = [pscustomobject]@{ Mode='ISOLATED_LOCAL_BROWSER_TESTING'; ProjectName=$projectName; InstanceId=[guid]::NewGuid().ToString(); ApplicationPort=(Select-LocalPort 24443); PostgresPort=(Select-LocalPort 25432); SmtpPort=(Select-LocalPort 21025); MailpitPort=(Select-LocalPort 28025); CertificateThumbprint=$certificate.Thumbprint; CertificateSha256=$certificateSha256; ProcessId=0; ProcessStartedTicks=0; GovernedContent=[bool]$GovernedContent }
     }
+    if ($PSBoundParameters.ContainsKey('GovernedContent')) { $state.GovernedContent = [bool]$GovernedContent }
     $state.InstanceId = [guid]::NewGuid().ToString()
     $state.CertificateThumbprint = $certificate.Thumbprint
     $state.CertificateSha256 = $certificateSha256

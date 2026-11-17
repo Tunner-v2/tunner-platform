@@ -17,7 +17,8 @@ using Tunner.Platform.Policies;
 using Tunner.User.Bff;
 
 internal sealed record BrowserTestHostOptions(string Origin, int Port, string ConnectionString, X509Certificate2 Certificate,
-    int SmtpPort, string? PersistentDirectory, string Mode, string RunId, BrowserTestTotp? Totp = null, BrowserTestRecoveryCodes? Recovery = null, BrowserTestRecoveryCase? RecoveryCase = null);
+    int SmtpPort, string? PersistentDirectory, string Mode, string RunId, BrowserTestTotp? Totp = null, BrowserTestRecoveryCodes? Recovery = null, BrowserTestRecoveryCase? RecoveryCase = null,
+    BrowserTestGovernedContent? GovernedContent = null);
 
 /// <summary>The existing test executable's single BFF composition, with explicit persistent or finite ownership.</summary>
 internal static class BrowserTestHost
@@ -25,6 +26,8 @@ internal static class BrowserTestHost
     internal static WebApplication Create(BrowserTestHostOptions options)
     {
         var sessions = options.Mode == "ISOLATED_LOCAL_BROWSER_TESTING" && options.PersistentDirectory is not null;
+        if (options.GovernedContent is not null && (!sessions || options.Totp is not null || options.Recovery is not null || options.RecoveryCase is not null))
+            throw new InvalidOperationException("Governed browser Content cannot be composed into finite fixture modes.");
         var registration = new RegistrationPolicy("browser-test-registration-v2", "PDR-0011", "test-only-processing", "test-only-retention",
             "test-only-terms", "test-only-privacy", "test-only-proof", "test-only-existing", "PASSWORD_AND_VERIFIED_EMAIL",
             15, 128, 10000, 6, TimeSpan.FromMinutes(5), 2, TimeSpan.FromSeconds(30), 2, TimeSpan.FromMinutes(1),
@@ -49,7 +52,8 @@ internal static class BrowserTestHost
             builder.Services.AddTunnerIdentityPersistence(options.ConnectionString);
             builder.Services.AddSingleton<IAuthenticationPolicySource>(new AuthenticationPolicyCatalog([new(authenticationMetadata, authentication)]));
             builder.Services.AddSingleton<IAccountAuthenticationAccessSource, BrowserTestAuthenticationAccess>();
-            builder.Services.AddSingleton<IAuthenticationPresentationSource>(new BrowserTestAuthenticationPresentation(options.Origin));
+            if (options.GovernedContent is { } governed) governed.ConfigureUser(builder.Services, authentication);
+            else builder.Services.AddSingleton<IAuthenticationPresentationSource>(new BrowserTestAuthenticationPresentation(options.Origin));
             builder.Services.AddScoped<IUserStepUpOperationSource, BrowserTestStepUpOperations>();
             builder.Services.AddSingleton<IStepUpPresentationSource, BrowserTestStepUpPresentation>();
             var required = options.Totp is null ? "test-only-password-assurance" : BrowserTestTotp.OperationAssurance;
@@ -121,6 +125,7 @@ internal static class BrowserTestHost
             if (database.Database.HasPendingModelChanges()) throw new InvalidOperationException("FINITE_MIGRATIONS_INCOMPLETE");
             await database.Database.ExecuteSqlRawAsync(BrowserTestStepUpOperations.Schema, cancellationToken).ConfigureAwait(false);
         }
+        if (options.GovernedContent is { } governed) await governed.InitializeAsync(cancellationToken).ConfigureAwait(false);
         BrowserTestStepUpAssets.Map(app);
         if (options.Recovery is { } recovery)
             app.MapGet("/browser-testing/status", () => new { mode = options.Mode, journeyId = recovery.JourneyId, runId = options.RunId, ready = true }).AllowAnonymous();
@@ -128,7 +133,7 @@ internal static class BrowserTestHost
             app.MapGet("/browser-testing/status", () => new { mode = options.Mode, journeyId = BrowserTestRecoveryCase.JourneyId, runId = options.RunId, ready = true }).AllowAnonymous();
         else if (options.Totp is { } profile)
             app.MapGet("/browser-testing/status", () => new { mode = options.Mode, journeyId = profile.JourneyId, runId = options.RunId, ready = true }).AllowAnonymous();
-        else app.MapGet("/browser-testing/status", () => new { mode = options.Mode, instanceId = options.RunId, ready = true }).AllowAnonymous();
+        else app.MapGet("/browser-testing/status", () => new { mode = options.Mode, instanceId = options.RunId, governedContent = options.GovernedContent is not null, ready = true }).AllowAnonymous();
         app.MapGet("/browser-testing/{notice}", () => Results.Text("Isolated browser test fixture only. No legal document or production policy is published here.")).AllowAnonymous();
         app.MapGet("/", () => Results.Redirect("/registration")).AllowAnonymous();
     }
