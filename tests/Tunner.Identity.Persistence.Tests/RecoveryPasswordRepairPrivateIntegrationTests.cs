@@ -167,12 +167,19 @@ internal sealed partial class RecoveryPasswordRepairPrivateIntegrationTests(Iden
         await using var scope = host.Services.CreateAsyncScope();
         return await Application(scope.ServiceProvider, authority).RepairPasswordAsync(caller, request, version, code, password, confirmation, ct);
     }
-    private static async Task Unspent(IdentityTestDatabase db, Seed seed, string? expectedHash = null, string? expectedStamp = null)
+    private static async Task<string> PasswordOutboxSnapshot(IdentityTestDatabase db)
+    {
+        await using var check = db.Context();
+        return JsonSerializer.Serialize(await check.Set<OutboxMessage>().AsNoTracking().OrderBy(row => row.EventId).ToArrayAsync());
+    }
+    private static async Task Unspent(IdentityTestDatabase db, Seed seed, string? expectedHash = null, string? expectedStamp = null, string? expectedOutbox = null)
     {
         await using var check = db.Context();
         Assert.True(await check.Set<RecoveryCodeEntryRow>().Where(x => x.SetReference == seed.Set).AllAsync(x => x.ConsumedAt == null && x.Version == 1));
         Assert.True(await check.Set<RecoveryCodeSetRow>().Where(x => x.SetReference == seed.Set).AllAsync(x => x.State == "ACTIVE" && x.LifecycleVersion == 1 && x.UsageVersion == 0));
-        Assert.True(!await check.Set<RecoveryResultRow>().AnyAsync() && !await check.Set<OutboxMessage>().AnyAsync());
+        Assert.True(!await check.Set<RecoveryResultRow>().AnyAsync());
+        if (expectedOutbox is null) Assert.True(!await check.Set<OutboxMessage>().AnyAsync());
+        else Assert.True(expectedOutbox == await PasswordOutboxSnapshot(db));
         Assert.True(await check.Set<RecoveryCaseRow>().AllAsync(x => x.State == "PENDING_CODE" && x.Version == 1 && x.ResultId == null));
         Assert.True(await check.Set<AuthenticationSessionRow>().AllAsync(x => x.State == "ACTIVE" && x.Version == 1));
         var user = await check.Users.SingleAsync(x => x.AccountId == seed.Account);

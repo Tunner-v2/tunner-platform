@@ -21,7 +21,7 @@ internal sealed partial class RecoveryPasswordRepairPrivateIntegrationTests
         {
             await using var db = await fixture.CreateFiniteDatabaseAsync(CancellationToken.None); var authority = new Authority();
             checkpoint.Mark(RecoveryCodeFirstCaseStage.HOST); var configured = await PublishedPasswordHost(db, authority, false); await using var host = configured.Host;
-            checkpoint.Mark(RecoveryCodeFirstCaseStage.SEED); using var seed = await SeedAsync(db, host, authority);
+            checkpoint.Mark(RecoveryCodeFirstCaseStage.SEED); using var seed = await SeedAsync(db, host, authority); var priorOutbox = await PasswordOutboxSnapshot(db);
             string priorHash; string priorStamp;
             await using (var before = db.Context()) { var user = await before.Users.SingleAsync(row => row.AccountId == seed.Account); priorHash = user.PasswordHash!; priorStamp = user.SecurityStamp!; }
             checkpoint.Mark(RecoveryCodeFirstCaseStage.OPTIONS_GET); using var bootstrap = await host.Get("/authentication/options"); Assert.True(bootstrap.StatusCode == HttpStatusCode.OK);
@@ -43,7 +43,7 @@ internal sealed partial class RecoveryPasswordRepairPrivateIntegrationTests
                 var entry = (await started.Content.ReadFromJsonAsync<JsonElement>()).GetProperty("operation"); expectedVersion = entry.GetProperty("version").GetInt64();
                 Assert.True(entry.GetProperty("status").GetString() == "AWAITING_PROOF" && !entry.GetProperty("authenticated").GetBoolean());
             }
-            await Unspent(db, seed, priorHash, priorStamp);
+            await Unspent(db, seed, priorHash, priorStamp, priorOutbox);
             checkpoint.Mark(RecoveryCodeFirstCaseStage.PASSWORD_PROOF_POST);
             using (var repaired = await host.Post("/recovery/repair", new { requestId = request, expectedVersion, code = seed.Code.NativeInput(), password = Replacement, passwordConfirmation = Replacement }, cookies, csrf))
             {
@@ -84,7 +84,7 @@ internal sealed partial class RecoveryPasswordRepairPrivateIntegrationTests
         {
             await using var db = await fixture.CreateFiniteDatabaseAsync(CancellationToken.None); var authority = new Authority();
             checkpoint.Mark(RecoveryCodeFirstCaseStage.HOST); var configured = await PublishedPasswordHost(db, authority, true); await using var host = configured.Host;
-            checkpoint.Mark(RecoveryCodeFirstCaseStage.SEED); using var seed = await SeedAsync(db, host, authority); string hash; string stamp;
+            checkpoint.Mark(RecoveryCodeFirstCaseStage.SEED); using var seed = await SeedAsync(db, host, authority); var priorOutbox = await PasswordOutboxSnapshot(db); string hash; string stamp;
             await using (var before = db.Context()) { var user = await before.Users.SingleAsync(row => row.AccountId == seed.Account); hash = user.PasswordHash!; stamp = user.SecurityStamp!; }
             using var bootstrap = await host.Get("/authentication/options"); Assert.True(bootstrap.StatusCode == HttpStatusCode.OK); var boot = await bootstrap.Content.ReadFromJsonAsync<JsonElement>();
             Assert.True(boot.GetProperty("recoveryAvailable").GetBoolean()); var cookies = AuthenticationTestHost.Merge(null, bootstrap); var csrf = boot.GetProperty("csrfToken").GetString()!;
@@ -98,7 +98,7 @@ internal sealed partial class RecoveryPasswordRepairPrivateIntegrationTests
             using (var primary = await host.Get("/authentication/options", cookies))
             { Assert.True(primary.StatusCode == HttpStatusCode.OK); Assert.True(!(await primary.Content.ReadFromJsonAsync<JsonElement>()).TryGetProperty("recoveryAvailable", out _)); }
             using (var screen = await host.Get("/recovery", cookies)) Assert.True(screen.StatusCode == HttpStatusCode.Found && screen.Headers.Location?.OriginalString == "/login");
-            checkpoint.Mark(RecoveryCodeFirstCaseStage.CHECK_CONTEXT); await Unspent(db, seed, hash, stamp);
+            checkpoint.Mark(RecoveryCodeFirstCaseStage.CHECK_CONTEXT); await Unspent(db, seed, hash, stamp, priorOutbox);
             await using var check = db.Context(); Assert.True(await check.Set<RecoveryEntryRow>().AllAsync(row => row.State == "OPEN" && row.Version == 1) && !await check.Set<RecoveryResultRow>().AnyAsync());
             Assert.True(authority.RequireEffective(host.Clock.GetUtcNow()).Metadata.EffectiveInterval.Contains(host.Clock.GetUtcNow()));
         }
