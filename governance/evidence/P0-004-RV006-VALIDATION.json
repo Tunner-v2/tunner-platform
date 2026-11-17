@@ -3,6 +3,20 @@
   "scope_id": "P0-004-RV006",
   "validation_kind": "COMMITTED",
   "result": "PENDING",
+  "schema_compilation_increment": {
+    "application_source_sha": "e663e533ce0370b45e80b0defda300e9a3ec2d5e",
+    "final_tested_sha": "519935b2efe4b02f890f49e190fd1727834194c6",
+    "reviewed_patch_sha256": "06e1ad940eb3bae8b070ca12a780bbc4c946fe7398fc2b8345a4449997af9a15",
+    "scope": "Compile gitState and Revision executable schemas once per individual Validate/AddDiagnostics invocation. Every record still evaluates; every fresh public invocation and standalone schema check reloads its source. No acceptance, YAML or cross-call schema cache.",
+    "build": "PASS zero warnings/errors at source freeze; test-only YAML/path repairs rebuilt successfully. No production source changed after e663e533.",
+    "initial_failure": {"source_sha":"e663e533ce0370b45e80b0defda300e9a3ec2d5e","exit_code":1,"elapsed_ms":122057,"classification":"TEST_FIXTURE_SERIALIZATION","cause":"New negative test parsed a YAML record as JSON; existing EditRevision helper reused instead.","ref":"governance/evidence/admission-performance-20261117/schema-hoist-e663e533/functional-summary.json"},
+    "focused_failure": {"source_sha":"8eacf2369b927af9e12eb4b5a4da02a2e07bfc12","exit_code":1,"elapsed_ms":86162,"classification":"TEST_FIXTURE_PATH_FORMAT","cause":"Two strict record-location assertions compared mixed-separator paths against native Windows paths. Two declarations now use the same native Path.Combine segments as the loader; strict equality and all seven new assertions retained.","ref":"governance/evidence/admission-performance-20261117/schema-hoist-8eacf236/focused-summary.json"},
+    "focused": {"source_sha":"519935b2efe4b02f890f49e190fd1727834194c6","exit_code":0,"assertions":31,"elapsed_ms":85768,"ref":"governance/evidence/admission-performance-20261117/schema-hoist-519935b2/focused-summary.json"},
+    "functional": {"source_sha":"519935b2efe4b02f890f49e190fd1727834194c6","exit_code":0,"elapsed_ms":241078,"scope":"Full existing suite including seven new later-record/schema-freshness assertions; not merely the focused group.","ref":"governance/evidence/admission-performance-20261117/schema-hoist-519935b2/functional-summary.json"},
+    "actual_context": {"scope":"TUN-P2-019","mode":"TASK","timed_out":true,"elapsed_ms":300167,"deadline_ms":300000,"owned_process_exited":true,"current_context_proved":false,"ref":"governance/evidence/admission-performance-20261117/schema-hoist-519935b2/context-summary.json"},
+    "review": "Independent AI p214_continuation_qa reviewed the two-file implementation, seven fixture assertions, both test-only repairs and all three actual run directories. Verified regression PASS and unsatisfied context-performance acceptance; no source finding, no all-scope role PASS or closure inference. Empty raw context stdout is retained as context-stdout.log, not a completed JSON result.",
+    "decision": "Regression qualification passes; required context-performance qualification remains unresolved. No performance speedup, CURRENT context, validation promotion or closure claim. Preserve all actual failures and passing runs; no equivalent context retry or cache/framework expansion. Pending RV007 authorization separately blocks P2-019 UI correction. Current P2-016 gate has only open prerequisite and shared test/project-source binding issues, not changed application code."
+  },
   "initial_compile": {"source_sha":"b258e7d2361b5ff320c799ec7cae741c8267551f","result":"FAIL_CA1861","scope":"Two new fixture constant array arguments only; hoisted once to enclosing fixture scope. Corrected build passed at 785b0547."},
   "qualification_checkpoint": {
     "source_sha": "c86ca859736fd26c3150b53b9b6b78663de07bf9",
