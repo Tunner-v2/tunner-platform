@@ -1030,6 +1030,10 @@ static void RunRevisionCommittedProofChecks(DirectoryInfo repositoryRoot, IColle
                 "same assessment rejects withdrawn required-role evidence outside direct Revision evidence");
             Check(RevisionApplication.CloseCheck(fixture, first).ExitCode != 0,
                 "fresh public assessment also rejects withdrawn required-role evidence");
+            Check(CommitReadinessApplication.Check(fixture, originalRecord, null, assessment).Any(finding =>
+                    finding.Contains("closed Revision proof is invalid for owned behavior: " + first, StringComparison.Ordinal) &&
+                    finding.Contains("role review", StringComparison.Ordinal)),
+                "effective ownership reports the nested closure refusal instead of hiding its cause");
         }
         finally { File.WriteAllBytes(roleEvidencePath, roleEvidenceBytes); }
         var changedProof = File.ReadAllBytes(firstProofPath);

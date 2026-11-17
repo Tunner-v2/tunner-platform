@@ -11,6 +11,7 @@ internal sealed class RevisionCommittedProofResolver
     private readonly CommittedProofAssessment assessment;
     private readonly Dictionary<string, (string? Sha, HashSet<string> Paths)> classifications = new(StringComparer.Ordinal);
     private readonly Dictionary<string, bool> validated = new(StringComparer.Ordinal);
+    private readonly Dictionary<string, string> validationFailures = new(StringComparer.Ordinal);
 
     internal RevisionCommittedProofResolver(DirectoryInfo repository, GovernanceRecord original, CommittedProofAssessment assessment)
     {
@@ -50,19 +51,28 @@ internal sealed class RevisionCommittedProofResolver
                     revision.StringList("required_roles").Contains(r.Scalar("role") ?? "", StringComparer.Ordinal));
                 try
                 {
-                    valid = revision.StringList("evidence_refs").All(IsCommitted) && reviewFiles.All(r =>
-                        IsCommitted(RepositoryRootResolver.ToLogicalPath(repository, r.Path))) &&
-                        RevisionApplication.CloseCheck(repository, revision.Identifier, assessment).ExitCode == 0;
+                    var uncommitted = revision.StringList("evidence_refs").Concat(reviewFiles.Select(r =>
+                        RepositoryRootResolver.ToLogicalPath(repository, r.Path))).Where(path => !IsCommitted(path)).ToArray();
+                    valid = uncommitted.Length == 0;
+                    if (!valid) validationFailures[revision.Identifier] = "uncommitted proof: " + string.Join(", ", uncommitted);
+                    else
+                    {
+                        var closure = RevisionApplication.CloseCheck(repository, revision.Identifier, assessment);
+                        valid = closure.ExitCode == 0;
+                        if (!valid) validationFailures[revision.Identifier] = string.Join("; ", ((RevisionOperationPayload)closure.Payload).Findings);
+                    }
                 }
                 catch (Exception exception) when (exception is JsonException or InvalidOperationException)
                 {
                     valid = false;
+                    validationFailures[revision.Identifier] = exception.GetType().Name + ": " + exception.Message;
                 }
                 validated.Add(revision.Identifier, valid);
             }
             if (!valid)
             {
-                failure = "closed Revision proof is invalid for owned behavior: " + revision.Identifier + ": " + logicalPath;
+                failure = "closed Revision proof is invalid for owned behavior: " + revision.Identifier + ": " + logicalPath +
+                    " (" + validationFailures[revision.Identifier] + ")";
                 return null; // Never fall back to older validation after a later owner has claimed this path.
             }
             return classification.Sha;
