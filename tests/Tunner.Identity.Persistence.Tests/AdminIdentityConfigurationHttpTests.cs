@@ -50,8 +50,10 @@ public sealed class AdminIdentityConfigurationHttpTests(SessionListingPostgresFi
     [InlineData("session-listing-content")]
     [InlineData("session-revocation-content")]
     [InlineData("session-bulk-revocation-content")]
+    [InlineData("recovery-password-content")]
     public async Task CanonicalSettingsRoutesEnforceCurrentIdentityAdmission(string family)
     {
+        var recovery = family == "recovery-password-content" ? new PublishedRecoveryPasswordPresentationTests.Fixture() : null;
         var additional = family switch
         {
             "registration" => new[] { new IdentityConfigurationScope(IdentityConfigurationFamily.Registration) },
@@ -66,9 +68,11 @@ public sealed class AdminIdentityConfigurationHttpTests(SessionListingPostgresFi
             "session-listing-content" => new[] { new IdentityConfigurationScope(IdentityConfigurationFamily.SessionListingContent, AuthenticationPolicyVersion: "fixture-session-listing-route-v1") },
             "session-revocation-content" => new[] { new IdentityConfigurationScope(IdentityConfigurationFamily.SessionRevocationContent, AuthenticationPolicyVersion: "fixture-session-revocation-route-v1") },
             "session-bulk-revocation-content" => new[] { new IdentityConfigurationScope(IdentityConfigurationFamily.SessionBulkRevocationContent, AuthenticationPolicyVersion: "fixture-session-bulk-revocation-route-v1") },
+            "recovery-password-content" => new[] { new IdentityConfigurationScope(IdentityConfigurationFamily.RecoveryPasswordContent, RecoveryPasswordPolicyVersion: recovery!.Policy.Version) },
             _ => Array.Empty<IdentityConfigurationScope>()
         };
-        await using var database = await fixture.CreateDatabaseAsync(); await using var host = await Host.Start(database, additionalScopes: additional);
+        await using var database = await fixture.CreateDatabaseAsync(); await using var host = await Host.Start(database, additionalScopes: additional,
+            recoveryPasswordPolicies: recovery is null ? null : new RecoveryPasswordPolicyCatalog([recovery.Binding.Policy]));
         var actor = await host.Browser("fixture-security-author"); var path = "/identity/settings/" + family;
         foreach (var suffix in new[] { "", "/review", "/history" })
         {
@@ -329,7 +333,8 @@ public sealed class AdminIdentityConfigurationHttpTests(SessionListingPostgresFi
         internal Owners Owners { get; }
         private Host(Microsoft.AspNetCore.Builder.WebApplication application, X509Certificate2 certificate, HttpClient client, Tickets tickets, RuntimeConfigurationTestEnvironment environment, Owners owners)
         { this.application = application; this.certificate = certificate; this.client = client; this.tickets = tickets; Environment = environment; Owners = owners; }
-        internal static async Task<Host> Start(IdentityTestDatabase database, bool publishChrome = false, IReadOnlyList<IdentityConfigurationScope>? additionalScopes = null)
+        internal static async Task<Host> Start(IdentityTestDatabase database, bool publishChrome = false, IReadOnlyList<IdentityConfigurationScope>? additionalScopes = null,
+            IRecoveryPasswordPolicySource? recoveryPasswordPolicies = null)
         {
             var env = new RuntimeConfigurationTestEnvironment(database); var owners = new Owners(env, additionalScopes); var tickets = new Tickets();
             PresentationContentTestEnvironment? chrome = null;
@@ -350,6 +355,7 @@ public sealed class AdminIdentityConfigurationHttpTests(SessionListingPostgresFi
                     builder.WebHost.ConfigureKestrel(server => server.Listen(IPAddress.Loopback, 0, listen => listen.UseHttps(certificate)));
                     builder.Services.AddDataProtection().UseEphemeralDataProtectionProvider(); builder.Services.AddSingleton<ITicketStore>(tickets);
                     builder.Services.AddSingleton<TimeProvider>(env.Clock); builder.Services.AddScoped(_ => env.Context()); builder.Services.AddScoped<IdentityRuntimeConfigurationApplication>();
+                    if (recoveryPasswordPolicies is not null) builder.Services.AddSingleton<IRecoveryPasswordPolicySource>(recoveryPasswordPolicies);
                     builder.Services.AddSingleton<IIdentityConfigurationGovernanceSource>(owners); builder.Services.AddSingleton<IIdentityConfigurationBrowseBudgetSource>(owners);
                     builder.Services.AddSingleton<IAdminIdentityConfigurationSessionSource>(owners); builder.Services.AddSingleton<IAdminIdentityConfigurationAuthorizationSource>(owners);
                     builder.Services.AddSingleton<IAdminIdentityConfigurationHttpProfileSource>(owners);

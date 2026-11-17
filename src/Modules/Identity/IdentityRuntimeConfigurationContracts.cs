@@ -4,19 +4,22 @@ using Tunner.Platform.Policies;
 
 namespace Tunner.Identity.Persistence;
 
-public enum IdentityConfigurationFamily { Authentication, Assurance, AuthenticationContent, Registration, Totp, RegistrationContent, Passkey, TotpContent, PasskeyContent, StepUpContent, RecoveryCodes, SessionListing, SessionListingContent, SessionRevocationContent, SessionBulkRevocationContent }
+public enum IdentityConfigurationFamily { Authentication, Assurance, AuthenticationContent, Registration, Totp, RegistrationContent, Passkey, TotpContent, PasskeyContent, StepUpContent, RecoveryCodes, SessionListing, SessionListingContent, SessionRevocationContent, SessionBulkRevocationContent, RecoveryPasswordContent }
 public enum IdentityConfigurationOperation { CreateDraft, UpdateDraft, Validate, Preview, Approve, Publish, History, Rollback, Browse }
 public enum IdentityConfigurationActorKind { Human, Service, Model }
 public sealed record IdentityConfigurationScope(IdentityConfigurationFamily Family, AssurancePolicyScope? AssuranceScope = null, string? AuthenticationPolicyVersion = null,
     [property: JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] string? RegistrationPolicyVersion = null,
     [property: JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] string? TotpPolicyVersion = null,
     [property: JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] string? PasskeyPolicyVersion = null,
-    [property: JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] string? AssurancePolicyVersion = null)
+    [property: JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] string? AssurancePolicyVersion = null,
+    [property: JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] string? RecoveryPasswordPolicyVersion = null)
 {
     internal string Key => JsonSerializer.Serialize(this);
     internal void Require()
     {
-        if (!Enum.IsDefined(Family) || Family != IdentityConfigurationFamily.RegistrationContent && RegistrationPolicyVersion is not null ||
+        if (!Enum.IsDefined(Family) || Family != IdentityConfigurationFamily.RecoveryPasswordContent && RecoveryPasswordPolicyVersion is not null ||
+            Family == IdentityConfigurationFamily.RecoveryPasswordContent && (AssuranceScope is not null || AuthenticationPolicyVersion is not null || string.IsNullOrWhiteSpace(RecoveryPasswordPolicyVersion)) ||
+            Family != IdentityConfigurationFamily.RegistrationContent && RegistrationPolicyVersion is not null ||
             Family != IdentityConfigurationFamily.TotpContent && TotpPolicyVersion is not null ||
             Family != IdentityConfigurationFamily.PasskeyContent && PasskeyPolicyVersion is not null ||
             Family != IdentityConfigurationFamily.StepUpContent && AssurancePolicyVersion is not null ||
@@ -90,6 +93,7 @@ public sealed record IdentityConfigurationPreview(IdentityConfigurationProposal 
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] public SessionListingContentBinding? SessionListingContent { get; init; }
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] public SessionActionContentBinding? SessionRevocationContent { get; init; }
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] public SessionActionContentBinding? SessionBulkRevocationContent { get; init; }
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] public RecoveryPasswordContentBindingValues? RecoveryPasswordContent { get; init; }
 }
 public sealed record IdentityConfigurationHistory(Guid PublicationReference, Guid VersionReference, IdentityConfigurationScope Scope, string PolicyVersionReference,
     string CandidateDigest, EffectivePolicyInterval EffectiveInterval, Guid? SupersedesPublicationReference, string ApproverReference,
@@ -113,7 +117,8 @@ internal sealed record IdentityConfigurationDocument(AuthenticationPolicyVersion
     [property: JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] SessionListingHttpBudget? SessionListing = null,
     [property: JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] SessionListingContentBinding? SessionListingContent = null,
     [property: JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] SessionActionContentBinding? SessionRevocationContent = null,
-    [property: JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] SessionActionContentBinding? SessionBulkRevocationContent = null)
+    [property: JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] SessionActionContentBinding? SessionBulkRevocationContent = null,
+    [property: JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] RecoveryPasswordContentBindingValues? RecoveryPasswordContent = null)
 {
     private static readonly JsonSerializerOptions Json = new()
     {
@@ -149,12 +154,13 @@ internal sealed record IdentityConfigurationDocument(AuthenticationPolicyVersion
         : SessionListingContent is not null ? new(IdentityConfigurationFamily.SessionListingContent, AuthenticationPolicyVersion: SessionListingContent.AuthenticationPolicyVersion)
         : SessionRevocationContent is not null ? new(IdentityConfigurationFamily.SessionRevocationContent, AuthenticationPolicyVersion: SessionRevocationContent.AuthenticationPolicyVersion)
         : SessionBulkRevocationContent is not null ? new(IdentityConfigurationFamily.SessionBulkRevocationContent, AuthenticationPolicyVersion: SessionBulkRevocationContent.AuthenticationPolicyVersion)
+        : RecoveryPasswordContent is not null ? new(IdentityConfigurationFamily.RecoveryPasswordContent, RecoveryPasswordPolicyVersion: RecoveryPasswordContent.RecoveryPasswordPolicyVersion)
         : new(IdentityConfigurationFamily.AuthenticationContent, AuthenticationPolicyVersion: ContentBinding!.AuthenticationPolicyVersion);
-    internal string Version => Authentication?.Values.Version ?? Assurance?.Metadata.VersionId ?? Registration?.Values.Version ?? Totp?.Values.Version ?? Passkey?.Values.Version ?? RegistrationContent?.ConfigurationVersionReference ?? TotpContent?.ConfigurationVersionReference ?? PasskeyContent?.ConfigurationVersionReference ?? StepUpContent?.ConfigurationVersionReference ?? RecoveryCodes?.Values.Version ?? SessionListing?.Metadata.VersionId ?? SessionListingContent?.ConfigurationVersionReference ?? SessionRevocationContent?.ConfigurationVersionReference ?? SessionBulkRevocationContent?.ConfigurationVersionReference ?? ContentBinding!.ConfigurationVersionReference;
-    internal EffectivePolicyInterval Interval => Authentication?.Metadata.EffectiveInterval ?? Assurance?.Metadata.EffectiveInterval ?? Registration?.Metadata.EffectiveInterval ?? Totp?.Metadata.EffectiveInterval ?? Passkey?.Metadata.EffectiveInterval ?? RegistrationContent?.EffectiveInterval ?? TotpContent?.EffectiveInterval ?? PasskeyContent?.EffectiveInterval ?? StepUpContent?.EffectiveInterval ?? RecoveryCodes?.Metadata.EffectiveInterval ?? SessionListing?.Metadata.EffectiveInterval ?? SessionListingContent?.EffectiveInterval ?? SessionRevocationContent?.EffectiveInterval ?? SessionBulkRevocationContent?.EffectiveInterval ?? ContentBinding!.EffectiveInterval;
+    internal string Version => Authentication?.Values.Version ?? Assurance?.Metadata.VersionId ?? Registration?.Values.Version ?? Totp?.Values.Version ?? Passkey?.Values.Version ?? RegistrationContent?.ConfigurationVersionReference ?? TotpContent?.ConfigurationVersionReference ?? PasskeyContent?.ConfigurationVersionReference ?? StepUpContent?.ConfigurationVersionReference ?? RecoveryCodes?.Values.Version ?? SessionListing?.Metadata.VersionId ?? SessionListingContent?.ConfigurationVersionReference ?? SessionRevocationContent?.ConfigurationVersionReference ?? SessionBulkRevocationContent?.ConfigurationVersionReference ?? RecoveryPasswordContent?.ConfigurationVersionReference ?? ContentBinding!.ConfigurationVersionReference;
+    internal EffectivePolicyInterval Interval => Authentication?.Metadata.EffectiveInterval ?? Assurance?.Metadata.EffectiveInterval ?? Registration?.Metadata.EffectiveInterval ?? Totp?.Metadata.EffectiveInterval ?? Passkey?.Metadata.EffectiveInterval ?? RegistrationContent?.EffectiveInterval ?? TotpContent?.EffectiveInterval ?? PasskeyContent?.EffectiveInterval ?? StepUpContent?.EffectiveInterval ?? RecoveryCodes?.Metadata.EffectiveInterval ?? SessionListing?.Metadata.EffectiveInterval ?? SessionListingContent?.EffectiveInterval ?? SessionRevocationContent?.EffectiveInterval ?? SessionBulkRevocationContent?.EffectiveInterval ?? RecoveryPasswordContent?.EffectiveInterval ?? ContentBinding!.EffectiveInterval;
     internal void Require()
     {
-        if ((Authentication is null ? 0 : 1) + (Assurance is null ? 0 : 1) + (ContentBinding is null ? 0 : 1) + (Registration is null ? 0 : 1) + (Totp is null ? 0 : 1) + (RegistrationContent is null ? 0 : 1) + (Passkey is null ? 0 : 1) + (TotpContent is null ? 0 : 1) + (PasskeyContent is null ? 0 : 1) + (StepUpContent is null ? 0 : 1) + (RecoveryCodes is null ? 0 : 1) + (SessionListing is null ? 0 : 1) + (SessionListingContent is null ? 0 : 1) + (SessionRevocationContent is null ? 0 : 1) + (SessionBulkRevocationContent is null ? 0 : 1) != 1) throw new IdentityConfigurationUnavailableException();
+        if ((Authentication is null ? 0 : 1) + (Assurance is null ? 0 : 1) + (ContentBinding is null ? 0 : 1) + (Registration is null ? 0 : 1) + (Totp is null ? 0 : 1) + (RegistrationContent is null ? 0 : 1) + (Passkey is null ? 0 : 1) + (TotpContent is null ? 0 : 1) + (PasskeyContent is null ? 0 : 1) + (StepUpContent is null ? 0 : 1) + (RecoveryCodes is null ? 0 : 1) + (SessionListing is null ? 0 : 1) + (SessionListingContent is null ? 0 : 1) + (SessionRevocationContent is null ? 0 : 1) + (SessionBulkRevocationContent is null ? 0 : 1) + (RecoveryPasswordContent is null ? 0 : 1) != 1) throw new IdentityConfigurationUnavailableException();
         if (Authentication is { } authentication)
         {
             if (authentication.Metadata is null || authentication.Values is null) throw new IdentityConfigurationUnavailableException();
@@ -225,6 +231,7 @@ internal sealed record IdentityConfigurationDocument(AuthenticationPolicyVersion
         if (SessionBulkRevocationContent is { } bulkContent)
             RequireFactorBinding(bulkContent.AuthenticationPolicyVersion, bulkContent.ConfigurationVersionReference, bulkContent.QualificationReference,
                 bulkContent.ContentScope, bulkContent.VariantReference, bulkContent.EffectiveInterval);
+        RecoveryPasswordContent?.Require();
         Scope.Require();
     }
     private static void RequireFactorBinding(string policy, string configuration, string qualification, string scope, string variant, EffectivePolicyInterval interval)

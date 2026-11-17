@@ -10,7 +10,7 @@ namespace Tunner.Identity.Persistence;
 /// <summary>Only current effective publications with immutable Identity validation/approval/effect receipts are runtime authority.
 /// Reading a policy never requires an Admin browser session and never changes historical actor/session state.</summary>
 public sealed class PersistedIdentityRuntimeConfigurationSource(IServiceScopeFactory scopes) : IAuthenticationPolicySource, IAssurancePolicySource, IAuthenticationContentBindingSource,
-    IRegistrationPolicySource, ITotpPolicySource, IRegistrationContentBindingSource, IPasskeyPolicySource, ITotpContentBindingSource, IPasskeyContentBindingSource, IStepUpContentBindingSource, IRecoveryCodePolicySource, ISessionListingHttpBudgetSource, ISessionListingContentBindingSource, ISessionRevocationContentBindingSource, ISessionBulkRevocationContentBindingSource
+    IRegistrationPolicySource, ITotpPolicySource, IRegistrationContentBindingSource, IPasskeyPolicySource, ITotpContentBindingSource, IPasskeyContentBindingSource, IStepUpContentBindingSource, IRecoveryCodePolicySource, ISessionListingHttpBudgetSource, ISessionListingContentBindingSource, ISessionRevocationContentBindingSource, ISessionBulkRevocationContentBindingSource, IRecoveryPasswordContentBindingSource
 {
     RegistrationPolicy IRegistrationPolicySource.RequireEffective(DateTimeOffset effectiveAt)
     {
@@ -107,6 +107,31 @@ public sealed class PersistedIdentityRuntimeConfigurationSource(IServiceScopeFac
         var value = selected.Document.SessionListingContent ?? throw new IdentityConfigurationUnavailableException();
         if (value.AuthenticationPolicyVersion != policy.Version || selected.BindingAvailability is null) throw new IdentityConfigurationUnavailableException();
         return value with { QualificationReference = selected.Publication.ApprovalEventReference.ToString("N"), EffectiveInterval = selected.BindingAvailability };
+    }
+
+    async ValueTask<RecoveryPasswordContentBinding> IRecoveryPasswordContentBindingSource.RequireQualifiedAsync(RecoveryPasswordPolicy policy,
+        DateTimeOffset effectiveAt, CancellationToken cancellationToken)
+    {
+        ArgumentNullException.ThrowIfNull(policy); cancellationToken.ThrowIfCancellationRequested();
+        var requested = JsonSerializer.Serialize(policy);
+        await using var scope = scopes.CreateAsyncScope();
+        var source = scope.ServiceProvider.GetService<IRecoveryPasswordPolicySource>();
+        var clock = scope.ServiceProvider.GetService<TimeProvider>() ?? throw new IdentityConfigurationUnavailableException();
+        var owner = RecoveryPasswordContentBindingValues.RequireOwner(source, policy.Version, effectiveAt);
+        owner.Require(policy.Origin, clock.GetUtcNow());
+        if (JsonSerializer.Serialize(owner.Values) != requested) throw new IdentityConfigurationUnavailableException();
+        var selected = await ReadAsync(new(IdentityConfigurationFamily.RecoveryPasswordContent, RecoveryPasswordPolicyVersion: policy.Version),
+            effectiveAt, cancellationToken).ConfigureAwait(false);
+        var value = selected.Document.RecoveryPasswordContent ?? throw new IdentityConfigurationUnavailableException();
+        var current = RecoveryPasswordContentBindingValues.RequireOwner(source, policy.Version, clock.GetUtcNow());
+        var finalAt = clock.GetUtcNow(); value.RequireCurrent(current, finalAt);
+        if (current.Snapshot != owner.Snapshot || JsonSerializer.Serialize(policy) != requested || JsonSerializer.Serialize(current.Values) != requested ||
+            selected.BindingAvailability is null || !selected.BindingAvailability.Contains(finalAt)) throw new IdentityConfigurationUnavailableException();
+        var interval = PublishedPresentationAvailability.Intersect(selected.BindingAvailability, current.Metadata.EffectiveInterval);
+        cancellationToken.ThrowIfCancellationRequested();
+        return new(current, value.ConfigurationVersionReference, selected.Publication.ApprovalEventReference.ToString("N"), value.ContentScope,
+            value.VariantReference, interval, value.GoalLabelKey, value.GoalDescriptionKey, value.EffectLabelKey, value.EffectValueKey,
+            [.. value.FollowUps.Select(item => new RecoveryPasswordFollowUp(item.Reference, item.LabelKey, item.ValueKey))]);
     }
 
     async ValueTask<SessionActionContentBinding> ISessionBulkRevocationContentBindingSource.RequireQualifiedAsync(AuthenticationPolicy policy,
@@ -237,6 +262,15 @@ public sealed class PersistedIdentityRuntimeConfigurationSource(IServiceScopeFac
 
 public static class IdentityRuntimeConfigurationRegistration
 {
+    /// <summary>Mapping-only opt-in; no Recovery policy, presentation, proof capability, application or route is selected.</summary>
+    public static IServiceCollection AddTunnerPersistedRecoveryPasswordContentBinding(this IServiceCollection services)
+    {
+        ArgumentNullException.ThrowIfNull(services);
+        if (services.Any(x => x.ServiceType == typeof(IRecoveryPasswordContentBindingSource))) throw new InvalidOperationException("Recovery password content binding source selection must be explicit and unique.");
+        services.TryAddSingleton<PersistedIdentityRuntimeConfigurationSource>();
+        services.AddSingleton<IRecoveryPasswordContentBindingSource>(provider => provider.GetRequiredService<PersistedIdentityRuntimeConfigurationSource>()); return services;
+    }
+
     /// <summary>Binding-only opt-in; single sign-out, policies, budgets, presentation and optional routes remain separate.</summary>
     public static IServiceCollection AddTunnerPersistedSessionBulkRevocationContentBinding(this IServiceCollection services)
     {

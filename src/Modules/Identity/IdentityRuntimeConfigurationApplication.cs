@@ -12,7 +12,7 @@ namespace Tunner.Identity.Persistence;
 
 /// <summary>Identity-owned security configuration. Typed candidates are proposals, not publication or approval authority.</summary>
 public sealed partial class IdentityRuntimeConfigurationApplication(IdentityPersistenceDbContext database, IIdentityConfigurationGovernanceSource governance,
-    IIdentityConfigurationAuthorizationSource authorization, TimeProvider clock)
+    IIdentityConfigurationAuthorizationSource authorization, TimeProvider clock, IRecoveryPasswordPolicySource? recoveryPasswordPolicies = null)
 {
     public Task<IdentityConfigurationProposal> CreateAuthenticationDraftAsync(AuthenticationPolicyVersion candidate, string operationId, string correlationId, CancellationToken cancellationToken = default)
         => DraftAsync(new(Authentication: candidate), null, null, operationId, correlationId, cancellationToken);
@@ -34,6 +34,8 @@ public sealed partial class IdentityRuntimeConfigurationApplication(IdentityPers
         => DraftAsync(new(Totp: SnapshotTotpCandidate(candidate)), null, null, operationId, correlationId, cancellationToken);
     public Task<IdentityConfigurationProposal> CreatePasskeyDraftAsync(PasskeyConfigurationVersion candidate, string operationId, string correlationId, CancellationToken cancellationToken = default)
         => DraftAsync(new(Passkey: SnapshotPasskeyCandidate(candidate)), null, null, operationId, correlationId, cancellationToken);
+    public Task<IdentityConfigurationProposal> CreateRecoveryPasswordContentDraftAsync(RecoveryPasswordContentBindingValues candidate, string operationId, string correlationId, CancellationToken cancellationToken = default)
+        => DraftAsync(new(RecoveryPasswordContent: candidate.Snapshot()), null, null, operationId, correlationId, cancellationToken);
     public Task<IdentityConfigurationProposal> CreateSessionBulkRevocationContentDraftAsync(SessionActionContentBinding candidate, string operationId, string correlationId, CancellationToken cancellationToken = default)
         => DraftAsync(new(SessionBulkRevocationContent: candidate), null, null, operationId, correlationId, cancellationToken);
     public Task<IdentityConfigurationProposal> CreateSessionRevocationContentDraftAsync(SessionActionContentBinding candidate, string operationId, string correlationId, CancellationToken cancellationToken = default)
@@ -74,6 +76,9 @@ public sealed partial class IdentityRuntimeConfigurationApplication(IdentityPers
     public Task<IdentityConfigurationProposal> UpdatePasskeyDraftAsync(Guid proposalReference, long expectedRevision, PasskeyConfigurationVersion candidate,
         string operationId, string correlationId, CancellationToken cancellationToken = default)
         => DraftAsync(new(Passkey: SnapshotPasskeyCandidate(candidate)), proposalReference, expectedRevision, operationId, correlationId, cancellationToken);
+    public Task<IdentityConfigurationProposal> UpdateRecoveryPasswordContentDraftAsync(Guid proposalReference, long expectedRevision, RecoveryPasswordContentBindingValues candidate,
+        string operationId, string correlationId, CancellationToken cancellationToken = default)
+        => DraftAsync(new(RecoveryPasswordContent: candidate.Snapshot()), proposalReference, expectedRevision, operationId, correlationId, cancellationToken);
     public Task<IdentityConfigurationProposal> UpdateSessionBulkRevocationContentDraftAsync(Guid proposalReference, long expectedRevision, SessionActionContentBinding candidate,
         string operationId, string correlationId, CancellationToken cancellationToken = default)
         => DraftAsync(new(SessionBulkRevocationContent: candidate), proposalReference, expectedRevision, operationId, correlationId, cancellationToken);
@@ -106,7 +111,7 @@ public sealed partial class IdentityRuntimeConfigurationApplication(IdentityPers
 
     private async Task<IdentityConfigurationProposal> DraftAsync(IdentityConfigurationDocument document, Guid? id, long? revision, string operationId, string correlationId, CancellationToken ct)
     {
-        document.Require(); await using var tx = await BeginAsync(ct).ConfigureAwait(false);
+        document.Require(); var recoveryOwner = RecoveryOwner(document); await using var tx = await BeginAsync(ct).ConfigureAwait(false);
         var authority = Governance(document.Scope); Bound(document, authority);
         var row = id is { } original ? await ProposalAsync(original, revision, ct).ConfigureAwait(false) : null;
         if (row is not null && (row.State == "PUBLISHED" || row.ScopeKey != document.Scope.Key || row.GovernanceVersion != authority.Metadata.VersionId)) throw new IdentityConfigurationConflictException();
@@ -123,13 +128,14 @@ public sealed partial class IdentityRuntimeConfigurationApplication(IdentityPers
         row.Payload = document.Snapshot; row.Digest = document.Digest; row.PolicyVersionReference = document.Version; row.State = "DRAFT";
         row.ModelOrigin |= actor.ActorKind == IdentityConfigurationActorKind.Model; row.VersionReference = null;
         row.ApproverReference = null; row.ApprovalEvidenceReference = null; row.ApprovalEventReference = null;
-        await FinishAsync(tx, authority, request, actor, target, row.Revision, row.Digest, row, null, null, ct).ConfigureAwait(false); return View(row);
+        await FinishAsync(tx, authority, request, actor, target, row.Revision, row.Digest, row, null, null, ct, recoveryOwner).ConfigureAwait(false); return View(row);
     }
 
     public async Task<IdentityConfigurationProposal> ValidateAsync(IdentityConfigurationCommand command, CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(command); var ct = cancellationToken; await using var tx = await BeginAsync(ct).ConfigureAwait(false);
         var row = await ProposalAsync(command.ProposalReference, command.ExpectedRevision, ct).ConfigureAwait(false); var document = IdentityConfigurationDocument.Read(row.Payload);
+        var recoveryOwner = RecoveryOwner(document);
         var authority = await ProposalGovernanceAsync(row, document, ct).ConfigureAwait(false);
         await LockAsync("version:" + row.ScopeKey + ":" + row.PolicyVersionReference, ct).ConfigureAwait(false);
         if (row.State != "DRAFT" || await database.Set<IdentityConfigurationVersionRow>().AnyAsync(x => x.ScopeKey == row.ScopeKey && x.PolicyVersionReference == row.PolicyVersionReference, ct).ConfigureAwait(false))
@@ -139,13 +145,14 @@ public sealed partial class IdentityRuntimeConfigurationApplication(IdentityPers
         var version = new IdentityConfigurationVersionRow { Id = Guid.NewGuid(), ProposalReference = row.Id, ScopeKey = row.ScopeKey, GovernanceVersion = row.GovernanceVersion,
             PolicyVersionReference = row.PolicyVersionReference, Payload = row.Payload, Digest = row.Digest, ContributorsJson = row.ContributorsJson, ModelOrigin = row.ModelOrigin };
         database.Set<IdentityConfigurationVersionRow>().Add(version); row.State = "VALIDATED"; row.VersionReference = version.Id; row.Revision++;
-        await FinishAsync(tx, authority, request, actor, version.Id, row.Revision, row.Digest, row, version, null, ct).ConfigureAwait(false); return View(row);
+        await FinishAsync(tx, authority, request, actor, version.Id, row.Revision, row.Digest, row, version, null, ct, recoveryOwner).ConfigureAwait(false); return View(row);
     }
 
     public async Task<IdentityConfigurationProposal> ApproveAsync(IdentityConfigurationCommand command, CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(command); var ct = cancellationToken; await using var tx = await BeginAsync(ct).ConfigureAwait(false);
         var row = await ProposalAsync(command.ProposalReference, command.ExpectedRevision, ct).ConfigureAwait(false); var document = IdentityConfigurationDocument.Read(row.Payload);
+        var recoveryOwner = RecoveryOwner(document);
         var authority = await ProposalGovernanceAsync(row, document, ct).ConfigureAwait(false);
         if (row.State != "VALIDATED" || row.VersionReference is null) throw new IdentityConfigurationConflictException();
         var request = Request(IdentityConfigurationOperation.Approve, document.Scope, authority, row.Id.ToString("N"), row.Revision,
@@ -153,7 +160,7 @@ public sealed partial class IdentityRuntimeConfigurationApplication(IdentityPers
         var actor = await AuthorizeAsync(request, ct).ConfigureAwait(false);
         if (authority.SeparateAuthorApprover && Authors(row.ContributorsJson).Contains(actor.ActorReference, StringComparer.Ordinal)) throw new IdentityConfigurationForbiddenException();
         row.ApproverReference = actor.ActorReference; row.ApprovalEvidenceReference = actor.EvidenceReference; row.State = "APPROVED"; row.Revision++;
-        await FinishAsync(tx, authority, request, actor, row.Id, row.Revision, row.Digest, row, null, null, ct).ConfigureAwait(false); return View(row);
+        await FinishAsync(tx, authority, request, actor, row.Id, row.Revision, row.Digest, row, null, null, ct, recoveryOwner).ConfigureAwait(false); return View(row);
     }
 
     public async Task<IdentityConfigurationPreview> PreviewAsync(IdentityConfigurationCommand command, CancellationToken cancellationToken = default)
@@ -164,13 +171,14 @@ public sealed partial class IdentityRuntimeConfigurationApplication(IdentityPers
         var request = Request(IdentityConfigurationOperation.Preview, value.Scope, authority, row.Id.ToString("N"), row.Revision, row.Digest, command.OperationId, command.CorrelationId);
         var actor = await AuthorizeAsync(request, ct).ConfigureAwait(false);
         await FinishAsync(tx, authority, request, actor, row.Id, row.Revision, row.Digest, null, null, null, ct).ConfigureAwait(false);
-        return new(View(row), value.Authentication, value.Assurance, value.ContentBinding) { Registration = value.Registration, Totp = value.Totp, RegistrationContent = value.RegistrationContent, Passkey = value.Passkey, TotpContent = value.TotpContent, PasskeyContent = value.PasskeyContent, StepUpContent = value.StepUpContent, RecoveryCodes = value.RecoveryCodes, SessionListing = value.SessionListing, SessionListingContent = value.SessionListingContent, SessionRevocationContent = value.SessionRevocationContent, SessionBulkRevocationContent = value.SessionBulkRevocationContent };
+        return new(View(row), value.Authentication, value.Assurance, value.ContentBinding) { Registration = value.Registration, Totp = value.Totp, RegistrationContent = value.RegistrationContent, Passkey = value.Passkey, TotpContent = value.TotpContent, PasskeyContent = value.PasskeyContent, StepUpContent = value.StepUpContent, RecoveryCodes = value.RecoveryCodes, SessionListing = value.SessionListing, SessionListingContent = value.SessionListingContent, SessionRevocationContent = value.SessionRevocationContent, SessionBulkRevocationContent = value.SessionBulkRevocationContent, RecoveryPasswordContent = value.RecoveryPasswordContent };
     }
 
     public async Task<IdentityConfigurationHistory> PublishAsync(PublishIdentityConfiguration command, CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(command); var ct = cancellationToken; await using var tx = await BeginAsync(ct).ConfigureAwait(false);
         var row = await ProposalAsync(command.ProposalReference, command.ExpectedRevision, ct).ConfigureAwait(false); var value = IdentityConfigurationDocument.Read(row.Payload);
+        var recoveryOwner = RecoveryOwner(value);
         var authority = await ProposalGovernanceAsync(row, value, ct).ConfigureAwait(false);
         if (row.State != "APPROVED" || row.VersionReference is null || row.ApprovalEventReference is null || string.IsNullOrWhiteSpace(row.ApproverReference) || string.IsNullOrWhiteSpace(row.ApprovalEvidenceReference))
             throw new IdentityConfigurationConflictException();
@@ -180,7 +188,7 @@ public sealed partial class IdentityRuntimeConfigurationApplication(IdentityPers
         var actor = await AuthorizeAsync(request, ct).ConfigureAwait(false); Publisher(authority, version, row, actor);
         var publication = await PublicationAsync(authority, value, version, row, actor, command.EffectiveInterval, command.SupersedesPublicationReference, ct).ConfigureAwait(false);
         row.State = "PUBLISHED"; row.Revision++;
-        await FinishAsync(tx, authority, request, actor, publication.Id, row.Revision, row.Digest, row, null, publication, ct).ConfigureAwait(false); return History(publication, version, value.Scope);
+        await FinishAsync(tx, authority, request, actor, publication.Id, row.Revision, row.Digest, row, null, publication, ct, recoveryOwner).ConfigureAwait(false); return History(publication, version, value.Scope);
     }
 
     public async Task<IdentityConfigurationHistory> RollbackAsync(RollbackIdentityConfiguration command, CancellationToken cancellationToken = default)
@@ -188,6 +196,7 @@ public sealed partial class IdentityRuntimeConfigurationApplication(IdentityPers
         ArgumentNullException.ThrowIfNull(command); var ct = cancellationToken; await using var tx = await BeginAsync(ct).ConfigureAwait(false);
         var version = await database.Set<IdentityConfigurationVersionRow>().SingleOrDefaultAsync(x => x.Id == command.ApprovedVersionReference, ct).ConfigureAwait(false) ?? throw new IdentityConfigurationConflictException();
         var row = await ProposalAsync(version.ProposalReference, null, ct).ConfigureAwait(false); var value = IdentityConfigurationDocument.Read(version.Payload);
+        var recoveryOwner = RecoveryOwner(value);
         var authority = await ProposalGovernanceAsync(row, value, ct).ConfigureAwait(false);
         if (row.State != "PUBLISHED" || row.VersionReference != version.Id || row.ApprovalEventReference is null ||
             !await database.Set<IdentityConfigurationPublicationRow>().AnyAsync(x => x.VersionReference == version.Id, ct).ConfigureAwait(false)) throw new IdentityConfigurationConflictException();
@@ -195,7 +204,7 @@ public sealed partial class IdentityRuntimeConfigurationApplication(IdentityPers
             IdentityConfigurationDigest.Of(command), command.OperationId, command.CorrelationId);
         var actor = await AuthorizeAsync(request, ct).ConfigureAwait(false); Publisher(authority, version, row, actor);
         var publication = await PublicationAsync(authority, value, version, row, actor, command.EffectiveInterval, command.SupersedesPublicationReference, ct).ConfigureAwait(false);
-        await FinishAsync(tx, authority, request, actor, publication.Id, row.Revision, row.Digest, null, null, publication, ct).ConfigureAwait(false); return History(publication, version, value.Scope);
+        await FinishAsync(tx, authority, request, actor, publication.Id, row.Revision, row.Digest, null, null, publication, ct, recoveryOwner).ConfigureAwait(false); return History(publication, version, value.Scope);
     }
 
     public async Task<IReadOnlyList<IdentityConfigurationHistory>> HistoryAsync(IdentityConfigurationScope scope, string operationId, string correlationId, CancellationToken cancellationToken = default)
@@ -292,22 +301,37 @@ public sealed partial class IdentityRuntimeConfigurationApplication(IdentityPers
             actor.ActorKind == IdentityConfigurationActorKind.Model && request.Operation is not (IdentityConfigurationOperation.CreateDraft or IdentityConfigurationOperation.UpdateDraft))
             throw new IdentityConfigurationForbiddenException(); return actor;
     }
+    private sealed record RecoveryPasswordOwnerWitness(RecoveryPasswordContentBindingValues Values, string PolicySnapshot);
+    private RecoveryPasswordOwnerWitness? RecoveryOwner(IdentityConfigurationDocument document)
+    {
+        if (document.RecoveryPasswordContent is not { } value) return null;
+        var owner = RecoveryPasswordContentBindingValues.RequireOwner(recoveryPasswordPolicies, value.RecoveryPasswordPolicyVersion, clock.GetUtcNow());
+        value.RequireCurrent(owner, clock.GetUtcNow()); return new(value, owner.Snapshot);
+    }
+    private void RequireRecoveryOwner(RecoveryPasswordOwnerWitness? witness)
+    {
+        if (witness is null) return;
+        var owner = RecoveryPasswordContentBindingValues.RequireOwner(recoveryPasswordPolicies, witness.Values.RecoveryPasswordPolicyVersion, clock.GetUtcNow());
+        witness.Values.RequireCurrent(owner, clock.GetUtcNow());
+        if (owner.Snapshot != witness.PolicySnapshot) throw new IdentityConfigurationUnavailableException();
+    }
     private async Task FrontierAsync(IdentityConfigurationGovernance authority, IdentityConfigurationAuthorizationRequest request, IdentityConfigurationAuthorizationDecision actor,
-        IdentityConfigurationPublicationRow? publication, IdentityConfigurationDocument? value, CancellationToken ct)
+        IdentityConfigurationPublicationRow? publication, IdentityConfigurationDocument? value, CancellationToken ct, RecoveryPasswordOwnerWitness? recoveryOwner = null)
     {
         var current = await AuthorizeAsync(request, ct).ConfigureAwait(false);
         if (current.ActorReference != actor.ActorReference || current.ActorKind != actor.ActorKind || current.AuditActorType != actor.AuditActorType ||
             current.AuthorizationPolicyVersion != actor.AuthorizationPolicyVersion || current.EvidenceReference != actor.EvidenceReference) throw new IdentityConfigurationForbiddenException();
         if (Governance(request.Scope).Snapshot != authority.Snapshot || IdentityConfigurationDigest.Of(authority) != request.GovernanceDigest) throw new IdentityConfigurationConflictException();
+        RequireRecoveryOwner(recoveryOwner);
         if (publication is not null) Interval(authority, value!.Interval, new(publication.EffectiveFrom, publication.IncludesFrom, publication.EffectiveUntil, publication.IncludesUntil));
     }
     private async Task FinishAsync(IDbContextTransaction tx, IdentityConfigurationGovernance authority, IdentityConfigurationAuthorizationRequest request,
         IdentityConfigurationAuthorizationDecision actor, Guid target, long revision, string digest, IdentityConfigurationProposalRow? proposal,
-        IdentityConfigurationVersionRow? version, IdentityConfigurationPublicationRow? publication, CancellationToken ct)
+        IdentityConfigurationVersionRow? version, IdentityConfigurationPublicationRow? publication, CancellationToken ct, RecoveryPasswordOwnerWitness? recoveryOwner = null)
     {
         IdentityConfigurationDocument? value = null;
         if (publication is not null) value = IdentityConfigurationDocument.Read((await database.Set<IdentityConfigurationVersionRow>().AsNoTracking().SingleAsync(x => x.Id == publication.VersionReference, ct).ConfigureAwait(false)).Payload);
-        await FrontierAsync(authority, request, actor, publication, value, ct).ConfigureAwait(false);
+        await FrontierAsync(authority, request, actor, publication, value, ct, recoveryOwner).ConfigureAwait(false);
         var eventId = Guid.NewGuid(); var at = clock.GetUtcNow(); var reference = target == Guid.Empty ? request.TargetReference : target.ToString("N");
         if (proposal is not null)
         {
@@ -329,7 +353,7 @@ public sealed partial class IdentityRuntimeConfigurationApplication(IdentityPers
                 effectiveUntil = publication?.EffectiveUntil, includesUntil = publication?.IncludesUntil,
                 supersedesPublicationReference = publication?.SupersedesPublicationReference?.ToString("N") }, CommandReceipt(request, actor, proposal, publication)), revision.ToString(CultureInfo.InvariantCulture), request.OperationId, request.CorrelationId));
         await database.SaveChangesAsync(ct).ConfigureAwait(false);
-        await FrontierAsync(authority, request, actor, publication, value, ct).ConfigureAwait(false);
+        await FrontierAsync(authority, request, actor, publication, value, ct, recoveryOwner).ConfigureAwait(false);
         await tx.CommitAsync(ct).ConfigureAwait(false);
     }
 }

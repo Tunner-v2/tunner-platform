@@ -44,9 +44,11 @@ public sealed class AdminIdentityConfigurationScope
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] public string? TotpPolicyVersion { get; init; }
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] public string? PasskeyPolicyVersion { get; init; }
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] public string? AssurancePolicyVersion { get; init; }
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] public string? RecoveryPasswordPolicyVersion { get; init; }
     internal IdentityConfigurationScope Value()
     {
-        if (Family != IdentityConfigurationFamily.TotpContent && TotpPolicyVersion is not null ||
+        if (Family != IdentityConfigurationFamily.RecoveryPasswordContent && RecoveryPasswordPolicyVersion is not null ||
+            Family != IdentityConfigurationFamily.TotpContent && TotpPolicyVersion is not null ||
             Family != IdentityConfigurationFamily.PasskeyContent && PasskeyPolicyVersion is not null ||
             Family != IdentityConfigurationFamily.StepUpContent && AssurancePolicyVersion is not null)
             throw new ArgumentException("An exact typed Identity configuration scope is required.");
@@ -59,6 +61,7 @@ public sealed class AdminIdentityConfigurationScope
         IdentityConfigurationFamily.RegistrationContent when AssuranceScope is null && AuthenticationPolicyVersion is null && !string.IsNullOrWhiteSpace(RegistrationPolicyVersion) => new(Family, RegistrationPolicyVersion: RegistrationPolicyVersion),
         IdentityConfigurationFamily.TotpContent when AssuranceScope is null && AuthenticationPolicyVersion is null && RegistrationPolicyVersion is null && !string.IsNullOrWhiteSpace(TotpPolicyVersion) => new(Family, TotpPolicyVersion: TotpPolicyVersion),
         IdentityConfigurationFamily.PasskeyContent when AssuranceScope is null && AuthenticationPolicyVersion is null && RegistrationPolicyVersion is null && !string.IsNullOrWhiteSpace(PasskeyPolicyVersion) => new(Family, PasskeyPolicyVersion: PasskeyPolicyVersion),
+        IdentityConfigurationFamily.RecoveryPasswordContent when AssuranceScope is null && AuthenticationPolicyVersion is null && RegistrationPolicyVersion is null && !string.IsNullOrWhiteSpace(RecoveryPasswordPolicyVersion) => new(Family, RecoveryPasswordPolicyVersion: RecoveryPasswordPolicyVersion),
         IdentityConfigurationFamily.StepUpContent when AssuranceScope is not null && AuthenticationPolicyVersion is null && RegistrationPolicyVersion is null && !string.IsNullOrWhiteSpace(AssurancePolicyVersion) => new(Family, AssuranceScope.Value(), AssurancePolicyVersion: AssurancePolicyVersion),
         _ => throw new ArgumentException("An exact typed Identity configuration scope is required.")
         };
@@ -66,7 +69,7 @@ public sealed class AdminIdentityConfigurationScope
     internal static AdminIdentityConfigurationScope From(IdentityConfigurationScope scope) => new()
     { Family = scope.Family, AssuranceScope = scope.AssuranceScope is { } assurance ? new() { Operation = assurance.Operation, Context = assurance.Context } : null,
         AuthenticationPolicyVersion = scope.AuthenticationPolicyVersion, RegistrationPolicyVersion = scope.RegistrationPolicyVersion,
-        TotpPolicyVersion = scope.TotpPolicyVersion, PasskeyPolicyVersion = scope.PasskeyPolicyVersion, AssurancePolicyVersion = scope.AssurancePolicyVersion };
+        TotpPolicyVersion = scope.TotpPolicyVersion, PasskeyPolicyVersion = scope.PasskeyPolicyVersion, AssurancePolicyVersion = scope.AssurancePolicyVersion, RecoveryPasswordPolicyVersion = scope.RecoveryPasswordPolicyVersion };
 }
 [JsonUnmappedMemberHandling(JsonUnmappedMemberHandling.Disallow)]
 public sealed class AdminIdentityAssuranceScope
@@ -239,6 +242,42 @@ public sealed class AdminStepUpContentBindingCandidate
             ConfigurationVersionReference, QualificationReference, ContentScope, VariantReference,
             (EffectiveInterval ?? throw new ArgumentException("An interval is required.")).Value());
     }
+}
+[JsonUnmappedMemberHandling(JsonUnmappedMemberHandling.Disallow)]
+public sealed class AdminRecoveryPasswordContentBindingCandidate
+{
+    public required string RecoveryPasswordPolicyVersion { get; init; }
+    public required string ConfigurationVersionReference { get; init; }
+    public required string QualificationReference { get; init; }
+    public required string ContentScope { get; init; }
+    public required string VariantReference { get; init; }
+    public required AdminIdentityConfigurationInterval EffectiveInterval { get; init; }
+    public required string GoalLabelKey { get; init; }
+    public required string GoalDescriptionKey { get; init; }
+    public required string EffectLabelKey { get; init; }
+    public required string EffectValueKey { get; init; }
+    public required IReadOnlyList<AdminRecoveryPasswordContentFollowUp> FollowUps { get; init; }
+    internal RecoveryPasswordContentBindingValues Value()
+    {
+        var value = new RecoveryPasswordContentBindingValues(RecoveryPasswordPolicyVersion, ConfigurationVersionReference, QualificationReference,
+            ContentScope, VariantReference, (EffectiveInterval ?? throw new ArgumentException("An interval is required.")).Value(),
+            GoalLabelKey, GoalDescriptionKey, EffectLabelKey, EffectValueKey,
+            (FollowUps ?? throw new ArgumentException("Explicit follow-up mappings are required.")).Select(item =>
+                item is null ? throw new ArgumentException("Complete follow-up mappings are required.") : new RecoveryPasswordFollowUp(item.Reference, item.LabelKey, item.ValueKey)).ToArray());
+        if (new[] { value.RecoveryPasswordPolicyVersion, value.ConfigurationVersionReference, value.QualificationReference, value.ContentScope, value.VariantReference,
+            value.GoalLabelKey, value.GoalDescriptionKey, value.EffectLabelKey, value.EffectValueKey }.Any(string.IsNullOrWhiteSpace) ||
+            value.FollowUps.Any(item => new[] { item.Reference, item.LabelKey, item.ValueKey }.Any(string.IsNullOrWhiteSpace)) ||
+            value.FollowUps.Select(item => item.Reference).Distinct(StringComparer.Ordinal).Count() != value.FollowUps.Count)
+            throw new ArgumentException("Complete Recovery content mappings are required.");
+        return value;
+    }
+}
+[JsonUnmappedMemberHandling(JsonUnmappedMemberHandling.Disallow)]
+public sealed class AdminRecoveryPasswordContentFollowUp
+{
+    public required string Reference { get; init; }
+    public required string LabelKey { get; init; }
+    public required string ValueKey { get; init; }
 }
 [JsonUnmappedMemberHandling(JsonUnmappedMemberHandling.Disallow)]
 public sealed class AdminSessionBulkRevocationContentBindingCandidate

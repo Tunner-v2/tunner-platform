@@ -17,7 +17,11 @@ public interface IIdentityConfigurationBrowseBudgetSource
 { IdentityConfigurationBrowseBudget RequireEffective(IdentityConfigurationScope scope, DateTimeOffset effectiveAt); }
 public sealed record IdentityConfigurationPage<T>(IReadOnlyList<T> Items, int? NextOffset);
 public sealed record IdentityConfigurationWorkspace(IdentityConfigurationScope Scope, string GovernanceVersion, int MaximumPayloadBytes,
-    int MaximumPageSize, int MaximumOffset, int MaximumSearchLength, bool SeparateAuthorApprover, bool SeparateAuthorPublisher, bool SeparateApproverPublisher);
+    int MaximumPageSize, int MaximumOffset, int MaximumSearchLength, bool SeparateAuthorApprover, bool SeparateAuthorPublisher, bool SeparateApproverPublisher)
+{
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] public RecoveryPasswordContentOwnerFacts? RecoveryPasswordContentOwnerFacts { get; init; }
+}
+public sealed record RecoveryPasswordContentOwnerFacts(string RecoveryPasswordPolicyVersion, IReadOnlyList<string> FollowUpReferences);
 public sealed record SearchIdentityConfiguration(IdentityConfigurationScope Scope, string? Search, int PageSize, int Offset, string OperationId, string CorrelationId);
 public sealed record BrowseIdentityConfigurationHistory(IdentityConfigurationScope Scope, int PageSize, int Offset, string OperationId, string CorrelationId);
 public sealed record IdentityConfigurationHistoricalPreview(IdentityConfigurationHistory Publication, AuthenticationPolicyVersion? Authentication,
@@ -35,6 +39,7 @@ public sealed record IdentityConfigurationHistoricalPreview(IdentityConfiguratio
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] public SessionListingContentBinding? SessionListingContent { get; init; }
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] public SessionActionContentBinding? SessionRevocationContent { get; init; }
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] public SessionActionContentBinding? SessionBulkRevocationContent { get; init; }
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] public RecoveryPasswordContentBindingValues? RecoveryPasswordContent { get; init; }
 }
 public enum IdentityConfigurationCapabilityTarget { Workspace, Proposal, History }
 public sealed record IdentityConfigurationCapabilityQuery(IdentityConfigurationScope Scope, IdentityConfigurationCapabilityTarget Target,
@@ -58,18 +63,35 @@ public sealed partial class IdentityRuntimeConfigurationApplication
             IdentityConfigurationDigest.Of(new { publicationReference = publication.Id, versionReference = version.Id, version.Digest }), operationId, correlationId);
         var actor = await AuthorizeAsync(request, ct).ConfigureAwait(false);
         await FinishAsync(tx, authority, request, actor, Guid.Empty, 0, request.CandidateDigest, null, null, null, ct).ConfigureAwait(false);
-        return new(History(publication, version, scope), value.Authentication, value.Assurance, value.ContentBinding) { Registration = value.Registration, Totp = value.Totp, RegistrationContent = value.RegistrationContent, Passkey = value.Passkey, TotpContent = value.TotpContent, PasskeyContent = value.PasskeyContent, StepUpContent = value.StepUpContent, RecoveryCodes = value.RecoveryCodes, SessionListing = value.SessionListing, SessionListingContent = value.SessionListingContent, SessionRevocationContent = value.SessionRevocationContent, SessionBulkRevocationContent = value.SessionBulkRevocationContent };
+        return new(History(publication, version, scope), value.Authentication, value.Assurance, value.ContentBinding) { Registration = value.Registration, Totp = value.Totp, RegistrationContent = value.RegistrationContent, Passkey = value.Passkey, TotpContent = value.TotpContent, PasskeyContent = value.PasskeyContent, StepUpContent = value.StepUpContent, RecoveryCodes = value.RecoveryCodes, SessionListing = value.SessionListing, SessionListingContent = value.SessionListingContent, SessionRevocationContent = value.SessionRevocationContent, SessionBulkRevocationContent = value.SessionBulkRevocationContent, RecoveryPasswordContent = value.RecoveryPasswordContent };
     }
     public async Task<IdentityConfigurationWorkspace> WorkspaceAsync(IdentityConfigurationScope scope, IIdentityConfigurationBrowseBudgetSource budgets,
         string operationId, string correlationId, CancellationToken cancellationToken = default)
     {
         var ct = cancellationToken; await using var tx = await BeginAsync(ct).ConfigureAwait(false);
         var authority = Governance(scope); var budget = BrowseBudget(budgets, scope);
+        RecoveryPasswordPolicyVersion? recoveryOwner = null;
+        if (scope.Family == IdentityConfigurationFamily.RecoveryPasswordContent)
+        {
+            try { recoveryOwner = RecoveryPasswordContentBindingValues.RequireOwner(recoveryPasswordPolicies, scope.RecoveryPasswordPolicyVersion!, clock.GetUtcNow()); }
+            catch (IdentityConfigurationUnavailableException) { /* Unqualified editor facts do not erase protected historical reads or other families. */ }
+        }
         var request = Request(IdentityConfigurationOperation.Browse, scope, authority, scope.Key, 0, IdentityConfigurationDigest.Of(new { scope, budget }), operationId, correlationId);
         var actor = await AuthorizeAsync(request, ct).ConfigureAwait(false);
         await FinishAsync(tx, authority, request, actor, Guid.Empty, 0, request.CandidateDigest, null, null, null, ct).ConfigureAwait(false); RequireBrowseBudget(budgets, scope, budget);
+        RecoveryPasswordContentOwnerFacts? facts = null;
+        if (recoveryOwner is not null)
+        {
+            try
+            {
+                var current = RecoveryPasswordContentBindingValues.RequireOwner(recoveryPasswordPolicies, scope.RecoveryPasswordPolicyVersion!, clock.GetUtcNow());
+                if (current.Snapshot == recoveryOwner.Snapshot && current.Metadata.EffectiveInterval.Contains(clock.GetUtcNow()))
+                    facts = new(current.Values.Version, Array.AsReadOnly(current.Values.UnresolvedDownstreamEffects.ToArray()));
+            }
+            catch (IdentityConfigurationUnavailableException) { /* The editor stays unavailable; historical data remains factual. */ }
+        }
         return new(scope, authority.Metadata.VersionId, authority.MaximumPayloadBytes, budget.MaximumPageSize, budget.MaximumOffset, budget.MaximumSearchLength,
-            authority.SeparateAuthorApprover, authority.SeparateAuthorPublisher, authority.SeparateApproverPublisher);
+            authority.SeparateAuthorApprover, authority.SeparateAuthorPublisher, authority.SeparateApproverPublisher) { RecoveryPasswordContentOwnerFacts = facts };
     }
     public async Task<IdentityConfigurationPage<IdentityConfigurationProposal>> SearchAsync(SearchIdentityConfiguration command, IIdentityConfigurationBrowseBudgetSource budgets,
         CancellationToken cancellationToken = default)
