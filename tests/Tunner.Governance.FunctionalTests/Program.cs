@@ -20,6 +20,10 @@ try
     {
         RunValidationSourceReadinessChecks(repositoryRoot, failures);
     }
+    else if (args.Contains("--revision-committed-proof-only", StringComparer.Ordinal))
+    {
+        RunRevisionCommittedProofChecks(repositoryRoot, failures);
+    }
     else if (!args.Contains("--self-test-cleanup-failure", StringComparer.Ordinal))
     {
         RunHarnessFailureReportingCheck(failures);
@@ -1019,9 +1023,7 @@ static void RunRevisionCommittedProofChecks(DirectoryInfo repositoryRoot, IColle
         Check(((ValidationPayload)GovernanceApplication.Validate(fixture).Payload).IsValid, "schema-hoist fixture begins with valid records");
         try
         {
-            var invalidState = JsonNode.Parse(File.ReadAllText(secondRevisionPath))!;
-            invalidState["git_state"]!["validated_commit_sha"] = "not-a-sha";
-            File.WriteAllText(secondRevisionPath, invalidState.ToJsonString());
+            EditRevision(secondRevisionPath, "git_state", State("not-a-sha"));
             var validation = (ValidationPayload)GovernanceApplication.Validate(fixture).Payload;
             Check(!validation.IsValid && validation.Diagnostics.Any(x => x.Code == "GOV_GIT_STATE_SCHEMA" && x.File == secondRevisionPath) &&
                 !validation.Diagnostics.Any(x => x.Code == "GOV_GIT_STATE_SCHEMA" && x.File == firstRevisionPath),
