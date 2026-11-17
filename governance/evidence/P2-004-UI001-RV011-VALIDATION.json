@@ -1,0 +1,75 @@
+{
+  "schema_version": 1,
+  "scope_id": "P2-004-UI001-RV011",
+  "validation_kind": "COMMITTED",
+  "result": "PENDING",
+  "tested_commit_sha": null,
+  "validated_commit_sha": null,
+  "owned_behavior_paths": [
+    "docs/contracts/ui-inventory.json",
+    "src/Modules/Identity/IdentityPersistenceDbContext.cs",
+    "src/Modules/Identity/Migrations/IdentityPersistenceDbContextModelSnapshot.cs",
+    "src/Modules/Identity/RegistrationApplication.cs",
+    "src/Modules/Identity/Tunner.Identity.Persistence.csproj",
+    "tests/Tunner.Identity.Persistence.Tests/RegistrationTests.cs",
+    "tests/Tunner.Identity.Persistence.Tests/Tunner.Identity.Persistence.Tests.csproj",
+    "web/package.json",
+    "web/packages/ui/src/content.tsx",
+    "web/pnpm-lock.yaml",
+    "web/tests/contracts.test.tsx",
+    "web/tsconfig.json"
+  ],
+  "scope": "Currentness reconciliation only for confirmed qualified shared-source drift and final inventory registration of an existing approved isolated fixture. No new application behavior, policy, production UI or authority is implemented through this revision.",
+  "qualification_map": [
+    {
+      "paths": [
+        "src/Modules/Identity/IdentityPersistenceDbContext.cs",
+        "src/Modules/Identity/Migrations/IdentityPersistenceDbContextModelSnapshot.cs",
+        "src/Modules/Identity/Tunner.Identity.Persistence.csproj",
+        "tests/Tunner.Identity.Persistence.Tests/Tunner.Identity.Persistence.Tests.csproj"
+      ],
+      "source_equivalence": "Four Identity bridge files are unchanged since196d522b; preserve actual qualification sources.",
+      "refs": [
+        "governance/evidence/P2-003-RV006-VALIDATION.json",
+        "governance/evidence/p2-019-content-20261116/native/13e2ee804aee4647a02a1f347ee4aefd/summary.json",
+        "governance/evidence/p2-019-content-20261116/native/3bf29b35ca644014aa6d054560198221/summary.json"
+      ]
+    },
+    {
+      "paths": [
+        "src/Modules/Identity/RegistrationApplication.cs",
+        "tests/Tunner.Identity.Persistence.Tests/RegistrationTests.cs"
+      ],
+      "source_equivalence": "Registration application/tests unchanged since98807ebe; actual qualified retry-guard, audit and notification runs retained at original SHAs; no current Work16 READY inference.",
+      "refs": [
+        "governance/evidence/P2-010-RV010-VALIDATION.json",
+        "governance/evidence/TUN-P2-016-VALIDATION.json"
+      ]
+    },
+    {
+      "paths": [
+        "docs/contracts/ui-inventory.json",
+        "web/package.json",
+        "web/packages/ui/src/content.tsx",
+        "web/pnpm-lock.yaml",
+        "web/tests/contracts.test.tsx",
+        "web/tsconfig.json"
+      ],
+      "source_equivalence": "Reuse actual Work19 TS/Vite, contracts and published User/Admin journeys; preserve mixed initial failures and corrected runs. Final inventory and per-scope native UI binding checks still required.",
+      "refs": [
+        "governance/evidence/TUN-P2-019-VALIDATION.json",
+        "governance/evidence/p2-019-content-20261116/user-browser-dfdb144a/end-to-end.json",
+        "governance/evidence/p2-019-content-20261116/admin-browser-d1147842/initial-results.json",
+        "governance/evidence/p2-019-content-20261116/admin-browser-d1147842/switch-repair-results.json",
+        "governance/evidence/p2-019-content-20261116/admin-browser-d1147842/query-repair-results.json"
+      ]
+    }
+  ],
+  "required_validation": [
+    "Verify all prior166 inventory objects unchanged when registering actual approved fixture as167th item",
+    "Independently review exact existing-source qualification map without rewriting historical execution identity",
+    "Commit final inventory/source candidate and matching open source/UI envelopes; native scoped UI/readiness/closure checks",
+    "Preserve original closed records and current VALIDATION/Product acceptance boundaries"
+  ],
+  "next_action": "Native approval/activation and focused current context before changing inventory or source bindings. P019 browser-case patch remains unapplied until its own native admission passes."
+}
