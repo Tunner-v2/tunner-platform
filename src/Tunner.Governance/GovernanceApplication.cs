@@ -36,6 +36,7 @@ public static class GovernanceApplication
         var schemas = SchemaCatalog.Load(repository, diagnostics);
         var records = LoadRecords(repository, diagnostics);
         _ = IntegrationPolicy.Load(repository, diagnostics);
+        JsonSchema? gitStateSchema = null;
 
         foreach (var record in records)
         {
@@ -65,9 +66,12 @@ public static class GovernanceApplication
 
             if (record.Fields.TryGetValue("git_state", out var gitState))
             {
-                using var library = JsonDocument.Parse(File.ReadAllText(Path.Combine(repository.FullName, "governance/schemas/v1/governance-record.schema.json")));
-                var executable = JsonSchema.FromText("{\"$defs\":" + library.RootElement.GetProperty("$defs").GetRawText() + ",\"$ref\":\"#/$defs/gitState\"}");
-                if (!executable.Evaluate(JsonSerializer.SerializeToElement(RevisionApplication.ToJson(gitState))).IsValid)
+                if (gitStateSchema is null)
+                {
+                    using var library = JsonDocument.Parse(File.ReadAllText(Path.Combine(repository.FullName, "governance/schemas/v1/governance-record.schema.json")));
+                    gitStateSchema = JsonSchema.FromText("{\"$defs\":" + library.RootElement.GetProperty("$defs").GetRawText() + ",\"$ref\":\"#/$defs/gitState\"}");
+                }
+                if (!gitStateSchema.Evaluate(JsonSerializer.SerializeToElement(RevisionApplication.ToJson(gitState))).IsValid)
                     diagnostics.Add(Diagnostic.Error(record.Path, gitState.Start, "GOV_GIT_STATE_SCHEMA", "git_state fails executable required field/type/SHA validation"));
             }
 

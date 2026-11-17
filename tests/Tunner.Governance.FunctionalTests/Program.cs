@@ -1011,6 +1011,64 @@ static void RunRevisionCommittedProofChecks(DirectoryInfo repositoryRoot, IColle
         Close(second, true);
         Check(AuditCommittedFixture(fixture), "later path owner and unchanged prior-owner paths compose");
         Check(RevisionApplication.CloseCheck(fixture, first).ExitCode == 0, "prior revision proof resolves strictly later ownership without recursion to itself");
+        var firstRevisionPath = Path.Combine(fixture.FullName, "governance/revisions/" + first + ".yaml");
+        var secondRevisionPath = Path.Combine(fixture.FullName, "governance/revisions/" + second + ".yaml");
+        var secondRevisionBytes = File.ReadAllBytes(secondRevisionPath);
+        var schemaPath = Path.Combine(fixture.FullName, "governance/schemas/v1/governance-record.schema.json");
+        var schemaBytes = File.ReadAllBytes(schemaPath);
+        Check(((ValidationPayload)GovernanceApplication.Validate(fixture).Payload).IsValid, "schema-hoist fixture begins with valid records");
+        try
+        {
+            var invalidState = JsonNode.Parse(File.ReadAllText(secondRevisionPath))!;
+            invalidState["git_state"]!["validated_commit_sha"] = "not-a-sha";
+            File.WriteAllText(secondRevisionPath, invalidState.ToJsonString());
+            var validation = (ValidationPayload)GovernanceApplication.Validate(fixture).Payload;
+            Check(!validation.IsValid && validation.Diagnostics.Any(x => x.Code == "GOV_GIT_STATE_SCHEMA" && x.File == secondRevisionPath) &&
+                !validation.Diagnostics.Any(x => x.Code == "GOV_GIT_STATE_SCHEMA" && x.File == firstRevisionPath),
+                "reusing a gitState schema still evaluates a later invalid state after a valid first state");
+        }
+        finally { File.WriteAllBytes(secondRevisionPath, secondRevisionBytes); }
+        try
+        {
+            EditRevision(secondRevisionPath, "revision_type", "NOT_A_REVISION_TYPE");
+            var validation = (ValidationPayload)GovernanceApplication.Validate(fixture).Payload;
+            Check(!validation.IsValid && validation.Diagnostics.Any(x => x.Code == "GOV_REVISION_INVALID" && x.File == secondRevisionPath &&
+                x.Message.Contains("executable JSON Schema", StringComparison.Ordinal)) &&
+                !validation.Diagnostics.Any(x => x.Code == "GOV_REVISION_INVALID" && x.File == firstRevisionPath),
+                "reusing a Revision schema still evaluates a later invalid Revision after a valid first Revision");
+        }
+        finally { File.WriteAllBytes(secondRevisionPath, secondRevisionBytes); }
+        try
+        {
+            var library = JsonNode.Parse(File.ReadAllText(schemaPath))!;
+            library["$defs"]!["gitState"]!["properties"]!["repository_changed"]!["type"] = "string";
+            File.WriteAllText(schemaPath, library.ToJsonString());
+            var validation = (ValidationPayload)GovernanceApplication.Validate(fixture).Payload;
+            Check(!validation.IsValid && validation.Diagnostics.Any(x => x.Code == "GOV_GIT_STATE_SCHEMA"),
+                "a fresh Validate invocation observes an edited gitState schema rather than a prior compiled schema");
+        }
+        finally { File.WriteAllBytes(schemaPath, schemaBytes); }
+        try
+        {
+            var library = JsonNode.Parse(File.ReadAllText(schemaPath))!;
+            library["$defs"]!["revision"]!["properties"]!["revision_type"]!["enum"] = new JsonArray("NOT_A_REVISION_TYPE");
+            File.WriteAllText(schemaPath, library.ToJsonString());
+            var validation = (ValidationPayload)GovernanceApplication.Validate(fixture).Payload;
+            Check(!validation.IsValid && validation.Diagnostics.Any(x => x.Code == "GOV_REVISION_INVALID" &&
+                x.Message.Contains("executable JSON Schema", StringComparison.Ordinal)),
+                "a fresh diagnostics invocation observes an edited Revision schema rather than a prior compiled schema");
+        }
+        finally { File.WriteAllBytes(schemaPath, schemaBytes); }
+        try
+        {
+            File.Delete(schemaPath);
+            var rejected = false;
+            try { rejected = !((ValidationPayload)GovernanceApplication.Validate(fixture).Payload).IsValid; }
+            catch (IOException) { rejected = true; } // Existing missing-library behavior may refuse or throw; neither may reuse a prior PASS.
+            Check(rejected, "a fresh Validate invocation cannot reuse schemas after their source library is removed");
+        }
+        finally { File.WriteAllBytes(schemaPath, schemaBytes); }
+        Check(((ValidationPayload)GovernanceApplication.Validate(fixture).Payload).IsValid, "restoring exact schema and record bytes restores valid evaluation");
         var assessment = new CommittedProofAssessment(fixture);
         var originalRecord = GovernanceApplication.LoadRecords(fixture, []).Single(record => record.Identifier == originalId);
         Check(CommitReadinessApplication.Check(fixture, originalRecord, null, assessment).Count == 0,

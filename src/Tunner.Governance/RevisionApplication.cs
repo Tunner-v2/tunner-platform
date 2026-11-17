@@ -216,11 +216,12 @@ public static class RevisionApplication
 
     internal static void AddDiagnostics(DirectoryInfo repository, IReadOnlyList<GovernanceRecord> records, List<Diagnostic> diagnostics)
     {
+        JsonSchema? revisionSchema = null;
         foreach (var revision in Revisions(records))
         {
             try
             {
-                foreach (var failure in SchemaFailures(repository, revision).Concat(RecordFailures(repository, revision, records)))
+                foreach (var failure in SchemaFailures(repository, revision, ref revisionSchema).Concat(RecordFailures(repository, revision, records)))
                     diagnostics.Add(Diagnostic.Error(revision.Path, revision.Root.Start, "GOV_REVISION_INVALID", failure));
             }
             catch (Exception exception) when (exception is InvalidOperationException or IOException or JsonException)
@@ -368,10 +369,19 @@ public static class RevisionApplication
 
     private static IEnumerable<string> SchemaFailures(DirectoryInfo repository, GovernanceRecord record)
     {
+        JsonSchema? schema = null;
+        return SchemaFailures(repository, record, ref schema);
+    }
+
+    private static IEnumerable<string> SchemaFailures(DirectoryInfo repository, GovernanceRecord record, ref JsonSchema? schema)
+    {
         try
         {
-            using var library = JsonDocument.Parse(File.ReadAllText(Path.Combine(repository.FullName, "governance", "schemas", "v1", "governance-record.schema.json")));
-            var schema = JsonSchema.FromText("{\"$defs\":" + library.RootElement.GetProperty("$defs").GetRawText() + ",\"$ref\":\"#/$defs/revision\"}");
+            if (schema is null)
+            {
+                using var library = JsonDocument.Parse(File.ReadAllText(Path.Combine(repository.FullName, "governance", "schemas", "v1", "governance-record.schema.json")));
+                schema = JsonSchema.FromText("{\"$defs\":" + library.RootElement.GetProperty("$defs").GetRawText() + ",\"$ref\":\"#/$defs/revision\"}");
+            }
             return schema.Evaluate(JsonSerializer.SerializeToElement(ToJson(record.Root))).IsValid ? [] : ["Revision fails executable JSON Schema field/type/enum validation"];
         }
         catch (Exception exception) when (exception is IOException or JsonException or InvalidOperationException)
