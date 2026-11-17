@@ -113,3 +113,42 @@ test('Synthetic Admin distinct actors publish governed Login wording and prospec
   for(const page of [author,approver,publisher,user])expect(await page.evaluate(()=>({query:location.search,hash:location.hash,local:localStorage.length,session:sessionStorage.length}))).toEqual({query:'',hash:'',local:0,session:0});
  }finally{await Promise.all(contexts.map(context=>context.close()));}
 });
+
+test('Synthetic Admin bootstrap preserves canonical keyboard history and tablet reflow without Content writes',async({page,context},info)=>{
+ test.setTimeout(90_000);
+ expect(state.Mode).toBe('ISOLATED_LOCAL_BROWSER_TESTING');expect(state.GovernedContent).toBe(true);expect(state.SyntheticAdmin).toBe(true);
+ let actorPosts=0,contentWrites=0;
+ page.on('request',request=>{if(request.method()!=='POST')return;const path=new URL(request.url()).pathname;if(path==='/browser-testing/admin/session')actorPosts++;if(/^\/content\/(?:proposals(?:\/(?:update|validate|approve|publish))?|rollback)$/.test(path))contentWrites++;});
+ const bootstrap=adminOrigin+'/browser-testing/admin',buttons=page.locator('[data-actor]');
+ const initial=await page.goto(bootstrap);expect(initial?.status()).toBe(200);await expect(page).toHaveURL(bootstrap);
+ await expect(page.getByRole('heading',{level:1,name:'Isolated Admin fixture',exact:true})).toBeVisible();
+ await expect(page.locator('[data-tunner-surface="admin"][data-tunner-theme="light"]')).toBeVisible();await page.evaluate(()=>document.fonts.ready.then(()=>undefined));
+ for(const viewport of [{width:1440,height:1024},{width:768,height:1024},{width:320,height:800}]){
+  await page.setViewportSize(viewport);await expect(buttons).toHaveCount(3);
+  for(const button of await buttons.all())await expect(button).toBeEnabled();
+  expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
+  expect(await buttons.evaluateAll(items=>items.every(item=>{const bounds=item.getBoundingClientRect();return bounds.width>0&&bounds.left>=-0.5&&bounds.right<=innerWidth+0.5;}))).toBe(true);
+  if(viewport.width===768){expect((await new AxeBuilder({page}).analyze()).violations).toEqual([]);await page.screenshot({path:info.outputPath('synthetic-admin-bootstrap-768.png'),fullPage:true});}
+ }
+ expect(actorPosts).toBe(0);expect(contentWrites).toBe(0);
+ // A real stale-CSRF failure in this fresh context; no intercepted request, secret output or host change.
+ await page.setViewportSize({width:768,height:1024});await context.clearCookies();
+ const rejected=page.waitForResponse(response=>new URL(response.url()).pathname==='/browser-testing/admin/session'&&response.request().method()==='POST');
+ await page.getByRole('button',{name:'Use synthetic author',exact:true}).focus();await page.keyboard.press('Enter');expect((await rejected).status()).toBe(400);
+ await expect(page.getByRole('status')).toHaveText('The isolated session could not start. Reload this page and try again.');
+ await expect(page).toHaveURL(bootstrap);for(const button of await buttons.all())await expect(button).toBeEnabled();expect(actorPosts).toBe(1);
+ await page.screenshot({path:info.outputPath('synthetic-admin-bootstrap-error-768.png'),fullPage:true});
+ const refreshed=await page.reload();expect(refreshed?.status()).toBe(200);await expect(page.getByRole('status')).toBeEmpty();expect(actorPosts).toBe(1);
+ await page.keyboard.press('Tab');await expect(page.getByRole('link',{name:'Skip to content',exact:true})).toBeFocused();await page.keyboard.press('Enter');
+ await expect(page).toHaveURL(bootstrap+'#fixture-main');await page.keyboard.press('Tab');await expect(page.getByRole('button',{name:'Use synthetic author',exact:true})).toBeFocused();
+ const admitted=page.waitForResponse(response=>new URL(response.url()).pathname==='/browser-testing/admin/session'&&response.request().method()==='POST'&&response.status()===204);
+ await page.keyboard.press('Enter');expect((await admitted).status()).toBe(204);await expect(page).toHaveURL(adminOrigin+'/admin/content');
+ await expect(page.getByRole('heading',{level:1,name:'Content workspace',exact:true})).toBeVisible();expect(actorPosts).toBe(2);expect(contentWrites).toBe(0);
+ await page.reload();await expect(page).toHaveURL(adminOrigin+'/admin/content');await expect(page.getByRole('heading',{level:1,name:'Content workspace',exact:true})).toBeVisible();expect(actorPosts).toBe(2);
+ await page.goBack();await expect(page).toHaveURL(bootstrap+'#fixture-main');await expect(page.getByRole('heading',{level:1,name:'Isolated Admin fixture',exact:true})).toBeVisible();
+ for(const button of await buttons.all())await expect(button).toBeEnabled();expect(actorPosts).toBe(2);
+ await page.goForward();await expect(page).toHaveURL(adminOrigin+'/admin/content');await expect(page.getByRole('heading',{level:1,name:'Content workspace',exact:true})).toBeVisible();expect(actorPosts).toBe(2);
+ await page.goBack();await expect(page).toHaveURL(bootstrap+'#fixture-main');const final=await page.reload();expect(final?.status()).toBe(200);
+ await expect(page.getByRole('heading',{level:1,name:'Isolated Admin fixture',exact:true})).toBeVisible();for(const button of await buttons.all())await expect(button).toBeEnabled();
+ expect(actorPosts).toBe(2);expect(contentWrites).toBe(0);expect(await page.evaluate(()=>({query:location.search,hash:location.hash,local:localStorage.length,session:sessionStorage.length}))).toEqual({query:'',hash:'#fixture-main',local:0,session:0});
+});
