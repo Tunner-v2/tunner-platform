@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "scope_id": "P2-014-RV001",
+  "owner_work_item": "TUN-P2-019",
+  "validation_kind": "COMMITTED",
+  "result": "PENDING",
+  "tested_commit_sha": null,
+  "validated_commit_sha": null,
+  "owned_behavior_paths": [
+    "src/Modules/PresentationContent/ContentContracts.cs",
+    "src/Modules/PresentationContent/ContentResolution.cs",
+    "src/Modules/Identity/PublishedProductAuthorizationPresentationSource.cs",
+    "tests/Tunner.Identity.Persistence.Tests/PublishedProductAuthorizationPresentationTests.cs",
+    "tests/Tunner.Identity.Persistence.Tests/PublishedProductAuthorizationPresentationIntegrationTests.cs",
+    "src/Modules/PresentationContent/ContentTransactionalResolution.cs",
+    "tests/Tunner.Identity.Persistence.Tests/ProductAuthorizationProtocolTests.cs",
+    "docs/contracts/ui-inventory.json",
+    "src/Modules/Identity/StepUpApplication.cs",
+    "src/Modules/Identity/Tunner.Identity.Persistence.csproj"
+  ],
+  "scope": "Standalone opted-in governed Product wording with explicit owner-qualified semantics, shared exact Content availability, and existing-host native protocol tests. Preserve original014 DONE, business/security/permissions/defaults. Existing inventory additions, Identity module reference and Recovery-only StepUp bridge receive bounded currentness using retained qualification; no historical feature audit or production selection.",
+  "candidate": {
+    "state": "UNAPPLIED_INDEPENDENT_SOURCE_REVIEW_PASS_RUNTIME_PENDING",
+    "patch_ref": "artifacts/p2-019-content-20261116/product-authorization-presentation.patch",
+    "sha256": "08ba52319f5ef3d1dce6fd75a42d09549c3800f273c1238356ede250fcbec6a8",
+    "authored_cases": 29
+  },
+  "retained_qualifications": [
+    "governance/evidence/TUN-P2-019-UI-COMPLIANCE.json",
+    "governance/evidence/P2-003-RV006-VALIDATION.json",
+    "governance/evidence/P2-009-RV009-VALIDATION.json"
+  ],
+  "boundaries": "Technical compatibility scope; whole P2-019 Product acceptance and all production/provider values/activation, protected-main merge and release remain separate."
+}
