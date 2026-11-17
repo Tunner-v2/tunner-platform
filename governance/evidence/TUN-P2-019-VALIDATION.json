@@ -3,14 +3,30 @@
   "scope_id": "TUN-P2-019",
   "validation_kind": "COMMITTED",
   "result": "PENDING",
-  "phase": "ADMIN_BOOTSTRAP_PASS_FINAL_UI_AND_INTEGRATION_QUALIFICATION_PENDING",
+  "phase": "UI_73_PASS_PRIVATE_RECOVERY_FIRST_HOST_STARTUP_DIAGNOSIS",
+  "private_current_qualification": {
+    "state": "NOT_ACCEPTED_FIRST_CASE_HOST_STARTUP",
+    "execution_sha": "06b20de2b2b0303a1213259c877b990169b9e380",
+    "build_source_sha": "0448f9ed7b3b0aaeeb5cc12710d2c5b08d0a97bd",
+    "build_binding_sha256": "389d2e14ff809e5836f11e046147bbe330b2a19f766b5f0ec89add77147b6a87",
+    "protocol_cases_passed": 17,
+    "resource_cases_passed": 6,
+    "reported_private_flags": 123,
+    "passed_private_flags": 0,
+    "failure_code": "FIRST_CASE_FEDERATION_MFA_FEDERATION_MFA_HOST",
+    "boundary": "Fixed cohort aborted its first case at host startup before account seeding/link/login. The123 false flags do not mean123 cases executed. Source/protocol, process/helper closure, exact ownership/cleanup, borrowed preservation and no-log containment all passed; no timeout or unexpected output.",
+    "receipt_ref": "governance/evidence/p2-019-content-20261116/final-qualification-63fb7514/private-initial-host-failure.json",
+    "diagnosis": "Relevant host/persistence/fixtures are unchanged from prior1bf123PASS; new configuration families are outside this host DI path. Exact existing certificate public metadata is valid and matches. One existing public authentication test is now isolating ordinary host startup without framework or source changes. No full private rerun or passing-result promotion."
+  },
   "ui_consolidation_review": {
-    "state": "REVIEWED_NATIVE_GATE_PENDING",
+    "state": "NATIVE_UI_GATE_PASS_ALL_73_ITEMS",
+    "native_gate_commit_sha": "06b20de2b2b0303a1213259c877b990169b9e380",
+    "native_gate_ref": "governance/evidence/p2-019-content-20261116/final-qualification-63fb7514/ui-native-06b20de2.json",
     "patch_sha256": "e54607ab69bd10eb2c3565ee8a606eaf74a59e5b18c66aabfbb42eb26ac5cb04",
     "tested_source_sha": "63fb7514984c2d98eedf3557e0eb34439f2c7783",
     "scope": "Existing evidence expanded from60 to73 current items:52 screens and21 forms,1064 checks. Original60 rows preserved;188 checks added for13 already-qualified items. Eighty-three behavior paths remain unchanged from63fb. Historical runs and failed attempts retain original sources;93 distinct browser identities are a union, not a same-source93-case run.",
     "independent_review": "One disclosed AI reviewer p214_continuation_qa verified exact applicable IDs/checks, preserved ownership prefix and all255 unique referenced-file hashes. Root applied only the requested factual sentence correction: five existing Single cases plus five new Bulk cases, all ten passing at371a. No new Product acceptance inferred.",
-    "next": "Commit the reviewed evidence, execute the native73-item UI gate, and finish current mandatory integration qualification. Whole Work19 acceptance remains pending."
+    "next": "Finish current mandatory integration qualification and whole-item engineering/acceptance checks. The native UI gate passed all73 items with no failures; whole Work19 acceptance remains pending."
   },
   "bootstrap_navigation_qualification": {
     "source_sha": "63fb7514984c2d98eedf3557e0eb34439f2c7783",

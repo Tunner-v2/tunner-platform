@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "revision_id": "P2-010-RV012",
+  "revision_scope": "WORK_ITEM",
+  "original_scope_id": "TUN-P2-010",
+  "parent_revision_id": "P2-010-RV011",
+  "parent_milestone_revision_id": null,
+  "title": "Classify Federation MFA host startup in existing private qualification",
+  "revision_type": "COMPATIBILITY",
+  "status": "PROPOSED",
+  "reason": "The current fixed Recovery cohort aborts the unchanged Federation MFA first case at HOST before any account seeding. Cover only its diagnostic catch integration with fixed non-sensitive categories; preserve original Federation closure and all business behavior.",
+  "authority_refs": [
+    "docs/authority/current/development/09_Testing_Acceptance_Evidence_and_Quality_Gates.md"
+  ],
+  "decision_refs": [],
+  "defect_refs": [],
+  "change_refs": ["governance/evidence/TUN-P2-019-VALIDATION.json"],
+  "impact_classification": "NON_BLOCKING",
+  "blocked_scope": [],
+  "acceptance_criteria": [
+    "Database classification remains first; host-only fixed enum classification and all other checkpoint behavior remain unchanged. No exception payload, new selector, logging, framing, fixture or business change.",
+    "Independent exact-patch security review, focused classifier checks and required current fixed native qualification precede engineering closure; preserve the failed source-bound run."
+  ],
+  "prerequisites": [],
+  "work_items": [],
+  "required_gates": [],
+  "required_roles": ["full-stack-engineer", "tester-qa-engineer", "solution-architect", "cyber-security-engineer", "auditor"],
+  "evidence_refs": ["governance/evidence/P2-010-RV012-VALIDATION.json"],
+  "product_acceptance_required": false,
+  "created_at": "2026-11-17T20:09:40.7371672\u002B00:00",
+  "closed_at": null
+}

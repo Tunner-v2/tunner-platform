@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "scope_id": "P2-010-RV012",
+  "validation_kind": "COMMITTED",
+  "result": "PENDING",
+  "tested_commit_sha": null,
+  "validated_commit_sha": null,
+  "owned_behavior_paths": ["tests/Tunner.Identity.Persistence.Tests/FederationPrivateIntegrationTests.cs"],
+  "scope": "Integrate the fixed safe classifier only when the existing Federation MFA checkpoint is HOST. Existing database classification keeps precedence; every other checkpoint retains its exact fallback. No Federation business behavior or original closure change.",
+  "candidate_patch_sha256": "2bef4aef42ec08157e8de0bc9c08fe21f1bd112da445cc93545048ec345aaf34",
+  "review": "PENDING independent exact-patch review before application.",
+  "qualification": "PENDING current fixed native qualification; no direct private-case selector or raw exception output.",
+  "acceptance_classification": {
+    "product_acceptance_required": false,
+    "reason": "Internal diagnostic-only compatibility correction. No provider capability, Product behavior, UX or policy decision. Independent technical/privacy review and native closure remain mandatory; whole Work19 Product acceptance remains separate.",
+    "authority_ref": "docs/authority/current/development/09_Testing_Acceptance_Evidence_and_Quality_Gates.md"
+  }
+}
