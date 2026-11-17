@@ -40,7 +40,7 @@ public sealed class IdentityRuntimeRecoveryPasswordContentBindingTests(SessionLi
         var content = new PresentationContentTestEnvironment(db, env.Clock, f.Resolver.Result.Content.ToDictionary(x => x.Key, x => x.Value.Text, StringComparer.Ordinal));
         await content.InitializeAsync(); ContentHistoryEntry? originalGoal = null;
         foreach (var text in f.Resolver.Result.Content.Values)
-        { var publication = await content.PublishTextAsync(text.Key, text.Text); if (text.Key == f.Binding.GoalLabelKey) originalGoal = publication; }
+        { var seededPublication = await content.PublishTextAsync(text.Key, text.Text); if (text.Key == f.Binding.GoalLabelKey) originalGoal = seededPublication; }
         var candidate = Values(f, env, "fixture-recovery-map-v1") with { ContentScope = content.Scope, VariantReference = content.Variant };
         var key = Guid.NewGuid(); var request = new { idempotencyKey = key, candidate }; JsonElement proposal;
         using (var created = await admin.Post(DraftPath, request, author))
