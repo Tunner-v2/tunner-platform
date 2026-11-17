@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "scope_id": "P2-009-RV009",
+  "owner_work_item": "TUN-P2-019",
+  "validation_kind": "COMMITTED",
+  "result": "PENDING",
+  "tested_commit_sha": null,
+  "validated_commit_sha": null,
+  "owned_behavior_paths": [
+    "src/Modules/Identity/RecoveryCodePolicy.cs",
+    "src/Modules/Identity/RecoveryCodeApplication.cs",
+    "src/Modules/Identity/RecoveryCodeAccountView.cs",
+    "src/Modules/Identity/RecoveryCodeExecution.cs",
+    "src/Modules/Identity/StepUpApplication.cs",
+    "src/Modules/Identity/RecoveryCodeEndpoints.cs",
+    "src/Modules/PresentationContent/ContentTransactionalResolution.cs",
+    "tests/Tunner.Identity.Persistence.Tests/ContentTransactionalResolutionTests.cs"
+  ],
+  "scope": "Explicitly authorized optional asynchronous same-Identity-transaction Recovery publication integration. Existing synchronous providers, exact facts/proof/currentness, atomic rollback and private-code ownership remain authoritative; core edits require exact independent review and eligible compatibility lineage. Production settings, grants, activation, merge and release are separate.",
+  "current_increment": "Content-owned reader only; eleven authored tests not yet executed. Six native Recovery files remain unchanged. Availability/ownership source review passed after isolation and terminal-cancellation corrections; native issuance/proof/post-Save guards and contention/restricted-role qualification remain pending."
+}
