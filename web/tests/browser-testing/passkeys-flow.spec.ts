@@ -104,6 +104,13 @@ test('real native passkeys complete approved onboarding, sign-in, proof, enrollm
   expect(submitted).toEqual({signIn:1,passwordProof:1,passkeyProof:3,enrollment:2});
   await testInfo.attach('native-operation-counts',{body:Buffer.from(JSON.stringify({deviceAssertions:asserted,credentialsCreated:created,submitted})),contentType:'application/json'});
   await page.reload();await expect(page.getByRole('heading',{name:'Passkeys & two-step verification'})).toBeVisible();
+  await expect(page.getByText('A passkey request is in progress. Check its status before trying again.',{exact:true})).toHaveCount(0);
+  await expect(page.getByRole('button',{name:'Check status',exact:true})).toHaveCount(0);
+  await expect(page.getByText('REMOVED',{exact:true})).toHaveCount(2);
+  const methodsAfterReload=await page.request.get('/account/passkeys');expect(methodsAfterReload.ok()).toBe(true);
+  expect((await methodsAfterReload.json()).enrollmentAvailable).toBe(true);
+  await expect(page.getByRole('button',{name:'Add passkey',exact:true})).toBeEnabled();
+  expect(created).toBe(2);expect(submitted).toEqual({signIn:1,passwordProof:1,passkeyProof:3,enrollment:2});
   await page.screenshot({path:testInfo.outputPath('real-native-passkeys-removed.png'),fullPage:true});
   expect(await page.evaluate(()=>({local:localStorage.length,session:sessionStorage.length,search:location.search,hash:location.hash})))
     .toEqual({local:0,session:0,search:'',hash:''});

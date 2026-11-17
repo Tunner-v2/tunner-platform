@@ -47,12 +47,18 @@ function Account(){
     running(false);setReady(-1);setProof(undefined);setModal(undefined);setSelected(undefined);setError(undefined);setNotice(undefined);setToast(false);setEnded(undefined);setUnavailable(false);setMenu(false);
     if(!isPasskeyRoute(route.pathname)){window.location.replace('/login');return()=>control.current.abort();}
     if(window.location.search||window.location.hash){navigatePath(route.pathname,true);return()=>control.current.abort();}
-    void Promise.all([bootstrap(work.signal),requestJson('/account/passkeys',{signal:work.signal}).then(value=>methodsSchema.parse(value))]).then(([options,list])=>{
+    void Promise.all([bootstrap(work.signal),requestJson('/account/passkeys',{signal:work.signal}).then(value=>methodsSchema.parse(value))]).then(async([options,list])=>{
       if(!current(work))return;setBoot(options);setMethods(list);const pending=starting.current;const candidate=options.recovery;const recovery=operationRef.current??(pending?(candidate&&matchesPasskeyStart(pending,candidate)?candidate:undefined):candidate);
       if(pending&&!operationRef.current&&!recovery){own(undefined);setPhase('unknown');setNotice('passkeys.operation.pending');setReady(work.revision);return;}
       if(pending&&recovery&&matchesPasskeyStart(pending,recovery))starting.current=undefined;
-      if(recovery&&!acknowledged.has(recovery.ceremonyId)){own(recovery);setPhase('unknown');setNotice('passkeys.operation.pending');}else{own(undefined);setPhase('review');}
-      setReady(work.revision);
+      if(recovery&&!acknowledged.has(recovery.ceremonyId)){
+        own(recovery);setPhase('unknown');setNotice('passkeys.operation.pending');
+        if(recovery.status==='COMPLETED'){
+          try{const result=await readOriginal(recovery,work);if(result)await acceptResult(result,work);}
+          catch(reason){if(current(work)){setError(passkeyErrorKey(reason));setPhase('unknown');}}
+        }
+      }else{own(undefined);setPhase('review');}
+      if(current(work))setReady(work.revision);
     }).catch(reason=>{if(!current(work))return;if(reason instanceof PasskeyHttpError&&reason.status===401){window.location.replace('/login');return;}setUnavailable(true);setReady(work.revision);});
     return()=>work.signal.aborted?undefined:control.current.abort();
   },[route.revision]);

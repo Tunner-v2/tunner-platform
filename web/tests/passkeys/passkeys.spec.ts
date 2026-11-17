@@ -39,6 +39,30 @@ test('Native cancellation cancels only its exact inactive enrollment and the nex
 test('Lost enrollment response checks the exact original result without another mutation or native create',async({page})=>{
   const state=await setup(page,{loseEnrollment:true});await page.goto(paths.methods);await authorizeEnrollment(page);await page.getByRole('button',{name:'Continue setup',exact:true}).click();await expect(page.getByRole('dialog').getByText('We are checking whether this passkey was added. Please wait before trying again.')).toBeVisible();await expect(page.getByText('Changes saved successfully')).toHaveCount(0);const original=state.operation!;await page.getByRole('dialog').getByRole('button',{name:'Check status',exact:true}).click();await expect(page.getByText('Changes saved successfully')).toBeVisible();expect(state.operation?.ceremonyId).toBe(original.ceremonyId);expect(state.enrollments).toBe(1);expect(state.starts).toHaveLength(1);expect((await nativeCounts(page)).creates).toBe(1);
 });
+test('@regression Completed revocation reload verifies the exact result without false pending or another mutation',async({page})=>{
+  const credential=activeCredential();const state=await setup(page,{credentials:[credential]});
+  const resultBodies:Array<Record<string,unknown>>=[];
+  page.on('request',request=>{if(request.method()==='POST'&&request.url().endsWith('/account/passkeys/result'))resultBodies.push(request.postDataJSON());});
+  await page.goto(paths.methods);await page.getByRole('button',{name:'Manage',exact:true}).click();
+  await page.getByRole('dialog').getByRole('button',{name:'Remove passkey',exact:true}).click();await passwordProof(page);
+  await expect(page.getByText('Changes saved successfully',{exact:true})).toBeVisible();
+  const original={...state.operation!};const reads=state.resultReads;const before={starts:state.starts.length,proofs:state.proofs,enrollments:state.enrollments};
+  await page.reload();await expect(page.getByRole('heading',{name:'Passkeys & two-step verification'})).toBeVisible();
+  await expect(page.getByText('A passkey request is in progress. Check its status before trying again.',{exact:true})).toHaveCount(0);
+  await expect(page.getByRole('button',{name:'Check status',exact:true})).toHaveCount(0);
+  await expect(page.getByRole('button',{name:'Add passkey',exact:true})).toBeEnabled();
+  await expect(page.getByText('REMOVED',{exact:true})).toHaveCount(1);
+  expect(state.resultReads).toBe(reads+1);expect(resultBodies.at(-1)).toEqual({requestId:original.requestId,ceremonyId:original.ceremonyId});
+  expect({starts:state.starts.length,proofs:state.proofs,enrollments:state.enrollments}).toEqual(before);
+  expect(await nativeCounts(page)).toMatchObject({creates:0,gets:0});await noBrowserStorage(page);
+  // A failed exact read still requires deliberate recovery; a completed bootstrap alone is not acknowledgement.
+  state.unrelatedResult=true;await page.reload();await expect(page.getByRole('button',{name:'Check status',exact:true})).toBeEnabled();
+  await expect(page.getByRole('button',{name:'Add passkey',exact:true})).toBeDisabled();await expect(page.getByText('Changes saved successfully',{exact:true})).toHaveCount(0);
+  state.unrelatedResult=false;await page.getByRole('button',{name:'Check status',exact:true}).click();
+  await expect(page.getByRole('button',{name:'Add passkey',exact:true})).toBeEnabled();
+  expect(resultBodies.slice(reads).every(body=>body.requestId===original.requestId&&body.ceremonyId===original.ceremonyId)).toBe(true);
+  expect({starts:state.starts.length,proofs:state.proofs,enrollments:state.enrollments}).toEqual(before);await noBrowserStorage(page);
+});
 test('Reload recovers original authorized metadata from server context without browser storage or new request',async({page})=>{
   const state=await setup(page);await page.goto(paths.methods);await authorizeEnrollment(page);const original=state.operation!;await page.reload();await expect(page.getByText('A passkey request is in progress. Check its status before trying again.')).toBeVisible();await page.getByRole('button',{name:'Check status',exact:true}).click();await expect(page.getByRole('dialog').getByRole('button',{name:'Continue setup',exact:true})).toBeVisible();expect(state.starts).toHaveLength(1);expect(state.operation?.requestId).toBe(original.requestId);expect((await nativeCounts(page)).creates).toBe(0);await noBrowserStorage(page);
 });
