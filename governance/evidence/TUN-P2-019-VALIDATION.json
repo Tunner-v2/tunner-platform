@@ -3,9 +3,11 @@
   "scope_id": "TUN-P2-019",
   "validation_kind": "COMMITTED",
   "result": "PENDING",
-  "phase": "RECOVERY_DEVICE_COMPATIBILITY_CLOSED_P2_019_CONTINUES",
+  "phase": "USER_CONTENT_COMPOSITION_RUNTIME_BLOCKED",
   "user_browser_composition": {
     "state": "IMPLEMENTED_COMPILE_SOURCE_REVIEW_PASS_RUNTIME_BLOCKED",
+    "candidate_sha": "20a6e8995ba08505666d61829057fd1b8b4d79c0",
+    "qualification_ref": "governance/evidence/p2-019-content-20261116/user-browser-20a6e899/summary.json",
     "scope": "Opted-in persistent isolated Development User host uses real Content migration, qualified Login binding and actual draft/validate/distinct-actor approval/publication bootstrap. Runtime Content writes denied; no Admin session/cookie/bootstrap or production source changed.",
     "activation": "tools/dev/tunner-browser.ps1 restart -GovernedContent; default false and older saved state remain supported; finite TOTP/Recovery modes keep null and reject this fixture.",
     "compile": "PASS zero warnings/errors; PowerShell parser PASS. Existing dependency graph restored with normal advisory check after sandbox network failure; no package/version added.",
