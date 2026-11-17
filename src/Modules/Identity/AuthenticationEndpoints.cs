@@ -104,10 +104,12 @@ public static class AuthenticationEndpoints
                 var productReview = context.RequestServices.GetService<ProductAuthorizationReview>();
                 var productContext = productReview is null ? null :
                     await productReview.LoginContextAsync(context, context.RequestAborted).ConfigureAwait(false);
+                var recoveryBrowser = context.RequestServices.GetService<RecoveryBrowserService>();
+                var recoveryAvailable = recoveryBrowser is not null && await recoveryBrowser.AvailableAsync(context.RequestAborted).ConfigureAwait(false);
                 return Results.Json(new AuthenticationBootstrapResponse(csrf, browser!.Key, policy.PasswordMaximumLength,
                     capability?.Available == true, capability?.MaximumCredentialJsonBytes, passkeyRecovery, presentation.Locale,
                     presentation.Content, presentation.TermsUri, presentation.PrivacyUri, presentation.SupportUri, federationBootstrap,
-                    context.RequestServices.GetService<RecoveryBrowserService>()?.Available == true ? true : null, productContext));
+                    recoveryAvailable ? true : null, productContext));
             }
             catch (InvalidOperationException) { return Problem(503, "DEPENDENCY_UNAVAILABLE"); }
             catch (ArgumentException) { return Problem(503, "DEPENDENCY_UNAVAILABLE"); }

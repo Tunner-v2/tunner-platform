@@ -53,8 +53,8 @@ public static class RecoveryEndpoints
                 .AllowAnonymous().WithMetadata(new AuthenticationEndpoints.CredentialAuthenticationMetadata());
         }
         var assets = endpoints.ServiceProvider.GetRequiredService<IdentityWebAssets>(); assets.MapAssets(endpoints);
-        assets.MapScreens(endpoints, "recovery.html", ["/recovery", "/recovery/verify", "/recovery/result"],
-            context => context.RequestServices.GetRequiredService<RecoveryBrowserService>().ScreenAllowed(context));
+        assets.MapScreensAsync(endpoints, "recovery.html", ["/recovery", "/recovery/verify", "/recovery/result"],
+            context => context.RequestServices.GetRequiredService<RecoveryBrowserService>().ScreenAllowedAsync(context));
         return endpoints;
     }
 }

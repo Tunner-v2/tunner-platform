@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "scope_id": "P2-013-RV004",
+  "owner_work_item": "TUN-P2-019",
+  "validation_kind": "COMMITTED",
+  "result": "PENDING",
+  "tested_commit_sha": null,
+  "validated_commit_sha": null,
+  "owned_behavior_paths": [
+    "src/Modules/Identity/PublishedDevicePresentationSource.cs",
+    "src/Modules/Identity/DeviceStepUpOwner.cs",
+    "src/Modules/Identity/DeviceBrowserEndpoints.cs",
+    "src/Modules/Identity/StepUpApplication.cs"
+  ],
+  "scope": "Qualify published Device discovery and transaction-bound trust removal",
+  "retained_qualification_refs": [
+    "governance/evidence/P2-009-RV009-VALIDATION.json",
+    "governance/evidence/P2-014-RV001-VALIDATION.json",
+    "governance/evidence/P2-013-RV003-VALIDATION.json"
+  ],
+  "boundaries": "Optional source selection only; preserve original business, security and synchronous behavior. No production values/activation, Product acceptance, merge or release."
+}

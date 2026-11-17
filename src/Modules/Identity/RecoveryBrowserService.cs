@@ -26,14 +26,24 @@ public sealed class RecoveryBrowserService
         this.protection = protection; this.partitions = partitions; this.origin = origin; this.clock = clock;
     }
     private sealed record Pointer(Guid RequestId, string BrowserDigest, string PreviousCookieDigest, string Origin, string PolicyVersion, DateTimeOffset ExpiresAt);
-    internal bool Available
+    internal async ValueTask<bool> AvailableAsync(CancellationToken cancellationToken)
     {
-        get { try { _ = Current(); return application.PasswordAvailable; } catch (InvalidOperationException) { return false; } catch (ArgumentException) { return false; } }
+        try { _ = await CurrentAsync(cancellationToken).ConfigureAwait(false); return application.PasswordAvailable; }
+        catch (OperationCanceledException) when (!cancellationToken.IsCancellationRequested) { return false; }
+        catch (Exception error) when (error is InvalidOperationException or ArgumentException or System.Data.Common.DbException or HttpRequestException or TimeoutException) { return false; }
     }
-    private (RecoveryPasswordPolicyVersion Policy, RecoveryPasswordPresentation Publication) Current()
+    private async ValueTask<(RecoveryPasswordPolicyVersion Policy, RecoveryPasswordPresentation Publication)> CurrentAsync(CancellationToken cancellationToken)
     {
         var now = clock.GetUtcNow(); var policy = policies.RequireEffective(now); policy.Require(origin, now);
-        var publication = presentations.RequirePublished(policy.Values, now); publication.Require(policy.Values, now); return (policy, publication);
+        if (presentations is IRecoveryPasswordAsyncPresentationSource asynchronous)
+        {
+            var publication = await asynchronous.RequirePublishedAsync(policy.Values, now, cancellationToken).ConfigureAwait(false)
+                ?? throw new InvalidOperationException("Current Recovery publication is unavailable.");
+            var current = policies.RequireEffective(clock.GetUtcNow()); current.Require(origin, clock.GetUtcNow());
+            if (current.Snapshot != policy.Snapshot) throw new InvalidOperationException("Recovery policy changed during publication preparation.");
+            publication.Require(current.Values, clock.GetUtcNow()); return (current, publication);
+        }
+        var legacy = presentations.RequirePublished(policy.Values, now); legacy.Require(policy.Values, now); return (policy, legacy);
     }
     private RecoveryEntryCaller Caller(HttpContext context)
     {
@@ -48,7 +58,7 @@ public sealed class RecoveryBrowserService
         try
         {
             if (context.Request.QueryString.HasValue) return Problem(400, "VALIDATION_ERROR");
-            var (policy, publication) = Current(); var caller = Caller(context); OperationView? operation = null;
+            var (policy, publication) = await CurrentAsync(context.RequestAborted).ConfigureAwait(false); var caller = Caller(context); OperationView? operation = null;
             var selected = Selected(context, caller, policy.Values.Version);
             if (selected is not null)
             {
@@ -70,7 +80,7 @@ public sealed class RecoveryBrowserService
     {
         try
         {
-            var (policy, publication) = Current(); var caller = Caller(context);
+            var (policy, publication) = await CurrentAsync(context.RequestAborted).ConfigureAwait(false); var caller = Caller(context);
             if (context.Request.QueryString.HasValue || !context.Request.HasJsonContentType()) return Problem(400, "VALIDATION_ERROR");
             RecoveryEntryResult result;
             if (kind == "start")
@@ -95,7 +105,7 @@ public sealed class RecoveryBrowserService
                 var options = await application.StartPasswordContactAsync(caller, command.RequestId, context.RequestAborted).ConfigureAwait(false);
                 if (options.ErrorCode is { } error) return Failure(error);
                 if (options.Entry is not { } contactEntry || options.Presentation is not { } presentation) return Problem(400, "RECOVERY_PROOF_REJECTED");
-                if (Current().Policy.Snapshot != policy.Snapshot) return Problem(503, "RECOVERY_UNAVAILABLE");
+                if ((await CurrentAsync(context.RequestAborted).ConfigureAwait(false)).Policy.Snapshot != policy.Snapshot) return Problem(503, "RECOVERY_UNAVAILABLE");
                 Select(context, caller, contactEntry);
                 return Results.Json(new { requestId = contactEntry.RequestId, challengeId = presentation.ChallengeId, expiresAt = presentation.ExpiresAt });
             }
@@ -124,7 +134,7 @@ public sealed class RecoveryBrowserService
                 var options = await application.StartPasswordPasskeyAsync(caller, command.RequestId, context, context.RequestAborted).ConfigureAwait(false);
                 if (options.ErrorCode is { } error) return Failure(error);
                 if (options.Entry is not { } optionsEntry || options.Presentation is not { } presentation) return Problem(400, "RECOVERY_PROOF_REJECTED");
-                if (Current().Policy.Snapshot != policy.Snapshot) return Problem(503, "RECOVERY_UNAVAILABLE");
+                if ((await CurrentAsync(context.RequestAborted).ConfigureAwait(false)).Policy.Snapshot != policy.Snapshot) return Problem(503, "RECOVERY_UNAVAILABLE");
                 Select(context, caller, optionsEntry);
                 return Results.Json(new PasskeyOptionsView(optionsEntry.RequestId, presentation.CeremonyId,
                     JsonSerializer.Deserialize<JsonElement>(presentation.OptionsJson), presentation.ExpiresAt));
@@ -167,11 +177,11 @@ public sealed class RecoveryBrowserService
         catch (InvalidOperationException) { return Problem(503, "RECOVERY_UNAVAILABLE"); }
         catch (CryptographicException) { return Problem(503, "RECOVERY_UNAVAILABLE"); }
     }
-    internal bool ScreenAllowed(HttpContext context)
+    internal async Task<bool> ScreenAllowedAsync(HttpContext context)
     {
-        if (!Available || context.Request.QueryString.HasValue) return false;
+        if (!await AvailableAsync(context.RequestAborted).ConfigureAwait(false) || context.Request.QueryString.HasValue) return false;
         if (context.Request.Path == "/recovery") return true;
-        try { var (policy, _) = Current(); return Selected(context, Caller(context), policy.Values.Version) is not null; }
+        try { var (policy, _) = await CurrentAsync(context.RequestAborted).ConfigureAwait(false); return Selected(context, Caller(context), policy.Values.Version) is not null; }
         catch (RecoveryBrowserContextException) { return false; } catch (InvalidOperationException) { return false; }
     }
     private IDataProtector PointerProtector() => protection.CreateProtector("Tunner.User.Recovery.Original.v1");

@@ -57,7 +57,8 @@ public static class RecoveryCodeFiniteNativeExecution
         "PUBLISHED_WINNER", "PUBLISHED_SAVED_SESSION", "PUBLISHED_SAVED_OPERATION",
         "PUBLISHED_SAVED_CONTENT", "PUBLISHED_PROFILE_WITHDRAW", "PUBLISHED_BINDING_DRIFT",
         "PUBLISHED_WRONG_FACTS", "PUBLISHED_MISSING_IMPACT", "PUBLISHED_LOCK_RELEASE",
-        "PUBLISHED_LOCK_CANCEL", "PUBLISHED_LOCK_DEADLINE", "PUBLISHED_COMMIT_OBSERVER"];
+        "PUBLISHED_LOCK_CANCEL", "PUBLISHED_LOCK_DEADLINE", "PUBLISHED_COMMIT_OBSERVER",
+        "PASSWORD_PUBLISHED_HTTPS", "PASSWORD_PUBLISHED_EXPIRY"];
 
     internal static async Task<RecoveryCodeNativeReceipt> RunAsync(RecoveryCodeNativeCohort cohort, Uri qualifiedLocalEndpoint, DirectoryInfo repository, RecoveryCodeFixtureOwnershipChannel ownershipChannel)
     {
@@ -432,6 +433,8 @@ public static class RecoveryCodeFiniteNativeExecution
             "RECOVERY_PASSKEY_ROLLBACK" => new RecoveryPasskeyRepairPrivateIntegrationTests(fixture).PostSaveFaultAndCancellationRollbackNativeCounterAndPasswordEffects(),
             "RECOVERY_PASSKEY_HTTPS" => new RecoveryPasskeyRepairPrivateIntegrationTests(fixture).ActualHttpsStrongRecoveryIsNeutralAndRequiresOriginalBrowserCsrf(),
             "RECOVERY_PASSWORD_HTTPS_WIRE" => new RecoveryPasswordRepairPrivateIntegrationTests(fixture).ActualHttpsRecoveryRequiresOriginalBrowserCsrfAndBoundedPublicCommandsWithoutLogin(),
+            "PASSWORD_PUBLISHED_HTTPS" => new RecoveryPasswordRepairPrivateIntegrationTests(fixture).PublishedPasswordRecoveryUsesActualContentAndPrivateNativeRepair(),
+            "PASSWORD_PUBLISHED_EXPIRY" => new RecoveryPasswordRepairPrivateIntegrationTests(fixture).PublishedPasswordRecoveryPublicationExpiryLeavesCodeAndCredentialUnchanged(),
             "RECOVERY_PASSWORD_ENTRY" => new RecoveryPasswordRepairPrivateIntegrationTests(fixture).NeutralEntryOriginalAndCancellationNeverSelectPublicAccountOrConsumeCode(),
             "RECOVERY_PASSWORD_EFFECT" => new RecoveryPasswordRepairPrivateIntegrationTests(fixture).ExactCodeRepairsNativePasswordWithoutLoginOrUnrelatedStateMutation(),
             "RECOVERY_PASSWORD_VALIDITY" => new RecoveryPasswordRepairPrivateIntegrationTests(fixture).ValidationAndAuthorityDriftLeaveOriginalCodeAndCredentialUnchanged(),

@@ -16,7 +16,7 @@ namespace Tunner.Identity.Persistence.Tests;
 
 /// <summary>Finite private owner tests only. Never output a code, credential, cookie, hash or restricted row.</summary>
 // No xUnit/default-fixture dispatch; the existing literal registry supplies the admitted finite owner.
-internal sealed class RecoveryPasswordRepairPrivateIntegrationTests(IdentityPostgresFixture fixture)
+internal sealed partial class RecoveryPasswordRepairPrivateIntegrationTests(IdentityPostgresFixture fixture)
 {
     private const string Public = "SYNTHETIC-TEST-ONLY";
     private const string Replacement = "a synthetic replacement passphrase for recovery";

@@ -1,0 +1,45 @@
+{
+  "schema_version": 1,
+  "revision_id": "P2-014-RV002",
+  "revision_scope": "WORK_ITEM",
+  "original_scope_id": "TUN-P2-014",
+  "parent_revision_id": "P2-014-RV001",
+  "parent_milestone_revision_id": null,
+  "title": "Preserve Product bootstrap and proof during remaining publication integration",
+  "revision_type": "COMPATIBILITY",
+  "status": "ACTIVE",
+  "reason": "Approved P2-019 introduces asynchronous optional Recovery availability in shared bootstrap and a Device-only prepared final witness in shared StepUp. Preserve original Product closure, all Product policy/proof/issuance behavior and explicit activation boundaries; qualify only affected shared source.",
+  "authority_refs": [
+    "docs/authority/baselines/1.6.0/17_Account_Identity_and_Session_FRD.md",
+    "docs/authority/baselines/1.6.0/19_Connected_Product_and_SDK_Lifecycle_FRD.md",
+    "docs/authority/baselines/1.6.0/32_Domain_API_Event_Data_and_Policy_Contract_Catalog.md"
+  ],
+  "decision_refs": [],
+  "defect_refs": [],
+  "change_refs": [
+    "governance/evidence/TUN-P2-019-VALIDATION.json"
+  ],
+  "impact_classification": "NON_BLOCKING",
+  "blocked_scope": [],
+  "acceptance_criteria": [
+    "Optional unavailable Recovery remains isolated from primary authentication bootstrap; Product origin, fresh proof and native issuance semantics remain unchanged.",
+    "Qualified shared-source equivalence and focused regressions preserve original Product closure; no production policy, source activation or release is implied."
+  ],
+  "prerequisites": [],
+  "work_items": [],
+  "required_gates": [],
+  "required_roles": [
+    "full-stack-engineer",
+    "tester-qa-engineer",
+    "solution-architect",
+    "cyber-security-engineer",
+    "auditor"
+  ],
+  "evidence_refs": [
+    "governance/evidence/P2-014-RV002-VALIDATION.json",
+    "governance/evidence/TUN-P2-019-VALIDATION.json"
+  ],
+  "created_at": "2026-11-17T07:29:23.8313537+00:00",
+  "closed_at": null,
+  "product_acceptance_required": false
+}
