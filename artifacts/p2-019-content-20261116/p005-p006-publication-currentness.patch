@@ -1,0 +1,80 @@
+diff --git a/governance/work-items/TUN-P2-005.yaml b/governance/work-items/TUN-P2-005.yaml
+--- a/governance/work-items/TUN-P2-005.yaml
++++ b/governance/work-items/TUN-P2-005.yaml
+@@ -101,5 +101,5 @@
+   "git_state": {
+     "repository_changed": true,
+-    "validated_commit_sha": "e1c1208664327563ed4d3f25fe8d7c3633d0e325",
+-    "tested_commit_sha": "e1c1208664327563ed4d3f25fe8d7c3633d0e325",
++    "validated_commit_sha": "1bf5971739f163d15777498b211ff0f48f677bc8",
++    "tested_commit_sha": "1bf5971739f163d15777498b211ff0f48f677bc8",
+     "work_item_commit_shas": [
+@@ -148,4 +148,5 @@
+       "196d522b52830bae0e57c908883cba3431fd5a81",
+-      "e1c1208664327563ed4d3f25fe8d7c3633d0e325"
++      "e1c1208664327563ed4d3f25fe8d7c3633d0e325",
++      "1bf5971739f163d15777498b211ff0f48f677bc8"
+     ],
+     "closure_commit_sha": null,
+diff --git a/governance/work-items/TUN-P2-006.yaml b/governance/work-items/TUN-P2-006.yaml
+--- a/governance/work-items/TUN-P2-006.yaml
++++ b/governance/work-items/TUN-P2-006.yaml
+@@ -99,5 +99,5 @@
+   "git_state": {
+     "repository_changed": true,
+-    "validated_commit_sha": "2ec18d92a3b0a42628e1f27584a621f4ad7d7ddf",
+-    "tested_commit_sha": "2ec18d92a3b0a42628e1f27584a621f4ad7d7ddf",
++    "validated_commit_sha": "1bf5971739f163d15777498b211ff0f48f677bc8",
++    "tested_commit_sha": "1bf5971739f163d15777498b211ff0f48f677bc8",
+     "work_item_commit_shas": [
+@@ -138,4 +138,5 @@
+       "b72ebef841e4623721413c012420a2be811a1814",
+-      "2ec18d92a3b0a42628e1f27584a621f4ad7d7ddf"
++      "2ec18d92a3b0a42628e1f27584a621f4ad7d7ddf",
++      "1bf5971739f163d15777498b211ff0f48f677bc8"
+     ],
+     "closure_commit_sha": null,
+diff --git a/governance/evidence/TUN-P2-005-AUDIT-CORRECTION-SOURCE.json b/governance/evidence/TUN-P2-005-AUDIT-CORRECTION-SOURCE.json
+--- a/governance/evidence/TUN-P2-005-AUDIT-CORRECTION-SOURCE.json
++++ b/governance/evidence/TUN-P2-005-AUDIT-CORRECTION-SOURCE.json
+@@ -1,3 +1,4 @@
+ {
++  "remaining_publication_currentness_20261117": {"candidate_commit_sha":"1bf5971739f163d15777498b211ff0f48f677bc8","prior_qualified_binding_sha":"e1c1208664327563ed4d3f25fe8d7c3633d0e325","ordered_owned_count":48,"unchanged_owned_count":47,"changed_owned_paths":["src/Modules/Identity/AuthenticationEndpoints.cs"],"qualification_refs":["governance/evidence/P2-014-RV002-VALIDATION.json","governance/evidence/P2-009-RV010-VALIDATION.json","governance/evidence/TUN-P2-019-VALIDATION.json","governance/evidence/p2-019-content-20261116/native-recovery-1bf59717/private-receipt.json","governance/evidence/p2-019-content-20261116/native-recovery-1bf59717/protocol-qualification.json","governance/evidence/p2-019-content-20261116/native-recovery-1bf59717/resource-qualification.json","governance/evidence/p2-019-content-20261116/native/shared-proof-04c86d0a/presentation.trx"],"build_binding_sha256":"0748b2dc3c9862afa05e0057c849040e018bc2c3210e7dfd3187387b4681e9aa","scope":"Only shared bootstrap now awaits optional Recovery availability; missing/unavailable/dependency-canceled Recovery remains absent without denying ordinary Login, while actual caller cancellation propagates. Other47 ordered owned Git blobs are unchanged from e1c12086.","actual_qualification":"Private123/123, protocol17/17 and resources6/6 execute at1bf59717; unchanged shared Authentication/StepUp pure35 execute at04c86d0a. Recovery24pure and public3 retain004603cf; corrected bootstrap1 retains35a121aa. Original public4=3PASS1FAIL and private123=121PASS2FAIL remain retained; no combined/full-parent rerun is claimed.","boundary":"Metadata-only currentness; preserve VALIDATION, ordered ownership, historical executions/test IDs/UI/approvals and acceptance boundaries. No Product, production, merge or release inference."},
+   "schema_version": 1,
+   "scope_id": "TUN-P2-005",
+@@ -45,5 +46,5 @@
+   "validation_kind": "COMMITTED",
+   "result": "PASS",
+-  "tested_commit_sha": "e1c1208664327563ed4d3f25fe8d7c3633d0e325",
+-  "validated_commit_sha": "e1c1208664327563ed4d3f25fe8d7c3633d0e325",
++  "tested_commit_sha": "1bf5971739f163d15777498b211ff0f48f677bc8",
++  "validated_commit_sha": "1bf5971739f163d15777498b211ff0f48f677bc8",
+   "owned_behavior_paths": [
+@@ -101,3 +102,4 @@
+-  "source_binding_ref": "governance/evidence/TUN-P2-014-VALIDATION.json",
++  "source_binding_ref": "governance/evidence/P2-014-RV002-VALIDATION.json",
+   "prior_current_source_bindings": [
++    {"tested_commit_sha":"e1c1208664327563ed4d3f25fe8d7c3633d0e325","validated_commit_sha":"e1c1208664327563ed4d3f25fe8d7c3633d0e325","source_binding_ref":"governance/evidence/TUN-P2-014-VALIDATION.json","source_envelope_git_ref":"0e0db26143d9c2e4c8f90a156b3111c7172cd323:governance/evidence/TUN-P2-005-AUDIT-CORRECTION-SOURCE.json"},
+     {
+diff --git a/governance/evidence/TUN-P2-006-AUDIT-CORRECTION-SOURCE.json b/governance/evidence/TUN-P2-006-AUDIT-CORRECTION-SOURCE.json
+--- a/governance/evidence/TUN-P2-006-AUDIT-CORRECTION-SOURCE.json
++++ b/governance/evidence/TUN-P2-006-AUDIT-CORRECTION-SOURCE.json
+@@ -1,3 +1,4 @@
+ {
++  "remaining_publication_currentness_20261117": {"candidate_commit_sha":"1bf5971739f163d15777498b211ff0f48f677bc8","prior_qualified_binding_sha":"2ec18d92a3b0a42628e1f27584a621f4ad7d7ddf","ordered_owned_count":45,"unchanged_owned_count":43,"changed_owned_paths":["src/Modules/Identity/AuthenticationEndpoints.cs","src/Modules/Identity/StepUpApplication.cs"],"qualification_refs":["governance/evidence/P2-009-RV010-VALIDATION.json","governance/evidence/P2-013-RV004-VALIDATION.json","governance/evidence/P2-014-RV002-VALIDATION.json","governance/evidence/TUN-P2-019-VALIDATION.json","governance/evidence/p2-019-content-20261116/native-recovery-1bf59717/private-receipt.json","governance/evidence/p2-019-content-20261116/native-recovery-1bf59717/protocol-qualification.json","governance/evidence/p2-019-content-20261116/native-recovery-1bf59717/resource-qualification.json","governance/evidence/p2-019-content-20261116/native/shared-proof-04c86d0a/presentation.trx"],"build_binding_sha256":"0748b2dc3c9862afa05e0057c849040e018bc2c3210e7dfd3187387b4681e9aa","parent006_cases":["PARENT006_PROOF_SESSION","PARENT006_PROOF_ROLLBACK","PARENT006_BROWSER_ORIGINAL","PARENT006_BROWSER_ABSENCE"],"scope":"Shared bootstrap isolates optional Recovery availability; StepUp adds only prepared-Device postSave local qualification/time checks. Existing Recovery and ordinary synchronous/nonDevice completion remain intact; other43 ordered owned Git blobs are unchanged from2ec18d92.","actual_qualification":"Private123/123 including all4 PARENT006 execute at1bf59717 with protocol17/17 and resources6/6. Unchanged shared Authentication/StepUp pure35 retain04c86d0a. Device19 distinct passing identities retain initial04c86d0a successes and focused5 at16468b07; original18=17PASS1FAIL remains retained. Recovery28 retains24pure/public3 at004603cf plus correctedbootstrap1 at35a121aa. Production source16468b07 to1bf59717 is unchanged; only private outbox-fixture baseline changed. No single combined run or complete historical006 rerun is claimed.","boundary":"Metadata-only currentness; preserve VALIDATION, ordered ownership, historical executions/test IDs/UI/approvals and acceptance boundaries. No Product, production, merge or release inference."},
+   "schema_version": 1,
+   "scope_id": "TUN-P2-006",
+@@ -49,5 +50,5 @@
+   "validation_kind": "COMMITTED",
+   "result": "PASS",
+-  "tested_commit_sha": "2ec18d92a3b0a42628e1f27584a621f4ad7d7ddf",
+-  "validated_commit_sha": "2ec18d92a3b0a42628e1f27584a621f4ad7d7ddf",
++  "tested_commit_sha": "1bf5971739f163d15777498b211ff0f48f677bc8",
++  "validated_commit_sha": "1bf5971739f163d15777498b211ff0f48f677bc8",
+   "owned_behavior_paths": [
+@@ -106,3 +107,4 @@
+-  "source_binding_ref": "governance/evidence/P2-009-RV009-VALIDATION.json",
++  "source_binding_ref": "governance/evidence/P2-009-RV010-VALIDATION.json",
+   "prior_current_source_bindings": [
++    {"tested_commit_sha":"2ec18d92a3b0a42628e1f27584a621f4ad7d7ddf","validated_commit_sha":"2ec18d92a3b0a42628e1f27584a621f4ad7d7ddf","source_binding_ref":"governance/evidence/P2-009-RV009-VALIDATION.json","source_envelope_git_ref":"0e0db26143d9c2e4c8f90a156b3111c7172cd323:governance/evidence/TUN-P2-006-AUDIT-CORRECTION-SOURCE.json"},
+     {"tested_commit_sha":"e1c1208664327563ed4d3f25fe8d7c3633d0e325","validated_commit_sha":"e1c1208664327563ed4d3f25fe8d7c3633d0e325","source_binding_ref":"governance/evidence/TUN-P2-014-VALIDATION.json","source_envelope_git_ref":"2ec18d92a3b0a42628e1f27584a621f4ad7d7ddf:governance/evidence/TUN-P2-006-AUDIT-CORRECTION-SOURCE.json"},
