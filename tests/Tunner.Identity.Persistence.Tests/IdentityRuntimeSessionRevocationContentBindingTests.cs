@@ -80,6 +80,9 @@ public sealed class IdentityRuntimeSessionRevocationContentBindingTests(SessionL
         Assert.Equal(env.Clock.GetUtcNow(), user.Clock.GetUtcNow());
         await user.SeedAsync(db);
         var cookies = await TotpTests.Login(user);
+        await using var snapshot = db.Context();
+        var sessionsBefore = await snapshot.Set<AuthenticationSessionRow>().AsNoTracking().OrderBy(row => row.Id)
+            .Select(row => new { row.Id, row.Version, row.State }).ToArrayAsync();
         using (var options = await user.Get("/account/sessions/revocation/options", cookies))
         {
             Assert.Equal(HttpStatusCode.OK, options.StatusCode);
@@ -113,8 +116,12 @@ public sealed class IdentityRuntimeSessionRevocationContentBindingTests(SessionL
         { scope = WireScope(), publicationReference = first.GetProperty("publicationReference").GetGuid() }, publisher))
         { Assert.Equal(HttpStatusCode.OK, history.StatusCode); Assert.Equal("fixture-signout-v2", (await Body(history)).GetProperty("sessionRevocationContent").GetProperty("configurationVersionReference").GetString()); }
         await using var unchanged = db.Context();
+        Assert.Equal(sessionsBefore, await unchanged.Set<AuthenticationSessionRow>().AsNoTracking().OrderBy(row => row.Id)
+            .Select(row => new { row.Id, row.Version, row.State }).ToArrayAsync());
         Assert.All(await unchanged.Set<AuthenticationSessionRow>().ToArrayAsync(), row => Assert.Equal("ACTIVE", row.State));
         Assert.Empty(await unchanged.Set<StepUpProofRow>().ToArrayAsync());
+        await using var platform = env.Platform();
+        Assert.False(await platform.OutboxMessages.AnyAsync(row => row.EventType == "TunnerSessionRevoked"));
     }
 
     [Theory]
