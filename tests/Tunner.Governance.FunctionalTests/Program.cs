@@ -933,6 +933,8 @@ static void RunRevisionCommittedProofChecks(DirectoryInfo repositoryRoot, IColle
         var originalProofBytes = File.ReadAllBytes(Path.Combine(fixture.FullName, originalProof));
         Check(AuditCommittedFixture(fixture), "original completed scope passes before revision");
 
+        string[] auditorRoles = ["auditor"];
+        string[] fixtureAuthorityReferences = ["docs/authority/mirror.txt"];
         string Candidate(string[] owned, string value)
         {
             var created = RevisionApplication.Create(fixture, new(originalId, "CORRECTIVE", "Fixture revision",
@@ -944,7 +946,7 @@ static void RunRevisionCommittedProofChecks(DirectoryInfo repositoryRoot, IColle
             EditRevision(revisionFile, "status", "VALIDATION");
             EditRevision(revisionFile, "product_acceptance_required", false);
             EditRevision(revisionFile, "evidence_refs", new[] { proof });
-            EditRevision(revisionFile, "required_roles", new[] { "auditor" });
+            EditRevision(revisionFile, "required_roles", auditorRoles);
             var reviewEvidence = "governance/evidence/" + id + "-role-proof.json";
             var review = "governance/reviews/" + id + "-auditor.yaml";
             File.WriteAllText(Path.Combine(fixture.FullName, reviewEvidence), "{}");
@@ -952,7 +954,7 @@ static void RunRevisionCommittedProofChecks(DirectoryInfo repositoryRoot, IColle
             {
                 schema_version = 1, review_id = "REV-" + id + "-auditor", work_item_id = id, role = "auditor", status = "PASS", result = "PASS",
                 reviewed_at = "2026-10-17T00:00:00Z", skill_id = "auditor", skill_version = "1.0.0", skill_hash = new string('a', 64),
-                authority_refs = new[] { "docs/authority/mirror.txt" }, context_artifacts = new[] { "governance/revisions/" + id + ".yaml" },
+                authority_refs = fixtureAuthorityReferences, context_artifacts = new[] { "governance/revisions/" + id + ".yaml" },
                 evidence_refs = new[] { reviewEvidence }, findings = Array.Empty<string>(), blocking_findings = Array.Empty<string>(),
                 required_actions = Array.Empty<string>(), context_expansion_requested = false
             }));
