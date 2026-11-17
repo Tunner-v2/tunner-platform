@@ -153,6 +153,12 @@ public static class RevisionApplication
     }
 
     public static CommandResult CloseCheck(DirectoryInfo repository, string id)
+        => CloseCheck(repository, id, new CommittedProofAssessment(repository));
+
+    internal static CommandResult CloseCheck(DirectoryInfo repository, string id, CommittedProofAssessment assessment)
+        => assessment.CloseCheck(repository, id, () => CloseCheckCore(repository, id, assessment));
+
+    private static CommandResult CloseCheckCore(DirectoryInfo repository, string id, CommittedProofAssessment assessment)
     {
         var validation = (ValidationPayload)GovernanceApplication.Validate(repository).Payload;
         if (!validation.IsValid) return Result("revision close-check", id, "NOT_READY", validation.Diagnostics.Select(x => x.Message));
@@ -169,9 +175,9 @@ public static class RevisionApplication
         foreach (var evidence in revision.StringList("evidence_refs"))
             if (!SafeFile(repository, evidence)) failures.Add($"required Revision evidence missing: {evidence}");
         if (CommitReadinessApplication.Read(revision)?.RepositoryChanged != true) failures.Add("repository-native Revision closure requires repository-changing committed-state lineage");
-        failures.AddRange(CommitReadinessApplication.Check(repository, revision));
+        failures.AddRange(CommitReadinessApplication.Check(repository, revision, null, assessment));
         var committedState = CommitReadinessApplication.Read(revision);
-        if (committedState?.RepositoryChanged == true && committedState.ValidatedCommitSha is { } sha && Parse(Git(repository, "show", sha + ":" + RepositoryRootResolver.ToLogicalPath(repository, revision.Path))) is null)
+        if (committedState?.RepositoryChanged == true && committedState.ValidatedCommitSha is { } sha && Parse(CommittedEvidenceApplication.Git(repository, assessment, "show", sha + ":" + RepositoryRootResolver.ToLogicalPath(repository, revision.Path))) is null)
             failures.Add("validated SHA must contain this Revision record");
         foreach (var workId in revision.StringList("work_items"))
         {
@@ -183,7 +189,7 @@ public static class RevisionApplication
             }
             var work = records.SingleOrDefault(x => x.Type.DefinitionName == "work-item" && x.Identifier == workId);
             if (work is null || work.Scalar("revision_ref") != id || work.Scalar("status") != "DONE") failures.Add($"Revision child is not complete and linked: {workId}");
-            else failures.AddRange(((GatePayload)GovernanceApplication.CheckGate(repository, workId).Payload).Failures.Select(x => $"{workId}: {x}"));
+            else failures.AddRange(((GatePayload)GovernanceApplication.CheckGate(repository, workId, assessment).Payload).Failures.Select(x => $"{workId}: {x}"));
         }
         foreach (var gateId in revision.StringList("required_gates"))
         {

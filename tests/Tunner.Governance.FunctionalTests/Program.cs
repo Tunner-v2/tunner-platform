@@ -944,12 +944,24 @@ static void RunRevisionCommittedProofChecks(DirectoryInfo repositoryRoot, IColle
             EditRevision(revisionFile, "status", "VALIDATION");
             EditRevision(revisionFile, "product_acceptance_required", false);
             EditRevision(revisionFile, "evidence_refs", new[] { proof });
+            EditRevision(revisionFile, "required_roles", new[] { "auditor" });
+            var reviewEvidence = "governance/evidence/" + id + "-role-proof.json";
+            var review = "governance/reviews/" + id + "-auditor.yaml";
+            File.WriteAllText(Path.Combine(fixture.FullName, reviewEvidence), "{}");
+            File.WriteAllText(Path.Combine(fixture.FullName, review), JsonSerializer.Serialize(new
+            {
+                schema_version = 1, review_id = "REV-" + id + "-auditor", work_item_id = id, role = "auditor", status = "PASS", result = "PASS",
+                reviewed_at = "2026-10-17T00:00:00Z", skill_id = "auditor", skill_version = "1.0.0", skill_hash = new string('a', 64),
+                authority_refs = new[] { "docs/authority/mirror.txt" }, context_artifacts = new[] { "governance/revisions/" + id + ".yaml" },
+                evidence_refs = new[] { reviewEvidence }, findings = Array.Empty<string>(), blocking_findings = Array.Empty<string>(),
+                required_actions = Array.Empty<string>(), context_expansion_requested = false
+            }));
             foreach (var path in owned) File.WriteAllText(Path.Combine(fixture.FullName, path), value);
             File.WriteAllText(Path.Combine(fixture.FullName, proof), JsonSerializer.Serialize(new
             {
                 scope_id = id, validation_kind = "COMMITTED", owned_behavior_paths = owned
             }));
-            RunGit(fixture, ["add", "--", "governance/revisions/" + id + ".yaml", proof, .. owned]);
+            RunGit(fixture, ["add", "--", "governance/revisions/" + id + ".yaml", proof, review, reviewEvidence, .. owned]);
             RunGit(fixture, "commit", "--quiet", "-m", "Revision validation candidate");
             var sha = RunGitOutput(fixture, "rev-parse", "HEAD");
             EditRevision(revisionFile, "git_state", State(sha));
@@ -997,8 +1009,46 @@ static void RunRevisionCommittedProofChecks(DirectoryInfo repositoryRoot, IColle
         Close(second, true);
         Check(AuditCommittedFixture(fixture), "later path owner and unchanged prior-owner paths compose");
         Check(RevisionApplication.CloseCheck(fixture, first).ExitCode == 0, "prior revision proof resolves strictly later ownership without recursion to itself");
+        var assessment = new CommittedProofAssessment(fixture);
+        var originalRecord = GovernanceApplication.LoadRecords(fixture, []).Single(record => record.Identifier == originalId);
+        Check(CommitReadinessApplication.Check(fixture, originalRecord, null, assessment).Count == 0,
+            "assessment retains complete three-path/two-Revision live closure proof");
+        var immutableComputations = assessment.ImmutableGitComputations;
+        var repeated = RevisionApplication.CloseCheck(fixture, first, assessment);
+        Check(immutableComputations > 0 && repeated.ExitCode == 0 && assessment.ImmutableGitComputations == immutableComputations &&
+            GovernanceApplication.Serialize(repeated) == GovernanceApplication.Serialize(RevisionApplication.CloseCheck(fixture, first)),
+            "repeated nested closure reuses immutable Git reads with identical fresh public output");
+        var roleEvidencePath = Path.Combine(fixture.FullName, "governance/evidence/" + first + "-role-proof.json");
+        var roleEvidenceBytes = File.ReadAllBytes(roleEvidencePath);
+        File.Delete(roleEvidencePath);
+        try
+        {
+            var withdrawn = RevisionApplication.CloseCheck(fixture, first, assessment);
+            Check(withdrawn.ExitCode != 0 && ((RevisionOperationPayload)withdrawn.Payload).Findings.Any(finding => finding.Contains("role review", StringComparison.Ordinal)),
+                "same assessment rejects withdrawn required-role evidence outside direct Revision evidence");
+            Check(RevisionApplication.CloseCheck(fixture, first).ExitCode != 0,
+                "fresh public assessment also rejects withdrawn required-role evidence");
+        }
+        finally { File.WriteAllBytes(roleEvidencePath, roleEvidenceBytes); }
+        var changedProof = File.ReadAllBytes(firstProofPath);
+        File.WriteAllText(firstProofPath, File.ReadAllText(firstProofPath).Replace("\"PASS\"", "\"FAIL\"", StringComparison.Ordinal));
+        Check(RevisionApplication.CloseCheck(fixture, first, assessment).ExitCode != 0,
+            "same assessment reruns changed direct evidence controls");
+        File.WriteAllBytes(firstProofPath, changedProof);
+        File.Delete(firstProofPath);
+        try { Check(RevisionApplication.CloseCheck(fixture, first, assessment).ExitCode != 0,
+            "same assessment reruns missing direct evidence controls"); }
+        finally { File.WriteAllBytes(firstProofPath, changedProof); }
+        var cycle = new CommittedProofAssessment(fixture);
+        var cyclic = cycle.CloseCheck(fixture, first, () => cycle.CloseCheck(fixture, first,
+            () => throw new InvalidOperationException("Cyclic proof must not recurse into another computation.")));
+        Check(cyclic.ExitCode != 0 && ((RevisionOperationPayload)cyclic.Payload).Findings.Any(finding => finding.Contains("cyclic", StringComparison.Ordinal)),
+            "in-progress closure is refused rather than accepted");
         File.WriteAllText(Path.Combine(fixture.FullName, originalPaths[0]), "original");
         Check(!AuditCommittedFixture(fixture), "unvalidated rollback cannot fall back to original or earlier revision proof");
+        Check(RevisionApplication.CloseCheck(fixture, second, assessment).ExitCode != 0 &&
+            RevisionApplication.CloseCheck(fixture, second).ExitCode != 0,
+            "same and fresh assessments independently rerun changed current owned-source checks");
         File.WriteAllText(Path.Combine(fixture.FullName, originalPaths[0]), "revision-two");
         File.WriteAllText(Path.Combine(fixture.FullName, originalPaths[2]), "unclaimed-drift");
         Check(!AuditCommittedFixture(fixture), "an unclaimed original path still requires original proof");

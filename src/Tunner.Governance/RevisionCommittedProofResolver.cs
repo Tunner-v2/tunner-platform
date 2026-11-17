@@ -8,12 +8,14 @@ internal sealed class RevisionCommittedProofResolver
     private readonly DirectoryInfo repository;
     private readonly IReadOnlyList<GovernanceRecord> records;
     private readonly GovernanceRecord[] candidates;
+    private readonly CommittedProofAssessment assessment;
     private readonly Dictionary<string, (string? Sha, HashSet<string> Paths)> classifications = new(StringComparer.Ordinal);
     private readonly Dictionary<string, bool> validated = new(StringComparer.Ordinal);
 
-    internal RevisionCommittedProofResolver(DirectoryInfo repository, GovernanceRecord original)
+    internal RevisionCommittedProofResolver(DirectoryInfo repository, GovernanceRecord original, CommittedProofAssessment assessment)
     {
         this.repository = repository;
+        this.assessment = assessment;
         records = GovernanceApplication.LoadRecords(repository, []);
         var originalId = original.Type.DefinitionName == "revision" ? original.Scalar("original_scope_id") : original.Identifier;
         var sameScope = records.Where(r => r.Type.DefinitionName == "revision" && r.Scalar("revision_scope") == "WORK_ITEM" &&
@@ -50,7 +52,7 @@ internal sealed class RevisionCommittedProofResolver
                 {
                     valid = revision.StringList("evidence_refs").All(IsCommitted) && reviewFiles.All(r =>
                         IsCommitted(RepositoryRootResolver.ToLogicalPath(repository, r.Path))) &&
-                        RevisionApplication.CloseCheck(repository, revision.Identifier).ExitCode == 0;
+                        RevisionApplication.CloseCheck(repository, revision.Identifier, assessment).ExitCode == 0;
                 }
                 catch (Exception exception) when (exception is JsonException or InvalidOperationException)
                 {
@@ -77,7 +79,7 @@ internal sealed class RevisionCommittedProofResolver
         var matched = false;
         foreach (var reference in revision.StringList("evidence_refs").Where(r => Path.GetExtension(r) == ".json"))
         {
-            var text = CommittedEvidenceApplication.Git(repository, "show", sha + ":" + reference);
+            var text = CommittedEvidenceApplication.Git(repository, assessment, "show", sha + ":" + reference);
             try
             {
                 using var document = JsonDocument.Parse(text);

@@ -35,6 +35,9 @@ internal static class CommitReadinessApplication
     }
 
     public static IReadOnlyList<string> Check(DirectoryInfo repository, GovernanceRecord record, string? effectiveState = null)
+        => Check(repository, record, effectiveState, new CommittedProofAssessment(repository));
+
+    internal static IReadOnlyList<string> Check(DirectoryInfo repository, GovernanceRecord record, string? effectiveState, CommittedProofAssessment assessment)
     {
         var state = Read(record);
         if (state is null)
@@ -61,20 +64,21 @@ internal static class CommitReadinessApplication
         if (state.RemainingUncommittedClassification is null || !AllowedClassifications.Contains(state.RemainingUncommittedClassification, StringComparer.Ordinal)) failures.Add("remaining_uncommitted_classification is unsupported");
         if (StringComparer.Ordinal.Equals(state.RemainingUncommittedClassification, "WORK_ITEM_OWNED")) failures.Add("work-item-owned uncommitted changes block local readiness and completion");
         if (StringComparer.Ordinal.Equals(state.RemainingUncommittedClassification, "NONE") && state.RemainingUncommittedPaths.Count > 0) failures.Add("classification NONE cannot list remaining uncommitted paths");
-        if (state.ValidatedCommitSha is not null && !GitCommitExists(repository, state.ValidatedCommitSha)) failures.Add("validated_commit_sha does not resolve to a local Git commit");
-        if (state.TestedCommitSha is not null && !GitCommitExists(repository, state.TestedCommitSha)) failures.Add("tested_commit_sha does not resolve to a local Git commit");
-        failures.AddRange(CommittedEvidenceApplication.Check(repository, record, state));
+        if (state.ValidatedCommitSha is not null && !GitCommitExists(repository, state.ValidatedCommitSha, assessment)) failures.Add("validated_commit_sha does not resolve to a local Git commit");
+        if (state.TestedCommitSha is not null && !GitCommitExists(repository, state.TestedCommitSha, assessment)) failures.Add("tested_commit_sha does not resolve to a local Git commit");
+        failures.AddRange(CommittedEvidenceApplication.Check(repository, record, state, assessment));
         return failures;
     }
 
     public static IReadOnlyList<string> Audit(DirectoryInfo repository, string? milestoneId)
     {
+        var assessment = new CommittedProofAssessment(repository);
         var diagnostics = new List<Diagnostic>();
         var records = GovernanceApplication.LoadRecords(repository, diagnostics);
         var findings = diagnostics.Where(item => item.Severity == "ERROR").Select(item => $"record parse issue: {item.Code}").ToList();
         foreach (var record in records.Where(item => item.Type.DefinitionName == "work-item" && (milestoneId is null || StringComparer.Ordinal.Equals(item.Scalar("milestone_id"), milestoneId)) && new[] { "VALIDATION", "PRODUCT_ACCEPTANCE", "LOCAL_VALIDATED", "READY_FOR_MERGE", "DONE" }.Contains(item.Scalar("status"), StringComparer.Ordinal)).OrderBy(item => item.Identifier, StringComparer.Ordinal))
         {
-            findings.AddRange(Check(repository, record, "LOCAL_VALIDATED").Select(item => $"{record.Identifier}: {item}"));
+            findings.AddRange(Check(repository, record, "LOCAL_VALIDATED", assessment).Select(item => $"{record.Identifier}: {item}"));
         }
         return findings;
     }
@@ -102,11 +106,11 @@ internal static class CommitReadinessApplication
     private static bool? ParseBoolean(string? value) => value?.ToLowerInvariant() switch { "true" => true, "false" => false, _ => null };
     private static string? NullIfEmpty(string? value) => string.IsNullOrWhiteSpace(value) || StringComparer.Ordinal.Equals(value, "null") ? null : value;
 
-    private static bool GitCommitExists(DirectoryInfo repository, string sha)
+    private static bool GitCommitExists(DirectoryInfo repository, string sha, CommittedProofAssessment assessment)
     {
         try
         {
-            return CommittedEvidenceApplication.IsSha(sha) && CommittedEvidenceApplication.Git(repository, "rev-parse", "--verify", sha + "^{commit}") == sha;
+            return CommittedEvidenceApplication.IsSha(sha) && CommittedEvidenceApplication.Git(repository, assessment, "rev-parse", "--verify", sha + "^{commit}") == sha;
         }
         catch (System.ComponentModel.Win32Exception)
         {

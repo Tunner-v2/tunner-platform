@@ -124,6 +124,7 @@ public static class GovernanceApplication
         var integrationActions = new List<IntegrationAction>();
         // A single assessment reuses identical prerequisite proof; new commands always start fresh.
         var committedReadiness = new Dictionary<(string PrerequisiteId, string EffectiveState), bool>();
+        var assessment = new CommittedProofAssessment(repository);
         var validation = (ValidationPayload)Validate(repository).Payload;
         diagnostics.AddRange(validation.Diagnostics);
 
@@ -151,7 +152,7 @@ public static class GovernanceApplication
                 continue;
             }
 
-            var reasons = ReadinessReasons(repository, record, workItems, dependencies, integrationPolicy, allowValidatedP0Prerequisites, committedReadiness);
+            var reasons = ReadinessReasons(repository, record, workItems, dependencies, integrationPolicy, allowValidatedP0Prerequisites, committedReadiness, assessment);
             var revisionReasons = RevisionApplication.BlockingReasons(records, record);
             reasons.AddRange(revisionReasons);
             integrationActions.AddRange(PendingIntegrationActions(repository, record, workItems, dependencies, integrationPolicy));
@@ -175,6 +176,9 @@ public static class GovernanceApplication
     }
 
     public static CommandResult CheckGate(DirectoryInfo repository, string workItemId)
+        => CheckGate(repository, workItemId, new CommittedProofAssessment(repository));
+
+    internal static CommandResult CheckGate(DirectoryInfo repository, string workItemId, CommittedProofAssessment assessment)
     {
         var diagnostics = new List<Diagnostic>();
         var records = LoadRecords(repository, diagnostics);
@@ -184,9 +188,9 @@ public static class GovernanceApplication
             return new CommandResult(2, "gate check", new GatePayload(workItemId, "NOT_FOUND", ["work item does not exist"], []));
         }
 
-        var failures = ReadinessReasons(repository, workItem, workItems, DependencyRecords(records), IntegrationPolicy.Load(repository, diagnostics), HasApprovedP0LocalIntegration(records));
+        var failures = ReadinessReasons(repository, workItem, workItems, DependencyRecords(records), IntegrationPolicy.Load(repository, diagnostics), HasApprovedP0LocalIntegration(records), assessment: assessment);
         failures.AddRange(RevisionApplication.BlockingReasons(records, workItem));
-        failures.AddRange(CommitReadinessApplication.Check(repository, workItem, "LOCAL_VALIDATED"));
+        failures.AddRange(CommitReadinessApplication.Check(repository, workItem, "LOCAL_VALIDATED", assessment));
         var authority = AuthorityApplication.Verify(repository);
         if (authority.ExitCode != 0)
         {
@@ -665,7 +669,7 @@ public static class GovernanceApplication
     }
 
     private static List<string> ReadinessReasons(DirectoryInfo repository, GovernanceRecord workItem, Dictionary<string, GovernanceRecord> workItems, IReadOnlyList<GovernanceRecord> dependencies, IntegrationPolicyDefinition integrationPolicy, bool allowValidatedP0Prerequisites,
-        Dictionary<(string PrerequisiteId, string EffectiveState), bool>? committedReadiness = null)
+        Dictionary<(string PrerequisiteId, string EffectiveState), bool>? committedReadiness = null, CommittedProofAssessment? assessment = null)
     {
         var failures = new List<string>();
         foreach (var prerequisite in workItem.StringList("prerequisites"))
@@ -702,7 +706,7 @@ public static class GovernanceApplication
             var proofKey = (prerequisiteRecord.Identifier, effectiveState ?? prerequisiteRecord.Scalar("status") ?? "UNKNOWN");
             if (committedReadiness is null || !committedReadiness.TryGetValue(proofKey, out var hasCommittedState))
             {
-                hasCommittedState = HasRequiredCommittedState(repository, prerequisiteRecord, effectiveState);
+                hasCommittedState = HasRequiredCommittedState(repository, prerequisiteRecord, effectiveState, assessment);
                 if (committedReadiness is not null) committedReadiness[proofKey] = hasCommittedState;
             }
             if (!hasCommittedState)
@@ -762,7 +766,7 @@ public static class GovernanceApplication
     private static bool RequiresCommittedState(DirectoryInfo repository, GovernanceRecord record, string? state = null)
         => CommitReadinessApplication.IsRequired(repository, record, state);
 
-    private static bool HasRequiredCommittedState(DirectoryInfo repository, GovernanceRecord record, string? state = null)
+    private static bool HasRequiredCommittedState(DirectoryInfo repository, GovernanceRecord record, string? state = null, CommittedProofAssessment? assessment = null)
     {
         if (!RequiresCommittedState(repository, record, state))
         {
@@ -770,7 +774,7 @@ public static class GovernanceApplication
         }
 
         return CommitReadinessApplication.Read(record) is not null
-            && CommitReadinessApplication.Check(repository, record, state).Count == 0;
+            && CommitReadinessApplication.Check(repository, record, state, assessment ?? new CommittedProofAssessment(repository)).Count == 0;
     }
 
     private static bool IsPrerequisiteReady(DirectoryInfo repository, GovernanceRecord workItem, GovernanceRecord prerequisite, GovernanceRecord? declaration, string readiness, bool allowValidatedP0Prerequisites)
