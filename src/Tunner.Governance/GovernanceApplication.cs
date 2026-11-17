@@ -708,14 +708,16 @@ public static class GovernanceApplication
             // VALIDATION may satisfy local dependencies only with the same current source proof as LOCAL_VALIDATED.
             var effectiveState = readiness == "LOCAL_VALIDATED" ? "LOCAL_VALIDATED" : null;
             var proofKey = (prerequisiteRecord.Identifier, effectiveState ?? prerequisiteRecord.Scalar("status") ?? "UNKNOWN");
+            var proofFailures = new List<string>();
             if (committedReadiness is null || !committedReadiness.TryGetValue(proofKey, out var hasCommittedState))
             {
-                hasCommittedState = HasRequiredCommittedState(repository, prerequisiteRecord, effectiveState, assessment);
+                hasCommittedState = HasRequiredCommittedState(repository, prerequisiteRecord, effectiveState, assessment, proofFailures);
                 if (committedReadiness is not null) committedReadiness[proofKey] = hasCommittedState;
             }
             if (!hasCommittedState)
             {
                 failures.Add($"prerequisite '{prerequisite}' lacks valid committed-state readiness evidence");
+                failures.AddRange(proofFailures.Select(reason => $"prerequisite '{prerequisite}' committed-state proof: {reason}"));
             }
         }
 
@@ -770,15 +772,18 @@ public static class GovernanceApplication
     private static bool RequiresCommittedState(DirectoryInfo repository, GovernanceRecord record, string? state = null)
         => CommitReadinessApplication.IsRequired(repository, record, state);
 
-    private static bool HasRequiredCommittedState(DirectoryInfo repository, GovernanceRecord record, string? state = null, CommittedProofAssessment? assessment = null)
+    private static bool HasRequiredCommittedState(DirectoryInfo repository, GovernanceRecord record, string? state = null, CommittedProofAssessment? assessment = null, List<string>? proofFailures = null)
     {
         if (!RequiresCommittedState(repository, record, state))
         {
             return true;
         }
 
-        return CommitReadinessApplication.Read(record) is not null
-            && CommitReadinessApplication.Check(repository, record, state, assessment ?? new CommittedProofAssessment(repository)).Count == 0;
+        if (CommitReadinessApplication.Read(record) is null) return false;
+        var failures = CommitReadinessApplication.Check(repository, record, state, assessment ?? new CommittedProofAssessment(repository));
+        if (proofFailures is not null)
+            foreach (var failure in failures) proofFailures.Add(failure);
+        return failures.Count == 0;
     }
 
     private static bool IsPrerequisiteReady(DirectoryInfo repository, GovernanceRecord workItem, GovernanceRecord prerequisite, GovernanceRecord? declaration, string readiness, bool allowValidatedP0Prerequisites)

@@ -1168,10 +1168,15 @@ static void RunValidationSourceReadinessChecks(DirectoryInfo repositoryRoot, ICo
             scope_id = scope, validation_kind = "COMMITTED", validated_commit_sha = sha,
             tested_commit_sha = sha, result = "PASS", owned_behavior_paths = new[] { behavior }
         }));
-        void Reject(string scenario)
+        void Reject(string scenario, string? expectedNestedFailure = null)
         {
-            Check(!DownstreamReady(), scenario + " must block the LOCAL_VALIDATED consumer");
+            var downstream = ((NextPayload)GovernanceApplication.Next(fixture).Payload).Items.Single(x => x.WorkItemId == "TUN-LOCAL");
+            Check(!downstream.Actionable, scenario + " must block the LOCAL_VALIDATED consumer");
             Check(!AuditCommittedFixture(fixture), scenario + " must be included in committed readiness audit");
+            if (expectedNestedFailure is not null)
+                Check(downstream.Reason.Contains("prerequisite 'TUN-001' lacks valid committed-state readiness evidence", StringComparison.Ordinal) &&
+                    downstream.Reason.Contains("prerequisite 'TUN-001' committed-state proof: " + expectedNestedFailure, StringComparison.Ordinal),
+                    scenario + " retains the generic refusal and identifies the exact nested source failure");
         }
         Reject("missing git_state on a VALIDATION prerequisite");
         Check(OwnFailures().Any(x => x.Contains("git_state is absent", StringComparison.Ordinal)), "final gate must refuse missing source state even before DONE");
@@ -1249,18 +1254,20 @@ static void RunValidationSourceReadinessChecks(DirectoryInfo repositoryRoot, ICo
         Check(File.ReadAllText(Path.Combine(fixture.FullName, "unrelated-user.txt")) == "preserve unrelated work", "checks must not alter unrelated work");
 
         File.AppendAllText(Path.Combine(fixture.FullName, behavior), "\nchanged behavior");
-        Reject("uncommitted owned behavior after validation");
+        Reject("uncommitted owned behavior after validation", "owned behavior changed after validated SHA: " + behavior);
         Check(OwnFailures().Any(x => x.Contains("owned behavior changed", StringComparison.Ordinal)), "own final gate must detect dirty source");
         RunGit(fixture, "add", "--", behavior);
         RunGit(fixture, "commit", "--quiet", "-m", "Later unvalidated owned behavior");
-        Reject("committed but unvalidated owned behavior");
+        Reject("committed but unvalidated owned behavior", "owned behavior changed after validated SHA: " + behavior);
 
         var current = RunGitOutput(fixture, "rev-parse", "HEAD");
         State(current, ["unrelated-user.txt"]);
         Proof(current);
         RunGit(fixture, "add", "--", "governance/work-items/TUN-001.yaml", "governance/evidence/TUN-001-proof.json");
         RunGit(fixture, "commit", "--quiet", "-m", "Revalidate later behavior");
-        Check(DownstreamReady() && AuditCommittedFixture(fixture), "new exact committed candidate must restore readiness");
+        var repaired = ((NextPayload)GovernanceApplication.Next(fixture).Payload).Items.Single(x => x.WorkItemId == "TUN-LOCAL");
+        Check(repaired.Actionable && AuditCommittedFixture(fixture), "new exact committed candidate must restore readiness");
+        Check(!repaired.Reason.Contains("committed-state proof:", StringComparison.Ordinal), "repaired proof must not retain nested failure diagnostics");
         var validProof = File.ReadAllText(proofPath);
         Proof(current, "TUN-OTHER");
         Reject("wrong-scope proof");
