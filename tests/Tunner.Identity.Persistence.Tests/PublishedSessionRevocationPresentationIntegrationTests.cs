@@ -196,8 +196,9 @@ public sealed partial class SessionBulkRevocationHttpTests
     private async Task<(Scenario Scenario, PresentationContentTestEnvironment Content, PublishedActionBindings Binding)> CreatePublishedActionScenario(bool storageOutage = false)
     {
         PresentationContentTestEnvironment? content = null; PublishedActionBindings? binding = null; IdentityTestDatabase? database = null;
-        var scenario = await Create(synchronizeClock: true, start: (actual, configure) => { database = actual; return AuthenticationTestHost.Start(actual, configure); }, configure: (services, _) =>
+        var scenario = await Create(synchronizeClock: true, start: (actual, configure) => { database = actual; return AuthenticationTestHost.Start(actual, configure); }, configure: (services, profile) =>
         {
+            profile.Interval = NativeInterval;
             var clock = Assert.IsType<AuthenticationTestHost.TestClock>(services.Last(service => service.ServiceType == typeof(TimeProvider)).ImplementationInstance);
             var policy = Assert.IsType<AuthenticationTestHost.TestPolicies>(services.Last(service => service.ServiceType == typeof(IAuthenticationPolicySource)).ImplementationInstance).Policy;
             var texts = SessionRevocationPresentation.RequiredKeys.Concat(SessionBulkRevocationPresentation.RequiredKeys).ToDictionary(key => key, key => "Synthetic published action: " + key, StringComparer.Ordinal);
